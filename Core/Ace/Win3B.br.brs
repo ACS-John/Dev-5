@@ -161,4 +161,4 @@ def fn_fkey(scrline,mat fkey$,mat disfk,&em$,es; _
 	end if
 fnend
 
-include: Ertn
+include: ertn

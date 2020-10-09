@@ -1690,4 +1690,4 @@ def fn_getTestValues
 	tty(8) =      2
 	tty(9) =      1
 fnend
-include: Ertn
+include: ertn

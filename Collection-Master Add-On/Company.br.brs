@@ -31,5 +31,5 @@ CompanySave: ! r:
 	write #hCompany,using form$(hCompany): mat comp$,mat compN
 	close #hCompany:
 return  ! /r
-include: Ertn
+include: ertn
  

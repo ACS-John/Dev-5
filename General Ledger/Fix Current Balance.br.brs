@@ -200,4 +200,4 @@ def fn_accumulatedActivity(hAcTrans,gln$*12,dayStart,dayEnd)
 	fn_accumulatedActivity=aaReturn
 fnend
 
-include: Ertn
+include: ertn

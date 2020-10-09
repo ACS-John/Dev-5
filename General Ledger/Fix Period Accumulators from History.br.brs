@@ -248,4 +248,4 @@ def fn_is_a_retained_earn_account(gl$; ___,returnN)
 	 fn_is_a_retained_earn_account=returnN
   fnend
  
-include: Ertn
+include: ertn

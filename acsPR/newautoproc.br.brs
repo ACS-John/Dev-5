@@ -100,4 +100,4 @@ BEGIN_AUTO: ! r:
 	fnpgnum(-1) ! resets the last program processed back to 0 befor going to NEWPRauto
 goto Xit !  /r
 Xit: fnXit
-include: Ertn
+include: ertn

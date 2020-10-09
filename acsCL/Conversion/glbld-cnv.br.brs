@@ -21,4 +21,4 @@ END1: close #1:
  
 Xit: fnXit
  
-include: Ertn
+include: ertn

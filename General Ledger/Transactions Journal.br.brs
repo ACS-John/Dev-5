@@ -216,4 +216,4 @@ ASK_PERIOD: ! r:
 	prior_period=val(resp$(11)) ! prior period code
 	if prior_period<0 or prior_period>13 then prior_period=0
 return  ! /r
-include: Ertn
+include: ertn

@@ -46,4 +46,4 @@ mat txt$(txt_item+=1) : txt$(txt_item)=chr$(9)&'West Orange, NJ 07052'
 fnmsgbox(mat txt$, response$, cap$)
 goto Xit
 Xit: fnXit
-include: Ertn
+include: ertn

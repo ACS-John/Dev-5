@@ -22,5 +22,5 @@
 	fnHamster("PaymentCode",mat lbl$,mat tln,1,mat p$,mat fltyp$,mat sln,mat mask,mat sp,mat c$)
 Xit: fnXit
  
-include: Ertn
+include: ertn
  

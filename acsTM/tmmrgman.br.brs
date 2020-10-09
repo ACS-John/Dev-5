@@ -78,4 +78,4 @@ L780: close #1:
 	close #3:
 	close #4:
 Xit: fnXit
-include: Ertn
+include: ertn

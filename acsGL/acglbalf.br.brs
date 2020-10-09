@@ -255,4 +255,4 @@ L2250: close #5:
 	big=totcol*14
 return
  
-include: Ertn
+include: ertn

@@ -17,7 +17,7 @@ OPEN_FILE: ! r:
 return ! /r
 CLOSE_FILE: for j=1 to open_file_count : close #j: : next j : return
 Xit: fnXit
-include: Ertn
+include: ertn
 def fn_setup_hamster
 		mask_pointtwo=32 : mask_number=30
 		mask_ccyymmdd=3 : mask_mmddyy=1 : mask_glnumber=53

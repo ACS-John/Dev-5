@@ -1810,5 +1810,5 @@ fnend
 def fn_customerChangesReport(mat customer$,mat customerN,mat customerBefore$,mat customerBeforeN)
 	open #h_notefile:=fnH:'name='&fn_notedir$&"\"&trim$(z$)&".log",d,output
 fnend
-include: Ertn
+include: ertn
 include: fn_open

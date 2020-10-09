@@ -293,5 +293,5 @@ Finis: ! r:
 	close #hFsD: ioerr ignore
 goto Xit ! /r
 Xit: fnXit
-include: Ertn
+include: ertn
 include: fn_open

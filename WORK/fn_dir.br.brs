@@ -155,7 +155,7 @@ def fn_dir(dir$*256,mat filename$; option$,filter$*40,mat gd2_date$,mat gd2_time
 	end if
 	fn_dir=gd2_return
 fnend
-include: Ertn
+include: ertn
 ! /r
 def fn_gethandle ! from C:\ACS\Dev-5\Core\Start.br.brs
   hMaybe=189

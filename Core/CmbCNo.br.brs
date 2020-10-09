@@ -49,4 +49,4 @@ def library fncmbcno(myline,mypos; mysys$)
 	goto Xit
 	Xit: !
 fnend 
-include: Ertn
+include: ertn

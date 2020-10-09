@@ -119,4 +119,4 @@ HEADER: ! r:
 	L1000: form skip 2,pos 1,c 10,pos 20,cc 40,skip 1,pos 1,c 10,pos 20,cc 40,skip 2
 return ! /r
 
-include: Ertn
+include: ertn

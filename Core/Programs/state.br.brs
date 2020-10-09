@@ -34,4 +34,4 @@
 	fnHamster(layoutName$,mat lbl$,mat fln,hState,mat p$,mat fltyp$,mat sln,mat mask)
 goto Xit ! /r
 Xit: fnXit
-include: Ertn
+include: ertn

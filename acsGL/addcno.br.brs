@@ -36,4 +36,4 @@ fnFree("[Q]\GLmstr\ACTrans.h"&str$(to_cno))
 open #1: "Name=[Q]\GLmstr\ACTrans.h"&str$(to_cno)&",Size=0,RecL=72,NoShr",internal,output
 close #1:
 Xit: fnchain("S:\acsGL\Company")
-include: Ertn
+include: ertn

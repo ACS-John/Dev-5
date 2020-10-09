@@ -28,4 +28,4 @@ L240: read #1,using 'Form POS 1,C 12,C 50,POS 87,PD 6.2': gl$,de$,cb eof Xit
 	goto L240
 Xit: fnXit
 ! 
-include: Ertn
+include: ertn

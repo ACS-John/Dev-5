@@ -919,4 +919,4 @@ def fn_2dRemove(mat a2d$,iadWhich)
 		mat a2d$=a2dnew$
 	end if
 fnend
-include: Ertn
+include: ertn

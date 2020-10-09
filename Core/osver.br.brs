@@ -43,4 +43,4 @@ def library fnosver(&osver$; get_or_put)
 	return ! /r
 
 Xit: fnend 
-include: Ertn
+include: ertn

@@ -207,6 +207,6 @@ Xit: end  ! fnXit("")
 def fn_a(r)
 		fn_a=int(r*100+.5)/100
 fnend
-include: Ertn
+include: ertn
  
  

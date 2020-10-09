@@ -54,5 +54,5 @@ def fn_add_rec(label$*38,textbox_len; field_type$*2,storage_length,ar_mask,stora
 	! storage_length_prior=storage_position
 	mat c$(add_rec_item,8)
 fnend
-include: Ertn
+include: ertn
  

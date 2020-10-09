@@ -48,4 +48,4 @@ READ_CUSTOMER_EOF: !
 	execute "Index [Q]\UBmstr\UBTransVB.h[cno]"&' '&"[Q]\UBmstr\UBTrIndx.h[cno] 1 19 Replace DupKeys -n"
 goto Xit
 Xit: fnXit
-include: Ertn
+include: ertn

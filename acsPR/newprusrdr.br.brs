@@ -21,5 +21,5 @@ chain "S:\acsPR\jcPrnt"&str$(rno)
  
 Xit: fnXit
  
-include: Ertn
+include: ertn
  

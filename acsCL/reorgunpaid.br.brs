@@ -29,4 +29,4 @@ L260: close #paytrans:
 	fnIndex('[Q]\CLmstr\unpdaloc.H[cno]','[Q]\CLmstr\Uaidx1.H[cno]',"9,12")
 Xit: fnXit
  
-include: Ertn
+include: ertn

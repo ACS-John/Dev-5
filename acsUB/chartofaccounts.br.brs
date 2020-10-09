@@ -74,5 +74,5 @@ return
  
 Xit: chain "S:\acsUB\postgl"
  
-include: Ertn
+include: ertn
  

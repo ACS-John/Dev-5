@@ -87,4 +87,4 @@ L810: pr #255,using "Form POS 101,C 28": "____________  ____________" : _
 	pr #255,using "Form POS 101,C 28": "============  ============"
 	close #1:
 return
-include: Ertn
+include: ertn

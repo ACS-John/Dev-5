@@ -118,5 +118,5 @@ SCREEN1: !
 	fndat(dat$,2)
 return
 
-include: Ertn
+include: ertn
 

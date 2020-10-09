@@ -315,7 +315,7 @@ SRCH: !
  
 Xit: fnXit
  
-include: Ertn
+include: ertn
  
 SCR5: ! selection criteria
 	if ips=0 then goto SCR4

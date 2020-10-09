@@ -228,4 +228,4 @@ PRINT_940: ! r: only fills in the blanks at this time
 	fnpa_txt(cnvrt$("pic(zzzzzzzzzzz.##)",futaqtr1+futaqtr2+futaqtr3+futaqtr4),column4+leftmargin,lyne+=8.2+margin) ! total liability
 	fnpa_finis
 return
-include: Ertn
+include: ertn

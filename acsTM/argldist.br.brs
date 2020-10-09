@@ -68,4 +68,4 @@ close #1: ioerr ignore
 close #2: ioerr ignore
 if nw=1 then close #255: else pr #255: newpage
 XIT: fnxit
-include: Ertn
+include: ertn

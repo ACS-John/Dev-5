@@ -23,4 +23,4 @@ goto L220
 L350: close #4:
 execute "Index [Q]\PRmstr\PRCkHist.h[cno]"&' '&"[Q]\PRmstr\PRCKINDX.h[cno] 1 14 Replace DupKeys -n"
 Xit: stop  ! Chain "PRMENU/acsPR"
-include: Ertn
+include: ertn

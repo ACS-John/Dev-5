@@ -43,4 +43,4 @@ def library fnStatusClose
 	status_initialized=0
 Xit: ! necessary for ertn
 fnend
-include: Ertn
+include: ertn

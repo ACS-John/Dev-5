@@ -19,5 +19,5 @@ L160: close #24:
  
 Xit: stop
  
-include: Ertn
+include: ertn
  

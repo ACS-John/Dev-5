@@ -384,5 +384,5 @@ L3550: goto MENU1
  
 Xit: fnXit
  
-include: Ertn
+include: ertn
  

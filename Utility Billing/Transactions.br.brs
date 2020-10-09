@@ -823,6 +823,6 @@ def fn_serviceIsMetered(serviceNumber; ___,returnN)
 	fn_serviceIsMetered=returnN
 fnend
 include: Enum
-include: Ertn
+include: ertn
 include: fn_open
 

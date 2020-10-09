@@ -55,4 +55,4 @@ ChainToAcGlMrge: !
 	close #3:
 fnchain("S:\acsGL\acglMrge")
 Xit: fnXit
-include: Ertn
+include: ertn

@@ -225,4 +225,4 @@ L1880: fnTos
 	if ckey=5 then goto Xit
 Xit: fnXit
  
-include: Ertn
+include: ertn

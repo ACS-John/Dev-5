@@ -130,7 +130,7 @@ L25050: cn$=""
 	continue
  
  
-include: Ertn
+include: ertn
  
 Xit: fnXit
  

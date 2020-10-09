@@ -772,4 +772,4 @@ REINDEX: ! r: drops deleted records and reindexes trmstr
 return  ! /r
 Xit: fnXit
 CHAIN_SELCNO: fnchain("S:\Core\programs\Select Company")
-include: Ertn
+include: ertn

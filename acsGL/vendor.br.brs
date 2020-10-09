@@ -38,4 +38,4 @@
 	open #1: "Name=[Q]\GLmstr\gl1099.h[cno],KFName=[Q]\GLmstr\gl109idx.h[cno],Use,RecL=127,KPs=1,KLn=8,Shr",internal,outIn,keyed 
 	fnHamster("gl1099",mat lbl$,mat fln,1,mat p$,mat fltyp$,mat sln,mat mask,mat startpos,mat c$)
 Xit: fnXit
-include: Ertn
+include: ertn

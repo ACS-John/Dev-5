@@ -327,5 +327,5 @@ L3030: if rtrm$(k$)><"" then goto SRCHEND
 	if ln<20 then goto SRCHEND
 	goto L2880
  
-include: Ertn
+include: ertn
  

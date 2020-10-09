@@ -548,4 +548,4 @@ def fn_FormCopyAwithBackgroundWarn
 		fnmsgbox(mat fcawbwText$,response$,'Notification')
 	end if
 fnend
-include: Ertn
+include: ertn

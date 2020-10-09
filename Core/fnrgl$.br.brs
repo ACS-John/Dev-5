@@ -55,4 +55,4 @@ NOKEYGLMSTR: !
 		x$="": desc$=""
 		goto DONE
 Xit: fnend
-include: Ertn
+include: ertn

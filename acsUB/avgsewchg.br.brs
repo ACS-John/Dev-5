@@ -116,4 +116,4 @@ SEWER_CALK: ! r: calculate standard sewer charge
 	rewrite #1,using L1284,key=x$: swchg
 	L1284: form pos 161,pd 4.2
 return ! /r
-include: Ertn No
+include: ertn No

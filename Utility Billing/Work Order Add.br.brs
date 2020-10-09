@@ -240,4 +240,4 @@ def fn_not_blank(nbTestText$*256)
 	end if
 	fn_not_blank=nbReturn
 fnend
-include: Ertn
+include: ertn

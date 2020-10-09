@@ -53,4 +53,4 @@ L2200: !
 		goto Xit
 Xit: !
 fnend
-include: Ertn
+include: ertn

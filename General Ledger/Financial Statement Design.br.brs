@@ -316,7 +316,7 @@ DeleteCorruptRecord: ! r:
 	reread #hFSDesign,using F_FSDesign: rno$ noRec READ_FIN_STMT,eof EO_FIN_STMT_GRID,ioerr ignore
 	delete #hFSDesign,key=rno$:
 goto READ_FIN_STMT ! /r
-include: Ertn
+include: ertn
 def fn_setup
 	if ~setup then
 		setup=1

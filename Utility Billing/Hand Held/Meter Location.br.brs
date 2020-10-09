@@ -712,6 +712,6 @@ def fn_purgeSrvAccountFromLocation(serviceCode$*2,account$*10)
 	CmlsDelFinis: !
 fnend
 include: fn_open
-include: Ertn
+include: ertn
 
 

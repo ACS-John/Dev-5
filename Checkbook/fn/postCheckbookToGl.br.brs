@@ -631,4 +631,4 @@ def fn_cb_trmstr_test ! TEST_CHECKHISTORY: !
 	EO_TRMSTR_TEST: ! 
 	fn_cb_trmstr_test=cb_tt_return
 fnend 
-include: Ertn
+include: ertn

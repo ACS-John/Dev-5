@@ -44,4 +44,4 @@ def library fnjob_srch(&jn$;fixgrid)
 	Xit: !
 	close #h:
 fnend 
-include: Ertn
+include: ertn

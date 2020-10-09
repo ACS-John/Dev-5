@@ -69,7 +69,7 @@ L720: dt2=fndate_mmddyy_to_ccyymmdd(ji1(3))
 	if h(1)><0 then write #4,using L350: mat h,dt2,jn$
 	goto Xit
  
-include: Ertn
+include: ertn
  
 Xit: ! fnXit
 	close #3,free:

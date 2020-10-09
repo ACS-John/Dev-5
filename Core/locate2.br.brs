@@ -94,4 +94,4 @@ L520: pr #2: "print border: 'Locating...'"
 execute "Proc "&procfile$
  
 Xit: stop  ! fnXit("")
-include: Ertn
+include: ertn

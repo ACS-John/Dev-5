@@ -68,4 +68,4 @@ def fn_reading_fix(&reading_current,&reading_prior,&usage_current,&usage_ytd,rea
 		usage_ytd+=usage_current
 	end if  ! do_usages
 fnend
-include: Ertn No
+include: ertn No

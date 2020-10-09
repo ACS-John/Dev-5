@@ -405,4 +405,4 @@ L3960: p1=pos(rtrm$(csz$),"  ",1)
 	city$=csz$(1:p2-1)(1:15): city$=ltrm$(rtrm$(city$))
 return
 def fn_a(r)=int(r*100+.5)/100 ! /r
-include: Ertn
+include: ertn

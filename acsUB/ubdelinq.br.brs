@@ -121,5 +121,5 @@ L990: pr #255: newpage
 	gosub HEADER
 	continue
  
-include: Ertn
+include: ertn
  

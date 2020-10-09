@@ -106,5 +106,5 @@ def fn_confirmadjustment
 		fn_confirmadjustment=0
 	end if
 fnend
-include: Ertn
+include: ertn
 

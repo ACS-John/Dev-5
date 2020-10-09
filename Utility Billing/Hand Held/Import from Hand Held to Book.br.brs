@@ -1175,4 +1175,4 @@ def fn_setup
 		fnHandHeldList(mat deviceOption$)
 	end if
 fnend
-include: Ertn
+include: ertn

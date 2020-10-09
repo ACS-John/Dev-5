@@ -465,5 +465,5 @@ L4490: next j
 	pr f str$(scrline)&","&str$(startpos)&",C "&str$(len(rtrm$(em$))+es)&",R,N": rtrm$(em$)
 L4520: return  ! Fnend
  
-include: Ertn
+include: ertn
  

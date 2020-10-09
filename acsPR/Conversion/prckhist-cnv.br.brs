@@ -23,5 +23,5 @@ L310: close #4:
 	execute "Index [Q]\PRmstr\PRCkHist.h[cno]"&' '&"[Q]\PRmstr\PRCKINDX.h[cno] 1 14 Replace DupKeys -n"
 Xit: stop
  
-include: Ertn
+include: ertn
  

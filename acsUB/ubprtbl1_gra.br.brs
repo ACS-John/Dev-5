@@ -357,5 +357,5 @@ L2820: close #1: ioerr ignore
 	execute "Index [Temp]\Temp."&session$&" [Temp]\Tempidx."&session$&" 1,19,Replace,DupKeys -n" ioerr L2860
 	open #6: "Name=[Temp]\Temp."&session$&",KFName=[Temp]\Tempidx."&session$,internal,input,keyed
 L2860: return
-include: Ertn
+include: ertn
 

@@ -273,4 +273,4 @@ CREATERECEIPTFILE: ! r:
 	execute "Index [Q]\CLmstr\Recmstr.h[cno]"&' '&"[Q]\CLmstr\Recidx1.h[cno] 1 8 Replace DupKeys,Shr"
 	execute "Index [Q]\CLmstr\Receiptglbreakdown.h[cno]"&' '&"[Q]\CLmstr\receiptglbkdidx.h[cno] 1 8 Replace DupKeys,Shr"
 return  ! /r
-include: Ertn
+include: ertn

@@ -267,4 +267,4 @@ def fn_setup
 	end if
 fnend
  
-include: Ertn
+include: ertn

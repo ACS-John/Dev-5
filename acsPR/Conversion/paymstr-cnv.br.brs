@@ -38,7 +38,7 @@ L290: close #1:
 	input fields "13,40,C 1,IAE,N": pause$
 	goto L90
  
-include: Ertn
+include: ertn
  
 Xit: stop
  

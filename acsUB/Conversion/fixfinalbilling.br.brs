@@ -19,4 +19,4 @@ L190: close #1:
 	execute "Index [Q]\UBmstr\Customer.h[cno]"&' '&"[Q]\UBmstr\UBIndx2.h[cno] 354 7 Replace DupKeys"
 Xit: fnXit
 ! 
-include: Ertn
+include: ertn

@@ -464,4 +464,4 @@ def fn_pay_after_amt
 		fn_pay_after_amt=round(bal*1.05,2)
 	end if
 fnend
-include: Ertn
+include: ertn

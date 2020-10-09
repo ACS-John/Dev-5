@@ -409,4 +409,4 @@ def fn_bulksort ! bulk sort order
 	open #6: "Name=[Temp]\Temp."&session$&",KFName=[Temp]\TempIdx."&session$,internal,input,keyed
 	L2860: !
 fnend
-include: Ertn
+include: ertn

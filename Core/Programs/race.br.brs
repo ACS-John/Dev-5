@@ -16,5 +16,5 @@
 	fnHamster("Race",mat lbl$,mat fln,1,mat p$,mat fltyp$,mat sln,mat mask)
 Xit: fnXit
  
-include: Ertn
+include: ertn
  

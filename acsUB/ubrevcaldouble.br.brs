@@ -162,4 +162,4 @@ L1380: form pos 11,2*pd 4,24*pd 5.2,2*pd 4
 	ta1=nba: goto L1340
 L1400: return
  
-include: Ertn No
+include: ertn No

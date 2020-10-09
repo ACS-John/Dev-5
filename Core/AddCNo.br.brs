@@ -96,4 +96,4 @@ else
 end if
  
 Xit: fnchain("S:\Core\Programs\Select Company")
-include: Ertn
+include: ertn

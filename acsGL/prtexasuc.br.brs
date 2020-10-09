@@ -104,7 +104,7 @@ L840: form skip j1,pos 47,pic(zzz,zzz,zzz.##)
 	t4=0
 return
  
-include: Ertn
+include: ertn
  
 L1000: dim first$*15,mid$*15,last$*20,em$(3)*30
 	k$(1)=uprc$(rtrm$(k$(1))): ! nAMCDE$="s"

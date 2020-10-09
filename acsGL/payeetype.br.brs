@@ -14,5 +14,5 @@ close #1:
 open #1: "Name=[Q]\GLmstr\PayeeType.dat,Version=1,KFName=[Q]\GLmstr\PayeeType.Idx,Use,RecL=27,KPs=1,KLn=2,Shr",internal,outIn,keyed
 fnHamster("PayeeType",mat lbl$,mat tln,1,mat p$,mat fltyp$,mat sln,mat mask,mat sp,mat c$)
 Xit: fnXit
-include: Ertn
+include: ertn
 

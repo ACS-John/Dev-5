@@ -36,4 +36,4 @@ pr newpage
 END1: !
 if uprc$(rtrm$(prg$))="S:\acsTM\EMAINT" then fnchain("S:\acsTM\EMAINT")
 Xit: fnXit
-include: Ertn
+include: ertn

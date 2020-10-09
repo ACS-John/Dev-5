@@ -44,7 +44,7 @@ L360: form pos 1,c 11,c 25,11*pd 7.2,2*pd 2,2*pd 3
 	input fields "13,40,C 1,IAE,N": pause$
 	goto L80
  
-include: Ertn
+include: ertn
  
 Xit: fnXit
  

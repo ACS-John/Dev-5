@@ -137,4 +137,4 @@ L1330: ytdtot=ytdtot+cb
 	cmtot=cmtot+curmo
 L1360: return
  
-include: Ertn
+include: ertn

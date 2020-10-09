@@ -330,4 +330,4 @@ def fn_sage_write_out(wo_date,wo_time,wo_sage_code$*128,wo_desc$*512)
 	sawo_line$&=wo_desc$
 	pr #sawo_h_out: sawo_line$
 fnend  ! fn_acs_write_out
-include: Ertn
+include: ertn

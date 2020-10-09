@@ -1040,4 +1040,4 @@ def library fnbarcode(barcode$,rightleft,updown)
 	end if
 fnend 
 ! /r
-include: Ertn
+include: ertn

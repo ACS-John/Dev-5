@@ -95,4 +95,4 @@ PAGE_O_FLOW: ! r:
 	pr #255: newpage
 	gosub HDR
 continue ! /r
-include: Ertn
+include: ertn

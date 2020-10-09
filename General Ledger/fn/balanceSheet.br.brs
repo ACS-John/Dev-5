@@ -295,5 +295,5 @@ def fn_tePrnHeader(reportHeading2$*50)
 	pr #255: "\ql "
 fnend
 
-include: Ertn
+include: ertn
 include: fn_open

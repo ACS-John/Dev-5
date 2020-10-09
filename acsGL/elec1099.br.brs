@@ -597,4 +597,4 @@ L5600: ! r:
 	close #25:
 	fnCopy('x','a:irstax')
 return ! /r
-include: Ertn
+include: ertn

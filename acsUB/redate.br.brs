@@ -41,4 +41,4 @@ Xit: !
 ! pr 'chg_count=';chg_count : end
 	fnXit
  
-include: Ertn
+include: ertn

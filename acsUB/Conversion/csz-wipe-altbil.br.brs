@@ -27,5 +27,5 @@ DONE: close #1:
 	goto L110
 Xit: stop
  
-include: Ertn
+include: ertn
  

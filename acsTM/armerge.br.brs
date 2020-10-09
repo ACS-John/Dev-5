@@ -61,5 +61,5 @@ if prtcode then
 	fncloseprn
 end if
 Xit: fnXit
-include: Ertn
+include: ertn
 

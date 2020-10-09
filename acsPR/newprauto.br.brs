@@ -50,4 +50,4 @@ Xit: !
 L410: fnXit
 CHAIN_PRG: fnchain(prg$)
  
-include: Ertn
+include: ertn

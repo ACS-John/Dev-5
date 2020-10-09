@@ -485,4 +485,4 @@ def fn_flat_amt(penaltyAmount)
 		tg(10)=penaltyAmount
 	end if
 fnend
-include: Ertn
+include: ertn

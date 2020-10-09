@@ -293,4 +293,4 @@ def fn_print_line_amt(mat pl_amt,mat pl_form$; pl_pos)
 	next pl_item
 	pr #255,using 'form pos pl_pos,c': pl_line$
 fnend
-include: Ertn
+include: ertn

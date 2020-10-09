@@ -190,4 +190,4 @@ END3B: !
 	pr #255,using 'Form POS 1,C 12,3*N 14.2,X 2,C 30': "   Totals",mat t1
 return
 
-include: Ertn
+include: ertn

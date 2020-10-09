@@ -101,4 +101,4 @@ L980: close #2:
 	goto L310
 !
 Xit: fnchain("General Ledger\Financial Statement Design")
-include: Ertn
+include: ertn

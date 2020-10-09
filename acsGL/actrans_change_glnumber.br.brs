@@ -58,4 +58,4 @@ def fn_report(line$*256)
 		pr #255: line$ ! if gl$='  6   101  0' then pr #255: line$
 fnend
  
-include: Ertn
+include: ertn

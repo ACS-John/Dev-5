@@ -16,5 +16,5 @@
 	fnHamster("1099Type",mat lbl$,mat fln,1,mat p$)
 Xit: fnXit
  
-include: Ertn
+include: ertn
  

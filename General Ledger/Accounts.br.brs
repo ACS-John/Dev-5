@@ -467,4 +467,4 @@ MSGBOX4: ! r:
 	fnmsgbox(mat ml$,resp$,'',49)
 	if resp$='OK' then goto DO_EDIT
 if resp$='Cancel' then gl$=key$=holdgl$: goto MAIN ! /r
-include: Ertn
+include: ertn

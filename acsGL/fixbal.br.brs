@@ -21,5 +21,5 @@ END1: !
 	close #glmstr:
 Xit: stop
  
-include: Ertn
+include: ertn
  

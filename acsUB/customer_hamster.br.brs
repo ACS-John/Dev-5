@@ -91,4 +91,4 @@ def fn_setup_hamster
 	fn_add_rec('Demand Multiplier',12,'PD',5,mask_number,282)
 	fn_add_rec("Demand Reading",12,'PD',5,mask_number,287)
 fnend  ! fn_setup_hamster
-include: Ertn
+include: ertn

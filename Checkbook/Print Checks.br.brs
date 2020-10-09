@@ -328,7 +328,7 @@ L5460: !
 	mat holdresp$=("")
 	goto CKOPTION1_CHECK_ENTRY
 ! /r
-include: Ertn
+include: ertn
 REPRINT_CHECKS: ! r:
 	fnTos
 	respc=0

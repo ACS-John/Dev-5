@@ -171,7 +171,7 @@ NORECORDSONFILE: ! r: no records on file
  
 Xit: fnXit
 
-include: Ertn
+include: ertn
  
 NO_PRREPORT: ! r:
 	mat ml$(2)

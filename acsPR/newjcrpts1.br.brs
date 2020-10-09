@@ -231,7 +231,7 @@ L2130: pr #11: "Free S:\acsPR\jcPrnt"&str$(rn)&".br -n"
 	close #11:
 	chain "Proc=Proc."&session$
  
-include: Ertn
+include: ertn
  
 Xit: fnXit
  

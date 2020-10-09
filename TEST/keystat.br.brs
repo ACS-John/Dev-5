@@ -23,4 +23,4 @@ do
 		pr #101: " "
 	end if
 loop
-include: Ertn
+include: ertn

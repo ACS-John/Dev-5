@@ -246,4 +246,4 @@ MSGBOX: !
 	msgline$(2)="invalid format.  Use mmddyy format."
 	fnmsgbox(mat msgline$,resp$,'',1)
 goto SCREEN1
-include: Ertn
+include: ertn

@@ -48,5 +48,5 @@ def library fnemployee_search(&x$;fixgrid)
 	Xit: !
 	close #file_num:
 fnend
-include: Ertn
+include: ertn
 

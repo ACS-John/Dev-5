@@ -55,4 +55,4 @@ def fn_setup_hamster
 	fn_add_rec("Next Trans Addr",5,'PD',3) ! ph$
 	fn_add_rec("Description",30,'C') ! ph$
 fnend
-include: Ertn
+include: ertn

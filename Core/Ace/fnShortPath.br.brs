@@ -77,4 +77,4 @@ def fn_make_shortpath_cmd(msc_path$*256)
 		close #msc_tmp: 
 	end if 
 fnend 
-include: Ertn
+include: ertn

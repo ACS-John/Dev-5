@@ -87,4 +87,4 @@ L800: !
 	pr #255,using L900: "CODE","DESCRIPTION","HOURS","AT STANDARD","HOURLY RATE"
 	L900: form pos 5,c 4,pos 18,c 11,pos 60,c 5,pos 68,c 11,pos 81,c 11,skip 3
 return
-include: Ertn
+include: ertn

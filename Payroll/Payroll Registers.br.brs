@@ -212,4 +212,4 @@ Finis: ! r:
 	fnpayroll_register_2(0,include_tips_in_other_wh,append_reg1,ppd)
 goto Xit ! /r let fnchain("S:\acsPR\newprReg2")
 Xit: fnXit
-include: Ertn
+include: ertn

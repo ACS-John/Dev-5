@@ -279,4 +279,4 @@ TMSRCH: ! r: search for customer #
 	ano=val(selection$) conv L4910
 L4910: !
 return ! /r
-include: Ertn
+include: ertn

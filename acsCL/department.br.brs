@@ -23,4 +23,4 @@ close #1:
 fnIndex('[Q]\CLmstr\DPTMSTR.h[cno]','[Q]\CLmstr\DPTIDX1.h[cno]','1 5')
 
 Xit: fnXit
-include: Ertn
+include: ertn

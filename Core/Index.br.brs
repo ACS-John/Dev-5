@@ -277,4 +277,4 @@ def fn_ub_index_customer(cno)
 	fn_index("[Q]\UBmstr\Customer.h[cno]", "[Q]\UBmstr\ubIndx5.h[cno]","1741/1743 2/7")
 fnend
 Xit: fnXit
-include: Ertn
+include: ertn

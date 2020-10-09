@@ -91,7 +91,7 @@ HDR: ! r:
 	pr #255: hd2$
 return ! /r
  
-include: Ertn No
+include: ertn No
  
 	dim hd1$*400,hd2$*400,g1(11),g2(11)
 	dim serviceName$(10)*20,services$(10)*2,tax_code$(10)*1,tg(11),usages(3)

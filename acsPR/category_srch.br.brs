@@ -36,5 +36,5 @@ ERR_READ: ! r:
 		cn$=lpad$(resp$(1)(1:5),5)
 		if ckey=5 then cn$="     " ! no one selected
 	goto Xit ! /r
-include: Ertn
+include: ertn
 Xit: close #file_num: : fnend

@@ -209,5 +209,5 @@ SEARCHEND: !
 	close #103: ioerr ignore
 return
  
-include: Ertn
+include: ertn
  

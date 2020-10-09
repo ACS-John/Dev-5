@@ -45,4 +45,4 @@ END1: !
 	execute "Index [Q]\PRmstr\RPMstr.h[cno]"&' '&"[Q]\PRmstr\RPIndex.h[cno] 1 8 Replace DupKeys -n"
 	execute "Index [Q]\PRmstr\RPMstr.h[cno]"&' '&"[Q]\PRmstr\RPIndx2.h[cno] 9 30 Replace DupKeys -n"
 Xit: stop 
-include: Ertn
+include: ertn

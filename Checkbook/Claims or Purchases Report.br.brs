@@ -341,4 +341,4 @@ HDR: ! r:
 	nofx=1
 	!  a nokey on the read #fundmstr line above can cause and err 201 (return without gosub)  the nokey is the last error and the continue goes to the line after the unsuccessful read   Build the general ledger control file and put the fund names in it!!!!!!!!
 return  ! /r
-include: Ertn
+include: ertn

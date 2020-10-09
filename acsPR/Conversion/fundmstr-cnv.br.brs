@@ -34,7 +34,7 @@ NF1: open #2: "Name=X,RecL=63,Replace",internal,output
 	write #2,using L210: "  0","General Fund","","",0,""
 	goto L250
  
-include: Ertn
+include: ertn
  
 Xit: stop
  

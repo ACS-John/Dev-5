@@ -50,4 +50,4 @@ PrHdr: ! r:
 	pr #255: "   Emp   Name                                  Routing  C/S      Account"
 return ! /r
 Xit: fnXit
-include: Ertn
+include: ertn

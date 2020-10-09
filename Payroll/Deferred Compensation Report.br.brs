@@ -108,4 +108,4 @@ L1020: ! r:
 pr #255: newpage
 	gosub HDR
 continue ! /r
-include: Ertn
+include: ertn

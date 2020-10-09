@@ -1476,17 +1476,17 @@ def fn_print_bill_blucksberg(z$,mat mg$,billing_date_prior,serviceFrom,serviceTo
 
 	fnpa_line(26,85,157)
 
-	fnpa_fontsize
-	fnpa_fontitalic(1)
-	fnpa_fontbold(1)
+	! fnpa_fontsize
+	! fnpa_fontitalic(1)
+	! fnpa_fontbold(1)
 
 	lyne=81
 	adder=4.5
-	fnpa_fontbold(1) : fnpa_fontitalic
-	fnpa_txt("Activity Since "&date$(days(billing_date_prior,'ccyymmdd'),'mm/dd/yy'),80,lyne+=adder)
-	fnpa_fontbold(0)
+	! fnpa_fontitalic
+	! fnpa_txt("Activity Since "&date$(days(billing_date_prior,'ccyymmdd'),'mm/dd/yy'),80,lyne+=adder)
+	! fnpa_fontbold(0)
 	fnpa_txt("Amount",170,lyne)
-	fn_add_activity_line("Balance as of "&date$(days(billing_date_prior,'ccyymmdd'),'mm/dd/yy'),prior_prior_balance)
+	fn_add_activity_line("Prior Balance as of "&date$(days(billing_date_prior,'ccyymmdd'),'mm/dd/yy'),prior_prior_balance)
 	fn_add_activity_line("Charges",activity_charge-g(11))
 	fn_add_activity_line("Penalties",activity_penalty)
 	fn_add_activity_line("Payments Received - Thank You",-activity_payment)
@@ -1603,7 +1603,7 @@ def fn_print_bill_blucksberg(z$,mat mg$,billing_date_prior,serviceFrom,serviceTo
 	fnpa_fontsize
 	fnpa_txt("Account: "&lpad$(trim$(z$),16),40,243)
 	fnpa_txt('Due Date:        '&cnvrt$("PIC(ZZ/ZZ/ZZ)",d4),40,247)
-	fnpa_txt("Total Due:",40,251)
+	fnpa_txt("Total Due:",40+10,251)
 	fnpa_txt(cnvrt$("pic(--------.##)",bal),70,251)
 	if bal>0 then 
 	 !   fnpa_txt("After "&cnvrt$("pic(##/##/##)",d4)&" pay "&cnvrt$("pic(---.##)",g(12)),40,255)
@@ -1722,7 +1722,7 @@ def fn_add_activity_line(aal_text$*80,aal_amt; aal_always_show,aal_desc_left_ove
 	if aal_desc_left_override=0 then aal_desc_left_override=30
 	if aal_always_show or aal_amt<>0 then 
 		fnpa_txt(aal_text$,aal_desc_left_override,lyne+=adder)
-		fnpa_txt(cnvrt$("pic($$$$$$$$.## CR)",aal_amt),160,lyne)
+		fnpa_txt(cnvrt$("pic($-------.## CR)",aal_amt),160,lyne)
 	end if 
 fnend
 def fn_print_bill_pennington(z$,mat mg$,mat mg2$,serviceFrom,serviceTo,penaltyDueDate)
@@ -2364,4 +2364,4 @@ Sort1: ! r: Select & Sort - sorts Cass1 file    requires: (h_customer_2,&enable_
 return  ! /r
 
 include: fn_open
-include: Ertn
+include: ertn

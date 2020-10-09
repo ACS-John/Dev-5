@@ -229,4 +229,4 @@ L2220: input fields mat in3$: monthb,total,total2,annualb conv L2220
  
 Xit: fnXit
  
-include: Ertn
+include: ertn

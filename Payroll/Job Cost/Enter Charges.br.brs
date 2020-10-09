@@ -212,4 +212,4 @@ CORRECTIONS: !
 	if ckey=2 then read #3,using L840,rec=editrec: rn$,dat,jn2$, mat ji2,d$: editone=1 : goto TRANSACTION_ENTRY
 	if ckey=4 then delete #3,rec=editrec: : goto CORRECTIONS
 goto CORRECTIONS
-include: Ertn
+include: ertn

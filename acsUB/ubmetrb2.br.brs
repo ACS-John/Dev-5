@@ -252,4 +252,4 @@ BLANKS: ! r: fill in blanks using prace
 	pr #20: 'Call Print.MyFontSize(10)'
 	fnpa_newpage
 return ! /r
-include: Ertn
+include: ertn

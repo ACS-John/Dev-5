@@ -11,4 +11,4 @@ do
 loop while A<500
 Xit: end
 ! /r
-include: Ertn
+include: ertn

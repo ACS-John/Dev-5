@@ -136,5 +136,5 @@ L1290: form pos 1,c 70
  
 Xit: fnXit
  
-include: Ertn
+include: ertn
  

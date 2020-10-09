@@ -55,4 +55,4 @@ END1: !
 	execute "Index [Q]\CLmstr\TRMSTR.H[cno]"&' '&"[Q]\CLmstr\TRIDX1.H[cno] 1 11 Replace DupKeys"
 	execute "Index [Q]\CLmstr\TRMSTR.H[cno]"&' '&"[Q]\CLmstr\TRIDX2.H[cno] 28/1 8/11 Replace DupKeys"
 Xit: fnXit
-include: Ertn
+include: ertn

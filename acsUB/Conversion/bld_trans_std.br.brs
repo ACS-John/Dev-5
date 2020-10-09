@@ -25,7 +25,7 @@ LOOP_STEP_1: !
 	goto Xit 
 	! If CNO<>0 Then Gosub CONVERT_CNO : Goto LOOP_STEP_1 Else goto Xit
  
-include: Ertn
+include: ertn
  
 Xit: chain "S:\acsUB\conversion\UBmstr-vb"
  

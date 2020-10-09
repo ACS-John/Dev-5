@@ -225,4 +225,4 @@ def fn_hasSewer(acctno$)
 	if hs_a(2)<>0 then let fn_hasSewer=1 else let fn_hasSewer=0
 fnend
 Xit: fnXit
-include: Ertn
+include: ertn

@@ -33,4 +33,4 @@ L250: read #trmstr,using "Form Pos 1,N 2,pos 72,n 6": bank_code,olddate eof Xit
  
 Xit: fnXit
  
-include: Ertn
+include: ertn

@@ -277,5 +277,5 @@ def fn_getFoFile$*30(fofile_fileno$)
 	! end if
 	L17496: !
 fnend 
-include: Ertn
+include: ertn
 include: cm\enum\master

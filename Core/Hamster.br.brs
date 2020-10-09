@@ -387,4 +387,4 @@ def fn_setKeyForm$*1024(mat blank$,&key$,fin; ___,return$*1024)
 	! pr 'return$='&return$ ! XXX
 	fn_setKeyForm$=return$
 fnend
-include: Ertn
+include: ertn

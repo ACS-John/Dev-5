@@ -325,4 +325,4 @@ if ji2(4)<1 or ji2(4)>20 then pt=ptp/100*ji2(3) else pt=0
 	if ji2(4)<1 or ji2(4)>20 then pt=ptp/100*ji2(3) else pt=0
 	if c1=2 then goto POSTTOJOBS
 return
-include: Ertn
+include: ertn

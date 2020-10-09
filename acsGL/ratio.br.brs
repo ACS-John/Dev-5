@@ -213,4 +213,4 @@ RIGHT_SIDE: !
 	if ckey=3 then goto RIGHT_SIDE
 	if ckey=6 then goto REWRITE_EXISTING_RATIOMST
 goto RATIOMSTGRID ! /r
-include: Ertn
+include: ertn

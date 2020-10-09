@@ -64,5 +64,5 @@ AFT_LOOP1: !
  
 Xit: stop
  
-include: Ertn
+include: ertn
  

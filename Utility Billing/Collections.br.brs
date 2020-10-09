@@ -1437,5 +1437,5 @@ def fn_totalAdd(transType,amt,&totalCollections,&totalDebitMemos,&totalCreditMem
 	end if
 fnend
 
-include: Ertn no
+include: ertn no
 include: fn_open
