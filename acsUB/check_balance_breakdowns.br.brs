@@ -1,7 +1,7 @@
 	fn_setup
 	fnTop(program$,"Check Balance Breakdowns 2")
 MENU1: ! r:
-	fnTos(sn$="bldtrans") : chk_align=0
+	fnTos : chk_align=0
 	fnLbl(1,1,"Scan:")
 	fnChk(2,5,"Scan Customer Balance Breakdowns",chk_align) : resp$(1)="True"
 	fnChk(3,5,"Scan Transaction Breakdowns"     ,chk_align) : resp$(2)="True"
@@ -40,30 +40,48 @@ def fn_setup
 
 		dim serviceName$(10)*20,srv$(10)*2
 		fnGetServices(mat serviceName$,mat srv$)
+		
+		
+	dim serviceName$(10)*20
+	dim serviceCode$(10)*2
+	dim tax_code$(10)*1
+	dim penalty$(10)*1
+
+	fnGetServices(mat serviceName$,mat srv$, mat tax_code$,mat penalty$) ! ,mat subjectto,mat ordertoapply)
+
+		
+		
+		
 	end if 
 fnend 
-def fn_report_it(z$,mat report_g,bal_breakdown; heading$*80,col_2_heading$*12,col_3_heading$,col_3_value$)
+def fn_report_it(z$,mat report_g,bal_breakdown; heading$*80,col_2_heading$*12,col_3_heading$,col_3_value$,col_4_heading$*12,col_4_value$*128)
 	if do_report then 
 		if ~setup_report_it then 
 			setup_report_it=1
 			fnopenprn
 			pr #255,using F_HDR1: heading$
-			if col_3_heading$='' then 
-				pr #255,using F_HDR2a: 'Account',col_2_heading$,serviceName$(1)(1:12),serviceName$(2)(1:12),serviceName$(3)(1:12),serviceName$(4)(1:12),serviceName$(5)(1:12),serviceName$(6)(1:12),serviceName$(7)(1:12),serviceName$(8)(1:12),serviceName$(9)(1:12),serviceName$(10)(1:12),'*Calculated*'
-				F_HDR2a: form pos 1,13*(cc 12,',')
-			else
+			if col_4_heading$<>'' then 
+				pr #255,using F_HDR2c: 'Account',col_2_heading$,serviceName$(1)(1:12),serviceName$(2)(1:12),serviceName$(3)(1:12),serviceName$(4)(1:12),serviceName$(5)(1:12),serviceName$(6)(1:12),serviceName$(7)(1:12),serviceName$(8)(1:12),serviceName$(9)(1:12),serviceName$(10)(1:12),'*Calculated*',col_3_heading$,col_4_heading$
+				F_HDR2c: form pos 1,15*(cc 12,',')
+			else if col_3_heading$<>'' then 
 				pr #255,using F_HDR2b: 'Account',col_2_heading$,serviceName$(1)(1:12),serviceName$(2)(1:12),serviceName$(3)(1:12),serviceName$(4)(1:12),serviceName$(5)(1:12),serviceName$(6)(1:12),serviceName$(7)(1:12),serviceName$(8)(1:12),serviceName$(9)(1:12),serviceName$(10)(1:12),'*Calculated*',col_3_heading$
 				F_HDR2b: form pos 1,14*(cc 12,',')
+			else
+				pr #255,using F_HDR2a: 'Account',col_2_heading$,serviceName$(1)(1:12),serviceName$(2)(1:12),serviceName$(3)(1:12),serviceName$(4)(1:12),serviceName$(5)(1:12),serviceName$(6)(1:12),serviceName$(7)(1:12),serviceName$(8)(1:12),serviceName$(9)(1:12),serviceName$(10)(1:12),'*Calculated*'
+				F_HDR2a: form pos 1,13*(cc 12,',')
 			end if
 			F_HDR1: form pos 1,cc 156
 		end if  ! ~setup_report_it
 		print_count+=1
-		if col_3_heading$='' then 
+		if col_4_heading$<>'' then 
+			pr #255,using F_BODYc: z$,bal,report_g(1),report_g(2),report_g(3),report_g(4),report_g(5),report_g(6),report_g(7),report_g(8),report_g(9),report_g(10),bal_breakdown,col_3_value$,col_4_value$
+			F_BODYc: form pos 1,c 12,',',12*(n 12.2,','),c 10,c
+		else if col_3_heading$<>'' then 
+			pr #255,using F_BODYb: z$,bal,report_g(1),report_g(2),report_g(3),report_g(4),report_g(5),report_g(6),report_g(7),report_g(8),report_g(9),report_g(10),bal_breakdown,col_3_value$
+			F_BODYb: form pos 1,c 12,',',12*(n 12.2,','),c 10
+		else
 			pr #255,using F_BODYa: z$,bal,report_g(1),report_g(2),report_g(3),report_g(4),report_g(5),report_g(6),report_g(7),report_g(8),report_g(9),report_g(10),bal_breakdown
 			F_BODYa: form pos 1,c 12,',',12*(n 12.2,',')
-		else
-			pr #255,using F_BODYb: z$,bal,report_g(1),report_g(2),report_g(3),report_g(4),report_g(5),report_g(6),report_g(7),report_g(8),report_g(9),report_g(10),bal_breakdown
-			F_BODYb: form pos 1,c 12,',',12*(n 12.2,','),c 10
 		end if
 		! pr #255: z$&' has a balance of '&str$(gb(10))&' but the breakdowns add up to '&str$(bal_breakdown)
 	end if 
@@ -87,6 +105,7 @@ def fn_balanceBreakdowns(do_fix,do_report) ! assumes balance is right, puts the 
 	dim service_rate_code(7)
 	dim gb(10)
 	gb_other=fnservice_other
+	fnopenprn
 	open #h_customer:=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,outIn,keyed 
 	do 
 		read #h_customer,using F_CUSTOMER: z$,mat service_rate_code,bal,mat customer_g,mat gb eof CUSTOMER_EOF

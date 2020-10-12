@@ -6,10 +6,10 @@ end
 ! /r doNotInclude
 ! ertn
 Ertn: !
-	library 'S:\Core\library': fnerror
+	library 'S:\Core\Library': fnError
 	dim ertnAct$*256
 
-	fnerror(program$,err,line,ertnAct$,'Xit')
+	fnError(program$,err,line,ertnAct$,'Xit')
 	if lwrc$(ertnAct$)='pause' then
 		if env$('ACSDeveloper')<>'' then
 			execute 'List '&str$(line)

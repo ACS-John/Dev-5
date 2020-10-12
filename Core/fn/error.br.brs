@@ -1,6 +1,26 @@
 autoLibrary
 on error goto Ertn
-pr 1/0
+pr 'test fnError'
+gos SubB
+end
+SubA: ! 
+	aa+=1
+	pr 'SubA';aa
+	if aa<5 th gos SubB
+return
+SubB: ! 
+	bb+=1
+	pr 'SubB';bb
+	if bb<5 th 
+		gos SubA
+	else
+		xx=1/0
+		end
+	en if
+return
+
+
+
 Xit: fnXit
 
 def library fnError(callingprogram$*256, errornumber, linenumber, &ertnAct$, stopable$; ___,sourceFile$*300,line$*512)
@@ -67,10 +87,11 @@ def library fnError(callingprogram$*256, errornumber, linenumber, &ertnAct$, sto
 		pr #win,f "14,16,C 5,P[textboxes]": session$
 		button_pos$='47'
 		pr #win,f "10,47,Cc 22,,B12": "Command Console (F12)" ! 1,19,12/CC 12,,B1000
+		pr #win,f "11,47,Cc 22,,B09": "Stacks           (F9)"
 	!   pr #win,f "6,47,C 22,B,10": "WB Help (F10)"
 		! pr #win,f "11,47,Cc 22,,B08": "BRWiki Help (F8)"
 	!   if exists(acshelp$)<>0 then
-	!     pr #win,f "12,47,Cc 22,,B09": "ACS Help (F9)"
+	!     pr #win,f "12,47,Cc 22,,B09": "ACS Help (F19)"
 	!   end if
 		pr #win,f "13,47,Cc 22,,B01": "Retry (Enter)"
 		pr #win,f "14,47,Cc 22,,B99": "Exit (Esc)"
@@ -79,7 +100,7 @@ def library fnError(callingprogram$*256, errornumber, linenumber, &ertnAct$, sto
 		if env$('acsDeveloper')<>'' then ! enableBigErtnAct and
 		  ! pr #win,f '16,20,Cc 35,,B11': "N++ .brs  on Line  (F11)" 
 			pr #win,f "17,20,Cc 35,,B21": 'Recompile, Reload and Run (Ctrl+F1)' 
-			pr #win,f "18,20,Cc 35,,B22": 'Reload and Run (Ctrl+F2)'
+			pr #win,f "18,20,Cc 35,,B22": 'Reload and Run            (Ctrl+F2)'
 			! pr #win,f "19,20,Cc 35,,B23": 'Edit (Ctrl+F3)' 
 			! pr #win,f "16,18,Cc 38,,B120": 'Recompile, Reload and Run (Ctrl+Alt+1)'
 		end if
@@ -97,7 +118,7 @@ def library fnError(callingprogram$*256, errornumber, linenumber, &ertnAct$, sto
 		else if cmdkey=8 then 
 			fnlog("action taken = BRWiki Help",2)
 			gosub BRWIKIHELP
-	!   else if cmdkey=9 then
+	!   else if cmdkey=19 then
 	!     fnlog("action taken = ACS Help",2)
 	!     gosub ACSHELP
 	!   else if cmdkey=10 then
@@ -196,4 +217,4 @@ def library fnError(callingprogram$*256, errornumber, linenumber, &ertnAct$, sto
 		if file(win)<>-1 then close #win: 
 fnend 
 
-include: ertn
+include: Ertn
