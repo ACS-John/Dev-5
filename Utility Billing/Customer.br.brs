@@ -6,6 +6,7 @@ fnCustomer(x)
 fnXit
 def library fnCustomer(x)
 	fn_setup
+	disableBalanceEdit=1
 	! r: open files
 	open #h_ubadrbil:=fnH: "Name=[Q]\UBmstr\ubAdrBil.h[cno],KFName=[Q]\UBmstr\AdrIndex.h[cno],Shr,Use,RecL=130,KPs=1,KLn=10",internal,outIn,keyed  ! was :=3
 	F_ADRBIL: form pos 1,c 10,4*c 30
@@ -627,7 +628,7 @@ def library fnCustomer(x)
 		fnTxt(1,16,8,0,0,'1',0,'',1)
 		bxnf$(3)=str$(lastBillingDate)
 		fnLbl(2,1,"Balance:",8,0,0,1)
-		fnTxt(2,10,10,0,1,'10',1,'',1)
+		fnTxt(2,10,10, 0,1,'10',disableBalanceEdit,'',1)
 		bxnf$(4)=str$(bal)
 		if uprc$(escrow$)="Y" then 
 			fnLbl(2,21,"Escrow Balance:",15,1,0,1)

@@ -1,9 +1,10 @@
 fn_setup
 dim serviceName$(10)*20
-fnGetServices(mat serviceName$) : for sNitem=1 to udim(mat serviceName$) : serviceName$(sNitem)=trim$(serviceName$(sNitem)) : nex sNitem
+fnGetServices(mat serviceName$)
+for sNitem=1 to udim(mat serviceName$) : serviceName$(sNitem)=trim$(serviceName$(sNitem)) : nex sNitem
 
 fnTop(program$)
- 
+
 do ! r: Main Loop
 	dim resp$(3)*256
 	fnTos : lc=0
@@ -31,14 +32,14 @@ do ! r: Main Loop
 	end if
 loop ! /r
 Xit: fnXit
-dim customer$(0)*256
-dim customerN(0)
+dim c$(0)*256
+dim cN(0)
 dim mg$(0)*256,mgResp$*40
 def fn_importRouteAndSequence(source$*256,delim$*1; ___,hIn,line$*2048,z$*10,pass,route,sequence,lineCount,failErrorNumber,bkno1$,bkno2$,bkno1,bkno2)
 	fncreg_read('Route Low' ,bkno1$) : bkno1=val(bkno1$)
 	fncreg_read('Route High',bkno2$) : bkno2=val(bkno2$)
- 
-	hCustomer=fn_open('UB Customer',mat customer$,mat customerN,mat form$)
+
+	hCustomer=fn_open('UB Customer',mat c$,mat cN,mat form$)
 	open #hIn:=fnH: 'Name='&br_filename$(source$),display,input ioerr ImportFail
 	dim header$(0)*256
 	for pass=1 to 2
@@ -65,11 +66,11 @@ def fn_importRouteAndSequence(source$*256,delim$*1; ___,hIn,line$*2048,z$*10,pas
 				goto ImportFailInvalidRoute
 			end if
 			if ~fnKeyExists(hCustomer,z$, 2) then goto ImportFailAccountKey
-			read #hCustomer,using form$(hCustomer),key=z$: mat customer$,mat customerN ! nokey ImportFail
-			customerN(c_route   )=route
-			customerN(c_sequence)=sequence
+			read #hCustomer,using form$(hCustomer),key=z$: mat c$,mat cN ! nokey ImportFail
+			cN(c_route   )=route
+			cN(c_sequence)=sequence
 			if pass=2 then
-				rewrite #hCustomer,using form$(hCustomer),key=z$: mat customer$,mat customerN
+				rewrite #hCustomer,using form$(hCustomer),key=z$: mat c$,mat cN
 			end if
 		loop
 		ImportEoF: !
@@ -79,9 +80,9 @@ def fn_importRouteAndSequence(source$*256,delim$*1; ___,hIn,line$*2048,z$*10,pas
 	fnAddOneC(mat mg$,'Succesfully completed import from:')
 	fnAddOneC(mat mg$,source$)
 	fnmsgbox(mat mg$,mgResp$,'',mb_information+mb_okonly)
- 
+
 	goto ImportFinis
-	
+
 	ImportFail: ! r:
 		failErrorNumber=err
 		mat mg$(0)
@@ -113,62 +114,62 @@ def fn_importRouteAndSequence(source$*256,delim$*1; ___,hIn,line$*2048,z$*10,pas
 		fnAddOneC(mat mg$,'This range can be changed in Company>Configuration.')
 		fnmsgbox(mat mg$,mgResp$,'',mb_stop+mb_okonly)
 	goto ImportFinis ! /r
- 
+
 	ImportFinis: !
 	close #hIn: ioerr ignore
 	fnCloseFile(hCustomer,'UB Customer')
 fnend
 def fn_exportRouteAndSequence(outFile$*256,delim$*1; ___,hCustomer)
-	hCustomer=fn_open('UB Customer',mat customer$,mat customerN,mat form$, 1)
+	hCustomer=fn_open('UB Customer',mat c$,mat cN,mat form$, 1)
 	! open #hCustomer:=fnH: 'Name=[Q]\UBmstr\Customer.h[cno],shr',internal,input,relative
 	fnMakeSurePathExists(outFile$)
 	open #hOut:=fnH: 'Name='&br_filename$(outFile$)&',RecL=2500,Replace,EOL=CRLF',display,output
 	!  r: Header
-	pr #hOut: 'Account Key'         &delim$;          ! z$
-	pr #hOut: 'Route'              	&delim$;
-	pr #hOut: 'Sequence'           	&delim$;
-	pr #hOut: 'Meter Address'&delim$;                 ! e$(1)
-	pr #hOut: 'Name'&delim$;                          ! e$(2)
-	pr #hOut: 'Address 1 - Primary'&delim$;           ! e$(3)
-	pr #hOut: 'Address 2 - Primary'&delim$;           ! extra$(1)
-	pr #hOut: 'CSZ - Primary'&delim$;                 ! e$(4)
-	pr #hOut: serviceName$(1)&' Meter Number'&delim$; ! f$(1)&delim$;
-	pr #hOut: serviceName$(3)&' Meter Number'&delim$; ! f$(2)&delim$;
-	pr #hOut: serviceName$(4)&' Meter Number'&delim$; ! f$(3)&delim$;
-	pr #hOut: serviceName$(1)&' Rate Code'&delim$;    ! str$(a(1))&delim$;
-	pr #hOut: serviceName$(2)&' Rate Code'&delim$;    ! str$(a(2))&delim$;
-	pr #hOut: serviceName$(3)&' Rate Code'&delim$;    ! str$(a(3))&delim$;
-	pr #hOut: serviceName$(4)&' Rate Code'&delim$;    ! str$(a(4))&delim$;
-	pr #hOut: serviceName$(5)&' Rate Code'&delim$;    ! str$(a(5))&delim$;
-	pr #hOut: serviceName$(9)&' Rate Code'&delim$;    ! str$(a(6))&delim$;
-	pr #hOut: serviceName$(10)&' Rate Code'&delim$;   ! str$(a(7))&delim$;
-	pr #hOut: 'Alpha Sort Field'&delim$; ! alp$&delim$;
+	pr #hOut: 'Account Key'                  &delim$;
+	pr #hOut: 'Route'              	         &delim$;
+	pr #hOut: 'Sequence'           	         &delim$;
+	pr #hOut: 'Meter Address'                &delim$;
+	pr #hOut: 'Name'                         &delim$;
+	pr #hOut: 'Address 1 - Primary'          &delim$;
+	pr #hOut: 'Address 2 - Primary'          &delim$;
+	pr #hOut: 'CSZ - Primary'                &delim$;
+	pr #hOut: serviceName$(1)&' Meter Number'&delim$;
+	pr #hOut: serviceName$(3)&' Meter Number'&delim$;
+	pr #hOut: serviceName$(4)&' Meter Number'&delim$;
+	pr #hOut: serviceName$(1)&' Rate Code'   &delim$;
+	pr #hOut: serviceName$(2)&' Rate Code'   &delim$;
+	pr #hOut: serviceName$(3)&' Rate Code'   &delim$;
+	pr #hOut: serviceName$(4)&' Rate Code'   &delim$;
+	pr #hOut: serviceName$(5)&' Rate Code'   &delim$;
+	pr #hOut: serviceName$(9)&' Rate Code'   &delim$;
+	pr #hOut: serviceName$(10)&' Rate Code'  &delim$;
+	pr #hOut: 'Alpha Sort Field'             &delim$;
 	pr #hOut: ''
 	! /r
- 
+
 	do
-		read #hCustomer,using form$(hCustomer): mat customer$,mat customerN eof ExportRouteAndSequence_Finis
+		read #hCustomer,using form$(hCustomer): mat c$,mat cN eof ExportRouteAndSequence_Finis
 		if finalBillingCode=0 or finalBillingCode=3 then
 			! r: pr #hOut delimited field values
-			pr #hOut: '"'&customer$(c_account)&'"'      	&delim$;
-			pr #hOut: str$(customerN(c_route))          	&delim$;
-			pr #hOut: str$(customerN(c_sequence))       	&delim$;
-			pr #hOut: '"'&customer$(c_meterAddress)&'"' 	&delim$;
-			pr #hOut: '"'&customer$(c_name)&'"'         	&delim$;
-			pr #hOut: '"'&customer$(c_addr1)&'"'        	&delim$;
-			pr #hOut: '"'&customer$(c_addr2)&'"'        	&delim$;
-			pr #hOut: '"'&customer$(c_csz)&'"'          	&delim$;
-			pr #hOut: '"'&customer$(c_s1meterNumber)&'"'	&delim$;
-			pr #hOut: '"'&customer$(c_s03meterNumber)&'"'	&delim$;
-			pr #hOut: '"'&customer$(c_s04meterNumber)&'"'	&delim$;
-			pr #hOut: str$(customerN(c_s01rate))        	&delim$;
-			pr #hOut: str$(customerN(c_s02rate))        	&delim$;
-			pr #hOut: str$(customerN(c_s03rate))        	&delim$;
-			pr #hOut: str$(customerN(c_s04rate))        	&delim$;
-			pr #hOut: str$(customerN(c_s05rate))        	&delim$;
-			pr #hOut: str$(customerN(c_s09rate))        	&delim$;
-			pr #hOut: str$(customerN(c_s10rate))        	&delim$;
-			pr #hOut: '"'&customer$(c_alphaSort)&'"'    	&delim$;
+			pr #hOut: '"'&c$(c_account)&'"'       &delim$;
+			pr #hOut: str$(cN(c_route))           &delim$;
+			pr #hOut: str$(cN(c_sequence))        &delim$;
+			pr #hOut: '"'&c$(c_meterAddress)&'"'  &delim$;
+			pr #hOut: '"'&c$(c_name)&'"'          &delim$;
+			pr #hOut: '"'&c$(c_addr1)&'"'         &delim$;
+			pr #hOut: '"'&c$(c_addr2)&'"'         &delim$;
+			pr #hOut: '"'&c$(c_csz)&'"'           &delim$;
+			pr #hOut: '"'&c$(c_s1meterNumber)&'"' &delim$;
+			pr #hOut: '"'&c$(c_s03meterNumber)&'"'&delim$;
+			pr #hOut: '"'&c$(c_s04meterNumber)&'"'&delim$;
+			pr #hOut: str$(cN(c_s01rate))         &delim$;
+			pr #hOut: str$(cN(c_s02rate))         &delim$;
+			pr #hOut: str$(cN(c_s03rate))         &delim$;
+			pr #hOut: str$(cN(c_s04rate))         &delim$;
+			pr #hOut: str$(cN(c_s05rate))         &delim$;
+			pr #hOut: str$(cN(c_s09rate))         &delim$;
+			pr #hOut: str$(cN(c_s10rate))         &delim$;
+			pr #hOut: '"'&c$(c_alphaSort)&'"'     &delim$;
 			pr #hOut:''
 			! /r
 		end if
