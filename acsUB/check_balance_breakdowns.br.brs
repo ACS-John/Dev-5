@@ -154,7 +154,7 @@ def fn_transBreakdowns(do_fix,do_report; ___,needsFixed)
 			if trim$(serviceName$(g_item))='' and trans_g(g_item)<>0 then
 				trans_g(bg_other)+=trans_g(g_item)
 				trans_g(g_item)=0
-				fn_report_it(p$,mat trans_g,bal_breakdown,"Transaction Breakdowns",'T Amount','T Date',cnvrt$('pic(zzzz/zz/zz)',tdate),'Note','found lost allocation on unlabeled service '&str$(g_item))
+				fn_report_it(p$,mat trans_g,bal_breakdown,"Transaction Breakdowns",'T Amount','T Date',cnvrt$('pic(zzzz/zz/zz)',tdate),'Note','Lost allocation on unlabeled service '&str$(g_item))
 				needsFixed=1
 			end if
 		next g_item
