@@ -28,8 +28,14 @@ do
 				txt$=' DIFF.' 
 			else 
 				txt$=''
+				cN(c_s05breakdown)=0
+				cN(c_s06breakdown)=0
+				cN(c_s07breakdown)=0
+				cN(c_s10breakdown)=0
+				cN(c_balance)=tN(trans_tbal)
 			end if
 			pr #255,us 'form pos 1,c 10,4*N 10.2,3*C 10': account$,cN(c_balance),tN(trans_tbal),diff,penSum,txt$,lastBillDate$,fn_transType$(tN(trans_tcode))
+			rewrite #hCust,us form$(hCust): mat c$,mat cN
 		end if
 	end if
 loop
@@ -84,7 +90,7 @@ def fn_getLastTransaction(key$*10,mat t$,mat tN; ___,which)
 			
 			SetupTaTlrNoRec: ! norec on read below lands here
 			tranRec-=1
-		loop while tranRec>0 and tranRec>(lrec(hTran)-10000) ! just use the last 10000 regcords
+		loop while tranRec>0
 	end if
 	! /r
 	key$=trim$(key$)
