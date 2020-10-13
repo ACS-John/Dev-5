@@ -561,47 +561,46 @@ Finis: ! r:
 	else 
 		fnTos : respc=0
 		mylen=23 : mypos=mylen+2
-		fnLbl(1,1,"Total Bills Printed:",mylen,1)
+		fnLbl(1,1,'Total Bills Printed:',mylen,1)
 		fnTxt(1,mypos,8,0,1,"",1)
-		resp$(respc+=1)=cnvrt$("N 8",sum(billsPrintedCount))
+		resp$(respc+=1)=cnvrt$('N 8',sum(billsPrintedCount))
 		fnCmdSet(52)
 		fnAcs(mat resp$,ckey)
 	end if
 goto Xit ! /r
 Xit: fnXit
-BUD1: ! r: Open #81 BudMstr and #82 BudTrans bud1=1
+Bud1: ! r: Open #81 BudMstr and #82 BudTrans bud1=1
 	bud1=0
-	dim ba(13),badr(2),bt1(14,2),bd1(5),bd2(5)
-	open #81: "Name=[Q]\UBmstr\BudMstr.h[cno],KFName=[Q]\UBmstr\BudIdx1.h[cno],Shr",internal,input,keyed ioerr EO_BUD1
+	dim ba(13),badr(2),bt1(14,2)
+	open #81: "Name=[Q]\UBmstr\BudMstr.h[cno],KFName=[Q]\UBmstr\BudIdx1.h[cno],Shr",internal,input,keyed ioerr EoBud1
 	open #82: "Name=[Q]\UBmstr\BudTrans.h[cno],Shr",internal,input,relative 
 	bud1=1
-	EO_BUD1: ! 
+	EoBud1: ! 
 return  ! /r
-BUD2: ! r: the heart of it...
-	totba=bd1=bd2=budgetpb=havebudget=00
-	mat bd1(5) : mat bd1=(0) : mat bd2=(0)
-	if bud1=0 then goto EO_BUD2
-	read #81,using 'form pos 1,c 10,pd 4,12*pd 5.2,2*pd 3',key=z$: z$,mat ba,mat badr nokey EO_BUD2
+Bud2: ! r: the heart of it...
+	totba=bd1=budgetpb=havebudget=0
+	if bud1=0 then goto EoBud2
+	read #81,using 'form pos 1,c 10,pd 4,12*pd 5.2,2*pd 3',key=z$: z$,mat ba,mat badr nokey EoBud2
 	havebudget=1
 	for j=2 to 12
 		totba=totba+ba(j)
 	next j
-	if totba=0 then havebudget=0: goto EO_BUD2
+	if totba=0 then havebudget=0: goto EoBud2
 	ta1=badr(1)
 	do
-		if ta1=0 then goto EO_BUD2
-		read #82,using 'form pos 1,c 10,2*pd 4,24*pd 5.2,2*pd 4,pd 3',rec=ta1: z$,mat bt1,nba noRec EO_BUD2
-		if bt1(14,1)<=0 then ! if bt1(14,1)>0 then goto L3340
+		if ta1=0 then goto EoBud2
+		read #82,using 'form pos 1,c 10,2*pd 4,24*pd 5.2,2*pd 4,pd 3',rec=ta1: z$,mat bt1,nba noRec EoBud2
+		if bt1(14,1)<=0 then
 			! if bt1(1,2)=f then goto 3350 ! ignore current budget billing record
-			budgetpb=budgetpb+bt1(5,1) ! add up prior balance for budget billing customers (any unpaid not counting current bill
-			bd1=bd1+1
+			budgetpb+=bt1(5,1) ! add up prior balance for budget billing customers (any unpaid not including current bill)
+			bd1+=1
 			if bd1>5 then 
-				goto EO_BUD2
+				goto EoBud2
 			end if
-		end if ! L3340: !
+		end if
 		ta1=nba 
 	loop
-	EO_BUD2: ! 
+	EoBud2: ! 
 return  ! /r
 def fn_get_mat_at(mat at$)
 	open #h_company:=fnH: "Name=[Q]\UBmstr\Company.h[cno],Shr",internal,input 
@@ -1722,7 +1721,7 @@ def fn_add_activity_line(aal_text$*80,aal_amt; aal_always_show,aal_desc_left_ove
 	if aal_desc_left_override=0 then aal_desc_left_override=30
 	if aal_always_show or aal_amt<>0 then 
 		fnpa_txt(aal_text$,aal_desc_left_override,lyne+=adder)
-		fnpa_txt(cnvrt$("pic($-------.## CR)",aal_amt),160,lyne)
+		fnpa_txt(cnvrt$("pic($-------.## CR)",aal_amt),162,lyne)
 	end if 
 fnend
 def fn_print_bill_pennington(z$,mat mg$,mat mg2$,serviceFrom,serviceTo,penaltyDueDate)
