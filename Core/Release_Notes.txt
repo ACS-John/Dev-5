@@ -1,5 +1,6 @@
 Time and Date 		Sys	Program(s) and Change(s) Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
 ______________________	___	____________________________________________________________________________________________________________________________________________________________________________________________________________________________________           
+3:18 PM 10/13/2020	UB	Billing Journal now has an Export button which will create a tab delimited file which can be opened by Excel or other external applications
 11:07 10/20/2020	CO	5.75066  
 1:36 PM 10/9/2020	CO	removed potential for infite loop in error routine if a function name is wrong 
 13:08 10/20/2020	CO	5.75065   

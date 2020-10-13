@@ -4,46 +4,19 @@
 autoLibrary
 on error goto Ertn
  
-dim z$*10,e$(4)*30,g(12)
-dim a(7),t1(10,200,3),st$(10)
-dim x2(5),d(15),extra(23)
-dim hd1$*400
-dim hd2$*400
-dim csvHdr$*400
+dim t1(10,200,3)
+dim d(15)
 dim px$(99)*30,px(99),tx(99),gx(99)
 dim resp$(20)*128
-dim tg(11),usages(3)
  
 fnTop(program$)
+expDelim$=chr$(9)
+enableExpExport=1
 fnLastBillingDate(billing_date)
-fncreg_read('Route Low',bkno1$) : route_number=val(bkno1$)
-dim serviceName$(10)*20,tax_code$(10)*1,penalty$(10)*1
-fnGetServices(mat serviceName$,mat service$,mat tax_code$,mat penalty$)
-hd1$='Account                             '
-hd2$='{\ul Number   }  {\ul Name                   }  '
-csvHdr$='Account,Name,'
-for j=1 to 10
-	x2=pos(trim$(serviceName$(j)),' ',1)
-	if x2>0 then serviceName$(j)=serviceName$(j)(1:2)&'-'&serviceName$(j)(x2+1:len(serviceName$(j)))
-	if trim$(serviceName$(j))<>'' then
-		x1=pos (serviceName$(j),' ',1)
-		x1=min(x1,7)
-		hd1$=hd1$&'---------'
-		hd2$=hd2$&'{\ul '&lpad$(trim$(serviceName$(j)(1:x1)),8)&'} '
-		csvHdr$&=','&trim$(serviceName$(j))
-		sz1+=1
-		px$(sz1)=serviceName$(j)
-	end if
-next j
-! /r
-open #h_trans:=2: 'Name=[Q]\UBmstr\UBTransVB.h[cno],KFName=[Q]\UBmstr\UBTrIndx.h[cno],Shr',internal,input,keyed
-open #hRate:=fnH: 'Name=[Q]\UBmstr\ubData\RateMst.h[cno],KFName=[Q]\UBmstr\ubData\RateIdx1.h[cno],Shr',internal,input,keyed
-! r: get default sequence
-	fncreg_read('ubBilJrn.Sort_Option',sequence$)
-	seq=val(sequence$) conv ignore
-	if seq<1 then seq=1
-! /r
-MAIN: ! r: Screen 1
+route_number=fncreg_read('Route Low',bkno1$)
+seq=fncreg_read('ubBilJrn.Sort_Option',sequence$)
+if seq<1 then seq=1
+ScrMain: ! r: Screen 1
 	fnTos
 	respc=0
 	fnLbl(2,1,'Billing Date:',25,1)
@@ -64,13 +37,15 @@ MAIN: ! r: Screen 1
 	fnChk(10,27,'Print Usages:',1)
 	fncreg_read('ubBilJrn.Print Usages',resp$(resp_print_usages:=respc+=1))
 
-	fnCmdKey("&CSV",2)
+	if enableExpExport then
+		fnCmdKey("Export",2)
+	end if
 	fnCmdKey("&Print",1,1)
 	fnCmdKey("&Cancel",5,0,1)
 	
 	fnAcs(mat resp$,ckey)
 	if ckey=5 then goto Xit
-	if ckey=2 then csv=1 else csv=0
+	if ckey=2 then enableExport=1 else enableExport=0
 	billing_date=val(resp$(1))
 	if resp$(2)='True' then seq=1 ! route sequence
 	if resp$(3)='True' then seq=2 ! account sequence
@@ -84,6 +59,33 @@ MAIN: ! r: Screen 1
 ! /r
 
 ! r: initialize stuff
+open #h_trans:=fnH: 'Name=[Q]\UBmstr\UBTransVB.h[cno],KFName=[Q]\UBmstr\UBTrIndx.h[cno],Shr',internal,input,keyed
+open #hRate:=fnH: 'Name=[Q]\UBmstr\ubData\RateMst.h[cno],KFName=[Q]\UBmstr\ubData\RateIdx1.h[cno],Shr',internal,input,keyed
+
+dim serviceName$(10)*20,tax_code$(10)*1,penalty$(10)*1
+fnGetServices(mat serviceName$,mat service$,mat tax_code$,mat penalty$)
+
+dim hd1$*400
+hd1$='Account                             '
+dim hd2$*400
+hd2$='{\ul Number   }  {\ul Name                   }  '
+dim expHdr$*400
+expHdr$='Account'&expDelim$&'Name'
+sz1=0
+for j=1 to 10
+	x2=pos(trim$(serviceName$(j)),' ',1)
+	if x2>0 then serviceName$(j)=serviceName$(j)(1:2)&'-'&serviceName$(j)(x2+1:len(serviceName$(j)))
+	if trim$(serviceName$(j))<>'' then
+		x1=pos (serviceName$(j),' ',1)
+		x1=min(x1,7)
+		hd1$&='---------'
+		hd2$&='{\ul '&lpad$(trim$(serviceName$(j)(1:x1)),8)&'} '
+		expHdr$&=expDelim$&trim$(serviceName$(j))
+		sz1+=1
+		px$(sz1)=serviceName$(j)
+	end if
+next j
+
 if seq=0 or seq=1 then ! route number
 	open #hCustomer:=fnH: 'Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx5.h[cno],Shr',internal,input,keyed
 else if seq=2 then            ! account
@@ -99,43 +101,47 @@ if trim$(serviceName$(1))='Water'                               then services+=1
 if trim$(serviceName$(3))='Electric' or trim$(service$(3))='LM' then services+=1
 if serviceName$(3)(1:5)='Re-Se'                                 then services+=1 : reduc=1
 if trim$(serviceName$(4))='Gas'                                 then services+=1 : gas=1
+dim usages(3)
 mat usages(services)
-hd1$=hd1$&'---------    Prior  Current'
-hd2$=hd2$&'{\ul    Total} {\ul  Balance} {\ul  Balance}  '
+hd1$&='---------    Prior  Current'
+hd2$&='{\ul    Total} {\ul  Balance} {\ul  Balance}  '
+expHdr$&=expDelim$&'Total'&expDelim$&'Prior Balance'&expDelim$&'Current Balance'
 x1=int((len(hd1$)-43)/2)+27
 hd1$(x1:x1+17)=' Current Billing '
-sz1=0
+
 px$(sz1+=1)='   Total'
 px$(sz1+=1)='Previous Balance'
 px$(sz1+=1)='Current Balance'
 mat px$(sz1) : mat tx(sz1) : mat gx(sz1) : mat px(sz1)
-if prtusage$='T' and trim$(serviceName$(1))='Water'    then hd2$&=' {\ul  W-Usage}'
-if prtusage$='T' and trim$(serviceName$(3))='Electric' then hd2$&=' {\ul  E-Usage}'
-if prtusage$='T' and trim$(service$(3))='LM'           then hd2$&=' {\ul LM-Usage}'
-if prtusage$='T' and trim$(serviceName$(4))='Gas'      then hd2$&=' {\ul  G-Usage}'
-if prtusage$='T'                                       then hd2$&=' {\ul Meter Address}'
-if csv then
-	CsvAsk: !
+if prtusage$='T' then
+	if trim$(serviceName$(1))='Water'    then hd2$&=' {\ul  W-Usage}'      : expHdr$&=expDelim$&'W-Usage'
+	if trim$(serviceName$(3))='Electric' then hd2$&=' {\ul  E-Usage}'      : expHdr$&=expDelim$&'E-Usage'
+	if trim$(service$(3))='LM'           then hd2$&=' {\ul LM-Usage}'      : expHdr$&=expDelim$&'LM-Usage'
+	if trim$(serviceName$(4))='Gas'      then hd2$&=' {\ul  G-Usage}'      : expHdr$&=expDelim$&'G-Usage'
+	hd2$&=' {\ul Meter Address}' : expHdr$&=expDelim$&'Meter Address'
+end if
+if enableExport then
+	ExpAsk: !
 		dim save_name$*256
-		open #h_tmp:=fnH: "Name=SAVE:"&fnsave_as_path$&"\*.csv,RecL=1,replace",external,output ioerr CsvOpenErr
+		open #h_tmp:=fnH: "Name=SAVE:"&fnSpecialFolderPath$('Desktop')&'\*.txt,RecL=1,replace',external,output ioerr ExpOpenErr
 		save_name$=os_filename$(file$(h_tmp))
 		close #h_tmp,free:
-	goto PastCsvOpenErr
-	CsvOpenErr: !
-	pr err : pause
+	goto PastExpOpenErr
+	ExpOpenErr: !
+	! pr err : pause
 	if err=622 then
-		goto MAIN
+		goto ScrMain
 	else
 		mat ml$(2)
 		ml$(1)='Select a different file name.'
 		ml$(2)='Error: '&str$(err)
-		fnmsgbox(mat ml$)
+		fnMsgBox(mat ml$)
 		pr "Err:";err;" Line:";line
-		goto CsvAsk
+		goto ExpAsk
 	end if
-	PastCsvOpenErr: !
-	open #hCsv:=fnH: 'Name='&br_filename$(save_name$)&',RecL=2500,Replace,EOL=CRLF',display,output
-	pr #hCsv: csvHdr$
+	PastExpOpenErr: !
+	open #hExp:=fnH: 'Name='&br_filename$(save_name$)&',RecL=2500,Replace,EOL=CRLF',display,output
+	pr #hExp: expHdr$
 else
 	fnopenprn
 	gosub PrHeader
@@ -143,22 +149,27 @@ end if
 if prtbkno<>0 and seq=1 then
 	prtbkno$=rpad$(lpad$(str$(prtbkno),2),kln(hcustomer))
 	startcd=1
-	restore #hCustomer,key>=prtbkno$: nokey MAIN
+	restore #hCustomer,key>=prtbkno$: nokey ScrMain
 end if
 ! /r
-! r: main loop
+! r: ScrMain loop
 MainLoopTop: !
 	do
 		matchFound=0
-		read #hCustomer,using F_Customer: z$,mat e$,mat a,mat d,bal,f,mat g,route,estimatedate,mat extra eof EoCustomer
+		dim z$*10
+		dim e$(4)*30
+		dim g(12)
+		dim a(7)
+		dim extra(23)
+		read #hCustomer,using F_Customer: z$,mat e$,mat a,mat d,bal,customerBillingDate,mat g,route,estimatedate,mat extra eof EoCustomer
 		F_Customer: form pos 1,c 10,4*c 30,pos 143,7*pd 2,pos 217,15*pd 5,pos 292,pd 4.2,pd 4,12*pd 4.2,pos 1741,n 2,pos 1831,n 9,pos 1741,n 2,n 7,2*n 6,n 9,pd 5.2,n 3,3*n 9,3*n 2,3*n 3,n 1,3*n 9,3*pd 5.2
-		! if f=billing_date then
+		! if customerBillingDate=billing_date then
 		! 	matchFound=1
-		! else ! if f><billing_date then
+		! else ! if customerBillingDate><billing_date then
 			matchFound=fn_readFromHistory
 		! end if
 	loop until matchFound
-	if seq=1 and ~csv then  !  route subtotals
+	if seq=1 and ~enableExport then  !  route subtotals
 		if startcd=1 and prtbkno<>route then
 			goto EoCustomer
 		else if (route_number>0 and route_number<prtbkno) or route_number=route then
@@ -176,22 +187,40 @@ MainLoopTop: !
 	end if
 	! gosub PrintCustomer
 	! PrintCustomer: ! r:
-	e=bal-g(11) : j1=0
+	ee=bal-g(11) : j1=0
 	for j=1 to 10
 		if trim$(serviceName$(j))<>'' then px(j1+=1)=g(j)
 	next j
-	px(j1+1)=g(11) : px(j1+2)=e : px(j1+3)=bal
+	px(j1+1)=g(11) : px(j1+2)=ee : px(j1+3)=bal
 	mat tx=tx+px : mat gx=gx+px
 	x=0
 	if water=1 then x+=1 : usages(x)=d(3)
 	if reduc=1 then x+=1 : usages(x)=d(3)-d(7)
 	if gas=1   then x+=1 : usages(x)=d(11)
 	if estimatedate=billing_date then est$='E' else est$=''
-	if prtusage$='T' then
-		pr #255,using L1020: z$,e$(2)(1:23),mat px,est$,mat usages,e$(1)(1:25) pageoflow PgOf
-		L1020: form pos 1,c 10,x 2,c 23,sz1*n 9.2,x 1,c 1,services*n 9,x 1,c 25
-	else
-		pr #255,using L1020: z$,e$(2)(1:23),mat px,est$ pageoflow PgOf
+	if enableExport then
+		dim expLine$*512
+		expLine$='"'&z$&'"'&expDelim$
+		expLine$&='"'&rtrm$(e$(2))&'"'&expDelim$
+		for x=1 to sz1
+			expLine$&=str$(px(x))&expDelim$
+		nex x
+		! expLine$&='"'&rtrm$(est$)&'"'&expDelim$
+
+		if prtusage$='T' then
+			for x=1 to services
+				expLine$&=str$(usages(x))&expDelim$
+			nex x
+			expLine$&='"'&rtrm$(e$(1))&'"'&expDelim$
+		end if
+		pr #hExp:expLine$
+	else 
+		if prtusage$='T' then
+			pr #255,using L1020: z$,e$(2)(1:23),mat px,est$,mat usages,e$(1)(1:25) pageoflow PgOf
+			L1020: form pos 1,c 10,x 2,c 23,sz1*n 9.2,x 1,c 1,services*n 9,x 1,c 25
+		else
+			pr #255,using L1020: z$,e$(2)(1:23),mat px,est$ pageoflow PgOf
+		end if
 	end if
 	printedCustomersInBookCount+=1
 	gosub AccumulateTotalsByCode
@@ -231,31 +260,37 @@ PrRouteTotal: ! r:
 	mat tx=(0)
 return  ! /r
 EoCustomer: ! r:
-! close #hCustomer: ioerr ignore
-	if sum(tx) or sum(gx) then
-		if seq<>1 then
-			pr #255: ''
-			pr #255: tab(27);'{\ul Totals for All Routes }       {\ul Grand Totals}'
-		else
-			pr #255: ''
-			pr #255: tab(27);'{\ul Totals for Route Number '&str$(route_number)&'}       {\ul Grand Totals}'
-		end if
-		for j=1 to sz1
-			! if trim$(px$(j))<>'Penalty' then ! don't allow any penalties go thur totals
-			if tx(j) or gx(j) then
-				pr #255,using 'Form POS 1,C 30,N 15.2,X 6,N 15.2': px$(j),tx(j),gx(j)
+	! close #hCustomer: ioerr ignore
+	if ~enableExport then
+		if sum(tx) or sum(gx) then
+			if seq<>1 then
+				pr #255: ''
+				pr #255: tab(27);'{\ul Totals for All Routes }       {\ul Grand Totals}'
+			else
+				pr #255: ''
+				pr #255: tab(27);'{\ul Totals for Route Number '&str$(route_number)&'}       {\ul Grand Totals}'
 			end if
-			! end if  ! trim$(px$(j))<>'Penalty' then
-		next j
+			for j=1 to sz1
+				! if trim$(px$(j))<>'Penalty' then ! don't allow any penalties go thur totals
+				if tx(j) or gx(j) then
+					pr #255,using 'Form POS 1,C 30,N 15.2,X 6,N 15.2': px$(j),tx(j),gx(j)
+				end if
+				! end if  ! trim$(px$(j))<>'Penalty' then
+			next j
+		end if
+		gosub PrTotalsByCode
 	end if
-	gosub PrTotalsByCode
 	close #hCustomer: ioerr ignore
 	close #hRate : ioerr ignore
-	fncloseprn
+	if enableExport then
+		close #hExp:
+	else
+		fncloseprn
+	end if
 goto Xit ! /r
 Xit: fnXit
  
-AccumulateTotalsByCode: ! r: ACCUMULATE TOTALS BY CODE
+AccumulateTotalsByCode: ! r:
 	for j=1 to 10
 		if trim$(serviceName$(j))='' or uprc$(penalty$(j))='Y' then goto L1720 ! don't allow any penalties go thur totals
 		x2=1 : u2=0
@@ -319,6 +354,7 @@ AccumulateTotalsByCode: ! r: ACCUMULATE TOTALS BY CODE
 	next j
 return  ! /r
 PrTotalsByCode: ! r: pr TOTALS BY CODE
+	dim st$(10)
 	for st_item=1 to 10
 		st$(st_item)=service$(st_item)
 	next st_item
@@ -366,6 +402,7 @@ def fn_readFromHistory(; ___,returnN)
 	mat g=(0) : mat d=(0) : bal=0
 	restore #h_trans,key>=z$&'         ': nokey PFH_XIT
 	do
+		dim tg(11)
 		read #h_trans,using 'form pos 1,c 10,n 8,n 1,12*pd 4.2,6*pd 5,pd 4.2,n 1': p$,tdate,tcode,tamount,mat tg,wr,wu,er,eu,gr,gu,tbal,pcode eof PFH_XIT
 		if z$<>p$ then goto PFH_XIT
 		if tcode=1 then
