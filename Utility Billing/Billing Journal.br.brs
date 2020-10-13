@@ -7,7 +7,9 @@ on error goto Ertn
 dim z$*10,e$(4)*30,g(12)
 dim a(7),t1(10,200,3),st$(10)
 dim x2(5),d(15),extra(23)
-dim hd1$*400,hd2$*400
+dim hd1$*400
+dim hd2$*400
+dim csvHdr$*400
 dim px$(99)*30,px(99),tx(99),gx(99)
 dim resp$(20)*128
 dim tg(11),usages(3)
@@ -19,6 +21,7 @@ dim serviceName$(10)*20,tax_code$(10)*1,penalty$(10)*1
 fnGetServices(mat serviceName$,mat service$,mat tax_code$,mat penalty$)
 hd1$='Account                             '
 hd2$='{\ul Number   }  {\ul Name                   }  '
+csvHdr$='Account,Name,'
 for j=1 to 10
 	x2=pos(trim$(serviceName$(j)),' ',1)
 	if x2>0 then serviceName$(j)=serviceName$(j)(1:2)&'-'&serviceName$(j)(x2+1:len(serviceName$(j)))
@@ -27,7 +30,9 @@ for j=1 to 10
 		x1=min(x1,7)
 		hd1$=hd1$&'---------'
 		hd2$=hd2$&'{\ul '&lpad$(trim$(serviceName$(j)(1:x1)),8)&'} '
-		sz1+=1 : px$(sz1)=serviceName$(j)
+		csvHdr$&=','&trim$(serviceName$(j))
+		sz1+=1
+		px$(sz1)=serviceName$(j)
 	end if
 next j
 ! /r
@@ -58,9 +63,14 @@ MAIN: ! r: Screen 1
 	resp$(resp_route:=respc+=1)='[All]'
 	fnChk(10,27,'Print Usages:',1)
 	fncreg_read('ubBilJrn.Print Usages',resp$(resp_print_usages:=respc+=1))
-	fnCmdSet(3)
+
+	fnCmdKey("&CSV",2)
+	fnCmdKey("&Print",1,1)
+	fnCmdKey("&Cancel",5,0,1)
+	
 	fnAcs(mat resp$,ckey)
 	if ckey=5 then goto Xit
+	if ckey=2 then csv=1 else csv=0
 	billing_date=val(resp$(1))
 	if resp$(2)='True' then seq=1 ! route sequence
 	if resp$(3)='True' then seq=2 ! account sequence
@@ -72,6 +82,7 @@ MAIN: ! r: Screen 1
 	fncreg_write('ubBilJrn.Sort_Option',str$(seq))
 	fncreg_write('ubBilJrn.Print Usages',resp$(resp_print_usages))
 ! /r
+
 ! r: initialize stuff
 if seq=0 or seq=1 then ! route number
 	open #hCustomer:=fnH: 'Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx5.h[cno],Shr',internal,input,keyed
@@ -83,6 +94,7 @@ else if seq=4 then ! Customer Name
 	fnIndex('[Q]\UBmstr\Customer.h[cno]', env$('temp')&'\customer_name'&session$&'.h[cno]','41 30')
 	open #hCustomer:=fnH: 'Name=[Q]\UBmstr\Customer.h[cno],KFName='&env$('temp')&'\customer_name'&session$&'.h[cno],Shr',internal,input,keyed
 end if
+services=0
 if trim$(serviceName$(1))='Water'                               then services+=1 : water=1
 if trim$(serviceName$(3))='Electric' or trim$(service$(3))='LM' then services+=1
 if serviceName$(3)(1:5)='Re-Se'                                 then services+=1 : reduc=1
@@ -92,17 +104,42 @@ hd1$=hd1$&'---------    Prior  Current'
 hd2$=hd2$&'{\ul    Total} {\ul  Balance} {\ul  Balance}  '
 x1=int((len(hd1$)-43)/2)+27
 hd1$(x1:x1+17)=' Current Billing '
+sz1=0
 px$(sz1+=1)='   Total'
 px$(sz1+=1)='Previous Balance'
 px$(sz1+=1)='Current Balance'
 mat px$(sz1) : mat tx(sz1) : mat gx(sz1) : mat px(sz1)
-if prtusage$='T' and trim$(serviceName$(1))='Water'    then hd2$=hd2$&' {\ul  W-Usage}'
-if prtusage$='T' and trim$(serviceName$(3))='Electric' then hd2$=hd2$&' {\ul  E-Usage}'
-if prtusage$='T' and trim$(service$(3))='LM'           then hd2$=hd2$&' {\ul LM-Usage}'
-if prtusage$='T' and trim$(serviceName$(4))='Gas'      then hd2$=hd2$&' {\ul  G-Usage}'
-if prtusage$='T'                                       then hd2$=hd2$&' {\ul Meter Address}'
-fnopenprn
-gosub PrHeader
+if prtusage$='T' and trim$(serviceName$(1))='Water'    then hd2$&=' {\ul  W-Usage}'
+if prtusage$='T' and trim$(serviceName$(3))='Electric' then hd2$&=' {\ul  E-Usage}'
+if prtusage$='T' and trim$(service$(3))='LM'           then hd2$&=' {\ul LM-Usage}'
+if prtusage$='T' and trim$(serviceName$(4))='Gas'      then hd2$&=' {\ul  G-Usage}'
+if prtusage$='T'                                       then hd2$&=' {\ul Meter Address}'
+if csv then
+	CsvAsk: !
+		dim save_name$*256
+		open #h_tmp:=fnH: "Name=SAVE:"&fnsave_as_path$&"\*.csv,RecL=1,replace",external,output ioerr CsvOpenErr
+		save_name$=os_filename$(file$(h_tmp))
+		close #h_tmp,free:
+	goto PastCsvOpenErr
+	CsvOpenErr: !
+	pr err : pause
+	if err=622 then
+		goto MAIN
+	else
+		mat ml$(2)
+		ml$(1)='Select a different file name.'
+		ml$(2)='Error: '&str$(err)
+		fnmsgbox(mat ml$)
+		pr "Err:";err;" Line:";line
+		goto CsvAsk
+	end if
+	PastCsvOpenErr: !
+	open #hCsv:=fnH: 'Name='&br_filename$(save_name$)&',RecL=2500,Replace,EOL=CRLF',display,output
+	pr #hCsv: csvHdr$
+else
+	fnopenprn
+	gosub PrHeader
+end if
 if prtbkno<>0 and seq=1 then
 	prtbkno$=rpad$(lpad$(str$(prtbkno),2),kln(hcustomer))
 	startcd=1
@@ -121,7 +158,7 @@ MainLoopTop: !
 			matchFound=fn_readFromHistory
 		! end if
 	loop until matchFound
-	if seq=1 then  !  route subtotals
+	if seq=1 and ~csv then  !  route subtotals
 		if startcd=1 and prtbkno<>route then
 			goto EoCustomer
 		else if (route_number>0 and route_number<prtbkno) or route_number=route then

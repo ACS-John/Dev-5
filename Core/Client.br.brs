@@ -542,6 +542,7 @@ def fn_getClientLicense(mat client_has$)
 		else if env$('client')='Scottville Rural' then 
 			fn_userLimit(1)
 			fn_getClientLicense_add('UB') : fn_setUbLimit(500) ! U3 Utility Billing (<500 Customers)
+			if days(date$)<=days('12/31/2020','mm/dd/ccyy') then fn_getClientLicense_add('U5') ! UB External Collections Processing
 		else if env$('client')='Starr County Gas' then 
 			fn_userLimit(1)
 			if days(date$)<=days('04/15/2018','mm/dd/ccyy') then fn_getClientLicense_add('UB') : fn_setUbLimit(9999)
