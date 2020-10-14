@@ -27,7 +27,7 @@ def fn_setup
 	dim b(11)
 	dim gb(10)
 	dim pe$(4)*30
-	dim at$(3)*40 ! (1)=company name, (2)=company addr, (3)=company address   ** POPULATED BY: fn_get_mat_at(mat at$)
+	dim at$(3)*40 ! (1)=company name, (2)=company addr, (3)=company address   ** POPULATED BY: fn_getCompanyAddr(mat at$)
 	dim serviceName$(10)*20
 	dim serviceCode$(10)*2
 	dim tax_code$(10)*1
@@ -602,7 +602,7 @@ Bud2: ! r: the heart of it...
 	loop
 	EoBud2: ! 
 return  ! /r
-def fn_get_mat_at(mat at$)
+def fn_getCompanyAddr(mat at$)
 	open #h_company:=fnH: "Name=[Q]\UBmstr\Company.h[cno],Shr",internal,input 
 	read #h_company,using "Form POS 41,2*C 40": at$(2),at$(3)
 	close #h_company: 
@@ -640,7 +640,7 @@ def fn_print_bill_standard_pdf_a(z$,mat mg$; mat mg2$,enableIsDueNowAndPayable,e
 	if ~setup_standardA then 
 		setup_standardA=1
 		lyne=3
-		fn_get_mat_at(mat at$)
+		fn_getCompanyAddr(mat at$)
 	end if 
 	subtotalAmt=g(1)+g(2)+g(3)+g(4)+g(5)+g(6)+g(7)+g(8)+g(9)
 	payLateAmount=0
@@ -676,7 +676,6 @@ def fn_print_bill_standard_pdf_a(z$,mat mg$; mat mg2$,enableIsDueNowAndPayable,e
 	else 
 		fnpa_txt(poundBeforeAccount$&trim$(z$)&'  '&bulk$,xmargin+4,lyne*5+ymargin)
 	end if
-
 	
 	fnpa_txt(e$(1),xmargin+4,lyne*6+ymargin)
 	fnpa_txt('From: '&cnvrt$("PIC(ZZ/ZZ/ZZ)",serviceFromOverride)&'  To: '&cnvrt$("PIC(ZZ/ZZ/ZZ)",serviceToOverride),xmargin+2,lyne*7+ymargin)
@@ -974,7 +973,7 @@ def fn_print_bill_raymond(z$,mat mg$; raymondAdditionalText$*128) ! inherrits al
 	if ~setup_raymond then 
 		setup_raymond=1
 		lyne=3
-		fn_get_mat_at(mat at$)
+		fn_getCompanyAddr(mat at$)
 	end if 
 	! -- Standard 4 Per Page Even Perferated Card Stock Bills
 	billOnPageCount+=1
@@ -1179,9 +1178,7 @@ def fn_print_bill_merriam(z$,mat mg$,serviceFrom,serviceTo) ! inherrits all thos
 	if ~setup_merriam then ! r:
 		setup_merriam=1
 		lyne=3
-		addr_indent=8
-		addr_down=3
-		fn_get_mat_at(mat at$)
+		fn_getCompanyAddr(mat at$)
 		! r: read custom margins
 		dim ub4upBill_data$(4)
 		fnreg_read('ub4upBill Margin Top 1' ,ub4upBill_data$(1),  '5') ! bills 1 and 2
@@ -1346,17 +1343,17 @@ def fn_print_bill_merriam(z$,mat mg$,serviceFrom,serviceTo) ! inherrits all thos
 	! pr #20: 'Call Print.AddLine('&str$(xmargin+90)&','&str$(ymargin+14)&',7,0)'
 	! pr #20: 'Call Print.AddLine('&str$(xmargin+90)&','&str$(ymargin+17)&',7,0)'
 	fnpa_fontsize(9)
-	pr #20: 'Call Print.AddText("Please return this",'&str$(xmargin+68+addr_indent)&','&str$(lyne*7+ymargin)&')'
-	pr #20: 'Call Print.AddText("side with payment to:",'&str$(xmargin+68+addr_indent)&','&str$(lyne*8+ymargin)&')'
-	pr #20: 'Call Print.AddText("'&env$('cnam')(1:27)&'",'&str$(xmargin+68+addr_indent)&','&str$(lyne*9+ymargin)&')'
+	pr #20: 'Call Print.AddText("Please return this",'&str$(xmargin+68+8)&','&str$(lyne*7+ymargin)&')'
+	pr #20: 'Call Print.AddText("side with payment to:",'&str$(xmargin+68+8)&','&str$(lyne*8+ymargin)&')'
+	pr #20: 'Call Print.AddText("'&env$('cnam')(1:27)&'",'&str$(xmargin+68+8)&','&str$(lyne*9+ymargin)&')'
 	fnpa_fontsize
-	pr #20: 'Call Print.AddText("Pay By '&cnvrt$("PIC(ZZ/ZZ/ZZ)",d4)&':",'&str$(xmargin+68+addr_indent)&','&str$(lyne*11+ymargin)&')'
+	pr #20: 'Call Print.AddText("Pay By '&cnvrt$("PIC(ZZ/ZZ/ZZ)",d4)&':",'&str$(xmargin+68+8)&','&str$(lyne*11+ymargin)&')'
 	if budget>0 then 
-		pr #20: 'Call Print.AddText("'&fnformnumb$(budget+pbud,2,9)&'",'&str$(xmargin+100+addr_indent)&','&str$(lyne*11+ymargin)&')'
+		pr #20: 'Call Print.AddText("'&fnformnumb$(budget+pbud,2,9)&'",'&str$(xmargin+100+8)&','&str$(lyne*11+ymargin)&')'
 	else 
-		pr #20: 'Call Print.AddText("'&fnformnumb$(bal,2,9)&'",'&str$(xmargin+100+addr_indent)&','&str$(lyne*11+ymargin)&')'
-		pr #20: 'Call Print.AddText("After  '&cnvrt$("PIC(ZZ/ZZ/ZZ)",d4)&':",'&str$(xmargin+68+addr_indent)&','&str$(lyne*12+ymargin)&')'
-		pr #20: 'Call Print.AddText("'&fnformnumb$(fn_pay_after_amt,2,9)&'",'&str$(xmargin+100+addr_indent)&','&str$(lyne*12+ymargin)&')'
+		pr #20: 'Call Print.AddText("'&fnformnumb$(bal,2,9)&'",'&str$(xmargin+100+8)&','&str$(lyne*11+ymargin)&')'
+		pr #20: 'Call Print.AddText("After  '&cnvrt$("PIC(ZZ/ZZ/ZZ)",d4)&':",'&str$(xmargin+68+8)&','&str$(lyne*12+ymargin)&')'
+		pr #20: 'Call Print.AddText("'&fnformnumb$(fn_pay_after_amt,2,9)&'",'&str$(xmargin+100+8)&','&str$(lyne*12+ymargin)&')'
 	end if 
 	fnpa_fontsize(9)
 	addy=11.5
@@ -1370,12 +1367,12 @@ def fn_print_bill_merriam(z$,mat mg$,serviceFrom,serviceTo) ! inherrits all thos
 	if c4>0 then 
 		fnpa_txt("Final Bill",xmargin+1,lyne*(addy+=1)+ymargin)
 	end if 
-	pr #20: 'Call Print.AddText("#'&trim$(z$)&' '&bulk$&'",'&str$(xmargin+68+addr_indent+30)&','&str$(lyne*(addy+=1)+ymargin+20+addr_down)&')'
-	fnpa_txt(trim$(pe$(1)),xmargin+68+addr_indent,lyne*(addy+=1)+ymargin+20+addr_down)
-	fnpa_txt(trim$(pe$(2)),xmargin+68+addr_indent,lyne*(addy+=1)+ymargin+20+addr_down)
-	fnpa_txt(trim$(pe$(3)),xmargin+68+addr_indent,lyne*(addy+=1)+ymargin+20+addr_down)
-	fnpa_txt(trim$(pe$(4)),xmargin+68+addr_indent,lyne*(addy+=1)+ymargin+20+addr_down)
-	pr #20: 'Call Print.AddText("Return Service Requested.",'&str$(xmargin+68+addr_indent)&','&str$(lyne*(addy+=2)+ymargin+20+addr_down)&')'
+	pr #20: 'Call Print.AddText("#'&trim$(z$)&' '&bulk$&'",'&str$(xmargin+68+8+30)&','&str$(lyne*(addy+=1)+ymargin+20+3)&')'
+	fnpa_txt(trim$(pe$(1)),xmargin+68+8,lyne*(addy+=1)+ymargin+23)
+	fnpa_txt(trim$(pe$(2)),xmargin+68+8,lyne*(addy+=1)+ymargin+23)
+	fnpa_txt(trim$(pe$(3)),xmargin+68+8,lyne*(addy+=1)+ymargin+23)
+	fnpa_txt(trim$(pe$(4)),xmargin+68+8,lyne*(addy+=1)+ymargin+23)
+	pr #20: 'Call Print.AddText("Return Service Requested.",'&str$(xmargin+68+8)&','&str$(lyne*(addy+=2)+ymargin+20+3)&')'
 	if billOnPageCount=1 then checkx=1.375 : checky=3.6875
 	if billOnPageCount=2 then checkx=6.75 : checky=3.6875
 	if billOnPageCount=3 then checkx=1.375 : checky=7.9375
@@ -1385,18 +1382,15 @@ def fn_print_bill_merriam(z$,mat mg$,serviceFrom,serviceTo) ! inherrits all thos
 	end if 
 fnend 
 def fn_print_bill_blucksberg(z$,mat mg$,billing_date_prior,serviceFrom,serviceTo) ! inherrits all those local customer variables too
+	! -- Printer Program for Laser 1-Per Page Utility Bills
 	if ~setup_blucksberg then ! r:
 		setup_blucksberg=1
-		lyne=3
-		addr_indent=8
-		addr_down=3
-		 
-		fn_get_mat_at(mat at$)
+
+		fn_getCompanyAddr(mat at$)
 		
 	end if  ! /r
 	! r: pr that bill
-	! AFTER_READ_CUSTOMER: !
-	! gosub READALTADR
+	lyne=3
 	pb=bal-g(11)
 	if bal<=0 then g(9)=0 ! don't show penalty if balance 0 or less
 	activity_charge =fntrans_total_as_of(z$,billing_date_prior,1)
@@ -1411,22 +1405,22 @@ def fn_print_bill_blucksberg(z$,mat mg$,billing_date_prior,serviceFrom,serviceTo
 	prior_prior_balance+=activity_credit
 	prior_prior_balance-=activity_debit
 	
-	! -- Printer Program for Laser 1-Per Page Utility Bills
-	! gosub PRIOR_USAGES
-	! PRIOR_USAGES: ! r: Blucksberg's prior usages gathering
+	! r: Blucksberg's prior usages gathering
 	mat usage=(0): mat billdate=(0) : mat reads=(0)
-	restore #h_ubtransvb,key>=z$&"         ": nokey PU_Xit ! no average but active customer (use 0 usage)
-	L3160: !
-	read #h_ubtransvb,using L3170: p$,tdate,tcode,tamount,mat tg,wr,wu,er,eu,gr,gu,tbal,pcode eof PU_Xit
-	L3170: form pos 1,c 10,n 8,n 1,12*pd 4.2,6*pd 5,pd 4.2,n 1
-	if p$<>z$ then goto PU_Xit
-	if tcode<>1 then goto L3160 ! only charge transactions
-	usage(3)=usage(2): billdate(3)=billdate(2) : reads(3)=reads(2)
-	usage(2)=usage(1): billdate(2)=billdate(1) : reads(2)=reads(1)
-	usage(1)=wu: billdate(1)=tdate : reads(1)=wr
-	goto L3160
-	PU_Xit: ! 
-	! return  ! /r
+	restore #h_ubtransvb,key>=z$&"         ": nokey PuXit ! no average but active customer (use 0 usage)
+	do
+		Pu_readTrans: !
+		read #h_ubtransvb,using FpuTrans: p$,tdate,tcode,tamount,mat tg,wr,wu,er,eu,gr,gu,tbal,pcode eof PuXit
+		FpuTrans: form pos 1,c 10,n 8,n 1,12*pd 4.2,6*pd 5,pd 4.2,n 1
+		if p$=z$ then
+			if tcode<>1 then goto Pu_readTrans ! only charge transactions
+			usage(3)=usage(2): billdate(3)=billdate(2) : reads(3)=reads(2)
+			usage(2)=usage(1): billdate(2)=billdate(1) : reads(2)=reads(1)
+			usage(1)=wu: billdate(1)=tdate : reads(1)=wr
+		end if
+	loop while p$=z$
+	PuXit: ! 
+	! /r
 	
 	fnpa_fontsize
 	! fnpa_txt("Blucksberg Mtn Water Association",158)
@@ -1467,33 +1461,33 @@ def fn_print_bill_blucksberg(z$,mat mg$,billing_date_prior,serviceFrom,serviceTo
 	fnpa_txt("Account:      "&lpad$(trim$(z$),19),tmp_box_left_pos+5,tmp_box_top+8)
 	fnpa_txt('Due Date:                '&cnvrt$("PIC(ZZ/ZZ/ZZ)",d4),tmp_box_left_pos+5,tmp_box_top+12)
 	fnpa_txt("Billing Questions:   605-720-5013",tmp_box_left_pos+5,tmp_box_top+16)
-	if final>0 then fnpa_txt('Final Bill'&cnvrt$("PIC(ZZzZZzZZ)",0),80,tmp_box_top+15)
-
 	lyne=65 : adder=4
 	fnpa_txt("Meter Location: "&trim$(e$(1)) ,23,lyne+=adder)
 	fnpa_txt("Service From: "&cnvrt$("pic(zz/zz/zz)",serviceFrom)&" To: "&cnvrt$("pic(zz/zz/zz)",serviceTo) ,23,lyne+=adder)
 
+	if final>0 then
+		fnpa_fontBold(1)
+		fnpa_txt('Final Bill',102,82)
+		fnpa_fontBold(0)
+	end if
 	fnpa_line(26,85,157)
-
-	! fnpa_fontsize
-	! fnpa_fontitalic(1)
-	! fnpa_fontbold(1)
 
 	lyne=81
 	adder=4.5
 	! fnpa_fontitalic
 	! fnpa_txt("Activity Since "&date$(days(billing_date_prior,'ccyymmdd'),'mm/dd/yy'),80,lyne+=adder)
 	! fnpa_fontbold(0)
+	lyne+=adder
 	fnpa_txt("Amount",170,lyne)
-	fn_add_activity_line("Prior Balance as of "&date$(days(billing_date_prior,'ccyymmdd'),'mm/dd/yy'),prior_prior_balance)
-	fn_add_activity_line("Charges",activity_charge-g(11))
-	fn_add_activity_line("Penalties",activity_penalty)
-	fn_add_activity_line("Payments Received - Thank You",-activity_payment)
-	fn_add_activity_line("Credits",-activity_credit)
-	fn_add_activity_line("Debits",activity_debit)
+	fn_blucksAddActivityLine("Prior Balance as of "&date$(days(billing_date_prior,'ccyymmdd'),'mm/dd/yy'),prior_prior_balance)
+	fn_blucksAddActivityLine("Charges as of "&date$(days(billing_date_prior,'ccyymmdd'),'mm/dd/yy'),activity_charge-g(11))
+	fn_blucksAddActivityLine("Penalties as of "&date$(days(billing_date_prior,'ccyymmdd'),'mm/dd/yy'),activity_penalty)
+	fn_blucksAddActivityLine("Payments Received as of "&date$(days(billing_date_prior,'ccyymmdd'),'mm/dd/yy')&" - Thank You",-activity_payment)
+	fn_blucksAddActivityLine("Credits",-activity_credit)
+	fn_blucksAddActivityLine("Debits",activity_debit)
 	fnpa_line(162,lyne+4,22)
 	fnpa_fontbold(1) ! on
-	fn_add_activity_line("Balance Forward",pb,1,110)
+	fn_blucksAddActivityLine("Balance Forward",pb,1,110)
 	lyne+=adder
 	! fnpa_fontbold(1) ! on
 	fnpa_line(26,lyne+=adder,157)
@@ -1515,13 +1509,13 @@ def fn_print_bill_blucksberg(z$,mat mg$,billing_date_prior,serviceFrom,serviceTo
 	if g(1)<>0 then 
 		if g(1)>=14 then 
 			fnpa_txt("Base Water Service Fee",26,lyne+=adder)
-			fnpa_txt(cnvrt$("pic($$$$$$$$.## CR)",14),160,lyne)
+			fn_blucksAddChargeField(14)
 		end if 
 		fnpa_txt("Water",26,lyne+=adder)
 		fnpa_txt(cnvrt$("pic(zzzzzzzz#)",d(1)), 79,lyne)
 		fnpa_txt(cnvrt$("pic(zzzzzzzz#)",d(2)),103,lyne)
 		fnpa_txt(cnvrt$("pic(zzzzzzzz#)",d(3)),123,lyne)
-		fnpa_txt(cnvrt$("pic($$$$$$$$.## CR)",g(1)-14),160,lyne)
+		fn_blucksAddChargeField(g(1)-14)
 	end if 
 	
 	if g(2)<>0 then 
@@ -1531,19 +1525,19 @@ def fn_print_bill_blucksberg(z$,mat mg$,billing_date_prior,serviceFrom,serviceTo
 		else !  use water usage
 			fnpa_txt(cnvrt$("pic(zzzzzzzz#)",d(2)),121,lyne)
 		end if 
-		fnpa_txt(cnvrt$("pic(--------.##)",g(2)),160,lyne)
+		fn_blucksAddChargeField(g(2))
 	end if 
 	
 	if g(3)<>0 then 
 		fnpa_txt("Association Fee *",26,lyne+=adder)
-		fnpa_txt(cnvrt$("pic($$$$$$$$.##)",g(3)),160,lyne)
+		fn_blucksAddChargeField(g(3))
 	end if 
 	
 	if g(4)<>0 then 
 		fnpa_txt("Ambulance Fund",26,lyne+=adder)
 		! fnpa_txt(cnvrt$("pic(zzzzzzzz#)",d(9)) ,078,lyne) ! left over from gas 
 		! fnpa_txt(cnvrt$("pic(zzzzzzzz#)",d(11)) ,121,lyne)
-		fnpa_txt(cnvrt$("pic(--------.##)",g(4)),160,lyne)
+		fn_blucksAddChargeField(g(4))
 	end if 
 	
 	! g(5)
@@ -1551,19 +1545,19 @@ def fn_print_bill_blucksberg(z$,mat mg$,billing_date_prior,serviceFrom,serviceTo
 	
 	if g(7)<>0 then 
 		fnpa_txt(serviceName$(7),26,lyne+=adder)
-		fnpa_txt(cnvrt$("pic($$$$$$$$.##)",g(7)),160,lyne)
+		fn_blucksAddChargeField(g(7))
 	end if 
 	
 	! g(8)
 	
 	if g(9)<>0 then 
 		fnpa_txt("Tax",26,lyne+=adder)
-		fnpa_txt(cnvrt$("pic(--------.##)",g(9)),160,lyne)
+		fn_blucksAddChargeField(g(9))
 	end if 
 	
 	fnpa_line(162,lyne+4,22) : lyne+=1
 	fnpa_fontbold(1)
-	fn_add_activity_line("Total Current Charges",g(11), 1,110)
+	fn_blucksAddActivityLine("Total Current Charges",g(11), 1,110)
 	! lyne+=adder ! fnpa_txt("Total Current Charges",110,lyne+=adder)
 	! fnpa_txt(cnvrt$("pic(--------.##)",g(11)),160,lyne)
 	fnpa_fontbold(0)
@@ -1571,8 +1565,8 @@ def fn_print_bill_blucksberg(z$,mat mg$,billing_date_prior,serviceFrom,serviceTo
 	fnpa_line(162,lyne+3,22)
 	fnpa_fontsize(14)
 	fnpa_fontbold(1)
-	fnpa_txt("Total Due",105,lyne+=adder)
-	fnpa_txt(cnvrt$("pic($$$$$$$$.## CR)",bal),150,lyne)
+	fnpa_txt("Total Due",105+17,lyne+=adder)
+	fnpa_txt(cnvrt$("pic($$$$$---.## CR)",bal),150,lyne)
 	fnpa_line(162,lyne+=adder+1,22)
 	fnpa_line(162,lyne+=1,22)
 	fnpa_fontsize
@@ -1602,7 +1596,7 @@ def fn_print_bill_blucksberg(z$,mat mg$,billing_date_prior,serviceFrom,serviceTo
 	fnpa_fontsize
 	fnpa_txt("Account: "&lpad$(trim$(z$),16),40,243)
 	fnpa_txt('Due Date:        '&cnvrt$("PIC(ZZ/ZZ/ZZ)",d4),40,247)
-	fnpa_txt("Total Due:",40+10,251)
+	fnpa_txt("Total Due:",40,251) 
 	fnpa_txt(cnvrt$("pic(--------.##)",bal),70,251)
 	if bal>0 then 
 	 !   fnpa_txt("After "&cnvrt$("pic(##/##/##)",d4)&" pay "&cnvrt$("pic(---.##)",g(12)),40,255)
@@ -1615,7 +1609,18 @@ def fn_print_bill_blucksberg(z$,mat mg$,billing_date_prior,serviceFrom,serviceTo
 	fnpa_txt(trim$(pe$(4)),130,255)
 	fnpa_newpage
 	! /r
-fnend 
+fnend
+def fn_blucksAddActivityLine(aal_text$*80,aal_amt; aal_always_show,aal_desc_left_override)
+	if aal_desc_left_override=0 then aal_desc_left_override=30
+	if aal_always_show or aal_amt<>0 then 
+		fnpa_txt(aal_text$,aal_desc_left_override,lyne+=adder)
+		fnpa_txt(cnvrt$("pic($-------.## CR)",aal_amt),162,lyne)
+	end if 
+fnend
+def fn_blucksAddChargeField(value) ! requires local: lyne
+	fnpa_txt(cnvrt$("pic($-------.## CR)",value),162,lyne)
+fnend
+
 def fn_print_bill_omaha(z$,mat mg$,mat mg2$,serviceFrom,pbo_service_to,mat penalty$)
 ! correct margins are top=.2, bottom=.2,left=.4,right=.2
 ! r: any and all necessary setup (except opening the printer) to pr one bill
@@ -1717,13 +1722,7 @@ def fn_print_bill_omaha(z$,mat mg$,mat mg2$,serviceFrom,pbo_service_to,mat penal
 		end if 
 	end if 
 fnend 
-def fn_add_activity_line(aal_text$*80,aal_amt; aal_always_show,aal_desc_left_override)
-	if aal_desc_left_override=0 then aal_desc_left_override=30
-	if aal_always_show or aal_amt<>0 then 
-		fnpa_txt(aal_text$,aal_desc_left_override,lyne+=adder)
-		fnpa_txt(cnvrt$("pic($-------.## CR)",aal_amt),162,lyne)
-	end if 
-fnend
+
 def fn_print_bill_pennington(z$,mat mg$,mat mg2$,serviceFrom,serviceTo,penaltyDueDate)
 	! correct margins are top:.7, bottom:.25, left:.63, right:.25
 	! r: any and all necessary setup (except opening the printer) to pr one bill
