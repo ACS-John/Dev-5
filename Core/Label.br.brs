@@ -64,10 +64,12 @@ def library fnLabel(mat linestyle$)
 		opt$(2)="Avery 5160 (30/Page Laser)"
 		opt$(3)="Universal Data Processing (1-Up Dot-Matrix)"
 		fncomboa("labellib1",1,17,mat opt$,"Choose either dot-matrix or laser type labels",32)
-		resp$(1)=opt$(1)
+		fnreg_read('label format',resp$(1),opt$(1))
+		! resp$(1)=opt$(1)
 		fnCmdSet(2)
 		fnAcs(mat resp$,ckey)
 		if ckey<>5 then
+			fnreg_write('label format',resp$(1))
 			if resp$(1)=opt$(3) then
 				Labelformat=1
 			else
