@@ -1,5 +1,6 @@
 Time and Date 		Sys	Program(s) and Change(s) Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
 ______________________	___	____________________________________________________________________________________________________________________________________________________________________________________________________________________________________              
+8:43 AM 10/28/2020	UB	Past Due Notices - added an option to Print Labels when creating Past Due Notices
 13:29 10/20/2020	CO	5.75069  
 1:28 PM 10/15/2020	CO	Added memory to Label type selection screen 
 14:15 10/20/2020	CO	5.75068   
