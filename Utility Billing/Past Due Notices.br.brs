@@ -36,7 +36,7 @@ on error goto Ertn
 		at$(j)=rpt$(" ",int(y/2))&at$(j)
 	next j
 
-	deltype=0 : fnreg_read('UB - Past Due Notices - Delinquent Type',deltype$) : deltype=val(deltype$) conv ignore
+	deltype=fnreg_read('UB - Past Due Notices - Delinquent Type',deltype$)
 
 	open #adrbil=3: "Name=[Q]\UBmstr\UBADRBIL.H[cno],KFName=[Q]\UBmstr\AdrIndex.h[cno],Shr",internal,input,keyed
 	open #customer5=11: "Name=[Q]\UBmstr\Customer.H[cno],KFName=[Q]\UBmstr\UBINDx5.H[cno],Shr",internal,input,keyed
@@ -133,6 +133,7 @@ PrintPastDueNotice: ! r:
 		labelText$(4)=addr$(3)
 		labelText$(5)=addr$(4)
 		fnAddLabel(mat labelText$)
+		labelCount+=1
 	end if
 
 	if reminder=1 then
@@ -571,7 +572,14 @@ goto ScreenSelect ! /r
 ! ! end_________________
 ! /r  fnend
 ScreenSelect: ! r:
+
 	fn_report_close
+	if enableLabels and labelCount then 
+		dim lineStyle$(5)
+		fnLabel(mat lineStyle$)
+		labelCount=0
+	end if
+
 	fnTos
 	mat resp$=("")
 	respc=0
@@ -600,8 +608,8 @@ ScreenSelect: ! r:
 	resp$(respc+=1)="[All]"
 	fnChk(6,30,"Print only Selected Accounts")
 	resp$(respc+=1)="False"
-	! fnChk(8,30,"Print Labels too")
-	! resp$(resp_labels=respc+=1)="False"
+	fnChk(8,30,"Print Labels")
+	resp$(resp_labels=respc+=1)="False"
 	fnCmdKey("&Print",1,1)
 	if ~hard_coded then fnCmdKey("E&dit",3)
 	if ~hard_coded then fnCmdKey("&Add",4)
@@ -619,7 +627,7 @@ ScreenSelect: ! r:
 	resp$(3)=""
 	if resp$(4)="True" then sel_indv$="Y" else sel_indv$="N"
 	resp$(4)=""
-	! if resp$(resp_labels)='True' then enableLabels=1 else enableLabels=0
+	if resp$(resp_labels)='True' then enableLabels=1 else enableLabels=0
 	if ckey=1 and resp$(1)="(Pre-Printed)" then
 		do_print_std_form=1
 		goto PrintingBegin
@@ -725,10 +733,6 @@ EO_CUSTOMER: ! r:
 	customer1=0
 	fnpa_finis
 	! end if
-	if enableLabels then 
-		dim lineStyle$(5)
-		fnLabel(mat lineStyle$)
-	end if
 	if h_prnt1 then
 		close #h_prnt1: : h_prnt1=0
 		fnEditFile('atlantis',tmp_rtf_filename$)
@@ -736,7 +740,7 @@ EO_CUSTOMER: ! r:
 		fncloseprn
 	end if  ! /r
 Xit: ! r:
-	fn_report_close
+! 	fn_report_close   removed 10/28/2020 - does not seem to be used.  if reinstated also add if labelCount then fnLabel logic here also
 fnXit
 ! /r
 include: ertn
