@@ -84,9 +84,9 @@ def fn_emailQueuedInvoices(email_date$; ___,pdfname$*255,pdfline$*1000,ppos,ppos
 							dim mg$(0)*128
 							mat mg$(0)
 							fnAddOneC(mat mg$,'Email failed to send.')
-							fnAddOneC(mat mg$,'Contact Name:'&tab$&triM$(contact$(con_name)))
-							fnAddOneC(mat mg$,'Client ID:'&tab$&triM$(contact$(con_clientid)))
-							fnAddOneC(mat mg$,'Billing Email:'&tab$&triM$(contact$(con_bemail)))
+							fnAddOneC(mat mg$,'Contact Name:'&tab$&trim$(contact$(con_name)))
+							fnAddOneC(mat mg$,'Client ID:'&tab$&trim$(contact$(con_clientid)))
+							fnAddOneC(mat mg$,'Billing Email:'&tab$&trim$(contact$(con_bemail)))
 							fnAddOneC(mat mg$,'Attachment:')
 							fnAddOneC(mat mg$,attachment$)
 							fnAddOneC(mat mg$,'Please send manually.')

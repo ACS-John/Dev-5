@@ -233,6 +233,7 @@ def fn_setupClient ! ** set up for new clients
 		!   fn_setupClient_add("PiattCO",3536,20832)
 		fn_setupClient_add("Purdy",3610,34570)
 		fn_setupClient_add("Raymond",3660,32798)
+		fn_setupClient_add("RecoverysUnlimited",3670,0)
 		fn_setupClient_add('R R Crawford',760,12466)  ! owns a system, but is stalling support until their old stuff breaks.
 		fn_setupClient_add('Sheila',770,0)
 		fn_setupClient_add("Thomas Richardson",3720,7718)
