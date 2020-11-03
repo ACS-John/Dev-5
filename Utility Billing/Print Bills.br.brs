@@ -2276,7 +2276,7 @@ def fn_print_bill_galena(serviceTo)
 		rightSide=xmargin+125
 	fnpa_fontSize(fontNorm)
 	fnpa_txt('Please return this side with payment to:',rightSide,lyne*6+ymargin)
-	fnpa_txt('payment to:  '&env$('cnam')                ,rightSide,lyne*7+ymargin)
+	fnpa_txt(env$('cnam')                ,rightSide,lyne*7+ymargin)
 	fnpa_txt(e$(2)                          ,rightSide     ,ymargin+lyne*9 )
 	fnpa_txt(mg$(1)                         ,rightSide     ,ymargin+lyne*11 )
 	fnpa_txt(mg$(2)                         ,rightSide     ,ymargin+lyne*12 )
