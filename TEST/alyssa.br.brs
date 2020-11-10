@@ -1,3 +1,4 @@
+! change 6
 option base 0
 dim coin(10)
 mat coin=(0)

@@ -16,20 +16,20 @@ hh=val(time$(1:2))
 ! if hh<=7 or hh>19 t le setenv('background_picture','[pandaPath]\asset\night.jpg') else le setenv('background_picture','[pandaPath]\asset\day.jpg.jpg')
 if hh<=7 or hh>19 t le setenv('background_picture','[pandaPath]\asset\night.jpg') else le setenv('background_picture','[pandaPath]\asset\day2.jpg')
 
-enablePlugIns=1
+le enablePlugIns=1
 
 
-setEnv('keyword-include','include:')
+le setEnv('keyword-include','include:')
 ! setEnv('keyword-autoLibrary','autoLibrary')
-setEnv('path-autoLibrary','S:\Core\Library.br')
-setEnv('path-include','C:\ACS\Dev-5\^resource\')
-setEnv('ext-include','.brs')
-fnHasKeyAdd('[lineStartsWith]'&env$('keyword-include'))
-fnHasKeyAdd('autoLibrary')
+le setEnv('path-autoLibrary','S:\Core\Library.br')
+le setEnv('path-include','C:\ACS\Dev-5\^resource\')
+le setEnv('ext-include','.brs')
+le fnHasKeyAdd('[lineStartsWith]'&env$('keyword-include'))
+le fnHasKeyAdd('autoLibrary')
 
-fnHasKeyAdd(chr$(9))
+le fnHasKeyAdd(chr$(9))
 
-setEnv('exe-examDiff','C:\Program Files\ExamDiff Pro\ExamDiff.exe')
+le setEnv('exe-examDiff','C:\Program Files\ExamDiff Pro\ExamDiff.exe')
 
 
 

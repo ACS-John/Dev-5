@@ -32,11 +32,20 @@ def library fnReCompile(; disableRebuildCache,___,hproc)
 					pr #hproc: 'Save "'&sourceFile$(sourceItem)(1:len(sourceFile$(sourceItem))-4)&'"'&parameter$
 				end if
 			else
-				pr #hproc:  'sy ""C:\ACS\Dev-5\Sad Panda\Compile.cmd" "'&sourceFile$(sourceItem)&'""'
+				if ~openFileList then
+					openFileList=1
+					open #hFileList=fnH: 'name=[temp]\FileList[session].txt,recl=512,eol=crlf,replace',display,output
+				end if
+				pr #hFileList: sourceFile$(sourceItem)
 				! exe  'sy ""C:\ACS\Util\Lexi\ConvStoO.cmd" "'&sourceFile$(sourceItem)&'""'
 			end if
 			pr #hproc: ''
 		nex sourceItem
+		if openFileList then
+			pr #hproc:  'sy ""C:\ACS\Dev-5\Sad Panda\Compile.cmd" "filelist:'&file$(hFileList)&'""'
+			close #hFileList:
+			openFileList=0
+		end if
 		pr #hproc: 'Scr_Thaw'
 	
 		if env$("AfterRecompile")="" then
@@ -48,6 +57,7 @@ def library fnReCompile(; disableRebuildCache,___,hproc)
 		msr_file$=file$(hproc)
 		close #hproc:
 		execute "subProc "&msr_file$
+		pr 'after subproc etc' : pause
 		! /r
 	! else
 	! 	! r: now with filelist:
