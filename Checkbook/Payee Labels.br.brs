@@ -8,19 +8,18 @@
 
 	fnTop(program$,"Payee Labels")
 
-	dim item1$(3)
-	item1$(print_all=1)="[All]"
-	item1$(check_range=2)="Range of Checks"
-	item1$(specific_payees=3)="Specific payees"
+	dim optSelection$(3)
+	optSelection$(print_all=1)="[All]"
+	optSelection$(check_range=2)="Range of Checks"
+	optSelection$(specific_payees=3)="Specific payees"
 goto MAIN ! /r
 
 MAIN: ! r:
 	fnTos
 	respc=0 : mylen=25 : mypos=mylen+2
 	fnLbl(1,1,"Print Labels For:",mylen,1)
-	fi$="cllabels"
-	fncomboa(fi$,1,mypos,mat item1$,"The labels can be printed in Customer Number order,Customer Name order, or in Bar Code sequence")
-	resp$(respc+=1)=item1$(1)
+	fncomboa("cllabels",1,mypos,mat optSelection$,"The labels can be printed in Customer Number order,Customer Name order, or in Bar Code sequence")
+	resp$(respc+=1)=optSelection$(1)
 	fnChk(2,mypos+2,'Print Payee Number on Label',1)
 	resp$(respc+=1)='False'
 	fnLbl(4,1,"Bank:",mylen,1)
@@ -42,11 +41,11 @@ MAIN: ! r:
 	fnAcs(mat resp$,ckey)
 	if ckey=5 then
 		goto Xit
-	else if resp$(1)=item1$(1) then
+	else if resp$(1)=optSelection$(1) then
 		prtall=print_all
-	else if resp$(1)=item1$(2) then
+	else if resp$(1)=optSelection$(2) then
 		prtall=check_range
-	else if resp$(1)=item1$(3) then
+	else if resp$(1)=optSelection$(3) then
 		prtall=specific_payees
 	end if
 	printpayeenum$=resp$(2)
@@ -88,7 +87,7 @@ ASK_VN: ! r:
 	end if
 goto GetStarted ! /r
 
-GetStarted: ! r: just kinda starts here
+GetStarted: ! r:
 	read #hPaymstr,using 'Form Pos 1,C 8,4*C 30',key=vn$: vn$,nam$,ad1$,ad2$,csz$ nokey ASK_VN
 	goto L530
 	ReadForFirstPayee: !
