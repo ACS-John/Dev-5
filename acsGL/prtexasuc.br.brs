@@ -16,7 +16,7 @@
 	close #1:
 	if fnprocess=1 then goto L280
  
-L170: fnTos(sn$="PrTexasUc1") : _
+L170: fnTos
 	mylen=60: mypos=mylen+3 : right=1
 	fnLbl(1,1,"Quarter Ending Date(mm-yy):",mylen,right)
 	fnTxt(1,mypos,5,0,left,"",0,"Enter the date as two numeric digits for the month, then a dash, and two digits for the year." ,0 ) : _

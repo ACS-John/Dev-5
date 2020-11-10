@@ -23,10 +23,10 @@
 ! 
 MENU1: !
 ASKDAT: !
-	fnTos(sn$="VendorTransList") : _
+	fnTos
 	mylen=28 : mypos=mylen+2
 	fnLbl(1,1,"Report Heading Date:",mylen,right=1)
-	fnTxt(1,mypos,20) : _
+	fnTxt(1,mypos,20) 
 	resp$(1)=dat$
 	fnLbl(3,1,"Transaction Starting Date:",mylen,right)
 	fnTxt(3,mypos,8,0,left,'CCYYMMDD',0,'(Blank for All)  Normally you would enter the first day of the year, but you can analyze any time frame.') : _

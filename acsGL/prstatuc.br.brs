@@ -15,7 +15,7 @@
 	close #1:
 	if fnprocess=1 then goto L240
  
-	fnTos(sn$="Prstatuc")
+	fnTos
 	mylen=35: mypos=mylen+3 : right=1
 	fnLbl(1,1,"Quarterly Period Ending Date:",mylen,right)
 	fnTxt(1,mypos,20,0,left,"",0,"Enter the last day of the quarter.",0 )

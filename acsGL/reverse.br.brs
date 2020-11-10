@@ -12,7 +12,7 @@
 	my_p$="Generated Reversing Entry"
  
 MENU1: !
-	fnTos(sn$="Reverse") : _
+	fnTos
 	mylen=20: mypos=mylen+3 : right=1
 	fnLbl(1,10,"Search For (blank for all)")
 	fnLbl(2,1,"Adjustment Date:",mylen,right)

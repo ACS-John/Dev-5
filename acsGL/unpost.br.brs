@@ -9,7 +9,7 @@ dim n(2),l$*12
 ! /r
 fnTop(program$,cap$="Remove Entries")
 MENU1: ! r:
-	fnTos(sn$='UnPost')
+	fnTos
 	lc=0 : mylen=47 : mypos=mylen+2
 	fnLbl(lc+=1,1,"Starting Date to Remove:",mylen,1)
 	fnTxt(lc,mypos,0,0,0,'ccyymmdd')
