@@ -96,7 +96,7 @@ L800: fnopenprn
 	mat k$=(" ")
 	ss$=" "
 	goto L730
-L870: fnTos(sn$="prmerge") : _
+L870: fnTos
 	mylen=40: mypos=mylen+3 : right=1
 	fnLbl(1,10,"  Employee Number: "&ven$,mylen,left)
 	fnLbl(2,10,"   Check Number: "&tr$,mylen,left)
@@ -114,7 +114,7 @@ L870: fnTos(sn$="prmerge") : _
 	goto L80
  
 ADD: !
-	fnTos(sn$="prmerge3") : _
+	fnTos
 	mylen=15: mypos=mylen+3 : right=1: rc=0
 	fnLbl(1,1,"Name:",mylen,right)
 	fnTxt(1,mypos,30,0,left,"",0,"Enter the employee information.",0 ) : _
@@ -142,7 +142,7 @@ L1180: form pos 1,c 4,3*c 25,c 11,36*pd 5.2,2*n 5
 return
  
 CHANGE_EMPLOYEE_NUMBER: !
-	fnTos(sn$="Prmerge4") : _
+	fnTos
 	mylen=18: mypos=mylen+3 : right=1: rc=0
 	fnLbl(1,1,"Employee Number:",mylen,right)
 	fncombof("PRmstr",1,mypos,27,"[Q]\GLmstr\PRmstr.h[cno]",1,4,5,30,'',0,pas, "Choose from the list of employees.",0) : _

@@ -21,7 +21,7 @@ L180: open #ratiomst: "Name=[Q]\GLmstr\RatioMST.h[cno],KFName=[Q]\GLmstr\RatioID
 L210: execute "Index [Q]\GLmstr\RatioMST.h[cno]"&' '&"[Q]\GLmstr\SchIndX2.h[cno] 3 30 Replace DupKeys -n"
 	goto L180
 RATIOMSTGRID: !
-	fnTos(sn$="Ratiomst")
+	fnTos
 	respc=0
 	mat chdr$(3) : mat cmask$(3) : mat flxitm$(3)
 	chdr$(1)="Rec"
@@ -71,7 +71,7 @@ EO_RATIOMST_GRID: !
 	pause
 !
 ADD_EDIT_RATIOMST: !
-	fnTos(sn$="Ratiomst2")
+	fnTos
 	mylen=20: mypos=mylen+3 : right=1
 	fnLbl(1,1,"Ratio Number:",mylen,right)
 	fncombof('glRatiomst',1,mypos,0,"[Q]\GLmstr\ratiomst.h[cno]",1,3,4,40,"[Q]\GLmstr\ratioidx.h[cno]",add_all)
@@ -167,7 +167,7 @@ Xit: fnXit
  
 GL_NUMBERS: ! r:
 LEFT_SIDE: !
-	fnTos(sn$="Ratiomst3")
+	fnTos
 	resp=0
 	fnLbl(1,35,"Left Side Of Ratio",30,0)
 	mypos(1)=1: mypos (2)=50
@@ -191,7 +191,7 @@ LEFT_SIDE: !
 	if ckey=6 then goto REWRITE_EXISTING_RATIOMST
 RIGHT_SIDE: !
 	resp=0
-	fnTos(sn$="Ratiomst4")
+	fnTos
 	mypos(1)=1: mypos (2)=50
 	fnLbl(1,35,"Right Side Of Ratio",30,0)
 	for j=2 to 40 step 2

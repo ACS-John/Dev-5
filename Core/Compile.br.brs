@@ -34,7 +34,7 @@ def library fnReCompile(; disableRebuildCache,___,hproc)
 			else
 				if ~openFileList then
 					openFileList=1
-					open #hFileList=fnH: 'name=[temp]\FileList[session].txt,recl=512,eol=crlf,replace',display,output
+					open #hFileList=fnH: 'name='&env$('temp')&'\FileList[session].txt,recl=512,eol=crlf,replace',display,output
 				end if
 				pr #hFileList: sourceFile$(sourceItem)
 				! exe  'sy ""C:\ACS\Util\Lexi\ConvStoO.cmd" "'&sourceFile$(sourceItem)&'""'
