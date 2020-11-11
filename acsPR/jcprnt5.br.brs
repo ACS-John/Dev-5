@@ -19,10 +19,10 @@
 	if fnprocess=1 then goto L103
  
 MAIN_SCREEN: !
-	fnTos(sn$="namlst1") : _
+	fnTos
 	mylen=25 : mypos=mylen+2: resp=0: left=1
 	fnLbl(1,1,"Report Heading Date:",23,left)
-	fnTxt(1,mypos,20,0,0,"",0,"Recommended to use full alpha date format.") : _
+	fnTxt(1,mypos,20,0,0,"",0,"Recommended to use full alpha date format.")
 	resp$(resp+=1)=dh$
 	fnCmdSet(2)
 	fnAcs(mat resp$,ckey)
