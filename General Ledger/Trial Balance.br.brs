@@ -92,9 +92,9 @@ L950: pr #255:
 	close #1: ioerr ignore
 	close #2: ioerr ignore
 	fncloseprn
- 
-	goto Xit ! /r
- 
+
+goto Xit ! /r
+
 HDR2: ! r:
 	pr #255,using L1090: date$('mm/dd/yy'),env$('cnam')
 	pr #255,using L1090: time$,env$('program_caption')
