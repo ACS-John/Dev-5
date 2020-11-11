@@ -1002,7 +1002,7 @@ fnend
 
 
 ! /r
-def fn_readings_backup(bookFile$*512)
+def fn_readings_backup(bookFile$*512;bookNumberToStoreReadings$)
 	if exists(bookFile$) then
 		fnCopy(bookFile$,"[Q]\UBmstr\readings_"&bookNumberToStoreReadings$&'.bak')
 	end if
