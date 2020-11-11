@@ -9,7 +9,7 @@
 	dim resp$(10)*80
  
 	right=1
-	fnTop(program$,cap$="Trial Balance")
+	fnTop(program$)
 	open #20: "Name=[Q]\GLmstr\Company.h[cno]",internal,input,relative
 	read #20,using 'Form POS 150,2*N 1',rec=1: d(1),d(2)
 	read #20,using 'Form POS 152,2*C 12',rec=1: mat cogl$
@@ -97,7 +97,7 @@ L950: pr #255:
  
 HDR2: ! r:
 	pr #255,using L1090: date$('mm/dd/yy'),env$('cnam')
-	pr #255,using L1090: time$,cap$
+	pr #255,using L1090: time$,env$('program_caption')
 	L1090: form pos 1,c 8,pos 15,cc 50
 	pr #255,using L1110: fnpedat$,"Page ",p1+=1
 	L1110: form pos 15,cc 50,pos 115,c 5,n 4,skip 2

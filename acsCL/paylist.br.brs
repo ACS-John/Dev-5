@@ -17,26 +17,25 @@
 	open #trmstr2=31: "Name=[Q]\CLmstr\TRMSTR.h[cno],KFName=[Q]\CLmstr\TRIDX2.h[cno],Shr",internal,outIn,keyed
 	open #payeegl=3: "Name=[Q]\CLmstr\payeeGLBreakdown.h[cno],KFName=[Q]\CLmstr\Payeeglbkdidx.h[cno],Shr",internal,outIn,keyed
 	pr newpage
-	fnTos("ubnamlst") : _
+	fnTos
 	respc=0
-	text$="Report Heading Date:" : _
-	fnLbl(1,1,text$,25,1)
+	fnLbl(1,1,"Report Heading Date:",25,1)
 	fnTxt(1,27,20) : _
 	resp$(respc+=1)=dat$
 	fnLbl(2,1,"Print Order:",25,1)
 	item1$(1)="Payee Number" : _
 	item1$(2)="Alphabetic by Name"
-	fncomboa("paylist-srt",2,27,mat item1$,tt$) : _
+	fncomboa("paylist-srt",2,27,mat item1$,tt$)
 	resp$(respc+=1)=item1$(1)
-	fnChk(4,29,"Print G/L Breakdowns:",1) : _
+	fnChk(4,29,"Print G/L Breakdowns:",1)
 	resp$(respc+=1)="False"
-	fnChk(6,29,"Print Total Payments:",1) : _
+	fnChk(6,29,"Print Total Payments:",1)
 	resp$(respc+=1)="False"
 	fnLbl(8,1,"Transaction Starting Date:",25,1)
-	fnTxt(8,27,8,0,0,"3",0,'Blank for All (Only applicable if need Total Payments Printed)') : _
+	fnTxt(8,27,8,0,0,"3",0,'Blank for All (Only applicable if need Total Payments Printed)')
 	resp$(respc+=1)=" "
 	fnLbl(9,1,"Transaction Ending Date:",25,1)
-	fnTxt(9,27,8,0,0,"3",0,'Blank for All (Only applicable if need Total Payments Printed)') : _
+	fnTxt(9,27,8,0,0,"3",0,'Blank for All (Only applicable if need Total Payments Printed)')
 	resp$(respc+=1)=""
 	fnCmdSet(2): fnAcs(mat resp$,ckey)
 	if ckey=5 then goto Xit
