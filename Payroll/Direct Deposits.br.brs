@@ -20,7 +20,7 @@ dim dd$(0)*32, ddN(0)
 dd=fn_open('PR Direct Deposit',mat dd$,mat ddN,mat form$)
 open #hChecks:=fnH: "Name=[Q]\PRmstr\payrollchecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno]",internal,outIn,keyed
 goto Screen1
- 
+
 Screen1: ! r:
 	fnTos
 	respc=0    ! response counter
@@ -72,7 +72,7 @@ Screen1: ! r:
 ! /r
 ! (logic just falls through here)
 MainLoop: ! r: main loop
-	open #ddout=fnH: "Name=DDout"&wsid$&".txt,RecL=96,EOL=CRLF,Replace",external,output
+	open #hDdout=fnH: "Name=DDout[wsid].txt,RecL=96,EOL=CRLF,Replace",external,output
 	fnopenprn
 	gosub ReportHdr ! pr header
 	gosub FileHeaderRecord
@@ -86,7 +86,7 @@ MainLoop: ! r: main loop
 		! rtn	=ddN(dd_routing)
 		! acc	=ddN(dd_accType)
 		! acn$	=dd$(dd_account)
-	
+
 		mat tcp=(0): mat ttdc=(0)
 		if ddN(dd_routing)=0 and ddN(dd_accType)=0 then goto READ_DD
 		if uprc$(dd$(dd_enable))='Y' then  ! Y means Yes Direct Deposit is active for this person
@@ -113,10 +113,10 @@ MainLoop: ! r: main loop
 	close #dd: ioerr ignore
 	gosub BatchControlRecord ! (8)
 	gosub FileControlRecord ! (9)
-	close #ddout:
+	close #hDdout:
 	if trim$(path$)<>'' then
-		if exists(path$) then let fnFree(path$)
-		if fnCopy("DDout"&wsid$&".txt",path$)<=0 then
+		if exists(path$) then fnFree(path$)
+		if fnCopy("DDout[wsid].txt",path$)<=0 then
 			mat ml$(2)
 			ml$(1)='Unable to create file at location:'
 			ml$(2)=path$
@@ -124,7 +124,7 @@ MainLoop: ! r: main loop
 			goto Screen1
 		end if
 	end if
-	fnfree("DDout"&wsid$&".txt")
+	fnfree("DDout[wsid].txt")
 	pr #255,using L1770: "Total",totalCredit/100
 	L1770: form pos 22,c 15,n 12.2
 	! if env$('client')="West Rest Haven" then pr #255,using L1770: "Total In House",totalin
@@ -142,8 +142,8 @@ FileHeaderRecord: ! r: (1) File Header Record
 	dim idn$*23 ! (23) Immediate Destination Name
 	idn$="Federal Reserve Bank   " ! (23) Immediate Destination Name
 	rc$="" ! Reference Code
-	! before 5/5/19  write #ddout,using F_ddout_1: 1,pcde,federalrouting$,bankrouting$,fcd$,fct$,fidm$,rsz$,bf$,fc$,idn$,bankname$,rc$,"0",crlf$
-	write #ddout,using F_ddout_1: 1,pcde,bankrouting$,bankrouting$,fcd$,fct$,fidm$,rsz$,bf$,fc$,idn$,bankname$,rc$,"0",crlf$
+	! before 5/5/19  write #hDdout,using F_ddout_1: 1,pcde,federalrouting$,bankrouting$,fcd$,fct$,fidm$,rsz$,bf$,fc$,idn$,bankname$,rc$,"0",crlf$
+	write #hDdout,using F_ddout_1: 1,pcde,bankrouting$,bankrouting$,fcd$,fct$,fidm$,rsz$,bf$,fc$,idn$,bankname$,rc$,"0",crlf$
 	F_ddout_1: Form POS 1,G 1,PIC(##),C 10,C 10,G 6,G 4,C 1,C 3,C 2,C 1,C 23,C 23,C 7,C 1,c 2
 return ! /r
 BatchHeaderRecord: ! r: (5) Company/Batch Header Record
@@ -154,10 +154,10 @@ BatchHeaderRecord: ! r: (5) Company/Batch Header Record
 	eed$=date$("YYMMDD") ! Effective Entry Date
 	osc$="1" ! Originator Status Code
 	bn=1 !  BN=Batch Number
-	write #ddout,using F_ddout_5: 5,scc,env$('cnam')(1:16),cdd$="Payroll",'9'&fedid$,ecc$,ced$,fncd(d2),eed$,"",osc$,bankaccount$,bn,crlf$
+	write #hDdout,using F_ddout_5: 5,scc,env$('cnam')(1:16),cdd$="Payroll",'9'&fedid$,ecc$,ced$,fncd(d2),eed$,"",osc$,bankaccount$,bn,crlf$
 	F_ddout_5: Form POS 1,G 1,PIC(###),C 16,C 20,C 10,C 3,C 10,PIC(######),G 6,G 3,G 1,C 8,PIC(#######),c 2
 return ! /r
- 
+
 EntryDetailRecord: ! r: (6) entry detail
 	t1=t1+tcp(32)
 	if ddN(dd_accType)=27 then
@@ -166,12 +166,12 @@ EntryDetailRecord: ! r: (6) entry detail
 		tc=32 ! BC ! Transaction Code used to be was TC=23
 	end if
 	ari=0 ! Addenda Record Indicator
-	tn1=tn1+1
+	tn1+=1
 	tn$=cnvrt$("PIC(#######)",tn1) ! Trace Number
 	! dr$="081505731"
 	! da$="10004147         "
 	if testfile=1 then tcp(32)=0
-	write #ddout,using F_ddout_6a: 6,tc,int(ddN(dd_routing)/10),str$(ddN(dd_routing))(len(str$(ddN(dd_routing))):len(str$(ddN(dd_routing)))),dd$(dd_account),tcp(32)*100,z$,em$(1)(1:22),"",ari,lpad$(trim$(bankaccount$),8),tn$,crlf$         ! changed dr$ to str(ddN(dd_routing)) ; also da$ to dd$(dd_account)  ! entry to place money in employees account
+	write #hDdout,using F_ddout_6a: 6,tc,int(ddN(dd_routing)/10),str$(ddN(dd_routing))(len(str$(ddN(dd_routing))):len(str$(ddN(dd_routing)))),dd$(dd_account),tcp(32)*100,z$,em$(1)(1:22),"",ari,lpad$(trim$(bankaccount$),8),tn$,crlf$         ! changed dr$ to str(ddN(dd_routing)) ; also da$ to dd$(dd_account)  ! entry to place money in employees account
 	F_ddout_6a: Form POS 1,G 1,G 2,pic(########),C 1,C 17,PIC(##########),C 15,C 22,G 2,N 1,C 8,c 7,c 2
 	pr #255: z$&" "&em$(1)&" "&str$(tcp(32)) pageoflow ReportPgof
 	totalDebit+=(tcp(32)*100)
@@ -179,7 +179,7 @@ EntryDetailRecord: ! r: (6) entry detail
 	! if env$('client')="West Rest Haven" and ddN(dd_routing)=1190515 then totalin=totalin+tcp(32)
 	eh=eh+int(ddN(dd_routing)/10) ! Entry Hash should accumulate Routing numbers    dropping the last digit of the routing number
 return ! /r
- 
+
 BatchControlRecord: ! r: (8) Company/Batch Control Record
 	scc=220 ! Service Class Code
 	eac=tn1 ! Entry Addenda Count
@@ -196,8 +196,8 @@ BatchControlRecord: ! r: (8) Company/Batch Control Record
 		fnmsgbox(mat ml$,resp$)
 		goto Xit
 	end if
- 
-	! write #ddout,using F_ddout_8: 8,scc,eac,eh,totalDebit,totalCredit,fedid$,mac$,"",bankaccount$,bn,crlf$ ! removed *100 from totalDebit and from totalCredit
+
+	! write #hDdout,using F_ddout_8: 8,scc,eac,eh,totalDebit,totalCredit,fedid$,mac$,"",bankaccount$,bn,crlf$ ! removed *100 from totalDebit and from totalCredit
 	! F_ddout_8: Form POS 1,G 1,PIC(###),PIC(######),PIC(##########),2*PIC(############),C 10,C 19,C 6,C 8,PIC(#######),c 2
 	! File Control Record
 	bactr=1 ! Batch Count
@@ -216,24 +216,24 @@ BatchControlRecord: ! r: (8) Company/Batch Control Record
 		fnmsgbox(mat ml$,resp$)
 		goto Xit
 	end if
-	! write #ddout,using F_ddout_6b: 6,27,int(bnkrtn/10),str$(bnkrtn)(len(str$(bnkrtn)):len(str$(bnkrtn))),bankaccount$,totalDebit,"","","",ari,lpad$(trim$(bankaccount$),8),tn$,crlf$        ! changed dr$ to str(ddN(dd_routing)) ; also da$ to dd$(dd_account)  ! total entry for  debiting customer account
+	! write #hDdout,using F_ddout_6b: 6,27,int(bnkrtn/10),str$(bnkrtn)(len(str$(bnkrtn)):len(str$(bnkrtn))),bankaccount$,totalDebit,"","","",ari,lpad$(trim$(bankaccount$),8),tn$,crlf$        ! changed dr$ to str(ddN(dd_routing)) ; also da$ to dd$(dd_account)  ! total entry for  debiting customer account
 	! F_ddout_6b: Form POS 1,G 1,G 2,pic(########),C 1,C 17,PIC(##########),C 15,C 22,G 2,N 1,C 8,c 7,c 2
-	write #ddout,using F_ddout_8: 8,scc,eac,eh,totalDebit,totalCredit,'1'&fedid$,mac$,"",bankaccount$,bn,crlf$ ! removed *100 from totalDebit and from totalCredit
+	write #hDdout,using F_ddout_8: 8,scc,eac,eh,totalDebit,totalCredit,'1'&fedid$,mac$,"",bankaccount$,bn,crlf$ ! removed *100 from totalDebit and from totalCredit
 	F_ddout_8: Form POS 1,G 1,PIC(###),PIC(######),PIC(##########),2*PIC(############),C 10,C 19,C 6,C 8,PIC(#######),c 2
 	! 5/5/19 moved the write out for 8 record to after 6 record write out
 return ! /r
 FileControlRecord: ! r: (9) requires bkfactor,bactr,blctr,eac,eh,totalDebit,totalCredit,crlf$
-	write #ddout,using F_ddout_9a: 9,bactr,blctr,eac,eh,totalDebit,totalCredit,rpt$(" ",38)," ",crlf$    ! removed *100 from totalDebit and totalCredit
+	write #hDdout,using F_ddout_9a: 9,bactr,blctr,eac,eh,totalDebit,totalCredit,rpt$(" ",38)," ",crlf$    ! removed *100 from totalDebit and totalCredit
 	F_ddout_9a: Form POS 1,G 1,2*PIC(######),PIC(########),PIC(##########),2*PIC(############),C 38,C 1,c 2
 	if bkfactor<>0 then
 		for j=1 to bkfactor
 			! pr "l22="&STR$(L22+=1)
-			write #ddout,using F_ddout_9b: rpt$("9",94)&crlf$
+			write #hDdout,using F_ddout_9b: rpt$("9",94)&crlf$
 			F_ddout_9b: Form POS 1,C 96
 		next j
 	end if
 return ! /r
- 
+
 ReportPgof: ! r:
 	pr #255: newpage
 	gosub ReportHdr
@@ -245,9 +245,7 @@ ReportHdr: ! r:
 	pr #255: "\qc  {\f181 \fs16 \b Payroll Date: "&cnvrt$("pic(zzzz/zz/zz)",payrollDate)&"}"
 	pr #255: "\ql   "
 return ! /r
- 
- 
- 
+
 
 
 def fn_readSavedResponses ! basicaly all variables are local
@@ -264,7 +262,7 @@ def fn_readSavedResponses ! basicaly all variables are local
 		bankaccountDefault$='' ! Origination DFI Identification  (your bank account number)
 	end if
 	fncreg_read('Direct Deposit Source Bank Account',bankaccount$, bankaccountDefault$) ! The right hand set of numbers at the bottom of your checks.
- 
+
 	dim bankrouting$*10 ! Immediage Origin Routing Number
 	dim bankrouting$*10
 	dim bankrouting$*10
@@ -279,7 +277,7 @@ def fn_readSavedResponses ! basicaly all variables are local
 		bankRoutingDefault$='' ! Immediate Origin (contains the routing number for your bank)
 	end if
 	fncreg_read('Direct Deposit Source Bank Routing',bankrouting$, bankRoutingDefault$) ! The middle set of numbers at the bottom of your checks.
- 
+
 	! if env$('client')="Billings" then
 	! 	federalroutingDefault$=" 081505964"
 	! !else if env$('client')="Washington Parrish" then
@@ -291,7 +289,7 @@ def fn_readSavedResponses ! basicaly all variables are local
 	! end if
 	! dim federalrouting$*20
 	! fncreg_read('Direct Deposit Federal Reserve Routing',federalrouting$, federalroutingDefault$) ! Routing Number of Federal Reserve Used by Your Bank
-	
+
 	dim bankname$*23
 	dim bankNameDefault$*23 ! (23) Immediate Origin Name
 	if env$('client')='Billings' then
@@ -304,7 +302,7 @@ def fn_readSavedResponses ! basicaly all variables are local
 		bankNameDefault$='' ! (23) Immediate Origin Name  (your bank name)
 	end if
 	fncreg_read('Direct Deposit Source Bank Name',bankname$, bankNameDefault$)
- 
+
 	dim fedid$*12
 	dim fedidDefault$*12
 	if env$('client')='Billings' then
@@ -317,9 +315,9 @@ def fn_readSavedResponses ! basicaly all variables are local
 		fedidDefault$=''  ! Company Identification
 	end if
 	fncreg_read('Direct Deposit Federal ID Number',fedid$, fedidDefault$) ! The Federal ID number can be found on any payroll report.
- 
+
 	payrollDate=fnPayPeriodEndingDate
- 
+
 fnend
 include: fn_setup
 include: fn_open

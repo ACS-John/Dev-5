@@ -1,7 +1,7 @@
 10000 ! exe 'lo "'&program$(1:pos(program$,'.')-1)&'.br"'
 10300 ! execute 'config editor "c:\program files\notepad++\notepad++.exe"'
 10600 ! ed ~                     
-10900 ! ** do not remove line numbers nor use syntax that requires a pre-compilier in this program - or you're gonna have a bad time **
+10900 ! ** do not remove line numbers nor use syntax that requires a pre-compilier in this program - or you're not gonna have a good time **
 10920 ! ** renumber all you like
 11200 dim pandaPath$*256
 11500 pandaPath$=program$(1:pos(program$,'\',-1)-1) ! pandaPath$=env$('cmd_home')(without a trailing backslash
@@ -64,10 +64,8 @@
 
 30700
 31000   ! r: read Developer Settings
-31300   ! r: initialize arrays built in Developer Settings.proc
 31600   dim simpleSrepFrom$(0)*256
 31900   dim simpleSrepTo$(0)*256
-32200   ! /r
 32500   dim developerSettingsFilename$*256
 32800   developerSettingsFilename$=pandaPath$&'\Developer Settings.proc'
 33100   dim developerSettingsProcLine$(0)*800
@@ -86,7 +84,6 @@
 35100   dim tmpSourceFile$*256
 35120   dim outCompileFile$*256
 35140   fn_prepareLocalVariables(orgFiles$(i),tmpSourceFile$,outCompileFile$)
-
 35220   ! pr 'after fn_prepareLocalVariables' : pause
 35240   setenv('pandaSourceFile',tmpSourceFile$)
 35260   if env$('returningFromPlugInProc')='True' t
