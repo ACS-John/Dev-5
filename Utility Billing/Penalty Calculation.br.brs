@@ -60,6 +60,7 @@ READ_CUSTOMER: !
 		if bud1=1 then
 			fn_bud2
 			if env$('client')='White Hall' and bd1>0 then goto READ_CUSTOMER ! Never penalize if Budget Billing
+			if env$('client')='Bethany' and bd1>0 then goto READ_CUSTOMER ! Never penalize if Budget Billing
 			if totba>0 and bd1>0 and f=bildat then goto EO_READ ! Penalize if Budget Bill and Havent Paid Last Bill, Even If BAL <0
 			if totba>0 and bd1=0 then goto READ_CUSTOMER ! have budget billing and have paid last bill
 		end if
