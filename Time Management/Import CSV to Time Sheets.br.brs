@@ -5,6 +5,7 @@ dim sage_code$*128
 dim resp$(20)*1048
 client_id_sage_ax=3811
 client_id_brc=90
+client_id_framemasters=1864
 
 ! r: Screens
  
@@ -446,6 +447,8 @@ fnend
 def fn_houryRateAcs(wo_client,the_date,wo_month; hr_category,wo_sage_code$*128) ! inherrits client_id_sage_ax and client_id_brc
 	if hr_category=23 or hr_category=11 then
 		hr_return=0
+	else if wo_client=client_id_framemasters then
+		hr_return=125
 	else if wo_client=client_id_brc then
 		hr_return=60
 	else if wo_client=client_id_sage_ax then
