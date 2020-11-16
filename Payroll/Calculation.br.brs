@@ -1764,6 +1764,8 @@ def fn_setup
 	!                              PD 6.2  ficamx2
 	read #20,using 'Form POS 230,x 2,PD 4.2,PD 3.3,12*PD 4.2,POS 708,3*PD 4.3,3*PD 3.2,4*PD 4.2,POS 133,PD 6.3,PD 6.2': feducmax,ficarate,ficamax,ficamxr,mat sucw,mat sck,vacm,MinHourlyWage,mat wcm,ficar2,ficamx2
 	close #20:
+	mat wcm(5)
+	wcm(5)=wcm(1)*12 ! make an annual wcm and set it equal to monthly*12
 	ficamax=ficamax*10
 	dim fullname$(20)*20
 	dim abrevname$(20)*8
