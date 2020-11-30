@@ -393,9 +393,11 @@ MAKE_CORRECTIONS: ! r:
 REWRITE_WORK: ! r:
 	rewrite #hWork,using Fwork,key=x$: trim$(x$),mat x nokey L3900
 	goto L3910
-L3900: if trim$(uprc$(x$))<>trim$(uprc$("DELETED")) then fn_writeWork(hWork,x$,mat x)
-L3910: if trim$(uprc$(x$))=trim$(uprc$("DELETED")) then goto MAKE_CORRECTIONS
-	fn_accumulateprooftotals
+	L3900: !
+	if trim$(uprc$(x$))<>trim$(uprc$("DELETED")) then fn_writeWork(hWork,x$,mat x)
+	L3910: !
+	if trim$(uprc$(x$))=trim$(uprc$("DELETED")) then goto MAKE_CORRECTIONS
+	fn_accumulateProofTotals
 	if editmode=1 then return
 	goto MENU1 ! /r MAKE_CORRECTIONS
 CHANGE_ACT_NUM: ! r:
@@ -412,34 +414,34 @@ CHANGE_ACT_NUM: ! r:
 def fn_lo_pr_rec(x$,mat x)
 	pr #255,using "form pos 1,c 10,x 2,4*pic(----------)": x$,x(1),x(2),x(3),x(4)
 fnend  ! fn_lo_pr_rec
-def fn_accumulateprooftotals
+def fn_accumulateProofTotals
 	t(1)+=1
 	for j=1 to 15
 		t(j+1)+=x(j)
 	next j
 fnend
-def fn_checkwater
-	if wr1=0 then fn_us1
+def fn_checkWater
+	if wr1=0 then fn_us1(x$,d1)
 	if a(1)<>0 then ! skip routine if no water code
 		sn$=srvnam$(1)
 		if trim$(srvnam$(1))="" or mroll(1)=1 or (d(wr1)=0 and x(1)=0) then
 			passcheck=ckpass
-			goto CHECKWATER_FINIS
+			goto CheckWaterFinis
 		end if
 		if trim$(sn$)="Water" and x(12)>0 then
 			passcheck=ckpass
-			goto CHECKWATER_FINIS ! don't give warning if usage entered
+			goto CheckWaterFinis ! don't give warning if usage entered
 		end if
 		if env$('client')="Billings" and len(str$(x(1)))=6 and len(str$(d(wr1)))=7 then x(1)=val(str$(d(wr1))(1:1)&str$(x(1)))
 		x4=x(1)-d(wr1)
 		sn$=srvnam$(1) : x0=x4 : prior_read=d(wr1) : cur_read=x(1)
 		if x4>=0 then goto CHECKWATER_L4260
-		if x(12)>0 then sn$=srvnam$(1) : goto CHECKWATER_FINIS
+		if x(12)>0 then sn$=srvnam$(1) : goto CheckWaterFinis
 		if x4<0 then fn_meter_roll
 	end if  ! a(1)<>0
-	goto CHECKWATER_FINIS
+	goto CheckWaterFinis
 	CHECKWATER_L4260: !
-	if d(3)=0 then goto CHECKWATER_FINIS
+	if d(3)=0 then goto CheckWaterFinis
 	if uum_water<>0 and x0<uum_water then
 		passcheck=ckpass
 	else if x4<d(3)-d(3)*pcent or x4>d(3)+d(3)*pcent then
@@ -447,11 +449,11 @@ def fn_checkwater
 	else
 		passcheck=ckpass
 	end if
-	CHECKWATER_FINIS: !
+	CheckWaterFinis: !
 	fn_checkend
 fnend
 def fn_checkElec
-	if er1=0 then fn_us1
+	if er1=0 then fn_us1(x$,d1)
 	if a(3)=0 then goto CHECKELEC_FINIS ! if no electric code skip
 	if trim$(sn$)="Electric" and x(13)>0 then passcheck=ckpass : goto CHECKELEC_FINIS ! don't give warning if usage entered
 	if (service_type(3)=3 or (service_type(3)=3.1 and env$('client')<>"Thomasboro")) then
@@ -706,7 +708,7 @@ def fn_hh_readings(ip1$; listonly) ! HH_READINGS: ! hand held routines
 
 	HH_CONTINUE: ! Continue with standard Hand Held routine
 	read #hCustomer1,using F_CUSTOMER_C,key=x$,release: x$,aname$,mat a,final,mat d,alp$,mat extra,extra$(3) nokey HH_W_NXT
-	fn_us1
+	fn_us1(x$,d1)
 	mat est1=(0)
 	if x(1)=999999 then est1(1,1)=1 : est1(1,2)=100
 	if x(2)=999999 then est1(3,1)=1 : est1(3,2)=100
@@ -720,7 +722,7 @@ def fn_hh_readings(ip1$; listonly) ! HH_READINGS: ! hand held routines
 		skiprec=0 : goto HH_W_NXT
 	else 
 		fn_writeWork(hWork,x$,mat x)
-		fn_accumulateprooftotals
+		fn_accumulateProofTotals
 		fn_rmk1
 	end if
 	HH_W_NXT: !
@@ -844,7 +846,7 @@ ASK_ROUTE: ! r:
 	read #hCustomer1,using F_CUSTOMER_A,release: x$,e2$,mat a,f,final,mat d,mat extra,extra$(3) eof ASK_ROUTE
 	if final=1 or final=2 or final=3 then goto READ_CUSTOMER
 	fnapply_default_rates(mat extra, mat a)
-	! fn_US1
+	! fn_us1(x$,d1)
 	if eb1>0 and extra(1)><eb1 then goto READ_CUSTOMER ! if route selected and does not match route
 	if final=1 or final=3 then goto READ_CUSTOMER ! SKIP FINAL BILLED
 	gosub EST2
@@ -891,16 +893,16 @@ EST2: ! r:
 	fn_writeWork(hWork,x$,mat x)
 	rewrite #hCustomer1,using "Form pos 1831,n 9",key=x$: d1 ! write billing date into bill estimated field  extra(19) any time bill estimated
 	L7210: !
-	fn_accumulateprooftotals
+	fn_accumulateProofTotals
 	L7220: !
 return  ! /r
 Xit: fnXit
-def fn_us1
-	rc1=0 ! SET USAGE FIELDS
+def fn_us1(x$,d1)
+	! rc1=0 ! SET USAGE FIELDS
 	wr1=1 : er1=5 : gr1=9
 	read #hCustomer1,using "Form POS 296,PD 4",key=x$,release: f nokey US1_XIT
 	if f><d1 then goto US1_XIT
-	wr1=2 : er1=6 : gr1=10 : rc1=1 ! Re-Calculation
+	wr1=2 : er1=6 : gr1=10 ! rc1=1 ! Re-Calculation
 	US1_XIT: !
 fnend
 def fn_rmk1
@@ -1039,7 +1041,7 @@ ImportTabDelimited: ! r:
 		!   HH_CONTINUE: ! Continue with standard Hand Held routine
 		read #hCustomer1,using F_CUSTOMER_C,key=x$,release: x$,aname$,mat a,final,mat d,alp$,mat extra,extra$(3) nokey IT_W_NEXT
 		fnapply_default_rates(mat extra, mat a)
-		fn_us1
+		fn_us1(x$,d1)
 		mat est1=(0)
 		if x(1)=999999 then est1(1,1)=1 : est1(1,2)=100
 		if x(2)=999999 then est1(3,1)=1 : est1(3,2)=100
@@ -1051,7 +1053,7 @@ ImportTabDelimited: ! r:
 		end if
 		gosub CheckUnusual
 		fn_writeWork(hWork,x$,mat x)
-		fn_accumulateprooftotals
+		fn_accumulateProofTotals
 		fn_rmk1
 		IT_W_NEXT: !
 	loop
@@ -1356,7 +1358,7 @@ def fn_holdingFileLoad(; ___,hld9)
 	do
 		read #hld9,using Fwork: x$,mat x eof IPHOLD_EO_HLD9
 		fn_writeWork(hWork,x$,mat x, 1)
-		fn_accumulateprooftotals
+		fn_accumulateProofTotals
 	loop
 	IPHOLD_EO_HLD9: !
 	close #hld9:
@@ -1504,7 +1506,7 @@ fnend
 EnterReadings: ! r:
 	if alp$="*" then goto READ_ROUTE_SEQUENCE
 	EnterReadings2: !
-	fn_us1
+	fn_us1(x$,d1)
 	EnterReadings3: !
 	fnTos
 	rc=0 : frac=0
@@ -1806,7 +1808,7 @@ EnterReadings: ! r:
 	if addmethod<>am_loadHoldingFile then mat mroll=(0)
 	passcheck=ckpass=0 : ckfail=1 : ckcancel=2
 
-	fn_checkwater
+	fn_checkWater
 	if passcheck=ckfail then
 		editmode=1
 		goto EnterReadings3
