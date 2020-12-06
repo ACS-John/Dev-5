@@ -1,5 +1,7 @@
 Time and Date 		Sys	Program(s) and Change(s) Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
 ______________________	___	____________________________________________________________________________________________________________________________________________________________________________________________________________________________________                     
+3:34 PM 12/6/2020	UB	Transaction Index 2 was becoming corrupted and needed reindexing often.  corrected the places where it wasn't being updated
+4:26 PM 12/3/2020	GL	Accounts - gave individual buttons for Current and History Transactions (one less click)
 14:43 11/20/2020	CO	5.75076  
 10:08 11/20/2020	CO	5.75075   
 10:07 AM 11/13/2020	CL	Payee Labels - added an option to omit addresses from labels  

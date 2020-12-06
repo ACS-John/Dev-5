@@ -35,4 +35,5 @@ L420: write #2,using 'Form POS 1,C 10,N 8,N 1,12*PD 4.2,6*PD 5,PD 4.2,N 1': x$,t
 L430: goto L240
 L440: close #2:
 	fnIndex("[Q]\UBmstr\UBTransvb.h[cno]","[Q]\UBmstr\UBTrindx.h[cno]","1 19")
+	fnIndex("[Q]\UBmstr\UBTransVB.h[cno]", "[Q]\UBmstr\UBTrdt.h[cno]","11/1 8/10")
 Xit: fnXit

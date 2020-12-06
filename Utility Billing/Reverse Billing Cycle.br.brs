@@ -48,6 +48,7 @@ def fn_undobilling
 		! open data files
 		open #h_customer=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno]",internal,outIn,keyed
 		open #hTrans=fnH: "Name=[Q]\UBmstr\ubtransvb.h[cno],KFName=[Q]\UBmstr\ubtrindx.h[cno]",internal,outIn,keyed
+		open #hTrans2=fnH: "Name=[Q]\UBmstr\ubtransvb.h[cno],KFName=[Q]\UBmstr\UBTrdt.h[cno]",internal,outIn,keyed
 		fnopenprn
 		fn_printHeader
 		do
@@ -132,6 +133,7 @@ def fn_undobilling
 		fncloseprn
 		close #h_customer: ioerr ignore
 		close #hTrans: ioerr ignore
+		close #hTrans2: ioerr ignore
 		if filter=do_individual then goto ASK_OPTIONS
 	end if
 

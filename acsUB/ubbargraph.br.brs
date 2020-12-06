@@ -1,98 +1,74 @@
 ! Replace S:\acsUB\ubbargraph
 ! pr bar graph of earnings by month for current year of prior year.
-!
+
 	autoLibrary
+	fnTop(program$,"Bar Graph")
 	on error goto Ertn
-!
+
 	dim acno$*12,bc(13),bp(13),wrd2$(2)*54,bud(13)
 	dim month(13), month$(24)*25,month$*25,actualdate$(24)
-	right=1 : center=2
-	fnTop(program$,"Bar Graph")
-	dim cd1(24),rw(8,13),e$*30,u1(24),u2(24),u3(24,13),message$*60
+	dim cd1(24),u1(24),u2(24),u3(24,13)
 	dim n2(24),n3(24,13),resp$(27),txt$*80
 	dim serviceName$(10)*20,msgline$(2)*40,tg(11),opt$(3)*20
 	dim srv$(10)*2,dollars(24)
-!
- 
-	open #1: "Name=[Q]\UBmstr\Company.h[cno]",internal,input
-	read #1,using "Form POS 121,N 6": d1 ioerr L230
-	close #1:
+
+	d1=fnLastBillingDate
 	magicdate=fndate_mmddyy_to_ccyymmdd(d1)-20000 ! don't start with anything older that two years ago
-L230: fnGetServices(mat serviceName$,mat srv$)
+
+	fnGetServices(mat serviceName$,mat srv$)
 	open #2: "Name=[Q]\UBmstr\UBTransVB.h[cno],KFName=[Q]\UBmstr\UBTrIndx.h[cno],Shr",internal,input,keyed
-	open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,outIn,keyed
-L260: read #1,using L990,release: z$,e$,bildat eof SCREEN1
+	open #hCustomer=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,outIn,keyed
+	L260: !
+	read #hCustomer,using Fcustomer,release: z$,bildat eof SCREEN1
 	if bildat<>d1 then goto L260 ! current customer
 	restore #2,key>=z$&"         ": nokey L260
-L280: read #2,using L1040: p$,tdate,tcode,tamount,mat tg,wr,wu,er,eu,gr,gu,tbal,pcode eof SCREEN1
-	if p$<>z$ then goto L350           ! history record must belong to this customer
-	if tcode<>1 then goto L280 ! charge transaction
-	if tdate<magicdate then goto L280
-	j=j+1
-	if j>24 then goto SCREEN1
-	resp$(j)=str$(tdate)
-	goto L280
-L350: if resp$(12)="" then goto L260 ! try another customer
-!
+	do
+		read #2,using L1040: p$,tdate,tcode,tamount,mat tg,wr,wu,er,eu,gr,gu,tbal,pcode eof SCREEN1
+		if p$<>z$ then goto L350           ! history record must belong to this customer
+		if tcode=1 and tdate=>magicdate then ! charge transaction
+			j=j+1
+			if j>24 then goto SCREEN1
+			resp$(j)=str$(tdate)
+		end if
+	loop
+	L350: !
+	if resp$(12)="" then goto L260 ! try another customer
+
 SCREEN1: !
-	restore #1:
-	fnTos(sn$="ubbargraph")
+	restore #hCustomer:
+	fnTos
 	rc=0
 	fnLbl(1,1,"Billing dates to be used:",35,1)
-	fnTxt(2,1,10,10,0,"3",0,"Select up to 24 billing dates to use in the graph.")
-	rc+=1 : resp$(rc)=resp$(rc)
-	fnTxt(2,15,10,10,0,"3",0,"Select up to 24 billing dates to use in the graph.")
-	rc+=1 : resp$(rc)=resp$(rc)
-	fnTxt(2,29,10,10,0,"3",0,"Select up to 24 billing dates to use in the graph.")
-	rc+=1 : resp$(rc)=resp$(rc)
-	fnTxt(2,43,10,10,0,"3",0,"Select up to 24 billing dates to use in the graph.")
-	rc+=1 : resp$(rc)=resp$(rc)
-	fnTxt(2,57,10,10,0,"3",0,"Select up to 24 billing dates to use in the graph.")
-	rc+=1 : resp$(rc)=resp$(rc)
-	fnTxt(2,71,10,10,0,"3",0,"Select up to 24 billing dates to use in the graph.")
-	rc+=1 : resp$(rc)=resp$(rc)
-	fnTxt(4,1,10,10,0,"3",0,"Select up to 24 billing dates to use in the graph.")
-	rc+=1 : resp$(rc)=resp$(rc)
-	fnTxt(4,15,10,10,0,"3",0,"Select up to 24 billing dates to use in the graph.")
-	rc+=1 : resp$(rc)=resp$(rc)
-	fnTxt(4,29,10,10,0,"3",0,"Select up to 24 billing dates to use in the graph.")
-	rc+=1 : resp$(rc)=resp$(rc)
-	fnTxt(4,43,10,10,0,"3",0,"Select up to 24 billing dates to use in the graph.")
-	rc+=1 : resp$(rc)=resp$(rc)
-	fnTxt(4,57,10,10,0,"3",0,"Select up to 24 billing dates to use in the graph.")
-	rc+=1 : resp$(rc)=resp$(rc)
-	fnTxt(4,71,10,10,0,"3",0,"Select up to 24 billing dates to use in the graph.")
-	rc+=1 : resp$(rc)=resp$(rc)
-	fnTxt(6,1,10,10,0,"3",0,"Select up to 24 billing dates to use in the graph.")
-	rc+=1 : resp$(rc)=resp$(rc)
-	fnTxt(6,15,10,10,0,"3",0,"Select up to 24 billing dates to use in the graph.")
-	rc+=1 : resp$(rc)=resp$(rc)
-	fnTxt(6,29,10,10,0,"3",0,"Select up to 24 billing dates to use in the graph.")
-	rc+=1 : resp$(rc)=resp$(rc)
-	fnTxt(6,43,10,10,0,"3",0,"Select up to 24 billing dates to use in the graph.")
-	rc+=1 : resp$(rc)=resp$(rc)
-	fnTxt(6,57,10,10,0,"3",0,"Select up to 24 billing dates to use in the graph.")
-	rc+=1 : resp$(rc)=resp$(rc)
-	fnTxt(6,71,10,10,0,"3",0,"Select up to 24 billing dates to use in the graph.")
-	rc+=1 : resp$(rc)=resp$(rc)
-	fnTxt(8,1,10,10,0,"3",0,"Select up to 24 billing dates to use in the graph.")
-	rc+=1 : resp$(rc)=resp$(rc)
-	fnTxt(8,15,10,10,0,"3",0,"Select up to 24 billing dates to use in the graph.")
-	rc+=1 : resp$(rc)=resp$(rc)
-	fnTxt(8,29,10,10,0,"3",0,"Select up to 24 billing dates to use in the graph.")
-	rc+=1 : resp$(rc)=resp$(rc)
-	fnTxt(8,43,10,10,0,"3",0,"Select up to 24 billing dates to use in the graph.")
-	rc+=1 : resp$(rc)=resp$(rc)
-	fnTxt(8,57,10,10,0,"3",0,"Select up to 24 billing dates to use in the graph.")
-	rc+=1 : resp$(rc)=resp$(rc)
-	fnTxt(8,71,10,10,0,"3",0,"Select up to 24 billing dates to use in the graph.")
-	rc+=1 : resp$(rc)=resp$(rc)
+	fnTxt(2, 1,10,10,0,"3",0,"Select up to 24 billing dates to use in the graph.") : 	resp$(rc+=1)=resp$(rc)
+	fnTxt(2,15,10,10,0,"3",0,"Select up to 24 billing dates to use in the graph.") : 	resp$(rc+=1)=resp$(rc)
+	fnTxt(2,29,10,10,0,"3",0,"Select up to 24 billing dates to use in the graph.") : 	resp$(rc+=1)=resp$(rc)
+	fnTxt(2,43,10,10,0,"3",0,"Select up to 24 billing dates to use in the graph.") : 	resp$(rc+=1)=resp$(rc)
+	fnTxt(2,57,10,10,0,"3",0,"Select up to 24 billing dates to use in the graph.") : 	resp$(rc+=1)=resp$(rc)
+	fnTxt(2,71,10,10,0,"3",0,"Select up to 24 billing dates to use in the graph.") : 	resp$(rc+=1)=resp$(rc)
+	fnTxt(4, 1,10,10,0,"3",0,"Select up to 24 billing dates to use in the graph.") : 	resp$(rc+=1)=resp$(rc)
+	fnTxt(4,15,10,10,0,"3",0,"Select up to 24 billing dates to use in the graph.") : 	resp$(rc+=1)=resp$(rc)
+	fnTxt(4,29,10,10,0,"3",0,"Select up to 24 billing dates to use in the graph.") : 	resp$(rc+=1)=resp$(rc)
+	fnTxt(4,43,10,10,0,"3",0,"Select up to 24 billing dates to use in the graph.") : 	resp$(rc+=1)=resp$(rc)
+	fnTxt(4,57,10,10,0,"3",0,"Select up to 24 billing dates to use in the graph.") : 	resp$(rc+=1)=resp$(rc)
+	fnTxt(4,71,10,10,0,"3",0,"Select up to 24 billing dates to use in the graph.") : 	resp$(rc+=1)=resp$(rc)
+	fnTxt(6, 1,10,10,0,"3",0,"Select up to 24 billing dates to use in the graph.") : 	resp$(rc+=1)=resp$(rc)
+	fnTxt(6,15,10,10,0,"3",0,"Select up to 24 billing dates to use in the graph.") : 	resp$(rc+=1)=resp$(rc)
+	fnTxt(6,29,10,10,0,"3",0,"Select up to 24 billing dates to use in the graph.") : 	resp$(rc+=1)=resp$(rc)
+	fnTxt(6,43,10,10,0,"3",0,"Select up to 24 billing dates to use in the graph.") : 	resp$(rc+=1)=resp$(rc)
+	fnTxt(6,57,10,10,0,"3",0,"Select up to 24 billing dates to use in the graph.") : 	resp$(rc+=1)=resp$(rc)
+	fnTxt(6,71,10,10,0,"3",0,"Select up to 24 billing dates to use in the graph.") : 	resp$(rc+=1)=resp$(rc)
+	fnTxt(8, 1,10,10,0,"3",0,"Select up to 24 billing dates to use in the graph.") : 	resp$(rc+=1)=resp$(rc)
+	fnTxt(8,15,10,10,0,"3",0,"Select up to 24 billing dates to use in the graph.") : 	resp$(rc+=1)=resp$(rc)
+	fnTxt(8,29,10,10,0,"3",0,"Select up to 24 billing dates to use in the graph.") : 	resp$(rc+=1)=resp$(rc)
+	fnTxt(8,43,10,10,0,"3",0,"Select up to 24 billing dates to use in the graph.") : 	resp$(rc+=1)=resp$(rc)
+	fnTxt(8,57,10,10,0,"3",0,"Select up to 24 billing dates to use in the graph.") : 	resp$(rc+=1)=resp$(rc)
+	fnTxt(8,71,10,10,0,"3",0,"Select up to 24 billing dates to use in the graph.") : 	resp$(rc+=1)=resp$(rc)
 	fnLbl(10,1,"Service to Analyze:",24,1,0)
 	opt$(1)="Water"
 	if srv$(3)="EL" then opt$(2)= serviceName$(3)
 	if srv$(4)="GA" then opt$(3)= serviceName$(4)
 	fncomboa("ubbargraph",10,26,mat opt$,"",13)
-	rc+=1 : resp$(rc)=opt$(1)
+	resp$(rc+=1)=opt$(1)
 	fnFra(12,1,2,45,"Base graph on usage or dollars","You can either analyze dollars or usage.",0)
 	fnOpt(1,2,"Use Usage",0,1)
 	resp$(rc+=1)="True"
@@ -101,9 +77,10 @@ SCREEN1: !
 	fnAcs(mat resp$,ckey)
 	if ckey=5 then goto Xit
 	for j=1 to 24
-L740: x=pos(resp$(j),"/",1)
+		L740: !
+		x=pos(resp$(j),"/",1)
 		if x>0 then resp$(j)(x:x)="": goto L740
-		cd1(j)=val(resp$(j)) conv MSGBOX
+		cd1(j)=val(resp$(j)) conv Mbox
 		y=val(resp$(j)(5:6))
 		if y=1 then month$(j)="Jan"
 		if y=2 then month$(j)="Feb"
@@ -118,46 +95,50 @@ L740: x=pos(resp$(j),"/",1)
 		if y=11 then month$(j)="Nov"
 		if y=12 then month$(j)="Dec"
 	next j
-	if cd1(1)=0 then goto MSGBOX
-	if resp$(25)="Water" then codepos=143: service=1: opt=1
-	if resp$(25)=trim$(opt$(2)) then codepos=147: service=3: opt=2
+	if cd1(1)=0 then goto Mbox
+	if resp$(25)="Water"        then codepos=143 : service=1 : opt=1
+	if resp$(25)=trim$(opt$(2)) then codepos=147 : service=3 : opt=2
 	if resp$(25)=trim$(opt$(3)) then codepos=149 : service=4 : opt=3
-	if resp$(26)="True" then baseon=1 else baseon =2 ! 1=usage  2=dollars
+	if resp$(26)="True" then baseon=1 else baseon=2 ! 1=usage  2=dollars
 	for j=1 to 24
 		actualdate$(j)=resp$(j)
 	next j
-L980: read #1,using L990: z$,e$,servicecode eof STORE_GRAPH_INFO
-L990: form pos 1,c 10,x 30,c 30,pos 296,pd 4
-	restore #2,key>=z$&"         ": nokey L980
-L1010: read #2,using L1040: p$,tdate,tcode,tamount,mat tg,wr,wu,er,eu,gr,gu,tbal,pcode eof STORE_GRAPH_INFO
-	if p$<>z$ then goto L980 ! history record must belong to this customer
-	if tcode<>1 then goto L1010 ! charge transactions only
-L1040: form pos 1,c 10,n 8,n 1,12*pd 4.2,6*pd 5,pd 4.2,n 1
-!
-	if service=1 and baseon=1 then usage=wu ! analyzing water
-	if service=1 and baseon=2 then usage=tg(1) ! analyzing water dollars
-	if service=3 and baseon=1 then usage=eu ! analyzing electric
-	if service=3 and baseon=2 then usage=tg(3) ! analyzing electric dollars
-	if service=4 and baseon=1 then usage=gu ! analyzing gas
-	if service=4 and baseon=2 then usage=tg(4) ! analyzing gas dollars
-	for j=1 to 24
-		if cd1(j)><tdate then goto L1150
-		n2(j)=n2(j)+1
-		u1(j)=u1(j)+usage
-		u2(j)=u2(j)+usage
-L1150: next j
-	goto L1010 ! read next transaction
-STORE_GRAPH_INFO: !
+	ReadCustomer: !
+	read #hCustomer,using Fcustomer: z$,servicecode eof STORE_GRAPH_INFO
+	Fcustomer: form pos 1,c 10,pos 296,pd 4
+	restore #2,key>=z$&"         ": nokey ReadCustomer
+	do
+		read #2,using L1040: p$,tdate,tcode,tamount,mat tg,wr,wu,er,eu,gr,gu,tbal,pcode eof STORE_GRAPH_INFO
+		if p$<>z$ then goto ReadCustomer ! history record must belong to this customer
+		if tcode=1 then ! charge transactions only
+			L1040: form pos 1,c 10,n 8,n 1,12*pd 4.2,6*pd 5,pd 4.2,n 1
+		
+			if service=1 and baseon=1 then usage=wu ! analyzing water
+			if service=1 and baseon=2 then usage=tg(1) ! analyzing water dollars
+			if service=3 and baseon=1 then usage=eu ! analyzing electric
+			if service=3 and baseon=2 then usage=tg(3) ! analyzing electric dollars
+			if service=4 and baseon=1 then usage=gu ! analyzing gas
+			if service=4 and baseon=2 then usage=tg(4) ! analyzing gas dollars
+			for j=1 to 24
+				if cd1(j)><tdate then goto L1150
+				n2(j)=n2(j)+1
+				u1(j)=u1(j)+usage
+				u2(j)=u2(j)+usage
+				L1150: !
+			next j
+		end if
+	loop
+	STORE_GRAPH_INFO: !
 	for j=1 to 24
 		dollars(j)=u1(j)
 	next j
-PRINT_CHART: !
+	PRINT_CHART: !
 	gosub VBOPENPRINT
-! determine maximum height and depth
+	! determine maximum height and depth
 	for j=1 to 24
 		if dollars(j)>0 then maximumheight=max(dollars(j),maximumheight) ! largest dollars by month for either year  (dollars is negative figure
 	next j
-! determine top line and bottom line
+	! determine top line and bottom line
 	if baseon=1 then top$=str$(maximumheight): toplen=len(top$): top=toplen*10
 	if baseon=2 then top$=str$(round(maximumheight,0)): toplen=len(top$): top=toplen*10
 	toplen$=str$(val(top$(1:1))+1)
@@ -166,7 +147,7 @@ PRINT_CHART: !
 	next j
 	top=val(toplen$)
 	x=top*.10
-DETERMINE_BOTTOM_LINE: !
+	DETERMINE_BOTTOM_LINE: !
 	spacing=10 : lyne=30
 	cnam=(len(trim$(env$('cnam')))/2)+110
 	pr #20: 'Call Print.MyFontsize(14)'
@@ -223,7 +204,7 @@ DETERMINE_BOTTOM_LINE: !
 		pr #20: 'Call Print.AddText("'&txt$&'",'&str$(indent+1)&','&str$(linezero+11)&')'
 	next j
 	gosub RELEASE_PRINT
-	close #1:
+	close #hCustomer:
 	goto Xit
 !
 Xit: fnXit
@@ -241,9 +222,9 @@ return
 RELEASE_PRINT: !
 	fnpa_finis
 return
-MSGBOX: !
+Mbox: !
 	msgline$(1)="You have entered dates in an"
 	msgline$(2)="invalid format.  Use mmddyy format."
-	fnmsgbox(mat msgline$,resp$,'',1)
+	fnMbox(mat msgline$,resp$,'',1)
 goto SCREEN1
 include: ertn

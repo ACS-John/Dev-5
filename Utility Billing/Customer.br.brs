@@ -137,10 +137,12 @@ def library fnCustomer(x)
 		! rewrite #h_customer_1,using F_CUSTOMER_1: z$,mat e$,f$(1),mat a,mat b,mat c,mat d,bal,lastBillingDate,mat g,mat adr,alp$,f$(2),f$(3),bra_legacy,mat gb,df$,dr$,dc$,da$,mat extra,mat extra$
 
 		if z$<>holdz$ or extra(1)<>holdroute or extra(2)><holdseq then fixgrid=1
-		open #h_ubtransvb:=fnH: "Name=[Q]\UBmstr\ubTransVB.h[cno],KFName=[Q]\UBmstr\ubTrIndx.h[cno],Shr,Use,RecL=102,KPs=1,KLn=19",internal,outIn,keyed
+		open #h_ubtransvb=fnH: "Name=[Q]\UBmstr\ubTransVB.h[cno],KFName=[Q]\UBmstr\ubTrIndx.h[cno],Shr,Use,RecL=102,KPs=1,KLn=19",internal,outIn,keyed
+		open #hTrans2=fnH: "Name=[Q]\UBmstr\ubTransVB.h[cno],KFName=[Q]\UBmstr\UBTrdt.h[cno],Shr,Use,KPs=11/1,KLn=8/10",internal,outIn,keyed
 		fnKeyChange(h_ubtransvb,'form pos 1,c 10',holdz$,z$) ! change # in history transactions
 		close #h_ubtransvb:
-		open #h_workorder:=fnH: "Name=[Q]\UBmstr\WorkOrder.h[cno],KFName=[Q]\UBmstr\wkIndex.h[cno],Shr",internal,outIn,keyed
+		close #hTrans2:
+		open #h_workorder=fnH: "Name=[Q]\UBmstr\WorkOrder.h[cno],KFName=[Q]\UBmstr\wkIndex.h[cno],Shr",internal,outIn,keyed
 		fnKeyChange(h_workorder,'form pos 1,c 10',holdz$,z$)
 		close #h_workorder:
 		fn_accountKeyChange_meter(holdz$,z$)
@@ -367,7 +369,8 @@ def library fnCustomer(x)
 		end if
 	return  ! /r
 	DEL_HIST: ! r: Delete History with old account
-		open #h_ubtransvb:=fnH: "Name=[Q]\UBmstr\ubTransVB.h[cno],KFName=[Q]\UBmstr\ubTrIndx.h[cno],Shr,Use,RecL=102,KPs=1,KLn=19",internal,outIn,keyed
+		open #h_ubtransvb:=fnH: "Name=[Q]\UBmstr\ubTransVB.h[cno],KFName=[Q]\UBmstr\ubTrIndx.h[cno],Shr",internal,outIn,keyed
+		open #hTrans2=fnH: "Name=[Q]\UBmstr\ubTransVB.h[cno],KFName=[Q]\UBmstr\UBTrdt.h[cno],Shr",internal,outIn,keyed
 		restore #h_ubtransvb,key>=x$&"         ": nokey DEL_HIST_FINIS
 		do
 			read #h_ubtransvb,using 'form pos 1,c 10,n 8,n 1,12*pd 4.2,6*pd 5,pd 4.2,n 1': p$,tdate eof DEL_HIST_FINIS
@@ -376,6 +379,7 @@ def library fnCustomer(x)
 		loop
 		DEL_HIST_FINIS: !
 		close #h_ubtransvb:
+		close #hTrans2:
 	return  ! /r
 	NameScreen: ! r: the main customer screen
 		fnTos

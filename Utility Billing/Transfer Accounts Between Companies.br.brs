@@ -35,6 +35,7 @@ MENU1: !
 	open #1: "Name=[Q]\UBmstr\Customer.h"&str$(co1)&",Shr,KFName=[Q]\UBmstr\UBIndex.h"&str$(co1)&",Shr",internal,outIn,keyed  ! Ioerr MENU1
 	close #2: ioerr ignore
 	open #2: "Name=[Q]\UBmstr\ubTransVB.h"&str$(co1)&",Shr,KFName=[Q]\UBmstr\ubTrIndx.h"&str$(co1)&",Shr",internal,outIn,keyed
+	open #hTrans2=fnH: "Name=[Q]\UBmstr\ubTransVB.h"&str$(co1)&",Shr,KFName=[Q]\UBmstr\UBTrdt.h"&str$(co1)&",Shr",internal,outIn,keyed
 	close #3: ioerr ignore
 	open #3: "Name=[Q]\UBmstr\UBADRBIL.h"&str$(co1)&",Shr,KFName=[Q]\UBmstr\AdrIndex.h"&str$(co1)&",Shr",internal,outIn,keyed
 	close #41: ioerr ignore
@@ -48,6 +49,7 @@ MENU1: !
 	open #unused1=fnH: "Name=[Q]\UBmstr\Customer.h"&str$(co2)&",Shr,KFName=[Q]\UBmstr\UBIndx4.h"&str$(co2)&",Shr",internal,outIn,keyed
 	open #unused2=fnH: "Name=[Q]\UBmstr\Customer.h"&str$(co2)&",Shr,KFName=[Q]\UBmstr\UBIndx5.h"&str$(co2)&",Shr",internal,outIn,keyed
 	open #hUbTranVb=fnH: "Name=[Q]\UBmstr\ubTransVB.h"&str$(co2)&",Shr,KFName=[Q]\UBmstr\ubTrIndx.h"&str$(co2)&",Shr",internal,outIn,keyed
+	open #hUbTranVb2=fnH: "Name=[Q]\UBmstr\ubTransVB.h"&str$(co2)&",Shr,KFName=[Q]\UBmstr\UBTrdt.h"&str$(co2)&",Shr",internal,outIn,keyed
 	close #23: ioerr ignore
 	open #23: "Name=[Q]\UBmstr\UBADRBIL.h"&str$(co2)&",Shr,KFName=[Q]\UBmstr\AdrIndex.h"&str$(co2)&",Shr",internal,outIn,keyed  ! Ioerr MENU1
 	close #51: ioerr ignore
@@ -109,6 +111,7 @@ goto MENU2
 	close #3:
 	close #26:
 	close #hUbTranVb:
+	close #hUbTranVb2:
 	close #23:
 FINIS: ! r:
 	! close #31:
@@ -127,6 +130,7 @@ return  ! /r
 DONE: ! r:
 	close #1: ioerr ignore
 	close #2: ioerr ignore
+	close #hTrans2: ioerr ignore
 	close #3: ioerr ignore
 	! close #31: ioerr ignore
 	close #41: ioerr ignore
@@ -137,6 +141,7 @@ DONE: ! r:
 	close #unused1: ioerr ignore
 	close #unused2: ioerr ignore
 	close #hUbTranVb: ioerr ignore
+	close #hUbTranVb2: ioerr ignore
 	close #23: ioerr ignore
 	close #51: ioerr ignore
 	close #52: ioerr ignore

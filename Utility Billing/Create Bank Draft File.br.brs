@@ -51,6 +51,7 @@ initialization: ! r: initialization
 		open #6: "Name=[Q]\UBmstr\Collections-"&env$('acsUserId')&".h[cno],RecL=91,Replace", internal,outIn,relative
 	end if
 	open #7: "Name=[Q]\UBmstr\ubTransVB.h[cno],KFName=[Q]\UBmstr\ubTrIndx.h[cno],Shr",internal,outIn,keyed
+	open #hTrans2=fnH: "Name=[Q]\UBmstr\ubTransVB.h[cno],KFName=[Q]\UBmstr\UBTrdt.h[cno],Shr",internal,outIn,keyed
 	fnopenprn
 	gosub HdrP1
 	gosub HDR1

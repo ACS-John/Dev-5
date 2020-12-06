@@ -6,10 +6,11 @@
 	fnTop(program$,cap$="Duplicate Transaction Report")
  
 	open #fnH: "Name=[Q]\UBmstr\ubTransVB.h[cno],KFName=[Q]\UBmstr\ubTrIndx.h[cno],Shr",internal,outIn,keyed
+	open #fnH: "Name=[Q]\UBmstr\ubTransVB.h[cno],KFName=[Q]\UBmstr\UBTrdt.h[cno],Shr",internal,outIn,keyed
 	open #h_trans1:=fnH: "Name=[Q]\UBmstr\ubTransVB.h[cno],Shr",internal,input,relative
 	open #h_trans2:=fnH: "Name=[Q]\UBmstr\ubTransVB.h[cno],KFName=[Q]\UBmstr\ubTrIndx.h[cno],Shr",internal,input,keyed
 	trans1_lrec=lrec(h_trans1)
-	F_TRANS: form pos 1,c 10,n 8,n 1,12*pd 4.2,6*pd 5,pd 4.2,n 1
+	Ftrans: form pos 1,c 10,n 8,n 1,12*pd 4.2,6*pd 5,pd 4.2,n 1
  
 	del_dupe=1
  
@@ -43,7 +44,7 @@
 		NEXT_REC: !
 		trans1_rec+=1
 		if trans1_rec>trans1_lrec or (rec_end>0 and rec_end<trans1_rec) then goto FINIS
-		read #h_trans1,using F_TRANS,rec=trans1_rec: p$,tdate,tcode,tamount,mat tg,wr,wu,er,eu,gr,gu,tbal,pcode noRec NEXT_REC
+		read #h_trans1,using Ftrans,rec=trans1_rec: p$,tdate,tcode,tamount,mat tg,wr,wu,er,eu,gr,gu,tbal,pcode noRec NEXT_REC
 		pr trans1_rec
 		if fn_has_dupe then
 			pr #255,using FORM_OUT: trans1_rec,p$,tdate,tamount pageoflow PGOF
@@ -55,7 +56,7 @@ FINIS: !
 	fncloseprn
 	close #h_trans1:
 Xit: !
-	fnXit
+fnXit
  
 PGOF: ! r:
 	pr #255: newpage
@@ -70,7 +71,7 @@ def fn_has_dupe
 	if del_dupe then
 		restore #h_trans2:
 		do
-			read #h_trans2,using F_TRANS: hd_p$,hd_tdate,hd_tcode,hd_tamount,mat hd_tg,hd_wr,hd_wu,hd_er,hd_eu,hd_gr,hd_gu,hd_tbal,hd_pcode eof HD_EOF
+			read #h_trans2,using Ftrans: hd_p$,hd_tdate,hd_tcode,hd_tamount,mat hd_tg,hd_wr,hd_wu,hd_er,hd_eu,hd_gr,hd_gu,hd_tbal,hd_pcode eof HD_EOF
 			if ~dupe(1) or p$=hd_p$ then
 				if ~dupe(2) or tdate=hd_tdate then
 					if ~dupe(3) or tamount=hd_tamount then
@@ -87,7 +88,7 @@ def fn_has_dupe
 	else
 		restore #h_trans2:
 		do
-			read #h_trans2,using F_TRANS: hd_p$,hd_tdate,hd_tcode,hd_tamount,mat hd_tg,hd_wr,hd_wu,hd_er,hd_eu,hd_gr,hd_gu,hd_tbal,hd_pcode eof HD_EOF
+			read #h_trans2,using Ftrans: hd_p$,hd_tdate,hd_tcode,hd_tamount,mat hd_tg,hd_wr,hd_wu,hd_er,hd_eu,hd_gr,hd_gu,hd_tbal,hd_pcode eof HD_EOF
 			if ~dupe(1) or p$=hd_p$ then
 				if ~dupe(2) or tdate=hd_tdate then
 					if ~dupe(3) or tamount=hd_tamount then
@@ -118,14 +119,14 @@ def fn_trans_delete(td_rec)
 		dim tdt_tg(11)
 		dim tdc_tg(11)
 	end if
-	read #h_td_trans1,using F_TRANS,rec=td_rec: td_customer_key$,td_tdate,td_trans_code,td_trans_amt,mat tdt_tg,td_wr,td_wu,td_er,td_eu,td_gr,td_gu,td_tbal,td_pcode noRec TD_XIT
+	read #h_td_trans1,using Ftrans,rec=td_rec: td_customer_key$,td_tdate,td_trans_code,td_trans_amt,mat tdt_tg,td_wr,td_wu,td_er,td_eu,td_gr,td_gu,td_tbal,td_pcode noRec TD_XIT
 	if td_pcode<>0 then
-		mat td_msg$(4)
-		td_msg$(1)='This transaction has already been posted (Posting Code='&str$(td_pcode)&') to General Ledger'
-		td_msg$(2)='The General Ledger must also be manually corrected.'
-		td_msg$(3)='You may instead consider a credit or debit memo.'
-		td_msg$(4)='Are you sure you want to delete it?'
-		fnmsgbox(mat txt$,resp$,cap$,52)
+		mat td_msg$(0)
+		fnAddOneC(mat td_msg$,'This transaction has already been posted (Posting Code='&str$(td_pcode)&') to General Ledger' 	)
+		fnAddOneC(mat td_msg$,'The General Ledger must also be manually corrected.'                                             	)
+		fnAddOneC(mat td_msg$,'You may instead consider a credit or debit memo.'                                                	)
+		fnAddOneC(mat td_msg$,'Are you sure you want to delete it?'                                                              	)
+		fnmsgbox(mat td_msg$,resp$,cap$,52)
 		if resp$<>'Yes' then
 			goto TD_XIT
 		end if
@@ -165,7 +166,7 @@ def fn_trans_delete(td_rec)
 	td_trans_amt=0
 	! .! rewrite #h_td_customer,using F_TB_CUSTOMER,key=td_customer_key$: tb_bal,mat tb_gb
 	pr #255: 'would delete rec '&str$(td_rec)
-	! .! rewrite #h_td_trans1,using F_TRANS,rec=td_rec: td_customer_key$,td_tdate,td_trans_code,td_trans_amt,mat tdt_tg,td_wr,td_wu,td_er,td_eu,td_gr,td_gu,td_tbal,td_pcode
+	! .! rewrite #h_td_trans1,using Ftrans,rec=td_rec: td_customer_key$,td_tdate,td_trans_code,td_trans_amt,mat tdt_tg,td_wr,td_wu,td_er,td_eu,td_gr,td_gu,td_tbal,td_pcode
 	TD_XIT: !
 fnend
 def fn_header

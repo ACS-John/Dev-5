@@ -1324,7 +1324,7 @@ fnend
 		library 'S:\acsUB\CmbAct.br': fncmbact
 		fncmbact=fncmbact(lyne,mypos, addall,container,indexfile$)
 	fnend
-	def library fnLastBillingDate(&d1;get_or_put)
+	def library fnLastBillingDate(; &d1,get_or_put)
 		library 'S:\Utility Billing\fn\lastBillingDate.br': fnLastBillingDate
 		fnLastBillingDate=fnLastBillingDate(d1,get_or_put)
 	fnend

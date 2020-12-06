@@ -1,23 +1,23 @@
 ! Replace S:\acsUB\UBRevCal
  
-	autoLibrary
-	on error goto Ertn
+autoLibrary
+on error goto Ertn
+
+dim x$*10,p$*10,reqz$*10,reqz12$*5,sr$*1,gb(10)
+dim z$*10,e$(4)*30,f$(3)*12,a(7),b(11),c(4),d(15),g(12),adr(2),alp$*7
+dim tg(11),key$*19
+dim bt1(14,2),badr(2),resp$(5)*60
+
+fnTop(program$)
  
-	dim x$*10,p$*10,reqz$*10,reqz12$*5,sr$*1,gb(10)
-	dim z$*10,e$(4)*30,f$(3)*12,a(7),b(11),c(4),d(15),g(12),adr(2),alp$*7
-	dim tg(11),key$*19
-	dim bt1(14,2),badr(2),resp$(5)*60
- 
-	fnTop(program$)
- 
-	goto ALLOW_PROGRAM ! if env$('client')="Ash Grove" then goto ALLOW_PROGRAM
+goto ALLOW_PROGRAM ! if env$('client')="Ash Grove" then goto ALLOW_PROGRAM
 	dim _msg$(4)*80
 	_msg$(1)="This program has been removed due to heavy misuse."
 	_msg$(2)="To recalculate bills simply use Enter Readings and Charges"
 	_msg$(3)="with the same billing date as used previously."
 	_msg$(4)="If you feel you need to use this legacy program, please contact ACS."
 	fnmsgbox(mat _msg$,resp$(1),'',16)
-	goto Xit
+goto Xit
 ALLOW_PROGRAM: !
  
 	fnLastBillingDate(d1)
@@ -27,10 +27,10 @@ ALLOW_PROGRAM: !
 	open #11: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\UBIndx2.h[cno],Shr",internal,outIn,keyed
 	open #12: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\UBIndx3.h[cno],Shr",internal,outIn,keyed
 	open #2: "Name=[Q]\UBmstr\ubtransvb.h[cno],KFName=[Q]\UBmstr\UBTrIndx.h[cno],Shr",internal,outIn,keyed
+	open #htrans2=fnH: "Name=[Q]\UBmstr\ubtransvb.h[cno],KFName=[Q]\UBmstr\UBTrdt.h[cno],Shr",internal,outIn,keyed
 	fn_bud1
 ASK1: !
 	x=6
-	close #111: ioerr ignore
 	fnTos
 	respc=0
 	fnLbl(1,1,"You may limit the customers to reverse by changing the options below.",73,2)
@@ -63,31 +63,31 @@ ASK1: !
 	if sr$="Y" then let fnopenprn
 	if sr$="Y" and secondpass<>1 then let fn_srhdr
 	secondpass=1
-L470: form pos 5,c 10,x 5,pic(zz/zz/zz)
-L480: !
+	L470: form pos 5,c 10,x 5,pic(zz/zz/zz)
+	L480: !
 	if rtrm$(reqz$)<> "" then
 		read #1,using L770,key=reqz$: z$,mat e$,f$(1),mat a,mat b,mat c,mat d,bal,f,mat g,alp$,f$(2),f$(3),bra,mat gb,route,extra3,extra4 nokey ASK1
 	else
 		goto CUSTOMER_READ
 	end if
 	if f<>reqf then goto ASK1 ! must have current billing date
-	goto L550
+goto L550
 CUSTOMER_READ: !
 	read #1,using L770: z$,mat e$,f$(1),mat a,mat b,mat c,mat d,bal,f,mat g,alp$,f$(2),f$(3),bra,mat gb,route,extra3,extra4 eof FINIS
 	if trim$(reqz12$)<>"" and route<>val(reqz12$) then goto CUSTOMER_READ
-! If TRIM$(Z$)="210008.02" Then Pause
+	! If TRIM$(Z$)="210008.02" Then Pause
 	if reqf<>0 and f<>reqf then goto CUSTOMER_READ
-L550: !
+	L550: !
 	if sr$="Y" then
 		pr #255,using L470: z$,f pageoflow SRPGOF
 	end if
 	for j=1 to 9 : gb(j)=gb(j)-g(j): bal=bal-g(j): next j ! subtract out current bill from breakdown
-! bal=bal-g(11)  moved above 06/01/12
+	! bal=bal-g(11)  moved above 06/01/12
 	x=fndate_mmddyy_to_ccyymmdd(olddat)
 	key$=z$&cnvrt$("n 8",x)&"1"
 	wr=wu=er=eu=gr=gu=0 ! set all previous readings to zero
 	read #2,using L810,key=key$: p$,tdate,tcode,tamount,mat tg,wr,wu,er,eu,gr,gu,tbal,pcode nokey L620 ! read previous months history to pull old readings and usages
-L620: !
+	L620: !
 	d(1)=d(2) ! set current water reading to last month
 	d(2)=wr ! set prior reading to month before last
 	d(4)=d(4)-d(3) ! subtract out current usage from year to date
@@ -104,11 +104,11 @@ L620: !
 	extra3=extra4 : extra4=0
 	mat g=(0) ! SET ALL LAST TIME BILL TO ZERO
 	rewrite #1,using L770: z$,mat e$,f$(1),mat a,mat b,mat c,mat d,bal,f,mat g,alp$,f$(2),f$(3),bra,mat gb,route,extra3,extra4
-L770: form pos 1,c 10,4*c 30,c 12,7*pd 2,11*pd 4.2,4*pd 4,15*pd 5,pd 4.2,pd 4,12*pd 4.2,pos 354,c 7,2*c 12,pd 3,10*pd 5.2,pos 1741,n 2,pos 1750,2*n 6
+	L770: form pos 1,c 10,4*c 30,c 12,7*pd 2,11*pd 4.2,4*pd 4,15*pd 5,pd 4.2,pd 4,12*pd 4.2,pos 354,c 7,2*c 12,pd 3,10*pd 5.2,pos 1741,n 2,pos 1750,2*n 6
 	x=fndate_mmddyy_to_ccyymmdd(reqf)
 	key$=z$&cnvrt$("n 8",x)&"1"
 	read #2,using L810,key=key$: p$,tdate,tcode,tamount,mat tg,wr,wu,er,eu,gr,gu,tbal,pcode nokey L480
-L810: form pos 1,c 10,n 8,n 1,12*pd 4.2,6*pd 5,pd 4.2,n 1
+	L810: form pos 1,c 10,n 8,n 1,12*pd 4.2,6*pd 5,pd 4.2,n 1
 	delete #2:
 	goto L480
 	if bud1=1 then let fn_bud2
