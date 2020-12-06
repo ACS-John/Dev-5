@@ -30,7 +30,7 @@
 	columns=1
 ! r: OPENFILES: The following lines will be proc in from a display file                          you have created. They are in the same file as the read                         statements explained above.  Don't forget the del lines to
 !               remove the old reads in case they dont match
-	open #1: "name="&datafolder$&"\ubtransvb.h[cno],kfname="&datafolder$&"\ubtrindx.h[cno],Use,RecL=102,KPs=1,KLn=19",internal,outIn,keyed
+	open #1: "name="&datafolder$&"\ubtransvb.h[cno],kfname="&datafolder$&"\ubtrindx.h[cno],Use,RecL=102,KPs=1,KLn=19",internal,input,keyed
 ! /r
 	open #11: "Name=[Temp]\Gridname.tmp",internal,input,relative
 	read #11,using 'Form POS 1,C 40',rec=1: gridname$

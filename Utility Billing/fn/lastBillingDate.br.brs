@@ -1,6 +1,6 @@
 ! Replace S:\acsUB\d1.br
 ! returns the last billing date
-def library fnLastBillingDate(&d1; get_or_put)
+def library fnLastBillingDate(; &d1,get_or_put)
 	autoLibrary
 	if get_or_put=0 then ! 0 = Get
 		fncreg_read('Current Billing Date',d1$)
@@ -14,5 +14,6 @@ def library fnLastBillingDate(&d1; get_or_put)
 		end if 
 	else if get_or_put=1 then ! 1 = Put
 		fncreg_write('Current Billing Date',str$(d1))
-	end if 
+	end if
+	fnLastBillingDate=d1
 fnend 

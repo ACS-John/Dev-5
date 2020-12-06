@@ -433,6 +433,7 @@ def fn_printTrans ! very local function - lots of inherritance
 	mat totalalloc=(0) : mat totalusage=(0) : totaltamount=0
 	close #trans: ioerr ignore
 	open #trans=2: "Name=[Q]\UBmstr\ubtransvb.h[cno],KFName=[Q]\UBmstr\ubTrIndx.h[cno],Shr",internal,outIn,keyed
+	open #trans2=fnH: "Name=[Q]\UBmstr\ubtransvb.h[cno],KFName=[Q]\UBmstr\UBTrdt.h[cno],Shr",internal,outIn,keyed
 	if trim$(z$)="[All]" then
 		restore #trans:
 	else

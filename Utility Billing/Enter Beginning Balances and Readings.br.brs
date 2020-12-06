@@ -9,6 +9,7 @@
  
 	open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],NoShr",internal,outIn,keyed
 	open #2: "Name=[Q]\UBmstr\UBTransVB.h[cno],KFName=[Q]\UBmstr\UBTrIndx.h[cno],Shr,USE,RecL=102,KPs=1,KLn=19",internal,outIn,keyed
+	open #hTrans2=fnH: "Name=[Q]\UBmstr\ubTransVB.h[cno],KFName=[Q]\UBmstr\UBTrdt.h[cno],Shr,Use,KPs=11/1,KLn=8/10",internal,outIn,keyed
 	fnGetServices(mat srv$)
 	for j=1 to udim(srv$)
 		srv$(j)=trim$(srv$(j))
@@ -154,18 +155,19 @@ L870: form pos 217,15*pd 5,pos 292,pd 4.2,pos 300,12*pd 4.2,pos 348,2*pd 3,pos 3
 DONE: !
 	close #1:
 	close #2:
-	goto Xit
- 
-! If ERR=4152 Then Goto 420
-include: ertn
- 
+	close #hTrans2:
+goto Xit
+
 Xit: fnXit
  
 DEL_HIST: ! Delete History
 	restore #2,key>=z$&"         ": nokey L1140
-L1090: read #2,using L1100: p$,tdate eof L1140
-L1100: form pos 1,c 10,n 8,n 1,12*pd 4.2,6*pd 5,pd 4.2,n 1
-	if p$<>z$ then goto L1140 ! not same account
-	if p$=z$ then delete #2:
-	goto L1090
-L1140: return
+	do
+		read #2,using L1100: p$,tdate eof L1140
+		L1100: form pos 1,c 10,n 8,n 1,12*pd 4.2,6*pd 5,pd 4.2,n 1
+		if p$<>z$ then goto L1140 ! not same account
+		if p$=z$ then delete #2:
+	loop
+	L1140: !
+return
+include: ertn

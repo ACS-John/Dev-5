@@ -36,6 +36,7 @@ Initialize: ! r:
 	fnAutomatedSavePoint('before')
 	open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,outIn,keyed
 	open #2: "Name=[Q]\UBmstr\UBTransVB.h[cno],KFName=[Q]\UBmstr\UBTrIndx.h[cno],Shr",internal,outIn,keyed
+	open #hTrans2=fnH: "Name=[Q]\UBmstr\UBTransVB.h[cno],KFName=[Q]\UBmstr\h_trans.h[cno],Shr",internal,outIn,keyed
 F_UBTRANS: form pos 1,c 10,n 8,n 1,12*pd 4.2,6*pd 5,pd 4.2,n 1
 	gosub BUD1
 goto READ_UBTRANS ! /r
@@ -56,6 +57,7 @@ READ_UBTRANS: ! r: main loop
 FINIS: ! r:
 	close #1: ioerr ignore
 	close #2: ioerr ignore
+	close #hTrans2: ioerr ignore
 	dim mg$(1)*128
 	mat mg$(1)
 	mg$(1)=str$(recordUpdateCount)&' records updated.'

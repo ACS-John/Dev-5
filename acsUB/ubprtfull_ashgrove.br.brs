@@ -18,7 +18,7 @@ fnTop("S:\acsUB\ubprtbl1",cap$="Print Bills")
 gosub BULKSORT
 open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,input,keyed  ! open in Account order
 open #2: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx5.h[cno],Shr",internal,input,keyed  ! open in route-sequence #
-open #ubtransvb=15: "Name=[Q]\UBmstr\UBTransVB.h[cno],KFName=[Q]\UBmstr\UBTrIndx.h[cno],Shr",internal,outIn,keyed
+open #ubtransvb=15: "Name=[Q]\UBmstr\UBTransVB.h[cno],KFName=[Q]\UBmstr\UBTrIndx.h[cno],Shr",internal,input,keyed
 if exists("[Q]\UBmstr\message.h[cno]")=0 then goto L3250
 L225: !
 open #16: "Name=[Q]\UBmstr\message.h[cno]",internal,outIn,relative

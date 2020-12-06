@@ -4,11 +4,10 @@
 	autoLibrary
 	on error goto Ertn
  
-	dim srv$(3)*1,cap$*128,txt$*80,tg(11)
-	fnTop(program$,cap$="Change Wrong Transaction Dates")
+	dim srv$(3)*1
+	fnTop(program$,"Change Wrong Transaction Dates")
 MAIN: !
-	sn$="redate"
-	fnTos(sn$)
+	fnTos
 	fnLbl(1,1,"Wrong Date:",22,1)
 	fnTxt(1,23,8,0,0,"1")
 	resp$(1)='' ! '120101' ! '012011'
@@ -25,6 +24,7 @@ MAIN: !
 	date_good=fndate_mmddyy_to_ccyymmdd(val(resp$(2)))
 	rec_low=val(resp$(3))
 	open #h_trans:=fnH: "Name=[Q]\UBmstr\ubtransvb.h[cno],KFName=[Q]\UBmstr\ubTrIndx.h[cno],Shr",internal,outIn,keyed
+	open #hTrans2:=fnH: "Name=[Q]\UBmstr\ubtransvb.h[cno],KFName=[Q]\UBmstr\UBTrdt.h[cno],Shr",internal,outIn,keyed
 	do
 		read #h_trans,using 'form pos 11,N 8': trans_date eof EO_TRANS
 ! if trans_date=date_bad then pause
@@ -35,6 +35,7 @@ MAIN: !
 	loop
 EO_TRANS: !
 	close #h_trans:
+	close #hTrans2:
 	goto Xit
  
 Xit: !

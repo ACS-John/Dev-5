@@ -29,15 +29,15 @@ if (answer$<>"Yes") then cont=0
 undocount=0
 if cont then
 	dim acct$*10,custname$*30,trcust$(3)*10,trdate(3)
-	CUSTFORM: form c 10,x 30,c 30,pos 1741,n 2,pos 217,12*pd 5,pos 292,pd 4.2,pd 4,12*pd 4.2,pos 388,10*pd 5.2,pos 1750,2*n 6
+	Fcustomer: form c 10,x 30,c 30,pos 1741,n 2,pos 217,12*pd 5,pos 292,pd 4.2,pd 4,12*pd 4.2,pos 388,10*pd 5.2,pos 1750,2*n 6
 	fn_openfiles ! open data files
 	open #h_iphold:=fnH: "Name=[Q]\UBmstr\IpHold7.h[cno]",internal,input
 	fnopenprn : fn_printheader
 	do
 		NEXT_CUSTOMER: !
 		read #h_iphold,using 'form pos 1,C 10': z$ eof CUSTDONE
-		read #f_custacct,using CUSTFORM,key=z$: acct$,custname$,custroute,mat readings,balance,chargedate,mat charges,mat breakdown,mat readingdates eof CUSTDONE
-		!       read #f_custacct,using CUSTFORM: acct$,custname$,custroute,mat readings,balance,chargedate,mat charges,mat breakdown,mat readingdates eof CUSTDONE
+		read #hCustomer,using Fcustomer,key=z$: acct$,custname$,custroute,mat readings,balance,chargedate,mat charges,mat breakdown,mat readingdates eof CUSTDONE
+		!       read #hCustomer,using Fcustomer: acct$,custname$,custroute,mat readings,balance,chargedate,mat charges,mat breakdown,mat readingdates eof CUSTDONE
 		! if trim$(acct$)='107000.00' then pause
 		if chargedate=val(billingdate$) then
 			if route=0 or custroute=route then ! if a route was selected and customer doesn't match, skip customer
@@ -49,7 +49,7 @@ if cont then
 							breakdown(item)=breakdown(item)-tg(item)
 						next item
 					next remove_item
-					rewrite #f_custacct,using CUSTFORM: acct$,custname$,custroute,mat readings,balance,chargedate,mat charges,mat breakdown,mat readingdates
+					rewrite #hCustomer,using Fcustomer: acct$,custname$,custroute,mat readings,balance,chargedate,mat charges,mat breakdown,mat readingdates
 					pr #255,using "form pos 5,c 10,x 5,pic(zz/zz/zz),X 5,N 10.2": acct$,str$(chargedate),balance pageoflow PRINTPAGEOVERFLOW
 				else
 					pr #255: "Could not find transaction for account "&acct$
@@ -100,8 +100,9 @@ def fn_options(&route,&billingdate$) ! show options dialog to user and return se
 	end if
 fnend
 def fn_openfiles
-	open #f_custacct:=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno]",internal,outIn,keyed
-	open #f_trans:=fnH: "Name=[Q]\UBmstr\ubtransvb.h[cno],KFName=[Q]\UBmstr\ubtrindx.h[cno]",internal,outIn,keyed
+	open #hCustomer:=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno]",internal,outIn,keyed
+	open #hTrans=fnH: "Name=[Q]\UBmstr\ubtransvb.h[cno],KFName=[Q]\UBmstr\ubtrindx.h[cno]",internal,input,keyed
+	! open #hTrans2=fnH: "Name=[Q]\UBmstr\ubtransvb.h[cno],KFName=[Q]\UBmstr\UBTrdt.h[cno]",internal,outIn,keyed
 fnend
 def fn_printheader
 	pg+=1
@@ -120,11 +121,11 @@ def fn_get_trans
 	gt_return=0
 	dateshouldbe=date(days(val(billingdate$),"mmddyy"),"ccyymmdd") : if str$(dateshouldbe)(1:2)="19" then dateshouldbe+=1000000
 
-	read #f_trans,using TRANSFORM,key=lpad$(acct$,10)&str$(dateshouldbe)&"1": transacct$,transdate,transcode,tamt,mat tg,tnet,wread,wused,tbal,pcode nokey GT_FINIS
-	TRANSFORM: form c 10,n 8,n 1,12*pd 4.2,2*pd 5,pos 98,pd 4.2,n 1
+	read #hTrans,using Ftrans,key=lpad$(acct$,10)&str$(dateshouldbe)&"1": transacct$,transdate,transcode,tamt,mat tg,tnet,wread,wused,tbal,pcode nokey GT_FINIS
+	Ftrans: form c 10,n 8,n 1,12*pd 4.2,2*pd 5,pos 98,pd 4.2,n 1
 	gt_return=1
 
-GT_FINIS: !
+	GT_FINIS: !
 	fn_get_trans=gt_return
 fnend
 include: ertn

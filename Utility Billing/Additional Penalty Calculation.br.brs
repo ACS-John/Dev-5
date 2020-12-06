@@ -103,7 +103,8 @@ SCREEN1: !
 	fncreg_write('Second Penalty Calculation Skip Service 10 Rate 9 Customers',skip_s10r9$)
 	fnAutomatedSavePoint('before')
 	open #customer=1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,outIn,keyed
-	open #h_trans:=2: "Name=[Q]\UBmstr\ubTransVB.h[cno],KFName=[Q]\UBmstr\ubtrindx.h[cno],Shr",internal,outIn,keyed
+	open #h_trans=fnH: "Name=[Q]\UBmstr\ubTransVB.h[cno],KFName=[Q]\UBmstr\ubtrindx.h[cno],Shr",internal,outIn,keyed
+	open #hTrans2=fnH: "Name=[Q]\UBmstr\ubTransVB.h[cno],KFName=[Q]\UBmstr\UBTrdt.h[cno],Shr",internal,outIn,keyed
 	gosub BUD1
 	open #ratemst:=8: "Name=[Q]\UBmstr\ubData\RateMst.h[cno],KFName=[Q]\UBmstr\ubData\RateIdx1.h[cno],Shr",internal,input,keyed
 	fnopenprn
@@ -194,7 +195,8 @@ EO_CUSTOMER: !
 		end if
 	next j
 	close #customer: ioerr ignore
-	close #2: ioerr ignore
+	close #h_trans: ioerr ignore
+	close #hTrans2: ioerr ignore
 	fncloseprn
 goto Xit ! /r
 PGOF: ! r:
