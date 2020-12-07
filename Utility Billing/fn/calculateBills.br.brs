@@ -407,6 +407,7 @@ def fn_cuu_water
 					pr #255: '* '&serviceName$(1)&' unusual because '&str$(usage_srv1)&'<'&str$(d(3)-d(3)*pcent)&' or '&str$(usage_srv1)&'>'&str$(d(3)+d(3)*pcent)
 				end if
 				cuu_water_return=1
+				pause
 			end if
 		else
 			if x(12)=0 then r9_usage_is_zero=1
