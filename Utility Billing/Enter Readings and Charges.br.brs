@@ -1468,7 +1468,11 @@ def fn_loadBookOrHoldingFile(&addmethod; ___,book_or_holding_file$,ihDirFileMask
 	fnAcs(mat resp$,ckey)
 	holdingFile$=''
 	ip1$=resp$(1)
-	if ckey=cancel or ip1$='' then
+	if ckey=ck_importHHtoBook then
+		fnRetrieveHandHeldFile
+		fnTop(program$)
+		goto INPUT_HAND
+	else if ckey=cancel or ip1$='' then
 		goto IH_XIT
 	else if ckey=ck_print then
 		if book_or_holding_file$='Holding File' then
@@ -1479,15 +1483,8 @@ def fn_loadBookOrHoldingFile(&addmethod; ___,book_or_holding_file$,ihDirFileMask
 			fn_hh_readings(ip1$, 1) ! pr for Books
 		end if
 		goto INPUT_HAND
-	else if ckey=ck_importHHtoBook then
-		fnRetrieveHandHeldFile
-		fnTop(program$)
-		goto INPUT_HAND
-	else if ckey=ck_delete then
 
-		! mat txt$(1)
-		! txt$(1)="Are you sure you wish to delete "&book_or_holding_file$&" "&ip1$&"?"
-		! fnmsgbox(mat txt$,resp$,'',36)
+	else if ckey=ck_delete then
 		if fnConfirmDelete(book_or_holding_file$&' '&ip1$,'confirmDeleteBook') then ! resp$="Yes" then
 			if addmethod=am_fromHhFile then
 				fnFree("[Q]\UBmstr\Readings."&ip1$)
