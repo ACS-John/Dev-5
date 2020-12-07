@@ -185,6 +185,10 @@ def fn_index_sys_do_one(cno,system_id$*2)
 		
 		exe 'con sub [FinancialStatementCode] B' ! primary
 		fnReIndex('GL FSDesign')
+		
+		fnReassignTransactionAddresses(cno)
+		pr 'did it' : pause
+		
 	! /r
 	else if system_id$='UB' then ! r:
 		fn_index("[Q]\UBmstr\Reads_and_Chgs.h"&str$(cno), "[Q]\UBmstr\Reads_and_Chgs-Key.h"&str$(cno),"1 10")
