@@ -720,7 +720,7 @@ def fn_hh_readings(ip1$; listonly) ! HH_READINGS: ! hand held routines
 	gosub CheckUnusual
 	if skiprec=1 then ! skip record
 		skiprec=0 : goto HH_W_NXT
-	else 
+	else
 		fn_writeWork(hWork,x$,mat x)
 		fn_accumulateProofTotals
 		fn_rmk1
@@ -1429,7 +1429,7 @@ def fn_loadBookOrHoldingFile(&addmethod; ___,book_or_holding_file$,ihDirFileMask
 	colhdr$(2)="Size"
 	colhdr$(3)="Date Time"
 	colhdr$(4)="Comment"
-	
+
 	dim bookItem$(0)*128
 	mat bookItem$(4)
 	mat colhdr$(4)
@@ -1767,22 +1767,22 @@ EnterReadings: ! r:
 		x(14)=val(resp$(rc+=1)) ! gas
 	end if
 
-	if service_enabled(5)=1 then ! service 5
+	if service_enabled(5)=1 then
 		x(06)=val(resp$(rc+=1))
 	end if
 
-	if service_enabled(6)=1 then ! service 6
+	if service_enabled(6)=1 then
 		x(07)=val(resp$(rc+=1))
 	end if
 
-	if service_enabled(7) then ! service 7
+	if service_enabled(7) then
 		x(07)=val(resp$(rc+=1))
 	end if
 
-	if service_enabled(8) then ! service 8
+	if service_enabled(8) then
 		x(08)=val(resp$(rc+=1))
 	end if
-	! pause
+
 	rc+=1
 	x(15)=val(resp$(resp_fianl_billing_code)(1:1)) ! final billing code
 	if ckey=2 and addmethod=am_fromHhFile then
@@ -2085,7 +2085,7 @@ def fn_hh_other_type2(ip1$,listonly; ___,lineCount)
 					! pr 'after ' : pause
 			 end if
 			loop until hot_z$<>hot_z_prior$ and hot_z_prior$<>''
-			! r:	debug				if trim$(hot_z_prior$)='100020.03' then 
+			! r:	debug				if trim$(hot_z_prior$)='100020.03' then
 			! 						debug=1
 			! 					! if debug then
 			! 						pr 'after loop'

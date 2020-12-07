@@ -212,9 +212,15 @@ NKT9: ! r: NOKEY ROUTINE CODE T9=9
 goto TOP ! /r
 CHECK_UNUSUAL_USAGE: ! r:
 	unusual_service$=''
-	if fn_cuu_water then let fn_cuu_report_main(unusual_service$&'/'&serviceName$(1))
-	if fn_cuu_electric then let fn_cuu_report_main(unusual_service$&'/'&serviceName$(3))
-	if fn_cuu_gas then let fn_cuu_report_main(unusual_service$&'/'&serviceName$(4))
+	if fn_cuu_water then
+		fn_cuu_report_main(unusual_service$&'/'&serviceName$(1))
+	end if
+	if fn_cuu_electric then
+		fn_cuu_report_main(unusual_service$&'/'&serviceName$(3))
+	end if
+	if fn_cuu_gas then
+		fn_cuu_report_main(unusual_service$&'/'&serviceName$(4))
+	end if
 	unusual_service$=trim$(unusual_service$,'/')
 
 	if r9_usage_is_zero=1 then
