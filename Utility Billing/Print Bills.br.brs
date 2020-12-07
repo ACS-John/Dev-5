@@ -92,6 +92,7 @@ PrintBill_Basic: ! r: set prefrences for clients
 		enable_service_to=1
 		include_zero_bal=include_credit_bal=1
 		enablePriorBillingDate=1
+		enableLastPenaltyDate=1
 	else if env$('client')='Pennington' then ! 12/07/2016
 		message1_line_count=3
 		message1_max_len=40
@@ -231,6 +232,11 @@ Screen1: ! r:
 		fnTxt(lc,pf,8,8,1,"1")
 		resp$(resp_billing_date_prior:=respc+=1)=cnvrt$("pic(zzzzzz)",billing_date_prior)
 	end if
+	if enableLastPenaltyDate then
+		fnLbl(lc+=1,1,"Last Penalty Date:",25,1)
+		fnTxt(lc,pf,8,8,1,"1")
+		resp$(resp_lastPenaltyDate:=respc+=1)=cnvrt$("pic(zzzzzz)",lastPenaltyDate)
+	end if
 	if enable_service_from or enable_service_to then 
 		lc+=1
 		if enable_service_from then 
@@ -309,6 +315,11 @@ Screen1: ! r:
 		billing_date_prior=val(resp$(resp_billing_date_prior))
 		billing_date_prior=date(days(billing_date_prior,'mmddyy'),'ccyymmdd')
 	end if
+	if enableLastPenaltyDate then
+		lastPenaltyDate=val(resp$(resp_lastPenaltyDate))
+		lastPenaltyDate=date(days(lastPenaltyDate,'mmddyy'),'ccyymmdd')
+	end if
+	
 	if enable_service_from then 
 		serviceFromOverride=val(resp$(respc_service_from))
 	end if 
@@ -1481,8 +1492,8 @@ def fn_print_bill_blucksberg(z$,mat mg$,billing_date_prior,serviceFrom,serviceTo
 	fnpa_txt("Amount",170,lyne)
 	fn_blucksAddActivityLine("Prior Balance as of "&date$(days(billing_date_prior,'ccyymmdd'),'mm/dd/yy'),prior_prior_balance)
 	fn_blucksAddActivityLine("Charges as of "&date$(days(billing_date_prior,'ccyymmdd'),'mm/dd/yy'),activity_charge-g(11))
-	fn_blucksAddActivityLine("Penalties as of "&date$(days(billing_date_prior,'ccyymmdd'),'mm/dd/yy'),activity_penalty)
-	fn_blucksAddActivityLine("Payments Received as of "&date$(days(billing_date_prior,'ccyymmdd'),'mm/dd/yy')&" - Thank You",-activity_payment)
+	fn_blucksAddActivityLine("Penalties as of "&date$(days(lastPenaltyDate,'ccyymmdd'),'mm/dd/yy'),activity_penalty)
+	fn_blucksAddActivityLine("Payments Received as of "&date$(days(d1,'mmddyy')-1,'mm/dd/yy')&" - Thank You",-activity_payment)
 	fn_blucksAddActivityLine("Credits",-activity_credit)
 	fn_blucksAddActivityLine("Debits",activity_debit)
 	fnpa_line(162,lyne+4,22)
