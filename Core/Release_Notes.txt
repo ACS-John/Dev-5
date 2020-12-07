@@ -1,5 +1,6 @@
 Time and Date 		Sys	Program(s) and Change(s) Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
 ______________________	___	____________________________________________________________________________________________________________________________________________________________________________________________________________________________________                      
+3:46 PM 12/6/2020	UB	Enter Readings and Charges - Books - Import from Hand Held button was not working when there was nothing selected
 15:38 12/20/2020	CO	5.75077  
 3:34 PM 12/6/2020	UB	Transaction Index 2 was becoming corrupted and needed reindexing often.  corrected the places where it wasn't being updated 
 4:26 PM 12/3/2020	GL	Accounts - gave individual buttons for Current and History Transactions (one less click) 
