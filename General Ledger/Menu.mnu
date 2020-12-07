@@ -73,7 +73,7 @@ Annually
 Error Recovery
 >Generate Reversing Entries                       ^ acsGL\Reverse 
 >Remove Entries Posted by Mistake                 ^ acsGL\Unpost
->Reassign Transaction Addresses                   ^ acsGL\glreass
+>Reassign Transaction Addresses                   ^ General Ledger\*
 >Fix Current Period Transaction Dates             ^ General Ledger\*
 >Fix Current Balance                              ^ General Ledger\*
 >Fix Period Accumulators from History             ^ General Ledger\*

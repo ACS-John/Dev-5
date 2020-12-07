@@ -1,5 +1,6 @@
 Time and Date 		Sys	Program(s) and Change(s) Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           
 ______________________	___	____________________________________________________________________________________________________________________________________________________________________________________________________________________________________                        
+1:35 PM 12/7/2020	GL	Recreate Indexes now also runs Reassign Transaction Addresses
 12:32 PM 12/7/2020	CO	Changed default Font Min Hight and Min Width from 15,8 to 18,7.  Allows for more narrow which works pretty well but also makes the text larger and easier to read
 12:23 PM 12/7/2020	UB	Past Due Notice (Reminder) was not printing correct customer address fields - fixed.
 10:57 12/20/2020	CO	5.75079  
