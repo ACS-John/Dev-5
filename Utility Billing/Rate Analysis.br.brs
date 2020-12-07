@@ -11,7 +11,7 @@
 	fnGetServices(mat srvnam$,mat srv$)
 goto SCR1 ! /r
 SCR1: ! r:
-	fnTos(sn$="Anlyze-1")
+	fnTos
 	rc=0 : mylen=20 : mypos=mylen+2
 	fnLbl(1,1,"Billing Date:",mylen,1)
 	fnTxt(1,mypos,8,0,0,"1")
@@ -47,7 +47,7 @@ SCR2: ! r: requires svce$, returns mat use_to, mat use_from, probably more
 	open #20: "Name=[Q]\UBmstr\ubData\RateMst.h[cno],KFName=[Q]\UBmstr\ubData\RateIdx1.h[cno],Shr",internal,input,keyed
 	read #20,using "Form POS 55,32*G 10",key=svce$: mat rt$ ioerr SCR1
 	close #20:
-	fnTos(sn$:="Anlyze-2b")
+	fnTos
 	rc=rtc=0 : mylen=20 : mypos=mylen+2
 	fnLbl(1,1,"Analysis Based On:",mylen,1)
 	fnTxt(1,mypos,55,0,0,"",1)
@@ -163,8 +163,7 @@ MainLoop: ! r:
 	end if
 	pr #255: "              Total Customers: "&cnvrt$("PIC(ZZZ,ZZZ,ZZZ)",sum(mat customer))
 	pr #255: "                Total Dollars: "&cnvrt$("PIC(zzZZ,ZZZ.ZZ)",sum(mat rateTot))
-goto DONE ! /r
-DONE: ! r:
+
 	fnclosefile(hTrans,'UB Transaction')
 	fnCustomerData$('','',0)
 	fncloseprn

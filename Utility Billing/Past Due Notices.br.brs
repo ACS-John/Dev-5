@@ -313,10 +313,10 @@ def fn_vbprint
 	fnpa_txt('Billing Date: '&cnvrt$("PIC(zZZ/ZZ/ZZ)",d1),125,lyne*16+spacer)
 	fnpa_txt('Balance Due: '&cnvrt$("pic(---,---.##)",bal),125,lyne*18+spacer)
 	fnpa_fontsize(13)
-	fnpa_txt(addr$(2),20,lyne*16+spacer)
-	fnpa_txt(addr$(3),20,lyne*17.5+spacer)
-	fnpa_txt(addr$(3),20,lyne*19+spacer)
-	fnpa_txt(addr$(4),20,lyne*20.5+spacer)
+	fnpa_txt(addr$(1),20,lyne*16+spacer)     ! 2
+	fnpa_txt(addr$(2),20,lyne*17.5+spacer)   ! 3
+	fnpa_txt(addr$(3),20,lyne*19+spacer)     ! 3
+	fnpa_txt(addr$(4),20,lyne*20.5+spacer)   ! 4
 	checkcounter+=1
 	spacer+=90
 	if checkcounter=3 then
@@ -423,7 +423,7 @@ def fn_print_blucksberg(mat a,mat at$,mat mis$,mat f$,meter_address$*30,z$,mat a
 	pr #255,using "Form pos 9,C 73": mis$(1)
 	pr #255,using "Form pos 9,C 73": mis$(2)
 	pr #255,using "Form pos 9,C 73": mis$(3)
-	pr #255,using "Form pos 9,C 73": mis$(4)
+	pr #255,using "Form pos 9,C 73": 
 	pr #255: ''
 	if a(1)=0 then water$="     " else water$="Water"
 	if a(4)=0 then gas$="   " else gas$="Gas"
@@ -643,10 +643,10 @@ ScreenSelect: ! r:
 		goto PrintingBegin
 	else if ckey=5 then
 		goto Menu1
-	else if ckey=6 then
+	else if ckey=6 then ! refresh
 		goto UbForm
 	else if resp$(1)="(Pre-Printed)" or resp$(1)="(Reminder)" and ckey<>4 then
-		goto ScreenSelect ! CANT EDIT STANDARD FORM
+		goto ScreenSelect ! cant edit a standard form
 	else if ckey=4 then ! r: Add
 		fnTos
 		respc=0
@@ -661,10 +661,10 @@ ScreenSelect: ! r:
 		fnCopy("S:\Core\default\plain.rtf",os_filename$("[Q]\UBmstr\"&newname$))
 		fnEditFile('atlantis',"[Q]\UBmstr\"&newname$)
 		goto UbForm ! /r
-	else if ckey=3 then
+	else if ckey=3 then ! edit
 		fnEditFile('atlantis',"[Q]\UBmstr\"&flname$)
 		goto UbForm
-	else if ckey=7 then
+	else if ckey=7 then ! delete
 		fnFree("[Q]\UBmstr\"&trim$(flname$))
 		goto UbForm
 	else
