@@ -26,7 +26,7 @@ def fn_calculateBills(goal$*11)
 	! get date meter read
 	fncreg_read('Meter Reading Date Current',tmp$) : dateread=val(tmp$)
 
-	fn_ask_billing_date
+	fn_askBillingDate
 	if ckey=5 then goto Xit_CALCULATE
 	! fnwait("Calculating: please wait...",0)
 	fnAutomatedSavePoint('before')
@@ -42,7 +42,7 @@ def fn_calculateBills(goal$*11)
 	open #h_customer:=1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,outIn,keyed
 	F_CUSTOMER: form pos 11,2*c 30,pos 143,7*pd 2,pos 157,11*pd 4.2,pos 201,4*pd 4,pos 217,15*pd 5,pos 292,pd 4.2,pos 296,pd 4,pos 300,12*pd 4.2,pos 388,10*pd 5.2,pos 1741,n 2,n 7,2*n 6,n 9,pd 5.2,n 3,3*n 9,3*n 2,3*n 3,n 1,3*n 9,3*pd 5.2,c 30,7*c 12,3*c 30
 	F_CUSTOMER_W_ACCT: form pos 1,c 10,2*c 30,pos 143,7*pd 2,pos 157,11*pd 4.2,pos 201,4*pd 4,pos 217,15*pd 5,pos 292,pd 4.2,pos 296,pd 4,pos 300,12*pd 4.2,pos 388,10*pd 5.2,pos 1741,n 2,n 7,2*n 6,n 9,pd 5.2,n 3,3*n 9,3*n 2,3*n 3,n 1,3*n 9,3*pd 5.2,c 30,7*c 12,3*c 30
-	open #h_ubtrans:=3: "Name=[Q]\UBmstr\UBTransVB.h[cno],KFName=[Q]\UBmstr\UBTrIndx.h[cno],Shr",internal,outIn,keyed
+	open #hTrans:=3: "Name=[Q]\UBmstr\UBTransVB.h[cno],KFName=[Q]\UBmstr\UBTrIndx.h[cno],Shr",internal,outIn,keyed
 	open #hTrans2=fnH: "Name=[Q]\UBmstr\UBTransVB.h[cno],KFName=[Q]\UBmstr\UBTrdt.h[cno],Shr",internal,outIn,keyed
 	FORM_UBTRANS: form pos 1,c 10,n 8,n 1,12*pd 4.2,6*pd 5,pd 4.2,n 1
 	if goal$='calculate' then
@@ -52,6 +52,7 @@ def fn_calculateBills(goal$*11)
 	fn_deposit_open
 	fn_bud_open
 
+
 TOP: ! r:
 	if goal$='calculate' then
 		if r3=>lrec(h_work) then goto FINIS
@@ -60,9 +61,7 @@ TOP: ! r:
 		read #h_customer,using F_CUSTOMER,key=x$: meteradr$,custname$,mat a,mat b,mat c,mat d, bal,f,mat g,mat gb,mat extra nokey NKT9
 	else if goal$='recalculate' then
 		read #h_customer,using F_CUSTOMER_W_ACCT: x$,meteradr$,custname$,mat a,mat b,mat c,mat d, bal,f,mat g,mat gb,mat extra eof FINIS
-
 		if f<>d1 then goto TOP
-
 		mat x=(0)
 		x(1)=d(1) ! current water reading
 		x(2)=d(9) ! current gas reading
@@ -93,20 +92,49 @@ TOP: ! r:
 			if env$('client')="Divernon" then goto LX760 ! Divernon's penalties are added into gb
 			if uprc$(penalty$(j))="Y" then goto LX770 ! don't subtract penalties out on recalculation
 			LX760: !
-			if env$('client')="White Hall" and (j=6 or j=7 or j=10) then goto LX770
-			gb(j)=gb(j)-g(j) !  if j><6 then gb(j)=gb(j)-g(j)
+			if env$('client')="White Hall" and (j=6 or j=7 or j=10) then
+				goto LX770
+			else
+
+			end if
+				gb(j)=gb(j)-g(j) !  if j><6 then gb(j)=gb(j)-g(j)
 			LX770: !
 		next j
 	end if  ! f=d1
 	w7=g(11)
 	mat g=(0)
-	usage_srv1=0 ! WATER USAGE
-	usage_srv3=0 ! ELECTRIC USAGE / lawn meter usage
-	usage_srv4=0 ! GAS USAGE
-	r9_usage_is_zero=0
-	mat w=(0) ! mat w appears to never be set - never be used, but is passed to fncalk
-	gosub CHECK_UNUSUAL_USAGE
+	
+
+	! r: Check Unusal Usage
+		r9_usage_is_zero=0
+		usage_srv1=0 ! WATER USAGE
+		usage_srv3=0 ! ELECTRIC USAGE / lawn meter usage
+		usage_srv4=0 ! GAS USAGE
+		unusual_service$=''
+		if fn_cuuMain(1,d(3),x(12),usage_srv1,r9_usage_is_zero) then ! water
+			fn_cuu_report_main(unusual_service$&'/'&serviceName$(1))
+		end if
+		if fn_cuuMain(3,d(7),x(13),usage_srv3,r9_usage_is_zero) then
+			fn_cuu_report_main(unusual_service$&'/'&serviceName$(3))
+		end if
+		if fn_cuuMain(4,d(11),x(14),usage_srv4,r9_usage_is_zero) then
+			fn_cuu_report_main(unusual_service$&'/'&serviceName$(4))
+		end if
+		unusual_service$=trim$(unusual_service$,'/')
+
+		if r9_usage_is_zero=1 then
+			pr #255: ""
+			pr #255: "Negative usage on Account: "&x$
+			pr #255: "   Action: RECORD SKIPPED."
+			print_count_skip+=1
+			if d1<>f then
+				fn_cuu_report_usage
+			end if
+		end if
+
 	if r9_usage_is_zero=1 then goto TOP
+
+	mat w=(0) ! mat w appears to never be set - never be used, but is passed to fncalk
 	if env$('client')="Chatom" then
 		fncalkChatom(x$,d1,f,usage_srv1,usage_srv3,usage_srv4,mc1,mu1,mat rt,mat a,mat b,mat c,mat d,mat g,mat w,mat x,mat extra,mat gb,h_ratemst,hDeposit2,btu, calc_interest_on_deposit,charge_inspection_fee,interest_credit_rate)
 	else
@@ -114,30 +142,27 @@ TOP: ! r:
 	end if
 	fn_date_meter_read ! update meter reading date
 	if g(11)>99999 or g(12)>99999 then
-		goto BILL_TOO_LARGE
+		! Bill too large
+		pr #255: ""
+		pr #255: "Net or Gross Bill too large on Account: ";x$
+		pr #255: "   Net Bill: "&str$(g(11))&"  Gross Bill: "&str$(g(12))
+		pr #255: "   Action: RECORD SKIPPED."
+		print_count_skip+=1
+		fn_cuu_report_usage
 	else if g(11)<99999 and g(11)>-99999 then
-		goto LX1230
+		fn_bud2
+		fn_updtbal
+		for j=1 to 10
+			if uprc$(penalty$(j))<>"Y" then  ! don't add penalties into mat gb
+				gb(j)=gb(j)+g(j)
+			end if
+		next j
+		rewrite #h_customer,using F_CUSTOMER,key=x$: meteradr$,custname$,mat a,mat b,mat c,mat d,bal,f,mat g,mat gb,mat extra conv CONV_CUSTOMER_REWRITE
+		fn_write_new_trans
 	end if
-	BILL_TOO_LARGE: !
-	pr #255: ""
-	pr #255: "Net or Gross Bill too large on Account: ";x$
-	pr #255: "   Net Bill: "&str$(g(11))&"  Gross Bill: "&str$(g(12))
-	pr #255: "   Action: RECORD SKIPPED."
-	print_count_skip+=1
-	fn_cuu_report_usage
-	goto TOP
-
-	LX1230: !
-	fn_bud2
-	fn_updtbal
-	for j=1 to 10
-		if uprc$(penalty$(j))<>"Y" then  ! don't add penalties into mat gb
-			gb(j)=gb(j)+g(j)
-		end if
-	next j
-	rewrite #h_customer,using F_CUSTOMER,key=x$: meteradr$,custname$,mat a,mat b,mat c,mat d,bal,f,mat g,mat gb,mat extra conv CONV_CUSTOMER_REWRITE
-	fn_write_new_trans
 goto TOP ! /r
+
+
 CONV_CUSTOMER_REWRITE: ! r:
 	pr #255: ""
 	pr #255: "The bill ("&str$(g(12))&") on account "&x$&" is too large for"
@@ -145,7 +170,7 @@ CONV_CUSTOMER_REWRITE: ! r:
 	pr #255: 'You must determine what is wrong and re-enter the reading."'
 	pr #255: 'ACTION: RECORD SKIPPED'
 	print_count_skip+=1
-	!
+
 	txt$(1)="The bill ("&str$(g(12))&") on account "&x$&" is too large for"
 	txt$(2)="the system to handle.  This record is being skipped. "
 	txt$(3)='You must determine what is wrong and re-enter the reading."'
@@ -158,7 +183,7 @@ FINIS: ! r:
 		close #h_work,free: ioerr ignore
 		fnFree(work_addr$)
 	end if
-	close #h_ubtrans: ioerr ignore
+	close #hTrans: ioerr ignore
 	close #hTrans2: ioerr ignore
 	! pr 'print_count_unusual=';print_count_unusual : pr 'print_count_skip=';print_count_skip
 	if print_count_unusual or print_count_skip then let fncloseprn
@@ -175,12 +200,12 @@ def fn_write_new_trans
 	gu=d(11)
 	for j=1 to 11 : tg(j)=g(j) : next j
 	transkey$=x$&cnvrt$("pic(########)",tdate)&cnvrt$("pic(#)",tcode)
-	read #h_ubtrans,using FORM_UBTRANS,key=transkey$: y$ nokey UBTRANS_NOKEY ! check for recalk
-	rewrite #h_ubtrans,using FORM_UBTRANS,key=transkey$: x$,tdate,tcode,tamount,mat tg,wr,wu,er,eu,gr,gu,bal,pcode
+	read #hTrans,using FORM_UBTRANS,key=transkey$: y$ nokey UBTRANS_NOKEY ! check for recalk
+	rewrite #hTrans,using FORM_UBTRANS,key=transkey$: x$,tdate,tcode,tamount,mat tg,wr,wu,er,eu,gr,gu,bal,pcode
 	goto WNT_XIT
 	UBTRANS_NOKEY: !
 		! need to update the balance on any transaction that may have been processed since the original charge transaction was created.
-		write #h_ubtrans,using FORM_UBTRANS: x$,tdate,tcode,tamount,mat tg,wr,wu,er,eu,gr,gu,bal,pcode
+		write #hTrans,using FORM_UBTRANS: x$,tdate,tcode,tamount,mat tg,wr,wu,er,eu,gr,gu,bal,pcode
 	WNT_XIT: !
 fnend
 
@@ -210,46 +235,22 @@ NKT9: ! r: NOKEY ROUTINE CODE T9=9
 	pr #255: "   Action: RECORD SKIPPED."
 	print_count_skip+=1
 goto TOP ! /r
-CHECK_UNUSUAL_USAGE: ! r:
-	unusual_service$=''
-	if fn_cuu_water then
-		fn_cuu_report_main(unusual_service$&'/'&serviceName$(1))
-	end if
-	if fn_cuu_electric then
-		fn_cuu_report_main(unusual_service$&'/'&serviceName$(3))
-	end if
-	if fn_cuu_gas then
-		fn_cuu_report_main(unusual_service$&'/'&serviceName$(4))
-	end if
-	unusual_service$=trim$(unusual_service$,'/')
 
-	if r9_usage_is_zero=1 then
-		pr #255: ""
-		pr #255: "Negative usage on Account: "&x$
-		pr #255: "   Action: RECORD SKIPPED."
-		print_count_skip+=1
-		if d1<>f then
-			fn_cuu_report_usage
-		end if
-		goto CUU_XIT
-	end if
-CUU_XIT: !
-	return  ! /r
 def fn_cuu_report_usage
 	! CUU_REPORT_USAGE_MAIN: !
 	x=0
 	mat watuse=(0) : mat watdat=(0)
 	mat elecuse=(0) : mat elecdat=(0)
 	mat gasuse=(0) : mat gasdat=(0)
-	restore #h_ubtrans,key>=x$&"         ": nokey CUU_REPORT_USAGE_PRINT ! find all old usages
+	restore #hTrans,key>=x$&"         ": nokey CUU_REPORT_USAGE_PRINT ! find all old usages
 	CUU_UBTRANS_READ: !
-	read #h_ubtrans,using L2360: p$,tdate,tcode,tamount,mat tg,wr,wu,er,eu,gr,gu,tbal,pcode eof CUU_REPORT_USAGE_PRINT
-	L2360: form pos 1,c 10,n 8,n 1,12*pd 4.2,6*pd 5,pd 4.2,n 1
+	read #hTrans,using Ftrans: p$,tdate,tcode,tamount,mat tg,wr,wu,er,eu,gr,gu,tbal,pcode eof CUU_REPORT_USAGE_PRINT
+	Ftrans: form pos 1,c 10,n 8,n 1,12*pd 4.2,6*pd 5,pd 4.2,n 1
 	if p$<>x$ then goto CUU_REPORT_USAGE_PRINT
 	if tcode<>1 then goto CUU_UBTRANS_READ ! only charge transactions
 	billdate=d1
 	if tdate<fndate_mmddyy_to_ccyymmdd(billdate)-10000 then goto CUU_UBTRANS_READ ! only list last 12 months
-	x=x+1
+	x+=1
 	if x>12 then goto CUU_REPORT_USAGE_PRINT
 	watuse(x)=wu : watdat(x)=tdate
 	elecuse(x)=eu : elecdat(x)=tdate
@@ -369,96 +370,94 @@ def fn_bud2
 	L7110: !
 fnend
 
-def fn_usage(usage_service_number)
+def fn_usage(serviceNumber)
 	! requires local variables: d1, f, mat x, mat d
 	usage_return=0
-	if usage_service_number=1 then
+	if serviceNumber=1 then
 		if x(1)=0 or d1=f then
 			usage_return=x(1)-d(2)
 		else
 			usage_return=x(1)-d(1)
 		end if
-	else if usage_service_number=3 then
+	else if serviceNumber=3 then
 		if d1=f then
 			usage_return=x(3)-d(6)
 		else
 			usage_return=x(3)-d(5)
 		end if
-	else if usage_service_number=4 then
+	else if serviceNumber=4 then
 		if d1=f then
 			usage_return=x(2)-d(10)
 		else
 			usage_return=x(2)-d(9)
 		end if
 	else
-		pr 'usage_service_number not recognized.' : pause
+		pr 'serviceNumber not recognized.' : pause
 	end if
 	fn_usage=usage_return
 fnend
-def fn_cuu_water
-	cuu_water_return=0
-	if serviceName$(1)="Water" then
-		usage_srv1=fn_usage(1)
-		if (a(1)=9 or a(1)=0) and (a(2)=9 or a(2)=0) then goto CUU_WATER_XIT ! skip if no water code and no sewer code
-		if usage_srv1>=0 then
-			if d(3)=0 then goto CUU_WATER_XIT
-			if usage_srv1<d(3)-d(3)*pcent or usage_srv1>d(3)+d(3)*pcent then
-				if unusual_usage_report=3 then
-					pr #255: '* '&serviceName$(1)&' unusual because '&str$(usage_srv1)&'<'&str$(d(3)-d(3)*pcent)&' or '&str$(usage_srv1)&'>'&str$(d(3)+d(3)*pcent)
-				end if
-				cuu_water_return=1
-				pause
-			end if
-		else
-			if x(12)=0 then r9_usage_is_zero=1
-		end if
-	end if
-	CUU_WATER_XIT: !
-	fn_cuu_water=cuu_water_return
-fnend
-def fn_cuu_electric
-	cuu_electric_return=0
-	if serviceName$(3)="Electric" or serviceName$(3)="Lawn Meter" or service$(3)="EL" then
-		if x(3)=0 then goto CUU_ELEC_XIT
 
-		usage_srv3=fn_usage(3)
 
-		if usage_srv3>=0 then
-			if d(7)=0 then goto CUU_ELEC_XIT
-			if usage_srv3<d(7)-d(7)*pcent or usage_srv3>d(7)+d(7)*pcent then
-				if unusual_usage_report=3 then
-					pr #255: '* '&serviceName$(3)&' unusual because '&str$(usage_srv3)&'<'&str$(d(7)-d(7)*pcent)&' or '&str$(usage_srv3)&'>'&str$(d(7)+d(7)*pcent)
-				end if
-				cuu_electric_return=1
-			end if
-		else
-			if x(13)=0 then r9_usage_is_zero=1
-		end if
+def fn_cuuMain(serviceNumber,usagePrior,reading,&usageCurrent,&r9_usage_is_zero; ___,returnN,usageLow,usageHigh)
+	if ~setup_cuuMain then	
+		setup_cuuMain=1
+		open #hCompany=fnH: "Name=[Q]\UBmstr\Company.h[cno]",internal,input 
+		read #hCompany,using "Form POS 1,x 129,n 4": pcent
+		close #hCompany: 
+		! pr pcent : pause
+		pcent=pcent/100
 	end if
-	CUU_ELEC_XIT: !
-	fn_cuu_electric=cuu_electric_return
-fnend
-def fn_cuu_gas
-	cuu_gas_return=0
-	if service$(4)="GA" or serviceName$(4)="Gas" then
-		if x(2)=0 then goto CUU_GAS_XIT
-		usage_srv4=fn_usage(4)
-		if usage_srv4>=0 then
-			if d(11)=0 then goto CUU_GAS_XIT
-			if usage_srv4<d(11)-d(11)*pcent or usage_srv4>d(11)+d(11)*pcent then
-				if unusual_usage_report=3 then
-					pr #255: '* '&serviceName$(4)&' unusual because '&str$(usage_srv4)&'<'&str$(d(11)-d(11)*pcent)&' or '&str$(usage_srv4)&'>'&str$(d(11)+d(11)*pcent)
-				end if
-				cuu_gas_return=1
-			end if
-		else
-			if x(14)=0 then r9_usage_is_zero=1
-		end if
+	usageCurrent=fn_usage(serviceNumber)
+
+	if serviceNumber=1 then
+		if ~serviceName$(serviceNumber)="Water" then goto CuuMainXit
+		if (a(1)=9 or a(1)=0) and (a(2)=9 or a(2)=0) then goto CuuMainXit ! skip if no water code and no sewer code
+	else if serviceNumber=3 then
+		if ~(serviceName$(serviceNumber)="Electric" or serviceName$(serviceNumber)="Lawn Meter" or service$(serviceNumber)="EL") then goto CuuMainXit
+		if x(3)=0 then goto CuuMainXit
+	else if serviceNumber=4 then
+		if ~service$(serviceNumber)="GA" and ~serviceName$(serviceNumber)="Gas" then goto CuuMainXit
+		if x(2)=0 then goto CuuMainXit
 	end if
-	CUU_GAS_XIT: !
-	fn_cuu_gas=cuu_gas_return
+
+	if usagePrior=0 then goto CuuMainXit
+
+	if usageCurrent>=0 then
+		usageLow =usagePrior-usagePrior*pcent
+		usageHigh=usagePrior+usagePrior*pcent
+		
+	! if trim$(x$)='118900.10' then 
+	! 	pr x$ 
+	! 	pr serviceName$(serviceNumber) 
+	! 	pr 'usagePrior   =';usagePrior
+	! 	pr 'reading      =';reading
+	! 	pr 'usageCurrent =';usageCurrent 
+	! 	pr 'usageLow     =';usageLow 
+	! 	pr 'usageHigh    =';usageHigh
+	! 	pr 'pcent    =';pcent
+	! 	
+	! 	pause
+	! end if
+		
+		if usageCurrent<usageLow or usageCurrent>usageHigh then
+			if unusual_usage_report=3 then
+				if usage<usageLow then
+					pr #255: '* '&serviceName$(serviceNumber)&' unusually low ('&str$(usageCurrent)&'<'&str$(usageLow)&')'
+				else if usage>usageHigh then
+					pr #255: '* '&serviceName$(serviceNumber)&' unusually high ('&str$(usageCurrent)&'>'&str$(usageHigh)&')'
+				end if
+			end if
+			returnN=1
+		end if
+	else
+		if reading=0 then r9_usage_is_zero=1
+	end if
+
+	CuuMainXit: !
+	fn_cuuMain=returnN
 fnend
-def fn_ask_billing_date
+
+def fn_askBillingDate
 	! returns ckey (if ckey=5 upon return then cancel  was selected)
 	ASK_BILLING_DATE: !
 	fnTos
