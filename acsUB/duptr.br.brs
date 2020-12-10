@@ -2,8 +2,8 @@
 	if ~setup_library then let fn_setup_library
 	on error goto Ertn
  
-	dim z$*10,cap$*128,txt$*40,tg(11),resp$(10)*80
-	fnTop(program$,cap$="Duplicate Transaction Report")
+	dim z$*10,tg(11),resp$(10)*80
+	fnTop(program$,"Duplicate Transaction Report")
  
 	open #fnH: "Name=[Q]\UBmstr\ubTransVB.h[cno],KFName=[Q]\UBmstr\ubTrIndx.h[cno],Shr",internal,outIn,keyed
 	open #fnH: "Name=[Q]\UBmstr\ubTransVB.h[cno],KFName=[Q]\UBmstr\UBTrdt.h[cno],Shr",internal,outIn,keyed
@@ -14,7 +14,7 @@
  
 	del_dupe=1
  
-	fnTos(sn$='DupTr3') : respc=lc=0
+	fnTos : respc=lc=0
 	fn_filter_add_chk('Account','True')
 	fn_filter_add_chk('Transaction Date','False')
 	fn_filter_add_chk('Amount','True')
@@ -126,7 +126,7 @@ def fn_trans_delete(td_rec)
 		fnAddOneC(mat td_msg$,'The General Ledger must also be manually corrected.'                                             	)
 		fnAddOneC(mat td_msg$,'You may instead consider a credit or debit memo.'                                                	)
 		fnAddOneC(mat td_msg$,'Are you sure you want to delete it?'                                                              	)
-		fnmsgbox(mat td_msg$,resp$,cap$,52)
+		fnmsgbox(mat td_msg$,resp$,'',52)
 		if resp$<>'Yes' then
 			goto TD_XIT
 		end if
@@ -145,7 +145,7 @@ def fn_trans_delete(td_rec)
 		mat td_msg$(2)
 		td_msg$(1)='Unknown transaction code ('&str$(td_trans_code)&')'
 		td_msg$(2)='Transaction may not be deleted'
-		fnmsgbox(mat txt$,resp$,cap$,16)
+		fnmsgbox(mat td_msg$,resp$,'',16)
 		goto TD_XIT
 	end if
 	read #h_td_customer,using F_TB_CUSTOMER,key=td_customer_key$: tb_bal,mat tb_gb
@@ -171,7 +171,7 @@ def fn_trans_delete(td_rec)
 fnend
 def fn_header
 	pr #255: "\qc {\b "&env$('cnam')&"}"
-	pr #255: "\qc {\fs28 {\b "&cap$&"}}"
+	pr #255: "\qc {\fs28 {\b "&env$('program_caption')&"}}"
 	pr #255: "\qc {\b "&trim$(date$("MM/DD/CCYY"))&" }"
 	pr #255: "\qr Page "&str$(p2+=1)
 	pr #255: ""
@@ -187,5 +187,5 @@ def fn_filter_get_chk(txt$,tf$)
 	if tf$='True' then dgc_return=1
 	fnreg_write(sn$&'.'&txt$,tf$)
 	fn_filter_get_chk=dgc_return
-fnend  ! fn_filter_get_chk
+fnend
 include: ertn
