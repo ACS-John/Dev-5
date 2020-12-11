@@ -332,10 +332,10 @@ PRW2B: ! r:
 	open #1: "Name=[Temp]\Control."&session$,internal,output
 	restore #1:
 	L2830: form pos 1,c 128
-	write #1,using L2830: "FILE [Temp]\Addr."&session$&",,,PRW2ADDR.H[cno],[Q]\PRmstr,,[Q]\PRmstr,,A,N"
+	write #1,using L2830: "FILE [Temp]\Addr."&session$&",,,PRW2ADDR.h[cno],[Q]\PRmstr,,[Q]\PRmstr,,A,N"
 	write #1,using L2830: "MASK 9,2,n,a,1,8,n,a"
 	close #1:
-		fnFree("[Q]\PRmstr\PRW2ADDR.H[cno]")
+		fnFree("[Q]\PRmstr\PRW2ADDR.h[cno]")
 	execute "Sort [Temp]\Control."&session$&" -n"
 goto Xit ! /r
 Xit: fnXit

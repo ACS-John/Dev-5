@@ -16,12 +16,12 @@
 	gosub OPEN_FILE : gosub CLOSE_FILE : gosub OPEN_FILE
 	gosub HAMSTER
 	gosub CLOSE_FILE
-	execute "Index [Q]\CLmstr\GLmstr.H[cno]"&' '&"[Q]\GLmstr\glindex.h[cno]1 12,replace,DupKeys" ioerr L140
+	execute "Index [Q]\CLmstr\GLmstr.h[cno]"&' '&"[Q]\GLmstr\glindex.h[cno]1 12,replace,DupKeys" ioerr L140
 L140: goto Xit
 !
 OPEN_FILE: !
 	open_file_count=0 ! this value is used in the close_file sub routine
-	open #open_file_count+=1: "Name=[Q]\CLmstr\GLmstr.H[cno],Version=0,KFName=[Q]\CLmstr\GLIndex.h[cno],Use,RecL=62,KPs=1,KLn=12,Shr",internal,outIn,keyed
+	open #open_file_count+=1: "Name=[Q]\CLmstr\GLmstr.h[cno],Version=0,KFName=[Q]\CLmstr\GLIndex.h[cno],Use,RecL=62,KPs=1,KLn=12,Shr",internal,outIn,keyed
 	return
 !
 CLOSE_FILE: for j=1 to open_file_count : close #j: : next j : return

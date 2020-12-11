@@ -28,15 +28,15 @@
 	close #20:
 
 	bankcode=val(bc$)
-	open #bankmstr=fnH: "Name=[Q]\CLmstr\BankMstr.H[cno],KFName=[Q]\CLmstr\BankIdx1.H[cno],Shr",internal, outin, keyed
+	open #bankmstr=fnH: "Name=[Q]\CLmstr\BankMstr.h[cno],KFName=[Q]\CLmstr\BankIdx1.h[cno],Shr",internal, outin, keyed
 	read #bankmstr,using 'Form POS 45,PD 6.2,PD 6.2',key=bc$,release: bal,upi nokey ignore
 	close #bankmstr:
-	open #glmstr=fnH: "Name=[Q]\CLmstr\GLmstr.H[cno],KFName=[Q]\CLmstr\GLIndex.H[cno],Shr",internal,outIn,keyed
-	open #paymstr1=13: "Name=[Q]\CLmstr\PayMstr.H[cno],KFName=[Q]\CLmstr\PayIdx1.H[cno],Shr",internal,outIn,keyed
-	open #paymstr2=14: "Name=[Q]\CLmstr\PayMstr.H[cno],KFName=[Q]\CLmstr\PayIdx2.H[cno],Shr",internal,outIn,keyed
+	open #glmstr=fnH: "Name=[Q]\CLmstr\GLmstr.h[cno],KFName=[Q]\CLmstr\GLIndex.h[cno],Shr",internal,outIn,keyed
+	open #paymstr1=13: "Name=[Q]\CLmstr\PayMstr.h[cno],KFName=[Q]\CLmstr\PayIdx1.h[cno],Shr",internal,outIn,keyed
+	open #paymstr2=14: "Name=[Q]\CLmstr\PayMstr.h[cno],KFName=[Q]\CLmstr\PayIdx2.h[cno],Shr",internal,outIn,keyed
 	open #payeegl=17: "Name=[Q]\CLmstr\payeeGLBreakdown.h[cno],KFName=[Q]\CLmstr\Payeeglbkdidx.h[cno],Shr",internal,outIn,keyed
-	open #paytrans=4: "Name=[Q]\CLmstr\PayTrans.H[cno],KFName=[Q]\CLmstr\UnPdIdx1.H[cno],Shr",internal,outIn,keyed
-	open #unpdaloc=5: "Name=[Q]\CLmstr\UnPdAloc.H[cno],KFName=[Q]\CLmstr\Uaidx2.H[cno],Shr",internal,outIn,keyed
+	open #paytrans=4: "Name=[Q]\CLmstr\PayTrans.h[cno],KFName=[Q]\CLmstr\UnPdIdx1.h[cno],Shr",internal,outIn,keyed
+	open #unpdaloc=5: "Name=[Q]\CLmstr\UnPdAloc.h[cno],KFName=[Q]\CLmstr\Uaidx2.h[cno],Shr",internal,outIn,keyed
 	t1(1)=bal : upi=t1(5) : t1(3)=t1(1)-t1(2)
 	if fnregistered_for_job_cost_pr then havejc=1 : gosub JCBLD
 goto MENU1 ! /r
@@ -171,10 +171,10 @@ JCBLD: ! r: Open JC Files
 	chdr3$(5)='Amount'
 	chdr3$(6)='Description'
 	cmask3$(5)='10' : cmask3$(1)=cmask3$(2)=cmask3$(3)=cmask3$(4)=cmask3$(6)=''
-	open #41: "Name=[Q]\PRmstr\JCMSTR.H[cno],KFName=[Q]\PRmstr\JCIndx.H[cno],Shr",internal,outIn,keyed ioerr JCBLD_FINIS
-	open #category:=2: "Name=[Q]\PRmstr\JCCAT.H[cno], KFName=[Q]\PRmstr\CATIndx.H[cno],Shr", internal,outIn,keyed
-	open #43: "Name=[Q]\PRmstr\SCMSTR.H[cno],KFName=[Q]\PRmstr\SCIndex.H[cno],Shr",internal,outIn,keyed
-	open #45: "Name=[Q]\PRmstr\JCTrans.H[cno],Shr",internal,outIn,relative
+	open #41: "Name=[Q]\PRmstr\JCMSTR.h[cno],KFName=[Q]\PRmstr\JCIndx.h[cno],Shr",internal,outIn,keyed ioerr JCBLD_FINIS
+	open #category:=2: "Name=[Q]\PRmstr\JCCAT.h[cno], KFName=[Q]\PRmstr\CATIndx.h[cno],Shr", internal,outIn,keyed
+	open #43: "Name=[Q]\PRmstr\SCMSTR.h[cno],KFName=[Q]\PRmstr\SCIndex.h[cno],Shr",internal,outIn,keyed
+	open #45: "Name=[Q]\PRmstr\JCTrans.h[cno],Shr",internal,outIn,relative
 	if not exists("[Q]\CLmstr\JCBreakdownS"&wsid$&".h[cno]") then gosub MAKE_JCB
 	open #jcbreakdown=46: "Name=[Q]\CLmstr\JCBreakdownS"&wsid$&".h[cno],KFName=[Q]\CLmstr\JcBrkidx"&wsid$&".h[cno],Version=1,Shr",internal,outIn,keyed ioerr MAKE_JCB
 JCBLD_FINIS: !
@@ -193,7 +193,7 @@ CODE_FOR_PAYMENT: ! r:
 		type$="Not Approved for Payment"
 	end if
 	close #paytrans: ioerr ignore
-	open #paytrans=4: "Name=[Q]\CLmstr\PayTrans.H[cno],KFName=[Q]\CLmstr\UnPdIdx1.H[cno],Shr",internal,outIn,keyed
+	open #paytrans=4: "Name=[Q]\CLmstr\PayTrans.h[cno],KFName=[Q]\CLmstr\UnPdIdx1.h[cno],Shr",internal,outIn,keyed
 L4700: read #paytrans,using 'Form POS 1,C 8,C 12,2*G 6,C 12,C 18,G 10.2,n 1,n 2,G 8,G 6,N 1,n 6,n 10.2,n 8': vn$,iv$,mat up$,upa,pcde,bcde,ckn,dp,gde,pdte,disamt,ddate eof DISPLAY_GRID
 	if displayunpaid=1 and pcde=1 then goto L4760 ! if only choose selected, don't allow others to list
 	if displayall=1 then goto L4760
@@ -503,7 +503,7 @@ return  ! /r
 MAKE_JCB: ! r: create [Q]\CLmstr\JCBreakdownS"&wsid$&".h[cno]"
 open #jcbreakdown=46: "Name=[Q]\CLmstr\JCBreakdownS"&wsid$&".h[cno],Version=1,replace,RecL=79",internal,outIn,relative
 close #jcbreakdown:
-execute "Index [Q]\CLmstr\JCBreakdownS"&wsid$&".h[cno],[Q]\CLmstr\jcbrkidx"&wsid$&".H[cno],48,20,Replace,DupKeys -n"
+execute "Index [Q]\CLmstr\JCBreakdownS"&wsid$&".h[cno],[Q]\CLmstr\jcbrkidx"&wsid$&".h[cno],48,20,Replace,DupKeys -n"
 return ! /r
 HDR2: ! r: header for jub cost listing
 fnopenprn

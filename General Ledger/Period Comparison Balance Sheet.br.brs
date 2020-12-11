@@ -53,9 +53,9 @@ L330: ! pr NEWPAGE
 L370: fnopenprn : _
 	if file$(255)(1:4)<>"PRN:" then redir=1 else redir=0
 	if fnps=2 then goto L410 ! secondary
-	execute "Index [Q]\GLmstr\GLmstr.h[cno] "&env$('temp')&'\'&"fsindex.H[cno] 63 3 Replace DupKeys -N"
+	execute "Index [Q]\GLmstr\GLmstr.h[cno] "&env$('temp')&'\'&"fsindex.h[cno] 63 3 Replace DupKeys -N"
 	goto L420
-L410: execute "Index [Q]\GLmstr\GLmstr.h[cno] "&env$('temp')&'\'&"fsindex.H[cno] 66 3 Replace DupKeys -N"
+L410: execute "Index [Q]\GLmstr\GLmstr.h[cno] "&env$('temp')&'\'&"fsindex.h[cno] 66 3 Replace DupKeys -N"
 L420: open #3: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName="&env$('temp')&'\'&"fsindex.h[cno],Shr",internal,input,keyed
 	report$=env$('program_caption')
 L440: read #1,using L480: r$,d$,te$,sp,ls,ds,ul,rs,bc,ap,mat ac,ic,fc eof L2120

@@ -45,9 +45,9 @@ L320: pr newpage
 	pr f "12,2,C 18,B,5": " Press F5 to stop"
 L350: fnopenprn
 	if fnps=2 then goto L390 ! secondary
-	execute "Index [Q]\GLmstr\GLmstr.h[cno] "&udf$&"fsindex.H[cno] 63 3 Replace DupKeys -N"
+	execute "Index [Q]\GLmstr\GLmstr.h[cno] "&udf$&"fsindex.h[cno] 63 3 Replace DupKeys -N"
 	goto L400
-L390: execute "Index [Q]\GLmstr\GLmstr.h[cno] "&udf$&"fsindex.H[cno] 66 3 Replace DupKeys -N"
+L390: execute "Index [Q]\GLmstr\GLmstr.h[cno] "&udf$&"fsindex.h[cno] 66 3 Replace DupKeys -N"
 L400: open #3: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName="&udf$&"fsindex.h[cno],Shr",internal,input,keyed
 	if file$(255)(1:4)<>"PRN:" then redir=1 else redir=0
 	on fkey 5 goto L1940

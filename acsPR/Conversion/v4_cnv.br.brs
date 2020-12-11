@@ -39,7 +39,7 @@ def fn_pr_conversion_department(cno; medicare_is_seperated)
 		close #h_rpmstr: 
 	end if 
 	fnIndex("[Q]\PRmstr\RPMstr.h[cno]","[Q]\PRmstr\RPIndex.h[cno]","1 8")
-	fnIndex("[Q]\PRmstr\RPMstr.H[cno]","[Q]\PRmstr\RPIndx2.H[cno]","9 30")
+	fnIndex("[Q]\PRmstr\RPMstr.h[cno]","[Q]\PRmstr\RPIndx2.h[cno]","9 30")
 	open #h_rpmstr:=1: "Name=[Q]\PRmstr\RPMstr.h[cno],KFName=[Q]\PRmstr\RPIndex.h[cno],Shr",internal,outIn,keyed 
 	if rln(h_rpmstr)<196 then 
 		close #h_rpmstr: 
@@ -167,10 +167,10 @@ def fn_pr_conversion_department(cno; medicare_is_seperated)
 		fnIndex("[Q]\PRmstr\Department.h[cno]","[Q]\PRmstr\DeptIdx.h[cno]","1 11")
 		close #h_payrollchecks: 
 		fnIndex("[Q]\PRmstr\PayrollChecks.h[cno]","[Q]\PRmstr\checkidx.h[cno]","1 17")
-		fnIndex("[Q]\PRmstr\dd.H[cno]","[Q]\PRmstr\ddidx1.H[cno]","1,10")
+		fnIndex("[Q]\PRmstr\dd.h[cno]","[Q]\PRmstr\ddidx1.h[cno]","1,10")
 		close #h_rpmstr: ioerr ignore
-		fnIndex("[Q]\PRmstr\RPMstr.H[cno]","[Q]\PRmstr\RPIndex.H[cno]","1,8")
-		fnIndex("[Q]\PRmstr\RPMstr.H[cno]","[Q]\PRmstr\RPIndx2.H[cno]","9 30")
+		fnIndex("[Q]\PRmstr\RPMstr.h[cno]","[Q]\PRmstr\RPIndex.h[cno]","1,8")
+		fnIndex("[Q]\PRmstr\RPMstr.h[cno]","[Q]\PRmstr\RPIndx2.h[cno]","9 30")
 	!   end if  ! cno_current<>0
 	! next company_item
 	Xit: ! 

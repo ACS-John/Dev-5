@@ -16,8 +16,8 @@
 	cmask$(3)=''
 
 	fnTop(program$)
-	open #4: "Name=[Q]\GLmstr\GLmstr.H[cno],Shr,KFName=[Q]\GLmstr\GLINDEX.H[cno],Shr",internal,outIn,keyed 
-	open #2: "Name=[Q]\GLmstr\GLTRANS.H[cno],Shr",internal,outIn,relative 
+	open #4: "Name=[Q]\GLmstr\GLmstr.h[cno],Shr,KFName=[Q]\GLmstr\GLINDEX.h[cno],Shr",internal,outIn,keyed 
+	open #2: "Name=[Q]\GLmstr\GLTRANS.h[cno],Shr",internal,outIn,relative 
 	gosub BUILD_LAYOUT
 MAIN: ! r:
 	fnTos
@@ -41,7 +41,7 @@ MAIN: ! r:
 	fnTos
 	mylen=10: mypos=mylen+3 : right=1
 	fnflexinit1('acglpost2',lc=1,1,15,30,mat chdr$,mat cmask$,1)
-	fngetdir2('[Q]\GLmstr\',mat filename$,'','GL*.H[cno]',mat filedate$,mat filetime$)
+	fngetdir2('[Q]\GLmstr\',mat filename$,'','GL*.h[cno]',mat filedate$,mat filetime$)
 	dircount=0
 	for filenameItem=1 to udim(mat filename$)
 		x=val(filename$(filenameItem)(3:8)) conv L420
@@ -72,7 +72,7 @@ PRINT_POST: !
 	for j3=1 to dircount
 		if dir(j3)<>0 then 
 			close #3: ioerr ignore
-			open #3: "Name=[Q]\GLmstr\GL"&cnvrt$("PIC(######)",dir(j3))&".H[cno],RecL=104,USE",internal,outIn,relative 
+			open #3: "Name=[Q]\GLmstr\GL"&cnvrt$("PIC(######)",dir(j3))&".h[cno],RecL=104,USE",internal,outIn,relative 
 			if listing=1 then 
 				pr #255,using 'form pos 1,c 11,pic(zz/zz/zz),skip 2': "File Date: ",dir(j3)
 			end if
@@ -138,7 +138,7 @@ PRINT_POST: !
 L1170: !
 	for j=1 to dircount
 		if dir(j)<>0 then 
-			fnFree("[Q]\GLmstr\GL"&cnvrt$("PIC(######)",dir(j))&".H[cno]")
+			fnFree("[Q]\GLmstr\GL"&cnvrt$("PIC(######)",dir(j))&".h[cno]")
 		end if 
 	next j
 Xit: fnXit
@@ -173,13 +173,13 @@ REVIEW: ! r:
 	gosub OPEN_FILE : gosub CLOSE_FILE : gosub OPEN_FILE 
 	fnHamster("TrAlloc",mat lbl$,mat tln,1,mat p$,mat fltyp$,mat sln,mat mask,mat sp,mat c$)
 	gosub CLOSE_FILE
-	! Open #3: "Name=[Q]\GLmstr\GL"&CNVRT$("PIC(######)",DIR(J3))&".H[cno],RecL=104,USE",Internal,outIn,Relative
+	! Open #3: "Name=[Q]\GLmstr\GL"&CNVRT$("PIC(######)",DIR(J3))&".h[cno],RecL=104,USE",Internal,outIn,Relative
 goto MAIN ! /r
 
 OPEN_FILE: ! r:
 	open_file_count=1 : close #3: ioerr ignore ! this value is used in the close_file sub routine
-	if exists("[Q]\GLmstr\GL"&cnvrt$("PIC(######)",review)&".H[cno]")=0 then gosub INDEX
-	open #open_file_count: "Name=[Q]\GLmstr\GL"&cnvrt$("PIC(######)",review)&".H[cno],KFName=[Q]\GLmstr\GL"&cnvrt$("PIC(######)",review)&"-idx.H[cno],RecL=104,kps=1,kln=12,USE",internal,outIn,keyed 
+	if exists("[Q]\GLmstr\GL"&cnvrt$("PIC(######)",review)&".h[cno]")=0 then gosub INDEX
+	open #open_file_count: "Name=[Q]\GLmstr\GL"&cnvrt$("PIC(######)",review)&".h[cno],KFName=[Q]\GLmstr\GL"&cnvrt$("PIC(######)",review)&"-idx.h[cno],RecL=104,kps=1,kln=12,USE",internal,outIn,keyed 
 return  ! /r
 
 CLOSE_FILE: ! r:
@@ -188,7 +188,7 @@ CLOSE_FILE: ! r:
 	next j
 return  ! /r
 INDEX: ! r:
-	if ~fnIndex("[Q]\GLmstr\GL"&cnvrt$("PIC(######)",review)&".H[cno]","[Q]\GLmstr\GL"&cnvrt$("PIC(######)",review)&"-idx.H[cno]","1 12") then goto MAIN
+	if ~fnIndex("[Q]\GLmstr\GL"&cnvrt$("PIC(######)",review)&".h[cno]","[Q]\GLmstr\GL"&cnvrt$("PIC(######)",review)&"-idx.h[cno]","1 12") then goto MAIN
 	return  ! /r
 
 ADD: ! r:

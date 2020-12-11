@@ -11,8 +11,8 @@ def library fnhours(eno)
 	dim impname$*25,empname$*30
 	dim flxitm$(8)*30,key$*21,ml$(3)*80
 
-	open #hBreakdown=fnH: "Name=[Q]\PRmstr\HourBreakdown.H[cno],KFName=[Q]\PRmstr\HourBreakdown-idx.H[cno],Shr",internal,outIn,keyed 
-	open #hClassification=fnH: "Name=[Q]\PRmstr\HourClass.H[cno],KFName=[Q]\PRmstr\HourClass-idx.H[cno],Shr",internal,outIn,keyed ioerr MSGBOX3
+	open #hBreakdown=fnH: "Name=[Q]\PRmstr\HourBreakdown.h[cno],KFName=[Q]\PRmstr\HourBreakdown-idx.h[cno],Shr",internal,outIn,keyed 
+	open #hClassification=fnH: "Name=[Q]\PRmstr\HourClass.h[cno],KFName=[Q]\PRmstr\HourClass-idx.h[cno],Shr",internal,outIn,keyed ioerr MSGBOX3
 	open #hEmployee=fnH: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr",internal,input,keyed 
 	MAIN: ! 
 		addhours=edithours=0
@@ -179,8 +179,8 @@ def library fnhours(eno)
 fnend 
 SETUP: ! 
 	goto L1090 ! don't allow run to delete files
-	open #hBreakdown=fnH: "Name=[Q]\PRmstr\HourBreakdown.H[cno],RecL=39,KFName=[Q]\PRmstr\HourBreakdown-idx.H[cno],kps=1/9/14,kln=8/5/8,replace",internal,outIn,keyed 
+	open #hBreakdown=fnH: "Name=[Q]\PRmstr\HourBreakdown.h[cno],RecL=39,KFName=[Q]\PRmstr\HourBreakdown-idx.h[cno],kps=1/9/14,kln=8/5/8,replace",internal,outIn,keyed 
 	close #hBreakdown: 
-	execute "Index [Q]\PRmstr\HourBreakdown.H[cno]"&' '&"[Q]\PRmstr\HourBreakdown-idx.H[cno] 1/9/14 8/5/8 Replace DupKeys"
+	execute "Index [Q]\PRmstr\HourBreakdown.h[cno]"&' '&"[Q]\PRmstr\HourBreakdown-idx.h[cno] 1/9/14 8/5/8 Replace DupKeys"
 L1090: stop 
 include: ertn

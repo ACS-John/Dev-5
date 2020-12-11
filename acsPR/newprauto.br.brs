@@ -13,7 +13,7 @@ L100: if fnprocess=0 then goto Xit
 	if pgnum=0 then open #prclnt=1: "Name=[Q]\PRmstr\PrClnt.dat,NoShr",internal,outIn,relative  : _
 		read #prclnt,using 'Form POS 46,3*N 1',rec=1: w,m,q : _
 		close #prclnt:
-L140: open #20: "Name=[Q]\PRmstr\newPrPGMN.H[cno],Shr",internal,input,relative ioerr MSGBOX1 : _
+L140: open #20: "Name=[Q]\PRmstr\newPrPGMN.h[cno],Shr",internal,input,relative ioerr MSGBOX1 : _
 	read #20,using 'Form POS 1,C 20,X 35,3*N 1',rec=pgnum+=1: prg$,wk,mo,qt eof Xit,noRec Xit : _
 	close #20:
 	if w=1 and wk<>1 then goto L140 ! WEEKLY PERIOD NOT SELECTED

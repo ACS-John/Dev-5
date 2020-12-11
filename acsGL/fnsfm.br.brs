@@ -10,17 +10,17 @@
 	fnTop(program$,cap$='Financial Statement Design')
 	fncno(cno)
 	id$(1)=" 1. Balance Sheet File" : _
-	fil$(1)="ACGLFNSB.H[cno]": idx$(1)="agfsidx4.H[cno]"
+	fil$(1)="ACGLFNSB.h[cno]": idx$(1)="agfsidx4.h[cno]"
 	id$(2)=" 2. Income Statement File" : _
-	fil$(2)="ACGLFNSI.H[cno]": idx$(2)="agfsidx3.H[cno]"
+	fil$(2)="ACGLFNSI.h[cno]": idx$(2)="agfsidx3.h[cno]"
 	id$(3)=" 3. Fund Statement / Cash Flow File" : _
-	fil$(3)="ACGLFNSF.H[cno]": idx$(3)="agfsidx5.H[cno]"
+	fil$(3)="ACGLFNSF.h[cno]": idx$(3)="agfsidx5.h[cno]"
 	id$(4)=" 4. Secondary Balance Sheet File" : _
-	fil$(4)="ACGLFNSC.H[cno]": idx$(4)="agfsidx1.H[cno]"
+	fil$(4)="ACGLFNSC.h[cno]": idx$(4)="agfsidx1.h[cno]"
 	id$(5)=" 5. Secondary Income Statement File" : _
-	fil$(5)="ACGLFNSJ.H[cno]": idx$(5)="agfsidx2.H[cno]"
+	fil$(5)="ACGLFNSJ.h[cno]": idx$(5)="agfsidx2.h[cno]"
 	id$(6)=" 6. Secondary Fund / Cash Flow File" : _
-	fil$(6)="ACGLFNSG.H[cno]": idx$(6)="agfsidx6.H[cno]"
+	fil$(6)="ACGLFNSG.h[cno]": idx$(6)="agfsidx6.h[cno]"
 	gosub BUILD_LAYOUT
 MAIN: !
 	fnTos(sn$="FsDesign") : _

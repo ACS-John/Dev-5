@@ -46,9 +46,9 @@
 	costcntr=val(resp$(1))
 L360: if fnps=2 then goto L390 ! secondary
 	close #3: ioerr L370
-L370: execute "Index [Q]\GLmstr\GLmstr.h[cno] [Temp]\fsindex.H[cno] 75 3 Replace DupKeys -N"
+L370: execute "Index [Q]\GLmstr\GLmstr.h[cno] [Temp]\fsindex.h[cno] 75 3 Replace DupKeys -N"
 	goto L400
-L390: execute "Index [Q]\GLmstr\GLmstr.h[cno] [Temp]\fsindex.H[cno] 78 3 Replace DupKeys -N"
+L390: execute "Index [Q]\GLmstr\GLmstr.h[cno] [Temp]\fsindex.h[cno] 78 3 Replace DupKeys -N"
 L400: open #3: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Temp]\fsindex.h[cno],Shr",internal,input,keyed
 	fnopenprn : _
 	if file$(255)(1:4)<>"PRN:" then redir=1 else redir=0

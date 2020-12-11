@@ -23,7 +23,7 @@
 	newdedcode_Deduct =1
 	newdedcode_Add    =2
 	newdedcode_Benefit=3
-	open #12: "Name=[Q]\CLmstr\BankMstr.H[cno],KFName=[Q]\CLmstr\BankIdx1.H[cno],Shr",internal,input,keyed ioerr BankReadFinis
+	open #12: "Name=[Q]\CLmstr\BankMstr.h[cno],KFName=[Q]\CLmstr\BankIdx1.h[cno],Shr",internal,input,keyed ioerr BankReadFinis
 	read #12,using 'Form POS 57,G 8',key=lpad$(str$(bankcode),2),release: cl_bank_last_check$ nokey ignore
 	close #12: ioerr ignore
 	BankReadFinis: !

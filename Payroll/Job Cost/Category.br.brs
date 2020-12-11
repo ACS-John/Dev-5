@@ -11,8 +11,8 @@
  
 	fndat(dat$,1)
  
-	if exists("[Q]\PRmstr\Category.H[cno]")=0 then goto SETUP_FILES
-L170: open #1: "Name=[Q]\PRmstr\Category.H[cno],KFName=[Q]\PRmstr\categoryIDX.H[cno],Shr",internal,outIn,keyed
+	if exists("[Q]\PRmstr\Category.h[cno]")=0 then goto SETUP_FILES
+L170: open #1: "Name=[Q]\PRmstr\Category.h[cno],KFName=[Q]\PRmstr\categoryIDX.h[cno],Shr",internal,outIn,keyed
 L180: form pos 1,n 5,c 30
 ASKCATEGORY: !
 	mat resp$=("")
@@ -105,13 +105,13 @@ L800: write #1,using L180: category,name$
 	gosub RECREATE_GRID
 	goto SCREEN_1
 SETUP_FILES: !
-	open #1: "Name=[Q]\PRmstr\Category.H[cno],RecL=128,replace",internal,outIn
+	open #1: "Name=[Q]\PRmstr\Category.h[cno],RecL=128,replace",internal,outIn
 	close #1:
 	goto REINDEX
 REINDEX: ! indexes if needed
 	reindex+=1
 	close #1: ioerr L910
-L910: execute "Index [Q]\PRmstr\Category.H[cno]"&' '&"[Q]\PRmstr\categoryIDX.H[cno] 1 5 Replace DupKeys -n"
+L910: execute "Index [Q]\PRmstr\Category.h[cno]"&' '&"[Q]\PRmstr\categoryIDX.h[cno] 1 5 Replace DupKeys -n"
 	goto L170
 PRINT_PROOF: !
 	fnopenprn

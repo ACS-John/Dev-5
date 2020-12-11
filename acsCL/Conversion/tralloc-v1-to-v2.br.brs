@@ -11,7 +11,7 @@ def library fntralloc_v1_to_v2
 
 		fnStatus("Updating Checkbook Transaction Allocation from v1 to v2")
 		! fnwait(message$="Converting: please wait...",0)
-		fnIndex("[Q]\CLmstr\TrAlloc.H[cno]","[Q]\CLmstr\TrAlloc-Idx.H[cno]","1 11")
+		fnIndex("[Q]\CLmstr\TrAlloc.h[cno]","[Q]\CLmstr\TrAlloc-Idx.h[cno]","1 11")
 		open #tralloc=1: "Name=[Q]\CLmstr\TrAlloc.h[cno],KFName=[Q]\CLmstr\TrAlloc-Idx.h[cno]",internal,outIn,keyed
 		close #tralloc:
 		open #tralloc: "Name=[Q]\CLmstr\TrAlloc.h[cno],KFName=[Q]\CLmstr\TrAlloc-Idx.h[cno]",internal,outIn,keyed
@@ -24,6 +24,6 @@ def library fntralloc_v1_to_v2
 	Xit: !
 		close #tralloc:
 		fnCopy("[Q]\CLmstr\TrAlloc.h[cno]","[Q]\CLmstr\TrAlloc.h[cno]",80)
-		fnIndex("[Q]\CLmstr\TrAlloc.H[cno]","[Q]\CLmstr\TrAlloc-Idx.H[cno]","1 11")
+		fnIndex("[Q]\CLmstr\TrAlloc.h[cno]","[Q]\CLmstr\TrAlloc-Idx.h[cno]","1 11")
 fnend
 include: ertn No

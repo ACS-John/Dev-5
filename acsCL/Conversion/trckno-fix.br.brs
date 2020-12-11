@@ -1,4 +1,4 @@
-open #trmstr=1: "Name=[Q]\CLmstr\TRMSTR.H[cno]",internal,outIn
+open #trmstr=1: "Name=[Q]\CLmstr\TRMSTR.h[cno]",internal,outIn
 open #2: "Name=[Q]\CLmstr\TRALLOC.h[cno]",internal,outIn,relative
 L110: read #trmstr,using 'Form POS 1,N 2,N 1,C 8,POS 79,2*PD 3': bank_code,tcde,checkNumber$,mat tr eof END1
 	v1=val(checkNumber$) conv L110
@@ -15,6 +15,6 @@ L220: form pos 4,c 8,pos 65,pd 3
 L250: goto L110
 END1: close #trmstr:
 	close #2:
-	execute "Index [Q]\CLmstr\TRMSTR.H[cno]"&' '&"[Q]\CLmstr\TRIDX1.H[cno] 1 11 REPLACE DupKeys"
-	execute "Index [Q]\CLmstr\TRMSTR.H[cno]"&' '&"[Q]\CLmstr\TRIDX2.H[cno] 1/28/4 3/8/8 REPLACE DupKeys"
+	execute "Index [Q]\CLmstr\TRMSTR.h[cno]"&' '&"[Q]\CLmstr\TRIDX1.h[cno] 1 11 REPLACE DupKeys"
+	execute "Index [Q]\CLmstr\TRMSTR.h[cno]"&' '&"[Q]\CLmstr\TRIDX2.h[cno] 1/28/4 3/8/8 REPLACE DupKeys"
 stop

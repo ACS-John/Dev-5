@@ -26,7 +26,7 @@ L180: form pos 1,103*c 18
 	close #1:
 	
 	gosub L1270
-	open #1: "Name=S:\Core\Data\acsllc\EMmstr.H[cno],KFName=S:\Core\Data\acsllc\EMIndex.h[cno],Shr",internal,outIn,keyed ioerr L2370
+	open #1: "Name=S:\Core\Data\acsllc\EMmstr.h[cno],KFName=S:\Core\Data\acsllc\EMIndex.h[cno],Shr",internal,outIn,keyed ioerr L2370
 L300: pr newpage
 	on fkey 5 goto L300
 	pr f "3,9,C 60": "Employee Master File"
@@ -245,12 +245,12 @@ L2220: pr newpage
 	pr newpage
 L2290: !
 	close #1: ioerr ignore
-	fnFree('S:\Core\Data\acsllc\EMmstr.H[cno]')
-	open #1: "Name=S:\Core\Data\acsllc\EMmstr.H[cno],SIZE=0,RecL=610",internal,output
+	fnFree('S:\Core\Data\acsllc\EMmstr.h[cno]')
+	open #1: "Name=S:\Core\Data\acsllc\EMmstr.h[cno],SIZE=0,RecL=610",internal,output
 	close #1:
  
 L2340: !
-	execute "Index S:\Core\Data\acsllc\EMmstr.H[cno],S:\Core\Data\acsllc\EMIndex.h[cno],1,9,REPLACE,DupKeys"
+	execute "Index S:\Core\Data\acsllc\EMmstr.h[cno],S:\Core\Data\acsllc\EMIndex.h[cno],1,9,REPLACE,DupKeys"
 	if ti<2 then chain 'S:\acsTM\EMAINT' else goto Xit
 	goto Xit
 L2370: !

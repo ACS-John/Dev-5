@@ -36,9 +36,9 @@ def library fnpaymstr_v0_to_v1
 		close #paymstr2: ioerr ignore
 		close #payeegl: ioerr ignore
 		close #payalloc,free: ioerr ignore
-		fnIndex('[Q]\CLmstr\PayMstr.H[cno]','[Q]\CLmstr\Paydx1.H[cno]','1 8')
-		fnIndex('[Q]\CLmstr\PayMstr.H[cno]','[Q]\CLmstr\PayIdx2.H[cno]','9 30')
-		fnIndex('[Q]\CLmstr\payeeglbreakdown.h[cno]','[Q]\CLmstr\payeeglbkdidx.H[cno]','1 8')
+		fnIndex('[Q]\CLmstr\PayMstr.h[cno]','[Q]\CLmstr\Paydx1.h[cno]','1 8')
+		fnIndex('[Q]\CLmstr\PayMstr.h[cno]','[Q]\CLmstr\PayIdx2.h[cno]','9 30')
+		fnIndex('[Q]\CLmstr\payeeglbreakdown.h[cno]','[Q]\CLmstr\payeeglbkdidx.h[cno]','1 8')
 	goto Xit
 
 	Xit: !

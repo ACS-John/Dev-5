@@ -1,6 +1,6 @@
-[Q]\GLmstr\glMstr.H[cno]  ,  gl_          , 0
-[Q]\GLmstr\GLIndex.H[cno] ,  Account
-[Q]\GLmstr\GLIndx2.H[cno] ,  Description
+[Q]\GLmstr\glMstr.h[cno]  ,  gl_          , 0
+[Q]\GLmstr\GLIndex.h[cno] ,  Account
+[Q]\GLmstr\GLIndx2.h[cno] ,  Description
 recl=416
 ===================================================
 Account            ,    Department Number                      ,   C  12      , !  Pos=1-3 DNO^Department Number,Pos=4-9 ANO^Major Account Number,Pos=10-12 SNO^Sub Account Number

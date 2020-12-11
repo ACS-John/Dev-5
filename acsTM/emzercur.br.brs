@@ -15,7 +15,7 @@ on a goto L170,XIT none L90
 L170: !
 pr newpage
 pr f "10,10,c 60,n": "ZERO CURRENT FIELDS IN EMPLOYEE MASTER FILE IN PROCESS"
-open #1: "Name=S:\Core\Data\acsllc\EMmstr.H[cno],KFName=S:\Core\Data\acsllc\EMIndex.h[cno],Shr",internal,outIn,keyed
+open #1: "Name=S:\Core\Data\acsllc\EMmstr.h[cno],KFName=S:\Core\Data\acsllc\EMIndex.h[cno],Shr",internal,outIn,keyed
 L200: read #1,using L210: eno$ eof L250
 	L210: form pos 1,c 9
 	rewrite #1,using L230: mat cchrs,mat ncchrs,mat ccamt,mat nccamt

@@ -17,7 +17,7 @@ else
 	rd1=val(resp$(1))
 end if
 fnAutomatedSavePoint('before')
-open #ivpaid=fnH: "Name=[Q]\CLmstr\IvPaid.H[cno],KFName=[Q]\CLmstr\IVIndex.H[cno],Shr",internal,outIn,keyed
+open #ivpaid=fnH: "Name=[Q]\CLmstr\IvPaid.h[cno],KFName=[Q]\CLmstr\IVIndex.h[cno],Shr",internal,outIn,keyed
 open #work=fnH: "Name=[Q]\CLmstr\Work.[session],Size=0,RecL=34,Replace",internal,output
 do
 	READ_IVPAID: !
@@ -28,8 +28,8 @@ loop
 EO_IVPAID: !
 close #ivpaid:
 close #work:
-fnFree("[Q]\CLmstr\IvPaid.H[cno]")
-fnRename("[Q]\CLmstr\Work.[session]","[Q]\CLmstr\IvPaid.H[cno]")
+fnFree("[Q]\CLmstr\IvPaid.h[cno]")
+fnRename("[Q]\CLmstr\Work.[session]","[Q]\CLmstr\IvPaid.h[cno]")
 goto Xit
 Xit: fnXit
 include: ertn

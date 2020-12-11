@@ -36,13 +36,13 @@
 	open #company=1: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,input
 	read #company,using 'Form Pos 150,2*N 1': use_dept,use_sub
 	close #1:
-	open #1: "Name=[Q]\GLmstr\GLmstr.H[cno],KFName=[Q]\GLmstr\GLIndex.H[cno],Shr",internal,outIn,keyed
+	open #1: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLIndex.h[cno],Shr",internal,outIn,keyed
 	! format:  budget #^bud^n 2,budget name^bud$^c 50,range of g/l #^gl$(40) (1 to 2, 3 to 4, etc)
-	open #5: "Name=[Q]\GLmstr\BudInfo.H[cno],use,KFName=[Q]\GLmstr\BudInfo_Index.H[cno],RecL=532,KPs=1,KLn=2",internal,outIn,keyed
+	open #5: "Name=[Q]\GLmstr\BudInfo.h[cno],use,KFName=[Q]\GLmstr\BudInfo_Index.h[cno],RecL=532,KPs=1,KLn=2",internal,outIn,keyed
 	read #5,using 'Form N 2,C 50,40*C 12': bud,bud$,mat gl$ noRec MAINTAIN_RANGE_FILE, eof MAINTAIN_RANGE_FILE
 	open #12: "Name=[Q]\GLmstr\BudgetInfo.h[cno],KFName=[Q]\GLmstr\BudIndx.h[cno],Use,RecL=28,KPs=1,KLn=14,Shr",internal,outIn,keyed
 
-	open #2: "Name=[Q]\GLmstr\Budget"&str$(bud)&".H[cno],KFName=[Q]\GLmstr\BgIndx"&str$(bud)&".H[cno],Shr",internal,outIn,keyed ioerr MENU1
+	open #2: "Name=[Q]\GLmstr\Budget"&str$(bud)&".h[cno],KFName=[Q]\GLmstr\BgIndx"&str$(bud)&".h[cno],Shr",internal,outIn,keyed ioerr MENU1
 
 	mat ml$(2)
 	ml$(1)="Budget Management is a separately licensed product. "
@@ -54,7 +54,7 @@ MENU1: ! r:
 	fnTos
 	respc=0
 	fnLbl(1,1,"Budget File #:",14,right)
-	execute "Dir [Q]\GLmstr\budget*.H[cno] >[Temp]\FlexWork.tmp" ioerr L530
+	execute "Dir [Q]\GLmstr\budget*.h[cno] >[Temp]\FlexWork.tmp" ioerr L530
 	L530: j=0
 	open #13: "Name=[Temp]\FlexWork.tmp",display,input ioerr L690
 	L550: !
@@ -124,16 +124,16 @@ fd2=val(resp$(2)) ! ending day of year
 return ! /r
 CREATE_NEW_FILE: ! r:
 close #2: ioerr L1020
-open #2: "Name=[Q]\GLmstr\BUDGET"&str$(bud)&".H[cno],KFName=[Q]\GLmstr\BGINDX"&str$(bud)&".H[cno],Shr",internal,outIn,keyed ioerr L1000
+open #2: "Name=[Q]\GLmstr\BUDGET"&str$(bud)&".h[cno],KFName=[Q]\GLmstr\BGINDX"&str$(bud)&".h[cno],Shr",internal,outIn,keyed ioerr L1000
 goto L1020
 L1000: mat ml$(2)
 ml$(1)="You already have a budget file # "&str$(bud) ! "
 ml$(2)="Take YES to continue, else NO to retain the old file."
 fnmsgbox(mat ml$,resp$,'',52)
 if resp$="Yes" then goto L1020 else goto MENU1
-L1020: open #2: "Name=[Q]\GLmstr\Budget"&str$(bud)&".H[cno],Replace,KFName=[Q]\GLmstr\BgIndx"&str$(bud)&".H[cno],RecL=149,KPS=1/149,KLN=12/1",internal,outIn,keyed
+L1020: open #2: "Name=[Q]\GLmstr\Budget"&str$(bud)&".h[cno],Replace,KFName=[Q]\GLmstr\BgIndx"&str$(bud)&".h[cno],RecL=149,KPS=1/149,KLN=12/1",internal,outIn,keyed
 close #2: ioerr L1040
-L1040: open #2: "Name=[Q]\GLmstr\Budget"&str$(bud)&".H[cno],use,KFName=[Q]\GLmstr\BgIndx"&str$(bud)&".H[cno],RecL=149,KPS=1/149,KLN=12/1",internal,outIn,keyed
+L1040: open #2: "Name=[Q]\GLmstr\Budget"&str$(bud)&".h[cno],use,KFName=[Q]\GLmstr\BgIndx"&str$(bud)&".h[cno],RecL=149,KPS=1/149,KLN=12/1",internal,outIn,keyed
 return ! /r
 READD_TOTALS: ! r:
 ! from general ledger __________________________________________________
@@ -161,17 +161,17 @@ cd$="X": mat bg=(0): gd$=ex$="" ! write one blank line at end of file
 g1$="999999999999"
 ! Write #2,Using 'Form POS 1,C 12,6*PD 6.2,2*C 50,C 1': G1$,MAT BG,GD$,EX$,CD$    why was it doing this  ??? kj
 close #2:
-execute "Index [Q]\GLmstr\Budget"&str$(bud)&".H[cno],[Q]\GLmstr\BGINDX"&str$(bud)&".H[cno],1/149,12/1,Replace,DupKeys -n"
-open #2: "Name=[Q]\GLmstr\Budget"&str$(bud)&".H[cno],KFName=[Q]\GLmstr\BgIndx"&str$(bud)&".H[cno],Shr",internal,outIn,keyed
+execute "Index [Q]\GLmstr\Budget"&str$(bud)&".h[cno],[Q]\GLmstr\BGINDX"&str$(bud)&".h[cno],1/149,12/1,Replace,DupKeys -n"
+open #2: "Name=[Q]\GLmstr\Budget"&str$(bud)&".h[cno],KFName=[Q]\GLmstr\BgIndx"&str$(bud)&".h[cno],Shr",internal,outIn,keyed
 ! holding files in gl___________________________________________________
-execute "DIR [Q]\GLmstr\GL*.H[cno] >[Temp]\Work."&session$
+execute "DIR [Q]\GLmstr\GL*.h[cno] >[Temp]\Work."&session$
 open #3: "Name=[Temp]\Work."&session$,display,input
 L1350: linput #3: ln$ eof L1530
 ln$=uprc$(ln$)
 if ln$(1:2)><"GL" then goto L1350
 d1=val(ln$(3:8)) conv L1350
 if fndate_mmddyy_to_ccyymmdd(d1)<fd1 or fndate_mmddyy_to_ccyymmdd(d1)>fd2 then goto L1350
-open #4: "Name=[Q]\GLmstr\"&ln$(1:8)&".H[cno]",internal,input
+open #4: "Name=[Q]\GLmstr\"&ln$(1:8)&".h[cno]",internal,input
 L1410: read #4,using L1420: g1$,d1,amt,tcde eof L1500
 L1420: form pos 1,c 12,n 6,pd 6.2,n 2
 if g1$(3:3)=" " then g1$(3:3)="0"
@@ -186,8 +186,8 @@ goto L1350
 ! from unpaid invoice file _____________________________________________
 L1530: close #3: ioerr L1540
 L1540: close #4: ioerr L1550
-L1550: open #3: "Name=[Q]\CLmstr\PAYTRANS.H[cno],Shr",internal,input,relative ioerr L1740
-open #4: "Name=[Q]\CLmstr\UnPdAloc.H[cno],KFName=[Q]\CLmstr\Uaidx2.H[cno],Shr",internal,outIn,keyed
+L1550: open #3: "Name=[Q]\CLmstr\PAYTRANS.h[cno],Shr",internal,input,relative ioerr L1740
+open #4: "Name=[Q]\CLmstr\UnPdAloc.h[cno],KFName=[Q]\CLmstr\Uaidx2.h[cno],Shr",internal,outIn,keyed
 for j=1 to lrec(3)
 	read #3,using L1590,rec=j: vn$,iv$,d1,gde noRec L1720
 L1590: form pos 1,c 8,c 12,pos 27,n 6,pos 96,n 1
@@ -207,8 +207,8 @@ L1720: next j
 ! from check history (checks not posted)
 L1740: close #3: ioerr L1750
 L1750: close #4: ioerr L1760
-L1760: open #3: "Name=[Q]\CLmstr\TRMSTR.H[cno],KFName=[Q]\CLmstr\TRIDX1.H[cno],Shr",internal,input,keyed ioerr L1930
-open #4: "Name=[Q]\CLmstr\TRALLOC.H[cno],Shr",internal,input,relative
+L1760: open #3: "Name=[Q]\CLmstr\TRMSTR.h[cno],KFName=[Q]\CLmstr\TRIDX1.h[cno],Shr",internal,input,keyed ioerr L1930
+open #4: "Name=[Q]\CLmstr\TRALLOC.h[cno],Shr",internal,input,relative
 L1780: read #3,using L1790: bcde,tcde,iv$,d1,pcde,scd eof L1930
 L1790: form pos 1,n 2,n 1,c 8,pos 12,g 6,pos 71,n 1,x 6,n 1
 if pcde=1 or pcde=3 then goto L1780
@@ -227,8 +227,8 @@ L1910: goto L1830
 ! from purchase order file_________________________________________
 L1930: close #3: ioerr L1940
 L1940: close #4: ioerr L1950
-L1950: open #3: "Name=[Q]\POmstr\POmstr.H[cno],KFName=[Q]\POmstr\POMSIDX.H[cno],Shr",internal,input,keyed ioerr L2080
-open #4: "Name=[Q]\POmstr\POTRANS.H[cno],Shr",internal,input,relative
+L1950: open #3: "Name=[Q]\POmstr\POmstr.h[cno],KFName=[Q]\POmstr\POMSIDX.h[cno],Shr",internal,input,keyed ioerr L2080
+open #4: "Name=[Q]\POmstr\POTRANS.h[cno],Shr",internal,input,relative
 L1970: read #3,using L1980: d1,mat aa eof L2080
 L1980: form pos 10,n 6,pos 161,2*pd 3
 if fndate_mmddyy_to_ccyymmdd(d1)<fd1 or fndate_mmddyy_to_ccyymmdd(d1)>fd2 then goto L1970
@@ -244,7 +244,7 @@ L2080: !
 close #3: ioerr ignore
 close #4: ioerr ignore
 close #2: ioerr ignore
-open #2: "Name=[Q]\GLmstr\Budget"&str$(bud)&".H[cno],KFName=[Q]\GLmstr\BgIndx"&str$(bud)&".H[cno],Shr",internal,outIn,keyed
+open #2: "Name=[Q]\GLmstr\Budget"&str$(bud)&".h[cno],KFName=[Q]\GLmstr\BgIndx"&str$(bud)&".h[cno],Shr",internal,outIn,keyed
 do
 	read #2,using 'Form POS 1,C 12,6*PD 6.2,2*C 50,C 1': g1$,mat bg,gd$,ex$,cd$ eof READD_SUB_TOTALS
 	bg(5)=bg(1)+bg(4) ! update new balance for any changes
@@ -610,7 +610,7 @@ fnopenprn
 restore #2,search>="": nokey MENU1 ioerr L4420
 goto L4430
 L4420: !
-open #2: "Name=[Q]\GLmstr\BUDGET"&str$(bud)&".H[cno],KFName=[Q]\GLmstr\BGINDX"&str$(bud)&".H[cno],Shr",internal,outIn,keyed ioerr MENU1
+open #2: "Name=[Q]\GLmstr\BUDGET"&str$(bud)&".h[cno],KFName=[Q]\GLmstr\BGINDX"&str$(bud)&".h[cno],Shr",internal,outIn,keyed ioerr MENU1
 L4430: if an1$(1)<>"Y" then goto L4470
 header$="GL Description                            "(1:an2(1))&"  "
 uline$="                                          "(1:an2(1)+2)

@@ -24,7 +24,7 @@ def library fnPostCheckbookToGl(; enablePost)
 	
 ! r: determine if cash or accrual by checking for any accounts payable numbers in the general ledger control file
 		up1$="C"
-		open #fundmstr=9: "Name=[Q]\CLmstr\FundMstr.H[cno],KFName=[Q]\CLmstr\FundIdx1.H[cno],Shr",internal,input,keyed 
+		open #fundmstr=9: "Name=[Q]\CLmstr\FundMstr.h[cno],KFName=[Q]\CLmstr\FundIdx1.h[cno],Shr",internal,input,keyed 
 		do
 			read #fundmstr,using 'Form Pos 52,C 12': gw$ eof EO_FUNDMSTR
 			accrual=val(gw$) conv L230
@@ -77,9 +77,9 @@ def library fnPostCheckbookToGl(; enablePost)
 	!   pr f "13,34,C 12,B,99": "Cancel (Esc)"
 	!   on fkey 99 goto Xit
 	fnopenprn
-	open #trmstr=1: "Name=[Q]\CLmstr\TrMstr.H[cno],KFName=[Q]\CLmstr\TrIdx1.H[cno],Shr",internal,outIn,keyed 
-	open #tralloc=3: "Name=[Q]\CLmstr\TrAlloc.H[cno],KFName=[Q]\CLmstr\tralloc-idx.h[cno],Shr",internal,outIn,keyed 
-	open #bankmstr=4: "Name=[Q]\CLmstr\BankMstr.H[cno],KFName=[Q]\CLmstr\BankIdx1.H[cno],Shr",internal,outIn,keyed 
+	open #trmstr=1: "Name=[Q]\CLmstr\TrMstr.h[cno],KFName=[Q]\CLmstr\TrIdx1.h[cno],Shr",internal,outIn,keyed 
+	open #tralloc=3: "Name=[Q]\CLmstr\TrAlloc.h[cno],KFName=[Q]\CLmstr\tralloc-idx.h[cno],Shr",internal,outIn,keyed 
+	open #bankmstr=4: "Name=[Q]\CLmstr\BankMstr.h[cno],KFName=[Q]\CLmstr\BankIdx1.h[cno],Shr",internal,outIn,keyed 
 	open #work=5: "Name=[Temp]\WORK."&session$&",SIZE=0,RecL=76,Replace",internal,output 
 	if ~fn_check_breakdowns_add_up then goto Xit ! gosub CHECK_BREAKDOWNS
 	gosub GLBucketStuff
@@ -313,7 +313,7 @@ def library fnPostCheckbookToGl(; enablePost)
 		if ~enablePost then goto Xit
 		close #20: ioerr ignore
 		! removed 5/20/20 - jb - nothing ever read this in anyway.  a better way would be to write it with fncreg_write
-		! open #20: "Name=[Q]\CLmstr\PostDat.H[cno],Replace,RecL=12",internal,outIn,relative 
+		! open #20: "Name=[Q]\CLmstr\PostDat.h[cno],Replace,RecL=12",internal,outIn,relative 
 		! write #20,using 'Form POS 1,2*N 6',rec=1: d1,d2
 		! close #20: 
 		if glb=2 then 
@@ -326,9 +326,9 @@ def library fnPostCheckbookToGl(; enablePost)
 	End1: ! r:
 		if scd=4 and pa1+pa2<>0 then gosub CombinePR
 		if up1$="C" then goto End2
-		open #paytrans=6: "Name=[Q]\CLmstr\PayTrans.H[cno],KFName=[Q]\CLmstr\UnPdIdx1.H[cno],Shr",internal,outIn,keyed 
-		open #unpdaloc=7: "Name=[Q]\CLmstr\UnPdAloc.H[cno],KFName=[Q]\CLmstr\Uaidx2.H[cno],Shr",internal,outIn,keyed 
-		open #paymstr=8: "Name=[Q]\CLmstr\PayMstr.H[cno],KFName=[Q]\CLmstr\PayIdx1.H[cno],Shr",internal,input,keyed 
+		open #paytrans=6: "Name=[Q]\CLmstr\PayTrans.h[cno],KFName=[Q]\CLmstr\UnPdIdx1.h[cno],Shr",internal,outIn,keyed 
+		open #unpdaloc=7: "Name=[Q]\CLmstr\UnPdAloc.h[cno],KFName=[Q]\CLmstr\Uaidx2.h[cno],Shr",internal,outIn,keyed 
+		open #paymstr=8: "Name=[Q]\CLmstr\PayMstr.h[cno],KFName=[Q]\CLmstr\PayIdx1.h[cno],Shr",internal,input,keyed 
 		READ_PAYTRANS: ! 
 		read #paytrans,using 'Form POS 1,C 8,C 12,N 6,POS 45,C 18,POS 96,N 1,N 6': vn$,iv$,dd,de$,pcde,pdte eof L2610
 		if include_prev_posted$="Y" then goto L2450
@@ -379,12 +379,12 @@ def library fnPostCheckbookToGl(; enablePost)
 	GLBucketStuff: ! r:
 		if enablePost then 
 			d2$=cnvrt$("PIC(######)",d2)
-			open #glbucket=20: "Name=[Q]\GLmstr\GLBucket.H[cno]",internal,input,relative ioerr L2830 ! [cno]" ! &str$(gl2)
+			open #glbucket=20: "Name=[Q]\GLmstr\GLBucket.h[cno]",internal,input,relative ioerr L2830 ! [cno]" ! &str$(gl2)
 			read #glbucket,using 'Form POS 1,N 1',rec=1: glb noRec ignore
 			close #glbucket: 
 			L2830: ! 
 			if glb=2 then 
-				glwk$="[Q]\GLmstr\GL"&d2$&".H[cno]" ! &str$(gl2)
+				glwk$="[Q]\GLmstr\GL"&d2$&".h[cno]" ! &str$(gl2)
 				open #glwk=11: "Name="&glwk$&",RecL=104,Use",internal,output 
 			else 
 				glwk$="[Q]\GLmstr\GL_Work_"&env$('acsUserId')&".h[cno]" ! &str$(gl2)
@@ -392,7 +392,7 @@ def library fnPostCheckbookToGl(; enablePost)
 			end if 
 		end if
 		if pr2$<>"N" then 
-			open #glwk2wsid=13: "Name=[Q]\GLmstr\GLWK2"&wsid$&".H[cno],RecL=110,Replace",internal,output ! [cno]" ! &str$(gl2)
+			open #glwk2wsid=13: "Name=[Q]\GLmstr\GLWK2"&wsid$&".h[cno],RecL=110,Replace",internal,output ! [cno]" ! &str$(gl2)
 		end if 
 	return  ! /r
 	REGGL: ! r:
@@ -563,9 +563,9 @@ fnend  !
 def fn_cb_unpaid_test ! CHECK_UNPAIDS: !
 	cb_cu_return=1
 	restore #trmstr: 
-	open #paymstr=8: "Name=[Q]\CLmstr\PayMstr.H[cno],KFName=[Q]\CLmstr\PayIdx1.H[cno],Shr",internal,input,keyed 
-	open #unpdaloc=7: "Name=[Q]\CLmstr\UnPdAloc.H[cno],KFName=[Q]\CLmstr\Uaidx2.H[cno],Shr",internal,outIn,keyed 
-	open #paytrans=6: "Name=[Q]\CLmstr\PayTrans.H[cno],KFName=[Q]\CLmstr\UnPdIdx1.H[cno],Shr",internal,outIn,keyed 
+	open #paymstr=8: "Name=[Q]\CLmstr\PayMstr.h[cno],KFName=[Q]\CLmstr\PayIdx1.h[cno],Shr",internal,input,keyed 
+	open #unpdaloc=7: "Name=[Q]\CLmstr\UnPdAloc.h[cno],KFName=[Q]\CLmstr\Uaidx2.h[cno],Shr",internal,outIn,keyed 
+	open #paytrans=6: "Name=[Q]\CLmstr\PayTrans.h[cno],KFName=[Q]\CLmstr\UnPdIdx1.h[cno],Shr",internal,outIn,keyed 
 	CB_CU_READ: ! 
 	read #paytrans,using 'Form POS 1,C 8,C 12,N 6,POS 45,C 18,POS 96,N 1,N 6,pos 63,g 10.2': vn$,iv$,dd,de$,pcde,pdte,upa eof EO_PAYTRANS_TEST
 	invalloc=0

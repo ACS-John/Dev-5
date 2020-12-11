@@ -27,9 +27,9 @@ L231: form pos 1,c 6,c 40,3*c 30,n 6,2*pd 7.2,n 2,c 30,c 12,c 60
 	close #1:
 	close #2:
 	execute "Index [Q]\PRmstr\JCMSTR.h[cno],[Q]\PRmstr\JCIndx.h[cno],1,6,Replace,DupKeys -n"
-	execute "Copy [Q]\PRmstr\JCCAT.H[cno],X -D -n"
+	execute "Copy [Q]\PRmstr\JCCAT.h[cno],X -D -n"
 	open #2: "Name=X",internal,outIn,relative
-	open #1: "Name=[Q]\PRmstr\JCCAT.H[cno],RecL=123,Replace",internal,outIn,relative
+	open #1: "Name=[Q]\PRmstr\JCCAT.h[cno],RecL=123,Replace",internal,outIn,relative
 	for j=1 to lrec(2)
 		read #2,using L340: cn$,k$,mat l,mat ta
 L340: form pos 1,c 11,c 25,11*pd 5.2,2*pd 2,2*pd 3
@@ -38,7 +38,7 @@ L360: form pos 1,c 11,c 25,11*pd 7.2,2*pd 2,2*pd 3
 	next j
 	close #1:
 	close #2:
-	execute "Index [Q]\PRmstr\JCCAT.H[cno],[Q]\PRmstr\CatIndx.h[cno],1,11,Replace,DupKeys"
+	execute "Index [Q]\PRmstr\JCCAT.h[cno],[Q]\PRmstr\CatIndx.h[cno],1,11,Replace,DupKeys"
 	pr f "12,5,C 60": "COMPLETED CONVERTING JOB FILE FOR COMPANY #: [cno]"
 	pr f "13,5,C 60": "PRESS ANY KEY TO CONTINUE"
 	input fields "13,40,C 1,IAE,N": pause$

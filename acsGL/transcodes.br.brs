@@ -16,7 +16,7 @@ OPEN_FILE: ! : _
 	open_file_count=1 ! this value is used in the close_file sub routine
 	if exists("[Q]\GLmstr\transcodes.h[cno]")=0 then goto L190
 	if exists("[Q]\GLmstr\transcodes-idx.h[cno]")=0 then gosub INDEX
-	open #open_file_count: "Name=[Q]\GLmstr\transcodes.H[cno],KFName=[Q]\GLmstr\transcodes-idx.H[cno],Version=1,Shr",internal,outIn,keyed
+	open #open_file_count: "Name=[Q]\GLmstr\transcodes.h[cno],KFName=[Q]\GLmstr\transcodes-idx.h[cno],Version=1,Shr",internal,outIn,keyed
 	goto L220
 L190: open #open_file_count: "Name=[Q]\GLmstr\transcodes.h[cno],Version=1,Replace,RecL=90",internal,outIn
 	gosub CLOSE_FILE

@@ -11,11 +11,11 @@
 	fncno(cno)
  
  
-	open #2: "Name=[Q]\PRmstr\JCCAT.H[cno],KFName=[Q]\PRmstr\CatIndx.h[cno],Shr",internal,outIn,keyed
+	open #2: "Name=[Q]\PRmstr\JCCAT.h[cno],KFName=[Q]\PRmstr\CatIndx.h[cno],Shr",internal,outIn,keyed
 	open #3: "Name=jcWork."&session$,internal,input
-	open #4: "Name=[Q]\PRmstr\JCPRH1.H[cno],RecL=128,use",internal,output
+	open #4: "Name=[Q]\PRmstr\JCPRH1.h[cno],RecL=128,use",internal,output
 	open #5: "Name=[Q]\PRmstr\JCTRANS.h[cno],Shr",internal,outIn,relative
-	open #9: "Name=[Q]\PRmstr\Category.H[cno],KFName=[Q]\PRmstr\categoryIDX.H[cno],Shr",internal,outIn,keyed
+	open #9: "Name=[Q]\PRmstr\Category.h[cno],KFName=[Q]\PRmstr\categoryIDX.h[cno],Shr",internal,outIn,keyed
 L190: read #3,using L210: mat ji1,jn$,mat ji2,empnam$,sal eof L750
 L210: form pos 1,n 8,n 1,pd 4,pd 2,2*pd 4.2,c 6,2*pd 3,pd 5.2,n 2,2*pd 4.2,c 30,pd 4.2
 	if ji1(1)=-1 then goto L190

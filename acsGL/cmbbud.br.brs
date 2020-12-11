@@ -8,7 +8,7 @@ def library fncmbbud(indexfile$*200)
 		dim ln$*200,options$(50)*200
  
 		fncno(cno)
-		execute "Dir [Q]\GLmstr\budget*.H[cno] >FlexWork.tmp" ! Ioerr 271
+		execute "Dir [Q]\GLmstr\budget*.h[cno] >FlexWork.tmp" ! Ioerr 271
 L120: linput #13: ln$ eof L170
 		x=pos(ln$,"<DIR>",1)
 		if x>0 and ln$(1:1)<>"." then goto L150 else goto L120

@@ -34,7 +34,7 @@ L260: form pos 745,n 1
 L330: form pos 1,c 12,c 6,n 5,pd 3,pd 2,n 6,4*pd 4.2,pd 5.2,c 30,pd 3
 	close #1:
  
-L360: open #2: "Name=[Q]\PRmstr\JCCAT.H[cno],KFName=[Q]\PRmstr\CatIndx.h[cno]",internal,outIn,keyed
+L360: open #2: "Name=[Q]\PRmstr\JCCAT.h[cno],KFName=[Q]\PRmstr\CatIndx.h[cno]",internal,outIn,keyed
 	if kt=0 then goto L430
 L380: read #2,using L400: a1,a2,a3 eof DONE
 	rewrite #2,using L400: 0,0,0

@@ -52,9 +52,9 @@
 	! /r
 	! r: open glmstr with new fsindex
 	if fnps=2 then ! secondary
-		execute "Index [Q]\GLmstr\GLmstr.h[cno] [Temp]\fsindex.H[cno] 66 3 Replace DupKeys -N"
+		execute "Index [Q]\GLmstr\GLmstr.h[cno] [Temp]\fsindex.h[cno] 66 3 Replace DupKeys -N"
 	else
-		execute "Index [Q]\GLmstr\GLmstr.h[cno] [Temp]\fsindex.H[cno] 63 3 Replace DupKeys -N"
+		execute "Index [Q]\GLmstr\GLmstr.h[cno] [Temp]\fsindex.h[cno] 63 3 Replace DupKeys -N"
 	end if
 	open #3: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName="&env$('temp')&'\'&"fsindex.h[cno],Shr",internal,input,keyed
 	! /r

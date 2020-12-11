@@ -1,5 +1,5 @@
 ! Replace S:\acsCL\Conversion\Bank_Code-Fix
-	open #trmstr=1: "Name=[Q]\CLmstr\TRMSTR.H[cno]",internal,outIn 
+	open #trmstr=1: "Name=[Q]\CLmstr\TRMSTR.h[cno]",internal,outIn 
 	open #3: "Name=[Q]\CLmstr\TRALLOC.h[cno],Shr",internal,outIn 
 L60: read #trmstr,using 'Form POS 1,N 2,N 1,C 8': bc,tc,checkNumber$ eof END1
 	ck1=val(checkNumber$) conv L60
@@ -17,5 +17,5 @@ L130: read #3,using 'Form POS 1,N 2,N 1,C 8': bc,tc,checkNumber$ eof END3
 END3: ! 
 	close #trmstr: 
 	close #3: 
-	execute "Index [Q]\CLmstr\TRMSTR.H[cno]"&' '&"[Q]\CLmstr\TRIDX1.H[cno] 1 11 REPLACE DupKeys -n"
-	execute "Index [Q]\CLmstr\TRMSTR.H[cno]"&' '&"[Q]\CLmstr\TRIDX2.H[cno] 28/1 8/11 REPLACE DupKeys -n"
+	execute "Index [Q]\CLmstr\TRMSTR.h[cno]"&' '&"[Q]\CLmstr\TRIDX1.h[cno] 1 11 REPLACE DupKeys -n"
+	execute "Index [Q]\CLmstr\TRMSTR.h[cno]"&' '&"[Q]\CLmstr\TRIDX2.h[cno] 28/1 8/11 REPLACE DupKeys -n"

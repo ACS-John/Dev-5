@@ -165,7 +165,7 @@ L1210: fncmbact(1,17) !
 BULKSORT: ! sort in bulk sort code sequence
 	open #9: "Name=[Temp]\Control."&session$&",Size=0,RecL=128,Replace",internal,output
 L1290: form pos 1,c 128
-	write #9,using L1290: "FILE customer.H[cno],[Q]\UBmstr,,[Temp]\Addr."&session$&",,,,,A,N"
+	write #9,using L1290: "FILE customer.h[cno],[Q]\UBmstr,,[Temp]\Addr."&session$&",,,,,A,N"
 	if prtbkno>0 then write #9,using L1290: 'RECORD I,1,2,N,"'&str$(prtbkno)&'","'&str$(prtbkno)&'"'
 	write #9,using L1290: "MASK 1942,12,C,A,1,10,C,A"
 	close #9:

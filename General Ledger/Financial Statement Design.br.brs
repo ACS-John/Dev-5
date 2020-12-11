@@ -333,12 +333,12 @@ def fn_setup
 		hp2=66-int(len(rtrm$(date$("Month DD, CCYY")))/2)
 	
 		dim id$(6)*40                           , fil$(6)*18                , idx$(6)*18
-		id$(1)=" 1. Balance Sheet"              : fil$(1)="ACGLFNSB.H[cno]" : idx$(1)="agfsidx4.H[cno]"
-		id$(2)=" 2. Income Statement"           : fil$(2)="ACGLFNSI.H[cno]" : idx$(2)="agfsidx3.H[cno]"
-		id$(3)=" 3. Fund Statement / Cash Flow" : fil$(3)="ACGLFNSF.H[cno]" : idx$(3)="agfsidx5.H[cno]"
-		id$(4)=" 4. Secondary Balance Sheet"    : fil$(4)="ACGLFNSC.H[cno]" : idx$(4)="agfsidx1.H[cno]"
-		id$(5)=" 5. Secondary Income Statement" : fil$(5)="ACGLFNSJ.H[cno]" : idx$(5)="agfsidx2.H[cno]"
-		id$(6)=" 6. Secondary Fund / Cash Flow" : fil$(6)="ACGLFNSG.H[cno]" : idx$(6)="agfsidx6.H[cno]"
+		id$(1)=" 1. Balance Sheet"              : fil$(1)="ACGLFNSB.h[cno]" : idx$(1)="agfsidx4.h[cno]"
+		id$(2)=" 2. Income Statement"           : fil$(2)="ACGLFNSI.h[cno]" : idx$(2)="agfsidx3.h[cno]"
+		id$(3)=" 3. Fund Statement / Cash Flow" : fil$(3)="ACGLFNSF.h[cno]" : idx$(3)="agfsidx5.h[cno]"
+		id$(4)=" 4. Secondary Balance Sheet"    : fil$(4)="ACGLFNSC.h[cno]" : idx$(4)="agfsidx1.h[cno]"
+		id$(5)=" 5. Secondary Income Statement" : fil$(5)="ACGLFNSJ.h[cno]" : idx$(5)="agfsidx2.h[cno]"
+		id$(6)=" 6. Secondary Fund / Cash Flow" : fil$(6)="ACGLFNSG.h[cno]" : idx$(6)="agfsidx6.h[cno]"
 		! r: Column headers
 		ic=0 ! temporary Item Counter
 		number$="30"

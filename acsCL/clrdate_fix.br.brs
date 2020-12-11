@@ -1,7 +1,7 @@
 
 dim dat$*20,cnam$*40,vnam$*30,de$*35,bn$*30
 
-open #5: "Name=[Q]\CLmstr\TRMSTR.H[cno],Shr",internal,outIn,relative 
+open #5: "Name=[Q]\CLmstr\TRMSTR.h[cno],Shr",internal,outIn,relative 
 L90: !
 	read #5,using L100: bcde,tcde,checkNumber$,clr eof END1
 	L100: form pos 1,n 2,n 1,c 8,pos 72,n 6

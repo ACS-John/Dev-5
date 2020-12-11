@@ -15,17 +15,17 @@ dim io7$(9),dpt(3),io8$(25),dpd(5,5)
 
 fnTop(program$, "Reconcile Bank")
 fndat(dat$)
-open #bankrec1:=1: "Name=[Q]\GLmstr\bankrec.H[cno],KFName=[Q]\GLmstr\Bankrec-idx.H[cno],Shr",internal,outIn,keyed
-! Open #BANKREC2:=2: "Name=[Q]\GLmstr\bankrec.H[cno],KFName=[Q]\GLmstr\bankx2.H[cno],Shr",Internal,outIn,Keyed  ! ????? ken
+open #bankrec1:=1: "Name=[Q]\GLmstr\bankrec.h[cno],KFName=[Q]\GLmstr\Bankrec-idx.h[cno],Shr",internal,outIn,keyed
+! Open #BANKREC2:=2: "Name=[Q]\GLmstr\bankrec.h[cno],KFName=[Q]\GLmstr\bankx2.h[cno],Shr",Internal,outIn,Keyed  ! ????? ken
 close #82: ioerr ignore
-open #82: "Name=[Q]\GLmstr\Bank2"&wsid$&".H[cno],Use,RecL=35",internal,outIn,relative
+open #82: "Name=[Q]\GLmstr\Bank2"&wsid$&".h[cno],Use,RecL=35",internal,outIn,relative
 read #82,using "Form pos 1,c 12",rec=1: wbc$ noRec L270
 goto MENU1
 L270: !
 write #82,using "Form pos 1,c 12",rec=1: wbc$
 MENU1: !
 close #81: ioerr ignore
-L300: open #81: "Name=[Q]\GLmstr\Bank"&wbc$&".H[cno],Use,RecL=32",internal,outIn,relative
+L300: open #81: "Name=[Q]\GLmstr\Bank"&wbc$&".h[cno],Use,RecL=32",internal,outIn,relative
 	if lrec(81)>0 then : _
 		read #81,using "Form POS 1,N 6,2*PD 5.2,N 6",rec=1: stmtdt,bgbal,stmtbal,codt : _
 	else : _
@@ -76,7 +76,7 @@ BANK_STMT_INFO: !
 	next j
 L620: if ti3=6 then let fnchain("S:\acsGL\Bankreconciliation")
 	close #81: ioerr L640
-L640: open #81: "Name=[Q]\GLmstr\Bank"&wbc$&".H[cno],Use,RecL=32",internal,outIn,relative
+L640: open #81: "Name=[Q]\GLmstr\Bank"&wbc$&".h[cno],Use,RecL=32",internal,outIn,relative
 	if lrec(81)=0 then write #81,using "Form POS 1,N 6,2*PD 5.2,N 6",rec=1: stmtdt,bgbal,stmtbal,codt : goto L670
 	rewrite #81,using "Form POS 1,N 6,2*PD 5.2,N 6",rec=1: stmtdt,bgbal,stmtbal,codt
 L670: close #81: ioerr L680
@@ -381,18 +381,18 @@ L3190: rewrite #bankrec1,using 'Form POS 72,N 6': stmtdt
 DISPLAYCLEAREDSOFAR: ! show what has been cleared
 	displaycleared=1 : goto CLEAR_TRANSACTIONS_FROM_LIST
 FREE_DPAMNTS: !
-	fnFree("[Q]\GLmstr\DpAmnts.H[cno]")
+	fnFree("[Q]\GLmstr\DpAmnts.h[cno]")
 	continue
 
 CLEAR_DEPOSITS_BY_AMOUNT: ! clear deposits by amounts
 	if cda=1 then goto DPAMENU
-L3370: open #dpamnts=91: "Name=[Q]\GLmstr\DpAmnts.H[cno],Use,RecL=20",internal,outIn,relative ioerr FREE_DPAMNTS
-	open #92: "Name=[Q]\GLmstr\DpDates.H[cno],Use,RecL=150",internal,outIn,relative
+L3370: open #dpamnts=91: "Name=[Q]\GLmstr\DpAmnts.h[cno],Use,RecL=20",internal,outIn,relative ioerr FREE_DPAMNTS
+	open #92: "Name=[Q]\GLmstr\DpDates.h[cno],Use,RecL=150",internal,outIn,relative
 	read #92,using L3400,rec=1: mat dpd noRec L3420
 L3400: form pos 1,25*n 6
 	goto L3430
 L3420: write #92,using L3400,rec=1: mat dpd
-L3430: open #93: "Name=[Q]\GLmstr\DPTypes.H[cno],Use,RecL=3",internal,outIn,relative
+L3430: open #93: "Name=[Q]\GLmstr\DPTypes.h[cno],Use,RecL=3",internal,outIn,relative
 	read #93,using L3450,rec=1: mat dpt noRec L3470
 L3450: form pos 1,3*n 1
 	goto L3480

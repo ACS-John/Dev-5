@@ -32,8 +32,8 @@ L240: fnopenprn
 	gosub L1020
 	open #1: "Name=S:\Core\Data\acsllc\CLmstr.h[cno],KFName=S:\Core\Data\acsllc\CLIndex.h[cno],Shr",internal,input,keyed
 	open #2: "Name=S:\Core\Data\acsllc\TMTRAddr.h[cno],Shr",internal,input,relative
-	open #3: "Name=S:\Core\Data\acsllc\TMTRANS.H[cno],Shr",internal,input,relative
-	open #4: "Name=S:\Core\Data\acsllc\EMmstr.H[cno],KFName=S:\Core\Data\acsllc\EMIndex.h[cno],Shr",internal,input,keyed
+	open #3: "Name=S:\Core\Data\acsllc\TMTRANS.h[cno],Shr",internal,input,relative
+	open #4: "Name=S:\Core\Data\acsllc\EMmstr.h[cno],KFName=S:\Core\Data\acsllc\EMIndex.h[cno],Shr",internal,input,keyed
 	goto L480
 L430: read #4,using L440,key=lpad$(str$(pno),9): enam$ nokey L460
 L440: form pos 10,c 25

@@ -18,7 +18,7 @@
 	se$(3)="TOTAL HOURS - YTD"
 	se$(4)="STANDARD FEES - YTD"
 	gosub L1780
-	open #1: "Name=S:\Core\Data\acsllc\SCMSTR.H[cno],KFName=S:\Core\Data\acsllc\SCIndex.H[cno],Shr",internal,outIn,keyed ioerr L2000
+	open #1: "Name=S:\Core\Data\acsllc\SCMSTR.h[cno],KFName=S:\Core\Data\acsllc\SCIndex.h[cno],Shr",internal,outIn,keyed ioerr L2000
 	goto L260
 L260: pr newpage
 	pr f "3,9,c 55,N": "SERVICE CODE MASTER FILE"
@@ -47,9 +47,9 @@ L490: input fields "13,50,C 5,IE,n": a$ conv L490
 	if uprc$(a$)="THINK" then goto L510 else goto L260
 L510: i2=1
 	close #1: ioerr L530
-L530: open #1: "Name=S:\Core\Data\acsllc\SCMSTR.H[cno],KFName=S:\Core\Data\acsllc\SCIndex.H[cno]",internal,outIn,keyed ioerr L550
+L530: open #1: "Name=S:\Core\Data\acsllc\SCMSTR.h[cno],KFName=S:\Core\Data\acsllc\SCIndex.h[cno]",internal,outIn,keyed ioerr L550
 	close #1,free: ioerr L550
-L550: open #1: "Name=S:\Core\Data\acsllc\SCMSTR.H[cno],SIZE=0,RecL=43,NoShr",internal,outIn,relative
+L550: open #1: "Name=S:\Core\Data\acsllc\SCMSTR.h[cno],SIZE=0,RecL=43,NoShr",internal,outIn,relative
 	goto L1700
 L570: form pos 1,c 4,c 30,pd 4.2,pd 5.2
 L580: new1=1
@@ -167,7 +167,7 @@ L1670: fncloseprn
 L1700: close #1:
 	if new1=1 then goto L1730
 	if ti=0 and i2=0 then goto Xit
-L1730: execute "Index S:\Core\Data\acsllc\SCMSTR.H[cno]"&' '&"S:\Core\Data\acsllc\SCIndex.H[cno] 1 4 REPLACE DupKeys"
+L1730: execute "Index S:\Core\Data\acsllc\SCMSTR.h[cno]"&' '&"S:\Core\Data\acsllc\SCIndex.h[cno] 1 4 REPLACE DupKeys"
 	if i2=1 then chain "S:\acsTM\SVMAINT"
 	if t1=0 then goto L1770
 	chain "S:\acsTM\SVMAINT"

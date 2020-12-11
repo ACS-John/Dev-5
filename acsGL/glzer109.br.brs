@@ -45,7 +45,7 @@ L370: read #2,using 'Form POS 1,C 8,N 6,PD 5.2,C 12,C 30': trvn$,da,amt,re$,de$ 
 L400: close #2:
 	execute "Copy [Q]\GLmstr\gltr1099.h[cno]" & " x -D"
 	execute "Copy X [Q]\GLmstr\gltr1099.h[cno]"
-	execute "Index [Q]\GLmstr\gltr1099.H[cno]"&' '&"[Q]\GLmstr\gltridx1.H[cno] 1 8 Replace DupKeys -N"
+	execute "Index [Q]\GLmstr\gltr1099.h[cno]"&' '&"[Q]\GLmstr\gltridx1.h[cno] 1 8 Replace DupKeys -N"
 L440: if fnprocess=1 then let fnchain("S:\acsGL\acglAuto")
 Xit: fnXit
  

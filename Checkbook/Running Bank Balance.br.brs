@@ -31,14 +31,14 @@ MAIN: !
 	b1=val(resp$(2))
 	bank_code=val(resp$(3))
  
-	open #20: "Name=[Q]\CLmstr\BankMstr.H[cno], KFName=[Q]\CLmstr\BankIdx1.H[cno],Shr", internal, outin, keyed
+	open #20: "Name=[Q]\CLmstr\BankMstr.h[cno], KFName=[Q]\CLmstr\BankIdx1.h[cno],Shr", internal, outin, keyed
 	read #20,using 'Form POS 3,C 30',key=lpad$(str$(bank_code),2),release: bn$ nokey MAIN
 	close #20:
  
 	close #trmstr: ioerr ignore
-	execute "Index [Q]\CLmstr\TrMstr.H[cno]"&' '&"[Q]\CLmstr\Tridx3.H[cno] 16/12/4 2/4/8 Replace DupKeys -n" ! index in year,monthday,reference
+	execute "Index [Q]\CLmstr\TrMstr.h[cno]"&' '&"[Q]\CLmstr\Tridx3.h[cno] 16/12/4 2/4/8 Replace DupKeys -n" ! index in year,monthday,reference
  
-	open #trmstr=5: "Name=[Q]\CLmstr\TrMstr.H[cno], KFName=[Q]\CLmstr\Tridx3.H[cno],Shr", internal, outin, keyed ioerr ignore
+	open #trmstr=5: "Name=[Q]\CLmstr\TrMstr.h[cno], KFName=[Q]\CLmstr\Tridx3.h[cno],Shr", internal, outin, keyed ioerr ignore
 	fnopenprn
 	gosub HDR
 	goto READ_1

@@ -28,10 +28,10 @@
 	open #2: "Name=[Q]\GLmstr\GLTrans.h[cno],Shr",internal,outIn,relative
 	open #3: "Name=[Q]\GLmstr\GL_Work_"&env$('acsUserId')&".h[cno],NoShr",internal,outIn
 	open #paymstr=4: "Name=[Q]\GLmstr\PayMstr.h[cno],Version=1,KFName=[Q]\GLmstr\PayIdx1.h[cno],Shr",internal,outIn,keyed
-	if ~exists("[Q]\GLmstr\bankrec.H[cno]") then
-		open #6: "Name=[Q]\GLmstr\bankrec.H[cno],KFName=[Q]\GLmstr\bankrec-idx.H[cno],Version=1,RecL=91,use,kps=79/3/4,kln=12/1/8,Shr",internal,outIn,keyed
+	if ~exists("[Q]\GLmstr\bankrec.h[cno]") then
+		open #6: "Name=[Q]\GLmstr\bankrec.h[cno],KFName=[Q]\GLmstr\bankrec-idx.h[cno],Version=1,RecL=91,use,kps=79/3/4,kln=12/1/8,Shr",internal,outIn,keyed
 		close #6:
-		fnIndex("[Q]\GLmstr\bankrec.H[cno]","[Q]\GLmstr\bankrec-idx.h[cno]","79/3/4 12/1/8")
+		fnIndex("[Q]\GLmstr\bankrec.h[cno]","[Q]\GLmstr\bankrec-idx.h[cno]","79/3/4 12/1/8")
 	end if
 	open #6: "Name=[Q]\GLmstr\BankRec.h[cno],KFName=[Q]\GLmstr\BankRec-idx.h[cno],Shr",internal,outIn,keyed
 	if exists("[Q]\GLmstr\gltr1099.h[cno]")=0 then
@@ -194,7 +194,7 @@ L1600: input fields "24,2,C 1,AE,N": pause$
 L1620: close #1:
 	close #2:
 	close #3:
-	fnFree("[Q]\GLmstr\GLPT"&wsid$&".H[cno]")
+	fnFree("[Q]\GLmstr\GLPT"&wsid$&".h[cno]")
 L1660: !
 	close #4: ioerr ignore
 	if new1=1 or new2=1 then

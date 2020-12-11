@@ -57,9 +57,9 @@ L140: form pos 162,2*n 1
 	scr2$(4)="SUB CATEGORIES"
 	open #1: "Name=S:\Core\Data\acsllc\CLmstr.h[cno],KFName=S:\Core\Data\acsllc\CLIndex.h[cno],Shr",internal,input,keyed ioerr L1770
 	open #11: "Name=S:\Core\Data\acsllc\CLmstr.h[cno],KFName=S:\Core\Data\acsllc\CLIndx2.h[cno],Shr",internal,input,keyed ioerr L1770
-	open #2: "Name=S:\Core\Data\acsllc\TMWk2"&wsid$&".H[cno]",internal,outIn,relative ioerr L630
+	open #2: "Name=S:\Core\Data\acsllc\TMWk2"&wsid$&".h[cno]",internal,outIn,relative ioerr L630
 	close #2,free:
-L630: open #2: "Name=S:\Core\Data\acsllc\TMWk2"&wsid$&".H[cno],Replace,RecL=56",internal,outIn,relative ioerr L1770
+L630: open #2: "Name=S:\Core\Data\acsllc\TMWk2"&wsid$&".h[cno],Replace,RecL=56",internal,outIn,relative ioerr L1770
 L640: scrid$(1)="TIME MANAGEMENT INPUT OF INVOICES"
 	scrid$(2)="Enter CLIENT # as 0 when completed."
 	scrid$(3)="PRESS F1 IF YOU HAVE ANOTHER ALLOCATION FOR THE SAME INVOICE"

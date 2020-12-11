@@ -50,7 +50,7 @@ def fn_checkfile(hact$*8,hCheckIdx3,hCheckIdx1,hEmployee)
 	fnreg_read('Check History - enable long names when printing',pr_ckHstEnableLongNames$,'False')
 	if pr_ckHstEnableLongNames$='True' then enableLongName=1 else enableLongName=0
 
-	open #hGridName:=9: "Name=[Q]\PRmstr\GridNames.H[cno],USE,RecL=30",internal,outIn,relative
+	open #hGridName:=9: "Name=[Q]\PRmstr\GridNames.h[cno],USE,RecL=30",internal,outIn,relative
 	if lrec(hGridName)=0 then
 		oldgridname$= gridname$="[All]                         "
 		write #hGridName,using "form pos 1,c 30",rec=1: gridname$
@@ -65,22 +65,22 @@ def fn_checkfile(hact$*8,hCheckIdx3,hCheckIdx1,hEmployee)
 		dednames$(j)=trim$(dednames$(j))
 	next j
 	L320: !
-	if exists("[Q]\PRmstr\payrollreports.H[cno]") =0 then 
-		open #hPrReport:=fnH: "Name=[Q]\PRmstr\payrollreports.H[cno],KFName=[Q]\PRmstr\reportidx.H[cno],RecL=85,kps=1,kln=30,replace",internal,outIn,keyed
+	if exists("[Q]\PRmstr\payrollreports.h[cno]") =0 then 
+		open #hPrReport:=fnH: "Name=[Q]\PRmstr\payrollreports.h[cno],KFName=[Q]\PRmstr\reportidx.h[cno],RecL=85,kps=1,kln=30,replace",internal,outIn,keyed
 		! 1 - 30 Name c 30
 		! 31 - 76 selections 46*n 1
 		close #hPrReport:
-	else if exists("[Q]\PRmstr\reportidx.H[cno]") =0 then
-		fnIndex('[Q]\PRmstr\payrollreports.H[cno]','[Q]\PRmstr\reportidx.H[cno]','1 30')
+	else if exists("[Q]\PRmstr\reportidx.h[cno]") =0 then
+		fnIndex('[Q]\PRmstr\payrollreports.h[cno]','[Q]\PRmstr\reportidx.h[cno]','1 30')
 		fnStatusClose
 	end if
 	
 	
-	open #hPrReport:=fnH: "Name=[Q]\PRmstr\payrollreports.H[cno],KFName=[Q]\PRmstr\reportidx.H[cno],Shr",internal,outIn,keyed
+	open #hPrReport:=fnH: "Name=[Q]\PRmstr\payrollreports.h[cno],KFName=[Q]\PRmstr\reportidx.h[cno],Shr",internal,outIn,keyed
 	if kln(hPrReport)<>30 then
 		close #hPrReport:
-		fnFree('[Q]\PRmstr\payrollreports.H[cno]')
-		fnFree('[Q]\PRmstr\reportidx.H[cno]')
+		fnFree('[Q]\PRmstr\payrollreports.h[cno]')
+		fnFree('[Q]\PRmstr\reportidx.h[cno]')
 		goto L320
 	end if
 	justopen=1 : gosub SelectColumns : justopen=0

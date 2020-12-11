@@ -21,7 +21,7 @@
 	redir=0: if file$(255)(1:4)<>"PRN:" then redir=1: goto L210
 L210: if fnps=2 then mp1=72 else mp1=69
 	fl1$="Name=[Q]\GLmstr\ACGLFNSI.h[cno],KFName=[Q]\GLmstr\agfsidx3.h[cno],Shr"
-	if fnps=2 then fl1$="Name=[Q]\GLmstr\ACGLFNSJ.H[cno],KFName=[Q]\GLmstr\agfsidx2.h[cno],Shr"
+	if fnps=2 then fl1$="Name=[Q]\GLmstr\ACGLFNSJ.h[cno],KFName=[Q]\GLmstr\agfsidx2.h[cno],Shr"
 	form c 9,skip 0
 L250: form pos mp1,pd 3,pos mp2,pd 3,pos 81,41*pd 6.2
 	form c 7,skip 0
@@ -41,9 +41,9 @@ L250: form pos mp1,pd 3,pos mp2,pd 3,pos 81,41*pd 6.2
 	costcntr=val(resp$(1))
 L390: fnopenprn
 	if fnps=2 then goto L430 ! secondary
-	execute "Index [Q]\GLmstr\GLmstr.h[cno] "&udf$&"fsindex.H[cno] 69 3 Replace DupKeys -N"
+	execute "Index [Q]\GLmstr\GLmstr.h[cno] "&udf$&"fsindex.h[cno] 69 3 Replace DupKeys -N"
 	goto L440
-L430: execute "Index [Q]\GLmstr\GLmstr.h[cno] "&udf$&"fsindex.H[cno] 72 3 Replace DupKeys -N"
+L430: execute "Index [Q]\GLmstr\GLmstr.h[cno] "&udf$&"fsindex.h[cno] 72 3 Replace DupKeys -N"
 L440: open #3: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName="&udf$&"fsindex.h[cno],Shr",internal,input,keyed
 	report$="STATEMENT OF INCOME AND EXPENSES"
 ! GOSUB BLDPCT1 ! BUILD % BASED ON REF # IN PRIMARY FUND # IN G/L ACCOUNT

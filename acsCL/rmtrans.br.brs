@@ -13,9 +13,9 @@
 	open #20: "Name=[Q]\CLmstr\Company.h[cno],Shr",internal,input  : _
 	read #20,using 'Form POS 417,N 1': rcn : _
 	close #20:
-	open #trmstr:=1: "Name=[Q]\CLmstr\TrMstr.H[cno],KFName=[Q]\CLmstr\TrIdx1.H[cno]",internal,outIn,keyed
+	open #trmstr:=1: "Name=[Q]\CLmstr\TrMstr.h[cno],KFName=[Q]\CLmstr\TrIdx1.h[cno]",internal,outIn,keyed
 	open #work1:=2: "Name=[Q]\CLmstr\Work1."&wsid$&",version=2,Size=0,RecL=84,Replace",internal,outIn,relative
-	open #tralloc:=3: "Name=[Q]\CLmstr\TrAlloc.H[cno],KFName=[Q]\CLmstr\TrAlloc-idx.h[cno]",internal,input,keyed
+	open #tralloc:=3: "Name=[Q]\CLmstr\TrAlloc.h[cno],KFName=[Q]\CLmstr\TrAlloc-idx.h[cno]",internal,input,keyed
 	open #work2=4: "Name=[Q]\CLmstr\Work2."&wsid$&",version=2,Size=0,RecL=80,Replace",internal,outIn,relative
 	fnTos
 	mylen=21 : mypos=mylen+2 : lc=0
@@ -59,12 +59,12 @@ END1: !
 	close #work2:
 	close #trmstr,free:
 	close #tralloc,free:
-	execute "Rename [Q]\CLmstr\Work1."&wsid$&' '&"[Q]\CLmstr\TRmstr.H[cno] -n"
-	execute "Rename [Q]\CLmstr\Work2."&wsid$&' '&"[Q]\CLmstr\TrAlloc.H[cno] -n"
-	execute "Index [Q]\CLmstr\TrMstr.H[cno]"&' '&"[Q]\CLmstr\TrIdx1.H[cno] 1 11 Replace DupKeys -n"
-	execute "Index [Q]\CLmstr\TrMstr.H[cno]"&' '&"[Q]\CLmstr\TrIdx2.H[cno] 28/1 8/11 Replace DupKeys -n"
-	execute "Index [Q]\CLmstr\TrMstr.H[cno]"&' '&"[Q]\CLmstr\TrIdx3.H[cno] 16/12/4 2/4/8 Replace DupKeys -n"
-	execute "Index [Q]\CLmstr\TrAlloc.H[cno]"&' '&"[Q]\CLmstr\TrAlloc-idx.H[cno] 1 11 Replace DupKeys -n"
+	execute "Rename [Q]\CLmstr\Work1."&wsid$&' '&"[Q]\CLmstr\TRmstr.h[cno] -n"
+	execute "Rename [Q]\CLmstr\Work2."&wsid$&' '&"[Q]\CLmstr\TrAlloc.h[cno] -n"
+	execute "Index [Q]\CLmstr\TrMstr.h[cno]"&' '&"[Q]\CLmstr\TrIdx1.h[cno] 1 11 Replace DupKeys -n"
+	execute "Index [Q]\CLmstr\TrMstr.h[cno]"&' '&"[Q]\CLmstr\TrIdx2.h[cno] 28/1 8/11 Replace DupKeys -n"
+	execute "Index [Q]\CLmstr\TrMstr.h[cno]"&' '&"[Q]\CLmstr\TrIdx3.h[cno] 16/12/4 2/4/8 Replace DupKeys -n"
+	execute "Index [Q]\CLmstr\TrAlloc.h[cno]"&' '&"[Q]\CLmstr\TrAlloc-idx.h[cno] 1 11 Replace DupKeys -n"
 	goto Xit
  
 Xit: fnXit

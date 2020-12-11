@@ -14,8 +14,8 @@ def library fnAddGlPayee
 		close #paymstr: ioerr ignore
 	end if
 	if ~exists("[Q]\GLmstr\PayIdx1.h[cno]") or ~exists("[Q]\GLmstr\PayIdx2.h[cno]") then 
-		fnIndex('[Q]\GLmstr\paymstr.H[cno]','[Q]\GLmstr\Payidx1.H[cno]','1 8 ')
-		fnIndex('[Q]\GLmstr\paymstr.H[cno]','[Q]\GLmstr\Payidx2.H[cno]','9 38')
+		fnIndex('[Q]\GLmstr\paymstr.h[cno]','[Q]\GLmstr\Payidx1.h[cno]','1 8 ')
+		fnIndex('[Q]\GLmstr\paymstr.h[cno]','[Q]\GLmstr\Payidx2.h[cno]','9 38')
 		fnStatusClose
 	end if
 	open #paymstr:=fnH: "Name=[Q]\GLmstr\PayMstr.h[cno],KFName=[Q]\GLmstr\PayIdx1.h[cno],Shr",internal,outIn,keyed 
