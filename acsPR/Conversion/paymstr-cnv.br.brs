@@ -31,8 +31,8 @@ L290: close #1:
 ! EXECUTE "Copy [Q]\CLmstr\PayMstr.h[cno],X -D -152"
 ! EXECUTE "Free [Q]\CLmstr\PayMstr.h[cno]"
 ! EXECUTE "Rename X [Q]\CLmstr\PayMstr.h[cno]"
-! EXECUTE "Index [Q]\CLmstr\PayMstr.h[cno],[Q]\CLmstr\PayIndx1.H[cno],1,8,Replace,DupKeys"
-! EXECUTE "Index [Q]\CLmstr\PayMstr.h[cno],[Q]\CLmstr\PayIndx2.H[cno],9,28,Replace,DupKeys"
+! EXECUTE "Index [Q]\CLmstr\PayMstr.h[cno],[Q]\CLmstr\PayIndx1.h[cno],1,8,Replace,DupKeys"
+! EXECUTE "Index [Q]\CLmstr\PayMstr.h[cno],[Q]\CLmstr\PayIndx2.h[cno],9,28,Replace,DupKeys"
 	pr f "12,5,C 60": "COMPLETED CONVERTING PAYMSTR FILE FOR COMPANY #: [cno]"
 	pr f "13,5,C 60": "PRESS ANY KEY TO CONTINUE"
 	input fields "13,40,C 1,IAE,N": pause$

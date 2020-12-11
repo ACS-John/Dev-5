@@ -60,7 +60,7 @@ if exportFormatID=0 then
 end if
 open #hEmployee:=fnH: "Name=[Q]\GLmstr\PRmstr.h[cno],KFName=[Q]\GLmstr\PRINDEX.h[cno],Shr",internal,input,keyed
 box16=0
-open #hW2Box16:=fnH: "Name=[Q]\GLmstr\W2Box16.H[cno],KFName=[Q]\GLmstr\W2INDEX.H[cno],Shr",internal,input,keyed ioerr w2b16openfail
+open #hW2Box16:=fnH: "Name=[Q]\GLmstr\W2Box16.h[cno],KFName=[Q]\GLmstr\W2INDEX.h[cno],Shr",internal,input,keyed ioerr w2b16openfail
 box16=1
 w2b16openfail: !
 cLocality$="NO"

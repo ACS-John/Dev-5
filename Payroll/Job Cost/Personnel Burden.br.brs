@@ -12,8 +12,8 @@
 !
 	fndat(dat$,1)
  
-	if exists("[Q]\PRmstr\Burden.H[cno]")=0 then goto SETUP_FILES
-L180: open #1: "Name=[Q]\PRmstr\Burden.H[cno],KFName=[Q]\PRmstr\BurdenIdx.H[cno],Shr",internal,outIn,keyed
+	if exists("[Q]\PRmstr\Burden.h[cno]")=0 then goto SETUP_FILES
+L180: open #1: "Name=[Q]\PRmstr\Burden.h[cno],KFName=[Q]\PRmstr\BurdenIdx.h[cno],Shr",internal,outIn,keyed
 L190: form pos 1,n 8,c 30,3*n 6.3
 ASKEMPLOYEE: !
 	mat resp$=("")
@@ -118,13 +118,13 @@ L870: burden=burden2=burden3=0
 	gosub RECREATE_GRID
 	goto SCREEN_1
 SETUP_FILES: !
-	open #1: "Name=[Q]\PRmstr\Burden.H[cno],RecL=128,replace",internal,outIn
+	open #1: "Name=[Q]\PRmstr\Burden.h[cno],RecL=128,replace",internal,outIn
 	close #1:
 	goto REINDEX
 REINDEX: ! indexes if needed
 	reindex+=1
 	close #1: ioerr L990
-L990: execute "Index [Q]\PRmstr\Burden.H[cno]"&' '&"[Q]\PRmstr\BurdenIdx.H[cno] 1 8 Replace DupKeys -n"
+L990: execute "Index [Q]\PRmstr\Burden.h[cno]"&' '&"[Q]\PRmstr\BurdenIdx.h[cno] 1 8 Replace DupKeys -n"
 	goto L180
 PRINT_PROOF: !
 	fnopenprn

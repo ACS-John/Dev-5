@@ -46,7 +46,7 @@
 	fncreg_read('Second Penalty Calculation Penalty Amount',penaltyamt$) : penaltyamt=val(penaltyamt$) conv ignore
 	fncreg_read('Second Penalty Calculation Skip Service 10 Rate 9 Customers',skip_s10r9$) ! : penaltyamt=val(penaltyamt$) conv ignore
 	if minimumbal=0 then
-		open #minbal:=5: "Name=[Q]\UBmstr\Minbal.H[cno],Shr",internal,outIn,relative ioerr ignore
+		open #minbal:=5: "Name=[Q]\UBmstr\Minbal.h[cno],Shr",internal,outIn,relative ioerr ignore
 		read #minbal,using 'Form POS 1,n 10.2',rec=1,release: minimumbal ioerr ignore
 		close #minbal: ioerr ignore
 	end if

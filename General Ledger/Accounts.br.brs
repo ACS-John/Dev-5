@@ -22,13 +22,13 @@ fixgrid=99
 open #company=1: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,input
 read #company,using 'Form Pos 150,2*N 1': use_dept,use_sub ! read fund and sub codes from general
 close #company:
-open #8: "Name=[Q]\CLmstr\GLmstr.H[cno],KFName=[Q]\CLmstr\GLIndex.h[cno],Shr",internal,outIn,keyed ioerr L310
+open #8: "Name=[Q]\CLmstr\GLmstr.h[cno],KFName=[Q]\CLmstr\GLIndex.h[cno],Shr",internal,outIn,keyed ioerr L310
 cl1=1
 L310: !
-open #hAccount=fnH: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLIndex.H[cno],Shr",internal,outIn,keyed
-open #hAccountUnused=fnH: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\glIndx2.H[cno],Shr",internal,outIn,keyed
+open #hAccount=fnH: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLIndex.h[cno],Shr",internal,outIn,keyed
+open #hAccountUnused=fnH: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\glIndx2.h[cno],Shr",internal,outIn,keyed
 Faccount: form pos 1,c 12,c 50,6*pd 3,42*pd 6.2,2*pd 3,13*pd 6.2
-open #hTransCurrent=fnH: "Name=[Q]\GLmstr\GLTRANS.H[cno],Shr",internal,outIn,relative
+open #hTransCurrent=fnH: "Name=[Q]\GLmstr\GLTRANS.h[cno],Shr",internal,outIn,relative
 FtransCurrent: form pos 1,c 12,n 6,pd 6.2,2*n 2,c 12,c 30,pd 3
 open #hTransHistory=fnH: "Name=[Q]\GLmstr\ACTrans.h[cno],KFName=[Q]\GLmstr\AcTrIdx.h[cno],Version=0,Use,RecL=72,KPs=1/71/17/13,KLn=12/2/2/4,Shr",internal,outIn,keyed
 FtransHistory: form pos 1,c 12,n 6,pd 6.2,2*n 2,c 12,c 30,n 2

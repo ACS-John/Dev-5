@@ -13,8 +13,8 @@
 	open #20: "Name=[Q]\CLmstr\Company.h[cno],Shr",internal,input  : _
 	read #20,using 'Form POS 417,N 1': rcn : _
 	close #20:
-	open #trmstr:=1: "Name=[Q]\CLmstr\TrMstr.H[cno],KFName=[Q]\CLmstr\TrIdx1.H[cno]",internal,outIn,keyed
-	open #tralloc:=3: "Name=[Q]\CLmstr\TrAlloc.H[cno],KFName=[Q]\CLmstr\TrAlloc-idx.h[cno]",internal,outIn,keyed
+	open #trmstr:=1: "Name=[Q]\CLmstr\TrMstr.h[cno],KFName=[Q]\CLmstr\TrIdx1.h[cno]",internal,outIn,keyed
+	open #tralloc:=3: "Name=[Q]\CLmstr\TrAlloc.h[cno],KFName=[Q]\CLmstr\TrAlloc-idx.h[cno]",internal,outIn,keyed
 L150: fnTos
 	mylen=30 : mypos=mylen+3 : lc=0
 	fnLbl(lc+=1,1,"First Check Number to Renumber:",mylen,right)
@@ -60,10 +60,10 @@ EO_TRALLOC: !
 END1: !
 	close #trmstr:
 	close #tralloc:
-	execute "Index [Q]\CLmstr\TrMstr.H[cno]"&' '&"[Q]\CLmstr\TrIdx1.H[cno] 1 11 Replace DupKeys -n"
-	execute "Index [Q]\CLmstr\TrMstr.H[cno]"&' '&"[Q]\CLmstr\TrIdx2.H[cno] 28/1 8/11 Replace DupKeys -n"
-	execute "Index [Q]\CLmstr\TrMstr.H[cno]"&' '&"[Q]\CLmstr\TrIdx3.H[cno] 16/12/4 2/4/8 Replace DupKeys -n"
-	execute "Index [Q]\CLmstr\TrAlloc.H[cno]"&' '&"[Q]\CLmstr\TrAlloc-idx.H[cno] 1 11 Replace DupKeys -n"
+	execute "Index [Q]\CLmstr\TrMstr.h[cno]"&' '&"[Q]\CLmstr\TrIdx1.h[cno] 1 11 Replace DupKeys -n"
+	execute "Index [Q]\CLmstr\TrMstr.h[cno]"&' '&"[Q]\CLmstr\TrIdx2.h[cno] 28/1 8/11 Replace DupKeys -n"
+	execute "Index [Q]\CLmstr\TrMstr.h[cno]"&' '&"[Q]\CLmstr\TrIdx3.h[cno] 16/12/4 2/4/8 Replace DupKeys -n"
+	execute "Index [Q]\CLmstr\TrAlloc.h[cno]"&' '&"[Q]\CLmstr\TrAlloc-idx.h[cno] 1 11 Replace DupKeys -n"
 	goto Xit
  
 Xit: fnXit

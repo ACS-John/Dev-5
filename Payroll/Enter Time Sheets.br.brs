@@ -4,7 +4,7 @@ fnTop(program$)
 d1=fnPayPeriodEndingDate
 if days(d1,'ccyymmdd')=>days(date)-5 then prd=d1
  
-open #h_rpwork:=fnH: "Name=[Q]\PRmstr\rpwork[unique_computer_id].h[cno],KFName=[Q]\PRmstr\prwork"&wsid$&"idx.H[cno]",internal,outIn,keyed ioerr ignore
+open #h_rpwork:=fnH: "Name=[Q]\PRmstr\rpwork[unique_computer_id].h[cno],KFName=[Q]\PRmstr\prwork"&wsid$&"idx.h[cno]",internal,outIn,keyed ioerr ignore
 F_rpwork: form pos 1,n 8,n 3,5*pd 4.2,25*pd 5.2,2*pd 4.2
  
 SCREEN_1: !
@@ -560,7 +560,7 @@ XITWOCAL: ! r:
 PullFromJobCost: ! r:
 ! h(1)=emp#,h(2)=method,h(3)=dept#,h(4)=reghrs,h(5)=ot hrs,h(6)=salary,h(7)=ded #
 	gosub SORTIT
-	open #5: "Name=[Q]\PRmstr\JCPRH1.H[cno]",internal,input,relative
+	open #5: "Name=[Q]\PRmstr\JCPRH1.h[cno]",internal,input,relative
 	open #6: "Name=[Temp]\Addr."&session$,internal,input
 	close #h_rpwork:=3: ioerr ignore
 	open #h_rpwork:=3: "Name=[Q]\PRmstr\rpwork[unique_computer_id].h[cno],RecL=167,Replace",internal,output
@@ -644,7 +644,7 @@ L6000: !
 ! /r
 SORTIT: ! r:
 	open #15: "Name=[Temp]\Sort"&session$&".tmp,RecL=128,Replace",internal,output
-	write #15,using 'form pos 1,c 128': "FILE [Q]\PRmstr\JCPRH1.H[cno],,,[Temp]\Addr."&session$&",,,acsPR,,A,N"
+	write #15,using 'form pos 1,c 128': "FILE [Q]\PRmstr\JCPRH1.h[cno],,,[Temp]\Addr."&session$&",,,acsPR,,A,N"
 	write #15,using 'form pos 1,c 128': "MASK 1,8,N,A,10,2,PD,A"
 	close #15:
 	close #6: ioerr ignore

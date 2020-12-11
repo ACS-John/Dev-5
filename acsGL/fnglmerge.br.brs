@@ -20,11 +20,11 @@ def library fnglmerge
 	if fnstyp=9 then prg$="S:\acsTM\tmMenu" else prg$="S:\acsGL\acGLAuto"
 	fnprg(prg$,2)
 	L200: !
-	open #glmstr:=fnH: "Name=[Q]\GLmstr\GLmstr.H[cno],KFName=[Q]\GLmstr\GLIndex.H[cno],Shr",internal,outIn,keyed ioerr GLMSTR_OPEN_ERR
-	open #gltrans:=fnH: "Name=[Q]\GLmstr\GLTrans.H[cno],Shr",internal,outIn,relative
+	open #glmstr:=fnH: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLIndex.h[cno],Shr",internal,outIn,keyed ioerr GLMSTR_OPEN_ERR
+	open #gltrans:=fnH: "Name=[Q]\GLmstr\GLTrans.h[cno],Shr",internal,outIn,relative
 	open #glwk1:=fnH: "Name=[Q]\GLmstr\GL_Work_"&env$('acsUserId')&".dat,NoShr",internal,outIn
-	open #gl1099:=fnH: "Name=[Q]\GLmstr\GL1099.H[cno],KFName=[Q]\GLmstr\gl109idx.H[cno],Shr",internal,outIn,keyed
-	open #gltr1099:=fnH: "Name=[Q]\GLmstr\GLTR1099.H[cno],Shr",internal,outIn,relative
+	open #gl1099:=fnH: "Name=[Q]\GLmstr\GL1099.h[cno],KFName=[Q]\GLmstr\gl109idx.h[cno],Shr",internal,outIn,keyed
+	open #gltr1099:=fnH: "Name=[Q]\GLmstr\GLTR1099.h[cno],Shr",internal,outIn,relative
 	! fnwait
 	READ_GLWK1: !
 	read #glwk1,using 'Form POS 1,C 12,N 6,PD 6.2,N 2,N 2,C 12,C 30,C 8': t$,s,k,mat n,l$,p$,ven$ eof EO_GLWK1
@@ -135,17 +135,17 @@ L1120: input fields "24,2,C 1,AE,N": pause$
 DONE: close #glmstr:
 	close #gltrans:
 	close #glwk1:
-	fnFree("[Q]\GLmstr\GLPT"&wsid$&".H[cno]")
+	fnFree("[Q]\GLmstr\GLPT"&wsid$&".h[cno]")
 	L1180: !
 	close #gl1099: ioerr ignore
 	if new1=1 or new2=1 then
 		fnIndex("[Q]\GLmstr\GLBREC.h[cno]","[Q]\GLmstr\GLRecIdx.h[cno]","1 24")
 	end if
 	if new1=1 then 
-		fnIndex('[Q]\GLmstr\GLmstr.H[cno]','[Q]\GLmstr\GLIndex.H[cno]','1 12')
+		fnIndex('[Q]\GLmstr\GLmstr.h[cno]','[Q]\GLmstr\GLIndex.h[cno]','1 12')
 	end if
 	if new2=1 then 
-		fnIndex('[Q]\GLmstr\GL1099.H[cno]','[Q]\GLmstr\GL109IDX.H[cno]','1 8')
+		fnIndex('[Q]\GLmstr\GL1099.h[cno]','[Q]\GLmstr\GL109IDX.h[cno]','1 8')
 	end if
 	if fnprocess=1 then 
 		fnchain("S:\acsGL\acGLAuto") 

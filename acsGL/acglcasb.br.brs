@@ -69,9 +69,9 @@ L550: !
 	if ir>=val(r$) and val(r$)><0 then goto L740
 	close #3: ioerr ignore
 	if fnps=2 then
-		fnIndex('[Q]\GLmstr\GLmstr.h[cno]','[temp]\fsindex.H[cno]','78 3')
+		fnIndex('[Q]\GLmstr\GLmstr.h[cno]','[temp]\fsindex.h[cno]','78 3')
 	else
-		fnIndex('[Q]\GLmstr\GLmstr.h[cno]','[temp]\fsindex.H[cno]','75 3')
+		fnIndex('[Q]\GLmstr\GLmstr.h[cno]','[temp]\fsindex.h[cno]','75 3')
 	end if
 	open #3: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Temp]\fsindex.h[cno],Shr",internal,input,keyed
 	L630: ! read amounts from gl master file

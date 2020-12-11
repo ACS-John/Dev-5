@@ -76,7 +76,7 @@ MENU1: !
 	loop
 	EO_GLMSTR: close #20:
 
-	execute "drop [Q]\GLmstr\GLTrans.H[cno]"
+	execute "drop [Q]\GLmstr\GLTrans.h[cno]"
 	open #1: "Name=[Q]\GLmstr\ACTrans.h[cno],Size=0,RecL=72,Replace,NoShr",internal,output
 	close #1:
 end if  ! /r

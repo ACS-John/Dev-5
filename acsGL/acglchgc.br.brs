@@ -56,9 +56,9 @@ L480: fnopenprn : _
 	if file$(255)(1:4)<>"PRN:" then redir=1 else redir=0
 	report$="Statement of Changes in Financial Position"
 	if fnps=2 then goto L530 ! secondary
-	execute "Index [Q]\GLmstr\GLmstr.h[cno] "&udf$&"fsindex.H[cno] 75 3 Replace DupKeys -N"
+	execute "Index [Q]\GLmstr\GLmstr.h[cno] "&udf$&"fsindex.h[cno] 75 3 Replace DupKeys -N"
 	goto L540
-L530: execute "Index [Q]\GLmstr\GLmstr.h[cno] "&udf$&"fsindex.H[cno] 78 3 Replace DupKeys -N"
+L530: execute "Index [Q]\GLmstr\GLmstr.h[cno] "&udf$&"fsindex.h[cno] 78 3 Replace DupKeys -N"
 L540: open #3: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName="&udf$&"fsindex.h[cno],Shr",internal,input,keyed
 L550: read #1,using L590: r$,d$,te$,sp,ls,ds,ul,rs,bc,ap,mat ac,ic,fc eof L2060
 	if ltrm$(r$)="" or ltrm$(r$)="0" then goto L550

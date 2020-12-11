@@ -5,7 +5,7 @@
 autoLibrary
 
 open #1: "Name=[Q]\CLmstr\PayMstr.h[cno],KFName=[Q]\CLmstr\PayIdx1.h[cno]",internal,outIn,keyed
-open #2: "Name=[Q]\CLmstr\X.H[cno],RecL=164,Replace",internal,outIn,relative
+open #2: "Name=[Q]\CLmstr\X.h[cno],RecL=164,Replace",internal,outIn,relative
 open #3: "Name=[Q]\CLmstr\PayAlloc.h[cno],Size=0,RecL=56,Replace",internal,outIn,relative
 do
 	dim vn$*8,nam$*30,ad1$*30,ad2$*30,csz$*30,ss$*11
@@ -18,9 +18,9 @@ do
 loop
 L190: !
 close #1: : close #2: : close #3:
-fnCopy('[Q]\CLmstr\X.H[cno]','[Q]\CLmstr\PayMstr.h[cno]')
+fnCopy('[Q]\CLmstr\X.h[cno]','[Q]\CLmstr\PayMstr.h[cno]')
 fnIndex('[Q]\CLmstr\PayMstr.h[cno]','[Q]\CLmstr\PayIdx1.h[cno]','1 8')
-fnIndex('[Q]\CLmstr\PayMstr.h[cno]','[Q]\CLmstr\PayIdx2.H[cno]','9 30')
-fnFree('[Q]\CLmstr\X.H[cno]')
+fnIndex('[Q]\CLmstr\PayMstr.h[cno]','[Q]\CLmstr\PayIdx2.h[cno]','9 30')
+fnFree('[Q]\CLmstr\X.h[cno]')
 fnStatus("Completed converting payee file.")
 Xit: fnXit

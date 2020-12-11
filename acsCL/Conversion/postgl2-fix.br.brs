@@ -19,7 +19,7 @@ ERR1: pr f "24,78,C 1": bell : goto L150
 L200: if cmdkey=5 then stop 
 
 
-	open #1: "Name=[Q]\CLmstr\TRMSTR.H[cno],KFName=[Q]\CLmstr\TRIDX1.H[cno],Shr",internal,outIn,keyed 
+	open #1: "Name=[Q]\CLmstr\TRMSTR.h[cno],KFName=[Q]\CLmstr\TRIDX1.h[cno],Shr",internal,outIn,keyed 
 	open #3: "Name=[Q]\CLmstr\TRALLOC.h[cno],Shr",internal,outIn,relative 
 L250: read #1,using L260: checkNumber$,pd,ca1,vn$,de$,pcde,scd,mat tr eof END1
 L260: form pos 4,c 8,n 6,pd 10.2,pos 28,c 8,c 30,pos 71,n 1,x 6,n 1,2*pd 3

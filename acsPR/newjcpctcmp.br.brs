@@ -9,7 +9,7 @@ dim jn$*6,jno$*6,n$*40,cn$*11,k$*25
  
 fnTop("S:\acsPR\jcPctCmp",cap$="Enter Percent Complete")
  
-open #2: "Name=[Q]\PRmstr\JCCAT.H[cno],KFName=[Q]\PRmstr\CatIndx.h[cno],Shr",internal,outIn,keyed
+open #2: "Name=[Q]\PRmstr\JCCAT.h[cno],KFName=[Q]\PRmstr\CatIndx.h[cno],Shr",internal,outIn,keyed
 open #1: "Name=[Q]\PRmstr\JCMSTR.h[cno],KFName=[Q]\PRmstr\JCIndx.h[cno],Shr",internal,outIn,keyed
 TRANSACTION_ENTRY: !
 	cn=l10=l12=l13=0

@@ -17,14 +17,14 @@ L170: input fields "15,75,N 1,UE,N": a conv L170
 	on a goto L190,L310 none L110
 L190: pr newpage
 	pr f "10,20,c 50,n": "REMOVE TERMINATED EMPLOYEES IN PROCESS"
-	open #1: "Name=S:\Core\Data\acsllc\EMmstr.H[cno],KFName=S:\Core\Data\acsllc\EMIndex.h[cno],Shr",internal,outIn,keyed ioerr L320
+	open #1: "Name=S:\Core\Data\acsllc\EMmstr.h[cno],KFName=S:\Core\Data\acsllc\EMIndex.h[cno],Shr",internal,outIn,keyed ioerr L320
 L220: read #1,using L230: eno$,emp eof L270 ioerr L320
 L230: form pos 1,c 9,pos 37,n 1
 	if emp><9 then goto L220
 	delete #1:
 	goto L220
 L270: close #1:
-	execute "Index S:\Core\Data\acsllc\EMmstr.H[cno],S:\Core\Data\acsllc\EMIndex.h[cno],1,9,REPLACE,DupKeys"
+	execute "Index S:\Core\Data\acsllc\EMmstr.h[cno],S:\Core\Data\acsllc\EMIndex.h[cno],1,9,REPLACE,DupKeys"
 	if uprc$(rtrm$(prg$))="S:\acsTM\EMAINT" then chain 'S:\acsTM\EMAINT'
 	goto Xit
 L310: goto Xit

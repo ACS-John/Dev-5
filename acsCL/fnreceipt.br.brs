@@ -8,7 +8,7 @@ def library fnaddreceipt
 	fnIndex('[Q]\CLmstr\Recmstr.h[cno]','[Q]\CLmstr\Recidx1.h[cno]','1 8')
 	fnStatusClose
 	open #trmstr2:=fnH: "Name=[Q]\CLmstr\TrMstr.h[cno],KFName=[Q]\CLmstr\TrIdx2.h[cno],Shr",internal,outIn,keyed 
-	if exists("[Q]\CLmstr\RECmstr.H[cno]")=0 then gosub CREATERECEIPTFILE
+	if exists("[Q]\CLmstr\RECmstr.h[cno]")=0 then gosub CREATERECEIPTFILE
 	open #receipt:=fnH: "Name=[Q]\CLmstr\recmstr.h[cno],Version=1,KFName=[Q]\CLmstr\recidx1.h[cno],Shr",internal,outIn,keyed 
 	open #receiptgl:=fnH: "Name=[Q]\CLmstr\ReceiptGLBreakdown.h[cno],Version=1,KFName=[Q]\CLmstr\Receiptglbkdidx.h[cno],Use,RecL=56,KPs=1,KLn=8,Shr",internal,outIn,keyed 
 	open #citystzip:=fnH: "Name=[Q]\Data\CityStZip.dat,KFName=[Q]\Data\CityStZip.Idx,Use,RecL=30,KPs=1,KLn=30,Shr",internal,outIn,keyed 

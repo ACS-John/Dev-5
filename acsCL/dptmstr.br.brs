@@ -64,7 +64,7 @@ L560: input fields "15,57,CU 5,UE,N",attr "R": pas$
 	if cmdkey=5 then goto MENU1
 	if pas$><"COPY " then goto L620
 	close #1: ioerr L600
-L600: execute "COPY A:DPTMSTR.H[cno],[Q]\CLmstr\*.*"
+L600: execute "COPY A:DPTMSTR.h[cno],[Q]\CLmstr\*.*"
 	goto L770
 L620: if ltrm$(rtrm$(pas$))><"BUILD" then goto L730
 	close #1: ioerr ignore

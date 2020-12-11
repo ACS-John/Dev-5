@@ -43,9 +43,9 @@
 L320: !
 	fnopenprn
 	if fnps=2 then ! secondary
-		execute "Index [Q]\GLmstr\GLmstr.h[cno] [Temp]\fsindex.H[cno] 72 3 Replace DupKeys -N"
+		execute "Index [Q]\GLmstr\GLmstr.h[cno] [Temp]\fsindex.h[cno] 72 3 Replace DupKeys -N"
 	else
-		execute "Index [Q]\GLmstr\GLmstr.h[cno] [Temp]\fsindex.H[cno] 69 3 Replace DupKeys -N"
+		execute "Index [Q]\GLmstr\GLmstr.h[cno] [Temp]\fsindex.h[cno] 69 3 Replace DupKeys -N"
 	end if
 	open #h_glmstr:=3: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Temp]\fsindex.h[cno],Shr",internal,input,keyed
 F_GLMSTR_A: form pos mp1,pd 3,pos 81,2*pd 6.2

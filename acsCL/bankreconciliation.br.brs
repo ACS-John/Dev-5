@@ -19,17 +19,17 @@
 	open #20: "Name=[Q]\CLmstr\Company.h[cno],Shr",internal,input,relative
 	read #20,using 'Form POS 150,X 2,N 2',rec=1,release: wbc
 	close #20:
-	open #bankmstr:=12: "Name=[Q]\CLmstr\BankMstr.H[cno],KFName=[Q]\CLmstr\BankIdx1.H[cno],Shr",internal,outIn,keyed
-	open #paymstr1:=13: "Name=[Q]\CLmstr\PayMstr.H[cno],KFName=[Q]\CLmstr\PayIdx1.H[cno],Shr",internal,outIn,keyed
-	open #paymstr2:=14: "Name=[Q]\CLmstr\PayMstr.H[cno],KFName=[Q]\CLmstr\PayIdx2.H[cno],Shr",internal,outIn,keyed
-	open #trmstr1:=1: "Name=[Q]\CLmstr\TrMstr.H[cno],KFName=[Q]\CLmstr\TrIdx1.H[cno],Shr",internal,outIn,keyed
-	open #trmstr2:=2: "Name=[Q]\CLmstr\TrMstr.H[cno],KFName=[Q]\CLmstr\TrIdx2.H[cno],Shr",internal,outIn,keyed
-	open #tralloc:=3: "Name=[Q]\CLmstr\TrAlloc.H[cno],Shr",internal,outIn,relative
+	open #bankmstr:=12: "Name=[Q]\CLmstr\BankMstr.h[cno],KFName=[Q]\CLmstr\BankIdx1.h[cno],Shr",internal,outIn,keyed
+	open #paymstr1:=13: "Name=[Q]\CLmstr\PayMstr.h[cno],KFName=[Q]\CLmstr\PayIdx1.h[cno],Shr",internal,outIn,keyed
+	open #paymstr2:=14: "Name=[Q]\CLmstr\PayMstr.h[cno],KFName=[Q]\CLmstr\PayIdx2.h[cno],Shr",internal,outIn,keyed
+	open #trmstr1:=1: "Name=[Q]\CLmstr\TrMstr.h[cno],KFName=[Q]\CLmstr\TrIdx1.h[cno],Shr",internal,outIn,keyed
+	open #trmstr2:=2: "Name=[Q]\CLmstr\TrMstr.h[cno],KFName=[Q]\CLmstr\TrIdx2.h[cno],Shr",internal,outIn,keyed
+	open #tralloc:=3: "Name=[Q]\CLmstr\TrAlloc.h[cno],Shr",internal,outIn,relative
 	read #bankmstr,using 'Form POS 3,C 40',key=cnvrt$("N 2",wbc),release: bn$
 	restore #bankmstr:
 	MENU1: !
 	close #81: ioerr ignore
-	open #81: "Name=[Q]\CLmstr\Bank"&str$(wbc)&".H[cno],Use,RecL=32",internal,outIn,relative
+	open #81: "Name=[Q]\CLmstr\Bank"&str$(wbc)&".h[cno],Use,RecL=32",internal,outIn,relative
 	if lrec(81)>0 then
 		read #81,using "Form POS 1,N 6,2*PD 5.2,N 6",rec=1: stmtdt,bgbal,stmtbal,codt conv L320 : goto BANK_STMT_INFO
 	end if
@@ -85,7 +85,7 @@ BANK_STMT_INFO: !
 	L610: !
 	if ti3=6 then fnchain("S:\Checkbook\Transaction")
 	close #81: ioerr ignore
-	open #81: "Name=[Q]\CLmstr\Bank"&str$(wbc)&".H[cno],Use,RecL=32",internal,outIn,relative
+	open #81: "Name=[Q]\CLmstr\Bank"&str$(wbc)&".h[cno],Use,RecL=32",internal,outIn,relative
 	if lrec(81)=0 then write #81,using "Form POS 1,N 6,2*PD 7.2,N 6",rec=1: stmtdt,bgbal,stmtbal,codt : goto L660
 	rewrite #81,using "Form POS 1,N 6,2*PD 7.2,N 6",rec=1: stmtdt,bgbal,stmtbal,codt
 	L660: !
@@ -417,20 +417,20 @@ L3370: form pos 9,c 12,pd 3.2,c 30,pd 3
 	DCSF_FINIS: !
 return  ! /r
 FREE_DPAMNTS: ! r:
-	fnFree("[Q]\CLmstr\DpAmnts.H[cno]")
+	fnFree("[Q]\CLmstr\DpAmnts.h[cno]")
 	continue  ! /r
  
 CLEAR_DEPOSITS_BY_AMOUNT: ! clear deposits by amounts
 	if cda=1 then goto DPAMENU
-L3600: open #dpamnts=91: "Name=[Q]\CLmstr\DpAmnts.H[cno],Use,RecL=20",internal,outIn,relative ioerr FREE_DPAMNTS
-	open #92: "Name=[Q]\CLmstr\DpDates.H[cno],Use,RecL=150",internal,outIn,relative
+L3600: open #dpamnts=91: "Name=[Q]\CLmstr\DpAmnts.h[cno],Use,RecL=20",internal,outIn,relative ioerr FREE_DPAMNTS
+	open #92: "Name=[Q]\CLmstr\DpDates.h[cno],Use,RecL=150",internal,outIn,relative
 	read #92,using L3630,rec=1: mat dpd noRec L3650
 L3630: form pos 1,25*n 6
 	goto L3660
 L3650: !
 	write #92,using L3630,rec=1: mat dpd
 L3660: !
-	open #93: "Name=[Q]\CLmstr\DPTypes.H[cno],Use,RecL=3",internal,outIn,relative
+	open #93: "Name=[Q]\CLmstr\DPTypes.h[cno],Use,RecL=3",internal,outIn,relative
 	read #93,using F_DPTYPES,rec=1: mat dpt noRec L3700
 F_DPTYPES: form pos 1,3*n 1
 	goto L3710

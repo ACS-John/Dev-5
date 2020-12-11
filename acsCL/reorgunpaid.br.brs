@@ -8,9 +8,9 @@
 	dim cap$*128
 	dim gldesc$*30
  
-	open #paytrans=4: "Name=[Q]\CLmstr\PayTrans.H[cno],KFName=[Q]\CLmstr\UnPdIdx1.H[cno],Shr",internal,outIn,keyed
-	open #unpdaloc=5: "Name=[Q]\CLmstr\UnPdAloc.H[cno],KFName=[Q]\CLmstr\Uaidx2.H[cno],Shr",internal,outIn,keyed
-	open #newunpdaloc=6: "Name=[Q]\CLmstr\NewUnPdAloc.H[cno],RecL=67,replace",internal,outIn
+	open #paytrans=4: "Name=[Q]\CLmstr\PayTrans.h[cno],KFName=[Q]\CLmstr\UnPdIdx1.h[cno],Shr",internal,outIn,keyed
+	open #unpdaloc=5: "Name=[Q]\CLmstr\UnPdAloc.h[cno],KFName=[Q]\CLmstr\Uaidx2.h[cno],Shr",internal,outIn,keyed
+	open #newunpdaloc=6: "Name=[Q]\CLmstr\NewUnPdAloc.h[cno],RecL=67,replace",internal,outIn
 READ_UNPAID_INVOICES: ! read unpaid invoice file
 	read #paytrans,using 'Form POS 1,C 8,c 12,2*G 6,C 12,C 18,G 10.2,n 1,n 2,G 8,G 6,N 1,n 6,n 10.2,n 8': vn$,iv$,mat up$,upa,pcde,bcde,ckn,dp,gde,pdte,disamt,ddate eof L260
 	restore #unpdaloc,key>=lpad$(rtrm$(vn$),8)&lpad$(rtrm$(iv$),12): nokey READ_UNPAID_INVOICES
@@ -23,10 +23,10 @@ L210: !
 L260: close #paytrans:
 	close #unpdaloc:
 	close #newunpdaloc:
-	fnCopy('[Q]\CLmstr\newunpdaloc.H[cno]',"[Q]\CLmstr\unpdaloc.H[cno]")
-	fnIndex('[Q]\CLmstr\PayTrans.H[cno]','[Q]\CLmstr\UnPdIdx1.H[cno]',"1,20")
-	fnIndex('[Q]\CLmstr\unpdaloc.H[cno]','[Q]\CLmstr\Uaidx2.H[cno]',"1,20")
-	fnIndex('[Q]\CLmstr\unpdaloc.H[cno]','[Q]\CLmstr\Uaidx1.H[cno]',"9,12")
+	fnCopy('[Q]\CLmstr\newunpdaloc.h[cno]',"[Q]\CLmstr\unpdaloc.h[cno]")
+	fnIndex('[Q]\CLmstr\PayTrans.h[cno]','[Q]\CLmstr\UnPdIdx1.h[cno]',"1,20")
+	fnIndex('[Q]\CLmstr\unpdaloc.h[cno]','[Q]\CLmstr\Uaidx2.h[cno]',"1,20")
+	fnIndex('[Q]\CLmstr\unpdaloc.h[cno]','[Q]\CLmstr\Uaidx1.h[cno]',"9,12")
 Xit: fnXit
  
 include: ertn

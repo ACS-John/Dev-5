@@ -1,6 +1,6 @@
-[Q]\PRmstr\RPMstr.H[cno]  ,  emp_          , 0
-[Q]\PRmstr\RPIndex.H[cno] ,  eno
-[Q]\PRmstr\RPIndx2.H[cno] ,  name
+[Q]\PRmstr\RPMstr.h[cno]  ,  emp_          , 0
+[Q]\PRmstr\RPIndex.h[cno] ,  eno
+[Q]\PRmstr\RPIndx2.h[cno] ,  name
 recl=196
 ! this table migraged to PR Employee on 12/31/2019
 ===================================================

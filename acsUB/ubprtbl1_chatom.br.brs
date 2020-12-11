@@ -29,8 +29,8 @@
  
 	fnTop("S:\acsUB\ubprtbl1",cap$="Print Bills")
 	fn_bulksort
-	open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.H[cno],Shr",internal,input,keyed  ! open in Account order
-	open #2: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx5.H[cno],Shr",internal,input,keyed  ! open in route-sequence #
+	open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,input,keyed  ! open in Account order
+	open #2: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx5.h[cno],Shr",internal,input,keyed  ! open in route-sequence #
  
 SCREEN1: !
 	a$="" : prtbkno=0
@@ -83,7 +83,7 @@ L460: form pos 1,c 10,pos 1741,n 2,n 7
 	if trim$(a$)<>"" then restore #2,key=cnvrt$("pic(zz)",route)& cnvrt$("pic(zzzzzzz)",sequence): nokey SCREEN1
 	if trim$(a$)="" and prtbkno>0 then restore #2,key>=cnvrt$("pic(zz)",prtbkno)&"       ": ! selected a route and no beginning Account
  
-	open #3: "Name=[Q]\UBmstr\UBAdrBil.H[cno],KFName=[Q]\UBmstr\adrIndex.H[cno],Shr",internal,input,keyed ioerr FAIL_OPEN_3
+	open #3: "Name=[Q]\UBmstr\UBAdrBil.h[cno],KFName=[Q]\UBmstr\adrIndex.h[cno],Shr",internal,input,keyed ioerr FAIL_OPEN_3
 FAIL_OPEN_3: !
 	fnPa_open("Landscape")
 	lyne=3

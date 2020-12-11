@@ -63,9 +63,9 @@ MAIN: ! r:
 	c2 =val(resp$(resp_checkEnd)(1:8)) ! ending check number
 	dim vn$*8 ! starting payee number
 	vn$=lpad$(rtrm$(resp$(resp_payee)(1:8)),8)
-	open #hPaymstr=fnH: "Name=[Q]\CLmstr\PayMstr.h[cno],KFName=[Q]\CLmstr\PayIdx1.H[cno],Shr",internal,input,keyed
+	open #hPaymstr=fnH: "Name=[Q]\CLmstr\PayMstr.h[cno],KFName=[Q]\CLmstr\PayIdx1.h[cno],Shr",internal,input,keyed
 	dim nam$*30,ad1$*30,ad2$*30,csz$*30
-	open #hTrmstr=fnH: "Name=[Q]\CLmstr\TrMstr.h[cno],KFName=[Q]\CLmstr\TrIdx1.H[cno],Shr",internal,input,keyed
+	open #hTrmstr=fnH: "Name=[Q]\CLmstr\TrMstr.h[cno],KFName=[Q]\CLmstr\TrIdx1.h[cno],Shr",internal,input,keyed
 	if prtall=check_range then
 		if wbc=0 or c1=0 then
 			dim message$(0)*256

@@ -341,10 +341,10 @@ Xit: fnXit
 PRW2B: ! r:
 	open #1: "Name=[Temp]\Control."&session$,internal,output
 	restore #1:
-	write #1,using 'form pos 1,c 128': "FILE [Temp]\Addr."&session$&",,,PRW2ADDR.H[cno],[Q]\PRmstr,,[Q]\PRmstr,,A,N"
+	write #1,using 'form pos 1,c 128': "FILE [Temp]\Addr."&session$&",,,PRW2ADDR.h[cno],[Q]\PRmstr,,[Q]\PRmstr,,A,N"
 	write #1,using 'form pos 1,c 128': "MASK 9,2,n,a,1,8,n,a"
 	close #1:
-	fnFree("[Q]\PRmstr\PRW2ADDR.H[cno]")
+	fnFree("[Q]\PRmstr\PRW2ADDR.h[cno]")
 	execute "Sort [Temp]\Control."&session$&" -n"
 fnchain("S:\acsPR\prw2b") ! /r
 ASK_EMP_LOCALITY: ! r:

@@ -26,7 +26,7 @@
 	open #tralloc:=3: "Name=[Q]\CLmstr\TrAlloc.h[cno],KFName=[Q]\CLmstr\tralloc-idx.h[cno],Shr",internal,outIn,keyed
 	open #h_paytrans:=4: "Name=[Q]\CLmstr\PayTrans.h[cno],KFName=[Q]\CLmstr\UnPdIdx1.h[cno],Shr",internal,outIn,keyed
 	open #h_unpdaloc:=7: "Name=[Q]\CLmstr\UnPdAloc.h[cno],KFName=[Q]\CLmstr\uaidx2.h[cno],Shr",internal,outIn,keyed
-	open #glmstr18:=18: "Name=[Q]\CLmstr\GLmstr.H[cno],KFName=[Q]\CLmstr\GLIndex.h[cno],Shr",internal,outIn,keyed
+	open #glmstr18:=18: "Name=[Q]\CLmstr\GLmstr.h[cno],KFName=[Q]\CLmstr\GLIndex.h[cno],Shr",internal,outIn,keyed
 	open #glcontrol:=19: "Name=[Q]\CLmstr\Fundmstr.h[cno],KFName=[Q]\CLmstr\Fundidx1.h[cno],Shr",internal,outIn,keyed
 	open #ivpaid:=6: "Name=[Q]\CLmstr\IvPaid.h[cno],KFName=[Q]\CLmstr\IVIndex.h[cno],Shr",internal,outIn,keyed
 	open #payeegl:=17: "Name=[Q]\CLmstr\payeeGLBreakdown.h[cno],KFName=[Q]\CLmstr\Payeeglbkdidx.h[cno],Shr",internal,outIn,keyed
@@ -803,8 +803,8 @@ def fn_index
 	fnRemoveDeletedRecords("[Q]\CLmstr\PayTrans.h[cno]")
 	fnRemoveDeletedRecords("[Q]\CLmstr\UnPdAloc.h[cno]")
 	fnIndex("[Q]\CLmstr\PayTrans.h[cno]","[Q]\CLmstr\UNPdIdx1.h[cno]","1,20")
-	fnIndex("[Q]\CLmstr\unpdaloc.H[cno]","[Q]\CLmstr\Uaidx2.H[cno]","1,20")
-	fnIndex("[Q]\CLmstr\unpdaloc.H[cno]","[Q]\CLmstr\Uaidx1.H[cno]","9,12")
+	fnIndex("[Q]\CLmstr\unpdaloc.h[cno]","[Q]\CLmstr\Uaidx2.h[cno]","1,20")
+	fnIndex("[Q]\CLmstr\unpdaloc.h[cno]","[Q]\CLmstr\Uaidx1.h[cno]","9,12")
 	fnIndex("[Q]\CLmstr\IvPaid.h[cno]","[Q]\CLmstr\IVIndex.h[cno]","1,20")
 fnend
 !

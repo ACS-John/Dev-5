@@ -19,11 +19,11 @@ dim cm2$(13),item2$(13)*30
 fnTop(program$,cap$="Job Cost")
 ! r: opens
 open #1: "Name=[Q]\PRmstr\JCMSTR.h[cno],KFName=[Q]\PRmstr\JCIndx.h[cno],Shr",internal,outIn,keyed ioerr L4890
-open #4: "Name=[Q]\PRmstr\JCMSTR.h[cno],KFName=[Q]\PRmstr\JCINDX2.H[cno],Shr",internal,outIn,keyed ioerr ignore
+open #4: "Name=[Q]\PRmstr\JCMSTR.h[cno],KFName=[Q]\PRmstr\JCINDX2.h[cno],Shr",internal,outIn,keyed ioerr ignore
  
-open #2: "Name=[Q]\PRmstr\JCCAT.H[cno],KFName=[Q]\PRmstr\CatIndx.h[cno],Shr",internal,outIn,keyed ioerr ignore
+open #2: "Name=[Q]\PRmstr\JCCAT.h[cno],KFName=[Q]\PRmstr\CatIndx.h[cno],Shr",internal,outIn,keyed ioerr ignore
 open #3: "Name=[Q]\PRmstr\JCTRANS.h[cno],Shr",internal,outIn,relative ioerr ignore
-open #16: "Name=[Q]\PRmstr\Category.H[cno],KFName=[Q]\PRmstr\categoryIDX.H[cno],Shr",internal,outIn,keyed ioerr ignore
+open #16: "Name=[Q]\PRmstr\Category.h[cno],KFName=[Q]\PRmstr\categoryIDX.h[cno],Shr",internal,outIn,keyed ioerr ignore
 ! /r
 MENU1: !
 	ndep=0
@@ -667,10 +667,10 @@ L1640: ! r:
 	open #1: "Name=[Q]\PRmstr\JCMSTR.h[cno],SIZE=0,RecL=300",internal,output
 	cont=1
 	close #2: ioerr ignore
-	open #2: "Name=[Q]\PRmstr\JCCAT.H[cno]",internal,input ioerr L1690
+	open #2: "Name=[Q]\PRmstr\JCCAT.h[cno]",internal,input ioerr L1690
 	close #2,free:
 	L1690: !
-	open #2: "Name=[Q]\PRmstr\JCCAT.H[cno],SIZE=0,RecL=123",internal,output
+	open #2: "Name=[Q]\PRmstr\JCCAT.h[cno],SIZE=0,RecL=123",internal,output
 	close #2:
 	close #3: ioerr ignore
 	open #3: "Name=[Q]\PRmstr\JCTRANS.h[cno]",internal,output ioerr L1750
@@ -679,15 +679,15 @@ L1640: ! r:
 	open #3: "Name=[Q]\PRmstr\JCTRANS.h[cno],SIZE=0,RecL=88",internal,output
 	write #3,using L1380: " ","",mat tr," ",1
 	close #3:
-	open #1: "Name=[Q]\PRmstr\JCPRH1.H[cno]",internal,output ioerr L1800
+	open #1: "Name=[Q]\PRmstr\JCPRH1.h[cno]",internal,output ioerr L1800
 	close #1,free:
 	L1800: !
-	open #1: "Name=[Q]\PRmstr\JCPRH1.H[cno],SIZE=0,RecL=40",internal,output
+	open #1: "Name=[Q]\PRmstr\JCPRH1.h[cno],SIZE=0,RecL=40",internal,output
 	close #1:
 	IndexAndXit: !
 	fnIndex('[Q]\PRmstr\JCMSTR.h[cno]','[Q]\PRmstr\JCIndx.h[cno]','1,6')
-	fnIndex('[Q]\PRmstr\JCMSTR.h[cno]','[Q]\PRmstr\JCINDX2.H[cno]','7,25')
-	fnIndex('[Q]\PRmstr\JCCAT.H[cno]' ,'[Q]\PRmstr\CatIndx.h[cno]','1,11')
+	fnIndex('[Q]\PRmstr\JCMSTR.h[cno]','[Q]\PRmstr\JCINDX2.h[cno]','7,25')
+	fnIndex('[Q]\PRmstr\JCCAT.h[cno]' ,'[Q]\PRmstr\CatIndx.h[cno]','1,11')
 goto Xit ! /r
 Xit: fnXit
  
@@ -700,9 +700,9 @@ RECREATE_GRID: ! r:
 	fncombof("CJob.h[cno]",lyne,mypos,43,"[Q]\PRmstr\jcmstr.h[cno]",1,6,7,25,"[Q]\PRmstr\jcindx.h[cno]" ,1)
 	fncombof("CJobALL.h[cno]",lyne,mypos,43,"[Q]\PRmstr\jcmstr.h[cno]",1,6,7,25,"[Q]\PRmstr\jcindx.h[cno]" ,2)
 	execute "Index [Q]\PRmstr\JCMSTR.h[cno],[Q]\PRmstr\JCIndx.h[cno],1,6,Replace,DupKeys -N" ioerr ignore
-	execute "Index [Q]\PRmstr\JCMSTR.h[cno],[Q]\PRmstr\JCINDX2.H[cno],7,25,Replace,DupKeys -N" ioerr ignore
+	execute "Index [Q]\PRmstr\JCMSTR.h[cno],[Q]\PRmstr\JCINDX2.h[cno],7,25,Replace,DupKeys -N" ioerr ignore
 	open #1: "Name=[Q]\PRmstr\JCMSTR.h[cno],KFName=[Q]\PRmstr\JCIndx.h[cno],Shr",internal,outIn,keyed ioerr Xit
-	open #4: "Name=[Q]\PRmstr\JCMSTR.h[cno],KFName=[Q]\PRmstr\JCINDX2.H[cno],Shr",internal,outIn,keyed ioerr Xit
+	open #4: "Name=[Q]\PRmstr\JCMSTR.h[cno],KFName=[Q]\PRmstr\JCINDX2.h[cno],Shr",internal,outIn,keyed ioerr Xit
 return ! /r
 RECREATE_CAT_GRID: ! r:
 	close #2: ioerr ignore
@@ -710,9 +710,9 @@ RECREATE_CAT_GRID: ! r:
 	fncategory_srch(x$,99)
 	fncombof("CCat.h[cno]",lyne,mypos,43,"[Q]\PRmstr\jccat.h[cno]",1,11,12,25,"[Q]\PRmstr\catindx.h[cno]" ,1)
 	fncombof("CCatALL.h[cno]",lyne,mypos,43,"[Q]\PRmstr\jccat.h[cno]",1,11,12,25,"[Q]\PRmstr\catindx.h[cno]" ,2)
-	execute "Index [Q]\PRmstr\JCCAT.H[cno],[Q]\PRmstr\CatIndx.h[cno],1,11,Replace,DupKeys -N" ioerr L5220
+	execute "Index [Q]\PRmstr\JCCAT.h[cno],[Q]\PRmstr\CatIndx.h[cno],1,11,Replace,DupKeys -N" ioerr L5220
 	L5220: !
-	open #2: "Name=[Q]\PRmstr\JCCAT.H[cno],KFName=[Q]\PRmstr\CatIndx.h[cno],Shr",internal,outIn,keyed ioerr Xit
+	open #2: "Name=[Q]\PRmstr\JCCAT.h[cno],KFName=[Q]\PRmstr\CatIndx.h[cno],Shr",internal,outIn,keyed ioerr Xit
 return ! /r
 DELETE_CATEGORY: ! r:
 	read #2,using L1360,key=cn$: mat ta nokey L5360

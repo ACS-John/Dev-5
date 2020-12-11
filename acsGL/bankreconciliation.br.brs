@@ -14,9 +14,9 @@
  
 OPEN_FILE: ! : _
 	open_file_count=1 ! this value is used in the close_file sub routine
-	if exists("[Q]\GLmstr\bankrec.H[cno]")=0 then goto L190
+	if exists("[Q]\GLmstr\bankrec.h[cno]")=0 then goto L190
 	if exists("[Q]\GLmstr\glstdidx.h[cno]")=0 then gosub INDEX
-	open #open_file_count: "Name=[Q]\GLmstr\bankrec.H[cno],KFName=[Q]\GLmstr\bankrec-idx.H[cno],Version=1,Shr",internal,outIn,keyed
+	open #open_file_count: "Name=[Q]\GLmstr\bankrec.h[cno],KFName=[Q]\GLmstr\bankrec-idx.h[cno],Version=1,Shr",internal,outIn,keyed
 	goto L220
 L190: open #open_file_count: "Name=[Q]\GLmstr\bankrec.h[cno],Version=1,Replace,RecL=91",internal,outIn
 	gosub CLOSE_FILE
@@ -24,7 +24,7 @@ L190: open #open_file_count: "Name=[Q]\GLmstr\bankrec.h[cno],Version=1,Replace,R
 L220: return
  
 INDEX: !
-	execute "Index [Q]\GLmstr\bankrec.H[cno]"&' '&"[Q]\GLmstr\bankrec-idx.h[cno]" &" 79/3/4 12/1/8 Replace,DupKeys"
+	execute "Index [Q]\GLmstr\bankrec.h[cno]"&' '&"[Q]\GLmstr\bankrec-idx.h[cno]" &" 79/3/4 12/1/8 Replace,DupKeys"
 return
  
 FIXGLACCOUNTS: ! left pad general ledger number and reference number

@@ -17,7 +17,7 @@ OPEN_FILE: ! : _
 	open_file_count=1 ! this value is used in the close_file sub routine
 	if exists("[Q]\GLmstr\Schedule"&str$(schedule)&".h[cno]")=0 then goto L190
 	if exists("[Q]\GLmstr\schedule"&str$(schedule)&"-idx.h[cno]")=0 then gosub INDEX
-	open #open_file_count: "Name=[Q]\GLmstr\schedule"&str$(schedule)&".H[cno],KFName=[Q]\GLmstr\schedule"&str$(schedule)&"-idx.H[cno],Version=1,Shr",internal,outIn,keyed
+	open #open_file_count: "Name=[Q]\GLmstr\schedule"&str$(schedule)&".h[cno],KFName=[Q]\GLmstr\schedule"&str$(schedule)&"-idx.h[cno],Version=1,Shr",internal,outIn,keyed
 	goto L220
 L190: open #open_file_count: "Name=[Q]\GLmstr\schedule"&str$(schedule)&".h[cno],Version=1,Replace,RecL=12",internal,outIn
 	gosub CLOSE_FILE
@@ -25,7 +25,7 @@ L190: open #open_file_count: "Name=[Q]\GLmstr\schedule"&str$(schedule)&".h[cno],
 L220: return
  
 INDEX: !
-	execute "Index [Q]\GLmstr\schedule"&str$(schedule)&".H[cno]"&' '&"[Q]\GLmstr\schedule"&str$(schedule)&"-idx.h[cno]" &" 1 12 Replace,DupKeys"
+	execute "Index [Q]\GLmstr\schedule"&str$(schedule)&".h[cno]"&' '&"[Q]\GLmstr\schedule"&str$(schedule)&"-idx.h[cno]" &" 1 12 Replace,DupKeys"
 return
  
 FIXGLACCOUNTS: ! left pad general ledger number and reference number

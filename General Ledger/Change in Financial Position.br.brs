@@ -54,10 +54,10 @@ BEGIN_PRINTING: !
 	fnopenprn
 	if file$(255)(1:4)<>"PRN:" then redir=1 else redir=0
 	if fnps=2 then goto L550 ! secondary
-	execute "Index [Q]\GLmstr\GLmstr.h[cno] [temp]\fsindex.H[cno] 75 3 Replace DupKeys -N"
+	execute "Index [Q]\GLmstr\GLmstr.h[cno] [temp]\fsindex.h[cno] 75 3 Replace DupKeys -N"
 goto L560
 L550: !
-	execute "Index [Q]\GLmstr\GLmstr.h[cno] [temp]\fsindex.H[cno] 78 3 Replace DupKeys -N"
+	execute "Index [Q]\GLmstr\GLmstr.h[cno] [temp]\fsindex.h[cno] 78 3 Replace DupKeys -N"
 L560: !
 	open #3: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[temp]\fsindex.h[cno],Shr",internal,input,keyed
 L570: !

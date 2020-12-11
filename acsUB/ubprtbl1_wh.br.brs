@@ -24,10 +24,10 @@
 	linelength=62
 	fnTop("S:\acsUB\ubprtbl1","Print Bills")
 	gosub BULKSORT ! want printed in alphabetic order
-	open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.H[cno],Shr",internal,input,keyed  ! open in Account order
-!  open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx2.H[cno],Shr",internal,input,keyed  ! open in alphabetic order  ! bethany special
-	open #8: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndEX.H[cno],Shr",internal,input,keyed  ! open in alphabetic order  ! bethany special
-	open #2: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx5.H[cno],Shr",internal,input,keyed  ! open in route-sequence #
+	open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,input,keyed  ! open in Account order
+!  open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx2.h[cno],Shr",internal,input,keyed  ! open in alphabetic order  ! bethany special
+	open #8: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndEX.h[cno],Shr",internal,input,keyed  ! open in alphabetic order  ! bethany special
+	open #2: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx5.h[cno],Shr",internal,input,keyed  ! open in route-sequence #
 
 	mg$(1)=''
 SCREEN1: !
@@ -90,7 +90,7 @@ L500: form pos 1,c 10,pos 1741,n 2,n 7
 	if trim$(a$)<>"" then restore #2,key=cnvrt$("pic(zz)",route)& cnvrt$("pic(zzzzzzz)",sequence): nokey SCREEN1
 	if trim$(a$)="" and prtbkno>0 then restore #2,key>=cnvrt$("pic(zz)",prtbkno)&"       ": ! selected a route and no beginning Account
 
-	open #h_adrbil:=3: "Name=[Q]\UBmstr\UBAdrBil.H[cno],KFName=[Q]\UBmstr\adrIndex.H[cno],Shr",internal,input,keyed
+	open #h_adrbil:=3: "Name=[Q]\UBmstr\UBAdrBil.h[cno],KFName=[Q]\UBmstr\adrIndex.h[cno],Shr",internal,input,keyed
 	gosub BUD1
 	gosub VBOPENPRINT
 
@@ -412,7 +412,7 @@ PRINTGRID: !
 return  ! /r
 
 BULKSORT: ! r: bulk sort order
-	open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.H[cno],Shr",internal,input,keyed  ! open in Account order
+	open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,input,keyed  ! open in Account order
 	open #6: "Name=[Temp]\Temp.[session],Replace,RecL=31",internal,output
 	do
 		read #1,using "Form POS 1,C 10,pos 1741,n 2,pos 1743,n 7,pos 1942,c 12": z$,route,seq,bulk$ eof BsEo1

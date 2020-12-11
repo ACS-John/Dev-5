@@ -5,7 +5,7 @@
 	fnTop(program$,cap$="Service Code")
 	dim sc$*4,ds$*30
 	dim prg$*20
-	open #1: "Name=S:\Core\Data\acsllc\SCMSTR.H[cno],KFName=S:\Core\Data\acsllc\SCIndex.H[cno]",internal,input,keyed
+	open #1: "Name=S:\Core\Data\acsllc\SCMSTR.h[cno],KFName=S:\Core\Data\acsllc\SCIndex.h[cno]",internal,input,keyed
 	namtab=43-int(len(rtrm$(env$('cnam')))/2)
 L130: pr newpage
 	pr f "7,10,c 60,n": "POSITION PAPER IN PRINTER FOR SERVICE CODE LISTING"

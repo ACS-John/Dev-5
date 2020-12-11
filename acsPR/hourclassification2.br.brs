@@ -12,8 +12,8 @@ def library fnhours(eno)
 	dim flxitm$(8)*30,key$*21
 
 	fnTop(program$,"Time Classification")
-	open #breakdown=1: "Name=[Q]\PRmstr\HourBreakdown.H[cno],KFName=[Q]\PRmstr\HourBreakdown-idx.H[cno],Shr",internal,outIn,keyed 
-	open #classification=2: "Name=[Q]\PRmstr\HourClass.H[cno],KFName=[Q]\PRmstr\HourClass-idx.H[cno],Shr",internal,outIn,keyed 
+	open #breakdown=1: "Name=[Q]\PRmstr\HourBreakdown.h[cno],KFName=[Q]\PRmstr\HourBreakdown-idx.h[cno],Shr",internal,outIn,keyed 
+	open #classification=2: "Name=[Q]\PRmstr\HourClass.h[cno],KFName=[Q]\PRmstr\HourClass-idx.h[cno],Shr",internal,outIn,keyed 
 	open #hEmployee=3: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr",internal,input,keyed 
 	MAIN: ! 
 		addhours=edithours=0
@@ -139,8 +139,8 @@ def library fnhours(eno)
 	if resp$="Yes" then eno=empno: goto L670 else empno=holdeno: goto ADDFM ! /r
 Xit: fnend 
 SETUP: ! r:
-	open #breakdown=1: "Name=[Q]\PRmstr\HourBreakdown.H[cno],RecL=39,KFName=[Q]\PRmstr\HourBreakdown-idx.H[cno],kps=1,kln=5,replace",internal,outIn,keyed 
+	open #breakdown=1: "Name=[Q]\PRmstr\HourBreakdown.h[cno],RecL=39,KFName=[Q]\PRmstr\HourBreakdown-idx.h[cno],kps=1,kln=5,replace",internal,outIn,keyed 
 	close #breakdown: 
-	execute "Index [Q]\PRmstr\HourBreakdown.H[cno]"&' '&"[Q]\PRmstr\HourBreakdown-idx.H[cno] 1/9/14 8/5/8 Replace DupKeys"
+	execute "Index [Q]\PRmstr\HourBreakdown.h[cno]"&' '&"[Q]\PRmstr\HourBreakdown-idx.h[cno] 1/9/14 8/5/8 Replace DupKeys"
 stop ! /r
 include: ertn

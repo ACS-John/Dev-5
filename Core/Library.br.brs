@@ -548,17 +548,17 @@ fnend
 		fnqgl=fnqgl(myline,mypos,con,x,use_or_replace,25)
 	fnend
 	def library fnagl$*12(&x$)
-		library 'S:\Core\fnAGL$.br': fnagl$
+		library 'S:\Core\fn\agl$.br': fnagl$
 		fnagl$=fnagl$(x$)
 	fnend
 	def library fnrgl$*60(x$; returnmaxlength)
-		library 'S:\Core\fnRGL$.br': fnrgl$
+		library 'S:\Core\fn\rgl$.br': fnrgl$
 		fnrgl$=fnrgl$(x$, returnmaxlength)
 	fnend
 	def library fnrglbig$*60(x$)
 		! library 'S:\Core\fnRGLbig$.br': fnrglbig$
 		! fnrglbig$=fnrglbig$(x$)
-		library 'S:\Core\fnRGL$.br': fnrgl$
+		library 'S:\Core\fn\rgl$.br': fnrgl$
 		fnrglbig$=fnrgl$(x$, 60)
 	fnend
 	def library fnosver(&osver$;get_or_put)

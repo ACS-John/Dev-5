@@ -16,7 +16,7 @@
  
 	execute "Copy [Q]\PRmstr\JCMSTR.h[cno] JCMSTR.X -n"
 	execute "Copy [Q]\PRmstr\JCTRANS.h[cno] JCTRANS.X -n"
-	execute "Copy [Q]\PRmstr\JCCAT.H[cno] JCCAT.X -n"
+	execute "Copy [Q]\PRmstr\JCCAT.h[cno] JCCAT.X -n"
  
 	open #1: "Name=JCMSTR.X,KFName=[Q]\PRmstr\JCIndx.h[cno]",internal,outIn,keyed
  
@@ -46,9 +46,9 @@ L390: pr newpage
 	open #11: "Name=[Q]\PRmstr\JCMSTR.h[cno]",internal,output
 	close #11,free:
 	open #11: "Name=[Q]\PRmstr\JCMSTR.h[cno],SIZE=0,RecL=300",internal,output
-	open #12: "Name=[Q]\PRmstr\JCCAT.H[cno]",internal,output
+	open #12: "Name=[Q]\PRmstr\JCCAT.h[cno]",internal,output
 	close #12,free:
-	open #12: "Name=[Q]\PRmstr\JCCAT.H[cno],SIZE=0,RecL=123",internal,output
+	open #12: "Name=[Q]\PRmstr\JCCAT.h[cno],SIZE=0,RecL=123",internal,output
 	open #13: "Name=[Q]\PRmstr\JCTRANS.h[cno]",internal,output
 	close #13,free:
 	open #13: "Name=[Q]\PRmstr\JCTRANS.h[cno],SIZE=0,RecL=88",internal,outIn,relative
@@ -90,7 +90,7 @@ EOF1: close #1,free:
 	close #12:
 	close #13:
 	execute "Index [Q]\PRmstr\JCMSTR.h[cno],[Q]\PRmstr\JCIndx.h[cno],1,6,Replace,DupKeys -n"
-	execute "Index [Q]\PRmstr\JCCAT.H[cno],[Q]\PRmstr\CatIndx.h[cno],1,11,Replace,DupKeys -n"
+	execute "Index [Q]\PRmstr\JCCAT.h[cno],[Q]\PRmstr\CatIndx.h[cno],1,11,Replace,DupKeys -n"
 	goto Xit
  
 Xit: fnXit

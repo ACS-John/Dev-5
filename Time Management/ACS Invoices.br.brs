@@ -418,7 +418,7 @@ def fn_mergeInvoices
 	dim ct(30)
 	dim tmwk2_sc(30)
 	open #h_artrans=fnH:  'Name=S:\Core\Data\acsllc\ARTrans.h[cno],Shr',internal,outIn,relative
-	open #h_tmtrans=fnH:  'Name=S:\Core\Data\acsllc\TMTRANS.H[cno],Shr',internal,outIn,relative
+	open #h_tmtrans=fnH:  'Name=S:\Core\Data\acsllc\TMTRANS.h[cno],Shr',internal,outIn,relative
 	open #h_clmstr=fnH:   'Name=S:\Core\Data\acsllc\CLmstr.h[cno],KFName=S:\Core\Data\acsllc\CLIndex.h[cno],Shr',internal,outIn,keyed
 	open #h_tmtraddr=fnH: 'Name=S:\Core\Data\acsllc\TMTRAddr.h[cno],Shr',internal,outIn,relative
 	do  ! r: main loop

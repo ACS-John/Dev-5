@@ -150,7 +150,7 @@ INDEX: ! r: (main schedule files)
 	execute "Index [Q]\GLmstr\ACGLSCHS.h[cno]"&' '&"[Q]\GLmstr\SchIndX2.h[cno] 4 30 Replace DupKeys -n"
 return ! /r
 INDEX2: ! r: index to gl breakdowns
-	execute "Index [Q]\GLmstr\schedule"&str$(sn)&".H[cno]"&' '&"[Q]\GLmstr\schedule"&str$(sn)&"-idx.h[cno]" &" 1 12 Replace,DupKeys" ioerr ignore
+	execute "Index [Q]\GLmstr\schedule"&str$(sn)&".h[cno]"&' '&"[Q]\GLmstr\schedule"&str$(sn)&"-idx.h[cno]" &" 1 12 Replace,DupKeys" ioerr ignore
 return ! /r
 ! PROOF: ! r:
 !   restore #10,key>="  ": eof ignore ioerr ADD_EDIT_SCHEDULES
@@ -218,7 +218,7 @@ OPEN_FILE: ! r:
 		gosub INDEX2
 	else
 		if exists("[Q]\GLmstr\schedule"&str$(sn)&"-idx.h[cno]")=0 then gosub INDEX2
-		open #open_file_count: "Name=[Q]\GLmstr\schedule"&str$(sn)&".H[cno],KFName=[Q]\GLmstr\schedule"&str$(sn)&"-idx.H[cno],Shr",internal,outIn,keyed
+		open #open_file_count: "Name=[Q]\GLmstr\schedule"&str$(sn)&".h[cno],KFName=[Q]\GLmstr\schedule"&str$(sn)&"-idx.h[cno],Shr",internal,outIn,keyed
 	end if
 return ! /r
 FIXGLACCOUNTS: ! r: left pad general ledger number and reference number

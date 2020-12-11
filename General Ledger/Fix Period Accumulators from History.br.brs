@@ -1,4 +1,5 @@
-! formerly S:\acsGL\FixPA
+if env$('acsdeveloper')<>'' then debug=1
+verbose=0
 	fn_setup
 	fnTop(program$)
 	current_accounting_period=fnactpd
@@ -14,23 +15,24 @@
 	mat last_retained_earnings_acct$(udim(mat fund_list)) : if udim(last_retained_earnings_acct$)=0 then mat last_retained_earnings_acct$(1)
 	mat period_accumulator_current(nap)
 	mat period_accumulator_prior(nap)
+	
 	if fn_screen_1(nap,mat period_date_start,mat prior_period_date_start)=5 then goto Xit
-	fn_report(env$('program_caption'))
-	fn_report(date$('mm/dd/ccyy'))
-	fn_report('')
-	open #h_actrans:=fnH: "Name=[Q]\GLmstr\AcTrans.H[cno],KFName=[Q]\GLmstr\AcTrIdx.H[cno],Shr",internal,outIn,keyed
+	! fn_report(env$('program_caption'))
+	! fn_report(date$('mm/dd/ccyy'))
+	! fn_report('')
+	open #h_actrans:=fnH: "Name=[Q]\GLmstr\AcTrans.h[cno],KFName=[Q]\GLmstr\AcTrIdx.h[cno],Shr",internal,outIn,keyed
 	F_ACTRANS: form pos 1,c 12,n 6,pd 6.2,n 2,pos 71,n 2
 	if process_gltrans then
-	fnIndex("[Q]\GLmstr\GLTrans.H[cno]",env$('Temp')&"\GLIndex.H[cno]","1 12")
-	open #h_gltrans:=fnH: "Name=[Q]\GLmstr\GLTrans.H[cno],KFName=[Temp]\GLIndex.h[cno],Shr",internal,outIn,keyed
+	fnIndex("[Q]\GLmstr\GLTrans.h[cno]",env$('Temp')&"\GLIndex.h[cno]","1 12")
+	open #h_gltrans:=fnH: "Name=[Q]\GLmstr\GLTrans.h[cno],KFName=[Temp]\GLIndex.h[cno],Shr",internal,outIn,keyed
 	end if  ! process_gltrans
 	F_GLTRANS: form pos 1,c 12,n 6,pd 6.2,n 2
-	open #h_glmstr:=fnH: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLIndex.H[cno],Shr",internal,outIn,keyed
-	open #h_glmstr2:=fnH: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\glIndx2.H[cno],Shr",internal,outIn,keyed
+	open #h_glmstr:=fnH: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLIndex.h[cno],Shr",internal,outIn,keyed
+	open #h_glmstr2:=fnH: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\glIndx2.h[cno],Shr",internal,outIn,keyed
 	F_GLMSTR: form pos 1,c 12,x 50,6*pd 3,42*pd 6.2,2*pd 3,13*pd 6.2
 	do
 		read #h_glmstr,using F_GLMSTR: gl$,mat rf,bb,cb,mat balance_current_year_month,mat balance_prior_year_month eof EO_GLMSTR
-		fn_report('*** '&gl$&' ***')
+		if verbose then fn_report('*** '&gl$&' ***')
 		mat balance_current_year_month=(0)
 		mat period_accumulator_current=(0)
 		if fn_is_a_retained_earn_account(gl$) then
@@ -63,13 +65,13 @@
 		!   if period>1 then period_accumulator_current(period)<>0 then period_accumulator_current(period)+=period_accumulator_current(period-1)
 		if period_accumulator_current(period)<>balance_current_year_month(period) then
 			gln_period_did_change+=1
-			fn_report('changing GLmstr '&gl$&' period '&str$(period)&" from "&str$(balance_current_year_month(period))&' to '&str$(period_accumulator_current(period)))
+			if verbose then fn_report('changing GLmstr '&gl$&' period '&str$(period)&" from "&str$(balance_current_year_month(period))&' to '&str$(period_accumulator_current(period)))
 			balance_current_year_month(period)=period_accumulator_current(period)
 		!  if gl$='  1   405  0' then pr ' about to write period_accumulator_current(';period;')=';period_accumulator_current(period) : pause
 		end if
 		if include_prior_periods and period_accumulator_prior(period)<>balance_prior_year_month(period) then
 			gln_period_did_change+=1
-			fn_report('changing GLmstr '&gl$&' period '&str$(period)&" from "&str$(balance_prior_year_month(period))&' to '&str$(period_accumulator_prior(period)))
+			if verbose then fn_report('changing GLmstr '&gl$&' period '&str$(period)&" from "&str$(balance_prior_year_month(period))&' to '&str$(period_accumulator_prior(period)))
 			balance_prior_year_month(period)=period_accumulator_prior(period)
 		end if  ! period_accumulator_prior(period)<>balance_prior_year_month(period) then
 	next period
@@ -81,7 +83,7 @@
 		if bb<>balance_current_year_month(current_accounting_period-1) then gln_period_did_change+=1
 		bb=balance_current_year_month(current_accounting_period-1)
 		
-		debug=1
+		
 		if debug and gln_period_did_change=1 and (current_accounting_period-1)=4 then 
 			pr 'bb=';bb
 				pause
@@ -96,6 +98,10 @@
 	loop
 	EO_GLMSTR: !
 	! fncloseprn : report_open=0
+	if openDebugReport then
+		fncloseprn
+		openDebugReport=0
+	end if
 Xit: fnXit ! if env$('acsdeveloper')<>'' then stop else fnXit ! XXX
 def fn_setup
 	autoLibrary
@@ -110,7 +116,7 @@ def fn_screen_1(nap,mat period_date_start,mat prior_period_date_start)
 	period_date_start=(0)
 	mat prior_period_date_start(nap)
 	prior_period_date_start=(0)
-	fnTos(sn$="FixPA2_"&str$(nap))
+	fnTos
 	mylen=31
 	mypos=mylen+2
 	respc=0 : myline=0
@@ -143,6 +149,27 @@ def fn_screen_1(nap,mat period_date_start,mat prior_period_date_start)
 		respc+=1
 		fncreg_read("last retained earnings account - no fund ",resp$(respc)) : resp$(respc)=fnrgl$(resp$(respc))
 	end if
+	
+	if debug then
+		myline+=1
+		col4_pos=col3_pos+32
+		fnLbl(myline+=1,col3_pos,'Debug Account:',31,1)
+		fnqgl(myline,col4_pos)
+		resp_debugAcct=respc+=1
+		dim debugAcct$*128
+		fncreg_read("debug account",debugAcct$)
+		resp$(resp_debugAcct)=fnrgl$(debugAcct$)
+		
+
+		fnLbl(myline+=1,col3_pos,"Debug Period:",31,1)
+		fnTxt(myline,col4_pos,2,0,1,'number')
+		dim debugPeriod$*128
+		fncreg_read("debug period",debugPeriod$)
+		resp$(resp_debugPeriod=respc+=1)=debugPeriod$
+
+		
+	end if
+
 	fnCmdSet(2)
 	fnAcs(mat resp$,ckey)
 	if ckey<>5 then
@@ -154,6 +181,15 @@ def fn_screen_1(nap,mat period_date_start,mat prior_period_date_start)
 		next period
 		if resp$(nap+1)='True' then include_prior_periods=1 else include_prior_periods=0
 		fncreg_write("correct prior year",resp$(nap+1))
+		if debug then
+			debugAcct$=fnagl$(resp$(resp_debugAcct))
+			fncreg_write("debug account",debugAcct$)
+			
+			debugPeriod$=resp$(resp_debugPeriod)
+			debugPeriod=val(debugPeriod$)
+			fncreg_write("debug period",debugPeriod$)
+			
+		end if
 		respc=resp_lrea_fund_1-1
 		if use_dept then
 			for fund_item=1 to udim(mat fund_list)
@@ -175,7 +211,9 @@ def fn_date_mmddyy_is_within_range(dmi_test_date,dmi_date_start,dmi_date_end)
 	if dmi_test_date=>dmi_date_start and dmi_test_date<=dmi_date_end then dmi_return=1
 	fn_date_mmddyy_is_within_range=dmi_return
 fnend  ! fn_date_mmddyy_is_within_range
-def fn_process_trans(h_trans; pt_fix_trans_period_code)
+def fn_process_trans(h_trans; pt_fix_trans_period_code,___,trgl$,tr_date,tr_date,tr_6,pc2)
+	! uses inherriteed local:  gl$, period, mat period_accumulator_prior    
+	!          probably others,
 	actrans_key$=rpad$(gl$,kln(h_trans))
 	restore #h_trans,key>=actrans_key$: nokey EO_TRANS
 	do
@@ -183,7 +221,7 @@ def fn_process_trans(h_trans; pt_fix_trans_period_code)
 			read #h_trans,using F_ACTRANS: trgl$,tr_date,tr_amt,tr_6,pc2 eof EO_TRANS
 		else
 			read #h_trans,using F_GLTRANS: trgl$,tr_date,tr_amt,tr_6 eof EO_TRANS
-		end if  ! pt_fix_trans_period_code   /   else
+		end if
 		if trgl$<>gl$ then goto EO_TRANS
 		! prior month
 		if fn_date_mmddyy_is_within_range(tr_date,prior_period_date_start(period),prior_period_date_end) then
@@ -193,7 +231,7 @@ def fn_process_trans(h_trans; pt_fix_trans_period_code)
 			!         fn_report('changing actrans '&trgl$&'/'&str$(tr_date)&" from "&str$(pc2)&' to '&str$(period))
 			pc2=period
 			rewrite #h_trans,using F_ACTRANS: trgl$,tr_date,tr_amt,tr_6,pc2
-			end if  ! pt_fix_trans_period_code and period<>pc2
+			end if
 		end if  ! fn_date_mmddyy_is_within_range
 		! current month
 		if fn_date_mmddyy_is_within_range(tr_date,period_date_start(period),period_date_end) then
@@ -204,9 +242,9 @@ def fn_process_trans(h_trans; pt_fix_trans_period_code)
 				!   pr 'just added  ';tr_amt;' due to date of ';tr_date
 				!   pause
 				! end if
-				if period=4 then
-					pr 'just added  ';tr_amt;' from trans date ';tr_date;' bringing accumulator to ';period_accumulator_current(period)
-					pause
+				if period=debugPeriod and trgl$=debugAcct$ then
+					fn_debugReport('TRANS: add '&cnvrt$('pic(---,--#.##)',tr_amt)&' from '&date$(days(tr_date,'mmddyy'),'mm/dd/ccyy')&' accum= '&cnvrt$('pic(---,--#.##)',period_accumulator_current(period)))
+
 				en if
 			end if
 			!         fn_report(str$(tr_date)&' period '&str$(period)&'  + '&cnvrt$('pic(----------.--)',tr_amt)&' type '&str$(tr_6))
@@ -214,15 +252,17 @@ def fn_process_trans(h_trans; pt_fix_trans_period_code)
 				!         fn_report('changing actrans '&trgl$&'/'&str$(tr_date)&" from "&str$(pc2)&' to '&str$(period))
 				pc2=period
 				rewrite #h_trans,using F_ACTRANS: trgl$,tr_date,tr_amt,tr_6,pc2
-			end if  ! pt_fix_trans_period_code and period<>pc2
+			end if
 		end if  ! fn_date_mmddyy_is_within_range
 	loop
 	EO_TRANS: !
-	if period_accumulator_current(period)<>0 then
-		fn_report('  period '&str$(period)&' totals '&cnvrt$('pic(----------.--)',period_accumulator_current(period)))
-	end if
-	if period_accumulator_prior(period)<>0 then
-		fn_report(rpt$(' ',40)&'prior period '&str$(period)&' totals '&cnvrt$('pic(----------.--)',period_accumulator_prior(period)))
+	if verbose or (gl$=debugAcct$) then  ! period=debugPeriod and 
+		if period_accumulator_current(period)<>0 then
+			fn_report('  period '&str$(period)&' totals '&cnvrt$('pic(----------.--)',period_accumulator_current(period)))
+		end if
+		if period_accumulator_prior(period)<>0 then
+			fn_report(rpt$(' ',40)&'prior period '&str$(period)&' totals '&cnvrt$('pic(----------.--)',period_accumulator_prior(period)))
+		end if
 	end if
 fnend
 def fn_report(line$*256)
@@ -231,7 +271,8 @@ def fn_report(line$*256)
 	!     fnopenprn
 	!   end if  ! ~report_open
 	!   pr #255: line$
-	fnStatus(line$) ! pr line$ ! XXX
+	! fnStatus(line$) ! pr line$ ! XXX
+	if debug then fn_debugReport(line$)
 fnend
 def fn_is_a_retained_earn_account(gl$; ___,returnN)
 	! pr 'gl number passed is *'&gl$&'*'
@@ -258,5 +299,13 @@ def fn_is_a_retained_earn_account(gl$; ___,returnN)
 	IareaFinis: !
 	fn_is_a_retained_earn_account=returnN
 	fnend
- 
+def fn_debugReport(text$*256)
+	if ~openDebugReport then
+		openDebugReport=1
+		fnopenprn
+		pr #255: env$('program_caption')
+		pr #255: date$&' '&time$
+	end if
+	pr #255: text$
+fnend
 include: ertn

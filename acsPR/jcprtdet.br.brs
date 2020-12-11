@@ -31,7 +31,7 @@ L250: close #1:
 	read #20,using 'Form POS 1,C 40,POS 746,2*C 6',rec=1: cnam$,mat npj$ : _
 	close #20:
 	open #1: "Name=[Q]\PRmstr\JCMSTR.h[cno],KFName=[Q]\PRmstr\JCIndx.h[cno],Shr",internal,input,keyed
-	open #2: "Name=[Q]\PRmstr\JCCAT.H[cno],KFName=[Q]\PRmstr\CatIndx.h[cno],Shr",internal,input,keyed
+	open #2: "Name=[Q]\PRmstr\JCCAT.h[cno],KFName=[Q]\PRmstr\CatIndx.h[cno],Shr",internal,input,keyed
 	open #3: "Name=[Q]\PRmstr\JCTRANS.h[cno],Shr",internal,input,relative
  
 	pr newpage

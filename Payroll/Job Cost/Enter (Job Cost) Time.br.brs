@@ -32,7 +32,7 @@
  
 	open #1: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr",internal,input,keyed
 	open #5: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-name.h[cno],Shr",internal,input,keyed
-	open #7: "Name=[Q]\PRmstr\Burden.H[cno],KFName=[Q]\PRmstr\BurdenIdx.H[cno],Shr",internal,input,keyed
+	open #7: "Name=[Q]\PRmstr\Burden.h[cno],KFName=[Q]\PRmstr\BurdenIdx.h[cno],Shr",internal,input,keyed
 	open #2: "Name=[Q]\PRmstr\Department.h[cno],KFName=[Q]\PRmstr\DeptIdx.h[cno]",internal,outIn,keyed
 	if exists("jcWork."&session$) >0 then goto L280 else goto L300
 L280: mat ml$(2)
@@ -44,8 +44,8 @@ L300: open #3: "Name=jcWork."&session$&",SIZE=0,RecL=84,Replace",internal,outIn,
 	goto L330
 L320: open #3: "Name=jcWork."&session$,internal,outIn,relative
 L330: open #11: "Name=[Q]\PRmstr\JCMSTR.h[cno],KFName=[Q]\PRmstr\JCIndx.h[cno],Shr",internal,input,keyed
-	open #14: "Name=[Q]\PRmstr\JCMSTR.h[cno],KFName=[Q]\PRmstr\JCINDX2.H[cno],Shr",internal,input,keyed
-	open #12: "Name=[Q]\PRmstr\JCCAT.H[cno],KFName=[Q]\PRmstr\CatIndx.h[cno],Shr",internal,input,keyed
+	open #14: "Name=[Q]\PRmstr\JCMSTR.h[cno],KFName=[Q]\PRmstr\JCINDX2.h[cno],Shr",internal,input,keyed
+	open #12: "Name=[Q]\PRmstr\JCCAT.h[cno],KFName=[Q]\PRmstr\CatIndx.h[cno],Shr",internal,input,keyed
 	open #13: "Name=[Q]\PRmstr\SCMSTR.h[cno],KFName=[Q]\PRmstr\SCIndex.h[cno],Shr",internal,input,keyed
  
 	addone=1 ! set code as adding when first entering

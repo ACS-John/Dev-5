@@ -25,8 +25,8 @@
 	in3$(1)="8,05,N 12.2,UT,N" : in3$(2)="8,25,N 12.2,UT,N"
 	in3$(3)="8,45,N 12.2,UT,N" : in3$(4)="8,65,N 12.2,UT,N"
 	if fnps=2 then mp1=78 else mp1=75
-	fl1$="Name=[Q]\GLmstr\ACGLFNSF.H[cno],KFName=[Q]\GLmstr\agfsidx5.H[cno],Shr"
-	if fnps=2 then fl1$="Name=[Q]\GLmstr\ACGLFNSG.H[cno],KFName=[Q]\GLmstr\agfsidx6.H[cno],Shr"
+	fl1$="Name=[Q]\GLmstr\ACGLFNSF.h[cno],KFName=[Q]\GLmstr\agfsidx5.h[cno],Shr"
+	if fnps=2 then fl1$="Name=[Q]\GLmstr\ACGLFNSG.h[cno],KFName=[Q]\GLmstr\agfsidx6.h[cno],Shr"
 	open #1: fl1$,internal,input,keyed
 	if fnprocess=1 or fnUseDeptNo=0 then goto L340
 	fnTos

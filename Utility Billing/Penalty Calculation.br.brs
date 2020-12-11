@@ -17,7 +17,7 @@
 	fnLastBillingDate(bildat)
 	fndat(dat$)
 ! r:  get MinimumBal
-	open #minbal:=5: "Name=[Q]\UBmstr\Minbal.H[cno],Use,RecL=10,Shr",internal,outIn,relative
+	open #minbal:=5: "Name=[Q]\UBmstr\Minbal.h[cno],Use,RecL=10,Shr",internal,outIn,relative
 	read #minbal,using 'Form POS 1,n 10.2',rec=1,release: minimumbal noRec SET_DEFAULT_MINUMUMBAL
 	goto EO_MINIMUMBAL
 SET_DEFAULT_MINUMUMBAL: !
@@ -125,7 +125,7 @@ def fn_scr_main
 		if resp$(4)="True" then printadr=1 ! wants meter address printed
 		if resp$(5)="True" then printmail=1 ! wants meter mailing address
 		minimumbal=val(resp$(6))
-		open #minbal:=5: "Name=[Q]\UBmstr\Minbal.H[cno],Use,RecL=10,Shr",internal,outIn,relative
+		open #minbal:=5: "Name=[Q]\UBmstr\Minbal.h[cno],Use,RecL=10,Shr",internal,outIn,relative
 		rewrite #minbal,using 'Form POS 1,n 10.2',rec=1,release: minimumbal
 		close #minbal:
 		if resp$(7)="True" then penaltybase$="Bill" ! base penalties on current bill

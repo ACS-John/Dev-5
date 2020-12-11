@@ -46,10 +46,10 @@
 	gosub L3200
 	open #1: "Name=[Q]\GLmstr\GL1099.h[cno],KFName=[Q]\GLmstr\GL109IDX.h[cno],Shr",internal,outIn,keyed ioerr L4750
 	open #11: "Name=[Q]\GLmstr\GL1099.h[cno],KFName=[Q]\GLmstr\VNINDX2.h[cno],Shr",internal,outIn,keyed ioerr L4090
-L480: open #2: "Name=[Q]\GLmstr\GLTR1099.H[cno],Shr",internal,outIn,relative ioerr L500
+L480: open #2: "Name=[Q]\GLmstr\GLTR1099.h[cno],Shr",internal,outIn,relative ioerr L500
 	goto L530
 L500: close #2: ioerr L510
-L510: open #2: "Name=[Q]\GLmstr\GLTR1099.H[cno],RecL=64,Replace",internal,outIn,relative
+L510: open #2: "Name=[Q]\GLmstr\GLTR1099.h[cno],RecL=64,Replace",internal,outIn,relative
 	write #2,using L850,rec=1: "",0,0,"","",1
 L530: pr newpage
 	if fnprocess=1 then ti=4 else goto MENU1
@@ -79,9 +79,9 @@ L770: open #1: "Name=[Q]\GLmstr\GL1099.h[cno],KFName=[Q]\GLmstr\GL109IDX.h[cno]"
 	close #1,free: ioerr L790
 L790: open #1: "Name=[Q]\GLmstr\GL1099.h[cno],RecL=127,Replace",internal,outIn,relative ioerr L820
 	close #2: ioerr L810
-L810: open #2: "Name=[Q]\GLmstr\GLTR1099.H[cno]",internal,outIn,relative ioerr L830
+L810: open #2: "Name=[Q]\GLmstr\GLTR1099.h[cno]",internal,outIn,relative ioerr L830
 L820: close #2,free: ioerr L830
-L830: open #2: "Name=[Q]\GLmstr\GLTR1099.H[cno],RecL=64,Replace",internal,outIn,relative ioerr L840
+L830: open #2: "Name=[Q]\GLmstr\GLTR1099.h[cno],RecL=64,Replace",internal,outIn,relative ioerr L840
 L840: write #2,using L850,rec=1: "",0,0,"","",1
 L850: form pos 1,c 8,n 6,pd 5.2,c 12,c 30,pd 3
 	new1=1

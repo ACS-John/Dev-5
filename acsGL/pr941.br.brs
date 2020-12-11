@@ -262,7 +262,7 @@ L2400: form pos 1,c 40,n 10.2,x 10,n 10.2
 return
 
 GET_MAT_TPT: !
-	open #19: "Name=[Q]\GLmstr\PRTOT.H[cno],Kfn_ame=[Q]\GLmstr\PRTOTIDX.H[cno],Shr",internal,input,keyed
+	open #19: "Name=[Q]\GLmstr\PRTOT.h[cno],Kfn_ame=[Q]\GLmstr\PRTOTIDX.h[cno],Shr",internal,input,keyed
 L2530: read #19,using L2540: mo,mat pt eof L2600
 L2540: form pos 1,n 2,pos 10,25*pd 5.2,n 4
 	if qtr=1 and mo>0 and mo<4 then mat tpt=tpt+pt

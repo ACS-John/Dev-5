@@ -17,8 +17,8 @@
 	a$(1)="C/D" : a$(2)="C/R" : a$(3)="ADJ"
 	a$(4)="A/P" : a$(5)="PR" : a$(6)="A/R"
 	a$(7)="S/J" : a$(8)="P/J" : a$(9)=" "
-	open #1: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLIndex.H[cno],Shr",internal,input,keyed
-	open #2: "Name=[Q]\GLmstr\GLTrans.H[cno],Shr",internal,input,relative
+	open #1: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLIndex.h[cno],Shr",internal,input,keyed
+	open #2: "Name=[Q]\GLmstr\GLTrans.h[cno],Shr",internal,input,relative
 	if fnprocess=1 then goto START_REPORT
 SCREEN1: !
 	fnTos(sn$="GLTB")

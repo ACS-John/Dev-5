@@ -2312,7 +2312,7 @@ fnend
 BulkSort: ! r: sort in bulk sort code sequence
 	if enable_BulkSort=1 then ! 
 		open #h_control:=fnH: "Name=[temp]\printBillsControl.[session],Size=0,RecL=128,Replace",internal,output 
-		write #h_control,using 'form pos 1,c 128': "FILE [Q]\UBmstr\customer.H[cno],,,[temp]\Addr.[session],,,,,A,N"
+		write #h_control,using 'form pos 1,c 128': "FILE [Q]\UBmstr\customer.h[cno],,,[temp]\Addr.[session],,,,,A,N"
 		if route_filter>0 then 
 			write #h_control,using 'form pos 1,c 128': 'RECORD I,1,2,N,"'&str$(route_filter)&'","'&str$(route_filter)&'"'
 		end if

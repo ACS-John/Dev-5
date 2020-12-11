@@ -599,7 +599,7 @@ ChangeEmployeeNo: ! r:
 		! the old way 1/9/20   ! for wsid_item=1 to 99
 		! the old way 1/9/20   ! 	wsid_item$=cnvrt$('pic(##)',wsid_item)
 		! the old way 1/9/20   ! 	if exists('[Q]\PRmstr\rpwork'&wsid_item$&'.h[cno]') then
-		! the old way 1/9/20   ! 		open #h_rpwork:=fnH: "Name=[Q]\PRmstr\rpwork"&wsid_item$&".h[cno],KFName=[Q]\PRmstr\rpwork"&wsid_item$&"idx.H[cno]"&',shr',internal,outIn,keyed ioerr RPWORK_OPEN_ERR
+		! the old way 1/9/20   ! 		open #h_rpwork:=fnH: "Name=[Q]\PRmstr\rpwork"&wsid_item$&".h[cno],KFName=[Q]\PRmstr\rpwork"&wsid_item$&"idx.h[cno]"&',shr',internal,outIn,keyed ioerr RPWORK_OPEN_ERR
 		! the old way 1/9/20   ! 		fnKeyChange(h_rpwork,'form pos 1,n 8',heno$,lpad$(str$(eno),8))
 		! the old way 1/9/20   ! 		close #h_rpwork:
 		! the old way 1/9/20   ! 		RPWORK_OPEN_ERR: !

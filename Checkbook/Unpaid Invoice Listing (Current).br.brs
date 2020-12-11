@@ -23,7 +23,7 @@
 		if resp$(1)=item1$(1) then fund=1 else : _
 			fund=2
 ! FNWAIT
-	open #paytrans=4: "Name=[Q]\CLmstr\PayTrans.H[cno],KFName=[Q]\CLmstr\UnPdIdx1.H[cno],Shr",internal,input,keyed
+	open #paytrans=4: "Name=[Q]\CLmstr\PayTrans.h[cno],KFName=[Q]\CLmstr\UnPdIdx1.h[cno],Shr",internal,input,keyed
 	open #unpdaloc=8: "Name=[Q]\CLmstr\UnPdAloc.h[cno],KFName=[Q]\CLmstr\Uaidx2.h[cno],Shr",internal,input,keyed
 	open #clwork=10: "Name=[Q]\CLmstr\CLWORK"&wsid$&".h[cno], Size=0, RecL=97, Replace",internal,outIn
 READ_PAYTRANS: !
@@ -39,7 +39,7 @@ READ_UNPDALOC: !
 L350: close #paytrans: : close #unpdaloc: : close #clwork:
 	upa=0 ! sort ok, sorts a work file
 	open #9: "Name="&env$('temp')&'\'&"CONTROL,SIZE=0,RecL=128,Replace",internal,output
-	write #9,using 'Form POS 1,C 128': "FILE CLWORK"&wsid$&".H[cno],[Q]\CLmstr,,"&env$('temp')&'\'&"ADDR,,,,,A,N"
+	write #9,using 'Form POS 1,C 128': "FILE CLWORK"&wsid$&".h[cno],[Q]\CLmstr,,"&env$('temp')&'\'&"ADDR,,,,,A,N"
 	if fund=2 then : _
 		write #9,using 'Form POS 1,C 128': "MASK 74,3,N,A,1,20,C,A,86,4,N,A"
 	if fund<>2 then : _
@@ -50,7 +50,7 @@ L350: close #paytrans: : close #unpdaloc: : close #clwork:
 	open #9: "Name="&env$('temp')&'\'&"ADDR",internal,input
 	open #paymstr=13: "Name=[Q]\CLmstr\PayMstr.h[cno],KFName=[Q]\CLmstr\PayIdx1.h[cno],Shr",internal,input,keyed
 	open #clwork=10: "Name=[Q]\CLmstr\CLWORK"&wsid$&".h[cno],Shr",internal,input,relative
-	open #glmstr=5: "Name=[Q]\CLmstr\GLmstr.H[cno],KFName=[Q]\CLmstr\GLIndex.h[cno],Shr",internal,input,keyed
+	open #glmstr=5: "Name=[Q]\CLmstr\GLmstr.h[cno],KFName=[Q]\CLmstr\GLIndex.h[cno],Shr",internal,input,keyed
 	open #work=6: "Name="&env$('temp')&'\'&"WORK,SIZE=0,RecL=22,Replace",internal,output
 	close #work:
 	fnFree("INDX."&wsid$)

@@ -167,11 +167,11 @@ ERASE_PREVIOUS_INPUT: ! r:
 	close #paymstr: ioerr ignore
 	close #payeegl: ioerr ignore
 	if pt1=3 then
-		fnCopy(dv$&"GLWK101.H[cno]","[Q]\GLmstr\GL_Work_"&env$('acsUserId')&".h[cno]")
-		fnCopy(dv$&"GLWK201.H[cno]","[Q]\GLmstr\GLWK2"&wsid$&".h[cno]")
+		fnCopy(dv$&"GLWK101.h[cno]","[Q]\GLmstr\GL_Work_"&env$('acsUserId')&".h[cno]")
+		fnCopy(dv$&"GLWK201.h[cno]","[Q]\GLmstr\GLWK2"&wsid$&".h[cno]")
 		open #3: "Name=[Q]\GLmstr\GLWK2"&wsid$&".h[cno]",internal,outIn,relative
 		open #h_gl_work:=2: "Name=[Q]\GLmstr\GL_Work_"&env$('acsUserId')&".h[cno]",internal,outIn,relative
-		open #9: "Name="&dv$&"PAYMSTR.H[cno],KFName="&dv$&"PAYIDX1.H[cno]",internal,input,keyed ioerr ignore
+		open #9: "Name="&dv$&"PAYMSTR.h[cno],KFName="&dv$&"PAYIDX1.h[cno]",internal,input,keyed ioerr ignore
 	else
 		open #3: "Name=[Q]\GLmstr\GLWK2"&wsid$&".h[cno],size=0,RecL=110,Replace",internal,outIn,relative
 		open #h_gl_work:=2: "Name=[Q]\GLmstr\GL_Work_"&env$('acsUserId')&".h[cno],SIZE=0,RecL=104,Replace",internal,outIn,relative
@@ -188,7 +188,7 @@ L1140: ! r:
 	close #glallocations: ioerr ignore
 	open #glallocations=12: "Name=[Q]\GLmstr\GLALLOCATIONS"&wsid$&env$('cno')&",Version=1,replace,RecL=59",internal,outIn,relative
 	if jccode then
-		open #8: "Name=[Q]\PRmstr\JCCAT.H[cno],KFName=[Q]\PRmstr\CatIndx.h[cno],Shr",internal,input,keyed ioerr ignore
+		open #8: "Name=[Q]\PRmstr\JCCAT.h[cno],KFName=[Q]\PRmstr\CatIndx.h[cno],Shr",internal,input,keyed ioerr ignore
 	end if
 	if ckey=3 then goto PROOF_TOTALS
 goto MAIN ! /r
@@ -588,7 +588,7 @@ L5310: !
 return  ! /r
 COPY_AR_IN: ! r:
 	close #h_gl_work:
-	execute "COPY "&dv$&"GLWK101.H[cno],"&"Name=[Q]\GLmstr\GL_Work_"&env$('acsUserId')&".h[cno] -n"
+	execute "COPY "&dv$&"GLWK101.h[cno],"&"Name=[Q]\GLmstr\GL_Work_"&env$('acsUserId')&".h[cno] -n"
 	open #10: "Name="&dv$&"ARTOGL.DAT",internal,input ioerr L5670
 	read #10,using L5650: cgl$(1),camt(1),cgl$(2),camt(2),cgl$(3),camt(3),cgl$(4),camt(4),cgl$(5),camt(5)
 L5650: form pos 1,c 12,n 10.2,c 12,n 10.2,c 12,n 10.2,c 12,n 10.2,c 12,n 10.2

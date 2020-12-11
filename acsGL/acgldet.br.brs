@@ -29,13 +29,13 @@
 	in3$(2)="8,45,N 12.2,UT,N"
 	mp1=75
 	if fnps=2 then mp1+=3
-	fl1$="Name=[Q]\GLmstr\ACGLFNSF.H[cno],KFName=[Q]\GLmstr\agfsidx5.H[cno],Shr"
+	fl1$="Name=[Q]\GLmstr\ACGLFNSF.h[cno],KFName=[Q]\GLmstr\agfsidx5.h[cno],Shr"
 	if fnps=2 then : _
-		fl1$="Name=[Q]\GLmstr\ACGLFNSG.H[cno],KFName=[Q]\GLmstr\agfsidx6.H[cno],Shr"
+		fl1$="Name=[Q]\GLmstr\ACGLFNSG.h[cno],KFName=[Q]\GLmstr\agfsidx6.h[cno],Shr"
 	nametab=int(44-len(rtrm$(cnam$))/2)
 	open #1: fl1$,internal,input,keyed
 	open #3: "Name=[Q]\GLmstr\GLmstr.h[cno],Shr",internal,input,relative
-	open #4: "Name=[Q]\GLmstr\GLTRANS.H[cno],Shr",internal,outIn,relative
+	open #4: "Name=[Q]\GLmstr\GLTRANS.h[cno],Shr",internal,outIn,relative
 	if fnprocess=1 or fnUseDeptNo=0 then goto L410
 	fnTos(sn$="GLInput") : _
 	mylen=30: mypos=mylen+3 : right=1

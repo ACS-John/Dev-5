@@ -47,7 +47,7 @@ L170: form pos 1,n 2,c 78,2*c 132,n 3,3*n 1,100*pd 6.3,20*c 50,40*pd 2,80*n 1
 	h1=66-len(rtrm$(aa$))/2 : h2=66-len(rtrm$(rt$))/2 : _
 	h3=66-len(rtrm$(dh$))/2 : i2=len(rtrm$(rt$))
 	open #1: "Name=[Q]\PRmstr\JCMSTR.h[cno],KFName=[Q]\PRmstr\JCIndx.h[cno],Shr",internal,input,keyed
-	open #2: "Name=[Q]\PRmstr\JCCAT.H[cno],KFName=[Q]\PRmstr\CatIndx.h[cno],Shr",internal,input,keyed
+	open #2: "Name=[Q]\PRmstr\JCCAT.h[cno],KFName=[Q]\PRmstr\CatIndx.h[cno],Shr",internal,input,keyed
 	gosub HDR
 	goto PRTRPT
  

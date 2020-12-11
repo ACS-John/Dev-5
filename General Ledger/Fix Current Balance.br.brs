@@ -22,7 +22,7 @@
 		startWithBalEndOfPriorYear=1
 	end if
 	open #hGlMstr:=fnH: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLINDEX.h[cno],Shr",internal,outIn,keyed
-	open #hGlTrans:=fnH: "Name=[Q]\GLmstr\GLTrans.H[cno],Shr",internal,input,relative
+	open #hGlTrans:=fnH: "Name=[Q]\GLmstr\GLTrans.h[cno],Shr",internal,input,relative
 	fTransBoth: form pos 1,c 12,n 6,pd 6.2
 	! /r
 	do ! r: main loop

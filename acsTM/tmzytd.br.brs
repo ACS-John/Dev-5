@@ -25,7 +25,7 @@ pr newpage
 	loop
 	Eo1: !
 	close #1:
-	open #1: "Name=S:\Core\Data\acsllc\SCMSTR.H[cno],KFName=S:\Core\Data\acsllc\SCIndex.H[cno],Shr",internal,outIn,keyed
+	open #1: "Name=S:\Core\Data\acsllc\SCMSTR.h[cno],KFName=S:\Core\Data\acsllc\SCIndex.h[cno],Shr",internal,outIn,keyed
 	F_Scmstr: form pos 35,pd 4.2,pd 5.2
 	do
 		read #1,using F_Scmstr: a1 eof EoScmstr

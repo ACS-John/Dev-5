@@ -1,7 +1,7 @@
 [Q]\CLmstr\TrMstr.h[cno]   ,  tran_  , 2
 [Q]\CLmstr\TrIdx1.h[cno]   ,  bank/type/check
-[Q]\CLmstr\TrIdx2.H[cno]   ,  payee/bank/type/check
-[Q]\CLmstr\Tridx3.H[cno]   ,  tdateyy/tdatemmdd/check
+[Q]\CLmstr\TrIdx2.h[cno]   ,  payee/bank/type/check
+[Q]\CLmstr\Tridx3.h[cno]   ,  tdateyy/tdatemmdd/check
 
 recl=84
 ===================================================
