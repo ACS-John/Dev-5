@@ -1,5 +1,6 @@
 Time and Date 		Sys	Program(s) and Change(s) Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
 ______________________	___	____________________________________________________________________________________________________________________________________________________________________________________________________________________________________                           
+9:21 AM 12/14/2020	GL	Fix Period Accumulators - added additional debugging to prove starting balance for debug account in addition to accumulated period
 13:42 12/20/2020	CO	5.75082  
 14:26 12/20/2020	CO	5.75081   
 2:22 PM 12/10/2020	UB	Fixed Unusual and Skipped (Classic) report during Calculate Bills, it should no longer report everyone.  
