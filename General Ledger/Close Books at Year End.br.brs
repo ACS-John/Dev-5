@@ -13,7 +13,7 @@
 	fnGetFundList(mat fund_list)
 ! /r
 do ! r: the first screen
-	fnTos(sn$="CloseYear1")
+	fnTos
 	lc=rc=frame=0 : mylen=30 : mypos=mylen+2 : width=0
 	fnLbl(lc+=1,1,"* * *   Warning   * * *",width,2)
 	fnLbl(lc+=1,1,"This program is to be used only at the end of the",width,2)
@@ -96,7 +96,7 @@ close #hPrMstr:
 ! /r
 SCR2: !
 	t5=0
-	fnTos(sn$='CloseYear3')
+	fnTos
 	lc=0 : mylen=30 : mypos=mylen+2 : width=80
 	fnLbl(lc+=1,1,"Enter the Last Retained Earnings Account or Equity Account.",width,2)
 	fnLbl(lc+=1,1,"The account that dividend, income, and expenses will be closed to.",width,2)
@@ -122,14 +122,18 @@ SCR2: !
 	end if
 	read #hGlMstr1,using 'form pos 1,c 3,c 6,c 3',key=glnumber$: dno$,ano$,sno$ nokey SCR2
 	acno$=glnumber$(1:3)&"         "
-!
+
 read #hGlMstr1,using fGlMstr1,key>=acno$: acno$,bb,cb,mat bc,mat bp,mat bud nokey SCR2
 goto L770
 do
-	read #hGlMstr1,using fGlMstr1: acno$,bb,cb,mat bc,mat bp, mat bud eof L940
+	read #hGlMstr1,using fGlMstr1: acno$,bb,cb,mat bc,mat bp, mat bud eof EoAcct
 	L770: !
-	if fnUseDeptNo=0 or closeDeptToRetainedEarnings=1 then goto L790
-	if glnumber$(1:3)><acno$(1:3) then dno=ano=sno=0: goto SCR2
+	if fnUseDeptNo=0 or closeDeptToRetainedEarnings=1 then 
+		goto L790
+	else if glnumber$(1:3)><acno$(1:3) then 
+		dno=ano=sno=0
+		goto SCR2
+	end if
 	L790: !
 	if acno$=glnumber$ then
 		cb=-t5
@@ -140,20 +144,20 @@ do
 	mat bp=bc
 	mat bc=(0)
 	bb=cb
-	t5=t5+cb
+	t5+=cb
 	if acno$>glnumber$ then  ! create a budget history record
 		write #hBudgetInfo,using "form pos 1,c 12,c 2,2*pd 6.2": acno$,yr$,cb,sum(bud)
 		cb=bb=0
 	end if
 	rewrite #hGlMstr1,using 'form pos 1,c 12,pos 81,41*pd 6.2,pos 327,pd 6.2': acno$,bb,cb,mat bc,mat bp,mat bud,pbp
 loop
-L940: !
+EoAcct: !
 	if fnUseDeptNo=0 or closeDeptToRetainedEarnings=1 then
 		goto FINIS
 	end if
 	dno=ano=sno=0
 goto SCR2
-!
+
 FINIS: ! r:
 	close #hGlMstr1:
 	close #hGlMstr2:
