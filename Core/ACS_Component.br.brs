@@ -990,6 +990,7 @@ def fn_windowSize(; ___,index_,tmpLine,tmpPos,tmpHeight,tmpWidth)
 		end if
 	next index_
 fnend
+
 def fn_validateFields(;___,found_invalid,_idx)
 	! requires local: mat text_masks,mat ace_resp$,mat resp$
 	for _idx=1 to udim(text_masks)
@@ -1042,6 +1043,7 @@ def fn_days_in_month (month,year;___,returnN)
 	returnN=date(days(date$(days(date$(str$(year)&lpad$(str$(month),2,"0")&"01"),"CCYYMMDD")+32,"CCYYMM01"),"CCYYMMDD")-1,"DD")
 	fn_days_in_month=returnN
 fnend
+
 def fn_ace_rd_menu (;___,index_,item_count)
 	dim menu_items$(1)*1023,menu_sub_items$(1)*255,_menu$(1)*255,_program$(1)*255,_status$(1)*255
 	str2mat(control$(2),mat menu_items$,'###')
@@ -1709,6 +1711,7 @@ def fn_ace_rd_text
 		fn_ace_io_add('#'&str$(acs_win)&','&str$(lyne)&','&str$(ps)&','&spec$)
 	end if
 fnend
+
 def fn_textMask$*255(mask$*255,lyne,ps,width,container,maxlen; ___,return$*255)
 	mask=0
 	mask=val(mask$) conv ignore
