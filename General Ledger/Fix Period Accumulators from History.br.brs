@@ -275,6 +275,9 @@ fnend
 def fn_isRetainedEarningsAcct(gl$; ___,returnN)
 	! pr 'gl number passed is *'&gl$&'*'
 	! pr 'gl number last retained earnings *'&last_retained_earnings_acct$&'*'
+	
+	glAcct=val(gl$(4:10))
+	! pr glAcct : pause
 	gl$=trim$(fnagl$(gl$))
 	if srep$(srep$(gl$,' ',''),'0','')='' then ! if GL account is 0-0-0 than it is not a retained earnings account, because it's invalid.
 		retunN=0
@@ -285,7 +288,11 @@ def fn_isRetainedEarningsAcct(gl$; ___,returnN)
 	else
 		fund_which=1
 	end if
-	if gl$<=trim$(last_retained_earnings_acct$(fund_which)) then
+	lreaVal=val(last_retained_earnings_acct$(fund_which)(4:10))
+
+
+	! if gl$<=trim$(last_retained_earnings_acct$(fund_which)) then
+	if glAcct<=lreaVal then
 		!     pr '"'&gl$&'"<="'&trim$(last_retained_earnings_acct$(fund_which))&'" so it IS a retained earnings account - fund:'&str$(fund_which)
 		returnN=1
 		!     pause
@@ -295,6 +302,9 @@ def fn_isRetainedEarningsAcct(gl$; ___,returnN)
 		!     pause
 	end if
 	IareaFinis: !
+	! if returnN then pr gl$&' IS a retained earnings account'
+	! if ~returnN then pr gl$&' is NOT a retained earnings account'
+	! pause
 	fn_isRetainedEarningsAcct=returnN
 fnend
 def fn_debugReport(text$*256)

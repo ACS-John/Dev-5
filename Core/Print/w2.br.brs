@@ -152,7 +152,7 @@ def library fnask_w2_info(&taxYear$,&beg_date,&end_date,&empStart$,&empEnd$,&ssr
 	fnLbl(5,1,"Maximum Wage Subject to Medicare Withholdings:",mylen,1,0,franum)
 	fnTxt(5,mypos,10,0,1,"10",disableSSMCedit,"At the present time there is no maximum.  Enter a number larger than any one's wages can be. For example, 999999.00",franum)
 	resp$(respc_mcmax:=rc+=1)=str$(mcmax)
-	!
+
 	fra3Y=fra2Y+fra2Height+2 : fra3Height=6
 	fnFra(fra3Y,1,fra3Height,fraWidth,"Printing or Exporting","You have the option to either pr the W-2s or export them to another system for printing.")
 	cf+=1 : franum=cf : mylen=26 : mypos=mylen+2
@@ -172,11 +172,11 @@ def library fnask_w2_info(&taxYear$,&beg_date,&end_date,&empStart$,&empEnd$,&ssr
 	! fnOpt(5,3,"Export for Center Piece Software",0,franum)  ! removed access 01/03/2017
 	! resp$(respc_export_cps:=rc+=1)=w2destinationOpt$(3)  ! removed access 01/03/2017
 	fnLbl(5,5,"Export File:",12,1,0,franum)
-	fnTxt(5,19,20,80,0,'72',0,'Choose a destination location for the ACS export.',franum)
+	fnTxt(5,19,20,256,0,'72',0,'Choose a destination location for the ACS export.',franum)
 	resp$(resp_w2_export_file:=rc+=1)=w2laser_output_filename$
 	fnButton(5,5+12+20+5,'Default',14,'Choose to set the default for the selected destination software.',0,0,franum)
 	fnLbl(6,19,"([CompanyNumber] and [TaxYear] will be substituted in filename)",0,0,0,franum)
-	!
+
 	if enablePayrollDeductions then
 		fra4Y=fra3y+fra3Height+2 ! 25
 		fnFra(fra4Y,1,2,fraWidth,"Identify the Following Deductions","You have twenty miscellaneous deductions available to you. If you have Qualified Pension or Dependent Care, start with the first deduction and count down to identify the number of the deduction.")
@@ -284,7 +284,9 @@ def library fnask_w2_info(&taxYear$,&beg_date,&end_date,&empStart$,&empEnd$,&ssr
 		fncreg_write('W-2 - State',state$)
 		!
 		! /r
-		if w2Copy$=optW2Copy$(1) and enableBackground$='True' then let fn_FormCopyAwithBackgroundWarn
+		if w2Copy$=optW2Copy$(1) and enableBackground$='True' and w2destinationOpt$(1)='True' then
+			fn_FormCopyAwithBackgroundWarn
+		end if
 	end if 
 	Xit: !
 	fnask_w2_info=awiReturn

@@ -20,7 +20,7 @@
 	dim dedcode$(20)*2,dedyn$(20)*5
 	dim miscded(20),totalbox12(20)
 	dim tmpMsgLine$(0)*256
-	!
+
 	dim in4$(30)
 	dim nameFirst$*64,nameMiddle$*64,nameLast$*64,nameSuffix$*64
 	dim k$(3)*30
@@ -29,13 +29,13 @@
 	fw2box16$="FORM  POS 1,C 8"&rpt$(",C 12,G 10.2,3*G 1",6)
  
 	open #hCompany:=fnH: "Name=[Q]\PRmstr\Company.h[cno],Shr",internal,input
-	read #hCompany,using fCompany: mat a$,empId$,mat d$,loccode,mat e$
-	fCompany: form pos 1,3*c 40,c 12,pos 150,10*c 8,n 2,pos 317,10*c 12
+	read #hCompany,using Fcompany: mat a$,empId$,mat d$,loccode,ssmax,mat e$
+	Fcompany: form pos 1,3*c 40,c 12,pos 150,10*c 8,n 2,pos 239,pd 4.2,pos 317,10*c 12
 	for j=1 to 3: a$(j)=a$(j)(1:30): next j
 	close #hCompany:
-	!
+
 	fnDedNames(mat fullname$,mat abrevname$,mat newdedcode,mat newcalcode,mat newdedfed,mat dedfica,mat dedst,mat deduc)
-	!
+
 	dim w2box12Opt$(0)*3
 	mat w2box12Opt$(0)
 	box_12a=fnAddOneC(mat w2box12Opt$,'12a')
@@ -43,11 +43,11 @@
 	box_12c=fnAddOneC(mat w2box12Opt$,'12c')
 	box_12d=fnAddOneC(mat w2box12Opt$,'12d')
 	box_14 =fnAddOneC(mat w2box12Opt$,'14')
-	!
+
 	dim w2laser_output_filename$*256
-	!
+
 	dim w2Copy$*68
-	!
+
 	! /r
 	ASK_INFO: !
 	if ~fnask_w2_info(taxYear$,beg_date,end_date,empStart$,empEnd$,ssrate,ssmax,mcrate,mcmax,mat w2destinationOpt$,enableW3$,enableBackground$,w2Copy,w2Copy$,exportFormatID,w2laser_output_filename$,pn1,dc1,topmargin,bottom,unused_state$,loccode,cLocality$) then goto Xit
@@ -76,7 +76,7 @@
 		if trim$(fullname$(fullnameItem))='' then fullnameBlankCount+=1
 	nex fullnameItem
 	if fullnameBlankCount<udim(mat fullname$) then ! if they're not all blank
-		fnTos(sn$="Prw2-box12")
+		fnTos
 		rc=cf=0 : mylen=20 : mypos=mylen+3
 		fnLbl(1,1,"Indicate if any of the miscellaneous deductions",50,1,0,0)
 		fnLbl(2,1,"should appear in box 12 or 14 on the W-2.",44,1,0,0)
@@ -154,10 +154,11 @@
 ! /r
 READ_EMPLOYEE: ! r:
 	do
-		read #hEmployee,using 'form pos 1,n 8,3*c 30,c 11,pos 122,n 2,pos 173,pd 3': eno,mat k$,ss$,em6,ta eof EO_EMPLOYEE
+		read #hEmployee,using 'form pos 1,n 8,3*c 30,c 11,pos 122,n 2': eno,mat k$,ss$,em6 eof EO_EMPLOYEE
 		if endnum>0 and eno>endnum then goto EO_EMPLOYEE ! ending employee number entered
 		fnNameParse(k$(1),nameFirst$,nameMiddle$,nameLast$,nameSuffix$)
 		if numb<>0 and eno<empno then goto READ_EMPLOYEE
+
 		kz$=lpad$(rtrm$(str$(eno)),8)
 		retirementPlanX$=""
 		box12aCode$=box12aAmt$=box12bCode$=box12bAmt$=box12cCode$=box12cAmt$=box12dCode$=box12dAmt$=''
@@ -228,6 +229,7 @@ READ_EMPLOYEE: ! r:
 			first=0
 		loop ! read next check record
 		EO_CHECKS_FOR_EMP: !
+		! if eno=7 then pr w(5) : pause
 		gosub BOX16_process
 		for dedItem=1 to 20
 			if trim$(fullname$(dedItem))<>'' then
@@ -345,10 +347,10 @@ PRW2B: ! r:
 	write #1,using 'form pos 1,c 128': "MASK 9,2,n,a,1,8,n,a"
 	close #1:
 	fnFree("[Q]\PRmstr\PRW2ADDR.h[cno]")
-	execute "Sort [Temp]\Control."&session$&" -n"
+	execute "Sort [Temp]\Control.[session] -n"
 fnchain("S:\acsPR\prw2b") ! /r
 ASK_EMP_LOCALITY: ! r:
-	fnTos(sn$="Prw2-5")
+	fnTos
 	rc=cf=0
 	mylen=30
 	mypos=mylen+3
