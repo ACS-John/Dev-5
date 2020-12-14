@@ -32,10 +32,10 @@ SCR1: ! r:
 	svce=srch(mat srv$,svce$(1:2))
 	if svce<>1 and svce<>3 and svce<>4 then
 		dim ml$(0)*256
-		fnaddone$(mat ml$,'Only the following services may be analyzed with '&env$('program_caption')&'.')
-		if trim$(srvnam$(1))<>'' then let fnaddone$(mat ml$,tab$&trim$(srvnam$(1)))
-		if trim$(srvnam$(3))<>'' then let fnaddone$(mat ml$,tab$&trim$(srvnam$(3)))
-		if trim$(srvnam$(4))<>'' then let fnaddone$(mat ml$,tab$&trim$(srvnam$(4)))
+		fnAddoneC(mat ml$,'Only the following services may be analyzed with '&env$('program_caption')&'.')
+		if trim$(srvnam$(1))<>'' then let fnAddoneC(mat ml$,tab$&trim$(srvnam$(1)))
+		if trim$(srvnam$(3))<>'' then let fnAddoneC(mat ml$,tab$&trim$(srvnam$(3)))
+		if trim$(srvnam$(4))<>'' then let fnAddoneC(mat ml$,tab$&trim$(srvnam$(4)))
 		fnmsgbox(mat ml$)
 		goto SCR1
 	end if
