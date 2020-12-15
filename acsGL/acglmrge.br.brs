@@ -1,11 +1,11 @@
 ! Replace S:\acsGL\ACGLMrge
 ! GL Merge program, chained to from other systems,
 	! like Checkbook-post to GL; also used to merge entries entered directly
-!
+
 	autoLibrary
 	fnTop(program$,"General Ledger Merge")
 	on error goto Ertn
-!
+
 	dim adr(2),ta(2),prg$*256,k(10,8),gl$(5)*12,gl1(5),tr$(5)*35
 	dim t$*12,n(2),l$*12,p$*30,ven$*8
 	dim zo(50),d$*50
@@ -14,7 +14,7 @@
 	dim nam$*35,ad1$*20,ad2$*20,csz$*20,ss$*11
 	dim fl1$(6)
 	dim resp$(40)*256
-!
+
 	dim prg$*256
 	fnprg(prg$)
 	if fnstyp<>99 then
@@ -98,9 +98,9 @@ VENDOR_FILE: !
 	write #5,using L810,rec=lr5,reserve: ven$,s,k,l$,p$,0 duprec L790
 	L810: form pos 1,c 8,n 6,pd 5.2,c 12,c 30,pd 3
 goto L360
-!
+
 L840: !
-	fnTos(sn$="GLmerge")
+	fnTos
 	mylen=40: mypos=mylen+3 : right=1
 	fnLbl(1,10,"  Account Number: "&t$,mylen,left)
 	fnLbl(2,10,"            Date: "&str$(s),mylen,left)
@@ -122,7 +122,7 @@ ADD: !
 	dno=val(t$(1:3)) conv ignore
 	ano=val(t$(4:9)) conv ignore
 	sno=val(t$(10:12)) conv ignore
-	fnTos(sn$="GLmerge3")
+	fnTos
 	mylen=23: mypos=mylen+3 : right=1: rc=0
 	if use_dept =1 then let fnLbl(1,26,"Fund #",6,2)
 	if use_sub  =1 then let fnLbl(1,40,"Sub #",6,2)
@@ -140,7 +140,7 @@ ADD: !
 	fnLbl(3,1,"Description:",mylen,right)
 	fnTxt(3,mypos,50,0,left,"",0,"Enter the account description.",0 )
 	resp$(rc+=1)=""
-!
+
 	fnCmdSet(2)
 	fnAcs(mat resp$,ckey)
 	pas=0
@@ -149,7 +149,7 @@ ADD: !
 	if use_dept=0 then ano=val(resp$(1))
 	if use_dept=1 and use_sub=1 then sno=val(resp$(3))
 	if use_dept=0 and use_sub=1 then sno=val(resp$(2))
-!
+
 	if use_dept=1 and use_sub=1 then d$=resp$(4)
 	if use_dept=0 and use_sub=1 then d$=resp$(3)
 	if use_dept=0 and use_sub=0 then d$=resp$(2)
@@ -157,14 +157,15 @@ ADD: !
 	key$=cnvrt$("N 3",dno)&cnvrt$("N 6",ano)&cnvrt$("N 3",sno)
 	read #1,using 'Form POS 1,N 3',key=key$: dno nokey L1300
 ! msgbox
-L1300: mat ta=(0)
+L1300: !
+	mat ta=(0)
 	cb=0
 	write #1,using L1330: t$,d$,mat zo
-L1330: form pos 1,c 12,c 50,6*pd 3,42*pd 6.2,2*pd 3
-	goto L460
-!
+	L1330: form pos 1,c 12,c 50,6*pd 3,42*pd 6.2,2*pd 3
+goto L460
+
 CHANGE_ACCOUNTS: !
-	fnTos(sn$="GLmerge4")
+	fnTos
 	mylen=23: mypos=mylen+3 : right=1
 	fnLbl(1,1,"General Ledger Number:",mylen,right)
 	fnqglbig(1,mypos,0,2)
@@ -173,8 +174,9 @@ CHANGE_ACCOUNTS: !
 	fnAcs(mat resp$,ckey)
 	if ckey=5 then goto L440
 	gl$=fnagl$(resp$(1)) : t$=gl$ : goto L440
-!
-L1450: if fnstyp><92 then goto L1620
+
+L1450: !
+	if fnstyp><92 then goto L1620
 	open #20: "Name=CNo.H"&wsid$,internal,outIn,relative
 	read #20,using "Form POS 239,5*C 12,5*N 10.2",rec=1: mat gl$,mat gl1 conv L1620
 	close #20:
@@ -212,6 +214,6 @@ L1660: !
 	close #30:
 	if process=1 or process=4 then let fnchain("S:\acsGL\prMerge")
 L1760: goto Xit
-!
+
 Xit: fnXit
 include: ertn

@@ -1,109 +1,109 @@
-if env$('acsdeveloper')<>'' then debug=1
+debug=1
 verbose=0
-	fn_setup
-	fnTop(program$)
-	current_accounting_period=fnactpd
- 
-	process_gltrans=1 ! if =1 than gltrans will be added into the period accumulators as well as actrans
- 
-	open #company:=fnH: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,outIn,relative
-	read #company,using 'Form Pos 296,n 2,Pos 384,N 2',rec=1: lmu,nap
-	! lmu = Last Accounting Period Closed
-	! nap = Number of Accounting Periods
-	close #company:
-	fnGetFundList(mat fund_list) ! pr 'fund_list:' : pr mat fund_list : pause
-	mat last_retained_earnings_acct$(udim(mat fund_list)) : if udim(last_retained_earnings_acct$)=0 then mat last_retained_earnings_acct$(1)
-	mat period_accumulator_current(nap)
-	mat period_accumulator_prior(nap)
+fn_setup
+fnTop(program$)
+current_accounting_period=fnactpd
+
+process_gltrans=1 ! if =1 than gltrans will be added into the period accumulators as well as actrans
+
+open #company:=fnH: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,outIn,relative
+read #company,using 'Form Pos 296,n 2,Pos 384,N 2',rec=1: lmu,nap
+! lmu = Last Accounting Period Closed
+! nap = Number of Accounting Periods
+close #company:
+fnGetFundList(mat fund_list) ! pr 'fund_list:' : pr mat fund_list : pause
+mat last_retained_earnings_acct$(udim(mat fund_list)) : if udim(last_retained_earnings_acct$)=0 then mat last_retained_earnings_acct$(1)
+mat period_accumulator_current(nap)
+mat period_accumulator_prior(nap)
+
+if fn_screen_1(nap,mat period_date_start,mat prior_period_date_start)=5 then goto Xit
+! fn_report(env$('program_caption'))
+! fn_report(date$('mm/dd/ccyy'))
+! fn_report('')
+open #hTransHistory=fnH: "Name=[Q]\GLmstr\AcTrans.h[cno],KFName=[Q]\GLmstr\AcTrIdx.h[cno],Shr",internal,outIn,keyed
+FtransHistory: form pos 1,c 12,n 6,pd 6.2,n 2,pos 71,n 2
+if process_gltrans then
+fnIndex("[Q]\GLmstr\GLTrans.h[cno]",'[Temp]\GLIndex.h[cno]',"1 12")
+open #hTransCurrent=fnH: "Name=[Q]\GLmstr\GLTrans.h[cno],KFName=[Temp]\GLIndex.h[cno],Shr",internal,outIn,keyed
+end if  ! process_gltrans
+FtransCurrent: form pos 1,c 12,n 6,pd 6.2,n 2
+open #hAcct1=fnH: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLIndex.h[cno],Shr",internal,outIn,keyed
+open #hAcct2=fnH: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\glIndx2.h[cno],Shr",internal,outIn,keyed
+Facct: form pos 1,c 12,x 50,6*pd 3,42*pd 6.2,2*pd 3,13*pd 6.2
+do
+	read #hAcct1,using Facct: gl$,mat rf,bb,cb,mat balance_current_year_month,mat balance_prior_year_month eof EO_GLMSTR
+	if verbose then fn_report('*** '&gl$&' ***')
+	mat balance_current_year_month=(0)
+	mat period_accumulator_current=(0)
+	if fn_isRetainedEarningsAcct(gl$) then
+		period_accumulator_current(1)=balance_prior_year_month(nap)
+		! if gl$='  1   405  0' then pr 'initialize it to  ';period_accumulator_current(1) : pause
+		if debugAcct$=gl$ then fn_debugReport('Starting Balance for Account ('&gl$&') set to last period of prior year '&str$(period_accumulator_current(1))&' because it is a retained earnings account.')
+	else
+		period_accumulator_current(1)=0 ! bb ! bb = Beginning Balance (at the beginning of the fiscal year)
+		if debugAcct$=gl$ then fn_debugReport('Starting Balance for Account ('&gl$&') set to 0 because it is NOT a retained earnings account.')
+end if
+mat period_accumulator_prior=(0)
+gln_period_did_change=0
+for period=1 to nap
+	if period=nap then
+		period_date_end=date(days(period_date_start(1)+1,'mmddyy')-1,'mmddyy')
+		prior_period_date_end=date(days(prior_period_date_start(1)+1,'mmddyy')-1,'mmddyy')
+	else
+		period_date_end=date(days(period_date_start(period+1),'mmddyy')-1,'mmddyy')
+		prior_period_date_end=date(days(prior_period_date_start(period+1),'mmddyy')-1,'mmddyy')
+	end if  ! period=nap   /   else
+	! if gl$='  1   405  0' and period=3 then pr 'before fn_processTrans   period_accumulator_current(';period;')=';period_accumulator_current(period) : pause
+	fn_processTrans(hTransHistory, 1)
+	! if gl$='  1   405  0' then pr 'after fn_processTrans' : pause
+	if process_gltrans then fn_processTrans(hTransCurrent)
+	if period>1 and period<=current_accounting_period then
+		period_accumulator_current(period)+=period_accumulator_current(period-1)
+	! if gl$='  1   405  0' and period=3 then pr 'after adding in the prior period    period_accumulator_current(';period;')=';period_accumulator_current(period) : pause
+	end if
+	if include_prior_periods then
+		if period>1 then period_accumulator_prior(period)+=period_accumulator_prior(period-1)
+	end if  ! include_prior_periods
+	!   if period>1 then period_accumulator_current(period)<>0 then period_accumulator_current(period)+=period_accumulator_current(period-1)
+	if period_accumulator_current(period)<>balance_current_year_month(period) then
+		gln_period_did_change+=1
+		if verbose then fn_report('changing GLmstr '&gl$&' period '&str$(period)&" from "&str$(balance_current_year_month(period))&' to '&str$(period_accumulator_current(period)))
+		balance_current_year_month(period)=period_accumulator_current(period)
+	!  if gl$='  1   405  0' then pr ' about to write period_accumulator_current(';period;')=';period_accumulator_current(period) : pause
+	end if
+	if include_prior_periods and period_accumulator_prior(period)<>balance_prior_year_month(period) then
+		gln_period_did_change+=1
+		if verbose then fn_report('changing GLmstr '&gl$&' period '&str$(period)&" from "&str$(balance_prior_year_month(period))&' to '&str$(period_accumulator_prior(period)))
+		balance_prior_year_month(period)=period_accumulator_prior(period)
+	end if  ! period_accumulator_prior(period)<>balance_prior_year_month(period) then
+next period
+if current_accounting_period>1 then
+	if cb<>balance_current_year_month(current_accounting_period) then gln_period_did_change+=1
+	cb=balance_current_year_month(current_accounting_period)
+end if
+if current_accounting_period>2 then
+	if bb<>balance_current_year_month(current_accounting_period-1) then gln_period_did_change+=1
+	bb=balance_current_year_month(current_accounting_period-1)
 	
-	if fn_screen_1(nap,mat period_date_start,mat prior_period_date_start)=5 then goto Xit
-	! fn_report(env$('program_caption'))
-	! fn_report(date$('mm/dd/ccyy'))
-	! fn_report('')
-	open #hTransHistory=fnH: "Name=[Q]\GLmstr\AcTrans.h[cno],KFName=[Q]\GLmstr\AcTrIdx.h[cno],Shr",internal,outIn,keyed
-	FtransHistory: form pos 1,c 12,n 6,pd 6.2,n 2,pos 71,n 2
-	if process_gltrans then
-	fnIndex("[Q]\GLmstr\GLTrans.h[cno]",env$('Temp')&"\GLIndex.h[cno]","1 12")
-	open #hTransCurrent=fnH: "Name=[Q]\GLmstr\GLTrans.h[cno],KFName=[Temp]\GLIndex.h[cno],Shr",internal,outIn,keyed
-	end if  ! process_gltrans
-	FtransCurrent: form pos 1,c 12,n 6,pd 6.2,n 2
-	open #hAcct1=fnH: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLIndex.h[cno],Shr",internal,outIn,keyed
-	open #hAcct2=fnH: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\glIndx2.h[cno],Shr",internal,outIn,keyed
-	Facct: form pos 1,c 12,x 50,6*pd 3,42*pd 6.2,2*pd 3,13*pd 6.2
-	do
-		read #hAcct1,using Facct: gl$,mat rf,bb,cb,mat balance_current_year_month,mat balance_prior_year_month eof EO_GLMSTR
-		if verbose then fn_report('*** '&gl$&' ***')
-		mat balance_current_year_month=(0)
-		mat period_accumulator_current=(0)
-		if fn_isRetainedEarningsAcct(gl$) then
-			period_accumulator_current(1)=balance_prior_year_month(nap)
-			! if gl$='  1   405  0' then pr 'initialize it to  ';period_accumulator_current(1) : pause
-			if debugAcct$=gl$ then fn_debugReport('Starting Balance for Account ('&gl$&') set to last period of prior year '&str$(period_accumulator_current(1))&' because it is a retained earnings account.')
-		else
-			period_accumulator_current(1)=0 ! bb ! bb = Beginning Balance (at the beginning of the fiscal year)
-			if debugAcct$=gl$ then fn_debugReport('Starting Balance for Account ('&gl$&') set to 0 because it is NOT a retained earnings account.')
+	
+	if debug and gln_period_did_change=1 and (current_accounting_period-1)=4 then 
+		pr 'bb=';bb
+			pause
 	end if
-	mat period_accumulator_prior=(0)
-	gln_period_did_change=0
-	for period=1 to nap
-		if period=nap then
-			period_date_end=date(days(period_date_start(1)+1,'mmddyy')-1,'mmddyy')
-			prior_period_date_end=date(days(prior_period_date_start(1)+1,'mmddyy')-1,'mmddyy')
-		else
-			period_date_end=date(days(period_date_start(period+1),'mmddyy')-1,'mmddyy')
-			prior_period_date_end=date(days(prior_period_date_start(period+1),'mmddyy')-1,'mmddyy')
-		end if  ! period=nap   /   else
-		! if gl$='  1   405  0' and period=3 then pr 'before fn_processTrans   period_accumulator_current(';period;')=';period_accumulator_current(period) : pause
-		fn_processTrans(hTransHistory, 1)
-		! if gl$='  1   405  0' then pr 'after fn_processTrans' : pause
-		if process_gltrans then fn_processTrans(hTransCurrent)
-		if period>1 and period<=current_accounting_period then
-			period_accumulator_current(period)+=period_accumulator_current(period-1)
-		! if gl$='  1   405  0' and period=3 then pr 'after adding in the prior period    period_accumulator_current(';period;')=';period_accumulator_current(period) : pause
-		end if
-		if include_prior_periods then
-			if period>1 then period_accumulator_prior(period)+=period_accumulator_prior(period-1)
-		end if  ! include_prior_periods
-		!   if period>1 then period_accumulator_current(period)<>0 then period_accumulator_current(period)+=period_accumulator_current(period-1)
-		if period_accumulator_current(period)<>balance_current_year_month(period) then
-			gln_period_did_change+=1
-			if verbose then fn_report('changing GLmstr '&gl$&' period '&str$(period)&" from "&str$(balance_current_year_month(period))&' to '&str$(period_accumulator_current(period)))
-			balance_current_year_month(period)=period_accumulator_current(period)
-		!  if gl$='  1   405  0' then pr ' about to write period_accumulator_current(';period;')=';period_accumulator_current(period) : pause
-		end if
-		if include_prior_periods and period_accumulator_prior(period)<>balance_prior_year_month(period) then
-			gln_period_did_change+=1
-			if verbose then fn_report('changing GLmstr '&gl$&' period '&str$(period)&" from "&str$(balance_prior_year_month(period))&' to '&str$(period_accumulator_prior(period)))
-			balance_prior_year_month(period)=period_accumulator_prior(period)
-		end if  ! period_accumulator_prior(period)<>balance_prior_year_month(period) then
-	next period
-	if current_accounting_period>1 then
-		if cb<>balance_current_year_month(current_accounting_period) then gln_period_did_change+=1
-		cb=balance_current_year_month(current_accounting_period)
-	end if
-	if current_accounting_period>2 then
-		if bb<>balance_current_year_month(current_accounting_period-1) then gln_period_did_change+=1
-		bb=balance_current_year_month(current_accounting_period-1)
-		
-		
-		if debug and gln_period_did_change=1 and (current_accounting_period-1)=4 then 
-			pr 'bb=';bb
-				pause
-		end if
-		
-	end if
-		!   if trim$(gl$)='1   405  0' then pause
-	if gln_period_did_change>0 then
-		! fn_report(' change detected to the current month balance column '&gl$)
-		rewrite #hAcct1,using Facct,key=gl$: gl$,mat rf,bb,cb,mat balance_current_year_month,mat balance_prior_year_month
-	end if  ! gln_period_did_change>0
-	loop
-	EO_GLMSTR: !
-	! fncloseprn : report_open=0
-	if openDebugReport then
-		fncloseprn
-		openDebugReport=0
-	end if
+	
+end if
+	!   if trim$(gl$)='1   405  0' then pause
+if gln_period_did_change>0 then
+	! fn_report(' change detected to the current month balance column '&gl$)
+	rewrite #hAcct1,using Facct,key=gl$: gl$,mat rf,bb,cb,mat balance_current_year_month,mat balance_prior_year_month
+end if  ! gln_period_did_change>0
+loop
+EO_GLMSTR: !
+! fncloseprn : report_open=0
+if openDebugReport then
+	fncloseprn
+	openDebugReport=0
+end if
 Xit: fnXit ! if env$('acsdeveloper')<>'' then stop else fnXit ! XXX
 def fn_setup
 	autoLibrary

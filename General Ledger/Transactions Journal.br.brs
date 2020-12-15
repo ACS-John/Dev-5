@@ -2,23 +2,25 @@
 ! pr Disbursements, Receipts, General adj/ap/pr/ar, Sales,
 ! and Purchases Journals a.k.a. Transaction Journals
 
-	autoLibrary
-	on error goto Ertn
+autoLibrary
+on error goto Ertn
 
-	dim flo$(8),fli$(8),tr(7),tr$*12,td$*30,oldtr$*12,oldtd$*30,p$(20)*50
-	dim sc1$(2)*20,wrd1$(2)*30,resp$(50)*50
-	dim b$*3,a$(8)*30,oldtrans$*21,journal_to_print(8),tgl(200,4)
+dim flo$(8),fli$(8),tr(7),tr$*12,td$*30,oldtr$*12,oldtd$*30,p$(20)*50
+dim sc1$(2)*20,wrd1$(2)*30,resp$(50)*50
+dim b$*3,a$(8)*30,oldtrans$*21
+dim journal_to_print(8)
+dim tgl(200,4)
 
-	fnTop(program$)
-	a$(1)="Disbursements Journal"
-	a$(2)="Receipts Journal"
-	a$(3)="General Journal      (Adj)"
-	a$(4)="General Journal      (A/P)"
-	a$(5)="General Journal      (Payroll)"
-	a$(6)="General Journal      (A/R)"
-	a$(7)="Sales Journal"
-	a$(8)="Purchases Journal"
-	mat journal_to_print=(1)
+fnTop(program$)
+a$(1)="Disbursements Journal"
+a$(2)="Receipts Journal"
+a$(3)="General Journal      (Adj)"
+a$(4)="General Journal      (A/P)"
+a$(5)="General Journal      (Payroll)"
+a$(6)="General Journal      (A/R)"
+a$(7)="Sales Journal"
+a$(8)="Purchases Journal"
+mat journal_to_print=(1)
 
 if fnprocess=1 then 
 	cur_prior=1
@@ -30,10 +32,10 @@ goto PR_JOURNAL
 PR_JOURNAL: ! r:
 	fnopenprn
 	if cur_prior=1 then 
-		execute "Index [Q]\GLmstr\GLTrans.h[cno] [Temp]\fsindex.h[cno]"& " 25/29/1 2/12/12 Replace DupKeys -N,Shr"
+		fnIndex('[Q]\GLmstr\GLTrans.h[cno]','[Temp]\fsindex.h[cno]','25/29/1 2/12/12')
 		open #3: "Name=[Q]\GLmstr\GLtrans.h[cno],KFName=[Temp]\fsindex.h[cno],Shr",internal,input,keyed 
 	else if cur_prior=2 then ! index current file
-		execute "Index [Q]\GLmstr\AcTrans.h[cno] [Temp]\fsindex.h[cno]"& " 25/29/1 2/12/12 Replace DupKeys -N" ! index current file
+		fnIndex('[Q]\GLmstr\AcTrans.h[cno]','[Temp]\fsindex.h[cno]','25/29/1 2/12/12')
 		open #3: "Name=[Q]\GLmstr\ACtrans.h[cno],KFName=[Temp]\fsindex.h[cno],Shr",internal,input,keyed 
 	end if 
 	PJ_READ_1: ! 
@@ -42,9 +44,7 @@ PR_JOURNAL: ! r:
 	else 
 		read #3,using L390: mat tr,tr$,td$ eof EO_JOURNAL ! read period code if from history
 	end if 
-	if cur_prior<>2 then goto L370
-	if prior_period>0 and prior_period<>pcode then goto PJ_READ_1
-	L370: ! 
+	if cur_prior=2 and prior_period>0 and prior_period<>pcode then goto PJ_READ_1
 	if tr(6)=0 and tr(5)=0 then goto PJ_READ_1
 	if tr(6)>1 and tr(6)<9 then goto L390 else tr(6)=1
 	L390: form pos 1,n 3,n 6,n 3,n 6,pd 6.2,2*n 2,c 12,c 30,n 2
