@@ -187,7 +187,7 @@ def fn_index_sys_do_one(cno,system_id$*2)
 		fnReIndex('GL FSDesign')
 		
 		fnReassignTransactionAddresses(cno)
-		pr 'did it' : pause
+		! pr 'did it' : pause
 		
 	! /r
 	else if system_id$='UB' then ! r:

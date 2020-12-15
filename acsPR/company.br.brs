@@ -3,14 +3,15 @@
 	autoLibrary
 	on error goto Ertn
  
-	if fnclient_has('P2') then let fnstyp(11) else let fnstyp(14) !  styp=11 for jobcost; styp=14 for regular payroll
+	if fnclient_has('P2') then fnstyp(11) else fnstyp(14) !  styp=11 for jobcost; styp=14 for regular payroll
 	fnTop(program$)
  
-	dim a$(3)*40,b$(2)*12,d$(10)*8,label1$(10)*20,m(10),r(10)
+	dim a$(3)*40,b$(2)*12,d$(10)*8,label1$(10)*20
+	dim m(10),r(10)
 	dim fa$(10)*26,e$(10)*12,prh$(2)*40
 	dim rpnames$(86)*20,rpnames2$(10)*6,x$(10)*20,io2$(50)*24,na$(125)*8
 	dim gln(45),glnt(45),gln$(15)*12,dedcode(10),calcode(10),dedfed(10)
-	dim prgl(15,3),label5$(15)*13,iolabel5$(17),io5$(45)*20,win6$*40
+	dim prgl(15,3),label5$(15)*13,iolabel5$(17),io5$(45)*20
 	dim x1(3),x2(3),x3(3),x4(3),x5(3),x6(3),x7(3),x8(3),x9(3),x10(3),sck(4)
 	dim wcm(4),io6$(11)*16,jn$(2)*6,iolabel1$*10
 	dim resp$(200)*40,ml$(3)*100
@@ -30,10 +31,10 @@
 	opt_std_or_percent$(2)="Percent"
  
  
-	open #1: "Name=[Q]\PRmstr\Company.h[cno]"&',recl=759,version=0,use',internal,outIn,relative
-	if lrec(1)=0 then write #1,using 'Form POS 1,3*C 40,C 12,PD 6.3,PD 6.2,PD 5.2,10*C 8,N 2,PD 4.2,PD 3.3,12*PD 4.2,10*PD 3.3,25*C 12,31*N 1,10*C 6,3*PD 4.3,3*PD 3.2,4*PD 4.2,N 1,2*C 6,N 2': mat a$,fid$,mcr,mcm,feducrat,mat d$,loccode,feducmax,ficarate,ficamaxw,ficawh,mat m,mat r,mat e$,mat gln$,gli,mat dedcode,mat calcode,mat dedfed,mat rpnames2$,mat sck,vacm,mhw,mat wcm,tc,mat jn$,dc
-	read #1,using 'Form POS 1,3*C 40,C 12,PD 6.3,PD 6.2,PD 5.2,10*C 8,N 2,PD 4.2,PD 3.3,12*PD 4.2,10*PD 3.3,25*C 12,31*N 1,10*C 6,3*PD 4.3,3*PD 3.2,4*PD 4.2,N 1,2*C 6,N 2',rec=1: mat a$,fid$,mcr,mcm,feducrat,mat d$,loccode,feducmax,ficarate,ficamaxw,ficawh,mat m,mat r,mat e$,mat gln$,gli,mat dedcode,mat calcode,mat dedfed,mat rpnames2$,mat sck,vacm,mhw,mat wcm,tc,mat jn$,dc ioerr L290
-	ficamaxw=ficamaxw*10
+	open #1: 'Name=[Q]\PRmstr\Company.h[cno],recl=759,version=0,use',internal,outIn,relative
+	if lrec(1)=0 then write #1,using 'Form POS 1,3*C 40,C 12,PD 6.3,PD 6.2,PD 5.2,10*C 8,N 2,PD 4.2,PD 3.3,12*PD 4.2,10*PD 3.3,25*C 12,31*N 1,10*C 6,3*PD 4.3,3*PD 3.2,4*PD 4.2,N 1,2*C 6,N 2': mat a$,fid$,mcr,mcm,feducrat,mat d$,loccode,feducmax,ficarate,ssmax,ficawh,mat m,mat r,mat e$,mat gln$,gli,mat dedcode,mat calcode,mat dedfed,mat rpnames2$,mat sck,vacm,mhw,mat wcm,tc,mat jn$,dc
+	read #1,using 'Form POS 1,3*C 40,C 12,PD 6.3,PD 6.2,PD 5.2,10*C 8,N 2,PD 4.2,PD 3.3,12*PD 4.2,10*PD 3.3,25*C 12,31*N 1,10*C 6,3*PD 4.3,3*PD 3.2,4*PD 4.2,N 1,2*C 6,N 2',rec=1: mat a$,fid$,mcr,mcm,feducrat,mat d$,loccode,feducmax,ficarate,ssmax,ficawh,mat m,mat r,mat e$,mat gln$,gli,mat dedcode,mat calcode,mat dedfed,mat rpnames2$,mat sck,vacm,mhw,mat wcm,tc,mat jn$,dc ioerr L290
+	ssmax=ssmax*10
 	L290: close #1:
 	! READNAMES: !
 	fnDedNames(mat fullname$,mat abrevname$,mat newdedcode,mat newcalcode,mat newdedfed,mat dedfica,mat dedst,mat deduc,mat gl$)
@@ -66,7 +67,7 @@ SCREEN_1: ! r:
 	resp$(7)=str$(ficarate)
 	fnLbl(8,1,"SS Maximum Wage:",mylen,right,0,fram1)
 	fnTxt(8,mypos,12,0,left,"10",0,"The maximum was 97500 for the year 2007.  See a 941 form.",fram1)
-	resp$(8)=str$(ficamaxw)
+	resp$(8)=str$(ssmax)
 	fnLbl(9,1,"Medicare Rate:",mylen,right,0,fram1)
 	fnTxt(9,mypos,10,0,left,"33",0,"Format would be 1.450",fram1)
 	resp$(9)=str$(mcr)
@@ -103,7 +104,7 @@ SCREEN_1: ! r:
 	feducrat=val(resp$(5))
 	feducmax=val(resp$(6))
 	ficarate=val(resp$(7))
-	ficamaxw=val(resp$(8)) ! pr ficamaxw : pause
+	ssmax=val(resp$(8)) ! pr ssmax : pause
 	mcr=val(resp$(9))
 	mcm=val(resp$(10))
 	if resp$(11)="True" then gli=1 else gli=0
@@ -312,6 +313,7 @@ SCREEN_5: ! r:
 	if ckey=5 then goto DONE
  
 	close #106: ioerr ignore
+	dim win6$*40
 	if fnstyp=14 then win6$="SRow=14,SCol=12,ECol=67"
 	if fnstyp<>14 then win6$="SRow=09,SCol=11,ECol=69"
 	open #106: win6$&",ERow=22,Border=SR,Caption=<"&env$('program_caption'),display,outIn
@@ -379,8 +381,8 @@ goto Xit
  
 DONE: ! r:
 	open #1: "Name=[Q]\PRmstr\Company.h[cno]",internal,outIn,relative
-	ficamaxw=ficamaxw*.1
-	rewrite #1,using 'Form POS 1,3*C 40,C 12,PD 6.3,PD 6.2,PD 5.2,10*C 8,N 2,PD 4.2,PD 3.3,12*PD 4.2,10*PD 3.3,25*C 12,31*N 1,10*C 6,3*PD 4.3,3*PD 3.2,4*PD 4.2,N 1,2*C 6,N 2',rec=1: mat a$,fid$,mcr,mcm,feducrat,mat d$,loccode,feducmax,ficarate,ficamaxw,ficawh,mat m,mat r,mat e$,mat gln$,gli,mat dedcode,mat calcode,mat dedfed,mat rpnames2$,mat sck,vacm,mhw,mat wcm,tc,mat jn$,dc
+	ssmax=ssmax*.1
+	rewrite #1,using 'Form POS 1,3*C 40,C 12,PD 6.3,PD 6.2,PD 5.2,10*C 8,N 2,PD 4.2,PD 3.3,12*PD 4.2,10*PD 3.3,25*C 12,31*N 1,10*C 6,3*PD 4.3,3*PD 3.2,4*PD 4.2,N 1,2*C 6,N 2',rec=1: mat a$,fid$,mcr,mcm,feducrat,mat d$,loccode,feducmax,ficarate,ssmax,ficawh,mat m,mat r,mat e$,mat gln$,gli,mat dedcode,mat calcode,mat dedfed,mat rpnames2$,mat sck,vacm,mhw,mat wcm,tc,mat jn$,dc
 	close #1:
 	fnDedNames(mat fullname$,mat abrevname$,mat newdedcode,mat newcalcode,mat newdedfed,mat dedfica,mat dedst,mat deduc,mat gl$,1)
 goto Xit ! /r
