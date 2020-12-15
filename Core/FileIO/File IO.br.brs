@@ -13,7 +13,7 @@ pr #hProc: 'cd '&program$(1:2)
 if env$('cursys')='CM' then
 	pr #hProc: 'load S:\Core\Xit.br'
 	pr #hProc: 'run'
-elsesy
+else
 	pr #hProc: 'load S:\Core\Menu.br'
 	pr #hProc: 'run'
 end if
