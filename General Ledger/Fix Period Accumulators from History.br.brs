@@ -23,7 +23,7 @@ if fn_screen_1(nap,mat period_date_start,mat prior_period_date_start)=5 then got
 open #hTransHistory=fnH: "Name=[Q]\GLmstr\AcTrans.h[cno],KFName=[Q]\GLmstr\AcTrIdx.h[cno],Shr",internal,outIn,keyed
 FtransHistory: form pos 1,c 12,n 6,pd 6.2,n 2,pos 71,n 2
 if process_gltrans then
-fnIndex("[Q]\GLmstr\GLTrans.h[cno]",'[Temp]\GLIndex.h[cno]',"1 12")
+fnIndex('[Q]\GLmstr\GLTrans.h[cno]','[Temp]\GLIndex.h[cno]','1 12')
 open #hTransCurrent=fnH: "Name=[Q]\GLmstr\GLTrans.h[cno],KFName=[Temp]\GLIndex.h[cno],Shr",internal,outIn,keyed
 end if  ! process_gltrans
 FtransCurrent: form pos 1,c 12,n 6,pd 6.2,n 2
