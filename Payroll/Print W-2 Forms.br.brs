@@ -29,7 +29,8 @@
 	fw2box16$="FORM  POS 1,C 8"&rpt$(",C 12,G 10.2,3*G 1",6)
  
 	open #hCompany:=fnH: "Name=[Q]\PRmstr\Company.h[cno],Shr",internal,input
-	read #hCompany,using Fcompany: mat a$,empId$,mat d$,loccode,ssmax,mat e$
+	read #hCompany,using Fcompany: mat a$,empId$,mat d$,loccode,NOTssmax,mat e$
+	NOTssmax=NOTssmax*10
 	Fcompany: form pos 1,3*c 40,c 12,pos 150,10*c 8,n 2,pos 239,pd 4.2,pos 317,10*c 12
 	for j=1 to 3: a$(j)=a$(j)(1:30): next j
 	close #hCompany:
@@ -179,11 +180,10 @@ READ_EMPLOYEE: ! r:
 			if tcd<1 or tcd>10 then tcd=1
 			if exportFormatID then
 				stcode=tcd
-			else
-				if first=1 then stcode=tcd
-				if first=0 and stcode><tcd then
-					goto L1300
-				end if
+			else if first=1 then 
+				stcode=tcd
+			else if first=0 and stcode><tcd then
+				goto L1300
 			end if
 			state$=d$(tcd)(1:2)
 			stcode$=e$(tcd)

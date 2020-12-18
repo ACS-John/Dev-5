@@ -49,6 +49,8 @@ def library fnask_w2_info(&taxYear$,&beg_date,&end_date,&empStart$,&empEnd$,&ssr
 				ssmax=128400
 		else if taxyear$='2019' then 
 				ssmax=132900
+		else if taxyear$='2020' then 
+				ssmax=137700
 		end if
 		mcrate=.0145
 		mcmax=999999
