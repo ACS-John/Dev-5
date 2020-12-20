@@ -8,13 +8,15 @@
  
 	dim a$(3)*40,b$(2)*12,d$(10)*8,label1$(10)*20
 	dim m(10),r(10)
-	dim fa$(10)*26,e$(10)*12,prh$(2)*40
-	dim rpnames$(86)*20,rpnames2$(10)*6,x$(10)*20,io2$(50)*24,na$(125)*8
-	dim gln(45),glnt(45),gln$(15)*12,dedcode(10),calcode(10),dedfed(10)
+	dim e$(10)*12
+	dim rpnames2$(10)*6
+	dim gln(45),glnt(45),gln$(15)*12
+	dim dedcode(10),calcode(10),dedfed(10)
 	dim prgl(15,3),label5$(15)*13,iolabel5$(17),io5$(45)*20
-	dim x1(3),x2(3),x3(3),x4(3),x5(3),x6(3),x7(3),x8(3),x9(3),x10(3),sck(4)
-	dim wcm(4),io6$(11)*16,jn$(2)*6,iolabel1$*10
-	dim resp$(200)*40,ml$(3)*100
+	dim sck(4)
+	dim wcm(4),jn$(2)*6
+	dim resp$(200)*40
+	dim ml$(0)*100
 	dim fullname$(20)*20
 	dim newcalcode(20),newdedfed(20),dedfica(20),dedst(20),deduc(20)
 	dim abrevname$(20)*8
@@ -33,10 +35,12 @@
  
 	open #1: 'Name=[Q]\PRmstr\Company.h[cno],recl=759,version=0,use',internal,outIn,relative
 	if lrec(1)=0 then 
-	write #1,using 'Form POS 1,3*C 40,C 12,PD 6.3,PD 6.2,PD 5.2,10*C 8,N 2,PD 4.2,PD 3.3,12*PD 4.2,10*PD 3.3,25*C 12,31*N 1,10*C 6,3*PD 4.3,3*PD 3.2,4*PD 4.2,N 1,2*C 6,N 2'       	: mat a$,fid$,mcr,mcm,feducrat,mat d$,loccode,feducmax,ficarate,ssmax,ficawh,mat m,mat r,mat e$,mat gln$,gli,mat dedcode,mat calcode,mat dedfed,mat rpnames2$,mat sck,vacm,mhw,mat wcm,tc,mat jn$,dc
-	 read #1,using 'Form POS 1,3*C 40,C 12,PD 6.3,PD 6.2,PD 5.2,10*C 8,N 2,PD 4.2,PD 3.3,12*PD 4.2,10*PD 3.3,25*C 12,31*N 1,10*C 6,3*PD 4.3,3*PD 3.2,4*PD 4.2,N 1,2*C 6,N 2',rec=1 	: mat a$,fid$,mcr,mcm,feducrat,mat d$,loccode,feducmax,ficarate,ssmax,ficawh,mat m,mat r,mat e$,mat gln$,gli,mat dedcode,mat calcode,mat dedfed,mat rpnames2$,mat sck,vacm,mhw,mat wcm,tc,mat jn$,dc ioerr L290
+		write #1,using 'Form POS 1,3*C 40,C 12,PD 6.3,PD 6.2,PD 5.2,10*C 8,N 2,PD 4.2,PD 3.3,12*PD 4.2,10*PD 3.3,25*C 12,31*N 1,10*C 6,3*PD 4.3,3*PD 3.2,4*PD 4.2,N 1,2*C 6,N 2'       	: mat a$,fid$,mcr,mcm,feducrat,mat d$,loccode,feducmax,ficarate,ssmax,ficawh,mat m,mat r,mat e$,mat gln$,gli,mat dedcode,mat calcode,mat dedfed,mat rpnames2$,mat sck,vacm,mhw,mat wcm,tc,mat jn$,dc
+	end if
+	read #1,using 'Form POS 1,3*C 40,C 12,PD 6.3,PD 6.2,PD 5.2,10*C 8,N 2,PD 4.2,PD 3.3,12*PD 4.2,10*PD 3.3,25*C 12,31*N 1,10*C 6,3*PD 4.3,3*PD 3.2,4*PD 4.2,N 1,2*C 6,N 2',rec=1 	: mat a$,fid$,mcr,mcm,feducrat,mat d$,loccode,feducmax,ficarate,ssmax,ficawh,mat m,mat r,mat e$,mat gln$,gli,mat dedcode,mat calcode,mat dedfed,mat rpnames2$,mat sck,vacm,mhw,mat wcm,tc,mat jn$,dc ioerr L290
 	ssmax=ssmax*10
-	L290: close #1:
+	L290: !
+	close #1:
 	! READNAMES: !
 	fnDedNames(mat fullname$,mat abrevname$,mat newdedcode,mat newcalcode,mat newdedfed,mat dedfica,mat dedst,mat deduc,mat gl$)
 goto SCREEN_1
@@ -309,7 +313,7 @@ SCREEN_4: ! r:
 goto SCREEN_5 ! /r
  
 SCREEN_5: ! r:
-	goto DONE ! will need the job cost screen someday
+	goto DONE ! we'll need the job cost screen someday
 	if ckey=2 then goto SCREEN_4
 	if ckey=5 then goto DONE
  
@@ -326,6 +330,7 @@ SCREEN_5: ! r:
 	pr #106,fields "6,2,Cr 44,N": "Maximum Sick Hours:"
 	pr #106,fields "7,2,Cr 44,N": "Maximum Vacation Hours:"
 	pr #106,fields "8,2,Cr 44,N": "Minimum Hourly Wage:"
+	dim io6$(11)*16
 	io6$(1)="2,47,Cu 1,UT,N"
 	io6$(2)="3,47,N 8.3,UT,N"
 	io6$(3)="4,47,N 8.3,UT,N"
