@@ -6,13 +6,12 @@
 	if fnclient_has('P2') then fnstyp(11) else fnstyp(14) !  styp=11 for jobcost; styp=14 for regular payroll
 	fnTop(program$)
  
-	dim a$(3)*40,b$(2)*12,d$(10)*8,label1$(10)*20
-	dim m(10),r(10)
+	dim a$(3)*40,b$(2)*12,d$(10)*8
+	dim xm(10),r(10)
 	dim e$(10)*12
 	dim rpnames2$(10)*6
 	dim gln(45),glnt(45),gln$(15)*12
 	dim dedcode(10),calcode(10),dedfed(10)
-	dim prgl(15,3),label5$(15)*13,iolabel5$(17),io5$(45)*20
 	dim sck(4)
 	dim wcm(4),jn$(2)*6
 	dim resp$(200)*40
@@ -35,9 +34,9 @@
  
 	open #1: 'Name=[Q]\PRmstr\Company.h[cno],recl=759,version=0,use',internal,outIn,relative
 	if lrec(1)=0 then 
-		write #1,using 'Form POS 1,3*C 40,C 12,PD 6.3,PD 6.2,PD 5.2,10*C 8,N 2,PD 4.2,PD 3.3,12*PD 4.2,10*PD 3.3,25*C 12,31*N 1,10*C 6,3*PD 4.3,3*PD 3.2,4*PD 4.2,N 1,2*C 6,N 2'       	: mat a$,fid$,mcr,mcm,feducrat,mat d$,loccode,feducmax,ficarate,ssmax,ficawh,mat m,mat r,mat e$,mat gln$,gli,mat dedcode,mat calcode,mat dedfed,mat rpnames2$,mat sck,vacm,mhw,mat wcm,tc,mat jn$,dc
+		write #1,using 'Form POS 1,3*C 40,C 12,PD 6.3,PD 6.2,PD 5.2,10*C 8,N 2,PD 4.2,PD 3.3,12*PD 4.2,10*PD 3.3,25*C 12,31*N 1,10*C 6,3*PD 4.3,3*PD 3.2,4*PD 4.2,N 1,2*C 6,N 2'       	: mat a$,fid$,mcr,mcm,feducrat,mat d$,loccode,feducmax,ficarate,ssmax,ficawh,mat xm,mat r,mat e$,mat gln$,gli,mat dedcode,mat calcode,mat dedfed,mat rpnames2$,mat sck,vacm,mhw,mat wcm,tc,mat jn$,dc
 	end if
-	read #1,using 'Form POS 1,3*C 40,C 12,PD 6.3,PD 6.2,PD 5.2,10*C 8,N 2,PD 4.2,PD 3.3,12*PD 4.2,10*PD 3.3,25*C 12,31*N 1,10*C 6,3*PD 4.3,3*PD 3.2,4*PD 4.2,N 1,2*C 6,N 2',rec=1 	: mat a$,fid$,mcr,mcm,feducrat,mat d$,loccode,feducmax,ficarate,ssmax,ficawh,mat m,mat r,mat e$,mat gln$,gli,mat dedcode,mat calcode,mat dedfed,mat rpnames2$,mat sck,vacm,mhw,mat wcm,tc,mat jn$,dc ioerr L290
+	read #1,using 'Form POS 1,3*C 40,C 12,PD 6.3,PD 6.2,PD 5.2,10*C 8,N 2,PD 4.2,PD 3.3,12*PD 4.2,10*PD 3.3,25*C 12,31*N 1,10*C 6,3*PD 4.3,3*PD 3.2,4*PD 4.2,N 1,2*C 6,N 2',rec=1 	: mat a$,fid$,mcr,mcm,feducrat,mat d$,loccode,feducmax,ficarate,ssmax,ficawh,mat xm,mat r,mat e$,mat gln$,gli,mat dedcode,mat calcode,mat dedfed,mat rpnames2$,mat sck,vacm,mhw,mat wcm,tc,mat jn$,dc ioerr L290
 	ssmax=ssmax*10
 	L290: !
 	close #1:
@@ -229,7 +228,7 @@ SCREEN_3: ! r:
 		fnTxt(j+3,19,12,0,left,"",0,"Enter the state id #.",0 )
 		resp$(resp+=1)=e$(j)
 		fnTxt(j+3,32,12,0,left,"10",0,"Enter the maximum wage subject to state unemployment (See your state u/c report.",0 )
-		resp$(resp+=1)=str$(m(j))
+		resp$(resp+=1)=str$(xm(j))
 		fnTxt(j+3,49,8,0,left,"33",0,"Enter the state unemployment rate (See your state u/c report. Enter in percent format. Example: 5% as 5.00",0 )
 		resp$(resp+=1)=str$(r(j))
 	next j
@@ -243,7 +242,7 @@ SCREEN_3: ! r:
 	for j=1 to 10
 		d$(j)=resp$(resp+=1)
 		e$(j)=resp$(resp+=1)
-		m(j)=val(resp$(resp+=1))
+		xm(j)=val(resp$(resp+=1))
 		r(j)=val(resp$(resp+=1))
 	next j
 	if ckey=2 then goto SCREEN_2
@@ -388,7 +387,7 @@ goto Xit
 DONE: ! r:
 	open #1: "Name=[Q]\PRmstr\Company.h[cno]",internal,outIn,relative
 	ssmax=ssmax*.1
-	rewrite #1,using 'Form POS 1,3*C 40,C 12,PD 6.3,PD 6.2,PD 5.2,10*C 8,N 2,PD 4.2,PD 3.3,12*PD 4.2,10*PD 3.3,25*C 12,31*N 1,10*C 6,3*PD 4.3,3*PD 3.2,4*PD 4.2,N 1,2*C 6,N 2',rec=1: mat a$,fid$,mcr,mcm,feducrat,mat d$,loccode,feducmax,ficarate,ssmax,ficawh,mat m,mat r,mat e$,mat gln$,gli,mat dedcode,mat calcode,mat dedfed,mat rpnames2$,mat sck,vacm,mhw,mat wcm,tc,mat jn$,dc
+	rewrite #1,using 'Form POS 1,3*C 40,C 12,PD 6.3,PD 6.2,PD 5.2,10*C 8,N 2,PD 4.2,PD 3.3,12*PD 4.2,10*PD 3.3,25*C 12,31*N 1,10*C 6,3*PD 4.3,3*PD 3.2,4*PD 4.2,N 1,2*C 6,N 2',rec=1: mat a$,fid$,mcr,mcm,feducrat,mat d$,loccode,feducmax,ficarate,ssmax,ficawh,mat xm,mat r,mat e$,mat gln$,gli,mat dedcode,mat calcode,mat dedfed,mat rpnames2$,mat sck,vacm,mhw,mat wcm,tc,mat jn$,dc
 	close #1:
 	fnDedNames(mat fullname$,mat abrevname$,mat newdedcode,mat newcalcode,mat newdedfed,mat dedfica,mat dedst,mat deduc,mat gl$,1)
 goto Xit ! /r
