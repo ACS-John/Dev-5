@@ -1497,7 +1497,7 @@ def fn_determine_earnings
 	if prd=d1 then mat ttc=ttc+tcp: mat ttdc=ttdc+tdc ! total for this check
 	if prd=d1 then let fn_accumulate_dept_totals1(tdepXcount,mat tdep,tdn,rate)
 	if env$('client')="Energy Exchanger" then let fn_accumulate_dept_totals2
-	if prd=d1 then rewrite #3,using "form pos 18,n 7",rec=lastrec: check_number
+	if prd=d1 then rewrite #3,using "form pos 17,n 8",rec=lastrec: check_number
 	goto L6580
 	STORE_VARIABLES: !
 	!   wagesyr=ytdTotal(31) ! total wages
