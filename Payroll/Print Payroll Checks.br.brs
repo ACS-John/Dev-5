@@ -4,10 +4,10 @@
 	autoLibrary
 	on error goto Ertn
 ! /r
-	fnTop(program$)
-	fnreg_read('Print Payroll Checks - Print checks which net zero',pr_prNetZeroChecks$,fnPrPrintNetZeroDefault$)
-	fnreg_read('Post to Checkbook - Populate Checkbook Payee from Payroll Employee',pr_prEmpToClPayee$,'True')
-	! fnreg_read('Post to Checkbook - Prefix (optional)',pr_clPayeePrefix$)
+fnTop(program$)
+fnreg_read('Print Payroll Checks - Print checks which net zero',pr_prNetZeroChecks$,fnPrPrintNetZeroDefault$)
+fnreg_read('Post to Checkbook - Populate Checkbook Payee from Payroll Employee',pr_prEmpToClPayee$,'True')
+! fnreg_read('Post to Checkbook - Prefix (optional)',pr_clPayeePrefix$)
 ! r: dims and constants
 	dim em$(3)*30 ! payee name and address
 	dim tdet(17)
@@ -38,7 +38,7 @@
 	dim dept(6),bankgl$*12,gl$*12,bn$*30,text$*90,v(7,8),deptsum(6)
 	dim hnames$(20)*8
 	dim eng$*128,wording$(27)*9,amount(11)
-!
+
 	dim opt_check_format$(6)*20, scc$(6)
 	opt_check_format$(1)="Check, Stub"        : scc$(1)="CS"
 	opt_check_format$(2)="Stub, Check"        : scc$(2)="SC"
@@ -46,45 +46,45 @@
 	opt_check_format$(4)="Check, Stub, Stub"  : scc$(4)="CSS"
 	opt_check_format$(5)="Stub, Stub, Check"  : scc$(5)="SSC"
 	opt_check_format$(6)="Stub, Check, Check" : scc$(6)="SCC"
-!
+
 	dim opt_check_type$(3)*14
 	opt_check_type$(1)="Regular Check"
 	opt_check_type$(2)="Direct Deposit"
 	opt_check_type$(3)="All"
-! r: set mat wording$
-	wc=0 ! Wording$ counter
-	wording$(wc+=1)='One'
-	wording$(wc+=1)='Two'
-	wording$(wc+=1)='Three'
-	wording$(wc+=1)='Four'
-	wording$(wc+=1)='Five'
-	wording$(wc+=1)='Six'
-	wording$(wc+=1)='Seven'
-	wording$(wc+=1)='Eight'
-	wording$(wc+=1)='Nine'
-	wording$(wc+=1)='Ten'
-	wording$(wc+=1)='Eleven'
-	wording$(wc+=1)='Twelve'
-	wording$(wc+=1)='Thirteen'
-	wording$(wc+=1)='Fourteen'
-	wording$(wc+=1)='Fifteen'
-	wording$(wc+=1)='Sixteen'
-	wording$(wc+=1)='Seventeen'
-	wording$(wc+=1)='Eighteen'
-	wording$(wc+=1)='Nineteen'
-	wording$(wc+=1)='Twenty'
-	wording$(wc+=1)='Thirty'
-	wording$(wc+=1)='Forty'
-	wording$(wc+=1)='Fifty'
-	wording$(wc+=1)='Sixty'
-	wording$(wc+=1)='Seventy'
-	wording$(wc+=1)='Eighty'
-	wording$(wc+=1)='Ninety'
-! /r
+	! r: set mat wording$
+		wc=0 ! Wording$ counter
+		wording$(wc+=1)='One'
+		wording$(wc+=1)='Two'
+		wording$(wc+=1)='Three'
+		wording$(wc+=1)='Four'
+		wording$(wc+=1)='Five'
+		wording$(wc+=1)='Six'
+		wording$(wc+=1)='Seven'
+		wording$(wc+=1)='Eight'
+		wording$(wc+=1)='Nine'
+		wording$(wc+=1)='Ten'
+		wording$(wc+=1)='Eleven'
+		wording$(wc+=1)='Twelve'
+		wording$(wc+=1)='Thirteen'
+		wording$(wc+=1)='Fourteen'
+		wording$(wc+=1)='Fifteen'
+		wording$(wc+=1)='Sixteen'
+		wording$(wc+=1)='Seventeen'
+		wording$(wc+=1)='Eighteen'
+		wording$(wc+=1)='Nineteen'
+		wording$(wc+=1)='Twenty'
+		wording$(wc+=1)='Thirty'
+		wording$(wc+=1)='Forty'
+		wording$(wc+=1)='Fifty'
+		wording$(wc+=1)='Sixty'
+		wording$(wc+=1)='Seventy'
+		wording$(wc+=1)='Eighty'
+		wording$(wc+=1)='Ninety'
+	! /r
 	dim opt_yn$(2)*4
 	opt_yn$(1)="Yes"
 	opt_yn$(2)="No"
-!
+
 ! /r
 ! r: set default answers and semi-consants and open some files
 	ssr1=fnss_employee*.01
@@ -105,22 +105,23 @@
 	open #20: "Name=[Q]\PRmstr\Company.h[cno],Shr",internal,input
 	read #20,using 'Form POS 1,x 120,POS 150,10*C 8,POS 437,15*C 12,N 1': mat d$,mat gln$,gl_installed
 	close #20:
- 
+
 	mat hnames$=abrevName$ : bankgl$=gln$(15)
 	if fnclient_has('CL') then fn_open_acscl
- 
+
 	if bankcode=0 then bankcode=1
 	check_number=ckno
+	if check_number>9999999 then check_number-=10000000
 ! if env$('client')="West Rest Haven" then sc1$="C"
 	if env$('client')="Billings" or env$('client')='Diamond' then sc1$="CSS"
-	if env$('client')="Divernon" or env$('client')="Thomasboro" or env$('client')="Edinburg" or env$('client')="Philo" or env$('client')="Hope Welty" then 
+	if env$('client')="Divernon" or env$('client')="Thomasboro" or env$('client')="Edinburg" or env$('client')="Philo" or env$('client')="Hope Welty" then
 		ficam1$="Y"
 	end if
 	ddcode$="R"
 	fnreg_read('PR.Check print.skip alignment',skip_alignment$) : if skip_alignment$='' then skip_alignment$='No'
-	goto MAIN_QUESTIONS ! /r
+goto MAIN_QUESTIONS ! /r
 MAIN_QUESTIONS: ! r:
-	fnTos(sn$="prckprt")
+	fnTos
 	respc=0
 	fnLbl(1,1,"Payroll Date:",38,1)
 	fnTxt(1,41,10,0,1,"3",0,"")
@@ -160,9 +161,9 @@ MAIN_QUESTIONS: ! r:
 	fnLbl(10,1,"Print Vacation and Sick Leave?",38,1)
 	fncomboa("prckprt-6",10,41,mat opt_yn$)
 	if accr$="Y" then resp$(10)=opt_yn$(1) else resp$(10)=opt_yn$(2)
-!
+
 	respc=10
-!
+
 	if cl_installed=0 and exists("[Q]\CLmstr\bankmstr.h[cno]") then
 		fnLbl(11,1,"Bank Account:",38,1)
 		fncombof("Bankmstr",11,41,20,"[Q]\CLmstr\bankmstr.h[cno]",1,2,3,15,"[Q]\CLmstr\Bankidx1.h[cno]",1,0, "Select bank account for printing")
@@ -209,7 +210,7 @@ MAIN_QUESTIONS: ! r:
 	prdmmddyy=val(ckdat$(5:6))*10000+val(ckdat$(7:8))*100+val(ckdat$(3:4)) ! convert date back to mmddyy format
 	skip_alignment$         =resp$(resp_skip_align)
 	if skip_alignment$='Yes' then allign=3
-!
+
 	if acsclcv$="Y" then cl_installed=1 else cl_installed=0
 	if ficam1$="Y" then ficam1=1 else ficam1=0
 	if pre$="Y" then pre=1 else pre=0
@@ -272,19 +273,19 @@ MAIN_QUESTIONS: ! r:
 	ml$(2)="but no checkbook files can be found! "
 	ml$(3)="Click OK to return to previous screen. "
 	fnmsgbox(mat ml$,resp$)
-	goto MAIN_QUESTIONS
-L1300: ! /r
-! if env$('client')<>"Washington Parrish" then prdate=d1
+goto MAIN_QUESTIONS
+	L1300: ! /r
+	! if env$('client')<>"Washington Parrish" then prdate=d1
 	if ~testCheckFormat then
 		if cl_installed then
-			open #7: "Name=[Q]\PRmstr\MGLMSTR.h[cno],KFName=[Q]\PRmstr\MGLIDX1.h[cno],Shr",internal,input,keyed
+			open #hMgl=fnH: "Name=[Q]\PRmstr\MGLMSTR.h[cno],KFName=[Q]\PRmstr\MGLIDX1.h[cno],Shr",internal,input,keyed ! 7
 		end if
-		open #praddr:=1: "Name=[Q]\PRmstr\prAddr1.h[cno],Shr",internal,input
-		open #hEmployee:=fnH: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr",internal,input,keyed
-		open #hDepartment:=fnH: "Name=[Q]\PRmstr\Department.h[cno],KFName=[Q]\PRmstr\DeptIdx.h[cno]",internal,outIn,keyed
-		open #hChecks=3: "Name=[Q]\PRmstr\PayrollChecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno]",internal,outIn,keyed
-		open #breakdown=31: "Name=[Q]\PRmstr\HourBreakdown.h[cno],KFName=[Q]\PRmstr\HourBreakdown-idx.h[cno]",internal,outIn,keyed
-		open #dd=30: "Name=[Q]\PRmstr\DD.h[cno],RecL=72,KFName=[Q]\PRmstr\DDidx1.h[cno],Shr,kps=1,kln=10,Use",internal,outIn,keyed
+		! unused removed 12/22/2020     open #praddr=1: "Name=[Q]\PRmstr\prAddr1.h[cno],Shr",internal,input
+		open #hEmployee=fnH: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr",internal,input,keyed
+		open #hDepartment=fnH: "Name=[Q]\PRmstr\Department.h[cno],KFName=[Q]\PRmstr\DeptIdx.h[cno]",internal,outIn,keyed
+		open #hCheck=fnH: "Name=[Q]\PRmstr\PayrollChecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno]",internal,outIn,keyed
+		open #hHourBreak=fnH: "Name=[Q]\PRmstr\HourBreakdown.h[cno],KFName=[Q]\PRmstr\HourBreakdown-idx.h[cno]",internal,outIn,keyed
+		open #hDd=fnH: "Name=[Q]\PRmstr\DD.h[cno],RecL=72,KFName=[Q]\PRmstr\DDidx1.h[cno],Shr,kps=1,kln=10,Use",internal,outIn,keyed
 		if fnclient_has('GL') and gl_installed=1 then
 			gl_installed=0
 			open #h_gl_glbrec:=fnH: "Name=[Q]\GLmstr\GLBREC.h[cno],KFName=[Q]\GLmstr\GLRECIDX.h[cno],Shr",internal,outIn,keyed ioerr L1440
@@ -304,19 +305,19 @@ L1300: ! /r
 		mat v=(0) : v1=1
 		! If env$('client')="WashingtonParrish" Then Goto 1110
 		dd$=""
-		read #dd,using "Form pos 1,C 10,C 1,N 9,N 2,N 17",key=rpad$(str$(eno),10): key$,dd$,rtn,acc,acn nokey ignore
+		read #hDd,using "Form pos 1,C 10,C 1,N 9,N 2,N 17",key=rpad$(str$(eno),10): key$,dd$,rtn,acc,acn nokey ignore
 		if uprc$(dd$)="Y" and ddcode$="D" then goto L1570
 		if uprc$(dd$)<>"Y" and ddcode$="R" then goto L1570
 		if ddcode$="A" then goto L1570 ! all
 	goto ReadNextEmployee
 	L1570: !
 	if beginningEmployeeNumber>eno then goto ReadNextEmployee ! start with certain employee
+
 	tdepXcount=0
 	mat tdep=(0)
 	tdc1=tdc2=tdc3=tdc4=tdc5=0
 	tpd3=tpd4=tpd5=0
-	tdct=0
-	rate=0
+	tdct=rate=0
 	s1=1
 	! If fndate_mmddyy_to_ccyymmdd(LPD)><D1 Then Goto 1360  ! with comment can reprint any payroll
 	if ~testCheckFormat then
@@ -327,38 +328,38 @@ L1300: ! /r
 	ProduceThatCheck: !
 	! Mat TCP=(0)
 	! Mat TDC=(0)
-	goto PRE_CHECK
- 
-PRE_CHECK: !
+	! goto PRE_CHECK
+	! PRE_CHECK: !
 	ttc(26)=ttc(26)-tpd3-tpd4-tpd5
 	ttc(28)=ttc(28)+ttc(29)+ttc(30) ! OTHER COMP-CURRENT
-	ttc(1)=ttc(1)-ttc(25) : tty(1)=tty(1)-tty(25)
-L2070: !
+	ttc(1)=ttc(1)-ttc(25)
+	tty(1)=tty(1)-tty(25)
+	L2070: !
 	if cl_installed=1 then fn_cknum
 	fnopenprn
 	if sc1$="SCS" then fn_print_stub : fn_print_check : fn_print_stub
 	if sc1$="CSS" then fn_print_check : fn_print_stub : fn_print_stub
 	if sc1$="SSC" then fn_print_stub : fn_print_stub : fn_print_check
 	if sc1$="SCC" then fn_print_stub : fn_print_check : fn_print_check
-	if sc1$="CS" then fn_print_check : fn_print_stub
-	if sc1$="SC" then fn_print_stub : fn_print_check
-L2150: !
+	if sc1$="CS"  then fn_print_check : fn_print_stub
+	if sc1$="SC"  then fn_print_stub : fn_print_check
+	L2150: !
 	if fp(d1*.01)>.9 then
 		hd1=19000000+fncd(d1)
 	else
 		hd1=20000000+fncd(d1)
 	end if
-! hsk$=lpad$(str$(eno),8)&cnvrt$("PD 6",hd1)
+	! hsk$=lpad$(str$(eno),8)&cnvrt$("PD 6",hd1)
 	if ~testCheckFormat and (allign=3 or skip_alignment$='Yes') then
 		pr #255: chr$(12) ! NEWPAGE
-		goto CHECK_PRINT_TOP
+		goto CheckPrintTop
 	end if
 	fncloseprn
 	if testCheckFormat then fnChain(program$)
-	goto ALLIGNMENT
- 
+goto ALLIGNMENT
+
 ALLIGNMENT: ! r:
-	fnTos(sn$="prckprt2")
+	fnTos
 	respc=0 : rc=0
 	fnOpt(1,3,"Reprint same check",0,franum)
 	resp$(rc+=1)="False"
@@ -372,24 +373,23 @@ ALLIGNMENT: ! r:
 	if resp$(1)="True" then allign=1
 	if resp$(2)="True" then allign=2
 	if resp$(3)="True" then allign=3
-	if ckey=5 then getout=1: allign=2: goto CHECK_PRINT_TOP ! write history on last check and quit
-	on allign goto REPRINT_SAME_CHECK,CHECK_PRINT_TOP,CHECK_PRINT_TOP none ALLIGNMENT
+	if ckey=5 then getout=1: allign=2: goto CheckPrintTop ! write history on last check and quit
+	on allign goto ReprintSameCheck,CheckPrintTop,CheckPrintTop none ALLIGNMENT
 ! /r
-REPRINT_SAME_CHECK: !
-	if pre=0 then goto L3130
+ReprintSameCheck: ! r:
+	if pre then
+		if cl_installed=1 then fn_build_check_record
+		check_number+=1
+		if check_number>9999999 then check_number-=10000000
+	end if
+goto L2070 ! /r
+
+CheckPrintTop: ! r:
 	if cl_installed=1 then fn_build_check_record
-	check_number=check_number+1
-L3130: !
-	goto L2070
- 
-CHECK_PRINT_TOP: !
-	if cl_installed=1 then fn_build_check_record
-	tdc1=0
-	tdc2=0
+	tdc1=tdc2=0
 	tdc3=tdc4=tdc5=0
 	tpd3=tpd4=tpd5=0
-	tdct=0
-	rate=0
+	tdct=rate=0
 	ttc(32)
 	mat dept=(0)
 	if gl_installed=1 then ! r: update GL's GLBREC
@@ -399,15 +399,16 @@ CHECK_PRINT_TOP: !
 	end if
 	rewrite #h_gl_glbrec,using F_GL_GLBREC: bankgl$,lpad$(rtrm$(str$(check_number)),12),em$(1),"PR",dat,ttc22,0
 	goto L3320
-!
-L3300: !
+
+	L3300: !
 	write #h_gl_glbrec,using F_GL_GLBREC: bankgl$,lpad$(rtrm$(str$(check_number)),12),em$(1),"PR",dat,ttc22,0
 	F_GL_GLBREC: form pos 1,2*c 12,c 30,c 2,n 6,pd 5.2,n 1
-L3320: ! /r
+	L3320: ! /r
 	if getout=1 then goto FINIS
 	ttc(32)=0
 	check_number=check_number+1
-goto MAIN_LOOP_TOP
+	if check_number>9999999 then check_number-=10000000
+goto MAIN_LOOP_TOP ! /r
 def fn_EnglishAmount(dol,mat eng$; n1)
  ! pass amount in dol, returned in mat eng$
  ! n1 = break point (58 is default)
@@ -478,17 +479,17 @@ def fn_engDol_hundred
 		eng$=rtrm$(eng$)&" Hundred"
 	end if
 	if amount(a0+1)=0 and amount(a0)=0 then goto L3920
-	if amount(a0+1)<2 then goto L3910
-	eng$=rtrm$(eng$)&" "&wording$(amount(a0+1)+18)
-	if amount(a0)=0 then goto L3920
-	amount(a0+1)=0
-	L3910: !
+	if amount(a0+1)=>2 then
+		eng$=rtrm$(eng$)&" "&wording$(amount(a0+1)+18)
+		if amount(a0)=0 then goto L3920
+		amount(a0+1)=0
+	end if
 	eng$=rtrm$(eng$)&" "&wording$(amount(a0+1)*10+amount(a0))
 	L3920: !
 fnend
 EoEmployee: ! r:
 	close #hEmployee:
-	close #hChecks:
+	close #hCheck:
 	if gl_installed=1 then close #h_gl_glbrec:
 	fncloseprn
 	goto FINIS ! /r
@@ -496,23 +497,20 @@ FINIS: !
 	if cl_installed=1 and allign=4 then fn_build_check_record
 Xit: fnXit
 def fn_open_acscl
-	open #h_cl_bank:=12: "Name=[Q]\CLmstr\BankMstr.h[cno],KFName=[Q]\CLmstr\BankIdx1.h[cno],Shr",internal,outIn,keyed ioerr L4220
+	open #h_cl_bank=12: "Name=[Q]\CLmstr\BankMstr.h[cno],KFName=[Q]\CLmstr\BankIdx1.h[cno],Shr",internal,outIn,keyed ioerr OcFinis
 	cl_installed=1
-	! not used - commented out 8/13/19 jb    			open #15: "Name=[Q]\CLmstr\Company.h[cno],Shr",internal,outIn,relative
-	open #h_cl_payee:=fnH: "Name=[Q]\CLmstr\PayMstr.h[cno],KFName=[Q]\CLmstr\PayIdx1.h[cno],Shr",internal,outIn,keyed
+
+	open #h_cl_payee=fnH: "Name=[Q]\CLmstr\PayMstr.h[cno],KFName=[Q]\CLmstr\PayIdx1.h[cno],Shr",internal,input,keyed
 	! open #14: "Name=[Q]\CLmstr\PayMstr.h[cno],KFName=[Q]\CLmstr\PayIdx2.h[cno],Shr",internal,outIn,keyed
-	open #h_cl_trans:=fnH: "Name=[Q]\CLmstr\TrMstr.h[cno],KFName=[Q]\CLmstr\TrIdx1.h[cno],Shr",internal,outIn,keyed
+	open #h_cl_trans=fnH: "Name=[Q]\CLmstr\TrMstr.h[cno],KFName=[Q]\CLmstr\TrIdx1.h[cno],Shr",internal,outIn,keyed
 	open #22: "Name=[Q]\CLmstr\TrMstr.h[cno],KFName=[Q]\CLmstr\TrIdx2.h[cno],Shr",internal,outIn,keyed
-	!   if exists("[Q]\CLmstr\Tralloc-Idx.h[cno]") then
-	open #h_cl_trans_alloc:=fnH: "Name=[Q]\CLmstr\TrAlloc.h[cno],Version=2,KFName=[Q]\CLmstr\TrAlloc-Idx.h[cno],Shr",internal,outIn,keyed
-	!   else
-	!     open #h_cl_trans_alloc:=f: "Name=[Q]\CLmstr\TrAlloc.h[cno],Shr",internal,outIn,relative
-	!   end if
-	open #h_cl_glmstr:=fnH: "Name=[Q]\CLmstr\GLmstr.h[cno],KFName=[Q]\CLmstr\GLINDEX.h[cno],Shr",internal,outIn,keyed
-	read #h_cl_bank,using F_CLFILE_12,key=lpad$(str$(bankcode),2),release: bn$,bal,upi,ckno nokey L4200
-	L4200: ckno=ckno+1
-	! dAT=VAL(DATE$(4:5)&DATE$(7:8)&DATE$(1:2))
-	L4220: !
+	open #h_cl_trans_alloc=fnH: "Name=[Q]\CLmstr\TrAlloc.h[cno],Version=2,KFName=[Q]\CLmstr\TrAlloc-Idx.h[cno],Shr",internal,outIn,keyed
+	open #h_cl_glmstr=fnH: "Name=[Q]\CLmstr\GLmstr.h[cno],KFName=[Q]\CLmstr\GLINDEX.h[cno],Shr",internal,outIn,keyed
+	read #h_cl_bank,using F_CLFILE_12,key=lpad$(str$(bankcode),2),release: bn$,bal,upi,ckno nokey ignore
+	F_CLFILE_12: form pos 3,c 30,pos 45,pd 6.2,pd 6.2,g 8
+	ckno+=1
+	if ckno>9999999 then ckno-=10000000
+	OcFinis: !
 fnend
 def fn_build_check_record
 	tr$(1)=cnvrt$("N 8",check_number)
@@ -540,12 +538,12 @@ def fn_build_check_record
 		mat ded$=("")
 	end if
 	goto WRITE_PAYROLL_TRANS
- 
+
 	L4480: ! If EM(5)=1 Then dED$(29)="4" ! weeks worked
 	if em(5)=2 then ded$(29)="2"
 	if em(5)=3 then ded$(29)="2"
 	if em(5)=4 then ded$(29)="1"
- 
+
 	WRITE_PAYROLL_TRANS: !
 	if testCheckFormat then goto L5250
 	! pr tr$(1),tr$(5) :  pause
@@ -581,7 +579,6 @@ def fn_build_check_record
 	bn$=rtrm$(bn$)
 	bal=bal-val(tr$(3)) conv ignore
 	rewrite #h_cl_bank,using F_CLFILE_12,key=lpad$(str$(bankcode),2): bn$,bal,upi,tr$(1) nokey NoKeyOnClBank
-	F_CLFILE_12: form pos 3,c 30,pos 45,pd 6.2,pd 6.2,g 8
 	NoKeyOnClBank: !
 	F_CL_TRANS_V1: form pos 1,n 2,n 1,c 8,g 6,pd 10.2,c 8,c 35,n 1,n 6,n 1,2*pd 3
 	! WRITE ALLOCATIONS
@@ -590,7 +587,7 @@ def fn_build_check_record
 	 if val(ded$(j))=0 then goto L5230
 	 gl$=""
 	 on j goto L4840,L4910,L4910,L4910,L4910,L4910,L4910,L4910,L4910,L4910,L4910,L4910,L4910,L4910,L4910,L4910,L4910,L4910,L4910,L4910,L4910,L4910,L4910,L4910,L4910,L4910,L5220_Next_J1,L5220_Next_J1,BCR_GLN_VALIDATED none L5230
- 
+
 	 L4840: !
 	 for j1=1 to tdepXcount
 		 if j<6 or j>25 then goto L4870 ! kj 91707
@@ -648,7 +645,7 @@ def fn_cknum ! check for duplicate check numbers
 	dtr$(3)=str$(dtr3)
 	L5440: form pos 4,c 8,g 6,pd 10.2,c 8,c 35,pos 79,2*pd 3
 	DUPLICATE_CHECK: !
-	fnTos(sn$="Prckprt4")
+	fnTos
 	respc=0: mypos=50
 	fnLbl(1,1,"Check Number "&str$(check_number)&" has been previously used!",50,1)
 	fnLbl(3,1,"Date: "&cnvrt$("PIC(ZZ/ZZ/ZZ)",val(dtr$(2))),50,0)
@@ -671,7 +668,7 @@ def fn_cknum ! check for duplicate check numbers
 	check_number=ckn2
 	tr$(1)=lpad$(str$(ckn2),8)
 	goto L5410
- 
+
 	L5670: !
 	bal=bal+val(dtr$(3))
 	delete #h_cl_trans,key=dk$:
@@ -689,7 +686,7 @@ def fn_mgl ! WRITE BENEFITS & FICA MATCH
 	cd1=2
 	for j=1 to tdepXcount
 		mat mgl$=("            ")
-		read #7,using L5790,key=lpad$(str$(tdep(j,5)),3): mat mgl$ nokey L5800
+		read #hMgl,using L5790,key=lpad$(str$(tdep(j,5)),3): mat mgl$ nokey L5800
 		L5790: form pos 4,11*c 12
 		L5800: !
 		for j2=6 to 16
@@ -697,18 +694,19 @@ def fn_mgl ! WRITE BENEFITS & FICA MATCH
 			if j2>6 then goto L5870
 			if ficam1=0 then goto L5980
 			sd5$=de$="FICA Match"
-			fica2=fica2+tdep(j,j2)
+			fica2+=tdep(j,j2)
 			j4=3
 			goto L5900
+			
 			L5870: !
 			if dedcode(j2-6)><3 then goto L5980
 			j4=j2-2
 			sd5$=de$=rtrm$(abrevName$(j4-4))&" Match"
+			
 			L5900: !
 			gl$=mgl$(j2-5)
 			read #h_cl_glmstr,using F_CL_GLMSTR,key=gl$,release: de$ nokey INVALIDGLNUMBER
-			!
-			!
+
 			EXLNKD_L5920: !
 			if ~testCheckFormat then
 				lr3=lrec(h_cl_trans_alloc)+1
@@ -1294,7 +1292,7 @@ F_STUB_01: form pos 3,c 18,2*pic(-------.--),x 4,c 12,pic(-------.--),pic(------
 F_STUB_02: form pos 3,c 9,pic(------.--),2*pic(-------.--),x 4,c 12,pic(-------.--),pic(-----------.--)
 def fn_stub_standard(; stst_show_tips,ststaddlength,Hide_Checknumber)
 	pr #255: ""
-	if Hide_Checknumber=0 then 
+	if Hide_Checknumber=0 then
 	   pr #255,using 'form pos 3,c 30,n 8,x 2,c 13,pic(zz/zz/zz),n 10': em$(1),eno,"",prdmmddyy,check_number
 	else if Hide_Checknumber=1 then
 	   pr #255,using 'form pos 3,c 30,n 8,x 2,c 13,pic(zz/zz/zz),n 10': em$(1),eno,"",prdmmddyy
@@ -1465,9 +1463,9 @@ fnend
 def fn_extract_comp_time
 	balance=0
 	key$=lpad$(str$(eno),8)&"             "
-	restore #breakdown,key>=key$: nokey EOBREAKDOWN
+	restore #hHourBreak,key>=key$: nokey EOBREAKDOWN
 	READHOURBREAKDOWN: !
-	read #breakdown,using "Form pos 1,n 8,c 5,n 8,2*n 9.2",release: empno2,class$,tdate,increase,decrease eof EOBREAKDOWN ! kj 4/18/07
+	read #hHourBreak,using "Form pos 1,n 8,c 5,n 8,2*n 9.2",release: empno2,class$,tdate,increase,decrease eof EOBREAKDOWN ! kj 4/18/07
 	if empno2<>eno then goto EOBREAKDOWN
 	if trim$(class$)<>trim$(compcode$) then goto READHOURBREAKDOWN
 	balance+=increase-decrease
@@ -1481,9 +1479,9 @@ def fn_determine_earnings
 	fedyr=ficayr=stateyr=wagesqtr=fedqtr=ficaqtr=stateqtr=medyr=0
 	medqtr=eicyr=eicqtr=wagesqtr=0
 	checkkey$=cnvrt$("pic(zzzzzzz#)",eno)&cnvrt$("pic(zz#)",0)&cnvrt$("pd 6",0) ! indexed by employee#,department# and payroll date
-	restore #hChecks,key>=checkkey$: nokey L6920
+	restore #hCheck,key>=checkkey$: nokey L6920
 	L6580: !
-	read #hChecks,using "Form POS 1,N 8,n 3,PD 6,N 7,5*PD 3.2,37*PD 5.2": heno,tdn,prd,oldckno,mat tdc,mat tcp eof STORE_VARIABLES : lastrec=rec(3)
+	read #hCheck,using "Form POS 1,N 8,n 3,PD 6,N 7,5*PD 3.2,37*PD 5.2": heno,tdn,prd,oldckno,mat tdc,mat tcp eof STORE_VARIABLES : lastrec=rec(3)
 	if heno<>eno then goto STORE_VARIABLES
 	if prd<beg_date or prd>end_date then ! not this year
 		goto L6580
@@ -1497,7 +1495,7 @@ def fn_determine_earnings
 	if prd=d1 then mat ttc=ttc+tcp: mat ttdc=ttdc+tdc ! total for this check
 	if prd=d1 then fn_accumulate_dept_totals1(tdepXcount,mat tdep,tdn,rate)
 	if env$('client')="Energy Exchanger" then fn_accumulate_dept_totals2
-	if prd=d1 then rewrite #hChecks,using "form pos 18,n 7",rec=lastrec: check_number
+	if prd=d1 then rewrite #hCheck,using "form pos 18,n 7",rec=lastrec: check_number
 	goto L6580
 	STORE_VARIABLES: !
 	!   wagesyr=ytdTotal(31) ! total wages
@@ -1616,26 +1614,26 @@ def fn_fica_matching ! CALCULATE MATCHING FICA
 	medic3=medic3+medic2
 	MFEND: !
 fnend
- 
+
 INVALIDGLNUMBER: ! r:
-	fnTos(sn$="Prckprt3")
+	fnTos
 	mylen=30 : mypos=mylen+2
 	fnLbl(1,1,"Employee Number:",mylen,1)
 	fnTxt(1,mypos,10, 0,0,'',1)
 	resp$(1)=str$(eno)
-!
+
 	fnLbl(2,1,"Department Number:",mylen,1)
 	fnTxt(2,mypos,10, 0,0,'',1)
 	resp$(2)=str$(tdn)
-!
+
 	fnLbl(4,1,"Invalid General Ledger Number:",mylen,1)
 	fnTxt(4,mypos,12, 0,0,'',1)
 	resp$(3)=gl$
-!
+
 	fnLbl(5,1,"Purpose for GL Number:",mylen,1)
 	fnTxt(5,mypos,40, 0,0,'',1)
 	resp$(4)=sd5$
-!
+
 	fnLbl(7,1,"The General Ledger Number is invalid.",40,0)
 	fnLbl(8,1,"Please select the correct one.",40,0)
 	fnLbl(3,1,"Correct General Ledger Number:",mylen,1)
@@ -1649,7 +1647,7 @@ INVALIDGLNUMBER: ! r:
 	read #h_cl_glmstr,using F_CL_GLMSTR,key=gl$,release: de$ nokey INVALIDGLNUMBER
 	on cd1 goto BCR_GLN_VALIDATED,EXLNKD_L5920 none BCR_GLN_VALIDATED
 ! /r
- 
+
 def fn_getTestValues
 	eno=999
 	eno=99999999
