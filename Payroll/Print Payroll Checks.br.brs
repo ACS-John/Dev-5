@@ -107,7 +107,7 @@
 	close #20:
  
 	mat hnames$=abrevName$ : bankgl$=gln$(15)
-	if fnclient_has('CL') then let fn_open_acscl
+	if fnclient_has('CL') then fn_open_acscl
  
 	if bankcode=0 then bankcode=1
 	check_number=ckno
@@ -282,7 +282,7 @@ L1300: ! /r
 		open #praddr:=1: "Name=[Q]\PRmstr\prAddr1.h[cno],Shr",internal,input
 		open #hEmployee:=fnH: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr",internal,input,keyed
 		open #hDepartment:=fnH: "Name=[Q]\PRmstr\Department.h[cno],KFName=[Q]\PRmstr\DeptIdx.h[cno]",internal,outIn,keyed
-		open #3: "Name=[Q]\PRmstr\PayrollChecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno]",internal,outIn,keyed
+		open #hChecks=3: "Name=[Q]\PRmstr\PayrollChecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno]",internal,outIn,keyed
 		open #breakdown=31: "Name=[Q]\PRmstr\HourBreakdown.h[cno],KFName=[Q]\PRmstr\HourBreakdown-idx.h[cno]",internal,outIn,keyed
 		open #dd=30: "Name=[Q]\PRmstr\DD.h[cno],RecL=72,KFName=[Q]\PRmstr\DDidx1.h[cno],Shr,kps=1,kln=10,Use",internal,outIn,keyed
 		if fnclient_has('GL') and gl_installed=1 then
@@ -334,14 +334,14 @@ PRE_CHECK: !
 	ttc(28)=ttc(28)+ttc(29)+ttc(30) ! OTHER COMP-CURRENT
 	ttc(1)=ttc(1)-ttc(25) : tty(1)=tty(1)-tty(25)
 L2070: !
-	if cl_installed=1 then let fn_cknum
+	if cl_installed=1 then fn_cknum
 	fnopenprn
-	if sc1$="SCS" then let fn_print_stub : fn_print_check : fn_print_stub
-	if sc1$="CSS" then let fn_print_check : fn_print_stub : fn_print_stub
-	if sc1$="SSC" then let fn_print_stub : fn_print_stub : fn_print_check
-	if sc1$="SCC" then let fn_print_stub : fn_print_check : fn_print_check
-	if sc1$="CS" then let fn_print_check : fn_print_stub
-	if sc1$="SC" then let fn_print_stub : fn_print_check
+	if sc1$="SCS" then fn_print_stub : fn_print_check : fn_print_stub
+	if sc1$="CSS" then fn_print_check : fn_print_stub : fn_print_stub
+	if sc1$="SSC" then fn_print_stub : fn_print_stub : fn_print_check
+	if sc1$="SCC" then fn_print_stub : fn_print_check : fn_print_check
+	if sc1$="CS" then fn_print_check : fn_print_stub
+	if sc1$="SC" then fn_print_stub : fn_print_check
 L2150: !
 	if fp(d1*.01)>.9 then
 		hd1=19000000+fncd(d1)
@@ -354,7 +354,7 @@ L2150: !
 		goto CHECK_PRINT_TOP
 	end if
 	fncloseprn
-	if testCheckFormat then let fnChain(program$)
+	if testCheckFormat then fnChain(program$)
 	goto ALLIGNMENT
  
 ALLIGNMENT: ! r:
@@ -377,13 +377,13 @@ ALLIGNMENT: ! r:
 ! /r
 REPRINT_SAME_CHECK: !
 	if pre=0 then goto L3130
-	if cl_installed=1 then let fn_build_check_record
+	if cl_installed=1 then fn_build_check_record
 	check_number=check_number+1
 L3130: !
 	goto L2070
  
 CHECK_PRINT_TOP: !
-	if cl_installed=1 then let fn_build_check_record
+	if cl_installed=1 then fn_build_check_record
 	tdc1=0
 	tdc2=0
 	tdc3=tdc4=tdc5=0
@@ -411,9 +411,9 @@ goto MAIN_LOOP_TOP
 def fn_EnglishAmount(dol,mat eng$; n1)
  ! pass amount in dol, returned in mat eng$
  ! n1 = break point (58 is default)
- ! n2  used to hardcoded to 58, let's try setting it to n1 instead 12/29/2017
+ ! n2  used to hardcoded to 58, try setting it to n1 instead 12/29/2017
  !
-	if n1=0 then let n1=58
+	if n1=0 then n1=58
 	n2=n1
 	dol=ttc(32)
 	if dol<=0 then
@@ -488,12 +488,12 @@ def fn_engDol_hundred
 fnend
 EoEmployee: ! r:
 	close #hEmployee:
-	close #3:
+	close #hChecks:
 	if gl_installed=1 then close #h_gl_glbrec:
 	fncloseprn
 	goto FINIS ! /r
 FINIS: !
-	if cl_installed=1 and allign=4 then let fn_build_check_record
+	if cl_installed=1 and allign=4 then fn_build_check_record
 Xit: fnXit
 def fn_open_acscl
 	open #h_cl_bank:=12: "Name=[Q]\CLmstr\BankMstr.h[cno],KFName=[Q]\CLmstr\BankIdx1.h[cno],Shr",internal,outIn,keyed ioerr L4220
@@ -862,7 +862,7 @@ def fn_check_dynamic(length,line_date,line_amount,line_amount_english,line_name_
 	if pos_amt=0 then pos_amt=pos_date+18
 	if pos_nameOnly=0 then pos_nameOnly=12
 	if pos_amount_english=0 then pos_amount_english=9
-	if use_asterisk=1 then let ca$=srep$(ca$,"$","*")
+	if use_asterisk=1 then ca$=srep$(ca$,"$","*")
 	for line_item=1 to length
 ! if line_item=4 the pr line_item : pause
 		if line_item=line_date and line_item=line_amount then
@@ -1481,9 +1481,9 @@ def fn_determine_earnings
 	fedyr=ficayr=stateyr=wagesqtr=fedqtr=ficaqtr=stateqtr=medyr=0
 	medqtr=eicyr=eicqtr=wagesqtr=0
 	checkkey$=cnvrt$("pic(zzzzzzz#)",eno)&cnvrt$("pic(zz#)",0)&cnvrt$("pd 6",0) ! indexed by employee#,department# and payroll date
-	restore #3,key>=checkkey$: nokey L6920
+	restore #hChecks,key>=checkkey$: nokey L6920
 	L6580: !
-	read #3,using "Form POS 1,N 8,n 3,PD 6,N 7,5*PD 3.2,37*PD 5.2": heno,tdn,prd,oldckno,mat tdc,mat tcp eof STORE_VARIABLES : lastrec=rec(3)
+	read #hChecks,using "Form POS 1,N 8,n 3,PD 6,N 7,5*PD 3.2,37*PD 5.2": heno,tdn,prd,oldckno,mat tdc,mat tcp eof STORE_VARIABLES : lastrec=rec(3)
 	if heno<>eno then goto STORE_VARIABLES
 	if prd<beg_date or prd>end_date then ! not this year
 		goto L6580
@@ -1495,9 +1495,9 @@ def fn_determine_earnings
 	mat ytdTotal=ytdTotal+tcp
 	mat tty=tty+tcp
 	if prd=d1 then mat ttc=ttc+tcp: mat ttdc=ttdc+tdc ! total for this check
-	if prd=d1 then let fn_accumulate_dept_totals1(tdepXcount,mat tdep,tdn,rate)
-	if env$('client')="Energy Exchanger" then let fn_accumulate_dept_totals2
-	if prd=d1 then rewrite #3,using "form pos 17,n 8",rec=lastrec: check_number
+	if prd=d1 then fn_accumulate_dept_totals1(tdepXcount,mat tdep,tdn,rate)
+	if env$('client')="Energy Exchanger" then fn_accumulate_dept_totals2
+	if prd=d1 then rewrite #hChecks,using "form pos 18,n 7",rec=lastrec: check_number
 	goto L6580
 	STORE_VARIABLES: !
 	!   wagesyr=ytdTotal(31) ! total wages

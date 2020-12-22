@@ -18,7 +18,7 @@ fnTop(program$)
 open #hEmployee=fnH: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr",internal,input,keyed
 dim dd$(0)*32, ddN(0)
 dd=fn_open('PR Direct Deposit',mat dd$,mat ddN,mat form$)
-open #hChecks:=fnH: "Name=[Q]\PRmstr\payrollchecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno]",internal,outIn,keyed
+open #hChecks=fnH: "Name=[Q]\PRmstr\payrollchecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno]",internal,outIn,keyed
 goto Screen1
 
 Screen1: ! r:
