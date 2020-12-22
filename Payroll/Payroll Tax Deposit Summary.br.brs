@@ -1,20 +1,24 @@
 ! formerly S:\acsPR\newprRegTot
 ! beginning with 4.0 the tax deposit reads from the checkhistory file
- 
+
 autoLibrary
 on error goto Ertn
- 
-dim deptot(999,2),t(36)
-dim fullname$(20)*20,ab$(20)*8,cp(32),tdc(10)
+
+dim deptot(999,2)
+
+dim tx(36)
+
+dim cp(32)
+
 dim em$*30
- 
+
 fnTop(program$)
- 
+
 fnGetPayrollDates(beg_date,end_date)
 ssr1=fnss_employee
 ssr2=fnss_employer
 ! If FNPROCESS=1 Then Goto 410
-fnTos(sn$="TaxDeposit")
+fnTos
 rc=0: mylen=22: mypos=mylen+3: frameno=1
 fnFra(1,1,3,40,"Date Range of Deposit","Enter the date range for the payrolls to be included.")
 fnLbl(1,1,"Beginning Date:",mylen,1,0,frameno)
@@ -29,28 +33,31 @@ fnAcs(mat resp$,ckey)
 if ckey=5 then goto Xit
 beg_date=val(resp$(1))
 end_date=val(resp$(2))
-!
+
 fnopenprn
-!
+
+dim fullname$(20)*20
+dim ab$(20)*8
 fnDedNames(mat fullname$,mat ab$)
 for j=1 to 20
 	ab$(j)=lpad$(rtrm$(ab$(j)),8)
 next j
 gosub PrHeader
-open #h_employee:=fnH: "Name=[Q]\PRmstr\Employee.h[cno],Shr",internal,input,relative
-open #h_checks:=fnH: "Name=[Q]\PRmstr\payrollchecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno]",internal,outIn,keyed
-do !
+open #h_employee=fnH: "Name=[Q]\PRmstr\Employee.h[cno],Shr",internal,input,relative
+open #h_checks=fnH: "Name=[Q]\PRmstr\payrollchecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno]",internal,outIn,keyed
+do
 	ReadEmployee: !
 	read #h_employee,using "Form POS 1,N 8,C 30": eno,em$ eof PrFinalTotals
 	checkkey$=cnvrt$("pic(ZZZZZZZ#)",eno)&"         "
 	foundone=1
 	restore #h_checks,key>=checkkey$: nokey ReadEmployee
 	do
+		dim tdc(10)
 		read #h_checks,using "Form POS 1,N 8,n 3,PD 6,N 7,5*PD 3.2,37*PD 5.2": heno,dep,prd,ckno,mat tdc,mat cp eof ReadEmployee
 		if eno=heno and prd=>beg_date and prd<=end_date then
 			if dep>0 then ! department 0 not totaled
-				deptot(dep,1)=deptot(dep,1)+cp(31)
-				deptot(dep,2)=deptot(dep,2)+cp(2)+cp(3)
+				deptot(dep,1)+=cp(31)
+				deptot(dep,2)+=cp(2)+cp(3)
 			end if
 			! pr #255: 'employee number: '&str$(heno)&' employee record: '&str$(rec(h_employee))&' check number: '&str$(ckno)&' check history record number: '&str$(rec(h_checks))
 			pr #255,using 'form pos 1,pic(zzzz/zz/zz),pos 11,19*n 10.2,n 4': prd,cp(31),cp(2)+cp(3),cp(1),cp(4),cp(5),cp(6),cp(7),cp(8),cp(9),cp(10),cp(11),cp(12),cp(13),cp(14),cp(32),cp(2)+cp(3) pageoflow PGOF
@@ -59,27 +66,27 @@ do !
 				pr #255,using 'form pos 61,10*c 10': ab$(11),ab$(12),ab$(13),ab$(14),ab$(15),ab$(16),ab$(17),ab$(18),ab$(19),ab$(20)
 				pr #255,using 'form pos 59,10*n 10.2': cp(15),cp(16),cp(17),cp(18),cp(19),cp(20),cp(21),cp(22),cp(23),cp(24) pageoflow PGOF
 			end if
-			for j=1 to 32 : t(j)=t(j)+cp(j) : next j
-			t(34)=t(34)+tdc(10)
-			t(35)=t(35)+tdc(9)
-			if foundone=1 then foundone=0: t(36)=t(36)+1
+			for j=1 to 32 : tx(j)+=cp(j) : next j
+			tx(34)+=tdc(10)
+			tx(35)+=tdc(9)
+			if foundone=1 then foundone=0: tx(36)+=1
 		end if
 	loop while eno=heno
 loop
- 
+
 PGOF: ! r:
 	pr #255: newpage
 	gosub PrHeader
 continue ! /r
 PrFinalTotals: ! r: EoF target
 	pr #255:''
-	pr #255,using 'form pos 4,c 5,pos 11,16*n 10.2,n 5': "Total",t(31),t(2)+t(3),t(1),t(4),t(5),t(6),t(7),t(8), t(9),t(10),t(11),t(12),t(13),t(14),t(32),t(2)+t(3) pageoflow PGOF
-	if t(15)+t(16)+t(17)+t(18)+t(19)+t(20)+t(21)+t(22)+t(23)+t(24)<>0 then
-		pr #255,using 'form pos 59,10*n 10.2': t(15),t(16),t(17),t(18),t(19),t(20),t(21),t(22),t(23),t(24) pageoflow PGOF
+	pr #255,using 'form pos 4,c 5,pos 11,16*n 10.2,n 5': "Total",tx(31),tx(2)+tx(3),tx(1),tx(4),tx(5),tx(6),tx(7),tx(8), tx(9),tx(10),tx(11),tx(12),tx(13),tx(14),tx(32),tx(2)+tx(3) pageoflow PGOF
+	if tx(15)+tx(16)+tx(17)+tx(18)+tx(19)+tx(20)+tx(21)+tx(22)+tx(23)+tx(24)<>0 then
+		pr #255,using 'form pos 59,10*n 10.2': tx(15),tx(16),tx(17),tx(18),tx(19),tx(20),tx(21),tx(22),tx(23),tx(24) pageoflow PGOF
 	end if
 	pr #255: ''
 	pr #255: ''
-	pr #255,using L820: "Calculated Tax Deposit:" ,"Medicare W/H",t(3),"SS Withholding",t(2),"Federal Withholding",t(1),"Employer's FICA Match",round(t(2)/ssr1*ssr2,2)+t(3),"Less EIC",-t(25),"Total Deposit",t(3)+t(2)+t(1)+round(t(2)/ssr1*ssr2,2)+t(3)-t(25) ! 2013
+	pr #255,using L820: "Calculated Tax Deposit:" ,"Medicare W/H",tx(3),"SS Withholding",tx(2),"Federal Withholding",tx(1),"Employer's FICA Match",round(tx(2)/ssr1*ssr2,2)+tx(3),"Less EIC",-tx(25),"Total Deposit",tx(3)+tx(2)+tx(1)+round(tx(2)/ssr1*ssr2,2)+tx(3)-tx(25) ! 2013
 	L820: form pos 8,c 30,skip 1,pos 10,c 30,n 12.2,skip 1,pos 10,c 30,n 12.2,skip 1,pos 10,c 30,n 12.2,skip 1,pos 10,c 30,n 12.2,skip 1,pos 10,c 30,n 12.2,skip 1,pos 42,"----------",skip 1,pos 20,c 20,n 12.2,skip 1,pos 42,"=========="
 	pr #255: ''
 	pr #255,using 'form pos 8,c 40': "Summary of FICA Match by Department:"
@@ -87,13 +94,13 @@ PrFinalTotals: ! r: EoF target
 	pr #255: ''
 	for j=1 to 999
 		if deptot(j,2)<>0 then
-			pr #255,using 'form pos 10,n 4,pos 25,n 10.2': j, round(deptot(j,2),2) ! 2013
-			gtotal=gtotal+round(deptot(j,2),2) ! 2013
+			pr #255,using 'form pos 10,n 4,pos 25,n 10.2': j, round(deptot(j,2),2)
+			gtotal+=round(deptot(j,2),2)
 		end if
 	next j
 	pr #255,using L940: "Total",gtotal
 	L940: form pos 25,"__________",skip 1,pos 10,c 6,pos 23,n 12.2,skip 1,pos 25,"=========="
-	pr #255,using "form skip 2,pos 1,c 40": "Total Employees: "&str$(t(36))
+	pr #255,using "form skip 2,pos 1,c 40": "Total Employees: "&str$(tx(36))
 	fncloseprn
 	close #1: ioerr ignore
 goto Xit ! /r
