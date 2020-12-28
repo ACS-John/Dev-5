@@ -1140,6 +1140,7 @@ def fn_ini_move(cursys$*2)
 		fn_programMoveAdd('acsPR\newprchangedate','Payroll\Change Payroll Dates')
 		fn_programMoveAdd('acsPR\newprinput','Payroll\Enter Time Sheets')
 		fn_programMoveAdd('acsPR\newprCkPrt','Payroll\Print Payroll Checks')
+		fn_programMoveAdd('Payroll\Print 1099 Forms','Payroll\Print 1099-NEC Forms')
 		if fnclient_has('P2') then
 			fn_programMoveAdd('acsPR\Category','Payroll\Job Cost\Category')
 		end if
@@ -1164,6 +1165,7 @@ def fn_ini_move(cursys$*2)
 		fn_programMoveAdd('acsUB\label','Utility Billing\Labels')
 	else if cursys$='GL' then
 		fn_programMoveAdd('acsGL\glPrt109','General Ledger\Print 1099 Forms')
+		fn_programMoveAdd('General Ledger\Print 1099 Forms','General Ledger\Print 1099-NEC Forms')
 		fn_programMoveAdd('acsGL\acGLClos','General Ledger\Close Books at Year End')
 		fn_programMoveAdd('acsGL\CloseMonth','General Ledger\Close Month')
 		fn_programMoveAdd('acsGL\AcGLAcTB','General Ledger\Print Accumulated Trial Balance')
@@ -1179,6 +1181,7 @@ def fn_ini_move(cursys$*2)
 	else if cursys$='CL' then
 		fn_programMoveAdd('acsCL\Transaction','Checkbook\Transaction')
 		fn_programMoveAdd('acsCL\cl1099','Checkbook\Print 1099 Forms')
+		fn_programMoveAdd('Checkbook\Print 1099 Forms','Checkbook\Print 1099-NEC Forms') ! XXX TODO: we did not move the page in the help files.
 		fn_programMoveAdd('acsCL\payee','Checkbook\Payee')
 		fn_programMoveAdd('acsCL\UnpaidInvoice','Checkbook\Unpaid Invoice')
 	end if
