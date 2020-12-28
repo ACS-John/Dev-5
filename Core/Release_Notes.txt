@@ -1,5 +1,6 @@
 Time and Date 		Sys	Program(s) and Change(s) Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       
 ______________________	___	____________________________________________________________________________________________________________________________________________________________________________________________________________________________________                                    
+4:44 PM 12/28/2020	PR	added 2021 federal withholding tables 
 14:56 12/20/2020	CO	5.75091  
 2:54 PM 12/28/2020	GL	Added 2020 and 2021 W2 and 1099 pdfs, added 1099-NEC pdfs and adjusted printout and menus for NEC. 
 2:54 PM 12/28/2020	PR	Added 2020 and 2021 W2 and 1099 pdfs, added 1099-NEC pdfs and adjusted printout and menus for NEC. 
