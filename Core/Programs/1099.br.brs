@@ -19,11 +19,11 @@ def fn_setup
 	!
 	dim copyFile$(5)*128,ssnMask(5)
 	taxYear$=date$(days(date$)-120,'CCYY')
-	copyFile$(1)='S:\Core\pdf\'&taxYear$&'\1099-Misc\Copy A.pdf' : ssnMask(1)=0
-	copyFile$(2)='S:\Core\pdf\'&taxYear$&'\1099-Misc\Copy 1.pdf' : ssnMask(2)=0
-	copyFile$(3)='S:\Core\pdf\'&taxYear$&'\1099-Misc\Copy B.pdf' : ssnMask(3)=0
-	copyFile$(4)='S:\Core\pdf\'&taxYear$&'\1099-Misc\Copy C.pdf' : ssnMask(4)=1
-	copyFile$(5)='S:\Core\pdf\'&taxYear$&'\1099-Misc\Copy 2.pdf' : ssnMask(5)=1
+	copyFile$(1)='S:\Core\pdf\'&taxYear$&'\1099-Nec\Copy A.pdf' : ssnMask(1)=0
+	copyFile$(2)='S:\Core\pdf\'&taxYear$&'\1099-Nec\Copy 1.pdf' : ssnMask(2)=0
+	copyFile$(3)='S:\Core\pdf\'&taxYear$&'\1099-Nec\Copy B.pdf' : ssnMask(3)=0
+	copyFile$(4)='S:\Core\pdf\'&taxYear$&'\1099-Nec\Copy C.pdf' : ssnMask(4)=1
+	copyFile$(5)='S:\Core\pdf\'&taxYear$&'\1099-Nec\Copy 2.pdf' : ssnMask(5)=1
 		! /r
 	end if
 fnend
@@ -137,7 +137,7 @@ def library fn1099print(vn$*8,nam$*30,mat empAddr$,ss$*11,mat box)
 		fnpa_txt(cnvrt$("pic(zz,zzz,zzz.zz",box(1)),column2,fn_line(1))
 		fnpa_txt(cnvrt$("pic(zz,zzz,zzz.zz",box(2)),column2,fn_line(2))
 		fnpa_txt(cnvrt$("pic(zz,zzz,zzz.zz",box(3)),column2,fn_line(3))
-		fnpa_txt(cnvrt$("pic(zz,zzz,zzz.zz",box(4)),column3,fn_line(3))
+		fnpa_txt(cnvrt$("pic(zz,zzz,zzz.zz",box(4)),column2,fn_line(5)+5) ! fed withheld 
 		fnpa_txt(fed$,column1,fn_line(4))
 		fnpa_txt(ss$,column1+45,fn_line(4))
 		fnpa_txt(cnvrt$("pic(zz,zzz,zzz.zz",box(5)),column2,fn_line(4))
@@ -152,9 +152,9 @@ def library fn1099print(vn$*8,nam$*30,mat empAddr$,ss$*11,mat box)
 		else
 			pr 'udim(mat empAddr$)=';udim(mat empAddr$);' this is unexpected by '&program$ : pause
 		end if
-		fnpa_txt(cnvrt$("pic(zz,zzz,zzz.zz",box(7)),column2,fn_line(5))
+		fnpa_txt(cnvrt$("pic(zz,zzz,zzz.zz",box(7)),column2,fn_line(1)+21) ! nec income
 		fnpa_txt(cnvrt$("pic(zz,zzz,zzz.zz",box(8)),column3,fn_line(5))
-		fnpa_txt(vn$,column1,fn_line(8))
+		fnpa_txt(vn$,column1,fn_line(9))
 		if twoPerPage$='False' or ten99Count=2 then
 			fnpa_newpage
 			ten99Count=0
@@ -275,7 +275,7 @@ def library fnask_1099_info(&seltp,&type,&min1,&beg_date,&end_date)
 	fnTxt(lc,mypos,12,0,1,"",0,'You can use dashes, etc."')
 	resp$(respc_phone:=rc+=1)=ph$
 	lc+=1
-	fnOpt(lc+=1,3,"Print 1099")
+	fnOpt(lc+=1,3,"Print 1099-NEC")
 	resp$(respc_Print1099:=rc+=1)=destinationOpt$(1)
 	fnLbl(lc+=1,5,"Copy:",12,1,0)
 	fncomboa('Copy',lc,19,mat optCopy$, '',20)

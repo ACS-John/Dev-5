@@ -67,7 +67,7 @@ Annually
 >Close Books at Year End                            ^ General Ledger\*
 >Clear Accumulated Transactions                     ^ acsGL\acGLClr
 >Enter Budget Amounts                               ^ acsGL\BudInpt
->Print 1099 Forms                                   ^ General Ledger\*   
+>Print 1099-NEC Forms                               ^ General Ledger\*   
 >Create Electronic 1099s                            ^ acsGL\Elec1099
 ! no longer necessary, unless files get too large >Dump Old Payee Transactions                              ^ acsGL\Dumppayeetrans
 Error Recovery
