@@ -1349,7 +1349,7 @@ def fn_ace_rd_flex(;___,index_)
 	end if
 	GRID_DATA_LOAD_COMPLETE: !
 	! clear the "Loading..." message
-	pr f loading_spec$: rpt$(" ",30)
+	pr f loading_spec$: rpt$(" ",30) err ignore
 
 	close #grid_data:
 	fn_ace_io_add(gridspec$&",row,selone")
