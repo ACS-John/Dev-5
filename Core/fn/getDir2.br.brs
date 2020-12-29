@@ -91,20 +91,20 @@ def library fnGetDir2(dir$*256,mat filename$; option$,filter$*40,mat gd2_date$,m
 		dim fileList_os$*256
 		if lwrc$(dir$(1:2))=lwrc$('s:') or lwrc$(dir$(1:len(env$('Q'))))=lwrc$(env$('Q')) then
 			if env$('cursys')='CM' then
-				clientOrServer$='Server' ! server
+				clientOrServer$='Server'
 				csat$=''
 				csExeOption$=' -s' ! server
 				fileList_br$='F:\clsinc\temp\GetDir'&session$&'.tmp'
 				fileList_os$=os_filename$('F:\')&'\clsinc\temp\GetDir'&session$&'.tmp'
 			else
-				clientOrServer$='Server' ! server
+				clientOrServer$='Server'
 				csat$=''
 				csExeOption$=' -s' ! server
 				fileList_br$=env$('temp')&'\GetDir'&session$&'.tmp'
 				fileList_os$=env$('temp')&'\GetDir'&session$&'.tmp'
 			end if
 		else
-			clientOrServer$='Client' ! server
+			clientOrServer$='Client'
 			csat$=env$('at')
 			csExeOption$=' -@' ! client
 			fileList_br$=env$('client_temp')&'\GetDir'&session$&'.tmp'
