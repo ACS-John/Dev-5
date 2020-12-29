@@ -1481,7 +1481,7 @@ def fn_determine_earnings
 	checkkey$=cnvrt$("pic(zzzzzzz#)",eno)&cnvrt$("pic(zz#)",0)&cnvrt$("pd 6",0) ! indexed by employee#,department# and payroll date
 	restore #hCheck,key>=checkkey$: nokey L6920
 	L6580: !
-	read #hCheck,using "Form POS 1,N 8,n 3,PD 6,N 7,5*PD 3.2,37*PD 5.2": heno,tdn,prd,oldckno,mat tdc,mat tcp eof STORE_VARIABLES : lastrec=rec(3)
+	read #hCheck,using "Form POS 1,N 8,n 3,PD 6,N 7,5*PD 3.2,37*PD 5.2": heno,tdn,prd,oldckno,mat tdc,mat tcp eof STORE_VARIABLES : lastrec=rec(hcheck)
 	if heno<>eno then goto STORE_VARIABLES
 	if prd<beg_date or prd>end_date then ! not this year
 		goto L6580
