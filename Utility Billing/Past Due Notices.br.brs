@@ -137,12 +137,12 @@ PrintPastDueNotice: ! r:
 	end if
 
 	if reminder=1 then
-		fn_vbprint
+		fn_reminder
 	else if env$('client')="Granby" then
 		fn_print_granby
 	else if env$('client')="French Settlement" then
 		fn_french_settlement_gas
-	else if env$('client')="Blucksberg" then
+	else if env$('client')="Blucksberg" then ! Blucksberg uses both (Reminder) and (Pre-Printed) options
 		fn_print_blucksberg(mat a,mat at$,mat mis$,mat f$,meter_address$,z$,mat addr$,bal,d1)
 	! else if env$('client')="Merriam Woods" then
 	!   fn_merriam_woods
@@ -289,7 +289,7 @@ def fn_vbopenprint
 	lyne=3
 	spacer=0
 fnend  ! fn_vbopenprint
-def fn_vbprint
+def fn_reminder
 	fnpa_fontbold(1)
 	fnpa_fontsize(16)
 	fnpa_font
@@ -303,11 +303,11 @@ def fn_vbprint
 	fnpa_fontsize(12)
 	fnpa_line(115,lyne*12+spacer,75, 30,1)
 	fnpa_txt("A Friendly Reminder....",100,lyne+spacer)
-	fnpa_fontsize
+	fnpa_fontsize(9)
 	fnpa_fontbold
-	fnpa_txt('If your check has already been mailed,please',100,lyne*3+spacer)
-	fnpa_txt('disregard this notice.  If not, your remittance by mail',100,lyne*4+spacer)
-	fnpa_txt('will be greatly appreciated.',100,lyne*5+spacer)
+	fnpa_txt('If your check has already been mailed, please',100,lyne*3+spacer)
+	fnpa_txt('disregard this notice.  If not, your remittance',100,lyne*4+spacer)
+	fnpa_txt('by mail will be greatly appreciated.',100,lyne*5+spacer)
 	fnpa_txt('Thank You!',150,lyne*7+spacer)
 	fnpa_txt('Customer No: '&z$,125,lyne*14+spacer)
 	fnpa_txt('Billing Date: '&cnvrt$("PIC(zZZ/ZZ/ZZ)",d1),125,lyne*16+spacer)
@@ -370,7 +370,7 @@ def fn_report_add
 	pr #h_ra,using 'form pos 1,c 256': z$&'  '&addr$(1)&cnvrt$("pic(---,---.##)",bal)&'  '&meter_address$&'  '
 
 fnend
-def fn_print_standard_form ! used by Blucksberg Mtn Water, possibly others
+def fn_print_standard_form ! used by (not) Blucksberg Mtn Water, possibly others
 	if a(1)=0 then water$="     " else water$="Water"
 	if a(4)=0 then gas$="   " else gas$="Gas"
 	fnopenprn
@@ -406,6 +406,7 @@ def fn_print_standard_form ! used by Blucksberg Mtn Water, possibly others
 	! 4 more lines from this point before next page
 	pr #255: newpage
 fnend
+! Blucksberg uses both   fn_print_blucksberg   and   fn_reminder 12/29/2020
 def fn_print_blucksberg(mat a,mat at$,mat mis$,mat f$,meter_address$*30,z$,mat addr$,bal,d1; ___,water$*5,gas$*3) ! 9/10/2018
 	fnopenprn
 	pr #255: ''
