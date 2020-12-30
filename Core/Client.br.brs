@@ -27,25 +27,27 @@ def library fnClientSelect
 fnend
 def fn_clientSelect
 	fnTos('clientSelect')
-	dim flexItem$(4)*256
-	mat clientSelectHeading$(4)
-	clientSelectHeading$(1)='Name'
-	clientSelectHeading$(2)='Number'
-	clientSelectHeading$(3)='brSerial'
-	clientSelectHeading$(4)='Licenses'
-	mat clientSelectMask$(4)
-	clientSelectMask$(1)=''
-	clientSelectMask$(2)=''
-	clientSelectMask$(3)=''
-	clientSelectMask$(4)=''
-	mat flexItem$(4)
-	fnflexinit1('clientSelect1',2,1,10,10,mat clientSelectHeading$,mat clientSelectMask$)
+	dim csCol$(5)*256
+	csCol$(1)='Name'
+	csCol$(2)='Number'
+	csCol$(3)='brSerial'
+	csCol$(4)='Licenses'
+	csCol$(5)='Last Selection Date'
+	mat csMask$(5)
+	csMask$(1)=''
+	csMask$(2)=''
+	csMask$(3)=''
+	csMask$(4)=''
+	csMask$(5)=''
+	fnflexinit1('clientSelect1',2,1,10,10,mat csCol$,mat csMask$)
 	for clientItem=1 to udim(mat client_name$)
-		flexItem$(1)=client_name$(clientItem)
-		flexItem$(2)=str$(client_cno(clientItem))
-		flexItem$(3)=str$(client_brserial(clientItem))
-		flexItem$(4)=client_name$(clientItem)
-		fnflexadd1(mat flexItem$)
+		mat csCol$(5)=('')
+		csCol$(1)=client_name$(clientItem)
+		csCol$(2)=str$(client_cno(clientItem))
+		csCol$(3)=str$(client_brserial(clientItem))
+		csCol$(4)=client_name$(clientItem)
+		fnmcreg_read('lastSelection for '&client_name$(clientItem),csCol$(5),'')
+		fnflexadd1(mat csCol$)
 	nex clientItem
 	fnCmdSet(2)
 	fnAcs(mat resp$,ckey)
@@ -62,6 +64,7 @@ def fn_setClient(scClient$*128)
 	fnSetEnv('Client',scClient$) ! pr 'env$ client set to '&env$('client') : pause
 	fnSetEnv('clientSelected',env$('Client'))
 	fnmcreg_write('clientSelected',env$('clientSelected'))
+	fnmcreg_write('lastSelection for '&env$('clientSelected'),date$('mm/dd/ccyy')&' - '&time$)
 	if env$('enableDataFolderByClient')='Yes' then
 		dataNew$=rtrm$(env$('QBase'),'\')&'\'&env$('client') ! &'\'
 		fnmakesurepathexists(dataNew$)
