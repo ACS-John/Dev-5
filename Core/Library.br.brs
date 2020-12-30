@@ -601,13 +601,13 @@ fnend
 		library 'S:\Core\fn\error.br': fnError
 		fnError=fnError(callingProgram$,errornumber,linenumber,ertnAct$,stopable$)
 	fnend
-	def library fnlog(log$*512;x)
+	def library fnlog(log$*512; x)
 		library 'S:\Core\Log.br': fnlog
-		fnlog=fnlog(log$,x)
+		fnlog=fnlog(log$, x)
 	fnend
-	def library fngetdir(&dir$,mat filename$;option$,filter$*40)
+	def library fngetdir(&dir$,mat filename$; option$,filter$*40)
 		library 'S:\Core\fn\getDir.br': fngetdir
-		fngetdir=fngetdir(dir$,mat filename$,option$,filter$)
+		fngetdir=fngetdir(dir$,mat filename$, option$,filter$)
 	fnend
 	def library fnGetDir2(dir$*256,mat filename$; option$,filter$*40,mat fileDate$,mat fileTime$,forceFullPath,mat fileSize)
 		library 'S:\Core\fn\getDir2.br': fngetdir2
@@ -634,7 +634,7 @@ fnend
 		library 'S:\Core\Check File Versions.br': fnCheckFileVersion
 		fnCheckFileVersion=fnCheckFileVersion
 	fnend
-	def library fnconsole(;on_off)
+	def library fnconsole(; on_off)
 		library 'S:\Core\Ace\Console.br': fnconsole
 		fnconsole(on_off)
 	fnend
