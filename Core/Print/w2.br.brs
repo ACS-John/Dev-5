@@ -90,7 +90,7 @@ def library fnask_w2_info(&taxYear$,&beg_date,&end_date,&empStart$,&empEnd$,&ssr
 	end if
 	ASK_INFO: !
 	! r: build and display the ASK_INFO screen
-	fnTos(sn$="Prw2-2")
+	fnTos
 	rc=cf=0: mylen=21: mypos=mylen+2 
 	if enableAskCLocality then 
 		fraWidth=94
@@ -309,7 +309,7 @@ def fn_ask_margins
 	fnreg_read('W-2 - Form 1 Y',amResp$(1),'10' )
 	fnreg_read('W-2 - Form 2 Y',amResp$(2),'151')
 	fnreg_read('W-2 - X'       ,amResp$(3),'12' )
-	fnTos(sn$='w2_ask_margins')
+	fnTos
 	mylen=30 : mypos=mylen+2
 	fnLbl(lc+=1,1,"Form 1 Distance from Top (mm):",mylen,1)
 	fnTxt(lc,mypos,3,0,1,'30')
