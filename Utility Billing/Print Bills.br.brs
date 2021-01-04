@@ -449,7 +449,7 @@ MainLoop: ! r: main loop
 		fn_print_bill_pennington(z$,mat mg$,mat mg2$,serviceFromMmddYy,serviceToMmddYy,d4)
 		! fn_print_bill_Exeter(z$,mat mg$,serviceFromMmddYy,serviceToMmddYy,d4)
 	else if env$('client')='Edinburg' then
-		fn_print_bill_edinburg(z$,mat mg$,d1,serviceFromOverride,~and)
+		fn_print_bill_edinburg(z$,mat mg$,d1,serviceFromOverride,serviceToOverride,d4) ! ,serviceTo,penaltyDueDate)  ! ~and)
 	else if env$('client')='Billings' or env$('client')='Diamond' then
 		fn_print_bill_billings(mat mg$,mat g,mat b,bal,mat penalty$,d1,serviceFromMmddYy,serviceToMmddYy,d4,mat pe$,final$,z$) ! 
 	else if env$('client')='Choctaw' then
@@ -1797,7 +1797,7 @@ def fn_print_bill_pennington(z$,mat mg$,mat mg2$,serviceFrom,serviceTo,penaltyDu
 		count=0
 	end if 
 fnend 
-def fn_print_bill_edinburg(z$,mat mg$,d1,serviceFrom,serviceTo,penaltyDueDate)
+def fn_print_bill_edinburg(z$,mat mg$,d1,serviceFrom,serviceToOverride,penaltyDueDate) ! ,serviceTo,penaltyDueDate)
 ! correct margins are ??
 ! r: any and all necessary setup (except opening the printer) to pr one bill
 		if ~pbedinburg_setup then 
@@ -1829,7 +1829,7 @@ def fn_print_bill_edinburg(z$,mat mg$,d1,serviceFrom,serviceTo,penaltyDueDate)
 	fnpa_txt("  Edinburg, IL 62531    ",xmargin+6,lyne*3+1+ymargin)
 	fnpa_txt('#'&trim$(z$)&'  '&bulk$,xmargin+4,lyne*5+ymargin)
 	fnpa_txt(e$(1),xmargin+4,lyne*6+ymargin)
-	fnpa_txt('From: '&cnvrt$("PIC(ZZ/ZZ/ZZ)",serviceFrom)&'  To: '&cnvrt$("PIC(ZZ/ZZ/ZZ)",serviceTo),xmargin+2,lyne*7+ymargin)
+	fnpa_txt('From: '&cnvrt$("PIC(ZZ/ZZ/ZZ)",serviceTo)&'  To: '&cnvrt$("PIC(ZZ/ZZ/ZZ)",serviceFrom),xmargin+2,lyne*7+ymargin)
 	fnpa_txt("Is due now and payable.",xmargin+2,lyne*8+ymargin)
 	fnpa_txt('Billing Date: '&cnvrt$("PIC(ZZ/ZZ/ZZ)",d1),xmargin+2,lyne*11+ymargin)
 	fnpa_line(xmargin+1,lyne*12+1+ymargin,62,0)
