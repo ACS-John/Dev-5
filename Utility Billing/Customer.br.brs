@@ -8,15 +8,15 @@ def library fnCustomer(x)
 	fn_setup
 	disableBalanceEdit=1
 	! r: open files
-	open #h_ubadrbil:=fnH: "Name=[Q]\UBmstr\ubAdrBil.h[cno],KFName=[Q]\UBmstr\AdrIndex.h[cno],Shr,Use,RecL=130,KPs=1,KLn=10",internal,outIn,keyed  ! was :=3
+	open #h_ubadrbil=fnH: "Name=[Q]\UBmstr\ubAdrBil.h[cno],KFName=[Q]\UBmstr\AdrIndex.h[cno],Shr,Use,RecL=130,KPs=1,KLn=10",internal,outIn,keyed  ! was :=3
 	F_ADRBIL: form pos 1,c 10,4*c 30
 	gosub OPEN_CASS1
 	fn_setup_depositChange ! INITIALIZE DEPOSIT TRACKING FILES
 	! r: BUD1: ! INITILIZE BUDGET FILE
 	bud1=0
-	open #h_budmstr:=fnH: "Name=[Q]\UBmstr\BudMstr.h[cno],KFName=[Q]\UBmstr\BudIdx1.h[cno],Shr,Use,RecL=80,KPs=1,KLn=10",internal,outIn,keyed  ! was 81
+	open #h_budmstr=fnH: "Name=[Q]\UBmstr\BudMstr.h[cno],KFName=[Q]\UBmstr\BudIdx1.h[cno],Shr,Use,RecL=80,KPs=1,KLn=10",internal,outIn,keyed  ! was 81
 	F_BUDMSTR: form pos 1,c 10,pd 4,12*pd 5.2,2*pd 3
-	open #h_budtrans:=fnH: "Name=[Q]\UBmstr\BudTrans.h[cno],Shr,Use,RecL=149",internal,outIn,relative  ! was 82
+	open #h_budtrans=fnH: "Name=[Q]\UBmstr\BudTrans.h[cno],Shr,Use,RecL=149",internal,outIn,relative  ! was 82
 	F_BUDTRANS: form pos 1,c 10,2*pd 4,24*pd 5.2,2*pd 4,pd 3
 	bud1=1
 	! /r
@@ -24,13 +24,13 @@ def library fnCustomer(x)
 	dim customerN(0)
 	h_customer_1=fn_open('UB Customer',mat customer$,mat customerN,mat form$)
 	h_customer_2=h_customer_1+1
-	! open #h_customer_1:=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,outIn,keyed ! 1
-	! open #h_customer_2:=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx2.h[cno],Shr",internal,outIn,keyed  ! 11
-	! open #h_customer_3:=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx3.h[cno],Shr",internal,outIn,keyed ! Meter address
-	! open #h_customer_4:=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx4.h[cno],Shr",internal,outIn,keyed
-	! open #h_customer_5:=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx5.h[cno],Shr",internal,outIn,keyed
+	! open #h_customer_1=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,outIn,keyed ! 1
+	! open #h_customer_2=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx2.h[cno],Shr",internal,outIn,keyed  ! 11
+	! open #h_customer_3=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx3.h[cno],Shr",internal,outIn,keyed ! Meter address
+	! open #h_customer_4=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx4.h[cno],Shr",internal,outIn,keyed
+	! open #h_customer_5=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx5.h[cno],Shr",internal,outIn,keyed
 	F_CUSTOMER_1: form pos 1,c 10,4*c 30,c 12,7*pd 2,11*pd 4.2,4*pd 4,15*pd 5,pd 4.2,pd 4,12*pd 4.2,2*pd 3,c 7,2*c 12,pd 3,10*pd 5.2,pos 1712,c 1,c 9,c 2,c 17,n 2,n 7,2*n 6,n 9,pd 5.2,n 3,3*n 9,3*n 2,3*n 3,n 1,3*n 9,3*pd 5.2,c 30,7*c 12,3*c 30
-	open #h_citystzip:=fnH: "Name=[Q]\Data\CityStZip.dat,KFName=[Q]\Data\CityStZip.Idx,Use,RecL=30,KPs=1,KLn=30,Shr",internal,outIn,keyed
+	open #h_citystzip=fnH: "Name=[Q]\Data\CityStZip.dat,KFName=[Q]\Data\CityStZip.Idx,Use,RecL=30,KPs=1,KLn=30,Shr",internal,outIn,keyed
 	! /r
 	!
 	goto AskAcct
@@ -359,7 +359,7 @@ def library fnCustomer(x)
 	 L4100: !
 	return ! /r
 	OPEN_CASS1: ! r:
-		open #h_cass1:=fnH: "Name=[Q]\UBmstr\Cass1.h[cno],KFName=[Q]\UBmstr\CASS1IDX.h[cno],Shr",internal,outIn,keyed ioerr L4150
+		open #h_cass1=fnH: "Name=[Q]\UBmstr\Cass1.h[cno],KFName=[Q]\UBmstr\CASS1IDX.h[cno],Shr",internal,outIn,keyed ioerr L4150
 		cassopen=1
 		L4150: !
 	return  ! /r
@@ -369,7 +369,7 @@ def library fnCustomer(x)
 		end if
 	return  ! /r
 	DEL_HIST: ! r: Delete History with old account
-		open #h_ubtransvb:=fnH: "Name=[Q]\UBmstr\ubTransVB.h[cno],KFName=[Q]\UBmstr\ubTrIndx.h[cno],Shr",internal,outIn,keyed
+		open #h_ubtransvb=fnH: "Name=[Q]\UBmstr\ubTransVB.h[cno],KFName=[Q]\UBmstr\ubTrIndx.h[cno],Shr",internal,outIn,keyed
 		open #hTrans2=fnH: "Name=[Q]\UBmstr\ubTransVB.h[cno],KFName=[Q]\UBmstr\UBTrdt.h[cno],Shr",internal,outIn,keyed
 		restore #h_ubtransvb,key>=x$&"         ": nokey DEL_HIST_FINIS
 		do
@@ -844,7 +844,7 @@ def library fnDepositChangeLog(z$*10,odp,ndp,chgDateMmDdYy,comment$*32)
 	fnDepositChangeLog=fn_depositChangeLog(z$,odp,ndp,chgDateMmDdYy,comment$)
 fnend
 def fn_setup_depositChange
-	open #h_deposit2:=fnH: 'Name=[Q]\UBmstr\Deposit2.h[cno],KFName=[Q]\UBmstr\Deposit2Index.h[cno],Shr,Use,RecL=73,KPs=1,KLn=10',internal,outIn,keyed ! "Name=[Q]\UBmstr\Deposit2.h[cno],Shr,Use,RecL=73",internal,outIn,relative  ! was 42
+	open #h_deposit2=fnH: 'Name=[Q]\UBmstr\Deposit2.h[cno],KFName=[Q]\UBmstr\Deposit2Index.h[cno],Shr,Use,RecL=73,KPs=1,KLn=10',internal,outIn,keyed ! "Name=[Q]\UBmstr\Deposit2.h[cno],Shr,Use,RecL=73",internal,outIn,relative  ! was 42
 fnend
 def fn_depositChangeLog(z$,odp,ndp,chgDateMmDdYy,comment$*32)
 	! requires local:  #h_deposit2
@@ -1169,7 +1169,7 @@ fnend
 def fn_customerNotes(z$)
 		noteFile$=fn_notedir$&"\"&trim$(z$)&".txt"
 		if exists(noteFile$)=0 then
-			open #hTmp:=fnH: "Name="&noteFile$&",Replace",display,output
+			open #hTmp=fnH: "Name="&noteFile$&",Replace",display,output
 			close #hTmp:
 		end if  ! exists(noteFile$)=0
 		fnEditFile('text',noteFile$) ! execute 'SY -w '&atlantis$&' "'&os_filename$(noteFile$)&'" -n' ! ioerr [itself]
@@ -1218,7 +1218,7 @@ def fn_accountKeyChange_meter(key_from$*10,key_to$*10)
 fnend
 def fn_customer_grid(cg_line,cg_pos)
 	dim cg_item$(12)*30,cg_ch$(12),cg_cm$(12)
-	open #cg_file_num:=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,input,keyed ioerr ERTN
+	open #cg_file_num=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,input,keyed ioerr ERTN
 	restore #file_num:
 	mat cg_ch$(12) : mat cg_cm$(12) : mat cg_cm$(12)
 	cg_ch$(1)="Account"
@@ -1460,7 +1460,7 @@ def fn_warn_text$*200(z$*10; wtDefaultText$*256)
 	dim wtLine$*2048
 	wtMaxLen=200
 	wtReturn$=wtDefaultText$
-	open #h_notefile:=fnH:'name='&fn_notedir$&"\"&trim$(z$)&".txt",d,input ioerr WT_FINIS
+	open #h_notefile=fnH:'name='&fn_notedir$&"\"&trim$(z$)&".txt",d,input ioerr WT_FINIS
 	do
 		linput #h_notefile: wtLine$ eof WT_FINIS
 		if lwrc$(wtLine$(1:5))='warn:' then
@@ -1546,7 +1546,7 @@ fnend
 def fn_getRateCodeOptions(service_code,&ratecode,mat rates$ ) ! get applicable rate codes
 	! search routine must be passed code for service (WA for water) in searchcode$
 	searchcode$=srv$(service_code)
-	open #h_rate1:=fnH: "Name=[Q]\UBmstr\ubData\RateMst.h[cno],KFName=[Q]\UBmstr\ubData\RateIdx1.h[cno],Shr",internal,input,keyed
+	open #h_rate1=fnH: "Name=[Q]\UBmstr\ubData\RateMst.h[cno],KFName=[Q]\UBmstr\ubData\RateIdx1.h[cno],Shr",internal,input,keyed
 	restore #h_rate1:
 	mat rates$(99)
 	mat rates$=("")
@@ -1813,7 +1813,7 @@ def fn_customerBeforeSet(mat customer$,mat customerN,mat customerBefore$,mat cus
 	mat customerBeforeN=customerN
 fnend
 def fn_customerChangesReport(mat customer$,mat customerN,mat customerBefore$,mat customerBeforeN)
-	open #h_notefile:=fnH:'name='&fn_notedir$&"\"&trim$(z$)&".log",d,output
+	open #h_notefile=fnH:'name='&fn_notedir$&"\"&trim$(z$)&".log",d,output
 fnend
 include: ertn
 include: fn_open
