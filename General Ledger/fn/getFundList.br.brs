@@ -6,7 +6,7 @@ def library fnGetFundList(mat fund_list)
   close #company: 
   if use_dept then 
 	 mat fund_list(999)
-	 open #gfl_h_glmstr:=fnH: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLIndex.h[cno],Shr",internal,input,keyed 
+	 open #gfl_h_glmstr=fnH: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLIndex.h[cno],Shr",internal,input,keyed 
 	 do 
 		read #gfl_h_glmstr,using 'form pos 1,N 3': fund eof GFL_EO_GLMSTR
 		if fund<>fund_prior then 

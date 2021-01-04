@@ -288,7 +288,7 @@ goto MAIN_QUESTIONS
 		open #hDd=fnH: "Name=[Q]\PRmstr\DD.h[cno],RecL=72,KFName=[Q]\PRmstr\DDidx1.h[cno],Shr,kps=1,kln=10,Use",internal,outIn,keyed
 		if fnclient_has('GL') and gl_installed=1 then
 			gl_installed=0
-			open #h_gl_glbrec:=fnH: "Name=[Q]\GLmstr\GLBREC.h[cno],KFName=[Q]\GLmstr\GLRECIDX.h[cno],Shr",internal,outIn,keyed ioerr L1440
+			open #h_gl_glbrec=fnH: "Name=[Q]\GLmstr\GLBREC.h[cno],KFName=[Q]\GLmstr\GLRECIDX.h[cno],Shr",internal,outIn,keyed ioerr L1440
 			gl_installed=1
 			L1440: !
 		end if

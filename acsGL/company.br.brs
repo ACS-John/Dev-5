@@ -284,12 +284,12 @@ return ! /r
 def library fnLastAccountingPeriodClosed(; setit,___,h,returnN)
 	autoLibrary
 	if setit then
-		open #h:=fnH: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,outIn,relative  
+		open #h=fnH: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,outIn,relative  
 		rewrite #h,using 'Form Pos 296,n 2',rec=1: setit
 		close #h:
 		returnN=setit
 	else
-		open #h:=fnH: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,outIn,relative  
+		open #h=fnH: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,outIn,relative  
 		read #h,using 'Form Pos 296,n 2',rec=1: returnN
 		close #h: 
 	end if

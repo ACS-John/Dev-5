@@ -40,15 +40,15 @@ def library fn1099print(vn$*8,nam$*30,mat empAddr$,ss$*11,mat box)
 	if ~ten99initialized then ! r: initialize output destination (if necessary)
 		dim a$(3)*40
 		if env$('CurSys')='PR' then
-			open #hCompany:=fnH: "Name=[Q]\PRmstr\company.h[cno],Shr", internal,input,relative
+			open #hCompany=fnH: "Name=[Q]\PRmstr\company.h[cno],Shr", internal,input,relative
 			read #hCompany,using "Form POS 1,3*C 40,C 12": mat a$,fed$
 			close #hCompany:
 		else if env$('CurSys')='GL' then
-			open #hCompany:=fnH: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,input,relative
+			open #hCompany=fnH: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,input,relative
 			read #hCompany,using ' Form POS 1,3*C 40,C 12': mat a$,fed$
 			close #hCompany:
 		else if env$('CurSys')='CL' then
-			open #hCompany:=fnH: "Name=[Q]\CLmstr\Company.h[cno],Shr",internal,input,relative
+			open #hCompany=fnH: "Name=[Q]\CLmstr\Company.h[cno],Shr",internal,input,relative
 			read #hCompany,using ' Form POS 1,3*C 40,C 12': mat a$,fed$
 			close #hCompany:
 		end if
@@ -71,7 +71,7 @@ def library fn1099print(vn$*8,nam$*30,mat empAddr$,ss$*11,mat box)
 			output_filename$=srep$(output_filename$,'[TaxYear]',taxYear$)
 			output_filename$=srep$(output_filename$,'[taxyear]',taxYear$)
 			output_filename$=srep$(output_filename$,'[TAXYEAR]',taxYear$)
-			open #hExport:=fnH: "Name="&br_filename$(output_filename$)&",REPLACE",display,output ioerr ASK_INFO
+			open #hExport=fnH: "Name="&br_filename$(output_filename$)&",REPLACE",display,output ioerr ASK_INFO
 		else
 			fnpa_open('',copyCurrent$,'PDF')
 		end if

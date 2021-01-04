@@ -29,8 +29,8 @@
 	fnGetServices(mat serviceName$) : for servicename_item=1 to udim(mat serviceName$) : serviceName$(servicename_item)=trim$(serviceName$(servicename_item)) : next servicename_item
 	delim$=chr$(9)
 !
-	open #h_customer:=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,input,keyed
-	open #h_alt_bill:=fnH: "Name=[Q]\UBmstr\ubAdrBil.h[cno],KFName=[Q]\UBmstr\AdrIndex.h[cno],Shr",internal,input,keyed
+	open #h_customer=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,input,keyed
+	open #h_alt_bill=fnH: "Name=[Q]\UBmstr\ubAdrBil.h[cno],KFName=[Q]\UBmstr\AdrIndex.h[cno],Shr",internal,input,keyed
 !
 	fnureg_read('ECP Export Filename',exp_filename$)
 	if exp_filename$='' then exp_filename$=os_filename$(env$('Desktop'))&"\ACS_ECP_Export.txt"

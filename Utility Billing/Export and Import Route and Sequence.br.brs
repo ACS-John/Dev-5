@@ -40,7 +40,7 @@ def fn_importRouteAndSequence(source$*256,delim$*1; ___,hIn,line$*2048,z$*10,pas
 	fncreg_read('Route High',bkno2$) : bkno2=val(bkno2$)
 
 	hCustomer=fn_open('UB Customer',mat c$,mat cN,mat form$)
-	open #hIn:=fnH: 'Name='&br_filename$(source$),display,input ioerr ImportFail
+	open #hIn=fnH: 'Name='&br_filename$(source$),display,input ioerr ImportFail
 	dim header$(0)*256
 	for pass=1 to 2
 		restore #hIn:
@@ -121,9 +121,9 @@ def fn_importRouteAndSequence(source$*256,delim$*1; ___,hIn,line$*2048,z$*10,pas
 fnend
 def fn_exportRouteAndSequence(outFile$*256,delim$*1; ___,hCustomer)
 	hCustomer=fn_open('UB Customer',mat c$,mat cN,mat form$, 1)
-	! open #hCustomer:=fnH: 'Name=[Q]\UBmstr\Customer.h[cno],shr',internal,input,relative
+	! open #hCustomer=fnH: 'Name=[Q]\UBmstr\Customer.h[cno],shr',internal,input,relative
 	fnMakeSurePathExists(outFile$)
-	open #hOut:=fnH: 'Name='&br_filename$(outFile$)&',RecL=2500,Replace,EOL=CRLF',display,output
+	open #hOut=fnH: 'Name='&br_filename$(outFile$)&',RecL=2500,Replace,EOL=CRLF',display,output
 	!  r: Header
 	pr #hOut: 'Account Key'                  &delim$;
 	pr #hOut: 'Route'              	         &delim$;

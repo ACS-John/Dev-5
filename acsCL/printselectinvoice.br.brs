@@ -13,8 +13,8 @@ close #20:
 bankcode=val(bc$)
  
 open #bankmstr=12: "Name=[Q]\CLmstr\BankMstr.h[cno],KFName=[Q]\CLmstr\BankIdx1.h[cno],Shr",internal, outin, keyed
-open #paymstr1:=fnH: "Name=[Q]\CLmstr\PayMstr.h[cno],KFName=[Q]\CLmstr\PayIdx1.h[cno],Shr",internal,outIn,keyed
-open #paytrans:=fnH: "Name=[Q]\CLmstr\PayTrans.h[cno],Version=2,KFName=[Q]\CLmstr\UnPdIdx1.h[cno],Shr",internal,outIn,keyed
+open #paymstr1=fnH: "Name=[Q]\CLmstr\PayMstr.h[cno],KFName=[Q]\CLmstr\PayIdx1.h[cno],Shr",internal,outIn,keyed
+open #paytrans=fnH: "Name=[Q]\CLmstr\PayTrans.h[cno],Version=2,KFName=[Q]\CLmstr\UnPdIdx1.h[cno],Shr",internal,outIn,keyed
 open #unpdaloc=5: "Name=[Q]\CLmstr\UnPdAloc.h[cno],KFName=[Q]\CLmstr\uaidx2.h[cno],Shr",internal,outIn,keyed
 sc3$(2)=" Total Invoices selected for payment-Bank "
 sc3$(2)=sc3$(2)&ltrm$(str$(bankcode))&":"

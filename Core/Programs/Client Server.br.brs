@@ -51,11 +51,11 @@ def fn_server_install
 	fnCopy('S:\brclient*.*',env$('temp')&'\acs\brCsInstall\ACS 5 Client\*.*')
 	execute 'sy xcopy "'&os_filename$('S:\Core')&'\Client\*.*" "'&os_filename$(env$('temp')&'\acs\brCsInstall\ACS 5 Client')&'\*.*" /S'
 	fnStatus('make [Q]\brListener.conf')
-	open #h_br_parms_txt:=fnH: 'Name='&env$('temp')&'\acs\brCsInstall\ACS 5 Client\br_parms.txt,RecL=256,replace',display,output
+	open #h_br_parms_txt=fnH: 'Name='&env$('temp')&'\acs\brCsInstall\ACS 5 Client\br_parms.txt,RecL=256,replace',display,output
 	pr #h_br_parms_txt: 'host='&server_name$
 	pr #h_br_parms_txt: 'label=ACS_5_CS'
 	close #h_br_parms_txt:
-	open #h_brlistener_conf:=fnH: 'Name=[Q]\brListener.conf,RecL=256,replace',display,output
+	open #h_brlistener_conf=fnH: 'Name=[Q]\brListener.conf,RecL=256,replace',display,output
 	pr #h_brlistener_conf: 'LogFile='&env$('temp')&'\acs-Log-CS.txt'
 	pr #h_brlistener_conf: 'LogLevel=10'
 	pr #h_brlistener_conf: '['
@@ -76,7 +76,7 @@ def fn_server_install
 	fnStatus('  and copy it into windows')
 	fnStatus('  and copy DLL to 32 bit system folder (System32 or SysWOW64)')
   ! execute 'copy "S:\Core\Run_As_Admin.cmd" "'&env$('temp')&'\acs\brCsInstall\Install_BR_Server_'&session$&'.cmd"'
-	open #h_copy_cmd:=fnH: 'Name='&env$('temp')&'\acs\brCsInstall\Install_BR_Server_'&session$&'.cmd,replace,recl=256',display,output
+	open #h_copy_cmd=fnH: 'Name='&env$('temp')&'\acs\brCsInstall\Install_BR_Server_'&session$&'.cmd,replace,recl=256',display,output
     pr #h_copy_cmd:     '@echo on'
 	pr #h_copy_cmd: 'copy "'&os_filename$('[Q]\brListener.conf')&'" "'&os_filename$(env$('windir')&'\brListener.conf')&'"'
 	! pr #h_copy_cmd: 'copy "'&os_filename$(env$('temp')&'\acs\brCsInstall\ACS 5 Client\br_parms.txt')&'" "'&os_filename$('S:\')&'\*.*"'
@@ -101,7 +101,7 @@ def fn_server_uninstall
   end if
 	fnStatus('fn_server_uninstall')
 	fnMakeSurePathExists('[temp]\acs\brCsInstall\')
-	open #h_copy_cmd:=fnH: 'Name='&env$('temp')&'\acs\brCsInstall\Remove_BR_Server_'&session$&'.cmd,replace,recl=256',display,output
+	open #h_copy_cmd=fnH: 'Name='&env$('temp')&'\acs\brCsInstall\Remove_BR_Server_'&session$&'.cmd,replace,recl=256',display,output
 	pr #h_copy_cmd: '"'&os_filename$('S:\brListenerInstaller-'&env$('BR_Architecture')&'.exe')&'" /release'
 	pr #h_copy_cmd: 'del "'&os_filename$(env$('windir')&'\brListener.conf')&'"'
 	pr #h_copy_cmd: 'del "'&os_filename$(env$('SystemRoot')&'\System32\brListener.exe')&'"'

@@ -32,7 +32,7 @@ autoLibrary
   if nap=13 then m1GlmBbAmtPos=171-6 else m1GlmBbAmtPos=171-12 ! 171 was 249
   ! last=val(lastCapitalAccount$(4:9))
   open #h_glmstr:=1: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLIndex.h[cno],Shr",internal,input,keyed
-  open #h_actrans:=fnH: "Name=[Q]\GLmstr\AcTrans.h[cno],KFName=[Q]\GLmstr\AcTrIdx.h[cno],Shr",internal,input,keyed
+  open #h_actrans=fnH: "Name=[Q]\GLmstr\AcTrans.h[cno],KFName=[Q]\GLmstr\AcTrIdx.h[cno],Shr",internal,input,keyed
   if fnprocess=1 then s1=1 : goto mainLoopInit
 goto SCREEN1
 SCREEN1: ! r:

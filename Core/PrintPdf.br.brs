@@ -115,7 +115,7 @@ def fn_print(text$*2048; disable_return)
 	if debug then
 		if ~debugScriptSetup then
 			debugScriptSetup=1
-			open #hDebugScript:=fnH: 'name=acsBrPdfScript.txt,recl=2048,replace',d,o
+			open #hDebugScript=fnH: 'name=acsBrPdfScript.txt,recl=2048,replace',d,o
 		end if
 		text$=srep$(text$,esc$,'\E')
 		if disable_return then
@@ -273,7 +273,7 @@ def fn_debug(debugText$*2048)
 	if debug then
 		if ~debugLogSetup then
 			debugLogSetup=1
-			open #hDebugLog:=fnH: 'name=acsBrPdf.txt,recl=2048,replace',d,o
+			open #hDebugLog=fnH: 'name=acsBrPdf.txt,recl=2048,replace',d,o
 		end if
 		if debugText$(1:2)<>'\E' then 
 			pr #hDebugLog: debugText$&'  ';

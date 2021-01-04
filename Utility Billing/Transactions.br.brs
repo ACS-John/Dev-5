@@ -40,7 +40,7 @@ def fn_trans_total_as_of(;customer_key$,date_ccyymmdd, trans_type)
 	! transaction_type or blank for all
 	if ~ttao_setup then
 		ttao_setup=1
-		open #ttao_h_trans:=fnH: "Name=[Q]\UBmstr\ubtransvb.h[cno],KFName=[Q]\UBmstr\UBTrIndx.h[cno],Shr",internal,input,keyed
+		open #ttao_h_trans=fnH: "Name=[Q]\UBmstr\ubtransvb.h[cno],KFName=[Q]\UBmstr\UBTrIndx.h[cno],Shr",internal,input,keyed
 		dim ttao_key$*19
 	end if
 	ttao_return=0
@@ -442,7 +442,7 @@ def fn_printTrans ! very local function - lots of inherritance
 		account_balance=val(fnCustomerData$(lpad$(rtrm$(z$),10),'balance'      , 1))
 		nam$           =    fnCustomerData$(lpad$(rtrm$(z$),10),'name'         , 1)
 		metraddr$      =    fnCustomerData$(lpad$(rtrm$(z$),10),'Meter Address'   )
-		! open #h_customer:=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,input,keyed
+		! open #h_customer=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,input,keyed
 		! read #h_customer,using 'Form POS 11,c 30,C 28,pos 292,PD 4.2',key=lpad$(rtrm$(z$),10),release: metraddr$,nam$,account_balance nokey PT_NO_CUSTOMER
 		! close #h_customer: ioerr ignore
 		restore #trans,key>=lpad$(rtrm$(z$),10)&"         ": nokey PT_FINIS
@@ -602,7 +602,7 @@ def fn_flextran(myline,mypos; hTrans,z$,begdate,enddate,selcode)
 
 	if hTrans=0 then
 		close_hTrans=1
-		open #hTrans:=fnH: "Name=[Q]\UBmstr\ubTransVB.h[cno],KFName=[Q]\UBmstr\ubTrIndx.h[cno],Shr",internal,input,keyed
+		open #hTrans=fnH: "Name=[Q]\UBmstr\ubTransVB.h[cno],KFName=[Q]\UBmstr\ubTrIndx.h[cno],Shr",internal,input,keyed
 	end if
 	hTrans_lrec_len=len(str$(lrec(hTrans)))
 	fn_columnGet(mat colhdr$,mat colmask$,ftShowElecUsed,ftShowGasUsed)

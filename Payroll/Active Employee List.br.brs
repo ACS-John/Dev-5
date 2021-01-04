@@ -11,7 +11,7 @@
 	fnGetPayrollDates(beg_date,end_date)
 	gosub ASKFORMAT
  
-	open #hEmployee:=fnH: "Name=[Q]\PRmstr\Employee.h[cno],Shr",internal,input,relative
+	open #hEmployee=fnH: "Name=[Q]\PRmstr\Employee.h[cno],Shr",internal,input,relative
 	F_employee: form pos 1,n 8,c 30,pos 162,n 6,pos 118,n 2
 	open #5: "Name=[Temp]\Temp1."&session$&",RecL=66,Replace",internal,output
 	fnopenprn

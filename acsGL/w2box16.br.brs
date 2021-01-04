@@ -28,7 +28,7 @@ def fn_wesupSetup
 		on error goto Ertn
 		dim resp$(64)*128
 		dim t$*8
-		open #hw2box16:=fnH: "Name=[Q]\GLmstr\W2Box16.h[cno],Version=0,KFName=[Q]\GLmstr\W2Index.h[cno],Use,RecL=158,KPs=1,KLn=8,Shr",internal,outIn,keyed
+		open #hw2box16=fnH: "Name=[Q]\GLmstr\W2Box16.h[cno],Version=0,KFName=[Q]\GLmstr\W2Index.h[cno],Use,RecL=158,KPs=1,KLn=8,Shr",internal,outIn,keyed
 		dim fw2box16$*255
 		fw2box16$="FORM  POS 1,C 8"&rpt$(",C 12,G 10.2,3*G 1",6)
 	end if

@@ -367,7 +367,7 @@ def fn_ifMatchOpenDo(deviceTest$*40,defaultOut_filename$*256,recordLength; extra
 	if deviceTest$='' or deviceSelected$=deviceTest$ then
 		if out_filename$='' then out_filename$=defaultOut_filename$
 		fnmakesurepathexists(env$('at')&out_filename$)
-		open #hImodoReturn:=fnH: 'Name=[at]'&out_filename$&',RecL='&str$(recordLength)&extraParameter$&',Replace',display,output
+		open #hImodoReturn=fnH: 'Name=[at]'&out_filename$&',RecL='&str$(recordLength)&extraParameter$&',Replace',display,output
 		if extraParameter$=',eol=none' then
 			gRecLenRequired=1
 		else
@@ -908,7 +908,7 @@ def fn_readyKamstrup(h_out,account$*10,srvCode$*2)
 fnend
 ! r: itron
 def fn_itron_open
-	open #h_out:=fnH: "Name=[Q]\HH[session].int,RecL=128,EoL=None,Replace",internal,outIn,relative
+	open #h_out=fnH: "Name=[Q]\HH[session].int,RecL=128,EoL=None,Replace",internal,outIn,relative
 	fn_itron_record_fhd
 	itron_rdg_count=0
 	itron_cus_count=0
@@ -974,7 +974,7 @@ def fn_itron_close
 	loop
 	IC_EOF_1: !
 	!
-	open #h_out2:=fnH: "Name=[Q]\Download.dat,RecL=128,EoL=None,Replace",display,output
+	open #h_out2=fnH: "Name=[Q]\Download.dat,RecL=128,EoL=None,Replace",display,output
 	restore #h_out:
 	do
 		read #h_out,using 'form pos 1,C 126': rec_line$ eof IC_EOF_2
@@ -988,7 +988,7 @@ def fn_itron_close
 	fn_reportCreatedFile(out_filename$)
 	!   if exists ("C:\MVRS\MVRSWin5.exe") then
 	!     if ~exists ("C:\MVRS\MVRSWin5.cmd") then
-	!       open #h_tmp:=fnH: 'Name=C:\MVRS\MVRSWin5.cmd,RecL=256,replace',display,output
+	!       open #h_tmp=fnH: 'Name=C:\MVRS\MVRSWin5.cmd,RecL=256,replace',display,output
 	!       pr #h_tmp: 'c:'
 	!       pr #h_tmp: 'cd \MVRS'
 	!       pr #h_tmp: 'C:\MVRS\MVRSWin5.exe'
@@ -1523,7 +1523,7 @@ fnend
 def fn_pcent
 	if ~pcent_setup then
 		pcent_setup=1
-		open #h_company:=fnH: "Name=[Q]\UBmstr\Company.h[cno]",internal,input
+		open #h_company=fnH: "Name=[Q]\UBmstr\Company.h[cno]",internal,input
 		read #h_company,using "Form POS 130,n 4": pcent_return
 		close #h_company:
 		if pcent_return=0 then pcent_return=100

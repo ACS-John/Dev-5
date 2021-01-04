@@ -30,7 +30,7 @@ dim scr1$(10)*30
 mat scr1$(sz1)
 dim alloc(10)
 mat alloc(sz1)
-open #h_customer:=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,input,keyed
+open #h_customer=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,input,keyed
 open #h_trans:=2: "Name=[Q]\UBmstr\UBTransVB.h[cno],KFName=[Q]\UBmstr\UBTrIndx.h[cno],Shr",internal,input,keyed
 
 fnopenprn

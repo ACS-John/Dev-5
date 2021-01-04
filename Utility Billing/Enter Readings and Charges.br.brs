@@ -748,7 +748,7 @@ fnend
 EST1: ! r: ESTIMATEING ROUTINE
 	close #hWork:
 	execute 'Index '&workFile$&' '&workFileIndex$&' 1 10 Replace,DupKeys -n'
-	open #hWork:=fnH: "Name="&workFile$&",KFName="&workFileIndex$,internal,outIn,keyed
+	open #hWork=fnH: "Name="&workFile$&",KFName="&workFileIndex$,internal,outIn,keyed
 	ASK_EST: !
 	fnTos
 	! services=0
@@ -993,9 +993,9 @@ def fn_write_tamper(custno$*10,tval)
 fnend
 ImportTabDelimited: ! r:
 	! r: phase 1 - import from text file into readings.tmp file
-	open #h_tmp:=fnH: "Name=OPEN:Tab Delimited Text (*.txt) |*.txt,RecL=129,Shr",display,input ioerr IT_XIT
+	open #h_tmp=fnH: "Name=OPEN:Tab Delimited Text (*.txt) |*.txt,RecL=129,Shr",display,input ioerr IT_XIT
 	!   open #h_tmp:=2: "Name=L:\readings.txt,RecL=129",display,input
-	open #h_readings_tmp:=fnH: "Name=[Temp]\readings.tmp,RecL=30,replace",display,output
+	open #h_readings_tmp=fnH: "Name=[Temp]\readings.tmp,RecL=30,replace",display,output
 	dim a$*256
 	do
 		IT_TEXT_READ: !
@@ -1342,7 +1342,7 @@ MENU1READWORKEOF: ! /r
 		close #hWork:
 		fnFree(workFile$)
 		fnFree(workFileIndex$)
-		open #hWork:=fnH: "Name="&workFile$&",KFName="&workFileIndex$&",Shr,Use,RecL=74,KPs=1,KLn=10",internal,outIn,keyed
+		open #hWork=fnH: "Name="&workFile$&",KFName="&workFileIndex$&",Shr,Use,RecL=74,KPs=1,KLn=10",internal,outIn,keyed
 	else if fky_importAndLoad and ckey=fky_importAndLoad then
 		fnRetrieveHandHeldFile
 		fnTop(program$)
@@ -1394,7 +1394,7 @@ def fn_holdingFileSave(hWork) ! probably requires more than just hWork
 		holdingFile$="[Q]\UBmstr\IpHold"&str$(bk1)&".h[cno]"
 		holdingFileIndex$=env$('temp')&"\acs\IpHold"&str$(bk1)&"-Index.h[cno]"
 		fnIndex(holdingFile$,holdingFileIndex$,'1 10')
-		open #hld8:=fnH: "Name="&holdingFile$&",KFName="&holdingFileIndex$&',Shr,Use,RecL=74,KPs=1,KLn=10',internal,outIn,keyed
+		open #hld8=fnH: "Name="&holdingFile$&",KFName="&holdingFileIndex$&',Shr,Use,RecL=74,KPs=1,KLn=10',internal,outIn,keyed
 		restore #hWork: ! ,search>="": nokey AppendFinis
 		do
 			read #hWork,using Fwork: x$,mat x eof AppendFinis
@@ -1476,7 +1476,7 @@ def fn_loadBookOrHoldingFile(&addmethod; ___,book_or_holding_file$,ihDirFileMask
 		goto IH_XIT
 	else if ckey=ck_print then
 		if book_or_holding_file$='Holding File' then
-			open #hpHoldingFile:=fnH: "Name=[Q]\UBmstr\IpHold"&ip1$&".h[cno]",internal,outIn,relative
+			open #hpHoldingFile=fnH: "Name=[Q]\UBmstr\IpHold"&ip1$&".h[cno]",internal,outIn,relative
 			fn_print_readings(hpHoldingFile, 'Holding File '&ip1$)
 			close #hpHoldingFile:
 		else

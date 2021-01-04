@@ -40,10 +40,10 @@
 	if trim$(cl_bank_last_check$)<>"" then ckno=val(cl_bank_last_check$)+1 conv ignore
  
  
-	open #hEmployee:=fnH: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr",internal,input,keyed
+	open #hEmployee=fnH: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr",internal,input,keyed
 	open #h_dd=fnH: "Name=[Q]\PRmstr\DD.h[cno],KFName=[Q]\PRmstr\DDidx1.h[cno],Shr",internal,input,keyed
-	open #hCheck1:=fnH: 'Name=[Q]\PRmstr\payrollchecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno],Shr',internal,input,keyed
-	open #hCheck3:=fnH: 'Name=[Q]\PRmstr\payrollchecks.h[cno],KFName=[Q]\PRmstr\checkidx3.h[cno],Shr',internal,input,keyed
+	open #hCheck1=fnH: 'Name=[Q]\PRmstr\payrollchecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno],Shr',internal,input,keyed
+	open #hCheck3=fnH: 'Name=[Q]\PRmstr\payrollchecks.h[cno],KFName=[Q]\PRmstr\checkidx3.h[cno],Shr',internal,input,keyed
 ! /r
  
 if fnprocess=1 then goto StartReport else goto AskCheckNo

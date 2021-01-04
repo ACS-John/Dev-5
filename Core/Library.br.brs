@@ -948,6 +948,14 @@ fnend
 		library 'S:\Core\Reg.br': fncreg_write
 		fncreg_write=fncreg_write(reg_field_name$,reg_field_value$)
 	fnend
+	def library fnPcReg_read(reg_field_name$*128,&reg_field_value$; reg_field_default$*128,cr_alsoApplyDefaultIfReadBlank)
+		library 'S:\Core\Reg.br': fnPcReg_read
+		fnPcReg_read=fnPcReg_read(reg_field_name$,reg_field_value$, reg_field_default$,cr_alsoApplyDefaultIfReadBlank)
+	fnend
+	def library fnPcReg_write(reg_field_name$*128,reg_field_value$*256)
+		library 'S:\Core\Reg.br': fnPcReg_write
+		fnPcReg_write=fnPcReg_write(reg_field_name$,reg_field_value$)
+	fnend
 	def library fnreg_read(reg_field_name$*128,&reg_field_value$; reg_field_default$*128,alsoUseDefaultIfReadBlank)
 		library 'S:\Core\Reg.br': fnreg_read
 		fnreg_read=fnreg_read(reg_field_name$,reg_field_value$, reg_field_default$,alsoUseDefaultIfReadBlank)

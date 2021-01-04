@@ -115,7 +115,7 @@ def library fnGetDir2(dir$*256,mat filename$; option$,filter$*40,mat gd2_date$,m
 		tmp$='Sy'&csExeOption$&' -M Dir '&option$&' "'&rtrm$(os_filename$(dir$),'\')&'\'&filter$&'" >"'&fileList_os$&'"'
 		execute tmp$ ioerr Xit
 
-		open #tf1:=fnH: "Name="&csat$&fileList_br$,display,input  ioerr Gd2_openReturnFailure
+		open #tf1=fnH: "Name="&csat$&fileList_br$,display,input  ioerr Gd2_openReturnFailure
 		filename_count=line_count=0
 		do 
 			linput #tf1: tmp$ eof EO_TF1
@@ -193,7 +193,7 @@ def library fnGetDirClient(dir$*256,mat filename$; filter$*40, ___,returnN,hGdc,
 	fnFree(env$('at')&gdcFileList$)
 	tmp$='Dir "'&env$('at')&rtrm$(dir$,'\')&'\'&filter$&'" >"'&gdcFileList$&'" -B'
 	execute tmp$ ioerr Gdc_Finis
-	open #hGdc:=fnH: "Name="&gdcFileList$,display,input ioerr Gdc_openReturnFailure
+	open #hGdc=fnH: "Name="&gdcFileList$,display,input ioerr Gdc_openReturnFailure
 	filename_count=line_count=0
 	linput #hGdc: tmp$ eof Gdc_EO_hGdc ! consume Directory of ...
 	linput #hGdc: tmp$ eof Gdc_EO_hGdc ! consume .

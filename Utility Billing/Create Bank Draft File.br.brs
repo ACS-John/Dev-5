@@ -44,9 +44,9 @@ fnTop(program$)
 goto initialization ! /r
 initialization: ! r: initialization
 	! open #3: "Name=[Q]\UBmstr\UBAdrBil.h[cno],Shr",internal,outIn,relative
-	open #hCustomer:=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,outIn,keyed
+	open #hCustomer=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,outIn,keyed
 	close #22: ioerr ignore
-	open #hOut:=fnH: "Name=[Temp]\BkDraft_Tmp_22."&session$&",RecL=94,Replace",display,output
+	open #hOut=fnH: "Name=[Temp]\BkDraft_Tmp_22."&session$&",RecL=94,Replace",display,output
 	if postub=1 then
 		open #6: "Name=[Q]\UBmstr\Collections-"&env$('acsUserId')&".h[cno],RecL=91,Replace", internal,outIn,relative
 	end if
@@ -168,8 +168,8 @@ Finis: ! r:
 	close #hOut:
 	
 	! r:
-	open #hTmpIn:=fnH: "Name=[Temp]\BkDraft_Tmp_22."&session$&",RecL=94",display,input
-	open #hTmpOut:=fnH: "Name=[Temp]\BkDraft_Tmp_24."&session$&",RecL=96,EOL=None,Replace",external,output
+	open #hTmpIn=fnH: "Name=[Temp]\BkDraft_Tmp_22."&session$&",RecL=94",display,input
+	open #hTmpOut=fnH: "Name=[Temp]\BkDraft_Tmp_24."&session$&",RecL=96,EOL=None,Replace",external,output
 	dim a$*94
 	do
 		linput #hTmpIn: a$ eof L1590

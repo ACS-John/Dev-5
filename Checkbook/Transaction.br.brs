@@ -274,11 +274,11 @@ REMOVE_TRALLOC_FOR_KEY_EOF: ! eo first...
 
 ! ** next add new allocations that match what they have in their payee file or receipt file (typeofentry=2=reading from receipt file
 	if typeofentry=2 then
-		open #payee:=fnH: "Name=[Q]\CLmstr\RecMstr.h[cno],KFName=[Q]\CLmstr\recIdx1.h[cno],Shr",internal,input,keyed
-		open #payeegl:=fnH: "Name=[Q]\CLmstr\ReceiptGLBreakdown.h[cno],KFName=[Q]\CLmstr\ReceiptGLBkdIdx.h[cno],Shr",internal,outIn,keyed
+		open #payee=fnH: "Name=[Q]\CLmstr\RecMstr.h[cno],KFName=[Q]\CLmstr\recIdx1.h[cno],Shr",internal,input,keyed
+		open #payeegl=fnH: "Name=[Q]\CLmstr\ReceiptGLBreakdown.h[cno],KFName=[Q]\CLmstr\ReceiptGLBkdIdx.h[cno],Shr",internal,outIn,keyed
 	else
-		open #payee:=fnH: "Name=[Q]\CLmstr\PayMstr.h[cno],KFName=[Q]\CLmstr\PayIdx1.h[cno],Shr",internal,input,keyed
-		open #payeegl:=fnH: "Name=[Q]\CLmstr\PayeeGLBreakdown.h[cno],KFName=[Q]\CLmstr\PayeeGLBkdIdx.h[cno],Shr",internal,outIn,keyed
+		open #payee=fnH: "Name=[Q]\CLmstr\PayMstr.h[cno],KFName=[Q]\CLmstr\PayIdx1.h[cno],Shr",internal,input,keyed
+		open #payeegl=fnH: "Name=[Q]\CLmstr\PayeeGLBreakdown.h[cno],KFName=[Q]\CLmstr\PayeeGLBkdIdx.h[cno],Shr",internal,outIn,keyed
 	end if
 
 	read #payee,using "form pos 1,c 8",key=lpad$(rtrm$(tr$(4)),8): vn$ nokey XIT_READSTGL

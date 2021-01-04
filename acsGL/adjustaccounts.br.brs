@@ -7,11 +7,11 @@ dim resp$(3)*255,ymbal(13),priorym(13)
 fnTop(program$,"Adjust Account Balances")
 fn_adjustaccounts
 def fn_adjustaccounts
-	open #h_glmstr:=fnH: "Name=[Q]\GLmstr\glmstr.h[cno],KFName=[Q]\GLmstr\GLindex.h[cno],Shr",internal,outIn,keyed
+	open #h_glmstr=fnH: "Name=[Q]\GLmstr\glmstr.h[cno],KFName=[Q]\GLmstr\GLindex.h[cno],Shr",internal,outIn,keyed
 	GLMSTR: form n 3,n 6,n 3,pos 81,28*pd 6.2
-	open #h_actrans:=fnH: "Name=[Q]\GLmstr\actrans.h[cno],KFName=[Q]\GLmstr\ACTRIDX.h[cno],Shr",internal,input,keyed
+	open #h_actrans=fnH: "Name=[Q]\GLmstr\actrans.h[cno],KFName=[Q]\GLmstr\ACTRIDX.h[cno],Shr",internal,input,keyed
 	ACTRANS: form n 3,n 6,n 3,n 6,pd 6.2,pos 71,n 2
-	open #h_gltrans:=fnH: "Name=[Q]\GLmstr\gltrans.h[cno],Shr",internal,input
+	open #h_gltrans=fnH: "Name=[Q]\GLmstr\gltrans.h[cno],Shr",internal,input
 	GLTRANS: form n 3,n 6,n 3,n 6,pd 6.2
 	do
 		fn_getadjustment

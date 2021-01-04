@@ -18,7 +18,7 @@ fnend
 def fn_mtomSoapOpen(method$*128)
 	dim reqFile$*256
 	reqFile$=folderIn$&'\mtomSoap'&session$&'-Request.xml'
-	open #hOut:=fnH: 'name='&reqFile$&',recl=2048,replace',d,o
+	open #hOut=fnH: 'name='&reqFile$&',recl=2048,replace',d,o
 	pr #hout: '<info>'
 	pr #hout: '  <method>'
 	pr #hout: '    '&method$
@@ -38,7 +38,7 @@ def fn_mtomSoapFinis
 	fnFree(replyFile$)
 	dim mtomSoapCallFile$*256
 	mtomSoapCallFile$=os_filename$(env$('temp'))&'\call'&session$&'.cmd'
-	open #hCall:=fnH: 'name='&mtomSoapCallFile$&',recl=4096,replace',d,o
+	open #hCall=fnH: 'name='&mtomSoapCallFile$&',recl=4096,replace',d,o
 	pr #hCall: 'prompt $p$g'
 	! pr #hCall: '"'&mtomSoapUtil$&'" /settings="'&mtomSoapSettings$&'" /in="'&reqFile$&'" /out="'&replyFile$&'"'
 	! pr #hCall: '"'&mtomSoapUtil$&'" /in="'&fn_filenameOnly$(reqFile$)&'" /out="'&fn_filenameOnly$(replyFile$)&'"'

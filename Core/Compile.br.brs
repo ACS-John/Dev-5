@@ -18,7 +18,7 @@ def library fnReCompile(; disableRebuildCache,___,hproc)
 	! sourceCount=udim(mat sourceFile$)
 	! RcDone:!
 	
-	! open #dirfile:=fnH: "Name=S:\(import)\brsfiles",display,input
+	! open #dirfile=fnH: "Name=S:\(import)\brsfiles",display,input
 	! if sourceCount<=1 then
 		! r: old way: file by file (but too slow for multiple files)
 		pr #hproc: 'Scr_Freeze'
@@ -68,7 +68,7 @@ fnend
 def fn_getFileList(filename$*256,mat list$; ___,dirfile,returnN,line$*256)
 	returnN=0
 	mat list$(0)
-	open #dirfile:=fnH: 'Name='&filename$,display,input
+	open #dirfile=fnH: 'Name='&filename$,display,input
 	do
 		linput #dirfile: line$ eof Gfl_Done
 		returnN=fnAddOneC(mat list$,line$)
@@ -274,7 +274,7 @@ def library fnCheckCompiled(; ___,filename$*256)
 		if ~exists('S:\(import)') then execute 'mkdir S:\(import)'
 		execute 'sy -M '&os_filename$('S:\sortfiles.exe')&' -D . -C ".br.brs|.br"' ioerr CcDone
 
-		open #hBrsFileList:=fnH: "Name=S:\(import)\brsfiles",display,input ioerr CC_ERR
+		open #hBrsFileList=fnH: "Name=S:\(import)\brsfiles",display,input ioerr CC_ERR
 		linput #hBrsFileList: filename$ eof CcDone
 		! pr 'there is at least one source file to be recompiled.' : pr  filename$ : pause
 		close #hBrsFileList:

@@ -7,7 +7,7 @@
 	dim acno$*12,bc(13),bp(13),bud(13)
 	dim resp$(10)*80
 	fnTop(program$)
-	open #hCompany:=fnH: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,input,relative
+	open #hCompany=fnH: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,input,relative
 	read #hCompany,using 'Form Pos 384,N 2',rec=1: nap
 	close #hCompany:
 	fnGetFundList(mat fund_list)
@@ -86,7 +86,7 @@ open #hAcPrCks=fnH: "Name=[Q]\GLmstr\acprcks.h[cno],SIZE=0,RecL=110,Replace",int
 close #hAcPrCks: ioerr ignore
 ! /r
 ! r: reset some stuff in "[Q]\GLmstr\PRmstr.h[cno]"
-open #hPrMstr:=fnH: "Name=[Q]\GLmstr\PRmstr.h[cno],KFName=[Q]\GLmstr\PRINDEX.h[cno]",internal,outIn,keyed ioerr SCR2
+open #hPrMstr=fnH: "Name=[Q]\GLmstr\PRmstr.h[cno],KFName=[Q]\GLmstr\PRINDEX.h[cno]",internal,outIn,keyed ioerr SCR2
 do
 	read #hPrMstr,using 'Form POS 271,2*N 5': n1,n2 eof L500
 	rewrite #hPrMstr,using 'Form POS 271,2*N 5': 0,0

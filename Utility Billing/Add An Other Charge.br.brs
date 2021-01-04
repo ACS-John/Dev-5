@@ -164,7 +164,7 @@ fnend
 def fn_fixBadOnes(askFirst; ___,z$*10,whichDid,tranRec,justFixedIt,service_other,priorBal)
 	service_other=fnservice_other
 	hTran=fn_open('UB Transaction',mat tran$,mat tranN,mat form$)
-	open #hTranRelative:=fnH: 'name=[Q]\UBmstr\ubTransVB.h[cno],shr',internal,outin,relative
+	open #hTranRelative=fnH: 'name=[Q]\UBmstr\ubTransVB.h[cno],shr',internal,outin,relative
 	hCustomer1=fn_open('UB Customer',mat c$,mat cN,mat form$)
 	mat tran$=('')
 	mat tranN=(0)

@@ -2,7 +2,7 @@
 library program$: fnworkOrderAdd
 library 'S:\Core\Library': fnXit,fnTop,fnask_account,fnH
 fnTop(program$)
-open #h_customer:=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,input,keyed 
+open #h_customer=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,input,keyed 
 do
 	if fnask_account('Work Order',z$,h_customer)=5 then 
 		goto Xit
@@ -40,7 +40,7 @@ def library fnworkOrderAdd(z$*10)
 	end if ! /r
 
 	dat$=date$("Month DD, CCYY")
-	open #wo_h_customer:=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,input,keyed 
+	open #wo_h_customer=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,input,keyed 
 	! really only need these: (z$,mat e$,mat i$,mat line$,mat a,mat b,mat d,mat f$,mat extra$)
 	read #wo_h_customer,using F_CUSTOMER_1,key=z$: z$,mat e$,f$(1),mat a,mat b,mat c,mat d,bal,f,mat g,mat adr,alp$,f$(2),f$(3),bra,mat gb,mat rw4,df$,dr$,dc$,da$,mat extra,mat extra$
 	cell$=extra$(8)
@@ -151,12 +151,12 @@ def library fnworkOrderAdd(z$*10)
 	fnWorkOrderPrint(z$,mat e$,mat i$,mat line$,mat a,mat b,mat d,mat f$,mat extra$, cell$)
 
 	 ! r: write to WorkOrder History file (z$)
-		open #h_workorder:=fnH: "Name=[Q]\UBmstr\WorkOrder.h[cno],KFName=[Q]\UBmstr\wkIndex.h[cno],Shr",internal,outIn,keyed
+		open #h_workorder=fnH: "Name=[Q]\UBmstr\WorkOrder.h[cno],KFName=[Q]\UBmstr\wkIndex.h[cno],Shr",internal,outIn,keyed
 		write #h_workorder,using "form pos 1,Cr 10,n 8,c 30,5*c 100": z$,date('ccyymmdd'),customer_name$,mat line$
 		close #h_workorder: 
 	! /r
 	! r: append to note file
-		open #h_notefile:=fnH: "Name="&fnNoteDir$&"\"&trim$(z$)&".txt,Use",display,output
+		open #h_notefile=fnH: "Name="&fnNoteDir$&"\"&trim$(z$)&".txt,Use",display,output
 		pr #h_notefile: '** Work Order added '&date$('mm/dd/ccyy')&' at '&time$&' **'
 		pr #h_notefile:   '              Account: '&z$&'  '&customer_name$
 		if fn_not_blank(i$(5)) then
