@@ -60,7 +60,7 @@ Financial Statements
 >Financial Statements Notes                         ^ acsGL\acGLNote
 ! removed 3/14/17   -  doesnt seem that anyone is using it.   >Print Bar Graph of Earnings                        ^ acsGL\bargraph
 Monthly
->Post Entries from Holding File                    ^ General Ledger\*
+>Post Entries from Holding File                     ^ General Ledger\*
 >Close Month                                        ^ General Ledger\*
 Annually
 >Print Accumulated Trial Balance                    ^ General Ledger\*
