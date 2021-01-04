@@ -178,6 +178,10 @@ def library fnCreg_read(cr_fieldName$*128,&cr_fieldValue$; cr_defaultIfNotRead$*
 	fnCreg_read=fn_cReg_read(cr_fieldName$,cr_fieldValue$, cr_defaultIfNotRead$,cr_alsoApplyDefaultIfReadBlank)
 	fn_creg_setup
 fnend
+def library fnCreg_write(cw_fieldName$*128,cw_fieldValue$*256)
+	fn_creg_setup
+	fnCreg_write=fn_cReg_write(cw_fieldName$,cw_fieldValue$)
+fnend
 def fn_cReg_read(cr_fieldName$*128,&cr_fieldValue$; cr_defaultIfNotRead$*128,cr_alsoApplyDefaultIfReadBlank)
 	dim cr_tmpfieldValue$*256,cr_key_compare$*128
 	cr_fieldName$=rpad$(lwrc$(trim$(cr_fieldName$)),128)
@@ -192,10 +196,6 @@ def fn_cReg_read(cr_fieldName$*128,&cr_fieldValue$; cr_defaultIfNotRead$*128,cr_
 	end if
 	! pr 'load ';trim$(cr_fieldName$);'=';cr_fieldValue$
 	fnCreg_read=val(cr_fieldValue$) conv ignore
-fnend
-def library fnCreg_write(cw_fieldName$*128,cw_fieldValue$*256)
-	fn_creg_setup
-	fnCreg_write=fn_cReg_write(cw_fieldName$,cw_fieldValue$)
 fnend
 def fn_cReg_write(cw_fieldName$*128,cw_fieldValue$*256)
 	cw_fieldName$=rpad$(lwrc$(trim$(cw_fieldName$)),128)
@@ -218,41 +218,41 @@ CReg_PreEtrn: ! r:
 	fnStatusClose
 retry ! /r
 def fn_creg_setup
-	if creg_setup<>val(env$('CNo')) then
-		if creg_setup>0 then let fn_creg_close
+	if creg_setup$<>env$('CNo')&env$('CurSys') then
+		if creg_setup$<>'' then let fn_creg_close
 
 		autoLibrary
 		dim cregFileData$*256
 		dim cregFileIndex$*256
 
-		if env$('acsDeveloper')<>'' and env$('cursys')='TM' then
+		if env$('acsDeveloper')<>'' and env$('CurSys')='TM' then
 			dim dataFolder$*256
 			dataFolder$='S:\Core\Data\acsllc'
 		else
-			dataFolder$='[Q]\'&env$('cursys')&"mstr"
+			dataFolder$='[Q]\[cursys]mstr'
 		end if
 
 
-		cregFileData$ =datafolder$&'\reg-'&env$('CurSys')&'.h[cno]'
-		cregFileIndex$=datafolder$&'\reg-'&env$('CurSys')&'-idx.h[cno]'
+		cregFileData$ =datafolder$&'\reg-[CurSys].h[cno]'
+		cregFileIndex$=datafolder$&'\reg-[CurSys]-idx.h[cno]'
 		open #creg_h=fnH: 'Name='&cregFileData$&',Version=1,KFName='&cregFileIndex$&',Use,RecL=384,KPs=1,KLn=128,Shr',internal,outIn,keyed
-		fn_creg_setup=val(env$('CNo'))
-		creg_setup=val(env$('CNo'))
+		creg_setup$=env$('CNo')&env$('CurSys')
 	end if
 	on error goto Ertn
 fnend
 
 ! Program and Company Registry - great for saving default answers on screens
-def library fnPcReg_write(cw_fieldName$*128,cw_fieldValue$*256; ___,pcId$*128)
-	fn_creg_setup
-	pcId$=env$('program_caption')&'.'&rtrm$(cw_fieldName$)
-	fnPcReg_write=fn_cReg_write(pcId$,cw_fieldValue$)
-fnend
 def library fnPcReg_Read(cr_fieldName$*128,&cr_fieldValue$; cr_defaultIfNotRead$*128,cr_alsoApplyDefaultIfReadBlank,___,pcId$*128)
 	fn_creg_setup
 	pcId$=env$('program_caption')&'.'&rtrm$(cw_fieldName$)
 	fnPcReg_Read=fn_cReg_read(pcId$,cr_fieldValue$, cr_defaultIfNotRead$,cr_alsoApplyDefaultIfReadBlank)
 fnend
+def library fnPcReg_write(cw_fieldName$*128,cw_fieldValue$*256; ___,pcId$*128)
+	fn_creg_setup
+	pcId$=env$('program_caption')&'.'&rtrm$(cw_fieldName$)
+	fnPcReg_write=fn_cReg_write(pcId$,cw_fieldValue$)
+fnend
+
 
 ! User Registry - tied to Unique_Computer_Id (stored in regurlar registry with key prepended)
 def library fnUreg_read(ur_fieldName$*128,&ur_fieldValue$; ur_defaultIfNotRead$*256,alsoUseDefaultIfReadBlank)
