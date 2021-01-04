@@ -541,14 +541,14 @@ def fn_test_key(holdkey$*20,vn$,iv$)
 	! TEST1: !
 	! pass goes to test2 - fail goes to test_key_fail_on_iv
 		close #ivpaid: ioerr ignore
-		open #ivpaid:=fnH: "Name=[Q]\CLmstr\IvPaid.h[cno],KFName=[Q]\CLmstr\IvIndex.h[cno]",internal,outIn,keyed
+		open #ivpaid=fnH: "Name=[Q]\CLmstr\IvPaid.h[cno],KFName=[Q]\CLmstr\IvIndex.h[cno]",internal,outIn,keyed
 		unpaidkey$=rpad$(ltrm$(vn$),8)&rpad$(ltrm$(iv$),12)
 		read #ivpaid,using 'Form Pos 1,C 8',key=unpaidkey$,release: x$ nokey TEST2
 	goto TEST_KEY_FAIL_ON_IV
 	
 	TEST2: !
 		! pass goes to test_key_pass - fail goes to test_key_fail_on_paytrans
-		open #testpaytrans:=fnH: "Name=[Q]\CLmstr\PayTrans.h[cno],KFName=[Q]\CLmstr\UnPdIdx1.h[cno],SHR",internal,outIn,keyed
+		open #testpaytrans=fnH: "Name=[Q]\CLmstr\PayTrans.h[cno],KFName=[Q]\CLmstr\UnPdIdx1.h[cno],SHR",internal,outIn,keyed
 		read #testpaytrans,using 'Form Pos 1,C 8',key=newkey$,release: x$ nokey TEST_KEY_OK
 	goto TEST_KEY_FAIL_ON_PAYTRANS
 	

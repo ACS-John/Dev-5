@@ -175,7 +175,10 @@ fnend
 
 ! Company Registry - tied to Client, System and Company Number
 def library fnCreg_read(cr_fieldName$*128,&cr_fieldValue$; cr_defaultIfNotRead$*128,cr_alsoApplyDefaultIfReadBlank)
+	fnCreg_read=fn_cReg_read(cr_fieldName$,cr_fieldValue$, cr_defaultIfNotRead$,cr_alsoApplyDefaultIfReadBlank)
 	fn_creg_setup
+fnend
+def fn_cReg_read(cr_fieldName$*128,&cr_fieldValue$; cr_defaultIfNotRead$*128,cr_alsoApplyDefaultIfReadBlank)
 	dim cr_tmpfieldValue$*256,cr_key_compare$*128
 	cr_fieldName$=rpad$(lwrc$(trim$(cr_fieldName$)),128)
 	cr_tmpfieldValue$=cr_fieldValue$=''
@@ -192,6 +195,9 @@ def library fnCreg_read(cr_fieldName$*128,&cr_fieldValue$; cr_defaultIfNotRead$*
 fnend
 def library fnCreg_write(cw_fieldName$*128,cw_fieldValue$*256)
 	fn_creg_setup
+	fnCreg_write=fn_cReg_write(cw_fieldName$,cw_fieldValue$)
+fnend
+def fn_cReg_write(cw_fieldName$*128,cw_fieldValue$*256)
 	cw_fieldName$=rpad$(lwrc$(trim$(cw_fieldName$)),128)
 	rewrite #creg_h,using 'form pos 1,c 128,c 256',key=cw_fieldName$: cw_fieldName$,cw_fieldValue$ nokey CREG_WRITE ! XXX
 	! pr 'rewrite #creg_h'
@@ -201,6 +207,7 @@ def library fnCreg_write(cw_fieldName$*128,cw_fieldValue$*256)
 	! pr 'write #creg_h'
 	CREG_SAVE_XIT: !
 	! pr 'save ';trim$(cw_fieldName$);'=';cw_fieldValue$
+	fn_cReg_write=val(cw_fieldValue$) conv ignore
 fnend
 CReg_PreEtrn: ! r:
 	if err=4126 then
@@ -213,7 +220,7 @@ retry ! /r
 def fn_creg_setup
 	if creg_setup<>val(env$('CNo')) then
 		if creg_setup>0 then let fn_creg_close
-		 !
+
 		autoLibrary
 		dim cregFileData$*256
 		dim cregFileIndex$*256
@@ -233,6 +240,18 @@ def fn_creg_setup
 		creg_setup=val(env$('CNo'))
 	end if
 	on error goto Ertn
+fnend
+
+! Program and Company Registry - great for saving default answers on screens
+def library fnPcReg_write(cw_fieldName$*128,cw_fieldValue$*256; ___,pcId$*128)
+	fn_creg_setup
+	pcId$=env$('program_caption')&'.'&rtrm$(cw_fieldName$)
+	fnPcReg_write=fn_cReg_write(pcId$,cw_fieldValue$)
+fnend
+def library fnPcReg_Read(cr_fieldName$*128,&cr_fieldValue$; cr_defaultIfNotRead$*128,cr_alsoApplyDefaultIfReadBlank,___,pcId$*128)
+	fn_creg_setup
+	pcId$=env$('program_caption')&'.'&rtrm$(cw_fieldName$)
+	fnPcReg_Read=fn_cReg_read(pcId$,cr_fieldValue$, cr_defaultIfNotRead$,cr_alsoApplyDefaultIfReadBlank)
 fnend
 
 ! User Registry - tied to Unique_Computer_Id (stored in regurlar registry with key prepended)

@@ -395,8 +395,8 @@ fnend
 def fn_customerAddress(z$*10,mat addr$; ca_address_type,ca_closeFiles)
 	if ~ca_setup then
 		ca_setup=1
-		open #h_ca_customer:=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno]"&',Shr',internal,input,keyed
-		open #adrbil:=fnH: "Name=[Q]\UBmstr\ubAdrBil.h[cno],KFName=[Q]\UBmstr\AdrIndex.h[cno],Shr",internal,input,keyed
+		open #h_ca_customer=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno]"&',Shr',internal,input,keyed
+		open #adrbil=fnH: "Name=[Q]\UBmstr\ubAdrBil.h[cno],KFName=[Q]\UBmstr\AdrIndex.h[cno],Shr",internal,input,keyed
 	end if
 	if ca_address_type=0 then ca_address_type=ao_billing
 	altaddr=ca_address_type

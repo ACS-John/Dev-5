@@ -6,7 +6,7 @@ current_accounting_period=fnactpd
 
 process_gltrans=1 ! if =1 than gltrans will be added into the period accumulators as well as actrans
 
-open #company:=fnH: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,outIn,relative
+open #company=fnH: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,outIn,relative
 read #company,using 'Form Pos 296,n 2,Pos 384,N 2',rec=1: lmu,nap
 ! lmu = Last Accounting Period Closed
 ! nap = Number of Accounting Periods

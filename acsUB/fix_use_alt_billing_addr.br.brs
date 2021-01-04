@@ -21,8 +21,8 @@ fnTop(program$,'Fix Use Alternate Billing Address')
 	d1=val(resp$(1))
 ! /r
 ! r: main loop
-	open #hCustomer:=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx5.h[cno],Shr",internal,outIn,keyed
-	open #hAltBillAddr:=fnH: "Name=[Q]\UBmstr\UBAdrBil.h[cno],KFName=[Q]\UBmstr\adrIndex.h[cno],Shr",internal,input,keyed 
+	open #hCustomer=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx5.h[cno],Shr",internal,outIn,keyed
+	open #hAltBillAddr=fnH: "Name=[Q]\UBmstr\UBAdrBil.h[cno],KFName=[Q]\UBmstr\adrIndex.h[cno],Shr",internal,input,keyed 
 	changeCount=0
 	do
 		read #hCustomer,using 'form pos 1,c 10,4*c 30,pos 1854,pd 5.2': z$,mat e$,extra22 eof FINIS

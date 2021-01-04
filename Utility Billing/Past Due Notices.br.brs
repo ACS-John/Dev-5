@@ -358,7 +358,7 @@ def fn_report_close
 fnend 
 def fn_listFile_add(z$)
 	if ~h_lf then
-		open #h_lf:=fnH: 'Name=[temp]\pastDueNoticesLastPrintedAccounts.txt,RecL=10,replace',display,output
+		open #h_lf=fnH: 'Name=[temp]\pastDueNoticesLastPrintedAccounts.txt,RecL=10,replace',display,output
 	end if
 	pr #h_lf,using 'form pos 1,c 10': z$
 fnend

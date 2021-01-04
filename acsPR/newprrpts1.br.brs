@@ -30,7 +30,7 @@ fnend
 def fn_print_designed_report(rn)
 	rn$=lpad$(str$(rn),2)
  
-	open #h_prreport:=fnH: "Name=[Q]\PRmstr\PRReport.h[cno],KFName=[Q]\PRmstr\PRRptIdx.h[cno],Shr",internal,input,keyed ioerr PDR_XIT
+	open #h_prreport=fnH: "Name=[Q]\PRmstr\PRReport.h[cno],KFName=[Q]\PRmstr\PRRptIdx.h[cno],Shr",internal,input,keyed ioerr PDR_XIT
 	read #h_prreport,using 'form pos 3,c 78',key=rn$: rt$ nokey NORECORDSONFILE
 	read #h_prreport,using 'form pos 3,c 78,2*c 132,n 3,2*n 1,100*pd 6.3,40*pd 2,20*n 1',key=rn$: rt$,mat ch$,ips,tdep,cp,mat psc,mat a,mat pp,mat ti ioerr NORECORDSONFILE ! nokey NORECORDSONFILE
 	close #h_prreport:
@@ -44,7 +44,7 @@ def fn_print_designed_report(rn)
  
 	fnCopy('S:\acsPR\newPRRpt_s1.brs',"[Q]\PRmstr\Tmp_Designed_Report-"&session$&"-brs.h[cno]")
  
-	open #h_tmp_dr:=fnH: "Name=[Q]\PRmstr\Tmp_Designed_Report-"&session$&"-brs.h[cno],RecL=255",display,output
+	open #h_tmp_dr=fnH: "Name=[Q]\PRmstr\Tmp_Designed_Report-"&session$&"-brs.h[cno],RecL=255",display,output
 	pr #h_tmp_dr,using F_C255: "00081 RN$="""&rn$&""""
 	pf$="19900 pr #255, USING F_PR_OUT: "
 	pfd$="20010 pr #255, USING F_PR_OUT: "
@@ -147,7 +147,7 @@ def fn_print_designed_report(rn)
 	L2210: !
 		pr #h_tmp_dr,using F_C255: "20001 if ips=0 or ipsw=1 then L20010 else L20020"
 		close #h_tmp_dr:
-		open #h_tmp_proc:=fnH: "Name=[Temp]\PROC."&session$&",Replace",display,output
+		open #h_tmp_proc=fnH: "Name=[Temp]\PROC."&session$&",Replace",display,output
 		pr #h_tmp_proc,using F_C255: "load [Q]\PRmstr\Tmp_Designed_Report-"&session$&"-brs.h[cno],Source"
 		
 		

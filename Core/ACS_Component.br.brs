@@ -159,9 +159,9 @@ def library fnComboF(sfn$*100,lyne,ps,width,df$*200,psk,lnk,psd,lnd; if$*200,lim
 	!				goto EODF
 	!			else
 	if if$="" then
-		open #df:=fnH: "Name="&df$&",Shr",internal,input
+		open #df=fnH: "Name="&df$&",Shr",internal,input
 	else
-		open #df:=fnH: "Name="&df$&",KFName="&if$&",Shr",internal,input,keyed ioerr COMBOF_OPEN_IOERR
+		open #df=fnH: "Name="&df$&",KFName="&if$&",Shr",internal,input,keyed ioerr COMBOF_OPEN_IOERR
 	end if
 	fn_add_combo_option_list('','',1)
 	if limlis=2 then
@@ -344,7 +344,7 @@ def library fnTab(myline,mypos,height,width,mat cap$)
 	! each tab caption should not be longer than 80 characters
 	! no more than 99 tabs
 	if ~setup then fn_setup
-	open #tf1:=fnH: "Name=[Temp]\tab.txt,size=0,RecL=80,replace",internal,output
+	open #tf1=fnH: "Name=[Temp]\tab.txt,size=0,RecL=80,replace",internal,output
 	for j=1 to udim(mat cap$)
 		write #tf1,using "Form Pos 1,C 80": cap$(j)(1:80)
 	next j
@@ -576,11 +576,11 @@ def fn_draw_windows
 		!			if disabled_background then open #disable_win=fnH: "srow=2,scol=2,rows="&str$(Session_Rows-2)&",cols="&str$(Session_Cols-2)&",picture=S:\Core\disable.png:TILE",display,output
 		!			if disabled_background then open #disable_win=fnH: "srow=1,scol=1,rows="&str$(Session_Rows+2)&",cols="&str$(Session_Cols+1)&",border=none,picture=S:\Core\disable.png:TILE",display,output
 		if disabled_background then let fn_backgrounddisable(1)
-		open #acs_win:=fnH: "SRow="&str$(row)&",SCol="&str$(col)&",Rows="&str$(rows+3)&",Cols="&str$(cols+2)&",parent=none,Caption="&cap$&",border=S:[screen],N=[screen]",display,outIn
-		open #button_win:=fnH: "SRow="&str$(rows+2)&",SCol=2,Rows=1,Cols="&str$(cols)&",parent="&str$(acs_win)&",border=S:[screen],N=[screen]",display,outIn
+		open #acs_win=fnH: "SRow="&str$(row)&",SCol="&str$(col)&",Rows="&str$(rows+3)&",Cols="&str$(cols+2)&",parent=none,Caption="&cap$&",border=S:[screen],N=[screen]",display,outIn
+		open #button_win=fnH: "SRow="&str$(rows+2)&",SCol=2,Rows=1,Cols="&str$(cols)&",parent="&str$(acs_win)&",border=S:[screen],N=[screen]",display,outIn
 	else
-		open #acs_win:=fnH: "SRow="&str$(row)&",SCol="&str$(col)&",Rows="&str$(rows)&",Cols="&str$(cols)&",parent=0,Caption="&cap$&",border=S:[screen],N=[screen]",display,outIn
-		open #button_win:=fnH: "SRow="&str$(row+rows+2)&",SCol="&str$(col)&",Rows=1,Cols="&str$(cols)&",parent=0,border=S:[screen],N=[screen]",display,outIn
+		open #acs_win=fnH: "SRow="&str$(row)&",SCol="&str$(col)&",Rows="&str$(rows)&",Cols="&str$(cols)&",parent=0,Caption="&cap$&",border=S:[screen],N=[screen]",display,outIn
+		open #button_win=fnH: "SRow="&str$(row+rows+2)&",SCol="&str$(col)&",Rows=1,Cols="&str$(cols)&",parent=0,border=S:[screen],N=[screen]",display,outIn
 	end if
 	ace_cmdkey_ps=max(1,cols-button_win_width-3) ! -1  ! changed from -1 to -3 on 8/23/2018 to prevent error (-2 also worked) on UB transaction button drawing on display grid screen when delete button was added
 	                                             ! -3 caused issues on PR Enter time sheets (actual time entry screen editmode=0,semp=1)
@@ -1161,12 +1161,12 @@ def fn_ace_rd_tab
 	height=val(control$(4))
 	width=val(control$(5))
 	path1$=control$(6) & control$(7)
-	open #tab_file:=fnH: "Name="&path1$,internal,outIn
+	open #tab_file=fnH: "Name="&path1$,internal,outIn
 	tabline$=""
 	for j=1 to min(lrec(tab_file),99)
 		read #tab_file,using "Form Pos 1,C 80": txt$
 		tabline$=tabline$&trim$(txt$)&tab$
-		open #tab:=fnH: 'srow='&str$(lyne+1)&',scol='&str$(ps+1)&',rows='&str$(height+1)&',cols='&str$(width+1)&',tab='&trim$(txt$)&',parent='&str$(acs_win)&',border=S:[screen],N=[screen]',display,outIn
+		open #tab=fnH: 'srow='&str$(lyne+1)&',scol='&str$(ps+1)&',rows='&str$(height+1)&',cols='&str$(width+1)&',tab='&trim$(txt$)&',parent='&str$(acs_win)&',border=S:[screen],N=[screen]',display,outIn
 		mat tabs(udim(tabs)+1,3)
 		tabs(udim(tabs),1)=tab
 		tabs(udim(tabs),2)=lyne+1
@@ -1188,10 +1188,10 @@ def fn_ace_rd_frame
 	! txt$=srep$(txt$,'"','""') ! fn2quote(txt$)
 	mat frames(udim(frames)+1,4)
 	if tabcon then
-		open #frame:=fnH: 'srow='&str$(lyne+1)&',scol='&str$(ps+1)&',rows='&str$(height-1)&',cols='&str$(width)&',parent='&str$(tabs(tabcon,1))&',border=S:[screen],N=[screen],caption='&srep$(txt$,',','.'),display,outIn
+		open #frame=fnH: 'srow='&str$(lyne+1)&',scol='&str$(ps+1)&',rows='&str$(height-1)&',cols='&str$(width)&',parent='&str$(tabs(tabcon,1))&',border=S:[screen],N=[screen],caption='&srep$(txt$,',','.'),display,outIn
 		frames(udim(frames),4)=tabs(tabcon,1)
 	else
-		open #frame:=fnH: 'srow='&str$(lyne+1)&',scol='&str$(ps+1)&',rows='&str$(height-1)&',cols='&str$(width)&',parent='&str$(acs_win)&',border=S:[screen],N=[screen],caption='&srep$(txt$,',','.'),display,outIn
+		open #frame=fnH: 'srow='&str$(lyne+1)&',scol='&str$(ps+1)&',rows='&str$(height-1)&',cols='&str$(width)&',parent='&str$(acs_win)&',border=S:[screen],N=[screen],caption='&srep$(txt$,',','.'),display,outIn
 	end if
 	frames(udim(frames),1)=frame
 	frames(udim(frames),2)=lyne+1
@@ -1213,7 +1213,7 @@ def fn_ace_rd_flex(;___,index_)
 	dim gridspec$*255		 !
 	dim loading_spec$*50 ! where to print Loading: please wait...
 	! pr env$('temp')&'\acs\'&trim$(path1$)&'.hdr' : pause
-	open #grid_headers:=fnH: 'Name='&env$('temp')&'\acs\'&trim$(path1$)&'.hdr',display,input
+	open #grid_headers=fnH: 'Name='&env$('temp')&'\acs\'&trim$(path1$)&'.hdr',display,input
 	linput #grid_headers: _line$
 	str2mat(_line$,mat _headings$,tab$)
 	linput #grid_headers: _line$
@@ -1254,7 +1254,7 @@ def fn_ace_rd_flex(;___,index_)
 	loading_spec$(0:0)=window_prefix$
 	! if env$('acsDeveloper')<>'' then pr 'just before grid headers' : pause !
 	pr f gridspec$&",headers,[gridheaders]" : (mat _headings$,mat _widths,mat _forms$)
-	open #grid_data:=fnH: 'Name='&env$('temp')&'\acs\'&trim$(path1$)&'[SESSION].tmp',display,input
+	open #grid_data=fnH: 'Name='&env$('temp')&'\acs\'&trim$(path1$)&'[SESSION].tmp',display,input
 	clearflag$="="
 
 	dim long_row$(1)*2100		 ! dim long_row$(1)*1024
@@ -1384,7 +1384,7 @@ def fn_gridform(mat _widths,mat _forms$,mat _mask$,mat _headings$; ___,index_)
 	_headings$(1)="Combined"
 	mat _widths(udim(_headings$))=(0): mat _forms$(udim(_headings$))=('')
 
-	open #grid_data:=fnH: 'Name='&env$('temp')&'\acs\'&trim$(path1$)&'[SESSION].tmp',display,input
+	open #grid_data=fnH: 'Name='&env$('temp')&'\acs\'&trim$(path1$)&'[SESSION].tmp',display,input
 	for count=1 to 1500
 		linput #grid_data: _line$ eof ignore
 		if file(grid_data)<>0 then goto GRIDFORM_COMPLETE
@@ -2065,7 +2065,7 @@ def library fnqgl(myline,mypos; qglcontainer,add_all_or_blank,use_or_replace,qgl
 ! /r
 	if setupqgl$<>qgl_cursys$ then ! r:
 		setupqgl$=qgl_cursys$
-		open #company:=fnH: "Name=[Q]\"&qgl_cursys$&"mstr\Company.h[cno],Shr",internal,input ioerr CLOSECOMPANY
+		open #company=fnH: "Name=[Q]\"&qgl_cursys$&"mstr\Company.h[cno],Shr",internal,input ioerr CLOSECOMPANY
 		if qgl_cursys$='CL' then
 			read #company,using 'Form Pos 150,2*N 1': use_dept,use_sub ! read it from checkbook
 		else if qgl_cursys$="GL" then
@@ -2096,7 +2096,7 @@ CLOSECOMPANY: !
 		end if
 ! read the chart of accounts from the appropriate system into an array
 		if qgl_cursys$='GL' or qgl_cursys$='CL' or qgl_cursys$='PR' or qgl_cursys$='UB' or qgl_cursys$='CR' then
-			open #glmstr:=fnH: "Name=[Q]\"&qgl_cursys$&"mstr\GLmstr.h[cno],KFName=[Q]\"&qgl_cursys$&"mstr\glIndex.h[cno],Shr",internal,input,keyed ioerr QGL_ERROR
+			open #glmstr=fnH: "Name=[Q]\"&qgl_cursys$&"mstr\GLmstr.h[cno],KFName=[Q]\"&qgl_cursys$&"mstr\glIndex.h[cno],Shr",internal,input,keyed ioerr QGL_ERROR
 		end if
 		do
 			read #glmstr,using glmstr_form$: qglopt$,desc$ noRec QGL_LOOP_COMPLETE eof EO_QGL_GLMSTR ioerr QGL_ERROR
@@ -2146,7 +2146,7 @@ def fn_exportGrid(;___,index_)
 	dim filename$*1024
 	filename$=''
 	grid_rows=grid_columns=index_=0
-	open #export_file:=fnH: "Name=save:"&env$('at')&"Text documents (*.txt) |*.txt,RecL=1,Replace",external,output error GRID_EXPORT_XIT
+	open #export_file=fnH: "Name=save:"&env$('at')&"Text documents (*.txt) |*.txt,RecL=1,Replace",external,output error GRID_EXPORT_XIT
 	filename$=file$(export_file)
 	close #export_file:
 	open #export_file: 'Name='&filename$&',RecL=2048,Replace',display,output

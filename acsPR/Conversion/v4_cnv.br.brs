@@ -54,14 +54,14 @@ def fn_pr_conversion_department(cno; medicare_is_seperated)
 	end if 
 
 	if fnIndex("[Q]\PRmstr\PRCkHist.h[cno]","[Q]\PRmstr\PRCKINDX.h[cno]","1 14") then 
-		open #h_prckhist:=fnH: "Name=[Q]\PRmstr\PRCkHist.h[cno],KFName=[Q]\PRmstr\PRCkIndx.h[cno],Shr",internal,outIn,keyed ioerr L320
+		open #h_prckhist=fnH: "Name=[Q]\PRmstr\PRCkHist.h[cno],KFName=[Q]\PRmstr\PRCkIndx.h[cno],Shr",internal,outIn,keyed ioerr L320
 		foundhistory=1 ! pr 'foundhistory : lrec(h_prckhist)='&str$(lrec(h_prckhist)) : pause
 	else 
 		foundhistory=0 ! pr 'was not able to index it - setting foundhistory to ZERO - history will not be created' : pause
 	end if 
 	L320: ! 
 	open #12: "Name=[Q]\PRmstr\Department.h[cno],KFName=[Q]\PRmstr\DeptIdx.h[cno],RecL=149,kps=1,kln=11,replace",internal,outIn,keyed 
-	open #h_payrollchecks:=fnH: "Name=[Q]\PRmstr\PayrollChecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno],RecL=224,kps=1,kln=17,replace",internal,outIn,keyed 
+	open #h_payrollchecks=fnH: "Name=[Q]\PRmstr\PayrollChecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno],RecL=224,kps=1,kln=17,replace",internal,outIn,keyed 
 	if exists("[Q]\PRmstr\dd.h[cno]")=0 then 
 		open #30: "Name=[Q]\PRmstr\dd.h[cno],RecL=72,KFName=[Q]\PRmstr\DDidx1.h[cno],kps=1,kln=10,Use",internal,outIn,keyed 
 		close #30: ioerr ignore
@@ -161,7 +161,7 @@ def fn_pr_conversion_department(cno; medicare_is_seperated)
 
 	DONE: ! 
 		gosub CREATENAMES
-		open #h_deptname:=fnH: "Name=[Q]\PRmstr\DeptName.h[cno],KFName=[Q]\PRmstr\DeptNameIdx.h[cno],replace,RecL=32,kps=1,kln=3,Shr",internal,outIn,keyed 
+		open #h_deptname=fnH: "Name=[Q]\PRmstr\DeptName.h[cno],KFName=[Q]\PRmstr\DeptNameIdx.h[cno],replace,RecL=32,kps=1,kln=3,Shr",internal,outIn,keyed 
 		close #h_deptname: 
 		close #12: ioerr ignore
 		fnIndex("[Q]\PRmstr\Department.h[cno]","[Q]\PRmstr\DeptIdx.h[cno]","1 11")
@@ -186,7 +186,7 @@ CREATENAMES: ! r:
 	if exists("[Q]\PRmstr\PRCOINFO.h[cno]") and ~exists("[Q]\PRmstr\Company.h[cno]") then 
 		execute "Rename [Q]\PRmstr\PRCOINFO.h[cno]"&' '&"[Q]\PRmstr\Company.h[cno]"
 	end if 
-	open #h_company:=fnH: "Name=[Q]\PRmstr\Company.h[cno]",internal,input 
+	open #h_company=fnH: "Name=[Q]\PRmstr\Company.h[cno]",internal,input 
 	read #h_company,using 'Form POS 1,3*C 40,C 12,PD 6.3,PD 6.2,PD 5.2,10*C 8,N 2,PD 4.2,PD 3.3,12*PD 4.2,10*PD 3.3,25*C 12,31*N 1,10*C 6,3*PD 4.3,3*PD 3.2,4*PD 4.2,N 1,2*C 6,N 2': mat a$,fid$,mcr,mcm,feducrat,mat d$,loccode,feducmax,ficarate,ficamaxw,ficawh,mat m,mat r,mat e$,mat gln$,gli,mat dedcode,mat calcode,mat dedfed,mat rpnames2$ ! eof L370 ioerr L330
 	close #h_company: 
 	for j=1 to 10

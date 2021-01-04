@@ -18,7 +18,7 @@ def library fnagl$*12(&x$)
 	if env$('CurSys')='CL' then tmp_cursys$='CL' else tmp_cursys$='GL'
 	! find out if I should use the department number and/or the sub account number
 	COMPANY_OPEN: !
-		open #company:=fnH: "Name=[Q]\"&tmp_cursys$&"mstr\Company.h[cno],Shr",internal,input ioerr COMPANY_OPEN_IOERR
+		open #company=fnH: "Name=[Q]\"&tmp_cursys$&"mstr\Company.h[cno],Shr",internal,input ioerr COMPANY_OPEN_IOERR
 		if tmp_cursys$='GL' then
 			read #company,using 'Form Pos 150,2*N 1': use_dept,use_sub
 		else if tmp_cursys$='CL' then

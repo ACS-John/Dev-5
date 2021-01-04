@@ -14,11 +14,11 @@ def  fn_premierCardiologyImport(; sourceId$)
 		goto PciXit
 	end if
 
-	open #hClaimOpen:=fnH: "name=MASTER//6,kfname=MASTERX//6,shr",internal,input,keyed
-	open #hClaimbyForwarderOpen:=fnH: "name=MASTER//6,kfname=FORWIDXA//6,shr",internal,input,keyed
+	open #hClaimOpen=fnH: "name=MASTER//6,kfname=MASTERX//6,shr",internal,input,keyed
+	open #hClaimbyForwarderOpen=fnH: "name=MASTER//6,kfname=FORWIDXA//6,shr",internal,input,keyed
 	
-	open #hClaimClosed:=fnH: "name=HISTORY//1,kfname=HISTORYX//1,shr",internal,input,keyed
-	open #hClaimbyForwarderClosed:=fnH: "name=HISTORY//1,kfname=FORWIDXA//1,shr",internal,input,keyed
+	open #hClaimClosed=fnH: "name=HISTORY//1,kfname=HISTORYX//1,shr",internal,input,keyed
+	open #hClaimbyForwarderClosed=fnH: "name=HISTORY//1,kfname=FORWIDXA//1,shr",internal,input,keyed
 	hInv=Fnopen_Invoice(mat hInvoice)
 
 	Screen1: !
@@ -66,7 +66,7 @@ def  fn_premierCardiologyImport(; sourceId$)
 
 		! r: gather Forwarder data
 		if ~hForw or file(hForw)=-1 then
-			open #hForw:=fnH: "name=MASFORW//8,shr",internal,outin,relative ! MASFORW//8 means COMMON\MASFORW
+			open #hForw=fnH: "name=MASFORW//8,shr",internal,outin,relative ! MASFORW//8 means COMMON\MASFORW
 		end if
 		read #hForw,using forwFormAll$,rec=val(forwNo$): mat forw$,mat forwN noRec Screen1
 		close #hForw:
@@ -122,7 +122,7 @@ def  fn_premierCardiologyImport(; sourceId$)
 		dim outFile$*256
 		outFile$=env$('at')&srep$(csvPath$&csvProg$&'-CM_EDI'&'.csv','@::','')
 include: filenamesPushMixedCase
-		open #hOut:=fnH: 'name='&outFile$&',recl=1024,replace',display,output
+		open #hOut=fnH: 'name='&outFile$&',recl=1024,replace',display,output
 include: filenamesPopUpperCase
 		fn_pr_hOut('0[tab]H[tab]This file is "'&os_filename$(outFile$)&'"'	)
 		fn_pr_hOut('0[tab]H[tab]This file was made by the "'&env$('program_caption')&'" (a Collection-Master Add-On program) on '&useDate$&' at '&useTime$&'.'	)
@@ -208,7 +208,7 @@ include: filenamesPopUpperCase
 	fn_reportClosedEncounter_finis
 	if enableImport then
 		! r: Generate Automation Files
-		open #hIni:=fnH: 'name=custom\cm_edi_pcs.ini,replace',d,o
+		open #hIni=fnH: 'name=custom\cm_edi_pcs.ini,replace',d,o
 		pr #hIni: '||MENUPATH:4-2-1-1'
 		pr #hIni: 'EDI NUMBER=326'
 		pr #hIni: 'FILE NUMBER='&sFileNo$
@@ -216,7 +216,7 @@ include: filenamesPopUpperCase
 		pr #hIni: 'UNASSIGNED FORW='&forwNo$
 		close #hIni:
 
-		open #hCmd:=fnH: 'name=batch\cm_edi_pcs.cmd,replace',d,o
+		open #hCmd=fnH: 'name=batch\cm_edi_pcs.cmd,replace',d,o
 		pr #hCmd: 'f:'
 		pr #hCmd: 'cd \clsinc'
 		pr #hCmd: 'set Automate=cm_edi_pcs.ini'
@@ -1314,7 +1314,7 @@ fnend
 
 def fn_writeArraysToTestFile(outFile$*1024; ___,x,xLimit,hOut)
 include: filenamesPushMixedCase
-	open #hOut:=fnH: 'name='&outFile$&',recl=1024,replace',display,output
+	open #hOut=fnH: 'name='&outFile$&',recl=1024,replace',display,output
 include: filenamesPopUpperCase
 	xLimit=udim(mat list_KEY$)
 	! r: heading

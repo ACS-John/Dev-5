@@ -16,7 +16,7 @@
 	open #trmstr2=22: "Name=[Q]\CLmstr\TrMstr.h[cno],KFName=[Q]\CLmstr\TrIdx2.h[cno],Shr",internal,input,keyed
 	open #paymstr1=1: "Name=[Q]\CLmstr\PayMstr.h[cno],KFName=[Q]\CLmstr\PayIdx1.h[cno],Shr",internal,outIn,keyed
 	open #paymstr2=2: "Name=[Q]\CLmstr\PayMstr.h[cno],KFName=[Q]\CLmstr\PayIdx2.h[cno],Shr",internal,outIn,keyed
-	open #payeeglbreakdown:=fnH: "Name=[Q]\CLmstr\PayeeGLBreakdown.h[cno],KFName=[Q]\CLmstr\PayeeGLBkdidx.h[cno],Shr",internal,outIn,keyed
+	open #payeeglbreakdown=fnH: "Name=[Q]\CLmstr\PayeeGLBreakdown.h[cno],KFName=[Q]\CLmstr\PayeeGLBkdidx.h[cno],Shr",internal,outIn,keyed
 	fnTos
 	respc=0 : mylen=21 : mypos=mylen+2
 	fnLbl(1,1,"Oldest retained Date:",mylen,right)

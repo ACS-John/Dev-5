@@ -21,9 +21,9 @@ def library fnCno(&cno; &cnam$)
 	dim cnam_read$*40
 	cnam_read$=''
 	if env$('ACSDeveloper')<>'' and env$('cursys')='TM' then
-		open #tf1:=fnH: "Name=S:\Core\Data\acsllc\Company.h[cno],Shr",internal,input ioerr CNAM_XIT
+		open #tf1=fnH: "Name=S:\Core\Data\acsllc\Company.h[cno],Shr",internal,input ioerr CNAM_XIT
 	else
-		open #tf1:=fnH: "Name=[Q]\[cursys]mstr\Company.h[cno],Shr",internal,input ioerr CNAM_XIT
+		open #tf1=fnH: "Name=[Q]\[cursys]mstr\Company.h[cno],Shr",internal,input ioerr CNAM_XIT
 	end if
 	read #tf1,using "Form pos 1,C 40": cnam_read$ ioerr ignore
 	close #tf1:
@@ -70,7 +70,7 @@ def fn_CnoLegacyNtoCReg(legacyFilename$*256,legacyForm$*64,registryKey$*128; val
 	if get_or_put=1 then
 		fncreg_read(registryKey$,fscode$) : valuePassedIn=val(fscode$)
 		if valuePassedIn=0 then
-			open #tmp:=fnH: "Name="&legacyFilename$,internal,outIn,relative ioerr LegacyOpenFail
+			open #tmp=fnH: "Name="&legacyFilename$,internal,outIn,relative ioerr LegacyOpenFail
 			read #tmp,using legacyForm$,rec=1: valuePassedIn noRec ignore
 			close #tmp: ioerr ignore
 			fncreg_write(registryKey$,str$(valuePassedIn))
@@ -97,7 +97,7 @@ def library fnpedat$*20(;pedat$*20)
 			else
 				goto xLegacyOpenFail
 			end if
-			open #tmp:=fnH: "Name="&pedatLegacyFile$,internal,outIn,relative ioerr xLegacyOpenFail
+			open #tmp=fnH: "Name="&pedatLegacyFile$,internal,outIn,relative ioerr xLegacyOpenFail
 			read #tmp,using "Form POS 1,C 20",rec=1: pedat$ noRec ignore
 			close #tmp: ioerr ignore
 			fncreg_write('Pay Period Ending Date',pedat$)
@@ -136,13 +136,13 @@ def library fnUseDeptNo
 	if ~setup then fn_setup
 	if env$('cursys')<>"GL" then
 		pr 'needs to read use department number setting some other way because cursys is not GL' : pause
-		! open #tmp:=fnH: "Name=[Temp]\gld1-"&session$&".dat,Use,RecL=9",internal,outIn,relative
+		! open #tmp=fnH: "Name=[Temp]\gld1-"&session$&".dat,Use,RecL=9",internal,outIn,relative
 		! read #tmp ,using "Form POS 150, n 1",rec=1: gld1 noRec ignore
 		! close #tmp:
 	end if
 	if useDeptNosetup<>val(env$('cno')) then
 		useDeptNosetup=val(env$('cno'))
-		open #company:=fnH: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,input,relative
+		open #company=fnH: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,input,relative
 		read #company ,using "Form POS 150, n 1",rec=1: gld1 noRec ignore
 		close #company:
 	end if

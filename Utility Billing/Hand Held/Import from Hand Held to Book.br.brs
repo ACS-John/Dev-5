@@ -194,7 +194,7 @@ fnend
 
 def fn_readingsFileVersion$*128(bookFile$*512)
 	dim rfvLine$*512,rfvReturn$*128
-	open #hRfv:=fnH: "Name="&bookFile$,display,input
+	open #hRfv=fnH: "Name="&bookFile$,display,input
 	linput #hRfv: rfvLine$
 	close #hRfv:
 	if rtrm$(rfvLine$)='[ACS Hand Held File Generic Version 2]' then
@@ -222,8 +222,8 @@ def fn_CsvByLocationId(bookFile$*512,enableMerge$)
 	if enableMerge$='True' and ~fn_okToMerge(bookFile$,'[ACS Hand Held File Generic Version 2]') then 
 		! returnN=-1
 	else
-		open #hIn:=fnH: "Name="&fn_hh_input_filename$,display,input
-		open #hOut:=fnH: "Name="&bookFile$&",RecL=512,replace",display,output
+		open #hIn=fnH: "Name="&fn_hh_input_filename$,display,input
+		open #hOut=fnH: "Name="&bookFile$&",RecL=512,replace",display,output
 		pr #hOut: '[ACS Hand Held File Generic Version 2]'
 		pr #hOut: 'Source File='&fn_hh_input_filename$
 		linput #hIn: line$ eof CblEoF
@@ -270,8 +270,8 @@ fnend
 			returnN=-1
 		else
 			returnN=0
-			open #hIn:=fnH: "Name="&fileIn$&',eol=lf',display,input
-			open #hOut:=fnH: "Name="&bookFile$&",RecL=512,replace",display,output
+			open #hIn=fnH: "Name="&fileIn$&',eol=lf',display,input
+			open #hOut=fnH: "Name="&bookFile$&",RecL=512,replace",display,output
 			pr #hOut: '[ACS Hand Held File Generic Version 2]'
 			pr #hOut: 'Source File='&fn_hh_input_filename$
 			do
@@ -351,8 +351,8 @@ fnend
 			returnN=-1
 			goto CblEoF
 		end if
-		open #hIn:=fnH: "Name="&fn_hh_input_filename$,display,input
-		open #hOut:=fnH: "Name="&bookFile$&",RecL=512,replace",display,output
+		open #hIn=fnH: "Name="&fn_hh_input_filename$,display,input
+		open #hOut=fnH: "Name="&bookFile$&",RecL=512,replace",display,output
 		pr #hOut: '[ACS Hand Held File Generic Version 2]'
 		pr #hOut: 'Source File='&fn_hh_input_filename$
 		if dataIncludesHeaders then
@@ -395,8 +395,8 @@ fnend
 	! def fn_aclaraWorkOrder(bookFile$*512,enableMerge$; ___,returnN)
 	! 	dataIncludesHeaders=1
 	! 	if enableMerge$='True' and ~fn_okToMerge(bookFile$,'[ACS Hand Held File Generic Version 2]') then returnN=-1 : goto EO_AW
-	! 	open #hIn:=fnH: "Name="&fn_hh_input_filename$,display,input
-	! 	open #hOut:=fnH: "Name="&bookFile$&",RecL=512,replace",display,output
+	! 	open #hIn=fnH: "Name="&fn_hh_input_filename$,display,input
+	! 	open #hOut=fnH: "Name="&bookFile$&",RecL=512,replace",display,output
 	! 	pr #hOut: '[ACS Hand Held File Generic Version 2]'
 	! 	pr #hOut: 'Source File='&fn_hh_input_filename$
 	! 	if dataIncludesHeaders then
@@ -503,8 +503,8 @@ fnend
 		!
 	fnend
 	def fn_itron(bookFile$*512)
-		open #h_itron:=fnH: "Name="&fn_hh_input_filename$,display,input
-		open #h_itron_out:=fnH: "Name="&bookFile$&",RecL=512,replace",display,output
+		open #h_itron=fnH: "Name="&fn_hh_input_filename$,display,input
+		open #h_itron_out=fnH: "Name="&bookFile$&",RecL=512,replace",display,output
 		pr #h_itron_out: '[ACS Hand Held File Generic Version 2]'
 		z$=''
 		do
@@ -588,9 +588,9 @@ fnend
 		fnCopy(fn_hh_input_filename$,bookFile$)
 	fnend
 	! def fn_sensus_in(bookFile$*512) r: old and unused
-	! 	open #h_sensus:=fnH: "Name="&fn_hh_input_filename$&",RecL=22",external,input
+	! 	open #h_sensus=fnH: "Name="&fn_hh_input_filename$&",RecL=22",external,input
 	! 	fn_readings_backup(bookFile$)
-	! 	open #h_readings:=fnH: "Name="&bookFile$&",RecL=30,replace",display,output
+	! 	open #h_readings=fnH: "Name="&bookFile$&",RecL=30,replace",display,output
 	! 	do
 	! 		read #h_sensus,using "form pos 1,c 22": line$ eof SENSUS_IN_XIT ioerr SENSUS_IN_XIT
 	! 		pr #h_readings,using "form pos 1,c 132": line$
@@ -602,9 +602,9 @@ fnend
 	! r: legacy multi-device hand held type
 		def fn_import_l_readings_txt(bookFile$*512; inFileRecordLen)
 			fn_readings_backup(bookFile$)
-			open #hReadingsOut:=fnH: "Name="&bookFile$&",RecL=30,replace",display,output
+			open #hReadingsOut=fnH: "Name="&bookFile$&",RecL=30,replace",display,output
 			! if inFileRecordLen=0 then inFileRecordLen=129
-			open #hHandHeld:=fnH: "Name="&fn_hh_input_filename$,display,input
+			open #hHandHeld=fnH: "Name="&fn_hh_input_filename$,display,input
 			do
 				linput #hHandHeld: line$ eof ilrt_EO_L_READINGS_TXT
 				if deviceSelected$="Other" and env$('client')="Brier Lake" then
@@ -693,8 +693,8 @@ fnend
 		pr what$ !  print to console also :)
 	fnend
 	def fn_neptuneEquinoxV4(inputFile$*2048,bookFile$*512; ___,returnN,line_type$,tmpr$,line$*2048,itron_meter_category$*1,itron_meter_chenge_out$*1,itron_reading,meterroll,z$*10,reading_water,reading_electric,reading_gas,meterroll_wate,meterroll_electric,meterroll_gas,hIn,hOut)
-		open #hIn:=fnH: "Name="&inputFile$,display,input
-		open #hOut:=fnH: "Name="&bookFile$&",RecL=512,replace",display,output
+		open #hIn=fnH: "Name="&inputFile$,display,input
+		open #hOut=fnH: "Name="&bookFile$&",RecL=512,replace",display,output
 		fn_prHout('[ACS Hand Held File Generic Version 2]')
 		z$=''
 		do
@@ -1039,7 +1039,7 @@ def fn_mergeBooks(mbFile1$*512,mbFile2$*512)
 	dim mbTmpNewFile$*512
 	mbTmpNewFile$=env$('temp')&'\acs\mergeTmpNew-session'&session$&'.txt'
 	fnMakesurePathExists(mbTmpNewFile$)
-	open #hMergeNew:=fnH: 'name='&mbTmpNewFile$&",RecL=512,Replace",d,o
+	open #hMergeNew=fnH: 'name='&mbTmpNewFile$&",RecL=512,Replace",d,o
 	pr #hMergeNew: '[ACS Hand Held File Generic Version 2]'
 	fn_getCustomerNumbers(mat mbF1Label$,mat mbF1Value$,mat mbF1CustomerNumbers$)
 	fn_getCustomerNumbers(mat mbF2Label$,mat mbF2Value$,mat mbF2CustomerNumbers$)

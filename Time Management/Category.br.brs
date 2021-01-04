@@ -8,7 +8,7 @@ def fn_setupCategories
 		setupCategories=1
 		if exists('S:\Core\Data\acsllc\TMCat.h[cno]') then
 			dim oldCat$(30)*30
-			open #hCategory:=fnH: "Name=S:\Core\Data\acsllc\TMCat.h[cno],Shr",internal,input,relative
+			open #hCategory=fnH: "Name=S:\Core\Data\acsllc\TMCat.h[cno],Shr",internal,input,relative
 			read #hCategory,using 'form pos 1,30*c 30',rec=1: mat oldCat$
 			dim catData$(0)*80,catDataN(0)
 			hCategory=fn_open('TM Category',mat catData$,mat catDataN,mat form$)

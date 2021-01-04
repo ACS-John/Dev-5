@@ -11,7 +11,7 @@ def fn_status(text$*512)
 	if ~status_initialized or file$(hStatusWin)<>':CON:' or hStatusWin=0 then
 		status_initialized=1
 		dim headings$(1)*40,widths(1),forms$(1)*40,status_gridspec$*80
-		open #hStatusWin:=fnH: 'SRow=1,SCol=1,Rows=20,Cols=80,Parent=None,Caption=Status',display,output
+		open #hStatusWin=fnH: 'SRow=1,SCol=1,Rows=20,Cols=80,Parent=None,Caption=Status',display,output
 		status_gridspec$='#'&str$(hStatusWin)&',1,1,List 20/80'
 		headings$(1)='Status'
 		widths(1)=80

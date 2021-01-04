@@ -31,7 +31,7 @@ if cont then
 	dim acct$*10,custname$*30,trcust$(3)*10,trdate(3)
 	Fcustomer: form c 10,x 30,c 30,pos 1741,n 2,pos 217,12*pd 5,pos 292,pd 4.2,pd 4,12*pd 4.2,pos 388,10*pd 5.2,pos 1750,2*n 6
 	fn_openfiles ! open data files
-	open #h_iphold:=fnH: "Name=[Q]\UBmstr\IpHold7.h[cno]",internal,input
+	open #h_iphold=fnH: "Name=[Q]\UBmstr\IpHold7.h[cno]",internal,input
 	fnopenprn : fn_printheader
 	do
 		NEXT_CUSTOMER: !
@@ -100,7 +100,7 @@ def fn_options(&route,&billingdate$) ! show options dialog to user and return se
 	end if
 fnend
 def fn_openfiles
-	open #hCustomer:=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno]",internal,outIn,keyed
+	open #hCustomer=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno]",internal,outIn,keyed
 	open #hTrans=fnH: "Name=[Q]\UBmstr\ubtransvb.h[cno],KFName=[Q]\UBmstr\ubtrindx.h[cno]",internal,input,keyed
 	! open #hTrans2=fnH: "Name=[Q]\UBmstr\ubtransvb.h[cno],KFName=[Q]\UBmstr\UBTrdt.h[cno]",internal,outIn,keyed
 fnend

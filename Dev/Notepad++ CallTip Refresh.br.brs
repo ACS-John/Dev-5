@@ -127,7 +127,7 @@ def fn_gatherLibraryKeywords(mat functions$)
 fnend
 def fn_gatherLibraryFunctions(mat functions$; ___,line$*512,hGlf,posSpace1,lineVal)
 	! updates local: mat functions$
-	open #hGlf:=fnH: 'name=S:\Core\Library.br.brs',d,i
+	open #hGlf=fnH: 'name=S:\Core\Library.br.brs',d,i
 	do
 		linput #hGlf: line$ eof eoGlf
 		line$=lwrc$(line$)
@@ -166,7 +166,7 @@ fnend
 def fn_updateNppCallTipFile
 	!
 	! pr 'fn_updateNppCallTipFile'
-	open #hNpp:=fnH: 'name='&env$('temp')&'\BRSource.xml,recl=1024,replace',d,o
+	open #hNpp=fnH: 'name='&env$('temp')&'\BRSource.xml,recl=1024,replace',d,o
 	pr #hNpp: '<?xml version="1.0" encoding="Windows-1252" ?>'
 	pr #hNpp: '<NotepadPlus>'
 	pr #hNpp: '  <AutoComplete language="BR! Source">'

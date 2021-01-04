@@ -8,7 +8,7 @@ autoLibrary
 !  library 'PROG2\INTERMNT.wb': fnopen_internal
 !  relation_employer=10
 !  fnopen_internal(relation_employer,h,file_name$, mat internal_data$, mat internal_data, mat internal_fieldsc$, mat internal_fieldsn$, internal_form_c$, internal_form_n$,mat internal_fc$,mat internal_fn$)
-open #h:=fnH: "NAME=INTERNAL//6,KFNAME=INTERNAL.IDX//6,SHR",internal,input,keyed
+open #h=fnH: "NAME=INTERNAL//6,KFNAME=INTERNAL.IDX//6,SHR",internal,input,keyed
 pr 'file opened: ';file$(h)
 fileno$='14901075'
 dno=1

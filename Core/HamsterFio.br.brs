@@ -28,7 +28,7 @@ def library fnHamsterFio(fileid$*64)
 fnend
 def fn_hfLayoutRead(hfLayoutFilename$*256,mat hfDataAll$,mat hfLabel$,mat hfFieldType$,mat hfStorageLen,mat hfMask,mat hfFieldLen)
 	dim line$*1024,hfItem$(0)*1024
-	open #hLay:=fnH: 'name='&hfLayoutFilename$,d,i
+	open #hLay=fnH: 'name='&hfLayoutFilename$,d,i
 	past_header=0
 	hfItem=0
 	mat hfDataAll$(0) : mat hfLabel$(0) : mat hfFieldType$(0) : mat hfStorageLen(0) : mat hfMask(0) : mat hfFieldLen(0) 

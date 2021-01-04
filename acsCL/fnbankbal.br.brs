@@ -2,7 +2,7 @@
 ! Checkbook Transaction File Editor
 def library fnbankbal(bankCode; ___,returnN,key$*2,bal)
 	autoLibrary
-	open #hBank:=fnH: "Name=[Q]\CLmstr\Bankmstr.h[cno],KFName=[Q]\CLmstr\BankIdx1.h[cno],Shr",internal,input,keyed
+	open #hBank=fnH: "Name=[Q]\CLmstr\Bankmstr.h[cno],KFName=[Q]\CLmstr\BankIdx1.h[cno],Shr",internal,input,keyed
 	if bankCode then
 		key$=cnvrt$('Pic(zz)',bankCode)
 		read #hBank,using 'Form Pos 45,PD 6.2',key=key$: returnN

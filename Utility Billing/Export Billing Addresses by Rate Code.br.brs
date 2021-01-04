@@ -38,7 +38,7 @@ MainLoop: ! r:
 	dim c$(0)*256
 	dim cN(0)
 	hCustomer=fn_open('UB Customer',mat c$,mat cN,mat form$)
-	open #hOut:=fnH: 'name=[at]'&fileOut$&',recl=2048,eol=crlf,replace',d,o
+	open #hOut=fnH: 'name=[at]'&fileOut$&',recl=2048,eol=crlf,replace',d,o
 	! r: Header
 	delim$=chr$(9)
 	pr #hOut: rpad$('Account   '       ,10)&delim$;

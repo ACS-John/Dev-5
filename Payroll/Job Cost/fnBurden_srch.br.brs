@@ -9,7 +9,7 @@ def library fnburden_srch(&x$;fixgrid)
 
 	! x$=account #     
 	! to extract the flexgrid information (personnel burden)
-	open #file_num:=fnH: "Name=[Q]\PRmstr\burden.h[cno],KFName=[Q]\PRmstr\burdenidx.h[cno],Shr",internal,input,keyed ioerr ERTN
+	open #file_num=fnH: "Name=[Q]\PRmstr\burden.h[cno],KFName=[Q]\PRmstr\burdenidx.h[cno],Shr",internal,input,keyed ioerr ERTN
 
 	restore #file_num: 
 	fnTos(sn$="BurdenSrch")

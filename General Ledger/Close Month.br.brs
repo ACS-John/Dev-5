@@ -22,7 +22,7 @@ MainLoop: ! r:
 	close #1:
 	fn_currentToAccumlatedTrans
 	OPEN_GLMSTR: !
-	open #hAcct:=fnH: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLINDEX.h[cno]",internal,outIn,keyed
+	open #hAcct=fnH: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLINDEX.h[cno]",internal,outIn,keyed
 	fnStatus("Closing Month...")
 	do
 		dim bc(13)
@@ -44,9 +44,9 @@ MainLoop: ! r:
 
 	if reccode=0 then 
 		FileDrop: !
-		open #hBankRec:=fnH: "Name=[Q]\GLmstr\GLBRec.h[cno],SIZE=0,RecL=68,Replace",internal,outIn
+		open #hBankRec=fnH: "Name=[Q]\GLmstr\GLBRec.h[cno],SIZE=0,RecL=68,Replace",internal,outIn
 	else 
-		open #hBankRec:=fnH: "Name=[Q]\GLmstr\GLBRec.h[cno],KFName=[Q]\GLmstr\GLRecIdx.h[cno]",internal,outIn,keyed ioerr FileDrop
+		open #hBankRec=fnH: "Name=[Q]\GLmstr\GLBRec.h[cno],KFName=[Q]\GLmstr\GLRecIdx.h[cno]",internal,outIn,keyed ioerr FileDrop
 		do
 			read #hBankRec,using 'Form POS 63,PD 5.2,POS 68,N 1': a2,a3 eof EoGlBrec
 			if a3=1 or a2=0 then delete #hBankRec:
@@ -60,8 +60,8 @@ goto Xit ! /r
 
 def fn_currentToAccumlatedTrans(; ___,hTransAccumulated,hTransCurrent,tr$*12,td$*30)
 	fnStatus("Transferring Current Transactions to Accumulated Trans...")
-	open #hTransAccumulated:=fnH: "Name=[Q]\GLmstr\AcTrans.h[cno],RecL=72,use",internal,outin
-	open #hTransCurrent:=fnH: "Name=[Q]\GLmstr\GLTrans.h[cno]",internal,input
+	open #hTransAccumulated=fnH: "Name=[Q]\GLmstr\AcTrans.h[cno],RecL=72,use",internal,outin
+	open #hTransCurrent=fnH: "Name=[Q]\GLmstr\GLTrans.h[cno]",internal,input
 	do
 		dim tr(7)
 		read #hTransCurrent,using 'Form POS 1,N 3,N 6,N 3,N 6,PD 6.2,2*N 2,C 12,C 30,N 2': mat tr,tr$,td$ eof CTAT_EoTransCurrent

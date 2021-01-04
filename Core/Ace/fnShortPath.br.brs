@@ -35,7 +35,7 @@ def library fnshortpath$*256(longpath$*256)
 		fnmakesurepathexists(csTempPath$&'\')
 		fn_make_shortpath_cmd(csTempPath$)
 		execute 'sy '&csOption$&optHide$&csTempPath$&"\ShortPath.cmd"&' "'&longpath$&'" '&csTempPath$&"\sp_"&session$&'.txt'
-		open #tmp:=fnH: 'Name='&csTempPath$&'\sp_'&session$&'.txt',display,input 
+		open #tmp=fnH: 'Name='&csTempPath$&'\sp_'&session$&'.txt',display,input 
 		linput #tmp: getfilepath_ln$
 							if do_debug then pr 'getfilepath_ln$='&getfilepath_ln$ : pause
 		if getfilepath_ln$='\' then 
@@ -53,7 +53,7 @@ def library fnshortpath$*256(longpath$*256)
 fnend 
 def fn_make_shortpath_cmd(msc_path$*256)
 	if ~exists(msc_path$&'\ShortPath.cmd') or do_debug then 
-		open #msc_tmp:=fnH: 'name='&msc_path$&'\ShortPath.cmd,RecL=256,Replace',display,output 
+		open #msc_tmp=fnH: 'name='&msc_path$&'\ShortPath.cmd,RecL=256,Replace',display,output 
 		pr #msc_tmp: "echo off"
 		pr #msc_tmp: "if '%1'=='' goto HELP"
 		pr #msc_tmp: "if '%2'=='' goto HELP"

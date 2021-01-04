@@ -59,8 +59,8 @@ ScrMain: ! r: Screen 1
 ! /r
 
 ! r: initialize stuff
-open #h_trans:=fnH: 'Name=[Q]\UBmstr\UBTransVB.h[cno],KFName=[Q]\UBmstr\UBTrIndx.h[cno],Shr',internal,input,keyed
-open #hRate:=fnH: 'Name=[Q]\UBmstr\ubData\RateMst.h[cno],KFName=[Q]\UBmstr\ubData\RateIdx1.h[cno],Shr',internal,input,keyed
+open #h_trans=fnH: 'Name=[Q]\UBmstr\UBTransVB.h[cno],KFName=[Q]\UBmstr\UBTrIndx.h[cno],Shr',internal,input,keyed
+open #hRate=fnH: 'Name=[Q]\UBmstr\ubData\RateMst.h[cno],KFName=[Q]\UBmstr\ubData\RateIdx1.h[cno],Shr',internal,input,keyed
 
 dim serviceName$(10)*20,tax_code$(10)*1,penalty$(10)*1
 fnGetServices(mat serviceName$,mat service$,mat tax_code$,mat penalty$)
@@ -87,14 +87,14 @@ for j=1 to 10
 next j
 
 if seq=0 or seq=1 then ! route number
-	open #hCustomer:=fnH: 'Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx5.h[cno],Shr',internal,input,keyed
+	open #hCustomer=fnH: 'Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx5.h[cno],Shr',internal,input,keyed
 else if seq=2 then            ! account
-	open #hCustomer:=fnH: 'Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr',internal,input,keyed
+	open #hCustomer=fnH: 'Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr',internal,input,keyed
 else if seq=3 then ! Alpha Sort Sequence
-	open #hCustomer:=fnH: 'Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\UBIndx2.h[cno],Shr',internal,input,keyed
+	open #hCustomer=fnH: 'Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\UBIndx2.h[cno],Shr',internal,input,keyed
 else if seq=4 then ! Customer Name
 	fnIndex('[Q]\UBmstr\Customer.h[cno]', env$('temp')&'\customer_name'&session$&'.h[cno]','41 30')
-	open #hCustomer:=fnH: 'Name=[Q]\UBmstr\Customer.h[cno],KFName='&env$('temp')&'\customer_name'&session$&'.h[cno],Shr',internal,input,keyed
+	open #hCustomer=fnH: 'Name=[Q]\UBmstr\Customer.h[cno],KFName='&env$('temp')&'\customer_name'&session$&'.h[cno],Shr',internal,input,keyed
 end if
 services=0
 if trim$(serviceName$(1))='Water'                               then services+=1 : water=1
@@ -123,7 +123,7 @@ end if
 if enableExport then
 	ExpAsk: !
 		dim save_name$*256
-		open #h_tmp:=fnH: "Name=SAVE:"&fnSpecialFolderPath$('Desktop')&'\*.txt,RecL=1,replace',external,output ioerr ExpOpenErr
+		open #h_tmp=fnH: "Name=SAVE:"&fnSpecialFolderPath$('Desktop')&'\*.txt,RecL=1,replace',external,output ioerr ExpOpenErr
 		save_name$=os_filename$(file$(h_tmp))
 		close #h_tmp,free:
 	goto PastExpOpenErr
@@ -140,7 +140,7 @@ if enableExport then
 		goto ExpAsk
 	end if
 	PastExpOpenErr: !
-	open #hExp:=fnH: 'Name='&br_filename$(save_name$)&',RecL=2500,Replace,EOL=CRLF',display,output
+	open #hExp=fnH: 'Name='&br_filename$(save_name$)&',RecL=2500,Replace,EOL=CRLF',display,output
 	pr #hExp: expHdr$
 else
 	fnopenprn

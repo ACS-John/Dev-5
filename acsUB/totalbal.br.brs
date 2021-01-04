@@ -32,7 +32,7 @@ def library fntotal_ar
 fnend 
 def fn_total_ar
 	totalBal=0
-	open #h_customer:=fnH: "Name=[Q]\UBmstr\Customer.h[cno],Shr",internal,input
+	open #h_customer=fnH: "Name=[Q]\UBmstr\Customer.h[cno],Shr",internal,input
 	do 
 		read #h_customer,using "Form POS 292,PD 4.2,PD 4,pos 1821,N 1": bal,customerBillingDate,finalBillingCode eof TA_FINIS
 		if excludeFinalBilled$='False' or finalBillingCode=0 then 

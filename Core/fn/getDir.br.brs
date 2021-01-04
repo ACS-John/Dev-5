@@ -20,7 +20,7 @@ def library fngetdir(&dir$,mat filename$; option$,filter$*40)
 		dim tmp$*255
 		tmp$='Sy -s -M Dir "'&rtrm$(os_filename$(dir$))&'\'&filter$&'" /b '&option$&' >"'&env$('temp')&'\GetDir'&session$&'.tmp"'
 		execute tmp$
-		open #tf1:=fnH: "Name="&env$('temp')&'\'&"GetDir"&session$&".tmp",display,input 
+		open #tf1=fnH: "Name="&env$('temp')&'\'&"GetDir"&session$&".tmp",display,input 
 		for x=1 to udim(filename$)
 			linput #tf1: tmp$ eof Xit
 			filename$(x)=rtrm$(tmp$)

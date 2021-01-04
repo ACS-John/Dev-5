@@ -25,7 +25,7 @@ def library fncmbcno(myline,mypos; mysys$)
 		if filename$(a)<>"" then 
 			end=len(filename$(a))
 			opt$(a)=filename$(a)(10:end)
-			open #x:=fnH: "Name="&sys_data_path$&"\Company.h"&opt$(a),internal,input 
+			open #x=fnH: "Name="&sys_data_path$&"\Company.h"&opt$(a),internal,input 
 			dim cnam$*40
 			read #x,using "Form pos 1,c 40": cnam$
 			close #x: 

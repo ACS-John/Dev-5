@@ -15,7 +15,7 @@
 	fn_report(cap$)
 	fn_report(date$('mm/dd/ccyy'))
 	fn_report('')
-	open #h_actrans:=fnH: "Name=[Q]\GLmstr\AcTrans.h[cno],KFName=[Q]\GLmstr\AcTrIdx.h[cno],Shr",internal,outIn,keyed
+	open #h_actrans=fnH: "Name=[Q]\GLmstr\AcTrans.h[cno],KFName=[Q]\GLmstr\AcTrIdx.h[cno],Shr",internal,outIn,keyed
 F_ACTRANS: form pos 1,c 12,n 6,pd 6.2,n 2,pos 71,n 2
 	restore #h_actrans,key>=rpad$(gln_from$,kln(h_actrans)):
 	do

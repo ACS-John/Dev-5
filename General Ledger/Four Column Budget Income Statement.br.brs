@@ -22,14 +22,14 @@
 !
 	if fnps=2 then
 		mp1=72
-		open #hAcGlFnsX:=fnH:"Name=[Q]\GLmstr\ACGLFNSJ.h[cno],KFName=[Q]\GLmstr\agfsidx2.h[cno],Shr" ,internal,input,keyed
+		open #hAcGlFnsX=fnH:"Name=[Q]\GLmstr\ACGLFNSJ.h[cno],KFName=[Q]\GLmstr\agfsidx2.h[cno],Shr" ,internal,input,keyed
 	else
 		mp1=69
-		open #hAcGlFnsX:=fnH:"Name=[Q]\GLmstr\ACGLFNSI.h[cno],KFName=[Q]\GLmstr\agfsidx3.h[cno],Shr",internal,input,keyed
+		open #hAcGlFnsX=fnH:"Name=[Q]\GLmstr\ACGLFNSI.h[cno],KFName=[Q]\GLmstr\agfsidx3.h[cno],Shr",internal,input,keyed
 	end if
 	fnIndex("[Q]\GLmstr\GLmstr.h[cno]",env$('temp')&"\fsindex.h[cno]",str$(mp1)&" 3")
 	fnopenprn
-	open #hGlMstr:=fnH: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Temp]\fsindex.h[cno],Shr",internal,input,keyed
+	open #hGlMstr=fnH: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Temp]\fsindex.h[cno],Shr",internal,input,keyed
 	fHlMstr: form pos mp1,pd 3,pos 81,41*pd 6.2
 	! /r
 ReadFinStmtLayout: ! r:

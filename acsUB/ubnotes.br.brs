@@ -21,7 +21,7 @@ SCR1: !
 	if resp$(1)="[All]" then rt1=0 else rt1=val(resp$(1))
 	d1=val(resp$(2))
 !
-	open #h_customer:=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx5.h[cno],Shr",internal,input,keyed 
+	open #h_customer=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx5.h[cno],Shr",internal,input,keyed 
 	fnopenprn
 	gosub HEADER
 

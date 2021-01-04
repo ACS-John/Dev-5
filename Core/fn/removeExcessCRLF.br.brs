@@ -6,8 +6,8 @@ def fn_replaceLFwithSpace$*256(csvFile$*256; ___,line$*1024,outFile$*300, _
 			line2$*1, _
 			line500$*500)
 	outFile$=csvFile$&env$('unique_computer_id')&'.tmp'
-	open #hIn:=fnH:  'name='&csvFile$&',RecL=500,EoL=None',external,input
-	open #hOut:=fnH:  'name='&outFile$&',RecL=2048,EoL=None,Replace',external,output
+	open #hIn=fnH:  'name='&csvFile$&',RecL=500,EoL=None',external,input
+	open #hOut=fnH:  'name='&outFile$&',RecL=2048,EoL=None,Replace',external,output
 	do
 		rea #hIn,using 'form pos 1,c 500': line500$ eof RlsEoF
 		line$=line500$
@@ -45,7 +45,7 @@ def fn_chunkOpen(filename$*80,&vrec,&chunk,&rpos,&file_size,&trec,&head)
 	if chunk+head>file_size then 
 		chunk=file_size-head
 	end if
-	open #hsuper:=fnH: "name="&trim$(filename$)&",recl="&str$(chunk)&",shr",external,input,relative ioerr L4744 ! outin
+	open #hsuper=fnH: "name="&trim$(filename$)&",recl="&str$(chunk)&",shr",external,input,relative ioerr L4744 ! outin
 	fn_chunkOpen=hsuper
 	goto L4746
 	L4744: !
@@ -86,9 +86,9 @@ def library fnRemoveExcessCRLF$*256(csvFile$*256; minColCount, ___, _
 	if ~setup then fn_setup
 	csvFile$=fn_replaceLFwithSpace$(csvFile$)
 	lineCount=0
-	open #hIn:=fnH:  'name=[at]'&csvFile$,display,input
+	open #hIn=fnH:  'name=[at]'&csvFile$,display,input
 include: filenamesPushMixedCase
-	open #hOut:=fnH: 'name=[at]'&csvFile$&'-fixedCrLf, _
+	open #hOut=fnH: 'name=[at]'&csvFile$&'-fixedCrLf, _
 														recl=2048,replace',display,output
 include: filenamesPopUpperCase
 

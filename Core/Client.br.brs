@@ -654,8 +654,8 @@ def fn_userLimit(userLimit)
 fnend 
 def fn_userCount
 	ucReturn=0
-	exec 'status users >"'&env$('temp')&'\acsUsers'&session$&'.tmp"'
-	open #hStUsers:=fnH: 'name='&env$('temp')&'\acsUsers'&session$&'.tmp',d,input
+	exec 'status users >"[temp]\acsUsers[session].tmp"'
+	open #hStUsers=fnH: 'name=[temp]\acsUsers[session].tmp',d,input
 	dim ucLine$*256
 	ucListStarted=0
 	do
@@ -671,7 +671,7 @@ def fn_userCount
 	loop
 	UcEof: !
 	close #hStUsers:
-	fnfree(env$('temp')&'\acsUsers'&session$&'.tmp')
+	fnfree('[temp]\acsUsers[session].tmp')
 	fn_userCount=ucReturn
 fnend
 ! r: def library fnuser_limit_exceeded
@@ -938,7 +938,7 @@ def fn_client_support_setup(client_id,mat css_system_id$,mat css_system_support_
 		mat cache_css_system_id$(0)
 		mat cache_css_system_sup_end_date(0)
 		cache_css_system_count=0
-		open #h_support:=fnH: "Name=S:\Core\Data\acsllc\support.h420,Version=2,KFName=S:\Core\Data\acsllc\support-idx.h420,version=0,Shr",internal,input,keyed 
+		open #h_support=fnH: "Name=S:\Core\Data\acsllc\support.h420,Version=2,KFName=S:\Core\Data\acsllc\support-idx.h420,version=0,Shr",internal,input,keyed 
 		restore #h_support: ! ,key>==lpad$(trim$(client_id$),kln(h_support)):
 		do 
 			read #h_support,using F_SUPPORT: cln$,scode,scode$,sdt1,stm$,sup_exp_date,scst eof CSS_SUPPORT_EOF

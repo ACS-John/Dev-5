@@ -17,7 +17,7 @@ do
 	else
 		fnCopy(csvFile$,csvFile$&'.bak')
 		open #hIn:= fnH: 'name='&csvFile$&'.bak',display,input
-		open #hOut:=fnH: 'name='&csvFile$&',recl=1024,replace',display,output
+		open #hOut=fnH: 'name='&csvFile$&',recl=1024,replace',display,output
 		lineCount   =0
 		colComment  =0
 		colCheckDate=0

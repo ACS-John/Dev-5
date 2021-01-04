@@ -7,11 +7,11 @@ def library fnaddreceipt
 
 	fnIndex('[Q]\CLmstr\Recmstr.h[cno]','[Q]\CLmstr\Recidx1.h[cno]','1 8')
 	fnStatusClose
-	open #trmstr2:=fnH: "Name=[Q]\CLmstr\TrMstr.h[cno],KFName=[Q]\CLmstr\TrIdx2.h[cno],Shr",internal,outIn,keyed 
+	open #trmstr2=fnH: "Name=[Q]\CLmstr\TrMstr.h[cno],KFName=[Q]\CLmstr\TrIdx2.h[cno],Shr",internal,outIn,keyed 
 	if exists("[Q]\CLmstr\RECmstr.h[cno]")=0 then gosub CREATERECEIPTFILE
-	open #receipt:=fnH: "Name=[Q]\CLmstr\recmstr.h[cno],Version=1,KFName=[Q]\CLmstr\recidx1.h[cno],Shr",internal,outIn,keyed 
-	open #receiptgl:=fnH: "Name=[Q]\CLmstr\ReceiptGLBreakdown.h[cno],Version=1,KFName=[Q]\CLmstr\Receiptglbkdidx.h[cno],Use,RecL=56,KPs=1,KLn=8,Shr",internal,outIn,keyed 
-	open #citystzip:=fnH: "Name=[Q]\Data\CityStZip.dat,KFName=[Q]\Data\CityStZip.Idx,Use,RecL=30,KPs=1,KLn=30,Shr",internal,outIn,keyed 
+	open #receipt=fnH: "Name=[Q]\CLmstr\recmstr.h[cno],Version=1,KFName=[Q]\CLmstr\recidx1.h[cno],Shr",internal,outIn,keyed 
+	open #receiptgl=fnH: "Name=[Q]\CLmstr\ReceiptGLBreakdown.h[cno],Version=1,KFName=[Q]\CLmstr\Receiptglbkdidx.h[cno],Use,RecL=56,KPs=1,KLn=8,Shr",internal,outIn,keyed 
+	open #citystzip=fnH: "Name=[Q]\Data\CityStZip.dat,KFName=[Q]\Data\CityStZip.Idx,Use,RecL=30,KPs=1,KLn=30,Shr",internal,outIn,keyed 
 
 	MENU1: ! 
 	fnTos
@@ -60,7 +60,7 @@ def library fnaddreceipt
 	DELETE_RECEIPT: ! r:
 		! check for Linked Unpaid Invoices 
 		! if there are any - than tell them, and don't delete.
-		open #paytrans:=fnH: "Name=[Q]\CLmstr\Paytrans.h[cno],KFName=[Q]\CLmstr\UnPdIdx1.h[cno],Shr",internal,outIn,keyed 
+		open #paytrans=fnH: "Name=[Q]\CLmstr\Paytrans.h[cno],KFName=[Q]\CLmstr\UnPdIdx1.h[cno],Shr",internal,outIn,keyed 
 		restore #paytrans,key>=rec$&rpt$(chr$(0),12): nokey L490
 		read #paytrans,using 'Form Pos 1,C 8': x$
 		if x$=rec$ then 
@@ -83,7 +83,7 @@ def library fnaddreceipt
 		end if
 		EO_DELETE_RECEIPT: ! 
 		! 
-		open #trans:=fnH: "Name=[Q]\CLmstr\TrMstr.h[cno],KFName=[Q]\CLmstr\TrIdx2.h[cno],Shr",internal,outIn,keyed 
+		open #trans=fnH: "Name=[Q]\CLmstr\TrMstr.h[cno],KFName=[Q]\CLmstr\TrIdx2.h[cno],Shr",internal,outIn,keyed 
 		restore #trans, key>=holdrec$&rpt$(chr$(0),kln(trans)-len(holdrec$)): nokey EO_DEL_KEY_ON_TRANS
 		L590: read #trans,using 'Form Pos 28,C 8': x$ eof EO_DEL_KEY_ON_TRANS
 		if x$=rec$ then 
@@ -181,7 +181,7 @@ def library fnaddreceipt
 	KEY_CHANGE: ! r: don't do on receipts
 		goto L1500 ! don't change any other files
 		! change the references to this file in the Transaction file
-		open #trans:=fnH: "Name=[Q]\CLmstr\TrMstr.h[cno],KFName=[Q]\CLmstr\TrIdx2.h[cno],Shr",internal,outIn,keyed 
+		open #trans=fnH: "Name=[Q]\CLmstr\TrMstr.h[cno],KFName=[Q]\CLmstr\TrIdx2.h[cno],Shr",internal,outIn,keyed 
 		restore #trans,key>=holdrec$&rpt$(chr$(0),11): nokey EO_CHANGE_KEY_ON_TRANS
 		L1230: ! 
 		read #trans,using 'Form Pos 28,C 8': x$ eof EO_CHANGE_KEY_ON_TRANS
@@ -203,7 +203,7 @@ def library fnaddreceipt
 	EO_CHANGE_KEY_ON_RECEIPTGL: ! 
 
 	! Change references to this file in the linked file PayTrans
-	open #paytrans:=fnH: "Name=[Q]\CLmstr\Paytrans.h[cno],KFName=[Q]\CLmstr\UnPdIdx1.h[cno],Shr",internal,outIn,keyed 
+	open #paytrans=fnH: "Name=[Q]\CLmstr\Paytrans.h[cno],KFName=[Q]\CLmstr\UnPdIdx1.h[cno],Shr",internal,outIn,keyed 
 	restore #paytrans,key>=holdrec$&rpt$(chr$(0),12): nokey EO_CHANGE_KEY_ON_PAYTRANS
 	L1370: !
 	read #paytrans,using 'Form Pos 1,C 8': x$ eof EO_CHANGE_KEY_ON_PAYTRANS
@@ -215,7 +215,7 @@ def library fnaddreceipt
 	close #paytrans: 
 
 	! Change references to this file in the linked file UnPdAloc
-	open #unpdaloc:=fnH: "Name=[Q]\CLmstr\UnPdAloc.h[cno],KFName=[Q]\CLmstr\UAIdx2.h[cno],Shr",internal,outIn,keyed 
+	open #unpdaloc=fnH: "Name=[Q]\CLmstr\UnPdAloc.h[cno],KFName=[Q]\CLmstr\UAIdx2.h[cno],Shr",internal,outIn,keyed 
 	restore #unpdaloc,key>=holdrec$&rpt$(chr$(0),kln(unpdaloc)-len(holdrec$)): nokey EO_CHANGE_KEY_ON_UNPDALOC
 	read #unpdaloc,using 'Form Pos 1,C 8': x$ eof EO_CHANGE_KEY_ON_UNPDALOC
 	if x$=holdrec$ then 
@@ -268,7 +268,7 @@ def library fnaddreceipt
 	close #citystzip: ioerr ignore
 fnend 
 CREATERECEIPTFILE: ! r:
-	open #receipt:=fnH: "Name=[Q]\CLmstr\recmstr.h[cno],Version=1,KFName=[Q]\CLmstr\recidx1.h[cno],REPLACE,RecL=38,KPS=1,KLN=8",internal,outIn,keyed 
+	open #receipt=fnH: "Name=[Q]\CLmstr\recmstr.h[cno],Version=1,KFName=[Q]\CLmstr\recidx1.h[cno],REPLACE,RecL=38,KPS=1,KLN=8",internal,outIn,keyed 
 	close #receipt: 
 	execute "Index [Q]\CLmstr\Recmstr.h[cno]"&' '&"[Q]\CLmstr\Recidx1.h[cno] 1 8 Replace DupKeys,Shr"
 	execute "Index [Q]\CLmstr\Receiptglbreakdown.h[cno]"&' '&"[Q]\CLmstr\receiptglbkdidx.h[cno] 1 8 Replace DupKeys,Shr"
