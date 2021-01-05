@@ -242,15 +242,17 @@ def fn_creg_setup
 fnend
 
 ! Program and Company Registry - great for saving default answers on screens
-def library fnPcReg_Read(cr_fieldName$*128,&cr_fieldValue$; cr_defaultIfNotRead$*128,cr_alsoApplyDefaultIfReadBlank,___,pcId$*128)
+def library fnPcReg_Read(fieldName$*128,&fieldValue$; defaultIfNotRead$*128,alsoApplyDefaultIfReadBlank,___,pcId$*128)
 	fn_creg_setup
-	pcId$=env$('program_caption')&'.'&rtrm$(cw_fieldName$)
-	fnPcReg_Read=fn_cReg_read(pcId$,cr_fieldValue$, cr_defaultIfNotRead$,cr_alsoApplyDefaultIfReadBlank)
+	pcId$=env$('program_caption')&'.'&rtrm$(fieldName$)
+	! pr 'read pcId$='&pcId$
+	fnPcReg_Read=fn_cReg_read(pcId$,fieldValue$, defaultIfNotRead$,alsoApplyDefaultIfReadBlank)
 fnend
-def library fnPcReg_write(cw_fieldName$*128,cw_fieldValue$*256; ___,pcId$*128)
+def library fnPcReg_write(fieldName$*128,fieldValue$*256; ___,pcId$*128)
 	fn_creg_setup
-	pcId$=env$('program_caption')&'.'&rtrm$(cw_fieldName$)
-	fnPcReg_write=fn_cReg_write(pcId$,cw_fieldValue$)
+	pcId$=env$('program_caption')&'.'&rtrm$(fieldName$)
+	! pr 'rite pcId$='&pcId$
+	fnPcReg_write=fn_cReg_write(pcId$,fieldValue$)
 fnend
 
 

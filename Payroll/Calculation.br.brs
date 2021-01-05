@@ -186,7 +186,7 @@ EmployeeNotFound: ! r:
 	fnmsgbox(mat ml$,resp$,'',0)
 goto ReadRpWork ! /r
 FEDWH_DEPT: ! r: Fed WH for Dept ! Federal Withholding for Department
-	if debug then fnStatus('federal  withholding for department calculating')
+	if showDetails then fnStatus('federal  withholding for department calculating')
 	f4=round(fed_wh*pog,2)
 	stwh(tcd(1),1)+=gpd : eic4=0 ! Calculate EIC
 	if eicCode then
@@ -1138,16 +1138,18 @@ def fn_wh_missouri(taxableWagesCurrent,marital,fed_wh,allowances,payPeriodsPerYe
 	end if ! /r
 
 	if marital=1 then ! 1 - Married - filing jointly
-		stStandardDeduction=min(stStdDed_spouseWorks,fed_wh)
+		stStandardDeduction=stStdDed_spouseWorks
 	else if marital=2 then ! 2 - Single - Head of Household
-		stStandardDeduction=min(stStdDed_headOfHousehold,fed_wh)
+		stStandardDeduction=stStdDed_headOfHousehold
 	else if marital=3 then ! 3 - Married - filing joint - only one working
-		stStandardDeduction=min(stStdDed_spouseDoesNotWork,fed_wh)
+		stStandardDeduction=stStdDed_spouseDoesNotWork
 	else if marital=4 then ! 4 - Married - filing joint - both working
-		stStandardDeduction=min(stStdDed_filingSeperate,fed_wh)
+		stStandardDeduction=stStdDed_filingSeperate
 	else if marital=5 then ! 5 - Married - filing seperate - both working
-		stStandardDeduction=min(stStdDed_filingSeperate,fed_wh)
+		stStandardDeduction=stStdDed_filingSeperate
 	end if
+	! if stStandardDeduction=0 then pr bell; : pause
+	! stStandardDeduction=min(stStandardDeduction,fed_wh)
 	if showDetails then
 		fnStatus('State Standard Deduction is '&str$(stStandardDeduction))
 	end if
@@ -1384,7 +1386,7 @@ def fn_wh_oregon( taxableWagesCurrent,fedWhEstimate,payPeriodsPerYear,allowances
 	if returnN<.1 then returnN=0
 
 
-		if debug then ! r: display all the details
+		if showDetails then ! r: display all the details
 			fnStatus('-------------------------------------------')
 			if theyAreSingle then
 				fnStatus('  Single with '&str$(allowancesEffective)&' allowances')
@@ -1415,7 +1417,7 @@ def fn_wh_oregon( taxableWagesCurrent,fedWhEstimate,payPeriodsPerYear,allowances
 		end if ! /r
 
 
-	! if debug then fnStatusPause ! pause
+	! if showDetails then fnStatusPause ! pause
 	fn_wh_oregon=returnN
 fnend
 def fn_oregonPhaseOut(opo_wages,opo_fed_wh,opo_table,isSingle,isMarried; ___,returnN)
@@ -1578,12 +1580,12 @@ ReallocateStateByDept: ! r: (reallocate state taxes based on earnings by dept an
 		TopStDeptLoop: !
 		read #hDepartment,using 'Form POS 1,N 8,n 3,c 12,4*N 6,3*N 2,pd 4.2,23*PD 4.2': teno,tdn,gl$,mat tdt,mat tcd,tli,mat tdet eof EoStDeptLoop
 		if teno=oldeno then
-			if debug then fnStatus('department read employee '&str$(eno)&' department '&str$(tdn))
+			if showDetails then fnStatus('department read employee '&str$(eno)&' department '&str$(tdn))
 			if d1><tdt(4) then goto TopStDeptLoop
 			holdtdn=tdn
 			olddeptkey$=cnvrt$("pic(zzzzzzz#)",oldeno)&cnvrt$("pic(zz#)",holdtdn)
 			read #hPrChecks,using "Form POS 1,N 8,n 3,PD 6,N 7,5*PD 3.2,37*PD 5.2",key=cnvrt$("pic(zzzzzzz#)",oldeno)&cnvrt$("pic(zz#)",tdn)&cnvrt$("pd 6",prd): heno,tdn,prdate,ckno,mat tdc,mat tcp nokey TopStDeptLoop
-			if debug then fnStatus('read check history: heno='&str$(heno)&',tdn='&str$(tdn)&',prdate='&str$(prdate)&',ckno='&str$(ckno)&'...')
+			if showDetails then fnStatus('read check history: heno='&str$(heno)&',tdn='&str$(tdn)&',prdate='&str$(prdate)&',ckno='&str$(ckno)&'...')
 			dst3=0
 			for j=1 to 20
 				if dedst(j)>0 then dst3=dst3+tcp(j+4)
@@ -1720,7 +1722,6 @@ def library fnCheckPayrollCalculation(; ___, _
 	if ~setup_checkCalculation then ! r:
 		setup_checkCalculation=1
 		if ~setup then fn_setup
-		debug=1
 		dim marriedOption$(0)*58
 		dim eicOption$(0)*29
 		dim w4yearOption$(0)*4
@@ -1784,7 +1785,7 @@ def library fnCheckPayrollCalculation(; ___, _
 		fnLbl(             lc+=1,col1_pos,"W-4 Year:",col1_len,1)
 		fncomboa("w4Year", lc   ,col2_pos,mat w4yearOption$,'Only used if W-4 Year is set to 2020 or later.',5)
 		fnPcReg_read('W-4 Year',resp$(resp_w4year=respc+=1), w4yearOption$(1))
-
+		! pr 'resp$(resp_w4year)=';resp$(resp_w4year),resp_w4year : pause
 		fnLbl(lc+=1,col1_pos,"Tax Year:",col1_len,1)
 		fnTxt(lc   ,col2_pos,4,4,0,"30")
 		tmp$=date$('ccyy')
@@ -1864,7 +1865,6 @@ fnend
 def fn_setup
 	autoLibrary
 	on error goto Ertn
-	if env$('ACSDeveloper')<>'' then debug=1 else debug=0
 
 	dim stwh(10,2)
 	dim _inp(29)
