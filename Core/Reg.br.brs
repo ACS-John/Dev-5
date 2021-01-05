@@ -195,7 +195,7 @@ def fn_cReg_read(cr_fieldName$*128,&cr_fieldValue$; cr_defaultIfNotRead$*128,cr_
 		cr_fieldValue$=cr_defaultIfNotRead$
 	end if
 	! pr 'load ';trim$(cr_fieldName$);'=';cr_fieldValue$
-	fnCreg_read=val(cr_fieldValue$) conv ignore
+	fn_cReg_read=val(cr_fieldValue$) conv ignore
 fnend
 def fn_cReg_write(cw_fieldName$*128,cw_fieldValue$*256)
 	cw_fieldName$=rpad$(lwrc$(trim$(cw_fieldName$)),128)
