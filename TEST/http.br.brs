@@ -3,24 +3,24 @@ fntop(program$)
 print newpage
 ! exe 'con gui off'
 ! for repeat=1 to 5
-! 	print 'Bitcoin Price as of '&date$("MM/DD/CCYY")&' - '&time$&' is '&str$(fn_getPrice)
+	print 'Bitcoin Price as of '&date$("MM/DD/CCYY")&' - '&time$&' is '&str$(fn_getPrice)
 ! 	sleep(1)
 ! next repeat
 
 ! fn_download('http://planetacs.net/acs5update/Release_Notes.txt','[temp]\Release_Notes.txt')
 
 ! r: functional proof I can read the release notes off the web
-	open #hC=fnH: "name=http://planetacs.net/acs5update/Release_Notes.txt, http=client",display,outin
-	do
-		dim line$*2048
-		linput #hC: line$ eof EoC
-		lineCount+=1
-		pr rtrm$(line$)
-		if lineCount/24=int(lineCount/24) then pause
-	loop
-	EoC: !
-	close #hC:
-	pause
+!	open #hC=fnH: "name=http://planetacs.net/acs5update/Release_Notes.txt, http=client",display,outin
+!	do
+!		dim line$*2048
+!		linput #hC: line$ eof EoC
+!		lineCount+=1
+!		pr rtrm$(line$)
+!		if lineCount/24=int(lineCount/24) then pause
+!	loop
+!	EoC: !
+!	close #hC:
+!	pause
 ! /r
 
 ! exe 'con gui on'

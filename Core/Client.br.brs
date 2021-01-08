@@ -654,8 +654,8 @@ def fn_userLimit(userLimit)
 fnend 
 def fn_userCount
 	ucReturn=0
-	exec 'status users >"[temp]\acsUsers[session].tmp"'
-	open #hStUsers=fnH: 'name=[temp]\acsUsers[session].tmp',d,input
+	exec 'status users >'&env$('temp')&'"\acsUsers[session].tmp"' ! don't use [temp] yet - called before it is set by core\start.br
+	open #hStUsers=fnH: 'name='&env$('temp')&'\acsUsers[session].tmp',d,input ! don't use [temp] yet - called before it is set by core\start.br
 	dim ucLine$*256
 	ucListStarted=0
 	do
@@ -671,7 +671,7 @@ def fn_userCount
 	loop
 	UcEof: !
 	close #hStUsers:
-	fnfree('[temp]\acsUsers[session].tmp')
+	fnfree(env$('temp')&'\acsUsers[session].tmp')
 	fn_userCount=ucReturn
 fnend
 ! r: def library fnuser_limit_exceeded
@@ -1010,7 +1010,7 @@ def fn_client_is_converting
 	! 	cic_return=1
 	! else if env$('client')='Payroll Done Right' and days(date$)<=days('12/01/2018','mm/dd/ccyy') then
 	! 	cic_return=1
-	else if env$('client')='Kathys Bookkeeping' and days(date$)<=days('12/31/2020','mm/dd/ccyy')  then
+	else if env$('client')='Kathys Bookkeeping' and days(date$)<=days('3/31/2021','mm/dd/ccyy')  then
 		cic_return=1
 	end if 
 	fn_client_is_converting=cic_return
