@@ -136,15 +136,15 @@ PrHdr: ! r:
 return ! /r
 PrLine: ! r:
 	if ta(1)=0 then
-		! if enableDetails then
+		if enableDetails then
 			pr #255,using Fl1: dno,ano,sno,d$,bb,cb pageoflow PgOf
 			Fl1: form pos 1,pic(---),x 1,pic(------),x 1,pic(---),x 2,c 50,pos 80,pic(zz,zzz,zzz.## cr),pos 111,pic(zz,zzz,zzz.## cr),skip 2
-		! end if
+		end if
 	else
-		! if enableDetails then
+		if enableDetails then
 			pr #255,using Fl2: dno,ano,sno,d$,bb pageoflow PgOf
 			Fl2: form pos 1,pic(---),x 1,pic(------),x 1,pic(---),x 2,c 50,pos 80,pic(zz,zzz,zzz.## cr)
-		! end if
+		end if
 	end if
 return ! /r
 AccumAndPrint: ! r:
