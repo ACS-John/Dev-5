@@ -865,7 +865,7 @@ def fn_stateTax(wages,pppy,allowances,marital,eicCode,fedWh,addOnSt,w4year$,taxY
 fnend
 ! r: fn_stateTax subordionate functions
 def fn_n2(mat n2,n2Index; ___,x,returnN,multiplier)
-	! n2 stands for middle number - not a great name, but it is goo enough 
+	! n2 stands for middle number - not a great name, but it is goo enough
 
 	! pr 'n2Index='&str$(n2Index)
 	for x=2 to n2Index
@@ -1132,7 +1132,7 @@ def fn_wh_missouri(taxableWagesCurrent,marital,fed_wh,allowances,payPeriodsPerYe
 			! pause
 
 		end if
-		
+
 
 
 	end if ! /r
@@ -1260,9 +1260,16 @@ def fn_wh_oregon( taxableWagesCurrent,fedWhEstimate,payPeriodsPerYear,allowances
 			or1(3,1)=  8900 : or1(3,2)=  758    : or1(3,3)=0.09
 			or1(4,1)= 50000 : or1(4,2)=  540    : or1(4,3)=0.09
 			or1(5,1)=250000 : or1(5,2)=11007    : or1(5,3)=0.099 ! /r
-		else
+		else if taxYear=2020 then ! r:
 			mat or1(4,3)
 			or1(1,1)=     0 : or1(1,2)= 210   : or1(1,3)=0.0475
+			or1(2,1)=  3600 : or1(2,2)= 381   : or1(2,3)=0.0675
+			or1(3,1)=  9050 : or1(3,2)= 749   : or1(3,3)=0.0875
+			or1(4,1)= 50000 : or1(4,2)= 4332   : or1(4,3)=0.099 ! /r
+		else ! 2021
+			mat or1(4,3)
+			or1(1,1)=     0 : or1(1,2)= 210   : or1(1,3)=0.0475
+			pr fn_n2(mat or1,1) : pause
 					! 0+3600*.0475+210=381
 			or1(2,1)=  3600 : or1(2,2)= 381   : or1(2,3)=0.0675
 					! (9050-3600)*.0675+381= 748.875  (round to 749)
@@ -1280,14 +1287,19 @@ def fn_wh_oregon( taxableWagesCurrent,fedWhEstimate,payPeriodsPerYear,allowances
 			or2(3,1)= 17800 : or2(3,2)= 1310 : or2(3,3)=0.09
 			or2(4,1)= 50000 : or2(4,2)= 1080 : or2(4,3)=0.09
 			or2(5,1)=250000 : or2(5,2)=22014 : or2(5,3)=0.099 ! /r
-		else
+		else if taxYear=2020 then
 			mat or2(4,3)
 			or2(1,1)=     0 : or2(1,2)=  210 : or2(1,3)=0.0475
 			or2(2,1)=  7200 : or2(2,2)=  552 : or2(2,3)=0.0675
 			or2(3,1)= 18100 : or2(3,2)= 1310 : or2(3,3)=0.0875
-
 			or2(4,1)= 50000 : or2(4,2)= 1080 : or2(4,3)=0.09
 			! or2(5,1)=250000 : or2(5,2)=22014 : or2(5,3)=0.099
+		else ! 2021
+			mat or2(4,3)
+			or2(1,1)=     0 : or2(1,2)=  210 : or2(1,3)=0.0475 !?
+			or2(2,1)=  7200 : or2(2,2)=  552 : or2(2,3)=0.0675 !?
+			or2(3,1)= 18100 : or2(3,2)= 1310 : or2(3,3)=0.0875 !?
+			or2(4,1)= 50000 : or2(4,2)= 1080 : or2(4,3)=0.09   !?
 		end if
 		! /r
 	end if ! /r
@@ -1313,17 +1325,22 @@ def fn_wh_oregon( taxableWagesCurrent,fedWhEstimate,payPeriodsPerYear,allowances
 		! r: determine:  standardDeduction,perAllowance  provided:  whichTable,taxYear
 		if whichTable=2 then ! theyAreMarried then
 			if taxYear=2019 then
-				standardDeduction=4545 ! 2019
-			else
-				standardDeduction=4630 ! 2020
+				standardDeduction=4545
+			else if taxYear=2020 then
+				standardDeduction=4630
+			else ! 2021
+				standardDeduction=4630 !?
 			end if
 		else ! if whichTable=1 then ! if theyAreSingle then
 			if taxYear=2019 then
-				standardDeduction=2270 ! 2019
+				standardDeduction=2270
 				perAllowance=206
-			else
-				standardDeduction=2315 ! 2020
+			else if taxYear=2020 then
+				standardDeduction=2315
 				perAllowance=210
+			else ! 2021
+				standardDeduction=2350 !!
+				perAllowance=213  !!
 			end if
 		end if
 		! /r

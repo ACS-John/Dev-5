@@ -23,8 +23,12 @@ gender          ,  Gender                              ,  n    1                
 !                  1 - Male                                                                 
 !                  2 - Female                                                               
 maritial        ,  Marital Status                      ,  n    2                 , ! Pos=112       em(01)  
-!                  0=Single                                                                 
-!                  1=Married                                                                
+!                  0 - Single
+!                  1 - Married - filing jointly
+!                  2 - Single - Head of Household
+!                  3 - Married - filing joint - only one working
+!                  4 - Married - filing joint - both working
+!                  5 - Married - filing seperate - both working
 fedExempt       , Federal Exemptions                   ,  n    2                 , ! Pos=114       em(02)  
 stExempt        , State Exemptions                     ,  n    2                 , ! Pos=116       em(03)  
 empStatus       , Employment Status                    ,  n    2                 , ! Pos=118       em(04)  
