@@ -575,7 +575,6 @@ def fn_dashboardDraw
 			fn_ddAddButton('Enter Time',fkey_pr_enter_time:=5002,tmpBtnItem+=1,tmp_btn_width)
 			fn_ddAddButton('Employee',fkey_pr_employee:=5001,tmpBtnItem+=1,tmp_btn_width)
 		else if env$('cursys')="GL" then
-
 			fnLbl(1,1,'Current Period:',19,1,0,fraDashboard)
 			fnLbl(1,21,str$(fnActPd),4,0,0,fraDashboard)
 

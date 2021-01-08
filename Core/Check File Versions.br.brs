@@ -149,7 +149,7 @@ def fn_getFileInfo(name$*512,kfname$*512,mat tmpkps,mat tmpkln,&tmpversion,&tmpr
 		tmpkln(j)=kln(hTmp,j)
 	next j
 
-	close #h_tmp:
+	close #hTmp:
 
 	returnN=1
 	goto GfiFinis
@@ -614,30 +614,30 @@ def fn_cfv_checkbook
 		write #hPayeeType,using 'form pos 1,n 2,C 25': 7,'Non-Employee Compensation'
 		close #hPayeeType:
 	end if
-	
+
 
 	if exists("[Q]\CLmstr\PostDat.h[cno]") then
 		fnFree('[Q]\CLmstr\PostDat.h[cno]')
 	end if
-	
-	
+
+
 fnend
 def fn_checkbookTrmstr_v0_to_v1(; ___,trmstr,pause$,amt,j)
 	! converts the CL TRmstr file to version 1
 	! meainging the amount changes from G 10.2 to PD 10.2
 	fnStatus("Checkbook update Trans to v1: Updating Transaction file.")
-	open #trmstr=fnH: "Name=[Q]\CLmstr\TrMstr.h[cno]",internal,outIn,relative 
+	open #trmstr=fnH: "Name=[Q]\CLmstr\TrMstr.h[cno]",internal,outIn,relative
 	if version(trmstr)=1 then
-	else 
+	else
 		version(trmstr,1)
 		for j=1 to lrec(trmstr)
 			read #trmstr,using 'form pos 18,n 10.2': amt eof L240
 			rewrite #trmstr,using 'form pos 18,pd 10.2': amt
 		next j
 		L240: !
-		close #trmstr: 
+		close #trmstr:
 	end if
-fnend 
+fnend
 def fn_cfv_payroll
 	if exists("[Q]\PRmstr")=0 then execute "MkDir [Q]\PRmstr"
 	! if ~exists('[Q]\INI\Payroll') then execute 'mkdir "[Q]\INI\Payroll"'
@@ -741,9 +741,9 @@ def fn_cfv_payroll
 	! end if
 	! /r
 	PrGlindex: !
-	open #h_tmp=fnH: "Name=[Q]\PRmstr\GLMstr.h[cno],Version=0,KFName=[Q]\PRmstr\GLIndex.h[cno],Use,RecL=62,KPs=1,KLn=12,Shr",internal,outIn,keyed ioerr Check4124OnPrGlindex
-	close #h_tmp:
-	!
+	open #hTmp=fnH: "Name=[Q]\PRmstr\GLMstr.h[cno],Version=0,KFName=[Q]\PRmstr\GLIndex.h[cno],Use,RecL=62,KPs=1,KLn=12,Shr",internal,outIn,keyed ioerr Check4124OnPrGlindex
+	close #hTmp:
+
 	if ~exists('[Q]\PRmstr\EmpStatus.dat') then
 		open #h_pr_emp_status=fnH: "Name=[Q]\PRmstr\EmpStatus.dat,KFName=[Q]\PRmstr\Empstatus.idx,Use,RecL=32,KPs=1,KLn=2,Shr",internal,outIn,keyed
 		write #h_pr_emp_status,using 'form pos 1,N 2,C 25': 9,'Terminated'
