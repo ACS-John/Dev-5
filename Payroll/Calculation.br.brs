@@ -865,6 +865,7 @@ def fn_stateTax(wages,pppy,allowances,marital,eicCode,fedWh,addOnSt,w4year$,taxY
 fnend
 ! r: fn_stateTax subordionate functions
 def fn_n2(mat n2,n2Index; ___,x,returnN,multiplier)
+	! this is working for MO, but not OR so I made fn_n2b
 	! n2 stands for middle number - not a great name, but it is goo enough
 
 	! pr 'n2Index='&str$(n2Index)
@@ -875,9 +876,40 @@ def fn_n2(mat n2,n2Index; ___,x,returnN,multiplier)
 		returnN+=round(multiplier*n2(x-1,3),0)
 		! pr '   +=[multiplier='&str$(multiplier)&']+[n2('&str$(x-1)&',3)='&str$(n2(x-1,3))&']   return='&str$(returnN)
 	nex x
-	! pr 'fn_n2=(mat n2,'&str$(n2Index)&') returns '&str$(returnN) : pause
+	! pr 'fn_n2=(mat n2,'&str$(n2Index)&') returns '&str$(returnN) ! pause
 	fn_n2=returnN
 fnend
+def fn_debugPrint2d(mat sw; ___,x)
+	if env$('acsDeveloper')<>'' then
+		for x=1 to udim(mat sw,1)
+			pr 'sw('&str$(x)&',1)='&str$(sw(x,1));
+			pr ' : sw('&str$(x)&',2)='&str$(sw(x,2));
+			if x=1 then
+				pr ' : sw('&str$(x)&',2) diff=n/a';
+			else
+				pr ' : sw('&str$(x)&',2) diff='&str$(sw(x,2)-sw(x-1,2));
+			end if
+			pr ' : sw('&str$(x)&',3)='&str$(sw(x,3))
+		nex x
+		pause
+	end if
+fnend
+
+def fn_n2b(mat n2,n2Index; ___,x,returnN,multiplier)
+	! n2 stands for middle number - not a great name, but it is goo enough
+
+	pr 'n2Index='&str$(n2Index)
+	for x=2 to n2Index
+		multiplier=n2(x,1)
+		if x>1 then multiplier-=n2(x-1,1)
+		pr    '   multiplier='&str$(multiplier)
+		returnN+=round(multiplier*n2(x-1,3),0)
+		pr '   +=[multiplier='&str$(multiplier)&']+[n2('&str$(x-1)&',3)='&str$(n2(x-1,3))&']   return='&str$(returnN)
+	nex x
+	pr 'fn_n2=(mat n2,'&str$(n2Index)&') returns '&str$(returnN) : pause
+	fn_n2b=returnN
+fnend
+
 
 def fn_wh_arkansas(war_wages_taxable_current,payPeriodsPerYear,allowances,wga_is_married,wga_eicCode; ___,s1,s2,returnN)
 	if ~setup_arwh then ! r: setup AR Arkansas
@@ -1083,7 +1115,7 @@ def fn_wh_missouri(taxableWagesCurrent,marital,fed_wh,allowances,payPeriodsPerYe
 	! revised 1/3/2021
 	if ~setup_mowh then  ! r: MO Missouri
 		setup_mowh=1
-		if taxYear=2010 then ! r:
+		if taxYear=2020 then ! r:
 			dim mo(9,3)
 			! read #h_tables,using 'Form POS 31,102*PD 6.4',rec=28: mat mo ! Missouri
 			mo( 1,1)=   0 : mo( 1,2)=  0  : mo( 1,3)=0.015
@@ -1119,21 +1151,9 @@ def fn_wh_missouri(taxableWagesCurrent,marital,fed_wh,allowances,payPeriodsPerYe
 			stStdDed_headOfHousehold    	=18800
 			! /r
 
-			! for x=1 to udim(mat mo,1)
-			! 	pr 'mo('&str$(x)&',1)='&str$(mo(x,1));
-			! 	pr ' : mo('&str$(x)&',2)='&str$(mo(x,2));
-			! 	if x=1 then
-			! 		pr ' : mo('&str$(x)&',2) diff=n/a';
-			! 	else
-			! 		pr ' : mo('&str$(x)&',2) diff='&str$(mo(x,2)-mo(x-1,2));
-			! 	end if
-			! 	pr ' : mo('&str$(x)&',3)='&str$(mo(x,3))
-			! nex x
-			! pause
+			! fn_debugPrint2d(mat mo)
 
 		end if
-
-
 
 	end if ! /r
 
@@ -1241,10 +1261,13 @@ def fn_wh_oklahoma(taxableWagesCurrent,payPeriodsPerYear,allowances,marital; _
 	returnN=round(returnN,0)
 	fn_wh_oklahoma=returnN
 fnend
-def fn_wh_oregon( taxableWagesCurrent,fedWhEstimate,payPeriodsPerYear,allowances,isMarried, _
+def fn_wh_oregon( taxableWagesCurrent,fedWhEstimate,payPeriodsPerYear, _
+									allowances,isMarried, _
 									w4year$,taxYear; ___, _
-									returnN,allowancesEffective,theyAreSingle,theyAreMarried,standardDeduction,whichTable, _
-									perAllowance,wagesAnnualEstimate,phaseOut,tableLine,fedWhAnnualEstimate, _
+									returnN,allowancesEffective,theyAreSingle,theyAreMarried, _
+									standardDeduction,whichTable, _
+									perAllowance,wagesAnnualEstimate,phaseOut,tableLine, _
+									fedWhAnnualEstimate, _
 									orBase,orDebug,preBase,removePrev,taxRate	)
 	! requires retaining variables: wor_setup, mat or1, mat or2
 
@@ -1268,15 +1291,17 @@ def fn_wh_oregon( taxableWagesCurrent,fedWhEstimate,payPeriodsPerYear,allowances
 			or1(4,1)= 50000 : or1(4,2)= 4332   : or1(4,3)=0.099 ! /r
 		else ! 2021
 			mat or1(4,3)
-			or1(1,1)=     0 : or1(1,2)= 210   : or1(1,3)=0.0475
-			pr fn_n2(mat or1,1) : pause
-					! 0+3600*.0475+210=381
-			or1(2,1)=  3600 : or1(2,2)= 381   : or1(2,3)=0.0675
-					! (9050-3600)*.0675+381= 748.875  (round to 749)
-			or1(3,1)=  9050 : or1(3,2)= 749   : or1(3,3)=0.0875
-					! (50000-9050)*.0875+749=  4332.125 (round to 4332)
-			or1(4,1)= 50000 : or1(4,2)= 4332   : or1(4,3)=0.099
-			! or1(4,1)= 50000 : or1(4,2)= 0   : or1(4,3)=0.099
+			or1(1,1)=     0 : or1(1,2)=213     : or1(1,3)=0.0475     !!
+												!         213												! 0+3650*.0475+213=386.375  (round to 386)
+			or1(2,1)=  3650 : or1(2,2)= 386   : or1(2,3)=0.0675     !!
+												! (9050-3600)*.0675+381= 748.875  (round to 749)     !!
+			! pr fn_n2(mat or1,2) : pause                            !!
+			or1(3,1)=  9200 : or1(3,2)= 761   : or1(3,3)=0.0875     !!
+												! (50000-9200)*.0875+761=  4331 (round to 4332)  !!
+			or1(4,1)= 50000 : or1(4,2)= 4331   : or1(4,3)=0.099     !!
+			
+			! fn_debugPrint2d(mat or1)
+			
 		end if
 		! /r
 		dim or2(0,0) ! r: Single with 3 or more allowances, or married
@@ -1287,19 +1312,21 @@ def fn_wh_oregon( taxableWagesCurrent,fedWhEstimate,payPeriodsPerYear,allowances
 			or2(3,1)= 17800 : or2(3,2)= 1310 : or2(3,3)=0.09
 			or2(4,1)= 50000 : or2(4,2)= 1080 : or2(4,3)=0.09
 			or2(5,1)=250000 : or2(5,2)=22014 : or2(5,3)=0.099 ! /r
-		else if taxYear=2020 then
+		else if taxYear=2020 then ! r:
 			mat or2(4,3)
 			or2(1,1)=     0 : or2(1,2)=  210 : or2(1,3)=0.0475
 			or2(2,1)=  7200 : or2(2,2)=  552 : or2(2,3)=0.0675
 			or2(3,1)= 18100 : or2(3,2)= 1310 : or2(3,3)=0.0875
 			or2(4,1)= 50000 : or2(4,2)= 1080 : or2(4,3)=0.09
-			! or2(5,1)=250000 : or2(5,2)=22014 : or2(5,3)=0.099
+			! or2(5,1)=250000 : or2(5,2)=22014 : or2(5,3)=0.099 ! /r
 		else ! 2021
 			mat or2(4,3)
-			or2(1,1)=     0 : or2(1,2)=  210 : or2(1,3)=0.0475 !?
-			or2(2,1)=  7200 : or2(2,2)=  552 : or2(2,3)=0.0675 !?
-			or2(3,1)= 18100 : or2(3,2)= 1310 : or2(3,3)=0.0875 !?
-			or2(4,1)= 50000 : or2(4,2)= 1080 : or2(4,3)=0.09   !?
+			or2(1,1)=     0 : or2(1,2)=  213 : or2(1,3)=0.0475 !!
+			or2(2,1)=  7300 : or2(2,2)=  560 : or2(2,3)=0.0675 !!
+
+			or2(3,1)= 18400 : or2(3,2)= 1309 : or2(3,3)=0.0875 !!
+			
+			or2(4,1)= 50000 : or2(4,2)= 4074 : or2(4,3)=0.09   !!
 		end if
 		! /r
 	end if ! /r
@@ -1313,8 +1340,8 @@ def fn_wh_oregon( taxableWagesCurrent,fedWhEstimate,payPeriodsPerYear,allowances
 		fnStatus('flat 8% tax override triggered by W-4 Year setting of "none".')
 	else
 		allowancesEffective=allowances
-		if taxableWagesCurrent>100000 and theyAreSingle then allowancesEffective=0
-		if taxableWagesCurrent>200000 and theyAreMarried then allowancesEffective=0
+		if taxableWagesCurrent>100000 and theyAreSingle then allowancesEffective=0  !!
+		if taxableWagesCurrent>200000 and theyAreMarried then allowancesEffective=0 !!
 
 		if theyAreMarried or (theyAreSingle and allowancesEffective>=3) then ! (married or more than 3 allowances)
 			whichTable=2
@@ -1329,7 +1356,7 @@ def fn_wh_oregon( taxableWagesCurrent,fedWhEstimate,payPeriodsPerYear,allowances
 			else if taxYear=2020 then
 				standardDeduction=4630
 			else ! 2021
-				standardDeduction=4630 !?
+				standardDeduction=4700 !!
 			end if
 		else ! if whichTable=1 then ! if theyAreSingle then
 			if taxYear=2019 then
@@ -1391,6 +1418,10 @@ def fn_wh_oregon( taxableWagesCurrent,fedWhEstimate,payPeriodsPerYear,allowances
 
 		!      WH = 1,244 + [(BASE – 16,900        ) * 0.09] – (206 * allowances) ! 2019
 		!      WH = $749 + [(BASE – $9,050) x 0.0875] – ($210 x allowances) ! 2020
+		
+		
+		!      WH =  $761 + [(BASE ­ $9,200) x 0.0875] ­ ($213 x allowances) ! 2021
+		
 		! returnN=or2(tableLine,2)+(orBase-or2(tableLine,1))*or2(tableLine,3)
 		returnN = preBase +(( orBase - removePrev) * taxRate) - (perAllowance * allowancesEffective)
 
@@ -1439,7 +1470,11 @@ def fn_wh_oregon( taxableWagesCurrent,fedWhEstimate,payPeriodsPerYear,allowances
 fnend
 def fn_oregonPhaseOut(opo_wages,opo_fed_wh,opo_table,isSingle,isMarried; ___,returnN)
 	if opo_wages<50000 then
-		returnN=min(opo_fed_wh,6800)
+		if taxYear=2020 then
+			returnN=min(opo_fed_wh,6800)
+		else ! taxYear=2021
+			returnN=min(opo_fed_wh,7050)
+		end if
 	else if opo_table=1 then
 		if opo_wages => 50000 and opo_wages<125000 th returnN= 6950 : goto Opo_Finis
 		if opo_wages =>125000 and opo_wages<130000 th returnN= 5550 : goto Opo_Finis
@@ -1447,23 +1482,17 @@ def fn_oregonPhaseOut(opo_wages,opo_fed_wh,opo_table,isSingle,isMarried; ___,ret
 		if opo_wages =>135000 and opo_wages<140000 th returnN= 2750 : goto Opo_Finis
 		if opo_wages =>140000 and opo_wages<145000 th returnN= 1350 : goto Opo_Finis
 		if opo_wages =>145000 then returnN=0
+
 	else ! if opo_table=2 then
-		if isMarried then
-			if opo_wages => 50000 and opo_wages<250000 then returnN= 6950 : goto Opo_Finis
-			if opo_wages =>250000 and opo_wages<260000 then returnN= 5550 : goto Opo_Finis
-			if opo_wages =>260000 and opo_wages<270000 then returnN= 4150 : goto Opo_Finis
-			if opo_wages =>270000 and opo_wages<280000 then returnN= 2750 : goto Opo_Finis
-			if opo_wages =>280000 and opo_wages<290000 then returnN= 1350 : goto Opo_Finis
-			if opo_wages =>290000 then returnN=0
-		else ! if isSingle then
-			if opo_wages => 50000 and opo_wages<125000 then returnN= 6950 : goto Opo_Finis
-			if opo_wages =>125000 and opo_wages<130000 then returnN= 5550 : goto Opo_Finis
-			if opo_wages =>130000 and opo_wages<135000 then returnN= 4150 : goto Opo_Finis
-			if opo_wages =>135000 and opo_wages<140000 then returnN= 2750 : goto Opo_Finis
-			if opo_wages =>140000 and opo_wages<145000 then returnN= 1350 : goto Opo_Finis
-			if opo_wages =>145000 then returnN=0
-		end if
-	end if
+		if opo_wages => 50000 and opo_wages<250000 then returnN= 6950 : goto Opo_Finis
+		if opo_wages =>250000 and opo_wages<260000 then returnN= 5550 : goto Opo_Finis
+		if opo_wages =>260000 and opo_wages<270000 then returnN= 4150 : goto Opo_Finis
+		if opo_wages =>270000 and opo_wages<280000 then returnN= 2750 : goto Opo_Finis
+		if opo_wages =>280000 and opo_wages<290000 then returnN= 1350 : goto Opo_Finis
+		if opo_wages =>290000 then returnN=0
+	end if ! /r
+
+
 	Opo_Finis: !
 	fn_oregonPhaseOut=returnN
 fnend
