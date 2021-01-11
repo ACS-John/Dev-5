@@ -218,7 +218,7 @@ CReg_PreEtrn: ! r:
 	fnStatusClose
 retry ! /r
 def fn_creg_setup
-	if creg_setup$<>env$('CNo')&env$('CurSys') then
+	if creg_setup$<>env$('CNo')&env$('CurSys')&env$('client') then
 		if creg_setup$<>'' then let fn_creg_close
 
 		autoLibrary
@@ -236,7 +236,7 @@ def fn_creg_setup
 		cregFileData$ =datafolder$&'\reg-[CurSys].h[cno]'
 		cregFileIndex$=datafolder$&'\reg-[CurSys]-idx.h[cno]'
 		open #creg_h=fnH: 'Name='&cregFileData$&',Version=1,KFName='&cregFileIndex$&',Use,RecL=384,KPs=1,KLn=128,Shr',internal,outIn,keyed
-		creg_setup$=env$('CNo')&env$('CurSys')
+		creg_setup$=env$('CNo')&env$('CurSys')&env$('client')
 	end if
 	on error goto Ertn
 fnend
