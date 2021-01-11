@@ -218,6 +218,7 @@ CReg_PreEtrn: ! r:
 	fnStatusClose
 retry ! /r
 def fn_creg_setup
+	dim creg_setup$*256
 	if creg_setup$<>env$('CNo')&env$('CurSys')&env$('client') then
 		if creg_setup$<>'' then let fn_creg_close
 
