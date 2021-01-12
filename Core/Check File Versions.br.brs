@@ -268,7 +268,8 @@ def fn_cfv_utility_billing
 	! no need, replaced by U4 Meter Location    !   fn_file_setup_data("[Q]\UBmstr\Meter.h[cno]",384,1)
 	! no need, replaced by U4 Meter Location    !   fn_file_setup_index("[Q]\UBmstr\Meter_Idx.h[cno]",'1/11','10/2')
 
-	fnInitialializeMeterLocation
+	hMeterLocation=fnInitialializeMeterLocation
+	fnCloseFile(hMeterLocation,'U4 Meter Location')
 
 	if exists('[Q]\UBmstr\CityStZip.dat') then
 		fnStatus('Migrating UB City State Zip records into Core City State Zip table...')

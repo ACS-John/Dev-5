@@ -175,8 +175,8 @@ fnend
 
 ! Company Registry - tied to Client, System and Company Number
 def library fnCreg_read(cr_fieldName$*128,&cr_fieldValue$; cr_defaultIfNotRead$*128,cr_alsoApplyDefaultIfReadBlank)
-	fnCreg_read=fn_cReg_read(cr_fieldName$,cr_fieldValue$, cr_defaultIfNotRead$,cr_alsoApplyDefaultIfReadBlank)
 	fn_creg_setup
+	fnCreg_read=fn_cReg_read(cr_fieldName$,cr_fieldValue$, cr_defaultIfNotRead$,cr_alsoApplyDefaultIfReadBlank)
 fnend
 def library fnCreg_write(cw_fieldName$*128,cw_fieldValue$*256)
 	fn_creg_setup
@@ -186,8 +186,8 @@ def fn_cReg_read(cr_fieldName$*128,&cr_fieldValue$; cr_defaultIfNotRead$*128,cr_
 	dim cr_tmpfieldValue$*256,cr_key_compare$*128
 	cr_fieldName$=rpad$(lwrc$(trim$(cr_fieldName$)),128)
 	cr_tmpfieldValue$=cr_fieldValue$=''
-	! pr 'read #creg_h'
-	read #creg_h,using 'form pos 1,C 128,v 256',key=cr_fieldName$,release: cr_key_compare$,cr_tmpfieldValue$ ioerr ignore
+	! pr 'read #hCreg'
+	read #hCreg,using 'form pos 1,C 128,v 256',key=cr_fieldName$,release: cr_key_compare$,cr_tmpfieldValue$ ioerr ignore
 	if cr_key_compare$=cr_fieldName$ then
 		cr_fieldValue$=rtrm$(cr_tmpfieldValue$)
 		if cr_alsoApplyDefaultIfReadBlank and cr_fieldValue$='' then cr_fieldValue$=cr_defaultIfNotRead$
@@ -199,12 +199,12 @@ def fn_cReg_read(cr_fieldName$*128,&cr_fieldValue$; cr_defaultIfNotRead$*128,cr_
 fnend
 def fn_cReg_write(cw_fieldName$*128,cw_fieldValue$*256)
 	cw_fieldName$=rpad$(lwrc$(trim$(cw_fieldName$)),128)
-	rewrite #creg_h,using 'form pos 1,c 128,c 256',key=cw_fieldName$: cw_fieldName$,cw_fieldValue$ nokey CREG_WRITE ! XXX
-	! pr 'rewrite #creg_h'
+	rewrite #hCreg,using 'form pos 1,c 128,c 256',key=cw_fieldName$: cw_fieldName$,cw_fieldValue$ nokey CREG_WRITE ! XXX
+	! pr 'rewrite #hCreg'
 	goto CREG_SAVE_XIT
 	CREG_WRITE: !
-	write #creg_h,using 'form pos 1,c 128,c 256': cw_fieldName$,cw_fieldValue$ err CReg_PreEtrn
-	! pr 'write #creg_h'
+	write #hCreg,using 'form pos 1,c 128,c 256': cw_fieldName$,cw_fieldValue$ err CReg_PreEtrn
+	! pr 'write #hCreg'
 	CREG_SAVE_XIT: !
 	! pr 'save ';trim$(cw_fieldName$);'=';cw_fieldValue$
 	fn_cReg_write=val(cw_fieldValue$) conv ignore
@@ -236,7 +236,7 @@ def fn_creg_setup
 
 		cregFileData$ =datafolder$&'\reg-[CurSys].h[cno]'
 		cregFileIndex$=datafolder$&'\reg-[CurSys]-idx.h[cno]'
-		open #creg_h=fnH: 'Name='&cregFileData$&',Version=1,KFName='&cregFileIndex$&',Use,RecL=384,KPs=1,KLn=128,Shr',internal,outIn,keyed
+		open #hCreg=fnH: 'Name='&cregFileData$&',Version=1,KFName='&cregFileIndex$&',Use,RecL=384,KPs=1,KLn=128,Shr',internal,outIn,keyed
 		creg_setup$=env$('CNo')&env$('CurSys')&env$('client')
 	end if
 	on error goto Ertn
@@ -277,8 +277,8 @@ def library fnReg_close ! closes all registries (sreg, creg and reg)
 	Xit: ! This Xit label is only for use by ERTN - fnerror - if they try to exit a failed read or write to the registry, them just skip on past
 fnend
 def fn_cReg_close
-	close #creg_h: ioerr ignore
-	creg_setup=0
+	close #hCreg: ioerr ignore
+	creg_setup$=''
 fnend
 
 
