@@ -219,9 +219,9 @@ DoLoad: ! r:
 	fncreg_read('Route High',bkno2$, '99') : bkno2=val(bkno2$) ! Route Number Range High
 	
 	
-	open #h_company:=1: "Name=[Q]\UBmstr\Company.h[cno]",internal,input 
-	read #h_company,using "Form POS 1,3*C 40,X 6,N 1,C 1,c 1,n 4": mat CompanyNameAndAddr$,maintac,rcpt$,escrow$,pcent ioerr DoLoadCompanyReadErr
-	close #h_company: 
+	open #hCompany=fnH: "Name=[Q]\UBmstr\Company.h[cno]",internal,input 
+	read #hCompany,using "Form POS 1,3*C 40,X 6,N 1,C 1,c 1,n 4": mat CompanyNameAndAddr$,maintac,rcpt$,escrow$,pcent ioerr DoLoadCompanyReadErr
+	close #hCompany: 
 	fnLastBillingDate(lastBillingDate)
 	if pcent=0 then pcent=100
 	if uprc$(rcpt$)=uprc$("Y") then rcpt$="True" else rcpt$="False"
@@ -239,14 +239,14 @@ DoLoad: ! r:
 	end if 
 	! /r
 	! r: Service Load - Type Of Service Open
-	open #service=fnH: "Name=[Q]\UBmstr\ubData\Service.h[cno],RecL=280,use",internal,outIn,relative 
+	open #hService=fnH: "Name=[Q]\UBmstr\ubData\Service.h[cno],RecL=280,use",internal,outIn,relative 
 	F_SERVICE: form pos 1,10*c 20,10*c 2,10*c 1,10*c 1,10*n 2,10*n 2
-	read #service,using F_SERVICE,rec=1: mat serviceName$,mat serviceCode$,mat tax_code$,mat penalty$,mat subjectto,mat ordertoapply noRec TOS_WRITE
+	read #hService,using F_SERVICE,rec=1: mat serviceName$,mat serviceCode$,mat tax_code$,mat penalty$,mat subjectto,mat ordertoapply noRec TOS_WRITE
 	goto ServiceLoad_Finis
 	TOS_WRITE: ! 
-	write #service,using F_SERVICE,rec=1: mat serviceName$,mat serviceCode$,mat tax_code$,mat penalty$,mat subjectto,mat ordertoapply
+	write #hService,using F_SERVICE,rec=1: mat serviceName$,mat serviceCode$,mat tax_code$,mat penalty$,mat subjectto,mat ordertoapply
 	ServiceLoad_Finis: ! 
-	close #service: 
+	close #hService: 
 
 	for service_item=1 to 10
 		fncreg_read('default rate '&str$(service_item),default_rate$(service_item))
@@ -258,11 +258,11 @@ DoLoad: ! r:
 return  ! /r
 DoLoadCompanyReadErr: ! r:
 	if err<>714 then goto ERTN
-	company_rln=rln(h_company)
+	company_rln=rln(hCompany)
 	if company_rln=133 then goto ERTN
 	pr "Converting UB Company Information"
 	pr "From Record Length "&str$(company_rln)&" to 133"
-	close #h_company: ioerr ignore
+	close #hCompany: ioerr ignore
 	fnCopy("[Q]\UBmstr\Company.h[cno]","[Q]\UBmstr\Company.h[cno]", 133)
 goto DoLoad ! /r
 
@@ -272,9 +272,9 @@ DoSave: ! r:
 	if escrow$="True" then escrow$="Y" else escrow$="N"
 	maintac=1 ! maintac was variable used for maintaining accumulated transaction file, no longer used but be want history to be retained no matter what (so set it to 1)
 	close #1,free: ioerr ignore
-	open #1: "Name=[Q]\UBmstr\Company.h[cno],Size=0,RecL=133,Replace",internal,outIn 
-	write #1,using "Form POS 1,3*C 40,x 6,N 1,C 1,c 1,n 4": mat CompanyNameAndAddr$,maintac,rcpt$,escrow$,pcent
-	close #1: 
+	open #hCompany=fnH: "Name=[Q]\UBmstr\Company.h[cno],Size=0,RecL=133,Replace",internal,outIn 
+	write #hCompany,using "Form POS 1,3*C 40,x 6,N 1,C 1,c 1,n 4": mat CompanyNameAndAddr$,maintac,rcpt$,escrow$,pcent
+	close #hCompany: 
 	fnLastBillingDate(lastBillingDate,1)
 	fncreg_write('unusual usage minimum water',uum_water$)
 	fncreg_write('unusual usage minimum gas',uum_gas$)
@@ -291,9 +291,9 @@ DoSave: ! r:
 	end if
 	! /r
 	! r: Service Save
-	open #service=fnH: "Name=[Q]\UBmstr\ubData\Service.h[cno],RecL=280,use",internal,outIn,relative 
-	rewrite #service,using F_SERVICE,rec=1: mat serviceName$,mat serviceCode$,mat tax_code$,mat penalty$,mat subjectto,mat ordertoapply
-	close #service: 
+	open #hService=fnH: "Name=[Q]\UBmstr\ubData\Service.h[cno],RecL=280,use",internal,outIn,relative 
+	rewrite #hService,using F_SERVICE,rec=1: mat serviceName$,mat serviceCode$,mat tax_code$,mat penalty$,mat subjectto,mat ordertoapply
+	close #hService: 
 
 	for service_item=1 to 10
 		fncreg_write('default rate '&str$(service_item),default_rate$(service_item))
@@ -308,14 +308,14 @@ def fn_cmb_rate(searchcode$,cr_lyne,cr_pos,ttt$*300,fra)
 	! GET_CODES: ! r: get applicable rate codes
 	! search routine must be passed code for service (WA for water) in searchcode$
 	dim rates$(50)*30,rt$*54
-	open #h_rate1=fnH: "Name=[Q]\UBmstr\ubData\RateMst.h[cno],KFName=[Q]\UBmstr\ubData\RateIdx1.h[cno],Shr",internal,input,keyed 
-	restore #h_rate1: 
+	open #hRate=fnH: "Name=[Q]\UBmstr\ubData\RateMst.h[cno],KFName=[Q]\UBmstr\ubData\RateIdx1.h[cno],Shr",internal,input,keyed 
+	restore #hRate: 
 	cr_rate_item=1: mat rates$=("")
 	mat rates$(50)
 	rates$(1)=" 0=Not applicable"
 	do 
 		CR_READ_RATE: ! 
-		read #h_rate1,using "Form POS 1,C 54",release: rt$ eof CR_EO_RATE
+		read #hRate,using "Form POS 1,C 54",release: rt$ eof CR_EO_RATE
 		if trim$(rt$(1:2))<>searchcode$ then goto CR_READ_RATE
 		cr_rate_item+=1
 		rates$(cr_rate_item)=rt$(3:4)&"="&rt$(5:25)
@@ -325,7 +325,7 @@ def fn_cmb_rate(searchcode$,cr_lyne,cr_pos,ttt$*300,fra)
 	if cr_rate_item>0 then mat rates$(cr_rate_item) else mat rates$(1)
 	if ratecode=0 then rateinfo$(3)=" 0=Not applicable"
 	! 
-	close #h_rate1: 
+	close #hRate: 
 	! /r
 	fncomboa("ubfm-rates",cr_lyne,cr_pos,mat rates$,ttt$,30,fra)
 fnend
