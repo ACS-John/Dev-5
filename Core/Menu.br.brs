@@ -592,7 +592,7 @@ def fn_dashboardDraw
 				fn_ddAddButton('Employee',fkey_g2_employee:=5011,tmpBtnItem+=1,tmp_btn_width, 2)
 			end if
 		else if env$('cursys')="UB" then
-			fnLastBillingDate(d1) : d1$=date$(days(d1,'mmddyy'),'mm/dd/ccyy')
+			d1$=date$(days(fnLastBillingDate,'mmddyy'),'mm/dd/ccyy')
 
 			fnLbl(1,1,'Last Billing Date:',18,1,0,1)
 			fnLbl(1,20,d1$,4,0,0,1)
