@@ -1,5 +1,6 @@
 Time and Date 		Sys	Program(s) and Change(s) Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
 ______________________	___	____________________________________________________________________________________________________________________________________________________________________________________________________________________________________                                             
+10:36 AM 1/13/2021	UB	Enhanced Last Billing Date read logic
 10:41 01/21/2021	CO	5.75100  
 10:40 AM 1/12/2021	UB	Fixed Check File Version issue that left Meter Location table open 
 10:40 AM 1/12/2021	CO	Fixed creg issue after save as 
