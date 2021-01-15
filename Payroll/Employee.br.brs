@@ -1,4 +1,4 @@
-! enableEasyDeptNavigation=0 
+! enableEasyDeptNavigation=0
 if env$('acsDeveloper')<>'' then enableEasyDeptNavigation=1
 
 ! formerly S:\acsPR\newprFM
@@ -15,7 +15,7 @@ goto AskEmployee
 AskEmployee: ! r:
 	departmentAddMode=0  !  this used to be in Menu1, but I moved it here because it shouldn't matter and I'd like to remove the Menu1 in favor of AskEmployee
 	ad1=0 ! add code - used to tell other parts of the program, that I am currently adding an employee record.
-	fnTos
+	fnTos : screen=0
 	respc=0
 	fnLbl(1,1,"Employee Number:",16,right)
 	fncmbemp(1,18)
@@ -57,14 +57,14 @@ AskEmployee: ! r:
 	end if
 goto AddEmployee ! /r
 AddEmployee: ! r:
-	fnTos
+	fnTos : screen=scrEmployee
 	respc=0 : frac=0
 	mylen=25 : mypos=mylen+2
 	fnLbl(1,1,"Employee Number:",mylen,1)
 	fnTxt(1,mylen+3,8,8,1,"30",0,"Employee numbers must be numeric.")
 	resp$(respc+=1)=str$(eno)
 	fnCmdKey("&Next",1,1,0,"Process employee information.")
-	fnCmdKey("&Cancel",5,0,1,"Returns to maintenance screem.")
+	fnCmdKey("&Cancel",5,0,1,"Returns to maintenance screen.")
 	fnAcs(mat resp$,ckey)
 	if ckey=5 then goto AskEmployee
 	add1=1
@@ -103,9 +103,9 @@ AddEmployee: ! r:
 	disableStTax=0
 	disableFedTax=0
 	w4Year$='none'
-	
-	
-	
+
+
+
 goto ScrEmployee ! /r
 EditEmployee: ! r:
 	if ent=0 then goto AskEmployee
@@ -124,37 +124,18 @@ goto AskEmployee ! /r
 
 
 
-def fn_deptButtons(&lc,&deptCount; ___,deptItem)
-	if ~setup_deptButtons then ! r:
-		setup_deptButtons=1
-
-	end if ! /r
-	deptCount=fn_EmployeeDepartments(eno,mat empDept)
-	if enableEasyDeptNavigation then
-		fnbutton_or_disabled(screen<>scrEmployee,lc+=1,dptPos=5,'Employee',fkey_scrEmployee)  
-		dptPos+=(8+2)
-		dptPos+=2  ! extra spaces after employee
-		for deptItem=1 to deptCount
-			dim deptTxt$*128
-			deptTxt$='Dept '&str$(empDept(deptItem)) ! &' '&fnDeptName$(empDept(deptItem))
-			dim deptToolTip$*256
-			deptToolTip$=fnDeptName$(empDept(deptItem))&'\n(Department '&str$(empDept(deptItem))&')'
-			fnbutton_or_disabled(screen<>scrDept(deptItem),lc,dptPos,deptTxt$,fkey_scrDept(deptItem), deptToolTip$)
-			dptPos+=(len(deptTxt$)+2)
-		nex deptItem
-	end if
-fnend
 
 ScrEmployee: ! r:
+
 	fnTos : screen=scrEmployee
 	respc=0 : frac=0 : mat lc=(0)
 	mylen=28 : mypos=mylen+2
 	col1_pos=1 : col1_len=mylen
 	col2_pos=col1_pos+col1_len+2
-	
+
 	col3_pos=58 : col3_len=21 ! 20
 	col4_pos=col3_pos+col3_len+2 ! 73
-	fn_deptButtons(lc(1),deptCount)
+	fn_navButtons(lc(1),deptCount)
 	lc(1)+=1 : lc(2)=lc(1)
 	fnLbl(lc(1)+=1,1,'Employee Number:',mylen,1)
 	fnTxt(lc(1)   ,mylen+3,8,8,1,"30",0,"Employee numbers must be numeric.")
@@ -178,12 +159,12 @@ ScrEmployee: ! r:
 	resp$(resp_ssn=respc+=1)=ss$
 	! /r
 	! r: col 2 top section
-	lc(2)=2
-	
+	lc(2)=4
+
 	fnLbl(lc(2)+=1,col3_pos,'Birth Date:',col3_len,1)
 	fnTxt(lc(2)   ,col4_pos,10,10,0,"1",0,"The birth date is not required.")
 	resp$(resp_birthDate=respc+=1)=str$(bd)
-	
+
 	fnLbl(lc(2)+=1,col3_pos,'Phone Number:',col3_len,1)
 	fnTxt(lc(2)   ,col4_pos,12)
 	resp$(resp_phone=respc+=1)=ph$
@@ -195,7 +176,7 @@ ScrEmployee: ! r:
 	fnLbl(         lc(2)+=1,col3_pos,'Sex:',col3_len,1)
 	fncomboa('Sex',lc(2)   ,col4_pos,mat gender_option$,'',10)
 	resp$(resp_sex=respc+=1)=fnSetForCombo$(mat gender_option$,str$(rs(2)))
-	
+
 	fnLbl(             lc(2)+=1,col3_pos,'Marital Status:',col3_len,1)
 	fncomboa('Marital',lc(2)   ,col4_pos,mat marriedOption$,'',25) ! ,'',11)
 	resp$(resp_married=respc+=1)=fnSetForCombo$(mat marriedOption$,str$(em(1)))
@@ -211,10 +192,10 @@ ScrEmployee: ! r:
 	! /r
 	! r: col 2 - state and federal section
 	lcTmp=lc(2)+=2
-	
+
 	fnChk(lc(2)+=1,col4_pos+1,'Disable Federal Taxes',1) ! , align,contain,tabcon,chk_disable)
 	resp_disableFedTax=respc+=1 : if em(12)=-1 then resp$(resp_disableFedTax)='True' else resp$(resp_disableFedTax)='False'
-	
+
 	fnLbl(             lc(2)+=1,col3_pos,"Federal Exemptions:",col3_len,1)
 	fncomboa("FedEx",  lc(2)   ,col4_pos,mat fed_exemption_option$,"",3)
 	resp$(resp_fedExepmtions=respc+=1)=fnSetForCombo$(mat fed_exemption_option$,str$(em(2)),1,2)
@@ -237,7 +218,7 @@ ScrEmployee: ! r:
 	fnTxt(lc(2)   ,col4_pos,10,10,0,"32",0,"If you wish for the system to withhold a fixed amount of State withholdings, enter that amount here. You can use a negative one dollar (-1.00) to skip state withholdings on this employee.")
 	resp$(resp_stdState=respc+=1)=str$(em(14))
 	! /r
-	
+
 	! lc(1)=lcTmp
 	fnLbl(lc(1)+=1,col1_pos,"Date Hired:",col1_len,1)
 	fnTxt(lc(1)   ,col2_pos,10,10,0,"1",0,"The date hired is only used for information purposes only.")
@@ -245,7 +226,7 @@ ScrEmployee: ! r:
 	fnLbl(lc(1)+=1,col1_pos,"Last Payroll Date:",col1_len,1)
 	fnTxt(lc(1)   ,col2_pos,10,10,0,"1",0,"This will always be the last time pay was calculated on this employee.")
 	resp$(resp_lastPayrollDate=respc+=1)=str$(lpd)
-	! 
+	!
 	fnLbl(               lc(1)+=1,1,"Employment Status:",mylen,1)
 	fncombof("EmpStatus",lc(1)   ,col2_pos,20,"[Q]\PRmstr\EmpStatus.dat",1,2,3,15,"[Q]\PRmstr\EmpStatus.idx",0,0, " ",fracustinfo,0)
 	resp$(resp_empStatus=respc+=1)=str$(em(4))
@@ -259,8 +240,8 @@ ScrEmployee: ! r:
 	fnLbl(lc(1)+=1,col1_pos,"Vacation Hours Accrued:",col1_len,1)
 	fnTxt(lc(1)   ,col2_pos,10,10,0,"32",0,"This should be the balance of vacation hours available at this time.")
 	resp$(resp_vacationAccrued=respc+=1)=str$(em(11))
-	
-	
+
+
 	lc(1)+=2
 	fnLbl(lc(1)+=1,1,"Sick Pay Code:",col1_len,1)
 	fnTxt(lc(1)   ,col2_pos,6,6,0,"33",0,"Normally is number of sick hours you want accrued each pay period.")
@@ -268,26 +249,26 @@ ScrEmployee: ! r:
 	fnLbl(lc(1)+=1,1,"Sick Hours Accrued:",col1_len,1)
 	fnTxt(lc(1)   ,col2_pos,10,10,0,"32",0,"This should be the balance of sick hours available at this time.")
 	resp$(resp_sickAccrued=respc+=1)=str$(em(10))
-	
+
 	! lc(2)-=2   !  go back up two lines and do the right side
-	
+
 	fnLbl(              lc(2)+=1,col3_pos,"FICA Code:",col3_len,1)
 	fncomboa("FICACode",lc(2)    ,col4_pos,mat code6$,"",25)
 	resp$(resp_ficaCode=respc+=1)=fnSetForCombo$(mat code6$,str$(em(6)))
 	fnLbl(              lc(2)+=1,col3_pos,"EIC Code:",col3_len,1)
 	fncomboa("EICCode", lc(2)    ,col4_pos,mat eicOption$,"",25)
 	resp$(resp_EicCode=respc+=1)=eicOption$(em(7)+1)
-	
-	
+
+
 	lc(1)+=1
-	
+
 	fnLbl(             lc(1)+=1,col1_pos,"W-4 Year:",col1_len,1)
 	fncomboa("w4Year", lc(1)   ,col2_pos,mat w4yearOption$,'Only used if W-4 Year is set to 2020 or later.',5)
 	resp$(resp_w4year=respc+=1)=w4Year$
-	
+
 	fnChk(lc(1)+=1,col2_pos+1,'2020 W-4 Step 2',1) ! , align,contain,tabcon,chk_disable)
 	resp_w4Step2=respc+=1 : if w4Step2 then resp$(resp_w4Step2)='True' else resp$(resp_w4Step2)='False'
-	
+
 	fnLbl(             lc(1)+=1,col1_pos,"2020 W-4 Step 3:",col1_len,1)
 	fnTxt(             lc(1)   ,col2_pos,10,10,0,"32",0,"Only used if W-4 Year is set to 2020 or later.")
 	resp$(resp_w4Step3=respc+=1)=str$(w4Step3)
@@ -304,13 +285,13 @@ ScrEmployee: ! r:
 
 
 	! picture=0
-	fnCmdKey('&Departments ('&str$(deptCount)&')',2,0,0,"Review this employee's departmental information.")
+	! fnCmdKey('&Departments ('&str$(deptCount)&')',2,0,0,"Review this employee's departmental information.")
 	fnCmdKey("Direct D&eposit",7,0,0,"Review direct deposit information.")
-	fnCmdKey("Re&view Special Hrs",8,0,0,"Review miscellaneous breakdown of hours.")
-	fnCmdKey("&Review Checks",10,0,0,"Review check information.")
+	fnCmdKey("Special Hrs",8,0,0,"Review miscellaneous breakdown of hours.")
+	fnCmdKey("&Check History",10,0,0,"Review check information.")
 	! fnCmdKey("&Picture",6,0,0,"Place any picture in share\images.")
 	if ad1=0 then
-		fnCmdKey("De&lete",4,0,0,"Deletes this record")
+		fnCmdKey("De&lete Employee",4,0,0,"Deletes this record")
 	end if
 	fnCmdKey("&Save",1,1,0,"Saves all changes.")
 	fnCmdKey("&Cancel",5,0,1,"Stops without applying any changes.")
@@ -369,13 +350,15 @@ ScrEmployee: ! r:
 			goto ScrEmployee
 		end if
 		gosub SaveEmployee
-		if ckey=2 then 
+		if ckey=2 then
 			goto FirstDepartment
-		else 
+		else
 			goto Menu1
 		end if
 	else if ckey=4 then
 		goto DeleteEmployee
+	else if ckey=>5200 and ckey<=5300 then
+		goto Nav
 	end if
 goto FirstDepartment ! /r
 EndOfDepartments: !
@@ -393,22 +376,37 @@ NextDepartment: ! r:
 	!       3*N  2   mat tcd(1-3)
 	!         pd 4.2 tli
 	!      23*PD 4.2 mat tdet(1-23)
-	read #hDepartment,using 'Form POS 1,N 8,n 3,c 12,4*N 6,3*N 2,pd 4.2,23*PD 4.2': teno,tdn,gl$,mat tdt,mat tcd,tli,mat tdet eof EndOfDepartments
+	read #hDepartment,using Fdept: teno,tdn,gl$,mat tdt,mat tcd,tli,mat tdet eof EndOfDepartments
 	whichDepartment+=1
 	if firstread=1 and teno<>eno then goto DepartmentAdd
 	if teno<>eno then goto EndOfDepartments
-ScrDepartment: !
-	fnTos
-	respc=0 : fram1=1
+goto ScrDepartment ! /r
+
+
+ScrDepartment: ! r:
+	fnTos : screen=scrDept(whichDepartment)
+	if ckey>5201 and ckey<=5201+deptCount then
+		! got here via direct button - must do the read now.
+		read #hDepartment,using Fdept,rec=empDeptRec(whichDepartment): teno,tdn,gl$,mat tdt,mat tcd,tli,mat tdet eof EndOfDepartments
+		Fdept: Form POS 1,N 8,n 3,c 12,4*N 6,3*N 2,pd 4.2,23*PD 4.2
+	else if ckey=4 then
+		
+		pr 'ckey 4 is add'
+		pause
+	end if
+	respc=0
 	mylen=20 : mypos=mylen+2 : mat resp$=("")
 	dim departmentCap$*128
-	departmentCount=fn_EmployeeDepartments(eno,mat empDept)
+	lc=0
+	fn_navButtons(lc,departmentCount)
+	! departmentCount=fn_EmployeeDepartments(eno,mat empDept,mat empDeptRec)
+	lc=3
 	if departmentAddMode then
 		departmentCap$='Adding Department '&str$(departmentCount+1)&' for '&trim$(em$(1))
 	else
 		departmentCap$='Department '&str$(whichDepartment)&' of '&str$(departmentCount)&' for '&trim$(em$(1))
 	end if
-	fnFra(1,1,6,97,departmentCap$)
+	fram1=1 : fnFra(3,1,6,97,departmentCap$)
 	fnLbl(1,1,"Employee Number:",mylen,1,0,fram1)
 	fnTxt(1,mylen+3,8,8,1,"1030",1,"Employee numbers must be numeric.",fram1)
 	resp$(respc+=1)=str$(eno)
@@ -444,7 +442,9 @@ ScrDepartment: !
 	fnLbl(6,35,"Union Code:",mylen,1,0,fram1)
 	fnTxt(6,58,2,2,1,"30",0,"You union code is used for grouping employees for the union report.",fram1)
 	resp$(respc+=1)=str$(tcd(3))
-	fram2=2: fnFra(9,1,3,97,"Salary and Pay Rates")
+	! fram1=1 : fnFra(3,1,6,97,departmentCap$)
+	fram2=2 : fnFra(12,1,3,97,"Salary and Pay Rates")
+
 	fnLbl(1,1,"Salary:",mylen,1,0,fram2)
 	fnTxt(1,mylen+3,12,12,1,"10",0,"Enter the salary for the pay period.",fram2)
 	resp$(respc+=1)=str$(tdet(1))
@@ -454,7 +454,7 @@ ScrDepartment: !
 	fnLbl(2,35,"O/T Hourly Rate:",mylen,1,0,fram2)
 	fnTxt(2,58,12,12,1,"10",0,"Enter the overtime hourly rate.",fram2)
 	resp$(respc+=1)=str$(tdet(3))
-	fram3=3: fnFra(14,1,10,97,"Deductions and Additions")
+	fram3=3 : fnFra(14+3,1,10,97,"Deductions and Additions")
 	for j=1 to 10
 		fnLbl(j,1,dednames$(j*2-1),mylen,1,0,fram3)
 		fnTxt(j,mylen+3,12,12,1,"10",0,"Enter the standard amount or the percent.",fram3)
@@ -463,21 +463,23 @@ ScrDepartment: !
 		fnTxt(j,58,12,12,1,"10",0,"Enter the standard amount or the percent.",fram3)
 		resp$(respc+=1)=str$(tdet(j*2+3))
 	next j
-	if departmentCount=whichDepartment then
-	fnCmdKey("Retur&n to Employee",3,1,0,"Save any changes and access next departmental record.")
-	else
-	fnCmdKey("&Next Department",3,1,0,"Save any changes and access next departmental record.")
-	end if
+	
+	
+	! if departmentCount=whichDepartment then
+	! 	fnCmdKey("Retur&n to Employee",3,1,0,"Save any changes and access next departmental record.")
+	! else
+	! 	fnCmdKey("&Next Department",3,1,0,"Save any changes and access next departmental record.")
+	! end if
 	fnCmdKey("&Add Department",4,0,0,"Add an additional department record.")
-	fnCmdKey("&Review Checks",10,0,0,"Review check information.")
+	fnCmdKey("&Check History",10,0,0,"Review check information.")
 	fnCmdKey("&Delete",9,0,0,"Deletes the department record.")
-	fnCmdKey("C&omplete",1,0,0,"Saves any changes and returns to main screen.")
+	fnCmdKey("S&ave Dept",1,0,0,"Save changes and returns to Employee.")
 	fnCmdKey("&Cancel",5,0,1,"Exit departmental record without saving changes.")
 	fnAcs(mat resp$,ckey)
 	if ckey=5 then goto AskEmployee
 	teno=val(resp$(1)) ! employee # in dept record
 	tdn=val(resp$(2)) ! department #
-	if ckey=9 then 
+	if ckey=9 then
 		delete #hDepartment,key=cnvrt$("pic(zzzzzzz#)",eno)&cnvrt$("pic(zz#)",tdn):
 		goto EditEmployee
 	end if
@@ -499,7 +501,7 @@ ScrDepartment: !
 	for j=4 to 23
 		tdet(j)=val(resp$(14+j-3)) ! standard deductions
 	next j
-	
+
 	if tdn=0 then
 		mat ml$(2)
 		ml$(1)="The department number can not be 0 (zero)."
@@ -508,22 +510,24 @@ ScrDepartment: !
 		goto ScrDepartment
 	end if
 	if departmentAddMode then
-		write #hDepartment,using 'Form POS 1,N 8,N 3,c 12,4*N 6,3*N 2,pd 4.2,23*PD 4.2',reserve: eno,tdn,gl$,mat tdt,mat tcd,tli,mat tdet ! Duprec 3140
+		write #hDepartment,using Fdept,reserve: eno,tdn,gl$,mat tdt,mat tcd,tli,mat tdet ! Duprec 3140
 	else
 		if eno<>ent then goto ChangeEmployeeNo
-		rewrite #hDepartment,using "Form POS 1,N 8,N 3,c 12,4*N 6,3*N 2,pd 4.2,23*PD 4.2": teno,tdn,gl$,mat tdt,mat tcd,tli,mat tdet
+		rewrite #hDepartment,using Fdept: teno,tdn,gl$,mat tdt,mat tcd,tli,mat tdet
 	end if
 	firstread=0
 	departmentAddMode=0
 	if ckey=4 then ! add new department
 		goto DepartmentAdd
-	else if ckey=3 then  ! move to next departmental record
-		goto NextDepartment
+	! else if ckey=3 then  ! move to next departmental record
+	! 	goto NextDepartment
 	else if ckey=1 then
 		goto EditEmployee
 	else if ckey=10 then
 		fncheckfile(hact$:=str$(eno),hCheckIdx3,hCheckIdx1,hEmployee)
 		goto EditEmployee
+	else if ckey=>5200 and ckey<=5300 then
+		goto Nav
 	end if
 goto AskEmployee ! /r
 DepartmentAdd: ! r: new department
@@ -535,17 +539,105 @@ DepartmentAdd: ! r: new department
 	tli=0
 	mat tdet=(0)
 	firstread=0
+	mat scrDept(deptCount+=1)
+	scrDept(deptCount)=deptCount+100
+	mat empDeptRec(deptCount)
+	empDeptRec(deptCount)=lrec(hEdcDept)+1
+	mat empDept(deptCount)
+	empDept(deptCount)=0
+	whichDepartment=deptCount
 goto ScrDepartment ! /r
 
+ScrIlW4: ! r:
+	fnTos : screen=scrIlW4
+	lc=0
+	fn_navButtons(lc,deptCount)
+	fnLbl(lc+=1,1,"Employee Number:",mylen,1)
+	fnTxt(lc,mylen+3,8,8,1,"1030",1,"Employee numbers must be numeric.")
+	resp$(respc+=1)=str$(eno)
+	fnCmdKey("C&omplete",1,0,0,"Saves any changes and returns to main screen.")
+	fnCmdKey("&Cancel",5,0,1,"Exit record without saving changes.")
+	fnAcs(mat resp$,ckey)
+	if ckey=5 then 
+		goto AskEmployee
+	else 
+		! pr 'ckey=';ckey
+		! pr 'do writing here??' : pause
+		if ckey=>5200 and ckey<=5300 then goto Nav
+	end if
+	pr 'ckey=';ckey
+	ause
+goto ScrIlW4 ! /r
+
+
+def fn_navButtons(&lc,&deptCount; ___,deptItem)
+	if ~setup_deptButtons then ! r:
+		setup_deptButtons=1
+
+	end if ! /r
+	deptCount=fn_EmployeeDepartments(eno,mat empDept,mat empDeptRec)
+	
+	mat scrDept(deptCount)
+	for deptItem=1 to deptCount
+		scrDept(deptItem)=(deptItem+100)
+	nex deptItem
+	
+	
+	lc+=1
+	fnbutton_or_disabled(screen<>scrEmployee,lc,1,'Employee',ckey_scrEmployee)
+	if fnpayroll_client_state$='IL' then
+		fnbutton_or_disabled(screen<>scrIlW4,lc,11,'IL W-4',ckey_ScrIlW4,'',10)
+	end if
+	if enableEasyDeptNavigation then
+		! lc+=1
+		! dptPos+=(8+2)
+		! dptPos+=2  ! extra spaces after employee
+		lc+=1
+		dptPos=1
+		for deptItem=1 to deptCount
+			dim deptTxt$*128
+			deptTxt$='Dept '&str$(empDept(deptItem)) ! &' '&fnDeptName$(empDept(deptItem))
+			! deptTxt$&=' [F'&str$(5201+deptItem)&']'
+			dim deptToolTip$*256
+			deptToolTip$=fnDeptName$(empDept(deptItem))&'\n(Department '&str$(empDept(deptItem))&')'
+			fnbutton_or_disabled(screen<>scrDept(deptItem),lc,dptPos,deptTxt$,5201+deptItem, deptToolTip$)
+			dptPos+=(len(deptTxt$)+2)
+		nex deptItem
+	end if
+	! fnlbl(36,108,'.') ! too low
+	! fnlbl(32,108,'.') ! too high
+	! consider  fnFra(14+3,1,10,97,"Deductions and Additions")
+	fnlbl(14+3+10+2-1,98+7,' ') ! invisible space to keep a minimum size, otherwise tab buttons jump while you're using them
+fnend
+
+Nav: ! r:
+	if ckey=ckey_ScrIlW4 then
+		goto ScrIlW4
+	! else if ckey=ckey_scrDept then
+	! 	goto ScrDepartment
+	else if ckey=ckey_scrEmployee then
+		goto ScrEmployee
+	else if ckey=>5201 and ckey<=5201+deptCount then
+		whichDepartment=ckey-5201
+		! pr 'go to Dept Tab Number '&str$(whichDepartment)
+		! pause
+		goto ScrDepartment
+	else
+
+		pr 'unknown ckey=';ckey
+		pause
+		goto xit
+	end if
+! /r
 SaveEmployee: ! r:
-	if add1=1 then 
-		write #hEmployee,using F_employee: eno,mat em$,ss$,mat rs,mat em,lpd,tgp,w4Step2,w4Year$,ph$,bd,w4Step3,w4Step4a,w4Step4b,w4Step4c 
-		
+	if add1=1 then
+		write #hEmployee,using F_employee: eno,mat em$,ss$,mat rs,mat em,lpd,tgp,w4Step2,w4Year$,ph$,bd,w4Step3,w4Step4a,w4Step4b,w4Step4c
+
 		add1=0
-	else if holdeno<>eno then 
+	else if holdeno<>eno then
 		goto ChangeEmployeeNo
 	else
-		rewrite #hEmployee,using F_employee,key=ent$: eno,mat em$,ss$,mat rs,mat em,lpd,tgp,w4Step2,w4Year$,ph$,bd,w4Step3,w4Step4a,w4Step4b,w4Step4c 
+		rewrite #hEmployee,using F_employee,key=ent$: eno,mat em$,ss$,mat rs,mat em,lpd,tgp,w4Step2,w4Year$,ph$,bd,w4Step3,w4Step4a,w4Step4b,w4Step4c
 	end if
 return ! /r
 
@@ -577,35 +669,18 @@ ChangeEmployeeNo: ! r:
 	if resp$<>"Yes" then
 		goto CHGENO_XIT
 	end if
-	read #hEmployee,using 'form pos 1,n 8',key=lpad$(str$(eno),8): teno nokey L3790
+	read #hEmployee,using 'form pos 1,n 8',key=lpad$(str$(eno),8): teno nokey ChangeEmpNo
 	mat ml$(2)
 	ml$(1)="Employee Number "&ltrm$(ent$)&" already exists."
 	ml$(2)="You cannot change to this number."
 	fnmsgbox(mat ml$,resp$)
 	goto CHGENO_XIT
-	L3790: ! change direct deposit
+	ChangeEmpNo: !
 	fn_DirectDepositKeyChange(rpad$(trim$(ent$),10),key$:=fn_dDkey$(eno))
-	! CHANGE DEPARTMENTS NUMBERS
-	heno$=lpad$(str$(holdeno),8) ! &"   "
-	restore #hDepartment,key>=rpad$(heno$,kln(hDepartment)): nokey L3890
-	do
-		read #hDepartment,using 'Form POS 1,N 8': deno eof L3890
-		if deno<>holdeno then goto L3890
-		rewrite #hDepartment,using 'form pos 1,n 8',rec=rec(hDepartment): eno
-	loop
-	L3890: ! pause
+	heno$=lpad$(str$(holdeno),8)
+	fnKeyChange(hDepartment,'form pos 1,n 8',heno$,lpad$(str$(eno),8)) ! change employee number in check history
 	fnKeyChange(hCheckIdx1,'form pos 1,n 8',heno$,lpad$(str$(eno),8)) ! change employee number in check history
 	! r: change employee number in any and all rpwork files.
-
-		! the old way 1/9/20   ! for wsid_item=1 to 99
-		! the old way 1/9/20   ! 	wsid_item$=cnvrt$('pic(##)',wsid_item)
-		! the old way 1/9/20   ! 	if exists('[Q]\PRmstr\rpwork'&wsid_item$&'.h[cno]') then
-		! the old way 1/9/20   ! 		open #h_rpwork=fnH: "Name=[Q]\PRmstr\rpwork"&wsid_item$&".h[cno],KFName=[Q]\PRmstr\rpwork"&wsid_item$&"idx.h[cno]"&',shr',internal,outIn,keyed ioerr RPWORK_OPEN_ERR
-		! the old way 1/9/20   ! 		fnKeyChange(h_rpwork,'form pos 1,n 8',heno$,lpad$(str$(eno),8))
-		! the old way 1/9/20   ! 		close #h_rpwork:
-		! the old way 1/9/20   ! 		RPWORK_OPEN_ERR: !
-		! the old way 1/9/20   ! 	end if
-		! the old way 1/9/20   ! next wsid_item
 	dim filename$(0)*256
 	dim kfname$*256
 	fnGetDir2('[Q]\PRmstr\',mat filename$, '','rpwork*.h[cno]')
@@ -621,7 +696,7 @@ ChangeEmployeeNo: ! r:
 	! /r
 	! change main employee record
 	delete #hEmployee,key=ent$:
-	write #hEmployee,using F_employee: eno,mat em$,ss$,mat rs,mat em,lpd,tgp,w4Step2,w4Year$,ph$,bd,w4Step3,w4Step4a,w4Step4b,w4Step4c 
+	write #hEmployee,using F_employee: eno,mat em$,ss$,mat rs,mat em,lpd,tgp,w4Step2,w4Year$,ph$,bd,w4Step3,w4Step4a,w4Step4b,w4Step4c
 	ent$=lpad$(str$(eno),8)
 	hact$=ent$
 	CHGENO_XIT: !
@@ -634,20 +709,21 @@ def fn_openFiles
 	open #hCheckIdx3=fnH: "Name=[Q]\PRmstr\PayrollChecks.h[cno],KFName=[Q]\PRmstr\checkidx3.h[cno],Shr",internal,outIn,keyed
 	open #hDepartment=fnH: "Name=[Q]\PRmstr\Department.h[cno],KFName=[Q]\PRmstr\DeptIdx.h[cno],Shr",internal,outIn,keyed
 fnend
-def fn_EmployeeDepartments(eno,mat empDept)
-	if ~edc_setup or ~edc_hDepartment then
-		edc_setup=1
-		open #edc_hDepartment=fnH: "Name=[Q]\PRmstr\Department.h[cno],KFName=[Q]\PRmstr\DeptIdx.h[cno],Shr",internal,input,keyed
+def fn_EmployeeDepartments(eno,mat empDept,mat empDeptRec; ___,teno,deptNumber)
+	if ~hEdcDept then
+		open #hEdcDept=fnH: 'Name=[Q]\PRmstr\Department.h[cno],KFName=[Q]\PRmstr\DeptIdx.h[cno],Shr',internal,input,keyed
 	end if
 	mat empDept(0)
-	restore #edc_hDepartment,key>=cnvrt$("pic(zzzzzzz#)",eno)&"   ": nokey edcFinis
+	mat empDeptRec(0)
+	restore #hEdcDept,key>=cnvrt$("pic(zzzzzzz#)",eno)&"   ": nokey EdcFinis
 	do
-		read #edc_hDepartment,using 'Form POS 1,N 8,N 3': teno,deptNumber eof edcFinis
-		if teno=eno then 
+		read #hEdcDept,using 'Form POS 1,N 8,N 3': teno,deptNumber eof EdcFinis
+		if teno=eno then
 			fnAddOneN(mat empDept,deptNumber)
+			fnAddOneN(mat empDeptRec,rec(hEdcDept))
 		end if
 	loop while teno=eno
-	edcFinis: !
+	EdcFinis: !
 	fn_EmployeeDepartments=udim(mat empDept)
 fnend
 def fn_setup
@@ -668,7 +744,7 @@ def fn_setup
 	dim rs(2)
 	dim em$(3)*30
 	dim ml$(2)*80
-	
+
 	dim race_option$(7)*15
 	race_option$(1)="0 - Unknown"
 	race_option$(2)="1 - Caucasian"
@@ -677,12 +753,12 @@ def fn_setup
 	race_option$(5)="4 - Oriental"
 	race_option$(6)="5 - AmIndian"
 	race_option$(7)="6 - Indochines"
-	
+
 	dim gender_option$(3)*11
 	gender_option$(1)="0 - Unknown"
 	gender_option$(2)="1 - Male"
 	gender_option$(3)="2 - Female"
-	
+
 
 
 	dim fed_exemption_option$(22)
@@ -715,13 +791,9 @@ def fn_setup
 		end if
 	next j
 
-	scrEmployee=1     :      fkey_scrEmployee=5201
-	mat scrDept(99)
-	dim fkey_scrDept(99)
-	for deptItem=1 to udim(mat scrDept)
-		scrDept(deptItem)=(deptItem+1)
-		fkey_scrDept(deptItem)=5201+deptItem
-	nex deptItem
+	scrIlW4=1          :     ckey_ScrIlW4=5200
+	scrEmployee=2     :      ckey_scrEmployee=5201
+
 
 
 
@@ -752,20 +824,20 @@ def fn_getEmpOptions(mat marriedOption$,mat eicOption$,mat w4yearOption$,mat pay
 	fnAddOneC(mat eicOption$,"0 - Not qualified for EIC"    )  !  em(7)=1
 	fnAddOneC(mat eicOption$,"1 - Single or Spouse not file")  !  em(7)=2
 	fnAddOneC(mat eicOption$,"2 - Married both filing"      )  !  em(7)=3
-	
+
 	mat w4yearOption$(0)
 	fnAddOneC(mat w4yearOption$,'2019')
 	fnAddOneC(mat w4yearOption$,'2020')
 	fnAddOneC(mat w4yearOption$,'none')
-	
-	
+
+
 	mat payPeriodOption$(0)
 	fnAddOneC(mat payPeriodOption$,'1 - Monthly'     )
 	fnAddOneC(mat payPeriodOption$,'2 - Semi-monthly')
 	fnAddOneC(mat payPeriodOption$,'3 - Bi-weekly'   )
 	fnAddOneC(mat payPeriodOption$,'4 - Weekly'      )
 	fnAddOneC(mat payPeriodOption$,'5 - Annually'    ) ! added 3/26/20, for testing state tax withholdings
-	
+
 fnend
 Finis: ! ! r:
 	close #hEmployee:
