@@ -34,7 +34,7 @@ def fn_reassignTrA(cno)
 	EoTrans: !
 
 	lr2=lrec(hTrans)
-	rewrite #hTrans,using Ftrans1,rec=1: lr2
+	rewrite #hTrans,using Ftrans1,rec=1: lr2 norec AddRecordOne
 	for j=1 to lr2
 		read #hTrans,using Ftrans2,rec=j: k$,nta noRec NextTrans
 		read #hAcct,using Facct,key=k$: mat ta nokey NextTrans
@@ -50,6 +50,8 @@ def fn_reassignTrA(cno)
 	close #hTrans: ioerr ignore
 
 fnend
-
+AddRecordOne: !
+write #hTrans,using Ftrans1,rec=1: lr2
+continue
 include: ertn no
 

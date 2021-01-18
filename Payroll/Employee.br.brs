@@ -13,7 +13,7 @@ goto Menu1 ! /r
 Menu1: !
 goto AskEmployee
 AskEmployee: ! r:
-	departmentAddMode=0  !  this used to be in Menu1, but I moved it here because it shouldn't matter and I'd like to remove the Menu1 in favor of AskEmployee
+	! departmentAddMode=0  !  this used to be in Menu1, but I moved it here because it shouldn't matter and I'd like to remove the Menu1 in favor of AskEmployee
 	ad1=0 ! add code - used to tell other parts of the program, that I am currently adding an employee record.
 	fnTos : screen=0
 	respc=0
@@ -26,7 +26,7 @@ AskEmployee: ! r:
 	end if
 	fnCmdKey("&Add",1,0,0,"Add a new employee" )
 	fnCmdKey("E&dit",2,1,0,"Access the highlighted record")
-	fnCmdKey("&Next Sequential",3,0,0,"Access next record in employee # order")
+	! fnCmdKey("&Next Sequential",3,0,0,"Access next record in employee # order")
 	fnCmdKey("&Search",8,0,0,"Search for employee record")
 	! fnCmdKey("&Refresh",7,0,0,"Updates search grids and combo boxes with new employee information")
 	fnCmdKey("E&xit",6,0,1,"Returns to menu")
@@ -38,11 +38,11 @@ AskEmployee: ! r:
 		goto AddEmployee
 	else if ckey=2 then
 		goto EditEmployee
-	else if ckey=3 then
-		read #hEmployee,using F_employee: eno,mat em$,ss$,mat rs,mat em,lpd,tgp,w4Step2,w4Year$,ph$,bd,w4Step3,w4Step4a,w4Step4b,w4Step4c  eof EmpNotFound
-		holdeno=eno
-		ent$=lpad$(str$(eno),8)
-		goto ScrEmployee
+	! else if ckey=3 then
+	! 	read #hEmployee,using F_employee: eno,mat em$,ss$,mat rs,mat em,lpd,tgp,w4Step2,w4Year$,ph$,bd,w4Step3,w4Step4a,w4Step4b,w4Step4c  eof EmpNotFound
+	! 	holdeno=eno
+	! 	ent$=lpad$(str$(eno),8)
+	! 	goto ScrEmployee
 	else if ckey=4 then
 		ent=eno
 		goto EditEmployee
@@ -127,7 +127,7 @@ goto AskEmployee ! /r
 
 ScrEmployee: ! r:
 
-	fnTos : screen=scrEmployee
+	fnTos : screen=scrEmployee ! r: build the screen
 	respc=0 : frac=0 : mat lc=(0)
 	mylen=28 : mypos=mylen+2
 	col1_pos=1 : col1_len=mylen
@@ -226,7 +226,7 @@ ScrEmployee: ! r:
 	fnLbl(lc(1)+=1,col1_pos,"Last Payroll Date:",col1_len,1)
 	fnTxt(lc(1)   ,col2_pos,10,10,0,"1",0,"This will always be the last time pay was calculated on this employee.")
 	resp$(resp_lastPayrollDate=respc+=1)=str$(lpd)
-	!
+
 	fnLbl(               lc(1)+=1,1,"Employment Status:",mylen,1)
 	fncombof("EmpStatus",lc(1)   ,col2_pos,20,"[Q]\PRmstr\EmpStatus.dat",1,2,3,15,"[Q]\PRmstr\EmpStatus.idx",0,0, " ",fracustinfo,0)
 	resp$(resp_empStatus=respc+=1)=str$(em(4))
@@ -295,8 +295,10 @@ ScrEmployee: ! r:
 	end if
 	fnCmdKey("&Save",1,1,0,"Saves all changes.")
 	fnCmdKey("&Cancel",5,0,1,"Stops without applying any changes.")
+	! /r
 	fnAcs(mat resp$,ckey)
 	if ckey=5 then goto AskEmployee
+	! r: get local from mat resp$
 	eno             =val(resp$(resp_eno            )(1:8))
 	em$(1)          =    resp$(resp_name           )       ! name
 	em$(2)          =    resp$(resp_addr           )
@@ -333,6 +335,7 @@ ScrEmployee: ! r:
 	if resp$(resp_disableFedTax)='True' then disableFedTax=-1 else disableFedTax=0
 	if disableFedTax then em(12)=-1
 	if disableStTax then em(14)=-1
+	! /r
 	! if ckey=6 then goto PICTURE
 	if ckey=8 then
 		fnhours(eno)
@@ -343,68 +346,68 @@ ScrEmployee: ! r:
 	else if ckey=10 then
 		fncheckfile(hact$:=str$(eno),hCheckIdx3,hCheckIdx1,hEmployee)
 		goto EditEmployee
-	else if ckey=1 or ckey=2 then
+	else if ckey=1 then ! or ckey=2 
 		if em(5)=0 then ! pay code not selected
 			mat ml$(1) : ml$(1)='Pay Code is required.'
 			fnmsgbox(mat ml$,resp$)
 			goto ScrEmployee
 		end if
 		gosub SaveEmployee
-		if ckey=2 then
-			goto FirstDepartment
-		else
+		! if ckey=2 then
+		! 	goto FirstDepartment
+		! else
 			goto Menu1
-		end if
+		! end if
 	else if ckey=4 then
 		goto DeleteEmployee
 	else if ckey=>5200 and ckey<=5300 then
 		goto Nav
 	end if
-goto FirstDepartment ! /r
+goto ScrEmployee ! FirstDepartment ! /r
 EndOfDepartments: !
 goto ScrEmployee
-FirstDepartment: ! r:
-	firstread=1
-	restore #hDepartment,key>=cnvrt$("pic(zzzzzzz#)",eno)&"   ": nokey DepartmentAdd
-	whichDepartment=0
-goto NextDepartment ! /r
-NextDepartment: ! r:
-	! POS 1   N  8   teno
-	!         n  3   tdn
-	!         c 12   gl$
-	!       4*N  6   mat tdt(1-4)
-	!       3*N  2   mat tcd(1-3)
-	!         pd 4.2 tli
-	!      23*PD 4.2 mat tdet(1-23)
-	read #hDepartment,using Fdept: teno,tdn,gl$,mat tdt,mat tcd,tli,mat tdet eof EndOfDepartments
-	whichDepartment+=1
-	if firstread=1 and teno<>eno then goto DepartmentAdd
-	if teno<>eno then goto EndOfDepartments
-goto ScrDepartment ! /r
-
+! FirstDepartment: ! r:
+! 	firstread=1
+! 	restore #hDepartment,key>=cnvrt$("pic(zzzzzzz#)",eno)&"   ": nokey DepartmentAdd
+! 	whichDepartment=0
+! goto NextDepartment ! /r
+! NextDepartment: ! r:
+! 	! POS 1   N  8   teno
+! 	!         n  3   tdn
+! 	!         c 12   gl$
+! 	!       4*N  6   mat tdt(1-4)
+! 	!       3*N  2   mat tcd(1-3)
+! 	!         pd 4.2 tli
+! 	!      23*PD 4.2 mat tdet(1-23)
+! 	read #hDepartment,using Fdept: teno,tdn,gl$,mat tdt,mat tcd,tli,mat tdet eof EndOfDepartments
+! 	whichDepartment+=1
+! 	if firstread=1 and teno<>eno then goto DepartmentAdd
+! 	if teno<>eno then goto EndOfDepartments
+! goto ScrDepartment ! /r
 
 ScrDepartment: ! r:
-	fnTos : screen=scrDept(whichDepartment)
+
+	fnTos : screen=scrDept(whichDepartment) ! r:
+	respc=0
+	mylen=20 : mypos=mylen+2 : mat resp$=("")
+	dim departmentCap$*128
+	lc=0
+	fn_navButtons(lc,deptCount)
 	if ckey>5201 and ckey<=5201+deptCount then
 		! got here via direct button - must do the read now.
 		read #hDepartment,using Fdept,rec=empDeptRec(whichDepartment): teno,tdn,gl$,mat tdt,mat tcd,tli,mat tdet eof EndOfDepartments
 		Fdept: Form POS 1,N 8,n 3,c 12,4*N 6,3*N 2,pd 4.2,23*PD 4.2
 	else if ckey=4 then
-		
-		pr 'ckey 4 is add'
-		pause
+		departmentCap$='Adding Department '&str$(deptCount+1)&' for '&trim$(em$(1))
+		! pr 'ckey 4 is add'
+		! pause
+	else
+		departmentCap$='Department '&str$(whichDepartment)&' of '&str$(deptCount)&' for '&trim$(em$(1))
 	end if
-	respc=0
-	mylen=20 : mypos=mylen+2 : mat resp$=("")
-	dim departmentCap$*128
-	lc=0
-	fn_navButtons(lc,departmentCount)
-	! departmentCount=fn_EmployeeDepartments(eno,mat empDept,mat empDeptRec)
+	! deptCount=fn_EmployeeDepartments(eno,mat empDept,mat empDeptRec)
 	lc=3
 	if departmentAddMode then
-		departmentCap$='Adding Department '&str$(departmentCount+1)&' for '&trim$(em$(1))
-	else
-		departmentCap$='Department '&str$(whichDepartment)&' of '&str$(departmentCount)&' for '&trim$(em$(1))
+		
 	end if
 	fram1=1 : fnFra(3,1,6,97,departmentCap$)
 	fnLbl(1,1,"Employee Number:",mylen,1,0,fram1)
@@ -465,17 +468,17 @@ ScrDepartment: ! r:
 	next j
 	
 	
-	! if departmentCount=whichDepartment then
+	! if deptCount=whichDepartment then
 	! 	fnCmdKey("Retur&n to Employee",3,1,0,"Save any changes and access next departmental record.")
 	! else
 	! 	fnCmdKey("&Next Department",3,1,0,"Save any changes and access next departmental record.")
 	! end if
 	fnCmdKey("&Add Department",4,0,0,"Add an additional department record.")
-	fnCmdKey("&Check History",10,0,0,"Review check information.")
-	fnCmdKey("&Delete",9,0,0,"Deletes the department record.")
-	fnCmdKey("S&ave Dept",1,0,0,"Save changes and returns to Employee.")
+	fnCmdKey("Check &History",10,0,0,"Review check information.")
+	fnCmdKey("&Delete Dept",9,0,0,"Deletes the department record.")
+	fnCmdKey("&Save Dept",1,1,0,"Save changes and returns to Employee.")
 	fnCmdKey("&Cancel",5,0,1,"Exit departmental record without saving changes.")
-	fnAcs(mat resp$,ckey)
+	fnAcs(mat resp$,ckey) ! /r
 	if ckey=5 then goto AskEmployee
 	teno=val(resp$(1)) ! employee # in dept record
 	tdn=val(resp$(2)) ! department #
@@ -509,14 +512,14 @@ ScrDepartment: ! r:
 		fnmsgbox(mat ml$,resp$)
 		goto ScrDepartment
 	end if
-	if departmentAddMode then
-		write #hDepartment,using Fdept,reserve: eno,tdn,gl$,mat tdt,mat tcd,tli,mat tdet ! Duprec 3140
-	else
+	! if departmentAddMode then
+	! 	write #hDepartment,using Fdept,reserve: eno,tdn,gl$,mat tdt,mat tcd,tli,mat tdet ! Duprec 3140
+	! else
 		if eno<>ent then goto ChangeEmployeeNo
 		rewrite #hDepartment,using Fdept: teno,tdn,gl$,mat tdt,mat tcd,tli,mat tdet
-	end if
+	! end if
 	firstread=0
-	departmentAddMode=0
+	! departmentAddMode=0
 	if ckey=4 then ! add new department
 		goto DepartmentAdd
 	! else if ckey=3 then  ! move to next departmental record
@@ -531,22 +534,54 @@ ScrDepartment: ! r:
 	end if
 goto AskEmployee ! /r
 DepartmentAdd: ! r: new department
-	departmentAddMode=1
+	fnTos : screen=scrDepartment
+	respc=0 : frac=0
+	mylen=25 : mypos=mylen+2
+	fnLbl(1,1,"Department Number:",mylen,1)
+	! fnTxt(1,mylen+3,3,3,1,"30",0,"Department numbers must be numeric.")
+	resp$(respc+=1)=''
+	fnCmdKey("&Next",1,1,0,"Process department information.")
+	fnCmdKey("&Cancel",5,0,1,"Returns to maintenance screen.")
+	fnAcs(mat resp$,ckey)
+	if ckey=5 then goto ScrEmployee
+	deptNew=val(resp$(1))
+	ent$=cnvrt$('n 8',eno)&cnvrt$('n 3',deptNew) ! lpad$(str$(ent),8)
+	read #hDepartment,using Fdept,key=ent$: tempEno,tempDept nokey DoDepartmentAdd
+	! r: only happens if nokey on department above
+		mat ml$(2)
+		ml$(1)="A record with this number already exists!"
+		ml$(2)="Select a different department number."
+		fnmsgbox(mat ml$,resp$,'',48)
+		goto DepartmentAdd
+	DoDepartmentAdd: ! /r
+	write #hDepartment,using Fdept:eno,deptNew
+	
+	! departmentAddMode=1
 	tdn=0
 	gl$=""
 	mat tdt=(0)
 	mat tcd=(0)
 	tli=0
 	mat tdet=(0)
-	firstread=0
+	! firstread=0
 	mat scrDept(deptCount+=1)
 	scrDept(deptCount)=deptCount+100
 	mat empDeptRec(deptCount)
-	empDeptRec(deptCount)=lrec(hEdcDept)+1
+	empDeptRec(deptCount)=lrec(hDepartment)
 	mat empDept(deptCount)
-	empDept(deptCount)=0
+	empDept(deptCount)=deptNew
 	whichDepartment=deptCount
 goto ScrDepartment ! /r
+
+
+
+
+
+
+
+
+
+
 
 ScrIlW4: ! r:
 	fnTos : screen=scrIlW4
@@ -607,7 +642,8 @@ def fn_navButtons(&lc,&deptCount; ___,deptItem)
 	! fnlbl(36,108,'.') ! too low
 	! fnlbl(32,108,'.') ! too high
 	! consider  fnFra(14+3,1,10,97,"Deductions and Additions")
-	fnlbl(14+3+10+2-1,98+7,' ') ! invisible space to keep a minimum size, otherwise tab buttons jump while you're using them
+	! fnlbl(14+3+10+2-1,98+7,' ')
+	fnlbl(28,105,' ') ! invisible space to keep a minimum size, otherwise tab buttons jump while you're using them
 fnend
 
 Nav: ! r:
