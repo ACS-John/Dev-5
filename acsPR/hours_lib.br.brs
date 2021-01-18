@@ -1,7 +1,7 @@
 ! Replace S:\acsPR\hours.br
 ! enter and track houly breakdowns of time for comp time, etc
 ! fnTop("S:\acsPR\hourclassification2","Time Classification")
-def library fnhours(eno)
+def library fnHours(eno)
 
 	autoLibrary
 	on error goto Ertn
@@ -20,7 +20,7 @@ def library fnhours(eno)
 		respc=0 : lc=0 : mat resp$=('') 
 		mylen=20 : mypos=mylen+2
 		fnLbl(lc+=1,1,'Employee Number:',mylen,1,0,0)
-		fncombof("PRmstr",lc,mypos,0,"[Q]\PRmstr\Employee.h[cno]",1,8,9,30,"[Q]\PRmstr\Employee.h[cno]",2,pas, "Enter the employee number you wish to work with.",0)
+		fncombof("PRmstr",lc,mypos,0,"[Q]\PRmstr\Employee.h[cno]",1,8,9,30,"[Q]\PRmstr\EmployeeIdx-no.h[cno]",2,pas, "Enter the employee number you wish to work with.",0)
 		if hact$="[All]" then resp$(1)="[All]" else resp$(1)=str$(eno)
 		fnButton(lc+=2,32,"&Refresh",46,"",0,0,0,0,1) 
 		!   fnButton(lc,41,"&Add",43) 
@@ -114,7 +114,7 @@ def library fnhours(eno)
 		respc=0 : lc=0 : mylen=21 : mypos=mylen+2: mat resp$=(""): right=1
 		fnFra(1,9,8,70,"Hourly Information - "&empname$,"",0) : frame1=1
 		fnLbl(lc+=1,1,'Employee Number:',mylen,right,0,frame1)
-		fncombof("PRmstr",lc,mypos,0,"[Q]\PRmstr\Employee.h[cno]",1,8,9,30,"[Q]\PRmstr\Employee.h[cno]",0,pas, "Enter the employee number to whom the time should be recorded",frame1) 
+		fncombof("PRmstr",lc,mypos,0,"[Q]\PRmstr\Employee.h[cno]",1,8,9,30,"[Q]\PRmstr\EmployeeIdx-no.h[cno]",0,pas, "Enter the employee number to whom the time should be recorded",frame1) 
 		resp$(1)=str$(empno)
 		fnLbl(lc+=1,1,'Classification:',mylen,right,0,frame1)
 		fncombof("Hours",lc,mypos,0,"[Q]\PRmstr\Hourclass.h[cno]",1,5,6,30,"[Q]\PRmstr\Hourclass-idx.h[cno]",0,pas, "Enter the proper classification of hours. If you need a new classification, you must add it under a different menu option",frame1) 
@@ -138,7 +138,8 @@ def library fnhours(eno)
 		increase=val(resp$(4)) 
 		decrease=val(resp$(5))
 		if empno<>holdeno then goto MSGBOX2 ! attempting to enter time on different employee
-	L740: if increase=0 and decrease=0 and addhours=1 then goto ADDFM  ! do not add blank records
+		L740: !
+		if increase=0 and decrease=0 and addhours=1 then goto ADDFM  ! do not add blank records
 		if addhours=1 then 
 			write #hBreakdown,using "Form pos 1,n 8,c 5,n 8,2*n 9.2": empno,class$,tdate,increase,decrease 
 			goto ADDFM
@@ -177,10 +178,8 @@ def library fnhours(eno)
 	close #hClassification: ioerr ignore
 	close #hEmployee: ioerr ignore
 fnend 
-SETUP: ! 
-	goto L1090 ! don't allow run to delete files
-	open #hBreakdown=fnH: "Name=[Q]\PRmstr\HourBreakdown.h[cno],RecL=39,KFName=[Q]\PRmstr\HourBreakdown-idx.h[cno],kps=1/9/14,kln=8/5/8,replace",internal,outIn,keyed 
-	close #hBreakdown: 
-	execute "Index [Q]\PRmstr\HourBreakdown.h[cno]"&' '&"[Q]\PRmstr\HourBreakdown-idx.h[cno] 1/9/14 8/5/8 Replace DupKeys"
-L1090: stop 
+! initial setup
+! open #hBreakdown=fnH: "Name=[Q]\PRmstr\HourBreakdown.h[cno],RecL=39,KFName=[Q]\PRmstr\HourBreakdown-idx.h[cno],kps=1/9/14,kln=8/5/8,replace",internal,outIn,keyed 
+! close #hBreakdown: 
+! fnIndex('[Q]\PRmstr\HourBreakdown.h[cno]','[Q]\PRmstr\HourBreakdown-idx.h[cno]','1/9/14 8/5/8')
 include: ertn
