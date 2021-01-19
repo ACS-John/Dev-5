@@ -34,7 +34,7 @@ AskEmployee: ! r:
 	eno=ent=val(resp$(1)(1:8))
 	if ckey=1 then
 		ad1=1 ! ti1=1
-		goto AddEmployee
+		goto EmployeeAdd
 	else if ckey=2 then
 		goto EditEmployee
 	! else if ckey=3 then
@@ -54,8 +54,8 @@ AskEmployee: ! r:
 	else if ckey=7 then
 		goto AskEmployee
 	end if
-goto AddEmployee ! /r
-AddEmployee: ! r:
+goto EmployeeAdd ! /r
+EmployeeAdd: ! r:
 	fnTos : screen=scrEmployee
 	respc=0 : frac=0
 	mylen=25 : mypos=mylen+2
@@ -75,7 +75,7 @@ AddEmployee: ! r:
 	ml$(1)="A record with this number already exists!"
 	ml$(2)="Select a different employee number."
 	fnmsgbox(mat ml$,resp$,'',48)
-	goto AddEmployee ! /r
+	goto EmployeeAdd ! /r
 	DoEmployeeAdd: !
 	mat em$=("")
 	ph$=ss$=""
@@ -340,7 +340,7 @@ ScrEmployee: ! r:
 	else if ckey=10 then
 		fncheckfile(hact$:=str$(eno),hCheckIdx3,hCheckIdx1,hEmployee)
 		goto EditEmployee
-	else if ckey=1 then ! or ckey=2 
+	else if ckey=1 then ! or ckey=2
 		if em(5)=0 then ! pay code not selected
 			mat ml$(1) : ml$(1)='Pay Code is required.'
 			fnmsgbox(mat ml$,resp$)
@@ -375,39 +375,30 @@ goto ScrEmployee
 
 ScrDepartment: ! r:
 
-	fnTos : screen=scrDept(whichDepartment) ! r:
+
+	fnTos :  ! r:
 	respc=0
 	mylen=20 : mypos=mylen+2 : mat resp$=("")
 	dim departmentCap$*128
 	lc=0
+	if ~deptNew then
+		screen=scrDept(whichDepartment)
+	end if
 	fn_navButtons(lc,deptCount)
-	if ckey>5201 and ckey<=5201+deptCount then
-		! got here via direct button - must do the read now.
-		read #hDepartment,using Fdept,rec=empDeptRec(whichDepartment): teno,tdn,gl$,mat tdt,mat tcd,tli,mat tdet eof EndOfDepartments
-		Fdept: Form POS 1,N 8,n 3,c 12,4*N 6,3*N 2,pd 4.2,23*PD 4.2
-		
-		!  POS 1   N  8   teno
-		!          n  3   tdn
-		!          c 12   gl$
-		!        4*N  6   mat tdt(1-4)
-		!        3*N  2   mat tcd(1-3)
-		!          pd 4.2 tli
-		!       23*PD 4.2 mat tdet(1-23)
-		
-		
-		
-	else if departmentAddMode then
+	! if departmentAddMode then
+	! 	whichDepartment=srch(mat empDept,deptNew)
+	! 	pr 'whichDepartment=';whichDepartment
+	! 	pause
+	! end if
+	read #hDepartment,using Fdept,rec=empDeptRec(whichDepartment): teno,tdn,gl$,mat tdt,mat tcd,tli,mat tdet eof EndOfDepartments
+	if departmentAddMode then
 		departmentCap$='Adding Department '&str$(deptCount+1)&' for '&trim$(em$(1))
-		! pr 'ckey 4 is add'
-		! pause
+		departmentAddMode=0
 	else
 		departmentCap$='Department '&str$(whichDepartment)&' of '&str$(deptCount)&' for '&trim$(em$(1))
 	end if
-	! deptCount=fn_EmployeeDepartments(eno,mat empDept,mat empDeptRec)
-	lc=3
-	! if departmentAddMode then
-	! 	
-	! end if
+	! lc=3
+	fnLbl(1,50,'whichDepartment='&str$(whichDepartment)&' scree='&str$(screen))
 	fram1=1 : fnFra(3,1,6,97,departmentCap$)
 	fnLbl(1,1,"Employee Number:",mylen,1,0,fram1)
 	fnTxt(1,mylen+3,8,8,1,"1030",1,"Employee numbers must be numeric.",fram1)
@@ -465,8 +456,8 @@ ScrDepartment: ! r:
 		fnTxt(j,58,12,12,1,"10",0,"Enter the standard amount or the percent.",fram3)
 		resp$(respc+=1)=str$(tdet(j*2+3))
 	next j
-	
-	
+
+
 	! if deptCount=whichDepartment then
 	! 	fnCmdKey("Retur&n to Employee",3,1,0,"Save any changes and access next departmental record.")
 	! else
@@ -512,7 +503,7 @@ ScrDepartment: ! r:
 		goto ScrDepartment
 	end if
 	if eno<>ent then goto ChangeEmployeeNo
-	rewrite #hDepartment,using Fdept: teno,tdn,gl$,mat tdt,mat tcd,tli,mat tdet
+	rewrite #hDepartment,using Fdept,rec=	empDeptRec(whichDepartment)	: teno,tdn,gl$,mat tdt,mat tcd,tli,mat tdet
 	! firstread=0
 	if ckey=4 then ! add new department
 		goto DepartmentAdd
@@ -528,20 +519,20 @@ ScrDepartment: ! r:
 	end if
 goto AskEmployee ! /r
 DepartmentAdd: ! r: new department
-	fnTos : screen=scrDepartment
+	fnTos
 	respc=0 : frac=0
 	mylen=25 : mypos=mylen+2
 	fnLbl(1,1,"Department Number:",mylen,1)
-	! fnTxt(1,mylen+3,3,3,1,"30",0,"Department numbers must be numeric.")
+	fnTxt(1,mylen+3,3,3,1,"30",0,"Department numbers must be numeric.")
 	resp$(respc+=1)=''
 	fnCmdKey("&Next",1,1,0,"Process department information.")
 	fnCmdKey("&Cancel",5,0,1,"Returns to maintenance screen.")
 	fnAcs(mat resp$,ckey)
-	if ckey=5 then goto ScrEmployee
+	if ckey=5 then goto ScrDepartment
 	deptNew=val(resp$(1))
 	ent$=cnvrt$('n 8',eno)&cnvrt$('n 3',deptNew) ! lpad$(str$(ent),8)
 	read #hDepartment,using Fdept,key=ent$: tempEno,tempDept nokey DoDepartmentAdd
-	! r: only happens if nokey on department above
+	! r: only happens if not nokey on department above
 		mat ml$(2)
 		ml$(1)="A record with this number already exists!"
 		ml$(2)="Select a different department number."
@@ -555,26 +546,16 @@ DepartmentAdd: ! r: new department
 	mat tcd=(0)
 	tli=0
 	mat tdet=(0)
-	write #hDepartment,using Fdept:eno,deptNew,gl$,mat tdt,mat tcd,tli,mat tdet
+	write #hDepartment,using Fdept:eno,tdn,gl$,mat tdt,mat tcd,tli,mat tdet
 	! firstread=0
-	mat scrDept(deptCount+=1)
-	scrDept(deptCount)=deptCount+100
-	mat empDeptRec(deptCount)
-	empDeptRec(deptCount)=lrec(hDepartment)
-	mat empDept(deptCount)
-	empDept(deptCount)=deptNew
-	whichDepartment=deptCount
+	! mat scrDept(deptCount+=1)
+	! scrDept(deptCount)=deptCount+100
+	! mat empDeptRec(deptCount)
+	! empDeptRec(deptCount)=lrec(hDepartment)
+	! mat empDept(deptCount)
+	! empDept(deptCount)=deptNew
+	! whichDepartment=deptCount
 goto ScrDepartment ! /r
-
-
-
-
-
-
-
-
-
-
 
 ScrIlW4: ! r:
 	fnTos : screen=scrIlW4
@@ -586,9 +567,9 @@ ScrIlW4: ! r:
 	fnCmdKey("C&omplete",1,0,0,"Saves any changes and returns to main screen.")
 	fnCmdKey("&Cancel",5,0,1,"Exit record without saving changes.")
 	fnAcs(mat resp$,ckey)
-	if ckey=5 then 
+	if ckey=5 then
 		goto AskEmployee
-	else 
+	else
 		! pr 'ckey=';ckey
 		! pr 'do writing here??' : pause
 		if ckey=>5200 and ckey<=5300 then goto Nav
@@ -597,20 +578,22 @@ ScrIlW4: ! r:
 	ause
 goto ScrIlW4 ! /r
 
-
 def fn_navButtons(&lc,&deptCount; ___,deptItem)
-	if ~setup_deptButtons then ! r:
-		setup_deptButtons=1
-
-	end if ! /r
+	! uses local deptNew, screen, mat scrDept, eno, etc
+	! returns local mat empDept,mat empDeptRec, etc
 	deptCount=fn_EmployeeDepartments(eno,mat empDept,mat empDeptRec)
-	
+
 	mat scrDept(deptCount)
 	for deptItem=1 to deptCount
 		scrDept(deptItem)=(deptItem+100)
 	nex deptItem
-	
-	
+
+	if deptNew then
+		whichDepartment=srch(mat empDept,deptNew)
+		screen=scrDept(whichDepartment)
+		deptNew=0
+	end if
+
 	lc+=1
 	fnbutton_or_disabled(screen<>scrEmployee,lc,1,'Employee',ckey_scrEmployee)
 	if fnpayroll_client_state$='IL' then
@@ -638,7 +621,6 @@ def fn_navButtons(&lc,&deptCount; ___,deptItem)
 	! fnlbl(14+3+10+2-1,98+7,' ')
 	fnlbl(28,105,' ') ! invisible space to keep a minimum size, otherwise tab buttons jump while you're using them
 fnend
-
 Nav: ! r:
 	if ckey=ckey_ScrIlW4 then
 		goto ScrIlW4
@@ -737,6 +719,14 @@ def fn_openFiles
 	open #hCheckIdx1=fnH: "Name=[Q]\PRmstr\PayrollChecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno],Shr",internal,outIn,keyed
 	open #hCheckIdx3=fnH: "Name=[Q]\PRmstr\PayrollChecks.h[cno],KFName=[Q]\PRmstr\checkidx3.h[cno],Shr",internal,outIn,keyed
 	open #hDepartment=fnH: "Name=[Q]\PRmstr\Department.h[cno],KFName=[Q]\PRmstr\DeptIdx.h[cno],Shr",internal,outIn,keyed
+		Fdept: Form pos 1,n 8,n 3,c 12,4*n 6,3*n 2,pd 4.2,23*pd 4.2
+		!  pos 1   n  8   teno
+		!          n  3   tdn
+		!          c 12   gl$
+		!        4*n  6   mat tdt(1-4)
+		!        3*n  2   mat tcd(1-3)
+		!          pd 4.2 tli
+		!       23*pd 4.2 mat tdet(1-23)
 fnend
 def fn_EmployeeDepartments(eno,mat empDept,mat empDeptRec; ___,teno,deptNumber)
 	if ~hEdcDept then
