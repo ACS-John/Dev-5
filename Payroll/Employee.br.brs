@@ -13,7 +13,6 @@ goto Menu1 ! /r
 Menu1: !
 goto AskEmployee
 AskEmployee: ! r:
-	! departmentAddMode=0  !  this used to be in Menu1, but I moved it here because it shouldn't matter and I'd like to remove the Menu1 in favor of AskEmployee
 	ad1=0 ! add code - used to tell other parts of the program, that I am currently adding an employee record.
 	fnTos : screen=0
 	respc=0
@@ -121,12 +120,7 @@ EmpNotFound: ! r:
 	fnmsgbox(mat ml$,resp$,'',48)
 goto AskEmployee ! /r
 
-
-
-
-
 ScrEmployee: ! r:
-
 	fnTos : screen=scrEmployee ! r: build the screen
 	respc=0 : frac=0 : mat lc=(0)
 	mylen=28 : mypos=mylen+2
@@ -372,13 +366,7 @@ goto ScrEmployee
 ! 	whichDepartment=0
 ! goto NextDepartment ! /r
 ! NextDepartment: ! r:
-! 	! POS 1   N  8   teno
-! 	!         n  3   tdn
-! 	!         c 12   gl$
-! 	!       4*N  6   mat tdt(1-4)
-! 	!       3*N  2   mat tcd(1-3)
-! 	!         pd 4.2 tli
-! 	!      23*PD 4.2 mat tdet(1-23)
+
 ! 	read #hDepartment,using Fdept: teno,tdn,gl$,mat tdt,mat tcd,tli,mat tdet eof EndOfDepartments
 ! 	whichDepartment+=1
 ! 	if firstread=1 and teno<>eno then goto DepartmentAdd
@@ -397,7 +385,18 @@ ScrDepartment: ! r:
 		! got here via direct button - must do the read now.
 		read #hDepartment,using Fdept,rec=empDeptRec(whichDepartment): teno,tdn,gl$,mat tdt,mat tcd,tli,mat tdet eof EndOfDepartments
 		Fdept: Form POS 1,N 8,n 3,c 12,4*N 6,3*N 2,pd 4.2,23*PD 4.2
-	else if ckey=4 then
+		
+		!  POS 1   N  8   teno
+		!          n  3   tdn
+		!          c 12   gl$
+		!        4*N  6   mat tdt(1-4)
+		!        3*N  2   mat tcd(1-3)
+		!          pd 4.2 tli
+		!       23*PD 4.2 mat tdet(1-23)
+		
+		
+		
+	else if departmentAddMode then
 		departmentCap$='Adding Department '&str$(deptCount+1)&' for '&trim$(em$(1))
 		! pr 'ckey 4 is add'
 		! pause
@@ -406,17 +405,17 @@ ScrDepartment: ! r:
 	end if
 	! deptCount=fn_EmployeeDepartments(eno,mat empDept,mat empDeptRec)
 	lc=3
-	if departmentAddMode then
-		
-	end if
+	! if departmentAddMode then
+	! 	
+	! end if
 	fram1=1 : fnFra(3,1,6,97,departmentCap$)
 	fnLbl(1,1,"Employee Number:",mylen,1,0,fram1)
 	fnTxt(1,mylen+3,8,8,1,"1030",1,"Employee numbers must be numeric.",fram1)
 	resp$(respc+=1)=str$(eno)
 	fnLbl(2,1,"Department Number:",mylen,1,0,fram1)
-	fnTxt(2,mylen+3,3,3,1,"30",0,"Department numbers must be numeric and no department # can be used twice on the same employee.",fram1)
+	fnTxt(2,mylen+3,3,3,1,"30",0,"Department numbers must be numeric and no department number can be used twice on the same employee.",fram1)
 	resp$(respc+=1)=str$(tdn)
-	fnLbl(2,35,"General Ledger #:",mylen,1,0,fram1)
+	fnLbl(2,35,"General Ledger Acct:",mylen,1,0,fram1)
 	fnqgl(2,58,fram1)
 	resp$(respc+=1)=fnrgl$(gl$)
 	fnLbl(3,1,"Last Review Date:",mylen,1,0,fram1)
@@ -512,14 +511,9 @@ ScrDepartment: ! r:
 		fnmsgbox(mat ml$,resp$)
 		goto ScrDepartment
 	end if
-	! if departmentAddMode then
-	! 	write #hDepartment,using Fdept,reserve: eno,tdn,gl$,mat tdt,mat tcd,tli,mat tdet ! Duprec 3140
-	! else
-		if eno<>ent then goto ChangeEmployeeNo
-		rewrite #hDepartment,using Fdept: teno,tdn,gl$,mat tdt,mat tcd,tli,mat tdet
-	! end if
-	firstread=0
-	! departmentAddMode=0
+	if eno<>ent then goto ChangeEmployeeNo
+	rewrite #hDepartment,using Fdept: teno,tdn,gl$,mat tdt,mat tcd,tli,mat tdet
+	! firstread=0
 	if ckey=4 then ! add new department
 		goto DepartmentAdd
 	! else if ckey=3 then  ! move to next departmental record
@@ -554,15 +548,14 @@ DepartmentAdd: ! r: new department
 		fnmsgbox(mat ml$,resp$,'',48)
 		goto DepartmentAdd
 	DoDepartmentAdd: ! /r
-	write #hDepartment,using Fdept:eno,deptNew
-	
-	! departmentAddMode=1
-	tdn=0
+	departmentAddMode=1
+	tdn=deptNew
 	gl$=""
 	mat tdt=(0)
 	mat tcd=(0)
 	tli=0
 	mat tdet=(0)
+	write #hDepartment,using Fdept:eno,deptNew,gl$,mat tdt,mat tcd,tli,mat tdet
 	! firstread=0
 	mat scrDept(deptCount+=1)
 	scrDept(deptCount)=deptCount+100
