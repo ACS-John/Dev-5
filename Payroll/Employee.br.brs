@@ -465,11 +465,8 @@ ScrDepartment: ! r:
 	end if
 	if eno<>ent then goto EmployeeChangeKey
 	rewrite #hDepartment,using Fdept,rec=	empDeptRec(whichDepartment)	: teno,tdn,gl$,mat tdt,mat tcd,tli,mat tdet
-	! firstread=0
 	if ckey=4 then ! add new department
 		goto DepartmentAdd
-	! else if ckey=3 then  ! move to next departmental record
-	! 	goto NextDepartment
 	else if ckey=1 then
 		goto EmployeeEdit
 	else if ckey=10 then
@@ -508,14 +505,7 @@ DepartmentAdd: ! r: new department
 	tli=0
 	mat tdet=(0)
 	write #hDepartment,using Fdept:eno,tdn,gl$,mat tdt,mat tcd,tli,mat tdet
-	! firstread=0
-	! mat scrDept(deptCount+=1)
-	! scrDept(deptCount)=deptCount+100
-	! mat empDeptRec(deptCount)
-	! empDeptRec(deptCount)=lrec(hDepartment)
-	! mat empDept(deptCount)
-	! empDept(deptCount)=deptNew
-	! whichDepartment=deptCount
+
 goto ScrDepartment ! /r
 
 ScrIlW4: ! r:
@@ -544,7 +534,7 @@ ScrIlW4: ! r:
 		fnEmployeeData$(eno,'IL W-4 Line 2 Allowances',resp$(rc_ilw4line2))
 		if ckey=>5200 and ckey<=5300 then goto Nav
 	end if
-goto ScrIlW4 ! /r
+goto ScrEmployee ! ScrIlW4 ! /r
 
 def fn_navButtons(&lc,&deptCount; ___,deptItem)
 	! many other locals too
