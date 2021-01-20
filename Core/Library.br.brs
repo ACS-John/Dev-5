@@ -1551,6 +1551,16 @@ fnend
 	fnend
 ! /r
 ! r: PR   payroll
+	def library fnEmployeeData$(eno,field$*64; setIt$*64,defaultIfNokey$*64,defaultIfBlank$*64)
+		library 'S:\Payroll\fn\employeeData.br': fnEmployeeData$
+		fnEmployeeData$=fnEmployeeData$(eno,field$, setIt$,defaultIfNokey$,defaultIfBlank$)
+	fnend
+	def library fnEmployeeDataClose
+		library 'S:\Payroll\fn\employeeData.br': fnEmployeeDataClose
+		fnEmployeeDataClose=fnEmployeeDataClose
+	fnend
+	
+	
 	def library fnCheckPayrollCalculation
 		library 'S:\Payroll\Calculation.br': fnCheckPayrollCalculation
 		fnCheckPayrollCalculation=fnCheckPayrollCalculation
