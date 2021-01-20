@@ -1,0 +1,7 @@
+[Q]\PRmstr\EmployeeData.h[cno]  ,  ed_   , 0
+[Q]\PRmstr\EmployeeDataIdx.h[cno] ,  no/field-u
+recl=201
+===================================================
+no      	,  Employee Number   	,  n    8 , ! Pos=  1
+field   	,  Field Name         	,  c   64 , ! Pos=  9
+value   	,  Value              	,  c  128 , ! Pos= 73
