@@ -44,6 +44,7 @@ OpenEmployeeData: ! r:
 return ! /r
 
 def library fnEmployeeDataClose
+	if ~setup then fn_setup
 	fnCloseFile(hEmpData,'PR Employee Data')
 	hEmpData=0
 fnend
