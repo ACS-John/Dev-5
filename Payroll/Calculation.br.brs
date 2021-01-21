@@ -48,7 +48,7 @@ ReadRpWork: ! r:  read rpwork, read employee, call calc deduction etc  basically
 	! /r
 
 	if env$('client')='Payroll Done Right' then gosub West_Acc_WorkmansComp ! env$('client')='West Accounting' or
-	newdeptkey$=cnvrt$("pic(zzzzzzz#)",val(x$))&cnvrt$("pic(zz#)",dep)
+	deptKey$=cnvrt$("pic(zzzzzzz#)",val(x$))&cnvrt$("pic(zz#)",dep)
 	eno=val(x$)
 	if eno=0 then goto ReadRpWork
 	if n$<>x$ then
@@ -97,7 +97,7 @@ ReadRpWork: ! r:  read rpwork, read employee, call calc deduction etc  basically
 		! cafeteria plan - maybe???
 		totalWagesYtd=0
 		mat stuc=(0)
-		read #hDepartment,using "form pos 48,n 2",key=newdeptkey$: tcd(1) ! get state code
+		read #hDepartment,using "form pos 48,n 2",key=deptKey$: tcd(1) ! get state code
 		dim ytdTotal(32)
 		fn_determineEarnings(hPrChecks,eno, dep,beg_date,end_date,mat ytdTotal,ytdFICA,ytdMedicare,ytdEic,ytdWages,mat caf)
 		for j=1 to 20
@@ -113,7 +113,7 @@ ReadRpWork: ! r:  read rpwork, read employee, call calc deduction etc  basically
 	!   Where Federal Withholdings are divided out into each department.
 	! gpd = gross pay per department
 	! pog = percent of gross
-	read #hDepartment,using 'Form POS 1,N 8,n 3,c 12,4*N 6,3*N 2,pd 4.2,23*PD 4.2',key=newdeptkey$: teno,tdn,gl$,mat tdt,mat tcd,tli,mat tdet ! Nokey X
+	read #hDepartment,using 'Form POS 1,N 8,n 3,c 12,4*N 6,3*N 2,pd 4.2,23*PD 4.2',key=deptKey$: teno,tdn,gl$,mat tdt,mat tcd,tli,mat tdet ! Nokey X
 	if totalGrossPay=0 then pog=1: goto L1620 ! Allow checks to calculate with no gross pay
 	if totalGrossPay=gpd then pog=1 : goto L1620
 	if totalGrossPay=0 then
@@ -271,7 +271,7 @@ FEDWH_DEPT: ! r: Fed WH for Dept ! Federal Withholding for Department
 		wc=wcm(payCode)-twc
 	end if
 	twc+=wc : tdc(6)=wc
-	rewrite #hDepartment,using "form pos 42,n 6,pos 58,23*pd 4.2",key=newdeptkey$: d1,mat tdet
+	rewrite #hDepartment,using "form pos 42,n 6,pos 58,23*pd 4.2",key=deptKey$: d1,mat tdet
 	tcp(4)=0
 	write #hPrChecks,using "Form POS 1,N 8,n 3,PD 6,N 7,5*PD 3.2,37*PD 5.2": eno,tdn,prd,0,mat tdc,mat tcp
 	! fnStatus('WRITING payroll check with tcp(4)='&str$(tcp(4))&' and tcp(32)='&str$(tcp(32)))
@@ -353,7 +353,7 @@ CalculateAllDeductionsAllDept: ! r:  returns totalGrossPay,ded,t3 (and probably 
 			if newdedfed(j)>=1 and newdedcode(j)=newdedcode_Deduct then
 				! r:  department.tdc1  State Code
 					sc1=1
-					read #hDepartment,using 'form pos 48,n 2',key=newdeptkey$: sc1 nokey ignore
+					read #hDepartment,using 'form pos 48,n 2',key=deptKey$: sc1 nokey ignore
 					if sc1=0 then sc1=1
 					! If env$('client')="Washington Parrish" AND J=3 Then sD3=_inp(J+9)*(GPD+DEFCOMPMATCH)/100 : Goto 3150 ! add deferred comp to gross for calculating pension deduction
 					if newcalcode(j)=1 then
@@ -827,7 +827,7 @@ def fn_table_line(mat tl_table,tl_seek_amount; tl_second_dimension)
 	fn_table_line=tl_item
 fnend
 
-def fn_stateTax(wages,pppy,allowances,marital,eicCode,fedWh,addOnSt,w4year$,taxYear; clientState$*2)
+def fn_stateTax(eno,wages,pppy,allowances,marital,eicCode,fedWh,addOnSt,w4year$,taxYear; clientState$*2)
 	if clientState$='' th clientState$=fnpayroll_client_state$
 
 	if clientState$='AR' then
@@ -837,7 +837,7 @@ def fn_stateTax(wages,pppy,allowances,marital,eicCode,fedWh,addOnSt,w4year$,taxY
 	else if clientState$='GA' then
 		returnN=fn_wh_georgia(wages,pppy,allowances,marital,eicCode)
 	else if clientState$='IL' then
-		returnN=fn_wh_illinois(wages,pppy,allowances)
+		returnN=fn_wh_illinois(eno,wages,pppy,allowances)
 	else if clientState$='IN' then
 		returnN=fn_wh_indiana(wages,pppy,allowances)
 	else if clientState$='KY' then ! added 10/03/2016 for R R Crawford Engineering
@@ -894,7 +894,6 @@ def fn_debugPrint2d(mat sw; ___,x)
 		pause
 	end if
 fnend
-
 def fn_n2b(mat n2,n2Index; ___,x,returnN,multiplier)
 	! n2 stands for middle number - not a great name, but it is goo enough
 
@@ -909,7 +908,6 @@ def fn_n2b(mat n2,n2Index; ___,x,returnN,multiplier)
 	pr 'fn_n2=(mat n2,'&str$(n2Index)&') returns '&str$(returnN) : pause
 	fn_n2b=returnN
 fnend
-
 
 def fn_wh_arkansas(war_wages_taxable_current,payPeriodsPerYear,allowances,wga_is_married,wga_eicCode; ___,s1,s2,returnN)
 	if ~setup_arwh then ! r: setup AR Arkansas
@@ -1024,16 +1022,34 @@ def fn_wh_georgia(taxableWagesCurrent,payPeriodsPerYear,allowances,wga_is_marrie
 	if returnN<.1 then returnN=0 ! do not withhold less than 10 cents.
 	fn_wh_georgia=returnN
 fnend
-def fn_wh_illinois(taxableWagesCurrent,payPeriodsPerYear,stAllowances; ___,g2,returnN)
-	! no table
-	! line 1 allowances = +1 for claiming self, +1 for claiming spouse
-	! line 2 allowances = +1 for each other (not you nor spouse) dependent
-	g2=round(taxableWagesCurrent*payPeriodsPerYear,2)
-	!  new way needs awesome function !    allowances_line_1=fn_allowances_spouse_and_self
-	!  new way needs awesome function !    allowances_line_2=stAllowances-allowances_line_1
-	!  new way needs awesome function !    g2=g2-(allowances_line_1*2175+allowances_line_2*1000)
-	g2=g2-1000*stAllowances
-	returnN=g2*.0495 ! changed from .0375 on 7/10/17  ! changed from .03 to .05 1/1/11, changed from .05 to .0375 1/1/15, ok as of 1/6/16
+def fn_wh_illinois(eno,taxableWagesCurrent,payPeriodsPerYear,stAllowances; ___,g2,returnN,line1allowances,line2allowances)
+	! 			! no table
+	! 			! line 1 allowances = +1 for claiming self, +1 for claiming spouse
+	! 			! line 2 allowances = +1 for each other (not you nor spouse) dependent
+	! 			g2=round(taxableWagesCurrent*payPeriodsPerYear,2)
+	! 			!  new way needs awesome function !    allowances_line_1=fn_allowances_spouse_and_self
+	! 			!  new way needs awesome function !    allowances_line_2=stAllowances-allowances_line_1
+	! 			!  new way needs awesome function !    g2=g2-(allowances_line_1*2175+allowances_line_2*1000)
+	! 			g2=g2-1000*stAllowances
+	! 			
+	! 			returnN=g2*.0495 ! changed from .0375 on 7/10/17  ! changed from .03 to .05 1/1/11, changed from .05 to .0375 1/1/15, ok as of 1/6/16
+	
+	line1allowances=val(fnEmployeeData$(eno,'IL W-4 Line 1 Allowances'))
+	line2allowances=val(fnEmployeeData$(eno,'IL W-4 Line 2 Allowances'))
+	
+	
+	returnN=.0495*(taxableWagesCurrent*payPeriodsPerYear-((line1allowances*2375)+(line2allowances*1000)/payPeriodsPerYear))
+
+	if showDetails then
+		fnStatus('eno='&str$(eno)                                      )
+		fnStatus('line1allowances='&str$(line1allowances)           )
+		fnStatus('line2allowances='&str$(line2allowances)           )
+		fnStatus('taxableWagesCurrent='&str$(taxableWagesCurrent)  )
+		fnStatus('payPeriodsPerYear='&str$(payPeriodsPerYear)       )
+		fnStatus('returnN='&str$(returnN)                             )
+	end if
+
+	
 	returnN=round(returnN/payPeriodsPerYear,2)
 	if returnN<.1 then returnN=0 ! do not withhold less than 10 cents.
 	fn_wh_illinois=returnN
@@ -1490,9 +1506,7 @@ def fn_oregonPhaseOut(opo_wages,opo_fed_wh,opo_table,isSingle,isMarried; ___,ret
 		if opo_wages =>270000 and opo_wages<280000 then returnN= 2750 : goto Opo_Finis
 		if opo_wages =>280000 and opo_wages<290000 then returnN= 1350 : goto Opo_Finis
 		if opo_wages =>290000 then returnN=0
-	end if ! /r
-
-
+	end if
 	Opo_Finis: !
 	fn_oregonPhaseOut=returnN
 fnend
@@ -1653,7 +1667,7 @@ ReallocateStateByDept: ! r: (reallocate state taxes based on earnings by dept an
 				! stAllowances - number of allowances
 				! payPeriodsPerYear = number of pay periods (formerly b8)
 			if tcd(1)=1 then
-				s3=fn_stateTax(stwh(tcd(1),1),payPeriodsPerYear,stAllowances,marital,eicCode,fed_wh,addOnSt,w4year$,taxYear) ! ST01:
+				s3=fn_stateTax(eno,stwh(tcd(1),1),payPeriodsPerYear,stAllowances,marital,eicCode,fed_wh,addOnSt,w4year$,taxYear) ! ST01:
 			else if tcd(1)=2  then
 				s3=0
 			else if tcd(1)=3  then
@@ -1779,7 +1793,7 @@ def library fnCheckPayrollCalculation(; ___, _
 			fed_exemption_option$(j)=str$(j-1)
 		next j
 		fed_exemption_option$(22)="99"
-
+		clientState$=fnpayroll_client_state$
 	end if ! /r
 	fn_setupOpenFiles
 	do
@@ -1797,7 +1811,7 @@ def library fnCheckPayrollCalculation(; ___, _
 		! /r
 		fnTos ! r: Test State Calculation Ask Criteria Screen
 		lc=respc=0
-		col1_pos=1 : col1_len=24 : col2_pos=col1_pos+col1_len+1 : col2_len=25
+		col1_pos=1 : col1_len=25 : col2_pos=col1_pos+col1_len+1 : col2_len=25
 
 		fnLbl(lc+=1,col1_pos,"Current Taxable Wages:",col1_len,1)
 		fnTxt(lc   ,col2_pos,10,10,0,"32",0,"If you wish for the system to add additional Federal withholdings, enter that amount here.")
@@ -1843,6 +1857,16 @@ def library fnCheckPayrollCalculation(; ___, _
 		fncomboa("EICCode", lc   ,col2_pos,mat eicOption$,'',25)
 		fnPcReg_read('EIC Code',resp$(resp_EicCode=respc+=1), eicOption$(1))
 
+		if clientState$='IL' then
+			lc+=1
+			fnLbl(lc+=1,1,"IL W-4 Line 1 Allowances:",col1_len,1)
+			fnTxt(lc,col2_pos,5, 0,1,"30",0,'')
+			resp$(rc_ilw4line1=respc+=1)=fnEmployeeData$(0,'IL W-4 Line 1 Allowances')
+			fnLbl(lc+=1,1,"IL W-4 Line 2 Allowances:",col1_len,1)
+			fnTxt(lc,col2_pos,5, 0,1,"30",0,'')
+			resp$(rc_ilw4line2=respc+=1)=fnEmployeeData$(0,'IL W-4 Line 2 Allowances')
+		end if
+
 		fnCmdSet(2)
 
 		fnAcs(mat resp$,ckey) ! /r
@@ -1859,6 +1883,10 @@ def library fnCheckPayrollCalculation(; ___, _
 			fnPcReg_write('W-4 Year'                	,resp$(resp_w4year))
 			fnPcReg_write('Tax Year'                	,resp$(resp_taxYear))
 			fnPcReg_write('EIC Code'                	,resp$(resp_EicCode))
+			if clientState$='IL' then
+				fnEmployeeData$(0,'IL W-4 Line 1 Allowances',resp$(rc_ilw4line1))
+				fnEmployeeData$(0,'IL W-4 Line 2 Allowances',resp$(rc_ilw4line2))
+			end if
 			marital       =val(resp$(resp_married       	)(1:1)) ! marital status
 			payCode       =val(resp$(resp_payCode       	)(1:2)) ! pay code
 			allowances    =val(resp$(resp_stExeptions  	)(1:2)) ! state ex
@@ -1868,7 +1896,7 @@ def library fnCheckPayrollCalculation(; ___, _
 			fedWh         =val(resp$(resp_fedWh         	)     ) ! Federal Withholding
 			taxYear       =val(resp$(resp_taxYear      	)     ) ! taxYear
 			eicCode       =val(resp$(resp_EicCode      	)(1:2)) ! eic code
-
+			eno=0
 			showDetails=1 ! a global variable that tells routines to show more info about calcuatlions for users when Checking Payroll Calculations
 
 			pppy=fn_payPeriodsPerYear(payCode)
@@ -1883,18 +1911,18 @@ def library fnCheckPayrollCalculation(; ___, _
 			fnStatus('               w4year: '&w4year$                  )
 
 			fnStatus('Calculated Federal WithHolding: '&str$( fn_federalTax(taxYear,fedpct,wages,ded,stdWhFed,fedExempt,pppy,marital,w4Year$,w4Step3,w4step4a,w4step4b,w4step4c) ))
-			! fnStatus('Arkansas     State WithHolding: '&str$( fn_stateTax(wages,pppy,allowances,marital,eicCode,fedWh,stateAddOn,w4year$,taxYear, 'AR') ))
-			! fnStatus('Arizona      State WithHolding: '&str$( fn_stateTax(wages,pppy,allowances,marital,eicCode,fedWh,stateAddOn,w4year$,taxYear, 'AZ') ))
-			! fnStatus('Georgia      State WithHolding: '&str$( fn_stateTax(wages,pppy,allowances,marital,eicCode,fedWh,stateAddOn,w4year$,taxYear, 'GA') ))
-			! fnStatus('Illinois     State WithHolding: '&str$( fn_stateTax(wages,pppy,allowances,marital,eicCode,fedWh,stateAddOn,w4year$,taxYear, 'IL') ))
-			! fnStatus('Indiana      State WithHolding: '&str$( fn_stateTax(wages,pppy,allowances,marital,eicCode,fedWh,stateAddOn,w4year$,taxYear, 'IN') ))
-			! fnStatus('Kentuky      State WithHolding: '&str$( fn_stateTax(wages,pppy,allowances,marital,eicCode,fedWh,stateAddOn,w4year$,taxYear, 'KY') ))
-			! fnStatus('Louisiana    State WithHolding: '&str$( fn_stateTax(wages,pppy,allowances,marital,eicCode,fedWh,stateAddOn,w4year$,taxYear, 'LA') ))
-			! fnStatus('Missouri     State WithHolding: '&str$( fn_stateTax(wages,pppy,allowances,marital,eicCode,fedWh,stateAddOn,w4year$,taxYear, 'MO') ))
-			! fnStatus('Mississippi  State WithHolding: '&str$( fn_stateTax(wages,pppy,allowances,marital,eicCode,fedWh,stateAddOn,w4year$,taxYear, 'MS') ))
-			! fnStatus('Oklahoma     State WithHolding: '&str$( fn_stateTax(wages,pppy,allowances,marital,eicCode,fedWh,stateAddOn,w4year$,taxYear, 'OK') ))
-			! fnStatus('Oregon       State WithHolding: '&str$( fn_stateTax(wages,pppy,allowances,marital,eicCode,fedWh,stateAddOn,w4year$,taxYear, 'OR') ))
-			fnStatus('Calculated State WithHolding: '&str$( fn_stateTax(wages,pppy,allowances,marital,eicCode,fedWh,stateAddOn,w4year$,taxYear)               ))
+			! fnStatus('Arkansas     State WithHolding: '&str$( fn_stateTax(eno,wages,pppy,allowances,marital,eicCode,fedWh,stateAddOn,w4year$,taxYear, 'AR') ))
+			! fnStatus('Arizona      State WithHolding: '&str$( fn_stateTax(eno,wages,pppy,allowances,marital,eicCode,fedWh,stateAddOn,w4year$,taxYear, 'AZ') ))
+			! fnStatus('Georgia      State WithHolding: '&str$( fn_stateTax(eno,wages,pppy,allowances,marital,eicCode,fedWh,stateAddOn,w4year$,taxYear, 'GA') ))
+			! fnStatus('Illinois     State WithHolding: '&str$( fn_stateTax(eno,wages,pppy,allowances,marital,eicCode,fedWh,stateAddOn,w4year$,taxYear, 'IL') ))
+			! fnStatus('Indiana      State WithHolding: '&str$( fn_stateTax(eno,wages,pppy,allowances,marital,eicCode,fedWh,stateAddOn,w4year$,taxYear, 'IN') ))
+			! fnStatus('Kentuky      State WithHolding: '&str$( fn_stateTax(eno,wages,pppy,allowances,marital,eicCode,fedWh,stateAddOn,w4year$,taxYear, 'KY') ))
+			! fnStatus('Louisiana    State WithHolding: '&str$( fn_stateTax(eno,wages,pppy,allowances,marital,eicCode,fedWh,stateAddOn,w4year$,taxYear, 'LA') ))
+			! fnStatus('Missouri     State WithHolding: '&str$( fn_stateTax(eno,wages,pppy,allowances,marital,eicCode,fedWh,stateAddOn,w4year$,taxYear, 'MO') ))
+			! fnStatus('Mississippi  State WithHolding: '&str$( fn_stateTax(eno,wages,pppy,allowances,marital,eicCode,fedWh,stateAddOn,w4year$,taxYear, 'MS') ))
+			! fnStatus('Oklahoma     State WithHolding: '&str$( fn_stateTax(eno,wages,pppy,allowances,marital,eicCode,fedWh,stateAddOn,w4year$,taxYear, 'OK') ))
+			! fnStatus('Oregon       State WithHolding: '&str$( fn_stateTax(eno,wages,pppy,allowances,marital,eicCode,fedWh,stateAddOn,w4year$,taxYear, 'OR') ))
+			fnStatus('Calculated State WithHolding: '&str$( fn_stateTax(eno,wages,pppy,allowances,marital,eicCode,fedWh,stateAddOn,w4year$,taxYear)               ))
 			fnStatusPause
 			fnStatusClose
 			showDetails=0
