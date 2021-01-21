@@ -1022,23 +1022,14 @@ def fn_wh_georgia(taxableWagesCurrent,payPeriodsPerYear,allowances,wga_is_marrie
 	if returnN<.1 then returnN=0 ! do not withhold less than 10 cents.
 	fn_wh_georgia=returnN
 fnend
-def fn_wh_illinois(eno,taxableWagesCurrent,payPeriodsPerYear,stAllowances; ___,g2,returnN,line1allowances,line2allowances)
+def fn_wh_illinois(eno,taxableWagesCurrent,payPeriodsPerYear,stAllowances; ___,g2,returnN,line1allowances,line2allowances,estAnnualNetPay)
 	! 			! no table
-	! 			! line 1 allowances = +1 for claiming self, +1 for claiming spouse
-	! 			! line 2 allowances = +1 for each other (not you nor spouse) dependent
-	! 			g2=round(taxableWagesCurrent*payPeriodsPerYear,2)
-	! 			!  new way needs awesome function !    allowances_line_1=fn_allowances_spouse_and_self
-	! 			!  new way needs awesome function !    allowances_line_2=stAllowances-allowances_line_1
-	! 			!  new way needs awesome function !    g2=g2-(allowances_line_1*2175+allowances_line_2*1000)
-	! 			g2=g2-1000*stAllowances
-	! 			
-	! 			returnN=g2*.0495 ! changed from .0375 on 7/10/17  ! changed from .03 to .05 1/1/11, changed from .05 to .0375 1/1/15, ok as of 1/6/16
-	
+
 	line1allowances=val(fnEmployeeData$(eno,'IL W-4 Line 1 Allowances'))
 	line2allowances=val(fnEmployeeData$(eno,'IL W-4 Line 2 Allowances'))
 	
-	
-	returnN=.0495*(taxableWagesCurrent*payPeriodsPerYear-((line1allowances*2375)+(line2allowances*1000)/payPeriodsPerYear))
+	estAnnualNetPay=taxableWagesCurrent*payPeriodsPerYear
+	returnN=.0495*(estAnnualNetPay-((line1allowances*2375)+(line2allowances*1000)/payPeriodsPerYear))
 
 	if showDetails then
 		fnStatus('eno='&str$(eno)                                      )

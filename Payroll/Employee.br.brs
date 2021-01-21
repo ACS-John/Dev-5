@@ -612,9 +612,7 @@ EmployeeDelete: ! r:
 		fn_dDdelete(eno)
 		delete #hEmployee,key=ent$:
 		heno$=cnvrt$("pic(zzzzzzz#)",eno)
-		! delete departmental records
 		fnKeyDelete(hDepartment,'form pos 1,n 8',heno$)
-		! delete check transactions
 		fnKeyDelete(hCheckIdx1,'form pos 1,n 8',heno$)
 
 		dim ed$(0)*128
