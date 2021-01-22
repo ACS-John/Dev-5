@@ -33,6 +33,7 @@ def library fnOsFilename$*512(filename$*512; return$*512)
 	end if
 	fnOsFilename$=return$
 fnend
+
 def library fnKeyExists(hFile,&keyToTest$; attemptFix,___,returnN, _
 	origionalKey$*256,attemptFix2Count,tried0,triedDot00,lenTmp,dotPos,tmp$*128)
 	! attemptFix =1 try it: As-Is, Left-padded, Right-padded
@@ -95,6 +96,7 @@ def library fnKeyExists(hFile,&keyToTest$; attemptFix,___,returnN, _
 	MaeFinis: !
 	fnKeyExists=returnN
 fnend
+
 def library fnSetEnv(from$*256,to$*256; conSubOnly, ___,quoteF$*1,quoteT$*1,fromLen,returnN) ! it works but it is currently unused.
 	! setenv(from$,to$)
 	if from$(1:1)<>'[' then from$(0:0)='['
