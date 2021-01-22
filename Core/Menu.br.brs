@@ -1,4 +1,5 @@
 enableFavorites=1
+enableUbCustomerEdit=1
 fn_setup
 
 ! r: setup once (additional setup stuff that just needs to be run once)
@@ -299,6 +300,8 @@ def fn_main
 				fn_callEditInWordProcessor(menu_option$)
 			else if lwrc$(ltrm$(menu_option$)(1:11))='hamsterfio:' then
 				fn_callHamsterFio(menu_option$)
+			else if lwrc$(ltrm$(menu_option$)(1:9))='customer:' then
+				fn_callUbCustomer(ltrm$(menu_option$)(10:19))
 			! else if menu_option$(1:5)='fnFM(' then
 			!   fnFM(menu_option$(6:len(menu_option$)-1))
 			else if menu_option$(1:14)='fnPrintAceTest' then
@@ -380,6 +383,8 @@ def fn_main
 						else
 							if lwrc$(ltrm$(program_file$(which))(1:11))='hamsterfio:' then
 								fn_callHamsterFio(program_file$(which))
+							else if env$('cursys')='UB' and lwrc$(ltrm$(program_file$(which))(1:9))='customer:' then
+								fn_callUbCustomer(ltrm$(program_file$(which))(10:19))
 							else
 								fnchain('S:\'&program_file$(which))
 							end if
@@ -448,6 +453,8 @@ def fn_main
 					fn_callHamsterFio(program_selection$)
 				else if lwrc$(ltrm$(program_selection$)(1:20))='editinwordprocessor:' then  ! else if
 					fn_callEditInWordProcessor(program_selection$)
+				else if lwrc$(ltrm$(program_selection$)(1:9))='customer:' and env$('cursys')='UB' then  ! else if
+					fn_callUbCustomer(ltrm$(program_selection$)(10:19))
 				else if program_selection$<>'' then
 					fn_chain('S:\'&trim$(program_selection$))
 				end if
@@ -496,6 +503,10 @@ def fn_callEditInWordProcessor(programSelection$*256)
 
 	fn_callEditInWordProcessor=fnEditFile(cewForce$,fileToEditInWp$)
 fnend
+def fn_callUbCustomer(x$*10)
+	fnCustomer(x$)
+fnend
+
 def fn_dashboardHeight
 	if env$('cursys')="OE" then
 		dhReturn=1
@@ -639,13 +650,58 @@ def library fnGetProgramList(mat program_plus$,mat program_name$,mat program_nam
 	if ~setup then fn_setup
 	fnGetProgramList=fn_getProgramList(mat program_plus$,mat program_name$,mat program_name_trim$,mat program_file$,mat ss_text$)
 fnend
-def fn_getProgramList(mat program_plus$,mat program_name$,mat program_name_trim$,mat program_file$,mat ss_text$)
+def fn_getProgramList(mat program_plus$,mat program_name$,mat program_name_trim$,mat program_file$,mat ss_text$; ___,glpa_program_count)
 	mat program_plus$(0) : mat program_name$(0) : mat program_name_trim$(0) : mat program_file$(0) : mat ss_text$(0)
-	glpa_program_count=0
+
 	fn_getProgramList_add('S:\'&fnSystemNameFromAbbr$&'\Menu.mnu')
 	if env$("ACSDeveloper")<>"" then
 		fn_getProgramList_add('S:\'&fnSystemNameFromAbbr$&'\Programmer.mnu')
 	end if  ! serial=env$('ACSDeveloper')<>''
+	if enableUbCustomerEdit and env$('cursys')='UB' then
+		! open #hUbCustomer=fnH: 'Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr',internal,input,keyed
+		dim customer$(0)*256
+		dim customerN(0)
+		hUbCustomer=fn_open('UB Customer',mat customer$,mat customerN,mat form$)
+		! r: add header item
+				program_item_count=udim(mat program_file$)+1
+				mat program_plus$(program_item_count)
+				mat program_name$(program_item_count)
+				mat program_name_trim$(program_item_count)
+				mat program_file$(program_item_count)
+				mat ss_text$(program_item_count)
+				mat program_level(program_item_count)
+
+				program_plus$(program_item_count)='**'
+				program_name$(program_item_count)='Active Customers'
+				program_name_trim$(program_item_count)=trim$(program_name$(program_item_count))
+				program_file$(program_item_count)=''
+				ss_text$(program_item_count)='' ! program_name$(program_item_count)
+				program_level(program_item_count)=1
+		! /r
+		do
+			read #hUbCustomer,using form$(hUbCustomer): mat customer$,mat customerN eof EoUbCustomer
+			if customerN(c_finalBilling)=0 or customerN(c_finalBilling)=3 or customerN(c_finalBilling)=4 then
+
+				program_item_count=udim(mat program_file$)+1
+				mat program_plus$(program_item_count)
+				mat program_name$(program_item_count)
+				mat program_name_trim$(program_item_count)
+				mat program_file$(program_item_count)
+				mat ss_text$(program_item_count)
+				mat program_level(program_item_count)
+
+				program_plus$(program_item_count)=''
+				program_name$(program_item_count)=customer$(c_account)&' '&rtrm$(customer$(c_name))
+				program_name_trim$(program_item_count)=trim$(program_name$(program_item_count))
+				program_file$(program_item_count)='customer:'&customer$(c_account)
+				ss_text$(program_item_count)=program_name$(program_item_count)
+				program_level(program_item_count)=2
+
+			end if
+		loop
+		EoUbCustomer: !
+		fnCloseFile(hUbCustomer,'UB Customer') ! close #hUbCustomer:
+	end if
 fnend
 def fn_getProgramList_add(gpla_file$*256;___,sign$)
 	dim ss_category$(1)*80
@@ -777,7 +833,7 @@ def fn_displayMenu
 		fn_dm_add(' Open &Report Cache','%report_cache_folder_current%\')
 		! end if
 		fn_dm_add(' -')
-		fn_dm_add(' E&Xit'&chr$(9)&'Alt+F4','Exit')
+		fn_dm_add(' E&xit'&chr$(9)&'Alt+F4','Exit')
 		if env$('BR_MODEL')='CLIENT/SERVER' then
 			fn_dm_add(' E&Xit and Logout','Exit and Logout')
 		end if
@@ -876,5 +932,6 @@ def fn_chain(c_program$*128)
 	fnchain(c_program$)
 fnend
 Xit: execute "System"
+include: fn_open
 include: fn_setup
 

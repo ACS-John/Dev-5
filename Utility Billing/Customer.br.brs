@@ -1,16 +1,21 @@
 ! Customer File Editor
-library program$: fnCustomer
-autoLibrary
+fn_setup
 fnTop(program$)
-fnCustomer(x)
-fnXit
-def library fnCustomer(x)
-	fn_setup
+fn_customer
+Xit: fnXit
+def library fnCustomer(; &editOne$)
+	if ~setup then fn_setup
+	fnCustomer=fn_customer( editOne$)
+fnend
+def fn_customer(; &editOne$,___,editOne,ckey)
 	disableBalanceEdit=1
+	if editOne$<>'' then
+		editOne=1
+	end if
 	! r: open files
 	open #h_ubadrbil=fnH: "Name=[Q]\UBmstr\ubAdrBil.h[cno],KFName=[Q]\UBmstr\AdrIndex.h[cno],Shr,Use,RecL=130,KPs=1,KLn=10",internal,outIn,keyed  ! was :=3
-	F_ADRBIL: form pos 1,c 10,4*c 30
-	gosub OPEN_CASS1
+	FadrBil: form pos 1,c 10,4*c 30
+	gosub Cass1Open
 	fn_setup_depositChange ! INITIALIZE DEPOSIT TRACKING FILES
 	! r: BUD1: ! INITILIZE BUDGET FILE
 	bud1=0
@@ -32,9 +37,9 @@ def library fnCustomer(x)
 	F_CUSTOMER_1: form pos 1,c 10,4*c 30,c 12,7*pd 2,11*pd 4.2,4*pd 4,15*pd 5,pd 4.2,pd 4,12*pd 4.2,2*pd 3,c 7,2*c 12,pd 3,10*pd 5.2,pos 1712,c 1,c 9,c 2,c 17,n 2,n 7,2*n 6,n 9,pd 5.2,n 3,3*n 9,3*n 2,3*n 3,n 1,3*n 9,3*pd 5.2,c 30,7*c 12,3*c 30
 	open #h_citystzip=fnH: "Name=[Q]\Data\CityStZip.dat,KFName=[Q]\Data\CityStZip.Idx,Use,RecL=30,KPs=1,KLn=30,Shr",internal,outIn,keyed
 	! /r
-	!
+	
 	goto AskAcct
-	!
+	
 	ACCOUNT_X_NOKEY: ! r:
 		mat ml$(2)
 		ml$(1)="Account "&x$&' could not be found.'
@@ -66,7 +71,7 @@ def library fnCustomer(x)
 		! pb=bal
 		odp=b(8)+b(9)+b(11)
 	goto NameScreen ! /r
-	!
+	
 	CHECK_BALANCE_BREAKDOWN: ! r:
 		gosub TGB_SET
 		! Gosub DRAFT1
@@ -101,6 +106,7 @@ def library fnCustomer(x)
 		delete #h_cass1,key=z$: ioerr ignore
 	PAST_CASS_DELETE: !
 	! probably change customer in ubtrans-vb here !Gosub 5130
+
 	if ad1=1 then goto ADD_RECORD else goto AskAcct ! /r
 
 	ASK_CONFIRM_KEY_CHANGE: ! r:
@@ -174,7 +180,7 @@ def library fnCustomer(x)
 	goto AskAcct ! /r
 
 	ALT_ADDRESS_SAVE: ! r: write or rewrite alternate billing address
-		rewrite #h_ubadrbil,using F_ADRBIL,key=z$: z$,mat ab$ nokey AAS_WRITE
+		rewrite #h_ubadrbil,using FadrBil,key=z$: z$,mat ab$ nokey AAS_WRITE
 		if trim$(ab$(1)&ab$(2)&ab$(3)&ab$(4))="" then
 			do
 				delete #h_ubadrbil,key=z$: ioerr AAS_DEL_ALL_END ! some how on conversion there can be several alternate addresses wtih same customer key (if delete any, delete them all)
@@ -184,7 +190,7 @@ def library fnCustomer(x)
 		goto AAS_FINIS
 		AAS_WRITE: ! r:
 		if trim$(ab$(1)&ab$(2)&ab$(3)&ab$(4))<>"" then
-			write #h_ubadrbil,using F_ADRBIL: z$,mat ab$
+			write #h_ubadrbil,using FadrBil: z$,mat ab$
 		end if
 		goto AAS_FINIS ! /r
 		AAS_FINIS: !
@@ -293,7 +299,7 @@ def library fnCustomer(x)
 			x=2 : lyne=3
 			for j=1 to 10
 				if trim$(srvnam$(j))<>"" then ! they have this service
-					x=x+2
+					x+=2
 					fnLbl(lyne+=1,1,trim$(srvnam$(j))&":",20,1,0,1)
 					fnTxt(lyne,22,10,10,1,"10",0,empty$,1)
 					budgetinfo$(x-1)=str$(bt1(j+1,1))
@@ -304,7 +310,7 @@ def library fnCustomer(x)
 			lyne+=1 : fnLbl(lyne,1,"Net Bill:",20,1,0,1)
 			budgetinfo$(x+=1)=str$(bt1(12,1))
 			fnTxt(lyne,22,10,10,1,"10",0,empty$,1)
-			x+=1: : budgetinfo$(x)=str$(bt1(12,2))
+			budgetinfo$(x+=1)=str$(bt1(12,2))
 			fnTxt(lyne,34,10,10,1,"10",0,empty$,1)
 			lyne+=1 : fnLbl(lyne,1,"Gross Bill:",20,1,0,1)
 			budgetinfo$(x+=1)=str$(bt1(13,1))
@@ -322,7 +328,7 @@ def library fnCustomer(x)
 			x=0
 			for j=1 to 14
 				if j<2 or j>11 or trim$(srvnam$(j-1))<>"" then
-					x=x+1
+					x+=1
 					bt1(j,1)=val(budgetinfo$(x*2-1))
 					bt1(j,2)=val(budgetinfo$(x*2))
 				end if
@@ -350,18 +356,17 @@ def library fnCustomer(x)
 	 read #h_budmstr,using 'form pos 1,c 10,pos 75,2*pd 3',key=x$: x$,mat badr nokey L4100
 	 delete #h_budmstr:
 	 tadr=badr(1)
-	 do
-		 if tadr=0 then goto L4100
+	 do until tadr=0
 		 read #h_budtrans,using 'form pos 1,c 10,pos 147,pd 3',rec=tadr: x$,nba
 		 delete #h_budtrans,rec=tadr:
 		 tadr=nba
 	 loop
 	 L4100: !
 	return ! /r
-	OPEN_CASS1: ! r:
-		open #h_cass1=fnH: "Name=[Q]\UBmstr\Cass1.h[cno],KFName=[Q]\UBmstr\CASS1IDX.h[cno],Shr",internal,outIn,keyed ioerr L4150
+	Cass1Open: ! r:
+		open #h_cass1=fnH: "Name=[Q]\UBmstr\Cass1.h[cno],KFName=[Q]\UBmstr\CASS1IDX.h[cno],Shr",internal,outIn,keyed ioerr Cass1OpenFinis
 		cassopen=1
-		L4150: !
+		Cass1OpenFinis: !
 	return  ! /r
 	DEL_CASS: ! r:
 		if cassopen then
@@ -526,6 +531,7 @@ def library fnCustomer(x)
 		L5430: !
 		write #h_citystzip,using 'form pos 1,c 30': e$(4)
 		L5440: !
+		! r: get local variables from mat custInfo$ and mat ab$
 		alp$=custInfo$(9)
 		extra$(2)=custInfo$(10)
 		extra$(8)=custInfo$(11)
@@ -546,6 +552,7 @@ def library fnCustomer(x)
 		extra$(10)=custInfo$(resp_phone_work)
 		extra$(11)=custInfo$(resp_phone_business)
 		citykey$=rpad$(ab$(4),30)
+		! /r
 		! r: add city state zip to h_citystzip file (if it does not exist)
 		read #h_citystzip,using 'form pos 1,c 30',key=citykey$,release: citystzip$ nokey L5520
 		goto L5530
@@ -768,6 +775,15 @@ def library fnCustomer(x)
 	AskAcct: ! r:
 		release #h_customer_1: ioerr ignore
 		ad1=0 ! add code - used to tell other parts of the program, that I am currently adding a customer record.
+		if editOne then 
+			if ckey=0 then
+				x$=editOne$
+				ckey=1
+				goto EDIT_CUSTOMER
+			else
+				goto Finis
+			end if
+		end if
 		ckey=fn_ask_account('ubfm',x$,h_customer_1, 'Edit',1)
 		jbact$=hact$=x$
 		if ckey=2 then ! add
@@ -776,7 +792,7 @@ def library fnCustomer(x)
 		else if ckey=1 then ! edit
 			goto EDIT_CUSTOMER
 		else if ckey=5 then ! Cancel
-			goto Xit
+			goto Finis
 		end if
 		goto AskAcct
 	! /r
@@ -818,7 +834,7 @@ def library fnCustomer(x)
 		read #h_customer_1,using 'Form POS 1,C 10',key=z$: z$ ! this line should lock the record and set the SAME paramater for use in add_cancel
 	goto EDIT_LOADED_CUSTOMER ! /r
 
-	Xit: ! r: close files and leave
+	Finis: ! r: close files and leave
 	! close #2: ioerr ignore
 	fn_close_file(h_customer_2)
 	fnCloseFile(hLocation,'U4 Meter Location')
@@ -1540,7 +1556,6 @@ def fn_setup
 	do until first_service<>0
 		if trim$(srvnam$(j+=1))<>'' then first_service=j
 	loop
-	!
 	! /r
 fnend
 def fn_getRateCodeOptions(service_code,&ratecode,mat rates$ ) ! get applicable rate codes
@@ -1563,8 +1578,7 @@ def fn_getRateCodeOptions(service_code,&ratecode,mat rates$ ) ! get applicable r
 	do
 		read #h_rate1,using "Form POS 1,C 54",release: rt$ eof GCODE_FINIS
 		if trim$(rt$(1:2))=searchcode$ then
-			x=x+1
-			rates$(x)=rt$(3:4)&"="&rt$(5:25)
+			rates$(x+=1)=rt$(3:4)&"="&rt$(5:25)
 			if ratecode=val(rt$(3:4)) then rateInfo$(3)=rt$(3:4)&"="&rt$(5:25)
 		end if
 	loop

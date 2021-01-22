@@ -1731,7 +1731,8 @@ EnterReadings: ! r:
 	if addmethod=am_customersInSequence or addmethod=am_fromHhFile then fnCmdSet(17) else fnCmdSet(11) ! kj   3/24/06
 	fnAcs(mat resp$,ckey)
 	if ckey=8 then
-		fncustomer(x): read #hCustomer1,using F_CUSTOMER_C,key=x$,release: x$,aname$,mat a,final,mat d,alp$,mat extra,extra$(3)
+		fncustomer( x$)
+		read #hCustomer1,using F_CUSTOMER_C,key=x$,release: x$,aname$,mat a,final,mat d,alp$,mat extra,extra$(3)
 		fnapply_default_rates(mat extra, mat a)
 		goto EnterReadings3
 	end if

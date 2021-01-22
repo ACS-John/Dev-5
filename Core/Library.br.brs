@@ -1341,9 +1341,9 @@ fnend
 		library 'S:\Utility Billing\fn\customerSearch.br': fnCustomerSearch
 		fnCustomerSearch=fnCustomerSearch(x$,fixgrid)
 	fnend
-	def library fncustomer(x)
-		library 'S:\Utility Billing\Customer.br': fncustomer
-		fncustomer=fncustomer(x)
+	def library fnCustomer(; &editOne$)
+		library 'S:\Utility Billing\Customer.br': fnCustomer
+		fnCustomer=fnCustomer( editOne$)
 	fnend
 	def library fnask_account(prev_list_id$,&x$,h_customer; select_button_text$,aa_button_enable_add)
 		library 'S:\Utility Billing\Customer.br': fnask_account

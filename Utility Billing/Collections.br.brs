@@ -201,7 +201,7 @@ ScreenAdd: ! r:
 	x(3)=val(resp$(2))
 	rcpt$=trim$(resp$(3))(1:9)
 	if ckey=8 then
-		fnCustomer(x)
+		fnCustomer( x$)
 		goto ScreenAdd
 	else if ckey=3 then
 		fnCustomerNotes(z$)
