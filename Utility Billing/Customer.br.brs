@@ -429,7 +429,7 @@ def fn_customer(; &editOne$,___,editOne,ckey)
 		custInfo$(respc+=1)=str$(extra(4))
 		fnLbl(18,1,"Final Billing Code:",mylen,1)
 		code$(1)="0 - Active"
-		if env$('client')="Merriam Woods" then let code$(1)="0 - Active (And Shut-Off/Bill)"
+		! if env$('client')="Merriam Woods" then let code$(1)="0 - Active (And Shut-Off/Bill)"
 		code$(2)="1 - Inactive / Final Billed"
 		code$(3)="2 - Inactive / Deposit Refunded"
 		code$(4)="3 - Active / but Do Not Bill"

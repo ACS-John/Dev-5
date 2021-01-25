@@ -1553,6 +1553,10 @@ fnend
 	fnend
 ! /r
 ! r: PR   payroll
+	def library fnEmployeeEdit(eno)
+		library 'S:\Payroll\Employee.br': fnEmployeeEdit
+		fnEmployeeEdit=fnEmployeeEdit(eno)
+	fnend
 	def library fnEmployeeData$(eno,field$*64; setIt$*64,defaultIfNokey$*64,defaultIfBlank$*64)
 		library 'S:\Payroll\fn\employeeData.br': fnEmployeeData$
 		fnEmployeeData$=fnEmployeeData$(eno,field$, setIt$,defaultIfNokey$,defaultIfBlank$)

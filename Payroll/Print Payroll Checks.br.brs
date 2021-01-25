@@ -725,9 +725,10 @@ def fn_print_check
 		ca$=rtrm$(cnvrt$("PIC($$$,$$$,$$$.##)",ttc(32)))
 	end if
 	!
-	if env$('client')="Merriam Woods" then
-		englishAmountBreakPoint=65
-	else if env$('client')="Payroll Done Right" and env$('cno')='18' then
+	! if env$('client')="Merriam Woods" then
+	! 	englishAmountBreakPoint=65
+	! else 
+	if env$('client')="Payroll Done Right" and env$('cno')='18' then
 		englishAmountBreakPoint=82
 	else
 		englishAmountBreakPoint=0   !   0=default=58
