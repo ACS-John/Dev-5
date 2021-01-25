@@ -681,7 +681,7 @@ def fn_getProgramList(mat program_plus$,mat program_name$,mat program_name_trim$
 		do
 			read #hUbCustomer,using form$(hUbCustomer): mat customer$,mat customerN eof EoUbCustomer
 			if customerN(c_finalBilling)=0 or customerN(c_finalBilling)=3 or customerN(c_finalBilling)=4 then
-
+				! r: add customer: item
 				program_item_count=udim(mat program_file$)+1
 				mat program_plus$(program_item_count)
 				mat program_name$(program_item_count)
@@ -696,7 +696,7 @@ def fn_getProgramList(mat program_plus$,mat program_name$,mat program_name_trim$
 				program_file$(program_item_count)='customer:'&customer$(c_account)
 				ss_text$(program_item_count)=program_name$(program_item_count)
 				program_level(program_item_count)=2
-
+				! /r
 			end if
 		loop
 		EoUbCustomer: !
