@@ -1,10 +1,12 @@
 Time and Date 		Sys	Program(s) and Change(s) Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    
 ______________________	___	____________________________________________________________________________________________________________________________________________________________________________________________________________________________________                                                 
+6:45 PM 1/25/2021	PR	Improved Department Adding with new interface - once again possible to add a first department
+6:22 PM 1/25/2021	PR	AR Withholding Tables updated - Employers need to add 
 15:41 01/21/2021	CO	5.75104  
 2:41 PM 1/22/2021	UB	Added Customers to the Main Menu - searchable by account or name simply takes you into customer record to edit it 
 14:02 01/21/2021	CO	5.75103   
 12:37 01/21/2021	CO	5.75102    
-12:34 PM 1/21/2021	PR	IL Withholdings updated - Employees need to add IL W-4 info from line 1 and line 2 into their employee records   
+12:34 PM 1/21/2021	PR	IL Withholding Tables updated - Employers need to add IL W-4 info from line 1 and line 2 into their employee records   
 3:08 PM 1/19/2021	PR	Employee / Employee Department navigation overhauled   
 10:58 01/21/2021	CO	5.75101     
 10:36 AM 1/13/2021	UB	Enhanced Last Billing Date read logic    

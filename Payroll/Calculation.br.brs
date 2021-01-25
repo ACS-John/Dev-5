@@ -831,7 +831,7 @@ def fn_stateTax(eno,wages,pppy,allowances,marital,eicCode,fedWh,addOnSt,w4year$,
 	if clientState$='' th clientState$=fnpayroll_client_state$
 
 	if clientState$='AR' then
-		returnN=fn_wh_arkansas(wages,pppy,allowances,marital,eicCode)
+		returnN=fn_wh_arkansas(eno,wages,pppy,allowances,marital,eicCode)
 	else if clientState$='AZ' then
 		returnN=fn_wh_arizona(wages,allowances)
 	else if clientState$='GA' then
@@ -909,50 +909,85 @@ def fn_n2b(mat n2,n2Index; ___,x,returnN,multiplier)
 	fn_n2b=returnN
 fnend
 
-def fn_wh_arkansas(war_wages_taxable_current,payPeriodsPerYear,allowances,wga_is_married,wga_eicCode; ___,s1,s2,returnN)
+def fn_wh_arkansas(eno,war_wages_taxable_current,payPeriodsPerYear,allowances, _
+	wga_is_married,wga_eicCode; ___, _
+	s1,annualPersonalCredit,returnN,stAllowances,adjEstAnnWages)
 	if ~setup_arwh then ! r: setup AR Arkansas
 		setup_arwh=1
 		dim ar(0,0)
-		if taxYear>=2020 then
-		mat ar(6,3)
-		! Page 1 of http://www.dfa.arkansas.gov/offices/incomeTax/withholding/Documents/whformula.pdf
-		! over                              Percentage
-		ar(1,1)=    0 : ar(1,2)=   0    :  ar(1,3)=0.009
-		ar(2,1)= 4300 : ar(2,2)=  38.7  :  ar(2,3)=0.024
-		ar(3,1)= 8400 : ar(3,2)= 137.1  :  ar(3,3)=0.034
-		ar(4,1)=12600 : ar(4,2)= 279.9  :  ar(4,3)=0.044
-		ar(5,1)=21000 : ar(5,2)= 649.5  :  ar(5,3)=0.059
-		ar(6,1)=35100 : ar(6,2)=1481.4  :  ar(6,3)=0.069
-		arStandardDeduction=2200
-		arPerExemption=20
+		if taxYear<=2020 then ! r:
+			mat ar(6,3)
+			! Page 1 of http://www.dfa.arkansas.gov/offices/incomeTax/withholding/Documents/whformula.pdf
+			! over                              Percentage
+			ar(1,1)=    0 : ar(1,2)=   0    :  ar(1,3)=0.009
+			ar(2,1)= 4300 : ar(2,2)=  38.7  :  ar(2,3)=0.024
+			ar(3,1)= 8400 : ar(3,2)= 137.1  :  ar(3,3)=0.034
+			ar(4,1)=12600 : ar(4,2)= 279.9  :  ar(4,3)=0.044
+			ar(5,1)=21000 : ar(5,2)= 649.5  :  ar(5,3)=0.059
+			ar(6,1)=35100 : ar(6,2)=1481.4  :  ar(6,3)=0.069
+			arStandardDeduction=2200
+			arPerExemption=20
+			! /r
+		else if taxYear=>2021 then ! r:
+			mat ar(12,3)
+			! Page 2 of https://www.dfa.arkansas.gov/images/uploads/incomeTaxOffice/whformula.pdf
+			! Over         : Minus Adjustment :    Percentage
+			ar(1 ,1)=    0 : ar(1 ,2)=   0    :  ar(1 ,3)=0.00
+			ar(2 ,1)= 4700 : ar(2 ,2)=  93.98 :  ar(2 ,3)=0.02
+			ar(3 ,1)= 9200 : ar(3 ,2)= 185.97 :  ar(3 ,3)=0.03
+			ar(4 ,1)=13900 : ar(4 ,2)= 241.57 :  ar(4 ,3)=0.034
+			ar(5 ,1)=22900 : ar(5 ,2)= 427.71 :  ar(5 ,3)=0.05
+			ar(6 ,1)=38500 : ar(6 ,2)= 774.2  :  ar(6 ,3)=0.059
+			ar(7 ,1)=82001 : ar(7 ,2)= 681.7  :  ar(7 ,3)=0.059
+			ar(8 ,1)=83001 : ar(8 ,2)= 581.7  :  ar(8 ,3)=0.059
+			ar(9 ,1)=84001 : ar(9 ,2)= 481.7  :  ar(9 ,3)=0.059
+			ar(10,1)=85301 : ar(10,2)= 381.7  :  ar(10,3)=0.059
+			ar(11,1)=86401 : ar(11,2)= 281.7  :  ar(11,3)=0.059
+			ar(12,1)=87501 : ar(12,2)= 241.7  :  ar(12,3)=0.059
+			arStandardDeduction=2200
+			arPerExemption=29
+			! /r
+		end if ! /r
+	end if
+	adjEstAnnWages=round(war_wages_taxable_current*payPeriodsPerYear,2)
+	fn_detail('1. Compute the Annual Gross Pay = '&str$(adjEstAnnWages))
+	adjEstAnnWages-=arStandardDeduction
+	fn_detail('2. Subtract Standard Deduction = '&str$(adjEstAnnWages))
+	if adjEstAnnWages<=88001 and taxYear=>2021 then
+		! fn_detail('Adjusted Estimated Annual Wages  before 50 midway:'&str$(adjEstAnnWages))
+		adjEstAnnWages=int(adjEstAnnWages/100)*100+50 ! round(adjEstAnnWages+49/50,0)*50
+	end if
+	fn_detail('3. $50 Midrange Income Lookup = '&str$(adjEstAnnWages))
+	tableRow=fn_table_line(mat ar,adjEstAnnWages)
+	
+	if taxYear<=2020 then
+		s1=round(ar(tableRow,2)+(adjEstAnnWages-ar(tableRow,1))*ar(tableRow,3),2)
 	else if taxYear=>2021 then
-		mat ar(12,3)
-		! Page 2 of https://www.dfa.arkansas.gov/images/uploads/incomeTaxOffice/whformula.pdf
-		! Over         : Minus Adjustment :    Percentage
-		ar(1 ,1)=    0 : ar(1 ,2)=   0    :  ar(1 ,3)=0.00
-		ar(2 ,1)= 4700 : ar(2 ,2)=  93.98 :  ar(2 ,3)=0.02
-		ar(3 ,1)= 9200 : ar(3 ,2)= 185.97 :  ar(3 ,3)=0.03
-		ar(4 ,1)=13900 : ar(4 ,2)= 241.57 :  ar(4 ,3)=0.034
-		ar(5 ,1)=22900 : ar(5 ,2)= 427.71 :  ar(5 ,3)=0.05
-		ar(6 ,1)=38500 : ar(6 ,2)= 774.2  :  ar(6 ,3)=0.059
-		ar(7 ,1)=82001 : ar(7 ,2)= 681.7  :  ar(7 ,3)=0.059
-		ar(8 ,1)=83001 : ar(8 ,2)= 581.7  :  ar(8 ,3)=0.059
-		ar(9 ,1)=84001 : ar(9 ,2)= 481.7  :  ar(9 ,3)=0.059
-		ar(10,1)=85301 : ar(10,2)= 381.7  :  ar(10,3)=0.059
-		ar(11,1)=86401 : ar(11,2)= 281.7  :  ar(11,3)=0.059
-		ar(12,1)=87501 : ar(12,2)= 241.7  :  ar(12,3)=0.059
-		arStandardDeduction=2200
-		arPerExemption=29
-	end if ! /r
-	t1=round(war_wages_taxable_current*payPeriodsPerYear,2)
-	! t2=2000
-	t3=t1-arStandardDeduction
-	tableRow=fn_table_line(mat ar,t3)
-	s1=round(ar(tableRow,2)+(t3-ar(tableRow,1))*ar(tableRow,3),2)
-	s2=stAllowances*arPerExemption
-	returnN=round((s1-s2)/payPeriodsPerYear,2)
+		s1=adjEstAnnWages*ar(tableRow,3)-ar(tableRow,2)
+	end if
+	s1=round(s1,0)
+	fn_detail('4. Compute the Annual Gross Tax = '&str$(s1))
+	fn_detail('...Multiply by (Percent) = '&str$(ar(tableRow,3)))
+	fn_detail('...less bracket adjustment amount = '&str$(ar(tableRow,2)))
+	stAllowances=val(fnEmployeeData$(eno,'AR4EC Exemptions'))
+	annualPersonalCredit=stAllowances*arPerExemption
+	returnN=s1-annualPersonalCredit
+	fn_detail('5. Compute the Annual Net Tax = '&str$(returnN))
+	returnN=round((returnN)/payPeriodsPerYear,2)
+	fn_detail('6. Compute the State Withholding per Pay Period = '&str$(returnN))
 	if returnN<.1 then returnN=0
+	fn_detail('Adjusted Estimated Annual Wages:'&str$(adjEstAnnWages))
+	fn_detail('Standard Deduction:'&str$(arStandardDeduction))
+	fn_detail('Per Exemption Amt:'&str$(arPerExemption))
+	fn_detail('State Allowances:'&str$(stAllowances))
+	fn_detail('annualPersonalCredit (Allowances*PerExemption):'&str$(annualPersonalCredit))
 	fn_wh_arkansas=returnN
+fnend
+! def fn_roundToNearest(numberToRound,roundToAmt)=round(numberToRound/roundToAmt,0)*roundToAmt ! /r
+def fn_detail(text$*128)
+	if showDetails then
+		fnStatus(text$)
+	end if
 fnend
 def fn_wh_arizona(taxableWagesCurrent,allowances; ___,returnN,stp)
 	! no table  revised 1/01/10, functionalized 3/24/20
@@ -1872,10 +1907,15 @@ def library fnCheckPayrollCalculation(; ___, _
 			lc+=1
 			fnLbl(lc+=1,1,"IL W-4 Line 1 Allowances:",col1_len,1)
 			fnTxt(lc,col2_pos,5, 0,1,"30",0,'')
-			resp$(rc_ilw4line1=respc+=1)=fnEmployeeData$(0,'IL W-4 Line 1 Allowances')
+			resp$(rc_stateExemptions1=respc+=1)=fnEmployeeData$(0,'IL W-4 Line 1 Allowances')
 			fnLbl(lc+=1,1,"IL W-4 Line 2 Allowances:",col1_len,1)
 			fnTxt(lc,col2_pos,5, 0,1,"30",0,'')
 			resp$(rc_ilw4line2=respc+=1)=fnEmployeeData$(0,'IL W-4 Line 2 Allowances')
+		else if clientState$='AR' then
+			lc+=1
+			fnLbl(lc+=1,1,"AR4EC Exemptions:",col1_len,1)
+			fnTxt(lc,col2_pos,5, 0,1,"30",0,'')
+			resp$(rc_stateExemptions1=respc+=1)=fnEmployeeData$(0,'AR4EC Exemptions')
 		end if
 
 		fnCmdSet(2)
@@ -1895,8 +1935,10 @@ def library fnCheckPayrollCalculation(; ___, _
 			fnPcReg_write('Tax Year'                	,resp$(resp_taxYear))
 			fnPcReg_write('EIC Code'                	,resp$(resp_EicCode))
 			if clientState$='IL' then
-				fnEmployeeData$(0,'IL W-4 Line 1 Allowances',resp$(rc_ilw4line1))
+				fnEmployeeData$(0,'IL W-4 Line 1 Allowances',resp$(rc_stateExemptions1))
 				fnEmployeeData$(0,'IL W-4 Line 2 Allowances',resp$(rc_ilw4line2))
+			else if clientState$='AR' then
+				fnEmployeeData$(0,'AR4EC Exemptions',resp$(rc_stateExemptions1))
 			end if
 			marital       =val(resp$(resp_married       	)(1:1)) ! marital status
 			payCode       =val(resp$(resp_payCode       	)(1:2)) ! pay code

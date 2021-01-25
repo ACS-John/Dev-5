@@ -334,7 +334,7 @@ def fn_employeeEdit(ent; employeeAdding)
 			goto EmployeeEditXit
 		else if ckey=4 then
 			goto EmployeeDelete
-		else if ckey=>5200 and ckey<=5300 then
+		else if ckey=>5200 and ckey<=ckey_high then
 			goto Nav
 		end if
 	goto ScrEmployee ! /r
@@ -419,7 +419,7 @@ ScrDepartment: ! r:
 		resp$(respc+=1)=str$(tdet(j*2+3))
 	next j
 
-	fnCmdKey("&Add Department",4,0,0,"Add an additional department record.")
+	! fnCmdKey("&Add Department",4,0,0,"Add an additional department record.")
 	fnCmdKey("Check &History",10,0,0,"Review check information.")
 	fnCmdKey("&Delete Dept",9,0,0,"Deletes the department record.")
 	fnCmdKey("&Save Dept",1,1,0,"Save changes and returns to Employee.")
@@ -460,18 +460,20 @@ ScrDepartment: ! r:
 	end if
 	if eno<>ent then goto EmployeeChangeKey
 	rewrite #hDepartment,using Fdept,rec=	empDeptRec(whichDepartment)	: teno,tdn,gl$,mat tdt,mat tcd,tli,mat tdet
-	if ckey=4 then ! add new department
-		goto DepartmentAdd
-	else if ckey=1 then
+	! if ckey=4 then ! add new department
+	! 	goto DepartmentAdd
+	! else
+	if ckey=1 then
 		goto EmployeeEdit
 	else if ckey=10 then
 		fncheckfile(hact$:=str$(eno),hCheckIdx3,hCheckIdx1,hEmployee)
 		goto EmployeeEdit
-	else if ckey=>5200 and ckey<=5300 then
+	else if ckey=>5200 and ckey<=ckey_high then
 		goto Nav
 	end if
 goto EmployeeEditXit ! /r
-DepartmentAdd: ! r: new department
+def fn_departmentAdd(eno,&deptNew; ___,returnN)
+	ScrDepartmentAdd: !
 	fnTos
 	respc=0 : frac=0
 	mylen=25 : mypos=mylen+2
@@ -481,27 +483,30 @@ DepartmentAdd: ! r: new department
 	fnCmdKey("&Next",1,1,0,"Process department information.")
 	fnCmdKey("&Cancel",5,0,1,"Returns to maintenance screen.")
 	fnAcs(mat resp$,ckey)
-	if ckey=5 then goto ScrDepartment
-	deptNew=val(resp$(1))
-	ent$=cnvrt$('n 8',eno)&cnvrt$('n 3',deptNew) ! lpad$(str$(ent),8)
-	read #hDepartment,using Fdept,key=ent$: tempEno,tempDept nokey DoDepartmentAdd
-	! r: only happens if not nokey on department above
-		mat ml$(2)
-		ml$(1)="A record with this number already exists!"
-		ml$(2)="Select a different department number."
-		fnmsgbox(mat ml$,resp$,'',48)
-		goto DepartmentAdd
-	DoDepartmentAdd: ! /r
-	departmentAddMode=1
-	tdn=deptNew
-	gl$=""
-	mat tdt=(0)
-	mat tcd=(0)
-	tli=0
-	mat tdet=(0)
-	write #hDepartment,using Fdept:eno,tdn,gl$,mat tdt,mat tcd,tli,mat tdet
+	if ckey<>5 then
+		deptNew=val(resp$(1))
+		ent$=cnvrt$('n 8',eno)&cnvrt$('n 3',deptNew) ! lpad$(str$(ent),8)
+		read #hDepartment,using Fdept,key=ent$: tempEno,tempDept nokey DoDepartmentAdd
+		! r: only happens if not nokey on department above
+			mat ml$(2)
+			ml$(1)="This department number is already attached to this employee."
+			ml$(2)="Select a different department number."
+			fnmsgbox(mat ml$,resp$,'',48)
+			goto ScrDepartmentAdd
+		DoDepartmentAdd: ! /r
+		departmentAddMode=1
+		tdn=deptNew
+		gl$=""
+		mat tdt=(0)
+		mat tcd=(0)
+		tli=0
+		mat tdet=(0)
+		write #hDepartment,using Fdept:eno,tdn,gl$,mat tdt,mat tcd,tli,mat tdet
+		returnN=1
+	end if
+	fn_departmentAdd=returnN
+fnend
 
-goto ScrDepartment ! /r
 ScrIlW4: ! r:
 	fnTos : screen=scrIlW4
 	lc=respc=0 : col1_len=25 : col2_pos=1+col1_len+2
@@ -526,7 +531,7 @@ ScrIlW4: ! r:
 	else
 		fnEmployeeData$(eno,'IL W-4 Line 1 Allowances',resp$(rc_ilw4line1))
 		fnEmployeeData$(eno,'IL W-4 Line 2 Allowances',resp$(rc_ilw4line2))
-		if ckey=>5200 and ckey<=5300 then goto Nav
+		if ckey=>5200 and ckey<=ckey_high then goto Nav
 	end if
 goto ScrEmployee ! ScrIlW4 ! /r
 ScrAr4ec: ! r:
@@ -549,7 +554,7 @@ ScrAr4ec: ! r:
 		goto EmployeeEditXit
 	else
 		fnEmployeeData$(eno,'AR4EC Exemptions',resp$(rc_ilw4line1))
-		if ckey=>5200 and ckey<=5300 then goto Nav
+		if ckey=>5200 and ckey<=ckey_high then goto Nav
 	end if
 goto ScrEmployee ! ScrAr4ec ! /r
 
@@ -589,7 +594,7 @@ def fn_navButtons(&lc,&deptCount; ___,deptItem)
 		fnbutton_or_disabled(screen<>scrDept(deptItem),lc,dptPos,deptTxt$,5201+deptItem, deptToolTip$)
 		dptPos+=(len(deptTxt$)+2)
 	nex deptItem
-	fnbutton_or_disabled(screen<>scrDept(deptItem),lc,dptPos,deptTxt$,5201+deptItem, deptToolTip$)
+	fnbutton(lc,dptPos,'Add Department',ckey_DepartmentAdd, 'Add a new department')
 	
 	! fnlbl(36,10
 	fnlbl(28,105,' ') ! invisible space to keep a minimum size, otherwise tab buttons jump while you're using them
@@ -609,8 +614,16 @@ Nav: ! r:
 	else if ckey=>5201 and ckey<=5201+deptCount then
 		whichDepartment=ckey-5201
 		goto ScrDepartment
+	else if ckey=ckey_DepartmentAdd then
+		pause
+		if fn_departmentAdd(eno,deptNew) then
+			deptCount=fn_EmployeeDepartments(eno,mat empDept,mat empDeptRec)
+			ckey=5202
+			goto Nav
+		else
+			goto ScrEmployee
+		end if
 	else
-
 		pr 'unknown ckey=';ckey
 		pause
 		goto xit
@@ -771,14 +784,11 @@ def fn_setup
 	next j
 	fed_exemption_option$(22)="99"
 
-
-
 	dim code6$(4)*28
 	code6$(1)="0 - Subject to SS and Med WH"
 	code6$(2)="1 - SS only"
 	code6$(3)="2 - Medicare Only"
 	code6$(4)="9 - Neither SS nor Medicare"
-
 
 	dim statenames$(10)*8
 	open #1: "Name=[Q]\PRmstr\Company.h[cno]",internal,outIn,relative
@@ -798,7 +808,8 @@ def fn_setup
 		scrIlW4=1        :     ckey_ScrState=5200
 	end if
 	scrEmployee=2     :      ckey_scrEmployee=5201
-
+	scrDeptAdd=3      :      ckey_DepartmentAdd=5301
+	ckey_high=ckey_DepartmentAdd ! should be the highest of these universal ckeys
 	dim marriedOption$(0)*58
 	dim eicOption$(0)*29
 	dim w4yearOption$(0)*4
@@ -841,7 +852,6 @@ def fn_getEmpOptions(mat marriedOption$,mat eicOption$,mat w4yearOption$,mat pay
 
 fnend
 
-
 Finis: ! ! r:
 	close #hEmployee:
 	close #hEmployeeIdx2:
@@ -849,7 +859,6 @@ Finis: ! ! r:
 	fnEmployeeDataClose
 goto Xit ! /r
 Xit: fnXit
-
 
 DD: ! r:
 	key$=fn_dDkey$(eno)
