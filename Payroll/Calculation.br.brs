@@ -1135,9 +1135,9 @@ def fn_wh_missouri(taxableWagesCurrent,marital,fed_wh,allowances,payPeriodsPerYe
 			mo( 8,1)=7371 : mo( 8,2)=221  : mo( 8,3)=0.05
 			mo( 9,1)=8424 : mo( 9,2)=274  : mo( 9,3)=0.054
 			stStdDed_single              	=12200
-			stStdDed_spouseWorks        	=12200
-			stStdDed_filingSeperate     	=12200
-			stStdDed_spouseDoesNotWork 	=24400
+			stStdDed_spouseWorks         	=12200
+			stStdDed_filingSeperate      	=12200
+			stStdDed_spouseDoesNotWork  	=24400
 			stStdDed_headOfHousehold    	=18350
 			! /r
 		else if taxYear=>2021 then ! r:
