@@ -65,8 +65,8 @@ else
 	if cnv_ub then
 		if cnv_ub_french_settlement then
 			fn_ubmaster2customer_frenchset('[Q]\UBmstr\UBMaster.h[cno]','[Q]\UBmstr\Customer.h[cno]')
-		else if cnv_ub_merriam_woods then
-			fn_ubmaster2customer_merriam('[Q]\UBmstr\Customer.h[cno]','[Q]\UBmstr\Customer.h[cno]')
+		! else if cnv_ub_merriam_woods then
+		! 	fn_ubmaster2customer_merriam('[Q]\UBmstr\Customer.h[cno]','[Q]\UBmstr\Customer.h[cno]')
 		else if cnv_exeter then
 			fnCopy('[Q]\UBmstr\UBMaster.h[cno]','[Q]\UBmstr\Customer.h[cno]',2067)
 			fnFree('[Q]\UBmstr\UBMaster.h[cno]')
@@ -93,7 +93,7 @@ else
 		end if
 		if cnv_pr then
 			if ~exists("[Q]\PRmstr\dednames.h"&str$(cno)) then
-				if env$('client')="Merriam Woods" then pr_cnv_medicare_is_seperated=0
+				! if env$('client')="Merriam Woods" then pr_cnv_medicare_is_seperated=0
 				fnpr_conversion_department(cno, pr_cnv_medicare_is_seperated)
 				fnpr_conversion_add_missing(cno)
 			end if
@@ -142,8 +142,8 @@ def fn_is_converison_detection
 		is_french_settlement=1
 	else if ((env$('ACSDeveloper')<>'' and destination_company_number=1615) or (env$('client')="Exeter" and serial=31210)) then
 		is_exeter=1
-	else if ((env$('ACSDeveloper')<>'' and destination_company_number=2900) or (env$('client')="Merriam Woods" and serial=31702)) then
-		is_merriam_woods=1
+	! else if ((env$('ACSDeveloper')<>'' and destination_company_number=2900) or (env$('client')="Merriam Woods" and serial=31702)) then
+	! 	is_merriam_woods=1
 	else if ((env$('ACSDeveloper')<>'' and destination_company_number=4560) or (env$('client')="Payroll Done Right" and serial=30176)) then  ! env$('client')="West Accounting" or
 		is_payrollDoneRight=1
 	else if ((env$('ACSDeveloper')<>'' and destination_company_number=700) or (env$('client')="Campbell")) then
@@ -321,9 +321,9 @@ def fn_ubmaster2customer_frenchset(file_source$*256,file_destination$*256)
 	fnub_index_customer
 	fnStatus('UBMaster Conversion for French Settlement complete.')
 fnend
-def fn_ubmaster2customer_merriam(file_source$*256,file_destination$*256)
-	fnStatus('UBMaster Conversion for Merriam Woods complete.')
-fnend
+! def fn_ubmaster2customer_merriam(file_source$*256,file_destination$*256)
+! 	fnStatus('UBMaster Conversion for Merriam Woods complete.')
+! fnend
 def fn_ub_cust_route_from_acctno(cno)
 	open #h_customer=fnH: "Name=[Q]\UBmstr\Customer.h"&str$(cno)&",Shr",internal,outIn,relative
 	do

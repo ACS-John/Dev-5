@@ -911,9 +911,10 @@ fnend
 
 def fn_wh_arkansas(war_wages_taxable_current,payPeriodsPerYear,allowances,wga_is_married,wga_eicCode; ___,s1,s2,returnN)
 	if ~setup_arwh then ! r: setup AR Arkansas
-		dim ar(6,3) ! ar(7,3)
 		setup_arwh=1
-		! read #h_tables,using 'Form POS 31,102*PD 6.4',rec=5: mat ar ! Arkansas
+		dim ar(0,0)
+		if taxYear>=2020 then
+		mat ar(6,3)
 		! Page 1 of http://www.dfa.arkansas.gov/offices/incomeTax/withholding/Documents/whformula.pdf
 		! over                              Percentage
 		ar(1,1)=    0 : ar(1,2)=   0    :  ar(1,3)=0.009
@@ -923,13 +924,32 @@ def fn_wh_arkansas(war_wages_taxable_current,payPeriodsPerYear,allowances,wga_is
 		ar(5,1)=21000 : ar(5,2)= 649.5  :  ar(5,3)=0.059
 		ar(6,1)=35100 : ar(6,2)=1481.4  :  ar(6,3)=0.069
 		arStandardDeduction=2200
+		arPerExemption=20
+	else if taxYear=>2021 then
+		mat ar(12,3)
+		! Page 2 of https://www.dfa.arkansas.gov/images/uploads/incomeTaxOffice/whformula.pdf
+		! Over         : Minus Adjustment :    Percentage
+		ar(1 ,1)=    0 : ar(1 ,2)=   0    :  ar(1 ,3)=0.00
+		ar(2 ,1)= 4700 : ar(2 ,2)=  93.98 :  ar(2 ,3)=0.02
+		ar(3 ,1)= 9200 : ar(3 ,2)= 185.97 :  ar(3 ,3)=0.03
+		ar(4 ,1)=13900 : ar(4 ,2)= 241.57 :  ar(4 ,3)=0.034
+		ar(5 ,1)=22900 : ar(5 ,2)= 427.71 :  ar(5 ,3)=0.05
+		ar(6 ,1)=38500 : ar(6 ,2)= 774.2  :  ar(6 ,3)=0.059
+		ar(7 ,1)=82001 : ar(7 ,2)= 681.7  :  ar(7 ,3)=0.059
+		ar(8 ,1)=83001 : ar(8 ,2)= 581.7  :  ar(8 ,3)=0.059
+		ar(9 ,1)=84001 : ar(9 ,2)= 481.7  :  ar(9 ,3)=0.059
+		ar(10,1)=85301 : ar(10,2)= 381.7  :  ar(10,3)=0.059
+		ar(11,1)=86401 : ar(11,2)= 281.7  :  ar(11,3)=0.059
+		ar(12,1)=87501 : ar(12,2)= 241.7  :  ar(12,3)=0.059
+		arStandardDeduction=2200
+		arPerExemption=29
 	end if ! /r
 	t1=round(war_wages_taxable_current*payPeriodsPerYear,2)
 	! t2=2000
 	t3=t1-arStandardDeduction
 	tableRow=fn_table_line(mat ar,t3)
 	s1=round(ar(tableRow,2)+(t3-ar(tableRow,1))*ar(tableRow,3),2)
-	s2=stAllowances*20
+	s2=stAllowances*arPerExemption
 	returnN=round((s1-s2)/payPeriodsPerYear,2)
 	if returnN<.1 then returnN=0
 	fn_wh_arkansas=returnN

@@ -155,13 +155,17 @@ COMPANY_ADD: ! r:
 				fnchain("S:\acsCL\Conversion\GLBLD-CNV")
 			end if
 		end if  ! /r
-		fnchain("S:\acs"&env$('cursys')&"\Company")
+		if exists ('S:\'&fnSystemNameFromAbbr$(env$('cursys'))&'\Company.br') then
+			fnchain('S:\'&fnSystemNameFromAbbr$(env$('cursys'))&'\Company.br')
+		else
+			fnchain("S:\acs"&env$('cursys')&"\Company")
+		end if
 	else if env$('cursys')='UB' then
-		fnchain(txt$="S:\Core\AddCNo")
+		fnchain("S:\Core\AddCNo")
 	else if exists('S:\'&fnSystemNameFromAbbr$(env$('cursys'))&'\Company.br') then
 		fnchain('S:\'&fnSystemNameFromAbbr$(env$('cursys'))&'\Company.br')
 	else
-		fnchain(txt$="S:\acs"&env$('cursys')&"\AddCNo")
+		fnchain("S:\acs"&env$('cursys')&"\AddCNo")
 	end if
 ! /r
 Xit: fnXit
@@ -215,7 +219,11 @@ fnend
 def fn_companyConfigure(scno)
 	setenv("xit_override","")
 	setenv("xit_override","S:\Core\Programs\Select Company")
-	fnchain('S:\acs'&env$('cursys')&'\Company.br')
+	if exists('S:\'&fnSystemNameFromAbbr$(env$('cursys'))&'\Company.br') then
+		fnchain('S:\'&fnSystemNameFromAbbr$(env$('cursys'))&'\Company.br')
+	else
+		fnchain('S:\acs'&env$('cursys')&'\Company.br')
+	end if
 fnend
 def fn_companyCopy(scno)
 	dim dcnam$*40
@@ -268,7 +276,7 @@ def fn_setup
 		on error goto Ertn
 		!
 		dim filename$(999)*40
-		dim resp$(10)*50,txt$*40 ! ,temp$*256
+		dim resp$(10)*50 ! ,temp$*256
 		dim mg$(3)*128
 		! NOTE: Regardless of which ACS System:
 		!  * Add Company program must be called acs[cursys]\ADDCNO.br

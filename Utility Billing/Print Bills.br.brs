@@ -65,15 +65,15 @@ PrintBill_Basic: ! r: set prefrences for clients
 		enable_service_from=1
 		enable_service_to=1
 		include_zero_bal=include_credit_bal=1
-	else if env$('client')='Merriam Woods' then ! completed 5/5/16
-		message1_line_count=2
-		enable_service_from=1
-		enable_service_to=1
-		pa_enabled=1
-		pa_orientation$='Landscape'
-		enable_BulkSort=1
-		include_zero_bal=include_credit_bal=1
-		enable_customMargins=1 ! added 2/17/2020
+	! else if env$('client')='Merriam Woods' then ! completed 5/5/16
+	! 	message1_line_count=2
+	! 	enable_service_from=1
+	! 	enable_service_to=1
+	! 	pa_enabled=1
+	! 	pa_orientation$='Landscape'
+	! 	enable_BulkSort=1
+	! 	include_zero_bal=include_credit_bal=1
+	! 	enable_customMargins=1 ! added 2/17/2020
 	else if env$('client')='Omaha' then ! 8/10/2016
 		message1_line_count=3
 		message1_max_len=30
@@ -439,8 +439,8 @@ MainLoop: ! r: main loop
 		fn_print_bill_raymond(z$,mat mg$, "Mailing Address: P O Box 87")
 	else if env$('client')='Cerro Gordo V' then 
 		fn_print_bill_cerro(z$,mat mg$,mat penalty$,serviceFromMmddYy,serviceToMmddYy)
-	else if env$('client')='Merriam Woods' then 
-		fn_print_bill_merriam(z$,mat mg$,serviceFromMmddYy,serviceToMmddYy)
+	! else if env$('client')='Merriam Woods' then 
+	! 	fn_print_bill_merriam(z$,mat mg$,serviceFromMmddYy,serviceToMmddYy)
 	else if env$('client')='Blucksberg' then 
 		fn_print_bill_blucksberg(z$,mat mg$,billing_date_prior,serviceFromMmddYy,serviceToMmddYy)
 	else if env$('client')='Omaha' then 
@@ -640,7 +640,7 @@ def fn_override_service_date(&serviceFrom,&serviceTo,serviceFromOverride,service
 	if serviceToOverride   then serviceTo=serviceToOverride
 fnend 
 def fn_pay_after_amt(; returnN)
-	if bal<=0 then returnN=round(bal,2) else returnN=bal+g(10) ! Penalties at Merriam Woods are flat
+	if bal<=0 then returnN=round(bal,2) else returnN=bal+g(10)
 	fn_pay_after_amt=returnN
 fnend
 
@@ -1185,213 +1185,213 @@ def fn_print_bill_cerro(z$,mat mg$,mat penalty$,serviceFrom,serviceTo)
 	if int(bills/3)=bills/3 then pr #255: newpage ! BOTTOM OF PAGE
 	! /r
 fnend 
-def fn_print_bill_merriam(z$,mat mg$,serviceFrom,serviceTo) ! inherrits all those local customer variables too
-	if ~setup_merriam then ! r:
-		setup_merriam=1
-		lyne=3
-		fn_getCompanyAddr(mat at$)
-		! r: read custom margins
-		dim ub4upBill_data$(4)
-		fnreg_read('ub4upBill Margin Top 1' ,ub4upBill_data$(1),  '5') ! bills 1 and 2
-		fnreg_read('ub4upBill Margin Top 2' ,ub4upBill_data$(2),'113') ! bills 3 and 4      ymargin was 108
-		fnreg_read('ub4upBill Margin Left 1',ub4upBill_data$(3),  '0') ! bills 1 and 3
-		fnreg_read('ub4upBill Margin Left 2',ub4upBill_data$(4),'142') ! bills 2 and 4      xmargin was 137
-		bill1y=bill2y=val(ub4upBill_data$(1))
-		bill3y=bill4y=val(ub4upBill_data$(2))
-		bill1x=bill3x=val(ub4upBill_data$(3))
-		bill2x=bill4x=val(ub4upBill_data$(4))
-		! /r
-	end if  ! /r
-	pb=bal-g(11)
-	net_bill=g(1)+g(2)+g(3)+g(4)+g(5)+g(6)+g(7)+g(8)+g(9)
-	fn_override_service_date(serviceFrom,serviceTo,serviceFromMmddYy,serviceToMmddYy)
-	! -- Standard 4 Per Page Even Perforated Card Stock Bills
-	billOnPageCount+=1
-	if billOnPageCount=1 then xmargin=bill1x : ymargin=bill1y                      !   0   5
-	if billOnPageCount=2 then xmargin=bill2x : ymargin=bill2y                      ! 142   5  
-	if billOnPageCount=3 then xmargin=bill3x : ymargin=bill3y                      !   0 113
-	if billOnPageCount=4 then xmargin=bill4x : ymargin=bill4y : billOnPageCount=0  ! 142 113
-	! move page down 1/2 inch
-
-
-	if billOnPageCount=1 then ! it's about to pr the first bill on the page
-		fnpa_line(70,1,0,1100) ! line down the middle of the page
-		fnpa_line(140,1,0,1100) ! line down the middle of the page
-		fnpa_line(215,1,0,1100) ! line down the middle of the page
-		fnpa_line(1,108,800,0) ! line across the middle of the page
-	!   fnpa_line(pl_left_pos,pl_top_pos,pl_width,pl_height,  pl_hollow) ! line across the middle of the page
-	end if 
-	fnpa_line(xmargin+5,ymargin+2,57,lyne*3+3,1)
-	fnpa_fontbold(1)
-	fnpa_fontsize(12)
-	fnpa_font
-	fnpa_txt(at$(1)(1:20),xmargin+8,lyne*1-1+ymargin)
-	fnpa_font('Lucida Console')
-	fnpa_fontsize
-	fnpa_fontbold
-	fnpa_txt(at$(2),xmargin+6,lyne*2+1+ymargin-.2)
-	fnpa_txt(at$(3),xmargin+6,lyne*3+1+ymargin)
-	fnpa_txt(trim$(z$)&'  '&bulk$,xmargin+4,lyne*5+ymargin)
-	fnpa_txt(e$(1),xmargin+4,lyne*6+ymargin)
-	fnpa_txt('From: '&cnvrt$("PIC(ZZ/ZZ/ZZ)",serviceFrom)&'  To: '&cnvrt$("PIC(ZZ/ZZ/ZZ)",serviceTo),xmargin+2,lyne*7+ymargin)
-	fnpa_txt("Due upon receipt",xmargin+2,lyne*8+ymargin)
-	fnpa_txt(e$(2),xmargin+2,lyne*9+ymargin)
-	fnpa_txt('Billing Date: '&cnvrt$("PIC(ZZ/ZZ/ZZ)",d1),xmargin+2,lyne*11+ymargin)
-	pr #20: 'Call Print.AddLine('&str$(xmargin+1)&','&str$(lyne*12+1+ymargin)&',62,0)'
-	fnpa_fontsize(7)
-	pr #20: 'Call Print.AddText("Current",'&str$(xmargin+12+5)&','&str$(lyne*13+ymargin)&')'
-	pr #20: 'Call Print.AddText("Usage",'&str$(xmargin+35+5)&','&str$(lyne*13+ymargin)&')'
-	pr #20: 'Call Print.AddText("Charge",'&str$(xmargin+52+5)&','&str$(lyne*13+ymargin)&')'
-	
-	! PRINTGRID: !
-	meter=14 ! 02114   meter=20 ! lyne=2 ! 3 ! 2.15 !  started at 20 and 2.1
-	fnpa_fontsize ! line_top(1)
-	if g(1)<>0 then 
-		pr #20: 'Call Print.AddText("WTR",'&str$(xmargin+1)&','&str$(lyne*(meter+=1)+ymargin)&')'
-		pr #20: 'Call Print.AddText("'&fnformnumb$(d(1),0,9)&'",'&str$(xmargin+6)&','&str$(lyne*meter+ymargin)&')'
-		pr #20: 'Call Print.AddText("'&fnformnumb$(d(3),0,7)&'",'&str$(xmargin+24)&','&str$(lyne*meter+ymargin)&')'
-		pr #20: 'Call Print.AddText("'&fnformnumb$(g(1),2,9)&'",'&str$(xmargin+43)&','&str$(lyne*meter+ymargin)&')'
-		pr #20: 'Call Print.AddText("WTR",'&str$(xmargin+91)&','&str$(lyne*(meter)+ymargin)&')'
-		pr #20: 'Call Print.AddText("'&fnformnumb$(g(1),2,9)&'",'&str$(xmargin+91+8)&','&str$(lyne*meter+ymargin)&')'
-	end if  ! g(1)<>0
-	if g(2)<>0 then 
-		pr #20: 'Call Print.AddText("SWR",'&str$(xmargin+1)&','&str$(lyne*(meter+=1)+ymargin)&')'
-		pr #20: 'Call Print.AddText("'&fnformnumb$(g(2),2,9)&'",'&str$(xmargin+43)&','&str$(lyne*meter+ymargin)&')'
-		pr #20: 'Call Print.AddText("SWR",'&str$(xmargin+91)&','&str$(lyne*(meter)+ymargin)&')'
-		pr #20: 'Call Print.AddText("'&fnformnumb$(g(2),2,9)&'",'&str$(xmargin+91+8)&','&str$(lyne*meter+ymargin)&')'
-	end if  ! g(2)<>0
-	if g(3)<>0 or d(7)<>0 then 
-		pr #20: 'Call Print.AddText("EL",'&str$(xmargin+1)&','&str$(lyne*(meter+=1)+ymargin)&')'
-		pr #20: 'Call Print.AddText("'&fnformnumb$(d(5),0,9)&'",'&str$(xmargin+6)&','&str$(lyne*meter+ymargin)&')'
-		pr #20: 'Call Print.AddText("'&fnformnumb$(d(7),0,9)&'",'&str$(xmargin+25)&','&str$(lyne*meter+ymargin)&')'
-		pr #20: 'Call Print.AddText("'&fnformnumb$(g(3),2,9)&'",'&str$(xmargin+43)&','&str$(lyne*meter+ymargin)&')'
-		pr #20: 'Call Print.AddText("EL",'&str$(xmargin+91)&','&str$(lyne*(meter)+ymargin)&')'
-		pr #20: 'Call Print.AddText("'&fnformnumb$(g(3),2,9)&'",'&str$(xmargin+91+8)&','&str$(lyne*meter+ymargin)&')'
-	end if  ! g(3)<>0 or d(7)<>0
-	s4code$="GAS"
-	if g(4)<>0 then 
-		pr #20: 'Call Print.AddText("'&s4code$&'",'&str$(xmargin+1)&','&str$(lyne*(meter+=1)+ymargin)&')'
-		fnpa_txt(fnformnumb$(d(9),0,9),xmargin+6,lyne*meter+ymargin)
-		pr #20: 'Call Print.AddText("'&fnformnumb$(d(11),0,9)&'",'&str$(xmargin+25)&','&str$(lyne*meter+ymargin)&')'
-		pr #20: 'Call Print.AddText("'&fnformnumb$(g(4),2,9)&'",'&str$(xmargin+43)&','&str$(lyne*meter+ymargin)&')'
-		pr #20: 'Call Print.AddText("'&s4code$&'",'&str$(xmargin+91)&','&str$(lyne*(meter)+ymargin)&')'
-		pr #20: 'Call Print.AddText("'&fnformnumb$(g(4),2,9)&'",'&str$(xmargin+91+8)&','&str$(lyne*meter+ymargin)&')'
-	end if  ! g(4)<>0
-	if g(5)<>0 then 
-		pr #20: 'Call Print.AddText("Trash",'&str$(xmargin+1)&','&str$(lyne*(meter+=1)+ymargin)&')' ! "Trash was "SL"
-		pr #20: 'Call Print.AddText("'&fnformnumb$(g(5),2,9)&'",'&str$(xmargin+43)&','&str$(lyne*meter+ymargin)&')'
-		pr #20: 'Call Print.AddText("Trash",'&str$(xmargin+91)&','&str$(lyne*(meter)+ymargin)&')' ! "Trash was "SL"
-		pr #20: 'Call Print.AddText("'&fnformnumb$(g(5),2,9)&'",'&str$(xmargin+91+8)&','&str$(lyne*meter+ymargin)&')'
-	end if  ! g(5)<>0
-	if g(6)<>0 then 
-		pr #20: 'Call Print.AddText("DEM",'&str$(xmargin+1)&','&str$(lyne*(meter+=1)+ymargin)&')'
-		pr #20: 'Call Print.AddText("'&fnformnumb$(g(6),2,9)&'",'&str$(xmargin+43)&','&str$(lyne*meter+ymargin)&')'
-		pr #20: 'Call Print.AddText("DEM",'&str$(xmargin+91)&','&str$(lyne*(meter)+ymargin)&')'
-		pr #20: 'Call Print.AddText("'&fnformnumb$(g(6),2,9)&'",'&str$(xmargin+91+8)&','&str$(lyne*meter+ymargin)&')'
-	end if  ! g(6)<>0
-	if g(7)<>0 then 
-		pr #20: 'Call Print.AddText("EL TAX",'&str$(xmargin+1)&','&str$(lyne*(meter+=1)+ymargin)&')'
-		pr #20: 'Call Print.AddText("'&fnformnumb$(g(7),2,9)&'",'&str$(xmargin+43)&','&str$(lyne*meter+ymargin)&')'
-		pr #20: 'Call Print.AddText("EL TAX",'&str$(xmargin+91)&','&str$(lyne*(meter)+ymargin)&')'
-		pr #20: 'Call Print.AddText("'&fnformnumb$(g(7),2,9)&'",'&str$(xmargin+91+8)&','&str$(lyne*meter+ymargin)&')'
-	end if  ! g(7)=0
-	if g(8)<>0 then 
-		pr #20: 'Call Print.AddText("Other",'&str$(xmargin+1)&','&str$(lyne*(meter+=1)+ymargin)&')'
-		pr #20: 'Call Print.AddText("'&fnformnumb$(g(8),2,9)&'",'&str$(xmargin+43)&','&str$(lyne*meter+ymargin)&')'
-		pr #20: 'Call Print.AddText("Other",'&str$(xmargin+01)&','&str$(lyne*(meter)+ymargin)&')'
-		pr #20: 'Call Print.AddText("'&fnformnumb$(g(8),2,9)&'",'&str$(xmargin+91+8)&','&str$(lyne*meter+ymargin)&')'
-	end if  ! g(8)<>0
-	if g(9)<>0 then 
-		pr #20: 'Call Print.AddText("TAX",'&str$(xmargin+1)&','&str$(lyne*(meter+=1)+ymargin)&')'
-		pr #20: 'Call Print.AddText("'&fnformnumb$(g(9),2,9)&'",'&str$(xmargin+43)&','&str$(lyne*meter+ymargin)&')'
-		pr #20: 'Call Print.AddText("TAX",'&str$(xmargin+92)&','&str$(lyne*(meter)+ymargin)&')'
-		pr #20: 'Call Print.AddText("'&fnformnumb$(g(9),2,9)&'",'&str$(xmargin+91+8)&','&str$(lyne*meter+ymargin)&')'
-	end if  ! g(9)<>0
-	pr #20: 'Call Print.AddLine('&str$(xmargin+49)&','&str$(lyne*(meter+=1)+ymargin+2)&',15,0)'
-	pr #20: 'Call Print.AddLine('&str$(xmargin+91+14)&','&str$(lyne*(meter)+ymargin+2)&',15,0)'
-	pr #20: 'Call Print.AddText("   Net Bill",'&str$(xmargin+1)&','&str$(lyne*(meter+=.25)+ymargin+2)&')'
-	pr #20: 'Call Print.AddText("Net",'&str$(xmargin+92)&','&str$(lyne*(meter)+ymargin+2)&')'
-	pr #20: 'Call Print.AddText("'&fnformnumb$(net_bill,2,9)&'",'&str$(xmargin+43)&','&str$(lyne*meter+ymargin+2)&')'
-	pr #20: 'Call Print.AddText("'&fnformnumb$(net_bill,2,9)&'",'&str$(xmargin+91+8)&','&str$(lyne*meter+ymargin+2)&')'
-	if pb then 
-		pr #20: 'Call Print.AddText("Previous Balance",'&str$(xmargin+1)&','&str$(lyne*(meter+=1)+ymargin+2)&')'
-		pr #20: 'Call Print.AddText("'&fnformnumb$(pb,2,9)&'",'&str$(xmargin+43)&','&str$(lyne*meter+ymargin+2)&')'
-		pr #20: 'Call Print.AddText("Prior",'&str$(xmargin+91)&','&str$(lyne*(meter)+ymargin+2)&')'
-		pr #20: 'Call Print.AddText("'&fnformnumb$(pb,2,9)&'",'&str$(xmargin+91+8)&','&str$(lyne*meter+ymargin+2)&')'
-	end if  ! pb
-	fnpa_fontsize : lyne=3
-	
-	if estimatedate=d1 then fnpa_txt("Bill estimated!",xmargin+1,lyne*21+ymargin)
-	fnpa_line(xmargin+1,lyne*23+1+ymargin+10,63,0)
-	if budget>0 then 
-		pr #20: 'Call Print.AddText("Actual Balance",'&str$(xmargin+1)&','&str$(lyne*24+ymargin+10)&')'
-		pr #20: 'Call Print.AddText("'&fnformnumb$(bal,2,9)&'",'&str$(xmargin+37)&','&str$(lyne*24+ymargin+10)&')' ! 37 was 42
-		pr #20: 'Call Print.AddText("Budget Amount",'&str$(xmargin+1)&','&str$(lyne*25+ymargin+10)&')'
-		pr #20: 'Call Print.AddText("'&fnformnumb$(budget+pbud,2,9)&'",'&str$(xmargin+37)&','&str$(lyne*25+ymargin+10)&')' ! 37 was 42
-	else 
-		pr #20: 'Call Print.AddText("Pay By '&cnvrt$("PIC(ZZ/ZZ/ZZ)",d4)&':",'&str$(xmargin+1)&','&str$(lyne*24+ymargin+10)&')'
-		pr #20: 'Call Print.AddText("'&fnformnumb$(bal,2,9)&'",'&str$(xmargin+37)&','&str$(lyne*24+ymargin+10)&')' ! 37 was 42
-		pr #20: 'Call Print.AddText("Pay After '&cnvrt$("PIC(ZZ/ZZ/ZZ)",d4)&':",'&str$(xmargin+1)&','&str$(lyne*25+ymargin+10)&')'
-		pr #20: 'Call Print.AddText("'&fnformnumb$(fn_pay_after_amt,2,9)&'",'&str$(xmargin+37)&','&str$(lyne*25+ymargin+10)&')' ! 37 was 42
-	end if 
-	fnpa_line(xmargin+1,lyne*26+1+ymargin+10,63,0)
-	! pr #20: 'Call Print.AddLine('&str$(xmargin+1)&','&str$(lyne*26+1+ymargin+10)&',63,0)'
-	! fnpa_fontsize(7)
-	fnpa_line(xmargin+97,ymargin+0,29, lyne*5+2,1)
-	fnpa_line(xmargin+90,ymargin+0   , 7,0)
-	fnpa_line(xmargin+90,ymargin+2.8 , 7,0)
-	fnpa_line(xmargin+90,ymargin+5.6 , 7,0)
-	fnpa_line(xmargin+90,ymargin+8.4 , 7,0)
-	fnpa_line(xmargin+90,ymargin+11.2, 7,0)
-	fnpa_line(xmargin+90,ymargin+14  , 7,0)
-	fnpa_line(xmargin+90,ymargin+17  , 7,0)
-	! pr #20: 'Call Print.AddLine('&str$(xmargin+97)&','&str$(ymargin+0)&',29,'&str$(lyne*5+2)&',TRUE)'
-	! pr #20: 'Call Print.AddLine('&str$(xmargin+90)&','&str$(ymargin+0)&',7,0)'
-	! pr #20: 'Call Print.AddLine('&str$(xmargin+90)&','&str$(ymargin+2.8)&',7,0)'
-	! pr #20: 'Call Print.AddLine('&str$(xmargin+90)&','&str$(ymargin+5.6)&',7,0)'
-	! pr #20: 'Call Print.AddLine('&str$(xmargin+90)&','&str$(ymargin+8.4)&',7,0)'
-	! pr #20: 'Call Print.AddLine('&str$(xmargin+90)&','&str$(ymargin+11.2)&',7,0)'
-	! pr #20: 'Call Print.AddLine('&str$(xmargin+90)&','&str$(ymargin+14)&',7,0)'
-	! pr #20: 'Call Print.AddLine('&str$(xmargin+90)&','&str$(ymargin+17)&',7,0)'
-	fnpa_fontsize(9)
-	pr #20: 'Call Print.AddText("Please return this",'&str$(xmargin+68+8)&','&str$(lyne*7+ymargin)&')'
-	pr #20: 'Call Print.AddText("side with payment to:",'&str$(xmargin+68+8)&','&str$(lyne*8+ymargin)&')'
-	pr #20: 'Call Print.AddText("'&env$('cnam')(1:27)&'",'&str$(xmargin+68+8)&','&str$(lyne*9+ymargin)&')'
-	fnpa_fontsize
-	pr #20: 'Call Print.AddText("Pay By '&cnvrt$("PIC(ZZ/ZZ/ZZ)",d4)&':",'&str$(xmargin+68+8)&','&str$(lyne*11+ymargin)&')'
-	if budget>0 then 
-		pr #20: 'Call Print.AddText("'&fnformnumb$(budget+pbud,2,9)&'",'&str$(xmargin+100+8)&','&str$(lyne*11+ymargin)&')'
-	else 
-		pr #20: 'Call Print.AddText("'&fnformnumb$(bal,2,9)&'",'&str$(xmargin+100+8)&','&str$(lyne*11+ymargin)&')'
-		pr #20: 'Call Print.AddText("After  '&cnvrt$("PIC(ZZ/ZZ/ZZ)",d4)&':",'&str$(xmargin+68+8)&','&str$(lyne*12+ymargin)&')'
-		pr #20: 'Call Print.AddText("'&fnformnumb$(fn_pay_after_amt,2,9)&'",'&str$(xmargin+100+8)&','&str$(lyne*12+ymargin)&')'
-	end if 
-	fnpa_fontsize(9)
-	addy=11.5
-	fnpa_txt(mg$(1),xmargin+4,(addy+=1)*lyne+ymargin+30)
-	fnpa_txt(mg$(2),xmargin+4,(addy+=1)*lyne+ymargin+30)
-	addy+=1
-	fnpa_fontsize
-	if df$="Y" then 
-		fnpa_txt("Drafted",xmargin+1,lyne*(addy+=1)+ymargin)
-	end if 
-	if c4>0 then 
-		fnpa_txt("Final Bill",xmargin+1,lyne*(addy+=1)+ymargin)
-	end if 
-	pr #20: 'Call Print.AddText("#'&trim$(z$)&' '&bulk$&'",'&str$(xmargin+68+8+30)&','&str$(lyne*(addy+=1)+ymargin+20+3)&')'
-	fnpa_txt(trim$(pe$(1)),xmargin+68+8,lyne*(addy+=1)+ymargin+23)
-	fnpa_txt(trim$(pe$(2)),xmargin+68+8,lyne*(addy+=1)+ymargin+23)
-	fnpa_txt(trim$(pe$(3)),xmargin+68+8,lyne*(addy+=1)+ymargin+23)
-	fnpa_txt(trim$(pe$(4)),xmargin+68+8,lyne*(addy+=1)+ymargin+23)
-	pr #20: 'Call Print.AddText("Return Service Requested.",'&str$(xmargin+68+8)&','&str$(lyne*(addy+=2)+ymargin+20+3)&')'
-	if billOnPageCount=1 then checkx=1.375 : checky=3.6875
-	if billOnPageCount=2 then checkx=6.75 : checky=3.6875
-	if billOnPageCount=3 then checkx=1.375 : checky=7.9375
-	if billOnPageCount=0 then checkx=6.75 : checky=7.9375
-	if billOnPageCount=0 then 
-		fnpa_newpage
-	end if 
-fnend 
+! def fn_print_bill_merriam(z$,mat mg$,serviceFrom,serviceTo) ! inherrits all those local customer variables too
+! 	if ~setup_merriam then ! r:
+! 		setup_merriam=1
+! 		lyne=3
+! 		fn_getCompanyAddr(mat at$)
+! 		! r: read custom margins
+! 		dim ub4upBill_data$(4)
+! 		fnreg_read('ub4upBill Margin Top 1' ,ub4upBill_data$(1),  '5') ! bills 1 and 2
+! 		fnreg_read('ub4upBill Margin Top 2' ,ub4upBill_data$(2),'113') ! bills 3 and 4      ymargin was 108
+! 		fnreg_read('ub4upBill Margin Left 1',ub4upBill_data$(3),  '0') ! bills 1 and 3
+! 		fnreg_read('ub4upBill Margin Left 2',ub4upBill_data$(4),'142') ! bills 2 and 4      xmargin was 137
+! 		bill1y=bill2y=val(ub4upBill_data$(1))
+! 		bill3y=bill4y=val(ub4upBill_data$(2))
+! 		bill1x=bill3x=val(ub4upBill_data$(3))
+! 		bill2x=bill4x=val(ub4upBill_data$(4))
+! 		! /r
+! 	end if  ! /r
+! 	pb=bal-g(11)
+! 	net_bill=g(1)+g(2)+g(3)+g(4)+g(5)+g(6)+g(7)+g(8)+g(9)
+! 	fn_override_service_date(serviceFrom,serviceTo,serviceFromMmddYy,serviceToMmddYy)
+! 	! -- Standard 4 Per Page Even Perforated Card Stock Bills
+! 	billOnPageCount+=1
+! 	if billOnPageCount=1 then xmargin=bill1x : ymargin=bill1y                      !   0   5
+! 	if billOnPageCount=2 then xmargin=bill2x : ymargin=bill2y                      ! 142   5  
+! 	if billOnPageCount=3 then xmargin=bill3x : ymargin=bill3y                      !   0 113
+! 	if billOnPageCount=4 then xmargin=bill4x : ymargin=bill4y : billOnPageCount=0  ! 142 113
+! 	! move page down 1/2 inch
+! 
+! 
+! 	if billOnPageCount=1 then ! it's about to pr the first bill on the page
+! 		fnpa_line(70,1,0,1100) ! line down the middle of the page
+! 		fnpa_line(140,1,0,1100) ! line down the middle of the page
+! 		fnpa_line(215,1,0,1100) ! line down the middle of the page
+! 		fnpa_line(1,108,800,0) ! line across the middle of the page
+! 	!   fnpa_line(pl_left_pos,pl_top_pos,pl_width,pl_height,  pl_hollow) ! line across the middle of the page
+! 	end if 
+! 	fnpa_line(xmargin+5,ymargin+2,57,lyne*3+3,1)
+! 	fnpa_fontbold(1)
+! 	fnpa_fontsize(12)
+! 	fnpa_font
+! 	fnpa_txt(at$(1)(1:20),xmargin+8,lyne*1-1+ymargin)
+! 	fnpa_font('Lucida Console')
+! 	fnpa_fontsize
+! 	fnpa_fontbold
+! 	fnpa_txt(at$(2),xmargin+6,lyne*2+1+ymargin-.2)
+! 	fnpa_txt(at$(3),xmargin+6,lyne*3+1+ymargin)
+! 	fnpa_txt(trim$(z$)&'  '&bulk$,xmargin+4,lyne*5+ymargin)
+! 	fnpa_txt(e$(1),xmargin+4,lyne*6+ymargin)
+! 	fnpa_txt('From: '&cnvrt$("PIC(ZZ/ZZ/ZZ)",serviceFrom)&'  To: '&cnvrt$("PIC(ZZ/ZZ/ZZ)",serviceTo),xmargin+2,lyne*7+ymargin)
+! 	fnpa_txt("Due upon receipt",xmargin+2,lyne*8+ymargin)
+! 	fnpa_txt(e$(2),xmargin+2,lyne*9+ymargin)
+! 	fnpa_txt('Billing Date: '&cnvrt$("PIC(ZZ/ZZ/ZZ)",d1),xmargin+2,lyne*11+ymargin)
+! 	pr #20: 'Call Print.AddLine('&str$(xmargin+1)&','&str$(lyne*12+1+ymargin)&',62,0)'
+! 	fnpa_fontsize(7)
+! 	pr #20: 'Call Print.AddText("Current",'&str$(xmargin+12+5)&','&str$(lyne*13+ymargin)&')'
+! 	pr #20: 'Call Print.AddText("Usage",'&str$(xmargin+35+5)&','&str$(lyne*13+ymargin)&')'
+! 	pr #20: 'Call Print.AddText("Charge",'&str$(xmargin+52+5)&','&str$(lyne*13+ymargin)&')'
+! 	
+! 	! PRINTGRID: !
+! 	meter=14 ! 02114   meter=20 ! lyne=2 ! 3 ! 2.15 !  started at 20 and 2.1
+! 	fnpa_fontsize ! line_top(1)
+! 	if g(1)<>0 then 
+! 		pr #20: 'Call Print.AddText("WTR",'&str$(xmargin+1)&','&str$(lyne*(meter+=1)+ymargin)&')'
+! 		pr #20: 'Call Print.AddText("'&fnformnumb$(d(1),0,9)&'",'&str$(xmargin+6)&','&str$(lyne*meter+ymargin)&')'
+! 		pr #20: 'Call Print.AddText("'&fnformnumb$(d(3),0,7)&'",'&str$(xmargin+24)&','&str$(lyne*meter+ymargin)&')'
+! 		pr #20: 'Call Print.AddText("'&fnformnumb$(g(1),2,9)&'",'&str$(xmargin+43)&','&str$(lyne*meter+ymargin)&')'
+! 		pr #20: 'Call Print.AddText("WTR",'&str$(xmargin+91)&','&str$(lyne*(meter)+ymargin)&')'
+! 		pr #20: 'Call Print.AddText("'&fnformnumb$(g(1),2,9)&'",'&str$(xmargin+91+8)&','&str$(lyne*meter+ymargin)&')'
+! 	end if  ! g(1)<>0
+! 	if g(2)<>0 then 
+! 		pr #20: 'Call Print.AddText("SWR",'&str$(xmargin+1)&','&str$(lyne*(meter+=1)+ymargin)&')'
+! 		pr #20: 'Call Print.AddText("'&fnformnumb$(g(2),2,9)&'",'&str$(xmargin+43)&','&str$(lyne*meter+ymargin)&')'
+! 		pr #20: 'Call Print.AddText("SWR",'&str$(xmargin+91)&','&str$(lyne*(meter)+ymargin)&')'
+! 		pr #20: 'Call Print.AddText("'&fnformnumb$(g(2),2,9)&'",'&str$(xmargin+91+8)&','&str$(lyne*meter+ymargin)&')'
+! 	end if  ! g(2)<>0
+! 	if g(3)<>0 or d(7)<>0 then 
+! 		pr #20: 'Call Print.AddText("EL",'&str$(xmargin+1)&','&str$(lyne*(meter+=1)+ymargin)&')'
+! 		pr #20: 'Call Print.AddText("'&fnformnumb$(d(5),0,9)&'",'&str$(xmargin+6)&','&str$(lyne*meter+ymargin)&')'
+! 		pr #20: 'Call Print.AddText("'&fnformnumb$(d(7),0,9)&'",'&str$(xmargin+25)&','&str$(lyne*meter+ymargin)&')'
+! 		pr #20: 'Call Print.AddText("'&fnformnumb$(g(3),2,9)&'",'&str$(xmargin+43)&','&str$(lyne*meter+ymargin)&')'
+! 		pr #20: 'Call Print.AddText("EL",'&str$(xmargin+91)&','&str$(lyne*(meter)+ymargin)&')'
+! 		pr #20: 'Call Print.AddText("'&fnformnumb$(g(3),2,9)&'",'&str$(xmargin+91+8)&','&str$(lyne*meter+ymargin)&')'
+! 	end if  ! g(3)<>0 or d(7)<>0
+! 	s4code$="GAS"
+! 	if g(4)<>0 then 
+! 		pr #20: 'Call Print.AddText("'&s4code$&'",'&str$(xmargin+1)&','&str$(lyne*(meter+=1)+ymargin)&')'
+! 		fnpa_txt(fnformnumb$(d(9),0,9),xmargin+6,lyne*meter+ymargin)
+! 		pr #20: 'Call Print.AddText("'&fnformnumb$(d(11),0,9)&'",'&str$(xmargin+25)&','&str$(lyne*meter+ymargin)&')'
+! 		pr #20: 'Call Print.AddText("'&fnformnumb$(g(4),2,9)&'",'&str$(xmargin+43)&','&str$(lyne*meter+ymargin)&')'
+! 		pr #20: 'Call Print.AddText("'&s4code$&'",'&str$(xmargin+91)&','&str$(lyne*(meter)+ymargin)&')'
+! 		pr #20: 'Call Print.AddText("'&fnformnumb$(g(4),2,9)&'",'&str$(xmargin+91+8)&','&str$(lyne*meter+ymargin)&')'
+! 	end if  ! g(4)<>0
+! 	if g(5)<>0 then 
+! 		pr #20: 'Call Print.AddText("Trash",'&str$(xmargin+1)&','&str$(lyne*(meter+=1)+ymargin)&')' ! "Trash was "SL"
+! 		pr #20: 'Call Print.AddText("'&fnformnumb$(g(5),2,9)&'",'&str$(xmargin+43)&','&str$(lyne*meter+ymargin)&')'
+! 		pr #20: 'Call Print.AddText("Trash",'&str$(xmargin+91)&','&str$(lyne*(meter)+ymargin)&')' ! "Trash was "SL"
+! 		pr #20: 'Call Print.AddText("'&fnformnumb$(g(5),2,9)&'",'&str$(xmargin+91+8)&','&str$(lyne*meter+ymargin)&')'
+! 	end if  ! g(5)<>0
+! 	if g(6)<>0 then 
+! 		pr #20: 'Call Print.AddText("DEM",'&str$(xmargin+1)&','&str$(lyne*(meter+=1)+ymargin)&')'
+! 		pr #20: 'Call Print.AddText("'&fnformnumb$(g(6),2,9)&'",'&str$(xmargin+43)&','&str$(lyne*meter+ymargin)&')'
+! 		pr #20: 'Call Print.AddText("DEM",'&str$(xmargin+91)&','&str$(lyne*(meter)+ymargin)&')'
+! 		pr #20: 'Call Print.AddText("'&fnformnumb$(g(6),2,9)&'",'&str$(xmargin+91+8)&','&str$(lyne*meter+ymargin)&')'
+! 	end if  ! g(6)<>0
+! 	if g(7)<>0 then 
+! 		pr #20: 'Call Print.AddText("EL TAX",'&str$(xmargin+1)&','&str$(lyne*(meter+=1)+ymargin)&')'
+! 		pr #20: 'Call Print.AddText("'&fnformnumb$(g(7),2,9)&'",'&str$(xmargin+43)&','&str$(lyne*meter+ymargin)&')'
+! 		pr #20: 'Call Print.AddText("EL TAX",'&str$(xmargin+91)&','&str$(lyne*(meter)+ymargin)&')'
+! 		pr #20: 'Call Print.AddText("'&fnformnumb$(g(7),2,9)&'",'&str$(xmargin+91+8)&','&str$(lyne*meter+ymargin)&')'
+! 	end if  ! g(7)=0
+! 	if g(8)<>0 then 
+! 		pr #20: 'Call Print.AddText("Other",'&str$(xmargin+1)&','&str$(lyne*(meter+=1)+ymargin)&')'
+! 		pr #20: 'Call Print.AddText("'&fnformnumb$(g(8),2,9)&'",'&str$(xmargin+43)&','&str$(lyne*meter+ymargin)&')'
+! 		pr #20: 'Call Print.AddText("Other",'&str$(xmargin+01)&','&str$(lyne*(meter)+ymargin)&')'
+! 		pr #20: 'Call Print.AddText("'&fnformnumb$(g(8),2,9)&'",'&str$(xmargin+91+8)&','&str$(lyne*meter+ymargin)&')'
+! 	end if  ! g(8)<>0
+! 	if g(9)<>0 then 
+! 		pr #20: 'Call Print.AddText("TAX",'&str$(xmargin+1)&','&str$(lyne*(meter+=1)+ymargin)&')'
+! 		pr #20: 'Call Print.AddText("'&fnformnumb$(g(9),2,9)&'",'&str$(xmargin+43)&','&str$(lyne*meter+ymargin)&')'
+! 		pr #20: 'Call Print.AddText("TAX",'&str$(xmargin+92)&','&str$(lyne*(meter)+ymargin)&')'
+! 		pr #20: 'Call Print.AddText("'&fnformnumb$(g(9),2,9)&'",'&str$(xmargin+91+8)&','&str$(lyne*meter+ymargin)&')'
+! 	end if  ! g(9)<>0
+! 	pr #20: 'Call Print.AddLine('&str$(xmargin+49)&','&str$(lyne*(meter+=1)+ymargin+2)&',15,0)'
+! 	pr #20: 'Call Print.AddLine('&str$(xmargin+91+14)&','&str$(lyne*(meter)+ymargin+2)&',15,0)'
+! 	pr #20: 'Call Print.AddText("   Net Bill",'&str$(xmargin+1)&','&str$(lyne*(meter+=.25)+ymargin+2)&')'
+! 	pr #20: 'Call Print.AddText("Net",'&str$(xmargin+92)&','&str$(lyne*(meter)+ymargin+2)&')'
+! 	pr #20: 'Call Print.AddText("'&fnformnumb$(net_bill,2,9)&'",'&str$(xmargin+43)&','&str$(lyne*meter+ymargin+2)&')'
+! 	pr #20: 'Call Print.AddText("'&fnformnumb$(net_bill,2,9)&'",'&str$(xmargin+91+8)&','&str$(lyne*meter+ymargin+2)&')'
+! 	if pb then 
+! 		pr #20: 'Call Print.AddText("Previous Balance",'&str$(xmargin+1)&','&str$(lyne*(meter+=1)+ymargin+2)&')'
+! 		pr #20: 'Call Print.AddText("'&fnformnumb$(pb,2,9)&'",'&str$(xmargin+43)&','&str$(lyne*meter+ymargin+2)&')'
+! 		pr #20: 'Call Print.AddText("Prior",'&str$(xmargin+91)&','&str$(lyne*(meter)+ymargin+2)&')'
+! 		pr #20: 'Call Print.AddText("'&fnformnumb$(pb,2,9)&'",'&str$(xmargin+91+8)&','&str$(lyne*meter+ymargin+2)&')'
+! 	end if  ! pb
+! 	fnpa_fontsize : lyne=3
+! 	
+! 	if estimatedate=d1 then fnpa_txt("Bill estimated!",xmargin+1,lyne*21+ymargin)
+! 	fnpa_line(xmargin+1,lyne*23+1+ymargin+10,63,0)
+! 	if budget>0 then 
+! 		pr #20: 'Call Print.AddText("Actual Balance",'&str$(xmargin+1)&','&str$(lyne*24+ymargin+10)&')'
+! 		pr #20: 'Call Print.AddText("'&fnformnumb$(bal,2,9)&'",'&str$(xmargin+37)&','&str$(lyne*24+ymargin+10)&')' ! 37 was 42
+! 		pr #20: 'Call Print.AddText("Budget Amount",'&str$(xmargin+1)&','&str$(lyne*25+ymargin+10)&')'
+! 		pr #20: 'Call Print.AddText("'&fnformnumb$(budget+pbud,2,9)&'",'&str$(xmargin+37)&','&str$(lyne*25+ymargin+10)&')' ! 37 was 42
+! 	else 
+! 		pr #20: 'Call Print.AddText("Pay By '&cnvrt$("PIC(ZZ/ZZ/ZZ)",d4)&':",'&str$(xmargin+1)&','&str$(lyne*24+ymargin+10)&')'
+! 		pr #20: 'Call Print.AddText("'&fnformnumb$(bal,2,9)&'",'&str$(xmargin+37)&','&str$(lyne*24+ymargin+10)&')' ! 37 was 42
+! 		pr #20: 'Call Print.AddText("Pay After '&cnvrt$("PIC(ZZ/ZZ/ZZ)",d4)&':",'&str$(xmargin+1)&','&str$(lyne*25+ymargin+10)&')'
+! 		pr #20: 'Call Print.AddText("'&fnformnumb$(fn_pay_after_amt,2,9)&'",'&str$(xmargin+37)&','&str$(lyne*25+ymargin+10)&')' ! 37 was 42
+! 	end if 
+! 	fnpa_line(xmargin+1,lyne*26+1+ymargin+10,63,0)
+! 	! pr #20: 'Call Print.AddLine('&str$(xmargin+1)&','&str$(lyne*26+1+ymargin+10)&',63,0)'
+! 	! fnpa_fontsize(7)
+! 	fnpa_line(xmargin+97,ymargin+0,29, lyne*5+2,1)
+! 	fnpa_line(xmargin+90,ymargin+0   , 7,0)
+! 	fnpa_line(xmargin+90,ymargin+2.8 , 7,0)
+! 	fnpa_line(xmargin+90,ymargin+5.6 , 7,0)
+! 	fnpa_line(xmargin+90,ymargin+8.4 , 7,0)
+! 	fnpa_line(xmargin+90,ymargin+11.2, 7,0)
+! 	fnpa_line(xmargin+90,ymargin+14  , 7,0)
+! 	fnpa_line(xmargin+90,ymargin+17  , 7,0)
+! 	! pr #20: 'Call Print.AddLine('&str$(xmargin+97)&','&str$(ymargin+0)&',29,'&str$(lyne*5+2)&',TRUE)'
+! 	! pr #20: 'Call Print.AddLine('&str$(xmargin+90)&','&str$(ymargin+0)&',7,0)'
+! 	! pr #20: 'Call Print.AddLine('&str$(xmargin+90)&','&str$(ymargin+2.8)&',7,0)'
+! 	! pr #20: 'Call Print.AddLine('&str$(xmargin+90)&','&str$(ymargin+5.6)&',7,0)'
+! 	! pr #20: 'Call Print.AddLine('&str$(xmargin+90)&','&str$(ymargin+8.4)&',7,0)'
+! 	! pr #20: 'Call Print.AddLine('&str$(xmargin+90)&','&str$(ymargin+11.2)&',7,0)'
+! 	! pr #20: 'Call Print.AddLine('&str$(xmargin+90)&','&str$(ymargin+14)&',7,0)'
+! 	! pr #20: 'Call Print.AddLine('&str$(xmargin+90)&','&str$(ymargin+17)&',7,0)'
+! 	fnpa_fontsize(9)
+! 	pr #20: 'Call Print.AddText("Please return this",'&str$(xmargin+68+8)&','&str$(lyne*7+ymargin)&')'
+! 	pr #20: 'Call Print.AddText("side with payment to:",'&str$(xmargin+68+8)&','&str$(lyne*8+ymargin)&')'
+! 	pr #20: 'Call Print.AddText("'&env$('cnam')(1:27)&'",'&str$(xmargin+68+8)&','&str$(lyne*9+ymargin)&')'
+! 	fnpa_fontsize
+! 	pr #20: 'Call Print.AddText("Pay By '&cnvrt$("PIC(ZZ/ZZ/ZZ)",d4)&':",'&str$(xmargin+68+8)&','&str$(lyne*11+ymargin)&')'
+! 	if budget>0 then 
+! 		pr #20: 'Call Print.AddText("'&fnformnumb$(budget+pbud,2,9)&'",'&str$(xmargin+100+8)&','&str$(lyne*11+ymargin)&')'
+! 	else 
+! 		pr #20: 'Call Print.AddText("'&fnformnumb$(bal,2,9)&'",'&str$(xmargin+100+8)&','&str$(lyne*11+ymargin)&')'
+! 		pr #20: 'Call Print.AddText("After  '&cnvrt$("PIC(ZZ/ZZ/ZZ)",d4)&':",'&str$(xmargin+68+8)&','&str$(lyne*12+ymargin)&')'
+! 		pr #20: 'Call Print.AddText("'&fnformnumb$(fn_pay_after_amt,2,9)&'",'&str$(xmargin+100+8)&','&str$(lyne*12+ymargin)&')'
+! 	end if 
+! 	fnpa_fontsize(9)
+! 	addy=11.5
+! 	fnpa_txt(mg$(1),xmargin+4,(addy+=1)*lyne+ymargin+30)
+! 	fnpa_txt(mg$(2),xmargin+4,(addy+=1)*lyne+ymargin+30)
+! 	addy+=1
+! 	fnpa_fontsize
+! 	if df$="Y" then 
+! 		fnpa_txt("Drafted",xmargin+1,lyne*(addy+=1)+ymargin)
+! 	end if 
+! 	if c4>0 then 
+! 		fnpa_txt("Final Bill",xmargin+1,lyne*(addy+=1)+ymargin)
+! 	end if 
+! 	pr #20: 'Call Print.AddText("#'&trim$(z$)&' '&bulk$&'",'&str$(xmargin+68+8+30)&','&str$(lyne*(addy+=1)+ymargin+20+3)&')'
+! 	fnpa_txt(trim$(pe$(1)),xmargin+68+8,lyne*(addy+=1)+ymargin+23)
+! 	fnpa_txt(trim$(pe$(2)),xmargin+68+8,lyne*(addy+=1)+ymargin+23)
+! 	fnpa_txt(trim$(pe$(3)),xmargin+68+8,lyne*(addy+=1)+ymargin+23)
+! 	fnpa_txt(trim$(pe$(4)),xmargin+68+8,lyne*(addy+=1)+ymargin+23)
+! 	pr #20: 'Call Print.AddText("Return Service Requested.",'&str$(xmargin+68+8)&','&str$(lyne*(addy+=2)+ymargin+20+3)&')'
+! 	if billOnPageCount=1 then checkx=1.375 : checky=3.6875
+! 	if billOnPageCount=2 then checkx=6.75 : checky=3.6875
+! 	if billOnPageCount=3 then checkx=1.375 : checky=7.9375
+! 	if billOnPageCount=0 then checkx=6.75 : checky=7.9375
+! 	if billOnPageCount=0 then 
+! 		fnpa_newpage
+! 	end if 
+! fnend 
 def fn_print_bill_blucksberg(z$,mat mg$,billing_date_prior,serviceFrom,serviceTo) ! inherrits all those local customer variables too
 	! -- Printer Program for Laser 1-Per Page Utility Bills
 	if ~setup_blucksberg then ! r:

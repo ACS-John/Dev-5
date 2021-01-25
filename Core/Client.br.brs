@@ -221,7 +221,7 @@ def fn_setupClient ! ** set up for new clients
 		! fn_setupClient_add("Lovington",2689,32720)
 		! fn_setupClient_add("Loma Linda",2690,33244)
 		!   fn_setupClient_add("Nancy Mouser",2795,34318)
-		fn_setupClient_add("Merriam Woods",2900,31702)
+		! fn_setupClient_add("Merriam Woods",2900,31702) support ended 12312020
 		!   fn_setupClient_add("Miller Hardware",3005,14668)
 		fn_setupClient_add("Millry",3025,33968)
 		!   fn_setupClient_add("Monticello",3040,12196)
@@ -492,14 +492,14 @@ def fn_getClientLicense(mat client_has$)
 		! 	fn_getClientLicense_add('GL')
 		! 	fn_getClientLicense_add('PR')
 		! 	fn_getClientLicense_add('CL')
-		else if env$('client')='Merriam Woods' then 
-			fn_userLimit(2)
-			fn_getClientLicense_add('UB') : fn_setUbLimit(1000) ! U2 Utility Billing (500-1000 customers)
-			fn_getClientLicense_add('U5') ! UB External Collections Processing
-			!     fn_getClientLicense_add('CR')
-			!     fn_getClientLicense_add('GL')
-			!     fn_getClientLicense_add('PR')
-			!     fn_getClientLicense_add('CL')
+		! canceled		else if env$('client')='Merriam Woods' then 
+		! canceled			fn_userLimit(2)
+		! canceled			fn_getClientLicense_add('UB') : fn_setUbLimit(1000) ! U2 Utility Billing (500-1000 customers)
+		! canceled			fn_getClientLicense_add('U5') ! UB External Collections Processing
+		! canceled			!     fn_getClientLicense_add('CR')
+		! canceled			!     fn_getClientLicense_add('GL')
+		! canceled			!     fn_getClientLicense_add('PR')
+		! canceled			!     fn_getClientLicense_add('CL')
 		else if env$('client')='Millry' then 
 			fn_userLimit(4)
 			fn_getClientLicense_add('UB') : fn_setUbLimit(1000) ! U2 Utility Billing (500-1000 customers)
@@ -748,7 +748,7 @@ def library fnub_printbill_program$*256
 		fn_upp_add('Exeter'            ,'(basic)'               )
 		fn_upp_add('French Settlement' ,'(basic)'               ) ! 'printbill_french_settlement_gas'
 		fn_upp_add('GreeneCo'          ,'(basic)'               ) ! 'ubprtbl1_GreeneCo'
-		fn_upp_add('Merriam Woods'     ,'(basic)'               ) ! 'PrintBill_Merriam_Woods'
+		! fn_upp_add('Merriam Woods'     ,'(basic)'               ) ! 'PrintBill_Merriam_Woods'
 		fn_upp_add('Raymond'           ,'(basic)'               ) ! 'ubprtbl1_Raymond'
 		! fn_upp_add('Thomasboro'        ,'(basic)'               ) ! 'ubprtbl1_tho'
 		fn_upp_add('Galena'            ,'(basic)'               ) ! 'ubprtbl1_galena')
@@ -847,7 +847,7 @@ def library fnpayroll_client_state$*2
 		! fn_pcs_add("Kimberling",'MO')
 		fn_pcs_add("Kathys Bookkeeping",'OK')
 !		fn_pcs_add("Lovington",'IL')
-		fn_pcs_add("Merriam Woods",'MO')
+! 		fn_pcs_add("Merriam Woods",'MO')
 !   fn_pcs_add("Monticello",'IL')
 !   fn_pcs_add("Nancy Mouser",'OK')
 !   fn_pcs_add("Northwest",'AR')

@@ -6,7 +6,6 @@ fn_openFiles
 goto Menu1
 
 Menu1: ! r:
-	ad1=0 ! add code - used to tell other parts of the program, that I am currently adding an employee record.
 	fnTos : screen=0
 	respc=0
 	fnLbl(1,1,"Employee Number:",16,right)
@@ -18,28 +17,16 @@ Menu1: ! r:
 	end if
 	fnCmdKey("&Add",1,0,0,"Add a new employee" )
 	fnCmdKey("E&dit",2,1,0,"Access the highlighted record")
-	! fnCmdKey("&Next Sequential",3,0,0,"Access next record in employee # order")
 	fnCmdKey("&Search",8,0,0,"Search for employee record")
-	! fnCmdKey("&Refresh",7,0,0,"Updates search grids and combo boxes with new employee information")
 	fnCmdKey("E&xit",6,0,1,"Returns to menu")
 	fnAcs(mat resp$,ckey) ! ask employee #
 	hact$=resp$(1)(1:8)
 	eno=ent=val(resp$(1)(1:8))
 	if ckey=1 then
-		ad1=1 ! ti1=1
 		goto EmployeeAdd
 	else if ckey=2 then
 		fn_employeeEdit(ent)
 		goto Menu1
-	! else if ckey=3 then
-	! 	read #hEmployee,using F_employee: eno,mat em$,ss$,mat rs,mat em,lpd,tgp,w4Step2,w4Year$,ph$,bd,w4Step3,w4Step4a,w4Step4b,w4Step4c  eof EmpNotFound
-	! 	holdeno=eno
-	! 	ent$=lpad$(str$(eno),8)
-	! 	goto ScrEmployee
-	! else if ckey=4 then
-	! 	ent=eno
-	! 	fn_employeeEdit(ent)
-	! 	goto Menu1
 	else if ckey=8 then
 		fnemployee_srch(x$,fixgrid)
 		ent=val(x$)
@@ -47,8 +34,6 @@ Menu1: ! r:
 		goto Menu1
 	else if ckey=6 or env$('ExitNow')='yes' then ! Added ExitNow env$ by GSB to ensure program recursively exits when they click the Windows X in a Subwindow
 		goto Finis
-	! else if ckey=7 then
-	! 	goto Menu1
 	end if
 goto EmployeeAdd ! /r
 EmployeeAdd: ! r:
@@ -66,12 +51,12 @@ EmployeeAdd: ! r:
 	ent=val(resp$(1))
 	ent$=lpad$(str$(ent),8)
 	read #hEmployee,using F_employee,key=ent$: tempeno nokey DoEmployeeAdd
-	! r: only happens if employee number already exists
-	mat ml$(2)
-	ml$(1)="A record with this number already exists!"
-	ml$(2)="Select a different employee number."
-	fnmsgbox(mat ml$,resp$,'',48)
-	goto EmployeeAdd ! /r
+		! r: only happens if employee number already exists
+		mat ml$(2)
+		ml$(1)="A record with this number already exists!"
+		ml$(2)="Select a different employee number."
+		fnmsgbox(mat ml$,resp$,'',48)
+	goto Menu1 ! /r
 	DoEmployeeAdd: !
 	mat em$=("")
 	ph$=ss$=""
@@ -98,12 +83,15 @@ EmployeeAdd: ! r:
 	disableStTax=0
 	disableFedTax=0
 	w4Year$='none'
+	fn_employeeEdit(ent, 1)
+goto Menu1 ! /r
 
-
-
-goto ScrEmployee ! /r
-
-def fn_employeeEdit(ent)
+def library fnEmployeeEdit(eno)
+	if ~setup then fn_setup
+	fnEmployeeEdit=fn_employeeEdit(eno)
+fnend
+def fn_employeeEdit(ent; employeeAdding)
+	if employeeAdding then goto ScrEmployee
 	EmployeeEdit: ! r:
 		if ent=0 then goto EmployeeEditXit
 		teno=eno=ent ! hdar=0
@@ -281,7 +269,7 @@ def fn_employeeEdit(ent)
 		fnCmdKey("Special Hrs",8,0,0,"Review miscellaneous breakdown of hours.")
 		fnCmdKey("&Check History",10,0,0,"Review check information.")
 		! fnCmdKey("&Picture",6,0,0,"Place any picture in share\images.")
-		if ad1=0 then
+		if ~employeeAdding then
 			fnCmdKey("De&lete Employee",4,0,0,"Deletes this record")
 		end if
 		fnCmdKey("&Save",1,1,0,"Saves all changes.")
@@ -514,7 +502,6 @@ DepartmentAdd: ! r: new department
 	write #hDepartment,using Fdept:eno,tdn,gl$,mat tdt,mat tcd,tli,mat tdet
 
 goto ScrDepartment ! /r
-
 ScrIlW4: ! r:
 	fnTos : screen=scrIlW4
 	lc=respc=0 : col1_len=25 : col2_pos=1+col1_len+2
@@ -535,13 +522,37 @@ ScrIlW4: ! r:
 	fnCmdKey("&Cancel",5,0,1,"Exit record without saving changes.")
 	fnAcs(mat resp$,ckey)
 	if ckey=5 then
-		goto EmployeeEditXit
+		goto Menu1
 	else
 		fnEmployeeData$(eno,'IL W-4 Line 1 Allowances',resp$(rc_ilw4line1))
 		fnEmployeeData$(eno,'IL W-4 Line 2 Allowances',resp$(rc_ilw4line2))
 		if ckey=>5200 and ckey<=5300 then goto Nav
 	end if
 goto ScrEmployee ! ScrIlW4 ! /r
+ScrAr4ec: ! r:
+	fnTos : screen=ScrAr4ec
+	lc=respc=0 : col1_len=25 : col2_pos=1+col1_len+2
+	fn_navButtons(lc,deptCount)
+	lc+=1
+	fnLbl(lc+=1,1,"Employee Number:",mylen,1)
+	fnTxt(lc,col1_len,8,8,1,"1030",1,"Employee numbers must be numeric.")
+	resp$(respc+=1)=str$(eno)
+	lc+=1
+	fnLbl(lc+=1,1,"AR4EC Exemptions:",col1_len,1)
+	fnTxt(lc,col2_pos,5, 0,1,"30",0,'')
+	resp$(rc_ilw4line1=respc+=1)=fnEmployeeData$(eno,'AR4EC Exemptions')
+
+	fnCmdKey("C&omplete",1,1,0,"Saves any changes and returns to main screen.")
+	fnCmdKey("&Cancel",5,0,1,"Exit record without saving changes.")
+	fnAcs(mat resp$,ckey)
+	if ckey=5 then
+		goto EmployeeEditXit
+	else
+		fnEmployeeData$(eno,'AR4EC Exemptions',resp$(rc_ilw4line1))
+		if ckey=>5200 and ckey<=5300 then goto Nav
+	end if
+goto ScrEmployee ! ScrAr4ec ! /r
+
 
 def fn_navButtons(&lc,&deptCount; ___,deptItem)
 	! many other locals too
@@ -562,8 +573,10 @@ def fn_navButtons(&lc,&deptCount; ___,deptItem)
 
 	lc+=1
 	fnbutton_or_disabled(screen<>scrEmployee,lc,1,'Employee',ckey_scrEmployee)
-	if fnpayroll_client_state$='IL' then
-		fnbutton_or_disabled(screen<>scrIlW4,lc,11,'IL W-4',ckey_ScrIlW4,'',10)
+	if fnpayroll_client_state$='AR' then
+		fnbutton_or_disabled(screen<>scrAr4ec,lc,11,'AR4EC',ckey_ScrState,'',10)
+	else if fnpayroll_client_state$='IL' then
+		fnbutton_or_disabled(screen<>scrIlW4,lc,11,'IL W-4',ckey_ScrState,'',10)
 	end if
 	lc+=1
 	dptPos=1
@@ -576,20 +589,25 @@ def fn_navButtons(&lc,&deptCount; ___,deptItem)
 		fnbutton_or_disabled(screen<>scrDept(deptItem),lc,dptPos,deptTxt$,5201+deptItem, deptToolTip$)
 		dptPos+=(len(deptTxt$)+2)
 	nex deptItem
+	fnbutton_or_disabled(screen<>scrDept(deptItem),lc,dptPos,deptTxt$,5201+deptItem, deptToolTip$)
+	
 	! fnlbl(36,10
 	fnlbl(28,105,' ') ! invisible space to keep a minimum size, otherwise tab buttons jump while you're using them
 fnend
 Nav: ! r:
-	if ckey=ckey_ScrIlW4 then
-		goto ScrIlW4
-	! else if ckey=ckey_scrDept then
-	! 	goto ScrDepartment
+	if ckey=ckey_ScrState then
+		if fnpayroll_client_state$='AR' then
+			goto ScrAr4ec
+		else if fnpayroll_client_state$='IL' then
+			goto ScrIlW4
+		else
+			pr 'State Screen not set up for '&fnpayroll_client_state$&' yet.'
+			pause
+		end if
 	else if ckey=ckey_scrEmployee then
 		goto ScrEmployee
 	else if ckey=>5201 and ckey<=5201+deptCount then
 		whichDepartment=ckey-5201
-		! pr 'go to Dept Tab Number '&str$(whichDepartment)
-		! pause
 		goto ScrDepartment
 	else
 
@@ -776,12 +794,10 @@ def fn_setup
 			dednames$(j)=trim$(dednames$(j))&":"
 		end if
 	next j
-
-	scrIlW4=1          :     ckey_ScrIlW4=5200
+	if fnpayroll_client_state$='IL' or fnpayroll_client_state$='AR' then
+		scrIlW4=1        :     ckey_ScrState=5200
+	end if
 	scrEmployee=2     :      ckey_scrEmployee=5201
-
-
-
 
 	dim marriedOption$(0)*58
 	dim eicOption$(0)*29
