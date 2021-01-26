@@ -818,7 +818,6 @@ fnend
 def fn_payroll_client_state$*2(; client$*64,___,return$*2,which)
 	if ~pcs_setup then ! r:
 		pcs_setup=1
-		if client$='' then client$=env$('client')
 		dim pr_clientstate_client$(1)*128
 		dim pr_clientstate_state$(1)*2
 		mat pr_clientstate_client$(999)
@@ -876,12 +875,12 @@ def fn_payroll_client_state$*2(; client$*64,___,return$*2,which)
 		mat pr_clientstate_state$(pr_clientstate_count)
 
 	end if  ! /r
+
+	if client$='' then client$=env$('client')
+	return$='--'
 	which=srch(mat pr_clientstate_client$,client$)
 	if which>0 then
 		return$=pr_clientstate_state$(which)
-	else
-		return$='--'
-		! msgbox('Your Payroll State could not be determined.  Please contact ACS at 1-800-643-6318.')
 	end if
 	fn_payroll_client_state$=return$
 fnend
