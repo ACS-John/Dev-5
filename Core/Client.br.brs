@@ -14,7 +14,7 @@ if env$('enableClientSelection')='Yes' then goto ClientSelect
 !     pr 'fn_client_has_on_support_list(mat tmp$,0) returns ';fn_client_has_on_support_list(mat tmp$,0);' with 0 grace days'
 !     pr mat tmp$
 !   end ! /r
-!   !  it is now ...  !!!     pr program$&' is not intended to be run directly' : end 
+!   !  it is now ...  !!!     pr program$&' is not intended to be run directly' : end
 ClientSelect: ! r:
 	fn_setup
 	fnTop(program$)
@@ -27,33 +27,36 @@ def library fnClientSelect
 fnend
 def fn_clientSelect
 	fnTos('clientSelect')
-	dim csCol$(5)*256
+	dim csCol$(6)*256
 	csCol$(1)='Name'
 	csCol$(2)='Number'
 	csCol$(3)='brSerial'
 	csCol$(4)='Licenses'
 	csCol$(5)='Last Selection Date'
-	mat csMask$(5)
+	csCol$(6)='PR'
+	mat csMask$(6)
 	csMask$(1)=''
 	csMask$(2)=''
 	csMask$(3)=''
 	csMask$(4)=''
 	csMask$(5)=''
+	csMask$(6)=''
 	fnflexinit1('clientSelect1',2,1,10,10,mat csCol$,mat csMask$)
 	for clientItem=1 to udim(mat client_name$)
-		mat csCol$(5)=('')
+		mat csCol$(6)=('')
 		csCol$(1)=client_name$(clientItem)
 		csCol$(2)=str$(client_cno(clientItem))
 		csCol$(3)=str$(client_brserial(clientItem))
 		csCol$(4)=client_name$(clientItem)
 		fnmcreg_read('lastSelection for '&client_name$(clientItem),csCol$(5),'')
+		csCol$(6)=fn_payroll_client_state$(client_name$(clientItem))
 		fnflexadd1(mat csCol$)
 	nex clientItem
 	fnCmdSet(2)
 	fnAcs(mat resp$,ckey)
 	if ckey=1 then ! r: select that client
 		fn_setClient(resp$(1))
-	end if ! /r 
+	end if ! /r
 fnend
 def library fnSetClient(scClient$*128)
 	if ~setup then fn_setup
@@ -70,23 +73,23 @@ def fn_setClient(scClient$*128)
 		fnmakesurepathexists(dataNew$)
 		fnSetEnv('data',dataNew$) ! pr 'env$ client set to '&env$('client') : pause
 		fnreg_close
-		! fnMapToVirturalDrive(dataNew$,'Q:') 
+		! fnMapToVirturalDrive(dataNew$,'Q:')
 		fnSetQ(dataNew$)
 		fncursys$( '',1)
 		fncno(unused)
 	end if
 fnend
 def fn_setup
-	if ~setup_library then 
+	if ~setup_library then
 		setup_library=1
 		autoLibrary
-	end if 
+	end if
 	fn_setupClient
-fnend 
+fnend
 def library fnClient$*18
 	fn_setup
 	fnClient$=fn_client$
-fnend 
+fnend
 def fn_client$*18
 	! if env$('ACSDeveloper')<>'' then pr 'on the way in env client$ is '&env$('client')
 	on error goto Ertn
@@ -111,14 +114,14 @@ def fn_client$*18
 	if env$('client')='' then
 		pr "env$('client') is blank." : pause
 	end if
-	! /r 
+	! /r
 	fn_getClientLicense(mat client_has$)
 	if srch(mat client_name$,login_name$)>0 then
 		clientReturn$=login_name$
 	else
 		clientReturn$=env$('client')
 		client_which=srch(mat client_name$,env$('client'))
-		if client_which>0 then 
+		if client_which>0 then
 			fnSetEnv('Client_ID',str$(client_cno(client_which)))
 		else
 			pr 'env: Client: "'&env$('client')&'" did not match any entries Mat client_name$.  env: Client_ID could not be set'
@@ -128,7 +131,7 @@ def fn_client$*18
 	end if
 	! if env$('ACSDeveloper')<>'' then pr 'clientReturn$='&clientReturn$ : pause
 	fn_client$=clientReturn$
-fnend 
+fnend
 def library fnClientNameShort$*18(; clientId,___,return$*18,which)
 	if ~setup then fn_setup
 	if ~setup_client then fn_setupClient
@@ -149,7 +152,7 @@ def library fnClientNameShort$*18(; clientId,___,return$*18,which)
 	fnClientNameShort$=return$
 fnend
 def fn_setupClient ! ** set up for new clients
-	if ~setup_client then 
+	if ~setup_client then
 		setup_client=1
 		dim client_name$(1)*18
 		client_count=0
@@ -270,15 +273,15 @@ def fn_setupClient_add(sca_name$*18,sca_customer_number,sca_brserial_number)
 	client_name$(client_count)=sca_name$
 	client_cno(client_count)=sca_customer_number
 	client_brserial(client_count)=sca_brserial_number
-fnend 
+fnend
 
 def fn_getClientLicense(mat client_has$)
 	if setup_client_has$<>env$('client') then
 		setup_client_has$=env$('client')
 		mat client_has$(0)
-		! r: big if statement 
+		! r: big if statement
 		client_has_system_count=0
-		if env$('client')='ACS' then 
+		if env$('client')='ACS' then
 			! fn_getClientLicense_add('UB')
 			! fn_getClientLicense_add('U4') ! U4 Utility Billing Hand Held Add-On
 			! fn_getClientLicense_add('CL')
@@ -291,10 +294,10 @@ def fn_getClientLicense(mat client_has$)
 		!   fn_userLimit(1)
 		!   if days(date)<=days(20151231,'ccyymmdd') then  fn_getClientLicense_add('UB') : fn_setUbLimit(500)
 		!   if days(date)<=days(20151231,'ccyymmdd') then fn_getClientLicense_add('U4')
-		else if env$('client')='BRCorp' then 
+		else if env$('client')='BRCorp' then
 			fn_userLimit(99)
-			fn_getClientLicense_add('OE') 
-		else if env$('client')='Ed Horton' then 
+			fn_getClientLicense_add('OE')
+		else if env$('client')='Ed Horton' then
 			fn_userLimit(1)
 			fn_getClientLicense_add('CL')
 			fn_getClientLicense_add('GL')
@@ -302,27 +305,27 @@ def fn_getClientLicense(mat client_has$)
 			fn_getClientLicense_add('PR')
 			fn_getClientLicense_add('UB') : fn_setUbLimit(500) ! U3 Utility Billing (<500 Customers)
 			fn_getClientLicense_add('U4') ! U4 Utility Billing Hand Held Add-On
-		else if env$('client')='Ash Grove' then 
+		else if env$('client')='Ash Grove' then
 			fn_userLimit(1)
 			fn_getClientLicense_add('UB') : fn_setUbLimit(1000) ! U2 Utility Billing (500-1000 customers)
 			fn_getClientLicense_add('U4') : u4_device$="Boson" ! U4 Utility Billing Hand Held Add-On
 			! canceled 2/7/2018 as per Debbie  -   fn_getClientLicense_add('PR')
 			! canceled 2/7/2018 as per Debbie  -   fn_getClientLicense_add('GL')
 			! canceled 2/7/2018 as per Debbie  -   fn_getClientLicense_add('CL')
-		else if env$('client')='Allendale' then 
+		else if env$('client')='Allendale' then
 			if days(date$)<=days('02/28/2020','mm/dd/ccyy') then
 				fn_userLimit(1)
 				fn_getClientLicense_add('UB') : fn_setUbLimit(500) ! U3 Utility Billing (<500 Customers)
 				fn_getClientLicense_add('U4') ! U4 Utility Billing Hand Held Add-On
 			end if
-		else if env$('client')='Bethany' then 
+		else if env$('client')='Bethany' then
 			fn_userLimit(1)
 			fn_getClientLicense_add('UB') : fn_setUbLimit(1000) ! U2 Utility Billing (500-1000 customers)
 			fn_getClientLicense_add('U4') : u4_device$="Itron FC300" ! U4 Utility Billing Hand Held Add-On
 			fn_getClientLicense_add('PR')
 			fn_getClientLicense_add('GL')
 			fn_getClientLicense_add('CL')
-		else if env$('client')='Brier Lake' then 
+		else if env$('client')='Brier Lake' then
 			fn_userLimit(1)
 			fn_getClientLicense_add('UB') : fn_setUbLimit(500) ! U3 Utility Billing (<500 Customers)
 		else if env$('client')='Billings' and (env$('Unique_Computer_Id')="58973139-FC9B-1A95-F234-C145E2B22211" or env$('Unique_Computer_Id')="50A59A38-38BF-A82F-9868-04C4E5DD281A") then ! Limit to only UB stuff for (Katrina or Gale)
@@ -336,7 +339,7 @@ def fn_getClientLicense(mat client_has$)
 			fn_getClientLicense_add('GL')
 			fn_getClientLicense_add('PR')
 			fn_getClientLicense_add('CL')
-		else if env$('client')='Billings' then 
+		else if env$('client')='Billings' then
 			fn_userLimit(3)
 			fn_getClientLicense_add('UB') : fn_setUbLimit(500) ! U3 Utility Billing (<500 Customers)
 			fn_getClientLicense_add('U4') : u4_device$="Boson" ! U4 Utility Billing Hand Held Add-On
@@ -346,44 +349,44 @@ def fn_getClientLicense(mat client_has$)
 			fn_getClientLicense_add('UB-EFT')
 			if days(date$)<=days('09/15/2019','mm/dd/ccyy') then le fn_getClientLicense_add('EM')  ! Alpha testing
 			!     fn_getClientLicense_add('CR')
-		else if env$('client')='Blucksberg' then 
+		else if env$('client')='Blucksberg' then
 			fn_userLimit(1)
 			fn_getClientLicense_add('UB') : fn_setUbLimit(9999) ! U1 Utility Billing (no discount)
 			fn_getClientLicense_add('U4') : u4_device$="Itron FC300" ! U4 Utility Billing Hand Held Add-On
-		else if env$('client')='Brumbaugh' then 
+		else if env$('client')='Brumbaugh' then
 			fn_userLimit(64)
 			fn_getClientLicense_add('CM')
-		else if env$('client')='Campbell' then 
+		else if env$('client')='Campbell' then
 			fn_userLimit(4)
 			fn_getClientLicense_add('CL')
 			fn_getClientLicense_add('PR')
 			fn_getClientLicense_add('UB') : fn_setUbLimit(1000) ! U2 Utility Billing (500-1000 customers)
 			fn_getClientLicense_add('U4') : u4_device$="Badger Beacon"
 			fn_getClientLicense_add('UB-EFT')
-		else if env$('client')='Carr Plumbing' then 
+		else if env$('client')='Carr Plumbing' then
 			fn_userLimit(1)
 			fn_getClientLicense_add('PR')
-		else if env$('client')='Chatom' then 
+		else if env$('client')='Chatom' then
 			fn_userLimit(1)
 			fn_getClientLicense_add('UB') : fn_setUbLimit(1000) ! U2 Utility Billing (500-1000 customers)
 			fn_getClientLicense_add('U4') : u4_device$="Boson" ! U4 Utility Billing Hand Held Add-On
-		else if env$('client')='Cerro Gordo V' then 
+		else if env$('client')='Cerro Gordo V' then
 			fn_userLimit(2)
 			fn_getClientLicense_add('GL')
 			fn_getClientLicense_add('PR')
 			fn_getClientLicense_add('CL')
 			fn_getClientLicense_add('UB') : fn_setUbLimit(1000) ! U2 Utility Billing (500-1000 customers)
 			fn_getClientLicense_add('U4') : u4_device$="Boson" ! U4 Utility Billing Hand Held Add-On
-		else if env$('client')='Cerro Gordo T' then 
+		else if env$('client')='Cerro Gordo T' then
 			fn_userLimit(1)
 			fn_getClientLicense_add('GL')
 			fn_getClientLicense_add('PR')
 			fn_getClientLicense_add('CL')
-		else if env$('client')='Choctaw' then 
+		else if env$('client')='Choctaw' then
 			fn_userLimit(1)
 			fn_getClientLicense_add('UB') : fn_setUbLimit(500) ! U3 Utility Billing (<500 Customers)
 			! fn_getClientLicense_add('GL')  -  removed from support as of 4/30/19
-		else if env$('client')='Crockett County' then 
+		else if env$('client')='Crockett County' then
 			fn_userLimit(1)
 			fn_getClientLicense_add('CL')
 			fn_getClientLicense_add('PR')
@@ -396,103 +399,103 @@ def fn_getClientLicense(mat client_has$)
 			fn_getClientLicense_add('CL')
 			! fn_getClientLicense_add('U4') : u4_device$="Boson" ! ACEECA MEZ 1500 ! U4 Utility Billing Hand Held Add-On
 
-		else if env$('client')='Edinburg' then 
+		else if env$('client')='Edinburg' then
 			fn_userLimit(2)
 			fn_getClientLicense_add('UB') : fn_setUbLimit(500) ! U3 Utility Billing (<500 Customers)
 			fn_getClientLicense_add('GL')
 			fn_getClientLicense_add('PR')
 			fn_getClientLicense_add('CL')
 			fn_getClientLicense_add('U4') : u4_device$="Boson" ! ACEECA MEZ 1500 ! U4 Utility Billing Hand Held Add-On
-		else if env$('client')='Edison' then 
+		else if env$('client')='Edison' then
 			fn_userLimit(3)
 			fn_getClientLicense_add('UB') : fn_setUbLimit(1000) ! U3 Utility Billing (<500 Customers)
 			fn_getClientLicense_add('GL')
 			fn_getClientLicense_add('PR')
 			fn_getClientLicense_add('CL')
-		else if env$('client')='Exeter' then 
+		else if env$('client')='Exeter' then
 			fn_userLimit(2)
 			fn_getClientLicense_add('UB') : fn_setUbLimit(500) ! U3 Utility Billing (<500 Customers)
-		! else if env$('client')='Energy Exchanger' then 
+		! else if env$('client')='Energy Exchanger' then
 		! 	fn_userLimit(1)
 		! 	fn_getClientLicense_add('PR')
-		else if env$('client')='Dorothy Salch' then 
+		else if env$('client')='Dorothy Salch' then
 			fn_userLimit(1)
 			fn_getClientLicense_add('GL')
 			fn_getClientLicense_add('G2') ! G3 Accountant's General Ledger
-		else if env$('client')='Evelyn Pareya' then 
+		else if env$('client')='Evelyn Pareya' then
 			fn_userLimit(1)
 			fn_getClientLicense_add('GL')
 			fn_getClientLicense_add('G2') ! G3 Accountant's General Ledger
-		else if env$('client')='Findlay' then 
+		else if env$('client')='Findlay' then
 			fn_userLimit(2)
 			fn_getClientLicense_add('UB') : fn_setUbLimit(1000) ! U2 Utility Billing (500-1000 customers)
 			fn_getClientLicense_add('U4') : u4_device$="Itron FC300" ! U4 Utility Billing Hand Held Add-On
-			!   else if env$('client')='Franklin and Son' then 
+			!   else if env$('client')='Franklin and Son' then
 			!     fn_userLimit(1)
 			!     fn_getClientLicense_add('PR')
-		else if env$('client')='Franklin Co Hosp' then 
+		else if env$('client')='Franklin Co Hosp' then
 			fn_userLimit(1)
 			fn_getClientLicense_add('GL')
 			fn_getClientLicense_add('CL')
-		else if env$('client')='French Settlement' then 
+		else if env$('client')='French Settlement' then
 			fn_userLimit(1)
 			fn_getClientLicense_add('UB') : fn_setUbLimit(9999) ! U1 Utility Billing (no discount)
-		else if env$('client')='Galena' then 
+		else if env$('client')='Galena' then
 			fn_userLimit(1)
 			fn_getClientLicense_add('UB') : fn_setUbLimit(500) ! U3 Utility Billing (<500 Customers)
-			!   else if env$('client')='Granby' then 
+			!   else if env$('client')='Granby' then
 			!     fn_userLimit(2)
 			!     fn_getClientLicense_add('UB') : fn_setUbLimit(9999) ! U1 Utility Billing (no discount)
-		else if env$('client')='Grandview' then 
+		else if env$('client')='Grandview' then
 			fn_userLimit(1)
 			fn_getClientLicense_add('UB') : fn_setUbLimit(1000) ! U2 Utility Billing (500-1000 customers)
-		else if env$('client')='Payroll Done Right' then 
+		else if env$('client')='Payroll Done Right' then
 			fn_userLimit(1)
 			fn_getClientLicense_add('GL')
 			fn_getClientLicense_add('PR')
-		else if env$('client')='Schachtner Portnoy' then 
+		else if env$('client')='Schachtner Portnoy' then
 			fn_userLimit(76)
 			fn_getClientLicense_add('CM')
-		else if env$('client')='GreeneCo' then 
-			! if days(date$)<=days('08/31/2018','mm/dd/ccyy') then 
+		else if env$('client')='GreeneCo' then
+			! if days(date$)<=days('08/31/2018','mm/dd/ccyy') then
 				fn_getClientLicense_add('UB') : fn_setUbLimit(500) ! U3 Utility Billing (<500 Customers)
 				fn_getClientLicense_add('U4') : u4_device$="EZReader" ! U4 Utility Billing Hand Held Add-On
 			! end if
-		else if env$('client')='Hope Welty' then 
+		else if env$('client')='Hope Welty' then
 			fn_userLimit(1)
 			fn_getClientLicense_add('GL')
 			fn_getClientLicense_add('PR')
 			fn_getClientLicense_add('CL')
-		else if env$('client')='Kathys Bookkeeping' then 
+		else if env$('client')='Kathys Bookkeeping' then
 			fn_userLimit(2)
 			fn_getClientLicense_add('GL')
 			!     fn_getClientLicense_add('G2') ! G3 Accountant's General Ledger
 			fn_getClientLicense_add('PR')
 			!     fn_getClientLicense_add('P4')
-		else if env$('client')='Kincaid' and env$('Unique_Computer_Id')='1478AEE0-5BCB-11D9-B0AC-BCAEC5EA1947' then 
+		else if env$('client')='Kincaid' and env$('Unique_Computer_Id')='1478AEE0-5BCB-11D9-B0AC-BCAEC5EA1947' then
 			fn_userLimit(1)
 			fn_getClientLicense_add('PR')
 			!   else if env$('client')='Kincaid' and and env$('Unique_Computer_Id')='XXX need to do XXX' then
 			!     fn_userLimit(1)
 			!     fn_getClientLicense_add('UB') : fn_setUbLimit(1000) ! U2 Utility Billing (500-1000 customers)
-		else if env$('client')='Kincaid' and env$('Unique_Computer_Id')='03000200-0400-0500-0006-000700080009' then 
+		else if env$('client')='Kincaid' and env$('Unique_Computer_Id')='03000200-0400-0500-0006-000700080009' then
 			fn_userLimit(1)
 			fn_getClientLicense_add('UB') : fn_setUbLimit(1000) ! U2 Utility Billing (500-1000 customers)
 			fn_getClientLicense_add('U4') : u4_device$="Boson" ! U4 Utility Billing Hand Held Add-On
-		else if env$('client')='Kincaid' then 
+		else if env$('client')='Kincaid' then
 			fn_userLimit(2)
 			fn_getClientLicense_add('UB') : fn_setUbLimit(1000) ! U2 Utility Billing (500-1000 customers)
 			fn_getClientLicense_add('U4') : u4_device$="Boson" ! U4 Utility Billing Hand Held Add-On
 			!     fn_getClientLicense_add('GL')
 			fn_getClientLicense_add('PR')
-		! else if env$('client')='Lovington' then 
+		! else if env$('client')='Lovington' then
 		! 	fn_userLimit(1)
 		! 	fn_getClientLicense_add('UB') : fn_setUbLimit(9999) ! U1 Utility Billing (no discount)
 		! 	fn_getClientLicense_add('U4') : u4_device$="Sensus" ! U4 Utility Billing Hand Held Add-On
 		! 	fn_getClientLicense_add('GL')
 		! 	fn_getClientLicense_add('PR')
 		! 	fn_getClientLicense_add('CL')
-		! canceled		else if env$('client')='Merriam Woods' then 
+		! canceled		else if env$('client')='Merriam Woods' then
 		! canceled			fn_userLimit(2)
 		! canceled			fn_getClientLicense_add('UB') : fn_setUbLimit(1000) ! U2 Utility Billing (500-1000 customers)
 		! canceled			fn_getClientLicense_add('U5') ! UB External Collections Processing
@@ -500,71 +503,71 @@ def fn_getClientLicense(mat client_has$)
 		! canceled			!     fn_getClientLicense_add('GL')
 		! canceled			!     fn_getClientLicense_add('PR')
 		! canceled			!     fn_getClientLicense_add('CL')
-		else if env$('client')='Millry' then 
+		else if env$('client')='Millry' then
 			fn_userLimit(4)
 			fn_getClientLicense_add('UB') : fn_setUbLimit(1000) ! U2 Utility Billing (500-1000 customers)
 			fn_getClientLicense_add('U4') : u4_device$="Itron FC300" ! U4 Utility Billing Hand Held Add-On
-		else if env$('client')='Morrisonville' then 
+		else if env$('client')='Morrisonville' then
 			fn_userLimit(1)
 			fn_getClientLicense_add('UB') : fn_setUbLimit(500) ! U3 Utility Billing (<500 Customers)
 			fn_getClientLicense_add('U4') : u4_device$="EZReader" ! U4 Utility Billing Hand Held Add-On
-		else if env$('client')='Moweaqua' then 
+		else if env$('client')='Moweaqua' then
 			fn_userLimit(1)
 			fn_getClientLicense_add('UB') : fn_setUbLimit(1000) ! U2 Utility Billing (500-1000 customers)
 			fn_getClientLicense_add('U4') : u4_device$="Badger Connect C" ! U4 Utility Billing Hand Held Add-On
-		else if env$('client')='Pennington' then 
+		else if env$('client')='Pennington' then
 			fn_userLimit(1)
 			fn_getClientLicense_add('UB') : fn_setUbLimit(500) ! U3 Utility Billing (<500 Customers)
-		else if env$('client')='Purdy' then 
+		else if env$('client')='Purdy' then
 			fn_userLimit(2)
 			fn_getClientLicense_add('UB') : fn_setUbLimit(500) ! U3 Utility Billing (<500 Customers)
 			fn_getClientLicense_add('U4') : u4_device$="Aclara" ! U4 Utility Billing Hand Held Add-On
-		else if env$('client')='Omaha' then 
+		else if env$('client')='Omaha' then
 			if days(date$)<=days('03/03/2018','mm/dd/ccyy') then fn_userLimit(3) else fn_userLimit(1) ! 2 user bonus for 60 days
 			fn_getClientLicense_add('UB') : fn_setUbLimit(9999) ! U1 Utility Billing (no discount)
 			fn_getClientLicense_add('U4') : u4_device$='READy Water'
-			
-		else if env$('client')='Raymond' and env$('Unique_Computer_Id')='4C4C4544-0043-4210-8058-C8C04F423432' then 
+
+		else if env$('client')='Raymond' and env$('Unique_Computer_Id')='4C4C4544-0043-4210-8058-C8C04F423432' then
 			fn_userLimit(1)
 			fn_getClientLicense_add('UB') : fn_setUbLimit(500) ! U3 Utility Billing (<500 Customers)
 			fn_getClientLicense_add('U4') : u4_device$='Badger Connect C' ! U4 Utility Billing Hand Held Add-On          FREE TRIAL PERIOD
-		! else if env$('client')='Raymond' and env$('Unique_Computer_Id')='4C4C4544-0032-5910-804C-B3C04F585131' then 
+		! else if env$('client')='Raymond' and env$('Unique_Computer_Id')='4C4C4544-0032-5910-804C-B3C04F585131' then
 		! 	fn_userLimit(1)
 		! 	fn_getClientLicense_add('PR')
 		! else if env$('client')='Raymond' and env$('Unique_Computer_Id')='C55D3F13-A162-E111-8430-DC0EA14AC3F6' then ! ACS Test Laptop QOSMIO X775
 		! 	fn_userLimit(1)
 		! 	fn_getClientLicense_add('PR')
-		else if env$('client')='Raymond' then 
+		else if env$('client')='Raymond' then
 			fn_userLimit(2)
 		! 	fn_getClientLicense_add('PR')
 			fn_getClientLicense_add('UB') : fn_setUbLimit(500) ! U3 Utility Billing (<500 Customers)
 			fn_getClientLicense_add('U4') : u4_device$='Badger Connect C' ! U4 Utility Billing Hand Held Add-On
-		else if env$('client')='R R Crawford' then 
+		else if env$('client')='R R Crawford' then
 			fn_userLimit(1)
 			fn_getClientLicense_add('PR')   ! R R Crawford decided to cancel/stall their conversoin until their old system breaks.  At which time they must resume support and may need check format converted.
 			fn_getClientLicense_add('GL')   ! R R Crawford decided to cancel/stall their conversoin until their old system breaks.  At which time they must resume support and may need check format converted.
-		else if env$('client')='Scottville Rural' then 
+		else if env$('client')='Scottville Rural' then
 			fn_userLimit(1)
 			fn_getClientLicense_add('UB') : fn_setUbLimit(500) ! U3 Utility Billing (<500 Customers)
 			if days(date$)<=days('12/31/2020','mm/dd/ccyy') then fn_getClientLicense_add('U5') ! UB External Collections Processing
-		else if env$('client')='Starr County Gas' then 
+		else if env$('client')='Starr County Gas' then
 			fn_userLimit(1)
 			if days(date$)<=days('04/15/2018','mm/dd/ccyy') then fn_getClientLicense_add('UB') : fn_setUbLimit(9999)
-		else if env$('client')='Sheila' then 
+		else if env$('client')='Sheila' then
 			fn_userLimit(1)
 			fn_getClientLicense_add('UB') : fn_setUbLimit(500) ! U3 Utility Billing (<500 Customers)
 			fn_getClientLicense_add('U4') : u4_device$="Aclara" ! U4 Utility Billing Hand Held Add-On
 			fn_getClientLicense_add('CL')
 			fn_getClientLicense_add('GL')
 			fn_getClientLicense_add('PR')
-		else if env$('client')='Stern and Stern' then 
+		else if env$('client')='Stern and Stern' then
 			fn_userLimit(99) ! unknown
 			fn_getClientLicense_add('CM')
-		else if env$('client')='Thayer' then 
+		else if env$('client')='Thayer' then
 			fn_userLimit(1)
 			fn_getClientLicense_add('UB') : fn_setUbLimit(500) ! U3 Utility Billing (<500 Customers)
 			fn_getClientLicense_add('U4') : u4_device$='Badger Connect C' ! U4 Utility Billing Hand Held Add-On
-		else if env$('client')='Thomasboro' then 
+		else if env$('client')='Thomasboro' then
 			fn_userLimit(1)
 			fn_getClientLicense_add('UB') : fn_setUbLimit(500) ! U3 Utility Billing (<500 Customers)
 			! fn_getClientLicense_add('U4') : u4_device$='Badger Connect C' ! switched to Beacon on 7/2/20 JB
@@ -573,70 +576,70 @@ def fn_getClientLicense(mat client_has$)
 			fn_getClientLicense_add('PR')
 			fn_getClientLicense_add('CL')
 			fn_getClientLicense_add('UB-EFT')
-		else if env$('client')='Thomas Richardson' then 
+		else if env$('client')='Thomas Richardson' then
 			fn_userLimit(1)
 			fn_getClientLicense_add('GL')
 			fn_getClientLicense_add('PR')
-		!   else if env$('client')='Waverly' then 
+		!   else if env$('client')='Waverly' then
 		!     fn_userLimit(1)
 		!     fn_getClientLicense_add('UB') : fn_setUbLimit(500) ! U3 Utility Billing (<500 Customers)
-		! else if env$('client')='West Accounting' then 
+		! else if env$('client')='West Accounting' then
 		!   fn_userLimit(1)
 		!   fn_getClientLicense_add('PR')
-		else if env$('client')='White Hall' then 
+		else if env$('client')='White Hall' then
 			fn_userLimit(2)
 			fn_getClientLicense_add('UB')
-			!   else if env$('client')='Willard' then 
+			!   else if env$('client')='Willard' then
 			!     fn_userLimit(1)
 			!     fn_getClientLicense_add('GL')
 			!     fn_getClientLicense_add('PR')
 			!     fn_getClientLicense_add('CL')
-		else if env$('client')='World Wide' then 
+		else if env$('client')='World Wide' then
 			fn_userLimit(1)
 			fn_getClientLicense_add('GL')
-		else if env$('client')='Zaleski' then 
+		else if env$('client')='Zaleski' then
 			fn_userLimit(1)
-			fn_getClientLicense_add('PR') 
-			fn_getClientLicense_add('GL') 
+			fn_getClientLicense_add('PR')
+			fn_getClientLicense_add('GL')
 			fn_getClientLicense_add('G2') ! G3 Accountant's General Ledger
-		end if 
+		end if
 		! /r
 	end if
 fnend
 def fn_getClientLicense_add(ch_item$*256)
 	client_has_system_count=udim(mat client_has$)
-	if client_has_system_count=0 then 
+	if client_has_system_count=0 then
 		client_has_system_count=2
 		dim client_has$(0)*256
 		mat client_has$(1)
 		client_has$(1)='CO'
-	else 
+	else
 		client_has_system_count+=1
-	end if 
+	end if
 	mat client_has$(client_has_system_count)
 	client_has$(client_has_system_count)=ch_item$
-fnend 
+fnend
 def library fnclient_has_mat(mat c_has$) ! returns a list of system each client owns
 	fn_setup
 	fnclient_has_mat=fn_clientHasMat(mat c_has$)
-fnend 
+fnend
 def fn_clientHasMat(mat c_has$)
-	if env$('client')='' then pr 'fn_clientHasMat called but env client not set.' : pause 
+	if env$('client')='' then pr 'fn_clientHasMat called but env client not set.' : pause
 	fn_getClientLicense(mat client_has$)
 	mat c_has$(udim(mat client_has$))
 	mat c_has$=client_has$
 	fn_clientHasMat=client_has_system_count
-fnend 
+fnend
 def library fnclient_has(ch_sys$*256)
 	fn_setup
 	fnclient_has=fn_client_has(ch_sys$)
-fnend 
+fnend
 def fn_client_has(ch_sys$*256)
 	fn_getClientLicense(mat client_has$)
 	ch_return=0
 	if srch(mat client_has$,uprc$(ch_sys$))>0 then ch_return=1
 	fn_client_has=ch_return
-fnend 
+fnend
 def fn_userLimit(userLimit)
 	if env$('acsProduct')='ACS Online' then
 		userCount=fn_userCount
@@ -649,9 +652,9 @@ def fn_userLimit(userLimit)
 	else if val(env$('user_limit'))<>userLimit then
 		execute 'config option 9 '&str$(userLimit)
 		setEnv('user_limit',str$(userLimit))
-	end if 
-	! 
-fnend 
+	end if
+	!
+fnend
 def fn_userCount
 	ucReturn=0
 	exec 'status users >'&env$('temp')&'"\acsUsers[session].tmp"' ! don't use [temp] yet - called before it is set by core\start.br
@@ -660,7 +663,7 @@ def fn_userCount
 	ucListStarted=0
 	do
 		linput #hStUsers: ucLine$ eof UcEof
-		if lwrc$(trim$(ucLine$))='current users on network:' then 
+		if lwrc$(trim$(ucLine$))='current users on network:' then
 			ucListStarted=1
 		else if ucListStarted then
 			! fnaddonec(mat activeUsers$,ucLine$)
@@ -684,7 +687,7 @@ def library fnregistered_for_hh
 	fn_setup
 	fn_getClientLicense(mat client_has$)
 	fnRegistered_for_hh=fn_client_has('U4') ! fn_registered_for_hh
-fnend 
+fnend
 def library fnRegistered_for_job_cost_pr
 	fn_setup
 	fn_getClientLicense(mat client_has$)
@@ -699,18 +702,18 @@ def library fnhand_held_device$*20
 	fn_setup
 	fn_getClientLicense(mat client_has$)
 	fnhand_held_device$=fn_hand_held_device$
-fnend 
+fnend
 def fn_hand_held_device$*20
 	dim u4_device$*20,u4_deviceDefault$*20
 	u4_deviceDefault$=u4_device$
 	fnreg_read('Hand Held Device',u4_device$,u4_deviceDefault$)
 	if u4_device$='' then u4_device$=u4_deviceDefault$ ! in case it's been set and then blanked out to force default for client
 	fn_hand_held_device$=u4_device$
-fnend 
+fnend
 def fn_setUbLimit(x)
 	gUbLimit=x
 	setEnv('UB_Limit',str$(gUbLimit))
-fnend 
+fnend
 def library fnub_printbill_program$*256
 	if ~upp_setup then ! r:
 		upp_setup=1
@@ -721,7 +724,7 @@ def library fnub_printbill_program$*256
 		mat ub_printbill_client$(999)
 		mat ub_printbill_program$(999)
 		ub_printbill_count=0
-		
+
 		fn_upp_add('Ash Grove'         ,'ubprtfull_ashgrove'    )
 		fn_upp_add('Bethany'           ,'ubprtbl1_Bethany'      )  ! on 12/17/18 I cleaned it up a little but didn't move it into (basic) yet - it could be though -john
 		fn_upp_add('Chatom'            ,'ubprtbl1_chatom'       )
@@ -741,7 +744,7 @@ def library fnub_printbill_program$*256
 		fn_upp_add('White Hall'        ,'ubprtbl1_wh'           )
 		fn_upp_add('Brier Lake'        ,'ubprtthree_Brier'      )
 		fn_upp_add('Cerro Gordo V'     ,'ubprtlas_cerro'        )
-		
+
 		fn_upp_add('Campbell'          ,'(basic)'               )  ! derived from printbill_french_settlement_gas which should still work too
 		fn_upp_add('Edinburg'          ,'(basic)'               ) ! 'ubprtbl1_edi'
 		fn_upp_add('Edison'            ,'(basic)'               )
@@ -758,7 +761,7 @@ def library fnub_printbill_program$*256
 		fn_upp_add('Omaha'             ,'(basic)'               ) ! 'ubprtthree_Omaha'
 		fn_upp_add('Pennington'        ,'(basic)'               ) ! PrintBill_Pennington ! atlantis format - hits preprinted stock
 		fn_upp_add('Blucksberg'        ,'(basic)'               ) ! 'PrintBill_Blucksberg'
-		
+
 		! r: old removed lines
 			! fn_upp_add("Ashland","ubprtbl1_ashland")
 			! fn_upp_add("Franklinton","ubprtbl1_Franklinton")
@@ -786,19 +789,19 @@ def library fnub_printbill_program$*256
 		! /r
 		mat ub_printbill_client$(ub_printbill_count)
 		mat ub_printbill_program$(ub_printbill_count)
-		! 
+		!
 	end if  ! /r
 	upp_return$='S:\Core\Menu.br'
 		ua_which=srch(mat ub_printbill_client$,env$('Client'))
-		if ua_which>0 then 
+		if ua_which>0 then
 			upp_return$=ub_printbill_program$(ua_which)
-		else 
+		else
 			msgbox('Your Utility Bill settings could not be determined.  Please contact ACS at 1-800-643-6318.')
-		end if 
-	!        (basic) should be fine.   end if 
+		end if
+	!        (basic) should be fine.   end if
 	! if env$('acsDeveloper')<>'' then pr 'upp_return$='&upp_return$ : pause
 	fnub_printbill_program$=upp_return$
-fnend 
+fnend
 def fn_upp_add(ua_client$,ua_program$*128)
 	ub_printbill_count+=1
 	ub_printbill_client$(ub_printbill_count)=ua_client$
@@ -807,19 +810,22 @@ def fn_upp_add(ua_client$,ua_program$*128)
 	else
 		ub_printbill_program$(ub_printbill_count)='S:\acsUB\'&ua_program$&'.br'
 	end if
-fnend 
-def library fnpayroll_client_state$*2
+fnend
+def library fnpayroll_client_state$*2(; client$*64,___,return$*2,which)
+		if ~setup then fn_setup
+		fnpayroll_client_state$=fn_payroll_client_state$( client$)
+fnend
+def fn_payroll_client_state$*2(; client$*64,___,return$*2,which)
 	if ~pcs_setup then ! r:
 		pcs_setup=1
-		fn_setup
-		dim pcs_return$*2
+		if client$='' then client$=env$('client')
 		dim pr_clientstate_client$(1)*128
 		dim pr_clientstate_state$(1)*2
 		mat pr_clientstate_client$(999)
 		mat pr_clientstate_state$(999)
 		pr_clientstate_count=0
 		!   fn_upp_add("Ash Grove","ubprtlas_ashgrove")
-		fn_pcs_add("ACS","AR")
+		fn_pcs_add("ACS","NJ")
 		fn_pcs_add("Lamar",'MS')
 		fn_pcs_add("Ash Grove",'MO')
 		!   fn_pcs_add("Battlefield",'MO')
@@ -868,65 +874,64 @@ def library fnpayroll_client_state$*2
 		fn_pcs_add("Zaleski",'TX')
 		mat pr_clientstate_client$(pr_clientstate_count)
 		mat pr_clientstate_state$(pr_clientstate_count)
-	!
+
 	end if  ! /r
-	pcs_return$=''
-	pcs_which=srch(mat pr_clientstate_client$,env$('Client'))
-	if pcs_which>0 then 
-		pcs_return$=pr_clientstate_state$(pcs_which)
-	else 
-		msgbox('Your Payroll State could not be determined.  Please contact ACS at 1-800-643-6318.')
-	end if 
-	!
-	fnpayroll_client_state$=pcs_return$
-fnend 
+	which=srch(mat pr_clientstate_client$,client$)
+	if which>0 then
+		return$=pr_clientstate_state$(which)
+	else
+		return$='--'
+		! msgbox('Your Payroll State could not be determined.  Please contact ACS at 1-800-643-6318.')
+	end if
+	fn_payroll_client_state$=return$
+fnend
 def fn_pcs_add(pa_client$*128,pa_state$*2)
 	pr_clientstate_count+=1
 	pr_clientstate_client$(pr_clientstate_count)=pa_client$
 	pr_clientstate_state$(pr_clientstate_count)=pa_state$
-fnend 
+fnend
 def library fnclient_has_on_support_list(mat chosl_list$; chosl_grace_days)
 	fn_setup
 	fnclient_has_on_support_list=fn_client_has_on_support_list(mat chosl_list$, chosl_grace_days)
-fnend 
+fnend
 def fn_client_has_on_support_list(mat chosl_list$; chosl_grace_days)
 	dim chosl_owns_list$(0)*256
 	chosl_count=0
 	chosl_owns_count=fn_clientHasMat(mat chosl_owns_list$)
 	for chosl_item=1 to chosl_owns_count
-		if fn_client_has_on_support_item(chosl_owns_list$(chosl_item), chosl_grace_days) then 
+		if fn_client_has_on_support_item(chosl_owns_list$(chosl_item), chosl_grace_days) then
 			chosl_count+=1
 			mat chosl_list$(chosl_count)
 			chosl_list$(chosl_count)=chosl_owns_list$(chosl_item)
-		end if 
+		end if
 	next chosl_item
 	fn_client_has_on_support_list=chosl_count
-fnend 
+fnend
 def library fnclient_has_on_support_item(chosi_item$*256; days_grace)
 	fn_setup
 	fnclient_has_on_support_item=fn_client_has_on_support_item(chosi_item$, days_grace)
-fnend 
+fnend
 def fn_client_has_on_support_item(chosi_item$*256; days_grace)
 	client_id=val(env$('Client_ID'))
 	fn_client_support_setup(client_id,mat chosi_system_id$,mat chosi_system_support_end_date,mat chosi_on_support, days_grace)
 	chosi_retun=0
 	chosi_which=srch(mat chosi_system_id$,chosi_item$)
-	if chosi_which>0 then 
+	if chosi_which>0 then
 		chosi_retun=chosi_on_support(chosi_which)
-	else 
+	else
 		pr 'system ('&chosi_item$&') is not owned by client number '&env$('Client_ID')
-		if env$('ACSDeveloper')<>'' then pause 
-	end if 
+		if env$('ACSDeveloper')<>'' then pause
+	end if
 	fn_client_has_on_support_item=chosi_retun
-fnend 
+fnend
 def library fnclient_support(mat css_system_id$,mat css_system_support_end_date,mat css_on_support; css_grace_days)
 	fn_setup
 	fnclient_support=fn_client_support(mat css_system_id$,mat css_system_support_end_date,mat css_on_support, css_grace_days)
-fnend 
+fnend
 def fn_client_support(mat css_system_id$,mat css_system_support_end_date,mat css_on_support; css_grace_days)
 	client_id=val(env$('Client_ID'))
 	fn_client_support=fn_client_support_setup(client_id,mat css_system_id$,mat css_system_support_end_date,mat css_on_support, css_grace_days)
-fnend 
+fnend
 def fn_client_support_setup(client_id,mat css_system_id$,mat css_system_support_end_date,mat css_on_support; css_days_grace)
 	! css_days_grace=day grace period to allow users to update after support has expired.
 	if css_setup<>client_id then ! r:
@@ -938,24 +943,24 @@ def fn_client_support_setup(client_id,mat css_system_id$,mat css_system_support_
 		mat cache_css_system_id$(0)
 		mat cache_css_system_sup_end_date(0)
 		cache_css_system_count=0
-		open #h_support=fnH: "Name=S:\Core\Data\acsllc\support.h420,Version=2,KFName=S:\Core\Data\acsllc\support-idx.h420,version=0,Shr",internal,input,keyed 
+		open #h_support=fnH: "Name=S:\Core\Data\acsllc\support.h420,Version=2,KFName=S:\Core\Data\acsllc\support-idx.h420,version=0,Shr",internal,input,keyed
 		restore #h_support: ! ,key>==lpad$(trim$(client_id$),kln(h_support)):
-		do 
+		do
 			read #h_support,using F_SUPPORT: cln$,scode,scode$,sdt1,stm$,sup_exp_date,scst eof CSS_SUPPORT_EOF
 			F_SUPPORT: form pos 1,g 6,n 2,c 2,n 8,c 2,n 8,n 10.2,4*c 50
 			cln=val(cln$)
-			if cln=client_id then 
+			if cln=client_id then
 				if srch(mat css_client_owns$,fn_system_code_standardize$(scode$))>0 then
 					cache_css_system_count+=1
 					mat cache_css_system_id$(cache_css_system_count)
 					mat cache_css_system_sup_end_date(cache_css_system_count)
 					cache_css_system_id$(cache_css_system_count)=fn_system_code_standardize$(scode$)
 					cache_css_system_sup_end_date(cache_css_system_count)=sup_exp_date
-				end if 
-			end if 
-		loop 
-		CSS_SUPPORT_EOF: ! 
-		close #h_support: 
+				end if
+			end if
+		loop
+		CSS_SUPPORT_EOF: !
+		close #h_support:
 		css_setup=client_id
 	end if  ! /r
 	! r: move cache_* arrays into passed in and out arrays
@@ -966,24 +971,24 @@ def fn_client_support_setup(client_id,mat css_system_id$,mat css_system_support_
 	! /r
 	! r: determine if on support
 		for css_item=1 to cache_css_client_owns_count ! udim(mat css_system_id$)
-			if css_item>udim(mat css_system_support_end_date) then 
-				css_on_support(css_item)=0 ! pause 
-			else if days(date('ccyymmdd'),'ccyymmdd')<=days(css_system_support_end_date(css_item),'ccyymmdd')+css_days_grace then 
+			if css_item>udim(mat css_system_support_end_date) then
+				css_on_support(css_item)=0 ! pause
+			else if days(date('ccyymmdd'),'ccyymmdd')<=days(css_system_support_end_date(css_item),'ccyymmdd')+css_days_grace then
 				css_on_support(css_item)=1
-			else 
+			else
 				css_on_support(css_item)=0
-			end if 
+			end if
 		next css_item
 	! /r
 fnend
 def library fnsystem_code_standardize$(st_code$*256)
 	fn_setup
 	fnsystem_code_standardize$=fn_system_code_standardize$(st_code$)
-fnend 
+fnend
 def fn_system_code_standardize$(st_code$*256)
 	! this function is to translate from systems.h420 to
 	! cursys type codes
-	! 
+	!
 	st_code$=uprc$(st_code$)
 	! if st_code$='G1' then st_code$='GL'
 	if st_code$='G1' then st_code$='GL'
@@ -995,11 +1000,11 @@ def fn_system_code_standardize$(st_code$*256)
 	if st_code$='P1' then st_code$='PR'
 	if st_code$='P2' then st_code$='P4' ! Job Cost Payroll Add On
 	fn_system_code_standardize$=st_code$
-fnend 
+fnend
 def library fnclient_is_converting
 	fn_setup
 	fnclient_is_converting=fn_client_is_converting
-fnend 
+fnend
 def fn_client_is_converting
 	cic_return=0
 	if env$('ACSDeveloper')<>'' then
@@ -1012,7 +1017,7 @@ def fn_client_is_converting
 	! 	cic_return=1
 	else if env$('client')='Kathys Bookkeeping' and days(date$)<=days('3/31/2021','mm/dd/ccyy')  then
 		cic_return=1
-	end if 
+	end if
 	fn_client_is_converting=cic_return
-fnend 
+fnend
 include: ertn No

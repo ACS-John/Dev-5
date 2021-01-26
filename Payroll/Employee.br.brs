@@ -506,58 +506,69 @@ def fn_departmentAdd(eno,&deptNew; ___,returnN)
 	end if
 	fn_departmentAdd=returnN
 fnend
-
-ScrIlW4: ! r:
-	fnTos : screen=scrIlW4
-	lc=respc=0 : col1_len=25 : col2_pos=1+col1_len+2
+ScrState: ! r:
+	screen=scrState
+	if fnpayroll_client_state$='AR' then
+			ckey=fn_scrAskOne(eno,'AR4EC Exemptions')
+			if ckey=>5200 and ckey<=ckey_high then goto Nav
+	else if fnpayroll_client_state$='IL' then
+		! gosub ScrIlW4
+		! ScrIlW4: ! r:
+		fnTos
+		lc=respc=0 : col1_len=25 : col2_pos=1+col1_len+2
+		fn_navButtons(lc,deptCount)
+		lc+=1
+		fnLbl(lc+=1,1,"Employee Number:",col1_len,1)
+		fnTxt(lc,col2_pos,8,8,1,"1030",1,"Employee numbers must be numeric.")
+		resp$(respc+=1)=str$(eno)
+		lc+=1
+		fnLbl(lc+=1,1,"IL W-4 Line 1 Allowances:",col1_len,1)
+		fnTxt(lc,col2_pos,5, 0,1,"30",0,'')
+		resp$(rc_ilw4line1=respc+=1)=fnEmployeeData$(eno,'IL W-4 Line 1 Allowances')
+		fnLbl(lc+=1,1,"IL W-4 Line 2 Allowances:",col1_len,1)
+		fnTxt(lc,col2_pos,5, 0,1,"30",0,'')
+		resp$(rc_ilw4line2=respc+=1)=fnEmployeeData$(eno,'IL W-4 Line 2 Allowances')
+	
+		fnCmdKey("C&omplete",1,1,0,"Saves any changes and returns to main screen.")
+		fnCmdKey("&Cancel",5,0,1,"Exit record without saving changes.")
+		fnAcs(mat resp$,ckey)
+		if ckey<>5 then
+			fnEmployeeData$(eno,'IL W-4 Line 1 Allowances',resp$(rc_ilw4line1))
+			fnEmployeeData$(eno,'IL W-4 Line 2 Allowances',resp$(rc_ilw4line2))
+			if ckey=>5200 and ckey<=ckey_high then goto Nav
+		end if
+		! return ! /r
+	else if fnpayroll_client_state$='LA' then !  R-1300 (L-4)
+		fn_scrAskOne(eno,'R-1300 Exepmtions')
+		if ckey=>5200 and ckey<=ckey_high then goto Nav
+	else 
+		pr 'state not yet setup yet'
+		pause
+	end if
+goto ScrEmployee ! /r
+def fn_scrAskOne(eno,id$*64)
+	fnTos : screen=ScrState
+	lc=respc=0 : col1_len=max(len(id$)+1,16) : col2_pos=1+col1_len+2
 	fn_navButtons(lc,deptCount)
 	lc+=1
-	fnLbl(lc+=1,1,"Employee Number:",mylen,1)
-	fnTxt(lc,col1_len,8,8,1,"1030",1,"Employee numbers must be numeric.")
+	fnLbl(lc+=1,1,"Employee Number:",col1_len,1)
+	fnTxt(lc,col2_pos,8,8,1,"1030",1,"Employee numbers must be numeric.")
 	resp$(respc+=1)=str$(eno)
 	lc+=1
-	fnLbl(lc+=1,1,"IL W-4 Line 1 Allowances:",col1_len,1)
+	fnLbl(lc+=1,1,id$&':',col1_len,1)
 	fnTxt(lc,col2_pos,5, 0,1,"30",0,'')
-	resp$(rc_ilw4line1=respc+=1)=fnEmployeeData$(eno,'IL W-4 Line 1 Allowances')
-	fnLbl(lc+=1,1,"IL W-4 Line 2 Allowances:",col1_len,1)
-	fnTxt(lc,col2_pos,5, 0,1,"30",0,'')
-	resp$(rc_ilw4line2=respc+=1)=fnEmployeeData$(eno,'IL W-4 Line 2 Allowances')
+	resp$(rc_id=respc+=1)=fnEmployeeData$(eno,id$)
 
 	fnCmdKey("C&omplete",1,1,0,"Saves any changes and returns to main screen.")
 	fnCmdKey("&Cancel",5,0,1,"Exit record without saving changes.")
 	fnAcs(mat resp$,ckey)
-	if ckey=5 then
-		goto Menu1
-	else
-		fnEmployeeData$(eno,'IL W-4 Line 1 Allowances',resp$(rc_ilw4line1))
-		fnEmployeeData$(eno,'IL W-4 Line 2 Allowances',resp$(rc_ilw4line2))
-		if ckey=>5200 and ckey<=ckey_high then goto Nav
+	if ckey<>5 then
+		fnEmployeeData$(eno,id$,resp$(rc_id))
+		! handled after function ! if ckey=>5200 and ckey<=ckey_high then goto Nav
 	end if
-goto ScrEmployee ! ScrIlW4 ! /r
-ScrAr4ec: ! r:
-	fnTos : screen=ScrAr4ec
-	lc=respc=0 : col1_len=25 : col2_pos=1+col1_len+2
-	fn_navButtons(lc,deptCount)
-	lc+=1
-	fnLbl(lc+=1,1,"Employee Number:",mylen,1)
-	fnTxt(lc,col1_len,8,8,1,"1030",1,"Employee numbers must be numeric.")
-	resp$(respc+=1)=str$(eno)
-	lc+=1
-	fnLbl(lc+=1,1,"AR4EC Exemptions:",col1_len,1)
-	fnTxt(lc,col2_pos,5, 0,1,"30",0,'')
-	resp$(rc_ilw4line1=respc+=1)=fnEmployeeData$(eno,'AR4EC Exemptions')
-
-	fnCmdKey("C&omplete",1,1,0,"Saves any changes and returns to main screen.")
-	fnCmdKey("&Cancel",5,0,1,"Exit record without saving changes.")
-	fnAcs(mat resp$,ckey)
-	if ckey=5 then
-		goto EmployeeEditXit
-	else
-		fnEmployeeData$(eno,'AR4EC Exemptions',resp$(rc_ilw4line1))
-		if ckey=>5200 and ckey<=ckey_high then goto Nav
-	end if
-goto ScrEmployee ! ScrAr4ec ! /r
-
+	ScrAskOneXit: !
+	fn_scrAskOne=ckey
+fnend
 
 def fn_navButtons(&lc,&deptCount; ___,deptItem)
 	! many other locals too
@@ -579,9 +590,11 @@ def fn_navButtons(&lc,&deptCount; ___,deptItem)
 	lc+=1
 	fnbutton_or_disabled(screen<>scrEmployee,lc,1,'Employee',ckey_scrEmployee)
 	if fnpayroll_client_state$='AR' then
-		fnbutton_or_disabled(screen<>scrAr4ec,lc,11,'AR4EC',ckey_ScrState,'',10)
+		fnbutton_or_disabled(screen<>scrState,lc,11,'AR4EC',ckey_ScrState,'',10)
 	else if fnpayroll_client_state$='IL' then
-		fnbutton_or_disabled(screen<>scrIlW4,lc,11,'IL W-4',ckey_ScrState,'',10)
+		fnbutton_or_disabled(screen<>scrState,lc,11,'IL W-4',ckey_ScrState,'',10)
+	else if fnpayroll_client_state$='LA' then
+		fnbutton_or_disabled(screen<>scrState,lc,11,'R-1300 (L-4)',ckey_ScrState,'',10)
 	end if
 	lc+=1
 	dptPos=1
@@ -600,22 +613,14 @@ def fn_navButtons(&lc,&deptCount; ___,deptItem)
 	fnlbl(28,105,' ') ! invisible space to keep a minimum size, otherwise tab buttons jump while you're using them
 fnend
 Nav: ! r:
-	if ckey=ckey_ScrState then
-		if fnpayroll_client_state$='AR' then
-			goto ScrAr4ec
-		else if fnpayroll_client_state$='IL' then
-			goto ScrIlW4
-		else
-			pr 'State Screen not set up for '&fnpayroll_client_state$&' yet.'
-			pause
-		end if
-	else if ckey=ckey_scrEmployee then
+	if ckey=ckey_scrEmployee then
 		goto ScrEmployee
+	else if ckey=ckey_ScrState then
+		goto ScrState
 	else if ckey=>5201 and ckey<=5201+deptCount then
 		whichDepartment=ckey-5201
 		goto ScrDepartment
 	else if ckey=ckey_DepartmentAdd then
-		pause
 		if fn_departmentAdd(eno,deptNew) then
 			deptCount=fn_EmployeeDepartments(eno,mat empDept,mat empDeptRec)
 			ckey=5202
@@ -640,7 +645,6 @@ EmployeeSave: ! r:
 		rewrite #hEmployee,using F_employee,key=ent$: eno,mat em$,ss$,mat rs,mat em,lpd,tgp,w4Step2,w4Year$,ph$,bd,w4Step3,w4Step4a,w4Step4b,w4Step4c
 	end if
 return ! /r
-
 EmployeeDelete: ! r:
 	mat ml$(2)
 	ml$(1)="Employee Number "&ltrm$(ent$)&" will be Deleted."
@@ -804,9 +808,9 @@ def fn_setup
 			dednames$(j)=trim$(dednames$(j))&":"
 		end if
 	next j
-	if fnpayroll_client_state$='IL' or fnpayroll_client_state$='AR' then
-		scrIlW4=1        :     ckey_ScrState=5200
-	end if
+	! if fnpayroll_client_state$='IL' or fnpayroll_client_state$='AR' then
+	! end if
+	scrState=1        :     ckey_ScrState=5200
 	scrEmployee=2     :      ckey_scrEmployee=5201
 	scrDeptAdd=3      :      ckey_DepartmentAdd=5301
 	ckey_high=ckey_DepartmentAdd ! should be the highest of these universal ckeys
@@ -930,7 +934,6 @@ AskDd: !
 		goto DdFinis
 	end if
 goto AskDd ! /r
-
 DdReadNoKey: ! r:
 	dd$='N' : rtn=acc=0 : acn$='' ! defaults
 	write #hDd,using "Form pos 1,C 10,C 1,N 9,N 2,C 17": key$,dd$,rtn,acc,acn$ nokey DdReadNoKey
