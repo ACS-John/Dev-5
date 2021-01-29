@@ -1315,8 +1315,12 @@ MENU1READWORKEOF: ! /r
 		if days(d1,"mmddyy")<days(date$)-25 then
 			ok_click=msgbox('The billing date entered is over three weeks old. Please enter the correct date or contact ACS support.','Old Billing Date',"OK","EXCL")
 			goto menu1
-			end if
-		fnchain("S:\Utility Billing\Calculate Bills") ! goto CALCULATE
+		end if
+		! fnchain("S:\Utility Billing\Calculate Bills") ! goto CALCULATE
+		fnCalculateBills('calculate')
+		goto Xit
+		
+		
 	else if ckey=fky_askCustomersInSequence then
 		addmethod=am_customersInSequence
 		goto AUTO_REC

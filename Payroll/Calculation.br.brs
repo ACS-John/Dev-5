@@ -843,7 +843,7 @@ def fn_stateTax(eno,wages,pppy,allowances,marital,eicCode,fedWh,addOnSt,w4year$,
 	else if clientState$='KY' then ! added 10/03/2016 for R R Crawford Engineering
 		returnN=fn_wh_kentuky(wages,pppy,allowances)
 	else if clientState$='LA' then
-		returnN=fn_wh_louisiana(wages,pppy,allowances)
+		returnN=fn_wh_louisiana(eno,marital,wages,pppy,allowances)
 	else if clientState$='MO' then
 		returnN=fn_wh_missouri(wages,marital,fedWh,allowances,pppy)
 	else if clientState$='MS' then
@@ -959,7 +959,7 @@ def fn_wh_arkansas(eno,war_wages_taxable_current,payPeriodsPerYear,allowances, _
 	end if
 	fn_detail('3. $50 Midrange Income Lookup = '&str$(adjEstAnnWages))
 	tableRow=fn_table_line(mat ar,adjEstAnnWages)
-	
+
 	if taxYear<=2020 then
 		s1=round(ar(tableRow,2)+(adjEstAnnWages-ar(tableRow,1))*ar(tableRow,3),2)
 	else if taxYear=>2021 then
@@ -1082,7 +1082,7 @@ def fn_wh_illinois(eno,taxableWagesCurrent,payPeriodsPerYear,stAllowances; ___,g
 
 	line1allowances=val(fnEmployeeData$(eno,'IL W-4 Line 1 Allowances'))
 	line2allowances=val(fnEmployeeData$(eno,'IL W-4 Line 2 Allowances'))
-	
+
 	estAnnualNetPay=taxableWagesCurrent*payPeriodsPerYear
 	returnN=.0495*(estAnnualNetPay-((line1allowances*2375)+(line2allowances*1000)/payPeriodsPerYear))
 
@@ -1095,7 +1095,7 @@ def fn_wh_illinois(eno,taxableWagesCurrent,payPeriodsPerYear,stAllowances; ___,g
 		fnStatus('returnN='&str$(returnN)                             )
 	end if
 
-	
+
 	returnN=round(returnN/payPeriodsPerYear,2)
 	if returnN<.1 then returnN=0 ! do not withhold less than 10 cents.
 	fn_wh_illinois=returnN
@@ -1138,36 +1138,94 @@ def fn_wh_kentuky(taxableWagesCurrent,payPeriodsPerYear,allowances; ___,returnN,
 	if returnN<.1 then returnN=0 ! do not withhold less than 10 cents.
 	fn_wh_kentuky=returnN
 fnend
-def fn_wh_louisiana(taxableWagesCurrent,payPeriodsPerYear,allowances; _
-		___,returnN,h1,h2,h3,stateEarnings,x,y,m1,m2,a,bb,cc,dd,ee)
+def fn_wh_louisiana(eno,marital,taxableWagesCurrent,payPeriodsPerYear,stAllowances; _
+		___,returnN,h1,h2,h3,stateEarnings,x,y,m1,m2,a,bb,cc,dd,ee, _
+		w,s,x,y,n,a,b)
 	! no table: revised 1/01/03
+	if taxYear<=2020 then ! r:
+		stateEarnings=round(taxableWagesCurrent,2) ! stateEarnings
+		if marital=0 or marital=2 then
+			y=stAllowances-1
+			x=1
+			if y>=0 then goto L3800
+			x=0
+			y=0
+			goto L3800
+		end if
+		if stAllowances=0 then y=0 : x=0
+		if stAllowances=1 then y=0 : x=1
+		if stAllowances>=2 then y=stAllowances-2 : x=2
+		L3800: ! married formula or >1 exemptions
+		if x<2 then m1=12500 : m2=25000
+		if x>=2 then m1=25000 : m2=50000
+		n=payPeriodsPerYear
+		if stateEarnings>0 then a=(stateEarnings*.021) else a=0
+		if stateEarnings>(m1/n) then bb=.0135*(stateEarnings-(m1/n)) else bb=0
+		if stateEarnings>(m2/n) then cc=.0135*(stateEarnings-(m2/n)) else cc=0
+		dd=.021*(((x*4500)+(y*1000))/n)
+		if ((x*4500)+(y*1000))>m1 then
+			ee=.0135*(((x*4500)+(y*1000)-m1)/n)
+		else
+			ee=0
+		end if
+		returnN=max(0,((a+bb+cc)-(dd+ee))) ! /r
+	else if taxYear=>2021 then
+		stAllowances=val(fnEmployeeData$(eno,'R-1300 Exepmtions'))
+		if (marital=0 or marital=2) and stAllowances<2 then
+			! they are single and claiming less than 2 exemptions 
 
-	stateEarnings=round(taxableWagesCurrent,2) ! stateEarnings
-	if marital=0 or marital=2 then
-		y=stAllowances-1
-		x=1
-		if y>=0 then goto L3800
-		x=0
-		y=0
-		goto L3800
+			! 1. Single Taxpayer Withholding Formulas
+			!   W is the withholding tax per pay period.
+			!   S is employee’s salary per pay period for each bracket.
+			s=taxableWagesCurrent
+			!   X is the number of personal exemptions; X must be 0 or 1.
+			x=stAllowances
+			!   Y is the number of dependency credits; Y must be a whole
+			y=val(fnEmployeeData$(eno,'R-1300 Dependencies'))
+			!   number that is 0 or greater.
+			!   N is the number of pay periods.
+			n=payPeriodsPerYear
+			!   A is the effect of the personal exemptions and dependency
+			!   credits equal to or less than $12,500;
+			!   A=.021(((X*4,500)+(Y*1,000))÷N).
+			!   B is the effect of the personal exemptions and dependency
+			!   credits in excess of $12,500;
+			!   B=.016((((X*4,500)+(Y*1,000))-12,500)÷N).
+			!   If annual wages are less than or equal to $12,500, then
+			!   W=.021(S)-(A+B).
+			!   If annual wages are greater $12,500 but less than or equal to
+			!   $50,000, then
+			!   W=.021(S)+.0160(S-(12,500÷N))-(A+B).
+			!   If annual wages are greater than $50,000, then
+			!   W=.021(S)+.0160(S-(12,500÷N))+.0135(S-(50,000÷N))-(A + B)
+			
+		else
+			! 2. Married Taxpayer Withholding Formulas
+			!   W is the withholding tax per pay period.
+			!   S is the employee’s salary per pay period for each bracket.
+			s=taxableWagesCurrent
+			!   X is the number of personal exemptions. X must 2.
+			x=stAllowances
+			!   Y is the number of dependency credits. Y must be 0 or greater.
+			y=val(fnEmployeeData$(eno,'R-1300 Dependencies'))
+			!   N is the number of pay periods.
+			n=payPeriodsPerYear
+			!   A is the effect of the personal exemptions and dependency
+			!   credits equal to or less than $25,000;
+			!   A=.021(((X*4,500)+(Y*1,000))÷N)
+			!   B is the effect of the personal exemptions and dependency
+			!   credits in excess of $25,000;
+			!   B=.0165((((X*4,500)+(Y*1,000))-25,000)÷N).
+			!   If annual wages are less than or equal to $25,000, then
+			!   W=.021(S)-(A+B).
+			!   If annual wages are greater $25,000 but less than or equal to
+			!   $100,000, then
+			!   W=.021(S)+.0165(S-(25,000÷N))-(A+B).
+			!   If annual wages are greater than $100,000, then
+			!   W=.021(S)+.0165(S-(25,000÷N))+.0135(S-(100,000÷N))-(A+B).
+		end if
+		returnN=w
 	end if
-	if stAllowances=0 then y=0 : x=0
-	if stAllowances=1 then y=0 : x=1
-	if stAllowances>=2 then y=stAllowances-2 : x=2
-	L3800: ! married formula or >1 exemptions
-	if x<2 then m1=12500 : m2=25000
-	if x>=2 then m1=25000 : m2=50000
-	n=payPeriodsPerYear
-	if stateEarnings>0 then a=(stateEarnings*.021) else a=0
-	if stateEarnings>(m1/n) then bb=.0135*(stateEarnings-(m1/n)) else bb=0
-	if stateEarnings>(m2/n) then cc=.0135*(stateEarnings-(m2/n)) else cc=0
-	dd=.021*(((x*4500)+(y*1000))/n)
-	if ((x*4500)+(y*1000))>m1 then
-		ee=.0135*(((x*4500)+(y*1000)-m1)/n)
-	else
-		ee=0
-	end if
-	returnN=max(0,((a+bb+cc)-(dd+ee)))
 	returnN=round(returnN,2)
 	if returnN<.1 then returnN=0
 	fn_wh_louisiana=returnN
@@ -1361,9 +1419,9 @@ def fn_wh_oregon( taxableWagesCurrent,fedWhEstimate,payPeriodsPerYear, _
 			or1(3,1)=  9200 : or1(3,2)= 761   : or1(3,3)=0.0875     !!
 												! (50000-9200)*.0875+761=  4331 (round to 4332)  !!
 			or1(4,1)= 50000 : or1(4,2)= 4331   : or1(4,3)=0.099     !!
-			
+
 			! fn_debugPrint2d(mat or1)
-			
+
 		end if
 		! /r
 		dim or2(0,0) ! r: Single with 3 or more allowances, or married
@@ -1387,7 +1445,7 @@ def fn_wh_oregon( taxableWagesCurrent,fedWhEstimate,payPeriodsPerYear, _
 			or2(2,1)=  7300 : or2(2,2)=  560 : or2(2,3)=0.0675 !!
 
 			or2(3,1)= 18400 : or2(3,2)= 1309 : or2(3,3)=0.0875 !!
-			
+
 			or2(4,1)= 50000 : or2(4,2)= 4074 : or2(4,3)=0.09   !!
 		end if
 		! /r
@@ -1480,10 +1538,10 @@ def fn_wh_oregon( taxableWagesCurrent,fedWhEstimate,payPeriodsPerYear, _
 
 		!      WH = 1,244 + [(BASE – 16,900        ) * 0.09] – (206 * allowances) ! 2019
 		!      WH = $749 + [(BASE – $9,050) x 0.0875] – ($210 x allowances) ! 2020
-		
-		
+
+
 		!      WH =  $761 + [(BASE ­ $9,200) x 0.0875] ­ ($213 x allowances) ! 2021
-		
+
 		! returnN=or2(tableLine,2)+(orBase-or2(tableLine,1))*or2(tableLine,3)
 		returnN = preBase +(( orBase - removePrev) * taxRate) - (perAllowance * allowancesEffective)
 

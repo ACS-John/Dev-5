@@ -1,10 +1,13 @@
-pr bell;'do not run this program directly.  it is just for library function calling. ' : end
-! fn_setup
-! fnTop(program$)
-! dim goal$*11
-! goal$=lwrc$(env$('program_caption')(1:pos(env$('program_caption'),' ')-1))
-! fn_calculateBills(goal$)
-! Xit: fnXit
+if env$('acsDeveloper')='' then 
+	pr bell;'direct run is for developers only.'
+	end
+end if
+
+fn_setup
+fnTop(program$)
+fn_calculateBills('calculate')
+fnXit
+
 def library fnCalculateBills(goal$*11)
 	if ~setup then fn_setup
 	fnCalculateBills=fn_calculateBills(goal$)
@@ -26,11 +29,16 @@ def fn_calculateBills(goal$*11)
 	! get date meter read
 	fncreg_read('Meter Reading Date Current',tmp$) : dateread=val(tmp$)
 
-	fn_askBillingDate
+	ckey=fn_askBillingDate
 	if ckey=5 then goto Xit_CALCULATE
 	! fnwait("Calculating: please wait...",0)
 	fnAutomatedSavePoint('before')
 
+	dim serviceName$(10)*20
+	dim service$(10)
+	dim tax_code$(10)*1
+	dim penalty$(10)
+	dim subjectto(10)
 	fnGetServices(mat serviceName$,mat service$,mat tax_code$,mat penalty$,mat subjectto)
 	for j=1 to udim(serviceName$)
 		serviceName$(j)=trim$(serviceName$(j))
@@ -38,15 +46,15 @@ def fn_calculateBills(goal$*11)
 
 	fnopenprn
 
-	open #h_ratemst:=8: "Name=[Q]\UBmstr\ubData\RateMst.h[cno],KFName=[Q]\UBmstr\ubData\RateIdx1.h[cno],Shr",internal,input,keyed
-	open #h_customer:=1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,outIn,keyed
+	open #h_ratemst=fnH: "Name=[Q]\UBmstr\ubData\RateMst.h[cno],KFName=[Q]\UBmstr\ubData\RateIdx1.h[cno],Shr",internal,input,keyed
+	open #h_customer=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,outIn,keyed
 	F_CUSTOMER: form pos 11,2*c 30,pos 143,7*pd 2,pos 157,11*pd 4.2,pos 201,4*pd 4,pos 217,15*pd 5,pos 292,pd 4.2,pos 296,pd 4,pos 300,12*pd 4.2,pos 388,10*pd 5.2,pos 1741,n 2,n 7,2*n 6,n 9,pd 5.2,n 3,3*n 9,3*n 2,3*n 3,n 1,3*n 9,3*pd 5.2,c 30,7*c 12,3*c 30
 	F_CUSTOMER_W_ACCT: form pos 1,c 10,2*c 30,pos 143,7*pd 2,pos 157,11*pd 4.2,pos 201,4*pd 4,pos 217,15*pd 5,pos 292,pd 4.2,pos 296,pd 4,pos 300,12*pd 4.2,pos 388,10*pd 5.2,pos 1741,n 2,n 7,2*n 6,n 9,pd 5.2,n 3,3*n 9,3*n 2,3*n 3,n 1,3*n 9,3*pd 5.2,c 30,7*c 12,3*c 30
-	open #hTrans:=3: "Name=[Q]\UBmstr\UBTransVB.h[cno],KFName=[Q]\UBmstr\UBTrIndx.h[cno],Shr",internal,outIn,keyed
+	open #hTrans=fnH: "Name=[Q]\UBmstr\UBTransVB.h[cno],KFName=[Q]\UBmstr\UBTrIndx.h[cno],Shr",internal,outIn,keyed
 	open #hTrans2=fnH: "Name=[Q]\UBmstr\UBTransVB.h[cno],KFName=[Q]\UBmstr\UBTrdt.h[cno],Shr",internal,outIn,keyed
 	FORM_UBTRANS: form pos 1,c 10,n 8,n 1,12*pd 4.2,6*pd 5,pd 4.2,n 1
 	if goal$='calculate' then
-		open #h_work:=2: "Name="&work$,internal,outIn,relative
+		open #h_work=fnH: "Name="&work$,internal,outIn,relative
 	end if
 	F_WORK: form pos 1,c 10,pos 11,4*pd 5,pos 31,7*pd 4.2,pos 59,3*pd 5,n 1
 	fn_deposit_open
@@ -157,6 +165,7 @@ TOP: ! r:
 				gb(j)=gb(j)+g(j)
 			end if
 		next j
+		! if env$('acsDeveloper')<>'' and trim$(x$)='100260.00' then pr ' just before write #customer' : pause
 		rewrite #h_customer,using F_CUSTOMER,key=x$: meteradr$,custname$,mat a,mat b,mat c,mat d,bal,f,mat g,mat gb,mat extra conv CONV_CUSTOMER_REWRITE
 		fn_write_new_trans
 	end if
@@ -261,15 +270,15 @@ def fn_cuu_report_usage
 	pr #255: "Type of Service     Old Reading   Current Reading       Calculated Usage"
 	F_PR_SERVICE: form c 22,pic(---------),x 9,pic(---------),x 11,pic(----------),x 2,c 30,x 2,c 30
 	F_PR_PRIOR_USAGES: form pos 1,c 13,12*(pic(zzzz/zz/zz),nz 9,x 1)
-	if trim$(serviceName$(1))<>"" then ! test vs. water
+	if serviceName$(1)<>"" then ! test vs. water
 		pr #255,using F_PR_SERVICE: "Water",d(1),x(1),usage_srv1
 		pr #255,using F_PR_PRIOR_USAGES: " Prior Usages",watdat(1),watuse(1),watdat(2),watuse(2),watdat(3),watuse(3),watdat(4),watuse(4),watdat(5),watuse(5),watdat(6),watuse(6),watdat(7),watuse(7),watdat(8),watuse(8),watdat(9),watuse(9),watdat(10),watuse(10),watdat(11),watuse(11),watdat(12),watuse(12)
 	end if
-	if trim$(serviceName$(3))="Electric" or trim$(serviceName$(3))="Lawn Meter" then ! test vs. Electric/lawn meter
+	if serviceName$(3)="Electric" or serviceName$(3)="Lawn Meter" then ! test vs. Electric/lawn meter
 		pr #255,using F_PR_SERVICE: "Electric",d(5),x(3),usage_srv3
 		pr #255,using F_PR_PRIOR_USAGES: " Prior Usages",elecdat(1),elecuse(1),elecdat(2),elecuse(2),elecdat(3),elecuse(3),elecdat(4),elecuse(4),elecdat(5),elecuse(5),elecdat(6),elecuse(6),elecdat(7),elecuse(7),elecdat(8),elecuse(8),elecdat(9),elecuse(9),elecdat(10),elecuse(10),elecdat(11),elecuse(11),elecdat(12),elecuse(12)
 	end if
-	if trim$(serviceName$(4))="Gas" then ! test vs. Gas
+	if serviceName$(4)="Gas" then ! test vs. Gas
 		pr #255,using F_PR_SERVICE: "Gas",d(9),x(2),usage_srv4
 		pr #255,using F_PR_PRIOR_USAGES: " Prior Usages",elecdat(1),gasuse(1),elecdat(2),gasuse(2),elecdat(3),gasuse(3),elecdat(4),gasuse(4),elecdat(5),gasuse(5),elecdat(6),gasuse(6),elecdat(7),gasuse(7),elecdat(8),gasuse(8),elecdat(9),gasuse(9),elecdat(10),gasuse(10),elecdat(11),gasuse(11),elecdat(12),gasuse(12)
 	end if
@@ -397,9 +406,8 @@ def fn_usage(serviceNumber)
 	fn_usage=usage_return
 fnend
 
-
 def fn_cuuMain(serviceNumber,usagePrior,reading,&usageCurrent,&r9_usage_is_zero; ___,returnN,usageLow,usageHigh)
-	if ~setup_cuuMain then	
+	if ~setup_cuuMain then
 		setup_cuuMain=1
 		open #hCompany=fnH: "Name=[Q]\UBmstr\Company.h[cno]",internal,input 
 		read #hCompany,using "Form POS 1,x 129,n 4": pcent
@@ -494,10 +502,10 @@ def fn_askBillingDate
 		resp$(resp_interest_credit_rate:=respc+=1)='.0500' ! str$(.05)
 	end if
 	! r: unusual usage report qusetion
-	dim unusual_usage_report_opt$(3)*52,unusual_usage_report$*52
+	dim unusual_usage_report_opt$(2)*52,unusual_usage_report$*52
 	unusual_usage_report_opt$(1)="Unusual and Skipped (Classic)"
 	unusual_usage_report_opt$(2)="Skipped Accounts Only"
-	unusual_usage_report_opt$(3)="Unusual, Skipped and Show Calculations"
+	! unusual_usage_report_opt$(3)="Unusual, Skipped and Show Calculations"
 	fnLbl(linec+=1,1,"Unusual Usage Report:",mylen,1)
 	fncomboa('ubcalk-unusal_usage_report',linec,mypos,mat unusual_usage_report_opt$, 'Select the unusual usage report style you prefer') ! ,width,contain,tabcon)
 	fncreg_read('ubcalk-unusal_usage_report',unusual_usage_report$,unusual_usage_report_opt$(2))
@@ -523,6 +531,7 @@ def fn_askBillingDate
 			fncreg_write('ubcalk-sewer_cap_date',sewer_cap_date$)
 		end if
 	end if
+	fn_askBillingDate=ckey
 fnend
 
 def fn_setup
@@ -558,8 +567,6 @@ def fn_setup
 		dim elecdat(12)
 		dim gasuse(12)
 		dim gasdat(12)
-		dim serviceName$(10)*20
-		dim tax_code$(10)*1
 		dim work$*256
 		dim work_addr$*256
 		dim subjectto(10)

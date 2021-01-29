@@ -1,5 +1,5 @@
 ! Replace S:\acsUB\UBRevCal
- 
+
 autoLibrary
 on error goto Ertn
 
@@ -9,7 +9,7 @@ dim tg(11),key$*19
 dim bt1(14,2),badr(2),resp$(5)*60
 
 fnTop(program$)
- 
+
 goto ALLOW_PROGRAM ! if env$('client')="Ash Grove" then goto ALLOW_PROGRAM
 	dim _msg$(4)*80
 	_msg$(1)="This program has been removed due to heavy misuse."
@@ -19,18 +19,11 @@ goto ALLOW_PROGRAM ! if env$('client')="Ash Grove" then goto ALLOW_PROGRAM
 	fnmsgbox(mat _msg$,resp$(1),'',16)
 goto Xit
 ALLOW_PROGRAM: !
- 
+
 	fnLastBillingDate(d1)
 	if d1=0 then d1=val(date$(4:5)&date$(7:8)&date$(1:2))
- 
-	open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,outIn,keyed
-	open #11: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\UBIndx2.h[cno],Shr",internal,outIn,keyed
-	open #12: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\UBIndx3.h[cno],Shr",internal,outIn,keyed
-	open #2: "Name=[Q]\UBmstr\ubtransvb.h[cno],KFName=[Q]\UBmstr\UBTrIndx.h[cno],Shr",internal,outIn,keyed
-	open #htrans2=fnH: "Name=[Q]\UBmstr\ubtransvb.h[cno],KFName=[Q]\UBmstr\UBTrdt.h[cno],Shr",internal,outIn,keyed
-	fn_bud1
+
 ASK1: !
-	x=6
 	fnTos
 	respc=0
 	fnLbl(1,1,"You may limit the customers to reverse by changing the options below.",73,2)
@@ -52,6 +45,16 @@ ASK1: !
 	fnCmdSet(2)
 	fnAcs(mat resp$,ckey)
 	if ckey=5 then goto Xit
+
+	fnAutomatedSavePoint('before')
+
+	open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,outIn,keyed
+	open #11: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\UBIndx2.h[cno],Shr",internal,outIn,keyed
+	open #12: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\UBIndx3.h[cno],Shr",internal,outIn,keyed
+	open #2: "Name=[Q]\UBmstr\ubtransvb.h[cno],KFName=[Q]\UBmstr\UBTrIndx.h[cno],Shr",internal,outIn,keyed
+	open #htrans2=fnH: "Name=[Q]\UBmstr\ubtransvb.h[cno],KFName=[Q]\UBmstr\UBTrdt.h[cno],Shr",internal,outIn,keyed
+	fn_bud1
+
 	if trim$(reqz$)="" and trim$(holdreqz$)<>"" then goto Xit ! if they ever select a customer and then accidently take f1 to continue, it will stop instead of reversing everyone else in file
 	reqz$=lpad$(rtrm$(resp$(1)(1:10)),10)
 	if trim$(reqz$)='[All]' then reqz$=''
@@ -63,7 +66,6 @@ ASK1: !
 	if sr$="Y" then let fnopenprn
 	if sr$="Y" and secondpass<>1 then let fn_srhdr
 	secondpass=1
-	L470: form pos 5,c 10,x 5,pic(zz/zz/zz)
 	L480: !
 	if rtrm$(reqz$)<> "" then
 		read #1,using L770,key=reqz$: z$,mat e$,f$(1),mat a,mat b,mat c,mat d,bal,f,mat g,alp$,f$(2),f$(3),bra,mat gb,route,extra3,extra4 nokey ASK1
@@ -80,11 +82,11 @@ CUSTOMER_READ: !
 	L550: !
 	if sr$="Y" then
 		pr #255,using L470: z$,f pageoflow SRPGOF
+		L470: form pos 5,c 10,x 5,pic(zz/zz/zz)
 	end if
 	for j=1 to 9 : gb(j)=gb(j)-g(j): bal=bal-g(j): next j ! subtract out current bill from breakdown
 	! bal=bal-g(11)  moved above 06/01/12
-	x=fndate_mmddyy_to_ccyymmdd(olddat)
-	key$=z$&cnvrt$("n 8",x)&"1"
+	key$=z$&cnvrt$("n 8",fndate_mmddyy_to_ccyymmdd(olddat))&"1"
 	wr=wu=er=eu=gr=gu=0 ! set all previous readings to zero
 	read #2,using L810,key=key$: p$,tdate,tcode,tamount,mat tg,wr,wu,er,eu,gr,gu,tbal,pcode nokey L620 ! read previous months history to pull old readings and usages
 	L620: !
@@ -105,8 +107,7 @@ CUSTOMER_READ: !
 	mat g=(0) ! SET ALL LAST TIME BILL TO ZERO
 	rewrite #1,using L770: z$,mat e$,f$(1),mat a,mat b,mat c,mat d,bal,f,mat g,alp$,f$(2),f$(3),bra,mat gb,route,extra3,extra4
 	L770: form pos 1,c 10,4*c 30,c 12,7*pd 2,11*pd 4.2,4*pd 4,15*pd 5,pd 4.2,pd 4,12*pd 4.2,pos 354,c 7,2*c 12,pd 3,10*pd 5.2,pos 1741,n 2,pos 1750,2*n 6
-	x=fndate_mmddyy_to_ccyymmdd(reqf)
-	key$=z$&cnvrt$("n 8",x)&"1"
+	key$=z$&cnvrt$("n 8",fndate_mmddyy_to_ccyymmdd(reqf))&"1"
 	read #2,using L810,key=key$: p$,tdate,tcode,tamount,mat tg,wr,wu,er,eu,gr,gu,tbal,pcode nokey L480
 	L810: form pos 1,c 10,n 8,n 1,12*pd 4.2,6*pd 5,pd 4.2,n 1
 	delete #2:
@@ -119,51 +120,53 @@ CUSTOMER_READ: !
 	else
 		goto L480
 	end if
- 
-FINIS: !
-	if sr$<>"Y" then goto Xit
-	fncloseprn
+
+FINIS: ! r:
+	if sr$="Y" then
+		fncloseprn
+	end if
+goto Xit ! /r
 Xit: fnXit
- 
+
 def fn_srhdr
-		pg+=1
-		pr #255: "Reverse Calculation Status Report"
-		pr #255: "Page "&str$(pg)
-		pr #255: ""
-		pr #255: "All accounts listed have been reversed."
-		pr #255: ""
-		pr #255: "Account           Billing Date"
-		pr #255: "_______________   ____________"
+	pg+=1
+	pr #255: "Reverse Calculation Status Report"
+	pr #255: "Page "&str$(pg)
+	pr #255: ""
+	pr #255: "All accounts listed have been reversed."
+	pr #255: ""
+	pr #255: "Account           Billing Date"
+	pr #255: "_______________   ____________"
 fnend
- 
-SRPGOF: !
+
+SRPGOF: ! r:
 	pr #255: newpage
 	fn_srhdr
-	continue
+continue ! /r
 def fn_bud1
-		bud1=0
-		open #81: "Name=[Q]\UBmstr\BudMstr.h[cno],KFName=[Q]\UBmstr\BudIdx1.h[cno],Shr",internal,outIn,keyed ioerr L1120
-		open #82: "Name=[Q]\UBmstr\BudTrans.h[cno],Shr",internal,outIn,relative
-		bud1=1
-L1120: !
+	bud1=0
+	open #81: "Name=[Q]\UBmstr\BudMstr.h[cno],KFName=[Q]\UBmstr\BudIdx1.h[cno],Shr",internal,outIn,keyed ioerr L1120
+	open #82: "Name=[Q]\UBmstr\BudTrans.h[cno],Shr",internal,outIn,relative
+	bud1=1
+	L1120: !
 fnend
- 
 def fn_bud2
-		bd1=0 : mat bd1(5) : mat bd1=(0) : mat bd2=(0) : mat bd3=(0)
-		if bud1=0 then goto L1260
-		read #81,using L1180,key=z$: x$,mat ba,mat badr nokey L1260
-L1180: form pos 1,c 10,pd 4,12*pd 5.2,2*pd 3
-		ta1=badr(1)
-L1200: if ta1=0 then goto L1260
-		read #82,using L1220,rec=ta1: x$,mat bt1,nba noRec L1260
-L1220: form pos 1,c 10,2*pd 4,24*pd 5.2,2*pd 4,pd 3
-		if bt1(1,1)=n then
-			mat bt1=(0)
-			rewrite #82,using L1240,rec=ta1: mat bt1
-		end if
-L1240: form pos 11,2*pd 4,24*pd 5.2,2*pd 4
-		ta1=nba: goto L1200
-L1260: !
+	bd1=0 : mat bd1(5) : mat bd1=(0) : mat bd2=(0) : mat bd3=(0)
+	if bud1=0 then goto L1260
+	read #81,using L1180,key=z$: x$,mat ba,mat badr nokey L1260
+	L1180: form pos 1,c 10,pd 4,12*pd 5.2,2*pd 3
+	ta1=badr(1)
+	L1200: !
+	if ta1=0 then goto L1260
+	read #82,using L1220,rec=ta1: x$,mat bt1,nba noRec L1260
+	L1220: form pos 1,c 10,2*pd 4,24*pd 5.2,2*pd 4,pd 3
+	if bt1(1,1)=n then
+		mat bt1=(0)
+		rewrite #82,using L1240,rec=ta1: mat bt1
+		L1240: form pos 11,2*pd 4,24*pd 5.2,2*pd 4
+	end if
+	ta1=nba: goto L1200
+	L1260: !
 fnend
- 
+
 include: ertn No
