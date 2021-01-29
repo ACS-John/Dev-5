@@ -1,5 +1,6 @@
 Time and Date 		Sys	Program(s) and Change(s) Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      
 ______________________	___	____________________________________________________________________________________________________________________________________________________________________________________________________________________________________                                                   
+6:03 PM 1/29/2021	PR	LA withholding tables updated - Please not you must add R-1300 info into Employee records
 11:22 01/21/2021	CO	5.75106  
 11:19 AM 1/29/2021	UB	Negative Lawn Meter numbers are no longer subtracted (thus adding usage) from Water Usage to get Sewer Usage - only possitive Lawn Meter values are used here 
 21:20 01/21/2021	CO	5.75105   

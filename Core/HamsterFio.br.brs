@@ -10,13 +10,13 @@ def library fnHamsterFio(fileid$*64)
 	if ~setup then fn_setup
 	dim defaultFileLayoutPath$*256
 	
-	if env$('client')='Brumbaugh' then
-		defaultFileLayoutExtension$=''
-		defaultFileLayoutPath$="S:\FileLay\"
-	else
+	! if env$('client')='Brumbaugh' then
+	! 	defaultFileLayoutExtension$=''
+	! 	defaultFileLayoutPath$="S:\FileLay\"
+	! else
 		defaultFileLayoutExtension$='.fio'
 		defaultFileLayoutPath$="S:\Core\FileIO\Layout\"
-	end if
+	! end if
 	dim hfData$(0)*2048
 	dim hfDataN(0)
 	dim hfDataAll$(0)*2048

@@ -527,7 +527,7 @@ ScrState: ! r:
 	end if
 	if ckey=>5200 and ckey<=ckey_high then goto Nav
 goto ScrEmployee ! /r
-def fn_askMat(mat id$; ___,lc,respc,tmp)
+def fn_askMat(eno,mat id$; ___,lc,respc,tmp)
 	fnTos
 	for tmp=1 to udim(mat id$) : col1_len=max(len(id$(tmp))+1,16) : next tmp
 	col2_pos=1+col1_len+2
