@@ -20,11 +20,11 @@ def fn_setup_calk
 fnend
 def library fncalk(x$,d1,f,usage_water,x2,x3,mc1,mu1,mat rt,mat a,mat b,mat c,mat d,mat g,mat w,mat x,mat extra,mat gb,h_ratemst,deposit2,btu; calc_interest_on_deposit,charge_inspection_fee,interest_credit_rate)
 	debugAccount=0
-	debugAccount$='100260.00'
-	if trim$(x$)=debugAccount$ and env$('acsdeveloper')<>'' then
-		debugAccount=1
-		! pause
-	end if
+	! debugAccount$='100260.00'
+	! if trim$(x$)=debugAccount$ and env$('acsdeveloper')<>'' then
+	! 	debugAccount=1
+	! 	! pause
+	! end if
 	! if trim$(x$)='300485.00' then pause
 	!
 	if ~setup_calk then fn_setup_calk
@@ -178,10 +178,10 @@ def fn_calk_sewer
 		! reduce sewer usage by lawn meter usage
 		if x2<0 then x2=0 ! lawn meter should never add usage - that's what negatives would do
 		usage_sewer=max(0,usage_sewer-x2)
-		if debugAccount then
-			pr x$&' - after lawn meter reduction, usage_sewer=';usage_sewer
-			pause
-		end if
+		! if debugAccount then
+		! 	pr x$&' - after lawn meter reduction, usage_sewer=';usage_sewer
+		! 	pause
+		! end if
 	end if
 	if serviceName$(3)(1:5)="Reduc" and service$(3)="SW" then usage_sewer=usage_sewer-x2 ! reduce sewer usage by Reduce Sewer usage
 	if env$('client')="Kimberling" then usage_sewer=usage_sewer-x2-x3 : eu1=x2
@@ -214,12 +214,12 @@ def fn_calk_sewer
 		!   pause ! acct 800370.16 43016 sewer charge was 19.06 water usage was 2040
 	end if
 	! pause
-	if debugAccount then
-		pr 'fn_calk_sewer completed for '&x$
-		pr '    usage_sewer=';usage_sewer
-		pr '           g(2)=';g(2)  ! sewer charge
-		pause
-	end if
+	! if debugAccount then
+	! 	pr 'fn_calk_sewer completed for '&x$
+	! 	pr '    usage_sewer=';usage_sewer
+	! 	pr '           g(2)=';g(2)  ! sewer charge
+	! 	pause
+	! end if
 	fn_calk_sewer=g(2)
 fnend
 def fn_service_chg_from_history(service_number,history_date,scfh_account$)

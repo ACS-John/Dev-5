@@ -176,7 +176,7 @@ def fn_setupClient ! ** set up for new clients
 		!   fn_setupClient_add("Brazeal" ,570,34418)
 		fn_setupClient_add("Brier Lake" ,578,20306)
 		fn_setupClient_add("BRCorp" ,7000,50775) ! 50775 is actually DAVID KALINSKI PERSONAL COPY, but it is what Gordon is using.
-		fn_setupClient_add("Brumbaugh" ,7007,200033202) ! Limited BR license
+		! fn_setupClient_add("Brumbaugh" ,7007,200033202) ! Limited BR license
 		fn_setupClient_add("Campbell" ,700,33942)
 		fn_setupClient_add("Carr Plumbing" ,780,34610)
 		! fn_setupClient_add("Carrizo" ,800,34416)
@@ -353,9 +353,9 @@ def fn_getClientLicense(mat client_has$)
 			fn_userLimit(1)
 			fn_getClientLicense_add('UB') : fn_setUbLimit(9999) ! U1 Utility Billing (no discount)
 			fn_getClientLicense_add('U4') : u4_device$="Itron FC300" ! U4 Utility Billing Hand Held Add-On
-		else if env$('client')='Brumbaugh' then
-			fn_userLimit(64)
-			fn_getClientLicense_add('CM')
+		! else if env$('client')='Brumbaugh' then
+		! 	fn_userLimit(64)
+		! 	fn_getClientLicense_add('CM')
 		else if env$('client')='Campbell' then
 			fn_userLimit(4)
 			fn_getClientLicense_add('CL')
