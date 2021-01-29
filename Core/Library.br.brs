@@ -1248,11 +1248,11 @@ fnend
 		fnCalculateBills=fnCalculateBills(goal$)
 	fnend
 	def library fnCalk(x$,d1,f,usage_water,x2,x3,mc1,mu1,mat rt,mat a,mat b,mat c,mat d,mat g,mat w,mat x,mat extra,mat gb,h_ratemst,deposit2,btu; calc_interest_on_deposit,charge_inspection_fee,interest_credit_rate)
-		library 'S:\acsUB\calk_standard.br': fncalk
+		library 'S:\Utility Billing\fn\calk.br': fncalk
 		fncalk=fncalk(x$,d1,f,usage_water,x2,x3,mc1,mu1,mat rt,mat a,mat b,mat c,mat d,mat g,mat w,mat x,mat extra,mat gb,h_ratemst,deposit2,btu, calc_interest_on_deposit,charge_inspection_fee,interest_credit_rate)
 	fnend
 	def library fnCalkChatom(x$,d1,f,usage_water,x2,x3,mc1,mu1,mat rt,mat a,mat b,mat c,mat d,mat g,mat w,mat x,mat extra,mat gb,ratemst,unused,btu; calc_interest_on_deposit,charge_inspection_fee,interest_credit_rate)
-		library 'S:\acsUB\calk_chatom.br': fncalkChatom
+		library 'S:\Utility Billing\fn\calkChatom.br': fncalkChatom
 		fncalkChatom=fncalkChatom(x$,d1,f,usage_water,x2,x3,mc1,mu1,mat rt,mat a,mat b,mat c,mat d,mat g,mat w,mat x,mat extra,mat gb,ratemst,unused,btu, calc_interest_on_deposit,charge_inspection_fee,interest_credit_rate)
 	fnend
 	def library fnDepositChangeLog(z$*10,odp,ndp,chgDate,comment$*32)

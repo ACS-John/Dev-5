@@ -508,68 +508,53 @@ def fn_departmentAdd(eno,&deptNew; ___,returnN)
 fnend
 ScrState: ! r:
 	screen=scrState
+	dim ids$(0)*64
+	mat ids$(0)
 	if fnpayroll_client_state$='AR' then
-			ckey=fn_scrAskOne(eno,'AR4EC Exemptions')
-			if ckey=>5200 and ckey<=ckey_high then goto Nav
+		fnAddOneC(mat ids$,'AR4EC Exemptions')
+		ckey=fn_askMat(eno,mat ids$)
 	else if fnpayroll_client_state$='IL' then
-		! gosub ScrIlW4
-		! ScrIlW4: ! r:
-		fnTos
-		lc=respc=0 : col1_len=25 : col2_pos=1+col1_len+2
-		fn_navButtons(lc,deptCount)
-		lc+=1
-		fnLbl(lc+=1,1,"Employee Number:",col1_len,1)
-		fnTxt(lc,col2_pos,8,8,1,"1030",1,"Employee numbers must be numeric.")
-		resp$(respc+=1)=str$(eno)
-		lc+=1
-		fnLbl(lc+=1,1,"IL W-4 Line 1 Allowances:",col1_len,1)
-		fnTxt(lc,col2_pos,5, 0,1,"30",0,'')
-		resp$(rc_ilw4line1=respc+=1)=fnEmployeeData$(eno,'IL W-4 Line 1 Allowances')
-		fnLbl(lc+=1,1,"IL W-4 Line 2 Allowances:",col1_len,1)
-		fnTxt(lc,col2_pos,5, 0,1,"30",0,'')
-		resp$(rc_ilw4line2=respc+=1)=fnEmployeeData$(eno,'IL W-4 Line 2 Allowances')
-	
-		fnCmdKey("C&omplete",1,1,0,"Saves any changes and returns to main screen.")
-		fnCmdKey("&Cancel",5,0,1,"Exit record without saving changes.")
-		fnAcs(mat resp$,ckey)
-		if ckey<>5 then
-			fnEmployeeData$(eno,'IL W-4 Line 1 Allowances',resp$(rc_ilw4line1))
-			fnEmployeeData$(eno,'IL W-4 Line 2 Allowances',resp$(rc_ilw4line2))
-			if ckey=>5200 and ckey<=ckey_high then goto Nav
-		end if
-		! return ! /r
+		fnAddOneC(mat ids$,'IL W-4 Line 1 Allowances')
+		fnAddOneC(mat ids$,'IL W-4 Line 2 Allowances')
+		ckey=fn_askMat(eno,mat ids$)
 	else if fnpayroll_client_state$='LA' then !  R-1300 (L-4)
-		fn_scrAskOne(eno,'R-1300 Exepmtions')
-		if ckey=>5200 and ckey<=ckey_high then goto Nav
+		fnAddOneC(mat ids$,'R-1300 Exepmtions')
+		fnAddOneC(mat ids$,'R-1300 Dependencies')
+		ckey=fn_askMat(eno,mat ids$)
 	else 
 		pr 'state not yet setup yet'
 		pause
 	end if
+	if ckey=>5200 and ckey<=ckey_high then goto Nav
 goto ScrEmployee ! /r
-def fn_scrAskOne(eno,id$*64)
-	fnTos : screen=ScrState
-	lc=respc=0 : col1_len=max(len(id$)+1,16) : col2_pos=1+col1_len+2
+def fn_askMat(mat id$; ___,lc,respc,tmp)
+	fnTos
+	for tmp=1 to udim(mat id$) : col1_len=max(len(id$(tmp))+1,16) : next tmp
+	col2_pos=1+col1_len+2
 	fn_navButtons(lc,deptCount)
 	lc+=1
 	fnLbl(lc+=1,1,"Employee Number:",col1_len,1)
 	fnTxt(lc,col2_pos,8,8,1,"1030",1,"Employee numbers must be numeric.")
 	resp$(respc+=1)=str$(eno)
 	lc+=1
-	fnLbl(lc+=1,1,id$&':',col1_len,1)
-	fnTxt(lc,col2_pos,5, 0,1,"30",0,'')
-	resp$(rc_id=respc+=1)=fnEmployeeData$(eno,id$)
-
-	fnCmdKey("C&omplete",1,1,0,"Saves any changes and returns to main screen.")
+	for tmp=1 to udim(mat id$)
+		fnLbl(lc+=1,1,id$(tmp)&':',col1_len,1)
+		fnTxt(lc,col2_pos,5, 0,1,"30",0,'')
+		resp$(respc+=1)=fnEmployeeData$(eno,id$(tmp))
+	next tmp
+	fnCmdKey("C&omplete",1,1,0,"Saves any changes and returns to Employee screen.")
 	fnCmdKey("&Cancel",5,0,1,"Exit record without saving changes.")
 	fnAcs(mat resp$,ckey)
 	if ckey<>5 then
-		fnEmployeeData$(eno,id$,resp$(rc_id))
+		respc=1
+		for tmp=1 to udim(mat id$)
+			fnEmployeeData$(eno,id$(tmp),resp$(respc+=1))
+		nex tmp
 		! handled after function ! if ckey=>5200 and ckey<=ckey_high then goto Nav
 	end if
-	ScrAskOneXit: !
-	fn_scrAskOne=ckey
+	ScrAskMatXit: !
+	fn_askMat=ckey
 fnend
-
 def fn_navButtons(&lc,&deptCount; ___,deptItem)
 	! many other locals too
 	! uses local deptNew, screen, mat scrDept, eno, etc
