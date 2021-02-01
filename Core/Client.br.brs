@@ -164,7 +164,7 @@ def fn_setupClient ! ** set up for new clients
 		fn_setupClient_add("ACS" ,420,34660) ! 58650
 		fn_setupClient_add("Ed Horton" ,5535,0)! Ed processes like ACS
 
-		fn_setupClient_add("Lamar" ,1,33854)
+		! fn_setupClient_add("Lamar" ,1,33854)
 		!   fn_setupClient_add("Albany" ,190,15376) ! notifed me 9/22/15 that they were switching UB providers
 		fn_setupClient_add("Allendale" ,200,0)
 		fn_setupClient_add("Ash Grove" ,286,19016)
@@ -825,7 +825,7 @@ def fn_payroll_client_state$*2(; client$*64,___,return$*2,which)
 		pr_clientstate_count=0
 		!   fn_upp_add("Ash Grove","ubprtlas_ashgrove")
 		fn_pcs_add("ACS","NJ")
-		fn_pcs_add("Lamar",'MS')
+		! fn_pcs_add("Lamar",'MS')
 		fn_pcs_add("Ash Grove",'MO')
 		!   fn_pcs_add("Battlefield",'MO')
 		fn_pcs_add("Bethany",'IL')
