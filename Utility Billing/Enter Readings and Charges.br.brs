@@ -1317,6 +1317,7 @@ MENU1READWORKEOF: ! /r
 			goto menu1
 		end if
 		! fnchain("S:\Utility Billing\Calculate Bills") ! goto CALCULATE
+		close #hWork: ioerr ignore
 		fnCalculateBills('calculate')
 		goto Xit
 		

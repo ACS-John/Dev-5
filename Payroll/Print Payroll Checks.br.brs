@@ -818,8 +818,8 @@ def fn_print_check
 		fn_check_hope_welty
 	else if env$('client')="Kathys Bookkeeping" then
 		fn_check_dynamic(23,9,9,6,10, 58,72)
-	else if env$('client')="Lamar" then
-		fn_check_lamar
+	! else if env$('client')="Lamar" then
+	! 	fn_check_lamar
 	! else if env$('client')="Lovington" then
 	! 	fn_check_lovington
 	else if env$('client')="Merriam Woods" then
@@ -1050,23 +1050,23 @@ def fn_check_hope_welty
 	pr #255: ""
 	pr #255: ""
 fnend
-def fn_check_lamar
-	for j=1 to 9
-		pr #255: ""
-	next j
-	if sc1$="C" then pr #255: : pr #255: : pr #255: : pr #255: : pr #255:
-	datepos=65
-	pr #255,using 'Form POS datepos,PIC(ZZ/ZZ/ZZ),X 4,C 18': dat,ca$
-	pr #255,using 'Form POS 9,C 62': eng$(1:n1)
-	pr #255,using 'Form POS 9,C 62': eng$(n1+1:128)
-	for j=1 to 3
-		pr #255: ""
-	next j
-	for j=1 to 3
-		pr #255,using "Form Pos 12,C 60": em$(j)
-	next j
-	pr #255,using "form pos 1,c 1,skip 6": ""
-fnend
+! def fn_check_lamar
+! 	for j=1 to 9
+! 		pr #255: ""
+! 	next j
+! 	if sc1$="C" then pr #255: : pr #255: : pr #255: : pr #255: : pr #255:
+! 	datepos=65
+! 	pr #255,using 'Form POS datepos,PIC(ZZ/ZZ/ZZ),X 4,C 18': dat,ca$
+! 	pr #255,using 'Form POS 9,C 62': eng$(1:n1)
+! 	pr #255,using 'Form POS 9,C 62': eng$(n1+1:128)
+! 	for j=1 to 3
+! 		pr #255: ""
+! 	next j
+! 	for j=1 to 3
+! 		pr #255,using "Form Pos 12,C 60": em$(j)
+! 	next j
+! 	pr #255,using "form pos 1,c 1,skip 6": ""
+! fnend
 def fn_check_merriam_woods
 	pr #255: ""
 	pr #255: ""
