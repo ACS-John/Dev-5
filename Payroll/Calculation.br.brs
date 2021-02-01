@@ -382,7 +382,6 @@ CalculateAllDeductionsAllDept: ! r:  returns totalGrossPay,ded,t3 (and probably 
 		totalGrossPay+=gpd
 		read #hRpWork,using F_RPWORK: newx$,newdep,mat _inp,gpd,mat hr eof L3150
 		if env$('client')='Payroll Done Right' then gosub West_Acc_WorkmansComp ! env$('client')='West Accounting' or
-		! pr 'A right after read rpwork _inp(6)=';_inp(6) : pause
 	loop while newx$=x$
 	L3150: !
 	workkey$=cnvrt$("pic(zzzzzzz#)",eno)&cnvrt$("pic(zz#)",dep)
@@ -1038,18 +1037,18 @@ def fn_wh_georgia(taxableWagesCurrent,payPeriodsPerYear,allowances,wga_is_marrie
 		gawhTableH(6,1)= 7000 : gawhTableH(6,2)= 230.00 : gawhTableH(6,3)=0.06
 		! /r
 	end if
-	Ga_StateDeduction=fn_standardStateDeduction('GA',wga_is_married,wga_eicCode)
-	Ga_StatePersonalAllowance=fn_statePersonalAllowance('GA',wga_is_married,wga_eicCode)
+	Ga_StateDeduction=fn_gaStandardDeduction('GA',wga_is_married,wga_eicCode)
+	Ga_StatePersonalAllowance=fn_gaPersonalAllowance('GA',wga_is_married,wga_eicCode)
 	if env$('acsDeveloper')<>'' then dev=1 else dev=0
 	! if dev then pr 'taxableWagesCurrent=';taxableWagesCurrent
 	! if dev then pr '   payPeriodsPerYear=';payPeriodsPerYear
 	! if dev then pr '   Ga_StatePersonalAllowance=';Ga_StatePersonalAllowance
-	! if dev then pr '   fn_standardStateDeduction=';Ga_StateDeduction
+	! if dev then pr '   fn_gaStandardDeduction=';Ga_StateDeduction
 	! if dev then pr '   allowances=';allowances
 	ga_WagesAnnual=(taxableWagesCurrent)*payPeriodsPerYear
 	! if dev then pr '   Ga_WagesAnnual=';Ga_WagesAnnual
-	ga_WagesAnnualTaxable=Ga_WagesAnnual-Ga_StateDeduction ! fn_standardStateDeduction('GA',wga_is_married,wga_eicCode)
-	ga_WagesAnnualTaxable-=Ga_StatePersonalAllowance ! fn_standardStateDeduction('GA',wga_is_married,wga_eicCode)
+	ga_WagesAnnualTaxable=Ga_WagesAnnual-Ga_StateDeduction ! fn_gaStandardDeduction('GA',wga_is_married,wga_eicCode)
+	ga_WagesAnnualTaxable-=Ga_StatePersonalAllowance ! fn_gaStandardDeduction('GA',wga_is_married,wga_eicCode)
 	! if dev then pr '   Annual Wages (less state deduction and personal allowance)=';Ga_WagesAnnualTaxable
 	if wga_is_married=0 then ! SINGLE INDIVIDUAL
 		mat gawh(udim(mat gawhTableH,1),udim(mat gawhTableH,2))
@@ -1077,6 +1076,44 @@ def fn_wh_georgia(taxableWagesCurrent,payPeriodsPerYear,allowances,wga_is_marrie
 	if returnN<.1 then returnN=0 ! do not withhold less than 10 cents.
 	fn_wh_georgia=returnN
 fnend
+def fn_gaStandardDeduction(state$,wga_is_married,wga_eicCode)
+	if state$='GA' then
+		if wga_is_married=0 or wga_is_married=2 then ! Single (or Single - Head of Household)
+			standardStateDeduction=2300
+		else if wga_is_married=5 then ! Married - filing seperate - both working
+			standardStateDeduction=1500
+		else if wga_is_married=4 then ! Married - filing joint - both working
+			standardStateDeduction=3000
+		else if wga_is_married=3 then ! Married - filing joint return - only one working
+			standardStateDeduction=3000
+		else  ! 1 - Married - (filing status unknown) - just use lowest deduction
+			standardStateDeduction=1500
+		end if
+	else
+		pr 'fn_gaStandardDeduction not yet configured for state: "'&state$&'"'
+		pause
+	end if
+	fn_gaStandardDeduction=standardStateDeduction
+fnend
+def fn_gaPersonalAllowance(state$,wga_is_married,wga_eicCode)
+	if state$='GA' then
+		if wga_is_married=0 or wga_is_married=2 then ! Single (or Single - Head of Household)
+			statePersonalAllowance=2700
+		else if wga_is_married=3 then ! Married - filing joint - only one working
+			statePersonalAllowance=3700
+		else if wga_is_married=4 then ! Married - filing joint - both working
+			statePersonalAllowance=7400
+		else if wga_is_married=5 then ! Married - filing seperate - both working
+			statePersonalAllowance=3700
+		else  ! 1 - Married - (filing status unknown) - just use lowest married deduction
+			statePersonalAllowance=3700
+		end if
+	else
+		pr 'fn_gaPersonalAllowance not yet configured for state: "'&state$&'"'
+		pause
+	end if
+	fn_gaPersonalAllowance=statePersonalAllowance
+fnend
 def fn_wh_illinois(eno,taxableWagesCurrent,payPeriodsPerYear,stAllowances; ___,g2,returnN,line1allowances,line2allowances,estAnnualNetPay)
 	! 			! no table
 
@@ -1086,18 +1123,17 @@ def fn_wh_illinois(eno,taxableWagesCurrent,payPeriodsPerYear,stAllowances; ___,g
 	estAnnualNetPay=taxableWagesCurrent*payPeriodsPerYear
 	returnN=.0495*(estAnnualNetPay-((line1allowances*2375)+(line2allowances*1000)/payPeriodsPerYear))
 
-	if showDetails then
-		fnStatus('eno='&str$(eno)                                      )
-		fnStatus('line1allowances='&str$(line1allowances)           )
-		fnStatus('line2allowances='&str$(line2allowances)           )
-		fnStatus('taxableWagesCurrent='&str$(taxableWagesCurrent)  )
-		fnStatus('payPeriodsPerYear='&str$(payPeriodsPerYear)       )
-		fnStatus('returnN='&str$(returnN)                             )
-	end if
+	fn_detail('Employee Number: '&str$(eno)                                      )
+	fn_detail('IL W-4 Line 1 Allowances: '&str$(line1allowances)           )
+	fn_detail('IL W-4 Line 2 Allowances: '&str$(line2allowances)           )
+	fn_detail('taxable Wages Current: '&str$(taxableWagesCurrent)  )
+	fn_detail('Pay Periods Per Year: '&str$(payPeriodsPerYear)       )
+	fn_detail('Calculated Annual Tax: '&str$(returnN)                             )
 
 
 	returnN=round(returnN/payPeriodsPerYear,2)
 	if returnN<.1 then returnN=0 ! do not withhold less than 10 cents.
+	fn_detail('Calculated Current Tax: '&str$(returnN)                             )
 	fn_wh_illinois=returnN
 fnend
 def fn_wh_indiana(taxableWagesCurrent,payPeriodsPerYear,stAllowances; ___,returnN,h3)
@@ -1111,31 +1147,24 @@ def fn_wh_indiana(taxableWagesCurrent,payPeriodsPerYear,stAllowances; ___,return
 	end if
 	fn_wh_indiana=returnN
 fnend
-def fn_wh_kentuky(taxableWagesCurrent,payPeriodsPerYear,allowances; ___,returnN,h1,h2,tableRow)
-	! revised 12/31/2005
-	! taxableWagesCurrent - formerly b8
-	! payPeriodsPerYear - formerly stwh(tcd1,1)
+def fn_wh_kentuky(taxableWagesCurrent,payPeriodsPerYear; ___, _
+	returnN)
+	! revised 2/1/21
 	if ~wky_setup then
 		wky_setup=1
-		! r: Pull the withholding routines from new\acswrk
-		! read #h_tables,using 'Form POS 31,102*PD 6.4',rec=20: mat ky ! Kentucky
-		dim ky(6,3)
-		ky(1,1)=    0 : ky(1,2)=   0 : ky(1,3)=0.02
-		ky(2,1)= 3000 : ky(2,2)=  60 : ky(2,3)=0.03
-		ky(3,1)= 4000 : ky(3,2)=  90 : ky(3,3)=0.04
-		ky(4,1)= 5000 : ky(4,2)= 130 : ky(4,3)=0.05
-		ky(5,1)= 8000 : ky(5,2)= 280 : ky(5,3)=0.058
-		ky(6,1)=75000 : ky(6,2)=4166 : ky(6,3)=0.06
-		! /r
+		stStandardDeduction=2690
+		stTaxRate=.05
 	end if
-	h1=(taxableWagesCurrent)*payPeriodsPerYear
-	h2=h1-1970
-	tableRow=fn_table_line(mat ky,h2)
-	returnN=ky(tableRow,2)+(h2-ky(tableRow,1))*ky(tableRow,3)
-	returnN=returnN-20*allowances
+	returnN=taxableWagesCurrent*payPeriodsPerYear
+	fn_detail('1. Compute annual wages: '&str$(returnN))
+	returnN-=stStandardDeduction
+	fn_detail('2. Compute Kentucky taxable wages: '&str$(returnN))
+	returnN=returnN*stTaxRate
+	fn_detail('3. Compute gross annual Kentucky tax: '&str$(returnN))
 	returnN=returnN/payPeriodsPerYear
 	returnN=round(returnN,2)
-	if returnN<.1 then returnN=0 ! do not withhold less than 10 cents.
+	fn_detail('4. Compute Kentucky withholding tax for tax period: '&str$(returnN))
+	! if returnN<.1 then returnN=0 ! do not withhold less than 10 cents.
 	fn_wh_kentuky=returnN
 fnend
 def fn_wh_louisiana(eno,marital,taxableWagesCurrent,payPeriodsPerYear,stAllowances; _
@@ -1639,109 +1668,73 @@ def fn_oregonPhaseOut(opo_wages,opo_fed_wh,opo_table,isSingle,isMarried; ___,ret
 	Opo_Finis: !
 	fn_oregonPhaseOut=returnN
 fnend
-def fn_standardStateDeduction(state$,wga_is_married,wga_eicCode)
-	if state$='GA' then
-		if wga_is_married=0 or wga_is_married=2 then ! Single (or Single - Head of Household)
-			standardStateDeduction=2300
-		else if wga_is_married=5 then ! Married - filing seperate - both working
-			standardStateDeduction=1500
-		else if wga_is_married=4 then ! Married - filing joint - both working
-			standardStateDeduction=3000
-		else if wga_is_married=3 then ! Married - filing joint return - only one working
-			standardStateDeduction=3000
-		else  ! 1 - Married - (filing status unknown) - just use lowest deduction
-			standardStateDeduction=1500
-		end if
-	else
-		pr 'fn_standardStateDeduction not yet configured for state: "'&state$&'"'
-		pause
-	end if
-	fn_standardStateDeduction=standardStateDeduction
-fnend
-def fn_statePersonalAllowance(state$,wga_is_married,wga_eicCode)
-	if state$='GA' then
-		if wga_is_married=0 or wga_is_married=2 then ! Single (or Single - Head of Household)
-			statePersonalAllowance=2700
-		else if wga_is_married=3 then ! Married - filing joint - only one working
-			statePersonalAllowance=3700
-		else if wga_is_married=4 then ! Married - filing joint - both working
-			statePersonalAllowance=7400
-		else if wga_is_married=5 then ! Married - filing seperate - both working
-			statePersonalAllowance=3700
-		else  ! 1 - Married - (filing status unknown) - just use lowest married deduction
-			statePersonalAllowance=3700
-		end if
-	else
-		pr 'fn_statePersonalAllowance not yet configured for state: "'&state$&'"'
-		pause
-	end if
-	fn_statePersonalAllowance=statePersonalAllowance
-fnend
-def fn_test_state_calk
-	fn_setup
-	! show the state you are assined  to and you change it if you like.
-	!  is_married=0	! is_married = 0 - Single
-									! is_married = 1 - Married
-									! is_married = 2 - Single - Head of Household
-									! is_married = 3 - Married - filing joint return - only one working
-									! is_married = 4 - Married - filing seperate or joint return both working
-	!   eicCode=0		! eicCode = 0 - Not qualified for EIC
-									! eicCode = 1 - Single or Spouse not file
-									! eicCode = 2 - Married both filing
-	!		w4year$			! "2019", "2020", or "none"
 
-	! r: example 1 OR 2020
-		pay_periods_per_year=1
-		wages_taxable_current=15000
-		fed_wh=1166
-		allowances=0
-		is_married=0
-		eicCode=0
-		w4year$='2020'
-		gosub TscDisplayStats
-		tmp=fn_wh_oregon(wages_taxable_current,fed_wh,pay_periods_per_year,allowances,is_married,w4year$,taxYear)
-		fnStatus('Oregon Example 1 returns '&str$(tmp))
-		fnStatusPause
-	! /r
-	! r: example 2 OR 2020
-		pay_periods_per_year=12
-		wages_taxable_current=1250
-		fed_wh=1166/12
-		allowances=0
-		is_married=0
-		eicCode=0
-		w4year$='2020'
-		gosub TscDisplayStats
-		fnStatus('Oregon Example 2 returns '&str$(fn_wh_oregon(wages_taxable_current,fed_wh,pay_periods_per_year,allowances,is_married,w4year$,taxYear)))
-		fnStatusPause
-	! /r
-	! r: example 3 OR 2020
-		pay_periods_per_year=12
-		wages_taxable_current=132000/12
-		fed_wh=21098
-		allowances=0 ! 4
-		is_married=0
-		eicCode=0
-		w4year$='none'
-		gosub TscDisplayStats
-		fnStatus('Oregon Example 3 returns '&str$(fn_wh_oregon(wages_taxable_current,fed_wh,pay_periods_per_year,allowances,is_married,w4year$,taxYear)))
-		fnStatusPause
-	! /r
-	! pr 'Kentuky Function returns ';fn_wh_kentuky(wages_taxable_current,pay_periods_per_year,allowances)
-	! pr 'Georgia Function returns ';fn_wh_georgia(wages_taxable_current,pay_periods_per_year,allowances,is_married,eicCode)
-	! pr 'Oregon Function returns ';fn_wh_oregon(wages_taxable_current,fed_wh,pay_periods_per_year,allowances,is_married,w4year$,taxYear)
-	! if env$('ACSdeveloper')<>'' then pause
-fnend
-TscDisplayStats: ! r: pr stats
-	fnStatus('wages_taxable_current: '&str$(wages_taxable_current))
-	fnStatus(' pay_periods_per_year: '&str$(pay_periods_per_year ))
-	fnStatus('               fed_wh: '&str$(fed_wh               ))
-	fnStatus('           allowances: '&str$(allowances           ))
-	fnStatus('           is_married: '&str$(is_married           ))
-	fnStatus('              eicCode: '&str$(eicCode              ))
-	fnStatus('               w4year: '&w4year$                    )
-return ! /r
-! /r
+
+! def fn_test_state_calk r:
+! 	fn_setup
+! 	! show the state you are assined  to and you change it if you like.
+! 	!  is_married=0	! is_married = 0 - Single
+! 									! is_married = 1 - Married
+! 									! is_married = 2 - Single - Head of Household
+! 									! is_married = 3 - Married - filing joint return - only one working
+! 									! is_married = 4 - Married - filing seperate or joint return both working
+! 	!   eicCode=0		! eicCode = 0 - Not qualified for EIC
+! 									! eicCode = 1 - Single or Spouse not file
+! 									! eicCode = 2 - Married both filing
+! 	!		w4year$			! "2019", "2020", or "none"
+! 
+! 	! r: example 1 OR 2020
+! 		pay_periods_per_year=1
+! 		wages_taxable_current=15000
+! 		fed_wh=1166
+! 		allowances=0
+! 		is_married=0
+! 		eicCode=0
+! 		w4year$='2020'
+! 		gosub TscDisplayStats
+! 		tmp=fn_wh_oregon(wages_taxable_current,fed_wh,pay_periods_per_year,allowances,is_married,w4year$,taxYear)
+! 		fnStatus('Oregon Example 1 returns '&str$(tmp))
+! 		fnStatusPause
+! 	! /r
+! 	! r: example 2 OR 2020
+! 		pay_periods_per_year=12
+! 		wages_taxable_current=1250
+! 		fed_wh=1166/12
+! 		allowances=0
+! 		is_married=0
+! 		eicCode=0
+! 		w4year$='2020'
+! 		gosub TscDisplayStats
+! 		fnStatus('Oregon Example 2 returns '&str$(fn_wh_oregon(wages_taxable_current,fed_wh,pay_periods_per_year,allowances,is_married,w4year$,taxYear)))
+! 		fnStatusPause
+! 	! /r
+! 	! r: example 3 OR 2020
+! 		pay_periods_per_year=12
+! 		wages_taxable_current=132000/12
+! 		fed_wh=21098
+! 		allowances=0 ! 4
+! 		is_married=0
+! 		eicCode=0
+! 		w4year$='none'
+! 		gosub TscDisplayStats
+! 		fnStatus('Oregon Example 3 returns '&str$(fn_wh_oregon(wages_taxable_current,fed_wh,pay_periods_per_year,allowances,is_married,w4year$,taxYear)))
+! 		fnStatusPause
+! 	! /r
+! 	! pr 'Kentuky Function returns ';fn_wh_kentuky(wages_taxable_current,pay_periods_per_year,allowances)
+! 	! pr 'Georgia Function returns ';fn_wh_georgia(wages_taxable_current,pay_periods_per_year,allowances,is_married,eicCode)
+! 	! pr 'Oregon Function returns ';fn_wh_oregon(wages_taxable_current,fed_wh,pay_periods_per_year,allowances,is_married,w4year$,taxYear)
+! 	! if env$('ACSdeveloper')<>'' then pause
+! fnend ! /r
+! TscDisplayStats: ! r: pr stats
+! 	fnStatus('wages_taxable_current: '&str$(wages_taxable_current))
+! 	fnStatus(' pay_periods_per_year: '&str$(pay_periods_per_year ))
+! 	fnStatus('               fed_wh: '&str$(fed_wh               ))
+! 	fnStatus('           allowances: '&str$(allowances           ))
+! 	fnStatus('           is_married: '&str$(is_married           ))
+! 	fnStatus('              eicCode: '&str$(eicCode              ))
+! 	fnStatus('               w4year: '&w4year$                    )
+! return ! /r
+! ! /r
 
 West_Acc_WorkmansComp: ! r:
 	! _inp(6) Other Compensation
