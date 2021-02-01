@@ -235,7 +235,7 @@ def fn_setupClient ! ** set up for new clients
 		fn_setupClient_add("Omaha",3320,33346)
 		fn_setupClient_add("Pennington",3431,33332)
 		!   fn_setupClient_add("Petromark",3535,33620)
-		fn_setupClient_add("Philo",3534,34150)
+		!   fn_setupClient_add("Philo",3534,34150)
 		!   fn_setupClient_add("PiattCO",3536,20832)
 		fn_setupClient_add("Purdy",3610,34570)
 		fn_setupClient_add("Raymond",3660,32798)
@@ -858,7 +858,7 @@ def fn_payroll_client_state$*2(; client$*64,___,return$*2,which)
 !   fn_pcs_add("Northwest",'AR')
 		fn_pcs_add("Oklahoma",'OK')
 		fn_pcs_add("Payroll Done Right",'OR')
-		fn_pcs_add("Philo",'IL')
+! 		fn_pcs_add("Philo",'IL')
 !   fn_pcs_add("PiattCO",'IL')
 		! fn_pcs_add("Raymond",'IL')
 		fn_pcs_add("R R Crawford",'KY')
@@ -1008,7 +1008,7 @@ def fn_client_is_converting
 	cic_return=0
 	if env$('ACSDeveloper')<>'' then
 		cic_return=1
-	! else if env$('client')='R R Crawford'       and days(date$)<=days('12/31/2020','mm/dd/ccyy') then ! just testing
+	! else if env$('client')='R R Crawford'       and days(date$)<=days('3/31/2021','mm/dd/ccyy') then ! just testing
 	! 	cic_return=1
 	! else if env$('client')='Crockett County'       and days(date$)<=days('2/28/2019','mm/dd/ccyy') then ! just testing
 	! 	cic_return=1

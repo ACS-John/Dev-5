@@ -114,7 +114,7 @@ fnreg_read('Post to Checkbook - Populate Checkbook Payee from Payroll Employee',
 	if check_number>9999999 then check_number-=10000000
 ! if env$('client')="West Rest Haven" then sc1$="C"
 	if env$('client')="Billings" or env$('client')='Diamond' then sc1$="CSS"
-	if env$('client')="Divernon" or env$('client')="Thomasboro" or env$('client')="Edinburg" or env$('client')="Philo" or env$('client')="Hope Welty" then
+	if env$('client')="Divernon" or env$('client')="Thomasboro" or env$('client')="Edinburg" or env$('client')="Hope Welty" then
 		ficam1$="Y"
 	end if
 	ddcode$="R"
@@ -800,32 +800,24 @@ def fn_print_check
 		pos_checkNumber       = 83
 		fn_check_dynamic(length,line_date,line_amount,line_amount_english,line_name_and_address, pos_date,pos_amt,line_nameOnly,pos_nameOnly,line_checkNumber,pos_checkNumber,check_number)
 		! /r
-	else if env$('client')="Energy Exchanger" then ! r: 5/9/2017
-		length                = 23
-		line_date             =  4
-		line_amount           = 12
-		line_amount_english   = 9
-		line_name_and_address = 13
-		pos_date              = 75
-		pos_amt               = 80
-		line_nameOnly         =  0
-		pos_nameOnly          =  0
-		line_checkNumber      = line_date
-		pos_checkNumber       = 86
-		fn_check_dynamic(length,line_date,line_amount,line_amount_english,line_name_and_address, pos_date,pos_amt,line_nameOnly,pos_nameOnly,line_checkNumber,pos_checkNumber,check_number)
-		! /r
+	! else if env$('client')="Energy Exchanger" then ! r: 5/9/2017
+	! 	length                	= 23
+	! 	line_date             	=  4
+	! 	line_amount           = 12
+	! 	line_amount_english   = 9
+	! 	line_name_and_address = 13
+	! 	pos_date              = 75
+	! 	pos_amt               = 80
+	! 	line_nameOnly         =  0
+	! 	pos_nameOnly          =  0
+	! 	line_checkNumber      = line_date
+	! 	pos_checkNumber       = 86
+	! 	fn_check_dynamic(length,line_date,line_amount,line_amount_english,line_name_and_address, pos_date,pos_amt,line_nameOnly,pos_nameOnly,line_checkNumber,pos_checkNumber,check_number)
+	! 	! /r
 	else if env$('client')="Hope Welty" then
 		fn_check_hope_welty
 	else if env$('client')="Kathys Bookkeeping" then
 		fn_check_dynamic(23,9,9,6,10, 58,72)
-	! else if env$('client')="Lamar" then
-	! 	fn_check_lamar
-	! else if env$('client')="Lovington" then
-	! 	fn_check_lovington
-	else if env$('client')="Merriam Woods" then
-		fn_check_merriam_woods
-	else if env$('client')="Philo" then
-		fn_check_philo
 	else if env$('client')="Thomasboro" then
 		fn_check_thomasboro
 	else if env$('client')="Thomas Richardson" then
@@ -1050,67 +1042,7 @@ def fn_check_hope_welty
 	pr #255: ""
 	pr #255: ""
 fnend
-! def fn_check_lamar
-! 	for j=1 to 9
-! 		pr #255: ""
-! 	next j
-! 	if sc1$="C" then pr #255: : pr #255: : pr #255: : pr #255: : pr #255:
-! 	datepos=65
-! 	pr #255,using 'Form POS datepos,PIC(ZZ/ZZ/ZZ),X 4,C 18': dat,ca$
-! 	pr #255,using 'Form POS 9,C 62': eng$(1:n1)
-! 	pr #255,using 'Form POS 9,C 62': eng$(n1+1:128)
-! 	for j=1 to 3
-! 		pr #255: ""
-! 	next j
-! 	for j=1 to 3
-! 		pr #255,using "Form Pos 12,C 60": em$(j)
-! 	next j
-! 	pr #255,using "form pos 1,c 1,skip 6": ""
-! fnend
-def fn_check_merriam_woods
-	pr #255: ""
-	pr #255: ""
-	pr #255: ""
-	pr #255: ""
-	pr #255: ""
-	pr #255: ""
-	pr #255: ""
-	if sc1$="C" then pr #255: : pr #255: : pr #255: : pr #255: : pr #255:
-	pr #255,using 'Form POS 9,C 62': eng$(1:n1)
-	pr #255,using 'Form POS 9,C 62': eng$(n1+1:128)
-	pr #255: ""
-	pr #255,using 'Form POS 65,PIC(ZZ/ZZ/ZZ),X 4,C 18': dat,ca$
-	pr #255: ""
-	pr #255: ""
-	pr #255,using "Form Pos 12,C 60": em$(1)
-	pr #255,using "Form Pos 12,C 60": em$(2)
-	pr #255,using "Form Pos 12,C 60": em$(3)
-	pr #255: ""
-	pr #255: ""
-	pr #255: ""
-	pr #255: ""
-	pr #255: ""
-	pr #255: ""
-fnend
-def fn_check_philo
-	pr #255: : pr #255: : pr #255: : pr #255: : pr #255:
-	pr #255,using 'Form POS 9,C 62': eng$(1:n1)
-	pr #255,using 'Form POS 9,C 62': eng$(n1+1:128)
-	pr #255: : pr #255:
-	pr #255,using 'Form POS 57,PIC(ZZ/ZZ/ZZ),X 4,C 18': dat,ca$
-	x=3
-	for j=1 to x
-		pr #255: ""
-	next j
-	for j=1 to 3
-		pr #255,using "Form Pos 12,C 60": em$(j)
-	next j
-	pr #255: ""
-	pr #255: ""
-	pr #255: ""
-	pr #255: ""
-	pr #255: ""
-fnend
+
 def fn_check_tom_richardson
 	!   if sc1$="C" then pr #255: : pr #255: : pr #255: : pr #255: : pr #255:
 	pr #255: ""
@@ -1223,60 +1155,60 @@ def fn_print_stub
 		fn_stub_kincaid
 	else if env$('client')='Payroll Done Right' then ! env$('client')='West Accounting' or
 		fn_stub_standard( 1) ! standard, but show tips
-	else if env$('client')='Energy Exchanger' then
-		! r: setup mat ltext$ and mat lPos for fn_stub_hitBoxes
-		! Page Settings:  Orientation: Landscapt
-		!                      Height:  7"
-		!                       Width:  8.5"
-		!                       Lines Per Page:  54 (default)
-		!                       Font Size:  10
-		!                      Top Margin: .5
-		!                   Bottom Margin: .5
-		!                     Left Margin: .2
-		!                    Right Margin: .2
-		dim ltext$(0,0)*256,lPos(0,0)
-		mat ltext$(15,10) : mat lPos(15,10)
-		mat ltext$=('')
-		! lyne=12 : litem=0
-		!   lpos(lyne,litem+=1)= 1   : ltext$(lyne,litem)=rpt$('----+----|',12)
-		lyne=5 : litem=0
-			lpos(lyne,litem+=1)=  1   : ltext$(lyne,litem)=str$(eno)
-			lpos(lyne,litem+=1)= 13   : ltext$(lyne,litem)=date$(days(d1,'ccyymmdd'),'mm/dd/yy')
-			lpos(lyne,litem+=1)= 22   : ltext$(lyne,litem)=cnvrt$('N 8.2',rate) ! Hourly Rate
-			lpos(lyne,litem+=1)= 32   : ltext$(lyne,litem)=cnvrt$('N 6.2',tdc1) ! Reg Hours
-			lpos(lyne,litem+=1)= 46   : ltext$(lyne,litem)=cnvrt$('N 5.2',tdc2) ! OT Hours
-			lpos(lyne,litem+=1)= 60   : ltext$(lyne,litem)='' ! daily Rate
-			lpos(lyne,litem+=1)= 67   : ltext$(lyne,litem)='' ! No Days
-			lpos(lyne,litem+=1)= 80   : ltext$(lyne,litem)='' ! Monthly Rate
-			lpos(lyne,litem+=1)= 90  : ltext$(lyne,litem)='' ! Salary Adjustment
-			lpos(lyne,litem+=1)=112  : ltext$(lyne,litem)=cnvrt$('pic(## ## ##)',prdmmddyy) ! Check Date MM DD YY
-		lyne=11 : litem=0
-			lpos(lyne,litem+=1)=  1   : ltext$(lyne,litem)=cnvrt$('N  9.2',ttc(31))! gross salary
-			lpos(lyne,litem+=1)= 12   : ltext$(lyne,litem)=cnvrt$('N 10.2',ttc(1)) ! Fed w/h
-			lpos(lyne,litem+=1)= 24   : ltext$(lyne,litem)=cnvrt$('N 10.2',ttc(4)) ! State w/h
-			lpos(lyne,litem+=1)= 36   : ltext$(lyne,litem)=cnvrt$('N 10.2',ttc(2)) ! FICA
-			lpos(lyne,litem+=1)= 50   : ltext$(lyne,litem)=cnvrt$('N  9.2',ttc(5)) ! pre insurance tax
-			lpos(lyne,litem+=1)= 60   : ltext$(lyne,litem)=cnvrt$('N 10.2',ttc(6))
-			lpos(lyne,litem+=1)= 72   : ltext$(lyne,litem)=cnvrt$('N 11.2',ttc(7))
-			lpos(lyne,litem+=1)= 84   : ltext$(lyne,litem)=cnvrt$('N 10.2',ttc(8))
-			lpos(lyne,litem+=1)= 96   : ltext$(lyne,litem)=cnvrt$('N  8.2',ttc(9))
-			lpos(lyne,litem+=1)=106   : ltext$(lyne,litem)=cnvrt$('N 13.2',ttc(32)) ! net pay
-		lyne=14 : litem=0                                   ! YTD of line above
-			lpos(lyne,litem+=1)=  1   : ltext$(lyne,litem)=cnvrt$('N  9.2',tty(31)) ! gross ytd
-			lpos(lyne,litem+=1)= 12   : ltext$(lyne,litem)=cnvrt$('N 10.2',tty(1)) ! fed w/h ytd
-			lpos(lyne,litem+=1)= 24   : ltext$(lyne,litem)=cnvrt$('N 10.2',tty(4)) ! state w/h ytd
-			lpos(lyne,litem+=1)= 36   : ltext$(lyne,litem)=cnvrt$('N 10.2',tty(2)) ! FICA YTD
-			lpos(lyne,litem+=1)= 50   : ltext$(lyne,litem)=cnvrt$('N  9.2',tty(5))
-			lpos(lyne,litem+=1)= 60   : ltext$(lyne,litem)=cnvrt$('N 10.2',tty(6))
-			lpos(lyne,litem+=1)= 72   : ltext$(lyne,litem)=cnvrt$('N 11.2',tty(7))
-			lpos(lyne,litem+=1)= 84   : ltext$(lyne,litem)=cnvrt$('N 10.2',tty(8))
-			lpos(lyne,litem+=1)= 96   : ltext$(lyne,litem)=cnvrt$('N  8.2',tty(9))
-			lpos(lyne,litem+=1)=106   : ltext$(lyne,litem)=''
-		! /r
-		pr #255: '{\fs16 '; !   <-- set to font size 8
-		fn_stub_hitBoxes(mat ltext$,mat lPos)
-		pr #255: "}" ! <-- end the font size of 8
-		fn_stub_energyExcnahger_extra(mat v,mat abrevName$,mat deptsum)
+	! else if env$('client')='Energy Exchanger' then
+	! 	! r: setup mat ltext$ and mat lPos for fn_stub_hitBoxes
+	! 	! Page Settings:  Orientation: Landscapt
+	! 	!                      Height:  7"
+	! 	!                       Width:  8.5"
+	! 	!                       Lines Per Page:  54 (default)
+	! 	!                       Font Size:  10
+	! 	!                      Top Margin: .5
+	! 	!                   Bottom Margin: .5
+	! 	!                     Left Margin: .2
+	! 	!                    Right Margin: .2
+	! 	dim ltext$(0,0)*256,lPos(0,0)
+	! 	mat ltext$(15,10) : mat lPos(15,10)
+	! 	mat ltext$=('')
+	! 	! lyne=12 : litem=0
+	! 	!   lpos(lyne,litem+=1)= 1   : ltext$(lyne,litem)=rpt$('----+----|',12)
+	! 	lyne=5 : litem=0
+	! 		lpos(lyne,litem+=1)=  1   : ltext$(lyne,litem)=str$(eno)
+	! 		lpos(lyne,litem+=1)= 13   : ltext$(lyne,litem)=date$(days(d1,'ccyymmdd'),'mm/dd/yy')
+	! 		lpos(lyne,litem+=1)= 22   : ltext$(lyne,litem)=cnvrt$('N 8.2',rate) ! Hourly Rate
+	! 		lpos(lyne,litem+=1)= 32   : ltext$(lyne,litem)=cnvrt$('N 6.2',tdc1) ! Reg Hours
+	! 		lpos(lyne,litem+=1)= 46   : ltext$(lyne,litem)=cnvrt$('N 5.2',tdc2) ! OT Hours
+	! 		lpos(lyne,litem+=1)= 60   : ltext$(lyne,litem)='' ! daily Rate
+	! 		lpos(lyne,litem+=1)= 67   : ltext$(lyne,litem)='' ! No Days
+	! 		lpos(lyne,litem+=1)= 80   : ltext$(lyne,litem)='' ! Monthly Rate
+	! 		lpos(lyne,litem+=1)= 90  : ltext$(lyne,litem)='' ! Salary Adjustment
+	! 		lpos(lyne,litem+=1)=112  : ltext$(lyne,litem)=cnvrt$('pic(## ## ##)',prdmmddyy) ! Check Date MM DD YY
+	! 	lyne=11 : litem=0
+	! 		lpos(lyne,litem+=1)=  1   : ltext$(lyne,litem)=cnvrt$('N  9.2',ttc(31))! gross salary
+	! 		lpos(lyne,litem+=1)= 12   : ltext$(lyne,litem)=cnvrt$('N 10.2',ttc(1)) ! Fed w/h
+	! 		lpos(lyne,litem+=1)= 24   : ltext$(lyne,litem)=cnvrt$('N 10.2',ttc(4)) ! State w/h
+	! 		lpos(lyne,litem+=1)= 36   : ltext$(lyne,litem)=cnvrt$('N 10.2',ttc(2)) ! FICA
+	! 		lpos(lyne,litem+=1)= 50   : ltext$(lyne,litem)=cnvrt$('N  9.2',ttc(5)) ! pre insurance tax
+	! 		lpos(lyne,litem+=1)= 60   : ltext$(lyne,litem)=cnvrt$('N 10.2',ttc(6))
+	! 		lpos(lyne,litem+=1)= 72   : ltext$(lyne,litem)=cnvrt$('N 11.2',ttc(7))
+	! 		lpos(lyne,litem+=1)= 84   : ltext$(lyne,litem)=cnvrt$('N 10.2',ttc(8))
+	! 		lpos(lyne,litem+=1)= 96   : ltext$(lyne,litem)=cnvrt$('N  8.2',ttc(9))
+	! 		lpos(lyne,litem+=1)=106   : ltext$(lyne,litem)=cnvrt$('N 13.2',ttc(32)) ! net pay
+	! 	lyne=14 : litem=0                                   ! YTD of line above
+	! 		lpos(lyne,litem+=1)=  1   : ltext$(lyne,litem)=cnvrt$('N  9.2',tty(31)) ! gross ytd
+	! 		lpos(lyne,litem+=1)= 12   : ltext$(lyne,litem)=cnvrt$('N 10.2',tty(1)) ! fed w/h ytd
+	! 		lpos(lyne,litem+=1)= 24   : ltext$(lyne,litem)=cnvrt$('N 10.2',tty(4)) ! state w/h ytd
+	! 		lpos(lyne,litem+=1)= 36   : ltext$(lyne,litem)=cnvrt$('N 10.2',tty(2)) ! FICA YTD
+	! 		lpos(lyne,litem+=1)= 50   : ltext$(lyne,litem)=cnvrt$('N  9.2',tty(5))
+	! 		lpos(lyne,litem+=1)= 60   : ltext$(lyne,litem)=cnvrt$('N 10.2',tty(6))
+	! 		lpos(lyne,litem+=1)= 72   : ltext$(lyne,litem)=cnvrt$('N 11.2',tty(7))
+	! 		lpos(lyne,litem+=1)= 84   : ltext$(lyne,litem)=cnvrt$('N 10.2',tty(8))
+	! 		lpos(lyne,litem+=1)= 96   : ltext$(lyne,litem)=cnvrt$('N  8.2',tty(9))
+	! 		lpos(lyne,litem+=1)=106   : ltext$(lyne,litem)=''
+	! 	! /r
+	! 	pr #255: '{\fs16 '; !   <-- set to font size 8
+	! 	fn_stub_hitBoxes(mat ltext$,mat lPos)
+	! 	pr #255: "}" ! <-- end the font size of 8
+	! 	fn_stub_energyExcnahger_extra(mat v,mat abrevName$,mat deptsum)
 	else if env$('client')='Crockett County' then
 		stubCount+=1
 		if stubCount=1 then
@@ -1431,35 +1363,35 @@ def fn_stub_billings
 		pr #255: ""
 	end if
 fnend
-def fn_stub_hitBoxes(mat ltext$,mat lPos)
-	! mat ltext$(lineCount,boxNumber)=textForBox$ (must be formatted)
-	! mat lPos(luneCount,BoxNumber)=Position of Box
-	! udim(mat ltext$,1) defines lineCount/length of stub
-	dim hbLine$*256
-	for hbLine=1 to udim(mat ltext$,1)
-		hbLine$=rpt$(' ',256)
-		for lposItem=1 to udim(mat lPos,2)
-			hbLine$(lPos(hbLine,lposItem):(lPos(hbLine,lposItem)+len(lText$(hbLine,lposItem))-1))=ltext$(hbLine,lposItem)
-		nex lposItem
-		pr #255: rtrm$(hbLine$)
-	nex hbLine
-fnend
-def fn_stub_energyExcnahger_extra(mat s,mat rpnames2$,mat dept)
-	pr #255: ''
-	for x=1 to 6
-		! if dept(x)=0 then
-			pr #255,using ees_L1510: rpnames2$(x+4),s(x,7),s(x,8)
-			ees_L1510: form pos 54,c 10,pos 64,pic(-------.##),pos 74,pic(-------.##)
-		! else
-		!   pr #255,using ees_L1480: dept(x),s(x,1),s(x,2),s(x,3),s(x,4),s(x,5),s(x,6),rpnames2$(x+4),s(x,7),s(x,8)
-		!   ees_L1480: form pos 2,n 3,pos 6,5*n 7.2,n 11.2,x 2,c 10,2*n 10.2
-		! end if
-	next x
-	! if s(7,6)<>0 then
-	!   pr #255,using ees_L1550: "OTHER",s(7,1),s(7,2),s(7,3),s(7,4),s(7,5),s(7,6),"TOTAL",s(7,7),s(7,8)
-	!   ees_L1550: form pos 1,c 5,pos 6,pic(----.##),pos 14,pic(---.##),pos 21,pic(---.##),pos 28,pic(---.##),pos 35,pic(---.##),pos 42,pic(---,---.##),pos 54,c 5,pos 64,pic(-------.##),pos 74,pic(-------.##),skip 1
-	! end if
-fnend
+! def fn_stub_hitBoxes(mat ltext$,mat lPos)
+! 	! mat ltext$(lineCount,boxNumber)=textForBox$ (must be formatted)
+! 	! mat lPos(luneCount,BoxNumber)=Position of Box
+! 	! udim(mat ltext$,1) defines lineCount/length of stub
+! 	dim hbLine$*256
+! 	for hbLine=1 to udim(mat ltext$,1)
+! 		hbLine$=rpt$(' ',256)
+! 		for lposItem=1 to udim(mat lPos,2)
+! 			hbLine$(lPos(hbLine,lposItem):(lPos(hbLine,lposItem)+len(lText$(hbLine,lposItem))-1))=ltext$(hbLine,lposItem)
+! 		nex lposItem
+! 		pr #255: rtrm$(hbLine$)
+! 	nex hbLine
+! fnend
+! def fn_stub_energyExcnahger_extra(mat s,mat rpnames2$,mat dept)
+! 	pr #255: ''
+! 	for x=1 to 6
+! 		! if dept(x)=0 then
+! 			pr #255,using ees_L1510: rpnames2$(x+4),s(x,7),s(x,8)
+! 			ees_L1510: form pos 54,c 10,pos 64,pic(-------.##),pos 74,pic(-------.##)
+! 		! else
+! 		!   pr #255,using ees_L1480: dept(x),s(x,1),s(x,2),s(x,3),s(x,4),s(x,5),s(x,6),rpnames2$(x+4),s(x,7),s(x,8)
+! 		!   ees_L1480: form pos 2,n 3,pos 6,5*n 7.2,n 11.2,x 2,c 10,2*n 10.2
+! 		! end if
+! 	next x
+! 	! if s(7,6)<>0 then
+! 	!   pr #255,using ees_L1550: "OTHER",s(7,1),s(7,2),s(7,3),s(7,4),s(7,5),s(7,6),"TOTAL",s(7,7),s(7,8)
+! 	!   ees_L1550: form pos 1,c 5,pos 6,pic(----.##),pos 14,pic(---.##),pos 21,pic(---.##),pos 28,pic(---.##),pos 35,pic(---.##),pos 42,pic(---,---.##),pos 54,c 5,pos 64,pic(-------.##),pos 74,pic(-------.##),skip 1
+! 	! end if
+! fnend
 ! /r
 def fn_extract_comp_time
 	balance=0
@@ -1495,7 +1427,7 @@ def fn_determine_earnings
 	mat tty=tty+tcp
 	if prd=d1 then mat ttc=ttc+tcp: mat ttdc=ttdc+tdc ! total for this check
 	if prd=d1 then fn_accumulate_dept_totals1(tdepXcount,mat tdep,tdn,rate)
-	if env$('client')="Energy Exchanger" then fn_accumulate_dept_totals2
+	! if env$('client')="Energy Exchanger" then fn_accumulate_dept_totals2
 	if prd=d1 then rewrite #hCheck,using "form pos 18,n 7",rec=lastrec: check_number
 	goto L6580
 	STORE_VARIABLES: !
@@ -1556,42 +1488,42 @@ def fn_accumulate_dept_totals1(&tdepXcount,mat tdep,tdn,&rate) ! probably others
 	tdc5=ttdc(5)
 	!   ttdct=ttdc(1)+ttdc(2)+ttdc(3)+ttdc(4)+ttdc(5) ! Total Hours
 fnend
-def fn_accumulate_dept_totals2
-	for v1=1 to 6
-		if tdn=deptsum(v1) then goto L8090 ! determine if dept # used on this employee already
-		if deptsum(v1)=0 then deptsum(v1)=tdn: goto L8080
-	next v1
-	if v1>6 then v1=6 ! summarize any departments over 6 and the seventh row
-	L8080: !
-	if prd<>d1 then goto L8150
-	L8090: !
-	for r=1 to 5
-		v(v1,r)+=tdc(r)
-		v(7,r)+=tdc(r) ! total line
-	next r
-	v(v1,6)+=tcp(31) ! pay
-	v(7,6)+=tcp(31) ! total pay line
-	L8150: !
-	for r=1 to 6
-		if prd=d1 then
-			v(r,7)+=tcp(r+8) ! last five misc deductions
-		end if
-		! FILL TABLE S WITH YEAR TO DATE DEDUCTIONS
-		v(r,8)=v(r,8)+tcp(r+8)
-	next r
-	! FILL TABLE S WITH CURRENT DEDUCTIONS
-	for j=9 to 14
-		if dedcode(j-3)=1 then goto L8270
-		v(7,8)=v(7,8)-tcp(j)
-		if prd=d1 then v(7,7)=+v(7,7)-tcp(j)
-		goto L8290
-		L8270: !
-		v(7,8)=v(7,8)+tcp(j)
-		if prd=d1 then v(7,7)=v(7,7)+tcp(j)
-		L8290: !
-	next j
-	! ROUTINE TO ACCUMULATE HOURS ETC. FOR SUMMARY
-fnend
+! def fn_accumulate_dept_totals2
+! 	for v1=1 to 6
+! 		if tdn=deptsum(v1) then goto L8090 ! determine if dept # used on this employee already
+! 		if deptsum(v1)=0 then deptsum(v1)=tdn: goto L8080
+! 	next v1
+! 	if v1>6 then v1=6 ! summarize any departments over 6 and the seventh row
+! 	L8080: !
+! 	if prd<>d1 then goto L8150
+! 	L8090: !
+! 	for r=1 to 5
+! 		v(v1,r)+=tdc(r)
+! 		v(7,r)+=tdc(r) ! total line
+! 	next r
+! 	v(v1,6)+=tcp(31) ! pay
+! 	v(7,6)+=tcp(31) ! total pay line
+! 	L8150: !
+! 	for r=1 to 6
+! 		if prd=d1 then
+! 			v(r,7)+=tcp(r+8) ! last five misc deductions
+! 		end if
+! 		! FILL TABLE S WITH YEAR TO DATE DEDUCTIONS
+! 		v(r,8)=v(r,8)+tcp(r+8)
+! 	next r
+! 	! FILL TABLE S WITH CURRENT DEDUCTIONS
+! 	for j=9 to 14
+! 		if dedcode(j-3)=1 then goto L8270
+! 		v(7,8)=v(7,8)-tcp(j)
+! 		if prd=d1 then v(7,7)=+v(7,7)-tcp(j)
+! 		goto L8290
+! 		L8270: !
+! 		v(7,8)=v(7,8)+tcp(j)
+! 		if prd=d1 then v(7,7)=v(7,7)+tcp(j)
+! 		L8290: !
+! 	next j
+! 	! ROUTINE TO ACCUMULATE HOURS ETC. FOR SUMMARY
+! fnend
 def fn_fica_fix ! fix rounding problem on fica
 	fica3=fica0+medi0+fica1+medi1+fica2
 	if fica3=0 then goto FICA_END
