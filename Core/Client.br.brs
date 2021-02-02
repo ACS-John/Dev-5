@@ -197,7 +197,7 @@ def fn_setupClient ! ** set up for new clients
 		! fn_setupClient_add("Eldorado" ,1500,33352)
 		fn_setupClient_add("Evelyn Pareya" ,3385,34366)
 		fn_setupClient_add("Exeter" ,1615,31210)
-		fn_setupClient_add("Energy Exchanger" ,1550,10172)
+		! fn_setupClient_add("Energy Exchanger" ,1550,10172)
 		!   fn_setupClient_add("FirstBaptist" ,1695,33380) ! <-- note it's the same as French Settlement - one of them is wrong, but First Baptist of Frnaklinton's license is 4.1 and not currently necessary, so just commenting them out for now.
 		fn_setupClient_add("Findlay" ,1700,34132)
 		!   fn_setupClient_add("Franklin and Son" ,1870,32454)
@@ -216,7 +216,7 @@ def fn_setupClient ! ** set up for new clients
 		fn_setupClient_add("Hope Welty" ,851,34152)
 		fn_setupClient_add("Laco Vinyl" ,2222,0)
 		fn_setupClient_add("Payroll Done Right" ,3393,0)
-		fn_setupClient_add("Schachtner Portnoy" ,3828,200008100)
+		! fn_setupClient_add("Schachtner Portnoy" ,3828,200008100)
 		! fn_setupClient_add("Illiopolis",2340,0)
 		fn_setupClient_add("Kathys Bookkeeping",3979,33672)
 		! fn_setupClient_add("Kimberling",2530,19212)
@@ -453,14 +453,12 @@ def fn_getClientLicense(mat client_has$)
 			fn_userLimit(1)
 			fn_getClientLicense_add('GL')
 			fn_getClientLicense_add('PR')
-		else if env$('client')='Schachtner Portnoy' then
-			fn_userLimit(76)
-			fn_getClientLicense_add('CM')
+		! else if env$('client')='Schachtner Portnoy' then
+		! 	fn_userLimit(76)
+		! 	fn_getClientLicense_add('CM')
 		else if env$('client')='GreeneCo' then
-			! if days(date$)<=days('08/31/2018','mm/dd/ccyy') then
-				fn_getClientLicense_add('UB') : fn_setUbLimit(500) ! U3 Utility Billing (<500 Customers)
-				fn_getClientLicense_add('U4') : u4_device$="EZReader" ! U4 Utility Billing Hand Held Add-On
-			! end if
+			fn_getClientLicense_add('UB') : fn_setUbLimit(500) ! U3 Utility Billing (<500 Customers)
+			fn_getClientLicense_add('U4') : u4_device$="EZReader" ! U4 Utility Billing Hand Held Add-On
 		else if env$('client')='Hope Welty' then
 			fn_userLimit(1)
 			fn_getClientLicense_add('GL')
@@ -1008,7 +1006,7 @@ def fn_client_is_converting
 	cic_return=0
 	if env$('ACSDeveloper')<>'' then
 		cic_return=1
-	! else if env$('client')='R R Crawford'       and days(date$)<=days('3/31/2021','mm/dd/ccyy') then ! just testing
+	else if env$('client')='R R Crawford'       and days(date$)<=days('3/31/2021','mm/dd/ccyy') then ! just testing
 	! 	cic_return=1
 	! else if env$('client')='Crockett County'       and days(date$)<=days('2/28/2019','mm/dd/ccyy') then ! just testing
 	! 	cic_return=1

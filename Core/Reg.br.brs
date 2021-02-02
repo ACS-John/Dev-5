@@ -236,6 +236,7 @@ def fn_creg_setup
 
 		cregFileData$ =datafolder$&'\reg-[CurSys].h[cno]'
 		cregFileIndex$=datafolder$&'\reg-[CurSys]-idx.h[cno]'
+		fnmakesurepathexists(cregFileData$)
 		open #hCreg=fnH: 'Name='&cregFileData$&',Version=1,KFName='&cregFileIndex$&',Use,RecL=384,KPs=1,KLn=128,Shr',internal,outIn,keyed
 		creg_setup$=env$('CNo')&env$('CurSys')&env$('client')
 	end if
