@@ -176,10 +176,10 @@ def fn_update
 			end if
 		next client_has_item
 		! client_has_count=udim((mat client_has$))
-		if srch(mat client_has$,'G2')>0 then client_has_count=client_has_count-1
-		if srch(mat client_has$,'HH')>0 then client_has_count=client_has_count-1
-		if srch(mat client_has$,'P4')>0 then client_has_count=client_has_count-1
-		if srch(mat client_has$,'U4')>0 then client_has_count=client_has_count-1
+		if srch(mat client_has$,'G2')>0 then client_has_count-=1
+		if srch(mat client_has$,'HH')>0 then client_has_count-=1
+		if srch(mat client_has$,'P4')>0 then client_has_count-=1
+		if srch(mat client_has$,'U4')>0 then client_has_count-=1
 		fnStatus("Downloading Updates for "&str$(client_has_count)&" support licensed systems.")
 		fnStatus("This may take up to "&str$(client_has_count*2+11)&" minutes on systems with slow internet connections.")
 		fnStatus("Download started at "&time$)
