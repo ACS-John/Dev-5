@@ -387,7 +387,7 @@ def fn_printTrans ! very local function - lots of inherritance
 		print_balance=0
 	end if
 	! /r
-	fnopenprn
+	fnopenprn('','Transactions')
 	if trim$(serviceName$(3))<>"Electric" and srv$(3)="EL" then ptShowElecUsed=1 ! electric readings are being used for a reduction meter
 	if trim$(serviceName$(4))<>"Gas" and srv$(4)="GA" then ptShowGasUsed=1 ! gas readings are being used for a reduction meter
 	if trim$(z$)="[All]" then hd1$="{\ul  Account }     {\ul     Date   }" else hd1$="    {\ul    Date   }"
@@ -400,30 +400,30 @@ def fn_printTrans ! very local function - lots of inherritance
 		if x2>0 then serviceName$(j)=serviceName$(j)(1:2)&"-"&serviceName$(j)(x2+1:len(serviceName$(j))) ! if service name two words long, use part of both
 		if trim$(serviceName$(j))<>"" then
 			sz1+=1 ! scr1$(sz1+=1)=serviceName$(j)
-			hd1$=hd1$&"  {\ul "&lpad$(rtrm$(serviceName$(j)(1:6)),6)&"}" : name$(x+=1)=serviceName$(j)
+			hd1$&="  {\ul "&lpad$(rtrm$(serviceName$(j)(1:6)),6)&"}" : name$(x+=1)=serviceName$(j)
 		end if  ! trim$(serviceName$(j))<>"" then
 		L1010: !
 	next j
-	hd1$=hd1$&"{\ul     Total}"
+	hd1$&="{\ul     Total}"
 	if print_balance then
-		hd1$=hd1$&"  {\ul   Balance }"
+		hd1$&="  {\ul   Balance }"
 	else
 		if trim$(serviceName$(1))="Water" then
-			hd1$=hd1$&"  {\ul   Wa Used }"
+			hd1$&="  {\ul   Wa Used }"
 			water=1
 		end if
 		if trim$(serviceName$(3))="Electric" then
-			hd1$=hd1$&"  {\ul   El Used }"
+			hd1$&="  {\ul   El Used }"
 			electric=1
 		else if ptShowElecUsed=1 then
-			hd1$=hd1$&"  {\ul      Used }"
+			hd1$&="  {\ul      Used }"
 			electric=1
 		end if
 		if trim$(serviceName$(4))="Gas" then
-			hd1$=hd1$&"  {\ul   Ga Used }"
+			hd1$&="  {\ul   Ga Used }"
 			gas=1
 		else if ptShowGasUsed=1 then
-			hd1$=hd1$&"  {\ul      Used }"
+			hd1$&="  {\ul      Used }"
 			gas=1
 		end if
 	end if
@@ -468,8 +468,7 @@ def fn_printTrans ! very local function - lots of inherritance
 			if trim$(serviceName$(j))<>"" then
 				if j=3 and srv$(3)="EL" and trim$(serviceName$(3))<>"Electric" and trim$(serviceName$(3))<>"Lawn Meter" then ! electic being used for reduction meter
 					goto L1370
-				end if
-				if j=4 and srv$(4)="GA" and trim$(serviceName$(4))<>"Gas" then ! gas being used for reduction meter
+				else if j=4 and srv$(4)="GA" and trim$(serviceName$(4))<>"Gas" then ! gas being used for reduction meter
 					goto L1370
 				end if
 				alloc(x+=1)=tg(j)
