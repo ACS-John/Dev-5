@@ -197,7 +197,7 @@ def fn_update
 		next ch_item
 		pr #h_script: 'quit'
 		close #h_script:
-		!
+		
 		open #h_batch=fnH: 'Name='&batch_name$&',RecL=256,replace',display,output
 		pr #h_batch: 'prompt $p$g'
 		pr #h_script: 'ftp -n -s:"'&os_filename$(script_name$)&'" ftp.planetacs.net >"'&os_filename$(return_name$)&'"'

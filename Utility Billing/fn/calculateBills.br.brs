@@ -113,7 +113,7 @@ TOP: ! r:
 	mat g=(0)
 	
 
-	! r: Check Unusal Usage
+	! Check Unusal Usage
 		r9_usage_is_zero=0
 		usage_srv1=0 ! WATER USAGE
 		usage_srv3=0 ! ELECTRIC USAGE / lawn meter usage
@@ -194,7 +194,6 @@ FINIS: ! r:
 	end if
 	close #hTrans: ioerr ignore
 	close #hTrans2: ioerr ignore
-	! pr 'print_count_unusual=';print_count_unusual : pr 'print_count_skip=';print_count_skip
 	if print_count_unusual or print_count_skip then let fncloseprn
 ! /r
 XIT_CALCULATE: !
@@ -248,6 +247,12 @@ goto TOP ! /r
 def fn_cuu_report_usage
 	! CUU_REPORT_USAGE_MAIN: !
 	x=0
+	dim watuse(12)
+	dim watdat(12)
+	dim elecuse(12)
+	dim elecdat(12)
+	dim gasuse(12)
+	dim gasdat(12)
 	mat watuse=(0) : mat watdat=(0)
 	mat elecuse=(0) : mat elecdat=(0)
 	mat gasuse=(0) : mat gasdat=(0)
@@ -265,7 +270,7 @@ def fn_cuu_report_usage
 	elecuse(x)=eu : elecdat(x)=tdate
 	gasuse(x)=gu : gasdat(x)=tdate
 	goto CUU_UBTRANS_READ
-	!
+	
 	CUU_REPORT_USAGE_PRINT: !
 	pr #255: "Type of Service     Old Reading   Current Reading       Calculated Usage"
 	F_PR_SERVICE: form c 22,pic(---------),x 9,pic(---------),x 11,pic(----------),x 2,c 30,x 2,c 30
@@ -561,12 +566,6 @@ def fn_setup
 		dim tg(11)
 		dim meteradr$*30
 		dim custname$*30
-		dim watuse(12)
-		dim watdat(12)
-		dim elecuse(12)
-		dim elecdat(12)
-		dim gasuse(12)
-		dim gasdat(12)
 		dim work$*256
 		dim work_addr$*256
 		dim subjectto(10)

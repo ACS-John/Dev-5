@@ -1002,19 +1002,14 @@ def library fnclient_is_converting
 	fn_setup
 	fnclient_is_converting=fn_client_is_converting
 fnend
-def fn_client_is_converting
-	cic_return=0
+def fn_client_is_converting(; ___,returnN)
 	if env$('ACSDeveloper')<>'' then
-		cic_return=1
-	else if env$('client')='R R Crawford'       and days(date$)<=days('3/31/2021','mm/dd/ccyy') then ! just testing
-		cic_return=1
-	! else if env$('client')='Crockett County'       and days(date$)<=days('2/28/2019','mm/dd/ccyy') then ! just testing
-	! 	cic_return=1
-	! else if env$('client')='Payroll Done Right' and days(date$)<=days('12/01/2018','mm/dd/ccyy') then
-	! 	cic_return=1
+		returnN=1
+	else if env$('client')='R R Crawford'       and days(date$)<=days('3/31/2021','mm/dd/ccyy') then
+		returnN=1
 	else if env$('client')='Kathys Bookkeeping' and days(date$)<=days('3/31/2021','mm/dd/ccyy')  then
-		cic_return=1
+		returnN=1
 	end if
-	fn_client_is_converting=cic_return
+	fn_client_is_converting=returnN
 fnend
 include: ertn No
