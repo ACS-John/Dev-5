@@ -294,6 +294,11 @@ def fn_get_the_date(gtd_source$*256)
 		cc18_pos=pos(gtd_source$,', 18')
 		cc19_pos=pos(gtd_source$,', 19')
 		cc20_pos=pos(gtd_source$,', 20')
+		cc21_pos=pos(gtd_source$,', 21')
+		cc22_pos=pos(gtd_source$,', 22')
+		cc23_pos=pos(gtd_source$,', 23')
+		cc24_pos=pos(gtd_source$,', 24')
+		cc25_pos=pos(gtd_source$,', 25')
 		if cc13_pos<=0 then cc13_pos=pos(gtd_source$,', 2013')
 		if cc14_pos<=0 then cc14_pos=pos(gtd_source$,', 2014')
 		if cc15_pos<=0 then cc15_pos=pos(gtd_source$,', 2015')
@@ -302,6 +307,11 @@ def fn_get_the_date(gtd_source$*256)
 		if cc18_pos<=0 then cc18_pos=pos(gtd_source$,', 2018')
 		if cc19_pos<=0 then cc19_pos=pos(gtd_source$,', 2019')
 		if cc20_pos<=0 then cc20_pos=pos(gtd_source$,', 2020')
+		if cc21_pos<=0 then cc21_pos=pos(gtd_source$,', 2021')
+		if cc22_pos<=0 then cc22_pos=pos(gtd_source$,', 2022')
+		if cc23_pos<=0 then cc23_pos=pos(gtd_source$,', 2023')
+		if cc24_pos<=0 then cc24_pos=pos(gtd_source$,', 2024')
+		if cc25_pos<=0 then cc25_pos=pos(gtd_source$,', 2025')
 		if cc12_pos>0 then
 			gtd_source$(cc12_pos:len(gtd_source$))=''
 			gtd_date_ccyy=2012
@@ -329,6 +339,21 @@ def fn_get_the_date(gtd_source$*256)
 		else if cc20_pos>0 then
 			gtd_source$(cc20_pos:len(gtd_source$))=''
 			gtd_date_ccyy=2020
+		else if cc21_pos>0 then
+			gtd_source$(cc21_pos:len(gtd_source$))=''
+			gtd_date_ccyy=2021
+		else if cc22_pos>0 then
+			gtd_source$(cc22_pos:len(gtd_source$))=''
+			gtd_date_ccyy=2022
+		else if cc23_pos>0 then
+			gtd_source$(cc23_pos:len(gtd_source$))=''
+			gtd_date_ccyy=2023
+		else if cc24_pos>0 then
+			gtd_source$(cc24_pos:len(gtd_source$))=''
+			gtd_date_ccyy=2024
+		else if cc25_pos>0 then
+			gtd_source$(cc25_pos:len(gtd_source$))=''
+			gtd_date_ccyy=2025
 		else
 			pr file$(h_in)
 			pr 'line '&str$(line_count)
