@@ -54,9 +54,9 @@ def library fn1099print(vn$*8,nam$*30,mat empAddr$,ss$*11,mat box)
 		end if
 		ten99initialized=1
 		fnreg_read('1099 - Export 1' ,ten99Export$,'False')
-		fnreg_read('1099 - Form 1 Y',tmp$,'5'  ) : topmargin=val(tmp$)
-		fnreg_read('1099 - Form 2 Y',tmp$,'144') : bottom=val(tmp$)
-		fnreg_read('1099 - X'       ,tmp$,'5'  ) : left=val(tmp$)
+		topmargin	=fnreg_read('1099 - Form 1 Y',tmp$,'5'  )
+		bottom    	=fnreg_read('1099 - Form 2 Y',tmp$,'144')
+		left      	=fnreg_read('1099 - X'       ,tmp$,'5'  )
 		fnreg_read('1099 - 2 Per Page',twoPerPage$,'False' )
 		fnreg_read('1099 - Enable Background',enableBackground$,'True' )
 		fnureg_read('1099 - Export Filename',output_filename$,os_filename$(env$('Desktop')&'\ACS [TaxYear] 1099 Export (Company [CompanyNumber]).txt'))
@@ -182,11 +182,10 @@ def fn_line(lineNumber)
 	fn_line=lineReturn
 fnend
 def fn_ask_margins
-	! if env$('acsdeveloper')='' then pr bell; : goto am_xit
 	fnreg_read('1099 - Form 1 Y',amResp$(1),'5' )
 	fnreg_read('1099 - Form 2 Y',amResp$(2),'144')
 	fnreg_read('1099 - X'       ,amResp$(3),'5' )
-	fnTos(sn$='1099_ask_margins')
+	fnTos
 	lc=0 : mylen=30 : mypos=mylen+2
 	fnLbl(lc+=1,1,"Form 1 Distance from Top (mm):",mylen,1)
 	fnTxt(lc,mypos,3,0,1,'30')
@@ -244,7 +243,7 @@ def library fnask_1099_info(&seltp,&type,&min1,&beg_date,&end_date)
 	end if ! /r
 	awiReturn=0
 	ASK_INFO: !
-	fnTos(sn$="pr1099-1")
+	fnTos
 	rc=lc=0 : mylen=40 : mypos=mylen+3
 	fnLbl(lc+=1,1,"Tax Year:",mylen,1)
 	fnTxt(lc,mypos,4,0,1,"",1,"Year to pr 1099s for")
@@ -289,7 +288,7 @@ def library fnask_1099_info(&seltp,&type,&min1,&beg_date,&end_date)
 	fnOpt(lc+=1,3,"Export for Advanced Micro Solutions")
 	resp$(respc_export_ams:=rc+=1)=destinationOpt$(2)
 	fnLbl(lc+=1,5,"Export File:",12,1,0,franum)
-	fnTxt(lc,19,20,80,0,'72',0,'Choose a destination location for the ACS export.',franum)
+	fnTxt(lc,19,20,128,0,'72',0,'Choose a destination location for the ACS export.',franum)
 	resp$(resp_export_file:=rc+=1)=output_filename$
 	fnButton(lc,5+12+20+5,'Default',14,'Choose to set the default for the selected destination software.',0,0,franum)
 	fnLbl(lc+=1,19,"([CompanyNumber] and [TaxYear] will be substituted in filename)",0,0,0,franum)
