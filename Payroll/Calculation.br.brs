@@ -838,7 +838,7 @@ def fn_stateTax(eno,wages,pppy,allowances,marital,eicCode,fedWh,addOnSt,w4year$,
 	else if clientState$='FL' then
 		returnN=0 ! no state income tax
 	else if clientState$='GA' then
-		returnN=fn_wh_georgia(wages,pppy,allowances,marital,eicCode)
+		returnN=fn_wh_georgia(eno,wages,pppy,marital,eicCode)
 	else if clientState$='IL' then
 		returnN=fn_wh_illinois(eno,wages,pppy)
 	else if clientState$='IN' then
@@ -1014,7 +1014,11 @@ def fn_wh_arizona(taxableWagesCurrent,allowances; ___,returnN,stp)
 	! h3=min(h3,1200)
 	fn_wh_arizona=returnN
 fnend
-def fn_wh_georgia(taxableWagesCurrent,payPeriodsPerYear,allowances,married,wga_eicCode; ___,returnN)
+def fn_wh_georgia(eno,taxableWagesCurrent,payPeriodsPerYear,married,wga_eicCode; ___,returnN, _
+	dependents,exemptions,tableName$,annualPersonalAllowance,stDeduction, _
+	tmp,tmp1,tmp2,tmp4,wagesAnnualTaxable,dependentAllowance, _
+	personalAllowance)
+	! OLD: wagesAnnual,
 	! updated 2/1/2021
 	! taxableWagesCurrent - formerly b8
 	! payPeriodsPerYear - formerly stwh(tcd1,1)
@@ -1049,49 +1053,62 @@ def fn_wh_georgia(taxableWagesCurrent,payPeriodsPerYear,allowances,married,wga_e
 		gawhTableH(6,1)= 7000 : gawhTableH(6,2)= 230.00 : gawhTableH(6,3)=0.0575
 		! /r
 	end if
-	Ga_StateDeduction=fn_gaStandardDeduction('GA',married,wga_eicCode)
-	Ga_StatePersonalAllowance=fn_gaPersonalAllowance('GA',married,wga_eicCode)
+	stDeduction=fn_gaStandardDeduction(married,wga_eicCode)
+	annualPersonalAllowance=fn_gaPersonalAllowance(married,wga_eicCode)
 	if env$('acsDeveloper')<>'' then dev=1 else dev=0
-	ga_WagesAnnual=(taxableWagesCurrent)*payPeriodsPerYear
+	! wagesAnnual=(taxableWagesCurrent)*payPeriodsPerYear
 
-	ga_WagesAnnualTaxable=Ga_WagesAnnual-Ga_StateDeduction
-	ga_WagesAnnualTaxable-=Ga_StatePersonalAllowance
-	fn_detail('   Annual Wages (less state deduction and personal allowance)='&str$(Ga_WagesAnnualTaxable))
+	wagesAnnualTaxable=wagesAnnual-stDeduction
+	wagesAnnualTaxable-=annualPersonalAllowance
+	! r: determine table
 	if married=0 then ! SINGLE INDIVIDUAL
 		mat gawh(udim(mat gawhTableH,1),udim(mat gawhTableH,2))
 		mat gawh=gawhTableH
-		fn_detail('   using Table H')
+		tableName$='H'
 	else if married=4 or married=5 then ! MARRIED FILING JOINT RETURN (both spouses having income) OR MARRIED FILING SEPARATE RETURN
 		mat gawh(udim(mat gawhTableG,1),udim(mat gawhTableG,2))
 		mat gawh=gawhTableG
-		fn_detail('   using Table G')
+		tableName$='G'
 	else if married=3 or married=2 or married=1 then ! MARRIED FILING JOINT RETURN (one spouse having income) OR HEAD OF HOUSEHOLD or 1-Married (nothing else known)
 		mat gawh(udim(mat gawhTableF,1),udim(mat gawhTableF,2))
 		mat gawh=gawhTableF
-		fn_detail('   using Table F')
+		tableName$='F'
 	else
 		pr 'unrecognized married';married : pause
 	end if
-	tableRow=fn_table_line(mat gawh,Ga_WagesAnnualTaxable)
-	pause
+	fn_detail('   using Table '&tableName$)
+	! /r
 	
+	exemptions=val(fnEmployeeData$(eno,'Exepmtions'))
+	dependents=val(fnEmployeeData$(eno,'Dependents'))
+	dependentAllowance=gaAnnualDependantAllowance/payPeriodsPerYear
 	
-	
-	
-	fn_detail('     col '&str$(tableRow)&' of that table.')
-	fn_detail('base to add:'&str$(gawh(tableRow,2)))
-	fn_detail('percentage rate for excess:'&str$(gawh(tableRow,3)))
-	fn_detail('excess of:'&str$(gawh(tableRow,1)))
-	! if dev then pr '   table line ';tableRow
-	! if dev then pause
-	ga_AnnualWagesSubjToWithhold=Ga_WagesAnnualTaxable-gaAnnualDependantAllowance*allowances
-	returnN=gawh(tableRow,2)+(ga_AnnualWagesSubjToWithhold-gawh(tableRow,1))*gawh(tableRow,3)
-	returnN=returnN/payPeriodsPerYear
+	fn_detail('Step 1: Total Taxable Wages = '&str$(taxableWagesCurrent))
+	fn_detail('    Less Standard Deduction = '&str$(stDeduction/payPeriodsPerYear))
+	tmp=taxableWagesCurrent-stDeduction/payPeriodsPerYear
+	! fn_detail('                            = '&str$(tmp))
+
+	personalAllowance=round(annualPersonalAllowance/payPeriodsPerYear,2)
+	fn_detail( 'Step 2: (a) Less Personal Allowance per Table E = '&str$(personalAllowance))
+	fn_detail('        (b) Less Dependent Allowance per Table E $'&str$(dependentAllowance)&' x '&str$(dependents)&' = '&str$(dependentAllowance*dependents))
+	totalAllowances=personalAllowance+dependentAllowance*dependents
+	fn_detail('            Total allowances                   '&str$(totalAllowances))
+	tmp-=totalAllowances
+	fn_detail('            Wages subject to withholding       '&str$(tmp))
+	tableRow=fn_table_line(mat gawh,tmp*payPeriodsPerYear)
+	tmp1=round(gawh(tableRow,1)/payperiodsperyear,2)
+	tmp2=round(gawh(tableRow,2)/payperiodsperyear,2)
+	taxRate=gawh(tableRow,3)
+	fn_detail('Step 3: Tax on '&str$(tmp1)&' per Table '&tableName$&' = '&str$(tmp2))
+	tmp4=round(((tmp-tmp1)*taxRate),2)
+	fn_detail('        Tax on excess ('&str$(tmp-tmp1)&' at '&str$(taxRate)&'%)  ='&str$(tmp4))
+	returnN=tmp2+tmp4
+	fn_detail('        Total tax to be withheld = '&str$(returnN))
 	returnN=round(returnN,2) ! round to the nearest whole dollar
 	if returnN<.1 then returnN=0 ! do not withhold less than 10 cents.
 	fn_wh_georgia=returnN
 fnend
-def fn_gaStandardDeduction(state$,married,wga_eicCode; ___,returnN)
+def fn_gaStandardDeduction(married,wga_eicCode; ___,returnN)
 	if taxYear<=2020 then ! r:
 		if married=0 or married=2 then ! Single (or Single - Head of Household)
 			standardStateDeduction=2300
@@ -1122,43 +1139,40 @@ def fn_gaStandardDeduction(state$,married,wga_eicCode; ___,returnN)
 	end if
 	fn_gaStandardDeduction=returnN
 fnend
-def fn_gaPersonalAllowance(state$,married,wga_eicCode)
-	if state$='GA' then
-		if taxYear<=2020 then
-			if married=0 or married=2 then ! Single (or Single - Head of Household)
-				statePersonalAllowance=2700
-			else if married=3 then ! Married - filing joint - only one working
-				statePersonalAllowance=3700
-			else if married=4 then ! Married - filing joint - both working
-				statePersonalAllowance=7400
-			else if married=5 then ! Married - filing seperate - both working
-				statePersonalAllowance=3700
-			else  ! 1 - Married - (filing status unknown) - just use lowest married deduction
-				statePersonalAllowance=3700
-			end if
-		else if taxYear=>2021 then
-			if married=0 or married=2 then
-				! Single (or Single - Head of Household)
-				statePersonalAllowance=2700
-			else if married=3 then
-				! Married - filing joint - only one working
-				statePersonalAllowance=3700
-			else if married=4 then
-				! Married - filing joint - both working
-				statePersonalAllowance=7400
-			else if married=5 then
-				! Married - filing seperate - both working
-				statePersonalAllowance=3700
-			else
-				! 1 - Married - (filing status unknown) - just use lowest married deduction
-				statePersonalAllowance=3700
-			end if
-		end if
-	else
-		pr 'fn_gaPersonalAllowance not yet configured for state: "'&state$&'"'
-		pause
+def fn_gaPersonalAllowance(married,wga_eicCode; ___,returnN)
+	if taxYear<=2020 then ! r:
+		if married=0 or married=2 then
+			! Single (or Single - Head of Household)
+			returnN=2700
+		else if married=3 then ! Married - filing joint - only one working
+			returnN=3700
+		else if married=4 then ! Married - filing joint - both working
+			returnN=7400
+		else if married=5 then ! Married - filing seperate - both working
+			returnN=3700
+		else  ! 1 - Married - (filing status unknown) - just use lowest married deduction
+			returnN=3700
+		end if ! /r
+	else if taxYear=>2021 then ! r:
+
+		if married=1 or married=3  or married=4 then
+			! 1 - Married - filing joint return
+			! 3 - Married - filing joint return - only one working
+			! 4 - Married - filing joint - both working
+			returnN=7400
+		else if married=0 or married=2 then
+			! 0 - Single
+			! 2 - Single - Head of Household
+			returnN=2700
+		else if married=5 then
+			! 5 - Married - filing seperate - both working
+			returnN=3700
+		else 
+			! unknown - just use the lowest
+			returnN=2700
+		end if ! /r
 	end if
-	fn_gaPersonalAllowance=statePersonalAllowance
+	fn_gaPersonalAllowance=returnN
 fnend
 def fn_wh_illinois(eno,taxableWagesCurrent,payPeriodsPerYear; ___,g2,returnN,line1allowances,line2allowances,estAnnualNetPay)
 	! 			! no table
@@ -2045,7 +2059,15 @@ def library fnCheckPayrollCalculation(; ___, _
 			resp$(rc_stateExemptions1=respc+=1)=fnEmployeeData$(0,'R-1300 Exepmtions')
 			fnLbl(lc+=1,1,"R-1300 Dependencies:",col1_len,1)
 			fnTxt(lc,col2_pos,5, 0,1,"30",0,'')
-			resp$(rc_stDependencies=respc+=1)=fnEmployeeData$(0,'R-1300 Dependencies')
+			resp$(rc_stDependents=respc+=1)=fnEmployeeData$(0,'R-1300 Dependencies')
+		else if clientState$='GA' then
+			lc+=1
+			fnLbl(lc+=1,1,"Exepmtions:",col1_len,1)
+			fnTxt(lc,col2_pos,5, 0,1,"30",0,'')
+			resp$(rc_stExemptions=respc+=1)=fnEmployeeData$(0,'Exepmtions')
+			fnLbl(lc+=1,1,"Dependents:",col1_len,1)
+			fnTxt(lc,col2_pos,5, 0,1,"30",0,'')
+			resp$(rc_stDependents=respc+=1)=fnEmployeeData$(0,'Dependents')
 		end if
 
 		fnCmdSet(2)
@@ -2071,7 +2093,10 @@ def library fnCheckPayrollCalculation(; ___, _
 				fnEmployeeData$(0,'AR4EC Exemptions',resp$(rc_stateExemptions1))
 			else if clientState$='LA' then
 				fnEmployeeData$(0,'R-1300 Exepmtions',resp$(rc_stateExemptions1))
-				fnEmployeeData$(0,'R-1300 Dependencies',resp$(rc_stDependencies))
+				fnEmployeeData$(0,'R-1300 Dependencies',resp$(rc_stDependents))
+			else if clientState$='GA' then
+				fnEmployeeData$(0,'Exepmtions',resp$(rc_stExemptions))
+				fnEmployeeData$(0,'Dependents',resp$(rc_stDependents))
 			end if
 			marital       =val(resp$(resp_married       	)(1:1)) ! marital status
 			payCode       =val(resp$(resp_payCode       	)(1:2)) ! pay code
@@ -2097,17 +2122,6 @@ def library fnCheckPayrollCalculation(; ___, _
 			fnStatus('               w4year: '&w4year$                  )
 
 			fnStatus('Calculated Federal WithHolding: '&str$( fn_federalTax(taxYear,fedpct,wages,ded,stdWhFed,fedExempt,pppy,marital,w4Year$,w4Step3,w4step4a,w4step4b,w4step4c) ))
-			! fnStatus('Arkansas     State WithHolding: '&str$( fn_stateTax(eno,wages,pppy,allowances,marital,eicCode,fedWh,stateAddOn,w4year$,taxYear, 'AR') ))
-			! fnStatus('Arizona      State WithHolding: '&str$( fn_stateTax(eno,wages,pppy,allowances,marital,eicCode,fedWh,stateAddOn,w4year$,taxYear, 'AZ') ))
-			! fnStatus('Georgia      State WithHolding: '&str$( fn_stateTax(eno,wages,pppy,allowances,marital,eicCode,fedWh,stateAddOn,w4year$,taxYear, 'GA') ))
-			! fnStatus('Illinois     State WithHolding: '&str$( fn_stateTax(eno,wages,pppy,allowances,marital,eicCode,fedWh,stateAddOn,w4year$,taxYear, 'IL') ))
-			! fnStatus('Indiana      State WithHolding: '&str$( fn_stateTax(eno,wages,pppy,allowances,marital,eicCode,fedWh,stateAddOn,w4year$,taxYear, 'IN') ))
-			! fnStatus('Kentuky      State WithHolding: '&str$( fn_stateTax(eno,wages,pppy,allowances,marital,eicCode,fedWh,stateAddOn,w4year$,taxYear, 'KY') ))
-			! fnStatus('Louisiana    State WithHolding: '&str$( fn_stateTax(eno,wages,pppy,allowances,marital,eicCode,fedWh,stateAddOn,w4year$,taxYear, 'LA') ))
-			! fnStatus('Missouri     State WithHolding: '&str$( fn_stateTax(eno,wages,pppy,allowances,marital,eicCode,fedWh,stateAddOn,w4year$,taxYear, 'MO') ))
-			! fnStatus('Mississippi  State WithHolding: '&str$( fn_stateTax(eno,wages,pppy,allowances,marital,eicCode,fedWh,stateAddOn,w4year$,taxYear, 'MS') ))
-			! fnStatus('Oklahoma     State WithHolding: '&str$( fn_stateTax(eno,wages,pppy,allowances,marital,eicCode,fedWh,stateAddOn,w4year$,taxYear, 'OK') ))
-			! fnStatus('Oregon       State WithHolding: '&str$( fn_stateTax(eno,wages,pppy,allowances,marital,eicCode,fedWh,stateAddOn,w4year$,taxYear, 'OR') ))
 			fnStatus('Calculated '&fnpayroll_client_state$&' State WithHolding: '&str$( fn_stateTax(eno,wages,pppy,allowances,marital,eicCode,fedWh,stateAddOn,w4year$,taxYear)               ))
 			fnStatusPause
 			fnStatusClose

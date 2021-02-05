@@ -523,6 +523,10 @@ ScrState: ! r:
 		fnAddOneC(mat ids$,'R-1300 Exepmtions')
 		fnAddOneC(mat ids$,'R-1300 Dependencies')
 		ckey=fn_askMat(eno,mat ids$)
+	else if fnpayroll_client_state$='GA' then !  R-1300 (L-4)
+		fnAddOneC(mat ids$,'Exepmtions')
+		fnAddOneC(mat ids$,'Dependents')
+		ckey=fn_askMat(eno,mat ids$)
 	else 
 		pr 'state not yet setup yet'
 		pause
@@ -581,7 +585,9 @@ def fn_navButtons(&lc,&deptCount; ___,deptItem)
 	else if fnpayroll_client_state$='IL' then
 		fnbutton_or_disabled(screen<>scrState,lc,11,'IL W-4',ckey_ScrState,'',10)
 	else if fnpayroll_client_state$='LA' then
-		fnbutton_or_disabled(screen<>scrState,lc,11,'R-1300 (L-4)',ckey_ScrState,'',10)
+		fnbutton_or_disabled(screen<>scrState,lc,11,'R-1300 (L-4)',ckey_ScrState,'',12)
+	else if fnpayroll_client_state$='GA' then
+		fnbutton_or_disabled(screen<>scrState,lc,11,'Withholding Exemptions',ckey_ScrState,'',22)
 	end if
 	lc+=1
 	dptPos=1
@@ -803,11 +809,9 @@ def fn_setup
 			dednames$(j)=trim$(dednames$(j))&":"
 		end if
 	next j
-	! if fnpayroll_client_state$='IL' or fnpayroll_client_state$='AR' then
-	! end if
-	scrState=1        :     ckey_ScrState=5200
-	scrEmployee=2     :      ckey_scrEmployee=5201
-	scrDeptAdd=3      :      ckey_DepartmentAdd=5301
+	scrState=1        	: ckey_ScrState=5200
+	scrEmployee=2     	: ckey_scrEmployee=5201
+	scrDeptAdd=3      	: ckey_DepartmentAdd=5301
 	ckey_high=ckey_DepartmentAdd ! should be the highest of these universal ckeys
 	dim marriedOption$(0)*58
 	dim eicOption$(0)*29

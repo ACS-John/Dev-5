@@ -1,5 +1,6 @@
 Time and Date 		Sys	Program(s) and Change(s) Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             
 ______________________	___	____________________________________________________________________________________________________________________________________________________________________________________________________________________________________                                                          
+6:22 PM 2/5/2021	PR	GA withholding tables updated - you must add Dependents and Expemtions on the new Withholding Exemptions tab in the Employee table
 11:26 02/21/2021	CO	5.75113  
 10:32 02/21/2021	CO	5.75112   
 10:30 AM 2/3/2021	UB	Transactions printed from within Customer file or Collections will now respect Print Properties set for Transactions program from Main Menu rather than inherriting Customer or Collections print properties  
@@ -8,7 +9,7 @@ ______________________	___	_____________________________________________________
 12:50 02/21/2021	CO	5.75109      
 9:52 02/21/2021	CO	5.75108       
 18:07 01/21/2021	CO	5.75107        
-6:03 PM 1/29/2021	PR	LA withholding tables updated - Please not you must add R-1300 info into Employee records       
+6:03 PM 1/29/2021	PR	LA withholding tables updated - you must add R-1300 info into Employee records       
 11:22 01/21/2021	CO	5.75106         
 11:19 AM 1/29/2021	UB	Negative Lawn Meter numbers are no longer subtracted (thus adding usage) from Water Usage to get Sewer Usage - only possitive Lawn Meter values are used here        
 21:20 01/21/2021	CO	5.75105          
