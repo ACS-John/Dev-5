@@ -63,6 +63,7 @@ def fn_importRouteAndSequence(source$*256,delim$*1; ___,hIn,line$*2048,z$*10,pas
 			dim item$(0)*256
 			mat item$(0)
 			str2mat(line$,mat item$,delim$,'Quotes:Trim')
+			if item$(in_acct)(1:4)='key:' then item$(in_acct)(1:4)=''
 			z$      =lpad$(trim$(item$(in_acct)),10)
 			route   =val(item$(in_route   )) conv ImportFail
 			sequence=val(item$(in_sequence)) conv ImportFail
@@ -155,7 +156,7 @@ def fn_exportRouteAndSequence(outFile$*256,delim$*1; ___,hCustomer)
 		read #hCustomer,using form$(hCustomer): mat c$,mat cN eof ExportRouteAndSequence_Finis
 		if finalBillingCode=0 or finalBillingCode=3 then
 			! r: pr #hOut delimited field values
-			pr #hOut: '"'&c$(c_account)&'"'       	&delim$;
+			pr #hOut: '"key:'&c$(c_account)&'"'       	&delim$;
 			pr #hOut: str$(cN(c_route))           	&delim$;
 			pr #hOut: str$(cN(c_sequence))        	&delim$;
 			pr #hOut: '"'&c$(c_meterAddress)&'"'  	&delim$;
