@@ -154,6 +154,7 @@ def fn_exportRouteAndSequence(outFile$*256,delim$*1; ___,hCustomer)
 
 	do
 		read #hCustomer,using form$(hCustomer): mat c$,mat cN eof ExportRouteAndSequence_Finis
+		finalBillingCode=cN(c_finalBilling)
 		if finalBillingCode=0 or finalBillingCode=3 then
 			! r: pr #hOut delimited field values
 			pr #hOut: '"key:'&c$(c_account)&'"'       	&delim$;

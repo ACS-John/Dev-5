@@ -921,7 +921,7 @@ def fn_n2b(mat n2,n2Index; ___,x,returnN,multiplier)
 fnend
 
 def fn_wh_arkansas(eno,war_wages_taxable_current,payPeriodsPerYear,allowances, _
-	wga_is_married,wga_eicCode; ___, _
+	married,wga_eicCode; ___, _
 	s1,annualPersonalCredit,returnN,stAllowances,adjEstAnnWages)
 	if ~setup_arwh then ! r: setup AR Arkansas
 		setup_arwh=1
@@ -1014,7 +1014,7 @@ def fn_wh_arizona(taxableWagesCurrent,allowances; ___,returnN,stp)
 	! h3=min(h3,1200)
 	fn_wh_arizona=returnN
 fnend
-def fn_wh_georgia(taxableWagesCurrent,payPeriodsPerYear,allowances,wga_is_married,wga_eicCode; ___,returnN)
+def fn_wh_georgia(taxableWagesCurrent,payPeriodsPerYear,allowances,married,wga_eicCode; ___,returnN)
 	! updated 2/1/2021
 	! taxableWagesCurrent - formerly b8
 	! payPeriodsPerYear - formerly stwh(tcd1,1)
@@ -1049,30 +1049,35 @@ def fn_wh_georgia(taxableWagesCurrent,payPeriodsPerYear,allowances,wga_is_marrie
 		gawhTableH(6,1)= 7000 : gawhTableH(6,2)= 230.00 : gawhTableH(6,3)=0.0575
 		! /r
 	end if
-	Ga_StateDeduction=fn_gaStandardDeduction('GA',wga_is_married,wga_eicCode)
-	Ga_StatePersonalAllowance=fn_gaPersonalAllowance('GA',wga_is_married,wga_eicCode)
+	Ga_StateDeduction=fn_gaStandardDeduction('GA',married,wga_eicCode)
+	Ga_StatePersonalAllowance=fn_gaPersonalAllowance('GA',married,wga_eicCode)
 	if env$('acsDeveloper')<>'' then dev=1 else dev=0
 	ga_WagesAnnual=(taxableWagesCurrent)*payPeriodsPerYear
 
 	ga_WagesAnnualTaxable=Ga_WagesAnnual-Ga_StateDeduction
 	ga_WagesAnnualTaxable-=Ga_StatePersonalAllowance
 	fn_detail('   Annual Wages (less state deduction and personal allowance)='&str$(Ga_WagesAnnualTaxable))
-	if wga_is_married=0 then ! SINGLE INDIVIDUAL
+	if married=0 then ! SINGLE INDIVIDUAL
 		mat gawh(udim(mat gawhTableH,1),udim(mat gawhTableH,2))
 		mat gawh=gawhTableH
 		fn_detail('   using Table H')
-	else if wga_is_married=4 or wga_is_married=5 then ! MARRIED FILING JOINT RETURN (both spouses having income) OR MARRIED FILING SEPARATE RETURN
+	else if married=4 or married=5 then ! MARRIED FILING JOINT RETURN (both spouses having income) OR MARRIED FILING SEPARATE RETURN
 		mat gawh(udim(mat gawhTableG,1),udim(mat gawhTableG,2))
 		mat gawh=gawhTableG
 		fn_detail('   using Table G')
-	else if wga_is_married=3 or wga_is_married=2 or wga_is_married=1 then ! MARRIED FILING JOINT RETURN (one spouse having income) OR HEAD OF HOUSEHOLD or 1-Married (nothing else known)
+	else if married=3 or married=2 or married=1 then ! MARRIED FILING JOINT RETURN (one spouse having income) OR HEAD OF HOUSEHOLD or 1-Married (nothing else known)
 		mat gawh(udim(mat gawhTableF,1),udim(mat gawhTableF,2))
 		mat gawh=gawhTableF
 		fn_detail('   using Table F')
 	else
-		pr 'unrecognized wga_is_married';wga_is_married : pause
+		pr 'unrecognized married';married : pause
 	end if
 	tableRow=fn_table_line(mat gawh,Ga_WagesAnnualTaxable)
+	pause
+	
+	
+	
+	
 	fn_detail('     col '&str$(tableRow)&' of that table.')
 	fn_detail('base to add:'&str$(gawh(tableRow,2)))
 	fn_detail('percentage rate for excess:'&str$(gawh(tableRow,3)))
@@ -1086,69 +1091,62 @@ def fn_wh_georgia(taxableWagesCurrent,payPeriodsPerYear,allowances,wga_is_marrie
 	if returnN<.1 then returnN=0 ! do not withhold less than 10 cents.
 	fn_wh_georgia=returnN
 fnend
-def fn_gaStandardDeduction(state$,wga_is_married,wga_eicCode)
-	if state$='GA' then
-		if taxYear<=2020 then ! r:
-			if wga_is_married=0 or wga_is_married=2 then ! Single (or Single - Head of Household)
-				standardStateDeduction=2300
-			else if wga_is_married=5 then ! Married - filing seperate - both working
-				standardStateDeduction=1500
-			else if wga_is_married=4 then ! Married - filing joint - both working
-				standardStateDeduction=3000
-			else if wga_is_married=3 then ! Married - filing joint return - only one working
-				standardStateDeduction=3000
-			else  ! 1 - Married - (filing status unknown) - just use lowest deduction
-				standardStateDeduction=1500
-			end if ! /r
-		else if taxYear=>2021 then ! r:
-			if wga_is_married=0 or wga_is_married=2 then
-				! Single (or Single - Head of Household)
-				standardStateDeduction=2700
-			else if wga_is_married=5 then
-				! Married - filing seperate - both working
-				standardStateDeduction=3700
-			else if wga_is_married=4 then
-				! Married - filing joint - both working
-				standardStateDeduction=7400
-			else if wga_is_married=3 then
-				! Married - filing joint return - only one working
-				standardStateDeduction=7400
-			else
-				! 1 - Married - (filing status unknown) - just use lowest deduction
-				standardStateDeduction=3700
-			end if ! /r
-		end if
-	else
-		pr 'fn_gaStandardDeduction not yet configured for state: "'&state$&'"'
-		pause
+def fn_gaStandardDeduction(state$,married,wga_eicCode; ___,returnN)
+	if taxYear<=2020 then ! r:
+		if married=0 or married=2 then ! Single (or Single - Head of Household)
+			standardStateDeduction=2300
+		else if married=5 then ! Married - filing seperate - both working
+			standardStateDeduction=1500
+		else if married=4 then ! Married - filing joint - both working
+			standardStateDeduction=3000
+		else if married=3 then ! Married - filing joint return - only one working
+			standardStateDeduction=3000
+		else  ! 1 - Married - (filing status unknown) - just use lowest deduction
+			standardStateDeduction=1500
+		end if ! /r
+	else if taxYear=>2021 then ! r:
+		if married=1 or married=3  or married=4 then
+			! 1 - Married - filing joint return
+			! 3 - Married - filing joint return - only one working
+			! 4 - Married - filing joint - both working
+			returnN=6000
+		else if married=0 or married=2 then
+			! 0 - Single
+			! 2 - Single - Head of Household
+			returnN=4600
+		else
+			! 5 - Married - filing seperate - both working
+			! unknown - just use the lowest deduction
+			returnN=3000
+		end if ! /r
 	end if
-	fn_gaStandardDeduction=standardStateDeduction
+	fn_gaStandardDeduction=returnN
 fnend
-def fn_gaPersonalAllowance(state$,wga_is_married,wga_eicCode)
+def fn_gaPersonalAllowance(state$,married,wga_eicCode)
 	if state$='GA' then
 		if taxYear<=2020 then
-			if wga_is_married=0 or wga_is_married=2 then ! Single (or Single - Head of Household)
+			if married=0 or married=2 then ! Single (or Single - Head of Household)
 				statePersonalAllowance=2700
-			else if wga_is_married=3 then ! Married - filing joint - only one working
+			else if married=3 then ! Married - filing joint - only one working
 				statePersonalAllowance=3700
-			else if wga_is_married=4 then ! Married - filing joint - both working
+			else if married=4 then ! Married - filing joint - both working
 				statePersonalAllowance=7400
-			else if wga_is_married=5 then ! Married - filing seperate - both working
+			else if married=5 then ! Married - filing seperate - both working
 				statePersonalAllowance=3700
 			else  ! 1 - Married - (filing status unknown) - just use lowest married deduction
 				statePersonalAllowance=3700
 			end if
 		else if taxYear=>2021 then
-			if wga_is_married=0 or wga_is_married=2 then
+			if married=0 or married=2 then
 				! Single (or Single - Head of Household)
 				statePersonalAllowance=2700
-			else if wga_is_married=3 then
+			else if married=3 then
 				! Married - filing joint - only one working
 				statePersonalAllowance=3700
-			else if wga_is_married=4 then
+			else if married=4 then
 				! Married - filing joint - both working
 				statePersonalAllowance=7400
-			else if wga_is_married=5 then
+			else if married=5 then
 				! Married - filing seperate - both working
 				statePersonalAllowance=3700
 			else
