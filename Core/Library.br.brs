@@ -35,7 +35,7 @@ def library fnOsFilename$*512(filename$*512; return$*512)
 fnend
 
 def library fnKeyExists(hFile,&keyToTest$; attemptFix,___,returnN, _
-	origionalKey$*256,attemptFix2Count,tried0,triedDot00,lenTmp,dotPos,tmp$*128)
+	origionalKey$*256,attemptFix2Count,tried0,triedDot0,triedDot00,lenTmp,dotPos,tmp$*128)
 	! attemptFix =1 try it: As-Is, Left-padded, Right-padded
 	!            =2 also try it: with adding 0, 00, .00 in all of the previous ways
 	origionalKey$=keyToTest$
@@ -78,6 +78,7 @@ def library fnKeyExists(hFile,&keyToTest$; attemptFix,___,returnN, _
 				goto KeTop
 			end if
 			PastDot00: !
+
 			
 			if dotPos=len(tmp$)-1 and ~tried0 then
 				keyToTest$=tmp$&'0' soflow Past0
@@ -85,6 +86,16 @@ def library fnKeyExists(hFile,&keyToTest$; attemptFix,___,returnN, _
 				goto KeTop
 			end if
 			Past0: !
+
+
+			! removed because never finished developing - very unusual situation anyway
+			! if dotPos<=0 and ~triedDot0 then
+			! 	keyToTest$=tmp$&'.0' soflow PastDot0
+			! 	triedDot0=1
+			! 	goto KeTop
+			! end if
+			! PastDot0: !
+
 
 		end if
 		MaeJustFail: !
@@ -1565,8 +1576,8 @@ fnend
 		library 'S:\Payroll\fn\employeeData.br': fnEmployeeDataClose
 		fnEmployeeDataClose=fnEmployeeDataClose
 	fnend
-	
-	
+
+
 	def library fnCheckPayrollCalculation
 		library 'S:\Payroll\Calculation.br': fnCheckPayrollCalculation
 		fnCheckPayrollCalculation=fnCheckPayrollCalculation
