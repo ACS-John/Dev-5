@@ -188,7 +188,7 @@ def fn_setupClient ! ** set up for new clients
 		! fn_setupClient_add("Community Dev" ,982,34156)
 		fn_setupClient_add("Crane" ,1120,0)
 		fn_setupClient_add("Crockett County" ,1141,15110)
-		fn_setupClient_add('Diamond' ,1345,0)
+		! fn_setupClient_add('Diamond' ,1345,0)
 		fn_setupClient_add("Divernon" ,1350,33698)
 		fn_setupClient_add("Dorothy Salch" ,3812,34494)
 		fn_setupClient_add("Durden" ,1406,16410)
@@ -241,7 +241,7 @@ def fn_setupClient ! ** set up for new clients
 		fn_setupClient_add("Raymond",3660,32798)
 		fn_setupClient_add("RecoverysUnlimited",3670,0)
 		fn_setupClient_add('R R Crawford',760,12466)  ! owns a system, but is stalling support until their old stuff breaks.
-		fn_setupClient_add('Sheila',770,0)
+		! fn_setupClient_add('Sheila',770,0)
 		fn_setupClient_add("Thomas Richardson",3720,7718)
 		!   fn_setupClient_add("Riverside",3725,18332)
 		!   fn_setupClient_add("Sangamon",3815,34066)
@@ -347,7 +347,7 @@ def fn_getClientLicense(mat client_has$)
 			fn_getClientLicense_add('PR')
 			fn_getClientLicense_add('CL')
 			fn_getClientLicense_add('UB-EFT')
-			if days(date$)<=days('09/15/2019','mm/dd/ccyy') then le fn_getClientLicense_add('EM')  ! Alpha testing
+			if days(date$)<=days('09/15/2019','mm/dd/ccyy') then fn_getClientLicense_add('EM')  ! Alpha testing
 			!     fn_getClientLicense_add('CR')
 		else if env$('client')='Blucksberg' then
 			fn_userLimit(1)
@@ -392,12 +392,12 @@ def fn_getClientLicense(mat client_has$)
 			fn_getClientLicense_add('PR')
 			fn_getClientLicense_add('GL')
 			fn_getClientLicense_add('GB')  !  GB is General Ledger Budget Management Add-On
-		else if env$('client')='Diamond' and days(date$)<=days('05/31/2020','mm/dd/ccyy') then
-			fn_getClientLicense_add('UB') : fn_setUbLimit(500) ! U3 Utility Billing (<500 Customers)
-			fn_getClientLicense_add('GL')
-			fn_getClientLicense_add('PR')
-			fn_getClientLicense_add('CL')
-			! fn_getClientLicense_add('U4') : u4_device$="Boson" ! ACEECA MEZ 1500 ! U4 Utility Billing Hand Held Add-On
+		! else if env$('client')='Diamond' and days(date$)<=days('05/31/2020','mm/dd/ccyy') then
+		! 	fn_getClientLicense_add('UB') : fn_setUbLimit(500) ! U3 Utility Billing (<500 Customers)
+		! 	fn_getClientLicense_add('GL')
+		! 	fn_getClientLicense_add('PR')
+		! 	fn_getClientLicense_add('CL')
+		! 	! fn_getClientLicense_add('U4') : u4_device$="Boson" ! ACEECA MEZ 1500 ! U4 Utility Billing Hand Held Add-On
 
 		else if env$('client')='Edinburg' then
 			fn_userLimit(2)
@@ -551,13 +551,13 @@ def fn_getClientLicense(mat client_has$)
 		else if env$('client')='Starr County Gas' then
 			fn_userLimit(1)
 			if days(date$)<=days('04/15/2018','mm/dd/ccyy') then fn_getClientLicense_add('UB') : fn_setUbLimit(9999)
-		else if env$('client')='Sheila' then
-			fn_userLimit(1)
-			fn_getClientLicense_add('UB') : fn_setUbLimit(500) ! U3 Utility Billing (<500 Customers)
-			fn_getClientLicense_add('U4') : u4_device$="Aclara" ! U4 Utility Billing Hand Held Add-On
-			fn_getClientLicense_add('CL')
-			fn_getClientLicense_add('GL')
-			fn_getClientLicense_add('PR')
+		! else if env$('client')='Sheila' then
+		! 	fn_userLimit(1)
+		! 	fn_getClientLicense_add('UB') : fn_setUbLimit(500) ! U3 Utility Billing (<500 Customers)
+		! 	fn_getClientLicense_add('U4') : u4_device$="Aclara" ! U4 Utility Billing Hand Held Add-On
+		! 	fn_getClientLicense_add('CL')
+		! 	fn_getClientLicense_add('GL')
+		! 	fn_getClientLicense_add('PR')
 		else if env$('client')='Stern and Stern' then
 			fn_userLimit(99) ! unknown
 			fn_getClientLicense_add('CM')
@@ -651,7 +651,7 @@ def fn_userLimit(userLimit)
 		execute 'config option 9 '&str$(userLimit)
 		setEnv('user_limit',str$(userLimit))
 	end if
-	!
+
 fnend
 def fn_userCount
 	ucReturn=0
@@ -754,7 +754,7 @@ def library fnub_printbill_program$*256
 		! fn_upp_add('Thomasboro'        ,'(basic)'               ) ! 'ubprtbl1_tho'
 		fn_upp_add('Galena'            ,'(basic)'               ) ! 'ubprtbl1_galena')
 		fn_upp_add('Billings'          ,'(basic)'               ) ! ubprtthree_bill
-		fn_upp_add('Diamond'           ,'(basic)'               ) ! ubprtthree_bill
+		! fn_upp_add('Diamond'           ,'(basic)'               ) ! ubprtthree_bill
 		fn_upp_add('Choctaw'           ,'(basic)'               ) ! 'ubprtlas_choctaw'
 		fn_upp_add('Omaha'             ,'(basic)'               ) ! 'ubprtthree_Omaha'
 		fn_upp_add('Pennington'        ,'(basic)'               ) ! PrintBill_Pennington ! atlantis format - hits preprinted stock
@@ -834,7 +834,7 @@ def fn_payroll_client_state$*2(; client$*64,___,return$*2,which)
 		fn_pcs_add("Cerro Gordo T",'IL')
 		!   fn_pcs_add("Community Dev",'TN')
 		fn_pcs_add("Crockett County",'TX')
-		fn_pcs_add('Diamond','MO')
+		! fn_pcs_add('Diamond','MO')
 		fn_pcs_add("Divernon",'IL')
 		fn_pcs_add("Durden",'LA')
 		fn_pcs_add("Edinburg",'IL')
@@ -861,7 +861,7 @@ def fn_payroll_client_state$*2(; client$*64,___,return$*2,which)
 		! fn_pcs_add("Raymond",'IL')
 		fn_pcs_add("R R Crawford",'KY')
 !   fn_pcs_add("Riverside",'IN') ! Indiana tax table is out of date...  and looks pretty complicated:  http://www.in.gov/dor/reference/files/dn01.pdf
-		fn_pcs_add("Sheila",'MO')
+		! fn_pcs_add("Sheila",'MO')
 		fn_pcs_add("Thomas Richardson",'LA')
 		fn_pcs_add("Thomasboro",'IL')
 		fn_pcs_add("Unity",'IL')
