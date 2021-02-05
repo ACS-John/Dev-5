@@ -157,7 +157,7 @@ def fn_exportRouteAndSequence(outFile$*256,delim$*1; ___,hCustomer)
 		finalBillingCode=cN(c_finalBilling)
 		if finalBillingCode=0 or finalBillingCode=3 then
 			! r: pr #hOut delimited field values
-			pr #hOut: '"key:'&c$(c_account)&'"'       	&delim$;
+			pr #hOut: '"key:'&c$(c_account)&'"'  	&delim$;
 			pr #hOut: str$(cN(c_route))           	&delim$;
 			pr #hOut: str$(cN(c_sequence))        	&delim$;
 			pr #hOut: '"'&c$(c_meterAddress)&'"'  	&delim$;

@@ -88,7 +88,9 @@ goto Menu1 ! /r
 
 def library fnEmployeeEdit(eno)
 	if ~setup then fn_setup
+	fn_openFiles
 	fnEmployeeEdit=fn_employeeEdit(eno)
+	fn_closeFiles
 fnend
 def fn_employeeEdit(ent; employeeAdding)
 	if employeeAdding then goto ScrEmployee
@@ -715,6 +717,16 @@ def fn_openFiles
 		!          pd 4.2 tli
 		!       23*pd 4.2 mat tdet(1-23)
 fnend
+def fn_closeFiles
+	close #hEmployee: ioerr ignore
+	close #hEmployeeIdx2: ioerr ignore
+	close #hCheckIdx1: ioerr ignore
+	close #hCheckIdx3: ioerr ignore
+	close #hDepartment: ioerr ignore
+	fnEmployeeDataClose
+	close #hEdcDept: ioerr ignore
+	hEdcDept=0
+fnend
 def fn_EmployeeDepartments(eno,mat empDept,mat empDeptRec; ___,teno,deptNumber)
 	if ~hEdcDept then
 		open #hEdcDept=fnH: 'Name=[Q]\PRmstr\Department.h[cno],KFName=[Q]\PRmstr\DeptIdx.h[cno],Shr',internal,input,keyed
@@ -765,8 +777,6 @@ def fn_setup
 	gender_option$(2)="1 - Male"
 	gender_option$(3)="2 - Female"
 
-
-
 	dim fed_exemption_option$(22)
 	for j=1 to 21
 		fed_exemption_option$(j)=str$(j-1)
@@ -805,8 +815,6 @@ def fn_setup
 	dim payPeriodOption$(0)*16
 	fn_getEmpOptions(mat marriedOption$,mat eicOption$,mat w4yearOption$,mat payPeriodOption$)
 
-
-
 fnend
 def library fnGetEmpOptions(mat marriedOption$,mat eicOption$,mat w4yearOption$,mat payPeriodOption$)
 	if ~setup then fn_setup
@@ -842,10 +850,7 @@ def fn_getEmpOptions(mat marriedOption$,mat eicOption$,mat w4yearOption$,mat pay
 fnend
 
 Finis: ! ! r:
-	close #hEmployee:
-	close #hEmployeeIdx2:
-	close #hDepartment:
-	fnEmployeeDataClose
+	fn_closeFiles
 goto Xit ! /r
 Xit: fnXit
 
@@ -937,7 +942,6 @@ def fn_dDclose
 	close #hDd:
 	hDd=0
 fnend
-
 def fn_dDdelete(eno)
 	! delete the record
 	hDd=fn_dDopen

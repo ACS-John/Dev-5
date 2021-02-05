@@ -301,7 +301,9 @@ def fn_main
 			else if lwrc$(ltrm$(menu_option$)(1:11))='hamsterfio:' then
 				fn_callHamsterFio(menu_option$)
 			else if lwrc$(ltrm$(menu_option$)(1:9))='customer:' then
-				fn_callUbCustomer(ltrm$(menu_option$)(10:19))
+				fn_callUbCustomer(menu_option$)
+			else if lwrc$(ltrm$(menu_option$)(1:9))='employee:' then
+				fn_callPrEmployee(menu_option$)
 			! else if menu_option$(1:5)='fnFM(' then
 			!   fnFM(menu_option$(6:len(menu_option$)-1))
 			else if menu_option$(1:14)='fnPrintAceTest' then
@@ -384,7 +386,9 @@ def fn_main
 							if lwrc$(ltrm$(program_file$(which))(1:11))='hamsterfio:' then
 								fn_callHamsterFio(program_file$(which))
 							else if env$('cursys')='UB' and lwrc$(ltrm$(program_file$(which))(1:9))='customer:' then
-								fn_callUbCustomer(ltrm$(program_file$(which))(10:19))
+								fn_callUbCustomer(program_file$(which))
+							else if env$('cursys')='UB' and lwrc$(ltrm$(program_file$(which))(1:9))='employee:' then
+								fn_callPrEmployee(program_file$(which))
 							else
 								fnchain('S:\'&program_file$(which))
 							end if
@@ -449,12 +453,14 @@ def fn_main
 				!   program_plus$(program_selection_id)='-'
 				! else if program_plus$(program_selection_id)='-' then
 				!   program_plus$(program_selection_id)='+'
-				if lwrc$(ltrm$(program_selection$)(1:11))='hamsterfio:' then  ! else if
+				if lwrc$(ltrm$(program_selection$)(1:11))='hamsterfio:' then
 					fn_callHamsterFio(program_selection$)
-				else if lwrc$(ltrm$(program_selection$)(1:20))='editinwordprocessor:' then  ! else if
+				else if lwrc$(ltrm$(program_selection$)(1:20))='editinwordprocessor:' then
 					fn_callEditInWordProcessor(program_selection$)
-				else if lwrc$(ltrm$(program_selection$)(1:9))='customer:' and env$('cursys')='UB' then  ! else if
-					fn_callUbCustomer(ltrm$(program_selection$)(10:19))
+				else if lwrc$(ltrm$(program_selection$)(1:9))='customer:' and env$('cursys')='UB' then
+					fn_callUbCustomer(program_selection$)
+				else if lwrc$(ltrm$(program_selection$)(1:9))='employee:' and env$('cursys')='PR' then
+					fn_callPrEmployee(program_selection$)
 				else if program_selection$<>'' then
 					fn_chain('S:\'&trim$(program_selection$))
 				end if
@@ -503,8 +509,20 @@ def fn_callEditInWordProcessor(programSelection$*256)
 
 	fn_callEditInWordProcessor=fnEditFile(cewForce$,fileToEditInWp$)
 fnend
-def fn_callUbCustomer(x$*10)
+def fn_callUbCustomer(line$*64; ___,x$*10)
+	line$=ltrm$(line$)
+	if line$(1:9)='customer:' then line$(1:9)=''
+	x$=line$(1:10)
 	fnCustomer(x$)
+fnend
+def fn_callPrEmployee(line$*64; ___,spos,eno)
+	line$=ltrm$(line$)
+	! pr line$ : pause
+	if line$(1:9)='employee:' then line$(1:9)=''
+	spos=pos(line$,' ')
+	if spos then line$(spos:inf)=''
+	eno=val(line$)
+	fnEmployeeEdit(eno)
 fnend
 
 def fn_dashboardHeight
@@ -657,12 +675,30 @@ def fn_getProgramList(mat program_plus$,mat program_name$,mat program_name_trim$
 	if env$("ACSDeveloper")<>"" then
 		fn_getProgramList_add('S:\'&fnSystemNameFromAbbr$&'\Programmer.mnu')
 	end if  ! serial=env$('ACSDeveloper')<>''
-	if enableUbCustomerEdit and env$('cursys')='UB' then
-		! open #hUbCustomer=fnH: 'Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr',internal,input,keyed
-		dim customer$(0)*256
-		dim customerN(0)
-		hUbCustomer=fn_open('UB Customer',mat customer$,mat customerN,mat form$)
+	if env$('cursys')='PR' then
+		dim employee$(0)*256
+		dim employeeN(0)
+		hPrEmployee=fn_open('PR Employee',mat employee$,mat employeeN,mat form$)
 		! r: add header item
+		program_item_count=udim(mat program_file$)+1
+		mat program_plus$(program_item_count)
+		mat program_name$(program_item_count)
+		mat program_name_trim$(program_item_count)
+		mat program_file$(program_item_count)
+		mat ss_text$(program_item_count)
+		mat program_level(program_item_count)
+
+		program_plus$(program_item_count)='**'
+		program_name$(program_item_count)='Active Employees'
+		program_name_trim$(program_item_count)=trim$(program_name$(program_item_count))
+		program_file$(program_item_count)=''
+		ss_text$(program_item_count)='' ! program_name$(program_item_count)
+		program_level(program_item_count)=1
+		! /r
+		do
+			read #hPrEmployee,using form$(hPrEmployee): mat employee$,mat employeeN eof EoPrEmployee
+			if employeeN(emp_empStatus)<>9 then
+				! r: add employee: item
 				program_item_count=udim(mat program_file$)+1
 				mat program_plus$(program_item_count)
 				mat program_name$(program_item_count)
@@ -671,12 +707,37 @@ def fn_getProgramList(mat program_plus$,mat program_name$,mat program_name_trim$
 				mat ss_text$(program_item_count)
 				mat program_level(program_item_count)
 
-				program_plus$(program_item_count)='**'
-				program_name$(program_item_count)='Active Customers'
+				program_plus$(program_item_count)=''
+				program_name$(program_item_count)=str$(employeeN(emp_no))&' '&rtrm$(employee$(emp_name))
 				program_name_trim$(program_item_count)=trim$(program_name$(program_item_count))
-				program_file$(program_item_count)=''
-				ss_text$(program_item_count)='' ! program_name$(program_item_count)
-				program_level(program_item_count)=1
+				program_file$(program_item_count)='employee:'&str$(employeeN(emp_no))
+				ss_text$(program_item_count)=program_name$(program_item_count)
+				program_level(program_item_count)=2
+				! /r
+			end if
+		loop
+		EoPrEmployee: !
+		fnCloseFile(hPrEmployee,'PR Employee')
+	else if env$('cursys')='UB' then
+		! open #hUbCustomer=fnH: 'Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr',internal,input,keyed
+		dim customer$(0)*256
+		dim customerN(0)
+		hUbCustomer=fn_open('UB Customer',mat customer$,mat customerN,mat form$)
+		! r: add header item
+		program_item_count=udim(mat program_file$)+1
+		mat program_plus$(program_item_count)
+		mat program_name$(program_item_count)
+		mat program_name_trim$(program_item_count)
+		mat program_file$(program_item_count)
+		mat ss_text$(program_item_count)
+		mat program_level(program_item_count)
+
+		program_plus$(program_item_count)='**'
+		program_name$(program_item_count)='Active Customers'
+		program_name_trim$(program_item_count)=trim$(program_name$(program_item_count))
+		program_file$(program_item_count)=''
+		ss_text$(program_item_count)='' ! program_name$(program_item_count)
+		program_level(program_item_count)=1
 		! /r
 		do
 			read #hUbCustomer,using form$(hUbCustomer): mat customer$,mat customerN eof EoUbCustomer
@@ -700,7 +761,7 @@ def fn_getProgramList(mat program_plus$,mat program_name$,mat program_name_trim$
 			end if
 		loop
 		EoUbCustomer: !
-		fnCloseFile(hUbCustomer,'UB Customer') ! close #hUbCustomer:
+		fnCloseFile(hUbCustomer,'UB Customer')
 	end if
 fnend
 def fn_getProgramList_add(gpla_file$*256;___,sign$)
