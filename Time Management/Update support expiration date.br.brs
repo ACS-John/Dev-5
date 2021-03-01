@@ -1,10 +1,20 @@
 ! load 'C:\ACS\Dev-5\Time Management\Update support expiration date.br'
 fn_setup
-fn_openFiles
 fnTop(program$)
+
 fn_updateSupportExpirationDate
 goto Xit
 def fn_updateSupportExpirationDate(; clientKey$*5)
+	
+	! r: open files
+		open #hClientKey =fnH: "Name=S:\Core\Data\acsllc\CLmstr.h420,Version=0,KFName=S:\Core\Data\acsllc\CLIndex.h420,Use,RecL=534,KPs=1,KLn=5,Shr",internal,outIn,keyed
+		open #hClientName=fnH: "Name=S:\Core\Data\acsllc\CLmstr.h420,Version=0,KFName=S:\Core\Data\acsllc\CLIndx2-Idx.h420,Use,RecL=534,KPs=6,KLn=30,Shr",internal,outIn,keyed
+		! CO Support
+		open #hSupport   =fnH: "Name=S:\Core\Data\acsllc\Support.h420,Version=2,KFName=S:\Core\Data\acsllc\Support-Idx.h420,Use,RecL=246,KPs=1/7,KLn=6/2,Shr",internal,outIn,keyed
+		fSupport: form pos 1,C 6,n 2,c 2,n 8,c 2,n 8,n 10
+	! /r	
+
+	
 	if clientKey$='' then ! r: ask client(s) and process them
 		do
 			Screen1: !
@@ -29,7 +39,7 @@ def fn_updateSupportExpirationDate(; clientKey$*5)
 				fnaddonec(mat msgConfirm$,'')
 				fnaddonec(mat msgConfirm$,'Total Cost:'&tab$&tab$&cnvrt$('pic($$$,$$#.##)',sum(mat cost)))
 				fnaddonec(mat msgConfirm$,'')
-				fnaddonec(mat msgConfirm$,'Update Expiration Dates? (adds one year to each)')
+				fnaddonec(mat msgConfirm$,'Update Expiration Dates? (adds one [timeframe] to each)')
 				fnmsgbox(mat msgConfirm$, resp$,'',buttonYN+iconQuestion+buttonDefaultTwo)
 				if resp$='Yes' then
 					fn_updateOneSupportExpDate(selectedClient$(1:5))
@@ -50,6 +60,12 @@ def fn_updateSupportExpirationDate(; clientKey$*5)
 		fn_updateOneSupportExpDate(clientKey$)
 	end if
 	! usedXit: !
+	! r: close files
+		close #hClientKey: ioerr ignore
+		close #hClientName: ioerr ignore
+		close #hSupport: ioerr ignore
+		hClientKey=hClientName=hSupport=0
+	! /r
 fnend
 def fn_addSupportMsgLines$(mat msgText$)
 	fn_getSupportArrayByClient(clientKey$,mat sysno,mat sysid$,mat dateStart,mat timeFrame$,mat dateExpire,mat cost)
@@ -83,10 +99,9 @@ def fn_updateOneSupportExpDate(client$)
 	do while rtrm$(client$)=rtrm$(clientId$)
 		! pr uCount+=1;rec(hSupport);clientId;SysNo;SysId$;timeFrame$,dateExpire;cost
 		if timeFrame$='An' then
-		dateExpireNew=val(str$(date(days(dateExpire,'ccyymmdd'),'ccyy')+1)&date$(days(dateExpire,'ccyymmdd'),'mmdd'))
+			dateExpireNew=val(str$(date(days(dateExpire,'ccyymmdd'),'ccyy')+1)&date$(days(dateExpire,'ccyymmdd'),'mmdd'))
 		else if timeFrame$='Qt' then
-		fnFirstMondayOfMonth(days(dateExpire,'ccyymmdd')+100)-1
-		dateExpireNew=val(str$(date(days(dateExpire,'ccyymmdd'),'ccyy')+1)&date$(days(dateExpire,'ccyymmdd'),'mmdd'))
+			dateExpireNew=date(fnEndOfMonth(days(dateExpire,'ccyymmdd')+85),'ccyymmdd')
 		else
 			pr 'unrecognized time frame: '&timeFrame$
 			pr ' please add code for newTimeFrame'
@@ -95,22 +110,13 @@ def fn_updateOneSupportExpDate(client$)
 			
 		end if
 		! pr 'dateExpireNew=';dateExpireNew
+		! pause
 		dateExpire=dateExpireNew
 		rewrite #hSupport,using fSupport: clientId$,SysNo,SysId$,dateStart,timeFrame$,dateExpire,cost
 		read #hSupport,using fSupport: client$,SysNo,SysId$,dateStart,timeFrame$,dateExpire,cost eof U1Finis
 	loop
 	U1Finis: !
 	! pause
-fnend
-def fn_openFiles
-	if ~openFiles then
-		openFiles=1
-		open #hClientKey =fnH: "Name=S:\Core\Data\acsllc\CLmstr.h420,Version=0,KFName=S:\Core\Data\acsllc\CLIndex.h420,Use,RecL=534,KPs=1,KLn=5,Shr",internal,outIn,keyed
-		open #hClientName=fnH: "Name=S:\Core\Data\acsllc\CLmstr.h420,Version=0,KFName=S:\Core\Data\acsllc\CLIndx2-Idx.h420,Use,RecL=534,KPs=6,KLn=30,Shr",internal,outIn,keyed
-		! CO Support
-		open #hSupport   =fnH: "Name=S:\Core\Data\acsllc\Support.h420,Version=2,KFName=S:\Core\Data\acsllc\Support-Idx.h420,Use,RecL=246,KPs=1/7,KLn=6/2,Shr",internal,outIn,keyed
-	end if
-	fSupport: form pos 1,C 6,n 2,c 2,n 8,c 2,n 8,n 10
 fnend
 def fn_setup
 	autoLibrary
