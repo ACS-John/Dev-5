@@ -82,7 +82,18 @@ def fn_updateOneSupportExpDate(client$)
 	read #hSupport,using fSupport,key=>client$: clientId$,SysNo,SysId$,dateStart,timeFrame$,dateExpire,cost
 	do while rtrm$(client$)=rtrm$(clientId$)
 		! pr uCount+=1;rec(hSupport);clientId;SysNo;SysId$;timeFrame$,dateExpire;cost
+		if timeFrame$='An' then
 		dateExpireNew=val(str$(date(days(dateExpire,'ccyymmdd'),'ccyy')+1)&date$(days(dateExpire,'ccyymmdd'),'mmdd'))
+		else if timeFrame$='Qt' then
+		fnFirstMondayOfMonth(days(dateExpire,'ccyymmdd')+100)-1
+		dateExpireNew=val(str$(date(days(dateExpire,'ccyymmdd'),'ccyy')+1)&date$(days(dateExpire,'ccyymmdd'),'mmdd'))
+		else
+			pr 'unrecognized time frame: '&timeFrame$
+			pr ' please add code for newTimeFrame'
+			pause
+			end
+			
+		end if
 		! pr 'dateExpireNew=';dateExpireNew
 		dateExpire=dateExpireNew
 		rewrite #hSupport,using fSupport: clientId$,SysNo,SysId$,dateStart,timeFrame$,dateExpire,cost
@@ -96,6 +107,7 @@ def fn_openFiles
 		openFiles=1
 		open #hClientKey =fnH: "Name=S:\Core\Data\acsllc\CLmstr.h420,Version=0,KFName=S:\Core\Data\acsllc\CLIndex.h420,Use,RecL=534,KPs=1,KLn=5,Shr",internal,outIn,keyed
 		open #hClientName=fnH: "Name=S:\Core\Data\acsllc\CLmstr.h420,Version=0,KFName=S:\Core\Data\acsllc\CLIndx2-Idx.h420,Use,RecL=534,KPs=6,KLn=30,Shr",internal,outIn,keyed
+		! CO Support
 		open #hSupport   =fnH: "Name=S:\Core\Data\acsllc\Support.h420,Version=2,KFName=S:\Core\Data\acsllc\Support-Idx.h420,Use,RecL=246,KPs=1/7,KLn=6/2,Shr",internal,outIn,keyed
 	end if
 	fSupport: form pos 1,C 6,n 2,c 2,n 8,c 2,n 8,n 10

@@ -14,8 +14,8 @@ def fn_setup
 		dim alp$*1
 		dim workFile$*256
 		dim workFileIndex$*256
-		dim t(16)
-		dim message$(1)*128
+
+
 		dim txt$*80
 		dim txt$(6)*70
 		dim extra(23)
@@ -384,8 +384,8 @@ PrintReadings_PgOf: ! r:
 continue ! /r
 MAKE_CORRECTIONS: ! r:
 	read #hWork,using Fwork,key=x$: x$,mat x nokey MENU1
-	t(1)-=1 ! SUBTRACT PROOF TOTALS
-	for j1=1 to 15 : t(j1+1)-=x(j1) : next j1
+	total(1)-=1 ! SUBTRACT PROOF TOTALS
+	for j1=1 to 15 : total(j1+1)-=x(j1) : next j1
 	read #hCustomer1,using F_CUSTOMER_C,key=x$,release: x$,aname$,mat a,final,mat d,alp$,mat extra,extra$(3)
 	fnapply_default_rates(mat extra, mat a)
 	editmode=1
@@ -414,10 +414,11 @@ CHANGE_ACT_NUM: ! r:
 def fn_lo_pr_rec(x$,mat x)
 	pr #255,using "form pos 1,c 10,x 2,4*pic(----------)": x$,x(1),x(2),x(3),x(4)
 fnend  ! fn_lo_pr_rec
+dim total(16)
 def fn_accumulateProofTotals
-	t(1)+=1
+	total(1)+=1
 	for j=1 to 15
-		t(j+1)+=x(j)
+		total(j+1)+=x(j)
 	next j
 fnend
 def fn_checkWater
@@ -745,7 +746,7 @@ def fn_hh_readings(ip1$; listonly) ! HH_READINGS: ! hand held routines
 	addmethod=am_askAndEnterIndviduals ! set back to regular readings
 	close #h_readings:
 fnend
-EST1: ! r: ESTIMATEING ROUTINE
+EstimateRoute: ! r: ESTIMATEING ROUTINE
 	close #hWork:
 	execute 'Index '&workFile$&' '&workFileIndex$&' 1 10 Replace,DupKeys -n'
 	open #hWork=fnH: "Name="&workFile$&",KFName="&workFileIndex$,internal,outIn,keyed
@@ -777,30 +778,36 @@ EST1: ! r: ESTIMATEING ROUTINE
 	if ckey=cancel then goto MENU1
 	for j=1 to 3
 		if uprc$(resp$(j*2-1))=uprc$("True") then est1(j,1)=1 else est1(j,1)=0
-		est1(j,2)=val(resp$(j*2)) conv EST1
+		est1(j,2)=val(resp$(j*2)) conv EstimateRoute
 	next j
-	if est1(1,1)=0 and est1(2,1)=0 and est1(3,1)=0 then goto L6520 else goto L6530
-	L6520: !
-	mat message$(1)
-	message$(1)="You must select at least one service to estimate"
-	fnmsgbox(mat message$,resp$,'',0)
-	goto ASK_EST
-	L6530: for j=1 to 3
-		if est1(j,1)=0 then goto L6570
-		if est1(j,2)<50 or est1(j,2)>150 then goto L6560 else goto L6570
-	L6560: !
+	if est1(1,1)=0 and est1(2,1)=0 and est1(3,1)=0 then
+		dim message$(1)*128
 		mat message$(1)
-		message$(1)="You percent must be between 50% and 150%"
-		fnmsgbox(mat message$)
+		message$(1)="You must select at least one service to estimate"
+		fnmsgbox(mat message$,resp$,'',0)
 		goto ASK_EST
-	L6570: !
+
+	else
+		goto L6530
+	end if
+
+	L6530: !
+	for j=1 to 3
+		if est1(j,1) then
+			if est1(j,2)<50 or est1(j,2)>150 then
+				mat message$(1)
+				message$(1)="You percent must be between 50% and 150%"
+				fnmsgbox(mat message$)
+				goto ASK_EST
+			end if
+		end if
 	next j
 	if ckey=cancel then goto MENU1
-	if uprc$(resp$(7))=uprc$("True") then est1=1
-	if uprc$(resp$(8))=uprc$("True") then est1=2 ! select route #
+	if uprc$(resp$(7))=uprc$("True") then estimationMode=1
+	if uprc$(resp$(8))=uprc$("True") then estimationMode=2 ! select route #
 	fn_est_dates
-	if est1=1 then goto EST3 ! selecting individual accounts to estimate
-	if est1=2 then goto ASK_ROUTE
+	if estimationMode=1 then goto EST3 ! selecting individual accounts to estimate
+	if estimationMode=2 then goto ASK_ROUTE
 goto ASK_EST ! /r
 EST3: ! r:
 	fnTos
@@ -821,7 +828,7 @@ EST3: ! r:
 	read #hCustomer1,using F_CUSTOMER_A,key=x$,release: x$,e2$,mat a,f,final,mat d,mat extra,extra$(3) nokey EST3
 	fnapply_default_rates(mat extra, mat a)
 	F_CUSTOMER_A: form pos 1,c 10,pos 41,c 30,pos 143,7*pd 2,pos 296,pd 4,pos 1821,n 1,pos 217,15*pd 5,pos 1741,n 2,n 7,2*n 6,n 9,pd 5.2,n 3,3*n 9,3*n 2,3*n 3,n 1,3*n 9,3*pd 5.2,c 30,7*c 12,3*c 30
-	gosub EST2
+	gosub EstIndividual
 	ex$=x$
 	goto EST3 ! /r
 ASK_ROUTE: ! r:
@@ -842,24 +849,24 @@ ASK_ROUTE: ! r:
 	L6890: !
 	if ckey=cancel then goto MENU1 ! finish
 	restore #hCustomer1:
-	READ_CUSTOMER: !
+	EstRouteCustomerRead: !
 	read #hCustomer1,using F_CUSTOMER_A,release: x$,e2$,mat a,f,final,mat d,mat extra,extra$(3) eof ASK_ROUTE
-	if final=1 or final=2 or final=3 then goto READ_CUSTOMER
+	if final=1 or final=2 or final=3 then goto EstRouteCustomerRead
 	fnapply_default_rates(mat extra, mat a)
 	! fn_us1(x$,d1)
-	if eb1>0 and extra(1)><eb1 then goto READ_CUSTOMER ! if route selected and does not match route
-	if final=1 or final=3 then goto READ_CUSTOMER ! SKIP FINAL BILLED
-	gosub EST2
+	if eb1>0 and extra(1)><eb1 then goto EstRouteCustomerRead ! if route selected and does not match route
+	if final=1 or final=3 then goto EstRouteCustomerRead ! SKIP FINAL BILLED
+	gosub EstIndividual
 	eb2=eb1
-goto READ_CUSTOMER ! /r
-EST2: ! r:
+goto EstRouteCustomerRead ! /r
+EstIndividual: ! r:
 	mat x=(0) ! actually calculate the estimated usage
 	EST2B: !
 	a1=est4=0
 	read #hWork,using Fwork,key=x$: x$,mat x nokey L7060
 	a1=1
-	t(1)-=1 ! Reverse Proof Totals
-	for j=1 to 15 : t(j+1)=t(j+1)-x(j) : next j
+	total(1)-=1 ! Reverse Proof Totals
+	for j=1 to 15 : total(j+1)=total(j+1)-x(j) : next j
 	L7060: !
 	for j=1 to 3
 		if j=1 and a(1)=0 then
@@ -867,23 +874,28 @@ EST2: ! r:
 		else if j=2 and a(3)=0 then
 			goto L7140
 		else if j=3 and a(4)=0 then
-			goto L7140 ! took this off front 71509  If EST1(J,1)=0 Then Goto 6790 Else
+			goto L7140 ! took this off front 71509  If est1(J,1)=0 Then Goto 6790 Else
 		end if
 		fn_est5
+		! 1=water
+		! 3=gas
 		if f=d1 then oldwatread=d(2) else oldwatread=d(1) ! old water reading equals the prior reading if recalculation else current reading if new calculation
 		if f=d1 then oldelecread=d(6) else oldelecread=d(5) ! old electric reading equals the prior reading if recalculation else current reading if new calculation
 		if f=d1 then oldgasread=d(10) else oldgasread=d(9) ! old gas reading equals the prior reading if recalculation else current reading if new calculation
+		if est1(1,2)=0 then est1(1,2)=100
+		if est1(3,2)=0 then est1(3,2)=100
+		if est1(2,2)=0 then est1(2,2)=100
 		if j=1 then
-			x(1)=oldwatread+watavg
+			x(1)=oldwatread+round(watavg*est1(j,2)/100,0)
 		else if j=2 then
-			x(3)=oldelecread+elecavg
+			x(3)=oldelecread+round(elecavg*est1(j,2)/100,0)
 		else if j=3 then
-			x(2)=oldgasread+gasavg
+			x(2)=oldgasread+round(gasavg*est1(j,2)/100,0)
 		end if
 		est4=1
 		L7140: !
 	next j
-	! If A(2)>0 AND EST1(1,1)=1 Then eST4=1 ! Sewer
+	! If A(2)>0 AND est1(1,1)=1 Then eST4=1 ! Sewer
 	if est4=0 then goto L7220
 	if addmethod=am_loadHoldingFile then goto L7220 ! FROM Hand Held
 	if a1=1 then
@@ -1320,8 +1332,8 @@ MENU1READWORKEOF: ! /r
 		close #hWork: ioerr ignore
 		fnCalculateBills('calculate')
 		goto Xit
-		
-		
+
+
 	else if ckey=fky_askCustomersInSequence then
 		addmethod=am_customersInSequence
 		goto AUTO_REC
@@ -1333,7 +1345,7 @@ MENU1READWORKEOF: ! /r
 		fn_loadBookOrHoldingFile(addmethod)
 	else if fky_estimateReadings and ckey=fky_estimateReadings then
 		addmethod=am_estimateReadings
-		goto EST1
+		goto EstimateRoute
 	else if ckey=fky_loadBook then
 		addmethod=am_fromHhFile
 		fn_loadBookOrHoldingFile(addmethod)
