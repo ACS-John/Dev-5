@@ -1,24 +1,21 @@
 ! Replace S:\acsUB\ubCorAmt
-! -- Enter Beginning Balances and Readings
- 
-	autoLibrary
-	on error goto Ertn
- 
-	dim z$*10,d(15),adr(2),p$*10,txt$*80,resp$(20)*80,txt$(6)*80
-	dim o(2),srv$(10)*20,in1(19),gb(10),e$*30,tg(11),g(12)
- 
-	open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],NoShr",internal,outIn,keyed
-	open #2: "Name=[Q]\UBmstr\UBTransVB.h[cno],KFName=[Q]\UBmstr\UBTrIndx.h[cno],Shr,USE,RecL=102,KPs=1,KLn=19",internal,outIn,keyed
-	open #hTrans2=fnH: "Name=[Q]\UBmstr\ubTransVB.h[cno],KFName=[Q]\UBmstr\UBTrdt.h[cno],Shr,Use,KPs=11/1,KLn=8/10",internal,outIn,keyed
-	fnGetServices(mat srv$)
-	for j=1 to udim(srv$)
-		srv$(j)=trim$(srv$(j))
-		if srv$(j)<>"" then srv$(j)=srv$(j)&":" : services+=1
-	next j
-	fnTop(program$)
-	goto MENU1
- 
-MENU1: !
+autoLibrary
+on error goto Ertn
+fnTop(program$)
+
+open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],NoShr",internal,outIn,keyed
+open #2: "Name=[Q]\UBmstr\UBTransVB.h[cno],KFName=[Q]\UBmstr\UBTrIndx.h[cno],Shr,USE,RecL=102,KPs=1,KLn=19",internal,outIn,keyed
+open #hTrans2=fnH: "Name=[Q]\UBmstr\ubTransVB.h[cno],KFName=[Q]\UBmstr\UBTrdt.h[cno],Shr,Use,KPs=11/1,KLn=8/10",internal,outIn,keyed
+dim srv$(10)*20
+fnGetServices(mat srv$)
+for j=1 to udim(srv$)
+	srv$(j)=trim$(srv$(j))
+	if srv$(j)<>"" then srv$(j)=srv$(j)&":" : services+=1
+next j
+goto MENU1
+
+MENU1: ! r:
+	dim resp$(20)*80
 	fnTos
 	mylen=48
 	mypos=mylen+2
@@ -35,22 +32,25 @@ MENU1: !
 	fnAcs(mat resp$,ckey)
 	if ckey=5 then goto Xit
 	n=val(resp$(2))
+	dim z$*10
 	hz$=z$=lpad$(trim$(resp$(1)(1:10)),10)
- 
+
 	if trim$(uprc$(hz$))=uprc$("[All]") then
-		goto READ_CUSTOMER 
+		goto READ_CUSTOMER
 	else
+		dim e$*30
+		dim d(15)
+		dim gb(10)
 		read #1,using L380,key=z$: z$,e$,mat d,bal,mat gb nokey MENU1
-		goto SKIP_READ_CUSTOMER
+		goto SCREEN2
 	end if
- 
-READ_CUSTOMER: !
+! /r
+READ_CUSTOMER: ! r:
 	read #1,using L380: z$,e$,mat d,bal,mat gb eof DONE
-L380: form pos 1,c 10,pos 41,c 30,pos 217,15*pd 5,pos 292,pd 4.2,pos 388,10*pd 5.2
-SKIP_READ_CUSTOMER: !
-	goto SCREEN2
- 
-SCREEN2: !
+	L380: form pos 1,c 10,pos 41,c 30,pos 217,15*pd 5,pos 292,pd 4.2,pos 388,10*pd 5.2
+	SKIP_READ_CUSTOMER: !
+goto SCREEN2 ! /r
+SCREEN2: ! r:
 	fnTos
 	mylen=15
 	for j=1 to 10 ! UDIM(SRV$)
@@ -98,6 +98,7 @@ SCREEN2: !
 	if ckey=5 then goto Xit
 	bal=val(resp$(2))
 	respc=2
+	dim tg(11)
 	for j=1 to 10 ! udIM(SRV$)  kj
 		if trim$(srv$(j))<>"" then
 			respc+=1 : gb(j)=val(resp$(respc))
@@ -121,13 +122,14 @@ SCREEN2: !
 		t1+=gb(j)
 	next j
 	if t1<>bal then
-		gosub T1_NOT_EQUAL_BAL 
-		goto SCREEN2 
+		gosub T1_NOT_EQUAL_BAL
+		goto SCREEN2
 	else
 		goto WRITE_TRANS
 	end if
- 
-T1_NOT_EQUAL_BAL: !
+! /r
+T1_NOT_EQUAL_BAL: ! r:
+	dim txt$(6)*80
 	txt$(1)="Total Allocations do not equal Current Balance"
 	txt$(2)=""
 	txt$(3)=cnvrt$("pic(--------#.##)",bal)&"  Current Balance  "
@@ -135,39 +137,40 @@ T1_NOT_EQUAL_BAL: !
 	txt$(5)="------------"
 	txt$(6)=cnvrt$("pic(--------#.##)",bal-t1)&"  Difference"
 	fnmsgbox(mat txt$,resp$,'',48)
-return
- 
-WRITE_TRANS: !
+return ! /r
+WRITE_TRANS: ! r:
 	gosub DEL_HIST
 	if bal<0 then tcode=4 else tcode=5 ! SHOW AS CREDIT MEMO IF NEGATIVE BAL OWED, ELSE DEBIT MEMO
 	tdate=n
 	tdate=fndate_mmddyy_to_ccyymmdd(tdate)
 	tg(11)=sum(tg)
-	if bal=0 then goto L860
-	write #2,using L840: z$,tdate,tcode,abs(bal),mat tg,wr,wu,er,eu,gr,gu,bal,pcode
-L840: form pos 1,c 10,n 8,n 1,12*pd 4.2,6*pd 5,pd 4.2,n 1
-	mat g=(0)
-L860: rewrite #1,using L870: mat d,bal,mat g,mat adr,mat gb
-L870: form pos 217,15*pd 5,pos 292,pd 4.2,pos 300,12*pd 4.2,pos 348,2*pd 3,pos 388,10*pd 5.2
+	if bal then
+		write #2,using L840: z$,tdate,tcode,abs(bal),mat tg,wr,wu,er,eu,gr,gu,bal,pcode
+		L840: form pos 1,c 10,n 8,n 1,12*pd 4.2,6*pd 5,pd 4.2,n 1
+		dim g(12)
+		mat g=(0)
+	end if
+	dim adr(2)
+	rewrite #1,using L870: mat d,bal,mat g,mat adr,mat gb
+	L870: form pos 217,15*pd 5,pos 292,pd 4.2,pos 300,12*pd 4.2,pos 348,2*pd 3,pos 388,10*pd 5.2
 	if ckey=2 then goto MENU1 ! enter next Account
-	goto READ_CUSTOMER
- 
-DONE: !
+goto READ_CUSTOMER ! /r
+DONE: ! r:
 	close #1:
 	close #2:
 	close #hTrans2:
-goto Xit
-
+goto Xit ! /r
 Xit: fnXit
- 
-DEL_HIST: ! Delete History
+
+DEL_HIST: ! r: Delete History
 	restore #2,key>=z$&"         ": nokey L1140
 	do
+		dim p$*10
 		read #2,using L1100: p$,tdate eof L1140
 		L1100: form pos 1,c 10,n 8,n 1,12*pd 4.2,6*pd 5,pd 4.2,n 1
 		if p$<>z$ then goto L1140 ! not same account
 		if p$=z$ then delete #2:
 	loop
 	L1140: !
-return
+return ! /r
 include: ertn

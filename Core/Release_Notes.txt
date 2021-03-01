@@ -1,6 +1,7 @@
 Time and Date 		Sys	Program(s) and Change(s) Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
 ______________________	___	____________________________________________________________________________________________________________________________________________________________________________________________________________________________________                                                             
-13:13 02/21/2021	CO	5.75116  
+11:33 03/21/2021	CO	5.75116  
+11:29 AM 3/1/2021	UB	Enter Readings and Charges - fixed bug causing % of estimation to always be 100. 
 18:40 02/21/2021	CO	5.75115   
 18:25 02/21/2021	CO	5.75114    
 6:22 PM 2/5/2021	PR	GA withholding tables updated - you must add Dependents and Expemtions on the new Withholding Exemptions tab in the Employee table   
