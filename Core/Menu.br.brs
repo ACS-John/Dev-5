@@ -722,7 +722,7 @@ def fn_getProgramList(mat program_plus$,mat program_name$,mat program_name_trim$
 		! open #hUbCustomer=fnH: 'Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr',internal,input,keyed
 		dim customer$(0)*256
 		dim customerN(0)
-		hUbCustomer=fn_open('UB Customer',mat customer$,mat customerN,mat form$)
+		hUbCustomer=fn_open('UB Customer',mat customer$,mat customerN,mat form$, 1)
 		! r: add header item
 		program_item_count=udim(mat program_file$)+1
 		mat program_plus$(program_item_count)
@@ -740,7 +740,7 @@ def fn_getProgramList(mat program_plus$,mat program_name$,mat program_name_trim$
 		program_level(program_item_count)=1
 		! /r
 		do
-			read #hUbCustomer,using form$(hUbCustomer): mat customer$,mat customerN eof EoUbCustomer
+			read #hUbCustomer,using form$(hUbCustomer): mat customer$,mat customerN eof EoUbCustomer ioerr UbCustomerReadErr
 			if customerN(c_finalBilling)=0 or customerN(c_finalBilling)=3 or customerN(c_finalBilling)=4 then
 				! r: add customer: item
 				program_item_count=udim(mat program_file$)+1
@@ -759,11 +759,17 @@ def fn_getProgramList(mat program_plus$,mat program_name$,mat program_name_trim$
 				program_level(program_item_count)=2
 				! /r
 			end if
+			UbNextCustomer: !
 		loop
 		EoUbCustomer: !
 		fnCloseFile(hUbCustomer,'UB Customer')
 	end if
 fnend
+UbCustomerReadErr: !
+	pr 'locked customer'
+	pause
+	read #hUbCustomer,next:
+goto UbNextCustomer
 def fn_getProgramList_add(gpla_file$*256;___,sign$)
 	dim ss_category$(1)*80
 	dim program_item$(1)*512

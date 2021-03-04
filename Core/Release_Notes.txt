@@ -1,5 +1,6 @@
 Time and Date 		Sys	Program(s) and Change(s) Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
 ______________________	___	____________________________________________________________________________________________________________________________________________________________________________________________________________________________________                                                             
+11:34 AM 3/4/2021	UB	Fixed Multi User issue with customer being locked and other workstation encountering err 61 when accessing the main menu
 11:33 03/21/2021	CO	5.75116  
 11:29 AM 3/1/2021	UB	Enter Readings and Charges - fixed bug causing % of estimation to always be 100. 
 18:40 02/21/2021	CO	5.75115   
