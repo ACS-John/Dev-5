@@ -106,7 +106,7 @@ def fn_balanceSheet(; defaultFormat$)
 fnend 
 
 def fn_teSetHeaderOrSubHead(mat fs$,mat fsN,&reportHeadingX$,foot$*132,tabnote)
-	reportHeadingX$=fs$(fsd_description)
+	reportHeadingX$=rtrm$(fs$(fsd_description))
 	fn_footer(foot$,tabnote,mat fsN)
 fnend
 def fn_teSetFootnote(mat fs$,mat fsN,&foot$,&tabnote)
@@ -287,7 +287,10 @@ fnend
 def fn_tePrnHeader(reportHeading2$*50)
 	heading=1
 	pr #255: "\qc  {\f181 \fs24 \b "&env$('cnam')&"}"
-	pr #255: "\qc  {\f181 \fs24 \b "&env$('program_caption')&"}"
+	if reportHeading1$<>env$('program_caption') then
+		pr #255: "\qc  {\f181 \fs24 \b "&env$('program_caption')&"}"
+	end if
+	pr #255: "\qc  {\f181 \fs24 \b "&reportHeading1$&"}"
 	if trim$(reportHeading2$)<>"" then
 		pr #255: "\qc  {\f181 \fs18 \b "&trim$(reportHeading2$)&"}"
 	end if
