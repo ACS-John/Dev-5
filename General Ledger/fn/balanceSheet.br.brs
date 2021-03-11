@@ -287,9 +287,9 @@ fnend
 def fn_tePrnHeader(reportHeading2$*50)
 	heading=1
 	pr #255: "\qc  {\f181 \fs24 \b "&env$('cnam')&"}"
-	if reportHeading1$<>env$('program_caption') then
-		pr #255: "\qc  {\f181 \fs24 \b "&env$('program_caption')&"}"
-	end if
+	! if reportHeading1$<>env$('program_caption') then
+	! 	pr #255: "\qc  {\f181 \fs24 \b "&env$('program_caption')&"}"
+	! end if
 	pr #255: "\qc  {\f181 \fs24 \b "&reportHeading1$&"}"
 	if trim$(reportHeading2$)<>"" then
 		pr #255: "\qc  {\f181 \fs18 \b "&trim$(reportHeading2$)&"}"
