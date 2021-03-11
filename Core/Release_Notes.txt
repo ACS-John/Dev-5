@@ -1,5 +1,6 @@
 Time and Date 		Sys	Program(s) and Change(s) Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  
 ______________________	___	____________________________________________________________________________________________________________________________________________________________________________________________________________________________________                                                               
+6:51 PM 3/10/2021	GL	Transaction Journal - added Company Name to the top of the report
 11:39 03/21/2021	CO	5.75118  
 11:35 03/21/2021	CO	5.75117   
 11:34 AM 3/4/2021	UB	Fixed Multi User issue with customer being locked and other workstation encountering err 61 when accessing the main menu  

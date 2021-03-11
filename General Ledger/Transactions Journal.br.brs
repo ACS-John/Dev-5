@@ -126,6 +126,7 @@ PJ_SOME_TOTAL: ! r:
 	net=0
 return  ! /r
 HDR: ! r:
+	pr #255,using L890: '',env$('cnam')
 	pr #255,using L890: date$('mm/dd/yy'),env$('program_caption')
 	if tr(6)<>0 then 
 		pr #255,using L890: time$,rtrm$(a$(tr(6))(1:21))
