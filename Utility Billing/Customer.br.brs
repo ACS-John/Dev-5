@@ -1438,6 +1438,7 @@ def fn_ask_account(prev_list_id$,&x$,h_customer_1; select_button_text$,aas_butto
 	AA_FINIS: !
 	fn_record_previous_save
 	fnureg_write('ubfm.account_selection_method',str$(account_selection_method))
+	release #h_customer_1: 
 	fn_ask_account=ckey
 fnend
 def library fnapply_default_rates(mat extra, mat a)
