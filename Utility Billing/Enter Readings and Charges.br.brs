@@ -323,7 +323,7 @@ def fn_print_readings(hWork; printReadings_altHeading$*40) ! pr proof of reading
 		read #hWork,using Fwork: x$,mat x eof PR_TOTALS
 		totwat+=x(1): totele+=x(3): totgas+=x(2)
 		e1$=e2$=""
-		read #hCustomer1,using F_CUSTOMER_B,key=x$: e1$,e2$,mat d,f,mat a nokey PR_CUSTOMER_NOKEY
+		read #hCustomer1,using F_CUSTOMER_B,key=x$,release: e1$,e2$,mat d,f,mat a nokey PR_CUSTOMER_NOKEY
 		F_CUSTOMER_B: form pos 11,2*c 30,pos 217,15*pd 5,pos 296,pd 4,pos 143,7*pd 2
 		! place usage in usage column if not usage already there so it shows on proof list
 		! Water
