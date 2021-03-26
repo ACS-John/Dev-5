@@ -627,12 +627,12 @@ def fn_flextran(myline,mypos; hTrans,z$,begdate,enddate,selcode)
 			colMask_enabled$(colHeaderEnabledCount)=colmask$(hdrItem)
 		end if
 	nex hdrItem
+	fnflexinit1("ubtrans_b",myline,mypos,25,100,mat colHdr_enabled$,mat colMask_enabled$,1)
 	if trim$(z$)='' then
 		restore #hTrans:
 	else
 		restore #hTrans,key>=lpad$(z$,10)&"         ": nokey FlexTranFinis
 	end if
-	fnflexinit1("ubtrans_b",myline,mypos,25,100,mat colHdr_enabled$,mat colMask_enabled$,1)
 	do
 		READ_UBTRANSVB: !
 		read #hTrans,using 'Form POS 1,C 10,N 8,N 1,12*PD 4.2,6*PD 5,PD 4.2,N 1': transAcct$,tdate,tcode,tamount,mat tg,wr,wu,er,eu,gr,gu,tbal,pcode eof FlexTranFinis
