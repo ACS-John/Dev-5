@@ -897,7 +897,7 @@ def fn_print_bill_fsg(pb,mat g,mat d,bal,final,mat pe$,d4,mat e$,z$,mat mg$,budg
 	count+=1
 	pr #255: "" ! if count=2 or count=3 then pr #255: ""
 	pr #255,using L340: serviceFromDate,serviceToDate,gross,bal,gross,d4,bal
-	L340: form pos 1,pic(## ## ##),x 1,pic(## ## ##),n 8.2,pos 27,pic(-----.--),pos 40,n 7.2,x 3,pic(## ## ##),pic(-----.--)
+	L340: form pos 1,pic(## ## ##),x 1,pic(## ## ##),n 9.2,pos 27,pic(-----.--),pos 40,n 9.2,x 3,pic(## ## ##),pic(-----.--)
 	if count=1 then pr #255: : pr #255: : pr #255: : pr #255: : pr #255: ! pr #255: ! EXTRA LINE BETWEEN 1ST and 2nd bills
 	if count=2 then pr #255: : pr #255: : pr #255: : pr #255: : pr #255: ! EXTRA LINE BETWEEN 2nd & 3rd bill
 	if count=3 then count=0 : pr #255: newpage
