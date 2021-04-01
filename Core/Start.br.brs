@@ -149,11 +149,11 @@ def fn_acsSystemInitialize(; syInitMode)
 				fnmakesurepathexists(workingDir$&'\')
 				exe 'CD '&workingDir$(1:2)
 				exe 'CD "'&workingDir$(3:len(workingDir$))&'"'
-				if exists('S:\ScreenIO.ini') then
-					fnCopy('S:\ScreenIO.ini','screenio.ini')   ! note that destination screenio.ini must be all lowercase as it is case sensitive on some systems
+				if exists('S:\Core\ScreenIO\ScreenIO.ini') then
+					fnCopy('S:\Core\ScreenIO\ScreenIO.ini','screenio.ini')   ! note that destination screenio.ini must be all lowercase as it is case sensitive on some systems
 				end if
-				if exists('S:\sio.lic') and ~exists('sio.lic') then
-					fnCopy('S:\sio.lic','sio.lic')
+				if exists('S:\Core\ScreenIO\sio.lic') and ~exists('sio.lic') then
+					fnCopy('S:\Core\ScreenIO\sio.lic','sio.lic')
 				end if
 				fn_CopySfileIoIniToFileIoIni
 			else
