@@ -1,13 +1,13 @@
 ! Replace S:\acsUB\postgl
 ! Company Information File
-!
+
 	autoLibrary
 	on error goto Ertn
-	dim cap$*128,resp$(40)*60,gln$(10,3)*12,serviceName$(10)*20
+	dim resp$(40)*60,gln$(10,3)*12,serviceName$(10)*20
 	dim dat$*20,amount(10,3),tg(10),totaltg(10),heading$*130,dollar(3)
-	dim msgline$(3)*80,glwk$*256,option2$(10)*20,service$*20,gl$(3)*12
+	dim msgline$(3)*80,option2$(10)*20,service$*20,gl$(3)*12
 	dim item$(6)*20,service$(10)*20,a(7)
-	fnTop(program$,cap$="Post General Ledger")
+	fnTop(program$,"Post General Ledger")
 	fndat(dat$,1)
 	fnGetServices(mat serviceName$)
 	x=0
@@ -20,20 +20,20 @@
 	option2$(x)
 	open #customer=1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\UBIndex.h[cno]",internal,input,keyed
 	open #ubtransvb=2: "Name=[Q]\UBmstr\ubTransVB.h[cno],KFName=[Q]\UBmstr\ubtrindx.h[cno]",internal,input,keyed
-	glwk$="[Q]\GLmstr\GL_Work_"&env$('acsUserId')&".h[cno]"
-	open #14: "Name="&glwk$&",Replace,RecL=104",internal,output ioerr ignore
-	if exists("[Q]\UBmstr\glinfo.h[cno]")=0 then goto L270 else goto L290
-L270: open #15: "Name=[Q]\UBmstr\Glinfo.h[cno],KFName=[Q]\UBmstr\glinfoidx.h[cno],Shr,Use,RecL=89,KPs=1,KLn=23",internal,outIn,keyed
-	close #15:
-L290: open #15: "Name=[Q]\UBmstr\Glinfo.h[cno],KFName=[Q]\UBmstr\glinfoidx.h[cno],Shr",internal,outIn,keyed
-!
+	open #14: "Name=[Q]\GLmstr\GL_Work_[acsUserId].h[cno],Replace,RecL=104",internal,output ioerr ignore
+	if ~exists("[Q]\UBmstr\glinfo.h[cno]") then 
+		open #15: "Name=[Q]\UBmstr\Glinfo.h[cno],KFName=[Q]\UBmstr\glinfoidx.h[cno],Shr,Use,RecL=89,KPs=1,KLn=23",internal,outIn,keyed
+		close #15:
+	end if
+	open #15: "Name=[Q]\UBmstr\Glinfo.h[cno],KFName=[Q]\UBmstr\glinfoidx.h[cno],Shr",internal,outIn,keyed
+
 	fnstyp(14)
 	!  styp=11 for jobcost; styp=14 for regular payroll
-	goto SCREEN1
-!
+goto SCREEN1
+
 SCREEN2: !
 	respc=x=0
-	fnTos(sn$="Postgl-2")
+	fnTos
 	mylen=10: mypos=mylen+3 : right=1 : respc=0
 	fram1=1: fnFra(1,1,12,100,"General Ledger Information","For each service, choose the appropriate g/l# for the bank, for the revenue, and possoibly the receivalbe account if using the accrual method.")
 	fnLbl(2,20,"Cash In Bank",12,right,0,fram1)
@@ -61,7 +61,7 @@ SCREEN2: !
 L580: rewrite #15,using "form pos 1,c 20,n 3,3*c 12,3*n 10.2",key=key$: service$,ratecode,gl$(1),gl$(2),gl$(3),mat amount
 	goto SCREEN1
 SCREEN1: !
-	fnTos(sn$='Postub2')
+	fnTos
 	mylen=36 : mypos=mylen+2
 	fnLbl(1,1,"Report Heading Date:",mylen,1,0)
 	fnTxt(1,mypos,20)
@@ -97,11 +97,11 @@ SCREEN1: !
 	if resp$(8)="True" then basis=accrual=2
 	if ld1>hd1 and ld1>0 and hd1>0 then
 		mat msgline$(1): msgline$(1)="Ending Date Before Starting Date!"
-		fnmsgbox(mat msgline$,resp$,cap$,48) : goto SCREEN1
+		fnmsgbox(mat msgline$,resp$,'',48) : goto SCREEN1
 	end if
 	if basis=0 then
 		mat msgline$(1): msgline$(1)="You must enter the basis for accounting!"
-		fnmsgbox(mat msgline$,resp$,cap$,48) : goto SCREEN1
+		fnmsgbox(mat msgline$,resp$,'',48) : goto SCREEN1
 	end if
 	if ckey=2 then goto GL_INFORMATION
 	fnopenprn
@@ -120,7 +120,7 @@ L990: read #ubtransvb,using 'Form POS 1,C 10,N 8,N 1,12*PD 4.2,6*PD 5,PD 4.2,N 1
 	goto L1040
 L1030: mat msgline$(2): msgline$(1)="You have tranactions on customer # "&p$
 	msgline$(2)="but the customer record no longer exists. "&p$
-	fnmsgbox(mat msgline$,resp$,cap$,48)
+	fnmsgbox(mat msgline$,resp$,'',48)
 L1040: ! 1=charge,2=penalty,3=collection,4=credit memo, 5=debit memo
 	for j =1 to 10
 		if basis=cash and tcode=1 or tcde=2 or tcode=4 or tcode=5 then goto L990 ! dont record anything but collections on cash basis.
@@ -193,7 +193,7 @@ L1450: goto L1410
 L1460: next j
 	pr #255,using "form pos 20,n 13.2,n 13.2": totaldebits,totalcredits
 	fncloseprn
-	if gli=1 then let fnchain("S:\acsGL\acglMrge")
+	if gli=1 then let fnchain("S:\General Ledger\Merge")
 Xit: fnXit
 HDR: ! r:
 	pr #255: "\qc  {\f181 \fs18 \b "&env$('cnam')&"}"
@@ -216,9 +216,9 @@ PAGE_OVER_FLOW: ! r:
 	pr #255: newpage
 gosub HDR ! /r
 	continue
-!
+
 GL_INFORMATION: !
-	fnTos(sn$="Breakdown")
+	fnTos
 	respc=0
 	mat chdr$(6) : mat cmask$(6) : mat item$(6)
 	chdr$(1)='Rec'
@@ -243,7 +243,7 @@ EO_FLEX1: !
 	fnCmdKey("&Add",1,0,0,"Add new records")
 	fnCmdKey("&Edit",2,1,0,"Highlight any record and press Enter or click Edit or press Alt+E to change any existing record.")
 	fnCmdKey("&Delete",3,0,0,"Highlight any record and press Alt+D or click Delete to remove any existing record.")
-	fnCmdKey("E&Xit",5,0,1,"Exit to menu")
+	fnCmdKey("E&xit",5,0,1,"Exit to menu")
 	fnAcs(mat resp$,ckey)
 	addone=_edit=0: holdvn$=""
 	if ckey=5 then
@@ -261,11 +261,11 @@ if ckey=2 or ckey=3 then
 end if
 if ckey=2 then _edit=1 : holdvn$=vn$: goto MAINTAIN_GLINFO
 if ckey=3 then gosub DELETE_GLINFO : goto GL_INFORMATION
-!
+
 DELETE_GLINFO: !
 mat msgline$(2): msgline$(1)="You have chosen to delete a record."
 msgline$(2)="Take OK to delete, Cancel to retain."
-fnmsgbox(mat msgline$,resp$,cap$,49)
+fnmsgbox(mat msgline$,resp$,'',49)
 if resp$="OK" then goto L2000 else goto L2010
 L2000: delete #15,rec=editrec:
 L2010: goto GL_INFORMATION
@@ -274,7 +274,7 @@ execute "Index [Q]\UBmstr\Ubinfo.h[cno]"&' '&"[Q]\UBmstr\ubinfoidx.h[cno] 1 23 R
 L2040: return
 MAINTAIN_GLINFO: !
 right=1: mylen=25: mypos=mylen+3
-fnTos(sn$="Glinfo2")
+fnTos
 fnLbl(1,1,"Service:",mylen,right)
 fncomboa("GLCmbSrv",1,mypos,mat option2$,"Set up records for every service and all rate codes within that service",20)
 for j=1 to udim(optio2$)

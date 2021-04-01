@@ -18,10 +18,10 @@
 	if ckey=5 then goto Xit
 	dat=val(resp$(1))
  
-	open #2: "Name=[Q]\GLmstr\GL_Work_"&env$('acsUserId')&".h[cno],NoShr",internal,output ioerr L240
+	open #2: "Name=[Q]\GLmstr\GL_Work_[acsUserId].h[cno],NoShr",internal,output ioerr L240
 	close #2,free:
 	L240: !
-	open #2: "Name=[Q]\GLmstr\GL_Work_"&env$('acsUserId')&".h[cno],size=0,RecL=104,NoShr",internal,output
+	open #2: "Name=[Q]\GLmstr\GL_Work_[acsUserId].h[cno],size=0,RecL=104,NoShr",internal,output
 	open #3: "Name=[Q]\GLmstr\GLSTDAD.h[cno],KFName=[Q]\GLmstr\GLStdIdx.h[cno],Shr",internal,input,keyed
 	net=0
 	L270: !
@@ -53,6 +53,6 @@ ChainToAcGlMrge: !
 	if totaldr+totalcr<>0 then gosub MSGBOX1
 	close #2:
 	close #3:
-fnchain("S:\acsGL\acglMrge")
+fnchain("S:\General Ledger\Merge")
 Xit: fnXit
 include: ertn

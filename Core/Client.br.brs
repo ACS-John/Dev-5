@@ -73,7 +73,6 @@ def fn_setClient(scClient$*128)
 		fnmakesurepathexists(dataNew$)
 		fnSetEnv('data',dataNew$) ! pr 'env$ client set to '&env$('client') : pause
 		fnreg_close
-		! fnMapToVirturalDrive(dataNew$,'Q:')
 		fnSetQ(dataNew$)
 		fncursys$( '',1)
 		fncno(unused)

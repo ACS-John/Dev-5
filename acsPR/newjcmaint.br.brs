@@ -41,7 +41,7 @@ ASKJOB: ! r:
 	fnCmdKey("&Search",8,0,0,"Search forjob record")
 	fnCmdKey("&Proof",11,0,0,"Prints proof listing of all joub information.")
 	fnCmdKey("&Refresh",7,0,0,"Updates search grids and combo boxes with new job information")
-	fnCmdKey("E&Xit",6,0,1,"Returns to menu")
+	fnCmdKey("E&xit",6,0,1,"Returns to menu")
 	fnAcs(mat resp$,ckey) ! ask job #
 	hact$=lpad$(rtrm$(resp$(1)(1:6)),6)
 	jn$=lpad$(rtrm$(resp$(1)(1:6)),6)
@@ -570,7 +570,7 @@ REVIEW_DETAILS: ! r:
 	fnCmdKey("&Add",1,0,0,"Add a new category record." )
 	fnCmdKey("&Delete",4,0,0,"Deletes the highlited record")
 	fnCmdKey("&Refresh",7,0,0,"Updates search grids and combo boxes with new category information")
-	fnCmdKey("E&Xit",5,0,1,"Returns to main screen.")
+	fnCmdKey("E&xit",5,0,1,"Returns to main screen.")
 	fnAcs(mat resp$,ckey) ! review_details  grid of transactions
 	if ckey=5 then goto GET_CATEGORY_LISTING
 	detaileditrec=val(resp$(1))

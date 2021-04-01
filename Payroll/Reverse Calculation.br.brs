@@ -71,7 +71,7 @@ ASK_EMPLOYEE_NO: !
 		fnLbl(6,1,"Employee Number "&str$(eno)&" successfully reversed!",40,1)
 	end if
 	fnCmdKey("&Next",1,1,0,"Proceed with reversing of payroll." )
-	fnCmdKey("E&Xit",5,0,1,"Returns to menu")
+	fnCmdKey("E&xit",5,0,1,"Returns to menu")
 !
 	fnAcs(mat resp$,ckey) ! ask employee #
 	if ckey=5 then goto Xit
@@ -213,12 +213,15 @@ POSTGL1: ! r:
 	fnLbl(1,1,"General Ledger Posting Date:",25,1)
 	fnTxt(1,28,12,0,1,"3",0,"If this revesing entry should be posted to the general ledger, what date should be used?")
 	fnCmdKey("&Next",1,1,0,"Proceed with reversing entry." )
-	fnCmdKey("E&Xit",5,0,1,"Don't Post")
+	fnCmdKey("E&xit",5,0,1,"Don't Post")
 	fnAcs(mat resp$,ckey) ! posting date
 	if ckey<>5 then
 		dat1=val(resp$(1))
-		if glb=2 then glwk$="[Q]\GLmstr\GL"&cnvrt$("PIC(######)",dat1)&".h[cno]"
-		if glb><2 then glwk$="[Q]\GLmstr\GL_Work_"&env$('acsUserId')&".h[cno]"
+		if glb=2 then 
+			glwk$="[Q]\GLmstr\GL"&cnvrt$("PIC(######)",dat1)&".h[cno]"
+		else
+			glwk$="[Q]\GLmstr\GL_Work_[acsUserId].h[cno]"
+		end if
 		if glb=2 and uprc$(rtrm$(accrue$))="Y" then
 			open #11: "Name=[Q]\GLmstr\GL"&cnvrt$("PIC(######)",d2)&".h[cno],RecL=104,USE",internal,output
 		end if
@@ -309,7 +312,7 @@ POSTGL4: ! r:
 	fncloseprn
 	if glinstal=0 then goto Xit
 	if glb=2 then goto Xit
-fnchain("S:\acsGL\ACGLMRGE") ! /r
+fnchain("S:\General Ledger\Merge") ! /r
 Xit: fnXit
 PGOF: ! r:
 	pr #255: newpage
@@ -433,7 +436,7 @@ return  ! /r
 !   fnTxt(4,mypos+3,10,0,1,"1",0,"Enter the month end date.")
 	!   resp$(4)=str$(d2)
 !   fnCmdKey("&Next",1,1,0,"Continue posting." )
-	!   fnCmdKey("E&Xit",5,0,1,"Returns to menu")
+	!   fnCmdKey("E&xit",5,0,1,"Returns to menu")
 !   fnAcs(mat resp$,ckey) ! ask accrual info
 !   if ckey=5 then goto Xit
 !   day=val(resp$(1)) ! days in pay period

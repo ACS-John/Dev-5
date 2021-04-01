@@ -204,8 +204,9 @@ def fn_main
 				fnLbl(program_grid_line+6,1,env$('Decimal_Assumed'),info_col_width,2)
 			end if
 			if env$('ACSDeveloper')<>'' then
-				fnLbl(program_grid_line+8,1,"ACS Developer"(1:info_col_width),info_col_width,2)
-				fnLbl(program_grid_line+9,1,env$('ACSDeveloper')(1:info_col_width),info_col_width,2)
+				fnLbl(program_grid_line+8 ,1,"ACS Developer"(1:info_col_width),info_col_width,2)
+				fnLbl(program_grid_line+9 ,1,env$('ACSDeveloper')(1:info_col_width),info_col_width,2)
+				fnLbl(program_grid_line+10,1,env$('acsUserId')(1:info_col_width),info_col_width,2)
 			end if
 			if env$('BR_MODEL')='CLIENT/SERVER' then
 				fnLbl(program_grid_line+11,1,'Client'(1:info_col_width),info_col_width,2)
@@ -902,7 +903,7 @@ def fn_displayMenu
 		fn_dm_add(' -')
 		fn_dm_add(' E&xit'&chr$(9)&'Alt+F4','Exit')
 		if env$('BR_MODEL')='CLIENT/SERVER' then
-			fn_dm_add(' E&Xit and Logout','Exit and Logout')
+			fn_dm_add(' E&xit and Logout','Exit and Logout')
 		end if
 		if udim(mat system_name$)>1 then
 			fn_dm_add('&System',str$(x+=1))

@@ -81,7 +81,7 @@ ScrGrid: ! r:
 	fnCmdKey("&Add"   ,1,0,0,"Allows you to add new financial statement reference numbers.")
 	fnCmdKey("&Delete",8,0,0,"Highlight any record and click Delete to remove the financial statement reference number.")
 ! fnCmdKey("&Print",3,0,0,"Takes you directly to the pr financial statement reference number option")
-	fnCmdKey("E&Xit"  ,5,0,1,"Exits to main menu")
+	fnCmdKey("E&xit"  ,5,0,1,"Exits to main menu")
 	fnAcs(mat resp$,ckey)
 	if ckey=5 then goto IndexThenMenu1
 	add=edit=0

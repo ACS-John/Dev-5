@@ -659,7 +659,7 @@ def fn_cknum ! check for duplicate check numbers
 	fnTxt(8,textlenght+7,7,0,1,"30",0,"")
 	resp$(respc+=1)=str$(check_number)
 	fnCmdKey("&Next",1,1,0,"Continue with checkprinting." )
-	fnCmdKey("E&Xit",5,0,1,"Returns to menu")
+	fnCmdKey("E&xit",5,0,1,"Returns to menu")
 	fnAcs(mat resp$,ckey) ! dupllicate check number
 	if ckey=5 then goto Xit
 	if ckey=3 then goto L5670 ! if delete
@@ -1573,7 +1573,7 @@ INVALIDGLNUMBER: ! r:
 	fnqgl(3,mypos,0,2,pas)
 	resp$(5)=fnrgl$(goodgl$)
 	fnCmdKey("&Next",1,1,0,"Continue with checkprinting." )
-	fnCmdKey("E&Xit",5,0,1,"Returns to menu")
+	fnCmdKey("E&xit",5,0,1,"Returns to menu")
 	fnAcs(mat resp$,ckey) ! bad general ledger numbers
 	if ckey=5 then goto Xit
 	gl$=fnagl$(resp$(5))

@@ -31,7 +31,7 @@ ASKREPORT: !
 	fnCmdKey("&Add",1,0,0,"Add a new report" ) : _
 	fnCmdKey("E&dit",2,1,0,"Access the highlited record") : _
 	fnCmdKey("&Next Record",3,0,0,"Access next record in report # order") : _
-	fnCmdKey("E&Xit",5,0,1,"Returns to menu")
+	fnCmdKey("E&xit",5,0,1,"Returns to menu")
 	fnAcs(mat resp$,ckey) ! ask report #
 	if ckey=5 then goto Xit
 	editrec=addone=0

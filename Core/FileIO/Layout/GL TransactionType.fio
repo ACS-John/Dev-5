@@ -1,0 +1,6 @@
+S:\Core\Data\GL TransactionType.dat  ,  tt_          , 0
+S:\Core\Data\GL TransactionType.idx  ,  key
+===================================================
+key						,Key											, N  1, !  Pos=1   Required=True mask=30
+name					,Transaction Date    		, C 18
+

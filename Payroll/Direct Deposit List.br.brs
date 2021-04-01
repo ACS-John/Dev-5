@@ -17,7 +17,7 @@
 	fnTxt(2,20+3,10,0,1,"3",0,"This report will list any employees who direct deposit on the date the report is printed.")
 	resp$(1)=str$(d1)
 	fnCmdKey("&Print",1,1,0,"Print the "&env$('program_caption')&"." )
-	fnCmdKey("E&Xit",5,0,1,"Returns to menu")
+	fnCmdKey("E&xit",5,0,1,"Returns to menu")
 	fnAcs(mat resp$,ckey)
 	if ckey=5 then goto Xit
 	ppd=val(resp$(1))

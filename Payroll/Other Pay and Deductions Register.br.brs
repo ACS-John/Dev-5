@@ -44,7 +44,7 @@ ASK_PAYROLL_DATE: ! r:
   fnTxt(2,23,10,0,1,"3",0,"You can pr or reprint for any pay period.  Normally you would use the last payroll date.")
   resp$(respc+=1)=str$(d1)
   fnCmdKey("&Next",1,1,0,"Proceed with importing time." )
-  fnCmdKey("E&Xit",5,0,1,"Returns to menu")
+  fnCmdKey("E&xit",5,0,1,"Returns to menu")
   fnAcs(mat resp$,ckey) ! ask employee #
   if ckey=5 then goto Xit
   ppd=val(resp$(1))

@@ -20,7 +20,6 @@ def fn_setup
 		setup_index_it=1
 		on error goto Ertn
 		option retain 
-		!     working_dir_rights=fnrights_test('',"Try Run As Administrator.",'Program','Indexes are unable to process without this access and will be skipped for the remainder of this session.')
 	end if 
 fnend 
 def library fnIndex(data_file$*256,index_statement_or_file$*512; indexParameters$*256)

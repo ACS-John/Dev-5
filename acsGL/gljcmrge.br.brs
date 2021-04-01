@@ -15,7 +15,7 @@
 	pr newpage
 	pr f "10,15,Cc 60,N": "GENERAL LEDGER JOB COST MERGE CHARGES IN PROCESS"
 	open #2: "Name=[Q]\PRmstr\JCCAT.h[cno],KFName=[Q]\PRmstr\CatIndx.h[cno],Shr",internal,outIn,keyed
-	open #3: "Name=[Q]\GLmstr\GL_Work_"&env$('acsUserId')&".h[cno]",internal,input
+	open #3: "Name=[Q]\GLmstr\GL_Work_[acsUserId].h[cno]",internal,input
 	open #5: "Name=[Q]\PRmstr\JCTRANS.h[cno],Shr",internal,outIn,relative
 L180: read #3,using L190: dat,ji2(3),postc,rn$,empnam$,jn$,ji2(1),ji2(2) eof L430,ioerr L430
 L190: form pos 13,n 6,pd 6.2,pos 27,n 2,c 12,c 30,pos 79,c 6,n 5,n 3
@@ -45,7 +45,7 @@ L360: form pos 1,c 12,c 6,n 5,pd 3,pd 2,n 6,4*pd 4.2,pd 5.2,c 30,pd 3
 L430: close #2:
 	close #3:
 	close #5:
-L460: fnchain("S:\acsGL\ACGLMRGE")
+L460: fnchain("S:\General Ledger\Merge")
  
 Xit: fnXit
  

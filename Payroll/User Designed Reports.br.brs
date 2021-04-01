@@ -30,7 +30,7 @@ do
 	fnCmdKey("&Add",1,0,0,"Add a new employee" )
 	fnCmdKey("E&dit",2,0,0,"Modify the selected report")
 	fnCmdKey("Print",4,1,0,"Run the selected report")
-	fnCmdKey("E&Xit",5,0,1,"Return to menu")
+	fnCmdKey("E&xit",5,0,1,"Return to menu")
 	fnAcs(mat resp$,ckey) ! ask report #
 	if ckey=5 then goto Xit
 	editrec=addone=0

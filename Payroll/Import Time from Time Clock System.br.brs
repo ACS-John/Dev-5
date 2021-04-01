@@ -25,7 +25,7 @@ ASK_PAYROLL_DATE: !
 	fnTxt(2,23,10,0,1,"3",0,"Always use the calculation date.")
 	resp$(respc+=1)=str$(ppd)
 	fnCmdKey("&Next",1,1,0,"Proceed with importing time." )
-	fnCmdKey("E&Xit",5,0,1,"Returns to menu")
+	fnCmdKey("E&xit",5,0,1,"Returns to menu")
 	fnAcs(mat resp$,ckey) ! ask employee #
 	if ckey=5 then goto Xit
 endingdate=val(resp$(1))

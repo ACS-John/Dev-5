@@ -64,7 +64,7 @@ def library fnAddGlPayee
 		fnCmdKey("&Add",1,0,0,"Add new payee records") 
 		fnCmdKey("&Edit",2,1,0,"Highlight any record and press Enter or click Edit or press Alt+E to change any existing payee record.") 
 		fnCmdKey("&Delete",3,0,0,"Highlight any record and press Alt+D or click Delete to remove any existing payee record.") 
-		fnCmdKey("E&Xit",5,0,1,"Exit to menu")
+		fnCmdKey("E&xit",5,0,1,"Exit to menu")
 		fnAcs(mat resp$,ckey)
 		add=_edit=0
 		if ckey=5 then 
@@ -178,7 +178,8 @@ def library fnAddGlPayee
 		loop
 		EO_FLEX3: ! /r
 		fnLbl(21,1,"",1,0,0,0) ! add space before buttons
-		fnButton(lc=21,61,"Add",2,"Add a standard general ledger breakdowns",0,4) 
+		!        lc=21
+		fnButton(lc=15,61,"Add",2,"Add a standard general ledger breakdowns",0,4) 
 		fnButton(lc,67,"Edit",7,"Edit or Delete a standard general ledger breakdowns")
 		fnCmdKey("Save",1,1,0,"Saves and returns to payee selection") 
 		fnCmdKey("&Transactions",4,0,0,"List all checks for this payee") 

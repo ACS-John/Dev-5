@@ -48,14 +48,14 @@ ASK_DATE: !
 	fnChk(3,28,"Print Report Only:",1)
 	resp$(respc+=1)="False"
 	fnCmdKey("&Next",1,1,0,"Proceed with posting." )
-	fnCmdKey("E&Xit",5,0,1,"Returns to menu")
+	fnCmdKey("E&xit",5,0,1,"Returns to menu")
 	fnAcs(mat resp$,ckey) ! ask payroll date
 	if ckey=5 then goto Xit
 	dat1=d1=val(resp$(1))
 	dat2=d2=val(resp$(2))
 	if resp$(3)="True" then skipposting=1
 	if glb=2 then glwk$="[Q]\GLmstr\GL"&date$(days(dat1,'ccyymmdd'),'mmddyy')&".h[cno]"
-	if glb><2 then glwk$="[Q]\GLmstr\GL_Work_"&env$('acsUserId')&".h[cno]"
+	if glb><2 then glwk$="[Q]\GLmstr\GL_Work_[acsUserId].h[cno]"
 	if glb=2 and accrue$="Yes" then
 		open #11: "Name=[Q]\GLmstr\GL"&date$(days(d2,'ccyymmdd'),'mmddyy')&".h[cno],RecL=104,Use",internal,output
 	end if
@@ -151,7 +151,7 @@ L1400: ! r:
 	!
 	fncloseprn
 	if ~skipposting=1 and glinstal and glb<>2 then
-		fnchain("S:\acsGL\ACGLMRGE")
+		fnchain("S:\General Ledger\Merge")
 	end if
 goto Xit ! /r
 PgOf: !  r:
@@ -229,7 +229,7 @@ def fn_l1800 ! OPEN G/L WORK FILES AND CREATE DUE TO AND DUE FROM ENTRIES
 	fnqgl(1,mypos+3,0,2,pas)
 	resp$(1)=fnrgl$(bankgl$)
 	fnCmdKey("&Next",1,1,0,"Continue posting." )
-	fnCmdKey("E&Xit",5,0,1,"Returns to menu")
+	fnCmdKey("E&xit",5,0,1,"Returns to menu")
 	fnAcs(mat resp$,ckey) ! ask clearing
 	if ckey=5 then goto Xit
 	key$=k$=bankgl$=fnagl$(resp$(1))
@@ -274,7 +274,7 @@ def fn_finalscrctrlbookmulitfunds
 	fnqgl(1,mypos+3,0,2,pas)
 	resp$(1)=fnrgl$(bankgl$)
 	fnCmdKey("&Next",1,1,0,"Continue posting." )
-	fnCmdKey("E&Xit",5,0,1,"Returns to menu")
+	fnCmdKey("E&xit",5,0,1,"Returns to menu")
 	fnAcs(mat resp$,ckey) ! ask clearing
 	if ckey=5 then goto Xit
 	key$=fnagl$(resp$(1))
@@ -318,7 +318,7 @@ def fn_askaccrue
 	fnTxt(4,mypos+3,10,0,1,"1",0,"Enter the month end date.")
 	resp$(4)=str$(d2)
 	fnCmdKey("&Next",1,1,0,"Continue posting." )
-	fnCmdKey("E&Xit",5,0,1,"Returns to menu")
+	fnCmdKey("E&xit",5,0,1,"Returns to menu")
 	fnAcs(mat resp$,ckey) ! ask accrual info
 	if ckey=5 then goto Xit
 	day=val(resp$(1)) ! days in pay period

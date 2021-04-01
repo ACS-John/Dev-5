@@ -65,7 +65,6 @@ def fn_make_data_file_exist(name$*512,myrln,version_proper)
 		open #tmp=fnH: 'Name='&name$&',Shr,Use,RecL='&str$(myrln)&',Version='&str$(version_proper),internal,outIn
 		close #tmp:
 	end if
-	!
 fnend
 def fn_check_indexes(name$*512,mat kfnames$,mat kps$,mat kln$)
 	ci_return=1 ! function should return 1 if all indexes tested are fine or 0 if any tested fail
@@ -74,7 +73,7 @@ def fn_check_indexes(name$*512,mat kfnames$,mat kps$,mat kln$)
 		str2mat(kln$(ci_item),mat ci_kln$,'/')
 		CI_OPEN_IT: !
 		open #h_ci_tmp=fnH: 'name='&name$&',KFName='&kfnames$(ci_item),internal,input,keyed ioerr CI_OPEN_ERR
-		!
+
 		for x=1 to udim(mat ci_kps$)
 			if kps(h_ci_tmp,x)<>val(ci_kps$(x)) then
 				fnStatus('Key Position mismatch!') ! should these use fnStatus ??
@@ -93,7 +92,7 @@ def fn_check_indexes(name$*512,mat kfnames$,mat kps$,mat kln$)
 				fnStatus('Key Length should be '&ci_kln$(x)&' but it is '&str$(kln(h_ci_tmp,x)))
 				ci_return=0
 			end if
-			!
+
 		next x
 		close #h_ci_tmp:
 	next ci_item
@@ -201,7 +200,7 @@ def fn_cfv_utility_billing
 			fnCopy("[Q]\UBmstr\Company.h[cno]",'',133)
 		end if
 	end if
-	!
+
 	fn_file_setup_data("[Q]\UBmstr\Customer.h[cno]",2067,1)
 	fn_file_setup_index("[Q]\UBmstr\ubIndex.h[cno]","1","10")
 	fn_file_setup_index("[Q]\UBmstr\ubIndx2.h[cno]","354","7")
@@ -264,7 +263,6 @@ def fn_cfv_utility_billing
 		close #hMeterType:
 	end if
 
-
 	! no need, replaced by U4 Meter Location    !   fn_file_setup_data("[Q]\UBmstr\Meter.h[cno]",384,1)
 	! no need, replaced by U4 Meter Location    !   fn_file_setup_index("[Q]\UBmstr\Meter_Idx.h[cno]",'1/11','10/2')
 
@@ -292,11 +290,7 @@ def fn_cfv_utility_billing
 		fnCloseFile(hCoCsz,'CO City State Zip')
 	end if
 
-	if exists('[Q]\UBmstr\Collections-'&wsid$&'.h[cno]') then
-		if fnCopy('[Q]\UBmstr\Collections-'&wsid$&'.h[cno]','[Q]\UBmstr\Collections-'&env$('acsUserId')&'.h[cno]') then
-			fnFree('[Q]\UBmstr\Collections-'&wsid$&'.h[cno]')
-		end if
-	end if
+	fn_rename('[Q]\UBmstr\Collections-[wsid].h[cno]','[Q]\UBmstr\Collections-[acsUserId].h[cno]')
 
 	if exists('[Q]\UBmstr\IpChg01.h[cno]') then
 		open #hupipchg=fnH: "Name=[Q]\UBmstr\IpChg01.h[cno],RecL=80,Use",internal,outIn ioerr ubipchgOpenErr
@@ -333,12 +327,12 @@ def fn_cfv_checkbook
 	fn_ini_move(env$('cursys'))
 	fnIniToReg
 	fn_reg_rename(env$('cursys'))
-	!
+
 	! if ~exists('[Q]\CLmstr\PayeeType.dat') and exists('S:\acsCL\PayeeType.dat') then
 	!   fnCopy('S:\acsCL\PayeeType.dat','[Q]\CLmstr\PayeeType.dat')
 	!   fnCopy('S:\acsCL\PayeeType.Idx','[Q]\CLmstr\PayeeType.Idx')
 	! end if
-	!
+
 	CL_TRMSTR1: ! Primary Non-Split Index
 	fn_file_setup_data("[Q]\CLmstr\TrMstr.h[cno]",78,2)
 	fn_file_setup_index("[Q]\CLmstr\TrIdx1.h[cno]",'1','11')
@@ -387,7 +381,7 @@ def fn_cfv_checkbook
 		pr 'Key Length Error in '&kfname$
 		pr '         KLn: '&str$(tmpkln(1))
 	end if
-	!
+
 	CL_UNPDALOC1: ! Primary, Non-Split Index
 	! it is important that if conversion from version 1 to 2 occur on this
 	! that this file process before PayTrans - the file it is linked to
@@ -422,7 +416,7 @@ def fn_cfv_checkbook
 		pr 'Key Length ('&str$(x)&') Error in '&kfname$
 		pr '      KLn('&str$(x)&'): '&str$(tmpkln(x))
 	end if
-	!
+
 	! CL_UNPDALOC2: ! Secondary, Non-Split Index
 	name$="[Q]\CLmstr\UnPdAloc.h[cno]"
 	kfname$="[Q]\CLmstr\UAIdx2.h[cno]"
@@ -438,7 +432,7 @@ def fn_cfv_checkbook
 		pr 'Key Length ('&str$(x)&') Error in '&kfname$
 		pr '      KLn('&str$(x)&'): '&str$(tmpkln(x))
 	end if
-	!
+
 	CL_PAYTRANS1: ! Primary Non-Split Index
 	name$="[Q]\CLmstr\PayTrans.h[cno]"
 	kfname$="[Q]\CLmstr\UnPdIdx1.h[cno]"
@@ -467,7 +461,7 @@ def fn_cfv_checkbook
 		pr 'Key Length ('&str$(x)&') Error in '&kfname$
 		pr '      KLn('&str$(x)&'): '&str$(tmpkln(x))
 	end if
-	!
+
 	! CL_PAYTRANS2: ! seconday 3-Split Index
 	name$="[Q]\CLmstr\PayTrans.h[cno]"
 	kfname$="[Q]\CLmstr\UnPdIdx2.h[cno]"
@@ -499,7 +493,7 @@ def fn_cfv_checkbook
 		pr 'Key Length ('&str$(x)&') Error in '&kfname$
 		pr '      KLn('&str$(x)&'): '&str$(tmpkln(x))
 	end if
-	!
+
 	CL_PAYMSTR1: ! Primary Non-Split Index
 	name$="[Q]\CLmstr\PayMstr.h[cno]"
 	kfname$="[Q]\CLmstr\PayIdx1.h[cno]"
@@ -553,7 +547,7 @@ def fn_cfv_checkbook
 		pr 'Key Length ('&str$(x)&') Error in '&kfname$
 		pr '      KLn('&str$(x)&'): '&str$(tmpkln(x))
 	end if
-	!
+
 	! CL_PAYMSTR2: ! Secondary, Non-Split Index
 	name$="[Q]\CLmstr\PayMstr.h[cno]"
 	kfname$="[Q]\CLmstr\PayIdx2.h[cno]"
@@ -569,7 +563,7 @@ def fn_cfv_checkbook
 		pr 'Key Length ('&str$(x)&') Error in '&kfname$
 		pr '      KLn('&str$(x)&'): '&str$(tmpkln(x))
 	end if
-	!
+
 	! CL_GLMSTR1: ! Primary Non-Split Index
 	name$="[Q]\CLmstr\GLmstr.h[cno]"
 	kfname$="[Q]\CLmstr\GLIndex.h[cno]"
@@ -596,7 +590,7 @@ def fn_cfv_checkbook
 	!     pr 'Key Length ('&str$(x)&') Error in '&kfname$
 	!     pr '      KLn('&str$(x)&'): '&str$(tmpkln(x))
 	!   end if
-	!
+
 	! CL_PAYEEGLBREAKDOWN: ! Primary Non-Split Index
 	fn_file_setup_data("[Q]\CLmstr\payeeglbreakdown.h[cno]",56,1)
 	fn_file_setup_index("[Q]\CLmstr\payeeglbkdidx.h[cno]",'1','8')
@@ -616,11 +610,9 @@ def fn_cfv_checkbook
 		close #hPayeeType:
 	end if
 
-
 	if exists("[Q]\CLmstr\PostDat.h[cno]") then
 		fnFree('[Q]\CLmstr\PostDat.h[cno]')
 	end if
-
 
 fnend
 def fn_checkbookTrmstr_v0_to_v1(; ___,trmstr,pause$,amt,j)
@@ -696,16 +688,16 @@ def fn_cfv_payroll
 	! /r
 	fn_file_setup_data("[Q]\PRmstr\DeptName.h[cno]",32,0)
 	fn_file_setup_index("[Q]\PRmstr\DeptNameIdx-idx.h[cno]",'1','3')
-	!
+
 	fn_file_setup_data("[Q]\PRmstr\Department.h[cno]",149,0)
 	fn_file_setup_index("[Q]\PRmstr\DeptIdx.h[cno]",'1/9','8/3')
-	!
+
 	fn_file_setup_data("[Q]\PRmstr\dd.h[cno]",72,0)
 	fn_file_setup_index("[Q]\PRmstr\DDidx1.h[cno]",'1','10')
-	!
+
 	fn_file_setup_data("[Q]\PRmstr\mglmstr.h[cno]",135,0)
 	fn_file_setup_index("[Q]\PRmstr\mglidx1-idx.h[cno]",'1','3')
-	!
+
 	fn_file_setup_data("[Q]\PRmstr\HourBreakdown.h[cno]",39,0)
 	fn_file_setup_index("[Q]\PRmstr\HourBreakdown-idx.h[cno]",'1/9/14','8/5/8')
 	! r: Dates.h
@@ -722,7 +714,7 @@ def fn_cfv_payroll
 	fn_file_setup_index("[Q]\PRmstr\CheckIdx.h[cno]",'1','17')
 	fn_file_setup_index("[Q]\PRmstr\CheckIdx2.h[cno]",'9/12/1','3/6/8')
 	fn_file_setup_index("[Q]\PRmstr\checkidx3.h[cno]",'1/12/9','8/6/3')
-	!
+
 	! r: DedNames.h setup
 	! if exists("[Q]\PRmstr\dednames.h[cno]")=0 then
 	dim pr_dednames_fullname$(20)*20
@@ -832,23 +824,23 @@ def fn_cfv_general_ledger
 	! General Ledger Only
 	fn_file_setup_data("[Q]\GLmstr\ACTrans.h[cno]",72,0)
 	fn_file_setup_index("[Q]\GLmstr\AcTrIdx.h[cno]",'1/71/17/13','12/2/2/4')
-	!
+
 	fn_file_setup_data("[Q]\GLmstr\GLTrans.h[cno]",73,0)
-	!
+
 	if exists("[Q]\GLmstr")=0 then execute "MkDir [Q]\GLmstr"
 	! if ~exists('[Q]\INI\General Ledger') then execute 'mkdir "[Q]\INI\General Ledger"'
 	! if ~exists('[Q]\INI\General Ledger\Accountants') then execute 'mkdir "[Q]\INI\General Ledger\Accountants"'
 	fn_ini_move(env$('cursys'))
 	fnIniToReg
 	fn_reg_rename(env$('cursys'))
-	!
+
 	if ~exists('[Q]\GLmstr\PayeeType.dat') then
 		open #hPayeeType=fnH: "Name=[Q]\GLmstr\PayeeType.dat,Version=1,KFName=[Q]\GLmstr\PayeeType.Idx,Use,RecL=27,KPs=1,KLn=2,Shr",internal,outIn,keyed
 		write #hPayeeType,using 'form pos 1,n 2,C 25': 0,'Not Applicable'
 		write #hPayeeType,using 'form pos 1,n 2,C 25': 7,'Non-Employee Compensation'
 		close #hPayeeType:
 	end if
-	!
+
 	! BudgetInfo: ! Primary Non-Split Index
 	name$="[Q]\GLmstr\BudgetInfo.h[cno]"
 	kfname$="[Q]\GLmstr\BudIndx.h[cno]"
@@ -928,7 +920,7 @@ def fn_cfv_general_ledger
 		pr 'Record Length Error in File: '&tmpfile$
 		pr '         RLn: '&str$(tmprln)
 	end if
-! If TMPRLN=81 OR TMPRLN=78 Then FNFINSTMT_v0_to_v1
+	! If TMPRLN=81 OR TMPRLN=78 Then FNFINSTMT_v0_to_v1
 	x=1 : if tmpkps(x)<>1 then
 		pr 'Key Position ('&str$(x)&') Error in '&kfname$
 		pr '      KPs('&str$(x)&'): '&str$(tmpkps(x))
@@ -946,7 +938,7 @@ def fn_cfv_general_ledger
 
 	fn_file_setup_data("[Q]\GLmstr\acglfnsg.h[cno]",83,1)
 	fn_file_setup_index("[Q]\GLmstr\agfsidx6.h[cno]",'1','5')
-	!
+
 	! /r
 	! PAYEEGLBREAKDOWN: !
 	name$="[Q]\GLmstr\payeeglbreakdown.h[cno]"
@@ -996,7 +988,7 @@ def fn_cfv_general_ledger
 		fnFree(kfname$)
 		goto L3600
 	end if
-		!
+
 		! GLTR1099: ! Primary, Non-Split Index  (Vendor transactions)
 	name$="[Q]\GLmstr\GlTr1099.h[cno]"
 	kfname$="[Q]\GLmstr\gltridx1.h[cno]"
@@ -1102,7 +1094,7 @@ def fn_cfv_general_ledger
 	fnstyp
 	fnps
 	! /r
-	!
+
 	if ~exists('[Q]\GLmstr\Period.h[cno]') then
 		open #hGlPeriod=fnH: "Name=[Q]\GLmstr\Period.h[cno],Version=1,KFName=[Q]\GLmstr\Period-Idx.h[cno],Use,RecL=35,KPs=1,KLn=2,Shr",internal,outIn,keyed
 		for periodRecord=1 to 12
@@ -1112,18 +1104,18 @@ def fn_cfv_general_ledger
 		close #hGlPeriod:
 	end if
 
-	if exists("[Q]\GLmstr\GLWK1"&wsid$&".h[cno]") and ~exists("[Q]\GLmstr\GL_Work_"&env$('acsUserId')&".h[cno]") then
-		if fncopy("[Q]\GLmstr\GLWK1"&wsid$&".h[cno]","[Q]\GLmstr\GL_Work_"&env$('acsUserId')&".h[cno]") then
-			fnFree("[Q]\GLmstr\GLWK1"&wsid$&".h[cno]")
+	fn_rename('[Q]\GLmstr\GLWK1[wsid].dat','[Q]\GLmstr\GL_Work_[acsUserId].dat')
+	fn_rename('[Q]\GLmstr\GLALLOCATIONS[wsid][cno]','[Q]\GLmstr\Allocations[acsUserId].h[cno]')
+
+
+fnend
+
+def fn_rename(from$*256,to$*256)
+	if exists(from$) and ~exists(to$) then
+		if fnCopy(from$,to$) then
+			fnFree(from$)
 		end if
 	end if
-
-	if exists("[Q]\GLmstr\GLWK1"&wsid$&".dat") and ~exists("[Q]\GLmstr\GL_Work_"&env$('acsUserId')&".dat") then
-		if fncopy("[Q]\GLmstr\GLWK1"&wsid$&".dat","[Q]\GLmstr\GL_Work_"&env$('acsUserId')&".dat") then
-			fnFree('[Q]\GLmstr\GLWK1'&wsid$&'.dat')
-		end if
-	end if
-
 fnend
 L9000: ! r: skip bad schedule records
 	reread #tmp, using "Form POS 1,c 2": a$ eof EO_TMP ioerr ignore
@@ -1200,11 +1192,7 @@ def fn_ini_move(cursys$*2)
 			 ! if pos(lwrc$(imBrFrom$),'acglbalc')>0 then pause
 ! if pos(lwrc$(imIniFrom$),'ubipcoll')>0 and env$('acsdeveloper')<>'' then pause
 		if ~(imIniFrom$='S:\Core\Default\Program.ini' or imIniTo$='S:\Core\Default\Program.ini') then
-			if exists(imIniFrom$) and ~exists(imIniTo$) then
-				if fnCopy(imIniFrom$,imIniTo$)>0 then
-					fnFree(imIniFrom$)
-				end if
-			end if
+			fn_rename(imIniFrom$,imIniTo$)
 		end if
 		fnKeyChange(hFavProgram,'form pos '&str$(kps(hFavProgram))&',C '&str$(kln(hFavProgram)),imBrFrom$,imBrTo$)
 	nex imItem

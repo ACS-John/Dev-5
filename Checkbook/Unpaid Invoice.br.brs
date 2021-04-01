@@ -84,7 +84,7 @@ EO_INVOICE_GRID: ! /r
 	fnCmdKey("&Edit",2,1,0,"Highlight any record and press Enter or click Edit to change any existing unpaid invoice record.")
 	fnCmdKey("&Select to Pay",8,0,0,"Allows you to code invoices for payment")
 	fnCmdKey("&Listing",3,0,0,"Prints listings from unpaid file")
-	fnCmdKey("E&Xit",5,0,1,"Exits to main menu") ! 320
+	fnCmdKey("E&xit",5,0,1,"Exits to main menu") ! 320
 	fnAcs(mat resp$,ckey)
 	displayalljobs=0
 	if ckey=5 then goto FINIS

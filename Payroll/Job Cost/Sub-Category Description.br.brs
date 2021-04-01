@@ -40,7 +40,7 @@ ADDREC: ! r:
 	fnTxt(1,19,3,3,0,"30",0,"Assign any number that has not been used before.")
 	resp$(respc+=1)=""
 	fnCmdKey("&Next",1,1,0,"Record this sub category record.")
-	fnCmdKey("E&Xit",5,0,1,"Returns to main screen.")
+	fnCmdKey("E&xit",5,0,1,"Returns to main screen.")
 	fnAcs(mat resp$,ckey) ! add sub-category #
 	if ckey=5 then goto ASKSUBCAT
 	cde$=lpad$(rtrm$(resp$(1)),3)
@@ -69,7 +69,7 @@ EDITREC: ! r:
 	fnCmdKey("&Next"			,1,1,0,"Record any changes & return to main screen.")
 	fnCmdKey("&Add" 			,2,0,0,"Save these changes and then add a new record." )
 	fnCmdKey("&Delete"		,4,0,0,"Delete this sub-category record." )
-	fnCmdKey("E&Xit"			,5,0,1,"Returns to main screen.")
+	fnCmdKey("E&xit"			,5,0,1,"Returns to main screen.")
 	fnAcs(mat resp$,ckey) ! edit sub-category
 	if ckey=5 then goto ASKSUBCAT
 	cde$=lpad$(rtrm$(resp$(1)),3)

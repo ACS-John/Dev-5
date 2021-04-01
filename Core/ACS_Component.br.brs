@@ -483,7 +483,7 @@ def fn_clearMenu
 	mat _m$(0) : mat _p$(0) : mat _s$(0)
 	display menu: mat _m$,mat _p$,mat _s$
 fnend
-def library fnAcs(mat resp$,&ckey; startfield,close_on_exit,parent_none,disabled_background)
+def library fnAcs(mat resp$; &ckey, startfield,close_on_exit,parent_none,disabled_background)
 	if ~setup then fn_setup
 	dim txt$*201,path1$*300,tt$*400,tabline$*8019
 	dim cap$*128 ! caption / title bar text
@@ -500,6 +500,8 @@ def library fnAcs(mat resp$,&ckey; startfield,close_on_exit,parent_none,disabled
 	! do we even need this line - it screws up other things.  Does removing it screw anything up?
 	! yeah it screws things up to take it out - repetative flex grids
 	fn_ace(sn$,unused,mat resp$,ckey,startfield,close_on_exit,parent_none,disabled_background)
+	
+	fnAcs=ckey
 	goto Xit
 Xit: fnend
 def fn_ace_init
@@ -1334,11 +1336,11 @@ def fn_ace_rd_flex(;___,index_)
 				row_count=1
 				printed=1
 			else
-				row_count += 1
+				row_count+=1
 			end if
 		end if
 	loop
-	row_count -= 1
+	row_count-=1
 	if row_count<>0 then
 		if not printed then
 			pr f gridspec$&",=L": mat long_row$(1:(row_count)*udim(_chunks$))
@@ -2028,7 +2030,7 @@ def fn_controlCount
 	setenv('control_count',str$(control_count))
 	fn_controlCount=control_count
 fnend
-def library fnqgl(myline,mypos; qglcontainer,add_all_or_blank,use_or_replace,qgllength,qgltabcon)
+def library fnqgl(myline,mypos; qglcontainer,add_all_or_blank,unused,qgllength,qgltabcon)
 	if ~setup then fn_setup
 	if qgllength=0 then qgllength=35
 

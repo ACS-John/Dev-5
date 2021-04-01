@@ -163,7 +163,7 @@ ASK_EMP_LOCALITY: ! r:
 	fnTxt(2,mypos,12,0,1,"",0,"Enter the Locality for this employee.",0)
 	resp$(rc+=1)=empLocality$
 	fnCmdKey("&Next",1,1,0,"Proceed to next screen.")
-	fnCmdKey("E&Xit",5,0,1,"Returns to menu")
+	fnCmdKey("E&xit",5,0,1,"Returns to menu")
 	fnAcs(mat resp$,ckey)
 	if ckey=5 then goto Xit
 	empLocality$=resp$(1)
