@@ -205,7 +205,7 @@ MENU1: ! r:
 	fnCmdKey('Add &Check (Disbursment)',8,0,0,"Allows you to add hand written checks to the checkbook files.")
 	fnCmdKey('&ReIndex',7,0,0,"Allows you to reindex the check history files. Should only be necessary if power failures have corrupted the files.")
 	fnCmdKey('&Change Selection Criteria',6,0,0,"Allows you to return to first screen and change date ranges, etc.")
-	fnCmdKey('E&Xit',5,0,1,"Exits the checkbook system.")
+	fnCmdKey('E&xit',5,0,1,"Exits the checkbook system.")
 	fnAcs(mat resp$,ckey)
 	if ckey=5 or ckey=cancel then goto Xit
 	if ckey=2 or ckey=8 then addloopcode=1 else addloopcode=0

@@ -164,7 +164,7 @@ def library fnHamster(uw$*20,mat lbl$,mat fln,fin,mat p$; mat flTyp$,mat sln,mat
 		fnCmdKey("Edi&t",opt_edit,1)
 		fnCmdKey("&Add",opt_add)
 		fnCmdKey("&Delete",opt_delete)
-		fnCmdKey("E&Xit",opt_cancel,0,1)
+		fnCmdKey("E&xit",opt_cancel,0,1)
 		fnAcs(mat resp$,menu1_opt)
 		prec=val(resp$(1)) conv MENU1
 		if prec=0 and menu1_opt=opt_edit then menu1_opt=opt_add

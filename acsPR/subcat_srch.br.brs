@@ -33,7 +33,7 @@ L280: fnCmdKey("&Add",97,0,0,"Add a new sub-category record." ) : _
 		fnCmdKey("E&dit",98,1,0,"Access the highlited record") : _
 		fnCmdKey("&Delete",96,0,0,"Deletes the highlited record") : _
 		fnCmdKey("&Listing",94,0,0,"Print a list of sub-category records") : _
-		fnCmdKey("E&Xit",5,0,1,"Returns to main menu.")
+		fnCmdKey("E&xit",5,0,1,"Returns to main menu.")
 		fnAcs(mat resp$,ckey) : _
 		! CALL FLEXGRID
 		x$=cde$=lpad$(resp$(1),3)

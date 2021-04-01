@@ -157,7 +157,7 @@ L1400: fnCmdKey("&Add",1,0,0,"Add a new transaction." )
 	fnCmdKey("E&dit",2,1,0,"Edit the highlited record")
 	fnCmdKey("&Delete",4,0,0,"Deletes the highlited record")
 	fnCmdKey("&Refresh",7,0,0,"Updates search grids and combo boxes with new transaction information")
-	fnCmdKey("E&Xit",5,0,1,"Returns to main screen.")
+	fnCmdKey("E&xit",5,0,1,"Returns to main screen.")
 	fnAcs(mat resp$,ckey) ! review_details  grid of transactions
 	if ckey=5 then goto TRANSACTION_ENTRY
 	editrec=val(resp$(1))

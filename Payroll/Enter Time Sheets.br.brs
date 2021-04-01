@@ -258,7 +258,7 @@ ENTER_TIME: !
 	if editmode=1 then fnCmdKey("&Delete Department",10,0,0,"Deletes the hours, etc for this department.")
 	if editmode=0 then fnCmdKey("&Track Hours",8,0,0,"Track hours other than those entered above.")
 	fnCmdKey("&Make Changes Permanent",3,0,0,"Makes any rate changes or other deductions changes permanent in the employee record.")
-	if editmode=0 then fnCmdKey("E&Xit",5,0,1,"Returns to menu")
+	if editmode=0 then fnCmdKey("E&xit",5,0,1,"Returns to menu")
 	if editmode=1 then fnCmdKey("&Finish",7,0,1,"Finished making corrections")
 	fnAcs(mat resp$,ckey) ! ask time
 	if ckey=5 and editmode=0 then goto FINISH
@@ -388,7 +388,7 @@ PROOF_TOTALS: !
 	fnCmdKey("&Listing",2,0,0,"Prints a listing of the entries you have made.")
 	fnCmdKey("&Calculate",3,1,0,"Calculates the pay.")
 	fnCmdKey("&Add",4,0,0,"Add additional time. (If you missed a department, you should delete the original entries on that employee and completely re-enter the employee time.")
-	fnCmdKey("E&Xit",5,0,1,"Exit without calculating")
+	fnCmdKey("E&xit",5,0,1,"Exit without calculating")
 	fnAcs(mat resp$,ckey) ! proof totals
 	pullFromTimeCardSystem=0
 	cor=ckey
@@ -661,7 +661,7 @@ ASK_EMPLOYEE: ! r:
 	fnCmdKey("&Next",1,1,0,"Enter time on this employee" )
 	fnCmdKey("&Search",2,0,0,"Search for employee record")
 	fnCmdKey("&Finish",6,0,1,"Finished entering hours")
-!                     fnCmdKey("E&Xit",5,0,1,"Returns to menu") !   fix kj
+!                     fnCmdKey("E&xit",5,0,1,"Returns to menu") !   fix kj
 	fnAcs(mat resp$,ckey) ! ask employee #
 	eno=ent=val(resp$(1)(1:8))
 	if ckey=1 then

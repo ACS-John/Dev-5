@@ -11,7 +11,7 @@ L80: dim tr$*12,td$*30,jv$(3)*6,resp$(10)*80
 	fncno(cno)
 	if exists("[Q]\glmstr\PRmstr.h[cno]")=0 then goto Xit
 	open #1: "Name=[Q]\GLmstr\PRmstr.h[cno],KFName=[Q]\GLmstr\PRIndex.h[cno],Shr",internal,outIn,keyed
-	open #2: "Name=[Q]\GLmstr\GL_Work_"&env$('acsUserId')&".h[cno],NoShr",internal,outIn,relative
+	open #2: "Name=[Q]\GLmstr\GL_Work_[acsUserId].h[cno],NoShr",internal,outIn,relative
 	if lrec(2)=0 then goto Xit
 	open #3: "Name=[Q]\GLmstr\ACPRCKS.h[cno],Shr",internal,outIn,relative
 READ_ENTRIES: !

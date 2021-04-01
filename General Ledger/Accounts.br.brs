@@ -348,7 +348,7 @@ def fn_transactionGrid(currentOrHistory,gl$)
 	if currentOrHistory=1 then 
 		fnCmdKey("&Edit",2,1,0,"Highlight any record and press Enter or click Edit to change any information.")
 	end if
-	fnCmdKey("E&Xit",5,0,1,"Exits to Main menu")
+	fnCmdKey("E&xit",5,0,1,"Exits to Main menu")
 	fnAcs(mat resp$,ckey)
 	if ckey=5 then goto TransactionGridXit
 	if ckey=2 then edit_mode=1 else edit_mode=0

@@ -40,7 +40,7 @@ def library fnaddreceipt
 	fnCmdKey("&Add",1,0,0,"Add new receipt records") 
 	fnCmdKey("&Edit",2,1,0,"Highlight any record and press Enter or click Edit or press Alt+E to change any existing receipt record.") 
 	fnCmdKey("&Delete",3,0,0,"Highlight any record and press Alt+D or click Delete to remove any existing receipt record.") 
-	fnCmdKey("E&Xit",5,0,1,"Exit to menu")
+	fnCmdKey("E&xit",5,0,1,"Exit to menu")
 	dim resp$(60)*50
 	fnAcs(mat resp$,ckey)
 	add=xedit=0

@@ -27,7 +27,7 @@ ASKDEPARTMENT: !
 	fnCmdKey("&Add",1,0,0,"Enter accrual information on a new department." ) : _
 	fnCmdKey("E&dit",2,1,0,"Change or review then highlighted record") : _
 	fnCmdKey("&Delete",3,0,0,"Deletes the highlited record.") : _
-	fnCmdKey("E&Xit",5,0,1,"Returns to menu")
+	fnCmdKey("E&xit",5,0,1,"Returns to menu")
 	fnAcs(mat resp$,ckey) ! ask department #
 	if ckey=5 then goto Xit
 	dp$=resp$(1)

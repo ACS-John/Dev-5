@@ -3,9 +3,9 @@ def library fnConfirm(cVerb$*64; textAddition$*2048,Confirm_Dont_Ask_Again_Key$*
 	fnConfirm=fn_confirm(cVerb$, textAddition$,Confirm_Dont_Ask_Again_Key$)
 fnend
 def fn_confirm(Verb$*64; textAddition$*2048,Confirm_Dont_Ask_Again_Key$*28,___,returnN,confirmButtonAdd,confirmResponse$)
-	! cVerb$ - something like "confirm" or "cancel" or "delete" or "complete"
+	! Verb$ - something like "confirm" or "cancel" or "delete" or "complete"
 	confirmFkeyPrior=Fkey
-	if cVerb$='delete' then
+	if Verb$='delete' then
 		confirmButtonAdd=mb_button2_default
 	else
 		confirmButtonAdd=mb_button1_default
@@ -13,7 +13,7 @@ def fn_confirm(Verb$*64; textAddition$*2048,Confirm_Dont_Ask_Again_Key$*28,___,r
 
 	dim confirmText$(0)*2048
 	mat confirmText$(0)
-	fnAddOneC(mat confirmText$,'Do you really want to '&lwrC$(cVerb$)&'?')
+	fnAddOneC(mat confirmText$,'Do you really want to '&lwrC$(Verb$)&'?')
 	if textAddition$<>'' then
 		fnAddOneC(mat confirmText$,'')
 		fnAddOneC(mat confirmText$,textAddition$)

@@ -1,5 +1,6 @@
 Time and Date 		Sys	Program(s) and Change(s) Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       
 ______________________	___	____________________________________________________________________________________________________________________________________________________________________________________________________________________________________                                                                    
+9:08 PM 3/27/2021	GL	Fixed Payee File was missing Add Edit buttons on Standard Breakdowns grid
  8:28 03/21/2021	CO	5.75123  
 8:26 AM 3/26/2021	UB	Fixed - Transaction screen was failing on last accounts on file that did not have transactions. 
 11:27 03/21/2021	CO	5.75122   

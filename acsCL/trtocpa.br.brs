@@ -5,13 +5,13 @@
 	on error goto Ertn
  
 	dim dat$*20
-	dim de$*35,ta(2)
+	dim de$*35
 	dim td$*30
 	dim prd(23)
 	dim srgln$(17)*12
 	dim sra(17)
 	dim prgln$(15)*12
-	dim pra(15),r9$*104
+	dim pra(15)
 	dim glwk$*256
 	dim ml$(0)*128
 	dim ty$(3)*20
@@ -58,8 +58,11 @@ MAIN: ! r:
 	read #20,using 'Form POS 1,N 1',rec=1: glb noRec ignore
 	close #20:
 	L400: !
-	if glb=2 then glwk$="[Q]\GLmstr\GL"&d2$&".h[cno]"
-	if glb><2 then glwk$="[Q]\GLmstr\GL_Work_"&env$('acsUserId')&".h[cno]"
+	if glb=2 then 
+		glwk$="[Q]\GLmstr\GL"&d2$&".h[cno]"
+	else
+		glwk$="[Q]\GLmstr\GL_Work_[acsUserId].h[cno]"
+	end if
 	open #trmstr=1: "Name=[Q]\CLmstr\TrMstr.h[cno],KFName=[Q]\CLmstr\TrIdx1.h[cno],Shr",internal,outIn,keyed
 	open #tralloc=2: "Name=[Q]\CLmstr\TrAlloc.h[cno],Version=2,KFName=[Q]\CLmstr\TrAlloc-Idx.h[cno],Shr",internal,input,keyed
 	open #glwk101=3: "Name=[Q]\CLmstr\GLWK101.h[cno],Size=0,RecL=104,Replace",internal,output
@@ -187,14 +190,14 @@ Xit: fnXit
  
 TRY_TO_SEND_TO_GL: ! r:
 	if glb=2 then goto BUCKET
-	execute "Copy [Q]\CLmstr\GLWK101.h[cno]"&' '&"[Q]\GLmstr\GL_Work_"&env$('acsUserId')&".h[cno] -n"
-	execute "Copy [Q]\CLmstr\GLWK201.h[cno]"&' '&"[Q]\GLmstr\GLWK2"&wsid$&".h[cno] -n"
+	fnCopy('[Q]\CLmstr\GLWK101.h[cno]','[Q]\GLmstr\GL_Work_[acsUserId].h[cno]')
+	fnCopy('[Q]\CLmstr\GLWK201.h[cno]','[Q]\GLmstr\GLWK2[wsid].h[cno]')
 	if lr4=0 then goto L1550
 	open #1: "Name=[Q]\GLmstr\PRmstr.h[cno],KFName=[Q]\GLmstr\PRINDEX.h[cno],Shr",internal,outIn,keyed ioerr L1550
 	fnprg("S:\acsGL\PRMerge",2)
 	fnstyp(99)
 	L1550: !
-fnchain("S:\acsGL\acglMrge") ! /r
+fnchain("S:\General Ledger\Merge") ! /r
  
 CONTRA: ! r:
 	t9$="999999999999"

@@ -34,7 +34,7 @@ ASKEMPLOYEE: !
 	fnCmdKey("&Search",6,0,0,"Search for employee burden record")
 	fnCmdKey("&Refresh",7,0,0,"Updates search grids and combo boxes with new employee burden information")
 	fnCmdKey("&Proof List",8,0,0,"Returns to menu")
-	fnCmdKey("E&Xit",5,0,1,"Returns to menu")
+	fnCmdKey("E&xit",5,0,1,"Returns to menu")
 	fnAcs(mat resp$,ckey)
 	if ckey=5 then goto Xit
 	if ckey=8 then gosub PRINT_PROOF: goto ASKEMPLOYEE

@@ -56,7 +56,7 @@ EO_SCHEDULE_GRID: !
 	fnCmdKey("&Edit",2,1,0,"Highlight any record and press Enter or click Edit to change any existing schedule.")
 	fnCmdKey("&Delete",8,0,0,"Highlight any record and click Delete to remove the schedule.")
 ! fnCmdKey("&Print",3,0,0,"Takes you directly to the pr Schedules option")
-	fnCmdKey("E&Xit",5,0,1,"Exits to main menu")
+	fnCmdKey("E&xit",5,0,1,"Exits to main menu")
 	fnAcs(mat resp$,ckey)
 	if ckey=5 then goto Xit
 	add=edit=0

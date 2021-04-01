@@ -174,21 +174,9 @@ XITPAUSE: fnend
 		library 'S:\Core\Start.br': fnH
 		fnH=fnH
 	fnend
-	def library fnMapToVirturalDrive(path_to_map$*256,drive_id$*2)
-		library 'S:\Core\Start.br': fnMapToVirturalDrive
-		fnMapToVirturalDrive=fnMapToVirturalDrive(path_to_map$,drive_id$)
-	fnend
 	def library fnAcsSystemInitialize(; isScreenIOtest)
 		library 'S:\Core\Start.br': fnAcsSystemInitialize
 		fnAcsSystemInitialize=fnAcsSystemInitialize( isScreenIOtest)
-	fnend
-	def library fnrights_test(rt_folder$*256,rt_how_to_fix$*256,folder_name$; additional_text_for_failure$*2048)
-		library 'S:\Core\Start.br': fnrights_test
-		fnrights_test=fnrights_test(rt_folder$,rt_how_to_fix$,folder_name$, additional_text_for_failure$)
-	fnend
-	def library fnSpoolPath$*256(; initialize)
-		library 'S:\Core\Start.br': fnSpoolPath$
-		fnSpoolPath$=fnSpoolPath$(initialize)
 	fnend
 ! /r
 def library fnSpecialFolderPath$*256(folderName$*64)
@@ -265,9 +253,9 @@ def library fnConfirmHard(chVerb$; whatYouAreVerbingGeneral$*20,whatYouAreVerbin
 	fnConfirmHard=fnConfirmHard(chVerb$, whatYouAreVerbingGeneral$,whatYouAreVerbingSpecific$)
 fnend
 
-def library fnConfirmDelete(whatYouAreDeletingGeneral$*20,whatYouAreDeletingSpecific$*60)
+def library fnConfirmDelete(What_You_Deleting$*60; Confirm_Dont_Ask_Again_Key$*28)
 	library 'S:\Core\Confirm.br': fnConfirmDelete
-	fnConfirmDelete=fnConfirmDelete(whatYouAreDeletingGeneral$,whatYouAreDeletingSpecific$)
+	fnConfirmDelete=fnConfirmDelete(What_You_Deleting$,Confirm_Dont_Ask_Again_Key$)
 fnend
 def library fnConfirmDeleteHard(whatYouAreDeletingGeneral$*20,whatYouAreDeletingSpecific$*60)
 	library 'S:\Core\Confirm.br': fnConfirmDeleteHard
@@ -544,21 +532,21 @@ fnend
 		library 'S:\Core\Programs\Update.br': fnAcsInstallationPath$
 		fnAcsInstallationPath$=fnAcsInstallationPath$( longFileName)
 	fnend
-	def library fnqgl(myline,mypos; con,x,use_or_replace,qgllength)
+	def library fnqgl(myline,mypos; container,x,unused,qgllength)
 		library 'S:\Core\ACS_Component.br': fnqgl
-		fnqgl=fnqgl(myline,mypos,con,x,use_or_replace,qgllength)
+		fnqgl=fnqgl(myline,mypos,container,x,unused,qgllength)
 	fnend
-	def library fnqglbig(myline,mypos; con,x,use_or_replace)
+	def library fnqglbig(myline,mypos; container,x,use_or_replace)
 		! library 'S:\Core\ACS_Component.br': fnqglbig
-		! fnqglbig(myline,mypos,con,x,use_or_replace)
+		! fnqglbig(myline,mypos,container,x,use_or_replace)
 		library 'S:\Core\ACS_Component.br': fnqgl
-		fnqglbig=fnqgl(myline,mypos,con,x,use_or_replace,60)
+		fnqglbig=fnqgl(myline,mypos,container,x,use_or_replace,60)
 	fnend
-	def library fnqgl25(myline,mypos; con,x,use_or_replace)
+	def library fnqgl25(myline,mypos; container,x,use_or_replace)
 		! library 'S:\Core\ACS_Component.br': fnqgl25
-		! fnqgl25=fnqgl25(myline,mypos,con,x,use_or_replace)
+		! fnqgl25=fnqgl25(myline,mypos,container,x,use_or_replace)
 		library 'S:\Core\ACS_Component.br': fnqgl
-		fnqgl=fnqgl(myline,mypos,con,x,use_or_replace,25)
+		fnqgl=fnqgl(myline,mypos,container,x,use_or_replace,25)
 	fnend
 	def library fnagl$*12(&x$)
 		library 'S:\Core\fn\agl$.br': fnagl$
@@ -912,9 +900,9 @@ fnend
 		library 'S:\Core\ACS_Component.br': fnClearMenu
 		fnClearMenu=fnClearMenu
 	fnend
-	def library fnAcs(mat resp$,&ckey; startfield,close_on_exit,parent_none,disabled_background)
+	def library fnAcs(mat resp$; &ckey,startfield,close_on_exit,parent_none,disabled_background)
 		library 'S:\Core\ACS_Component.br': fnAcs
-		fnAcs=fnAcs(mat resp$,ckey, startfield,close_on_exit,parent_none,disabled_background) : fnend  ! fnend should be on the same line as fn call so that f12 program pause will work properly
+		fnAcs=fnAcs(mat resp$, ckey,startfield,close_on_exit,parent_none,disabled_background) : fnend  ! fnend should be on the same line as fn call so that f12 program pause will work properly
 	def library fnpic(lyne,ps,hi,wd,picture$*300; x,y)
 		library 'S:\Core\ACS_Component.br': fnpic
 		fnpic=fnpic(lyne,ps,hi,wd,picture$, x,y)
@@ -1475,10 +1463,6 @@ fnend
 	def library fnGlAskFormatPriorCdPeriod(; defaultFormatOption$)
 		library 'S:\acsGL\fnglfs.br': fnGlAskFormatPriorCdPeriod
 		fnGlAskFormatPriorCdPeriod=fnGlAskFormatPriorCdPeriod( defaultFormatOption$)
-	fnend
-	def library fnglmerge
-		library 'S:\acsGL\fnGLmerge.br': fnglmerge
-		fnglmerge=fnglmerge
 	fnend
 	def library fnaccount_search(&x$;fixgrid)
 		library 'S:\acsGL\account_search.br': fnaccount_search

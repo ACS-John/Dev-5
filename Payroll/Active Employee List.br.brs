@@ -85,7 +85,7 @@ ASKFORMAT: ! r:
 	fncombof("EmpStatus",2,30,25,"[Q]\PRmstr\EmpStatus.dat",1,2,3,25,"[Q]\PRmstr\EmpStatus.idx",0,0, "Indicate the code used for terminated employees",fracustinfo,0)
 	resp$(respc+=1)=str$(status)
 	fnCmdKey("&Next",1,1,0,"Proceed with printing." )
-	fnCmdKey("E&Xit",5,0,1,"Returns to menu")
+	fnCmdKey("E&xit",5,0,1,"Returns to menu")
 	fnAcs(mat resp$,ckey) ! ask employee #
 	if ckey=5 then goto Xit
 	namcde$=resp$(1)(1:1)

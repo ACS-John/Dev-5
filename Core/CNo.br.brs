@@ -90,10 +90,10 @@ def library fnpedat$*20(;pedat$*20)
 		fncreg_read('Pay Period Ending Date',pedat$)
 		if pedat$='' then
 			dim pedatLegacyFile$*256
-			if exists(env$('temp')&"\pedat-"&session$&".h[cno]") then
-				pedatLegacyFile$=env$('temp')&"\pedat-"&session$&".h[cno]"
-			else if exists(env$('temp')&"\pedat$-"&session$&".h[cno]") then
-				pedatLegacyFile$=env$('temp')&"\pedat$-"&session$&".h[cno]"
+			if exists("[temp]\pedat-[session].h[cno]") then
+				pedatLegacyFile$="[temp]\pedat-[session].h[cno]"
+			else if exists("[temp]\pedat$-[session].h[cno]") then
+				pedatLegacyFile$="[temp]\pedat$-[session].h[cno]"
 			else
 				goto xLegacyOpenFail
 			end if
@@ -110,33 +110,33 @@ def library fnpedat$*20(;pedat$*20)
 fnend
 def library fnfscode(;fscode)
 	if ~setup then fn_setup
-	fnfscode=fn_CnoLegacyNtoCReg(env$('temp')&"\fscode-"&session$&".dat","Form POS 1,N 9",'Financial Statement Code', fscode)
+	fnfscode=fn_CnoLegacyNtoCReg("[temp]\fscode-[session].dat","Form POS 1,N 9",'Financial Statement Code', fscode)
 fnend
 def library fnpriorcd(;PriorCD)
 	if ~setup then fn_setup
-	fnpriorcd=fn_CnoLegacyNtoCReg(env$('temp')&"\priorcd-"&session$&".dat","Form POS 1,N 9",'PriorCD', PriorCD)
+	fnpriorcd=fn_CnoLegacyNtoCReg("[temp]\priorcd-[session].dat","Form POS 1,N 9",'PriorCD', PriorCD)
 fnend
 def library fnpgnum(;pgnum)
 	if ~setup then fn_setup
-	fnpgnum=fn_CnoLegacyNtoCReg(env$('temp')&"\PgNum-"&session$&".dat","Form POS 1,N 9",'PgNum', pgnum)
+	fnpgnum=fn_CnoLegacyNtoCReg("[temp]\PgNum-[session].dat","Form POS 1,N 9",'PgNum', pgnum)
 fnend
 def library fnrx(;rx)
 	if ~setup then fn_setup
-	fnrx=fn_CnoLegacyNtoCReg(env$('temp')&"\rx-"&session$&".dat","Form POS 1,N 9",'rx', rx)
+	fnrx=fn_CnoLegacyNtoCReg("[temp]\rx-[session].dat","Form POS 1,N 9",'rx', rx)
 fnend
 def library fnstyp(;STyp)
 	if ~setup then fn_setup
-	fnstyp=fn_CnoLegacyNtoCReg(env$('temp')&"\STyp-"&session$&".dat","Form POS 1,N 9",'STyp', STyp)
+	fnstyp=fn_CnoLegacyNtoCReg('[temp]\STyp-[session].dat',"Form POS 1,N 9",'STyp', STyp)
 fnend
 def library fnps(;ps)
 	if ~setup then fn_setup
-	fnps=fn_CnoLegacyNtoCReg(env$('temp')&"\ps-"&session$&".dat","Form POS 1,N 9",'ps', ps)
+	fnps=fn_CnoLegacyNtoCReg("[temp]\ps-[session].dat","Form POS 1,N 9",'ps', ps)
 fnend
 def library fnUseDeptNo
 	if ~setup then fn_setup
 	if env$('cursys')<>"GL" then
 		pr 'needs to read use department number setting some other way because cursys is not GL' : pause
-		! open #tmp=fnH: "Name=[Temp]\gld1-"&session$&".dat,Use,RecL=9",internal,outIn,relative
+		! open #tmp=fnH: "Name=[Temp]\gld1-[session].dat,Use,RecL=9",internal,outIn,relative
 		! read #tmp ,using "Form POS 150, n 1",rec=1: gld1 noRec ignore
 		! close #tmp:
 	end if

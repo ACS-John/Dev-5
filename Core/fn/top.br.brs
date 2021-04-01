@@ -24,8 +24,8 @@ def library fnTop(; prg$*256,cap$*128,force80x24)
 		setenv('Program_Caption',cap$)
 	end if
 	if env$('acsDeveloper')='' then
-		if exists('S:\FileIO.ini') and ~exists('FileIO.ini') then
-			fnCopy('S:\FileIO.ini','FileIO.ini')
+		if exists('S:\Core\FileIO\FileIO.ini') and ~exists('FileIO.ini') then
+			fnCopy('S:\Core\FileIO\FileIO.ini','FileIO.ini')
 		end if
 		if exists('S:\ScreenIO.ini') and ~exists('ScreenIO.ini') then
 				fnCopy('S:\ScreenIO.ini','ScreenIO.ini')

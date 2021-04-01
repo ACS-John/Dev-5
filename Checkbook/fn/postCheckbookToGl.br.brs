@@ -71,7 +71,7 @@ def library fnPostCheckbookToGl(; enablePost)
 	if resp$(6)(1:1)="T" then pr1$="Y" else pr1$="N" ! pr distribution listing
 	if resp$(7)(1:1)="T" then pr2$="Y" else pr2$="N" ! update after fact payroll
 	! gl2=val(resp$(8)) ! GL company to post
-	if pr2$="Y" then let fnprocess(4)
+	if pr2$="Y" then fnprocess(4)
 	if ~enablePost then pr1$="Y"
 	! fnputcno(gl2)
 	!   pr f "13,34,C 12,B,99": "Cancel (Esc)"
@@ -80,7 +80,7 @@ def library fnPostCheckbookToGl(; enablePost)
 	open #trmstr=1: "Name=[Q]\CLmstr\TrMstr.h[cno],KFName=[Q]\CLmstr\TrIdx1.h[cno],Shr",internal,outIn,keyed 
 	open #tralloc=3: "Name=[Q]\CLmstr\TrAlloc.h[cno],KFName=[Q]\CLmstr\tralloc-idx.h[cno],Shr",internal,outIn,keyed 
 	open #bankmstr=4: "Name=[Q]\CLmstr\BankMstr.h[cno],KFName=[Q]\CLmstr\BankIdx1.h[cno],Shr",internal,outIn,keyed 
-	open #work=5: "Name=[Temp]\WORK."&session$&",SIZE=0,RecL=76,Replace",internal,output 
+	open #work=5: "Name=[Temp]\WORK.[session],SIZE=0,RecL=76,Replace",internal,output 
 	if ~fn_check_breakdowns_add_up then goto Xit ! gosub CHECK_BREAKDOWNS
 	gosub GLBucketStuff
 	! Gosub GLCHG
@@ -320,7 +320,7 @@ def library fnPostCheckbookToGl(; enablePost)
 			goto Xit
 		else 
 			! fnputcno(gl2)
-			fnChain("S:\acsGL\ACGLMrge")
+			fnChain("S:\General Ledger\Merge")
 		end if 
 	! /r
 	End1: ! r:
@@ -387,7 +387,7 @@ def library fnPostCheckbookToGl(; enablePost)
 				glwk$="[Q]\GLmstr\GL"&d2$&".h[cno]" ! &str$(gl2)
 				open #glwk=11: "Name="&glwk$&",RecL=104,Use",internal,output 
 			else 
-				glwk$="[Q]\GLmstr\GL_Work_"&env$('acsUserId')&".h[cno]" ! &str$(gl2)
+				glwk$="[Q]\GLmstr\GL_Work_[acsUserId].h[cno]" ! &str$(gl2)
 				open #glwk=11: "Name="&glwk$&",RecL=104,Replace",internal,output 
 			end if 
 		end if
