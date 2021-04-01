@@ -27,8 +27,11 @@ def library fnTop(; prg$*256,cap$*128,force80x24)
 		if exists('S:\Core\FileIO\FileIO.ini') and ~exists('FileIO.ini') then
 			fnCopy('S:\Core\FileIO\FileIO.ini','FileIO.ini')
 		end if
-		if exists('S:\ScreenIO.ini') and ~exists('ScreenIO.ini') then
-				fnCopy('S:\ScreenIO.ini','ScreenIO.ini')
+		if exists('S:\Core\ScreenIO\ScreenIO.ini') and ~exists('ScreenIO.ini') then
+				fnCopy('S:\Core\ScreenIO\ScreenIO.ini','ScreenIO.ini')
+		end if
+		if exists('S:\Core\ScreenIO\sio.lic') and ~exists('sio.lic') then
+				fnCopy('S:\Core\ScreenIO\sio.lic','sio.lic')
 		end if
 	end if
 	if env$('cursys')='CM' then

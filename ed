@@ -1,1 +1,0 @@
-exec 'sy C:\ACS\Dev-5\brEdit.cmd "'&os_filename$(program$)&'"'
