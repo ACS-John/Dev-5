@@ -102,24 +102,24 @@ L940: !
 L1070: if pension$="Y" or pension$="N" then goto L1080 else ce=15: goto ERR1
 L1080: monthyr$=cnvrt$("pic(######)",endingdate)(1:2)&"20"&cnvrt$("pic(######)",endingdate)(5:6)
 	yr=endingdate-(int(endingdate/100)*100)+2000
-!
+
 	gosub SCR2
 	pr newpage
 	win=101
 	message$=""
 	stopable=1: gosub WaitX ! fnWAIT(MESSAGE$,1)
-!
+
 	open #1: "Name=[Q]\GLmstr\RPMSTR.h[cno],KFName=[Q]\GLmstr\RPIndex.h[cno],SHR",internal,input,keyed 
 	open #2: "Name=[Q]\GLmstr\RPTrail.h[cno],SHR",internal,input,relative 
 L1190: open #22: "Name=[Q]\UCReport,RECL=512,eol=crlf,replace",display,output 
-!
+
 	goto BEGINNING_OF_FILE
 	pr newpage
 	msgline$(1)="Insert Diskette"
 	mtype=1
 	if err=4221 then gosub OldMsgBox
 	goto L1190
-!
+
 BEGINNING_OF_FILE: gosub RECRA : gosub RECRE: fnopenprn
 	pr #255,using "form pos 20,cc 40,skip 1,pos 20,cc 40": "Electronic Edit List",cnvrt$("pic(zz/zz/zzzz",endingdate)
 READ_EMPLOYEE: read #1,using L1330: eno,mat em$,ss$,em6,em16,ta eof END1
@@ -145,21 +145,21 @@ L1460: form pos 1,n 8,pos 48,n 2,pos 168,38*pd 5.2,pos 468,pd 3
 ! Gosub RECRE
 	gosub RECRS
 	tw1=tw1+1 ! counter
-	goto READ_EMPLOYEE
-!
+goto READ_EMPLOYEE
+
 RECRA: pr #22,using L1580: "RA",b1,"","98",a$(1),"",a$(2)(1:22),ct$,st$,zip$,"","","","",country$(1:2),a$(1),"",a$(2)(1:22),ct$,st$,zip$,"","","","",country$(1:2),contact$,contactph$,phoneext$,"",email$,"","",""
 L1580: form pos 1,c 2,pic(#########),c 24,c 2,c 57,c 22,c 22,c 22,c 2,c 5,c 4,c 5,c 23,c 15,c 2,c 57,c 22,c 22,c 22,c 2,c 5,c 4,c 5,c 23,c 15,c 2,c 27,c 15,c 5,c 3,c 40,c 3,c 10,c 14
-	return 
-!
+return 
+
 RECRE: pr #22,using L1620: "RE",yr,"",b1,"","0","","",a$(1),"",a$(2)(1:22),ct$,st$,zip$,"","",e$(sr1)(1:9),monthyr$,"",r(sr1)*.01,"",naics$,""
 L1620: form pos 1,c 2,pic(####),c 1,pic(#########),c 9,c 1,c 4,c 9,c 57,c 22,c 22,c 22,c 2,c 5,c 4,c 126,c 9,c 6,c 1,n 5.4,c 1,c 6,c 185
-	return 
-!
+return 
+
 	form pos 1,c 2,pic(#########),c 15,c 15,c 20,c 4,c 22,c 22,c 22,c 2,c 5,c 4,c 5,c 23,c 15,c 2,18*pic(###########),c 22,2*pic(###########),c 56,n 1,c 1,c 1,n 1,c 23,
 	pr #22,using L1670: "2E",ct$,st$,"",zip$,namcde$,typemp$,"","","",""
 L1670: form pos 1,c 2,g 25,g 10,2*g 5,2*g 1,g 2,g 4,g 2,c 71
-	return 
-!
+return 
+
 RECRS: ! STATE RECORD
 	if sr1=0 then goto L1790 ! NO STATE SELECTED
 	if m1=0 then goto L1790 ! NO quarterly wages
@@ -181,19 +181,19 @@ L1790: t1=t1+1: mat t1=t1+w2
 	mat w2=(0)
 	mat w3=(0)
 	mat s2=(0)
-	return 
-!
+return 
+
 RECRF: pr #22,using L1940: "RF"," ",tw1,""
 L1940: form pos 1,c 2,c 5,pic(#########),c 496
-	return 
-!
+return 
+
 END1: ! 
 	pr #255,using "form skip 1,pos 1,c 14,pic(zz,zzz,zzz.##)": "Total wages:",totwage,"Total Taxable:",tottaxable
 	pr #255,using "form pos 1,c 16,pic(zz,zzz,zzz)": "Total employees:",totemployees
 	fncloseprn
 	gosub L2040
 Xit: fnXit
-!
+
 L2040: ! r:
 	close #24: ioerr ignore
 	dim a$*512
@@ -277,7 +277,7 @@ L2560: ! last name first
 L2610: x=pos(first$,",",1): if x>0 then first$(x:x)=""
 	x=pos(last$,",",1): if x>0 then last$(x:x)=""
 ! pr FIRST$,MID$,LAST$
-	return 
+return 
 L2650: ! 
 	if exists("C:\ACS\Local\Settings\No_Print_Newpage.txt") then goto L2730 else pr newpage
 L2730: screen_width=80
@@ -356,8 +356,8 @@ L3230: if mtype=2 then input fields str$(endrow)&",09,Cu 1,AE,N": response$(1)
 	if mtype=3 and cmdkey=21 then response$(1)="Y"
 	if mtype=3 and cmdkey=99 then response$(1)=""
 	if mtype=3 and response$(1)<>"Y" and response$(1)<>"N" and response$(1)<>"" then pr f "24,1,C 7,N": bell$ : goto L3230
-	close #104: ioerr L3360
-L3360: return  ! /r Fnend
+	close #104: ioerr ignore
+return  ! /r Fnend
 WaitX: ! r: def library fnWAIT(&MESSAGE$,STOPABLE)
 ! if stopable=1 will display "Cancel (F5)" button
 ! win = window number
@@ -436,5 +436,6 @@ L4300: h3=m1-h2
 	t1=t1+m1
 	t2=t2+h3
 	t3=t3+h2
-L4340: return ! /r
+	L4340: !
+return ! /r
 include: ertn

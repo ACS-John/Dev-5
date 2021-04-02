@@ -11,6 +11,7 @@ File
 >Payee Type                                         ^ acsGL\payeetype
 Period Ending Dates                                 ^ General Ledger\*
 Enter Transactions                                  ^ General Ledger\*
+Enter Transactions (Legacy)                         ^ General Ledger\*
 >Post Transactions                                  ^ acsGL\GLJCMrge
 >Remove Entries Posted by Mistake                   ^ acsGL\UNPost
 ! removed 2/10/2017 - will anyone notice?    Automatic Processing
