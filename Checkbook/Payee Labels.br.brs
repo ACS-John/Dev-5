@@ -41,7 +41,7 @@ MAIN: ! r:
 	fnLbl(lc+=1,1,"Starting Payee Number:",25,1)
 	! fnTxt(lc,27,8,0,1,'',0,'If you wish to start with a specific payee, enter their number.  Only appllicable to printing "All Payees"')!
 	! rESP$(RESPC+=1)=''
-	fncombof("Payee",lc,27,20,"[Q]\CLmstr\Paymstr.h[cno]",1,8,9,20,"[Q]\CLmstr\Payidx1.h[cno]",1,0, "Select starting payee record for printing")
+	fncombof("Payee",lc,27,20,"[Q]\CLmstr\PayMstr.h[cno]",1,8,9,20,"[Q]\CLmstr\Payidx1.h[cno]",1,0, "Select starting payee record for printing")
 	resp$(resp_payee:=respc+=1)=''
 	fnLbl(lc+=1,1,'.',70,1) ! just so the right side of the comboboxes for checks can be seen
 	fnCmdSet(2)
@@ -86,7 +86,7 @@ ASK_VN: ! r:
 	fnTos
 	respc=0 : mylen=20
 	fnLbl(1,1,"Payee to Print:",mylen,1)
-	fncombof("Payee",1,22,20,"[Q]\CLmstr\Paymstr.h[cno]",1,8,9,20,"[Q]\CLmstr\Payidx1.h[cno]",1,0, 'If you wish to start with a specific payee, enter their number.  Only appllicable to printing "All Payees"')
+	fncombof("Payee",1,22,20,"[Q]\CLmstr\PayMstr.h[cno]",1,8,9,20,"[Q]\CLmstr\Payidx1.h[cno]",1,0, 'If you wish to start with a specific payee, enter their number.  Only appllicable to printing "All Payees"')
 	resp$(respc+=1)=''
 	fnCmdSet(3)
 	fnAcs(mat resp$,ckey)

@@ -1,0 +1,19 @@
+[Q]\GLmstr\PayMstr.h[cno]  ,  TranType_  , 0
+[Q]\GLmstr\PayIdx1.h[cno]  ,  vn
+[Q]\GLmstr\PayIdx2.h[cno]  ,  nam
+recl=276
+===================================================
+vn      	,vn      	,c  8, ! pos=1    aka=vn$      Required=True
+nam     	,nam     	,c 30, ! pos=9    aka=nam$
+ad1     	,ad1     	,c 30, ! pos=39   aka=ad1$
+ad2     	,ad2     	,c 30, ! pos=69   aka=ad2$
+csz     	,csz     	,c 30, ! pos=99   aka=csz$
+unused1 	,unused1 	,c  5, ! pos=129  
+typ     	,typ     	,n  2, ! pos=134  aka=typ
+ss      	,ss      	,c 11, ! pos=136  aka=ss$
+unused2 	,unused2 	,c  6, ! pos=147  
+ph      	,ph      	,c 12, ! pos=153  aka=ph$
+contact 	,contact 	,c 30, ! pos=165  aka=contact$
+email   	,email   	,c 50, ! pos=195  aka=email$
+fax     	,fax     	,c 12, ! pos=245  aka=fax$
+myact   	,myact   	,c 20, ! pos=257  aka=myact$

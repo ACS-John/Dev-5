@@ -1,5 +1,5 @@
-[Q]\CLmstr\PayeeType.dat  ,  TranType_  , 1
-[Q]\CLmstr\PayeeType.Idx  ,  key
+[Q]\GLmstr\PayeeType.dat  ,  TranType_  , 1
+[Q]\GLmstr\PayeeType.Idx  ,  key
 recl=27
 ===================================================
 key     ,    Type         ,  N  2       , !  Pos=1  Required=True  Mask=1030

@@ -14,8 +14,8 @@
 	fnconsole(off=0)
 	fncno(cno,cnam$) : _
 	fndat(dat$)
-	open #payee=1: "Name=[Q]\GLmstr\paymstr.h[cno],KFName=[Q]\GLmstr\PayIdx2.h[cno],Shr",internal,outIn,keyed
-	open #payee2=11: "Name=[Q]\GLmstr\paymstr.h[cno],KFName=[Q]\GLmstr\payidx2.h[cno],Shr",internal,outIn,keyed
+	open #payee=1: "Name=[Q]\GLmstr\PayMstr.h[cno],KFName=[Q]\GLmstr\PayIdx2.h[cno],Shr",internal,outIn,keyed
+	open #payee2=11: "Name=[Q]\GLmstr\PayMstr.h[cno],KFName=[Q]\GLmstr\payidx2.h[cno],Shr",internal,outIn,keyed
 	open #trans=2: "Name=[Q]\GLmstr\GLTR1099.h[cno],KFName=[Q]\GLmstr\gltridx1.h[cno],Shr",internal,outIn,keyed
 	namtab=66-int(len(rtrm$(cnam$))/2)
 	dattab=66-int(len(rtrm$(dat$))/2)

@@ -1,9 +1,9 @@
-[Q]\CLmstr\PayeeType.dat  ,  trans_  , 0
-[Q]\CLmstr\PayeeType.Idx   ,  acct/tdate/tcode
+[Q]\CLmstr\PayeeType.dat   ,  trans_  , 0
+[Q]\CLmstr\PayeeType.Idx   ,  type
 recl=27
 ===================================================
-Type        , Type             , N     2    , !  SPos=1 Mask=Number Required=True
-Description , Description      , C    25    , !  SPos=3 
+type        	, Type          	, N  2 , !  SPos=1 Mask=Number Required=True
+description	, Description  	, C 25 , !  SPos=3 
  
  
  

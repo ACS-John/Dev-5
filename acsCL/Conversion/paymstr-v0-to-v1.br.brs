@@ -9,7 +9,7 @@ def library fnpaymstr_v0_to_v1
 		cap$="Checkbook update Payees from v0 to v1"
 
 		fnStatus('updating payee file.')
-		open #paymstr=fnH: "Name=[Q]\CLmstr\Paymstr.h[cno]",internal,outIn,relative
+		open #paymstr=fnH: "Name=[Q]\CLmstr\PayMstr.h[cno]",internal,outIn,relative
 		if version(paymstr)=1 then
 			msgline$(4)="Paymstr is already version 1"
 			msgline$(5)="press enter to continue" : msgline$(6)=""
@@ -17,7 +17,7 @@ def library fnpaymstr_v0_to_v1
 			goto Xit
 		end if
 		close #paymstr:
-		fnCopy("[Q]\CLmstr\Paymstr.h[cno]","[Q]\CLmstr\Paymstr.h[cno]",736)
+		fnCopy("[Q]\CLmstr\PayMstr.h[cno]","[Q]\CLmstr\PayMstr.h[cno]",736)
 		fnIndex("[Q]\CLmstr\PayMstr.h[cno]","[Q]\CLmstr\PayIdx2.h[cno]","9 30")
 		open #paymstr1=fnH: "Name=[Q]\CLmstr\PayMstr.h[cno],KFName=[Q]\CLmstr\PayIdx1.h[cno]",internal,outIn,keyed
 		open #paymstr2=fnH: "Name=[Q]\CLmstr\PayMstr.h[cno],KFName=[Q]\CLmstr\PayIdx2.h[cno]",internal,outIn,keyed

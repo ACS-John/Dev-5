@@ -9,16 +9,16 @@ def library fnglpayee_v0_to_v1
 
 		fnStatus('updating Payee file format.')
 		open #1: "Name=[Q]\GLmstr\GL1099.h[cno],KFName=[Q]\GLmstr\GL109IDX.h[cno]",internal,outIn,keyed ioerr ignore
-		if ~exists("[Q]\GLmstr\paymstr.h[cno]") then 
-			open #2: "Name=[Q]\GLmstr\paymstr.h[cno],KFName=[Q]\GLmstr\payidx1.h[cno],RecL=276,kps=1,kln=8,replace",internal,outIn,keyed
+		if ~exists("[Q]\GLmstr\PayMstr.h[cno]") then 
+			open #2: "Name=[Q]\GLmstr\PayMstr.h[cno],KFName=[Q]\GLmstr\payidx1.h[cno],RecL=276,kps=1,kln=8,replace",internal,outIn,keyed
 			version(2,1)
 			close #2:
 		end if
-		open #2: "Name=[Q]\GLmstr\paymstr.h[cno]",internal,outIn,relative  ! open #2: "Name=[Q]\GLmstr\paymstr.h[cno],KFName=[Q]\GLmstr\payidx1.h[cno]",internal,outIn,keyed
+		open #2: "Name=[Q]\GLmstr\PayMstr.h[cno]",internal,outIn,relative  ! open #2: "Name=[Q]\GLmstr\PayMstr.h[cno],KFName=[Q]\GLmstr\payidx1.h[cno]",internal,outIn,keyed
 		if rln(2)<>276 then
 			close #2:
-			fnCopy("[Q]\GLmstr\paymstr.h[cno]","[Q]\GLmstr\paymstr.h[cno]",276)
-			open #2: "Name=[Q]\GLmstr\paymstr.h[cno]",internal,outIn,relative  ! open #2: "Name=[Q]\GLmstr\paymstr.h[cno],KFName=[Q]\GLmstr\payidx1.h[cno]",internal,outIn,keyed
+			fnCopy("[Q]\GLmstr\PayMstr.h[cno]","[Q]\GLmstr\PayMstr.h[cno]",276)
+			open #2: "Name=[Q]\GLmstr\PayMstr.h[cno]",internal,outIn,relative  ! open #2: "Name=[Q]\GLmstr\PayMstr.h[cno],KFName=[Q]\GLmstr\payidx1.h[cno]",internal,outIn,keyed
 		end if
 		do
 			read #1,using "form pos 1,c 8,c 35,3*c 20,pd 5.2,n 2,c 11": vn$,nam$,ad1$,ad2$,csz$,ytdp,typ,ss$ eof EOD_GL1099 ioerr EOD_GL1099
@@ -28,8 +28,8 @@ def library fnglpayee_v0_to_v1
 		version(2,1)
 		close #1,free: ioerr ignore
 		close #2: ioerr ignore
-		fnIndex("[Q]\GLmstr\paymstr.h[cno]","[Q]\GLmstr\payidx1.h[cno]","1 8")
-		fnIndex("[Q]\GLmstr\paymstr.h[cno]","[Q]\GLmstr\payidx2.h[cno]","9 38")
+		fnIndex("[Q]\GLmstr\PayMstr.h[cno]","[Q]\GLmstr\payidx1.h[cno]","1 8")
+		fnIndex("[Q]\GLmstr\PayMstr.h[cno]","[Q]\GLmstr\payidx2.h[cno]","9 38")
 		fnIndex("[Q]\GLmstr\payeeglbreakdown.h[cno]","[Q]\GLmstr\payeeglbkdidx.h[cno]","1 8")
 		if ~exists("[Q]\GLmstr\gltr1099.h[cno]") then 
 			fnCopy("S:\General Ledger\mstr\gltr1099.h99999","[Q]\GLmstr\gltr1099.h[cno]")

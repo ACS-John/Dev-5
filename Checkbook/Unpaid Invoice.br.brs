@@ -627,7 +627,7 @@ ai_ADD_UNPAID_INVOICES_TOS: ! r:
 	lc=0 : mylen=18 : mypos=mylen+2
 	frame=1
 	fnLbl(lc+=1,1,"Payee:",mylen,1,0,frame)
-	fncombof("Paymstr",lc,mypos,0,"[Q]\CLmstr\paymstr.h[cno]",1,8,9,30,"[Q]\CLmstr\Payidx1.h[cno]",1,0, "Enter the payee number (Use the 'Add Payee' option to add a new vendor record",frame)
+	fncombof("Paymstr",lc,mypos,0,"[Q]\CLmstr\PayMstr.h[cno]",1,8,9,30,"[Q]\CLmstr\Payidx1.h[cno]",1,0, "Enter the payee number (Use the 'Add Payee' option to add a new vendor record",frame)
 	resp$(1)=vn$
 	fnLbl(lc+=1,1,"Invoice Number:",mylen,1,0,frame)
 	fnTxt(lc,mypos,12,0,0,"",0,"",frame)
