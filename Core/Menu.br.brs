@@ -229,9 +229,9 @@ def fn_main
 			! end if
 
 			setenv('tmp_acs_back_arrow','S:\Core\Icon\Red_X.png')
-			fnreg_close ! allow backups to happen while this screen is open...  i think this will work - added 9/14/2017
+			fnreg_close ! allow backups to happen while this screen is open.
 			dim resp$(32)*255
-			fnAcs(mat resp$,fkey_value,0,0,0)
+			fkey_value=fnAcs(mat resp$)
 			setenv('tmp_acs_back_arrow','')
 			program_selection$=resp$(1)
 			program_selection_id=val(program_selection$(2:pos(program_selection$,']')-1))
@@ -250,8 +250,6 @@ def fn_main
 		end if
 
 		if fkey_value=93 or fkey_value=99 or (fkey_value=98 and lwrc$(menu$)='exit') or env$('ExitNow')='yes' or menu$='Exit and Logout' then
-	!  removed 1/21/2017 -  does not seem necessary - it does it when it is selected       fncursys$(env$('cursys'))
-	!       fn_put_plus(env$('cursys'),mat program_file$,mat program_plus$)
 			fnureg_write('FavoritesOpen',env$('FavoritesOpen'))
 			goto Xit_MAIN
 		else

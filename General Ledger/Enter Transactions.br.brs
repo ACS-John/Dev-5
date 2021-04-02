@@ -3,15 +3,11 @@
 ! r: setup library, dims, constants, fnTop
 	autoLibrary
 	on error goto Ertn
-
 	dim resp$(30)*128
-
-
 	dim prx(19)
 	dim ml$(0)*100
 
-
-
+	gridRowHold$=env$('current_grid_row')
 
 	fnTop(program$)
 	gltyp=7
@@ -40,8 +36,8 @@ fn_clearContras(hMerge)
 post=fn_getPost(hMerge)
 
 ScreenOne: ! r:
-	editMode=0
-	fnTos
+	editMode=recordNumber=0
+	fnTos ! r:
 	colPos=48 : mylen=20 : mypos=colPos+mylen+3 : rc=lc=0
 	fnLbl(lc+=1,colPos,"Type Of Entry:",mylen,1)
 	fnComboF("TransactionType",lc,mypos,20,'S:\Core\Data\GL TransactionType.dat',1,1,2,18,'S:\Core\Data\GL TransactionType.idx',1,0,"You must indicate the type of entry you will be entering.")
@@ -83,32 +79,20 @@ ScreenOne: ! r:
 	fnButton(lc,65,"Clear All",ck_clearAll=52,"Erase entire batch of previously entered transactions",1,10)
 	defaultEdit=defaultAdd=0
 	if count=0 then defaultAdd=1 else defaultEdit=1
-	fnButton(lc,84,"Add [F1]",ck_Add=1,"Erase previous input transactions",1,8,0,0,defaultAdd,0)
-	if gridSelected<>gridProofTotals then
-		fnButton(lc,93,"Edit",ck_Edit=63,"Modify selected transaction",1,8,0,0,defaultEdit,0)
-		fnButton(lc,102,"Delete",ck_deleteOne=67,"Delete selected transaction",1,8)
+	fnButton(lc-2,84,'Add',ck_Add=30,"(Alt+A)  Add a new transaction",1,8,0,0,defaultAdd,0)
+	if gridSelected<>gridProofTotals and count then
+		fnButton(lc,84,"Edit",ck_Edit=63,"Modify selected transaction",1,8,0,0,defaultEdit,0)
+		fnButton(lc,93,"Delete",ck_deleteOne=67,"Delete selected transaction",1,8)
 	end if
-
-	! r: add the grid
-	if gridSelected=gridTransactions then
-		fn_transactionGrid(hMerge,lc+=1,2,10,90)
-	else if gridSelected=gridTransactionsNet then
-		fn_transactionGrid(hMerge,lc+=1,2,10,90, 1)
-	else if gridSelected=gridProofTotals then
-		fn_totalGrid(hAccount,mat kList$,mat kVal,lc+=1,2)
-	end if
-	! /r
+	fn_addOneGrid
 	fnCmdKey("Print Proof Totals",ck_printProofTotals=58)
 	fnCmdKey("Print Proof List",ck_printProofList=54)
 	fnCmdKey("Import Client File",ck_importFile=51,0,0,"Import a Client's ACS Checkbook file.")
-
-	! fnCmdKey("Add",ck_Add=1,defaultAdd,0,"Allows you to enter transactions.")
-	! fnCmdKey("Edit",ck_Edit=63,defaultEdit,0,"Modify selected transaction")
 	fnCmdKey("&Post",ck_post=62,0,0,"Will post this group of entries to the general ledger.")
-	! fnCmdKey("Proof Totals",ck_proofTotals=3,0,0,"Provides proof totals and option to post the entries.")
-	fnCmdKey("&Cancel",5,0,1,"Exits.")
+	fnCmdKey("E&xit",ck_exit=5,0,1,"Exit without Posting - you can always come back and finish later")
+	! /r
 	ckey=fnAcs(mat resp$)
-	if ckey=5 then goto Xit
+	if ckey=ck_exit then goto Xit
 
 	! pOST=1 ! code as unposted once leave this screen
 	! if post=1 and resp$(respc_regularInput)="True" then fn_clearContras(hMerge) ! remove any contra entries created in previous run
@@ -118,9 +102,10 @@ ScreenOne: ! r:
 	key$=bankgl$=fnagl$(resp$(respc_bankGl)) ! GL number
 	contraEntryDate$=resp$(respc_contraDate)
 	contraEntryDateN=val(contraEntryDate$)
-	recordNumber=0
-	if gridSelected<>gridProofTotals then recordNumber=val(resp$(respc_grid))
-	
+	if gridSelected<>gridProofTotals then 
+		recordNumber=val(resp$(respc_grid))
+		previouslySelected=recordNumber
+	end if
 	if (selx=1 or selx=2) and val(bankgl$)=0 then goto S1BankGlFail ! must have GL bank account on receipts or disbursements
 	dim bankname$*40
 	if (selx=1 or selx=2 or selx=4) then
@@ -136,12 +121,15 @@ ScreenOne: ! r:
 	else if ckey=ck_gridTotals then
 		gridSelected=gridProofTotals
 		fnPcReg_write('gridSelected',str$(gridSelected))
+		previouslySelected=0
 	else if ckey=ck_gridTransNet then
 		gridSelected=gridTransactionsNet
 		fnPcReg_write('gridSelected',str$(gridSelected))
+		previouslySelected=0
 	else if ckey=ck_gridTrans then
 		gridSelected=gridTransactions
 		fnPcReg_write('gridSelected',str$(gridSelected))
+		previouslySelected=0
 	else if ckey=ck_importFile then
 		fn_inputClientCheckbookFile
 	else if ckey=ck_clearAll then
@@ -149,15 +137,15 @@ ScreenOne: ! r:
 			fn_eraseAllPreviousInput
 		end if
 	else if ckey=ck_deleteOne then
-		if recordNumber and fnConfirmDelete('entry','Record '&str$(recordNumber)) then
+		if recordNumber then
 			fn_transactionDelete(hMerge,recordNumber)
 		end if
 	else if ckey=ck_printProofList then
-		fn_pr_proof_list(hMerge)
+		fn_prProofList(hMerge)
 	else if ckey=ck_printProofTotals then
-		fn_pr_proof_totals(hAccount,totalDebits,totalCredits,typeofentry$,bankgl$,contraEntryDateN,mat kList$,mat kVal,mat chdr_proof_total$,mat glitem3$)
+		fn_prProofTotals(hAccount,totalDebits,totalCredits,typeofentry$,bankgl$,contraEntryDateN,mat kList$,mat kVal,mat chdr_proof_total$,mat glitem3$)
 	else if ckey=ck_Add then
-		goto ScrMain
+		previouslySelected=fn_transactionAdd(selx,bankGl$,contraEntryDateN)
 	else if ckey=ck_post then
 		if totalDebits<>-totalCredits then
 			mat ml$(3)
@@ -195,14 +183,14 @@ GetAllocationsFromPayee: ! r:  pull allocation breakdown from payee record
 		read #hPayeeGl,using 'Form Pos 1,C 8,c 12,n 6.2,c 30',release: payeekey$,payeegl$,percent,td$ eof L4740
 		if payeekey$<>glkey$ then goto L4740
 		if percent=0 and lrec(hAllocations)=0 then percent=100
-		allocamt=round(transactionamt*(percent*.01),2)
+		allocamt=round(transactionAmt*(percent*.01),2)
 		write #hAllocations,using "form pos 1,c 12,pd 10.2,c 30": payeegl$,allocamt,td$: allocgl$='': totalalloc+=allocamt: allocamt=0
 	loop
 	L4740: !
-	if totalalloc<>transactionamt then
+	if totalalloc<>transactionAmt then
 		read #hAllocations,using "Form pos 13,pd 10.2",rec=lrec(hAllocations): lastallocation noRec ignore
 	else
-		lastallocation+=transactionamt-totalalloc
+		lastallocation+=transactionAmt-totalalloc
 		rewrite #hAllocations,using "Form pos 13,pd 10.2",rec=lrec(hAllocations): lastallocation
 	end if
 	allocamt=0 ! kj  eXTRACT=0
@@ -211,7 +199,7 @@ return ! /r
 def fn_transactionDelete(hMerge,mergeRec; hAllocations)
 	! omit hAllocations to skip processing that file
 	! deletes entire transaction
-	if fnConfirmDelete('entry','entryInsideDel1') then
+	if fnConfirmDelete('Record '&str$(mergeRec),'transDeleteOne') then
 		if hAllocations then
 			restore #hAllocations:
 			do
@@ -223,19 +211,30 @@ def fn_transactionDelete(hMerge,mergeRec; hAllocations)
 		else
 			delete #hMerge,rec=mergeRec: ioerr ignore
 		end if
-		transactionamt=0
+		transactionAmt=0
 		vn$=gl$=tr$=''
 	end if
 fnend
-def fn_transactionGrid(hMerge,row,col,twenty,ninety; _
-	enableNet,___,net,tDate,tAmt,tType,desc$*30)
+
+def fn_addOneGrid
+	if gridSelected=gridTransactions then
+		fn_transactionGrid(hMerge,lc+=1,2,10,90,previouslySelected)
+	else if gridSelected=gridTransactionsNet then
+		fn_transactionGrid(hMerge,lc+=1,2,10,90,previouslySelected, 1)
+	else if gridSelected=gridProofTotals then
+		fn_totalGrid(hAccount,mat kList$,mat kVal,lc+=1,2)
+	end if
+fnend
+def fn_transactionGrid(hMerge,row,col,twenty,ninety,previouslySelected; _
+	enableNet,___,net,tDate,tAmt,tType,desc$*30,colCount,postCode,lineCount)
 	! r: setup
-	dim cmask2$(8)
-	mat cmask2$(8)
+	colCount=10
+	dim cmask2$(0)
+	mat cmask2$(colCount)
 	mat cmask2$=('')
 	
-	dim chdr2$(8)*25
-	mat chdr2$(8)
+	dim chdr2$(0)*25
+	mat chdr2$(colCount)
 	chdr2$(1)='Record '                      : cmask2$(1)='30'
 	chdr2$(2)='Date'
 	chdr2$(3)='Reference'      :     if ~enableNet then cmask2$(2)='3'
@@ -244,13 +243,15 @@ def fn_transactionGrid(hMerge,row,col,twenty,ninety; _
 	chdr2$(6)='Amount'                       :  cmask2$(6)='10'
 	chdr2$(7)='Allocation Description'
 	chdr2$(8)='Type'
-	dim glitem2$(8)*30
-	mat glitem2$(8)
+	chdr2$(9)='PC'
+	chdr2$(10)='Key'
+	dim glitem2$(0)*30
+	mat glitem2$(colCount)
 	! /r
 	fnflexinit1('GlTrans',row,col,twenty,ninety,mat chdr2$,mat cmask2$,1,0,0)
 	restore #hMerge:
 	do
-		read #hMerge,using F_merge: gl$,tDate,tAmt,tType,tr(7),tr$,desc$,vn$,mat jv$,key$ eof TgEoF
+		read #hMerge,using F_merge: gl$,tDate,tAmt,tType,postCode,tr$,desc$,vn$,mat jv$,key$ eof TgEoF
 		if enableNet then
 			if trim$(tr$)<>'' and tr$<>oldtr$ then
 				mat glitem2$=('')
@@ -273,6 +274,14 @@ def fn_transactionGrid(hMerge,row,col,twenty,ninety; _
 		glitem2$(6)=str$(tAmt)
 		glitem2$(7)=desc$
 		glitem2$(8)=fn_transType$(tType)&' ('&str$(tType)&')'
+		if postCode then
+			glitem2$(9)='POSTED'
+		else
+			glitem2$(9)=''
+		end if
+		glitem2$(10)=key$
+		lineCount+=1
+		if glitem2$(1)=str$(previouslySelected) then setenv('current_grid_row',str$(lineCount))
 		fnflexadd1(mat glitem2$)
 		net+=tr(5) ! add net check
 		oldtr$=tr$ ! hold reference numbers
@@ -281,10 +290,10 @@ def fn_transactionGrid(hMerge,row,col,twenty,ninety; _
 	if enableNet then
 		mat glitem2$=('')
 		glitem2$(6)=str$(net) : glitem2$(7)="Net"
+		lineCount+=1
 		fnflexadd1(mat glitem2$)
 	end if
 fnend
-
 def fn_totalGrid(hAccount,mat kList$,mat kVal,lc,ps)
 	! r: setup
 	dim cmask3$(6),chdr_proof_total$(6),glitem3$(6)
@@ -319,17 +328,50 @@ def fn_totalGrid(hAccount,mat kList$,mat kVal,lc,ps)
 	next j
 fnend
 
-def fn_tranactionEdit(recordNumber)
+def fn_transactionAdd(typeOfEntryN,bankGl$,transDate; ___,returnN)
+	mat tr=(0)
+	tr$=td$=vn$=key$=('')
+	mat jv$=('')
+	tr(4)=transDate
+	tr(6)=typeOfEntryN
+	write #hMerge,using fGlWork: mat tr,tr$,td$,vn$,mat jv$,bankGl$
+	recordNumber=lrec(hMerge)
+	returnN=recordNumber
+	
+	fn_clearVar(hAllocations,transactionAmt,td$,tr$,vn$,gl$,totalalloc,gl_retainFieldsDuringAdd$)
+	! response=fn_tranactionEdit(recordNumber)
+	fn_scrMain(editMode)
+	response=ckey
+	
+	if response=6 then ! canceled     response is ckey from fn_scrMain
+		delete #hMerge,rec=recordNumber:
+		returnN=0
+	end if
+	fn_transactionAdd=returnN
+fnend
+def fn_clearVar(&hAllocations,&transactionAmt,&td$,&tr$,&vn$,&gl$,&totalalloc,&gl_retainFieldsDuringAdd$)
+	!  clear entry screen
+	close #hAllocations: ioerr ignore
+	open #hAllocations=fnH: "Name=[Q]\GLmstr\Allocations[acsUserId].h[cno],Version=1,replace,RecL=59",internal,outIn,relative
+	transactionAmt=0
+	if gl_retainFieldsDuringAdd$='False' then
+		td$=''
+	end if
+	tr$=fn_nextTr$(tr$,gl_retainFieldsDuringAdd$)
+	vn$=gl$=''
+	totalalloc=0 
+	! extract=0 kj
+fnend
+def fn_tranactionEdit(recordNumber; ___,returnN)
 		if recordNumber then
-			editMode=1
 			! gosub PREPARE_EDIT_SCREEN
 			! PREPARE_EDIT_SCREEN: ! r:
 			! returns:   totalalloc
 			! requires:  recordNumber (record number of hMerge)
 			!            hMerge
 			!            etc
-			transactionamt=0
 			editMode=1
+			transactionAmt=0
 			gl$=''
 			totalalloc=0
 			read #hMerge,using fGlWork,rec=recordNumber: mat tr,tr$,td$,vn$,mat jv$,key$ noRec PES_XIT ! get basic information from record clicked to find the complete transaction
@@ -342,7 +384,7 @@ def fn_tranactionEdit(recordNumber)
 				read #hMerge,using F_merge: payeegl$,tr(4),tr(5),tr(6),tr(7),tr$,td$,vn$,mat jv$,key$ eof GLALLOCATIONS_EOF
 				if trim$(tr$)<>trim$(holdtr$) then goto GLALLOCATIONS_READ
 				if tr(6)=2 or tr(6)=7 then tr(5)=-tr(5) ! reverse signs on receipts and sales BEFORE DISPLAYING ON CORRECTION SCREEN
-				transactionamt+=tr(5)
+				transactionAmt+=tr(5)
 				vn$=vn$
 				selx=tr(6)
 				if tr(6)=1 then selx=1 ! reg Disbursements
@@ -359,17 +401,20 @@ def fn_tranactionEdit(recordNumber)
 			PES_XIT: !
 			! return  ! /r
 
-			gosub ScrMain
+			fn_scrMain
+			returnN=ckey
 			
 		end if
 	TeFinis: !
 	close #hAllocations,free: ioerr ignore
+	fn_tranactionEdit=returnN
 fnend
-ScrMain: ! r:
+def fn_scrMain(; editMode,typeofentry$,bankGl$,transDate)
 	! pr 'selx=';selx
 	! pr 'editMode=';editMode
 	! pause
-	if selx=4 and ~editMode then goto ScrPayroll
+	ScrMainTop: !
+	if selx=4 and ~editMode then gosub ScrPayroll : goto SmFinis
 	fnTos ! r:
 	mylen=18 : mypos=mylen+3
 	fnLbl(3,1,"Date:",mylen,1)
@@ -384,25 +429,25 @@ ScrMain: ! r:
 	fnLbl(4,36,message$,50,left)
 
 	fnTxt(4,mypos,13,0,1,"10",0,"Enter the net transaction amount. If correcting a transaction, change the allocations and net will be adjusted accordingly.",0 )
-	if selx=3 then resp$(2)='' else resp$(2)=str$(transactionamt)
-	fnLbl(5,1,"Reference #:",mylen,1)
-	fnTxt(5,mypos,12,0,0,'',0,"Enter check number, receipt # or adjusting entry number",0)
+	if selx=3 then resp$(2)='' else resp$(2)=str$(transactionAmt)
+	fnLbl(5,1,"Reference Number:",mylen,1)
+	fnTxt(5,mypos,12,0,0,'',0,"Enter check number, receipt number or adjusting entry number",0)
 	resp$(3)=tr$
 	if selx=2 or selx=3 or selx=5 then
 		fnLbl(6,1,"Description:",mylen,1) ! for receipts
 		fnTxt(6,mypos,30,0,left,'',0,"Brief description of transaction.",0 )
 		resp$(4)=td$
 	else
-		fnLbl(6,1,"Payee #:",mylen,1)
-		if disable_payee=1 then
-			fnTxt(6,mypos,8,0,1,'',1,"Payee field disabled. Click 'Enable Payee' again to enable.",0 )
-			resp$(4)=''
-		else
+		fnLbl(6,1,"Payee Number:",mylen,1)
+		! if disable_payee=1 then
+		! 	fnTxt(6,mypos,8,0,1,'',1,"Payee field disabled. Click 'Enable Payee' again to enable.",0 )
+		! 	resp$(4)=''
+		! else
 			fncombof("Paymstrcomb",6,mypos,35,"[Q]\GLmstr\paymstr.h[cno]",1,8,9,39,"[Q]\GLmstr\payidx1.h[cno]",0,0, "If the payee # is known, the general ledger information can be extracted from that record.",0)
 			resp$(4)=vn$
-		end if
+		! end if
 	end if
-	fnLbl(7,1,"General Ledger #:",mylen,1)
+	fnLbl(7,1,"General Ledger:",mylen,1)
 	fnqgl(7,mypos,0,2)
 	resp$(5)=fnrgl$(gl$)
 	if selx=3 then
@@ -415,9 +460,14 @@ ScrMain: ! r:
 		resp$(6)=''
 	end if
 	seltype=tr(6) : if tr(6)>4 then seltype=tr(6)-2
-	if editMode=1 then typeofentry_selected$=fn_transType$(seltype) else typeofentry_selected$=typeofentry$
-	
-	fnLbl(1,4,"Type of Entry: "&typeofentry_selected$,36,1)
+	if editMode=1 then
+		typeofentry_selected$=fn_transType$(seltype)
+	else
+		typeofentry_selected$=typeofentry$
+	end if
+
+	fnLbl(1,4,typeofentry_selected$,36,1)
+	! fnLbl(1,4,"Type of Entry: "&typeofentry_selected$,36,1)
 	fnLbl(1,38,"Bank Account: "&bankname$,50,1)
 	fnLbl(9,53,"Transaction Breakdown")
 	! r: General Ledger Transaction Breakdown Grid
@@ -457,30 +507,30 @@ ScrMain: ! r:
 	if editMode=1 then
 		fnCmdKey("&Save",ck_save=30,1,0,"Completed making corrections to this transaction.")
 	else
-		fnCmdKey("&Next Transaction",1,1,0,"You are completed with this transaction and ready to move to the next transaction.")
+		fnCmdKey("&Next Transaction",ck_nextTransaction=1,1,0,"You are completed with this transaction and ready to move to the next transaction.")
 	end if
 	! fnCmdKey("more Breakdowns",2,0,0,"More breakdowns to the same transaction.")
 	! fnCmdKey("&Review Transactions",3,0,0,"Prints a list of all transactions entered during the setting and also provides for edit options.")
-	fnCmdKey("&Delete",7,0,0,"Deletes the entire transaction as shown on screen.")
+	fnCmdKey("&Delete",ck_delete=7,0,0,"Deletes the entire transaction as shown on screen.")
 	! fnCmdKey("&Back",6,0,0,"Return to first screen to change transaction types or bank accounts.")
 	! if ~editMode then fnCmdKey("&Finish",ck_finish=9,0,1,'')
-	fnCmdKey("&Cancel",6,0,1,'')
+	fnCmdKey("&Cancel",ck_cancel=6,0,1,'')
 	! /r
 	ckey=fnAcs(mat resp$)
 	allocamt=0
 	message$=''
-	if extract=1 and ckey<>1 then extract=0
-	if (ckey=ck_finish or ckey=3) and sel1=3 and val(resp$(2))<>0 then ckey=1 ! force the last entry to write   ! KJ 50707
-	if ckey=ck_save and sel1=3 and val(resp$(2))<>0 then ckey=1 ! force the last entry to write   ! KJ 50707
+	if extract=1 and ckey<>ck_nextTransaction then extract=0
+	if (ckey=ck_finish or ckey=3) and sel1=3 and val(resp$(2))<>0 then ckey=ck_nextTransaction ! force the last entry to write   ! KJ 50707
+	if ckey=ck_save and sel1=3 and val(resp$(2))<>0 then ckey=ck_nextTransaction ! force the last entry to write   ! KJ 50707
 	if (ckey=ck_finish or ckey=3 or ckey=6) and lrec(hAllocations)>0 and ~editMode then goto SmGlNoTestFinis ! 4430 ! unwritten record on screen
 
-	if ckey=6 then ! Back (Return to first screen to change transaction types or bank accounts.)
-		transactionamt=0
-		un$=tr$=''
+	if ckey=ck_cancel then ! Back (Return to first screen to change transaction types or bank accounts.)
+		transactionAmt=0
+		tr$=''
 		goto SmFinis
 	else
 		tr(4)=val(resp$(1))            ! date
-		transactionamt=val(resp$(2))   	! amount
+		transactionAmt=val(resp$(2))   	! amount
 		tr$=resp$(3)                    	! ref #
 		vn$=vn$=resp$(4)(1:8)          	! payee number
 
@@ -505,24 +555,24 @@ ScrMain: ! r:
 		goto SmFinis
 	! else if ckey=ck_breakdownAdd then
 	! 	pause
-	else if ckey=7 then
+	else if ckey=ck_delete then
 		fn_transactionDelete(hMerge,mergeRec, hAllocations)
-		goto ScrMain
+		goto ScrMainTop
 	else if ckey=16 then
 		if disable_payee=0 then disable_payee=1 else disable_payee=0
-		goto ScrMain
+		goto ScrMainTop
 	else if ckey=15 and ~editMode then
 		extract=1
 		gosub GetAllocationsFromPayee
-		goto ScrMain
+		goto ScrMainTop
 	end if
 
-	if selx=3 and ckey<>ck_save then allocamt=transactionamt ! create an allocation amount automatically on adjustments
-	if allocamt=0 and ckey=1 and lrec(hAllocations)=0 then allocamt=transactionamt ! allows them to press enter if only allocation without haveing to key the amount a second time
+	if selx=3 and ckey<>ck_save then allocamt=transactionAmt ! create an allocation amount automatically on adjustments
+	if allocamt=0 and ckey=ck_nextTransaction and lrec(hAllocations)=0 then allocamt=transactionAmt ! allows them to press enter if only allocation without haveing to key the amount a second time
 
 	! r: GL Number Test
 	if extract=1 then goto SmGlNoTestFinis
-	if ckey=ck_breakdownEdit then goto SmGlNoTestFinis ! don't require gl # on ScrMain screen when editing transaction
+	if ckey=ck_breakdownEdit then goto SmGlNoTestFinis ! don't require gl # when editing transaction
 	if ckey=ck_save and editMode=1 then goto SmGlNoTestFinis ! don't require gl # when editing and take complete
 	if selx=3 and (allocamt=0 or ckey=ck_save) then goto SmGlNoTestFinis ! don't require gl # on adjustments when amount=0 (actually changing from one adjustment to the next)
 	if selx=4 and editMode=1 then goto SmGlNoTestFinis ! never should have an amount on payroll check. (done from another screen and edits all made from allocation screen
@@ -536,7 +586,7 @@ ScrMain: ! r:
 		ml$(2)="on each allocation."
 		ml$(3)="Click OK to enter the general ledger number."
 		fnmsgbox(mat ml$,resp$,'',49)
-		goto ScrMain
+		goto ScrMainTop
 	end if
 	goto SmGlNoTestFinis
 	SmGlNoTestFinis: ! 
@@ -552,13 +602,13 @@ ScrMain: ! r:
 	end if
 	if ckey=17 then
 		fnaddglpayee
-		goto ScrMain
+		goto ScrMainTop
 	else if ckey=ck_breakdownEdit then
 		fn_editAllocation(val(resp$(7)))
-		goto ScrMain
+		goto ScrMainTop
 	else if ckey=19 then
 		fn_editAllocation(val(resp$(7)), 1)
-		goto ScrMain
+		goto ScrMainTop
 	else if ckey=ck_save then
 		goto L4460
 	else if ckey=2 and allocamt<>0 then
@@ -566,16 +616,16 @@ ScrMain: ! r:
 		allocgl$=''
 		totalalloc+=allocamt
 		allocamt=0
-		goto ScrMain
-	else if ckey=1 and allocamt<>0 then
+		goto ScrMainTop
+	else if ckey=ck_nextTransaction and allocamt<>0 then
 		write #hAllocations,using "form pos 1,c 12,pd 10.2,c 30": allocgl$,allocamt,td$
 		allocgl$=''
 		totalalloc+=allocamt
 		allocamt=0
 	end if
-	if ckey=1 and selx <>3 and transactionamt<>totalalloc then message$= "Allocations don't add up!" : goto ScrMain
-	! if ckey=1 and selx=3 and totalalloc <>0 then message$= "Allocations don't add up!": Goto ScrMain
-	if ckey=1 or ckey=2 or (ckey=ck_finish and ~editMode and lrec(hAllocations)>0) then  ! ckey 9 (ck_finish) thing: allow last transaction to be written if take finish
+	if ckey=ck_nextTransaction and selx <>3 and transactionAmt<>totalalloc then message$= "Allocations don't add up!" : goto ScrMainTop
+	! if ckey=ck_nextTransaction and selx=3 and totalalloc <>0 then message$= "Allocations don't add up!": Goto ScrMainTop
+	if ckey=ck_nextTransaction or ckey=2 or (ckey=ck_finish and ~editMode and lrec(hAllocations)>0) then  ! ckey 9 (ck_finish) thing: allow last transaction to be written if take finish
 		L4460: !
 		restore #hAllocations:
 		for j=1 to lrec(hAllocations)
@@ -587,94 +637,37 @@ ScrMain: ! r:
 			fn_transactionSave(hMerge,transadr,mat tr,tr$,td$,vn$,mat jv$,key$)
 		next j
 		L4520: !
-		goto ScrOne
+		goto SmFinis ! ScreenOne
 	else
-		goto ScrMain
+		goto ScrMainTop
 	end if
-	if ckey=ck_finish then 	goto SmFinis
-	if ckey=2 then goto ScrMain
-	! goto CLEAN_MAIN_SCREEN
-	! 
-	! CLEAN_MAIN_SCREEN: !  clear entry screen before returning
-	close #hAllocations: ioerr ignore
-	open #hAllocations=fnH: "Name=[Q]\GLmstr\Allocations[acsUserId].h[cno],Version=1,replace,RecL=59",internal,outIn,relative
-	transactionamt=0
-	if gl_retainFieldsDuringAdd$='False' then
-		td$=''
-	end if
-	tr$=fn_nextTr$(tr$,gl_retainFieldsDuringAdd$)
-	vn$=gl$=''
-	totalalloc=editMode=0 ! extract=0 kj
-	if ckey=6 then
-		transactionamt=0
-		un$=tr$=vn$=''
+	if ckey=ck_finish then 
 		goto SmFinis
+	else if ckey=2 then 
+		goto ScrMainTop
+	else
+		fn_clearVar(hAllocations,transactionAmt,td$,tr$,vn$,gl$,totalalloc,gl_retainFieldsDuringAdd$)
+		if ckey=ck_cancel then ! 6
+			transactionAmt=0
+			tr$=vn$=''
+			goto SmFinis
+		end if
+		goto ScrMainTop
 	end if
-	goto ScrMain
 	SmFinis: !
-return ! /r
-def fn_pr_proof_totals(hAccount,totalDebits,totalCredits, _
-		typeofentry$,bankgl$,contraEntryDateN, _
-		mat kList$,mat kVal,mat chdr_proof_total$,mat glitem3$ _
-		; ___,j,mylen)
-
-	mylen=20
-	for j=1 to 30
-		read #hAccount,using "form pos 87,pd 6.2",key=kList$(j),release: kVal(j,4) nokey PPT_L6240 ! get last balance
-		kVal(j,8)=kVal(j,4)-kVal(j,5)-kVal(j,6)+kVal(j,7) ! new balance when posted
-		PPT_L6240: !
-	next j
-	fnopenprn
-	pr #255: lpad$("Total Debits:",mylen)&' '&cnvrt$("pic(-------,---,---.##)",totalDebits)
-	pr #255: lpad$("Total Credits:",mylen)&' '&cnvrt$("Pic(-------,---,---.##",totalCredits)
-	pr #255: ''
-	pr #255: lpad$("Type of Entry:",mylen)&' '&typeofentry$
-	pr #255: lpad$("Bank Account:",mylen)&' '&fnrgl$(bankgl$)
-	pr #255: lpad$("Process Ending Date:",mylen)&' '&cnvrt$("pic(zz/zz/zz)",contraEntryDateN)
-	pr #255: ''
-	pr #255,using F_PPT_LINE: mat chdr_proof_total$
-	F_PPT_LINE: form pos 1,c 12,5*cr 19
-	mat glitem3$=('')
-	for j=1 to 30
-		if trim$(kList$(j))<>'' then ! skip blanks
-			glitem3$(1)=kList$(j)
-			glitem3$(2)=cnvrt$("Pic(-------,---,---.##)",kVal(j,4)) ! cmask3$(2)=cmask3$(3)=cmask3$(4)=cmask3$(5)="10"
-			glitem3$(3)=cnvrt$("Pic(-------,---,---.##)",-kVal(j,5))
-			glitem3$(4)=cnvrt$("Pic(-------,---,---.##)",kVal(j,6))
-			glitem3$(5)=cnvrt$("Pic(-------,---,---.##)",kVal(j,7))
-			glitem3$(6)=cnvrt$("Pic(-------,---,---.##)",kVal(j,8)) ! cmask3$(6)='10'
-			pr #255,using F_PPT_LINE: mat glitem3$
-		end if
-	next j
-	fncloseprn
-fnend
-def fn_createContraEntries(hMerge,mat kList$,mat kVal,contraEntryDateN; ___,j,tr$*12)
-	restore #hMerge:
-	tr$="999999999999"
-	for j=1 to 30
-		if val(kList$(j))<>0 then
-			if kVal(j,5)<>0 then write #hMerge,using F_merge: kList$(j),contraEntryDateN,-kVal(j,5),2,0,tr$,"Contra Entry",'','','','' ! debits from receipts or sales      ! ,rec=lrec(hMerge)+1
-			if kVal(j,6)<>0 then write #hMerge,using F_merge: kList$(j),contraEntryDateN,-kVal(j,6),1,0,tr$,"Contra Entry",'','','','' ! credits from checks or purchases   ! ,rec=lrec(hMerge)+1
-		end if
-	next j
 fnend
 ScrPayroll: ! r:
-	if selx=0 then selx=4 ! default to payroll
-	pr 'ScrPayroll here' : pause
+	! selx=4 ! this section is only for Payroll type selx is already 4.
+	! pr 'ScrPayroll here' : pause
 	fnTos
-	mylen=18: mypos=mylen+3
+	mylen=18 : mypos=mylen+3
 	fnLbl(3,1,"Date:",mylen,1)
-	fnTxt(3,mypos,8,0,1,"1",0,"Transaction date must always be answered.",0 )
+	fnTxt(3,mypos,8,0,1,"1001",0,"Transaction date is required.",0 )
 	resp$(1)=str$(tr(4))
-	if selx=3 then 
-		fnLbl(4,1,"Amount:",mylen,1) 
-	else 
-		fnLbl(4,1,"Net Amount:",mylen,1)
-	end if
+	fnLbl(4,1,"Net Amount:",mylen,1)
 	fnLbl(4,36,message$,50,left)
-
 	fnTxt(4,mypos,12,0,1,"10",0,"Enter the net transaction amount. If correcting a transaction, change the allocations and net will be adjusted accordingly.",0 )
-	if selx=3 then resp$(2)='' else resp$(2)=str$(transactionamt)
+	resp$(2)=str$(transactionAmt) ! if selx=3 then resp$(2)='' else resp$(2)=str$(transactionAmt)
 	fnLbl(5,1,"Reference:",mylen,1)
 	fnTxt(5,mypos,12,0,0,'',0,"Enter check number.",0)
 	resp$(3)=tr$
@@ -684,11 +677,10 @@ ScrPayroll: ! r:
 	fnLbl(7,1,"General Ledger:",mylen,1)
 	fnqgl(7,mypos,0,2)
 	resp$(5)=fnrgl$(gl$)
-	if selx=3 then fnLbl(7,60,"Net Adj:",mylen,1) else fnLbl(7,60,"Amount:",mylen,1)
-	if selx=3 or selx=4 then disable=1 else disable=0
-	fnTxt(7,70,13,0,1,"10",disable,"Amount to allocated to this general ledger number. Not applicable to adjustments.",0 )
-	if selx=3 then resp$(6)=str$(totalalloc) else resp$(6)=''
-	fnLbl(1,4,"Type of Entry: "&typeofentry$,36,1)
+	fnLbl(7,60,"Amount:",mylen,1) ! if selx=3 then fnLbl(7,60,"Net Adj:",mylen,1) else fnLbl(7,60,"Amount:",mylen,1)
+	fnTxt(7,70,13,0,1,"10",1,"Amount to allocated to this general ledger number.",0 )
+	resp$(6)=''
+	fnLbl(1,4,typeofentry$,36,1)
 	fnLbl(1,38,"Bank Account: "&bankname$,50,1)
 	fnFra(8,1,10,70,"Payroll Breakdown","Enter the check breakdown.")
 	fnLbl(1,1,"Total Wage:",mylen,1,0,1)
@@ -725,43 +717,34 @@ ScrPayroll: ! r:
 	fnLbl(8,30,"EIC:",mylen,1,0,1)
 	fnTxt(8,51,12,0,1,"10",0,"Total Earned Income Credit applied.",1)
 	resp$(24)=str$(prx(19))
-	if selx=1 or selx=6 then
-		fnButton(6,53,"E&xtract",15,"Extracts General Ledger numbers from Payee records",1,8)
-		if disable_payee=1 then payee_button$ ="Enable &Payee" else payee_button$ ="Disable &Payee"
-		fnButton(6,64,payee_button$,16,"Allows you to disable or enable the payee field.",1,12)
-		fnButton(6,79,"&Add Payee",17,"Allows you to add a payee record.",1,10)
-	end if
-	! fnLbl(17,73,'',1,1)
-	! fnLbl(16,1," ")
-	! If editMode=1 Then fnCmdKey("C&hange Acct #",9,0,0,'')
+
 	if editMode=1 then
 		fnCmdKey("&Complete",30,1,0,"Completed making corrections to this transaction.")
 	else
 		fnCmdKey("&Next Transaction",1,1,0,"You are completed with this transaction and ready to move to the next transaction.")
 	end if
-	! fnCmdKey("&Review Transactions",3,0,0,"Prints a list of all transactions entered during the setting and also provides for edit options.")
 	fnCmdKey("&Delete",7,0,0,"Deletes the entire transaction as shown on screen.")
 	fnCmdKey("&Back",6,0,0,"Allows you to return to screen 1 and change transaction types or bank accounts.")
 	fnCmdKey("&Finish",9,0,1,'')
 	ckey=fnAcs(mat resp$)
 	if ckey=9 then
-		goto ScreenOne
+		goto ScrPayrollXit
 	else if ckey=6 then
-		transactionamt=0
+		transactionAmt=0
 		mat prx=(0)
 		tr$=''
 		vn$=''
-		goto ScreenOne
+		goto ScrPayrollXit
 	! else if ckey=3 then
-	! 	gosub ScrTransactionsCorrections : goto ScrMain
+	! 	gosub ScrTransactionsCorrections : goto ScrMainTop
 	end if
 	tr(4)=val(resp$(1)) ! date
-	tr(5)=transactionamt=val(resp$(2)) ! amount
+	tr(5)=transactionAmt=val(resp$(2)) ! amount
 	tr$=resp$(3) ! ref #
 	prx(1)=val(resp$(4)(1:4)): vn$=resp$(4)(1:4) ! employee number
 	td$=resp$(4)(5:30) ! transaction description = employee name
-	dim empname$*30
-	empname$=td$
+	dim empName$*30
+	empName$=td$
 	gl$=fnagl$(resp$(5))
 	for j=2 to 19
 		prx(j)=val(resp$(j+5))
@@ -769,27 +752,34 @@ ScrPayroll: ! r:
 	wh=0
 	for j=1 to 19
 		if j>2 and j<7 then wh+=prx(j)
-		if j<7 or j>16 then goto L7300
-		if dedcode(j-6)=2 then wh-=prx(j) else wh+=prx(j)
+		if j<7 or j>16 then 
+			goto L7300
+		else
+			if dedcode(j-6)=2 then wh-=prx(j) else wh+=prx(j)
+		end if
 		L7300: !
 		if j=17 then wh+=prx(j)
 		if j=19 then wh-=prx(j)
 	next j
 	if tr(5)=prx(2)-wh then 
-		gosub WRITE_PAYROLL_TRANS
-		goto ScrMain
+		gosub WritePayrollTrans
+		goto ScrPayrollXit
 	end if
 	mat ml$(3)
 	ml$(1)="Total wages less deductions do not equal the net check!"
-	ml$(2)=" Net entered:" &ltrm$(cnvrt$("PIC($$$$,$$$.##CR)",transactionamt))&"   Calculated net: "&ltrm$(cnvrt$("PIC($$$$,$$$.##CR)",prx(2)-wh))
+	ml$(2)=" Net entered:" &ltrm$(cnvrt$("PIC($$$$,$$$.##CR)",transactionAmt))&"   Calculated net: "&ltrm$(cnvrt$("PIC($$$$,$$$.##CR)",prx(2)-wh))
 	ml$(3)="Click ok to return to the entry screen."
 	fnmsgbox(mat ml$,resp$,'',49)
-goto ScrPayroll ! /r
-WRITE_PAYROLL_TRANS: ! r:
+	goto ScrPayroll
+	ScrPayrollXit: !
+return
+
+ ! /r
+WritePayrollTrans: ! r:
 	tr(6)=4 ! payroll transaction type  (was converted back to 1 in old system)
 	for j=2 to 19
 		jv$(2)=str$(j-1) ! carry breakdown code for posting employee record
-		if j=2 then allocgl$=gl$ : td$="Gross Pay-"&empname$(1:18)
+		if j=2 then allocgl$=gl$ : td$="Gross Pay-"&empName$(1:18)
 		if j=3 then td$="Federal Withholdings"
 		if j=4 then td$="FICA Withholdings"
 		if j=5 then td$="State Withholdings"
@@ -817,7 +807,7 @@ WRITE_PAYROLL_TRANS: ! r:
 			write #hMerge,using F_merge: allocgl$,tr(4),prx(j),tr(6),tr(7),tr$,td$,vn$,mat jv$,key$ ! gross wage
 		end if
 	next j
-	transactionamt=0
+	transactionAmt=0
 	mat prx=(0)
 	vn$=''
 	tr$=fn_nextTr$(tr$,gl_retainFieldsDuringAdd$)
@@ -876,11 +866,11 @@ def fn_editAllocation(editrecord; editall,___,ckey,mylen,mypos)
 			end if
 			if ckey=6 then delete #hAllocations,rec=editrecord:
 			delete #hMerge,rec=transadr: ioerr ignore
-			transactionamt+=-holdallocation
+			transactionAmt+=-holdallocation
 		else
 			allocgl$=fnagl$(resp$(2))
 			allocation=val(resp$(1))
-			transactionamt+=allocation-holdallocation ! update net amount of transaction
+			transactionAmt+=allocation-holdallocation ! update net amount of transaction
 			td$=resp$(3)
 			rewrite #hAllocations,using "Form pos 1,c 12,pd 10.2,c 30",rec=editrecord: allocgl$,allocation,td$
 			totalalloc+=allocation-holdallocation
@@ -892,7 +882,42 @@ def fn_editAllocation(editrecord; editall,___,ckey,mylen,mypos)
 	fn_editAllocation=ckey
 fnend
 
-def fn_pr_proof_list(hMerge; ___,holdtr$,tr$)
+def fn_prProofTotals(hAccount,totalDebits,totalCredits, _
+		typeofentry$,bankgl$,contraEntryDateN, _
+		mat kList$,mat kVal,mat chdr_proof_total$,mat glitem3$ _
+		; ___,j,mylen)
+
+	mylen=20
+	for j=1 to 30
+		read #hAccount,using "form pos 87,pd 6.2",key=kList$(j),release: kVal(j,4) nokey PPT_L6240 ! get last balance
+		kVal(j,8)=kVal(j,4)-kVal(j,5)-kVal(j,6)+kVal(j,7) ! new balance when posted
+		PPT_L6240: !
+	next j
+	fnopenprn
+	pr #255: lpad$("Total Debits:",mylen)&' '&cnvrt$("pic(-------,---,---.##)",totalDebits)
+	pr #255: lpad$("Total Credits:",mylen)&' '&cnvrt$("Pic(-------,---,---.##",totalCredits)
+	pr #255: ''
+	pr #255: lpad$("Type of Entry:",mylen)&' '&typeofentry$
+	pr #255: lpad$("Bank Account:",mylen)&' '&fnrgl$(bankgl$)
+	pr #255: lpad$("Process Ending Date:",mylen)&' '&cnvrt$("pic(zz/zz/zz)",contraEntryDateN)
+	pr #255: ''
+	pr #255,using F_PPT_LINE: mat chdr_proof_total$
+	F_PPT_LINE: form pos 1,c 12,5*cr 19
+	mat glitem3$=('')
+	for j=1 to 30
+		if trim$(kList$(j))<>'' then ! skip blanks
+			glitem3$(1)=kList$(j)
+			glitem3$(2)=cnvrt$("Pic(-------,---,---.##)",kVal(j,4)) ! cmask3$(2)=cmask3$(3)=cmask3$(4)=cmask3$(5)="10"
+			glitem3$(3)=cnvrt$("Pic(-------,---,---.##)",-kVal(j,5))
+			glitem3$(4)=cnvrt$("Pic(-------,---,---.##)",kVal(j,6))
+			glitem3$(5)=cnvrt$("Pic(-------,---,---.##)",kVal(j,7))
+			glitem3$(6)=cnvrt$("Pic(-------,---,---.##)",kVal(j,8)) ! cmask3$(6)='10'
+			pr #255,using F_PPT_LINE: mat glitem3$
+		end if
+	next j
+	fncloseprn
+fnend
+def fn_prProofList(hMerge; ___,holdtr$,tr$)
 	fnopenprn
 	gosub PrProofListHeader
 	holdtr$=tr$=''
@@ -1055,7 +1080,7 @@ ScrPost: ! r:
 	if resp$(2)="True" then fnprocess(1) else fnprocess(0)
 	if resp$(4)="True" then fnprocess(4) ! post both
 	if resp$(1)="True" then goto DoMerge
-	if resp$(3)="True" then fnchain("S:\acsGL\PRMerge")
+	if resp$(3)="True" then goto DoPrMerge
 
 	open #h_process=fnH: "Name=[Q]\GLmstr\Process.h[cno],RecL=128,Use",internal,outIn,relative
 	if lrec(h_process)=0 then write #h_process,using "form pos 1,n 1": 0
@@ -1070,10 +1095,30 @@ ScrPost: ! r:
 	close #h_process:
 
 	if resp$(4)="True" then goto DoMerge ! post both
-	if resp$(2)="True" then fnchain("S:\acsGL\autoproc")
+	if resp$(2)="True" then goto DoAutoProc
 goto Xit ! /r
-Xit: fnXit
-DoMerge: fnchain("S:\General Ledger\Merge")
+def fn_createContraEntries(hMerge,mat kList$,mat kVal,contraEntryDateN; ___,j,tr$*12)
+	restore #hMerge:
+	tr$="999999999999"
+	for j=1 to 30
+		if val(kList$(j))<>0 then
+			if kVal(j,5)<>0 then write #hMerge,using F_merge: kList$(j),contraEntryDateN,-kVal(j,5),2,0,tr$,"Contra Entry",'','','','' ! debits from receipts or sales      ! ,rec=lrec(hMerge)+1
+			if kVal(j,6)<>0 then write #hMerge,using F_merge: kList$(j),contraEntryDateN,-kVal(j,6),1,0,tr$,"Contra Entry",'','','','' ! credits from checks or purchases   ! ,rec=lrec(hMerge)+1
+		end if
+	next j
+fnend
+Xit: ! r:
+	setenv('current_grid_row',gridRowHold$)
+fnXit ! /r
+DoMerge: ! r:
+	setenv('current_grid_row',gridRowHold$)
+fnchain("S:\General Ledger\Merge") ! /r
+DoPrMerge: ! r:
+	setenv('current_grid_row',gridRowHold$)
+fnchain("S:\acsGL\PRMerge") ! /r
+DoAutoProc: ! r:
+	setenv('current_grid_row',gridRowHold$)
+fnchain("S:\acsGL\autoproc") ! /r
 def fn_transType$(key; ___,hTt,which,return$*18)
 	if ~setupTransTypeC then
 		setupTransTypeC=1
