@@ -31,7 +31,6 @@
 ! /r
 fn_openFiles
 
-
 fn_clearContras(hMerge)
 post=fn_getPost(hMerge)
 
@@ -443,7 +442,7 @@ def fn_scrMain(; editMode,typeofentry$,bankGl$,transDate)
 		! 	fnTxt(6,mypos,8,0,1,'',1,"Payee field disabled. Click 'Enable Payee' again to enable.",0 )
 		! 	resp$(4)=''
 		! else
-			fncombof("Paymstrcomb",6,mypos,35,"[Q]\GLmstr\paymstr.h[cno]",1,8,9,39,"[Q]\GLmstr\payidx1.h[cno]",0,0, "If the payee # is known, the general ledger information can be extracted from that record.",0)
+			fncombof("Paymstrcomb",6,mypos,35,"[Q]\GLmstr\PayMstr.h[cno]",1,8,9,39,"[Q]\GLmstr\payidx1.h[cno]",0,0, "If the payee # is known, the general ledger information can be extracted from that record.",0)
 			resp$(4)=vn$
 		! end if
 	end if

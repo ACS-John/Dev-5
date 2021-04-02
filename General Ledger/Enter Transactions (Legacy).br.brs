@@ -171,7 +171,7 @@ ERASE_PREVIOUS_INPUT: ! r:
 		fnCopy(dv$&"GLWK201.h[cno]","[Q]\GLmstr\GLWK2"&wsid$&".h[cno]")
 		open #3: "Name=[Q]\GLmstr\GLWK2"&wsid$&".h[cno]",internal,outIn,relative
 		open #h_gl_work:=2: "Name=[Q]\GLmstr\GL_Work_"&env$('acsUserId')&".h[cno]",internal,outIn,relative
-		open #9: "Name="&dv$&"PAYMSTR.h[cno],KFName="&dv$&"PAYIDX1.h[cno]",internal,input,keyed ioerr ignore
+		open #9: "Name="&dv$&"PayMstr.h[cno],KFName="&dv$&"PAYIDX1.h[cno]",internal,input,keyed ioerr ignore
 	else
 		open #3: "Name=[Q]\GLmstr\GLWK2"&wsid$&".h[cno],size=0,RecL=110,Replace",internal,outIn,relative
 		open #h_gl_work:=2: "Name=[Q]\GLmstr\GL_Work_"&env$('acsUserId')&".h[cno],SIZE=0,RecL=104,Replace",internal,outIn,relative
@@ -294,7 +294,7 @@ MAIN: ! r:
 			fnTxt(6,mypos,8,0,right,"",1,"Payee field disabled. Click 'Enable Payee' again to enable.",0 )
 			resp$(4)=""
 		else
-			fncombof("Paymstrcomb",6,mypos,35,"[Q]\GLmstr\paymstr.h[cno]",1,8,9,39,"[Q]\GLmstr\payidx1.h[cno]",0,pas, "If the payee # is known, the general ledger information can be extracted from that record.",0)
+			fncombof("Paymstrcomb",6,mypos,35,"[Q]\GLmstr\PayMstr.h[cno]",1,8,9,39,"[Q]\GLmstr\payidx1.h[cno]",0,pas, "If the payee # is known, the general ledger information can be extracted from that record.",0)
 			resp$(4)=vn$
 		end if
 	end if

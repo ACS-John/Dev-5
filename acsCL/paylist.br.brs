@@ -12,8 +12,8 @@
 	fnTop(program$,cap$="Payee Listing")
 	fndat(dat$)
 	fncno(cno,cnam$)
-	open #1: "Name=[Q]\CLmstr\PAYMSTR.h[cno],KFName=[Q]\CLmstr\PAYIDX1.h[cno],Shr",internal,outIn,keyed
-	open #2: "Name=[Q]\CLmstr\PAYMSTR.h[cno],KFName=[Q]\CLmstr\PAYIDX2.h[cno],Shr",internal,outIn,keyed
+	open #1: "Name=[Q]\CLmstr\PayMstr.h[cno],KFName=[Q]\CLmstr\PAYIDX1.h[cno],Shr",internal,outIn,keyed
+	open #2: "Name=[Q]\CLmstr\PayMstr.h[cno],KFName=[Q]\CLmstr\PAYIDX2.h[cno],Shr",internal,outIn,keyed
 	open #trmstr2=31: "Name=[Q]\CLmstr\TRMSTR.h[cno],KFName=[Q]\CLmstr\TRIDX2.h[cno],Shr",internal,outIn,keyed
 	open #payeegl=3: "Name=[Q]\CLmstr\payeeGLBreakdown.h[cno],KFName=[Q]\CLmstr\Payeeglbkdidx.h[cno],Shr",internal,outIn,keyed
 	pr newpage

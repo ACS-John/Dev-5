@@ -87,7 +87,9 @@ def fn_acsSystemInitialize(; syInitMode)
 		exe "load S:\Core\fn\windowsStart.br,Resident"
 		exe 'load "S:\Core\FileIO\fileio.br",Resident'
 		!  maybe but not yet ...     exe "load S:\Core\Client.br,resident"
-		if env$('acsEnableComplier')='Yes' and env$('BR_MODEL')<>'CLIENT/SERVER' and ~syInitMode then fncheckcompiled ! sets the current directory to "S:" if it is not already
+		if env$('acsEnableComplier')='Yes' and env$('BR_MODEL')<>'CLIENT/SERVER' and ~syInitMode then 
+			fncheckcompiled ! sets the current directory to "S:" if it is not already
+		end if
 		if env$('acsEnableComplier')='Yes' and env$('BR_MODEL')<>'CLIENT/SERVER' then fn_updateVersionForInno
 		if env$('BR_MODEL')='CLIENT/SERVER' then
 			! exe 'config editor'   !  editor setting removed from brconfig.sys - not necessary
@@ -149,11 +151,11 @@ def fn_acsSystemInitialize(; syInitMode)
 				fnmakesurepathexists(workingDir$&'\')
 				exe 'CD '&workingDir$(1:2)
 				exe 'CD "'&workingDir$(3:len(workingDir$))&'"'
-				if exists('S:\Core\ScreenIO\ScreenIO.ini') then
-					fnCopy('S:\Core\ScreenIO\ScreenIO.ini','screenio.ini')   ! note that destination screenio.ini must be all lowercase as it is case sensitive on some systems
+				if exists('S:\ScreenIO.ini') then
+					fnCopy('S:\ScreenIO.ini','screenio.ini')   ! note that destination screenio.ini must be all lowercase as it is case sensitive on some systems
 				end if
-				if exists('S:\Core\ScreenIO\sio.lic') and ~exists('sio.lic') then
-					fnCopy('S:\Core\ScreenIO\sio.lic','sio.lic')
+				if exists('S:\sio.lic') and ~exists('sio.lic') then
+					fnCopy('S:\sio.lic','sio.lic')
 				end if
 				fn_CopySfileIoIniToFileIoIni
 			else
@@ -720,9 +722,9 @@ retry ! /r
 def fn_CopySfileIoIniToFileIoIni
 	! note that destination fileio.ini must be all lowercase as it is case sensitive on some systems
 	if env$('acsDeveloper')='' then
-		fnCopy('S:\Core\FileIO\FileIO.ini','fileio.ini')
+		fnCopy('S:\FileIO.ini','fileio.ini')
 	else
-		open #hIn_fileIoIni=fn_h: 'name=S:\Core\FileIO\fileio.ini',d,i ioerr RetryAFewTimes
+		open #hIn_fileIoIni=fn_h: 'name=S:\FileIO.ini',d,i ioerr RetryAFewTimes
 		open #hOut_FileIoIni=fn_h: 'name=fileio.ini,recl=256,replace',d,o ioerr RetryAFewTimes
 		dim line$*256
 		do

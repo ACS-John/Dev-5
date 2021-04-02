@@ -230,7 +230,7 @@ MENU4: ! r: (Reprint Options)
 	fncomboa("ckprt-cmb2",1,40,mat item4$,tt$)
 	resp$(respc+=1)=item4$(1)
 	fnLbl(3,1,"Beginning payee number:",38)
-	fncombof("Paymstr",3,10,30,"[Q]\CLmstr\paymstr.h[cno]",1,8,9,30,"[Q]\CLmstr\Payidx1.h[cno]",0,pas, "Enter the beginning payee number if you wish to only reprint part of the checks")
+	fncombof("Paymstr",3,10,30,"[Q]\CLmstr\PayMstr.h[cno]",1,8,9,30,"[Q]\CLmstr\Payidx1.h[cno]",0,pas, "Enter the beginning payee number if you wish to only reprint part of the checks")
 	resp$(respc+=1)=holdpayee$
 	fnCmdSet(2)
 	fnAcs(mat resp$,ckey)
@@ -442,7 +442,7 @@ def fn_scr_check_entry
 	fnTxt(3,67,12,0,1,"10",0,"",1)
 	resp$(respc+=1)=tr$(3)
 	fnLbl(5,1,"Payee:",8,1,0,1)
-	fncombof("Paymstr",5,10,30,"[Q]\CLmstr\paymstr.h[cno]",1,8,9,30,"[Q]\CLmstr\Payidx1.h[cno]",0,pas, "Enter the payee number or simply enter the payee name if no vendor record exits",1)
+	fncombof("Paymstr",5,10,30,"[Q]\CLmstr\PayMstr.h[cno]",1,8,9,30,"[Q]\CLmstr\Payidx1.h[cno]",0,pas, "Enter the payee number or simply enter the payee name if no vendor record exits",1)
 	resp$(respc+=1)=holdpayee$
 	fnFra(9,1,12,96,"Breakdown Information"," ")
 	fnLbl(1,1,"General Ledger",30,0,0,2)
