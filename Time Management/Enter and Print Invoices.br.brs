@@ -2,27 +2,33 @@
 	autoLibrary
 	on error goto Ertn
 	fnTop(program$)
-	dim fl1$(8)
-	dim io1$(60)
-	
-	dim xinp(3)
-	dim invoiceNumber$*12,a1$*30
+
+	dim invoiceNumber$*12
+
 	dim pt(4)
 	dim fl2$(8)
-	
+
 	dim ot2$(4)
 	dim nam$*25
 	dim bk$(20)*30
-	dim cde$(30)*6,ct(30),sc(30)
+	dim cde$(30)*6
+	dim ct(30)
+	dim sc(30)
 	dim id$(30)*128
-	dim da(30),gl$(30)*12,gl(3)
-	dim billto$(3)*30,cdk$*6,des$*60,bc$(3)*18
+	dim da(30)
+	dim gl$(30)*12
+	dim gl(3)
+	dim billto$(3)*30
+	dim cdk$*6
+	dim des$*60
+	dim bc$(3)*18
 	bc$(1)="PARTIAL BILL"
 	bc$(2)="FINAL BILL"
 	bc$(3)="WRITE OFF"
- 
+
 	fncreg_read('Last Invoice Number',tmp$) : iv1=val(tmp$)
- 
+
+	dim fl1$(8)
 	fl1$(5)="1,10,c 60,h,n"
 	fl1$(6)="2,10,c 60,h,n"
 	fl1$(7)="9,1,c 80,h,n"
@@ -31,7 +37,8 @@
 	fl2$(6)="14,10,c 60,h,n"
 	fl2$(7)="15,10,c 60,h,n"
 	fl2$(8)="24,2,c 60,h,n"
-	
+
+	dim io1$(60)
 	io1$(1)="4,25,N 5,UE,N"
 	io1$(2)="5,25,N 1,UE,N"
 	io1$(3)="6,25,N 6,UE,N"
@@ -48,11 +55,6 @@
 		ot2$(j)=str$(j+3)&",25,n 10.2,ut,n"
 		fl2$(j)=fl1$(j)
 	next j
-	dim scr1$(4)
-	scr1$(1)="Client"
-	scr1$(2)="Billing Code"
-	scr1$(3)="Date"
-	scr1$(4)="Invoice"
 	enableEbilling=fnClient_has('EM')
 	open #1: "Name=S:\Core\Data\acsllc\CLmstr.h[cno],KFName=S:\Core\Data\acsllc\CLIndex.h[cno],Shr",internal,input,keyed
 	open #32: "Name=S:\Core\Data\acsllc\CLmstr.h[cno],KFName=S:\Core\Data\acsllc\CLIndx2.h[cno],Shr",internal,input,keyed
@@ -64,6 +66,7 @@ REGULAR_ENTRY: ! r:
 	fnopenprn
 	ScreenEntry: !
 	L950: !
+	dim xinp(3)
 	inp3=xinp(3)
 	mat xinp=(0)
 	xinp(3)=inp3
@@ -81,6 +84,12 @@ REGULAR_ENTRY: ! r:
 	scrid$(2)="Enter CLIENT # as 0 when completed."
 	scrid$(3)="-Code- ---------Invoice Descriptions-------------------------  --Amount-- CT SC"
 	scrid$(4)="  Press F1 when completed with this screen"
+
+	dim scr1$(4)
+	scr1$(1)="Client"
+	scr1$(2)="Billing Code"
+	scr1$(3)="Date"
+	scr1$(4)="Invoice"
 
 	pr f mat fl1$: mat scr1$,mat scrid$
 	pr f "24,2,Cc 70,R,N": "[F1] Continue   [F5] Stop"
@@ -118,6 +127,7 @@ REGULAR_ENTRY: ! r:
 	if cmdkey=1 or xinp(1)=0 then goto L1710
 	if ce><1 then goto L1370
 	k$=lpad$(str$(xinp(1)),5)
+	dim a1$*30
 	read #1,using 'form pos 6,c 30',key=k$: a1$ nokey ERR1
 	pr f "4,35,C 40,H,N": a1$
 	goto L1200
@@ -204,7 +214,7 @@ REGULAR_ENTRY: ! r:
 		pt(4)=pt(4)-sc(j)
 	next j
 goto L1080 ! /r
- 
+
 ScreenFinal: ! r:
 	pr newpage
 	pr f "2,10,c 60,h,n" :"TIME MANAGEMENT INPUT PROOF TOTALS"
@@ -279,15 +289,15 @@ ScreenPrintInvoices: ! r:
 	do
 		read #hTmpInvoice,using F_TMWK2: mat xinp,invoiceNumber$,mat cde$,mat id$,mat da,mat ct,mat sc,mat gl$ eof PRI_EOF
 		! xinp(1) = client id
+		! xinp(3) = invoice date
 		if xinp(1) then
 			k$=lpad$(str$(xinp(1)),5)
 			read #1,using 'form pos 6,3*c 30',key=k$: mat billto$
 			fnInvoiceAdd(k$,mat billto$,invoiceNumber$,xinp(3),mat id$,mat da,0)
 		end if
-	loop 
+	loop
 	PRI_EOF: !
 	fnInvoiceClose(xinp(3), 'Enter and Print')
-	L2870: !
 return ! /r
 Xit: fnXit
 include: ertn
