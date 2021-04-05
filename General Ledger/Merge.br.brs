@@ -32,7 +32,7 @@ if ~exists("[Q]\GLmstr\bankrec.h[cno]") then
 end if
 open #hBankRec=fnH: "Name=[Q]\GLmstr\BankRec.h[cno],KFName=[Q]\GLmstr\BankRec-idx.h[cno],Shr",internal,outIn,keyed
 open #hTr1099=fnH: "Name=[Q]\GLmstr\GLTR1099.h[cno],KFName=[Q]\GLmstr\gltrIdx1.h[cno],Shr",internal,outIn,keyed
-L360: !
+ReadMerge: !
 dim t$*12
 dim l$*12
 dim p$*30
@@ -41,18 +41,18 @@ dim xn(2)
 read #hMerge,using "Form POS 1,C 12,N 6,PD 6.2,N 2,N 2,C 12,C 30,C 8,POS 93,C 12": t$,xs,k,mat xn,l$,p$,ven$,key$ eof Finis
 prtrans=0
 if xn(1)=4 then xn(1)=1 : prtrans=1 ! convert payroll transaction types to a regular disbursment
-if xn(2)=9 then goto L360 ! CHECK PREVIOUS POST
-if k=0 and uprc$(ltrm$(rtrm$(p$)))<>"VOID" then goto L360
-if val(t$(1:3))=0 and val(t$(4:9))=0 and val(t$(10:12))=0 and k=0 then goto L360
+if xn(2)=9 then goto ReadMerge ! CHECK PREVIOUS POST
+if k=0 and uprc$(ltrm$(rtrm$(p$)))<>"VOID" then goto ReadMerge
+if val(t$(1:3))=0 and val(t$(4:9))=0 and val(t$(10:12))=0 and k=0 then goto ReadMerge
 if t$(1:3)="   " then t$(3:3)="0"
 if t$(10:12)="   " then t$(12:12)="0"
 
 L440: !
 dim ta(2)
 read #hAccount,using F_Glmstr1,key=t$: cb,mat ta nokey L840
-L460: ! READ #hGlTrans,USING 460,REC=1: LR2
-lr2=lrec(hGlTrans)+1
-write #hGlTrans,using F_glTrans,rec=lr2: t$,xs,k,mat xn,l$,p$,0 duprec L460
+L460: !
+write #hGlTrans,using F_glTrans: t$,xs,k,mat xn,l$,p$,0
+lr2=lrec(hGlTrans)
 if ta(1)=0 then ta(1)=lr2
 if ta(2)>0 then rewrite #hGlTrans,using L550,rec=ta(2): lr2
 ta(2)=lr2
@@ -89,15 +89,15 @@ BANK_REC_FILE: ! r:
 	write #hBankRec,using 'Form POS 79,c 12,pos 3,N 1,C 8,G 6,pd 10.2,C 8,C 35,N 1,N 6,N 1': bankgl$,tcde,tr$(1),tr$(2),tx3,tr$(4),tr$(5),pcde,clr,scd
 	form pos 1,c 12,c 12,c 30,c 2,n 6,pd 5.2,n 1
 	VENDOR_FILE: !
-	if rtrm$(ven$)="" or ltrm$(rtrm$(ven$))="0" then goto L360
-	if xn(1)<>1 or prtrans=1 then goto L360 ! only disbursments and not payroll trans
+	if rtrm$(ven$)="" or ltrm$(rtrm$(ven$))="0" then goto ReadMerge
+	if xn(1)<>1 or prtrans=1 then goto ReadMerge ! only disbursments and not payroll trans
 	ven$=lpad$(rtrm$(ven$),8)
 	! L790: !
 	! lr5=lrec(5)+1
 	! write #hTr1099,using L810,rec=lr5,reserve: ven$,xs,k,l$,p$,0 duprec L790
 	write #hTr1099,using L810,reserve: ven$,xs,k,l$,p$,0
 	L810: form pos 1,c 8,n 6,pd 5.2,c 12,c 30,pd 3
-goto L360 ! /r
+goto ReadMerge ! /r
 
 L840: ! r:
 	fnTos

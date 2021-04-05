@@ -1,0 +1,25 @@
+[Q]\GLmstr\Allocations[acsUserId].h[cno]  ,  mt_          , 0
+
+"form pos 1,c 12,pd 10.2,c 30,pd 5": allocgl$,allocamt,td$,transadr
+"Form pos 1,c 12,pd 10.2,c 30,pd 5": gl$,allocation,td$,
+recl=59
+===================================================
+gl							,Payee General Ledger  	, C 	 12				,               , ! sPos=1  aka=t$,payeegl$
+amt							,Allocation Amount     	, PD	 10.2			,               , ! sPos=19  aka=k,tr(5)
+desc						,Description           	, C 	 30				,              	, ! sPos=41  aka=td$
+date						,Transaction Date      	, N 	  6				, date(mmddyy) , ! sPos=13  aka=xs,tr(4)     mmddyy
+mergeRec  			,Merge Record Number   	, PD	  5				,               , ! sPos=25  aka=transadr
+								
+								! 1 = Disbursements											
+								! 2 = Receipts														
+								! 3 = Adjustments												
+								! 4 = Payroll Check											
+								! 5 = Sales																
+								! 6 = Purchases													
+postCode				,Post Code  							, N 	  2				,              	, ! sPos=27  aka=xn(2),tr(7),pc
+ref							,Reference Number				, C 	 12				,              	, ! sPos=29  aka=l$,tr$   999999999999 stipulates contra entry
+ven							,ven         							, C 	  8				,              	, ! sPos=71  aka=ven$,vn$
+jv1							,notSure1	          			, C 	 6				,              	, ! sPos=79 aka=jv$(1)
+jv2							,notSure2	          			, C 	 5				,              	, ! sPos=79 aka=jv$(2)    in Payroll Type Transaction - carry breakdown code for posting employee record
+jv3							,notSure3	          			, C 	 3				,              	, ! sPos=79 aka=jv$(3)
+key			  			,key         							, C 	 12  			,              	, ! sPos=93 aka=key$

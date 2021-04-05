@@ -90,7 +90,7 @@ ScreenOne: ! r:
 	fnCmdKey("&Post",ck_post=62,0,0,"Will post this group of entries to the general ledger.")
 	fnCmdKey("E&xit",ck_exit=5,0,1,"Exit without Posting - you can always come back and finish later")
 	! /r
-	ckey=fnAcs(mat resp$)
+	ckey=fnAcs(mat resp$) ! ScreenOne
 	if ckey=ck_exit then goto Xit
 
 	! pOST=1 ! code as unposted once leave this screen
@@ -174,39 +174,18 @@ def fn_transactionSave(hMerge,transadr,mat tr,tr$,td$*30,vn$*8,mat jv$,key$*12)
 		fGlWork: form pos 1,n 3,n 6,n 3,n 6,pd 6.2,n 2,n 2,c 12,c 30,c 8,c 6,c 5,c 3,c 12
 	end if
 fnend
-
-GetAllocationsFromPayee: ! r:  pull allocation breakdown from payee record
-	glkey$=lpad$(rtrm$(vn$),8)
-	restore #hPayeeGl,key>=glkey$: nokey L4780
-	do
-		read #hPayeeGl,using 'Form Pos 1,C 8,c 12,n 6.2,c 30',release: payeekey$,payeegl$,percent,td$ eof L4740
-		if payeekey$<>glkey$ then goto L4740
-		if percent=0 and lrec(hAllocations)=0 then percent=100
-		allocamt=round(transactionAmt*(percent*.01),2)
-		write #hAllocations,using "form pos 1,c 12,pd 10.2,c 30": payeegl$,allocamt,td$: allocgl$='': totalalloc+=allocamt: allocamt=0
-	loop
-	L4740: !
-	if totalalloc<>transactionAmt then
-		read #hAllocations,using "Form pos 13,pd 10.2",rec=lrec(hAllocations): lastallocation noRec ignore
-	else
-		lastallocation+=transactionAmt-totalalloc
-		rewrite #hAllocations,using "Form pos 13,pd 10.2",rec=lrec(hAllocations): lastallocation
-	end if
-	allocamt=0 ! kj  eXTRACT=0
-	L4780: !
-return ! /r
-def fn_transactionDelete(hMerge,mergeRec; hAllocations)
-	! omit hAllocations to skip processing that file
+def fn_transactionDelete(hMerge,mergeRec; hMtemp)
+	! omit hMtemp to skip processing that file
 	! deletes entire transaction
 	if fnConfirmDelete('Record '&str$(mergeRec),'transDeleteOne') then
-		if hAllocations then
-			restore #hAllocations:
+		if hMtemp then
+			restore #hMtemp:
 			do
-				read #hAllocations,using "Form pos 1,c 12,pd 10.2,c 30,pd 5": gl$,allocation,td$,mergeRec eof L5170
-				delete #hAllocations:
+				read #hMtemp,using "Form pos 1,c 12,pd 10.2,c 30,pd 5": gl$,allocation,td$,mergeRec eof TdEoMt
+				delete #hMtemp:
 				delete #hMerge,rec=mergeRec: ioerr ignore
 			loop
-			L5170: !
+			TdEoMt: !
 		else
 			delete #hMerge,rec=mergeRec: ioerr ignore
 		end if
@@ -327,6 +306,8 @@ def fn_totalGrid(hAccount,mat kList$,mat kVal,lc,ps)
 	next j
 fnend
 
+
+
 def fn_transactionAdd(typeOfEntryN,bankGl$,transDate; ___,returnN)
 	mat tr=(0)
 	tr$=td$=vn$=key$=('')
@@ -337,7 +318,7 @@ def fn_transactionAdd(typeOfEntryN,bankGl$,transDate; ___,returnN)
 	recordNumber=lrec(hMerge)
 	returnN=recordNumber
 	
-	fn_clearVar(hAllocations,transactionAmt,td$,tr$,vn$,gl$,totalalloc,gl_retainFieldsDuringAdd$)
+	fn_clearVar(hMtemp,transactionAmt,td$,tr$,vn$,gl$,totalalloc,gl_retainFieldsDuringAdd$)
 	! response=fn_tranactionEdit(recordNumber)
 	fn_scrMain(editMode)
 	response=ckey
@@ -347,19 +328,6 @@ def fn_transactionAdd(typeOfEntryN,bankGl$,transDate; ___,returnN)
 		returnN=0
 	end if
 	fn_transactionAdd=returnN
-fnend
-def fn_clearVar(&hAllocations,&transactionAmt,&td$,&tr$,&vn$,&gl$,&totalalloc,&gl_retainFieldsDuringAdd$)
-	!  clear entry screen
-	close #hAllocations: ioerr ignore
-	open #hAllocations=fnH: "Name=[Q]\GLmstr\Allocations[acsUserId].h[cno],Version=1,replace,RecL=59",internal,outIn,relative
-	transactionAmt=0
-	if gl_retainFieldsDuringAdd$='False' then
-		td$=''
-	end if
-	tr$=fn_nextTr$(tr$,gl_retainFieldsDuringAdd$)
-	vn$=gl$=''
-	totalalloc=0 
-	! extract=0 kj
 fnend
 def fn_tranactionEdit(recordNumber; ___,returnN)
 		if recordNumber then
@@ -372,49 +340,71 @@ def fn_tranactionEdit(recordNumber; ___,returnN)
 			editMode=1
 			transactionAmt=0
 			gl$=''
-			totalalloc=0
-			read #hMerge,using fGlWork,rec=recordNumber: mat tr,tr$,td$,vn$,mat jv$,key$ noRec PES_XIT ! get basic information from record clicked to find the complete transaction
-			holdtr$=tr$
-			close #hAllocations: ioerr ignore
-			open #hAllocations=fnH: "Name=[Q]\GLmstr\Allocations[acsUserId].h[cno],Version=1,replace,RecL=59",internal,outIn,relative
-			restore #hMerge:
-			do
-				GLALLOCATIONS_READ: !
-				read #hMerge,using F_merge: payeegl$,tr(4),tr(5),tr(6),tr(7),tr$,td$,vn$,mat jv$,key$ eof GLALLOCATIONS_EOF
-				if trim$(tr$)<>trim$(holdtr$) then goto GLALLOCATIONS_READ
-				if tr(6)=2 or tr(6)=7 then tr(5)=-tr(5) ! reverse signs on receipts and sales BEFORE DISPLAYING ON CORRECTION SCREEN
-				transactionAmt+=tr(5)
-				vn$=vn$
-				selx=tr(6)
-				if tr(6)=1 then selx=1 ! reg Disbursements
-				if tr(6)=2 then selx=2 ! reg Receipts
-				if tr(6)=3 then selx=3 ! reg Adjustments
-				if tr(6)=4 then selx=4 !     Payroll Check
-				if tr(6)=7 then selx=5 !     Sales
-				if tr(6)=8 then selx=6 !     Purchases
-				write #hAllocations,using "form pos 1,c 12,pd 10.2,c 30,pd 5": payeegl$,tr(5),td$,rec(hMerge)
-				totalalloc+=tr(5) ! re-add total allocations
-			loop
-			GLALLOCATIONS_EOF: !
-			read #hMerge,using fGlWork,rec=recordNumber: mat tr,tr$,td$,vn$,mat jv$,key$ noRec ignore ! get basic information from record clicked to find the complete transaction
-			PES_XIT: !
-			! return  ! /r
-
+			
+			hMtemp=fn_makeMergeTemp(hMerge,recordNumber,transactionAmt,totalalloc,selx)
+			read #hMerge,using fGlWork,rec=recordNumber: mat tr,tr$,td$,vn$,jv1$,jv2$,jv3$,key$ noRec ignore ! get basic information from record clicked to find the complete transaction
 			fn_scrMain
 			returnN=ckey
 			
 		end if
 	TeFinis: !
-	close #hAllocations,free: ioerr ignore
+	close #hMtemp,free: ioerr ignore
 	fn_tranactionEdit=returnN
 fnend
-def fn_scrMain(; editMode,typeofentry$,bankGl$,transDate)
+def fn_makeMergeTemp(hMerge,mergeRecordNumber,&tAmt,&totalalloc,&selx; _ 
+		___,allocAmt,tr$*12,holdtr$*12,td$*30,vn$*8,jv1$*6,jv2$*5,jv3$*3)
+			
+			read #hMerge,using fGlWork,rec=mergeRecordNumber: mat tr,tr$,td$,vn$,jv1$,jv2$,jv3$,key$ noRec PES_XIT ! get basic information from record clicked to find the complete transaction
+			holdtr$=tr$
+			close #hMtemp: ioerr ignore
+			open #hMtemp=fnH: "Name=[Q]\GLmstr\Allocations[acsUserId].h[cno],Version=1,replace,RecL=59",internal,outIn,relative
+			! process the whole file and gather all records that match reference number and gather into MergeTemp file
+			restore #hMerge:
+			do
+				read #hMerge,using F_merge: payeegl$,tr(4),allocAmt,tr(6),tr(7),tr$,td$,vn$,jv1$,jv2$,jv3$,key$ eof MtEoM
+				if trim$(tr$)=trim$(holdtr$) then 
+					if tr(6)=2 or tr(6)=7 then allocAmt=-allocAmt ! reverse signs on receipts and sales BEFORE DISPLAYING ON CORRECTION SCREEN
+					tAmt+=allocAmt
+					vn$=vn$
+					selx=tr(6)
+					if tr(6)=1 then selx=1 ! reg Disbursements
+					if tr(6)=2 then selx=2 ! reg Receipts
+					if tr(6)=3 then selx=3 ! reg Adjustments
+					if tr(6)=4 then selx=4 !     Payroll Check
+					if tr(6)=7 then selx=5 !     Sales
+					if tr(6)=8 then selx=6 !     Purchases
+					write #hMtemp,using "form pos 1,c 12,pd 10.2,c 30,pd 5": payeegl$,allocAmt,td$,rec(hMerge)
+					totalalloc+=allocAmt ! re-add total allocations
+				end if
+			loop
+			MtEoM: !
+
+			PES_XIT: !
+			! return  ! /r
+	fn_makeMergeTemp=hMtemp
+fnend
+def fn_scrMain(; editMode,typeofentry$,bankGl$,transDate) ! mostly local stuff still
 	! pr 'selx=';selx
 	! pr 'editMode=';editMode
 	! pause
+	if ~sm_setup then
+		sm_setup=1
+		! ckey enums for both main add/edit screen and payroll add screen (ScrPayroll)
+		ck_extract=15
+		ck_payeeTogle=16
+		ck_payeeAdd=17
+		ck_breakdownEdit=18
+		ck_breakdownEditAll=19
+		ck_save1=30
+		ck_save2=1
+		ck_delete=7
+		ck_cancel=6
+		ck_finish=9
+
+	end if
 	ScrMainTop: !
 	if selx=4 and ~editMode then gosub ScrPayroll : goto SmFinis
-	fnTos ! r:
+	fnTos ! r: draw Main add/edit screen
 	mylen=18 : mypos=mylen+3
 	fnLbl(3,1,"Date:",mylen,1)
 	fnTxt(3,mypos,8,0,1,"1",0,"Transaction date must always be answered.",0 )
@@ -442,7 +432,7 @@ def fn_scrMain(; editMode,typeofentry$,bankGl$,transDate)
 		! 	fnTxt(6,mypos,8,0,1,'',1,"Payee field disabled. Click 'Enable Payee' again to enable.",0 )
 		! 	resp$(4)=''
 		! else
-			fncombof("Paymstrcomb",6,mypos,35,"[Q]\GLmstr\PayMstr.h[cno]",1,8,9,39,"[Q]\GLmstr\payidx1.h[cno]",0,0, "If the payee # is known, the general ledger information can be extracted from that record.",0)
+			fncombof("payee",6,mypos,35,'[Q]\GLmstr\PayMstr.h[cno]',1,8,9,30,'[Q]\GLmstr\PayIdx1.h[cno]',0,0, 'If the payee number is known, the general ledger information can be extracted from that record.',0)
 			resp$(4)=vn$
 		! end if
 	end if
@@ -479,56 +469,48 @@ def fn_scrMain(; editMode,typeofentry$,bankGl$,transDate)
 	mat cmask$=('')
 	cmask$(3)='10'
 	fnflexinit1('Glalloc',10,40,6,60,mat chdr$,mat cmask$,1,0,0)
-	restore #hAllocations:
+	restore #hMtemp:
 	dim allocItem$(4)*30
 	mat allocItem$(4)
-	do  ! READ_GL_ALLOCATIONS: !
-		read #hAllocations,using 'Form Pos 1,c 12,pd 10.2,c 30': allocgl$,allocamt,td$ eof EO_FLEX1
-		allocItem$(1)=str$(rec(hAllocations))
+	do
+		read #hMtemp,using 'Form Pos 1,c 12,pd 10.2,c 30': allocgl$,allocamt,td$ eof EO_FLEX1
+		allocItem$(1)=str$(rec(hMtemp))
 		allocItem$(2)=allocgl$
 		allocItem$(3)=str$(allocamt)
 		allocItem$(4)=td$
 		fnflexadd1(mat allocItem$)
-	loop  !  goto READ_GL_ALLOCATIONS
+	loop
 	EO_FLEX1: ! /r
 	if selx=1 or selx=6 then
-		fnButton(6,61,"E&xtract",15,"Extracts general ledger numbers from payee records",1,8)
-		if disable_payee=1 then payee_button$ ="Enable &Payee" else payee_button$ ="Disable &Payee"
-		fnButton(6,72,payee_button$,16,"Allows you to disable or enable the payee field.",1,12)
-		fnButton(6,87,"&Add Payee",17,"Allows you to add a payee record.",1,10)
+		fnButton(6,63,"Extract",ck_extract=15,"Extracts general ledger numbers from payee records",1,7)
+		if disable_payee=1 then payee_button$ ="Enable Payee" else payee_button$ ="Disable Payee"
+		fnButton(6,73,payee_button$,ck_payeeTogle=16,"Allows you to disable or enable the payee field.",1,12)
+		fnButton(6,87,"Add Payee",ck_payeeAdd=17,"Allows you to add a payee record.",1,10)
 	end if
-	! fnButton(9,78,"Add",ck_breakdownAdd=20,"Add an allocation.",1,5)
 	fnButton(9,85,"&Edit",ck_breakdownEdit=18,"Correct an allocation.",1,5)
-	fnButton(9,92,"Edit Al&l",19,"Edit all allocations without returning to this screen.",1,8)
-	! fnLbl(17,73,'',1,1)
-	! fnLbl(16,1," ")
-	! If editMode=1 Then fnCmdKey("C&hange Acct #",9,0,0,'')
+	fnButton(9,92,"Edit All",ck_breakdownEditAll=19,"Edit all allocations without returning to this screen.",1,8)
 	if editMode=1 then
-		fnCmdKey("&Save",ck_save=30,1,0,"Completed making corrections to this transaction.")
+		fnCmdKey("Save",ck_save1=30,1,0,"Completed making corrections to this transaction.")
 	else
-		fnCmdKey("&Next Transaction",ck_nextTransaction=1,1,0,"You are completed with this transaction and ready to move to the next transaction.")
+		fnCmdKey("Save",ck_save2=1,1,0,"You are completed with this transaction and ready to move to the next transaction.")
 	end if
-	! fnCmdKey("more Breakdowns",2,0,0,"More breakdowns to the same transaction.")
-	! fnCmdKey("&Review Transactions",3,0,0,"Prints a list of all transactions entered during the setting and also provides for edit options.")
-	fnCmdKey("&Delete",ck_delete=7,0,0,"Deletes the entire transaction as shown on screen.")
-	! fnCmdKey("&Back",6,0,0,"Return to first screen to change transaction types or bank accounts.")
-	! if ~editMode then fnCmdKey("&Finish",ck_finish=9,0,1,'')
-	fnCmdKey("&Cancel",ck_cancel=6,0,1,'')
+	fnCmdKey("Delete",ck_delete=7,0,0,"Deletes the entire transaction as shown on screen.")
+	fnCmdKey("Cancel",ck_cancel,0,1,'')
 	! /r
 	ckey=fnAcs(mat resp$)
 	allocamt=0
 	message$=''
-	if extract=1 and ckey<>ck_nextTransaction then extract=0
-	if (ckey=ck_finish or ckey=3) and sel1=3 and val(resp$(2))<>0 then ckey=ck_nextTransaction ! force the last entry to write   ! KJ 50707
-	if ckey=ck_save and sel1=3 and val(resp$(2))<>0 then ckey=ck_nextTransaction ! force the last entry to write   ! KJ 50707
-	if (ckey=ck_finish or ckey=3 or ckey=6) and lrec(hAllocations)>0 and ~editMode then goto SmGlNoTestFinis ! 4430 ! unwritten record on screen
+	if extract=1 and ckey<>ck_save2 then extract=0
+	if (ckey=ck_finish or ckey=3) and sel1=3 and val(resp$(2))<>0 then ckey=ck_save2 ! force the last entry to write   ! KJ 50707
+	if ckey=ck_save1 and sel1=3 and val(resp$(2))<>0 then ckey=ck_save2 ! force the last entry to write   ! KJ 50707
+	if (ckey=ck_finish or ckey=3 or ckey=ck_cancel) and lrec(hMtemp)>0 and ~editMode then goto SmGlNoTestFinis ! 4430 ! unwritten record on screen
 
 	if ckey=ck_cancel then ! Back (Return to first screen to change transaction types or bank accounts.)
 		transactionAmt=0
 		tr$=''
 		goto SmFinis
 	else
-		tr(4)=val(resp$(1))            ! date
+		tr(4)=val(resp$(1))             	! date
 		transactionAmt=val(resp$(2))   	! amount
 		tr$=resp$(3)                    	! ref #
 		vn$=vn$=resp$(4)(1:8)          	! payee number
@@ -555,27 +537,27 @@ def fn_scrMain(; editMode,typeofentry$,bankGl$,transDate)
 	! else if ckey=ck_breakdownAdd then
 	! 	pause
 	else if ckey=ck_delete then
-		fn_transactionDelete(hMerge,mergeRec, hAllocations)
+		fn_transactionDelete(hMerge,mergeRec, hMtemp)
 		goto ScrMainTop
-	else if ckey=16 then
+	else if ckey=ck_payeeTogle then
 		if disable_payee=0 then disable_payee=1 else disable_payee=0
 		goto ScrMainTop
-	else if ckey=15 and ~editMode then
+	else if ckey=ck_extract and ~editMode then
 		extract=1
 		gosub GetAllocationsFromPayee
 		goto ScrMainTop
 	end if
 
-	if selx=3 and ckey<>ck_save then allocamt=transactionAmt ! create an allocation amount automatically on adjustments
-	if allocamt=0 and ckey=ck_nextTransaction and lrec(hAllocations)=0 then allocamt=transactionAmt ! allows them to press enter if only allocation without haveing to key the amount a second time
+	if selx=3 and ckey<>ck_save1 then allocamt=transactionAmt ! create an allocation amount automatically on adjustments
+	if allocamt=0 and ckey=ck_save2 and lrec(hMtemp)=0 then allocamt=transactionAmt ! allows them to press enter if only allocation without haveing to key the amount a second time
 
 	! r: GL Number Test
-	if extract=1 then goto SmGlNoTestFinis
+	if extract then goto SmGlNoTestFinis
 	if ckey=ck_breakdownEdit then goto SmGlNoTestFinis ! don't require gl # when editing transaction
-	if ckey=ck_save and editMode=1 then goto SmGlNoTestFinis ! don't require gl # when editing and take complete
-	if selx=3 and (allocamt=0 or ckey=ck_save) then goto SmGlNoTestFinis ! don't require gl # on adjustments when amount=0 (actually changing from one adjustment to the next)
+	if ckey=ck_save1 and editMode=1 then goto SmGlNoTestFinis ! don't require gl # when editing and take complete
+	if selx=3 and (allocamt=0 or ckey=ck_save1) then goto SmGlNoTestFinis ! don't require gl # on adjustments when amount=0 (actually changing from one adjustment to the next)
 	if selx=4 and editMode=1 then goto SmGlNoTestFinis ! never should have an amount on payroll check. (done from another screen and edits all made from allocation screen
-	if ckey=17 then goto SmGlNoTestFinis
+	if ckey=ck_payeeAdd then goto SmGlNoTestFinis
 	x=val(allocgl$) conv SmGlTestFail
 	if val(allocgl$)=0 and ~editMode then
 		! KJ 080608   DON'T CHECK FOR GENERAL NUMBER ON EDIT
@@ -599,36 +581,30 @@ def fn_scrMain(; editMode,typeofentry$,bankGl$,transDate)
 		if selx=5 then tr(6)=7 ! sales
 		if selx=6 then tr(6)=8 ! purchases
 	end if
-	if ckey=17 then
+	if ckey=ck_payeeAdd then
 		fnaddglpayee
 		goto ScrMainTop
 	else if ckey=ck_breakdownEdit then
 		fn_editAllocation(val(resp$(7)))
 		goto ScrMainTop
-	else if ckey=19 then
+	else if ckey=ck_breakdownEditAll then
 		fn_editAllocation(val(resp$(7)), 1)
 		goto ScrMainTop
-	else if ckey=ck_save then
+	else if ckey=ck_save1 then
 		goto L4460
-	else if ckey=2 and allocamt<>0 then
-		write #hAllocations,using "form pos 1,c 12,pd 10.2,c 30": allocgl$,allocamt,td$
-		allocgl$=''
-		totalalloc+=allocamt
-		allocamt=0
-		goto ScrMainTop
-	else if ckey=ck_nextTransaction and allocamt<>0 then
-		write #hAllocations,using "form pos 1,c 12,pd 10.2,c 30": allocgl$,allocamt,td$
+	else if ckey=ck_save2 and allocamt<>0 then
+		write #hMtemp,using "form pos 1,c 12,pd 10.2,c 30": allocgl$,allocamt,td$
 		allocgl$=''
 		totalalloc+=allocamt
 		allocamt=0
 	end if
-	if ckey=ck_nextTransaction and selx <>3 and transactionAmt<>totalalloc then message$= "Allocations don't add up!" : goto ScrMainTop
-	! if ckey=ck_nextTransaction and selx=3 and totalalloc <>0 then message$= "Allocations don't add up!": Goto ScrMainTop
-	if ckey=ck_nextTransaction or ckey=2 or (ckey=ck_finish and ~editMode and lrec(hAllocations)>0) then  ! ckey 9 (ck_finish) thing: allow last transaction to be written if take finish
+	if ckey=ck_save2 and selx<>3 and transactionAmt<>totalalloc then message$="Allocations don't add up!" : goto ScrMainTop
+	! if ckey=ck_save2 and selx=3 and totalalloc <>0 then message$= "Allocations don't add up!": Goto ScrMainTop
+	if ckey=ck_save2 or (ckey=ck_finish and ~editMode and lrec(hMtemp)>0) then  ! ckey 9 (ck_finish) thing: allow last transaction to be written if take finish
 		L4460: !
-		restore #hAllocations:
-		for j=1 to lrec(hAllocations)
-			read #hAllocations,using "form pos 1,c 12,pd 10.2,c 30,pd 5": allocgl$,allocamt,td$,transadr eof L4520
+		restore #hMtemp:
+		for j=1 to lrec(hMtemp)
+			read #hMtemp,using "form pos 1,c 12,pd 10.2,c 30,pd 5": allocgl$,allocamt,td$,transadr eof L4520
 			tr(1)=val(allocgl$(1:3))
 			tr(2)=val(allocgl$(4:9))
 			tr(3)=val(allocgl$(10:12))
@@ -642,11 +618,9 @@ def fn_scrMain(; editMode,typeofentry$,bankGl$,transDate)
 	end if
 	if ckey=ck_finish then 
 		goto SmFinis
-	else if ckey=2 then 
-		goto ScrMainTop
 	else
-		fn_clearVar(hAllocations,transactionAmt,td$,tr$,vn$,gl$,totalalloc,gl_retainFieldsDuringAdd$)
-		if ckey=ck_cancel then ! 6
+		fn_clearVar(hMtemp,transactionAmt,td$,tr$,vn$,gl$,totalalloc,gl_retainFieldsDuringAdd$)
+		if ckey=ck_cancel then
 			transactionAmt=0
 			tr$=vn$=''
 			goto SmFinis
@@ -718,24 +692,22 @@ ScrPayroll: ! r:
 	resp$(24)=str$(prx(19))
 
 	if editMode=1 then
-		fnCmdKey("&Complete",30,1,0,"Completed making corrections to this transaction.")
+		fnCmdKey("&Save",ck_save1,1,0,"Completed making corrections to this transaction.")
 	else
-		fnCmdKey("&Next Transaction",1,1,0,"You are completed with this transaction and ready to move to the next transaction.")
+		fnCmdKey("&Save",ck_save2,1,0,"You are completed with this transaction and ready to move to the next transaction.")
 	end if
-	fnCmdKey("&Delete",7,0,0,"Deletes the entire transaction as shown on screen.")
-	fnCmdKey("&Back",6,0,0,"Allows you to return to screen 1 and change transaction types or bank accounts.")
-	fnCmdKey("&Finish",9,0,1,'')
+	fnCmdKey("&Delete",ck_delete,0,0,"Deletes the entire transaction as shown on screen.")
+	fnCmdKey("&Back",ck_cancel,0,0,"Allows you to return to screen 1 and change transaction types or bank accounts.")
+	fnCmdKey("&Finish",ck_finish,0,1,'')
 	ckey=fnAcs(mat resp$)
-	if ckey=9 then
+	if ckey=ck_finish then
 		goto ScrPayrollXit
-	else if ckey=6 then
+	else if ckey=ck_cancel then
 		transactionAmt=0
 		mat prx=(0)
 		tr$=''
 		vn$=''
 		goto ScrPayrollXit
-	! else if ckey=3 then
-	! 	gosub ScrTransactionsCorrections : goto ScrMainTop
 	end if
 	tr(4)=val(resp$(1)) ! date
 	tr(5)=transactionAmt=val(resp$(2)) ! amount
@@ -771,9 +743,20 @@ ScrPayroll: ! r:
 	fnmsgbox(mat ml$,resp$,'',49)
 	goto ScrPayroll
 	ScrPayrollXit: !
-return
-
- ! /r
+return ! /r
+def fn_clearVar(&hMtemp,&transactionAmt,&td$,&tr$,&vn$,&gl$,&totalalloc,&gl_retainFieldsDuringAdd$)
+	!  clear entry screen
+	close #hMtemp: ioerr ignore
+	open #hMtemp=fnH: "Name=[Q]\GLmstr\Allocations[acsUserId].h[cno],Version=1,replace,RecL=59",internal,outIn,relative
+	transactionAmt=0
+	if gl_retainFieldsDuringAdd$='False' then
+		td$=''
+	end if
+	tr$=fn_nextTr$(tr$,gl_retainFieldsDuringAdd$)
+	vn$=gl$=''
+	totalalloc=0 
+	! extract=0 kj
+fnend
 WritePayrollTrans: ! r:
 	tr(6)=4 ! payroll transaction type  (was converted back to 1 in old system)
 	for j=2 to 19
@@ -811,14 +794,26 @@ WritePayrollTrans: ! r:
 	vn$=''
 	tr$=fn_nextTr$(tr$,gl_retainFieldsDuringAdd$)
 return ! /r
-def fn_clearContras(hMerge; ___,gl$,tr4,tr5,tr6,tr7,tr$*12)
+GetAllocationsFromPayee: ! r:  pull allocation breakdown from payee record
+	glkey$=lpad$(rtrm$(vn$),8)
+	restore #hPayeeGl,key>=glkey$: nokey L4780
 	do
-		read #hMerge,using F_merge: gl$,tr4,tr5,tr6,tr7,tr$ eof CfcEoF
-		if trim$(tr$)="999999999999" then delete #hMerge:
+		read #hPayeeGl,using 'Form Pos 1,C 8,c 12,n 6.2,c 30',release: payeekey$,payeegl$,percent,td$ eof L4740
+		if payeekey$<>glkey$ then goto L4740
+		if percent=0 and lrec(hMtemp)=0 then percent=100
+		allocamt=round(transactionAmt*(percent*.01),2)
+		write #hMtemp,using "form pos 1,c 12,pd 10.2,c 30": payeegl$,allocamt,td$: allocgl$='': totalalloc+=allocamt: allocamt=0
 	loop
-	CfcEoF: !
-fnend
-
+	L4740: !
+	if totalalloc<>transactionAmt then
+		read #hMtemp,using "Form pos 13,pd 10.2",rec=lrec(hMtemp): lastallocation noRec ignore
+	else
+		lastallocation+=transactionAmt-totalalloc
+		rewrite #hMtemp,using "Form pos 13,pd 10.2",rec=lrec(hMtemp): lastallocation
+	end if
+	allocamt=0 ! kj  eXTRACT=0
+	L4780: !
+return ! /r
 def fn_nextTr$(tr$,gl_retainFieldsDuringAdd$; ___,trVal)
 	if gl_retainFieldsDuringAdd$='False' then
 		tr$=''
@@ -835,7 +830,7 @@ def fn_editAllocation(editrecord; editall,___,ckey,mylen,mypos)
 	! editrecord=val(resp$(7))
 	! if editall=19 then editrecord=1
 	do
-		read #hAllocations,using "Form pos 1,c 12,pd 10.2,c 30,pd 5",rec=editrecord: gl$,allocation,td$,transadr noRec EA_FINIS
+		read #hMtemp,using "Form pos 1,c 12,pd 10.2,c 30,pd 5",rec=editrecord: gl$,allocation,td$,transadr noRec EA_FINIS
 		holdallocation=allocation
 		TosEditAllocation: !
 		fnTos
@@ -863,7 +858,7 @@ def fn_editAllocation(editrecord; editall,___,ckey,mylen,mypos)
 			if resp$<>"OK" then
 				goto TosEditAllocation
 			end if
-			if ckey=6 then delete #hAllocations,rec=editrecord:
+			if ckey=6 then delete #hMtemp,rec=editrecord:
 			delete #hMerge,rec=transadr: ioerr ignore
 			transactionAmt+=-holdallocation
 		else
@@ -871,7 +866,7 @@ def fn_editAllocation(editrecord; editall,___,ckey,mylen,mypos)
 			allocation=val(resp$(1))
 			transactionAmt+=allocation-holdallocation ! update net amount of transaction
 			td$=resp$(3)
-			rewrite #hAllocations,using "Form pos 1,c 12,pd 10.2,c 30",rec=editrecord: allocgl$,allocation,td$
+			rewrite #hMtemp,using "Form pos 1,c 12,pd 10.2,c 30",rec=editrecord: allocgl$,allocation,td$
 			totalalloc+=allocation-holdallocation
 		end if
 		editrecord+=1
@@ -1034,9 +1029,8 @@ def fn_eraseAllPreviousInput
 	fnCopy('[Q]\GLmstr\GL_Work_[acsUserId].h[cno]','[temp]\acs_Enter_Transactions_[acsUserId]_batchDelete_[datetime].h[cno]')
 	fn_openFiles( 1)
 fnend
+
 def fn_openFiles(; reset,___,useOrReplace$)
-	! close #hAllocations: ioerr ignore
-	! open #hAllocations=fnH: "Name=[Q]\GLmstr\Allocations[acsUserId].h[cno],Version=1,replace,RecL=59",internal,outIn,relative
 	if reset then
 		useOrReplace$='Replace'
 		fnFree('[Q]\GLmstr\Allocations[acsUserId].h[cno]')
@@ -1074,7 +1068,7 @@ ScrPost: ! r:
 	fnCmdSet(2)
 	ckey=fnAcs(mat resp$)
 	fnfscode(0)
-	fn_createContraEntries(hMerge,mat kList$,mat kVal,contraEntryDateN)
+	fn_createContras(hMerge,mat kList$,mat kVal,contraEntryDateN)
 	if resp$(5)="True" or ckey=5 then goto Xit ! return w/o posting
 	if resp$(2)="True" then fnprocess(1) else fnprocess(0)
 	if resp$(4)="True" then fnprocess(4) ! post both
@@ -1096,7 +1090,7 @@ ScrPost: ! r:
 	if resp$(4)="True" then goto DoMerge ! post both
 	if resp$(2)="True" then goto DoAutoProc
 goto Xit ! /r
-def fn_createContraEntries(hMerge,mat kList$,mat kVal,contraEntryDateN; ___,j,tr$*12)
+def fn_createContras(hMerge,mat kList$,mat kVal,contraEntryDateN; ___,j,tr$*12)
 	restore #hMerge:
 	tr$="999999999999"
 	for j=1 to 30
@@ -1106,6 +1100,14 @@ def fn_createContraEntries(hMerge,mat kList$,mat kVal,contraEntryDateN; ___,j,tr
 		end if
 	next j
 fnend
+def fn_clearContras(hMerge; ___,gl$,tr4,tr5,tr6,tr7,tr$*12)
+	do
+		read #hMerge,using F_merge: gl$,tr4,tr5,tr6,tr7,tr$ eof CfcEoF
+		if trim$(tr$)="999999999999" then delete #hMerge:
+	loop
+	CfcEoF: !
+fnend
+
 Xit: ! r:
 	setenv('current_grid_row',gridRowHold$)
 fnXit ! /r
