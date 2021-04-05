@@ -1,0 +1,5 @@
+end
+setenv('source',program$&program$(pos(program$,'.',-1):inf)&'s')
+setenv('source',os_filename$(env$('source')))
+exec 'sy ""C:\ACS\Dev-5\Sad Panda\Compile.cmd" "'&env$('source')&'""'
+exe 'load "'&program$&'"'

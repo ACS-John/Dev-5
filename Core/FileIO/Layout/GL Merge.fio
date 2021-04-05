@@ -1,22 +1,22 @@
-[Q]\GLmstr\GL_Work_[acsUserId].h[cno]  ,  mr_          , 0
+[Q]\GLmstr\GL_Work_[acsUserId].h[cno]  ,  m_          , 0
 
 recl=104
 ===================================================
-gl							,General Ledger Number		, C 	 12				,               , ! sPos=1  aka=t$,payeegl$
-date						,Transaction Date    		, N 	  6				, date(mmddyy) , ! sPos=13  aka=xs,tr(4)     mmddyy
-amt							,Transaction Amount			, PD	  6.2			,               , ! sPos=19  aka=k,tr(5)
-type						,Transaction Type				, N 	  2				,               , ! sPos=25  aka=xn(1),tr(6),selx,sel
-								! 1 = Disbursements											
-								! 2 = Receipts														
-								! 3 = Adjustments												
-								! 4 = Payroll Check											
-								! 5 = Sales																
-								! 6 = Purchases													
-n2							,n2         							, N 	  2				,              	, ! sPos=27  aka=xn(2),tr(7)
-ref							,Reference Number				, C 	 12				,              	, ! sPos=29  aka=l$,tr$   999999999999 stipulates contra entry
-desc						,Description							, C 	 30				,              	, ! sPos=41  aka=p$,td$
-ven							,ven         							, C 	  8				,              	, ! sPos=71  aka=ven$
-jv1							,notSure1	          			, C 	 6				,              	, ! sPos=79 aka=jv$(1)
-jv2							,notSure2	          			, C 	 5				,              	, ! sPos=79 aka=jv$(2)    in Payroll Type Transaction - carry breakdown code for posting employee record
-jv3							,notSure3	          			, C 	 3				,              	, ! sPos=79 aka=jv$(3)
-key			  			,key         							, C 	 12  			,              	, ! sPos=93 aka=key$
+gl							,PayeeGeneral Ledger Number		, C 	 12				,               , ! sPos=1  aka=t$,payeegl$
+date						,Transaction Date          		, N 	  6				, date(mmddyy) , ! sPos=13  aka=xs,tr(4)     mmddyy
+amt							,Transaction Amount      			, PD	  6.2			,               , ! sPos=19  aka=k,tr(5)
+type						,Transaction Type      				, N 	  2				,               , ! sPos=25  aka=xn(1),tr(6),selx,sel
+								! 1 = Disbursements
+								! 2 = Receipts
+								! 3 = Adjustments
+								! 4 = Payroll Check
+								! 5 = Sales
+								! 6 = Purchases
+post						,posting code        					, N 	  2				,              	, ! sPos=27  aka=xn(2),tr(7)    9=posted
+ref							,Reference Number      				, C 	 12				,              	, ! sPos=29  aka=l$,tr$   999999999999 stipulates contra entry
+desc						,Description      							, C 	 30				,              	, ! sPos=41  aka=p$,td$
+ven							,ven               							, C 	  8				,              	, ! sPos=71  aka=ven$
+jv1							,notSure1	                			, C 	 6				,              	, ! sPos=79 aka=jv$(1)
+jv2							,notSure2	                			, C 	 5				,              	, ! sPos=79 aka=jv$(2)    in Payroll Type Transaction - carry breakdown code for posting employee record
+jv3							,notSure3	                			, C 	 3				,              	, ! sPos=79 aka=jv$(3)
+key			  			,key               							, C 	 12  			,              	, ! sPos=93 aka=key$

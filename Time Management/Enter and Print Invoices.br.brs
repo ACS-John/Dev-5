@@ -7,13 +7,15 @@
 	
 	dim xinp(3)
 	dim invoiceNumber$*12,a1$*30
-	dim pt(4),fl2$(8),scr2$(4)
+	dim pt(4)
+	dim fl2$(8)
+	
 	dim ot2$(4)
 	dim nam$*25
 	dim bk$(20)*30
 	dim cde$(30)*6,ct(30),sc(30)
-	DIM id$(30)*128
-	DIM da(30),gl$(30)*12,gl(3)
+	dim id$(30)*128
+	dim da(30),gl$(30)*12,gl(3)
 	dim billto$(3)*30,cdk$*6,des$*60,bc$(3)*18
 	bc$(1)="PARTIAL BILL"
 	bc$(2)="FINAL BILL"
@@ -29,6 +31,7 @@
 	fl2$(6)="14,10,c 60,h,n"
 	fl2$(7)="15,10,c 60,h,n"
 	fl2$(8)="24,2,c 60,h,n"
+	
 	io1$(1)="4,25,N 5,UE,N"
 	io1$(2)="5,25,N 1,UE,N"
 	io1$(3)="6,25,N 6,UE,N"
@@ -204,21 +207,23 @@ goto L1080 ! /r
  
 ScreenFinal: ! r:
 	pr newpage
-	scrid$(1)="TIME MANAGEMENT INPUT PROOF TOTALS"
-	scrid$(2)="1 for listing, 2 for corrections, 3 for additional entries,"
-	scrid$(3)=" 4 to pr invoices entered, or 5 to merge and email."
-	scrid$(4)=""
-	pr f mat fl2$: mat scr2$,mat scrid$
+	pr f "2,10,c 60,h,n" :"TIME MANAGEMENT INPUT PROOF TOTALS"
+	pr f "14,10,c 60,h,n":"1 for listing, 2 for corrections, 3 for additional entries,"
+	pr f "15,10,c 60,h,n":" 4 to pr invoices entered, or 5 to merge and email."
+	pr f "24,2,c 60,h,n" :""
 	pr f mat ot2$: mat pt
 	do
-		L2110: !
-		input fields "16,30,N 1,UE,N": chg conv L2110
-		
+		SfInput: !
+		input fields "16,30,N 1,UE,N": chg conv SfInput
 		if chg=1 then
 			gosub PrProof
 			goto ScreenFinal
 		else if chg=2 then
-			goto ScreenCorrection
+			scrid$(1)="Input Correction Screen"
+			scrid$(2)="Enter client number as 0 to delete this entry"
+			scrid$(3)="  Desc/Code   Invoice Descriptions"
+			scrid$(4)="  Press F1 when completed with this screen"
+			goto SCR_ADDEDIT
 		else if chg=3 then
 			goto ScreenEntry
 		else if chg=4 then
@@ -267,27 +272,18 @@ PrProofPgOf: !
 continue
 ! /r
 
-ScreenCorrection: ! r:
-	scrid$(1)="Input Correction Screen"
-	scrid$(2)="Enter client number as 0 to delete this entry"
-	scrid$(3)="  Desc/Code   Invoice Descriptions"
-	scrid$(4)="  Press F1 when completed with this screen"
-goto SCR_ADDEDIT ! /r
 ScreenPrintInvoices: ! r:
 	select_invoices_to_print=0
 	fnInvoiceOpen
-	align=0
 	restore #hTmpInvoice:
 	do
-		PR_SELECTED_INVOICE: !
- 
 		read #hTmpInvoice,using F_TMWK2: mat xinp,invoiceNumber$,mat cde$,mat id$,mat da,mat ct,mat sc,mat gl$ eof PRI_EOF
+		! xinp(1) = client id
 		if xinp(1) then
 			k$=lpad$(str$(xinp(1)),5)
 			read #1,using 'form pos 6,3*c 30',key=k$: mat billto$
 			fnInvoiceAdd(k$,mat billto$,invoiceNumber$,xinp(3),mat id$,mat da,0)
 		end if
-		! if select_invoices_to_print=1 then goto SCR_SELECT_INVOICE
 	loop 
 	PRI_EOF: !
 	fnInvoiceClose(xinp(3), 'Enter and Print')
