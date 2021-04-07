@@ -798,9 +798,9 @@ fnend
 		library 'S:\Core\HamsterFio.br': fnHamsterFio
 		fnHamsterFio=fnHamsterFio(fileid$)
 	fnend
-	def library fnHamster(a$*20,mat b$,mat l,c,mat e$; mat f$,mat d,mat g,mat h,mat j$,mat k)
+	def library fnHamster(uniqueWord$*20,mat lbl$,mat fln,hIn,mat p$; mat flTyp$,mat sln,mat mask,mat startPos,mat incontrol$,mat mxl)
 		library 'S:\Core\Hamster.br': fnHamster
-		fnHamster=fnHamster(a$,mat b$,mat l,c,mat e$,mat f$,mat d,mat g,mat h,mat j$,mat k)
+		fnHamster=fnHamster(uniqueWord$,mat lbl$,mat fln,hIn,mat p$, mat flTyp$,mat sln,mat mask,mat startPos,mat incontrol$,mat mxl)
 	fnend
 	def library fnH2AddComboF(hac_screen_item,hac_data_file$*256,hac_key_pos,hac_key_len,hac_desc_pos,hac_desc_len,hac_index_file$*256,hac_limit_to_list)
 		library 'S:\Core\Hamster_Setup.br': fnH2AddComboF

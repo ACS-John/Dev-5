@@ -651,7 +651,7 @@ SCREEN_PROOF_TOTALS: !
 	fnLbl(4,1,"Type of Entry:",mylen,right)
 	fnTxt(4,mypos,15,0,0,"",1)
 	resp$(3)=typeofentry$ ! typeofentry_selected$
-	fnLbl(5,1,"Bank Account: "&bankname$,mylen,right)
+	fnLbl(5,1,"Bank Account:",mylen,right)
 	fnTxt(5,mypos,40,0,0,"",1)
 	resp$(4)=fnrgl$(bankgl$)
 	fnLbl(6,1,"Process Ending Date:",mylen,right)
