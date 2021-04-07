@@ -1,11 +1,11 @@
 ! uw$         unique word -
 ! mat lbl$    array of field labels
 ! mat fln     array of field lengths
-! fin         open file handle
+! hIn         open file handle
 ! mat p$      array of
-def library fnHamster(uw$*20,mat lbl$,mat fln,fin,mat p$; mat flTyp$,mat sln,mat mask,mat startPos,mat incontrol$,mat mxl)
+def library fnHamster(uw$*20,mat lbl$,mat fln,hIn,mat p$; mat flTyp$,mat sln,mat mask,mat startPos,mat incontrol$,mat mxl)
 	! r: setup
-	library 'S:\Core\Library': fnTos,fnflexinit1,fnCmdKey,fnAcs,fnflexadd1,fnLbl,fnTxt,fncomboa,fncombof,fnpause,fnChk,fnH
+	autoLibrary
 	on error goto Ertn
 
 	dim sln2(199)
@@ -112,31 +112,29 @@ def library fnHamster(uw$*20,mat lbl$,mat fln,fin,mat p$; mat flTyp$,mat sln,mat
 		next j
 		mat flxhdr$(fhc) : mat flxItem$(fhc) : mat cmask$(fhc)
 		! /r
-	! /r
 	goto MENU1
 
-
 	! KEYORDER_BUILD: ! r: unused
-	! uses: FIN, mat startPos2
+	! uses: hIn, mat startPos2
 	! returns: mat keyorder
 	! this section is not used currently
 	! if later we want to add an option to force keys to be unique,
 	! than I'll probably want to resurect and test this section
 			j=0 : mat keyorder=(0) : bowman=0
-			do while kps(fin,j+=1)>0
+			do while kps(hIn,j+=1)>0
 				for j=1 to udim(startPos2)
-					if startPos2=kps(fin,j) then keyorder(j)=bowman+=1
+					if startPos2=kps(hIn,j) then keyorder(j)=bowman+=1
 				next j
 			loop
 	return ! /r
 	MENU1: ! r:
 		fnTos
 		fnflexinit1(uw$&"2b",1,1,20,108,mat flxhdr$,mat cmask$,row_select)
-		for j1=1 to lrec(fin)
+		for j1=1 to lrec(hIn)
 			prec=j1
-			gosub READ_P ! Read #FIN,Using FRM$,Rec=J1: MAT P$ noRec (just past fnflexadd1)
+			gosub READ_P ! Read #hIn,Using FRM$,Rec=J1: MAT P$ noRec (just past fnflexadd1)
 			if pnorec<>1 then
-				fic=0 : flxItem$(fic+=1)=str$(rec(fin))
+				fic=0 : flxItem$(fic+=1)=str$(rec(hIn))
 				for j2=2 to itemCount+1
 					controlX=j2-1
 					if mask2(controlX)<20000 then
@@ -175,7 +173,7 @@ def library fnHamster(uw$*20,mat lbl$,mat fln,fin,mat p$; mat flTyp$,mat sln,mat
 		else if menu1_opt=opt_edit then
 			goto TO_EDIT
 		else if menu1_opt=opt_delete then
-			delete #fin,rec=prec:
+			delete #hIn,rec=prec:
 		end if
 	goto MENU1 ! /r
 	TO_EDIT: ! r: ADD and EDIT routines
@@ -260,13 +258,13 @@ def library fnHamster(uw$*20,mat lbl$,mat fln,fin,mat p$; mat flTyp$,mat sln,mat
 		dim tmp$*512
 		if fltyp2$(j)="c" or fltyp2$(j)="cr" then
 			tmp$="Form Pos "&str$(startPos2(j))&",c "&str$(sln2(j))
-			read #fin,using tmp$,rec=prec,reserve: p$(j) noRec PNOREC eof PEOF
+			read #hIn,using tmp$,rec=prec,reserve: p$(j) noRec PNOREC eof PEOF
 		else if fltyp2$(j)="g" then
 			tmp$="Form Pos "&str$(startPos2(j))&",g "&str$(sln2(j))
-			read #fin,using tmp$,rec=prec,reserve: p$(j) noRec PNOREC eof PEOF
+			read #hIn,using tmp$,rec=prec,reserve: p$(j) noRec PNOREC eof PEOF
 		else if fltyp2$(j)="n" or fltyp2$(j)="pd" then
 			tmp$="Form Pos "&str$(startPos2(j))&","&fltyp2$(j)&" "&str$(sln2(j))
-			read #fin,using tmp$,rec=prec,reserve: t noRec PNOREC eof PEOF
+			read #hIn,using tmp$,rec=prec,reserve: t noRec PNOREC eof PEOF
 			p$(j)=str$(t)
 		else if fltyp2$(j)="pd" and ord(p$(j))=15 then
 			p$(j)=""
@@ -275,13 +273,13 @@ def library fnHamster(uw$*20,mat lbl$,mat fln,fin,mat p$; mat flTyp$,mat sln,mat
 		for j=2 to itemCount-1
 			if fltyp2$(j)="c" or fltyp2$(j)="cr" then
 				tmp$="Form Pos "&str$(startPos2(j))&",c "&str$(sln2(j))
-				reread #fin,using tmp$,reserve: p$(j) noRec PNOREC eof PEOF
+				reread #hIn,using tmp$,reserve: p$(j) noRec PNOREC eof PEOF
 			else if fltyp2$(j)="g" then
 				tmp$="Form Pos "&str$(startPos2(j))&",g "&str$(sln2(j))
-				reread #fin,using tmp$,reserve: p$(j) noRec PNOREC eof PEOF
+				reread #hIn,using tmp$,reserve: p$(j) noRec PNOREC eof PEOF
 			else if fltyp2$(j)="n" or fltyp2$(j)="pd" then
 				tmp$="Form Pos "&str$(startPos2(j))&","&fltyp2$(j)&" "&str$(sln2(j))
-				reread #fin,using tmp$,reserve: t noRec PNOREC eof PEOF
+				reread #hIn,using tmp$,reserve: t noRec PNOREC eof PEOF
 				p$(j)=str$(t)
 			else if fltyp2$(j)="pd" and ord(p$(j))=15 then
 				p$(j)=""
@@ -291,13 +289,13 @@ def library fnHamster(uw$*20,mat lbl$,mat fln,fin,mat p$; mat flTyp$,mat sln,mat
 		j=itemCount
 		if fltyp2$(j)="c" or fltyp2$(j)="cr" then
 			tmp$="Form Pos "&str$(startPos2(j))&",c "&str$(sln2(j))
-			reread #fin,using tmp$,release: p$(j) noRec PNOREC eof PEOF
+			reread #hIn,using tmp$,release: p$(j) noRec PNOREC eof PEOF
 		else if fltyp2$(j)="g" then
 			tmp$="Form Pos "&str$(startPos2(j))&",g "&str$(sln2(j))
-			reread #fin,using tmp$,release: p$(j) noRec PNOREC eof PEOF
+			reread #hIn,using tmp$,release: p$(j) noRec PNOREC eof PEOF
 		else if fltyp2$(j)="n" or fltyp2$(j)="pd" then
 			tmp$="Form Pos "&str$(startPos2(j))&","&fltyp2$(j)&" "&str$(sln2(j))
-			reread #fin,using tmp$,release: t noRec PNOREC eof PEOF
+			reread #hIn,using tmp$,release: t noRec PNOREC eof PEOF
 			p$(j)=str$(t)
 		else if fltyp2$(j)="pd" and ord(p$(j))=15 then
 			p$(j)=""
@@ -313,27 +311,27 @@ def library fnHamster(uw$*20,mat lbl$,mat fln,fin,mat p$; mat flTyp$,mat sln,mat
 	return ! /r
 	RightKeyWrongRecord: ! r:
 		do
-			read #fin:
-		loop until rec(fin)=prec
+			read #hIn:
+		loop until rec(hIn)=prec
 	return ! /r
 
 	REWR_P: ! r:
 		! spos=1
 		if menu1_opt=opt_add then
-			prec=lrec(fin)+1
-			keyForm$=fn_setKeyForm$(mat blank$,key$,fin)
-			write #fin,using keyForm$,reserve: mat blank$
+			prec=lrec(hIn)+1
+			keyForm$=fn_setKeyForm$(mat blank$,key$,hIn)
+			write #hIn,using keyForm$,reserve: mat blank$
 			! pr 'write using KeyFormS,Reserve: Mat Blank$   - keyForm$='&keyForm$
-			read #fin,key=key$: nokey SPECIAL_NOKEY
+			read #hIn,key=key$: nokey SPECIAL_NOKEY
 		else
-			keyForm$=fn_setKeyForm$(mat blank$,key$,fin)
-			reread #fin,using keyForm$: mat blank$
+			keyForm$=fn_setKeyForm$(mat blank$,key$,hIn)
+			reread #hIn,using keyForm$: mat blank$
 			j=0 : key$=''
-			do while kps(fin,j+=1)>0
+			do while kps(hIn,j+=1)>0
 				key$=key$&blank$(j)
 			loop
-			read #fin,key=key$: nokey SPECIAL_NOKEY
-			if rec(fin)<>prec then
+			read #hIn,key=key$: nokey SPECIAL_NOKEY
+			if rec(hIn)<>prec then
 				gosub RightKeyWrongRecord
 			end if
 		end if
@@ -351,35 +349,35 @@ def library fnHamster(uw$*20,mat lbl$,mat fln,fin,mat p$; mat flTyp$,mat sln,mat
 			if fltyp2$(j)="c" or fltyp2$(j)="g" or fltyp2$(j)="cr" then
 				tmp$="Form Pos "&str$(startPos2(j))&","&fltyp2$(j)&" "
 				tmp$=tmp$&str$(sln2(j))
-				rewrite #fin,using tmp$,same,reserve: p$(j)
+				rewrite #hIn,using tmp$,same,reserve: p$(j)
 				! pr 'Rewr$ - '&TMP$&"   P$("&STR$(J)&")="&P$(J)
 			end if
 			if crflag=1 then fltyp2$(j)="cr" : crflag=0
 			if fltyp2$(j)="n" or fltyp2$(j)="pd" then
 				tmp$="Form Pos "&str$(startPos2(j))&","&fltyp2$(j)&" "
 				tmp$=tmp$&str$(sln2(j)) : t=val(p$(j))
-				rewrite #fin,using tmp$,same,reserve: t
+				rewrite #hIn,using tmp$,same,reserve: t
 			end if
 		next j
-		release #fin:
+		release #hIn:
 		! REWR_P_XIT: !
 	return ! /r
 	SPECIAL_NOKEY: ! r:
 		! pr 'Special Nokey routine' ! XXX
 		key$=""
 		dim keyForm$*1024
-		read #fin,using keyForm$,rec=prec: mat blank$
+		read #hIn,using keyForm$,rec=prec: mat blank$
 		for j=1 to udim(blank$) : key$=key$&blank$(j) : next j
 	continue  ! not Return  ! not Retry ! /r
 	Xit: !
 fnend
 
-def fn_setKeyForm$*1024(mat blank$,&key$,fin; ___,return$*1024)
+def fn_setKeyForm$*1024(mat blank$,&key$,hIn; ___,return$*1024)
 	return$='Form ' : key$='' : j=0
-	do while kps(fin,j+=1)>0
-		return$&='Pos '&str$(kps(fin,j))&','
-		return$&='C '&str$(kln(fin,j))&','
-		blank$(j)=rpt$(chr$(48),kln(fin,j))
+	do while kps(hIn,j+=1)>0
+		return$&='Pos '&str$(kps(hIn,j))&','
+		return$&='C '&str$(kln(hIn,j))&','
+		blank$(j)=rpt$(chr$(48),kln(hIn,j))
 		key$&=blank$(j)
 	loop
 	return$=return$(1:len(return$)-1) ! remove the trailing comma

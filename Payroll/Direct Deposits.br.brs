@@ -171,6 +171,7 @@ EntryDetailRecord: ! r: (6) entry detail
 	! dr$="081505731"
 	! da$="10004147         "
 	if testfile=1 then tcp(32)=0
+	! pr 'tcp(32)=';tcp(32) : pause
 	write #hDdout,using F_ddout_6a: 6,tc,int(ddN(dd_routing)/10),str$(ddN(dd_routing))(len(str$(ddN(dd_routing))):len(str$(ddN(dd_routing)))),dd$(dd_account),tcp(32)*100,z$,em$(1)(1:22),"",ari,lpad$(trim$(bankaccount$),8),tn$,crlf$         ! changed dr$ to str(ddN(dd_routing)) ; also da$ to dd$(dd_account)  ! entry to place money in employees account
 	F_ddout_6a: Form POS 1,G 1,G 2,pic(########),C 1,C 17,PIC(##########),C 15,C 22,G 2,N 1,C 8,c 7,c 2
 	pr #255: z$&" "&em$(1)&" "&str$(tcp(32)) pageoflow ReportPgof
