@@ -5,13 +5,13 @@ fncno(cno)
 MENU1: ! r:
 	fnTos
 	! r: add the system buttons to the screen
-	fnbutton_or_disabled(env$('enableClientSelection')=='Yes',2,2,env$('client')(1:37),fkey_client:=5201, 'Client Name is "'&env$('client')&'"',37)
+	fnButtonOrDisabled(env$('enableClientSelection')=='Yes',2,2,env$('client')(1:37),fkey_client:=5201, 'Client Name is "'&env$('client')&'"',37)
 	fnFra(4,1,udim(mat client_has$)+1,38, 'System','Click a system button to change and view the companies in that system')
 	ch_line=1
 	for ch_item=2 to udim(mat client_has$) ! starting at 2 to always skip CO = which is always #1
 		if ~fnSystemIsAddOn(client_has$(ch_item)) then
 			ch_line+=1
-			fnbutton_or_disabled((~env$('cursys')==client_has$(ch_item)),ch_line,1,fnSystemNameFromAbbr$(client_has$(ch_item))(1:37),1000+ch_item, '',37,1)
+			fnButtonOrDisabled((~env$('cursys')==client_has$(ch_item)),ch_line,1,fnSystemNameFromAbbr$(client_has$(ch_item))(1:37),1000+ch_item, '',37,1)
 		end if
 	next ch_item
 	! /r

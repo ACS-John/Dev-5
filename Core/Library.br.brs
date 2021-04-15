@@ -872,11 +872,11 @@ fnend
 		library 'S:\Core\ACS_Component.br': fnflexinit1
 		fnflexinit1=fnflexinit1(sfn$,lyne,ps,height,width,mat ch$,mat cm$,seltype,usr,container,tabcon)
 	fnend
-	def library fncomboa(sfn$*256,lyne,ps,mat opt$; ttt$*200,width,contain,tabcon)
+	def library fnComboa(sfn$*256,lyne,ps,mat opt$; ttt$*200,width,contain,tabcon)
 		library 'S:\Core\ACS_Component.br': fncomboa
 		fncomboa=fncomboa(sfn$,lyne,ps,mat opt$, ttt$,width,contain,tabcon)
 	fnend
-	def library fncombof(sfn$*100,lyne,ps,width,df$*200,psk,lnk,psd,lnd; if$*200,limlis,unused_userOrReplace,ttt$*200,contain,tabcon,keyFormat$)
+	def library fnCombof(sfn$*100,lyne,ps,width,df$*200,psk,lnk,psd,lnd; if$*200,limlis,unused_userOrReplace,ttt$*200,contain,tabcon,keyFormat$)
 		library 'S:\Core\ACS_Component.br': fncombof
 		fncombof=fncombof(sfn$,lyne,ps,width,df$,psk,lnk,psd,lnd, if$,limlis,unused_userOrReplace,ttt$,contain,tabcon,keyFormat$)
 	fnend
@@ -884,11 +884,11 @@ fnend
 		library 'S:\Core\ACS_Component.br': fnButton
 		fnButton=fnButton(lyne,ps,txt$,comkey, tt$,height,width,container,tabcon,default,cancel)
 	fnend
-	def library fnbutton_or_disabled(enable,lyne,ps,txt$*200,comkey; tt$*200,width,container,tabcon,default,cancel)
-		library 'S:\Core\fnbutton_or_disabled.br': fnbutton_or_disabled
-		fnbutton_or_disabled=fnbutton_or_disabled(enable,lyne,ps,txt$,comkey, tt$,width,container,tabcon,default,cancel)
+	def library fnButtonOrDisabled(enable,lyne,ps,text$*200,comkey; toolTip$*200,width,container,tabcon,default,cancel)
+		library 'S:\Core\fn\buttonOrDisabled.br': fnButtonOrDisabled
+		fnButtonOrDisabled=fnButtonOrDisabled(enable,lyne,ps,text$,comkey, toolTip$,width,container,tabcon,default,cancel)
 	fnend
-	def library fnpicbut(lyne,mypos,txt$*40,comkey,pic1$*150,btnh,btnw; pic2$*150,tt$*150,container,tabcon,default,cancel)
+	def library fnPicBut(lyne,mypos,txt$*40,comkey,pic1$*150,btnh,btnw; pic2$*150,tt$*150,container,tabcon,default,cancel)
 		library 'S:\Core\ACS_Component.br': fnpicbut
 		fnpicbut=fnpicbut(lyne,mypos,txt$,comkey,pic1$,btnh,btnw, pic2$,tt$,container,tabcon,default,cancel)
 	fnend

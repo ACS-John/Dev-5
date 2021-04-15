@@ -63,7 +63,7 @@ def library fnget_company_number_list(mat cno_list; sysid$*256)
 	mat cno_list(company_count)
 	fnget_company_number_list=company_count
 fnend
-def fn_CnoLegacyNtoCReg(legacyFilename$*256,legacyForm$*64,registryKey$*128; valuePassedIn)
+def fn_CnoLegacyNtoCReg(legacyFilename$*256,legacyForm$*64,registryKey$*128; valuePassedIn,___,fscode$)
 	! Get_or_Put=1 then GET
 	! Get_or_Put=2 then PUT
 	if valuePassedIn>0 then get_or_put=2 else get_or_put=1

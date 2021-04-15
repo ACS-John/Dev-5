@@ -1108,55 +1108,6 @@ def fn_ace_rd_picbut(; ___,lyne$,pos$,comkey$,height$,width$,container,tabcon,de
 
 
 fnend
-def fn_ace_rd_cmdkey
-	dim spec$*255
-	spec$=''
-	txt$=control$(2)
-	mat return_keys(udim(return_keys)+1)
-	returnkey=return_keys(udim(return_keys))=val(control$(3))
-	default=val(control$(4))
-	cancel=val(control$(5))
-	if udim(control$)>=6 then
-		tt$=control$(6)
-	end if
-	if cancel then fkey_cancel=returnkey
-	txt$=srep$(txt$,'&','') ! remove underlined letters...	 would be nice to use them. xxx
-	width=len(txt$)
-	spec$='1,'&str$(ace_cmdkey_ps)&',CC '&str$(width)&',,B'&str$(returnkey)
-	if default then
-		default_button_fkey=returnkey
-		spec$='1,'&str$(ace_cmdkey_ps)&',CC '&str$(width)&',[buttons],B'&str$(returnkey)
-		pr #0, fields "1,5,P 1/2,[buttons],"&str$(returnkey): "S:\Core\Icon\forward-icon.png" ioerr ignore
-	else if cancel then
-		spec$='1,'&str$(ace_cmdkey_ps)&',CC '&str$(width)&',[buttoncancel],B'&str$(returnkey)
-		if env$('tmp_acs_back_arrow')<>'' then
-			pr #0, fields "1,2,P 1/2,[buttons],"&str$(returnkey): env$('tmp_acs_back_arrow') ioerr ignore
-		else
-			pr #0, fields "1,2,P 1/2,[buttons],"&str$(returnkey): "S:\Core\Icon\back-icon.png" ioerr ignore
-		end if
-	else
-		spec$='1,'&str$(ace_cmdkey_ps)&',CC '&str$(width)&',,B'&str$(returnkey)
-	end if
-
-	dim _help$*255
-	if tt$='' then
-		_help$="1;Press ["
-		if default then
-			_help$&="Enter"
-		else if cancel then
-			_help$&="Esc"
-		else if returnkey >=2 and returnkey<=12 then ! because F1 will be used for Help
-			_help$&="F"&str$(returnkey)
-		else
-			_help$=''
-		end if
-		if _help$<>'' then _help$&="] to "&txt$&";"
-	else
-		_help$='1;'&tt$&';'
-	end if
-	pr #button_win, fields spec$, help _help$: txt$
-	ace_cmdkey_ps+=(width+2)
-fnend
 def fn_ace_rd_tab
 	lyne=val(control$(2))
 	ps=val(control$(3))
@@ -1539,7 +1490,40 @@ def fn_ace_rd_pic
 	height=val(control$(5))
 	path1$=control$(6)
 fnend
-def fn_ace_rd_button
+def fn_ace_rd_cmdkey(; ___,_help$*255,spec$*255)
+	txt$=control$(2)
+	mat return_keys(udim(return_keys)+1)
+	returnkey=return_keys(udim(return_keys))=val(control$(3))
+	default=val(control$(4))
+	cancel=val(control$(5))
+	if udim(control$)>=6 then
+		tt$=control$(6)
+	end if
+	if cancel then fkey_cancel=returnkey
+	txt$=srep$(txt$,'&','') ! remove underlined letters...	 would be nice to use them. xxx
+	width=len(txt$)
+	spec$='1,'&str$(ace_cmdkey_ps)&',CC '&str$(width)&',,B'&str$(returnkey)
+	if default then
+		default_button_fkey=returnkey
+		spec$='1,'&str$(ace_cmdkey_ps)&',CC '&str$(width)&',[buttons],B'&str$(returnkey)
+		pr #0, fields "1,5,P 1/2,[buttons],"&str$(returnkey): "S:\Core\Icon\forward-icon.png" ioerr ignore
+	else if cancel then
+		spec$='1,'&str$(ace_cmdkey_ps)&',CC '&str$(width)&',[buttoncancel],B'&str$(returnkey)
+		if env$('tmp_acs_back_arrow')<>'' then
+			pr #0, fields "1,2,P 1/2,[buttons],"&str$(returnkey): env$('tmp_acs_back_arrow') ioerr ignore
+		else
+			pr #0, fields "1,2,P 1/2,[buttons],"&str$(returnkey): "S:\Core\Icon\back-icon.png" ioerr ignore
+		end if
+	else
+		spec$='1,'&str$(ace_cmdkey_ps)&',CC '&str$(width)&',,B'&str$(returnkey)
+	end if
+
+	_help$=fn_formatButtonHelp$(tt$,returnkey,txt$, default,cancel)
+
+	pr #button_win, fields spec$, help _help$: txt$
+	ace_cmdkey_ps+=(width+2)
+fnend
+def fn_ace_rd_button(; ___,_help$*255,spec$*255)
 	lyne=val(control$(2))
 	ps=val(control$(3))
 	height=val(control$(4))
@@ -1555,7 +1539,7 @@ def fn_ace_rd_button
 	cancel=val(control$(10)) error ignore
 	container=val(control$(11)) error ignore
 	tabcon=val(control$(12)) error ignore
-	dim spec$*255
+
 	spec$=str$(lyne)&','&str$(ps)&','&str$(width)&'/CC '&str$(len(txt$))&',,B'&str$(comkey)
 	! r: new logic 10/19/2015
 	!		spec$=str$(lyne)&','&str$(ps)&',CC '&str$(width)&',,B'&str$(comkey)
@@ -1581,26 +1565,52 @@ def fn_ace_rd_button
 	else
 		tmp_win=acs_win ! pr #acs_win, fields spec$: txt$
 	end if
-	! r: new help logic 10/19/2015
-	dim _help$*255
-	if tt$='' then
-		_help$="1;Press ["
-		if default then
-			_help$&="Enter"
-		else if cancel then
-			_help$&="Esc"
-		else if returnkey >=2 and returnkey<=12 then
-			_help$&="F"&str$(returnkey)
-		else
-			_help$=''
-		end if
-		if not _help$='' then _help$&="] to "&txt$&";"
-	else
-		_help$='1;'&tt$&';'
-	end if
-	! /r
+	_help$=fn_formatButtonHelp$(tt$,comkey,txt$, default,cancel)
 	pr #tmp_win, fields spec$, help _help$: txt$
+	! pr 'spec$='&spec$
+	! pr '_help$='&_help$
+	! pr 'txt$='&txt$
+	! pause
 fnend
+	def fn_formatButtonHelp$*256(tt$*256,comkey,txt$*128; default,cancel,___,return$*256)
+		return$='1;'&tt$
+		if default then return$&='\nKeyboard Shortcut: [Enter] (or double click an item in a list view)' : goto EoIfCh
+		if cancel then return$&='\nKeyboard Shortcut: [Esc]' : goto EoIfCh
+		if comkey=>1 and comkey<=10 then return$&='\nKeyboard Shortcut: [F'&str$(comkey)&']'
+		fn_ifCh(30,'[Alt+A]') : goto EoIfCh
+		fn_ifCh(48,'[Alt+B]') : goto EoIfCh
+		fn_ifCh(46,'[Alt+C]') : goto EoIfCh
+		fn_ifCh(32,'[Alt+D]') : goto EoIfCh
+		fn_ifCh(18,'[Alt+E]') : goto EoIfCh
+		fn_ifCh(33,'[Alt+F]') : goto EoIfCh
+		fn_ifCh(34,'[Alt+G]') : goto EoIfCh
+		fn_ifCh(35,'[Alt+H]') : goto EoIfCh
+		fn_ifCh(23,'[Alt+I]') : goto EoIfCh
+		fn_ifCh(36,'[Alt+J]') : goto EoIfCh
+		fn_ifCh(37,'[Alt+K]') : goto EoIfCh
+		fn_ifCh(38,'[Alt+L]') : goto EoIfCh
+		fn_ifCh(50,'[Alt+M]') : goto EoIfCh
+		fn_ifCh(49,'[Alt+N]') : goto EoIfCh
+		fn_ifCh(24,'[Alt+O]') : goto EoIfCh
+		fn_ifCh(25,'[Alt+P]') : goto EoIfCh
+		fn_ifCh(16,'[Alt+Q]') : goto EoIfCh
+		fn_ifCh(19,'[Alt+R]') : goto EoIfCh
+		fn_ifCh(31,'[Alt+S]') : goto EoIfCh
+		fn_ifCh(20,'[Alt+T]') : goto EoIfCh
+		fn_ifCh(22,'[Alt+U]') : goto EoIfCh
+		fn_ifCh(47,'[Alt+V]') : goto EoIfCh
+		fn_ifCh(17,'[Alt+W]') : goto EoIfCh
+		fn_ifCh(45,'[Alt+X]') : goto EoIfCh
+		fn_ifCh(21,'[Alt+Y]') : goto EoIfCh
+		fn_ifCh(44,'[Alt+Z]') : goto EoIfCh
+		EoIfCh: !
+		return$&=';'
+		fn_formatButtonHelp$=return$
+	fnend
+		def fn_ifCh(comkey,text$*64; ___,returnN)
+			if comkey=comkeyTest then return$&='\nKeyboard Shortcut: '&text$ : returnN=1
+			fn_ifCh=returnN
+		fnend
 def fn_ace_rd_option
 	respc+=1
 	lyne=val(control$(2))
@@ -1621,7 +1631,8 @@ def fn_ace_rd_option
 		fn_ace_io_add('#'&str$(acs_win)&','&str$(lyne)&','&str$(ps)&',radio '&str$(len(trim$(txt$))+4)&',T') ! tab order
 	end if
 fnend
-def fn_ace_rd_check
+def fn_ace_rd_check(; ___,lyne,ps,align,txt$*256,container,tabcon,chk_disable,spec$*255,align$,chk_protected$*2)
+	! local: acs_win, respc,mat tabs, mat frames
 	respc+=1
 	lyne=val(control$(2))
 	ps=val(control$(3))
@@ -1685,7 +1696,7 @@ def fn_ace_rd_label(; ___,lbl_win)
 		end if
 	end if
 fnend
-def fn_ace_rd_text
+def fn_ace_rd_text(; ___,spec$*255)
 	respc+=1
 	lyne=val(control$(2))
 	ps=val(control$(3)) ! -.6
@@ -1701,7 +1712,6 @@ def fn_ace_rd_text
 	addtomask$=control$(12)
 ! resp$(respc)=srep$(resp$(respc),'"','""') soflow ignore ! fn2quote(resp$(respc))
 ! tt$=srep$(tt$,'"','""') soflow ignore ! fn2quote(tt$)
-	dim spec$*255
 	spec$=fn_textMask$(mask$,lyne,ps,width,container,maxlen)
 	mat text_masks(respc)
 	text_masks(respc)=val(mask$)
@@ -1925,7 +1935,7 @@ def fn_dateTextBox(mask,lyne,ps,&width,container; disable,___,disable$*1,date_bu
 	date_fielddata(date_boxes,5)=respc ! parent textbox number
 	date_fielddata(date_boxes,6)=mask
 fnend
-def fn_ace_rd_combo(combo$*1)
+def fn_ace_rd_combo(combo$*1; ___,spec$*255)
 	dim ace_combo_io$*255
 	ace_combo_io$=''
 	! combo_count=0

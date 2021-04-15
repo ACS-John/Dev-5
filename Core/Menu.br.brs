@@ -199,10 +199,10 @@ def fn_main
 			fnLbl(program_grid_line+2,1,last_save_date$(1:info_col_width),info_col_width,2,0,0,0,tmp_tooltip$)
 			fnLbl(program_grid_line+3,1,last_save$(pos(last_save$,'\',-1)+1:len(last_save$))(1:info_col_width),info_col_width,2,0,0,0,tmp_tooltip$)
 			fnLbl(program_grid_line+4,1,login_name$(1:info_col_width),info_col_width,2,0,0,0,'Login Name is "'&login_name$&'"')
-			fnbutton_or_disabled(env$('enableClientSelection')=='Yes',program_grid_line+5,1,env$('client')(1:info_col_width),fkey_client:=5201, 'Client Name is "'&env$('client')&'"',info_col_width)
 			if env$('Decimal_Assumed')<>'Decimal Required' then
-				fnLbl(program_grid_line+6,1,env$('Decimal_Assumed'),info_col_width,2)
+				fnLbl(program_grid_line+5,1,env$('Decimal_Assumed'),info_col_width,2)
 			end if
+			fnButtonOrDisabled(env$('enableClientSelection')=='Yes',program_grid_line+6,1,env$('client')(1:info_col_width),fkey_client:=5201, 'Client Name is "'&env$('client')&'"',info_col_width)
 			if env$('ACSDeveloper')<>'' then
 				fnLbl(program_grid_line+8 ,1,"ACS Developer"(1:info_col_width),info_col_width,2)
 				fnLbl(program_grid_line+9 ,1,env$('ACSDeveloper')(1:info_col_width),info_col_width,2)
@@ -571,8 +571,8 @@ def fn_favoritesDraw
 		dim favorite$(0)*128
 		fnFavoriteList(mat favorite$)
 		fnButton(1,1,'Close',fkey_favorite_close:=1452,'Close Favorites',0,6,fraFavorites)
-		fnbutton_or_disabled(favoriteDeleteMode$<>'True',1,15,'Delete',fkey_favorite_del:=1455,'To remove a favorite, click this "Delete" button and then click the favorite.',6,fraFavorites)
-		fnbutton_or_disabled(1,1,favorite_width-6,'Add',fkey_favorite_add:=1450,'To add a favorite, highlite a menu option and click this "add" button.',6,fraFavorites)
+		fnButtonOrDisabled(favoriteDeleteMode$<>'True',1,15,'Delete',fkey_favorite_del:=1455,'To remove a favorite, click this "Delete" button and then click the favorite.',6,fraFavorites)
+		fnButtonOrDisabled(1,1,favorite_width-6,'Add',fkey_favorite_add:=1450,'To add a favorite, highlite a menu option and click this "add" button.',6,fraFavorites)
 		if favoriteDeleteMode$='True' then
 			fnLbl(2,1,'Select Favorite to Delete',favorite_width,2,0,fraFavorites)
 		end if
@@ -587,7 +587,7 @@ def fn_dashboardDraw
 		dashboard_width=screen_width-4
 		fnFra(1,1,dashboard_height,dashboard_width,'Dashboard') : frameCount+=1 : fraDashboard=frameCount
 		if enableFavorites then
-			fnbutton_or_disabled(env$('FavoritesOpen')<>'True',2,favorite_left,'Favorites',fkey_favorite_open:=1451,'',20,fraDashboard)
+			fnButtonOrDisabled(env$('FavoritesOpen')<>'True',2,favorite_left,'Favorites',fkey_favorite_open:=1451,'',20,fraDashboard)
 		end if
 		if env$('cursys')="CL" then
 			tmp_btn_width=14 : tmpBtnItem=0

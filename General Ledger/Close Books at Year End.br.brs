@@ -77,6 +77,9 @@ do ! r: the first screen
 		fncreg_write("last retained earnings account - no fund ",last_retained_earnings_acct$(1))
 	end if
 loop until lwrc$(pas$)=lwrc$("CLOSE") ! /r
+
+fnAutomatedSavePoint('before')
+
 open #hGlMstr1=fnH: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLINDEX.h[cno],Shr",internal,outIn,keyed
 open #hGlMstr2=fnH: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\glIndx2.h[cno],Shr",internal,outIn,keyed
 fGlMstr1: form pos 1,c 12,pos 81,41*pd 6.2

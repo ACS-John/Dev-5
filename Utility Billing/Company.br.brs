@@ -6,10 +6,10 @@ MAIN: ! r:
 	fnTos
 	lc=1
 	respc=0
-	fnbutton_or_disabled(screen<>screen_main   ,lc, 2,'Main'     ,1001, '',8)
-	fnbutton_or_disabled(screen<>screen_Route  ,lc,12,'Routes'   ,1002, '',8)
-	fnbutton_or_disabled(screen<>screen_Service,lc,24,'Services' ,1003, '',8)
-	fnbutton_or_disabled(screen<>screen_EFT    ,lc,36,'EFT'      ,1004, '',8)
+	fnButtonOrDisabled(screen<>screen_main   ,lc, 2,'Main'     ,1001, '',8)
+	fnButtonOrDisabled(screen<>screen_Route  ,lc,12,'Routes'   ,1002, '',8)
+	fnButtonOrDisabled(screen<>screen_Service,lc,24,'Services' ,1003, '',8)
+	fnButtonOrDisabled(screen<>screen_EFT    ,lc,36,'EFT'      ,1004, '',8)
 	lc=2
 	if screen=screen_main then
 		! r: company information portion of screen
