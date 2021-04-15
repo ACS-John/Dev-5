@@ -32,6 +32,7 @@ if ~exists("[Q]\GLmstr\bankrec.h[cno]") then
 end if
 open #hBankRec=fnH: "Name=[Q]\GLmstr\BankRec.h[cno],KFName=[Q]\GLmstr\BankRec-idx.h[cno],Shr",internal,outIn,keyed
 open #hTr1099=fnH: "Name=[Q]\GLmstr\GLTR1099.h[cno],KFName=[Q]\GLmstr\gltrIdx1.h[cno],Shr",internal,outIn,keyed
+
 ReadMerge: !
 dim t$*12
 dim l$*12
@@ -49,8 +50,8 @@ if t$(10:12)="   " then t$(12:12)="0"
 
 L440: !
 dim ta(2)
-read #hAccount,using F_Glmstr1,key=t$: cb,mat ta nokey L840
-L460: !
+read #hAccount,using F_Glmstr1,key=t$: cb,mat ta nokey ScrMissingGl
+WriteIt: !
 write #hGlTrans,using F_glTrans: t$,xs,k,mat xn,l$,p$,0
 lr2=lrec(hGlTrans)
 if ta(1)=0 then ta(1)=lr2
@@ -61,7 +62,7 @@ rewrite #hAccount,using F_Glmstr1,key=t$: cb,mat ta
 L550: form pos 71,pd 3
 rewrite #hMerge,using L570: 9
 L570: form pos 27,n 2
-BANK_REC_FILE: ! r:
+ ! r: ! BANK_REC_FILE
 	if l$="999999999999" then goto VENDOR_FILE ! don't update bkrec for contra entries
 	if xn(1)>2 then goto VENDOR_FILE ! only allow receipts or disbursments to bank rec
 	l$=trim$(l$): l$=l$(1:8)
@@ -73,6 +74,7 @@ BANK_REC_FILE: ! r:
 	amt=amt+k
 	rewrite #hBankRec,using L650: amt
 	goto VENDOR_FILE !
+	
 	WRITE_NEW_BANKREC: !
 	bankgl$=key$
 	tcde=xn(1) ! transaction code
@@ -88,6 +90,7 @@ BANK_REC_FILE: ! r:
 	if tcde=2 then tx3=-tx3 ! turn sign around on bank rec file for receipts
 	write #hBankRec,using 'Form POS 79,c 12,pos 3,N 1,C 8,G 6,pd 10.2,C 8,C 35,N 1,N 6,N 1': bankgl$,tcde,tr$(1),tr$(2),tx3,tr$(4),tr$(5),pcde,clr,scd
 	form pos 1,c 12,c 12,c 30,c 2,n 6,pd 5.2,n 1
+	
 	VENDOR_FILE: !
 	if rtrm$(ven$)="" or ltrm$(rtrm$(ven$))="0" then goto ReadMerge
 	if xn(1)<>1 or prtrans=1 then goto ReadMerge ! only disbursments and not payroll trans
@@ -99,7 +102,7 @@ BANK_REC_FILE: ! r:
 	L810: form pos 1,c 8,n 6,pd 5.2,c 12,c 30,pd 3
 goto ReadMerge ! /r
 
-L840: ! r:
+ScrMissingGl: ! r:
 	fnTos
 	mylen=40: mypos=mylen+3 : right=1
 	fnLbl(1,10,"  Account Number: "&t$,mylen,left)
@@ -116,7 +119,7 @@ L840: ! r:
 	fnAcs(mat resp$,ckey)
 	if resp$(1)="True" then goto ADD
 	if resp$(2)="True" then goto CHANGE_ACCOUNTS
-goto L840 ! /r
+goto ScrMissingGl ! /r
 
 ADD: ! r:
 	dno=val(t$(1:3)) conv ignore
@@ -161,7 +164,7 @@ ADD: ! r:
 	cb=0
 	dim zo(50)
 	write #hAccount,using F_Glmstr2: t$,d$,mat zo
-goto L460 ! /r
+goto WriteIt ! /r
 
 CHANGE_ACCOUNTS: ! r:
 	fnTos
@@ -185,15 +188,7 @@ Finis: ! r:
 	close #hTr1099: ioerr ignore
 	close #hBankRec: ioerr ignore
 
-	if new1=1 or new2=1 then
-		fnIndex("[Q]\GLmstr\GLBREC.h[cno]","[Q]\GLmstr\GLRecIdx.h[cno]","1 24")
-		if new1=1 then
-			fnIndex("[Q]\GLmstr\GLmstr.h[cno]","[Q]\GLmstr\GLIndex.h[cno]","1 12")
-		end if
-		if new2=1 then
-			fnIndex("[Q]\GLmstr\GL1099.h[cno]","[Q]\GLmstr\GL109IDX.h[cno]","1 8")
-		end if
-	end if
+	fnIndex("[Q]\GLmstr\GLBREC.h[cno]","[Q]\GLmstr\GLRecIdx.h[cno]","1 24")
 
 	open #30: "Name=[Q]\GLmstr\Process.h[cno],Shr",internal,outIn,relative ioerr L1760
 	read #30,using "form pos 1,n 1",rec=1: process noRec L1760 ! read post payroll code

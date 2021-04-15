@@ -180,8 +180,9 @@ def library fnAddGlPayee
 		fnLbl(21,1,"",1,0,0,0) ! add space before buttons
 		!        lc=21
 		fnButton(lc=15,61,"Add",2,"Add a standard general ledger breakdowns",0,4)
-		fnButton(lc,67,"Edit",7,"Edit or Delete a standard general ledger breakdowns")
-		fnCmdKey("Save",1,1,0,"Saves and returns to payee selection")
+		! fnButton(lyne,ps,txt$*200,comkey; tt$*200,height,width,container,tabcon,default,cancel)
+		fnButton(lc,67,"Edit",7,"Edit or Delete a standard general ledger breakdowns",0,0,0,0,1)
+		fnCmdKey("Save",1,0,0,"Saves and returns to payee selection")
 		fnCmdKey("&Transactions",4,0,0,"List all checks for this payee")
 		fnCmdKey("&Cancel",5,0,1,"Return to payee selection")
 		fnAcs(mat resp$,ckey)

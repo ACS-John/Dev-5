@@ -1,6 +1,6 @@
 ! Replace S:\acsGL\gljcMrge
-! GENERAL LEDGER JOB COST MERGE Charges; attempts to merge job cost : _
-	! and then chains to regular general ledger merge program.
+! GENERAL LEDGER JOB COST MERGE Charges; attempts to merge job cost
+! and then chains to regular general ledger merge program.
  
 	autoLibrary
 	on error goto Ertn
@@ -8,8 +8,8 @@
 	dim rn$*12,jn$*6,ji2(3),cn$*11,l(13),ta(2),tr(9),empnum$*12,empnam$*30
  
 	fnTop(program$,"Post Transactions")
-	fncno(cno)
-	open #1: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,input,relative: read #1,using 'Form POS 382,N 2',rec=1: jccode : _
+	open #1: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,input,relative
+	read #1,using 'Form POS 382,N 2',rec=1: jccode 
 	close #1:
 	if jccode<>1 then goto L460
 	pr newpage

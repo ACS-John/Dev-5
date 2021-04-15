@@ -683,26 +683,26 @@ def fn_nav_buttons
 	if screen=0 then screen=screen_main
 	nb_lc=0 : nb_pos=110 : nb_len=15
 	fnLbl(win_height,nb_len,'') ! forces all the windows for each screen to be at least the hight specified by win_height (set toward the top of this program)
-	fnbutton_or_disabled(screen<>screen_main,nb_lc+=1,nb_pos,'Main',1001, '',nb_len)
-	fnbutton_or_disabled(screen<>screen_theme,nb_lc+=1,nb_pos,'Theme',1002, '',nb_len)
-	fnbutton_or_disabled(screen<>screen_print,nb_lc+=1,nb_pos,'Printer',1003, '',nb_len)
+	fnButtonOrDisabled(screen<>screen_main,nb_lc+=1,nb_pos,'Main',1001, '',nb_len)
+	fnButtonOrDisabled(screen<>screen_theme,nb_lc+=1,nb_pos,'Theme',1002, '',nb_len)
+	fnButtonOrDisabled(screen<>screen_print,nb_lc+=1,nb_pos,'Printer',1003, '',nb_len)
 	nb_lc+=1
 	if fnclient_has('PR') then
-		fnbutton_or_disabled(screen<>screen_pr,nb_lc+=1,nb_pos,'Payroll',1007, '',nb_len)
+		fnButtonOrDisabled(screen<>screen_pr,nb_lc+=1,nb_pos,'Payroll',1007, '',nb_len)
 	end if
 	if fnclient_has('GL') then
-		fnbutton_or_disabled(screen<>screen_gl,nb_lc+=1,nb_pos,'General Ledger',1006, '',nb_len)
+		fnButtonOrDisabled(screen<>screen_gl,nb_lc+=1,nb_pos,'General Ledger',1006, '',nb_len)
 	end if
 	if fnclient_has('UB') then
-		fnbutton_or_disabled(screen<>screen_ub,nb_lc+=1,nb_pos,'Utility Billing',1005, '',nb_len)
+		fnButtonOrDisabled(screen<>screen_ub,nb_lc+=1,nb_pos,'Utility Billing',1005, '',nb_len)
 	end if
 
 	if fnclient_has('U4') then
-		fnbutton_or_disabled(screen<>screen_hh,nb_lc+=1,nb_pos,'(UB) Hand Held',1004, '',nb_len)
+		fnButtonOrDisabled(screen<>screen_hh,nb_lc+=1,nb_pos,'(UB) Hand Held',1004, '',nb_len)
 	end if
 
 	if fnclient_has('EM') then
-		fnbutton_or_disabled(screen<>screen_em,nb_lc+=1,nb_pos,'Email',1008, '',nb_len)
+		fnButtonOrDisabled(screen<>screen_em,nb_lc+=1,nb_pos,'Email',1008, '',nb_len)
 	end if
 	fnLbl(22,1,'')
 fnend

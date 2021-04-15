@@ -337,6 +337,7 @@ def fn_employeeEdit(ent; employeeAdding)
 		else if ckey=4 then
 			goto EmployeeDelete
 		else if ckey=>5200 and ckey<=ckey_high then
+			if employeeAdding then gosub EmployeeSave
 			goto Nav
 		end if
 	goto ScrEmployee ! /r
@@ -579,15 +580,15 @@ def fn_navButtons(&lc,&deptCount; ___,deptItem)
 	end if
 
 	lc+=1
-	fnbutton_or_disabled(screen<>scrEmployee,lc,1,'Employee',ckey_scrEmployee)
+	fnButtonOrDisabled(screen<>scrEmployee,lc,1,'Employee',ckey_scrEmployee)
 	if fnpayroll_client_state$='AR' then
-		fnbutton_or_disabled(screen<>scrState,lc,11,'AR4EC',ckey_ScrState,'',10)
+		fnButtonOrDisabled(screen<>scrState,lc,11,'AR4EC',ckey_ScrState,'',10)
 	else if fnpayroll_client_state$='IL' then
-		fnbutton_or_disabled(screen<>scrState,lc,11,'IL W-4',ckey_ScrState,'',10)
+		fnButtonOrDisabled(screen<>scrState,lc,11,'IL W-4',ckey_ScrState,'',10)
 	else if fnpayroll_client_state$='LA' then
-		fnbutton_or_disabled(screen<>scrState,lc,11,'R-1300 (L-4)',ckey_ScrState,'',12)
+		fnButtonOrDisabled(screen<>scrState,lc,11,'R-1300 (L-4)',ckey_ScrState,'',12)
 	else if fnpayroll_client_state$='GA' then
-		fnbutton_or_disabled(screen<>scrState,lc,11,'Withholding Exemptions',ckey_ScrState,'',22)
+		fnButtonOrDisabled(screen<>scrState,lc,11,'Withholding Exemptions',ckey_ScrState,'',22)
 	end if
 	lc+=1
 	dptPos=1
@@ -597,7 +598,7 @@ def fn_navButtons(&lc,&deptCount; ___,deptItem)
 		! deptTxt$&=' [F'&str$(5201+deptItem)&']'
 		dim deptToolTip$*256
 		deptToolTip$=fnDeptName$(empDept(deptItem))&'\n(Department '&str$(empDept(deptItem))&')'
-		fnbutton_or_disabled(screen<>scrDept(deptItem),lc,dptPos,deptTxt$,5201+deptItem, deptToolTip$)
+		fnButtonOrDisabled(screen<>scrDept(deptItem),lc,dptPos,deptTxt$,5201+deptItem, deptToolTip$)
 		dptPos+=(len(deptTxt$)+2)
 	nex deptItem
 	fnbutton(lc,dptPos,'Add Department',ckey_DepartmentAdd, 'Add a new department')
@@ -630,7 +631,6 @@ Nav: ! r:
 EmployeeSave: ! r:
 	if add1=1 then
 		write #hEmployee,using F_employee: eno,mat em$,ss$,mat rs,mat em,lpd,tgp,w4Step2,w4Year$,ph$,bd,w4Step3,w4Step4a,w4Step4b,w4Step4c
-
 		add1=0
 	else if holdeno<>eno then
 		goto EmployeeChangeKey

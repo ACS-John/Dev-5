@@ -989,7 +989,7 @@ ServiceScreen: ! r:
 		for j=1 to 10
 			if trim$(srv$(j))<>"" and trim$(srvnam$(j))<>"" then
 				lyne+=1 : funkeyval=j+20
-				fnbutton_or_disabled(trim$(srv$(j))<>searchcode$,lyne,45,srvnam$(j),funkeyval,"Allows you to assign "&lwrc$(trim$(srvnam$(j)))&" codes for this customer (service "&str$(j)&')',20)
+				fnButtonOrDisabled(trim$(srv$(j))<>searchcode$,lyne,45,srvnam$(j),funkeyval,"Allows you to assign "&lwrc$(trim$(srvnam$(j)))&" codes for this customer (service "&str$(j)&')',20)
 			end if
 		next j
 		fn_ScrAddServiceMeterInfo(srvLine,respc+=1,mat rateInfo$,srv$(service_code),service_code)
@@ -1361,10 +1361,10 @@ def fn_ask_account(prev_list_id$,&x$,h_customer_1; select_button_text$,aas_butto
 		end if
 		fnLbl(AskAcct_line+=1,1,"Selection Method:",col1_width,1)
 		btn_width=10
-		fnbutton_or_disabled(account_selection_method<>asm_combo,AskAcct_line,col2_pos,'Combo',2001,'',btn_width)
-		fnbutton_or_disabled(account_selection_method<>asm_grid,AskAcct_line,col2_pos+((btn_width+1)*1),'Grid',2002,'',btn_width)
-		fnbutton_or_disabled(account_selection_method<>asm_text,AskAcct_line,col2_pos+((btn_width+1)*2),'Text',2003,'',btn_width)
-		fnbutton_or_disabled(account_selection_method<>asm_locationId,AskAcct_line,col2_pos+((btn_width+1)*3),'Location ID',2004,'',btn_width)
+		fnButtonOrDisabled(account_selection_method<>asm_combo,AskAcct_line,col2_pos,'Combo',2001,'',btn_width)
+		fnButtonOrDisabled(account_selection_method<>asm_grid,AskAcct_line,col2_pos+((btn_width+1)*1),'Grid',2002,'',btn_width)
+		fnButtonOrDisabled(account_selection_method<>asm_text,AskAcct_line,col2_pos+((btn_width+1)*2),'Text',2003,'',btn_width)
+		fnButtonOrDisabled(account_selection_method<>asm_locationId,AskAcct_line,col2_pos+((btn_width+1)*3),'Location ID',2004,'',btn_width)
 		AskAcct_line+=1
 		if account_selection_method=asm_locationId then
 			fnLbl(AskAcct_line+=1,1,"Location ID:",col1_width,1)

@@ -12,7 +12,7 @@ File
 Period Ending Dates                                 ^ General Ledger\*
 Enter Transactions                                  ^ General Ledger\*
 Enter Transactions (Legacy)                         ^ General Ledger\*
->Post Transactions                                  ^ acsGL\GLJCMrge
+! >Post Transactions                                  ^ acsGL\GLJCMrge <-- removed 4-9-21 Laura and John agreed   (  GENERAL LEDGER JOB COST MERGE  )
 >Remove Entries Posted by Mistake                   ^ acsGL\UNPost
 ! removed 2/10/2017 - will anyone notice?    Automatic Processing
 ! removed 2/10/2017 - will anyone notice?    >Select Automatic Processing Programs                              ^ acsGL\SelAuto

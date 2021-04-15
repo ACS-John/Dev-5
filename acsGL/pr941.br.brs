@@ -9,7 +9,7 @@ dim dedcode(10),calcode(10),dedfed(10),option1$(4)*20
 dim a$(3)*40,b$(2)*12,d$(10)*8,m(10),r(10),msgline$(2)*60
 dim e$(10)*12,tpt(26),pt(26)
 dim message$*40,option$(4)*15,resp$(15)*30
-dim d(2),e$(2)*12,prgl(5,3),miscname$(10)*20,dedfica(10),dedst(10),deduc(10),miscgl$(10)*12
+dim d(2),e$(2)*12,unused3(5,3),unused4$(10)*20,dedfica(10),unused7(10),unused6(10),unused5$(10)*12
 dim tb$*30,m(36),k(1),l$(1)*11,k$(3)*30
 dim city$*15,state$*2,zip$*9,csz$*40,x$*40
 
@@ -17,7 +17,7 @@ dim city$*15,state$*2,zip$*9,csz$*40,x$*40
 
 
 open #1: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,input,relative
-read #1,using 'Form POS 1,3*C 40,2*C 12,C 5,2*N 1,2*C 12,N 3,N 6,N 3,PD 7.2,C 30,POS 298,15*PD 4,POS 382,N 2,N 2,PD 5.3,PD 5.2,PD 5.3,PD 5.2,G 1,PD 5.3,PD 5.2,N 1,10*C 20,50*N 1,10*C 12',rec=1: mat a$,mat b$,c$,mat d,mat e$,a1,a2,a3,ucm,tb$,mat prgl,jccode,nap,ficarate,ficawage,feducrat,feducwag,actr$,mcr,mcm,reccode,mat miscname$,mat dedcode,mat dedfed,mat dedfica,mat dedst,mat deduc,mat miscgl$
+read #1,using 'Form POS 1,3*C 40,2*C 12,C 5,2*N 1,2*C 12,N 3,N 6,N 3,PD 7.2,C 30,POS 298,15*PD 4,POS 382,N 2,N 2,PD 5.3,PD 5.2,PD 5.3,PD 5.2,G 1,PD 5.3,PD 5.2,N 1,10*C 20,50*N 1,10*C 12',rec=1: mat a$,mat b$,c$,mat d,mat e$,a1,a2,a3,ucm,tb$,mat unused3,unused1,unused2,ficarate,ficawage,feducrat,feducwag,actr$,mcr,mcm,reccode,mat unused4$,mat dedcode,mat dedfed,mat dedfica,mat unused7,mat unused6,mat unused5$
 close #1:
 ficarate=ficarate/100
 mcr=mcr*.01

@@ -109,7 +109,7 @@ L860: goto L1640
 	data "  Budget","S:\acsGL\BGMaint2","BGMaint2","E"
 	data "  Enter Period Ending Dates","S:\General Ledger\Period Ending Dates","EntDat","E"
 	data "  Enter Transactions","S:\General Ledger\Enter Transactions","GLInput","E"
-	data "  Post Transactions","S:\acsGL\GLJCMRGE","GLJCMRGE","E"
+	! ta "  Post Transactions","S:\acsGL\GLJCMRGE","GLJCMRGE","E"
 	data "  Reverse Posted Transactions","S:\acsGL\UNPost","","E"
 	data "  Enter Standard Adjustments","S:\General Ledger\Enter Standard Adjustments","BldStdAj","E"
 	data "  Post Standard Adjustments","S:\General Ledger\Post Standard Adjustments","StdAdj","E"
