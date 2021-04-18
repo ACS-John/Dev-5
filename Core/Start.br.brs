@@ -663,7 +663,7 @@ def fn_freeVirtualStore ! does not work.
 	end if
 fnend
 def fn_UpdateQFileIO
-	if env$('acsDeveloper')='' and env$('cursys')<>'CM' then ! because I used symbolic link
+	if env$('cursys')<>'CM' then !    env$('acsDeveloper')='' and    removed because I removed the symbolic link and went NAS for D drive instead
 		fnMakeSurepathExists(env$('QBase')&'\Core\FileIO\Layout\')
 		fnMakeSurepathExists(env$('QBase')&'\Core\FileIO\Layout\version\')
 		fnCopy('S:\Core\FileIO\Layout\*.*'        ,env$('QBase')&'\Core\FileIO\Layout\*.*'        )
