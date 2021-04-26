@@ -783,10 +783,10 @@ def fn_transactionGrid(hMerge,row,col,twenty,ninety,previouslySelected; _
 	do
 		if fn_readMerge(0,gl$,tDate,tAmt,tType,postCode,tr$,desc$,vn$,jv2$,key$)=-4270 then goto TgEoF
 		if enableNet then
-			if trim$(tr$)<>'' and tr$<>oldtr$ then
+			if trim$(tr$)<>'' and tr$<>oldtr$ and lineCount then
 				mat glitem2$=('')
 				glitem2$(6)=str$(net)
-				glitem2$(7)="Net "
+				glitem2$(7)='Net'
 				fnflexadd1(mat glitem2$)
 
 				if enableblankLineAfterNet then
@@ -823,7 +823,7 @@ def fn_transactionGrid(hMerge,row,col,twenty,ninety,previouslySelected; _
 		oldtr$=tr$ ! hold reference numbers
 	loop
 	TgEoF: !
-	if enableNet then
+	if enableNet and lineCount then
 		mat glitem2$=('')
 		glitem2$(6)=str$(net)
 		glitem2$(7)="Net"
@@ -1031,33 +1031,36 @@ fnend
 def fn_extract(&hMtemp,vn$,transactionAmt; ___, _
 	hPayeeGl,glkey$*8,payeekey$*8,payeegl$,percent,td$*30,allocAmt,lastallocation)
 	!  pull allocation breakdown from payee record
+	if glkey$<>'' then
 
-	open #hPayeeGl=fnH: "Name=[Q]\GLmstr\PayeeGLBreakdown.h[cno],Version=1,KFName=[Q]\GLmstr\Payeeglbkdidx.h[cno],Use,RecL=56,KPs=1,KLn=8,Shr",internal,outIn,keyed
-	glkey$=lpad$(rtrm$(vn$),8)
-	restore #hPayeeGl,key>=glkey$: nokey ExtractFinis
+		open #hPayeeGl=fnH: "Name=[Q]\GLmstr\PayeeGLBreakdown.h[cno],Version=1,KFName=[Q]\GLmstr\Payeeglbkdidx.h[cno],Use,RecL=56,KPs=1,KLn=8,Shr",internal,outIn,keyed
+		glkey$=lpad$(rtrm$(vn$),8)
+		restore #hPayeeGl,key>=glkey$: nokey ExtractFinis
 
-	close #hMtemp: ioerr ignore
-	open #hMtemp=fnH: "Name=[Q]\GLmstr\Allocations[acsUserId].h[cno],Version=1,replace,RecL=59",internal,outIn,relative
+		close #hMtemp: ioerr ignore
+		open #hMtemp=fnH: "Name=[Q]\GLmstr\Allocations[acsUserId].h[cno],Version=1,replace,RecL=59",internal,outIn,relative
 
-	do
-		read #hPayeeGl,using 'Form Pos 1,C 8,c 12,n 6.2,c 30',release: payeekey$,payeegl$,percent,td$ eof ExtractEoPgl
-		if payeekey$=glkey$ then
-			if percent=0 and lrec(hMtemp)=0 then percent=100
-			allocAmt=round(transactionAmt*(percent*.01),2)
-			write #hMtemp,using "form pos 1,c 12,pd 10.2,c 30": payeegl$,allocAmt,td$
-			allocgl$='' : totalalloc+=allocAmt : allocAmt=0
-		end if
-	loop while payeekey$=glkey$
-	ExtractEoPgl: !
+		do
+			read #hPayeeGl,using 'Form Pos 1,C 8,c 12,n 6.2,c 30',release: payeekey$,payeegl$,percent,td$ eof ExtractEoPgl
+			if payeekey$=glkey$ then
+				if percent=0 and lrec(hMtemp)=0 then percent=100
+				allocAmt=round(transactionAmt*(percent*.01),2)
+				write #hMtemp,using "form pos 1,c 12,pd 10.2,c 30": payeegl$,allocAmt,td$
+				allocgl$='' : totalalloc+=allocAmt : allocAmt=0
+			end if
+		loop while payeekey$=glkey$
+		ExtractEoPgl: !
 
-	if totalalloc<>transactionAmt then ! r: if it doesn't add up put the difference on the last allocation
-		read #hMtemp,using "Form pos 13,pd 10.2",rec=lrec(hMtemp): lastallocation noRec ignore
-		lastallocation+=transactionAmt-totalalloc
-		rewrite #hMtemp,using "Form pos 13,pd 10.2",rec=lrec(hMtemp): lastallocation
-	end if 	! /r
+		if totalalloc<>transactionAmt and lrec(hMtemp)>0 then ! r: if it doesn't add up put the difference on the last allocation
+			read #hMtemp,using "Form pos 13,pd 10.2",rec=lrec(hMtemp): lastallocation noRec ignore
+			lastallocation+=transactionAmt-totalalloc
+			rewrite #hMtemp,using "Form pos 13,pd 10.2",rec=lrec(hMtemp): lastallocation
+		end if 	! /r
 
-	ExtractFinis: !
-	close #hPayeeGl: ioerr ignore
+		ExtractFinis: !
+		close #hPayeeGl: ioerr ignore
+
+	end if
 fnend
 def fn_nextTr$(tr$,gl_retainFieldsDuringAdd$; ___,trVal)
 	if gl_retainFieldsDuringAdd$='False' then
