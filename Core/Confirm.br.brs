@@ -31,15 +31,15 @@ def library fnConfirmDelete(What_You_Deleting$*60; Confirm_Dont_Ask_Again_Key$*2
 	if ~setup then fn_setup
 	fnConfirmDelete=fn_confirm('delete',What_You_Deleting$,Confirm_Dont_Ask_Again_Key$)
 fnend
-def library fnConfirmDeleteHard(whatYouAreDeletingGeneral$*20,whatYouAreDeletingSpecific$*60; ___,returnN)
+def library fnConfirmDeleteHard(whatYouAreDeletingGeneral$*32,whatYouAreDeletingSpecific$*60; ___,returnN)
 	if ~setup then fn_setup
 	fnConfirmDeleteHard=fn_confirmHard('delete',whatYouAreDeletingGeneral$,whatYouAreDeletingSpecific$)
 fnend
-def library fnConfirmHard(chVerb$,whatYouAreVerbingGeneral$*20,whatYouAreVerbingSpecific$*60; ___,returnN,typeWord$,verb$)
+def library fnConfirmHard(chVerb$,whatYouAreVerbingGeneral$*32,whatYouAreVerbingSpecific$*60; ___,returnN,typeWord$,verb$)
 	if ~setup then fn_setup
 	fnConfirmHard=fn_confirmHard(chVerb$,whatYouAreVerbingGeneral$,whatYouAreVerbingSpecific$)
 fnend
-def fn_confirmHard(chVerb$,whatYouAreVerbingGeneral$*20,whatYouAreVerbingSpecific$*60; ___,returnN,typeWord$,verb$)
+def fn_confirmHard(chVerb$,whatYouAreVerbingGeneral$*32,whatYouAreVerbingSpecific$*60; ___,returnN,typeWord$,verb$)
 	fnTos
 	fnLbl(1,1,"**** WARNING ****",40,1,+455)
 	fnLbl(3,1,'You have '&chVerb$&' '&whatYouAreVerbingGeneral$&":",60,2)

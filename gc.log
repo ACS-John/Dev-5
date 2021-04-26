@@ -1,0 +1,6 @@
+GC Warning: Repeated allocation of very large block (appr. size 5951488):
+	May lead to memory leak and poor performance.
+GC Warning: Repeated allocation of very large block (appr. size 17846272):
+	May lead to memory leak and poor performance.
+GC Warning: Repeated allocation of very large block (appr. size 17846272):
+	May lead to memory leak and poor performance.
