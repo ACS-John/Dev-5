@@ -1031,7 +1031,7 @@ fnend
 def fn_extract(&hMtemp,vn$,transactionAmt; ___, _
 	hPayeeGl,glkey$*8,payeekey$*8,payeegl$,percent,td$*30,allocAmt,lastallocation)
 	!  pull allocation breakdown from payee record
-	if glkey$<>'' then
+	if trim$(vn$)<>'' then
 
 		open #hPayeeGl=fnH: "Name=[Q]\GLmstr\PayeeGLBreakdown.h[cno],Version=1,KFName=[Q]\GLmstr\Payeeglbkdidx.h[cno],Use,RecL=56,KPs=1,KLn=8,Shr",internal,outIn,keyed
 		glkey$=lpad$(rtrm$(vn$),8)
@@ -1046,7 +1046,9 @@ def fn_extract(&hMtemp,vn$,transactionAmt; ___, _
 				if percent=0 and lrec(hMtemp)=0 then percent=100
 				allocAmt=round(transactionAmt*(percent*.01),2)
 				write #hMtemp,using "form pos 1,c 12,pd 10.2,c 30": payeegl$,allocAmt,td$
-				allocgl$='' : totalalloc+=allocAmt : allocAmt=0
+				! allocgl$=''   irrelevant
+				totalalloc+=allocAmt
+				! allocAmt=0  not necessary
 			end if
 		loop while payeekey$=glkey$
 		ExtractEoPgl: !
