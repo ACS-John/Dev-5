@@ -486,7 +486,7 @@ CLEAN_MAIN_SCREEN: ! r: clear entry screen before returning
 		un$=tr$=vn$=""
 		goto SCREEN_1
 	end if
-	!
+
 	L4620: !
 	if ckey=9 then goto PROOF_TOTALS
 goto MAIN ! /r
@@ -614,14 +614,14 @@ PROOF_TOTALS: ! r: add and display proof totals
 	do
 		read #h_gl_work,using "Form POS 1,c 12,N 6,PD 6.2,N 2,N 2,C 12,C 30,C 8 ,C 6,C 5,C 3,C 12": gl$,tr(4),tr(5),tr(6),tr(7),tr$,td$,vn$,mat jv$,key$ eof SCREEN_PROOF_TOTALS
 !   pr 'read an entruy from work file:'&gl$&' - '&key$ : pause
-!
+
 		for j=1 to 30
 			if k_list$(j)<>"" and key$=k_list$(j) then goto L6100 ! found matching contra account
 			if trim$(k_list$(j))="" then k_list$(j)=key$: goto L6100 ! found a blank contra and no previous match
 		next j
 		goto SCREEN_PROOF_TOTALS
 L6100: !
-!
+
 		if k_list$(j)=key$ then
 			if tr(6)=1 or tr(6)=4 or tr(6)=8 then
 				k(j,6)+=tr(5)
@@ -662,7 +662,7 @@ SCREEN_PROOF_TOTALS: !
 		k(j,8)=k(j,4)-k(j,5)-k(j,6)+k(j,7) ! new balance when posted
 L6240: !
 	next j
-!
+
 	fnflexinit1('Prooftotals',8,1,15,90,mat chdr_proof_total$,mat cmask3$,1,0,0)
 	mat glitem3$=("")
 	for j=1 to 30
@@ -703,7 +703,7 @@ F_PPT_LINE: form pos 1,c 12,5*cr 19
 			k(j,8)=k(j,4)-k(j,5)-k(j,6)+k(j,7) ! new balance when posted
 PPT_L6240: !
 		next j
-!
+
 		fnopenprn
 		pr #255: lpad$("Total Debits:",mylen)&' '&cnvrt$("pic(-------,---,---.##)",td)
 		pr #255: lpad$("Total Credits:",mylen)&' '&cnvrt$("Pic(-------,---,---.##",tc)

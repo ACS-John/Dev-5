@@ -257,7 +257,7 @@ def library fnConfirmDelete(What_You_Deleting$*60; Confirm_Dont_Ask_Again_Key$*2
 	library 'S:\Core\Confirm.br': fnConfirmDelete
 	fnConfirmDelete=fnConfirmDelete(What_You_Deleting$,Confirm_Dont_Ask_Again_Key$)
 fnend
-def library fnConfirmDeleteHard(whatYouAreDeletingGeneral$*20,whatYouAreDeletingSpecific$*60)
+def library fnConfirmDeleteHard(whatYouAreDeletingGeneral$*32,whatYouAreDeletingSpecific$*60)
 	library 'S:\Core\Confirm.br': fnConfirmDeleteHard
 	fnConfirmDeleteHard=fnConfirmDeleteHard(whatYouAreDeletingGeneral$,whatYouAreDeletingSpecific$)
 fnend
