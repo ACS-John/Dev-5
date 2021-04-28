@@ -411,8 +411,8 @@
 		loop
 	L3040: close #1: ioerr ignore
 		close #6: ioerr ignore
-		execute "Index [Temp]\Temp."&session$&" [Temp]\Tempidx."&wsid$&" 1,19,Replace,DupKeys -n" ioerr L3080
-		open #6: "Name=[Temp]\Temp."&session$&",KFName=[Temp]\Tempidx."&wsid$,internal,input,keyed
+		execute "Index [Temp]\Temp.[session] [Temp]\Tempidx.[session] 1,19,Replace,DupKeys -n" ioerr L3080
+		open #6: "Name=[Temp]\Temp.[session],KFName=[Temp]\Tempidx.[session]",internal,input,keyed
 	L3080: return
 	
 	BUD1: bud1=0
