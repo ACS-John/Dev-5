@@ -80,7 +80,7 @@ TOP: ! r:
 		if d(11)>0 and d(9)-d(10)<> d(11) then x(14)=d(11) ! if usage was override then use for gas
 	end if
 
-	if env$('client')='Millry' and date$('mm/dd/ccyy')='04/28/2021'  then extra(2)=int(extra(2)/10) ! prior readings were 10x too high.
+	! if env$('client')='Millry' and date$('mm/dd/ccyy')='04/28/2021'  then d(2)=int(d(2)/10) ! prior readings were 10x too high.
 
 	! r: set default rate codes
 	! if env$('client')="Pennington" then extra(12)=1 ! default to 1
