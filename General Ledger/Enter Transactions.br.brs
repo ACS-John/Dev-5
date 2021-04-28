@@ -104,7 +104,7 @@ ScreenOne: ! r:
 	fnButton(lc-2,84,'Add',ck_Add=30,"(Alt+A)  Add a new transaction",1,8,0,0,defaultAdd,0)
 	if gridSelected<>gridProofTotals and count then
 		fnButton(lc,84,"Edit",ck_Edit=63,"Modify selected transaction",1,8,0,0,defaultEdit,0)
-		fnButton(lc,93,"Delete",ck_deleteOne=67,"Delete selected transaction",1,8)
+		fnButton(lc,93,"Delete",ck_deleteOne=67,"Delete selected allocation and all other allocations in the same transaction",1,8)
 	end if
 	fn_addOneGrid
 	fnCmdKey("Print Proof Totals",ck_printProofTotals=58)
@@ -153,7 +153,7 @@ ScreenOne: ! r:
 		fnPcReg_write('gridSelected',str$(gridSelected))
 		previouslySelected=0
 	else if ckey=ck_importFile then
-		fn_inputClientCheckbookFile
+		fn_importFile
 	else if ckey=ck_clearAll then
 		if fnConfirmDeleteHard('(entire batch of transactions)','clearAllEnteredTrans') then
 			fn_eraseAllPreviousInput
@@ -452,6 +452,15 @@ def fn_scrMain(hMerge; editRecord,heading$*64,glBank$*12,transDate,bankAcctName$
 	SmFinis: !
 	fn_scrMain=ckey
 fnend
+	def fn_mTempToMerge(hMtemp,hMerge,tr4,selx,postingCode,tr$,vn$,jv2$,glBank$*12; _
+		___,allocgl$*12,td$*30,allocAmt,transAdr)
+		restore #hMtemp:
+		do
+			read #hMtemp,using "form pos 1,c 12,pd 10.2,c 30,pd 5": allocgl$,allocAmt,td$,transAdr eof EoMtempToMerge
+			fn_transactionSave(hMerge,transAdr,allocgl$,tr4,allocAmt,selx,postingCode,tr$,td$,vn$,jv2$,glBank$)
+		loop
+		EoMtempToMerge: !
+	fnend
 def fn_scrPayrollAdd(; ___,lendeditRecordc,lc)
 	! selx=sx_payrollCheck ! this section is only for Payroll type selx is 4.
 	fnPcReg_read('Payroll Check GL Account',gl$, gl$)
@@ -613,7 +622,7 @@ fnend
 def fn_scrAdjustment	(hMerge,editRecord,bankAcctName$*40, _
 	message$*50, _
 	tr$,gl$,tDate; _
-	gl$,tDate,tAmt,tType,postCode,tr$,desc$*30,vn$,unused$, _
+	tAmt,tType,postCode,desc$*30,vn$,unused$, _
 	gl2$,tDate2,tAmt2,tType2,postCode2,tr2$,desc2$*30,vn2$,jv22$, _
 	foundMatch,transAdrFrom,transAdrTo, _
 	___, _
@@ -668,6 +677,8 @@ def fn_scrAdjustment	(hMerge,editRecord,bankAcctName$*40, _
 		! pr 'transAdrTo  =';transAdrTo
 		! pause
 	end if ! /r
+
+	! if tDate=0 then tDate=date('mmddyy')
 
 	fnTos
 	mylen=18 : mypos=mylen+3
@@ -911,16 +922,15 @@ def fn_transactionAdd(hMerge,typeOfEntryN,glBank$,transDate; ___, _
 	returnN,gl$*12,tr4,tr5,tType,postingCode,lrPrior,smResponse)
 	if trPrior$='' then fnpcreg_read('last Reference Number',trPrior$)
 	do
-		gl$=jv2$=''
+		gl$=jv2$=tr$=td$=vn$=key$=''
 		tr5=tType=postingCode=0
-		tr$=td$=vn$=key$=('')
 		tr4=transDate
 		tType=typeOfEntryN
 		fn_clearVar(hMtemp,transactionAmt,td$,vn$,gl$,totalalloc,gl_retainFieldsDuringAdd$)
 		lrPrior=lrec(hMerge)
 		dim trPrior$*12
-		tr$=fn_nextTr$(trPrior$,gl_retainFieldsDuringAdd$)
-
+		tr$=fn_nextTr$(trPrior$,selx,gl_retainFieldsDuringAdd$)
+		! pr 'tr$='&tr$ : pause
 		if selx=sx_adjustment then
 			smResponse=fn_scrAdjustment(hMerge,0,bankAcctName$,message$,tr$,glBank$,transDate)
 
@@ -953,29 +963,63 @@ def fn_transactionEdit(hMerge,recordNumber,glBank$*12; ___,returnN,gl$*12,tr4,tr
 	close #hMtemp,free: ioerr ignore
 	fn_transactionEdit=returnN
 fnend
+	def fn_makeMergeTemp(hMerge,mergeRecordNumber,&tAmt,&totalalloc,&selx; ___, _
+			allocAmt,holdtr$*12, _
+			gl$*12,tr4,tType,postingCode,tr$*12,td$*30,vn$*8,jv2$*5,key$*12)
+				tAmt=0
+				if fn_readMerge(mergeRecordNumber,gl$,tr4,tr5,tType,postingCode,tr$,td$,vn$,jv2$,key$)=57 then goto PES_XIT
+				holdtr$=tr$
+				close #hMtemp: ioerr ignore
+				open #hMtemp=fnH: "Name=[Q]\GLmstr\Allocations[acsUserId].h[cno],Version=1,replace,RecL=59",internal,outIn,relative
+				! process the whole file and gather all records that match reference number and gather into MergeTemp file
+				restore #hMerge:
+				do
+					if fn_readMerge(0,payeegl$,tr4,allocAmt,tType,postingCode,tr$,td$,vn$,jv2$,key$)=-4270 then goto MtEoM
+					if trim$(tr$)=trim$(holdtr$) then
+						if tType=sx_receipt or tType=sx_sale then allocAmt=-allocAmt ! reverse signs on receipts and sales BEFORE DISPLAYING ON CORRECTION SCREEN
+						tAmt+=allocAmt
+						vn$=vn$
+	
+						selx=tType
+						write #hMtemp,using "form pos 1,c 12,pd 10.2,c 30,pd 5": payeegl$,allocAmt,td$,rec(hMerge)
+						totalalloc+=allocAmt ! re-add total allocations
+					end if
+				loop
+				MtEoM: !
+	
+				PES_XIT: !
+	
+		fn_makeMergeTemp=hMtemp
+	fnend
 def fn_transactionDelete(hMerge,delRec; ___, _
-	gl$*12 ,tDate ,tr5 ,tType ,postingCode ,tR$*12 ,tD$*30 ,vn$*12 ,jv2$ ,glBank$*12 , _
-	cGl$*12,cTdate,cTr5,cTtype,cPostingCode,CTr$*12,cTd$*30,cVn$*12,cJv2$,cGlBank$*12, _
+	gl$*12 ,tDate ,tr5 ,tType  	,postingCode 	,tR$*12 ,tD$*30 ,vn$*12 ,jv2$ 	,glBank$*12 , _
+	cGl$*12,cTdate,cTr5,cTtype	,cPostingCode,CTr$*12,cTd$*30,cVn$*12,cJv2$	,cGlBank$*12, _
 	testRec,isMatch,oKey$*128,cKey$*128,look)
 	! omit hMtemp to skip processing that file
 	! deletes entire transaction
 	if fnConfirmDelete('Record '&str$(delRec),'transDeleteOne') then
 		read #hMerge,using F_merge,rec=delRec: gl$,tDate,tr5,tType,postingCode,tR$,tD$,vn$,jv2$,glBank$
+		! pr 'delete record '&str$(delRec)
+		delete #hMerge,rec=delRec:
 		oKey$=str$(tType)&'~'&tr$&'~'&str$(tDate)
 		for look=1 to 2
 			testRec=delRec
 			do
 				if look=1 then testRec-=1 ! look up
 				if look=2 then testRec+=1 ! look down
-				read #hMerge,using F_merge,rec=testRec: cGl$,cTdate,cTr5,cTtype,cPostingCode,CTr$,cTd$,cVn$,cJv2$,cGlBank$
+				if testRec<1 or testRec>lrec(hMerge) then goto TdEoF
+				read #hMerge,using F_merge,rec=testRec: cGl$,cTdate,cTr5,cTtype,cPostingCode,CTr$,cTd$,cVn$,cJv2$,cGlBank$ norec TdEoF
+				isMatch=0
 				cKey$=str$(cTtype)&'~'&cTr$&'~'&str$(cTdate)
 				if cKey$=oKey$ then 
 					isMatch=1
-					pr 'would delete record '&str$(testRec)
+					! pr 'delete record '&str$(testRec)
+					delete #hMerge,rec=testRec:
 				end if
 			loop while isMatch
+			TdEoF: !
 		nex look
-		pause
+		! pause
 
 	end if
 fnend
@@ -990,43 +1034,8 @@ def fn_transactionSave(hMerge,transAdr,gl$,tr4,tr5,tType,postingCode,tr$,td$*30,
 fnend
 
 
-def fn_makeMergeTemp(hMerge,mergeRecordNumber,&tAmt,&totalalloc,&selx; ___, _
-		allocAmt,holdtr$*12, _
-		gl$*12,tr4,tType,postingCode,tr$*12,td$*30,vn$*8,jv2$*5,key$*12)
-			tAmt=0
-			if fn_readMerge(mergeRecordNumber,gl$,tr4,tr5,tType,postingCode,tr$,td$,vn$,jv2$,key$)=57 then goto PES_XIT
-			holdtr$=tr$
-			close #hMtemp: ioerr ignore
-			open #hMtemp=fnH: "Name=[Q]\GLmstr\Allocations[acsUserId].h[cno],Version=1,replace,RecL=59",internal,outIn,relative
-			! process the whole file and gather all records that match reference number and gather into MergeTemp file
-			restore #hMerge:
-			do
-				if fn_readMerge(0,payeegl$,tr4,allocAmt,tType,postingCode,tr$,td$,vn$,jv2$,key$)=-4270 then goto MtEoM
-				if trim$(tr$)=trim$(holdtr$) then
-					if tType=sx_receipt or tType=sx_sale then allocAmt=-allocAmt ! reverse signs on receipts and sales BEFORE DISPLAYING ON CORRECTION SCREEN
-					tAmt+=allocAmt
-					vn$=vn$
 
-					selx=tType
-					write #hMtemp,using "form pos 1,c 12,pd 10.2,c 30,pd 5": payeegl$,allocAmt,td$,rec(hMerge)
-					totalalloc+=allocAmt ! re-add total allocations
-				end if
-			loop
-			MtEoM: !
 
-			PES_XIT: !
-
-	fn_makeMergeTemp=hMtemp
-fnend
-def fn_mTempToMerge(hMtemp,hMerge,tr4,selx,postingCode,tr$,vn$,jv2$,glBank$*12; _
-	___,allocgl$*12,td$*30,allocAmt,transAdr)
-	restore #hMtemp:
-	do
-		read #hMtemp,using "form pos 1,c 12,pd 10.2,c 30,pd 5": allocgl$,allocAmt,td$,transAdr eof EoMtempToMerge
-		fn_transactionSave(hMerge,transAdr,allocgl$,tr4,allocAmt,selx,postingCode,tr$,td$,vn$,jv2$,glBank$)
-	loop
-	EoMtempToMerge: !
-fnend
 
 def fn_clearVar(&hMtemp,&transactionAmt,&td$,&vn$,&gl$,&totalalloc, _
 	&gl_retainFieldsDuringAdd$)
@@ -1076,19 +1085,35 @@ def fn_extract(&hMtemp,vn$,transactionAmt; ___, _
 
 	end if
 fnend
-def fn_nextTr$(tr$,gl_retainFieldsDuringAdd$; ___,trVal,pS,pE)
+def fn_nextTr$(tr$,selx,gl_retainFieldsDuringAdd$; ___,trVal,pS,pE,v)
 
-	if gl_retainFieldsDuringAdd$='False' then
-		tr$=''
+	pS=fnPosOfAny(tr$,mat digit$)
+	pE=fnPosOfAny(tr$,mat digit$, -1)
+	trVal=val(tr$(pS:pE)) ! conv ignore
+
+	if trVal=>999999999999 then
+		trVal=1
 	else
-		pS=fnPosOfAny(tr$,mat digit$)
-		pE=fnPosOfAny(tr$,mat digit$, -1)
-		trVal=val(tr$(pS:pE)) ! conv ignore
-		if trVal and tr$<>"999999999999" then
-			tr$=str$(val(tr$)+1) ! increment if possible
-		end if
+		trVal+=1
 	end if
-	fn_nextTr$='tr'&tr$
+
+	if selx=sx_adjustment then
+		tr$='adj'
+	else if selx=sx_disbursement then
+		tr$='dsp'
+	else if selx=sx_payrollCheck then
+		tr$='pck'
+	else if selx=sx_purchase then
+		tr$='pch'
+	else if selx=sx_receipt then
+		tr$='pch'
+	else if selx=sx_sale then
+		tr$='sal'
+	else
+		tr$='oth'
+	end if
+	
+	fn_nextTr$=tr$&str$(trVal)
 fnend
 def fn_buildMatK(hMerge,mat kList$,mat kReceipts,mat kDisbursements,mat kAdjustments,&totalCredits,&totalDebits,&count; ___,tAmt,key$*12,tranType,kWhich)
 	!  accumulate proof totals (mat k, totalCredits, totalDebits)
@@ -1214,13 +1239,13 @@ PrProofListHeader: ! r:
 	if jccode=1 then pr #255: "Job     Cat  S-Cat" else pr #255: " "
 return  ! /r
 
-def fn_inputClientCheckbookFile
+def fn_importFile
 
 	! r: screen_insert_diskette
 	fntos
 	fnlbl(2,1,"Insert Input Diskette in selected drive:",40,1)
 	fntxt(2,42,1)
-	if dv$='' then dv$="A"
+	if dv$='' then dv$="D"
 	resp$(1)=dv$
 	fnCmdSet(2)
 	ckey=fnacs(mat resp$)
@@ -1228,7 +1253,7 @@ def fn_inputClientCheckbookFile
 	! /r
 	fn_closeFiles
 	fnCopy(dv$&"GLWK101.h[cno]","[Q]\GLmstr\GL_Work_[acsUserId].h[cno]")
-	fn_openFiles(1)
+	fn_openFiles( 1)
 fnend
 def fn_eraseAllPreviousInput
 	fn_closeFiles
