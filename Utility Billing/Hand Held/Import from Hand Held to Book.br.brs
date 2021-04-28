@@ -732,7 +732,8 @@ fnend
 				! Reading                      Req HH 89 - 98 10 A / N
 				! Collector Reading            Req HH 99 - 108 10 A / N Raw unadjusted reading from the MIU.
 				if 'WTR'=trim$(line$(6:9)) then
-					reading_water=val(line$(99:108))
+					! reading_water=val(line$(99:108))  
+					reading_water=val(line$(89:98))  ! use Reading instead of Collector Reading (has invisible decimals)
 				else 
 					pr 'unhandled service in RDGDT record: '&line$(6:9)
 					pause

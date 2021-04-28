@@ -459,7 +459,7 @@ def fn_scrPayrollAdd(; ___,lendeditRecordc,lc)
 	fnTos
 	mylen=18 : mypos=mylen+3
 
-	fnLbl(lc+=1,1,'______________________________ '&heading$&' ______________________________')
+	fnLbl(lc+=1,1,'______________________________ Adding Payroll Check ______________________________')
 	! fnLbl(1,38,"Bank Account: "&bankAcctName$,50,1)
 	fnLbl(lc+=1,1,"Bank Account:",mylen,1)
 	fnLbl(lc,mypos,bankAcctName$)
@@ -523,7 +523,7 @@ def fn_scrPayrollAdd(; ___,lendeditRecordc,lc)
 	resp$(24)=str$(prx(19))
 	fnCmdKey("&Save",ck_save1,0,0,"Completed making corrections to this transaction.")
 	fnCmdKey("Save and Add Another",ck_saveA,1,0,"Save this Transaction and go directly to adding another of the same type")
-	fnCmdKey("&Back",ck_cancel,0,0,"Allows you to return to screen 1 and change transaction types or bank accounts.")
+	fnCmdKey("&Cancel",ck_cancel,0,1,"Do not save this transaction and return to transaction selection screen")
 	! fnCmdKey("&Finish",ck_finish,0,1,'')
 	ckey=fnAcs(mat resp$)
 	if ckey=ck_cancel then
@@ -571,10 +571,49 @@ def fn_scrPayrollAdd(; ___,lendeditRecordc,lc)
 	ScrPayrollXit: !
 	fn_scrPayrollAdd=ckey
 fnend
+	def fn_payrollSave  ! &tr$,gl$,...; ___,j,allocgl$,td$*30
+		! WritePayrollTrans:
+		! only routine that uses mat pgl (read from company.h[cno])
+
+		for j=2 to 19
+			jv2$=str$(j-1) ! carry breakdown code for posting employee record
+			if j=2 then allocgl$=gl$ : td$="Gross Pay-"&empName$(1:18)
+			if j=3 then td$="Federal Withholdings"
+			if j=4 then td$="FICA Withholdings"
+			if j=5 then td$="State Withholdings"
+			if j=6 then td$="Local Withholdings"
+			if j=3 or j=4 or j=5 or j=6 then allocgl$=cnvrt$("pic(zz#)",pgl(j-2,1))&cnvrt$("pic(zzzzz#)",pgl(j-2,2))&cnvrt$("pic(zz#)",pgl(j-2,3))
+			if j=19 then allocgl$=cnvrt$("pic(zz#)",pgl(5,1))&cnvrt$("pic(zzzzz#)",pgl(5,2))&cnvrt$("pic(zz#)",pgl(5,3)) ! eic
+			if j>6 and j<17 then
+				allocgl$=miscgl$(j-6)
+				td$=miscname$(j-6) ! miscellaneous deductions
+			end if
+			if j>2 and j<7 then
+				prx(j)=-prx(j) ! reverse sign on fica, etc
+			else if j>6 and j<17 and dedcode(j-6)=1 then
+				prx(j)=-prx(j)
+				! turn sign around on any of ten deductions coded as additions
+			else if j=17 then
+				prx(j)=-prx(j)
+				td$="Tips"
+				allocgl$=gl$ ! tips
+			else if j=19 then
+				prx(j)=prx(j)
+				td$="Eic" ! eic as positive
+			end if
+			if prx(j)<>0 then
+				write #hMerge,using F_merge: allocgl$,tr4,prx(j),sx_payrollCheck,postingCode,tr$,td$,vn$,jv2$,glBank$ ! gross wage
+			end if
+		next j
+		transactionAmt=0
+		mat prx=(0)
+		vn$=''
+
+	fnend
 def fn_scrAdjustment	(hMerge,editRecord,bankAcctName$*40, _
 	message$*50, _
 	tr$,gl$,tDate; _
-	gl$,tDate,tAmt,tType,postCode,tr$,desc$*30,vn$,jv2$, _
+	gl$,tDate,tAmt,tType,postCode,tr$,desc$*30,vn$,unused$, _
 	gl2$,tDate2,tAmt2,tType2,postCode2,tr2$,desc2$*30,vn2$,jv22$, _
 	foundMatch,transAdrFrom,transAdrTo, _
 	___, _
@@ -583,7 +622,7 @@ def fn_scrAdjustment	(hMerge,editRecord,bankAcctName$*40, _
 	heading$*60)
 
 	if editRecord then ! r: get transAdrFrom and transAdrTo
-		read #hMerge,using F_merge,rec=editRecord  : gl$,tDate,tAmt,tType,postCode,tr$,desc$,vn$,jv2$
+		read #hMerge,using F_merge,rec=editRecord  : gl$,tDate,tAmt,tType,postCode,tr$,desc$,vn$,unused$
 		read #hMerge,using F_merge,rec=editRecord+1: gl2$,tDate2,tAmt2,tType2,postCode2,tr2$,desc2$,vn2$,jv22$ norec TryPrior
 
 		if tDate=tDate2 and abs(tAmt)=abs(tAmt2) and tType2=sx_adjustment and tr$=tr2$ then
@@ -683,13 +722,8 @@ def fn_scrAdjustment	(hMerge,editRecord,bankAcctName$*40, _
 		transactionAmt=val(resp$(resp_amt)) ! amount
 		tr$=resp$(resp_ref) ! ref #
 		td$=resp$(resp_desc) ! transaction description
-
 		glFrom$=fnagl$(resp$(resp_glFrom))
 		glTo$=fnagl$(resp$(resp_glTo))
-
-		! fn_payrollSave
-		! pr ' write two adjustment records here'
-		! pause
 
 		fn_transactionSave(hMerge,transAdrFrom,glFrom$,tDate,-transactionAmt,sx_adjustment,0,tr$,td$,'','','')
 		fn_transactionSave(hMerge,transAdrTo  ,glTo$  ,tDate, transactionAmt,sx_adjustment,0,tr$,td$,'','','')
@@ -760,118 +794,118 @@ def fn_addOneGrid
 		fn_totalGrid(hAccount,mat kList$,mat kReceipts,mat kDisbursements,mat kAdjustments,lc+=1,2)
 	end if
 fnend
-def fn_transactionGrid(hMerge,row,col,twenty,ninety,previouslySelected; _
-	enableNet,___,net,tDate,tAmt,tType,desc$*30,colCount,postCode,lineCount, _
-	gl$*12,tDate,tAmt,tType,postCode,tr$,desc$*30,vn$,jv2$,key$*12)
-	! r: setup
-	colCount=10
-	dim cmask2$(0)
-	mat cmask2$(colCount)
-	mat cmask2$=('')
+	def fn_transactionGrid(hMerge,row,col,twenty,ninety,previouslySelected; _
+		enableNet,___,net,tDate,tAmt,tType,desc$*30,colCount,postCode,lineCount, _
+		gl$*12,tDate,tAmt,tType,postCode,tr$,desc$*30,vn$,jv2$,key$*12)
+		! r: setup
+		colCount=10
+		dim cmask2$(0)
+		mat cmask2$(colCount)
+		mat cmask2$=('')
 
-	dim chdr2$(0)*25
-	mat chdr2$(colCount)
-	chdr2$(1)='rec'                      : cmask2$(1)='30'
-	chdr2$(2)='Date'
-	chdr2$(3)='Ref'                      : if ~enableNet then cmask2$(2)='3'
-	chdr2$(4)='Payee/Description'
-	chdr2$(5)='GL Account'
-	chdr2$(6)='Amount'                   : cmask2$(6)='10'
-	chdr2$(7)='Allocation Description'
-	chdr2$(8)='Type'
-	chdr2$(9)='PC'
-	chdr2$(10)='Bank'
-	dim glitem2$(0)*128
-	mat glitem2$(colCount)
-	! /r
-	fnflexinit1('GlTrans',row,col,twenty,ninety,mat chdr2$,mat cmask2$,1,0,0)
-	restore #hMerge:
-	do
-		if fn_readMerge(0,gl$,tDate,tAmt,tType,postCode,tr$,desc$,vn$,jv2$,key$)=-4270 then goto TgEoF
-		if enableNet then
-			if trim$(tr$)<>'' and tr$<>oldtr$ and lineCount then
-				mat glitem2$=('')
-				glitem2$(6)=str$(net)
-				glitem2$(7)='Net'
-				fnflexadd1(mat glitem2$)
-
-				if enableblankLineAfterNet then
+		dim chdr2$(0)*25
+		mat chdr2$(colCount)
+		chdr2$(1)='rec'                      : cmask2$(1)='30'
+		chdr2$(2)='Date'
+		chdr2$(3)='Ref'                      : if ~enableNet then cmask2$(2)='3'
+		chdr2$(4)='Payee/Description'
+		chdr2$(5)='GL Account'
+		chdr2$(6)='Amount'                   : cmask2$(6)='10'
+		chdr2$(7)='Allocation Description'
+		chdr2$(8)='Type'
+		chdr2$(9)='PC'
+		chdr2$(10)='Bank'
+		dim glitem2$(0)*128
+		mat glitem2$(colCount)
+		! /r
+		fnflexinit1('GlTrans',row,col,twenty,ninety,mat chdr2$,mat cmask2$,1,0,0)
+		restore #hMerge:
+		do
+			if fn_readMerge(0,gl$,tDate,tAmt,tType,postCode,tr$,desc$,vn$,jv2$,key$)=-4270 then goto TgEoF
+			if enableNet then
+				if trim$(tr$)<>'' and tr$<>oldtr$ and lineCount then
 					mat glitem2$=('')
+					glitem2$(6)=str$(net)
+					glitem2$(7)='Net'
 					fnflexadd1(mat glitem2$)
+
+					if enableblankLineAfterNet then
+						mat glitem2$=('')
+						fnflexadd1(mat glitem2$)
+					end if
+
+					net=0 ! add net subtotals any time reference number changes     ( AND NET<>0)was in there
 				end if
-
-				net=0 ! add net subtotals any time reference number changes     ( AND NET<>0)was in there
 			end if
+
+			glitem2$(1)=str$(rec(hMerge))
+			if enableNet then
+				glitem2$(2)=date$(days(tDate,'mmddyy'),'ccyy/mm/dd')
+			else
+				glitem2$(2)=str$(tDate) ! str$(date(days(tr4,'mmddyy'),'ccyymmdd'))
+			end if
+			glitem2$(3)=tr$
+			glitem2$(4)=vn$
+			glitem2$(5)=trim$(fnrgl$(gl$))
+			glitem2$(6)=str$(tAmt)
+			glitem2$(7)=desc$
+			glitem2$(8)=fn_transType$(tType)&' ('&str$(tType)&')'
+			if postCode then
+				glitem2$(9)='POSTED'
+			else
+				glitem2$(9)=''
+			end if
+			glitem2$(10)=trim$(fnrgl$(key$))
+			lineCount+=1
+			if glitem2$(1)=str$(previouslySelected) then setenv('current_grid_row',str$(lineCount))
+			fnflexadd1(mat glitem2$)
+			net+=tAmt ! add net check
+			oldtr$=tr$ ! hold reference numbers
+		loop
+		TgEoF: !
+		if enableNet and lineCount then
+			mat glitem2$=('')
+			glitem2$(6)=str$(net)
+			glitem2$(7)="Net"
+			lineCount+=1
+			fnflexadd1(mat glitem2$)
 		end if
+	fnend
+	def fn_totalGrid(hAccount,mat kList$,mat kReceipts,mat kDisbursements,mat kAdjustments,lc,ps)
+		! r: setup
+		dim chdr_proof_total$(6),cmask3$(6),glitem3$(6)*128
+		chdr_proof_total$(1)='G/L Account'  	: cmask3$(1)=''
+		chdr_proof_total$(2)='Beg Balance'  	: cmask3$(2)='10'
+		chdr_proof_total$(3)='Receipts'     	: cmask3$(3)='10'
+		chdr_proof_total$(4)='Disbursements'	: cmask3$(4)='10'
+		chdr_proof_total$(5)='Adjustments'  	: cmask3$(5)='10'
+		chdr_proof_total$(6)='End Balance'  	: cmask3$(6)='10'
 
-		glitem2$(1)=str$(rec(hMerge))
-		if enableNet then
-			glitem2$(2)=date$(days(tDate,'mmddyy'),'ccyy/mm/dd')
-		else
-			glitem2$(2)=str$(tDate) ! str$(date(days(tr4,'mmddyy'),'ccyymmdd'))
-		end if
-		glitem2$(3)=tr$
-		glitem2$(4)=vn$
-		glitem2$(5)=trim$(fnrgl$(gl$))
-		glitem2$(6)=str$(tAmt)
-		glitem2$(7)=desc$
-		glitem2$(8)=fn_transType$(tType)&' ('&str$(tType)&')'
-		if postCode then
-			glitem2$(9)='POSTED'
-		else
-			glitem2$(9)=''
-		end if
-		glitem2$(10)=trim$(fnrgl$(key$))
-		lineCount+=1
-		if glitem2$(1)=str$(previouslySelected) then setenv('current_grid_row',str$(lineCount))
-		fnflexadd1(mat glitem2$)
-		net+=tAmt ! add net check
-		oldtr$=tr$ ! hold reference numbers
-	loop
-	TgEoF: !
-	if enableNet and lineCount then
-		mat glitem2$=('')
-		glitem2$(6)=str$(net)
-		glitem2$(7)="Net"
-		lineCount+=1
-		fnflexadd1(mat glitem2$)
-	end if
-fnend
-def fn_totalGrid(hAccount,mat kList$,mat kReceipts,mat kDisbursements,mat kAdjustments,lc,ps)
-	! r: setup
-	dim chdr_proof_total$(6),cmask3$(6),glitem3$(6)*128
-	chdr_proof_total$(1)='G/L Account'  	: cmask3$(1)=''
-	chdr_proof_total$(2)='Beg Balance'  	: cmask3$(2)='10'
-	chdr_proof_total$(3)='Receipts'     	: cmask3$(3)='10'
-	chdr_proof_total$(4)='Disbursements'	: cmask3$(4)='10'
-	chdr_proof_total$(5)='Adjustments'  	: cmask3$(5)='10'
-	chdr_proof_total$(6)='End Balance'  	: cmask3$(6)='10'
+		! /r
+		dim kBegBalance(0),kEndBalance(0)
+		mat kBegBalance(udim(mat kList$))
+		mat kEndBalance(udim(mat kList$))
+		for j=1 to udim(mat kList$)
 
-	! /r
-	dim kBegBalance(0),kEndBalance(0)
-	mat kBegBalance(udim(mat kList$))
-	mat kEndBalance(udim(mat kList$))
-	for j=1 to udim(mat kList$)
+			read #hAccount,using "form pos 87,pd 6.2",key=kList$(j),release: kBegBalance(j) nokey L6240 ! get last balance
+			kEndBalance(j)=kBegBalance(j)-kReceipts(j)-kDisbursements(j)+kAdjustments(j) ! new balance when posted
+			L6240: !
+		next j
 
-		read #hAccount,using "form pos 87,pd 6.2",key=kList$(j),release: kBegBalance(j) nokey L6240 ! get last balance
-		kEndBalance(j)=kBegBalance(j)-kReceipts(j)-kDisbursements(j)+kAdjustments(j) ! new balance when posted
-		L6240: !
-	next j
-
-	fnflexinit1('Prooftotals',lc,ps,15,90,mat chdr_proof_total$,mat cmask3$,1,0,0)
-	mat glitem3$=('')
-	for j=1 to udim(mat kList$)
-		! if trim$(kList$(j))<>'' then ! skip blanks
-		glitem3$(1)=trim$(fnrgl$(kList$(j)))
-		glitem3$(2)=str$(kBegBalance(j))
-		glitem3$(3)=str$(-kReceipts(j))
-		glitem3$(4)=str$(kDisbursements(j))
-		glitem3$(5)=str$(kAdjustments(j))
-		glitem3$(6)=str$(kEndBalance(j))
-		fnflexadd1(mat glitem3$)
-		! end if
-	next j
-fnend
+		fnflexinit1('Prooftotals',lc,ps,15,90,mat chdr_proof_total$,mat cmask3$,1,0,0)
+		mat glitem3$=('')
+		for j=1 to udim(mat kList$)
+			! if trim$(kList$(j))<>'' then ! skip blanks
+			glitem3$(1)=trim$(fnrgl$(kList$(j)))
+			glitem3$(2)=str$(kBegBalance(j))
+			glitem3$(3)=str$(-kReceipts(j))
+			glitem3$(4)=str$(kDisbursements(j))
+			glitem3$(5)=str$(kAdjustments(j))
+			glitem3$(6)=str$(kEndBalance(j))
+			fnflexadd1(mat glitem3$)
+			! end if
+		next j
+	fnend
 
 def fn_transactionAdd(hMerge,typeOfEntryN,glBank$,transDate; ___, _
 	returnN,gl$*12,tr4,tr5,tType,postingCode,lrPrior,smResponse)
@@ -919,6 +953,42 @@ def fn_transactionEdit(hMerge,recordNumber,glBank$*12; ___,returnN,gl$*12,tr4,tr
 	close #hMtemp,free: ioerr ignore
 	fn_transactionEdit=returnN
 fnend
+def fn_transactionDelete(hMerge,delRec; ___, _
+	gl$*12 ,tDate ,tr5 ,tType ,postingCode ,tR$*12 ,tD$*30 ,vn$*12 ,jv2$ ,glBank$*12 , _
+	cGl$*12,cTdate,cTr5,cTtype,cPostingCode,CTr$*12,cTd$*30,cVn$*12,cJv2$,cGlBank$*12, _
+	testRec,isMatch,oKey$*128,cKey$*128,look)
+	! omit hMtemp to skip processing that file
+	! deletes entire transaction
+	if fnConfirmDelete('Record '&str$(delRec),'transDeleteOne') then
+		read #hMerge,using F_merge,rec=delRec: gl$,tDate,tr5,tType,postingCode,tR$,tD$,vn$,jv2$,glBank$
+		oKey$=str$(tType)&'~'&tr$&'~'&str$(tDate)
+		for look=1 to 2
+			testRec=delRec
+			do
+				if look=1 then testRec-=1 ! look up
+				if look=2 then testRec+=1 ! look down
+				read #hMerge,using F_merge,rec=testRec: cGl$,cTdate,cTr5,cTtype,cPostingCode,CTr$,cTd$,cVn$,cJv2$,cGlBank$
+				cKey$=str$(cTtype)&'~'&cTr$&'~'&str$(cTdate)
+				if cKey$=oKey$ then 
+					isMatch=1
+					pr 'would delete record '&str$(testRec)
+				end if
+			loop while isMatch
+		nex look
+		pause
+
+	end if
+fnend
+def fn_transactionSave(hMerge,transAdr,gl$,tr4,tr5,tType,postingCode,tr$,td$*30,vn$*8,jv2$*5,glBank$*12)
+	if tType=sx_receipt or tType=sx_sale then tr5=-tr5 ! reverse signs on receipts and sales
+	if transAdr>0 then
+		rewrite #hMerge,using F_merge,rec=transAdr: gl$,tr4,tr5,tType,postingCode,tr$,td$,vn$,jv2$,glBank$ ! noRec L3280
+	else
+		! L3280: !
+		write #hMerge,using F_merge: gl$,tr4,tr5,tType,postingCode,tr$,td$,vn$,jv2$,glBank$
+	end if
+fnend
+
 
 def fn_makeMergeTemp(hMerge,mergeRecordNumber,&tAmt,&totalalloc,&selx; ___, _
 		allocAmt,holdtr$*12, _
@@ -956,73 +1026,6 @@ def fn_mTempToMerge(hMtemp,hMerge,tr4,selx,postingCode,tr$,vn$,jv2$,glBank$*12; 
 		fn_transactionSave(hMerge,transAdr,allocgl$,tr4,allocAmt,selx,postingCode,tr$,td$,vn$,jv2$,glBank$)
 	loop
 	EoMtempToMerge: !
-fnend
-def fn_transactionSave(hMerge,transAdr,gl$,tr4,tr5,tType,postingCode,tr$,td$*30,vn$*8,jv2$*5,glBank$*12)
-	if tType=sx_receipt or tType=sx_sale then tr5=-tr5 ! reverse signs on receipts and sales
-	if transAdr>0 then
-		rewrite #hMerge,using F_merge,rec=transAdr: gl$,tr4,tr5,tType,postingCode,tr$,td$,vn$,jv2$,glBank$ ! noRec L3280
-	else
-		! L3280: !
-		write #hMerge,using F_merge: gl$,tr4,tr5,tType,postingCode,tr$,td$,vn$,jv2$,glBank$
-	end if
-fnend
-def fn_payrollSave  ! &tr$,gl$,...; ___,j,allocgl$,td$*30
-	! WritePayrollTrans:
-	! only routine that uses mat pgl (read from company.h[cno])
-
-	for j=2 to 19
-		jv2$=str$(j-1) ! carry breakdown code for posting employee record
-		if j=2 then allocgl$=gl$ : td$="Gross Pay-"&empName$(1:18)
-		if j=3 then td$="Federal Withholdings"
-		if j=4 then td$="FICA Withholdings"
-		if j=5 then td$="State Withholdings"
-		if j=6 then td$="Local Withholdings"
-		if j=3 or j=4 or j=5 or j=6 then allocgl$=cnvrt$("pic(zz#)",pgl(j-2,1))&cnvrt$("pic(zzzzz#)",pgl(j-2,2))&cnvrt$("pic(zz#)",pgl(j-2,3))
-		if j=19 then allocgl$=cnvrt$("pic(zz#)",pgl(5,1))&cnvrt$("pic(zzzzz#)",pgl(5,2))&cnvrt$("pic(zz#)",pgl(5,3)) ! eic
-		if j>6 and j<17 then
-			allocgl$=miscgl$(j-6)
-			td$=miscname$(j-6) ! miscellaneous deductions
-		end if
-		if j>2 and j<7 then
-			prx(j)=-prx(j) ! reverse sign on fica, etc
-		else if j>6 and j<17 and dedcode(j-6)=1 then
-			prx(j)=-prx(j)
-			! turn sign around on any of ten deductions coded as additions
-		else if j=17 then
-			prx(j)=-prx(j)
-			td$="Tips"
-			allocgl$=gl$ ! tips
-		else if j=19 then
-			prx(j)=prx(j)
-			td$="Eic" ! eic as positive
-		end if
-		if prx(j)<>0 then
-			write #hMerge,using F_merge: allocgl$,tr4,prx(j),sx_payrollCheck,postingCode,tr$,td$,vn$,jv2$,key$ ! gross wage
-		end if
-	next j
-	transactionAmt=0
-	mat prx=(0)
-	vn$=''
-
-fnend
-def fn_transactionDelete(hMerge,mergeRec; hMtemp)
-	! omit hMtemp to skip processing that file
-	! deletes entire transaction
-	if fnConfirmDelete('Record '&str$(mergeRec),'transDeleteOne') then
-		if hMtemp then
-			restore #hMtemp:
-			do
-				read #hMtemp,using "Form pos 1,c 12,pd 10.2,c 30,pd 5": gl$,allocation,td$,mergeRec eof TdEoMt
-				delete #hMtemp:
-				delete #hMerge,rec=mergeRec: ioerr ignore
-			loop
-			TdEoMt: !
-		else
-			delete #hMerge,rec=mergeRec: ioerr ignore
-		end if
-		transactionAmt=0
-		vn$=gl$=tr$=''
-	end if
 fnend
 
 def fn_clearVar(&hMtemp,&transactionAmt,&td$,&vn$,&gl$,&totalalloc, _
@@ -1245,7 +1248,7 @@ def fn_openFiles(; reset,___,useOrReplace$)
 	dim td$*30 ! transaction description
 	dim jv2$*5
 	dim key$*12
-	open #hMerge=fnH: 'Name=[Q]\GLmstr\GL_Work_[acsUserId].h[cno],RecL=104,'&useOrReplace$,internal,outIn,relative
+	open #hMerge=fnH: 'Name=[Q]\GLmstr\GL_Work_[acsUserId].h[cno],RecL=104,'&useOrReplace$&',Shr',internal,outIn,relative
 	F_merge: form pos 1,c 12,n 6,pd 6.2,n 2,n 2,c 12,c 30,c 8,x 6,c 5,x 3,c 12
 	open #hAccount=fnH: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLIndex.h[cno],Shr",internal,outIn,keyed
 fnend
