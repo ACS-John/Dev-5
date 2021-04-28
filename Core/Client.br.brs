@@ -83,8 +83,132 @@ def fn_setup
 		setup_library=1
 		autoLibrary
 	end if
-	fn_setupClient
+	if ~setup_client then fn_setupClient
 fnend
+	def fn_setupClient ! ** set up for new clients
+		if ~setup_client then
+			setup_client=1
+			dim client_name$(1)*18
+			client_count=0
+			mat client_name$(client_count)
+			mat client_cno(client_count)
+			mat client_brserial(client_count)
+			!  fn_setupClient_add("ACS",1,0) ! TEMP
+	
+			fn_setupClient_add("ACS" ,420,34660) ! 58650
+			fn_setupClient_add("Ed Horton" ,5535,0)! Ed processes like ACS
+	
+			! fn_setupClient_add("Lamar" ,1,33854)
+			!   fn_setupClient_add("Albany" ,190,15376) ! notifed me 9/22/15 that they were switching UB providers
+			fn_setupClient_add("Allendale" ,200,0)
+			fn_setupClient_add("Ash Grove" ,286,19016)
+			!   fn_setupClient_add("Ashland" ,300,33584)
+			!   fn_setupClient_add("Battlefield" ,369,33306)
+			fn_setupClient_add("Bethany" ,380,34326)
+			fn_setupClient_add("Billings" ,440,33534)
+			fn_setupClient_add("Blucksberg" ,465,34564)
+			!   fn_setupClient_add("Brazeal" ,570,34418)
+			fn_setupClient_add("Brier Lake" ,578,20306)
+			fn_setupClient_add("BRCorp" ,7000,50775) ! 50775 is actually DAVID KALINSKI PERSONAL COPY, but it is what Gordon is using.
+			! fn_setupClient_add("Brumbaugh" ,7007,200033202) ! Limited BR license
+			fn_setupClient_add("Campbell" ,700,33942)
+			fn_setupClient_add("Carr Plumbing" ,780,34610)
+			! fn_setupClient_add("Carrizo" ,800,34416)
+			fn_setupClient_add("Cerro Gordo V" ,850,34508) ! 33994)
+			fn_setupClient_add("Cerro Gordo T" ,970,34508)
+			fn_setupClient_add("Chatom" ,911,15678)
+			fn_setupClient_add("Choctaw" ,918,34214)
+			! fn_setupClient_add("Colyell" ,980,33948)
+			! fn_setupClient_add("Community Dev" ,982,34156)
+			fn_setupClient_add("Crane" ,1120,0)
+			fn_setupClient_add("Crockett County" ,1141,15110)
+			! fn_setupClient_add('Diamond' ,1345,0)
+			fn_setupClient_add("Divernon" ,1350,33698)
+			fn_setupClient_add("Dorothy Salch" ,3812,34494)
+			fn_setupClient_add("Durden" ,1406,16410)
+			fn_setupClient_add("Edinburg" ,1478,34022)
+			fn_setupClient_add("Edison" ,1480,34022)
+			! fn_setupClient_add("Eldorado" ,1500,33352)
+			fn_setupClient_add("Evelyn Pareya" ,3385,34366)
+			fn_setupClient_add("Exeter" ,1615,31210)
+			! fn_setupClient_add("Energy Exchanger" ,1550,10172)
+			!   fn_setupClient_add("FirstBaptist" ,1695,33380) ! <-- note it's the same as French Settlement - one of them is wrong, but First Baptist of Frnaklinton's license is 4.1 and not currently necessary, so just commenting them out for now.
+			fn_setupClient_add("Findlay" ,1700,34132)
+			!   fn_setupClient_add("Franklin and Son" ,1870,32454)
+			fn_setupClient_add("Framemasters" ,1864,0)
+			fn_setupClient_add("Franklin Co Hosp" ,1876,33668)
+			!   fn_setupClient_add("Franklinton" ,1876,0) ! Town of
+			fn_setupClient_add("French Settlement" ,1880,33380)
+			fn_setupClient_add("Fulton" ,1890,33720) ! Utilities Board
+			fn_setupClient_add("Galena" ,1945,34566)
+			fn_setupClient_add("Garrity",1950,0)
+			!   fn_setupClient_add("Gilbertown",1985,0)
+			!   fn_setupClient_add("Granby",2040,34098) ! no longer using as of 6/13/2016
+			fn_setupClient_add("Grandview",2050,34040)
+			fn_setupClient_add("GreeneCo",2070,33910)
+			fn_setupClient_add("Halfway" ,2130,33768)
+			fn_setupClient_add("Hope Welty" ,851,34152)
+			fn_setupClient_add("Laco Vinyl" ,2222,0)
+			fn_setupClient_add("Payroll Done Right" ,3393,0)
+			! fn_setupClient_add("Schachtner Portnoy" ,3828,200008100)
+			! fn_setupClient_add("Illiopolis",2340,0)
+			fn_setupClient_add("Kathys Bookkeeping",3979,33672)
+			! fn_setupClient_add("Kimberling",2530,19212)
+			fn_setupClient_add("Kincaid",2532,33652)
+			! fn_setupClient_add("Lovington",2689,32720)
+			! fn_setupClient_add("Loma Linda",2690,33244)
+			!   fn_setupClient_add("Nancy Mouser",2795,34318)
+			! fn_setupClient_add("Merriam Woods",2900,31702) support ended 12312020
+			!   fn_setupClient_add("Miller Hardware",3005,14668)
+			fn_setupClient_add("Millry",3025,33968)
+			!   fn_setupClient_add("Monticello",3040,12196)
+			fn_setupClient_add("Moweaqua",3045,34594) ! 200032790) ! 33986 <--??  I don't know where that came from - 200032790 was their 4.13 version
+			fn_setupClient_add("Morrisonville",3050,34408) ! 32242  <-- that's white hall's but there was a mistake in license file for a while
+			!   fn_setupClient_add("Northwest",3241,11176 )
+			!   fn_setupClient_add("Oakland",3250,34260)
+			fn_setupClient_add("Omaha",3320,33346)
+			fn_setupClient_add("Pennington",3431,33332)
+			!   fn_setupClient_add("Petromark",3535,33620)
+			!   fn_setupClient_add("Philo",3534,34150)
+			!   fn_setupClient_add("PiattCO",3536,20832)
+			fn_setupClient_add("Purdy",3610,34570)
+			fn_setupClient_add("Raymond",3660,32798)
+			fn_setupClient_add("RecoverysUnlimited",3670,0)
+			fn_setupClient_add('R R Crawford',760,12466)  ! owns a system, but is stalling support until their old stuff breaks.
+			! fn_setupClient_add('Sheila',770,0)
+			fn_setupClient_add("Thomas Richardson",3720,7718)
+			!   fn_setupClient_add("Riverside",3725,18332)
+			!   fn_setupClient_add("Sangamon",3815,34066)
+			fn_setupClient_add("Scottville Rural",3840,33390)
+			fn_setupClient_add("Starr County Gas",4127,33390)
+			fn_setupClient_add("Stern and Stern",4132,200014280)
+			fn_setupClient_add("Thayer",4245,32800)
+			fn_setupClient_add("Thomasboro",4260,34068)
+			fn_setupClient_add("Unity",4380,34478)
+			!   fn_setupClient_add("Washington Parrish",4510,34116)
+			!   fn_setupClient_add("Waverly",4515,34430)
+			!   fn_setupClient_add("West Accounting",4560,30176)   retired as of 02/22/2018
+			!   fn_setupClient_add("West Rest Haven",4567,34032)
+			fn_setupClient_add("White Hall",4625,32242)
+			!   fn_setupClient_add("Willard",4650,33514)
+			fn_setupClient_add("World Wide",4650,33604)
+			fn_setupClient_add("Zaleski",4710,34164)
+			! fn_setupClient_add("Demo",20001,34450)
+			! fn_setupClient_add("Demo",20002,34450)
+			! fn_setupClient_add("Demo",20003,34450)
+			! fn_setupClient_add("Demo",20004,34450)
+		end if
+	fnend
+		def fn_setupClient_add(sca_name$*18,sca_customer_number,sca_brserial_number)
+		client_count+=1
+		mat client_name$(client_count)
+		mat client_cno(client_count)
+		mat client_brserial(client_count)
+		client_name$(client_count)=sca_name$
+		client_cno(client_count)=sca_customer_number
+		client_brserial(client_count)=sca_brserial_number
+	fnend
+
 def library fnClient$*18
 	fn_setup
 	fnClient$=fn_client$
@@ -133,7 +257,7 @@ def fn_client$*18
 fnend
 def library fnClientNameShort$*18(; clientId,___,return$*18,which)
 	if ~setup then fn_setup
-	if ~setup_client then fn_setupClient
+
 	if clientId<=0 then
 		return$=env$('client')
 	else
@@ -149,129 +273,6 @@ def library fnClientNameShort$*18(; clientId,___,return$*18,which)
 		end if
 	end if
 	fnClientNameShort$=return$
-fnend
-def fn_setupClient ! ** set up for new clients
-	if ~setup_client then
-		setup_client=1
-		dim client_name$(1)*18
-		client_count=0
-		mat client_name$(client_count)
-		mat client_cno(client_count)
-		mat client_brserial(client_count)
-		!  fn_setupClient_add("ACS",1,0) ! TEMP
-
-		fn_setupClient_add("ACS" ,420,34660) ! 58650
-		fn_setupClient_add("Ed Horton" ,5535,0)! Ed processes like ACS
-
-		! fn_setupClient_add("Lamar" ,1,33854)
-		!   fn_setupClient_add("Albany" ,190,15376) ! notifed me 9/22/15 that they were switching UB providers
-		fn_setupClient_add("Allendale" ,200,0)
-		fn_setupClient_add("Ash Grove" ,286,19016)
-		!   fn_setupClient_add("Ashland" ,300,33584)
-		!   fn_setupClient_add("Battlefield" ,369,33306)
-		fn_setupClient_add("Bethany" ,380,34326)
-		fn_setupClient_add("Billings" ,440,33534)
-		fn_setupClient_add("Blucksberg" ,465,34564)
-		!   fn_setupClient_add("Brazeal" ,570,34418)
-		fn_setupClient_add("Brier Lake" ,578,20306)
-		fn_setupClient_add("BRCorp" ,7000,50775) ! 50775 is actually DAVID KALINSKI PERSONAL COPY, but it is what Gordon is using.
-		! fn_setupClient_add("Brumbaugh" ,7007,200033202) ! Limited BR license
-		fn_setupClient_add("Campbell" ,700,33942)
-		fn_setupClient_add("Carr Plumbing" ,780,34610)
-		! fn_setupClient_add("Carrizo" ,800,34416)
-		fn_setupClient_add("Cerro Gordo V" ,850,34508) ! 33994)
-		fn_setupClient_add("Cerro Gordo T" ,970,34508)
-		fn_setupClient_add("Chatom" ,911,15678)
-		fn_setupClient_add("Choctaw" ,918,34214)
-		! fn_setupClient_add("Colyell" ,980,33948)
-		! fn_setupClient_add("Community Dev" ,982,34156)
-		fn_setupClient_add("Crane" ,1120,0)
-		fn_setupClient_add("Crockett County" ,1141,15110)
-		! fn_setupClient_add('Diamond' ,1345,0)
-		fn_setupClient_add("Divernon" ,1350,33698)
-		fn_setupClient_add("Dorothy Salch" ,3812,34494)
-		fn_setupClient_add("Durden" ,1406,16410)
-		fn_setupClient_add("Edinburg" ,1478,34022)
-		fn_setupClient_add("Edison" ,1480,34022)
-		! fn_setupClient_add("Eldorado" ,1500,33352)
-		fn_setupClient_add("Evelyn Pareya" ,3385,34366)
-		fn_setupClient_add("Exeter" ,1615,31210)
-		! fn_setupClient_add("Energy Exchanger" ,1550,10172)
-		!   fn_setupClient_add("FirstBaptist" ,1695,33380) ! <-- note it's the same as French Settlement - one of them is wrong, but First Baptist of Frnaklinton's license is 4.1 and not currently necessary, so just commenting them out for now.
-		fn_setupClient_add("Findlay" ,1700,34132)
-		!   fn_setupClient_add("Franklin and Son" ,1870,32454)
-		fn_setupClient_add("Framemasters" ,1864,0)
-		fn_setupClient_add("Franklin Co Hosp" ,1876,33668)
-		!   fn_setupClient_add("Franklinton" ,1876,0) ! Town of
-		fn_setupClient_add("French Settlement" ,1880,33380)
-		fn_setupClient_add("Fulton" ,1890,33720) ! Utilities Board
-		fn_setupClient_add("Galena" ,1945,34566)
-		fn_setupClient_add("Garrity",1950,0)
-		!   fn_setupClient_add("Gilbertown",1985,0)
-		!   fn_setupClient_add("Granby",2040,34098) ! no longer using as of 6/13/2016
-		fn_setupClient_add("Grandview",2050,34040)
-		fn_setupClient_add("GreeneCo",2070,33910)
-		fn_setupClient_add("Halfway" ,2130,33768)
-		fn_setupClient_add("Hope Welty" ,851,34152)
-		fn_setupClient_add("Laco Vinyl" ,2222,0)
-		fn_setupClient_add("Payroll Done Right" ,3393,0)
-		! fn_setupClient_add("Schachtner Portnoy" ,3828,200008100)
-		! fn_setupClient_add("Illiopolis",2340,0)
-		fn_setupClient_add("Kathys Bookkeeping",3979,33672)
-		! fn_setupClient_add("Kimberling",2530,19212)
-		fn_setupClient_add("Kincaid",2532,33652)
-		! fn_setupClient_add("Lovington",2689,32720)
-		! fn_setupClient_add("Loma Linda",2690,33244)
-		!   fn_setupClient_add("Nancy Mouser",2795,34318)
-		! fn_setupClient_add("Merriam Woods",2900,31702) support ended 12312020
-		!   fn_setupClient_add("Miller Hardware",3005,14668)
-		fn_setupClient_add("Millry",3025,33968)
-		!   fn_setupClient_add("Monticello",3040,12196)
-		fn_setupClient_add("Moweaqua",3045,34594) ! 200032790) ! 33986 <--??  I don't know where that came from - 200032790 was their 4.13 version
-		fn_setupClient_add("Morrisonville",3050,34408) ! 32242  <-- that's white hall's but there was a mistake in license file for a while
-		!   fn_setupClient_add("Northwest",3241,11176 )
-		!   fn_setupClient_add("Oakland",3250,34260)
-		fn_setupClient_add("Omaha",3320,33346)
-		fn_setupClient_add("Pennington",3431,33332)
-		!   fn_setupClient_add("Petromark",3535,33620)
-		!   fn_setupClient_add("Philo",3534,34150)
-		!   fn_setupClient_add("PiattCO",3536,20832)
-		fn_setupClient_add("Purdy",3610,34570)
-		fn_setupClient_add("Raymond",3660,32798)
-		fn_setupClient_add("RecoverysUnlimited",3670,0)
-		fn_setupClient_add('R R Crawford',760,12466)  ! owns a system, but is stalling support until their old stuff breaks.
-		! fn_setupClient_add('Sheila',770,0)
-		fn_setupClient_add("Thomas Richardson",3720,7718)
-		!   fn_setupClient_add("Riverside",3725,18332)
-		!   fn_setupClient_add("Sangamon",3815,34066)
-		fn_setupClient_add("Scottville Rural",3840,33390)
-		fn_setupClient_add("Starr County Gas",4127,33390)
-		fn_setupClient_add("Stern and Stern",4132,200014280)
-		fn_setupClient_add("Thayer",4245,32800)
-		fn_setupClient_add("Thomasboro",4260,34068)
-		fn_setupClient_add("Unity",4380,34478)
-		!   fn_setupClient_add("Washington Parrish",4510,34116)
-		!   fn_setupClient_add("Waverly",4515,34430)
-		!   fn_setupClient_add("West Accounting",4560,30176)   retired as of 02/22/2018
-		!   fn_setupClient_add("West Rest Haven",4567,34032)
-		fn_setupClient_add("White Hall",4625,32242)
-		!   fn_setupClient_add("Willard",4650,33514)
-		fn_setupClient_add("World Wide",4650,33604)
-		fn_setupClient_add("Zaleski",4710,34164)
-		! fn_setupClient_add("Demo",20001,34450)
-		! fn_setupClient_add("Demo",20002,34450)
-		! fn_setupClient_add("Demo",20003,34450)
-		! fn_setupClient_add("Demo",20004,34450)
-	end if
-fnend
-def fn_setupClient_add(sca_name$*18,sca_customer_number,sca_brserial_number)
-	client_count+=1
-	mat client_name$(client_count)
-	mat client_cno(client_count)
-	mat client_brserial(client_count)
-	client_name$(client_count)=sca_name$
-	client_cno(client_count)=sca_customer_number
-	client_brserial(client_count)=sca_brserial_number
 fnend
 
 def fn_getClientLicense(mat client_has$)
@@ -300,7 +301,7 @@ def fn_getClientLicense(mat client_has$)
 			fn_userLimit(1)
 			fn_getClientLicense_add('CL')
 			fn_getClientLicense_add('GL')
-			fn_getClientLicense_add('G2') ! G3 Accountant's General Ledger
+			fn_getClientLicense_add('G2') ! G2 Accountant's General Ledger
 			fn_getClientLicense_add('PR')
 			fn_getClientLicense_add('UB') : fn_setUbLimit(500) ! U3 Utility Billing (<500 Customers)
 			fn_getClientLicense_add('U4') ! U4 Utility Billing Hand Held Add-On
@@ -420,11 +421,11 @@ def fn_getClientLicense(mat client_has$)
 		else if env$('client')='Dorothy Salch' then
 			fn_userLimit(1)
 			fn_getClientLicense_add('GL')
-			fn_getClientLicense_add('G2') ! G3 Accountant's General Ledger
+			fn_getClientLicense_add('G2') ! G2 Accountant's General Ledger
 		else if env$('client')='Evelyn Pareya' then
 			fn_userLimit(1)
 			fn_getClientLicense_add('GL')
-			fn_getClientLicense_add('G2') ! G3 Accountant's General Ledger
+			fn_getClientLicense_add('G2') ! G2 Accountant's General Ledger
 		else if env$('client')='Findlay' then
 			fn_userLimit(2)
 			fn_getClientLicense_add('UB') : fn_setUbLimit(1000) ! U2 Utility Billing (500-1000 customers)
@@ -466,7 +467,7 @@ def fn_getClientLicense(mat client_has$)
 		else if env$('client')='Kathys Bookkeeping' then
 			fn_userLimit(2)
 			fn_getClientLicense_add('GL')
-			fn_getClientLicense_add('G2') ! G3 Accountant's General Ledger
+			! fn_getClientLicense_add('G2') ! G2 Accountant's General Ledger
 			fn_getClientLicense_add('PR')
 			!     fn_getClientLicense_add('P4')
 		else if env$('client')='Kincaid' and env$('Unique_Computer_Id')='1478AEE0-5BCB-11D9-B0AC-BCAEC5EA1947' then
@@ -523,20 +524,8 @@ def fn_getClientLicense(mat client_has$)
 			if days(date$)<=days('03/03/2018','mm/dd/ccyy') then fn_userLimit(3) else fn_userLimit(1) ! 2 user bonus for 60 days
 			fn_getClientLicense_add('UB') : fn_setUbLimit(9999) ! U1 Utility Billing (no discount)
 			fn_getClientLicense_add('U4') : u4_device$='READy Water'
-
-		else if env$('client')='Raymond' and env$('Unique_Computer_Id')='4C4C4544-0043-4210-8058-C8C04F423432' then
-			fn_userLimit(1)
-			fn_getClientLicense_add('UB') : fn_setUbLimit(500) ! U3 Utility Billing (<500 Customers)
-			fn_getClientLicense_add('U4') : u4_device$='Badger Connect C' ! U4 Utility Billing Hand Held Add-On          FREE TRIAL PERIOD
-		! else if env$('client')='Raymond' and env$('Unique_Computer_Id')='4C4C4544-0032-5910-804C-B3C04F585131' then
-		! 	fn_userLimit(1)
-		! 	fn_getClientLicense_add('PR')
-		! else if env$('client')='Raymond' and env$('Unique_Computer_Id')='C55D3F13-A162-E111-8430-DC0EA14AC3F6' then ! ACS Test Laptop QOSMIO X775
-		! 	fn_userLimit(1)
-		! 	fn_getClientLicense_add('PR')
 		else if env$('client')='Raymond' then
 			fn_userLimit(2)
-		! 	fn_getClientLicense_add('PR')
 			fn_getClientLicense_add('UB') : fn_setUbLimit(500) ! U3 Utility Billing (<500 Customers)
 			fn_getClientLicense_add('U4') : u4_device$='Badger Connect C' ! U4 Utility Billing Hand Held Add-On
 		else if env$('client')='R R Crawford' then
@@ -598,7 +587,7 @@ def fn_getClientLicense(mat client_has$)
 			fn_userLimit(1)
 			fn_getClientLicense_add('PR')
 			fn_getClientLicense_add('GL')
-			fn_getClientLicense_add('G2') ! G3 Accountant's General Ledger
+			fn_getClientLicense_add('G2') ! G2 Accountant's General Ledger
 		end if
 		! /r
 	end if
@@ -722,42 +711,37 @@ def library fnub_printbill_program$*256
 		mat ub_printbill_program$(999)
 		ub_printbill_count=0
 
-		fn_upp_add('Ash Grove'         ,'ubprtfull_ashgrove'    )
-		fn_upp_add('Bethany'           ,'ubprtbl1_Bethany'      )  ! on 12/17/18 I cleaned it up a little but didn't move it into (basic) yet - it could be though -john
-		fn_upp_add('Chatom'            ,'ubprtbl1_chatom'       )
-		fn_upp_add('Divernon'          ,'ubprtbl1_div'          )
-		fn_upp_add('Findlay'           ,'ubprtbl1_fin'          )
-		fn_upp_add('Grandview'         ,'ubprtbl1_gra'          )
-		fn_upp_add('Kincaid'           ,'ubprtbl1_kin'          )
-		! fn_upp_add('Lovington'         ,'ubprtbl1_Lovington'    )
-		! fn_upp_add('Loma Linda'        ,'ubprtbl1_ll'           )
-		fn_upp_add('Millry'            ,'ubprtbl1_millry'       )
-		fn_upp_add('Morrisonville'     ,'ubprtbl1_morrisonville')
-		fn_upp_add('Moweaqua'          ,'PrintBill_Moweaqua'    )
-		fn_upp_add('Purdy'             ,'ubprtbl1_purdy'        )
-		fn_upp_add('Scottville Rural'  ,'ubprtbl1_scottville'   )
-		fn_upp_add('Thayer'            ,'ubprtbl1_thayer'       )
-		fn_upp_add('Thomasboro'        ,'ubprtbl1_tho'          )
-		fn_upp_add('White Hall'        ,'ubprtbl1_wh'           )
-		fn_upp_add('Brier Lake'        ,'ubprtthree_Brier'      )
-		fn_upp_add('Cerro Gordo V'     ,'ubprtlas_cerro'        )
+		fn_upp_add('Ash Grove'         	,'ubprtfull_ashgrove'    	)
+		fn_upp_add('Bethany'           	,'ubprtbl1_Bethany'      	)  ! on 12/17/18 I cleaned it up a little but didn't move it into (basic) yet - it could be though -john
+		fn_upp_add('Chatom'            	,'ubprtbl1_chatom'       	)
+		fn_upp_add('Divernon'          	,'ubprtbl1_div'          	)
+		fn_upp_add('Findlay'           	,'ubprtbl1_fin'          	)
+		fn_upp_add('Grandview'         	,'ubprtbl1_gra'          	)
+		fn_upp_add('Kincaid'           	,'ubprtbl1_kin'          	)
+		fn_upp_add('Millry'            	,'ubprtbl1_millry'       	)
+		fn_upp_add('Morrisonville'     	,'ubprtbl1_morrisonville'	)
+		fn_upp_add('Moweaqua'          	,'PrintBill_Moweaqua'    	)
+		fn_upp_add('Purdy'             	,'ubprtbl1_purdy'        	)
+		fn_upp_add('Scottville Rural' 	,'ubprtbl1_scottville'   	)
+		fn_upp_add('Thayer'            	,'ubprtbl1_thayer'       	)
+		fn_upp_add('Thomasboro'        	,'ubprtbl1_tho'          	)
+		fn_upp_add('White Hall'        	,'ubprtbl1_wh'           	)
+		fn_upp_add('Brier Lake'        	,'ubprtthree_Brier'      	)
+		fn_upp_add('Cerro Gordo V'     	,'ubprtlas_cerro'        	)
 
-		fn_upp_add('Campbell'          ,'(basic)'               )  ! derived from printbill_french_settlement_gas which should still work too
-		fn_upp_add('Edinburg'          ,'(basic)'               ) ! 'ubprtbl1_edi'
-		fn_upp_add('Edison'            ,'(basic)'               )
-		fn_upp_add('Exeter'            ,'(basic)'               )
-		fn_upp_add('French Settlement' ,'(basic)'               ) ! 'printbill_french_settlement_gas'
-		fn_upp_add('GreeneCo'          ,'(basic)'               ) ! 'ubprtbl1_GreeneCo'
-		! fn_upp_add('Merriam Woods'     ,'(basic)'               ) ! 'PrintBill_Merriam_Woods'
-		fn_upp_add('Raymond'           ,'(basic)'               ) ! 'ubprtbl1_Raymond'
-		! fn_upp_add('Thomasboro'        ,'(basic)'               ) ! 'ubprtbl1_tho'
-		fn_upp_add('Galena'            ,'(basic)'               ) ! 'ubprtbl1_galena')
-		fn_upp_add('Billings'          ,'(basic)'               ) ! ubprtthree_bill
-		! fn_upp_add('Diamond'           ,'(basic)'               ) ! ubprtthree_bill
-		fn_upp_add('Choctaw'           ,'(basic)'               ) ! 'ubprtlas_choctaw'
-		fn_upp_add('Omaha'             ,'(basic)'               ) ! 'ubprtthree_Omaha'
-		fn_upp_add('Pennington'        ,'(basic)'               ) ! PrintBill_Pennington ! atlantis format - hits preprinted stock
-		fn_upp_add('Blucksberg'        ,'(basic)'               ) ! 'PrintBill_Blucksberg'
+		fn_upp_add('Campbell'          	,'(basic)'	)  ! derived from printbill_french_settlement_gas which should still work too
+		fn_upp_add('Edinburg'          	,'(basic)'	) ! 'ubprtbl1_edi'
+		fn_upp_add('Edison'            	,'(basic)'	)
+		fn_upp_add('Exeter'            	,'(basic)'	)
+		fn_upp_add('French Settlement'	,'(basic)'	) ! 'printbill_french_settlement_gas'
+		fn_upp_add('GreeneCo'          	,'(basic)'	) ! 'ubprtbl1_GreeneCo'
+		fn_upp_add('Raymond'           	,'(basic)'	) ! 'ubprtbl1_Raymond'
+		fn_upp_add('Galena'            	,'(basic)'	) ! 'ubprtbl1_galena')
+		fn_upp_add('Billings'          	,'(basic)'	) ! ubprtthree_bill
+		fn_upp_add('Choctaw'           	,'(basic)'	) ! 'ubprtlas_choctaw'
+		fn_upp_add('Omaha'             	,'(basic)'	) ! 'ubprtthree_Omaha'
+		fn_upp_add('Pennington'        	,'(basic)'	) ! PrintBill_Pennington ! atlantis format - hits preprinted stock
+		fn_upp_add('Blucksberg'        	,'(basic)'	) ! 'PrintBill_Blucksberg'
 
 		! r: old removed lines
 			! fn_upp_add("Ashland","ubprtbl1_ashland")
@@ -786,7 +770,7 @@ def library fnub_printbill_program$*256
 		! /r
 		mat ub_printbill_client$(ub_printbill_count)
 		mat ub_printbill_program$(ub_printbill_count)
-		!
+		
 	end if  ! /r
 	upp_return$='S:\Core\Menu.br'
 		ua_which=srch(mat ub_printbill_client$,env$('Client'))
@@ -822,7 +806,7 @@ def fn_payroll_client_state$*2(; client$*64,___,return$*2,which)
 		pr_clientstate_count=0
 		!   fn_upp_add("Ash Grove","ubprtlas_ashgrove")
 		fn_pcs_add("ACS","NJ")
-		! fn_pcs_add("Lamar",'MS')
+		!   fn_pcs_add("Lamar",'MS')
 		fn_pcs_add("Ash Grove",'MO')
 		!   fn_pcs_add("Battlefield",'MO')
 		fn_pcs_add("Bethany",'IL')
@@ -833,40 +817,40 @@ def fn_payroll_client_state$*2(; client$*64,___,return$*2,which)
 		fn_pcs_add("Cerro Gordo T",'IL')
 		!   fn_pcs_add("Community Dev",'TN')
 		fn_pcs_add("Crockett County",'TX')
-		! fn_pcs_add('Diamond','MO')
+		!   fn_pcs_add('Diamond','MO')
 		fn_pcs_add("Divernon",'IL')
 		fn_pcs_add("Durden",'LA')
 		fn_pcs_add("Edinburg",'IL')
 		fn_pcs_add("Edison",'GA')
 		fn_pcs_add("Ed Horton",'IL')
 		! fn_pcs_add("Energy Exchanger",'OK')  dropped support of april 2019, removed april 2020
-!   fn_pcs_add("Franklin and Son",'AR')
-!   fn_pcs_add("Franklinton",'LA')
+		!   fn_pcs_add("Franklin and Son",'AR')
+		!   fn_pcs_add("Franklinton",'LA')
 		fn_pcs_add("Galena",'MO')
-!   fn_pcs_add("GreeneCo",'MO')
+		!   fn_pcs_add("GreeneCo",'MO')
 		fn_pcs_add("Hope Welty",'IL')
 		fn_pcs_add("Kincaid",'IL')
 		! fn_pcs_add("Kimberling",'MO')
 		fn_pcs_add("Kathys Bookkeeping",'OK')
-!		fn_pcs_add("Lovington",'IL')
-! 		fn_pcs_add("Merriam Woods",'MO')
-!   fn_pcs_add("Monticello",'IL')
-!   fn_pcs_add("Nancy Mouser",'OK')
-!   fn_pcs_add("Northwest",'AR')
+		!		fn_pcs_add("Lovington",'IL')
+		! 		fn_pcs_add("Merriam Woods",'MO')
+		!   fn_pcs_add("Monticello",'IL')
+		!   fn_pcs_add("Nancy Mouser",'OK')
+		!   fn_pcs_add("Northwest",'AR')
 		fn_pcs_add("Oklahoma",'OK')
 		fn_pcs_add("Payroll Done Right",'OR')
-! 		fn_pcs_add("Philo",'IL')
-!   fn_pcs_add("PiattCO",'IL')
+		!   fn_pcs_add("Philo",'IL')
+		!   fn_pcs_add("PiattCO",'IL')
 		! fn_pcs_add("Raymond",'IL')
 		fn_pcs_add("R R Crawford",'KY')
-!   fn_pcs_add("Riverside",'IN') ! Indiana tax table is out of date...  and looks pretty complicated:  http://www.in.gov/dor/reference/files/dn01.pdf
+		!   fn_pcs_add("Riverside",'IN') ! Indiana tax table is out of date...  and looks pretty complicated:  http://www.in.gov/dor/reference/files/dn01.pdf
 		! fn_pcs_add("Sheila",'MO')
 		fn_pcs_add("Thomas Richardson",'LA')
 		fn_pcs_add("Thomasboro",'IL')
 		fn_pcs_add("Unity",'IL')
-!   fn_pcs_add("Washington Parrish",'LA')
-!   fn_pcs_add("West Rest Haven",'')
-!   fn_pcs_add("West Accounting",'OR')
+		!   fn_pcs_add("Washington Parrish",'LA')
+		!   fn_pcs_add("West Rest Haven",'')
+		!   fn_pcs_add("West Accounting",'OR')
 		fn_pcs_add("Zaleski",'TX')
 		mat pr_clientstate_client$(pr_clientstate_count)
 		mat pr_clientstate_state$(pr_clientstate_count)
@@ -932,10 +916,10 @@ def fn_client_support_setup(client_id,mat css_system_id$,mat css_system_support_
 	! css_days_grace=day grace period to allow users to update after support has expired.
 	if css_setup<>client_id then ! r:
 		cache_css_client_owns_count=fn_clientHasMat(mat css_client_owns$)
-				mat css_client_owns$(cache_css_client_owns_count)
-				mat css_system_id$(cache_css_client_owns_count)
-				mat css_system_id$=css_client_owns$
-		!
+		mat css_client_owns$(cache_css_client_owns_count)
+		mat css_system_id$(cache_css_client_owns_count)
+		mat css_system_id$=css_client_owns$
+		
 		mat cache_css_system_id$(0)
 		mat cache_css_system_sup_end_date(0)
 		cache_css_system_count=0

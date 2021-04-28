@@ -67,6 +67,7 @@ TOP: ! r:
 		read #h_work,using F_WORK,rec=r3+=1: x$,mat x eof FINIS,noRec TOP
 		if x$(1:2)="00" or uprc$(x$)=uprc$("   DELETED") then goto TOP
 		read #h_customer,using F_CUSTOMER,key=x$: meteradr$,custname$,mat a,mat b,mat c,mat d, bal,f,mat g,mat gb,mat extra nokey NKT9
+
 	else if goal$='recalculate' then
 		read #h_customer,using F_CUSTOMER_W_ACCT: x$,meteradr$,custname$,mat a,mat b,mat c,mat d, bal,f,mat g,mat gb,mat extra eof FINIS
 		if f<>d1 then goto TOP
@@ -78,6 +79,8 @@ TOP: ! r:
 		if d(7)>0 and d(5)-d(6)<> d(7) then x(13)=d(7) ! if usage was override then use
 		if d(11)>0 and d(9)-d(10)<> d(11) then x(14)=d(11) ! if usage was override then use for gas
 	end if
+
+	if env$('client')='Millry' and date$('mm/dd/ccyy')='04/28/2021'  then extra(2)=int(extra(2)/10) ! prior readings were 10x too high.
 
 	! r: set default rate codes
 	! if env$('client')="Pennington" then extra(12)=1 ! default to 1
@@ -327,8 +330,8 @@ def fn_demand
 fnend
 def fn_bud_open
 	bud1=0
-	open #budmstr:=6: "Name=[Q]\UBmstr\BudMstr.h[cno],KFName=[Q]\UBmstr\BudIdx1.h[cno],Shr",internal,outIn,keyed ioerr BUD1_XIT
-	open #budtrans:=7: "Name=[Q]\UBmstr\BudTrans.h[cno],Shr",internal,outIn,relative
+	open #budmstr=6: "Name=[Q]\UBmstr\BudMstr.h[cno],KFName=[Q]\UBmstr\BudIdx1.h[cno],Shr",internal,outIn,keyed ioerr BUD1_XIT
+	open #budtrans=7: "Name=[Q]\UBmstr\BudTrans.h[cno],Shr",internal,outIn,relative
 	bud1=1
 	BUD1_XIT: !
 fnend
