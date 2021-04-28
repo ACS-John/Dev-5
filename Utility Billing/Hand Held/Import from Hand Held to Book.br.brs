@@ -734,6 +734,7 @@ fnend
 				if 'WTR'=trim$(line$(6:9)) then
 					! reading_water=val(line$(99:108))  
 					reading_water=val(line$(89:98))  ! use Reading instead of Collector Reading (has invisible decimals)
+					! reading_water=int(reading_water)/10
 				else 
 					pr 'unhandled service in RDGDT record: '&line$(6:9)
 					pause
