@@ -21,7 +21,7 @@ def library fnTos(; sn$*100)
 	! open #119: "Name="&env$('temp')&'\acs\'&sn$&",RecL=1024,Replace",internal,outIn,relative	! recl was 500
 	fn_clear_env(tmp_combo_count_for_read,tmp_combo_count_for_set)
 	if env$('GUIMode')='OFF' then execute 'config GUI On'
-fnend
+fnend ! /r  (extra slash r because fnt-p is also a folder)
 def library fnLbl(myline,mypos,txt$*200; mylen,myalign,font_mod,container,tabcon,lbl_tooltip$*256)
 	! add a label to a screen ace form	 ! fnLbl(l,p,t$*200; mylen,myalign,fm,c,tc)
 	! myline	 vertical (that's up and down) Position of the Label.
@@ -483,7 +483,7 @@ def fn_clearMenu
 	mat _m$(0) : mat _p$(0) : mat _s$(0)
 	display menu: mat _m$,mat _p$,mat _s$
 fnend
-def library fnAcs(mat resp$; &ckey, startfield,close_on_exit,parent_none,disabled_background)
+def library fnAcs(mat resp$; &ckey, startfield,close_on_exit,parent_none,disabled_background) ! r: (extra r colon because fna-s is also a folder closer)
 	if ~setup then fn_setup
 	dim txt$*201,path1$*300,tt$*400,tabline$*8019
 	dim cap$*128 ! caption / title bar text
@@ -501,8 +501,7 @@ def library fnAcs(mat resp$; &ckey, startfield,close_on_exit,parent_none,disable
 	! yeah it screws things up to take it out - repetative flex grids
 	fn_ace(sn$,unused,mat resp$,ckey,startfield,close_on_exit,parent_none,disabled_background)
 	
-	fnAcs=ckey
-	goto Xit
+	fnAcs=ckey ! r: (extra r colon because fna-s is also a folder closer)
 Xit: fnend
 def fn_ace_init
 	ace_io_count=ace_lyne_max=ace_column_max=grid_present=tmp_combo_count_for_read=0
@@ -1577,38 +1576,42 @@ fnend
 		if default then return$&='\nKeyboard Shortcut: [Enter] (or double click an item in a list view)' : goto EoIfCh
 		if cancel then return$&='\nKeyboard Shortcut: [Esc]' : goto EoIfCh
 		if comkey=>1 and comkey<=10 then return$&='\nKeyboard Shortcut: [F'&str$(comkey)&']'
-		fn_ifCh(30,'[Alt+A]') : goto EoIfCh
-		fn_ifCh(48,'[Alt+B]') : goto EoIfCh
-		fn_ifCh(46,'[Alt+C]') : goto EoIfCh
-		fn_ifCh(32,'[Alt+D]') : goto EoIfCh
-		fn_ifCh(18,'[Alt+E]') : goto EoIfCh
-		fn_ifCh(33,'[Alt+F]') : goto EoIfCh
-		fn_ifCh(34,'[Alt+G]') : goto EoIfCh
-		fn_ifCh(35,'[Alt+H]') : goto EoIfCh
-		fn_ifCh(23,'[Alt+I]') : goto EoIfCh
-		fn_ifCh(36,'[Alt+J]') : goto EoIfCh
-		fn_ifCh(37,'[Alt+K]') : goto EoIfCh
-		fn_ifCh(38,'[Alt+L]') : goto EoIfCh
-		fn_ifCh(50,'[Alt+M]') : goto EoIfCh
-		fn_ifCh(49,'[Alt+N]') : goto EoIfCh
-		fn_ifCh(24,'[Alt+O]') : goto EoIfCh
-		fn_ifCh(25,'[Alt+P]') : goto EoIfCh
-		fn_ifCh(16,'[Alt+Q]') : goto EoIfCh
-		fn_ifCh(19,'[Alt+R]') : goto EoIfCh
-		fn_ifCh(31,'[Alt+S]') : goto EoIfCh
-		fn_ifCh(20,'[Alt+T]') : goto EoIfCh
-		fn_ifCh(22,'[Alt+U]') : goto EoIfCh
-		fn_ifCh(47,'[Alt+V]') : goto EoIfCh
-		fn_ifCh(17,'[Alt+W]') : goto EoIfCh
-		fn_ifCh(45,'[Alt+X]') : goto EoIfCh
-		fn_ifCh(21,'[Alt+Y]') : goto EoIfCh
-		fn_ifCh(44,'[Alt+Z]') : goto EoIfCh
+		if fn_ifCh(30,'[Alt+A]'   	,return$,comkey) then goto EoIfCh
+		if fn_ifCh(48,'[Alt+B]'   	,return$,comkey) then goto EoIfCh
+		if fn_ifCh(46,'[Alt+C]'   	,return$,comkey) then goto EoIfCh
+		if fn_ifCh(32,'[Alt+D]'   	,return$,comkey) then goto EoIfCh
+		if fn_ifCh(18,'[Alt+E]'   	,return$,comkey) then goto EoIfCh
+		if fn_ifCh(33,'[Alt+F]'   	,return$,comkey) then goto EoIfCh
+		if fn_ifCh(34,'[Alt+G]'   	,return$,comkey) then goto EoIfCh
+		if fn_ifCh(35,'[Alt+H]'   	,return$,comkey) then goto EoIfCh
+		if fn_ifCh(23,'[Alt+I]'   	,return$,comkey) then goto EoIfCh
+		if fn_ifCh(36,'[Alt+J]'   	,return$,comkey) then goto EoIfCh
+		if fn_ifCh(37,'[Alt+K]'   	,return$,comkey) then goto EoIfCh
+		if fn_ifCh(38,'[Alt+L]'   	,return$,comkey) then goto EoIfCh
+		if fn_ifCh(50,'[Alt+M]'   	,return$,comkey) then goto EoIfCh
+		if fn_ifCh(49,'[Alt+N]'   	,return$,comkey) then goto EoIfCh
+		if fn_ifCh(24,'[Alt+O]'   	,return$,comkey) then goto EoIfCh
+		if fn_ifCh(25,'[Alt+P]'   	,return$,comkey) then goto EoIfCh
+		if fn_ifCh(16,'[Alt+Q]'   	,return$,comkey) then goto EoIfCh
+		if fn_ifCh(19,'[Alt+R]'   	,return$,comkey) then goto EoIfCh
+		if fn_ifCh(31,'[Alt+S]'   	,return$,comkey) then goto EoIfCh
+		if fn_ifCh(20,'[Alt+T]'   	,return$,comkey) then goto EoIfCh
+		if fn_ifCh(22,'[Alt+U]'   	,return$,comkey) then goto EoIfCh
+		if fn_ifCh(47,'[Alt+V]'   	,return$,comkey) then goto EoIfCh
+		if fn_ifCh(17,'[Alt+W]'   	,return$,comkey) then goto EoIfCh
+		if fn_ifCh(45,'[Alt+X]'   	,return$,comkey) then goto EoIfCh
+		if fn_ifCh(21,'[Alt+Y]'   	,return$,comkey) then goto EoIfCh
+		if fn_ifCh(44,'[Alt+Z]'   	,return$,comkey) then goto EoIfCh
+		if fn_ifCh(112,'[Home]'   	,return$,comkey) then goto EoIfCh
+		if fn_ifCh(113,'[End]'    	,return$,comkey) then goto EoIfCh
+		if fn_ifCh(90,'[PageUp]'  	,return$,comkey) then goto EoIfCh
+		if fn_ifCh(91,'[PageDown]'	,return$,comkey) then goto EoIfCh
 		EoIfCh: !
 		return$&=';'
 		fn_formatButtonHelp$=return$
 	fnend
-		def fn_ifCh(comkey,text$*64; ___,returnN)
-			if comkey=comkeyTest then return$&='\nKeyboard Shortcut: '&text$ : returnN=1
+		def fn_ifCh(comkeyTest,text$*64,&tooltip$,comkey; ___,returnN)
+			if comkey=comkeyTest then tooltip$&='\nKeyboard Shortcut: '&text$ : returnN=1
 			fn_ifCh=returnN
 		fnend
 def fn_ace_rd_option

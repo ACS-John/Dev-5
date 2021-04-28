@@ -54,7 +54,7 @@ def library fnget_company_number_list(mat cno_list; sysid$*256)
 	mat cno_list(99999)
 	for filename_item=1 to udim(mat filename$)
 		tmp_cno=val(filename$(filename_item)(10:14)) conv ACNO_CONV
-		if tmp_cno<>99999 and filename$(filename_item)<>'' then ! don't display company 99999
+		if tmp_cno<>99999 and filename$(filename_item)<>'' then
 			company_count+=1
 			cno_list(company_count)=tmp_cno
 		end if

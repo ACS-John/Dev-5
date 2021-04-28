@@ -466,7 +466,7 @@ def fn_getClientLicense(mat client_has$)
 		else if env$('client')='Kathys Bookkeeping' then
 			fn_userLimit(2)
 			fn_getClientLicense_add('GL')
-			!     fn_getClientLicense_add('G2') ! G3 Accountant's General Ledger
+			fn_getClientLicense_add('G2') ! G3 Accountant's General Ledger
 			fn_getClientLicense_add('PR')
 			!     fn_getClientLicense_add('P4')
 		else if env$('client')='Kincaid' and env$('Unique_Computer_Id')='1478AEE0-5BCB-11D9-B0AC-BCAEC5EA1947' then

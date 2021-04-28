@@ -251,7 +251,7 @@ def fn_index_sys_do_one(cno,system_id$*2)
 		fn_index("[Q]\CLmstr\DPTMSTR.h"&str$(cno), "[Q]\CLmstr\DPTIDX1.h"&str$(cno),"1 5")
 		fn_index("[Q]\CLmstr\GLmstr.H"&str$(cno), "[Q]\CLmstr\GLINDEX.H"&str$(cno),"1 12")
 		fn_index("[Q]\CLmstr\IvPaid.h"&str$(cno), "[Q]\CLmstr\IVIndex.h"&str$(cno)," 1 20")
-		fn_index("[Q]\CLmstr\JCBreakdownS"&wsid$&".h"&str$(cno), "[Q]\CLmstr\jcbrkidx"&wsid$&".H"&str$(cno),"48 20")
+		fn_index("[Q]\CLmstr\JCBreakdownS[wsid].h"&str$(cno), "[Q]\CLmstr\jcbrkidx[wsid].H"&str$(cno),"48 20")
 		fn_index("[Q]\CLmstr\payeeglbreakdown.H"&str$(cno), "[Q]\CLmstr\Payeeglbkdidx.H"&str$(cno),"1 8")
 		fn_index("[Q]\CLmstr\PayMstr.h"&str$(cno), "[Q]\CLmstr\payidx1.H"&str$(cno),"1 8")
 		fn_index("[Q]\CLmstr\PayTrans.h"&str$(cno), "[Q]\CLmstr\Unpdidx2.H"&str$(cno),"31/27/1 2/4/26") ! index in year,monthday,reference
@@ -273,11 +273,11 @@ def library fnub_index_customer(; cno)
 	fnub_index_customer=fn_ub_index_customer(cno)
 fnend 
 def fn_ub_index_customer(cno)
-	fn_index("[Q]\UBmstr\Customer.h[cno]", "[Q]\UBmstr\ubIndex.h[cno]","1 10")
-	fn_index("[Q]\UBmstr\Customer.h[cno]", "[Q]\UBmstr\ubIndx2.h[cno]","354 7")
-	fn_index("[Q]\UBmstr\Customer.h[cno]", "[Q]\UBmstr\ubIndx3.h[cno]","11 30u")
-	fn_index("[Q]\UBmstr\Customer.h[cno]", "[Q]\UBmstr\ubIndx4.h[cno]","41 30")
-	fn_index("[Q]\UBmstr\Customer.h[cno]", "[Q]\UBmstr\ubIndx5.h[cno]","1741/1743 2/7")
+	fn_index("[Q]\UBmstr\Customer.h"&str$(cno), "[Q]\UBmstr\ubIndex.h"&str$(cno),"1 10")
+	fn_index("[Q]\UBmstr\Customer.h"&str$(cno), "[Q]\UBmstr\ubIndx2.h"&str$(cno),"354 7")
+	fn_index("[Q]\UBmstr\Customer.h"&str$(cno), "[Q]\UBmstr\ubIndx3.h"&str$(cno),"11 30u")
+	fn_index("[Q]\UBmstr\Customer.h"&str$(cno), "[Q]\UBmstr\ubIndx4.h"&str$(cno),"41 30")
+	fn_index("[Q]\UBmstr\Customer.h"&str$(cno), "[Q]\UBmstr\ubIndx5.h"&str$(cno),"1741/1743 2/7")
 fnend
 Xit: fnXit
 include: ertn
