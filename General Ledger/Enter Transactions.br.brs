@@ -698,7 +698,7 @@ def fn_scrAdjustment	(hMerge,editRecord,bankAcctName$*40, _
 	resp$(resp_tDate=rc+=1)=str$(tDate)
 	fnLbl(lc+=1,1,"Net Amount:",mylen,1)
 	fnLbl(lc,36,message$,50,left)
-	fnTxt(lc,mypos,12,0,1,"10",0,"Enter the net transaction amount. If correcting a transaction, change the allocations and net will be adjusted accordingly.",0 )
+	fnTxt(lc,mypos,12,0,1,"1010",0,"Enter the net transaction amount. If correcting a transaction, change the allocations and net will be adjusted accordingly.",0 )
 	resp$(resp_amt=rc+=1)=str$(transactionAmt) ! if selx=sx_adjustment then resp$(2)='' else resp$(2)=str$(transactionAmt)
 	fnLbl(lc+=1,1,"Reference:",mylen,1)
 	fnTxt(lc,mypos,12,0,0,'',0,"Enter check number.",0)
