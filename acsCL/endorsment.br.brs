@@ -13,7 +13,7 @@ ENDORSE_CHECKS: !
 	resp$(2)=""
 	fnCmdKey("&Next",1,1,0,"Proceed with printing.")
 	fnCmdKey("&Cancel",5,0,1,"Cancel printing any check endorsments.")
-	fnAcs(mat resp$,ckey) ! endorse check
+	ckey=fnAcs(mat resp$) ! endorse check
 	if ckey=5 then goto Xit
 	endorsements=val(resp$(1))
 	bank=val(resp$(2))

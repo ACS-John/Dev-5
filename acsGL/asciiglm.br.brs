@@ -18,7 +18,7 @@
 	resp$(1)=fl$
 	fnCmdKey("&Next",1,1,0,"Will create an ascii file of the general ledger accounts.")
 	fnCmdKey("&Cancel",5,0,1,"Will return to menu without creating a file.")
-	fnAcs(mat resp$,ckey)
+	ckey=fnAcs(mat resp$)
 	if ckey=5 then goto Xit
 	fl$=trim$(resp$(1))
 	open #2: "Name="&fl$&",RecL=79,EOL=CRLF,Replace",external,output

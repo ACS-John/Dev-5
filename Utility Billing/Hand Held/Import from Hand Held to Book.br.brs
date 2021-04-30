@@ -52,7 +52,7 @@ def library fnRetrieveHandHeldFile(; automationBookNumber)
 			fnLbl(lc+=1,1,"Importing from "&fn_hh_input_filename$,len("Importing from "&fn_hh_input_filename$),1)
 		end if
 		fnCmdSet(2)
-		fnAcs(mat resp$,ckey)
+		ckey=fnAcs(mat resp$)
 		Screen1ProcessResponse: !
 		if ckey<>5 then
 			bookNumberToStoreReadings$=resp$(rc_book)
@@ -568,7 +568,7 @@ fnend
 		fnTxt(1,23,20,100,0,"",0,"Source drive should be drive designation for the usb drive, including a : and a \ ")
 		if resp$(1)="" then resp$(1)="F:\"
 		fnCmdSet(2)
-		fnAcs(mat resp$,ckey)
+		ckey=fnAcs(mat resp$)
 		if ckey=5 then goto Xit
 		source$=resp$(1)
 		if len(source$)=0 then goto L1420

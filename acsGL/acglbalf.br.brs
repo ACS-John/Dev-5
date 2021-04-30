@@ -237,7 +237,7 @@ L2080: fnTos
 	next j
 	fnCmdKey("&Next",1,1,0,"Continues with financial statement.")
 	fnCmdKey("&Cancel",5,0,1,"Returns to menu without posting.")
-	fnAcs(mat resp$,ckey)
+	ckey=fnAcs(mat resp$)
 	if ckey=5 then goto Xit
 	for j=1 to 10
 		fundnum(j)=val(resp$(j*2-1))

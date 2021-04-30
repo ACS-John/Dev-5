@@ -19,7 +19,7 @@ do ! r: Main Loop
 	fnCmdKey('Export',ckey_export:=1, 0,0,'Export file to modify Route and Sequence numbers')
 	fnCmdKey('Import',ckey_import:=2, 0,0,'Import modified Route and Sequence numbers from file')
 	fnCmdKey('Exit'  ,5, 0,1)
-	fnAcs(mat resp$,ckey)
+	ckey=fnAcs(mat resp$)
 	if ckey=5 then
 		goto Xit
 	else

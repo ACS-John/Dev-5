@@ -426,7 +426,7 @@ def fn_askDatesAndFile(mat label$,mat filter_date,mat empName$,mat filename$; __
 	fnureg_read('TM Employee 4 Name',resp$(resp_e4name:=respc+=1)) : fnureg_read('TM Employee 4 TimeSheet CSV',resp$(resp_e4_file:=respc+=1))
 	fnureg_read('TM Employee 5 Name',resp$(resp_e5name:=respc+=1)) : fnureg_read('TM Employee 5 TimeSheet CSV',resp$(resp_e5_file:=respc+=1))
 	fnCmdSet(3)
-	fnAcs(mat resp$,ckey)
+	ckey=fnAcs(mat resp$)
 	if ckey=5 then
 		fkey(99)
 	else

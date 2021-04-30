@@ -10,7 +10,7 @@ resp$(1)=''
 fnLbl(3,1,"All transactions with a date equal to",42,2)
 fnLbl(4,1,"or older than this date will be removed.",42,2)
 fnCmdSet(2)
-fnAcs(mat resp$,ckey)
+ckey=fnAcs(mat resp$)
 if ckey=5 or ckey=99 then 
 	goto Xit 
 else 

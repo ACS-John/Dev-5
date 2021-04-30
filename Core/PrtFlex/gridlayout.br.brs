@@ -13,7 +13,7 @@ L100: fnTos(sn$="file_layout") : _
 	fnTxt(1,lablen+2,60,0,0,"") : _
 	resp$(1)="programfolder\grid\data_base_name\filename"
 	fnCmdSet(2)
-	fnAcs(mat resp$,ckey)
+	ckey=fnAcs(mat resp$)
 	outputfile$=trim$(resp$(1))&".fil"
 	open #10: "Name="&outputfile$&",RecL=87,Use",display,output ioerr L100
 L170: fnTos(sn$="file_layout") : _
@@ -37,7 +37,7 @@ L170: fnTos(sn$="file_layout") : _
 	fnTxt(6,lablen+2,20,0,0,"") : _
 	resp$(6)=""
 	fnCmdSet(11)
-	fnAcs(mat resp$,ckey)
+	ckey=fnAcs(mat resp$)
 	if ckey=5 then goto Xit
 	fieldnam$=trim$(resp$(1))
 	vn$=trim$(resp$(2))

@@ -18,7 +18,7 @@
 	fnTxt(2,mypos,10,0,0,"3") : _
 	resp$(2)=""
 	fnCmdSet(2)
-	fnAcs(mat resp$,ckey)
+	ckey=fnAcs(mat resp$)
 	if ckey=5 then goto Xit
 	bc1=val(resp$(1)(1:2))
 	clrdate=val(resp$(2))

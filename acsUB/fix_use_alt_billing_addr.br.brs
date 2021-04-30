@@ -16,7 +16,7 @@ fnTop(program$,'Fix Use Alternate Billing Address')
 	fnTxt(7,pf,8,8,1,"1") 
 	resp$(1)='' ! cnvrt$("pic(zzzzzz)",d1)
 	fnCmdSet(2) 
-	fnAcs(mat resp$,ckey)
+	ckey=fnAcs(mat resp$)
 	if ckey=5 then goto Xit
 	d1=val(resp$(1))
 ! /r
@@ -47,6 +47,6 @@ FINIS: ! r: pr totals screen
 	fnTxt(1,mypos,8,0,1,"",1) 
 	resp$(respc+=1)=str$(changeCount)
 	fnCmdSet(52) 
-	fnAcs(mat resp$,ckey) ! /r
+	ckey=fnAcs(mat resp$) ! /r
 Xit: fnXit
 include: ertn

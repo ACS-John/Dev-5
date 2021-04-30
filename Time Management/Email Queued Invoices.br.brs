@@ -17,7 +17,7 @@ def fn_emailEntryScreen
 	! resp$(rc+=1)=use_date$
 	fnCmdKey("Next",1,1,0,"Emails all PDF invoices created on this date")
 	fnCmdKey("Cancel",5,0,1,"Returns to main menu")
-	fnAcs(mat resp$,ckey)
+	ckey=fnAcs(mat resp$)
 	if ckey=5 then 
 		goto Tf_XIT
 	else if ckey=1 then 

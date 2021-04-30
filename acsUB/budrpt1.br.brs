@@ -40,7 +40,7 @@ BUD1: ! INITILIZE BUDGET FILE
 	fnTxt(2,mypos,8,0,0,"1")
 	resp$(2)=""
 	fnCmdSet(3)
-	fnAcs(mat resp$,ckey)
+	ckey=fnAcs(mat resp$)
 	if ckey=5 then goto Xit
 	d1=val(resp$(1)) conv L350
 L350: d2=val(resp$(2)) conv L360

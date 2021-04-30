@@ -23,7 +23,7 @@ SCR1: !
 	fnTxt(lc,mypos,5) : _
 	resp$(1)=""
 	fnCmdSet(2)
-	fnAcs(mat resp$,ckey)
+	ckey=fnAcs(mat resp$)
 	if ckey=5 then goto Xit
 	pas$=resp$(1)
 	if lwrc$(pas$)<>lwrc$("zero") then goto SCR1
@@ -35,7 +35,7 @@ OLDEST_DATE: !
 	resp$(1)=str$(transactionendingdate)
 	fnLbl(lc,45,"",0,right)
 	fnCmdSet(2)
-	fnAcs(mat resp$,ckey)
+	ckey=fnAcs(mat resp$)
 	if ckey=5 then goto Xit
 	lastdate=val(resp$(1))
 L370: read #2,using 'Form POS 1,C 8,N 6,PD 5.2,C 12,C 30': trvn$,da,amt,re$,de$ eof L400

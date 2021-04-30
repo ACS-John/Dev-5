@@ -30,7 +30,7 @@ L150: fnTos
 	fnTxt(lc,mypos,2,0,0,'30') : _
 	resp$(4)=""
 	fnCmdSet(2)
-	fnAcs(mat resp$,ckey)
+	ckey=fnAcs(mat resp$)
 	if ckey=5 or ckey=cancel then goto Xit else : _
 		firstold=val(resp$(1)) : _
 		lastold=val(resp$(2)) : _

@@ -31,7 +31,7 @@ fnTop(program$)
 	resp$(respc_bankDraftFile:=respc+=1)=pth$
 	fnChk(4,mypos,"Post Collections:",1)
 	fnCmdSet(2)
-	fnAcs(mat resp$,ckey)
+	ckey=fnAcs(mat resp$)
 	
 	if ckey=5 then goto Xit
 	d1=val(resp$(1))

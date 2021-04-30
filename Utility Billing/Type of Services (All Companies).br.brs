@@ -31,7 +31,7 @@ for service_file_item=1 to udim(service_file$)
 	close #h_service:
 next service_file_item
 fnCmdSet(4)
-fnAcs(mat resp$,ckey)
+ckey=fnAcs(mat resp$)
 fnXit
  
 include: fn_setup 

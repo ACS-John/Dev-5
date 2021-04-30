@@ -90,7 +90,7 @@ L690: if j<=0 then j=1
 	fnCmdKey("&Add",1,0,0,"Add a new budget file" )
 	fnCmdKey("E&dit",2,0,0,"Edit the highlited record")
 	fnCmdKey("E&xit",5,0,1,"Returns to menu")
-	fnAcs(mat resp$,ckey) ! ask budget file #
+	ckey=fnAcs(mat resp$) ! ask budget file #
 	ad1=0
 	hg1$=g1$=resp$(1)(1:12)
 	bud=val(resp$(1)(1:2))
@@ -117,7 +117,7 @@ resp$(respc+=1)=str$(fd1)
 fnLbl(2,1,"Ending Day of Year:",30,1)
 fnTxt(2,34,12,0,0,"3",0,"")
 resp$(respc+=1)=str$(fd2)
-fnCmdSet(2): fnAcs(mat resp$,ckey)
+fnCmdSet(2): ckey=fnAcs(mat resp$)
 if ckey=5 then goto MENU1
 fd1=val(resp$(1)) ! beginning of year
 fd2=val(resp$(2)) ! ending day of year
@@ -278,7 +278,7 @@ resp$(1)=fnrgl$(gl$(1))
 fnCmdKey("&Next",1,1,0,"Display budget file starting with this account. ")
 fnCmdKey("&Back",2,0,0,"Takes you back one screen.")
 fnCmdKey("E&xit",5,0,1,"Returns to main menu")
-fnAcs(mat resp$,ckey) ! ask general ledger #
+ckey=fnAcs(mat resp$) ! ask general ledger #
 if ckey=5 then goto MENU1
 g1$=startgl$=fnagl$(resp$(1))
 restore #2,key>=g1$&"B": nokey L2370
@@ -329,7 +329,7 @@ fnCmdKey("&Listing",3,0,0,"Prints listings of the budget")
 fnCmdKey("&Delete",7,0,0,"Deletes this line item")
 fnCmdKey("&Back",8,0,0,"Reselect starting budget item to display.")
 fnCmdKey("E&xit",5,0,1,"Exits back to main budget screen.")
-fnAcs(mat resp$,ckey) ! GRID
+ckey=fnAcs(mat resp$) ! GRID
 add=edit=0
 if ckey=5 then goto MENU1
 if ckey=2 then edit=1
@@ -394,7 +394,7 @@ option2$(5)="X "&type$(5) : option2$(6)="Z "&type$(6)
 fncomboa("Types",4,mypos,mat option2$,"Select the type of entry.",20,container)
 resp$(rc+=1)=cd$
 fnCmdSet(2)
-fnAcs(mat resp$,ckey)
+ckey=fnAcs(mat resp$)
 if ckey=5 then goto DISPLAY_GRID
 dno=ano=sno=0
 if use_dept=1 then dno=val(resp$(1)) : ano=val(resp$(2))
@@ -497,7 +497,7 @@ resp$(respc+=1)=option2$(1)
 fncomboa("Types",12,mypos,mat option2$,"Select the type of entry.",20,container)
 fnCmdKey("&Save",1,1,0,"Save any changes." )
 fnCmdKey("E&xit",5,0,1,"Exit without saving any changes.")
-fnAcs(mat resp$,ckey) ! EDIT SCREEN
+ckey=fnAcs(mat resp$) ! EDIT SCREEN
 if ckey=5 then goto MENU1
 g1$=fnagl$(resp$(1))
 bg(1)=val(resp$(2))
@@ -583,7 +583,7 @@ fnTxt(lyne,mypos,30,0,0,"",0,"Date you want printed in heading of the report.")
 resp$(respc+=1)=dat$
 fnCmdKey("&Next",1,1,0,"Display ")
 fnCmdKey("E&xit",5,0,1,"Returns to main menu")
-fnAcs(mat resp$,ckey) ! pr setup
+ckey=fnAcs(mat resp$) ! pr setup
 if ckey=5 then goto DISPLAY_GRID
 if resp$(1)="True" then 	an1$(1)="Y" : an2(1)=val(resp$(2))
 if resp$(3) ="True" then an1$(2)= "Y" : an2(2)=val( resp$(4))
@@ -711,7 +711,7 @@ fnCmdKey("&Complete",1,1,0,"Saves the changes and and builds the new file from t
 !
 fnCmdKey("&Delete",6,0,0,"Deletes this complete budget file.")
 fnCmdKey("&Cancel",5,0,1,"Returns to main budget file menu.")
-fnAcs(mat resp$,ckey) ! gl breakdown screen
+ckey=fnAcs(mat resp$) ! gl breakdown screen
 if ckey=5 then goto MENU1
 bud=val(resp$(1))
 bud$=resp$(2)
@@ -745,7 +745,7 @@ fnChk(lyne+=1,mypos,"Include Changes in Remaining Balance:",1)
 resp$(respc+=1)="True"
 fnCmdKey("&Next",1,1,0,"Continue with re-calculations. ")
 fnCmdKey("E&xit",5,0,1,"Returns to main menu")
-fnAcs(mat resp$,ckey) ! include changes if remaining balance
+ckey=fnAcs(mat resp$) ! include changes if remaining balance
 if ckey=5 then goto MENU1
 if resp$(1)="True" then ti3=1 else ti3=2
 chg=1
@@ -767,7 +767,7 @@ for j=1 to 4
 next j
 fnCmdKey("&Next",1,1,0,"Display ")
 fnCmdKey("E&xit",5,0,1,"Returns to main menu")
-fnAcs(mat resp$,ckey) ! ask prior years
+ckey=fnAcs(mat resp$) ! ask prior years
 if ckey=5 then goto MENU1
 if resp$(1)="True" then needactual=1 else needactual=0
 if resp$(2)="True" then needbudget=1 else needbudget=0

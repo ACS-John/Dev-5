@@ -32,7 +32,7 @@ do ! r: main loop
 	fnCmdKey("Install Server",2,1,0)
 	fnCmdKey("Uninstall Server",3,0,0)
 	fnCmdKey('&Back',5,0,1)
-	fnAcs(mat resp$,ckey)
+	ckey=fnAcs(mat resp$)
 	server_name$=resp$(1) : fnureg_write('CS Server Name',server_name$)
 	cs_port$=resp$(2) : fnureg_write('CS Server Port',cs_port$)
 	anon_user$=resp$(3) : fnureg_write('CS Anonymous User',anon_user$)

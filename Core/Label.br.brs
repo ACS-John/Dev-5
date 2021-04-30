@@ -67,7 +67,7 @@ def library fnLabel(mat linestyle$)
 		fnreg_read('label format',resp$(1),opt$(1))
 		! resp$(1)=opt$(1)
 		fnCmdSet(2)
-		fnAcs(mat resp$,ckey)
+		ckey=fnAcs(mat resp$)
 		if ckey<>5 then
 			fnreg_write('label format',resp$(1))
 			if resp$(1)=opt$(3) then
@@ -89,7 +89,7 @@ def library fnLabel(mat linestyle$)
 			if mypos>30 then mypos=1
 		next j
 		fnCmdSet(1)
-		fnAcs(mat resp$,ckey)
+		ckey=fnAcs(mat resp$)
 		if ckey<>5 then
 			lstart=ckey-21 ! because the other routine starts out adding one.
 			labx=int((lstart+2)/3)
@@ -123,7 +123,7 @@ def library fnLabel(mat linestyle$)
 		fnTxt(4,26,3,3,1,'20',0,"Increase or decrease the position to move the right label right or left")
 		resp$(4)=str$(labelPos3)
 		fnCmdSet(2)
-		fnAcs(mat resp$,ckey)
+		ckey=fnAcs(mat resp$)
 		top_marg =val(resp$(1))
 		labelPos1=val(resp$(2))
 		labelPos2=val(resp$(3))

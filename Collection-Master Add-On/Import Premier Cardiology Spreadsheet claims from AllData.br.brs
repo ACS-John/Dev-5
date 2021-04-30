@@ -316,7 +316,7 @@ def fn_askScreen1(&sourceFile$,&sFileNo$,&forwNo$,&enableImport,&enableImport$,&
 	resp$(resp_enableImport:=rc+=1)=enableImport$
 
 	fnCmdSet(2)
-	fnAcs(mat resp$,ckey)
+	ckey=fnAcs(mat resp$)
 	if ckey=5 then
 		returnN=99
 		goto AskScreen1_xit

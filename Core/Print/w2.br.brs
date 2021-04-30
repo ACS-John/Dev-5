@@ -200,7 +200,7 @@ def library fnask_w2_info(&taxYear$,&beg_date,&end_date,&empStart$,&empEnd$,&ssr
 	fnCmdKey("&Margins",ckey_margins:=1021,0,0,"Manually adjust margins for hitting forms")
 	fnCmdKey("&Next",1,1,0,"Proceed to next screen.")
 	fnCmdKey("&Cancel",5,0,1,"Returns to menu")
-	fnAcs(mat resp$,ckey)
+	ckey=fnAcs(mat resp$)
 	! /r
 	! r: ASK_INFO screen - respond to FKeys, and get local values from mat resp$
 	if ckey=5 then 

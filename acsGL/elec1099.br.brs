@@ -298,7 +298,7 @@ MAIN: !
 	resp$(13)=str$(ppn)
 	fnCmdKey("&Next",1,1,0,"Moves to next questions.")
 	fnCmdKey("&Cancel",5,0,1,"Returns to menu.")
-	fnAcs(mat resp$,ckey)
+	ckey=fnAcs(mat resp$)
 	if ckey=5 then goto Xit
 ! Input #101,Fields MAT IO1$: MAT A$,B1,YR,PNC$,CFSYN$,TCC$,FCIYN$,CN$,CPN,ORC$,PPN Conv CONV1
 	if cfsyn$="Y" then cfs$="1" else cfs$=" "
@@ -329,7 +329,7 @@ SELECT_ST: !
 	next j
 	fnCmdKey("&Next",1,1,0,"Moves to next questions.")
 	fnCmdKey("&Cancel",5,0,1,"Returns to menu.")
-	fnAcs(mat resp$,ckey)
+	ckey=fnAcs(mat resp$)
 	for j=1 to 51
 		if resp$(j)="True" then stu(j)=1
 	next j
@@ -388,7 +388,7 @@ ASKDAT: !
 	resp$(2)=str$(transactionendingdate)
 	fnLbl(2,1,"",45,1)
 	fnCmdSet(2)
-	fnAcs(mat resp$,ckey)
+	ckey=fnAcs(mat resp$)
 !
 	transactionstartingdate=val(resp$(1))
 	transactionendingdate=val(resp$(2))

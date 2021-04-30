@@ -18,7 +18,7 @@ fnLbl(4,1,"Oldest Date to Retain (MMDDYY):" ,33,1)
 fnTxt(4,35,8,0,0,"1")
 resp$(1)=""
 fnCmdSet(2)
-fnAcs(mat resp$,ckey)
+ckey=fnAcs(mat resp$)
 rd1=val(resp$(1))
 if ckey=5 then goto Xit
 open #2: "Name="&env$('temp')&'\'&"Work1.dat,Size=0,RecL=149,Replace",internal,outIn,relative

@@ -15,7 +15,7 @@ fnLbl(2,1,'Lines to print:',40,2)
 fnTxt(2,42,3,0,0,'30')
 resp$(rc+=1)='54'
 fnCmdSet(2)
-fnAcs(mat resp$,ckey)
+ckey=fnAcs(mat resp$)
 if ckey=cancel then goto Xit
 fnopenprn
 ln$=rpt$("X",val(resp$(1)))

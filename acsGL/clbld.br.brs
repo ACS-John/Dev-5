@@ -21,7 +21,7 @@ MENU1: !
 	resp$(2)=str$(sel)
 	fnCmdKey("&Next",1,1,0,"Allows you to enter transactions.")
 	fnCmdKey("&Cancel",5,0,1,"Returns to menu without transferring files.")
-	fnAcs(mat resp$,ckey)
+	ckey=fnAcs(mat resp$)
 	if ckey=5 then goto Xit
 	dv$=resp$(1)
 	if trim$(resp$(2))="Build G/L Master File" then ti1=1 else ti1=2

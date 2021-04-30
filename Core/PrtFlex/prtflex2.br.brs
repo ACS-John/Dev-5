@@ -145,7 +145,7 @@ ASKTRANSET: ! r:
 	end if
 	fnCmdKey("&Display",1,1,0,"Displays a list of transactions on the screen")
 	fnCmdKey("&Cancel",5,0,1,"Returns to customer record")
-	fnAcs(mat resp$,ckey)
+	ckey=fnAcs(mat resp$)
 	if ckey=cancel then goto Xit_ASKTRANSET
 	if resp$(1)="True" then
 		sel_code=1

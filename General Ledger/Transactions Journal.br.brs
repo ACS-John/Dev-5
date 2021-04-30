@@ -207,7 +207,7 @@ ASK_PERIOD: ! r:
 	fnTxt(16,37,2,0,1,"30",0,"Prior period code is only applicable if printing from history.  Enter the period code for the month you want printed. Use blank for all and also if you chose current period transactions.")
 	resp$(respc+=1)=" "
 	fnCmdSet(2)
-	fnAcs(mat resp$,ckey)
+	ckey=fnAcs(mat resp$)
 	if ckey=5 then goto Xit
 	if resp$(1)="True" then cur_prior=1 else cur_prior=2
 	mat journal_to_print=(0)

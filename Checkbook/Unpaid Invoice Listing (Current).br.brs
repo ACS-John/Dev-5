@@ -18,7 +18,7 @@
 	fncomboa("unpdinv",1,22,mat item1$,tt$)
 	resp$(respc+=1)=item1$(1)
 	fnCmdSet(2)
-	fnAcs(mat resp$,ckey)
+	ckey=fnAcs(mat resp$)
 	if ckey=5 then goto Xit else : _
 		if resp$(1)=item1$(1) then fund=1 else : _
 			fund=2

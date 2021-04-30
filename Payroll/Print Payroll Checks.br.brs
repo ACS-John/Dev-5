@@ -185,7 +185,7 @@ MAIN_QUESTIONS: ! r:
 	end if
 	fncmdkey('Test Check Format',ck_TestCheck:=21)
 	fnCmdSet(2) ! need button to show totals
-	fnAcs(mat resp$,ckey)
+	ckey=fnAcs(mat resp$)
 	if ckey=5 then goto Xit ! /r
 	if ckey=ck_TestCheck then testCheckFormat=1 else testCheckFormat=0
 ! r: validate answers (and move to local variables from mat resp$)
@@ -369,7 +369,7 @@ ALLIGNMENT: ! r:
 	resp$(rc+=1)="True"
 	if env$('client')='Billings' then resp$(2)='True' : resp$(3)='False'
 	fnCmdSet(2)
-	fnAcs(mat resp$,ckey) ! allignment
+	ckey=fnAcs(mat resp$) ! allignment
 	if resp$(1)="True" then allign=1
 	if resp$(2)="True" then allign=2
 	if resp$(3)="True" then allign=3
@@ -660,7 +660,7 @@ def fn_cknum ! check for duplicate check numbers
 	resp$(respc+=1)=str$(check_number)
 	fnCmdKey("&Next",1,1,0,"Continue with checkprinting." )
 	fnCmdKey("E&xit",5,0,1,"Returns to menu")
-	fnAcs(mat resp$,ckey) ! dupllicate check number
+	ckey=fnAcs(mat resp$) ! dupllicate check number
 	if ckey=5 then goto Xit
 	if ckey=3 then goto L5670 ! if delete
 	ckn2=val(resp$(1))
@@ -1574,7 +1574,7 @@ INVALIDGLNUMBER: ! r:
 	resp$(5)=fnrgl$(goodgl$)
 	fnCmdKey("&Next",1,1,0,"Continue with checkprinting." )
 	fnCmdKey("E&xit",5,0,1,"Returns to menu")
-	fnAcs(mat resp$,ckey) ! bad general ledger numbers
+	ckey=fnAcs(mat resp$) ! bad general ledger numbers
 	if ckey=5 then goto Xit
 	gl$=fnagl$(resp$(5))
 	read #h_cl_glmstr,using F_CL_GLMSTR,key=gl$,release: de$ nokey INVALIDGLNUMBER

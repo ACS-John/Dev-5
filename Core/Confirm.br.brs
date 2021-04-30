@@ -54,7 +54,7 @@ def fn_confirmHard(chVerb$,whatYouAreVerbingGeneral$*32,whatYouAreVerbingSpecifi
 	fnTxt(9,col2_pos,col2_len)
 	resp$(1)=''
 	fnCmdSet(2)
-	fnAcs(mat resp$,ckey)
+	ckey=fnAcs(mat resp$)
 	e$=uprc$(trim$(resp$(1)))
 	if ckey<>5 and uprc$(trim$(resp$(1)))=typeWord$ then
 		returnN=1

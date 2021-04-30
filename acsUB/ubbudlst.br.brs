@@ -35,7 +35,7 @@ SCR1: !
 	fncomboa("bs2",3,mypos,mat sel$) : _
 	resp$(respc+=1)=sel$(1)
 	fnCmdSet(2)
-	fnAcs(mat resp$,ckey)
+	ckey=fnAcs(mat resp$)
 	if ckey=5 then goto Xit
 	if resp$(1)=wrd2$(1) then q0=1 else : _
 		if resp$(1)=wrd2$(2) then q0=2 else : _

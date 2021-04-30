@@ -129,7 +129,7 @@ DO_SCREEN_MAIN: ! r:
 		fnCmdKey("&Save",1,1)
 		fnCmdKey("Apply",2,0)
 		fnCmdKey("&Cancel",5,0,1)
-		fnAcs(mat resp$,ckey)
+		ckey=fnAcs(mat resp$)
 		if ckey=5 then
 			goto Xit
 		else
@@ -197,7 +197,7 @@ DO_SCREEN_THEME: ! r:
 		fnCmdKey("&Save",1,1)
 		fnCmdKey("Apply",2,0)
 		fnCmdKey("&Cancel",5,0,1)
-		fnAcs(mat resp$,ckey)
+		ckey=fnAcs(mat resp$)
 		if ckey=5 then
 			goto Xit
 		else
@@ -333,7 +333,7 @@ DO_SCREEN_PRINTER: ! r:
 		fnCmdKey("&Save",1,1)
 		fnCmdKey("Apply",2,0)
 		fnCmdKey("&Cancel",5,0,1)
-		fnAcs(mat resp$,ckey)
+		ckey=fnAcs(mat resp$)
 		if ckey=5 then
 			goto Xit
 		else
@@ -411,7 +411,7 @@ do
 	fnCmdKey("&Save",1,1)
 	fnCmdKey("Apply",2,0)
 	fnCmdKey("&Cancel",5,0,1)
-	fnAcs(mat resp$,ckey)
+	ckey=fnAcs(mat resp$)
 	if ckey=5 then
 		goto Xit
 	else
@@ -453,7 +453,7 @@ do
 	fnCmdKey("&Save",1,1)
 	fnCmdKey("Apply",2,0)
 	fnCmdKey("&Cancel",5,0,1)
-	fnAcs(mat resp$,ckey)
+	ckey=fnAcs(mat resp$)
 	if ckey=5 then
 		goto Xit
 	else
@@ -484,7 +484,7 @@ do
 	fnCmdKey("&Save",1,1)
 	fnCmdKey("Apply",2,0)
 	fnCmdKey("&Cancel",5,0,1)
-	fnAcs(mat resp$,ckey)
+	ckey=fnAcs(mat resp$)
 	if ckey=5 then
 		goto Xit
 	else
@@ -526,7 +526,7 @@ do
 	fnCmdKey("&Save",1,1)
 	fnCmdKey("Apply",2,0)
 	fnCmdKey("&Cancel",5,0,1)
-	fnAcs(mat resp$,ckey)
+	ckey=fnAcs(mat resp$)
 	if ckey=5 then
 		goto Xit
 	else
@@ -571,7 +571,7 @@ do
 	fnCmdKey("&Save",1,1)
 	fnCmdKey("Apply",2,0)
 	fnCmdKey("&Cancel",5,0,1)
-	fnAcs(mat resp$,ckey)
+	ckey=fnAcs(mat resp$)
 	if ckey=5 then
 		goto Xit
 	else

@@ -19,7 +19,7 @@ Screen1: !
 	fnTxt(8,mypos,4,0,right,"",0,"You must type the word 'Zero' to indicate that you for sure want to zero the quarter.",0 ) : _
 	resp$(1)=""
 	fnCmdSet(2)
-	fnAcs(mat resp$,ckey)
+	ckey=fnAcs(mat resp$)
 	if ckey=5 then goto Xit
 	pas$=uprc$(resp$(1))
 	if pas$="ZERO" then goto ZeroIt

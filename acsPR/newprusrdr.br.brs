@@ -13,7 +13,7 @@ MAIN_SCREEN: !
 	fncombof("CRjcreportALL",1,1,80,"S:\acsPR\Jcreport.mst",1,2,3,74,"S:\acsPR\jcreport.idx" ,2)
 	resp$(1)=""
 	fnCmdSet(2)
-	fnAcs(mat resp$,ckey)
+	ckey=fnAcs(mat resp$)
 	if ckey=5 then goto Xit
 	rno=val(resp$(1)(1:2))
  

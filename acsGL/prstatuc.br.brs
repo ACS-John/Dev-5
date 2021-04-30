@@ -21,7 +21,7 @@
 	fnTxt(1,mypos,20,0,left,"",0,"Enter the last day of the quarter.",0 )
 	resp$(1)=""
 	fnCmdSet(2)
-	fnAcs(mat resp$,ckey)
+	ckey=fnAcs(mat resp$)
 	if ckey=5 then goto Xit
 	pedat$=resp$(1)
 L240: open #2: "Name=[Q]\GLmstr\PRmstr.h[cno],KFName=[Q]\GLmstr\PRIndex.h[cno],Shr",internal,input,keyed

@@ -32,7 +32,7 @@ ASKCATEGORY: !
 	fnCmdKey("&Refresh",7,0,0,"Updates search grids and combo boxes with new category information") : _
 	fnCmdKey("&Proof List",8,0,0,"Returns to menu") : _
 	fnCmdKey("E&xit",5,0,1,"Returns to menu")
-	fnAcs(mat resp$,ckey)
+	ckey=fnAcs(mat resp$)
 	if ckey=5 then goto Xit
 	if ckey=8 then gosub PRINT_PROOF: goto ASKCATEGORY
 	if ckey=1 then goto ADD_RECORD
@@ -56,7 +56,7 @@ SCREEN_1: ! maintain category screen
 	fnCmdKey("&Save",1,1,0,"Saves any changes and returns to main screen.")
 	fnCmdKey("&Delete",4,0,0,"Deletes this record from the Category file.")
 	fnCmdKey("&Cancel",5,0,1,"Returns to first screen without saving any changes.")
-	fnAcs(mat resp$,ckey)
+	ckey=fnAcs(mat resp$)
 	if ckey=5 then goto ASKCATEGORY
 	category=val(resp$(1)(1:5)) : category$=lpad$(trim$(resp$(1)),5)
 	name$=resp$(2)
@@ -88,7 +88,7 @@ ADD_RECORD: !
 	resp$(1)=str$(category)
 	resp$(1)=""
 	fnCmdSet(11)
-	fnAcs(mat resp$,ckey)
+	ckey=fnAcs(mat resp$)
 	if ckey=5 then goto ASKCATEGORY
 	category=val(resp$(1)(1:5)) : _
 	category$=lpad$(trim$(resp$(1)(1:5)),5)

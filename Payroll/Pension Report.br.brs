@@ -95,7 +95,7 @@ SCREEN_PENSION1: ! r:
 	resp$(rc+=1)=str$(end_date)
 	fnCmdKey("Next",1,1,0,"Prints the report")
 	fnCmdKey("Cancel",5,0,1,"Returns to menu")
-	fnAcs(mat resp$,ckey)
+	ckey=fnAcs(mat resp$)
 	if ckey=5 then goto Xit
 	for j=1 to 20
 		if resp$(j)="True" then sel_ded(j)=1

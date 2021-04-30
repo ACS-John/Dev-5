@@ -79,7 +79,7 @@ ASK_EMP: ! r:
 	resp$(respc+=1)=""
 	fnCmdKey("&Next",1,1,0,"Add this employee to list of labels to be printed.")
 	fnCmdKey("&Complete",2,0,0,"Print selected labels.")
-	fnAcs(mat resp$,ckey)
+	ckey=fnAcs(mat resp$)
 	if ckey=2 then goto FINIS
 	eno=val(resp$(1)(1:8))
 	if eno=0 then goto FINIS
@@ -115,7 +115,7 @@ SCR1: ! r:
 	fncombof("Employee",13,mypos,20,"[Q]\PRmstr\Employee.h[cno]",1,8,9,20,"[Q]\PRmstr\EmployeeIdx-no.h[cno]",1,0, "Select starting employee record for printing. Only applicable if not starting with first employee.")
 	resp$(respc+=1)=""
 	fnCmdSet(2)
-	fnAcs(mat resp$,ckey)
+	ckey=fnAcs(mat resp$)
 	if ckey=5 then
 		goto Xit
 	else if resp$(1)=item1$(1) then

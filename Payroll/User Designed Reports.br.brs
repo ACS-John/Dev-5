@@ -31,7 +31,7 @@ do
 	fnCmdKey("E&dit",2,0,0,"Modify the selected report")
 	fnCmdKey("Print",4,1,0,"Run the selected report")
 	fnCmdKey("E&xit",5,0,1,"Return to menu")
-	fnAcs(mat resp$,ckey) ! ask report #
+	ckey=fnAcs(mat resp$) ! ask report #
 	if ckey=5 then goto Xit
 	editrec=addone=0
 	rptn=val(resp$(1)(1:2))
@@ -103,7 +103,7 @@ SCR2: ! r:
 	fnCmdKey("&Next",1,1,0,"Save changes and move to next questions" )
 	fnCmdKey("&Delete",4,0,0,"Deletes this report from your system.")
 	fnCmdKey("&Cancel",5,0,1,"Return to selection screen.")
-	fnAcs(mat resp$,ckey) ! ask report #
+	ckey=fnAcs(mat resp$) ! ask report #
 	addone=0
 	if ckey=5 then goto AskReport
 	rn=val(resp$(1)(1:2))
@@ -168,7 +168,7 @@ SCR3: ! r:
 	fnCmdKey("&Next",1,1,0,"Save changes and move to next questions" )
 	fnCmdKey("&Back",6,0,0,"Back up a screen.")
 	fnCmdKey("&Cancel",5,0,1,"Return to selection screen.")
-	fnAcs(mat resp$,ckey) ! ask matching criteria
+	ckey=fnAcs(mat resp$) ! ask matching criteria
 	if ckey=5 then goto AskReport
 	for j=1 to 100
 		psc(j)=val(resp$(j))
@@ -194,7 +194,7 @@ SCR4: ! r:
 	fnCmdKey("&Next",1,1,0,"Save changes on this report design." )
 	fnCmdKey("&Back",6,0,0,"Back up a screen.")
 	fnCmdKey("&Cancel",5,0,1,"Return to report selection screen without saving any changes.")
-	fnAcs(mat resp$,ckey) ! enter column information
+	ckey=fnAcs(mat resp$) ! enter column information
 	if ckey<>5 then
 		x=0
 		for j=3 to 60 step 3

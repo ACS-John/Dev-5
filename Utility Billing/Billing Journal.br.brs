@@ -43,7 +43,7 @@ ScrMain: ! r: Screen 1
 	fnCmdKey("&Print",1,1)
 	fnCmdKey("&Cancel",5,0,1)
 	
-	fnAcs(mat resp$,ckey)
+	ckey=fnAcs(mat resp$)
 	if ckey=5 then goto Xit
 	if ckey=2 then enableExport=1 else enableExport=0
 	billing_date=val(resp$(1))

@@ -19,7 +19,7 @@ goto READ_1
 EOF1: close #1:
 fnCmdKey('Ok',1,1,0)
 fnCmdKey('Cancel',99,0,1)
-fnAcs(mat resp$,ckey)
+ckey=fnAcs(mat resp$)
 pr "returned response is "&resp$(1) 
 pr "Press Enter to continue"
 fnpause

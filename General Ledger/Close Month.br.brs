@@ -10,7 +10,7 @@ Screen1: ! r:
 	fnTxt(1,24,2,0,0,'number')
 	resp$(1)=str$(fnActPd)
 	fnCmdSet(2)
-	fnAcs(mat resp$,ckey)
+	ckey=fnAcs(mat resp$)
 	if ckey=5 then goto Xit
 	actpd=val(resp$(1))
 	if actpd<1 or actpd>13 then goto Screen1

@@ -173,7 +173,7 @@ def fn_screen_1(nap,mat period_date_start,mat prior_period_date_start)
 	end if
 
 	fnCmdSet(2)
-	fnAcs(mat resp$,ckey)
+	ckey=fnAcs(mat resp$)
 	if ckey<>5 then
 		respc=0
 		for period=1 to nap

@@ -37,7 +37,7 @@ SCREEN1: !
 	fnqgl(lc,mypos,0,1) : _
 	resp$(5)="[All]"
 	fnCmdSet(3)
-	fnAcs(mat resp$,ckey)
+	ckey=fnAcs(mat resp$)
 	if ckey=5 then goto Xit
 	if resp$(1)="True" then pt=0 else pt=1
 	costcent=val(resp$(2)) : _

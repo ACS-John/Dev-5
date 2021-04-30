@@ -312,7 +312,7 @@ Screen1: ! r:
 
 	fnCmdKey("Calculate",1,1,0,"Proceed with calculations.")
 	fnCmdKey("Cancel",5,0,1,"Returns to menu without calculating")
-	fnAcs(mat resp$,ckey)
+	ckey=fnAcs(mat resp$)
 	if ckey<>5 then
 		prd=d1=val(resp$(resp_d1N))
 		d1$=resp$(resp_d1S)
@@ -2072,7 +2072,7 @@ def library fnCheckPayrollCalculation(; ___, _
 
 		fnCmdSet(2)
 
-		fnAcs(mat resp$,ckey) ! /r
+		ckey=fnAcs(mat resp$) ! /r
 		if ckey=5 then
 			goto XitCheckStateCalculation
 		else

@@ -23,28 +23,28 @@ goto READ_1
 EOF1: !
 close #1:
 fnCmdKey('Ok-1',1,1,0)
-fnAcs(mat resp$,ckey)
+ckey=fnAcs(mat resp$)
 pr 'just after return from fnAcs - '&time$
 
 sleep(5) : pr "sleep for 5 seconds"
 pr 'just before tos - '&time$
 fnTos
 fnCmdKey('Ok-2',1,1,0)
-fnAcs(mat resp$,ckey)
+ckey=fnAcs(mat resp$)
 pr 'just after return from fnAcs - '&time$
 
 sleep(5) : pr "sleep for 5 seconds"
 pr 'just before tos - '&time$
 fnTos
 fnCmdKey('Ok-3',1,1,0)
-fnAcs(mat resp$,ckey)
+ckey=fnAcs(mat resp$)
 pr 'just after return from fnAcs - '&time$
 
 sleep(5) : pr "sleep for 5 seconds"
 pr 'just before tos - '&time$
 fnTos
 fnCmdKey('Ok-4',1,1,0)
-fnAcs(mat resp$,ckey)
+ckey=fnAcs(mat resp$)
 pr 'just after return from fnAcs - '&time$
 
 stop

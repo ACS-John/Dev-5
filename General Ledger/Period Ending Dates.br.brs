@@ -23,7 +23,7 @@ fnTxt(4,42,20,0,2,"",0,"This will be the column heading for the current period c
 resp$(respc+=1)=fncch$
 fnLbl(6,1,"Last Accounting Period closed was "&str$(fnLastAccountingPeriodClosed),60,2)
 fnCmdSet(2)
-fnAcs(mat resp$,ckey)
+ckey=fnAcs(mat resp$)
 if ckey=5 then goto Xit
 
 fnpedat$(resp$(1)) 

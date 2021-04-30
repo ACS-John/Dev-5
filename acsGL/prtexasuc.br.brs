@@ -30,7 +30,7 @@ L170: fnTos
 	if trim$(csvpath$)="" then csvpath$="[Q]\GLmstr\txuc.csv"
 	resp$(3)=csvpath$
 	fnCmdSet(2)
-	fnAcs(mat resp$,ckey)
+	ckey=fnAcs(mat resp$)
 	if ckey=5 then goto Xit
 	pedat$=resp$(1)
 	namcde$=uprc$(resp$(2))

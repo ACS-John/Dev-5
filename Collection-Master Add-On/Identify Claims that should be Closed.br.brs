@@ -29,7 +29,7 @@ fnTop(program$,'',1)
 	fnTxt(2,24,40)
 	resp$(1)=forwarderFilter$
 	fnCmdSet(2)
-	fnAcs(mat resp$,ckey)
+	ckey=fnAcs(mat resp$)
 	if ckey=5 then goto Xit
 	forwarderFilter$=resp$(1)
 	fnrange_to_array(forwarderFilter$,mat forwarderFilter)

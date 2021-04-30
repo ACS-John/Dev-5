@@ -49,7 +49,7 @@ fnTos
 	fnChk(6,mypos,"Start Jobs On a New Page:",left)
 	resp$(resp+=1)="False"
 	fnCmdSet(2)
-	fnAcs(mat resp$,ckey)
+	ckey=fnAcs(mat resp$)
 	if ckey=5 then goto Xit
 	dat1=val(resp$(1)) ! date
 	if resp$(2)="True" then prtjob$="Y" else prtjob$="N"
@@ -70,7 +70,7 @@ ASK_JOB: ! r:
 		if k=1 then goto L600
 		if k>1 then let fnLbl(3,1,"Last Job Number entered was "&prtj$(k-1),50,1)
 L600: fnCmdSet(2)
-		fnAcs(mat resp$,ckey)
+		ckey=fnAcs(mat resp$)
 		if ckey=5 then goto L690
 		prtj$(k)=lpad$(trim$(resp$(1)(1:6)),6)
 		if rtrm$(prtj$(k))="" or ltrm$(rtrm$(prtj$(k)))="0" then goto L330

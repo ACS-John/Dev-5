@@ -20,7 +20,7 @@ fnLbl(2,1,"Ending Date:",mylen,right)
 fnTxt(2,mypos,8,0,1,"ccyymmdd")
 resp$(respc+=1)=""
 fnCmdSet(3)
-fnAcs(mat resp$,ckey)
+ckey=fnAcs(mat resp$)
 if ckey=5 then goto Xit
 date1=val(resp$(1))
 date2=val(resp$(2))

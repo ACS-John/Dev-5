@@ -32,7 +32,7 @@ Screen1: ! r:
 	fnreg_read('ublabel.line 5',resp$(7), optLineX$(5),1)
 
 	fnCmdSet(2)
-	fnAcs(mat resp$,ckey) ! select order of printing
+	ckey=fnAcs(mat resp$) ! select order of printing
 	if ckey=5 then goto Xit
 	fnreg_write('ublabel.sequence',resp$(1))
 	fnreg_write('ublabel.address',resp$(2))
@@ -116,7 +116,7 @@ Screen2: !
 	resp$(1)=optFilterEnabled$(1)
 	gosub OpenFiles
 	fnCmdSet(6)
-	fnAcs(mat resp$,ckey) ! method of selection
+	ckey=fnAcs(mat resp$) ! method of selection
 	filter_selection=srch(mat optFilter$,resp$(1))
 	if ckey=5 then goto Xit
 	if ckey=2 then goto Screen1
@@ -219,7 +219,7 @@ SelectRangeOfAccounts: ! r: select range of accounts
 	fncmbact(2,22,1)
 	resp$(2)=h1$
 	fnCmdSet(22)
-	fnAcs(mat resp$,ckey) ! select by range
+	ckey=fnAcs(mat resp$) ! select by range
 	if ckey=5 then goto Xit
 	l1$=lpad$(trim$(resp$(1)(1:10)),10)
 	h1$=lpad$(trim$(resp$(2)(1:10)),10)
@@ -246,7 +246,7 @@ SelectIndividualAccounts: ! r: select individual accounts
 	fnLbl(3,1,"Last selection: "&hz$,35,0)
 	if trim$(sele$(2))<>"" then fnLbl(2,17,sele$(2),20,0)
 	fnCmdSet(23)
-	fnAcs(mat resp$,ckey)
+	ckey=fnAcs(mat resp$)
 	if ckey=2 then
 		fnCustomerSearch(resp$(1))
 		selz$=lpad$(rtrm$(resp$(1)(1:10)),10)
@@ -274,7 +274,7 @@ SelectByRoute: ! r: selects by route
 	fnTxt(2,17,7,7,1,"20",0,"The sequence number is only required if you wish to start in the middle of a route")
 	resp$(respc+=1)=""
 	fnCmdSet(22)
-	fnAcs(mat resp$,ckey) ! select labels by route
+	ckey=fnAcs(mat resp$) ! select labels by route
 	if ckey=5 then goto Xit
 	if ckey=2 then goto Screen2
 	bk=0 : bk=val(resp$(1)) conv L1860
@@ -293,7 +293,7 @@ goto Top ! /r
 ! 		fnLbl(2,17,sele$(2),20,0)
 ! 	end if
 ! 	fnCmdSet(21)
-! 	fnAcs(mat resp$,ckey) ! select starting customer name
+! 	ckey=fnAcs(mat resp$) ! select starting customer name
 ! 	if ckey=5 then goto Xit
 ! 	if ckey=6 then fnCustomerSearch(resp$(1))
 ! 	restore #customer,key>="       ": nokey ignore
@@ -354,7 +354,7 @@ SelectStartingCustomer: ! r: select customer to start with
 	fncmbact(1,mypos,1)
 	if trim$(selz$)='' then resp$(1)='[All]' else resp$(1)=selz$
 	fnCmdSet(5)
-	fnAcs(mat resp$,ckey) ! select starting customer
+	ckey=fnAcs(mat resp$) ! select starting customer
 	if ckey=6 then
 		fnCustomerSearch(resp$(1))
 		selz$=lpad$(rtrm$(resp$(1)(1:10)),10)
@@ -375,7 +375,7 @@ ReadFromGrid: ! r: select customers from grid
 	resp$(1)=""
 	fnLbl(2,40,"",30,0)
 	fnCmdSet(3)
-	fnAcs(mat resp$,ckey) ! select starting customer #
+	ckey=fnAcs(mat resp$) ! select starting customer #
 	if ckey=5 then goto Xit
 	open #6: "Name="&trim$(resp$(1)),display,input ioerr ReadFromGrid
 	do

@@ -26,7 +26,7 @@ fnLbl(2,1,"Destination Company Number:",col1_width,1)
 fnTxt(2,col2_pos,5,5,0,'1030',0,'')
 resp$(2)=str$(destination_company_number)
 fnCmdSet(2)
-fnAcs(mat resp$,ckey)
+ckey=fnAcs(mat resp$)
 if ckey=5 then goto Xit
 company_file$=resp$(1)
 destination_company_number=val(resp$(2)) : destination_company_number$=str$(destination_company_number)

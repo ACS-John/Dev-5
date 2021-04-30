@@ -35,7 +35,7 @@ ASKDAT: !
 	fnTxt(4,mypos,8,0,left,'CCYYMMDD',0,'(Blank for All)  Normally you would enter the last day of the year, but you can analyze any time frame.') : _
 	resp$(2)=str$(transactionendingdate)
 	fnCmdSet(2)
-	fnAcs(mat resp$,ckey)
+	ckey=fnAcs(mat resp$)
 	if ckey=5 then goto Xit
 	dat$=resp$(1)
 	dattab=66-int(len(rtrm$(dat$))/2)

@@ -86,7 +86,7 @@ ASKFORMAT: ! r:
 	resp$(respc+=1)=str$(status)
 	fnCmdKey("&Next",1,1,0,"Proceed with printing." )
 	fnCmdKey("E&xit",5,0,1,"Returns to menu")
-	fnAcs(mat resp$,ckey) ! ask employee #
+	ckey=fnAcs(mat resp$) ! ask employee #
 	if ckey=5 then goto Xit
 	namcde$=resp$(1)(1:1)
 	status=val(resp$(2)(1:2))

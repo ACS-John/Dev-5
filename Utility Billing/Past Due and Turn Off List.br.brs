@@ -61,7 +61,7 @@
 	fnChk(17,40,"Account Sequence",1)
 	resp$(rc_accountSequence:=12)=accountSequence$
 	fnCmdSet(3)
-	fnAcs(mat resp$,ckey)
+	ckey=fnAcs(mat resp$)
 	if ckey=5 then goto Xit
 	for j=1 to 3
 L400: x=pos(resp$(j),"/",1)

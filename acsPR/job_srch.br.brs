@@ -37,7 +37,7 @@ def library fnjob_srch(&jn$;fixgrid)
 	L280: !
 		if fixgrid=99 then goto Xit ! FIXING NEW GRID FILE BEFORE LEAVING job files
 		fnCmdSet(2)
-		fnAcs(mat resp$,ckey) 
+		ckey=fnAcs(mat resp$) 
 		jn$=lpad$(resp$(1),6)
 		if ckey=5 then jn$="      " ! no one selected
 	goto Xit

@@ -45,7 +45,7 @@ ASK_PAYROLL_DATE: ! r:
   resp$(respc+=1)=str$(d1)
   fnCmdKey("&Next",1,1,0,"Proceed with importing time." )
   fnCmdKey("E&xit",5,0,1,"Returns to menu")
-  fnAcs(mat resp$,ckey) ! ask employee #
+  ckey=fnAcs(mat resp$) ! ask employee #
   if ckey=5 then goto Xit
   ppd=val(resp$(1))
 goto START_REPORT ! /r

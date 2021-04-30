@@ -41,7 +41,7 @@ def fn_addAnOtherCharge(; z$*10,hCustomer1)
 	fnLbl(lc+=1,1,'Amount:' , col1Len,1) : fntxt(lc,col2Pos,10, 0,0,'currency') : resp$(rc+=1)=amt$
 	fnLbl(lc+=1,1,'Note:'   , col1Len,1) : fntxt(lc,col2Pos,40, 128)            : resp$(rc+=1)=note$
 	fnCmdset(2)
-	fnAcs(mat resp$,ckey)
+	ckey=fnAcs(mat resp$)
 	if ckey<>5 then
 		rc=0
 		z$   =lpad$(trim$(resp$(rc+=1)(1:10)),10)

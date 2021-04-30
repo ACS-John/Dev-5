@@ -14,7 +14,7 @@ Menu1: ! r:
 	fnTxt(2,18,8,0,0,"1",0,"Use mmddyy format for the latest date to be listed.")
 	resp$(2)=str$(ed1)
 	fnCmdSet(3)
-	fnAcs(mat resp$,ckey)
+	ckey=fnAcs(mat resp$)
 	if ckey=5 then goto Xit
 
 	bd1=fnreg_write(env$('cap')&'.Starting Date',resp$(1))

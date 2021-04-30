@@ -12,7 +12,7 @@ fnTxt(1,37,8,0,left,'CCYYMMDD',0,'All payee transactions older than the date you
 resp$(1)=str$(oldestdate)
 fnLbl(1,50,'')
 fnCmdSet(2)
-fnAcs(mat resp$,ckey)
+ckey=fnAcs(mat resp$)
 if ckey=5 then
 	goto Xit
 else

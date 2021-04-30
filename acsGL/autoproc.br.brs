@@ -51,7 +51,7 @@ L330: fncomboa('CmbAuto',2,13,mat opt$,'Select the companies that should be incl
 	fnCmdKey("&Select",1,1,0,"Selects the highlited company to be included in automatic processing.") : _
 	fnCmdKey("C&omplete",2,0,0,"Finished selecting companies; begin porcessing.") : _
 	fnCmdKey("&Cancel",5,0,1)
-	fnAcs(mat resp$,ckey)
+	ckey=fnAcs(mat resp$)
 	if ckey=5 then goto Xit
 	if ckey=2 then goto L470
 	clnam$(count+=1)=resp$(1)(1:30)

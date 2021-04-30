@@ -24,7 +24,7 @@ SCR1: !
   fnTxt(lc,mypos,2,0,1,'30')
   resp$(2)='1'
   fnCmdSet(5)
-  fnAcs(mat resp$,ckey)
+  ckey=fnAcs(mat resp$)
   if ckey=5 then goto Xit
   apcno=val(resp$(2))
   if ~exists('[Q]\tmpAP') then

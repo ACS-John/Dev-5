@@ -90,7 +90,7 @@ def library fnHours(eno)
 		fnCmdKey("&Edit",45) 
 		fnCmdKey("&Delete",44) 
 		fnCmdKey("&Cancel",5,0,1)
-		fnAcs(mat resp$,ckey) 
+		ckey=fnAcs(mat resp$) 
 		if ckey=5 then goto Xit
 		hact$=trim$(resp$(1)(1:8))
 		if hact$="[All]" then goto MAIN
@@ -130,7 +130,7 @@ def library fnHours(eno)
 		fnTxt(lc,mypos,10,0,right,'32',0,"",frame1 ) 
 		resp$(5)=str$(decrease)
 		fnCmdSet(4)
-		fnAcs(mat resp$,ckey) 
+		ckey=fnAcs(mat resp$) 
 		if ckey=5 then goto MAIN
 		empno=val(resp$(1)(1:8)) 
 		class$=resp$(2)(1:5) 

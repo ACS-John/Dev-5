@@ -39,7 +39,7 @@ L290: fnTos
 	resp$(rc+=1)=str$(end_date)
 	fnCmdKey("Next",1,1,0,"Prints the report")
 	fnCmdKey("Cancel",5,0,1,"Returns to menu")
-	fnAcs(mat resp$,ckey)
+	ckey=fnAcs(mat resp$)
 	if ckey=5 then goto Xit
 	beg_date=val(resp$(1))
 	end_date=val(resp$(2))
@@ -101,7 +101,7 @@ ASK_INFO: !
 	resp$(rc+=1)=str$(posx)
 	fnCmdKey("&Next",1,1,0,"Proceed to next screen.")
 	fnCmdKey("&Cancel",5,0,1,"Returns to menu")
-	fnAcs(mat resp$,ckey)
+	ckey=fnAcs(mat resp$)
 	if ckey=5 then goto Xit
 	ssrate=val(resp$(1))
 	ssmax=val(resp$(2))
@@ -279,7 +279,7 @@ AskDefaultLocality: ! r:
 	fnLbl(5,5,"but not he same on all employees.)",60,0,0,0)
 	fnCmdKey("&Next",1,1,0,"Proceed to next screen.")
 	fnCmdKey("&Cancel",5,0,1,"Returns to menu")
-	fnAcs(mat resp$,ckey)
+	ckey=fnAcs(mat resp$)
 	if ckey=5 then goto Xit
 	z$=resp$(1)
 	z$=uprc$(rtrm$(z$))
@@ -301,7 +301,7 @@ ASK_STARTING: ! r:
 	fnLbl(9,mypos2," ",mylen2,0,0,0)
 	fnCmdKey("&Next",1,1,0,"Proceed to next screen.")
 	fnCmdKey("&Complete",5,0,1,"Returns to menu")
-	fnAcs(mat resp$,ckey)
+	ckey=fnAcs(mat resp$)
 	if ckey=5 then totalcode=1 : goto L2130
 	restore #1:
 	numb=val(resp$(1)(1:8))
@@ -319,7 +319,7 @@ ASK_LOCALITY: ! r:
 	resp$(rc+=1)=f$
 	fnCmdKey("&Next",1,1,0,"Proceed to next screen.")
 	fnCmdKey("&Cancel",5,0,1,"Returns to menu")
-	fnAcs(mat resp$,ckey)
+	ckey=fnAcs(mat resp$)
 	if ckey=5 then goto Xit
 	f$=resp$(1)
 	g$=rtrm$(g$)
@@ -621,7 +621,7 @@ ASK_DEDUCTIONS: ! r: ask if any misecllaneous deductions should pr in box 12
 	next j
 	fnCmdKey("&Next",1,1,0,"Proceed to next screen.")
 	fnCmdKey("&Cancel",5,0,1,"Returns to menu")
-	fnAcs(mat resp$,ckey)
+	ckey=fnAcs(mat resp$)
 	if ckey=5 then goto Xit
 	x=0
 	for j=1 to 20
@@ -723,7 +723,7 @@ ASK_OLD_INFO: ! r:
 	resp$(rc+=1)=str$(box4)
 	fnCmdKey('&Next',1,1,0)
 	fnCmdKey('&Cancel',5,0,1)
-	fnAcs(mat resp$,ckey) ! old amounts
+	ckey=fnAcs(mat resp$) ! old amounts
 	if totalcode=1 then goto L2270
 	if ckey=5 then goto ASK_STARTING
 	oldss$=resp$(1) ! ss#

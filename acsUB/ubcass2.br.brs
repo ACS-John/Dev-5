@@ -23,7 +23,7 @@
 	fnLbl(3,1,"This program prints:")
 	fnLbl(4,1,"Listing of Customer Addresses that could not be certified",58,2)
 	fnCmdSet(2)
-L180: fnAcs(mat resp$,ckey)
+L180: ckey=fnAcs(mat resp$)
 	if ckey=5 then goto Xit
 	dv$=resp$(1)
  

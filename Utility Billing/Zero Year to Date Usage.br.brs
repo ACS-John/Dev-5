@@ -8,7 +8,7 @@ fnLbl(1,1,'Type "ZERO" to Zero all Year To Date Usages:',48,1)
 fnTxt(1,50,5)
 resp$(1)=""
 fnCmdSet(2)
-fnAcs(mat resp$,ckey)
+ckey=fnAcs(mat resp$)
 if ckey=5 then goto Xit
 if rtrm$(uprc$(resp$(1)))<>"ZERO" then goto SCREEN1
 open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,outIn,keyed

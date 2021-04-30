@@ -39,7 +39,7 @@ def fn_ChangePayrollDates
 	fnCmdKey('Year Forward',2,0,0,'Adjust date range years higher one')
 	fnCmdKey("Save",1,1,0,"Save and Continue")
 	fnCmdKey("Cancel",5,0,1,"Close without Saving")
-	fnAcs(mat resp$,ckey)
+	ckey=fnAcs(mat resp$)
 	if ckey<>5 then 
 		prd=d1=val(resp$(1))
 		beg_date=val(resp$(2)) 

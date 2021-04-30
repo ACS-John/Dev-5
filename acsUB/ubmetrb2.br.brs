@@ -70,7 +70,7 @@ MENU1: !
 	fnOpt(2,2,"Fill in the blanks",0,2)
 	if env$('client')="Carrizo" then resp$(9)="True" else resp$(9)="False"
 	fnCmdSet(3) 
-	fnAcs(mat resp$,ckey)
+	ckey=fnAcs(mat resp$)
 	if ckey=5 then goto Xit
 	if uprc$(resp$(1))=uprc$("[All]") then route=0 else         route=val(resp$(1))
 	svt$=resp$(2)
@@ -194,7 +194,7 @@ SELECTONE: !
 	resp$(1)=a$
 	fnCmdKey("&Next",1,1,0,"Accept this record for printing") 
 	fnCmdKey("&Complete",5,0,1,"Print all selected records")
-	fnAcs(mat resp$,ckey)
+	ckey=fnAcs(mat resp$)
 	a$ = lpad$(trim$(resp$(1)(1:10)),10) 
 	if trim$(a$)="" then goto DONE
 	if ckey=5 then goto DONE

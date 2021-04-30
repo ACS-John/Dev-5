@@ -49,7 +49,7 @@ Screen1: ! r:
 		fnCmdKey("&Print with Details",1,1)
 		fnCmdKey("&Print without Details",2,0)
 		fnCmdKey("&Cancel",5,0,1)
-	fnAcs(mat resp$,ckey)
+	ckey=fnAcs(mat resp$)
 	if ckey=5 then goto Xit
 	if ckey=1 then enableDetails=1
 	if ckey=2 then enableDetails=0

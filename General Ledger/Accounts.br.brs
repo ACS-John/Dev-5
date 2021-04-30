@@ -113,7 +113,7 @@ Main: !
 		fnCmdKey("Sea&rch",8,0,0,"")
 	end if
 	fnCmdKey("&Cancel",5,0,1,"")
-	fnAcs(mat resp$,ckey)
+	ckey=fnAcs(mat resp$)
 	if ckey=5 then goto Xit
 	gl$=fnagl$(resp$(1)) : key$=gl$
 	if ckey=7 then gosub DELETE_ACCT : goto L1780
@@ -187,7 +187,7 @@ Add: ! r:
 	fnTxt(3,mypos,50,0,left,"",0,"Enter the account description.",0 )
 	resp$(rc+=1)=""
 	fnCmdSet(2)
-	fnAcs(mat resp$,ckey)
+	ckey=fnAcs(mat resp$)
 	if ckey=5 then goto Main
 	fixgrid=99
 	dno=ano=sno=0  : rc=0
@@ -294,7 +294,7 @@ return  ! /r
 ! 	fnOpt(2,1,"History transactions",0,1)
 ! 	resp$(2)="False"
 ! 	fnCmdSet(2)
-! 	fnAcs(mat resp$,ckey)
+! 	ckey=fnAcs(mat resp$)
 ! 	if ckey=5 then goto Main
 ! 	if resp$(1)="True" then currentOrHistory=1 ! current
 ! 	if resp$(2)="True" then currentOrHistory=2 ! history
@@ -349,7 +349,7 @@ def fn_transactionGrid(currentOrHistory,gl$)
 		fnCmdKey("&Edit",2,1,0,"Highlight any record and press Enter or click Edit to change any information.")
 	end if
 	fnCmdKey("E&xit",5,0,1,"Exits to Main menu")
-	fnAcs(mat resp$,ckey)
+	ckey=fnAcs(mat resp$)
 	if ckey=5 then goto TransactionGridXit
 	if ckey=2 then edit_mode=1 else edit_mode=0
 	recordnum=val(resp$(1))
@@ -391,7 +391,7 @@ def fn_transactionGrid(currentOrHistory,gl$)
 	fnTxt(8,mypos,2,0,0,"30",0,"",0)
 	resp$(8)=str$(pc2)
 	fnCmdSet(2)
-	fnAcs(mat resp$,ckey)
+	ckey=fnAcs(mat resp$)
 	if ckey<>5 then
 		trgl$=fnagl$(resp$(1)) ! transaction gl #
 		tr(4)=val(resp$(2)) ! date
@@ -451,7 +451,7 @@ ChangeAccountNumber: ! r:
 	fnTxt(3,mypos,50,0,left,"",0,"Enter the account description.",0 )
 	resp$(rc+=1)=d$
 	fnCmdSet(2)
-	fnAcs(mat resp$,ckey)
+	ckey=fnAcs(mat resp$)
 	if ckey=5 then goto Main
 	fixgrid=99
 	dno=ano=sno=0

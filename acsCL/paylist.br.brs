@@ -37,7 +37,7 @@
 	fnLbl(9,1,"Transaction Ending Date:",25,1)
 	fnTxt(9,27,8,0,0,"3",0,'Blank for All (Only applicable if need Total Payments Printed)')
 	resp$(respc+=1)=""
-	fnCmdSet(2): fnAcs(mat resp$,ckey)
+	fnCmdSet(2): ckey=fnAcs(mat resp$)
 	if ckey=5 then goto Xit
 	dat$=resp$(1)
 	seq$=resp$(2)(1:1)

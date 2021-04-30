@@ -14,7 +14,7 @@ MAIN: ! r:
 	fnLbl(3,1,"Route Number:",mylen,1)   :	fncmbrt2(3,mypos)          :	resp$(2)="[All]"
 	fnChk(4,23,"Print Meter Address:",1) :  resp$(3)="True"
 	fnCmdSet(3)
-	fnAcs(mat resp$,ckey)
+	ckey=fnAcs(mat resp$)
 	if ckey=5 then goto Xit
 	d1 = val(resp$(1))
 	if resp$(2)="[All]" then

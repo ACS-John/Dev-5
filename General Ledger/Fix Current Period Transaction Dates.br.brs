@@ -146,7 +146,7 @@ ASK_PERIOD: ! r:
 	fnTxt(5,14,2,0,1,"1",0,"")
 	resp$(respc+=1)=" "
 	fnCmdSet(2)
-	fnAcs(mat resp$,ckey)
+	ckey=fnAcs(mat resp$)
 	if ckey<>5 then 
 		date_bad=val(resp$(1))
 		date_good=val(resp$(2))

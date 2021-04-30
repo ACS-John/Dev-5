@@ -49,7 +49,7 @@ Screen1: ! r:
 	resp$(resp_fedId:=respc+=1)=fedid$(1:9)
 	fnCmdKey("&Next",1,1,0,"Create the file." )
 	fnCmdKey("E&xit",5,0,1,"Returns to menu")
-	fnAcs(mat resp$,ckey) ! ask employee number
+	ckey=fnAcs(mat resp$) ! ask employee number
 	if ckey=5 then
 		goto Xit
 	else
