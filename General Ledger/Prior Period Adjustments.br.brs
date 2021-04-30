@@ -36,7 +36,7 @@ do ! r: main loop
 	fnLbl(lc+=1,1,"Last Year Affected:",mylen,1)
 	fnComboF('Year',lc,mypos,0,"[Q]\GLmstr\Year.h[cno]",1,1,2,7,"[Q]\GLmstr\Year-Idx.h[cno]",1)
 	fnCmdSet(2)
-	fnAcs(mat resp$,ckey)
+	ckey=fnAcs(mat resp$)
 	if ckey=5 then
 		goto Finis
 	else

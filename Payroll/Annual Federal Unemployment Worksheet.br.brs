@@ -66,7 +66,7 @@ fnFra(lc+=1,1,5,40,"Option for printing","The system can print the form or just 
 	resp$(resp_left:=respc+=1)=str$(5)
  
 fnCmdSet(2)
-fnAcs(mat resp$,ckey)
+ckey=fnAcs(mat resp$)
 if ckey=5 then goto Xit
 beg_date=val(resp$(1)) ! beginning of year
 end_date=val(resp$(2)) ! ending day of year

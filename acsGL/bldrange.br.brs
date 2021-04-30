@@ -53,7 +53,7 @@ MAIN: !
 	fnTxt(7,mylen+3,5,0,right,"30",0,"Enter the first new financial statement reference number to be matched with the new general ledger numbers.",2 )
 	resp$(rc+=1)=""
 	fnCmdSet(2)
-	fnAcs(mat resp$,ckey)
+	ckey=fnAcs(mat resp$)
 	pas=0 ! rebuild each time
 	if ckey=5 then goto Xit
 	gl$=fnagl$(resp$(1))

@@ -27,7 +27,7 @@
 	fnTxt(lc,18,10,0,0,'30')
 	resp$(respc+=1)=str$(trans1_lrec)
 	fnCmdSet(2)
-	fnAcs(mat resp$,ckey)
+	ckey=fnAcs(mat resp$)
 	if ckey=5 then goto Xit
 	respc=0
 	dupe(1)=fn_filter_get_chk('Account',resp$(respc+=1))

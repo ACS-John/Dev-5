@@ -24,7 +24,7 @@
 	resp$(rc+=1)=str$(end_date)
 	fnCmdKey("Next",1,1,0,"Print report.")
 	fnCmdKey("Cancel",5,0,1,"Returns to menu without printing.")
-	fnAcs(mat resp$,ckey)
+	ckey=fnAcs(mat resp$)
 	if ckey=5 then goto Xit
 	beg_date=val(resp$(1))
 	end_date=val(resp$(2))

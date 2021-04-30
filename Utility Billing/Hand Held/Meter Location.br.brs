@@ -374,7 +374,7 @@ LwKeyMatchDisplay: ! r: returns lisReturn (1=left is superior) lisReturn=1 means
 		lisReturn=1
 		forceKeepLeftCount+=1
 	else
-		fnAcs(mat resp$,ckey)
+		ckey=fnAcs(mat resp$)
 		if ckey=2 then lisReturn=1 else lisReturn=0
 	end if
 return ! /r
@@ -588,7 +588,7 @@ def library fnCustomerMeterLocationSelect(account$*10,serviceCode$*2) ! cmls
 	fncmdkey('Select',1,1,0)
 	fncmdkey('New',2,0,0)
 	fncmdkey('Cancel',5,0,1)
-	fnAcs(mat resp$,ckey)
+	ckey=fnAcs(mat resp$)
 	if ckey<>5 then
 		cmlsSelectedLocationId=val(resp$(2))
 		if ckey=1 then
@@ -655,7 +655,7 @@ CmlsAdd: ! r: returns ckey, optionally accepts cmlsAddForceServiceId$, requires 
 	fncombof('',lc,22,46,'[Q]\UBmstr\MeterType.h[cno]',1,5,6,40,'[Q]\UBmstr\MeterTypeIdx.h[cno]',1)
 	resp$(respc+=1)=location$(loc_meterType     )
 	fncmdset(4)
-	fnAcs(mat resp$,ckey)
+	ckey=fnAcs(mat resp$)
 	if ckey=5 then
 		if u4_meterLocationIdSequential$='True' then
 			fn_newLocationIdSequential(-1)

@@ -46,7 +46,7 @@ MENU1: !
 	fnChk(6,1,"Skip accounts with Zero balances") : _
 	resp$(6)="True"
 	fnCmdSet(3)
-L350: fnAcs(mat resp$,ckey)
+L350: ckey=fnAcs(mat resp$)
 	if ckey=5 then goto Xit
 	d1=val(resp$(1)) : _
 	lbill=val(resp$(2))

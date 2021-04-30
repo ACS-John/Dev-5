@@ -206,7 +206,7 @@ def library fnError(callingprogram$*256, errornumber, linenumber, &ertnAct$, sto
 			fnCmdKey("Edit",1,1)
 			fnCmdKey("Back",5,0,1)
 			dim resp$(40)*256
-			fnAcs(mat resp$,ckey)
+			ckey=fnAcs(mat resp$)
 			if ckey=5 then
 				setenv('current_grid_row','')
 				goto MENU1

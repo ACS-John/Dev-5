@@ -45,7 +45,7 @@ MENU1: ! r:
 	loop
 	m1EoList: !
 	if recCount then let fnCmdSet(14) else let fnCmdSet(15)
-	fnAcs(mat resp$,ckey)
+	ckey=fnAcs(mat resp$)
 	if ckey=1 then ! Add
 		fn_w2supEdit
 	else if ckey=2 then ! Edit
@@ -75,7 +75,7 @@ def fn_w2supEdit(; empNo$)
 		fncombof('emp',1,mypos,width,'[Q]\GLmstr\PRmstr.h[cno]',1,4,5,25, '[Q]\GLmstr\PRIndex.h[cno]',1)
 		resp$(1)=t$
 		fnCmdSet(2)
-		fnAcs(mat resp$,ckey)
+		ckey=fnAcs(mat resp$)
 		if ckey=5 then goto w2eFinis
 		empNo$=resp$(1)(1:4)
 		t$=uprc$(lpad$(rtrm$(t$),8))
@@ -118,7 +118,7 @@ def fn_w2supEdit(; empNo$)
 	fnLbl(lc+=1,1,"Box 12d:",lenCol1,1)
 		fn_add_this_one(mat in1$(26:30))
 	fnCmdSet(4)
-	fnAcs(mat resp$,ckey)
+	ckey=fnAcs(mat resp$)
 	if cmdkey=5 then goto w2eFinis
 	rc=0
 	t$=resp$(rc+=1)

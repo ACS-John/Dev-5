@@ -522,7 +522,7 @@ def fn_askBillingDate
 	resp$(resp_unusual_usage_report:=respc+=1)=unusual_usage_report$
 	! /r
 	fnCmdSet(2)
-	fnAcs(mat resp$,ckey)
+	ckey=fnAcs(mat resp$)
 	if ckey<>5 then
 		d1=val(resp$(respc_billing_date))
 		if enableCostOfGas then btu=val(resp$(resp_btu_factor)) ! Edinburg requires a monthly BTU factor for calculating taxes

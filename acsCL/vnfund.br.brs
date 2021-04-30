@@ -23,7 +23,7 @@
 	fnLbl(3,1,"Minimum Amount to Print:",25,1)
 	fnTxt(3,27,10,0,1,"10") : _
 	resp$(respc+=1)=""
-	fnCmdSet(2): fnAcs(mat resp$,ckey)
+	fnCmdSet(2): ckey=fnAcs(mat resp$)
 	if ckey=5 then goto Xit
 	in1(1)=val(resp$(1))
 	in1(2)=val(resp$(2))

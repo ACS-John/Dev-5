@@ -12,7 +12,7 @@ TestAcs: ! r:
 	fnTxt(1,8,40,256,right,"1070",0,"",0 )
 	resp$(1)='' !
 	fnCmdKey("mmmK",1,1)
-	fnAcs(mat resp$,ckey)
+	ckey=fnAcs(mat resp$)
 	pr resp$(1)
 return ! /r
  

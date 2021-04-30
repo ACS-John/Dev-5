@@ -29,7 +29,7 @@ MAIN: !
 	fnCmdKey("&Next",1,1,0,"Allows you to combine this company and select more if desired.")
 	fnCmdKey("C&omplete",2,0,0,"All companies have been combined.  Return to the menu.")
 	fnCmdKey("Cancel",5,0,1,"Stop without combining any companies.")
-	fnAcs(mat resp$,ckey)
+	ckey=fnAcs(mat resp$)
  
 	if ckey=5 then goto Xit
 	if ckey=2 then goto END1

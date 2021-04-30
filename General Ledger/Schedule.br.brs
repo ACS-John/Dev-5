@@ -57,7 +57,7 @@ EO_SCHEDULE_GRID: !
 	fnCmdKey("&Delete",8,0,0,"Highlight any record and click Delete to remove the schedule.")
 ! fnCmdKey("&Print",3,0,0,"Takes you directly to the pr Schedules option")
 	fnCmdKey("E&xit",5,0,1,"Exits to main menu")
-	fnAcs(mat resp$,ckey)
+	ckey=fnAcs(mat resp$)
 	if ckey=5 then goto Xit
 	add=edit=0
 	editrec=val(resp$(1))
@@ -106,7 +106,7 @@ ADD_EDIT_SCHEDULES: ! r:
 	resp$(6)=option$(cm)
 	fnCmdKey("&Display G/L #'s",1,1,0,"Allows you to review, add, or change the G/L accounts that are contained in this schedule.")
 	fnCmdKey("&Cancel",5,0,1,"Returns to list of schedules withouit saving any changes.")
-	fnAcs(mat resp$,ckey)
+	ckey=fnAcs(mat resp$)
 	if ckey=5 then goto SCHEDULEGRID
 	sn=val(resp$(1)(1:3)) conv ADD_EDIT_SCHEDULES
 	schnam$=resp$(2)

@@ -97,7 +97,7 @@ execute 'sy "C:\ACS\Util\Dev-5 Commit.cmd"'
 		fnOpt(3,1,'Stop (neither merge, nor email)')
 		resp$(3)='False'
 		fnCmdSet(2)
-		fnAcs(mat resp$,ckey)
+		ckey=fnAcs(mat resp$)
 		if ckey=5 or resp$(3)='True' then
 			goto Xit
 		else if resp$(1)='True' then
@@ -283,7 +283,7 @@ def fn_askScreen1(&invDateMmDdYy,&invoice_number; ___,returnN,invDay)
 	resp$(resp_invNo:=rc+=1)=str$(invoice_number)
 
 	fnCmdSet(2)
-	fnAcs(mat resp$,ckey)
+	ckey=fnAcs(mat resp$)
 	if ckey=5 then
 		returnN=99
 	else

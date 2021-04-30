@@ -67,7 +67,7 @@ def fn_addpayee
 		fnCmdKey("&Edit",2,1,0,"Highlight any record and press Enter or click Edit or press Alt+E to change any existing payee record.")
 		fnCmdKey("&Delete",3,0,0,"Highlight any record and press Alt+D or click Delete to remove any existing payee record.")
 		fnCmdKey("E&xit",5,0,1,"Exit to menu")
-		fnAcs(mat resp$,ckey)
+		ckey=fnAcs(mat resp$)
 		add=xedit=0: holdvn$=""
 		if ckey=5 then
 			goto PayeeXIT
@@ -196,7 +196,7 @@ def fn_addpayee
 		fnCmdKey("Save",1,1,0,"Saves and returns to Vendor selection")
 		fnCmdKey("&Transactions",4,0,0,"List all checks for this payee")
 		fnCmdKey("&Cancel",5,0,1,"Return to Vendor selection")
-		fnAcs(mat resp$,ckey)
+		ckey=fnAcs(mat resp$)
 		if ckey=5 then goto MENU1
 		vn$=lpad$(trim$(resp$(1)(1:8)),8)
 		nam$=resp$(2) ! name
@@ -386,7 +386,7 @@ CHECK_HISTORY: ! r:
 	resp$(3)=str$(transactionstotal)
 	fnCmdKey('&Refresh',2,1,0,"If you select a date range, you must refresh the screen to see the transactions for that date range.")
 	fnCmdKey('&Close',5,0,1)
-	fnAcs(mat resp$,ckey)
+	ckey=fnAcs(mat resp$)
 	if ckey=5 or ckey=cancel then goto EO_CHECK_HISTORY
 	transactionstartingdate=val(resp$(1))
 	transactionendingdate=val(resp$(2))
@@ -409,7 +409,7 @@ GL_BREAKDOWNS: ! r:
 	fnTxt(5,mypos,30)
 	resp$(respc+=1)=gldesc$
 	fnCmdSet(7)
-	fnAcs(mat resp$,ckey)
+	ckey=fnAcs(mat resp$)
 	if ckey=5 then goto EDIT_PAYEE
 	payeekey$=vn$
 	payeegl$=fnagl$(resp$(1))

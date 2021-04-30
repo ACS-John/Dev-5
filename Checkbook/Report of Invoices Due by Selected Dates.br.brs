@@ -98,7 +98,7 @@ Ask: ! r:
 	fnLbl(10,1,"10th Due By Date:",25,1)
 	fnTxt(10,27,10,0,1,"3") 
 	resp$(respc+=1)=""
-	fnCmdSet(2): fnAcs(mat resp$,ckey)
+	fnCmdSet(2): ckey=fnAcs(mat resp$)
 	if ckey=5 then goto Xit
 	for j=1 to 10
 		d2(j)=val(resp$(j))

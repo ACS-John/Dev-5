@@ -63,7 +63,7 @@ def library fnhours(eno)
 		fnButton(lc,44,"&Add",43) 
 		fnButton(lc,50,"&Refresh",46) 
 		fnButton(lc,60,"&Delete",44)
-		fnAcs(mat resp$,ckey) 
+		ckey=fnAcs(mat resp$) 
 		if ckey=5 then goto Xit
 		eno=val(resp$(1)(1:8))
 		editrec=val(resp$(2)) ! record # if edit
@@ -101,7 +101,7 @@ def library fnhours(eno)
 		fnTxt(lc,mypos,10,0,right,'32',0,"",frame1 ) 
 		resp$(5)=str$(decrease)
 		fnCmdSet(4)
-		fnAcs(mat resp$,ckey) 
+		ckey=fnAcs(mat resp$) 
 		if ckey=5 then goto MAIN
 		empno=val(resp$(1)(1:8)) 
 		class$=resp$(2)(1:5) 

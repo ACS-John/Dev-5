@@ -62,7 +62,7 @@ def fn_getadjustment
 	fnLbl(3,1,"Balance on Date:",mylen,right)
 	fnTxt(3,mypos,14,0,right,"10",0) : resp$(3)=''
 	fnCmdSet(11)
-	fnAcs(mat resp$,ckey)
+	ckey=fnAcs(mat resp$)
 	if ckey=1 then
 		gl$=fnagl$(resp$(1)) : adjustdate=val(resp$(2)) : adjustamt=val(resp$(3))
 	else
@@ -87,7 +87,7 @@ def fn_confirmadjustment
 	fnCmdKey("&Save",1,1)
 	fnCmdKey("Clear &Periods",2,0)
 	fnCmdKey("&Cancel",5,0,1)
-	fnAcs(mat resp$,ckey)
+	ckey=fnAcs(mat resp$)
 	if ckey=1 then
 		balance=val(resp$(1))
 		for period=1 to 13 : ymbal(period)=val(resp$(period+1)) : priorym(period)=val(resp$(period+14)) : next period

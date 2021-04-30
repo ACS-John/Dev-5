@@ -39,7 +39,7 @@ MENU1: pr newpage
 	fncomboa("NoteOption",1,mypos,mat option$,"You can edit or pr notes to the financial statements ",40)
 	fnCmdKey("&Next",1,1,0,"Allows you to enter information.")
 	fnCmdKey("&Cancel",5,0,1,"Return to menu.")
-	fnAcs(mat resp$,ckey)
+	ckey=fnAcs(mat resp$)
 	if ckey=5 then goto Xit
 	if resp$(1)=option$(1) then t=1 else t=2
 L290: on t goto L300,L320 none MENU1

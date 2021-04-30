@@ -16,16 +16,16 @@ end
 ! /r
 def fn_setup
 	autoLibrary
-	if ~setup_index_it then 
+	if ~setup_index_it then
 		setup_index_it=1
 		on error goto Ertn
-		option retain 
-	end if 
-fnend 
+		option retain
+	end if
+fnend
 def library fnIndex(data_file$*256,index_statement_or_file$*512; indexParameters$*256)
 	fn_setup
 	fnIndex=fn_index(data_file$,index_statement_or_file$, indexParameters$)
-fnend 
+fnend
 def fn_index(data_file$*256,index_statement_or_file$*512; indexParameters$*256,___,isIndexStatement,fail)
 	fn_setup
 	data_file$=trim$(data_file$)
@@ -38,8 +38,8 @@ def fn_index(data_file$*256,index_statement_or_file$*512; indexParameters$*256,_
 	! 	pr dataFile$
 	! 	pause
 	! end if
-	if exists(data_file$) then 
-		if isIndexStatement then 
+	if exists(data_file$) then
+		if isIndexStatement then
 			fnStatus(index_statement_or_file$)
 			dim indexStatement$*512
 			indexStatement$=index_statement_or_file$
@@ -60,7 +60,7 @@ def fn_index(data_file$*256,index_statement_or_file$*512; indexParameters$*256,_
 			indexParameters$=srep$(indexParameters$,' dupkeys',' ')
 			indexParameters$=srep$(indexParameters$,' -n',' ')
 			indexParameters$=trim$(indexParameters$)&' Replace DupKeys Shr' ! -N
-		!	! r: old way 
+		!	! r: old way
 			if pos(data_file$,' ')>0 then data_file$=fnshortpath$(data_file$)
 			if pos(index_statement_or_file$,' ')>0 then index_statement_or_file$=fnshortpath$(index_statement_or_file$)
 		!
@@ -72,63 +72,63 @@ def fn_index(data_file$*256,index_statement_or_file$*512; indexParameters$*256,_
 		!!! does not work		fn_conSub('[indexFile]',index_statement_or_file$)
 		!!! does not work		indexStatement$='index [dataFile] [indexFile] '&indexParameters$
 		!!! does not work	! /r
-			
+
 			!       if env$('ACSDeveloper')='' then execute 'CD '&env$('temp')(1:2)
 			!       if env$('ACSDeveloper')='' then execute 'CD '&env$('temp')(3:len(env$('temp')))
 			fnStatus(indexStatement$) ! pr 'indexStatement$='&indexStatement$&' sreped='&fnsrepenv$(indexStatement$,'[Q]') : pause
 			execute indexStatement$ ioerr EXE_INDEX_ERR
 			!       if env$('ACSDeveloper')='' then execute 'CD S:'
-		end if 
-	else 
+		end if
+	else
 		fail=1
 		fnStatus("Could not find data file:")
 		fnStatus("     "&os_filename$(data_file$))
-	end if 
+	end if
 	goto INDEX_XIT
-	EXE_INDEX_ERR: ! 
+	EXE_INDEX_ERR: !
 	fail=1
 	fnStatus("Encountered error "&str$(err)&" executing index:")
 	fnStatus("     ("&indexStatement$&")") ! pause
-	if err=7600 then 
+	if err=7600 then
 		open #h_tmp=fnH: 'name='&data_file$,internal,input error EIE_7600_XIT
 		fnStatus('     (Record Length is '&str$(rln(h_tmp))&')')
-		close #h_tmp: 
-		EIE_7600_XIT: ! 
-	else if err=7605 then 
+		close #h_tmp:
+		EIE_7600_XIT: !
+	else if err=7605 then
 		if env$('acsDeveloper')<>'' then pause
-	end if 
-	INDEX_XIT: ! 
-	if fail then 
+	end if
+	INDEX_XIT: !
+	if fail then
 		! if env$('acsDeveloper')<>'' then pr 'dev: pause on index_xit fail' : pause
 		!     fnStatusPause
 		index_it_return=0
-	else 
+	else
 		index_it_return=1
-	end if 
+	end if
 	fn_index=index_it_return
 fnend
 def library fnindex_sys(; only_cno,system_id$*2)
 	fn_setup
 	fnindex_sys=fn_index_sys( only_cno,system_id$)
-fnend 
+fnend
 def fn_index_sys(; only_cno,system_id$*2)
 	! only_cno=0 means index all company numbers, otherwise index only the company number passed
 	! system_id$ of blank means to index the currenet system - otherwise index the system specified.
 	if system_id$='' then system_id$=env$('CurSys')
-	if only_cno then 
+	if only_cno then
 		fn_index_sys_do_one(only_cno,system_id$)
-	else 
-		if fnget_company_number_list(mat cno_list, system_id$) then 
+	else
+		if fnget_company_number_list(mat cno_list, system_id$) then
 			for cno_item=1 to udim(mat cno_list)
 				fn_index_sys_do_one(cno_list(cno_item),system_id$)
 			next cno_item
-		else 
+		else
 			fnStatus('no companies found in '&system_id$&' to index')
-		end if 
-	end if 
-fnend 
+		end if
+	end if
+fnend
 def fn_index_sys_do_one(cno,system_id$*2)
-	if system_id$='GL' then ! r:
+	if      	system_id$='GL' then ! r:
 		fn_index("[Q]\GLmstr\ACGLSCHS.h"&str$(cno),"[Q]\GLmstr\schindex.h"&str$(cno),"1 3")
 		fn_index("[Q]\GLmstr\ACGLSCHS.h"&str$(cno),"[Q]\GLmstr\SchIndX2.h"&str$(cno),"3 30")
 
@@ -173,23 +173,23 @@ def fn_index_sys_do_one(cno,system_id$*2)
 		next sn
 		fn_index("[Q]\GLmstr\TransCodes.h"&str$(cno),"[Q]\GLmstr\transcodes-idx.h"&str$(cno),"1 2")
 		fn_index("[Q]\GLmstr\W2Box16.h"&str$(cno),"[Q]\GLmstr\W2INDEX.h"&str$(cno),"1 8")
-		
 
 		fn_index("[Q]\GLmstr\ACGLFNSB.h"&str$(cno),"[Q]\GLmstr\agfsidx4.h"&str$(cno),",1 5")
 		fn_index("[Q]\GLmstr\ACGLFNSc.h"&str$(cno),"[Q]\GLmstr\agfsidx1.h"&str$(cno),",1 5")
 
+		fn_index("[Q]\GLmstr\Year.h"&str$(cno),"[Q]\GLmstr\Year-Idx.h[cno]"&str$(cno),",1 1")
 
 		exe 'con sub [FinancialStatementCode] C' ! secondary
 		fnReIndex('GL FSDesign')
-		
+
 		exe 'con sub [FinancialStatementCode] B' ! primary
 		fnReIndex('GL FSDesign')
-		
+
 		fnReassignTransactionAddresses(cno)
 		! pr 'did it' : pause
-		
+
 	! /r
-	else if system_id$='UB' then ! r:
+	else if 	system_id$='UB' then ! r:
 		fn_index("[Q]\UBmstr\Reads_and_Chgs.h"&str$(cno), "[Q]\UBmstr\Reads_and_Chgs-Key.h"&str$(cno),"1 10")
 		fn_ub_index_customer(cno)
 		fn_index("[Q]\UBmstr\UBAdrBil.h"&str$(cno), "[Q]\UBmstr\adrIndex.h"&str$(cno),"1 10")
@@ -204,7 +204,7 @@ def fn_index_sys_do_one(cno,system_id$*2)
 		fn_index("[Q]\UBmstr\Cass1.h"&str$(cno), "[Q]\UBmstr\Cass1Idx.h"&str$(cno),"1 10")
 		fn_index("[Q]\UBmstr\workorder.h"&str$(cno), "[Q]\UBmstr\wkindex.h"&str$(cno),"1/11 10/8")
 	! /r
-	else if system_id$='PR' then ! r:
+	else if 	system_id$='PR' then ! r:
 		fn_index("[Q]\PRmstr\EmpStatus.dat","[Q]\PRmstr\EmpStatus.Idx","1 2")
 		fn_index("[Q]\PRmstr\MGLMstr.h"&str$(cno),"[Q]\PRmstr\MGLIdx1.h"&str$(cno),"1 3")
 		fn_index("[Q]\PRmstr\PRCkHist.h"&str$(cno),"[Q]\PRmstr\PRCKINDX.h"&str$(cno),"1 14")
@@ -243,10 +243,10 @@ def fn_index_sys_do_one(cno,system_id$*2)
 				fn_index('[Q]\PRmstr\'&filename$(fileItem), '[Q]\PRmstr\'&kfname$(2),'1/27 8/14')
 			end if
 		nex fileItem
-		
+
 		fn_index("[Q]\PRmstr\DeptName.h"&str$(cno),"[Q]\PRmstr\DepNameIdx.h"&str$(cno),"1 3")
 	! /r
-	else if system_id$='CL' then ! r:
+	else if 	system_id$='CL' then ! r:
 		fn_index("[Q]\CLmstr\BankMstr.h"&str$(cno), "[Q]\CLmstr\BankIdx1.h"&str$(cno),"1 2")
 		fn_index("[Q]\CLmstr\DPTMSTR.h"&str$(cno), "[Q]\CLmstr\DPTIDX1.h"&str$(cno),"1 5")
 		fn_index("[Q]\CLmstr\GLmstr.H"&str$(cno), "[Q]\CLmstr\GLINDEX.H"&str$(cno),"1 12")
@@ -265,13 +265,13 @@ def fn_index_sys_do_one(cno,system_id$*2)
 		fn_index("[Q]\CLmstr\unpdaloc.H"&str$(cno), "[Q]\CLmstr\Uaidx1.H"&str$(cno),"9,12")
 		fn_index("[Q]\CLmstr\unpdaloc.H"&str$(cno), "[Q]\CLmstr\Uaidx2.H"&str$(cno),"1,20")
 	! /r
-	end if 
-fnend 
+	end if
+fnend
 def library fnub_index_customer(; cno)
 	fn_setup
 	if cno=0 then cno=val(env$('cno'))
 	fnub_index_customer=fn_ub_index_customer(cno)
-fnend 
+fnend
 def fn_ub_index_customer(cno)
 	fn_index("[Q]\UBmstr\Customer.h"&str$(cno), "[Q]\UBmstr\ubIndex.h"&str$(cno),"1 10")
 	fn_index("[Q]\UBmstr\Customer.h"&str$(cno), "[Q]\UBmstr\ubIndx2.h"&str$(cno),"354 7")

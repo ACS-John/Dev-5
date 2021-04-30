@@ -3,8 +3,8 @@
 ! r: setup library, dims, constants, fnTop
 	autoLibrary
 	on error goto Ertn
-!
-	dim cap$*128,resp$(30)*128
+
+	dim resp$(30)*128
 	dim tr(7),tr$*12,td$*30,tcde(10,2),dedcode(10),empname$*30
 	dim miscname$(10)*20
 	dim key$*12,k(30,8),camt(5)
@@ -17,17 +17,17 @@
 	dim typeofentry_option$(6)*18,message$*100,glitem$(4)*30
 	dim glitem2$(7)*30,ml$(4)*100,text$*80,bankname$*40,k_list$(30)*12
 	dim pr(19)
-!
-	fnTop(program$,cap$="Enter Transactions")
+
+	fnTop(program$,"Enter Transactions")
 	gltyp=7
 	fnreg_read('Enter Transactions - retain some fields between additions',gl_retainFieldsDuringAdd$,'False')
 ! fil$(1)="Name=[Q]\GLmstr\PRmstr.h[cno],KFName=[Q]\GLmstr\PRIndex.h[cno],Shr"
 ! fil$(2)="Name=[Q]\GLmstr\GL_Work_"&env$('acsUserId')&".h[cno]"
 ! fil$(3)="Name=[Q]\GLmstr\GLWK2"&wsid$&".h[cno]"
-!
+
 ! fil$(5)="Name=[Q]\GLmstr\GLPT"&wsid$&".h[cno]"
 ! fil$(6)="Name=[Q]\GLmstr\GLBRec.h[cno],KFName=[Q]\GLmstr\GLRecIdx.h[cno],Shr"
-!
+
 	typeofentry_option$(1)="1 = Disbursements"
 	typeofentry_option$(2)="2 = Receipts"
 	typeofentry_option$(3)="3 = Adjustments"
@@ -55,7 +55,7 @@
 	cmask$(1)=cmask$(2)=cmask$(3)=cmask$(5)=''
 	cmask$(4)='32'
 	mat glitem$(5)
-!
+
 	dim chdr2$(7)*25
 	mat chdr2$(7)
 	mat cmask2$(7)
@@ -72,13 +72,13 @@
 	cmask2$(5)=''
 	cmask2$(6)='10'
 	cmask2$(7)=""
-!
+
 	open #1: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,input
 	read #1,using 'Form POS 150,2*N 1,POS 298,15*PD 4,POS 382,N 2,POS 418,10*C 20,10*N 1,POS 668,10*C 12': mat d,mat pgl,jccode,mat miscname$,mat dedcode,mat miscgl$
 	close #1:
 ! /r
 	open #h_glmstr=fnH: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLIndex.h[cno],Shr",internal,outIn,keyed
-!
+
 	if gltyp<>1 then
 		open #1: "Name=[Q]\GLmstr\PRmstr.h[cno],KFName=[Q]\GLmstr\PRIndex.h[cno],Shr",internal,outIn,keyed ioerr ignore ! 00340   open #1: fil$(1),internal,outIn,keyed ioerr ignore
 		open #3: "Name=[Q]\GLmstr\GLWK2"&wsid$&".h[cno]",internal,outIn,relative ioerr ignore ! PR Work File
@@ -128,7 +128,7 @@ SCREEN_1: ! r:
 	fnCmdKey("&Next",1,1,0,"Allows you to enter transactions.")
 	fnCmdKey("&Proof Totals",3,0,0,"Provides proof totals and option to post the entries.")
 	fnCmdKey("&Cancel",5,0,1,"Exits.")
-	fnAcs(mat resp$,ckey)
+	ckey=fnAcs(mat resp$)
 	if ckey=5 then goto Xit
 ! pOST=1 ! code as unposted once leave this screen
 	if post=1 and resp$(respc_regularInput)="True" then gosub CHECK_FOR_CONTRAS ! remove any contra entries created in previous run
@@ -156,7 +156,7 @@ BANK_GL_FAIL: ! r:
 	mat ml$(2)
 	ml$(1)="You must have a Bank Account General Ledger"
 	ml$(2)="Number for disbursements or receipts."
-	fnmsgbox(mat ml$,resp$,cap$,49)
+	fnmsgbox(mat ml$,resp$,'',49)
 	goto SCREEN_1 ! /r
 ERASE_PREVIOUS_INPUT: ! r:
 	post=1
@@ -235,7 +235,7 @@ POSTING_OPTIONS: ! r:
 	fnOpt(5,2,"Return to Menu without posting",0,0)
 	resp$(5)="False"
 	fnCmdSet(2)
-	fnAcs(mat resp$,ckey)
+	ckey=fnAcs(mat resp$)
 	fnfscode(0)
 	gosub CREATE_CONTRA_ENTRIES
 	if resp$(5)="True" or ckey=5 then goto Xit ! return w/o posting
@@ -243,7 +243,7 @@ POSTING_OPTIONS: ! r:
 	if resp$(4)="True" then let fnprocess(4) ! post both
 	if resp$(1)="True" then goto ACGLMRGE
 	if resp$(3)="True" then let fnchain("S:\acsGL\PRMerge")
-	open #h_process:=30: "Name=[Q]\GLmstr\Process.h[cno],RecL=128,Use",internal,outIn,relative
+	open #h_process=fnH: "Name=[Q]\GLmstr\Process.h[cno],RecL=128,Use",internal,outIn,relative
 	if lrec(h_process)=0 then write #h_process,using "form pos 1,n 1": 0
 	if resp$(2)="True" then rewrite #h_process,using "form pos 1,n 1",rec=1: 1 else rewrite #h_process,using "form pos 1,n 1",rec=1: 0 ! code for post payroll and gl both
 	if resp$(4)="True" then rewrite #h_process,using "form pos 1,n 1",rec=1: 4 ! code for posting pr and gl both
@@ -252,7 +252,7 @@ POSTING_OPTIONS: ! r:
 	if resp$(2)="True" then let fnchain("S:\acsGL\autoproc")
 	goto Xit ! /r
 Xit: fnXit
-!
+
 RECORD_TRANSACTIONS: ! r:
 	if tr(6)=2 or tr(6)=7 then tr(5)=-tr(5) ! reverse signs on receipts and sales
 	if transadr>0 then
@@ -278,7 +278,7 @@ MAIN: ! r:
 		fnLbl(4,1,"Net Amount:",mylen,right)
 	end if
 	fnLbl(4,36,message$,50,left)
-!
+
 	fnTxt(4,mypos,13,0,right,"10",0,"Enter the net transaction amount. If correcting a transaction, change the allocations and net will be adjusted accordingly.",0 )
 	if sel=3 then resp$(2)="" else resp$(2)=str$(transactionamt)
 	fnLbl(5,1,"Reference #:",mylen,right)
@@ -357,7 +357,7 @@ EO_FLEX1: ! /r
 	fnCmdKey("&Delete",7,0,0,"Deletes the entire transaction as shown on screen.")
 	fnCmdKey("&Back",6,0,0,"Return to first screen to change transaction types or bank accounts.")
 	if ~edit then let fnCmdKey("&Finish",9,0,1,"")
-	fnAcs(mat resp$,ckey)
+	ckey=fnAcs(mat resp$)
 	allocamt=0
 	! pAS=1 ! kj 61107
 	message$=""
@@ -416,7 +416,7 @@ AFP_BAD_GL: ! r:
 	ml$(1)="You must have a General Ledger Number"
 	ml$(2)="on each allocation."
 	ml$(3)="Click OK to enter the general ledger number."
-	fnmsgbox(mat ml$,resp$,cap$,49)
+	fnmsgbox(mat ml$,resp$,'',49)
 goto MAIN ! r
 AFP_XIT: ! r:
 	if ~edit=1 then ! DON'T CHANGE CODE IF MAKEING CORRECTIONS
@@ -517,7 +517,7 @@ DELETE_TRANS: ! r: deletes entire transaction
 	ml$(1)="You have chosen to delete this entire entry."
 	ml$(2)="Click Ok to delete this entry."
 	ml$(3)="Click Cancel to return to main entry screen."
-	fnmsgbox(mat ml$,resp$,cap$,49)
+	fnmsgbox(mat ml$,resp$,'',49)
 	if resp$="OK" then goto L5120 else goto MAIN
 L5120: restore #glallocations:
 L5130: read #glallocations,using "Form pos 1,c 12,pd 10.2,c 30,pd 5": gl$,allocation,td$,transadr eof L5170
@@ -561,7 +561,7 @@ L5310: !
 	fnCmdKey("&Edit",2,1,0,"Highlight any allocation and click Edit to change any part of the entire transaction")
 	fnCmdKey("&Print Proof List",4,0,0,"Prints a proof list of your entries..")
 	fnCmdKey("&Back",5,0,1,"Return to main entry screen.")
-	fnAcs(mat resp$,ckey)
+	ckey=fnAcs(mat resp$)
 	if ckey=5 then edit=0: goto CLEAN_MAIN_SCREEN
 	rn=val(resp$(1))
 	if ckey=2 then edit=1 else edit=0 ! set edit mode
@@ -681,7 +681,7 @@ L6240: !
 	fnCmdKey("&Make Corrections",1,1,0,"Allows you to make corrections to any transactions before they are posted.")
 	fnCmdKey("&Cancel Without Posting",5,0,1,"Allows you to escape without posting this batch of entries.")
 	fnCmdKey("&Post",2,0,0,"Will post this group of entries to the general ledger files.")
-	fnAcs(mat resp$,ckey)
+	ckey=fnAcs(mat resp$)
 	if ckey=5 then goto Xit
 	if ckey=4 then let fn_pr_proof_list : goto SCREEN_PROOF_TOTALS
 	if ckey=10 then let fn_pr_proof_totals : goto SCREEN_PROOF_TOTALS
@@ -691,7 +691,7 @@ L6240: !
 		ml$(1)="Total Debits of "&trim$(cnvrt$("pic(-----,---,---.##)",td))&" to not equal"
 		ml$(2)="the total Credits of "&trim$(cnvrt$("Pic(----,---,---.##",tc))
 		ml$(3)="Click OK to continue or Cancel to go back."
-		fnmsgbox(mat ml$,resp$,cap$,49)
+		fnmsgbox(mat ml$,resp$,'',49)
 		if resp$="Cancel" then goto SCREEN_PROOF_TOTALS
 	end if
 	if ckey=2 then goto POSTING_OPTIONS
@@ -746,7 +746,7 @@ PAYROLL: ! r:
 	resp$(1)=str$(tr(4))
 	if sel=3 then let fnLbl(4,1,"Amount:",mylen,right) else let fnLbl(4,1,"Net Amount:",mylen,right)
 	fnLbl(4,36,message$,50,left)
-!
+
 	fnTxt(4,mypos,12,0,right,"10",0,"Enter the net transaction amount. If correcting a transaction, change the allocations and net will be adjusted accordingly.",0 )
 	if sel=3 then resp$(2)="" else resp$(2)=str$(transactionamt)
 	fnLbl(5,1,"Reference #:",mylen,right)
@@ -815,7 +815,7 @@ PAYROLL: ! r:
 	fnCmdKey("&Delete",7,0,0,"Deletes the entire transaction as shown on screen.")
 	fnCmdKey("&Back",6,0,0,"Allows you to return to screen 1 and change transaction types or bank accounts.")
 	fnCmdKey("&Finish",9,0,1,"")
-	fnAcs(mat resp$,ckey)
+	ckey=fnAcs(mat resp$)
 	if ckey=9 then
 		goto SCREEN_1
 	else if ckey=6 then
@@ -850,7 +850,7 @@ L7300: if j=17 then wh=wh+pr(j)
 	ml$(1)="Total wages less deductions do not equal the net check!"
 	ml$(2)=" Net entered:" &ltrm$(cnvrt$("PIC($$$$,$$$.##CR)",transactionamt))&"   Calculated net: "&ltrm$(cnvrt$("PIC($$$$,$$$.##CR)",pr(2)-wh))
 	ml$(3)="Click ok to return to the entry screen."
-	fnmsgbox(mat ml$,resp$,cap$,49)
+	fnmsgbox(mat ml$,resp$,'',49)
 	goto PAYROLL ! /r
 WRITE_PAYROLL_TRANS: ! r:
 	tr(6)=4 ! payroll transaction type  (was converted back to 1 in old system)
@@ -932,14 +932,14 @@ EditAllocations: ! r:  editing glallocation while still being entered into alloc
 	fnCmdKey("&Next",1,1,0,"Apply any changes and return to main entry screen.")
 	fnCmdKey("&Delete",6,0,0,"Deletes this allocation.")
 	fnCmdKey("&Cancel",5,0,1,"Return to main entry screen without applying changes.")
-	fnAcs(mat resp$,ckey)
+	ckey=fnAcs(mat resp$)
 	if ckey=5 then goto EA_FINIS
 	if ckey=6 then
 		mat ml$(3)
 		ml$(1)="You have chosen to delete this allocation."
 		ml$(2)="Click OK to delete this entry."
 		ml$(3)="Click Cancel to return to previous screen."
-		fnmsgbox(mat ml$,resp$,cap$,49)
+		fnmsgbox(mat ml$,resp$,'',49)
 		if resp$<>"OK" then
 			goto EditAllocations
 		end if

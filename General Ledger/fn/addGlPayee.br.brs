@@ -65,7 +65,7 @@ def library fnAddGlPayee
 		fnCmdKey("&Edit",2,1,0,"Highlight any record and press Enter or click Edit or press Alt+E to change any existing payee record.")
 		fnCmdKey("&Delete",3,0,0,"Highlight any record and press Alt+D or click Delete to remove any existing payee record.")
 		fnCmdKey("E&xit",5,0,1,"Exit to menu")
-		fnAcs(mat resp$,ckey)
+		ckey=fnAcs(mat resp$)
 		add=_edit=0
 		if ckey=5 then
 			goto XitFn
@@ -185,7 +185,7 @@ def library fnAddGlPayee
 		fnCmdKey("Save",1,0,0,"Saves and returns to payee selection")
 		fnCmdKey("&Transactions",4,0,0,"List all checks for this payee")
 		fnCmdKey("&Cancel",5,0,1,"Return to payee selection")
-		fnAcs(mat resp$,ckey)
+		ckey=fnAcs(mat resp$)
 		if ckey=5 then goto MENU1
 		vn$=lpad$(trim$(resp$(1)(1:8)),8)
 		nam$=resp$(2) ! name
@@ -321,7 +321,7 @@ PAYEE_TRANSACTIONS: ! r:
 		fnCmdKey('&Edit',4,0,0,"Allows you to change or delete a transaction.")
 	end if
 	fnCmdKey('&Close',5,0,1)
-	fnAcs(mat resp$,ckey)
+	ckey=fnAcs(mat resp$)
 	edittrans=0
 	if ckey<>5 then
 		if ckey=3 then
@@ -354,7 +354,7 @@ GL_BREAKDOWNS: ! r: sub routine
 	fnTxt(5,mypos,30)
 	resp$(respc+=1)=gldesc$
 	fnCmdSet(7)
-	fnAcs(mat resp$,ckey)
+	ckey=fnAcs(mat resp$)
 	if ckey<>5 then
 		payeekey$=vn$
 		payeegl$=fnagl$(resp$(1))
@@ -406,7 +406,7 @@ ADD_TRANSACTIONS: !  r: sub routnie - allows you to manually add a transaction
 	fnCmdKey("Save",1,1,0,"Saves any changes and returns to Payee selection")
 	fnCmdKey("&Delete",3,0,0,"Highlight any record and press Alt+D or click Delete to remove any existing transaction.")
 	fnCmdKey("&Cancel",5,0,1,"Return to Payee selection screen.")
-	fnAcs(mat resp$,ckey)
+	ckey=fnAcs(mat resp$)
 	if ckey=5 then
 		goto XitTransactionAdd
 	else if ckey=3 then

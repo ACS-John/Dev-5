@@ -63,7 +63,7 @@ SCREEN1: !
 	fnChk(10,pf,"Select Accounts to Print",1)
 	resp$(respc+=1)="False"
 	fnCmdSet(3)
-	fnAcs(mat resp$,ckey)
+	ckey=fnAcs(mat resp$)
 	if ckey=5 then goto ENDSCR
 	d2x= val(resp$(1))
 	d3x= val(resp$(2))
@@ -153,7 +153,7 @@ SCREEN3: !
 	end if
 	fncmbact(1,17) 
 	resp$(1)=a$
-	fnCmdSet(3): fnAcs(mat resp$,ckey)
+	fnCmdSet(3): ckey=fnAcs(mat resp$)
 	a$ = lpad$(trim$(resp$(1)(1:10)),10)
 	if trim$(a$)="" then goto RELEASE_PRINT
 	if ckey=5 then goto RELEASE_PRINT
@@ -169,7 +169,7 @@ ENDSCR: ! pr totals screen
 	fnTxt(1,mypos,8,0,1,"",1)
 	resp$(respc+=1)=cnvrt$("N 8",sum(bct))
 	fnCmdSet(52)
-	fnAcs(mat resp$,ckey)
+	ckey=fnAcs(mat resp$)
 Xit: fnXit
 
  

@@ -30,7 +30,7 @@ SCREEN1: !
 EOF1: close #h_tralloc:
 	fnCmdKey('Ok',1,1,0)
 	fnCmdKey('Cancel',99,0,1)
-	fnAcs(mat resp$,ckey)
+	ckey=fnAcs(mat resp$)
 
 	goto SCREEN1
 Xit: fnXit

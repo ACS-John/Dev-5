@@ -32,7 +32,7 @@ ASKREPORT: !
 	fnCmdKey("E&dit",2,1,0,"Access the highlited record") : _
 	fnCmdKey("&Next Record",3,0,0,"Access next record in report # order") : _
 	fnCmdKey("E&xit",5,0,1,"Returns to menu")
-	fnAcs(mat resp$,ckey) ! ask report #
+	ckey=fnAcs(mat resp$) ! ask report #
 	if ckey=5 then goto Xit
 	editrec=addone=0
 	hreport$=resp$(1)(1:2) : _
@@ -91,7 +91,7 @@ SCR2: ! add/edit first screen of report
 	fnCmdKey("&Next",1,1,0,"Save changes and move to next questions" ) : _
 	fnCmdKey("&Delete",4,0,0,"Deletes this report from your system.") : _
 	fnCmdKey("&Cancel",5,0,1,"Return to selection screen.")
-	fnAcs(mat resp$,ckey) ! edit first screen for report format
+	ckey=fnAcs(mat resp$) ! edit first screen for report format
 	addone=0
 	if ckey=5 then goto SCR1
 	if ckey=4 then goto DELETEIT : goto SCR3
@@ -139,7 +139,7 @@ SCR3: ! ask column # to edit
 	fnTxt(1,mypos,2,2,0,"30",0,"Column numbers must be from 1 to 20,") : _
 	resp$(respc+=1)=str$(column)
 	fnCmdSet(2)
-	fnAcs(mat resp$,ckey) ! acs column
+	ckey=fnAcs(mat resp$) ! acs column
 	if ckey=5 then goto SCR1
 	column=val(resp$(1))
 	if column=0 then goto SCR1
@@ -173,7 +173,7 @@ SCR4: ! edit/columns
 	fnCmdKey("&Delete",4,0,0,"Deletes this column from the report.") : _
 	fnCmdKey("C&omplete",3,0,1,"Save changes and return to main screen.") : _
 	fnCmdKey("&Cancel",5,0,1,"Return to main screen without saving any changes on this screen.")
-	fnAcs(mat resp$,ckey)
+	ckey=fnAcs(mat resp$)
 	if ckey=5 then goto SCR1
 	psc(column)=column ! set array to column number
 	f$(column)=resp$(1) ! formula
@@ -209,7 +209,7 @@ MAIN_SCREEN: !
 	fnCmdKey("&Add",1,0,0,"Add a new customer" ) : _
 	fnCmdKey("E&dit",2,1,0,"Review or change the record.") : _
 	fnCmdKey("&Cancel",5,0,1,"Exit the program.")
-	fnAcs(mat resp$,ckey)
+	ckey=fnAcs(mat resp$)
 	if ckey=5 then goto Xit
 	rno=val(resp$(1)(1:2))
 	if ckey=1 then addone=1: rt$="" : mat ch$=("") : ips=sd=cp=sc=0 : mat ps=(0) : _
@@ -233,7 +233,7 @@ EDIT_ADD_REPORT: !
 	fnChk(3,mypos,"Print One Job Per Page:",left) : _
 	resp$(respc+=1)="False"
 	fnCmdSet(2)
-	fnAcs(mat resp$,ckey)
+	ckey=fnAcs(mat resp$)
 	if ckey=5 then goto Xit
 L1780: form pos 1,n 2,c 51,x 27,2*c 132,n 3,3*n 1,100*pd 6.3,20*c 50,40*pd 2,80*n 1
 L1790: close #1:
@@ -333,7 +333,7 @@ SCR5: ! selection criteria
 	: _
 	: fnCmdKey("&Back",6,0,0,"Back up a screen.") : _
 	fnCmdKey("&Cancel",5,0,1,"Return to selection screen.")
-	fnAcs(mat resp$,ckey) ! ask matching criteria
+	ckey=fnAcs(mat resp$) ! ask matching criteria
 	if ckey=5 then goto SCR1
 	for j=1 to 100
 		psc(j)=val(resp$(j))
@@ -375,5 +375,5 @@ REVIEW_VARIABLES: !
 	respc=0: mylen=15: mypos=mylen+3
 	fncomboa("Variables",1,mylen+3,mat ty$,"Listing of variables that can be used in a formula.",60,0)
 	fnCmdSet(2)
-	fnAcs(mat resp$,ckey) ! variables
+	ckey=fnAcs(mat resp$) ! variables
 	goto SCR4

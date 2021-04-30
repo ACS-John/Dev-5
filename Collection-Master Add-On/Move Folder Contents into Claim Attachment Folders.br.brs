@@ -17,7 +17,7 @@ fntos : lc=0 : rc=0 : col1_width=20 : col2_pos=1+col1_width+1
 	fnTxt(lc,col2_pos,8,0,0,'',0,'')
 	resp$(resp_pcode:=rc+=1)=pcode$
 	fnCmdSet(2)
-fnAcs(mat resp$,ckey)
+ckey=fnAcs(mat resp$)
 if ckey=5 then goto Xit
 sourcePath$=resp$(resp_sourcePath)
 pcode$=resp$(resp_pcode)

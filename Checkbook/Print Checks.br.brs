@@ -161,7 +161,7 @@ SCR_CKPRT7: !
 		end if
 	end if
 	fnCmdSet(2)
-	fnAcs(mat resp$,ckey)
+	ckey=fnAcs(mat resp$)
 	if (ckey=5 or ckey=99) and ckoption=1 then fn_write_ck_hist_1 : goto MENU1
 	if (ckey=5 or cmdkey=99) then goto TRANS_TO_CK_HIST
 	for j=1 to 4
@@ -216,7 +216,7 @@ MENU3: ! r: (reprint or transfer to history)
 	item5$(2)="Transfer to Check History"
 	fncomboa("ckprt-cmb1",1,40,mat item5$,tt$)
 	resp$(respc+=1)=item5$(2)
-	fnCmdSet(41): fnAcs(mat resp$,ckey)
+	fnCmdSet(41): ckey=fnAcs(mat resp$)
 	if resp$(1)=item5$(1) then ti2=1 else ti2=2
 	allign=0
 	on ti2 goto MENU4,TRANS_TO_CK_HIST none MENU3
@@ -233,7 +233,7 @@ MENU4: ! r: (Reprint Options)
 	fncombof("Paymstr",3,10,30,"[Q]\CLmstr\PayMstr.h[cno]",1,8,9,30,"[Q]\CLmstr\Payidx1.h[cno]",0,pas, "Enter the beginning payee number if you wish to only reprint part of the checks")
 	resp$(respc+=1)=holdpayee$
 	fnCmdSet(2)
-	fnAcs(mat resp$,ckey)
+	ckey=fnAcs(mat resp$)
 	if ckey=5 then goto Xit
 	if resp$(1)=item4$(1) then ti2=1 else ti2=2
 	begvn$=resp$(2)(1:8) ! beginning payee to start reprint
@@ -346,7 +346,7 @@ REPRINT_CHECKS: ! r:
 	fnTxt(2,40,8,0,1,"30",0,"")
 	resp$(respc+=1)=str$(lastckn)
 	if reprintckn>0 then fnLbl(4,1,"Last Check Number Reprinted "&str$(reprintckn)&":",38,1)
-	fnCmdSet(2): fnAcs(mat resp$,ckey)
+	fnCmdSet(2): ckey=fnAcs(mat resp$)
 	if ckey=5 then goto Xit
 	firstckn=ckn1=reprintckn=val(resp$(1))
 	lastckn=val(resp$(2)) : if lastckn=0 then lastckn=firstckn
@@ -477,7 +477,7 @@ def fn_scr_check_entry
 	fnCmdKey("&Allocate",2,0,0,"Automatically allocates the general ledger breakdown if payee record contains the breakdown information")
 	fnCmdKey("&Complete",5,0,1,"Return to menu.")
 	! need a fnCmdKey to change screens for the breakdowns  (screen 1,2 or 3)
-	fnAcs(mat resp$,ckey)
+	ckey=fnAcs(mat resp$)
 	if ckey=5 then screen=0 : goto SCE_XIT
 	!
 	for j=3 to 30, step 3
@@ -773,7 +773,7 @@ def fn_cknum ! CHECK FOR DUPLICATE CHECK NUMBERS
 	fnTxt(8,48,8,0,1,"30",0,"You will never enter the new check number if you are deleting the old check.")
 	resp$(respc+=1)=""
 
-	fnCmdSet(2): fnAcs(mat resp$,ckey)
+	fnCmdSet(2): ckey=fnAcs(mat resp$)
 	ckn2=val(resp$(2))
 	if resp$(1)(1:1)="T" then goto CKNUM_DEL_PRV ! delete previous check
 	if ckn2<=0 then
@@ -1306,7 +1306,7 @@ def fn_scr_main_questions(;___,ckey)
 	if env$('client')="Billings" or (env$('client')="ACS"and bankcode=2) then resp$(respc)=layoutOption$(2)
 	! need button to show totals
 	fnCmdSet(2)
-	fnAcs(mat resp$,ckey)
+	ckey=fnAcs(mat resp$)
 	if ckey<>5 then
 		for j=1 to 3
 			if resp$(j)='True' then ti1=j : ckoption=j

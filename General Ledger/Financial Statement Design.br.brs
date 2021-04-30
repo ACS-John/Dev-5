@@ -19,7 +19,7 @@ ScrMenu1: ! r:
 	fnCmdKey("&Build D Records",2,0,0,"Automaticly build all type D records (without having to rekey all descriptions).")
 	fnCmdKey("&Proof List",3,0,0,"Allows you to pr a proof list of the financial statement layout.")
 	fnCmdKey("&Close",5,0,1,"Return to main menu.")
-	fnAcs(mat resp$,ckey)
+	ckey=fnAcs(mat resp$)
 	if ckey=5 then goto Xit
 	if ckey=2 then chain "S:\acsGL\Bld_D_Records"
 	if resp$(1)="True" then selection=1
@@ -82,7 +82,7 @@ ScrGrid: ! r:
 	fnCmdKey("&Delete",8,0,0,"Highlight any record and click Delete to remove the financial statement reference number.")
 ! fnCmdKey("&Print",3,0,0,"Takes you directly to the pr financial statement reference number option")
 	fnCmdKey("E&xit"  ,5,0,1,"Exits to main menu")
-	fnAcs(mat resp$,ckey)
+	ckey=fnAcs(mat resp$)
 	if ckey=5 then goto IndexThenMenu1
 	add=edit=0
 	editRec=val(resp$(1)) ! (1:pos(resp$(1)&' ',' ')-1))
@@ -151,7 +151,7 @@ AddEdit: ! r:
 	resp$(21)=str$(fc)
 	fnCmdKey("&Save",1,1,0,"Saves changes.")
 	fnCmdKey("&Cancel",5,0,1,"Returns to list of fin_stmts withouit saving any changes.")
-	fnAcs(mat resp$,ckey)
+	ckey=fnAcs(mat resp$)
 	if ckey=5 then goto ScrGrid
 	rno$=resp$(1)
 	rno$=lpad$(rtrm$(rno$),5)

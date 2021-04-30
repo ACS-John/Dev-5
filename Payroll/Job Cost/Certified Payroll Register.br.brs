@@ -22,7 +22,7 @@ MENU1: !
 	fnLbl(2,1,"Ending Date:",20,1)
 	fnTxt(2,23,8,0,0,"1",0,"Week ending date.")
 	resp$(respc+=1)=str$(dt)
-	fnCmdSet(2): fnAcs(mat resp$,ckey)
+	fnCmdSet(2): ckey=fnAcs(mat resp$)
 	if ckey=5 then goto Xit
 	df=val(resp$(1)) ! beginning date
 	dt=val(resp$(2)) ! ending date
@@ -59,7 +59,7 @@ ASKJOB: !
 	if trim$(jn$)<>"" then let fnLbl(3,1,"Last job processed:"&trim$(jn$),35,1)
 	fnCmdKey("&Next",1,1,0,"Process the job" )
 	fnCmdKey("&Complete",2,0,0,"Start printing")
-	fnAcs(mat resp$,ckey)
+	ckey=fnAcs(mat resp$)
 	if ckey=2 then goto PRINT_REPORT
 	jn$=lpad$(trim$(resp$(1)(1:6)),6)
 	rw=0

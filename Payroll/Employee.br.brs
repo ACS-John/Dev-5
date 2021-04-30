@@ -19,7 +19,7 @@ Menu1: ! r:
 	fnCmdKey("E&dit",2,1,0,"Access the highlighted record")
 	fnCmdKey("&Search",8,0,0,"Search for employee record")
 	fnCmdKey("E&xit",6,0,1,"Returns to menu")
-	fnAcs(mat resp$,ckey) ! ask employee #
+	ckey=fnAcs(mat resp$) ! ask employee #
 	hact$=resp$(1)(1:8)
 	eno=ent=val(resp$(1)(1:8))
 	if ckey=1 then
@@ -45,7 +45,7 @@ EmployeeAdd: ! r:
 	resp$(respc+=1)=str$(eno)
 	fnCmdKey("&Next",1,1,0,"Process employee information.")
 	fnCmdKey("&Cancel",5,0,1,"Returns to maintenance screen.")
-	fnAcs(mat resp$,ckey)
+	ckey=fnAcs(mat resp$)
 	if ckey=5 then goto EmployeeEditXit
 	add1=1
 	ent=val(resp$(1))
@@ -277,7 +277,7 @@ def fn_employeeEdit(ent; employeeAdding)
 		fnCmdKey("&Save",1,1,0,"Saves all changes.")
 		fnCmdKey("&Cancel",5,0,1,"Stops without applying any changes.")
 		! /r
-		fnAcs(mat resp$,ckey)
+		ckey=fnAcs(mat resp$)
 		if ckey=5 then goto EmployeeEditXit
 		! r: get local from mat resp$
 		eno             =val(resp$(resp_eno            )(1:8))
@@ -427,7 +427,7 @@ ScrDepartment: ! r:
 	fnCmdKey("&Delete Dept",9,0,0,"Deletes the department record.")
 	fnCmdKey("&Save Dept",1,1,0,"Save changes and returns to Employee.")
 	fnCmdKey("&Cancel",5,0,1,"Exit departmental record without saving changes.")
-	fnAcs(mat resp$,ckey) ! /r
+	ckey=fnAcs(mat resp$) ! /r
 	if ckey=5 then goto EmployeeEditXit
 	teno=val(resp$(1)) ! employee # in dept record
 	tdn=val(resp$(2)) ! department #
@@ -485,7 +485,7 @@ def fn_departmentAdd(eno,&deptNew; ___,returnN)
 	resp$(respc+=1)=''
 	fnCmdKey("&Next",1,1,0,"Process department information.")
 	fnCmdKey("&Cancel",5,0,1,"Returns to maintenance screen.")
-	fnAcs(mat resp$,ckey)
+	ckey=fnAcs(mat resp$)
 	if ckey<>5 then
 		deptNew=val(resp$(1))
 		ent$=cnvrt$('n 8',eno)&cnvrt$('n 3',deptNew) ! lpad$(str$(ent),8)
@@ -551,7 +551,7 @@ def fn_askMat(eno,mat id$; ___,lc,respc,tmp)
 	next tmp
 	fnCmdKey("C&omplete",1,1,0,"Saves any changes and returns to Employee screen.")
 	fnCmdKey("&Cancel",5,0,1,"Exit record without saving changes.")
-	fnAcs(mat resp$,ckey)
+	ckey=fnAcs(mat resp$)
 	if ckey<>5 then
 		respc=1
 		for tmp=1 to udim(mat id$)
@@ -902,7 +902,7 @@ AskDd: !
 	fnCmdKey("&Save",1,1,0,"Saves the information on the screen." )
 	fnCmdKey("&Delete",4,0,0,"Deletes the direct deposit information on this employee.You can stop direct deposits simply by changing the direct deposit question to no.")
 	fnCmdKey("&Cancel",5,0,1,"Cancels without recording any chnages to the screen.")
-	fnAcs(mat resp$,ckey)
+	ckey=fnAcs(mat resp$)
 	if ckey=5 then goto DdFinis
 	key$ =    resp$(1)
 	dd$  =    resp$(2)(1:1)

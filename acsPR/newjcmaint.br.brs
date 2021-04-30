@@ -42,7 +42,7 @@ ASKJOB: ! r:
 	fnCmdKey("&Proof",11,0,0,"Prints proof listing of all joub information.")
 	fnCmdKey("&Refresh",7,0,0,"Updates search grids and combo boxes with new job information")
 	fnCmdKey("E&xit",6,0,1,"Returns to menu")
-	fnAcs(mat resp$,ckey) ! ask job #
+	ckey=fnAcs(mat resp$) ! ask job #
 	hact$=lpad$(rtrm$(resp$(1)(1:6)),6)
 	jn$=lpad$(rtrm$(resp$(1)(1:6)),6)
  
@@ -82,7 +82,7 @@ ADDREC: ! r:
 	resp$(respc+=1)=""
 	fnCmdKey("&Next",1,1,0,"Enter job information.")
 	fnCmdKey("&Cancel",5,0,1,"Returns to main screen.")
-	fnAcs(mat resp$,ckey) ! ASK NEW JOB #
+	ckey=fnAcs(mat resp$) ! ASK NEW JOB #
  
 	if ckey=5 then goto ASKJOB
 	addjob=1
@@ -159,7 +159,7 @@ L670: ! r:
 		fnCmdKey("De&lete",4,0,0,"Deletes this job.")
 	end if
 	fnCmdKey("&Cancel",5,0,1,"Stops without applying any changes.")
-	fnAcs(mat resp$,ckey) ! detail job screen     editrec
+	ckey=fnAcs(mat resp$) ! detail job screen     editrec
 	if ckey=5 then goto ASKJOB
 	jn$=lpad$(trim$(resp$(1)(1:6)),6)
 	if ckey=4 then goto DELETE_ENTIRE_JOB
@@ -318,7 +318,7 @@ L2510: ! r:
 	fnCmdKey("&Search",8,0,0,"Search forjob record")
 	fnCmdKey("&Refresh",7,0,0,"Updates search grids and combo boxes with new job information")
 	fnCmdKey("&Cancel",5,0,1,"Returns to previous screen")
-	fnAcs(mat resp$,ckey) ! ask job # to start printing
+	ckey=fnAcs(mat resp$) ! ask job # to start printing
 	if ckey=5 then goto ASKJOB
 	jn$=lpad$(rtrm$(resp$(1)(1:6)),6)
 	restore #1,key>=jn$: nokey L2510
@@ -368,7 +368,7 @@ DUPLICATE_CATEGORIES: ! r:
 	fnCmdKey("&Search",8,0,0,"Search forjob record")
 	fnCmdKey("&Refresh",7,0,0,"Updates search grids and combo boxes with new job information")
 	fnCmdKey("&Cancel",5,0,1,"Returns to previous screen")
-	fnAcs(mat resp$,ckey) ! ask job # to duplicate
+	ckey=fnAcs(mat resp$) ! ask job # to duplicate
 	if ckey=5 then goto ASKJOB
 	djn$=lpad$(rtrm$(resp$(1)(1:6)),6)
 	dup$=lpad$(rtrm$(djn$),6)&"     "
@@ -396,7 +396,7 @@ EDITCAT: !
 	fnCmdKey("&Search",8,0,0,"Search for category record")
 	fnCmdKey("&Refresh",7,0,0,"Updates search grids and combo boxes with new category information")
 	fnCmdKey("&Complete",6,0,1,"Returns to job screen.")
-	fnAcs(mat resp$,ckey) ! ask category #
+	ckey=fnAcs(mat resp$) ! ask category #
 	hcat$=lpad$(rtrm$(resp$(1)(1:11)),11)
 	cn$=lpad$(rtrm$(resp$(1)(1:11)),11)
 	if ckey=1 then
@@ -427,7 +427,7 @@ ADDCAT: !
 	resp$(respc+=1)=""
 	fnCmdKey("&Next",1,1,0,"Adds the new category record." )
 	fnCmdKey("&Cancel",5,0,1,"Stops without adding this category record and returns to category listing.")
-	fnAcs(mat resp$,ckey) ! ask new category #
+	ckey=fnAcs(mat resp$) ! ask new category #
 	if ckey=5 then goto GET_CATEGORY_LISTING
 	cn$=jn$&lpad$(trim$(resp$(1)(1:5)),5)
 	k$=resp$(1)(7:36)
@@ -497,7 +497,7 @@ EDITCATEGORY: ! r:
 	resp$(respc+=1)=str$(l(13))
 	fnCmdKey("&Save",1,1,0,"Saves all changes.")
 	fnCmdKey("&Cancel",5,0,1,"Stops without applying any changes.")
-	fnAcs(mat resp$,ckey) ! full edit on category  edit_category
+	ckey=fnAcs(mat resp$) ! full edit on category  edit_category
 	if ckey=5 then goto GET_CATEGORY_LISTING
 	cn$=jn$&lpad$(trim$(resp$(1)(1:5)),5)
 	k$=resp$(2) ! name
@@ -571,7 +571,7 @@ REVIEW_DETAILS: ! r:
 	fnCmdKey("&Delete",4,0,0,"Deletes the highlited record")
 	fnCmdKey("&Refresh",7,0,0,"Updates search grids and combo boxes with new category information")
 	fnCmdKey("E&xit",5,0,1,"Returns to main screen.")
-	fnAcs(mat resp$,ckey) ! review_details  grid of transactions
+	ckey=fnAcs(mat resp$) ! review_details  grid of transactions
 	if ckey=5 then goto GET_CATEGORY_LISTING
 	detaileditrec=val(resp$(1))
 	if ckey=1 then adddetails=1: mat tr=(0): eno$="": jno$=jn$: goto EDIT_DETAILS
@@ -627,7 +627,7 @@ EDIT_DETAILS: ! r:
 	resp$(respc+=1)=pd$
 	fnCmdKey("&Save",1,1,0,"Saves all changes.")
 	fnCmdKey("&Cancel",5,0,1,"Stops without applying any changes.")
-	fnAcs(mat resp$,ckey) ! full edit details
+	ckey=fnAcs(mat resp$) ! full edit details
 	if ckey=5 then goto REVIEW_DETAILS
 	eno$=resp$(1) ! employee #/ ref #
 	jno$=resp$(2) ! job number

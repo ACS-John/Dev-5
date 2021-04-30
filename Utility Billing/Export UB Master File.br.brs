@@ -14,7 +14,7 @@ MENU1: ! r:
 	! resp$(2)="9"
 	fnLbl(5,1,"NOTE: If Destination exists it will be overwritten.",76,2)
 	fnCmdSet(2)
-	fnAcs(mat resp$,ckey)
+	ckey=fnAcs(mat resp$)
 	if ckey=5 then goto Xit
 	dim dest$*256
 	dest$=resp$(1)

@@ -21,7 +21,7 @@ SCR1: !
 	fnChk(4,2,"Outstanding Balances Only") : _
 	resp$(3)="False"
 	fnCmdSet(3)
-	fnAcs(mat resp$,ckey)
+	ckey=fnAcs(mat resp$)
 	if ckey=5 then goto Xit
 	d1= val(resp$(1)) conv SCR1 : _
 	if uprc$(resp$(2))=uprc$("[All]") then route=0 else : _

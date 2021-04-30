@@ -37,7 +37,7 @@ MENU1: !
 	fnChk(5,1,"Remove Transactions with Bad Dates")
 	resp$(2)="False"
 	fnCmdSet(2)
-	fnAcs(mat resp$,ckey)
+	ckey=fnAcs(mat resp$)
 	delubtransvb$=resp$(1)
 	removebaddates$=resp$(2)
 	if ckey=5 then cno=0

@@ -88,7 +88,7 @@ def fn_options(&route,&billingdate$) ! show options dialog to user and return se
 
 	fnCmdSet(2) ! show "Next" and "Cancel" buttons
 
-	fnAcs(mat resp$,ckey) ! run the screen
+	ckey=fnAcs(mat resp$) ! run the screen
 
 	if ckey=5 then ! if user pressed Cancel
 		fn_options=0

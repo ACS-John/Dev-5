@@ -21,7 +21,7 @@
 	fnTxt(5,28,8,0,right,"1001",0,"Enter the last billing date.",0 ) : _
 	resp$(5)=str$(d1)
 	fnCmdSet(2)
-	fnAcs(mat resp$,ckey)
+	ckey=fnAcs(mat resp$)
 	if ckey=5 then goto Xit
 	fan$=lpad$(rtrm$(resp$(1)(1:10)),10)
 	lan$=lpad$(rtrm$(resp$(2)(1:10)),10)

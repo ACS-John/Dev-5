@@ -35,7 +35,7 @@ L270: ! If FIXGRID=99 Then goto Xit ! FIXING NEW GRID FILE BEFORE LEAVING UBFM
 		fnCmdKey("&Refresh",7,0,0,"Updates search grids and combo boxes with new category information") : _
 		fnCmdKey("D&uplicate",12,0,1,"Duplicates all Caterories from anouther existing job.") : _
 		fnCmdKey("E&xit",6,0,1,"Returns to main screen.")
-		fnAcs(mat resp$,ckey) : _
+		ckey=fnAcs(mat resp$) : _
 		! CALL FLEXGRID
 		cn$=lpad$(resp$(1),11)
 		if ckey=5 then cn$=cn$(1:6)&"     " ! no one selected

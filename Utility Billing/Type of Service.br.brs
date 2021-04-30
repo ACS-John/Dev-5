@@ -31,7 +31,7 @@ fnTos ! r:
 		fnTxt(a+2,72,2,0,0,"30")
 	next a
 	fnCmdSet(4)
-	fnAcs(mat resp$,ckey)
+	ckey=fnAcs(mat resp$)
 	if ckey<>5 then
 		for a=1 to 10
 			serviceName$(a)=resp$(a*6-5)

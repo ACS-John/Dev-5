@@ -27,7 +27,7 @@ MAIN_SCREEN: !
 	fnChk(2,mypos,"Print Category Names:",left) : _
 	resp$(resp+=1)="False"
 	fnCmdSet(2)
-	fnAcs(mat resp$,ckey)
+	ckey=fnAcs(mat resp$)
 	if ckey=5 then goto Xit
 	dat$=resp$(1) ! heading date
 	if resp$(2)="True" then prtcat$="Y" else prtcat$="N"

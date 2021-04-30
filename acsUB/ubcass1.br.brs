@@ -24,7 +24,7 @@
 ! fncomboa("AB",1,35,mat opt1$)
 ! resp$(respc+=1)=opt1$(1)
 ! fnCmdSet(2)
-! L170: fnAcs(mat resp$,ckey)
+! L170: ckey=fnAcs(mat resp$)
 ! if ckey=5 then goto Xit
 ! dv$=resp$(1)
 ! /r

@@ -37,7 +37,7 @@ Screen1: ! r:
 
 	fnLbl(9,1,"",46,2)
 	fnCmdSet(2)
-	fnAcs(mat resp$,ckey)
+	ckey=fnAcs(mat resp$)
 	if ckey<>5 then
 			if lwrc$(devicePreference$)='[ask]' then
 				deviceSelected$=resp$(rc_Device)
@@ -98,7 +98,7 @@ AskRange: ! r:
 	fnButton(1,48,"Search",7,blank$,0,7,2)
 	fnCmdKey("&Finish",2,1,0,"Completed with all routes")
 	fnCmdSet(2)
-	fnAcs(mat resp$,ckey)
+	ckey=fnAcs(mat resp$)
 	bk1$=lpad$(trim$(resp$(1)(1:10)), 10)
 	bk2$=lpad$(trim$(resp$(2)(1:10)), 10)
 	if ckey=2 then goto Finis
@@ -287,7 +287,7 @@ NextAskAccount: ! r:
 	fncmbact(myline,16)
 	resp$(1)=z$
 	fnCmdSet(5)
-	fnAcs(mat resp$,ckey)
+	ckey=fnAcs(mat resp$)
 	if ckey=6 then
 		fnCustomerSearch(resp$(1))
 	end if
@@ -1458,7 +1458,7 @@ def fn_transfer
 		fnLbl(1,1,"Android Drive:",20,1)
 		fncomboa("USB-Drive",1,23,mat drive$,"Drive letter of the destination android device.")
 		fnCmdSet(2)
-		fnAcs(mat resp$,ckey)
+		ckey=fnAcs(mat resp$)
 		if ckey<>5 then
 			dest$=resp$(1)
 			fnCopy(out_filename$,trim$(dest$)&"acs_meter_data.txt")
@@ -1482,7 +1482,7 @@ def fn_transfer
 		fnTxt(1,23,20,100,0,"",0,"Destination can be a drive designation including folders")
 		if resp$(1)="" then resp$(1)="A:\"
 		fnCmdSet(2)
-		fnAcs(mat resp$,ckey)
+		ckey=fnAcs(mat resp$)
 		if ckey<>5 then
 			dest$=resp$(1)
 			if len(dest$)=0 then goto TRANSFER_TO_LAPTOP

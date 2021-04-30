@@ -20,6 +20,6 @@ fncomboa("coll_type_rdc",1,27,mat opt$,opt$(1))
 
 fnCmdKey("Okay",1,1,1)
 
-fnAcs(mat resp$,ckey)
+ckey=fnAcs(mat resp$)
 
 pr resp$(1) : key$ = resp$(1)(32:41) : pr key$

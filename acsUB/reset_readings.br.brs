@@ -25,7 +25,7 @@ SCREEN1: !
 	fnChk(7,mypos,srvnam$(4),1)      : resp$(5)='True'
 	fnChk(9,mypos,"Update Usages",1) : resp$(6)='False'
 	fnCmdSet(2)
-	fnAcs(mat resp$,ckey)
+	ckey=fnAcs(mat resp$)
 	if ckey=5 then goto Xit
 	d1=fndate_mmddyy_to_ccyymmdd(val(resp$(1)))
 	if resp$(2)='True' then do_current=1 else do_current=0

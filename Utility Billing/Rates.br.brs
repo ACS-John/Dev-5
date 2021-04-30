@@ -61,7 +61,7 @@ L1010: !
 	fnCmdKey("&Delete",4,0,0,"Deletes highlighted record")
 	fnCmdKey("&Print",3,0,0,"Prints rate file proof list")
 	fnCmdKey("&Complete",5,0,1,"Return to menu")
-	fnAcs(mat resp$,ckey) ! CALL FLEXGRID
+	ckey=fnAcs(mat resp$) ! CALL FLEXGRID
 	k$=rpad$(resp$(1),4)
 	if ckey=5 then 
 		goto Xit
@@ -96,7 +96,7 @@ AddNewRecord: ! r:
 	resp$(1)=""
 	fnTxt(1,40,2,0,0,"",0,"All codes must be between 1 and 99")
 	fnCmdSet(2)
-	fnAcs(mat resp$,ckey) ! CALL ADD NEW RECORD
+	ckey=fnAcs(mat resp$) ! CALL ADD NEW RECORD
 	if ckey=5 then goto ScreenGrid
 	rt$=uprc$(resp$(1)) ! service type
 	if rtrm$(rt$)="" then 
@@ -166,7 +166,7 @@ RateEdit: ! r: maintain rate file
 	fnCmdSet(4)
 	mat resp$(udim(mat rt$))
 	mat resp$=rt$
-	fnAcs(mat resp$,ckey) !        ! CALLS RATE MAINTENANCE
+	ckey=fnAcs(mat resp$) !        ! CALLS RATE MAINTENANCE
 	mat resp$(udim(mat rt$))
 	mat rt$=resp$
 	if ckey=5 then goto ScreenGrid
@@ -203,7 +203,7 @@ PrintProof: ! r:
 	fnOpt(2,14,"Name Sequence")
 	resp$(2)="False"
 	fnCmdSet(2)
-	fnAcs(mat resp$,ckey) ! CALLS PROOF LIST
+	ckey=fnAcs(mat resp$) ! CALLS PROOF LIST
 	if ckey=5 then goto ScreenGrid
 	ti2=hRate1 ! default to code sequence
 	if uprc$(resp$(1))=uprc$("True") then ti2=hRate1: k$="    " ! code sequence

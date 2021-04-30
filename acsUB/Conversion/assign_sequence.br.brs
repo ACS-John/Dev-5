@@ -9,7 +9,7 @@ SCREEN1: !
 	fnLbl(1,1,'Increment by what number:',mylen,1)
 	fnTxt(1,mypos,3,0,1,"30")
 	resp$(1)=""
-	fnCmdSet(2): fnAcs(mat resp$,ckey)
+	fnCmdSet(2): ckey=fnAcs(mat resp$)
 	if ckey=5 then goto Xit
 	incr=val(resp$(1))
 	on fkey 5 goto DONE

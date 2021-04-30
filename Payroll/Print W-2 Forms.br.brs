@@ -111,7 +111,7 @@
 			end if
 		next dedItem
 		fnCmdSet(2)
-		fnAcs(mat resp$,ckey)
+		ckey=fnAcs(mat resp$)
 		if ckey=5 then
 			if exportFormatID then
 				close #hExport:
@@ -360,7 +360,7 @@ ASK_EMP_LOCALITY: ! r:
 	resp$(rc+=1)=empLocality$
 	fnCmdKey("&Next",1,1,0,"Proceed to next screen.")
 	fnCmdKey("E&xit",5,0,1,"Returns to menu")
-	fnAcs(mat resp$,ckey)
+	ckey=fnAcs(mat resp$)
 	if ckey=5 then goto Xit
 	empLocality$=resp$(1)
 	controlNumber$=rtrm$(controlNumber$)

@@ -74,7 +74,7 @@ SCREEN1: !
 	resp$(rc+=1)="True"
 	fnOpt(2,2,"Use Dollars",0,1)
 	fnCmdSet(2)
-	fnAcs(mat resp$,ckey)
+	ckey=fnAcs(mat resp$)
 	if ckey=5 then goto Xit
 	for j=1 to 24
 		L740: !

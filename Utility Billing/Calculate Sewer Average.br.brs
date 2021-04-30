@@ -34,7 +34,7 @@ SCR1: !
 	fnCmdKey("&Clear Sewer Code Averages",3,0)
 	fnCmdKey("&Next",1,1)
 	fnCmdKey("&Cancel",5,0,1)
-	fnAcs(mat resp$,ckey)
+	ckey=fnAcs(mat resp$)
 	if ckey=5 then goto Xit
 	if ckey=3 then clear_averages=1 else clear_averages=0
 	for j=1 to 8

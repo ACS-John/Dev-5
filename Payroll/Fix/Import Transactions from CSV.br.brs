@@ -24,7 +24,7 @@ fnLbl(2,1,"Employee Register CSV:",col1_width,1)
 fnTxt(2,col2_pos,30,256,0,'70',0,'')
 resp$(2)=emplRegisterFile$
 fnCmdSet(2)
-fnAcs(mat resp$,ckey)
+ckey=fnAcs(mat resp$)
 if ckey=5 then goto Xit
 deptRegisterFile$=resp$(1)
 emplRegisterFile$=resp$(2)

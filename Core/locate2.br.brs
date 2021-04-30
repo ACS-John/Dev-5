@@ -45,7 +45,7 @@ MAIN: !
 	fnLbl(lc+=1,1,"Do NOT try to use Secondary Find if using Replace")
 	fnLbl(lc+=1,1,"In Windows XP I can use '*.br,*.br'")
 	fnCmdSet(2)
-	fnAcs(mat resp$,ckey)
+	ckey=fnAcs(mat resp$)
 	if ckey=5 then goto Xit
 	lc$=trim$(resp$(1))
 	lc2$=trim$(resp$(2))

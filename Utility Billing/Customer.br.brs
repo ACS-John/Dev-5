@@ -762,7 +762,7 @@ def fn_customer(; &editOne$,___,editOne,ckey)
 		loop
 		L7160: !
 		fnCmdSet(2)
-		fnAcs(mat resp$,ckey) ! CALL deposit change grd
+		ckey=fnAcs(mat resp$) ! CALL deposit change grd
 		DEPOSIT_HIST_XIT: !
 	goto NameScreen ! /r
 	DEPOSIT_HIST_NONE: ! r:
@@ -806,7 +806,7 @@ def fn_customer(; &editOne$,___,editOne,ckey)
 		fnTxt(3,17,10,0,1)
 		resp$(1)=""
 		fnCmdSet(11)
-		fnAcs(mat resp$,ckey)
+		ckey=fnAcs(mat resp$)
 		if ckey=5 then goto AskAcct
 		x$=lpad$(trim$(resp$(1)),10)
 		if trim$(x$)="" then goto ADD_RECORD
@@ -1389,7 +1389,7 @@ def fn_ask_account(prev_list_id$,&x$,h_customer_1; select_button_text$,aas_butto
 		fnCmdKey(select_button_text$,1,1,0,select_button_text$&" the selected/highlighted record.")
 		fnCmdKey("Search",6,0,0,"Search for customer record")
 		fnCmdKey('Back',5,0,1,"Returns to previous screen")
-		fnAcs(mat resp$,ckey)
+		ckey=fnAcs(mat resp$)
 		x$=trim$(resp$(1)(1:10))
 		if account_selection_method=asm_text and ckey=1 then
 			if ~fn_key_tweak(x$,h_customer_1) then

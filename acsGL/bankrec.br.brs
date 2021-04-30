@@ -61,7 +61,7 @@ BANK_STMT_INFO: !
 	fnCmdKey("&Display Balances",3,0,0,"Displays previous balances for this bank account.") : _
 	fnCmdKey("&Next",1,1,0,"Proceed to next options")
 	fnCmdKey("&Cancel",5,0,1,"Returns to main menu")
-	fnAcs(mat resp$,ckey)
+	ckey=fnAcs(mat resp$)
 	if ckey=5 then goto Xit
 	wbc$=fnagl$(resp$(1)) ! working bank account
 	rewrite #82,using "Form pos 1,c 12",rec=1: resp$(1)
@@ -92,7 +92,7 @@ CLEARING_ADJUSTMENTS: !
 	fnLbl(3,1,"cleared date (mmddyy) (otherwise leave blank):",50,0)
 	fnTxt(3,48,8,0,1,"1",0,"") : _
 	resp$(respc+=1)=""
-	fnCmdSet(2): fnAcs(mat resp$,ckey)
+	fnCmdSet(2): ckey=fnAcs(mat resp$)
 	if ckey=5 or ckey=99 then goto MENU1
 	pcd1=val(resp$(1)) ! clear old adjustments
 	restore #bankrec1,key>=wbc$&"3        ": nokey MENU1
@@ -118,7 +118,7 @@ CLEARING_OPTIONS: !
 	if ti3=2 then let fnButton(3,50,"Clear Deposits by Date Range",62,"This option allows you to clear deposits by entering a date range.",0,30)
 	if ti3=2 then let fnButton(5,50,"Clear Deposits from List",63,"This option allows you to clear deposits from a listing of all outstanding deposits.",0,30)
 	if ti3=1 then let fnButton(3,50,"Clear Checks from List",64,"This option allows you to clear checks from a listing of all outstanding checks.",0,20)
-	fnCmdSet(2): fnAcs(mat resp$,ckey)
+	fnCmdSet(2): ckey=fnAcs(mat resp$)
 	if ckey=5 then goto MENU1
 	k$=resp$(1) ! check # to clear
 	if ckey=61 then : _
@@ -160,7 +160,7 @@ ALREADY_CLEARED: !
 	fnLbl(2,1,"Correct cleared date:",30,1)
 	fnTxt(2,33,10,0,1,"1",0,"Enter the new date if cleared in error on another date.  Use the old cleared date if correct.  Leave blank to unclear. ") : _
 	resp$(respc+=1)=str$(stmtdt)
-	fnCmdSet(2): fnAcs(mat resp$,ckey)
+	fnCmdSet(2): ckey=fnAcs(mat resp$)
 	if ckey=5 or ckey=99 then goto CLEARING_OPTIONS
 	cdte=val(resp$(1)) ! statement date cleared
 	if cdte=0 then goto L1330
@@ -244,7 +244,7 @@ L1990: read #bankrec1,using 'Form POS 79,c 12,pos 3,N 1,C 8,G 6,pd 10.2,C 8,C 35
 	goto L1990
 EO_ADDING_BALANCE: !
 	fnLbl(11,1,"Book Balance as of"&cnvrt$("PIC(ZZ/ZZ/ZZ)",codt)&":"&cnvrt$("pic(----,---,---.##)",cutoffbal),45,1)
-	fnCmdSet(3): fnAcs(mat resp$,ckey)
+	fnCmdSet(3): ckey=fnAcs(mat resp$)
 	if ckey=5 then goto MENU1
 	if ckey=1 then gosub L2140 : goto BANKTOTALSCREEN
 	goto BANKTOTALSCREEN
@@ -283,7 +283,7 @@ PRINT_LISTINGS: !
 	resp$(respc+=1)=""
 	fnChk(4,3,hdw$(4),0)
 	resp$(respc+=1)=""
-	fnCmdSet(2): fnAcs(mat resp$,ckey)
+	fnCmdSet(2): ckey=fnAcs(mat resp$)
 	if ckey=5 or ckey=99 then goto MENU1
 	if resp$(1)(1:1)="T" then w(1)=1 else w(1)=0
 	if resp$(2)(1:1)="T" then w(2)=1 else w(2)=0
@@ -341,7 +341,7 @@ L2920: fnLbl(1,1,"Lowest Date to Clear:",30,1)
 	fnLbl(2,1,"Highest Date to Clear:",30,1)
 	fnTxt(2,32,10,0,1,"1",0,"Normally you would use the last day of the month, but if the bank's cutoff date is different, you may want to use it.") : _
 	resp$(respc+=1)=""
-L2960: fnCmdSet(2): fnAcs(mat resp$,ckey)
+L2960: fnCmdSet(2): ckey=fnAcs(mat resp$)
 	if ckey=5 or ckey=99 then goto MENU1
 	l1=val(resp$(1)) ! either lowest date or lowest check #
 	h1=val(resp$(2)) ! either highest date or highest check #
@@ -434,7 +434,7 @@ DPAMENU: !
 	if t1 =0 and t2=0 then goto L3660
 	fnLbl(12,1,"Deposits Entered: "&cnvrt$("pic(ZZ,ZZZ,ZZZ.##)",t1),40,0)
 	fnLbl(13,1,"Deposits Cleared: "&cnvrt$("pic(ZZ,ZZZ,ZZZ.##)",t2),40,0)
-L3660: fnCmdSet(2): fnAcs(mat resp$,ckey)
+L3660: fnCmdSet(2): ckey=fnAcs(mat resp$)
 	if ckey=5 or ckey=99 then goto MENU1
 	for j=1 to 8
 		if resp$(j)(1:1)="T" then sel_code=ti1=j: goto L3710
@@ -453,7 +453,7 @@ ENTER_DEPOSITS_CLEARED: !
 	fnTxt(1,28,12,0,1,"10",0,"Enter each deposit amount that shows as cleared on the bank statement.") : _
 	resp$(respc+=1)=""
 	if am1>0 then let fnLbl(2,1,"Last Amount Entered:"&cnvrt$("N 13.2",am1),38,1)
-	fnCmdSet(2): fnAcs(mat resp$,ckey)
+	fnCmdSet(2): ckey=fnAcs(mat resp$)
 	if ckey=5 then goto PRINT_EDITS
 	am1=val(resp$(1)) ! deposit amount entered
 	if am1=0 then goto PRINT_EDITS
@@ -659,7 +659,7 @@ L5690: fnLbl(17,30,"Total Cleared:",16,1)
 	if clear_from_range=1 then let fnCmdKey("&Clear by Range",6,1,0,"Enter another range of reference numbers")
 	if clear_from_range=0 then let fnCmdKey("&Clear",1,1,0,"Clear the highlited transaction")
 	fnCmdKey("C&ancel",5,0,1,"Return to Bank Reconciliation menu")
-	fnAcs(mat resp$,ckey)
+	ckey=fnAcs(mat resp$)
 	displaycleared=total= clear_from_range=0
 	if ckey=5 or ckey=99 then goto BANK_STMT_INFO
 	displayattop$=resp$(3) : _

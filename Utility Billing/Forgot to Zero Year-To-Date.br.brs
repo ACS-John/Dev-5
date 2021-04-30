@@ -9,7 +9,7 @@ fnLbl(1,1,"First Billing Date of New Year (MMDDYY):",42,1)
 fnTxt(1,44,8,0,0,"1")
 resp$(1)=str$(fbd)
 fnCmdSet(2)
-fnAcs(mat resp$,ckey)
+ckey=fnAcs(mat resp$)
 if ckey=5 then goto Xit
 fbd$=lpad$(str$(val(resp$(1))),6)
 fbd=val(resp$(1)) conv MAIN

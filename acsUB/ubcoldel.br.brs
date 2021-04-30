@@ -31,7 +31,7 @@ ASKDATE: !
 	fnTxt(1,mypos,10,10,0,"2")
 	resp$(respc+=1)=""
 	fnCmdSet(2)
-	fnAcs(mat resp$,ckey)
+	ckey=fnAcs(mat resp$)
 	if ckey=5 then goto Xit
 	ld1=val(resp$(1)) conv ASKDATE
 	ld1=fn_cd2(ld1)

@@ -55,6 +55,7 @@ enableblankLineAfterNet=1
 fn_openFiles
 fn_clearContrasAndPosted(hMerge)
 
+
 ScreenOne: ! r:
 	dim kList$(0)*12
 	dim kReceipts(0)
@@ -919,8 +920,10 @@ fnend
 	fnend
 
 def fn_transactionAdd(hMerge,typeOfEntryN,glBank$,transDate; ___, _
-	returnN,gl$*12,tr4,tr5,tType,postingCode,lrPrior,smResponse)
-	if trPrior$='' then fnpcreg_read('last Reference Number',trPrior$)
+	returnN,gl$*12,tr$*12,tr4,tr5,tType,postingCode,lrPrior,smResponse)
+	! if trPrior$='' then fnpcreg_read('last Reference Number',trPrior$)
+				
+				fnpcreg_read('reference number',tr$)
 	do
 		gl$=jv2$=tr$=td$=vn$=key$=''
 		tr5=tType=postingCode=0
@@ -941,7 +944,12 @@ def fn_transactionAdd(hMerge,typeOfEntryN,glBank$,transDate; ___, _
 		end if
 		if lrPrior<>lrec(hMerge) then returnN=0 else returnN=lrec(hMerge)
 		trPrior$=tr$
+		if smResponse<>ck_cancel then
+			fnpcreg_write('reference number',tr$)
+		end if
+
 	loop while smResponse=ck_saveA
+
 	fn_transactionAdd=returnN ! returns last record worked for auto selection on ScreenOne
 fnend
 def fn_transactionEdit(hMerge,recordNumber,glBank$*12; ___,returnN,gl$*12,tr4,tr5,tType,postingCode,tr$*12,td$*30,vn$*8,jv2$*5,key$*12)
@@ -1032,9 +1040,6 @@ def fn_transactionSave(hMerge,transAdr,gl$,tr4,tr5,tType,postingCode,tr$,td$*30,
 		write #hMerge,using F_merge: gl$,tr4,tr5,tType,postingCode,tr$,td$,vn$,jv2$,glBank$
 	end if
 fnend
-
-
-
 
 
 def fn_clearVar(&hMtemp,&transactionAmt,&td$,&vn$,&gl$,&totalalloc, _

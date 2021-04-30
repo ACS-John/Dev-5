@@ -68,7 +68,7 @@ SCREEN1: ! r:
 	fnTxt(lc,mypos,8,0,left,"",0,'Enter the check or reference # to access a specific transactin, else blank for all')
 	resp$(9)=''
 	fnCmdSet(2)
-	fnAcs(mat resp$,ckey)
+	ckey=fnAcs(mat resp$)
 	if ckey=5 or ckey=cancel then goto Xit
 	if resp$(1)='[All]' then
 		wbc=0 : bn$='[All]'
@@ -206,7 +206,7 @@ MENU1: ! r:
 	fnCmdKey('&ReIndex',7,0,0,"Allows you to reindex the check history files. Should only be necessary if power failures have corrupted the files.")
 	fnCmdKey('&Change Selection Criteria',6,0,0,"Allows you to return to first screen and change date ranges, etc.")
 	fnCmdKey('E&xit',5,0,1,"Exits the checkbook system.")
-	fnAcs(mat resp$,ckey)
+	ckey=fnAcs(mat resp$)
 	if ckey=5 or ckey=cancel then goto Xit
 	if ckey=2 or ckey=8 then addloopcode=1 else addloopcode=0
 	! pas=1
@@ -461,7 +461,7 @@ DELETE_TRANSACTION: ! r:
 	fnChk(lc+=1,1,'Delete Transaction Allocations too')
 	resp$(2)='True'
 	fnCmdSet(2)
-	fnAcs(mat resp$,ckey)
+	ckey=fnAcs(mat resp$)
 	if ckey=5 or ckey=cancel then goto DELETE_TRANSACTION_DONE
 	updatebankbalance$=resp$(1)
 	deletetransactionallocation$=resp$(2)
@@ -535,7 +535,7 @@ FM_ALLOCATION: ! r:
 	fnTxt(lc,mypos,1,0,left,number$,disable)
 	resp$(9)=str$(tragde)
 	fnCmdSet(4)
-	fnAcs(mat resp$,ckey)
+	ckey=fnAcs(mat resp$)
 	if ckey=5 then goto CANCEL_ALLOC
 	trabank_code=val(resp$(1))
 	tratcde=val(resp$(2))
@@ -679,7 +679,7 @@ EO_FLEX2: ! /r
 	fnCmdKey('&Delete',3,0,0,"Will delete this entry from your files.  You will have an option as to how to effect the bank balance.")
 	fnCmdKey('&Void',4,0,0,"Voids the transaction that is on the screen. It will adjust the bank balance. It leaves a voided transaction on file.")
 	fnCmdKey('&Cancel',5,0,1,"Returns to previous screen without saving any changes.")
-	fnAcs(mat resp$,ckey)
+	ckey=fnAcs(mat resp$)
 	holdtr1$=tr$(1)
 	if ckey=3 then
 		if fnConfirmDeleteHard('transaction','Refercence Number '&trim$(tr$(1))) then

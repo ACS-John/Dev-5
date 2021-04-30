@@ -43,7 +43,7 @@ ASK1: !
 	fnChk(8,29,"Print Status Report")
 	resp$(respc+=1)="True"
 	fnCmdSet(2)
-	fnAcs(mat resp$,ckey)
+	ckey=fnAcs(mat resp$)
 	if ckey=5 then goto Xit
 
 	fnAutomatedSavePoint('before')

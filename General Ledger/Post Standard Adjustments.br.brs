@@ -14,7 +14,7 @@
 	resp$(1)=str$(dat)
 	fnLbl(1,60,"",1,1) ! space it over
 	fnCmdSet(2)
-	fnAcs(mat resp$,ckey)
+	ckey=fnAcs(mat resp$)
 	if ckey=5 then goto Xit
 	dat=val(resp$(1))
  

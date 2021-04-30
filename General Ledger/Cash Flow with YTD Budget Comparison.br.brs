@@ -37,7 +37,7 @@
 	fnLbl(2,1,"(Blank for all Departments)",mylen,right)
 	fnCmdKey("&Next",1,1,0,"Prints the financial statement.")
 	fnCmdKey("&Cancel",5,0,1,"Returns to menu without posting.")
-	fnAcs(mat resp$,ckey)
+	ckey=fnAcs(mat resp$)
 	if ckey=5 then goto Xit
 	costcntr=val(resp$(1))
 	L340: !
@@ -255,7 +255,7 @@ TeC: ! r:
 	resp$(2)=str$(annualb)
 	fnCmdKey("&Next",1,1,0,"Accept the answer.")
 	fnCmdKey("&Cancel",5,0,1,"Returns to menu without posting.")
-	fnAcs(mat resp$,ckey)
+	ckey=fnAcs(mat resp$)
 	if ckey=5 then goto Xit
 	total2=val(resp$(1))
 	annualb=val(resp$(2))

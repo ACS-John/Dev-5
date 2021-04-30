@@ -24,7 +24,7 @@ MENU1: ! r:
 	fnChk(lc+=1,50,'Remove Duplicates Only',1)
 	resp$(4)='False'
 	fnCmdSet(2)
-	fnAcs(mat resp$,ckey)
+	ckey=fnAcs(mat resp$)
 	if ckey=5 then goto Xit
 	begdat=val(resp$(1))
 	enddat=val(resp$(2))

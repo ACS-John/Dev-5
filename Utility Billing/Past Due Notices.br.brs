@@ -75,7 +75,7 @@ Menu1: ! r:
 	fnOpt(6,1,"Who Were Billed This Month",0,1)
 	if deltype=6 then resp$(respc+=1)="True" else resp$(respc+=1)="False"
 	fnCmdSet(2)
-	fnAcs(mat resp$,ckey)
+	ckey=fnAcs(mat resp$)
 	if ckey=5 then goto Xit
 	d$(1)=cnvrt$("PIC(##/##/##)",d1=val(resp$(1)))
 	d$(2)=cnvrt$("PIC(##/##/##)",d2=val(resp$(2)))
@@ -617,7 +617,7 @@ ScreenSelect: ! r:
 	if ~hard_coded then fnCmdKey("&Delete",7)
 	if ~hard_coded then fnCmdKey("&Refresh",6)
 	fnCmdKey("&Cancel",5,0,1)
-	fnAcs(mat resp$,ckey)
+	ckey=fnAcs(mat resp$)
 	do_print_std_form=0
 	dim flname$*256
 	flname$=rtrm$(resp$(1))
@@ -655,7 +655,7 @@ ScreenSelect: ! r:
 		fnTxt(1,17,40,64,1,"")
 		resp$(respc+=1)=""
 		fnCmdSet(2)
-		fnAcs(mat resp$,ckey)
+		ckey=fnAcs(mat resp$)
 		if ckey=5 then goto Menu1
 		dim newname$*256
 		newname$=trim$(resp$(1))&'.rtf' ! &".rtf" ! trim$(resp$(1)(1:8))&".rtf"
@@ -702,7 +702,7 @@ AskNextAct: ! r:
 	fncmbact(1,20,1)
 	resp$(respc+=1)=""
 	fnCmdSet(19)
-	fnAcs(mat resp$,ckey)
+	ckey=fnAcs(mat resp$)
 	if ckey=5 then
 		goto Xit
 	else if ckey=2 then

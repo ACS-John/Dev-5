@@ -52,7 +52,7 @@ SCREEN2: !
 	fnCmdKey("&Save",1,1,0,"Saves any changes and returns to menu.")
 	fnCmdKey("&Create Accounts",3,0,0,"Allows you to create a chart of account (limited to the accounts you need) if general ledger or checkbook is not installed.")
 	fnCmdKey("&Cancel",5,0,1,"Returns to menu without saving any changes on the screen.")
-	fnAcs(mat resp$,ckey)
+	ckey=fnAcs(mat resp$)
 	if ckey=5 then goto L580
 	if ckey=3 then chain "S:\acsUB\chartofaccounts"
 	for j=1 to 30
@@ -86,7 +86,7 @@ SCREEN1: !
 	fnCmdKey("&Post",1,1,0,"Begins the posting process.")
 	fnCmdKey("&Assign GL Numbers",2,0,0,"Assign general ledger numbers to the various revenue accounts.")
 	fnCmdKey("&Cancel",5,0,1,"Returns to menu without saving any changes on the screen.")
-	fnAcs(mat resp$,ckey)
+	ckey=fnAcs(mat resp$)
 	if ckey=5 then goto Xit
 	dat$=resp$(1) : ld1=val(resp$(2)) : hd1=val(resp$(3))
 	postingdate=val(resp$(3)(5:8))*100+val(resp$(3)(3:4))
@@ -244,7 +244,7 @@ EO_FLEX1: !
 	fnCmdKey("&Edit",2,1,0,"Highlight any record and press Enter or click Edit or press Alt+E to change any existing record.")
 	fnCmdKey("&Delete",3,0,0,"Highlight any record and press Alt+D or click Delete to remove any existing record.")
 	fnCmdKey("E&xit",5,0,1,"Exit to menu")
-	fnAcs(mat resp$,ckey)
+	ckey=fnAcs(mat resp$)
 	addone=_edit=0: holdvn$=""
 	if ckey=5 then
 		goto SCREEN1
@@ -295,7 +295,7 @@ resp$(5)=fnrgl$(gl$(3))
 fnCmdKey("&Save",1,1,0,"Saves any changes and returns to gl breakdown screen.")
 fnCmdKey("&Create Accounts",3,0,0,"Allows you to create a chart of account (limited to the accounts you need) if general ledger or checkbook is not installed.")
 fnCmdKey("&Cancel",5,0,1,"Return to main screen without saving any changes.")
-fnAcs(mat resp$,ckey)
+ckey=fnAcs(mat resp$)
 if ckey=5 then goto GL_INFORMATION
 if ckey=3 then chain "S:\acsUB\chartofaccounts"
 service$=resp$(1)

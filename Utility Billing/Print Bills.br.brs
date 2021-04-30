@@ -303,7 +303,7 @@ Screen1: ! r:
 	fnCmdKey('&Test'   ,ckey_test:=1023   ,0,0,'Prints 4 Bills and then stops.')
 	fnCmdKey('&Print'  ,ckey_print:=1     ,1)
 	fnCmdKey('&Cancel' ,5,0,1)
-	fnAcs(mat resp$,ckey)
+	ckey=fnAcs(mat resp$)
 	if ckey=5 then goto Xit
 	if ckey_test and ckey=ckey_test then
 		testMode=1
@@ -539,7 +539,7 @@ ScrAskIndividual: ! r: account selection screen
 	fncmbact(1,17)
 	resp$(1)=starting_key$
 	fnCmdSet(11)
-	fnAcs(mat resp$,ckey)
+	ckey=fnAcs(mat resp$)
 	if ckey=5 or trim$(resp$(1))='' then goto Finis
 	starting_key$=lpad$(trim$(resp$(1)(1:10)),10)
 	read #h_customer_1,using F_CUSTOMER_A,key=starting_key$,release: z$,mat e$,f$,a3,mat b,final,mat d,bal,f,mat g,mat gb,route,serviceFromMmddYy,serviceToMmddYy,est nokey ScrAskIndividual
@@ -576,7 +576,7 @@ Finis: ! r:
 		fnTxt(1,mypos,8,0,1,"",1)
 		resp$(respc+=1)=cnvrt$('N 8',sum(billsPrintedCount))
 		fnCmdSet(52)
-		fnAcs(mat resp$,ckey)
+		ckey=fnAcs(mat resp$)
 	end if
 goto Xit ! /r
 Xit: fnXit

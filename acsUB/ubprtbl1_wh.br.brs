@@ -60,7 +60,7 @@ SCREEN1: !
 	fnTxt(9,pf,8,8,1,"1")
 	resp$(respc+=1)=cnvrt$("pic(zzzzzz)",0)
 	fnCmdSet(3)
-	fnAcs(mat resp$,ckey)
+	ckey=fnAcs(mat resp$)
 	if ckey=5 then goto ENDSCR
 	d4 = val(resp$(1))
 	mg$(1) = resp$(2)
@@ -155,7 +155,7 @@ SCREEN3: !
 	resp$(1)=a$
 	fnCmdKey("&Next",1,1,0,"Accept this record for printing")
 	fnCmdKey("&Complete",5,0,1,"Print all selected records")
-	fnAcs(mat resp$,ckey)
+	ckey=fnAcs(mat resp$)
 	a$=lpad$(trim$(resp$(1)(1:10)),10)
 	if trim$(a$)="" then goto RELEASE_PRINT
 	if ckey=5 then goto RELEASE_PRINT
@@ -206,7 +206,7 @@ ENDSCR: ! pr totals screen
 	fnTxt(1,mypos,8,0,1,"",1)
 	resp$(respc+=1)=cnvrt$("N 8",sum(bct))
 	fnCmdSet(52)
-	fnAcs(mat resp$,ckey)
+	ckey=fnAcs(mat resp$)
 Xit: fnXit
 
 VBOPENPRINT: ! r:

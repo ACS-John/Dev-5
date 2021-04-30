@@ -37,4 +37,4 @@
 EO_GRID: !
 	fnCmdKey("End",5,0,0)
 ! 
-	fnAcs(mat resp$,ckey) ! CALL FLEXGRID
+	ckey=fnAcs(mat resp$) ! CALL FLEXGRID

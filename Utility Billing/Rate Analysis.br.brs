@@ -21,7 +21,7 @@ SCR1: ! r:
 	usa+=1
 	resp$(rc+=1)="" ! just default to the first one
 	fnCmdSet(2)
-	fnAcs(mat resp$,ckey)
+	ckey=fnAcs(mat resp$)
 	if ckey=5 then goto Xit
 	bdate=val(resp$(1)) : billingDay=days(bdate,'mmddyy')
 	dim rateToAnalyze$*80
@@ -75,7 +75,7 @@ SCR2: ! r: requires svce$, returns mat use_to, mat use_from, probably more
 		resp$(rc+=1)=rt$(rtc+=1)
 	next j
 	fnCmdSet(8)
-	fnAcs(mat resp$,ckey)
+	ckey=fnAcs(mat resp$)
 	if ckey=2 then
 		goto SCR1
 	else if ckey=5 then

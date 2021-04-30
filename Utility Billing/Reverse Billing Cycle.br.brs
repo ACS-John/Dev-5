@@ -181,7 +181,7 @@ def fn_askOptions(&route,&billingdate$) ! show options dialog to user and return
 	! if resp$(resp_individual)='' then resp$(resp_individual)="[All]"
 
 	fnCmdSet(2) ! show "Next" and "Cancel" buttons
-	fnAcs(mat resp$,ckey) ! run the screen
+	ckey=fnAcs(mat resp$) ! run the screen
 	 ! if env$('ACSDeveloper')<>'' then pause
 	if ckey=5 then ! if user pressed Cancel
 		fn_askOptions=0

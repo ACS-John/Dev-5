@@ -75,7 +75,7 @@ SCREEN1: !
 	resp$(rc+=1)=skip_s10r9$
 	fnLbl(10,50,'') ! avoids error 857 caused by check box (skip customers...) - it is a bug in acs_component - jb 2019/08/22
 	fnCmdSet(2)
-	fnAcs(mat resp$,ckey)
+	ckey=fnAcs(mat resp$)
 	if ckey=5 then goto Xit
 	pendat=val(resp$(1)(5:6)&resp$(1)(7:8)&resp$(1)(3:4))
 	bildat=val(resp$(2)(5:6)&resp$(2)(7:8)&resp$(2)(3:4))

@@ -47,7 +47,7 @@ do ! main loop
 	fnCmdKey('Delete',ck_delete:=4)
 	fnCmdKey('Exit',ck_exit:=5,0,1)
 	fnCmdKey('Reassign Next Transaction Addresses',ck_rnta:=6)
-	fnAcs(mat resp$,ckey)
+	ckey=fnAcs(mat resp$)
 	if ckey=ck_exit then
 		goto Finis
 	else

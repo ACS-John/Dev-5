@@ -25,7 +25,7 @@ fnTop(program$)
 	fnTxt(6,col2_pos,42,256,0,'70',0,'Choose the output file name. [Rate Code] will be replaced with the rate code selected.')
 	resp$(resp_fileOut:=respc+=1)=fileOut$
 	fnCmdSet(2)
-	fnAcs(mat resp$,ckey)
+	ckey=fnAcs(mat resp$)
 
 	if ckey=5 then goto Xit
 	if resp$(resp_enableFinaled)='True' then enableFinaled=1 else enableFinaled=0

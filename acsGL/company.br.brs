@@ -105,7 +105,7 @@ SCREEN_1: ! r:
 	fnCmdKey("&Next",1,1,0,"Moves to 2nd screen of company information.")
 	fnCmdKey("&Save",4,0,0,"Saves any changes and returns to menu without reviewing remainter of screens.")
 	fnCmdKey("&Cancel",5,0,1,"Returns to menu without saving any changes.")
-	fnAcs(mat resp$,ckey)
+	ckey=fnAcs(mat resp$)
 	if ckey=5 then
 		goto Xit
 	else
@@ -149,7 +149,7 @@ SCREEN_2: ! r:
 	fnCmdKey("&Save",4,0,0,"Saves any changes and returns to menu without reviewing remainter of screens.")
 	fnCmdKey("&Back",2,0,0,"Returns to previous screen.")
 	fnCmdKey("&Cancel",5,0,1,"Returns to menu without saving any changes.")
-	fnAcs(mat resp$,ckey)
+	ckey=fnAcs(mat resp$)
 	e$(1)=fnagl$(resp$(1)) ! Summary # 1
 	e$(2)=fnagl$(resp$(2)) ! Summary # 1
 	if ckey=4 then !  save and exit
@@ -205,7 +205,7 @@ SCREEN_3: ! r:
 	fnCmdKey("&Save",4,0,0,"Saves any changes and returns to menu without reviewing remainter of screens.")
 	fnCmdKey("&Back",2,0,0,"Returns to previous screen.")
 	fnCmdKey("&Cancel",5,0,1,"Returns to menu without saving any changes.")
-	fnAcs(mat resp$,ckey)
+	ckey=fnAcs(mat resp$)
 	if ckey=5 then goto Xit
 	if ckey=2 then goto SCREEN_2
 	ficarate=val(resp$(1))
@@ -257,7 +257,7 @@ SCREEN_4: ! r:
 	fnCmdKey("&Save",4,0,0,"Saves any changes and returns to menu.")
 	fnCmdKey("&Back",2,0,0,"Returns to previous screen.")
 	fnCmdKey("&Cancel",5,0,1,"Returns to menu without saving any changes.")
-	fnAcs(mat resp$,ckey)
+	ckey=fnAcs(mat resp$)
 	if ckey=5 then goto Xit
 	resp=0
 	for j=1 to 10
