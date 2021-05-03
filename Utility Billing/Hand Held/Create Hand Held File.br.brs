@@ -1674,6 +1674,7 @@ def fn_meterInfo$*30(mi_field$,z$*10,serviceCode$; closeHandle,___,return$*30)
 		close #hLocation: ioerr ignore
 		close #mi_h_meter: ioerr ignore
 		close #mi_h_metertype: ioerr ignore
+		mi_setup=0
 	end if
 	fn_meterInfo$=return$
 fnend
