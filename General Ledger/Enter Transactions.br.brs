@@ -5,7 +5,6 @@ enableblankLineAfterNet=1
 	autoLibrary
 	on error goto Ertn
 	dim resp$(30)*128
-	dim prx(19)
 	dim ml$(0)*100
 
 	gridRowHold$=env$('current_grid_row')
@@ -463,6 +462,7 @@ fnend
 		EoMtempToMerge: !
 	fnend
 def fn_scrPayrollAdd(; ___,lendeditRecordc,lc)
+	dim prx(19)
 	! selx=sx_payrollCheck ! this section is only for Payroll type selx is 4.
 	fnPcReg_read('Payroll Check GL Account',gl$, gl$)
 	ScrPayrollTos: !
@@ -726,9 +726,7 @@ def fn_scrAdjustment	(hMerge,editRecord,bankAcctName$*40, _
 
 	if ckey=ck_cancel then
 		transactionAmt=0
-		mat prx=(0)
 		tr$=''
-		goto ScrAdjustmentXit
 	else
 		tDate=val(resp$(resp_tDate)) ! date
 		transactionAmt=val(resp$(resp_amt)) ! amount
@@ -743,7 +741,6 @@ def fn_scrAdjustment	(hMerge,editRecord,bankAcctName$*40, _
 	end if
 
 	ScrAdjustmentXit: !
-
 	fn_scrAdjustment=ckey
 fnend
 def fn_editAllocation(editrecord; editall,___,ckey,mylen,mypos)

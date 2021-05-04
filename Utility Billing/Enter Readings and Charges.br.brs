@@ -2,6 +2,299 @@
 fn_setup
 fnTop(program$)
 goto MENU1
+
+MENU1: ! r:
+	editmode=0
+	addmethod=0
+	fnTos
+	mylen=28 : mypos=mylen+3
+	frame_bd_witdh=42
+	fnFra(1,1,5,frame_bd_witdh,"Batch Data")
+	disable=0 ! If LREC(hWork)>1 Then dISABLE=1 Else dISABLE=0
+	fnLbl(2,2,"Billing Date:",mylen,1,0,1)
+	fnTxt(2,mypos,8,0,0,"1001",disable,empty$,1)
+	resp$(1)=str$(d1)
+	fnLbl(4,2,"Meter Reading Date:",mylen,1,0,1)
+	fnTxt(4,mypos,8,0,0,"1",disable,empty$,1)
+	resp$(2)=str$(d2)
+
+	moe_button_width=frame_bd_witdh-1
+	fnFra(8,1,20,moe_button_width+1,"Add Readings") : frame_current=2 : frame_line=0
+	fnLbl(frame_line+=2,2,"Individuals:",0,0,0,frame_current)
+	fnButton(frame_line+=1,1,"Display customers in route sequence",fky_askCustomersInSequence:=2001,'Display each customer in route sequence',0,moe_button_width,frame_current)
+	fnButton(frame_line+=1,1,"Ask Account, then enter Reading",fky_askAndEnterIndviduals:=2002,'Ask Account, then enter Reading',0,moe_button_width,frame_current)
+
+	fnLbl(frame_line+=2,2,"Bulk:",0,0,0,frame_current)
+	fnButton(frame_line+=1,1,"Load Holding File",fky_loadHoldingFile:=2003 ,'Retrieve readings previously saved to a Holding File',0,moe_button_width,frame_current)
+	fnButton(frame_line+=1,1,"Estimate Readings",fky_estimateReadings:=2004,'',0,moe_button_width,frame_current)
+	fnButton(frame_line+=1,1,"Import from Tab Delimited Text File",fky_importTabDelimited:=2006,'',0,moe_button_width,frame_current)
+
+	if fnregistered_for_hh then
+		! fnLbl(frame_line+=2,2,"Hand Held:",0,0,0,frame_current)
+		! fnButton(frame_line+=1,1,'Import from Hand Held to Book'     ,fky_importHHtoBook:=2007,'Retrieve Hand Held File'                                                               ,0,moe_button_width,frame_current)
+		! fnButton(frame_line+=1,1,'Load Hand Held Book'               ,fky_loadBook:=2005      ,'Generally for use after "Retreive (Import) from Hand Held to Book"'                    ,0,moe_button_width,frame_current)
+		fnButton(frame_line+=2,1,'Hand Held Books'               ,fky_loadBook:=2005      ,'Generally for use after "Retreive (Import) from Hand Held to Book"'                    ,0,moe_button_width,frame_current)
+
+		! fnButton(frame_line+=1,1,'Import and Load Hand Held (Book 1)',fky_importAndLoad:=2009 ,'Completes "Import to Hand Held to Book" (using book 1) and then "Load Hand Held Book".',0,moe_button_width,frame_current)
+	end if  ! fnregistered_for_hh
+! r: add the grid
+
+	chc=0
+	mat colhdr$(30)
+	mat cm$(30)
+	mat item$(30)
+	colhdr$(chc+=1)="Account"
+	reporth$="   Account  Customer Name              Customer Address           "
+	form$="Form pos 1,c 10,x 2,c 25,x 2,c 25"
+! r: Service 1 - Water
+	if service_enabled(1) then
+		colhdr$(chc+=1)=srvnam$(1)&" Reading"
+		cm$(chc)="20"
+		colhdr$(chc+=1)=srvnam$(1)&" Charge"
+		cm$(chc)="10"
+		colhdr$(chc+=1)=srvnam$(1)&" Usage"
+		cm$(chc)="20"
+
+		reporth$=reporth$&srvnam$(1)(1:2)&" Read   "&srvnam$(1)(1:2)&" Chg  "&srvnam$(1)(1:2)&" Usage "
+		form$=form$&",n 9,n 9.2,n 9"
+	end if
+! /r
+! r: Service 2 - Sewer
+	if service_enabled(2) then
+		colhdr$(chc+=1)=srvnam$(2)&" Charge"
+		cm$(chc)="10"
+
+		reporth$=reporth$&" "&srvnam$(2)(1:2)&" Chg  "
+		form$=form$&",n 9.2"
+	end if
+! /r
+! r: Service 3 - Electric
+	if service_type(3)=3 then
+		colhdr$(chc+=1)=srvnam$(3)&" Reading"
+		cm$(chc)="20"
+		colhdr$(chc+=1)=srvnam$(3)&" Charge"
+		cm$(chc)="10"
+		colhdr$(chc+=1)=srvnam$(3)&" Usage"
+		cm$(chc)="20"
+		colhdr$(chc+=1)="Demand"
+		cm$(chc)="20"
+
+		reporth$=reporth$&srvnam$(3)(1:2)&" Read   "&srvnam$(3)(1:2)
+		reporth$=reporth$&" Chg  "&srvnam$(3)(1:2)&" Usage   Demand "
+		form$=form$&",n 9,n 9.2,n 9,n 9"
+	else if service_type(3)=3.1 then
+		colhdr$(chc+=1)=srvnam$(3)&" Reading"
+		cm$(chc)="20"
+		colhdr$(chc+=1)=srvnam$(3)&" Charge"
+		cm$(chc)="10"
+		colhdr$(chc+=1)=srvnam$(3)&" Usage"
+		cm$(chc)="20"
+
+		reporth$=reporth$&srvnam$(3)(1:2)&" Read   "&srvnam$(3)(1:2)
+		reporth$=reporth$&" Chg  "&srvnam$(3)(1:2)&" Usage "
+		form$=form$&",n 9,n 9.2,n 9"
+	else if service_type(3)=3.2 then
+		colhdr$(chc+=1)=srvnam$(3)&" Usage"
+		cm$(chc)="20"
+
+		! LOOKS LIKE SOMETHING IS MiSSING HERE
+	end if
+! /r
+! r: Service 4 - Gas
+	if service_enabled(4) then ! if service_type(4)=4 then
+		colhdr$(chc+=1)=srvnam$(4)&" Reading"
+		cm$(chc)="20"
+		colhdr$(chc+=1)=srvnam$(4)&" Charge"
+		cm$(chc)="10"
+		colhdr$(chc+=1)=srvnam$(4)&" Usage"
+		cm$(chc)="20"
+
+		reporth$=reporth$&srvnam$(4)(1:2)&" Read   "&srvnam$(4)(1:2)
+		reporth$=reporth$&" Chg  "&srvnam$(4)(1:2)&" Usage "
+		form$=form$&",n 9,n 9.2,n 9"
+	end if
+! /r
+! r: Service 5 - Oother
+	if service_enabled(5) then ! always show "Other Charge"
+		colhdr$(chc+=1)=srvnam$(5)&" Charge"
+		cm$(chc)="10"
+
+		reporth$=reporth$&" "&srvnam$(5)(1:2)&" Chg  "
+		form$=form$&",n 9.2"
+	end if
+! /r
+! r: Service 6
+	if service_enabled(6) then ! always show "Other Charge"
+		colhdr$(chc+=1)=srvnam$(6)&" Charge"
+		cm$(chc)="10"
+
+		reporth$=reporth$&" "&srvnam$(6)(1:2)&" Chg  "
+		form$=form$&",n 9.2"
+	end if
+! /r
+! r: Service 7
+	if service_enabled(7) then ! always show "Other Charge"
+		colhdr$(chc+=1)=srvnam$(7)&" Charge"
+		cm$(chc)="10"
+
+		reporth$=reporth$&" "&srvnam$(7)(1:2)&" Chg  "
+		form$=form$&",n 9.2"
+	end if
+! /r
+! r: Service 8
+	if service_enabled(8) then ! always show "Other Charge"
+		colhdr$(chc+=1)=srvnam$(8)&" Charge"
+		cm$(chc)="10"
+
+		reporth$=reporth$&" "& srvnam$(8)(1:2)&" Chg  "
+		form$=form$&",n 9.2"
+	end if
+! /r
+! r: final billing code
+	colhdr$(chc+=1)=" F/B"
+	cm$(chc)="30"
+
+	reporth$=reporth$&" Final "
+
+	form$=form$&",n 9"
+! /r
+	mat colhdr$(chc) : mat cm$(chc)
+
+	fnflexinit1("Work",2,frame_bd_witdh+3,28,74,mat colhdr$,mat cm$,1)
+	 entryCount=0
+	ic=0
+	restore #hWork:
+	batchtot=0
+	do
+		read #hWork,using Fwork: x$,mat x eof MENU1READWORKEOF
+		ic=0
+		item$(ic+=1)=x$
+		batchtot+=val(x$) conv L1100
+		L1100: !
+		if service_enabled(1) then
+			item$(ic+=1)=str$(x(01))
+			item$(ic+=1)=str$(x(09))
+			item$(ic+=1)=str$(x(12)) ! water
+		end if
+		if service_enabled(2) then
+			item$(ic+=1)=str$(x(05)) ! sewer
+		end if
+		if service_type(3)=3.2 then
+			item$(ic+=1)=str$(x(13)) ! eletric
+		else if service_type(3)=3 then
+			item$(ic+=1)=str$(x(03))
+			item$(ic+=1)=str$(x(10))
+			item$(ic+=1)=str$(x(13))
+			item$(ic+=1)=str$(x(04)) ! eletric
+		end if
+		if service_type(3)=3.1 then
+			item$(ic+=1)=str$(x(03))
+			item$(ic+=1)=str$(x(10))
+			item$(ic+=1)=str$(x(13))
+		end if
+		if service_enabled(4) then
+			item$(ic+=1)=str$(x(02))
+			item$(ic+=1)=str$(x(11))
+			item$(ic+=1)=str$(x(14)) ! gas
+		end if
+		if service_enabled(5) then ! service 5
+			item$(ic+=1)=str$(x(06))
+		end if
+		if service_enabled(6) then ! service 6
+			item$(ic+=1)=str$(x(07))
+		end if
+		if service_enabled(7) then ! service 7
+			item$(ic+=1)='' ! str$(x(07))  ! x(??)   07 is used in another place for service 7 but it is also used for service 6
+		end if
+		if service_enabled(8) then ! service 8
+			item$(ic+=1)=str$(x(08))
+		end if
+		item$(ic+=1)=str$(x(15)) ! final billing code
+		entryCount+=1
+		fnflexadd1(mat item$) ! pr mat item$ : pause
+	loop
+MENU1READWORKEOF: ! /r
+	fnLbl(1,frame_bd_witdh+4,'Entry Count: '&str$(entryCount))
+	fnButton(1,frame_bd_witdh+21,'Clear All',fky_clearAll:=2008)
+	if lrec(hWork)>0 then
+!   fnCmdKey("&Add",1)
+		fnCmdKey("E&dit",2,1,0,'Edit highlighted record by clicking this button, pressing enter or double clicking the record.')
+		fnCmdKey("&Print",4,0,0,'Print a proof listing of the entered records.')
+		fnCmdKey("Save to &Holding File",fkey_saveToHoldingFile:=6,0,0,'Save entered readings to a Holding File for later calculation.')
+		fnCmdKey("&Delete",8)
+		fnCmdKey("&Close",5,0,1)
+		fnCmdKey("&Meter Change",9,0,0,"Calculates usage on meter change out.")
+		fnCmdKey("&Finish and Calculate",10,0,0,'Calculate entered readings')
+	else
+		fnCmdKey("&Close",5,0,1)
+		! fnCmdSet(1)
+	end if
+	ckey=fnAcs(mat resp$)
+	if ckey=cancel then
+		goto Xit
+	end if
+	d1=val(resp$(1))
+	d2=val(resp$(2))
+	fnLastBillingDate(d1,1)
+	fncreg_write('Meter Reading Date Current',str$(d2))
+	x$=lpad$(trim$(resp$(3)(1:10)),10) ! formerly resp$(9)
+	if lrec(hWork)>0 and ckey=2 then
+		goto MAKE_CORRECTIONS
+	end if
+	if ckey=4 then
+		fn_print_readings(hWork)
+	else if fkey_saveToHoldingFile and ckey=fkey_saveToHoldingFile then ! add to holding file
+		if fn_holdingFileSave(hWork) then goto Xit
+	else if ckey=8 then
+		delete #hWork,key=x$:
+	else if ckey=9 then
+		if fn_meter_change_out=3 then goto EnterReadings3
+	else if ckey=10 then
+		if days(d1,"mmddyy")<days(date$)-25 then
+			ok_click=msgbox('The billing date entered is over three weeks old. Please enter the correct date or contact ACS support.','Old Billing Date',"OK","EXCL")
+			goto MENU1
+		end if
+		! fnchain("S:\Utility Billing\Calculate Bills") ! goto CALCULATE
+		close #hWork: ioerr ignore
+		fnCalculateBills('calculate')
+		goto Xit
+
+
+	else if ckey=fky_askCustomersInSequence then
+		addmethod=am_customersInSequence
+		goto AUTO_REC
+	else if ckey=1 or (fky_askAndEnterIndviduals and ckey=fky_askAndEnterIndviduals) then
+		addmethod=am_askAndEnterIndviduals
+		goto SEL_ACC
+	else if fky_loadHoldingFile and ckey=fky_loadHoldingFile then
+		addmethod=am_loadHoldingFile
+		fn_loadBookOrHoldingFile(addmethod)
+	else if fky_estimateReadings and ckey=fky_estimateReadings then
+		addmethod=am_estimateReadings
+		goto EstimateRoute
+	else if ckey=fky_loadBook then
+		addmethod=am_fromHhFile
+		fn_loadBookOrHoldingFile(addmethod)
+	else if fky_importTabDelimited and ckey=fky_importTabDelimited then
+		addmethod=am_importTabDelimited
+		goto ImportTabDelimited
+	else if fky_importHHtoBook and ckey=fky_importHHtoBook then
+		fnRetrieveHandHeldFile
+		fnTop(program$)
+	else if fky_clearAll and ckey=fky_clearAll then
+		close #hWork:
+		fnFree(workFile$)
+		fnFree(workFileIndex$)
+		open #hWork=fnH: "Name="&workFile$&",KFName="&workFileIndex$&",Shr,Use,RecL=74,KPs=1,KLn=10",internal,outIn,keyed
+	else if fky_importAndLoad and ckey=fky_importAndLoad then
+		fnRetrieveHandHeldFile
+		fnTop(program$)
+		addmethod=am_fromHhFile
+		fn_loadBookOrHoldingFile(addmethod)
+
+	end if
+goto MENU1 ! /r
+
 def fn_setup
 	if ~setup then
 		setup=1
@@ -399,7 +692,7 @@ REWRITE_WORK: ! r:
 	if trim$(uprc$(x$))=trim$(uprc$("DELETED")) then goto MAKE_CORRECTIONS
 	fn_accumulateProofTotals
 	if editmode=1 then return
-	goto MENU1 ! /r MAKE_CORRECTIONS
+goto MENU1 ! /r MAKE_CORRECTIONS
 CHANGE_ACT_NUM: ! r:
 	fnTos
 	mylen=19 : mypos=mylen+2
@@ -802,7 +1095,7 @@ EstimateRoute: ! r: ESTIMATEING ROUTINE
 			end if
 		end if
 	next j
-	if ckey=cancel then goto MENU1
+	! if ckey=cancel then goto MENU1
 	if uprc$(resp$(7))=uprc$("True") then estimationMode=1
 	if uprc$(resp$(8))=uprc$("True") then estimationMode=2 ! select route #
 	fn_est_dates
@@ -1077,297 +1370,7 @@ ImportTabDelimited: ! r:
 	fnFree(workFileIndex$)
 	IT_XIT: !
 goto MENU1 ! /r
-MENU1: ! r:
-	editmode=0
-	addmethod=0
-	fnTos
-	mylen=28 : mypos=mylen+3
-	frame_bd_witdh=42
-	fnFra(1,1,5,frame_bd_witdh,"Batch Data")
-	disable=0 ! If LREC(hWork)>1 Then dISABLE=1 Else dISABLE=0
-	fnLbl(2,2,"Billing Date:",mylen,1,0,1)
-	fnTxt(2,mypos,8,0,0,"1001",disable,empty$,1)
-	resp$(1)=str$(d1)
-	fnLbl(4,2,"Meter Reading Date:",mylen,1,0,1)
-	fnTxt(4,mypos,8,0,0,"1",disable,empty$,1)
-	resp$(2)=str$(d2)
 
-	moe_button_width=frame_bd_witdh-1
-	fnFra(8,1,20,moe_button_width+1,"Add Readings") : frame_current=2 : frame_line=0
-	fnLbl(frame_line+=2,2,"Individuals:",0,0,0,frame_current)
-	fnButton(frame_line+=1,1,"Display customers in route sequence",fky_askCustomersInSequence:=2001,'Display each customer in route sequence',0,moe_button_width,frame_current)
-	fnButton(frame_line+=1,1,"Ask Account, then enter Reading",fky_askAndEnterIndviduals:=2002,'Ask Account, then enter Reading',0,moe_button_width,frame_current)
-
-	fnLbl(frame_line+=2,2,"Bulk:",0,0,0,frame_current)
-	fnButton(frame_line+=1,1,"Load Holding File",fky_loadHoldingFile:=2003 ,'Retrieve readings previously saved to a Holding File',0,moe_button_width,frame_current)
-	fnButton(frame_line+=1,1,"Estimate Readings",fky_estimateReadings:=2004,'',0,moe_button_width,frame_current)
-	fnButton(frame_line+=1,1,"Import from Tab Delimited Text File",fky_importTabDelimited:=2006,'',0,moe_button_width,frame_current)
-
-	if fnregistered_for_hh then
-		! fnLbl(frame_line+=2,2,"Hand Held:",0,0,0,frame_current)
-		! fnButton(frame_line+=1,1,'Import from Hand Held to Book'     ,fky_importHHtoBook:=2007,'Retrieve Hand Held File'                                                               ,0,moe_button_width,frame_current)
-		! fnButton(frame_line+=1,1,'Load Hand Held Book'               ,fky_loadBook:=2005      ,'Generally for use after "Retreive (Import) from Hand Held to Book"'                    ,0,moe_button_width,frame_current)
-		fnButton(frame_line+=2,1,'Hand Held Books'               ,fky_loadBook:=2005      ,'Generally for use after "Retreive (Import) from Hand Held to Book"'                    ,0,moe_button_width,frame_current)
-
-		! fnButton(frame_line+=1,1,'Import and Load Hand Held (Book 1)',fky_importAndLoad:=2009 ,'Completes "Import to Hand Held to Book" (using book 1) and then "Load Hand Held Book".',0,moe_button_width,frame_current)
-	end if  ! fnregistered_for_hh
-! r: add the grid
-
-	chc=0
-	mat colhdr$(30)
-	mat cm$(30)
-	mat item$(30)
-	colhdr$(chc+=1)="Account"
-	reporth$="   Account  Customer Name              Customer Address           "
-	form$="Form pos 1,c 10,x 2,c 25,x 2,c 25"
-! r: Service 1 - Water
-	if service_enabled(1) then
-		colhdr$(chc+=1)=srvnam$(1)&" Reading"
-		cm$(chc)="20"
-		colhdr$(chc+=1)=srvnam$(1)&" Charge"
-		cm$(chc)="10"
-		colhdr$(chc+=1)=srvnam$(1)&" Usage"
-		cm$(chc)="20"
-
-		reporth$=reporth$&srvnam$(1)(1:2)&" Read   "&srvnam$(1)(1:2)&" Chg  "&srvnam$(1)(1:2)&" Usage "
-		form$=form$&",n 9,n 9.2,n 9"
-	end if
-! /r
-! r: Service 2 - Sewer
-	if service_enabled(2) then
-		colhdr$(chc+=1)=srvnam$(2)&" Charge"
-		cm$(chc)="10"
-
-		reporth$=reporth$&" "&srvnam$(2)(1:2)&" Chg  "
-		form$=form$&",n 9.2"
-	end if
-! /r
-! r: Service 3 - Electric
-	if service_type(3)=3 then
-		colhdr$(chc+=1)=srvnam$(3)&" Reading"
-		cm$(chc)="20"
-		colhdr$(chc+=1)=srvnam$(3)&" Charge"
-		cm$(chc)="10"
-		colhdr$(chc+=1)=srvnam$(3)&" Usage"
-		cm$(chc)="20"
-		colhdr$(chc+=1)="Demand"
-		cm$(chc)="20"
-
-		reporth$=reporth$&srvnam$(3)(1:2)&" Read   "&srvnam$(3)(1:2)
-		reporth$=reporth$&" Chg  "&srvnam$(3)(1:2)&" Usage   Demand "
-		form$=form$&",n 9,n 9.2,n 9,n 9"
-	else if service_type(3)=3.1 then
-		colhdr$(chc+=1)=srvnam$(3)&" Reading"
-		cm$(chc)="20"
-		colhdr$(chc+=1)=srvnam$(3)&" Charge"
-		cm$(chc)="10"
-		colhdr$(chc+=1)=srvnam$(3)&" Usage"
-		cm$(chc)="20"
-
-		reporth$=reporth$&srvnam$(3)(1:2)&" Read   "&srvnam$(3)(1:2)
-		reporth$=reporth$&" Chg  "&srvnam$(3)(1:2)&" Usage "
-		form$=form$&",n 9,n 9.2,n 9"
-	else if service_type(3)=3.2 then
-		colhdr$(chc+=1)=srvnam$(3)&" Usage"
-		cm$(chc)="20"
-
-		! LOOKS LIKE SOMETHING IS MiSSING HERE
-	end if
-! /r
-! r: Service 4 - Gas
-	if service_enabled(4) then ! if service_type(4)=4 then
-		colhdr$(chc+=1)=srvnam$(4)&" Reading"
-		cm$(chc)="20"
-		colhdr$(chc+=1)=srvnam$(4)&" Charge"
-		cm$(chc)="10"
-		colhdr$(chc+=1)=srvnam$(4)&" Usage"
-		cm$(chc)="20"
-
-		reporth$=reporth$&srvnam$(4)(1:2)&" Read   "&srvnam$(4)(1:2)
-		reporth$=reporth$&" Chg  "&srvnam$(4)(1:2)&" Usage "
-		form$=form$&",n 9,n 9.2,n 9"
-	end if
-! /r
-! r: Service 5 - Oother
-	if service_enabled(5) then ! always show "Other Charge"
-		colhdr$(chc+=1)=srvnam$(5)&" Charge"
-		cm$(chc)="10"
-
-		reporth$=reporth$&" "&srvnam$(5)(1:2)&" Chg  "
-		form$=form$&",n 9.2"
-	end if
-! /r
-! r: Service 6
-	if service_enabled(6) then ! always show "Other Charge"
-		colhdr$(chc+=1)=srvnam$(6)&" Charge"
-		cm$(chc)="10"
-
-		reporth$=reporth$&" "&srvnam$(6)(1:2)&" Chg  "
-		form$=form$&",n 9.2"
-	end if
-! /r
-! r: Service 7
-	if service_enabled(7) then ! always show "Other Charge"
-		colhdr$(chc+=1)=srvnam$(7)&" Charge"
-		cm$(chc)="10"
-
-		reporth$=reporth$&" "&srvnam$(7)(1:2)&" Chg  "
-		form$=form$&",n 9.2"
-	end if
-! /r
-! r: Service 8
-	if service_enabled(8) then ! always show "Other Charge"
-		colhdr$(chc+=1)=srvnam$(8)&" Charge"
-		cm$(chc)="10"
-
-		reporth$=reporth$&" "& srvnam$(8)(1:2)&" Chg  "
-		form$=form$&",n 9.2"
-	end if
-! /r
-! r: final billing code
-	colhdr$(chc+=1)=" F/B"
-	cm$(chc)="30"
-
-	reporth$=reporth$&" Final "
-
-	form$=form$&",n 9"
-! /r
-	mat colhdr$(chc) : mat cm$(chc)
-
-	fnflexinit1("Work",2,frame_bd_witdh+3,28,74,mat colhdr$,mat cm$,1)
-	 entryCount=0
-	ic=0
-	restore #hWork:
-	batchtot=0
-	do
-		read #hWork,using Fwork: x$,mat x eof MENU1READWORKEOF
-		ic=0
-		item$(ic+=1)=x$
-		batchtot+=val(x$) conv L1100
-		L1100: !
-		if service_enabled(1) then
-			item$(ic+=1)=str$(x(01))
-			item$(ic+=1)=str$(x(09))
-			item$(ic+=1)=str$(x(12)) ! water
-		end if
-		if service_enabled(2) then
-			item$(ic+=1)=str$(x(05)) ! sewer
-		end if
-		if service_type(3)=3.2 then
-			item$(ic+=1)=str$(x(13)) ! eletric
-		else if service_type(3)=3 then
-			item$(ic+=1)=str$(x(03))
-			item$(ic+=1)=str$(x(10))
-			item$(ic+=1)=str$(x(13))
-			item$(ic+=1)=str$(x(04)) ! eletric
-		end if
-		if service_type(3)=3.1 then
-			item$(ic+=1)=str$(x(03))
-			item$(ic+=1)=str$(x(10))
-			item$(ic+=1)=str$(x(13))
-		end if
-		if service_enabled(4) then
-			item$(ic+=1)=str$(x(02))
-			item$(ic+=1)=str$(x(11))
-			item$(ic+=1)=str$(x(14)) ! gas
-		end if
-		if service_enabled(5) then ! service 5
-			item$(ic+=1)=str$(x(06))
-		end if
-		if service_enabled(6) then ! service 6
-			item$(ic+=1)=str$(x(07))
-		end if
-		if service_enabled(7) then ! service 7
-			item$(ic+=1)='' ! str$(x(07))  ! x(??)   07 is used in another place for service 7 but it is also used for service 6
-		end if
-		if service_enabled(8) then ! service 8
-			item$(ic+=1)=str$(x(08))
-		end if
-		item$(ic+=1)=str$(x(15)) ! final billing code
-		entryCount+=1
-		fnflexadd1(mat item$) ! pr mat item$ : pause
-	loop
-MENU1READWORKEOF: ! /r
-	fnLbl(1,frame_bd_witdh+4,'Entry Count: '&str$(entryCount))
-	fnButton(1,frame_bd_witdh+21,'Clear All',fky_clearAll:=2008)
-	if lrec(hWork)>0 then
-!   fnCmdKey("&Add",1)
-		fnCmdKey("E&dit",2,1,0,'Edit highlighted record by clicking this button, pressing enter or double clicking the record.')
-		fnCmdKey("&Print",4,0,0,'Print a proof listing of the entered records.')
-		fnCmdKey("Save to &Holding File",fkey_saveToHoldingFile:=6,0,0,'Save entered readings to a Holding File for later calculation.')
-		fnCmdKey("&Delete",8)
-		fnCmdKey("&Close",5,0,1)
-		fnCmdKey("&Meter Change",9,0,0,"Calculates usage on meter change out.")
-		fnCmdKey("&Finish and Calculate",10,0,0,'Calculate entered readings')
-	else
-		fnCmdKey("&Close",5,0,1)
-		! fnCmdSet(1)
-	end if
-	ckey=fnAcs(mat resp$)
-	if ckey=cancel then
-		goto Xit
-	end if
-	d1=val(resp$(1))
-	d2=val(resp$(2))
-	fnLastBillingDate(d1,1)
-	fncreg_write('Meter Reading Date Current',str$(d2))
-	x$=lpad$(trim$(resp$(3)(1:10)),10) ! formerly resp$(9)
-	if lrec(hWork)>0 and ckey=2 then
-		goto MAKE_CORRECTIONS
-	end if
-	if ckey=4 then
-		fn_print_readings(hWork)
-	else if fkey_saveToHoldingFile and ckey=fkey_saveToHoldingFile then ! add to holding file
-		if fn_holdingFileSave(hWork) then goto Xit
-	else if ckey=8 then
-		delete #hWork,key=x$:
-	else if ckey=9 then
-		if fn_meter_change_out=3 then goto EnterReadings3
-	else if ckey=10 then
-		if days(d1,"mmddyy")<days(date$)-25 then
-			ok_click=msgbox('The billing date entered is over three weeks old. Please enter the correct date or contact ACS support.','Old Billing Date',"OK","EXCL")
-			goto menu1
-		end if
-		! fnchain("S:\Utility Billing\Calculate Bills") ! goto CALCULATE
-		close #hWork: ioerr ignore
-		fnCalculateBills('calculate')
-		goto Xit
-
-
-	else if ckey=fky_askCustomersInSequence then
-		addmethod=am_customersInSequence
-		goto AUTO_REC
-	else if ckey=1 or (fky_askAndEnterIndviduals and ckey=fky_askAndEnterIndviduals) then
-		addmethod=am_askAndEnterIndviduals
-		goto SEL_ACC
-	else if fky_loadHoldingFile and ckey=fky_loadHoldingFile then
-		addmethod=am_loadHoldingFile
-		fn_loadBookOrHoldingFile(addmethod)
-	else if fky_estimateReadings and ckey=fky_estimateReadings then
-		addmethod=am_estimateReadings
-		goto EstimateRoute
-	else if ckey=fky_loadBook then
-		addmethod=am_fromHhFile
-		fn_loadBookOrHoldingFile(addmethod)
-	else if fky_importTabDelimited and ckey=fky_importTabDelimited then
-		addmethod=am_importTabDelimited
-		goto ImportTabDelimited
-	else if fky_importHHtoBook and ckey=fky_importHHtoBook then
-		fnRetrieveHandHeldFile
-		fnTop(program$)
-	else if fky_clearAll and ckey=fky_clearAll then
-		close #hWork:
-		fnFree(workFile$)
-		fnFree(workFileIndex$)
-		open #hWork=fnH: "Name="&workFile$&",KFName="&workFileIndex$&",Shr,Use,RecL=74,KPs=1,KLn=10",internal,outIn,keyed
-	else if fky_importAndLoad and ckey=fky_importAndLoad then
-		fnRetrieveHandHeldFile
-		fnTop(program$)
-		addmethod=am_fromHhFile
-		fn_loadBookOrHoldingFile(addmethod)
-
-	end if
-goto MENU1 ! /r
 
 def fn_holdingFileLoad(; ___,hld9)
 	holdingFile$="[Q]\UBmstr\IpHold"&ip1$&".h[cno]"
