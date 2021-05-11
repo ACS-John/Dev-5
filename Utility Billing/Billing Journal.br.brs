@@ -15,6 +15,8 @@ enableExpExport=1
 fnLastBillingDate(billing_date)
 route_number=fncreg_read('Route Low',bkno1$)
 seq=fncreg_read('ubBilJrn.Sort_Option',sequence$)
+
+
 if seq<1 then seq=1
 ScrMain: ! r: Screen 1
 	fnTos
@@ -36,6 +38,8 @@ ScrMain: ! r: Screen 1
 	resp$(resp_route:=respc+=1)='[All]'
 	fnChk(10,27,'Print Usages:',1)
 	fncreg_read('ubBilJrn.Print Usages',resp$(resp_print_usages:=respc+=1))
+	fnChk(11,27,'Use Current Balance:',1)
+	fnpcreg_read('enableCurrentBalance',resp$(rc_enableCurrentBalance=respc+=1), 'False')
 
 	if enableExpExport then
 		fnCmdKey("Export",2)
@@ -52,10 +56,12 @@ ScrMain: ! r: Screen 1
 	if resp$(4)='True' then seq=3 ! Alpha Sort Sequence
 	if resp$(5)='True' then seq=4 ! Customer Name Sequence
 	if uprc$(resp$(resp_route)) = uprc$('[All]') then resp$(resp_route) = '0'
+	enableCurrentBalance$=resp$(rc_enableCurrentBalance)
 	prtbkno=val(resp$(resp_route))
 	prtusage$=resp$(resp_print_usages)(1:1)
 	fncreg_write('ubBilJrn.Sort_Option',str$(seq))
 	fncreg_write('ubBilJrn.Print Usages',resp$(resp_print_usages))
+	fnpcreg_write('enableCurrentBalance',enableCurrentBalance$)
 ! /r
 
 ! r: initialize stuff
@@ -97,15 +103,21 @@ else if seq=4 then ! Customer Name
 	open #hCustomer=fnH: 'Name=[Q]\UBmstr\Customer.h[cno],KFName='&env$('temp')&'\customer_name'&session$&'.h[cno],Shr',internal,input,keyed
 end if
 services=0
-if trim$(serviceName$(1))='Water'                               then services+=1 : water=1
-if trim$(serviceName$(3))='Electric' or trim$(service$(3))='LM' then services+=1
-if serviceName$(3)(1:5)='Re-Se'                                 then services+=1 : reduc=1
-if trim$(serviceName$(4))='Gas'                                 then services+=1 : gas=1
+if trim$(serviceName$(1))='Water'                                 	then services+=1 : water=1
+if trim$(serviceName$(3))='Electric' or trim$(service$(3))='LM' 	then services+=1
+if serviceName$(3)(1:5)='Re-Se'                                   	then services+=1 : reduc=1
+if trim$(serviceName$(4))='Gas'                                   	then services+=1 : gas=1
 dim usages(3)
 mat usages(services)
-hd1$&='---------    Prior  Current'
 hd2$&='{\ul    Total} {\ul  Balance} {\ul  Balance}  '
-expHdr$&=expDelim$&'Total'&expDelim$&'Prior Balance'&expDelim$&'Current Balance'
+expHdr$&=expDelim$&'Total'&expDelim$&'Prior Balance'
+if enableCurrentBalance$='True' then
+	hd1$&='---------    Prior  Current'
+	expHdr$&=expDelim$&'Current Balance'
+else
+	hd1$&='---------    Prior         '
+	expHdr$&=expDelim$&'Balance'
+end if
 x1=int((len(hd1$)-43)/2)+27
 hd1$(x1:x1+17)=' Current Billing '
 
@@ -161,12 +173,13 @@ MainLoopTop: !
 		dim g(12)
 		dim a(7)
 		dim extra(23)
-		read #hCustomer,using F_Customer: z$,mat e$,mat a,mat d,bal,customerBillingDate,mat g,route,estimatedate,mat extra eof EoCustomer
+		read #hCustomer,using F_Customer: z$,mat e$,mat a,mat d,cBal,customerBillingDate,mat g,route,estimatedate,mat extra eof EoCustomer
 		F_Customer: form pos 1,c 10,4*c 30,pos 143,7*pd 2,pos 217,15*pd 5,pos 292,pd 4.2,pd 4,12*pd 4.2,pos 1741,n 2,pos 1831,n 9,pos 1741,n 2,n 7,2*n 6,n 9,pd 5.2,n 3,3*n 9,3*n 2,3*n 3,n 1,3*n 9,3*pd 5.2
 		! if customerBillingDate=billing_date then
 		! 	matchFound=1
 		! else ! if customerBillingDate><billing_date then
 			matchFound=fn_readFromHistory
+			if enableCurrentBalance$='True' then bal=cBal
 		! end if
 	loop until matchFound
 	if seq=1 and ~enableExport then  !  route subtotals
@@ -248,7 +261,7 @@ PgOf: ! r:
 	gosub PrHeader
 continue  ! /r
 PrRouteTotal: ! r:
-	if sum(tx)>0 then
+	if sum(mat tx)>0 then
 		pr #255: ''
 		pr #255: tab(27);'{\ul Totals for Route Number '&str$(route_number)&'}'
 		for j=1 to sz1
@@ -262,7 +275,7 @@ return  ! /r
 EoCustomer: ! r:
 	! close #hCustomer: ioerr ignore
 	if ~enableExport then
-		if sum(tx) or sum(gx) then
+		if sum(mat tx) or sum(mat gx) then
 			if seq<>1 then
 				pr #255: ''
 				pr #255: tab(27);'{\ul Totals for All Routes }       {\ul Grand Totals}'
