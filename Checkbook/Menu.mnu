@@ -12,7 +12,7 @@ Unpaid Invoice                            ^ Checkbook\*
 Paid Invoice                              ^ acsCL\PaidInvoice
 >Remove Paid Invoices                     ^ Checkbook\*
 Bank                                      ^ acsCL\*
->Bank Reconciliation                      ^ acsCL\BankReconciliation
+>Bank Reconciliation                      ^ Checkbook\*
 >Select Bank Account                      ^ acsCL\ChgBank
 >Unclear All Entries by Bank              ^ acsCL\UnClBank
 Payee                                     ^ Checkbook\*
@@ -23,7 +23,7 @@ Payee                                     ^ Checkbook\*
 >Check Listing by Payee                   ^ acsCL\CkLstV
 >Payee Type                               ^ HamsterFio:Payee Type
 General Ledger
->Chart of Accounts                        ^ acsCL\ChartOfAccounts
+>Chart of Accounts                        ^ Checkbook\*
 >General Ledger Control                   ^ acsCL\GLControl
 Other Files
 >Department Breakdown                     ^ acsCL\department
@@ -34,10 +34,9 @@ Print
 >Claims or Purchases Report               ^ Checkbook\*
 >GL Distribution Report                   ^ Checkbook\*                    ^ GL
 >Print 1099-NEC Forms                         ^ Checkbook\*
-Export                                    
+Import/Export                                    
 >Transfer to Accountant                   ^ acsCL\TrToCPA
 >Post to General Ledger                   ^ Checkbook\*                    ^ GL
-! Import                                    
-! >Import General Ledger Chart of Accounts  ^ acsCL\InitGLCoA ! never used still hardcoded to A: - removed 8/7/20 
+>Import General Ledger Chart of Accounts  ^ Checkbook\*                    ^ GL
 ! >Import Payee Records from General Ledger ^ acsCL\initglpay ! never used still hardcoded to A: - removed 8/7/20 
 

@@ -17,7 +17,7 @@ def library fnHamster(uw$*20,mat lbl$,mat fln,hIn,mat p$; mat flTyp$,mat sln,mat
 	dim keyorder(199) ! contains a 0 if not a key, else contains it's sequence in the order of fields used to make the key
 	dim cmask$(199) ! Flexgrid Column Mask
 	dim flxItem$(199)*2048,flxhdr$(199)*80 ! flexgrid item and header
-	dim key$*80,blank$(20)*80 ! dynamically built key
+	dim key$*80 ! dynamically built key
 	dim resp$(256)*1024
 	! /r
 	! r: prepare arrays
@@ -27,7 +27,7 @@ def library fnHamster(uw$*20,mat lbl$,mat fln,hIn,mat p$; mat flTyp$,mat sln,mat
 		opt_delete=7 : right=1
 		itemCount=udim(mat p$)
 		mat hComboF(itemCount)
-		!
+
 		if udim(incontrol$,1)<>0 then
 			mat control$(udim(incontrol$,1),udim(incontrol$,2))
 			mat control$=incontrol$
@@ -319,6 +319,7 @@ def library fnHamster(uw$*20,mat lbl$,mat fln,hIn,mat p$; mat flTyp$,mat sln,mat
 		! spos=1
 		if menu1_opt=opt_add then
 			prec=lrec(hIn)+1
+			dim blank$(20)*80
 			keyForm$=fn_setKeyForm$(mat blank$,key$,hIn)
 			write #hIn,using keyForm$,reserve: mat blank$
 			! pr 'write using KeyFormS,Reserve: Mat Blank$   - keyForm$='&keyForm$

@@ -59,11 +59,11 @@ ScreenMenu1: ! r:
 		! /r
 		resp_selectedRecordNumber=rc+=1 ! resp$(1) returns the record number of the selected entry
 		fnLbl(1,1,"Total Collections:",22,1)
-		fnLbl(1,24,cnvrt$('pic($$$$,$$$,$$#.##)',totalCollections),15,1)
+		fnLbl(1,24,cnvrt$('pic($----,---,--#.##)',totalCollections),15,1)
 		fnLbl(2,1,"Total Credit Memos:",22,1)
-		fnLbl(2,24,cnvrt$('pic($$$$,$$$,$$#.##)',totalCreditMemos),15,1)
+		fnLbl(2,24,cnvrt$('pic($----,---,--#.##)',totalCreditMemos),15,1)
 		fnLbl(3,1,"Total Debit Memos:",22,1)
-		fnLbl(3,24,cnvrt$('pic($$$$,$$$,$$#.##)',totalDebitMemos),15,1)
+		fnLbl(3,24,cnvrt$('pic($----,---,--#.##)',totalDebitMemos),15,1)
 		fnLbl(4,1,"Total Account Numbers:",22,1)
 		fnLbl(4,24,str$(totalacct),15,1)
 		if lrec(hTransUnposted)<1 then
@@ -957,7 +957,7 @@ BuildAllocations: ! r: returns mat alloc, mat tgb,transType,escrow$,oldescrowbal
 		! end if
 		! print j,validserviceitem, alloc(allocOrder(validServiceItem)), sum(alloc)
 		! pause
-		! /r5
+		! /r
 		! r: old allocation logic
 		!   if ~(havemainbudget=1 and penalty$(baOrder(j))="Y") then ! ELSE don't allow penalty budgets amount to go thru routine
 		!
@@ -1038,6 +1038,7 @@ return  ! /r
 ! 		! pause
 ! 	end if
 ! return ! /r
+
 def fn_open_cash_drawer
 	fnopen_receipt_printer
 	pr #255,using 'form pos 1,c 9,skip 0': hex$("1B70302828") ioerr ignore ! apg cash drawer hooked to epson t 88 thermal receipt printer

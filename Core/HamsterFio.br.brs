@@ -23,6 +23,7 @@ def library fnHamsterFio(fileid$*64)
 	hFile=fn_open(fileid$,mat hfData$,mat hfDataN,mat form$)
 	if hFile then
 		fn_hfLayoutRead(defaultFileLayoutPath$&fileid$&defaultFileLayoutExtension$,mat hfDataAll$,mat hfLabel$,mat hfFieldType$,mat hfStorageLen,mat hfMask,mat hfFieldLen)
+		! pause
 		fnHamster(fileid$,mat hfLabel$,mat hfFieldLen,hFile,mat hfDataAll$,mat hfFieldType$,mat hfStorageLen,mat hfMask,mat startingPosition,mat comboBox$)
 	end if
 fnend

@@ -12,7 +12,7 @@
 	dim w(4),hdw$(4)*40
 	dim io7$(9),dpt(3),io8$(25),dpd(5,5)
  
-	fnTop(program$,"Bank Reconciliation")
+	fnTop(program$)
 	cancel=99 : right=1
 	fndat(dat$)
 
