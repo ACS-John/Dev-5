@@ -41,7 +41,7 @@ def fn_printInvoice(actNum$,mat billTo$,invNum$,invDate,mat desc$,mat amt,pbal; 
 	! forcePrintAcePdf=0
 	! disableRtf=1
 	! r: set cnam$ and cLogo$
-	if fnval(actNum$)=4132 or fnval(actNum$)=3670 then  ! Stern and Stern
+	if fnval(actNum$)=4132 or fnval(actNum$)=3670 or actNum$='ped' then  ! Stern and Stern, Recoveries Unlimited and Peter Engler Designs
 		isCss=1
 		dim cnam$*40
 		dim cLogo$*128

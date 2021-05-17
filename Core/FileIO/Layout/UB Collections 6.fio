@@ -1,0 +1,25 @@
+[Q]\UBmstr\Collections-[acsUserId].h[cno]  ,  col_  , 0
+[Q]\UBmstr\ubTrIndx.h[cno]   ,  acct/tdate/tcode
+[Q]\UBmstr\UBTrdt.h[cno]     ,  tdate/acct
+recl=91
+===================================================
+
+acct$    ,  Customer Number        	,  c 10  , !	sPos= 1
+tamount  ,  Amount                 	,  pd 4.2, !	sPos=11
+tdate    ,  Date                    	,  pd 4  , !	sPos=15
+type     ,  Transaction Type       	,  n  1  , !	sPos=19
+post     ,  Posting Code           	,  n  1  , !	sPos=20
+unused1  ,  Unknown                	,  C  3  , !	sPos=21
+rcpt     , receipt                 	,  c  9  , !	sPos=24
+alloc1   , valid srv allocation   	,  pd 4.2, !	sPos=33
+alloc2   , valid srv allocation   	,  pd 4.2, !	sPos=37
+alloc3   , valid srv allocation   	,  pd 4.2, !	sPos=41
+alloc4   , valid srv allocation   	,  pd 4.2, !	sPos=45
+alloc5   , valid srv allocation   	,  pd 4.2, !	sPos=49
+alloc6   , valid srv allocation   	,  pd 4.2, !	sPos=53
+bd3_1    ,bd3_1                    	,  pd 3  , !	sPos=57
+bd3_2    ,bd3_2                    	,  pd 3  , !	sPos=60
+bd3_3    ,bd3_3                    	,  pd 3  , !	sPos=63
+bd3_4    ,bd3_4                    	,  pd 3  , !	sPos=66
+bd3_5    ,bd3_5                    	,  pd 3  , !	sPos=69
+escr     , escrow                  	,  pd 4.2, !	sPos=72
