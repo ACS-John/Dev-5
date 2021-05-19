@@ -475,7 +475,7 @@ def fn_callHamsterFio(tmpCap$*128)
 		tmpCap$(1:11)=''
 	end if
 	tmpCap$=trim$(tmpCap$)
-	! pause
+
 	if tmpCap$(1:3)=uprc$(tmpCap$(1:2))&' ' then !  if the first two letters are uppercase and the third is a space then assume it includes it's own system code
 		tmpCursys$=tmpCap$(1:2)
 		tmpCap$(1:3)=''
@@ -980,7 +980,7 @@ def fn_displayMenu
 			! fn_dm_add(' Locate 1','S:\Core\Locate.br')
 			if exists('S:\Core\Data\acsllc\Company.h420') then
 				fn_dm_add('ACS LLC')
-				fn_dm_add(' Client 420','S:\acsTM\Client.br')
+				fn_dm_add(' Client 420','HamsterFio:TM Client 420') ! S:\acsTM\Client.br
 				fn_dm_add(' Support 420','S:\acsTM\Support.br')
 			end if
 		end if

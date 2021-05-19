@@ -6,9 +6,9 @@ end
 ! /r doNotInclude
 ! ertn
 Ertn: !
-	autoLibrary
+	library 'S:\Core\Library': fnError
 	dim ertnAct$*256
-	fnerror(program$,err,line,ertnAct$,'NO')
+	fnError(program$,err,line,ertnAct$,'NO')
 	if lwrc$(ertnAct$)='pause' then
 		if env$('ACSDeveloper')<>'' then
 			execute 'List '&str$(line)
