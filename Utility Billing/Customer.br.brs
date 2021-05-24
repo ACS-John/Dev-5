@@ -144,7 +144,7 @@ def fn_customer(; &editOne$,___,editOne,ckey)
 
 		if z$<>holdz$ or extra(1)<>holdroute or extra(2)><holdseq then fixgrid=1
 		open #h_ubtransvb=fnH: "Name=[Q]\UBmstr\ubTransVB.h[cno],KFName=[Q]\UBmstr\ubTrIndx.h[cno],Shr,Use,RecL=102,KPs=1,KLn=19",internal,outIn,keyed
-		open #hTrans2=fnH:      "Name=[Q]\UBmstr\ubTransVB.h[cno],KFName=[Q]\UBmstr\UBTrdt.h[cno],Shr,Use,RecL=102,KPs=11/1,KLn=8/10",internal,outIn,keyed
+		open #hTrans2=fnH:      "Name=[Q]\UBmstr\ubTransVB.h[cno],KFName=[Q]\UBmstr\UBTrdt.h[cno],Shr",internal,outIn,keyed
 		fnKeyChange(h_ubtransvb,'form pos 1,c 10',holdz$,z$) ! change # in history transactions
 		close #h_ubtransvb:
 		close #hTrans2:

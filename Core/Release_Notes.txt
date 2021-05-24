@@ -1,5 +1,6 @@
 Time and Date 		Sys	Program(s) and Change(s) Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
 ______________________	___	____________________________________________________________________________________________________________________________________________________________________________________________________________________________________                                                                              
+9:59 AM 5/24/2021	UB	Customer Change Number had an err 605 - fixed
 11:54 05/21/2021	CO	5.75133  
 15:42 05/21/2021	CO	5.75132   
 3:40 PM 5/17/2021	UB	Collections - now does not error if a negative entry somehow makes it through.  Please note, negative amounts are never correct and should be deleted, not posted.  
