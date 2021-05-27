@@ -485,6 +485,7 @@ def fn_getClientLicense(mat client_has$)
 			fn_userLimit(2)
 			fn_getClientLicense_add('UB') : fn_setUbLimit(1000) ! U2 Utility Billing (500-1000 customers)
 			fn_getClientLicense_add('U4') : u4_device$="Boson" ! U4 Utility Billing Hand Held Add-On
+			fn_getClientLicense_add('U5') ! UB External Collections Processing - given freely on 5/27/21
 			!     fn_getClientLicense_add('GL')
 			fn_getClientLicense_add('PR')
 		! else if env$('client')='Lovington' then
