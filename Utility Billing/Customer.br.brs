@@ -37,9 +37,9 @@ def fn_customer(; &editOne$,___,editOne,ckey)
 	F_CUSTOMER_1: form pos 1,c 10,4*c 30,c 12,7*pd 2,11*pd 4.2,4*pd 4,15*pd 5,pd 4.2,pd 4,12*pd 4.2,2*pd 3,c 7,2*c 12,pd 3,10*pd 5.2,pos 1712,c 1,c 9,c 2,c 17,n 2,n 7,2*n 6,n 9,pd 5.2,n 3,3*n 9,3*n 2,3*n 3,n 1,3*n 9,3*pd 5.2,c 30,7*c 12,3*c 30
 	open #h_citystzip=fnH: "Name=[Q]\Data\CityStZip.dat,KFName=[Q]\Data\CityStZip.Idx,Use,RecL=30,KPs=1,KLn=30,Shr",internal,outIn,keyed
 	! /r
-	
+
 	goto AskAcct
-	
+
 	ACCOUNT_X_NOKEY: ! r:
 		mat ml$(2)
 		ml$(1)="Account "&x$&' could not be found.'
@@ -71,7 +71,7 @@ def fn_customer(; &editOne$,___,editOne,ckey)
 		! pb=bal
 		odp=b(8)+b(9)+b(11)
 	goto NameScreen ! /r
-	
+
 	CHECK_BALANCE_BREAKDOWN: ! r:
 		gosub TGB_SET
 		! Gosub DRAFT1
@@ -157,7 +157,7 @@ def fn_customer(; &editOne$,___,editOne,ckey)
 		gosub BUD3
 		noteFile$=fn_notedir$&"\"&trim$(holdz$)&".txt" ! old notes
 		noteFileNew$=fn_notedir$&"\"&trim$(z$)&".txt" ! new notes
-		if exists(noteFile$)<>0 then 
+		if exists(noteFile$)<>0 then
 			! if exists(noteFileNew$) then fnFree(noteFileNew$)
 			fnRename(noteFile$,noteFileNew$)
 		end if
@@ -778,7 +778,7 @@ def fn_customer(; &editOne$,___,editOne,ckey)
 	AskAcct: ! r:
 		release #h_customer_1: ioerr ignore
 		ad1=0 ! add code - used to tell other parts of the program, that I am currently adding a customer record.
-		if editOne then 
+		if editOne then
 			if ckey=0 then
 				x$=editOne$
 				ckey=1
@@ -1441,7 +1441,7 @@ def fn_ask_account(prev_list_id$,&x$,h_customer_1; select_button_text$,aas_butto
 	AA_FINIS: !
 	fn_record_previous_save
 	fnureg_write('ubfm.account_selection_method',str$(account_selection_method))
-	release #h_customer_1: 
+	release #h_customer_1:
 	fn_ask_account=ckey
 fnend
 def library fnapply_default_rates(mat extra, mat a)
