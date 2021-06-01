@@ -3,9 +3,10 @@ fnTop(program$)
 
 dim sage_code$*128
 dim resp$(20)*1048
-client_id_sage_ax=3811
-client_id_brc=90
-client_id_framemasters=1864
+client_id_peterEngler$='ped'
+client_id_sage_ax$='3811'
+client_id_brc$='90'
+client_id_framemasters$='1864'
 
 ! r: Screens
  
@@ -42,7 +43,7 @@ for fileItem=1 to fileNameCount
 	pr #255: ''
 	pr #255,using Form_PrnHead: 'Date','Client','Time','Cat','Month','Desc','Rate','Expenses'
 	Form_PrnHead: form pos 1,cc 8,x 1,c 18,x 1,5*cr 10,x 1,c 30,x 1,cr 7,c 8
-	Form_PrnLine: form pos 1,n 5,n 9,2*pd 3.2,pd 4.2,n 6,n 2,pd 2,pd 1,n 2,n 4,c 12,pd 3,c 30
+	Form_PrnLine: form pos 1,C 5,n 9,2*pd 3.2,pd 4.2,n 6,n 2,pd 2,pd 1,n 2,n 4,c 12,pd 3,c 30
 	F_Support: form pos 1,g 6,n 2,c 2,x 8,x 2,n 8
 	dim line$*1024
  
@@ -67,21 +68,22 @@ for fileItem=1 to fileNameCount
 				! if fileItem=2 then pr 'body:',line_count,line$ : pause
 				if udim(mat item$)>9 and item$(4)<>'#N/A' and val(item$(7))>0 then ! entry
 					!       pr the_date;item$(4);' ';item$(7);' ';item$(9);' ';item$(10)
-					client_id=val(item$(4))
-					! if client_id=970 then pause
+					client_id$=trim$(item$(4))
+					! if client_id$='970' then pause
 					hours=val(item$(7))
 					! expense=val(item$(8))
 					if rtrm$(item$(13),cr$)<>'' then sage_code$=rtrm$(item$(13),cr$)
 					dim description$*1024
 					description$=item$(12)
-					!         if client_id=3811 and the_date=20160716 then pr 'sage_code$='&sage_code$&' date:';the_date : pause
-					fn_writeOutAcs(the_date,client_id,hours,val(item$(9)),val(item$(10)),item$(11)(1:30),sage_code$)
+					!         if client_id$=client_id_sage_ax$ and the_date=20160716 then pr 'sage_code$='&sage_code$&' date:';the_date : pause
+					fn_writeOutAcs(the_date,client_id$,hours,val(item$(9)),val(item$(10)),item$(11)(1:30),sage_code$)
 					! pr 'write ';writeCount+=1 : pause
-					if client_id=client_id_sage_ax then
+					if client_id$=client_id_sage_ax$ then
 						fn_writeOutSage(the_date,hours,sage_code$,description$)
 						!           pr the_date,hours,description$ : pause
 					end if
-					pr #255,using FORM_PRN: date$(days(the_date,'ccyymmdd'),'mm/dd/yy'),fnClientNameShort$(client_id),hours,val(item$(9)),val(item$(10)),item$(11)(1:15),inp(4),expense
+					! pr client_id$,fnClientNameShort$(client_id$) : pause
+					pr #255,using FORM_PRN: date$(days(the_date,'ccyymmdd'),'mm/dd/yy'),fnClientNameShort$(client_id$),hours,val(item$(9)),val(item$(10)),item$(11)(1:15),inp4,expense
 					fn_clientTimesheet
 				end if  ! item$(4)<>'#N/A' and  val(item$(7))>0
 			end if  ! the_date=>filter_date(1) and <=filter_date(2)
@@ -104,7 +106,7 @@ dim ctFiles$(0)*1024
 dim ctHandles(0)
 def fn_clientTimesheet(; ___,ctFile$*1024,ctNew,ctWhich)
 	ctFile$=env$('at')&fnReportCacheFolderCurrent$&'\Client TimeSheets\'
-	ctFile$&=fnClientNameShort$(client_id)&'\'
+	ctFile$&=fnClientNameShort$(client_id$)&'\'
 	ctFile$&=str$(filter_date(1))&'-'&str$(filter_date(2))&'.txt'
 	fnmakesurepathexists(ctFile$)
 	ctWhich=srch(mat ctFiles$,ctFile$)
@@ -141,7 +143,7 @@ def fn_clientTimesheet(; ___,ctFile$*1024,ctNew,ctWhich)
 	! pr #hCt: item$(9)&tab$;
 	! pr #hCt: item$(10)&tab$;
 	! pr #hCt: item$(11)&tab$;
-	pr #hCt: str$(inp(4))&tab$;
+	pr #hCt: str$(inp4)&tab$;
   pr #hCt: rtrm$(srep$(srep$(line$,cr$,''),lf$,''),tab$)
 	! close #hCt:
 fnend
@@ -160,16 +162,16 @@ def fn_lineIsEmpty(line$*1024; ___,returnN)
 	end if
 	fn_lineIsEmpty=returnN
 fnend
-def fn_writeOutAcs(wo_date,wo_client,wo_time,wo_cat,wo_month,wo_desc$*30; wo_sage_code$*128)
-	dim inp(7)
-	inp(1)=wo_client
-	inp(2)=1 ! employee number
-	inp(3)=wo_time
-	!         if wo_client=3811 and wo_date=20160716 then pr 'wo_sage_code$=';wo_sage_code$ : pause
-	inp(4)=fn_houryRateAcs(wo_client,the_date,wo_month, wo_cat,wo_sage_code$) ! hourly rate
-	inp(5)=wo_time*inp(4)
-	inp(6)=date(days(wo_date,'ccyymmdd'),'mmddyy') ! mmddyy
-	inp(7)=wo_cat
+def fn_writeOutAcs(wo_date,wo_client$,wo_time,wo_cat,wo_month,wo_desc$*30; wo_sage_code$*128)
+	! dim inp(7)
+	inp1$=wo_client$
+	inp2=1 ! employee number
+	inp3=wo_time
+	!         if wo_client$=client_id_sage_ax$ and wo_date=20160716 then pr 'wo_sage_code$=';wo_sage_code$ : pause
+	inp4=fn_houryRateAcs(wo_client$,the_date,wo_month, wo_cat,wo_sage_code$) ! hourly rate
+	inp5=wo_time*inp4
+	inp6=date(days(wo_date,'ccyymmdd'),'mmddyy') ! mmddyy
+	inp7=wo_cat
 	if wo_cat=6 then
 		sc=601
 	else if wo_cat=2 then
@@ -182,10 +184,10 @@ def fn_writeOutAcs(wo_date,wo_client,wo_time,wo_cat,wo_month,wo_desc$*30; wo_sag
 		pr #255: '!!! wo_cat ('&str$(wo_cat)&') is unrecognized - enhance code'
 		!   pr 'wo_cat (';wo_cat;') is unrecognized - enhance code' : pause
 	end if
-	write #h_out,using Form_PrnLine: mat inp,0,1,wo_month,sc,'',0,wo_desc$
+	write #h_out,using Form_PrnLine: inp1$,inp2,inp3,inp4,inp5,inp6,inp7,0,1,wo_month,sc,'',0,wo_desc$
 	! if expense<>0 then
-	! 	inp(3)=1
-	! 	inp(4)=expense
+	! 	inp3=1
+	! 	inp4=expense
 	! 	sc=601
 	! 	wo_month=19
 	! 	write #h_out,using Form_PrnLine: mat inp,0,1,wo_month,sc,'',0,'Expenses'
@@ -451,15 +453,15 @@ def fn_askDatesAndFile(mat label$,mat filter_date,mat empName$,mat filename$; __
 	end if
 	fn_askDatesAndFile=ckey
 fnend
-def fn_onsupport(wo_client,wo_month,the_date)
+def fn_onsupport(wo_client$,wo_month,the_date)
 	os_return=0
 	! try lpad first
-	spk$=lpad$(str$(wo_client),6)&cnvrt$("n 2",wo_month)
+	spk$=lpad$(wo_client$,6)&cnvrt$("n 2",wo_month)
 	read #h_support,using F_Support,key=spk$: cln$,scode,scode$,sdt2 nokey OS_TRY_RPAD
 	goto OS_FOUND_REC
  
 	OS_TRY_RPAD: !
-	spk$=rpad$(str$(wo_client),6)&cnvrt$("n 2",wo_month)
+	spk$=rpad$(wo_client$,6)&cnvrt$("n 2",wo_month)
 	read #h_support,using F_Support,key=spk$: cln$,scode,scode$,sdt2 nokey OS_FINIS
 	goto OS_FOUND_REC
  
@@ -469,16 +471,18 @@ def fn_onsupport(wo_client,wo_month,the_date)
 	OS_FINIS: !
 	fn_onsupport=os_return
 fnend
-def fn_houryRateAcs(wo_client,the_date,wo_month; hr_category,wo_sage_code$*128) ! inherrits client_id_sage_ax and client_id_brc
+def fn_houryRateAcs(wo_client$,the_date,wo_month; hr_category,wo_sage_code$*128) ! inherrits client_id_sage_ax$ and client_id_brc$
 	if hr_category=23 or hr_category=11 then
 		hr_return=0
-	else if wo_client=client_id_framemasters then
+	else if wo_client$=client_id_framemasters$ then
 		hr_return=125
-	else if wo_client=client_id_brc then
+	else if wo_client$=client_id_peterEngler$ then
+		hr_return=75
+	else if wo_client$=client_id_brc$ then
 		hr_return=60
-	else if wo_client=client_id_sage_ax then
+	else if wo_client$=client_id_sage_ax$ then
 		hr_return=fn_houryRateSage(wo_sage_code$, the_date)
-	else if fn_onsupport(wo_client,wo_month,the_date) then
+	else if fn_onsupport(wo_client$,wo_month,the_date) then
 		if hr_category=6 then
 			hr_return=0
 		else

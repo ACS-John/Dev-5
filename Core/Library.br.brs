@@ -325,9 +325,9 @@ def library fnMsExe$*256(l$)
 fnend
 ! /r
 ! r: Client
-	def library fnClientNameShort$(clientId)
+	def library fnClientNameShort$(clientId$)
 		library 'S:\Core\Client.br': fnClientNameShort$
-		fnClientNameShort$=fnClientNameShort$(clientId)
+		fnClientNameShort$=fnClientNameShort$(clientId$)
 	fnend
 	def library fnSetClient(clientSelected$*128)
 		library 'S:\Core\Client.br': fnSetClient
