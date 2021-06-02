@@ -1,8 +1,8 @@
 ! formerly acsTM\moInvoice
 fn_setup
 fnTop(program$)
-client_id_sageAx=3811
-client_id_brc=90
+client_id_sageAx$='3811'
+client_id_brc$='90'
 enableMinimumMonthlyBill=1
 
 invoice_number=fncreg_read('Last Invoice Number',tmp$)
@@ -27,7 +27,7 @@ execute 'sy "C:\ACS\Util\Dev-5 Commit.cmd"'
 	! pr 're-indexing support, just in case - probably not necessary to do so often, but one time there was this problem.'
 	! fnIndex('S:\Core\Data\acsllc\support.h[cno]','S:\Core\Data\acsllc\support-idx.h[cno]','1/7,6/2')
 	open #hSupport=fnH: 'Name=S:\Core\Data\acsllc\Support.h[cno],KFName=S:\Core\Data\acsllc\support-idx.h[cno],Shr',internal,input,keyed
-	Fsupport: form pos 1,g 6,n 2,c 2,x 8,c 2,n 8,n 10.2,4*c 50
+	Fsupport: form pos 1,c 6,n 2,c 2,x 8,c 2,n 8,n 10.2,4*c 50
 
 	! fnIndex('TMSHT[wsid]','TMSHT-IDX[wsid]','1,5')
 	fn_combineIntoTmSht('S:\Core\Data\acsllc\TimeSheet.h[cno]')
@@ -46,20 +46,15 @@ execute 'sy "C:\ACS\Util\Dev-5 Commit.cmd"'
 	dim client_addr$(3)*30
 	do
 		read #hClient,using 'form pos 1,c 5,3*c 30,pos 283,pd 5.2': client_id$,mat client_addr$,pbal eof EoClient
-		client_id=val(client_id$)
+		client_id$=client_id$
 		
-		! if client_id=4132 then pbal+=  3077
-		! if client_id=4260 then pbal+=  2054
-		! if client_id=2070 then pbal+=   254
-		! if client_id=3045 then pbal+=  1134
-		! if client_id=3385 then pbal+=   755
+
 		
-		
-		! if client_id=3320 then pr '3320 - omaha' : pause
-		! if client_id=3379 then pr '3379 - Kathy Bacon' : pause
-		! if client_id=3385 then pr '3385 - Evelyn Pareya' : pause
-		! if client_id=3045 then pr '3045 - Moweaqua' : debug=1 : pause else debug=0
-		! if client_id=4132 then pr '4132 - Stern' : pause
+		! if client_id$='3320' then pr '3320 - omaha' : pause
+		! if client_id$='3379' then pr '3379 - Kathy Bacon' : pause
+		! if client_id$='3385' then pr '3385 - Evelyn Pareya' : pause
+		! if client_id$='3045' then pr '3045 - Moweaqua' : debug=1 : pause else debug=0
+		! if client_id$='4132' then pr '4132 - Stern' : pause
 		
 		
 		
@@ -118,9 +113,9 @@ def fn_billForMaint(&invTotal)
 	restore #hSupport: ! ,key>=lpad$(trim$(client_id$),kln(hSupport)): ! nokey EoSupport
 	do
 		read #hSupport,using Fsupport: cln$,scode,scode$,stm$,sup_exp_date,supCost eof EoSupport
-		cln=val(cln$)
+		cln$=trim$(cln$)
 
-		if cln=client_id then
+		if cln$=client_id$ then
 			needsRenewal=0 ! if it expires this month
 			if int(invoiceDateCcyymmdd*.01)=int(sup_exp_date*.01) then needsRenewal=1
 
@@ -155,7 +150,7 @@ def fn_billForMaint(&invTotal)
 						inv_item$(invLine)=inv_item$(invLine)&' Maintenance for '&trim$(fnSystemNameFromId$(scode))
 						if trim$(fnSystemNameFromId$(scode))='' then
 							pr ' sending blank system name  scode='&str$(scode)
-							pr '   client_id=';client_id
+							pr '   client_id=';client_id$
 							pause
 						end if
 					end if
@@ -167,10 +162,10 @@ def fn_billForMaint(&invTotal)
 
 				invTotal+=supCost
 
-				if debug then pr '   ';client_id;' billForMaint Match encountered ';supCost
+				if debug then pr '   ';client_id$;' billForMaint Match encountered ';supCost
 			end if
 		end if
-	loop ! while cln=client_id ! commented out to work around a critical nokey problem above.  should severely slow things down though
+	loop ! while cln$=client_id$ ! commented out to work around a critical nokey problem above.  should severely slow things down though
 	EoSupport: !
 fnend
 
@@ -179,53 +174,53 @@ def fn_billForNonMaint(&invTotal; ___,wo_desc$*30,hTimeSheet) ! add charges not 
 	! dim timesheetN(0)
 	! hTimeSheet=fn_open('TM timeSheet',mat timesheet$, mat timesheetN, mat form$)
 	open #hTimeSheet=fnH: 'Name=TmSht[session],KFName=TmSht-Idx[session]',internal,outIn,keyed
-	dim inpX(7)
-	read #hTimeSheet,using F_TIME,key=>rpad$(client_id$,kln(hTimeSheet)): mat inpX,b6,b7,b8,sc,o_o,wo_desc$ nokey TM_XIT2
-	F_TIME: form pos 1,g 5,n 9,2*pd 3.2,pd 4.2,n 6,n 2,pd 2,pd 1,n 2,n 4,x 12,pd 3,c 30
-	if inpX(1)=val(client_id$) then
+	dim inp7
+	read #hTimeSheet,using F_TIME,key=>rpad$(client_id$,kln(hTimeSheet)): inp1$,inp2,inp3,inp4,inp5,inp6,inp7,b6,b7,b8,sc,o_o,wo_desc$ nokey TM_XIT2
+	F_TIME: form pos 1,c 5,n 9,2*pd 3.2,pd 4.2,n 6,n 2,pd 2,pd 1,n 2,n 4,x 12,pd 3,c 30
+	if inp1$=client_id$ then
 		do
 			if b8=0 then b8=19
 			delete #hTimeSheet: ioerr ignore ! delete current record so it is not processed twice
 			! fn_billForHours(client_id$)
-			! def fn_billForHours(client_id$) ! ,mat inpX,etc...
+			! def fn_billForHours(client_id$) ! ,inp1$,inp2,inp3,inp4,inp5,inp6,inp7,etc...
 			if invLine=30 then fn_print_inv ! pr invoice if more than 20 entries
 			if invLine>29 then pause
 			spk$=' '&client_id$&cnvrt$('n 2',b8)
 
-			if inpX(7)=2 then goto BfhGo ! always bill modifications
+			if inp7=2 then goto BfhGo ! always bill modifications
 
-			if inpX(7)=23 or inpX(7)=11 then goto BfhXit ! always no charge
+			if inp7=23 or inp7=11 then goto BfhXit ! always no charge
 
-			if inpX(7)<>2 then
+			if inp7<>2 then
 				read #hSupport,using Fsupport,key=spk$: cln$,scode,scode$,stm$,sup_exp_date,supCost nokey BfhGo
-				trans_date=date(days(inpX(6),'mmddyy'),'ccyymmdd')
+				trans_date=date(days(inp6,'mmddyy'),'ccyymmdd')
 				if (trans_date<=sup_exp_date) then goto BfhXit !  it covered by maintenance
 			end if
 
 			BfhGo: !
-			supCost=inpX(5)
+			supCost=inp5
 
 			invTotal+=supCost
 			invLine+=1
 			! if val(client_id$)=3828 then pr 'schachtner encountered invLine=';invLine : pause
-			if val(client_id$)=client_id_sageAx or val(client_id$)=client_id_brc then
-				!     pause  ! inv_item$(invLine)=str$(inpX(3))&' hours at a rate of '&&' on '&cnvrt$('pic(##/##/##)',inpX(6))
-				inv_item$(invLine)=str$(inpX(3))&' hours at a rate of '&cnvrt$('pic($$#.##)',inpX(4))&' on '&cnvrt$('pic(##/##/##)',inpX(6))
-			else if inpX(7)=2 then
-				inv_item$(invLine)=str$(inpX(3))&' hours of '&trim$(fnSystemNameFromId$(b8))&' programming on '&cnvrt$('pic(##/##/##)',inpX(6))
+			if client_id$=client_id_sageAx$ or client_id$=client_id_brc$ then
+				!     pause  ! inv_item$(invLine)=str$(inp3)&' hours at a rate of '&&' on '&cnvrt$('pic(##/##/##)',inp6)
+				inv_item$(invLine)=str$(inp3)&' hours at a rate of '&cnvrt$('pic($$#.##)',inp4)&' on '&cnvrt$('pic(##/##/##)',inp6)
+			else if inp7=2 then
+				inv_item$(invLine)=str$(inp3)&' hours of '&trim$(fnSystemNameFromId$(b8))&' programming on '&cnvrt$('pic(##/##/##)',inp6)
 			else
-				inv_item$(invLine)=str$(inpX(3))&' hours of '&trim$(fnSystemNameFromId$(b8))&' support on '&cnvrt$('pic(##/##/##)',inpX(6))
+				inv_item$(invLine)=str$(inp3)&' hours of '&trim$(fnSystemNameFromId$(b8))&' support on '&cnvrt$('pic(##/##/##)',inp6)
 			end if
 
-			inv_amt(invLine)=inpX(5)
+			inv_amt(invLine)=inp5
 			inv_category(invLine)=6
 			inv_service_code(invLine)=b8
 			inv_gl$(invLine)='  0  1160  0'
 			BfhXit: !
 			! fnend
 
-			read #hTimeSheet,using F_TIME: mat inpX,b6,b7,b8,sc,o_o,wo_desc$ eof TM_XIT2
-		loop while inpX(1)=client_id
+			read #hTimeSheet,using F_TIME: inp1$,inp2,inp3,inp4,inp5,inp6,inp7,b6,b7,b8,sc,o_o,wo_desc$ eof TM_XIT2
+		loop while inp1$=client_id$
 	end if
 	TM_XIT2: !
 	close #hTimeSheet:
@@ -308,16 +303,16 @@ def fn_combineIntoTmSht(file_from$*256; ___,wo_desc$*30)
 	open #tce_h_from=fnH: 'Name='&file_from$,internal,input
 	open #tce_h_to=fnH: 'Name=TmSht[session],KFName=TmSht-Idx[session],Replace,RecL='&str$(rln(tce_h_from))&',KPs=1/36/25,KLn=5/2/6',internal,outIn,keyed
 	do
-		read #tce_h_from,using F_TIME: mat inpX,b6,b7,b8,sc,o_o,wo_desc$ eof TCE_EOF
+		read #tce_h_from,using F_TIME: inp1$,inp2,inp3,inp4,inp5,inp6,inp7,b6,b7,b8,sc,o_o,wo_desc$ eof TCE_EOF
 		if b8=20 then b8=19 ! ALL PRINTING SUPPORT IS COVERED BY CORE
-		tce_key$=cnvrt$('N 5',inpX(1))&cnvrt$('N 2',b8)&cnvrt$('N 6',inpX(6))
+		tce_key$=rpad$(inp1$,5)&cnvrt$('N 2',b8)&cnvrt$('N 6',inp6) ! ...=cnvrt$('N 5',inp1$)&...
 		read #tce_h_to,using F_TIME,key=tce_key$: mat tce_to_inp nokey CitAdd
-		inpX(3)+=tce_to_inp(3) ! time
-		inpX(5)+=tce_to_inp(5) ! charge
-		rewrite #tce_h_to,using F_TIME,key=tce_key$: mat inpX,b6,b7,b8,sc,o_o,wo_desc$
+		inp3+=tce_to_inp(3) ! time
+		inp5+=tce_to_inp(5) ! charge
+		rewrite #tce_h_to,using F_TIME,key=tce_key$: inp1$,inp2,inp3,inp4,inp5,inp6,inp7,b6,b7,b8,sc,o_o,wo_desc$
 		goto CitNext
 		CitAdd: !
-		write #tce_h_to,using F_TIME: mat inpX,b6,b7,b8,sc,o_o,wo_desc$
+		write #tce_h_to,using F_TIME: inp1$,inp2,inp3,inp4,inp5,inp6,inp7,b6,b7,b8,sc,o_o,wo_desc$
 		CitNext: !
 	loop
 	TCE_EOF: !
