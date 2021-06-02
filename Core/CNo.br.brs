@@ -190,16 +190,16 @@ def fn_setup_systemCache
 		mat sAbbr$(0)
 		dim sName$(0)*256
 		mat sName$(0)
-		dim sNumber(0)
-		mat sNumber(0)
+		dim sNumber$(0)
+		mat sNumber$(0)
 		dim sIsAddOnN(0)
 		mat sIsAddOnN(0)
 		do
 			read #hS,using form$(hS): mat s$,mat sN eof EoS
-			fnAddOneC(mat sAbbr$    ,trim$(lwrc$(s$(sys_id     )))   )
-			fnAddOneC(mat sName$    ,trim$(      s$(sys_name   ))    )
-			fnAddOneN(mat sNumber   ,            sN(sys_number )     )
-			fnAddOneN(mat sIsAddOnN ,            sN(sys_isAddOn)     )
+			fnAddOneC(mat sAbbr$     	,trim$(lwrc$(s$(sys_id     )))   )
+			fnAddOneC(mat sName$     	,trim$(      s$(sys_name   ))    )
+			fnAddOneC(mat sNumber$  	,            s$(sys_number )     )
+			fnAddOneN(mat sIsAddOnN 	,            sN(sys_isAddOn)     )
 		loop
 		EoS: !
 		close #hS:
@@ -224,10 +224,10 @@ def library fnSystemIsAddOn( sia_systemAbbr$*256; ___,returnN)
 	end if
 	fnSystemIsAddOn=returnN
 fnend
-def library fnSystemNameFromId$*256(sysno; ___,return$*256)
+def library fnSystemNameFromId$*256(sysno$; ___,return$*256)
 	if ~setup then fn_setup
 	fn_setup_systemCache
-	sWhich=srch(mat sNumber,sysno)
+	sWhich=srch(mat sNumber$,sysno$)
 	if sWhich>0 then
 		return$=sName$(sWhich)
 	end if

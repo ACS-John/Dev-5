@@ -1177,9 +1177,9 @@ fnend
 		library 'S:\Core\CNo.br': fnSystemNameFromAbbr$
 		fnSystemNameFromAbbr$=fnSystemNameFromAbbr$( systemAbbreviation$)
 	fnend
-	def library fnSystemNameFromId$*256(sysno)
+	def library fnSystemNameFromId$*256(sysno$)
 		library 'S:\Core\CNo.br': fnSystemNameFromId$
-		fnSystemNameFromId$=fnSystemNameFromId$(sysno)
+		fnSystemNameFromId$=fnSystemNameFromId$(sysno$)
 	fnend
 
 ! /r
