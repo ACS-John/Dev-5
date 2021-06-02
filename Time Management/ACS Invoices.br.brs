@@ -298,26 +298,26 @@ def fn_askScreen1(&invDateMmDdYy,&invoice_number; ___,returnN,invDay)
 	fn_askScreen1=returnN
 fnend
 
-def fn_combineIntoTmSht(file_from$*256; ___,wo_desc$*30)
+def fn_combineIntoTmSht(file_from$*256; ___,wo_desc$*30,h_from,h_to)
 	dim tce_to_inp(7)
-	open #tce_h_from=fnH: 'Name='&file_from$,internal,input
-	open #tce_h_to=fnH: 'Name=TmSht[session],KFName=TmSht-Idx[session],Replace,RecL='&str$(rln(tce_h_from))&',KPs=1/36/25,KLn=5/2/6',internal,outIn,keyed
+	open #h_from=fnH: 'Name='&file_from$,internal,input
+	open #h_to=fnH: 'Name=TmSht[session],KFName=TmSht-Idx[session],Replace,RecL='&str$(rln(h_from))&',KPs=1/36/25,KLn=5/2/6',internal,outIn,keyed
 	do
-		read #tce_h_from,using F_TIME: inp1$,inp2,inp3,inp4,inp5,inp6,inp7,b6,b7,b8,sc,o_o,wo_desc$ eof TCE_EOF
+		read #h_from,using F_TIME: inp1$,inp2,inp3,inp4,inp5,inp6,inp7,b6,b7,b8,sc,o_o,wo_desc$ eof TCE_EOF
 		if b8=20 then b8=19 ! ALL PRINTING SUPPORT IS COVERED BY CORE
 		tce_key$=rpad$(inp1$,5)&cnvrt$('N 2',b8)&cnvrt$('N 6',inp6) ! ...=cnvrt$('N 5',inp1$)&...
-		read #tce_h_to,using F_TIME,key=tce_key$: mat tce_to_inp nokey CitAdd
+		read #h_to,using F_TIME,key=tce_key$: mat tce_to_inp nokey CitAdd
 		inp3+=tce_to_inp(3) ! time
 		inp5+=tce_to_inp(5) ! charge
-		rewrite #tce_h_to,using F_TIME,key=tce_key$: inp1$,inp2,inp3,inp4,inp5,inp6,inp7,b6,b7,b8,sc,o_o,wo_desc$
+		rewrite #h_to,using F_TIME,key=tce_key$: inp1$,inp2,inp3,inp4,inp5,inp6,inp7,b6,b7,b8,sc,o_o,wo_desc$
 		goto CitNext
 		CitAdd: !
-		write #tce_h_to,using F_TIME: inp1$,inp2,inp3,inp4,inp5,inp6,inp7,b6,b7,b8,sc,o_o,wo_desc$
+		write #h_to,using F_TIME: inp1$,inp2,inp3,inp4,inp5,inp6,inp7,b6,b7,b8,sc,o_o,wo_desc$
 		CitNext: !
 	loop
 	TCE_EOF: !
-	close #tce_h_from:
-	close #tce_h_to:
+	close #h_from:
+	close #h_to:
 fnend
 def fn_summaryAccumulate
 	! pr 'fn_summaryAccumulate   totalInvoicesPrinted=';totalInvoicesPrinted !
