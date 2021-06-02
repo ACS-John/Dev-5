@@ -47,17 +47,17 @@ execute 'sy "C:\ACS\Util\Dev-5 Commit.cmd"'
 	do
 		read #hClient,using 'form pos 1,c 5,3*c 30,pos 283,pd 5.2': client_id$,mat client_addr$,pbal eof EoClient
 		client_id$=client_id$
-		
 
-		
+
+
 		! if client_id$='3320' then pr '3320 - omaha' : pause
 		! if client_id$='3379' then pr '3379 - Kathy Bacon' : pause
 		! if client_id$='3385' then pr '3385 - Evelyn Pareya' : pause
 		! if client_id$='3045' then pr '3045 - Moweaqua' : debug=1 : pause else debug=0
 		! if client_id$='4132' then pr '4132 - Stern' : pause
-		
-		
-		
+
+
+
 		fn_billforMaint(invTotal)
 		fn_billForNonMaint(invTotal)
 		! if invTotal then
@@ -79,10 +79,10 @@ execute 'sy "C:\ACS\Util\Dev-5 Commit.cmd"'
 	execute 'sy -c -w explorer "'&fnReportCacheFolderCurrent$&'\Ebilling"'
 	execute 'sy -c -w explorer "'&fnReportCacheFolderCurrent$&'\Invoice\Archive"'
 	execute 'sy -c -w explorer "'&fnReportCacheFolderCurrent$&'\Invoice\Print"'
-	
+
 	fnStatus('producing Summary...')
 	fn_summaryRelease
-	
+
 	do
 		fnToS
 		fnOpt(1,41,'Merge Invoices and Email Queued Invoices',1)
@@ -119,7 +119,7 @@ def fn_billForMaint(&invTotal)
 			needsRenewal=0 ! if it expires this month
 			if int(invoiceDateCcyymmdd*.01)=int(sup_exp_date*.01) then needsRenewal=1
 
-			if stm$='Mo' and needsRenewal then 
+			if stm$='Mo' and needsRenewal then
 				pr 'monthly bill encountered.  please test code before accepting.'
 				pause
 			end if
@@ -129,11 +129,11 @@ def fn_billForMaint(&invTotal)
 
 				if supCost=0 then supCost=fn_price(scode$,stm$)
 				if supCost=0 then pr 'zero price???' : pause
-			
+
 				if supCost>0 then
 					returnN=supCost
 					invLine+=1
-			
+
 					if stm$='An' then
 						inv_item$(invLine)='Annual'
 					else if stm$='Qt' then
@@ -175,8 +175,9 @@ def fn_billForNonMaint(&invTotal; ___,wo_desc$*30,hTimeSheet) ! add charges not 
 	! hTimeSheet=fn_open('TM timeSheet',mat timesheet$, mat timesheetN, mat form$)
 	open #hTimeSheet=fnH: 'Name=TmSht[session],KFName=TmSht-Idx[session]',internal,outIn,keyed
 	dim inp7
-	read #hTimeSheet,using F_TIME,key=>rpad$(client_id$,kln(hTimeSheet)): inp1$,inp2,inp3,inp4,inp5,inp6,inp7,b6,b7,b8,sc,o_o,wo_desc$ nokey TM_XIT2
-	F_TIME: form pos 1,c 5,n 9,2*pd 3.2,pd 4.2,n 6,n 2,pd 2,pd 1,n 2,n 4,x 12,pd 3,c 30
+	read #hTimeSheet,using F_time,key=>rpad$(client_id$,kln(hTimeSheet)): inp1$,inp2,inp3,inp4,inp5,inp6,inp7,b6,b7,b8,sc,o_o,wo_desc$ nokey TM_XIT2
+	F_time: form pos 1,c 5,n 9,2*pd 3.2,pd 4.2,n 6,n 2,pd 2,pd 1,n 2,n 4,x 12,pd 3,c 30
+	F_timeTc: form pos 1,x 14,pd 3.2,x 3,pd 4.2
 	if inp1$=client_id$ then
 		do
 			if b8=0 then b8=19
@@ -219,14 +220,14 @@ def fn_billForNonMaint(&invTotal; ___,wo_desc$*30,hTimeSheet) ! add charges not 
 			BfhXit: !
 			! fnend
 
-			read #hTimeSheet,using F_TIME: inp1$,inp2,inp3,inp4,inp5,inp6,inp7,b6,b7,b8,sc,o_o,wo_desc$ eof TM_XIT2
+			read #hTimeSheet,using F_time: inp1$,inp2,inp3,inp4,inp5,inp6,inp7,b6,b7,b8,sc,o_o,wo_desc$ eof TM_XIT2
 		loop while inp1$=client_id$
 	end if
 	TM_XIT2: !
 	close #hTimeSheet:
 fnend
 def fn_print_inv
-	if debug then pr 'debug print_inv' :  pause
+	! if debug then pr 'debug print_inv' :  pause
 	if enableMinimumMonthlyBill and invTotal>0 and invTotal<100 then
 		invLine+=1
 		if invLine<30 then
@@ -255,7 +256,6 @@ def fn_print_inv
 	mat inv_amt=(0)
 	invLine=invTotal=0
 fnend
-
 
 Xit: fnXit
 dim resp$(30)*128
@@ -298,21 +298,21 @@ def fn_askScreen1(&invDateMmDdYy,&invoice_number; ___,returnN,invDay)
 	fn_askScreen1=returnN
 fnend
 
-def fn_combineIntoTmSht(file_from$*256; ___,wo_desc$*30,h_from,h_to)
-	dim tce_to_inp(7)
+def fn_combineIntoTmSht(file_from$*256; ___,tce_key$,wo_desc$*30,h_from,h_to,toInp3,toInp5)
+
 	open #h_from=fnH: 'Name='&file_from$,internal,input
 	open #h_to=fnH: 'Name=TmSht[session],KFName=TmSht-Idx[session],Replace,RecL='&str$(rln(h_from))&',KPs=1/36/25,KLn=5/2/6',internal,outIn,keyed
 	do
-		read #h_from,using F_TIME: inp1$,inp2,inp3,inp4,inp5,inp6,inp7,b6,b7,b8,sc,o_o,wo_desc$ eof TCE_EOF
+		read #h_from,using F_time: inp1$,inp2,inp3,inp4,inp5,inp6,inp7,b6,b7,b8,sc,o_o,wo_desc$ eof TCE_EOF
 		if b8=20 then b8=19 ! ALL PRINTING SUPPORT IS COVERED BY CORE
 		tce_key$=rpad$(inp1$,5)&cnvrt$('N 2',b8)&cnvrt$('N 6',inp6) ! ...=cnvrt$('N 5',inp1$)&...
-		read #h_to,using F_TIME,key=tce_key$: mat tce_to_inp nokey CitAdd
-		inp3+=tce_to_inp(3) ! time
-		inp5+=tce_to_inp(5) ! charge
-		rewrite #h_to,using F_TIME,key=tce_key$: inp1$,inp2,inp3,inp4,inp5,inp6,inp7,b6,b7,b8,sc,o_o,wo_desc$
+		read #h_to,using F_timeTc,key=tce_key$: toInp3,toInp5 nokey CitAdd
+		inp3+=toInp3 ! time
+		inp5+=toInp5 ! charge
+		rewrite #h_to,using F_time,key=tce_key$: inp1$,inp2,inp3,inp4,inp5,inp6,inp7,b6,b7,b8,sc,o_o,wo_desc$
 		goto CitNext
 		CitAdd: !
-		write #h_to,using F_TIME: inp1$,inp2,inp3,inp4,inp5,inp6,inp7,b6,b7,b8,sc,o_o,wo_desc$
+		write #h_to,using F_time: inp1$,inp2,inp3,inp4,inp5,inp6,inp7,b6,b7,b8,sc,o_o,wo_desc$
 		CitNext: !
 	loop
 	TCE_EOF: !
@@ -328,7 +328,7 @@ def fn_summaryAccumulate
 		pr #hSummary: '_____ ______________  ________  __________  __________  __________  __________'
 	end if
 	! SI_ADD: !
-	if pbal or invTotal then 
+	if pbal or invTotal then
 		pr #hSummary,using Fsummary: client_id$,client_addr$(1)(1:14),invDateMmDdYy,pbal,invTotal,pbal+invTotal,iv$
 		Fsummary: form pos 1,c 5,x 2,c 15,pic(zz/zz/zz),3*nz 12.2,x 2,c 12
 		totalInvoicesPrinted+=invTotal
@@ -336,7 +336,6 @@ def fn_summaryAccumulate
 	end if
 fnend
 def fn_summaryRelease
-	! pause
 	close  #hSummary:
 	if exists('PrnSummary[session]') then
 		open #hSummary=fnH: 'Name=PrnSummary[session]',display,input ! ioerr SpFinis
@@ -396,7 +395,6 @@ def library fnMergeInvoices
 	fnMergeInvoices=fn_mergeInvoices
 fnend
 def fn_mergeInvoices
-
 	! fnTop(program$,cap$='Merge Invoices written to temp file S:\Core\Data\acsllc\tmpInvoice.h[cno]')
 	dim ta(25,2),fb(25),e$*9,xb(8),sc$*4
 	! clmstr dims
@@ -474,7 +472,7 @@ def fn_mergeInvoices
 		amt=0
 	loop  ! /r
 
-	MiFinis: ! 
+	MiFinis: !
 	close #h_clmstr:
 	close #h_tmtrans:
 	close #h_tmwk2:
