@@ -79,7 +79,7 @@ L740: pr newpage
 L790: if cmdkey=1 then goto L800 else input fields "5,25,N 5,UE,N": inp(1) conv L790
 	if cmdkey=4 then goto TMSRCH
 L800: if inp(1)=0 or cmdkey=5 then goto L1360
-	k$=lpad$(str$(inp(1)),5)
+	k$=rpad$(str$(inp(1)),5)
 	read #1,using L970,key=k$,release: a1$ nokey L850
 	pr f "5,45,C 30,N": a1$
 	goto L870
@@ -93,7 +93,7 @@ L870: input fields mat in1$: mat inp,iv$ conv L1690
 	if inp(1)=0 then mat inp=(0)
 	if inp(1)=0 then iv$=""
 	if inp(1)=0 then goto L1240
-	k$=lpad$(str$(inp(1)),5)
+	k$=rpad$(str$(inp(1)),5)
 	read #1,using L970,key=k$,release: a1$ nokey L990 ioerr L1770
 L970: form pos 6,c 30
 	goto L1010

@@ -4,7 +4,7 @@ fnTop(program$,"Trial Balance")
 fndat(dat$)
 open #8: "Name=S:\Core\Data\acsllc\pedate.h[cno],RecL=20,use,Shr",internal,outIn,relative 
 if lrec(8)=0 then write #8,using "form pos 1,n 6": d1 else read #8,using "form pos 1,n 6",rec=1,release: d1
-dim z$*5,e$(4)*30,e(5),s(5),c(5),u$*20,flo$(3),fli$(2),dat$*20
+dim z$*5,e$(4)*30,ex(5),sx(5),c(5),u$*20,flo$(3),fli$(2),dat$*20
 dim scr$(3)*50,ta(2),o(2),cnv$*6,q$*30,age(4),mo(12),iv$*12
 data 0,31,59,90,120,151,181,212,243,273,304,334
 read mat mo
@@ -43,8 +43,8 @@ L420: form pos 1,c 5,c 30,pos 283,pd 5.2,pos 298,n 1,pos 299,2*pd 3
 L450: if am6<0 then cb1=cb1+(-am6) else db1=db1+am6
 	if am6<=0 then goto L400
 	gosub L1000
-	mat s=s+e
-	pr #255,using L500: z$,e$(1),am6,mat e pageoflow L520
+	mat sx=sx+ex
+	pr #255,using L500: z$,e$(1),am6,mat ex pageoflow L520
 L500: form pos 1,c 12,c 30,x 10,6*n 12.2,skip 1
 	goto L400
 L520: pr #255: newpage
@@ -65,15 +65,15 @@ L630: form pos tabq,c 26,skip 0
 	pr #255,using L680: "CLIENT #","CLIENT NAME"," ","BALANCE","CURRENT",age(1),"-",age(2),age(2)+1,"-",age(3),age(3)+1,"-",age(4),"OVER ",age(4)
 L680: form pos 1,c 9,pos 12,c 13,pos 42,c 12,pos 58,c 7,pos 70,c 7,pos 83,n 3,c 1,n 2,pos 95,n 3,c 1,n 3,pos 106,n 3,c 1,n 3,pos 117,c 5,n 3,skip 1
 L690: return 
-L700: c6=s(1)+s(2)+s(3)+s(4)+s(5)
+L700: c6=sx(1)+sx(2)+sx(3)+sx(4)+sx(5)
 	if c6=0 then goto L790
 	mat c=(0)
 	for j=1 to 5
-		if s(j)=0 then goto L760
-		c(j)=s(j)/c6*100
+		if sx(j)=0 then goto L760
+		c(j)=sx(j)/c6*100
 L760: next j
 	pr #255: 
-	pr #255,using L500: "","   COMPANY TOTALS",tam6,mat s
+	pr #255,using L500: "","   COMPANY TOTALS",tam6,mat sx
 L790: pr #255: newpage
 	v9=9
 	gosub L550
@@ -81,12 +81,12 @@ L790: pr #255: newpage
 L830: form skip 2,pos 58,c 40,skip 2
 	pr #255: tab(68);"AMOUNT   PERCENT"
 	pr #255: 
-	pr #255,using L870: "CURRENT",s(1),c(1)
+	pr #255,using L870: "CURRENT",sx(1),c(1)
 L870: form pos 43,c 10,pos 61,n 13.2,n 10.2,skip
-	pr #255,using L870: str$(age(1)+1)&"-"&str$(age(2)),s(2),c(2)
-	pr #255,using L870: str$(age(2)+1)&"-"&str$(age(3)),s(3),c(3)
-	pr #255,using L870: str$(age(3)+1)&"-"&str$(age(4)),s(4),c(4)
-	pr #255,using L870: "OVER "&str$(age(4)),s(5),c(5)
+	pr #255,using L870: str$(age(1)+1)&"-"&str$(age(2)),sx(2),c(2)
+	pr #255,using L870: str$(age(2)+1)&"-"&str$(age(3)),sx(3),c(3)
+	pr #255,using L870: str$(age(3)+1)&"-"&str$(age(4)),sx(4),c(4)
+	pr #255,using L870: "OVER "&str$(age(4)),sx(5),c(5)
 	pr #255: 
 	pr #255,using L940: "                       TOTAL",db1
 L940: form pos 30,c 30,n 14.2,skip 2
@@ -96,7 +96,7 @@ L940: form pos 30,c 30,n 14.2,skip 2
 	close #1: ioerr XIT
 XIT: fnxit
 L1000: ! AGING ROUTINE
-	mat e=(0)
+	mat ex=(0)
 	if ta(1)=0 then goto L1500
 	ta1=ta(1)
 L1040: read #2,using L1050,rec=ta1: iv$,mm,dd,yy,tr3,tr5,nta ioerr Ertn
@@ -106,18 +106,18 @@ L1070: if mm=0 then goto L1190
 	ag1=mo(mm)+dd+yy*365+int(yy/4)
 	if yy-int(yy/4)*4=0 and mm>2 then ag1=ag1+1
 	ag2=ag0-ag1
-	if ag2>=age(4) then e(5)=e(5)+tr3 else goto L1130
+	if ag2>=age(4) then ex(5)=ex(5)+tr3 else goto L1130
 	goto L1340
-L1130: if ag2>=age(3) then e(4)=e(4)+tr3 else goto L1150
+L1130: if ag2>=age(3) then ex(4)=ex(4)+tr3 else goto L1150
 	goto L1340
-L1150: if ag2>=age(2) then e(3)=e(3)+tr3 else goto L1170
+L1150: if ag2>=age(2) then ex(3)=ex(3)+tr3 else goto L1170
 	goto L1340
-L1170: if ag2>=age(1) then e(2)=e(2)+tr3 else goto L1190
+L1170: if ag2>=age(1) then ex(2)=ex(2)+tr3 else goto L1190
 	goto L1340
-L1190: e(1)=e(1)+tr3
+L1190: ex(1)=ex(1)+tr3
 	goto L1340
 L1210: if ar(5)=2 then goto L1240
-	e(5)=e(5)-tr3
+	ex(5)=ex(5)-tr3
 	goto L1340
 L1240: tr3=-tr3
 	ta1=ta(1)
@@ -128,23 +128,23 @@ L1270: form pos 6,c 12,pos 18,3*n 2,pos 36,n 1,pos 58,pd 3
 L1300: if cta=0 then goto L1330
 	ta1=cta
 	goto L1260
-L1330: e(5)=e(5)+tr3
+L1330: ex(5)=ex(5)+tr3
 L1340: if nta=0 then goto L1370
 	ta1=nta
 	goto L1040
-L1370: if e(5)>=0 then goto L1400
-	e(4)=e(4)+e(5)
-	e(5)=0
-L1400: if e(4)>=0 then goto L1430
-	e(3)=e(3)+e(4)
-	e(4)=0
-L1430: if e(3)>=0 then goto L1460
-	e(2)=e(2)+e(3)
-	e(3)=0
-L1460: if e(2)>=0 then goto L1500
-	e(1)=e(1)+e(2)
-	e(2)=0
-	if e(1)<0 then v6=v6+(-e(1))
+L1370: if ex(5)>=0 then goto L1400
+	ex(4)=ex(4)+ex(5)
+	ex(5)=0
+L1400: if ex(4)>=0 then goto L1430
+	ex(3)=ex(3)+ex(4)
+	ex(4)=0
+L1430: if ex(3)>=0 then goto L1460
+	ex(2)=ex(2)+ex(3)
+	ex(3)=0
+L1460: if ex(2)>=0 then goto L1500
+	ex(1)=ex(1)+ex(2)
+	ex(2)=0
+	if ex(1)<0 then v6=v6+(-ex(1))
 L1500: return 
 L1510: mm=int(d1/10000)
 	dd=int((d1-mm*10000)/100)

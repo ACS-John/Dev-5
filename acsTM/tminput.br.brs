@@ -105,7 +105,7 @@ ERR1: pr f "24,78,C 1": bell : goto L970
 L1020: if cmdkey=6 then hce=curfld : goto SRCH1
 	if inp(1)<0 then goto L1390
 	if inp(1)<=0 then goto L1180
-	k$=lpad$(str$(inp(1)),5)
+	k$=rpad$(str$(inp(1)),5)
 	if cmdkey=2 and err=4272 then goto L1070 else goto L1140
 L1070: pr f "4,45,c 30,n": "Enter customer name:"
 	input fields "5,50,c 30,ue,n": a$(1)
@@ -158,7 +158,7 @@ L1490: if b8<0 or b8>29 then ce=8: goto ERR2
 	if inp(6)<10182 or inp(6)>123199 then ce=6: goto ERR2
 	if inp(1)=0 then goto L1620
 	ce=1
-	k$=lpad$(str$(inp(1)),5)
+	k$=rpad$(str$(inp(1)),5)
 	read #1,using L1560,key=k$: a1$,mat app nokey ERR2 ioerr L2650
 L1560: form pos 6,c 30,pos 375,20*n 1,x 60,20*n 1
 	if env$('client')="ACS" and (b8=0 or app(b8)=1) then goto L1610
@@ -256,7 +256,7 @@ L2430: form pos 21,"      ----------",skip 1,pos 10,"TOTAL HOURS",pos 27,n 10.2,
 		tottime=0
 L2470: tinp3=tinp3+inp(3)
 		if b7=2 then totexp=totexp+inp(5) else tottime=tottime+inp(5)
-		k$=lpad$(str$(inp(1)),5)
+		k$=rpad$(str$(inp(1)),5)
 		a1$=""
 		read #1,using L1560,key=k$: a1$ nokey L2530 ioerr L2530
 		if des$(1:5)="TELEP" then a1$=des$
@@ -324,7 +324,7 @@ L3130: input fields "24,58,N 5,RE,N": k1 conv L3130
 	alp=0
 	if cmdkey=5 then goto SRCHEND
 	if rtrm$(k$)="" then goto L3200
-	k$=lpad$(str$(k1),5)
+	k$=rpad$(str$(k1),5)
 	read #1,using L1560,key=k$: a1$,mat app nokey L3130
 	goto SRCHEND
 L3200: if cmdkey><2 then goto L3250

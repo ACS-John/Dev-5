@@ -11,7 +11,7 @@ def fn_updateSupportExpirationDate(; clientKey$*5)
 		open #hClientName=fnH: "Name=S:\Core\Data\acsllc\CLmstr.h420,Version=0,KFName=S:\Core\Data\acsllc\CLIndx2-Idx.h420,Use,RecL=534,KPs=6,KLn=30,Shr",internal,outIn,keyed
 		! CO Support
 		open #hSupport   =fnH: "Name=S:\Core\Data\acsllc\Support.h420,Version=2,KFName=S:\Core\Data\acsllc\Support-Idx.h420,Use,RecL=246,KPs=1/7,KLn=6/2,Shr",internal,outIn,keyed
-		fSupport: form pos 1,C 6,n 2,c 2,n 8,c 2,n 8,n 10
+		F_support: form pos 1,C 6,n 2,c 2,n 8,c 2,n 8,n 10
 	! /r	
 
 	
@@ -80,7 +80,7 @@ def fn_getSupportArrayByClient(client$,mat sysno,mat sysid$,mat dateStart,mat ti
 	mat timeFrame$(0)
 	mat dateExpire(0)
 	mat cost(0)
-	read #hSupport,using fSupport,key=>rpad$(client$,kln(hSupport)): clientId$,SysNo,SysId$,dateStart,timeFrame$,dateExpire,cost
+	read #hSupport,using F_support,key=>rpad$(client$,kln(hSupport)): clientId$,SysNo,SysId$,dateStart,timeFrame$,dateExpire,cost
 	do while rtrm$(client$)=rtrm$(clientId$)
 		fnAddOneN(mat sysno,SysNo)
 		fnaddoneC(mat sysid$,SysId$)
@@ -88,14 +88,14 @@ def fn_getSupportArrayByClient(client$,mat sysno,mat sysid$,mat dateStart,mat ti
 		fnaddoneC(mat timeFrame$,timeFrame$)
 		fnAddOneN(mat dateExpire,dateExpire)
 		fnAddOneN(mat cost,cost)
-		read #hSupport,using fSupport: clientId$,SysNo,SysId$,dateStart,timeFrame$,dateExpire,cost eof G1Finis
+		read #hSupport,using F_support: clientId$,SysNo,SysId$,dateStart,timeFrame$,dateExpire,cost eof G1Finis
 	loop
 	G1Finis: !
  
 fnend
 def fn_updateOneSupportExpDate(client$)
 	client$=rpad$(client$,kln(hSupport))
-	read #hSupport,using fSupport,key=>client$: clientId$,SysNo,SysId$,dateStart,timeFrame$,dateExpire,cost
+	read #hSupport,using F_support,key=>client$: clientId$,SysNo,SysId$,dateStart,timeFrame$,dateExpire,cost
 	do while rtrm$(client$)=rtrm$(clientId$)
 		! pr uCount+=1;rec(hSupport);clientId;SysNo;SysId$;timeFrame$,dateExpire;cost
 		if timeFrame$='An' then
@@ -112,8 +112,8 @@ def fn_updateOneSupportExpDate(client$)
 		! pr 'dateExpireNew=';dateExpireNew
 		! pause
 		dateExpire=dateExpireNew
-		rewrite #hSupport,using fSupport: clientId$,SysNo,SysId$,dateStart,timeFrame$,dateExpire,cost
-		read #hSupport,using fSupport: client$,SysNo,SysId$,dateStart,timeFrame$,dateExpire,cost eof U1Finis
+		rewrite #hSupport,using F_support: clientId$,SysNo,SysId$,dateStart,timeFrame$,dateExpire,cost
+		read #hSupport,using F_support: client$,SysNo,SysId$,dateStart,timeFrame$,dateExpire,cost eof U1Finis
 	loop
 	U1Finis: !
 	! pause

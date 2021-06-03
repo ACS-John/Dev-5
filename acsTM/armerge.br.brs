@@ -5,8 +5,8 @@ fnTop(program$,cap$="AR Merge")
 dim p$*5,iv$*12,tr(6),id$*20,sc1$(5),sc2$(9),hd$(2)*50
 pr newpage
 pr f "10,10,c 50,H,N": "A/R Merge Transactions In Process"
-open #hClient:=1: "Name=S:\Core\Data\acsllc\CLmstr.h[cno],KFName=S:\Core\Data\acsllc\CLIndex.h[cno],Shr",internal,outIn,keyed
-open #hArTrans:=2: "Name=S:\Core\Data\acsllc\ARTrans.h[cno],Shr",internal,outIn,relative
+open #hClient=1: "Name=S:\Core\Data\acsllc\CLmstr.h[cno],KFName=S:\Core\Data\acsllc\CLIndex.h[cno],Shr",internal,outIn,keyed
+open #hArTrans=2: "Name=S:\Core\Data\acsllc\ARTrans.h[cno],Shr",internal,outIn,relative
 open #hAddr=fnH: "Name=[Temp]\Addr."&session$,internal,outIn,relative
 ! open #h_armotran:=4: "Name=S:\Core\Data\acsllc\ARMoTran.h[cno],Shr",internal,output
 LOOP_TOP: !
@@ -41,7 +41,7 @@ LOOP_TOP: !
 goto LOOP_TOP
 
 CLSMSTR_NOKEY: !
-	if rtrm$(p$)="" or rtrm$(ltrm$(p$))="0" then goto LOOP_TOP
+	if rtrm$(p$)="" or trim$(p$)="0" then goto LOOP_TOP
 	prtcode=1
 	fnopenprn
 	pr #255: ,"Cannot locate account number ";p$

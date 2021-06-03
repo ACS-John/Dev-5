@@ -129,7 +129,7 @@
 	input fields mat fli1$: p$,iv$,tr(1),tr(3),id$,tr(2),mat pgl,mat gl conv L1240
 	if cmdkey=2 then goto L920
 	L1200: !
-	p$=uprc$(lpad$(rtrm$(p$),5))
+	p$=uprc$(rpad$(trim$(p$),5))
 	if ce>0 then fli1$(ce)=srep$(fli1$(ce),1,"RC","U")
 	ce=0
 	goto L1280

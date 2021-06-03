@@ -28,7 +28,7 @@
 	if cmdkey=99 or cmdkey=5 then goto Xit
 	if cmdkey=10 then prtall=1 : goto PRINT_EM
 	if cmdkey=6 then goto SRCH1
-	z$=lpad$(rtrm$(k$),5)
+	z$=rpad$(trim$(k$),5)
 	read #1,using F_CLIENT,key=z$: z$,mat a$,mat app,mat ma nokey L250
 	gosub PRINT_LABEL
 	goto L190
@@ -138,7 +138,7 @@ L1310: input fields "24,58,C 5,RE,N": k$
 	alp=0
 	if cmdkey=5 then goto SRCHEND
 	if rtrm$(k$)="" then goto L1380
-	z$=lpad$(rtrm$(k$),5)
+	z$=rpad$(trim$(k$),5)
 	read #1,using F_CLIENT,key=z$: z$,mat a$,mat app,mat ma nokey L1310
 	gosub PRINT_LABEL : goto L1300
 L1380: if cmdkey><2 then goto L1430

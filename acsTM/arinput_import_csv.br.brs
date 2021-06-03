@@ -9,7 +9,7 @@ dim p$*5,iv$*12,tr(6),id$*20,sc1$(5),sc2$(9),hd$(2)*50
 dim flo4$(5),sc4$(5),ot4$(5),fli4$(5),q(3),gln1(3),gln2(3),otgl$(3)
 dim gl(10,4),fli1$(49),ot1$(49),pgl(3)
 fn_get_old_setup
-open #h_clmstr:=9: "Name=S:\Core\Data\acsllc\CLmstr.h[cno],KFName=S:\Core\Data\acsllc\CLIndex.h[cno],Shr",internal,input,keyed ioerr ERR_FILE
+open #h_clmstr=9: "Name=S:\Core\Data\acsllc\CLmstr.h[cno],KFName=S:\Core\Data\acsllc\CLIndex.h[cno],Shr",internal,input,keyed ioerr ERR_FILE
 open #11: "Name=S:\Core\Data\acsllc\CLmstr.h[cno],KFName=S:\Core\Data\acsllc\CLIndx2.h[cno],Shr",internal,input,keyed ioerr ERR_FILE
 open #h_addr:=3: "Name=[Temp]\Addr."&session$&",RecL=239,Replace",internal,outIn,relative ioerr ERR_FILE
 SCREEN_1: ! r:
@@ -87,7 +87,7 @@ L910: !
 L920: !
 	rinput fields "3,30,C 5,EU,n": p$ conv L920
 	if cmdkey=4 then let fn_tmsrch : goto L920
-	p$=uprc$(lpad$(rtrm$(p$),5))
+	p$=uprc$(rpad$(trim$(p$),5))
 	if ltrm$(p$)="-1" then pr f mat otgl$: mat gln1 else pr f mat otgl$: mat gln2
 	if ltrm$(p$)="0" or ltrm$(p$)="" and vf=0 then goto SCREEN_1
 	if ltrm$(p$)="0" or ltrm$(p$)="" and vf=1 then goto L1630
