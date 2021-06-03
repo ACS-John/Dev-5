@@ -27,7 +27,7 @@
 	! open #h_in=fnH: 'Name=C:\ACS\Doc\Timesheets\Time Sheet - John Bowman.csv,RecL=100,Shr',external,input
 	open #h_out=fnH: "Name=S:\Core\Data\acsllc\TimeSheet.h[cno],RecL=86,KFName=S:\Core\Data\acsllc\TimeSheet-Idx.h[cno],Replace,KPs=1,KLn=5",internal,outIn,keyed
 	open #h_support=fnH: "Name=S:\Core\Data\acsllc\SUPPORT.h[cno],KFName=S:\Core\Data\acsllc\support-idx.h[cno],Shr",internal,input,keyed
-	FMSUPPORT: form pos 1,g 6,n 2,c 2,x 8,x 2,n 8
+	F_support: form pos 1,c 6,n 2,c 2,x 8,x 2,n 8
 	fnopenprn
 	pr #255,using FORM_PRN_HEAD: 'date','client','time','cat','month','desc','rate'
 	FORM_OUT: form pos 1,n 5,n 9,2*pd 3.2,pd 4.2,n 6,n 2,pd 2,pd 1,n 2,n 4,c 12,pd 3,c 30
@@ -267,12 +267,12 @@ def fn_onsupport(wo_client,wo_month,the_date)
 	os_return=0
 	! try lpad first
 	spk$=lpad$(str$(wo_client),6)&cnvrt$("n 2",wo_month)
-	read #h_support,using FMSUPPORT,key=spk$: cln$,scode,scode$,sdt2 nokey OS_TRY_RPAD
+	read #h_support,using F_support,key=spk$: cln$,scode,scode$,sdt2 nokey OS_TRY_RPAD
 	goto OS_FOUND_REC
  
 	OS_TRY_RPAD: !
 	spk$=rpad$(str$(wo_client),6)&cnvrt$("n 2",wo_month)
-	read #h_support,using FMSUPPORT,key=spk$: cln$,scode,scode$,sdt2 nokey OS_FINIS
+	read #h_support,using F_support,key=spk$: cln$,scode,scode$,sdt2 nokey OS_FINIS
 	goto OS_FOUND_REC
  
 	OS_FOUND_REC: !

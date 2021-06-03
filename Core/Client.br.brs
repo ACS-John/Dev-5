@@ -937,7 +937,7 @@ def fn_client_support_setup(client_id,mat css_system_id$,mat css_system_support_
 		restore #h_support: ! ,key>==lpad$(trim$(client_id$),kln(h_support)):
 		do
 			read #h_support,using F_SUPPORT: cln$,scode,scode$,sdt1,stm$,sup_exp_date,scst eof CSS_SUPPORT_EOF
-			F_SUPPORT: form pos 1,g 6,n 2,c 2,n 8,c 2,n 8,n 10.2,4*c 50
+			F_SUPPORT: form pos 1,c 6,n 2,c 2,n 8,c 2,n 8,n 10.2,4*c 50
 			cln=val(cln$)
 			if cln=client_id then
 				if srch(mat css_client_owns$,fn_system_code_standardize$(scode$))>0 then

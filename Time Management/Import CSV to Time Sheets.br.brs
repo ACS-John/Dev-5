@@ -43,7 +43,7 @@ for fileItem=1 to fileNameCount
 	pr #255,using Form_PrnHead: 'Date','Client','Time','Cat','Month','Desc','Rate','Expenses'
 	Form_PrnHead: form pos 1,cc 8,x 1,c 18,x 1,5*cr 10,x 1,c 30,x 1,cr 7,c 8
 	Form_PrnLine: form pos 1,C 5,n 9,2*pd 3.2,pd 4.2,n 6,n 2,pd 2,pd 1,C 2,n 4,c 12,pd 3,c 30
-	F_Support: form pos 1,g 6,n 2,c 2,x 8,x 2,n 8
+	F_support: form pos 1,g 6,n 2,c 2,x 8,x 2,n 8
 	dim line$*1024
  
 	fn_get_next_line(h_in,line$) : line_count+=1 ! consume headings
@@ -453,23 +453,24 @@ def fn_askDatesAndFile(mat label$,mat filter_date,mat empName$,mat filename$; __
 	end if
 	fn_askDatesAndFile=ckey
 fnend
-def fn_onsupport(wo_client$,wo_month$,the_date)
-	os_return=0
+def fn_onSupport(wo_client$,wo_month$,the_date; ___,returnN)
+	returnN=0
+	wo_client$=trim$(wo_client$)
 	! try lpad first
-	spk$=lpad$(wo_client$,6)&lpad$(wo_month$,2)
-	read #h_support,using F_Support,key=spk$: cln$,scode,scode$,sdt2 nokey OS_TRY_RPAD
+	spk$=lpad$(wo_client$,kln(h_support,1))&lpad$(wo_month$,2)
+	read #h_support,using F_support,key=spk$: cln$,scode,scode$,sdt2 nokey OS_TRY_RPAD
 	goto OS_FOUND_REC
  
 	OS_TRY_RPAD: !
-	spk$=rpad$(wo_client$,6)&lpad$(wo_month$,2)
-	read #h_support,using F_Support,key=spk$: cln$,scode,scode$,sdt2 nokey OS_FINIS
+	spk$=rpad$(wo_client$,kln(h_support,1))&lpad$(wo_month$,2)
+	read #h_support,using F_support,key=spk$: cln$,scode,scode$,sdt2 nokey OS_FINIS
 	goto OS_FOUND_REC
  
 	OS_FOUND_REC: !
-	if the_date<=sdt2 then os_return=1
+	if the_date<=sdt2 then returnN=1
  
 	OS_FINIS: !
-	fn_onsupport=os_return
+	fn_onSupport=returnN
 fnend
 def fn_houryRateAcs(wo_client$,the_date,wo_month$; hr_category,wo_sage_code$*128) ! inherrits client_id_sage_ax$ and client_id_brc$
 	if hr_category=23 or hr_category=11 then
@@ -482,7 +483,7 @@ def fn_houryRateAcs(wo_client$,the_date,wo_month$; hr_category,wo_sage_code$*128
 		hr_return=60
 	else if wo_client$=client_id_sage_ax$ then
 		hr_return=fn_houryRateSage(wo_sage_code$, the_date)
-	else if fn_onsupport(wo_client$,wo_month$,the_date) then
+	else if fn_onSupport(wo_client$,wo_month$,the_date) then
 		if hr_category=6 then
 			hr_return=0
 		else

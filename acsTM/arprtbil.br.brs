@@ -137,7 +137,7 @@ L1330: p=0
 	if ta=0 then goto L450
 return
  
-L1410: read #1,using L460,key=lpad$(rtrm$(st1$),5): z$,mat e$,mat ar,mat ta nokey L370 
+L1410: read #1,using L460,key=rpad$(trim$(st1$),5): z$,mat e$,mat ar,mat ta nokey L370 
 	goto L470
 L1430: tam1=tam1+am1
 	tam6=tam6+ar(1)

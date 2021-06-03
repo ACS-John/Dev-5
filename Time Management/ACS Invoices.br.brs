@@ -29,8 +29,9 @@ execute 'sy "C:\ACS\Util\Dev-5 Commit.cmd"'
 	open #hSupport=fnH: 'Name=S:\Core\Data\acsllc\Support.h[cno],KFName=S:\Core\Data\acsllc\support-idx.h[cno],Shr',internal,input,keyed
 	Fsupport: form pos 1,c 6,x 2,c 2,x 8,c 2,n 8,n 10.2,4*c 50
 
-	! fnIndex('TMSHT[session]','TMSHT-IDX[wsid]','1,5')
+	! fnIndex('[Temp]\TmSht[session]','[Temp]\TmSht-idx[session]','1,5')
 	fn_combineIntoTmSht('S:\Core\Data\acsllc\TimeSheet.h[cno]')
+	! pr 'ok go do FileIo on TM Tmp TimeSheet now' : pause
 
 	fnStatus('Printing Invoices...')
 	fnInvoiceOpen
@@ -58,7 +59,7 @@ execute 'sy "C:\ACS\Util\Dev-5 Commit.cmd"'
 
 
 		fn_billforMaint(invTotal)
-		if trim$(client_id$)='4132' then pause
+		
 		fn_billForNonMaint(invTotal)
 		! if invTotal then
 		! 	pr client_id$&' - '&client_addr$(1)&'     ';invTotal
@@ -186,7 +187,7 @@ def fn_billForNonMaint(&invTotal; ___,wo_desc$*30,hTimeSheet) ! add charges not 
 	! dim timesheet$(0)*128
 	! dim timesheetN(0)
 	! hTimeSheet=fn_open('TM timeSheet',mat timesheet$, mat timesheetN, mat form$)
-	open #hTimeSheet=fnH: 'Name=TmSht[session],KFName=TmSht-Idx[session]',internal,outIn,keyed
+	open #hTimeSheet=fnH: 'Name=[Temp]\TmSht[session],KFName=[Temp]\TmSht-idx[session]',internal,outIn,keyed
 	dim inp7
 	read #hTimeSheet,using F_time,key=>rpad$(client_id$,kln(hTimeSheet)): inp1$,inp2,inp3,inp4,inp5  ,inp6	,inp7,b6  	,b7  ,	b8$,sc,       o_o 	,wo_desc$ nokey TM_XIT2
 	F_time: form pos 1,                                                        c 5 ,n 9  ,2*pd 3.2 ,pd 4.2,n 6 	,n 2 ,pd 2	,pd 1,	c 2,n 4,x 12, pd 3	,c 30
@@ -199,7 +200,7 @@ def fn_billForNonMaint(&invTotal; ___,wo_desc$*30,hTimeSheet) ! add charges not 
 			! def fn_billForHours(client_id$) ! ,inp1$,inp2,inp3,inp4,inp5,inp6,inp7,etc...
 			if invLine=30 then fn_print_inv ! pr invoice if more than 20 entries
 			if invLine>29 then pause
-			spk$=' '&client_id$&lpad$(b8$,2)
+			spk$=' '&lpad$(client_id$,5)&lpad$(b8$,2)
 
 			if inp7=2 then goto BfhGo ! always bill modifications
 
@@ -314,11 +315,11 @@ fnend
 def fn_combineIntoTmSht(file_from$*256; ___,tce_key$,wo_desc$*30,h_from,h_to,toInp3,toInp5)
 
 	open #h_from=fnH: 'Name='&file_from$,internal,input
-	open #h_to=fnH: 'Name=TmSht[session],KFName=TmSht-Idx[session],Replace,RecL='&str$(rln(h_from))&',KPs=1/36/25,KLn=5/2/6',internal,outIn,keyed
+	open #h_to=fnH: 'Name=[Temp]\TmSht[session],KFName=[Temp]\TmSht-idx[session],Replace,RecL='&str$(rln(h_from))&',KPs=1/36/25,KLn=5/2/6',internal,outIn,keyed
 	do
 		read #h_from,using F_time: inp1$,inp2,inp3,inp4,inp5,inp6,inp7,b6,b7,b8$,sc,o_o,wo_desc$ eof TCE_EOF
 		
-		! pr '_______________________________-'
+		! pr '_______________________________'
 		! pr 'inp1$   =';inp1$
 		! pr 'inp2    =';inp2
 		! pr 'inp3    =';inp3

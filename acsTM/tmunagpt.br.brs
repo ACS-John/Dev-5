@@ -11,7 +11,7 @@
 	fnRead30Categories(mat cat$)
  
 	open #1: "Name=S:\Core\Data\acsllc\Work2.H"&wsid$&",NoShr",internal,input ioerr ERTN
-	open #2: "Name=S:\Core\Data\acsllc\CLmstr.h[cno],KFName=S:\Core\Data\acsllc\CLIndex.h[cno],Shr",internal,input,keyed ioerr ERTN
+	! open #2: "Name=S:\Core\Data\acsllc\CLmstr.h[cno],KFName=S:\Core\Data\acsllc\CLIndex.h[cno],Shr",internal,input,keyed ioerr ERTN
 	pr newpage
 	pr f "10,10,Cc 60,n": "Printing Unbilled Aging by Partner..."
 	pr f "12,30,Cc 20,B,5": "Cancel (F5)"
@@ -23,7 +23,7 @@ L260: form pos 1,c 5,c 30,c 9,n 2,n 6,pd 4.2,5*pd 4.2
 	gosub L870
 	goto L250
 L300: close #1,free:
-	close #2:
+	! close #2:
 	open #3: "Name=S:\Core\Data\acsllc\EMmstr.h[cno],KFName=S:\Core\Data\acsllc\EMIndex.h[cno],Shr",internal,input,keyed ioerr ERTN
 	gosub L350
 	goto L420
@@ -37,10 +37,10 @@ L380: form x 20,"Total",pos 34,n 11.2,x 1,5*n 11.2,skip 1
 L420: gosub L640
 	gosub L980
 	gosub L350
-L450: close #1: ioerr L460
-L460: close #2: ioerr L470
-L470: close #6: ioerr L480
-L480: fncloseprn
+L450: close #1: ioerr ignore
+! close #2: ioerr ignore
+close #6: ioerr ignore
+fncloseprn
 Xit: fnXit
 !
 L510: pr #255: newpage

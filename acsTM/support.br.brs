@@ -10,7 +10,7 @@
 	gosub BUILD_LAYOUT
 	gosub OPEN_FILE : gosub CLOSE_FILE : gosub OPEN_FILE
 	gosub HAMSTER: gosub CLOSE_FILE
-	execute 'Index S:\Core\Data\acsllc\support.h420  S:\Core\Data\acsllc\support-idx.h420 1/7,6/2,replace,DupKeys'
+	fnIndex('S:\Core\Data\acsllc\support.h420','S:\Core\Data\acsllc\support-idx.h420','1/7,6/2')
 	goto Xit
  
 OPEN_FILE: !

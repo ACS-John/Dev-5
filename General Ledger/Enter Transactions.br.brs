@@ -919,7 +919,7 @@ fnend
 def fn_transactionAdd(hMerge,typeOfEntryN,glBank$,transDate; ___, _
 	returnN,gl$*12,tr$*12,tr4,tr5,tType,postingCode,lrPrior,smResponse)
 	! if trPrior$='' then fnpcreg_read('last Reference Number',trPrior$)
-				
+
 				fnpcreg_read('reference number',tr$)
 	do
 		gl$=jv2$=tr$=td$=vn$=key$=''
@@ -984,16 +984,16 @@ fnend
 						if tType=sx_receipt or tType=sx_sale then allocAmt=-allocAmt ! reverse signs on receipts and sales BEFORE DISPLAYING ON CORRECTION SCREEN
 						tAmt+=allocAmt
 						vn$=vn$
-	
+
 						selx=tType
 						write #hMtemp,using "form pos 1,c 12,pd 10.2,c 30,pd 5": payeegl$,allocAmt,td$,rec(hMerge)
 						totalalloc+=allocAmt ! re-add total allocations
 					end if
 				loop
 				MtEoM: !
-	
+
 				PES_XIT: !
-	
+
 		fn_makeMergeTemp=hMtemp
 	fnend
 def fn_transactionDelete(hMerge,delRec; ___, _
@@ -1016,7 +1016,7 @@ def fn_transactionDelete(hMerge,delRec; ___, _
 				read #hMerge,using F_merge,rec=testRec: cGl$,cTdate,cTr5,cTtype,cPostingCode,CTr$,cTd$,cVn$,cJv2$,cGlBank$ norec TdEoF
 				isMatch=0
 				cKey$=str$(cTtype)&'~'&cTr$&'~'&str$(cTdate)
-				if cKey$=oKey$ then 
+				if cKey$=oKey$ then
 					isMatch=1
 					! pr 'delete record '&str$(testRec)
 					delete #hMerge,rec=testRec:
@@ -1114,7 +1114,7 @@ def fn_nextTr$(tr$,selx,gl_retainFieldsDuringAdd$; ___,trVal,pS,pE,v)
 	else
 		tr$='oth'
 	end if
-	
+
 	fn_nextTr$=tr$&str$(trVal)
 fnend
 def fn_buildMatK(hMerge,mat kList$,mat kReceipts,mat kDisbursements,mat kAdjustments,&totalCredits,&totalDebits,&count; ___,tAmt,key$*12,tranType,kWhich)

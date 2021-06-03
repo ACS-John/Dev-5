@@ -126,7 +126,7 @@ REGULAR_ENTRY: ! r:
 	if chg=2 and xinp(1)=0 then goto L1720
 	if cmdkey=1 or xinp(1)=0 then goto L1710
 	if ce><1 then goto L1370
-	k$=lpad$(str$(xinp(1)),5)
+	k$=rpad$(str$(xinp(1)),5)
 	dim a1$*30
 	read #1,using 'form pos 6,c 30',key=k$: a1$ nokey ERR1
 	pr f "4,35,C 40,H,N": a1$
@@ -291,7 +291,7 @@ ScreenPrintInvoices: ! r:
 		! xinp(1) = client id
 		! xinp(3) = invoice date
 		if xinp(1) then
-			k$=lpad$(str$(xinp(1)),5)
+			k$=rpad$(str$(xinp(1)),5)
 			read #1,using 'form pos 6,3*c 30',key=k$: mat billto$
 			fnInvoiceAdd(k$,mat billto$,invoiceNumber$,xinp(3),mat id$,mat da,0)
 		end if

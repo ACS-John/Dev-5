@@ -86,7 +86,7 @@ L900: pr newpage
 	pr f "10,10,c 52,n": "ENTER CLIENT NUMBER TO PRINT, ENTER 0 WHEN COMPLETE"
 L920: input fields "10,65,n 5,ue,n": cliprt conv L920
 	if cliprt=0 then goto L980
-	cliprt$=lpad$(rtrm$(str$(cliprt)),5)
+	cliprt$=rpad$(trim$(str$(cliprt)),5)
 	write #7,using L960: cliprt$
 L960: form pos 1,c 5
 	goto L900
