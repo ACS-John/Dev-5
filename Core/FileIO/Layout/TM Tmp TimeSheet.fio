@@ -1,5 +1,5 @@
-S:\Core\Data\acsllc\TimeSheet.h[cno],  c_  , 0
-S:\Core\Data\acsllc\TimeSheet-Idx.h[cno] ,  clientId
+TmSht[session], ts2_, 0
+TmSht-Idx[session] ,  clientId
 recl=86
 ===================================================
 clientId  	,Client Key    		,c   5    	,                 , ! pos=1     aka=inp(1),ipx(1)   combof(ignored,S:\Core\Data\acsllc\CLmstr.h[cno],1,5,6,30,S:\Core\Data\acsllc\CLIndex.h[cno],1)
@@ -18,4 +18,3 @@ zero2     	,Zero 2         	,pd  3    	,                 , ! pos=54    aka=o_o
 desc      	,Description   	,c  30    	,                 , ! pos=57
 
 
-! !!!   csz               ,  CSZ          ,  C    30    , ! SPos= 101 EPos=130   aka=e$(4)   ComboF(ignore,[Q]\Data\CityStZip.dat,1,30,0,0,[Q]\Data\CityStZip.idx)

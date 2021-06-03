@@ -27,9 +27,9 @@ execute 'sy "C:\ACS\Util\Dev-5 Commit.cmd"'
 	! pr 're-indexing support, just in case - probably not necessary to do so often, but one time there was this problem.'
 	! fnIndex('S:\Core\Data\acsllc\support.h[cno]','S:\Core\Data\acsllc\support-idx.h[cno]','1/7,6/2')
 	open #hSupport=fnH: 'Name=S:\Core\Data\acsllc\Support.h[cno],KFName=S:\Core\Data\acsllc\support-idx.h[cno],Shr',internal,input,keyed
-	Fsupport: form pos 1,c 6,n 2,c 2,x 8,c 2,n 8,n 10.2,4*c 50
+	Fsupport: form pos 1,c 6,x 2,c 2,x 8,c 2,n 8,n 10.2,4*c 50
 
-	! fnIndex('TMSHT[wsid]','TMSHT-IDX[wsid]','1,5')
+	! fnIndex('TMSHT[session]','TMSHT-IDX[wsid]','1,5')
 	fn_combineIntoTmSht('S:\Core\Data\acsllc\TimeSheet.h[cno]')
 
 	fnStatus('Printing Invoices...')
@@ -40,13 +40,13 @@ execute 'sy "C:\ACS\Util\Dev-5 Commit.cmd"'
 	dim inv_item$(30)*128
 	dim inv_amt(30)
 	dim inv_category(30)
-	dim inv_service_code(30)
+	dim inv_service_code$(30)
 	dim inv_gl$(30)*12
 	dim client_id$*5
 	dim client_addr$(3)*30
 	do
 		read #hClient,using 'form pos 1,c 5,3*c 30,pos 283,pd 5.2': client_id$,mat client_addr$,pbal eof EoClient
-		client_id$=client_id$
+
 
 
 
@@ -57,13 +57,26 @@ execute 'sy "C:\ACS\Util\Dev-5 Commit.cmd"'
 		! if client_id$='4132' then pr '4132 - Stern' : pause
 
 
-
 		fn_billforMaint(invTotal)
+		if trim$(client_id$)='4132' then pause
 		fn_billForNonMaint(invTotal)
 		! if invTotal then
 		! 	pr client_id$&' - '&client_addr$(1)&'     ';invTotal
 		! end if
-		fn_print_inv
+		
+		! r: debug point
+		pr '*'&client_id$&'*'
+		if trim$(client_id$)='4132' then 
+			pr 'client_id$="'&client_id$&'"'
+			pr 'client_addr$(1)="'&client_addr$(1)&'"'
+			pr 'client_addr$(2)="'&client_addr$(2)&'"'
+			pr 'pbal=';pbal
+			pr 'invTotal=';invTotal
+			pause
+		end if
+		! /r
+		
+		fn_print_inv ! ( client_id$,mat client_addr$,pbal,invTotal )
 
 	loop
 	EoClient: !
@@ -112,7 +125,7 @@ def fn_billForMaint(&invTotal)
 	iv$=rpad$(str$(invoice_number),12)
 	restore #hSupport: ! ,key>=lpad$(trim$(client_id$),kln(hSupport)): ! nokey EoSupport
 	do
-		read #hSupport,using Fsupport: cln$,scode,scode$,stm$,sup_exp_date,supCost eof EoSupport
+		read #hSupport,using Fsupport: cln$,scode$,stm$,sup_exp_date,supCost eof EoSupport
 		cln$=trim$(cln$)
 
 		if cln$=client_id$ then
@@ -156,7 +169,7 @@ def fn_billForMaint(&invTotal)
 					end if
 					inv_amt(invLine)=supCost
 					inv_category(invLine)=6
-					inv_service_code(invLine)=scode
+					inv_service_code$(invLine)=scode$
 					inv_gl$(invLine)='  0  1160  0'
 				end if
 
@@ -175,25 +188,25 @@ def fn_billForNonMaint(&invTotal; ___,wo_desc$*30,hTimeSheet) ! add charges not 
 	! hTimeSheet=fn_open('TM timeSheet',mat timesheet$, mat timesheetN, mat form$)
 	open #hTimeSheet=fnH: 'Name=TmSht[session],KFName=TmSht-Idx[session]',internal,outIn,keyed
 	dim inp7
-	read #hTimeSheet,using F_time,key=>rpad$(client_id$,kln(hTimeSheet)): inp1$,inp2,inp3,inp4,inp5,inp6,inp7,b6,b7,b8,sc,o_o,wo_desc$ nokey TM_XIT2
-	F_time: form pos 1,c 5,n 9,2*pd 3.2,pd 4.2,n 6,n 2,pd 2,pd 1,n 2,n 4,x 12,pd 3,c 30
+	read #hTimeSheet,using F_time,key=>rpad$(client_id$,kln(hTimeSheet)): inp1$,inp2,inp3,inp4,inp5  ,inp6	,inp7,b6  	,b7  ,	b8$,sc,       o_o 	,wo_desc$ nokey TM_XIT2
+	F_time: form pos 1,                                                        c 5 ,n 9  ,2*pd 3.2 ,pd 4.2,n 6 	,n 2 ,pd 2	,pd 1,	c 2,n 4,x 12, pd 3	,c 30
 	F_timeTc: form pos 1,x 14,pd 3.2,x 3,pd 4.2
 	if inp1$=client_id$ then
 		do
-			if b8=0 then b8=19
+			if b8$='0' or b8$='' then b8$='19'
 			delete #hTimeSheet: ioerr ignore ! delete current record so it is not processed twice
 			! fn_billForHours(client_id$)
 			! def fn_billForHours(client_id$) ! ,inp1$,inp2,inp3,inp4,inp5,inp6,inp7,etc...
 			if invLine=30 then fn_print_inv ! pr invoice if more than 20 entries
 			if invLine>29 then pause
-			spk$=' '&client_id$&cnvrt$('n 2',b8)
+			spk$=' '&client_id$&lpad$(b8$,2)
 
 			if inp7=2 then goto BfhGo ! always bill modifications
 
 			if inp7=23 or inp7=11 then goto BfhXit ! always no charge
 
 			if inp7<>2 then
-				read #hSupport,using Fsupport,key=spk$: cln$,scode,scode$,stm$,sup_exp_date,supCost nokey BfhGo
+				read #hSupport,using Fsupport,key=spk$: cln$,scode$,stm$,sup_exp_date,supCost nokey BfhGo
 				trans_date=date(days(inp6,'mmddyy'),'ccyymmdd')
 				if (trans_date<=sup_exp_date) then goto BfhXit !  it covered by maintenance
 			end if
@@ -208,19 +221,19 @@ def fn_billForNonMaint(&invTotal; ___,wo_desc$*30,hTimeSheet) ! add charges not 
 				!     pause  ! inv_item$(invLine)=str$(inp3)&' hours at a rate of '&&' on '&cnvrt$('pic(##/##/##)',inp6)
 				inv_item$(invLine)=str$(inp3)&' hours at a rate of '&cnvrt$('pic($$#.##)',inp4)&' on '&cnvrt$('pic(##/##/##)',inp6)
 			else if inp7=2 then
-				inv_item$(invLine)=str$(inp3)&' hours of '&trim$(fnSystemNameFromId$(b8))&' programming on '&cnvrt$('pic(##/##/##)',inp6)
+				inv_item$(invLine)=str$(inp3)&' hours of '&trim$(fnSystemNameFromId$(b8$))&' programming on '&cnvrt$('pic(##/##/##)',inp6)
 			else
-				inv_item$(invLine)=str$(inp3)&' hours of '&trim$(fnSystemNameFromId$(b8))&' support on '&cnvrt$('pic(##/##/##)',inp6)
+				inv_item$(invLine)=str$(inp3)&' hours of '&trim$(fnSystemNameFromId$(b8$))&' support on '&cnvrt$('pic(##/##/##)',inp6)
 			end if
 
 			inv_amt(invLine)=inp5
 			inv_category(invLine)=6
-			inv_service_code(invLine)=b8
+			inv_service_code$(invLine)=b8$
 			inv_gl$(invLine)='  0  1160  0'
 			BfhXit: !
 			! fnend
 
-			read #hTimeSheet,using F_time: inp1$,inp2,inp3,inp4,inp5,inp6,inp7,b6,b7,b8,sc,o_o,wo_desc$ eof TM_XIT2
+			read #hTimeSheet,using F_time: inp1$,inp2,inp3,inp4,inp5,inp6,inp7,b6,b7,b8$,sc,o_o,wo_desc$ eof TM_XIT2
 		loop while inp1$=client_id$
 	end if
 	TM_XIT2: !
@@ -234,13 +247,13 @@ def fn_print_inv
 			inv_item$(invLine)='Minimum Monthly Billing of $100.00'
 			inv_amt(invLine)=100-sum(mat inv_amt)
 			invTotal+=inv_amt(invLine)
-			inv_service_code(invLine)=19
+			inv_service_code$(invLine)='19'
 			inv_gl$(invLine)='  0  1160  0'
 		end if
 	end if
 	if invTotal=>1 then
-		write #h_tmwk2,using F_TMWK2a: client_id$,2,invDateMmDdYy,iv$,mat cde$,mat inv_item$,mat inv_amt,mat inv_category,mat inv_service_code,mat inv_gl$
-		F_TMWK2a: form pos 1,c 5,n 1,n 6,c 12,30*c 6,30*c 128,30*pd 5.2,30*n 2,30*n 2,30*c 12
+		write #h_tmwk2,using F_TMWK2a: client_id$,2,invDateMmDdYy,iv$,mat cde$,mat inv_item$,mat inv_amt,mat inv_category,mat inv_service_code$,mat inv_gl$
+		F_TMWK2a: form pos 1,c 5,n 1,n 6,c 12,30*c 6,30*c 128,30*pd 5.2,30*n 2,30*c 2,30*c 12
 	end if
 	if invTotal=>1 or pbal=>1 then
 		fn_summaryAccumulate
@@ -251,7 +264,7 @@ def fn_print_inv
 	end if
 	mat inv_item$=(' ')
 	mat inv_category=(0)
-	mat inv_service_code=(0)
+	mat inv_service_code$=('')
 	mat inv_gl$=('')
 	mat inv_amt=(0)
 	invLine=invTotal=0
@@ -303,16 +316,43 @@ def fn_combineIntoTmSht(file_from$*256; ___,tce_key$,wo_desc$*30,h_from,h_to,toI
 	open #h_from=fnH: 'Name='&file_from$,internal,input
 	open #h_to=fnH: 'Name=TmSht[session],KFName=TmSht-Idx[session],Replace,RecL='&str$(rln(h_from))&',KPs=1/36/25,KLn=5/2/6',internal,outIn,keyed
 	do
-		read #h_from,using F_time: inp1$,inp2,inp3,inp4,inp5,inp6,inp7,b6,b7,b8,sc,o_o,wo_desc$ eof TCE_EOF
-		if b8=20 then b8=19 ! ALL PRINTING SUPPORT IS COVERED BY CORE
-		tce_key$=rpad$(inp1$,5)&cnvrt$('N 2',b8)&cnvrt$('N 6',inp6) ! ...=cnvrt$('N 5',inp1$)&...
+		read #h_from,using F_time: inp1$,inp2,inp3,inp4,inp5,inp6,inp7,b6,b7,b8$,sc,o_o,wo_desc$ eof TCE_EOF
+		
+		! pr '_______________________________-'
+		! pr 'inp1$   =';inp1$
+		! pr 'inp2    =';inp2
+		! pr 'inp3    =';inp3
+		! pr 'inp4    =';inp4
+		! pr 'inp5    =';inp5
+		! pr 'inp6    =';inp6
+		! pr 'inp7    =';inp7
+		! pr 'b6      =';b6
+		! pr 'b7      =';b7
+		! pr 'b8$     =';b8$
+		! pr 'sc      =';sc
+		! pr 'o_o     =';o_o
+		! pr 'wo_desc$=';wo_desc$
+		! pause
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		if b8$='20' then b8$='19' ! ALL PRINTING SUPPORT IS COVERED BY CORE
+		
+		tce_key$=rpad$(inp1$,5)&lpad$(b8$,2)&cnvrt$('N 6',inp6) ! ...=cnvrt$('N 5',inp1$)&...
 		read #h_to,using F_timeTc,key=tce_key$: toInp3,toInp5 nokey CitAdd
 		inp3+=toInp3 ! time
 		inp5+=toInp5 ! charge
-		rewrite #h_to,using F_time,key=tce_key$: inp1$,inp2,inp3,inp4,inp5,inp6,inp7,b6,b7,b8,sc,o_o,wo_desc$
+		rewrite #h_to,using F_time,key=tce_key$: inp1$,inp2,inp3,inp4,inp5,inp6,inp7,b6,b7,b8$,sc,o_o,wo_desc$
 		goto CitNext
 		CitAdd: !
-		write #h_to,using F_time: inp1$,inp2,inp3,inp4,inp5,inp6,inp7,b6,b7,b8,sc,o_o,wo_desc$
+		write #h_to,using F_time: inp1$,inp2,inp3,inp4,inp5,inp6,inp7,b6,b7,b8$,sc,o_o,wo_desc$
 		CitNext: !
 	loop
 	TCE_EOF: !
@@ -398,7 +438,7 @@ def fn_mergeInvoices
 	! fnTop(program$,cap$='Merge Invoices written to temp file S:\Core\Data\acsllc\tmpInvoice.h[cno]')
 	dim ta(25,2),fb(25),e$*9,xb(8),sc$*4
 	! clmstr dims
-	dim ca(10),sc(10)
+	dim ca(10),sCa(10)
 	fnStatus('Merging Invoices...')
 	open #h_tmwk2=fnH: 'Name=S:\Core\Data\acsllc\tmpInvoice.h[cno],NoShr',internal,input
 	F_TMWK2: form pos 1,c 5,n 1,n 6,c 12,30*c 6,30*c 128,30*pd 5.2,30*n 2,30*n 2
@@ -419,7 +459,7 @@ def fn_mergeInvoices
 		read #h_tmwk2,using F_TMWK2: k$,xb(7),xb(4),iv$,mat cde$,mat id$,mat inv_amt,mat ct,mat tmwk2_sc eof MiFinis
 		! pr k$ : pause
 		if rtrm$(k$)='' or rtrm$(k$)='0' then goto READ_TMWK
-		read #h_clmstr,using F_CLMSTR,key=k$: e$,mat sc,mat ca,ar1 nokey READ_TMWK
+		read #h_clmstr,using F_CLMSTR,key=k$: e$,mat sCa,mat ca,ar1 nokey READ_TMWK
 		F_CLMSTR: form pos 179,c 9,pos 220,10*n 1,10*pd 3,pos 283,pd 5.2
 		if xb(7)=3 and rtrm$(iv$)='' then iv$='WRITE OFF'
 		iv$=lpad$(rtrm$(iv$),12)
@@ -431,15 +471,15 @@ def fn_mergeInvoices
 			xb(5)=ct(j) ! inv_amt(j+10) ! Category i.e. 6,2
 			xb(8)=tmwk2_sc(j) ! System Code
 
-			if xb(8)=0 then b8=25 else b8=xb(8)
+			if xb(8)=0 then b8N=25 else b8N=xb(8)
 			L390: !
 			lta=lrec(h_tmtrans)+1
 			write #h_tmtrans,using 'form pos 1,c 5,c 9,2*pd 3.2,pd 4.2,n 6,n 2,pd 2,pd 1,n 2,c 4,c 12,pd 3,c 30',rec=lta,reserve: k$,' ',mat xb,sc$,iv$,0,id$(j)(1:30) duprec L390
 			rewrite #h_tmtrans,using 'form pos 54,pd 3',rec=1,release: lta
 			if xb(5)=0 or ca(xb(5))=0 then goto THAT_STEP ! added xb(5)=0 on 2/1/2012
-				if b8>25 then b8=25 ! goto NEXT_ONE
-				p1=1+(b8-1)*6
-				p2=150+b8
+				! if b8N>25 then b8N=25 ! goto NEXT_ONE
+				p1=1+(b8N-1)*6
+				p2=150+b8N
 
 				read #h_tmtraddr,using F_TMTRADDR,rec=ca(xb(5)),reserve: ta1,ta2,fb1 noRec NEXT_ONE
 				F_TMTRADDR: form pos p1,2*pd 3,pos p2,n 1
@@ -452,11 +492,11 @@ def fn_mergeInvoices
 			mat ta=(0)
 			mat fb=(0)
 			if xb(5)>0 then ca(xb(5))=lta4 ! added xb(5)>0 on 2/1/2012
-			ta(b8,1)=lta
-			ta(b8,2)=lta
-			if xb(7)=-2 then fb(b8)=2
-			if fb(b8)=2 then goto L630
-			if xb(7)=-1 then fb(b8)=1
+			ta(b8N,1)=lta
+			ta(b8N,2)=lta
+			if xb(7)=-2 then fb(b8N)=2
+			if fb(b8N)=2 then goto L630
+			if xb(7)=-1 then fb(b8N)=1
 			L630: !
 			write #h_tmtraddr,using 'form pos 1,50*pd 3,25*n 1',reserve: mat ta,mat fb
 			lta4=lrec(4)
@@ -467,8 +507,8 @@ def fn_mergeInvoices
 			write #h_artrans,using 'form pos 1,c 5,c 12,n 6,2*pd 5.2,pd 2,2*n 1,c 20,pd 3',reserve: k$,iv$,xb(4),amt,amt,0,1,0,'CHARGE',0
 			ar1+=amt
 		end if
-		if xb(7)=-2 and xb(5)>0 then sc(xb(5))=2 ! added xb(5)>0 on 2/1/2012
-		rewrite #h_clmstr,using 'form pos 220,10*n 1,10*pd 3,pos 283,pd 5.2',key=k$: mat sc,mat ca,ar1
+		if xb(7)=-2 and xb(5)>0 then sCa(xb(5))=2 ! added xb(5)>0 on 2/1/2012
+		rewrite #h_clmstr,using 'form pos 220,10*n 1,10*pd 3,pos 283,pd 5.2',key=k$: mat sCa,mat ca,ar1
 		amt=0
 	loop  ! /r
 
