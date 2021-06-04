@@ -49,30 +49,30 @@ execute 'sy "C:\ACS\Util\Dev-5 Commit.cmd"'
 		read #hClient,using 'form pos 1,c 5,3*c 30,pos 283,pd 5.2': client_id$,mat client_addr$,pbal eof EoClient
 
 
+		client_id$=trim$(client_id$)
 
-
-		! if client_id$='3320' then pr '3320 - omaha' : pause
+		if client_id$='911' then pr client_id$&' - '&fnClientNameShort$(client_id$) : pause
 		! if client_id$='3379' then pr '3379 - Kathy Bacon' : pause
 		! if client_id$='3385' then pr '3385 - Evelyn Pareya' : pause
 		! if client_id$='3045' then pr '3045 - Moweaqua' : debug=1 : pause else debug=0
 		! if client_id$='4132' then pr '4132 - Stern' : pause
 
 
-		fn_billforMaint(invTotal)
-		
-		fn_billForNonMaint(invTotal)
+		fn_billforMaint(client_id$,invTotal)
+		if client_id$='4132' then pr client_id$&' - invTotal=';invTotal : pause
+		fn_billForNonMaint(client_id$,invTotal)
 		! if invTotal then
 		! 	pr client_id$&' - '&client_addr$(1)&'     ';invTotal
 		! end if
 		
 		! r: debug point
-		pr '*'&client_id$&'*'
-		if trim$(client_id$)='4132' then 
+		! pr '*'&client_id$&'*'
+		if client_id$='4132' or client_id$='911' then 
 			pr 'client_id$="'&client_id$&'"'
 			pr 'client_addr$(1)="'&client_addr$(1)&'"'
 			pr 'client_addr$(2)="'&client_addr$(2)&'"'
-			pr 'pbal=';pbal
-			pr 'invTotal=';invTotal
+			pr 'pbal           =';pbal
+			pr 'invTotal       =';invTotal
 			pause
 		end if
 		! /r
@@ -120,11 +120,16 @@ execute 'sy "C:\ACS\Util\Dev-5 Commit.cmd"'
 	loop
 ! /r
 
-def fn_billForMaint(&invTotal)
+def fn_billForMaint(client_id$,&invTotal)
 	! loads of locals
+
+
 	dim iv$*12
 	iv$=rpad$(str$(invoice_number),12)
-	restore #hSupport: ! ,key>=lpad$(trim$(client_id$),kln(hSupport)): ! nokey EoSupport
+	
+	client_id$=trim$(client_id$)
+	
+	restore #hSupport: ! ,key>=rpad$(trim$(client_id$),kln(hSupport)): ! nokey EoSupport
 	do
 		read #hSupport,using Fsupport: cln$,scode$,stm$,sup_exp_date,supCost eof EoSupport
 		cln$=trim$(cln$)
@@ -142,7 +147,7 @@ def fn_billForMaint(&invTotal)
 			if needsRenewal then
 
 				if supCost=0 then supCost=fn_price(scode$,stm$)
-				if supCost=0 then pr 'zero price???' : pause
+				if supCost=0 then pr 'zero support price???' : pause
 
 				if supCost>0 then
 					returnN=supCost
@@ -161,9 +166,9 @@ def fn_billForMaint(&invTotal)
 					if scode$='U4' then
 						inv_item$(invLine)=inv_item$(invLine)&' Maintenance for (UB) Hand Held Add-On'
 					else
-						inv_item$(invLine)=inv_item$(invLine)&' Maintenance for '&trim$(fnSystemNameFromId$(scode))
-						if trim$(fnSystemNameFromId$(scode))='' then
-							pr ' sending blank system name  scode='&str$(scode)
+						inv_item$(invLine)=inv_item$(invLine)&' Maintenance for '&trim$(fnSystemNameFromId$(scode$))
+						if trim$(fnSystemNameFromId$(scode$))='' then
+							pr ' sending blank system name  scode$='&scode$
 							pr '   client_id=';client_id$
 							pause
 						end if
@@ -183,7 +188,7 @@ def fn_billForMaint(&invTotal)
 	EoSupport: !
 fnend
 
-def fn_billForNonMaint(&invTotal; ___,wo_desc$*30,hTimeSheet) ! add charges not under maintenance to maintenance invoices
+def fn_billForNonMaint(client_id$,&invTotal; ___,wo_desc$*30,hTimeSheet) ! add charges not under maintenance to maintenance invoices
 	! dim timesheet$(0)*128
 	! dim timesheetN(0)
 	! hTimeSheet=fn_open('TM timeSheet',mat timesheet$, mat timesheetN, mat form$)

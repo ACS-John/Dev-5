@@ -198,7 +198,7 @@ def fn_setup_systemCache
 			read #hS,using form$(hS): mat s$,mat sN eof EoS
 			fnAddOneC(mat sAbbr$     	,trim$(lwrc$(s$(sys_id     )))   )
 			fnAddOneC(mat sName$     	,trim$(      s$(sys_name   ))    )
-			fnAddOneC(mat sNumber$  	,            s$(sys_number )     )
+			fnAddOneC(mat sNumber$  	,trim$(      s$(sys_number ))    )
 			fnAddOneN(mat sIsAddOnN 	,            sN(sys_isAddOn)     )
 		loop
 		EoS: !
@@ -224,11 +224,21 @@ def library fnSystemIsAddOn( sia_systemAbbr$*256; ___,returnN)
 	end if
 	fnSystemIsAddOn=returnN
 fnend
-def library fnSystemNameFromId$*256(sysno$; ___,return$*256)
+def library fnSystemNameFromId$*256(; sysno$,___,return$*256) ! from ID or Abbr
+	! inherrits mat sNumber$, mat sAbbr$
 	if ~setup then fn_setup
 	fn_setup_systemCache
+	sysno$=lwrc$(trim$(sysno$))
+	
+	if sysno$='' then sysno$=env$('CurSys')
+	
 	sWhich=srch(mat sNumber$,sysno$)
-	if sWhich>0 then
+	if sWhich<=0 then
+		! if uprc$(sysno$)='P1' then pr fn_standardizeSysId$(sysno$) : pause
+		sWhich=srch(mat sAbbr$,lwrc$(fn_standardizeSysId$(sysno$)))
+	end if
+	
+	if sWhich then
 		return$=sName$(sWhich)
 	end if
 	fnSystemNameFromId$=return$
@@ -266,19 +276,23 @@ def library fncursys$(; cursys_set$*256,resetCache)
 			end if
 		end if
 	end if
-
-	if uprc$(cursys_cache$)="P1" then cursys_cache$="PR" ! Payroll
-	if uprc$(cursys_cache$)="P2" then cursys_cache$="PR" ! Job Cost Payroll
-	if uprc$(cursys_cache$)="P4" then cursys_cache$="PR" ! version 4 Payroll
-	if uprc$(cursys_cache$)="G1" then cursys_cache$="GL" ! General Ledger
-	if uprc$(cursys_cache$)="G2" then cursys_cache$="GL" ! Accountant's GL
-	if uprc$(cursys_cache$)="G3" then cursys_cache$="GL" ! Budget Management
+	
+	cursys_cache$=fn_standardizeSysId$(cursys_cache$)
 	if env$('CurSys')<>cursys_cache$ then
 		fnSetEnv('CurSys',cursys_cache$)
 		! just fnSystemNameFromAbbr$ instead       --->      fnSetEnv('CurSystem',fn_systemNameFromAbbr$(cursys_cache$))
 		execute 'config substitute [CurSys] '&cursys_cache$
 	end if
 	fncursys$=cursys_cache$
+fnend
+def fn_standardizeSysId$(return$)
+	if uprc$(return$)="P1" then return$="PR" ! Payroll
+	if uprc$(return$)="P2" then return$="PR" ! Job Cost Payroll
+	if uprc$(return$)="P4" then return$="PR" ! version 4 Payroll
+	if uprc$(return$)="G1" then return$="GL" ! General Ledger
+	if uprc$(return$)="G2" then return$="GL" ! Accountant's GL
+	if uprc$(return$)="G3" then return$="GL" ! Budget Management
+	fn_standardizeSysId$=return$
 fnend
 include: fn_open
 include: fn_setup
