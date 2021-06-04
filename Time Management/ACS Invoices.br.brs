@@ -59,7 +59,7 @@ execute 'sy "C:\ACS\Util\Dev-5 Commit.cmd"'
 
 
 		fn_billforMaint(client_id$,invTotal)
-		if client_id$='4132' then pr client_id$&' - invTotal=';invTotal : pause
+		if client_id$='4132' then pr client_id$&' - before fn_billForNonMaint' : pause
 		fn_billForNonMaint(client_id$,invTotal)
 		! if invTotal then
 		! 	pr client_id$&' - '&client_addr$(1)&'     ';invTotal
@@ -68,11 +68,10 @@ execute 'sy "C:\ACS\Util\Dev-5 Commit.cmd"'
 		! r: debug point
 		! pr '*'&client_id$&'*'
 		if client_id$='4132' or client_id$='911' then 
-			pr 'client_id$="'&client_id$&'"'
-			pr 'client_addr$(1)="'&client_addr$(1)&'"'
-			pr 'client_addr$(2)="'&client_addr$(2)&'"'
-			pr 'pbal           =';pbal
-			pr 'invTotal       =';invTotal
+			pr 'client_id$     ="'&client_id$&'"     invTotal  =';invTotal
+			! pr 'client_addr$(1)="'&client_addr$(1)&'"'
+			! pr 'client_addr$(2)="'&client_addr$(2)&'"'
+			! pr 'pbal           =';pbal
 			pause
 		end if
 		! /r
@@ -129,7 +128,7 @@ def fn_billForMaint(client_id$,&invTotal)
 	
 	client_id$=trim$(client_id$)
 	
-	restore #hSupport: ! ,key>=rpad$(trim$(client_id$),kln(hSupport)): ! nokey EoSupport
+	restore #hSupport: ! ,key>=rpad$(client_id$,kln(hSupport)): ! nokey EoSupport
 	do
 		read #hSupport,using Fsupport: cln$,scode$,stm$,sup_exp_date,supCost eof EoSupport
 		cln$=trim$(cln$)
@@ -195,8 +194,9 @@ def fn_billForNonMaint(client_id$,&invTotal; ___,wo_desc$*30,hTimeSheet) ! add c
 	open #hTimeSheet=fnH: 'Name=[Temp]\TmSht[session],KFName=[Temp]\TmSht-idx[session]',internal,outIn,keyed
 	dim inp7
 	read #hTimeSheet,using F_time,key=>rpad$(client_id$,kln(hTimeSheet)): inp1$,inp2,inp3,inp4,inp5  ,inp6	,inp7,b6  	,b7  ,	b8$,sc,       o_o 	,wo_desc$ nokey TM_XIT2
-	F_time: form pos 1,                                                        c 5 ,n 9  ,2*pd 3.2 ,pd 4.2,n 6 	,n 2 ,pd 2	,pd 1,	c 2,n 4,x 12, pd 3	,c 30
+	F_time: form pos 1,                                                        v 5 ,n 9  ,2*pd 3.2 ,pd 4.2,n 6 	,n 2 ,pd 2	,pd 1,	c 2,n 4,x 12, pd 3	,c 30
 	F_timeTc: form pos 1,x 14,pd 3.2,x 3,pd 4.2
+	! inp1$=trim$(inp1$)
 	if inp1$=client_id$ then
 		do
 			if b8$='0' or b8$='' then b8$='19'
