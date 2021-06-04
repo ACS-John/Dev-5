@@ -52,7 +52,9 @@ L540: form pos 1,50*pd 3,25*n 1
 	rewrite #4,using L190,rec=1,release: lta4
 L560: scc(b(5))=1
 	rewrite #1,using L330,key=k$: mat scc,mat ca
-L580: if val(e$)=0 then goto L660 ! EMPLOYEE
+
+L580: !
+	if val(e$)=0 then goto L660 ! EMPLOYEE
 	read #5,using L600,key=e$: mat e nokey L660
 L600: form pos 38,60*pd 4.2,60*pd 5.2
 	e(1,b(5))=e(1,b(5))+b(1)

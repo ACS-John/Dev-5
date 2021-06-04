@@ -3,7 +3,6 @@ fnTop(program$)
 
 dim sage_code$*128
 dim resp$(20)*1048
-client_id_peterEngler$='ped'
 client_id_sage_ax$='3811'
 client_id_brc$='90'
 client_id_framemasters$='1864'
