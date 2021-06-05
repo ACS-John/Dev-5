@@ -51,7 +51,7 @@ execute 'sy "C:\ACS\Util\Dev-5 Commit.cmd"'
 
 		client_id$=trim$(client_id$)
 
-		if client_id$='911' then pr client_id$&' - '&fnClientNameShort$(client_id$) : pause
+		! if client_id$='911' then pr client_id$&' - '&fnClientNameShort$(client_id$) : pause
 		! if client_id$='3379' then pr '3379 - Kathy Bacon' : pause
 		! if client_id$='3385' then pr '3385 - Evelyn Pareya' : pause
 		! if client_id$='3045' then pr '3045 - Moweaqua' : debug=1 : pause else debug=0
@@ -59,7 +59,7 @@ execute 'sy "C:\ACS\Util\Dev-5 Commit.cmd"'
 
 
 		fn_billforMaint(client_id$,invTotal)
-		if client_id$='4132' then pr client_id$&' - before fn_billForNonMaint' : pause
+		! if client_id$='4132' then pr client_id$&' - before fn_billForNonMaint' : pause
 		fn_billForNonMaint(client_id$,invTotal)
 		! if invTotal then
 		! 	pr client_id$&' - '&client_addr$(1)&'     ';invTotal
@@ -67,13 +67,13 @@ execute 'sy "C:\ACS\Util\Dev-5 Commit.cmd"'
 		
 		! r: debug point
 		! pr '*'&client_id$&'*'
-		if client_id$='4132' or client_id$='911' then 
-			pr 'client_id$     ="'&client_id$&'"     invTotal  =';invTotal
-			! pr 'client_addr$(1)="'&client_addr$(1)&'"'
-			! pr 'client_addr$(2)="'&client_addr$(2)&'"'
-			! pr 'pbal           =';pbal
-			pause
-		end if
+		! if client_id$='4132' or client_id$='911' then 
+		! 	pr 'client_id$     ="'&client_id$&'"     invTotal  =';invTotal
+		! 	! pr 'client_addr$(1)="'&client_addr$(1)&'"'
+		! 	! pr 'client_addr$(2)="'&client_addr$(2)&'"'
+		! 	! pr 'pbal           =';pbal
+		! 	pause
+		! end if
 		! /r
 		
 		fn_print_inv ! ( client_id$,mat client_addr$,pbal,invTotal )
@@ -340,15 +340,6 @@ def fn_combineIntoTmSht(file_from$*256; ___,tce_key$,wo_desc$*30,h_from,h_to,toI
 		! pr 'wo_desc$=';wo_desc$
 		! pause
 		
-		
-		
-		
-		
-		
-		
-		
-		
-		
 		if b8$='20' then b8$='19' ! ALL PRINTING SUPPORT IS COVERED BY CORE
 		
 		tce_key$=rpad$(inp1$,5)&lpad$(b8$,2)&cnvrt$('N 6',inp6) ! ...=cnvrt$('N 5',inp1$)&...
@@ -447,7 +438,7 @@ def fn_mergeInvoices
 	dim ca(10),sCa(10)
 	fnStatus('Merging Invoices...')
 	open #h_tmwk2=fnH: 'Name=S:\Core\Data\acsllc\tmpInvoice.h[cno],NoShr',internal,input
-	F_TMWK2: form pos 1,c 5,n 1,n 6,c 12,30*c 6,30*c 128,30*pd 5.2,30*n 2,30*n 2
+	
 
 	dim k$*5
 	dim iv$*12
@@ -455,14 +446,15 @@ def fn_mergeInvoices
 	dim id$(30)*128
 	dim inv_amt(30)
 	dim ct(30)
-	dim tmwk2_sc(30)
+	dim tmwk2_sc$(30)
 	open #h_artrans=fnH:  'Name=S:\Core\Data\acsllc\ARTrans.h[cno],Shr',internal,outIn,relative
 	open #h_tmtrans=fnH:  'Name=S:\Core\Data\acsllc\TMTRANS.h[cno],Shr',internal,outIn,relative
 	open #h_clmstr=fnH:   'Name=S:\Core\Data\acsllc\CLmstr.h[cno],KFName=S:\Core\Data\acsllc\CLIndex.h[cno],Shr',internal,outIn,keyed
 	open #h_tmtraddr=fnH: 'Name=S:\Core\Data\acsllc\TMTRAddr.h[cno],Shr',internal,outIn,relative
 	do  ! r: main loop
 		READ_TMWK: !
-		read #h_tmwk2,using F_TMWK2: k$,xb(7),xb(4),iv$,mat cde$,mat id$,mat inv_amt,mat ct,mat tmwk2_sc eof MiFinis
+		read #h_tmwk2,using F_TMWK2b: k$,xb(7),xb(4),iv$,mat cde$,mat id$,mat inv_amt,mat ct,mat tmwk2_sc$ eof MiFinis
+		F_TMWK2b: form pos 1         ,c 5,n 1,n 6,c 12,30*c 6,30*c 128,30*pd 5.2,30*n 2,30*c 2
 		! pr k$ : pause
 		if rtrm$(k$)='' or rtrm$(k$)='0' then goto READ_TMWK
 		read #h_clmstr,using F_CLMSTR,key=k$: e$,mat sCa,mat ca,ar1 nokey READ_TMWK
@@ -475,7 +467,7 @@ def fn_mergeInvoices
 			amt=amt+inv_amt(j)
 			xb(3)=inv_amt(j)
 			xb(5)=ct(j) ! inv_amt(j+10) ! Category i.e. 6,2
-			xb(8)=tmwk2_sc(j) ! System Code
+			xb(8)=fnval(tmwk2_sc$(j)) ! System Code
 
 			if xb(8)=0 then b8N=25 else b8N=xb(8)
 			L390: !
