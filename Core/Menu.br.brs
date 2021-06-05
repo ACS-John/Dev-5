@@ -3,7 +3,7 @@ enableUbCustomerEdit=1
 fn_setup
 
 ! r: setup once (additional setup stuff that just needs to be run once)
-	setenv('Session_Rows', '35')
+	setenv('Session_Rows', '40') ! 35
 	setenv('Session_Cols','115')
 	dim ml$(1)*128
 	if ~fnclient_has_mat(mat client_has$) then

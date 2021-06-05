@@ -2219,7 +2219,7 @@ def library fnBackgroundDisable(; activate)
 fnend
 def fn_backgrounddisable(; activate)
 	if activate then
-		Session_Rows=val(env$('Session_Rows')) : if Session_Rows<=0 then Session_Rows=35
+		Session_Rows=val(env$('Session_Rows')) : if Session_Rows<=0 then Session_Rows=352
 		Session_Cols=val(env$('Session_Cols')) : if Session_Cols<=0 then Session_Cols=115
 		open #disable_win=fnH: "srow=1,scol=1,rows="&str$(Session_Rows)&",cols="&str$(Session_Cols)&",border=none,picture=S:\Core\disable.png:TILE,parent=0",display,output
 	else
