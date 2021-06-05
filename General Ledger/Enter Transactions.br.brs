@@ -891,8 +891,9 @@ fnend
 		chdr_proof_total$(6)='End Balance'  	: cmask3$(6)='10'
 
 		! /r
-		dim kBegBalance(0),kEndBalance(0)
+		dim kBegBalance(0)
 		mat kBegBalance(udim(mat kList$))
+		dim kEndBalance(0)
 		mat kEndBalance(udim(mat kList$))
 		for j=1 to udim(mat kList$)
 
@@ -1145,18 +1146,15 @@ def fn_buildMatK(hMerge,mat kList$,mat kReceipts,mat kDisbursements,mat kAdjustm
 				! 1 = Disbursements
 				! 4 = Payroll Check
 				kDisbursements(kWhich)+=tAmt ! total debits entered
-				kDisbursements(kWhich)+=tAmt ! total debits entered
 				totalDebits+=tAmt
 				totalCredits-=tAmt
 			else if tranType=2 or tranType=7 then
 				! 2 = Receipts
 				kReceipts(kWhich)+=tAmt ! total credits entered
-				kReceipts(kWhich)+=tAmt ! total credits entered
 				totalCredits+=tAmt
 				totalDebits-=tAmt
 			else if tranType=3 then
 				! 3 = Adjustments
-				kAdjustments(kWhich)+=tAmt ! net adjustments
 				kAdjustments(kWhich)+=tAmt ! net adjustments
 				if tAmt<0 then totalCredits+=tAmt
 				if tAmt>0 then totalDebits+=tAmt
