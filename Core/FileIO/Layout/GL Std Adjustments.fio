@@ -1,0 +1,8 @@
+[Q]\GLmstr\glStdAd.h[cno]  ,  sa_  , 1
+[Q]\GLmstr\glStdIdx.h[cno] ,  ref
+recl=59
+===================================================
+ref   	,Reference   		, c  12  , ! Pos= 1  
+desc  	,Description 	, c  30  , ! Pos=13    
+gl    	,GL Account  		, c  12  , ! Pos=43  mask=glaccount
+amt   	,Amount       	, pd 5.2 , ! Pos=55  mask=32
