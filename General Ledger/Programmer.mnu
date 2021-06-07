@@ -1,6 +1,7 @@
 General Ledger ^ ACS General Ledger
 General Ledger - Programmer
 >Hamsters
+>Std Adjustments                         ^ HamsterFio:Std Adjustments
 >TransactionType                         ^ HamsterFio:*
 >AcTrans (Accumulated Transactions)      ^ HamsterFio:acTrans
 >AcTrans (Accumulated Transactions)      ^ HamsterFio:acTrans

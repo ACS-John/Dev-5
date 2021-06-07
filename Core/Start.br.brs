@@ -214,7 +214,7 @@ def fn_acsSystemInitialize(; syInitMode)
 
 		fnSetEnv('Desktop',fnSpecialFolderPath$('Desktop'))
 
-		if version_current$>version_prior$ or env$('ForceScreenIOUpdate')<>'' then
+		if version_current$>version_prior$ then
 			if  env$('cursys')<>'CM' then
 				fn_showReleaseNotes(version_prior$,version_current$)
 				fn_freeVirtualStore
