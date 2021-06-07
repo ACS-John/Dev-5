@@ -1,7 +1,7 @@
 def fn_setup
 	if ~setup then
 		setup=1
-		library 'S:\Core\Library': fnAddOneC,fnOpenFile,fnAddOneN,fnHamster,fnH,fnerror,fnSrepEnv$
+		autoLibrary
 		dim form$(0)*256
 		dim hfLabel$(0)*128
 	end if
@@ -81,8 +81,21 @@ def fn_hfLayoutRead(hfLayoutFilename$*256,mat hfDataAll$,mat hfLabel$,mat hfFiel
 					mask$=lwrc$(hfItem$(hamsterColumn)(posMask+6:posSpaceAfter-1))
 					if mask$='currency' or mask$='pointtwo' then
 						tmp=32
-					else if mask$='glnumber' then
-						tmp=53
+					else if mask$='glaccount' then !   old unused format: mask=glnumber   
+						tmp=53          !  this could also need to be 50, 51 or 52  jb 6/7/2021
+						fnGetUseDeptAndSub(useDept,useSub)
+						if ~useDept and ~useSub then
+							tmp=50
+						else if useDept and ~useSub then
+							tmp=51
+						else if ~useDept and useSub then
+							tmp=52
+						else if useDept and useSub then
+							tmp=53
+						end if
+						! see fnagl$ logic in
+						! C:\ACS\Dev-5\Core\fn\agl$.br.brs
+						pr 'found it' : pause
 					else if mask$='mmddyy' then
 						tmp=1
 					else if mask$='ccyymmdd' then
@@ -139,8 +152,13 @@ def fn_hfLayoutRead(hfLayoutFilename$*256,mat hfDataAll$,mat hfLabel$,mat hfFiel
 						! cfItem$(cbIndex)=srep$(cfItem$(cbIndex),'[Q]',env$('Q'))
 						! cfItem$(cbIndex)=srep$(cfItem$(cbIndex),'[cno]',env$('cno'))
 						cfItem$(cbIndex)=fnSrepEnv$(cfItem$(cbIndex))
+						
+						! use mask=glaccount instead    if pos(cfItem$(cbIndex),'*custom:GL Account*')>0 then
+						!                               	debugCombo=1
+						!                               	pause
+						!                               end if
+						
 						if pos(cfItem$(cbIndex),'*custom:UB ServiceCodes*')>0 then
-							library 'S:\Core\Library': fnGetServices
 							dim serviceName$(10)*20
 							dim serviceCode$(10)*2
 							fnGetServices(mat serviceName$,mat serviceCode$)
@@ -154,12 +172,10 @@ def fn_hfLayoutRead(hfLayoutFilename$*256,mat hfDataAll$,mat hfLabel$,mat hfFiel
 							nex scItem
 							cfItem$(cbIndex)=srep$(cfItem$(cbIndex),'*custom:UB ServiceCodes*',tmpList$)
 						else if pos(cfItem$(cbIndex),'*custom:UB ServiceCodes Metered*')>0 then
-							library 'S:\Core\Library': fnGetServiceCodesMetered
 							fnGetServiceCodesMetered(mat serviceCodeMetered$)
 							mat2str(mat serviceCodeMetered$,tmpList$,',')
 							cfItem$(cbIndex)=srep$(cfItem$(cbIndex),'*custom:UB ServiceCodes Metered*',tmpList$)
 						else if pos(cfItem$(cbIndex),'*custom:U4 Devices Enabled*')>0 then
-							library 'S:\Core\Library': fnHandHeldList
 							dim deviceName$(0)*20
 							fnHandHeldList(mat deviceName$)
 							mat2str(mat deviceName$,tmpList$,',')

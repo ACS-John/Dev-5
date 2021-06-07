@@ -79,7 +79,7 @@ def library fnKeyExists(hFile,&keyToTest$; attemptFix,___,returnN, _
 			end if
 			PastDot00: !
 
-			
+
 			if dotPos=len(tmp$)-1 and ~tried0 then
 				keyToTest$=tmp$&'0' soflow Past0
 				tried0=1
@@ -160,6 +160,55 @@ fnend
 def library fnpause(;unused)
 	if env$("ACSDeveloper")<>"" then pr 'fnpause enacted.' : exe 'go XITPAUSE step'
 XITPAUSE: fnend
+
+def library fnGetUseDeptAndSub(&useDept,&useSub; ___,guSys$,gudsSetupTimeN)
+	! find out if I should use the department number and/or the sub account number
+	! only reads once every three seconds, but resets counter if checked within 3 seconds
+	! Retains: gudsSetup$,useDeptCache,useSubCache
+	! Guds_
+
+	guSys$=env$('CurSys')
+	if env$('CurSys')='UB' and exists('[Q]\GLmstr\Company.h[cno]') then guSys$='GL': goto Guds_CoOpen
+	if env$('CurSys')='UB' and exists('[Q]\UBmstr\GLmstr.h[cno]' ) then guSys$='UB': goto GudsDefault
+	if env$('CurSys')='PR' and exists('[Q]\GLmstr\Company.h[cno]') then guSys$='GL': goto Guds_CoOpen
+	if env$('CurSys')='PR' and exists('[Q]\CLmstr\Company.h[cno]') then guSys$='CL': goto Guds_CoOpen
+	if env$('CurSys')='PR' and exists('[Q]\PRmstr\glmstr.h[cno]' ) then guSys$='PR': goto Guds_CoOpen
+	if env$('CurSys')='CR' and exists('[Q]\GLmstr\GLmstr.h[cno]' ) then guSys$='GL': goto Guds_CoOpen
+	if env$('CurSys')='CR' and ~exists('[Q]\GLmstr\GLmstr.h[cno]') then guSys$='CR': goto Guds_CoOpen
+	if env$('CurSys')='CL' then guSys$='CL' else guSys$='GL'
+
+	Guds_CoOpen: !
+		if guSys$='GL' or guSys$='CL' then
+
+			gudsSetupTimeN=val(gudsSetup$(4:inf))
+			if gudsSetup$(1:2)<>guSys$ or fn_stime>gudsSetupTimeN+3 then
+				gudsSetup$=guSys$&'-'&str$(fn_stime)
+				open #hCompany=fnH: 'Name=[Q]\'&guSys$&'mstr\Company.h[cno],Shr',internal,input ioerr GudsDefault
+				read #hCompany,using 'Form Pos 150,2*N 1': useDept,useSub
+				close #hCompany: ioerr ignore
+				useDeptCache=useDept
+				useSubCache =useSub 
+			else
+				gudsSetup$=guSys$&'-'&str$(fn_stime)
+				useDept=useDeptCache
+				useSub =useSubCache 
+			end if
+		else if guSys$='PR' or guSys$='UB' or guSys$='CR' then
+			GudsDefault: ! default both to use
+			useDept=useSub=1
+		end if
+
+fnend
+def fn_stime(; returnN,___,tmp$*8)
+tmp$=time$  ! i.e. 10:31:52
+returnN+=val(time$(1:2))*60*60
+returnN+=val(time$(4:5))*60
+returnN+=val(time$(7:8))
+fn_stime=returnN
+fnend
+
+
+
 ! /r
 ! r: S:\Core\Start.br
 	def library fnWriteProc(procName$*64,procLine$*256)
@@ -537,14 +586,10 @@ fnend
 		fnqgl=fnqgl(myline,mypos,container,x,unused,qgllength)
 	fnend
 	def library fnqglbig(myline,mypos; container,x,use_or_replace)
-		! library 'S:\Core\ACS_Component.br': fnqglbig
-		! fnqglbig(myline,mypos,container,x,use_or_replace)
 		library 'S:\Core\ACS_Component.br': fnqgl
 		fnqglbig=fnqgl(myline,mypos,container,x,use_or_replace,60)
 	fnend
 	def library fnqgl25(myline,mypos; container,x,use_or_replace)
-		! library 'S:\Core\ACS_Component.br': fnqgl25
-		! fnqgl25=fnqgl25(myline,mypos,container,x,use_or_replace)
 		library 'S:\Core\ACS_Component.br': fnqgl
 		fnqgl=fnqgl(myline,mypos,container,x,use_or_replace,25)
 	fnend
