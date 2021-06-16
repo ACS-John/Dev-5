@@ -29,27 +29,28 @@ def fn_setup_hamster
 	dim lbl$(1)*38,tln(1),p$(1)*160,fltyp$(1),sln(1),mask(1),c$(1,8)*40 ! SP(1) - not used
 	mat lbl$(0) : mat tln(0) : mat p$(0) : mat fltyp$(0) : mat sln(0) : mat mask(0) : mat c$(0,8) : mat sp(0)
  
-	! fn_add_rec(label$*38,textbox_len,field_type$*2; storage_length,ar_mask)
-	fn_add_rec("Dept",3,'N',0,mask_number)
-	fn_add_rec("Acct",6,'N',0,mask_number)
-	fn_add_rec("Sub",3,'N',0,mask_number)
-	fn_add_rec("Date",6,'N',0,mask_mmddyy)
-	fn_add_rec("Amount",12.2,'PD',6.2,mask_pointtwo)
-	fn_add_rec("Trans Code",2,'N',0,mask_pointtwo)
-	fn_add_rec("Posting Code",2,'N',0,mask_pointtwo)
-	fn_add_rec("Reference #",12,'C')
-	fn_add_rec("Description",30,'C')
-	fn_add_rec("Next Tran Addr",5,'PD',3,mask_number)
+	! fn_add_rec(label$*38,textbox_len,field_type$*2; storage_length,mask)
+	fn_add_rec("Dept"          	, 3  ,'N' ,0   ,mask_number  	)
+	fn_add_rec("Acct"          	, 6  ,'N' ,0   ,mask_number  	)
+	fn_add_rec("Sub"           	, 3  ,'N' ,0   ,mask_number  	)
+	fn_add_rec("Date"          	, 6  ,'N' ,0   ,mask_mmddyy  	)
+	fn_add_rec("Amount"        	,12.2,'PD',6.2 ,mask_pointtwo	)
+	fn_add_rec("Trans Code"   	,2   ,'N' ,0   ,mask_pointtwo	)
+	fn_add_rec("Posting Code" 	, 2  ,'N' ,0   ,mask_pointtwo	)
+	fn_add_rec("Reference #"  	,12  ,'C'                     	)
+	fn_add_rec("Description"  	,30  ,'C'                     	)
+	fn_add_rec("Next Tran Addr", 5  ,'PD',3   ,mask_number  	)
 fnend
-def fn_add_rec(label$*38,textbox_len,field_type$*2; storage_length,ar_mask)
+def fn_add_rec(label$*38,textbox_len,field_type$*2; storage_length,mask)
+
 	if storage_length=0 then storage_length=textbox_len
 	add_rec_item=udim(mat lbl$)+1
-	mat lbl$(add_rec_item) : lbl$(add_rec_item)=label$
-	mat tln(add_rec_item) : tln(add_rec_item)=textbox_len
+	mat lbl$(add_rec_item)   	: lbl$(add_rec_item)   	=label$
+	mat tln(add_rec_item)    	: tln(add_rec_item)    	=textbox_len
 	mat p$(add_rec_item)
-	mat fltyp$(add_rec_item) : fltyp$(add_rec_item)=field_type$
-	mat sln(add_rec_item) : sln(add_rec_item)=storage_length
-	mat mask(add_rec_item) : mask(add_rec_item)=ar_mask
+	mat fltyp$(add_rec_item) 	: fltyp$(add_rec_item) 	=field_type$
+	mat sln(add_rec_item)    	: sln(add_rec_item)    	=storage_length
+	mat mask(add_rec_item)   	: mask(add_rec_item)   	=mask
 	mat c$(add_rec_item,8)
 fnend
  

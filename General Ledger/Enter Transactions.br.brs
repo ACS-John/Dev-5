@@ -1295,17 +1295,20 @@ def fn_createContras(hMerge,mat kList$,mat kReceipts,mat kDisbursements,contraEn
 		end if
 	next j
 fnend
-def fn_clearContrasAndPosted(hMerge; ___,tr$*12,postCode)
+def fn_clearContrasAndPosted(hMerge; ___,tr$*12,postCode,type)
 	restore #hMerge:
 	do
-		read #hMerge,using 'form pos 27,n 2,pos 29,c 12': postCode,tr$ eof CfcEoF
-		if postCode=9 or trim$(tr$)="999999999999" then
+		read #hMerge,using 'form pos 25,n 2,n 2,c 12': type,postCode,tr$ eof CfcEoF
+		if postCode=9 or trim$(tr$)="999999999999" or type=0 then
+			if type=0 then
+				msgbox('A transaction with an invalid type ('&str$(type)&') was automatically deleted.')
+			end if
 			delete #hMerge:
 		end if
 	loop
 	CfcEoF: !
-fnend
 
+fnend
 Xit: ! r:
 	setenv('current_grid_row',gridRowHold$)
 fnXit ! /r

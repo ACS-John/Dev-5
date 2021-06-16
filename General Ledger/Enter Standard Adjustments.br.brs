@@ -9,10 +9,10 @@ fnTop(program$)
 	dim lbl$(4)*38,tln(4),p$(4)*160,fltyp$(4),sln(4),mask(4),sp(4),c$(4,8)*40
 	ic=0 ! temporary Item Counter
 	! ** Field Labels     ** Storage Positions **		! ** Field Types   ** Storage Lengths ** Display Len ** Field Masks **
-	lbl$(ic+=1)="Reference"   	: sp(ic)= 1	:	fltyp$(ic)='C' 	: sln(ic)=12 	: tln(ic)=12  	: mask(ic)= 0
+	lbl$(ic+=1)="Reference"    	: sp(ic)= 1	:	fltyp$(ic)='C' 	: sln(ic)=12 	: tln(ic)=12  	: mask(ic)= 0
 	lbl$(ic+=1)="Description" 	: sp(ic)=13	:	fltyp$(ic)='C' 	: sln(ic)=30 	: tln(ic)=30  	: mask(ic)= 0
-	lbl$(ic+=1)="G/L Number"  	: sp(ic)=43	:	fltyp$(ic)='C' 	: sln(ic)=12 	: tln(ic)=12  	: mask(ic)= 0
-	lbl$(ic+=1)="Amount"      	: sp(ic)=55	:	fltyp$(ic)='PD'	: sln(ic)=5.2	: tln(ic)=10.2	: mask(ic)=32
+	lbl$(ic+=1)="G/L Number"   	: sp(ic)=43	:	fltyp$(ic)='C' 	: sln(ic)=12 	: tln(ic)=12  	: mask(ic)= 0
+	lbl$(ic+=1)="Amount"       	: sp(ic)=55	:	fltyp$(ic)='PD'	: sln(ic)=5.2	: tln(ic)=10.2	: mask(ic)=32
 
 	! ** Combo Box **
 	clx=3 : c$(clx,1)='ComboF'

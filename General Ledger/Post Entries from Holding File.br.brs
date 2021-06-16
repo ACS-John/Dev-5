@@ -194,16 +194,16 @@ INDEX: ! r:
 ADD: ! r:
 	fnTos
 	mylen=23: mypos=mylen+3 : right=1: rc=0
-	if use_dept =1 then let fnLbl(1,26,"Fund #",6,2)
-	if use_sub =1 then let fnLbl(1,40,"Sub #",6,2)
+	if useDept then fnLbl(1,26,"Fund #",6,2)
+	if useSub  then fnLbl(1,40,"Sub #",6,2)
 	fnLbl(2,1,"General Ledger Number:",mylen,right)
-	if use_dept=1 then 
+	if useDept then 
 		fnTxt(2,26,3,0,right,"30",0,"Enter the fund portion of the general ledger number.",0 ) 
 		resp$(rc+=1)=str$(dno)
 	end if
 	fnTxt(2,31,6,0,right,"30",0,"Enter the main part of the general ledger number.",0 ) 
 	resp$(rc+=1)=str$(ano)
-	if use_sub=1 then 
+	if useSub then 
 		fnTxt(2,40,3,0,right,"30",0,"Enter the sub portion of the general ledger number.",0 ) 
 		resp$(rc+=1)=str$(sno)
 	end if
@@ -215,15 +215,15 @@ ADD: ! r:
 	pas=0
 	if ckey=5 then goto MAIN
 	dno=ano=sno=0
-	if use_dept=1 then dno=val(resp$(1)) : ano=val(resp$(2))
-	if use_dept=0 then ano=val(resp$(1))
-	if use_dept=1 and use_sub=1 then sno=val(resp$(3))
-	if use_dept=0 and use_sub=1 then sno=val(resp$(2))
+	if useDept then dno=val(resp$(1)) : ano=val(resp$(2))
+	if ~useDept then ano=val(resp$(1))
+	if useDept and useSub then sno=val(resp$(3))
+	if ~useDept and useSub then sno=val(resp$(2))
 
-	if use_dept=1 and use_sub=1 then d$=resp$(4)
-	if use_dept=0 and use_sub=1 then d$=resp$(3)
-	if use_dept=0 and use_sub=0 then d$=resp$(2)
-	if use_dept=1 and use_sub=0 then d$=resp$(3)
+	if useDept and useSub then d$=resp$(4)
+	if ~useDept and useSub then d$=resp$(3)
+	if ~useDept and ~useSub then d$=resp$(2)
+	if useDept and ~useSub then d$=resp$(3)
 	key$=cnvrt$("N 3",dno)&cnvrt$("N 6",ano)&cnvrt$("N 3",sno)
 	read #4,using 'Form POS 1,N 3',key=key$: dno nokey L2310 ! 
 ! MSGBOX2: !

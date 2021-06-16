@@ -52,6 +52,7 @@ do ! r:  main loop - cycle through Merge file
 
 	! r: added because weird Std Adjustments were coming through
 	if ~use_dept and ~use_sub then
+		if glAcct$(len(glAcct$)-2:len(glAcct$))='  0' then glAcct$(len(glAcct$)-2:len(glAcct$))=''
 		glAcct$='  0'&lpad$(str$(val(glAcct$)),6)&'  0'
 		goto ReadAccount
 	end if
