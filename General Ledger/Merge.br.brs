@@ -25,6 +25,10 @@ fnAutomatedSavePoint('before Merge')
 	open #hGlTrans=fnH: "Name=[Q]\GLmstr\GLTrans.h[cno],Shr",internal,outIn,relative
 	F_glTrans: form pos 1,c 12,n 6,pd 6.2,n 2,n 2,c 12,c 30,pd 3
 	open #hMerge=fnH: "Name=[Q]\GLmstr\GL_Work_[acsUserId].h[cno],NoShr",internal,outIn
+	F_merge1: Form POS 1,C 12,N 6,PD 6.2,N 2,N 2,C 12,C 30,C 8,POS 93,C 12
+	F_merge2: form pos 1,c 12,n 6,pd 6.2,n 2,n 2,c 12,c 30
+	F_merge3: form pos 27,n 2
+	contraTotal=fn_contraTotal(hMerge,contraDisb,contraRcpt,contraOthr)
 	open #hPaymstr=fnH: "Name=[Q]\GLmstr\PayMstr.h[cno],Version=1,KFName=[Q]\GLmstr\PayIdx1.h[cno],Shr",internal,outIn,keyed
 	if ~exists("[Q]\GLmstr\bankrec.h[cno]") then
 		open #hBankRec=fnH: "Name=[Q]\GLmstr\bankrec.h[cno],KFName=[Q]\GLmstr\bankrec-idx.h[cno],Version=1,RecL=91,use,kps=79/3/4,kln=12/1/8,Shr",internal,outIn,keyed
@@ -41,7 +45,7 @@ do ! r:  main loop - cycle through Merge file
 	dim p$*30
 	dim ven$*8
 	dim xn(2)
-	read #hMerge,using "Form POS 1,C 12,N 6,PD 6.2,N 2,N 2,C 12,C 30,C 8,POS 93,C 12": glAcct$,xs,tranAmt,mat xn,l$,p$,ven$,glBank$ eof Finis
+	read #hMerge,using F_merge1: glAcct$,xs,tranAmt,mat xn,l$,p$,ven$,glBank$ eof Finis
 	prtrans=0
 	if xn(1)=4 then xn(1)=1 : prtrans=1 ! convert payroll transaction types to a regular disbursment
 	if xn(2)=9 then goto NextMergeRecord ! CHECK PREVIOUS POST
@@ -79,8 +83,8 @@ do ! r:  main loop - cycle through Merge file
 	cb+=tranAmt
 	rewrite #hAccount,using F_Glmstr1,key=glAcct$: cb,mat ta
 	L550: form pos 71,pd 3
-	rewrite #hMerge,using L570: 9
-	L570: form pos 27,n 2
+	rewrite #hMerge,using F_merge3: 9
+	
 
  ! r: ! BankRec file
 	if l$="999999999999" then goto EoBankRec ! don't update bkrec for contra entries
@@ -129,7 +133,7 @@ loop ! /r
 
 ScrMissingGl: ! r:
 	fnTos
-	mylen=40: mypos=mylen+3 : right=1
+	mylen=40: mypos=mylen+3
 	fnLbl(1,10,"  Account Number: "&glAcct$,mylen,left)
 	fnLbl(2,10,"            Date: "&str$(xs),mylen,left)
 	fnLbl(3,10, "          Amount: "&str$(tranAmt),mylen,left)
@@ -147,8 +151,8 @@ ScrMissingGl: ! r:
 	else if resp$(2)="True" then
 		! r: Change Account
 		fnTos
-		mylen=23: mypos=mylen+3 : right=1
-		fnLbl(1,1,"General Ledger Number:",mylen,right)
+		mylen=23: mypos=mylen+3
+		fnLbl(1,1,"General Ledger Number:",mylen,1)
 		fnqglbig(1,mypos,0,2)
 		resp$(1)=fnrglbig$(gl$)
 		fnCmdKey("&Next",1,1,0,"Will change to the selected account.")
@@ -165,21 +169,21 @@ goto ScrMissingGl ! /r
 		ano=val(glAcct$(4:9)) conv ignore
 		sno=val(glAcct$(10:12)) conv ignore
 		fnTos
-		mylen=23: mypos=mylen+3 : right=1: rc=0
+		mylen=23 : mypos=mylen+3 : rc=0
 		if use_dept then fnLbl(1,26,"Fund #",6,2)
 		if use_sub  then fnLbl(1,40,"Sub #",6,2)
-		fnLbl(2,1,"General Ledger Number:",mylen,right)
+		fnLbl(2,1,"General Ledger Number:",mylen,1)
 		if use_dept then
-			fnTxt(2,26,3,0,right,"30",0,"Fund portion of the general ledger number",0 )
+			fnTxt(2,26,3,0,1,"30",0,"Fund portion of the general ledger number",0 )
 			resp$(rc+=1)=str$(dno)
 		end if
-		fnTxt(2,31,6,0,right,"30",0,"Main part of the general ledger number",0 )
+		fnTxt(2,31,6,0,1,"30",0,"Main part of the general ledger number",0 )
 		resp$(rc+=1)=str$(ano)
 		if use_sub then
-			fnTxt(2,40,3,0,right,"30",0,"Sub portion of the general ledger number",0 )
+			fnTxt(2,40,3,0,1,"30",0,"Sub portion of the general ledger number",0 )
 			resp$(rc+=1)=str$(sno)
 		end if
-		fnLbl(3,1,"Description:",mylen,right)
+		fnLbl(3,1,"Description:",mylen,1)
 		fnTxt(3,mypos,50,0,left,"",0,"Account description",0 )
 		resp$(rc+=1)=""
 
@@ -230,4 +234,25 @@ Finis: ! r:
 goto Xit ! /r
 
 Xit: fnXit
+
+def fn_contraTotal(hMerge,&contraDisb,&contraRcpt,&contraOthr; ___,glAcct$*12,amt,type,postCode,id9$*12,desc$*30)
+	contraDisb=contraRcpt=contraOthr=0
+	restore #hMerge:
+	do
+		read #hMerge,using F_merge2: glAcct$,contraEntryDateN,amt,type,postCode,id9$,desc$ eof CtEoMerge
+		if id9$="999999999999" and desc$="Contra Entry" then
+			if type=1 then 								! 1 = Disbursements											
+				contraDisb+=amt
+			else if type=2 then						! 2 = Receipts														
+				contraRcpt+=amt
+			else
+				contraOthr+=amt
+			end if
+		end if
+	loop
+	CtEoMerge: !
+	restore #hMerge:
+	fn_contraTotal=contraDisb+contraRcpt+contraOthr
+fnend
+
 include: ertn

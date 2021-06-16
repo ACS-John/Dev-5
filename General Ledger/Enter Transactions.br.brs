@@ -187,22 +187,52 @@ goto ScreenOne ! /r
 		fnmsgbox(mat ml$,resp$,'',49)
 	goto ScreenOne ! /r
 ScrPost: ! r:
-	fnTos
+	fn_createContras(hMerge,mat kList$,mat kReceipts,mat kDisbursements,contraEntryDateN)
+	
+	! pr 'point b' : pause
+	
+	contraTotal=fn_contraTotal(hMerge,contraDisb,contraRcpt,contraOthr)
+
+	! pr 'point c',contraDisb,contraRcpt,contraOthr : pause
+	
+	
+	
+	fnTos : lc=respc=0
 	! fnFra(1,1,6,60,"Posting Options","You would only use the After_The_Fact options if you are maintaining the payroll records within the general ledger system.",0)
-	fnOpt(1,2,"Post to General Ledger",0,0)
+
+	lc=4
+	fnOpt(lc+=1,2,"Post to General Ledger",0,0)
 	resp$(1)="True"
-	fnOpt(2,2,"Automatic Processing",0,0)
+	fnOpt(lc+=1,2,"Automatic Processing",0,0)
 	resp$(2)="False"
-	fnOpt(3,2,"Post After-The-Fact Payroll only",0,0)
+	fnOpt(lc+=1,2,"Post After-The-Fact Payroll only",0,0)
 	resp$(3)="False"
-	fnOpt(4,2,"Post both General Ledger and After-The-Fact Payroll",0,0)
+	fnOpt(lc+=1,2,"Post both General Ledger and After-The-Fact Payroll",0,0)
 	resp$(4)="False"
-	fnOpt(5,2,"Return to Menu without posting",0,0)
+	fnOpt(lc+=1,2,"Cancel (Return to Menu without posting)",0,0)
 	resp$(5)="False"
+	lc+=1
+	respc=5 : lc=1
+	if contraDisb then
+		fnLbl(lc+=1,2,'Total Disbursements Contra:',27,1)
+		fnTxt(lc,30,10, 0,1,'',1,'credits from checks or purchases')
+		resp$(respc+=1)=str$(contraDisb)
+	end if
+	if contraRcpt then
+		fnLbl(lc+=1,2,'Total Receipts Contra:',27,1)
+		fnTxt(lc,30,10, 0,1,'',1,'debits from receipts or sales')
+		resp$(respc+=1)=str$(contraRcpt)
+	end if
+	if contraOthr then
+		pr bell,'Total Other Contra should not exist.'
+		fnLbl(lc+=1,2,'Total Other Contra:',27,1)
+		fnTxt(lc,30,10, 0,1,'',1,'these really shold not exist')
+		resp$(respc+=1)=str$(contraOthr)
+	end if
+
 	fnCmdSet(2)
 	ckey=fnAcs(mat resp$)
 	fnfscode(0)
-	fn_createContras(hMerge,mat kList$,mat kReceipts,mat kDisbursements,contraEntryDateN)
 	if resp$(5)="True" or ckey=5 then goto Xit ! return w/o posting
 	if resp$(2)="True" then fnprocess(1) else fnprocess(0)
 	if resp$(4)="True" then fnprocess(4) ! post both
@@ -1129,6 +1159,10 @@ def fn_buildMatK(hMerge,mat kList$,mat kReceipts,mat kDisbursements,mat kAdjustm
 	restore #hMerge:
 	do
 		read #hMerge,using "Form pos 19,PD 6.2,N 2,pos 93,C 12": tAmt,tranType,key$ eof FinisBuildMatK
+		
+		if tranType=5 then tranType=7
+		if tranType=6 then tranType=8
+		
 		count+=1
 
 		kWhich=srch(mat kList$,key$)
@@ -1283,19 +1317,44 @@ def fn_closeFiles ! always local
 fnend
 
 def fn_createContras(hMerge,mat kList$,mat kReceipts,mat kDisbursements,contraEntryDateN; ___,j)
-	restore #hMerge:
+
+	! pr 'in fn_createContras' : pause
+
 	for j=1 to udim(mat kList$)
 		if val(kList$(j)) then
 			if kDisbursements(j) then ! credits from checks or purchases
 				write #hMerge,using F_merge: kList$(j),contraEntryDateN,-kDisbursements(j),1,0,"999999999999","Contra Entry",'',''
+				! pr 'wrote a combined disbursements contra for '&str$(-kDisbursements(j)) ! pause
 			end if
 			if kReceipts(j) then ! debits from receipts or sales
 				write #hMerge,using F_merge: kList$(j),contraEntryDateN,-kReceipts(j),2,0,"999999999999","Contra Entry",'',''
+				! pr 'wrote a combined receipts/sales contra for '&str$(-kReceipts(j)) ! pause
 			end if
 		end if
 	next j
 fnend
-def fn_clearContrasAndPosted(hMerge; ___,tr$*12,postCode,type)
+
+def fn_contraTotal(hMerge,&contraDisb,&contraRcpt,&contraOthr; ___,glAcct$*12,amt,type,postCode,id9$*12,desc$*30)
+	contraDisb=contraRcpt=contraOthr=0
+	restore #hMerge:
+	do
+		read #hMerge,using F_merge: glAcct$,contraEntryDateN,amt,type,postCode,id9$,desc$ eof CtEoMerge
+		
+		if id9$="999999999999" and pos(desc$,"Contra Entry")>0 then
+			if type=1 then 								! 1 = Disbursements   -  credits from checks or purchases
+				contraDisb+=amt
+			else if type=2 then						! 2 = Receipts        -  debits from receipts or sales
+				contraRcpt+=amt
+			else
+				contraOthr+=amt
+			end if
+		end if
+	loop
+	CtEoMerge: !
+	restore #hMerge:
+	fn_contraTotal=contraDisb+contraRcpt+contraOthr
+fnend
+def fn_clearContrasAndPosted(hMerge; ___,tr$*12,postCode,type) ! also cleans up file
 	restore #hMerge:
 	do
 		read #hMerge,using 'form pos 25,n 2,n 2,c 12': type,postCode,tr$ eof CfcEoF
@@ -1304,6 +1363,14 @@ def fn_clearContrasAndPosted(hMerge; ___,tr$*12,postCode,type)
 				msgbox('A transaction with an invalid type ('&str$(type)&') was automatically deleted.')
 			end if
 			delete #hMerge:
+		end if
+		if type=5 or type=6 then
+			if type=5 then 
+				type=7
+			else if type=6 then 
+				type=8
+			end if
+			rewrite #hMerge,using 'form pos 25,n 2': type
 		end if
 	loop
 	CfcEoF: !
