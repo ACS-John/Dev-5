@@ -1,5 +1,6 @@
 Time and Date 		Sys	Program(s) and Change(s) Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       
 ______________________	___	____________________________________________________________________________________________________________________________________________________________________________________________________________________________________                                                                                    
+2:03 PM 6/16/2021	GL	Merge - fixed auto clean up of gl numbers with no fund nor subaccount for standard adjustmsnets post
 16:55 06/21/2021	CO	5.75139  
 4:43 PM 6/7/2021	GL	Merge - fixed GL Accounts not being found when posting Standard Adjustments 
 13:47 06/21/2021	CO	5.75138   
