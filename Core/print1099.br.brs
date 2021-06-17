@@ -17,7 +17,7 @@ def library fnadd1099(mat cinfo$, mat einfo$, mat box)
 	dim oldbox(22)
 
 	! if einfo$(1)='' then fnpause
-	open #dave=fnH: 'Name=1099-'&session$&'.dat,RecL=810,Use,Version=1,KFName=S:\Core\Data\Print1099.Idx,KPs=241,KLn=40',internal,outIn,keyed
+	open #dave=fnH: 'Name=1099-[session].dat,RecL=810,Use,Version=1,KFName=S:\Core\Data\Print1099.Idx,KPs=241,KLn=40',internal,outIn,keyed
 	read #dave,using 'Form Pos 481,22*N 15.2',key=rpad$(einfo$(1),40),reserve: mat oldbox nokey DAVENOKEY
 	mat box=box+oldbox
 	rewrite #dave,using 'Form Pos 481,22*N 15.2',same: mat box
@@ -39,7 +39,7 @@ def library fnPrint1099(; lz1$)
 	if ~setup then fn_setup
 	fnPrint1099=fn_print1099( lz1$)
 fnend
-def library fn_print1099(; lz1$)
+def fn_print1099(; lz1$)
 	
 	dim cinfo$(6)*40,einfo$(6)*40,box(22)
 	! cInfo$(1)*40 ! Company Name
@@ -53,7 +53,7 @@ def library fn_print1099(; lz1$)
 	if lz1$='' then lz1$='D'
 	
 	on fkey 5 goto EODAVE
-	open #dave=fnH: 'Name=1099-'&session$&'.dat',internal,outIn
+	open #dave=fnH: 'Name=1099-[session].dat',internal,outIn
 	if lz1$='E' then
 		open #exportfile=fnH: 'Name=\1099Etc.Wrk\W2Data\1099Dat.Prn,Replace',display,output
 	else
@@ -179,5 +179,3 @@ DoExport: ! r:
 	pr #exportfile: "*"
 return ! /r
 include: fn_setup
-
-
