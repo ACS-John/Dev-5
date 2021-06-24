@@ -69,7 +69,7 @@ ScreenOne: ! r:
 
 	resp$(respc_entryType=rc+=1)=str$(selx)
 	fnLbl(lc+=1,colPos,"Bank Account:",mylen,1)
-	fnqgl(lc,mypos,0,2)
+	fnqgl(lc,mypos,0,2,1)
 	resp$(respc_bankGl=rc+=1)=fnrgl$(glBank$)
 	fnLbl(lc+=1,colPos,"Process Ending Date:",mylen,1)
 	fnTxt(lc,mypos,8,0,1,"1001",0,"Process endings date must always be answered and will be the last day of the month or the last day of the period beding processed.",0 )
@@ -323,7 +323,7 @@ def fn_scrMain(hMerge; editRecord,heading$*64,glBank$*12,transDate,bankAcctName$
 		fnLbl(lc+=1,1,"General Ledger:",mylen,1)
 		fnLbl(lc,mylen+mypos+5,"If only one allocation necessary you may enter only",mylen,1)
 		fnLbl(lc+1,mylen+mypos+5,"the GL Account and Save.",mylen,1)
-		fnqgl(lc,mypos,0,2)
+		fnqgl(lc,mypos,0,2,1)
 		resp$(respc_AllocGl=5)=fnrgl$(gl$)
 		if selx=sx_adjustment then
 			fnLbl(lc+=1,1,"Net Adjustment:",mylen,1)
@@ -519,7 +519,7 @@ def fn_scrPayrollAdd(; ___,lendeditRecordc,lc)
 	if prx(1) then resp$(4)=str$(prx(1)) else resp$(4)=''
 	lc+=1
 	fnLbl(lc+=1,1,"General Ledger:",mylen,1)
-	fnqgl(lc,mypos,0,2)
+	fnqgl(lc,mypos,0,2,1)
 	resp$(5)=fnrgl$(gl$)
 	fnTxt(lc+2,50,13,0,1,"10",1,"Amount to allocated to this general ledger number.",0 )
 	resp$(6)='' ! disabled and hidden behind frame
@@ -740,10 +740,10 @@ def fn_scrAdjustment	(hMerge,editRecord,bankAcctName$*40, _
 
 	lc+=1
 	fnLbl(lc+=1,1,"General Ledger From:",mylen,1)
-	fnqgl(lc,mypos,0,2)
+	fnqgl(lc,mypos,0,2,1)
 	resp$(resp_glFrom=5)=fnrgl$(glFrom$)
 	fnLbl(lc+=1,1,"General Ledger To:",mylen,1)
-	fnqgl(lc,mypos,0,2)
+	fnqgl(lc,mypos,0,2,1)
 	resp$(resp_glTo=6)=fnrgl$(glTo$)
 
 	fnCmdKey("Save",ck_save1,~editRecord,0,"Completed making corrections to this transaction.")
@@ -787,7 +787,7 @@ def fn_editAllocation(editrecord; editall,___,ckey,mylen,mypos)
 		fnTxt(2,mypos,13,0,1,"10",0,"Enter the amount of this breakdown.",0 )
 		resp$(1)=str$(allocation)
 		fnLbl(1,1,"General Ledger #:",mylen,1)
-		fnqgl(1,mypos,0,2)
+		fnqgl(1,mypos,0,2,1)
 		resp$(2)=fnrgl$(gl$)
 		fnLbl(3,1,"Description:",mylen,1)
 		fnTxt(3,mypos,30,0,left,'',0,"Enter description to be carried in the general ledger transaction.",0 )

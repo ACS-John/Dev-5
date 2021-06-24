@@ -169,9 +169,8 @@ L860: goto L1640
 	data "  pr W-2's","S:\acsGL\PRW2","PRW2","E"
 	data "  Create Electronic W-2s","S:\acsGL\GLELECW2","GLElecW2","E"
 	data "  pr 1099s","S:\acsGL\GLPRT109","GLPrt109","E"
-	data "  Create Electronic 1099s","S:\acsGL\ELEC1099","Elec1099","E"
+	data "  Create Electronic 1099s","S:\General Ledger\Create Electronic 1099s","Create Electronic 1099s","E"
 	data "  Zero YTD Payroll Information","S:\acsGL\PRZYTD","PRZYTD","E"
-	data "  Zero YTD Vendor Purchases","S:\acsGL\GLZER109","GLZer109","E"
 ! Utilities
 	data "  pr Chart of Accounts","S:\acsGL\acGLCHRT","acGLChrt","E"
 	data "  Generate Reversing Entries","S:\acsGL\Reverse","","E"

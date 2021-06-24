@@ -11,7 +11,7 @@ dim gl(10,4),fli1$(49),ot1$(49),pgl(3)
 fn_get_old_setup
 open #h_clmstr=9: "Name=S:\Core\Data\acsllc\CLmstr.h[cno],KFName=S:\Core\Data\acsllc\CLIndex.h[cno],Shr",internal,input,keyed ioerr ERR_FILE
 open #11: "Name=S:\Core\Data\acsllc\CLmstr.h[cno],KFName=S:\Core\Data\acsllc\CLIndx2.h[cno],Shr",internal,input,keyed ioerr ERR_FILE
-open #h_addr:=3: "Name=[Temp]\Addr."&session$&",RecL=239,Replace",internal,outIn,relative ioerr ERR_FILE
+open #h_addr:=3: "Name=[Temp]\Addr.[Session],RecL=239,Replace",internal,outIn,relative ioerr ERR_FILE
 SCREEN_1: ! r:
 ! exec 'config dimonly'
 	dim file_import$*256,filter_date(2)
@@ -266,17 +266,11 @@ L2350: pr f "24,3,C 70,N": "PRESS ENTER TO RETRY; ELSE ENTER  Q  TO QUIT"
 L2410: goto Xit
 ! /r
 	def fn_tmsrch !  search for customer #
-		dim heading$*70,form$*80,numeric_format$*20,selection$*70
-		file_num=11 ! alpha index on clients
-		form$="form pos 1,c 5,pos 6,c 30,pos 66,c 15,pos 283,pd 5.2"
-		numeric_format$='pic($$$,$$$.##)'
-		key_length=5
-		heading$="Acct #-Name--------------------Address--------Balance"
-		fnsearch(cap$,file_num,heading$,form$,numeric_format$,selection$,key_length)
+		dim selection$*70
+		fnsearch(11,"form pos 1,c 5,pos 6,c 30,pos 66,c 15,pos 283,pd 5.2",'pic($$$,$$$.##)',selection$,key_length)
 		p$=selection$ ! pull key from first field in search line
 		ano=0
-		ano=val(selection$) conv L4910
-		L4910: !
+		ano=val(selection$) conv ignore
 	fnend
 def fn_get_old_setup
 	open #h_company:=1: "Name=S:\Core\Data\acsllc\Company.h[cno],Shr",internal,input ioerr ERR_FILE

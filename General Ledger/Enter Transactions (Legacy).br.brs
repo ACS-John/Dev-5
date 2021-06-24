@@ -23,7 +23,7 @@
 	fnreg_read('Enter Transactions - retain some fields between additions',gl_retainFieldsDuringAdd$,'False')
 ! fil$(1)="Name=[Q]\GLmstr\PRmstr.h[cno],KFName=[Q]\GLmstr\PRIndex.h[cno],Shr"
 ! fil$(2)="Name=[Q]\GLmstr\GL_Work_"&env$('acsUserId')&".h[cno]"
-! fil$(3)="Name=[Q]\GLmstr\GLWK2"&wsid$&".h[cno]"
+! fil$(3)="Name=[Q]\GLmstr\GLWK2[acsUserId].h[cno]"
 
 ! fil$(5)="Name=[Q]\GLmstr\GLPT"&wsid$&".h[cno]"
 ! fil$(6)="Name=[Q]\GLmstr\GLBRec.h[cno],KFName=[Q]\GLmstr\GLRecIdx.h[cno],Shr"
@@ -81,7 +81,7 @@
 
 	if gltyp<>1 then
 		open #1: "Name=[Q]\GLmstr\PRmstr.h[cno],KFName=[Q]\GLmstr\PRIndex.h[cno],Shr",internal,outIn,keyed ioerr ignore ! 00340   open #1: fil$(1),internal,outIn,keyed ioerr ignore
-		open #3: "Name=[Q]\GLmstr\GLWK2"&wsid$&".h[cno]",internal,outIn,relative ioerr ignore ! PR Work File
+		open #3: "Name=[Q]\GLmstr\GLWK2[acsUserId].h[cno]",internal,outIn,relative ioerr ignore ! PR Work File
 	end if
 	open #h_gl_work:=2: "Name=[Q]\GLmstr\GL_Work_"&env$('acsUserId')&".h[cno]",internal,outIn,relative ioerr ignore ! GL Work File
 	F_2A: form pos 1,c 12,n 6,pd 6.2,n 2,n 2,c 12,c 30,c 8,c 6,c 5,c 3,c 12
@@ -120,7 +120,7 @@ SCREEN_1: ! r:
 													!    if sel=j then resp$(4)=typeofentry_option$(j)
 													!  next j
 	fnLbl(8,1,"Bank Account:",mylen,right)
-	fnqgl(8,mypos,0,2,pas)
+	fnqgl(8,mypos,0,2,1)
 	resp$(respc_bankGl:=rc+=1)=fnrgl$(bankgl$)
 	fnLbl(9,1,"Process Ending Date:",mylen,right)
 	fnTxt(9,mypos,8,0,right,"1001",0,"Process endings date must always be answered and will be the last day of the month or the last day of the period beding processed.",0 )
@@ -168,12 +168,12 @@ ERASE_PREVIOUS_INPUT: ! r:
 	close #payeegl: ioerr ignore
 	if pt1=3 then
 		fnCopy(dv$&"GLWK101.h[cno]","[Q]\GLmstr\GL_Work_"&env$('acsUserId')&".h[cno]")
-		fnCopy(dv$&"GLWK201.h[cno]","[Q]\GLmstr\GLWK2"&wsid$&".h[cno]")
-		open #3: "Name=[Q]\GLmstr\GLWK2"&wsid$&".h[cno]",internal,outIn,relative
+		fnCopy(dv$&"GLWK201.h[cno]","[Q]\GLmstr\GLWK2[acsUserId].h[cno]")
+		open #3: "Name=[Q]\GLmstr\GLWK2[acsUserId].h[cno]",internal,outIn,relative
 		open #h_gl_work:=2: "Name=[Q]\GLmstr\GL_Work_"&env$('acsUserId')&".h[cno]",internal,outIn,relative
 		open #9: "Name="&dv$&"PayMstr.h[cno],KFName="&dv$&"PAYIDX1.h[cno]",internal,input,keyed ioerr ignore
 	else
-		open #3: "Name=[Q]\GLmstr\GLWK2"&wsid$&".h[cno],size=0,RecL=110,Replace",internal,outIn,relative
+		open #3: "Name=[Q]\GLmstr\GLWK2[acsUserId].h[cno],size=0,RecL=110,Replace",internal,outIn,relative
 		open #h_gl_work:=2: "Name=[Q]\GLmstr\GL_Work_"&env$('acsUserId')&".h[cno],SIZE=0,RecL=104,Replace",internal,outIn,relative
 	end if
 	open #5: "Name=[Q]\GLmstr\GLPT"&wsid$&".h[cno],Size=0,RecL=538,Replace",internal,outIn,relative
@@ -294,12 +294,12 @@ MAIN: ! r:
 			fnTxt(6,mypos,8,0,right,"",1,"Payee field disabled. Click 'Enable Payee' again to enable.",0 )
 			resp$(4)=""
 		else
-			fncombof("Paymstrcomb",6,mypos,35,"[Q]\GLmstr\PayMstr.h[cno]",1,8,9,39,"[Q]\GLmstr\payidx1.h[cno]",0,pas, "If the payee # is known, the general ledger information can be extracted from that record.",0)
+			fncombof("Paymstrcomb",6,mypos,35,"[Q]\GLmstr\PayMstr.h[cno]",1,8,9,39,"[Q]\GLmstr\payidx1.h[cno]",0,0, "If the payee # is known, the general ledger information can be extracted from that record.",0)
 			resp$(4)=vn$
 		end if
 	end if
 	fnLbl(7,1,"General Ledger #:",mylen,right)
-	fnqgl(7,mypos,0,2,pas)
+	fnqgl(7,mypos,0,2,1)
 	resp$(5)=fnrgl$(gl$)
 	if sel=3 then
 		fnLbl(7,60,"Net Adj:",8,right)
@@ -359,7 +359,6 @@ EO_FLEX1: ! /r
 	if ~edit then let fnCmdKey("&Finish",9,0,1,"")
 	ckey=fnAcs(mat resp$)
 	allocamt=0
-	! pAS=1 ! kj 61107
 	message$=""
 	if extract=1 and ckey<>1 then extract=0
 	if (ckey=9 or ckey=3) and sel1=3 and val(resp$(2))<>0 then ckey=1 ! force the last entry to write   ! KJ 50707
@@ -429,7 +428,6 @@ AFP_XIT: ! r:
 	end if
 	if ckey=17 then
 		fnaddglpayee
-		pas=0
 		goto MAIN
 	else if ckey=18 then
 		gosub EditAllocations
@@ -753,10 +751,10 @@ PAYROLL: ! r:
 	fnTxt(5,mypos,12,0,0,"",0,"Enter check number.",0)
 	resp$(3)=tr$
 	fnLbl(6,1,"Employee #:",mylen,right)
-	fncombof("PRmstr",6,mypos,35,"[Q]\GLmstr\PRmstr.h[cno]",1,4,5,30,"[Q]\GLmstr\PRINDEX.h[cno]",1,pas, "Choose from the list of employees.  Click Add Employee to add a new employee not shown on list.",0)
+	fncombof("PRmstr",6,mypos,35,"[Q]\GLmstr\PRmstr.h[cno]",1,4,5,30,"[Q]\GLmstr\PRINDEX.h[cno]",1,0, "Choose from the list of employees.  Click Add Employee to add a new employee not shown on list.",0)
 	resp$(4)=str$(pr(1))
 	fnLbl(7,1,"General Ledger #:",mylen,right)
-	fnqgl(7,mypos,0,2,pas)
+	fnqgl(7,mypos,0,2,1)
 	resp$(5)=fnrgl$(gl$)
 	if sel=3 then let fnLbl(7,60,"Net Adj:",mylen,right) else let fnLbl(7,60,"Amount:",mylen,right)
 	if sel=3 or sel=4 then disable=1 else disable=0
@@ -924,7 +922,7 @@ EditAllocations: ! r:  editing glallocation while still being entered into alloc
 	fnTxt(2,mypos,13,0,right,"10",0,"Enter the amount of this breakdown.",0 )
 	resp$(1)=str$(allocation)
 	fnLbl(1,1,"General Ledger #:",mylen,right)
-	fnqgl(1,mypos,0,2,pas)
+	fnqgl(1,mypos,0,2,1)
 	resp$(2)=fnrgl$(gl$)
 	fnLbl(3,1,"Description:",mylen,right)
 	fnTxt(3,mypos,30,0,left,"",0,"Enter description to be carried in the general ledger transaction.",0 )

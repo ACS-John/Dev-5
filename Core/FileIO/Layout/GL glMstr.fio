@@ -3,7 +3,7 @@
 [Q]\GLmstr\GLIndx2.h[cno] ,  Description
 recl=416
 ===================================================
-Account             	,    Department Number                       	,  C  12      , !  Pos=1-3 DNO^Department Number,Pos=4-9 ANO^Major Account Number,Pos=10-12 SNO^Sub Account Number
+Account             	,    Account Number                           	,  C  12      , !  Pos=1-3 DNO^Department Number,Pos=4-9 ANO^Major Account Number,Pos=10-12 SNO^Sub Account Number
 Description$       	,    Description                              	,  C  50      , !  Pos=13        D$        ^Desc
 RefBalSheet1       	,    Balance Sheet Ref Number                	,  PD  3      , !  Pos=63        RF(1)     ^BalShtRf1     combof({comment area},[Q]\GLmstr\acglfnsb.h[cno],1,5,6,30,[Q]\GLmstr\agfsidx4.h[cno]) ! ,0,0, Select the balance sheet reference number where this account should appear on the balance sheet."1)
 RefBalSheet2       	,    Secondary Balance Sheet Ref Number     	,  PD  3      , !  Pos=66        RF(2)     ^BalShtRf2     combof(ignore,[Q]\GLmstr\acglfnsc.h[cno],1,5,6,30,[Q]\GLmstr\agfsidx1.h[cno]) ! ,0,0, "Select the balance sheet reference number where this account should appear on the secondary balance sheet.",1)

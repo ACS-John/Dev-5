@@ -450,7 +450,7 @@ return  ! /r
 ! L3970: !
 ! return ! /r
 CREATE_LIST: ! r:
-	open #13: "Name=[Temp]\prreverse"&session$&",size=0,RecL=128,replace",internal,outIn
+	open #13: "Name=[Temp]\prreverse[Session],size=0,RecL=128,replace",internal,outIn
 	L4000: !
 	read #1,using "FORM pos 1,n 8,pos 132,2*PD 4.2",release: eno,em10,em11 eof L4100
 	checkkey$=cnvrt$("pic(ZZZZZZZ#)",eno)&"         "

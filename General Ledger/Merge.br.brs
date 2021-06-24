@@ -28,7 +28,6 @@ fnAutomatedSavePoint('before Merge')
 	F_merge1: Form POS 1,C 12,N 6,PD 6.2,N 2,N 2,C 12,C 30,C 8,POS 93,C 12
 	F_merge2: form pos 1,c 12,n 6,pd 6.2,n 2,n 2,c 12,c 30
 	F_merge3: form pos 27,n 2
-	contraTotal=fn_contraTotal(hMerge,contraDisb,contraRcpt,contraOthr)
 	open #hPaymstr=fnH: "Name=[Q]\GLmstr\PayMstr.h[cno],Version=1,KFName=[Q]\GLmstr\PayIdx1.h[cno],Shr",internal,outIn,keyed
 	if ~exists("[Q]\GLmstr\bankrec.h[cno]") then
 		open #hBankRec=fnH: "Name=[Q]\GLmstr\bankrec.h[cno],KFName=[Q]\GLmstr\bankrec-idx.h[cno],Version=1,RecL=91,use,kps=79/3/4,kln=12/1/8,Shr",internal,outIn,keyed
@@ -78,11 +77,10 @@ do ! r:  main loop - cycle through Merge file
 	write #hGlTrans,using F_glTrans: glAcct$,xs,tranAmt,mat xn,l$,p$,0
 	lr2=lrec(hGlTrans)
 	if ta(1)=0 then ta(1)=lr2
-	if ta(2)>0 then rewrite #hGlTrans,using L550,rec=ta(2): lr2
+	if ta(2)>0 then rewrite #hGlTrans,using 'form pos 71,pd 3',rec=ta(2): lr2
 	ta(2)=lr2
 	cb+=tranAmt
 	rewrite #hAccount,using F_Glmstr1,key=glAcct$: cb,mat ta
-	L550: form pos 71,pd 3
 	rewrite #hMerge,using F_merge3: 9
 	
 
@@ -132,54 +130,57 @@ do ! r:  main loop - cycle through Merge file
 loop ! /r
 
 ScrMissingGl: ! r:
-	fnTos
-	mylen=40: mypos=mylen+3
-	fnLbl(1,10,"  Account Number: "&glAcct$,mylen,left)
-	fnLbl(2,10,"            Date: "&str$(xs),mylen,left)
-	fnLbl(3,10, "          Amount: "&str$(tranAmt),mylen,left)
-	fnLbl(4,10, "Reference Number: "&l$ ,mylen,left)
-	fnLbl(5,10, "     Description: "&p$ ,mylen,left)
-	fnLbl(7,5, "This general ledger account does not exist!" ,60,0)
-	fnOpt(8,10,"Add this Account",0,0)
-	resp$(1)="True"
-	fnOpt(9,10,"Change Account Number",0,0)
-	resp$(1)="False"
-	fnCmdKey("&Next",1,1,0,"Allows you to either add the account or change the account number.")
-	ckey=fnAcs(mat resp$)
-	if resp$(1)="True" then
-		goto ADD
-	else if resp$(2)="True" then
-		! r: Change Account
-		fnTos
-		mylen=23: mypos=mylen+3
-		fnLbl(1,1,"General Ledger Number:",mylen,1)
-		fnqglbig(1,mypos,0,2)
-		resp$(1)=fnrglbig$(gl$)
-		fnCmdKey("&Next",1,1,0,"Will change to the selected account.")
+	do
+		fnTos : rc=0
+		mylen=40: mypos=mylen+3
+		fnLbl(1,10,"  Account Number: "&glAcct$,mylen,left)
+		fnLbl(2,10,"            Date: "&str$(xs),mylen,left)
+		fnLbl(3,10, "          Amount: "&str$(tranAmt),mylen,left)
+		fnLbl(4,10, "Reference Number: "&l$ ,mylen,left)
+		fnLbl(5,10, "     Description: "&p$ ,mylen,left)
+		fnLbl(7,5, "This general ledger account does not exist!" ,60,0)
+		fnOpt(8,10,"Add this Account",0,0)
+		resp$(respc_accountAdd=rc+=1)="True"
+		fnOpt(9,10,"Change Account Number",0,0)
+		resp$(respc_AccountChg=rc+=1)="True"
+		resp$(1)="False"
+		fnCmdKey("&Next",1,1,0,"Allows you to either add the account or change the account number.")
 		ckey=fnAcs(mat resp$)
-		if ckey<>5 then
-			glAcct$=gl$=fnagl$(resp$(1))
+		if resp$(respc_accountAdd)="True" then
+			goto ADD
+		else if resp$(respc_AccountChg)="True" then
+			! r: Change Account
+			fnTos
+			mylen=23: mypos=mylen+3
+			fnLbl(1,1,"General Ledger Number:",mylen,1)
+			fnQglBig(1,mypos,0,2,1)
+			resp$(1)=fnRglBig$(gl$)
+			fnCmdKey("&Next",1,1,0,"Will change to the selected account.")
+			ckey=fnAcs(mat resp$)
+			if ckey<>5 then
+				glAcct$=gl$=fnAgl$(resp$(1))
+			end if
+			! /r
+			goto ReadAccount
 		end if
-		! /r
-		goto ReadAccount
-	end if
-goto ScrMissingGl ! /r
+	loop 
+! /r
 	ADD: ! r:
 		dno=val(glAcct$(1:3)) conv ignore
 		ano=val(glAcct$(4:9)) conv ignore
 		sno=val(glAcct$(10:12)) conv ignore
 		fnTos
 		mylen=23 : mypos=mylen+3 : rc=0
-		if use_dept then fnLbl(1,26,"Fund #",6,2)
-		if use_sub  then fnLbl(1,40,"Sub #",6,2)
-		fnLbl(2,1,"General Ledger Number:",mylen,1)
 		if use_dept then
+			fnLbl(1,26,"Fund #",6,2)
 			fnTxt(2,26,3,0,1,"30",0,"Fund portion of the general ledger number",0 )
 			resp$(rc+=1)=str$(dno)
 		end if
+		fnLbl(2,1,"General Ledger Number:",mylen,1)
 		fnTxt(2,31,6,0,1,"30",0,"Main part of the general ledger number",0 )
 		resp$(rc+=1)=str$(ano)
 		if use_sub then
+			fnLbl(1,40,"Sub #",6,2)
 			fnTxt(2,40,3,0,1,"30",0,"Sub portion of the general ledger number",0 )
 			resp$(rc+=1)=str$(sno)
 		end if
@@ -189,26 +190,30 @@ goto ScrMissingGl ! /r
 
 		fnCmdSet(2)
 		ckey=fnAcs(mat resp$)
-		! todo:  XXX Where's the cancel logic?  either remove the cancel button or make cancel work.
-		pas=0
-		dno=ano=sno=0
-		if use_dept then dno=val(resp$(1)) : ano=val(resp$(2))
-		if ~use_dept then ano=val(resp$(1))
-		if use_dept and use_sub then sno=val(resp$(3))
-		if ~use_dept and use_sub then sno=val(resp$(2))
-
-		dim d$*50
-		if use_dept and use_sub then d$=resp$(4)
-		if ~use_dept and use_sub then d$=resp$(3)
-		if ~use_dept and ~use_sub then d$=resp$(2)
-		if use_dept and ~use_sub then d$=resp$(3)
-		glBank$=cnvrt$("N 3",dno)&cnvrt$("N 6",ano)&cnvrt$("N 3",sno)
-		read #hAccount,using 'Form POS 1,N 3',key=glBank$: dno nokey ignore
-		mat ta=(0)
-		cb=0
-		dim zo(50)
-		write #hAccount,using F_Glmstr2: glAcct$,d$,mat zo
-	goto WriteTrans ! /r
+		if ckey=5 then 
+			goto ScrMissingGl  		! todo:  XXX new cancel logic   should probably be tested
+		else 
+			pas=0
+			dno=ano=sno=0
+			if use_dept then dno=val(resp$(1)) : ano=val(resp$(2))
+			if ~use_dept then ano=val(resp$(1))
+			if use_dept and use_sub then sno=val(resp$(3))
+			if ~use_dept and use_sub then sno=val(resp$(2))
+	
+			dim d$*50
+			if use_dept and use_sub then d$=resp$(4)
+			if ~use_dept and use_sub then d$=resp$(3)
+			if ~use_dept and ~use_sub then d$=resp$(2)
+			if use_dept and ~use_sub then d$=resp$(3)
+			glBank$=cnvrt$("N 3",dno)&cnvrt$("N 6",ano)&cnvrt$("N 3",sno)
+			read #hAccount,using 'Form POS 1,N 3',key=glBank$: dno nokey ignore
+			mat ta=(0)
+			cb=0
+			dim zo(50)
+			write #hAccount,using F_Glmstr2: glAcct$,d$,mat zo
+			goto WriteTrans 
+		end if
+	! /r
 
 
 Finis: ! r:
@@ -235,24 +240,5 @@ goto Xit ! /r
 
 Xit: fnXit
 
-def fn_contraTotal(hMerge,&contraDisb,&contraRcpt,&contraOthr; ___,glAcct$*12,amt,type,postCode,id9$*12,desc$*30)
-	contraDisb=contraRcpt=contraOthr=0
-	restore #hMerge:
-	do
-		read #hMerge,using F_merge2: glAcct$,contraEntryDateN,amt,type,postCode,id9$,desc$ eof CtEoMerge
-		if id9$="999999999999" and desc$="Contra Entry" then
-			if type=1 then 								! 1 = Disbursements											
-				contraDisb+=amt
-			else if type=2 then						! 2 = Receipts														
-				contraRcpt+=amt
-			else
-				contraOthr+=amt
-			end if
-		end if
-	loop
-	CtEoMerge: !
-	restore #hMerge:
-	fn_contraTotal=contraDisb+contraRcpt+contraOthr
-fnend
 
 include: ertn

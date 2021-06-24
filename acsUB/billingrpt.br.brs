@@ -39,7 +39,7 @@ STARTREPORT: !
 L380: form pos 1,c 10,pos 41,c 30,pos 227,pd 5,pos 296,pd 4
 	fnopenprn
 ! sort prep !!!
-	open #6: "Name=[Temp]\Work."&session$&",REPLACE,RecL=50",internal,output
+	open #6: "Name=[Temp]\Work.[Session],REPLACE,RecL=50",internal,output
 	if fan$>"" then restore #1,search>=fan$:
 L430: read #1,using L380: z$,e2$,d3,f eof SORT_NOW
 	if f<>d1 then goto L430
@@ -49,13 +49,13 @@ L470: form pos 1,n 10,c 10,c 30
 	goto L430
 SORT_NOW: !
 	close #1: : close #6:
-	open #9: "Name=[Temp]\Control."&session$&",SIZE=0,RecL=128,REPLACE",internal,output
+	open #9: "Name=[Temp]\Control.[Session],SIZE=0,RecL=128,REPLACE",internal,output
 L520: form pos 1,c 128
-	write #9,using L520: "FILE [Temp]\Work."&session$&",,,[Temp]\Addr."&session$&",,,,,A,N"
+	write #9,using L520: "FILE [Temp]\Work.[Session],,,[Temp]\Addr.[Session],,,,,A,N"
 	write #9,using L520: "MASK 1,10,N,A,11,10,C,A"
 	close #9:
-	execute "FREE [Temp]\Addr."&session$&" -n" ioerr L570
-L570: execute "Sort [Temp]\Control."&session$&" -n"
+	execute "FREE [Temp]\Addr.[Session] -n" ioerr L570
+L570: execute "Sort [Temp]\Control.[Session] -n"
 	open #6: "Name=[Temp]\Work."&session$,internal,input,relative
 	open #7: "Name=[Temp]\Addr."&session$,internal,input,relative
 	gosub HEADER_PAGE

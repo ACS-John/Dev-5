@@ -50,41 +50,6 @@ def fn_srch_case_insensitive(mat srch_array$,srch_for$*256; srch_start_ele)
   fn_srch_case_insensitive=srch_return
 fnend
 
-def library fnAddOneN(mat addTo, one; skipZeros, skipDupes)
-  fnAddOneN=fn_addOneN(mat addTo, one, skipZeros, skipDupes)
-fnend
-def fn_addOneN(mat addTo, one; skipZeros, skipDupes)
-  ! must dim an array to 0 before you can add a first item
-  !    Mat addTo - the array to add One item to
-  !    One - the One item to add to Mat addTo
-  !    skipZeros - if =1 than only add One if One<>0
-  !    skipDupes - if =1 than only add One if One is not yet in Mat addTo
-  !    This function returns the number of items in the array after any add
-  if skipZeros=0 or (skipZeros and one<>0) then
-    if skipDupes=0 or (skipDupes and srch(mat addTo,one)=-1) then
-      add_to_udim=udim(mat addTo) : mat addTo(add_to_udim+1) : addTo(add_to_udim+1)=one
-    end if
-  end if
-  fn_addOneN=udim(mat addTo)
-fnend
-def library fnAddOneC(mat add_to$, one$*2048; skip_blanks, skipDupes)
-  fnAddOneC=fn_addOneC(mat add_to$, one$, skip_blanks, skipDupes)
-fnend
-def fn_addOneC(mat add_to$, one$*2048; skip_blanks, skipDupes)
-  ! must dim an array to 0 before you can add a first item
-  !    Mat Add_To$ - the array to add One$ item to
-  !    One$ - the One$ item to add to Mat Add_To$
-  !    skip_Blanks - if =1 than only add One$ if Trim$(One$)<>""
-  !    skipDupes - if =1 than only add One$ if One$ is not yet in Mat Add_To$
-  !    This function returns the number of items in the array after any add
-  if skip_blanks=0 or (skip_blanks and trim$(one$)<>"") then
-    if skipDupes=0 or (skipDupes and srch(mat add_to$,one$)<=0) then
-      add_to_udim=udim(mat add_to$) : mat add_to$(add_to_udim+1) : add_to$(add_to_udim+1)=one$
-    end if
-  end if
-  fn_addOneC=udim(mat add_to$)
-fnend
-
 def library fnCountMatchesC(mat arrayToSearch$,valueToMatch$*256)
   cmcReturn=0
   cmcIndex=0
@@ -172,11 +137,11 @@ def library fnFileTo2Arrays(ftaFile$*512,mat ftaArrayLeft$,mat ftaArrayRight$; f
     linput #hFta: ftaLine$ eof FtaEof
     ftaPosDelim=pos(ftaLine$,ftaDelimiter$)
     if ftaPosDelim<=0 then
-      fn_addOneC(mat ftaArrayLeft$,trim$(ftaLine$))
-      fn_addOneC(mat ftaArrayRight$,'')
+      fnAddOneC(mat ftaArrayLeft$,trim$(ftaLine$))
+      fnAddOneC(mat ftaArrayRight$,'')
     else
-      fn_addOneC(mat ftaArrayLeft$,trim$(ftaLine$(1:ftaPosDelim-1)))
-      fn_addOneC(mat ftaArrayRight$,trim$(ftaLine$(ftaPosDelim+1:len(ftaLine$))))
+      fnAddOneC(mat ftaArrayLeft$,trim$(ftaLine$(1:ftaPosDelim-1)))
+      fnAddOneC(mat ftaArrayRight$,trim$(ftaLine$(ftaPosDelim+1:len(ftaLine$))))
     end if
   loop
   FtaEof: !
@@ -195,7 +160,7 @@ def library fnRead1column(mat r1Return$,r1File$*256,r1ColumnNumber,r1Delimiter$)
     linput #hr1: r1Line$ eof EoR1
     str2mat(r1Line$,mat r1LineItem$,r1Delimiter$)
     if udim(mat r1LineItem$)=>r1ColumnNumber then
-      fn_addonec(mat r1Return$,r1LineItem$(r1ColumnNumber))
+      fnAddOneC(mat r1Return$,r1LineItem$(r1ColumnNumber))
     end if
   loop
   close #hr1:
@@ -214,14 +179,14 @@ def library fnRead2column(mat r2Return1$,mat r2Return2$,r2File$*256,r2ColumnNumb
     linput #hr2: r2Line$ eof Eor2
     str2mat(r2Line$,mat r2LineItem$,r2Delimiter$)
     if udim(mat r2LineItem$)=>r2ColumnNumber1 then
-      fn_addonec(mat r2Return1$,r2LineItem$(r2ColumnNumber1))
+      fnAddOneC(mat r2Return1$,r2LineItem$(r2ColumnNumber1))
     else
-      fn_addonec(mat r2Return1$,'')
+      fnAddOneC(mat r2Return1$,'')
     end if
     if udim(mat r2LineItem$)=>r2ColumnNumber2 then
-      fn_addonec(mat r2Return2$,r2LineItem$(r2ColumnNumber2))
+      fnAddOneC(mat r2Return2$,r2LineItem$(r2ColumnNumber2))
     else
-      fn_addonec(mat r2Return2$,'')
+      fnAddOneC(mat r2Return2$,'')
     end if
   loop
   close #hr2:
@@ -240,9 +205,9 @@ def library fnRead3column(mat r3Return1$,mat r3Return2$,mat r3Return3$,r3File$*2
     linput #hr3: r3Line$ eof Eor3
     str2mat(r3Line$,mat r3LineItem$,r3Delimiter$)
     if udim(mat r3LineItem$)<max(r3ColumnNumber3,r3ColumnNumber2,r3ColumnNumber1) then mat r3LineItem$(max(r3ColumnNumber3,r3ColumnNumber2,r3ColumnNumber1))
-    fn_addonec(mat r3Return1$,r3LineItem$(r3ColumnNumber1))
-    fn_addonec(mat r3Return2$,r3LineItem$(r3ColumnNumber2))
-    fn_addonec(mat r3Return3$,r3LineItem$(r3ColumnNumber3))
+    fnAddOneC(mat r3Return1$,r3LineItem$(r3ColumnNumber1))
+    fnAddOneC(mat r3Return2$,r3LineItem$(r3ColumnNumber2))
+    fnAddOneC(mat r3Return3$,r3LineItem$(r3ColumnNumber3))
   loop
   close #hr3:
   Eor3: !
@@ -260,10 +225,10 @@ def library fnRead4column(mat r4Return1$,mat r4Return2$,mat r4Return3$,mat r4Ret
     linput #hr4: r4Line$ eof Eor4
     str2mat(r4Line$,mat r4LineItem$,r4Delimiter$)
     if udim(mat r4LineItem$)<max(r4ColumnNumber4,r4ColumnNumber2,r4ColumnNumber1) then mat r4LineItem$(max(r4ColumnNumber4,r4ColumnNumber2,r4ColumnNumber1))
-    fn_addonec(mat r4Return1$,r4LineItem$(r4ColumnNumber1))
-    fn_addonec(mat r4Return2$,r4LineItem$(r4ColumnNumber2))
-    fn_addonec(mat r4Return3$,r4LineItem$(r4ColumnNumber3))
-    fn_addonec(mat r4Return4$,r4LineItem$(r4ColumnNumber4))
+    fnAddOneC(mat r4Return1$,r4LineItem$(r4ColumnNumber1))
+    fnAddOneC(mat r4Return2$,r4LineItem$(r4ColumnNumber2))
+    fnAddOneC(mat r4Return3$,r4LineItem$(r4ColumnNumber3))
+    fnAddOneC(mat r4Return4$,r4LineItem$(r4ColumnNumber4))
   loop
   close #hr4:
   Eor4: !
@@ -281,8 +246,8 @@ def library fnRead2columnFixedWidth(mat r2fReturn1$,mat r2fReturn2$,r2fFile$*256
   open #hr2f=fnH: 'name='&r2fFile$,d,input ioerr Eor2f
   do
     linput #hr2f: r2fLine$ eof Eor2f
-    fn_addonec(mat r2fReturn1$,r2fLine$(1:r2fColumn1Width))
-    fn_addonec(mat r2fReturn2$,r2fLine$(r2fColumn1Width+2:inf))
+    fnAddOneC(mat r2fReturn1$,r2fLine$(1:r2fColumn1Width))
+    fnAddOneC(mat r2fReturn2$,r2fLine$(r2fColumn1Width+2:inf))
   loop
   close #hr2f:
   Eor2f: !

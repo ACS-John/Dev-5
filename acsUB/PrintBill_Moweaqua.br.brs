@@ -308,14 +308,14 @@ fnend
  
 def fn_bulksort ! bulk sort order
 	open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,input,keyed  ! open in Account order
-	open #6: "Name=[Temp]\Temp."&session$&",Replace,RecL=31",internal,output
+	open #6: "Name=[Temp]\Temp.[Session],Replace,RecL=31",internal,output
 	L2730: read #1,using "Form POS 1,C 10,pos 1741,n 2,pos 1743,n 7,pos 1942,c 12": z$,route,seq,bulk$ eof L2760
 	write #6,using "Form POS 1,C 12,n 2,n 7,c 10": bulk$,route,seq,z$
 	goto L2730
 	L2760: close #1: ioerr ignore
 	close #6: ioerr ignore
-	execute "Index [Temp]\Temp."&session$&" [Temp]\Tempidx."&session$&" 1,19,Replace,DupKeys -n"
-	open #6: "Name=[Temp]\Temp."&session$&",KFName=[Temp]\Tempidx."&session$,internal,input,keyed
+	execute "Index [Temp]\Temp.[Session] [Temp]\Tempidx.[Session] 1,19,Replace,DupKeys -n"
+	open #6: "Name=[Temp]\Temp.[Session],KFName=[Temp]\Tempidx."&session$,internal,input,keyed
  
 fnend
 include: ertn

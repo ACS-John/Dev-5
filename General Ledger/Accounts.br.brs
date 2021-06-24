@@ -12,7 +12,6 @@ dim rf(6)
 dim key$*12
 dim ta(2)
 dim revb(13)
-dim ack$*20
 dim resp$(100)*60
 dim ml$(3)*128
 dim item$(9)*30
@@ -38,10 +37,10 @@ Main: !
 	fnLbl(1,1,"Account:",mylen,1)
 	if edit_mode=1 then ! attempt to put disabled text box for acct #
 		fnTxt(1,mypos,60,0,0,"",1,"",0)
-		resp$(1)=fnrglbig$(gl$)
+		resp$(1)=fnRglBig$(gl$)
 	else
-		fnqglbig(1,mypos,0,2)
-		resp$(1)=fnrglbig$(gl$)
+		fnQglBig(1,mypos,0,2,1)
+		resp$(1)=fnRglBig$(gl$)
 	end if
 	holdgl$=gl$
 	if edit_mode=1 then
@@ -325,6 +324,7 @@ def fn_transactionGrid(currentOrHistory,gl$)
 	adr=nta
 	goto DISPLAY_TRANS
 	RestoreTransHistory: !
+	dim ack$*20
 	ack$=gl$&cnvrt$("N 2",pc1)&"      "
 	restore #hTransHistory,key>=ack$: nokey EO_TRANS_GRID
 	ReadTransHistory: !
@@ -366,7 +366,7 @@ def fn_transactionGrid(currentOrHistory,gl$)
 	fnTos ! edit transaction screen
 	mylen=23: mypos=mylen+3 
 	fnLbl(1,1,"Account:",mylen,1)
-	fnqglbig(1,mypos,0,2)
+	fnqglbig(1,mypos,0,2,1)
 	resp$(1)=fnrglbig$(trgl$)
 	holdgl$=gl$
 	fnLbl(2,1,"Date:",mylen,1)

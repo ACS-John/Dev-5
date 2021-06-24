@@ -19,46 +19,46 @@
  
 MENU1: !
 ASKDEPARTMENT: !
-	fnTos(sn$="Department-ask") : _
+	fnTos
 	respc=0
 	fnLbl(1,1,"Department #:",15,1)
-	fncombof("Dept",1,18,3,"[Q]\PRmstr\mglmstr.h[cno]",1,3,0,0,"[Q]\PRmstr\mglidx1.h[cno]",0,0, "Set the matching g/l numbers for accruing payroll taxes by department. Choose a department.",0,0) : _
+	fncombof("Dept",1,18,3,"[Q]\PRmstr\mglmstr.h[cno]",1,3,0,0,"[Q]\PRmstr\mglidx1.h[cno]",0,0, "Set the matching g/l numbers for accruing payroll taxes by department. Choose a department.",0,0)
 	resp$(respc+=1)=""
-	fnCmdKey("&Add",1,0,0,"Enter accrual information on a new department." ) : _
-	fnCmdKey("E&dit",2,1,0,"Change or review then highlighted record") : _
-	fnCmdKey("&Delete",3,0,0,"Deletes the highlited record.") : _
+	fnCmdKey("&Add",1,0,0,"Enter accrual information on a new department." )
+	fnCmdKey("E&dit",2,1,0,"Change or review then highlighted record")
+	fnCmdKey("&Delete",3,0,0,"Deletes the highlited record.")
 	fnCmdKey("E&xit",5,0,1,"Returns to menu")
 	ckey=fnAcs(mat resp$) ! ask department #
 	if ckey=5 then goto Xit
 	dp$=resp$(1)
 	dp$=lpad$(uprc$(rtrm$(dp$)),3)
 	addrec=editrec=0
-	if ckey=1 then addrec=1 else : _
-		if ckey=2 then editrec=1 else : _
-			if ckey=3 then goto DELETE_RECORD
+	if ckey=1 then addrec=1 else if ckey=2 then editrec=1 else if ckey=3 then goto DELETE_RECORD
  
 ADD_EDIT_REC: !
 	deptname$="": read #9,using "form pos 4,c 20",key=rpad$(ltrm$(dp$),3): deptname$ nokey L370
 L370: if addrec=1 then dp$="": mat mgl$=(""): goto L400
 	k$=dp$=lpad$(uprc$(rtrm$(dp$)),3)
 	read #1,using "Form POS 1,G 3,11*C 12",key=k$,release: dp$,mat mgl$ nokey MENU1
-L400: fnTos(sn$="Department-gl") : _
+L400: !
+	fnTos
 	respc=0
 	fnLbl(1,1,deptname$,50,2)
 	fnLbl(2,1,"Department #:",15,1)
-	fnTxt(2,18,3,3,1,"30",0,"Department # to change or add.") : _
+	fnTxt(2,18,3,3,1,"30",0,"Department # to change or add.")
 	resp$(respc+=1)=dp$
 	fnLbl(3,1,label1$(1),15,1)
-	fnqgl(3,18,0,2,0) : _
+	fnqgl(3,18,0,2)
 	resp$(respc+=1)=fnrgl$(mgl$(1)) ! fica
 	x=1 : y=3
 	for j=1 to 20
-		if dedcode(j)=3 then goto L490 else goto L510
-L490: fnLbl(y+=1,1,label1$(x+=1),15,1)
-		fnqgl(y,18,0,2,0) : _
-		resp$(respc+=1)=fnrgl$(mgl$(j+1))
-L510: next j
-	fnCmdKey("&Next",1,1,0,"Save changes and move to next record" ) : _
+		if dedcode(j)=3 then 
+			fnLbl(y+=1,1,label1$(x+=1),15,1)
+			fnqgl(y,18,0,2)
+			resp$(respc+=1)=fnrgl$(mgl$(j+1))
+		end if
+	next j
+	fnCmdKey("&Next",1,1,0,"Save changes and move to next record" )
 	fnCmdKey("&Complete",5,0,1,"Returns to menu")
 	ckey=fnAcs(mat resp$) ! ask gl numbers
 	if ckey=5 then goto Xit
@@ -69,13 +69,14 @@ L510: next j
 	for j=1 to 20
 		if dedcode(j)=3 then goto L610 else goto L620
 L610: mgl$(j+1)=fnagl$(resp$(x+=1))
-L620: next j
+L620: !
+	next j
 	if addrec=1 then goto ADD_RECORD else goto REWRITE_RECORD
  
 DELETE_RECORD: !
-	mat ml$(2) : _
-	ml$(1)="You have chosen to delete department # "&dp$ ! " : _
-	ml$(2)="Take OK to delete; else Cancel to retain the record." : _
+	mat ml$(2)
+	ml$(1)="You have chosen to delete department # "&dp$ ! "
+	ml$(2)="Take OK to delete; else Cancel to retain the record."
 	fnmsgbox(mat ml$,resp$,cap$,1)
 	if resp$="OK" then goto L680 else goto MENU1
 L680: delete #1,key=dp$: nokey MENU1

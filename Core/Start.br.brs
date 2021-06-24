@@ -87,7 +87,7 @@ def fn_acsSystemInitialize(; syInitMode)
 		exe "load S:\Core\fn\windowsStart.br,Resident"
 		exe 'load "S:\Core\FileIO\fileio.br",Resident'
 		!  maybe but not yet ...     exe "load S:\Core\Client.br,resident"
-		if env$('acsEnableComplier')='Yes' and env$('BR_MODEL')<>'CLIENT/SERVER' and ~syInitMode then 
+		if env$('acsEnableComplier')='Yes' and env$('BR_MODEL')<>'CLIENT/SERVER' and ~syInitMode then
 			fncheckcompiled ! sets the current directory to "S:" if it is not already
 		end if
 		if env$('acsEnableComplier')='Yes' and env$('BR_MODEL')<>'CLIENT/SERVER' then fn_updateVersionForInno
@@ -225,6 +225,13 @@ def fn_acsSystemInitialize(; syInitMode)
 		else if  env$('cursys')='CM' then
 			fn_UpdateQFileIO
 		end if
+
+		if lwrc$(env$('ForceScreenIOUpdate'))='yes' then
+			fn_UpdateQFileIO
+			fn_UpdateQScreenIO
+			setenv('ForceScreenIOUpdate','')
+		end if
+
 	end if
 	!
 	! fn_uniqueComputerId_initialize ! called to initialize env$('unique_computer_id')
@@ -675,7 +682,7 @@ def fn_UpdateQFileIO
 	end if
 fnend
 def fn_updateAlienFolder(localAlien$*512,sourceFolder$*512,filterFrom$,filterTo$)
-		
+
 		dim sLayFile$(0)*256
 		dim sLayDate$(1)*32
 		dim sLayTime$(1)*32
@@ -683,7 +690,7 @@ def fn_updateAlienFolder(localAlien$*512,sourceFolder$*512,filterFrom$,filterTo$
 		dim dLayFile$(0)*256
 		dim dLayDate$(1)*32
 		dim dLayTime$(1)*32
-		if udim(mat sLayFile$)=0 then 
+		if udim(mat sLayFile$)=0 then
 			pr 'fngetdir2 found no files found in: S:\Core\FileIO\Layout\'
 			pause
 		end if
@@ -696,7 +703,7 @@ def fn_updateAlienFolder(localAlien$*512,sourceFolder$*512,filterFrom$,filterTo$
 				if dWhich=>0 then dDay=days(dlaydate$(dWhich),'mm/dd/ccyy')
 				if dDay<=sDay then
 					fnCopy(sourceFolder$&'\'&sLayFile$(sItem)        ,localAlien$&'\'&rtrm$(filterTo$,'.')        )
-					! pr 'from: '&sourceFolder$&'\'&sLayFile$(sItem)   
+					! pr 'from: '&sourceFolder$&'\'&sLayFile$(sItem)
 					! pr '  to: '&localAlien$&'\'&rtrm$(filterTo$,'.')
 					! pause
 				end if

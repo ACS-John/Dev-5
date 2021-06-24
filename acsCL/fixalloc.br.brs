@@ -8,7 +8,7 @@ autoLibrary
 	open #trmstr=1: "Name=[Q]\CLmstr\TrMstr.h[cno],KFName=[Q]\CLmstr\TrIdx1.h[cno],Shr",internal,outIn,keyed
 	open #tralloc=3: "Name=[Q]\CLmstr\TrAlloc.h[cno],KFName=[Q]\CLmstr\tralloc-idx.h[cno],Shr",internal,outIn,keyed
 	open #bankmstr=4: "Name=[Q]\CLmstr\BankMstr.h[cno],KFName=[Q]\CLmstr\BankIdx1.h[cno],Shr",internal,outIn,keyed
-	open #work=5: "Name=[Temp]\Work."&session$&",SIZE=0,RecL=76,Replace",internal,output
+	open #work=5: "Name=[Temp]\Work.[Session],SIZE=0,RecL=76,Replace",internal,output
 	do
 		READ_TRMSTR: !
 		holdck$=checkNumber$

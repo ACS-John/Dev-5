@@ -1570,7 +1570,7 @@ INVALIDGLNUMBER: ! r:
 	fnLbl(7,1,"The General Ledger Number is invalid.",40,0)
 	fnLbl(8,1,"Please select the correct one.",40,0)
 	fnLbl(3,1,"Correct General Ledger Number:",mylen,1)
-	fnqgl(3,mypos,0,2,pas)
+	fnqgl(3,mypos,0,2)
 	resp$(5)=fnrgl$(goodgl$)
 	fnCmdKey("&Next",1,1,0,"Continue with checkprinting." )
 	fnCmdKey("E&xit",5,0,1,"Returns to menu")

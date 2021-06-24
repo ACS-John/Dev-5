@@ -1,14 +1,14 @@
 ! Replace S:\acsGL\ratio
 ! Ratio File  (was: Form POS 1,G 3,C 40,280*PD 4',Key=AC$: HAC$,NA$,MAT R  Now:  Form POS 1,G 3,C 40,80*c 12',Key=AC$: HAC$,NA$,MAT gl$
-!
+
 	autoLibrary
 	on error goto Ertn
-!
+
 	dim gln(80,3),k4$*2,message$*40
 	dim gl$(80)*12,dat$*20,hac$*3,na$*40
 	dim e$(2)*12,option$(6)*60,item$(7)*80
 	dim heading$*70,form$*80,numeric_format$*20,selection$*70,resp$(90)*50
-!
+
 	fnTop(program$)
 	fndat(dat$)
 	ratiomst=10
@@ -39,7 +39,7 @@ READ_RATIOMST: ! read Ratiomst file
 EO_RATIOMST_GRID: !
 	fnLbl(11,1,"")
 	fnCmdKey("&Add",1,0,0,"Allows you to add new Ratios.")
-!
+
 	fnCmdKey("&Edit",2,1,0,"Highlight any record and press Enter or click Edit to change any existing Ratio.")
 	fnCmdKey("&Review G/L #",4,0,0,"Click to review the general ledger numbers used in this ratio.")
 	fnCmdKey("&Delete",8,0,0,"Highlight any record and click Delete to remove the Ratio.")
@@ -69,7 +69,7 @@ EO_RATIOMST_GRID: !
 		goto RATIOMSTGRID
 	end if
 	pause
-!
+
 ADD_EDIT_RATIOMST: !
 	fnTos
 	mylen=20: mypos=mylen+3 : right=1
@@ -89,7 +89,7 @@ ADD_EDIT_RATIOMST: !
 	if edit=1 then goto REWRITE_EXISTING_RATIOMST
 	if add=1 then goto WRITE_NEW_RATIOMST
 	pause
-!
+
 REWRITE_EXISTING_RATIOMST: !
 	if hac$="" or trim$(hac$)="0" then goto ADD_EDIT_RATIOMST
 	if holdhac$<>hac$ and holdhac$<>"" then goto MSGBOX1 else goto L780
@@ -102,15 +102,15 @@ MSGBOX1: !
 	if resp$="OK" then goto L780 else goto ADD_EDIT_RATIOMST
 L780: rewrite #ratiomst,using 'Form POS 1,G 3,C 40,80*c 12',rec=editrec: hac$,na$,mat gl$
 	goto L830
-!
+
 WRITE_NEW_RATIOMST: write #ratiomst,using 'Form POS 1,G 3,C 40,80*c 12',rec=editrec: hac$,na$,mat gl$
 	new1=1
 L830: goto RATIOMSTGRID
-!
+
 	close #ratiomst:
 	if new1=1 then gosub L940
 	goto Xit
-!
+
 CREATE_FILES: !
 	close #ratiomst: ioerr L910
 L910: open #ratiomst: "Name=[Q]\GLmstr\RatioMST.h[cno],KFName=[Q]\GLmstr\RatioIDX.h[cno]",internal,outIn,keyed ioerr L930
@@ -120,8 +120,8 @@ L940: close #ratiomst: ioerr L950
 L950: close #11: ioerr L970
 INDEX: ! (main Ratio files)
 L970: execute "Index [Q]\GLmstr\RatioMST.h[cno]"&' '&"[Q]\GLmstr\RatioIDX.h[cno] 1 3 Replace DupKeys -n"
-	return
-!
+return
+
 PROOF: restore #ratiomst,key>="   ": eof L1010 ioerr RATIOMSTGRID
 L1010: on fkey 5 goto L1330
 	fnopenprn
@@ -153,18 +153,18 @@ L1270: j1=j1+1
 	next j
 	j1=0
 	pr #255: newpage
-	goto L1030
-!
+goto L1030
+
 L1330: fncloseprn
 	on fkey 5 ignore
 	if fnprocess=1 then goto Xit
-	goto ADD_EDIT_RATIOMST
-!
+goto ADD_EDIT_RATIOMST
+
 L1380: if err=4152 then goto L930 else goto ERTN
-!
+
 Xit: fnXit
-!
- 
+
+
 GL_NUMBERS: ! r:
 LEFT_SIDE: !
 	fnTos
@@ -173,7 +173,7 @@ LEFT_SIDE: !
 	mypos(1)=1: mypos (2)=50
 	for j=2 to 40 step 2
 		for x=1 to 2
-			fnqgl(j/2+1,mypos(x),0,2,pas)
+			fnqgl(j/2+1,mypos(x),0,2)
 			if x =1 then resp$(resp+=1)=fnrgl$(gl$(j-1)) else resp$(resp+=1)=fnrgl$(gl$(j))
 		next x
 	next j
@@ -196,7 +196,7 @@ RIGHT_SIDE: !
 	fnLbl(1,35,"Right Side Of Ratio",30,0)
 	for j=2 to 40 step 2
 		for x=1 to 2
-			fnqgl(j/2+1,mypos(x),0,2,pas)
+			fnqgl(j/2+1,mypos(x),0,2)
 			if x=1 then resp$(resp+=1)=fnrgl$(gl$(40+j-1)) else resp$(resp+=1)=fnrgl$(gl$(40+j))
 		next x
 	next j
@@ -213,4 +213,5 @@ RIGHT_SIDE: !
 	if ckey=3 then goto RIGHT_SIDE
 	if ckey=6 then goto REWRITE_EXISTING_RATIOMST
 goto RATIOMSTGRID ! /r
+
 include: ertn

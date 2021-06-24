@@ -31,9 +31,5 @@ def library fnglpayee_v0_to_v1
 		fnIndex("[Q]\GLmstr\PayMstr.h[cno]","[Q]\GLmstr\payidx1.h[cno]","1 8")
 		fnIndex("[Q]\GLmstr\PayMstr.h[cno]","[Q]\GLmstr\payidx2.h[cno]","9 38")
 		fnIndex("[Q]\GLmstr\payeeglbreakdown.h[cno]","[Q]\GLmstr\payeeglbkdidx.h[cno]","1 8")
-		if ~exists("[Q]\GLmstr\gltr1099.h[cno]") then 
-			fnCopy("S:\General Ledger\mstr\gltr1099.h99999","[Q]\GLmstr\gltr1099.h[cno]")
-		end if
-		fnIndex("[Q]\GLmstr\gltr1099.h[cno]","[Q]\GLmstr\gltridx.h[cno]","1 8")
 fnend
 

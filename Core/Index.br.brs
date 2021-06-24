@@ -150,7 +150,6 @@ def fn_index_sys_do_one(cno,system_id$*2)
 	! fn_index("[Q]\GLmstr\GLmstr.h"&str$(cno),"[Q]\GLmstr\fsindex.H"&str$(cno),"63 3") ! Secondary
 	! fn_index("[Q]\GLmstr\GLmstr.h"&str$(cno),"[Q]\GLmstr\fsindex.H"&str$(cno),"66 3") ! Primary
 		fn_index("[Q]\GLmstr\gl1099.h"&str$(cno),"[Q]\GLmstr\gl109Idx.h"&str$(cno),"1 8")
-		fn_index("[Q]\GLmstr\GL1099.h"&str$(cno),"[Q]\GLmstr\VNINDX2.h"&str$(cno),"9 25")
 		fn_index("[Q]\GLmstr\gltr1099.H"&str$(cno),"[Q]\GLmstr\gltridx1.H"&str$(cno),"1 8")
 		fn_index("[Q]\GLmstr\GLBRec.h"&str$(cno),"[Q]\GLmstr\GLRecIdx.h"&str$(cno),"1 24")
 		fn_index("[Q]\GLmstr\glstdad.H"&str$(cno),"[Q]\GLmstr\glstdidx.h"&str$(cno),"1 12")

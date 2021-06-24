@@ -508,11 +508,11 @@ def fn_printListings
 		! r: Create Sort for UBIPCOLINP
 		close #hTransUnposted: ioerr ignore
 		fnFree('[temp]\acs\collections_sort_address_s[session].int')
-		open #h_control=fnH: "Name=[Temp]\acs\collections_sort_control_s"&session$&".int,RecL=128,Replace", internal,output
+		open #h_control=fnH: "Name=[Temp]\acs\collections_sort_control_s[Session].int,RecL=128,Replace", internal,output
 		write #h_control,using 'Form POS 1,C 128': "File "&collections_filename$&",,,"&env$('temp')&'\acs\collections_sort_address_s'&session$&'.int,,,,,A,N'
 		write #h_control,using 'Form POS 1,C 128': "Mask 1,11,C,A"
 		close #h_control:
-		execute "SORT [Temp]\acs\collections_sort_control_s"&session$&".int -n"
+		execute "SORT [Temp]\acs\collections_sort_control_s[Session].int -n"
 		open #hTransUnposted=fnH: "Name="&collections_filename$,internal,outIn,relative
 		open #h_addr=fnH: "Name="&env$('temp')&'\acs\collections_sort_address_s'&session$&'.int',internal,outIn
 		! /r

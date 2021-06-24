@@ -312,12 +312,12 @@ def fn_main
 			else if menu_option$='Restart' then
 				fnClearLayoutCache
 				setenv('ForceScreenIOUpdate','yes')
-				open #h_tmp=fnH: 'Name='&env$('temp')&'\acs_Restart_'&session$&'.prc,replace',display,output
+				open #h_tmp=fnH: 'Name='&env$('temp')&'\acs_Restart_[session].prc,replace',display,output
 				pr #h_tmp: "Stop"
 				pr #h_tmp: "clear resident"
 				pr #h_tmp: "chain 'S:\Core\Start'"
 				close #h_tmp:
-				execute 'proc '&env$('temp')&'\acs_Restart_'&session$&'.prc'
+				execute 'proc [temp]\acs_Restart_[session].prc'
 			else if menu_option$='Index System' then
 				fnindex_sys
 			else if lwrc$(menu_option$(1:8))='[cursys=' then

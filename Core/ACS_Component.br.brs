@@ -2043,7 +2043,7 @@ def fn_controlCount
 	setenv('control_count',str$(control_count))
 	fn_controlCount=control_count
 fnend
-def library fnqgl(myline,mypos; qglcontainer,add_all_or_blank,unused,qgllength,qgltabcon)
+def library fnqgl(myline,mypos; qglcontainer,add_all_or_blank,forceGLsysIfPossible,qgllength,qgltabcon,hAccts)
 	if ~setup then fn_setup
 	if qgllength=0 then qgllength=35
 
@@ -2058,7 +2058,9 @@ def library fnqgl(myline,mypos; qglcontainer,add_all_or_blank,unused,qgllength,q
 	dim qglsetupkeycurrent$*128
 	dim qglsetupkeyprior$*128
 ! r: set qgl_cursys$ (for fnqgl purposes only)
-	if env$('CurSys')="UB" and exists("[Q]\GLmstr\Company.h[cno]") then
+	if forceGLsysIfPossible and exists("[Q]\GLmstr\Company.h[cno]") then
+		qgl_cursys$="GL"
+	else if env$('CurSys')="UB" and exists("[Q]\GLmstr\Company.h[cno]") then
 		qgl_cursys$="GL"
 	else if env$('CurSys')="PR" then
 		if exists("[Q]\GLmstr\Company.h[cno]") then
@@ -2111,10 +2113,11 @@ CLOSECOMPANY: !
 		end if
 ! read the chart of accounts from the appropriate system into an array
 		if qgl_cursys$='GL' or qgl_cursys$='CL' or qgl_cursys$='PR' or qgl_cursys$='UB' or qgl_cursys$='CR' then
-			open #glmstr=fnH: "Name=[Q]\"&qgl_cursys$&"mstr\GLmstr.h[cno],KFName=[Q]\"&qgl_cursys$&"mstr\glIndex.h[cno],Shr",internal,input,keyed ioerr QGL_ERROR
+			! pr 'reading chart of accounts from: '&qgl_cursys$ : pause
+			open #hAccts=fnH: "Name=[Q]\"&qgl_cursys$&"mstr\GLmstr.h[cno],KFName=[Q]\"&qgl_cursys$&"mstr\glIndex.h[cno],Shr",internal,input,keyed ioerr QGL_ERROR
 		end if
 		do
-			read #glmstr,using glmstr_form$: qglopt$,desc$ noRec QGL_LOOP_COMPLETE eof EO_QGL_GLMSTR ioerr QGL_ERROR
+			read #hAccts,using glmstr_form$: qglopt$,desc$ noRec QGL_LOOP_COMPLETE eof EO_QGL_GLMSTR ioerr QGL_ERROR
 ! reformat the options for typing
 			if use_dept<>0 and use_sub<>0 then
 				qglopt$=trim$(qglopt$(1:3))&"-"&trim$(qglopt$(4:9))&"-"&trim$(qglopt$(10:12))
@@ -2135,7 +2138,7 @@ CLOSECOMPANY: !
 QGL_LOOP_COMPLETE: !
 		loop
 EO_QGL_GLMSTR: !
-		close #glmstr: ioerr ignore
+		close #hAccts: ioerr ignore
 	end if
 	goto QGLFINIS
 QGL_ERROR: !

@@ -82,19 +82,19 @@ SCREEN_1: ! r:
 	fnChk(1,30,"General Ledger Installed:",1,fram2)
 	if gli=1 then resp$(11)="True" else resp$(11)="False"
 	fnLbl(2,1,"Cash In Bank:",mylen,right,0,fram2)
-	fnqgl(2,32,fram2,2,pas)
+	fnqgl(2,32,fram2,2,1)
 	resp$(12)=fnrgl$(gln$(15))
 	fnLbl(3,1,"Federal W/H:",mylen,right,0,fram2)
-	fnqgl(3,32,fram2,2,pas)
+	fnqgl(3,32,fram2,2,1)
 	resp$(13)=fnrgl$(gln$(1))
 	fnLbl(4,1,"SS & Medicare W/H:",mylen,right,0,fram2)
-	fnqgl(4,32,fram2,2,pas)
+	fnqgl(4,32,fram2,2,1)
 	resp$(14)=fnrgl$(gln$(2))
 	fnLbl(5,1,"State W/H:",mylen,right,0,fram2)
-	fnqgl(5,32,fram2,2,pas)
+	fnqgl(5,32,fram2,2,1)
 	resp$(15)=fnrgl$(gln$(3))
 	fnLbl(6,1,"EIC:",mylen,right,0,fram2)
-	fnqgl(6,32,fram2,2,pas)
+	fnqgl(6,32,fram2,2,1)
 	resp$(16)=fnrgl$(gln$(14))
 	fnCmdKey("&Next",1,1,0,"Moves to 2nd screen of company information.")
 	fnCmdKey("&Save and Exit",4,0,0,"Saves any changes and returns to menu without reviewing remainter of screens.")
@@ -184,7 +184,7 @@ SCREEN_2: ! r:
 		fnChk(j+5,pos_col(9),"",1)
 		if deduc(j)>0 then resp$(resp+=1)="True" else resp$(resp+=1)="False"
 		linecount=j+5
-		fnqgl(linecount,pos_col(10),0,2,pas)
+		fnqgl(linecount,pos_col(10),0,2,1)
 		resp$(resp+=1)=fnrgl$(gl$(j))
 	next j
 	fnCmdKey("&Next",1,1,0,"Moves to next screen of company information.")

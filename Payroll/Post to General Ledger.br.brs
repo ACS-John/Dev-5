@@ -3,26 +3,26 @@
 ! r: setup library, on err, dims, fnTop, etc
 	autoLibrary
 	on error goto Ertn
- 
-	dim a$*40,em$*30,tgl(3),tcp(32),eno$*8,ttgl(3),oldtgl(3)
+
+	dim a$*40,em$*30,tgl(3),tcp(32),eno$*8,oldtgl(3)
 	dim tr(7),tr$*12,td$*30,dat$*20,a(100),i$*21,glwk$*30,desc$*50
-	dim tgl$*12,oldtgl$*12
+	dim tgl$*12
 	dim t(26),prgl(26,3),prgl$(15)*12,dedcode(20)
 	dim message$*40,msgline$(2)*60,ml$(4)*80,resp$(10)*60
 	dim fullname$(20)*20,abbrevname$(20)*8,newcalcode(20),newdedfed(20),dedfica(20)
 	dim dedst(20),deduc(20),gl$(20)*12
- 
+
 	fnTop(program$)
 	fnIndex('[Q]\PRmstr\Department.h[cno]','[Q]\PRmstr\DeptId4.h[cno]','12/1/9 12/8/3') ! sort department file in general ledger sequence
 	fnStatusClose
 	fnopenprn
- 
+
 	open #20: "Name=[Q]\GLmstr\GLBucket.h[cno],Shr",internal,input,relative ioerr L260
 	read #20,using 'Form POS 1,N 1',rec=1: glb noRec ignore
 	close #20:
 	if glb=2 then let fn_askaccrue
 	L260: !
- 
+
 	fnDedNames(mat fullname$,mat abbrevname$,mat dedcode,mat newcalcode,mat newdedfed,mat dedfica,mat dedst,mat deduc,mat gl$)
 	open #4: "Name=[Q]\PRmstr\PayrollChecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno]",internal,input,keyed
 	d1=fnPayPeriodEndingDate
@@ -59,7 +59,7 @@ ASK_DATE: !
 	if glb=2 and accrue$="Yes" then
 		open #11: "Name=[Q]\GLmstr\GL"&date$(days(d2,'ccyymmdd'),'mmddyy')&".h[cno],RecL=104,Use",internal,output
 	end if
-!
+
 	open #1: "Name=[Q]\PRmstr\Company.h[cno],Shr",internal,input
 	read #1,using 'Form POS 1,C 40,POS 437,15*C 12,N 1,POS 618,10*N 1': a$,mat prgl$,glinstal ! need to get from other file
 	for j=1 to 4 ! 1=fed 2=fica/med 3=med 4=state
@@ -94,7 +94,9 @@ ASK_DATE: !
 		mat oldtgl=tgl
 		read #6,using "Form POS 1,N 8,POS 12,n 3,n 6,n 3,pos 42,n 6": teno,mat tgl,paydat eof L1400
 		! If fndate_mmddyy_to_ccyymmdd(PAYDAT)<DAT1 OR fndate_mmddyy_to_ccyymmdd(PAYDAT)>DAT2 Then Goto 770 ! payroll date in department record must match
+		dim oldtgl$*12
 		oldtgl$=tgl$
+		dim ttgl(3)
 		mat ttgl=oldtgl
 		oldteno=teno
 		checkkey$=cnvrt$("pic(zzzzzzzz)",teno)&"         "
@@ -133,7 +135,7 @@ ASK_DATE: !
 		totaldr=totaldr+tcp(31) ! -TCP(29)-TCP(30)  ! kj
 		totalrec=totalrec+tcp(31) ! -TCP(29)-TCP(30) ! TOTAL DUE FROM OTHER FUNDS  kj
 	loop
-	
+
 L1400: ! r:
 	eofcode=1
 	mat ttgl=tgl
@@ -148,7 +150,7 @@ L1400: ! r:
 	close #1: ioerr ignore
 	close #2: ioerr ignore
 	close #4: ioerr ignore
-	!
+
 	fncloseprn
 	if ~skipposting=1 and glinstal and glb<>2 then
 		fnchain("S:\General Ledger\Merge")
@@ -226,7 +228,7 @@ def fn_l1800 ! OPEN G/L WORK FILES AND CREATE DUE TO AND DUE FROM ENTRIES
 	fnTos(sn$="PostGl3")
 	respc=0: mypos=45
 	fnLbl(1,1,"Due to Payroll Clearing Account on Fund # "&oldtgl$(1:3)&":",mypos,1)
-	fnqgl(1,mypos+3,0,2,pas)
+	fnqgl(1,mypos+3,0,2,1)
 	resp$(1)=fnrgl$(bankgl$)
 	fnCmdKey("&Next",1,1,0,"Continue posting." )
 	fnCmdKey("E&xit",5,0,1,"Returns to menu")
@@ -271,7 +273,7 @@ def fn_finalscrctrlbookmulitfunds
 	fnTos(sn$="PostGl4")
 	respc=0: mypos=45
 	fnLbl(1,1,"G/L # for Due From Other Funds on Fund # "&oldtgl$(1:3)&":",mypos,1)
-	fnqgl(1,mypos+3,0,2,pas)
+	fnqgl(1,mypos+3,0,2,1)
 	resp$(1)=fnrgl$(bankgl$)
 	fnCmdKey("&Next",1,1,0,"Continue posting." )
 	fnCmdKey("E&xit",5,0,1,"Returns to menu")
@@ -301,9 +303,9 @@ def fn_askaccrue
 	fnmsgbox(mat msgline$,resp$,'',4)
 	accrue$=resp$
 	if accrue$<>"Yes" then goto ASKACCRUE_XIT
- 
+
 	ACCRUAL: ! r:
-	fnTos(sn$="PostGl5")
+	fnTos
 	respc=0: mypos=50
 	fnLbl(1,1,"Number of Days in this Pay Period:",mypos,1)
 	fnTxt(1,mypos+3,10,0,1,"30",0,"In order to know how much to accure, the system needs to know the days to accure.")
@@ -312,7 +314,7 @@ def fn_askaccrue
 	fnTxt(2,mypos+3,10,0,1,"30",0,"In order to know how much to accure, the system needs to know the days to accure.")
 	resp$(2)=str$(dayslm)
 	fnLbl(3,1,"G/L # for Due From Other Funds on Fund # "&oldtgl$(1:3)&":",mypos,1)
-	fnqgl(3,mypos+3,0,2,pas)
+	fnqgl(3,mypos+3,0,2,1)
 	resp$(3)=fnrgl$(bankgl$)
 	fnLbl(4,1,"Last Day of Previous Month:",mypos,1)
 	fnTxt(4,mypos+3,10,0,1,"1",0,"Enter the month end date.")

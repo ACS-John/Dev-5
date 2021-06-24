@@ -9,7 +9,7 @@ dim alloc(10)
 dim _o(2)
 
 open #6: "Name=[Q]\UBmstr\Collect.h[cno]",internal,input
-open #7: "Name=[Temp]\Work."&session$&",Replace,RecL=72",internal,output
+open #7: "Name=[Temp]\Work.[Session],Replace,RecL=72",internal,output
 
 gosub ASKDATE
 READ_COLLECT: !

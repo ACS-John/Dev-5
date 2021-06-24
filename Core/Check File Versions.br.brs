@@ -360,7 +360,7 @@ def fn_cfv_checkbook
 	myrln=80
 	version_proper=2
 	fn_make_data_file_exist(name$,myrln,version_proper)
-	if lwrc$(env$('force_reindex'))='yes' or exists(kfname$)=0 then
+	if lwrc$(env$('force_reindex'))='yes' or ~exists(kfname$) then
 		fnIndex(name$,kfname$,'1 11')
 	end if
 	fn_getFileInfo(name$,kfname$,mat tmpkps,mat tmpkln,tmpversion,tmprln,tmpfile$)
@@ -392,7 +392,7 @@ def fn_cfv_checkbook
 	version_proper=2
 	fn_make_data_file_exist(name$,myrln,version_proper)
 	L1840: !
-	if lwrc$(env$('force_reindex'))='yes' or exists(kfname$)=0 then
+	if lwrc$(env$('force_reindex'))='yes' or ~exists(kfname$) then
 		fnIndex(name$,kfname$,'9 12')
 	end if
 	fn_getFileInfo(name$,kfname$,mat tmpkps,mat tmpkln,tmpversion,tmprln,tmpfile$)
@@ -420,7 +420,7 @@ def fn_cfv_checkbook
 	! CL_UNPDALOC2: ! Secondary, Non-Split Index
 	name$="[Q]\CLmstr\UnPdAloc.h[cno]"
 	kfname$="[Q]\CLmstr\UAIdx2.h[cno]"
-	if lwrc$(env$('force_reindex'))='yes' or exists(kfname$)=0 then
+	if lwrc$(env$('force_reindex'))='yes' or ~exists(kfname$) then
 		fnIndex(name$,kfname$,'1 20')
 	end if
 	fn_getFileInfo(name$,kfname$,mat tmpkps,mat tmpkln,tmpversion,tmprln,tmpfile$)
@@ -439,7 +439,7 @@ def fn_cfv_checkbook
 	myrln=114
 	version_proper=2
 	fn_make_data_file_exist(name$,myrln,version_proper)
-	if lwrc$(env$('force_reindex'))='yes' or exists(kfname$)=0 then
+	if lwrc$(env$('force_reindex'))='yes' or ~exists(kfname$) then
 		fnIndex(name$,kfname$,'1 20')
 	end if
 	fn_getFileInfo(name$,kfname$,mat tmpkps,mat tmpkln,tmpversion,tmprln,tmpfile$)
@@ -465,7 +465,7 @@ def fn_cfv_checkbook
 	! CL_PAYTRANS2: ! seconday 3-Split Index
 	name$="[Q]\CLmstr\PayTrans.h[cno]"
 	kfname$="[Q]\CLmstr\UnPdIdx2.h[cno]"
-	if lwrc$(env$('force_reindex'))='yes' or exists(kfname$)=0 then
+	if lwrc$(env$('force_reindex'))='yes' or ~exists(kfname$) then
 		fnIndex(name$,kfname$,'31/27/1 2/4/26')
 	end if
 	fn_getFileInfo(name$,kfname$,mat tmpkps,mat tmpkln,tmpversion,tmprln,tmpfile$)
@@ -500,7 +500,7 @@ def fn_cfv_checkbook
 	myrln=736
 	version_proper=1
 	fn_make_data_file_exist(name$,myrln,version_proper)
-	if lwrc$(env$('force_reindex'))='yes' or exists(kfname$)=0 then
+	if lwrc$(env$('force_reindex'))='yes' or ~exists(kfname$) then
 		fnIndex(name$,kfname$,'1 8')
 	end if
 	fn_getFileInfo(name$,kfname$,mat tmpkps,mat tmpkln,tmpversion,tmprln,tmpfile$)
@@ -526,7 +526,7 @@ def fn_cfv_checkbook
 	myrln=38
 	version_proper=1
 	fn_make_data_file_exist(name$,myrln,version_proper)
-	if lwrc$(env$('force_reindex'))='yes' or exists(kfname$)=0 then
+	if lwrc$(env$('force_reindex'))='yes' or ~exists(kfname$) then
 		fnIndex(name$,kfname$,'1 8')
 	end if
 	fn_getFileInfo(name$,kfname$,mat tmpkps,mat tmpkln,tmpversion,tmprln,tmpfile$)
@@ -551,7 +551,7 @@ def fn_cfv_checkbook
 	! CL_PAYMSTR2: ! Secondary, Non-Split Index
 	name$="[Q]\CLmstr\PayMstr.h[cno]"
 	kfname$="[Q]\CLmstr\PayIdx2.h[cno]"
-	if lwrc$(env$('force_reindex'))='yes' or exists(kfname$)=0 then
+	if lwrc$(env$('force_reindex'))='yes' or ~exists(kfname$) then
 		fnIndex(name$,kfname$,'9 30')
 	end if
 	fn_getFileInfo(name$,kfname$,mat tmpkps,mat tmpkln,tmpversion,tmprln,tmpfile$)
@@ -570,7 +570,7 @@ def fn_cfv_checkbook
 	myrln=62
 	!   version_proper=0
 	!   fn_make_data_file_exist(name$,myrln,version_proper)
-	!   if lwrc$(env$('force_reindex'))='yes' or exists(kfname$)=0 then
+	!   if lwrc$(env$('force_reindex'))='yes' or ~exists(kfname$) then
 	!     fnIndex(name$,kfname$,'1 12')
 	!   end if
 	fn_file_setup_data("[Q]\CLmstr\GLmstr.h[cno]",62,1)
@@ -847,7 +847,7 @@ def fn_cfv_general_ledger
 	myrln=28
 	version_proper=0
 	fn_make_data_file_exist(name$,myrln,version_proper)
-	if lwrc$(env$('force_reindex'))='yes' or exists(kfname$)=0 then
+	if lwrc$(env$('force_reindex'))='yes' or ~exists(kfname$) then
 		fnIndex(name$,kfname$,'1 14')
 	end if
 	! GL_GLMSTR1: ! Primary Non-Split Index
@@ -856,7 +856,7 @@ def fn_cfv_general_ledger
 	myrln=416
 	version_proper=0
 	fn_make_data_file_exist(name$,myrln,version_proper)
-	if lwrc$(env$('force_reindex'))='yes' or exists(kfname$)=0 then
+	if lwrc$(env$('force_reindex'))='yes' or ~exists(kfname$) then
 		fnIndex(name$,kfname$,'1 12')
 	end if
 	fn_getFileInfo(name$,kfname$,mat tmpkps,mat tmpkln,tmpversion,tmprln,tmpfile$)
@@ -878,7 +878,7 @@ def fn_cfv_general_ledger
 	! GL_GLMSTR2: ! Secondary, Non-Split Index
 	name$="[Q]\GLmstr\GLmstr.h[cno]"
 	kfname$="[Q]\GLmstr\GLIndx2.h[cno]"
-	if lwrc$(env$('force_reindex'))='yes' or exists(kfname$)=0 then
+	if lwrc$(env$('force_reindex'))='yes' or ~exists(kfname$) then
 		fnIndex(name$,kfname$,'13 30')
 	end if
 	fn_getFileInfo(name$,kfname$,mat tmpkps,mat tmpkln,tmpversion,tmprln,tmpfile$)
@@ -910,7 +910,7 @@ def fn_cfv_general_ledger
 	! myrln=83
 	! version_proper=1
 	! fn_make_data_file_exist(name$,myrln,version_proper)
-	! if lwrc$(env$('force_reindex'))='yes' or exists(kfname$)=0 then
+	! if lwrc$(env$('force_reindex'))='yes' or ~exists(kfname$) then
 	!   fnIndex(name$,kfname$,'1 5')
 	! end if
 	fn_getFileInfo(name$,kfname$,mat tmpkps,mat tmpkln,tmpversion,tmprln,tmpfile$)
@@ -947,7 +947,7 @@ def fn_cfv_general_ledger
 	version_proper=1
 	fn_make_data_file_exist(name$,myrln,version_proper)
 	L3510: !
-	if lwrc$(env$('force_reindex'))='yes' or exists(kfname$)=0 then
+	if lwrc$(env$('force_reindex'))='yes' or ~exists(kfname$) then
 		fnIndex(name$,kfname$,'1 8')
 	end if
 	fn_check_version(tmpversion,version_proper,tmpfile$)
@@ -971,7 +971,7 @@ def fn_cfv_general_ledger
 	version_proper=1
 	fn_make_data_file_exist(name$,myrln,version_proper)
 	L3600: !
-	if lwrc$(env$('force_reindex'))='yes' or exists(kfname$)=0 then
+	if lwrc$(env$('force_reindex'))='yes' or ~exists(kfname$) then
 		fnIndex(name$,kfname$,'1 8') : fnglpayee_v0_to_v1
 	end if
 	fn_getFileInfo(name$,kfname$,mat tmpkps,mat tmpkln,tmpversion,tmprln,tmpfile$)
@@ -996,7 +996,7 @@ def fn_cfv_general_ledger
 	version_proper=1
 	fn_make_data_file_exist(name$,myrln,version_proper)
 	L3690: !
-	if lwrc$(env$('force_reindex'))='yes' or exists(kfname$)=0 then
+	if lwrc$(env$('force_reindex'))='yes' or ~exists(kfname$) then
 		fnIndex(name$,kfname$,'1 8')
 	end if
 	fn_getFileInfo(name$,kfname$,mat tmpkps,mat tmpkln,tmpversion,tmprln,tmpfile$)
@@ -1012,13 +1012,14 @@ def fn_cfv_general_ledger
 		fnFree(kfname$)
 		goto L3690
 	end if
+	
 	! GLBREC: ! Primary, Non-Split Index
 	name$="[Q]\GLmstr\Glbrec.h[cno]"
 	kfname$="[Q]\GLmstr\glrecidx.h[cno]"
 	myrln=68
 	version_proper=1
 	fn_make_data_file_exist(name$,myrln,version_proper)
-	if lwrc$(env$('force_reindex'))='yes' or exists(kfname$)=0 then
+	if lwrc$(env$('force_reindex'))='yes' or ~exists(kfname$) then
 	GlBrecIndex: !
 		fnIndex(name$,kfname$,'1 24')
 	end if

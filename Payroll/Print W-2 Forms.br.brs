@@ -142,7 +142,7 @@
 	open #hDepartment:=2: "Name=[Q]\PRmstr\department.h[cno],KFName=[Q]\PRmstr\deptidx.h[cno]",internal,outIn,keyed
 	open #hChecks=fnH: "Name=[Q]\PRmstr\payrollchecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno]",internal,outIn,keyed
 	! if env$('acsDeveloper')<>'' then pr 'hChecks=';hChecks : pause
-	open #hAddr=fnH: "Name=[Temp]\Addr."&session$&",Replace,RecL=33,NoShr",internal,output
+	open #hAddr=fnH: "Name=[Temp]\Addr.[Session],Replace,RecL=33,NoShr",internal,output
 	write #hAddr,using 'form pos 1,n 10.2,n 1': ssmax,w1
 	open #hW2Box16=fnH: "Name=[Q]\PRmstr\W2Box16.h[cno],KFName=[Q]\PRmstr\W2Index.h[cno],Shr",internal,input,keyed ioerr ignore
 	w2printCount=0
@@ -343,7 +343,7 @@ Xit: fnXit
 PRW2B: ! r:
 	open #1: "Name=[Temp]\Control."&session$,internal,output
 	restore #1:
-	write #1,using 'form pos 1,c 128': "FILE [Temp]\Addr."&session$&",,,PRW2ADDR.h[cno],[Q]\PRmstr,,[Q]\PRmstr,,A,N"
+	write #1,using 'form pos 1,c 128': "FILE [Temp]\Addr.[Session],,,PRW2ADDR.h[cno],[Q]\PRmstr,,[Q]\PRmstr,,A,N"
 	write #1,using 'form pos 1,c 128': "MASK 9,2,n,a,1,8,n,a"
 	close #1:
 	fnFree("[Q]\PRmstr\PRW2ADDR.h[cno]")
