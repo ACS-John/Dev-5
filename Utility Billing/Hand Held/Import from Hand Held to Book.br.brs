@@ -478,11 +478,11 @@ fnend
 			linput #2: line$ eof EXREADER_XIT
 			z$=lpad$(trim$(line$(209:228)),10)
 			reading=val(line$(309:318))
+			! if env$('client')='GreeneCo' then reading=reading*10
+			! if env$('client')='Morrisonville' then reading=reading*100
+			if env$('client')='Billings' then reading=reading*100
 			pr #h_out,using "form pos 1,c 10,n 10": z$,reading
 			! if fncustomerdata$('meter multiplier')
-			if env$('client')='GreeneCo' then reading=reading*10
-			if env$('client')='Morrisonville' then reading=reading*100
-			if env$('client')='Billings' then reading=reading*100
 		loop
 		EXREADER_XIT: !
 		close #2: ioerr ignore
