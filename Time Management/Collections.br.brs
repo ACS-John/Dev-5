@@ -37,16 +37,16 @@
 		mat pgl(1)=(0)
 		gpx=1
 	end if
-	open #h_addr:=3: "Name=[Temp]\Addr."&session$,internal,outIn ioerr L530
+	open #h_addr:=3: "Name=[Temp]\Addr.[session]",internal,outIn ioerr L530
 	close #h_addr,free:
 	L530: !
-	open #h_addr:=3: "Name=[Temp]\Addr."&session$&",SIZE=0,RecL=239",internal,outIn,relative ioerr Ertn
+	open #h_addr:=3: "Name=[Temp]\Addr.[session],SIZE=0,RecL=239",internal,outIn,relative ioerr Ertn
 	open #1: "Name=S:\acsTM\TMSCRN.CL,Shr",internal,input,relative ioerr Ertn
 	read #1,using L560,rec=sz: f3$,mat fl1$,mat sc1$,mat sc2$,mat fli1$,mat ot1$,mat flo1$,mat flo3$,mat sc3$ ioerr Ertn
 	L560: form pos 1,c 255,142*c 18
 	close #1:
-	open #9: "Name=S:\Core\Data\acsllc\CLmstr.h[cno],KFName=S:\Core\Data\acsllc\CLIndex.h[cno],Shr",internal,input,keyed ioerr Ertn
-	open #11: "Name=S:\Core\Data\acsllc\CLmstr.h[cno],KFName=S:\Core\Data\acsllc\CLIndx2.h[cno],Shr",internal,input,keyed ioerr Ertn
+	open #hCl1=fnH: "Name=S:\Core\Data\acsllc\CLmstr.h[cno],KFName=S:\Core\Data\acsllc\CLIndex.h[cno],Shr",internal,input,keyed ioerr Ertn
+	open #hCl2=fnH: "Name=S:\Core\Data\acsllc\CLmstr.h[cno],KFName=S:\Core\Data\acsllc\CLIndx2.h[cno],Shr",internal,input,keyed ioerr Ertn  ! alpha index on clients
 	L590: !
 	hd$(1)="A/R Input Selection Menu"
 	hd$(2)="ENTER SELECTION"
@@ -102,10 +102,11 @@
 	if ltrm$(p$)="-1" then name$="CASH SALE" else goto Read9
 	goto L1050
 	Read9: !
-	read #9,using L1000,key=p$,release: name$ nokey L1020 ioerr Ertn
-	L1000: form pos 6,c 25
+	read #hCl1,using FclientName,key=rpad$(trim$(p$),kln(hCl1)),release: name$ nokey L1020 ioerr Ertn
+	FclientName: form pos 6,c 25
 	goto L1050
 	L1020: !
+	! pr 'nokey on read '&file$(hCl1)
 	name$="INVALID CLIENT NUMBER"
 	pr f "3,40,C 25,R,N": name$
 	goto L920
@@ -228,7 +229,7 @@ L1850: !
 	read #h_addr,using L2110,rec=r: p$,iv$,mat tr,id$ eof L2040,noRec L2040 ioerr Ertn
 	if ltrm$(p$)="0" or ltrm$(p$)="" then goto L1960
 	name$=""
-	read #9,using L1000,key=p$,release: name$ nokey L2010
+	read #hCl1,using FclientName,key=rpad$(trim$(p$),kln(hCl1)),release: name$ nokey L2010
 	L2010: !
 	pr #255,using L2020: r,p$,iv$,tr(1),tr(3),tr(4),name$(1:22),tr(2),tr(5)
 	L2020: form pos 1,n 4,x 2,c 5,x 2,c 18,n 6,n 11.2,pic(zzzzzz),x 7,c 22,n 12.2,n 12,skip 1
@@ -267,16 +268,11 @@ chain "S:\acsTM\ARMerge"
 Xit: pr newpage: fnXit
  
 TMSRCH: ! r: search for customer #
-	dim heading$*70,form$*80,numeric_format$*20,selection$*70
-	file_num=11 ! alpha index on clients
-	form$="form pos 1,c 5,pos 6,c 30,pos 66,c 15,pos 283,pd 5.2"
-	numeric_format$='pic($$$,$$$.##)'
-	key_length=5
-	heading$="Acct #횼ame컴컴컴컴컴컴컴컴컴컴Address컴컴컴컴Balance"
-	fnsearch('',file_num,heading$,form$,numeric_format$,selection$,key_length)
+	! uses hCl2
+	dim selection$*70
+	fnsearch(hCl2,"form pos 1,c 5,pos 6,c 30,pos 66,c 15,pos 283,pd 5.2",'pic($$$,$$$.##)',selection$,5)
 	p$=selection$ ! pull key from first field in search line
 	ano=0
-	ano=val(selection$) conv L4910
-L4910: !
+	ano=val(selection$) conv ignore
 return ! /r
 include: ertn

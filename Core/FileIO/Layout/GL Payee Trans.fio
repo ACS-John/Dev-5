@@ -1,0 +1,15 @@
+[Q]\GLmstr\gltr1099.H[cno], t9_, 0
+[Q]\GLmstr\gltridx1.H[cno],vn
+recl=64
+===================================================
+vn   	,Id                 	, C   8   	, ! 
+nam  	,Name               	, C  35   	, ! 
+ad1  	,Address 1          	, C  20   	, ! 
+ad2  	,Address 2          	, C  20   	, ! 
+csz  	,City State and Zip	, C  20   	, ! 
+ytdp 	,YTD Paid           	, PD  5.2 	, ! 
+typ  	,Type               	, N   2   	, ! 
+ss   	,Social Security No	, C  11   	, ! 
+adr1 	,(old unused adr1) 	, PD  3   	, ! 
+adr2 	,(old unused adr2) 	, PD  3   	, ! pos 62
+#eof#

@@ -13,7 +13,7 @@
  
 	open #hEmployee=fnH: "Name=[Q]\PRmstr\Employee.h[cno],Shr",internal,input,relative
 	F_employee: form pos 1,n 8,c 30,pos 162,n 6,pos 118,n 2
-	open #5: "Name=[Temp]\Temp1."&session$&",RecL=66,Replace",internal,output
+	open #5: "Name=[Temp]\Temp1.[Session],RecL=66,Replace",internal,output
 	fnopenprn
  
 TOPOFLOOP: !
@@ -28,8 +28,8 @@ TOPOFLOOP: !
 	L340: !
 	gosub HDR
 	close #5:
-	execute "INDEX [Temp]\Temp1."&session$&" [Temp]\TempIdx."&session$&" 9 50 Replace DupKeys"
-	open #5: "Name=[Temp]\Temp1."&session$&",KFName=[Temp]\TempIdx."&session$,internal,outIn,keyed
+	execute "INDEX [Temp]\Temp1.[Session] [Temp]\TempIdx.[Session] 9 50 Replace DupKeys"
+	open #5: "Name=[Temp]\Temp1.[Session],KFName=[Temp]\TempIdx."&session$,internal,outIn,keyed
 	L390: !
 	read #5,using L320: eno,last$,first$,mid$,lpd,em4 eof DONE
 	pr #255,using L410: eno,trim$(first$)&" "&trim$(mid$)&" "&trim$(last$),lpd,em4 pageoflow PGOF

@@ -38,24 +38,25 @@ READ_UNPDALOC: !
 	goto READ_UNPDALOC
 L350: close #paytrans: : close #unpdaloc: : close #clwork:
 	upa=0 ! sort ok, sorts a work file
-	open #9: "Name="&env$('temp')&'\'&"CONTROL,SIZE=0,RecL=128,Replace",internal,output
-	write #9,using 'Form POS 1,C 128': "FILE CLWORK"&wsid$&".h[cno],[Q]\CLmstr,,"&env$('temp')&'\'&"ADDR,,,,,A,N"
+	open #9: "Name=[temp]\CONTROL,SIZE=0,RecL=128,Replace",internal,output
+	write #9,using 'Form POS 1,C 128': "FILE CLWORK"&wsid$&".h[cno],[Q]\CLmstr,,[temp]\ADDR,,,,,A,N"
 	if fund=2 then : _
 		write #9,using 'Form POS 1,C 128': "MASK 74,3,N,A,1,20,C,A,86,4,N,A"
 	if fund<>2 then : _
 		write #9,using 'Form POS 1,C 128': "MASK 1,20,C,A,86,4,N,A"
 	close #9:
-	fnFree(env$('temp')&'\'&"ADDR")
-	execute "SORT "&env$('temp')&'\'&"CONTROL"
-	open #9: "Name="&env$('temp')&'\'&"ADDR",internal,input
+	fnFree('[temp]\ADDR')
+	execute 'SORT [temp]\CONTROL'
+	open #9: "Name=[temp]\ADDR",internal,input
 	open #paymstr=13: "Name=[Q]\CLmstr\PayMstr.h[cno],KFName=[Q]\CLmstr\PayIdx1.h[cno],Shr",internal,input,keyed
 	open #clwork=10: "Name=[Q]\CLmstr\CLWORK"&wsid$&".h[cno],Shr",internal,input,relative
 	open #glmstr=5: "Name=[Q]\CLmstr\GLmstr.h[cno],KFName=[Q]\CLmstr\GLIndex.h[cno],Shr",internal,input,keyed
-	open #work=6: "Name="&env$('temp')&'\'&"WORK,SIZE=0,RecL=22,Replace",internal,output
-	close #work:
-	fnFree("INDX."&wsid$)
-L510: execute "INDEX "&env$('temp')&'\'&"WORK,"&env$('temp')&'\'&"INDX,1,12,Replace"
-	open #work=6: "Name="&env$('temp')&'\'&"WORK,KFName="&env$('temp')&'\'&"INDX",internal,outIn,keyed
+	open #hWork=6: "Name=[temp]\WORK,RecL=22,Replace",internal,output
+	close #hWork:
+	fnFree("[temp]\INDX[session]")
+L510: !
+	execute 'INDEX [temp]\WORK,[temp]\INDX[session],1,12,Replace'
+	open #hWork=6: "Name=[temp]\WORK,KFName=[temp]\INDX[session]",internal,outIn,keyed
 	open #fundmstr=7: "Name=[Q]\CLmstr\FundMstr.h[cno],KFName=[Q]\CLmstr\FundIdx1.h[cno],Shr",internal,input,keyed
 	fnopenprn
 	vn$="": iv$=""
@@ -94,11 +95,11 @@ L830: discdate$=cnvrt$("pic(########)",ddate)
 	goto L600
 L890: if gl$(3:3)=" " then gl$(3:3)="0"
 	if gl$(12:12)=" " then gl$(12:12)="0"
-	read #work,using 'FORM POS 13,N 10.2',key=gl$: gla nokey L950
+	read #hWork,using 'FORM POS 13,N 10.2',key=gl$: gla nokey L950
 	gla+=amt
-	rewrite #work,using 'FORM POS 13,N 10.2': gla
+	rewrite #hWork,using 'FORM POS 13,N 10.2': gla
 	goto L960
-L950: write #work,using 'FORM POS 1,C 12,N 10.2': gl$,amt
+L950: write #hWork,using 'FORM POS 1,C 12,N 10.2': gl$,amt
 L960: return
  
 NEWPGE: pr #255: newpage: gosub HDR : continue
@@ -128,9 +129,9 @@ L1210: gosub TOTALS
 	pr #255: tab(97);"__________  __________  __________"
 	pr #255,using 'FORM POS 77,C 18,3*N 12.2': "Final Total",t1,t2,t3
 	pr #255: tab(97);"=================================="
-	restore #work,key>="            ": nokey EO_WORK
+	restore #hWork,key>="            ": nokey EO_WORK
 READ_WORK: !
-	read #work,using 'FORM POS 1,C 12,N 10.2': gl$,gla eof EO_WORK
+	read #hWork,using 'FORM POS 1,C 12,N 10.2': gl$,gla eof EO_WORK
 	if hf$="" or hf$=gl$(1:3) then goto L1300
 	gosub TOTF1
 L1300: hf$=gl$(1:3)
@@ -148,7 +149,7 @@ return
  
 EO_WORK: gosub TOTF1
 	fncloseprn
-	close #work,free: ioerr Xit
+	close #hWork,free: ioerr Xit
 Xit: fnXit
  
 TOTALS: !

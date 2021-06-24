@@ -1,14 +1,13 @@
  
 	on error goto L2650
 	autoLibrary
-	fnTop(program$,cap$="Enter Time")
-	fncno(cno,cnam$)
+	fnTop(program$,"Enter Time")
 	fnconsole(1)
 	dim scr1$(10),fl1$(12),io1$(10),scrid$(2)*60,inp(7),iv$*12,a1$*30,app(20)
-	dim fl2$(10),scr2$(7)*36,e$*9,e1$*25,he$*9,r(11),des$*30,cnam$*40,de$*30
-	dim a$(5)*30,ph$*12,ss$*11,dd(10),sc(10),ca(10),ph2$*12,ss2$*11,ar(5),arta(2),cm$*70,app(40),ma(40),cap$*128
+	dim fl2$(10),scr2$(7)*36,e$*9,e1$*25,he$*9,r(11),des$*30,de$*30
+	dim a$(5)*30,ph$*12,ss$*11,dd(10),sc(10),ca(10),ph2$*12,ss2$*11,ar(5),arta(2),cm$*70,app(40),xma(40)
 	ar(5)=1 ! set any new customers up as a balance forward
-	ntab=60-int(len(ltrm$(rtrm$(cnam$)))/2)
+	ntab=60-int(len(ltrm$(rtrm$(env$('cnam'))))/2)
 	fl1$(11)="2,10,C 60,H,N"
 	fl1$(12)="3,6,C 60,H,N"
 	fl2$(5)="2,10,C 60,H,N"
@@ -52,9 +51,9 @@
 	read mat scr2$ ioerr L2650
 	open #1: "Name=S:\Core\Data\acsllc\CLmstr.h[cno],KFName=S:\Core\Data\acsllc\CLIndex.h[cno],Shr",internal,outIn,keyed ioerr L2650
 	open #32: "Name=S:\Core\Data\acsllc\CLmstr.h[cno],KFName=S:\Core\Data\acsllc\CLIndx2.h[cno],Shr",internal,outIn,keyed
-	open #2: "Name=S:\Core\Data\acsllc\TMWK"&wsid$&".h[cno]",internal,outIn,relative ioerr L570
+	open #2: "Name=S:\Core\Data\acsllc\TMWK[acsUserId].h[cno]",internal,outIn,relative ioerr L570
 	close #2,free:
-L570: open #2: "Name=S:\Core\Data\acsllc\TMWK"&wsid$&".h[cno],RecL=86,REPLACE",internal,outIn,relative ioerr L2650
+L570: open #2: "Name=S:\Core\Data\acsllc\TMWK[acsUserId].h[cno],RecL=86,REPLACE",internal,outIn,relative ioerr L2650
 	open #7: "Name=S:\Core\Data\acsllc\SCMSTR.h[cno],KFName=S:\Core\Data\acsllc\SCIndex.h[cno],Shr",internal,input,keyed ioerr L2650
 	open #8: "Name=S:\Core\Data\acsllc\EMmstr.h[cno],KFName=S:\Core\Data\acsllc\EMIndex.h[cno],Shr",internal,outIn,keyed ioerr L2650
 L600: pr newpage
@@ -109,7 +108,7 @@ L1020: if cmdkey=6 then hce=curfld : goto SRCH1
 	if cmdkey=2 and err=4272 then goto L1070 else goto L1140
 L1070: pr f "4,45,c 30,n": "Enter customer name:"
 	input fields "5,50,c 30,ue,n": a$(1)
-	write #1,using L1100: k$,mat a$,ph$,ss$,pno,mye,mat dd,mat sc,mat ca,ph2$,ss2$,mat ar,mat arta,cm$,mat app,mat ma
+	write #1,using L1100: k$,mat a$,ph$,ss$,pno,mye,mat dd,mat sc,mat ca,ph2$,ss2$,mat ar,mat arta,cm$,mat app,mat xma
 L1100: form pos 1,c 5,5*c 30,c 12,c 11,n 9,n 2,10*pd 3,10*n 1,10*pd 3,c 12,c 11,2*pd 5.2,pd 4.3,2*n 1,2*pd 3,c 70,20*n 1,x 60,20*n 1,pos 474,20*pd 3.2,x 20,20*pd 3.2
 	pr f "4,45,c 30,n": " "
 	pr f "5,50,c 30,n": " "
@@ -237,7 +236,7 @@ L2230: pr newpage
 	if cp=1 then pr #255,using L2280: hex$("2B0205000F1042") else pr #255,using L2280: hex$("2B0205000F1042")
 L2280: form pos 1,c 9,skip 0
 	form c 9,skip 0
-	pr #255,using L2310: date$,"TIME MANAGEMENT INPUT LISTING ",time$,cnam$
+	pr #255,using L2310: date$,"TIME MANAGEMENT INPUT LISTING ",time$,env$('cnam')
 L2310: form pos 1,c 8,pos 40,c 40,skip 1,pos 1,c 8,pos ntab,c 40,skip 2
 	pr #255: "REF #  CLIENT #  EMPLOYEE #    HOURS       RATE     AMOUNT    DATE   CATEGORY   MONTH CODE     SERVICE-CODE   TYPE  DESCRIPTION"
 	inp2=0
@@ -344,13 +343,8 @@ L3310: ce=hce
 	pr f "5,40,c 30,n": a1$
 L3350: on sno goto L970,L1320
 TMSRCH: ! search for customer #
-	dim heading$*70,form$*80,numeric_format$*20,selection$*70
-	file_num=32 ! alpha index on clients
-	form$="form pos 1,c 5,pos 6,c 30,pos 66,c 15,pos 283,pd 5.2"
-	numeric_format$='pic($$$,$$$.##)'
-	key_length=5
-	heading$="Acct #횼ame컴컴컴컴컴컴컴컴컴컴Address컴컴컴컴Balance"
-	fnsearch(cap$,file_num,heading$,form$,numeric_format$,selection$,key_length)
+	dim selection$*70
+	fnSearch(32,"form pos 1,c 5,pos 6,c 30,pos 66,c 15,pos 283,pd 5.2",'pic($$$,$$$.##)',selection$,5)
 	k$=z$=selection$ ! pull key from first field in search line
 	inp(1)=0
 	inp(1)=val(selection$) conv L4910

@@ -42,9 +42,9 @@ def fn_print_designed_report(rn)
 		goto PDR_XIT
 	end if
  
-	fnCopy('S:\acsPR\newPRRpt_s1.brs',"[Q]\PRmstr\Tmp_Designed_Report-"&session$&"-brs.h[cno]")
+	fnCopy('S:\acsPR\newPRRpt_s1.brs',"[Q]\PRmstr\Tmp_Designed_Report-[Session]-brs.h[cno]")
  
-	open #h_tmp_dr=fnH: "Name=[Q]\PRmstr\Tmp_Designed_Report-"&session$&"-brs.h[cno],RecL=255",display,output
+	open #h_tmp_dr=fnH: "Name=[Q]\PRmstr\Tmp_Designed_Report-[Session]-brs.h[cno],RecL=255",display,output
 	pr #h_tmp_dr,using F_C255: "00081 RN$="""&rn$&""""
 	pf$="19900 pr #255, USING F_PR_OUT: "
 	pfd$="20010 pr #255, USING F_PR_OUT: "
@@ -147,8 +147,8 @@ def fn_print_designed_report(rn)
 	L2210: !
 		pr #h_tmp_dr,using F_C255: "20001 if ips=0 or ipsw=1 then L20010 else L20020"
 		close #h_tmp_dr:
-		open #h_tmp_proc=fnH: "Name=[Temp]\PROC."&session$&",Replace",display,output
-		pr #h_tmp_proc,using F_C255: "load [Q]\PRmstr\Tmp_Designed_Report-"&session$&"-brs.h[cno],Source"
+		open #h_tmp_proc=fnH: "Name=[Temp]\PROC.[Session],Replace",display,output
+		pr #h_tmp_proc,using F_C255: "load [Q]\PRmstr\Tmp_Designed_Report-[Session]-brs.h[cno],Source"
 		
 		
 		

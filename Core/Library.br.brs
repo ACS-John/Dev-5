@@ -1,213 +1,248 @@
 ! test changes
-! r: simple functions that do not redirect
-def library fnVal(stringToConvert$*128; ___,returnN)
-	returnN=val(stringToConvert$) conv ValConv
-	goto ValXit
-	ValConv: !
-		stringToConvert$=srep$(stringToConvert$,'$','')
-		stringToConvert$=srep$(stringToConvert$,',','')
-		stringToConvert$=srep$(stringToConvert$,'"','')
-		stringToConvert$=trim$(stringToConvert$)
-		returnN=val(stringToConvert$) conv ignore
-	goto ValXit
-	ValXit: !
-	fnVal=returnN
-fnend
+! r: functions that do not redirect
+	def library fnVal(stringToConvert$*128; ___,returnN)
+		returnN=val(stringToConvert$) conv ValConv
+		goto ValXit
+		ValConv: !
+			stringToConvert$=srep$(stringToConvert$,'$','')
+			stringToConvert$=srep$(stringToConvert$,',','')
+			stringToConvert$=srep$(stringToConvert$,'"','')
+			stringToConvert$=trim$(stringToConvert$)
+			returnN=val(stringToConvert$) conv ignore
+		goto ValXit
+		ValXit: !
+		fnVal=returnN
+	fnend
 
-def library fnSaveToAsStart(filenameToCopyTo$*400)
-	setEnv('saveToAsStart',trim$(filenameToCopyTo$))
-fnend
-def library fnBrFilename$*512(filename$*512; return$*512)
-	if trim$(filename$)='' then
-		return$=''
-	else
-		return$=br_filename$(filename$)
-	end if
-	fnBrFilename$=return$
-fnend
-def library fnOsFilename$*512(filename$*512; return$*512)
-	if trim$(filename$)='' then
-		return$=''
-	else
-		return$=os_filename$(filename$)
-	end if
-	fnOsFilename$=return$
-fnend
+	def library fnSaveToAsStart(filenameToCopyTo$*400)
+		setEnv('saveToAsStart',trim$(filenameToCopyTo$))
+	fnend
+	def library fnBrFilename$*512(filename$*512; return$*512)
+		if trim$(filename$)='' then
+			return$=''
+		else
+			return$=br_filename$(filename$)
+		end if
+		fnBrFilename$=return$
+	fnend
+	def library fnOsFilename$*512(filename$*512; return$*512)
+		if trim$(filename$)='' then
+			return$=''
+		else
+			return$=os_filename$(filename$)
+		end if
+		fnOsFilename$=return$
+	fnend
 
-def library fnKeyExists(hFile,&keyToTest$; attemptFix,___,returnN, _
-	origionalKey$*256,attemptFix2Count,tried0,triedDot0,triedDot00,lenTmp,dotPos,tmp$*128)
-	! attemptFix =1 try it: As-Is, Left-padded, Right-padded
-	!            =2 also try it: with adding 0, 00, .00 in all of the previous ways
-	origionalKey$=keyToTest$
-	! if trim$(origionalKey$)='101650' then pr 'yes' : pause
-	keyToTest$=rpad$(keyToTest$,kLn(hFile))
-	read #hFile,key=keyToTest$,release: nokey KeTop
-	returnN=1
-	goto MaeFinis
-
-	KeTop: !
-	if attemptFix then
-
-		keyToTest$=lpad$(rtrm$(keyToTest$),kln(hFile))
-		read #hFile,key=keyToTest$,release: nokey KeAlign1
+	def library fnKeyExists(hFile,&keyToTest$; attemptFix,___,returnN, _
+		origionalKey$*256,attemptFix2Count,tried0,triedDot0,triedDot00,lenTmp,dotPos,tmp$*128)
+		! attemptFix =1 try it: As-Is, Left-padded, Right-padded
+		!            =2 also try it: with adding 0, 00, .00 in all of the previous ways
+		origionalKey$=keyToTest$
+		! if trim$(origionalKey$)='101650' then pr 'yes' : pause
+		keyToTest$=rpad$(keyToTest$,kLn(hFile))
+		read #hFile,key=keyToTest$,release: nokey KeTop
 		returnN=1
 		goto MaeFinis
 
-		KeAlign1: ! try lpad(trim)
-			keyToTest$=lpad$(trim$(keyToTest$),kln(hFile))
-			read #hFile,key=keyToTest$,release: nokey KeAlign2
+		KeTop: !
+		if attemptFix then
+
+			keyToTest$=lpad$(rtrm$(keyToTest$),kln(hFile))
+			read #hFile,key=keyToTest$,release: nokey KeAlign1
 			returnN=1
-		goto MaeFinis
-		KeAlign2: ! try rpad(trim)
-			keyToTest$=rpad$(trim$(keyToTest$),kln(hFile))
-			read #hFile,key=keyToTest$,release: nokey KeAlign3
-			returnN=1
-		goto MaeFinis
-		KeAlign3: !
+			goto MaeFinis
 
-		if attemptFix=>2 then ! treat it like a mistreated UB Customer number - look for missing trailing 0 or .00
-			! attempt additions to make it work (may have been truncated)
-			! attemptFix2Count+=1
+			KeAlign1: ! try lpad(trim)
+				keyToTest$=lpad$(trim$(keyToTest$),kln(hFile))
+				read #hFile,key=keyToTest$,release: nokey KeAlign2
+				returnN=1
+			goto MaeFinis
+			KeAlign2: ! try rpad(trim)
+				keyToTest$=rpad$(trim$(keyToTest$),kln(hFile))
+				read #hFile,key=keyToTest$,release: nokey KeAlign3
+				returnN=1
+			goto MaeFinis
+			KeAlign3: !
 
-			tmp$=trim$(keyToTest$)
-			lenTmp=len(tmp$)
-			dotPos=pos(tmp$,'.',-1)
-			if dotPos<=0 and ~triedDot00 then
-				keyToTest$=tmp$&'.00' soflow PastDot00
-				triedDot00=1
-				goto KeTop
+			if attemptFix=>2 then ! treat it like a mistreated UB Customer number - look for missing trailing 0 or .00
+				! attempt additions to make it work (may have been truncated)
+				! attemptFix2Count+=1
+
+				tmp$=trim$(keyToTest$)
+				lenTmp=len(tmp$)
+				dotPos=pos(tmp$,'.',-1)
+				if dotPos<=0 and ~triedDot00 then
+					keyToTest$=tmp$&'.00' soflow PastDot00
+					triedDot00=1
+					goto KeTop
+				end if
+				PastDot00: !
+
+
+				if dotPos=len(tmp$)-1 and ~tried0 then
+					keyToTest$=tmp$&'0' soflow Past0
+					tried0=1
+					goto KeTop
+				end if
+				Past0: !
+
+
+				! removed because never finished developing - very unusual situation anyway
+				! if dotPos<=0 and ~triedDot0 then
+				! 	keyToTest$=tmp$&'.0' soflow PastDot0
+				! 	triedDot0=1
+				! 	goto KeTop
+				! end if
+				! PastDot0: !
+
+
 			end if
-			PastDot00: !
-
-
-			if dotPos=len(tmp$)-1 and ~tried0 then
-				keyToTest$=tmp$&'0' soflow Past0
-				tried0=1
-				goto KeTop
-			end if
-			Past0: !
-
-
-			! removed because never finished developing - very unusual situation anyway
-			! if dotPos<=0 and ~triedDot0 then
-			! 	keyToTest$=tmp$&'.0' soflow PastDot0
-			! 	triedDot0=1
-			! 	goto KeTop
-			! end if
-			! PastDot0: !
-
-
+			MaeJustFail: !
+			! if attemptFix2Count<4 goto KeTop
+			returnN=0
+			keyToTest$=origionalKey$
 		end if
-		MaeJustFail: !
-		! if attemptFix2Count<4 goto KeTop
+		goto MaeFinis
+		MaeFinis: !
+		fnKeyExists=returnN
+	fnend
+
+	def library fnSetEnv(from$*256,to$*256; conSubOnly, ___,quoteF$*1,quoteT$*1,fromLen,returnN) ! it works but it is currently unused.
+		! setenv(from$,to$)
+		if from$(1:1)<>'[' then from$(0:0)='['
+		fromLen=len(from$)
+		if from$(fromLen:fromLen)<>']' then from$&=']'
+		if pos(from$,' ')>0 then	quoteF$='"'
+		if pos(to$,' ')>0 then		quoteT$='"'
+		! pr 'config substitute '&quoteF$&from$&quoteF$&' '&quoteT$&to$&quoteT$
 		returnN=0
-		keyToTest$=origionalKey$
-	end if
-	goto MaeFinis
-	MaeFinis: !
-	fnKeyExists=returnN
-fnend
+		if ~conSubOnly then
+			setenv(from$(2:len(from$)-1),to$) error SetEnvFinis
+		end if
+		exe 'config substitute '&quoteF$&from$&quoteF$&' '&quoteT$&to$&quoteT$
+		returnN=1
+		SetEnvFinis: !
+		fnSetEnv=returnN
+	fnend
+	def library fnSrepEnv$*2048(text$*2048; exclude$*64,___,sePosOpen,sePosClose,seVariable$*128,seStartSearchPos)
+		do
+			sePosOpen =pos(text$,'[', seStartSearchPos)
+			sePosClose=pos(text$,']', max(seStartSearchPos,sePosOpen))
+			if sePosOpen>0 and sePosClose>sePosOpen then
+				if lwrc$(text$(sePosOpen:sePosClose))=lwrc$(exclude$)  then
+					seStartSearchPos=sePosClose+1
+				else
+					seVariable$=text$(sePosOpen+1:sePosClose-1)
+					! pr 'changing ['&seVariable$&'] to '&env$(seVariable$)&'.' : pause
+					text$=srep$(text$,'['&seVariable$&']',env$(seVariable$))
+				end if
+			end if
+		loop while sePosOpen>0 and sePosClose>sePosOpen
+		fnSrepEnv$=text$
+	fnend
+	def library fnFixPd(mat arrayOrVariableToFix; ___,fpReturn,fpItem)
+		fpReturn=0
+		for fpItem=1 to udim(mat arrayOrVariableToFix)
+			if str$(arrayOrVariableToFix(fpItem))(1:5)='-2020' then
+				arrayOrVariableToFix(fpItem)=0
+				fpReturn+=1
+			end if
+		nex fpItem
+		fnFixPd=fpReturn
+	fnend
+	def library fnCd(x)
+		fncd=(x-int(x*.01)*100)*10000+int(x*.01)
+	fnend
+	def library fnFormNumb$(numb,decimals,size)
+		fnformnumb$=lpad$(cnvrt$("N 10."&str$(decimals),numb),size)
+	fnend
+	def library fnpause(;unused)
+		if env$("ACSDeveloper")<>"" then pr 'fnpause enacted.' : exe 'go XITPAUSE step'
+	XITPAUSE: fnend
 
-def library fnSetEnv(from$*256,to$*256; conSubOnly, ___,quoteF$*1,quoteT$*1,fromLen,returnN) ! it works but it is currently unused.
-	! setenv(from$,to$)
-	if from$(1:1)<>'[' then from$(0:0)='['
-	fromLen=len(from$)
-	if from$(fromLen:fromLen)<>']' then from$&=']'
-	if pos(from$,' ')>0 then	quoteF$='"'
-	if pos(to$,' ')>0 then		quoteT$='"'
-	! pr 'config substitute '&quoteF$&from$&quoteF$&' '&quoteT$&to$&quoteT$
-	returnN=0
-	if ~conSubOnly then
-		setenv(from$(2:len(from$)-1),to$) error SetEnvFinis
-	end if
-	exe 'config substitute '&quoteF$&from$&quoteF$&' '&quoteT$&to$&quoteT$
-	returnN=1
-	SetEnvFinis: !
-	fnSetEnv=returnN
-fnend
-def library fnSrepEnv$*2048(text$*2048; exclude$*64,___,sePosOpen,sePosClose,seVariable$*128,seStartSearchPos)
-	do
-		sePosOpen =pos(text$,'[', seStartSearchPos)
-		sePosClose=pos(text$,']', max(seStartSearchPos,sePosOpen))
-		if sePosOpen>0 and sePosClose>sePosOpen then
-			if lwrc$(text$(sePosOpen:sePosClose))=lwrc$(exclude$)  then
-				seStartSearchPos=sePosClose+1
-			else
-				seVariable$=text$(sePosOpen+1:sePosClose-1)
-				! pr 'changing ['&seVariable$&'] to '&env$(seVariable$)&'.' : pause
-				text$=srep$(text$,'['&seVariable$&']',env$(seVariable$))
+	def library fnGetUseDeptAndSub(&useDept,&useSub; ___,guSys$,gudsSetupTimeN)
+		! find out if I should use the department number and/or the sub account number
+		! only reads once every three seconds, but resets counter if checked within 3 seconds
+		! Retains: gudsSetup$,useDeptCache,useSubCache
+		! Guds_
+
+		guSys$=env$('CurSys')
+		if env$('CurSys')='UB' and exists('[Q]\GLmstr\Company.h[cno]') then guSys$='GL': goto Guds_CoOpen
+		if env$('CurSys')='UB' and exists('[Q]\UBmstr\GLmstr.h[cno]' ) then guSys$='UB': goto GudsDefault
+		if env$('CurSys')='PR' and exists('[Q]\GLmstr\Company.h[cno]') then guSys$='GL': goto Guds_CoOpen
+		if env$('CurSys')='PR' and exists('[Q]\CLmstr\Company.h[cno]') then guSys$='CL': goto Guds_CoOpen
+		if env$('CurSys')='PR' and exists('[Q]\PRmstr\glmstr.h[cno]' ) then guSys$='PR': goto Guds_CoOpen
+		if env$('CurSys')='CR' and exists('[Q]\GLmstr\GLmstr.h[cno]' ) then guSys$='GL': goto Guds_CoOpen
+		if env$('CurSys')='CR' and ~exists('[Q]\GLmstr\GLmstr.h[cno]') then guSys$='CR': goto Guds_CoOpen
+		if env$('CurSys')='CL' then guSys$='CL' else guSys$='GL'
+
+		Guds_CoOpen: !
+			if guSys$='GL' or guSys$='CL' then
+
+				gudsSetupTimeN=val(gudsSetup$(4:inf))
+				if gudsSetup$(1:2)<>guSys$ or fn_stime>gudsSetupTimeN+3 then
+					gudsSetup$=guSys$&'-'&str$(fn_stime)
+					open #hCompany=fnH: 'Name=[Q]\'&guSys$&'mstr\Company.h[cno],Shr',internal,input ioerr GudsDefault
+					read #hCompany,using 'Form Pos 150,2*N 1': useDept,useSub
+					close #hCompany: ioerr ignore
+					useDeptCache=useDept
+					useSubCache =useSub
+				else
+					gudsSetup$=guSys$&'-'&str$(fn_stime)
+					useDept=useDeptCache
+					useSub =useSubCache
+				end if
+			else if guSys$='PR' or guSys$='UB' or guSys$='CR' then
+				GudsDefault: ! default both to use
+				useDept=useSub=1
+			end if
+
+	fnend
+	def fn_stime(; returnN,___,tmp$*8)
+	tmp$=time$  ! i.e. 10:31:52
+	returnN+=val(time$(1:2))*60*60
+	returnN+=val(time$(4:5))*60
+	returnN+=val(time$(7:8))
+	fn_stime=returnN
+	fnend
+
+
+	! 6/17/21 - JB - moved the fnAddOne* here from S:\Core\Array to hopefully increase speed of these very heavy use utilities
+	def library fnAddOneC(mat addTo$,one$*2048; skipBlanks,skipDupes,___,size)
+		! must dim an array to 0 before you can add a first item
+		!    Mat addTo$ - the array to add One$ item to
+		!    One$ - the One$ item to add to Mat addTo$
+		!    skipBlanks - if =1 than only add One$ if Trim$(One$)<>""
+		!    skipDupes - if =1 than only add One$ if One$ is not yet in Mat addTo$
+		!    This function returns the number of items in the array
+		size=udim(mat addTo$)
+		if ~skipBlanks or (skipBlanks and trim$(one$)<>'') then
+			if ~skipDupes or (skipDupes and srch(mat addTo$,one$)<=0) then
+				size+=1
+				mat addTo$(size)
+				addTo$(size)=one$
 			end if
 		end if
-	loop while sePosOpen>0 and sePosClose>sePosOpen
-	fnSrepEnv$=text$
-fnend
-def library fnFixPd(mat arrayOrVariableToFix; ___,fpReturn,fpItem)
-	fpReturn=0
-	for fpItem=1 to udim(mat arrayOrVariableToFix)
-		if str$(arrayOrVariableToFix(fpItem))(1:5)='-2020' then
-			arrayOrVariableToFix(fpItem)=0
-			fpReturn+=1
-		end if
-	nex fpItem
-	fnFixPd=fpReturn
-fnend
-def library fnCd(x)
-	fncd=(x-int(x*.01)*100)*10000+int(x*.01)
-fnend
-def library fnFormNumb$(numb,decimals,size)
-	fnformnumb$=lpad$(cnvrt$("N 10."&str$(decimals),numb),size)
-fnend
-def library fnpause(;unused)
-	if env$("ACSDeveloper")<>"" then pr 'fnpause enacted.' : exe 'go XITPAUSE step'
-XITPAUSE: fnend
-
-def library fnGetUseDeptAndSub(&useDept,&useSub; ___,guSys$,gudsSetupTimeN)
-	! find out if I should use the department number and/or the sub account number
-	! only reads once every three seconds, but resets counter if checked within 3 seconds
-	! Retains: gudsSetup$,useDeptCache,useSubCache
-	! Guds_
-
-	guSys$=env$('CurSys')
-	if env$('CurSys')='UB' and exists('[Q]\GLmstr\Company.h[cno]') then guSys$='GL': goto Guds_CoOpen
-	if env$('CurSys')='UB' and exists('[Q]\UBmstr\GLmstr.h[cno]' ) then guSys$='UB': goto GudsDefault
-	if env$('CurSys')='PR' and exists('[Q]\GLmstr\Company.h[cno]') then guSys$='GL': goto Guds_CoOpen
-	if env$('CurSys')='PR' and exists('[Q]\CLmstr\Company.h[cno]') then guSys$='CL': goto Guds_CoOpen
-	if env$('CurSys')='PR' and exists('[Q]\PRmstr\glmstr.h[cno]' ) then guSys$='PR': goto Guds_CoOpen
-	if env$('CurSys')='CR' and exists('[Q]\GLmstr\GLmstr.h[cno]' ) then guSys$='GL': goto Guds_CoOpen
-	if env$('CurSys')='CR' and ~exists('[Q]\GLmstr\GLmstr.h[cno]') then guSys$='CR': goto Guds_CoOpen
-	if env$('CurSys')='CL' then guSys$='CL' else guSys$='GL'
-
-	Guds_CoOpen: !
-		if guSys$='GL' or guSys$='CL' then
-
-			gudsSetupTimeN=val(gudsSetup$(4:inf))
-			if gudsSetup$(1:2)<>guSys$ or fn_stime>gudsSetupTimeN+3 then
-				gudsSetup$=guSys$&'-'&str$(fn_stime)
-				open #hCompany=fnH: 'Name=[Q]\'&guSys$&'mstr\Company.h[cno],Shr',internal,input ioerr GudsDefault
-				read #hCompany,using 'Form Pos 150,2*N 1': useDept,useSub
-				close #hCompany: ioerr ignore
-				useDeptCache=useDept
-				useSubCache =useSub 
-			else
-				gudsSetup$=guSys$&'-'&str$(fn_stime)
-				useDept=useDeptCache
-				useSub =useSubCache 
+		fnAddOneC=size
+	fnend
+	def library fnAddOneN(mat addTo,oneN; skipZeros,skipDupes,___,size)
+		! must dim an array to 0 before you can add a first item
+		!    Mat addTo - the array to add oneN item to
+		!    oneN - the oneN item to add to Mat addTo
+		!    skipZeros - if =1 than only add oneN if oneN<>0
+		!    skipDupes - if =1 than only add oneN if oneN is not yet in Mat addTo
+		!    This function returns the number of items in the array
+		size=udim(mat addTo)
+		if ~skipZeros or (skipZeros and oneN) then
+			if ~skipDupes or (skipDupes and srch(mat addTo,oneN)<=0) then
+				size+=1
+				mat addTo(size)
+				addTo(size)=oneN
 			end if
-		else if guSys$='PR' or guSys$='UB' or guSys$='CR' then
-			GudsDefault: ! default both to use
-			useDept=useSub=1
 		end if
-
-fnend
-def fn_stime(; returnN,___,tmp$*8)
-tmp$=time$  ! i.e. 10:31:52
-returnN+=val(time$(1:2))*60*60
-returnN+=val(time$(4:5))*60
-returnN+=val(time$(7:8))
-fn_stime=returnN
-fnend
-
-
+		fnAddOneN=size
+	fnend
 
 ! /r
 ! r: S:\Core\Start.br
@@ -581,17 +616,17 @@ fnend
 		library 'S:\Core\Programs\Update.br': fnAcsInstallationPath$
 		fnAcsInstallationPath$=fnAcsInstallationPath$( longFileName)
 	fnend
-	def library fnqgl(myline,mypos; container,x,unused,qgllength)
+	def library fnqgl(myline,mypos; container,x,forceGLsysIfPossible,qgllength)
 		library 'S:\Core\ACS_Component.br': fnqgl
-		fnqgl=fnqgl(myline,mypos,container,x,unused,qgllength)
+		fnqgl=fnqgl(myline,mypos,container,x,forceGLsysIfPossible,qgllength)
 	fnend
-	def library fnqglbig(myline,mypos; container,x,use_or_replace)
+	def library fnqglbig(myline,mypos; container,x,forceGLsysIfPossible)
 		library 'S:\Core\ACS_Component.br': fnqgl
-		fnqglbig=fnqgl(myline,mypos,container,x,use_or_replace,60)
+		fnqglbig=fnqgl(myline,mypos,container,x,forceGLsysIfPossible,60)
 	fnend
-	def library fnqgl25(myline,mypos; container,x,use_or_replace)
+	def library fnqgl25(myline,mypos; container,x,forceGLsysIfPossible)
 		library 'S:\Core\ACS_Component.br': fnqgl
-		fnqgl=fnqgl(myline,mypos,container,x,use_or_replace,25)
+		fnqgl=fnqgl(myline,mypos,container,x,forceGLsysIfPossible,25)
 	fnend
 	def library fnagl$*12(&x$)
 		library 'S:\Core\fn\agl$.br': fnagl$
@@ -1119,14 +1154,6 @@ fnend
 	def library fnsrch_case_insensitive(mat srch_array$,srch_for$*256; srch_start_ele)
 		library 'S:\Core\Array.br': fnsrch_case_insensitive
 		fnsrch_case_insensitive=fnsrch_case_insensitive(mat srch_array$,srch_for$, srch_start_ele)
-	fnend
-	def library fnAddOneN(mat add_to,one; skip_zeros,skip_dupes)
-		library 'S:\Core\Array.br': fnAddOneN
-		fnAddOneN=fnAddOneN(mat add_to,one, skip_zeros,skip_dupes)
-	fnend
-	def library fnAddOneC(mat add_to$,one$*2048; skip_blanks,skip_dupes)
-		library 'S:\Core\Array.br': fnAddOneC
-		fnAddOneC=fnAddOneC(mat add_to$,one$, skip_blanks,skip_dupes)
 	fnend
 	def library fnCountMatchesC(mat arrayToSearch$,valueToMatch$*256)
 		library 'S:\Core\Array.br': fnCountMatchesC
@@ -1739,9 +1766,9 @@ fnend
 	! /r
 ! /r
 ! r: TM Time Management
-	def library fnSearch(unused$,fum,&hea$,&form$,nformat$,&sel$,klength)
+	def library fnSearch(h,form$*128,nformat$*20,&sel$,klength)
 		library 'S:\Time Management\fn\search.br': fnSearch
-		fnSearch=fnSearch(unused$,fum,hea$,form$,nformat$,sel$,klength)
+		fnSearch=fnSearch(h,form$,nformat$,sel$,klength)
 	fnend
 	def library fnReassignNTA(filename$*256,keyForm$,ntaForm$)
 		library 'S:\Time Management\fn\printInvoice.br': fnReassignNTA

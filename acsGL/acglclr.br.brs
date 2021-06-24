@@ -25,7 +25,7 @@
 	if ckey=5 then goto Xit
 	rd1=val(resp$(1))
  
-	open #2: "Name=[Temp]\Work."&session$&",RecL=72,Replace",internal,output
+	open #2: "Name=[Temp]\Work.[Session],RecL=72,Replace",internal,output
 	open #1: "Name=[Q]\GLmstr\ACTRANS.h[cno]",internal,input
 L270: read #1,using L280: mat tr,tr$,td$,pcde eof END1
 L280: form pos 1,n 3,n 6,n 3,n 6,pd 6.2,2*n 2,c 12,c 30,n 2

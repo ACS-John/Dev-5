@@ -19,7 +19,7 @@ def library fnub_cnv_note_phase_1
   else
     fnStatus("converting [Q]\UBmstr\Note1.h[cno] to version 1")
   end if
-  open #work=fnH: "Name=[Temp]\Work."&session$&",Replace,RecL=16",internal,output
+  open #work=fnH: "Name=[Temp]\Work.[Session],Replace,RecL=16",internal,output
   READ_NOTE1_PHASE1: !
   read #note1,using 'Form POS 1,C 7,2*PD 3': z$,a1,a2 eof EO1
   write #work,using 'Form POS 1,C 7,C 3,2*PD 3': z$,".00",a1,a2

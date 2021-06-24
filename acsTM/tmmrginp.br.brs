@@ -6,7 +6,7 @@ dim ta(25,2),fb(25),iv$*12,k$*5,e$*9,b(8),sc$*4,gl$*12,ivr(6),ca(10)
 dim e(4,30),sc(2),scc(10),des$*30
 pr newpage
 pr f "10,20,c 60,h,n": "T/M MERGE INPUT IN PROCESS"
-open #3: "Name=S:\Core\Data\acsllc\TMWK"&wsid$&".h[cno],NoShr",internal,input
+open #3: "Name=S:\Core\Data\acsllc\TMWK[acsUserId].h[cno],NoShr",internal,input
 open #2: "Name=S:\Core\Data\acsllc\TMTRANS.h[cno],Shr",internal,outIn,relative
 L140: form pos 54,pd 3
 	open #1: "Name=S:\Core\Data\acsllc\CLmstr.h[cno],KFName=S:\Core\Data\acsllc\CLIndex.h[cno],Shr",internal,outIn,keyed

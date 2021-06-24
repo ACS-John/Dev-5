@@ -5,18 +5,9 @@ def library fnCno(&cno; &cnam$)
 	fnreg_read(session$&'.'&env$('cursys')&'.cno',cno$)
 	cno=val(cno$)
 	! /r
-	! r: read cno tied to WSID (v 5 but before feb 2015)
-	if ~cno then
-		fnreg_read(wsid$&'.'&env$('cursys')&'.cno',cno$)
-		cno=val(cno$)
-		fn_putcno(cno)
-	end if
-	! /r
-	! r: legacy cno fetch
-	if ~cno then ! it's not yet converted to be used in the registry (5.0)
-		cno=1
-	end if
-	! /r
+
+	if ~cno then 	cno=1
+
 	! r: read cnam
 	dim cnam_read$*40
 	cnam_read$=''

@@ -8,7 +8,7 @@ def library fnub_cnv_adrbil
  
 	
  
-	if ~exists("[Q]\UBmstr\UBAdrBil.h[cno]") then ! move old files to "env$('temp')&"\temp."&session$&"orary file before creating new file with same name
+	if ~exists("[Q]\UBmstr\UBAdrBil.h[cno]") then ! move old files to "env$('temp')&"\temp.[Session]orary file before creating new file with same name
 		fnCopy("[Q]\UBmstr\UBAdrBil.h[cno]",env$('temp')&"\temp."&session$)
 	end if
 	if exists("[Q]\UBmstr\UBAdrBil.h[cno]")=0 then goto BUILD_FILES
@@ -20,8 +20,8 @@ def library fnub_cnv_adrbil
 	goto L160
 	
 	L160: !
-	open #1: "Name=[Temp]\temp."&session$&"",internal,input,relative
-	open #2: "Name=[Temp]\tmp_x_"&session$&",RecL=130,Replace",internal,outIn,relative
+	open #1: "Name=[Temp]\temp.[Session]",internal,input,relative
+	open #2: "Name=[Temp]\tmp_x_[Session],RecL=130,Replace",internal,outIn,relative
 	L180: !
 		read #3,using "form pos 1,c 10,pos 385,pd 3": z$,bra eof END1
 	if bra=0 then goto L180

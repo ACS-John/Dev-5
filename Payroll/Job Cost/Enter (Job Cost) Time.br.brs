@@ -40,7 +40,7 @@ L280: mat ml$(2)
 	ml$(2)="Enter Yes to work with this file, else No to create a new batch of entries."
 	fnmsgbox(mat ml$,resp$,'',52)
 	if resp$="Yes" then goto L320 else goto L300
-L300: open #3: "Name=jcWork."&session$&",SIZE=0,RecL=84,Replace",internal,outIn,relative
+L300: open #3: "Name=jcWork.[Session],SIZE=0,RecL=84,Replace",internal,outIn,relative
 	goto L330
 L320: open #3: "Name=jcWork."&session$,internal,outIn,relative
 L330: open #11: "Name=[Q]\PRmstr\JCMSTR.h[cno],KFName=[Q]\PRmstr\JCIndx.h[cno],Shr",internal,input,keyed

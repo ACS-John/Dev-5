@@ -191,7 +191,7 @@ Xit: fnXit
 TRY_TO_SEND_TO_GL: ! r:
 	if glb=2 then goto BUCKET
 	fnCopy('[Q]\CLmstr\GLWK101.h[cno]','[Q]\GLmstr\GL_Work_[acsUserId].h[cno]')
-	fnCopy('[Q]\CLmstr\GLWK201.h[cno]','[Q]\GLmstr\GLWK2[wsid].h[cno]')
+	fnCopy('[Q]\CLmstr\GLWK201.h[cno]','[Q]\GLmstr\GLWK2[acsUserId].h[cno]')
 	if lr4=0 then goto L1550
 	open #1: "Name=[Q]\GLmstr\PRmstr.h[cno],KFName=[Q]\GLmstr\PRINDEX.h[cno],Shr",internal,outIn,keyed ioerr L1550
 	fnprg("S:\acsGL\PRMerge",2)

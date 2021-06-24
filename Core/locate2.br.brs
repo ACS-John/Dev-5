@@ -9,11 +9,11 @@ dim report$*256,subprocfile$*256,procfile$*256,tempfile1$*256,tempfile2$*256
 fngetcd(dur$)
 fnTop(program$,'Locate2')
 filter$="*.br, *.br"
-report$=env$('temp')&"\LocRpt-"&session$&".txt"
-subprocfile$=env$('temp')&"\loc3-"&session$&".tmp"
-procfile$=env$('temp')&"\Loc0-"&session$&".prc"
-tempfile1$=env$('temp')&"\Loc1-"&session$&".tmp"
-tempfile2$=env$('temp')&"\Loc2-"&session$&".tmp"
+report$=env$('temp')&"\LocRpt-[Session].txt"
+subprocfile$=env$('temp')&"\loc3-[Session].tmp"
+procfile$=env$('temp')&"\Loc0-[Session].prc"
+tempfile1$=env$('temp')&"\Loc1-[Session].tmp"
+tempfile2$=env$('temp')&"\Loc2-[Session].tmp"
  
 MAIN: !
 	fnTos

@@ -23,7 +23,7 @@
 	if fnps=2 then fl1$="Name=[Q]\GLmstr\ACGLFNSJ.h[cno],KFName=[Q]\GLmstr\agfsidx2.h[cno],Shr" else : _
 		fl1$="Name=[Q]\GLmstr\ACGLFNSI.h[cno],KFName=[Q]\GLmstr\agfsidx3.h[cno],Shr"
 L190: form pos mp1,pd 3,pos 81,41*pd 6.2
-	pas=1 : open #hwork:=4: "Name=[Temp]\Work."&session$&",KFName=IDX."&wsid$&",Replace,RecL=33,KPS=1,KLN=5",internal,outIn,keyed
+	pas=1 : open #hwork:=4: "Name=[Temp]\Work.[Session],KFName=IDX."&wsid$&",Replace,RecL=33,KPS=1,KLN=5",internal,outIn,keyed
 L210: acglfnsi=1 : _
 	open #acglfnsi: fl1$,internal,outIn,keyed
 	if fnprocess=1 or fnUseDeptNo=0 then goto L330

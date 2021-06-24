@@ -176,7 +176,7 @@ goto HERE ! ./r
  
 SORT1: ! r: SELECT & SORT
 	open #5: "Name=[Q]\UBmstr\Cass1.h[cno],KFName=[Q]\UBmstr\Cass1Idx.h[cno],Shr",internal,input,keyed ioerr L1410
-	open #6: "Name=[Temp]\Temp."&session$&",Replace,RecL=19",internal,output
+	open #6: "Name=[Temp]\Temp.[Session],Replace,RecL=19",internal,output
 	s5=1
 	if prtbkno=0 then routekey$="" else routekey$=cnvrt$("N 2",prtbkno)&"       " ! key off first record in route (route # no longer part of customer #)
 	restore #2,search>=routekey$:
@@ -193,9 +193,9 @@ SORT1: ! r: SELECT & SORT
 	goto L1210
 	END5: !
 	close #6:
-	open #9: "Name=[Temp]\Control."&session$&",Size=0,RecL=128,Replace",internal,output
+	open #9: "Name=[Temp]\Control.[Session],Size=0,RecL=128,Replace",internal,output
 	L1330: form pos 1,c 128
-	write #9,using L1330: "File [Temp]\Temp."&session$&",,,[Temp]\Addr."&session$&",,,,,A,N"
+	write #9,using L1330: "File [Temp]\Temp.[Session],,,[Temp]\Addr.[Session],,,,,A,N"
 	write #9,using L1330: "Mask 1,19,C,A"
 	close #9:
 	execute "Free [Temp]\Addr."&session$ ioerr ignore

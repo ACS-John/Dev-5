@@ -189,9 +189,9 @@
           ! ?tart writing RTF text file                                   !:
           ! ?                                                             !:
           ! -------------------------------- !
-10380     open #(textfile:=fnH): "name=[Temp]\text"&session$&".txt,recl=5000,replace",display,output 
+10380     open #(textfile:=fnH): "name=[Temp]\text[Session].txt,recl=5000,replace",display,output 
 10385     if sort_col>0 then header$(inf:inf)="[RTFLINE] Sorted by "&headers$(sort_col)
-10390     pr #textfile: "H|[SPEC(spec"&session$&".spc)]"&header$&"[BOTLINE]" !:
+10390     pr #textfile: "H|[SPEC(spec[Session].spc)]"&header$&"[BOTLINE]" !:
           pr #textfile: "F|"&footer$&"|Page [PAGE] |[RTFDATE][TOPLINE]" !:
           pr #textfile: "T| "&title$&"[RTFLINE]"
 10393     mat theaders$(udim(headers$)) !:
@@ -351,10 +351,10 @@
 10700     rtfout$=file$(rtfout)
 10705 ! close #waitwin:! PAUSE
 10710     gosub BUILD_SPEC
-10720     fnrtf(textfile,env$("temp")&"\spec"&session$&".spc",rtfout,env$("temp")&"\")
+10720     fnrtf(textfile,env$("temp")&"\spec[Session].spc",rtfout,env$("temp")&"\")
 10730     if file(textfile)>-1 then close #textfile: 
 10740     if file(rtfout)>-1 then close #rtfout: 
-10742     if _cs then let fnCopys2c(rtfout$,outfile$:="temp\temp"&session$&".rtf",1)
+10742     if _cs then let fnCopys2c(rtfout$,outfile$:="temp\temp[Session].rtf",1)
 10743     close #waitwin: ! PAUSE
 10744     if close=1 then mw$=" -M" else mw$=""
 10745     dim word$*150
@@ -381,7 +381,7 @@
         ! ?uild an RTF specification file in the %TEMP% directory based !:
         ! ?n the number of columns and text of the lIST to print.       !:
         ! -------------------------------- !
-10810   open #(specfile=fnH): "name=[Temp]\spec"&session$&".spc,recl=2000,replace",display,output 
+10810   open #(specfile=fnH): "name=[Temp]\spec[Session].spc,recl=2000,replace",display,output 
 10820   pr #specfile: ""
 10825 ! -------------------------------- !:
         ! ?et margins                                                   !:

@@ -237,7 +237,7 @@ L1650: ! r:
 	goto Xit ! /r
  
 BLDPCT1: ! r:
-	open #10: "Name=[Temp]\Work."&session$&",KFName=[Temp]\Addr."&session$&",Replace,RecL=17,KPS=1,KLN=5",internal,outIn,keyed
+	open #10: "Name=[Temp]\Work.[Session],KFName=[Temp]\Addr.[Session],Replace,RecL=17,KPS=1,KLN=5",internal,outIn,keyed
 	for j=1 to lrec(3)
 		read #h_glmstr,using F_GLMSTR_A,rec=j: pc1,bb,cb noRec L1830
 		k$=cnvrt$("N 5",pc1)

@@ -159,7 +159,7 @@ def library fnPostCheckbookToGl(; enablePost)
 		close #work: 
 		open #1: "Name=[Temp]\CONTROL."&wsid$&",SIZE=0,RecL=128,Replace",internal,output 
 		write #1,using L1150: "! SORT FOR G/L DISTRIBUTION LIST IN PROCESS"
-		write #1,using L1150: "FILE [Temp]\WORK."&session$&",,,[Temp]\Addr."&session$&",,,,,A,N"
+		write #1,using L1150: "FILE [Temp]\WORK.[Session],,,[Temp]\Addr.[Session],,,,,A,N"
 		write #1,using L1150: "MASK 1,26,C,A"
 		L1150: form pos 1,c 128
 		close #1: 
@@ -378,21 +378,20 @@ def library fnPostCheckbookToGl(; enablePost)
 	return  ! /r
 	GLBucketStuff: ! r:
 		if enablePost then 
-			d2$=cnvrt$("PIC(######)",d2)
 			open #glbucket=20: "Name=[Q]\GLmstr\GLBucket.h[cno]",internal,input,relative ioerr L2830 ! [cno]" ! &str$(gl2)
 			read #glbucket,using 'Form POS 1,N 1',rec=1: glb noRec ignore
 			close #glbucket: 
 			L2830: ! 
 			if glb=2 then 
-				glwk$="[Q]\GLmstr\GL"&d2$&".h[cno]" ! &str$(gl2)
-				open #glwk=11: "Name="&glwk$&",RecL=104,Use",internal,output 
+				glwk$="[Q]\GLmstr\GL"&cnvrt$("PIC(######)",d2)&".h[cno]" ! &str$(gl2)
+				open #glwk=fnH: "Name="&glwk$&",RecL=104,Use",internal,output 
 			else 
 				glwk$="[Q]\GLmstr\GL_Work_[acsUserId].h[cno]" ! &str$(gl2)
-				open #glwk=11: "Name="&glwk$&",RecL=104,Replace",internal,output 
+				open #glwk=fnH: "Name="&glwk$&",RecL=104,Replace",internal,output 
 			end if 
 		end if
 		if pr2$<>"N" then 
-			open #glwk2wsid=13: "Name=[Q]\GLmstr\GLWK2"&wsid$&".h[cno],RecL=110,Replace",internal,output ! [cno]" ! &str$(gl2)
+			open #glwk2wsid=fnH: "Name=[Q]\GLmstr\GLWK2[acsUserId].h[cno],RecL=110,Replace",internal,output ! [cno]" ! &str$(gl2)
 		end if 
 	return  ! /r
 	REGGL: ! r:

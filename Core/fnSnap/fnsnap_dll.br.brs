@@ -134,8 +134,8 @@
           ! +----------------------------------------------------------------+!
 01030     dim f$*32000
 01031     library env$("PD")&"Core\fnsnap\fnsnap_dll.br": fnH
-01032     execute "copy "&flnm$&" work"&session$&".tmp -D -N"
-01034     open #(flin:=fnH): "name=work"&session$&".tmp",internal,outIn 
+01032     execute "copy "&flnm$&" work[Session].tmp -D -N"
+01034     open #(flin:=fnH): "name=work[Session].tmp",internal,outIn 
 01036     execute "free "&flnm$&" -N"
 01038     open #(flout:=fnH): "NAME="&flnm$&",recl="&str$(rln(flin))&",replace,version=1",internal,output 
 01040     flfrm$=cform$("FORM C "&str$(rln(flin)))
@@ -202,8 +202,8 @@
 01370     curdrv=10
 01372     dim curdrv$*100
 01375     if file(curdrv)>-1 then curdrv+=1: goto 1375
-01380     open #curdrv: "name=drv."&wsid$&",replace",display,output 
-01385     curdrv$=srep$(file$(curdrv),"drv."&wsid$,"")
+01380     open #curdrv: "name=drv.[acsUserId],replace",display,output 
+01385     curdrv$=srep$(file$(curdrv),"drv.[acsUserId]","")
 01392     fncurdrv$=curdrv$
 01395     close #curdrv,free: 
 01400   fnend 
@@ -214,7 +214,7 @@
           !    !
 01430     outfile=10
 01440     if file(outfile)>-1 then outfile+=1 : goto 1440
-01450     open #outfile: "name=out"&session$&".txt,eol=none,replace",display,output 
+01450     open #outfile: "name=out[Session].txt,eol=none,replace",display,output 
 01460     crlf$=chr$(13)&chr$(10)
 01470     if header$>"" then pr #outfile: "H|"&header$&crlf$
 01480     if footer$>"" then pr #outfile: "F|"&footer$&crlf$
@@ -255,7 +255,7 @@
 01630     close #rtfout: !:
           close #rtfno: 
 01635     if word and _cs then !:
-            fnCopys2c(rtfout$,csout$:="@:"&env$("C_DIR")&"temp\temp"&session$&".rtf",1) !:
+            fnCopys2c(rtfout$,csout$:="@:"&env$("C_DIR")&"temp\temp[Session].rtf",1) !:
             execute "sys  -w -c "&fnmsexe$("winword.exe")&" "&os_filename$(csout$) else !:
             if word then execute "sys  -w -c "&fnmsexe$("winword.exe")&" "&os_filename$(rtfout$)
 01640     fnrtfend$=rtfout$
@@ -350,7 +350,7 @@
 02150     dim srtcnt$*100
 02160     srtcnt=10
 02170     if file(srtcnt)>-1 then srtcnt+=1 : goto 2170
-02180     open #srtcnt: "name="&env$("TEMP")&"\srtcnt."&session$&",recl=128,replace",internal,output 
+02180     open #srtcnt: "name="&env$("TEMP")&"\srtcnt.[Session],recl=128,replace",internal,output 
 02190     srtcnt$=file$(srtcnt)
 02200     goto 2220
 02210     for a=1 to 4 !:
@@ -991,7 +991,7 @@
 04902   library env$("PD")&"Core\fnsnap\fnsnap_dll.br": fnH
 04903   execute 'proc '&env$("PD")&'Core\fnsnap\tt'
 04904   fnawplite$=awtext$
-04905   open #(awp:=fnH): "name="&env$("PD")&"Core\fnsnap\awp"&session$&".txt,replace",display,output 
+04905   open #(awp:=fnH): "name="&env$("PD")&"Core\fnsnap\awp[Session].txt,replace",display,output 
 04910   dim awp$*100,awt$*1000
 04915 !    !:
         ! |  Open the parameters file for AWPlite                       | !:
@@ -1013,7 +1013,7 @@
         ! | Create the transfer file for data to be used by AWPlite     | !:
         ! |                                                             | !:
         !    !
-04985   open #(awt:=fnH(awp)): "name="&env$("PD")&"Core\fnsnap\awt"&session$&".txt,recl="&str$(alen)&",replace",display,output 
+04985   open #(awt:=fnH(awp)): "name="&env$("PD")&"Core\fnsnap\awt[Session].txt,recl="&str$(alen)&",replace",display,output 
 04990   pr #awt: srep$(awtext$,"\n",crlf$)
 04995   awt$=os_filename$(file$(awt))
 05000   close #awt: 
@@ -1036,7 +1036,7 @@
         ! | original, if CANCEL then leave the original                 | !:
         !    !
 05050   if trim$(uprc$(result$))="SAVE" then 
-05055     open #(awt:=fnH(awt)): "name="&env$("PD")&"Core\fnsnap\awt"&session$&".txt",display,input 
+05055     open #(awt:=fnH(awt)): "name="&env$("PD")&"Core\fnsnap\awt[Session].txt",display,input 
 05056     awx=0
 05060     linput #awt: awtext$ eof 5070 !:
           awx+=1
@@ -1336,9 +1336,9 @@
         ! |                                                                | !:
         ! | FNHIST("mawh",env$("PD")&"efile\ma",env$("PD")&"efile\ma\mawh")| !:
         ! ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ!
-06502   execute "dir "&from$&"\"&mask$&"*.* >hist"&session$&".txt"
+06502   execute "dir "&from$&"\"&mask$&"*.* >hist[Session].txt"
 06504   library env$("PD")&"Core\fnsnap\fnsnap_dll.br": fnH
-06506   open #(infile:=fnH): "name=hist"&session$&".txt",display,input 
+06506   open #(infile:=fnH): "name=hist[Session].txt",display,input 
 06508   dim ahist$*100,dhist$(1)*100
 06510   dh=0
 06512 HIST1: linput #infile: ahist$ eof HIST2
@@ -1351,14 +1351,14 @@
 06522   goto HIST1
 06524 HIST2: close #infile: 
 06526   execute "mkdir "&to$ ioerr 6528
-06528   if exists("hist"&session$&".txt")=2 then execute "free hist"&session$&".txt -N"
+06528   if exists("hist[Session].txt")=2 then execute "free hist[Session].txt -N"
 06530   for a=1 to dh-3
 06532     execute "copy "&from$&"\"&dhist$(a)&" "&to$&"\"&dhist$(a)
 06534     if exists(to$&"\"&dhist$(a))=2 then !:
             execute "free "&from$&"\"&dhist$(a)&" -N"
 06536   next a
 06538 ZHIST: if file(infile)>-1 then close #infile: 
-06540   if exists("hist"&session$&".txt")=2 then execute "free hist"&session$&".txt -N"
+06540   if exists("hist[Session].txt")=2 then execute "free hist[Session].txt -N"
 06542   fnhist=dh-1
 06544 fnend 
 06700 ! =====================================================================
@@ -1654,7 +1654,7 @@
 10092   open #flnr: "name=ldup.[WSID]",display,output  !:
         pr #flnr: "Index error in file "&flnm$&" using index "&kfnm$ !:
         close #flnr: 
-10093   fnprint_file("ldup."&wsid$,10,1,1) !:
+10093   fnprint_file("ldup."&env$('acsUserId'),10,1,1) !:
         ! INPUT FIELDS "23,64,c 1,ax": CHOICE$
 10094   choice$="" !:
         dupa=3 !:
@@ -2719,7 +2719,7 @@
         ! +----------------------------------------------------------------+!
 34202   library env$("PD")&"Core\fnsnap\fnsnap_dll.br": fnH,fnCopyc2s,fnCopys2c
 34204   dim tempenv$*2048, addstr$*3, leftstr$*2048, rightstr$*2048, cs_textfile$*256
-34206   cs_textfile$="cs-"&session$&".txt"
+34206   cs_textfile$="cs-[Session].txt"
 34207   if uprc$(cs$)="C" or cs$="" then !:
           execute "*sys -M -@ set > "&cs_textfile$ !:
           fnCopyc2s("@:\"&cs_textfile$,cs_textfile$,1) !:
@@ -2944,11 +2944,11 @@
 38840   x=len(lookin$)
 38850   if not lookin$(x:x)="\" then lookin$=lookin$&"\"
 38855   if wbversion$<"4.20" then 
-38860     execute "sys -W "&os_filename$(progpath$&"filedialog.exe")&" -T1 -B"&wsid$&" -P"&lookin$&" -X"&lookfor$
-38870     if exists(progpath$&"dbde"&wsid$&".txt") then goto 38880 else goto 38960
+38860     execute "sys -W "&os_filename$(progpath$&"filedialog.exe")&" -T1 -B"&env$('unique_computer_id')&" -P"&lookin$&" -X"&lookfor$
+38870     if exists(progpath$&"dbde"&env$('acsUserId')&".txt") then goto 38880 else goto 38960
 38880     getfile=50
 38890     if file(getfile)>-1 then getfile+=1 : goto 38890
-38900     open #getfile: "name="&progpath$&"dbde"&wsid$&".txt",display,input 
+38900     open #getfile: "name="&progpath$&"dbde"&env$('acsUserId')&".txt",display,input 
 38910     linput #getfile: getfile$
 38920     close #getfile,free: 
 38930     getfile=0
@@ -2978,11 +2978,11 @@
         lookfor$=trim$(lookfor$)
 39040   x=len(lookin$)
 39050   if not lookin$(x:x)="\" then lookin$=lookin$&"\"
-39060   execute "sys -W "&os_filename$(progpath$&"filedialog.exe")&" -T2 -B"&wsid$&" -P"&lookin$&" -X"&lookfor$
-39070   if exists(progpath$&"dbde"&wsid$&".txt") then goto 39080 else goto 39160
+39060   execute "sys -W "&os_filename$(progpath$&"filedialog.exe")&" -T2 -B"&env$('unique_computer_id')&" -P"&lookin$&" -X"&lookfor$
+39070   if exists(progpath$&"dbde"&env$('acsUserId')&".txt") then goto 39080 else goto 39160
 39080   putfile=50
 39090   if file(putfile)>-1 then putfile+=1 : goto 39090
-39100   open #putfile: "name="&progpath$&"dbde"&wsid$&".txt",display,input 
+39100   open #putfile: "name="&progpath$&"dbde"&env$('acsUserId')&".txt",display,input 
 39110   linput #putfile: putfile$
 39120   close #putfile,free: 
 39130   putfile=0
@@ -3037,11 +3037,11 @@
         mat conres(5)
 39480   if w$>"0" then !:
           w=fp(val(w$)/10)*10 conv ZSETRES else !:
-          w=fp(val(wsid$)/10)*10 conv ZSETRES
-39490   execute "sys -w "&os_filename$(env$("PD")&"Core\fnsnap\resolution.exe")&" -"&os_filename$(env$("PD")&"Core\fnsnap\res"&wsid$&".txt")
+          w=fp(val(env$('acsUserId'))/10)*10 conv ZSETRES
+39490   execute "sys -w "&os_filename$(env$("PD")&"Core\fnsnap\resolution.exe")&" -"&os_filename$(env$("PD")&"Core\fnsnap\res"&env$('acsUserId')&".txt")
 39500   resfil=130
 39510   if file(resfil)>-1 then resfile+=1 : goto 39510
-39520   open #resfil: "name="&env$("PD")&"Core\fnsnap\res"&wsid$&".txt",display,input 
+39520   open #resfil: "name="&env$("PD")&"Core\fnsnap\res"&env$('acsUserId')&".txt",display,input 
 39530 READ_RES: linput #resfil: res$ eof 39570
 39540   res$=trim$(res$)
 39550   gosub SETRES
@@ -3120,10 +3120,10 @@
 40080 ! 
 40090 ! 
 40100 ! 
-40110   execute "status files >s_files."&wsid$
+40110   execute "status files >s_files."&env$('acsUserId')
 40120   s_files=10
 40130   if file(s_files)>-1 then s_files+=1 : goto 40130
-40140   open #s_files: "name=s_files."&wsid$,display,input 
+40140   open #s_files: "name=s_files."&env$('acsUserId'),display,input 
 40150   dim s_a$*1000
 40160   s_a=0
 40170 S_FILES_1: linput #s_files: s_a$ eof S_FILES_2
@@ -3455,15 +3455,15 @@
 41500   end if 
 41501   if _cs then let fnCopys2c(infile$,"@:S:\Core\fnsnap\"&infile$(pos(infile$,"\",-1)+1:len(infile$)),1)
 41502   if file(rccfile)>-1 then rccfile+=1 : goto 41502 else !:
-          open #rccfile: "name=command."&session$&",replace,recl=3200",display,output 
+          open #rccfile: "name=command.[Session],replace,recl=3200",display,output 
 41503   dim rccfile$*65
 41505   rccfile$=file$(rccfile)
 41510 ! 
 41520   if _cs then pr #rccfile: "-F"&os_filename$(srep$(infile$,env$("PD"),"@:")) !:
-          pr #rccfile: "-B"&session$&" " !:
+          pr #rccfile: "-B[Session] " !:
         else !:
           pr #rccfile: "-F"&os_filename$(infile$) !:
-          pr #rccfile: "-B"&session$&" "
+          pr #rccfile: "-B[Session] "
 41530 ! 
 41531   if left>0 then pr #rccfile: "-L"&str$(left)
 41540 ! 
@@ -3492,11 +3492,11 @@
           execute "sys -w "&os_filename$("@:S:\Core\fnsnap\radiochk.exe")&" -#"&os_filename$("@:temp\"&"command."&session$) !:
         else !:
           execute "sys -w "&os_filename$(env$("PD")&"Core\fnsnap\radiochk.exe")&" -#"&os_filename$(rccfile$)
-41625   if _cs and exists("@:S:\Core\fnsnap\dbde"&session$&".txt")=2 then let fnCopyc2s("@:S:\Core\fnsnap\dbde"&session$&".txt",env$("PD")&"Core\fnsnap\dbde"&session$&".txt",1)
-41630   if not exists(env$("PD")&"Core\fnsnap\dbde"&session$&".txt") then goto 41700
+41625   if _cs and exists("@:S:\Core\fnsnap\dbde[Session].txt")=2 then let fnCopyc2s("@:S:\Core\fnsnap\dbde[Session].txt",env$("PD")&"Core\fnsnap\dbde[Session].txt",1)
+41630   if not exists(env$("PD")&"Core\fnsnap\dbde[Session].txt") then goto 41700
 41640   rcfile=10
 41650   if file(rcfile)>-1 then rcfile+=1 : goto 41650 !:
-        else open #rcfile: "name="&env$("PD")&"Core\fnsnap\dbde"&session$&".txt",display,input 
+        else open #rcfile: "name="&env$("PD")&"Core\fnsnap\dbde[Session].txt",display,input 
 41670   linput #rcfile: response$
 41680   close #rcfile,free: !:
         rcfile=0
@@ -3542,15 +3542,15 @@
 41858   dim tempfile$*100
 41860   if _cs then !:
           execute "config shell default client" !:
-          execute "sys -W "&os_filename$("@:S:\Core\fnsnap\brregister2.exe")&" -B"&session$&" -N"&l$ !:
+          execute "sys -W "&os_filename$("@:S:\Core\fnsnap\brregister2.exe")&" -B[Session] -N"&l$ !:
           ! EXECUTE "config shell default server" !:
         else !:
-          execute "sys -W "&os_filename$(env$("PD")&"Core\fnsnap\brregister2.exe")&" -B"&session$&" -N"&l$
+          execute "sys -W "&os_filename$(env$("PD")&"Core\fnsnap\brregister2.exe")&" -B[Session] -N"&l$
 41867   if _cs then !:
-          fnCopyc2s(lwrc$("@:S:\Core\fnsnap\dbde"&session$&".txt"),env$("PD")&"Core\fnsnap\dbde"&session$&".txt")
+          fnCopyc2s(lwrc$("@:S:\Core\fnsnap\dbde[Session].txt"),env$("PD")&"Core\fnsnap\dbde[Session].txt")
 41870   exefil=1
 41880   if file(exefil)>-1 then exefil+=1 : goto 41880
-41890   open #exefil: "name="&env$("PD")&"Core\fnsnap\dbde"&session$&".txt",display,input 
+41890   open #exefil: "name="&env$("PD")&"Core\fnsnap\dbde[Session].txt",display,input 
 41900   dim exefil$*100
 41910   linput #exefil: exefil$
 41920   close #exefil,free: 
@@ -6176,9 +6176,9 @@
 78155   open #(errlog:=fnH): "name="&env$("PD")&"errlog.txt,rln=2500,use",display,output 
 78156   pr #errlog: str$(days(date))&chr$(9)&session$&chr$(9)&eprog$&chr$(9)& str$(eline)&chr$(9)&str$(eerr)&chr$(9)&str$(ecount)&chr$(9)&wbversion$&chr$(9)&env$("USER_NAME")&chr$(9)&login_name$
 78157   close #errlog: 
-78160   open #(errfil:=fnH): "name=ERRLOG.[WSID],use",display,output 
+78160   open #(errfil:=fnH): "name=ERRLOG.[acsUserId],use",display,output 
 78165   pr #errfil: " Date         = "&date$("MM/DD/CCYY") !:
-        pr #errfil: " Workstation  = "&wsid$
+        pr #errfil: " acsUserId    = "&env$('acsUserId')
 78170   pr #errfil: " Program      = "&eprog$ !:
         pr #errfil: " Error        = "&str$(eerr) !:
         pr #errfil: " Line         = "&str$(eline)
@@ -6189,7 +6189,7 @@
         errfile$=file$(errfil) !:
         close #errfil: !:
         errfil=0
-78185   fnemailfile(env$("PD")&"emailq","client@client.com","Error "&cnvrt$("pic(####)",eerr)&" "&wsid$&" "&eprog$,mat aic$,errfile$,mat dummy$)
+78185   fnemailfile(env$("PD")&"emailq","client@client.com","Error "&cnvrt$("pic(####)",eerr)&" "&env$('unique_computer_id')&" "&eprog$,mat aic$,errfile$,mat dummy$)
 78190   input #errwin,fields "17,68,c 1,ie,n": epause$
 78195   if cmdkey=0 then 
 78200     close #errwin: !:
@@ -6228,7 +6228,7 @@
         !    !
 78405   dim wmlfile$*100
 78410   library env$("PD")&"Core\fnsnap\fnsnap_dll.br": fnH
-78435   open #(fileno:=fnH): "NAME="&senddir$&"\"&wsid$(1:2)&srep$(time$,":","")&".txt,RECL=500,NEW",display,output ioerr 78435
+78435   open #(fileno:=fnH): "NAME="&senddir$&"\"&env$('acsUserId')(1:2)&srep$(time$,":","")&".txt,RECL=500,NEW",display,output ioerr 78435
 78440   pr #fileno: "<TO>"
 78445   for a=1 to udim(mat mailto$)
 78450     pr #fileno: trim$(mailto$(a))

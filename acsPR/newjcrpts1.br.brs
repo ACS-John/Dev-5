@@ -51,7 +51,7 @@ L490: form pos 1,n 2,c 51,x 27,2*c 132,n 3,3*n 1,100*pd 6.3,20*c 50,40*pd 2,80*n
  
 	open #11: "Name=PROC."&session$,display,output ioerr L570
 	close #11,free:
-L570: open #11: "Name=PROC."&session$&",SIZE=0,RecL=255",display,output
+L570: open #11: "Name=PROC.[Session],SIZE=0,RecL=255",display,output
 	pr #11: "Clear"
 	pr #11: "ProcErr Return"
 	pr #11: "Load S:\acsPR\newJCRpt-Mod"
