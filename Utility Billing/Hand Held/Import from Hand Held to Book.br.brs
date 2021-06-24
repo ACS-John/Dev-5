@@ -482,6 +482,7 @@ fnend
 			! if fncustomerdata$('meter multiplier')
 			if env$('client')='GreeneCo' then reading=reading*10
 			if env$('client')='Morrisonville' then reading=reading*100
+			if env$('client')='Billings' then reading=reading*100
 		loop
 		EXREADER_XIT: !
 		close #2: ioerr ignore
