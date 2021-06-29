@@ -1,4 +1,4 @@
-! Replace S:\acsUB\ubMetRB2
+! formerly S:\acsUB\ubMetRB2
 ! pr Complete Route Sheets
 autoLibrary
 on error goto Ertn
@@ -8,7 +8,7 @@ dim z2$*10,e2$(4)*30,f12$*12,f32$(12),f22$(12),a(7),a2(7)
 dim snm$(10)*20,a(7),option$(5),extra(13),service$(3)*26,ms$(13)*3
 dim txt$*50,resp$(9)*50
 
-fnTop(program$,"Route Book Pages")
+fnTop(program$)
 open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx5.h[cno],Shr",internal,input,keyed 
 open #11: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,input,keyed 
 
@@ -184,12 +184,9 @@ goto LOOP_TOP
 SELECTONE: ! 
 	fnTos
 	fnLbl(1,1,"Account:",16,1)
-	! If TRIM$(A$)="" Then Goto 1030 Else Goto 1040
-	if trim$(z$)<>"" then : _
-		txt$="Last Account entered was "&z$ : _
-		fnLbl(3,1,txt$,44,1) else : _
-		txt$="" : _
-		fnLbl(3,1,txt$,44,1)
+	if trim$(z$)<>"" then
+		fnLbl(3,1,"Last Account entered was "&z$,44,1) 
+	end if
 	fncmbact(1,18) ! 
 	resp$(1)=a$
 	fnCmdKey("&Next",1,1,0,"Accept this record for printing") 
