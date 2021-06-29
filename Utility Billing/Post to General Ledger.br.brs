@@ -1,4 +1,4 @@
-! Replace S:\acsUB\postgl
+! formerly S:\acsUB\postgl
 ! Company Information File
 
 	autoLibrary

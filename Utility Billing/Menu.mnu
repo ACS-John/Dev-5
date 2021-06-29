@@ -27,10 +27,10 @@ Month-End
 >Transaction Listing                                  ^ Utility Billing\*
 >Cash Receipts Journal                                ^ Utility Billing\*
 >Balance Breakdown (Aged by Month)                    ^ Utility Billing\*
->Post to General Ledger                               ^ acsub\postgl                                            ^ GL
+>Post to General Ledger                               ^ Utility Billing\*                                      ^ GL
 Annual
 >Print
->>Accumulated Transaction List                        ^ acsUB\ubAccTr
+>>Accumulated Transaction List                        ^ Utility Billing\*
 >>Annual Usage Report                                 ^ Utility Billing\*
 ! >Remove Old Transactions                            ^ acsUB\ubRemove ! removed 1/18/2017 because it is just a bad idea
 >Zero Year To Date Usage                              ^ Utility Billing\*
@@ -45,8 +45,8 @@ Print
 >Rate Analysis                                        ^ Utility Billing\*
 >Final Billing Report                                 ^ acsUB\BillRpt
 >Past Due Balance Breakdown                           ^ acsUB\ubDelinq
->Meter Reading Book                                   ^ acsUB\ubMetrBk
->Route Book Pages                                     ^ acsUB\ubMetrB2
+>Meter Reading Book                                   ^ Utility Billing\*
+>Route Book Pages                                     ^ Utility Billing\*
 >Median Sewer Charge                                  ^ Utility Billing\*
 >Average Sewer Usage Report                           ^ acsUB\averagesewer
 >Secondary Water Usage Report                         ^ acsUB\billingrpt

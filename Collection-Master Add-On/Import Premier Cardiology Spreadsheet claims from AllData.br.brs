@@ -462,7 +462,7 @@ def fn_writeDemographics(hOut,oc$,mat item$; ___,whichAdk,tmpCity$*64,tmpSt$*64,
 			! r: add Debtor 2 - the Patient
 			fn_add('FIRM_FILENO' 	,item$(csv_FILENO)           ,1	)
 			fn_add('NUMBER'      	,'2'                            	)
-			fn_add('RELATION'    	,'PATIENT'                     	)
+			fn_add('RELATION'    	,'PATIENT'                      	)
 			! fn_add('FORW_REFNO' 	,item$(csv_KEY)         	)
 			fn_add('NAME'        	,item$(csv_patientName)       	)
 			fn_add('SSN'         	,item$(csv_social)             	)

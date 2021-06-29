@@ -36,7 +36,7 @@
 	end if
 goto ASK_DATE ! /r
 ASK_DATE: !
-	fnTos(sn$="PostGl")
+	fnTos
 	respc=0
 	fnLbl(1,40,"",1,1) ! bigger screen
 	fnLbl(1,1,"Beginning Payroll Date:",25,1)
@@ -225,7 +225,7 @@ def fn_l1800 ! OPEN G/L WORK FILES AND CREATE DUE TO AND DUE FROM ENTRIES
 	if multigl=2 then goto L2080
 	! CREATE DUE TO PAYROLL FUND ENTRIES
 	if mastercd=0 then goto L2050 ! FIRST TIME THRU ROUTINE
-	fnTos(sn$="PostGl3")
+	fnTos
 	respc=0: mypos=45
 	fnLbl(1,1,"Due to Payroll Clearing Account on Fund # "&oldtgl$(1:3)&":",mypos,1)
 	fnqgl(1,mypos+3,0,2,1)
@@ -270,7 +270,7 @@ def fn_L2090
 fnend
 def fn_finalscrctrlbookmulitfunds
 	! FINAL PAGE FOR CONTROL SET OF BOOKS  (MULTI-FUNDS ONLY)
-	fnTos(sn$="PostGl4")
+	fnTos
 	respc=0: mypos=45
 	fnLbl(1,1,"G/L # for Due From Other Funds on Fund # "&oldtgl$(1:3)&":",mypos,1)
 	fnqgl(1,mypos+3,0,2,1)
