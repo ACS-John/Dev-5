@@ -28,14 +28,14 @@ enableblankLineAfterNet=1
 	sx_purchase=8
 	selx=fnPcReg_read('TransactionType',selx$,str$(sx_adjustment))
 
-	open #1: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,input
+	open #hCompany=fnH: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,input
 	dim miscname$(10)*20
 	dim dedcode(10)
 	dim pgl(5,3)
 	dim miscgl$(10)*12
-	read #1,using 'Form POS 298,15*PD 4,POS 382,N 2,POS 418,10*C 20,10*N 1,POS 668,10*C 12': mat pgl,jccode,mat miscname$,mat dedcode,mat miscgl$
+	read #hCompany,using 'Form POS 298,15*PD 4,POS 382,N 2,POS 418,10*C 20,10*N 1,POS 668,10*C 12': mat pgl,jccode,mat miscname$,mat dedcode,mat miscgl$
 	for j=1 to udim(mat miscname$) : miscname$(j)=trim$(miscname$(j)) : next j
-	close #1:
+	close #hCompany:
 
 	! ckey enums for both main add/edit screen and payroll add screen (ScrPayroll)
 	ck_extract=15
@@ -45,10 +45,9 @@ enableblankLineAfterNet=1
 	ck_breakdownEdit=18
 	ck_breakdownEditAll=19
 	ck_save1=30
-	ck_saveA=68
+	ck_saveAndAddAnother=68
 	ck_cancel=6
 
-	str2mat('1234567890',mat digit$,'')
 
 ! /r
 fn_openFiles
@@ -255,8 +254,8 @@ ScrPost: ! r:
 	if resp$(2)="True" then goto DoAutoProc
 goto Xit ! /r
 def fn_scrMain(hMerge; editRecord,heading$*64,glBank$*12,transDate,bankAcctName$*40,message$*50, _
-	tr$,transactionAmt, _
-	___,rc,lc,mylen,mypos,x$*8,ckeySave) ! mostly local stuff still
+	&tr$,transactionAmt, _
+	___,rc,lc,mylen,mypos,x$*8,ckeySave,ckey) ! mostly local stuff still
 
 	ScrMainTop: !
 	fnTos ! r: draw Main add/edit screen
@@ -361,7 +360,7 @@ def fn_scrMain(hMerge; editRecord,heading$*64,glBank$*12,transDate,bankAcctName$
 	EO_FLEX1: ! /r
 	fnCmdKey("Save",ck_save1,editRecord,0,"Save this transaction and return to the transaction selection") ! formerly complete
 	if ~editRecord then
-		fnCmdKey("Save and Add Another",ck_saveA,~editRecord,0,"Save this Transaction and go directly to adding another of the same type")
+		fnCmdKey("Save and Add Another",ck_saveAndAddAnother,~editRecord,0,"Save this Transaction and go directly to adding another of the same type")
 	end if
 	fnCmdKey("Cancel",ck_cancel,0,1,'Discard changes and return to transaction selection')
 	! /r
@@ -403,7 +402,7 @@ def fn_scrMain(hMerge; editRecord,heading$*64,glBank$*12,transDate,bankAcctName$
 			close #hPaymstr: ioerr ignore
 		! /r
 
-		if ckey=ck_save1 or ckey=ck_saveA then ckeySave=1 else ckeySave=0
+		if ckey=ck_save1 or ckey=ck_saveAndAddAnother then ckeySave=1 else ckeySave=0
 
 	end if
 
@@ -463,7 +462,7 @@ def fn_scrMain(hMerge; editRecord,heading$*64,glBank$*12,transDate,bankAcctName$
 		goto ScrMainTop
 	end if
 
-	if ckeySave then ! ckey=ck_save1 or ckey=ck_saveA
+	if ckeySave then ! ckey=ck_save1 or ckey=ck_saveAndAddAnother
 
 		if selx=sx_adjustment then allocAmt=transactionAmt ! create an allocation amount automatically on adjustments
 		if allocAmt=0 and lrec(hMtemp)=0 then allocAmt=transactionAmt ! allows them to press enter if only allocation without haveing to key the amount a second time
@@ -562,7 +561,7 @@ def fn_scrPayrollAdd(; ___,lendeditRecordc,lc)
 	fnTxt(8,51,12,0,1,"10",0,"Total Earned Income Credit applied.",1)
 	resp$(24)=str$(prx(19))
 	fnCmdKey("&Save",ck_save1,0,0,"Completed making corrections to this transaction.")
-	fnCmdKey("Save and Add Another",ck_saveA,1,0,"Save this Transaction and go directly to adding another of the same type")
+	fnCmdKey("Save and Add Another",ck_saveAndAddAnother,1,0,"Save this Transaction and go directly to adding another of the same type")
 	fnCmdKey("&Cancel",ck_cancel,0,1,"Do not save this transaction and return to transaction selection screen")
 	! fnCmdKey("&Finish",ck_finish,0,1,'')
 	ckey=fnAcs(mat resp$)
@@ -748,7 +747,7 @@ def fn_scrAdjustment	(hMerge,editRecord,bankAcctName$*40, _
 
 	fnCmdKey("Save",ck_save1,~editRecord,0,"Completed making corrections to this transaction.")
 	if editRecord then
-		fnCmdKey("Save and Add Another",ck_saveA,1,0,"Save this Transaction and go directly to adding another of the same type")
+		fnCmdKey("Save and Add Another",ck_saveAndAddAnother,1,0,"Save this Transaction and go directly to adding another of the same type")
 	end if
 	fnCmdKey("Cancel",ck_cancel,0,1,"Allows you to return to screen 1 and change transaction types or bank accounts.")
 	! fnCmdKey("&Finish",ck_finish,0,1,'')
@@ -951,7 +950,8 @@ def fn_transactionAdd(hMerge,typeOfEntryN,glBank$,transDate; ___, _
 	returnN,gl$*12,tr$*12,tr4,tr5,tType,postingCode,lrPrior,smResponse)
 	! if trPrior$='' then fnpcreg_read('last Reference Number',trPrior$)
 
-				fnpcreg_read('reference number',tr$)
+				! fnpcreg_read('reference number',tr$)
+				! pr 'tr$ i read and ignored just before the do loop='&tr$
 	do
 		gl$=jv2$=tr$=td$=vn$=key$=''
 		tr5=tType=postingCode=0
@@ -960,11 +960,11 @@ def fn_transactionAdd(hMerge,typeOfEntryN,glBank$,transDate; ___, _
 		fn_clearVar(hMtemp,transactionAmt,td$,vn$,gl$,totalalloc,gl_retainFieldsDuringAdd$)
 		lrPrior=lrec(hMerge)
 		dim trPrior$*12
+		! pr 'before trPrior$='&trPrior$
 		tr$=fn_nextTr$(trPrior$,selx,gl_retainFieldsDuringAdd$)
-		! pr 'tr$='&tr$ : pause
+		! pr 'after       tr$='&tr$ : pause
 		if selx=sx_adjustment then
 			smResponse=fn_scrAdjustment(hMerge,0,bankAcctName$,message$,tr$,glBank$,transDate)
-
 		else if selx=sx_payrollCheck then
 			smResponse=fn_scrPayrollAdd
 		else
@@ -976,7 +976,7 @@ def fn_transactionAdd(hMerge,typeOfEntryN,glBank$,transDate; ___, _
 			fnpcreg_write('reference number',tr$)
 		end if
 
-	loop while smResponse=ck_saveA
+	loop while smResponse=ck_saveAndAddAnother
 
 	fn_transactionAdd=returnN ! returns last record worked for auto selection on ScreenOne
 fnend
@@ -1118,11 +1118,18 @@ def fn_extract(&hMtemp,vn$,transactionAmt; ___, _
 
 	end if
 fnend
-def fn_nextTr$(tr$,selx,gl_retainFieldsDuringAdd$; ___,trVal,pS,pE,v)
+def fn_nextTr$(tr$,selx,gl_retainFieldsDuringAdd$; ___,trVal,pS,pE,disablePrefix)
+	if ~setupNextTr then
+		setupNextTr=1
+		str2mat('1234567890',mat digit$,'')
+	end if
 
 	pS=fnPosOfAny(tr$,mat digit$)
 	pE=fnPosOfAny(tr$,mat digit$, -1)
 	trVal=val(tr$(pS:pE)) ! conv ignore
+	if pS=1 then
+		disablePrefix=1
+	end if
 
 	if trVal=>999999999999 then
 		trVal=1
@@ -1130,7 +1137,9 @@ def fn_nextTr$(tr$,selx,gl_retainFieldsDuringAdd$; ___,trVal,pS,pE,v)
 		trVal+=1
 	end if
 
-	if selx=sx_adjustment then
+	if disablePrefix then
+		tr$=''
+	else if selx=sx_adjustment then
 		tr$='adj'
 	else if selx=sx_disbursement then
 		tr$='dsp'
