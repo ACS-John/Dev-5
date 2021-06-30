@@ -521,48 +521,48 @@ def fn_build_check_record
 	if allign>1 then
 		ded$(1)=str$(ttc(31))
 		for j=2 to 25
-			if j=3 then ded$(j)=str$(ttc(2)) : goto L4390
 			! ADD MEDICARE TO FICA  no kj
-			ded$(j)=str$(ttc(j-1))
-		L4390: !
+			if j=3 then 
+				ded$(j)=str$(ttc(2))
+			else
+				ded$(j)=str$(ttc(j-1))
+			end if
 		next j
-		! dED$(25)=STR$(TTC(29)) ! meals
-		! dED$(26)=STR$(TTC(30)) ! tips
-		! dED$(27)=STR$(TDC1) ! reg hourly rate
-		! dED$(28)=STR$(TDC2) ! ot rate
-		if tdc1=0 then goto L4480
+		! ded$(25)=str$(ttc(29)) ! meals
+		! ded$(26)=str$(ttc(30)) ! tips
+		! ded$(27)=str$(tdc1) ! reg hourly rate
+		! ded$(28)=str$(tdc2) ! ot rate
+		if tdc1=0 then 
+			! if em(5)=1 then ded$(29)="4" ! weeks worked
+			if em(5)=2 then ded$(29)="2"
+			if em(5)=3 then ded$(29)="2"
+			if em(5)=4 then ded$(29)="1"
+		end if
 		! dED$(29)=STR$(INT(TDC1/40+.99))
 	else
 		tr$(3)=tr$(4)=""
 		tr$(5)="VOID"
 		mat ded$=("")
 	end if
-	goto WRITE_PAYROLL_TRANS
-
-	L4480: ! If EM(5)=1 Then dED$(29)="4" ! weeks worked
-	if em(5)=2 then ded$(29)="2"
-	if em(5)=3 then ded$(29)="2"
-	if em(5)=4 then ded$(29)="1"
-
-	WRITE_PAYROLL_TRANS: !
-	if testCheckFormat then goto L5250
+	if testCheckFormat then goto EoBuildCheckRecord
 	! pr tr$(1),tr$(5) :  pause
 	mat tr=(0)
+
 	! r: removed existing CL Check (and it's allocations) first
 	clk$=lpad$(str$(bankcode),2)&"1"&tr$(1)
 	read #h_cl_trans,using 'form pos 79,2*pd 3',key=clk$: nt1 nokey L4610
 	delete #h_cl_trans,key=clk$:
 	key$=lpad$(str$(bankcode),2)&str$(tcde)&rpad$(tr$(1),8)
 	restore #h_cl_trans_alloc,key>=key$: nokey L4610
-	L4590: !
-	read #h_cl_trans_alloc,using 'Form Pos 1,C 11': newkey$ eof L4610
-	if newkey$=key$ then
-		delete #h_cl_trans_alloc:
-		goto L4590
-	end if
+	do
+		read #h_cl_trans_alloc,using 'Form Pos 1,C 11': newkey$ eof L4610
+		if newkey$=key$ then
+			delete #h_cl_trans_alloc:
+		end if
+	loop while newkey$=key$
 	L4610: !
 	! /r
-	!   if exists("[Q]\CLmstr\Tralloc-Idx.h[cno]") then
+
 	tx3=val(tr$(3))
 	tr2=val(tr$(2))
 	if pr_prEmpToClPayee$='False' then
@@ -582,7 +582,7 @@ def fn_build_check_record
 	NoKeyOnClBank: !
 	F_CL_TRANS_V1: form pos 1,n 2,n 1,c 8,g 6,pd 10.2,c 8,c 35,n 1,n 6,n 1,2*pd 3
 	! WRITE ALLOCATIONS
-	if allign=1 then goto L5250
+	if allign=1 then goto EoBuildCheckRecord
 	for j=1 to 29
 	 if val(ded$(j))=0 then goto L5230
 	 gl$=""
@@ -635,7 +635,7 @@ def fn_build_check_record
 	 L5230: !
 	next j
 	fn_mgl
-	L5250: !
+	EoBuildCheckRecord: !
 fnend
 def fn_cknum ! check for duplicate check numbers
 	if testCheckFormat then goto L5720
