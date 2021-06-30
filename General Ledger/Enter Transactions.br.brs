@@ -651,7 +651,7 @@ fnend
 	fnend
 def fn_scrAdjustment	(hMerge,editRecord,bankAcctName$*40, _
 	message$*50, _
-	tr$,gl$,tDate; _
+	&tr$,gl$,tDate; _
 	tAmt,tType,postCode,desc$*30,vn$,unused$, _
 	gl2$,tDate2,tAmt2,tType2,postCode2,tr2$,desc2$*30,vn2$,jv22$, _
 	foundMatch,transAdrFrom,transAdrTo, _
