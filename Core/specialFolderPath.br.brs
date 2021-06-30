@@ -30,7 +30,7 @@ fnend
 def fn_specialFolderPath$*256(folderName$*64; ___,line$*256,lineCount,return$*256)
 	exe 'sy -M reg query "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Shell Folders" /v "'&folderName$&'" >"'&env$('client_temp')&'\sfp'&session$&'.txt"'
 	!  6/17/21 - switched to [temp] for CM/stern where this wasn't working.       open #hTmp=fnH: 'name=[at][client_temp]\sfp[session].txt',d,input
-	open #hTmp=fnH: 'name=[at][temp]\sfp[session].txt',d,input
+	open #hTmp=fnH: 'name=[at][client_temp]\sfp[session].txt',d,input
 	do
 		linput #hTmp: line$ EoF EoTmp
 		if trim$(line$)<>'' then
