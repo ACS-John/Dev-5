@@ -1,10 +1,12 @@
 ! Replace S:\Core\programs\1099.br
 ! library for all 1099 forms
 
+
 ! r: testing zone
 	fn_setup
 	
-	! if fnask_1099_info (seltp,type,min1,beg_date,end_date) then
+	if fnask_1099_info (seltp,type,min1,beg_date,end_date) then
+		debug=1
 		! r: test values
 		dim testVn$
 		testVn$='vn'
@@ -28,7 +30,7 @@
 		! /r
 		fn_1099print(testVn$,testName$,mat testAddr$,'111-22-3344',mat testBox)
 		fn_1099print_close
-	! end if
+	end if
 	end
 ! /r
 
@@ -83,6 +85,11 @@ def fn_1099print(vn$*8,nam$*30,mat empAddr$,ss$*11,mat box)
 			dim fed$*12
 			read #hCompany,using 'Form POS 1,3*C 40,C 12': mat a$,fed$
 			close #hCompany:
+		else
+			a$(1)='Test Company - The first company you try'
+			a$(2)='123 Test Drive'
+			a$(3)='Testerville, TS  12345-6789'
+			fed$='12-456789012'
 		end if
 		ten99initialized=1
 		fnreg_read('1099 - Export 1' ,ten99Export$,'False')
@@ -166,9 +173,9 @@ def fn_1099print(vn$*8,nam$*30,mat empAddr$,ss$*11,mat box)
 		fnpa_txt(a$(2)(1:30),column1,fn_line(1)+5)
 		fnpa_txt(a$(3)(1:30),column1,fn_line(1)+10)
 		fnpa_txt(ph$,column1,fn_line(1)+20)
-		fnpa_txt(cnvrt$('pic(zz,zzz,zzz.zz',box(1)  ),column2,fn_line(1))
-		fnpa_txt(cnvrt$('pic(zz,zzz,zzz.zz',box(2)  ),column2,fn_line(2))
-		fnpa_txt(cnvrt$('pic(zz,zzz,zzz.zz',box(3)  ),column2,fn_line(3))
+		fnpa_txt(cnvrt$('pic(zz,zzz,zzz.zz',box(1)  ),column2,fn_line(3))
+		fnpa_txt(cnvrt$('pic(zz,zzz,zzz.zz',box(2)  ),column2,fn_line(4))
+		fnpa_txt(cnvrt$('pic(zz,zzz,zzz.zz',box(3)  ),column2,fn_line(5))
 		fnpa_txt(cnvrt$('pic(zz,zzz,zzz.zz',box(4)  ),column2,fn_line(5)+5) ! fed withheld 
 		fnpa_txt(fed$,column1,fn_line(4))
 		fnpa_txt(ss$,column1+45,fn_line(4))
