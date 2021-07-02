@@ -94,10 +94,10 @@ fnend
 			mat client_cno$(client_count)
 			mat client_brserial(client_count)
 			!  fn_setupClient_add("ACS",1,0) ! TEMP
-	
+
 			fn_setupClient_add("ACS" 										, '420',   34660) ! 58650
 			fn_setupClient_add("Ed Horton" 							,'5535',       0)! Ed processes like ACS
-																															  
+
 			fn_setupClient_add("Allendale" 							, '200',       0)
 			fn_setupClient_add("Ash Grove" 							, '286',   19016)
 			fn_setupClient_add("Bethany" 								, '380',   34326)
@@ -779,7 +779,7 @@ def library fnub_printbill_program$*256
 		! /r
 		mat ub_printbill_client$(ub_printbill_count)
 		mat ub_printbill_program$(ub_printbill_count)
-		
+
 	end if  ! /r
 	upp_return$='S:\Core\Menu.br'
 		ua_which=srch(mat ub_printbill_client$,env$('Client'))
@@ -929,7 +929,7 @@ def fn_client_support_setup(client_id,mat css_system_id$,mat css_system_support_
 		mat css_client_owns$(cache_css_client_owns_count)
 		mat css_system_id$(cache_css_client_owns_count)
 		mat css_system_id$=css_client_owns$
-		
+
 		mat cache_css_system_id$(0)
 		mat cache_css_system_sup_end_date(0)
 		cache_css_system_count=0

@@ -1,8 +1,7 @@
-! Replace S:\acsGL\CLBld
-! Create Checkbook System Files
+! formerly S:\acsGL\CLBld
 
 autoLibrary
-fnTop(program$,"Create Checkbook System Files")
+fnTop(program$)
 on error goto Ertn
 
 dim resp$(4)*50
@@ -47,10 +46,10 @@ L410: !
 	open #1: "Name=[Q]\GLmstr\PayMstr.h[cno],KFName=[Q]\GLmstr\payidx1.h[cno],Shr",internal,input,keyed  ! Ioerr 580
 	do
 		dim vn$(4)*30,contact$*30,email$*50,myact$*20
-		read #1,using 'Form Pos 1,C 8,4*c 30,x 5,n 2,c 11,x 6,c 12,c 30,c 50,c 12,c 20': vn$,mat vn$,typ,ss$,ph$,contact$,email$,fax$,myact$ eof EOF_GL1099
+		read #1,using 'Form Pos 1,C 8,4*c 30,x 5,n 2,c 11,x 6,c 12,c 30,c 50,c 12,c 20': vn$,mat vn$,typ,ss$,ph$,contact$,email$,fax$,myact$ eof Eo1
 		write #2,using 'Form Pos 1,C 8,4*c 30,x 5,n 2,c 11,x 6,c 12,c 30,c 50,c 12,c 20': vn$,mat vn$,typ,ss$,ph$,contact$,email$,fax$,myact$
 	loop
-	EOF_GL1099: !
+	Eo1: !
 	close #1:
 	open #1: "Name=[Q]\GLmstr\PRmstr.h[cno],KFName=[Q]\GLmstr\PRIndex.h[cno],Shr",internal,input,keyed ioerr L410
 	vn$(3)=""

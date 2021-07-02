@@ -33,7 +33,7 @@ Print
 >Accounts Payable Listing (Aged)          ^ acsCL\AgedAP
 >Claims or Purchases Report               ^ Checkbook\*
 >GL Distribution Report                   ^ Checkbook\*                    ^ GL
->Print 1099-NEC Forms                         ^ Checkbook\*
+>Print 1099-NEC Forms                     ^ Checkbook\*
 Import/Export                                    
 >Transfer to Accountant                   ^ acsCL\TrToCPA
 >Post to General Ledger                   ^ Checkbook\*                    ^ GL

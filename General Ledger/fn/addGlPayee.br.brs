@@ -96,17 +96,17 @@ def library fnAddGlPayee
 		loop
 		EO_DELETE_PAYEE: !
 
-		open #trans=fnH: "Name=[Q]\GLmstr\GLTR1099.h[cno],KFName=[Q]\GLmstr\gltrIdx1.h[cno],Shr",internal,outIn,keyed
+		open #hTran=fnH: "Name=[Q]\GLmstr\GLTR1099.h[cno],KFName=[Q]\GLmstr\gltrIdx1.h[cno],Shr",internal,outIn,keyed
 		if trim$(holdvn$)="" then goto EO_DEL_KEY_ON_TRANS
-		restore #trans, key>=holdvn$: nokey EO_DEL_KEY_ON_TRANS
+		restore #hTran, key>=holdvn$: nokey EO_DEL_KEY_ON_TRANS
 		L570: !
-		read #trans,using 'Form Pos 1,C 8': trx$ eof EO_DEL_KEY_ON_TRANS
+		read #hTran,using 'Form Pos 1,C 8': trx$ eof EO_DEL_KEY_ON_TRANS
 		if trx$=vn$ then
-			rewrite #trans,using 'Form Pos 1,Cr 8': ''
+			rewrite #hTran,using 'Form Pos 1,Cr 8': ''
 			goto L570
 		end if
 		EO_DEL_KEY_ON_TRANS: !
-		close #trans: ioerr ignore
+		close #hTran: ioerr ignore
 		! EO_DELETE: !
 	return ! /r
 	ADD_NEW_PAYEE: ! r:
@@ -235,17 +235,17 @@ def library fnAddGlPayee
 	goto MENU1 ! /r
 	KEY_CHANGE: ! r: a gosub routine
 		! change the references to this file in the payee transaction file
-		close #trans: ioerr ignore
-		open #trans=fnH: "Name=[Q]\GLmstr\GLTR1099.h[cno],KFName=[Q]\GLmstr\gltrIdx1.h[cno],Shr",internal,outIn,keyed
-		restore #trans,key>=holdvn$: nokey EO_CHANGE_KEY_ON_TRANS
+		close #hTran: ioerr ignore
+		open #hTran=fnH: "Name=[Q]\GLmstr\GLTR1099.h[cno],KFName=[Q]\GLmstr\gltrIdx1.h[cno],Shr",internal,outIn,keyed
+		restore #hTran,key>=holdvn$: nokey EO_CHANGE_KEY_ON_TRANS
 		do
-			read #trans,using 'Form Pos 28,C 8': x$ eof EO_CHANGE_KEY_ON_TRANS
+			read #hTran,using 'Form Pos 28,C 8': x$ eof EO_CHANGE_KEY_ON_TRANS
 			if x$=holdvn$ then
-				rewrite #trans,using 'Form Pos 28,Cr 8',release: vn$
+				rewrite #hTran,using 'Form Pos 28,Cr 8',release: vn$
 			end if
 		loop while x$=holdvn$
 		EO_CHANGE_KEY_ON_TRANS: !
-		close #trans: ioerr ignore
+		close #hTran: ioerr ignore
 
 		! Change references to this file in the sub-file PayeeGLBreakdown
 		restore #payeegl,key=holdvn$: nokey EO_CHANGE_KEY_ON_PAYEEGL
@@ -272,8 +272,8 @@ def library fnAddGlPayee
 	! /r
 fnend
 PAYEE_TRANSACTIONS: ! r:
-	close #trans: ioerr ignore
-	open #trans=fnH: "Name=[Q]\GLmstr\GLTR1099.h[cno],KFName=[Q]\GLmstr\gltrIdx1.h[cno],Shr",internal,outIn,keyed
+	close #hTran: ioerr ignore
+	open #hTran=fnH: "Name=[Q]\GLmstr\GLTR1099.h[cno],KFName=[Q]\GLmstr\gltrIdx1.h[cno],Shr",internal,outIn,keyed
 	fnTos
 	lc=0 : mylen=25 : mypos=mylen+2 : width=50
 	lc+=1
@@ -296,15 +296,15 @@ PAYEE_TRANSACTIONS: ! r:
 	fnflexinit1('glPayee-'&str$(wbc)&'-'&str$(wtt),7,1,10,85,mat chdr$,mat cmask$,1,0,frame)
 	key$=vn$
 	transOnScreenCount=0
-	restore #trans,key>=key$: nokey EO_FLEX2
+	restore #hTran,key>=key$: nokey EO_FLEX2
 	transactionstotal=0
 	do
 		READ_TRANS: !
-		read #trans,using 'Form POS 1,c 8,N 6,PD 5.2,C 12,C 30,PD 3',release: trvn$,dt,am,rn$,de$,nta eof EO_FLEX2
+		read #hTran,using 'Form POS 1,c 8,N 6,PD 5.2,C 12,C 30,PD 3',release: trvn$,dt,am,rn$,de$,nta eof EO_FLEX2
 		if trim$(vn$)<>trim$(trvn$) then goto EO_FLEX2
 		if transactionstartingdate<>0 and transactionstartingdate>fndate_mmddyy_to_ccyymmdd(dt) then goto READ_TRANS
 		if transactionendingdate<>0 and transactionendingdate<fndate_mmddyy_to_ccyymmdd(dt) then goto READ_TRANS
-		item6$(1)=str$(rec(trans)) : item6$(2)=trvn$
+		item6$(1)=str$(rec(hTran)) : item6$(2)=trvn$
 		item6$(3)=str$(dt): item6$(4)=str$(am)
 		item6$(5)=rn$ : item6$(6)=de$
 		fnflexadd1(mat item6$)
@@ -338,7 +338,7 @@ PAYEE_TRANSACTIONS: ! r:
 			goto PAYEE_TRANSACTIONS ! goto the top of this function
 		end if
 	end if
-	close #trans: ioerr ignore
+	close #hTran: ioerr ignore
 return ! /r
 GL_BREAKDOWNS: ! r: sub routine
 	fnTos
@@ -384,7 +384,7 @@ def fn_payeeTotalAllocationPercent
 	fn_payeeTotalAllocationPercent=tac
 fnend
 EDIT_TRANSACTIONS: ! r:
-	read #trans,using 'Form POS 1,c 8,N 6,PD 5.2,C 12,C 30,PD 3',rec=editrec: vn$,dt,am,rn$,de$
+	read #hTran,using 'Form POS 1,c 8,N 6,PD 5.2,C 12,C 30,PD 3',rec=editrec: vn$,dt,am,rn$,de$
 	gosub ADD_TRANSACTIONS
 return ! /r
 ADD_TRANSACTIONS: !  r: sub routnie - allows you to manually add a transaction
@@ -415,7 +415,7 @@ ADD_TRANSACTIONS: !  r: sub routnie - allows you to manually add a transaction
 		ml$(2)="Click OK to delete or Cancel to retain the transaction."
 		fnmsgbox(mat ml$,resp$,cap$,49)
 		if resp$="OK" then
-			delete #trans,rec=editrec:
+			delete #hTran,rec=editrec:
 			goto XitTransactionAdd
 		end if
 	end if
@@ -424,10 +424,10 @@ ADD_TRANSACTIONS: !  r: sub routnie - allows you to manually add a transaction
 	rn$=resp$(3)
 	de$=resp$(4)
 	if edittrans=1 then
-		rewrite #trans,using 'Form POS 1,c 8,N 6,PD 5.2,C 12,C 30,PD 3',rec=editrec: vn$,dt,am,rn$,de$,0
+		rewrite #hTran,using 'Form POS 1,c 8,N 6,PD 5.2,C 12,C 30,PD 3',rec=editrec: vn$,dt,am,rn$,de$,0
 		edittrans=0
 	else
-		write #trans,using 'Form POS 1,c 8,N 6,PD 5.2,C 12,C 30,PD 3': vn$,dt,am,rn$,de$,0
+		write #hTran,using 'Form POS 1,c 8,N 6,PD 5.2,C 12,C 30,PD 3': vn$,dt,am,rn$,de$,0
 	end if
 	XitTransactionAdd: !
 return ! /r

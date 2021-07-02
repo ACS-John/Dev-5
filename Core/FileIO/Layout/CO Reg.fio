@@ -1,5 +1,5 @@
 [Q]\Data\reg.dat, reg_, 1
 [Q]\Data\reg.idx, key
 ===================================================
-key$       ,Key                    , C   10
-value$     ,Value                  , C 1024
+key   	,Key   	, C  128
+value 	,Value 	, V  256
