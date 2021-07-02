@@ -554,7 +554,7 @@ fnend
 		fnStatusPause=fnStatusPause
 	fnend
 	def library fnStatusClose
-		library 'S:\Core\status.br': fnStatusClose
+		library 'S:\Core\status.br': fnStatusClose0
 		fnStatusClose=fnStatusClose
 	fnend
 ! /r
