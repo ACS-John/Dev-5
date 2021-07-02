@@ -1,5 +1,37 @@
 ! Replace S:\Core\programs\1099.br
 ! library for all 1099 forms
+
+! r: testing zone
+	fn_setup
+	
+	! if fnask_1099_info (seltp,type,min1,beg_date,end_date) then
+		! r: test values
+		dim testVn$
+		testVn$='vn'
+		dim testName$
+		testName$='name'
+		dim testAddr$(3)*60
+		testAddr$(1)='Address Line 1'
+		testAddr$(2)='Address Line 2'
+		testAddr$(3)='Address Line 3'
+		dim testBox(10)
+		testBox(1 )=100
+		testBox(2 )=200
+		testBox(3 )=300
+		testBox(4 )=400
+		testBox(5 )=500
+		testBox(6 )=600
+		testBox(7 )=700
+		testBox(8 )=800
+		testBox(9 )=900
+		testBox(10)=100
+		! /r
+		fn_1099print(testVn$,testName$,mat testAddr$,'111-22-3344',mat testBox)
+		fn_1099print_close
+	! end if
+	end
+! /r
+
 dim empAddr$(3)*30,ss$*11,a$(3)*40,box(11),ph$*12
 def fn_setup
 	if ~setup then
@@ -28,6 +60,10 @@ def fn_setup
 	end if
 fnend
 def library fn1099print_close
+	if ~setup then fn_setup
+	fn1099print_close=fn_1099print_close
+fnend
+def fn_1099print_close
 		if ten99Export$='True' then
 			close #hExport:
 		else
@@ -37,24 +73,20 @@ def library fn1099print_close
 fnend
 def library fn1099print(vn$*8,nam$*30,mat empAddr$,ss$*11,mat box)
 	if ~setup then fn_setup
+	fn1099print=fn_1099print(vn$,nam$,mat empAddr$,ss$,mat box)
+fnend
+def fn_1099print(vn$*8,nam$*30,mat empAddr$,ss$*11,mat box)
 	if ~ten99initialized then ! r: initialize output destination (if necessary)
-		dim a$(3)*40
-		if env$('CurSys')='PR' then
-			open #hCompany=fnH: 'Name=[Q]\PRmstr\company.h[cno],Shr', internal,input,relative
+		if env$('CurSys')='PR' or env$('CurSys')='GL' or env$('CurSys')='CL' then
+			open #hCompany=fnH: 'Name=[Q]\[CurSys]mstr\company.h[cno],Shr', internal,input,relative
+			dim a$(3)*40
+			dim fed$*12
 			read #hCompany,using 'Form POS 1,3*C 40,C 12': mat a$,fed$
-			close #hCompany:
-		else if env$('CurSys')='GL' then
-			open #hCompany=fnH: 'Name=[Q]\GLmstr\Company.h[cno],Shr',internal,input,relative
-			read #hCompany,using ' Form POS 1,3*C 40,C 12': mat a$,fed$
-			close #hCompany:
-		else if env$('CurSys')='CL' then
-			open #hCompany=fnH: 'Name=[Q]\CLmstr\Company.h[cno],Shr',internal,input,relative
-			read #hCompany,using ' Form POS 1,3*C 40,C 12': mat a$,fed$
 			close #hCompany:
 		end if
 		ten99initialized=1
 		fnreg_read('1099 - Export 1' ,ten99Export$,'False')
-		topmargin	=fnreg_read('1099 - Form 1 Y',tmp$,'5'  )
+		topmargin 	=fnreg_read('1099 - Form 1 Y',tmp$,'5'  )
 		bottom    	=fnreg_read('1099 - Form 2 Y',tmp$,'144')
 		left      	=fnreg_read('1099 - X'       ,tmp$,'5'  )
 		fnreg_read('1099 - 2 Per Page',twoPerPage$,'False' )
@@ -205,9 +237,12 @@ def fn_ask_margins
 	end if
 fnend
 def library fnask_1099_info(&seltp,&type,&min1,&beg_date,&end_date)
+	if ~setup then fn_setup
+	fnask_1099_info=fn_ask1099Info(seltp,type,min1,beg_date,end_date)
+fnend
+def fn_ask1099Info(&seltp,&type,&min1,&beg_date,&end_date)
 	if ~awi_setup then ! r:
 		awi_setup=1
-		if ~setup then fn_setup
 		! r: read or set values for ASK_INFO screen
 		taxYear$=date$(days(date$)-180,'CCYY')
 		if env$('CurSys')='PR' then
@@ -352,9 +387,9 @@ def library fnask_1099_info(&seltp,&type,&min1,&beg_date,&end_date)
 		fnureg_write('1099 - Export Filename',output_filename$)
 		fncreg_write('1099 - Your Phone Number',ph$)
 		! /r
-		if copyCurrent$=optCopy$(1) and enableBackground$='True' then let fnFormCopyAwithBackgroundWarn
+		if copyCurrent$=optCopy$(1) and enableBackground$='True' then fnFormCopyAwithBackgroundWarn
 		awiReturn=1
 	end if
-	fnask_1099_info=awiReturn
+	fn_ask1099Info=awiReturn
 fnend
 include: ertn

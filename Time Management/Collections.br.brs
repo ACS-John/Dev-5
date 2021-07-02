@@ -81,7 +81,7 @@
 	L820: !
 	input fields mat fli1$: p$,iv$,tr(1),tr(3),id$,tr(2) conv L870
 	if cmdkey=4 then gosub TMSRCH : goto L760
-	p$=uprc$(lpad$(rtrm$(p$),5))
+	p$=rpad$(trim$(p$),5)
 	if ce>0 then fli1$(ce)=srep$(fli1$(ce),1,"RC","U")
 	ce=0
 	goto L1280
@@ -95,7 +95,7 @@
 	L920: !
 	rinput fields "3,30,C 5,EU,n": p$ conv L920
 	if cmdkey=4 then gosub TMSRCH : goto L920
-	p$=uprc$(lpad$(rtrm$(p$),5))
+	p$=rpad$(trim$(p$),5)
 	if ltrm$(p$)="-1" then pr f mat otgl$: mat gln1 else pr f mat otgl$: mat gln2
 	if ltrm$(p$)="0" or ltrm$(p$)="" and vf=0 then goto L590
 	if ltrm$(p$)="0" or ltrm$(p$)="" and vf=1 then goto L1630
