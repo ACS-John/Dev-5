@@ -45,11 +45,11 @@ def library fnask_w2_info(&taxYear$,&beg_date,&end_date,&empStart$,&empEnd$,&ssr
 			ssmax=118500 ! 2016
 		else if taxYear$='2017' then
 				ssmax=127200 ! 2017
-		else if taxyear$='2018' then 
+		else if taxyear$='2018' then
 				ssmax=128400
-		else if taxyear$='2019' then 
+		else if taxyear$='2019' then
 				ssmax=132900
-		else if taxyear$='2020' then 
+		else if taxyear$='2020' then
 				ssmax=137700
 		end if
 		mcrate=.0145
@@ -67,7 +67,7 @@ def library fnask_w2_info(&taxYear$,&beg_date,&end_date,&empStart$,&empEnd$,&ssr
 		fncreg_read('Qualified Pension Plan' ,tmp$) : pn1=val(tmp$)
 		fncreg_read('Dependent Care Benefits',tmp$) : dc1=val(tmp$)
 		fncreg_read('W-2 - State',state$)
-		!
+
 		fnreg_read('W-2 - Form 1 Y'              ,tmp$   ,'10' ) : topmargin=val(tmp$)
 		fnreg_read('W-2 - Form 2 Y'              ,tmp$   ,'151') : bottom=val(tmp$)
 		enableDateRange=0
@@ -75,7 +75,7 @@ def library fnask_w2_info(&taxYear$,&beg_date,&end_date,&empStart$,&empEnd$,&ssr
 		enableEmpRange=0
 		! /r
 	end if ! /r
-	awiReturn=0 
+	awiReturn=0
 	if env$('cursys')='PR' then
 		enablePayrollDeductions=1
 		enableAskState=0
@@ -91,13 +91,13 @@ def library fnask_w2_info(&taxYear$,&beg_date,&end_date,&empStart$,&empEnd$,&ssr
 	ASK_INFO: !
 	! r: build and display the ASK_INFO screen
 	fnTos
-	rc=cf=0: mylen=21: mypos=mylen+2 
-	if enableAskCLocality then 
+	rc=cf=0: mylen=21: mypos=mylen+2
+	if enableAskCLocality then
 		fraWidth=94
 	else
 		fraWidth=82 ! 68
 	end if
-	!
+
 	fraGeneralHeight=2
 	if enableDateRange then fraGeneralHeight+=2
 	if enableEmpRange then fraGeneralHeight+=3
@@ -166,13 +166,10 @@ def library fnask_w2_info(&taxYear$,&beg_date,&end_date,&empStart$,&empEnd$,&ssr
 	resp$(respc_w2copy:=rc+=1)=w2Copy$
 	fnChk(2,68,'W-2 - Enable Background',1,franum)
 	resp$(respc_enableBackground:=rc+=1)=enableBackground$
-	! fnChk(3,68,'2 Per Page',1,franum)
 	fnChk(4,68,'Print W-3 also',1,franum)
 	resp$(respc_w3:=rc+=1)=enableW3$
 	fnOpt(4,3,"Export for Advanced Micro Solutions",0,franum)
 	resp$(respc_export_ams:=rc+=1)=w2destinationOpt$(2)
-	! fnOpt(5,3,"Export for Center Piece Software",0,franum)  ! removed access 01/03/2017
-	! resp$(respc_export_cps:=rc+=1)=w2destinationOpt$(3)  ! removed access 01/03/2017
 	fnLbl(5,5,"Export File:",12,1,0,franum)
 	fnTxt(5,19,20,256,0,'72',0,'Choose a destination location for the ACS export.',franum)
 	resp$(resp_w2_export_file:=rc+=1)=w2laser_output_filename$
@@ -203,9 +200,9 @@ def library fnask_w2_info(&taxYear$,&beg_date,&end_date,&empStart$,&empEnd$,&ssr
 	ckey=fnAcs(mat resp$)
 	! /r
 	! r: ASK_INFO screen - respond to FKeys, and get local values from mat resp$
-	if ckey=5 then 
-		awiReturn=0 
-	else 
+	if ckey=5 then
+		awiReturn=0
+	else
 		awiReturn=1
 		taxYear$=resp$(resc_taxYear)
 		nameFormat$=resp$(resp_namcde)
@@ -221,7 +218,7 @@ def library fnask_w2_info(&taxYear$,&beg_date,&end_date,&empStart$,&empEnd$,&ssr
 		if enableEmpRange then
 			empStart$=resp$(respc_empStart)(1:8)
 			empEnd$  =resp$(respc_empEnd)(1:8)
-			if empStart$<>'[All]' then 
+			if empStart$<>'[All]' then
 				numb=val(empStart$(1:8))
 				empno=numb
 			end if
@@ -229,7 +226,7 @@ def library fnask_w2_info(&taxYear$,&beg_date,&end_date,&empStart$,&empEnd$,&ssr
 				cLocality$=uprc$(rtrm$(resp$(resp_cLocality)))
 				if cLocality$='' then cLocality$='NO'
 			end if
-			if empEnd$<>'[All]' then 
+			if empEnd$<>'[All]' then
 				endnum=val(empEnd$(1:8))
 			end if
 		end if
@@ -237,19 +234,16 @@ def library fnask_w2_info(&taxYear$,&beg_date,&end_date,&empStart$,&empEnd$,&ssr
 		ssmax=val(resp$(respc_ssmax))
 		mcrate=val(resp$(respc_mcrate))
 		mcmax=val(resp$(respc_mcmax))
-		w2Copy$=resp$(respc_w2copy) : w2Copy=srch(mat optW2Copy$,resp$(respc_w2copy)) 
+		w2Copy$=resp$(respc_w2copy) : w2Copy=srch(mat optW2Copy$,resp$(respc_w2copy))
 		enableBackground$=resp$(respc_enableBackground)
 		enableW3$=resp$(respc_w3)
-		if resp$(respc_PrintW2)="True" then 
+		if resp$(respc_PrintW2)="True" then
 			exportFormatID=0
-		else if resp$(respc_export_ams)="True" then 
+		else if resp$(respc_export_ams)="True" then
 			exportFormatID=1
-		! else if resp$(respc_export_cps)="True" then 
-		!   exportFormatID=2
 		end if
 		w2destinationOpt$(1)=resp$(respc_PrintW2)
 		w2destinationOpt$(2)=resp$(respc_export_ams)
-		!   w2destinationOpt$(3)=resp$(respc_export_cps)  ! removed access 01/03/2017
 		w2laser_output_filename$=resp$(resp_w2_export_file)
 		if enablePayrollDeductions then
 			pn1=val(resp$(respc_qpenplan))
@@ -257,14 +251,8 @@ def library fnask_w2_info(&taxYear$,&beg_date,&end_date,&empStart$,&empEnd$,&ssr
 		else if enableAskState then
 			state$=resp$(respc_state)
 		end if
-		if ckey=14 then 
-			!     if exportFormatID=1
-			!       w2laser_output_filename$=os_filename$("\1099ETC.W"&date$(days(date$)-180,'YY')&"\W2DATA\W2DAT.PRN")
-			!     else if exportFormatID=2 then  ! removed access 01/03/2017
-			!       w2laser_output_filename$=os_filename$("\CPS04\ASCIIW2.TXT")  ! removed access 01/03/2017
-			!     else 
+		if ckey=14 then
 				w2laser_output_filename$=os_filename$(env$('Desktop')&'\ACS [TaxYear] W-2 Export (Company [CompanyNumber]).txt')
-			!     end if 
 			goto ASK_INFO
 		else if ckey=ckey_margins then
 			fn_ask_margins
@@ -284,12 +272,12 @@ def library fnask_w2_info(&taxYear$,&beg_date,&end_date,&empStart$,&empEnd$,&ssr
 		fncreg_write('Dependent Care Benefits',str$(dc1))
 		fncreg_write('Employee Name Format',nameFormat$)
 		fncreg_write('W-2 - State',state$)
-		!
+
 		! /r
 		if w2Copy$=optW2Copy$(1) and enableBackground$='True' and w2destinationOpt$(1)='True' then
 			fn_FormCopyAwithBackgroundWarn
 		end if
-	end if 
+	end if
 	Xit: !
 	fnask_w2_info=awiReturn
 fnend
@@ -338,10 +326,10 @@ def library fnNameParse(fullname$*128,&nameFirst$,&nameMiddle$,&nameLast$,&nameS
 	fullname$=uprc$(rtrm$(fullname$)): ! nameFormat$="s"
 	npPosSpace1=pos(fullname$," ",1)
 	npPosSpace2=pos(fullname$," ",npPosSpace1+1)
-	if nameFormat$=optNameFormat$(1) then 
+	if nameFormat$=optNameFormat$(1) then
 		! r: first name first
 		nameFirst$=fullname$(1:max(min(15,npPosSpace1-1),1))
-		if npPosSpace2>0 then 
+		if npPosSpace2>0 then
 			nameMiddle$=fullname$(npPosSpace1+1:npPosSpace2-1)
 			nameLast$=fullname$(npPosSpace2+1:len(fullname$))
 		end if
@@ -371,14 +359,14 @@ def library fnNameParse(fullname$*128,&nameFirst$,&nameMiddle$,&nameLast$,&nameS
 		!   ! r: last name [space] first name
 		!   ! /r
 		! ! end if
-		if npPosSpace1>0 and fullname$(npPosSpace1-1:npPosSpace1-1)="," then 
-			nameLast$=fullname$(1:npPosSpace1-2) 
-		else 
+		if npPosSpace1>0 and fullname$(npPosSpace1-1:npPosSpace1-1)="," then
+			nameLast$=fullname$(1:npPosSpace1-2)
+		else
 			nameLast$=fullname$(1:max(npPosSpace1-1,1))
 		end if
-		if npPosSpace2>0 then 
+		if npPosSpace2>0 then
 			nameFirst$=fullname$(npPosSpace1+1:npPosSpace2-1): nameMiddle$=fullname$(npPosSpace2+1:len(fullname$))
-		else ! if npPosSpace2=0 then 
+		else ! if npPosSpace2=0 then
 			nameFirst$=fullname$(npPosSpace1+1:len(fullname$)): nameMiddle$=""
 		end if
 		! /r
@@ -388,17 +376,17 @@ def library fnNameParse(fullname$*128,&nameFirst$,&nameMiddle$,&nameLast$,&nameS
 	nameSuffix$='' err npNsFinis
 	if uprc$(nameFirst$&'*')<>uprc$(srep$(nameFirst$&'*',',JR*','')) then
 		nameSuffix$='JR'
-		nameFirst$=rtrm$(nameFirst$) 
+		nameFirst$=rtrm$(nameFirst$)
 		nameFirst$=nameFirst$(1:len(nameFirst$)-3)
 	end if
 	if uprc$(nameLast$&'*')<>uprc$(srep$(nameLast$&'*',',JR*','')) then
 		nameSuffix$='JR'
-		nameLast$=rtrm$(nameLast$) 
+		nameLast$=rtrm$(nameLast$)
 		nameLast$=nameLast$(1:len(nameLast$)-3)
 	end if
 	if uprc$(nameLast$&'*')<>uprc$(srep$(nameLast$&'*',',JR.*','')) then
 		nameSuffix$='JR'
-		nameLast$=rtrm$(nameLast$) 
+		nameLast$=rtrm$(nameLast$)
 		nameLast$=nameLast$(1:len(nameLast$)-4)
 	end if
 	npNsFinis: !
@@ -413,28 +401,28 @@ def library fnw2_text(w2Yoffset,maskSsn,mat a$,empId$*12,ss$,controlNumber$,mat 
 	! ss$             social security number (with dashes)
 	! mat a$          company name and address
 	! controlNumber$  control number
-	! 
+
 	! box12aCode$     box 12a code
 	! box12aAmt$      box 12a amount
-	!               
+
 	! box12bCode$     box 12b code
 	! box12bAmt$      box 12b amount
-	!               
+
 	! box12cCode$     box 12c code
 	! box12cAmt$      box 12c amount
-	!               
+
 	! box12dCode$     box 12d code
 	! box12dAmt$      box 12d amount
-	! 
+
 	! w(4)            EIC
 	! /r
 	if ~w2setup then
 		w2setup=1
 		fnreg_read('W-2 - X',tmp$   ,'12' ) : left=val(tmp$)
 		fncreg_read('W-2 - cLocality',cLocality$,'NO')
-		w2Col1=left     
-		w2Col2=left+117 
-		w2Col3=left+160 
+		w2Col1=left
+		w2Col2=left+117
+		w2Col3=left+160
 		w2Box12CodePos=w2Col3-14
 		w2Box12AmtPos=w2Box12CodePos+18
 		w2Box14AmtPos=w2Box12AmtPos
@@ -467,11 +455,11 @@ def library fnw2_text(w2Yoffset,maskSsn,mat a$,empId$*12,ss$,controlNumber$,mat 
 	fnpa_txt(box12aCode$,w2Box12CodePos,fn_line(7))
 	fnpa_txt(box12aAmt$,w2Box12AmtPos,fn_line(7))
 	fnpa_txt(k$(2),w2Col1,fn_line(8))
-	if specialform2018<>1 then 
+	if specialform2018<>1 then
 		fnpa_txt(retirementPlanX$,left+118,fn_line(8))
 	else if specialform2018=1 then
-		fnpa_txt(retirementPlanX$,left+119,fn_line(8)) 
-	end if 
+		fnpa_txt(retirementPlanX$,left+119,fn_line(8))
+	end if
 	fnpa_txt(box12bCode$,w2Box12CodePos,fn_line(8))
 	fnpa_txt(box12bAmt$,w2Box12AmtPos,fn_line(8))
 	fnpa_txt(k$(3),w2Col1,fn_line(9))
@@ -483,7 +471,7 @@ def library fnw2_text(w2Yoffset,maskSsn,mat a$,empId$*12,ss$,controlNumber$,mat 
 		fnpa_txt(cnvrt$("pic(-,---,---,---.##",w2Box14Amt),left+109,fn_line(10))
 	end if
 	if env$('client')<>'Zaleski' then ! cLocality$<>'NO' then
-		if specialform2018=1 then 
+		if specialform2018=1 then
 			! thomasboro had special pre-printed forms for 2018 tax year
 			fnpa_txt(state$,left-4,fn_line(12))
 			fnpa_txt(stcode$,left+10,fn_line(12))
@@ -492,7 +480,7 @@ def library fnw2_text(w2Yoffset,maskSsn,mat a$,empId$*12,ss$,controlNumber$,mat 
 			fnpa_txt(cnvrt$("pic(-,---,---,---.##",w(10)),left+109,fn_line(12))
 			fnpa_txt(cnvrt$("pic(-,---,---,---.##",w(8)),left+137,fn_line(12))
 			fnpa_txt(printLocality$(1:6),left+164,fn_line(12))
-		else 
+		else
 			fnpa_txt(state$,left-3,fn_line(11))
 			fnpa_txt(stcode$,left+10,fn_line(11))
 			fnpa_txt(cnvrt$("pic(-,---,---,---.##",w(9)),left+51,fn_line(11))
@@ -500,30 +488,26 @@ def library fnw2_text(w2Yoffset,maskSsn,mat a$,empId$*12,ss$,controlNumber$,mat 
 			fnpa_txt(cnvrt$("pic(-,---,---,---.##",w(10)),left+109,fn_line(11))
 			fnpa_txt(cnvrt$("pic(-,---,---,---.##",w(8)),left+137,fn_line(11))
 			fnpa_txt(printLocality$(1:6),left+164,fn_line(11))
-		end if 
+		end if
 	end if
 fnend
 def fn_line(lineNumber)
 	lReturn=0
-	if lineNumber=1 then 
+	if lineNumber=1 then
 		lReturn=w2Yoffset+1
 	else  ! if lineNumber>=1 and lineNumber<=14 then
 		lReturn=w2Yoffset+10+(8.5*(lineNumber-2))
 		if specialform2018=1 and lineNumber=12 then
 			lReturn+=.5
 			goto LineFinis
-		else if specialform2018=1 and lineNumber=8 then 
+		else if specialform2018=1 and lineNumber=8 then
 			lReturn+=2
 			goto LineFinis
-		end if 
-		if lineNumber>=11 then 
-			! if env$('client')='Edinburg' then 
-			! 	lReturn+=7
-			! else
-				lReturn+=3.5
-			! end if
 		end if
-	end if 
+		if lineNumber>=11 then
+				lReturn+=3.5
+		end if
+	end if
 	LineFinis: ! skip here for special pre-printed forms
 	fn_line=lReturn
 fnend

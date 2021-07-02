@@ -1,4 +1,4 @@
-! Replace S:\acsPR\newpr1099 (formerly)
+! formerly S:\acsPR\newpr1099
 ! r: setup, fnTop, open files, on error, etc
 autoLibrary
 on error goto Ertn

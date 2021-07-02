@@ -3,7 +3,7 @@ File
 >Accounts (General Ledger Master)                   ^ General Ledger\Accounts
 >Financial Statement Design                         ^ General Ledger\*
 >Payee                                              ^ General Ledger\*
->>Payee Transaction List                            ^ acsGL\VendorTransList
+>>Payee Transaction List                            ^ General Ledger\*
 >Schedule                                           ^ General Ledger\*
 >Bank Reconciliation                                ^ acsGL\bankrec
 >>Access Bank Rec File                              ^ acsGL\bankreconciliation
@@ -82,7 +82,7 @@ Utilities
 >Duplicate Range of Accounts                       ^ acsGL\BldRange
 >Consolidate Master Files                         ^ acsGL\COMBGL
 >Create ASCII File                                ^ acsGL\ASCIIGLM
->Create Checkbook System Files                    ^ acsGL\CLBLD
+>Create Checkbook System Files                    ^ General Ledger\*
 >Reorganize Company                               ^ acsGL\GlReorganize
 >Period Names                                     ^ HamsterFio:*
 >Test Balance Sheet Design                        ^ General Ledger\*

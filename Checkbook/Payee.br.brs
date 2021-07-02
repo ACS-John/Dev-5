@@ -1,6 +1,5 @@
-! formerly S:\acsCL\Payee
 fn_setup
-fnTop(program$,"Payee")
+fnTop(program$)
 fn_addpayee
 goto Xit
 Xit: fnXit
@@ -17,7 +16,6 @@ def fn_addpayee
 	dim ml$(3)*70,citystzip$*30,glitem$(5)*30,payeekey$*8,payeegl$*12
 	dim gldesc$*30,resp$(60)*50
 
-	left=0: right=1
 	open #trmstr2=fnH: "Name=[Q]\CLmstr\TrMstr.h[cno],KFName=[Q]\CLmstr\TrIdx2.h[cno],Shr",internal,outIn,keyed
 	open #paymstr=fnH: "Name=[Q]\CLmstr\PayMstr.h[cno],Version=1,KFName=[Q]\CLmstr\PayIdx1.h[cno],Shr",internal,outIn,keyed
 	open #paymstr2=fnH: "Name=[Q]\CLmstr\PayMstr.h[cno],KFName=[Q]\CLmstr\PayIdx2.h[cno],Shr",internal,outIn,keyed
@@ -338,11 +336,11 @@ CHECK_HISTORY: ! r:
 	lc=0 : mylen=25 : mypos=mylen+2 : width=50
 	lc+=1
 	fnLbl(lc+=1,30,'Check History Selection Criteria',width,center)
-	fnLbl(lc+=1,1,"Transaction Starting Date:",mylen,right)
-	fnTxt(lc,mypos,8,0,left,'CCYYMMDD',0,'Blank for All')
+	fnLbl(lc+=1,1,"Transaction Starting Date:",mylen,1)
+	fnTxt(lc,mypos,8,0,0,'CCYYMMDD',0,'Blank for All')
 	resp$(1)=''
-	fnLbl(lc+=1,1,"Transaction Ending Date:",mylen,right)
-	fnTxt(lc,mypos,8,0,left,'CCYYMMDD',0,'Blank for All')
+	fnLbl(lc+=1,1,"Transaction Ending Date:",mylen,1)
+	fnTxt(lc,mypos,8,0,0,'CCYYMMDD',0,'Blank for All')
 	resp$(2)=''
 	wbc=0
 	fnLbl(lc=6,40,'Transaction Grid')
@@ -381,8 +379,8 @@ CHECK_HISTORY: ! r:
 	transactionstotal+=tr3
 	goto READ_TRANS
 	EO_FLEX2: !
-	fnLbl(5,1,'Transactions Total:',mylen,right)
-	fnTxt(5,mypos,12,0,right,"10",1,'This is the total of only the transactions shown in the Transaction Grid above. ')
+	fnLbl(5,1,'Transactions Total:',mylen,1)
+	fnTxt(5,mypos,12,0,1,"10",1,'This is the total of only the transactions shown in the Transaction Grid above. ')
 	resp$(3)=str$(transactionstotal)
 	fnCmdKey('&Refresh',2,1,0,"If you select a date range, you must refresh the screen to see the transactions for that date range.")
 	fnCmdKey('&Close',5,0,1)
@@ -399,13 +397,13 @@ GL_BREAKDOWNS: ! r:
 	fnTos
 	respc=0 : mylen=28 : mypos=mylen+2
 	fnLbl(1,25,"Breakdown for "&nam$(1:20),40)
-	fnLbl(3,1,"General Ledger Number:",mylen,right)
+	fnLbl(3,1,"General Ledger Number:",mylen,1)
 	fnqgl(3,mypos)
 	resp$(respc+=1)=fnrgl$(payeegl$) ! think maybe here kj
-	fnLbl(4,1,'Percent:',mylen,right)
+	fnLbl(4,1,'Percent:',mylen,1)
 	fnTxt(4,mypos,6,0,0,'32',0,"Percent of total check to be charged to this g/l account.  Enter 25% as 25.00!")
 	resp$(respc+=1)=str$(percent)
-	fnLbl(5,1,"Description:",mylen,right)
+	fnLbl(5,1,"Description:",mylen,1)
 	fnTxt(5,mypos,30)
 	resp$(respc+=1)=gldesc$
 	fnCmdSet(7)

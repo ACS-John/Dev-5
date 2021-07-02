@@ -334,8 +334,8 @@ SELECT_ST: !
 	next j
 
 L3180: ! pr NEWPAGE ! commenting this line might screw up window 101 repeat processing
-	close #102: ioerr L3200
-L3200: open #102: "SROW=6,SCOL=20,ERow=20,ECOL=58,Border=SR,Caption=<"&env$('program_caption'),display,outIn
+	close #102: ioerr ignore
+	open #102: "SROW=6,SCOL=20,ERow=20,ECOL=58,Border=SR,Caption=<"&env$('program_caption'),display,outIn
 	pr #102: newpage
 	pr #102,fields "2,2,C 17,N": "Select Form Type:"
 	for j=1 to 13
