@@ -8,7 +8,7 @@ autoLibrary
 if enableDelete then
 	fnCopy('[Q]\GLmstr\GLTrans.h[cno]','[Q]\GLmstr\GLTrans backup at '&fnSafeFilename$(date$&' - '&time$)&'.h[cno]')
 end if
-open #hTrans=fnH: "Name=[Q]\GLmstr\GLTrans.h[cno],Shr",internal,outIn,relative
+open #hTrans=fnH: 'Name=[Q]\GLmstr\GLTrans.h[cno],kfname=[Q]\GLmstr\glTrans-IdxAcct.h[cno],Shr',internal,outIn,keyed
 do
 	dim tr(7)
 	dim tr$*12

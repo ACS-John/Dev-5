@@ -80,7 +80,7 @@ Error Recovery
 >Fix Period Accumulators from History             ^ General Ledger\*
 Utilities
 >Duplicate Range of Accounts                       ^ acsGL\BldRange
->Consolidate Master Files                         ^ acsGL\COMBGL
+! removed 7/12/2021 - does anyone really ever use this?? i really doubt it -john  >Consolidate Master Files                         ^ acsGL\COMBGL
 >Create ASCII File                                ^ acsGL\ASCIIGLM
 >Create Checkbook System Files                    ^ General Ledger\*
 >Reorganize Company                               ^ acsGL\GlReorganize

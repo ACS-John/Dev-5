@@ -133,7 +133,6 @@ def fn_index_sys_do_one(cno,system_id$*2)
 		fn_index("[Q]\GLmstr\ACGLSCHS.h"&str$(cno),"[Q]\GLmstr\SchIndX2.h"&str$(cno),"3 30")
 
 		fn_index("[Q]\GLmstr\ACTrans.h"&str$(cno),"[Q]\GLmstr\AcTrIdx.h"&str$(cno),"1/71/17/13 12/2/2/4")
-		fn_index("[Q]\GLmstr\AcTrans.h"&str$(cno),"[Q]\GLmstr\tmp70.h"&str$(cno),"1 70")
 
 		fn_index("[Q]\GLmstr\ACGLfNSf.h"&str$(cno),"[Q]\GLmstr\agfsidx5.h"&str$(cno),",1 5")
 		fn_index("[Q]\GLmstr\ACGLfNSg.h"&str$(cno),"[Q]\GLmstr\agfsidx6.h"&str$(cno),",1 5")
@@ -153,7 +152,7 @@ def fn_index_sys_do_one(cno,system_id$*2)
 		fn_index("[Q]\GLmstr\gltr1099.H"&str$(cno),"[Q]\GLmstr\gltridx1.H"&str$(cno),"1 8")
 		fn_index("[Q]\GLmstr\GLBRec.h"&str$(cno),"[Q]\GLmstr\GLRecIdx.h"&str$(cno),"1 24")
 		fn_index("[Q]\GLmstr\glstdad.H"&str$(cno),"[Q]\GLmstr\glstdidx.h"&str$(cno),"1 12")
-		fn_index("[Q]\GLmstr\GLTrans.h"&str$(cno),"[Q]\GLmstr\tmp70.h"&str$(cno),"1 70")
+		fn_index('[Q]\GLmstr\GLTrans.h'&str$(cno),'[Q]\GLmstr\glTrans-IdxAcct.h'&str$(cno),'1 12')
 
 		fn_index("[Q]\GLmstr\payeeglbreakdown.H"&str$(cno),"[Q]\GLmstr\payeeglbkdidx.H"&str$(cno),"1 8")
 		fn_index("[Q]\GLmstr\PayMstr.h"&str$(cno),"[Q]\GLmstr\Payidx1.H"&str$(cno),"1 8")

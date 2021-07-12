@@ -77,6 +77,7 @@ MENU1: !
 	EO_GLMSTR: close #20:
 
 	execute "drop [Q]\GLmstr\GLTrans.h[cno]"
+	! fnDel('[Q]\GLmstr\glTrans-IdxAcct.h[cno]')    maybe a good idea??
 	open #1: "Name=[Q]\GLmstr\ACTrans.h[cno],Size=0,RecL=72,Replace,NoShr",internal,output
 	close #1:
 end if  ! /r

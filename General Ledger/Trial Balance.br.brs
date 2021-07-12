@@ -21,7 +21,7 @@ a$(8)="P/J"
 a$(9)=" "
 
 open #hAcct=fnH: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLIndex.h[cno],Shr",internal,input,keyed ! formerly #1
-open #hTran=fnH: "Name=[Q]\GLmstr\GLTrans.h[cno],Shr",internal,input,relative ! formerly #2
+open #hTran=fnH: "Name=[Q]\GLmstr\GLTrans.h[cno],Shr",internal,input,relative
 
 if fnprocess=1 then goto DoReport
 goto Screen1

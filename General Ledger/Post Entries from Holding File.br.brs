@@ -17,7 +17,7 @@
 
 	fnTop(program$)
 	open #4: "Name=[Q]\GLmstr\GLmstr.h[cno],Shr,KFName=[Q]\GLmstr\GLINDEX.h[cno],Shr",internal,outIn,keyed 
-	open #2: "Name=[Q]\GLmstr\GLTRANS.h[cno],Shr",internal,outIn,relative 
+	open #2: 'Name=[Q]\GLmstr\GLTrans.h[cno],kfname=[Q]\GLmstr\glTrans-IdxAcct.h[cno],Shr',internal,outIn,keyed
 	gosub BUILD_LAYOUT
 MAIN: ! r:
 	fnTos
@@ -189,7 +189,7 @@ CLOSE_FILE: ! r:
 return  ! /r
 INDEX: ! r:
 	if ~fnIndex("[Q]\GLmstr\GL"&cnvrt$("PIC(######)",review)&".h[cno]","[Q]\GLmstr\GL"&cnvrt$("PIC(######)",review)&"-idx.h[cno]","1 12") then goto MAIN
-	return  ! /r
+return  ! /r
 
 ADD: ! r:
 	fnTos
@@ -318,7 +318,7 @@ BUILD_LAYOUT: ! r:
 	c$(cl,2)="[Q]\GLmstr\GLmstr.h[cno]"
 	c$(cl,3)="1" : c$(cl,4)="12"
 	c$(cl,5)="13": c$(cl,6)="40"
-	c$(cl,7)="[Q]\GLmstr\glindex.h[cno]"
+	c$(cl,7)="[Q]\GLmstr\glTrans-IdxAcct.h[cno]"
 	! C$(CL,8)=limit to list option ('1'=Yes; '0'=No)
 	limit_to_list$='1'
 return  ! /r
