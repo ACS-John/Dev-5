@@ -13,7 +13,7 @@ goto Xit
  
 OPEN_FILE: !
 	open_file_count=0 ! this value is used in the close_file sub routine
-	open #open_file_count+=1: "Name=[Q]\GLmstr\GLTrans.h[cno],Version=0,Use,RecL=73,Shr",internal,outIn,relative
+	open #open_file_count+=1: 'Name=[Q]\GLmstr\GLTrans.h[cno],kfname=[Q]\GLmstr\glTrans-IdxAcct.h[cno],kps=1,kln=1,version=0,use,recl=73,Shr',internal,outIn,keyed
 return
  
 CLOSE_FILE: for j=1 to open_file_count : close #j: : next j : return

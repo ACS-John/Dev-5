@@ -50,7 +50,7 @@ MENU1: ! r:
 		if del_dupe_only then
 			fnIndex("[Q]\GLmstr\GLTrans.h[cno]","[Q]\GLmstr\tmp70.h[cno]","1,70")
 		end if  ! del_dupe_only
-		open #h_trans=fnH: "Name=[Q]\GLmstr\GLTrans.h[cno],Shr",internal,outIn,relative  ! 2
+		open #h_trans=fnH: 'Name=[Q]\GLmstr\GLTrans.h[cno],kfname=[Q]\GLmstr\glTrans-IdxAcct.h[cno],Shr',internal,outIn,keyed
 		if del_dupe_only then
 			open #h_trans_dupe=fnH: "Name=[Q]\GLmstr\GLTrans.h[cno],KFName=[Q]\GLmstr\tmp70.h[cno],Shr",internal,input,keyed
 		end if  ! del_dupe_only

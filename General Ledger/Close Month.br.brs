@@ -41,7 +41,7 @@ MainLoop: ! r:
 	open #1: "Name=[Q]\GLmstr\GLTrans.h[cno],Size=0,RecL=73,Replace",internal,output
 	write #1,using 'Form POS 1,N 3,N 6,N 3,N 6,PD 6.2,2*N 2,C 12,C 30,PD 3': 0,0,0,0,0,0,0," "," ",1
 	close #1:
-
+	fnIndex('[Q]\GLmstr\GLTrans.h[cno]','[Q]\GLmstr\glTrans-IdxAcct.h[cno]','1 12')
 	if reccode=0 then 
 		FileDrop: !
 		open #hBankRec=fnH: "Name=[Q]\GLmstr\GLBRec.h[cno],SIZE=0,RecL=68,Replace",internal,outIn

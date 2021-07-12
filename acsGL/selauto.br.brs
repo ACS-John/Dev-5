@@ -175,7 +175,7 @@ L860: goto L1640
 	data "  pr Chart of Accounts","S:\acsGL\acGLCHRT","acGLChrt","E"
 	data "  Generate Reversing Entries","S:\acsGL\Reverse","","E"
 	data "  Remove Entries Posted by Mistake","S:\acsGL\Unpost","","E"
-	data "  Consolidate Master Files","S:\acsGL\COMBGL","CombGL","E"
+! 	data "  Consolidate Master Files","S:\acsGL\COMBGL","CombGL","E"
 	data "  Create ASCII Files","S:\acsGL\ASCIIGLM","ASCIIGLM","E"
 	data "  Create Checkbook System Files","S:\General Ledger\Create Checkbook System Files","Create Checkbook System Files","E"
 	read m$(i+=1),pgm$(i),hlpg$(i),status$(i)

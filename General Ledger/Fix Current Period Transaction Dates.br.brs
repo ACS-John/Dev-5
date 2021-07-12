@@ -22,7 +22,7 @@
 	if ckey=5 then goto Xit
 
 	fnopenprn
-	open #h_gltrans:=3: "Name=[Q]\GLmstr\GLTrans.h[cno],Shr",internal,outIn,relative 
+	open #h_gltrans:=fnH: 'Name=[Q]\GLmstr\GLTrans.h[cno],kfname=[Q]\GLmstr\glTrans-IdxAcct.h[cno],Shr',internal,outIn,keyed
 	F_GLTRANS: form pos 1,n 3,n 6,n 3,n 6,pd 6.2,2*n 2,c 12,c 30,n 2
 	gosub HDR
 	do 

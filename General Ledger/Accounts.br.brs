@@ -4,34 +4,24 @@
 autoLibrary
 ! fnrglbig$ and fnqglbig  were added so all of the description could easily be seen in the Main gl screen
 on error goto Ertn
-
-dim tr(7),tr$*12,td$*30
-dim d$*50,bc(13),bp(13)
-dim bm(13)
-dim rf(6)
-dim key$*12
-dim ta(2)
-dim revb(13)
-dim resp$(100)*60
-dim ml$(3)*128
-dim item$(9)*30
-
+dim ml$(0)*128
 fnTop(program$)
-fixgrid=99
-open #company=1: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,input
+! fixgrid=99
+open #company=fnH: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,input
 read #company,using 'Form Pos 150,2*N 1': use_dept,use_sub ! read fund and sub codes from general
 close #company:
 open #8: "Name=[Q]\CLmstr\GLmstr.h[cno],KFName=[Q]\CLmstr\GLIndex.h[cno],Shr",internal,outIn,keyed ioerr L310
-cl1=1
+checkbookEnabled=1
 L310: !
 open #hAccount=fnH: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLIndex.h[cno],Shr",internal,outIn,keyed
 open #hAccountUnused=fnH: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\glIndx2.h[cno],Shr",internal,outIn,keyed
 Faccount: form pos 1,c 12,c 50,6*pd 3,42*pd 6.2,2*pd 3,13*pd 6.2
-open #hTransCurrent=fnH: "Name=[Q]\GLmstr\GLTRANS.h[cno],Shr",internal,outIn,relative
+open #hTransCurrent=fnH: 'Name=[Q]\GLmstr\GLTrans.h[cno],kfname=[Q]\GLmstr\glTrans-IdxAcct.h[cno],Shr',internal,outIn,keyed
 FtransCurrent: form pos 1,c 12,n 6,pd 6.2,2*n 2,c 12,c 30,pd 3
 open #hTransHistory=fnH: "Name=[Q]\GLmstr\ACTrans.h[cno],KFName=[Q]\GLmstr\AcTrIdx.h[cno],Version=0,Use,RecL=72,KPs=1/71/17/13,KLn=12/2/2/4,Shr",internal,outIn,keyed
 FtransHistory: form pos 1,c 12,n 6,pd 6.2,2*n 2,c 12,c 30,n 2
-Main: !
+Main: ! r:
+	dim resp$(100)*60
 	fnTos
 	mylen=23 : mypos=mylen+3
 	fnLbl(1,1,"Account:",mylen,1)
@@ -57,6 +47,7 @@ Main: !
 		fnFra(4,1,4,f1Col4+f1Col4Len+2,"Financial Statement Information"," ",0)
 		fnLbl(1,1,"Balance Sheet Ref:",f1Col1Len,1,0,1)
 		fncombof("fs-bal",1,f1Col2,f1Col2Len,"[Q]\GLmstr\acglfnsb.h[cno]",1,5,6,30,"[Q]\GLmstr\agfsidx4.h[cno]",0,0, "Select the balance sheet reference number where this account should appear on the balance sheet.",1)
+		dim rf(6)
 		resp$(4)=str$(rf(1)) ! balance sheet ref #
 		fnLbl(1,f1Col3,"2nd Balance Sheet:",f1Col3len,1,0,1)
 		fncombof("fs-bal2",1,f1Col4,f1Col4Len,"[Q]\GLmstr\acglfnsc.h[cno]",1,5,6,30,"[Q]\GLmstr\agfsidx1.h[cno]",0,0, "Select the balance sheet reference number where this account should appear on the secondary balance sheet.",1)
@@ -83,6 +74,7 @@ Main: !
 		fnLbl(1,34,"Balance Last Yr",15,0,0,2)
 		fnLbl(1,54,"Original Budget",15,0,0,2)
 		fnLbl(1,74,"Revised Budget ",15,0,0,2)
+		dim bc(13),bp(13),bm(13),revb(13)
 		for j=1 to 13
 			fnLbl(j+1,1,"Period "&str$(j),90,0,0,2)
 			fnTxt(j+1,14,14,0,1,"10",0,"",2 )
@@ -114,6 +106,7 @@ Main: !
 	fnCmdKey("&Cancel",5,0,1,"")
 	ckey=fnAcs(mat resp$)
 	if ckey=5 then goto Xit
+	dim key$*12
 	gl$=fnagl$(resp$(1)) : key$=gl$
 	if ckey=7 then gosub DELETE_ACCT : goto L1780
 	if edit_mode=1 and gl$<>holdgl$ then 
@@ -149,19 +142,23 @@ Main: !
 	! if ckey=3 then goto REVIEW_TRANS ! review current or prior transactions
 
 	if ckey=31 then
-		currentOrHistory=1 ! current
-		fn_transactionGrid(currentOrHistory,gl$)
+		fn_transactionGrid(1,gl$,hTransCurrent) ! current
 		goto Main
 	else if ckey=32 then
-		currentOrHistory=2 ! history
-		fn_transactionGrid(currentOrHistory,gl$)
+		fn_transactionGrid(0,gl$,hTransHistory) ! history
 		goto Main
 	end if
 
-	if ckey=6 then goto Save
-	if ckey=8 then goto SEARCH_GRID
-	if ckey=9 then goto ChangeAccountNumber
-	goto Main
+	if ckey=6 then 
+		goto Save
+	else if ckey=8 then
+		fnGlAccountSearch(gl$) ! ,fixgrid)
+		! fixgrid=0
+		read #hAccount,using Faccount,key=gl$: gl$,d$,mat rf,bb,cb,mat bc,mat bp,mat bm,pbp,mat ta,mat revb nokey Main
+	else if ckey=9 then 
+		goto ChangeAccountNumber
+	end if
+goto Main ! /r
 
 ! BLDRANGE: fnchain("S:\acsGL\BldRange")
 Xit: fnXit
@@ -188,23 +185,25 @@ Add: ! r:
 	fnCmdSet(2)
 	ckey=fnAcs(mat resp$)
 	if ckey=5 then goto Main
-	fixgrid=99
+	! fixgrid=99
 	dno=ano=sno=0  : rc=0
 	if use_dept then dno=val(resp$(rc+=1))
 	ano=val(resp$(rc+=1))
 	if use_sub then sno=val(resp$(rc+=1))
+	dim d$*50
 	d$=resp$(rc+=1)
 	key$=cnvrt$("N 3",dno)&cnvrt$("N 6",ano)&cnvrt$("N 3",sno)
 	read #hAccount,using 'Form POS 1,N 3',key=key$: dno nokey ignore
 	! NEW_RECORD: !
 	! L1540: !
 	bb=cb=pbp=0
+	dim ta(2)
 	mat bc=(0): mat bp=(0): mat bm=(0): mat revb=(0): mat ta=(0): mat rf=(0)
 	edit_mode=1
 	gl$=key$
 	! write_new_record
 	write #hAccount,using Faccount: gl$,d$,mat rf,bb,cb,mat bc,mat bp,mat bm,pbp,mat ta,mat revb
-	if cl1=1 then
+	if checkbookEnabled then
 		write #8,using Faccount: gl$,d$
 	end if
 goto Main ! /r
@@ -232,7 +231,7 @@ Save: ! r:
 	end if
 	! !f BB=0 Then bB=CB  ! need to make current bal & begbalance same if adding new record
 	rewrite #hAccount,using Faccount,key=key$: key$,d$,mat rf,bb,cb,mat bc,mat bp,mat bm,pbp,mat ta,mat revb
-	if cl1=1 then
+	if checkbookEnabled then
 		rewrite #8,using Faccount,key=key$: gl$,d$ nokey L1760
 	end if
 	L1760: !
@@ -265,12 +264,13 @@ L1880: !
 	if resp$="Cancel" then goto L2030
 L1910: !
 	delete #hAccount,key=gl$: ioerr L2030
-	if cl1=1 then delete #8,key=gl$: nokey ignore
+	if checkbookEnabled then delete #8,key=gl$: nokey ignore
 	goto ChangeCurrentTrans ! /r
 ChangeCurrentTrans: ! r:
 	if ta(1) then
 		adr=ta(1)
 		do
+			dim tr(7),tr$*12,td$*30
 			read #hTransCurrent,using FtransCurrent,rec=adr: trgl$,tr(4),tr(5),tr(6),tr(7),tr$,td$,nta
 			if delete_it=1 then
 				rewrite #hTransCurrent,using FtransCurrent,rec=adr: "",0,0,0,0,"","",0
@@ -284,68 +284,47 @@ ChangeCurrentTrans: ! r:
 	delete_it=0
 return  ! /r
 
-! REVIEW_TRANS: ! r:
-! 	fnTos
-! 	mylen=23: mypos=mylen+3 
-! 	fnFra(1,1,3,50,"Review transactions","Transactions are retained in the current files until the month is closed; then they are transferred to history ",0)
-! 	fnOpt(1,1,"Current transactions",0,1)
-! 	resp$(1)="True"
-! 	fnOpt(2,1,"History transactions",0,1)
-! 	resp$(2)="False"
-! 	fnCmdSet(2)
-! 	ckey=fnAcs(mat resp$)
-! 	if ckey=5 then goto Main
-! 	if resp$(1)="True" then currentOrHistory=1 ! current
-! 	if resp$(2)="True" then currentOrHistory=2 ! history
-! 	fn_transactionGrid(currentOrHistory,gl$)
-! goto Main ! /r
-def fn_transactionGrid(currentOrHistory,gl$)
+def fn_transactionGrid(isCurrent,gl$,h; ___,nta,recordnum,pc2,trgl$*12)
+	! isCurrent =1 Current - include Edit feature
+	! isCurrent<>1 History - no edit button
 	TransactionGrid:! 
-	mat chdr$(9) : mat cmask$(9) : mat item$(9)
-	chdr$(1)='Ref'         	: cmask$(1)="30"
-	chdr$(2)='G/L #'       	: cmask$(2)=""
-	chdr$(3)='Date'        	: cmask$(3)="3"
-	chdr$(4)='Amount'      	: cmask$(4)='10'
-	chdr$(5)='T Code'      	: cmask$(5)='30'
-	chdr$(6)='P Code'      	: cmask$(6)='30'
-	chdr$(7)='ChkRec #'    	: cmask$(7)=''
-	chdr$(8)='Description' 	: cmask$(8)=''
-	chdr$(9)='Period'      	: cmask$(9)='30'
-
 	fnTos
 	! r: build the grid
+	dim item$(9)*30
+	mat chdr$(9) : mat cmask$(9) : mat item$(9)
+	chdr$(1)='Rec'          	: cmask$(1)="30"
+	chdr$(2)='Account'     	: cmask$(2)=""
+	chdr$(3)='Date'        	: cmask$(3)="3"
+	chdr$(4)='Amount'      	: cmask$(4)='10'
+	chdr$(5)='TrType'      	: cmask$(5)='30'
+	chdr$(6)='Post'        	: cmask$(6)='30'
+	chdr$(7)='Chk/Ref '    	: cmask$(7)=''
+	chdr$(8)='Description' 	: cmask$(8)=''
+	chdr$(9)='Period'      	: cmask$(9)='30'
 	fnflexinit1('Currentfile',1,1,20,85,mat chdr$,mat cmask$,1,0)
-	adr=ta(1): pc2=0
-	!  read current or history files
-	if currentOrHistory=1 then goto ReadTransCurrent else goto RestoreTransHistory
-	ReadTransCurrent: !
-	if adr=0 then goto EO_TRANS_GRID
-	read #hTransCurrent,using FtransCurrent,rec=adr,release: trgl$,tr(4),tr(5),tr(6),tr(7),tr$,td$,nta
-	adr=nta
-	goto DISPLAY_TRANS
-	RestoreTransHistory: !
-	dim ack$*20
-	ack$=gl$&cnvrt$("N 2",pc1)&"      "
-	restore #hTransHistory,key>=ack$: nokey EO_TRANS_GRID
-	ReadTransHistory: !
-		read #hTransHistory,using FtransHistory,release: trgl$,tr(4),tr(5),tr(6),tr(7),tr$,td$,pc2 eof EO_TRANS_GRID
-		if key$><trgl$ then goto EO_TRANS_GRID
-		if pc1 and pc1><pc2 then goto ReadTransHistory
-		DISPLAY_TRANS: !
-		item$(1)=str$(rec(hTransHistory))
-		item$(2)=trgl$
-		item$(3)=str$(tr(4))
-		item$(4)=str$(tr(5))
-		item$(5)=str$(tr(6))
-		item$(6)=str$(tr(7))
-		item$(7)=tr$
-		item$(8)=td$
-		item$(9)=str$(pc2)
-		fnflexadd1(mat item$)
-	if currentOrHistory=1 then goto ReadTransCurrent else goto ReadTransHistory ! read from current or history
-	EO_TRANS_GRID: !
+	restore #h,search>=gl$: nokey EoTransGrid
+	do
+		if isCurrent=1 then 
+			read #h,using FtransCurrent,release: trgl$,tr(4),tr(5),tr(6),tr(7),tr$,td$ eof EoTransGrid
+		else 
+			read #h,using FtransHistory,release: trgl$,tr(4),tr(5),tr(6),tr(7),tr$,td$ eof EoTransGrid
+		end if
+		if gl$=trgl$ then
+			item$(1)=str$(rec(h))
+			item$(2)=trgl$
+			item$(3)=str$(tr(4))
+			item$(4)=str$(tr(5))
+			item$(5)=str$(tr(6))
+			item$(6)=str$(tr(7))
+			item$(7)=tr$
+			item$(8)=td$
+			item$(9)=str$(pc2)
+			fnflexadd1(mat item$)
+		end if
+	loop while gl$=trgl$
+	EoTransGrid: !
 	! /r
-	if currentOrHistory=1 then 
+	if isCurrent=1 then 
 		fnCmdKey("&Edit",2,1,0,"Highlight any record and press Enter or click Edit to change any information.")
 	end if
 	fnCmdKey("E&xit",5,0,1,"Exits to Main menu")
@@ -353,11 +332,11 @@ def fn_transactionGrid(currentOrHistory,gl$)
 	if ckey=5 then goto TransactionGridXit
 	if ckey=2 then edit_mode=1 else edit_mode=0
 	recordnum=val(resp$(1))
-	if recordnum=0 then goto TransactionGridXit
-	if currentOrHistory=1 then
-		read #hTransCurrent,using FtransCurrent,rec=recordnum: trgl$,tr(4),tr(5),tr(6),tr(7),tr$,td$,nta
+	if ~recordnum then goto TransactionGridXit
+	if isCurrent=1 then
+		read #h,using FtransCurrent,rec=recordnum: trgl$,tr(4),tr(5),tr(6),tr(7),tr$,td$,nta
 	else
-		read #hTransHistory,using FtransHistory,rec=recordnum: trgl$,tr(4),tr(5),tr(6),tr(7),tr$,td$,pc2
+		read #h,using FtransHistory,rec=recordnum: trgl$,tr(4),tr(5),tr(6),tr(7),tr$,td$,pc2
 	end if
 	resp$(1)=str$(recordnum): resp$(2)=trgl$: resp$(3)=str$(tr(4))
 	resp$(4)=str$(tr(5)): resp$(5)=str$(tr(6)) : resp$(6)=str$(tr(7))
@@ -401,10 +380,10 @@ def fn_transactionGrid(currentOrHistory,gl$)
 		tr$=resp$(6) ! reference #
 		td$=resp$(7) ! reference #
 		pc2=val(resp$(8)) ! period code from history; blank when returning from current
-		if currentOrHistory=1 then
-			rewrite #hTransCurrent,using FtransCurrent,rec=recordnum: gl$,tr(4),tr(5),tr(6),tr(7),tr$,td$,nta
+		if isCurrent=1 then
+			rewrite #h,using FtransCurrent,rec=recordnum: gl$,tr(4),tr(5),tr(6),tr(7),tr$,td$,nta
 		else
-			rewrite #hTransHistory,using FtransHistory,rec=recordnum: trgl$,tr(4),tr(5),tr(6),tr(7),tr$,td$,pc2
+			rewrite #h,using FtransHistory,rec=recordnum: trgl$,tr(4),tr(5),tr(6),tr(7),tr$,td$,pc2
 		end if
 		adr=ta(1)
 		goto TransactionGrid
@@ -412,12 +391,9 @@ def fn_transactionGrid(currentOrHistory,gl$)
 	TransactionGridXit: !
 fnend
 
-SEARCH_GRID: ! r:
-	fnaccount_search(gl$,fixgrid)
-	fixgrid=0
-	read #hAccount,using Faccount,key=gl$: gl$,d$,mat rf,bb,cb,mat bc,mat bp,mat bm,pbp,mat ta,mat revb nokey Main
-goto Main ! /r
+
 CHG_GLNO_IN_HISTORY: ! r: change gl # in history
+	dim ack$*20
 	ack$=holdgl$&cnvrt$("N 2",0)&"      "
 	if trim$(ack$)="" then goto L3850
 	restore #hTransHistory,key>=rpad$(ack$,kln(hTransHistory)): nokey L3850
@@ -453,7 +429,7 @@ ChangeAccountNumber: ! r:
 	fnCmdSet(2)
 	ckey=fnAcs(mat resp$)
 	if ckey=5 then goto Main
-	fixgrid=99
+	! fixgrid=99
 	dno=ano=sno=0
 	if use_dept then dno=val(resp$(1)) : ano=val(resp$(2))
 	if ~use_dept then ano=val(resp$(1))
@@ -477,7 +453,7 @@ ChangeAccountNumber: ! r:
 		gl$=key$
 	end if
 	rewrite #hAccount,using Faccount,key=holdgl$: key$,d$,mat rf,bb,cb,mat bc,mat bp,mat bm,pbp,mat ta,mat revb
-	if cl1=1 then
+	if checkbookEnabled then
 		rewrite #8,using Faccount,key=holdgl$: gl$,d$ nokey ignore
 	end if
 

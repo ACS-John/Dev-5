@@ -826,6 +826,7 @@ def fn_cfv_general_ledger
 	fn_file_setup_index("[Q]\GLmstr\AcTrIdx.h[cno]",'1/71/17/13','12/2/2/4')
 
 	fn_file_setup_data("[Q]\GLmstr\GLTrans.h[cno]",73,0)
+	fn_file_setup_index('[Q]\GLmstr\glTrans-IdxAcct.h[cno]','1','12')
 
 	if exists("[Q]\GLmstr")=0 then execute "MkDir [Q]\GLmstr"
 	! if ~exists('[Q]\INI\General Ledger') then execute 'mkdir "[Q]\INI\General Ledger"'

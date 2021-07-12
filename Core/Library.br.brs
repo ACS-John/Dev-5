@@ -1536,9 +1536,9 @@ fnend
 		library 'S:\acsGL\fnglfs.br': fnGlAskFormatPriorCdPeriod
 		fnGlAskFormatPriorCdPeriod=fnGlAskFormatPriorCdPeriod( defaultFormatOption$)
 	fnend
-	def library fnaccount_search(&x$;fixgrid)
-		library 'S:\acsGL\account_search.br': fnaccount_search
-		fnaccount_search=fnaccount_search(x$,fixgrid)
+	def library fnGlAccountSearch(&account$)
+		library 'S:\General Ledger\fn\glAccountSearch.br': fnGlAccountSearch
+		fnGlAccountSearch=fnGlAccountSearch(account$)
 	fnend
 	def library fnacglblds
 		library 'S:\acsGL\fnacglblds.br': fnacglblds
