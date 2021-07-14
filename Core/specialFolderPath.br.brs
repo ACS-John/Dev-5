@@ -31,12 +31,13 @@ def fn_specialFolderPath$*256(folderName$*64; ___,line$*256,lineCount,return$*25
 	!  6/17/21 - switched to [temp] for CM/stern where this wasn't working.       open #hTmp=fnH: 'name=[at][client_temp]\sfp[session].txt',d,input
 	!  6/30/21 - switched to [cleint_temp] for White Hall where this wasn't working.
 	if env$('cursys')='CM' then
-		tmpFile$=env$('temp')&'\sfp'&session$&'.txt"' ! [at][temp]\sfp[session].txt
+		tmpFile$=env$('temp')&'\sfp'&session$&'.txt"' ! [temp]\sfp[session].txt
 	else
-		tmpFile$=env$('client_temp')&'\sfp'&session$&'.txt' ! [at][client_temp]\sfp[session].txt
+		tmpFile$=env$('client_temp')&'\sfp'&session$&'.txt' ! [client_temp]\sfp[session].txt
+		
 	end if
 	exe 'sy -M reg query "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Shell Folders" /v "'&folderName$&'" >"'&tmpFile$&'"'
-	open #hTmp=fnH: 'name='&tmpFile$,d,input
+	open #hTmp=fnH: 'name='&env$('at')&tmpFile$,d,input
 	do
 		linput #hTmp: line$ EoF EoTmp
 		if trim$(line$)<>'' then

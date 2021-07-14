@@ -517,7 +517,7 @@ def fn_getClientLicense(mat client_has$)
 		else if env$('client')='Moweaqua' then
 			fn_userLimit(1)
 			fn_getClientLicense_add('UB') : fn_setUbLimit(1000) ! U2 Utility Billing (500-1000 customers)
-			fn_getClientLicense_add('U4') : u4_device$="Badger Connect C" ! U4 Utility Billing Hand Held Add-On
+			fn_getClientLicense_add('U4') : u4_device$="Badger Beacon" ! "Badger Connect C" 7/14/21 switched to newer Badger interface (Beacon) from Connect C     ! U4 Utility Billing Hand Held Add-On
 		else if env$('client')='Pennington' then
 			fn_userLimit(1)
 			fn_getClientLicense_add('UB') : fn_setUbLimit(500) ! U3 Utility Billing (<500 Customers)
