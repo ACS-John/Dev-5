@@ -3,24 +3,6 @@
 	on error goto Ertn
 	fnTop(program$)
 
-	dim invoiceNumber$*12
-
-	dim pt(4)
-	dim fl2$(8)
-
-	dim ot2$(4)
-	dim nam$*25
-	dim bk$(20)*30
-	dim cde$(30)*6
-	dim ct(30)
-	dim sc(30)
-	dim id$(30)*128
-	dim da(30)
-	dim gl$(30)*12
-	dim gl(3)
-	dim billto$(3)*30
-	dim cdk$*6
-	dim des$*60
 	dim bc$(3)*18
 	bc$(1)="PARTIAL BILL"
 	bc$(2)="FINAL BILL"
@@ -33,6 +15,7 @@
 	fl1$(6)="2,10,c 60,h,n"
 	fl1$(7)="9,1,c 80,h,n"
 	fl1$(8)="24,2,c 60,h,n"
+	dim fl2$(8)
 	fl2$(5)="2,10,c 60,h,n"
 	fl2$(6)="14,10,c 60,h,n"
 	fl2$(7)="15,10,c 60,h,n"
@@ -50,14 +33,15 @@
 		io1$(34+j)=str$(j+9)&",75,N 2,UE,N"
 		io1$(44+j)=str$(j+9)&",78,N 2,UE,N"
 	next j
+	dim ot2$(4)
 	for j=1 to 4
 		fl1$(j)=str$(j+3)&",8,c 20,N"
 		ot2$(j)=str$(j+3)&",25,n 10.2,ut,n"
 		fl2$(j)=fl1$(j)
 	next j
 	enableEbilling=fnClient_has('EM')
-	open #1: "Name=S:\Core\Data\acsllc\CLmstr.h[cno],KFName=S:\Core\Data\acsllc\CLIndex.h[cno],Shr",internal,input,keyed
-	open #32: "Name=S:\Core\Data\acsllc\CLmstr.h[cno],KFName=S:\Core\Data\acsllc\CLIndx2.h[cno],Shr",internal,input,keyed
+	open #hClient=fnH: "Name=S:\Core\Data\acsllc\CLmstr.h[cno],KFName=S:\Core\Data\acsllc\CLIndex.h[cno],Shr",internal,input,keyed ! 1
+	! open #hClient2=fnH: "Name=S:\Core\Data\acsllc\CLmstr.h[cno],KFName=S:\Core\Data\acsllc\CLIndx2.h[cno],Shr",internal,input,keyed ! 32
 ! /r
 REGULAR_ENTRY: ! r:
 	open #hTmpInvoice=fnH: "Name=S:\Core\Data\acsllc\tmpInvoice.h[cno],RecL=4675,Replace",internal,outIn,relative
@@ -70,12 +54,18 @@ REGULAR_ENTRY: ! r:
 	inp3=xinp(3)
 	mat xinp=(0)
 	xinp(3)=inp3
+	dim invoiceNumber$*12
 	invoiceNumber$=str$(iv1+1)
 	! invoiceNumber$=str$(iv1+1) conv ignore
+	dim id$(30)*128
 	mat id$=(" ")
+	dim da(30)
 	mat da=(0)
+	dim cde$(30)*6
 	mat cde$=("")
+	dim ct(30)
 	mat ct=(0)
+	dim sc(30)
 	mat sc=(0)
 	L1080: !
 	pr newpage
@@ -128,7 +118,7 @@ REGULAR_ENTRY: ! r:
 	if ce><1 then goto L1370
 	k$=rpad$(str$(xinp(1)),5)
 	dim a1$*30
-	read #1,using 'form pos 6,c 30',key=k$: a1$ nokey ERR1
+	read #hClient,using 'form pos 6,c 30',key=k$: a1$ nokey ERR1
 	pr f "4,35,C 40,H,N": a1$
 	goto L1200
 	L1370: !
@@ -153,6 +143,7 @@ REGULAR_ENTRY: ! r:
 	if sc(de)<0 or sc(de)>25 then goto ERR1
 	ce=ce-39
 	L1540: !
+	dim gl(3)
 	gl(1)=val(gl$(de)(1:3))
 	gl(2)=val(gl$(de)(4:9))
 	gl(3)=val(gl$(de)(10:12))
@@ -162,13 +153,16 @@ REGULAR_ENTRY: ! r:
 	fli4$(2)="22,62,N 6,ut,N"
 	fli4$(3)="22,69,N 3,ut,N"
 	rinput fields mat fli4$,attr "R": mat gl
+	dim gl$(30)*12
 	gl$(de)=lpad$(str$(gl(1)),3)&lpad$(str$(gl(2)),6)&lpad$(str$(gl(3)),3)
 	pr f "22,40,C 40": ""
 	goto CT1
 	L1610: !
 	if rtrm$(cde$(de))="" then goto L1700
 	cde$(de)=uprc$(cde$(de))
+	dim cdk$*6
 	cdk$=lpad$(rtrm$(cde$(de)),6)
+	dim des$*60
 	read #3,using 'form pos 1,c 6,c 55,pd 5.2,c 12',key=cdk$: cdk$,des$,da,gl$(de) nokey ERR1
 	pr f io1$(ce+10): des$
 	pr f io1$(ce+20): da
@@ -181,6 +175,7 @@ REGULAR_ENTRY: ! r:
 	L1720: !
 	if xinp(1)=0 then mat xinp=(0)
 	if xinp(1)=0 then goto L1900
+	dim pt(4)
 	pt(1)=pt(1)+xinp(1)
 	for j=1 to 10
 		pt(2)+=da(j)
@@ -241,8 +236,8 @@ ScreenFinal: ! r:
 			goto ScreenFinal
 		else if chg=5 then
 			! fnEmailQueuedInvoices(email_date$)  this seems like a good idea to add here, perhaps a question like int S:\Time Management\ACS Invoices.br.brs
-			close #1:
-			close #32:
+			close #hClient:
+			! close #hClient2:
 			close #hTmpInvoice:
 			fnMergeInvoices
 			goto Xit
@@ -292,7 +287,8 @@ ScreenPrintInvoices: ! r:
 		! xinp(3) = invoice date
 		if xinp(1) then
 			k$=rpad$(str$(xinp(1)),5)
-			read #1,using 'form pos 6,3*c 30',key=k$: mat billto$
+			dim billto$(3)*30
+			read #hClient,using 'form pos 6,3*c 30',key=k$: mat billto$
 			fnInvoiceAdd(k$,mat billto$,invoiceNumber$,xinp(3),mat id$,mat da,0)
 		end if
 	loop
