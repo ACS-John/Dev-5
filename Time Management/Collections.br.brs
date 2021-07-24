@@ -37,14 +37,14 @@
 		mat pgl(1)=(0)
 		gpx=1
 	end if
-	open #h_addr:=3: "Name=[Temp]\Addr.[session]",internal,outIn ioerr L530
-	close #h_addr,free:
-	L530: !
-	open #h_addr:=3: "Name=[Temp]\Addr.[session],SIZE=0,RecL=239",internal,outIn,relative ioerr Ertn
+
+	open #h_addr:=fnH: "Name=[Temp]\Addr.[session],Replace,RecL=239",internal,outIn,relative ioerr Ertn
+
 	open #1: "Name=S:\acsTM\TMSCRN.CL,Shr",internal,input,relative ioerr Ertn
 	read #1,using L560,rec=sz: f3$,mat fl1$,mat sc1$,mat sc2$,mat fli1$,mat ot1$,mat flo1$,mat flo3$,mat sc3$ ioerr Ertn
 	L560: form pos 1,c 255,142*c 18
 	close #1:
+
 	open #hCl1=fnH: "Name=S:\Core\Data\acsllc\CLmstr.h[cno],KFName=S:\Core\Data\acsllc\CLIndex.h[cno],Shr",internal,input,keyed ioerr Ertn
 	open #hCl2=fnH: "Name=S:\Core\Data\acsllc\CLmstr.h[cno],KFName=S:\Core\Data\acsllc\CLIndx2.h[cno],Shr",internal,input,keyed ioerr Ertn  ! alpha index on clients
 	L590: !
@@ -130,7 +130,7 @@
 	input fields mat fli1$: p$,iv$,tr(1),tr(3),id$,tr(2),mat pgl,mat gl conv L1240
 	if cmdkey=2 then goto L920
 	L1200: !
-	p$=uprc$(rpad$(trim$(p$),5))
+	p$=rpad$(trim$(p$),5)
 	if ce>0 then fli1$(ce)=srep$(fli1$(ce),1,"RC","U")
 	ce=0
 	goto L1280
@@ -264,7 +264,7 @@ L1850: !
 	input fields "10,61,N 1,EU,N": j conv L2250
 	on j goto L590,ScreenTotals none L2250
 	ChainArMerge: !
-chain "S:\acsTM\ARMerge"
+fnChain('S:\Time Management\Merge Transactions')
 Xit: pr newpage: fnXit
  
 TMSRCH: ! r: search for customer #
