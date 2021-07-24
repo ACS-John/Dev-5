@@ -247,7 +247,7 @@ L2250: !
 	input fields "10,61,N 1,EU,N": j conv L2250
 	on j goto SCREEN_1,SCREEN_PROOF_TOTALS none L2250
 ! /r
-CHAIN_ARMERGE: chain "S:\acsTM\ARMerge"
+CHAIN_ARMERGE: fnChain('S:\Time Management\Merge Transactions')
 Xit: !
 	fnXit
 ERR_FILE: ! r:
