@@ -219,12 +219,20 @@ BatchControlRecord: ! r: (8) Company/Batch Control Record
 	end if
 	! write #hDdout,using F_ddout_6b: 6,27,int(bnkrtn/10),str$(bnkrtn)(len(str$(bnkrtn)):len(str$(bnkrtn))),bankaccount$,totalDebit,"","","",ari,lpad$(trim$(bankaccount$),8),tn$,crlf$        ! changed dr$ to str(ddN(dd_routing)) ; also da$ to dd$(dd_account)  ! total entry for  debiting customer account
 	! F_ddout_6b: Form POS 1,G 1,G 2,pic(########),C 1,C 17,PIC(##########),C 15,C 22,G 2,N 1,C 8,c 7,c 2
-	write #hDdout,using F_ddout_8: 8,scc,eac,eh,totalDebit,totalCredit,'1'&fedid$,mac$,"",bankaccount$,bn,crlf$ ! removed *100 from totalDebit and from totalCredit
+	if uprc$(trim$(bankname$))="RESOURCE BANK" then
+		write #hDdout,using F_ddout_8: 8,scc,eac,eh,0,totalCredit,'1'&fedid$,mac$,"",bankaccount$,bn,crlf$ ! no total debit for Resource Bank
+	else
+		write #hDdout,using F_ddout_8: 8,scc,eac,eh,totalDebit,totalCredit,'1'&fedid$,mac$,"",bankaccount$,bn,crlf$ ! removed *100 from totalDebit and from totalCredit
+	end if 
 	F_ddout_8: Form POS 1,G 1,PIC(###),PIC(######),PIC(##########),2*PIC(############),C 10,C 19,C 6,C 8,PIC(#######),c 2
 	! 5/5/19 moved the write out for 8 record to after 6 record write out
 return ! /r
 FileControlRecord: ! r: (9) requires bkfactor,bactr,blctr,eac,eh,totalDebit,totalCredit,crlf$
-	write #hDdout,using F_ddout_9a: 9,bactr,blctr,eac,eh,totalDebit,totalCredit,rpt$(" ",38)," ",crlf$    ! removed *100 from totalDebit and totalCredit
+	if uprc$(trim$(bankname$))="RESOURCE BANK" then
+		write #hDdout,using F_ddout_9a: 9,bactr,blctr,eac,eh,0,totalCredit,rpt$(" ",38)," ",crlf$
+	else
+		write #hDdout,using F_ddout_9a: 9,bactr,blctr,eac,eh,totalDebit,totalCredit,rpt$(" ",38)," ",crlf$    ! removed *100 from totalDebit and totalCredit
+	end if
 	F_ddout_9a: Form POS 1,G 1,2*PIC(######),PIC(########),PIC(##########),2*PIC(############),C 38,C 1,c 2
 	if bkfactor<>0 then
 		for j=1 to bkfactor
