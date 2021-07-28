@@ -700,6 +700,7 @@ fnend
 		z$=''
 		do
 			linput #hIn: line$ eof Eo_nev4
+			if env$('client')="Millry" then let line$=srep$(line$,":"," ")
 			line_type$=lwrc$(line$(1:5))
 			if line_type$="prmdt" then ! r: Premises Detail
 				if z$<>'' then 
