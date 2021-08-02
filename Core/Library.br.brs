@@ -703,14 +703,14 @@ fnend
 		library 'S:\Core\fn\wait.br': fnwait
 		fnwait(message$,stopable)
 	fnend
-	! old and unused XXX 7/2/21   def library fnadd1099(mat cinfo$, mat einfo$, mat box)
+	! old and unused XXX 7/2/21   def library fnadd1099(mat cinfo$, mat einfo$, mat box) r:
 	! old and unused XXX 7/2/21   	library 'S:\Core\Print1099.br': fnadd1099
 	! old and unused XXX 7/2/21   	fnadd1099(mat cinfo$, mat einfo$, mat box)
 	! old and unused XXX 7/2/21   fnend
 	! old and unused XXX 7/2/21   def library fnprint1099(; lz1$)
 	! old and unused XXX 7/2/21   	library 'S:\Core\Print1099.br': fnprint1099
 	! old and unused XXX 7/2/21   	fnprint1099(lz1$)
-	! old and unused XXX 7/2/21   fnend
+	! old and unused XXX 7/2/21   fnend ! /r
 	def library fnCheckFileVersion
 		library 'S:\Core\Check File Versions.br': fnCheckFileVersion
 		fnCheckFileVersion=fnCheckFileVersion

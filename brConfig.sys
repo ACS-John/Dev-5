@@ -5,12 +5,10 @@ include Drive.sys
 include Core\Printer.sys
 rem include Core\PDF.sys
 
-
 Rem Editor "c:\Program Files\Notepad++\Notepad++.exe"
 Rem Editor "c:\ACS\Dev-5\brEdit.cmd"
 
 PrintScreen gui Win:/Select
-
 
 Console Off
 WorkStack 99999999
@@ -26,7 +24,6 @@ Shell Limit -1
 
 Insert On Non_Persistent
 
-
 Rem      Rem Option 26 suppresses the creation of .BAK (copies of .br) files during Replace operations
 Option 26  On
 
@@ -35,7 +32,6 @@ Option 46 On
 
 Date never ! disables BR's date picker
 Rem Graphic_LineDraw ThinRaised
-
 
 Rem BaseYear "The default is 1900... If you always use the results from the Days function when comparing dates, your programs should require no changes to continue working into the next century."
 BaseYear 1950
