@@ -599,7 +599,10 @@ def fn_cfv_checkbook
 	fn_file_setup_index("[Q]\CLmstr\fundidx1.h[cno]",'1','3')
 	fn_getFileInfo(g_fs_name$,g_fs_kfname$,mat tmpkps,mat tmpkln,tmpversion,tmprln,tmpfile$)
 	fn_check_version(tmpversion,version_proper,tmpfile$)
-	if tmprln=63 then fnglcontrol
+	if tmprln=63 then 
+		fnCopy('[Q]\CLmstr\FundMstr.h[cno]','[Q]\CLmstr\FundMstr.h[cno]',75)
+		fnIndex('[Q]\CLmstr\FundMstr.h[cno]','[Q]\CLmstr\fundidx1.h[cno]','1,3')
+	end if
 	!
 	fn_file_setup_data("[Q]\CLmstr\BankMstr.h[cno]",64,1)
 	fn_file_setup_index("[Q]\CLmstr\BankIdx1.h[cno]",'1','2')

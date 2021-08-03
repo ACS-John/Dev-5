@@ -57,7 +57,7 @@ L350: close #paytrans: : close #unpdaloc: : close #clwork:
 L510: !
 	execute 'INDEX [temp]\WORK,[temp]\INDX[session],1,12,Replace'
 	open #hWork=6: "Name=[temp]\WORK,KFName=[temp]\INDX[session]",internal,outIn,keyed
-	open #fundmstr=7: "Name=[Q]\CLmstr\FundMstr.h[cno],KFName=[Q]\CLmstr\FundIdx1.h[cno],Shr",internal,input,keyed
+	open #hFund=fnH: "Name=[Q]\CLmstr\FundMstr.h[cno],KFName=[Q]\CLmstr\FundIdx1.h[cno],Shr",internal,input,keyed
 	fnopenprn
 	vn$="": iv$=""
 L560: read #9,using 'FORM POS 1,PD 3': r4 eof END1
@@ -105,7 +105,7 @@ L960: return
 NEWPGE: pr #255: newpage: gosub HDR : continue
 L990: fd$=""
 	fund$=gl$(1:3)
-	read #fundmstr,using 'FORM POS 4,C 25',key=fund$: fd$ nokey HDR
+	read #hFund,using 'FORM POS 4,C 25',key=fund$: fd$ nokey HDR
 HDR: f1=1
 	pr #255,using 'FORM POS 1,C 8,Cc 86': date$,env$('cnam')
 	pr #255,using 'FORM POS 1,C 8,cc 86': time$,"Unpaid Invoice Listing"

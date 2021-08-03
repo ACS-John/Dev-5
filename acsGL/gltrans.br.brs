@@ -1,34 +1,15 @@
- 
 autoLibrary
 on error goto Ertn
 fnTop(program$)
-fn_setup_hamster
- 
-! gosub OPEN_FILE : gosub CLOSE_FILE :
-gosub OPEN_FILE
-fnHamster("GLTrans",mat lbl$,mat tln,1,mat p$,mat fltyp$,mat sln,mat mask,mat sp,mat c$)
-gosub CLOSE_FILE
- 
-goto Xit
- 
-OPEN_FILE: !
-	open_file_count=0 ! this value is used in the close_file sub routine
-	open #open_file_count+=1: 'Name=[Q]\GLmstr\GLTrans.h[cno],kfname=[Q]\GLmstr\glTrans-IdxAcct.h[cno],kps=1,kln=1,version=0,use,recl=73,Shr',internal,outIn,keyed
-return
- 
-CLOSE_FILE: for j=1 to open_file_count : close #j: : next j : return
- 
-Xit: fnXit
- 
-def fn_setup_hamster
+! r: setup_hamster
 	mask_pointtwo=32 : mask_number=30
 	mask_ccyymmdd=3 : mask_mmddyy=1 : mask_glnumber=53
 	textlen_mmddyy=8 : textlen_ccyymmdd=10
 	storage_len_mmddyy=6 : storage_len_ccyymmdd=8
- 
+
 	dim lbl$(1)*38,tln(1),p$(1)*160,fltyp$(1),sln(1),mask(1),c$(1,8)*40 ! SP(1) - not used
 	mat lbl$(0) : mat tln(0) : mat p$(0) : mat fltyp$(0) : mat sln(0) : mat mask(0) : mat c$(0,8) : mat sp(0)
- 
+
 	! fn_add_rec(label$*38,textbox_len,field_type$*2; storage_length,mask)
 	fn_add_rec("Dept"          	, 3  ,'N' ,0   ,mask_number  	)
 	fn_add_rec("Acct"          	, 6  ,'N' ,0   ,mask_number  	)
@@ -40,9 +21,16 @@ def fn_setup_hamster
 	fn_add_rec("Reference #"  	,12  ,'C'                     	)
 	fn_add_rec("Description"  	,30  ,'C'                     	)
 	fn_add_rec("Next Tran Addr", 5  ,'PD',3   ,mask_number  	)
-fnend
-def fn_add_rec(label$*38,textbox_len,field_type$*2; storage_length,mask)
+! /r
 
+open #h=fnH: 'Name=[Q]\GLmstr\GLTrans.h[cno],kfname=[Q]\GLmstr\glTrans-IdxAcct.h[cno],kps=1,kln=12,version=0,use,recl=73,Shr',internal,outIn,keyed
+fnHamster("GLTrans",mat lbl$,mat tln,h,mat p$,mat fltyp$,mat sln,mat mask,mat sp,mat c$)
+close #h:
+goto Xit
+
+Xit: fnXit
+
+def fn_add_rec(label$*38,textbox_len,field_type$*2; storage_length,mask)
 	if storage_length=0 then storage_length=textbox_len
 	add_rec_item=udim(mat lbl$)+1
 	mat lbl$(add_rec_item)   	: lbl$(add_rec_item)   	=label$
@@ -53,6 +41,5 @@ def fn_add_rec(label$*38,textbox_len,field_type$*2; storage_length,mask)
 	mat mask(add_rec_item)   	: mask(add_rec_item)   	=mask
 	mat c$(add_rec_item,8)
 fnend
- 
- 
+
 include: ertn
