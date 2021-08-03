@@ -68,7 +68,7 @@ ASK_SORT: !
 	execute "Free [Temp]\Indx -n" ioerr ignore
 	execute "Index [Temp]\Work,[Temp]\Indx,1,12,Replace,DupKeys -n"
 	open #work=6: "Name=[Temp]\Work,KFName=[Temp]\Indx",internal,outIn,keyed
-	open #fundmstr=7: "Name=[Q]\CLmstr\FundMstr.h[cno],KFName=[Q]\CLmstr\FundIdx1.h[cno],Shr",internal,input,keyed
+	open #hFund=fnH: "Name=[Q]\CLmstr\FundMstr.h[cno],KFName=[Q]\CLmstr\FundIdx1.h[cno],Shr",internal,input,keyed ! 7
 	notused=1: open #11: "Name=[Q]\CLmstr\dptmSTR.h[cno],KFName=[Q]\CLmstr\dptidx1.h[cno]",internal,input,keyed ioerr L640 : notused=0
 	L640: !
 	fnopenprn
@@ -326,7 +326,7 @@ return  ! /r
 HDR: ! r:
 	fd$=""
 	fund$=gl$(1:3)
-	read #fundmstr,using 'Form POS 4,C 25',key=fund$: fd$ nokey ignore ! changed from "nokey ignore" in an attempt to fix error 201
+	read #hFund,using 'Form POS 4,C 25',key=fund$: fd$ nokey ignore ! changed from "nokey ignore" in an attempt to fix error 201
 	nofx=1 : pg+=1
 	pr #255,using 'Form POS 1,C 8,CC 86': date$,env$('cnam')
 	if ti1$="C" then tmp$="Claims" else tmp$="Purchases"
@@ -339,6 +339,6 @@ HDR: ! r:
 	pr #255: "Payee Name                      Invoice Numb    Date      Date    Description            Due          Number"
 	pr #255: "______________________________  ____________  ________  ________  __________________  __________  ______________"
 	nofx=1
-	!  a nokey on the read #fundmstr line above can cause and err 201 (return without gosub)  the nokey is the last error and the continue goes to the line after the unsuccessful read   Build the general ledger control file and put the fund names in it!!!!!!!!
+	!  a nokey on the read #hFund line above can cause and err 201 (return without gosub)  the nokey is the last error and the continue goes to the line after the unsuccessful read   Build the general ledger control file and put the fund names in it!!!!!!!!
 return  ! /r
 include: ertn

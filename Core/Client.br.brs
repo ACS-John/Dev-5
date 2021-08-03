@@ -76,6 +76,7 @@ def fn_setClient(scClient$*128)
 		fnSetQ(dataNew$)
 		fncursys$( '',1)
 		fncno(unused)
+		fnapply_theme
 	end if
 fnend
 def fn_setup

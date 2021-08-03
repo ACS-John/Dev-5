@@ -1598,10 +1598,6 @@ fnend
 		library 'S:\acsCL\Conversion\GLMstr-to-RecL62.br': fnglmstrtorecl62
 		fnglmstrtorecl62=fnglmstrtorecl62
 	fnend
-	def library fnglcontrol
-		library 'S:\acsCL\Conversion\fundmstr-RecL75.br': fnglcontrol
-		fnglcontrol=fnglcontrol
-	fnend
 	def library fnaddpayee
 		library 'S:\Checkbook\Payee.br': fnaddpayee
 		fnaddpayee=fnaddpayee
