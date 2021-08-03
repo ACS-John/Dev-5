@@ -560,7 +560,7 @@ def fn_draw_windows
 		pr #0, border: borderText$
 	end if
 
-	fn_company_name(0,Session_Cols) ! fn_company_name(0,Session_Cols,trim$(cap$(1:pos(cap$,'(')-1))) ! fnSystemNameFromAbbr$(cursys$))
+	fn_companyName(0,Session_Cols) ! fn_companyName(0,Session_Cols,trim$(cap$(1:pos(cap$,'(')-1))) ! fnSystemNameFromAbbr$(cursys$))
 
 	if not grid_present then
 		row=ceil((Session_Rows-ace_lyne_max)/2 )
@@ -576,7 +576,7 @@ def fn_draw_windows
 	if parent_none then
 		!			if disabled_background then open #disable_win=fnH: "srow=2,scol=2,rows="&str$(Session_Rows-2)&",cols="&str$(Session_Cols-2)&",picture=S:\Core\disable.png:TILE",display,output
 		!			if disabled_background then open #disable_win=fnH: "srow=1,scol=1,rows="&str$(Session_Rows+2)&",cols="&str$(Session_Cols+1)&",border=none,picture=S:\Core\disable.png:TILE",display,output
-		if disabled_background then let fn_backgrounddisable(1)
+		if disabled_background then fn_backgrounddisable(1)
 		open #acs_win=fnH: "SRow="&str$(row)&",SCol="&str$(col)&",Rows="&str$(rows+3)&",Cols="&str$(cols+2)&",parent=none,Caption="&cap$&",border=S:[screen],N=[screen]",display,outIn
 		open #button_win=fnH: "SRow="&str$(rows+2)&",SCol=2,Rows=1,Cols="&str$(cols)&",parent="&str$(acs_win)&",border=S:[screen],N=[screen]",display,outIn
 	else
@@ -703,7 +703,7 @@ def fn_processUserInput(; ___,returnN)
 		fkey(-1)
 		returnN=1
 	else if fkey=93 then
-		if env$('ACSDeveloper')<>'' then let setenv('ExitNow','yes')
+		if env$('ACSDeveloper')<>'' then setenv('ExitNow','yes')
 		ckey=fkey_cancel
 	else if fkey=98 then
 		ckey=fkey
@@ -722,7 +722,7 @@ def fn_processUserInput(; ___,returnN)
 		returnN=1
 	else if (fkey=105 or fkey=124 or fkey=106 or fkey=125) and (pos(ace_io$(curfld),"list ") or pos(ace_io$(curfld),"list ")) then
 		returnN=1
-		if fkey=105 or fkey=124 then let setenv('current_grid_row','1')
+		if fkey=105 or fkey=124 then setenv('current_grid_row','1')
 	else if not srch(mat return_keys,fkey)>0 or fkey=92 or fkey=208 or fkey=txtbox_fkey then ! this means user switched tabs (fkey 92) or picked a value from a combo box (fkey 208)
 		returnN=1
 	else
@@ -806,7 +806,7 @@ def fn_mainInput
 		! mat ace_io$(ace_io_count)
 		! mat ace_resp$(ace_io_count)
 		if udim(ace_io$)=2 then ! this is if the grid is the only control
-			curfld(2) !	 if ~current_grid_row then let curfld(2) ! if grid is first control than set the focus to the filter box
+			curfld(2) !	 if ~current_grid_row then curfld(2) ! if grid is first control than set the focus to the filter box
 			rinput fields mat ace_io$: mat ace_resp$, grid_filter$ error ignore ! error MainInput886Avoidance
 			current_grid_row=0
 			if udim(ace_resp$)>1 then
@@ -882,7 +882,7 @@ def fn_ace(sn$*100, unused,mat resp$, &ckey; startfield, close_on_exit, parent_n
 	AceFinis: !
 	fkey(-1)
 	fn_close_windows ! :display menu:
-	if disabled_background then let fn_backgrounddisable(0)
+	if disabled_background then fn_backgrounddisable(0)
 fnend
 def fn_close_windows
 	if file(acs_win)<>-1 then close #acs_win:
@@ -1022,12 +1022,12 @@ def fn_validate_mdy(_date$;separator$,___,month,day,year)
 	month=val(_date$(1:2))
 	day=val(_date$(3:4))
 	year=val(_date$(5:6))
-	if not (fn_validateMonth(month) and fn_validate_day(day,month,year) and fn_validate_year(year)) then let fn_validate_mdy=0
+	if not (fn_validateMonth(month) and fn_validate_day(day,month,year) and fn_validate_year(year)) then fn_validate_mdy=0
  ! FINISHEDVALIDATE_MDY: !
 fnend
 def fn_validateMonth(month; ___,returnN)
 	returnN=1
-	if month < 1 or month > 12 then let returnN=0
+	if month < 1 or month > 12 then returnN=0
 	fn_validateMonth=returnN
 fnend
 def fn_validate_day(day,month,year; ___,returnN)
@@ -2217,7 +2217,7 @@ def fn_get_flexhandle(; forceclose)
 	fn_get_flexhandle=118
 fnend
 def library fnBackgroundDisable(; activate)
-	if ~setup_library then let fn_setup
+	if ~setup_library then fn_setup
 	fnBackgroundDisable=fn_backgrounddisable( activate)
 fnend
 def fn_backgrounddisable(; activate)
@@ -2229,11 +2229,11 @@ def fn_backgrounddisable(; activate)
 		close #disable_win: ioerr ignore
 	end if
 fnend
-def library fncompany_name(window,win_cols)
-	if ~setup_library then let fn_setup
-	fncompany_name=fn_company_name(window,win_cols)
+def library fnCompanyName(window,win_cols)
+	if ~setup_library then fn_setup
+	fnCompanyName=fn_companyName(window,win_cols)
 fnend
-def fn_company_name(window,win_cols)
+def fn_companyName(window,win_cols)
 	pr #window, fields "1,08,CC 18,[screenheader]": date$("Month dd, ccyy")(1:18)
 	pr #window, fields "1,27,CC 05,[screenheader]": env$("cno")
 	pr #window, fields "1,33,CC 51,[screenheader]": env$('Program_Caption')(1:51)

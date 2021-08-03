@@ -174,7 +174,7 @@ def fn_setupOnCursysChange
 fnend
 def fn_captionUpdate
 	setenv('Program_Caption',fnSystemNameFromAbbr$(env$('cursys')))
-	fncompany_name(0,screen_width)
+	fnCompanyName(0,screen_width)
 fnend
 def fn_main
 	dim program_selection$*256,menu_option$*128

@@ -291,6 +291,15 @@ fnend
 ! fnend
 ! /r
 ! r: FileIO
+def library fnProgressBar(percent)
+	library 'S:\Core\FileIO\fileio.br': fnProgressBar
+	fnProgressBar=fnProgressBar(percent)
+fnend
+def library fnProgressBarClose
+	library 'S:\Core\FileIO\fileio.br': fnCloseBar
+	fnProgressBarClose=fnCloseBar
+fnend
+
 def library fnFileioEnums(filename$*255; mat subs$)
 	library 'S:\Core\FileIO\fileio.br': fnMakeSubProc
 	fnFileioEnums=fnMakeSubProc(filename$, mat subs$)
@@ -916,15 +925,15 @@ fnend
 		library 'S:\Core\fn\top.br': fnTop
 		fnTop=fnTop( prg$,cap$,force80x24)
 	fnend
-	def library fncompany_name(window,win_cols)
-		library 'S:\Core\ACS_Component.br': fncompany_name
-		fncompany_name=fncompany_name(window,win_cols)
+	def library fnCompanyName(window,win_cols)
+		library 'S:\Core\ACS_Component.br': fnCompanyName
+		fnCompanyName=fnCompanyName(window,win_cols)
 	fnend
 	def library fnCmdKey(caption$*200,returnkey; default,cancel,tt$*200)
 		library 'S:\Core\ACS_Component.br': fnCmdKey
 		fnCmdKey=fnCmdKey(caption$,returnkey, default,cancel,tt$)
 	fnend
-	def library fnflexadd1(mat item$)
+	def library fnflexAdd1(mat item$)
 		library 'S:\Core\ACS_Component.br': fnflexadd1
 		fnflexadd1=fnflexadd1(mat item$)
 	fnend
@@ -948,17 +957,17 @@ fnend
 		library 'S:\Core\ACS_Component.br': fnChk
 		fnChk=fnChk(lyne,ps,txt$, align,contain,tabcon,chk_disable)
 	fnend
-	def library fnflexinit1(sfn$*256,lyne,ps,height,width,mat ch$;mat cm$,seltype,usr,container,tabcon)
+	def library fnflexInit1(sfn$*256,lyne,ps,height,width,mat ch$;mat cm$,seltype,usr,container,tabcon)
 		library 'S:\Core\ACS_Component.br': fnflexinit1
 		fnflexinit1=fnflexinit1(sfn$,lyne,ps,height,width,mat ch$,mat cm$,seltype,usr,container,tabcon)
 	fnend
-	def library fnComboa(sfn$*256,lyne,ps,mat opt$; ttt$*200,width,contain,tabcon)
-		library 'S:\Core\ACS_Component.br': fncomboa
-		fncomboa=fncomboa(sfn$,lyne,ps,mat opt$, ttt$,width,contain,tabcon)
+	def library fnComboA(sfn$*256,lyne,ps,mat opt$; ttt$*200,width,contain,tabcon)
+		library 'S:\Core\ACS_Component.br': fnComboA
+		fnComboA=fnComboA(sfn$,lyne,ps,mat opt$, ttt$,width,contain,tabcon)
 	fnend
-	def library fnCombof(sfn$*100,lyne,ps,width,df$*200,psk,lnk,psd,lnd; if$*200,limlis,unused_userOrReplace,ttt$*200,contain,tabcon,keyFormat$)
-		library 'S:\Core\ACS_Component.br': fncombof
-		fncombof=fncombof(sfn$,lyne,ps,width,df$,psk,lnk,psd,lnd, if$,limlis,unused_userOrReplace,ttt$,contain,tabcon,keyFormat$)
+	def library fnComboF(sfn$*100,lyne,ps,width,df$*200,psk,lnk,psd,lnd; if$*200,limlis,unused_userOrReplace,ttt$*200,contain,tabcon,keyFormat$)
+		library 'S:\Core\ACS_Component.br': fnComboF
+		fnComboF=fnComboF(sfn$,lyne,ps,width,df$,psk,lnk,psd,lnd, if$,limlis,unused_userOrReplace,ttt$,contain,tabcon,keyFormat$)
 	fnend
 	def library fnButton(lyne,ps,txt$*200,comkey; tt$*200,height,width,container,tabcon,default,cancel)
 		library 'S:\Core\ACS_Component.br': fnButton
