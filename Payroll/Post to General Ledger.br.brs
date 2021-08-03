@@ -20,7 +20,7 @@
 	open #20: "Name=[Q]\GLmstr\GLBucket.h[cno],Shr",internal,input,relative ioerr L260
 	read #20,using 'Form POS 1,N 1',rec=1: glb noRec ignore
 	close #20:
-	if glb=2 then let fn_askaccrue
+	if glb=2 then fn_askaccrue
 	L260: !
 
 	fnDedNames(mat fullname$,mat abbrevname$,mat dedcode,mat newcalcode,mat newdedfed,mat dedfica,mat dedst,mat deduc,mat gl$)
@@ -106,12 +106,12 @@ ASK_DATE: !
 		if heno<>teno then goto DEPT_READ
 		if prdate<dat1 or prdate>dat2 then goto L840
 		! If SUM(TGL)=0 Then Goto 500
-		if mastercd=0 then let fn_l1800
+		if mastercd=0 then fn_l1800
 		tgl$=lpad$(str$(tgl(1)),3)&lpad$(str$(tgl(2)),6)&lpad$(str$(tgl(3)),3)
 		if oldtgl$=tgl$ or oldtgl$="" then goto L920
 		fn_write_gl_trans
 		L920: !
-		if tgl(1)=0 or tgl(1)=oldtgl then goto L930 else let fn_l1800 ! No Cost Center or same Cost Center
+		if tgl(1)=0 or tgl(1)=oldtgl then goto L930 else fn_l1800 ! No Cost Center or same Cost Center
 		L930: ! If OLDTENO=TENO Then Goto 830
 		eno$=lpad$(str$(teno),8)
 		read #2,using L960,key=eno$: em$ nokey DEPT_READ
@@ -162,7 +162,7 @@ PgOf: !  r:
 continue ! /r
 def fn_write_gl_trans ! SUBTOTAL ROUTINE AND WRITE GL TRANS
 	if glinstal then
-	if diskin=0 then let fn_L2090
+	if diskin=0 then fn_L2090
 	td$="Payroll summary"
 	if accrue$="Yes" then
 		accrued=round(subtotal/day*dayslm,2)

@@ -2,7 +2,7 @@
 ! GL Merge program, chained to from GL>Enter Transactions and Other ACS systems too,
 ! i.e. Checkbook>Post to GL
 
-pr 'welcome to GL Merge' : pause
+! pr 'welcome to GL Merge' : pause
 
 autoLibrary
 fnTop(program$)
@@ -47,7 +47,7 @@ do ! r:  main loop - cycle through Merge file
 	dim ven$*8
 	dim xn(2)
 	read #hMerge,using F_merge1: glAcct$,xs,tranAmt,mat xn,l$,p$,ven$,glBank$ eof Finis
-	pr 'read from Merge work file';glAcct$;xs;tranAmt : pause
+	! pr 'read from Merge work file';glAcct$;xs;tranAmt : pause
 	prtrans=0
 	if xn(1)=4 then xn(1)=1 : prtrans=1 ! convert payroll transaction types to a regular disbursment
 	if xn(2)=9 then goto NextMergeRecord ! CHECK PREVIOUS POST
@@ -77,7 +77,7 @@ do ! r:  main loop - cycle through Merge file
 	! pr 'Z. glAcct$="'&glAcct$&'"' : pause
 	read #hAccount,using F_Glmstr1,key=glAcct$: cb,mat ta nokey ScrMissingGl
 	WriteTrans: !
-	pr 'writting trans';glAcct$;xs;tranAmt : pause
+	! pr 'writting trans';glAcct$;xs;tranAmt : pause
 	write #hGlTrans,using FglTrans: glAcct$,xs,tranAmt,mat xn,l$,p$,0
 	lr2=lrec(hGlTrans)
 	if ta(1)=0 then ta(1)=lr2

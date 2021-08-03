@@ -1,57 +1,57 @@
 ! formerly S:\acsPR\newprRevCal
 ! Reverse Calculation
  
-	autoLibrary
-	on error goto Ertn
+autoLibrary
+on error goto Ertn
  
-	dim x$*8,tdc(6)
-	dim bankgl$*12,bk$*24,glwk$*256
-	dim tr$(5)*35,tr(2),resp$(5)*40
-	dim tgl$*12,t(26),prgl(15,3),prgl$(15)*12 ! ,desc$*50
-	dim tr$*12,td$*30,dat$*20,cp(32),tdc(10)
-	dim a$*40,em$*30,tgl(3),tcp(32),eno$*8,ttgl(3)
-	dim ml$(3)*100,fullname$(20)*20,abrevname$(20)*8,newcalcode(20)
-	dim newdedfed(20),dedfica(20),dedst(20),deduc(20),dedcode(20),gl$(20)*12
+dim x$*8,tdc(6)
+dim bankgl$*12,bk$*24,glwk$*256
+dim tr$(5)*35,tr(2),resp$(5)*40
+dim tgl$*12,t(26),prgl(15,3),prgl$(15)*12 ! ,desc$*50
+dim tr$*12,td$*30,dat$*20,cp(32),tdc(10)
+dim a$*40,em$*30,tgl(3),tcp(32),eno$*8,ttgl(3)
+dim ml$(3)*100,fullname$(20)*20,abrevname$(20)*8,newcalcode(20)
+dim newdedfed(20),dedfica(20),dedst(20),deduc(20),dedcode(20),gl$(20)*12
  
-	fnTop(program$)
+fnTop(program$)
  
-	cd1=val(date$(4:5)&date$(7:8)&date$(1:2))
-	fnDedNames(mat fullname$,mat abrevname$,mat dedcode,mat newcalcode,mat newdedfed,mat dedfica,mat dedst,mat deduc,mat gl$)
-	open #1: "Name=[Q]\PRmstr\Company.h[cno],Shr",internal,input
-	read #1,using 'Form POS 605,C 12,N 1': bankgl$,gli
-	close #1:
-	if gli=1 then
-		gosub POSTGL0
-		open #14: "Name=[Q]\GLmstr\GLBRec.h[cno],KFName=[Q]\GLmstr\GLRecIdx.h[cno],Shr",internal,outIn,keyed ioerr L250
-		goto L260
-		L250: !
-		gli=0
-		L260: !
-	end if
-	open #6: "Name=[Q]\CLmstr\TRMSTR.h[cno],KFName=[Q]\CLmstr\TRIDX1.h[cno],Shr",internal,outIn,keyed ioerr L330
-	open #7: "Name=[Q]\CLmstr\TRMSTR.h[cno],KFName=[Q]\CLmstr\TRIDX2.h[cno],Shr",internal,outIn,keyed
-	if exists("[Q]\CLmstr\Tralloc-Idx.h[cno]") then
-		open #tralloc:=8: "Name=[Q]\CLmstr\TrAlloc.h[cno],Version=2,KFName=[Q]\CLmstr\TrAlloc-Idx.h[cno],Shr",internal,outIn,keyed
-	else
-		open #tralloc:=8: "Name=[Q]\CLmstr\TrAlloc.h[cno],Shr",internal,outIn,relative
-	end if
-	open #9: "Name=[Q]\CLmstr\BankMstr.h[cno],KFName=[Q]\CLmstr\BankIdx1.h[cno],Shr",internal,outIn,keyed
-	open #20: "Name=[Q]\CLmstr\Company.h[cno],Shr",internal,input,relative ioerr L330
-	read #20,using 'Form POS 152,N 2',rec=1: bcde
-	close #20:
-	cli=1
-	L330: !
-	open #1: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr",internal,outIn,keyed
-	open #hDepartment:=5: "Name=[Q]\PRmstr\Department.h[cno],Shr, KFName=[Q]\PRmstr\DeptIdx.h[cno],Shr",internal,outIn,keyed
-	open #4: "Name=[Q]\PRmstr\payrollchecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno]",internal,outIn,keyed
+cd1=val(date$(4:5)&date$(7:8)&date$(1:2))
+fnDedNames(mat fullname$,mat abrevname$,mat dedcode,mat newcalcode,mat newdedfed,mat dedfica,mat dedst,mat deduc,mat gl$)
+open #1: "Name=[Q]\PRmstr\Company.h[cno],Shr",internal,input
+read #1,using 'Form POS 605,C 12,N 1': bankgl$,gli
+close #1:
+if gli=1 then
+	gosub POSTGL0
+	open #14: "Name=[Q]\GLmstr\GLBRec.h[cno],KFName=[Q]\GLmstr\GLRecIdx.h[cno],Shr",internal,outIn,keyed ioerr L250
+	goto L260
+	L250: !
+	gli=0
+	L260: !
+end if
+open #6: "Name=[Q]\CLmstr\TRMSTR.h[cno],KFName=[Q]\CLmstr\TRIDX1.h[cno],Shr",internal,outIn,keyed ioerr L330
+open #7: "Name=[Q]\CLmstr\TRMSTR.h[cno],KFName=[Q]\CLmstr\TRIDX2.h[cno],Shr",internal,outIn,keyed
+if exists("[Q]\CLmstr\Tralloc-Idx.h[cno]") then
+	open #tralloc:=8: "Name=[Q]\CLmstr\TrAlloc.h[cno],Version=2,KFName=[Q]\CLmstr\TrAlloc-Idx.h[cno],Shr",internal,outIn,keyed
+else
+	open #tralloc:=8: "Name=[Q]\CLmstr\TrAlloc.h[cno],Shr",internal,outIn,relative
+end if
+open #9: "Name=[Q]\CLmstr\BankMstr.h[cno],KFName=[Q]\CLmstr\BankIdx1.h[cno],Shr",internal,outIn,keyed
+open #20: "Name=[Q]\CLmstr\Company.h[cno],Shr",internal,input,relative ioerr L330
+read #20,using 'Form POS 152,N 2',rec=1: bcde
+close #20:
+cli=1
+L330: !
+open #1: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr",internal,outIn,keyed
+open #hDepartment:=5: "Name=[Q]\PRmstr\Department.h[cno],Shr, KFName=[Q]\PRmstr\DeptIdx.h[cno],Shr",internal,outIn,keyed
+open #4: "Name=[Q]\PRmstr\payrollchecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno]",internal,outIn,keyed
  
-	d1=fnPayPeriodEndingDate
-	dat$=cnvrt$("pic(########)",d1)
-	dat=val(dat$(5:6))*10000 +val(dat$(7:8))*100 +val(dat$(3:4)) ! set payroll date back to mmddyy format for some files
+d1=fnPayPeriodEndingDate
+dat$=cnvrt$("pic(########)",d1)
+dat=val(dat$(5:6))*10000 +val(dat$(7:8))*100 +val(dat$(3:4)) ! set payroll date back to mmddyy format for some files
  
 ASK_EMPLOYEE_NO: !
 	if reverse_all=1 then goto L730
-	fnTos(sn$="Prrevcal")
+	fnTos
 	respc=0
 	fnLbl(1,1,"Employee to Reverse:",25,1)
 	fncombof("Employee",1,28,0,"[Q]\PRmstr\Employee.h[cno]",1,8,9,20,"[Q]\PRmstr\EmployeeIdx-no.h[cno]",2,0, "Select the employee to reverse.")
@@ -72,13 +72,16 @@ ASK_EMPLOYEE_NO: !
 	end if
 	fnCmdKey("&Next",1,1,0,"Proceed with reversing of payroll." )
 	fnCmdKey("E&xit",5,0,1,"Returns to menu")
-!
+
 	ckey=fnAcs(mat resp$) ! ask employee #
 	if ckey=5 then goto Xit
 	success=0
-	if resp$(1)="[All]" then reverse_all=1 : goto L670
-	eno=val(resp$(1)(1:8))
-L670: d1=val(resp$(2))
+	if resp$(1)="[All]" then
+		reverse_all=1
+	else
+		eno=val(resp$(1)(1:8))
+	end if
+	d1=val(resp$(2))
 	if d1=0 then
 		mat ml$(2)
 		ml$(1)="You must enter the payroll date!"
@@ -89,6 +92,7 @@ L670: d1=val(resp$(2))
 	if resp_cl_bank_code then bcde=val(resp$(resp_cl_bank_code)(1:2))
 	mat tcp=(0)
 	if reverse_all=1 then gosub CREATE_LIST
+
 	L730: ! r: main loop
 	if reverse_all=1 then read #13,using "form pos 1,n 8,n 7": eno,w1 eof FINIS
 	gosub REVERSE_BANK_REC
@@ -98,22 +102,23 @@ L670: d1=val(resp$(2))
 L780: form pos 132,2*pd 4.2
 	if pgl1=1 then gosub POSTGL2
 	cxk=0
-! DELETE_OLD_PAYROLL_CHECK: !
+	! DELETE_OLD_PAYROLL_CHECK: !
 	checkkey$=cnvrt$("pic(ZZZZZZZ#)",eno)&"         "
 	restore #4,key>=checkkey$: nokey UPDATE_MASTER
-L840: read #4,using "Form POS 1,N 8,n 3,PD 6,N 7,5*PD 3.2,37*PD 5.2": heno,tdn,prd,ckno,mat tdc,mat cp eof UPDATE_MASTER
+do
+	read #4,using "Form POS 1,N 8,n 3,PD 6,N 7,5*PD 3.2,37*PD 5.2": heno,tdn,prd,ckno,mat tdc,mat cp eof UPDATE_MASTER
 	if heno<>eno then goto UPDATE_MASTER
 	if prd=d1 then mat tcp=tcp+cp : delete #4:
 	cxk=1
 	if prd=d1 then em10=em10+tdc(3) ! add sick hours back
 	if prd=d1 then em11=em11+tdc(4) ! add vacation hours back
-	goto L840
+loop
 UPDATE_MASTER: !
 	if cxk=0 then goto L1220
 	rewrite #1,using L950,key=x$: em10,em11,0 ! WRITE 0 IN LAST PAYROLL DATE IN MASTER RECORD
-L950: form pos 132,2*pd 4.2,pos 162,n 6
+	L950: form pos 132,2*pd 4.2,pos 162,n 6
 	success=1
-! UPDATE_DEPARTMENT: !
+	! UPDATE_DEPARTMENT: !
 	restore #hDepartment,key>=cnvrt$("pic(zzzzzzz#)",eno)&"   ": nokey L1040
 	do
 		read #hDepartment,using 'Form POS 1,N 8,n 3,pos 42,n 6': teno,tdn,lastpd eof L1040
@@ -122,11 +127,11 @@ L950: form pos 132,2*pd 4.2,pos 162,n 6
 		end if
 	loop while teno=eno
 	L1040: !
-	goto ASK_EMPLOYEE_NO
+goto ASK_EMPLOYEE_NO
 FINIS: !
-if pgl1=1 then goto POSTGL4
-close #1: ioerr ignore
-close #2: ioerr ignore
+	if pgl1=1 then goto POSTGL4
+	close #1: ioerr ignore
+	close #2: ioerr ignore
 goto Xit
 ! /r
 REVERSE_BANK_REC: ! r:
@@ -134,21 +139,23 @@ REVERSE_BANK_REC: ! r:
 	if gli<>1 then goto L1170
 	bk$=bankgl$&lpad$(str$(w1),12)
 	rewrite #14,using L1150,key=bk$: 0 nokey L1170
-L1150: form pos 63,pd 5.2
+	L1150: form pos 63,pd 5.2
 	hw1=w1
-L1170: !
-	return  ! /r
-L1190: mat ml$(2)
+	L1170: !
+return  ! /r
+L1190: !
+	mat ml$(2)
 	ml$(1)="Employee Number "&ltrm$(x$)&" does not exist!"
 	ml$(2)="Please select a different Employee Number."
 	fnmsgbox(mat ml$,resp$,'',0)
-	goto ASK_EMPLOYEE_NO
+goto ASK_EMPLOYEE_NO
  
-L1220: mat ml$(2)
+L1220: !
+	mat ml$(2)
 	ml$(1)="No information found for Employee Number "&ltrm$(x$)
 	ml$(2)="Please select a different Employee Number."
 	fnmsgbox(mat ml$,resp$,'',0)
-	goto ASK_EMPLOYEE_NO
+goto ASK_EMPLOYEE_NO
  
 UPDATE_CHECKBOOK: ! r:
 	if bcde=0 and w1=0 then goto L1510 ! no bank info
@@ -208,7 +215,7 @@ POSTGL1: ! r:
 	close #1:
 	if glb=2 then gosub L3690
 	L1740: !
-	fnTos(sn$="Prrevcal2")
+	fnTos
 	respc=0
 	fnLbl(1,1,"General Ledger Posting Date:",25,1)
 	fnTxt(1,28,12,0,1,"3",0,"If this revesing entry should be posted to the general ledger, what date should be used?")
@@ -421,22 +428,22 @@ L3690: ! r:
 	accrue$=resp$(1)(1:1)
 return  ! /r
 ! ACCRUAL: ! r:
-!   fnTos(sn$="Prrevcal3")
-	!   respc=0: mypos=50
+!   fnTos
+!   respc=0: mypos=50
 !   fnLbl(1,1,"Number of Days in this Pay Period:",mypos,1)
 !   fnTxt(1,mypos+3,10,0,1,"30",0,"In order to know how much to accure, the system needs to know the days to accure.")
-	!   resp$(1)=str$(day)
+!   resp$(1)=str$(day)
 !   fnLbl(2,1,"Number of Days to Expense in Last Month:",mypos,1)
 !   fnTxt(2,mypos+3,10,0,1,"30",0,"In order to know how much to accure, the system needs to know the days to accure.")
-	!   resp$(2)=str$(dayslm)
+!   resp$(2)=str$(dayslm)
 !   fnLbl(3,1,"G/L # for Due From Other Funds on Fund # "&oldtgl$(1:3)&":",mypos,1)
 !   fnqgl(3,mypos+3,0,2,pas)
-	!   resp$(3)=fnrgl$(bankgl$)
+!   resp$(3)=fnrgl$(bankgl$)
 !   fnLbl(4,1,"Last Day of Previous Month:",mypos,1)
 !   fnTxt(4,mypos+3,10,0,1,"1",0,"Enter the month end date.")
-	!   resp$(4)=str$(d2)
+!   resp$(4)=str$(d2)
 !   fnCmdKey("&Next",1,1,0,"Continue posting." )
-	!   fnCmdKey("E&xit",5,0,1,"Returns to menu")
+!   fnCmdKey("E&xit",5,0,1,"Returns to menu")
 !   ckey=fnAcs(mat resp$) ! ask accrual info
 !   if ckey=5 then goto Xit
 !   day=val(resp$(1)) ! days in pay period
