@@ -116,7 +116,7 @@ PRINTLISTING: ! r: pr listings
 		t0=val(in1$(7)) conv L1440
 		t1=t1+t0
 L1440: !
-		pr #255,using 'Form POS 1,N 4,X 2,C 10,C 14,2*C 8,C 14,C 20,C 12,C 6,G 4,N 10,N 8': j,mat in1$,ckn,dp pageoflow NEWPGE
+		pr #255,using 'Form POS 1,N 5,X 2,C 10,C 14,2*C 8,C 14,C 20,C 12,C 6,G 4,N 10,N 8': j,mat in1$,ckn,dp pageoflow NEWPGE
 		aa2=0
 !   r5=aa(1)
 		restore #unpdaloc,key>=in1$(1)&"            ": nokey NEXTRECORD
