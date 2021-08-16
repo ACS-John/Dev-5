@@ -7,10 +7,10 @@ on error goto Ertn
 dim ml$(0)*128
 fnTop(program$)
 ! fixgrid=99
-open #company=fnH: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,input
-read #company,using 'Form Pos 150,2*N 1': use_dept,use_sub ! read fund and sub codes from general
-close #company:
-open #8: "Name=[Q]\CLmstr\GLmstr.h[cno],KFName=[Q]\CLmstr\GLIndex.h[cno],Shr",internal,outIn,keyed ioerr L310
+open #hCompany=fnH: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,input
+read #hCompany,using 'Form Pos 150,2*N 1': use_dept,use_sub ! read fund and sub codes from general
+close #hCompany:
+open #hClAcct=fnH: "Name=[Q]\CLmstr\GLmstr.h[cno],KFName=[Q]\CLmstr\GLIndex.h[cno],Shr",internal,outIn,keyed ioerr L310
 checkbookEnabled=1
 L310: !
 open #hAccount=fnH: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLIndex.h[cno],Shr",internal,outIn,keyed
@@ -99,7 +99,7 @@ Main: ! r:
 		fnCmdKey("&Delete",7,0,0,"")
 		fnButton(1,mypos+60+2,"C&hange",9,"Change the Account and/or the Description of this General Ledger Account") ! fnCmdKey("C&hange Acct-Desc",9,0,0,"")
 	else
-		fnCmdKey("&Edit",1,1,0,"") ! if edit_mode=1 then let fnCmdKey("&Edit",1,0,0,"") else let fnCmdKey("&Edit",1,1,0,"")
+		fnCmdKey("&Edit",1,1,0,"") ! if edit_mode=1 then fnCmdKey("&Edit",1,0,0,"") else fnCmdKey("&Edit",1,1,0,"")
 		fnCmdKey("&Add",2,0,0,"")
 		fnCmdKey("Sea&rch",8,0,0,"")
 	end if
@@ -108,7 +108,7 @@ Main: ! r:
 	if ckey=5 then goto Xit
 	dim key$*12
 	gl$=fnagl$(resp$(1)) : key$=gl$
-	if ckey=7 then gosub DELETE_ACCT : goto L1780
+	if ckey=7 then gosub DELETE_ACCT : goto SaveFinis
 	if edit_mode=1 and gl$<>holdgl$ then 
 		! r: msgbox4
 		mat ml$(4)
@@ -166,17 +166,17 @@ Xit: fnXit
 Add: ! r:
 	fnTos
 	mylen=23: mypos=mylen+3 : rc=0
-	if use_dept =1 then let fnLbl(1,26,"Fund #",6,2)
-	if use_sub =1 then let fnLbl(1,40,"Sub #",6,2)
+	if use_dept =1 then fnLbl(1,26,"Fund #",6,2)
+	if use_sub =1 then fnLbl(1,40,"Sub #",6,2)
 	fnLbl(2,1,"Account:",mylen,1)
 	if use_dept then
-		let fnTxt(2,26,3,0,1,"30",0,"Enter the fund portion of the account.",0 )
+		fnTxt(2,26,3,0,1,"30",0,"Enter the fund portion of the account.",0 )
 		resp$(rc+=1)=str$(dno)
 	end if
 	fnTxt(2,31,6,0,1,"1030",0,"Enter the Main part of the account.",0)
 	resp$(rc+=1)=str$(ano)
 	if use_sub then
-		let fnTxt(2,40,3,0,1,"30",0,"Enter the sub portion of the account.",0 )
+		fnTxt(2,40,3,0,1,"30",0,"Enter the sub portion of the account.",0 )
 		resp$(rc+=1)=str$(sno)
 	end if
 	fnLbl(3,1,"Description:",mylen,1)
@@ -186,7 +186,7 @@ Add: ! r:
 	ckey=fnAcs(mat resp$)
 	if ckey=5 then goto Main
 	! fixgrid=99
-	dno=ano=sno=0  : rc=0
+	dno=ano=sno=rc=0
 	if use_dept then dno=val(resp$(rc+=1))
 	ano=val(resp$(rc+=1))
 	if use_sub then sno=val(resp$(rc+=1))
@@ -204,7 +204,7 @@ Add: ! r:
 	! write_new_record
 	write #hAccount,using Faccount: gl$,d$,mat rf,bb,cb,mat bc,mat bp,mat bm,pbp,mat ta,mat revb
 	if checkbookEnabled then
-		write #8,using Faccount: gl$,d$
+		write #hClAcct,using Faccount: gl$,d$
 	end if
 goto Main ! /r
 
@@ -226,20 +226,21 @@ Save: ! r:
 		ml$(3)="Take Cancel to return to Main screen."
 		fnmsgbox(mat ml$,resp$,'',49)
 		if resp$<>"OK" then
-			goto L1780
+			goto SaveFinis
 		end if
 	end if
 	! !f BB=0 Then bB=CB  ! need to make current bal & begbalance same if adding new record
 	rewrite #hAccount,using Faccount,key=key$: key$,d$,mat rf,bb,cb,mat bc,mat bp,mat bm,pbp,mat ta,mat revb
 	if checkbookEnabled then
-		rewrite #8,using Faccount,key=key$: gl$,d$ nokey L1760
+		rewrite #hClAcct,using Faccount,key=key$: gl$,d$ nokey ignore
 	end if
-	L1760: !
 	if gl$<>holdkey$ then
-		gosub CHG_GLNO_IN_HISTORY ! change accounts in history
-		gosub ChangeCurrentTrans
+		gosub ChangeGLNoInHistoryTrans ! change accounts in history
+		gosub ChangeGLNoInCurrentTrans
 	end if
-	L1780: !
+goto SaveFinis ! /r
+
+SaveFinis: ! r:
 	bb=cb=pbp=0
 	mat bc=(0) : mat bp=(0) : mat bm=(0) : mat revb=(0) : mat ta=(0) : mat rf=(0)
 	edit_mode=0
@@ -264,9 +265,9 @@ L1880: !
 	if resp$="Cancel" then goto L2030
 L1910: !
 	delete #hAccount,key=gl$: ioerr L2030
-	if checkbookEnabled then delete #8,key=gl$: nokey ignore
-	goto ChangeCurrentTrans ! /r
-ChangeCurrentTrans: ! r:
+	if checkbookEnabled then delete #hClAcct,key=gl$: nokey ignore
+	goto ChangeGLNoInCurrentTrans ! /r
+ChangeGLNoInCurrentTrans: ! r:
 	if ta(1) then
 		adr=ta(1)
 		do
@@ -344,31 +345,14 @@ def fn_transactionGrid(isCurrent,gl$,h; ___,nta,recordnum,pc2,trgl$*12)
 	resp$(9)=str$(pc2)
 	fnTos ! edit transaction screen
 	mylen=23: mypos=mylen+3 
-	fnLbl(1,1,"Account:",mylen,1)
-	fnqglbig(1,mypos,0,2,1)
-	resp$(1)=fnrglbig$(trgl$)
-	holdgl$=gl$
-	fnLbl(2,1,"Date:",mylen,1)
-	fnTxt(2,mypos,10,0,1,"1",0,"",0)
-	resp$(2)=str$(tr(4))
-	fnLbl(3,1,"Amount:",mylen,1)
-	fnTxt(3,mypos,10,0,1,"10",0,"",0)
-	resp$(3)=str$(tr(5))
-	fnLbl(4,1,"Trans Code:",mylen,1)
-	fnTxt(4,mypos,2,0,1,"30",0,"Transaction Code - 1=Disbursment  2= Receipt  3= Adjustment",0)
-	resp$(4)=str$(tr(6))
-	fnLbl(5,1,"Post Code:",mylen,1)
-	fnTxt(5,mypos,2,0,1,"30",0,"",0)
-	resp$(5)=str$(tr(7))
-	fnLbl(6,1,"ChkRef:",mylen,1)
-	fnTxt(6,mypos,12,0,1,"",0,"",0)
-	resp$(6)=tr$
-	fnLbl(7,1,"Description:",mylen,1)
-	fnTxt(7,mypos,30,0,0,"",0,"",0)
-	resp$(7)=td$
-	fnLbl(8,1,"Period:",mylen,1)
-	fnTxt(8,mypos,2,0,0,"30",0,"",0)
-	resp$(8)=str$(pc2)
+	fnLbl(1,1,"Account:",mylen,1)     	: fnqglbig(1,mypos,0,2,1)            	: resp$(1)=fnrglbig$(trgl$) 	: holdgl$=gl$
+	fnLbl(2,1,"Date:",mylen,1)         	: fnTxt(2,mypos,10,0,1,"1",0,"",0)   	: resp$(2)=str$(tr(4))
+	fnLbl(3,1,"Amount:",mylen,1)      	: fnTxt(3,mypos,10,0,1,"10",0,"",0)  	: resp$(3)=str$(tr(5))
+	fnLbl(4,1,"Trans Code:",mylen,1)  	: fnTxt(4,mypos,2,0,1,"30",0,"Transaction Code - 1=Disbursment  2= Receipt  3= Adjustment",0)  	: resp$(4)=str$(tr(6))
+	fnLbl(5,1,"Post Code:",mylen,1)   	: fnTxt(5,mypos,2,0,1,"30",0,"",0)   	: resp$(5)=str$(tr(7))
+	fnLbl(6,1,"ChkRef:",mylen,1)      	: fnTxt(6,mypos,12,0,1,"",0,"",0)    	: resp$(6)=tr$
+	fnLbl(7,1,"Description:",mylen,1) 	: fnTxt(7,mypos,30,0,0,"",0,"",0)    	: resp$(7)=td$
+	fnLbl(8,1,"Period:",mylen,1)      	: fnTxt(8,mypos,2,0,0,"30",0,"",0)   	: resp$(8)=str$(pc2)
 	fnCmdSet(2)
 	ckey=fnAcs(mat resp$)
 	if ckey<>5 then
@@ -392,7 +376,7 @@ def fn_transactionGrid(isCurrent,gl$,h; ___,nta,recordnum,pc2,trgl$*12)
 fnend
 
 
-CHG_GLNO_IN_HISTORY: ! r: change gl # in history
+ChangeGLNoInHistoryTrans: ! r: change gl # in history
 	dim ack$*20
 	ack$=holdgl$&cnvrt$("N 2",0)&"      "
 	if trim$(ack$)="" then goto L3850
@@ -410,8 +394,8 @@ ChangeAccountNumber: ! r:
 	mat resp$=("")
 	fnTos
 	mylen=28: mypos=mylen+3 : rc=0
-	if use_dept =1 then let fnLbl(1,31,"Fund #",6,2)
-	if use_sub =1 then let fnLbl(1,45,"Sub #",6,2)
+	if use_dept =1 then fnLbl(1,31,"Fund #",6,2)
+	if use_sub =1 then fnLbl(1,45,"Sub #",6,2)
 	fnLbl(2,1,"New Account:",mylen,1)
 	if use_dept then
 		fnTxt(2,31,3,0,1,"30",0,"Enter the fund portion of the account.",0 )
@@ -454,11 +438,11 @@ ChangeAccountNumber: ! r:
 	end if
 	rewrite #hAccount,using Faccount,key=holdgl$: key$,d$,mat rf,bb,cb,mat bc,mat bp,mat bm,pbp,mat ta,mat revb
 	if checkbookEnabled then
-		rewrite #8,using Faccount,key=holdgl$: gl$,d$ nokey ignore
+		rewrite #hClAcct,using Faccount,key=holdgl$: gl$,d$ nokey ignore
 	end if
 
-	gosub CHG_GLNO_IN_HISTORY ! change accounts in history
-	gosub ChangeCurrentTrans
+	gosub ChangeGLNoInHistoryTrans ! change accounts in history
+	gosub ChangeGLNoInCurrentTrans
 goto Main ! /r
 
 include: ertn
