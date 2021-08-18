@@ -1012,9 +1012,23 @@ fnend
 		library 'S:\Core\ACS_Component.br': fnCmdSet
 		fnCmdSet=fnCmdSet(a)
 	fnend
-	def library fnmsgbox(mat message$; &response$,cap$*128,mtype)
+	
+
+	def library fnMsgBox(mat message$; &response$,cap$*128,mtype)
 		library 'S:\Core\fnMsgBox.br': fnmsgbox
-		fnmsgbox=fnmsgbox(mat message$, response$,cap$,mtype)
+		fnMsgBox=fnMsgBox(mat message$, response$,cap$,mtype)
+	fnend
+	def library fnMb(mat mb$; mtype,___,returnN,resp$) ! an alias for fnMsgBox with optimized parameters
+		library 'S:\Core\fnMsgBox.br': fnMsgBox
+		fnMsgBox(mat mb$, resp$,'',mtype)
+		if resp$='OK'      	then returnN=1 ! mb_ok     = 1
+		if resp$='Cancel'  	then returnN=2 ! mb_cancel = 2
+		if resp$='Abort'   	then returnN=3 ! mb_abort  = 3
+		if resp$='Retry'   	then returnN=4 ! mb_retry  = 4
+		if resp$='Ignore'  	then returnN=5 ! mb_ignore = 5
+		if resp$='Yes'     	then returnN=6 ! mb_yes    = 6
+		if resp$='No'      	then returnN=7 ! mb_no     = 7
+		fnMb=returnN
 	fnend
 	def library fnBackgroundDisable(; Activate)
 		library 'S:\Core\ACS_Component.br': fnBackgroundDisable

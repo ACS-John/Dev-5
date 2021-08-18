@@ -81,7 +81,7 @@ def fn_br_messagebox(&mat mg$, &response$; cap$*128, mt)
 fnend
 def fn_ace_messagebox(&mat mg$, &response$; cap$*128, mt)
 	mat_mg_len=0 : for j=1 to udim(mat mg$) : mat_mg_len+=len(mg$(j)) : next j
-	fnTos(sn$="mb"&str$(udim(mat mg$))&'-'&str$(mat_mg_len))
+	fnTos
 	for mg_item=1 to udim(mat mg$)
 		fnLbl(mg_item,1,mg$(mg_item))
 	next mg_item
