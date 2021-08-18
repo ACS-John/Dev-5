@@ -1,18 +1,15 @@
 ! Formerly S:\acsGL\glMaint
 ! General Ledger Master File editor
-
-autoLibrary
-! fnrglbig$ and fnqglbig  were added so all of the description could easily be seen in the Main gl screen
-on error goto Ertn
-dim ml$(0)*128
+fn_setup
 fnTop(program$)
+dim ml$(0)*128
 ! fixgrid=99
 open #hCompany=fnH: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,input
 read #hCompany,using 'Form Pos 150,2*N 1': use_dept,use_sub ! read fund and sub codes from general
 close #hCompany:
-open #hClAcct=fnH: "Name=[Q]\CLmstr\GLmstr.h[cno],KFName=[Q]\CLmstr\GLIndex.h[cno],Shr",internal,outIn,keyed ioerr L310
+open #hClAcct=fnH: "Name=[Q]\CLmstr\GLmstr.h[cno],KFName=[Q]\CLmstr\GLIndex.h[cno],Shr",internal,outIn,keyed ioerr OpenClAcctFinis
 checkbookEnabled=1
-L310: !
+OpenClAcctFinis: !
 open #hAccount=fnH: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLIndex.h[cno],Shr",internal,outIn,keyed
 open #hAccountUnused=fnH: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\glIndx2.h[cno],Shr",internal,outIn,keyed
 Faccount: form pos 1,c 12,c 50,6*pd 3,42*pd 6.2,2*pd 3,13*pd 6.2
@@ -460,4 +457,4 @@ ChangeAccountNumber: ! r:
 	gosub ChangeGLNoInCurrentTrans
 goto Main ! /r
 
-include: ertn
+include: fn_setup
