@@ -20,6 +20,7 @@ open #hTransCurrent=fnH: 'Name=[Q]\GLmstr\GLTrans.h[cno],kfname=[Q]\GLmstr\glTra
 FtransCurrent: form pos 1,c 12,n 6,pd 6.2,2*n 2,c 12,c 30,pd 3
 open #hTransHistory=fnH: "Name=[Q]\GLmstr\ACTrans.h[cno],KFName=[Q]\GLmstr\AcTrIdx.h[cno],Version=0,Use,RecL=72,KPs=1/71/17/13,KLn=12/2/2/4,Shr",internal,outIn,keyed
 FtransHistory: form pos 1,c 12,n 6,pd 6.2,2*n 2,c 12,c 30,n 2
+
 Main: ! r:
 	dim resp$(100)*60
 	fnTos
@@ -108,7 +109,7 @@ Main: ! r:
 	if ckey=5 then goto Xit
 	dim key$*12
 	gl$=fnagl$(resp$(1)) : key$=gl$
-	if ckey=7 then gosub DELETE_ACCT : goto SaveFinis
+	if ckey=7 then gosub AcctDelete : goto SaveFinis
 	if edit_mode=1 and gl$<>holdgl$ then 
 		! r: msgbox4
 		mat ml$(4)
@@ -117,8 +118,12 @@ Main: ! r:
 		ml$(3)="account or the description."
 		ml$(4)="Click OK to access the new account; else Cancel to quit."
 		fnmsgbox(mat ml$,resp$,'',49)
-		if resp$='OK' then goto DO_EDIT
-		if resp$='Cancel' then gl$=key$=holdgl$: goto Main ! /r
+		if resp$='OK' then 
+			gosub AccountEditRead
+		else if resp$='Cancel' then 
+			gl$=key$=holdgl$
+		end if
+		goto Main ! /r
 	end if
 	! de$=resp$(1)(13:60)
 	if edit_mode=1 then
@@ -137,19 +142,18 @@ Main: ! r:
 		next j
 	end if
 	if  ckey<>31 and ckey<>32 then edit_mode=0 ! ckey<>3 and
-	if ckey=1 then goto DO_EDIT
-	if ckey=2 then goto Add ! Add new accounts
-	! if ckey=3 then goto REVIEW_TRANS ! review current or prior transactions
-
-	if ckey=31 then
+	if ckey=1 then 
+		gosub AccountEditRead
+		! goto Main
+	else if ckey=2 then ! Add new accounts
+		goto Add
+	else if ckey=31 then
 		fn_transactionGrid(1,gl$,hTransCurrent) ! current
-		goto Main
+		! goto Main
 	else if ckey=32 then
 		fn_transactionGrid(0,gl$,hTransHistory) ! history
-		goto Main
-	end if
-
-	if ckey=6 then 
+		! goto Main
+	else if ckey=6 then 
 		goto Save
 	else if ckey=8 then
 		fnGlAccountSearch(gl$) ! ,fixgrid)
@@ -208,16 +212,24 @@ Add: ! r:
 	end if
 goto Main ! /r
 
-DO_EDIT: ! r:
-	pr newpage
-	read #hAccount,using Faccount,key=key$: gl$,d$,mat rf,bb,cb,mat bc,mat bp,mat bm,pbp,mat ta,mat revb nokey L1650
+AccountEditRead: ! r:
+	gl$=d$=''
+	mat rf=(0)
+	bb=cb=0
+	mat bc=(0)
+	mat bp=(0)
+	mat bm=(0)
+	pbp=0
+	mat ta=(0)
+	mat revb=(0)
+	read #hAccount,using Faccount,key=key$: gl$,d$,mat rf,bb,cb,mat bc,mat bp,mat bm,pbp,mat ta,mat revb nokey AcctEditReadFinis
 	fnrglbig$(key$)
 	for j=1 to 13
 		if revb(j)=-202020202.02 then revb(j)=0
 	next j
 	edit_mode=1
-	L1650: !
-goto Main ! /r
+	AcctEditReadFinis: !
+return ! /r
 Save: ! r:
 	if holdgl$<>gl$ then ! attempting to change account
 		mat ml$(3)
@@ -246,28 +258,30 @@ SaveFinis: ! r:
 	edit_mode=0
 	gl$=""
 goto Main ! /r
-DELETE_ACCT: ! r:
-	if cb=0 then goto L1880
-	mat ml$(3)
-	ml$(1)="Account # "&gl$&" has a balance. You should not "
-	ml$(2)="delete an account with a balance."
-	ml$(3)="Take OK to delete; else Cancel to return to Main screen."
-	fnmsgbox(mat ml$,resp$,'',49)
-	if resp$="OK" then delete_it=1: goto L1910
-	if resp$="Cancel" then goto L2030
-L1880: !
-	mat ml$(3)
-	ml$(1)="You have chosen to delete account # "&gl$&"!"
-	ml$(2)="Take OK to delete the account."
-	ml$(3)="Take Cancel to return to Main screen."
-	fnmsgbox(mat ml$,resp$,'',49)
-	if resp$="OK" then delete_it=1: goto L1910
-	if resp$="Cancel" then goto L2030
-L1910: !
-	delete #hAccount,key=gl$: ioerr L2030
-	if checkbookEnabled then delete #hClAcct,key=gl$: nokey ignore
-	goto ChangeGLNoInCurrentTrans ! /r
-ChangeGLNoInCurrentTrans: ! r:
+AcctDelete: ! r:
+	if cb then
+		mat ml$(3)
+		ml$(1)="Account "&gl$&" has a balance. You may not "
+		ml$(2)="delete an account with a balance."
+		ml$(3)="Take OK to return to Main screen."
+		fnmsgbox(mat ml$,resp$,'',mb_exclamation+mb_okonly)
+	else
+		mat ml$(3)
+		ml$(1)="You have chosen to delete account "&gl$&"!"
+		ml$(2)="Take OK to delete the account."
+		ml$(3)="Take Cancel to return to Main screen."
+		fnmsgbox(mat ml$,resp$,'',mb_exclamation+mb_okcancel)
+		if resp$="OK" then 
+			delete_it=1
+			delete #hAccount,key=gl$: ioerr AcctDeleteFinis
+			if checkbookEnabled then delete #hClAcct,key=gl$: nokey ignore
+			gosub ChangeGLNoInCurrentTrans
+		end if
+	end if
+	AcctDeleteFinis: !
+	delete_it=0
+return ! /r
+ChangeGLNoInCurrentTrans: ! r: (&delete_it,ta(1))
 	if ta(1) then
 		adr=ta(1)
 		do
@@ -280,7 +294,6 @@ ChangeGLNoInCurrentTrans: ! r:
 			end if
 			if nta then adr=nta
 		loop until nta=0
-		L2030: !
 	end if
 	delete_it=0
 return  ! /r
@@ -379,23 +392,24 @@ fnend
 ChangeGLNoInHistoryTrans: ! r: change gl # in history
 	dim ack$*20
 	ack$=holdgl$&cnvrt$("N 2",0)&"      "
-	if trim$(ack$)="" then goto L3850
-	restore #hTransHistory,key>=rpad$(ack$,kln(hTransHistory)): nokey L3850
-	do
-		read #hTransHistory,using FtransHistory: trgl$,tr(4),tr(5),tr(6),tr(7),tr$,td$,pc2 eof L3850
-		if holdgl$=trgl$ then
-			rewrite #hTransHistory,using FtransHistory: gl$,tr(4),tr(5),tr(6),tr(7),tr$,td$,pc2
-		end if
-	loop
-	L3850: !
+	if trim$(ack$)<>'' then
+		restore #hTransHistory,key>=rpad$(ack$,kln(hTransHistory)): nokey L3850
+		do
+			read #hTransHistory,using FtransHistory: trgl$,tr(4),tr(5),tr(6),tr(7),tr$,td$,pc2 eof L3850
+			if holdgl$=trgl$ then
+				rewrite #hTransHistory,using FtransHistory: gl$,tr(4),tr(5),tr(6),tr(7),tr$,td$,pc2
+			end if
+		loop
+		L3850: !
+	end if
 return ! /r
 ChangeAccountNumber: ! r:
-	dno=val(gl$(1:3)): ano=val(gl$(4:9)): sno=val(gl$(10:12))
+	dno=val(gl$(1:3)) : ano=val(gl$(4:9)) : sno=val(gl$(10:12))
 	mat resp$=("")
 	fnTos
-	mylen=28: mypos=mylen+3 : rc=0
-	if use_dept =1 then fnLbl(1,31,"Fund #",6,2)
-	if use_sub =1 then fnLbl(1,45,"Sub #",6,2)
+	mylen=28 : mypos=mylen+3 : rc=0
+	if use_dept then fnLbl(1,31,"Fund #",6,2)
+	if use_sub  then fnLbl(1,45,"Sub #",6,2)
 	fnLbl(2,1,"New Account:",mylen,1)
 	if use_dept then
 		fnTxt(2,31,3,0,1,"30",0,"Enter the fund portion of the account.",0 )
@@ -432,7 +446,9 @@ ChangeAccountNumber: ! r:
 		ml$(2)="exists. Take OK to review the account."
 		ml$(3)="Take Cancel to return to Main screen."
 		fnmsgbox(mat ml$,resp$,'',49)
-		if resp$="OK" then goto DO_EDIT else goto Main
+		if resp$="OK" then gosub AccountEditRead 
+		goto Main
+		
 		L4190: !
 		gl$=key$
 	end if
@@ -440,7 +456,6 @@ ChangeAccountNumber: ! r:
 	if checkbookEnabled then
 		rewrite #hClAcct,using Faccount,key=holdgl$: gl$,d$ nokey ignore
 	end if
-
 	gosub ChangeGLNoInHistoryTrans ! change accounts in history
 	gosub ChangeGLNoInCurrentTrans
 goto Main ! /r
