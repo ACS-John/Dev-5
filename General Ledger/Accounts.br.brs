@@ -29,6 +29,7 @@ Main: ! r:
 	else
 		fnQglBig(1,mypos,0,2,1)
 		resp$(1)=fnRglBig$(gl$)
+		! if resp$(1)='--' or resp$(1)='-' then resp$(1)=''
 	end if
 	holdgl$=gl$
 	if edit_mode=1 then

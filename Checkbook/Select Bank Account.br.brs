@@ -1,18 +1,12 @@
-! Replace S:\acsCL\chgbank
-! Select Bank Account program - just updates the Company file
- 
 autoLibrary
 on error goto Ertn
- 
-dim resp$(1)*60
- 
-fnTop(program$, "Select Bank Account")
- 
+fnTop(program$)
+
 open #20: "Name=[Q]\CLmstr\Company.h[cno],Shr",internal,outIn,relative
 read #20,using 'Form POS 152,N 2',rec=1,release: wbc
 close #20:
- 
 ASK1: !
+	dim resp$(1)*60
 	fnTos
 	lc=0 : mylen=20 : mypos=mylen+2
 	fnLbl(lc+=1,1,"Working Bank:",mylen,1)
@@ -25,7 +19,7 @@ ASK1: !
 	if ckey=5 or ckey=99 then
 		goto Xit
 	else if ckey=1 then
-		fnchain("S:\acsCL\Bank")
+		fnchain("S:\Checkbook\Bank")
 	else if ckey=2 then
 		wbc=val(resp$(1)(1:2))
 	end if
@@ -33,6 +27,6 @@ ASK1: !
 	rewrite #20,using 'Form POS 152,N 2',rec=1: wbc
 	close #20:
 goto Xit
- 
+
 Xit: fnXit
 include: ertn

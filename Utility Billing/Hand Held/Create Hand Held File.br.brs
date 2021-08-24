@@ -556,7 +556,7 @@ def fn_badgerConnectC ! older than BadgerBeacon
 		m$=ltrm$(f$(1))(1:10)
 		if env$('client')="Moweaqua" then manual_or_dialog$=extra$(3)
 		if env$('client')="Moweaqua" then extra$(3)=f$(1) ! they have meter number in first water meter number and a code in the second number
-		if env$('client')="Moweaqua" then d(1)=d(1): d(2)=d(2): d(3)=d(3)
+		! if env$('client')="Moweaqua" then d(1)=d(1) : d(2)=d(2) : d(3)=d(3)  ! this line dones nothing.  removed during customizations review 8/23/21
 		dim rt$*4
 		rt$=cnvrt$("pic(##)",extra(1))&"  "
 		if env$('client')='Raymond' then manual_or_dialog$="N"

@@ -53,7 +53,7 @@ else if env$('cursys')='UB' then ! r:
 ! /r
 else if env$('cursys')='GL' then ! r:
 	dim zer(57)
-MENU1: !
+	GlMenu1: !
 	fnTos
 	mylen=37 : mypos=mylen+2
 	fnLbl(1,1,"Copy Chart of Accounts from Company:",mylen,1)
@@ -66,7 +66,7 @@ MENU1: !
 		fro_cno=val(resp$(1)(43:47))
 		if fro_cno=0 then fro_cno=99999
 	end if
-	if cno<1 or cno=fro_cno then goto MENU1
+	if cno<1 or cno=fro_cno then goto GlMenu1
 
 	fnCopy('[Q]\GLmstr\*.h'&str$(fro_cno),'[Q]\GLmstr\*.h[cno]')
 	open #20: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLIndex.h[cno],NoShr",internal,outIn,keyed
@@ -74,7 +74,8 @@ MENU1: !
 		read #20,using 'Form POS 87,PD 6.2': cb eof EO_GLMSTR
 		rewrite #20,using 'Form POS 81,42*PD 6.2,POS 333,2*PD 3,13*pd 6.2': mat zer
 	loop
-	EO_GLMSTR: close #20:
+	EO_GLMSTR: !
+	close #20:
 
 	execute "drop [Q]\GLmstr\GLTrans.h[cno]"
 	! fnDel('[Q]\GLmstr\glTrans-IdxAcct.h[cno]')    maybe a good idea??
