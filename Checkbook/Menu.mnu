@@ -11,9 +11,9 @@ Unpaid Invoice                            ^ Checkbook\*
 >Report of Invoices Due by Selected Dates ^ Checkbook\*
 Paid Invoice                              ^ acsCL\PaidInvoice
 >Remove Paid Invoices                     ^ Checkbook\*
-Bank                                      ^ acsCL\*
+Bank                                      ^ Checkbook\*
 >Bank Reconciliation                      ^ Checkbook\*
->Select Bank Account                      ^ acsCL\ChgBank
+>Select Bank Account                      ^ Checkbook\*
 >Unclear All Entries by Bank              ^ acsCL\UnClBank
 Payee                                     ^ Checkbook\*
 >Payee Labels                             ^ Checkbook\*

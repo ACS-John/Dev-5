@@ -1,5 +1,5 @@
 ! formerly S:\acsGL\acglTB
-! pr Trial Balance
+
 
 autoLibrary
 on error goto Ertn
@@ -9,16 +9,6 @@ open #hCompany=fnH: "Name=[Q]\GLmstr\Company.h[cno]",internal,input,relative
 dim cogl$(2)*12
 read #hCompany,using 'Form POS 152,2*C 12',rec=1: mat cogl$
 close #hCompany:
-dim a$(9)*3
-a$(1)="C/D"
-a$(2)="C/R"
-a$(3)="ADJ"
-a$(4)="A/P"
-a$(5)="PR"
-a$(6)="A/R"
-a$(7)="S/J"
-a$(8)="P/J"
-a$(9)=" "
 
 open #hAcct=fnH: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLIndex.h[cno],Shr",internal,input,keyed ! formerly #1
 open #hTran=fnH: "Name=[Q]\GLmstr\GLTrans.h[cno],Shr",internal,input,relative
@@ -48,11 +38,15 @@ Screen1: ! r:
 	! fnCmdSet(3)
 		fnCmdKey("&Print with Details",1,1)
 		fnCmdKey("&Print without Details",2,0)
+		if env$('acsDeveloper')<>'' then
+			fnCmdKey("&Export with Details",3,0)
+		end if
 		fnCmdKey("&Cancel",5,0,1)
 	ckey=fnAcs(mat resp$)
 	if ckey=5 then goto Xit
 	if ckey=1 then enableDetails=1
 	if ckey=2 then enableDetails=0
+	if ckey=3 then enableExport=1 : enableDetails=1 else enableExport=0
 	! pr 'enableDetails=';enableDetails : pause
 	costcent=val(resp$(rc_costCenter))
 	dim n$*12
@@ -65,9 +59,26 @@ Screen1: ! r:
 	restore #hAcct,key>=sl1$: nokey ignore
 
 goto DoReport ! /r
+
+SAVE_AS_OPEN_ERR: !
+pr err
+pause
+retry
+
+
 DoReport: ! r:
-on fkey 5 goto Finis
+! on fkey 5 goto Finis
 fnopenprn
+if enableExport then 
+		open #h_tmp=fnH: "Name=SAVE:"&fnsave_as_path$&"\*.csv,RecL=1,replace",external,output ioerr SAVE_AS_OPEN_ERR
+		dim exportFile$*256
+		exportFile$=os_filename$(file$(h_tmp))
+		close #h_tmp,free:
+		dim serverTempSaveFile$*256
+		serverTempSaveFile$='[temp]\save_[session].csv'
+		open #hExp=fnH: 'name='&serverTempSaveFile$&',recl=1024,replace',d,o
+		delim$=chr$(9)
+end if
 gosub PrHdr
 do
 	ReadAcct: !
@@ -119,6 +130,13 @@ Finis: ! r:
 	close #hAcct: ioerr ignore
 	close #hTran: ioerr ignore
 	fncloseprn
+	if enableExport then
+		fnmakesurepathexists(env$('at')&exportFile$)
+		close #hExp:
+		fnCopyFile(serverTempSaveFile$,env$('at')&exportFile$)
+		exe 'Sy -@ -m -C start "Trial Balance Export" "C:\Program Files\Microsoft Office\root\Office16\excel.exe""'&exportFile$&'"'
+	end if
+
 goto Xit ! /r
 
 PrHdr: ! r:
@@ -133,21 +151,40 @@ PrHdr: ! r:
 	Fh4: form pos 6,c 6,pos 17,c 36,pos 54,c 13,pos 71,c 6,pos 85,c 7,pos 99,c 8,pos 116,c 7
 	pr #255,using Fh5: "__________","____________________________________","____","______","___________","_________","__________","_________"
 	Fh5: form pos 4,c 10,pos 17,c 36,pos 54,c 4,pos 60,c 6,pos 69,c 11,pos 84,c 9,pos 98,c 10,pos 115,c 10,skip 2
+	if enableExport then
+		pr #hExp: 'Acct Id'&delim$&'Acct Name or Trans Desc'&delim$&'Date'&delim$&'Source'&delim$&'Reference Number'&delim$&'Beginning Balance'&delim$&'Current Activity'&delim$&'Ending Balance'
+	end if
 return ! /r
 PrLine: ! r:
 	if ta(1)=0 then
 		if enableDetails then
 			pr #255,using Fl1: dno,ano,sno,d$,bb,cb pageoflow PgOf
 			Fl1: form pos 1,pic(---),x 1,pic(------),x 1,pic(---),x 2,c 50,pos 80,pic(zz,zzz,zzz.## cr),pos 111,pic(zz,zzz,zzz.## cr),skip 2
+			if enableExport then 
+				pr #hExp,using Fl1: dno,ano,sno,d$,bb,cb pageoflow ExpPgOf
+			end if
 		end if
 	else
 		if enableDetails then
 			pr #255,using Fl2: dno,ano,sno,d$,bb pageoflow PgOf
 			Fl2: form pos 1,pic(---),x 1,pic(------),x 1,pic(---),x 2,c 50,pos 80,pic(zz,zzz,zzz.## cr)
+			if enableExport then
+				pr #hExp,using Fl2: dno,ano,sno,d$,bb pageoflow ExpPgOf
+			end if
 		end if
 	end if
 return ! /r
 AccumAndPrint: ! r:
+	dim a$(9)*3
+	a$(1)="C/D"
+	a$(2)="C/R"
+	a$(3)="ADJ"
+	a$(4)="A/P"
+	a$(5)="PR"
+	a$(6)="A/R"
+	a$(7)="S/J"
+	a$(8)="P/J"
+	a$(9)=" "
 	dim x$*3
 	if tr(6)<1 or tr(6)>9 then x$="" else x$=a$(tr(6))
 	if val(cogl$(1)(4:9))=0 or val(cogl$(2)(4:9))=0 then
@@ -171,6 +208,9 @@ AccumAndPrint: ! r:
 		if enableDetails then
 			pr #255,using Faap1: td$,tr(4),x$,ltrm$(tr$),tr(5),cb pageoflow PgOf
 			Faap1: form pos 21,c 30,pos 52,pic(zz/zz/zz),pos 62,c 3,pos rn,c 12,pos 95,pic(zz,zzz,zzz.## cr),pos 111,pic(zz,zzz,zzz.## cr),skip 2
+			if enableExport then
+				pr #hExp,using Faap1: td$,tr(4),x$,ltrm$(tr$),tr(5),cb pageoflow ExpPgOf
+			end if
 		end if
 		! pr #255,Using 'form pos 40,2*c 35,skip 2': "Total Debits: "&LTRM$(CNVRT$("PIC(ZZZZ,ZZZ,ZZZ,ZZ#.##)",TDR1)),"Total Credits: "&LTRM$(CNVRT$("PIC(ZZZZ,ZZZ,ZZZ,ZZ#.##)",ABS(TCR1)))
 		tdr1=tcr1=0
@@ -178,6 +218,9 @@ AccumAndPrint: ! r:
 		if enableDetails then
 			pr #255,using Faap2: td$,tr(4),x$,ltrm$(tr$),tr(5) pageoflow PgOf
 			Faap2: form pos 21,c 30,pos 52,pic(zz/zz/zz),pos 62,c 3,pos rn,c 12,pos 95,pic(zz,zzz,zzz.## cr)
+			if enableExport then
+				pr #hExp,using Faap2: td$,tr(4),x$,ltrm$(tr$),tr(5) pageoflow ExpPgOf
+			end if
 		end if
 	end if
 	trtotal+=tr(5)
@@ -191,6 +234,9 @@ PrSummary: ! r:
 			if enableDetails then
 				pr #255,using L1550: "Summary Transaction",u0,cb pageoflow PgOf
 				L1550: form pos 21,c 30,pos 95,pic(zz,zzz,zzz.## cr),pos 111,pic(zz,zzz,zzz.## cr),skip 2
+				if enableExport then
+					pr #hExp,using L1550: "Summary Transaction",u0,cb pageoflow ExpPgOf
+				end if
 			end if
 			u0=0
 		end if
@@ -199,6 +245,9 @@ return ! /r
 PgOf: ! r:
 	pr #255: newpage
 	gosub PrHdr
+continue ! /r
+ExpPgOf: ! r:
+	pr #hExp: newpage
 continue ! /r
 Xit: fnXit
 include: ertn

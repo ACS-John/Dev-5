@@ -1,4 +1,4 @@
-! Replace S:\acsGL\BankRec
+! formerly S:\acsGL\BankRec
 ! Bank reconciliation routines for general ledger
 
 autoLibrary
@@ -26,10 +26,11 @@ write #82,using "Form pos 1,c 12",rec=1: wbc$
 MENU1: !
 close #81: ioerr ignore
 L300: open #81: "Name=[Q]\GLmstr\Bank"&wbc$&".h[cno],Use,RecL=32",internal,outIn,relative
-	if lrec(81)>0 then : _
-		read #81,using "Form POS 1,N 6,2*PD 5.2,N 6",rec=1: stmtdt,bgbal,stmtbal,codt : _
-	else : _
+	if lrec(81)>0 then
+		read #81,using "Form POS 1,N 6,2*PD 5.2,N 6",rec=1: stmtdt,bgbal,stmtbal,codt
+	else
 		write #81,using "Form POS 1,N 6,2*PD 5.2,N 6": stmtdt,bgbal,stmtbal,codt
+	end if
 BANK_STMT_INFO: !
 	fnTos
 	respc=0
@@ -38,16 +39,16 @@ BANK_STMT_INFO: !
 	fnqgl(1,mypos,0,2)
 	resp$(respc+=1)=fnrgl$(wbc$)
 	fnLbl(3,1,"Statement Date:",mylen,1)
-	fnTxt(3,mypos,10,0,1,"3",0,"We suggest you always use the month end date.") : _
+	fnTxt(3,mypos,10,0,1,"3",0,"We suggest you always use the month end date.")
 	resp$(respc+=1)=str$(stmtdt)
 	fnLbl(4,1,"Previous Statement Balance:",mylen,1)
-	fnTxt(4,mypos,12,0,1,"10",0,"Pull this information directly from your current bank statement. ") : _
+	fnTxt(4,mypos,12,0,1,"10",0,"Pull this information directly from your current bank statement. ")
 	resp$(respc+=1)=str$(bgbal)
 	fnLbl(5,1,"Current Statement Balance:",mylen,1)
 	fnTxt(5,mypos,12,0,1,"10",0," ")
 	resp$(respc+=1)=str$(stmtbal)
 	fnLbl(6,1,"Reconciliation Cutoff Date:",mylen,1)
-	fnTxt(6,mypos,10,0,1,"3",0,"The cutoff date would normally be the last day of the month.") : _
+	fnTxt(6,mypos,10,0,1,"3",0,"The cutoff date would normally be the last day of the month.")
 	resp$(respc+=1)=str$(codt)
 	fnLbl(8,1,"Reconciliation Options:",28,1)
 	item1$(1)="Enter Cleared Checks"
@@ -58,7 +59,7 @@ BANK_STMT_INFO: !
 	item1$(6)="Make Corrections"
 	fncomboa("bankrec-1",8,30,mat item1$,"Select the funtion you would like to perform.  Normally you would clear the checks, deposits, adjustments and then calculate the bank totals")
 	if selection=0 then selection=1 : resp$(respc+=1)=item1$(selection)
-	fnCmdKey("&Display Balances",3,0,0,"Displays previous balances for this bank account.") : _
+	fnCmdKey("&Display Balances",3,0,0,"Displays previous balances for this bank account.")
 	fnCmdKey("&Next",1,1,0,"Proceed to next options")
 	fnCmdKey("&Cancel",5,0,1,"Returns to main menu")
 	ckey=fnAcs(mat resp$)
@@ -74,7 +75,7 @@ BANK_STMT_INFO: !
 	for j=1 to 6
 		if resp$(6)=item1$(j) then ti3=j: selection=j: goto L620
 	next j
-L620: if ti3=6 then let fnchain("S:\acsGL\Bankreconciliation")
+L620: if ti3=6 then fnchain("S:\General Ledger\Access Bank Rec File")
 	close #81: ioerr L640
 L640: open #81: "Name=[Q]\GLmstr\Bank"&wbc$&".h[cno],Use,RecL=32",internal,outIn,relative
 	if lrec(81)=0 then write #81,using "Form POS 1,N 6,2*PD 5.2,N 6",rec=1: stmtdt,bgbal,stmtbal,codt : goto L670
@@ -90,7 +91,7 @@ CLEARING_ADJUSTMENTS: !
 	fnLbl(1,1,"If the adjustments have been previously cleared",50,0)
 	fnLbl(2,1,"with a wrong date, then enter the previously",50,0)
 	fnLbl(3,1,"cleared date (mmddyy) (otherwise leave blank):",50,0)
-	fnTxt(3,48,8,0,1,"1",0,"") : _
+	fnTxt(3,48,8,0,1,"1",0,"")
 	resp$(respc+=1)=""
 	fnCmdSet(2): ckey=fnAcs(mat resp$)
 	if ckey=5 or ckey=99 then goto MENU1
@@ -108,10 +109,10 @@ CLEARING_OPTIONS: !
 	fnTos
 	respc=0
 	fnLbl(1,1,"Reference Number to Clear:",28,1)
-	fnTxt(1,31,8,0,1,"",0,"If you wish to clear one transaction at a time, enter the reference # here.") : _
+	fnTxt(1,31,8,0,1,"",0,"If you wish to clear one transaction at a time, enter the reference # here.")
 	resp$(respc+=1)=""
 	fnLbl(2,1,"Cleared Amount:",28,1)
-	fnTxt(2,31,12,0,1,"10",0,"You do not have to enter the amount.  If you do, it will compare the amount you enter to your check history and warn you of any differences. ") : _
+	fnTxt(2,31,12,0,1,"10",0,"You do not have to enter the amount.  If you do, it will compare the amount you enter to your check history and warn you of any differences. ")
 	resp$(respc+=1)=""
 	if ti3=1 then let fnButton(1,50,"Clear Range of Checks",60,"This option allows you to clear a range of checks without having to enter each check number",0,20)
 	if ti3=2 then let fnButton(1,50,"Clear Deposits by Amount",61,"This option allows you to clear deposits by entering the amount without having to know the reference number.",0,30)
@@ -121,10 +122,11 @@ CLEARING_OPTIONS: !
 	fnCmdSet(2): ckey=fnAcs(mat resp$)
 	if ckey=5 then goto MENU1
 	k$=resp$(1) ! check # to clear
-	if ckey=61 then : _
-		ti=2: tcde=wtt=ti3: xck$=k$ : _
-		hamt=tr3=pcde=0 : _
+	if ckey=61 then
+		ti=2: tcde=wtt=ti3: xck$=k$
+		hamt=tr3=pcde=0
 		goto CLEAR_DEPOSITS_BY_AMOUNT
+	end if
 	if ti3=1 and ckey=60 then goto L2810 ! clear range of checks
 ! If TI3=2 AND ckey=3 Then Goto 4440 ! clear deposits by amount
 	if ti3=2 and ckey=62 then goto L2810 ! deposits by date range
@@ -134,7 +136,7 @@ CLEARING_OPTIONS: !
 	if rtrm$(k$)="" then goto CLEARING_OPTIONS
 	xck$=lpad$(rtrm$(k$),8)
 	k$=wbc$&str$(ti3)&xck$
-	read #bankrec1,using 'Form POS 79,c 12,pos 3,N 1,C 8,G 6,pd 10.2,C 8,C 35,N 1,N 6,N 1',key=k$,release: bankgl$,tcde,tr$(1),tr$(2),tx3,tr$(4),tr$(5),pcde,clr,scd nokey L1190 : _
+	read #bankrec1,using 'Form POS 79,c 12,pos 3,N 1,C 8,G 6,pd 10.2,C 8,C 35,N 1,N 6,N 1',key=k$,release: bankgl$,tcde,tr$(1),tr$(2),tx3,tr$(4),tr$(5),pcde,clr,scd nokey L1190
 	tr$(3)=str$(tx3)
 	ckamt=val(resp$(2)) : if val(tr$(3))=ckamt or ckamt=0 then goto L1210
 	mat ml$(3)
@@ -158,7 +160,7 @@ ALREADY_CLEARED: !
 	respc=0
 	fnLbl(1,1,"Check # "&trim$(k$(4:11))&" was previously cleared on "&cnvrt$("PIC(ZZ/ZZ/ZZ)",clr)&"!",60,1)
 	fnLbl(2,1,"Correct cleared date:",30,1)
-	fnTxt(2,33,10,0,1,"1",0,"Enter the new date if cleared in error on another date.  Use the old cleared date if correct.  Leave blank to unclear. ") : _
+	fnTxt(2,33,10,0,1,"1",0,"Enter the new date if cleared in error on another date.  Use the old cleared date if correct.  Leave blank to unclear. ")
 	resp$(respc+=1)=str$(stmtdt)
 	fnCmdSet(2): ckey=fnAcs(mat resp$)
 	if ckey=5 or ckey=99 then goto CLEARING_OPTIONS
@@ -169,7 +171,7 @@ L1330: rewrite #bankrec1,using 'Form POS 72,N 6',key=k$: cdte
 CALCULATE_TOTALS: !
 	restore #bankrec1,key>=wbc$&"         ": nokey MENU1
 	mat t1=(0)
-L1380: read #bankrec1,using 'Form POS 79,c 12,pos 3,N 1,C 8,G 6,pd 10.2,C 8,C 35,N 1,N 6,N 1',release: bankgl$,tcde,tr$(1),tr$(2),tx3,tr$(4),tr$(5),pcde,clr,scd eof L1600 : _
+L1380: read #bankrec1,using 'Form POS 79,c 12,pos 3,N 1,C 8,G 6,pd 10.2,C 8,C 35,N 1,N 6,N 1',release: bankgl$,tcde,tr$(1),tr$(2),tx3,tr$(4),tr$(5),pcde,clr,scd eof L1600
 	tr$(3)=str$(tx3)
 	if bankgl$><wbc$ then goto L1600
 	amt=val(tr$(3)) conv L1380
@@ -208,8 +210,7 @@ L1700: linput #wp: line$ eof EO_WP
 EO_WP: !
 		pr #255: newpage
 		close #wp:
-! If SENDTO$(1:3)<>"PRN" Then : _
-		! Execute "Sy Copy "&SENDTO$&"+RPT"&STR$(J)&"."&WSID$&" "&SENDTO$
+! If SENDTO$(1:3)<>"PRN" Then 	! Execute "Sy Copy "&SENDTO$&"+RPT"&STR$(J)&"."&WSID$&" "&SENDTO$
 WPNEXTJ: next j
 	fncloseprn
 	goto MENU1
@@ -233,7 +234,7 @@ BANKTOTALSCREEN: !
 	t1(10)=bgbal+t1(7)+t1(4)-t1(9)-t1(2)
 	cutoffbal=bal
 	restore #bankrec1,key>=wbc$&"         ": nokey EO_ADDING_BALANCE
-L1990: read #bankrec1,using 'Form POS 79,c 12,pos 3,N 1,C 8,G 6,pd 10.2,C 8,C 35,N 1,N 6,N 1': bankgl$,tcde,tr$(1),tr$(2),tx3,tr$(4),tr$(5),pcde,clr,scd eof EO_ADDING_BALANCE : _
+L1990: read #bankrec1,using 'Form POS 79,c 12,pos 3,N 1,C 8,G 6,pd 10.2,C 8,C 35,N 1,N 6,N 1': bankgl$,tcde,tr$(1),tr$(2),tx3,tr$(4),tr$(5),pcde,clr,scd eof EO_ADDING_BALANCE
 	tr$(3)=str$(tx3)
 	if bankgl$><wbc$ then goto L1990
 	x=val(tr$(2)) conv L1990
@@ -329,17 +330,17 @@ CLEAR_BY_RANGE: ! clear by range of check numbers or by date
 	fnLbl(1,43,"",1,0)
 	if ti3=2 then goto L2920
 	fnLbl(1,1,"Lowest Check Number to Clear:",30,1)
-	fnTxt(1,32,8,0,1,"",0,"If your bank statement lists checks in the order cleared and indicate breaks in the check numbers, it is very easy to clear checks using this feature.") : _
+	fnTxt(1,32,8,0,1,"",0,"If your bank statement lists checks in the order cleared and indicate breaks in the check numbers, it is very easy to clear checks using this feature.")
 	resp$(respc+=1)=""
 	fnLbl(2,1,"Highest Check Number to Clear:",30,1)
-	fnTxt(2,32,8,0,1,"",0,"Enter the last check number in the series.") : _
+	fnTxt(2,32,8,0,1,"",0,"Enter the last check number in the series.")
 	resp$(respc+=1)=""
 	goto L2960
 L2920: fnLbl(1,1,"Lowest Date to Clear:",30,1)
-	fnTxt(1,32,10,0,1,"1",0,"Normally you would use beginning of the month, but you could back the date up a few days to get any uncleared from the previous month.") : _
+	fnTxt(1,32,10,0,1,"1",0,"Normally you would use beginning of the month, but you could back the date up a few days to get any uncleared from the previous month.")
 	resp$(respc+=1)=""
 	fnLbl(2,1,"Highest Date to Clear:",30,1)
-	fnTxt(2,32,10,0,1,"1",0,"Normally you would use the last day of the month, but if the bank's cutoff date is different, you may want to use it.") : _
+	fnTxt(2,32,10,0,1,"1",0,"Normally you would use the last day of the month, but if the bank's cutoff date is different, you may want to use it.")
 	resp$(respc+=1)=""
 L2960: fnCmdSet(2): ckey=fnAcs(mat resp$)
 	if ckey=5 or ckey=99 then goto MENU1
@@ -352,13 +353,13 @@ L3030: if ti3=1 then k$=wbc$&str$(ti3)&lpad$(str$(l1),8)
 	if ti3=2 then k$=wbc$&str$(ti3)&lpad$(str$(0),8)
 	restore #bankrec1,key>=k$: nokey L3070
 	goto L3080
-L3070: mat ml$(1) : _
-	ml$(1)="Nothing found in this range." : _
-	fnmsgbox(mat ml$,resp$,'',48) : _
+L3070: mat ml$(1)
+	ml$(1)="Nothing found in this range."
+	fnmsgbox(mat ml$,resp$,'',48)
 	goto CLEAR_BY_RANGE
 L3080: ! pr f "1,2,C 8,R,N": " Check #"   ! do I want some kind of grid here???? kj
 ! pr f "1,11,C 10,R,N": "  Amount"
-L3100: read #bankrec1,using 'Form POS 79,c 12,pos 3,N 1,C 8,G 6,pd 10.2,C 8,C 35,N 1,N 6,N 1': bankgl$,tcde,tr$(1),tr$(2),tx3,tr$(4),tr$(5),pcde,clr,scd eof DISPLAYCLEAREDSOFAR : _
+L3100: read #bankrec1,using 'Form POS 79,c 12,pos 3,N 1,C 8,G 6,pd 10.2,C 8,C 35,N 1,N 6,N 1': bankgl$,tcde,tr$(1),tr$(2),tx3,tr$(4),tr$(5),pcde,clr,scd eof DISPLAYCLEAREDSOFAR
 	tr$(3)=str$(tx3)
 	if bankgl$><wbc$ or tcde><ti3 then goto CLEAR_BY_RANGE
 	if ti3=1 then goto L3170
@@ -402,32 +403,24 @@ L3480: cda=1
 DPAMENU: !
 	fnTos
 	respc=0
-	fnFra(1,1,9,60,"Reconciliation Options","Used to clear deposita by amounts and not by reference number",0) : _
+	fnFra(1,1,9,60,"Reconciliation Options","Used to clear deposita by amounts and not by reference number",0)
 	frame=1
-	fnOpt(1,3,"Erase Previous Amounts & Dates",0,frame) : _
-	if sel_code=1 or sel_code=0 then resp$(respc+=1)="True" else : _
-		resp$(respc+=1)="False"
-	fnOpt(2,3,"Enter Deposit Amounts",0,frame) : _
-	if sel_code=2 then resp$(respc+=1)="True" else : _
-		resp$(respc+=1)="False"
-	fnOpt(3,3,"Enter Types to Add Together",0,frame) : _
-	if sel_code=3 then resp$(respc+=1)="True" else : _
-		resp$(respc+=1)="False"
-	fnOpt(4,3,"Enter Dates to Add Together",0,frame) : _
-	if sel_code=4 then resp$(respc+=1)="True" else : _
-		resp$(respc+=1)="False"
-	fnOpt(5,3,"Clear Matches",0,frame) : _
-	if sel_code=5 then resp$(respc+=1)="True" else : _
-		resp$(respc+=1)="False"
-	fnOpt(6,3,"Print listing of Un-Matched",0,frame) : _
-	if sel_code=6 then resp$(respc+=1)="True" else : _
-		resp$(respc+=1)="False"
-	fnOpt(7,3,"Print Listing of All Entries",0,frame) : _
-	if sel_code=7 then resp$(respc+=1)="True" else : _
-		resp$(respc+=1)="False"
-	fnOpt(8,3,"Make Corrections",0,frame) : _
-	if sel_code=8 then resp$(respc+=1)="True" else : _
-		resp$(respc+=1)="False"
+	fnOpt(1,3,"Erase Previous Amounts & Dates",0,frame)
+	if sel_code=1 or sel_code=0 then resp$(respc+=1)="True" else resp$(respc+=1)="False"
+	fnOpt(2,3,"Enter Deposit Amounts",0,frame)
+	if sel_code=2 then resp$(respc+=1)="True" else resp$(respc+=1)="False"
+	fnOpt(3,3,"Enter Types to Add Together",0,frame)
+	if sel_code=3 then resp$(respc+=1)="True" else resp$(respc+=1)="False"
+	fnOpt(4,3,"Enter Dates to Add Together",0,frame)
+	if sel_code=4 then resp$(respc+=1)="True" else resp$(respc+=1)="False"
+	fnOpt(5,3,"Clear Matches",0,frame)
+	if sel_code=5 then resp$(respc+=1)="True" else resp$(respc+=1)="False"
+	fnOpt(6,3,"Print listing of Un-Matched",0,frame)
+	if sel_code=6 then resp$(respc+=1)="True" else resp$(respc+=1)="False"
+	fnOpt(7,3,"Print Listing of All Entries",0,frame)
+	if sel_code=7 then resp$(respc+=1)="True" else resp$(respc+=1)="False"
+	fnOpt(8,3,"Make Corrections",0,frame)
+	if sel_code=8 then resp$(respc+=1)="True" else resp$(respc+=1)="False"
 ! fnCOMBOA("bankrec-3",3,30,MAT ITEM3$,"Select the funtion you would like to perform.  Normally you would Erase Previous, Enter Amounts, Clear Matches and check your totals")!: _
 	resp$(respc+=1)=item3$(1)
 	resp$(2)="True"
@@ -450,7 +443,7 @@ ENTER_DEPOSITS_CLEARED: !
 	fnTos
 	respc=0
 	fnLbl(1,1,"Amount to Clear:",25,1)
-	fnTxt(1,28,12,0,1,"10",0,"Enter each deposit amount that shows as cleared on the bank statement.") : _
+	fnTxt(1,28,12,0,1,"10",0,"Enter each deposit amount that shows as cleared on the bank statement.")
 	resp$(respc+=1)=""
 	if am1>0 then let fnLbl(2,1,"Last Amount Entered:"&cnvrt$("N 13.2",am1),38,1)
 	fnCmdSet(2): ckey=fnAcs(mat resp$)
@@ -600,13 +593,16 @@ L5260: goto DPAMENU
 
 include: ertn
 CLEAR_TRANSACTIONS_FROM_LIST: !
-	lastrec=nextrec=total=0 : _
+	lastrec=nextrec=total=0
 	displayattop$="True"
 	if ti3=1 then type$="Checks" else type$="Deposits"
 	close #clearing: ioerr L5400
 L5400: open #clearing=89: "Name=[Q]\GLmstr\clearing.H"&wsid$&",replace,RecL=43",internal,outIn,relative
-	if ti3=2 then restore #bankrec1,key>=wbc$&"2        ": nokey DISPLAY_GRID else : _
+	if ti3=2 then 
+		restore #bankrec1,key>=wbc$&"2        ": nokey DISPLAY_GRID 
+	else
 		restore #bankrec1,key>=wbc$&"1        ": nokey DISPLAY_GRID
+	end if
 L5420: read #bankrec1,using 'Form POS 79,c 12,POS 3,N 1,pos 4,c 8,G 6,pd 10.2,POS 72,N 6': bankgl$,tcde,tr$(1),tr2,tr3,clr eof DISPLAY_GRID
 	if bankgl$><wbc$ then goto L5420
 	if ti3=1 and tcde><1 then goto L5420 ! only disbursments
@@ -617,11 +613,11 @@ L5480: k$=lpad$(rtrm$(bankgl$),12)&str$(tcde)&lpad$(rtrm$(tr$(1)),8)
 	write #clearing,using 'Form POS 1,C 21,G 6,pd 10.2,N 6': k$,tr2,tr3,clr
 	goto L5420
 DISPLAY_GRID: !
-	mat chdr$(5) : mat cmask$(5) : mat flxitm$(5) : _
-	chdr$(1)="Rec" : _
-	chdr$(2)="Reference #" : chdr$(3)="Date" : _
-	chdr$(4)="Amount" : chdr$(5)="Cleared" : _
-	cmask$(1)='30' : cmask$(2)='' : cmask$(3)='1' : _
+	mat chdr$(5) : mat cmask$(5) : mat flxitm$(5)
+	chdr$(1)="Rec"
+	chdr$(2)="Reference #" : chdr$(3)="Date"
+	chdr$(4)="Amount" : chdr$(5)="Cleared"
+	cmask$(1)='30' : cmask$(2)='' : cmask$(3)='1'
 	cmask$(4)='10' : cmask$(5)='1'
 L5530: fnTos
 	respc=0 : mat resp$=('')
@@ -630,31 +626,31 @@ L5530: fnTos
 	restore #clearing:
 	x=lrec(89): if nextrec>0 and x>1 and displayattop$="True" then goto L5580 else goto L5670
 L5580: for j=nextrec to lrec(clearing) ! read starting with next record
-		read #clearing,using 'Form POS 1,C 21,G 6,pd 10.2,c 6',rec=j: flxitm$(2),flxitm$(3),amount,flxitm$(5) noRec L5610 : _
-		flxitm$(1)=str$(rec(clearing)) : _
+		read #clearing,using 'Form POS 1,C 21,G 6,pd 10.2,c 6',rec=j: flxitm$(2),flxitm$(3),amount,flxitm$(5) noRec L5610
+		flxitm$(1)=str$(rec(clearing))
 		flxitm$(4)=str$(amount)
 		fnflexadd1(mat flxitm$)
 L5610: next j
 	for j=1 to max(nextrec-1,1) ! read records previously cleared or skipped
-		read #clearing,using 'Form POS 1,C 21,G 6,pd 10.2,c 6',rec=j: flxitm$(2),flxitm$(3),amount,flxitm$(5) noRec L5650 : _
-		flxitm$(1)=str$(rec(clearing)) : _
-		flxitm$(4)=str$(amount) : _
+		read #clearing,using 'Form POS 1,C 21,G 6,pd 10.2,c 6',rec=j: flxitm$(2),flxitm$(3),amount,flxitm$(5) noRec L5650
+		flxitm$(1)=str$(rec(clearing))
+		flxitm$(4)=str$(amount)
 		if val(flxitm$(5))=stmtdt then total+=amount
 		fnflexadd1(mat flxitm$)
 L5650: next j
 	goto L5690
-L5670: read #clearing,using 'Form POS 1,C 21,G 6,pd 10.2,c 6': flxitm$(2),flxitm$(3),amount,flxitm$(5) eof L5690 : _
-	flxitm$(1)=str$(rec(clearing)) : _
-	flxitm$(4)=str$(amount) : _
+L5670: read #clearing,using 'Form POS 1,C 21,G 6,pd 10.2,c 6': flxitm$(2),flxitm$(3),amount,flxitm$(5) eof L5690
+	flxitm$(1)=str$(rec(clearing))
+	flxitm$(4)=str$(amount)
 	if val(flxitm$(5))=stmtdt then total+=amount
 	fnflexadd1(mat flxitm$) : goto L5670
 L5690: fnLbl(17,30,"Total Cleared:",16,1)
-	fnTxt(17,49,12,0,1,"10",0," ") : _
-	resp$(respc+=1)=str$(total) : _
+	fnTxt(17,49,12,0,1,"10",0," ")
+	resp$(respc+=1)=str$(total)
 	if val(flxitm$(5))=stmtdt then total+=amount
-	fnChk(18,49,"Display at Top:",1) : _
+	fnChk(18,49,"Display at Top:",1)
 	resp$(respc+=1)=displayattop$
-	fnCmdKey("&Display Cleared",3,0,0,"Displays all transactions cleared on this clearing date") : _
+	fnCmdKey("&Display Cleared",3,0,0,"Displays all transactions cleared on this clearing date")
 	fnCmdKey("&Display Uncleared",2,0,0,"Displays all remaining uncleared transactions")
 	if clear_from_range=1 then let fnCmdKey("&Clear by Range",6,1,0,"Enter another range of reference numbers")
 	if clear_from_range=0 then let fnCmdKey("&Clear",1,1,0,"Clear the highlited transaction")
@@ -662,21 +658,18 @@ L5690: fnLbl(17,30,"Total Cleared:",16,1)
 	ckey=fnAcs(mat resp$)
 	displaycleared=total= clear_from_range=0
 	if ckey=5 or ckey=99 then goto BANK_STMT_INFO
-	displayattop$=resp$(3) : _
+	displayattop$=resp$(3)
 	! do you want next uncleared check at the top of the screen
 	if ckey=2 then goto CLEAR_TRANSACTIONS_FROM_LIST ! redisplay on uncleared
-	if ckey=3 then displaycleared=1: goto CLEAR_TRANSACTIONS_FROM_LIST : _
-		! displays only cleared on this date
-	if ckey=6 then goto CLEAR_BY_RANGE : _
-		! return to clearing by range of reference numbers
+	if ckey=3 then displaycleared=1: goto CLEAR_TRANSACTIONS_FROM_LIST 	! displays only cleared on this date
+	if ckey=6 then goto CLEAR_BY_RANGE ! return to clearing by range of reference numbers
 	read #clearing,using 'Form POS 1,C 21,G 6,pd 10.2,N 6',rec=val(resp$(1)): k$,tr2,tr3,clr noRec L5900
 ! k$(1:12)=LPAD$(RTRM$(K$(1:12)),12)
 	if clr=0 then newclr=stmtdt else newclr=0 ! if no previous clearing date, use new one; if it has a date, unclear it
 	rewrite #clearing,using 'Form POS 38,n 6',rec=val(resp$(1)): newclr
 	read #clearing,using 'Form POS 1,C 21,G 6,pd 10.2,N 6',rec=val(resp$(1)): k$,tr2,tr3,clr noRec L5900
 	rewrite #bankrec1,using 'Form POS 72,N 6',key=k$: newclr ! update the transaction history
-	lastrec=val(resp$(1)) : _
-	if lastrec+1 <= lrec(clearing) then nextrec=lastrec+1 else nextrec=1
+	lastrec=val(resp$(1)) : if lastrec+1 <= lrec(clearing) then nextrec=lastrec+1 else nextrec=1
 L5900: goto L5530
 
 Xit: fnXit

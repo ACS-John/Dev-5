@@ -5,8 +5,8 @@ File
 >Payee                                              ^ General Ledger\*
 >>Payee Transaction List                            ^ General Ledger\*
 >Schedule                                           ^ General Ledger\*
->Bank Reconciliation                                ^ acsGL\bankrec
->>Access Bank Rec File                              ^ acsGL\bankreconciliation
+>Bank Reconciliation                                ^ General Ledger\*
+>>Access Bank Rec File                              ^ General Ledger\*
 ! removed 2/10/2017 - will anyone notice?  >Ratios  ^ acsGL\Ratio
 >Payee Type                                         ^ acsGL\payeetype
 Period Ending Dates                                 ^ General Ledger\*

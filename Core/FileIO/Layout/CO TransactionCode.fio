@@ -1,6 +1,5 @@
 S:\Core\Data\TransactionCode.dat, transactioncode_, 1
 S:\Core\Data\TransactionCode.idx, code
 ===================================================
-code,     Code ,                           N  1
-desc$,    Description ,                    C 18
-
+code	, Code        	, 	N  1
+desc	, Description	, 	C 18
