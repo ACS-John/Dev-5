@@ -104,7 +104,7 @@ def library fnHamster(uw$*20,mat lbl$,mat fln,hIn,mat p$; mat flTyp$,mat sln,mat
 			else if testmask=>40 and testmask<=49 then
 				cmask$(fhc)=str$(testmask)
 			else if testmask=>50 and testmask<=53 then
-				cmask$(fhc)=str$(testmask)
+				cmask$(fhc)='' ! str$(testmask) ! &' glnumbo'
 			else
 				cmask$(fhc)='80'
 			end if
@@ -144,6 +144,9 @@ def library fnHamster(uw$*20,mat lbl$,mat fln,hIn,mat p$; mat flTyp$,mat sln,mat
 							hcfKey$=rpad$(trim$(p$(controlX))(1:kln(hComboF(controlX))),kln(hComboF(controlX)))
 							read #hComboF(controlX),using 'form pos '&control$(controlX,5)&',c '&control$(controlX,6),key=hcfKey$: hcfDesc$ nokey ignore
 							hcfDesc$=rtrm$(hcfDesc$)
+							if mask2(controlX)=>50 and mask2(controlX)<=53 then
+								hcfDesc$&=' - desc here'
+							end if
 						end if
 						flxItem$(fic+=1)=p$(controlX)&' '&hcfDesc$
 						!           if hcfDesc$<>'' then pr 'flxItem$('&str$(fic)&')="'&flxItem$(fic)&'" hcfDesc$="'&hcfDesc$&'"' : pause
