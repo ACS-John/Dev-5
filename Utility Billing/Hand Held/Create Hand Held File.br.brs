@@ -2,8 +2,8 @@
 ! -- Tranfer Data From Computer to Hand Held
 fn_setup
 fnTop(program$)
-open #h_customer_i1=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,input,keyed
-open #h_customer_i5=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx5.h[cno],Shr",internal,input,keyed
+open #h_customer_i1=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",i,i,k
+open #h_customer_i5=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx5.h[cno],Shr",i,i,k
 goto Screen1
 
 Screen1: ! r:
@@ -367,7 +367,7 @@ def fn_ifMatchOpenDo(deviceTest$*40,defaultOut_filename$*256,recordLength; extra
 	if deviceTest$='' or deviceSelected$=deviceTest$ then
 		if out_filename$='' then out_filename$=defaultOut_filename$
 		fnmakesurepathexists(env$('at')&out_filename$)
-		open #hImodoReturn=fnH: 'Name=[at]'&out_filename$&',RecL='&str$(recordLength)&extraParameter$&',Replace',display,output
+		open #hImodoReturn=fnH: 'Name=[at]'&out_filename$&',RecL='&str$(recordLength)&extraParameter$&',Replace',d,o
 		if extraParameter$=',eol=none' then
 			gRecLenRequired=1
 		else
@@ -908,7 +908,7 @@ def fn_readyKamstrup(h_out,account$*10,srvCode$*2)
 fnend
 ! r: itron
 def fn_itron_open
-	open #h_out=fnH: "Name=[Q]\HH[session].int,RecL=128,EoL=None,Replace",internal,outIn,relative
+	open #h_out=fnH: "Name=[Q]\HH[session].int,RecL=128,EoL=None,Replace",i,outi,r
 	fn_itron_record_fhd
 	itron_rdg_count=0
 	itron_cus_count=0
@@ -974,7 +974,7 @@ def fn_itron_close
 	loop
 	IC_EOF_1: !
 	!
-	open #h_out2=fnH: "Name=[Q]\Download.dat,RecL=128,EoL=None,Replace",display,output
+	open #h_out2=fnH: "Name=[Q]\Download.dat,RecL=128,EoL=None,Replace",d,o
 	restore #h_out:
 	do
 		read #h_out,using 'form pos 1,C 126': rec_line$ eof IC_EOF_2
@@ -988,7 +988,7 @@ def fn_itron_close
 	fn_reportCreatedFile(out_filename$)
 	!   if exists ("C:\MVRS\MVRSWin5.exe") then
 	!     if ~exists ("C:\MVRS\MVRSWin5.cmd") then
-	!       open #h_tmp=fnH: 'Name=C:\MVRS\MVRSWin5.cmd,RecL=256,replace',display,output
+	!       open #h_tmp=fnH: 'Name=C:\MVRS\MVRSWin5.cmd,RecL=256,replace',d,o
 	!       pr #h_tmp: 'c:'
 	!       pr #h_tmp: 'cd \MVRS'
 	!       pr #h_tmp: 'C:\MVRS\MVRSWin5.exe'

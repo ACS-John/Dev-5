@@ -14,11 +14,11 @@ def  fn_premierCardiologyImport(; sourceId$)
 		goto PciXit
 	end if
 
-	open #hClaimOpen=fnH: "name=MASTER//6,kfname=MASTERX//6,shr",internal,input,keyed
-	open #hClaimbyForwarderOpen=fnH: "name=MASTER//6,kfname=FORWIDXA//6,shr",internal,input,keyed
+	open #hClaimOpen=fnH: "name=MASTER//6,kfname=MASTERX//6,shr",i,i,k
+	open #hClaimbyForwarderOpen=fnH: "name=MASTER//6,kfname=FORWIDXA//6,shr",i,i,k
 	
-	open #hClaimClosed=fnH: "name=HISTORY//1,kfname=HISTORYX//1,shr",internal,input,keyed
-	open #hClaimbyForwarderClosed=fnH: "name=HISTORY//1,kfname=FORWIDXA//1,shr",internal,input,keyed
+	open #hClaimClosed=fnH: "name=HISTORY//1,kfname=HISTORYX//1,shr",i,i,k
+	open #hClaimbyForwarderClosed=fnH: "name=HISTORY//1,kfname=FORWIDXA//1,shr",i,i,k
 	hInv=Fnopen_Invoice(mat hInvoice)
 
 	Screen1: !
@@ -66,7 +66,7 @@ def  fn_premierCardiologyImport(; sourceId$)
 
 		! r: gather Forwarder data
 		if ~hForw or file(hForw)=-1 then
-			open #hForw=fnH: "name=MASFORW//8,shr",internal,outin,relative ! MASFORW//8 means COMMON\MASFORW
+			open #hForw=fnH: "name=MASFORW//8,shr",i,outi,r ! MASFORW//8 means COMMON\MASFORW
 		end if
 		read #hForw,using forwFormAll$,rec=val(forwNo$): mat forw$,mat forwN noRec Screen1
 		close #hForw:
@@ -122,7 +122,7 @@ def  fn_premierCardiologyImport(; sourceId$)
 		dim outFile$*256
 		outFile$=env$('at')&srep$(csvPath$&csvProg$&'-CM_EDI'&'.csv','@::','')
 include: filenamesPushMixedCase
-		open #hOut=fnH: 'name='&outFile$&',recl=1024,replace',display,output
+		open #hOut=fnH: 'name='&outFile$&',recl=1024,replace',d,o
 include: filenamesPopUpperCase
 		fn_pr_hOut('0[tab]H[tab]This file is "'&os_filename$(outFile$)&'"'	)
 		fn_pr_hOut('0[tab]H[tab]This file was made by the "'&env$('program_caption')&'" (a Collection-Master Add-On program) on '&useDate$&' at '&useTime$&'.'	)
@@ -1314,7 +1314,7 @@ fnend
 
 def fn_writeArraysToTestFile(outFile$*1024; ___,x,xLimit,hOut)
 include: filenamesPushMixedCase
-	open #hOut=fnH: 'name='&outFile$&',recl=1024,replace',display,output
+	open #hOut=fnH: 'name='&outFile$&',recl=1024,replace',d,o
 include: filenamesPopUpperCase
 	xLimit=udim(mat list_KEY$)
 	! r: heading
@@ -1525,7 +1525,7 @@ def fn_removeExcessCRLF$*256(csvFile$*256; ___,return$*256,hIn,hOut,line$*1024,d
 	close #hIn: ioerr ignore
 	open #hIn=fnH:  'name=[at]'&csvFile$,display,input
 include: filenamesPushMixedCase
-	open #hOut=fnH: 'name=[at]'&csvFile$&'-fixedCrLf,recl=2048,replace',display,output
+	open #hOut=fnH: 'name=[at]'&csvFile$&'-fixedCrLf,recl=2048,replace',d,o
 include: filenamesPopUpperCase
 
 	do

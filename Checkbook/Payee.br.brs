@@ -331,7 +331,7 @@ MSGBOX3: ! r: dupkey
 	fnmsgbox(mat ml$,resp$,cap$,16)
 	goto EDIT_PAYEE ! /r
 CHECK_HISTORY: ! r:
-	open #trans=fnH: "Name=[Q]\CLmstr\TrMstr.h[cno],KFName=[Q]\CLmstr\TrIdx2.h[cno],Shr",internal,input,keyed
+	open #trans=fnH: "Name=[Q]\CLmstr\TrMstr.h[cno],KFName=[Q]\CLmstr\TrIdx2.h[cno],Shr",i,i,k
 	fnTos
 	lc=0 : mylen=25 : mypos=mylen+2 : width=50
 	lc+=1

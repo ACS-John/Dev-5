@@ -5,7 +5,7 @@ def library fnub_cnv_note_phase_1
   autoLibrary
 
 	! r: ** phase 1 **
-  open #note1=fnH: "Name=[Q]\UBmstr\Note1.h[cno]",internal,outIn,relative
+  open #note1=fnH: "Name=[Q]\UBmstr\Note1.h[cno]",i,outi,r
 	if version(note1)=0 and rln(note1)=16 then
 		let version(note1,1)
     close #note1:
@@ -41,7 +41,7 @@ def library fnub_cnv_note_phase_1
 	EOPHASE1: ! /r
 	! r: *** Phase 2 ***"
 	open #note1=fnH: "Name=[Q]\UBmstr\Note1.h[cno],KFName=[Q]\UBmstr\NoteIdx1.h[cno]",internal,outIn,keyed
-	open #note2=fnH: "Name=[Q]\UBmstr\Note2.h[cno]",internal,outIn,relative
+	open #note2=fnH: "Name=[Q]\UBmstr\Note2.h[cno]",i,outi,r
 	if version(note2)=>1 then
 		close #note2: ioerr ignore
 		fnStatus("[Q]\UBmstr\Note2.h[cno] is already at least version 1")
@@ -72,13 +72,13 @@ def library fnub_cnv_note_phase_1
 	! ** Phase 3 **
 	! Note conversion program
 	if exists("[Q]\UBmstr\Customer.h[cno]") then
-		open #hCustomer=fnH: "Name=[Q]\UBmstr\Customer.h[cno]",internal,input,relative
+		open #hCustomer=fnH: "Name=[Q]\UBmstr\Customer.h[cno]",i,i,r
 	else if exists("[Q]\UBmstr\ubMaster.h[cno]") then
-		open #hCustomer=fnH: "Name=[Q]\UBmstr\ubMaster.h[cno]",internal,input,relative
+		open #hCustomer=fnH: "Name=[Q]\UBmstr\ubMaster.h[cno]",i,i,r
 	end if
 	fnIndex("[Q]\UBmstr\Note1.h[cno]","[Q]\UBmstr\NoteIdx1.h[cno]","1 10")
 	open #note1b=fnH: "Name=[Q]\UBmstr\Note1.h[cno],KFName=[Q]\UBmstr\NoteIdx1.h[cno]",internal,outIn,keyed
-	open #note2b=fnH: "Name=[Q]\UBmstr\Note2.h[cno]",internal,outIn,relative
+	open #note2b=fnH: "Name=[Q]\UBmstr\Note2.h[cno]",i,outi,r
 	L50100: !
 	read #hCustomer,using 'Form POS 1,C 10': z$ eof EO4
 	if z$(8:10)=".00" then goto L50100 ! skip base records

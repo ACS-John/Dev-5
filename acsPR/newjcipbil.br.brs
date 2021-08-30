@@ -20,15 +20,15 @@
 	fnmsgbox(mat ml$,resp$,cap$,52)
 	if resp$="Yes" then goto L220 else goto L200
 	L200: !
-	open #3: "Name=jcbillings."&wsid$&",SIZE=0,RecL=84,Replace",internal,outIn,relative
+	open #3: "Name=jcbillings."&wsid$&",SIZE=0,RecL=84,Replace",i,outi,r
 	goto L230
 	L220: !
-	open #3: "Name=jcbillings."&wsid$,internal,outIn,relative
+	open #3: "Name=jcbillings."&wsid$,i,outi,r
 	L230: !
 	open #11: "Name=[Q]\PRmstr\JCMSTR.h[cno],KFName=[Q]\PRmstr\JCIndx.h[cno],Shr",internal,outIn,keyed
-	open #14: "Name=[Q]\PRmstr\JCMSTR.h[cno],KFName=[Q]\PRmstr\JCINDX2.h[cno],Shr",internal,input,keyed
-	open #12: "Name=[Q]\PRmstr\JCCAT.h[cno],KFName=[Q]\PRmstr\CatIndx.h[cno],Shr",internal,input,keyed
-	open #13: "Name=[Q]\PRmstr\SCMSTR.h[cno],KFName=[Q]\PRmstr\SCIndex.h[cno],Shr",internal,input,keyed
+	open #14: "Name=[Q]\PRmstr\JCMSTR.h[cno],KFName=[Q]\PRmstr\JCINDX2.h[cno],Shr",i,i,k
+	open #12: "Name=[Q]\PRmstr\JCCAT.h[cno],KFName=[Q]\PRmstr\CatIndx.h[cno],Shr",i,i,k
+	open #13: "Name=[Q]\PRmstr\SCMSTR.h[cno],KFName=[Q]\PRmstr\SCIndex.h[cno],Shr",i,i,k
  
 	addone=1 ! set code as adding when first entering
  

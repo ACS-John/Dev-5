@@ -22,7 +22,7 @@
 	if ckey=5 then goto Xit
 	fl$=trim$(resp$(1))
 	open #2: "Name="&fl$&",RecL=79,EOL=CRLF,Replace",external,output
-	open #1: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLIndex.h[cno]",internal,input,keyed
+	open #1: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLIndex.h[cno]",i,i,k
 L240: read #1,using 'Form POS 1,C 12,C 50,POS 87,PD 6.2': gl$,de$,cb eof Xit
 	write #2,using 'Form POS 1,C 12,X 2,C 50,N 12.2,c 2': gl$,de$,cb,crlf$
 	goto L240

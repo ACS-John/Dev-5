@@ -14,7 +14,7 @@
 	dim item1$(3)*15,type$*25
 	dim holdkey$*20,resp$(256)*128
 
-	open #20: "Name=[Q]\CLmstr\Company.h[cno],Shr",internal,input,relative
+	open #20: "Name=[Q]\CLmstr\Company.h[cno],Shr",i,i,r
 	read #20,using 'Form POS 150,2*N 1,C 2',rec=1: mat d,bc$
 	if d(1)=0 and d(2)=0 then
 		glnMask$='50'
@@ -174,7 +174,7 @@ JCBLD: ! r: Open JC Files
 	open #41: "Name=[Q]\PRmstr\JCMSTR.h[cno],KFName=[Q]\PRmstr\JCIndx.h[cno],Shr",internal,outIn,keyed ioerr JCBLD_FINIS
 	open #category:=2: "Name=[Q]\PRmstr\JCCAT.h[cno], KFName=[Q]\PRmstr\CATIndx.h[cno],Shr", internal,outIn,keyed
 	open #43: "Name=[Q]\PRmstr\SCMSTR.h[cno],KFName=[Q]\PRmstr\SCIndex.h[cno],Shr",internal,outIn,keyed
-	open #45: "Name=[Q]\PRmstr\JCTrans.h[cno],Shr",internal,outIn,relative
+	open #45: "Name=[Q]\PRmstr\JCTrans.h[cno],Shr",i,outi,r
 	if not exists("[Q]\CLmstr\JCBreakdownS"&wsid$&".h[cno]") then gosub MAKE_JCB
 	open #jcbreakdown=46: "Name=[Q]\CLmstr\JCBreakdownS"&wsid$&".h[cno],KFName=[Q]\CLmstr\JcBrkidx"&wsid$&".h[cno],Version=1,Shr",internal,outIn,keyed ioerr MAKE_JCB
 JCBLD_FINIS: !
@@ -184,7 +184,7 @@ CODE_FOR_PAYMENT: ! r:
 	lastrec=nextrec=total=0
 	displayattop$="True"
 	close #clearing: ioerr ignore
-	open #clearing=fnH: "Name=[Q]\CLmstr\clearing.H"&wsid$&",replace,RecL=114",internal,outIn,relative  ! kj wrong recl
+	open #clearing=fnH: "Name=[Q]\CLmstr\clearing.H"&wsid$&",replace,RecL=114",i,outi,r  ! kj wrong recl
 	if displayunpaid=1 then
 		type$="Coded for Payment"
 	else if displayunpaid=0 then
@@ -501,7 +501,7 @@ execute "Drop [Q]\CLmstr\jcbreakdowns"&wsid$&".h[cno]"
 L6930: !
 return  ! /r
 MAKE_JCB: ! r: create [Q]\CLmstr\JCBreakdownS"&wsid$&".h[cno]"
-open #jcbreakdown=46: "Name=[Q]\CLmstr\JCBreakdownS"&wsid$&".h[cno],Version=1,replace,RecL=79",internal,outIn,relative
+open #jcbreakdown=46: "Name=[Q]\CLmstr\JCBreakdownS"&wsid$&".h[cno],Version=1,replace,RecL=79",i,outi,r
 close #jcbreakdown:
 execute "Index [Q]\CLmstr\JCBreakdownS"&wsid$&".h[cno],[Q]\CLmstr\jcbrkidx"&wsid$&".h[cno],48,20,Replace,DupKeys -n"
 return ! /r

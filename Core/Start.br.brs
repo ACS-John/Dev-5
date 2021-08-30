@@ -336,7 +336,7 @@ def fn_rightsTest(folder$*256,rt_how_to_fix$*256,folderName$; additional_text_fo
 	folder$=trim$(folder$)
 	if folder$<>'' and folder$(len(folder$):len(folder$))<>'\' then folder$=folder$&'\'
 
-	open #h_test=fn_h: 'Name='&folder$&'tmp_rights_test'&session$&'.dat,Replace,RecL=384',internal,outIn,relative ioerr RT_FAIL
+	open #h_test=fn_h: 'Name='&folder$&'tmp_rights_test'&session$&'.dat,Replace,RecL=384',i,outi,r ioerr RT_FAIL
 	close #h_test:
 	exe 'free "'&folder$&'tmp_rights_test'&session$&'.dat"' ioerr RT_FAIL
 	goto RT_PASS
@@ -530,7 +530,7 @@ def fn_multisessionTest(; ___,returnN)
 	fn_multisessionTest=returnN
 fnend
 def fn_updateVersionForInno(; ___,h_tmp)
-	open #h_tmp=fn_h: 'name=:C:\ACS\Setup\ACS 5 - AppVersion.iss,RecL=256,Replace',display,output
+	open #h_tmp=fn_h: 'name=:C:\ACS\Setup\ACS 5 - AppVersion.iss,RecL=256,Replace',d,o
 	pr #h_tmp: ';This file is dynamically built by '&os_filename$(program$)&' when run by an ACSDeveloper.'
 	pr #h_tmp: ';Attempts to edit it directly are moot and will be quickly overwritten.'
 	pr #h_tmp: 'AppVersion='&env$('acsVersion')

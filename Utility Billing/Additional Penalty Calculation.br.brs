@@ -46,7 +46,7 @@
 	fncreg_read('Second Penalty Calculation Penalty Amount',penaltyamt$) : penaltyamt=val(penaltyamt$) conv ignore
 	fncreg_read('Second Penalty Calculation Skip Service 10 Rate 9 Customers',skip_s10r9$) ! : penaltyamt=val(penaltyamt$) conv ignore
 	if minimumbal=0 then
-		open #minbal:=5: "Name=[Q]\UBmstr\Minbal.h[cno],Shr",internal,outIn,relative ioerr ignore
+		open #minbal:=5: "Name=[Q]\UBmstr\Minbal.h[cno],Shr",i,outi,r ioerr ignore
 		read #minbal,using 'Form POS 1,n 10.2',rec=1,release: minimumbal ioerr ignore
 		close #minbal: ioerr ignore
 	end if
@@ -106,7 +106,7 @@ SCREEN1: !
 	open #h_trans=fnH: "Name=[Q]\UBmstr\ubTransVB.h[cno],KFName=[Q]\UBmstr\ubtrindx.h[cno],Shr",internal,outIn,keyed
 	open #hTrans2=fnH: "Name=[Q]\UBmstr\ubTransVB.h[cno],KFName=[Q]\UBmstr\UBTrdt.h[cno],Shr",internal,outIn,keyed
 	gosub BUD1
-	open #ratemst:=8: "Name=[Q]\UBmstr\ubData\RateMst.h[cno],KFName=[Q]\UBmstr\ubData\RateIdx1.h[cno],Shr",internal,input,keyed
+	open #ratemst:=8: "Name=[Q]\UBmstr\ubData\RateMst.h[cno],KFName=[Q]\UBmstr\ubData\RateIdx1.h[cno],Shr",i,i,k
 	fnopenprn
 	gosub HDR
 	do
@@ -224,7 +224,7 @@ Xit: fnXit
 BUD1: ! r:
 	bud1=0
 	open #81: "Name=[Q]\UBmstr\BudMstr.h[cno],KFName=[Q]\UBmstr\BudIdx1.h[cno],Shr",internal,outIn,keyed ioerr EO_BUD1
-	open #82: "Name=[Q]\UBmstr\BudTrans.h[cno],Shr",internal,outIn,relative
+	open #82: "Name=[Q]\UBmstr\BudTrans.h[cno],Shr",i,outi,r
 	bud1=1
 	EO_BUD1: !
 return  ! /r

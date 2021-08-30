@@ -6,7 +6,7 @@ fndat(dat$)
 dim p$*5,iv$*12,gl(3),gh(3),td$*30,tr$*12,a$*40,cap$*128,dat$*20
 td$="AR SUMMARY"
 tr6=5
-open #8: "Name=S:\Core\Data\acsllc\pedate.h[cno],RecL=20,use,Shr",internal,outIn,relative 
+open #8: "Name=S:\Core\Data\acsllc\pedate.h[cno],RecL=20,use,Shr",i,outi,r 
 if lrec(8)=0 then write #8,using "form pos 1,n 6": dat else read #8,using "form pos 1,n 6",rec=1,release: dat
 pr newpage
 pr f "10,15,c 60": "POSITION PAPER FOR G/L DISTRIBUTION REPORT"
@@ -17,7 +17,7 @@ L170: input fields "12,53,n 6,ue": tr4 conv L170
 	rewrite #8,using "form pos 1,n 6",rec=1: d1
 	pa=43-int(len(rtrm$(a$))/2)
 	open #1: "Name=[Temp]\Addr."&session$,internal,input 
-	open #2: "Name=[Temp]\Work."&session$,internal,input,relative 
+	open #2: "Name=[Temp]\Work."&session$,i,i,r 
 	pr newpage
 	pr f "10,15,c 50,h,n": "PRINT A/R GENERAL LEDGER DISTRIBUTION IN PROCESS"
 	pr f "23,2,C 30,N": "Press F5 to stop"

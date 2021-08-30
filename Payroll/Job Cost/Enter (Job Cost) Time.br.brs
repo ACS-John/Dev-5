@@ -30,9 +30,9 @@
 	comboname$(1)=" 0 Not Applicable"
 	comboname$(22)="21 Add Amount to Pay"
  
-	open #1: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr",internal,input,keyed
-	open #5: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-name.h[cno],Shr",internal,input,keyed
-	open #7: "Name=[Q]\PRmstr\Burden.h[cno],KFName=[Q]\PRmstr\BurdenIdx.h[cno],Shr",internal,input,keyed
+	open #1: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr",i,i,k
+	open #5: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-name.h[cno],Shr",i,i,k
+	open #7: "Name=[Q]\PRmstr\Burden.h[cno],KFName=[Q]\PRmstr\BurdenIdx.h[cno],Shr",i,i,k
 	open #2: "Name=[Q]\PRmstr\Department.h[cno],KFName=[Q]\PRmstr\DeptIdx.h[cno]",internal,outIn,keyed
 	if exists("jcWork."&session$) >0 then goto L280 else goto L300
 L280: mat ml$(2)
@@ -40,13 +40,13 @@ L280: mat ml$(2)
 	ml$(2)="Enter Yes to work with this file, else No to create a new batch of entries."
 	fnmsgbox(mat ml$,resp$,'',52)
 	if resp$="Yes" then goto L320 else goto L300
-L300: open #3: "Name=jcWork.[Session],SIZE=0,RecL=84,Replace",internal,outIn,relative
+L300: open #3: "Name=jcWork.[Session],SIZE=0,RecL=84,Replace",i,outi,r
 	goto L330
-L320: open #3: "Name=jcWork."&session$,internal,outIn,relative
-L330: open #11: "Name=[Q]\PRmstr\JCMSTR.h[cno],KFName=[Q]\PRmstr\JCIndx.h[cno],Shr",internal,input,keyed
-	open #14: "Name=[Q]\PRmstr\JCMSTR.h[cno],KFName=[Q]\PRmstr\JCINDX2.h[cno],Shr",internal,input,keyed
-	open #12: "Name=[Q]\PRmstr\JCCAT.h[cno],KFName=[Q]\PRmstr\CatIndx.h[cno],Shr",internal,input,keyed
-	open #13: "Name=[Q]\PRmstr\SCMSTR.h[cno],KFName=[Q]\PRmstr\SCIndex.h[cno],Shr",internal,input,keyed
+L320: open #3: "Name=jcWork."&session$,i,outi,r
+L330: open #11: "Name=[Q]\PRmstr\JCMSTR.h[cno],KFName=[Q]\PRmstr\JCIndx.h[cno],Shr",i,i,k
+	open #14: "Name=[Q]\PRmstr\JCMSTR.h[cno],KFName=[Q]\PRmstr\JCINDX2.h[cno],Shr",i,i,k
+	open #12: "Name=[Q]\PRmstr\JCCAT.h[cno],KFName=[Q]\PRmstr\CatIndx.h[cno],Shr",i,i,k
+	open #13: "Name=[Q]\PRmstr\SCMSTR.h[cno],KFName=[Q]\PRmstr\SCIndex.h[cno],Shr",i,i,k
  
 	addone=1 ! set code as adding when first entering
  

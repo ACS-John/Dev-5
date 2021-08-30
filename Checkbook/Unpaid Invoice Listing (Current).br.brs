@@ -23,8 +23,8 @@
 		if resp$(1)=item1$(1) then fund=1 else : _
 			fund=2
 ! FNWAIT
-	open #paytrans=4: "Name=[Q]\CLmstr\PayTrans.h[cno],KFName=[Q]\CLmstr\UnPdIdx1.h[cno],Shr",internal,input,keyed
-	open #unpdaloc=8: "Name=[Q]\CLmstr\UnPdAloc.h[cno],KFName=[Q]\CLmstr\Uaidx2.h[cno],Shr",internal,input,keyed
+	open #paytrans=4: "Name=[Q]\CLmstr\PayTrans.h[cno],KFName=[Q]\CLmstr\UnPdIdx1.h[cno],Shr",i,i,k
+	open #unpdaloc=8: "Name=[Q]\CLmstr\UnPdAloc.h[cno],KFName=[Q]\CLmstr\Uaidx2.h[cno],Shr",i,i,k
 	open #clwork=10: "Name=[Q]\CLmstr\CLWORK"&wsid$&".h[cno], Size=0, RecL=97, Replace",internal,outIn
 READ_PAYTRANS: !
 	read #paytrans,using 'Form POS 1,C 8,C 12,2*G 6,C 12,C 18,G 10.2,G 1,pos 107,n 8': vn$,iv$,ivd,dd,po$,de$,upa,cde,ddate eof L350
@@ -48,16 +48,16 @@ L350: close #paytrans: : close #unpdaloc: : close #clwork:
 	fnFree('[temp]\ADDR')
 	execute 'SORT [temp]\CONTROL'
 	open #9: "Name=[temp]\ADDR",internal,input
-	open #paymstr=13: "Name=[Q]\CLmstr\PayMstr.h[cno],KFName=[Q]\CLmstr\PayIdx1.h[cno],Shr",internal,input,keyed
-	open #clwork=10: "Name=[Q]\CLmstr\CLWORK"&wsid$&".h[cno],Shr",internal,input,relative
-	open #glmstr=5: "Name=[Q]\CLmstr\GLmstr.h[cno],KFName=[Q]\CLmstr\GLIndex.h[cno],Shr",internal,input,keyed
+	open #paymstr=13: "Name=[Q]\CLmstr\PayMstr.h[cno],KFName=[Q]\CLmstr\PayIdx1.h[cno],Shr",i,i,k
+	open #clwork=10: "Name=[Q]\CLmstr\CLWORK"&wsid$&".h[cno],Shr",i,i,r
+	open #glmstr=5: "Name=[Q]\CLmstr\GLmstr.h[cno],KFName=[Q]\CLmstr\GLIndex.h[cno],Shr",i,i,k
 	open #hWork=6: "Name=[temp]\WORK,RecL=22,Replace",internal,output
 	close #hWork:
 	fnFree("[temp]\INDX[session]")
 L510: !
 	execute 'INDEX [temp]\WORK,[temp]\INDX[session],1,12,Replace'
 	open #hWork=6: "Name=[temp]\WORK,KFName=[temp]\INDX[session]",internal,outIn,keyed
-	open #hFund=fnH: "Name=[Q]\CLmstr\FundMstr.h[cno],KFName=[Q]\CLmstr\FundIdx1.h[cno],Shr",internal,input,keyed
+	open #hFund=fnH: "Name=[Q]\CLmstr\FundMstr.h[cno],KFName=[Q]\CLmstr\FundIdx1.h[cno],Shr",i,i,k
 	fnopenprn
 	vn$="": iv$=""
 L560: read #9,using 'FORM POS 1,PD 3': r4 eof END1

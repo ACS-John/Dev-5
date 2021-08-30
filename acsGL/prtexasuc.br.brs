@@ -36,8 +36,8 @@ L170: fnTos
 	namcde$=uprc$(resp$(2))
 	csvpath$=resp$(3)
 	if trim$(namcde$)="" then goto L170
-L280: open #2: "Name=[Q]\GLmstr\PRmstr.h[cno],KFName=[Q]\GLmstr\PRIndex.h[cno],Shr",internal,input,keyed
-	open #(h_csv:=fnH): "Name="&csvpath$&",REPLACE",display,output
+L280: open #2: "Name=[Q]\GLmstr\PRmstr.h[cno],KFName=[Q]\GLmstr\PRIndex.h[cno],Shr",i,i,k
+	open #(h_csv:=fnH): "Name="&csvpath$&",REPLACE",d,o
 	fnopenprn
 	gosub HDR
 L310: read #2,using L320: mat k,mat k$,mat l$,mat m eof L600

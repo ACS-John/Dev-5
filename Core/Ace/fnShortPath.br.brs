@@ -53,7 +53,7 @@ def library fnshortpath$*256(longpath$*256)
 fnend 
 def fn_make_shortpath_cmd(msc_path$*256)
 	if ~exists(msc_path$&'\ShortPath.cmd') or do_debug then 
-		open #msc_tmp=fnH: 'name='&msc_path$&'\ShortPath.cmd,RecL=256,Replace',display,output 
+		open #msc_tmp=fnH: 'name='&msc_path$&'\ShortPath.cmd,RecL=256,Replace',d,o 
 		pr #msc_tmp: "echo off"
 		pr #msc_tmp: "if '%1'=='' goto HELP"
 		pr #msc_tmp: "if '%2'=='' goto HELP"

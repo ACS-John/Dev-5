@@ -39,7 +39,7 @@ L330: form pos mp1,pd 3,pos 81,41*pd 6.2
 	pr f "12,2,C 60,N": "USE OPTION 1 ON THE MENU TO ENTER THIS INFORMATION"
 	input fields "23,2,C 1,E,N": pause$
 	goto Xit
-L430: open #1: fl1$,internal,input,keyed
+L430: open #1: fl1$,i,i,k
 	if fnprocess=1 or fnUseDeptNo=0 then goto L550
 	if percent=1 then goto L550
 	fnTos(sn$="ACGlinyy")
@@ -69,7 +69,7 @@ L580: open #101: "SROW=08,SCOL=18,EROW=12,ECOL=58,BORDER=DR,CAPTION= COMPARATIVE
 	execute "Index [Q]\GLmstr\GLmstr.h[cno] "&env$('temp')&'\'&"fsindex.h[cno] 69 3 Replace DupKeys -N"
 	goto L710
 L700: execute "Index [Q]\GLmstr\GLmstr.h[cno] "&env$('temp')&'\'&"fsindex.h[cno] 72 3 Replace DupKeys -N"
-L710: open #3: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName="&env$('temp')&'\'&"fsindex.h[cno],Shr",internal,input,keyed
+L710: open #3: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName="&env$('temp')&'\'&"fsindex.h[cno],Shr",i,i,k
 L720: !
 L730: read #1,using L780: r$,d$,te$,sp,ls,ds,ul,rs,bc,ap,mat ac,ic,fc,rnp eof L2510
 	if ltrm$(r$)="" or ltrm$(r$)="0" then goto L720

@@ -13,10 +13,10 @@
 	fncreg_read('calculation date text',d$)
 	open #1: "Name=[Q]\PRmstr\Company.h[cno],Shr",internal,input
 	read #1,using 'Form POS 1,C 40,POS 618,30*N 1': a$,mat dedcode,mat calcode,mat dedfed : close #1:
-	open #1: "Name=[Q]\PRmstr\Employee.h[cno],Shr",internal,input,relative
-	open #2: "Name=[Q]\PRmstr\RPTRAIL.h[cno],Shr",internal,input,relative
+	open #1: "Name=[Q]\PRmstr\Employee.h[cno],Shr",i,i,r
+	open #2: "Name=[Q]\PRmstr\RPTRAIL.h[cno],Shr",i,i,r
 	open #hpraddr=fnH: "Name=[Q]\PRmstr\praddr1.h[cno]",internal,input
-	open #4: "Name=[Q]\PRmstr\PR401K.DAT,RecL=235,Replace",display,output
+	open #4: "Name=[Q]\PRmstr\PR401K.DAT,RecL=235,Replace",d,o
 	ReadPrAddr1: !
 	read #hpraddr,using 'Form POS 1,PD 3': address eof END1
 	read #1,using L240,rec=address: eno,mat em$,ss$,em16,lpd,mat ta,bd noRec ReadPrAddr1

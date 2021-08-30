@@ -15,7 +15,7 @@ L110: pr f "8,20,C 30,R,N": "Mask Cisty State Zip"
 	csz$="Townsville, AR  55555"
 L160: rinput fields mat io1$: cno,csz$ conv L160
 	if cno=0 or cmdkey=5 or cmdkey=99 then goto Xit
-	open #1: "Name=[Q]\UBmstr\ubadrbil.h[cno]",internal,outIn,relative
+	open #1: "Name=[Q]\UBmstr\ubadrbil.h[cno]",i,outi,r
 	for j=1 to lrec(1)
 		rewrite #1,using "Form Pos 101,c 30",rec=j: csz$ noRec L220
 		pr f "1,1,N 10,R,N": j

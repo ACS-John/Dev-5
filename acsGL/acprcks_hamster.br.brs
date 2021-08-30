@@ -38,7 +38,7 @@ fn_add_rec("D(21))"       ,12         ,'PD',               5.2,       mask_point
 fn_add_rec("D(22))"       ,12         ,'PD',               5.2,       mask_pointtwo  )
 fn_add_rec("NTA"          ,12         ,'PD',               3  ,       mask_number    )
 
-open #1: "Name=[Q]\GLmstr\AcPrCks.h[cno],Shr",internal,outIn,relative
+open #1: "Name=[Q]\GLmstr\AcPrCks.h[cno],Shr",i,outi,r
 if sum(mat sp)=0 then mat sp(0)
 fnHamster("AcPrCks",mat lbl$,mat tln,1,mat p$,mat fltyp$,mat sln,mat mask,mat sp,mat c$)
 close #1:

@@ -15,8 +15,8 @@
 	dim serviceName$(10)*20,service$(10)*2,tax_code$(10)*1,penalty$(10)*1
 	fnGetServices(mat serviceName$, mat service$, mat tax_code$,mat penalty$,mat subjectto)
 	linelength=62
-	open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,input,keyed  ! open in Account order
-	open #2: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx5.h[cno],Shr",internal,input,keyed  ! open in route-sequence #
+	open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",i,i,k  ! open in Account order
+	open #2: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx5.h[cno],Shr",i,i,k  ! open in route-sequence #
 	open #81: "Name=[Q]\UBmstr\BudMstr.h[cno],KFName=[Q]\UBmstr\BudIdx1.h[cno],Shr",internal,outIn,keyed
  
 SCREEN1: !
@@ -89,7 +89,7 @@ L580: form pos 1,c 10,pos 1741,n 2,n 7
 	if trim$(a$)<>"" then restore #2,key=cnvrt$("pic(zz)",route)& cnvrt$("pic(zzzzzzz)",sequence): nokey SCREEN1
 	if trim$(a$)="" and prtbkno>0 then restore #2,key>=cnvrt$("pic(zz)",prtbkno)&"       ": ! selected a route and no beginning Account
  
-	open #3: "Name=[Q]\UBmstr\UBAdrBil.h[cno],KFName=[Q]\UBmstr\adrIndex.h[cno],Shr",internal,input,keyed
+	open #3: "Name=[Q]\UBmstr\UBAdrBil.h[cno],KFName=[Q]\UBmstr\adrIndex.h[cno],Shr",i,i,k
 	fnopenprn
  
 	on fkey 5 goto RELEASE_PRINT
@@ -171,7 +171,7 @@ L1290: form pos 1,c 128
 	close #9:
 	execute "Free [Temp]\Addr."&session$ ioerr L1350
 L1350: execute "Sort [Temp]\Control."&session$
-	open #7: "Name=[Temp]\Addr."&session$,internal,input,relative
+	open #7: "Name=[Temp]\Addr."&session$,i,i,r
 	return
  
 ENDSCR: ! pr totals screen

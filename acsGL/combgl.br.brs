@@ -49,7 +49,7 @@ MAIN: !
 	open #1: "Name=[Q]\GLmstr\GLmstr.H"&str$(dcno)&"",internal,output
 goto MAIN
  
-L390: open #2: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLIndex.h[cno]",internal,input,keyed ioerr MAIN
+L390: open #2: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLIndex.h[cno]",i,i,k ioerr MAIN
 L400: read #2,using 'Form POS 1,C 416': a$ eof L430
 	write #1,using 'Form POS 1,C 416': a$
 	goto L400

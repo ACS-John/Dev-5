@@ -137,8 +137,8 @@ L1290: if cmdkey=5 then goto Xit
 	message$=""
 	stopable=1: gosub L3970 ! fnWAIT(MESSAGE$,1)
  
-	open #1: "Name=[Q]\GLmstr\PRmstr.h[cno],KFName=[Q]\GLmstr\PRINDEX.h[cno],Shr",internal,input,keyed
-L1400: open #22: "Name=W2REPORT,RecL=512,eol=crlf,replace",display,output
+	open #1: "Name=[Q]\GLmstr\PRmstr.h[cno],KFName=[Q]\GLmstr\PRINDEX.h[cno],Shr",i,i,k
+L1400: open #22: "Name=W2REPORT,RecL=512,eol=crlf,replace",d,o
 	goto L1480
  
 	pr newpage

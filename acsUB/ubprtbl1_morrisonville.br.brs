@@ -25,8 +25,8 @@ z=26
 		at$(j)=rpt$(" ",int(y/2))&at$(j)
 	next j
 	linelength=62
-	open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,input,keyed  ! open in account order
-	open #2: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx5.h[cno],Shr",internal,input,keyed  ! open in route-sequence
+	open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",i,i,k  ! open in account order
+	open #2: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx5.h[cno],Shr",i,i,k  ! open in route-sequence
 !
 SCREEN1: ! 
 	a$="" : prtbkno=0
@@ -95,7 +95,7 @@ L480: form pos 1,c 10,pos 1741,n 2,n 7
 	if trim$(a$)<>"" then restore #2,key=cnvrt$("pic(zz)",route)& cnvrt$("pic(zzzzzzz)",sequence): nokey SCREEN1
 	if trim$(a$)="" and prtbkno>0 then restore #2,key>=cnvrt$("pic(zz)",prtbkno)&"       ": ! selected a route and no beginning Account
 !
-	open #3: "Name=[Q]\UBmstr\ubAdrBil.h[cno],KFName=[Q]\UBmstr\AdrIndex.h[cno],Shr",internal,input,keyed 
+	open #3: "Name=[Q]\UBmstr\ubAdrBil.h[cno],KFName=[Q]\UBmstr\AdrIndex.h[cno],Shr",i,i,k 
 	fnPa_open("Landscape")
 !
 ! IF SL1=0 THEN GOSUB SORT1
@@ -173,7 +173,7 @@ L1080: fncmbact(1,17) !
 	goto HERE
 !
 SORT1: ! SELECT & SORT
-	open #5: "Name=[Q]\UBmstr\Cass1.h[cno],KFName=[Q]\UBmstr\Cass1Idx.h[cno],Shr",internal,input,keyed ioerr L1410
+	open #5: "Name=[Q]\UBmstr\Cass1.h[cno],KFName=[Q]\UBmstr\Cass1Idx.h[cno],Shr",i,i,k ioerr L1410
 	open #6: "Name=[Temp]\Temp.[Session],Replace,RecL=19",internal,output 
 	s5=1
 	if prtbkno=0 then routekey$="" else routekey$=cnvrt$("N 2",prtbkno)&"       " ! key off first record in route (route # no longer part of customer #)
@@ -196,8 +196,8 @@ L1330: form pos 1,c 128
 	close #9: 
 	execute "Free [Temp]\Addr."&session$ ioerr L1380
 L1380: execute "Sort [Temp]\Control."&session$
-	open #6: "Name=[Temp]\Temp."&session$,internal,input,relative 
-	open #7: "Name=[Temp]\Addr."&session$,internal,input,relative 
+	open #6: "Name=[Temp]\Temp."&session$,i,i,r 
+	open #7: "Name=[Temp]\Addr."&session$,i,i,r 
 L1410: return 
 !
 ENDSCR: ! pr totals screen

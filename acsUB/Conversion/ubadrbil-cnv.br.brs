@@ -20,8 +20,8 @@ def library fnub_cnv_adrbil
 	goto L160
 	
 	L160: !
-	open #1: "Name=[Temp]\temp.[Session]",internal,input,relative
-	open #2: "Name=[Temp]\tmp_x_[Session],RecL=130,Replace",internal,outIn,relative
+	open #1: "Name=[Temp]\temp.[Session]",i,i,r
+	open #2: "Name=[Temp]\tmp_x_[Session],RecL=130,Replace",i,outi,r
 	L180: !
 		read #3,using "form pos 1,c 10,pos 385,pd 3": z$,bra eof END1
 	if bra=0 then goto L180
@@ -47,7 +47,7 @@ def library fnub_cnv_adrbil
 		execute "Free [Q]\UBmstr\ubMaster.h[cno]" ioerr ignore
 	goto Xit
 	BUILD_FILES: ! build files if don't exist
-		open #2: "Name=[Q]\UBmstr\UBAdrBil.h[cno],RecL=130,Replace",internal,outIn,relative
+		open #2: "Name=[Q]\UBmstr\UBAdrBil.h[cno],RecL=130,Replace",i,outi,r
 		close #2:
 		fnIndex("[Q]\UBmstr\UBAdrBil.h[cno]","[Q]\UBmstr\adrIndex.h[cno]","1 10") ! execute "Index [Q]\UBmstr\UBAdrBil.h[cno]"&' '&"[Q]\UBmstr\adrIndex.h[cno] 1,10,Replace,DupKeys -n"
 	return

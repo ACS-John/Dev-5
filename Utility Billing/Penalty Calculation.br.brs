@@ -17,7 +17,7 @@
 	fnLastBillingDate(bildat)
 	fndat(dat$)
 ! r:  get MinimumBal
-	open #minbal:=5: "Name=[Q]\UBmstr\Minbal.h[cno],Use,RecL=10,Shr",internal,outIn,relative
+	open #minbal:=5: "Name=[Q]\UBmstr\Minbal.h[cno],Use,RecL=10,Shr",i,outi,r
 	read #minbal,using 'Form POS 1,n 10.2',rec=1,release: minimumbal noRec SET_DEFAULT_MINUMUMBAL
 	goto EO_MINIMUMBAL
 SET_DEFAULT_MINUMUMBAL: !
@@ -48,7 +48,7 @@ EO_MINIMUMBAL: !
 	mat columnhead$(pencount)
 	mat coltot(pencount)
 	fn_bud1
-	open #ratemst:=8: "Name=[Q]\UBmstr\ubData\RateMst.h[cno],KFName=[Q]\UBmstr\ubData\RateIdx1.h[cno],Shr",internal,input,keyed
+	open #ratemst:=8: "Name=[Q]\UBmstr\ubData\RateMst.h[cno],KFName=[Q]\UBmstr\ubData\RateIdx1.h[cno],Shr",i,i,k
 	fnopenprn
 	fn_print_header
 	do
@@ -125,7 +125,7 @@ def fn_scr_main
 		if resp$(4)="True" then printadr=1 ! wants meter address printed
 		if resp$(5)="True" then printmail=1 ! wants meter mailing address
 		minimumbal=val(resp$(6))
-		open #minbal:=5: "Name=[Q]\UBmstr\Minbal.h[cno],Use,RecL=10,Shr",internal,outIn,relative
+		open #minbal:=5: "Name=[Q]\UBmstr\Minbal.h[cno],Use,RecL=10,Shr",i,outi,r
 		rewrite #minbal,using 'Form POS 1,n 10.2',rec=1,release: minimumbal
 		close #minbal:
 		if resp$(7)="True" then penaltybase$="Bill" ! base penalties on current bill
@@ -388,7 +388,7 @@ fnend
 def fn_bud1
 	bud1=0
 	open #81: "Name=[Q]\UBmstr\BudMstr.h[cno],KFName=[Q]\UBmstr\BudIdx1.h[cno],Shr",internal,outIn,keyed ioerr EO_BUD1
-	open #82: "Name=[Q]\UBmstr\BudTrans.h[cno],Shr",internal,outIn,relative
+	open #82: "Name=[Q]\UBmstr\BudTrans.h[cno],Shr",i,outi,r
 	bud1=1
 	EO_BUD1: !
 fnend

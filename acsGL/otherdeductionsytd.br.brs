@@ -12,14 +12,14 @@
 	fnTop(program$,cap$="Other Deductions Registers-YTD QTD")
 	fncno(cno,cnam$) : _
 	fndat(dat$)
-	open #1: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,outIn,relative: read #1,using 'Form POS 386,PD 5.3,PD 5.2,PD 5.3,PD 5.2,POS 407,PD 5.3,PD 5.2,POS 418,10*C 20,10*N 1',rec=1: ficarate,ficawage,feducrat,feducwag,mcr,mcm,mat miscname$,mat dedcode : _
+	open #1: "Name=[Q]\GLmstr\Company.h[cno],Shr",i,outi,r: read #1,using 'Form POS 386,PD 5.3,PD 5.2,PD 5.3,PD 5.2,POS 407,PD 5.3,PD 5.2,POS 418,10*C 20,10*N 1',rec=1: ficarate,ficawage,feducrat,feducwag,mcr,mcm,mat miscname$,mat dedcode : _
 	close #1:
 	for j=1 to 10
 		miscname$(j)=lpad$(rtrm$(miscname$(j)(1:9)),9)
 	next j
 	nametab=66-int(len(rtrm$(cnam$))/2)
 	open #1: "Name=[Q]\GLmstr\PRmstr.h[cno],KFName=[Q]\GLmstr\PRIndex.h[cno],Shr",internal,outIn,keyed
-	open #2: "Name=[Q]\GLmstr\ACPRCKS.h[cno],Shr",internal,outIn,relative
+	open #2: "Name=[Q]\GLmstr\ACPRCKS.h[cno],Shr",i,outi,r
 	report$="Other Deductions Register-YTD QTD"
 	fnopenprn
 	gosub L390

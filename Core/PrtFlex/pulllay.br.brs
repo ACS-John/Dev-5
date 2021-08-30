@@ -105,7 +105,7 @@ L870: !
 stop
 !
 MoveItToText: ! r:
-	open #10: "Name="&outputfile$&",RecL=87,Replace",display,output
+	open #10: "Name="&outputfile$&",RecL=87,Replace",d,o
 	open #15: "Name=[Temp]\Temp.[Session],KFName=[Temp]\TempIdx.[Session],RecL=87,KPs=1,KLn=30,use",internal,outIn,keyed
 	do
 		read #15,using L970: textfile$ eof L1000

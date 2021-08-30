@@ -9,7 +9,7 @@
  
 	fnTop("S:\acsPR\prRpt4",cap$="Report File - Proof List")
 	fncno(cno,cnam$)
-	open #1: "Name=[Q]\PRmstr\PRReport.h[cno],KFName=[Q]\PRmstr\prrptidx.h[cno],Shr",internal,input,keyed
+	open #1: "Name=[Q]\PRmstr\PRReport.h[cno],KFName=[Q]\PRmstr\prrptidx.h[cno],Shr",i,i,k
 	fnopenprn
 	nametab=66-len(rtrm$(cnam$))/2
  

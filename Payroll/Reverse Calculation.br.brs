@@ -33,10 +33,10 @@ open #7: "Name=[Q]\CLmstr\TRMSTR.h[cno],KFName=[Q]\CLmstr\TRIDX2.h[cno],Shr",int
 if exists("[Q]\CLmstr\Tralloc-Idx.h[cno]") then
 	open #tralloc:=8: "Name=[Q]\CLmstr\TrAlloc.h[cno],Version=2,KFName=[Q]\CLmstr\TrAlloc-Idx.h[cno],Shr",internal,outIn,keyed
 else
-	open #tralloc:=8: "Name=[Q]\CLmstr\TrAlloc.h[cno],Shr",internal,outIn,relative
+	open #tralloc:=8: "Name=[Q]\CLmstr\TrAlloc.h[cno],Shr",i,outi,r
 end if
 open #9: "Name=[Q]\CLmstr\BankMstr.h[cno],KFName=[Q]\CLmstr\BankIdx1.h[cno],Shr",internal,outIn,keyed
-open #20: "Name=[Q]\CLmstr\Company.h[cno],Shr",internal,input,relative ioerr L330
+open #20: "Name=[Q]\CLmstr\Company.h[cno],Shr",i,i,r ioerr L330
 read #20,using 'Form POS 152,N 2',rec=1: bcde
 close #20:
 cli=1
@@ -210,7 +210,7 @@ POSTGL1: ! r:
 	fli2$(1)="11,64,n 3,u"
 	fli2$(2)="11,68,n 6,u"
 	fli2$(3)="11,75,n 3,u"
-	open #1: "Name=[Q]\GLmstr\GLBUCKET.h[cno],Shr",internal,input,relative ioerr L1740
+	open #1: "Name=[Q]\GLmstr\GLBUCKET.h[cno],Shr",i,i,r ioerr L1740
 	read #1,using 'form pos 1,n 1',rec=1: glb noRec ignore
 	close #1:
 	if glb=2 then gosub L3690
@@ -420,7 +420,7 @@ PRINT_TOTALS: ! r: AND UNDERLINES
 return  ! /r
 L3690: ! r:
 	close #101: ioerr ignore
-	open #12: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLINDEX.h[cno],Shr",internal,input,keyed ioerr ignore
+	open #12: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLINDEX.h[cno],Shr",i,i,k ioerr ignore
 	mat ml$(2)
 	ml$(1)="Did you accrue part of this payroll"
 	ml$(2)="in the previous month? (Y/N)"

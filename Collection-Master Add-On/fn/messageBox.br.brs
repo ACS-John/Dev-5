@@ -79,7 +79,7 @@ def fn_messageBox(text$*2048; type,title$*200,___,hTextCols)
 		end if  ! mbx_file_count>0
 		Mbx_Win$(Inf:0)=',parent=none'
 		if ~Developer then Mbx_Win$(Inf:0)=',modal,Nomaximize'
-		open #Mbx_H_Win=fnH: fn_openParent$(Mbx_Win$,mat winData$,1,1),DISPLAY,OUTPUT
+		open #Mbx_H_Win=fnH: fn_openParent$(Mbx_Win$,mat winData$,1,1),d,o
 		fn_Generate_Buttons_For_Window(mat winData$,Mbx_H_Win, 1,mat Mbx_Win_Field$,mat Mbx_Win_Text$)
 		fn_arrayReverse$(mat Mbx_Win_Field$)
 		fn_arrayReverse$(mat Mbx_Win_Text$)
@@ -87,7 +87,7 @@ def fn_messageBox(text$*2048; type,title$*200,___,hTextCols)
 		Mbx_H_Cols=val(winData$(Pw_Cols))
 		Mbx_H_Text_Rows=Mb3_Text_Rows
 		hTextCols=Mbx_H_Cols-10
-		open #Mbx_H_Text=fnH: 'Modal,Parent='&str$(Mbx_H_Win)&',Border=None,SRow=1,SCol=10,Rows='&str$(Mbx_H_Text_Rows)&',Cols='&str$(hTextCols),DISPLAY,OUTPUT
+		open #Mbx_H_Text=fnH: 'Modal,Parent='&str$(Mbx_H_Win)&',Border=None,SRow=1,SCol=10,Rows='&str$(Mbx_H_Text_Rows)&',Cols='&str$(hTextCols),d,o
 ! if jbowman then print 'text$='&text$ : pause
 		print #Mbx_H_Text,FIELDS '1,1,'&fn_textSize$(hTextCols,Mbx_H_Text_Rows)&',[T]S,49': text$
 		if Mbx_Name$<>'' then
@@ -187,12 +187,12 @@ def fn_fileMenu(Mbxfm_Title$*80,fileCount, _
 	actionWin$(Inf:0)=',button.fkey=99;2001;2002;2003'
 	actionWin$(Inf:0)=',parent=none'
 	if ~Developer then actionWin$(Inf:0)=',modal,Nomaximize'
-	open #Mbxfm_H_Win=fnH: fn_openParent$(actionWin$,mat actionWinData$,1),DISPLAY,OUTPUT
+	open #Mbxfm_H_Win=fnH: fn_openParent$(actionWin$,mat actionWinData$,1),d,o
 
 	actionTab$='SRow=2,SCol=2,Rows='&str$(fileCount+0)&',Cols='&str$(Mbxfm_Win_Action_Cols-2)&',Parent='&str$(Mbxfm_H_Win)
 	fn_Generate_Buttons_For_Window(mat actionWinData$,Mbxfm_H_Win)
-	open #hTab(1)=fnH: fn_openParent$(actionTab$&',Tab=OS Path'&s$,mat Mbxfm_Tab_Data$,1),DISPLAY,OUTPUT
-	open #hTab(2)=fnH: fn_openParent$(actionTab$&',Tab=Virtual Path'&s$,mat Mbxfm_Tab_Data$,1),DISPLAY,OUTPUT
+	open #hTab(1)=fnH: fn_openParent$(actionTab$&',Tab=OS Path'&s$,mat Mbxfm_Tab_Data$,1),d,o
+	open #hTab(2)=fnH: fn_openParent$(actionTab$&',Tab=Virtual Path'&s$,mat Mbxfm_Tab_Data$,1),d,o
 	dim fileField$(0)*20
 	mat fileField$(fileCount)
 	for Mbxfm_File_Item=1 to fileCount

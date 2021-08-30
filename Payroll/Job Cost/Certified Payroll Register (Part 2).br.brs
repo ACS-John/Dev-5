@@ -22,7 +22,7 @@ fnTop(program$)
 fnopenprn
 if file$(255)(1:3)<>"PRN" then jbskip=1
 dim dedcode(20)
-open #1: "Name=[Q]\PRmstr\Company.h[cno],Shr",internal,input,relative
+open #1: "Name=[Q]\PRmstr\Company.h[cno],Shr",i,i,r
 read #1,using 'Form POS 618,10*N 1,POS 758,N 2',rec=1: mat dedcode,un
 close #1:
  
@@ -32,9 +32,9 @@ for j=1 to 20
 	if trim$(fullname$)="Union" then un=j ! determine union deduction
 next j
  
-open #1: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr",internal,input,keyed
-open #2: "Name=[Q]\PRmstr\JCMSTR.h[cno],KFName=[Q]\PRmstr\JCIndx.h[cno],Shr",internal,input,keyed
-open #3: "Name=[Temp]\Work."&session$,internal,input,relative
+open #1: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr",i,i,k
+open #2: "Name=[Q]\PRmstr\JCMSTR.h[cno],KFName=[Q]\PRmstr\JCIndx.h[cno],Shr",i,i,k
+open #3: "Name=[Temp]\Work."&session$,i,i,r
 open #4: "Name=[Temp]\Addr."&session$,internal,input ioerr Xit
 open #8: "Name=[Q]\PRmstr\Department.h[cno],KFName=[Q]\PRmstr\DeptIdx.h[cno]",internal,outIn,keyed
 open #7: "Name=[Q]\PRmstr\PayrollChecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno]",internal,outIn,keyed

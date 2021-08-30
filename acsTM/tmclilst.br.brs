@@ -16,9 +16,9 @@ L144: input fields "10,58,N 1,UE,N": sapp conv L144
 	if sapp<0 or sapp>20 then goto L144
 	if numalp<1 or numalp>2 then goto L140
 	if numalp=1 then goto L170 else goto L190
-L170: open #1: "Name=S:\Core\Data\acsllc\CLmstr.h[cno],KFName=S:\Core\Data\acsllc\CLIndex.h[cno],Shr",internal,input,keyed
+L170: open #1: "Name=S:\Core\Data\acsllc\CLmstr.h[cno],KFName=S:\Core\Data\acsllc\CLIndex.h[cno],Shr",i,i,k
 	goto L200
-L190: open #1: "Name=S:\Core\Data\acsllc\CLmstr.h[cno],KFName=S:\Core\Data\acsllc\CLIndx2.h[cno],Shr",internal,input,keyed
+L190: open #1: "Name=S:\Core\Data\acsllc\CLmstr.h[cno],KFName=S:\Core\Data\acsllc\CLIndx2.h[cno],Shr",i,i,k
 L200: pr newpage
 	pr f "10,10,c 46,n": "ENTER DATE FOR CLIENT LISTING IN MMDDYY FORMAT"
 	pr f "10,60,n 6,n": dat

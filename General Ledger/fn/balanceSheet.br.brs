@@ -36,16 +36,16 @@ def fn_balanceSheet(; defaultFormat$)
 		if fnps=2 then
 			mp1=66
 			exe 'con sub [FinancialStatementCode] C' ! used by fn_open('GL FSDesign'...)
-			! open #hFsD=fnH:"Name=[Q]\GLmstr\acglFnSC.h[cno],KFName=[Q]\GLmstr\agfsidx1.h[cno],Shr",internal,input,keyed
+			! open #hFsD=fnH:"Name=[Q]\GLmstr\acglFnSC.h[cno],KFName=[Q]\GLmstr\agfsidx1.h[cno],Shr",i,i,k
 		else
 			exe 'con sub [FinancialStatementCode] B' ! used by fn_open('GL FSDesign'...)
 			mp1=63
-			! open #hFsD=fnH:"Name=[Q]\GLmstr\ACGLFNSB.h[cno],KFName=[Q]\GLmstr\agfsidx4.h[cno],Shr",internal,input,keyed
+			! open #hFsD=fnH:"Name=[Q]\GLmstr\ACGLFNSB.h[cno],KFName=[Q]\GLmstr\agfsidx4.h[cno],Shr",i,i,k
 		end if
 		fnIndex("[Q]\GLmstr\GLmstr.h[cno]","[Q]\GLmstr\fsindex.h[cno]",str$(mp1)&" 3")
 		dim fsN(0),fs$(0)*128
 		hFsD=fn_open('GL FSDesign',mat fs$,mat fsN,mat form$,1) ! requires [FinancialStatementCode]
-		open #hGl=fnH: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\fsindex.h[cno],Shr",internal,input,keyed
+		open #hGl=fnH: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\fsindex.h[cno],Shr",i,i,k
 		fnopenprn
 		do
 			read #hFsD,using form$(hFsD): mat fs$,mat fsN eof Finis

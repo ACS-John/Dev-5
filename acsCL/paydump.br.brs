@@ -11,9 +11,9 @@
 	fncno(cno,cnam$) : _
 	fndat(dat$)
 
-	open #20: "Name=[Q]\CLmstr\Company.h[cno],Shr",internal,input,relative: read #20,using 'Form POS 150,2*N 1',rec=1: mat d : _
+	open #20: "Name=[Q]\CLmstr\Company.h[cno],Shr",i,i,r: read #20,using 'Form POS 150,2*N 1',rec=1: mat d : _
 	close #20:
-	open #trmstr2=22: "Name=[Q]\CLmstr\TrMstr.h[cno],KFName=[Q]\CLmstr\TrIdx2.h[cno],Shr",internal,input,keyed
+	open #trmstr2=22: "Name=[Q]\CLmstr\TrMstr.h[cno],KFName=[Q]\CLmstr\TrIdx2.h[cno],Shr",i,i,k
 	open #paymstr1=1: "Name=[Q]\CLmstr\PayMstr.h[cno],KFName=[Q]\CLmstr\PayIdx1.h[cno],Shr",internal,outIn,keyed
 	open #paymstr2=2: "Name=[Q]\CLmstr\PayMstr.h[cno],KFName=[Q]\CLmstr\PayIdx2.h[cno],Shr",internal,outIn,keyed
 	open #payeeglbreakdown=fnH: "Name=[Q]\CLmstr\PayeeGLBreakdown.h[cno],KFName=[Q]\CLmstr\PayeeGLBkdidx.h[cno],Shr",internal,outIn,keyed

@@ -11,7 +11,7 @@ goto Xit
  
 OPEN_FILE: ! r:
 	open_file_count=0 ! this value is used in the close_file sub routine
-	open #open_file_count+=1: "Name=S:\Core\Data\acsllc\ARTrans.h[cno],Version=0,Use,RecL=60,Shr",internal,outIn,relative
+	open #open_file_count+=1: "Name=S:\Core\Data\acsllc\ARTrans.h[cno],Version=0,Use,RecL=60,Shr",i,outi,r
 return ! /r
  
 CLOSE_FILE: for j=1 to open_file_count : close #j: : next j : return

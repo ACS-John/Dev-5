@@ -50,7 +50,7 @@ def fn_checkfile(hact$*8,hCheckIdx3,hCheckIdx1,hEmployee)
 	fnreg_read('Check History - enable long names when printing',pr_ckHstEnableLongNames$,'False')
 	if pr_ckHstEnableLongNames$='True' then enableLongName=1 else enableLongName=0
 
-	open #hGridName:=9: "Name=[Q]\PRmstr\GridNames.h[cno],USE,RecL=30",internal,outIn,relative
+	open #hGridName:=9: "Name=[Q]\PRmstr\GridNames.h[cno],USE,RecL=30",i,outi,r
 	if lrec(hGridName)=0 then
 		oldgridname$= gridname$="[All]                         "
 		write #hGridName,using "form pos 1,c 30",rec=1: gridname$

@@ -72,7 +72,7 @@ def fn_check_indexes(name$*512,mat kfnames$,mat kps$,mat kln$)
 		str2mat(kps$(ci_item),mat ci_kps$,'/')
 		str2mat(kln$(ci_item),mat ci_kln$,'/')
 		CI_OPEN_IT: !
-		open #h_ci_tmp=fnH: 'name='&name$&',KFName='&kfnames$(ci_item),internal,input,keyed ioerr CI_OPEN_ERR
+		open #h_ci_tmp=fnH: 'name='&name$&',KFName='&kfnames$(ci_item),i,i,k ioerr CI_OPEN_ERR
 
 		for x=1 to udim(mat ci_kps$)
 			if kps(h_ci_tmp,x)<>val(ci_kps$(x)) then
@@ -133,7 +133,7 @@ fnend
 
 def fn_getFileInfo(name$*512,kfname$*512,mat tmpkps,mat tmpkln,&tmpversion,&tmprln,&tmpfile$; ___,returnN,hTmp)
 	if kfname$='' then
-		open #hTmp=fnH: 'Name='&name$&',Shr',internal,outIn,relative error GetFileInfoFail
+		open #hTmp=fnH: 'Name='&name$&',Shr',i,outi,r error GetFileInfoFail
 	else
 		open #hTmp=fnH: 'Name='&name$&',KFName='&kfname$&',Shr',internal,outIn,keyed error GetFileInfoFail
 	end if
@@ -174,7 +174,7 @@ def fn_cfv_utility_billing
 	fn_reg_rename(env$('cursys'))
 	! r: move ubBkNo.h into CReg and delete ubBkNo.h
 	if exists('[Q]\UBmstr\ubBkNo.h[cno]') then
-		open #h_ubbkno=fnH: "Name=[Q]\UBmstr\ubBkNo.h[cno]",internal,outIn,relative
+		open #h_ubbkno=fnH: "Name=[Q]\UBmstr\ubBkNo.h[cno]",i,outi,r
 		read #h_ubbkno,using "Form POS 1,2*N 3",rec=1: bkno1,bkno2  noRec CFVUB_RPDATE_NOREC
 		fncreg_write('Route Low',str$(bkno1)) ! Route Number Range Low
 		fncreg_write('Route High',str$(bkno2)) ! Route Number Range High
@@ -304,7 +304,7 @@ def fn_cfv_utility_billing
 	end if
 	if exists("[Q]\UBmstr\per1000.h[cno]") then
 		dim range(16)
-		open #hPer1000=fnH: "Name=[Q]\UBmstr\per1000.h[cno],Shr",internal,outIn,relative
+		open #hPer1000=fnH: "Name=[Q]\UBmstr\per1000.h[cno],Shr",i,outi,r
 		read #hPer1000,using "Form pos 1,16*n 10,n 2,c 1": mat range,wrate,weg$
 		fncreg_write('Per 1000 Usage - Rate Code ',weg$)
 		fncreg_write('Per 1000 Usage - Service for Analysis ',str$(wrate))
@@ -622,7 +622,7 @@ def fn_checkbookTrmstr_v0_to_v1(; ___,trmstr,pause$,amt,j)
 	! converts the CL TRmstr file to version 1
 	! meainging the amount changes from G 10.2 to PD 10.2
 	fnStatus("Checkbook update Trans to v1: Updating Transaction file.")
-	open #trmstr=fnH: "Name=[Q]\CLmstr\TrMstr.h[cno]",internal,outIn,relative
+	open #trmstr=fnH: "Name=[Q]\CLmstr\TrMstr.h[cno]",i,outi,r
 	if version(trmstr)=1 then
 	else
 		version(trmstr,1)
@@ -642,7 +642,7 @@ def fn_cfv_payroll
 	fn_reg_rename(env$('cursys'))
 	! r: move DDInfo.h into CReg and delete DDInfo.h
 	if exists('[Q]\PRmstr\DDInfo.h[cno]') then
-		open #h_prDdinfo=fnH: "Name=[Q]\PRmstr\DDInfo.h[cno],USE,RecL=256",internal,outIn,relative
+		open #h_prDdinfo=fnH: "Name=[Q]\PRmstr\DDInfo.h[cno],USE,RecL=256",i,outi,r
 		if lrec(h_prDdinfo)>=1 then
 			dim ddinfo_path$*30
 			dim ddinfo_bankaccount$*20
@@ -665,7 +665,7 @@ def fn_cfv_payroll
 	! /r
 	! r: move CheckInfo.h into CReg and delete checkinfo.h
 	if exists('[Q]\PRmstr\Checkinfo.h[cno]') then
-		open #h_pr_checkinfo=fnH: "Name=[Q]\PRmstr\Checkinfo.h[cno],USE,RecL=128",internal,outIn,relative
+		open #h_pr_checkinfo=fnH: "Name=[Q]\PRmstr\Checkinfo.h[cno],USE,RecL=128",i,outi,r
 		read #h_pr_checkinfo,using "form pos 1,3*c 1,c 3,c 1,n 3,c 5",rec=1: pre$,acsclcv$,ficam1$,sc1$,accr$,bankcode,compcode$ noRec CFVPR_CHECKINFO_NOREC
 		fncreg_write('Prenumbered Checks',pre$)
 		fncreg_write('Post to CL',acsclcv$)
@@ -680,7 +680,7 @@ def fn_cfv_payroll
 	! /r
 	! r: move rpDate.h into CReg and delete rpDate.h
 	if exists('[Q]\PRmstr\rpDate.h[cno]') then
-		open #h_pr_rpdate=fnH: "Name=[Q]\PRmstr\rpDate.h[cno]",internal,outIn,relative
+		open #h_pr_rpdate=fnH: "Name=[Q]\PRmstr\rpDate.h[cno]",i,outi,r
 		dim cfvpr_rpdate_d$*20
 		read #h_pr_rpdate,using 'Form POS 1,N 6,C 20': cfvpr_rpdate_ppd,cfvpr_rpdate_d$  noRec CFVPR_RPDATE_NOREC
 		fncreg_write('calculation date',str$(cfvpr_rpdate_ppd)) ! quarter ending date, i think - definately NOT the payroll calculation date!
@@ -705,7 +705,7 @@ def fn_cfv_payroll
 	fn_file_setup_index("[Q]\PRmstr\HourBreakdown-idx.h[cno]",'1/9/14','8/5/8')
 	! r: Dates.h
 	fn_file_setup_data("[Q]\PRmstr\Dates.h[cno]",76,0)
-	open #tmp=fnH: "Name=[Q]\PRmstr\Dates.h[cno],Use,RecL=76,Shr",internal,outIn,relative
+	open #tmp=fnH: "Name=[Q]\PRmstr\Dates.h[cno],Use,RecL=76,Shr",i,outi,r
 	read #tmp,using "form pos 1,6*n 8",rec=1: beg_date,end_date,qtr1,qtr2,qtr3,qtr4 noRec PR_WRITE_BLANK_DATE_REC
 	goto PR_CLOSE_DATE
 	PR_WRITE_BLANK_DATE_REC: !
@@ -729,7 +729,7 @@ def fn_cfv_payroll
 	dim pr_dednames_dedst(20)
 	dim pr_dednames_deduc(20)
 	dim pr_dednames_gl$(20)*12
-	open #h_dednames=fnH: "Name=[Q]\PRmstr\dednames.h[cno],RecL=920,use",internal,outIn,relative
+	open #h_dednames=fnH: "Name=[Q]\PRmstr\dednames.h[cno],RecL=920,use",i,outi,r
 	if lrec(h_dednames)=0 then
 		write #h_dednames,using 'form pos 1,20*c 20,20*c 8,120*n 1,20*c 12': mat pr_dednames_fullname$,mat pr_dednames_abrevname$,mat pr_dednames_newdedcode,mat pr_dednames_newcalcode,mat pr_dednames_newdedfed,mat pr_dednames_dedfica,mat pr_dednames_dedst,mat pr_dednames_deduc,mat pr_dednames_gl$
 	end if
@@ -747,7 +747,7 @@ def fn_cfv_payroll
 	if exists('[Q]\PRmstr\RPMstr.h[cno]') and ~exists('[Q]\PRmstr\Employee.h[cno]') then
 		! r: Convert from RPMstr.h[cno] to Employee.h[cno]
 		! only significant difference is that mat ta(2) has been removed to make room for w4step2 (initialized to 0 here)
-		open #hIn  =fnH: 'Name=[Q]\PRmstr\RPMstr.h[cno],NoShr',internal,outIn,relative
+		open #hIn  =fnH: 'Name=[Q]\PRmstr\RPMstr.h[cno],NoShr',i,outi,r
 		open #hOut =fnH: 'Name=[Q]\PRmstr\Employee.h[cno],version=0,KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],New,RecL=196,KPs=1,KLn=8,Shr',internal,outIn,keyed
 		open #hOut2=fnH: 'Name=[Q]\PRmstr\Employee.h[cno],version=0,KFName=[Q]\PRmstr\EmployeeIdx-name.h[cno],Use,RecL=196,KPs=9,KLn=30,Shr',internal,outIn,keyed
 

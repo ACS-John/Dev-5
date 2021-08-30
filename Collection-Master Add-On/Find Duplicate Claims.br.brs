@@ -36,7 +36,7 @@ FFFN: ! r:
 	limitRecordsProcessed=0 ! 50000
 	timeStart=fnStime(time$)
 	Fffn_AskFile: !
-	open #hOut:=fngethandle: "Name=SAVE:"&reportFile$&",RecL=1024,replace",display,output ioerr SAVE_AS_OPEN_ERR
+	open #hOut:=fngethandle: "Name=SAVE:"&reportFile$&",RecL=1024,replace",d,o ioerr SAVE_AS_OPEN_ERR
 	reportFile$=os_filename$(file$(hOut))
 	Fnlist_Print('creating '&reportFile$, 0,1,'Status') ! env$('program_caption'))
 	pr #hOut: 'FileNo'&delim$&'Matches'&delim$&'Forwarder'&delim$&'Forwarder File Number'
@@ -95,10 +95,10 @@ FFIT: ! r:
 	end if
 	limitRecordsProcessed=0 ! 50000
 	timeStart=fnStime(time$)
-	!open #hOut:=fngethandle: 'Name='&reportFile$&',RecL=1024,Replace',display,output 
+	!open #hOut:=fngethandle: 'Name='&reportFile$&',RecL=1024,Replace',d,o 
 	open #hInf:=fngethandle: "name=infinity.int//6,kfname=infinity.idx//6,shr",internal,outin,keyed
 	Ffit_AskFile: !
-	open #hOut:=fngethandle: "Name=SAVE:"&reportFile$&",RecL=1024,replace",display,output ioerr SAVE_AS_OPEN_ERR
+	open #hOut:=fngethandle: "Name=SAVE:"&reportFile$&",RecL=1024,replace",d,o ioerr SAVE_AS_OPEN_ERR
 	reportFile$=os_filename$(file$(hOut))
 	Fnlist_Print('creating '&reportFile$, 0,1,'Status') ! env$('program_caption'))
 	pr #hOut: 'FileNo'&delim$&'Matches'&delim$&'Forwarder'&delim$&'*TrakNo'

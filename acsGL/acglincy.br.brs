@@ -8,9 +8,9 @@
 	dim fl1$*256,actpd$*6,pedat$*20,m1$(13)*9,m2$(13)*8,total(13)
 	dim r$*5,d$*50,te$*1,ac(9),report$*50,secondr$*50,foot$*132,underlin$*12
 	dim cnam$*40,b$*3,a$(8)*30,oldtrans$*16,g(8),accum(9,13)
-	dim by(13),bp(13),cap$*128,udf$*256
+	dim by(13),bp(13)
  
-	fnTop(program$,cap$="Income Statement with Period Comparison")
+	fnTop(program$,"Income Statement with Period Comparison")
 	on fkey 5 goto L2360
 	fncno(cno,cnam$)
 	data "     ONE","     TWO","   THREE","    FOUR","    FIVE","     SIX","   SEVEN","   EIGHT","    NINE","     TEN","  ELEVEN","  TWELVE",""
@@ -18,15 +18,12 @@
 	data "     ONE","     TWO","   THREE","    FOUR","    FIVE","     SIX","   SEVEN","   EIGHT","    NINE","     TEN","  ELEVEN","  TWELVE","THIRTEEN"
 	read mat m2$
  
-	udf$=env$('temp')&'\'
 	actpd=fnactpd
 	actpd$=fnactpd$
  
-	if fnGlAskFormatPriorCdPeriod=5 then goto Xit : _
-		! sets fnps,fnpriorcd,fnfscode (primary/secondary,current year/Prior,period to print)
-	open #20: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,outIn,relative  : _
-	read #20,using 'Form Pos 384,n 2',rec=1: nap : close #20:
-	open #20: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,input,relative: read #20,using "Form pos 296,N 2",rec=1: lmu : close #20:
+	if fnGlAskFormatPriorCdPeriod=5 then goto Xit ! sets fnps,fnpriorcd,fnfscode (primary/secondary,current year/Prior,period to print)
+	open #20: "Name=[Q]\GLmstr\Company.h[cno],Shr",i,i,r
+	read #20,using 'Form Pos 384,n 2,pos 296,N 2',rec=1: nap,lmu
  
 	pors=1
 	mp1=69
@@ -37,7 +34,7 @@
 L350: form pos mp1,pd 3,pos 81,41*pd 6.2
 	form c 7,skip 0
 	nametab=int(95-len(rtrm$(cnam$))/2)
-	open #1: fl1$,internal,input,keyed
+	open #1: fl1$,i,i,k
 	if fnprocess=1 or fnUseDeptNo=0 then goto L490
 	fnTos(sn$="Acglincy") : _
 	mylen=30: mypos=mylen+3 : right=1
@@ -52,8 +49,8 @@ L350: form pos mp1,pd 3,pos 81,41*pd 6.2
 	costcntr=val(resp$(1))
 L490: cnam$=rtrm$(cnam$)
 	pf1=len(cnam$)+int((43-len(cnam$))/2)
-	close #101: ioerr L520
-L520: open #101: "SROW=08,SCOL=18,EROW=12,ECOL=58,BORDER=DR,CAPTION= INCOME STATEMENT WITH MONTHLY COMPARISONS ",display,outIn
+	close #101: ioerr ignore
+	open #101: "SROW=08,SCOL=18,EROW=12,ECOL=58,BORDER=DR,CAPTION= INCOME STATEMENT WITH MONTHLY COMPARISONS ",display,outIn
 	pr f "08,18,C 41,H,N": lpad$(cnam$,pf1)
 	pr f "09,18,C 41,H,N": "            COMPANY NUMBER [cno]"
 	pr f "11,18,C 41,R,N": "              IN PROCESS"
@@ -62,10 +59,10 @@ L520: open #101: "SROW=08,SCOL=18,EROW=12,ECOL=58,BORDER=DR,CAPTION= INCOME STAT
 	report$="STATEMENT OF INCOME AND EXPENSES"
 	fnopenprn
 	if fnps=2 then goto L630 ! secondary
-	execute "Index [Q]\GLmstr\GLmstr.h[cno] "&udf$&"fsindex.h[cno] 69 3 Replace DupKeys -N"
+	execute "Index [Q]\GLmstr\GLmstr.h[cno] [temp]\fsindex.h[cno] 69 3 Replace DupKeys -N"
 	goto L640
-L630: execute "Index [Q]\GLmstr\GLmstr.h[cno] "&udf$&"fsindex.h[cno] 72 3 Replace DupKeys -N"
-L640: open #3: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName="&udf$&"fsindex.h[cno],Shr",internal,input,keyed
+L630: execute "Index [Q]\GLmstr\GLmstr.h[cno] [temp]\fsindex.h[cno] 72 3 Replace DupKeys -N"
+L640: open #3: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[temp]\fsindex.h[cno],Shr",i,i,k
 	redir=0: if file$(255)(1:4)<>"PRN:" then redir=1
 L660: read #1,using L710: r$,d$,te$,sp,ls,ds,ul,rs,bc,ap,mat ac,ic,fc eof L2360
 	if ltrm$(r$)="" or ltrm$(r$)="0" then goto L660

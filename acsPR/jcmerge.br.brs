@@ -14,7 +14,7 @@
 	open #2: "Name=[Q]\PRmstr\JCCAT.h[cno],KFName=[Q]\PRmstr\CatIndx.h[cno],Shr",internal,outIn,keyed
 	open #3: "Name=[Temp]\Work."&session$,internal,input
 	open #4: "Name=[Q]\PRmstr\JCPRH1.h[cno],Shr",internal,output
-	open #5: "Name=[Q]\PRmstr\JCTRANS.h[cno],Shr",internal,outIn,relative
+	open #5: "Name=[Q]\PRmstr\JCTRANS.h[cno],Shr",i,outi,r
 L220: read #3,using L230: mat ji1,jn$,mat ji2,empnam$,sal eof L720
 L230: form pos 1,n 8,n 1,pd 4,pd 2,2*pd 4.2,c 6,2*pd 3,pd 5.2,n 2,2*pd 4.2,c 30,pd 4.2
 	if ji1(1)=-1 then goto L220

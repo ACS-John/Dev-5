@@ -36,7 +36,7 @@
 	if trim$(resp$(4))<>"" then gl2$=fnagl$(resp$(4))
 
 GetStarted: !
-	open #1: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLIndex.h[cno],Shr",internal,input,keyed
+	open #1: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLIndex.h[cno],Shr",i,i,k
 
 	pr newpage
 	fnopenprn

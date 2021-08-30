@@ -12,9 +12,9 @@
 	ssrate1=fnss_employee*.01
 	ssrate2=fnss_employer*.01
 	open #1: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr",internal,outIn,keyed
-	open #3: "Name=[Q]\PRmstr\Department.h[cno],KFName=[Q]\PRmstr\DeptIdx.h[cno],Shr",internal,input,keyed
+	open #3: "Name=[Q]\PRmstr\Department.h[cno],KFName=[Q]\PRmstr\DeptIdx.h[cno],Shr",i,i,k
 	open #4: "Name=[Q]\PRmstr\PayrollChecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno],Shr",internal,outIn,keyed
-	open #7: "Name=[Q]\PRmstr\MGLMSTR.h[cno],KFName=[Q]\PRmstr\MGLIDX1.h[cno],Shr",internal,input,keyed
+	open #7: "Name=[Q]\PRmstr\MGLMSTR.h[cno],KFName=[Q]\PRmstr\MGLIDX1.h[cno],Shr",i,i,k
 	gosub CHECK_ACSCL
 	do
 		read #4,using F_HIST: heno,tdn,prd,ckno,mat tdc,mat tcp eof END_HIST
@@ -25,7 +25,7 @@ F_HIST: form pos 1,n 8,n 3,pd 6,n 7,5*pd 3.2,37*pd 5.2
 	loop
 CHECK_ACSCL: ! r:
 	open #12: "Name=[Q]\CLmstr\BankMstr.h[cno],KFName=[Q]\CLmstr\BankIdx1.h[cno],Shr",internal,outIn,keyed
-	open #15: "Name=[Q]\CLmstr\Company.h[cno],Shr",internal,outIn,relative
+	open #15: "Name=[Q]\CLmstr\Company.h[cno],Shr",i,outi,r
 	open #8: "Name=[Q]\CLmstr\TrMstr.h[cno],KFName=[Q]\CLmstr\TrIdx1.h[cno],Shr",internal,outIn,keyed
 	open #22: "Name=[Q]\CLmstr\TrMstr.h[cno],KFName=[Q]\CLmstr\TrIdx2.h[cno],Shr",internal,outIn,keyed
 	open #tralloc:=23: "Name=[Q]\CLmstr\TrAlloc.h[cno],KFName=[Q]\CLmstr\TrAlloc-Idx.h[cno],Shr",internal,outIn,keyed
@@ -94,7 +94,7 @@ WR_SSMATCH: write #tralloc,using FM_TRALLOC: clk$,tragl$,traamt,tradesc$,traivd$
 END_CHECK_RECORD: return
 READ_COMPANY_INFO: !
 	dim fullname$(20)*20,abrevname$(20)*8,newcalcode(20),newdedfed(20),dedfica(20),dedst(20),deduc(20),newdedcode(20),gl$(20)*12
-	open #1: "Name=[Q]\PRmstr\Company.h[cno]",internal,outIn,relative
+	open #1: "Name=[Q]\PRmstr\Company.h[cno]",i,outi,r
 	read #1,using F_company,rec=1: mat a$,fid$,mcr,mcm,feducrat,mat d$,loccode,feducmax,ficarate,ficamaxw,ficawh,mat m,mat r,mat e$,mat gln$,gli,mat dedcode,mat calcode,mat dedfed,mat rpnames2$
 	F_company: form pos 1,3*c 40,c 12,pd 6.3,pd 6.2,pd 5.2,10*c 8,n 2,pd 4.2,pd 3.3,12*pd 4.2,10*pd 3.3,25*c 12,31*n 1,10*c 6,3*pd 4.3,3*pd 3.2,4*pd 4.2,n 1,2*c 6,n 2
 	close #1:

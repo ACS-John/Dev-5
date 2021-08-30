@@ -29,7 +29,7 @@ L230: prioryr=curyear-1
 	if fnps=2 then mp1=mp1+3
 	fl1$="Name=[Q]\GLmstr\ACGLFNSI.h[cno],KFName=[Q]\GLmstr\agfsidx3.h[cno],Shr"
 	if fnps=2 then fl1$="Name=[Q]\GLmstr\ACGLFNSJ.h[cno],KFName=[Q]\GLmstr\agfsidx2.h[cno],Shr"
-	open #1: fl1$,internal,input,keyed
+	open #1: fl1$,i,i,k
 	if fnprocess=1 or fnUseDeptNo=0 then goto L450
 	fnTos(sn$="ACglincb") : _
 	mylen=30: mypos=mylen+3 : right=1
@@ -49,7 +49,7 @@ L450: costcntr=val(resp$(1))
 	execute "Index [Q]\GLmstr\GLmstr.h[cno] "&udf$&"fsindex.h[cno] 69 3 Replace DupKeys -N"
 	goto L550
 L540: execute "Index [Q]\GLmstr\GLmstr.h[cno] "&udf$&"fsindex.h[cno] 72 3 Replace DupKeys -N"
-L550: open #3: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName="&udf$&"fsindex.h[cno],Shr",internal,input,keyed
+L550: open #3: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName="&udf$&"fsindex.h[cno],Shr",i,i,k
 L560: read #1,using L610: r$,d$,te$,sp,ls,ds,ul,rs,bc,ap,mat ac,ic,fc eof L2350
 	if ltrm$(r$)="" or ltrm$(r$)="0" then goto L560
 	if costcntr=0 then goto L610

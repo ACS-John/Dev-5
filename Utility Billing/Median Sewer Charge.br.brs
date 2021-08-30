@@ -8,7 +8,7 @@
 
 	fnTop(program$)
 
-	open #2: "Name=[Q]\UBmstr\UBTransVB.h[cno],KFName=[Q]\UBmstr\UBTrIndx.h[cno],Shr",internal,input,keyed 
+	open #2: "Name=[Q]\UBmstr\UBTransVB.h[cno],KFName=[Q]\UBmstr\UBTrIndx.h[cno],Shr",i,i,k 
 	open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,outIn,keyed 
 	open #5: "Name=[Q]\UBmstr\MEANs.h[cno],RecL=22,REPLACE",internal,output 
 	read #1,using L490: x$,a2 eof DONE

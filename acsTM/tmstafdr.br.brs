@@ -6,7 +6,7 @@ fnTop(program$,"Employee")
 fnopenprn
 dim eno$*9,e$*25,r(11),prg$*20
 namtab=66-int(len(rtrm$(env$('cnam')))/2)
-open #1: "Name=S:\Core\Data\acsllc\EMmstr.h[cno],KFName=S:\Core\Data\acsllc\EMIndex.h[cno],Shr",internal,input,keyed
+open #1: "Name=S:\Core\Data\acsllc\EMmstr.h[cno],KFName=S:\Core\Data\acsllc\EMIndex.h[cno],Shr",i,i,k
 L120: !
 pr newpage
 pr f "10,10,c 48,n": "ENTER DATE FOR STAFF DIRECTORY IN MMDDYY FORMAT"

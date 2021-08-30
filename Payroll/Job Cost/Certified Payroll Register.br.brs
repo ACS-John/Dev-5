@@ -8,8 +8,8 @@ dim resp$(3)*50,ml$(2)*60
  
 fnTop(program$)
  
-open #2: "Name=[Q]\PRmstr\JCCAT.h[cno],KFName=[Q]\PRmstr\CatIndx.h[cno],Shr",internal,input,keyed
-open #3: "Name=[Q]\PRmstr\JCTRANS.h[cno],Shr",internal,input,relative
+open #2: "Name=[Q]\PRmstr\JCCAT.h[cno],KFName=[Q]\PRmstr\CatIndx.h[cno],Shr",i,i,k
+open #3: "Name=[Q]\PRmstr\JCTRANS.h[cno],Shr",i,i,r
 open #4: "Name=[Temp]\Work.[Session],SIZE=0,RecL=55,Replace",internal,output
  
 MENU1: !

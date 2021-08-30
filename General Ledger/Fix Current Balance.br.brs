@@ -18,11 +18,11 @@
 	if ~fn_theScreen then goto Xit
 	! r: setup and open files
 	if enableProcessAccumulatedTrans$='True' then
-		open #hAcTrans=fnH: 'Name=[Q]\GLmstr\AcTrans.h[cno],KFName=[Q]\GLmstr\AcTrIdx.h[cno]',internal,input,keyed
+		open #hAcTrans=fnH: 'Name=[Q]\GLmstr\AcTrans.h[cno],KFName=[Q]\GLmstr\AcTrIdx.h[cno]',i,i,k
 		startWithBalEndOfPriorYear=1
 	end if
 	open #hGlMstr=fnH: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLINDEX.h[cno],Shr",internal,outIn,keyed
-	open #hGlTrans=fnH: "Name=[Q]\GLmstr\GLTrans.h[cno],Shr",internal,input,relative
+	open #hGlTrans=fnH: "Name=[Q]\GLmstr\GLTrans.h[cno],Shr",i,i,r
 	fTransBoth: form pos 1,c 12,n 6,pd 6.2
 	! /r
 	do ! r: main loop

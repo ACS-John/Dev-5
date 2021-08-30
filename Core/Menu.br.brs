@@ -312,7 +312,7 @@ def fn_main
 			else if menu_option$='Restart' then
 				fnClearLayoutCache
 				setenv('ForceScreenIOUpdate','yes')
-				open #h_tmp=fnH: 'Name='&env$('temp')&'\acs_Restart_[session].prc,replace',display,output
+				open #h_tmp=fnH: 'Name='&env$('temp')&'\acs_Restart_[session].prc,replace',d,o
 				pr #h_tmp: "Stop"
 				pr #h_tmp: "clear resident"
 				pr #h_tmp: "chain 'S:\Core\Start'"
@@ -718,7 +718,7 @@ def fn_getProgramList(mat program_plus$,mat program_name$,mat program_name_trim$
 		EoPrEmployee: !
 		fnCloseFile(hPrEmployee,'PR Employee')
 	else if env$('cursys')='UB' then
-		! open #hUbCustomer=fnH: 'Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr',internal,input,keyed
+		! open #hUbCustomer=fnH: 'Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr',i,i,k
 		dim customer$(0)*256
 		dim customerN(0)
 		hUbCustomer=fn_open('UB Customer',mat customer$,mat customerN,mat form$, 1)

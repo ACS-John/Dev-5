@@ -23,7 +23,7 @@ def library fnPostCheckbookToGl(; enablePost,___,pg)
 
 ! r: determine if cash or accrual by checking for any accounts payable numbers in the general ledger control file
 		up1$="C"
-		open #hFund=9: "Name=[Q]\CLmstr\FundMstr.h[cno],KFName=[Q]\CLmstr\FundIdx1.h[cno],Shr",internal,input,keyed
+		open #hFund=9: "Name=[Q]\CLmstr\FundMstr.h[cno],KFName=[Q]\CLmstr\FundIdx1.h[cno],Shr",i,i,k
 		do
 			read #hFund,using 'Form Pos 52,C 12': gw$ eof EoFund
 			accrual=val(gw$) conv L230
@@ -218,7 +218,7 @@ def library fnPostCheckbookToGl(; enablePost,___,pg)
 		fnFree('[Temp]\Addr.[session]')
 		execute 'Sort [Temp]\CONTROL.[wsid] -n'
 		open #hAddr=fnH: 'Name=[Temp]\Addr.[session]',internal,input ioerr EndAll
-		open #hWork=fnH: 'Name=[Temp]\WORK.[session]',internal,input,relative
+		open #hWork=fnH: 'Name=[Temp]\WORK.[session]',i,i,r
 		if pr1$<>"N" then
 			if ~pg then gosub Hdr ! f1
 			pr #255: "____________  ________  ________  ________  Regular GL Postings___________  __________  __________" pageoflow NewPge
@@ -381,7 +381,7 @@ def library fnPostCheckbookToGl(; enablePost,___,pg)
 		if ~enablePost then goto Xit
 		close #20: ioerr ignore
 		! removed 5/20/20 - jb - nothing ever read this in anyway.  a better way would be to write it with fncreg_write
-		! open #20: "Name=[Q]\CLmstr\PostDat.h[cno],Replace,RecL=12",internal,outIn,relative
+		! open #20: "Name=[Q]\CLmstr\PostDat.h[cno],Replace,RecL=12",i,outi,r
 		! write #20,using 'Form POS 1,2*N 6',rec=1: d1,d2
 		! close #20:
 		if glb=2 then
@@ -396,7 +396,7 @@ def library fnPostCheckbookToGl(; enablePost,___,pg)
 		if up1$="C" then goto End2
 		open #paytrans=6: "Name=[Q]\CLmstr\PayTrans.h[cno],KFName=[Q]\CLmstr\UnPdIdx1.h[cno],Shr",internal,outIn,keyed
 		open #unpdaloc=7: "Name=[Q]\CLmstr\UnPdAloc.h[cno],KFName=[Q]\CLmstr\Uaidx2.h[cno],Shr",internal,outIn,keyed
-		open #paymstr=8: "Name=[Q]\CLmstr\PayMstr.h[cno],KFName=[Q]\CLmstr\PayIdx1.h[cno],Shr",internal,input,keyed
+		open #paymstr=8: "Name=[Q]\CLmstr\PayMstr.h[cno],KFName=[Q]\CLmstr\PayIdx1.h[cno],Shr",i,i,k
 		READ_PAYTRANS: !
 		read #paytrans,using 'Form POS 1,C 8,C 12,N 6,POS 45,C 18,POS 96,N 1,N 6': vn$,iv$,dd,de$,pcde,pdte eof L2610
 		if include_prev_posted$="Y" then goto L2450
@@ -446,7 +446,7 @@ def library fnPostCheckbookToGl(; enablePost,___,pg)
 	return  ! /r
 	GLBucketStuff: ! r:
 		if enablePost then
-			open #glbucket=fnH: "Name=[Q]\GLmstr\GLBucket.h[cno]",internal,input,relative ioerr L2830 ! [cno]" ! &str$(gl2)
+			open #glbucket=fnH: "Name=[Q]\GLmstr\GLBucket.h[cno]",i,i,r ioerr L2830 ! [cno]" ! &str$(gl2)
 			read #glbucket,using 'Form POS 1,N 1',rec=1: glb noRec ignore
 			close #glbucket:
 			L2830: !
@@ -636,7 +636,7 @@ fnend  !
 	def fn_cb_unpaid_test ! CHECK_UNPAIDS: !
 		cb_cu_return=1
 		restore #hTran:
-		open #paymstr=8: "Name=[Q]\CLmstr\PayMstr.h[cno],KFName=[Q]\CLmstr\PayIdx1.h[cno],Shr",internal,input,keyed
+		open #paymstr=8: "Name=[Q]\CLmstr\PayMstr.h[cno],KFName=[Q]\CLmstr\PayIdx1.h[cno],Shr",i,i,k
 		open #unpdaloc=7: "Name=[Q]\CLmstr\UnPdAloc.h[cno],KFName=[Q]\CLmstr\Uaidx2.h[cno],Shr",internal,outIn,keyed
 		open #paytrans=6: "Name=[Q]\CLmstr\PayTrans.h[cno],KFName=[Q]\CLmstr\UnPdIdx1.h[cno],Shr",internal,outIn,keyed
 		CB_CU_READ: !

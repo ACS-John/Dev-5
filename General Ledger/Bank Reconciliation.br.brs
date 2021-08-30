@@ -18,14 +18,14 @@ fndat(dat$)
 open #bankrec1:=1: "Name=[Q]\GLmstr\bankrec.h[cno],KFName=[Q]\GLmstr\Bankrec-idx.h[cno],Shr",internal,outIn,keyed
 ! Open #BANKREC2:=2: "Name=[Q]\GLmstr\bankrec.h[cno],KFName=[Q]\GLmstr\bankx2.h[cno],Shr",Internal,outIn,Keyed  ! ????? ken
 close #82: ioerr ignore
-open #82: "Name=[Q]\GLmstr\Bank2"&wsid$&".h[cno],Use,RecL=35",internal,outIn,relative
+open #82: "Name=[Q]\GLmstr\Bank2"&wsid$&".h[cno],Use,RecL=35",i,outi,r
 read #82,using "Form pos 1,c 12",rec=1: wbc$ noRec L270
 goto MENU1
 L270: !
 write #82,using "Form pos 1,c 12",rec=1: wbc$
 MENU1: !
 close #81: ioerr ignore
-L300: open #81: "Name=[Q]\GLmstr\Bank"&wbc$&".h[cno],Use,RecL=32",internal,outIn,relative
+L300: open #81: "Name=[Q]\GLmstr\Bank"&wbc$&".h[cno],Use,RecL=32",i,outi,r
 	if lrec(81)>0 then
 		read #81,using "Form POS 1,N 6,2*PD 5.2,N 6",rec=1: stmtdt,bgbal,stmtbal,codt
 	else
@@ -77,7 +77,7 @@ BANK_STMT_INFO: !
 	next j
 L620: if ti3=6 then fnchain("S:\General Ledger\Access Bank Rec File")
 	close #81: ioerr L640
-L640: open #81: "Name=[Q]\GLmstr\Bank"&wbc$&".h[cno],Use,RecL=32",internal,outIn,relative
+L640: open #81: "Name=[Q]\GLmstr\Bank"&wbc$&".h[cno],Use,RecL=32",i,outi,r
 	if lrec(81)=0 then write #81,using "Form POS 1,N 6,2*PD 5.2,N 6",rec=1: stmtdt,bgbal,stmtbal,codt : goto L670
 	rewrite #81,using "Form POS 1,N 6,2*PD 5.2,N 6",rec=1: stmtdt,bgbal,stmtbal,codt
 L670: close #81: ioerr L680
@@ -294,7 +294,7 @@ PRINT_LISTINGS: !
 	for j=1 to 4
 		if w(j)=0 then goto L2540
 		wp=j+50
-		open #wp: "Name=Rpt"&str$(j)&"."&wsid$&",Size=0,RecL=132,Replace",display,output
+		open #wp: "Name=Rpt"&str$(j)&"."&wsid$&",Size=0,RecL=132,Replace",d,o
 L2540: next j
 	mat t2=(0)
 	goto CALCULATE_TOTALS
@@ -387,13 +387,13 @@ FREE_DPAMNTS: !
 
 CLEAR_DEPOSITS_BY_AMOUNT: ! clear deposits by amounts
 	if cda=1 then goto DPAMENU
-L3370: open #dpamnts=91: "Name=[Q]\GLmstr\DpAmnts.h[cno],Use,RecL=20",internal,outIn,relative ioerr FREE_DPAMNTS
-	open #92: "Name=[Q]\GLmstr\DpDates.h[cno],Use,RecL=150",internal,outIn,relative
+L3370: open #dpamnts=91: "Name=[Q]\GLmstr\DpAmnts.h[cno],Use,RecL=20",i,outi,r ioerr FREE_DPAMNTS
+	open #92: "Name=[Q]\GLmstr\DpDates.h[cno],Use,RecL=150",i,outi,r
 	read #92,using L3400,rec=1: mat dpd noRec L3420
 L3400: form pos 1,25*n 6
 	goto L3430
 L3420: write #92,using L3400,rec=1: mat dpd
-L3430: open #93: "Name=[Q]\GLmstr\DPTypes.h[cno],Use,RecL=3",internal,outIn,relative
+L3430: open #93: "Name=[Q]\GLmstr\DPTypes.h[cno],Use,RecL=3",i,outi,r
 	read #93,using L3450,rec=1: mat dpt noRec L3470
 L3450: form pos 1,3*n 1
 	goto L3480
@@ -597,7 +597,7 @@ CLEAR_TRANSACTIONS_FROM_LIST: !
 	displayattop$="True"
 	if ti3=1 then type$="Checks" else type$="Deposits"
 	close #clearing: ioerr L5400
-L5400: open #clearing=89: "Name=[Q]\GLmstr\clearing.H"&wsid$&",replace,RecL=43",internal,outIn,relative
+L5400: open #clearing=89: "Name=[Q]\GLmstr\clearing.H"&wsid$&",replace,RecL=43",i,outi,r
 	if ti3=2 then 
 		restore #bankrec1,key>=wbc$&"2        ": nokey DISPLAY_GRID 
 	else

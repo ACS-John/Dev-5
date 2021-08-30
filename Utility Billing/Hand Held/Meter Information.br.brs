@@ -15,7 +15,7 @@ def fn_CsvToMeterInformation
 	colP=16
 	dim line$*1024,item$(0)*256
 	open #hIn=fnH: 'name=[at]'&'C:\ACS\(Client_Files)\Purdy\Purdy MO Installation List 20171015 Final All.txt',d,input
-	open #hCustomer=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,input,keyed
+	open #hCustomer=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",i,i,k
 	linput #hIn: line$ eof CtmiEof ! consume headers
 	do
 		linput #hIn: line$ eof CtmiEof

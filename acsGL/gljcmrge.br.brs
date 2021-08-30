@@ -8,7 +8,7 @@
 	dim rn$*12,jn$*6,ji2(3),cn$*11,l(13),ta(2),tr(9),empnum$*12,empnam$*30
  
 	fnTop(program$,"Post Transactions")
-	open #1: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,input,relative
+	open #1: "Name=[Q]\GLmstr\Company.h[cno],Shr",i,i,r
 	read #1,using 'Form POS 382,N 2',rec=1: jccode 
 	close #1:
 	if jccode<>1 then goto L460
@@ -16,7 +16,7 @@
 	pr f "10,15,Cc 60,N": "GENERAL LEDGER JOB COST MERGE CHARGES IN PROCESS"
 	open #2: "Name=[Q]\PRmstr\JCCAT.h[cno],KFName=[Q]\PRmstr\CatIndx.h[cno],Shr",internal,outIn,keyed
 	open #3: "Name=[Q]\GLmstr\GL_Work_[acsUserId].h[cno]",internal,input
-	open #5: "Name=[Q]\PRmstr\JCTRANS.h[cno],Shr",internal,outIn,relative
+	open #5: "Name=[Q]\PRmstr\JCTRANS.h[cno],Shr",i,outi,r
 L180: read #3,using L190: dat,ji2(3),postc,rn$,empnam$,jn$,ji2(1),ji2(2) eof L430,ioerr L430
 L190: form pos 13,n 6,pd 6.2,pos 27,n 2,c 12,c 30,pos 79,c 6,n 5,n 3
 	if postc=9 or rn$="999999999999" then goto L180

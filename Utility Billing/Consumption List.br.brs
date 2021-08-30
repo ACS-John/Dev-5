@@ -42,7 +42,7 @@ MAIN: !
 		goto MAIN
 	end if
 	rcode=val(resp$(3))
-	open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,input,keyed
+	open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",i,i,k
 	fnopenprn
 	gosub PRINTIT
 DONE: close #1: ioerr ignore

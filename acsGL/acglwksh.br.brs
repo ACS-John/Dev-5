@@ -13,7 +13,7 @@
 	fnconsole(off=0)
 	first=1
 	fncno(cno,cnam$)
-	open #20: "Name=[Q]\GLmstr\Company.h[cno]",internal,input,relative  : _
+	open #20: "Name=[Q]\GLmstr\Company.h[cno]",i,i,r  : _
 	read #20,using 'Form POS 150,2*N 1',rec=1: d(1) : _
 	read #20,using 'Form POS 176,C 12',rec=1: cogl$ : _
 	close #20:
@@ -21,7 +21,7 @@
 	a$(4)="A/P" : a$(5)="PR" : a$(6)="A/R" : _
 	a$(7)="S/J" : a$(8)="P/J" : a$(9)=" "
 	p$="|        *         |         *         |         *        |"
-	open #glmstr=1: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\glIndex.h[cno],Shr",internal,input,keyed
+	open #glmstr=1: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\glIndex.h[cno],Shr",i,i,k
 	if fnprocess=1 or d(1)=0 then goto START_REPORT : _
 		! Skip Cost Center Question if not applicable or in Automatic Processing
 SCREEN1: !

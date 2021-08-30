@@ -735,7 +735,7 @@ def fn_closeFiles
 fnend
 def fn_EmployeeDepartments(eno,mat empDept,mat empDeptRec; ___,teno,deptNumber)
 	if ~hEdcDept then
-		open #hEdcDept=fnH: 'Name=[Q]\PRmstr\Department.h[cno],KFName=[Q]\PRmstr\DeptIdx.h[cno],Shr',internal,input,keyed
+		open #hEdcDept=fnH: 'Name=[Q]\PRmstr\Department.h[cno],KFName=[Q]\PRmstr\DeptIdx.h[cno],Shr',i,i,k
 	end if
 	mat empDept(0)
 	mat empDeptRec(0)
@@ -796,7 +796,7 @@ def fn_setup
 	code6$(4)="9 - Neither SS nor Medicare"
 
 	dim statenames$(10)*8
-	open #1: "Name=[Q]\PRmstr\Company.h[cno]",internal,outIn,relative
+	open #1: "Name=[Q]\PRmstr\Company.h[cno]",i,outi,r
 	read #1,using "form pos 150,10*c 8",rec=1: mat statenames$
 	close #1:
 	dim state_option$(10)*11

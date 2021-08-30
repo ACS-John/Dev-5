@@ -39,7 +39,7 @@ L280: !
 mat filename$(tmp)
 pr 'Files Found = '&str$(tmp)
 
-open #20: "Name=Proc.[wsid],Size=0,Replace",display,output
+open #20: "Name=Proc.[wsid],Size=0,Replace",d,o
 
 for j=1 to udim(mat filename$)
 	if filename$(j)="" then goto AFT_LOOP1

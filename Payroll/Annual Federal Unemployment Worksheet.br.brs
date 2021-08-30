@@ -82,7 +82,7 @@ if resp$(resp_OptFillIn)="True" then fullform=2 ! fill in blanks
  
 fnopenprn
 on pageoflow goto PGOF
-open #hEmployee=fnH: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr",internal,input,keyed ! was #2
+open #hEmployee=fnH: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr",i,i,k ! was #2
 gosub HDR
 open #4: "Name=[Q]\PRmstr\payrollchecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno]",internal,outIn,keyed
 open #3: "Name=[Q]\PRmstr\Department.h[cno],Shr, KFName=[Q]\PRmstr\DeptIdx.h[cno],Shr",internal,outIn,keyed
@@ -156,7 +156,7 @@ PGOF: pr #255: newpage : gosub HDR : continue
 PRINT_940: ! r: only fills in the blanks at this time
 	! r: VBOPENPRINT
 	if file(20)=-1 then
-		fnpa_open ('','940-PR','PDF')! open #20: "Name=[Q]\PRmstr\940"&wsid$&".txt,Replace,RecL=5000",display,output
+		fnpa_open ('','940-PR','PDF')! open #20: "Name=[Q]\PRmstr\940"&wsid$&".txt,Replace,RecL=5000",d,o
 		lyne=margin ! starting of 1st line
 	end if
 	column2=103

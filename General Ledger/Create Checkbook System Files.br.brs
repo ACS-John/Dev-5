@@ -28,7 +28,7 @@ MENU1: !
 on ti1 goto L330,END1
 
 L330: !
-	open #1: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLIndex.h[cno],Shr",internal,input,keyed
+	open #1: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLIndex.h[cno],Shr",i,i,k
 	open #2: "Name="&dv$&"GLmstr.h[cno],SIZE=0,RecL=62,Replace",internal,output
 	do
 		dim de$*50
@@ -43,7 +43,7 @@ L410: !
 	close #2: ioerr ignore
 	open #2: "Name="&dv$&"PayMstr.h[cno],SIZE=0,RecL=276,Replace",internal,output
 	open #payeegl=fnH: "Name=[Q]\CLmstr\PayeeGLBreakdown.h[cno],Version=1,KFName=[Q]\CLmstr\Payeeglbkdidx.h[cno],Use,RecL=56,KPs=1,KLn=8,Shr",internal,outIn,keyed
-	open #1: "Name=[Q]\GLmstr\PayMstr.h[cno],KFName=[Q]\GLmstr\payidx1.h[cno],Shr",internal,input,keyed  ! Ioerr 580
+	open #1: "Name=[Q]\GLmstr\PayMstr.h[cno],KFName=[Q]\GLmstr\payidx1.h[cno],Shr",i,i,k  ! Ioerr 580
 	do
 		dim vn$(4)*30,contact$*30,email$*50,myact$*20
 		read #1,using 'Form Pos 1,C 8,4*c 30,x 5,n 2,c 11,x 6,c 12,c 30,c 50,c 12,c 20': vn$,mat vn$,typ,ss$,ph$,contact$,email$,fax$,myact$ eof Eo1
@@ -51,7 +51,7 @@ L410: !
 	loop
 	Eo1: !
 	close #1:
-	open #1: "Name=[Q]\GLmstr\PRmstr.h[cno],KFName=[Q]\GLmstr\PRIndex.h[cno],Shr",internal,input,keyed ioerr L410
+	open #1: "Name=[Q]\GLmstr\PRmstr.h[cno],KFName=[Q]\GLmstr\PRIndex.h[cno],Shr",i,i,k ioerr L410
 	vn$(3)=""
 	do
 		read #1,using 'Form POS 1,N 4,3*C 25,C 11,PD 5.2': eno,vn$(1),vn$(2),vn$(4),ss$,ytdp eof L580

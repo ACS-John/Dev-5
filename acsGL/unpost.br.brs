@@ -43,7 +43,7 @@ MENU1: ! r:
 		end if  ! del_dupe_only
 		open #h_trans=fnH: "Name=[Q]\GLmstr\AcTrans.h[cno],KFName=[Q]\GLmstr\AcTrIdx.h[cno],Shr",internal,outIn,keyed  ! 3
 		if del_dupe_only then
-			open #h_trans_dupe=fnH: "Name=[Q]\GLmstr\AcTrans.h[cno],KFName=[Q]\GLmstr\tmp70.h[cno],Shr",internal,input,keyed
+			open #h_trans_dupe=fnH: "Name=[Q]\GLmstr\AcTrans.h[cno],KFName=[Q]\GLmstr\tmp70.h[cno],Shr",i,i,k
 		end if  ! del_dupe_only
 	else
 		fnStatus('Processing current transactions only')
@@ -52,7 +52,7 @@ MENU1: ! r:
 		end if  ! del_dupe_only
 		open #h_trans=fnH: 'Name=[Q]\GLmstr\GLTrans.h[cno],kfname=[Q]\GLmstr\glTrans-IdxAcct.h[cno],Shr',internal,outIn,keyed
 		if del_dupe_only then
-			open #h_trans_dupe=fnH: "Name=[Q]\GLmstr\GLTrans.h[cno],KFName=[Q]\GLmstr\tmp70.h[cno],Shr",internal,input,keyed
+			open #h_trans_dupe=fnH: "Name=[Q]\GLmstr\GLTrans.h[cno],KFName=[Q]\GLmstr\tmp70.h[cno],Shr",i,i,k
 		end if  ! del_dupe_only
 	end if
 ! /r

@@ -15,7 +15,7 @@ dim pathtotimecard$*200
 pathtotimecard$="c:\progra~1\acs\"
  
 open #1: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr",internal,outIn,keyed
-open #2: "Name=[Q]\PRmstr\RPTRAIL.h[cno],Shr",internal,outIn,relative
+open #2: "Name=[Q]\PRmstr\RPTRAIL.h[cno],Shr",i,outi,r
  
 ASK_PAYROLL_DATE: !
 	fnTos

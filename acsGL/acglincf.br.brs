@@ -35,7 +35,7 @@
 L340: form pos 1,n 3,n 6,n 3,pos mp1,pd 3,pos mp2,pd 3,pos 81,41*pd 6.2
 	form c 7,skip 0
 	nametab=int(44-len(rtrm$(cnam$))/2)
-	open #1: fl1$,internal,input,keyed
+	open #1: fl1$,i,i,k
 	if fnprocess=1 or fnUseDeptNo=0 then goto L480
 	fnTos(sn$="ACglincf") : _
 	mylen=30: mypos=mylen+3 : right=1
@@ -55,7 +55,7 @@ L480: report$="STATEMENT OF INCOME AND EXPENSES - FUND COMPARISON"
 	execute "Index [Q]\GLmstr\GLmstr.h[cno] "&udf$&"fsindex.h[cno] 69 3 Replace DupKeys -N"
 	goto L550
 L540: execute "Index [Q]\GLmstr\GLmstr.h[cno] "&udf$&"fsindex.h[cno] 72 3 Replace DupKeys -N"
-L550: open #3: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName="&udf$&"fsindex.h[cno],Shr",internal,input,keyed
+L550: open #3: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName="&udf$&"fsindex.h[cno],Shr",i,i,k
 L560: read #1,using L610: r$,d$,te$,sp,ls,ds,ul,rs,bc,ap,mat ac,ic,fc eof L2170
 	if ltrm$(r$)="" or ltrm$(r$)="0" then goto L560
 	if costcntr=0 then goto L610
@@ -251,7 +251,7 @@ BLDPCT2: !
 L2480: if total2(fund)=0 then goto L2510
 	pc4=round(((total2(fund)-yt2)/total(fund))*100,0)
 	if pc4<-999 or pc4>9999 then pc4=0
-L2510: open #5: "Name=[Q]\GLmstr\GLfund.h[cno],RecL=230,use",internal,outIn,relative
+L2510: open #5: "Name=[Q]\GLmstr\GLfund.h[cno],RecL=230,use",i,outi,r
 	read #5,using L2530: mat fundnum,mat funddesc$ ioerr L2530
 L2530: form pos 1,10*n 3,10*c 20
 	fnTos(sn$="ACglcasf3") : _

@@ -126,9 +126,9 @@ def fn_importRouteAndSequence(source$*256,delim$*1; ___,hIn,line$*2048,z$*10,pas
 fnend
 def fn_exportRouteAndSequence(outFile$*256,delim$*1; ___,hCustomer)
 	hCustomer=fn_open('UB Customer',mat c$,mat cN,mat form$, 1)
-	! open #hCustomer=fnH: 'Name=[Q]\UBmstr\Customer.h[cno],shr',internal,input,relative
+	! open #hCustomer=fnH: 'Name=[Q]\UBmstr\Customer.h[cno],shr',i,i,r
 	fnMakeSurePathExists(outFile$)
-	open #hOut=fnH: 'Name='&br_filename$(outFile$)&',RecL=2500,Replace,EOL=CRLF',display,output
+	open #hOut=fnH: 'Name='&br_filename$(outFile$)&',RecL=2500,Replace,EOL=CRLF',d,o
 	!  r: Header
 	pr #hOut: 'Account Key'                  		&delim$;
 	pr #hOut: 'Route'                        		&delim$;

@@ -81,9 +81,9 @@
 
 	if gltyp<>1 then
 		open #1: "Name=[Q]\GLmstr\PRmstr.h[cno],KFName=[Q]\GLmstr\PRIndex.h[cno],Shr",internal,outIn,keyed ioerr ignore ! 00340   open #1: fil$(1),internal,outIn,keyed ioerr ignore
-		open #3: "Name=[Q]\GLmstr\GLWK2[acsUserId].h[cno]",internal,outIn,relative ioerr ignore ! PR Work File
+		open #3: "Name=[Q]\GLmstr\GLWK2[acsUserId].h[cno]",i,outi,r ioerr ignore ! PR Work File
 	end if
-	open #h_gl_work:=2: "Name=[Q]\GLmstr\GL_Work_"&env$('acsUserId')&".h[cno]",internal,outIn,relative ioerr ignore ! GL Work File
+	open #h_gl_work:=2: "Name=[Q]\GLmstr\GL_Work_"&env$('acsUserId')&".h[cno]",i,outi,r ioerr ignore ! GL Work File
 	F_2A: form pos 1,c 12,n 6,pd 6.2,n 2,n 2,c 12,c 30,c 8,c 6,c 5,c 3,c 12
 	F_2B: form pos 1,c 12,n 6,pd 6.2,n 2,n 2,c 12,c 30,c 8,c 6,c 5,c 3,c 12
 	pc=1
@@ -93,10 +93,10 @@ L400: !
 	read #h_gl_work,using 'form pos 27,n 2',rec=adr: pc noRec CHECK_FOR_DELETED conv L460
 	if pc=0 then post=1 ! if previous batch not posted, set post=1
 	if pc>0 then goto L460 ! PREVIOUS TRANSACTIONS HAVE BEEN POSTED
-	open #5: "Name=[Q]\GLmstr\GLPT"&wsid$&".h[cno]",internal,outIn,relative ioerr L460
+	open #5: "Name=[Q]\GLmstr\GLPT"&wsid$&".h[cno]",i,outi,r ioerr L460
 	goto SCREEN_1
 	L460: !
-	open #5: "Name=[Q]\GLmstr\GLPT"&wsid$&".h[cno],SIZE=0,RecL=538,Replace",internal,outIn,relative
+	open #5: "Name=[Q]\GLmstr\GLPT"&wsid$&".h[cno],SIZE=0,RecL=538,Replace",i,outi,r
 	write #5,using F_5,rec=1: kn,mat k,td,tc,mat tcde
 SCREEN_1: ! r:
 	edit=0
@@ -169,14 +169,14 @@ ERASE_PREVIOUS_INPUT: ! r:
 	if pt1=3 then
 		fnCopy(dv$&"GLWK101.h[cno]","[Q]\GLmstr\GL_Work_"&env$('acsUserId')&".h[cno]")
 		fnCopy(dv$&"GLWK201.h[cno]","[Q]\GLmstr\GLWK2[acsUserId].h[cno]")
-		open #3: "Name=[Q]\GLmstr\GLWK2[acsUserId].h[cno]",internal,outIn,relative
-		open #h_gl_work:=2: "Name=[Q]\GLmstr\GL_Work_"&env$('acsUserId')&".h[cno]",internal,outIn,relative
-		open #9: "Name="&dv$&"PayMstr.h[cno],KFName="&dv$&"PAYIDX1.h[cno]",internal,input,keyed ioerr ignore
+		open #3: "Name=[Q]\GLmstr\GLWK2[acsUserId].h[cno]",i,outi,r
+		open #h_gl_work:=2: "Name=[Q]\GLmstr\GL_Work_"&env$('acsUserId')&".h[cno]",i,outi,r
+		open #9: "Name="&dv$&"PayMstr.h[cno],KFName="&dv$&"PAYIDX1.h[cno]",i,i,k ioerr ignore
 	else
-		open #3: "Name=[Q]\GLmstr\GLWK2[acsUserId].h[cno],size=0,RecL=110,Replace",internal,outIn,relative
-		open #h_gl_work:=2: "Name=[Q]\GLmstr\GL_Work_"&env$('acsUserId')&".h[cno],SIZE=0,RecL=104,Replace",internal,outIn,relative
+		open #3: "Name=[Q]\GLmstr\GLWK2[acsUserId].h[cno],size=0,RecL=110,Replace",i,outi,r
+		open #h_gl_work:=2: "Name=[Q]\GLmstr\GL_Work_"&env$('acsUserId')&".h[cno],SIZE=0,RecL=104,Replace",i,outi,r
 	end if
-	open #5: "Name=[Q]\GLmstr\GLPT"&wsid$&".h[cno],Size=0,RecL=538,Replace",internal,outIn,relative
+	open #5: "Name=[Q]\GLmstr\GLPT"&wsid$&".h[cno],Size=0,RecL=538,Replace",i,outi,r
 	write #5,using F_5,rec=1: kn,mat k,td,tc,mat tcde
 F_5: form pos 1,pd 6.2,80*pd 6.2,pd 6.2,pd 6.2,20*n 2
 	goto L1140 ! /r
@@ -186,9 +186,9 @@ L1140: ! r:
 	open #paymstr=fnH: "Name=[Q]\GLmstr\PayMstr.h[cno],Version=1,KFName=[Q]\GLmstr\PayIdx1.h[cno],Shr",internal,outIn,keyed
 	open #payeegl=fnH: "Name=[Q]\GLmstr\PayeeGLBreakdown.h[cno],Version=1,KFName=[Q]\GLmstr\Payeeglbkdidx.h[cno],Use,RecL=56,KPs=1,KLn=8,Shr",internal,outIn,keyed
 	close #glallocations: ioerr ignore
-	open #glallocations=12: "Name=[Q]\GLmstr\GLALLOCATIONS"&wsid$&env$('cno')&",Version=1,replace,RecL=59",internal,outIn,relative
+	open #glallocations=12: "Name=[Q]\GLmstr\GLALLOCATIONS"&wsid$&env$('cno')&",Version=1,replace,RecL=59",i,outi,r
 	if jccode then
-		open #8: "Name=[Q]\PRmstr\JCCAT.h[cno],KFName=[Q]\PRmstr\CatIndx.h[cno],Shr",internal,input,keyed ioerr ignore
+		open #8: "Name=[Q]\PRmstr\JCCAT.h[cno],KFName=[Q]\PRmstr\CatIndx.h[cno],Shr",i,i,k ioerr ignore
 	end if
 	if ckey=3 then goto PROOF_TOTALS
 goto MAIN ! /r
@@ -200,7 +200,7 @@ PREPARE_EDIT_SCREEN: ! r:
 	read #h_gl_work,using fGlWork,rec=rn: mat tr,tr$,td$,vn$,mat jv$,key$ noRec PES_XIT ! get basic information from record clicked to find the complete transaction
 	holdtr$=tr$
 	close #glallocations: ioerr ignore
-	open #glallocations=12: "Name=[Q]\GLmstr\GLALLOCATIONS"&wsid$&env$('cno')&",Version=1,replace,RecL=59",internal,outIn,relative
+	open #glallocations=12: "Name=[Q]\GLmstr\GLALLOCATIONS"&wsid$&env$('cno')&",Version=1,replace,RecL=59",i,outi,r
 	restore #h_gl_work:
 GLALLOCATIONS_READ: !
 	read #h_gl_work,using F_2B: payeegl$,tr(4),tr(5),tr(6),tr(7),tr$,td$,vn$,mat jv$,key$ eof GLALLOCATIONS_EOF
@@ -243,7 +243,7 @@ POSTING_OPTIONS: ! r:
 	if resp$(4)="True" then let fnprocess(4) ! post both
 	if resp$(1)="True" then goto ACGLMRGE
 	if resp$(3)="True" then let fnchain("S:\acsGL\PRMerge")
-	open #h_process=fnH: "Name=[Q]\GLmstr\Process.h[cno],RecL=128,Use",internal,outIn,relative
+	open #h_process=fnH: "Name=[Q]\GLmstr\Process.h[cno],RecL=128,Use",i,outi,r
 	if lrec(h_process)=0 then write #h_process,using "form pos 1,n 1": 0
 	if resp$(2)="True" then rewrite #h_process,using "form pos 1,n 1",rec=1: 1 else rewrite #h_process,using "form pos 1,n 1",rec=1: 0 ! code for post payroll and gl both
 	if resp$(4)="True" then rewrite #h_process,using "form pos 1,n 1",rec=1: 4 ! code for posting pr and gl both
@@ -469,7 +469,7 @@ AFP_XIT: ! r:
 goto CLEAN_MAIN_SCREEN ! /r
 CLEAN_MAIN_SCREEN: ! r: clear entry screen before returning
 	close #glallocations: ioerr ignore
-	open #glallocations=12: "Name=[Q]\GLmstr\GLALLOCATIONS"&wsid$&env$('cno')&",Version=1,replace,RecL=59",internal,outIn,relative
+	open #glallocations=12: "Name=[Q]\GLmstr\GLALLOCATIONS"&wsid$&env$('cno')&",Version=1,replace,RecL=59",i,outi,r
 	transactionamt=0
 	if gl_retainFieldsDuringAdd$='False' then
 		td$=""

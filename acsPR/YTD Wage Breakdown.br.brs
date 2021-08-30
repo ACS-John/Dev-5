@@ -10,8 +10,8 @@ dim em1$*30
 dim tdet(17),tdy(6),tdc(6),ty(21)
 
 fndat(dat$)
-open #1: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr",internal,input,keyed
-open #2: "Name=[Q]\PRmstr\RPTRAIL.h[cno],Shr",internal,input,relative
+open #1: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr",i,i,k
+open #2: "Name=[Q]\PRmstr\RPTRAIL.h[cno],Shr",i,i,r
 fnopenprn
 gosub HDR
 goto LYNES

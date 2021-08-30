@@ -4,7 +4,7 @@ fn_setup
 
 
 library program$: fnSmtpMail
-		open #hMsg=fnH: "Name=[Temp]E-[SESSION].htm,EoL=None,Replace",DISPLAY,OUTPUT 
+		open #hMsg=fnH: "Name=[Temp]E-[SESSION].htm,EoL=None,Replace",d,o 
 
 
 
@@ -78,7 +78,7 @@ def library fnSmtpMail(recip$*128,subject$*128,msgNotehtml$*128;senderDisplayNam
 	end if
 	fnList_print("Sending email to "&recip$)
 
-		open #19: "name=[Temp]E-[SESSION].INI,replace,recl=1024",DISPLAY,OUTPUT 
+		open #19: "name=[Temp]E-[SESSION].INI,replace,recl=1024",d,o 
 		pr #19: "ServerName = "&Smtp$ 
 		pr #19: "RecipDisplayName = "&recip$
 		pr #19: "RecipAddress = "&recip$
@@ -101,7 +101,7 @@ def library fnSmtpMail(recip$*128,subject$*128,msgNotehtml$*128;senderDisplayNam
 	SmtpMailXit: !
 fnend
 def fn_readClsSetup(&smtp$,&bcc$,&reply$)
-	open #hClsSetup=fnH: "name=clssetup//8,shr",internal,outin,relative ioerr ChainClsSetup
+	open #hClsSetup=fnH: "name=clssetup//8,shr",i,outi,r ioerr ChainClsSetup
 	read #hClsSetup,using 'form pos 316,v 60,v 60,v 60',rec=11: smtp$,bcc$,reply$
 	close #hClsSetup: 
 	goto ReadClsSetupFinis

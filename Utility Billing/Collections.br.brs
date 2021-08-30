@@ -8,12 +8,12 @@
 	! r: open BudMstr and BudTrans, also set bud1 (1=budget files opened, 0=not)
 	bud1=0
 	open #h_budmstr=fnH: "Name=[Q]\UBmstr\BudMstr.h[cno],KFName=[Q]\UBmstr\BudIdx1.h[cno],Shr",internal,outIn,keyed ioerr BudMstrOpenFail
-	open #h_budTrans=fnH: "Name=[Q]\UBmstr\BudTrans.h[cno],Shr",internal,outIn,relative
+	open #h_budTrans=fnH: "Name=[Q]\UBmstr\BudTrans.h[cno],Shr",i,outi,r
 	bud1=1
 	BudMstrOpenFail: !
 	! /r
 	! dim tau$(0)*256,tauN(0)
-	open #hTransUnposted=fnH: "Name="&collections_filename$&',RecL=91,Use',internal,outIn,relative
+	open #hTransUnposted=fnH: "Name="&collections_filename$&',RecL=91,Use',i,outi,r
 	mat x=(0)
 	transType=postingCodeUnused=0
 goto ScreenMenu1
@@ -513,7 +513,7 @@ def fn_printListings
 		write #h_control,using 'Form POS 1,C 128': "Mask 1,11,C,A"
 		close #h_control:
 		execute "SORT [Temp]\acs\collections_sort_control_s[Session].int -n"
-		open #hTransUnposted=fnH: "Name="&collections_filename$,internal,outIn,relative
+		open #hTransUnposted=fnH: "Name="&collections_filename$,i,outi,r
 		open #h_addr=fnH: "Name="&env$('temp')&'\acs\collections_sort_address_s'&session$&'.int',internal,outIn
 		! /r
 	end if

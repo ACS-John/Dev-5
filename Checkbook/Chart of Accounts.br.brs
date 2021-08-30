@@ -4,7 +4,7 @@ autoLibrary
 on error goto Ertn
 fnTop(program$)
 
-open #20: "Name=[Q]\CLmstr\Company.h[cno],Shr",internal,input,relative
+open #20: "Name=[Q]\CLmstr\Company.h[cno],Shr",i,i,r
 read #20,using 'Form POS 150,2*N 1',rec=1: d(1),d(2)
 close #20:
 ! r: BUILD_LAYOUT

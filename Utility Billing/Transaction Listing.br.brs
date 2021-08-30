@@ -102,11 +102,11 @@ fnreg_write('ubtrlist.include_no_activity_accounts',str$(include_no_activity_acc
 ! on fkey 5 goto DONE
 fnopenprn
 if seq=1 then
-	open #h_customer=1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,input,keyed
+	open #h_customer=1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",i,i,k
 else
-	open #h_customer=1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx5.h[cno],Shr",internal,input,keyed
+	open #h_customer=1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx5.h[cno],Shr",i,i,k
 end if
-open #ubtransvb=2: "Name=[Q]\UBmstr\UBTransVB.h[cno],KFName=[Q]\UBmstr\UBTrIndx.h[cno],Shr",internal,input,keyed
+open #ubtransvb=2: "Name=[Q]\UBmstr\UBTransVB.h[cno],KFName=[Q]\UBmstr\UBTrIndx.h[cno],Shr",i,i,k
 gosub HDR
 do
 READ_CUSTOMER: ! r: report main loop

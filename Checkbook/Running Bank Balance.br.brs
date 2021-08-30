@@ -8,7 +8,7 @@
  
 	fnTop(program$)
 	fndat(dat$,1)
-	open #20: "Name=[Q]\CLmstr\Company.h[cno],Shr",internal,outIn,relative
+	open #20: "Name=[Q]\CLmstr\Company.h[cno],Shr",i,outi,r
 	read #20,using 'Form POS 152,N 2',rec=1,release: bank_code
 	close #20:
 MAIN: !

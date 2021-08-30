@@ -21,7 +21,7 @@
 L170: mat filename$(tmp)
 	pr ' =)   Files Found = '&str$(tmp)
 
-	open #20: "Name=Proc.[session],Size=0,Replace",display,output
+	open #20: "Name=Proc.[session],Size=0,Replace",d,o
 
 	for j=1 to udim(filename$)
 VALID_FILE_TEST: !

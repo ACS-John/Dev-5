@@ -36,7 +36,7 @@ Xit: fnXit
 STARTREPORT: !
 	fnwait("Printing: please wait...",1)
 	on fkey 5 goto DONE
-	open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,input,keyed
+	open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",i,i,k
 	fnopenprn
 	gosub HEADER
 	goto REPORT

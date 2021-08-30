@@ -7,7 +7,7 @@
 	dim acno$*12,bc(13),bp(13),bud(13)
 	dim resp$(10)*80
 	fnTop(program$)
-	open #hCompany=fnH: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,input,relative
+	open #hCompany=fnH: "Name=[Q]\GLmstr\Company.h[cno],Shr",i,i,r
 	read #hCompany,using 'Form Pos 384,N 2',rec=1: nap
 	close #hCompany:
 	fnGetFundList(mat fund_list)

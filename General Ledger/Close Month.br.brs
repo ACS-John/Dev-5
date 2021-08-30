@@ -17,7 +17,7 @@ Screen1: ! r:
 goto MainLoop ! /r
 MainLoop: ! r:
 	fnAutomatedSavePoint('before')
-	open #1: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,outIn,relative
+	open #1: "Name=[Q]\GLmstr\Company.h[cno],Shr",i,outi,r
 	read #1,using 'Form pos 384,n 2,POS 417,N 1',rec=1: nap,reccode
 	close #1:
 	fn_currentToAccumlatedTrans

@@ -54,12 +54,12 @@ scr2$(1)="CLIENT #S"
 scr2$(2)="AMOUNTS"
 scr2$(3)="CATEGORIES"
 scr2$(4)="SUB CATEGORIES"
-open #1: "Name=S:\Core\Data\acsllc\CLmstr.h[cno],KFName=S:\Core\Data\acsllc\CLIndex.h[cno],Shr",internal,input,keyed
-open #11: "Name=S:\Core\Data\acsllc\CLmstr.h[cno],KFName=S:\Core\Data\acsllc\CLIndx2.h[cno],Shr",internal,input,keyed
-open #2: "Name=S:\Core\Data\acsllc\TMWk2[acsUserId].h[cno]",internal,outIn,relative ioerr L630
+open #1: "Name=S:\Core\Data\acsllc\CLmstr.h[cno],KFName=S:\Core\Data\acsllc\CLIndex.h[cno],Shr",i,i,k
+open #11: "Name=S:\Core\Data\acsllc\CLmstr.h[cno],KFName=S:\Core\Data\acsllc\CLIndx2.h[cno],Shr",i,i,k
+open #2: "Name=S:\Core\Data\acsllc\TMWk2[acsUserId].h[cno]",i,outi,r ioerr L630
 close #2,free:
 L630: !
-open #2: "Name=S:\Core\Data\acsllc\TMWk2[acsUserId].h[cno],Replace,RecL=56",internal,outIn,relative
+open #2: "Name=S:\Core\Data\acsllc\TMWk2[acsUserId].h[cno],Replace,RecL=56",i,outi,r
 L640: !
 scrid$(1)="TIME MANAGEMENT INPUT OF INVOICES"
 scrid$(2)="Enter CLIENT # as 0 when completed."

@@ -41,10 +41,10 @@
 	next j
 	io1$(27)="21,30,C 20,U,N"
 	hd1$="TIME MANAGEMENT CHANGE COMPANY INFORMATION"
-	open #1: "Name=S:\Core\Data\acsllc\Company.h[cno]",internal,outIn,relative ioerr L480
+	open #1: "Name=S:\Core\Data\acsllc\Company.h[cno]",i,outi,r ioerr L480
 	goto L500
 	close #1,free:
-L480: open #1: "Name=S:\Core\Data\acsllc\Company.h[cno],SIZE=0,RecL=245",internal,outIn,relative ioerr L750
+L480: open #1: "Name=S:\Core\Data\acsllc\Company.h[cno],SIZE=0,RecL=245",i,outi,r ioerr L750
 	write #1,using L510,rec=1: mat co$,mat co,mat ag,mat gln,dat$
 L500: read #1,using L510,rec=1: mat co$,mat co,mat ag,mat gln,dat$ ioerr L750
 L510: form pos 1,4*c 40,4*n 1,pd 3.3,5*pd 2,n 3,n 6,n 3,n 3,n 6,n 3,n 3,n 6,n 3,n 3,n 6,n 3,c 20

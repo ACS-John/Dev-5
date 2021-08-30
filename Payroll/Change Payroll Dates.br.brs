@@ -80,7 +80,7 @@ def library fnGetPayrollDates(&beg_date,&end_date; &qtr1,&qtr2,&qtr3,&qtr4)
 fnend
 def fn_getPayrollDates(&beg_date,&end_date; &qtr1,&qtr2,&qtr3,&qtr4)
 	GpdTop: !
-	open #hDates=fnH: "Name=[Q]\PRmstr\Dates.h[cno]",internal,input,relative ioerr GpdNoRec
+	open #hDates=fnH: "Name=[Q]\PRmstr\Dates.h[cno]",i,i,r ioerr GpdNoRec
 	read #hDates,using "form pos 1,6*n 8",rec=1: beg_date,end_date,qtr1,qtr2,qtr3,qtr4 noRec GpdNoRec
 	close #hDates:
 	goto GpdFinis
@@ -91,7 +91,7 @@ def fn_getPayrollDates(&beg_date,&end_date; &qtr1,&qtr2,&qtr3,&qtr4)
 	GpdFinis: !
 fnend
 def fn_putPayrollDates(beg_date,end_date,qtr1,qtr2,qtr3,qtr4; d1)
-	open #hDates=fnH: "Name=[Q]\PRmstr\Dates.h[cno],use,RecL=76",internal,outIn,relative
+	open #hDates=fnH: "Name=[Q]\PRmstr\Dates.h[cno],use,RecL=76",i,outi,r
 	PutPayrollDatesReWrite: !
 	if d1 then
 		rewrite #hDates,using "form pos 1,6*n 8,n 8"	,rec=1: beg_date,end_date,qtr1,qtr2,qtr3,qtr4,d1 noRec PutPayrollDatesNoRec
@@ -127,11 +127,11 @@ def library fnPayPeriodEndingDate(; setIt)
 fnend
 def fn_payPeriodEndingDate(; setIt,hPrDates)
 	if setIt then
-		open #hPrDates=fnH: "Name=[Q]\PRmstr\Dates.h[cno],Shr",internal,outin,relative 
+		open #hPrDates=fnH: "Name=[Q]\PRmstr\Dates.h[cno],Shr",i,outi,r 
 		rewrite #hPrDates,using "form pos 1,x 48,n 8",rec=1: setIt
 		close #hPrDates: 
 	else
-		open #hPrDates=fnH: "Name=[Q]\PRmstr\Dates.h[cno],Shr",internal,input,relative 
+		open #hPrDates=fnH: "Name=[Q]\PRmstr\Dates.h[cno],Shr",i,i,r 
 		read #hPrDates,using "form pos 1,x 48,n 8",rec=1: setIt
 		close #hPrDates: 
 	end if
@@ -139,7 +139,7 @@ def fn_payPeriodEndingDate(; setIt,hPrDates)
 fnend
 def library fnCompanyPayPeriodEndingDate(cno; ___,returnN)
 	if ~setup then fn_setup
-	open #hPrDates=fnH: 'Name=[Q]\PRmstr\Dates.h'&str$(cno)&',Shr',internal,input,relative ioerr CppedFinis
+	open #hPrDates=fnH: 'Name=[Q]\PRmstr\Dates.h'&str$(cno)&',Shr',i,i,r ioerr CppedFinis
 	read #hPrDates,using "form pos 1,x 48,n 8",rec=1: returnN
 	close #hPrDates: 
 	CppedFinis: !

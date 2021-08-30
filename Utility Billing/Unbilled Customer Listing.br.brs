@@ -30,7 +30,7 @@ Initialize: ! r:
 	if resp$(3)="True" then printadr=1 ! wants meter address printed
 	if d1<10100 or d1>123199 then goto MAIN
 	fnopenprn
-	open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx5.h[cno],Shr",internal,input,keyed
+	open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx5.h[cno],Shr",i,i,k
 	gosub HDR
 	if prtbkno=0 then goto READ_CUSTOMER
 	prtbkno$=lpad$(str$(prtbkno),2)&"       "

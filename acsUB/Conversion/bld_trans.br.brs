@@ -45,7 +45,7 @@ def fn_ub_build_transactions
  
 		fnStatus('   * an error indexing ubindx5 on the next line is acceptable')
 		fnub_index_customer
-		open #master=3: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,input,keyed
+		open #master=3: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",i,i,k
  
 		! open NEW files
 		open #transvb=11: "Name=[Q]\UBmstr\ubTransVB.h[cno],KFName=[Q]\UBmstr\ubTrIndx.h[cno],Shr,RecL=102,KPs=1,KLn=19,Use",internal,outIn,keyed

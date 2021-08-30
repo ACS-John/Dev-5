@@ -60,14 +60,14 @@ def fn_conectivity_test$*40
 	wud_success=0
 	dim wud_return$*40
 	wud_return$=''
-	open #h_script=fnH: 'Name='&script_name$&',RecL=256,replace',display,output
+	open #h_script=fnH: 'Name='&script_name$&',RecL=256,replace',d,o
 	pr #h_script: 'user acs5update'
 	pr #h_script: 'ACSKen!1'
 	pr #h_script: 'Dir ACS-5-Update-CO.exe'
 	pr #h_script: 'quit'
 	close #h_script:
 
-	open #h_batch=fnH: 'Name='&batch_name$&',RecL=256,replace',display,output
+	open #h_batch=fnH: 'Name='&batch_name$&',RecL=256,replace',d,o
 	pr #h_batch: 'prompt $p$g'
 	pr #h_batch: 'ftp -n -s:"'&os_filename$(script_name$)&'" ftp.planetacs.net >"'&os_filename$(return_name$)&'"'
 	close #h_batch:
@@ -101,7 +101,7 @@ def fn_update_license
 	ul_success=0
 	dim ul_return$*40
 	ul_return$=''
-	open #h_script=fnH: 'Name='&script_name$&',RecL=256,replace',display,output
+	open #h_script=fnH: 'Name='&script_name$&',RecL=256,replace',d,o
 	pr #h_script: 'user acs5update'
 	pr #h_script: 'ACSKen!1'
 	pr #h_script: 'LCD '&env$('Temp')
@@ -109,7 +109,7 @@ def fn_update_license
 	pr #h_script: 'quit'
 	close #h_script:
 
-	open #h_batch=fnH: 'Name='&batch_name$&',RecL=256,replace',display,output
+	open #h_batch=fnH: 'Name='&batch_name$&',RecL=256,replace',d,o
 	pr #h_batch: 'prompt $p$g'
 	pr #h_batch: 'ftp -n -s:"'&os_filename$(script_name$)&'" ftp.planetacs.net >"'&os_filename$(return_name$)&'"'
 	close #h_batch:
@@ -185,7 +185,7 @@ def fn_update
 		fnStatus("Download started at "&time$)
 		fnStatus("Please wait...")
 		!  fn_download_an_update(system_id$*2)
-		open #h_script=fnH: 'Name='&script_name$&',RecL=256,replace',display,output
+		open #h_script=fnH: 'Name='&script_name$&',RecL=256,replace',d,o
 		pr #h_script: 'user acs5update'
 		pr #h_script: 'ACSKen!1'
 		pr #h_script: 'LCD '&env$('Temp')
@@ -198,7 +198,7 @@ def fn_update
 		pr #h_script: 'quit'
 		close #h_script:
 		
-		open #h_batch=fnH: 'Name='&batch_name$&',RecL=256,replace',display,output
+		open #h_batch=fnH: 'Name='&batch_name$&',RecL=256,replace',d,o
 		pr #h_batch: 'prompt $p$g'
 		pr #h_script: 'ftp -n -s:"'&os_filename$(script_name$)&'" ftp.planetacs.net >"'&os_filename$(return_name$)&'"'
 		close #h_batch:
@@ -249,7 +249,7 @@ fnend
 def fn_drive_sys_must_exist
 	if ~exists('S:\Drive.sys') then
 		fnStatus('creating missing Drive.sys')
-		open #h_drive_sys=fnH: 'Name=S:\Drive.sys,RecL=256,New',display,output
+		open #h_drive_sys=fnH: 'Name=S:\Drive.sys,RecL=256,New',d,o
 		open #h_brconfig_sys=fnH: 'Name=S:\BRConfig.sys',display,input
 		pr #h_drive_sys: 'Rem Drive.sys automatically created by update process on '&date$&' at '&time$
 		do

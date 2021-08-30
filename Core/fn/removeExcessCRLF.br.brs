@@ -89,7 +89,7 @@ def library fnRemoveExcessCRLF$*256(csvFile$*256; minColCount, ___, _
 	open #hIn=fnH:  'name=[at]'&csvFile$,display,input
 include: filenamesPushMixedCase
 	open #hOut=fnH: 'name=[at]'&csvFile$&'-fixedCrLf, _
-														recl=2048,replace',display,output
+														recl=2048,replace',d,o
 include: filenamesPopUpperCase
 
 	do

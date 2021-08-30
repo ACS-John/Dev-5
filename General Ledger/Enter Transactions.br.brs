@@ -238,7 +238,7 @@ ScrPost: ! r:
 	if resp$(1)="True" then goto DoMerge
 	if resp$(3)="True" then goto DoPrMerge
 
-	open #h_process=fnH: "Name=[Q]\GLmstr\Process.h[cno],RecL=128,Use",internal,outIn,relative
+	open #h_process=fnH: "Name=[Q]\GLmstr\Process.h[cno],RecL=128,Use",i,outi,r
 	if lrec(h_process)=0 then write #h_process,using "form pos 1,n 1": 0
 	if resp$(2)="True" then  ! code for post payroll and gl both
 		rewrite #h_process,using "form pos 1,n 1",rec=1: 1
@@ -1006,7 +1006,7 @@ fnend
 				if fn_readMerge(mergeRecordNumber,gl$,tr4,tr5,tType,postingCode,tr$,td$,vn$,jv2$,key$)=57 then goto PES_XIT
 				holdtr$=tr$
 				close #hMtemp: ioerr ignore
-				open #hMtemp=fnH: "Name=[Q]\GLmstr\Allocations[acsUserId].h[cno],Version=1,replace,RecL=59",internal,outIn,relative
+				open #hMtemp=fnH: "Name=[Q]\GLmstr\Allocations[acsUserId].h[cno],Version=1,replace,RecL=59",i,outi,r
 				! process the whole file and gather all records that match reference number and gather into MergeTemp file
 				restore #hMerge:
 				do
@@ -1074,7 +1074,7 @@ def fn_clearVar(&hMtemp,&transactionAmt,&td$,&vn$,&gl$,&totalalloc, _
 	&gl_retainFieldsDuringAdd$)
 	!  clear entry screen
 	close #hMtemp: ioerr ignore
-	open #hMtemp=fnH: "Name=[Q]\GLmstr\Allocations[acsUserId].h[cno],Version=1,replace,RecL=59",internal,outIn,relative
+	open #hMtemp=fnH: "Name=[Q]\GLmstr\Allocations[acsUserId].h[cno],Version=1,replace,RecL=59",i,outi,r
 	transactionAmt=0
 	if gl_retainFieldsDuringAdd$='False' then
 		td$=''
@@ -1092,7 +1092,7 @@ def fn_extract(&hMtemp,vn$,transactionAmt; ___, _
 		restore #hPayeeGl,key>=glkey$: nokey ExtractFinis
 
 		close #hMtemp: ioerr ignore
-		open #hMtemp=fnH: "Name=[Q]\GLmstr\Allocations[acsUserId].h[cno],Version=1,replace,RecL=59",internal,outIn,relative
+		open #hMtemp=fnH: "Name=[Q]\GLmstr\Allocations[acsUserId].h[cno],Version=1,replace,RecL=59",i,outi,r
 
 		do
 			read #hPayeeGl,using 'Form Pos 1,C 8,c 12,n 6.2,c 30',release: payeekey$,payeegl$,percent,td$ eof ExtractEoPgl
@@ -1316,7 +1316,7 @@ def fn_openFiles(; reset,___,useOrReplace$)
 	dim td$*30 ! transaction description
 	dim jv2$*5
 	dim key$*12
-	open #hMerge=fnH: 'Name=[Q]\GLmstr\GL_Work_[acsUserId].h[cno],RecL=104,'&useOrReplace$&',Shr',internal,outIn,relative
+	open #hMerge=fnH: 'Name=[Q]\GLmstr\GL_Work_[acsUserId].h[cno],RecL=104,'&useOrReplace$&',Shr',i,outi,r
 	F_merge: form pos 1,c 12,n 6,pd 6.2,n 2,n 2,c 12,c 30,c 8,x 6,c 5,x 3,c 12
 	open #hAccount=fnH: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLIndex.h[cno],Shr",internal,outIn,keyed
 fnend

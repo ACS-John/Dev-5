@@ -9,8 +9,8 @@ dim snm$(10)*20,a(7),option$(5),extra(13),service$(3)*26,ms$(13)*3
 dim txt$*50,resp$(9)*50
 
 fnTop(program$)
-open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx5.h[cno],Shr",internal,input,keyed 
-open #11: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,input,keyed 
+open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx5.h[cno],Shr",i,i,k 
+open #11: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",i,i,k 
 
 ! this section+the comboA on the first screen is just what you need 
 ! for a fnCurrently availableServiceTypeComboBox

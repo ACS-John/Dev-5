@@ -29,7 +29,7 @@ def fn_payroll_register_2(; det,include_tips_in_other_wh,append_reg1,ppdOverride
 
 	if ~append_reg1 then fnopenprn(' (Departmental Register)')
 
-	open #hDeptName=fnH: "Name=[Q]\PRmstr\DeptName.h[cno],KFName=[Q]\PRmstr\DeptNameIdx.h[cno],Shr",internal,input,keyed ioerr P2DeptOpened
+	open #hDeptName=fnH: "Name=[Q]\PRmstr\DeptName.h[cno],KFName=[Q]\PRmstr\DeptNameIdx.h[cno],Shr",i,i,k ioerr P2DeptOpened
 	founddept=1
 	P2DeptOpened: !
 	if ppdOverride then
@@ -54,8 +54,8 @@ def fn_payroll_register_2(; det,include_tips_in_other_wh,append_reg1,ppdOverride
 	ficarate=ficar1+ficar2
 	fnIndex("[Q]\PRmstr\PayrollChecks.h[cno]","[Q]\PRmstr\CheckIdx2.h[cno]","9/12/1 3/6/8")
 	! execute "Index [Q]\PRmstr\PayrollChecks.h[cno],[Q]\PRmstr\CheckIdx2.h[cno] 9/12/1 3/6/8,replace,DupKeys -n"
-	open #hTrans=fnH: "Name=[Q]\PRmstr\PayrollChecks.h[cno],KFName=[Q]\PRmstr\CheckIdx2.h[cno]",internal,input,keyed
-	open #hEmployee=fnH: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr",internal,input,keyed
+	open #hTrans=fnH: "Name=[Q]\PRmstr\PayrollChecks.h[cno],KFName=[Q]\PRmstr\CheckIdx2.h[cno]",i,i,k
+	open #hEmployee=fnH: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr",i,i,k
 	open #hDepartment=fnH: "Name=[Q]\PRmstr\Department.h[cno],KFName=[Q]\PRmstr\DeptIdx.h[cno]",internal,outIn,keyed
 	! Read #hDepartment,Using 370,Rec=adr: eno, dep1,lpd,tcd(1),mat tdet,mat hc,mcwh,mat cp
 	P2ReadChecks: !

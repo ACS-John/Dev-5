@@ -15,7 +15,7 @@
  
 	if exists("[Q]\PRmstr\MGLMstr.h[cno]")=0 then gosub CREATE_FILES
 	open #1: "Name=[Q]\PRmstr\MGLMstr.h[cno],KFName=[Q]\PRmstr\MGLIdx1.h[cno],Shr",internal,outIn,keyed
-	open #9: "Name=[Q]\PRmstr\DeptName.h[cno],KFName=[Q]\PRmstr\DeptNameIdx.h[cno],Shr",internal,input,keyed
+	open #9: "Name=[Q]\PRmstr\DeptName.h[cno],KFName=[Q]\PRmstr\DeptNameIdx.h[cno],Shr",i,i,k
  
 MENU1: !
 ASKDEPARTMENT: !

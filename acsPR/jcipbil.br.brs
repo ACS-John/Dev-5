@@ -16,7 +16,7 @@
 	open #1: "Name=[Q]\PRmstr\JCMSTR.h[cno],KFName=[Q]\PRmstr\JCIndx.h[cno],Shr",internal,outIn,keyed
 	open #2: "Name=[Temp]\Work."&session$,internal,output ioerr L180
 	close #2,free:
-L180: open #2: "Name=[Temp]\Work.[Session],SIZE=0,RecL=17,Replace",internal,outIn,relative
+L180: open #2: "Name=[Temp]\Work.[Session],SIZE=0,RecL=17,Replace",i,outi,r
 L190: shoption=1
 L200: pr newpage
 	win=101
@@ -148,7 +148,7 @@ SRCH: !
 	bk=0
 	hce=ce
 	close #103: ioerr L1460
-L1460: open #103: "SROW=1,SCOL=1,EROW=24,ECOL=80",display,output
+L1460: open #103: "SROW=1,SCOL=1,EROW=24,ECOL=80",d,o
 	pr #103: newpage
 L1480: pr newpage
 	win=102

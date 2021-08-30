@@ -31,7 +31,7 @@ fnTop(program$)
 	med$="Y"
 ! /r
 	fnDedNames(mat fullname$,mat abrevname$,mat newdedcode,mat newcalcode,mat newdedfed,mat dedfica,mat dedst,mat deduc)
-	open #hEmployee=fnH: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr",internal,input,keyed
+	open #hEmployee=fnH: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr",i,i,k
 	open #hChecks=fnH: "Name=[Q]\PRmstr\payrollchecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno]",internal,outIn,keyed
 ! r: initialize variables
  
@@ -269,7 +269,7 @@ SCREEN1_NEW: ! r:
 	fncreg_write('W-2 FIPS',str$(sr2))
 	!
 ! /r
-	open #hOut=fnH: "Name=W2REPORT,RecL=512,eol=crlf,replace",display,output
+	open #hOut=fnH: "Name=W2REPORT,RecL=512,eol=crlf,replace",d,o
 !
 	gosub RecRA
 	gosub RecRE ! kj 22610  was commented

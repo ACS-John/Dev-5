@@ -16,8 +16,8 @@ if trim$(serviceName$(3))="Electric" or trim$(srv$(3))="EL" or trim$(serviceName
 if trim$(serviceName$(4))="Gas" or trim$(srv$(4))="GA" then service4enabled=1
 sequenceRoute=1
 sequenceAccount=2
-open #h_trans=fnH: "Name=[Q]\UBmstr\UBTransVB.h[cno],KFName=[Q]\UBmstr\UBTrIndx.h[cno],Shr",internal,input,keyed
-open #h_customer_1=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,input,keyed ! 1
+open #h_trans=fnH: "Name=[Q]\UBmstr\UBTransVB.h[cno],KFName=[Q]\UBmstr\UBTrIndx.h[cno],Shr",i,i,k
+open #h_customer_1=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",i,i,k ! 1
 	! /r
 SCREEN1: ! r:
 	fnTos
@@ -57,9 +57,9 @@ SCREEN1: ! r:
 	if resp$(respc_sequenceAccount)='True' then reportSequence=sequenceAccount
 	filterBillingDateCcyymdd=fndate_mmddyy_to_ccyymmdd(filterBillingDate)
 	if reportSequence=sequenceAccount then
-		open #hCustomerForReport=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,input,keyed
+		open #hCustomerForReport=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",i,i,k
 	else ! if reportSequence=sequenceRoute then
-		open #hCustomerForReport=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx5.h[cno],Shr",internal,input,keyed
+		open #hCustomerForReport=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx5.h[cno],Shr",i,i,k
 	end if
 	if filterRoute then
 		if reportSequence=sequenceRoute then restore #hCustomerForReport,key>=lpad$(str$(filterRoute),2)&"       ": nokey SCREEN1

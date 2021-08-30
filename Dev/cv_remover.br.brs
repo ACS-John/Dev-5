@@ -20,7 +20,7 @@ def fn_replace_in_file(program_file$*256,from$*256,to$*256)
 	dim tmp$*512
 	close #h_file: ioerr ignore
 	open #h_file: 'name='&program_file$,display,input 
-	open #h_out=fnH: 'name=new.brs,recl=1048,replace',display,output 
+	open #h_out=fnH: 'name=new.brs,recl=1048,replace',d,o 
 	restore #h_file: 
 	do 
 		dim line$*1048

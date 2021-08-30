@@ -12,8 +12,8 @@ dim dat$*20
 fndat(dat$)
 gosub Ask
 fnIndex('[Q]\CLmstr\PayTrans.h[cno]','[Q]\CLmstr\Unpdidx2.h[cno]','31/27/1 2/4/26') ! index in year,monthday,reference
-open #paymstr=fnH: "Name=[Q]\CLmstr\PayMstr.h[cno],KFName=[Q]\CLmstr\PayIdx1.h[cno],Shr",internal,input,keyed 
-open #paytrans=fnH: "Name=[Q]\CLmstr\PayTrans.h[cno],KFName=[Q]\CLmstr\Unpdidx2.h[cno],Shr",internal,input,keyed 
+open #paymstr=fnH: "Name=[Q]\CLmstr\PayMstr.h[cno],KFName=[Q]\CLmstr\PayIdx1.h[cno],Shr",i,i,k 
+open #paytrans=fnH: "Name=[Q]\CLmstr\PayTrans.h[cno],KFName=[Q]\CLmstr\Unpdidx2.h[cno],Shr",i,i,k 
 fnopenprn
 gosub Hdr
 vn$=iv$=""

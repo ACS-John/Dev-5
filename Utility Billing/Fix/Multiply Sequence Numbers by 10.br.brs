@@ -9,7 +9,7 @@
 	dim z$*10,e$(4)*30,f$(3)*12,a(7),b(11),c(4),d(15),g(12),adr(2),alp$*7,gb(10),extra$(11)*30
 	dim extra(23)
 	dim df$*1
-	open #h_customer=fnH: "Name=[Q]\UBmstr\Customer.h[cno]",internal,outIn,relative
+	open #h_customer=fnH: "Name=[Q]\UBmstr\Customer.h[cno]",i,outi,r
 	F_CustomerSequenceOnly: form pos 1743,N 7
 	! /r
 	do ! r: primary loop

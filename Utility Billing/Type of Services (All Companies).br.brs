@@ -25,7 +25,7 @@ fngetdir2("[Q]\UBmstr\ubData\",mat service_file$, '/ON','Service.h*')
 
 for service_file_item=1 to udim(service_file$)
 	item$(1)=service_file$(service_file_item)(10:len(service_file$(service_file_item)))
-	open #h_service=15: "Name=[Q]\UBmstr\ubData\"&service_file$(service_file_item),internal,outIn,relative
+	open #h_service=15: "Name=[Q]\UBmstr\ubData\"&service_file$(service_file_item),i,outi,r
 	read #h_service,using "form pos 1,10*c 20,10*c 2,10*c 1,10*c 1,10*G 2,10*G 2",rec=1: mat item$(2:61)
 	fnflexadd1(mat item$)
 	close #h_service:

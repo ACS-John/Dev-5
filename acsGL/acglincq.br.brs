@@ -26,7 +26,7 @@ L210: if fnps=2 then mp1=72 else mp1=69
 L250: form pos mp1,pd 3,pos mp2,pd 3,pos 81,41*pd 6.2
 	form c 7,skip 0
 	nametab=int(44-len(rtrm$(cnam$))/2)
-	open #1: fl1$,internal,input,keyed
+	open #1: fl1$,i,i,k
 	if fnprocess=1 or fnUseDeptNo=0 then goto L390
 	fnTos(sn$="ACglincq") : _
 	mylen=30: mypos=mylen+3 : right=1
@@ -44,7 +44,7 @@ L390: fnopenprn
 	execute "Index [Q]\GLmstr\GLmstr.h[cno] "&udf$&"fsindex.h[cno] 69 3 Replace DupKeys -N"
 	goto L440
 L430: execute "Index [Q]\GLmstr\GLmstr.h[cno] "&udf$&"fsindex.h[cno] 72 3 Replace DupKeys -N"
-L440: open #3: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName="&udf$&"fsindex.h[cno],Shr",internal,input,keyed
+L440: open #3: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName="&udf$&"fsindex.h[cno],Shr",i,i,k
 	report$="STATEMENT OF INCOME AND EXPENSES"
 ! GOSUB BLDPCT1 ! BUILD % BASED ON REF # IN PRIMARY FUND # IN G/L ACCOUNT
 L470: read #1,using L520: r$,d$,te$,sp,ls,ds,ul,rs,bc,ap,mat ac,ic,fc eof L1720

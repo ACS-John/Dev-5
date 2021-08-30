@@ -232,7 +232,7 @@ Finis: ! r:
 
 	fnIndex("[Q]\GLmstr\GLBREC.h[cno]","[Q]\GLmstr\GLRecIdx.h[cno]","1 24")
 
-	open #30: "Name=[Q]\GLmstr\Process.h[cno],Shr",internal,outIn,relative ioerr L1760
+	open #30: "Name=[Q]\GLmstr\Process.h[cno],Shr",i,outi,r ioerr L1760
 	read #30,using "form pos 1,n 1",rec=1: process noRec L1760 ! read post payroll code
 	rewrite #30,using "form pos 1,n 1",rec=1: 0 noRec L1760 ! clear post payroll code
 	L1760: !

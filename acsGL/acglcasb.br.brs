@@ -16,7 +16,7 @@
 	if fnGlAskFormatPriorCdPeriod=5 then goto Xit ! sets fnps,fnpriorcd,fnfscode (primary/secondary,current year/Prior,period to print)
 	fscode=fnfscode
 	priorcd=fnpriorcd
-	open #20: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,input,relative
+	open #20: "Name=[Q]\GLmstr\Company.h[cno],Shr",i,i,r
 	read #20,using 'Form Pos 384,n 2',rec=1: nap
 	close #20:
 	actpd=fnactpd
@@ -35,7 +35,7 @@
 	fl1$="Name=[Q]\GLmstr\ACGLFNSF.h[cno],KFName=[Q]\GLmstr\agfsidx5.h[cno],Shr"
 	if fnps=2 then fl1$="Name=[Q]\GLmstr\ACGLFNSG.h[cno],KFName=[Q]\GLmstr\agfsidx6.h[cno],Shr"
 	form c 7,skip 0
-	open #1: fl1$,internal,input,keyed
+	open #1: fl1$,i,i,k
 	if fnprocess=1 or fnUseDeptNo=0 then goto L410
 	fnTos
 	mylen=30 : mypos=mylen+3 : right=1
@@ -73,7 +73,7 @@ L550: !
 	else
 		fnIndex('[Q]\GLmstr\GLmstr.h[cno]','[temp]\fsindex.h[cno]','75 3')
 	end if
-	open #3: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Temp]\fsindex.h[cno],Shr",internal,input,keyed
+	open #3: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Temp]\fsindex.h[cno],Shr",i,i,k
 	L630: ! read amounts from gl master file
 	L640: !
 	read #3,using L730: ir,bb,cb,mat by,mat bp,mat bm eof L940

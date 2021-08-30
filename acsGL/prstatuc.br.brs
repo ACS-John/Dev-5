@@ -24,7 +24,7 @@
 	ckey=fnAcs(mat resp$)
 	if ckey=5 then goto Xit
 	pedat$=resp$(1)
-L240: open #2: "Name=[Q]\GLmstr\PRmstr.h[cno],KFName=[Q]\GLmstr\PRIndex.h[cno],Shr",internal,input,keyed
+L240: open #2: "Name=[Q]\GLmstr\PRmstr.h[cno],KFName=[Q]\GLmstr\PRIndex.h[cno],Shr",i,i,k
 	fnopenprn
 	gosub HDR
 L340: read #2,using L350: mat k,mat k$,mat l$,mat m eof L720

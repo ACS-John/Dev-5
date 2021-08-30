@@ -38,13 +38,13 @@ else ! NO DEPT    NO SUBACCOUNT
 	mat pgl(1)=(0)
 	gpx=1
 end if
-	open #hAddr:=fnH: "Name=[Temp]\Addr.[Session],Replace,RecL=239",internal,outIn,relative
-	open #1: "Name=S:\acsTM\TMSCRN.CL,Shr",internal,input,relative
+	open #hAddr:=fnH: "Name=[Temp]\Addr.[Session],Replace,RecL=239",i,outi,r
+	open #1: "Name=S:\acsTM\TMSCRN.CL,Shr",i,i,r
 	read #1,using L560,rec=sz: f3$,mat fl1$,mat sc1$,mat sc2$,mat fli1$,mat ot1$,mat flo1$,mat flo3$,mat sc3$
 	L560: form pos 1,c 255,142*c 18
 	close #1:
-	open #9: "Name=S:\Core\Data\acsllc\CLmstr.h[cno],KFName=S:\Core\Data\acsllc\CLIndex.h[cno],Shr",internal,input,keyed
-	open #hClmstr2=fnH: "Name=S:\Core\Data\acsllc\CLmstr.h[cno],KFName=S:\Core\Data\acsllc\CLIndx2.h[cno],Shr",internal,input,keyed ! 11
+	open #9: "Name=S:\Core\Data\acsllc\CLmstr.h[cno],KFName=S:\Core\Data\acsllc\CLIndex.h[cno],Shr",i,i,k
+	open #hClmstr2=fnH: "Name=S:\Core\Data\acsllc\CLmstr.h[cno],KFName=S:\Core\Data\acsllc\CLIndx2.h[cno],Shr",i,i,k ! 11
 L590: !
 	hd$(1)="A/R Input Selection Menu"
 	hd$(2)="ENTER SELECTION"

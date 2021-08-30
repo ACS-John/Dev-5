@@ -6,7 +6,7 @@ on error goto Ertn
 fnTop(program$)
 dim dat$*20
 fndat(dat$)
-open #20: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,input,relative
+open #20: "Name=[Q]\GLmstr\Company.h[cno],Shr",i,i,r
 read #20,using "Form pos 384,N 2",rec=1: nap
 close #20:
 open #hGlmstr=fnH:  "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLINDEX.h[cno],Shr",internal,outIn,keyed

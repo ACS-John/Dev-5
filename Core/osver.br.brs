@@ -22,7 +22,7 @@ def library fnosver(&osver$; get_or_put)
 	return  ! /r 
 	OsvBuild: ! r:
 		fnFree(osv_file$)
-		open #osv_tfn=fnH: "Name="&osv_file$&",RecL=80,replace",display,output 
+		open #osv_tfn=fnH: "Name="&osv_file$&",RecL=80,replace",d,o 
 		if rtrm$(env$("os"))="" then 
 			osv_temp$="Microsoft Windows 95/98"
 		else 

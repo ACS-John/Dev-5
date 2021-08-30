@@ -27,10 +27,10 @@
  
 	fnTop("S:\acsUB\ubprtbl1",cap$="Print Bills")
 ! Gosub BULKSORT ! want printed in alphabetic order
-! Open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",Internal,Input,Keyed  ! open in Account order
-	open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\UBIndx2.h[cno],Shr",internal,input,keyed  ! open in alphabetic order  ! bethany special
-	open #8: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,input,keyed  ! open in alphabetic order  ! bethany special
-	open #2: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx5.h[cno],Shr",internal,input,keyed  ! open in route-sequence #
+! Open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",i,i,k  ! open in Account order
+	open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\UBIndx2.h[cno],Shr",i,i,k  ! open in alphabetic order  ! bethany special
+	open #8: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",i,i,k  ! open in alphabetic order  ! bethany special
+	open #2: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx5.h[cno],Shr",i,i,k  ! open in route-sequence #
  
 SCREEN1: !
 	a$="" : prtbkno=0
@@ -95,7 +95,7 @@ L500: form pos 1,c 10,pos 1741,n 2,n 7
 	if trim$(a$)<>"" then restore #2,key=cnvrt$("pic(zz)",route)& cnvrt$("pic(zzzzzzz)",sequence): nokey SCREEN1
 	if trim$(a$)="" and prtbkno>0 then restore #2,key>=cnvrt$("pic(zz)",prtbkno)&"       ": ! selected a route and no beginning Account
  
-	open #3: "Name=[Q]\UBmstr\UBAdrBil.h[cno],KFName=[Q]\UBmstr\adrIndex.h[cno],Shr",internal,input,keyed
+	open #3: "Name=[Q]\UBmstr\UBAdrBil.h[cno],KFName=[Q]\UBmstr\adrIndex.h[cno],Shr",i,i,k
 	gosub BUD1
 	gosub VBOPENPRINT
  
@@ -177,7 +177,7 @@ SCREEN3: ! r:
 goto READALTADR ! /r
  
 SORT1: ! r: SELECT & SORT
-	open #5: "Name=[Q]\UBmstr\Cass1.h[cno],KFName=[Q]\UBmstr\Cass1Idx.h[cno],Shr",internal,input,keyed ioerr L1510
+	open #5: "Name=[Q]\UBmstr\Cass1.h[cno],KFName=[Q]\UBmstr\Cass1Idx.h[cno],Shr",i,i,k ioerr L1510
 	open #6: "Name=[Temp]\Temp.[Session],Replace,RecL=19",internal,output
 	s5=1
 	if prtbkno=0 then
@@ -207,8 +207,8 @@ SORT1: ! r: SELECT & SORT
 	close #9:
 	execute "Free [Temp]\Addr.[Session] -n" ioerr ignore
 	execute "Sort [Temp]\Control.[Session] -n"
-	open #6: "Name=[Temp]\Temp."&session$,internal,input,relative
-	open #7: "Name=[Temp]\Addr."&session$,internal,input,relative
+	open #6: "Name=[Temp]\Temp."&session$,i,i,r
+	open #7: "Name=[Temp]\Addr."&session$,i,i,r
 	L1510: !
 return ! /r
  
@@ -406,7 +406,7 @@ VBPRINT: ! r:
 return ! /r
  
 BULKSORT: ! r: bulk sort order
-	open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,input,keyed  ! open in Account order
+	open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",i,i,k  ! open in Account order
 	open #6: "Name=[Temp]\Temp.[Session],Replace,RecL=31",internal,output
 	do
 		read #1,using "Form POS 1,C 10,pos 1741,n 2,pos 1743,n 7,pos 1942,c 12": z$,route,seq,bulk$ eof L3070
@@ -416,14 +416,14 @@ BULKSORT: ! r: bulk sort order
 	close #1: ioerr ignore
 	close #6: ioerr ignore
 	L3090: execute "Index [Temp]\Temp.[Session] [Temp]\TempIdx.[Session] 1,19,Replace,DupKeys -n" ioerr L3110
-	open #6: "Name=[Temp]\Temp.[Session],KFName=[Temp]\TempIdx."&session$,internal,input,keyed
+	open #6: "Name=[Temp]\Temp.[Session],KFName=[Temp]\TempIdx."&session$,i,i,k
 	L3110: !
 return ! /r
 BUD1: ! r:
 	bud1=0
 	dim ba(13),badr(2),bt1(14,2),bd1(5),bd2(5),bd3(5),bd$(5)*30
 	open #81: "Name=[Q]\UBmstr\BudMstr.h[cno],KFName=[Q]\UBmstr\BudIdx1.h[cno],Shr",internal,outIn,keyed ioerr L3200
-	open #82: "Name=[Q]\UBmstr\BudTrans.h[cno],Shr",internal,outIn,relative
+	open #82: "Name=[Q]\UBmstr\BudTrans.h[cno],Shr",i,outi,r
 	bud1=1
 	for j=1 to 5
 		bd$(j)=str$(j+10)&",20,PIC(##/##/##),U,N"

@@ -560,7 +560,7 @@ XITWOCAL: ! r:
 PullFromJobCost: ! r:
 ! h(1)=emp#,h(2)=method,h(3)=dept#,h(4)=reghrs,h(5)=ot hrs,h(6)=salary,h(7)=ded #
 	gosub SORTIT
-	open #5: "Name=[Q]\PRmstr\JCPRH1.h[cno]",internal,input,relative
+	open #5: "Name=[Q]\PRmstr\JCPRH1.h[cno]",i,i,r
 	open #6: "Name=[Temp]\Addr."&session$,internal,input
 	close #h_rpwork:=3: ioerr ignore
 	open #h_rpwork:=3: "Name=[Q]\PRmstr\rpwork[unique_computer_id].h[cno],RecL=167,Replace",internal,output
@@ -677,7 +677,7 @@ ASK_EMPLOYEE: ! r:
 	end if
 ! /r
 	def fn_add_proof_totals(&apt_total_employee_numbers,&apt_count_employees_entered,mat tinp)
-		open #apt_h_rpwork=fnH: "Name=[Q]\PRmstr\rpwork[unique_computer_id].h[cno],KFName=[Q]\PRmstr\rpwork[unique_computer_id]Idx.h[cno]",internal,input,keyed ioerr APT_FINIS
+		open #apt_h_rpwork=fnH: "Name=[Q]\PRmstr\rpwork[unique_computer_id].h[cno],KFName=[Q]\PRmstr\rpwork[unique_computer_id]Idx.h[cno]",i,i,k ioerr APT_FINIS
 		apt_heno=0 ! temp variable for internal comparison
 		apt_total_employee_numbers=0 ! total of all (unique) employee numbers entered
 		apt_count_employees_entered=0 ! total unique employees entered

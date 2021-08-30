@@ -37,7 +37,7 @@ L270: form pos mp1,pd 3,pos 81,41*pd 6.2
 	pr f "12,2,C 60,N": "USE OPTION 1 ON THE MENU TO ENTER THIS INFORMATION"
 	input fields "23,2,C 1,E,N": pause$
 	goto L2530
-L330: open #1: fl1$,internal,input,keyed
+L330: open #1: fl1$,i,i,k
 	if fnprocess=1 or fnUseDeptNo=0 or percent=1 then goto L440
 	fnTos(sn$="ACglincv") : _
 	mylen=30: mypos=mylen+3 : right=1
@@ -55,7 +55,7 @@ L440: report$="Statement of Income and Expenses"
 	execute "Index [Q]\GLmstr\GLmstr.h[cno] "&udf$&"fsindex.h[cno] 69 3 Replace DupKeys -N"
 	goto L490
 L480: execute "Index [Q]\GLmstr\GLmstr.h[cno] "&udf$&"fsindex.h[cno] 72 3 Replace DupKeys -N"
-L490: open #3: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName="&udf$&"fsindex.h[cno],Shr",internal,input,keyed
+L490: open #3: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName="&udf$&"fsindex.h[cno],Shr",i,i,k
 	goto TOP_OF_LOOP
  
 TOP_OF_LOOP: !

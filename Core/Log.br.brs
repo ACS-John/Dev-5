@@ -11,7 +11,7 @@ def library fnlog(log$*512;log_type)
 	else
 		needsHeader=0
 	end if
-	open #h_log=fnH: "Name=[Temp]\acs\Log.txt,RecL=1024,EOL=CRLF,Use",display,output ioerr Xit
+	open #h_log=fnH: "Name=[Temp]\acs\Log.txt,RecL=1024,EOL=CRLF,Use",d,o ioerr Xit
 	if needsHeader then
 		pr #h_log: 'acsUserId/Session'&delim$;
 		pr #h_log: 'logType'&delim$;

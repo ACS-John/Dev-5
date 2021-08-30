@@ -40,7 +40,7 @@ def library fnHamster(uw$*20,mat lbl$,mat fln,hIn,mat p$; mat flTyp$,mat sln,mat
 		for j=1 to itemCount
 			if udim(mat control$,1)=>j and lwrc$(control$(j,1))='combof' and control$(j,7)<>'' then ! it is a combof that has an index
 				fltyp2$(j)="c"
-				open #hComboF(j)=fnH: 'name='&control$(j,2)&',kfname='&control$(j,7)&',Shr',internal,input,keyed
+				open #hComboF(j)=fnH: 'name='&control$(j,2)&',kfname='&control$(j,7)&',Shr',i,i,k
 			else if udim(flTyp$)<>itemCount then
 				fltyp2$(j)="g"
 			else if j>udim(flTyp$) then

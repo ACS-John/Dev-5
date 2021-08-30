@@ -28,7 +28,7 @@
 		fl1$="Name=[Q]\GLmstr\ACGLFNSJ.h[cno],KFName=[Q]\GLmstr\agfsidx2.h[cno],Shr" else : _
 		mp1=69 : _
 		fl1$="Name=[Q]\GLmstr\ACGLFNSI.h[cno],KFName=[Q]\GLmstr\agfsidx3.h[cno],Shr"
-	open #1: fl1$,internal,input,keyed
+	open #1: fl1$,i,i,k
 	fnopenprn : _
 	if file$(255)(1:4)<>"PRN:" then redir=1 else redir=0
 	on fkey 5 goto L1670
@@ -38,7 +38,7 @@
 	goto L340
 L320: execute "Index [Q]\GLmstr\GLmstr.h[cno] "&udf$&"fsindex.h[cno] 72 3 Replace DupKeys -N"
 	fnconsole(off=0)
-L340: open #3: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName="&udf$&"fsindex.h[cno],Shr",internal,input,keyed
+L340: open #3: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName="&udf$&"fsindex.h[cno],Shr",i,i,k
 L350: read #1,using L400: r$,d$,te$,sp,ls,ds,ul,rs,bc,ap,mat ac,ic,fc eof L1670
 	if ltrm$(r$)="" or ltrm$(r$)="0" then goto L350
 	if costcntr=0 then goto L400

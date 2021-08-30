@@ -41,8 +41,8 @@ L390: pr newpage
 	message$="Removeing completed Jobs..."
 	fnwait(message$,0)
 	restore #1:
-	open #2: "Name=JCCAT.X,KFName=[Q]\PRmstr\CatIndx.h[cno]",internal,input,keyed
-	open #3: "Name=JCTRANS.X",internal,input,relative
+	open #2: "Name=JCCAT.X,KFName=[Q]\PRmstr\CatIndx.h[cno]",i,i,k
+	open #3: "Name=JCTRANS.X",i,i,r
 	open #11: "Name=[Q]\PRmstr\JCMSTR.h[cno]",internal,output
 	close #11,free:
 	open #11: "Name=[Q]\PRmstr\JCMSTR.h[cno],SIZE=0,RecL=300",internal,output
@@ -51,7 +51,7 @@ L390: pr newpage
 	open #12: "Name=[Q]\PRmstr\JCCAT.h[cno],SIZE=0,RecL=123",internal,output
 	open #13: "Name=[Q]\PRmstr\JCTRANS.h[cno]",internal,output
 	close #13,free:
-	open #13: "Name=[Q]\PRmstr\JCTRANS.h[cno],SIZE=0,RecL=88",internal,outIn,relative
+	open #13: "Name=[Q]\PRmstr\JCTRANS.h[cno],SIZE=0,RecL=88",i,outi,r
 	ot4=1
 	write #13,using L560,rec=1: " ","",mat tr," ",ot4
 L560: form pos 1,c 12,c 6,n 5,pd 3,pd 2,n 6,4*pd 4.2,pd 5.2,c 30,pd 3

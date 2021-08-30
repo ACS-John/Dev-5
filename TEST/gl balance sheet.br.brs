@@ -40,17 +40,17 @@ GetStarted: ! r:
 	if fnps=2 then
 		mp1=66
 		exe 'con sub [FinancialStatementCode] C'
-		! open #hFsD=fnH:"Name=[Q]\GLmstr\acglFnSC.h[cno],KFName=[Q]\GLmstr\agfsidx1.h[cno],Shr",internal,input,keyed
+		! open #hFsD=fnH:"Name=[Q]\GLmstr\acglFnSC.h[cno],KFName=[Q]\GLmstr\agfsidx1.h[cno],Shr",i,i,k
 		fnIndex("[Q]\GLmstr\GLmstr.h[cno]","[Q]\GLmstr\fsindex.h[cno]","66 3")
 	else
 		exe 'con sub [FinancialStatementCode] B'
 		mp1=63
-		! open #hFsD=fnH:"Name=[Q]\GLmstr\ACGLFNSB.h[cno],KFName=[Q]\GLmstr\agfsidx4.h[cno],Shr",internal,input,keyed
+		! open #hFsD=fnH:"Name=[Q]\GLmstr\ACGLFNSB.h[cno],KFName=[Q]\GLmstr\agfsidx4.h[cno],Shr",i,i,k
 		fnIndex("[Q]\GLmstr\GLmstr.h[cno]","[Q]\GLmstr\fsindex.h[cno]","63 3")
 	end if
 	dim fsN(0),fs$(0)*128
 	hFsD=fn_open('GL FSDesign',mat fs$,mat fsN,mat form$,1)
-	open #hGl=fnH: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\fsindex.h[cno],Shr",internal,input,keyed
+	open #hGl=fnH: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\fsindex.h[cno],Shr",i,i,k
 	fnopenprn
 	dim reportHeading1$*50
 	reportHeading1$=env$('program_caption')

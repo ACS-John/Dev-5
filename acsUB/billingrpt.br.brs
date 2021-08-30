@@ -35,7 +35,7 @@ DONE: !
 Xit: fnXit
  
 STARTREPORT: !
-	open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,input,keyed
+	open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",i,i,k
 L380: form pos 1,c 10,pos 41,c 30,pos 227,pd 5,pos 296,pd 4
 	fnopenprn
 ! sort prep !!!
@@ -56,8 +56,8 @@ L520: form pos 1,c 128
 	close #9:
 	execute "FREE [Temp]\Addr.[Session] -n" ioerr L570
 L570: execute "Sort [Temp]\Control.[Session] -n"
-	open #6: "Name=[Temp]\Work."&session$,internal,input,relative
-	open #7: "Name=[Temp]\Addr."&session$,internal,input,relative
+	open #6: "Name=[Temp]\Work."&session$,i,i,r
+	open #7: "Name=[Temp]\Addr."&session$,i,i,r
 	gosub HEADER_PAGE
 	goto REPORT
  

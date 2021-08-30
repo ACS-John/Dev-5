@@ -48,9 +48,9 @@ def fn_pr_conversion_department(cno; medicare_is_seperated)
 	end if 
 
 	if exists("[Q]\PRmstr\RPTrail.h[cno]") then 
-		open #h_rptrail:=2: "Name=[Q]\PRmstr\RPTrail.h[cno],Shr",internal,input,relative 
+		open #h_rptrail:=2: "Name=[Q]\PRmstr\RPTrail.h[cno],Shr",i,i,r 
 	else 
-		open #h_rptrail:=2: "Name=[Q]\PRmstr\RPTRAIL.h[cno],RecL=474,Use,Shr",internal,outIn,relative 
+		open #h_rptrail:=2: "Name=[Q]\PRmstr\RPTRAIL.h[cno],RecL=474,Use,Shr",i,outi,r 
 	end if 
 
 	if fnIndex("[Q]\PRmstr\PRCkHist.h[cno]","[Q]\PRmstr\PRCKINDX.h[cno]","1 14") then 

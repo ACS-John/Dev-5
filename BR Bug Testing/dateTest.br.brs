@@ -1,14 +1,14 @@
 20000   print newpage
-21000   open #0: 'srow=1,scol=1,Rows=37,Cols=116',display,output 
+21000   open #0: 'srow=1,scol=1,Rows=37,Cols=116',d,o 
 22000   print #0,fields '2,2,C': 'Tab, tab'
 22020   print #0,fields '3,2,C': 'right arrow, hold shift, left arrow, left arrow, release shift, 7, tab'
 22040   print #0,fields '4,2,C': 'right arrow, hold shift, left arrow, left arrow, release shift, 7, tab'
 22060   print #0,fields '5,2,C': 'you should encounter the brassertion (ret <= datalen) failed in'
 22080   print #0,fields '6,2,C': 'c:\cugwin64\home\gordo_000\br43\br\brs\brcontrols.h line 359. ...'
-30000   open #188: 'srow=11,scol=24,erow=24,ecol=92,border=S:[screen],N=[screen],caption=Change Payroll Date',display,output 
-30040   open #187: 'srow=27,scol=24,erow=27,ecol=92,border=S:[screen],N=[screen]',display,output 
-30060   open #186: 'srow=2,scol=2,erow=5,ecol=67,parent=188,border=S:[screen],N=[screen],caption=Payroll Date',display,output 
-30080   open #185: 'srow=8,scol=26,erow=13,ecol=67,parent=188,border=S:[screen],N=[screen],caption=Date Range',display,output 
+30000   open #188: 'srow=11,scol=24,erow=24,ecol=92,border=S:[screen],N=[screen],caption=Change Payroll Date',d,o 
+30040   open #187: 'srow=27,scol=24,erow=27,ecol=92,border=S:[screen],N=[screen]',d,o 
+30060   open #186: 'srow=2,scol=2,erow=5,ecol=67,parent=188,border=S:[screen],N=[screen],caption=Payroll Date',d,o 
+30080   open #185: 'srow=8,scol=26,erow=13,ecol=67,parent=188,border=S:[screen],N=[screen],caption=Date Range',d,o 
 30120   dim ace_io$(8)*256
 30140   ace_io$(1)='#186,1,45,9/#PIC(--/--/--),T[textboxes],300'
 30160   ace_io$(2)='#186,2,45,20/C 20,T[textboxes],300'

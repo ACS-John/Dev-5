@@ -3,7 +3,7 @@
 def library fnGlAccountSearch(&account$ ) ! ; fixgrid)
 	autoLibrary
 	on error goto Ertn
-	open #hAccount=fnH: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\glIndex.h[cno],Shr",internal,input,keyed ioerr ERTN
+	open #hAccount=fnH: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\glIndex.h[cno],Shr",i,i,k ioerr ERTN
 	! restore #hAccount:
 	dim resp$(30)*80
 	fnTos

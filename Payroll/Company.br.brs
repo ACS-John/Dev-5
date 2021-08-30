@@ -32,7 +32,7 @@
 	opt_std_or_percent$(2)="Percent"
  
  
-	open #1: 'Name=[Q]\PRmstr\Company.h[cno],recl=759,version=0,use',internal,outIn,relative
+	open #1: 'Name=[Q]\PRmstr\Company.h[cno],recl=759,version=0,use',i,outi,r
 	if lrec(1)=0 then 
 		write #1,using 'Form POS 1,3*C 40,C 12,PD 6.3,PD 6.2,PD 5.2,10*C 8,N 2,PD 4.2,PD 3.3,12*PD 4.2,10*PD 3.3,25*C 12,31*N 1,10*C 6,3*PD 4.3,3*PD 3.2,4*PD 4.2,N 1,2*C 6,N 2'       	: mat a$,fid$,mcr,mcm,feducrat,mat d$,loccode,feducmax,ficarate,ssmax,ficawh,mat xm,mat r,mat e$,mat gln$,gli,mat dedcode,mat calcode,mat dedfed,mat rpnames2$,mat sck,vacm,mhw,mat wcm,tc,mat jn$,dc
 	end if
@@ -385,7 +385,7 @@ goto Xit
 ! /r
  
 DONE: ! r:
-	open #1: "Name=[Q]\PRmstr\Company.h[cno]",internal,outIn,relative
+	open #1: "Name=[Q]\PRmstr\Company.h[cno]",i,outi,r
 	ssmax=ssmax*.1
 	rewrite #1,using 'Form POS 1,3*C 40,C 12,PD 6.3,PD 6.2,PD 5.2,10*C 8,N 2,PD 4.2,PD 3.3,12*PD 4.2,10*PD 3.3,25*C 12,31*N 1,10*C 6,3*PD 4.3,3*PD 3.2,4*PD 4.2,N 1,2*C 6,N 2',rec=1: mat a$,fid$,mcr,mcm,feducrat,mat d$,loccode,feducmax,ficarate,ssmax,ficawh,mat xm,mat r,mat e$,mat gln$,gli,mat dedcode,mat calcode,mat dedfed,mat rpnames2$,mat sck,vacm,mhw,mat wcm,tc,mat jn$,dc
 	close #1:

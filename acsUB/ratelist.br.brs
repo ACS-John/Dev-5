@@ -33,7 +33,7 @@ MAIN: !
 	if resp$(2)="Gas"      then srvc=4 : srvc$=resp$(2)
 	rcode=val(resp$(3))
 	fnopenprn
-	open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,input,keyed
+	open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",i,i,k
 
 	on fkey 5 goto DONE
 	fnopenprn

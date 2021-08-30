@@ -120,7 +120,7 @@ ASK_INFO: !
 	gosub VBOPENPRINT
 	goproc=0
 	if w1=2 then gosub L5930
-	open #1: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr",internal,input,keyed
+	open #1: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr",i,i,k
 	open #2: "Name=[Q]\PRmstr\department.h[cno],KFName=[Q]\PRmstr\deptidx.h[cno]",internal,outIn,keyed
 	open #4: "Name=[Q]\PRmstr\payrollchecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno]",internal,outIn,keyed
 	open #3: "Name=[Temp]\Addr."&session$,internal,input ioerr L960
@@ -129,7 +129,7 @@ L960: open #3: "Name=[Temp]\Addr.[Session],size=0,RecL=33,NoShr",internal,output
 	if w1=3 then gosub L4430
 	write #3,using L990: ssmax,w1,nw
 L990: form pos 1,n 10.2,2*n 1
-	open #14: "Name=[Q]\PRmstr\W2Box16.h[cno],KFName=[Q]\PRmstr\W2Index.h[cno],Shr",internal,input,keyed ioerr L1030
+	open #14: "Name=[Q]\PRmstr\W2Box16.h[cno],KFName=[Q]\PRmstr\W2Index.h[cno],Shr",i,i,k ioerr L1030
 	z$="NO" ! 1/12/90
 	box16=1
 L1030: if loccode=0 then goto ASK_STARTING else goto AskDefaultLocality
@@ -509,10 +509,10 @@ L4560: ! r:
 	on sw1 goto L4620,L4640
 	fl$=rtrm$(fl$)
 	L4620: !
-	open #5: "Name="&fl$&",REPLACE",display,output ioerr L4580
+	open #5: "Name="&fl$&",REPLACE",d,o ioerr L4580
 	goto L4650
 	L4640: !
-	open #5: "Name="&fl$&",RecL=470,REPLACE",display,output ioerr L4580
+	open #5: "Name="&fl$&",RecL=470,REPLACE",d,o ioerr L4580
 	L4650: !
 	close #101:
 return ! /r
@@ -659,7 +659,7 @@ L5930: ! r: left or right stub
 return ! /r
 VBOPENPRINT: ! r:
 	if file(20)=-1 then
-		fnpa_open ! open #20: "Name=[Q]\PRmstr\W2"&wsid$&".txt,Replace,RecL=5000",display,output
+		fnpa_open ! open #20: "Name=[Q]\PRmstr\W2"&wsid$&".txt,Replace,RecL=5000",d,o
 		lyne=topmargin ! starting of 1st line
 		character=1.5
 	end if

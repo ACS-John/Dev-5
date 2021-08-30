@@ -10,7 +10,7 @@
 	dim heading$*70,form$*80,numeric_format$*20,selection$*70
 !
 !
-	open #1: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,input,relative
+	open #1: "Name=[Q]\GLmstr\Company.h[cno],Shr",i,i,r
 	read #1,using 'Form Pos 384,N 2',rec=1: nap
 	close #1:
 !
@@ -87,7 +87,7 @@ Xit: fnXit
 !
 L790: ! PULL FROM BUDGET MANAGEMENT SYSTEM  (select budget #)
 !
-	open #1: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,input,relative
+	open #1: "Name=[Q]\GLmstr\Company.h[cno],Shr",i,i,r
 	read #1,using 'Form Pos 384,N 2',rec=1: nap
 	close #1:
 	pr newpage

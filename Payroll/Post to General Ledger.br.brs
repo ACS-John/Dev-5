@@ -17,14 +17,14 @@
 	fnStatusClose
 	fnopenprn
 
-	open #20: "Name=[Q]\GLmstr\GLBucket.h[cno],Shr",internal,input,relative ioerr L260
+	open #20: "Name=[Q]\GLmstr\GLBucket.h[cno],Shr",i,i,r ioerr L260
 	read #20,using 'Form POS 1,N 1',rec=1: glb noRec ignore
 	close #20:
 	if glb=2 then fn_askaccrue
 	L260: !
 
 	fnDedNames(mat fullname$,mat abbrevname$,mat dedcode,mat newcalcode,mat newdedfed,mat dedfica,mat dedst,mat deduc,mat gl$)
-	open #4: "Name=[Q]\PRmstr\PayrollChecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno]",internal,input,keyed
+	open #4: "Name=[Q]\PRmstr\PayrollChecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno]",i,i,k
 	d1=fnPayPeriodEndingDate
 	if fnclient_has('CL') then ! exists("[Q]\CLmstr") then
 		mat ml$(3)
@@ -86,7 +86,7 @@ ASK_DATE: !
 	prgl(j,3)=val(prgl$(15)(10:12)) ! cash
 	nametab=36-len(rtrm$(a$))/2
 	close #1:
-	open #2: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr",internal,input,keyed
+	open #2: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr",i,i,k
 	open #6: "Name=[Q]\PRmstr\Department.h[cno],KFName=[Q]\PRmstr\DeptId4.h[cno],Shr",internal,outIn,keyed
 	fn_pr_hdr
 	do
@@ -295,7 +295,7 @@ def fn_printtotalsandunderlines: ! pr TOTALS AND UNDERLINES
 	pr #255: newpage
 fnend
 def fn_askaccrue
-	open #12: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLindex.h[cno],Shr",internal,input,keyed ioerr L2500
+	open #12: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLindex.h[cno],Shr",i,i,k ioerr L2500
 	glthere=1
 	L2500: !
 	msgline$(1)="Do you wish to accrue part of this Payroll"

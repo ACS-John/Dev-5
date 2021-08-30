@@ -35,7 +35,7 @@ MAIN: !
 	if resp$(3)="Sewer" then          svce=3
 	if resp$(4)="Sewer" then          svce=4
 	fnopenprn
-	open #1: "Name=[Q]\UBmstr\ubMaster.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,input,keyed
+	open #1: "Name=[Q]\UBmstr\ubMaster.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",i,i,k
 L510: !
 	for k9=1 to 20
 		pr f "20,13,C 11,N": "Rate Code:"

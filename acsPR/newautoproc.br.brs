@@ -13,7 +13,7 @@ dim wk(20),mo(20),qt(20)
 goto BUILD_PRCLNT
  
 BUILD_PRCLNT: ! r:
-	open #prclnt=1: "Name=[Q]\PRmstr\prclnt.dat,Size=0,RecL=48,REPLACE",internal,outIn,relative
+	open #prclnt=1: "Name=[Q]\PRmstr\prclnt.dat,Size=0,RecL=48,REPLACE",i,outi,r
 	for j=1 to 20
 		write #prclnt,using 'Form POS 1,N 5,C 40,3*N 1',rec=j: 0," ",0,0,0
 	next j

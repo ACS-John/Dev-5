@@ -33,7 +33,7 @@
 	! input fields "23,2,c 1,e,n": pause$
 	! goto Xit
 	! L230:
-	open #1: fl1$,internal,input,keyed
+	open #1: fl1$,i,i,k
 	! /r
 	! r: ask cost center
 	if fnprocess=1 or fnUseDeptNo=0 then goto L320
@@ -56,7 +56,7 @@
 	else
 		execute "Index [Q]\GLmstr\GLmstr.h[cno] [Temp]\fsindex.h[cno] 63 3 Replace DupKeys -N"
 	end if
-	open #3: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName="&env$('temp')&'\'&"fsindex.h[cno],Shr",internal,input,keyed
+	open #3: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName="&env$('temp')&'\'&"fsindex.h[cno],Shr",i,i,k
 	! /r
 	fnopenprn
 	report$=env$('program_caption')

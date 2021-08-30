@@ -41,7 +41,7 @@ MENU1: !
 	close #41: ioerr ignore
 	open #41: "Name=[Q]\UBmstr\DEPOSIT1.h"&str$(co1)&",Shr,KFName=[Q]\UBmstr\DEPIDX1.h"&str$(co1)&",Shr,USE,RecL=16,KPS=1,KLN=10",internal,outIn,keyed
 	close #42: ioerr ignore
-	open #42: 'Name=[Q]\UBmstr\Deposit2.h[cno],KFName=[Q]\UBmstr\Deposit2Index.h[cno],Shr,Use,RecL=73,KPs=1,KLn=10',internal,outIn,keyed ! "Name=[Q]\UBmstr\DEPOSIT2.h"&str$(co1)&",Shr,USE,RecL=73",internal,outIn,relative
+	open #42: 'Name=[Q]\UBmstr\Deposit2.h[cno],KFName=[Q]\UBmstr\Deposit2Index.h[cno],Shr,Use,RecL=73,KPs=1,KLn=10',internal,outIn,keyed ! "Name=[Q]\UBmstr\DEPOSIT2.h"&str$(co1)&",Shr,USE,RecL=73",i,outi,r
 	close #26: ioerr ignore
 	open #26: "Name=[Q]\UBmstr\Customer.h"&str$(co2)&",Shr,KFName=[Q]\UBmstr\UBIndex.h"&str$(co2)&",Shr",internal,outIn,keyed  ! Ioerr MENU1
 	open #11: "Name=[Q]\UBmstr\Customer.h"&str$(co2)&",Shr,KFName=[Q]\UBmstr\UBIndx2.h"&str$(co2)&",Shr",internal,outIn,keyed
@@ -55,7 +55,7 @@ MENU1: !
 	close #51: ioerr ignore
 	open #51: "Name=[Q]\UBmstr\Deposit1.h"&str$(co2)&",Shr,KFName=[Q]\UBmstr\DepIdx1.h"&str$(co2)&",Shr,Use,RecL=16,KPs=1,KLn=10",internal,outIn,keyed ioerr MENU1
 	close #52: ioerr ignore
-	open #52: "Name=[Q]\UBmstr\Deposit2.h"&str$(co2)&",Shr,USE,RecL=73",internal,outIn,relative
+	open #52: "Name=[Q]\UBmstr\Deposit2.h"&str$(co2)&",Shr,USE,RecL=73",i,outi,r
 	fnopenprn
 	gosub HDR
 MENU2: !

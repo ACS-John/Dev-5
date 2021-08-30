@@ -68,9 +68,9 @@
 fnopenprn
 gosub Header
 if seq=1 then
-	open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\UBIndx2.h[cno],Shr",internal,input,keyed  ! name sequence
+	open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\UBIndx2.h[cno],Shr",i,i,k  ! name sequence
 else
-	open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx5.h[cno],Shr",internal,input,keyed  ! route sequence
+	open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx5.h[cno],Shr",i,i,k  ! route sequence
 end if
 F_CUSTOMER: form pos 1,c 10,2*c 30,pos 157,11*pd 4.2,4*pd 4,pos 1741,n 2,n 7,pos 1821,n 1
 do ! r: main loop

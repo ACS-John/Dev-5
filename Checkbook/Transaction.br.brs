@@ -27,7 +27,7 @@ on error goto Ertn
 	endd=begd+3000
 	transstartdate=date('mm')*10000+100+date('yy') ! changed default to beginning of month as per billing's suggestion on 2/9/12    ! begd
 	transenddate=date('mmddyy') ! val(date$(4:5))*10000+val(date$(7:8))*100+val(date$(1:2))
-	open #20: "Name=[Q]\CLmstr\Company.h[cno],Shr",internal,input,relative ioerr CHAIN_SELCNO
+	open #20: "Name=[Q]\CLmstr\Company.h[cno],Shr",i,i,r ioerr CHAIN_SELCNO
 	read #20,using 'Form Pos 152,N 2',rec=1,release: wbc : close #20:
 	gosub OPEN_TRANSACTION_FILES
 	open #h_tralloc=fnH: "Name=[Q]\CLmstr\TrAlloc.h[cno],KFName=[Q]\CLmstr\TrAlloc-Idx.h[cno],Shr",internal,outIn,keyed
@@ -274,10 +274,10 @@ REMOVE_TRALLOC_FOR_KEY_EOF: ! eo first...
 
 ! ** next add new allocations that match what they have in their payee file or receipt file (typeofentry=2=reading from receipt file
 	if typeofentry=2 then
-		open #payee=fnH: "Name=[Q]\CLmstr\RecMstr.h[cno],KFName=[Q]\CLmstr\recIdx1.h[cno],Shr",internal,input,keyed
+		open #payee=fnH: "Name=[Q]\CLmstr\RecMstr.h[cno],KFName=[Q]\CLmstr\recIdx1.h[cno],Shr",i,i,k
 		open #payeegl=fnH: "Name=[Q]\CLmstr\ReceiptGLBreakdown.h[cno],KFName=[Q]\CLmstr\ReceiptGLBkdIdx.h[cno],Shr",internal,outIn,keyed
 	else
-		open #payee=fnH: "Name=[Q]\CLmstr\PayMstr.h[cno],KFName=[Q]\CLmstr\PayIdx1.h[cno],Shr",internal,input,keyed
+		open #payee=fnH: "Name=[Q]\CLmstr\PayMstr.h[cno],KFName=[Q]\CLmstr\PayIdx1.h[cno],Shr",i,i,k
 		open #payeegl=fnH: "Name=[Q]\CLmstr\PayeeGLBreakdown.h[cno],KFName=[Q]\CLmstr\PayeeGLBkdIdx.h[cno],Shr",internal,outIn,keyed
 	end if
 

@@ -221,7 +221,7 @@ SETUP_SQL: ! r: Setup SQL Info
 return ! /r
 REJECT_REPORT: ! r:
 	if ~h_reject_report or trim$(file$(h_reject_report))="" then 
-		open #h_reject_report:=fngethandle: "NAME=N:NOT_DELETED_"&date$("MMDDCCYY")&srep$(time$,":","")&".CSV,replace",display,output  
+		open #h_reject_report:=fngethandle: "NAME=N:NOT_DELETED_"&date$("MMDDCCYY")&srep$(time$,":","")&".CSV,replace",d,o  
 		print #h_reject_report: "FILENO,RECD,REASON"
 	end if
 	print #h_reject_report: f$&","&fndate_rpt10$(r$)&","&reject_reason$
@@ -230,13 +230,13 @@ REJECT_REPORT: ! r:
 return ! /r
 PRINT_DELETE_REPORT: ! r:
 	if ~h_delete_report or trim$(file$(h_delete_report))="" then 
-		open #h_delete_report:=fngethandle: "NAME=N:DELETED_"&date$("MMDDCCYY")&srep$(time$,":","")&".CSV,replace",display,output  
+		open #h_delete_report:=fngethandle: "NAME=N:DELETED_"&date$("MMDDCCYY")&srep$(time$,":","")&".CSV,replace",d,o  
 		print #h_delete_report: "FILENO,RECD"
 	end if
 	print #h_delete_report: delete_fileno$&","&fndate_rpt10$(date_recd$)
 return ! /r
 OPEN_FILES: ! r:
-	open #h_removed:=fngethandle: "name=removed.mw/temp,replace,recl=100",display,output 
+	open #h_removed:=fngethandle: "name=removed.mw/temp,replace,recl=100",d,o 
 	! OPEN #H_Extra:=fngethandle: "NAME=EXTRA//6,KFNAME=EXTRAI//6,SHR",INTERNAL,OUTIN,KEYED 
 	h_extra=fnopen_extra(mat extra_handles)
 	! OPEN #H_Masterdate:=fngethandle: "NAME=MASTER//6,KFNAME=dateidxb//6,SHR",INTERNAL,OUTIN,KEYED  
@@ -253,7 +253,7 @@ OPEN_FILES: ! r:
 	h_buckets=fnopen_buckets(mat buckets_handles)
 	! OPEN #H_Diarydat:=fngethandle: "name=diary.int//6,kfname=diary.dat//6,shr",INTERNAL,OUTIN,KEYED IOERR 20100
 	! OPEN #H_Diaryfil:=fngethandle: "name=diary.int//6,kfname=diary.fil//6,shr",INTERNAL,OUTIN,KEYED IOERR 20110
-	! OPEN #H_Diaryque:=fngethandle: "name=diary.int//6,kfname=diary.que//6,shr",INTERNAL,INPUT,KEYED IOERR 20120
+	! OPEN #H_Diaryque:=fngethandle: "name=diary.int//6,kfname=diary.que//6,shr",i,i,k IOERR 20120
 	h_diaryfil=fnopen_diaryint(mat diary_handles)
 	! OPEN #H_Internal:=fngethandle: "NAME=INTERNAL//6,KFNAME=INTERNAL.IDX//6,SHR",INTERNAL,OUTIN,KEYED  
 	! OPEN #H_Internalrel:=fngethandle: "NAME=INTERNAL//6,KFNAME=INTERNAL.REL//6,SHR",INTERNAL,OUTIN,KEYED 

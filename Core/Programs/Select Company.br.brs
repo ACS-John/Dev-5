@@ -264,7 +264,7 @@ fnend
 def fn_companyNameSet(cno,cnam$*40)
 	cnam$=rtrm$(cnam$)
 	if cnam$<>'' then
-		open #h_company=fnH: 'Name='&fn_dataFolder$&'\Company.h'&str$(cno),internal,outIn,relative
+		open #h_company=fnH: 'Name='&fn_dataFolder$&'\Company.h'&str$(cno),i,outi,r
 		rewrite #h_company,using 'form pos 1,c 40',rec=1: cnam$
 		close #h_company:
 	end if

@@ -9,9 +9,9 @@ dim p$*5,iv$*12,tr(6),id$*20,sc1$(5),sc2$(9),hd$(2)*50
 dim flo4$(5),sc4$(5),ot4$(5),fli4$(5),q(3),gln1(3),gln2(3),otgl$(3)
 dim gl(10,4),fli1$(49),ot1$(49),pgl(3)
 fn_get_old_setup
-open #h_clmstr=9: "Name=S:\Core\Data\acsllc\CLmstr.h[cno],KFName=S:\Core\Data\acsllc\CLIndex.h[cno],Shr",internal,input,keyed ioerr ERR_FILE
-open #11: "Name=S:\Core\Data\acsllc\CLmstr.h[cno],KFName=S:\Core\Data\acsllc\CLIndx2.h[cno],Shr",internal,input,keyed ioerr ERR_FILE
-open #h_addr:=3: "Name=[Temp]\Addr.[Session],RecL=239,Replace",internal,outIn,relative ioerr ERR_FILE
+open #h_clmstr=9: "Name=S:\Core\Data\acsllc\CLmstr.h[cno],KFName=S:\Core\Data\acsllc\CLIndex.h[cno],Shr",i,i,k ioerr ERR_FILE
+open #11: "Name=S:\Core\Data\acsllc\CLmstr.h[cno],KFName=S:\Core\Data\acsllc\CLIndx2.h[cno],Shr",i,i,k ioerr ERR_FILE
+open #h_addr:=3: "Name=[Temp]\Addr.[Session],RecL=239,Replace",i,outi,r ioerr ERR_FILE
 SCREEN_1: ! r:
 ! exec 'config dimonly'
 	dim file_import$*256,filter_date(2)
@@ -315,7 +315,7 @@ def fn_get_old_setup
 	L490: ! NO GL TO BE ENTERED
 	sz=6
 	L510: !
-	open #1: "Name=S:\acsTM\TMSCRN.CL,Shr",internal,input,relative ioerr ERR_FILE
+	open #1: "Name=S:\acsTM\TMSCRN.CL,Shr",i,i,r ioerr ERR_FILE
 	read #1,using 'form pos 1,c 255,142*c 18',rec=sz: ioerr ERR_FILE
 	close #1:
 fnend

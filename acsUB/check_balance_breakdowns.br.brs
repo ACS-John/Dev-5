@@ -141,9 +141,9 @@ def fn_transBreakdowns(do_fix,do_report; ___,needsFixed)
 	gb_other=fnservice_other
 	fnStatus('Checking Transaction Breakdowns')
 	if do_fix then 
-		open #h_trans=11: "Name=[Q]\UBmstr\ubTransVB.h[cno],Shr",internal,outIn,relative 
+		open #h_trans=11: "Name=[Q]\UBmstr\ubTransVB.h[cno],Shr",i,outi,r 
 	else 
-		open #h_trans=11: "Name=[Q]\UBmstr\ubTransVB.h[cno],Shr",internal,input,relative 
+		open #h_trans=11: "Name=[Q]\UBmstr\ubTransVB.h[cno],Shr",i,i,r 
 	end if 
 	do 
 		read #h_trans,using F_TRANS: p$,tdate,transcode,tamt,mat trans_g,mat unused_ru,bal,postcode eof TRANS_EOF

@@ -30,20 +30,20 @@ fnstyp(0)
 open #glmstr=11: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLIndex.h[cno],Shr",internal,outIn,keyed ioerr L220
  
 L220: !
-open #20: "Name=[Q]\GLmstr\GLBucket.h[cno],RecL=1,Use",internal,outIn,relative
+open #20: "Name=[Q]\GLmstr\GLBucket.h[cno],RecL=1,Use",i,outi,r
 if lrec(20)=0 then
 	write #20,using 'Form POS 1,N 1',rec=1: 1
 end if
 read #20,using 'Form POS 1,N 1',rec=1: glb
 close #20:
  
-open #company=1: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,outIn,relative ioerr BLD_COINFO
+open #company=1: "Name=[Q]\GLmstr\Company.h[cno],Shr",i,outi,r ioerr BLD_COINFO
 goto READ_COINFO
  
 COINFO_READ_ERR: close #company: ioerr BLD_COINFO : goto BLD_COINFO
  
 BLD_COINFO: !
-	open #company=1: "Name=[Q]\GLmstr\Company.h[cno],RecL=882,Replace",internal,outIn,relative
+	open #company=1: "Name=[Q]\GLmstr\Company.h[cno],RecL=882,Replace",i,outi,r
 COINFO_WRITE: !
 	write #company,using 'Form POS 1,3*C 40,2*C 12,C 5,2*N 1,2*C 12,N 3,N 6,N 3,PD 7.2,C 30,POS 298,15*PD 4,POS 382,N 2,N 2,PD 5.3,PD 5.2,PD 5.3,PD 5.2,G 1,PD 5.3,PD 5.2,N 1,10*C 20,50*N 1,10*C 12',rec=1: mat a$,mat b$,c$,mat d,mat e$,a1,a2,a3,ucm,tb$,mat prgl,jccode,nap,ficarate,ficawage,feducrat,feducwag,actr$,mcr,mcm,reccode,mat miscname$,mat dedcode,mat dedfed,mat dedfica,mat dedst,mat deduc,mat miscgl$
  
@@ -276,7 +276,7 @@ goto Xit ! /r
 Xit: fnXit
 SAVE: ! r:
 	rewrite #company,using 'Form POS 1,3*C 40,2*C 12,C 5,2*N 1,2*C 12,N 3,N 6,N 3,PD 7.2,C 30,POS 298,15*PD 4,POS 382,N 2,N 2,PD 5.3,PD 5.2,PD 5.3,PD 5.2,G 1,PD 5.3,PD 5.2,N 1,10*C 20,50*N 1,10*C 12',rec=1: mat a$,mat b$,c$,mat d,mat e$,a1,a2,a3,ucm,tb$,mat prgl,jccode,nap,ficarate,ficawage,feducrat,feducwag,unused,mcr,mcm,reccode,mat miscname$,mat dedcode,mat dedfed,mat dedfica,mat dedst,mat deduc,mat miscgl$
-	open #20: "Name=[Q]\GLmstr\GLBucket.h[cno],RecL=1,Use",internal,outIn,relative
+	open #20: "Name=[Q]\GLmstr\GLBucket.h[cno],RecL=1,Use",i,outi,r
 	rewrite #20,using 'Form POS 1,N 1',rec=1: glb
 	close #20:
 return ! /r
@@ -284,12 +284,12 @@ return ! /r
 def library fnLastAccountingPeriodClosed(; setit,___,h,returnN)
 	autoLibrary
 	if setit then
-		open #h=fnH: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,outIn,relative  
+		open #h=fnH: "Name=[Q]\GLmstr\Company.h[cno],Shr",i,outi,r  
 		rewrite #h,using 'Form Pos 296,n 2',rec=1: setit
 		close #h:
 		returnN=setit
 	else
-		open #h=fnH: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,outIn,relative  
+		open #h=fnH: "Name=[Q]\GLmstr\Company.h[cno],Shr",i,outi,r  
 		read #h,using 'Form Pos 296,n 2',rec=1: returnN
 		close #h: 
 	end if

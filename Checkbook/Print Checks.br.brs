@@ -46,7 +46,7 @@ MAIN_QUESTIONS: !
 	if ti1=1 then h_vf1=13
 	allign=0
 	if ti1=3 then goto REPRINT_CHECKS
-	open #company=15: "Name=[Q]\CLmstr\Company.h[cno],Shr",internal,outIn,relative
+	open #company=15: "Name=[Q]\CLmstr\Company.h[cno],Shr",i,outi,r
 	rewrite #company,using 'Form POS 152,N 2',rec=1: bankcode
 	close #company:
 	read #bankmstr,using 'Form POS 3,C 30,POS 45,PD 6.2,PD 6.2,G 8',key=lpad$(str$(bankcode),2),release: bn$,bal,upi,lcn$ nokey MAIN_QUESTIONS
@@ -412,7 +412,7 @@ L7970: !
 	if firstckn<>lastckn then goto Xit
 	goto REPRINT_CHECKS ! /r
 def fn_get_coinfo
-	open #company=15: "Name=[Q]\CLmstr\Company.h[cno],Shr",internal,outIn,relative
+	open #company=15: "Name=[Q]\CLmstr\Company.h[cno],Shr",i,outi,r
 	dim whgl(5,3)
 	read #company,using 'Form POS 1,C 40,POS 150,2*N 1,N 2,POS 418,10*C 20,POS 668,10*C 12,POS 298,15*PD 4,POS 618,10*N 1,POS 406,N 1',rec=1,release: cnam$,mat d,bankcode ,mat misc$,mat miscgl$,mat whgl,mat dedcode,prenum
 	method$="C" ! temporary kJ  ! Read #COMPANY,Using 'Form POS 789,c 1',Rec=1,Release: method$

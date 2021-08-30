@@ -112,7 +112,7 @@ def fn_pa_open(; pa_orientation$,pa_sendto_base_name_addition$*128,formsFormatFo
 		!   g_pa_filename$=env$('client_temp')&'\PA_Tmp_'&session$&'_batch_'&str$(g_pa_batch)&pa_sendto_base_name_addition$&'.PrintAce'
 		! end if 
 		if pa_orientation$='' then pa_orientation$='Portrait'
-		open #h_printace: "Name="&g_pa_filename$&",Replace,RecL=5000",display,output 
+		open #h_printace: "Name="&g_pa_filename$&",Replace,RecL=5000",d,o 
 		pr #h_printace: 'Call Print.MyOrientation("'&pa_orientation$&'")'
 	 !  pr #h_printace: 'Call Print.NewPaperBin(1)'
 		g_pa_pagecount=1
