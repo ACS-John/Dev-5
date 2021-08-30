@@ -95,7 +95,7 @@ def fn_hfLayoutRead(hfLayoutFilename$*256,mat hfDataAll$,mat hfLabel$,mat hfFiel
 						end if
 						! see fnagl$ logic in
 						! C:\ACS\Dev-5\Core\fn\agl$.br.brs
-						pr 'found it' : pause
+						pr 'found it -aaa-  mask$='&mask$ : pause
 					else if mask$='mmddyy' then
 						tmp=1
 					else if mask$='ccyymmdd' then
