@@ -23,9 +23,9 @@
 	fndat(resp$(1),put=2)
 	customer=1 : _
 	if resp$(2)=opt$(1) then : _
-		open #customer: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,input,keyed else : _
+		open #customer: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",i,i,k else : _
 		if resp$(2)=opt$(2) then : _
-			open #customer: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\UBIndx2.h[cno],Shr",internal,input,keyed
+			open #customer: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\UBIndx2.h[cno],Shr",i,i,k
 	fnopenprn
 	on pageoflow goto PGOF
 	gosub HDR

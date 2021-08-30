@@ -125,7 +125,7 @@ L1240: form pos 1,n 2,c 78,2*c 132,n 3,2*n 1,100*pd 6.3,40*pd 2,20*n 1
 	goto SCR1
 DONE: pr newpage
 	close #1:
-	open #99: "Name=PROC."&wsid$&",SIZE=0,Replace",display,output
+	open #99: "Name=PROC."&wsid$&",SIZE=0,Replace",d,o
 L1290: form pos 1,c 70
 	pr #99,using L1290: "CLEAR"
 	pr #99,using L1290: "PROCERR RETURN"

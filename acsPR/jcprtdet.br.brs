@@ -19,7 +19,7 @@
 	prtjob$="N" : prtdet$="N" : sumcat$="N" : sumjob$="N" : _
 	prtpag$="N" ! setup defaults to answers (also used by fnprocess=1)
  
-	open #1: "Name=[Q]\PRmstr\SCMSTR.h[cno],KFName=[Q]\PRmstr\SCIndex.h[cno],Shr",internal,input,keyed
+	open #1: "Name=[Q]\PRmstr\SCMSTR.h[cno],KFName=[Q]\PRmstr\SCIndex.h[cno],Shr",i,i,k
 	for j=1 to 100
 		read #1,using 'Form POS 1,C 3,C 30': dcode$(j),desc$(100) eof L250
 		desc$(val(dcode$(j)))=desc$(100) conv L240
@@ -27,12 +27,12 @@ L240: next j
 L250: close #1:
 	desc$(100)="Unassigned"
  
-	open #20: "Name=[Q]\PRmstr\Company.h[cno],Shr",internal,input,relative  : _
+	open #20: "Name=[Q]\PRmstr\Company.h[cno],Shr",i,i,r  : _
 	read #20,using 'Form POS 1,C 40,POS 746,2*C 6',rec=1: cnam$,mat npj$ : _
 	close #20:
-	open #1: "Name=[Q]\PRmstr\JCMSTR.h[cno],KFName=[Q]\PRmstr\JCIndx.h[cno],Shr",internal,input,keyed
-	open #2: "Name=[Q]\PRmstr\JCCAT.h[cno],KFName=[Q]\PRmstr\CatIndx.h[cno],Shr",internal,input,keyed
-	open #3: "Name=[Q]\PRmstr\JCTRANS.h[cno],Shr",internal,input,relative
+	open #1: "Name=[Q]\PRmstr\JCMSTR.h[cno],KFName=[Q]\PRmstr\JCIndx.h[cno],Shr",i,i,k
+	open #2: "Name=[Q]\PRmstr\JCCAT.h[cno],KFName=[Q]\PRmstr\CatIndx.h[cno],Shr",i,i,k
+	open #3: "Name=[Q]\PRmstr\JCTRANS.h[cno],Shr",i,i,r
  
 	pr newpage
 	if fnprocess=1 then goto L640

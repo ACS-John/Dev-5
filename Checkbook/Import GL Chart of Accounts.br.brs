@@ -45,7 +45,7 @@ do
 	! end if
 	if trim$(pas$)="BUILD" then ! else if
 		close #1: ioerr ignore
-		open #2: "Name=[Q]\GLmstr\GLmstr.h"&str$(glcno)&",KFName=[Q]\GLmstr\GLINDEX.h"&str$(glcno)&",Shr",internal,input,keyed ioerr MSGBOX1
+		open #2: "Name=[Q]\GLmstr\GLmstr.h"&str$(glcno)&",KFName=[Q]\GLmstr\GLINDEX.h"&str$(glcno)&",Shr",i,i,k ioerr MSGBOX1
 		open #1: "Name=[Q]\CLmstr\GLmstr.H[cno],Size=0,RecL=62,Replace",internal,output
 		do
 			dim de$*50

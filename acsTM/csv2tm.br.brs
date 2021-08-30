@@ -26,7 +26,7 @@
 	open #h_in=fnH: 'Name=D:\ACS\Doc\Timesheets\Time Sheet - Laura Smith.csv,RecL=100,Shr',external,input
 	! open #h_in=fnH: 'Name=C:\ACS\Doc\Timesheets\Time Sheet - John Bowman.csv,RecL=100,Shr',external,input
 	open #h_out=fnH: "Name=S:\Core\Data\acsllc\TimeSheet.h[cno],RecL=86,KFName=S:\Core\Data\acsllc\TimeSheet-Idx.h[cno],Replace,KPs=1,KLn=5",internal,outIn,keyed
-	open #h_support=fnH: "Name=S:\Core\Data\acsllc\SUPPORT.h[cno],KFName=S:\Core\Data\acsllc\support-idx.h[cno],Shr",internal,input,keyed
+	open #h_support=fnH: "Name=S:\Core\Data\acsllc\SUPPORT.h[cno],KFName=S:\Core\Data\acsllc\support-idx.h[cno],Shr",i,i,k
 	F_support: form pos 1,c 6,n 2,c 2,x 8,x 2,n 8
 	fnopenprn
 	pr #255,using FORM_PRN_HEAD: 'date','client','time','cat','month','desc','rate'
@@ -295,7 +295,7 @@ def fn_sage_write_out(wo_date,wo_time,wo_sage_code$*128,wo_desc$*512)
 	dim wo_sage_code_prior$*128
 	if ~setup_sawo then
 		setup_sawo=1
-		open #sawo_h_out=fnH: 'Name=[Q]\Sage_AX_'&str$(filter_date(1))&'-'&str$(filter_date(2))&'.csv,RecL=512,eol=crlf,Replace',display,output
+		open #sawo_h_out=fnH: 'Name=[Q]\Sage_AX_'&str$(filter_date(1))&'-'&str$(filter_date(2))&'.csv,RecL=512,eol=crlf,Replace',d,o
 	end if
 	if wo_sage_code_prior$='' and wo_sage_code$='' then
 		pr #255: '!!! Sage Code is blank !!!'

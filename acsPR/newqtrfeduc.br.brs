@@ -58,7 +58,7 @@ if qtr=3 then begdate=taxyear*10000+0912: enddate=val(taxyear$)*10000+0918
 if qtr=4 then begdate=taxyear*10000+1212: enddate=val(taxyear$)*10000+1218
  
 on pageoflow goto PGOF
-open #2: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr",internal,input,keyed
+open #2: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr",i,i,k
 gosub HDR
 open #4: "Name=[Q]\PRmstr\payrollchecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno]",internal,outIn,keyed
 open #3: "Name=[Q]\PRmstr\Department.h[cno],Shr, KFName=[Q]\PRmstr\DeptIdx.h[cno],Shr",internal,outIn,keyed

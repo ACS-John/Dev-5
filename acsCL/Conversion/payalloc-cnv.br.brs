@@ -5,8 +5,8 @@
 autoLibrary
 
 open #1: "Name=[Q]\CLmstr\PayMstr.h[cno],KFName=[Q]\CLmstr\PayIdx1.h[cno]",internal,outIn,keyed
-open #2: "Name=[Q]\CLmstr\X.h[cno],RecL=164,Replace",internal,outIn,relative
-open #3: "Name=[Q]\CLmstr\PayAlloc.h[cno],Size=0,RecL=56,Replace",internal,outIn,relative
+open #2: "Name=[Q]\CLmstr\X.h[cno],RecL=164,Replace",i,outi,r
+open #3: "Name=[Q]\CLmstr\PayAlloc.h[cno],Size=0,RecL=56,Replace",i,outi,r
 do
 	dim vn$*8,nam$*30,ad1$*30,ad2$*30,csz$*30,ss$*11
 	dim gl(3),ytdp,typ

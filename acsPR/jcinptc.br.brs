@@ -36,10 +36,10 @@
 		iolabel1$(j)=str$(j+3)&",2,Cr 17,N"
 	next j
  
-	open #3: "Name=[Temp]\Work.[Session],SIZE=0,RecL=63,Replace",internal,outIn,relative
-	open #11: "Name=[Q]\PRmstr\JCMSTR.h[cno],KFName=[Q]\PRmstr\JCIndx.h[cno],Shr",internal,input,keyed
-	open #12: "Name=[Q]\PRmstr\JCCAT.h[cno],KFName=[Q]\PRmstr\CatIndx.h[cno],Shr",internal,input,keyed
-	open #13: "Name=[Q]\PRmstr\SCMSTR.h[cno],KFName=[Q]\PRmstr\SCIndex.h[cno],Shr",internal,input,keyed
+	open #3: "Name=[Temp]\Work.[Session],SIZE=0,RecL=63,Replace",i,outi,r
+	open #11: "Name=[Q]\PRmstr\JCMSTR.h[cno],KFName=[Q]\PRmstr\JCIndx.h[cno],Shr",i,i,k
+	open #12: "Name=[Q]\PRmstr\JCCAT.h[cno],KFName=[Q]\PRmstr\CatIndx.h[cno],Shr",i,i,k
+	open #13: "Name=[Q]\PRmstr\SCMSTR.h[cno],KFName=[Q]\PRmstr\SCIndex.h[cno],Shr",i,i,k
  
 INPUTSCREEN1: !
 	shoption=1
@@ -207,7 +207,7 @@ L1790: pr f "24,1,C 7,N": bell
  
 SRCH: bk=0 : hce=ce
 	close #103: ioerr L1880
-L1880: open #103: "SROW=1,SCOL=1,EROW=24,ECOL=80",display,output
+L1880: open #103: "SROW=1,SCOL=1,EROW=24,ECOL=80",d,o
 	pr #103: newpage
 	wrds$(1)="1. JOB # SEARCH" : skl(1)=6
 	wrds$(2)="2. JOB NAME SEARCH" : skl(2)=25
@@ -279,7 +279,7 @@ L2540: return
 CATEGORY_SEARCH: !
 	bk=0
 	close #103: ioerr L2590
-L2590: open #103: "SROW=2,SCOL=47,EROW=23,ECOL=79,BORDER=DR",display,output
+L2590: open #103: "SROW=2,SCOL=47,EROW=23,ECOL=79,BORDER=DR",d,o
 	pr #103: newpage
 	jn$=lpad$(rtrm$(jn$),6)
 	read #11,using L2630,key=jn$: jn$,n$,mat a$,mat b nokey L2750
@@ -307,7 +307,7 @@ L2810: if rtrm$(k$)><"" then goto SRCHEND
  
 SRCH3: bk=0
 	close #103: ioerr L2870
-L2870: open #103: "SROW=2,SCOL=47,EROW=23,ECOL=79,BORDER=DR",display,output
+L2870: open #103: "SROW=2,SCOL=47,EROW=23,ECOL=79,BORDER=DR",d,o
 L2880: pr #103: newpage
 	pr f "2,47,C 33,R,N": " "&n$(1:31)
 	restore #13:

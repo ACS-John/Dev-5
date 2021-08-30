@@ -3,10 +3,10 @@
 on error goto Ertn
 dim em$(3)*30,ss$*11,rs(2),em(16),ta(2),tr$*467
 
-open #10: "Name=[Q]\PRmstr\RPMstr.h[cno]",internal,input,relative 
+open #10: "Name=[Q]\PRmstr\RPMstr.h[cno]",i,i,r 
 open #11: "Name=RPMSTR.X,RecL=196,Replace",internal,output 
-open #12: "Name=[Q]\PRmstr\RPTRAIL.h[cno]",internal,input,relative 
-open #13: "Name=RPTRAIL.X,SIZE=0,RecL=474,Replace",internal,outIn,relative 
+open #12: "Name=[Q]\PRmstr\RPTRAIL.h[cno]",i,i,r 
+open #13: "Name=RPTRAIL.X,SIZE=0,RecL=474,Replace",i,outi,r 
 ot13=1
 write #13,using L170,rec=1: mat tdz,ot13,0
 L170: form pos 1,n 8,n 3,n 3,n 6,n 3,4*n 6,3*n 2,24*pd 4.2,6*pd 3.2,60*pd 5.2,pd 3,pd 4.2

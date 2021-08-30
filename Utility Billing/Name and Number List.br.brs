@@ -104,9 +104,9 @@ ReportInit: ! r:
 	on fkey 5 goto DONE
 	if q0=3 and turn$="Y" then gosub STREET_REVERSE
 	if uprc$(turn$)="Y" then
-		open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName="&idx$(1)&",Shr",internal,input,keyed
+		open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName="&idx$(1)&",Shr",i,i,k
 	else
-		open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName="&idx$(q0)&",Shr",internal,input,keyed
+		open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName="&idx$(q0)&",Shr",i,i,k
 		if q0=4 then gosub OPEN_GRID ! OPEN GRID DISPLAY FILE
 	end if
 	dim email$*30
@@ -221,7 +221,7 @@ GET_AU: ! r:
 	next j
 return  ! /r
 STREET_REVERSE: ! r: FOR SORTING
-	open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName="&idx$(q0)&",Shr",internal,input,keyed
+	open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName="&idx$(q0)&",Shr",i,i,k
 	open #10: "Name=[Temp]\Temp.[Session],RecL=40,Replace",internal,outIn
 	do
 		read #1,using 'form pos 1,c 10,c 30': z$,e$(1) eof SORT1
@@ -240,8 +240,8 @@ STREET_REVERSE: ! r: FOR SORTING
 	close #9:
 	execute "Free [Temp]\Addr."&session$ ioerr ignore
 	execute "Sort [Temp]\Control."&session$
-	open #6: "Name=[Temp]\Temp."&session$,internal,input,relative
-	open #7: "Name=[Temp]\Addr."&session$,internal,input,relative
+	open #6: "Name=[Temp]\Temp."&session$,i,i,r
+	open #7: "Name=[Temp]\Addr."&session$,i,i,r
 return  ! /r
 OPEN_GRID: ! r: select customers from grid
 	sn$="ublabel-7"

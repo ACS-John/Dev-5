@@ -30,7 +30,7 @@ fnend
 def fn_make_source_init
 	prg_list_count=0
 	mat prg_list$(prg_list_count)
-	open #proc_file:=1: 'Name=tmp'&session$&'.prc,RecL=1024,Replace',display,output
+	open #proc_file:=1: 'Name=tmp'&session$&'.prc,RecL=1024,Replace',d,o
 fnend  ! fn_make_source_init
 def fn_make_source_add(msa_item$*256,dir_source$*128,dir_destination$*128)
 	mat prg_list$(prg_list_count+=1)

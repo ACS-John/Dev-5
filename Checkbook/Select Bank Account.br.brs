@@ -2,7 +2,7 @@ autoLibrary
 on error goto Ertn
 fnTop(program$)
 
-open #20: "Name=[Q]\CLmstr\Company.h[cno],Shr",internal,outIn,relative
+open #20: "Name=[Q]\CLmstr\Company.h[cno],Shr",i,outi,r
 read #20,using 'Form POS 152,N 2',rec=1,release: wbc
 close #20:
 ASK1: !
@@ -23,7 +23,7 @@ ASK1: !
 	else if ckey=2 then
 		wbc=val(resp$(1)(1:2))
 	end if
-	open #20: "Name=[Q]\CLmstr\Company.h[cno],Shr",internal,outIn,relative
+	open #20: "Name=[Q]\CLmstr\Company.h[cno],Shr",i,outi,r
 	rewrite #20,using 'Form POS 152,N 2',rec=1: wbc
 	close #20:
 goto Xit

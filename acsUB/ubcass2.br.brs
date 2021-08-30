@@ -31,7 +31,7 @@ L180: ckey=fnAcs(mat resp$)
 	open #1: "Name="&dv$&"Cass1.Dat,RecL=113",external,input ioerr L180
 	open #2: "Name=[Q]\UBmstr\Cass1.h[cno],RecL=112,Replace",internal,output
 	open #3: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,outIn,keyed
-	open #4: "Name=[Q]\UBmstr\UBAdrBil.h[cno],Shr",internal,outIn,relative
+	open #4: "Name=[Q]\UBmstr\UBAdrBil.h[cno],Shr",i,outi,r
 	fnopenprn
 	pr #255: "\qc {\b "&cap$ : _
 	pr #255: "Listing of Customer Addresses that could not be certified" : _

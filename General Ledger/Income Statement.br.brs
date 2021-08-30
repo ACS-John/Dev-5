@@ -27,7 +27,7 @@
 		mp2=75
 		fl1$="Name=[Q]\GLmstr\ACGLFNSI.h[cno],KFName=[Q]\GLmstr\agfsidx3.h[cno],Shr"
 	end if
-	open #h_acglfnx:=1: fl1$,internal,input,keyed
+	open #h_acglfnx:=1: fl1$,i,i,k
 	if fnprocess=1 or fnUseDeptNo=0 then goto L320
 	fnTos(sn$="GLInput")
 	mylen=30: mypos=mylen+3 : right=1
@@ -47,7 +47,7 @@ L320: !
 	else
 		execute "Index [Q]\GLmstr\GLmstr.h[cno] [Temp]\fsindex.h[cno] 69 3 Replace DupKeys -N"
 	end if
-	open #h_glmstr:=3: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Temp]\fsindex.h[cno],Shr",internal,input,keyed
+	open #h_glmstr:=3: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Temp]\fsindex.h[cno],Shr",i,i,k
 F_GLMSTR_A: form pos mp1,pd 3,pos 81,2*pd 6.2
 F_GLMSTR_B: form pos 1,c 12,pos mp1,pd 3,pos mp2,pd 3,pos 81,41*pd 6.2
 	report$="Statement of Income and Expenses"

@@ -7,7 +7,7 @@
  
 	fncno(cno)
  
-	open #2: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLINDEX.h[cno],Shr",internal,input,keyed
+	open #2: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLINDEX.h[cno],Shr",i,i,k
 	open #1: "Name=[Q]\CLmstr\GLmstr.h[cno],Size=0,RecL=62,Replace",internal,output
 READ_GLMSTR: !
 	read #2,using 'Form POS 1,C 12,C 50': gl$,de$ eof END1

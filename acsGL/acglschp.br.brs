@@ -11,7 +11,7 @@
  
 	fnTop(program$,cap$="Print Schedules")
 	fncno(cno,cnam$)
-	open #20: "Name=CNO.H"&wsid$,internal,input,relative  : _
+	open #20: "Name=CNO.H"&wsid$,i,i,r  : _
 	read #20,using 'Form POS 141,6*N 1,3*N 2,C 6,POS 195,2*C 20',rec=1: process,ps,filno,priorcd,mat d,fscode,lmu,actpd,actpd$,pedat$,cch$ : _
 	close #20:
 	if process=1 then prtall=1 : goto L320
@@ -31,8 +31,8 @@ L280: input fields fb$: prtsch(j) conv L280
 		if prtsch(j)=0 then goto L310
 	next j
 L310: j=0
-L320: open #1: "Name=[Q]\GLmstr\ACGLSCHS.h[cno],KFName=[Q]\GLmstr\schindex.h[cno],Shr",internal,input,keyed ioerr DONE
-	open #3: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLIndex.h[cno],Shr",internal,input,keyed
+L320: open #1: "Name=[Q]\GLmstr\ACGLSCHS.h[cno],KFName=[Q]\GLmstr\schindex.h[cno],Shr",i,i,k ioerr DONE
+	open #3: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLIndex.h[cno],Shr",i,i,k
 	pr newpage
 	pr f "10,20,C 60,N": "PRINT SCHEDULES IN PROCESS"
 	pr f "12,2,C 30,B,5": "Press F5 to stop"

@@ -51,10 +51,10 @@
 	read mat scr2$ ioerr L2650
 	open #1: "Name=S:\Core\Data\acsllc\CLmstr.h[cno],KFName=S:\Core\Data\acsllc\CLIndex.h[cno],Shr",internal,outIn,keyed ioerr L2650
 	open #32: "Name=S:\Core\Data\acsllc\CLmstr.h[cno],KFName=S:\Core\Data\acsllc\CLIndx2.h[cno],Shr",internal,outIn,keyed
-	open #2: "Name=S:\Core\Data\acsllc\TMWK[acsUserId].h[cno]",internal,outIn,relative ioerr L570
+	open #2: "Name=S:\Core\Data\acsllc\TMWK[acsUserId].h[cno]",i,outi,r ioerr L570
 	close #2,free:
-L570: open #2: "Name=S:\Core\Data\acsllc\TMWK[acsUserId].h[cno],RecL=86,REPLACE",internal,outIn,relative ioerr L2650
-	open #7: "Name=S:\Core\Data\acsllc\SCMSTR.h[cno],KFName=S:\Core\Data\acsllc\SCIndex.h[cno],Shr",internal,input,keyed ioerr L2650
+L570: open #2: "Name=S:\Core\Data\acsllc\TMWK[acsUserId].h[cno],RecL=86,REPLACE",i,outi,r ioerr L2650
+	open #7: "Name=S:\Core\Data\acsllc\SCMSTR.h[cno],KFName=S:\Core\Data\acsllc\SCIndex.h[cno],Shr",i,i,k ioerr L2650
 	open #8: "Name=S:\Core\Data\acsllc\EMmstr.h[cno],KFName=S:\Core\Data\acsllc\EMIndex.h[cno],Shr",internal,outIn,keyed ioerr L2650
 L600: pr newpage
 	scrid$(1)="TIME MANAGEMENT INPUT SUB-MENU"

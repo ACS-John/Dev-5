@@ -109,9 +109,9 @@ L1080: monthyr$=cnvrt$("pic(######)",endingdate)(1:2)&"20"&cnvrt$("pic(######)",
 	message$=""
 	stopable=1: gosub WaitX ! fnWAIT(MESSAGE$,1)
 
-	open #1: "Name=[Q]\GLmstr\RPMSTR.h[cno],KFName=[Q]\GLmstr\RPIndex.h[cno],SHR",internal,input,keyed 
-	open #2: "Name=[Q]\GLmstr\RPTrail.h[cno],SHR",internal,input,relative 
-L1190: open #22: "Name=[Q]\UCReport,RECL=512,eol=crlf,replace",display,output 
+	open #1: "Name=[Q]\GLmstr\RPMSTR.h[cno],KFName=[Q]\GLmstr\RPIndex.h[cno],SHR",i,i,k 
+	open #2: "Name=[Q]\GLmstr\RPTrail.h[cno],SHR",i,i,r 
+L1190: open #22: "Name=[Q]\UCReport,RECL=512,eol=crlf,replace",d,o 
 
 	goto BEGINNING_OF_FILE
 	pr newpage

@@ -29,8 +29,8 @@ fnreg_write(env$('cap')&'.Paperless Code',pcode$)
 	if fkey=93 or fkey=99 then goto Screen1
 !
  
-open   #hMopen=fnH: 'Name=MASTER//6 ,KFName=MASTERX//6 ,shr',INTERNAL,Input,KEYED
-open #hMclosed=fnH: 'Name=HISTORY//1,KFName=HISTORYX//1,shr',INTERNAL,Input,KEYED
+open   #hMopen=fnH: 'Name=MASTER//6 ,KFName=MASTERX//6 ,shr',i,i,k
+open #hMclosed=fnH: 'Name=HISTORY//1,KFName=HISTORYX//1,shr',i,i,k
 hActiveOpen=fnOpen_active(mat h_active_open)
 hActiveClosed=fnClosed_active(mat h_active_closed)
  

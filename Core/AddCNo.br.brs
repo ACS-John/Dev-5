@@ -22,7 +22,7 @@ if env$('cursys')='CL' then ! r:
 	if resp$='Yes' then fnchain("S:\acsCL\Conversion\APmstr-Cnv")
 	! /r
 else if env$('cursys')='UB' then ! r:
-	open #1: "Name=[Q]\UBmstr\Company.h[cno],RecL=129,Replace,Shr",internal,outIn,relative
+	open #1: "Name=[Q]\UBmstr\Company.h[cno],RecL=129,Replace,Shr",i,outi,r
 	write #1,using "Form POS 1,C 40",rec=1: empty$
 	close #1:
 	open #1: "Name=[Q]\UBmstr\Customer.h[cno],Size=0,RecL=2067,Replace",internal,output
@@ -38,11 +38,11 @@ else if env$('cursys')='UB' then ! r:
 	close #1:
 	! open #1: "Name=[Q]\UBmstr\Deposit1.h[cno],KFName=[Q]\UBmstr\DepIdx1.h[cno],Replace,RecL=16,KPs=1,KLn=10",internal,outIn,keyed
 	! close #1:
-	open #1: "Name=[Q]\UBmstr\Deposit2.h[cno],Replace,RecL=73",internal,outIn,relative
+	open #1: "Name=[Q]\UBmstr\Deposit2.h[cno],Replace,RecL=73",i,outi,r
 	close #1:
 	open #1: "Name=[Q]\UBmstr\BudMstr.h[cno],KFName=[Q]\UBmstr\BudIdx1.h[cno],Replace,RecL=80,KPs=1,KLn=10",internal,outIn,keyed
 	close #1:
-	open #1: "Name=[Q]\UBmstr\BudTrans.h[cno],Replace,RecL=149",internal,outIn,relative
+	open #1: "Name=[Q]\UBmstr\BudTrans.h[cno],Replace,RecL=149",i,outi,r
 	close #1:
 	open #1: "Name=[Q]\UBmstr\UBAdrBil.h[cno],KFName=[Q]\UBmstr\NoteIdx1.h[cno],Replace,RecL=130,KPs=1,KLn=10",internal,outIn,keyed
 	close #1:

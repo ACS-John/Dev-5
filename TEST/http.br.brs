@@ -32,7 +32,7 @@ def fn_download(url$*2048,destination$*512; ___,hOut,hIn,line$*2048,lineCount)
 	fn_copyFile(url$&', http=client',destination$)
 	
 	! open #hIn=fnH: 'name='&url$&', http=client',display,outin
-	! open #hOut=fnH: 'name='&destination$&',replace',display,output
+	! open #hOut=fnH: 'name='&destination$&',replace',d,o
 	! do
 	! 	dim line$*2048
 	! 	linput #hIn: line$ eof EoDi

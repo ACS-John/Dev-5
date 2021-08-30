@@ -7,9 +7,9 @@
 	dim cat$(30)*30
 	dim sc$*4,ds$*30,catno$*2,cap$*128
 	namtab=41-int(len(rtrm$(env$('cnam')))/2)
-	open #1: "Name=S:\Core\Data\acsllc\SCMSTR.h[cno],KFName=S:\Core\Data\acsllc\SCIndex.h[cno],Shr",internal,input,keyed
+	open #1: "Name=S:\Core\Data\acsllc\SCMSTR.h[cno],KFName=S:\Core\Data\acsllc\SCIndex.h[cno],Shr",i,i,k
 	fnRead30Categories(mat cat$)
-	open #8: "Name=S:\Core\Data\acsllc\pedate.h[cno],RecL=20,use,Shr",internal,outIn,relative
+	open #8: "Name=S:\Core\Data\acsllc\pedate.h[cno],RecL=20,use,Shr",i,outi,r
 	if lrec(8)=0 then write #8,using "form pos 1,n 6": d1 else read #8,using "form pos 1,n 6",rec=1,release: dat
 	pr newpage
 	pr f "10,5,c 57,n": "ENTER DATE FOR SERVICE PRODUCTION REPORT IN MMDDYY FORMAT"

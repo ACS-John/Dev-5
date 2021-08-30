@@ -26,7 +26,7 @@
 		io1$(j*5-5)=str$(j+2)&",42,N 2,UT,N"
 		io1$(j*5-4)=str$(j+2)&",48,N 2,UET,N"
 	next j
-	open #1: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr",internal,input,keyed
+	open #1: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr",i,i,k
 	pr newpage
 	fnopenwin(win=101,10,22,15,58,env$('program_caption'))
 	io2$(1)="4,2,C 35,N"

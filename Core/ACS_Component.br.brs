@@ -18,7 +18,7 @@ def library fnTos(; sn$*100)
 	combokeycurrent$=combokeyprior$=''
 	if len(sn$)>100 then : pr "INVALID FILE NAME: Too Long" : input fields "1,1,C 1,N": pause$ : goto Xit
 	! close #119: ioerr ignore
-	! open #119: "Name="&env$('temp')&'\acs\'&sn$&",RecL=1024,Replace",internal,outIn,relative	! recl was 500
+	! open #119: "Name="&env$('temp')&'\acs\'&sn$&",RecL=1024,Replace",i,outi,r	! recl was 500
 	fn_clear_env(tmp_combo_count_for_read,tmp_combo_count_for_set)
 	if env$('GUIMode')='OFF' then execute 'config GUI On'
 fnend ! /r  (extra slash r because fnt-p is also a folder)
@@ -161,7 +161,7 @@ def library fnComboF(sfn$*100,lyne,ps,width,df$*200,psk,lnk,psd,lnd; if$*200,lim
 	if if$="" then
 		open #df=fnH: "Name="&df$&",Shr",internal,input
 	else
-		open #df=fnH: "Name="&df$&",KFName="&if$&",Shr",internal,input,keyed ioerr COMBOF_OPEN_IOERR
+		open #df=fnH: "Name="&df$&",KFName="&if$&",Shr",i,i,k ioerr COMBOF_OPEN_IOERR
 	end if
 	fn_add_combo_option_list('','',1)
 	if limlis=2 then
@@ -292,7 +292,7 @@ def library fnFlexInit1(sfn$*100,lyne,ps,height,width,mat ch$; mat colMask$,selt
 	! ***	 test validity of some stuff **********
 	fnFlexInit1=555
 	fnmakesurepathexists(env$('temp')&'\acs\'&hdrfile$)
-	open #filenumber: "Name="&env$('temp')&'\acs\'&hdrfile$&",Size=0,Replace,EoL=CRLF,RecL=8000",display,output
+	open #filenumber: "Name="&env$('temp')&'\acs\'&hdrfile$&",Size=0,Replace,EoL=CRLF,RecL=8000",d,o
 	for j=1 to udim(mat colMask$)
 		if trim$(colMask$(j))="" then colMask$(j)="80"
 	next j
@@ -311,7 +311,7 @@ def library fnFlexInit1(sfn$*100,lyne,ps,height,width,mat ch$; mat colMask$,selt
 	! if exists(env$('temp')&'\acs\'&optfile$) then
 	! 	fnFree(env$('temp')&'\acs\'&optfile$)
 	! end if
-	open #filenumber: "Name="&env$('temp')&'\acs\'&optfile$&",Size=0,Replace,EoL=CRLF,RecL=6491",display,output
+	open #filenumber: "Name="&env$('temp')&'\acs\'&optfile$&",Size=0,Replace,EoL=CRLF,RecL=6491",d,o
 	WRITE_TO_ACE: !
 	sorttype=0
 	setenv('control'&str$(fn_controlCount),"FLEX|"&str$(lyne)&"|"&str$(ps)&"|"&str$(height)&"|"&str$(width)&"|2|"&str$(seltype)&"|"&str$(sorttype)&"|"&sfn$&"|"&str$(hdr_count)&"|"&str$(con)&"|"&str$(tabcon)&"|")
@@ -574,8 +574,8 @@ def fn_draw_windows
 		cols=Session_Cols-2
 	end if
 	if parent_none then
-		!			if disabled_background then open #disable_win=fnH: "srow=2,scol=2,rows="&str$(Session_Rows-2)&",cols="&str$(Session_Cols-2)&",picture=S:\Core\disable.png:TILE",display,output
-		!			if disabled_background then open #disable_win=fnH: "srow=1,scol=1,rows="&str$(Session_Rows+2)&",cols="&str$(Session_Cols+1)&",border=none,picture=S:\Core\disable.png:TILE",display,output
+		!			if disabled_background then open #disable_win=fnH: "srow=2,scol=2,rows="&str$(Session_Rows-2)&",cols="&str$(Session_Cols-2)&",picture=S:\Core\disable.png:TILE",d,o
+		!			if disabled_background then open #disable_win=fnH: "srow=1,scol=1,rows="&str$(Session_Rows+2)&",cols="&str$(Session_Cols+1)&",border=none,picture=S:\Core\disable.png:TILE",d,o
 		if disabled_background then fn_backgrounddisable(1)
 		open #acs_win=fnH: "SRow="&str$(row)&",SCol="&str$(col)&",Rows="&str$(rows+3)&",Cols="&str$(cols+2)&",parent=none,Caption="&cap$&",border=S:[screen],N=[screen]",display,outIn
 		open #button_win=fnH: "SRow="&str$(rows+2)&",SCol=2,Rows=1,Cols="&str$(cols)&",parent="&str$(acs_win)&",border=S:[screen],N=[screen]",display,outIn
@@ -2114,7 +2114,7 @@ CLOSECOMPANY: !
 ! read the chart of accounts from the appropriate system into an array
 		if qgl_cursys$='GL' or qgl_cursys$='CL' or qgl_cursys$='PR' or qgl_cursys$='UB' or qgl_cursys$='CR' then
 			! pr 'reading chart of accounts from: '&qgl_cursys$ : pause
-			open #hAccts=fnH: "Name=[Q]\"&qgl_cursys$&"mstr\GLmstr.h[cno],KFName=[Q]\"&qgl_cursys$&"mstr\glIndex.h[cno],Shr",internal,input,keyed ioerr QGL_ERROR
+			open #hAccts=fnH: "Name=[Q]\"&qgl_cursys$&"mstr\GLmstr.h[cno],KFName=[Q]\"&qgl_cursys$&"mstr\glIndex.h[cno],Shr",i,i,k ioerr QGL_ERROR
 		end if
 		do
 			read #hAccts,using glmstr_form$: qglopt$,desc$ noRec QGL_LOOP_COMPLETE eof EO_QGL_GLMSTR ioerr QGL_ERROR
@@ -2167,7 +2167,7 @@ def fn_exportGrid(;___,index_)
 	open #export_file=fnH: "Name=save:"&env$('at')&"Text documents (*.txt) |*.txt,RecL=1,Replace",external,output error GRID_EXPORT_XIT
 	filename$=file$(export_file)
 	close #export_file:
-	open #export_file: 'Name='&filename$&',RecL=2048,Replace',display,output
+	open #export_file: 'Name='&filename$&',RecL=2048,Replace',d,o
 	input fields gridspec$&",RowCnt,all,nowait": grid_rows
 	input fields gridspec$&",ColCnt,all,nowait": grid_columns
 	mat _chunks$(grid_columns)
@@ -2224,7 +2224,7 @@ def fn_backgrounddisable(; activate)
 	if activate then
 		Session_Rows=val(env$('Session_Rows')) : if Session_Rows<=0 then Session_Rows=352
 		Session_Cols=val(env$('Session_Cols')) : if Session_Cols<=0 then Session_Cols=115
-		open #disable_win=fnH: "srow=1,scol=1,rows="&str$(Session_Rows)&",cols="&str$(Session_Cols)&",border=none,picture=S:\Core\disable.png:TILE,parent=0",display,output
+		open #disable_win=fnH: "srow=1,scol=1,rows="&str$(Session_Rows)&",cols="&str$(Session_Cols)&",border=none,picture=S:\Core\disable.png:TILE,parent=0",d,o
 	else
 		close #disable_win: ioerr ignore
 	end if

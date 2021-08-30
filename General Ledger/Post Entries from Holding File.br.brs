@@ -72,7 +72,7 @@ PRINT_POST: !
 	for j3=1 to dircount
 		if dir(j3)<>0 then 
 			close #3: ioerr ignore
-			open #3: "Name=[Q]\GLmstr\GL"&cnvrt$("PIC(######)",dir(j3))&".h[cno],RecL=104,USE",internal,outIn,relative 
+			open #3: "Name=[Q]\GLmstr\GL"&cnvrt$("PIC(######)",dir(j3))&".h[cno],RecL=104,USE",i,outi,r 
 			if listing=1 then 
 				pr #255,using 'form pos 1,c 11,pic(zz/zz/zz),skip 2': "File Date: ",dir(j3)
 			end if
@@ -173,7 +173,7 @@ REVIEW: ! r:
 	gosub OPEN_FILE : gosub CLOSE_FILE : gosub OPEN_FILE 
 	fnHamster("TrAlloc",mat lbl$,mat tln,1,mat p$,mat fltyp$,mat sln,mat mask,mat sp,mat c$)
 	gosub CLOSE_FILE
-	! Open #3: "Name=[Q]\GLmstr\GL"&CNVRT$("PIC(######)",DIR(J3))&".h[cno],RecL=104,USE",Internal,outIn,Relative
+	! Open #3: "Name=[Q]\GLmstr\GL"&CNVRT$("PIC(######)",DIR(J3))&".h[cno],RecL=104,USE",i,outi,r
 goto MAIN ! /r
 
 OPEN_FILE: ! r:

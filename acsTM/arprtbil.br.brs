@@ -8,7 +8,7 @@ dim z$*5,e$(4)*30,name$(4)*40,d$*20,flo$(2),scr1$(2)*55
 dim age(4),st1$*5,mo(12)
 data 0,31,59,90,120,151,181,212,243,273,304,334
 read mat mo
-open #8: "Name=S:\Core\Data\acsllc\pedate.h[cno],RecL=20,use,Shr",internal,outIn,relative
+open #8: "Name=S:\Core\Data\acsllc\pedate.h[cno],RecL=20,use,Shr",i,outi,r
 if lrec(8)=0 then write #8,using "form pos 1,n 6": d1 else read #8,using "form pos 1,n 6",rec=1,release: d1
 close #8:
 form c 9,skip 0
@@ -28,7 +28,7 @@ if cmdkey=5 then goto Xit
 if d1<10100 or d1>123199 then goto L310
 gosub L1960
 open #1: "Name=S:\Core\Data\acsllc\CLmstr.h[cno],KFName=S:\Core\Data\acsllc\CLIndex.h[cno],Shr",internal,outIn,keyed 
-open #2: "Name=S:\Core\Data\acsllc\ARTrans.h[cno],Shr",internal,input,relative 
+open #2: "Name=S:\Core\Data\acsllc\ARTrans.h[cno],Shr",i,i,r 
 L370: pr newpage
 pr f "10,5,c 53": "ENTER CLIENT NUMBER TO START PRINTING, ELSE ENTER 0"
 input fields "10,60,C 5,UE,N": st1$ conv L370

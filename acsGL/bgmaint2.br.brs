@@ -186,7 +186,7 @@ goto L1350
 ! from unpaid invoice file _____________________________________________
 L1530: close #3: ioerr L1540
 L1540: close #4: ioerr L1550
-L1550: open #3: "Name=[Q]\CLmstr\PAYTRANS.h[cno],Shr",internal,input,relative ioerr L1740
+L1550: open #3: "Name=[Q]\CLmstr\PAYTRANS.h[cno],Shr",i,i,r ioerr L1740
 open #4: "Name=[Q]\CLmstr\UnPdAloc.h[cno],KFName=[Q]\CLmstr\Uaidx2.h[cno],Shr",internal,outIn,keyed
 for j=1 to lrec(3)
 	read #3,using L1590,rec=j: vn$,iv$,d1,gde noRec L1720
@@ -207,8 +207,8 @@ L1720: next j
 ! from check history (checks not posted)
 L1740: close #3: ioerr L1750
 L1750: close #4: ioerr L1760
-L1760: open #3: "Name=[Q]\CLmstr\TRMSTR.h[cno],KFName=[Q]\CLmstr\TRIDX1.h[cno],Shr",internal,input,keyed ioerr L1930
-open #4: "Name=[Q]\CLmstr\TRALLOC.h[cno],Shr",internal,input,relative
+L1760: open #3: "Name=[Q]\CLmstr\TRMSTR.h[cno],KFName=[Q]\CLmstr\TRIDX1.h[cno],Shr",i,i,k ioerr L1930
+open #4: "Name=[Q]\CLmstr\TRALLOC.h[cno],Shr",i,i,r
 L1780: read #3,using L1790: bcde,tcde,iv$,d1,pcde,scd eof L1930
 L1790: form pos 1,n 2,n 1,c 8,pos 12,g 6,pos 71,n 1,x 6,n 1
 if pcde=1 or pcde=3 then goto L1780
@@ -227,8 +227,8 @@ L1910: goto L1830
 ! from purchase order file_________________________________________
 L1930: close #3: ioerr L1940
 L1940: close #4: ioerr L1950
-L1950: open #3: "Name=[Q]\POmstr\POmstr.h[cno],KFName=[Q]\POmstr\POMSIDX.h[cno],Shr",internal,input,keyed ioerr L2080
-open #4: "Name=[Q]\POmstr\POTRANS.h[cno],Shr",internal,input,relative
+L1950: open #3: "Name=[Q]\POmstr\POmstr.h[cno],KFName=[Q]\POmstr\POMSIDX.h[cno],Shr",i,i,k ioerr L2080
+open #4: "Name=[Q]\POmstr\POTRANS.h[cno],Shr",i,i,r
 L1970: read #3,using L1980: d1,mat aa eof L2080
 L1980: form pos 10,n 6,pos 161,2*pd 3
 if fndate_mmddyy_to_ccyymmdd(d1)<fd1 or fndate_mmddyy_to_ccyymmdd(d1)>fd2 then goto L1970

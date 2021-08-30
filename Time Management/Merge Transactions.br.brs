@@ -4,9 +4,9 @@ fnTop(program$)
 fnStatus('Merging transactions...')
 open #hClient=fnH: 'Name=S:\Core\Data\acsllc\CLmstr.h[cno],KFName=S:\Core\Data\acsllc\CLIndex.h[cno],Shr',internal,outIn,keyed
 FclientBal: form pos 283,pd 5.2
-open #hArTrans=fnH: 'Name=S:\Core\Data\acsllc\ARTrans.h[cno],Shr',internal,outIn,relative
+open #hArTrans=fnH: 'Name=S:\Core\Data\acsllc\ARTrans.h[cno],Shr',i,outi,r
 Ftrans: form pos 1,c 5,c 12,n 6,2*pd 5.2,pd 2,2*n 1,c 20,pd 3
-open #hAddr=fnH: 'Name=[Temp]\Addr.[session]',internal,outIn,relative
+open #hAddr=fnH: 'Name=[Temp]\Addr.[session]',i,outi,r
 Faddr: form pos 1,c 5,c 12,n 6,2*pd 5.2,pd 2,2*n 1,c 20
 do ! r: main loop
 	ReadNext: !

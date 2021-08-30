@@ -22,7 +22,7 @@
 	priorcd=fnpriorcd
 	udf$=env$('temp')&'\'
 	monthly=1 ! default to monthly information
-	open #20: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,input,relative: read #20,using 'Form Pos 384,n 2',rec=1: nap : close #20:
+	open #20: "Name=[Q]\GLmstr\Company.h[cno],Shr",i,i,r: read #20,using 'Form Pos 384,n 2',rec=1: nap : close #20:
 	fscode=fnfscode
 	pors=1
 	gosub L2370
@@ -32,7 +32,7 @@
 	if fnps=2 then mp1=mp1+3
 	fl1$="Name=[Q]\GLmstr\ACGLFNSF.h[cno],KFName=[Q]\GLmstr\agfsidx5.h[cno],Shr"
 	if fnps=2 then fl1$="Name=[Q]\GLmstr\ACGLFNSG.h[cno],KFName=[Q]\GLmstr\agfsidx6.h[cno],Shr"
-	open #1: fl1$,internal,input,keyed
+	open #1: fl1$,i,i,k
 	if fnprocess=1 or fnUseDeptNo=0 then goto L410
 	fnTos
 	mylen=30: mypos=mylen+3 : right=1
@@ -52,7 +52,7 @@ L410: on fkey 5 goto L2250
 L430: execute "Index [Q]\GLmstr\GLmstr.h[cno] "&udf$&"fsindex.h[cno] 75 3 Replace DupKeys -N"
 	goto L460
 L450: execute "Index [Q]\GLmstr\GLmstr.h[cno] "&udf$&"fsindex.h[cno] 78 3 Replace DupKeys -N"
-L460: open #3: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName="&udf$&"fsindex.h[cno],Shr",internal,input,keyed
+L460: open #3: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName="&udf$&"fsindex.h[cno],Shr",i,i,k
 	fnopenprn : _
 	if file$(255)(1:4)<>"PRN:" then redir=1 else redir=0
 L480: read #1,using L520: r$,d$,te$,sp,ls,ds,ul,rs,bc,ap,mat ac,ic,fc eof L2250
@@ -245,7 +245,7 @@ L2300: !
  
 Xit: fnXit
  
-L2370: open #5: "Name=[Q]\GLmstr\GLfund.h[cno],RecL=230,use",internal,outIn,relative
+L2370: open #5: "Name=[Q]\GLmstr\GLfund.h[cno],RecL=230,use",i,outi,r
 	read #5,using L2390: mat fundnum,mat funddesc$ ioerr L2400
 L2390: form pos 1,10*n 3,10*c 20
 L2400: fnTos

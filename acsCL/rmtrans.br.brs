@@ -14,9 +14,9 @@
 	read #20,using 'Form POS 417,N 1': rcn : _
 	close #20:
 	open #trmstr:=1: "Name=[Q]\CLmstr\TrMstr.h[cno],KFName=[Q]\CLmstr\TrIdx1.h[cno]",internal,outIn,keyed
-	open #work1:=2: "Name=[Q]\CLmstr\Work1."&wsid$&",version=2,Size=0,RecL=84,Replace",internal,outIn,relative
-	open #tralloc:=3: "Name=[Q]\CLmstr\TrAlloc.h[cno],KFName=[Q]\CLmstr\TrAlloc-idx.h[cno]",internal,input,keyed
-	open #work2=4: "Name=[Q]\CLmstr\Work2."&wsid$&",version=2,Size=0,RecL=80,Replace",internal,outIn,relative
+	open #work1:=2: "Name=[Q]\CLmstr\Work1."&wsid$&",version=2,Size=0,RecL=84,Replace",i,outi,r
+	open #tralloc:=3: "Name=[Q]\CLmstr\TrAlloc.h[cno],KFName=[Q]\CLmstr\TrAlloc-idx.h[cno]",i,i,k
+	open #work2=4: "Name=[Q]\CLmstr\Work2."&wsid$&",version=2,Size=0,RecL=80,Replace",i,outi,r
 	fnTos
 	mylen=21 : mypos=mylen+2 : lc=0
 	fnLbl(lc+=1,1,"Oldest Retained Date:",mylen,right)

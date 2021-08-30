@@ -17,7 +17,7 @@ def library fnpdf_open(; pdfOrientation$*9,pdf_sendto_base_name_addition$*128,h)
 	dim g_filename_final$*1024 ! PDF must be made on Client side.  BR won't work otherwise
 	g_filename_final$=fnPrintFileName$( pdf_sendto_base_name_addition$,'pdf')
 	if h>0 then hPdfOut=h else hPdfOut=fnH
-	open #hPdfOut: 'Name=PDF:,PrintFile=[at]'&g_filename_final$&',Replace,RecL=5000',Display,Output ioerr poFAIL
+	open #hPdfOut: 'Name=PDF:,PrintFile=[at]'&g_filename_final$&',Replace,RecL=5000',d,o ioerr poFAIL
 	! pr g_filename_final$ : pause
 	! if env$('acsDeveloper')<>'' then pr 'hPdfOut=';hPdfOut : pause
 	poReturn=hPdfOut

@@ -16,7 +16,7 @@
 	magicdate=fndate_mmddyy_to_ccyymmdd(d1)-20000 ! don't start with anything older that two years ago
 
 	fnGetServices(mat serviceName$,mat srv$)
-	open #2: "Name=[Q]\UBmstr\UBTransVB.h[cno],KFName=[Q]\UBmstr\UBTrIndx.h[cno],Shr",internal,input,keyed
+	open #2: "Name=[Q]\UBmstr\UBTransVB.h[cno],KFName=[Q]\UBmstr\UBTrIndx.h[cno],Shr",i,i,k
 	open #hCustomer=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,outIn,keyed
 	L260: !
 	read #hCustomer,using Fcustomer,release: z$,bildat eof SCREEN1
@@ -211,7 +211,7 @@ Xit: fnXit
 !
 VBOPENPRINT: !
 	if file(20)=-1 then
-		open #20: "Name=[Q]\UBmstr\linechart"&wsid$&".txt,Replace,RecL=5000",display,output
+		open #20: "Name=[Q]\UBmstr\linechart"&wsid$&".txt,Replace,RecL=5000",d,o
 		pr #20: 'Call Print.MyOrientation("Landscape")'
 		lyne=margin ! starting of 1st line
 		column1=16

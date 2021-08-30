@@ -98,9 +98,9 @@ MENU1: ! r:
 	fnreg_write('ubMetrRt.account sequence',resp$(11))
 ! /r
 if seq=2 then 
-	open #hCustomer=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,input,keyed 
+	open #hCustomer=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",i,i,k 
 else 
-	open #hCustomer=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx5.h[cno],Shr",internal,input,keyed 
+	open #hCustomer=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx5.h[cno],Shr",i,i,k 
 end if 
 fnopenprn
 on pageoflow goto PgOf
@@ -297,7 +297,7 @@ def fn_campbell_meter_book ! Campbell Special Routine (printed once a year, one 
 	if uprc$(resp$(1))=uprc$("[All]") then route=0 else route=val(resp$(1))
 	service$="W"
 	fnreg_write('ubMetrRt.route',resp$(1))
-	open #hCustomer=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,input,keyed 
+	open #hCustomer=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",i,i,k 
 	fnopenprn
 	do
 	CAMPBELL_LOOP_TOP: ! 

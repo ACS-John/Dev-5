@@ -202,7 +202,7 @@
 01370     curdrv=10
 01372     dim curdrv$*100
 01375     if file(curdrv)>-1 then curdrv+=1: goto 1375
-01380     open #curdrv: "name=drv.[acsUserId],replace",display,output 
+01380     open #curdrv: "name=drv.[acsUserId],replace",d,o 
 01385     curdrv$=srep$(file$(curdrv),"drv.[acsUserId]","")
 01392     fncurdrv$=curdrv$
 01395     close #curdrv,free: 
@@ -214,7 +214,7 @@
           !    !
 01430     outfile=10
 01440     if file(outfile)>-1 then outfile+=1 : goto 1440
-01450     open #outfile: "name=out[Session].txt,eol=none,replace",display,output 
+01450     open #outfile: "name=out[Session].txt,eol=none,replace",d,o 
 01460     crlf$=chr$(13)&chr$(10)
 01470     if header$>"" then pr #outfile: "H|"&header$&crlf$
 01480     if footer$>"" then pr #outfile: "F|"&footer$&crlf$
@@ -249,7 +249,7 @@
 01600     open #rtfno: "name="&rtfno$,display,input 
 01605     rtfout=rtfno+1
 01610     if file(rtfout)>-1 then rtfout+=1 : goto 1610
-01615     open #rtfout: "name="&rtfname$&",eol=none,replace",display,output 
+01615     open #rtfout: "name="&rtfname$&",eol=none,replace",d,o 
 01620     fnrtf(rtfno,rtfspec$,rtfout)
 01625     rtfout$=file$(rtfout)
 01630     close #rtfout: !:
@@ -476,8 +476,8 @@
 02945     end if 
 02946     _cs=fn_cs
 02950     if _cs then !:
-            open #(helpfil:=fnH): "name=@:temp\brhelp.htm,recl=2000,replace",display,output else !:
-            open #(helpfil:=fnH): "name="&env$("TEMP")&"\brhelp.htm,recl=2000,replace",display,output 
+            open #(helpfil:=fnH): "name=@:temp\brhelp.htm,recl=2000,replace",d,o else !:
+            open #(helpfil:=fnH): "name="&env$("TEMP")&"\brhelp.htm,recl=2000,replace",d,o 
 02955     pr #helpfil: "<html>"
 02960     pr #helpfil: "<head>"
 02965     pr #helpfil: "<meta http-equiv=""Content-Type"" content=""text/html; charset=windows-1252"">"
@@ -991,7 +991,7 @@
 04902   library env$("PD")&"Core\fnsnap\fnsnap_dll.br": fnH
 04903   execute 'proc '&env$("PD")&'Core\fnsnap\tt'
 04904   fnawplite$=awtext$
-04905   open #(awp:=fnH): "name="&env$("PD")&"Core\fnsnap\awp[Session].txt,replace",display,output 
+04905   open #(awp:=fnH): "name="&env$("PD")&"Core\fnsnap\awp[Session].txt,replace",d,o 
 04910   dim awp$*100,awt$*1000
 04915 !    !:
         ! |  Open the parameters file for AWPlite                       | !:
@@ -1013,7 +1013,7 @@
         ! | Create the transfer file for data to be used by AWPlite     | !:
         ! |                                                             | !:
         !    !
-04985   open #(awt:=fnH(awp)): "name="&env$("PD")&"Core\fnsnap\awt[Session].txt,recl="&str$(alen)&",replace",display,output 
+04985   open #(awt:=fnH(awp)): "name="&env$("PD")&"Core\fnsnap\awt[Session].txt,recl="&str$(alen)&",replace",d,o 
 04990   pr #awt: srep$(awtext$,"\n",crlf$)
 04995   awt$=os_filename$(file$(awt))
 05000   close #awt: 
@@ -1058,9 +1058,9 @@
 05105 ! pRINTFILE=5
 05106 ! IF FILE(PRINTFILE)>-1 THEN pRINTFILE+=1 : GOTO 5106
 05110   if not select then !:
-          open #(printfile:=fnH): "NAME=//20,recl=2000,PAGEOFLOW=50",display,output  !:
+          open #(printfile:=fnH): "NAME=//20,recl=2000,PAGEOFLOW=50",d,o  !:
         else !:
-          open #(printfile:=fnH): "NAME=preview:/select,recl=2000,PAGEOFLOW=50",display,output 
+          open #(printfile:=fnH): "NAME=preview:/select,recl=2000,PAGEOFLOW=50",d,o 
 05111   printfile$=file$(printfile)
 05120   ! pr #PRINTFILE,USING SETPRINT: "[RESET+]" ! normal print
 05130   pr #printfile,using SETPRINT: "[LETTER][CPI=15][TOPLEFT]" ! condensed print
@@ -1599,7 +1599,7 @@
 08110   library env$("PD")&"Core\fnsnap\fnsnap_dll.br": fnH,fngetfile$,fnTop$,fnleft$,fnlines$
 08120   execute 'proc '&env$("PD")&'Core\fnsnap\tt'
 08130   dim pdffile$*100,macno$(1)*40
-08140   open #(filnum:=fnH): "name=PDF:/READER,PrintFile="&destination$&",eol=none,use",display,output  !:
+08140   open #(filnum:=fnH): "name=PDF:/READER,PrintFile="&destination$&",eol=none,use",d,o  !:
         pr #filnum: fnTop$(1)&fnleft$(0)&fnlines$(0)
 08150   pr #filnum: esc$&"pdf='"&str$(page)&","&source$&"'"
 08160   close #filnum: 
@@ -1651,7 +1651,7 @@
 10080 if choice$="Delete" then goto DELDUPS0
 10082 if choice$="Continue" then dupa=2
 10090 if choice$="List" then 
-10092   open #flnr: "name=ldup.[WSID]",display,output  !:
+10092   open #flnr: "name=ldup.[WSID]",d,o  !:
         pr #flnr: "Index error in file "&flnm$&" using index "&kfnm$ !:
         close #flnr: 
 10093   fnprint_file("ldup."&env$('acsUserId'),10,1,1) !:
@@ -1663,7 +1663,7 @@
 10098 if choice$="" then dupa=3
 10100 return 
 10109 ! -----------------------------
-10110 DELDUPS0: open #flnr: "NAME="&flnm$&",NOSHR",internal,outIn,relative 
+10110 DELDUPS0: open #flnr: "NAME="&flnm$&",NOSHR",i,outi,r 
 10120 open #flnr+1: "NAME=LDUP.[WSID]",display,input 
 10130 lstkey$=""
 10140 DELDUPS1: input #flnr+1: a$ eof ZDELDUPS1
@@ -1743,7 +1743,7 @@
 10795 if pageo>0 then !:
         _pageo$=",pageoflow="&str$(pageo) else !:
         _pageo$=""
-10800 open #filno: "name="&flpath$&flnm$&_pageo$&eol$&",replace",display,output 
+10800 open #filno: "name="&flpath$&flnm$&_pageo$&eol$&",replace",d,o 
 10810 crlf$=chr$(13)&chr$(10) !:
       ff$=chr$(12) !:
       tab$=chr$(9)
@@ -1779,7 +1779,7 @@
 11025   library env$("PD")&"Core\fnsnap\fnsnap_dll.br": fnH
 11030 !  pFILE=10
 11040 !  IF FILE(PFILE)>-1 THEN pFILE+=1 : GOTO 11040
-11050   open #(pfile:=fnH): "name="&printer$&",eol=NONE",display,output 
+11050   open #(pfile:=fnH): "name="&printer$&",eol=NONE",d,o 
 11060   fntype(filnm$,pfile)
 11070   close #pfile: ioerr 11080
 11080 end def 
@@ -1980,16 +1980,16 @@
 11830   pfile=10
 11840   if file(pfile)>-1 then pfile+=1 : goto 11840
 11850   setenv("PRINT_DOCUMENT_NAME","Reprinted Report") ! PAUSE
-11860   if uprc$(trim$(d2typ$(d2r)))="ANY" then open #pfile: "name=preview:/select,eol=none",display,output  !:
+11860   if uprc$(trim$(d2typ$(d2r)))="ANY" then open #pfile: "name=preview:/select,eol=none",d,o  !:
           goto 11900
 11870   if uprc$(trim$(d2typ$(d2r)))="DIRECT" then let msgbox("The report that you are reprinting contains characters that are not compatable with the preview mode."&cr$&cr$&"The report must be sent directly to a PCL compatable laser printer.  Please select an appropriate printer for this report.") !:
-          open #pfile: "name=direct:/select,eol=none",display,output  !:
+          open #pfile: "name=direct:/select,eol=none",d,o  !:
           goto 11900
 11880   if uprc$(trim$(d2typ$(d2r)))="MATRIX" then let msgbox("The report that you are reprinting contains characters that are not compatable with the preview mode."&cr$&cr$&"The report must be sent directly to a MATRIX printer.  "&c$&cr$&"Please select an appropriate printer for this report.") !:
-          open #pfile: "name=direct:/select,eol=none",display,output  !:
+          open #pfile: "name=direct:/select,eol=none",d,o  !:
           goto 11900
 11882   if uprc$(trim$(d2typ$(d2r)))="MICR" then let msgbox("The report that you are reprinting contains characters that are not compatable with the preview mode."&cr$&cr$&"The report must be sent directly to a MICR capable printer.  "&c$&cr$&"Please select an appropriate printer for this report.") !:
-          open #pfile: "name=direct:/select,eol=none",display,output  !:
+          open #pfile: "name=direct:/select,eol=none",d,o  !:
           goto 11900
 11890   msgbox("An invalid PRINTER TYPE was specified in the REPORTLOG file.  You must correct the report type before printing can occur.") !:
         goto 11690
@@ -2567,7 +2567,7 @@
 31840   open #infile: "name="&infile$&",recl="&str$(lr),external,input 
 31845   outfile=infile+1
 31846   if file(outfile)>-1 then outfile+=1 : goto 31846
-31847   open #outfile: "name="&outfile$&",eol=NONE,replace",display,output 
+31847   open #outfile: "name="&outfile$&",eol=NONE,replace",d,o 
 31848   acnt=0
 31850   if acnt*lr+lr<inrec then 
 31855     read #infile,using inform$: pcl$
@@ -2605,7 +2605,7 @@
 32030   dim png$*200
 32040   png$=""
 32050   msgbox("Select an HP6L printer that has had the driver configured for printing to a file."&crlf$&"This will properly format the file for further conversion to PCL5 and storage in the FORMS library.")
-32060   open #(outfile:=fnH): "name=WIN:/SELECT,eol=NONE",display,output 
+32060   open #(outfile:=fnH): "name=WIN:/SELECT,eol=NONE",d,o 
 32070   if file(outfile)<0 then goto ZPIC2PRN
 32080   open #(infile:=fnH): "name=open:"&env$("PD")&".\*.png,recl=1",external,input 
 32090   if file(infile)<0 then goto ZPIC2PRN
@@ -3449,13 +3449,13 @@
 41460     rcfile=10 !:
           locate=1
 41470     if file(rcfile)>-1 then rcfile+=1 : goto 41470 else !:
-            open #rcfile: "name="&infile$&",replace,recl=3200",display,output 
+            open #rcfile: "name="&infile$&",replace,recl=3200",d,o 
 41480     pr #rcfile: textstring$
 41490     close #rcfile: 
 41500   end if 
 41501   if _cs then let fnCopys2c(infile$,"@:S:\Core\fnsnap\"&infile$(pos(infile$,"\",-1)+1:len(infile$)),1)
 41502   if file(rccfile)>-1 then rccfile+=1 : goto 41502 else !:
-          open #rccfile: "name=command.[Session],replace,recl=3200",display,output 
+          open #rccfile: "name=command.[Session],replace,recl=3200",d,o 
 41503   dim rccfile$*65
 41505   rccfile$=file$(rccfile)
 41510 ! 
@@ -3662,7 +3662,7 @@
           open #(in:=fnH): "name=open:"&infile$&",recl="&str$(inlen),external,input else !:
           open #(in:=fnH): "name="&infile$&",recl="&str$(inlen),external,input 
 42770   frm_infile$=cform$("FORM C "&str$(inlen))
-42780   open #(save:=fnH): "name="&outfile$&",recl="&str$(inlen+2)&",replace",display,output 
+42780   open #(save:=fnH): "name="&outfile$&",recl="&str$(inlen+2)&",replace",d,o 
 42790   outfile$=os_filename$(file$(save))
 42800 READ_IN: read #in,using frm_infile$: in_a$ eof ZVIEW_EXT
 42810   pr #save: in_a$
@@ -4367,7 +4367,7 @@
 53200     prtfile+=1 !:
           if file(prtfile)>-1 then goto 53200 !:
           else !:
-            open #prtfile: "name="&env$("TEMP")&"\tempfil.[WSID],replace,recl=32000,eol=none",display,output 
+            open #prtfile: "name="&env$("TEMP")&"\tempfil.[WSID],replace,recl=32000,eol=none",d,o 
 53205   end if 
 53210   print_file$=file$(prtfile)
 53212   pr #prtfile: " "
@@ -4663,7 +4663,7 @@
 54410   library env$("PD")&"Core\fnsnap\fnsnap_dll.br": fnprintbox,fnH,fnmod
 54415   if udim(mat addr$)<5 then mat addr$(5)
 54420   if not lbl then 
-54430     open #(lblno:=fnH): "srow=5,scol=10,rows=3,cols=25,parent=0,border=S",display,output 
+54430     open #(lblno:=fnH): "srow=5,scol=10,rows=3,cols=25,parent=0,border=S",d,o 
 54440     pr #lblno, fields "2,2,c 15,N/W:T": "Lable number"
 54442     lbl=fngeta("FNPRT3X10")
 54450     rinput #lblno, fields "2,18,n 3,N/W:W": lbl conv 54450
@@ -6173,10 +6173,10 @@
 78140   pr #errwin,fields "8,20,n 10,n,n": eline
 78145   pr #errwin,fields "10,20,n 10,n,n": eerr
 78150   pr #errwin,fields "12,20,n 10,n,n": ecount
-78155   open #(errlog:=fnH): "name="&env$("PD")&"errlog.txt,rln=2500,use",display,output 
+78155   open #(errlog:=fnH): "name="&env$("PD")&"errlog.txt,rln=2500,use",d,o 
 78156   pr #errlog: str$(days(date))&chr$(9)&session$&chr$(9)&eprog$&chr$(9)& str$(eline)&chr$(9)&str$(eerr)&chr$(9)&str$(ecount)&chr$(9)&wbversion$&chr$(9)&env$("USER_NAME")&chr$(9)&login_name$
 78157   close #errlog: 
-78160   open #(errfil:=fnH): "name=ERRLOG.[acsUserId],use",display,output 
+78160   open #(errfil:=fnH): "name=ERRLOG.[acsUserId],use",d,o 
 78165   pr #errfil: " Date         = "&date$("MM/DD/CCYY") !:
         pr #errfil: " acsUserId    = "&env$('acsUserId')
 78170   pr #errfil: " Program      = "&eprog$ !:
@@ -6228,7 +6228,7 @@
         !    !
 78405   dim wmlfile$*100
 78410   library env$("PD")&"Core\fnsnap\fnsnap_dll.br": fnH
-78435   open #(fileno:=fnH): "NAME="&senddir$&"\"&env$('acsUserId')(1:2)&srep$(time$,":","")&".txt,RECL=500,NEW",display,output ioerr 78435
+78435   open #(fileno:=fnH): "NAME="&senddir$&"\"&env$('acsUserId')(1:2)&srep$(time$,":","")&".txt,RECL=500,NEW",d,o ioerr 78435
 78440   pr #fileno: "<TO>"
 78445   for a=1 to udim(mat mailto$)
 78450     pr #fileno: trim$(mailto$(a))

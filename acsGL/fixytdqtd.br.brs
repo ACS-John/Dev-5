@@ -38,12 +38,12 @@
 	end_date=val(resp$(2))
 	begytd_date=val(resp$(3)) : _
 	endytd_date=val(resp$(4))
-	open #1: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,outIn,relative: read #1,using 'Form POS 386,PD 5.3,PD 5.2,PD 5.3,PD 5.2,POS 407,PD 5.3,PD 5.2,POS 418,10*C 20,10*N 1',rec=1: ficarate,ficawage,feducrat,feducwag,mcr,mcm,mat miscname$,mat dedcode : _
+	open #1: "Name=[Q]\GLmstr\Company.h[cno],Shr",i,outi,r: read #1,using 'Form POS 386,PD 5.3,PD 5.2,PD 5.3,PD 5.2,POS 407,PD 5.3,PD 5.2,POS 418,10*C 20,10*N 1',rec=1: ficarate,ficawage,feducrat,feducwag,mcr,mcm,mat miscname$,mat dedcode : _
 	close #1:
 	ficarate=ficarate/100 : feducrat=feducrat/100 : mcr=mcr/100
 	nametab=66-int(len(rtrm$(cnam$))/2)
 	open #1: "Name=[Q]\GLmstr\PRmstr.h[cno],KFName=[Q]\GLmstr\PRIndex.h[cno],Shr",internal,outIn,keyed
-	open #2: "Name=[Q]\GLmstr\ACPRCKS.h[cno],Shr",internal,outIn,relative
+	open #2: "Name=[Q]\GLmstr\ACPRCKS.h[cno],Shr",i,outi,r
 L380: read #1,using 'Form POS 1,N 4,3*C 25,C 11,36*PD 5.2,2*N 5': eno,mat k$,ss$,mat m,mat adr eof Xit
 	fixqtr=fixytd=0
 	if beg_date>0 and end_date>0 then fixqtr=1: goto L410 else goto L440

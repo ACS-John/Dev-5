@@ -14,8 +14,8 @@ read #1,using 'Form POS 1,3*C 40,C 12,POS 150,10*C 8,N 2,POS 317,10*C 12,POS 618
 close #1: ! company was prcoinfo before conversion
 mcmax=9999999
 for j=1 to 3: a$(j)=a$(j)(1:30): next j
-open #1: "Name=[Q]\PRmstr\RPMstr.h[cno],KFName=[Q]\PRmstr\RPIndex.h[cno],Shr",internal,input,keyed 
-open #2: "Name=[Q]\PRmstr\RPTRAIL.h[cno],Shr",internal,outIn,relative 
+open #1: "Name=[Q]\PRmstr\RPMstr.h[cno],KFName=[Q]\PRmstr\RPIndex.h[cno],Shr",i,i,k 
+open #2: "Name=[Q]\PRmstr\RPTRAIL.h[cno],Shr",i,outi,r 
 L220: read #1,using L230: eno,mat em$,ss$,em6,ta eof Xit
 L230: form pos 1,n 8,3*c 30,c 11,pos 122,n 2,pos 173,pd 3
 L240: read #2,using L250,rec=ta: teno,tcd,mat ty,ta

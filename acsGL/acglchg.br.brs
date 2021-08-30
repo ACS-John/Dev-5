@@ -13,7 +13,7 @@
 	if fnGlAskFormatPriorCdPeriod=5 then goto Xit
 	fncno(cno,cnam$)
 	udf$=env$('temp')&'\'
-	open #20: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,input,relative: read #20,using 'Form Pos 152,3*C 12',rec=1: mat cogl$ : close #20:
+	open #20: "Name=[Q]\GLmstr\Company.h[cno],Shr",i,i,r: read #20,using 'Form Pos 152,3*C 12',rec=1: mat cogl$ : close #20:
 	actpd=fnactpd : fscode=fnfscode
 	pors=1
 	on fkey 5 goto L1830
@@ -23,7 +23,7 @@
 	if fnps=2 then fl1$="Name=[Q]\GLmstr\ACGLFNSG.h[cno],KFName=[Q]\GLmstr\agfsidx6.h[cno],Shr"
 L230: form pos mp1,pd 3,pos 81,28*pd 6.2,pos 327,pd 6.2
 L240: form pos 1,c 12,pos 87,27*pd 6.2
-	open #1: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLIndex.h[cno],Shr",internal,input,keyed
+	open #1: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLIndex.h[cno],Shr",i,i,k
 L260: read #1,using L240: acct$,cb,mat by,mat bp eof L340
 	if acct$>cogl$(3) then goto L340
 	if fnpriorcd=2 then income=income-bp(fscode) else goto L310
@@ -37,7 +37,7 @@ L310: if fscode<=0 or fscode>12 then : _
 		pincome=pincome-bp(fscode)
 L330: goto L260
 L340: close #1:
-	open #1: fl1$,internal,input,keyed
+	open #1: fl1$,i,i,k
 	if fnprocess=1 or fnUseDeptNo=0 then goto L460
 	fnTos
 	mylen=30: mypos=mylen+3 : right=1
@@ -57,7 +57,7 @@ L460: fnopenprn : _
 	execute "Index [Q]\GLmstr\GLmstr.h[cno] "&udf$&"fsindex.h[cno] 75 3 Replace DupKeys -N"
 	goto L520
 L510: execute "Index [Q]\GLmstr\GLmstr.h[cno] "&udf$&"fsindex.h[cno] 78 3 Replace DupKeys -N"
-L520: open #3: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName="&udf$&"fsindex.h[cno],Shr",internal,input,keyed
+L520: open #3: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName="&udf$&"fsindex.h[cno],Shr",i,i,k
 L530: read #1,using L570: r$,d$,te$,sp,ls,ds,ul,rs,bc,ap,mat ac,ic,fc eof L1830
 	if ltrm$(r$)="" or ltrm$(r$)="0" then goto L530
 	if costcntr=0 then goto L570

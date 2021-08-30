@@ -7,7 +7,7 @@
 	dim tdc(6),tcp(22),em$*30,tgl(3),tdet(3)
  
 	open #2: "Name=[Q]\PRmstr\RPMstr.h[cno],KFName=[Q]\PRmstr\RPIndex.h[cno],Shr",internal,outIn,keyed
-	open #3: "Name=[Q]\PRmstr\RPTRAIL.h[cno],Shr",internal,outIn,relative
+	open #3: "Name=[Q]\PRmstr\RPTRAIL.h[cno],Shr",i,outi,r
 	open #4: "Name=[Q]\PRmstr\PRCkHist.h[cno],KFName=[Q]\PRmstr\PRCKINDX.h[cno],Shr",internal,outIn,keyed
 	open #5: "Name=[Temp]\Work.[Session],KFName=[Temp]\Addr.[Session],RecL=30,KPS=1,KLN=12,Replace",internal,outIn,keyed
 	io5$(1)="11,55,N 6,U,N"

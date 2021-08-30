@@ -7,8 +7,8 @@
  
 	open #fnH: "Name=[Q]\UBmstr\ubTransVB.h[cno],KFName=[Q]\UBmstr\ubTrIndx.h[cno],Shr",internal,outIn,keyed
 	open #fnH: "Name=[Q]\UBmstr\ubTransVB.h[cno],KFName=[Q]\UBmstr\UBTrdt.h[cno],Shr",internal,outIn,keyed
-	open #h_trans1=fnH: "Name=[Q]\UBmstr\ubTransVB.h[cno],Shr",internal,input,relative
-	open #h_trans2=fnH: "Name=[Q]\UBmstr\ubTransVB.h[cno],KFName=[Q]\UBmstr\ubTrIndx.h[cno],Shr",internal,input,keyed
+	open #h_trans1=fnH: "Name=[Q]\UBmstr\ubTransVB.h[cno],Shr",i,i,r
+	open #h_trans2=fnH: "Name=[Q]\UBmstr\ubTransVB.h[cno],KFName=[Q]\UBmstr\ubTrIndx.h[cno],Shr",i,i,k
 	trans1_lrec=lrec(h_trans1)
 	Ftrans: form pos 1,c 10,n 8,n 1,12*pd 4.2,6*pd 5,pd 4.2,n 1
  
@@ -113,7 +113,7 @@ fnend
 def fn_trans_delete(td_rec)
 	if ~td_setup then
 		td_setup=1
-		open #h_td_trans1=fnH: "Name=[Q]\UBmstr\ubTransVB.h[cno],Shr",internal,outIn,relative
+		open #h_td_trans1=fnH: "Name=[Q]\UBmstr\ubTransVB.h[cno],Shr",i,outi,r
 		open #h_td_customer=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,outIn,keyed
 		dim td_msg$(1)*90
 		dim tdt_tg(11)

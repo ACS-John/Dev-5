@@ -67,7 +67,7 @@ L350: ckey=fnAcs(mat resp$)
 	fnopenprn
 	gosub HEADER
 	v=bkno1
-	open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,input,keyed
+	open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",i,i,k
 L570: read #1,using L580: z$,e$,f,bal,mat g,mat gb eof DONE
 L580: form pos 1,c 10,pos 41,c 30,pos 296,pd 4,pos 292,pd 4.2,pos 300,12*pd 4.2,pos 388,10*pd 5.2
 	if f<>lbill then mat g=(0)

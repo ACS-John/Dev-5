@@ -392,8 +392,8 @@ ASKDAT: !
 	transactionstartingdate=val(resp$(1))
 	transactionendingdate=val(resp$(2))
 	open #paymstr=1: "Name=[Q]\GLmstr\PayMstr.h[cno],Version=1,KFName=[Q]\GLmstr\PayIdx1.h[cno],Shr",internal,outIn,keyed
-	open #trans=2: "Name=[Q]\GLmstr\GLTR1099.h[cno],KFName=[Q]\GLmstr\gltrIdx1.h[cno],Shr",internal,input,keyed
-	if ct1=0 then open #22: "Name=IRSTAX,RecL=750,eol=crlf,Replace",display,output
+	open #trans=2: "Name=[Q]\GLmstr\GLTR1099.h[cno],KFName=[Q]\GLmstr\gltrIdx1.h[cno],Shr",i,i,k
+	if ct1=0 then open #22: "Name=IRSTAX,RecL=750,eol=crlf,Replace",d,o
 	if ct1=0 then gosub RECT
 	gosub RECA
 	if lrec(1)=0 then goto L3800

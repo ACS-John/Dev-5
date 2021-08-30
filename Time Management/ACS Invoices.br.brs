@@ -23,10 +23,10 @@ execute 'sy "C:\ACS\Util\Dev-5 Commit.cmd"'
 ! /r
 ! r: main loop (produceInvoices)
 	fnStatus('producing Invoice Archive...')
-	open #hClient=fnH: 'Name=S:\Core\Data\acsllc\CLmstr.h[cno],KFName=S:\Core\Data\acsllc\CLIndex.h[cno],Shr',internal,input,keyed
+	open #hClient=fnH: 'Name=S:\Core\Data\acsllc\CLmstr.h[cno],KFName=S:\Core\Data\acsllc\CLIndex.h[cno],Shr',i,i,k
 	! pr 're-indexing support, just in case - probably not necessary to do so often, but one time there was this problem.'
 	! fnIndex('S:\Core\Data\acsllc\support.h[cno]','S:\Core\Data\acsllc\support-idx.h[cno]','1/7,6/2')
-	open #hSupport=fnH: 'Name=S:\Core\Data\acsllc\Support.h[cno],KFName=S:\Core\Data\acsllc\support-idx.h[cno],Shr',internal,input,keyed
+	open #hSupport=fnH: 'Name=S:\Core\Data\acsllc\Support.h[cno],KFName=S:\Core\Data\acsllc\support-idx.h[cno],Shr',i,i,k
 	Fsupport: form pos 1,c 6,x 2,c 2,x 8,c 2,n 8,n 10.2,4*c 50
 
 	! fnIndex('[Temp]\TmSht[session]','[Temp]\TmSht-idx[session]','1,5')
@@ -359,7 +359,7 @@ fnend
 def fn_summaryAccumulate
 	! pr 'fn_summaryAccumulate   totalInvoicesPrinted=';totalInvoicesPrinted !
 	if ~hSummary then
-		open #hSummary=fnH: 'Name=PrnSummary[session],RecL=80,replace',display,output ! ioerr SI_ADD
+		open #hSummary=fnH: 'Name=PrnSummary[session],RecL=80,replace',d,o ! ioerr SI_ADD
 		pr #hSummary: '{\fs16'  ! set the RTF Font Size to 8
 		pr #hSummary: 'Clnt   Name           Date      Prev Bal    New Amt     Total Due   Inv No  '
 		pr #hSummary: '_____ ______________  ________  __________  __________  __________  __________'
@@ -447,10 +447,10 @@ def fn_mergeInvoices
 	dim inv_amt(30)
 	dim ct(30)
 	dim tmwk2_sc$(30)
-	open #h_artrans=fnH:  'Name=S:\Core\Data\acsllc\ARTrans.h[cno],Shr',internal,outIn,relative
-	open #h_tmtrans=fnH:  'Name=S:\Core\Data\acsllc\TMTRANS.h[cno],Shr',internal,outIn,relative
+	open #h_artrans=fnH:  'Name=S:\Core\Data\acsllc\ARTrans.h[cno],Shr',i,outi,r
+	open #h_tmtrans=fnH:  'Name=S:\Core\Data\acsllc\TMTRANS.h[cno],Shr',i,outi,r
 	open #h_clmstr=fnH:   'Name=S:\Core\Data\acsllc\CLmstr.h[cno],KFName=S:\Core\Data\acsllc\CLIndex.h[cno],Shr',internal,outIn,keyed
-	open #h_tmtraddr=fnH: 'Name=S:\Core\Data\acsllc\TMTRAddr.h[cno],Shr',internal,outIn,relative
+	open #h_tmtraddr=fnH: 'Name=S:\Core\Data\acsllc\TMTRAddr.h[cno],Shr',i,outi,r
 	do  ! r: main loop
 		READ_TMWK: !
 		read #h_tmwk2,using F_TMWK2b: k$,xb(7),xb(4),iv$,mat cde$,mat id$,mat inv_amt,mat ct,mat tmwk2_sc$ eof MiFinis

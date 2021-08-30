@@ -1,5 +1,5 @@
 open #trmstr=1: "Name=[Q]\CLmstr\TRMSTR.h[cno]",internal,outIn
-open #2: "Name=[Q]\CLmstr\TRALLOC.h[cno]",internal,outIn,relative
+open #2: "Name=[Q]\CLmstr\TRALLOC.h[cno]",i,outi,r
 L110: read #trmstr,using 'Form POS 1,N 2,N 1,C 8,POS 79,2*PD 3': bank_code,tcde,checkNumber$,mat tr eof END1
 	v1=val(checkNumber$) conv L110
 	if v1<7822 or v1>7848 then goto L110

@@ -22,9 +22,9 @@ goto ASK_PP1
 ASK_SORT: !
 	if fund=1 then ty1$="Vendor Sequence" else ty1$="Fund Sequence"
 	if coded=1 then ty2$="All Invoices" else ty2$="Selected Invoices"
-	open #paytrans=4: "Name=[Q]\CLmstr\PayTrans.h[cno],Shr",internal,input,relative
+	open #paytrans=4: "Name=[Q]\CLmstr\PayTrans.h[cno],Shr",i,i,r
 	execute "Index [Q]\CLmstr\unpdaloc.h[cno]"&' '&"[Q]\CLmstr\Uaidx2.h[cno] 1 20 Replace DupKeys -n" ! index in vendor, reference order
-	open #unpdaloc=8: "Name=[Q]\CLmstr\UnPdAloc.h[cno],KFName=[Q]\CLmstr\Uaidx2.h[cno],Shr",internal,input,keyed
+	open #unpdaloc=8: "Name=[Q]\CLmstr\UnPdAloc.h[cno],KFName=[Q]\CLmstr\Uaidx2.h[cno],Shr",i,i,k
 	READ_PAYTRANS: !
 	read #paytrans,using 'Form POS 1,C 8,C 12,2*G 6,C 12,C 18,g 10.2,G 1': vn$,iv$,ivd,dd,po$,de$,upa,cde eof L420
 	if coded=2 and cde=0 then goto READ_PAYTRANS
@@ -58,18 +58,18 @@ ASK_SORT: !
 	execute "Sort [Temp]\Control -n"
 	open #addr:=9: "Name=[Temp]\Addr",internal,input
 	open #paymstr:=13: "Name=[Q]\CLmstr\PayMstr.h[cno],KFName=[Q]\CLmstr\PayIdx1.h[cno],Shr",internal,outIn,keyed
-	open #rpmstr:=23: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr",internal,input,keyed ioerr L550
+	open #rpmstr:=23: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr",i,i,k ioerr L550
 	prcode=1
 	L550: !
-	open #clwork:=10: "Name=[Q]\CLmstr\CLWork"&wsid$&".h[cno],Shr",internal,input,relative
+	open #clwork:=10: "Name=[Q]\CLmstr\CLWork"&wsid$&".h[cno],Shr",i,i,r
 	open #glmstr:=5: "Name=[Q]\CLmstr\GLmstr.h[cno],KFName=[Q]\CLmstr\GLIndex.h[cno],Shr",internal,outIn,keyed
 	open #work:=6: "Name=[Temp]\Work,Size=0,RecL=22,Replace",internal,output
 	close #work:
 	execute "Free [Temp]\Indx -n" ioerr ignore
 	execute "Index [Temp]\Work,[Temp]\Indx,1,12,Replace,DupKeys -n"
 	open #work=6: "Name=[Temp]\Work,KFName=[Temp]\Indx",internal,outIn,keyed
-	open #hFund=fnH: "Name=[Q]\CLmstr\FundMstr.h[cno],KFName=[Q]\CLmstr\FundIdx1.h[cno],Shr",internal,input,keyed ! 7
-	notused=1: open #11: "Name=[Q]\CLmstr\dptmSTR.h[cno],KFName=[Q]\CLmstr\dptidx1.h[cno]",internal,input,keyed ioerr L640 : notused=0
+	open #hFund=fnH: "Name=[Q]\CLmstr\FundMstr.h[cno],KFName=[Q]\CLmstr\FundIdx1.h[cno],Shr",i,i,k ! 7
+	notused=1: open #11: "Name=[Q]\CLmstr\dptmSTR.h[cno],KFName=[Q]\CLmstr\dptidx1.h[cno]",i,i,k ioerr L640 : notused=0
 	L640: !
 	fnopenprn
 	vn$="": iv$=""
@@ -191,8 +191,8 @@ return  ! /r
  
 ASK_PP1: ! r:
 	open #clwork=10: "Name=[Q]\CLmstr\CLWork"&wsid$&".h[cno], Size=0, RecL=93, Replace", internal,outIn
-	open #trmstr=1: "Name=[Q]\CLmstr\TrMstr.h[cno],KFName=[Q]\CLmstr\TrIdx1.h[cno],Shr",internal,input,keyed
-	open #tralloc=2: "Name=[Q]\CLmstr\TrAlloc.h[cno],KFName=[Q]\CLmstr\TrAlloc-Idx.h[cno],Shr",internal,input,keyed
+	open #trmstr=1: "Name=[Q]\CLmstr\TrMstr.h[cno],KFName=[Q]\CLmstr\TrIdx1.h[cno],Shr",i,i,k
+	open #tralloc=2: "Name=[Q]\CLmstr\TrAlloc.h[cno],KFName=[Q]\CLmstr\TrAlloc-Idx.h[cno],Shr",i,i,k
 	if pp1yn$="N" then goto END8
 	ld1=fndate_mmddyy_to_ccyymmdd(ld1) : hd1=fndate_mmddyy_to_ccyymmdd(hd1)
 	READ_TRMSTR: !

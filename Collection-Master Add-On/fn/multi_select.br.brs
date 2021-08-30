@@ -388,7 +388,7 @@ def library fnopen_xml_writer(filename$*256)
 	if ~setup then fn_setup
 	dim xml_node_stack$(1)*100
 	mat xml_node_stack$(0)
-	open #(xmlfh:=fngethandle): "NAME="&filename$&",REPLACE,RECL=4096",display,output 
+	open #(xmlfh:=fngethandle): "NAME="&filename$&",REPLACE,RECL=4096",d,o 
 	! PRINT #XMLFH: '<?xml version="1.0"?>'
 	fnopen_xml_writer = xmlfh
 fnend 
@@ -581,8 +581,8 @@ def fn_multi_select(mat ms_selected$,mat ms_unselected$; cap$*80,mat ms_grid_hea
 
 		ms_tool_col+=2 : ms_tool_col$=str$(ms_tool_col)
 	end if  ! MS_Rotation=MS_Rotation_Horizontal   /   MS_Rotation=MS_Rotation_Vertical
-	open #ms_win_unselected_handle:=fngethandle: "SRow="&ms_win_unselected_srow$&",SCol="&ms_win_unselected_scol$&",Rows="&ms_win_unselected_height$&",Cols="&ms_win_unselected_width$&",Border=S,Caption=Unselected,Parent="&ms_parent_handle$,display,output 
-	open #ms_win_selected_handle:=fngethandle: "SRow="&ms_win_selected_srow$&",SCol="&ms_win_selected_scol$&",Rows="&ms_win_selected_height$&",Cols="&ms_win_selected_width$&",Border=S,Caption=Selected,Parent="&ms_parent_handle$,display,output 
+	open #ms_win_unselected_handle:=fngethandle: "SRow="&ms_win_unselected_srow$&",SCol="&ms_win_unselected_scol$&",Rows="&ms_win_unselected_height$&",Cols="&ms_win_unselected_width$&",Border=S,Caption=Unselected,Parent="&ms_parent_handle$,d,o 
+	open #ms_win_selected_handle:=fngethandle: "SRow="&ms_win_selected_srow$&",SCol="&ms_win_selected_scol$&",Rows="&ms_win_selected_height$&",Cols="&ms_win_selected_width$&",Border=S,Caption=Selected,Parent="&ms_parent_handle$,d,o 
 	print #ms_win_unselected_handle, fields "1,1,List "&ms_win_unselected_height$&"/"&ms_win_unselected_width$&",Headers,[Tabs]": (mat ms_grid_heading$,mat ms_grid_width,mat ms_grid_form$)
 	print #ms_win_selected_handle, fields "1,1,List "&ms_win_selected_height$&"/"&ms_win_selected_width$&",Headers,[Tabs]": (mat ms_grid_heading$,mat ms_grid_width,mat ms_grid_form$)
 	return  ! MS_GON_WIN_OPEN
@@ -613,7 +613,7 @@ def fn_multi_select(mat ms_selected$,mat ms_unselected$; cap$*80,mat ms_grid_hea
 	MS_GON_TOOL_DISPLAY: !r: requires MS_Side_Active  (and several other things)
 	if ms_rotation<>ms_rotation_hold then 
 		if ms_rotation=ms_rotation_horizontal then ! =
-			open #ms_tool_handle:=fngethandle: "SRow="&ms_tool_line$&",SCol=1,Rows=1,Cols="&ms_parent_width$&",Picture=icons\ToolBar.gif,Parent="&ms_parent_handle$,display,output  ! VBAR.gif  is up and down       and toolbar.gif is left and right"
+			open #ms_tool_handle:=fngethandle: "SRow="&ms_tool_line$&",SCol=1,Rows=1,Cols="&ms_parent_width$&",Picture=icons\ToolBar.gif,Parent="&ms_parent_handle$,d,o  ! VBAR.gif  is up and down       and toolbar.gif is left and right"
 			fn_array_quick$(mat button_pos$,'34','37','41','44','70')
 			button_image$(1)="Icons\A-Dn.png" ! Add
 			button_image$(2)="Icons\R-Up.png" ! Remove
@@ -627,7 +627,7 @@ def fn_multi_select(mat ms_selected$,mat ms_unselected$; cap$*80,mat ms_grid_hea
 				print #ms_tool_handle,fields "1,"&button_pos$(button_item)&",P 1/2,,"&button_fkey$(button_item), help "1a;"&button_tooltip$(button_item)&";": button_image$(button_item)&":Isotropic"
 			next button_item
 		else if ms_rotation=ms_rotation_vertical then ! ||
-			open #ms_tool_handle:=fngethandle: "SRow=1,SCol="&ms_tool_col$&",Rows="&ms_parent_height$&",Cols="&ms_tool_col_width$&",Parent="&ms_parent_handle$,display,output  ! VBAR.gif  is up and down       and toolbar.gif is left and right"
+			open #ms_tool_handle:=fngethandle: "SRow=1,SCol="&ms_tool_col$&",Rows="&ms_parent_height$&",Cols="&ms_tool_col_width$&",Parent="&ms_parent_handle$,d,o  ! VBAR.gif  is up and down       and toolbar.gif is left and right"
 			fn_array_quick$(mat button_line$,'10','11','13','14','20')
 			button_image$(1)="Icons\A-Right.png" ! Add
 			button_image$(2)="Icons\R-Left.png" ! Remove
@@ -653,7 +653,7 @@ def fn_multi_select(mat ms_selected$,mat ms_unselected$; cap$*80,mat ms_grid_hea
 	dim ms_gons_field$(4)*40 ! ,MS_GONS_FIELD_DISABLED$(4)*40
 	ms_rotation_hold=0
 	if trim$(cap$)="" then ms_parent_caption$="" else ms_parent_caption$=",Caption="&cap$
-	open #ms_parent_handle:=fngethandle: fnwindowthis_size$(ms_parent_height,ms_parent_width,"Full Screen","S")&ms_parent_caption$&",Parent=0",display,output 
+	open #ms_parent_handle:=fngethandle: fnwindowthis_size$(ms_parent_height,ms_parent_width,"Full Screen","S")&ms_parent_caption$&",Parent=0",d,o 
 	ms_parent_height$=str$(ms_parent_height)
 	ms_parent_width$=str$(ms_parent_width)
 	ms_parent_handle$=str$(ms_parent_handle)
@@ -1451,12 +1451,12 @@ def fn_menu2(m2_title$*80,m2_cap$*80,m2_pk$*80,mat m2_option$; m2_default_select
 	m2_big_empty$=rpt$(chr$(0),100)
 	if m2_parent_handle>0 and file$(m2_parent_handle)=":CON:" then goto M2_ASK ! XXX EXPIRAMENTAL
 	if m2_preserve_backgroud=0 then 
-		open #m2_display_top_parent:=fngethandle: 'SRow=1,SCol=1,Cols=80,Rows=24,Border=None',display,output 
+		open #m2_display_top_parent:=fngethandle: 'SRow=1,SCol=1,Cols=80,Rows=24,Border=None',d,o 
 	else if m2_preserve_backgroud=2 then 
 		dim m2_dtp_data$(1)*128,dumb_tmp$*2048
 		dumb_tmp$=fnopen_parent$('Parent=None,SRow=1,SCol=1,Cols=80,Rows=30,Border=None,Name=M2,button.fkey=0;99,button.text=OK;Exit',mat m2_dtp_data$,1)
 		if jbowman then pr 'dumb_tmp$=';dumb_tmp$ : pause
-		open #m2_display_top_parent:=fngethandle: dumb_tmp$,display,output 
+		open #m2_display_top_parent:=fngethandle: dumb_tmp$,d,o 
 		fngenerate_buttons_for_window(mat m2_dtp_data$,m2_display_top_parent)
 	else 
 		m2_display_top_parent=0
@@ -1490,7 +1490,7 @@ def fn_menu2(m2_title$*80,m2_cap$*80,m2_pk$*80,mat m2_option$; m2_default_select
 	end if  ! M2_Option_Count=>20   /   =19   /   else 
 	m2_parent_height$=str$(m2_parent_height=min(session_rows-m2_parent_srow,m2_option_count+3))
 	m2_parent_width$=str$(m2_parent_width=72)
-	open #m2_parent_handle:=fngethandle: 'Parent='&str$(m2_display_top_parent)&',SRow='&m2_parent_srow$&',SCol=4,Rows='&m2_parent_height$&',Cols='&m2_parent_width$&',Border=S[N],Tab='&m2_cap$,display,output 
+	open #m2_parent_handle:=fngethandle: 'Parent='&str$(m2_display_top_parent)&',SRow='&m2_parent_srow$&',SCol=4,Rows='&m2_parent_height$&',Cols='&m2_parent_width$&',Border=S[N],Tab='&m2_cap$,d,o 
 	m2_parent_handle$=str$(m2_parent_handle)
 	m2_grid_height$=str$(m2_grid_height=m2_parent_height-2)
 	m2_grid_width$=str$(m2_grid_width=m2_parent_width-3)
@@ -1513,7 +1513,7 @@ def fn_menu2(m2_title$*80,m2_cap$*80,m2_pk$*80,mat m2_option$; m2_default_select
 	end if  ! M2_Default_Selection$=''   /   else 
 	if m2_default_selection>0 then m2_filter$=m2_default_selection$ else m2_filter$=m2_option_col1$(1)
 
-	open #m2_toolbar_handle:=fngethandle: 'SRow=1,SCol='&str$(m2_field_1_width+m2_pk_len+2)&',Rows=1,Cols='&str$(m2_toolbar_width)&',Border=None,Picture=Icons\Toolbar.gif,Parent='&m2_parent_handle$,display,output 
+	open #m2_toolbar_handle:=fngethandle: 'SRow=1,SCol='&str$(m2_field_1_width+m2_pk_len+2)&',Rows=1,Cols='&str$(m2_toolbar_width)&',Border=None,Picture=Icons\Toolbar.gif,Parent='&m2_parent_handle$,d,o 
 	rinput #m2_toolbar_handle,select '1,'&str$(m2_toolbar_width-1)&',P 1/2,[Toolbar],B99',wait=0, help "3a;[Esc] Exit;": 'Icons\X.gif:Isotropic' timeout ignore
 	print #m2_parent_handle,fields '1,1,Cr '&str$(m2_pk_len+1)&',[Toolbar]S': m2_pk$&'-'
 	if m2_help_available then rinput #m2_toolbar_handle,select '1,'&str$(m2_toolbar_width-4)&',P 1/2,[Toolbar],B100',wait=0, help "3a;Help;": 'Icons\Help.png:Isotropic' timeout ignore
@@ -1834,7 +1834,7 @@ def fn_table_unique_key_list(stukl_handle,mat stukl_key_list$) ! stukl_
 	! This function when provided stukl_Handle,mat stukl_data$,mat stukl_data,stukl_formall$ returns an array of all unique keys in the file)
 	! This function itself will return the number of items found
 	! currently this function only works with single part keys.
-	open #stukl_com_handle:=fngethandle: "SRow=12,SCol=32,Rows=1,Cols=14,Border=None",display,output 
+	open #stukl_com_handle:=fngethandle: "SRow=12,SCol=32,Rows=1,Cols=14,Border=None",d,o 
 	restore #stukl_handle: 
 	dim stukl_key$*128,stukl_form$*80
 	stukl_key_pos=kps(stukl_handle)
@@ -2007,7 +2007,7 @@ def fn_combobox$*128(cb_parent,cb_parent_rows,cb_parent_cols,cb_srow,cb_scol,cb_
 		cb_rows=min(cb_opt_count+2,cb_parent_rows-cb_srow)
 	end if  ! cb_parent_above
 
-	open #cb_canvas_handle:=fngethandle: 'Parent='&str$(cb_parent)&',SRow='&str$(cb_srow)&',SCol='&str$(cb_scol)&',Cols='&str$(cb_width)&',Rows='&str$(cb_rows)&',Border=S,N=[N]',display,output 
+	open #cb_canvas_handle:=fngethandle: 'Parent='&str$(cb_parent)&',SRow='&str$(cb_srow)&',SCol='&str$(cb_scol)&',Cols='&str$(cb_width)&',Rows='&str$(cb_rows)&',Border=S,N=[N]',d,o 
 
 	cb_canvas_handle$=str$(cb_canvas_handle)
 
@@ -2017,13 +2017,13 @@ def fn_combobox$*128(cb_parent,cb_parent_rows,cb_parent_cols,cb_srow,cb_scol,cb_
 	cb_form$(1)='Cl 128,[M]LX^NoSort'
 
 	if cb_parent_above then 
-		open #cb_x_handle:=fngethandle: 'SRow='&str$(cb_rows)&',SCol='&str$(cb_width-1)&',Rows=1,Cols=2,Border=None,Parent='&cb_canvas_handle$&',Picture=Icons\Comobo.png:Tile',display,output 
-	!     open #cb_x_handle:=fngethandle: 'SRow='&str$(cb_rows)&',SCol='&str$(cb_width-1)&',Rows=1,Cols=2,Border=None,Picture=Icons\Toolbar.gif,Parent='&cb_canvas_handle$,display,output
+		open #cb_x_handle:=fngethandle: 'SRow='&str$(cb_rows)&',SCol='&str$(cb_width-1)&',Rows=1,Cols=2,Border=None,Parent='&cb_canvas_handle$&',Picture=Icons\Comobo.png:Tile',d,o 
+	!     open #cb_x_handle:=fngethandle: 'SRow='&str$(cb_rows)&',SCol='&str$(cb_width-1)&',Rows=1,Cols=2,Border=None,Picture=Icons\Toolbar.gif,Parent='&cb_canvas_handle$,d,o
 		cb_grid_field$='1,1,List '&cb_grid_height$&'/'&cb_width$
 		cb_field$(1)=str$(cb_rows)&',1,'&str$(cb_width)&'/Search 128,[D]STAEX,1,1'
 	else ! combo box apears on and BELOW cb_srow
-		open #cb_x_handle:=fngethandle: 'SRow=1,SCol='&str$(cb_width-1)&',Rows=1,Cols=2,Border=None,Parent='&cb_canvas_handle$&',Picture=Icons\Comobo.png:Tile',display,output 
-	!     open #cb_x_handle:=fngethandle: 'SRow=1,SCol='&str$(cb_width-1)&',Rows=1,Cols=2,Border=None,Picture=Icons\Toolbar.gif,Parent='&cb_canvas_handle$,display,output
+		open #cb_x_handle:=fngethandle: 'SRow=1,SCol='&str$(cb_width-1)&',Rows=1,Cols=2,Border=None,Parent='&cb_canvas_handle$&',Picture=Icons\Comobo.png:Tile',d,o 
+	!     open #cb_x_handle:=fngethandle: 'SRow=1,SCol='&str$(cb_width-1)&',Rows=1,Cols=2,Border=None,Picture=Icons\Toolbar.gif,Parent='&cb_canvas_handle$,d,o
 		cb_grid_field$='2,1,List '&cb_grid_height$&'/'&cb_width$
 		cb_field$(1)='1,1,'&str$(cb_width)&'/Search 128,[D]STAEX,2,1'
 	end if  ! cb_parent_above   /   else 

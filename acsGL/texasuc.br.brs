@@ -21,7 +21,7 @@ L180: input #win,fields "4,39,C 5,UT,N": m$ conv L180
 	close #win:
 	if cmdkey=5 or cmdkey=99 then goto Xit
  
-L220: open #2: "Name=[Q]\GLmstr\PRmstr.h[cno],KFName=[Q]\GLmstr\PRIndex.h[cno],Shr",internal,input,keyed
+L220: open #2: "Name=[Q]\GLmstr\PRmstr.h[cno],KFName=[Q]\GLmstr\PRIndex.h[cno],Shr",i,i,k
 	message$="Printing: please wait..." : _
 	fnwait(message$,1)
 	on fkey 5 goto Xit

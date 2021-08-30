@@ -14,7 +14,7 @@ L80: fnTos(sn$="file_layout")
 	fnCmdSet(2)
 	ckey=fnAcs(mat resp$)
 	outputfile$=trim$(resp$(1))&".fil"
-	open #10: "Name="&outputfile$&",RecL=87,use",display,output ioerr L80
+	open #10: "Name="&outputfile$&",RecL=87,use",d,o ioerr L80
 L160: sn$="file_layout"
 	fnTos(sn$)
 	lablen=30

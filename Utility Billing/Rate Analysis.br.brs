@@ -44,7 +44,7 @@ SCR2: ! r: requires svce$, returns mat use_to, mat use_from, probably more
 	dim rt$(32)
 	dim use_to(11)
 	dim use_from(11)
-	open #20: "Name=[Q]\UBmstr\ubData\RateMst.h[cno],KFName=[Q]\UBmstr\ubData\RateIdx1.h[cno],Shr",internal,input,keyed
+	open #20: "Name=[Q]\UBmstr\ubData\RateMst.h[cno],KFName=[Q]\UBmstr\ubData\RateIdx1.h[cno],Shr",i,i,k
 	read #20,using "Form POS 55,32*G 10",key=svce$: mat rt$ ioerr SCR1
 	close #20:
 	fnTos

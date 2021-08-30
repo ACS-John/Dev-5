@@ -60,7 +60,7 @@ MAIN: !
 		if trim$(brfn$(j))="" then mat brfn$(j-1) : goto L490
 	next j
 L490: pr "Found "&str$(j-1)&" files."
-	open #2: "Name="&procfile$&",Replace",display,output
+	open #2: "Name="&procfile$&",Replace",d,o
 	if uprc$(app_prev$)="FALSE" then           execute "free Locate-Report.txt -n" ioerr L520
 L520: pr #2: "print border: 'Locating...'"
 ! pr #2: "ProcErr Return" ! quietly continue on error ! XXX

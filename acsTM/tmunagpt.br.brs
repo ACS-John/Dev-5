@@ -11,7 +11,7 @@
 	fnRead30Categories(mat cat$)
  
 	open #1: "Name=S:\Core\Data\acsllc\Work2.H"&wsid$&",NoShr",internal,input ioerr ERTN
-	! open #2: "Name=S:\Core\Data\acsllc\CLmstr.h[cno],KFName=S:\Core\Data\acsllc\CLIndex.h[cno],Shr",internal,input,keyed ioerr ERTN
+	! open #2: "Name=S:\Core\Data\acsllc\CLmstr.h[cno],KFName=S:\Core\Data\acsllc\CLIndex.h[cno],Shr",i,i,k ioerr ERTN
 	pr newpage
 	pr f "10,10,Cc 60,n": "Printing Unbilled Aging by Partner..."
 	pr f "12,30,Cc 20,B,5": "Cancel (F5)"
@@ -24,7 +24,7 @@ L260: form pos 1,c 5,c 30,c 9,n 2,n 6,pd 4.2,5*pd 4.2
 	goto L250
 L300: close #1,free:
 	! close #2:
-	open #3: "Name=S:\Core\Data\acsllc\EMmstr.h[cno],KFName=S:\Core\Data\acsllc\EMIndex.h[cno],Shr",internal,input,keyed ioerr ERTN
+	open #3: "Name=S:\Core\Data\acsllc\EMmstr.h[cno],KFName=S:\Core\Data\acsllc\EMIndex.h[cno],Shr",i,i,k ioerr ERTN
 	gosub L350
 	goto L420
 L350: pr #255,using L360: "_________   _________  _________  _________  _________  _________"

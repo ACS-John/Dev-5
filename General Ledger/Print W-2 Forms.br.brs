@@ -13,7 +13,7 @@ dim k$(3)*30
  
 fnTop(program$)
  
-open #1: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,outIn,relative
+open #1: "Name=[Q]\GLmstr\Company.h[cno],Shr",i,outi,r
 read #1,using 'Form POS 386,PD 5.3,PD 5.2,PD 5.3,PD 5.2',rec=1: ficarate,ficawage,feducrat,feducwag
 close #1:
 ficarate=ficarate/100
@@ -50,7 +50,7 @@ if exportFormatID then
 	w2laser_output_filename$=srep$(w2laser_output_filename$,'[TaxYear]',taxYear$)
 	w2laser_output_filename$=srep$(w2laser_output_filename$,'[taxyear]',taxYear$)
 	w2laser_output_filename$=srep$(w2laser_output_filename$,'[TAXYEAR]',taxYear$)
-	open #hExport=fnH: "Name="&br_filename$(w2laser_output_filename$)&",REPLACE",display,output ioerr ASK_INFO
+	open #hExport=fnH: "Name="&br_filename$(w2laser_output_filename$)&",REPLACE",d,o ioerr ASK_INFO
 end if
 ! /r
  
@@ -58,9 +58,9 @@ end if
 if exportFormatID=0 then
 	fnpa_open('',w2Copy$,'PDF')
 end if
-open #hEmployee=fnH: "Name=[Q]\GLmstr\PRmstr.h[cno],KFName=[Q]\GLmstr\PRINDEX.h[cno],Shr",internal,input,keyed
+open #hEmployee=fnH: "Name=[Q]\GLmstr\PRmstr.h[cno],KFName=[Q]\GLmstr\PRINDEX.h[cno],Shr",i,i,k
 box16=0
-open #hW2Box16=fnH: "Name=[Q]\GLmstr\W2Box16.h[cno],KFName=[Q]\GLmstr\W2INDEX.h[cno],Shr",internal,input,keyed ioerr w2b16openfail
+open #hW2Box16=fnH: "Name=[Q]\GLmstr\W2Box16.h[cno],KFName=[Q]\GLmstr\W2INDEX.h[cno],Shr",i,i,k ioerr w2b16openfail
 box16=1
 w2b16openfail: !
 cLocality$="NO"

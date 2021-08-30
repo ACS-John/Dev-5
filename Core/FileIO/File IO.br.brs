@@ -5,7 +5,7 @@ end if
 fnTop(program$)
 dim procFile$*256
 procFile$='fileioproc[session].$$$'
-open  #hProc=fnH: 'name='&procFile$&',replace',display,output
+open  #hProc=fnH: 'name='&procFile$&',replace',d,o
 pr #hProc: 'load S:\Core\FileIO\fileio.br'
 pr #hProc: 'cd S:'
 pr #hProc: 'Run'

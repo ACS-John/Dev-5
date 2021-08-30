@@ -6,7 +6,7 @@ def library fnReCompile(; disableRebuildCache,___,hproc)
 	autoLibrary
 	dim filename$*255,msr_file$*255
 	if ~exists("S:\(import)") then execute "sy -M md "&os_filename$("S:\(import)")
-	open #hproc:=1: 'Name=S:\(import)\compile.prc,RecL=1024,Replace',display,output
+	open #hproc:=1: 'Name=S:\(import)\compile.prc,RecL=1024,Replace',d,o
 
 	if ~disableRebuildCache then
 		execute "sy -M sortFiles -D . -C "".br.brs|.br""" ! ioerr RcDone
@@ -34,7 +34,7 @@ def library fnReCompile(; disableRebuildCache,___,hproc)
 			else
 				if ~openFileList then
 					openFileList=1
-					open #hFileList=fnH: 'name='&env$('temp')&'\FileList[session].txt,recl=512,eol=crlf,replace',display,output
+					open #hFileList=fnH: 'name='&env$('temp')&'\FileList[session].txt,recl=512,eol=crlf,replace',d,o
 				end if
 				pr #hFileList: sourceFile$(sourceItem)
 				! exe  'sy ""C:\ACS\Util\Lexi\ConvStoO.cmd" "'&sourceFile$(sourceItem)&'""'
@@ -104,7 +104,7 @@ def fn_lexiLineNum(lextFileIn$*256,lextFileOut$*256)
 	mat constantName$(0)
 	mat const$(0)
 	open #1: "name="&lextFileIn$, display, input
-	open #2: "name="&lextFileOut$&",recl=800,replace",display,output
+	open #2: "name="&lextFileOut$&",recl=800,replace",d,o
 	do
 		linput #1: string$ eof LexiDoneReading
 		if ~skipNextOne and (ltrm$(string$)(1:1)="!" and pos(string$,"!")>3) then string$(1:4)=" ! ."&ltrm$(string$(1:4))

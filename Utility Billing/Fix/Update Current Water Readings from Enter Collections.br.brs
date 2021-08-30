@@ -22,7 +22,7 @@ do
 		cN(c_s01readingCur)=rcN(rc_xa1)
 		rewrite #hC,using form$(hC),key=rc$(rc_acct): mat c$,mat cN
 		! r: append to note file
-			open #h_notefile=fnH: "Name="&fnNoteDir$&"\"&trim$(c$(c_account))&".txt,Use",display,output
+			open #h_notefile=fnH: "Name="&fnNoteDir$&"\"&trim$(c$(c_account))&".txt,Use",d,o
 			pr #h_notefile: '** Current Reading programmatically updated from '&oldReading$&' to '&newReading$&' on '&date$('mm/dd/ccyy')&' at '&time$&' **'
 			close #h_notefile: 
 		! /r

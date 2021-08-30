@@ -26,8 +26,8 @@ for j=2 to udim(at$)
 next j
 
 gosub BULKSORT
-open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,input,keyed  ! open in Account order
-open #2: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx5.h[cno],Shr",internal,input,keyed  ! open in route-sequence #
+open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",i,i,k  ! open in Account order
+open #2: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx5.h[cno],Shr",i,i,k  ! open in route-sequence #
  
 SCREEN1: !
 	a$="" : prtbkno=0
@@ -76,7 +76,7 @@ SCREEN1: !
 	if trim$(a$)<>"" then restore #2,key=cnvrt$("pic(zz)",route)& cnvrt$("pic(zzzzzzz)",sequence): nokey SCREEN1
 	if trim$(a$)="" and prtbkno>0 then restore #2,key>=cnvrt$("pic(zz)",prtbkno)&"       ": ! selected a route and no beginning Account
  
-	open #3: "Name=[Q]\UBmstr\UBAdrBil.h[cno],KFName=[Q]\UBmstr\adrIndex.h[cno],Shr",internal,input,keyed
+	open #3: "Name=[Q]\UBmstr\UBAdrBil.h[cno],KFName=[Q]\UBmstr\adrIndex.h[cno],Shr",i,i,k
 	
 	fnPa_open("Landscape")
 	lyne=3
@@ -147,7 +147,7 @@ SCREEN3: !
 	goto READALTADR
  
 SORT1: ! SELECT & SORT
-	open #5: "Name=[Q]\UBmstr\Cass1.h[cno],KFName=[Q]\UBmstr\Cass1Idx.h[cno],Shr",internal,input,keyed ioerr L1390
+	open #5: "Name=[Q]\UBmstr\Cass1.h[cno],KFName=[Q]\UBmstr\Cass1Idx.h[cno],Shr",i,i,k ioerr L1390
 	open #6: "Name=[Temp]\Temp.[Session],Replace,RecL=19",internal,output
 	s5=1
 	if prtbkno=0 then routekey$="" else routekey$=cnvrt$("N 2",prtbkno)&"       " ! key off first record in route (route # no longer part of customer #)
@@ -170,8 +170,8 @@ L1310: form pos 1,c 128
 	close #9:
 	execute "Free [Temp]\Addr."&session$ ioerr L1360
 L1360: execute "Sort [Temp]\Control."&session$
-	open #6: "Name=[Temp]\Temp."&session$,internal,input,relative
-	open #7: "Name=[Temp]\Addr."&session$,internal,input,relative
+	open #6: "Name=[Temp]\Temp."&session$,i,i,r
+	open #7: "Name=[Temp]\Addr."&session$,i,i,r
 L1390: return
  
 ENDSCR: ! pr totals screen
@@ -335,7 +335,7 @@ VBPRINT: ! r:
 return ! /r
  
 BULKSORT: ! r: bulk sort order
-	open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,input,keyed  ! open in Account order
+	open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",i,i,k  ! open in Account order
 	open #6: "Name=[Temp]\Temp.[Session],Replace,RecL=31",internal,output
 	do
 	read #1,using "Form POS 1,C 10,pos 1741,n 2,pos 1743,n 7,pos 1942,c 12": z$,route,seq,bulk$ eof L2810
@@ -344,7 +344,7 @@ BULKSORT: ! r: bulk sort order
 	L2810: close #1: ioerr ignore
 	close #6: ioerr ignore
 	execute "Index [Temp]\Temp.[Session] [Temp]\TempIdx.[Session] 1,19,Replace,DupKeys -n" ioerr L2850
-	open #6: "Name=[Temp]\Temp.[Session],KFName=[Temp]\TempIdx."&session$,internal,input,keyed
+	open #6: "Name=[Temp]\Temp.[Session],KFName=[Temp]\TempIdx."&session$,i,i,k
 	L2850: !
 return ! /r
 include: ertn

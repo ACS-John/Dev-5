@@ -7,7 +7,7 @@ def library fnCustomerSearch(&x$;fixgrid)
 	on error goto Ertn
 	dim item$(12)*30,resp$(30)*80,ch$(12),cm$(12)
 	fnTos
-	open #hCustomer=fnH: 'Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr',internal,input,keyed ioerr Ertn
+	open #hCustomer=fnH: 'Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr',i,i,k ioerr Ertn
 	Fcustomer: Form POS 1,C 10,pos 1821,c 1,POS 41,C 30,C 30,POS 1864,C 30,POS 101,C 30,POS 11,C 30,POS 1741,C 2,C 7,POS 1894,C 12,POS 131,C 12,pos 354, c 7
 	restore #hCustomer: 
 	mat ch$(12) : mat cm$(12) : mat cm$(12)

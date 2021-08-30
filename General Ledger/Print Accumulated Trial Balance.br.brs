@@ -19,7 +19,7 @@ autoLibrary
   a$(9)=" "
 ! /r
   fnTop(program$,cap$="Print Accumulated Trial Balance")
-  open #20: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,input,relative
+  open #20: "Name=[Q]\GLmstr\Company.h[cno],Shr",i,i,r
   read #20,using 'Form Pos 152,3*C 12',rec=1: mat cogl$
   read #20,using "Form pos 296,N 2",rec=1: lmu
   read #20,using 'Form Pos 384,n 2',rec=1: nap
@@ -31,8 +31,8 @@ autoLibrary
   m2GlmCbAmtPos=87
   if nap=13 then m1GlmBbAmtPos=171-6 else m1GlmBbAmtPos=171-12 ! 171 was 249
   ! last=val(lastCapitalAccount$(4:9))
-  open #h_glmstr:=1: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLIndex.h[cno],Shr",internal,input,keyed
-  open #h_actrans=fnH: "Name=[Q]\GLmstr\AcTrans.h[cno],KFName=[Q]\GLmstr\AcTrIdx.h[cno],Shr",internal,input,keyed
+  open #h_glmstr:=1: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLIndex.h[cno],Shr",i,i,k
+  open #h_actrans=fnH: "Name=[Q]\GLmstr\AcTrans.h[cno],KFName=[Q]\GLmstr\AcTrIdx.h[cno],Shr",i,i,k
   if fnprocess=1 then s1=1 : goto mainLoopInit
 goto SCREEN1
 SCREEN1: ! r:

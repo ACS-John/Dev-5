@@ -3,7 +3,7 @@ fnTop(program$,"Fix WH Wages in Check History")
 on error goto Ertn
 ssrate1=fnss_employee*.01
 ssrate2=fnss_employer*.01
-open #1: "Name=[Q]\PRmstr\Company.h[cno]",internal,outIn,relative 
+open #1: "Name=[Q]\PRmstr\Company.h[cno]",i,outi,r 
 read #1,using 'Form POS 1,3*x 40,x 12,PD 6.3',rec=1: mcr
 close #1:
 mcr=mcr*.01

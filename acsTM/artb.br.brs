@@ -2,7 +2,7 @@ on error goto Ertn
 autoLibrary
 fnTop(program$,"Trial Balance")
 fndat(dat$)
-open #8: "Name=S:\Core\Data\acsllc\pedate.h[cno],RecL=20,use,Shr",internal,outIn,relative 
+open #8: "Name=S:\Core\Data\acsllc\pedate.h[cno],RecL=20,use,Shr",i,outi,r 
 if lrec(8)=0 then write #8,using "form pos 1,n 6": d1 else read #8,using "form pos 1,n 6",rec=1,release: d1
 dim z$*5,e$(4)*30,ex(5),sx(5),c(5),u$*20,flo$(3),fli$(2),dat$*20
 dim scr$(3)*50,ta(2),o(2),cnv$*6,q$*30,age(4),mo(12),iv$*12
@@ -33,7 +33,7 @@ L280: rinput fields mat fli$: dat$,d1 conv L280
 	pr f "10,15,c 50,h": "A/R AGED TRIAL BALANCE PROGRAM IN PROCESS"
 	pr f "23,2,C 30,N": "Press F5 to stop"
 	open #1: "Name=S:\Core\Data\acsllc\CLmstr.h[cno],KFName=S:\Core\Data\acsllc\CLIndex.h[cno],Shr",internal,outIn,keyed ioerr Ertn
-	open #2: "Name=S:\Core\Data\acsllc\ARTrans.h[cno],Shr",internal,input,relative ioerr Ertn
+	open #2: "Name=S:\Core\Data\acsllc\ARTrans.h[cno],Shr",i,i,r ioerr Ertn
 	gosub L550
 L400: read #1,using L420: z$,e$(1),am6,am16,mat ta eof L700 ioerr Ertn
 	if am6=0 then goto L400

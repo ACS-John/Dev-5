@@ -144,9 +144,9 @@ SCR1: ! r:
 ! falls through ! /r
 gosub SCR2
  
-open #hEmployee=fnH: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr",internal,input,keyed
-open #2: "Name=[Q]\PRmstr\RPTRAIL.h[cno],Shr",internal,input,relative
-open #22: "Name=[Q]\UCReport,RecL=512,eol=crlf,replace",display,output
+open #hEmployee=fnH: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr",i,i,k
+open #2: "Name=[Q]\PRmstr\RPTRAIL.h[cno],Shr",i,i,r
+open #22: "Name=[Q]\UCReport,RecL=512,eol=crlf,replace",d,o
 goto BEGINNING_OF_FILE
  
  

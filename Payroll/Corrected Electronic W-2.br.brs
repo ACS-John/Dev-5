@@ -227,10 +227,10 @@ L1930: if cmdkey=5 then goto Xit
 	message$=""
 !
 	fnDedNames(mat fullname$,mat abrevname$,mat newdedcode,mat newcalcode,mat newdedfed,mat dedfica,mat dedst,mat deduc)
-	open #1: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr",internal,input,keyed
-! Open #2: "Name=[Q]\PRmstr\RPTRAIL.h[cno],Shr",Internal,Input,Relative
+	open #1: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr",i,i,k
+! Open #2: "Name=[Q]\PRmstr\RPTRAIL.h[cno],Shr",i,i,r
 	open #4: "Name=[Q]\PRmstr\payrollchecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno]",internal,outIn,keyed
-L2070: open #22: "Name=W2REPORT,RecL=1024,eol=crlf,replace",display,output
+L2070: open #22: "Name=W2REPORT,RecL=1024,eol=crlf,replace",d,o
 	goto L2140
 	pr newpage
 	msgline$(1)="Insert Diskette"

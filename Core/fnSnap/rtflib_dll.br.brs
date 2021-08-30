@@ -2,7 +2,7 @@
 00019   library "RTFLIB_dll.br": fnrtf,fnamt$,fntext$
 00020   dim types$(4)*2,styles$(4)*1000,data$(20)*1200,sub$(1)*1000
 00030   rtffile=126 !:
-        open #rtffile: "name=c:\temp.rtf,recl=1000,replace",display,output 
+        open #rtffile: "name=c:\temp.rtf,recl=1000,replace",d,o 
 00040   types$(1)="H" !:
         types$(2)="F" !:
         types$(3)="D" !:
@@ -189,7 +189,7 @@
           ! ?tart writing RTF text file                                   !:
           ! ?                                                             !:
           ! -------------------------------- !
-10380     open #(textfile:=fnH): "name=[Temp]\text[Session].txt,recl=5000,replace",display,output 
+10380     open #(textfile:=fnH): "name=[Temp]\text[Session].txt,recl=5000,replace",d,o 
 10385     if sort_col>0 then header$(inf:inf)="[RTFLINE] Sorted by "&headers$(sort_col)
 10390     pr #textfile: "H|[SPEC(spec[Session].spc)]"&header$&"[BOTLINE]" !:
           pr #textfile: "F|"&footer$&"|Page [PAGE] |[RTFDATE][TOPLINE]" !:
@@ -347,7 +347,7 @@
 10670     close #textfile: 
 10680     open #textfile: "name="&textfile$,display,input 
 10682     _seq=-1
-10690     _seq+=1: open #(rtfout:=fnH): "name=[Temp]\temp"&session$&str$(_seq)&".rtf,eol=none,replace",display,output ioerr 10690
+10690     _seq+=1: open #(rtfout:=fnH): "name=[Temp]\temp"&session$&str$(_seq)&".rtf,eol=none,replace",d,o ioerr 10690
 10700     rtfout$=file$(rtfout)
 10705 ! close #waitwin:! PAUSE
 10710     gosub BUILD_SPEC
@@ -381,7 +381,7 @@
         ! ?uild an RTF specification file in the %TEMP% directory based !:
         ! ?n the number of columns and text of the lIST to print.       !:
         ! -------------------------------- !
-10810   open #(specfile=fnH): "name=[Temp]\spec[Session].spc,recl=2000,replace",display,output 
+10810   open #(specfile=fnH): "name=[Temp]\spec[Session].spc,recl=2000,replace",d,o 
 10820   pr #specfile: ""
 10825 ! -------------------------------- !:
         ! ?et margins                                                   !:

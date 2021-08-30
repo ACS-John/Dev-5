@@ -25,7 +25,7 @@ Xit: fnXit
  
 StartReport: !
 	! maybe a printing please wait screen here would be nice.
-	open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,input,keyed
+	open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",i,i,k
 	fnopenprn
 	gosub Header
 goto Report

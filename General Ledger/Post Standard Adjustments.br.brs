@@ -16,7 +16,7 @@ ckey=fnAcs(mat resp$)
 if ckey=5 then goto Xit
 dat=val(resp$(1))
 open #hMerge=fnH: "Name=[Q]\GLmstr\GL_Work_[acsUserId].h[cno],RecL=104,Replace,NoShr",internal,output
-open #hStdAdj=fnH: "Name=[Q]\GLmstr\glStdAd.h[cno],KFName=[Q]\GLmstr\glStdIdx.h[cno],Shr",internal,input,keyed
+open #hStdAdj=fnH: "Name=[Q]\GLmstr\glStdAd.h[cno],KFName=[Q]\GLmstr\glStdIdx.h[cno],Shr",i,i,k
 net=totalDb=totalCr=0
 dim holdref$*12
 holdref$=''

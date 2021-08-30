@@ -16,12 +16,12 @@ fnLastBillingDate(d1)
  
 fnTop("S:\acsUB\ubprtbl1",cap$="Print Bills")
 gosub BULKSORT
-open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,input,keyed  ! open in Account order
-open #2: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx5.h[cno],Shr",internal,input,keyed  ! open in route-sequence #
-open #ubtransvb=15: "Name=[Q]\UBmstr\UBTransVB.h[cno],KFName=[Q]\UBmstr\UBTrIndx.h[cno],Shr",internal,input,keyed
+open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",i,i,k  ! open in Account order
+open #2: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx5.h[cno],Shr",i,i,k  ! open in route-sequence #
+open #ubtransvb=15: "Name=[Q]\UBmstr\UBTransVB.h[cno],KFName=[Q]\UBmstr\UBTrIndx.h[cno],Shr",i,i,k
 if exists("[Q]\UBmstr\message.h[cno]")=0 then goto L3250
 L225: !
-open #16: "Name=[Q]\UBmstr\message.h[cno]",internal,outIn,relative
+open #16: "Name=[Q]\UBmstr\message.h[cno]",i,outi,r
 for j=1 to 13
 	read #16,using "form pos 1,c 60",rec=j: mg$(j) noRec L228
 	L228: !
@@ -141,7 +141,7 @@ if trim$(a$)="" and prtbkno=0 then restore #2,key>="         ": ! if no beginnin
 if trim$(a$)<>"" then restore #2,key=cnvrt$("pic(zz)",route)& cnvrt$("pic(zzzzzzz)",sequence): nokey SCREEN1
 if trim$(a$)="" and prtbkno>0 then restore #2,key>=cnvrt$("pic(zz)",prtbkno)&"       ": ! selected a route and no beginning Account
  
-open #3: "Name=[Q]\UBmstr\UBAdrBil.h[cno],KFName=[Q]\UBmstr\adrIndex.h[cno],Shr",internal,input,keyed
+open #3: "Name=[Q]\UBmstr\UBAdrBil.h[cno],KFName=[Q]\UBmstr\adrIndex.h[cno],Shr",i,i,k
 		fnpa_open
 		lyne=3
  
@@ -207,7 +207,7 @@ SCREEN3: ! r:
 	read #1,using L800,key=a$: z$,mat e$,f$,a3,mat _b,final,mat _d,bal,_f,mat g,bra,mat gb,route,d3,d2,bulk$,extra1$,estimatedate,final,df$,seweravg nokey SCREEN3
 goto READALTADR ! /r
 SORT1: ! r: SELECT & SORT
-	open #5: "Name=[Q]\UBmstr\Cass1.h[cno],KFName=[Q]\UBmstr\Cass1Idx.h[cno],Shr",internal,input,keyed ioerr L1600
+	open #5: "Name=[Q]\UBmstr\Cass1.h[cno],KFName=[Q]\UBmstr\Cass1Idx.h[cno],Shr",i,i,k ioerr L1600
 	open #6: "Name=[Temp]\Temp.[Session],Replace,RecL=19",internal,output
 	s5=1
 	if prtbkno=0 then routekey$="" else routekey$=cnvrt$("N 2",prtbkno)&"       " ! key off first record in route (route # no longer part of customer #)
@@ -230,8 +230,8 @@ END5: ! r:
 	close #9:
 	execute "Free [Temp]\Addr.[Session] -n" ioerr L1570
 	L1570: execute "Sort [Temp]\Control.[Session] -n"
-	open #6: "Name=[Temp]\Temp."&session$,internal,input,relative
-	open #7: "Name=[Temp]\Addr."&session$,internal,input,relative
+	open #6: "Name=[Temp]\Temp."&session$,i,i,r
+	open #7: "Name=[Temp]\Addr."&session$,i,i,r
 	L1600: !
 return ! /r
 EndScreen: ! r: pr totals screen
@@ -425,7 +425,7 @@ VBPRINT: ! r:
 	fnpa_newpage
 return ! /r
 BulkSort: ! r:bulk sort order
-	open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,input,keyed  ! open in Account order
+	open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",i,i,k  ! open in Account order
 	open #6: "Name=[Temp]\Temp.[Session],Replace,RecL=31",internal,output
 	do
 		read #1,using "Form POS 1,C 10,pos 1741,n 2,pos 1743,n 7,pos 1942,c 12": z$,route,seq,bulk$ eof L3080
@@ -435,7 +435,7 @@ BulkSort: ! r:bulk sort order
 	close #1: ioerr ignore
 	close #6: ioerr ignore
 	if fnIndex('[temp]\Temp.[session]','[temp]\TempIdx.[session]','1,19') then
-		open #6: 'Name=[temp]\Temp.[session],KFName=[temp]\TempIdx.[session]',internal,input,keyed
+		open #6: 'Name=[temp]\Temp.[session],KFName=[temp]\TempIdx.[session]',i,i,k
 	end if
 return ! /r
 PRIOR_USAGES: ! r:
@@ -452,7 +452,7 @@ goto L3160
 L3240: !
 return ! /r
 L3250: ! r:
-	open #16: "Name=[Q]\UBmstr\message.h[cno],RecL=132,replace",internal,outIn,relative
+	open #16: "Name=[Q]\UBmstr\message.h[cno],RecL=132,replace",i,outi,r
 	for j=1 to 10
 		write #16,using "form pos 1,c 60": "" ! write 10 blank messages
 	next j

@@ -14,7 +14,7 @@
 	fncno(cno,cnam$)
 	actpd$=fnactpd$
 	pedat=val(actpd$)
-	open #20: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,input,relative  : _
+	open #20: "Name=[Q]\GLmstr\Company.h[cno],Shr",i,i,r  : _
 	read #20,using 'Form Pos 384,n 2',rec=1: nap : close #20:
 	fscode=fnfscode
 	fnfscode
@@ -31,7 +31,7 @@
 	fl1$="Name=[Q]\GLmstr\ACGLFNSF.h[cno],KFName=[Q]\GLmstr\agfsidx5.h[cno],Shr"
 	if fnps=2 then fl1$="Name=[Q]\GLmstr\ACGLFNSG.h[cno]," : _
 		fl1$=fl1$&"KFName=[Q]\GLmstr\agfsidx6.h[cno],Shr"
-	open #1: fl1$,internal,input,keyed
+	open #1: fl1$,i,i,k
 	if fnprocess=1 or fnUseDeptNo=0 then goto L360
 	fnTos
 	mylen=30: mypos=mylen+3 : right=1
@@ -49,7 +49,7 @@ L360: if fnps=2 then goto L390 ! secondary
 L370: execute "Index [Q]\GLmstr\GLmstr.h[cno] [Temp]\fsindex.h[cno] 75 3 Replace DupKeys -N"
 	goto L400
 L390: execute "Index [Q]\GLmstr\GLmstr.h[cno] [Temp]\fsindex.h[cno] 78 3 Replace DupKeys -N"
-L400: open #3: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Temp]\fsindex.h[cno],Shr",internal,input,keyed
+L400: open #3: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Temp]\fsindex.h[cno],Shr",i,i,k
 	fnopenprn : _
 	if file$(255)(1:4)<>"PRN:" then redir=1 else redir=0
 L420: read #1,using L460: r$,d$,te$,sp,ls,ds,ul,rs,bc,ap,mat ac,ic,fc eof L1820

@@ -934,7 +934,7 @@ def fn_client_support_setup(client_id,mat css_system_id$,mat css_system_support_
 		mat cache_css_system_id$(0)
 		mat cache_css_system_sup_end_date(0)
 		cache_css_system_count=0
-		open #h_support=fnH: "Name=S:\Core\Data\acsllc\support.h420,Version=2,KFName=S:\Core\Data\acsllc\support-idx.h420,version=0,Shr",internal,input,keyed
+		open #h_support=fnH: "Name=S:\Core\Data\acsllc\support.h420,Version=2,KFName=S:\Core\Data\acsllc\support-idx.h420,version=0,Shr",i,i,k
 		restore #h_support: ! ,key>==lpad$(trim$(client_id$),kln(h_support)):
 		do
 			read #h_support,using F_SUPPORT: cln$,scode,scode$,sdt1,stm$,sup_exp_date,scst eof CSS_SUPPORT_EOF

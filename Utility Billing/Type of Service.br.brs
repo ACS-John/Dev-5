@@ -49,7 +49,7 @@ fnTos ! r:
 			subjectTo(a)=val(resp$(a*6-1))
 			orderToApply(a)=val(resp$(a*6))
 		next a
-		open #hService=fnH: "Name=[Q]\UBmstr\ubData\Service.h[cno],RecL=280,use",internal,outIn,relative
+		open #hService=fnH: "Name=[Q]\UBmstr\ubData\Service.h[cno],RecL=280,use",i,outi,r
 		rewrite #hService,using F_service,rec=1: mat serviceName$,mat serviceCode$,mat taxCode$,mat penalty$,mat subjectTo,mat orderToApply
 		close #hService:
 	end if
@@ -82,7 +82,7 @@ def fn_readService
 		else if ~exists('[Q]\UBmstr\ubData\Service.h[cno]') then
 			fnCopy('S:\Utility Billing\mstr\ubData\*.h99999','[Q]\UBmstr\UBData\*.h[cno]')
 		end if
-		open #hService=fnH: "Name=[Q]\UBmstr\ubData\Service.h[cno],RecL=280,use",internal,outIn,relative
+		open #hService=fnH: "Name=[Q]\UBmstr\ubData\Service.h[cno],RecL=280,use",i,outi,r
 		if lrec(hService)<1 then !  this should not happen because it should be copied in from company #1 above
 			write #hService,using F_service,rec=1: mat cacheServiceName$,mat cacheServiceCode$,mat cacheTaxCode$,mat cacheePenalty$,mat cacheSubjectTo,mat cacheOrderToApply
 			pr 'A new empty Type of Service file was created.  Only ACS can edit this file type.  Type GO and press Enter to continue.' : pause

@@ -18,9 +18,9 @@ pr newpage
 pr f "10,5,C 60": "CHECK POSITION OF W2 FORMS FOR SECOND STATE"
 pr f "12,15,C 60": "PRESS ENTER TO CONTINUE:"
 input fields "12,40,C 1,I,N": pause$
-open #1: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr",internal,input,keyed
+open #1: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr",i,i,k
 open #2: "Name=[Q]\PRmstr\PRW2ADDR.h[cno],NoShr",internal,input
-open #hAddr=fnH: "Name=[Temp]\Addr.[Session],NoShr",internal,input,relative
+open #hAddr=fnH: "Name=[Temp]\Addr.[Session],NoShr",i,i,r
 read #hAddr,using 'form pos 1,n 10.2,n 1',rec=1: ficamax,w1
 ficamaw=ficamax*10
 first=1

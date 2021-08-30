@@ -15,7 +15,7 @@ fbd$=lpad$(str$(val(resp$(1))),6)
 fbd=val(resp$(1)) conv MAIN
 x=fndate_mmddyy_to_ccyymmdd(fbd)
 open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,outIn,keyed
-open #2: "Name=[Q]\UBmstr\ubtransvb.h[cno],KFName=[Q]\UBmstr\ubtrindx.h[cno],Shr",internal,input,keyed
+open #2: "Name=[Q]\UBmstr\ubtransvb.h[cno],KFName=[Q]\UBmstr\ubtrindx.h[cno],Shr",i,i,k
 do
 	read #1,using 'form pos 1,c 10': z$ eof Xit
 	watuse=eleuse=gasuse=0

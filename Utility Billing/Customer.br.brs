@@ -21,7 +21,7 @@ def fn_customer(; &editOne$,___,editOne,ckey)
 	bud1=0
 	open #h_budmstr=fnH: "Name=[Q]\UBmstr\BudMstr.h[cno],KFName=[Q]\UBmstr\BudIdx1.h[cno],Shr,Use,RecL=80,KPs=1,KLn=10",internal,outIn,keyed  ! was 81
 	F_BUDMSTR: form pos 1,c 10,pd 4,12*pd 5.2,2*pd 3
-	open #h_budtrans=fnH: "Name=[Q]\UBmstr\BudTrans.h[cno],Shr,Use,RecL=149",internal,outIn,relative  ! was 82
+	open #h_budtrans=fnH: "Name=[Q]\UBmstr\BudTrans.h[cno],Shr,Use,RecL=149",i,outi,r  ! was 82
 	F_BUDTRANS: form pos 1,c 10,2*pd 4,24*pd 5.2,2*pd 4,pd 3
 	bud1=1
 	! /r
@@ -863,7 +863,7 @@ def library fnDepositChangeLog(z$*10,odp,ndp,chgDateMmDdYy,comment$*32)
 	fnDepositChangeLog=fn_depositChangeLog(z$,odp,ndp,chgDateMmDdYy,comment$)
 fnend
 def fn_setup_depositChange
-	open #h_deposit2=fnH: 'Name=[Q]\UBmstr\Deposit2.h[cno],KFName=[Q]\UBmstr\Deposit2Index.h[cno],Shr,Use,RecL=73,KPs=1,KLn=10',internal,outIn,keyed ! "Name=[Q]\UBmstr\Deposit2.h[cno],Shr,Use,RecL=73",internal,outIn,relative  ! was 42
+	open #h_deposit2=fnH: 'Name=[Q]\UBmstr\Deposit2.h[cno],KFName=[Q]\UBmstr\Deposit2Index.h[cno],Shr,Use,RecL=73,KPs=1,KLn=10',internal,outIn,keyed ! "Name=[Q]\UBmstr\Deposit2.h[cno],Shr,Use,RecL=73",i,outi,r  ! was 42
 fnend
 def fn_depositChangeLog(z$,odp,ndp,chgDateMmDdYy,comment$*32)
 	! requires local:  #h_deposit2
@@ -1188,7 +1188,7 @@ fnend
 def fn_customerNotes(z$)
 		noteFile$=fn_notedir$&"\"&trim$(z$)&".txt"
 		if exists(noteFile$)=0 then
-			open #hTmp=fnH: "Name="&noteFile$&",Replace",display,output
+			open #hTmp=fnH: "Name="&noteFile$&",Replace",d,o
 			close #hTmp:
 		end if  ! exists(noteFile$)=0
 		fnEditFile('text',noteFile$) ! execute 'SY -w '&atlantis$&' "'&os_filename$(noteFile$)&'" -n' ! ioerr [itself]
@@ -1237,7 +1237,7 @@ def fn_accountKeyChange_meter(key_from$*10,key_to$*10)
 fnend
 def fn_customer_grid(cg_line,cg_pos)
 	dim cg_item$(12)*30,cg_ch$(12),cg_cm$(12)
-	open #cg_file_num=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,input,keyed ioerr ERTN
+	open #cg_file_num=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",i,i,k ioerr ERTN
 	restore #file_num:
 	mat cg_ch$(12) : mat cg_cm$(12) : mat cg_cm$(12)
 	cg_ch$(1)="Account"
@@ -1553,7 +1553,7 @@ def fn_setup
 	fnGetServices(mat srvnam$,mat srv$)
 	dim serviceCodeMetered$(0)*2
 	fnGetServiceCodesMetered(mat serviceCodeMetered$)
-	open #20: "Name=[Q]\UBmstr\Company.h[cno],Shr",internal,input,relative
+	open #20: "Name=[Q]\UBmstr\Company.h[cno],Shr",i,i,r
 	read #20,using "Form POS 81,C 30,pos 129,c 1",rec=1: newe4$,escrow$
 	close #20:
 	j=first_service=0
@@ -1565,7 +1565,7 @@ fnend
 def fn_getRateCodeOptions(service_code,&ratecode,mat rates$ ) ! get applicable rate codes
 	! search routine must be passed code for service (WA for water) in searchcode$
 	searchcode$=srv$(service_code)
-	open #h_rate1=fnH: "Name=[Q]\UBmstr\ubData\RateMst.h[cno],KFName=[Q]\UBmstr\ubData\RateIdx1.h[cno],Shr",internal,input,keyed
+	open #h_rate1=fnH: "Name=[Q]\UBmstr\ubData\RateMst.h[cno],KFName=[Q]\UBmstr\ubData\RateIdx1.h[cno],Shr",i,i,k
 	restore #h_rate1:
 	mat rates$(99)
 	mat rates$=("")

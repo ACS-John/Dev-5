@@ -11,7 +11,7 @@ pr f "10,15,C 50": "ENTER COMPANY # TO CONVERT OR 0 TO STOP:"
 L130: input fields "10,55,N 2,UE,N": cno conv L130
 if cno=0 then goto Xit
  
-	open #4: "Name=[Q]\PRmstr\PRCkHist.h[cno],RecL=150,USE",internal,outIn,relative
+	open #4: "Name=[Q]\PRmstr\PRCkHist.h[cno],RecL=150,USE",i,outi,r
 L170: r1+=1
 	read #4,using L190,rec=r1: eno,prd,ckno,mat tdc,mat tc2 eof L330,conv L220,noRec L330
 L190: form pos 1,n 8,pd 6,n 7,5*pd 3.2,pd 4.2,22*pd 5.2

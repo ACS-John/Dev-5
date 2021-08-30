@@ -11,7 +11,7 @@
 	cancel=99 : right=1 : center=2 : on=1 : off=0 : _
 	left=0
 	open #1: "Name=[Q]\PRmstr\PayrollChecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno],NoShr",internal,outIn,keyed
-	open #work1:=2: "Name=[Q]\PRmstr\Work1."&wsid$&",Size=0,RecL=224,replace",internal,outIn,relative
+	open #work1:=2: "Name=[Q]\PRmstr\Work1."&wsid$&",Size=0,RecL=224,replace",i,outi,r
 	fnTos(sn$='RemoveChecks') : _
 	mylen=22 : mypos=mylen+3 : lc=0
 	fnLbl(lc+=1,1,"Oldest Date to Retain:",mylen,1)

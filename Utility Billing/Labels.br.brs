@@ -332,9 +332,9 @@ Sort1: ! r: SELECT & SORT
 	close #9:
 	execute "Free [Temp]\Addr.[session] -n" ioerr ignore
 	execute "Sort [Temp]\CONTROL.[session] -n"
-	open #6: "Name=[Temp]\Work.[session]",internal,input,relative
+	open #6: "Name=[Temp]\Work.[session]",i,i,r
 	close #addr: ioerr ignore
-	open #addr=7: "Name=[Temp]\Addr.[session]",internal,input,relative
+	open #addr=7: "Name=[Temp]\Addr.[session]",i,i,r
 return  ! /r
 BarCode: ! r:
 	gosub OpenCass
@@ -395,8 +395,8 @@ fnend
 def fn_customerAddress(z$*10,mat addr$; ca_address_type,ca_closeFiles)
 	if ~ca_setup then
 		ca_setup=1
-		open #h_ca_customer=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno]"&',Shr',internal,input,keyed
-		open #adrbil=fnH: "Name=[Q]\UBmstr\ubAdrBil.h[cno],KFName=[Q]\UBmstr\AdrIndex.h[cno],Shr",internal,input,keyed
+		open #h_ca_customer=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno]"&',Shr',i,i,k
+		open #adrbil=fnH: "Name=[Q]\UBmstr\ubAdrBil.h[cno],KFName=[Q]\UBmstr\AdrIndex.h[cno],Shr",i,i,k
 	end if
 	if ca_address_type=0 then ca_address_type=ao_billing
 	altaddr=ca_address_type
@@ -460,7 +460,7 @@ def fn_primary_address
 	if trim$(extra$(1))<>'' then pe$(4)=pe$(3) : pe$(3)=extra$(1)
 fnend
 BulkSort: ! r: bulk sort order
-	open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno]",internal,input,keyed  ! open in Account order
+	open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno]",i,i,k  ! open in Account order
 	open #6: "Name=[Temp]\Temp.[session],Replace,RecL=31",internal,output
 	do
 		read #1,using "Form POS 1,C 10,pos 1741,n 2,pos 1743,n 7,pos 1942,c 12": z$,route,seq,bulk$ eof BULKSORT_FINIS
@@ -470,27 +470,27 @@ BulkSort: ! r: bulk sort order
 	close #1: ioerr ignore
 	close #6: ioerr ignore
 	execute "Index [Temp]\Temp.[session] [Temp]\Tempidx.[wsid] 1,19,Replace,DupKeys -n" ioerr BULKSORT_XIT
-	open #6: "Name=[Temp]\Temp.[session],KFName=[Temp]\Tempidx.[wsid]",internal,input,keyed
+	open #6: "Name=[Temp]\Temp.[session],KFName=[Temp]\Tempidx.[wsid]",i,i,k
 	BULKSORT_XIT: !
 return  ! /r
 OpenFiles: ! r:
 	close #customer=1: ioerr ignore
 	if annbc=sequence_account or annbc=sequence_bar_code or annbc=sequence_grid or annbc=sequence_bulk_sort then
-		open #customer: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,input,keyed
+		open #customer: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",i,i,k
 	! else if annbc=sequence_name then
-	! 	open #customer: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\UBIndx2.h[cno],Shr",internal,input,keyed
+	! 	open #customer: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\UBIndx2.h[cno],Shr",i,i,k
 	else if annbc=sequence_route then
-		open #customer: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx5.h[cno],Shr",internal,input,keyed
+		open #customer: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx5.h[cno],Shr",i,i,k
 	end if
 	close #adrbil=3: ioerr ignore
-	open #adrbil: "Name=[Q]\UBmstr\ubAdrBil.h[cno],KFName=[Q]\UBmstr\AdrIndex.h[cno],Shr",internal,input,keyed
+	open #adrbil: "Name=[Q]\UBmstr\ubAdrBil.h[cno],KFName=[Q]\UBmstr\AdrIndex.h[cno],Shr",i,i,k
 	execute "drop [Temp]\label.dat -n" ioerr ignore
 	fnLastBillingDate(d1)
 	if annbc=sequence_bar_code and s5=0 then gosub Sort1
 return  ! /r
 OpenCass: ! r:
 	if file(5)=-1 then
-		open #5: "Name=[Q]\UBmstr\Cass1.h[cno],KFName=[Q]\UBmstr\Cass1Idx.h[cno],Shr",internal,input,keyed ioerr ignore
+		open #5: "Name=[Q]\UBmstr\Cass1.h[cno],KFName=[Q]\UBmstr\Cass1Idx.h[cno],Shr",i,i,k ioerr ignore
 	end if
 return  ! /r
 def fn_setup

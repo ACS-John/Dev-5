@@ -10,7 +10,7 @@ def library fnrgl$*60(acctIn$; returnMaxLength,___,desc$*50,return$*60)
 
 	fnGetUseDeptAndSub(useDept,useSub)
 
-	open #hAcct=fnH: 'Name=[Q]\[cursys]mstr\GLmstr.h[cno],KFName=[Q]\[cursys]mstr\GLIndex.h[cno],Shr',internal,input,keyed ioerr L_ERR_OPEN_FOR_DESC
+	open #hAcct=fnH: 'Name=[Q]\[cursys]mstr\GLmstr.h[cno],KFName=[Q]\[cursys]mstr\GLIndex.h[cno],Shr',i,i,k ioerr L_ERR_OPEN_FOR_DESC
 	read #hAcct,using 'Form Pos 13,C 50',key=acctIn$: desc$ nokey NOKEYGLMSTR ioerr NOKEYGLMSTR
 	close #hAcct:
 	L_ERR_OPEN_FOR_DESC: !

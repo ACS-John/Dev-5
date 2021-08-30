@@ -212,8 +212,8 @@ PrintBill_Basic: ! r: set prefrences for clients
 	! if env$('acsDeveloper')<>'' then pause
 	if enable_BulkSort then gosub BulkSort
 	open #h_customer_1=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,outIn,keyed  ! open in account order
-	open #h_customer_2=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx5.h[cno],Shr",internal,input,keyed  ! open in route-sequence
-	open #h_ubtransvb=fnH: "Name=[Q]\UBmstr\UBTransVB.h[cno],KFName=[Q]\UBmstr\UBTrIndx.h[cno],Shr",internal,Input,keyed 
+	open #h_customer_2=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx5.h[cno],Shr",i,i,k  ! open in route-sequence
+	open #h_ubtransvb=fnH: "Name=[Q]\UBmstr\UBTransVB.h[cno],KFName=[Q]\UBmstr\UBTrIndx.h[cno],Shr",i,i,k 
 	if enable_cass_sort then gosub Sort1
 ! /r
 Screen1: ! r:
@@ -583,8 +583,8 @@ Xit: fnXit
 Bud1: ! r: Open #81 BudMstr and #82 BudTrans bud1=1
 	bud1=0
 	dim ba(13),badr(2),bt1(14,2)
-	open #81: "Name=[Q]\UBmstr\BudMstr.h[cno],KFName=[Q]\UBmstr\BudIdx1.h[cno],Shr",internal,input,keyed ioerr EoBud1
-	open #82: "Name=[Q]\UBmstr\BudTrans.h[cno],Shr",internal,input,relative 
+	open #81: "Name=[Q]\UBmstr\BudMstr.h[cno],KFName=[Q]\UBmstr\BudIdx1.h[cno],Shr",i,i,k ioerr EoBud1
+	open #82: "Name=[Q]\UBmstr\BudTrans.h[cno],Shr",i,i,r 
 	bud1=1
 	EoBud1: ! 
 return  ! /r
@@ -907,7 +907,7 @@ def fn_print_bill_campbell(z$,mat mg$,serviceFrom,serviceTo)
 	! r: any and all necessary setup (except opening the printer) to pr one bill
 	if ~pbcampbel_setup then 
 		pbcampbel_setup=1
-		open #h_pbcampbel_customer=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,input,keyed 
+		open #h_pbcampbel_customer=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",i,i,k 
 		F_PBCAMPBEL_CUSTOMER: form pos 1,c 10,c 30,x 90,c 12,pos 147,pd 2,pos 157,11*pd 4.2,pos 1821,n 1,pos 217,15*pd 5,pd 4.2,pd 4,12*pd 4.2,pos 385,pd 3,pos 388,10*pd 5.2,pos 1741,n 2,pos 1750,2*n 6
 		blankbefore=1
 		blankafter=3
@@ -1122,7 +1122,7 @@ def fn_print_bill_cerro(z$,mat mg$,mat penalty$,serviceFrom,serviceTo)
 	! r: any and all necessary setup (except opening the printer) to pr one bill
 	if ~pbcerro_setup then 
 		pbcerro_setup=1
-		open #h_pbcerro_customer=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,input,keyed 
+		open #h_pbcerro_customer=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",i,i,k 
 		F_PBCERRO_CUSTOMER: form pos 1,c 10,c 30,x 90,c 12,pos 147,pd 2,pos 157,11*pd 4.2,pos 1821,n 1,pos 217,15*pd 5,pd 4.2,pd 4,12*pd 4.2,pos 385,pd 3,pos 388,10*pd 5.2,pos 1741,n 2,pos 1750,2*n 6,pos 1854,pd 5.2
 		blankbefore=1
 		blankafter=3
@@ -1637,7 +1637,7 @@ def fn_print_bill_omaha(z$,mat mg$,mat mg2$,serviceFrom,pbo_service_to,mat penal
 ! r: any and all necessary setup (except opening the printer) to pr one bill
 	if ~pbomaha_setup then 
 		pbomaha_setup=1
-		open #h_pbomaha_customer=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,input,keyed 
+		open #h_pbomaha_customer=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",i,i,k 
 		F_PBOMAHA_CUSTOMER: form pos 1,c 10,c 30,x 90,c 12,pos 147,pd 2,pos 157,11*pd 4.2,pos 1821,n 1,pos 217,15*pd 5,pd 4.2,pd 4,12*pd 4.2,pos 385,pd 3,pos 388,10*pd 5.2,pos 1741,n 2,pos 1750,2*n 6,pos 1854,pd 5.2
 		pboposrightcol=70
 	end if 
@@ -1739,7 +1739,7 @@ def fn_print_bill_pennington(z$,mat mg$,mat mg2$,serviceFrom,serviceTo,penaltyDu
 	! r: any and all necessary setup (except opening the printer) to pr one bill
 		if ~pbpennington_setup then 
 			pbpennington_setup=1
-			open #h_pbpennington_customer=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,input,keyed 
+			open #h_pbpennington_customer=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",i,i,k 
 		end if 
 		read #h_pbpennington_customer,using f_pbpennington,key=z$: z$,a4,mat b,mat d,bal,f,mat g,serviceToMmddYy,serviceFromMmddYy
 		f_pbpennington: form pos 1,c 10,pos 149,pd 2,pos 157,11*pd 4.2,pos 217,15*pd 5,pd 4.2,pd 4,12*pd 4.2,pos 1750,2*n 6
@@ -1802,7 +1802,7 @@ def fn_print_bill_edinburg(z$,mat mg$,d1,serviceFrom,serviceToOverride,penaltyDu
 ! r: any and all necessary setup (except opening the printer) to pr one bill
 		if ~pbedinburg_setup then 
 			pbedinburg_setup=1
-			open #h_pbedinburg_customer=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,input,keyed 
+			open #h_pbedinburg_customer=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",i,i,k 
 			F_PBedinburg_CUSTOMER: form pos 1,c 10,pos 147,pd 2,pos 1821,n 1,pos 217,15*pd 5,pd 4.2,pd 4,12*pd 4.2,pos 1741,n 2,pos 1750,2*n 6
 			lyne=3
 		end if 
@@ -2321,9 +2321,9 @@ BulkSort: ! r: sort in bulk sort code sequence
 		h_control=0
 		execute "Free [temp]\Addr.[session]" ioerr ignore
 		execute "Sort [temp]\printBillsControl.[session]"
-		open #hAddr=fnH: "Name=[temp]\Addr.[session]",internal,input,relative ! was #7
+		open #hAddr=fnH: "Name=[temp]\Addr.[session]",i,i,r ! was #7
 	else if enable_BulkSort=2 then
-		open #hBs2Customer=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,input,keyed  ! open in Account order
+		open #hBs2Customer=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",i,i,k  ! open in Account order
 		open #hBs2Out=fnH: "Name=[temp]\Temp.[session],Replace,RecL=31",internal,output 
 		do 
 			read #hBs2Customer,using "Form POS 1,C 10,pos 1741,n 2,pos 1743,n 7,pos 1942,c 12": z$,route,seq,bulk$ eof BS_EO_CUSTOMER
@@ -2335,12 +2335,12 @@ BulkSort: ! r: sort in bulk sort code sequence
 		close #hBs2Out: ioerr ignore
 		hBs2Out=0
 		execute "Index [temp]\Temp.[session] [temp]\Tempidx.[session] 1,19,Replace,DupKeys -n"
-		open #hBulk2=fnH: "Name=[temp]\Temp.[session],KFName=[temp]\Tempidx.[session]",internal,input,keyed 
+		open #hBulk2=fnH: "Name=[temp]\Temp.[session],KFName=[temp]\Tempidx.[session]",i,i,k 
 	end if
 return  ! /r
 Sort1: ! r: Select & Sort - sorts Cass1 file    requires: (h_customer_2,&enable_cass_sort,&hSort1Sequence,&hAddr,d1,route_filter,... ;  ___,z$*10,customerLastBillingDate,route
 	enable_cass_sort=0 ! replaces old s5 variable
-	open #h_cass1=fnH: "Name=[Q]\UBmstr\Cass1.h[cno],KFName=[Q]\UBmstr\Cass1Idx.h[cno],Shr",internal,input,keyed ioerr Xit_Sort1
+	open #h_cass1=fnH: "Name=[Q]\UBmstr\Cass1.h[cno],KFName=[Q]\UBmstr\Cass1Idx.h[cno],Shr",i,i,k ioerr Xit_Sort1
 	open #hSort1Sequence=fnH: "Name=[temp]\Temp.[session],Replace,RecL=19",internal,output 
 	enable_cass_sort=1
 	if route_filter=0 then routekey$="" else routekey$=cnvrt$("N 2",route_filter)&"       " ! key off first record in route (route # no longer part of customer #)
@@ -2367,8 +2367,8 @@ Sort1: ! r: Select & Sort - sorts Cass1 file    requires: (h_customer_2,&enable_
 	h_Sort1_control=0
 	execute "Free [temp]\Addr.[session]" ioerr ignore
 	execute "Sort [temp]\Control.[session]"
-	open #hSort1Sequence=fnH: "Name=[temp]\Temp.[session]",internal,input,relative 
-	open #hAddr=fnH: "Name=[temp]\Addr.[session]",internal,input,relative ! was #7
+	open #hSort1Sequence=fnH: "Name=[temp]\Temp.[session]",i,i,r 
+	open #hAddr=fnH: "Name=[temp]\Addr.[session]",i,i,r ! was #7
 	Xit_Sort1: ! 
 return  ! /r
 

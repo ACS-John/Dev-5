@@ -209,7 +209,7 @@ def fn_acsmr(bookFile$*256) ! ACS Meter Reader
 	source$=resp$(1)
 	open #2: "Name="&fn_hh_input_filename$&",RecL=256",display,input ! acs_meter_data.txt
 	fn_readings_backup(bookFile$)
-	open #3: "Name="&bookFile$&",RecL=30,replace",display,output
+	open #3: "Name="&bookFile$&",RecL=30,replace",d,o
 	do
 		linput #2: amr$ eof ACSMR_XIT
 		z$=amr$(1:10)
@@ -223,7 +223,7 @@ def fn_CsvByLocationId(bookFile$*512,enableMerge$)
 		! returnN=-1
 	else
 		open #hIn=fnH: "Name="&fn_hh_input_filename$,display,input
-		open #hOut=fnH: "Name="&bookFile$&",RecL=512,replace",display,output
+		open #hOut=fnH: "Name="&bookFile$&",RecL=512,replace",d,o
 		pr #hOut: '[ACS Hand Held File Generic Version 2]'
 		pr #hOut: 'Source File='&fn_hh_input_filename$
 		linput #hIn: line$ eof CblEoF
@@ -271,7 +271,7 @@ fnend
 		else
 			returnN=0
 			open #hIn=fnH: "Name="&fileIn$&',eol=lf',display,input
-			open #hOut=fnH: "Name="&bookFile$&",RecL=512,replace",display,output
+			open #hOut=fnH: "Name="&bookFile$&",RecL=512,replace",d,o
 			pr #hOut: '[ACS Hand Held File Generic Version 2]'
 			pr #hOut: 'Source File='&fn_hh_input_filename$
 			do
@@ -352,7 +352,7 @@ fnend
 			goto CblEoF
 		end if
 		open #hIn=fnH: "Name="&fn_hh_input_filename$,display,input
-		open #hOut=fnH: "Name="&bookFile$&",RecL=512,replace",display,output
+		open #hOut=fnH: "Name="&bookFile$&",RecL=512,replace",d,o
 		pr #hOut: '[ACS Hand Held File Generic Version 2]'
 		pr #hOut: 'Source File='&fn_hh_input_filename$
 		if dataIncludesHeaders then
@@ -396,7 +396,7 @@ fnend
 	! 	dataIncludesHeaders=1
 	! 	if enableMerge$='True' and ~fn_okToMerge(bookFile$,'[ACS Hand Held File Generic Version 2]') then returnN=-1 : goto EO_AW
 	! 	open #hIn=fnH: "Name="&fn_hh_input_filename$,display,input
-	! 	open #hOut=fnH: "Name="&bookFile$&",RecL=512,replace",display,output
+	! 	open #hOut=fnH: "Name="&bookFile$&",RecL=512,replace",d,o
 	! 	pr #hOut: '[ACS Hand Held File Generic Version 2]'
 	! 	pr #hOut: 'Source File='&fn_hh_input_filename$
 	! 	if dataIncludesHeaders then
@@ -439,7 +439,7 @@ fnend
 	! /r
 	def fn_amr(bookFile$*512)
 		fn_readings_backup(bookFile$)
-		open #3: "Name="&bookFile$&",RecL=30,replace",display,output
+		open #3: "Name="&bookFile$&",RecL=30,replace",d,o
 		open #2: "Name="&fn_hh_input_filename$&",RecL=620",display,input
 		linput #2: amr$ ioerr AMR_NOTHING_TO_READ ! read header
 		do
@@ -472,7 +472,7 @@ fnend
 	fnend
 	def fn_ezreader(bookFile$*512)
 		fn_readings_backup(bookFile$,bookNumberToStoreReadings$)
-		open #h_out:=3: "Name="&bookFile$&",RecL=30,replace",display,output
+		open #h_out:=3: "Name="&bookFile$&",RecL=30,replace",d,o
 		open #2: "Name="&fn_hh_input_filename$&",RecL=578",display,input
 		do
 			linput #2: line$ eof EXREADER_XIT
@@ -490,7 +490,7 @@ fnend
 	fnend
 	def fn_hersey(bookFile$*512)
 		fn_readings_backup(bookFile$,bookNumberToStoreReadings$)
-		open #h_out:=3: "Name="&bookFile$&",RecL=30,replace",display,output
+		open #h_out:=3: "Name="&bookFile$&",RecL=30,replace",d,o
 		open #2: "Name=" &fn_hh_input_filename$&",RecL=282",display,input
 		do
 			linput #2: hersey$ eof HERSEY_EOF
@@ -505,7 +505,7 @@ fnend
 	fnend
 	def fn_itron(bookFile$*512)
 		open #h_itron=fnH: "Name="&fn_hh_input_filename$,display,input
-		open #h_itron_out=fnH: "Name="&bookFile$&",RecL=512,replace",display,output
+		open #h_itron_out=fnH: "Name="&bookFile$&",RecL=512,replace",d,o
 		pr #h_itron_out: '[ACS Hand Held File Generic Version 2]'
 		z$=''
 		do
@@ -591,7 +591,7 @@ fnend
 	! def fn_sensus_in(bookFile$*512) r: old and unused
 	! 	open #h_sensus=fnH: "Name="&fn_hh_input_filename$&",RecL=22",external,input
 	! 	fn_readings_backup(bookFile$)
-	! 	open #h_readings=fnH: "Name="&bookFile$&",RecL=30,replace",display,output
+	! 	open #h_readings=fnH: "Name="&bookFile$&",RecL=30,replace",d,o
 	! 	do
 	! 		read #h_sensus,using "form pos 1,c 22": line$ eof SENSUS_IN_XIT ioerr SENSUS_IN_XIT
 	! 		pr #h_readings,using "form pos 1,c 132": line$
@@ -603,7 +603,7 @@ fnend
 	! r: legacy multi-device hand held type
 		def fn_import_l_readings_txt(bookFile$*512; inFileRecordLen)
 			fn_readings_backup(bookFile$)
-			open #hReadingsOut=fnH: "Name="&bookFile$&",RecL=30,replace",display,output
+			open #hReadingsOut=fnH: "Name="&bookFile$&",RecL=30,replace",d,o
 			! if inFileRecordLen=0 then inFileRecordLen=129
 			open #hHandHeld=fnH: "Name="&fn_hh_input_filename$,display,input
 			do
@@ -695,7 +695,7 @@ fnend
 	fnend
 	def fn_neptuneEquinoxV4(inputFile$*2048,bookFile$*512; ___,returnN,line_type$,tmpr$,line$*2048,itron_meter_category$*1,itron_meter_chenge_out$*1,itron_reading,meterroll,z$*10,reading_water,reading_electric,reading_gas,meterroll_wate,meterroll_electric,meterroll_gas,hIn,hOut)
 		open #hIn=fnH: "Name="&inputFile$,display,input
-		open #hOut=fnH: "Name="&bookFile$&",RecL=512,replace",display,output
+		open #hOut=fnH: "Name="&bookFile$&",RecL=512,replace",d,o
 		fn_prHout('[ACS Hand Held File Generic Version 2]')
 		z$=''
 		do
@@ -846,8 +846,8 @@ fnend
 		
 		if enableMerge$='True' and ~fn_okToMerge(bookFile$,'[ACS Hand Held File Generic Version 2]') then returnN=-1 : goto RkgEoIn
 		open #hIn=fnH: "Name="&fn_hh_input_filename$,display,input
-		open #hOut=fnH: "Name="&bookFile$&",RecL=512,replace",display,output
-		open #hCustomer=fnH: 'Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr',internal,input,keyed 
+		open #hOut=fnH: "Name="&bookFile$&",RecL=512,replace",d,o
+		open #hCustomer=fnH: 'Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr',i,i,k 
 		pr #hOut: '[ACS Hand Held File Generic Version 2]'
 		pr #hOut: 'Source File='&fn_hh_input_filename$
 		lineCount=1
@@ -901,8 +901,8 @@ fnend
 		! headers required ! dataIncludesHeaders=1
 		if enableMerge$='True' and ~fn_okToMerge(bookFile$,'[ACS Hand Held File Generic Version 2]') then returnN=-1 : goto RksEoIn
 		open #hIn=fnH: "Name="&fn_hh_input_filename$,display,input
-		open #hOut=fnH: "Name="&bookFile$&",RecL=512,replace",display,output
-		open #hCustomer=fnH: 'Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr',internal,input,keyed 
+		open #hOut=fnH: "Name="&bookFile$&",RecL=512,replace",d,o
+		open #hCustomer=fnH: 'Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr',i,i,k 
 		pr #hOut: '[ACS Hand Held File Generic Version 2]'
 		pr #hOut: 'Source File='&fn_hh_input_filename$
 		! r: read headers and check for customer.account column
@@ -985,7 +985,7 @@ fnend
 		end if
 	fnend
 	def fn_addNote(z$,amt,note$*256)
-		open #h_notefile=fnH: 'Name='&fnNoteDir$&'\'&trim$(z$)&'.txt,Use',display,output
+		open #h_notefile=fnH: 'Name='&fnNoteDir$&'\'&trim$(z$)&'.txt,Use',d,o
 		pr #h_notefile: '** Other Charge added '&date$('mm/dd/ccyy')&' at '&time$&' **'
 		pr #h_notefile:   '  Account: '&z$&'  '&customer_name$
 		if fn_not_blank(note$) then

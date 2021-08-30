@@ -49,7 +49,7 @@ L510: i2=1
 	close #1: ioerr L530
 L530: open #1: "Name=S:\Core\Data\acsllc\SCMSTR.h[cno],KFName=S:\Core\Data\acsllc\SCIndex.h[cno]",internal,outIn,keyed ioerr L550
 	close #1,free: ioerr L550
-L550: open #1: "Name=S:\Core\Data\acsllc\SCMSTR.h[cno],SIZE=0,RecL=43,NoShr",internal,outIn,relative
+L550: open #1: "Name=S:\Core\Data\acsllc\SCMSTR.h[cno],SIZE=0,RecL=43,NoShr",i,outi,r
 	goto L1700
 L570: form pos 1,c 4,c 30,pd 4.2,pd 5.2
 L580: new1=1
@@ -173,7 +173,7 @@ L1730: execute "Index S:\Core\Data\acsllc\SCMSTR.h[cno]"&' '&"S:\Core\Data\acsll
 	chain "S:\acsTM\SVMAINT"
 L1770: goto Xit
 L1780: dim hlp$(20)*78,flh$(22)*18,a$*5
-	open #10: "Name=S:\acsTM\SC.HLP,Shr",internal,outIn,relative
+	open #10: "Name=S:\acsTM\SC.HLP,Shr",i,outi,r
 	for j=1 to 20
 		flh$(j)=str$(j+2)&",2,C 78,U,N"
 	next j

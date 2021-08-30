@@ -21,7 +21,7 @@ fnCmdSet(2)
 ckey=fnAcs(mat resp$)
 rd1=val(resp$(1))
 if ckey=5 then goto Xit
-open #2: "Name="&env$('temp')&'\'&"Work1.dat,Size=0,RecL=149,Replace",internal,outIn,relative
+open #2: "Name="&env$('temp')&'\'&"Work1.dat,Size=0,RecL=149,Replace",i,outi,r
 L370: form pos 1,c 10,2*pd 4,24*pd 5.2,2*pd 4,pd 3
 do
 	read #81,using 'form pos 1,c 10,pd 4,12*pd 5.2,2*pd 3': z$,mat ba,mat tr eof END1
@@ -66,7 +66,7 @@ Xit: fnXit
 BUD1: ! r:
 	bud1=0
 	open #81: "Name=[Q]\UBmstr\BudMstr.h[cno],KFName=[Q]\UBmstr\BudIdx1.h[cno],Shr",internal,outIn,keyed ioerr L630
-	open #82: "Name=[Q]\UBmstr\BudTrans.h[cno],Shr",internal,outIn,relative
+	open #82: "Name=[Q]\UBmstr\BudTrans.h[cno],Shr",i,outi,r
 	bud1=1
 	L630: !
 return ! /r

@@ -32,7 +32,7 @@ Financial Statements
 >Balance Sheet                                      ^ General Ledger\*
 >>Comparative Balance Sheet                         ^ General Ledger\*
 >>Period Comparison Balance Sheet                   ^ General Ledger\*
->>Fund Comparison Balance Sheet                     ^ acsGL\ACGLbalF
+>>Fund Comparison Balance Sheet                     ^ General Ledger\*
 >Income Statement                                   ^ General Ledger\*
 >>Quarterly Income Statement                        ^ acsGL\ACGLINCQ
 >>Income Statement with Percents                    ^ acsGL\ACGLINCP

@@ -27,8 +27,8 @@
 !
 !
 	fn_bulksort
-	open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,input,keyed  ! open in Account order
-	open #2: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx5.h[cno],Shr",internal,input,keyed  ! open in route-sequence #
+	open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",i,i,k  ! open in Account order
+	open #2: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx5.h[cno],Shr",i,i,k  ! open in route-sequence #
  
 SCREEN1: !
 	a$="" : prtbkno=0
@@ -77,7 +77,7 @@ L460: form pos 1,c 10,pos 1741,n 2,n 7
 	if trim$(a$)<>"" then restore #2,key=cnvrt$("pic(zz)",route)& cnvrt$("pic(zzzzzzz)",sequence): nokey SCREEN1
 	if trim$(a$)="" and prtbkno>0 then restore #2,key>=cnvrt$("pic(zz)",prtbkno)&"       ": ! selected a route and no beginning Account
  
-	open #3: "Name=[Q]\UBmstr\UBAdrBil.h[cno],KFName=[Q]\UBmstr\adrIndex.h[cno],Shr",internal,input,keyed
+	open #3: "Name=[Q]\UBmstr\UBAdrBil.h[cno],KFName=[Q]\UBmstr\adrIndex.h[cno],Shr",i,i,k
 	fnpa_open("Landscape")
 	lyne=3
 NEXT_CUSTOMER: !
@@ -303,7 +303,7 @@ def fn_vbprint
 fnend
  
 def fn_bulksort ! bulk sort order
-	open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,input,keyed  ! open in Account order
+	open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",i,i,k  ! open in Account order
 	open #6: "Name=[Temp]\Temp.[Session],Replace,RecL=31",internal,output
 	L2730: read #1,using "Form POS 1,C 10,pos 1741,n 2,pos 1743,n 7,pos 1942,c 12": z$,route,seq,bulk$ eof L2760
 	write #6,using "Form POS 1,C 12,n 2,n 7,c 10": bulk$,route,seq,z$
@@ -311,7 +311,7 @@ def fn_bulksort ! bulk sort order
 	L2760: close #1: ioerr ignore
 	close #6: ioerr ignore
 	execute "Index [Temp]\Temp.[Session] [Temp]\Tempidx.[Session] 1,19,Replace,DupKeys -n"
-	open #6: "Name=[Temp]\Temp.[Session],KFName=[Temp]\Tempidx."&session$,internal,input,keyed
+	open #6: "Name=[Temp]\Temp.[Session],KFName=[Temp]\Tempidx."&session$,i,i,k
  
 fnend
 include: ertn

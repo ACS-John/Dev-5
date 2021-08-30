@@ -48,7 +48,7 @@ SCR1: !
  
 	on fkey 5 goto DONE
 	fnopenprn
-	open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\"&idx$(q0)&".h[cno],Shr",internal,input,keyed
+	open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\"&idx$(q0)&".h[cno],Shr",i,i,k
 	gosub BUD1
 	gosub HEADER
 	goto READ_CUSTOMER
@@ -88,7 +88,7 @@ Xit: fnXit
 BUD1: bud1=0
 	dim ba(13),badr(2),bt1(14,2),bd1(5),bd2(5),bd3(5),bd$(5)*30
 	open #81: "Name=[Q]\UBmstr\BudMstr.h[cno],KFName=[Q]\UBmstr\BudIdx1.h[cno],Shr",internal,outIn,keyed ioerr L760
-	open #82: "Name=[Q]\UBmstr\BudTrans.h[cno],Shr",internal,outIn,relative
+	open #82: "Name=[Q]\UBmstr\BudTrans.h[cno],Shr",i,outi,r
 	bud1=1
 L760: return
  

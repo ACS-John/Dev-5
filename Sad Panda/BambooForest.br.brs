@@ -236,7 +236,7 @@
 04900     status_initialized=1
 04920     dim headings$(1)*40,widths(1),forms$(1)*40,status_gridspec$*80
 04930     if env$('guimode')='OFF' then exe 'Con Gui On'
-04940     ope #h_status_win:=fn_gethandle: 'SRow=20,SCol=15,Rows=10,Cols=80,Border=S,Caption=Status,NoClose',display,output
+04940     ope #h_status_win:=fn_gethandle: 'SRow=20,SCol=15,Rows=10,Cols=80,Border=S,Caption=Status,NoClose',d,o
 04960     status_gridspec$='#'&str$(h_status_win)&',1,1,List 10/80'
 04980     headings$(1)='Status'
 05000     widths(1)=80

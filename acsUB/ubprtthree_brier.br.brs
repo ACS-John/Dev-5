@@ -11,7 +11,7 @@ fnLastBillingDate(d1)
 open #21: "Name=[Q]\UBmstr\Company.h[cno],Shr",internal,input
 read #21,using "Form POS 41,2*C 40": at$(2),at$(3)
 close #21:
-open #ratemst:=8: "Name=[Q]\UBmstr\ubData\RateMst.h[cno],KFName=[Q]\UBmstr\ubData\RateIdx1.h[cno],Shr",internal,input,keyed
+open #ratemst:=8: "Name=[Q]\UBmstr\ubData\RateMst.h[cno],KFName=[Q]\UBmstr\ubData\RateIdx1.h[cno],Shr",i,i,k
 at$(1)=env$('cnam')
 z=21
 at$(1)=trim$(at$(1))(1:z)
@@ -26,9 +26,9 @@ next j
 linelength=62
 
 gosub BULKSORT
-open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,input,keyed  ! open in Account order
-open #2: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx5.h[cno],Shr",internal,input,keyed  ! open in route-sequence #
-open #ubtransvb=15: "Name=[Q]\UBmstr\UBTransVB.h[cno],KFName=[Q]\UBmstr\UBTrIndx.h[cno],Shr",internal,input,keyed
+open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",i,i,k  ! open in Account order
+open #2: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx5.h[cno],Shr",i,i,k  ! open in route-sequence #
+open #ubtransvb=15: "Name=[Q]\UBmstr\UBTransVB.h[cno],KFName=[Q]\UBmstr\UBTrIndx.h[cno],Shr",i,i,k
  
 SCREEN1: !
 	a$="" : prtbkno=0
@@ -85,7 +85,7 @@ SCREEN1: !
 	if trim$(a$)<>"" then restore #2,key=cnvrt$("pic(zz)",route)& cnvrt$("pic(zzzzzzz)",sequence): nokey SCREEN1
 	if trim$(a$)="" and prtbkno>0 then restore #2,key>=cnvrt$("pic(zz)",prtbkno)&"       ": ! selected a route and no beginning Account
  
-	open #3: "Name=[Q]\UBmstr\UBAdrBil.h[cno],KFName=[Q]\UBmstr\adrIndex.h[cno],Shr",internal,input,keyed
+	open #3: "Name=[Q]\UBmstr\UBAdrBil.h[cno],KFName=[Q]\UBmstr\adrIndex.h[cno],Shr",i,i,k
 	fnpa_open
  
 	on fkey 5 goto RELEASE_PRINT
@@ -208,7 +208,7 @@ VBPRINT: ! r: Brier Lake - 3 per page  Utility Bills  requires: (z$,fb$(1),mat d
 	end if
 return ! /r
 BULKSORT: ! r: bulk sort order
-	open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,input,keyed  ! open in Account order
+	open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",i,i,k  ! open in Account order
 	open #6: "Name=[Temp]\Temp.[session],Replace,RecL=31",internal,output
 	do
 		read #1,using "Form POS 1,C 10,pos 1741,n 2,pos 1743,n 7,pos 1942,c 12": z$,route,seq,bulk$ eof L2220
@@ -218,7 +218,7 @@ BULKSORT: ! r: bulk sort order
 	close #1: ioerr ignore
 	close #6: ioerr ignore
 	execute "Index [Temp]\Temp.[session] [Temp]\Tempidx.[session] 1,19,Replace,DupKeys -n" ioerr L2260
-	open #6: "Name=[Temp]\Temp.[session],KFName=[Temp]\Tempidx.[session]",internal,input,keyed
+	open #6: "Name=[Temp]\Temp.[session],KFName=[Temp]\Tempidx.[session]",i,i,k
 	L2260: !
 return ! /r
 include: ertn

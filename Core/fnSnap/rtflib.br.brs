@@ -2,7 +2,7 @@
 00019   library program$: fnrtf,fnamt$,fntext$ ! library "RTFLIB_dll.br": fnrtf,fnamt$,fntext$
 00020   dim types$(4)*2,styles$(4)*1000,data$(20)*1200,sub$(1)*1000
 00030   rtffile=126 !:
-        open #rtffile: "name=[Temp]\temp.rtf,recl=1000,replace",display,output 
+        open #rtffile: "name=[Temp]\temp.rtf,recl=1000,replace",d,o 
 00040   types$(1)="H" !:
         types$(2)="F" !:
         types$(3)="D" !:

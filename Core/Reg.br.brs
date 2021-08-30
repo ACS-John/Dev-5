@@ -3,7 +3,7 @@ def fn_sreg_setup(; ___,returnN)
 	autoLibrary
 	returnN=0
 	if env$('ACSDeveloper')='' then
-		open #sreg_h=fnH: 'Name=S:\Core\Data\System Registry.dat,Version=1,KFName=S:\Core\Data\System Registry.idx,Shr',internal,input,keyed
+		open #sreg_h=fnH: 'Name=S:\Core\Data\System Registry.dat,Version=1,KFName=S:\Core\Data\System Registry.idx,Shr',i,i,k
 		returnN=1
 	else
 		open #sreg_h=fnH: 'Name=S:\Core\Data\System Registry.dat,Version=1,KFName=S:\Core\Data\System Registry.idx,Use,RecL=384,KPs=1,KLn=128,Shr',internal,outIn,keyed

@@ -50,11 +50,11 @@ MAIN: ! r:
 	gosub GETPRC
  
 	fnwait
-	open #20: "Name=[Q]\CLmstr\Company.h[cno],Shr",internal,outIn,relative
+	open #20: "Name=[Q]\CLmstr\Company.h[cno],Shr",i,outi,r
 	read #20,using 'Form POS 618,10*N 1': mat dedcode
 	close #20:
 	d2$=cnvrt$("PIC(######)",d2)
-	open #20: "Name=[Q]\GLmstr\glBucket.h[cno],Shr",internal,input,relative ioerr L400
+	open #20: "Name=[Q]\GLmstr\glBucket.h[cno],Shr",i,i,r ioerr L400
 	read #20,using 'Form POS 1,N 1',rec=1: glb noRec ignore
 	close #20:
 	L400: !
@@ -64,11 +64,11 @@ MAIN: ! r:
 		glwk$="[Q]\GLmstr\GL_Work_[acsUserId].h[cno]"
 	end if
 	open #trmstr=1: "Name=[Q]\CLmstr\TrMstr.h[cno],KFName=[Q]\CLmstr\TrIdx1.h[cno],Shr",internal,outIn,keyed
-	open #tralloc=2: "Name=[Q]\CLmstr\TrAlloc.h[cno],Version=2,KFName=[Q]\CLmstr\TrAlloc-Idx.h[cno],Shr",internal,input,keyed
+	open #tralloc=2: "Name=[Q]\CLmstr\TrAlloc.h[cno],Version=2,KFName=[Q]\CLmstr\TrAlloc-Idx.h[cno],Shr",i,i,k
 	open #glwk101=3: "Name=[Q]\CLmstr\GLWK101.h[cno],Size=0,RecL=104,Replace",internal,output
 	open #glwk201=4: "Name=[Q]\CLmstr\GLWK201.h[cno],Size=0,RecL=110,Replace",internal,output
-	open #bankmstr=5: "Name=[Q]\CLmstr\BankMstr.h[cno],KFName=[Q]\CLmstr\BankIdx1.h[cno],Shr",internal,input,keyed
-	open #paymstr=6: "Name=[Q]\CLmstr\PayMstr.h[cno],KFName=[Q]\CLmstr\PayIdx1.h[cno],Shr",internal,input,keyed
+	open #bankmstr=5: "Name=[Q]\CLmstr\BankMstr.h[cno],KFName=[Q]\CLmstr\BankIdx1.h[cno],Shr",i,i,k
+	open #paymstr=6: "Name=[Q]\CLmstr\PayMstr.h[cno],KFName=[Q]\CLmstr\PayIdx1.h[cno],Shr",i,i,k
 	fnopenprn
 	gosub HDR
 goto READ_TRMSTR ! /r

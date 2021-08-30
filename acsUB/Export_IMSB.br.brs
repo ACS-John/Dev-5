@@ -12,14 +12,14 @@
  
 ! r: a screen
 ! /r
-	open #h_out=fnH: "Name=SAVE:text documents (*.txt) |*.txt,RecL=112,EOL=CRLF,Replace",display,output ioerr Xit
+	open #h_out=fnH: "Name=SAVE:text documents (*.txt) |*.txt,RecL=112,EOL=CRLF,Replace",d,o ioerr Xit
 F_OUT_FIXED: form pos 1,c 10,c 30,c 30,c 23,c 2,c 5,pos 112,c 1
 !  pr file$(h_tmp);" ";lrec(h_tmp)
 !  save_name$=os_filename$(file$(h_tmp))
 !  close #h_tmp,free:
  
 ! open #h_out:=2: "Name="&dv$&"ubCass1.dat,RecL=112,EOL=None,Replace",external,output ! ioerr l170
-	open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,input,keyed
+	open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",i,i,k
 F_CUSTOMER: form pos 1,c 10,pos 41,3*c 30,pos 213,pd 4,pos 296,pd 4,pos 385,pd 3,pos 1854,pd 5.2
 	open #h_adrbil:=3: "Name=[Q]\UBmstr\ubAdrBil.h[cno],KFName=[Q]\UBmstr\AdrIndex.h[cno],Shr",internal,outIn,keyed
 F_ADRBIL: form pos 11,4*c 30

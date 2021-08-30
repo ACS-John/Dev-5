@@ -25,13 +25,13 @@ MENU1: ! r:
 MainLoop: ! r:
 	dim delim$*1
 	delim$=tab$
-	open #h_customer=fnH: "Name=[Q]\UBmstr\Customer.h[cno]"&',shr',internal,outIn,relative
-	! open #h_customer=fnH: "Name=[Q]\UBmstr\Customer.h[cno]",internal,input,relative
+	open #h_customer=fnH: "Name=[Q]\UBmstr\Customer.h[cno]"&',shr',i,outi,r
+	! open #h_customer=fnH: "Name=[Q]\UBmstr\Customer.h[cno]",i,i,r
 	fnMakeSurePathExists(dest$)
-	open #2: "Name="&br_filename$(dest$)&",RecL=2500,Replace,EOL=CRLF",display,output ioerr MENU1
+	open #2: "Name="&br_filename$(dest$)&",RecL=2500,Replace,EOL=CRLF",d,o ioerr MENU1
 	! form pos 1,c 14,c 1,c 30,c 1,c 30,c 1,c 30,c 1,c 30,c 1,c 12,c 1,n 4,c 1,n 4,c 1,n 4,c 1,n 4,c 1,n 4,c 1,n 4,c 1,n 4,c 1,n 8.2,c 1,n 8.2,c 1,n 8.2,c 1,n 8.2,c 1,n 8.2,c 1,n 8.2,c 1,n 8.2,c 1,n 8.2,c 1,n 8.2,c 1,n 8.2,c 1,n 8.2,c 1
 	! form pos 287,c 10,c 1,c 30,c 1,c 30,c 1,c 30,c 1,c 30,c 1,c 12,c 1
-	open #3: "Name=[Q]\UBmstr\ubAdrBil.h[cno],KFName=[Q]\UBmstr\AdrIndex.h[cno],Shr",internal,input,keyed
+	open #3: "Name=[Q]\UBmstr\ubAdrBil.h[cno],KFName=[Q]\UBmstr\AdrIndex.h[cno],Shr",i,i,k
 	gosub HEADER ! work in progress
 	do
 		dim z$*10

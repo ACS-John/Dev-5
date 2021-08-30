@@ -5,7 +5,7 @@ fnTop(program$,"Test DatePicker")
 dim chdr$(16),cmask$(16) ! used with flex grid
 dim resp$(256)*50
  
-open #clearing=89: "Name=[Q]\CLmstr\clearing.H"&wsid$&",replace,RecL=114",internal,outIn,relative  ! kj wrong recl
+open #clearing=89: "Name=[Q]\CLmstr\clearing.H"&wsid$&",replace,RecL=114",i,outi,r  ! kj wrong recl
 fnTos
 respc=0 : mat resp$=('')
 fnLbl(1,1,trim$(env$('cnam')(1:30))&"-"&'',65,2)

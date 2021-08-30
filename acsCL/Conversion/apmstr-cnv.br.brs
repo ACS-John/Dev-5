@@ -35,11 +35,11 @@ SCR1: !
   fnCopy(resp$(1)&'\*.h'&str$(apcno),'[Q]\tmpAP\*.*')
   if exists("[Q]\tmpAP\apcoinfo.h"&str$(apcno))=0 then goto SCR1
   open #apmstr=fnH: "Name=[Q]\tmpAP\APmstr.h"&str$(apcno),internal,input  ! &",KFName=[Q]\tmpAP\apIndex.h"&str$(apcno) ,keyed
-  open #aptrans=10: "Name=[Q]\tmpAP\apTrans.H"&str$(apcno),internal,outIn,relative
-  open #paymstr=fnH: "Name=[Q]\CLmstr\PayMstr.h[cno],Version=1,size=0,RecL=276,Replace",internal,outIn,relative
-  open #payalloc=fnH: "Name=[Q]\CLmstr\PayAlloc.h[cno],Size=0,RecL=56,Replace",internal,outIn,relative
-  open #paytrans=fnH: "Name=[Q]\CLmstr\PayTrans.h[cno],Version=2,Size=0,RecL=114,Replace",internal,outIn,relative
-  open #unpdaloc=fnH: "Name=[Q]\CLmstr\UnPdAloc.h[cno],SIZE=0,RecL=70,Replace",internal,outIn,relative
+  open #aptrans=10: "Name=[Q]\tmpAP\apTrans.H"&str$(apcno),i,outi,r
+  open #paymstr=fnH: "Name=[Q]\CLmstr\PayMstr.h[cno],Version=1,size=0,RecL=276,Replace",i,outi,r
+  open #payalloc=fnH: "Name=[Q]\CLmstr\PayAlloc.h[cno],Size=0,RecL=56,Replace",i,outi,r
+  open #paytrans=fnH: "Name=[Q]\CLmstr\PayTrans.h[cno],Version=2,Size=0,RecL=114,Replace",i,outi,r
+  open #unpdaloc=fnH: "Name=[Q]\CLmstr\UnPdAloc.h[cno],SIZE=0,RecL=70,Replace",i,outi,r
   do
     read #apmstr,using 'Form POS 1,C 8,4*C 30,POS 159,C 12,POS 176,PD 5.2,POS 219,N 2,C 11,POS 213,2*PD 3': vn$,nam$,ad1$,ad2$,csz$,ph$,ytdp,typ,ss$,mat ta eof EO_11
     gosub UNPDMSTR

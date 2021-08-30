@@ -19,8 +19,8 @@
 		! sets fnps,fnpriorcd,fnfscode (primary/secondary,current year/Prior,             period to print)
 	! fnfscode
 	! fnpriorcd
-	open #1: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,input,relative: read #1,using "Form pos 384,N 2",rec=1: nap : close #1:
-	open #1: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,input,relative: read #1,using "Form pos 296,N 2",rec=1: lmu : close #1:
+	open #1: "Name=[Q]\GLmstr\Company.h[cno],Shr",i,i,r: read #1,using "Form pos 384,N 2",rec=1: nap : close #1:
+	open #1: "Name=[Q]\GLmstr\Company.h[cno],Shr",i,i,r: read #1,using "Form pos 296,N 2",rec=1: lmu : close #1:
 	m1$(1)="  January" : m1$(2)=" February" : _
 	m1$(3)="    March" : m1$(4)="    April" : _
 	m1$(5)="      May" : m1$(6)="     June" : _
@@ -37,7 +37,7 @@
 	if fnps=2 then mp1=mp1+3
 	fl1$="Name=[Q]\GLmstr\ACGLFNSB.h[cno],KFName=[Q]\GLmstr\agfsidx4.h[cno],Shr"
 	if fnps=2 then fl1$="Name=[Q]\GLmstr\AcGLFnSc.h[cno],KFName=[Q]\GLmstr\agfsidx1.h[cno],Shr"
-	open #1: fl1$,internal,input,keyed
+	open #1: fl1$,i,i,k
 	if fnprocess=1 or fnUseDeptNo=0 then goto L330
 	goto L370 ! pr NEWPAGE
 	close #101: ioerr L280
@@ -56,7 +56,7 @@ L370: fnopenprn : _
 	execute "Index [Q]\GLmstr\GLmstr.h[cno] "&env$('temp')&'\'&"fsindex.h[cno] 63 3 Replace DupKeys -N"
 	goto L420
 L410: execute "Index [Q]\GLmstr\GLmstr.h[cno] "&env$('temp')&'\'&"fsindex.h[cno] 66 3 Replace DupKeys -N"
-L420: open #3: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName="&env$('temp')&'\'&"fsindex.h[cno],Shr",internal,input,keyed
+L420: open #3: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName="&env$('temp')&'\'&"fsindex.h[cno],Shr",i,i,k
 	report$=env$('program_caption')
 L440: read #1,using L480: r$,d$,te$,sp,ls,ds,ul,rs,bc,ap,mat ac,ic,fc eof L2120
 	if ltrm$(r$)="" or ltrm$(r$)="0" then goto L440

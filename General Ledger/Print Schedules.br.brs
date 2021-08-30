@@ -16,9 +16,9 @@
 	if fnGlAskFormatPriorCdPeriod=5 then goto Xit
 	fnfscode
 	fnpriorcd
-	open #20: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,input,relative: read #20,using "Form pos 296,N 2",rec=1: lmu : close #20:
-	open #hAcGlSchs1:=1: "Name=[Q]\GLmstr\ACGLSCHS.h[cno],KFName=[Q]\GLmstr\schindex.h[cno],Shr",internal,input,keyed ioerr DONE
-	open #3: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLIndex.h[cno],Shr",internal,input,keyed
+	open #20: "Name=[Q]\GLmstr\Company.h[cno],Shr",i,i,r: read #20,using "Form pos 296,N 2",rec=1: lmu : close #20:
+	open #hAcGlSchs1:=1: "Name=[Q]\GLmstr\ACGLSCHS.h[cno],KFName=[Q]\GLmstr\schindex.h[cno],Shr",i,i,k ioerr DONE
+	open #3: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLIndex.h[cno],Shr",i,i,k
 	if fnprocess=1 then
 		prtall=1
 	else

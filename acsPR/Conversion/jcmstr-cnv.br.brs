@@ -15,8 +15,8 @@ L100: open #101: "SROW=9,SCOL=4,EROW=11,ECOL=65,BORDER=DR,CAPTION=CONVERT JOB CO
 	if cmdkey=5 then goto Xit
  
 	execute "Copy [Q]\PRmstr\JCMSTR.h[cno],X -D -n"
-	open #2: "Name=X",internal,outIn,relative
-	open #1: "Name=[Q]\PRmstr\JCMSTR.h[cno],RecL=300,Replace",internal,outIn,relative
+	open #2: "Name=X",i,outi,r
+	open #1: "Name=[Q]\PRmstr\JCMSTR.h[cno],RecL=300,Replace",i,outi,r
 	for j=1 to lrec(2)
 		read #2,using L210,rec=j: jn$,n$,mat a$,mat b
 L210: form pos 1,c 6,c 40,3*c 30,n 6,2*pd 5.2,n 2
@@ -28,8 +28,8 @@ L231: form pos 1,c 6,c 40,3*c 30,n 6,2*pd 7.2,n 2,c 30,c 12,c 60
 	close #2:
 	execute "Index [Q]\PRmstr\JCMSTR.h[cno],[Q]\PRmstr\JCIndx.h[cno],1,6,Replace,DupKeys -n"
 	execute "Copy [Q]\PRmstr\JCCAT.h[cno],X -D -n"
-	open #2: "Name=X",internal,outIn,relative
-	open #1: "Name=[Q]\PRmstr\JCCAT.h[cno],RecL=123,Replace",internal,outIn,relative
+	open #2: "Name=X",i,outi,r
+	open #1: "Name=[Q]\PRmstr\JCCAT.h[cno],RecL=123,Replace",i,outi,r
 	for j=1 to lrec(2)
 		read #2,using L340: cn$,k$,mat l,mat ta
 L340: form pos 1,c 11,c 25,11*pd 5.2,2*pd 2,2*pd 3

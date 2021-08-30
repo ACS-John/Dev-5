@@ -7,7 +7,7 @@ dim de$*30,gl(3),t1(5),sc3$(5)*55,up$(4),d(2),nam$*30
  
 fnTop(program$,"Print Selected Invoice Listing")
  
-open #20: "Name=[Q]\CLmstr\Company.h[cno],Shr",internal,input,relative
+open #20: "Name=[Q]\CLmstr\Company.h[cno],Shr",i,i,r
 read #20,using 'Form POS 150,2*N 1,C 2',rec=1: mat d,bc$
 close #20:
 bankcode=val(bc$)

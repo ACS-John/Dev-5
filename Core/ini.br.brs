@@ -141,7 +141,7 @@ def library fnIniWrite
 	dim inir_field$*256,inir_value$*256
 	dim inir_section$*1024
 	dim inir_temp_file$*1024
-	open #inir_temp_handle=fnH: "Name="&env$("Temp")&"\inir-[Session].ini,RecL=2048,Replace",display,output
+	open #inir_temp_handle=fnH: "Name="&env$("Temp")&"\inir-[Session].ini,RecL=2048,Replace",d,o
 	inir_temp_file$=file$(inir_temp_handle)
 	if ini_file$="" then
 		if env$('ACSDeveloper')<>'' then

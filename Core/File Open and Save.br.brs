@@ -27,7 +27,7 @@ def fn_FileSaveAs(save_what$; fsa_automatedSaveFileName$*256,suppressErrorLog,di
 		fnCopy('S:\brserial.dat','[Q]\*.*')
 	end if
 	fnreg_close
-	open #h_tmp=fnH: 'Name='&br_filename$(env$('temp')&'\save_as_'&session$&'.cmd')&',RecL=512,Replace',display,output
+	open #h_tmp=fnH: 'Name='&br_filename$(env$('temp')&'\save_as_'&session$&'.cmd')&',RecL=512,Replace',d,o
 	dim tmp7ZipCommand$*512
 	dim zOmitReportCacheOption$*64
 	if enableBackupReportCache$='True' then
@@ -182,7 +182,7 @@ fnend
 def fn_7zFileListFromArchive(zFileOpen$*512,mat filename$)
 	dim gflfaTmpFile$*512
 	gflfaTmpFile$=env$('temp')&'\acs\7zGetFileList'&session$&'.txt'
-	open #h_tmp=fnH: 'Name= '&br_filename$(env$('temp')&'\acs\OpenEverything_'&session$&'.cmd')&',RecL=512,Replace',display,output
+	open #h_tmp=fnH: 'Name= '&br_filename$(env$('temp')&'\acs\OpenEverything_'&session$&'.cmd')&',RecL=512,Replace',d,o
 	pr #h_tmp: '@echo off'
 	pr #h_tmp: '@echo Advanced Computer Services LLC'
 	pr #h_tmp: '@echo Reading file list from "'&zFileOpen$&'"'
@@ -353,7 +353,7 @@ def fn_fileOpenEverything(foeSource$*256)
 	end if
 	foeDestinationFolder$=os_filename$(env$('Q'))
 	foeLogFile$=env$('temp')&'\acs\Open_Log.txt'
-	open #h_tmp=fnH: 'Name= '&br_filename$(env$('temp')&'\acs\OpenEverything_'&session$&'.cmd')&',RecL=512,Replace',display,output
+	open #h_tmp=fnH: 'Name= '&br_filename$(env$('temp')&'\acs\OpenEverything_'&session$&'.cmd')&',RecL=512,Replace',d,o
 	pr #h_tmp: '@echo off'
 	pr #h_tmp: '@echo Advanced Computer Services LLC'
 	pr #h_tmp: '@echo Opening: "'&foeSource$&'"'
@@ -392,7 +392,7 @@ def fn_fileOpenEverything(foeSource$*256)
 	end if
 fnend
 def fn_extract_appropriate_files(eafSourceFile$*256,eafSourceFilter$*128,eafDestinationFolder$*256)
-	open #h_tmp=fnH: 'Name= '&env$('temp')&'\acs\openPartial'&session$&'.cmd,RecL=512,Replace',display,output
+	open #h_tmp=fnH: 'Name= '&env$('temp')&'\acs\openPartial'&session$&'.cmd,RecL=512,Replace',d,o
 	pr #h_tmp: '@echo off'
 	pr #h_tmp: '@echo Advanced Computer Services LLC'
 	pr #h_tmp: 'set openFile="'&eafSourceFile$&'"'

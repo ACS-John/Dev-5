@@ -51,9 +51,9 @@ MAIN: !
 	if resp$(6)(1:1)="T" then sltyn$(3)="Y" : slt(3)=1 else sltyn$(3)="N" ! adj jrn
 	wbc=val(resp$(7)(1:2))
 ! FNWAIT
-	open #trmstr=1: "Name=[Q]\CLmstr\TrMstr.h[cno],KFName=[Q]\CLmstr\TrIdx1.h[cno],Shr",internal,input,keyed
-	open #tralloc=2: "Name=[Q]\CLmstr\TrAlloc.h[cno],KFName=[Q]\CLmstr\TrAlloc-Idx.h[cno],Shr",internal,input,keyed
-	open #glmstr=4: "Name=[Q]\CLmstr\GLmstr.h[cno],KFName=[Q]\CLmstr\GLIndex.h[cno],Shr",internal,input,keyed
+	open #trmstr=1: "Name=[Q]\CLmstr\TrMstr.h[cno],KFName=[Q]\CLmstr\TrIdx1.h[cno],Shr",i,i,k
+	open #tralloc=2: "Name=[Q]\CLmstr\TrAlloc.h[cno],KFName=[Q]\CLmstr\TrAlloc-Idx.h[cno],Shr",i,i,k
+	open #glmstr=4: "Name=[Q]\CLmstr\GLmstr.h[cno],KFName=[Q]\CLmstr\GLIndex.h[cno],Shr",i,i,k
 	open #work=3: "Name="&env$('temp')&'\'&"WORK,KFName="&env$('temp')&'\'&"ADDR,RecL=40,KPS=1,KLN=12,Replace",internal,outIn,keyed  : _
 	! this file is used to total Amounts by General Ledger Number
 	open #bankmstr=12: "Name=[Q]\CLmstr\BankMstr.h[cno],KFName=[Q]\CLmstr\BankIdx1.h[cno],Shr",internal,outIn,keyed

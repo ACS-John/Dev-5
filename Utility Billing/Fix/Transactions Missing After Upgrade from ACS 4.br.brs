@@ -7,7 +7,7 @@
  
 fn_setup
 if env$('acsDeveloper')<>'' then
-	open #hOld=fnH: 'Name=C:\ACS\(Client_Files)\GreeneCo\Old ACS 4 - Program Files (x86)-ACS\UBmstr\UBTransVB.h1,Shr',internal,input,relative
+	open #hOld=fnH: 'Name=C:\ACS\(Client_Files)\GreeneCo\Old ACS 4 - Program Files (x86)-ACS\UBmstr\UBTransVB.h1,Shr',i,i,r
 else
 	open #hOld=fnH: 'Name=@:C:\Program Files (x86)\ACS\UBmstr\UBTransVB.h1,Shr',internal,input
 end if

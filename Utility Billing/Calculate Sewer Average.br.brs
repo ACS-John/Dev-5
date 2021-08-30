@@ -4,7 +4,7 @@ dim cd1(8),x(13),message$(5)*80,message$*60,tg(11),extra(23)
 on error goto Ertn
 fnTop(program$)
  
-open #h_trans=fnH: "Name=[Q]\UBmstr\ubTransvb.h[cno],KFName=[Q]\UBmstr\ubTrIndx.h[cno],Shr",internal,input,keyed
+open #h_trans=fnH: "Name=[Q]\UBmstr\ubTransvb.h[cno],KFName=[Q]\UBmstr\ubTrIndx.h[cno],Shr",i,i,k
 open #h_customer=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,outIn,keyed
 read #h_customer,using L500: x$,customer_sewer_rate_code,oldavg eof DONE
 gosub APPLY_DEFAULT_RATE

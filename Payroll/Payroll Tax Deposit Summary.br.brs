@@ -43,7 +43,7 @@ for j=1 to 20
 	ab$(j)=lpad$(rtrm$(ab$(j)),8)
 next j
 gosub PrHeader
-open #h_employee=fnH: "Name=[Q]\PRmstr\Employee.h[cno],Shr",internal,input,relative
+open #h_employee=fnH: "Name=[Q]\PRmstr\Employee.h[cno],Shr",i,i,r
 open #h_checks=fnH: "Name=[Q]\PRmstr\payrollchecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno]",internal,outIn,keyed
 do
 	ReadEmployee: !

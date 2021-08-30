@@ -18,8 +18,8 @@
 		serviceName$(j)=trim$(serviceName$(j)(1:8))&":"
 	next j
 	option2$(x)
-	open #customer=1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\UBIndex.h[cno]",internal,input,keyed
-	open #ubtransvb=2: "Name=[Q]\UBmstr\ubTransVB.h[cno],KFName=[Q]\UBmstr\ubtrindx.h[cno]",internal,input,keyed
+	open #customer=1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\UBIndex.h[cno]",i,i,k
+	open #ubtransvb=2: "Name=[Q]\UBmstr\ubTransVB.h[cno],KFName=[Q]\UBmstr\ubtrindx.h[cno]",i,i,k
 	open #14: "Name=[Q]\GLmstr\GL_Work_[acsUserId].h[cno],Replace,RecL=104",internal,output ioerr ignore
 	if ~exists("[Q]\UBmstr\glinfo.h[cno]") then 
 		open #15: "Name=[Q]\UBmstr\Glinfo.h[cno],KFName=[Q]\UBmstr\glinfoidx.h[cno],Shr,Use,RecL=89,KPs=1,KLn=23",internal,outIn,keyed

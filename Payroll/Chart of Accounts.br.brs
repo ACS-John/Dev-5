@@ -12,7 +12,7 @@ fnTop(program$)
 	fltyp$(2)='N' : sln(2)=6  : tln(2)=6  : mask(2)=30 : lbl$(2)="Account"
 	fltyp$(3)='N' : sln(3)=3  : tln(3)=3  : mask(3)=30 : lbl$(3)="Sub Account"
 	fltyp$(4)='C' : sln(4)=50 : tln(4)=50 : mask(4)=0  : lbl$(4)="Description"
-	! Open #20: "Name=[Q]\CLmstr\Company.h[cno],Shr",Internal,Input,Relative
+	! Open #20: "Name=[Q]\CLmstr\Company.h[cno],Shr",i,i,r
 	! Read #20,Using 'Form POS 150,2*N 1',Rec=1: D(1),D(2)
 	! Close #20:
 	d(1)=d(2)=1 ! default to fund number and sub number

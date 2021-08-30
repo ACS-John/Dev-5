@@ -11,14 +11,14 @@
 	right=1
 	fnTop(program$,cap$="Reprint Year End Trial Balance")
 	fncno(cno,cnam$)
-	open #20: "Name=[Q]\GLmstr\Company.h[cno]",internal,input,relative  : _
+	open #20: "Name=[Q]\GLmstr\Company.h[cno]",i,i,r  : _
 	read #20,using 'Form POS 150,2*N 1',rec=1: d(1),d(2) : _
 	read #20,using 'Form POS 152,2*C 12',rec=1: mat cogl$ : _
 	close #20:
 	a$(1)="C/D" : a$(2)="C/R" : a$(3)="ADJ" : _
 	a$(4)="A/P" : a$(5)="PR" : a$(6)="A/R" : _
 	a$(7)="S/J" : a$(8)="P/J" : a$(9)=" "
-	open #1: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLIndex.h[cno],Shr",internal,input,keyed
+	open #1: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLIndex.h[cno],Shr",i,i,k
 	goto START_REPORT
 SCREEN1: !
 	fnTos(sn$="GLTB") : _

@@ -12,9 +12,9 @@ dim gl$*12,gd$*50
 fnTop(program$)
 fndat(dat$)
 fnwait
-open #paytrans=4: "Name=[Q]\CLmstr\PayTrans.h[cno],KFName=[Q]\CLmstr\unpdidx1.h[cno],Shr",internal,input,keyed
-open #glmstr=7: "Name=[Q]\CLmstr\GLmstr.h[cno],KFName=[Q]\CLmstr\GLINDEX.h[cno],Shr",internal,input,keyed
-open #unpdaloc=8: "Name=[Q]\CLmstr\UnPdAloc.h[cno],KFName=[Q]\CLmstr\UAIdx2.h[cno],Shr",internal,input,keyed
+open #paytrans=4: "Name=[Q]\CLmstr\PayTrans.h[cno],KFName=[Q]\CLmstr\unpdidx1.h[cno],Shr",i,i,k
+open #glmstr=7: "Name=[Q]\CLmstr\GLmstr.h[cno],KFName=[Q]\CLmstr\GLINDEX.h[cno],Shr",i,i,k
+open #unpdaloc=8: "Name=[Q]\CLmstr\UnPdAloc.h[cno],KFName=[Q]\CLmstr\UAIdx2.h[cno],Shr",i,i,k
 open #work=9: "Name="&env$('temp')&'\work.tmp,KFName='&env$('temp')&'\addr.tmp,KPS=1,KLN=12,RecL=68,Replace',internal,outIn,keyed
 open #paymstr=13: "Name=[Q]\CLmstr\PayMstr.h[cno],KFName=[Q]\CLmstr\PayIdx1.h[cno],Shr",internal,outIn,keyed
 gosub HDR

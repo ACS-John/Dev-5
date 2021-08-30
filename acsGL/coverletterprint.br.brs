@@ -10,7 +10,7 @@
 	fnconsole(off=0)
 	fncno(cno)
 	fndat(dat$)
-	open #1: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,input,relative  : _
+	open #1: "Name=[Q]\GLmstr\Company.h[cno],Shr",i,i,r  : _
 	read #1,using 'Form POS 195,C 30',rec=1: tb$ : _
 	close #1: : _
 	tb$="("&trim$(tb$)&")"

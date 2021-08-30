@@ -16,7 +16,7 @@ dim city$*15,state$*2,zip$*9,csz$*40,x$*40
 
 
 
-open #1: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,input,relative
+open #1: "Name=[Q]\GLmstr\Company.h[cno],Shr",i,i,r
 read #1,using 'Form POS 1,3*C 40,2*C 12,C 5,2*N 1,2*C 12,N 3,N 6,N 3,PD 7.2,C 30,POS 298,15*PD 4,POS 382,N 2,N 2,PD 5.3,PD 5.2,PD 5.3,PD 5.2,G 1,PD 5.3,PD 5.2,N 1,10*C 20,50*N 1,10*C 12',rec=1: mat a$,mat b$,c$,mat d,mat e$,a1,a2,a3,ucm,tb$,mat unused3,unused1,unused2,ficarate,ficawage,feducrat,feducwag,actr$,mcr,mcm,reccode,mat unused4$,mat dedcode,mat dedfed,mat dedfica,mat unused7,mat unused6,mat unused5$
 close #1:
 ficarate=ficarate/100
@@ -112,7 +112,7 @@ START_PRINT: !
 	on fkey 5 goto DONE
 	fnopenprn
 	on pageoflow goto PGOF
-L1070: open #2: "Name=[Q]\GLmstr\PRmstr.h[cno],Kfn_ame=[Q]\GLmstr\PRIndex.h[cno],Shr",internal,input,keyed
+L1070: open #2: "Name=[Q]\GLmstr\PRmstr.h[cno],Kfn_ame=[Q]\GLmstr\PRIndex.h[cno],Shr",i,i,k
 	if frm=2 then gosub WK_HEADER
 L1090: m1=0
 	m2=0
@@ -262,7 +262,7 @@ L2400: form pos 1,c 40,n 10.2,x 10,n 10.2
 return
 
 GET_MAT_TPT: !
-	open #19: "Name=[Q]\GLmstr\PRTOT.h[cno],Kfn_ame=[Q]\GLmstr\PRTOTIDX.h[cno],Shr",internal,input,keyed
+	open #19: "Name=[Q]\GLmstr\PRTOT.h[cno],Kfn_ame=[Q]\GLmstr\PRTOTIDX.h[cno],Shr",i,i,k
 L2530: read #19,using L2540: mo,mat pt eof L2600
 L2540: form pos 1,n 2,pos 10,25*pd 5.2,n 4
 	if qtr=1 and mo>0 and mo<4 then mat tpt=tpt+pt
@@ -307,7 +307,7 @@ return
 
 OPEN_PRINTER: !
 	if file(20)=-1 then
-		open #20: "Name=[Q]\GLmstr\Pr941"&wsid$&".txt,Replace,RecL=5000",display,output
+		open #20: "Name=[Q]\GLmstr\Pr941"&wsid$&".txt,Replace,RecL=5000",d,o
 		pr #20: 'Call Print.MyOrientation("Portrait")'
 	end if
 return

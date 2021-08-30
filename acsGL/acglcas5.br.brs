@@ -20,7 +20,7 @@
 	actpd=fnactpd
 	fscode=fnfscode
 	priorcd=fnpriorcd
-	open #20: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,input,relative  : _
+	open #20: "Name=[Q]\GLmstr\Company.h[cno],Shr",i,i,r  : _
 	read #20,using 'Form Pos 384,n 2',rec=1: nap : close #20:
 	if nap<12 or nap> 13 then nap=12
 	in3$(1)="8,5,N 12.2,UT,N" : in3$(2)="8,25,N 12.2,UT,N" : _
@@ -33,7 +33,7 @@
 	pr f "10,20,C 30,h,n": "CASH FLOW STATEMENT IN PROCESS"
 	on fkey 5 goto L2130
 	fnopenprn
-	open #1: fl1$,internal,input,keyed
+	open #1: fl1$,i,i,k
 	if process=1 or d(1)=0 then goto L390
 	pr newpage
 	pr f "10,5,C 75,": "ENTER THE COST CENTER OR DEPT # IF YOU WISH TO ONLY pr A STATEMENT"
@@ -46,7 +46,7 @@ L390: pr newpage
 	execute "Index [Q]\GLmstr\GLmstr.h[cno] "&udf$&"fsindex.h[cno] 75 3 Replace DupKeys -N"
 	goto L460
 L450: execute "Index [Q]\GLmstr\GLmstr.h[cno] "&udf$&"fsindex.h[cno] 78 3 Replace DupKeys -N"
-L460: open #3: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName="&udf$&"fsindex.h[cno],Shr",internal,input,keyed
+L460: open #3: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName="&udf$&"fsindex.h[cno],Shr",i,i,k
 L470: read #1,using L510: r$,d$,te$,sp,ls,ds,ul,rs,bc,ap,mat ac,ic,fc eof L2130
 	if ltrm$(r$)="" or ltrm$(r$)="0" then goto L470
 	if costcntr=0 then goto L510

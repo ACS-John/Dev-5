@@ -26,10 +26,10 @@ MENU1: !
   beg_date=val(resp$(1)) ! beginning of year
   end_date=val(resp$(2)) ! ending day of year
   fnGetPayrollDates(beg_date,end_date)
-  open #hEmployee:=1: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr",internal,input,keyed
+  open #hEmployee:=1: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr",i,i,k
   execute "Index [Q]\PRmstr\Department.h[cno]"&' '&"[Q]\PRmstr\DeptIdx4.h[cno] 50/1/9 2/8/3,Replace,DupKeys,Shr -n" ! index in workmans comp code,department #,employee # sequence
-  open #h_department:=2: "Name=[Q]\PRmstr\Department.h[cno],KFName=[Q]\PRmstr\DeptIdx4.h[cno],Shr",internal,input,keyed  ! open in workmans comp code sequence
-  open #h_payrollchecks:=4: "Name=[Q]\PRmstr\PayrollChecks.h[cno],KFName=[Q]\PRmstr\CheckIdx.h[cno],Shr",internal,input,keyed
+  open #h_department:=2: "Name=[Q]\PRmstr\Department.h[cno],KFName=[Q]\PRmstr\DeptIdx4.h[cno],Shr",i,i,k  ! open in workmans comp code sequence
+  open #h_payrollchecks:=4: "Name=[Q]\PRmstr\PayrollChecks.h[cno],KFName=[Q]\PRmstr\CheckIdx.h[cno],Shr",i,i,k
   fnopenprn
   fn_hdr
   do

@@ -5,13 +5,13 @@ autoLibrary
 on error goto Ertn
 
 fnTop(program$)
-open #hCompany=fnH: "Name=[Q]\GLmstr\Company.h[cno]",internal,input,relative
+open #hCompany=fnH: "Name=[Q]\GLmstr\Company.h[cno]",i,i,r
 dim cogl$(2)*12
 read #hCompany,using 'Form POS 152,2*C 12',rec=1: mat cogl$
 close #hCompany:
 
-open #hAcct=fnH: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLIndex.h[cno],Shr",internal,input,keyed ! formerly #1
-open #hTran=fnH: "Name=[Q]\GLmstr\GLTrans.h[cno],Shr",internal,input,relative
+open #hAcct=fnH: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLIndex.h[cno],Shr",i,i,k ! formerly #1
+open #hTran=fnH: "Name=[Q]\GLmstr\GLTrans.h[cno],Shr",i,i,r
 
 if fnprocess=1 then goto DoReport
 goto Screen1

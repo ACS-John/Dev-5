@@ -9,7 +9,7 @@
 	dim a$(9)*3,cogl$(2)*12,u$*12,address$(2)*40,b$(2)*12,c$*5,d(2),ta(2)
 	dim desc$(10)*20,beg(10),inc(10),disb(10),end(10),bank$(90)*25,begb(90),endb(90),bankdr(90),bankcr(90),tr$*12,td$*30,tr(7)
  
-	open #20: "Name=CNO.H"&wsid$,internal,input,relative  : _
+	open #20: "Name=CNO.H"&wsid$,i,i,r  : _
 	read #20,using 'Form POS 145,2*N 1,POS 159,2*C 12,POS 195,C 20',rec=1: mat d,mat cogl$,pedat$ : _
 	close #20:
 	on fkey 5 goto Xit
@@ -25,8 +25,8 @@
 	data " "
 	read mat desc$
 	fnopenprn
-	open #1: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLIndex.h[cno],Shr",internal,input,keyed
-	open #2: "Name=[Q]\GLmstr\GLTrans.h[cno],Shr",internal,input,relative
+	open #1: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLIndex.h[cno],Shr",i,i,k
+	open #2: "Name=[Q]\GLmstr\GLTrans.h[cno],Shr",i,i,r
 	pr newpage
 	pr f "10,20,C 30,H,N": " FUND BALANCE IN PROCESS"
 	pr f "12,2,C 18,B,5": " Press F5 to stop"

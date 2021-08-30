@@ -68,7 +68,7 @@ L600: execute "COPY A:DPTMSTR.h[cno],[Q]\CLmstr\*.*"
 	goto L770
 L620: if ltrm$(rtrm$(pas$))><"BUILD" then goto L730
 	close #1: ioerr ignore
-	open #2: "Name=DPTMSTR.h[cno]/DPTMSTR,KFName=DPTIDX1.h[cno]/DPTMSTR,Shr",internal,input,keyed
+	open #2: "Name=DPTMSTR.h[cno]/DPTMSTR,KFName=DPTIDX1.h[cno]/DPTMSTR,Shr",i,i,k
 	open #1: "Name=[Q]\CLmstr\DPTMSTR.h[cno],SIZE=0,RecL=35,Replace",internal,output
 L660: read #2,using L670: gl$,de$ eof END1
 L670: form pos 1,c 12,c 50

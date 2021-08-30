@@ -1,6 +1,6 @@
 autoLibrary
 
-open #20: "Name=[Q]\UBmstr\label"&wsid$&".txt,Replace,RecL=5000",display,output 
+open #20: "Name=[Q]\UBmstr\label"&wsid$&".txt,Replace,RecL=5000",d,o 
 pr #20: 'Call Print.MyOrientation("Portrait")'
 lyne=4
 

@@ -17,7 +17,7 @@
 	ml$(2)="current period information?." : _
 	fnmsgbox(mat ml$,resp$,cap$,36)
  
-	open #1: "Name=[Q]\PRmstr\Company.h[cno],Shr",internal,input,relative
+	open #1: "Name=[Q]\PRmstr\Company.h[cno],Shr",i,i,r
 	read #1,using L190,rec=1: kt
 L190: form pos 745,n 1
 	close #1:

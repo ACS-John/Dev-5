@@ -12,8 +12,8 @@
 	fndat(dat$,1)
 	on fkey 5 goto DONE
 	fnopenprn
-	open #1: "Name=[Q]\UBmstr\Customer.h[cno],Shr",internal,input,relative
-	open #2: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,input,keyed
+	open #1: "Name=[Q]\UBmstr\Customer.h[cno],Shr",i,i,r
+	open #2: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",i,i,k
 	fn_header
 	do
 		read #1,using FORM_CUSTOMER: z$,mat e$,mat a,final,bal,route,sequence,extra$(1) eof DONE

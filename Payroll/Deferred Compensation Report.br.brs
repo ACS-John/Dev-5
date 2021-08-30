@@ -8,9 +8,9 @@ dim abbrevname$(20)*8,dedfica(20),dedst(20),deduc(20)
 dim sel_ded(20),sel_pen(20)
 fnDedNames(mat fullname$,mat abbrevname$,mat dedcode,mat calcode,mat dedfed,mat dedfica,mat dedst,mat deduc)
 gosub L710
-open #1: "Name=[Q]\PRmstr\Employee.h[cno],Shr",internal,input,relative
+open #1: "Name=[Q]\PRmstr\Employee.h[cno],Shr",i,i,r
 open #4: "Name=[Q]\PRmstr\payrollchecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno]",internal,outIn,keyed
-open #2: "Name=[Q]\PRmstr\RPTRAIL.h[cno],Shr",internal,input,relative
+open #2: "Name=[Q]\PRmstr\RPTRAIL.h[cno],Shr",i,i,r
 fnopenprn
 gosub HDR
 L250: !

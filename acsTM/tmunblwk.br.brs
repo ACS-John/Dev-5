@@ -9,12 +9,12 @@ dim cxno$*5,cna$*30,en$*9,d(8)
 dim k$*5,e$*9,b(8),sc$*4,sc2$*6,iv$*12
 namtab=66-int(len(rtrm$(env$('cnam')))/2)
 fnRead30Categories(mat cat$)
-open #8: "Name=S:\Core\Data\acsllc\pedate.h[cno],RecL=20,use,Shr",internal,outIn,relative
+open #8: "Name=S:\Core\Data\acsllc\pedate.h[cno],RecL=20,use,Shr",i,outi,r
 if lrec(8)=0 then write #8,using "form pos 1,n 6": d1 else read #8,using "form pos 1,n 6",rec=1,release: dat
-open #1: "Name=S:\Core\Data\acsllc\CLmstr.h[cno],KFName=S:\Core\Data\acsllc\CLIndex.h[cno],Shr",internal,input,keyed ioerr Ertn
-open #2: "Name=S:\Core\Data\acsllc\TMTRAddr.h[cno],Shr",internal,input,relative ioerr Ertn
-open #3: "Name=S:\Core\Data\acsllc\TMTRANS.h[cno],Shr",internal,input,relative ioerr Ertn
-open #4: "Name=S:\Core\Data\acsllc\EMmstr.h[cno],KFName=S:\Core\Data\acsllc\EMIndex.h[cno],Shr",internal,input,keyed ioerr Ertn
+open #1: "Name=S:\Core\Data\acsllc\CLmstr.h[cno],KFName=S:\Core\Data\acsllc\CLIndex.h[cno],Shr",i,i,k ioerr Ertn
+open #2: "Name=S:\Core\Data\acsllc\TMTRAddr.h[cno],Shr",i,i,r ioerr Ertn
+open #3: "Name=S:\Core\Data\acsllc\TMTRANS.h[cno],Shr",i,i,r ioerr Ertn
+open #4: "Name=S:\Core\Data\acsllc\EMmstr.h[cno],KFName=S:\Core\Data\acsllc\EMIndex.h[cno],Shr",i,i,k ioerr Ertn
 goto L460
 L270: !
 	read #4,using L280,key=e$: empname$ nokey L300 ioerr Ertn
@@ -38,7 +38,7 @@ L410: if b(7)><-1 then goto L440
 	goto L450
 L440: empname$="*** FINAL BILLED"
 L450: return
-L460: open #5: "Name=S:\Core\Data\acsllc\SCMSTR.h[cno],KFName=S:\Core\Data\acsllc\SCIndex.h[cno],Shr",internal,input,keyed ioerr Ertn
+L460: open #5: "Name=S:\Core\Data\acsllc\SCMSTR.h[cno],KFName=S:\Core\Data\acsllc\SCIndex.h[cno],Shr",i,i,k ioerr Ertn
 	goto L530
 	read #5,using L490,key=sc$: scdesc$ nokey L510 ioerr Ertn
 L490: form pos 5,c 30

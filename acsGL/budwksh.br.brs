@@ -10,7 +10,7 @@ dim resp$(10)*80,revb(13)
 fnTop(program$,"Budget Worksheet")
 gosub DETERMINE_DATE
 on fkey 5 goto L760
-open #1: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLINDEX.h[cno],Shr",internal,input,keyed
+open #1: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLINDEX.h[cno],Shr",i,i,k
 open #12: "Name=[Q]\GLmstr\BudgetInfo.h[cno],KFName=[Q]\GLmstr\BudIndx.h[cno],Use,RecL=28,KPs=1,KLn=14,Shr",internal,outIn,keyed
 if fnprocess=1 then goto L440
 ! defaults

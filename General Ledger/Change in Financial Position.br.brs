@@ -22,7 +22,7 @@
 	fl1$="Name=[Q]\GLmstr\ACGLFNSF.h[cno],KFName=[Q]\GLmstr\agfsidx5.h[cno],Shr"
 	if fnps=2 then fl1$="Name=[Q]\GLmstr\ACGLFNSG.h[cno],KFName=[Q]\GLmstr\agfsidx6.h[cno],Shr"
 
-	open #1: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLIndex.h[cno],Shr",internal,input,keyed
+	open #1: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLIndex.h[cno],Shr",i,i,k
 	L280: !
 	read #1,using L290: acct$,cb,mat by,mat bp eof L350
 	L290: form pos 1,c 12,pos 87,27*pd 6.2
@@ -34,7 +34,7 @@ L330: !
 L340: !
 goto L280
 L350: close #1:
-	open #1: fl1$,internal,input,keyed
+	open #1: fl1$,i,i,k
 	if fnprocess=1 or fnUseDeptNo=0 then goto BEGIN_PRINTING
 	fnTos
 	mylen=30: mypos=mylen+3 : right=1
@@ -59,7 +59,7 @@ goto L560
 L550: !
 	execute "Index [Q]\GLmstr\GLmstr.h[cno] [temp]\fsindex.h[cno] 78 3 Replace DupKeys -N"
 L560: !
-	open #3: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[temp]\fsindex.h[cno],Shr",internal,input,keyed
+	open #3: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[temp]\fsindex.h[cno],Shr",i,i,k
 L570: !
 	read #1,using L610: r$,d$,te$,sp,ls,ds,ul,rs,bc,ap,mat ac,ic,fc eof DONE
 	if ltrm$(r$)="" or ltrm$(r$)="0" then goto L570

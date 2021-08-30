@@ -17,7 +17,7 @@ MAIN: !
 	if uprc$(resp$)=uprc$("CANCEL") then goto Xit
  
 	open #1: "Name=[Q]\UBmstr\Deposit1.h[cno],KFName=[Q]\UBmstr\DepIdx1.h[cno]",internal,outIn,keyed ioerr MAIN
-	open #2: 'Name=[Q]\UBmstr\Deposit2.h[cno],KFName=[Q]\UBmstr\Deposit2Index.h[cno],Shr,Use,RecL=73,KPs=1,KLn=10',internal,outIn,keyed ! "Name=[Q]\UBmstr\Deposit2.h[cno]",internal,outIn,relative ioerr MAIN
+	open #2: 'Name=[Q]\UBmstr\Deposit2.h[cno],KFName=[Q]\UBmstr\Deposit2Index.h[cno],Shr,Use,RecL=73,KPs=1,KLn=10',internal,outIn,keyed ! "Name=[Q]\UBmstr\Deposit2.h[cno]",i,outi,r ioerr MAIN
  
 TOP: !
 	read #1,using "Form POS 11,2*PD 3": mat ta eof L240

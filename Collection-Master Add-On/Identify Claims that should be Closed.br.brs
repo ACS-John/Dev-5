@@ -57,7 +57,7 @@ fnTop(program$,'',1)
 	! /r
 ! r: Accumulate that Data
 	! masterKey$=  "forwarder number here"
-	open #hM:=fngethandle: 'name=master//6,kfname=masterx//6,shr',internal,input,keyed
+	open #hM:=fngethandle: 'name=master//6,kfname=masterx//6,shr',i,i,k
 	restore #hM: ! ,key=>masterKey$:
 	
 	fn_listPrint('Stage 1/2 - gather claims')
@@ -95,7 +95,7 @@ fnTop(program$,'',1)
 	!				! r: Stage 2 - scan paperless - SCAN WHOLE FILE ONCE approach - works but is slow
 	!				fn_listPrint('Stage 2/3 - scan paperless')
 	!				comLine+=1
-	!				open #hActive:=fngethandle: "Name=Active.int//6,KFName=Active.idx//6,Shr",internal,input,keyed ! RecL=92,KPs=1,KLn=8,Shr
+	!				open #hActive:=fngethandle: "Name=Active.int//6,KFName=Active.idx//6,Shr",i,i,k ! RecL=92,KPs=1,KLn=8,Shr
 	!				do
 	!					read #hActive,using active_FormAll$: mat active_data$,mat active_data eof EoActive
 	!					countReadActive+=1
@@ -120,7 +120,7 @@ fnTop(program$,'',1)
 		! r: Stage 2 - scan paperless - RESTORE FILE for each claim approach - should be faster
 	fn_listPrint('Stage 2/3 - scan paperless')
 	comLine+=1
-	open #hActive:=fngethandle: "Name=Active.int//6,KFName=Active.idx//6,Shr",internal,input,keyed ! RecL=92,KPs=1,KLn=8,Shr
+	open #hActive:=fngethandle: "Name=Active.int//6,KFName=Active.idx//6,Shr",i,i,k ! RecL=92,KPs=1,KLn=8,Shr
 	for claim=1 to udim(mat listFileno$)
 		fileno$=listFileno$(claim)
 		restore #hActive,key=>rpad$(fileno$,kln(hActive)): noKey S2b_nextClaim

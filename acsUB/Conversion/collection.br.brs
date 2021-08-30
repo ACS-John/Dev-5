@@ -7,7 +7,7 @@ fnTop(program$,"Convert Collections")
 dim dat$*20,a$(61)*30,u(61),scr1$(10)*30,alloc(10),nam$*30,o(2)
 dim r(20,4),hd1$*190,hd2$*190,message$*40
 
-open #6: "Name=[Q]\UBmstr\Collect.h[cno]",internal,outIn,relative
+open #6: "Name=[Q]\UBmstr\Collect.h[cno]",i,outi,r
 open #2: "Name=[Q]\UBmstr\UBTransVB.h[cno],KFName=[Q]\UBmstr\UBTrIndx.h[cno],Shr",internal,outIn,keyed
 L230: !
 do

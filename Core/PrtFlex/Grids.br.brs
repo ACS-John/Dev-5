@@ -254,7 +254,7 @@ PrintGrid: ! r: Creates grid lines for prtflex2
 	! This section generates the program lines needed to create the column            headings and column masks
 	close #hgridfile: ioerr ignore
 	open #hgridfile:=15: "Name="&fullgridname$&",KFName="&fullgridindx$&",RecL=80,KPs=1,KLn=3,use",internal,outIn,keyed ioerr SelectDataBase
-	open #h_gridspecs1:=10: "Name=[Temp]\GridSpecs1.tmp,RecL=255,Replace",display,output  ! temporary file to hold generated lines for grid specifications
+	open #h_gridspecs1:=10: "Name=[Temp]\GridSpecs1.tmp,RecL=255,Replace",d,o  ! temporary file to hold generated lines for grid specifications
 	pr #h_gridspecs1,using F_GRIDSPECS1: "procerr return" ! skip next line if no lines exist
 	pr #h_gridspecs1,using F_GRIDSPECS1: "del 10010,10480" ! delete any lines from previous grid
 	pr #h_gridspecs1,using F_GRIDSPECS1: "procerr return" ! skip next line if no lines exist
@@ -280,7 +280,7 @@ PrintGrid: ! r: Creates grid lines for prtflex2
 	dim new_prtflex2_name$*512
 	new_prtflex2_name$=env$('temp')&'\PrtFlex2_'&session$&'.br'
 	fnCopy("S:\Core\PrtFlex\PrtFlex2.br",new_prtflex2_name$)
-	open #h_gridspecs2:=10: "Name=[Temp]\GridSpecs2.tmp,RecL=255,Replace",display,output
+	open #h_gridspecs2:=10: "Name=[Temp]\GridSpecs2.tmp,RecL=255,Replace",d,o
 	pr #h_gridspecs2,using F_GRIDSPECS1: "PROC NOECHO"
 	pr #h_gridspecs2,using F_GRIDSPECS1: "Load "&new_prtflex2_name$ ! S:\Core\PrtFlex\PrtFlex2"
 	pr #h_gridspecs2,using F_GRIDSPECS1: "Load "&new_prtflex2_name$ ! S:\Core\PrtFlex\PrtFlex2"

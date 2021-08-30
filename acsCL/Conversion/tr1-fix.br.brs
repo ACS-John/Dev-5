@@ -6,7 +6,7 @@ L70: input fields "10,55,N 2,UE,N": cno conv L70
 	if cno=0 then stop 
 ! 
 	open #1: "Name=[Q]\CLmstr\TRMSTR.h[cno]",internal,outIn 
-	open #2: "Name=[Q]\CLmstr\TRALLOC.h[cno]",internal,outIn,relative 
+	open #2: "Name=[Q]\CLmstr\TRALLOC.h[cno]",i,outi,r 
 L120: read #1,using L130: checkNumber$,mat tr eof END1
 L130: form pos 4,c 8,pos 79,2*pd 3
 	v1=val(checkNumber$) conv L120

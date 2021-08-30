@@ -23,7 +23,7 @@ def fn_reassignTrA(cno)
 	open #hAcct=fnH: 'Name=[Q]\GLmstr\GLmstr.h'&str$(cno)&',KFName=[Q]\GLmstr\GLIndex.H'&str$(cno)&',Shr',internal,outIn,keyed
 	dim ta(2)
 	Facct: form pos 333,2*pd 3
-	open #hTrans=fnH: 'Name=[Q]\GLmstr\GLTrans.H'&str$(cno)&',Shr',internal,outIn,relative
+	open #hTrans=fnH: 'Name=[Q]\GLmstr\GLTrans.H'&str$(cno)&',Shr',i,outi,r
 	Ftrans1: form pos 71,pd 3
 	Ftrans2: form pos 1,c 12,pos 71,pd 3
 

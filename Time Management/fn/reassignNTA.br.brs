@@ -1,7 +1,7 @@
 def library fnReassignNTA(filename$*256,keyForm$,ntaForm$; ___,x,key$*64,formBoth$*64,nta,recCount)
 	if ~setup then fn_setup
 	fnCopy(filename$,filename$&'.beforeReassignTranAddr')
-	open #hRta=fnH: 'name='&filename$,internal,outin,relative
+	open #hRta=fnH: 'name='&filename$,i,outi,r
 	recCount=lrec(hRta)
 	! r: gather mat keys$ and mat ntas
 	mat keys$(recCount)

@@ -30,7 +30,7 @@ def fn_initupdate(&lastcompile)
 	fnreg_write("LastCompile",str$(curtime))
 	fnreg_write("OldLastCompile", str$(lastcompile))
 	if not exists("(import)") then execute "sy -M md (import)"
-	open #proc_file:=1: 'name=(import)\compile.prc,RecL=1024,Replace',display,output 
+	open #proc_file:=1: 'name=(import)\compile.prc,RecL=1024,Replace',d,o 
 fnend 
 def fn_updatesource
 	dim filename$*255,msr_file$*255

@@ -7,10 +7,10 @@ dim e(4,30),sc(2),scc(10),des$*30
 pr newpage
 pr f "10,20,c 60,h,n": "T/M MERGE INPUT IN PROCESS"
 open #3: "Name=S:\Core\Data\acsllc\TMWK[acsUserId].h[cno],NoShr",internal,input
-open #2: "Name=S:\Core\Data\acsllc\TMTRANS.h[cno],Shr",internal,outIn,relative
+open #2: "Name=S:\Core\Data\acsllc\TMTRANS.h[cno],Shr",i,outi,r
 L140: form pos 54,pd 3
 	open #1: "Name=S:\Core\Data\acsllc\CLmstr.h[cno],KFName=S:\Core\Data\acsllc\CLIndex.h[cno],Shr",internal,outIn,keyed
-	open #4: "Name=S:\Core\Data\acsllc\TMTRAddr.h[cno],Shr",internal,outIn,relative
+	open #4: "Name=S:\Core\Data\acsllc\TMTRAddr.h[cno],Shr",i,outi,r
 	open #5: "Name=S:\Core\Data\acsllc\EMmstr.h[cno],KFName=S:\Core\Data\acsllc\EMIndex.h[cno],Shr",internal,outIn,keyed
 	open #6: "Name=S:\Core\Data\acsllc\SCMSTR.h[cno],KFName=S:\Core\Data\acsllc\SCIndex.h[cno],Shr",internal,outIn,keyed
 L190: form pos 1,pd 3

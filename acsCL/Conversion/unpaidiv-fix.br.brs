@@ -7,7 +7,7 @@ dim tr(2),up$(4),aa(2)
 ! L70: input fields "10,55,N 2,UE,N": cno conv L70
 ! if cno=0 then stop 
 
-open #1: "Name=[Q]\CLmstr\PayTrans.h[cno],Shr",internal,outIn,relative 
+open #1: "Name=[Q]\CLmstr\PayTrans.h[cno],Shr",i,outi,r 
 L120: read #1,using L130: vn$,iv$,mat up$,upa,pcde,bank_code,ckn,cp,mat aa,gde eof END1
 L130: form pos 1,c 8,c 12,g 6,g 6,c 12,c 18,n 10.2,n 1,n 2,g 8,g 6,2*pd 3,n 1
 dat=val(up$(1)) conv L120

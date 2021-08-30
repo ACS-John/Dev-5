@@ -25,8 +25,8 @@ gosub SCREEN1
 	hd1$=hd1$&"  {\ul Customer Name               }"
 	mat scr1$(sz1)
 	mat alloc(sz1)
-	open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,input,keyed
-	open #2: "Name=[Q]\UBmstr\UBTransVB.h[cno],KFName=[Q]\UBmstr\ubtrdt.h[cno],Shr",internal,input,keyed
+	open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",i,i,k
+	open #2: "Name=[Q]\UBmstr\UBTransVB.h[cno],KFName=[Q]\UBmstr\ubtrdt.h[cno],Shr",i,i,k
 
 	on fkey 5 goto Xit
 	fnopenprn

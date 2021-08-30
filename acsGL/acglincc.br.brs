@@ -39,7 +39,7 @@ L280: form pos mp1,pd 3,pos 81,41*pd 6.2
 	pr f "12,2,C 70,N": "USE THE SELECT DATE ROUTINE TO ENTER THIS INFORMATION"
 	input fields "23,2,C 1,E,N": pause$
 	goto Xit
-L380: open #1: fl1$,internal,input,keyed
+L380: open #1: fl1$,i,i,k
 	if fnprocess=1 or fnUseDeptNo=0 then goto L510
 	if percent=1 then goto L510
 	fnTos(sn$="Acglincc") : _
@@ -62,7 +62,7 @@ L510: pf1=len(cnam$)+int((43-len(cnam$))/2)
 	execute "Index [Q]\GLmstr\GLmstr.h[cno] "&udf$&"fsindex.h[cno] 69 3 Replace DupKeys -N"
 	goto L590
 L580: execute "Index [Q]\GLmstr\GLmstr.h[cno] "&udf$&"fsindex.h[cno] 72 3 Replace DupKeys -N"
-L590: open #3: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName="&udf$&"fsindex.h[cno],Shr",internal,input,keyed
+L590: open #3: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName="&udf$&"fsindex.h[cno],Shr",i,i,k
 L600: !
 L610: read #1,using L660: r$,d$,te$,sp,ls,ds,ul,rs,bc,ap,mat ac,ic,fc,rnp eof L2330
 	if ltrm$(r$)="" or ltrm$(r$)="0" then goto L600

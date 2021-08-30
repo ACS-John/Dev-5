@@ -66,7 +66,7 @@ MAIN: !
 		if trim$(brfn$(j))="" then mat brfn$(j-1) : goto L500
 	next j
 	L500: pr "Found "&str$(j-1)&" files."
-	open #2: "Name="&procfile$&",Replace",display,output
+	open #2: "Name="&procfile$&",Replace",d,o
 	if uprc$(app_prev$)="FALSE" then fnFree(report$)
 	L530: pr #2: "print border: 'Locating...'"
 	! pr #2: "ProcErr Return" ! quietly continue on error ! XXX

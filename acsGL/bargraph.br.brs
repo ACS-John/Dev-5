@@ -10,7 +10,7 @@
 !
 	right=1 : center=2
 	fnTop(program$,cap$="Print Bar Graph of Earnings")
-	open #20: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,outIn,relative
+	open #20: "Name=[Q]\GLmstr\Company.h[cno],Shr",i,outi,r
 	read #20,using 'form pos 296,pos 384,n 2': lmu,nap : close #20:
 !
 	open #1: "Name=[Q]\GLmstr\Period.h[cno],Version=1,KFName=[Q]\GLmstr\Period-Idx.h[cno],Use,RecL=35,KPs=1,KLn=2,Shr",internal,outIn,keyed
@@ -183,7 +183,7 @@ include: ertn
 !
 VBOPENPRINT: !
 	if file(20)=-1 then
-		open #20: "Name=[Q]\GLmstr\linechart"&wsid$&".txt,Replace,RecL=5000",display,output
+		open #20: "Name=[Q]\GLmstr\linechart"&wsid$&".txt,Replace,RecL=5000",d,o
 		pr #20: 'Call Print.MyOrientation("Portrait")'
 		lyne=margin ! starting of 1st line
 		column1=16

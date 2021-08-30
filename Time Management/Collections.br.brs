@@ -38,15 +38,15 @@
 		gpx=1
 	end if
 
-	open #h_addr:=fnH: "Name=[Temp]\Addr.[session],Replace,RecL=239",internal,outIn,relative ioerr Ertn
+	open #h_addr:=fnH: "Name=[Temp]\Addr.[session],Replace,RecL=239",i,outi,r ioerr Ertn
 
-	open #1: "Name=S:\acsTM\TMSCRN.CL,Shr",internal,input,relative ioerr Ertn
+	open #1: "Name=S:\acsTM\TMSCRN.CL,Shr",i,i,r ioerr Ertn
 	read #1,using L560,rec=sz: f3$,mat fl1$,mat sc1$,mat sc2$,mat fli1$,mat ot1$,mat flo1$,mat flo3$,mat sc3$ ioerr Ertn
 	L560: form pos 1,c 255,142*c 18
 	close #1:
 
-	open #hCl1=fnH: "Name=S:\Core\Data\acsllc\CLmstr.h[cno],KFName=S:\Core\Data\acsllc\CLIndex.h[cno],Shr",internal,input,keyed ioerr Ertn
-	open #hCl2=fnH: "Name=S:\Core\Data\acsllc\CLmstr.h[cno],KFName=S:\Core\Data\acsllc\CLIndx2.h[cno],Shr",internal,input,keyed ioerr Ertn  ! alpha index on clients
+	open #hCl1=fnH: "Name=S:\Core\Data\acsllc\CLmstr.h[cno],KFName=S:\Core\Data\acsllc\CLIndex.h[cno],Shr",i,i,k ioerr Ertn
+	open #hCl2=fnH: "Name=S:\Core\Data\acsllc\CLmstr.h[cno],KFName=S:\Core\Data\acsllc\CLIndx2.h[cno],Shr",i,i,k ioerr Ertn  ! alpha index on clients
 	L590: !
 	hd$(1)="A/R Input Selection Menu"
 	hd$(2)="ENTER SELECTION"

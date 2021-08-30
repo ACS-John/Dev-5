@@ -21,9 +21,9 @@ fnTop(program$)
 	c$(clx,5)="13" : c$(clx,6)="30"
 	c$(clx,7)="[Q]\GLmstr\glindex.h[cno]"
 ! /r
-if ~exists("[Q]\GLmstr\glStdIdx.h[cno]") then 
-	fnIndex('[Q]\GLmstr\glStdAd.h[cno]','[Q]\GLmstr\glStdIdx.h[cno]','1 12')
-end if
+! if ~exists("[Q]\GLmstr\glStdIdx.h[cno]") then 
+! 	fnIndex('[Q]\GLmstr\glStdAd.h[cno]','[Q]\GLmstr\glStdIdx.h[cno]','1 12')
+! end if
 ! open #hFile=fnH: "Name=[Q]\GLmstr\glStdAd.h[cno],KFName=[Q]\GLmstr\glStdIdx.h[cno],Version=1,RecL=59,Shr",internal,outIn,keyed
 open #hFile=fnH: "Name=[Q]\GLmstr\glStdAd.h[cno],Version=1,KFName=[Q]\GLmstr\glStdIdx.h[cno],Use,RecL=59,KPs=1,KLn=12,Shr",internal,outIn,keyed
 

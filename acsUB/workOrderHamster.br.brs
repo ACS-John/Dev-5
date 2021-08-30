@@ -23,7 +23,7 @@
  
 OPEN_FILE: !
 	open_file_count=0 ! this value is used in the close_file sub routine
-	open #open_file_count+=1: "Name=[Q]\UBmstr\workorder.h[cno],Use,RecL=600,Shr",internal,outIn,relative
+	open #open_file_count+=1: "Name=[Q]\UBmstr\workorder.h[cno],Use,RecL=600,Shr",i,outi,r
 ! open #open_file_count+=1: "Name=[Q]\UBmstr\workorder.h[cno],KFName=[Q]\UBmstr\wkindex.h[cno],Use,RecL=600,KPs=1/11,KLn=10/8,Shr",internal,outIn,keyed
 return
  

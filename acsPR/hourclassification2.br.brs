@@ -14,7 +14,7 @@ def library fnhours(eno)
 	fnTop(program$,"Time Classification")
 	open #breakdown=1: "Name=[Q]\PRmstr\HourBreakdown.h[cno],KFName=[Q]\PRmstr\HourBreakdown-idx.h[cno],Shr",internal,outIn,keyed 
 	open #classification=2: "Name=[Q]\PRmstr\HourClass.h[cno],KFName=[Q]\PRmstr\HourClass-idx.h[cno],Shr",internal,outIn,keyed 
-	open #hEmployee=3: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr",internal,input,keyed 
+	open #hEmployee=3: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr",i,i,k 
 	MAIN: ! 
 		addhours=edithours=0
 		fnTos

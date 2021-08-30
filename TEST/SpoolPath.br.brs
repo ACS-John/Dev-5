@@ -3,7 +3,7 @@ autoLibrary
 on error goto Ertn
 a=1
 do
-	Open #20: "name=pdf:/,recl=512,replace",display,output
+	Open #20: "name=pdf:/,recl=512,replace",d,o
 	pr #20: STR$(A)
 	Close #20: ioerr ignore
 	pr STR$(A)

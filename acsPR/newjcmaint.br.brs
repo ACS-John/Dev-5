@@ -22,7 +22,7 @@ open #1: "Name=[Q]\PRmstr\JCMSTR.h[cno],KFName=[Q]\PRmstr\JCIndx.h[cno],Shr",int
 open #4: "Name=[Q]\PRmstr\JCMSTR.h[cno],KFName=[Q]\PRmstr\JCINDX2.h[cno],Shr",internal,outIn,keyed ioerr ignore
  
 open #2: "Name=[Q]\PRmstr\JCCAT.h[cno],KFName=[Q]\PRmstr\CatIndx.h[cno],Shr",internal,outIn,keyed ioerr ignore
-open #3: "Name=[Q]\PRmstr\JCTRANS.h[cno],Shr",internal,outIn,relative ioerr ignore
+open #3: "Name=[Q]\PRmstr\JCTRANS.h[cno],Shr",i,outi,r ioerr ignore
 open #16: "Name=[Q]\PRmstr\Category.h[cno],KFName=[Q]\PRmstr\categoryIDX.h[cno],Shr",internal,outIn,keyed ioerr ignore
 ! /r
 MENU1: !

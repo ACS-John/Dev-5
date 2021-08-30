@@ -31,7 +31,7 @@ for fileItem=1 to fileNameCount
 	the_date_prior=the_date=0
 	if fileItem=1 then
 		open #h_out=fnH: 'Name=S:\Core\Data\acsllc\TimeSheet.h[cno],RecL=86,KFName=S:\Core\Data\acsllc\TimeSheet-Idx.h[cno],Replace,KPs=1,KLn=5',internal,outIn,keyed
-		open #h_support=fnH: "Name=S:\Core\Data\acsllc\SUPPORT.h[cno],KFName=S:\Core\Data\acsllc\support-idx.h[cno],Shr",internal,input,keyed
+		open #h_support=fnH: "Name=S:\Core\Data\acsllc\SUPPORT.h[cno],KFName=S:\Core\Data\acsllc\support-idx.h[cno],Shr",i,i,k
 		fnopenprn
 	else
 		pr #255: ''
@@ -115,7 +115,7 @@ def fn_clientTimesheet(; ___,ctFile$*1024,ctNew,ctWhich)
 		fnAddOneC(mat ctFiles$,ctFile$)
 		hCt=fnH
 		fnAddOneN(mat ctHandles,hCt)
-		open #hCt: 'name='&ctFile$&',RecL=2048,Replace',display,output
+		open #hCt: 'name='&ctFile$&',RecL=2048,Replace',d,o
 		pr #hCt: 'Employee Name'&tab$;
 		pr #hCt: 'Date'&tab$;
 		! pr #hCt: 'hours'&tab$;
@@ -196,7 +196,7 @@ def fn_writeOutSage(wo_date,wo_time,wo_sage_code$*128,wo_desc$*1024)
 	dim wo_sage_code_prior$*128
 	if ~setup_sawo then
 		setup_sawo=1
-		open #sawo_h_out=fnH: 'Name=[Q]\Sage_AX_'&str$(filter_date(1))&'-'&str$(filter_date(2))&'.csv,RecL=512,eol=crlf,Replace',display,output
+		open #sawo_h_out=fnH: 'Name=[Q]\Sage_AX_'&str$(filter_date(1))&'-'&str$(filter_date(2))&'.csv,RecL=512,eol=crlf,Replace',d,o
 	end if
 	if wo_sage_code_prior$='' and wo_sage_code$='' then
 		pr #255: '!!! Sage Code is blank !!!'

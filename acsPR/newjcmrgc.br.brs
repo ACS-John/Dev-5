@@ -11,7 +11,7 @@
  
 	open #2: "Name=[Q]\PRmstr\JCCAT.h[cno],KFName=[Q]\PRmstr\CatIndx.h[cno],Shr",internal,outIn,keyed
 	open #3: "Name=jccharges."&wsid$,internal,input
-	open #5: "Name=[Q]\PRmstr\JCTRANS.h[cno],Shr",internal,outIn,relative
+	open #5: "Name=[Q]\PRmstr\JCTRANS.h[cno],Shr",i,outi,r
 L170: read #3,using L180: rn$,dat,jn$,mat ji2,empnam$ eof L400
 L180: form pos 1,c 12,pd 4,c 6,2*pd 3,pd 5.2,c 30
 	if ltrm$(rtrm$(rn$))="-1" or ji2(3)=0 then goto L170

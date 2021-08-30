@@ -11,10 +11,10 @@ autoLibrary
   if fnGlAskFormatPriorCdPeriod=5 then goto Xit           ! sets fnps,fnpriorcd,fnfscode (primary/secondary,current year/Prior,period to print)
   if fnps=2 then
     mp1=66
-    open #1:"Name=[Q]\GLmstr\acglFnSC.h[cno],KFName=[Q]\GLmstr\agfsidx1.h[cno],Shr",internal,input,keyed
+    open #1:"Name=[Q]\GLmstr\acglFnSC.h[cno],KFName=[Q]\GLmstr\agfsidx1.h[cno],Shr",i,i,k
   else
     mp1=63
-    open #1:"Name=[Q]\GLmstr\ACGLFNSB.h[cno],KFName=[Q]\GLmstr\agfsidx4.h[cno],Shr",internal,input,keyed
+    open #1:"Name=[Q]\GLmstr\ACGLFNSB.h[cno],KFName=[Q]\GLmstr\agfsidx4.h[cno],Shr",i,i,k
   end if
   if fnprocess=1 or fnUseDeptNo=0 then goto GetStarted else goto Screen1
 !
@@ -35,7 +35,7 @@ GetStarted: if fnps=2 then goto L310 ! secondary
   execute "Index [Q]\GLmstr\GLmstr.h[cno]"&' '&"[Q]\GLmstr\fsindex.h[cno] 63 3 Replace DupKeys -N"
   goto L320
 L310: execute "Index [Q]\GLmstr\GLmstr.h[cno]"&' '&"[Q]\GLmstr\fsindex.h[cno] 66 3 Replace DupKeys -N"
-L320: open #3: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\fsindex.h[cno],Shr",internal,input,keyed
+L320: open #3: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\fsindex.h[cno],Shr",i,i,k
   fnopenprn
   if file$(255)(1:4)<>"PRN:" then redir=1 else redir=0
   report$="Balance Sheet"

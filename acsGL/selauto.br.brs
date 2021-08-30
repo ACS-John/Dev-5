@@ -11,11 +11,11 @@ dim ln$*128,ln2$*128,item$(1)*35,resp$(60)*35
 dim prg$(100)*40,nam$(100)*35
 
 fnTop(program$,"Select Programs")
-open #1: "Name=[Q]\GLmstr\acGLPGMN.h[cno],Use,RecL=76",internal,outIn,relative ioerr L190
+open #1: "Name=[Q]\GLmstr\acGLPGMN.h[cno],Use,RecL=76",i,outi,r ioerr L190
 goto L210
 L190: !
 if exists("[Q]\GLmstr\acGLPGMN.h[cno]") >0 then let fnFree("[Q]\GLmstr\acGLPGMN.h[cno]")
-open #1: "Name=[Q]\GLmstr\acGLPGMN.h[cno],Use,RecL=76",internal,outIn,relative ioerr MAIN
+open #1: "Name=[Q]\GLmstr\acGLPGMN.h[cno],Use,RecL=76",i,outi,r ioerr MAIN
 L210: !
 if lrec(1)=0 then write #1,using L1690: nxtpgm$(1),nxtdesc$(1),pn(1),cp(1),prim(1),srq(1)
 for j=1 to lrec(1)
@@ -124,7 +124,7 @@ L860: goto L1640
 	data "    Standard - B/S","S:\acsGL\ACGLBAL","acglbal","ES54"
 	data "    Comparison - B/S","S:\General Ledger\Comparative Balance Sheet","acglbalc","ES55"
 	data "    Period Comparison - B/S","S:\General Ledger\Period Comparison Balance Sheet","acglbaly","ES56"
-	data "    Fund Comparison - B/S","S:\acsGL\ACGLBALF","","ES56"
+	data "    Fund Comparison - B/S","S:\General Ledger\Fund Comparison Balance Sheet","","ES56"
 ! Income Statements
 	data "    Standard - I/C","S:\General Ledger\Income Statement","acglinc","ES57"
 	data "    Quarterly - I/C","S:\acsGL\ACGLINCQ","acglincq","ES59"
@@ -182,7 +182,7 @@ L860: goto L1640
 	form pos 1,c 20,c 35,n 3,3*n 1
 L1640: execute "drop [Q]\GLmstr\acGLPGMN.h[cno]"
 	close #1: ioerr ignore
-	open #1: "Name=[Q]\GLmstr\acGLPGMN.h[cno],Use,RecL=76",internal,outIn,relative 
+	open #1: "Name=[Q]\GLmstr\acGLPGMN.h[cno],Use,RecL=76",i,outi,r 
 	for j1=1 to 20 
 		if j1>lrec(3) then 
 			write #1,using L1690: nxtpgm$(j1),nxtdesc$(j1),pn(j1),cp(j1),prim(j1),srq(j1)

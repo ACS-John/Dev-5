@@ -112,8 +112,8 @@ L1130: monthyr$=cnvrt$("pic(######)",endingdate)(1:2)&"20"&cnvrt$("pic(######)",
 	message$=""
 	stopable=1: gosub L3390 ! fnWAIT(MESSAGE$,1)
 
-	open #1: "Name=[Q]\GLmstr\PRmstr.h[cno],KFName=[Q]\GLmstr\PRIndex.h[cno],Shr",internal,input,keyed
-L1230: open #22: "Name=[Q]\UCReport,RecL=512,eol=crlf,replace",display,output
+	open #1: "Name=[Q]\GLmstr\PRmstr.h[cno],KFName=[Q]\GLmstr\PRIndex.h[cno],Shr",i,i,k
+L1230: open #22: "Name=[Q]\UCReport,RecL=512,eol=crlf,replace",d,o
 
 	goto BEGINNING_OF_FILE
 	pr newpage
@@ -123,7 +123,7 @@ L1230: open #22: "Name=[Q]\UCReport,RecL=512,eol=crlf,replace",display,output
 	goto L1230
 
 BEGINNING_OF_FILE: gosub RECRA : gosub RECRE
-	open #255: "Name=PRN:/SELECT,PAGEOFLOW=58,RecL=220",display,output
+	open #255: "Name=PRN:/SELECT,PAGEOFLOW=58,RecL=220",d,o
 	pr #255,using "form SKIP 2,pos 20,cc 40,skip 1,pos 20,cc 40": "Electronic Edit List",cnvrt$("pic(zz/zz/zzzz",endingdate)
 ! READ_EMPLOYEE: Read #1,Using 1370: ENO,MAT EM$,SS$,EM6,EM16,TA Eof END1
 READ_EMPLOYEE: read #1,using L1360: eno,mat em$,ss$,mat m eof END1
@@ -150,7 +150,7 @@ L1480: p1=pos(ss$,"-",1)
 ! Gosub RECRE
 	gosub RECRS
 	tw1=tw1+1 ! counter
-	goto READ_EMPLOYEE
+goto READ_EMPLOYEE
 
 RECRA: pr #22,using L1620: "RA",b1,"","98",a$(1),"",a$(2)(1:22),ct$,st$,zip$,"","","","",country$(1:2),a$(1),"",a$(2)(1:22),ct$,st$,zip$,"","","","",country$(1:2),contact$,contactph$,phoneext$,"",email$,"","",""
 L1620: form pos 1,c 2,pic(#########),c 24,c 2,c 57,c 22,c 22,c 22,c 2,c 5,c 4,c 5,c 23,c 15,c 2,c 57,c 22,c 22,c 22,c 2,c 5,c 4,c 5,c 23,c 15,c 2,c 27,c 15,c 5,c 3,c 40,c 3,c 10,c 14

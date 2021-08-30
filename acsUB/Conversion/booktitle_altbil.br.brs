@@ -13,7 +13,7 @@ L270: pr f "8,20,C 30,R,N": "Book Title Capital"
 	io1$(1)="10,40,N 2,UT,N"
 L310: rinput fields mat io1$: cno conv L310
 	if cno=0 or cmdkey=5 or cmdkey=99 then goto Xit
-	open #1: "Name=[Q]\UBmstr\ubadrbil.h"&str$(cno),internal,outIn,relative
+	open #1: "Name=[Q]\UBmstr\ubadrbil.h"&str$(cno),i,outi,r
 	for j=1 to lrec(1)
 		read #1,using "Form Pos 11,4*c 40",rec=j: mat ab$ noRec L390
 		for x=1 to 4

@@ -33,10 +33,10 @@ PR_JOURNAL: ! r:
 	fnopenprn
 	if cur_prior=1 then 
 		fnIndex('[Q]\GLmstr\GLTrans.h[cno]','[Temp]\fsindex.h[cno]','25/29/1 2/12/12')
-		open #3: "Name=[Q]\GLmstr\GLtrans.h[cno],KFName=[Temp]\fsindex.h[cno],Shr",internal,input,keyed 
+		open #3: "Name=[Q]\GLmstr\GLtrans.h[cno],KFName=[Temp]\fsindex.h[cno],Shr",i,i,k 
 	else if cur_prior=2 then ! index current file
 		fnIndex('[Q]\GLmstr\AcTrans.h[cno]','[Temp]\fsindex.h[cno]','25/29/1 2/12/12')
-		open #3: "Name=[Q]\GLmstr\ACtrans.h[cno],KFName=[Temp]\fsindex.h[cno],Shr",internal,input,keyed 
+		open #3: "Name=[Q]\GLmstr\ACtrans.h[cno],KFName=[Temp]\fsindex.h[cno],Shr",i,i,k 
 	end if 
 	PJ_READ_1: ! 
 	if cur_prior=2 then 

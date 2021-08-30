@@ -27,8 +27,8 @@
 		linelength=62
 	!
 		gosub BULKSORT
-		open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,input,keyed  ! open in Account order
-		open #2: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx5.h[cno],Shr",internal,input,keyed  ! open in route-sequence #
+		open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",i,i,k  ! open in Account order
+		open #2: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx5.h[cno],Shr",i,i,k  ! open in route-sequence #
 	!
 	SCREEN1: !
 		a$="" : prtbkno=0
@@ -86,7 +86,7 @@
 		if trim$(a$)<>"" then restore #2,key=cnvrt$("pic(zz)",route)& cnvrt$("pic(zzzzzzz)",sequence): nokey SCREEN1
 		if trim$(a$)="" and prtbkno>0 then restore #2,key>=cnvrt$("pic(zz)",prtbkno)&"       ": ! selected a route and no beginning Account
 	!
-		open #3: "Name=[Q]\UBmstr\UBAdrBil.h[cno],KFName=[Q]\UBmstr\adrIndex.h[cno],Shr",internal,input,keyed
+		open #3: "Name=[Q]\UBmstr\UBAdrBil.h[cno],KFName=[Q]\UBmstr\adrIndex.h[cno],Shr",i,i,k
 		gosub BUD1
 		gosub VBOPENPRINT
 	!
@@ -167,7 +167,7 @@
 		goto L660
 	!
 	SORT1: ! SELECT & SORT
-		open #5: "Name=[Q]\UBmstr\Cass1.h[cno],KFName=[Q]\UBmstr\Cass1Idx.h[cno],Shr",internal,input,keyed ioerr L1430
+		open #5: "Name=[Q]\UBmstr\Cass1.h[cno],KFName=[Q]\UBmstr\Cass1Idx.h[cno],Shr",i,i,k ioerr L1430
 		open #6: "Name=[Temp]\Temp.[Session],Replace,RecL=19",internal,output
 		s5=1
 		if prtbkno=0 then routekey$="" else routekey$=cnvrt$("N 2",prtbkno)&"       "
@@ -191,8 +191,8 @@
 		close #9:
 		execute "Free [Temp]\Addr.[Session] -n" ioerr L1400
 	L1400: execute "Sort [Temp]\Control.[Session] -n"
-		open #6: "Name=[Temp]\Temp."&session$,internal,input,relative
-		open #7: "Name=[Temp]\Addr."&session$,internal,input,relative
+		open #6: "Name=[Temp]\Temp."&session$,i,i,r
+		open #7: "Name=[Temp]\Addr."&session$,i,i,r
 	L1430: return
 	!
 	ENDSCR: ! pr totals screen
@@ -403,7 +403,7 @@
 		return
 	!
 	BULKSORT: ! bulk sort order
-		open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,input,keyed  ! open in Account order
+		open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",i,i,k  ! open in Account order
 		open #6: "Name=[Temp]\Temp.[Session],Replace,RecL=31",internal,output
 		do
 			read #1,using "Form POS 1,C 10,pos 1741,n 2,pos 1743,n 7,pos 1942,c 12": z$,route,seq,bulk$ eof L3040
@@ -412,13 +412,13 @@
 	L3040: close #1: ioerr ignore
 		close #6: ioerr ignore
 		execute "Index [Temp]\Temp.[session] [Temp]\Tempidx.[session] 1,19,Replace,DupKeys -n" ioerr L3080
-		open #6: "Name=[Temp]\Temp.[session],KFName=[Temp]\Tempidx.[session]",internal,input,keyed
+		open #6: "Name=[Temp]\Temp.[session],KFName=[Temp]\Tempidx.[session]",i,i,k
 	L3080: return
 	
 	BUD1: bud1=0
 		dim ba(13),badr(2),bt1(14,2),bd1(5),bd2(5),bd3(5)
 		open #81: "Name=[Q]\UBmstr\BudMstr.h[cno],KFName=[Q]\UBmstr\BudIdx1.h[cno],Shr",internal,outIn,keyed ioerr EO_BUD1
-		open #82: "Name=[Q]\UBmstr\BudTrans.h[cno],Shr",internal,outIn,relative
+		open #82: "Name=[Q]\UBmstr\BudTrans.h[cno],Shr",i,outi,r
 		bud1=1
 	EO_BUD1: return
 	!

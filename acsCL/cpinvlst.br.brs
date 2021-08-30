@@ -30,9 +30,9 @@
 
 	open #paymstr=13: "Name=[Q]\CLmstr\PayMstr.h[cno],KFName=[Q]\CLmstr\PayIdx1.h[cno],Shr",internal,outIn,keyed
 	open #trmstr=1: "Name=[Q]\CLmstr\TrMstr.h[cno],KFName=[Q]\CLmstr\TrIdx1.h[cno],Shr",internal,outIn,keyed
-	open #tralloc=3: "Name=[Q]\CLmstr\TrAlloc.h[cno],Version=2,KFName=[Q]\CLmstr\TrAlloc-Idx.h[cno],Shr",internal,input,keyed
-	open #paytrans=4: "Name=[Q]\CLmstr\PayTrans.h[cno],KFName=[Q]\CLmstr\UnPdIdx1.h[cno],Shr",internal,input,keyed
-	open #unpdaloc=6: "Name=[Q]\CLmstr\UnPdAloc.h[cno],Version=2,KFName=[Q]\CLmstr\UAIdx2.h[cno],Shr",internal,input,keyed
+	open #tralloc=3: "Name=[Q]\CLmstr\TrAlloc.h[cno],Version=2,KFName=[Q]\CLmstr\TrAlloc-Idx.h[cno],Shr",i,i,k
+	open #paytrans=4: "Name=[Q]\CLmstr\PayTrans.h[cno],KFName=[Q]\CLmstr\UnPdIdx1.h[cno],Shr",i,i,k
+	open #unpdaloc=6: "Name=[Q]\CLmstr\UnPdAloc.h[cno],Version=2,KFName=[Q]\CLmstr\UAIdx2.h[cno],Shr",i,i,k
 	open #work=5: "Name=[Temp]\Work,Size=0,RecL=66,Replace",internal,output
 READ_PAYTRANS: !
 	read #paytrans,using 'Form POS 1,C 8,C 12,2*G 6',release: vn$,iv$,ivd,dd eof END1
@@ -83,7 +83,7 @@ END2: close #1:
 	fnFree(env$('Temp')&"\ADDR")
 	execute "Sort [Temp]\Control"
 	open #addr=1: "Name=[Temp]\ADDR",internal,input ioerr Xit
-	open #work=5: "Name=[Temp]\WORK",internal,input,relative
+	open #work=5: "Name=[Temp]\WORK",i,i,r
 	fnopenprn
 	gosub HDR
 READ_ADDR: !

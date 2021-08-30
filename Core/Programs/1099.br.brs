@@ -110,7 +110,7 @@ def fn_1099print(vn$*8,nam$*30,mat empAddr$,ss$*11,mat box)
 			output_filename$=srep$(output_filename$,'[TaxYear]',taxYear$)
 			output_filename$=srep$(output_filename$,'[taxyear]',taxYear$)
 			output_filename$=srep$(output_filename$,'[TAXYEAR]',taxYear$)
-			open #hExport=fnH: 'Name='&br_filename$(output_filename$)&',REPLACE',display,output ioerr ASK_INFO
+			open #hExport=fnH: 'Name='&br_filename$(output_filename$)&',REPLACE',d,o ioerr ASK_INFO
 		else
 			fnpa_open('',copyCurrent$,'PDF')
 		end if

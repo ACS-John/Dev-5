@@ -10,12 +10,12 @@
  
 	cap$="Begin Automatic Processing"
 	fncno(cno,oldcnam$)
-	open #glclnt=1: "Name=[Q]\GLmstr\glClnt.dat",internal,outIn,relative ioerr BUILD_GLCLNT
+	open #glclnt=1: "Name=[Q]\GLmstr\glClnt.dat",i,outi,r ioerr BUILD_GLCLNT
 	rewrite #glclnt,using 'Form POS 1,N 5,C 40',rec=1: cno,cnam$
 	goto L210
  
 BUILD_GLCLNT: !
-	open #glclnt=1: "Name=[Q]\GLmstr\glClnt.dat,Size=0,RecL=45",internal,outIn,relative
+	open #glclnt=1: "Name=[Q]\GLmstr\glClnt.dat,Size=0,RecL=45",i,outi,r
 	for j=1 to 20 : _
 		write #glclnt,using 'Form POS 1,N 5,C 40',rec=j: 0," " : _
 	next j

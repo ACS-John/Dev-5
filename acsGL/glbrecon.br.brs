@@ -71,7 +71,7 @@ L690: input #101,fields "8,27,Cu 5,UT,N": pas$
 	if pas$><"ERASE" then goto L690
 	new1=1
 	close #1: ioerr L740
-L740: open #1: "Name=[Q]\GLmstr\GLBREC.h[cno],Size=0,RecL=68,Replace",internal,outIn,relative
+L740: open #1: "Name=[Q]\GLmstr\GLBREC.h[cno],Size=0,RecL=68,Replace",i,outi,r
 	goto L2620
 L760: form pos 1,n 3,n 6,n 3,c 12,c 30,c 2,n 6,pd 5.2,n 1
 L770: new1=1

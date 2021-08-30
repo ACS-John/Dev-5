@@ -29,7 +29,7 @@
 	cancel=5 : save=1 : pointtwo$='32'
 	pointthree$='33'
 	open #glmstr=11: "Name=[Q]\CLmstr\GLmstr.h[cno],KFName=[Q]\CLmstr\GLIndex.h[cno],Shr",internal,outIn,keyed ioerr ignore
-	open #company=1: "Name=[Q]\CLmstr\Company.h[cno],Shr",internal,outIn,relative ioerr BUILD_COMPANY
+	open #company=1: "Name=[Q]\CLmstr\Company.h[cno],Shr",i,outi,r ioerr BUILD_COMPANY
 	goto READ_COMPANY
 !
 READ_COMPANY: ! r:
@@ -281,7 +281,7 @@ PAGE4: ! r:
 	next j
 return ! /r
 BUILD_COMPANY: ! r:
-	open #company=1: "Name=[Q]\CLmstr\Company.h[cno],Size=0,RecL=882,Replace",internal,outIn,relative
+	open #company=1: "Name=[Q]\CLmstr\Company.h[cno],Size=0,RecL=882,Replace",i,outi,r
 	write #company,using 'Form POS 1,3*C 40,2*C 12,C 5,2*N 1,N 2,N 1,C 9,C 12,c 12,PD 7.2,C 30,POS 298,15*PD 4,POS 382,N 2,N 2,PD 5.3,PD 5.2,PD 5.3,PD 5.2,G 1,PD 5.3,PD 5.2,N 1,10*C 20,50*N 1,10*C 12',rec=1: mat a$,mat b$,c$,mat d,1,0,mat e$,lastact$,ucm,tb$,mat prgl,jccode,nap,ficarate,ficawage,feducrat,feducwag,prenum,mcr,mcm,reccode,mat miscname$,mat dedcode,mat dedfed,mat dedfica,mat dedst,mat deduc,mat miscgl$
 goto READ_COMPANY ! /r
 SAVE: ! r:

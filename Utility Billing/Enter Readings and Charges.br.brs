@@ -372,7 +372,7 @@ def fn_setup
 	! /r
 	! Open_Stuff: !
 		fn_setup_service(mat service_enabled)
-		open #hTrans=fnH: "Name=[Q]\UBmstr\ubTransVB.h[cno],KFName=[Q]\UBmstr\ubTrIndx.h[cno],Shr",internal,input,keyed
+		open #hTrans=fnH: "Name=[Q]\UBmstr\ubTransVB.h[cno],KFName=[Q]\UBmstr\ubTrIndx.h[cno],Shr",i,i,k
 		open #hCustomer1=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,outIn,keyed  ! was file #1, but it was getting closed incorrectly
 	F_CUSTOMER_C: form pos 1,c 10,pos 41,c 30,pos 143,7*pd 2,pos 1821,n 1,pos 217,15*pd 5,pos 354,c 1,pos 1741,n 2,n 7,2*n 6,n 9,pd 5.2,n 3,3*n 9,3*n 2,3*n 3,n 1,3*n 9,3*pd 5.2,pos 1954,c 12,pos 1906,c 12
 		open #hWork=fnH: "Name="&workFile$&",KFName="&workFileIndex$&",Shr,Use,RecL=74,KPs=1,KLn=10",internal,outIn,keyed
@@ -1300,7 +1300,7 @@ ImportTabDelimited: ! r:
 	! r: phase 1 - import from text file into readings.tmp file
 	open #h_tmp=fnH: "Name=OPEN:Tab Delimited Text (*.txt) |*.txt,RecL=129,Shr",display,input ioerr IT_XIT
 	!   open #h_tmp:=2: "Name=L:\readings.txt,RecL=129",display,input
-	open #h_readings_tmp=fnH: "Name=[Temp]\readings.tmp,RecL=30,replace",display,output
+	open #h_readings_tmp=fnH: "Name=[Temp]\readings.tmp,RecL=30,replace",d,o
 	dim a$*256
 	do
 		IT_TEXT_READ: !
@@ -1496,7 +1496,7 @@ def fn_loadBookOrHoldingFile(&addmethod; ___,book_or_holding_file$,ihDirFileMask
 		goto IH_XIT
 	else if ckey=ck_print then
 		if book_or_holding_file$='Holding File' then
-			open #hpHoldingFile=fnH: "Name=[Q]\UBmstr\IpHold"&ip1$&".h[cno]",internal,outIn,relative
+			open #hpHoldingFile=fnH: "Name=[Q]\UBmstr\IpHold"&ip1$&".h[cno]",i,outi,r
 			fn_print_readings(hpHoldingFile, 'Holding File '&ip1$)
 			close #hpHoldingFile:
 		else
@@ -1889,7 +1889,7 @@ def fn_flexRead(myline,mypos,filnum,z$,begdate,enddate,selcode) ! library ready
 	if ~setupFlexRead then fn_setupFlexRead
 	z$=trim$(z$)
 	if z$<>'' then
-		open #tmp=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,input,keyed
+		open #tmp=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",i,i,k
 		z$=lpad$(trim$(z$),10)
 		read #tmp,using "Form Pos 143,7*pd 2",key=z$: mat a
 		close #tmp:
@@ -2056,7 +2056,7 @@ def fn_meter_change_out
 	! goto somewhere
 	MCO_UPDATE_FULL_FILE: ! meter change over - update full file
 	close #hWork: ioerr ignore
-	open #hWork: "Name="&workFile$,internal,outIn,relative
+	open #hWork: "Name="&workFile$,i,outi,r
 	if lrec(hWork)=0 then goto MCO_L9290
 	MCO_WORK_READ: !
 	read #hWork,using Fwork: x$,mat x eof MCO_L9350

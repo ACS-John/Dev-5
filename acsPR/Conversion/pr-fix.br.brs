@@ -3,7 +3,7 @@
 on error goto Ertn
 dim ta(2)
 open #1: "Name=[Q]\PRmstr\RPMstr.h[cno],KFName=[Q]\PRmstr\RPIndex.h[cno]",internal,outIn,keyed 
-open #2: "Name=[Q]\PRmstr\RPTRAIL.h[cno]",internal,outIn,relative 
+open #2: "Name=[Q]\PRmstr\RPTRAIL.h[cno]",i,outi,r 
 do
 	read #1,using L140: lpd,tgp,mat ta eof Xit
 	L140: form pos 162,n 6,pd 5.2,2*pd 3

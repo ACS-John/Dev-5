@@ -76,7 +76,7 @@ def fn_openReceiptPrinter(; orp_only_if_it_is_assigned)
 			orp_did_open=1
 		end if
 	else
-		open #255: 'Name=Prn:/'&orp_receipt_printer$,display,output ioerr ORP_FINIS
+		open #255: 'Name=Prn:/'&orp_receipt_printer$,d,o ioerr ORP_FINIS
 		orp_did_open=1
 	end if
 	ORP_FINIS: !
@@ -129,7 +129,7 @@ def fn_openPrn(; baseNameAddition$*128,prgCapForSettingsOverride$*256,programCap
 
 		dim g_prn_destination_name$*1024
 		g_prn_destination_name$=op_printFileName$
-		open #255: 'Name=[Q]\tmp_[session].prn,PageOFlow='&lpp$&',RecL=512,Replace',display,output
+		open #255: 'Name=[Q]\tmp_[session].prn,PageOFlow='&lpp$&',RecL=512,Replace',d,o
 		! if env$('acsDeveloper')<>'' then pr 'fnOpenPrn did its thing.  ' : pause
 	else
 		! if env$('acsDeveloper')<>'' then pr 'fnOpenPrn skipped any action due to file(255)=-1.  ' : pause
@@ -220,7 +220,7 @@ def fn_startRtf(startRtf_destinationFileName$*1024; forceWordProcessor$,saveToAs
 	open #20: "Name="&startRtf_destinationFileName$,display,input
 	! end if
 	lrec20=lrec(20)
-	open #hOut=fnH: "Name=[Temp]\acs_print_tmp[session].rtf,Size=0,RecL=800,Replace",display,output
+	open #hOut=fnH: "Name=[Temp]\acs_print_tmp[session].rtf,Size=0,RecL=800,Replace",d,o
 	pr #hOut: "{\rtf1\ansi\deflang1033";
 	pr #hOut: "{\fonttbl";
 	pr #hOut: "{\f8\fswiss\fcharset0\fprq2 Lucida Console;}";
@@ -297,7 +297,7 @@ def fn_startRtf(startRtf_destinationFileName$*1024; forceWordProcessor$,saveToAs
 	SpInsertThatFileHere: ! r:
 		close #hOut:
 		execute 'Type "'&trim$(line$)&'" >>"'&env$('temp')&'\acs_print_tmp'&session$&'.rtf"'
-		open #hOut=fnH: "Name=[Temp]\acs_print_tmp[session].rtf,RecL=800,use",display,output
+		open #hOut=fnH: "Name=[Temp]\acs_print_tmp[session].rtf,RecL=800,use",d,o
 	goto SrRead ! /r
 
 	SrEoInput: !
@@ -346,7 +346,7 @@ def library fnWaitForShellCloseStart(whatsRunning$*256)
 	fnWaitForShellCloseStart=fn_waitForWpToCloseStart(whatsRunning$)
 fnend
 def fn_waitForWpToCloseStart(whatsRunning$*256)
-	open #h_win_wait=fnH: "srow=1,scol=1,rows="&env$('Session_Rows')&",cols="&env$('Session_Cols')&",border=none,picture=S:\Core\disable.png:TILE",display,output
+	open #h_win_wait=fnH: "srow=1,scol=1,rows="&env$('Session_Rows')&",cols="&env$('Session_Cols')&",border=none,picture=S:\Core\disable.png:TILE",d,o
 	pr #h_win_wait,fields str$(val(env$('Session_Rows'))/2)&',1,Cc '&env$('Session_Cols')&',[Screen]': 'Close your '&whatsRunning$&' to continue.'
 fnend
 
