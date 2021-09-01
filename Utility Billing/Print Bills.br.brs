@@ -2082,6 +2082,7 @@ def fn_print_bill_choctaw(z$,mat g,mat b,mat penalty$,d1,serviceFrom,serviceTo,d
 		pr #255: ''
 		pr #255: ''
 		pr #255: ''
+		pr #255: ''
 		! pr #255: '' ! microsoft word seemed to need an extra line
 	! end if
 	! ! If billOnPage=1 Then  pr #255,Using 1910: " " ! extra line after 1st bill
