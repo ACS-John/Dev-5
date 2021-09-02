@@ -349,90 +349,57 @@ def library fnTab(myline,mypos,height,width,mat cap$)
 	close #tf1:
 	setenv('control'&str$(fn_controlCount),"TAB|"&str$(myline)&"|"&str$(mypos)&"|"&str$(height)&"|"&str$(width)&"|[Temp]\|tab.txt|")
 fnend
-def library fnCmdKey(caption$*200,returnkey; default,cancel,tt$*200)
+def library fnCmdKey(caption$*200,returnkey; default,isCancel,tt$*200)
 	! add a button to a screen ace form
 	if ~setup then fn_setup
-	setenv('control'&str$(fn_controlCount),"CMDKEY|"&caption$&"|"&str$(returnkey)&"|"&str$(default)&"|"&str$(cancel)&"|"&tt$&"|")
+	setenv('control'&str$(fn_controlCount),"CMDKEY|"&caption$&"|"&str$(returnkey)&"|"&str$(default)&"|"&str$(isCancel)&"|"&tt$&"|")
 fnend
 def library fnCmdSet(bon)
 	if ~setup then fn_setup
 	if bon=1 then
 		fnCmdKey("&Cancel",5,1,1)
 	else if bon=2 then
-		fnCmdKey("&Next",1,1)
-		fnCmdKey("&Cancel",5,0,1)
+		fnCmdKey("&Next",1,1) 			: fnCmdKey("&Cancel",5,0,1)
 	else if bon=3 then
-		fnCmdKey("&Print",1,1)
-		fnCmdKey("&Cancel",5,0,1)
+		fnCmdKey("&Print",1,1)			:	fnCmdKey("&Cancel",5,0,1)
 	else if bon=4 then
-		fnCmdKey("&Save",1,1)
-		fnCmdKey("&Cancel",5,0,1)
+		fnCmdKey("&Save",1,1)			:	fnCmdKey("&Cancel",5,0,1)
 	else if bon=5 then
-		fnCmdKey("&Next",1,1)
-		fnCmdKey("&Cancel",5,0,1)
-		fnCmdKey("&Search",6)
+		fnCmdKey("&Next",1,1)			:	fnCmdKey("&Cancel",5,0,1)		:	fnCmdKey("&Search",6)
 	else if bon=6 then
-		fnCmdKey("&Next",1,1)
-		fnCmdKey("&Back",2)
-		fnCmdKey("&Cancel",5,0,1)
+		fnCmdKey("&Next",1,1)			:	fnCmdKey("&Back",2)					:	fnCmdKey("&Cancel",5,0,1)
 	else if bon=7 then
-		fnCmdKey("&Save",1,1)
-		fnCmdKey("&Delete",4)
-		fnCmdKey("&Cancel",5,0,1)
+		fnCmdKey("&Save",1,1)			:	fnCmdKey("&Delete",4)				:	fnCmdKey("&Cancel",5,0,1)
 	else if bon=8 then
-		fnCmdKey("&Print",1,1)
-		fnCmdKey("&Back", 2)
-		fnCmdKey("&Cancel",5,0,1)
+		fnCmdKey("&Print",1,1)			:	fnCmdKey("&Back", 2)					:	fnCmdKey("&Cancel",5,0,1)
 	else if bon=11 then
-		fnCmdKey("&Next",1,1)
-		fnCmdKey("&Finish",5,0,1)
+		fnCmdKey("&Next",1,1)			:	fnCmdKey("&Finish",5,0,1)
 	else if bon=13 then
-		fnCmdKey("&Next",1,1)
-		fnCmdKey("&Add",2)
-		fnCmdKey("&Cancel",5,0,1)
+		fnCmdKey("&Next",1,1)			:	fnCmdKey("&Add",2)						:	fnCmdKey("&Cancel",5,0,1)
 	else if bon=14 then
-		fnCmdKey("&Add",1)
-		fnCmdKey("E&dit",2,1)
-		fnCmdKey("&Print",4)
-		fnCmdKey("&Cancel",5,0,1)
+		fnCmdKey("&Add",1)		:	fnCmdKey("E&dit",2,1)		:	fnCmdKey("&Print",4)	:	fnCmdKey("&Cancel",5,0,1)
 	else if bon=15 then
-		fnCmdKey("&Add",1,1)
-		fnCmdKey("&Cancel",5,0,1)
+		fnCmdKey("&Add",1,1)	:	fnCmdKey("&Cancel",5,0,1)
 	else if bon=17 then
-		fnCmdKey("&Next",1,1)
-		fnCmdKey("&Skip",2,0,1)
-		fnCmdKey("&Finish",3)
+		fnCmdKey("&Next",1,1)	:	fnCmdKey("&Skip",2,0,1)	:	fnCmdKey("&Finish",3)
 	else if bon=19 then
-		fnCmdKey("&Next",1,1)
-		fnCmdKey("&Finish",2)
-		fnCmdKey("&Cancel",5,0,1)
+		fnCmdKey("&Next",1,1)	:	fnCmdKey("&Finish",2)		:	fnCmdKey("&Cancel",5,0,1)
 	else if bon=21 then
-		fnCmdKey("&Print",1,1)
-		fnCmdKey("&Search", 2)
-		fnCmdKey("&Cancel",5,0,1)
+		fnCmdKey("&Print",1,1)	:	fnCmdKey("&Search", 2)		:	fnCmdKey("&Cancel",5,0,1)
 	else if bon=22 then
-		fnCmdKey("&Next",1,1)
-		fnCmdKey("&Back",2)
-		fnCmdKey("&Cancel",5,0,1)
+		fnCmdKey("&Next",1,1)	:	fnCmdKey("&Back",2)			:	fnCmdKey("&Cancel",5,0,1)
 	else if bon=23 then
-		fnCmdKey("&Add",1,1)
-		fnCmdKey("&Search",2)
-		fnCmdKey("&Finish",4)
-		fnCmdKey("&Cancel",5,0,1)
+		fnCmdKey("&Add",1,1)		:	fnCmdKey("&Search",2)	:	fnCmdKey("&Finish",4)	:	fnCmdKey("&Cancel",5,0,1)
 	else if bon=41 then
 		fnCmdKey("&Ok",1,1,1)
 	else if bon=52 then
 		fnCmdKey("&Finish",5,1,1)
 	else if bon=102 then
-		fnCmdKey("&Print",1,1)
-		fnCmdKey("E&dit",3)
-		fnCmdKey("&Add",4)
-		fnCmdKey("&Delete",7)
-		fnCmdKey("&Refresh",6)
-		fnCmdKey("&Cancel",5,0,1)
+		fnCmdKey("&Print",1,1)	:	fnCmdKey("E&dit",3)	:		fnCmdKey("&Add",4)	:	fnCmdKey("&Delete",7)
+		fnCmdKey("&Refresh",6)	:	fnCmdKey("&Cancel",5,0,1)
 	end if
 fnend
-def library fnButton(lyne,ps,txt$*200,comkey; tt$*200,height,width,container,tabcon,default,cancel)
+def library fnButton(lyne,ps,txt$*200,comkey; tt$*200,height,width,container,tabcon,default,isCancel)
 	! adds a screen ace button
 	! mylen		 button.width
 	! txt$		 button.caption
@@ -440,9 +407,9 @@ def library fnButton(lyne,ps,txt$*200,comkey; tt$*200,height,width,container,tab
 	if ~setup then fn_setup
 	height=max(height,1) ! button height is at least 1
 	if width=0 then width=len(txt$)
-	setenv('control'&str$(fn_controlCount),"BUTTON|"&str$(lyne)&"|"&str$(ps)&"|"&str$(height)&"|"&str$(width)&"|"&str$(comkey)&"|"&txt$&"|"&tt$&"|"&str$(default)&"|"&str$(cancel)&"|"&str$(container)&"|"&str$(tabcon)&"|")
+	setenv('control'&str$(fn_controlCount),"BUTTON|"&str$(lyne)&"|"&str$(ps)&"|"&str$(height)&"|"&str$(width)&"|"&str$(comkey)&"|"&txt$&"|"&tt$&"|"&str$(default)&"|"&str$(isCancel)&"|"&str$(container)&"|"&str$(tabcon)&"|")
 fnend
-def library fnPicBut(lyne,ps,txt$*40,comkey,pic1$*100,btnh,btnw; pic2$*100,tt$*150,container,tabcon,default,cancel,___,tmpControlX$*2048)
+def library fnPicBut(lyne,ps,txt$*40,comkey,pic1$*100,btnh,btnw; pic2$*100,tt$*150,container,tabcon,default,isCancel,___,tmpControlX$*2048)
 	if ~setup then fn_setup
 	! mylen		 button.width
 	! txt$		 button.caption
@@ -463,7 +430,7 @@ def library fnPicBut(lyne,ps,txt$*40,comkey,pic1$*100,btnh,btnw; pic2$*100,tt$*1
 	tmpControlX$&=str$(container)&'|'
 	tmpControlX$&=str$(tabcon)&'|'
 	tmpControlX$&=str$(default)&'|'
-	tmpControlX$&=str$(cancel)&'|'
+	tmpControlX$&=str$(isCancel)&'|'
 	setenv('control'&str$(fn_controlCount),tmpControlX$)
 fnend
 
@@ -549,7 +516,7 @@ Xit: fnend
 		AceFinis: !
 		fkey(-1)
 		fn_close_windows ! :display menu:
-		if disabled_background then fn_backgrounddisable(0)
+		if disabled_background then fn_backgroundDisable(0)
 	fnend
 		def fn_ace_init
 			ace_io_count=ace_lyne_max=ace_column_max=grid_present=tmp_combo_count_for_read=0
@@ -740,7 +707,7 @@ Xit: fnend
 			if parent_none then
 				!			if disabled_background then open #disable_win=fnH: "srow=2,scol=2,rows="&str$(Session_Rows-2)&",cols="&str$(Session_Cols-2)&",picture=S:\Core\disable.png:TILE",d,o
 				!			if disabled_background then open #disable_win=fnH: "srow=1,scol=1,rows="&str$(Session_Rows+2)&",cols="&str$(Session_Cols+1)&",border=none,picture=S:\Core\disable.png:TILE",d,o
-				if disabled_background then fn_backgrounddisable(1)
+				if disabled_background then fn_backgroundDisable(1)
 				open #acs_win=fnH: "SRow="&str$(row)&",SCol="&str$(col)&",Rows="&str$(rows+3)&",Cols="&str$(cols+2)&",parent=none,Caption="&cap$&",border=S:[screen],N=[screen]",display,outIn
 				open #button_win=fnH: "SRow="&str$(rows+2)&",SCol=2,Rows=1,Cols="&str$(cols)&",parent="&str$(acs_win)&",border=S:[screen],N=[screen]",display,outIn
 			else
@@ -1135,7 +1102,7 @@ def fn_ace_rd_multiline
 	fn_remove_crlf(resp$(respc))
 	 !	 resp$(respc)=srep$(resp$(respc),'"','""') ! fn2quote(resp$(respc))
 fnend
-def fn_ace_rd_picbut(; ___,lyne$,pos$,comkey$,height$,width$,container,tabcon,default,cancel,txt$*256,path1$*300,tt$*400,tmpWin)
+def fn_ace_rd_picbut(; ___,lyne$,pos$,comkey$,height$,width$,container,tabcon,default,xCancel,txt$*256,path1$*300,tt$*400,tmpWin)
 	lyne$    =    control$(2)
 	pos$     =    control$(3)
 	txt$     =    control$(4) !  not used
@@ -1148,7 +1115,7 @@ def fn_ace_rd_picbut(; ___,lyne$,pos$,comkey$,height$,width$,container,tabcon,de
 	container=val(control$(11))
 	tabcon   =val(control$(12))
 	default  =val(control$(13))
-	cancel   =val(control$(14))
+	xCancel   =val(control$(14))
 	! path2$=control$(13)
 	! pr #0, fields "1,2,P 1/2,[buttons],"&str$(returnkey): env$('tmp_acs_back_arrow') ioerr ignore
 
@@ -1214,17 +1181,17 @@ def fn_ace_rd_frame
 	frames(udim(frames),2)=lyne+1
 	frames(udim(frames),3)=ps+1
 fnend
-def fn_ace_rd_flex(;___,index_)
-	lyne        = val(control$(2))
-	ps          = val(control$(3))
-	height     	= rows - lyne       ! val(control$(4))
-	width	      = cols - ps-2       ! val(control$(5))
-	seltype    	= val(control$(7))
-	sorttype   	= val(control$(8))
-	path1$     	= control$(9)
+def fn_ace_rd_flex(;___,index_,masknumber,masknumber)
+	lyne         	= val(control$(2))
+	ps           	= val(control$(3))
+	height      	= rows - lyne       ! val(control$(4))
+	width	       	= cols - ps-2       ! val(control$(5))
+	seltype     	= val(control$(7))
+	sorttype    	= val(control$(8))
+	path1$      	= control$(9)
 	hdr_count  	= val(control$(10))
 	container  	= val(control$(11))
-	tabcon     	= val(control$(12))
+	tabcon      	= val(control$(12))
 	dim _headings$(1)*1024,_line$*10000,_chunks$(1)*2100,_forms$(1)*1024
 	dim filterspec$*255	 !
 	dim gridspec$*255		 !
@@ -1315,7 +1282,7 @@ def fn_ace_rd_flex(;___,index_)
 		_chunks$(1)=_line$
 
 		! CHECK_JULIAN_DATES: ! Convert dates to julain format for BR internal date specs
-		dim datemask$,masknumber
+		dim datemask$
 		for index_=1 to udim(mat _mask$)
 			masknumber=val(_mask$(index_)) conv NOT_JULIAN_DATE
 			if masknumber>=1000 then masknumber-=1000
@@ -1337,6 +1304,8 @@ def fn_ace_rd_flex(;___,index_)
 				if quick_len=6 then _chunks$(index_+1)=date$(days(_chunks$(index_+1),'mmddyy'),'ccyymmdd') ! datemask$='mmddyy' else datemask$="ccyymmdd"! =str$(days(_chunks$(index_+1),datemask$)) ! Convert to julain date according to mask for data in expected format
 		!					pr _chunks$(index_+1),quick_len : pause ! =date$(days(_chunks$(index_+1),'mmddyy'),'ccyymmdd') ! datemask$='mmddyy' else datemask$="ccyymmdd"! =str$(days(_chunks$(index_+1),datemask$)) ! Convert to julain date according to mask for data in expected format
 				_chunks$(index_+1)=str$(days(_chunks$(index_+1),datemask$)) ! Convert to julain date according to mask for data in expected format
+			else if _mask$='glaccount' then
+				pr 'populating gl account' : pause
 			end if
 			NOT_JULIAN_DATE: ! Not a julian date field, leave it alone
 		next index_
@@ -1430,24 +1399,27 @@ fnend
 		close #grid_data:
 		fn_gridform=data_file_nonempty
 	fnend
-	def fn_column_mask(&form$,&width,mask$; ___,invisible)
+	def fn_column_mask(&form$,&width,mask$; ___,maskN,invisible)
 		maxlen=width + 10 ! to deal with bad data
-		mask=val(mask$) conv ignore
-		if mask=>1000 then
-			mask-=1000
+		maskN=val(mask$) conv ignore
+		mask$=lwrc$(mask$)
+		if maskN=>1000 then
+			maskN-=1000
 			invisible=1
 		end if
-		if mask=1 then ! date format : mm/dd/yy
+		if mask$='glaccount' then
+			form$='25/c 64'
+		else if maskN=1 then ! date format : mm/dd/yy
 			form$=str$(width)&'/date(m/d/yy)' !
-		else if mask=2 then !		 date format : mm/dd/ccyy
+		else if maskN=2 then !		 date format : mm/dd/ccyy
 			form$=str$(width)&'/date(m/d/ccyy)' ! $$$$$ GSB This code used to say FMT(99/99/99) which is only 6 digits long and appears wrong
-		else if mask=03 then !		date format : ccyy/mm/dd
+		else if maskN=03 then !		date format : ccyy/mm/dd
 			form$=str$(width)&'/date(ccyy/m/d)' ! '/fmt(9999/99/99)'
-		else if mask=04 then !		date format : dd/mm/ccyy
+		else if maskN=04 then !		date format : dd/mm/ccyy
 			form$=str$(width)&'/date(d/m/ccyy)'
-		else if mask=05 then !		date format : dd/mm/yy
+		else if maskN=05 then !		date format : dd/mm/yy
 			form$=str$(width)&'/date(d/m/yy)'
-		else if mask=10 then ! dollars, 2 decimals, commas
+		else if maskN=10 then ! dollars, 2 decimals, commas
 			form$=''
 			for tm_char_index=1 to maxlen-4
 				if mod(tm_char_index,4)=0 then
@@ -1459,7 +1431,7 @@ fnend
 			if form$(1:1)=',' then form$(0:0)='-'
 			form$(0:0)=str$(width)&"/#PIC("
 			form$&=".--)"
-		else if mask=20 then ! 0 decimals, commas
+		else if maskN=20 then ! 0 decimals, commas
 			form$=''
 			for tm_char_index=1 to maxlen
 				if mod(tm_char_index,4)=0 then
@@ -1471,59 +1443,59 @@ fnend
 			if form$(1:1)=',' then form$(0:0)='-'
 			form$(0:0)=str$(width)&"/#PIC("
 			form$&=")"
-		else if mask=30 then ! defaults 1 to 1
+		else if maskN=30 then ! defaults 1 to 1
 			if maxlen>15 then
 				form$=str$(width)&"/PIC("&rpt$('-',maxlen)&")"
 			else
 				form$=str$(width)&"/#PIC("&rpt$('-',maxlen)&")"
 			end if
-		else if mask=31 then ! defaults 1 to 1.0
+		else if maskN=31 then ! defaults 1 to 1.0
 			form$=str$(width)&"/#PIC("&rpt$('-',maxlen-2)&".-)"
-		else if mask=32 then ! defaults 1 to 1.00
+		else if maskN=32 then ! defaults 1 to 1.00
 			form$=str$(width)&"/#PIC("&rpt$('-',maxlen-3)&".--)"
-		else if mask=33 then ! defaults 1 to 1.000
+		else if maskN=33 then ! defaults 1 to 1.000
 			form$=str$(width)&"/#PIC("&rpt$('-',maxlen-4)&".---)"
-		else if mask=34 then ! defaults 1 to 1.0000
+		else if maskN=34 then ! defaults 1 to 1.0000
 			form$=str$(width)&"/#PIC("&rpt$('-',maxlen-5)&".----)"
-		else if mask=35 then ! defaults 1 to 1.00000
+		else if maskN=35 then ! defaults 1 to 1.00000
 			form$=str$(width)&"/#PIC("&rpt$('-',maxlen-6)&".-----)"
-		else if mask=36 then ! defaults 1 to 1.000000
+		else if maskN=36 then ! defaults 1 to 1.000000
 			form$=str$(width)&"/#PIC("&rpt$('-',maxlen-7)&".------)"
-		else if mask=40 then ! defaults 1 to 0.1
+		else if maskN=40 then ! defaults 1 to 0.1
 			form$=str$(width)&"/#PIC("&rpt$('-',maxlen)&")"
-		else if mask=41 then ! defaults 1 to 0.10
+		else if maskN=41 then ! defaults 1 to 0.10
 			form$=str$(width)&"/#PIC("&rpt$('-',maxlen-2)&".-)"
-		else if mask=42 then ! defaults 1 to 0.100
+		else if maskN=42 then ! defaults 1 to 0.100
 			form$=str$(width)&"/#PIC("&rpt$('-',maxlen-3)&".--)"
-		else if mask=43 then ! defaults 1 to 0.1000
+		else if maskN=43 then ! defaults 1 to 0.1000
 			form$=str$(width)&"/#PIC("&rpt$('-',maxlen-4)&".---)"
-		else if mask=44 then ! defaults 1 to 0.10000
+		else if maskN=44 then ! defaults 1 to 0.10000
 			form$=str$(width)&"/#PIC("&rpt$('-',maxlen-5)&".----)"
-		else if mask=45 then ! defaults 1 to 0.100000
+		else if maskN=45 then ! defaults 1 to 0.100000
 			form$=str$(width)&"/#PIC("&rpt$('-',maxlen-6)&".-----)"
-		else if mask=46 then ! defaults 1 to 0.1000000
+		else if maskN=46 then ! defaults 1 to 0.1000000
 			form$=str$(width)&"/#PIC("&rpt$('-',maxlen-7)&".------)"
-		else if mask=50 then
+		else if maskN=50 then
 			form$=str$(width)&"/#PIC(------)" ! ######
-		else if mask=51 then
+		else if maskN=51 then
 			form$=str$(width)&"/#PIC(---D------)" ! ###-######
-		else if mask=52 then
+		else if maskN=52 then
 			form$=str$(width)&"/#PIC(------D---)" ! ######-###
-		else if mask=53 then
+		else if maskN=53 then
 			form$=str$(width)&"/#PIC(---D------D---)" ! ###-######-###
-		! else if mask=51 then !				general ledger : ###-######
+		! else if maskN=51 then !				general ledger : ###-######
 		! 	form$='fmt(999-999999)'
-		! else if mask=52 then !				general ledger : ######-###
+		! else if maskN=52 then !				general ledger : ######-###
 		! 	form$='fmt(999999-999)'
-		! else if mask=53 then !				general ledger : ###-######-###
+		! else if maskN=53 then !				general ledger : ###-######-###
 		! 	form$='fmt(999-999999-999)'
-		else if mask=61 then !				general ledger : ############
+		else if maskN=61 then !				general ledger : ############
 			form$='fmt(999999999999999)'
-		else if mask=65 then !				12 decimals no commas
+		else if maskN=65 then !				12 decimals no commas
 			form$='#PIC(------.------------)'
-		else if mask=80 then !				force column left aligned
+		else if maskN=80 then !				force column left aligned
 			form$="C "&str$(width)
-		else if mask=81 then !				force column right aligned
+		else if maskN=81 then !				force column right aligned
 			form$="CR "&str$(width)
 		end if
 		if invisible then width=0
@@ -1540,11 +1512,11 @@ def fn_ace_rd_cmdkey(; ___,_help$*255,spec$*255)
 	mat return_keys(udim(return_keys)+1)
 	returnkey=return_keys(udim(return_keys))=val(control$(3))
 	default=val(control$(4))
-	cancel=val(control$(5))
+	xCancel=val(control$(5))
 	if udim(control$)>=6 then
 		tt$=control$(6)
 	end if
-	if cancel then fkey_cancel=returnkey
+	if xCancel then fkey_cancel=returnkey
 	txt$=srep$(txt$,'&','') ! remove underlined letters...	 would be nice to use them. xxx
 	width=len(txt$)
 	spec$='1,'&str$(ace_cmdkey_ps)&',CC '&str$(width)&',,B'&str$(returnkey)
@@ -1552,7 +1524,7 @@ def fn_ace_rd_cmdkey(; ___,_help$*255,spec$*255)
 		default_button_fkey=returnkey
 		spec$='1,'&str$(ace_cmdkey_ps)&',CC '&str$(width)&',[buttons],B'&str$(returnkey)
 		pr #0, fields "1,5,P 1/2,[buttons],"&str$(returnkey): "S:\Core\Icon\forward-icon.png" ioerr ignore
-	else if cancel then
+	else if xCancel then
 		spec$='1,'&str$(ace_cmdkey_ps)&',CC '&str$(width)&',[buttoncancel],B'&str$(returnkey)
 		if env$('tmp_acs_back_arrow')<>'' then
 			pr #0, fields "1,2,P 1/2,[buttons],"&str$(returnkey): env$('tmp_acs_back_arrow') ioerr ignore
@@ -1563,7 +1535,7 @@ def fn_ace_rd_cmdkey(; ___,_help$*255,spec$*255)
 		spec$='1,'&str$(ace_cmdkey_ps)&',CC '&str$(width)&',,B'&str$(returnkey)
 	end if
 
-	_help$=fn_formatButtonHelp$(tt$,returnkey,txt$, default,cancel)
+	_help$=fn_formatButtonHelp$(tt$,returnkey,txt$, default,xCancel)
 
 	pr #button_win, fields spec$, help _help$: txt$
 	ace_cmdkey_ps+=(width+2)
@@ -1581,7 +1553,7 @@ def fn_ace_rd_button(; ___,_help$*255,spec$*255)
 	txt$=srep$(trim$(control$(7)),chr$(38),"")
 	tt$=control$(8) error ignore
 	default=val(control$(9)) error ignore
-	cancel=val(control$(10)) error ignore
+	xCancel=val(control$(10)) error ignore
 	container=val(control$(11)) error ignore
 	tabcon=val(control$(12)) error ignore
 
@@ -1592,7 +1564,7 @@ def fn_ace_rd_button(; ___,_help$*255,spec$*255)
 		default_button_fkey=comkey
 		spec$=str$(lyne)&','&str$(ps)&','&str$(width)&'/CC '&str$(len(txt$))&',[buttons],B'&str$(comkey)
 		pr #0, fields "1,5,P 1/2,[buttons],"&str$(comkey): "S:\Core\Icon\forward-icon.png" ioerr ignore
-	else if cancel then
+	else if xCancel then
 		spec$=str$(lyne)&','&str$(ps)&','&str$(width)&'/CC '&str$(len(txt$))&',[buttoncancel],B'&str$(comkey)
 		if env$('tmp_acs_back_arrow')<>'' then
 			pr #0, fields "1,2,P 1/2,[buttons],"&str$(comkey): env$('tmp_acs_back_arrow') ioerr ignore
@@ -1610,17 +1582,17 @@ def fn_ace_rd_button(; ___,_help$*255,spec$*255)
 	else
 		tmp_win=acs_win ! pr #acs_win, fields spec$: txt$
 	end if
-	_help$=fn_formatButtonHelp$(tt$,comkey,txt$, default,cancel)
+	_help$=fn_formatButtonHelp$(tt$,comkey,txt$, default,xCancel)
 	pr #tmp_win, fields spec$, help _help$: txt$
 	! pr 'spec$='&spec$
 	! pr '_help$='&_help$
 	! pr 'txt$='&txt$
 	! pause
 fnend
-	def fn_formatButtonHelp$*256(tt$*256,comkey,txt$*128; default,cancel,___,return$*256)
+	def fn_formatButtonHelp$*256(tt$*256,comkey,txt$*128; default,xCancel,___,return$*256)
 		return$='1;'&tt$
 		if default then return$&='\nKeyboard Shortcut: [Enter] (or double click an item in a list view)' : goto EoIfCh
-		if cancel then return$&='\nKeyboard Shortcut: [Esc]' : goto EoIfCh
+		if xCancel then return$&='\nKeyboard Shortcut: [Esc]' : goto EoIfCh
 		if comkey=>1 and comkey<=10 then return$&='\nKeyboard Shortcut: [F'&str$(comkey)&']'
 		if fn_ifCh(30,'[Alt+A]'   	,return$,comkey) then goto EoIfCh
 		if fn_ifCh(48,'[Alt+B]'   	,return$,comkey) then goto EoIfCh
@@ -1772,8 +1744,7 @@ def fn_ace_rd_text(; ___,spec$*255)
 		fn_ace_io_add('#'&str$(acs_win)&','&str$(lyne)&','&str$(ps)&','&spec$)
 	end if
 fnend
-	def fn_textMask$*255(mask$*255,lyne,ps,width,container,maxlen; ___,return$*255)
-		mask=0
+	def fn_textMask$*255(mask$*255,lyne,ps,width,container,maxlen; ___,return$*255,mask)
 		mask=val(mask$) conv ignore
 	
 		if mask>1000 then mask-=1000
@@ -2231,9 +2202,9 @@ fnend
 
 def library fnBackgroundDisable(; activate)
 	if ~setup_library then fn_setup
-	fnBackgroundDisable=fn_backgrounddisable( activate)
+	fnBackgroundDisable=fn_backgroundDisable( activate)
 fnend
-def fn_backgrounddisable(; activate)
+def fn_backgroundDisable(; activate)
 	if activate then
 		Session_Rows=val(env$('Session_Rows')) : if Session_Rows<=0 then Session_Rows=352
 		Session_Cols=val(env$('Session_Cols')) : if Session_Cols<=0 then Session_Cols=115
