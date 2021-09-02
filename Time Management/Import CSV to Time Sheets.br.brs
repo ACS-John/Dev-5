@@ -478,6 +478,8 @@ def fn_houryRateAcs(wo_client$,the_date,wo_month$; hr_category,wo_sage_code$*128
 		hr_return=125
 	else if lwrc$(wo_month$)='ww' then
 		hr_return=75
+	else if wo_client$='ajj' then
+		hr_return=25
 	else if wo_client$=client_id_brc$ then
 		hr_return=60
 	else if wo_client$=client_id_sage_ax$ then
