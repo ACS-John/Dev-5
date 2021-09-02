@@ -1,5 +1,6 @@
 ! *** TM - Time Management ***
 File
+>Transaction Hamster                              ^ HamsterFio:TM Transaction
 >Client (TM - Hamster)                            ^ acsTM\client
 >>Client 420                                      ^ HamsterFio:*
 >>Prices                                          ^ HamsterFio:CO *
