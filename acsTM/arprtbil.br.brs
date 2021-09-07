@@ -27,8 +27,8 @@ L310: input fields "10,51,N 6,UE,N": d1 conv L310
 if cmdkey=5 then goto Xit
 if d1<10100 or d1>123199 then goto L310
 gosub L1960
-open #1: "Name=S:\Core\Data\acsllc\CLmstr.h[cno],KFName=S:\Core\Data\acsllc\CLIndex.h[cno],Shr",internal,outIn,keyed 
-open #2: "Name=S:\Core\Data\acsllc\ARTrans.h[cno],Shr",i,i,r 
+open #1: "Name=S:\Core\Data\acsllc\Client.h[cno],KFName=S:\Core\Data\acsllc\Client-Idx.h[cno],Shr",internal,outIn,keyed 
+open #2: "Name=S:\Core\Data\acsllc\Transactions.h[cno],Shr",i,i,r 
 L370: pr newpage
 pr f "10,5,c 53": "ENTER CLIENT NUMBER TO START PRINTING, ELSE ENTER 0"
 input fields "10,60,C 5,UE,N": st1$ conv L370

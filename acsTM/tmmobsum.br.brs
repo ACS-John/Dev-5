@@ -30,7 +30,7 @@ L240: fnopenprn
 	namtab2=43-int(len(rtrm$(env$('cnam')))/2)
 	fnRead30Categories(mat cat$)
 	gosub L1020
-	open #1: "Name=S:\Core\Data\acsllc\CLmstr.h[cno],KFName=S:\Core\Data\acsllc\CLIndex.h[cno],Shr",i,i,k
+	open #1: "Name=S:\Core\Data\acsllc\Client.h[cno],KFName=S:\Core\Data\acsllc\Client-Idx.h[cno],Shr",i,i,k
 	open #2: "Name=S:\Core\Data\acsllc\TMTRAddr.h[cno],Shr",i,i,r
 	open #3: "Name=S:\Core\Data\acsllc\TMTRANS.h[cno],Shr",i,i,r
 	open #4: "Name=S:\Core\Data\acsllc\EMmstr.h[cno],KFName=S:\Core\Data\acsllc\EMIndex.h[cno],Shr",i,i,k

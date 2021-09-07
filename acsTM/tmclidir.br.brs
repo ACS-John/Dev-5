@@ -12,7 +12,7 @@
 	dim cat$(30)*30
 	dim catcode(10)
 	namtab=44-len(rtrm$(env$('cnam')))/2
-	open #1: "Name=S:\Core\Data\acsllc\CLmstr.h[cno],KFName=S:\Core\Data\acsllc\CLIndex.h[cno],Shr",i,i,k
+	open #1: "Name=S:\Core\Data\acsllc\Client.h[cno],KFName=S:\Core\Data\acsllc\Client-Idx.h[cno],Shr",i,i,k
 
 	pr newpage
 	pr f "3,15,C 65,N": "You have the option to get the client directory sorted by "

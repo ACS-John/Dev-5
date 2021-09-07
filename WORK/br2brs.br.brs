@@ -11,8 +11,8 @@
 		pr "Directory not set default used (Default Dir: "&dir$&" )"
 	if dir$(len(dir$):len(dir$))="\" then dir$=dir$(1:len(dir$)-1)
 	option$="/s /a-d /on" ! widows xp ... /s   - include sub dirs. : _
-	! .                                       /a-d - exclude dir. names : _
-	! .                                       /on  - order by name
+	!                                         /a-d - exclude dir. names : _
+	!                                         /on  - order by name
 	fngetdir(dir$,mat filename$,option$)
 !
 	for tmp=1 to udim(filename$)
@@ -36,7 +36,7 @@ VALID_FILE_TEST_FAIL: !
 		goto LOOP1_NEXT
 VALID_FILE_TEST_PASS: !
 		pr #20: "Load "&filename$(j)
-		pr #20: "List >"&filename$(j)&"s" ! ...br + s = ...brs
+		pr #20: "List >"&filename$(j)&"s" !  ..br + s = ...brs
 		pr #20: " ! file created: "&filename$(j)&"s"
 LOOP1_NEXT: !
 	next j

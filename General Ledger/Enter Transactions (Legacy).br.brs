@@ -869,7 +869,7 @@ WRITE_PAYROLL_TRANS: ! r:
 			pr(j)=-pr(j) ! reverse sign on fica, etc
 		else if j>6 and j<17 and dedcode(j-6)=1 then
 			pr(j)=-pr(j)
-! .     ! turn sign around on any of ten deductions coded as additions
+!       ! turn sign around on any of ten deductions coded as additions
 		else if j=17 then
 			pr(j)=-pr(j)
 			td$="Tips"

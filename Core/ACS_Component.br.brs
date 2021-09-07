@@ -103,7 +103,7 @@ def fn_comboA(sfn$*256,lyne,ps,mat opt$; ttt$*200,width,contain,tabcon,comboa_co
 	! mat opt$	choices in the combobox and one of them is your answer
 	! width			(optional) sets the field/max length of the combobox.
 	!						may not be larger than 81
-	! 
+	!
 	! ** get/set constants ********
 	if env$('exitnow')<>'yes' then ! special processing to increase speed for exitnow
 		sfn$=trim$(sfn$)&env$('cno')
@@ -146,7 +146,7 @@ def library fnComboF(sfn$*100,lyne,ps,width,df$*200,psk,lnk,psd,lnd; if$*200,lim
 		form$=form$&",Pos "&str$(psd)&",C "&str$(lnd) : nodesc=0
 	end if
 	becky$=sfn$&env$('cno')&"[SESSION].tmp" ! combof_whr$=env$('temp')&'\acs\'&becky$
-	! 
+	!
 	if width=0 then width=lnk+lnd+1
 	dim combokeycurrent$*512,combokeyprior$*512
 	combokeycurrent$='df='&df$&',if='&if$&',psk='&str$(psk)&',lnk='&str$(lnk)&',psd='&str$(psd)&'lnd='&str$(lnd)&',limlis='&str$(limlis)
@@ -240,7 +240,7 @@ def fn_add_combo_option_list(key$*81,txt$*81; reset_only)
 		setenv(acol_env_variable$,env$(acol_env_variable$)&'|'&txt$)
 	end if
 fnend
-def library fnFlexInit1(sfn$*100,lyne,ps,height,width,mat ch$; mat colMask$,seltype,usr,con,tabcon)
+def library fnFlexInit1(sfn$*100,lyne,ps,height,width,mat ch$; mat colMask$,seltype,usr,fraCon,tabcon)
 	! mat ch$		(column headers)=no more than 80 headers with 100 chrs each
 	! mat colMask$		(column mask)=(see mask chart in screen ace manual)
 	! seltype		0=editable cells,	 1=row selection,	 2=column selection
@@ -254,7 +254,7 @@ def library fnFlexInit1(sfn$*100,lyne,ps,height,width,mat ch$; mat colMask$,selt
 	dim hdrfile$*192,all_hdr$*6491,all_mask$*6491
 	dim optfile$*199
 	if usr=0 then grid_populated=0
-	! 
+	!
 	! if usr=0 then pr "USR=0-Replace"
 	! if usr>0 then pr "USR>0-Use Previous USR="&str$(usr)
 	! if usr<0 then pr "USR<0-append=-1		 USR="&str$(usr)
@@ -275,19 +275,15 @@ def library fnFlexInit1(sfn$*100,lyne,ps,height,width,mat ch$; mat colMask$,selt
 	hdr_count=udim(ch$) : hdrfile$=sfn$&".hdr"
 	if usr<>0 then goto USEPREVIOUS
 	XRETRY: ! !print "Retrying delete here! (If you see this twice)"
-	if exists(env$('temp')&'\acs\'&optfile$) then
-		fnFree(env$('temp')&'\acs\'&optfile$)
-	end if
+	fnFree(env$('temp')&'\acs\'&optfile$)
 
 	close #filenumber: ioerr ignore
-	if exists(env$('temp')&'\acs\'&hdrfile$)<>0 then
-		fnFree(env$('temp')&'\acs\'&hdrfile$)
-	end if
+	fnFree(env$('temp')&'\acs\'&hdrfile$)
 	USEPREVIOUS: !
 	if usr>0 and exists(env$('temp')&'\acs\'&optfile$) then
 		fnFlexInit1=1 : goto WRITE_TO_ACE
 	end if
-	! 
+	!
 	! ***	 test validity of some stuff **********
 	fnFlexInit1=555
 	fnmakesurepathexists(env$('temp')&'\acs\'&hdrfile$)
@@ -301,11 +297,11 @@ def library fnFlexInit1(sfn$*100,lyne,ps,height,width,mat ch$; mat colMask$,selt
 	pr #filenumber,using "Form pos 1,C "&str$(len(all_mask$)): all_mask$
 	close #filenumber:
 	! hdrfile name is expected by screen ace to be the same name as
-	! .	 ! optfile$ only with the added .hdr extenstion
+	!  	 ! optfile$ only with the added .hdr extenstion
 	if usr>0 and exists(env$('temp')&'\acs\'&optfile$)<>0 then
 		fnFlexInit1=1 : goto WRITE_TO_ACE
 	end if
-	! 
+	!
 	fnFlexInit1=0
 	! if exists(env$('temp')&'\acs\'&optfile$) then
 	! 	fnFree(env$('temp')&'\acs\'&optfile$)
@@ -313,7 +309,7 @@ def library fnFlexInit1(sfn$*100,lyne,ps,height,width,mat ch$; mat colMask$,selt
 	open #filenumber: "Name="&env$('temp')&'\acs\'&optfile$&",Size=0,Replace,EoL=CRLF,RecL=6491",d,o
 	WRITE_TO_ACE: !
 	sorttype=0
-	setenv('control'&str$(fn_controlCount),"FLEX|"&str$(lyne)&"|"&str$(ps)&"|"&str$(height)&"|"&str$(width)&"|2|"&str$(seltype)&"|"&str$(sorttype)&"|"&sfn$&"|"&str$(hdr_count)&"|"&str$(con)&"|"&str$(tabcon)&"|")
+	setenv('control'&str$(fn_controlCount),"FLEX|"&str$(lyne)&"|"&str$(ps)&"|"&str$(height)&"|"&str$(width)&"|2|"&str$(seltype)&"|"&str$(sorttype)&"|"&sfn$&"|"&str$(hdr_count)&"|"&str$(fraCon)&"|"&str$(tabcon)&"|")
 	usr=0
 	FLEXINIT1_COMPLETE: !
 fnend
@@ -475,7 +471,7 @@ def library fnAcs(mat resp$; &ckey, startfield,close_on_exit,parent_none,disable
 	! do we even need this line - it screws up other things.  Does removing it screw anything up?
 	! yeah it screws things up to take it out - repetative flex grids
 	fn_ace(sn$,unused,mat resp$,ckey,startfield,close_on_exit,parent_none,disabled_background)
-	
+
 	fnAcs=ckey ! r: (extra r colon because fna-s is also a folder closer)
 Xit: fnend
 ! r: fnA~S subordionate functions
@@ -600,7 +596,7 @@ Xit: fnend
 				else
 					curfld(grid_index,row_count)
 				end if
-		
+
 				grid_filter$=''
 				dim grid_row$(1)*10000
 				if not grid_populated then ! file_nonempty then ! if no rows have been populated, we have to create one
@@ -608,8 +604,8 @@ Xit: fnend
 					mat grid_row$(udim(ace_resp$))=("")
 					pr f gridspec$&",=": mat grid_row$
 				end if
-		
-		
+
+
 				! mat ace_io$(ace_io_count)
 				! mat ace_resp$(ace_io_count)
 				if udim(ace_io$)=2 then ! this is if the grid is the only control
@@ -661,7 +657,7 @@ Xit: fnend
 			fnend
 		def fn_draw_windows
 			Session_Rows=max(Session_Rows,ace_lyne_max+4)   : setenv('Session_Rows',str$(Session_Rows)) ! in case 35 rows is not enough
-		
+
 			Session_Cols=max(Session_Cols,ace_column_max+4) : setenv('Session_Cols',str$(Session_Cols)) ! in case 115 columns is not enough
 			if Session_Rows>35 or Session_Cols>115 or env$('cursys')='CM' then
 				if env$('force80x24')='Yes' then
@@ -676,7 +672,7 @@ Xit: fnend
 			dim borderText$*256
 			if env$('acsProduct')='' then borderText$='ACS 5 ' else borderText$=env$('acsProduct')&' '
 			if env$('enableClientSelection')='Yes' then borderText$&='- '&env$('client')&' '
-		
+
 			if session$(3:3)<>'1' then
 				borderText$&='(Session '&session$(len(session$):len(session$))&') '
 			end if
@@ -690,9 +686,9 @@ Xit: fnend
 			if env$('cursys')<>'CM' then
 				pr #0, border: borderText$
 			end if
-		
+
 			fn_companyName(0,Session_Cols) ! fn_companyName(0,Session_Cols,trim$(cap$(1:pos(cap$,'(')-1))) ! fnSystemNameFromAbbr$(cursys$))
-		
+
 			if not grid_present then
 				row=ceil((Session_Rows-ace_lyne_max)/2 )
 				col=ceil((Session_Cols-ace_column_max)/2 )
@@ -723,7 +719,7 @@ Xit: fnend
 			for tmp_combo_key_item=1 to tmp_combo_count_for_set
 				str2mat( env$('tmp_combo'&str$(tmp_combo_key_item)&'_key'),mat tmp_combo_key$,'|')
 				str2mat( env$('tmp_combo'&str$(tmp_combo_key_item)),mat tmp_combo_item$,'|')
-		
+
 				tck_response_item=val(env$('tmp_combo'&str$(tmp_combo_key_item)&'_response_item'))
 				tck_which=srch(mat tmp_combo_key$,trim$(resp$(tck_response_item))) ! do not turn this trim$ into a rtrm$ - it messes up in and out with same person selected during UB Customer 9/20/2018
 				if tck_which>0 and tck_which<=udim(mat tmp_combo_item$) then
@@ -930,7 +926,7 @@ in	clude: filenamesPushMixedCase
 					close #h_selectfile:
 				end if
 in	clude: filenamesPopUpperCase
-		
+
 			end if
 		fnend
 		def fn_reformatUserInput
@@ -1181,7 +1177,7 @@ def fn_ace_rd_frame
 	frames(udim(frames),2)=lyne+1
 	frames(udim(frames),3)=ps+1
 fnend
-def fn_ace_rd_flex(;___,index_,masknumber,masknumber)
+def fn_ace_rd_flex(;___,index_,masknumber)
 	lyne         	= val(control$(2))
 	ps           	= val(control$(3))
 	height      	= rows - lyne       ! val(control$(4))
@@ -1369,7 +1365,7 @@ fnend
 		mat _headings$(2:udim(_headings$))=_headings$(1:udim(_headings$)-1)
 		_headings$(1)="Combined"
 		mat _widths(udim(_headings$))=(0): mat _forms$(udim(_headings$))=('')
-	
+
 		open #grid_data=fnH: 'Name='&env$('temp')&'\acs\'&trim$(path1$)&'[SESSION].tmp',display,input
 		for count=1 to 1500
 			linput #grid_data: _line$ eof ignore
@@ -1685,15 +1681,15 @@ def fn_ace_rd_check(; ___,lyne,ps,align,txt$*256,container,tabcon,chk_disable,sp
 	end if
 fnend
 def fn_ace_rd_label(; ___,lbl_win)
-	lyne=val(control$(2))
-	ps=val(control$(3))
-	mylen=val(control$(4))
-	align=val(control$(5))
-	txt$=control$(6)
-	container=val(control$(7))
-	tabcon=val(control$(8))
-	font_mod=val(control$(9))
-	txt$=srep$(trim$(txt$),'&','')
+	lyne      	=val(control$(2))
+	ps        	=val(control$(3))
+	mylen     	=val(control$(4))
+	align     	=val(control$(5))
+	txt$      	=control$(6)
+	container	=val(control$(7))
+	tabcon    	=val(control$(8))
+	font_mod  	=val(control$(9))
+	txt$      	=srep$(trim$(txt$),'&','')
 	dim lbl_tooltip$*256
 	if udim(control$)>=10 then lbl_tooltip$=control$(10) else lbl_tooltip$=''
 	if txt$<>'' then
@@ -1746,11 +1742,11 @@ def fn_ace_rd_text(; ___,spec$*255)
 fnend
 	def fn_textMask$*255(mask$*255,lyne,ps,width,container,maxlen; ___,return$*255,mask)
 		mask=val(mask$) conv ignore
-	
+
 		if mask>1000 then mask-=1000
 		if mask>=1 and mask<=5 then
 			fn_dateTextBox(mask,lyne,ps,width,container,disable)
-	
+
 			return$="9/#PIC(--/--/--)" ! return$="9/DATE(m/d/y)"
 			if mask=1 then
 				resp$(respc)=lpad$(trim$(resp$(respc)),6,'0')
@@ -1771,9 +1767,9 @@ fnend
 				date_format$='dmy'
 				resp$(respc)=lpad$(trim$(resp$(respc)),6,'0')
 			end if
-	
+
 			resp$(respc)=date$(days(trim$(resp$(respc)),date_format$),'mdy')
-	
+
 		else if mask=9 then ! defaults 100 to 1.00
 			return$=str$(width)&"/#PIC("&rpt$('-',maxlen-3)&".--)"
 			resp$(respc)=str$(val(resp$(respc))/100)
@@ -1874,7 +1870,7 @@ fnend
 				return$=str$(width)&'/C '&str$(maxlen) ! left=default
 			end if
 		end if
-	
+
 		if disable then protected$='P' else protected$='T' ! either Protect the field or force it to be in the tab order
 		return$&= ','&protected$&'[textboxes]' &','&str$(txtbox_fkey)
 		return$=srep$(return$,'PIC(,','PIC(')
@@ -2036,14 +2032,14 @@ def library fnqgl(myline,mypos; qglcontainer,add_all_or_blank,forceGLsysIfPossib
 	if ~setup then fn_setup
 	if qgllength=0 then qgllength=35
 
-! the response$ for this - should be gotten with fnAGL
-! fnComboA("XXX",MYLINE,MYPOS,MAT OPT$,"Select from your Chart of Accounts ("&qgl_cursys$&").",WIDTH=35)
-! this function has an integrated fnComboA - similar to the one above
+	! the response$ for this - should be gotten with fnAGL
+	! fnComboA("XXX",MYLINE,MYPOS,MAT OPT$,"Select from your Chart of Accounts ("&qgl_cursys$&").",WIDTH=35)
+	! this function has an integrated fnComboA - similar to the one above
 
 	dim qglopt$*60
 	dim glmstr_form$*80
 	dim qgloption$(1)*255
-	
+
 	dim qglsetupkeycurrent$*128
 	dim qglsetupkeyprior$*128
 ! r: set qgl_cursys$ (for fnqgl purposes only)

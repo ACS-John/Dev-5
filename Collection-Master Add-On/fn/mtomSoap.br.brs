@@ -8,7 +8,7 @@ def fn_setup
 		dim folderOut$*256
 		folderOut$='C:\clsinc\MTOM SOAP\Out'
 		dim mtomSoapUtil$*256
-		mtomSoapUtil$=os_filename$('Collection-Master Add-On\mtomSoap.cmd') ! os_filename$(program$(1:pos(program$,'\',-1)-1))&'\mtomSoap.cmd'	! .exe'
+		mtomSoapUtil$=os_filename$('Collection-Master Add-On\mtomSoap.cmd') ! os_filename$(program$(1:pos(program$,'\',-1)-1))&'\mtomSoap.cmd'	!  exe'
 		
 		autoLibrary
 

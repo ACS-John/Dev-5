@@ -398,7 +398,7 @@ respc=0 : mat resp$=(''): lc=0: mylen=20: mypos=mylen+3
 fnLbl(lc+=1,1,"Payee # "&trim$(vn$)&" Invoice # "&trim$(iv$),50,0)
 fnLbl(lc+=2,1,"Job #:",mylen,1)
 ! fnTxt(LC,MYPOS,6,0,1,"",0,"Choose from the sub-category list.")
-! .  !  rESP$(RESPC+=1)=JN$
+!    !  rESP$(RESPC+=1)=JN$
 fncmbjob(lc,mypos)
 resp$(respc+=1)=jn$
 fnLbl(lc+=2,1,"Category #:",mylen,1)

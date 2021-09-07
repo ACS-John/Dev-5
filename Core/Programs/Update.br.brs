@@ -1,5 +1,5 @@
 ! S:\Core\Programs\Update
-	force_update=1
+force_update=1
 ! r: dims and constants
 	if ~setup then fn_setup
 ! dim message$(1)*256
@@ -13,7 +13,7 @@
 	grace_days=45
 	fnclient_support(mat system_id$,mat system_support_end_date,mat on_support,grace_days)
 ! /r
-	fnTop(program$,"ACS Update")
+fnTop(program$,"ACS Update")
 ! r: main loop
 	fnStatus('launching update')
 	if ~fn_simple_connectivity_test then

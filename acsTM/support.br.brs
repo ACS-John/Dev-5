@@ -100,12 +100,12 @@ BUILD_LAYOUT: !
 ! C$(CL,8)=limit to list option ('1'=Yes; '0'=No)
 	limit_to_list$='1'
 	cl=1 : c$(cl,1)='ComboF'
-	c$(cl,2)='S:\Core\Data\acsllc\Clmstr.h420'
+	c$(cl,2)='S:\Core\Data\acsllc\Client.h420'
 	c$(cl,3)='1' : c$(cl,4)='5'
 ! c$(cl,3)='1' : c$(cl,4)='6'
 	c$(cl,5)='6' : c$(cl,6)='30'
 ! c$(cl,5)='7' : c$(cl,6)='50'
-	c$(cl,7)='S:\Core\Data\acsllc\CLIndex.h420'
+	c$(cl,7)='S:\Core\Data\acsllc\Client-Idx.h420'
 	c$(cl,8)=limit_to_list$
 	cl=3 : c$(cl,1)='ComboF'
 	c$(cl,2)='S:\Core\Data\acsllc\Systems.h420'

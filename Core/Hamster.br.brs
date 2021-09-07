@@ -32,7 +32,7 @@ def library fnHamster(uw$*20,mat lbl$,mat fln,hIn,mat p$; mat flTyp$,mat sln,mat
 			mat control$(udim(incontrol$,1),udim(incontrol$,2))
 			mat control$=incontrol$
 		end if
-		if udim(startPos)<>itemCount then
+		if udim(mat startPos)<>itemCount then
 			startPos2(1)=1
 		else
 			startPos2(1)=startPos(1)
@@ -124,7 +124,7 @@ def library fnHamster(uw$*20,mat lbl$,mat fln,hIn,mat p$; mat flTyp$,mat sln,mat
 	! than I'll probably want to resurect and test this section
 			j=0 : mat keyorder=(0) : bowman=0
 			do while kps(hIn,j+=1)>0
-				for j=1 to udim(startPos2)
+				for j=1 to udim(mat startPos2)
 					if startPos2=kps(hIn,j) then keyorder(j)=bowman+=1
 				next j
 			loop
@@ -359,7 +359,10 @@ def library fnHamster(uw$*20,mat lbl$,mat fln,hIn,mat p$; mat flTyp$,mat sln,mat
 				rewrite #hIn,using tmp$,same,reserve: p$(j)
 				! pr 'Rewr$ - '&TMP$&"   P$("&STR$(J)&")="&P$(J)
 			end if
-			if crflag=1 then fltyp2$(j)="cr" : crflag=0
+			if crflag=1 then 
+				crflag=0
+				fltyp2$(j)="cr"
+			end if
 			if fltyp2$(j)="n" or fltyp2$(j)="pd" then
 				tmp$="Form Pos "&str$(startPos2(j))&","&fltyp2$(j)&" "
 				tmp$=tmp$&str$(sln2(j)) : t=val(p$(j))
@@ -373,7 +376,9 @@ def library fnHamster(uw$*20,mat lbl$,mat fln,hIn,mat p$; mat flTyp$,mat sln,mat
 		! pr 'Special Nokey routine' ! XXX
 		key$=""
 		read #hIn,using keyForm$,rec=pRec: mat blank$
-		for j=1 to udim(mat blank$) : key$&=blank$(j) : next j
+		for j=1 to udim(mat blank$)
+			key$&=blank$(j)
+		next j
 	continue  ! not Return  ! not Retry ! /r
 	Xit: !
 fnend

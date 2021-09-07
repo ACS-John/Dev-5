@@ -40,8 +40,8 @@
 		fl2$(j)=fl1$(j)
 	next j
 	enableEbilling=fnClient_has('EM')
-	open #hClient=fnH: "Name=S:\Core\Data\acsllc\CLmstr.h[cno],KFName=S:\Core\Data\acsllc\CLIndex.h[cno],Shr",i,i,k ! 1
-	! open #hClient2=fnH: "Name=S:\Core\Data\acsllc\CLmstr.h[cno],KFName=S:\Core\Data\acsllc\CLIndx2.h[cno],Shr",i,i,k ! 32
+	open #hClient=fnH: "Name=S:\Core\Data\acsllc\Client.h[cno],KFName=S:\Core\Data\acsllc\Client-Idx.h[cno],Shr",i,i,k ! 1
+	! open #hClient2=fnH: "Name=S:\Core\Data\acsllc\Client.h[cno],KFName=S:\Core\Data\acsllc\CLIndx2.h[cno],Shr",i,i,k ! 32
 ! /r
 REGULAR_ENTRY: ! r:
 	open #hTmpInvoice=fnH: "Name=S:\Core\Data\acsllc\tmpInvoice.h[cno],RecL=4675,Replace",i,outi,r

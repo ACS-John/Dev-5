@@ -11,7 +11,7 @@ namtab=66-int(len(rtrm$(env$('cnam')))/2)
 fnRead30Categories(mat cat$)
 open #8: "Name=S:\Core\Data\acsllc\pedate.h[cno],RecL=20,use,Shr",i,outi,r
 if lrec(8)=0 then write #8,using "form pos 1,n 6": d1 else read #8,using "form pos 1,n 6",rec=1,release: dat
-open #1: "Name=S:\Core\Data\acsllc\CLmstr.h[cno],KFName=S:\Core\Data\acsllc\CLIndex.h[cno],Shr",i,i,k ioerr Ertn
+open #1: "Name=S:\Core\Data\acsllc\Client.h[cno],KFName=S:\Core\Data\acsllc\Client-Idx.h[cno],Shr",i,i,k ioerr Ertn
 open #2: "Name=S:\Core\Data\acsllc\TMTRAddr.h[cno],Shr",i,i,r ioerr Ertn
 open #3: "Name=S:\Core\Data\acsllc\TMTRANS.h[cno],Shr",i,i,r ioerr Ertn
 open #4: "Name=S:\Core\Data\acsllc\EMmstr.h[cno],KFName=S:\Core\Data\acsllc\EMIndex.h[cno],Shr",i,i,k ioerr Ertn

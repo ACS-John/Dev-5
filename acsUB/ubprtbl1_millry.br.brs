@@ -172,7 +172,7 @@ SCREEN3: ! r:
 	a$=lpad$(trim$(resp$(1)(1:10)),10)
 	if trim$(a$)="" then goto F5_CANCEL
 	read #1,using L650,key=a$: z$,mat e$,f$,a3,mat b,final,mat d,bal,f,mat g,bra,mat gb,route,use_alt nokey SCREEN3
-goto HERE ! ./r
+goto HERE !  /r
  
 SORT1: ! r: SELECT & SORT
 	open #5: "Name=[Q]\UBmstr\Cass1.h[cno],KFName=[Q]\UBmstr\Cass1Idx.h[cno],Shr",i,i,k ioerr L1410
