@@ -946,7 +946,7 @@ ServiceScreen: ! r:
 				fnLbl(srvLine+=1,1,"Prior Reading:"  ,srvCol1len,1) : fnTxt(srvLine,srvCol2pos, 9,0,1,'20') : rateInfo$(respc+=1)=str$(d(6))
 				fnLbl(srvLine+=1,1,"Usage - Current:",srvCol1len,1) : fnTxt(srvLine,srvCol2pos, 9,0,1,'20') : rateInfo$(respc+=1)=str$(d(7))
 				fnLbl(srvLine+=1,1,"Usage - YTD:"    ,srvCol1len,1) : fnTxt(srvLine,srvCol2pos, 9,0,1,"20") : rateInfo$(respc+=1)=str$(d(8))
-				if srv$(service_code)="EL" then  ! .    ! skip rest of information on lawn meters
+				if srv$(service_code)="EL" then  !      ! skip rest of information on lawn meters
 					fnLbl(srvLine+=1,1,"Demand Reading:"   ,srvCol1len,1) : fnTxt(srvLine,srvCol2pos,9,0,1,"20") : rateInfo$(respc+=1)=str$(d(15))
 					fnLbl(srvLine+=1,1,"Demand Multiplier:",srvCol1len,1) : fnTxt(srvLine,srvCol2pos,9,0,1,"33") : rateInfo$(respc+=1)=str$(d(14)*.001)
 					fnLbl(srvLine+=1,1,"Average Usage:"    ,srvCol1len,1) : fnTxt(srvLine,srvCol2pos,9,0,1,"20") : rateInfo$(respc+=1)=str$(extra(9))

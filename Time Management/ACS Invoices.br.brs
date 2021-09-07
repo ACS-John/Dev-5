@@ -23,7 +23,7 @@ execute 'sy "C:\ACS\Util\Dev-5 Commit.cmd"'
 ! /r
 ! r: main loop (produceInvoices)
 	fnStatus('producing Invoice Archive...')
-	open #hClient=fnH: 'Name=S:\Core\Data\acsllc\CLmstr.h[cno],KFName=S:\Core\Data\acsllc\CLIndex.h[cno],Shr',i,i,k
+	open #hClient=fnH: 'Name=S:\Core\Data\acsllc\Client.h[cno],KFName=S:\Core\Data\acsllc\Client-Idx.h[cno],Shr',i,i,k
 	! pr 're-indexing support, just in case - probably not necessary to do so often, but one time there was this problem.'
 	! fnIndex('S:\Core\Data\acsllc\support.h[cno]','S:\Core\Data\acsllc\support-idx.h[cno]','1/7,6/2')
 	open #hSupport=fnH: 'Name=S:\Core\Data\acsllc\Support.h[cno],KFName=S:\Core\Data\acsllc\support-idx.h[cno],Shr',i,i,k
@@ -342,7 +342,7 @@ def fn_combineIntoTmSht(file_from$*256; ___,tce_key$,wo_desc$*30,h_from,h_to,toI
 		
 		if b8$='20' then b8$='19' ! ALL PRINTING SUPPORT IS COVERED BY CORE
 		
-		tce_key$=rpad$(inp1$,5)&lpad$(b8$,2)&cnvrt$('N 6',inp6) ! ...=cnvrt$('N 5',inp1$)&...
+		tce_key$=rpad$(inp1$,5)&lpad$(b8$,2)&cnvrt$('N 6',inp6) !  ..=cnvrt$('N 5',inp1$)&...
 		read #h_to,using F_timeTc,key=tce_key$: toInp3,toInp5 nokey CitAdd
 		inp3+=toInp3 ! time
 		inp5+=toInp5 ! charge
@@ -447,9 +447,9 @@ def fn_mergeInvoices
 	dim inv_amt(30)
 	dim ct(30)
 	dim tmwk2_sc$(30)
-	open #h_artrans=fnH:  'Name=S:\Core\Data\acsllc\ARTrans.h[cno],Shr',i,outi,r
+	open #h_artrans=fnH:  'Name=S:\Core\Data\acsllc\Transactions.h[cno],Shr',i,outi,r
 	open #h_tmtrans=fnH:  'Name=S:\Core\Data\acsllc\TMTRANS.h[cno],Shr',i,outi,r
-	open #h_clmstr=fnH:   'Name=S:\Core\Data\acsllc\CLmstr.h[cno],KFName=S:\Core\Data\acsllc\CLIndex.h[cno],Shr',internal,outIn,keyed
+	open #h_clmstr=fnH:   'Name=S:\Core\Data\acsllc\Client.h[cno],KFName=S:\Core\Data\acsllc\Client-Idx.h[cno],Shr',internal,outIn,keyed
 	open #h_tmtraddr=fnH: 'Name=S:\Core\Data\acsllc\TMTRAddr.h[cno],Shr',i,outi,r
 	do  ! r: main loop
 		READ_TMWK: !

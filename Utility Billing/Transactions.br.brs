@@ -636,7 +636,7 @@ def fn_flextran(myline,mypos; hTrans,z$,begdate,enddate,selcode)
 	do
 		READ_UBTRANSVB: !
 		read #hTrans,using 'Form POS 1,C 10,N 8,N 1,12*PD 4.2,6*PD 5,PD 4.2,N 1': transAcct$,tdate,tcode,tamount,mat tg,wr,wu,er,eu,gr,gu,tbal,pcode eof FlexTranFinis
-		if lpad$(transAcct$,10)<>lpad$(z$,10) and trim$(z$)<>'' then goto FlexTranFinis ! .     ! not same account
+		if lpad$(transAcct$,10)<>lpad$(z$,10) and trim$(z$)<>'' then goto FlexTranFinis !       ! not same account
 		if selcode>1 and tcode<>selcode-1 then goto READ_UBTRANSVB
 		if begdate>20000000 and tdate<begdate then goto READ_UBTRANSVB
 		if enddate>20000000 and tdate>enddate then goto READ_UBTRANSVB

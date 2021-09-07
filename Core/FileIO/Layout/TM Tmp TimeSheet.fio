@@ -2,7 +2,7 @@
 [Temp]\TmSht-idx[session] ,  clientId
 recl=86
 ===================================================
-clientId  	,Client Key    		,c   5    	,                 , ! pos=1     aka=inp(1),ipx(1)   combof(ignored,S:\Core\Data\acsllc\CLmstr.h[cno],1,5,6,30,S:\Core\Data\acsllc\CLIndex.h[cno],1)
+clientId  	,Client Key    		,c   5    	,                 , ! pos=1     aka=inp(1),ipx(1)   combof(ignored,S:\Core\Data\acsllc\Client.h[cno],1,5,6,30,S:\Core\Data\acsllc\Client-Idx.h[cno],1)
 empId     	,Employee Key  	,n   9    	,                 , ! pos=6     aka=inp(2)
 sTime     	,Time Spent    		,pd  3.2  	,                 , ! pos=15    aka=inp(3)  decimal format (i.e. 30 min=0.5 hours)
 hourlyRate	,Hourly Rate    	,pd  3.2  	,                 , ! pos=18    aka=inp(4)

@@ -301,7 +301,7 @@ EDIT_REC: ! r:
 	fncmbact(2,27)
 	resp$(resp_account:=respc+=1)=x$&"  "&nam$
 
-	if uprc$(escrow$)="Y" then transAmount+=escrow : escrow=0 ! .   ! .    ! add escrow amount back into payment amount before edit
+	if uprc$(escrow$)="Y" then transAmount+=escrow : escrow=0 !     !      ! add escrow amount back into payment amount before edit
 
 	fnLbl(3,1,"Amount:",25,1)
 	fnTxt(3,27,9,0,0,"10")
@@ -344,7 +344,7 @@ EDIT_REC: ! r:
 	rcpt$         =trim$(resp$(resp_receiptNumber))
 	if uprc$(escrow$)="Y" then escrow=fn_checkEscrow(escrowbal,mat gb,x(2),possibleServiceCount) ! check escrow balance
 	if ~fn_breakdown(hCustomer1,h_budmstr,x1$,havebudget, mat tgb, mat alloc,mat baOrder,ckey) then goto ScreenSelectAccount
-	if uprc$(escrow$)="Y" then transAmount=transAmount-escrow ! .   ! .    ! subtract escrow amount from  payment amount before rewriting
+	if uprc$(escrow$)="Y" then transAmount=transAmount-escrow !     !      ! subtract escrow amount from  payment amount before rewriting
 	rewrite #hTransUnposted,using F_ubColInp,rec=edrec: x$,transAmount,transDate,transType,postingCodeUnused,rcpt$,mat alloc,mat bd3,escrow
 	! If BUD1=1 Then Gosub Bud2 : Gosub Bud1
 	L2590: !

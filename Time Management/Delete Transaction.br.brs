@@ -56,7 +56,7 @@ do ! main loop
 			gosub DeleteTransaction
 			needToRnta=1
 		else if ckey=ck_rnta then
-			fnReassignNTA('S:\Core\Data\acsllc\ARTrans.h[cno]','Form pos 1,C 5','Form Pos 58,PD 3')
+			fnReassignNTA('S:\Core\Data\acsllc\Transactions.h[cno]','Form pos 1,C 5','Form Pos 58,PD 3')
 			needToRnta=0
 		end if
 	end if
@@ -143,7 +143,7 @@ DeleteTransaction: ! r: requires selectedRecord
 return ! /r
 Finis: ! r:
 	if needToRnta then
-		fnReassignNTA('S:\Core\Data\acsllc\ARTrans.h[cno]','Form pos 1,C 5','Form Pos 58,PD 3')
+		fnReassignNTA('S:\Core\Data\acsllc\Transactions.h[cno]','Form pos 1,C 5','Form Pos 58,PD 3')
 		needToRnta=0
 	end if
 goto Xit ! /r

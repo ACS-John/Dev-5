@@ -8,10 +8,10 @@
 ! r: Notes on options
 	!
 	! Dir$=Directory to Read
-	! .            does not require but will accept a \ on the end
+	!              does not require but will accept a \ on the end
 	! filename$(x)=file names (includes path if /s option is used)
 	! option$: /s or /o-g or what ever you want use "dir /?"
-	! .        at dos prompt for complete list of options.
+	!          at dos prompt for complete list of options.
 	!    DIR /?  (from Windows 7 Home Premium)
 	! Displays a list of files and subdirectories in a directory.
 	! 

@@ -9,9 +9,9 @@ dim p$*5,iv$*12,tr(6),id$*20,sc1$(5),sc2$(9),hd$(2)*50
 dim flo4$(5),sc4$(5),ot4$(5),fli4$(5),q(3),gln1(3),gln2(3),otgl$(3)
 dim gl(10,4),fli1$(49),ot1$(49),pgl(3)
 fn_get_old_setup
-open #h_clmstr=9: "Name=S:\Core\Data\acsllc\CLmstr.h[cno],KFName=S:\Core\Data\acsllc\CLIndex.h[cno],Shr",i,i,k ioerr ERR_FILE
-open #11: "Name=S:\Core\Data\acsllc\CLmstr.h[cno],KFName=S:\Core\Data\acsllc\CLIndx2.h[cno],Shr",i,i,k ioerr ERR_FILE
-open #h_addr:=3: "Name=[Temp]\Addr.[Session],RecL=239,Replace",i,outi,r ioerr ERR_FILE
+open #h_clmstr=9: "Name=S:\Core\Data\acsllc\Client.h[cno],KFName=S:\Core\Data\acsllc\Client-Idx.h[cno],Shr",i,i,k ioerr ERR_FILE
+open #11: "Name=S:\Core\Data\acsllc\Client.h[cno],KFName=S:\Core\Data\acsllc\CLIndx2.h[cno],Shr",i,i,k ioerr ERR_FILE
+open #hTransBatch:=3: "Name=[Temp]\transBatch.[Session],RecL=239,Replace",i,outi,r ioerr ERR_FILE
 SCREEN_1: ! r:
 ! exec 'config dimonly'
 	dim file_import$*256,filter_date(2)
@@ -110,9 +110,9 @@ L1060: !
 	if cmdkey=2 then goto L920
 	if transaction_type<>3 then goto L1200
 	fli1$(4)="6,30,n 11.2,ut,n"
-	if sz=4 then gl(1,2)=gln1(2): gl(1,1)=gln1(1): gl(1,3)=tr(3)
-	if sz=3 then gl(1,1)=gln1(2): gl(1,2)=gln1(3): gl(1,3)=tr(3)
-	if sz=2 then gl(1,2)=gln1(2): gl(1,1)=gln1(1): gl(1,3)=gln1(3): gl(1,4)=tr(3)
+	! if sz=4 then gl(1,2)=gln1(2): gl(1,1)=gln1(1): gl(1,3)=tr(3)
+	! if sz=3 then gl(1,1)=gln1(2): gl(1,2)=gln1(3): gl(1,3)=tr(3)
+	! if sz=2 then gl(1,2)=gln1(2): gl(1,1)=gln1(1): gl(1,3)=gln1(3): gl(1,4)=tr(3)
 	if sz=5 then gl(1,1)=gln1(2): gl(1,2)=tr(3)
 L1180: !
 	rinput fields mat fli1$: p$,iv$,tr(1),tr(3),id$,tr(2),mat pgl,mat gl conv L1240
@@ -167,7 +167,7 @@ L1540: !
 	if vf=1 then goto L1670
 	r3=r3+1
 	tr(5)=transaction_type
-	write #h_addr,using f3$,rec=r3: p$,iv$,mat tr,id$,mat pgl,mat gl
+	write #hTransBatch,using f3$,rec=r3: p$,iv$,mat tr,id$,mat pgl,mat gl
 	p$=""
 	q2=0
 	goto SCREENS_TRANS_ENTRY_B
@@ -177,7 +177,7 @@ L1630: !
 	id$=" "
 	mat gl=(0)
 L1670: !
-	rewrite #h_addr,using f3$,rec=r1: p$,iv$,mat tr,id$,mat pgl,mat gl
+	rewrite #hTransBatch,using f3$,rec=r1: p$,iv$,mat tr,id$,mat pgl,mat gl
 	p$=""
 	goto SCREEN_ASK_REF_TO_FIX ! /r
 SCREEN_PROOF_TOTALS: ! r: old
@@ -209,7 +209,7 @@ def fn_print_proof_list
 	pr #255: tab(34);"Date     Amount             Description           Discount          Tr Code"
 	L1960: !
 	r=r+1
-	read #h_addr,using L2110,rec=r: p$,iv$,mat tr,id$ eof L2040,noRec L2040 ioerr ERR_FILE
+	read #hTransBatch,using L2110,rec=r: p$,iv$,mat tr,id$ eof L2040,noRec L2040 ioerr ERR_FILE
 	L2110: form pos 1,c 5,c 12,n 6,2*pd 5.2,pd 2,2*n 1,c 20
 	if ltrm$(p$)="0" or ltrm$(p$)="" then goto L1960
 	name$=""
@@ -227,7 +227,7 @@ SCREEN_ASK_REF_TO_FIX: ! r:
 	pr f "10,10,c 60": "Ref Number To Correct; (0 when Completed)"
 L2080: input fields "10,61,n 4,eu,n": r1 conv L2080
 	if r1=0 then goto SCREEN_ASK_ADD_MORE
-	read #h_addr,using f3$,rec=r1: p$,iv$,mat tr,id$,mat pgl,mat gl noRec SCREEN_ASK_REF_TO_FIX ioerr ERR_FILE
+	read #hTransBatch,using f3$,rec=r1: p$,iv$,mat tr,id$,mat pgl,mat gl noRec SCREEN_ASK_REF_TO_FIX ioerr ERR_FILE
 	if ltrm$(p$)="0" or ltrm$(p$)="" then goto SCREEN_ASK_REF_TO_FIX
 	transaction_type=tr(5)
 	if p><-1 then pt(1)=pt(1)-val(p$) conv L2150
@@ -282,42 +282,39 @@ def fn_get_old_setup
 	otgl$(1)="9,30,pic(zzz)"
 	otgl$(2)="9,34,pic(zzzzzz)"
 	otgl$(3)="9,41,pic(zzz)"
-	if i3=0 then goto L490
-	if i4=1 and i5=1 then goto L300
-	if i4=0 and i5=1 then goto L350
-	if i4=1 and i5=0 then goto L420
+	! if i3=0 then goto L490
+	! if i4=1 and i5=1 then goto L300
+	! if i4=0 and i5=1 then goto L350
+	! if i4=1 and i5=0 then goto L420
 	! NO DEPT    NO SUBACCOUNT
 	sz=5
 	gx=2
 	mat gl(10,2)=(0)
 	mat pgl(1)=(0)
 	gpx=1
-	goto L510
-	L300: ! YES DEPT   YES SUBACCOUNT
-	sz=2
-	gx=4
-	gpx=2
-	goto L510
-	L350: ! NO DEPT    YES SUBACCOUNT
-	sz=3
-	gx=3
-	mat gl(10,3)=(0)
-	mat pgl(2)=(0)
-	gpx=1
-	goto L510
-	L420: ! YES DEPT    NO SUB ACCOUNT
-	sz=4
-	gx=3
-	mat gl(10,3)=(0)
-	mat pgl(2)=(0)
-	gpx=2
-	goto L510
-	L490: ! NO GL TO BE ENTERED
-	sz=6
-	L510: !
-	open #1: "Name=S:\acsTM\TMSCRN.CL,Shr",i,i,r ioerr ERR_FILE
-	read #1,using 'form pos 1,c 255,142*c 18',rec=sz: ioerr ERR_FILE
-	close #1:
+	! goto L510
+	! L300: ! YES DEPT   YES SUBACCOUNT
+	! sz=2
+	! gx=4
+	! gpx=2
+	! goto L510
+	! L350: ! NO DEPT    YES SUBACCOUNT
+	! sz=3
+	! gx=3
+	! mat gl(10,3)=(0)
+	! mat pgl(2)=(0)
+	! gpx=1
+	! goto L510
+	! L420: ! YES DEPT    NO SUB ACCOUNT
+	! sz=4
+	! gx=3
+	! mat gl(10,3)=(0)
+	! mat pgl(2)=(0)
+	! gpx=2
+	! goto L510
+	! L490: ! NO GL TO BE ENTERED
+	! sz=6
+	! L510: !
 fnend
 def fn_get_next_line(&line$)
 	dim gnl_block$*512

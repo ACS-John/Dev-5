@@ -115,7 +115,7 @@ READ_EMPLOYEE: ! r:
 			gosub EXPORT_AMS
 			x$=''
 			! else if exportFormatID=2 then
-			!   gosub EXPORT_CPS !  ! removed access 01/03/2017
+			!   gosub EXPORT_CPS ! removed access 01/03/2017
 		else
 			gosub PrintW2
 		end if

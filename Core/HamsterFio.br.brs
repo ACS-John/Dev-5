@@ -1,11 +1,7 @@
-def fn_setup
-	if ~setup then
-		setup=1
-		autoLibrary
-		dim form$(0)*256
-		dim hfLabel$(0)*128
-	end if
-fnend
+pr 'this program ('&program$&') is not intended to be run directly.'
+end
+
+
 def library fnHamsterFio(fileid$*64)
 	if ~setup then fn_setup
 	dim defaultFileLayoutPath$*256
@@ -22,11 +18,13 @@ def library fnHamsterFio(fileid$*64)
 	dim hfDataAll$(0)*2048
 	hFile=fn_open(fileid$,mat hfData$,mat hfDataN,mat form$)
 	if hFile then
+		dim hfLabel$(0)*128
 		fn_hfLayoutRead(defaultFileLayoutPath$&fileid$&defaultFileLayoutExtension$,mat hfDataAll$,mat hfLabel$,mat hfFieldType$,mat hfStorageLen,mat hfMask,mat hfFieldLen)
 		! pause
 		fnHamster(fileid$,mat hfLabel$,mat hfFieldLen,hFile,mat hfDataAll$,mat hfFieldType$,mat hfStorageLen,mat hfMask,mat startingPosition,mat comboBox$)
 	end if
 fnend
+
 def fn_hfLayoutRead(hfLayoutFilename$*256,mat hfDataAll$,mat hfLabel$,mat hfFieldType$,mat hfStorageLen,mat hfMask,mat hfFieldLen)
 	dim line$*1024,hfItem$(0)*1024
 	open #hLay=fnH: 'name='&hfLayoutFilename$,d,i
@@ -74,7 +72,9 @@ def fn_hfLayoutRead(hfLayoutFilename$*256,mat hfDataAll$,mat hfLabel$,mat hfFiel
 				posComboF=pos(lwrc$(hfItem$(hamsterColumn)),' combof(') 
 				posComboA=pos(lwrc$(hfItem$(hamsterColumn)),' comboa(') 
 				
-				if posMask>0 then 
+				if hamsterColumn=5 and hfItem$(hamsterColumn-1)='date(mmddyy)' then 
+				
+				else if posMask>0 then 
 					! r: masked text box
 					posSpaceAfter=pos(hfItem$(hamsterColumn),' ',posMask+1)
 					! pr hfItem$(hamsterColumn) : pause
@@ -192,7 +192,24 @@ def fn_hfLayoutRead(hfLayoutFilename$*256,mat hfDataAll$,mat hfLabel$,mat hfFiel
 		end if
 	loop
 	hfEofhLay: !
+	
+	! r: build mat startingPosition from mat hfStorageLen
+		startingPosition(1)=1
+		mat startingPosition(udim(mat hfStorageLen))
+		for item=2 to udim(mat startingPosition)
+			startingPosition(item)=startingPosition(item-1)+int(hfStorageLen(item-1))
+		nex item
+	! /r
+	
+	
 	close #hLay:
+fnend
+
+def fn_setup
+	if ~setup then
+		setup=1
+		autoLibrary
+	end if
 fnend
 include: fn_open
 include: ertn

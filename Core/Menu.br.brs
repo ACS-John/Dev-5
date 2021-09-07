@@ -330,6 +330,12 @@ def fn_main
 			else if lwrc$(menu_option$(len(menu_option$):len(menu_option$)))='\' then ! it is a Folder - just open it
 				menu_option$=srep$(menu_option$,'%report_cache_folder_current%',fnReportCacheFolderCurrent$)
 				execute 'sy -c -w explorer "'&os_filename$(menu_option$(1:len(menu_option$)-1))&'"'
+			! else if trim$(menu_option$)='*UpdateFileIO*' then
+			! 
+			! 	pause
+			! 	setenv('ForceScreenIOUpdate','Yes')
+			! 	execute 'Proc R'
+			
 			else
 				pr 'menu_option$=';menu_option$
 			end if
@@ -460,6 +466,7 @@ def fn_main
 					fn_callUbCustomer(program_selection$)
 				else if lwrc$(ltrm$(program_selection$)(1:9))='employee:' and env$('cursys')='PR' then
 					fn_callPrEmployee(program_selection$)
+
 				else if program_selection$<>'' then
 					fn_chain('S:\'&trim$(program_selection$))
 				end if
@@ -974,6 +981,7 @@ def fn_displayMenu
 			fn_dm_add('  Standard and User','HamsterFio:CO Reg')
 			fn_dm_add('  System','HamsterFio:CO System Registry')
 			fn_dm_add(' FileIO','S:\Core\FileIO\File IO.br')
+			fn_dm_add(' Update FileIO','*UpdateFileIO*')
 			!   fn_dm_add(' FileIO (update and launch)','FileIO (update and launch)')
 			! fn_dm_add(' ScreenIO','ScreenIO')
 			! fn_dm_add(' -')

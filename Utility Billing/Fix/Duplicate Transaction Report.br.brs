@@ -1,57 +1,56 @@
- 
-	if ~setup_library then let fn_setup_library
-	on error goto Ertn
- 
-	dim z$*10,tg(11),resp$(10)*80
-	fnTop(program$,"Duplicate Transaction Report")
- 
-	open #fnH: "Name=[Q]\UBmstr\ubTransVB.h[cno],KFName=[Q]\UBmstr\ubTrIndx.h[cno],Shr",internal,outIn,keyed
-	open #fnH: "Name=[Q]\UBmstr\ubTransVB.h[cno],KFName=[Q]\UBmstr\UBTrdt.h[cno],Shr",internal,outIn,keyed
-	open #h_trans1=fnH: "Name=[Q]\UBmstr\ubTransVB.h[cno],Shr",i,i,r
-	open #h_trans2=fnH: "Name=[Q]\UBmstr\ubTransVB.h[cno],KFName=[Q]\UBmstr\ubTrIndx.h[cno],Shr",i,i,k
-	trans1_lrec=lrec(h_trans1)
-	Ftrans: form pos 1,c 10,n 8,n 1,12*pd 4.2,6*pd 5,pd 4.2,n 1
- 
-	del_dupe=1
- 
-	fnTos : respc=lc=0
-	fn_filter_add_chk('Account','True')
-	fn_filter_add_chk('Transaction Date','False')
-	fn_filter_add_chk('Amount','True')
-	fn_filter_add_chk('Transaction Code','True')
-	lc+=1
-	fnLbl(lc+=1,1,"Starting Record:",16,1)
-	fnTxt(lc,18,10,0,0,'30')
-	resp$(respc+=1)=str$(max(1,trans1_lrec-1000))
-	fnLbl(lc+=1,1,"Ending Record:",16,1)
-	fnTxt(lc,18,10,0,0,'30')
-	resp$(respc+=1)=str$(trans1_lrec)
-	fnCmdSet(2)
-	ckey=fnAcs(mat resp$)
-	if ckey=5 then goto Xit
-	respc=0
-	dupe(1)=fn_filter_get_chk('Account',resp$(respc+=1))
-	dupe(2)=fn_filter_get_chk('Transaction Date',resp$(respc+=1))
-	dupe(3)=fn_filter_get_chk('Amount',resp$(respc+=1))
-	dupe(4)=fn_filter_get_chk('Transaction Code',resp$(respc+=1))
-	rec_start=val(resp$(respc+=1))
-	rec_end=val(resp$(respc+=1))
-	fnopenprn
-	fn_header
-	! restore #h_trans1,rec=rec_start: noRec NEXT_REC
-	trans1_rec=rec_start-1
-	do
-		NEXT_REC: !
-		trans1_rec+=1
-		if trans1_rec>trans1_lrec or (rec_end>0 and rec_end<trans1_rec) then goto FINIS
-		read #h_trans1,using Ftrans,rec=trans1_rec: p$,tdate,tcode,tamount,mat tg,wr,wu,er,eu,gr,gu,tbal,pcode noRec NEXT_REC
-		pr trans1_rec
-		if fn_has_dupe then
-			pr #255,using FORM_OUT: trans1_rec,p$,tdate,tamount pageoflow PGOF
-			FORM_OUT: form n 8,x 1,c 10,x 1,x 1,pic(zzzz/zz/zz),n 11.2
-		end if  ! fn_has_dupe(z$)
-	loop
- 
+autoLibrary
+on error goto Ertn
+
+dim z$*10,tg(11),resp$(10)*80
+fnTop(program$,"Duplicate Transaction Report")
+
+open #fnH: "Name=[Q]\UBmstr\ubTransVB.h[cno],KFName=[Q]\UBmstr\ubTrIndx.h[cno],Shr",internal,outIn,keyed
+open #fnH: "Name=[Q]\UBmstr\ubTransVB.h[cno],KFName=[Q]\UBmstr\UBTrdt.h[cno],Shr",internal,outIn,keyed
+open #h_trans1=fnH: "Name=[Q]\UBmstr\ubTransVB.h[cno],Shr",i,i,r
+open #h_trans2=fnH: "Name=[Q]\UBmstr\ubTransVB.h[cno],KFName=[Q]\UBmstr\ubTrIndx.h[cno],Shr",i,i,k
+trans1_lrec=lrec(h_trans1)
+Ftrans: form pos 1,c 10,n 8,n 1,12*pd 4.2,6*pd 5,pd 4.2,n 1
+
+del_dupe=1
+
+fnTos : respc=lc=0
+fn_filter_add_chk('Account','True')
+fn_filter_add_chk('Transaction Date','False')
+fn_filter_add_chk('Amount','True')
+fn_filter_add_chk('Transaction Code','True')
+lc+=1
+fnLbl(lc+=1,1,"Starting Record:",16,1)
+fnTxt(lc,18,10,0,0,'30')
+resp$(respc+=1)=str$(max(1,trans1_lrec-1000))
+fnLbl(lc+=1,1,"Ending Record:",16,1)
+fnTxt(lc,18,10,0,0,'30')
+resp$(respc+=1)=str$(trans1_lrec)
+fnCmdSet(2)
+ckey=fnAcs(mat resp$)
+if ckey=5 then goto Xit
+respc=0
+dupe(1)=fn_filter_get_chk('Account',resp$(respc+=1))
+dupe(2)=fn_filter_get_chk('Transaction Date',resp$(respc+=1))
+dupe(3)=fn_filter_get_chk('Amount',resp$(respc+=1))
+dupe(4)=fn_filter_get_chk('Transaction Code',resp$(respc+=1))
+rec_start=val(resp$(respc+=1))
+rec_end=val(resp$(respc+=1))
+fnopenprn
+fn_header
+! restore #h_trans1,rec=rec_start: noRec NEXT_REC
+trans1_rec=rec_start-1
+do
+	NEXT_REC: !
+	trans1_rec+=1
+	if trans1_rec>trans1_lrec or (rec_end>0 and rec_end<trans1_rec) then goto FINIS
+	read #h_trans1,using Ftrans,rec=trans1_rec: p$,tdate,tcode,tamount,mat tg,wr,wu,er,eu,gr,gu,tbal,pcode noRec NEXT_REC
+	pr trans1_rec
+	if fn_has_dupe then
+		pr #255,using FORM_OUT: trans1_rec,p$,tdate,tamount pageoflow PGOF
+		FORM_OUT: form n 8,x 1,c 10,x 1,x 1,pic(zzzz/zz/zz),n 11.2
+	end if  ! fn_has_dupe(z$)
+loop
+
 FINIS: !
 	fncloseprn
 	close #h_trans1:
@@ -62,9 +61,6 @@ PGOF: ! r:
 	pr #255: newpage
 	fn_header
 continue ! /r
-def fn_setup_library
-	autoLibrary
-fnend  ! fn_setup_library
 def fn_has_dupe
 	hd_return=0
 	dim hd_tg(11)
@@ -107,7 +103,7 @@ def fn_has_dupe
 	fn_has_dupe=hd_return
 fnend  ! fn_has_dupe
 def library fntrans_delete(td_rec)
-	if ~setup_library then let fn_setup_library
+	autoLibrary
 	fntrans_delete=fn_trans_delete(td_rec)
 fnend
 def fn_trans_delete(td_rec)
@@ -164,9 +160,9 @@ def fn_trans_delete(td_rec)
 		next tb_item
 	end if
 	td_trans_amt=0
-	! .! rewrite #h_td_customer,using F_TB_CUSTOMER,key=td_customer_key$: tb_bal,mat tb_gb
+	! rewrite #h_td_customer,using F_TB_CUSTOMER,key=td_customer_key$: tb_bal,mat tb_gb
 	pr #255: 'would delete rec '&str$(td_rec)
-	! .! rewrite #h_td_trans1,using Ftrans,rec=td_rec: td_customer_key$,td_tdate,td_trans_code,td_trans_amt,mat tdt_tg,td_wr,td_wu,td_er,td_eu,td_gr,td_gu,td_tbal,td_pcode
+	! rewrite #h_td_trans1,using Ftrans,rec=td_rec: td_customer_key$,td_tdate,td_trans_code,td_trans_amt,mat tdt_tg,td_wr,td_wu,td_er,td_eu,td_gr,td_gu,td_tbal,td_pcode
 	TD_XIT: !
 fnend
 def fn_header

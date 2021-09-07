@@ -107,7 +107,7 @@ def fn_lexiLineNum(lextFileIn$*256,lextFileOut$*256)
 	open #2: "name="&lextFileOut$&",recl=800,replace",d,o
 	do
 		linput #1: string$ eof LexiDoneReading
-		if ~skipNextOne and (ltrm$(string$)(1:1)="!" and pos(string$,"!")>3) then string$(1:4)=" ! ."&ltrm$(string$(1:4))
+		if ~skipNextOne and (ltrm$(string$)(1:1)="!" and pos(string$,"!")>3) then string$(1:4)=" !  "&ltrm$(string$(1:4))
 		for constIndex=1 to udim(Mat const$)
 			if (constantPosition:=pos(Uprc$(string$),Uprc$(constantName$(constIndex)))) then
 				string$=string$(1:constantPosition-1)&const$(constIndex)&string$(constantPosition+len(constantName$(constIndex)):len(string$))

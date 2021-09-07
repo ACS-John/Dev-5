@@ -84,81 +84,100 @@ L840: sc$=lpad$(rtrm$(sc$),4)
 	read #1,using L880,key=sc$: sc$ nokey L910
 L880: form pos 1,c 4
 	pr f "5,35,c 30,h,n": "DUPLICATE SERVICE CODE NUMBER"
-	goto L730
-L910: write #1,using L570: sc$,ds$,th,sf
-	goto L390
-L930: pr newpage ! *****  FILE MAINT   *****
+goto L730
+L910: !
+	write #1,using L570: sc$,ds$,th,sf
+goto L390
+L930: !
+	pr newpage ! *****  FILE MAINT   *****
 	pr f "10,15,c 50,n": "ENTER SERVICE CODE NUMBER, ENTER 0 WHEN COMPLETED"
-L950: input fields "10,70,c 4,eu,n": scode$ conv L950
+L950: !
+	input fields "10,70,c 4,eu,n": scode$ conv L950
 	if ltrm$(rtrm$(scode$))="0" or rtrm$(scode$)="" then goto L260
 	scode$=lpad$(rtrm$(scode$),4)
 	read #1,using L570,key=scode$: sc$,ds$,th,sf nokey L950
 	holdsc$=sc$
-L1000: pr newpage
+L1000: !
+	pr newpage
 	pr f "2,13,c 45,n": "*** REVIEW SERVICE CODE RECORDS ***"
 	pr f "3,10,c 60,n": "ENTER SERVICE CODE NUMBER AS BLANK TO DELETE"
-	goto L620
-L1040: if ltrm$(sc$)="" or rtrm$(ltrm$(sc$))="0" then goto L1050 else goto L1160
-L1050: pr newpage
+goto L620
+L1040: !
+	if ltrm$(sc$)="" or rtrm$(ltrm$(sc$))="0" then goto L1050 else goto L1160
+L1050: !
+	pr newpage
 	pr f "10,10,c 60,n": "SERVICE CODE NUMBER "&holdsc$&" WILL BE DELETED"
 	pr f "12,10,c 40,n": "ENTER 1 TO DELETE; ENTER 2 TO RE-ENTER"
-L1080: input fields "12,55,n 1,eu,n": dcode conv L1080
+L1080: !
+	input fields "12,55,n 1,eu,n": dcode conv L1080
 	if dcode=1 then goto L1130
 	if dcode><2 then goto L1080
 	sc$=holdsc$
-	goto L1000
-L1130: delete #1,key=holdsc$:
+goto L1000
+L1130: !
+	delete #1,key=holdsc$:
 	new1=1
-	goto L930
+goto L930
 L1160: if holdsc$=sc$ then goto L1220
 	read #1,using L880,key=sc$: sc$ nokey L1190
-	goto L930
-L1190: delete #1,key=holdsc$:
+goto L930
+L1190: !
+	delete #1,key=holdsc$:
 	new1=1
-	goto L910
-L1220: rewrite #1,using L570,key=sc$: sc$,ds$,th,sf
+goto L910
+L1220: !
+	rewrite #1,using L570,key=sc$: sc$,ds$,th,sf
 	if oldti=2 then ti=2
 	oldti=0
-	goto L390
-L1260: pr newpage
+goto L390
+L1260: !
+	pr newpage
 	if process=1 then goto L1340
 	pr f "8,10,c 50,n": "POSITION PAPER FOR SERVICE CODE PROOF LIST"
 	pr f "12,10,c 25,n": "ENTER DATE FOR PROOF LIST"
-L1300: rinput fields "12,40,c 20,uE,n": dat$ conv L1300
+L1300: !
+	rinput fields "12,40,c 20,uE,n": dat$ conv L1300
 	namtab=66-int(len(rtrm$(env$('cnam')))/2)
 	dattab=66-int(len(rtrm$(dat$))/2)
 	pr newpage
-L1340: pr f "10,10,c 50,n": "PRINT SERVICE CODE PROOF LIST IN PROCESS"
+	L1340: !
+	pr f "10,10,c 50,n": "PRINT SERVICE CODE PROOF LIST IN PROCESS"
 	pr f "23,2,C 30,N": "Press F5 to stop"
 	on fkey 5 goto L1670
 	fnopenprn
-L1380: j=0
+L1380: !
+	j=0
 	eofc=0
-L1400: read #1,using L570: sc$,ds$,th,sf eof L1640
+L1400: !
+	read #1,using L570: sc$,ds$,th,sf eof L1640
 	j=j+1
 	pl$(1,j)=sc$
 	pl$(2,j)=ds$
 	pl$(3,j)=str$(th)
 	pl$(4,j)=str$(sf)
 	if j=3 then goto L1480
-	goto L1400
-L1480: if pcnt><0 then goto L1510
+goto L1400
+L1480: !
+	if pcnt><0 then goto L1510
 	pr #255,using L1500: date$,env$('cnam'),time$,"SERVICE CODE PROOF LIST",dat$
-L1500: form skip 3,pos 1,c 8,pos namtab,c 40,skip 1,pos 1,c 8,pos 55,c 24,skip 1,pos dattab,c 20,skip 2
-L1510: for i=1 to 4
+	L1500: form skip 3,pos 1,c 8,pos namtab,c 40,skip 1,pos 1,c 8,pos 55,c 24,skip 1,pos dattab,c 20,skip 2
+	L1510: !
+	for i=1 to 4
 		pr #255,using L1530: se$(i),pl$(i,1),pl$(i,2),pl$(i,3)
-L1530: form pos 1,c 25,pos 30,c 30,pos 65,c 30,pos 100,c 30,skip 1
+		L1530: form pos 1,c 25,pos 30,c 30,pos 65,c 30,pos 100,c 30,skip 1
 	next i
 	pr #255:
 	mat pl$=(" ")
 	if eofc=1 then goto L1670
 	pcnt=pcnt+1
 	if pcnt=11 then goto L1610
-	goto L1380
-L1610: pr #255: newpage
+goto L1380
+L1610: !
+	pr #255: newpage
 	pcnt=0
-	goto L1380
-L1640: if j=0 then goto L1670
+goto L1380
+L1640: !
+	if j=0 then goto L1670
 	eofc=1
 	goto L1480
 L1670: fncloseprn
@@ -170,16 +189,18 @@ L1700: close #1:
 L1730: execute "Index S:\Core\Data\acsllc\SCMSTR.h[cno]"&' '&"S:\Core\Data\acsllc\SCIndex.h[cno] 1 4 REPLACE DupKeys"
 	if i2=1 then chain "S:\acsTM\SVMAINT"
 	if t1=0 then goto L1770
-	chain "S:\acsTM\SVMAINT"
-L1770: goto Xit
-L1780: dim hlp$(20)*78,flh$(22)*18,a$*5
+chain "S:\acsTM\SVMAINT"
+L1770: !
+goto Xit
+L1780: ! r:
+	dim hlp$(20)*78,flh$(22)*18,a$*5
 	open #10: "Name=S:\acsTM\SC.HLP,Shr",i,outi,r
 	for j=1 to 20
 		flh$(j)=str$(j+2)&",2,C 78,U,N"
 	next j
 	flh$(21)="1,25,C 40,H,N"
 	flh$(22)="24,5,C 65,H,N"
-return
+return ! /r
 L1860: pr newpage
 	convc=currow-4
 	if convc<1 or convc>8 then convc=0: goto L1950

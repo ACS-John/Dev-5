@@ -54,8 +54,8 @@ scr2$(1)="CLIENT #S"
 scr2$(2)="AMOUNTS"
 scr2$(3)="CATEGORIES"
 scr2$(4)="SUB CATEGORIES"
-open #1: "Name=S:\Core\Data\acsllc\CLmstr.h[cno],KFName=S:\Core\Data\acsllc\CLIndex.h[cno],Shr",i,i,k
-open #11: "Name=S:\Core\Data\acsllc\CLmstr.h[cno],KFName=S:\Core\Data\acsllc\CLIndx2.h[cno],Shr",i,i,k
+open #1: "Name=S:\Core\Data\acsllc\Client.h[cno],KFName=S:\Core\Data\acsllc\Client-Idx.h[cno],Shr",i,i,k
+open #11: "Name=S:\Core\Data\acsllc\Client.h[cno],KFName=S:\Core\Data\acsllc\CLIndx2.h[cno],Shr",i,i,k
 open #2: "Name=S:\Core\Data\acsllc\TMWk2[acsUserId].h[cno]",i,outi,r ioerr L630
 close #2,free:
 L630: !

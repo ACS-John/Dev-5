@@ -57,7 +57,7 @@ def fn_setup
 			fnadd_one$(mat fileno$,'08-40042')
 			fnadd_one$(mat fileno$,'05-08528')
 			fnadd_one$(mat fileno$,'08-40079')
-			! ...  add more here ...
+			!  ..  add more here ...
 		! /r
  
 	end if

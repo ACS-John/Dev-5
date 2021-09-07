@@ -4,7 +4,7 @@ File
 >Client (TM - Hamster)                            ^ acsTM\client
 >>Client 420                                      ^ HamsterFio:*
 >>Prices                                          ^ HamsterFio:CO *
->Transactions (ARTrans - processed)               ^ acsTM\ARTrans
+>Transactions                                     ^ acsTM\*
 >>Delete Transaction                              ^ Time Management\*
 >>Transaction Code                                ^ HamsterFio:*
 >>Import Transactions from Mint CSV to Checkbook  ^ acsTM\arinput_import_csv
@@ -25,7 +25,7 @@ File
 >Contact                                          ^ HamsterFio:Contact         ^EM
 >TimeSheet                                        ^ HamsterFio:TimeSheet
 Daily
->Enter Time and Charges                           ^ acsTM\tminput
+>Enter Time and Charges                           ^ Time Management\*
 >Collections                                      ^ Time Management\*
 ! >Unbilled Work In Process                       ^ acsTM\tmunblwk
 ! >Productivity Report                            
