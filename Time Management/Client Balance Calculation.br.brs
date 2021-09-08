@@ -1,9 +1,10 @@
 fn_setup
+! enableDelete=1
 do
 	fnToS
 	dim resp$(10)*128
-	! (sfn$*100,lbuttonYNe,ps,width,df$*200,psk,lnk,psd,lnd; if$*200,limlis,urep,ttt$*200,contain,tabcon)
 	fnLbl(1,1,'Client:',lenCol1,1)
+	fnLbl(2,1,'(Use blank to summarize all without details)')
 	fncombof('',1,12,37,'S:\Core\Data\acsllc\Client.h[cno]',1,5,6,30, 'S:\Core\Data\acsllc\Client-Idx.h[cno]',0)
 	fnCmdSet(11)
 	ckey=fnAcs(mat resp$)
@@ -16,13 +17,13 @@ do
 loop until ckey=5
 goto Xit
 
-def fn_DoCalculation(; justOne$)
+def fn_DoCalculation(; justOne$,___,reportInitialized)
 	
 	! justOne$='960' ! 3045' ! client id or blank for all
 	
 	dim d$(0)*128
 	dim dN(0)
-	hTran=fn_open('TM Transaction',mat d$,mat dN,mat form$, 1)
+	hTran=fn_open('TM Transaction',mat d$,mat dN,mat form$, ~enableDelete)
 	! r: build mat client$ and mat balance from Transaction file
 	mat client$(0)
 	mat balance(0)
@@ -31,13 +32,18 @@ def fn_DoCalculation(; justOne$)
 		fnProgressBar(recCount+=1/lrec(hTran))
 		d$(tr_clientid)=trim$(d$(tr_clientid))
 		isValid=0 : if justOne$='' or d$(tr_clientid)=justOne$ then isValid=1
+		! if enableDelete and pos(',4660,4300,971,',','&d$(tr_clientid)&',')>0 then
+		! 	pr d$(tr_clientid)&' found to delete.'
+		! 	delete #hTran:
+		! end if
+		
 		if isValid then
 			which=srch(mat client$,d$(tr_clientid))
 			if which<=0 then
 				which=fnAddOneC(mat client$,d$(tr_clientid))
 				mat balance(which)
 			end if
-			if dN(tr_transCode)>=3 or dN(tr_transCode)=5 then balance(which)+=dN(tr_amt) else balance(which)-=dN(tr_amt) ! SIMPLEST WAY
+			if dN(tr_transCode)<=3 or dN(tr_transCode)=5 then balance(which)+=dN(tr_amt) else balance(which)-=dN(tr_amt) ! SIMPLEST WAY
 			if justOne$<>'' then
 				if ~reportInitialized then
 					reportInitialized=1
@@ -67,6 +73,7 @@ def fn_DoCalculation(; justOne$)
 	loop
 	EoHtran: !
 	close #hTran:
+	! if enableDelete then pause
 	! /r
 	! r: report findings
 	if reportInitialized then
@@ -91,6 +98,6 @@ def fn_DoCalculation(; justOne$)
 	fnClosePrn
 	! /r
 fnend
-xit: end ! fnXit
+xit: fnXit
 include: fn_open
 include: fn_Setup

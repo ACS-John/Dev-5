@@ -1,4 +1,5 @@
 ! *** TM - Time Management ***
+Client Balance Calculation ^ Time Management\*
 File
 >Transaction Hamster                              ^ HamsterFio:TM Transaction
 >Client (TM - Hamster)                            ^ acsTM\client
@@ -6,7 +7,7 @@ File
 >>Prices                                          ^ HamsterFio:CO *
 >Transactions                                     ^ acsTM\*
 >>Delete Transaction                              ^ Time Management\*
->>Transaction Code                                ^ HamsterFio:*
+>>TransactionType                                 ^ HamsterFio:*
 >>Import Transactions from Mint CSV to Checkbook  ^ acsTM\arinput_import_csv
 >Unbilled Transactions (TMTrans Hamster)          ^ acsTM\TMTrans
 >Support                                          ^ acsTM\*

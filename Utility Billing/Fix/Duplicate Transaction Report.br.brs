@@ -17,7 +17,7 @@ fnTos : respc=lc=0
 fn_filter_add_chk('Account','True')
 fn_filter_add_chk('Transaction Date','False')
 fn_filter_add_chk('Amount','True')
-fn_filter_add_chk('Transaction Code','True')
+fn_filter_add_chk('Transaction Type','True')
 lc+=1
 fnLbl(lc+=1,1,"Starting Record:",16,1)
 fnTxt(lc,18,10,0,0,'30')
@@ -32,7 +32,7 @@ respc=0
 dupe(1)=fn_filter_get_chk('Account',resp$(respc+=1))
 dupe(2)=fn_filter_get_chk('Transaction Date',resp$(respc+=1))
 dupe(3)=fn_filter_get_chk('Amount',resp$(respc+=1))
-dupe(4)=fn_filter_get_chk('Transaction Code',resp$(respc+=1))
+dupe(4)=fn_filter_get_chk('Transaction Type',resp$(respc+=1))
 rec_start=val(resp$(respc+=1))
 rec_end=val(resp$(respc+=1))
 fnopenprn
@@ -139,7 +139,7 @@ def fn_trans_delete(td_rec)
 		td_sign$='-' ! subtract it from balance
 	else
 		mat td_msg$(2)
-		td_msg$(1)='Unknown transaction code ('&str$(td_trans_code)&')'
+		td_msg$(1)='Unknown transaction type ('&str$(td_trans_code)&')'
 		td_msg$(2)='Transaction may not be deleted'
 		fnmsgbox(mat td_msg$,resp$,'',16)
 		goto TD_XIT

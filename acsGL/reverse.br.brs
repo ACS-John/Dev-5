@@ -17,7 +17,7 @@ MENU1: !
 	fnLbl(3,1,"Reference Number:",mylen,1)
 	fnTxt(3,mypos,12,0,1,"",0,"Enter the reference # of the adjustment to reverse a specific adjustment.",0 )
 	resp$(2)=s_rn$
-	fnLbl(4,1,"Transaction Code:",mylen,1)
+	fnLbl(4,1,"Transaction Type:",mylen,1)
 	fnTxt(4,mypos,1,0,1,"30",0,"If you wish to reverse all adjustments, you can enter a transaction code of 3.",0 )
 	resp$(3)=str$(s_tc)
 	fnChk(6,mypos,"Search History Also:",1)

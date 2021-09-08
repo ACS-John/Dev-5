@@ -182,7 +182,7 @@ def fn_transaction_conv(h_trans)
 		if sum(g)-g(10)=tamt or transcode=1 then g(10)=0 ! don't include penaltiies unless they are needed to total to the transaction amount
 		if transcode=2 and g(10)=tamt then g(1)=g(2)=g(3)=g(4)=g(5)=g(6)=g(7)=g(8)=g(9)=0 ! make sure all other charges are zero on penalty records where g(10) is the penalty field
 		fn_translate_transcode
-		if postcode=5 then goto READ_TRANS ! Skip all transaction code 5s.
+		if postcode=5 then goto READ_TRANS ! Skip all transaction type 5s.
 		if len(str$(tdate))<=6 then tdate=fndate_mmddyy_to_ccyymmdd(tdate)
 		if len(str$(fdate))<=6 then fdate=fndate_mmddyy_to_ccyymmdd(fdate)
  

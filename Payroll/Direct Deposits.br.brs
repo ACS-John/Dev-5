@@ -164,7 +164,7 @@ EntryDetailRecord: ! r: (6) entry detail
 	if ddN(dd_accType)=27 then
 		tc=22
 	else if ddN(dd_accType)=37 then
-		tc=32 ! BC ! Transaction Code used to be was TC=23
+		tc=32 ! BC ! Transaction Type used to be was TC=23
 	end if
 	ari=0 ! Addenda Record Indicator
 	tn1+=1

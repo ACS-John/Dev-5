@@ -2,7 +2,7 @@ on error goto Ertn
 autoLibrary
 fnTop(program$)
 fnStatus('Merging transactions...')
-pr ' entered '&program$ : pause
+! pr ' entered '&program$ : pause
 open #hClient=fnH: 'Name=S:\Core\Data\acsllc\Client.h[cno],KFName=S:\Core\Data\acsllc\Client-Idx.h[cno],Shr',internal,outIn,keyed
 FclientBal: form pos 283,pd 5.2
 open #hTrans=fnH: 'Name=S:\Core\Data\acsllc\Transactions.h[cno],Shr',i,outi,r
@@ -16,7 +16,7 @@ do ! r: main loop
 	dim tr(6)
 	dim id$*20
 	read #hTransBatch,using FtransBatch: clientId$,inv$,mat tr,id$ eof Finis
-	pr 'read transBatch clientId$='&clientId$ : pause
+	! pr 'read transBatch clientId$='&clientId$ : pause
 	if trim$(clientId$)='-1' then
 		fnStatus('client=-1 trans detected and skipped')
 	else if tr(6)=9 then
@@ -25,7 +25,7 @@ do ! r: main loop
 		read #hClient,using FclientBal,key=rpad$(trim$(clientId$),5): cBalance ! nokey NokeyClient 9/5/21 - i want to get errors if they happen here
 		inv$=lpad$(rtrm$(inv$),12)
 
-		if tr(5)>=3 or tr(5)=5 then cBalance+=tr(3) else cBalance-=tr(3) ! SIMPLEST WAY
+		if tr(5)<=3 or tr(5)=5 then cBalance+=tr(3) else cBalance-=tr(3) ! SIMPLEST WAY
 		! if tr(5)>=3 or tr(5)=5 then
 		! 	cBalance+-tr(3)
 		! else

@@ -105,7 +105,7 @@ DETAIL1: ! r:
 	pr #255,using L900: z$,e$(2),d2,bal pageoflow NEWPGE
 	L900: form pos 1,c 12,c 32,pic(zz/zz/zz),n 13.2,skip 1
 	t1=t1+bal
-	tc=bc ! TRANSACTION CODE
+	tc=bc ! Transaction Type
 	! l1=LEN(RTRM$(BA$))
 	! cD=VAL(BA$(L1:L1)) ! CHECK DIGIT
 	ari=0 ! ADDENDA RECORD INDICATOR

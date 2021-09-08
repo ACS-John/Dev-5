@@ -161,24 +161,31 @@ L1600: if ag2>=age(2) then e(3)=e(3)+tr3 else goto L1620
 L1620: if ag2>=age(1) then e(2)=e(2)+tr3 else goto L1640
 	goto L1790
 L1640: e(1)=e(1)+tr3
-	goto L1790
-L1660: if ar(5)=2 then goto L1690
+goto L1790
+L1660: ! r:
+	if ar(5)=2 then goto L1690
 	e(5)=e(5)-tr3
-	goto L1790
-L1690: tr3=-tr3
+goto L1790 ! /r
+L1690: ! r:
+	tr3=-tr3
 	ta1=ta(1)
-L1710: read #2,using L1720,rec=ta1: hv$,mm,dd,yy,tr5,cta 
-L1720: form pos 6,c 12,pos 18,3*n 2,pos 36,n 1,pos 58,pd 3
+	L1710: !
+	read #2,using L1720,rec=ta1: hv$,mm,dd,yy,tr5,cta 
+	L1720: form pos 6,c 12,pos 18,3*n 2,pos 36,n 1,pos 58,pd 3
 	if tr5=4 or tr5=6 then goto L1750
 	if iv$=hv$ then goto L1520
-L1750: if cta=0 then goto L1780
+	L1750: !
+	if cta=0 then goto L1780
 	ta1=cta
-	goto L1710
-L1780: e(5)=e(5)+tr3
-L1790: if nta=0 then goto L1820
+goto L1710 ! /r
+L1780: ! r:
+	e(5)=e(5)+tr3
+	L1790: !
+	if nta=0 then goto L1820
 	ta1=nta
-	goto L1490
-L1820: if e(5)>=0 then goto L1850
+goto L1490 ! /r
+L1820: ! r:
+	if e(5)>=0 then goto L1850
 	e(4)=e(4)+e(5)
 	e(5)=0
 	L1850: !
@@ -195,12 +202,12 @@ L1820: if e(5)>=0 then goto L1850
 	e(2)=0
 	if e(1)<0 then v6=v6+(-e(1))
 L1950: !
-return
-L1960: !
+return ! /r
+L1960: ! r:
 	mm=int(d1/10000)
 	dd=int((d1-mm*10000)/100)
 	yy=d1-(mm*10000+dd*100)
 	ag0=mo(mm)+dd+yy*365+int(yy/4)
 	if yy-int(yy/4)*4=0 and mm>2 then ag0=ag0+1
-return
+return ! /r
 include: ertn

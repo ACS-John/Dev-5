@@ -23,7 +23,7 @@ CLOSE_FILE: for j=1 to open_file_count : close #j: : next j : return
 !
 BUILD_LAYOUT: !
   lbl$(1)="Bank"
-  lbl$(2)="Transaction Code"
+  lbl$(2)="Transaction Type"
   lbl$(3)="Check/Reference Number"
   lbl$(4)="Check Date"
   lbl$(5)="Amount"

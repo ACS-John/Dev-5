@@ -6,7 +6,7 @@ recl=73
 gl          	,GL Account                   	, C 	12    	, ! pos 1   TR(1),TR(2),TR(3)
 tDate       	,Date MMDDYY                  	, N 	 6    	, ! pos 13  TR(4) MMDDYY
 Amt         	,Amount                       	, PD	 6.2  	, ! pos 19  TR(5)
-TranCode    	,Transaction Code             	, C 	 2    	, ! pos 25  TR(6)
+TranCode    	,Transaction Type             	, C 	 2    	, ! pos 25  TR(6)
 PostingCode 	,Posting Code                 	, C 	 2    	, ! pos 27  TR(7)
 Ref          	,Reference Number             	, C 	12    	, ! pos 29  TR$  
 Desc         	,Description                  	, C 	30    	, ! pos 41  TD$  
