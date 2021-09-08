@@ -191,7 +191,7 @@ L1660: !
 	close #1:
 	close #2:
 	L1680: !
-fnChain("S:\acsTM\TMMRGMAN")
+fnChain("S:\acsTM\Merge Pre-Printed Invoices")
 Xit: fnXit
 
 L1690: !
