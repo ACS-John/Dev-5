@@ -182,7 +182,7 @@ HDR: ! r:
 	pr #255: "           {\ul Customer Name}                 {\ul    Date    }     {\ul  Balance }        {\ul    Debits}   {\ul    Credits}      {\ul    Balance}"
 return  ! /r
 PRINT_INFO: !  r: If TAMOUNT=0 Then Goto 1460
-	if tcode<1 or tcode>5 then tcode=1 ! default to charge if no transaction code exits
+	if tcode<1 or tcode>5 then tcode=1 ! default to charge if no transaction type exits
 	t1(tcode)=t1(tcode)+tamount
 	st1(tcode)=st1(tcode)+tamount
 	! if q5=9 then goto L1230

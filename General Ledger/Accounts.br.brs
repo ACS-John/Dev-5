@@ -359,7 +359,7 @@ def fn_transactionGrid(isCurrent,gl$,h; ___,nta,recordnum,pc2,trgl$*12)
 	fnLbl(1,1,"Account:",mylen,1)     	: fnqglbig(1,mypos,0,2,1)            	: resp$(1)=fnrglbig$(trgl$) 	: holdgl$=gl$
 	fnLbl(2,1,"Date:",mylen,1)         	: fnTxt(2,mypos,10,0,1,"1",0,"",0)   	: resp$(2)=str$(tr(4))
 	fnLbl(3,1,"Amount:",mylen,1)      	: fnTxt(3,mypos,10,0,1,"10",0,"",0)  	: resp$(3)=str$(tr(5))
-	fnLbl(4,1,"Trans Code:",mylen,1)  	: fnTxt(4,mypos,2,0,1,"30",0,"Transaction Code - 1=Disbursment  2= Receipt  3= Adjustment",0)  	: resp$(4)=str$(tr(6))
+	fnLbl(4,1,"Trans Type:",mylen,1)  	: fnTxt(4,mypos,2,0,1,"30",0,"Transaction Type - 1=Disbursment  2= Receipt  3= Adjustment",0)  	: resp$(4)=str$(tr(6))
 	fnLbl(5,1,"Post Code:",mylen,1)   	: fnTxt(5,mypos,2,0,1,"30",0,"",0)   	: resp$(5)=str$(tr(7))
 	fnLbl(6,1,"ChkRef:",mylen,1)      	: fnTxt(6,mypos,12,0,1,"",0,"",0)    	: resp$(6)=tr$
 	fnLbl(7,1,"Description:",mylen,1) 	: fnTxt(7,mypos,30,0,0,"",0,"",0)    	: resp$(7)=td$

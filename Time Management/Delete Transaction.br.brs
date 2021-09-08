@@ -13,7 +13,7 @@ do ! main loop
 		heading$(5 )='Origional Amount  ' : mask$(5 )='32'
 		heading$(6 )='Amount            ' : mask$(6 )='32'
 		heading$(7 )='Salesman Id       ' : mask$(7 )='30'
-		heading$(8 )='Transaction Code  ' : mask$(8 )=''
+		heading$(8 )='Transaction Type  ' : mask$(8 )=''
 		heading$(9 )='Posting Code      ' : mask$(9 )='30'
 		heading$(10)='Inv Description   ' : mask$(10)=''
 		heading$(11)='Next Trans Address' : mask$(11)='30'
@@ -66,7 +66,7 @@ def fn_transDesc$(transCode; ___,return$,x)
 		transDesc_setup=1
 		dim tc$(0)*64
 		dim tcN(0)
-		hTcode=fn_open('TM Transaction Code',mat tc$,mat tcN,mat form$,1)
+		hTcode=fn_open('TM TransactionType',mat tc$,mat tcN,mat form$,1)
 		mat transCodes(0)
 		mat transDesc$(0)
 		do
@@ -75,7 +75,7 @@ def fn_transDesc$(transCode; ___,return$,x)
 			fnAddOneC(mat transDesc$,trim$(tc$(tc_desc)))
 		loop
 		EoTcode: !
-		fnCloseFile(hTcode,'TM Transaction Code')
+		fnCloseFile(hTcode,'TM TransactionType')
 	end if
 	x=srch(mat transCodes, transCode)
 	return$=transDesc$(x)
@@ -131,7 +131,7 @@ DeleteTransaction: ! r: requires selectedRecord
 		else if transN(tr_transCode)=6 then ! Credit Memo
 			clientN(client_balance)+=transN(tr_amt)
 		else
-			pr 'i do not know how to handle this transaction code'
+			pr 'i do not know how to handle this transaction type ('&str$(transN(tr_transCode))&')'
 			pause
 		end if
 		rewrite #hClient,using form$(hClient): mat client$,mat clientN

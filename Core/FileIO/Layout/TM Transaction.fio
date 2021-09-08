@@ -8,7 +8,7 @@ date        	,Date               	,n    6   	, date(mmddyy)	, ! SPos=18    aka=b
 amtOrigional	,Origional Amount  	,pd   5.2 	,              	, ! SPos=24    aka=amt,tr(2)
 amt          	,Amount             	,pd   5.2 	,              	, ! SPos=29    aka=amt,tr(3)
 salesmanId  	,Salesman Id        	,pd   2   	,              	, ! SPos=34    aka=tr(4)
-transCode   	,Transaction Code  	,n    1   	,              	, ! SPos=36    aka=tr(5)      ComboF(ignore,S:\Core\Data\TransactionCode.dat,1,1,2,40,S:\Core\Data\TransactionCode.idx)
+transCode   	,Transaction Type  	,n    1   	,              	, ! SPos=36    aka=tr(5)      ComboF(ignore,S:\Core\Data\TransactionCode.dat,1,1,2,40,S:\Core\Data\TransactionCode.idx)
 postCode    	,Posting Code      	,n    1   	,              	, ! SPos=37    aka=
 desc        	,Inv Description   	,c   20   	,              	, ! SPos=38    aka="CHARGE"
 nta         	,Next Trans Address	,pd   3   	,              	, ! SPos=58    aka=lar

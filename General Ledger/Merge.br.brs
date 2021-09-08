@@ -103,7 +103,7 @@ do ! r:  main loop - cycle through Merge file
 	
 	WRITE_NEW_BANKREC: !
 	bankgl$=glBank$
-	tcde=xn(1) ! transaction code
+	tcde=xn(1) ! transaction type
 	dim tr$(5)*35
 	tr$(1)  =lpad$(rtrm$(l$),8)  	! ref #
 	tr$(2)  =str$(xs)             	!  check date

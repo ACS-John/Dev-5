@@ -7,8 +7,6 @@ goto Xit
 def fn_updateSupportExpirationDate(; clientKey$*5)
 	
 	! r: open files
-		open #hClientKey =fnH: "Name=S:\Core\Data\acsllc\Client.h420,Version=0,KFName=S:\Core\Data\acsllc\Client-Idx.h420,Use,RecL=534,KPs=1,KLn=5,Shr",internal,outIn,keyed
-		open #hClientName=fnH: "Name=S:\Core\Data\acsllc\Client.h420,Version=0,KFName=S:\Core\Data\acsllc\CLIndx2.h420,Use,RecL=534,KPs=6,KLn=30,Shr",internal,outIn,keyed
 		! CO Support
 		open #hSupport   =fnH: "Name=S:\Core\Data\acsllc\Support.h420,Version=2,KFName=S:\Core\Data\acsllc\Support-Idx.h420,Use,RecL=246,KPs=1/7,KLn=6/2,Shr",internal,outIn,keyed
 		F_support: form pos 1,C 6,n 2,c 2,n 8,c 2,n 8,n 10
@@ -61,10 +59,8 @@ def fn_updateSupportExpirationDate(; clientKey$*5)
 	end if
 	! usedXit: !
 	! r: close files
-		close #hClientKey: ioerr ignore
-		close #hClientName: ioerr ignore
 		close #hSupport: ioerr ignore
-		hClientKey=hClientName=hSupport=0
+		hSupport=0
 	! /r
 fnend
 def fn_addSupportMsgLines$(mat msgText$)
