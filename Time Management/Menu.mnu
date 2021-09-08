@@ -33,7 +33,7 @@ Daily
 ! >>Employee                                      ^ acsTM\tmempprd
 ! >>Summary                                       ^ acsTM\tmempdpt
 ! >Zero Current Period                            ^ acsTM\emzercur
->Enter Pre-Printed Invoices                       ^ acsTM\tminpinv
+>Enter Pre-Printed Invoices                       ^ acsTM\*
 >Enter and Print Invoices                         ^ Time Management\*
 ! >Print Work Schedules                           ^ acsTM\tmwrksch
 ! >Print Messages                                 ^ acsTM\armessag
