@@ -1,0 +1,7 @@
+S:\Core\Data\TransactionCode.dat, tc_, 1
+S:\Core\Data\TransactionCode ,  code
+recl=41
+===================================================
+code     ,Type           ,N    1  
+desc     ,Description    ,c   18  
+
