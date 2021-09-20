@@ -37,9 +37,10 @@ def library fnInvoiceClose(invDate; filenameAddOn$*128)
 fnend
 def fn_invoiceClose(invDate; filenameAddOn$*128,___,invoiceFilenameBase$*64)
 	close #hClient:
+	close #hProvider:
 	close #hCollection:
 	close #hPrintCollection:
-	hClient=hCollection=hPrintCollection=0
+	hClient=hProvider=hCollection=hPrintCollection=0
 	setup_printInvoice=0
 
 	invoiceFilenameBase$='ACS Invoice '
@@ -68,20 +69,24 @@ def fn_printInvoice(actNum$,mat billTo$,invNum$,invDate,mat desc$,mat amt,pbal; 
 		dim c$(0)*256
 		dim cN(0)
 		hClient=fn_openFio('TM Client 420',mat c$,mat cN, 1)
+		dim p$(0)*256
+		dim pN(0)
+		hProvider=fn_openFio('CO Provider',mat p$,mat pN, 1)
 	end if
 	! forcePrintAcePdf=0
 	! disableRtf=1
 	! r: set cnam$ and cLogo$
 	actNum$=trim$(actNum$)
 	
-	dim provider$*11
 	read #hClient,key=rpad$(actNum$,kln(hClient)): mat c$,mat cN 
+	read #hProvider,key=c$(client_provider): mat p$,mat pN
 	dim cnam$*128
-	! cnam$=fnClientProvider$(actNum$)
+	cnam$=rtrm$(p$(provider_name))
+	dim cLogo$*128
+	cLogo$=p$(provider_logo)
 	c$(client_provider)=trim$(c$(client_provider))
 	if c$(client_provider)='css' then  ! Stern and Stern, Recoveries Unlimited and Peter Engler Designs
 		cnam$='Commercial Software Solutions LLC'
-		dim cLogo$*128
 		cLogo$='S:\Time Management\resource\cssLogo.png'
 	else if c$(client_provider)='acs' then 
 		cnam$='Advanced Computer Services LLC'
@@ -146,7 +151,16 @@ def fn_printInvoice(actNum$,mat billTo$,invNum$,invDate,mat desc$,mat amt,pbal; 
 	! return ! /r
 
 fnend
-
+! def fn_clientProvider$*128(client$*64; ___,return$*128) r:
+! 	if client$='ajj' then  ! American Jiu Jitsu of Maplewood
+! 		return$='John Bowman'
+! 	else if client$='4132' or client$='3670' or client$='ped' then  ! Stern and Stern, Recoveries Unlimited and Peter Engler Designs
+! 		return$='Commercial Software Solutions LLC'
+! 	else
+! 		return$='Advanced Computer Services LLC'
+! 	end if
+! 	fn_clientProvider$=return$
+! fnend /r
 def fn_lauraStyleInvoiceBody(out,cnam$*128,cLogo$*128,invNum$*12,actNum$,mat billTo$,pbal,mat desc$,mat amt; ___, totalAmt,pdfline$*151)
 	
 	staticSize=0

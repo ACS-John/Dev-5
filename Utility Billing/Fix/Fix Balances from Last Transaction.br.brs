@@ -4,7 +4,7 @@ fntop(program$)
 
 dim c$(0)*256
 dim cN(0)
-hCust=fn_open('UB Customer',mat c$,mat cN,mat form$)
+hCust=fn_openFio('UB Customer',mat c$,mat cN)
 dim t$(0)*256
 dim tN(0)
 hTran=fn_open('UB Transaction',mat t$,mat tN,mat form$)

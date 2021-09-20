@@ -423,10 +423,6 @@ def library fnMsExe$*256(l$)
 fnend
 ! /r
 ! r: Client
-	def library fnClientProvider$*128(client$*64)
-		library 'S:\Core\Client.br': fnClientProvider$
-		fnClientProvider$=fnClientProvider$(client$)
-	fnend
 	def library fnClientNameShort$(clientId$)
 		library 'S:\Core\Client.br': fnClientNameShort$
 		fnClientNameShort$=fnClientNameShort$(clientId$)

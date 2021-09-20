@@ -23,7 +23,7 @@ def fn_DoCalculation(; justOne$,___,reportInitialized)
 	
 	dim d$(0)*128
 	dim dN(0)
-	hTran=fn_open('TM Transaction',mat d$,mat dN,mat form$, ~enableDelete)
+	hTran=fn_openFio('TM Transaction',mat d$,mat dN, ~enableDelete)
 	! r: build mat client$ and mat balance from Transaction file
 	mat client$(0)
 	mat balance(0)
@@ -82,7 +82,7 @@ def fn_DoCalculation(; justOne$,___,reportInitialized)
 	end if
 	dim c$(0)*256
 	dim cN(0)
-	hClient=fn_open('TM Client 420',mat c$,mat cN,mat form$,1)
+	hClient=fn_openFio('TM Client 420',mat c$,mat cN,1)
 	fnOpenPrn
 	pr #255,using 'form pos 1,C 6,2*(x 2,Cr 18),x 2,C 40': 'Client','Calculated Balance','Current Balance','Client Name'
 	for item=1 to udim(mat client$)

@@ -20,7 +20,7 @@ do ! main loop
 	end if ! /r
 	fnflexinit1('tmTran',3,1,10,10,mat heading$,mat mask$) ! r: draw the flexgrid
 	dim trans$(0)*80,transN(0)
-	hTrans=fn_open('TM Transaction',mat trans$,mat transN,mat form$, 1)
+	hTrans=fn_openFio('TM Transaction',mat trans$,mat transN, 1)
  
 	dim item$(11)*128
 	do
@@ -66,7 +66,7 @@ def fn_transDesc$(transCode; ___,return$,x)
 		transDesc_setup=1
 		dim tc$(0)*64
 		dim tcN(0)
-		hTcode=fn_open('TM TransactionType',mat tc$,mat tcN,mat form$,1)
+		hTcode=fn_openFio('TM TransactionType',mat tc$,mat tcN, 1)
 		mat transCodes(0)
 		mat transDesc$(0)
 		do
@@ -86,7 +86,7 @@ def fn_clientName$*30(clientId$; ___,return$*30,x)
 		clientName_setup=1
 		dim client$(0)*256
 		dim clientN(0)
-		hClient=fn_open('TM Client 420',mat client$,mat clientN,mat form$,1)
+		hClient=fn_openFio('TM Client 420',mat client$,mat clientN, 1)
 		dim clientIds$(0)*5
 		mat clientIds$(0)
 		dim clientNames$(0)*30
@@ -113,10 +113,10 @@ DeleteTransaction: ! r: requires selectedRecord
 	mat mg$(0)
 	fnAddOneC(mat mg$,'Would you like to update the Client Balance?')
 	fnMsgBox(mat mg$,updateClientBalance$,'',mb_question+mb_yesno)
-	hTrans=fn_open('TM Transaction',mat trans$,mat transN,mat form$)
+	hTrans=fn_openFio('TM Transaction',mat trans$,mat transN)
 	read #hTrans,using form$(hTrans),rec=selectedRecord: mat trans$,mat transN
 	if updateClientBalance$='Yes' then
-		hClient=fn_open('TM Client 420',mat client$,mat clientN,mat form$)
+		hClient=fn_openFio('TM Client 420',mat client$,mat clientN)
 		read #hClient,using form$(hClient),key=trans$(tr_clientId),reserve: mat client$,mat clientN
 		if transN(tr_transCode)=1 then ! invoice
 			clientN(client_balance)-=transN(tr_amt)

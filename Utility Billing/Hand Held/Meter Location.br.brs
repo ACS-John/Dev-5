@@ -43,8 +43,8 @@ fnend
 
 def fn_populateLocationNonSeq
 	dim cus$(0)*256,cusN(0)
-	hCustomer=fn_open('UB Customer',mat cus$,mat cusN,mat form$)
-	hLocation=fn_open(table$,mat location$,mat locationN,mat form$, 0,1)
+	hCustomer=fn_openFio('UB Customer',mat cus$,mat cusN)
+	hLocation=fn_openFio(table$,mat location$,mat locationN, 0,1)
 	do
 		read #hCustomer,using form$(hCustomer): mat cus$,mat cusN eof PlnsEoCustomer
 		fnapplyDefaultRatesFio(mat cusN)
@@ -89,12 +89,12 @@ def fn_InitialializeMeterLocation
 	end if
 	if imlCreateNew or imlImportFromInfo then
 		fnAutomatedSavePoint('before U4 Initialize Meter Location')
-		hInfo=fn_open('UB Meter Info',mat info$,mat infoN,mat form$)
-		hLocation=fn_open(table$,mat location$,mat locationN,mat form$)
+		hInfo=fn_openFio('UB Meter Info',mat info$,mat infoN)
+		hLocation=fn_openFio(table$,mat location$,mat locationN)
 		fnCloseFile(hLocation,table$)
 		fnIndex('[Q]\UBmstr\MeterLocation.h[cno]','[Q]\UBmstr\MeterLocationIdx2.h[cno]', '12 30u')
 	end if
-	hLocation=fn_open(table$,mat location$,mat locationN,mat form$, 0,2)
+	hLocation=fn_openFio(table$,mat location$,mat locationN, 0,2)
 	fncreg_read('u4 meter location clean zeros from Location ID',umlCleanZeroLocationId$,'True')
 	fncreg_read('u4 meter location account numbers left justified',umlCustomerLeftJustified$,'False')
 	if ~imlCreateNew and umlCustomerLeftJustified$='False' or umlCleanZeroLocationId$='True' then
@@ -122,7 +122,7 @@ def fn_InitialializeMeterLocation
 	! no longer necessary         if exists('[Q]\UBmstr\MeterAddress.h[cno]') then
 	! no longer necessary         	! r: import UB Meter Address (and subordinate UB Meter Info data into U4 Meter Location)
 	! no longer necessary         		fnStatus('Initializing U4 Meter Location table...')
-	! no longer necessary         		hAddress=fn_open('UB Meter Address',mat addr$,mat addrN,mat form$, 0,2)
+	! no longer necessary         		hAddress=fn_openFio('UB Meter Address',mat addr$,mat addrN, 0,2)
 	! no longer necessary         		fnStatus('Record Count of UB Meter Address: '&str$(lrec(hAddress)))
 	! no longer necessary         		dim loacationRecordsAdded(11)
 	! no longer necessary         		mat loacationRecordsAdded=(0)
@@ -231,7 +231,7 @@ def fn_InitialializeMeterLocation
 fnend
 def fn_locationWrite(mat location$,mat locationN; leaveFileOpen) ! inherits local dim form$
 	if ~hLocation(1) then ! r:
-		hLocation(1)=fn_open(table$,mat location$,mat locationN,mat form$)
+		hLocation(1)=fn_openFio(table$,mat location$,mat locationN)
 		for lwIndex=2 to 5
 			hLocation(lwIndex)=hLocation(lwIndex-1)+1
 		nex lwIndex
@@ -411,7 +411,7 @@ fnend
 def fn_accountFromLocIdViaLocation$(locationId; leaveFileOpen)
 	aliReturn$=''
 	dim location$(0)*128,locationN(0)
-	if ~hAliLocation then hAliLocation=fn_open(table$,mat location$,mat locationN,mat form$, 1)
+	if ~hAliLocation then hAliLocation=fn_openFio(table$,mat location$,mat locationN, 1)
 	mat location$=('')
 	mat locationN=(0)
 	locationN(loc_locationId)=locationId
@@ -425,7 +425,7 @@ def fn_accountFromLocIdViaLocation$(locationId; leaveFileOpen)
 fnend
 def library fnLocationIdFromAccountAndServ$*30(account$*10,serviceId$*2; field$*14,leaveFileOpen)
 	if ~setup then fn_setup
-	if ~hLfaLocation then hLfaLocation=fn_open(table$,mat location$,mat locationN,mat form$, 1,4)
+	if ~hLfaLocation then hLfaLocation=fn_openFio(table$,mat location$,mat locationN, 1,4)
 	dim lfaReturn$*30
 	lfaReturn$=''
 	if field$='' then field$='LocationId'
@@ -479,7 +479,7 @@ fnend
 !    obosoluete    	if ~setup then fn_setup
 !    obosoluete    	if leaveFileOpen and hMaLocationByName<>0 then goto maliPastOpen
 !    obosoluete    	dim location$(0)*128,locationN(0),locationKey$*128
-!    obosoluete    	hMaLocationByName=fn_open(table$,mat location$,mat locationN,mat form$, 1,2)
+!    obosoluete    	hMaLocationByName=fn_openFio(table$,mat location$,mat locationN, 1,2)
 !    obosoluete    	maliPastOpen: !
 !    obosoluete    	locationN(loc_LocationID)=-1
 !    obosoluete    	read #hMaLocationByName,using form$(hMaLocationByName),key=rpad$(meterAddress$,KLN(hMaLocationByName)),release: mat location$,mat locationN nokey ignore
@@ -492,7 +492,7 @@ fnend
 def library fnMeterAddressName$*30(locationId; leaveFileOpen) ! returns the meterAddress$ for a provided LocationID
 	if ~setup then fn_setup
 	if leaveFileOpen and hMaLocationByLocationId<>0 then goto manPastOpen
-	hMaLocationByLocationId=fn_open(table$,mat location$,mat locationN,mat form$, 1)
+	hMaLocationByLocationId=fn_openFio(table$,mat location$,mat locationN, 1)
 	manPastOpen: !
 	locationN(loc_LocationID)=-1
 	read #hMaLocationByLocationId,using form$(hMaLocationByLocationId),key=cnvrt$('N 11',locationId),release: mat location$,mat locationN nokey ignore
@@ -545,7 +545,7 @@ fnend
 
 def library fnCustomerMeterLocationSelect(account$*10,serviceCode$*2) ! cmls
 	if ~setup then fn_setup
-	hCmlsLocation(1)=fn_open(table$,mat location$,mat locationN,mat form$)
+	hCmlsLocation(1)=fn_openFio(table$,mat location$,mat locationN)
 	for j=2 to 5 : hCmlsLocation(j)=hCmlsLocation(1)+j-1 : nex j
 	CmlsSelect: !
 	fntos(sn$='cmls'&account$) : respc=0

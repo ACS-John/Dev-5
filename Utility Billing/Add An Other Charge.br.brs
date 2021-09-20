@@ -23,7 +23,7 @@ fnend
 def fn_addAnOtherCharge(; z$*10,hCustomer1)
 	if ~hCustomer1 then
 		dim c$(0)*256,cN(0)
-		hCustomer1=fn_open('UB Customer',mat c$,mat cN,mat form$)
+		hCustomer1=fn_openFio('UB Customer',mat c$,mat cN)
 		needToCloseHcustomer1=1
 	else
 		needToCloseHcustomer1=0
@@ -100,7 +100,7 @@ goto SCR1 ! /r
 def fn_addTransaction(z$,serviceCode,tDate,amt,newBalance)
 	dim tran$(0)*256
 	dim tranN(0)
-	hTran=fn_open('UB Transaction',mat tran$,mat tranN,mat form$)
+	hTran=fn_openFio('UB Transaction',mat tran$,mat tranN)
 	mat tran$=('')
 	mat tranN=(0)
 	
@@ -163,9 +163,9 @@ fnend
 
 def fn_fixBadOnes(askFirst; ___,z$*10,whichDid,tranRec,justFixedIt,service_other,priorBal)
 	service_other=fnservice_other
-	hTran=fn_open('UB Transaction',mat tran$,mat tranN,mat form$)
+	hTran=fn_openFio('UB Transaction',mat tran$,mat tranN)
 	open #hTranRelative=fnH: 'name=[Q]\UBmstr\ubTransVB.h[cno],shr',i,outi,r
-	hCustomer1=fn_open('UB Customer',mat c$,mat cN,mat form$)
+	hCustomer1=fn_openFio('UB Customer',mat c$,mat cN)
 	mat tran$=('')
 	mat tranN=(0)
 	

@@ -13,7 +13,7 @@ def fn_customerData$*128(account$*10,fieldName$*40; leaveOpen,___,return$*128,wh
 		if ~hCustomer then
 			dim cus$(0)*256
 			dim cusN(0)
-			hCustomer=fn_open('UB Customer',mat cus$,mat cusN,mat form$, 1)
+			hCustomer=fn_openFio('UB Customer',mat cus$,mat cusN, 1)
 			! open #hCustomer=fnH: 'Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr',i,i,k
 		end if
 		dim account$*10
