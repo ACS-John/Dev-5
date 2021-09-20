@@ -300,6 +300,10 @@ def library fnProgressBarClose
 	fnProgressBarClose=fnCloseBar
 fnend
 
+def library fnReadLayoutHeader(layoutName$*255; &fileName$,mat key$,mat keyDescription$,leaveOpen,&prefix$)
+	library 'S:\Core\FileIO\fileio.br': fnReadLayoutHeader
+	fnReadLayoutHeader=fnReadLayoutHeader(layoutName$, fileName$,mat key$,mat keyDescription$,leaveOpen,prefix$)
+fnend
 def library fnFileioEnums(filename$*255; mat subs$)
 	library 'S:\Core\FileIO\fileio.br': fnMakeSubProc
 	fnFileioEnums=fnMakeSubProc(filename$, mat subs$)
@@ -335,6 +339,7 @@ def library fnReIndex(fileioLayout$*255; indexNum)
 fnend
 
 ! /r
+
 ! r: Confirm
 def library fnConfirm(Verb$*64; textAddition$*2048,Confirm_Dont_Ask_Again_Key$*28)
 	library 'S:\Core\Confirm.br': fnConfirm
@@ -418,6 +423,10 @@ def library fnMsExe$*256(l$)
 fnend
 ! /r
 ! r: Client
+	def library fnClientProvider$*128(client$*64)
+		library 'S:\Core\Client.br': fnClientProvider$
+		fnClientProvider$=fnClientProvider$(client$)
+	fnend
 	def library fnClientNameShort$(clientId$)
 		library 'S:\Core\Client.br': fnClientNameShort$
 		fnClientNameShort$=fnClientNameShort$(clientId$)
@@ -918,6 +927,12 @@ fnend
 	def library fnHamster2AddCombo(mat c$)
 		library 'S:\Core\Hamster_Setup.br': fnHamster2AddCombo
 		fnHamster2AddCombo=fnHamster2AddCombo(mat c$)
+	fnend
+! /r
+! r: FileIO + Screen Ace
+	def library fnComboFio(lyne,ps,layoutName$*128; limitToListorAddAll,whichIndex)
+		library 'S:\Core\ACS_Component.br': fnComboFio
+		fnComboFio=fnComboFio(lyne,ps,layoutName$, limitToListorAddAll,whichIndex)
 	fnend
 ! /r
 ! r: Screen Ace

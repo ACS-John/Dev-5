@@ -6,6 +6,9 @@
 ! /r doNotInclude
 ! openDataN_open (supressprompt:=2)
 dim form$(0)*2048
+def fn_openFio(table$*255,mat openData$, mat openDataN; inputOnly,indexNumber)
+	fn_openFio=fn_open(table$,mat openData$,mat openDataN,mat form$, inputOnly,indexNumber)
+fnend
 
 def fn_open(openTableName$*255, mat openData$, mat openDataN, mat openForm$; openInputOnly,openKeyNumber,openDisableEnumSort,openPath$*255,mat openDescription$,mat openFieldWidth, ___,openLetEnumItem,openReturn,openSupressPrompt)
 	library 'S:\Core\Library': fnOpenFile

@@ -1,4 +1,27 @@
-pr 'program not indended to be run directly'
+if env$('acsDeveloper')<>'' then
+	! r: test zone
+	fn_setup
+	testActNum$='ajj'
+	dim testBillTo$(3)*60
+	testBillTo$(1)='American Jiu Jitsu of Maplewood'
+	testBillTo$(2)='something Valley St'
+	testBillTo$(3)='Maplewood, NJ number'
+	testInvNum$='123456'
+	testInvDate=010101
+	dim testDesc$(2)*128,testAmt(2)
+	testDesc$(1)='something number one' : testAmt(1)=100.00
+	testDesc$(2)='something number two' : testAmt(2)=200.00
+	testPbal=12345.67
+	
+	fn_printInvoice(testActNum$,mat testBillTo$,testInvNum$,testInvDate,mat testDesc$,mat testAmt,testPbal)
+	fn_invoiceClose(invDate, 'test')
+	
+	pr 'NOTE: This test makes an email invoice which is not displayed. You can find it here:'
+	pr 'D:\ACS\Dev-5_Data\ACS\Report Cache\Time Management\Advanced Computer Services LLC (420)\Ebilling\'
+	! /r
+else
+	pr 'program not indended to be run directly'
+end if
 end
 
 def library fnInvoiceOpen
@@ -32,6 +55,7 @@ def fn_invoiceClose(invDate; filenameAddOn$*128,___,invoiceFilenameBase$*64)
 	end if
 	collectionPageCount=printCollectionPageCount=0
 fnend
+
 def library fnInvoiceAdd(actNum$,mat billTo$,invNum$,invDate,mat desc$,mat amt,pbal)
 	if ~setup then fn_setup
 	fnInvoiceAdd=fn_printInvoice(actNum$,mat billTo$,invNum$,invDate,mat desc$,mat amt,pbal)
@@ -42,15 +66,16 @@ def fn_printInvoice(actNum$,mat billTo$,invNum$,invDate,mat desc$,mat amt,pbal; 
 	! disableRtf=1
 	! r: set cnam$ and cLogo$
 	actNum$=trim$(actNum$)
-	if actNum$='4132' or actNum$='3670' or actNum$='ped' then  ! Stern and Stern, Recoveries Unlimited and Peter Engler Designs
+	dim cnam$*128
+	cnam$=fnClientProvider$(actNum$)
+	if cnam$='Commercial Software Solutions LLC' then  ! Stern and Stern, Recoveries Unlimited and Peter Engler Designs
 		isCss=1
-		dim cnam$*40
 		dim cLogo$*128
-		cnam$='Commercial Software Solutions LLC'
 		cLogo$='S:\Time Management\resource\cssLogo.png'
-	else
-		cnam$='Advanced Computer Services LLC'
+	else if cnam$='Advanced Computer Services LLC' then
 		cLogo$='S:\Core\Icon\bwLogo.jpg' ! 's:\acsTM\bwlogo2.jpg'
+	else if cnam$='John Bowman' then
+		cLogo$='S:\Core\Icon\John.png'
 	end if
 	! /r
 	!	gosub LauraStyleInvoiceBody
@@ -109,7 +134,7 @@ def fn_printInvoice(actNum$,mat billTo$,invNum$,invDate,mat desc$,mat amt,pbal; 
 
 fnend
 
-def fn_lauraStyleInvoiceBody(out,cnam$*40,cLogo$*128,invNum$*12,actNum$,mat billTo$,pbal,mat desc$,mat amt; ___, totalAmt,pdfline$*151)
+def fn_lauraStyleInvoiceBody(out,cnam$*128,cLogo$*128,invNum$*12,actNum$,mat billTo$,pbal,mat desc$,mat amt; ___, totalAmt,pdfline$*151)
 	
 	staticSize=0
 	

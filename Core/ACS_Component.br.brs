@@ -121,7 +121,39 @@ def fn_comboA(sfn$*256,lyne,ps,mat opt$; ttt$*200,width,contain,tabcon,comboa_co
 		width=contain=0
 	end if
 fnend
+
+def library fnComboFio(lyne,ps,layoutName$*128; limlis,whichIndex,ttt$*200, ___,sfn$*100,df$*200,if$*200,contain,tabcon,keyFormat$)
+	! limlis (limit to list)=0=no,	1=yes,	2=yes, but add a [all] option
+	if ~setup then fn_setup
+	dim keyList$(0)*256
+	dim keyDescription$(0)*256
+	fnReadLayoutHeader(layoutName$, df$,mat keyList$,mat keyDescription$) ! ,leaveOpen,prefix$)
+	if whichIndex=0 then whichIndex=1
+	if$=keyList$(whichIndex)
+	sfn$=trim$(layoutName$)(1:100)
+	! open #hTmp=fnH: 'name='&df$&',kfname='&if$,i,i,k
+	! psk=kps(hTmp,whichIndex)
+	! lnk=kln(hTmp,whichIndex)
+	! close #hTmp:
+	if layoutName$='TM Client 420' then
+		keyFormat$='C'
+		psk= 1 ! key position
+		lnk= 5 ! key length
+		psd= 6 ! description position         the name field
+		lnd=30 ! description length
+	else
+		pr ' currently fnComboFio does yet read position and key info for your layoutname - please add logic for it here'
+		pause
+	end if
+	
+	returnN=fn_comboF(sfn$,lyne,ps,width,df$,psk,lnk,psd,lnd, if$,limlis,0,ttt$,contain,tabcon,keyFormat$)
+	fnComboFio=returnN
+fnend
 def library fnComboF(sfn$*100,lyne,ps,width,df$*200,psk,lnk,psd,lnd; if$*200,limlis,urep,ttt$*200,contain,tabcon,keyFormat$)
+	if ~setup then fn_setup
+	fnComboF=fn_comboF(sfn$,lyne,ps,width,df$,psk,lnk,psd,lnd, if$,limlis,urep,ttt$,contain,tabcon,keyFormat$)
+fnend
+def fn_comboF(sfn$*100,lyne,ps,width,df$*200,psk,lnk,psd,lnd; if$*200,limlis,urep,ttt$*200,contain,tabcon,keyFormat$)
 	if env$('exitnow')='yes' then goto COMBOF_COMPLETE ! special processing to increase speed for exitnow
 	! add a combo box (populated from a file) to a screen ace form
 	if ~setup then fn_setup
@@ -1233,7 +1265,7 @@ def fn_ace_rd_flex(;___,index_,masknumber)
 	gridspec$(0:0)=window_prefix$
 	loading_spec$(0:0)=window_prefix$
 	! if env$('acsDeveloper')<>'' then pr 'just before grid headers' : pause !
-	pr f gridspec$&",headers,[gridheaders]" : (mat _headings$,mat _widths,mat _forms$)
+	pr f gridspec$&',headers,[gridheaders]' : (mat _headings$,mat _widths,mat _forms$)
 	open #grid_data=fnH: 'Name='&env$('temp')&'\acs\'&trim$(path1$)&'[SESSION].tmp',display,input
 	clearflag$="="
 
@@ -1254,7 +1286,7 @@ def fn_ace_rd_flex(;___,index_,masknumber)
 		if file(grid_data)<>0 then exit do
 		record_count += 1
 		if record_count=30000 then
-			value= msgbox( "30,000 records have been loaded. Do you wish to continue loading?", "Message", "YN", "INF")
+			value= msgbox( '30,000 records have been loaded. Do you wish to continue loading?', 'Message', 'YN', 'INF')
 			if value=3 then goto GRID_DATA_LOAD_COMPLETE
 		end if
 
@@ -1263,7 +1295,7 @@ def fn_ace_rd_flex(;___,index_,masknumber)
 			mat _chunks$(udim(_headings$)-1 )
 		end if
 
-		mat2str(mat _chunks$,_line$," ")
+		mat2str(mat _chunks$,_line$,' ')
 
 		for index_=1 to udim(mat alpha_mask_indices)
 			cell_value=val(_chunks$(alpha_mask_indices(index_))) conv BAD_NUMERIC_CELL
@@ -1280,19 +1312,20 @@ def fn_ace_rd_flex(;___,index_,masknumber)
 		! CHECK_JULIAN_DATES: ! Convert dates to julain format for BR internal date specs
 		dim datemask$
 		for index_=1 to udim(mat _mask$)
+			
 			masknumber=val(_mask$(index_)) conv NOT_JULIAN_DATE
 			if masknumber>=1000 then masknumber-=1000
 			if masknumber>=01 and masknumber<=05 then
 		!					if masknumber=01 then !		 date format : mm/dd/yy
-		!						datemask$="ccyymmdd" ! "mmddyy" ! Expected programs sending dates like mddyy
+		!						datemask$='ccyymmdd' ! 'mmddyy' ! Expected programs sending dates like mddyy
 		!					else if masknumber=02 then !		date format : mm/dd/ccyy
-		!						datemask$="ccyymmdd" ! "mmddccyy" ! Expected programs sending dates like mmddccyy
+		!						datemask$='ccyymmdd' ! 'mmddccyy' ! Expected programs sending dates like mmddccyy
 		!					else if masknumber=03 then !		date format : ccyy/mm/dd
-		!						datemask$="ccyymmdd"
+		!						datemask$='ccyymmdd'
 		!					else if masknumber=04 then !		date format : dd/mm/ccyy
-		!						datemask$="ccyymmdd" ! "ddmmccyy"
+		!						datemask$='ccyymmdd' ! 'ddmmccyy'
 		!					else if masknumber=05 then !		date format : dd/mm/yy
-				datemask$="ccyymmdd" ! "ddmmyy"
+				datemask$='ccyymmdd' ! 'ddmmyy'
 		!					end if
 		!					_chunks$(index_+1)=srep$(lpad$(_chunks$(index_+1),len(datemask$))," ","0") ! pause ! lpad with zeros to the right size
 				quick_len=len(trim$(srep$(_chunks$(index_+1),'/',''))) ! pr quick_len
@@ -1300,7 +1333,7 @@ def fn_ace_rd_flex(;___,index_,masknumber)
 				if quick_len=6 then _chunks$(index_+1)=date$(days(_chunks$(index_+1),'mmddyy'),'ccyymmdd') ! datemask$='mmddyy' else datemask$="ccyymmdd"! =str$(days(_chunks$(index_+1),datemask$)) ! Convert to julain date according to mask for data in expected format
 		!					pr _chunks$(index_+1),quick_len : pause ! =date$(days(_chunks$(index_+1),'mmddyy'),'ccyymmdd') ! datemask$='mmddyy' else datemask$="ccyymmdd"! =str$(days(_chunks$(index_+1),datemask$)) ! Convert to julain date according to mask for data in expected format
 				_chunks$(index_+1)=str$(days(_chunks$(index_+1),datemask$)) ! Convert to julain date according to mask for data in expected format
-			else if _mask$='glaccount' then
+			else if _mask$(index_)='glaccount' then
 				pr 'populating gl account' : pause
 			end if
 			NOT_JULIAN_DATE: ! Not a julian date field, leave it alone
