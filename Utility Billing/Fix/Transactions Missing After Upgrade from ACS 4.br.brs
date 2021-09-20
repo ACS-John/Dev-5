@@ -12,7 +12,7 @@ else
 	open #hOld=fnH: 'Name=@:C:\Program Files (x86)\ACS\UBmstr\UBTransVB.h1,Shr',internal,input
 end if
 dim tg(11)
-hTrans=fn_open('UB Transaction',mat t$,mat tN,mat form$)
+hTrans=fn_openFio('UB Transaction',mat t$,mat tN)
  
 	do
 		read #hOld,using 'Form POS 1,C 10,N 8,N 1,12*PD 4.2,6*PD 5,PD 4.2,N 1': p$,tdate,tcode,tamount,mat tg,wr,wu,er,eu,gr,gu,tbal,pcode eof EoOld
@@ -50,7 +50,7 @@ def fn_transAlreadyExist(p$,tdate,tcode,tamount; ___,returnN,taeKeyMatch)
 	if ~taeSetup then
 		taeSetup=1
 		dim tae$(0)*256,taeN(0)
-		hTaeTrans=fn_open('UB Transaction',mat tae$,mat taeN,mat form$,1,1)
+		hTaeTrans=fn_openFio('UB Transaction',mat tae$,mat taeN, 1,1)
 	end if
 	returnN=0
 	mat tae$=('')

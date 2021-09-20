@@ -1613,10 +1613,10 @@ def fn_meterInfo$*30(mi_field$,z$*10,serviceCode$; closeHandle,___,return$*30)
 		mi_setup=1
 		dim location$(0)*128
 		dim locationN(0)
-		hLocation=fn_open('U4 Meter Location',mat location$,mat locationN,mat form$, 1,4)
+		hLocation=fn_openFio('U4 Meter Location',mat location$,mat locationN, 1,4)
 		dim mt_data$(5)*40
 		dim mt_dataN(0)
-		mi_h_metertype=fn_open('U4 Meter Type',mat mt_data$,mat mt_dataN,mat form$, 1)
+		mi_h_metertype=fn_openFio('U4 Meter Type',mat mt_data$,mat mt_dataN, 1)
 	end if
 	return$=''
 	location$(loc_activeCustomer)=trim$(z$)
@@ -1690,7 +1690,7 @@ def fn_handHeldList(mat deviceName$; mat deviceOption$)
 		mat deviceNameCache$(0)
 		mat deviceOptionCache$(0)
 		dim hd$(0)*256,hdN(0)
-		hU4Device=fn_open('U4 Device', mat hd$,mat hdN,mat form$, 1)
+		hU4Device=fn_openFio('U4 Device', mat hd$,mat hdN, 1)
 		do
 			read #hU4Device,using form$(hU4Device): mat hd$,mat hdN eof EoU4Device
 			if hdN(device_disable)<>1 then
@@ -1735,7 +1735,7 @@ def fn_customerRead(; accountKey$,locationId) ! all values read are passed back 
 		LastLocationIdOnFileSetup=1
 		dim form$(0)*256
 		dim location$(0)*128,locationN(0)
-		hLocationByLocationID=fn_open('U4 Meter Location',mat location$,mat locationN,mat form$, 1)
+		hLocationByLocationID=fn_openFio('U4 Meter Location',mat location$,mat locationN, 1)
 		read #hLocationByLocationID,using form$(hLocationByLocationID),last: mat location$,mat locationN
 		close #hLocationByLocationID:
 		LastLocationIdOnFile=locationN(loc_LocationID)

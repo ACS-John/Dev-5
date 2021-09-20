@@ -1010,15 +1010,4 @@ def fn_client_is_converting(; ___,returnN)
 	fn_client_is_converting=returnN
 fnend
 
-def library fnClientProvider$*128(client$*64; ___,return$*128)
-	if client$='ajj' then  ! American Jiu Jitsu of Maplewood
-		return$='John Bowman'
-	else if client$='4132' or client$='3670' or client$='ped' then  ! Stern and Stern, Recoveries Unlimited and Peter Engler Designs
-		return$='Commercial Software Solutions LLC'
-	else
-		return$='Advanced Computer Services LLC'
-	end if
-	fnClientProvider$=return$
-fnend
-
 include: ertn No

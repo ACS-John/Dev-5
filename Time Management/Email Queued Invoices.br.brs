@@ -36,7 +36,7 @@ def fn_emailQueuedInvoices(email_date$; ___,pdfname$*255,pdfline$*1000,ppos,ppos
 	fnmakesurepathexists(fnReportCacheFolderCurrent$&'\Ebilling\Sent\')
 	dim contact$(0)*255
 	dim contactN(0)
-	hContact=fn_open("TM Contact",mat contact$,mat contactN,mat form$, 1,1)
+	hContact=fn_openFio("TM Contact",mat contact$,mat contactN, 1,1)
 
 	dim filename$(0)*256
 	fnGetDir2('fnReportCacheFolderCurrent$&"\Ebilling',mat filename$, '','Invoice*.pdf')

@@ -5,7 +5,9 @@
 	end
 ! /r doNotInclude
 ! openDataN_open (supressprompt:=2)
+
 dim form$(0)*2048
+
 def fn_openFio(table$*255,mat openData$, mat openDataN; inputOnly,indexNumber)
 	fn_openFio=fn_open(table$,mat openData$,mat openDataN,mat form$, inputOnly,indexNumber)
 fnend

@@ -28,8 +28,8 @@ dim l$(0)*128
 dim lN(0)
 dim c$(0)*256
 dim cN(0)
-hCustomer=fn_open('UB Customer',mat c$,mat cN,mat form$)
-hLocation=fn_open('U4 Meter Location',mat l$,mat lN,mat form$)
+hCustomer=fn_openFio('UB Customer',mat c$,mat cN)
+hLocation=fn_openFio('U4 Meter Location',mat l$,mat lN)
 dupCount=countWrite=0
 do
 	read #hCustomer,using form$(hCustomer): mat c$,mat cN eof EoCustomer

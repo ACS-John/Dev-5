@@ -60,7 +60,7 @@ if fnAskFileName(filename$,'open','*.txt;*.csv','Tab Delimited',env$('cap'))>0 t
 	! r: update the Meter Location table from mat col_account$ and mat col_meterNumber$ (and update mat used)
 		mat used(udim(mat col_account$))
 		dim location$(0)*256,locationN(0)
-		hLocation=fn_open('U4 Meter Location',mat location$,mat locationN,mat form$, 0,1)
+		hLocation=fn_openFio('U4 Meter Location',mat location$,mat locationN, 0,1)
 		hLocation4=hLocation+3
 		for x=1 to udim(col_account$)
 			mat location$=('')

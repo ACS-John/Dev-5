@@ -27,7 +27,7 @@ fnHamsterFio('U4 Meter Location')
 end
 def fn_fixIt
 	dim location$(0)*256,locationN(0)
-	hLocation=fn_open('U4 Meter Location',mat location$,mat locationN,mat form$)
+	hLocation=fn_openFio('U4 Meter Location',mat location$,mat locationN)
 	do
 		read #hLocation,using form$(hLocation): mat location$,mat locationN eof FiEoLocation
 		inWhich=srch(mat inLocationIdN,locationN(loc_locationId))
@@ -85,7 +85,7 @@ fnend
  
 def fn_quickExport(; append$*18)
 	dim location$(0)*256,locationN(0)
-	hLocation=fn_open('U4 Meter Location',mat location$,mat locationN,mat form$, 0,1)
+	hLocation=fn_openFio('U4 Meter Location',mat location$,mat locationN, 0,1)
 	open #hOut=fnH: 'name='&env$('Desktop')&'\Meter Location'&append$&',replace,recl=2048',d,o
 	pr #hOut: 'LocationID ,MeterNumber ,Transmitter         '
 	do

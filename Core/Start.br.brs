@@ -674,7 +674,10 @@ def fn_UpdateQFileIO
 		fnMakeSurepathExists(env$('QBase')&'\Core\FileIO\Layout\')
 		fnMakeSurepathExists(env$('QBase')&'\Core\FileIO\Layout\version\')
 		fnCopy('S:\Core\FileIO\Layout\*.*'        ,env$('QBase')&'\Core\FileIO\Layout\*.*'        )
-		fnCopy('S:\Core\FileIO\Layout\version\*.*',env$('QBase')&'\Core\FileIO\Layout\version\*.*')
+		! fnFree(env$('QBase')&'\Core\FileIO\Layout\version\*.*')
+		if exists('S:\Core\FileIO\Layout\version\*.*') then
+			fnCopy('S:\Core\FileIO\Layout\version\*.*',env$('QBase')&'\Core\FileIO\Layout\version\*.*')
+		end if
 	else if env$('cursys')='CM' then
 		fn_updateAlienFolder('filelay','S:\Core\FileIO\Layout','*.fio','*.')
 		fn_updateAlienFolder('filelay\version','S:\Core\FileIO\Layout\version','*.*','*.*')

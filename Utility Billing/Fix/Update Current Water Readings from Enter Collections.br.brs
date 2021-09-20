@@ -10,9 +10,9 @@ fnAutomatedSavePoint('before fix')
 ! open #hCustomer5=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx5.h[cno],Shr",internal,outIn,keyed
 
 dim rc$(0)*10,rcN(0)
-hRc=fn_open('UB Reads_and_Chgs',mat rc$,mat rcN,mat form$, 1)
+hRc=fn_openFio('UB Reads_and_Chgs',mat rc$,mat rcN, 1)
 dim c$(0)*200,cN(0)
-hC=fn_open('UB Customer',mat c$,mat cN,mat form$)
+hC=fn_openFio('UB Customer',mat c$,mat cN)
 do
 	read #hRc,using form$(hRc): mat rc$,mat rcN eof EoRc
 	read #hC,using form$(hC),key=rc$(rc_acct): mat c$,mat cN nokey Cnokey
