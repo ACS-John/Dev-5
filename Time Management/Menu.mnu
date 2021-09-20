@@ -1,6 +1,7 @@
 ! *** TM - Time Management ***
 Client Balance Calculation ^ Time Management\*
 File
+>Provider                                         ^ HamsterFio:CO *
 >Transaction Hamster                              ^ HamsterFio:TM Transaction
 >Client (TM - Hamster)                            ^ acsTM\client
 >>Client 420                                      ^ HamsterFio:*

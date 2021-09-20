@@ -191,7 +191,7 @@ def library fnHamster(uw$*20,mat lbl$,mat fln,hIn,mat p$; mat flTyp$,mat sln,mat
 					myflen=max(myflen,fln(j))
 				next j
 			end if
-	! \Print MYFLEN : fnPAUSE ! XXX
+	! Print MYFLEN : fnPAUSE ! XXX
 			mylen=0
 			for j=1 to itemCount
 				mylen=max(mylen,len(lbl$(j)))
@@ -245,7 +245,7 @@ def library fnHamster(uw$*20,mat lbl$,mat fln,hIn,mat p$; mat flTyp$,mat sln,mat
 			if addloop$='' then p2$(alana)='False' else p2$(alana)=addloop$
 			fnCmdKey("&Save",1,1)
 			fnCmdKey("&Cancel",opt_cancel,0,1)
-			!
+
 			fnAcs(mat p2$,ckey)
 			mat p$(1:udim(mat p$))=p2$(1:udim(mat p$))
 			if ckey<>opt_cancel then gosub RewriteP

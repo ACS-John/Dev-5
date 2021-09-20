@@ -27,7 +27,7 @@ Enum: ! r: Common Enumerations
 			mb_yes    	= 6
 			mb_no     	= 7
 			! Icon Enumerations
-			mb_stop         	= 16
+			mb_stop        	= 16
 			mb_question    	= 32
 			mb_exclamation 	= 48
 			mb_information 	= 64
@@ -36,12 +36,12 @@ Enum: ! r: Common Enumerations
 			mb_button2_default = 256
 			mb_button3_default = 512
 			! Button Set Enumerations
-			mb_okonly            	= 0
-			mb_okcancel          	= 1
+			mb_okonly           	= 0
+			mb_okcancel         	= 1
 			mb_abortretryignore 	= 2
-			mb_yesnocancel       	= 3
-			mb_yesno              	= 4
-			mb_retrycancel       	= 5
+			mb_yesnocancel      	= 3
+			mb_yesno            	= 4
+			mb_retrycancel      	= 5
 		end if
 		! /r
 		! r:  Standard FKey Enumerations

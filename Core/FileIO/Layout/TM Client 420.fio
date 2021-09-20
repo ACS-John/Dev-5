@@ -11,8 +11,7 @@ a4       	,Contact Name(s)                                         	,C  30  , ! 
 a5       	,Client Type                                             	,C  30  , ! a$(5)
 ph1      	,Phone Number 1                                          	,C  12  , ! ph$
 ss1      	,ss1                                                      	,C  11  , ! ss$
-pno      	,partner number                                          	,N   9
-mye      	,mye                                                      	,N   2
+provider 	,Provider Id                                             	,C  11
 unused1  	,mat dd(10*PD 3) sc(10*N 1) ca(10*PD 3)                	,C  70
 ph2      	,Phone Number 2                                          	,C  12
 ss2      	,Ss2                                                      	,C  11

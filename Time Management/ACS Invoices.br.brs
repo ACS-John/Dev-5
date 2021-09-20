@@ -324,7 +324,7 @@ def fn_combineIntoTmSht(file_from$*256; ___,tce_key$,wo_desc$*30,h_from,h_to,toI
 	do
 		read #h_from,using F_time: inp1$,inp2,inp3,inp4,inp5,inp6,inp7,b6,b7,b8$,sc,o_o,wo_desc$ eof TCE_EOF
 		
-		! pr '_______________________________'
+		! pr '_______________________________' ! r: pr debug info and pause
 		! pr 'inp1$   =';inp1$
 		! pr 'inp2    =';inp2
 		! pr 'inp3    =';inp3
@@ -338,7 +338,7 @@ def fn_combineIntoTmSht(file_from$*256; ___,tce_key$,wo_desc$*30,h_from,h_to,toI
 		! pr 'sc      =';sc
 		! pr 'o_o     =';o_o
 		! pr 'wo_desc$=';wo_desc$
-		! pause
+		! pause ! /r
 		
 		if b8$='20' then b8$='19' ! ALL PRINTING SUPPORT IS COVERED BY CORE
 		

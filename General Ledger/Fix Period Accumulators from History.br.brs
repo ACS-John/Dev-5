@@ -1,5 +1,5 @@
-debug=1
-verbose=0
+debug=0
+verbose=1
 fn_setup
 fnTop(program$)
 current_accounting_period=fnactpd
@@ -32,6 +32,7 @@ open #hAcct2=fnH: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\glIndx2.h[cno
 Facct: form pos 1,c 12,x 50,6*pd 3,42*pd 6.2,2*pd 3,13*pd 6.2
 do
 	read #hAcct1,using Facct: gl$,mat rf,bb,cb,mat balance_current_year_month,mat balance_prior_year_month eof EO_GLMSTR
+	pr gl$
 	if verbose then fn_report('*** '&gl$&' ***')
 	mat balance_current_year_month=(0)
 	mat period_accumulator_current=(0)
@@ -108,10 +109,9 @@ Xit: fnXit ! if env$('acsdeveloper')<>'' then stop else fnXit ! XXX
 def fn_setup
 	autoLibrary
 	on error goto Ertn
- 
 	dim resp$(100)*60
 	dim balance_current_year_month(13),balance_prior_year_month(13),rf(6)
-	dim actrans_key$*20
+
 fnend
 def fn_screen_1(nap,mat period_date_start,mat prior_period_date_start)
 	mat period_date_start(nap)
@@ -213,7 +213,7 @@ def fn_date_mmddyy_is_within_range(dmi_test_date,dmi_date_start,dmi_date_end)
 	if dmi_test_date=>dmi_date_start and dmi_test_date<=dmi_date_end then dmi_return=1
 	fn_date_mmddyy_is_within_range=dmi_return
 fnend  ! fn_date_mmddyy_is_within_range
-def fn_processTrans(h_trans; pt_fix_trans_period_code,___,trgl$,tr_date,tr_date,tr_6,pc2)
+def fn_processTrans(h_trans; pt_fix_trans_period_code,___,trgl$,tr_date,tr_amt,tr_6,pc2,actrans_key$*20)
 	! uses inherriteed local:  gl$, period, mat period_accumulator_prior    
 	!          probably others,
 	actrans_key$=rpad$(gl$,kln(h_trans))
