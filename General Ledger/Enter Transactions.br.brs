@@ -1421,7 +1421,7 @@ def fn_transType$(key; ___,hTt,which,return$*18)
 		setupTransTypeC=1
 		dim tt$(0)*128
 		dim ttN(0)
-		hTt=fn_open('GL TransactionType', mat tt$, mat ttN, mat form$, 1)
+		hTt=fn_openFio('GL TransactionType',mat tt$,mat ttN, 1)
 		dim ttKeyN(0)
 		mat ttKeyN(0)
 		dim ttDesc$(0)*18

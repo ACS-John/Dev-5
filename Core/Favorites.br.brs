@@ -6,7 +6,7 @@ dim form$(0)*256
 dim favData$(0)*128,favDataN(0)
 def library fnFavoriteAdd(programCaption$*256)
 	if ~setup then fn_setup
-	hFav=fn_open('CO Favorites',mat favData$,mat favDataN,mat form$)
+	hFav=fn_openFio('CO Favorites',mat favData$,mat favDataN)
 	mat favData$=('') : mat favDataN=(0)
 	favData$(fav_user)=env$('Unique_Computer_ID')
 	favData$(fav_system)=env$('cursys')
@@ -16,7 +16,7 @@ def library fnFavoriteAdd(programCaption$*256)
 fnend
 def library fnFavoriteDel(programCaption$*256)
 	if ~setup then fn_setup
-	hFavProgram=fn_open('CO Favorites',mat favData$,mat favDataN,mat form$,0,2)
+	hFavProgram=fn_openFio('CO Favorites',mat favData$,mat favDataN, 0,2)
 	mat favData$=('') : mat favDataN=(0)
 	favData$(fav_user)=env$('Unique_Computer_ID')
 	favData$(fav_system)=env$('cursys')
@@ -27,7 +27,7 @@ fnend
 def library fnFavoriteList(mat favorite$)
 	if ~setup then fn_setup
 	mat favorite$(0)
-	hFav=fn_open('CO Favorites',mat favData$,mat favDataN,mat form$,1)
+	hFav=fn_openFio('CO Favorites',mat favData$,mat favDataN, 1)
 	restore #hFav,key>=fn_favKey$: nokey fl_eof
 	do
 		read #hFav,using form$(hFav):mat favData$,mat favDataN eof fl_eof

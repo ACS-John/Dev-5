@@ -49,7 +49,7 @@ GetStarted: ! r:
 		fnIndex("[Q]\GLmstr\GLmstr.h[cno]","[Q]\GLmstr\fsindex.h[cno]","63 3")
 	end if
 	dim fsN(0),fs$(0)*128
-	hFsD=fn_open('GL FSDesign',mat fs$,mat fsN,mat form$,1)
+	hFsD=fn_openFio('GL FSDesign',mat fs$,mat fsN,1)
 	open #hGl=fnH: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\fsindex.h[cno],Shr",i,i,k
 	fnopenprn
 	dim reportHeading1$*50

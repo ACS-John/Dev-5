@@ -44,7 +44,7 @@ def fn_balanceSheet(; defaultFormat$)
 		end if
 		fnIndex("[Q]\GLmstr\GLmstr.h[cno]","[Q]\GLmstr\fsindex.h[cno]",str$(mp1)&" 3")
 		dim fsN(0),fs$(0)*128
-		hFsD=fn_open('GL FSDesign',mat fs$,mat fsN,mat form$,1) ! requires [FinancialStatementCode]
+		hFsD=fn_openFio('GL FSDesign',mat fs$,mat fsN,1) ! requires [FinancialStatementCode]
 		open #hGl=fnH: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\fsindex.h[cno],Shr",i,i,k
 		fnopenprn
 		do

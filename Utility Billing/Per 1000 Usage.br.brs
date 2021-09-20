@@ -87,7 +87,7 @@ fnopenprn
 dayFilter=days(d1,'mmddyy')
 dim over(0)
 mat over(0)
-hTran2=fn_open('UB Transaction',mat tran$,mat tranN,mat form$,1,2)
+hTran2=fn_openFio('UB Transaction',mat tran$,mat tranN, 1,2)
 restore #hTran2,search=>date$(dayFilter,'ccyymmdd'): nokey finis
 do
 	read #hTran2,using form$(hTran2): mat tran$,mat tranN eof Finis

@@ -39,7 +39,7 @@ OpenEmployeeData: ! r:
 	if ~hEmpData then
 		dim ed$(0)*128
 		dim edN(0)
-		hEmpData=fn_open('PR Employee Data',mat ed$,mat edN,mat form$)
+		hEmpData=fn_openFio('PR Employee Data',mat ed$,mat edN)
 	end if
 return ! /r
 

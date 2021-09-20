@@ -16,7 +16,7 @@ def library fnHamsterFio(fileid$*64)
 	dim hfData$(0)*2048
 	dim hfDataN(0)
 	dim hfDataAll$(0)*2048
-	hFile=fn_open(fileid$,mat hfData$,mat hfDataN,mat form$)
+	hFile=fn_openFio(fileid$,mat hfData$,mat hfDataN)
 	if hFile then
 		dim hfLabel$(0)*128
 		fn_hfLayoutRead(defaultFileLayoutPath$&fileid$&defaultFileLayoutExtension$,mat hfDataAll$,mat hfLabel$,mat hfFieldType$,mat hfStorageLen,mat hfMask,mat hfFieldLen)

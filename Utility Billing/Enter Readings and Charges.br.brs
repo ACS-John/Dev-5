@@ -2291,7 +2291,7 @@ def fn_hot_writeWork(hWork,hwwAccount$,mat x,&hotDataImportAsked,&hotDataImportE
 		if hotDataImportEnabled then ! r: import the data
 			if ~hLocation then
 				dim location$(0)*128,locationN(0)
-				hLocation:=fn_open('U4 Meter Location',mat location$,mat locationN,mat form$, 0,4)
+				hLocation:=fn_openFio('U4 Meter Location',mat location$,mat locationN, 0,4)
 			end if
 			mat location$=('')
 			mat locationN=(0)

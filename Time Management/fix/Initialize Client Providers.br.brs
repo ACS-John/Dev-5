@@ -22,7 +22,7 @@ def fn_clientProvider$*128(client$*64; ___,return$*128) ! stolen from Client - i
 		! return$='Advanced Computer Services LLC'
 		return$='acs'
 	end if
-	fnClientProvider$=return$
+	fn_clientProvider$=return$
 fnend
 
 Xit: fnXit

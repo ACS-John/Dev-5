@@ -684,7 +684,7 @@ def fn_getProgramList(mat program_plus$,mat program_name$,mat program_name_trim$
 	if env$('cursys')='PR' then
 		dim employee$(0)*256
 		dim employeeN(0)
-		hPrEmployee=fn_open('PR Employee',mat employee$,mat employeeN,mat form$, 1)
+		hPrEmployee=fn_openFio('PR Employee',mat employee$,mat employeeN, 1)
 		! r: add header item
 		program_item_count=udim(mat program_file$)+1
 		mat program_plus$(program_item_count)
@@ -728,7 +728,7 @@ def fn_getProgramList(mat program_plus$,mat program_name$,mat program_name_trim$
 		! open #hUbCustomer=fnH: 'Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr',i,i,k
 		dim customer$(0)*256
 		dim customerN(0)
-		hUbCustomer=fn_open('UB Customer',mat customer$,mat customerN,mat form$, 1)
+		hUbCustomer=fn_openFio('UB Customer',mat customer$,mat customerN, 1)
 		! r: add header item
 		program_item_count=udim(mat program_file$)+1
 		mat program_plus$(program_item_count)

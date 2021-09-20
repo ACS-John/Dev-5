@@ -27,7 +27,7 @@ def fn_customer(; &editOne$,___,editOne,ckey)
 	! /r
 	dim customer$(0)*256
 	dim customerN(0)
-	h_customer_1=fn_open('UB Customer',mat customer$,mat customerN,mat form$)
+	h_customer_1=fn_openFio('UB Customer',mat customer$,mat customerN)
 	h_customer_2=h_customer_1+1
 	! open #h_customer_1=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,outIn,keyed ! 1
 	! open #h_customer_2=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx2.h[cno],Shr",internal,outIn,keyed  ! 11
@@ -1097,7 +1097,7 @@ def fn_ScrAddServiceMeterInfo(&srvLine,&respc1,mat rateInfo$,serviceCode$*2,serv
 	if fn_serviceIsMetered(service_code) then
 		if ~setup_MeterLocation then
 			setup_MeterLocation=1
-			hLocation=fn_open('U4 Meter Location',mat location$,mat locationN,mat form$, 0,4)
+			hLocation=fn_openFio('U4 Meter Location',mat location$,mat locationN, 0,4)
 		end if
 		srvLine+=1
 		fnLbl(srvLine+=1,19,trim$(srvnam$(service_code))&' Meter Location',20,2,4)
@@ -1231,7 +1231,7 @@ def fn_customer_name$*30(cn_account$*10)
 	fn_customer_name$=rtrm$(customer_name_return$)
 fnend
 def fn_accountKeyChange_meter(key_from$*10,key_to$*10)
-	hLocation=fn_open('U4 Meter Location',mat location$,mat locationN,mat form$, 0,3)
+	hLocation=fn_openFio('U4 Meter Location',mat location$,mat locationN, 0,3)
 	fnKeyChange(hLocation,'form pos 42,c 10',key_from$,key_to$)
 	fnclosefile(hLocation,'U4 Meter Location') : setup_MeterLocation=0
 fnend

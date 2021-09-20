@@ -2,7 +2,7 @@
 fn_setup
 dim tr$(0)*128
 dim trN(0)
-hTrans=fn_open('TM Transaction',mat tr$,mat trN,mat form$, 1)
+hTrans=fn_openFio('TM Transaction',mat tr$,mat trN, 1)
 dim coClient$*40
 coClient$='[All]'
 coProvider$='[All]'

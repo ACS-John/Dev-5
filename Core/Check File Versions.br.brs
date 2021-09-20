@@ -273,7 +273,7 @@ def fn_cfv_utility_billing
 		fnStatus('Migrating UB City State Zip records into Core City State Zip table...')
 		open #hUbCsz=fnH: "Name=[Q]\UBmstr\CityStZip.dat,KFName=[Q]\UBmstr\CityStZip.idx,Use,RecL=30,KPs=1,KLn=30,Shr",internal,outIn,keyed
 		dim cszData$(0)*128,cszDataN(0),csz$*30
-		hCoCsz:=fn_open('CO City State Zip',mat cszData$,mat cszDataN,mat form$)
+		hCoCsz:=fn_openFio('CO City State Zip',mat cszData$,mat cszDataN)
 		do
 			read #hUbCsz,using 'form pos 1,C 30': csz$ eof CszFinis
 			restore #hCoCsz,key=csz$: nokey CszAdd
@@ -1184,7 +1184,7 @@ def fn_ini_move(cursys$*2)
 		fn_programMoveAdd('acsCL\UnpaidInvoice','Checkbook\Unpaid Invoice')
 	end if
 	dim favData$(0)*128,favDataN(0)
-	hFavProgram=fn_open('CO Favorites', mat favData$, mat favDataN, mat form$, 0, 2)
+	hFavProgram=fn_openFio('CO Favorites',mat favData$,mat favDataN, 0,2)
 	for imItem=1 to imProgramCount
 		dim imIniFrom$*256
 		dim imIniTo$*256
