@@ -1,7 +1,7 @@
 fn_setup
 
 dim gl$(0)*128,glN(0)
-hGl=fn_open('GL Account',mat gl$,mat glN,mat form$)
+hGl=fn_openFio('GL Account',mat gl$,mat glN)
 
 ! r: get key lists
 restore #hGl:

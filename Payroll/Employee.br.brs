@@ -652,7 +652,7 @@ EmployeeDelete: ! r:
 
 		dim ed$(0)*128
 		dim edN(0)
-		hEmpData=fn_open('PR Employee Data',mat ed$,mat edN,mat form$)
+		hEmpData=fn_openFio('PR Employee Data',mat ed$,mat edN)
 		fnKeyDelete(hEmpData,'form pos 1,n 8',heno$)
 		fnCloseFile(hEmpData,'PR Employee Data')
 	else
@@ -681,7 +681,7 @@ EmployeeChangeKey: ! r:
 	fnKeyChange(hDepartment,'form pos 1,n 8',heno$,lpad$(str$(eno),8))
 	fnKeyChange(hCheckIdx1,'form pos 1,n 8',heno$,lpad$(str$(eno),8)) ! change employee number in check history
 
-	hEmpData=fn_open('PR Employee Data',mat ed$,mat edN,mat form$)
+	hEmpData=fn_openFio('PR Employee Data',mat ed$,mat edN)
 	fnKeyChange(hEmpData,'form pos 1,n 8',heno$,lpad$(str$(eno),8))
 	fnCloseFile(hEmpData,'PR Employee Data')
 

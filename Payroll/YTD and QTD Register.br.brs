@@ -11,7 +11,7 @@ fnopenprn
 	gosub PrHdr
 	dim emp$(0)*256
 	dim empN(0)
-	hEmployee=fn_open('PR Employee',mat emp$,mat empN, mat form$, 1)
+	hEmployee=fn_openFio('PR Employee',mat emp$,mat empN, 1)
 	! open #hEmployee=fnH: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr",i,i,k
 	dim em$*30 ! first column
 	do

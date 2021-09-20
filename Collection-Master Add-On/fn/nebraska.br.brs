@@ -3,7 +3,7 @@
 	dim nc$(0)*2048
 	dim ncN(0)
 	dim hfDataAll$(0)*2048
-	hNeCounty=fn_open('CM Nebraska County',mat nc$,mat ncN,mat form$)
+	hNeCounty=fn_openFio('CM Nebraska County',mat nc$,mat ncN)
 	pr udim(mat nc$) : pause
 	for recItem=1 to udim(mat countyNumberList$)
 		mat nc$=('')

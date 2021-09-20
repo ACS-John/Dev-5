@@ -49,4 +49,3 @@ def fn_askFileName(&opFileOpen$,purpose$; filter$,filterDescription$*64,path$*25
 	fn_askFileName=returnN
 fnend
 include: fn_setup
-include: fn_open

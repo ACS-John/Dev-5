@@ -176,7 +176,7 @@ def fn_setup_systemCache
 	if ~setup_systemCache then
 		setup_systemCache=1
 		dim s$(0)*128,sN(0)
-		hS=fn_open('CO Systems',mat s$,mat sN,mat form$, 1)
+		hS=fn_openFio('CO Systems',mat s$,mat sN, 1)
 		dim sAbbr$(0)*256
 		mat sAbbr$(0)
 		dim sName$(0)*256

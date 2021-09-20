@@ -194,7 +194,7 @@ def fn_transactionDelete(editrec,&bal,mat gb; ___,tranRec,runningBalance)
 
 	dim tran$(0)*128
 	dim tranN(0)
-	hTran=fn_open('UB Transaction',mat tran$,mat tranN,mat form$)
+	hTran=fn_openFio('UB Transaction',mat tran$,mat tranN)
 	dim origTran$(0)*128
 	dim origTranN(0)
 	mat origTran$(udim(mat tran$))
@@ -202,7 +202,7 @@ def fn_transactionDelete(editrec,&bal,mat gb; ___,tranRec,runningBalance)
 	open #hTranRelative=fnH: 'name=[Q]\UBmstr\ubTransVB.h[cno],shr',i,outi,r
 	dim c$(0)*256
 	dim cN(0)
-	hCustomer=fn_open('UB Customer',mat c$,mat cN,mat form$)
+	hCustomer=fn_openFio('UB Customer',mat c$,mat cN)
 
 	read #hTranRelative,using form$(hTran),rec=editrec: mat origTran$,mat origTranN noRec TdEoTran
 	read #hCustomer,using form$(hCustomer),key=origTran$(trans_acct): mat c$,mat cN ! noKey ignore

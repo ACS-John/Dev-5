@@ -1264,7 +1264,7 @@ def fn_transAlreadyPosted(p$,tdate,tcode,tamount; ___,returnN,tapKeyMatch)
 	if ~tapSetup then
 		tapSetup=1
 		dim tap$(0)*256,tapN(0)
-		hTapTrans=fn_open('UB Transaction',mat tap$,mat tapN,mat form$,1,1)
+		hTapTrans=fn_openFio('UB Transaction',mat tap$,mat tapN, 1,1)
 	end if
 	returnN=0
 	mat tap$=('')

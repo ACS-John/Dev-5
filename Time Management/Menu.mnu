@@ -1,11 +1,12 @@
 ! *** TM - Time Management ***
 Client Balance Calculation ^ Time Management\*
-File
->Provider                                         ^ HamsterFio:CO *
+--File--
+>Transaction Explorer                             ^ Time Management\Transaction Explorer
 >Transaction Hamster                              ^ HamsterFio:TM Transaction
 >Client (TM - Hamster)                            ^ acsTM\client
 >>Client 420                                      ^ HamsterFio:*
 >>Prices                                          ^ HamsterFio:CO *
+>Provider                                         ^ HamsterFio:CO *
 >Transactions                                     ^ acsTM\*
 >>Delete Transaction                              ^ Time Management\*
 >>TransactionType                                 ^ HamsterFio:*
@@ -26,7 +27,7 @@ File
 ! >Client (Support)                               ^ acsSU\Client
 >Contact                                          ^ HamsterFio:Contact         ^EM
 >TimeSheet                                        ^ HamsterFio:TimeSheet
-Daily
+--Daily--
 >Enter Time and Charges                           ^ Time Management\*
 >Collections                                      ^ Time Management\*
 ! >Unbilled Work In Process                       ^ acsTM\tmunblwk
@@ -39,7 +40,7 @@ Daily
 ! >Print Work Schedules                           ^ acsTM\tmwrksch
 ! >Print Messages                                 ^ acsTM\armessag
 >Email Queued Invoices                            ^ Time Management\*          ^EM
-Monthly
+--Monthly--
 >Import CSV to Time Sheets                        ^ Time Management\*
 >Print Monthly Billing Summary                    ^ acsTM\tmmobsum
 ! >Post to General Ledger                         ^ acsTM\arpostgl             ^GL
@@ -47,7 +48,7 @@ Monthly
 ! Generate
 ! >Finance Charges                                ^ acsTM\arfinchg
 ! >Standard Charges                               ^ acsTM\arstdchg
-Print
+--Print--
 ! >AR Transaction Listing                         ^ acsTM\artrlist
 ! >Statements                                       ^ acsTM\arprtbil
 ! >AR Aged Trial Balance                          ^ acsTM\artb

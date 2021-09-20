@@ -11,7 +11,7 @@ def fn_setupCategories
 			open #hCategory=fnH: "Name=S:\Core\Data\acsllc\TMCat.h[cno],Shr",i,i,r
 			read #hCategory,using 'form pos 1,30*c 30',rec=1: mat oldCat$
 			dim catData$(0)*80,catDataN(0)
-			hCategory=fn_open('TM Category',mat catData$,mat catDataN,mat form$)
+			hCategory=fn_openFio('TM Category',mat catData$,mat catDataN)
 			for x=1 to 30
 				if trim$(oldCat$(x))<>'' then
 					catDataN(cat_id)=x
@@ -29,7 +29,7 @@ fnend
 def library fnRead30Categories(mat dimTo30$)
 	if ~setup then fn_setup
 	if ~setupCategories then let fn_setupCategories
-	hCategory=fn_open('TM Category',mat catData$,mat catDataN,mat form$)
+	hCategory=fn_openFio('TM Category',mat catData$,mat catDataN)
 	mat dimTo30$=('')
 	for x=1 to 30
 		read #hCategory,key=cnvrt$('N 3',x): mat catData$,mat catDataN nokey R3cNoKey

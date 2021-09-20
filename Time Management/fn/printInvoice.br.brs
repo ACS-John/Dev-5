@@ -36,9 +36,11 @@ def library fnInvoiceClose(invDate; filenameAddOn$*128)
 	fnInvoiceClose=fn_invoiceClose(invDate, filenameAddOn$)
 fnend
 def fn_invoiceClose(invDate; filenameAddOn$*128,___,invoiceFilenameBase$*64)
+	close #hClient:
 	close #hCollection:
 	close #hPrintCollection:
-	hCollection=hPrintCollection=0
+	hClient=hCollection=hPrintCollection=0
+	setup_printInvoice=0
 
 	invoiceFilenameBase$='ACS Invoice '
 	invoiceFilenameBase$&=date$(days(invDate,'mmddyy'),'ccyy-mm')
@@ -60,21 +62,32 @@ def library fnInvoiceAdd(actNum$,mat billTo$,invNum$,invDate,mat desc$,mat amt,p
 	if ~setup then fn_setup
 	fnInvoiceAdd=fn_printInvoice(actNum$,mat billTo$,invNum$,invDate,mat desc$,mat amt,pbal)
 fnend
-def fn_printInvoice(actNum$,mat billTo$,invNum$,invDate,mat desc$,mat amt,pbal; ___,isCss,totalAmt)
-
+def fn_printInvoice(actNum$,mat billTo$,invNum$,invDate,mat desc$,mat amt,pbal; ___,totalAmt)
+	if ~setup_printInvoice then
+		setup_printInvoice=1
+		dim c$(0)*256
+		dim cN(0)
+		hClient=fn_openFio('TM Client 420',mat c$,mat cN, 1)
+	end if
 	! forcePrintAcePdf=0
 	! disableRtf=1
 	! r: set cnam$ and cLogo$
 	actNum$=trim$(actNum$)
+	
+	dim provider$*11
+	read #hClient,key=rpad$(actNum$,kln(hClient)): mat c$,mat cN 
 	dim cnam$*128
-	cnam$=fnClientProvider$(actNum$)
-	if cnam$='Commercial Software Solutions LLC' then  ! Stern and Stern, Recoveries Unlimited and Peter Engler Designs
-		isCss=1
+	! cnam$=fnClientProvider$(actNum$)
+	c$(client_provider)=trim$(c$(client_provider))
+	if c$(client_provider)='css' then  ! Stern and Stern, Recoveries Unlimited and Peter Engler Designs
+		cnam$='Commercial Software Solutions LLC'
 		dim cLogo$*128
 		cLogo$='S:\Time Management\resource\cssLogo.png'
-	else if cnam$='Advanced Computer Services LLC' then
+	else if c$(client_provider)='acs' then 
+		cnam$='Advanced Computer Services LLC'
 		cLogo$='S:\Core\Icon\bwLogo.jpg' ! 's:\acsTM\bwlogo2.jpg'
-	else if cnam$='John Bowman' then
+	else if c$(client_provider)='jb' then 
+		cnam$='John Bowman'
 		cLogo$='S:\Core\Icon\John.png'
 	end if
 	! /r
@@ -190,4 +203,5 @@ def fn_lauraStyleInvoiceBody(out,cnam$*128,cLogo$*128,invNum$*12,actNum$,mat bil
 	pr #out: '[pos(+0,-2)]'&pdfline$
 
 fnend
+include: fn_open
 include: fn_setup

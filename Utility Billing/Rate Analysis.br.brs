@@ -99,7 +99,7 @@ Initialize: ! r: Initialize
 	fnopenprn
 	dim tr$(0)*256
 	dim trN(0)
-	hTrans=fn_open('UB Transaction',mat tr$,mat trN,mat form$, 1,2)  ! input only, index 2 (tdate/acct)
+	hTrans=fn_openFio('UB Transaction',mat tr$,mat trN, 1,2)  ! input only, index 2 (tdate/acct)
 	dim customer(18)
 	mat customer=(0)
 	dim rateTot(18)

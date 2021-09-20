@@ -7,7 +7,7 @@
  
 autoLibrary
 dim t$(0)*128,tN(0)
-hTrans=fn_open('CL Transaction',mat t$,mat tN,mat form$)
+hTrans=fn_openFio('CL Transaction',mat t$,mat tN)
 on error goto Ertn
 fnTop(program$)
 matchClearDay=days('07/31/2018','mm/dd/ccyy')

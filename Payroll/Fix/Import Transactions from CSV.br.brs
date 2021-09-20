@@ -5,7 +5,7 @@ fnTop(program$)
 	dim newdedcode(20)
 	fnDedNames(mat dednames$,mat abrevname$,mat newdedcode)
 	dim tran$(0)*128,tranN(0),csz$*30
-	hTran:=fn_open('PR Transaction',mat tran$,mat tranN,mat form$)
+	hTran=fn_openFio('PR Transaction',mat tran$,mat tranN)
 		
 dim deptRegisterFile$*1024
 dim emplRegisterFile$*1024

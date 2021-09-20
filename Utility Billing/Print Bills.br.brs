@@ -378,7 +378,7 @@ Screen1: ! r:
 		restore #h_customer_2,key>=cnvrt$("pic(zz)",route_filter)&"       ": 
 	end if 
 
-	hCustomer=fn_open('UB Customer',mat c$,mat cN,mat form$, 1)
+	hCustomer=fn_openFio('UB Customer',mat c$,mat cN, 1)
 
 	gosub BUD1
 	if pa_enabled=1 then 

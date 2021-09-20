@@ -16,7 +16,7 @@ def fn_setup(&table$)
 	end if
 fnend
 def fn_InitialializeCpt
-	 hTable=fn_open(table$,mat cpt$,mat cptN,mat form$)
+	 hTable=fn_openFio(table$,mat cpt$,mat cptN)
 	! r: initial list of CPT codes
 	fn_addCpt(hTable,'76942',"ULTRASONIC GUIDANCE FOR NEEDLE PLACEMENT (EG, BIOPSY, ASPIRATION, INJECTION, LOC")
 	fn_addCpt(hTable,'78452',"MULTIPLE STUDIES, AT REST &/OR STRESS &/OR REDISTRIBUTION &/OR REST REINJECTION")

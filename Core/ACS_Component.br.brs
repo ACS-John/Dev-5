@@ -939,7 +939,7 @@ Xit: fnend
 				end if
 				filename$=rtrm$(filename$)
 				h_selectfile=fnH
-in	clude: filenamesPushMixedCase
+include: filenamesPushMixedCase
 				if openOrSave$='SAVE' then
 					dim tmpFilename$*1048
 					dim tmpPath$*1048
@@ -957,7 +957,7 @@ in	clude: filenamesPushMixedCase
 					if filename$(1:1)=':' then filename$(1:1)=''
 					close #h_selectfile:
 				end if
-in	clude: filenamesPopUpperCase
+include: filenamesPopUpperCase
 
 			end if
 		fnend
