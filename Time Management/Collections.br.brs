@@ -41,23 +41,22 @@ close #h_company:
 		dim f3$*255
 		f3$='FORM POS 1,C 5,C 12,N 6,2*PD 5.2,PD 2,2*N 1,C 20,x 3,n 6,x 3,x 3,n 6,x 3,pd 5.2,x 3,n 6,x 3,pd 5.2,x 3,n 6,x 3,pd 5.2,x 3,n 6,x 3,pd 5.2,x 3,n 6,x 3,pd 5.2,x 3,n 6,x 3,pd 5.2,x 3,n 6,x 3,pd 5.2,x 3,n 6,x 3,pd 5.2,x 3,n 6,x 3,pd 5.2,x 3,n 6,x 3,pd 5.2'
 		dim sc1$(5)
-		sc1$(1)='0 = COMPLETED'
-		sc1$(2)='1 = INVOICES'
-		sc1$(3)='2 = DEBIT MEMOS'
-		sc1$(4)='3 = COLLECTIONS'
-		sc1$(5)='4 = CREDIT MEMOS'
-
+		sc1$(1)='0 = Completed'
+		sc1$(2)='1 = Invoices'
+		sc1$(3)='2 = Debit Memos'
+		sc1$(4)='3 = Collections'
+		sc1$(5)='4 = Credit Memos'
 		dim sc2$(9)
 
-		sc2$(1)='CLIENT #'
-		sc2$(2)='INVOICE #'
-		sc2$(3)='DATE'
-		sc2$(4)='AMOUNT'
-		sc2$(5)='DESCRIPTION'
-		sc2$(6)='COST OF GOODS'
+		sc2$(1)='Client'
+		sc2$(2)='Invoice'
+		sc2$(3)='Date'
+		sc2$(4)='Amount'
+		sc2$(5)='Description'
+		sc2$(6)='Cost of Goods'
 		sc2$(7)=''
-		sc2$(8)='G/L ACCOUNT #'
-		sc2$(9)='AMOUNT'
+		sc2$(8)='G/L Account'
+		sc2$(9)='Amount'
 
 		dim fli1$(49)
 		fli1$(1 )='3,30,C 5,ut,n'
@@ -186,7 +185,7 @@ ScreenAddMore: ! r:
 goto ScreenSomething1 ! /r
 
 ScreenSomething1: ! r:
-	if tr5=4 or tr5=3 then sc2$(7)="G/L # TO Credit" else sc2$(7)="G/L # TO Debit"
+	if tr5=4 or tr5=3 then sc2$(7)="G/L # to Credit" else sc2$(7)="G/L # to Debit"
 	if tr5=3 then sc2$(6)="Discount Amount" else sc2$(6)=""
 	if gx=0 then sc2$(7)=" "
 	L710: !

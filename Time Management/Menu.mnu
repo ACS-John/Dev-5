@@ -1,13 +1,13 @@
 ! *** TM - Time Management ***
 Client Balance Calculation ^ Time Management\*
 --File--
->Transaction Explorer                             ^ Time Management\Transaction Explorer
->Transaction Hamster                              ^ HamsterFio:TM Transaction
 >Client (TM - Hamster)                            ^ acsTM\client
 >>Client 420                                      ^ HamsterFio:*
 >>Prices                                          ^ HamsterFio:CO *
 >Provider                                         ^ HamsterFio:CO *
 >Transactions                                     ^ acsTM\*
+>>Transaction Explorer                            ^ Time Management\Transaction Explorer
+>>Transaction Hamster                             ^ HamsterFio:TM Transaction
 >>Delete Transaction                              ^ Time Management\*
 >>TransactionType                                 ^ HamsterFio:*
 >>Import Transactions from Mint CSV to Checkbook  ^ acsTM\arinput_import_csv
