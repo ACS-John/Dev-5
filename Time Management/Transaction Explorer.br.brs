@@ -6,9 +6,6 @@ hTrans=fn_openFio('TM Transaction',mat tr$,mat trN, 1)
 dim coClient$*40
 coClient$='[All]'
 coProvider$='[All]'
-providerOpt$(1)='ACS'
-providerOpt$(1)='CSS'
-providerOpt$(1)='JB'
 do
 	fntos : rc=0
 	dim resp$(16)*256
@@ -22,7 +19,7 @@ do
 	
 	! fnComboA(ln,col2pos,'TM Provider', 2)
 	fnLbl(ln+=1,1,'Provider:', col1len,1)
-	fnComboA('provider',ln,col2pos,mat providerOpt$) ! , ttt$*200,width,contain,tabcon)
+	fnComboFio(ln,col2pos,'CO Provider', 2)
 	fnButton(ln+=1,(val(env$('Session_Cols'))-8),'Refresh',ck_refresh=19, 'reapply the filters')
 	
 	ln+=1

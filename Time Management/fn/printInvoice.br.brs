@@ -83,18 +83,18 @@ def fn_printInvoice(actNum$,mat billTo$,invNum$,invDate,mat desc$,mat amt,pbal; 
 	dim cnam$*128
 	cnam$=rtrm$(p$(provider_name))
 	dim cLogo$*128
-	cLogo$=p$(provider_logo)
+	cLogo$=rtrm$(p$(provider_logo))
 	c$(client_provider)=trim$(c$(client_provider))
-	if c$(client_provider)='css' then  ! Stern and Stern, Recoveries Unlimited and Peter Engler Designs
-		cnam$='Commercial Software Solutions LLC'
-		cLogo$='S:\Time Management\resource\cssLogo.png'
-	else if c$(client_provider)='acs' then 
-		cnam$='Advanced Computer Services LLC'
-		cLogo$='S:\Core\Icon\bwLogo.jpg' ! 's:\acsTM\bwlogo2.jpg'
-	else if c$(client_provider)='jb' then 
-		cnam$='John Bowman'
-		cLogo$='S:\Core\Icon\John.png'
-	end if
+	! if c$(client_provider)='css' then  ! Stern and Stern, Recoveries Unlimited and Peter Engler Designs
+	! 	cnam$='Commercial Software Solutions LLC'
+	! 	cLogo$='S:\Time Management\resource\cssLogo.png'
+	! else if c$(client_provider)='acs' then 
+	! 	cnam$='Advanced Computer Services LLC'
+	! 	cLogo$='S:\Core\Icon\bwLogo.jpg' ! 's:\acsTM\bwlogo2.jpg'
+	! else if c$(client_provider)='jb' then 
+	! 	cnam$='John Bowman'
+	! 	cLogo$='S:\Core\Icon\John.png'
+	! end if
 	! /r
 	!	gosub LauraStyleInvoiceBody
 	! LauraStyleInvoiceBody: ! r:
