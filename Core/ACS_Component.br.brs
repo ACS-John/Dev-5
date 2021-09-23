@@ -135,14 +135,20 @@ def library fnComboFio(lyne,ps,layoutName$*128; limlis,whichIndex,ttt$*200, ___,
 	! psk=kps(hTmp,whichIndex)
 	! lnk=kln(hTmp,whichIndex)
 	! close #hTmp:
-	if layoutName$='TM Client 420' then
+	if layoutName$='CO Client' then
 		keyFormat$='C'
 		psk= 1 ! key position
 		lnk= 5 ! key length
 		psd= 6 ! description position         the name field
 		lnd=30 ! description length
+	else if layoutName$='CO Provider' then
+		psk= 1 
+		lnk=11 
+		psd=12 
+		lnd=64 
 	else
 		pr ' currently fnComboFio does yet read position and key info for your layoutname - please add logic for it here'
+		pr "      layoutName$='"&layoutName$&"'"
 		pause
 	end if
 	
@@ -153,12 +159,12 @@ def library fnComboF(sfn$*100,lyne,ps,width,df$*200,psk,lnk,psd,lnd; if$*200,lim
 	if ~setup then fn_setup
 	fnComboF=fn_comboF(sfn$,lyne,ps,width,df$,psk,lnk,psd,lnd, if$,limlis,urep,ttt$,contain,tabcon,keyFormat$)
 fnend
-def fn_comboF(sfn$*100,lyne,ps,width,df$*200,psk,lnk,psd,lnd; if$*200,limlis,urep,ttt$*200,contain,tabcon,keyFormat$)
+def fn_comboF(sfn$*100,lyne,ps,width,df$*200,psk,lnk,psd,lnd; if$*200,limlis,urep,ttt$*200,contain,tabcon,keyFormat$,___,becky$*199)
 	if env$('exitnow')='yes' then goto COMBOF_COMPLETE ! special processing to increase speed for exitnow
 	! add a combo box (populated from a file) to a screen ace form
 	if ~setup then fn_setup
 	if keyFormat$='' then keyFormat$='C'
-	dim key$*30,desc$*120,form$*200,becky$*199
+	dim key$*30,desc$*120
 	dim ml$(10)*256
 	! df$ (data file) must be internal br format
 	! psk (key position)=your key's/answer's starting pos
@@ -173,9 +179,10 @@ def fn_comboF(sfn$*100,lyne,ps,width,df$*200,psk,lnk,psd,lnd; if$*200,limlis,ure
 	lnk=min(lnk,30) : lnd=min(lnd,60)
 	width=min(width,81) : sfn$=trim$(sfn$) : df$=trim$(df$)
 	if$=trim$(if$)
+	dim form$*200
 	form$="Form Pos "&str$(psk)&","&keyFormat$&" "&str$(lnk) : nodesc=1
 	if psd<>0 and lnd<>0 then
-		form$=form$&",Pos "&str$(psd)&",C "&str$(lnd) : nodesc=0
+		form$&=",Pos "&str$(psd)&",C "&str$(lnd) : nodesc=0
 	end if
 	becky$=sfn$&env$('cno')&"[SESSION].tmp" ! combof_whr$=env$('temp')&'\acs\'&becky$
 	!

@@ -324,7 +324,7 @@ def fn_getClientLicense(mat client_has$)
 				fn_getClientLicense_add('U4') ! U4 Utility Billing Hand Held Add-On
 			end if
 		else if env$('client')='Bethany' then
-			fn_userLimit(1)
+			fn_userLimit(2) ! second user added 9/22/2021
 			fn_getClientLicense_add('UB') : fn_setUbLimit(1000) ! U2 Utility Billing (500-1000 customers)
 			fn_getClientLicense_add('U4') : u4_device$="Itron FC300" ! U4 Utility Billing Hand Held Add-On
 			fn_getClientLicense_add('PR')

@@ -82,7 +82,7 @@ def fn_DoCalculation(; justOne$,___,reportInitialized)
 	end if
 	dim c$(0)*256
 	dim cN(0)
-	hClient=fn_openFio('TM Client 420',mat c$,mat cN,1)
+	hClient=fn_openFio('CO Client',mat c$,mat cN,1)
 	fnOpenPrn
 	pr #255,using 'form pos 1,C 6,2*(x 2,Cr 18),x 2,C 40': 'Client','Calculated Balance','Current Balance','Client Name'
 	for item=1 to udim(mat client$)

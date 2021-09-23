@@ -25,22 +25,22 @@ def library fnH2AddText(label$*38,textbox_len; field_type$*2,storage_length,ar_m
 	mat c$(add_rec_item,8)
 	fnH2AddText=add_rec_item
 fnend  ! fn_hamster_field_add
-def library fnH2AddComboF(hac_screen_item,hac_data_file$*256,hac_key_pos,hac_key_len,hac_desc_pos,hac_desc_len,hac_index_file$*256,hac_limit_to_list)
-	c$(hac_screen_item,1)='ComboF'
-	c$(hac_screen_item,2)=hac_data_file$
-	c$(hac_screen_item,3)=str$(hac_key_pos)
-	c$(hac_screen_item,4)=str$(hac_key_len) ! Key
-	c$(hac_screen_item,5)=str$(hac_desc_pos)
-	c$(hac_screen_item,6)=str$(hac_desc_len) ! Description
-	c$(hac_screen_item,7)=hac_index_file$
-	c$(hac_screen_item,8)=str$(hac_limit_to_list)
+def library fnH2AddComboF(screenItem,dataFile$*256,keyPos,keyLen,descPos,descLen,indexFile$*256,limitToList)
+	c$(screenItem,1)='ComboF'
+	c$(screenItem,2)=dataFile$
+	c$(screenItem,3)=str$(keyPos)
+	c$(screenItem,4)=str$(keyLen) ! Key
+	c$(screenItem,5)=str$(descPos)
+	c$(screenItem,6)=str$(descLen) ! Description
+	c$(screenItem,7)=indexFile$
+	c$(screenItem,8)=str$(limitToList)
 fnend 
-def library fnH2AddComboA(hac_screen_item,mat hac_option$)
+def library fnH2AddComboA(screenItem,mat hac_option$)
 	c_y=1
-	c$(hac_screen_item,c_y)='ComboA'
+	c$(screenItem,c_y)='ComboA'
 	! if udim(mat c$,2)<udim(mat hac_option$) then mat c$(udim(mat c$,1),udim(mat hac_option$)+c_y)
 	for hac_item=1 to udim(mat hac_option$)
-		c$(hac_screen_item,c_y+=1)=hac_option$(hac_item)
+		c$(screenItem,c_y+=1)=hac_option$(hac_item)
 	next hac_item
 fnend 
 def library fnHamster2(h2_name$*20; h2_file)

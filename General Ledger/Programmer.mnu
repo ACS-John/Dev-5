@@ -3,13 +3,12 @@ General Ledger - Programmer
 >Hamsters
 >Standard Adjustments                    ^ HamsterFio:Std Adjustments
 >TransactionType                         ^ HamsterFio:*
->AcTrans (Accumulated Transactions)      ^ HamsterFio:acTrans
->GLTrans (Current Transactions)          ^ acsGL\GLTrans
+>Transactions - Accumulated (AcTrans)    ^ HamsterFio:acTrans
+>Transactions - Current (GLTrans)        ^ acsGL\GLTrans
 >glMstr                                  ^ HamsterFio:glMstr
 >>Year                                   ^ acsGL\year
 >>Vendor                                 ^ acsGL\Vendor
 >>GLMaster                               ^ acsGL\glmstr_hamster
->>ACTrans                                ^ acsGL\AcTrans
 >Build Range                             ^ acsGL\BldRange
 >Fix Reference Numbers                   ^ acsGL\FixRef
 >Payroll Only Month End Closing          ^ acsGL\PRClose

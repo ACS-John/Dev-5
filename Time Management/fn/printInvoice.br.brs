@@ -68,7 +68,7 @@ def fn_printInvoice(actNum$,mat billTo$,invNum$,invDate,mat desc$,mat amt,pbal; 
 		setup_printInvoice=1
 		dim c$(0)*256
 		dim cN(0)
-		hClient=fn_openFio('TM Client 420',mat c$,mat cN, 1)
+		hClient=fn_openFio('CO Client',mat c$,mat cN, 1)
 		dim p$(0)*256
 		dim pN(0)
 		hProvider=fn_openFio('CO Provider',mat p$,mat pN, 1)
@@ -151,16 +151,7 @@ def fn_printInvoice(actNum$,mat billTo$,invNum$,invDate,mat desc$,mat amt,pbal; 
 	! return ! /r
 
 fnend
-! def fn_clientProvider$*128(client$*64; ___,return$*128) r:
-! 	if client$='ajj' then  ! American Jiu Jitsu of Maplewood
-! 		return$='John Bowman'
-! 	else if client$='4132' or client$='3670' or client$='ped' then  ! Stern and Stern, Recoveries Unlimited and Peter Engler Designs
-! 		return$='Commercial Software Solutions LLC'
-! 	else
-! 		return$='Advanced Computer Services LLC'
-! 	end if
-! 	fn_clientProvider$=return$
-! fnend /r
+
 def fn_lauraStyleInvoiceBody(out,cnam$*128,cLogo$*128,invNum$*12,actNum$,mat billTo$,pbal,mat desc$,mat amt; ___, totalAmt,pdfline$*151)
 	
 	staticSize=0

@@ -2,11 +2,20 @@ autoLibrary
 fnTop(program$)
 
 ! r: setup
-dim pt(6),name$*25
-dim p$*5,iv$*12,tr(6)
-dim flo4$(5),sc4$(5),ot4$(5),fli4$(5),q(3),gln1(3),gln2(3)
+dim pt(6)
+dim name$*25
+dim p$*5
+dim iv$*12
+dim tr(6)
+dim flo4$(5)
+dim sc4$(5)
+dim ot4$(5)
+dim fli4$(5)
+dim q(3)
+dim gln1(3)
+dim gln2(3)
 dim pgl(3)
-open #h_company:=fnH: "Name=S:\Core\Data\acsllc\Company.h[cno],Shr",internal,input
+open #h_company=fnH: "Name=S:\Core\Data\acsllc\Company.h[cno],Shr",internal,input
 read #h_company,using 'form pos 161,3*n 1,pos 178,n 3,n 6,n 3,n 3,n 6,n 3': i3,i4,i5,mat gln1,mat gln2
 ! i3=1 ! ENTER G/L #'S
 close #h_company:

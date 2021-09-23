@@ -1,26 +1,12 @@
 ! Replace S:\acsTM\Support
- 
-	autoLibrary
-	on error goto Ertn
- 
-	dim lbl$(11)*38,tln(11),p$(11)*160,fltyp$(11),sln(11),mask(11),c$(11,8)*256 ! SP(11) - not used
-	
-	fnTop(program$,'Support 420')
- 
-	gosub BUILD_LAYOUT
-	gosub OPEN_FILE : gosub CLOSE_FILE : gosub OPEN_FILE
-	gosub HAMSTER: gosub CLOSE_FILE
-	fnIndex('S:\Core\Data\acsllc\support.h420','S:\Core\Data\acsllc\support-idx.h420','1/7,6/2')
-	goto Xit
- 
-OPEN_FILE: !
-	open_file_count=0 ! this value is used in the close_file sub routine
-	open #open_file_count+=1: 'Name=S:\Core\Data\acsllc\Support.h420,Version=2,KFName=S:\Core\Data\acsllc\Support-Idx.h420,Use,RecL=246,KPs=1/7,KLn=6/2,Shr',internal,outIn,keyed
-return
- 
-CLOSE_FILE: for j=1 to open_file_count : close #j: : next j : return
- 
-BUILD_LAYOUT: !
+
+autoLibrary
+on error goto Ertn
+
+dim lbl$(11)*38,tln(11),p$(11)*160,fltyp$(11),sln(11),mask(11),c$(11,8)*256 ! SP(11) - not used
+fnTop(program$,'Support 420')
+
+! r: BUILD_LAYOUT: !
 ! ** Field Labels    **
 	ic=0 ! temporary Item Counter
 	lbl$(ic+=1)="Client ID"
@@ -119,11 +105,12 @@ BUILD_LAYOUT: !
 	c$(cl,5)='3' : c$(cl,6)='50'
 	c$(cl,7)='S:\Core\Data\acsllc\TimeFrame-Idx.h420'
 	c$(cl,8)=limit_to_list$
-return
- 
-HAMSTER: !
-	fnHamster("Support",mat lbl$,mat tln,1,mat p$,mat fltyp$,mat sln,mat mask,mat sp,mat c$)
-return
- 
+! /r
+open #1: 'Name=S:\Core\Data\acsllc\Support.h420,Version=2,KFName=S:\Core\Data\acsllc\Support-Idx.h420,Use,RecL=246,KPs=1/7,KLn=6/2,Shr',internal,outIn,keyed
+fnHamster("Support",mat lbl$,mat tln,1,mat p$,mat fltyp$,mat sln,mat mask,mat sp,mat c$)
+close #1:
+fnIndex('S:\Core\Data\acsllc\support.h420','S:\Core\Data\acsllc\support-idx.h420','1/7,6/2')
+goto Xit
+
 Xit: fnXit
 include: ertn

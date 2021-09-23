@@ -324,7 +324,7 @@ def library fnHamster(uw$*20,mat lbl$,mat fln,hIn,mat p$; mat flTyp$,mat sln,mat
 		! spos=1
 		if menu1_opt=opt_add then
 			pRec=lrec(hIn)+1
-			dim blank$(20)*80
+			dim blank$(20)*256
 			dim keyForm$*1024
 			keyForm$=fn_keyForm$(mat blank$,key$,hIn)
 			write #hIn,using keyForm$,reserve: mat blank$

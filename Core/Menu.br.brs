@@ -952,6 +952,7 @@ def fn_displayMenu
 		if env$('BR_MODEL')<>'CLIENT/SERVER' then
 			fn_dm_add(' Client Server','S:\Core\Programs\Client Server.br')
 		end if
+		fn_dm_add(' -')
 		fn_dm_add(' Restart','Restart')
 		fn_dm_add('&Help')
 		fn_dm_add(' Help','http://planetacs.net/help/')
@@ -966,6 +967,8 @@ def fn_displayMenu
 		fn_dm_add(' About','S:\Core\Programs\About.br')
 		if env$('ACSDeveloper')<>'' then
 			fn_dm_add('De&veloper')
+			fn_dm_add(' Restart','Restart')
+			fn_dm_add(' -')
 			if env$('acsEnableComplier')='Yes' then
 				fn_dm_add(' Re&compile','S:\Core\Start.br') : setenv('compile_without_asking','Yes') ! Recompile changed source
 				fn_dm_add(' Retry last compile proc','C:\ACS\Dev-5\(import)\compile.prc') : setenv('compile_without_asking','Yes') ! Recompile changed source
@@ -986,10 +989,10 @@ def fn_displayMenu
 			! fn_dm_add(' ScreenIO','ScreenIO')
 			! fn_dm_add(' -')
 			! fn_dm_add(' Locate 1','S:\Core\Locate.br')
-			if exists('S:\Core\Data\acsllc\Company.h420') then
+			if exists('S:\Core\Data\acsllc\Company.h420') and env$('acsDeveloper')<>'' and serial=34660 then
 				fn_dm_add('ACS LLC')
-				fn_dm_add(' Client 420','HamsterFio:TM Client 420') ! S:\acsTM\Client.br
-				fn_dm_add(' Support 420','S:\acsTM\Support.br')
+				fn_dm_add(' Client','HamsterFio:CO Client') ! S:\acsTM\Client.br
+				fn_dm_add(' Support','S:\acsTM\Support.br')
 			end if
 		end if
 	end if  ! ~dm_setup
