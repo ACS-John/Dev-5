@@ -1,7 +1,7 @@
 fn_setup
 dim c$(0)*256
 dim cN(0)
-hClient=fn_openFio('TM Client 420',mat c$,mat cN)
+hClient=fn_openFio('CO Client',mat c$,mat cN)
 do
 	read #hClient,using form$(hClient): mat c$,mat cN eof EoClient
 	c$(client_provider)=fn_clientProvider$(c$(client_id))

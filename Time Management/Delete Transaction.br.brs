@@ -86,7 +86,7 @@ def fn_clientName$*30(clientId$; ___,return$*30,x)
 		clientName_setup=1
 		dim client$(0)*256
 		dim clientN(0)
-		hClient=fn_openFio('TM Client 420',mat client$,mat clientN, 1)
+		hClient=fn_openFio('CO Client',mat client$,mat clientN, 1)
 		dim clientIds$(0)*5
 		mat clientIds$(0)
 		dim clientNames$(0)*30
@@ -97,7 +97,7 @@ def fn_clientName$*30(clientId$; ___,return$*30,x)
 			fnAddOneC(mat clientNames$,trim$(client$(client_name)))
 		loop
 		EoClientName: !
-		fnCloseFile(hClient,'TM Client 420')
+		fnCloseFile(hClient,'CO Client')
 	end if
 	x=srch(mat clientIds$,trim$(clientId$))
 	if x<=0 then
@@ -116,7 +116,7 @@ DeleteTransaction: ! r: requires selectedRecord
 	hTrans=fn_openFio('TM Transaction',mat trans$,mat transN)
 	read #hTrans,using form$(hTrans),rec=selectedRecord: mat trans$,mat transN
 	if updateClientBalance$='Yes' then
-		hClient=fn_openFio('TM Client 420',mat client$,mat clientN)
+		hClient=fn_openFio('CO Client',mat client$,mat clientN)
 		read #hClient,using form$(hClient),key=trans$(tr_clientId),reserve: mat client$,mat clientN
 		if transN(tr_transCode)=1 then ! invoice
 			clientN(client_balance)-=transN(tr_amt)
@@ -135,7 +135,7 @@ DeleteTransaction: ! r: requires selectedRecord
 			pause
 		end if
 		rewrite #hClient,using form$(hClient): mat client$,mat clientN
-		fnCloseFile(hClient,'TM Client 420')
+		fnCloseFile(hClient,'CO Client')
 	end if
 	delete #hTrans,rec=selectedRecord:
 	fnCloseFile(hTrans,'TM Transaction')

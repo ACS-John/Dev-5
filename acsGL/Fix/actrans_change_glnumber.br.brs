@@ -32,7 +32,7 @@ EO_ACTRANS: !
 Xit: fnXit
  
 def fn_screen_1(&gln_from$,&gln_to$)
-		fnTos(sn$="FixGLN")
+		fnTos
 		mylen=22
 		mypos=mylen+2
 		respc=0 : myline=0

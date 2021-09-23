@@ -1,6 +1,6 @@
 ! *** GL - General Ledger ***
 File
->Accounts (General Ledger Master)                   ^ General Ledger\Accounts
+>Accounts                                           ^ General Ledger\*
 >Financial Statement Design                         ^ General Ledger\*
 >Payee                                              ^ General Ledger\*
 >>Payee Transaction List                            ^ General Ledger\*
