@@ -3,12 +3,24 @@
 ! pretty useless to the end user - but quite usefull to the programmer
 autoLibrary
 on error goto Ertn
-fnTop(program$,'General Ledger Control File')
+fnTop(program$,'General Ledger Control')
 dim lbl$(6)*38,tln(6),p$(6)*160,fltyp$(6),sln(6),mask(6),c$(6,8)*40
  
 gosub BUILD_LAYOUT
 gosub OPEN_FILE : gosub CLOSE_FILE : gosub OPEN_FILE
 fnHamster("GLControl",mat lbl$,mat tln,1,mat p$,mat fltyp$,mat sln,mat mask,mat sp,mat c$)
+
+! r: Fix Gl Accounts  
+	! left pad general ledger number and reference number
+	restore #1:
+	do
+		read #1, using "form pos 43,c 12": gl$ eof FgaEoF
+		gl$=lpad$(rtrm$(gl$),12)
+		rewrite #1, using "form pos 43,c 12,": gl$
+	loop
+	FgaEoF: !
+! /r
+
 goto Xit
  
 OPEN_FILE: !
@@ -16,7 +28,7 @@ OPEN_FILE: !
 	open #open_file_count+=1: "Name=[Q]\CLmstr\FundMstr.h[cno],KFName=[Q]\CLmstr\FundIdx1.h[cno],Use,RecL=75,KPs=1,KLn=3,Shr",internal,outIn,keyed
 return
  
-CLOSE_FILE: for j=1 to open_file_count : close #j: : next j : return
+CLOSE_FILE: close #1: : return
  
 BUILD_LAYOUT: ! r:
 	fncno(cno)
