@@ -19,7 +19,7 @@ lbl$(ic+=1)="Description"  	: tln(ic)=50 	: fltyp$(ic)='C' 	: sln(ic)=50 	: mask
 gosub OPEN_FILE ! gosub CLOSE_FILE : gosub OPEN_FILE
 fnHamster("ChartOfAccounts",mat lbl$,mat tln,1,mat p$,mat fltyp$,mat sln,mat mask)
 gosub CLOSE_FILE
-fnIndex('[Q]\CLmstr\GLmstr.h[cno]','[Q]\GLmstr\glindex.h[cno]','1 12')
+fnIndex('[Q]\CLmstr\GLmstr.h[cno]','[Q]\CLmstr\glindex.h[cno]','1 12')
 goto Xit
 OPEN_FILE: ! r:
 	open_file_count=0 ! this value is used in the close_file sub routine
