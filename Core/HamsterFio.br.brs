@@ -158,21 +158,29 @@ def fn_hfLayoutRead(hfLayoutFilename$*256,mat hfDataAll$,mat hfLabel$,mat hfFiel
 								!  comboBox$(hfItem,7)  =  index_file$
 								!  comboBox$(hfItem,8)  =  limit_to_list
 							! /r
-							
-							! S:\Core\Data
-							if fn_amc('CO TransactionCode'	,'S:\Core\Data\TransactionCode.dat,1,1,2,18,S:\Core\Data\TimTransactionCode.idx') then goto CfGotIt
-							if fn_amc('GL TransactionType' 	,'S:\Core\Data\GL TransactionType.dat,1,1,2,18,S:\Core\Data\GL TransactionType.idx') then goto CfGotIt
-							! s:\Core\Data\acsllc
-							if fn_amc('CO Client'          	,'S:\Core\Data\acsllc\Client.h[cno],1,5,6,30,S:\Core\Data\acsllc\Client-Idx.h[cno]') then goto CfGotIt
-							if fn_amc('CO Provider'        	,'S:\Core\Data\acsllc\Provider.h[cno],1,11,12,64,S:\Core\Data\acsllc\Provider-Idx.h[cno]') then goto CfGotIt
-							if fn_amc('CO Systems'         	,'S:\Core\Data\acsllc\Systems.h420,1,2,3,50,S:\Core\Data\acsllc\Systems-Idx.h420') then goto CfGotIt
-							if fn_amc('TM Time Frame'      	,'S:\Core\Data\acsllc\TimeFrame.h[cno],1,2,3,50,S:\Core\Data\acsllc\TimeFrame-Idx.h[cno]') then goto CfGotIt
-							! [Q]\Data
-							if fn_amc('CO City State Zip' 	,'[Q]\Data\CityStZip.dat,1,30,0,0,[Q]\Data\CityStZip.idx') then goto CfGotIt
-							! [Q]\GLmstr
-							if fn_amc('GL Account'         	,'[Q]\GLmstr\glMstr.h[cno],1,12,13,50,[Q]\GLmstr\GLIndex.h[cno]') then goto CfGotIt
-							if fn_amc('GL Period Names'    	,'[Q]\GLmstr\Period.h[cno],1,2,3,30,[Q]\GLmstr\Period-Idx.h[cno]') then goto CfGotIt
-							
+							! r: S:\Core\Data
+								! S:\Core\Data
+								if fn_amc('CO TransactionCode'	,'S:\Core\Data\TransactionCode.dat    ,1, 1, 2,18,S:\Core\Data\TimTransactionCode.idx ') then goto CfGotIt
+								if fn_amc('GL TransactionType'	,'S:\Core\Data\GL TransactionType.dat ,1, 1, 2,18,S:\Core\Data\GL TransactionType.idx ') then goto CfGotIt
+								if fn_amc('CO Billing Method' 	,'S:\Core\Data\Billing Method.dat     ,1, 1, 2,40,S:\Core\Data\Billing Method.idx     ') then goto CfGotIt
+								! s:\Core\Data\acsllc
+								if fn_amc('CO Client'          	,'S:\Core\Data\acsllc\Client.h[cno]   ,1, 5, 6,30,S:\Core\Data\acsllc\Client-Idx.h[cno]') then goto CfGotIt
+								if fn_amc('CO Provider'        	,'S:\Core\Data\acsllc\Provider.h[cno] ,1,11,12,64,S:\Core\Data\acsllc\Provider-Idx.h[cno]') then goto CfGotIt
+								if fn_amc('CO Systems'         	,'S:\Core\Data\acsllc\Systems.h420    ,1, 2, 3,50,S:\Core\Data\acsllc\Systems-Idx.h420') then goto CfGotIt
+								if fn_amc('TM Time Frame'      	,'S:\Core\Data\acsllc\TimeFrame.h[cno],1, 2, 3,50,S:\Core\Data\acsllc\TimeFrame-Idx.h[cno]') then goto CfGotIt
+								if fn_amc('TM Category'        	,'S:\Core\Data\acsllc\Category.h[cno] ,1, 3, 4,30,S:\Core\Data\acsllc\Category_Id_Idx.h[cno]') then goto CfGotIt
+							! /r
+							! r: [Q]
+								! [Q]\Data
+								if fn_amc('CO City State Zip' 	,'[Q]\Data\CityStZip.dat              ,1,30, 0, 0,[Q]\Data\CityStZip.idx') then goto CfGotIt
+								! [Q]\GLmstr
+								if fn_amc('GL Account'         	,'[Q]\GLmstr\glMstr.h[cno]            ,1,12,13,50,[Q]\GLmstr\GLIndex.h[cno]') then goto CfGotIt
+								if fn_amc('GL Period Names'    	,'[Q]\GLmstr\Period.h[cno]            ,1, 2, 3,30,[Q]\GLmstr\Period-Idx.h[cno]') then goto CfGotIt
+								! [Q]\UBmstr
+								if fn_amc('UB Customer'        	,'[Q]\UBmstr\Customer.h[cno]          ,1,10,41,30,[Q]\UBmstr\ubIndex.h[cno]') then goto CfGotIt
+								if fn_amc('U4 Meter Type'      	,'[Q]\UBmstr\MeterType.h[cno]         ,1, 5, 6,40,[Q]\UBmstr\MeterTypeIdx.h[cno]') then goto CfGotIt
+								
+							! /r
 							pr 'unrecognized table passed to ComboFio'
 							pr 'unrecognized table='&cfTable$
 							pr 'more code suggested'
@@ -272,6 +280,7 @@ def fn_hfLayoutRead(hfLayoutFilename$*256,mat hfDataAll$,mat hfLabel$,mat hfFiel
 fnend
 	def fn_amc(table$*128,csvList$*1024; ___,returnN) ! uses local: hfItem,limit_to_list$,cfTable$
 		if cfTable$=table$ then
+			if limit_to_list$='' then limit_to_list$='0'
 			fn_addToMatComboBox(hfItem,'comboF,'&csvList$&','&limit_to_list$)
 			returnN=1
 		end if
@@ -282,7 +291,7 @@ fnend
 			mat atmItem$(0)
 			str2mat(csvList$,mat atmItem$,',')
 			for y=1 to 8
-				comboBox$(x,y)=atmItem$(y)
+				comboBox$(x,y)=rtrm$(atmItem$(y))
 			nex y
 		fnend
 def fn_setup
