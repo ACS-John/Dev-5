@@ -1,7 +1,7 @@
-[Q]\[cursys]mstr\Deposit1.h[cno]  ,  dep1_  , 0
-[Q]\[cursys]mstr\DepIdx.h[cno]   ,  customer
+[Q]\UBmstr\Deposit1.h[cno]  ,  dep1_  , 0
+[Q]\UBmstr\DepIdx.h[cno]   ,  customer
 recl=16
 ===================================================
-customer$         ,Account No        ,  C 10 ,  ! combof(1,[Q]\UBmstr\Customer.h[cno],1,10,41,30,[Q]\UBmstr\ubIndex.h[cno],1)
-nta               ,first trans addr   ,  PD 3 , ! for records in Deposit2 - generally unused since an index was added to that file
-lta               ,last trans addr   ,  PD 3 ,  ! for records in Deposit2 - generally unused since an index was added to that file
+customer      	,Account No        	,  C 10 , , ! comboFio(UB Customer,1)
+nta            	,first trans addr  	,  PD 3 , , ! for records in Deposit2 - generally unused since an index was added to that file
+lta            	,last trans addr   	,  PD 3 , , ! for records in Deposit2 - generally unused since an index was added to that file

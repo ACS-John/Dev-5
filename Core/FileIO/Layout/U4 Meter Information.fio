@@ -2,7 +2,7 @@
 [Q]\[cursys]mstr\Meter_Idx.h[cno]   ,  customer/serviceID
 recl=384
 ===================================================
-customer$         ,Account No        ,  C 10 , ! combof(1,[Q]\UBmstr\Customer.h[cno],1,10,41,30,[Q]\UBmstr\ubIndex.h[cno],1)
+customer$         ,Account No        ,  C 10 , ! comboFio(UB Customer,1)
 serviceID$        ,Service ID        ,  C  2 , ! comboa(ignored,*custom:UB ServiceCodes*)
 longitude$        ,Longitude         ,  C 17 , !
 latitude$         ,Latitude          ,  C 17 , !

@@ -7,12 +7,11 @@
 recl=2067
 ===================================================
 ! Some of the old dims:   dim extra(23)
-account           	,Account Key                                           				,  C    10    , ! SPos=   1 EPos= 10   aka=z$,x$
+account           	,Account Key                                           			,  C    10    , ! SPos=   1 EPos= 10   aka=z$  x$
 meterAddress      	,Meter Address                                        				,  C    30    , ! SPos=  11 EPos= 40   aka=e$(1)
 name              	,Name                                                   			,  C    30    , ! SPos=  41 EPos= 70   aka=e$(2)
 addr1             	, Address 1 - Primary                                  			,  C    30    , ! SPos=  71 EPos=100   aka=e$(3)
-csz               	,  CSZ                                                  			,  C    30    , ! SPos= 101 EPos=130   aka=e$(4)   ComboF(ignore,[Q]\Data\CityStZip.dat,1,30,0,0,[Q]\Data\CityStZip.idx)
-!                 	                                                            	                                                      combof(ignored,[Q]\UBmstr\Customer.h[cno],1,10,41,30,[Q]\UBmstr\ubIndex.h[cno],1)
+csz               	,  CSZ                                                  			,  C    30    , ! SPos= 101 EPos=130   aka=e$(4)   comboFio(CO City State Zip)
 s1meterNumber     	,  Service 1 Meter Number                             				,  C    12    , ! SPos= 131 EPos=142   aka=f1$
 s01rate           	,  Service 1 (Water) – Rate Code                      			,  PD    2    , ! SPos= 143 EPos=144   aka=a(1)
 s02rate           	,  Service 2 (Sewer) – Rate Code                      			,  PD    2    , ! SPos= 145 EPos=146   aka=a(2)
@@ -64,24 +63,24 @@ s08bill           	,    Service 8 Charge                                  			,  
 s09bill           	,    Service 9 Charge                                  			,  PD    4.2  , ! SPos= 332 EPos=335   aka=g(9)
 s10bill           	,    Current Bill – Service 10? (Penalty)            				,  PD    4.2  , ! SPos= 336 EPos=339   aka=g(10)
 netBill           	,    Current Bill – Net Bill                          				,  PD    4.2  , ! SPos= 340 EPos=343   aka=g(11)
-grossBill         	,    Current Bill – Gross Bill                        				,  PD    4.2  , ! SPos= 344 EPos=347   aka=g(12)
+grossBill         	,    Current Bill – Gross Bill                        			,  PD    4.2  , ! SPos= 344 EPos=347   aka=g(12)
 adr1              	,  (unused) 1                                           			,  PD    3    , ! SPos= 348 EPos=350   aka=adr1
 adr2              	,  (unused) 2                                           			,  PD    3    , ! SPos= 351 EPos=353   aka=adr2
 alphaSort         	, Alpha Sort Field                                     			,  C     7    , ! SPos=354  EPos=360   aka=alp$
 s03meterNumber    	,  Service 3 (Electric) - Meter Number               				,  C    12    , ! SPos= 361 EPos=372   aka=f2$
 s04meterNumber    	,  Service 4 (Gas) – Meter Number                    				,  C    12    , ! SPos= 373 EPos=384   aka=f3$
 bra               	,  (unused) 3                                          				,  pd    3    , ! SPos= 385 EPos=387   aka=bra  (used to be alternate billing address – now that's extra(22))
-s01breakdown      	,    Service 1 Breakdown                              				,  PD    5.2  , ! SPos= 388 EPos=392    aka=gb(1) 
-s02breakdown      	,    Service 2 Breakdown                              				,  PD    5.2  , ! SPos= 393 EPos=397    aka=gb(2) 
-s03breakdown      	,    Service 3 Breakdown                              				,  PD    5.2  , ! SPos= 398 EPos=402    aka=gb(3) 
-s04breakdown      	,    Service 4 Breakdown                              				,  PD    5.2  , ! SPos= 403 EPos=407    aka=gb(4) 
-s05breakdown      	,    Service 5 Breakdown                              				,  PD    5.2  , ! SPos= 408 EPos=412    aka=gb(5) 
-s06breakdown      	,    Service 6 Breakdown                              				,  PD    5.2  , ! SPos= 413 EPos=417    aka=gb(6) 
-s07breakdown      	,    Service 7 Breakdown                              				,  PD    5.2  , ! SPos= 418 EPos=422    aka=gb(7) 
-s08breakdown      	,    Service 8 Breakdown                              				,  PD    5.2  , ! SPos= 423 EPos=427    aka=gb(8) 
-s09breakdown      	,    Service 9 Breakdown                              				,  PD    5.2  , ! SPos= 428 EPos=432    aka=gb(9) 
-s10breakdown      	,    Service 10 Breakdown                             				,  PD    5.2  , ! SPos= 433 EPos=437    aka=gb(10)
-unused04a         	,    old mat rw4 part 1                                			,  C   174    , ! SPos= 438 EPos=1711   aka=mat rw4(?,?)
+s01breakdown      	,    Service 1 Breakdown                              				,  PD    5.2  , ! SPos= 388 EPos=392   aka=gb(1) 
+s02breakdown      	,    Service 2 Breakdown                              				,  PD    5.2  , ! SPos= 393 EPos=397   aka=gb(2) 
+s03breakdown      	,    Service 3 Breakdown                              				,  PD    5.2  , ! SPos= 398 EPos=402   aka=gb(3) 
+s04breakdown      	,    Service 4 Breakdown                              				,  PD    5.2  , ! SPos= 403 EPos=407   aka=gb(4) 
+s05breakdown      	,    Service 5 Breakdown                              				,  PD    5.2  , ! SPos= 408 EPos=412   aka=gb(5) 
+s06breakdown      	,    Service 6 Breakdown                              				,  PD    5.2  , ! SPos= 413 EPos=417   aka=gb(6) 
+s07breakdown      	,    Service 7 Breakdown                              				,  PD    5.2  , ! SPos= 418 EPos=422   aka=gb(7) 
+s08breakdown      	,    Service 8 Breakdown                              				,  PD    5.2  , ! SPos= 423 EPos=427   aka=gb(8) 
+s09breakdown      	,    Service 9 Breakdown                              				,  PD    5.2  , ! SPos= 428 EPos=432   aka=gb(9) 
+s10breakdown      	,    Service 10 Breakdown                             				,  PD    5.2  , ! SPos= 433 EPos=437   aka=gb(10)
+unused04a         	,    old mat rw4 part 1                                			,  C   174    , ! SPos= 438 EPos=1711  aka=mat rw4(?,?)
 unused04b         	,    old mat rw4 part 2                                			,  C   200    , ! 
 unused04c         	,    old mat rw4 part 3                                			,  C   200    , ! 
 unused04d         	,    old mat rw4 part 4                                			,  C   200    , ! 
@@ -106,10 +105,10 @@ s06rate           	,   Service 6 – Rate Code                                		, 
 s07rate           	,   Service 7 – Rate Code                                		,  N     2    , ! SPos=1808 EPos=1809   aka=extra(12)
 s08rate           	,   Service 8 – Rate Code                                		,  N     2    , ! SPos=1810 EPos=1811   aka=extra(13)
 s02units          	,   Service 2 (Sewer) – Number of Units                    	,  N     3    , ! SPos=1812 EPos=1814   aka=extra(14)
-s03units          	,   Service 3 (Electric or Lawn Meter) – Number of Units  	,  N     3    , ! SPos=1815 EPos=1817   aka=extra(15)
-s04units          	,   Service 4 (Gas) – Number of Units                      	,  N     3    , ! SPos=1818 EPos=1820   aka=extra(16)
+s03units          	,   Service 3 (Electric or Lawn Meter) – Number of Units	,  N     3    , ! SPos=1815 EPos=1817   aka=extra(15)
+s04units          	,   Service 4 (Gas) – Number of Units                     	,  N     3    , ! SPos=1818 EPos=1820   aka=extra(16)
 finalBilling      	,   Final Billing Code                                     	,  N     1    , ! SPos=1821 EPos=1821  comboA(ignore,0 Active, 1 Inactive/Final Billed, 2 Inactive/Deposit Refunded, 3 Active/but Do Not Bill, 4 Finaled/but Not Billed)
-s02averageUsage   	,   Service 2 (Sewer) – Average Usage                      	,  N     9    , ! SPos=1822 EPos=1830   aka=extra(18)
+s02averageUsage   	,   Service 2 (Sewer) – Average Usage                     	,  N     9    , ! SPos=1822 EPos=1830   aka=extra(18)
 estimationDate    	,   Estimated Date                                         	,  N     9    , ! SPos=1831 EPos=1839   aka=extra(19)
 unused09          	,   9                                                      		,  N     9    , ! SPos=1840 EPos=1848   aka=extra(20)
 unused10          	,   10                                                     		,  PD    5.2  , ! SPos=1849 EPos=1853   aka=extra(21)

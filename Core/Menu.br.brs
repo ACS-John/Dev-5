@@ -984,7 +984,7 @@ def fn_displayMenu
 			fn_dm_add('  Standard and User','HamsterFio:CO Reg')
 			fn_dm_add('  System','HamsterFio:CO System Registry')
 			fn_dm_add(' FileIO','S:\Core\FileIO\File IO.br')
-			fn_dm_add(' Update FileIO','*UpdateFileIO*')
+			! fn_dm_add(' Update FileIO','*UpdateFileIO*') ! restart already does this anyway
 			!   fn_dm_add(' FileIO (update and launch)','FileIO (update and launch)')
 			! fn_dm_add(' ScreenIO','ScreenIO')
 			! fn_dm_add(' -')
