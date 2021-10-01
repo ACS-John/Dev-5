@@ -1,0 +1,11 @@
+[Q]\CLmstr\FundMstr.h[cno]  ,  gc_  , 1
+[Q]\CLmstr\FundIdx1.h[cno] ,  ref
+
+recl=59
+===================================================
+ref   	,Fund Number                 	, n   3   ,   , ! Pos= 1  
+ref   	,Description                 	, c  30   ,   , ! Pos= 1  
+ref   	,GL Account Due To"           	, c   9   ,   , ! Pos= 1  uses fund field to complete it's gl number
+ref   	,GL Account Due From"        	, c   9   ,   , ! Pos= 1  uses fund field to complete it's gl number
+ref   	,GL Account Accounts Payable"	, c  12   ,   , ! Pos= 1  
+ref   	,GL Account for Discounts"  	, c  12   ,   , ! Pos= 1  

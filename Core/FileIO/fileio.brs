@@ -5858,7 +5858,7 @@ READLAYOUTS: ! ***** Reads Into A Given Array The List Of File Layouts
       open #(Dirfile:=Fngetfilenumber) : "Name=xxx", display,input
       READFILENAME: ! Read The Next File Name
       linput #Dirfile: Dummy$ eof DONEREADINGFILENAMES
-      if trim$(uprc$(dummy$(11:13)))=trim$(uprc$(FileLayoutExtension$(2:4))) and ~pos(dummy$,"<DIR>") then
+			if trim$(uprc$(dummy$(pos(dummy$,'.',-1)+1:inf)))=trim$(uprc$(filelayoutextension$(2:4))) and ~pos(dummy$,"<DIR>") then ! if trim$(uprc$(dummy$(11:13)))=trim$(uprc$(FileLayoutExtension$(2:4))) and ~pos(dummy$,"<DIR>") then
          mat dirlist$(udim(dirlist$)+1)
          let dummy$=trim$(dummy$(44:99))
          if FileLayoutExtension$<>'' and FileLayoutExtension$><"." then
