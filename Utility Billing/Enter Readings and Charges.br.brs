@@ -187,7 +187,7 @@ MENU1: ! r:
 			item$(ic+=1)=str$(x(13))
 			item$(ic+=1)=str$(x(04)) ! eletric
 		end if
-		if service_type(3)=3.1 then
+		if service_type(3)=3.1 then ! lawn meter
 			item$(ic+=1)=str$(x(03))
 			item$(ic+=1)=str$(x(10))
 			item$(ic+=1)=str$(x(13))
@@ -231,7 +231,7 @@ MENU1READWORKEOF: ! /r
 	end if
 	ckey=fnAcs(mat resp$)
 	if ckey=cancel then
-		goto Xit
+		goto Finis
 	end if
 	d1=val(resp$(1))
 	d2=val(resp$(2))
@@ -302,22 +302,15 @@ def fn_setup
 		on error goto Ertn
 	! dims, constants, top, etc
 		dim resp$(40)*256
-		dim aname$*30
-		dim d(15)
-		dim alp$*1
 		dim workFile$*256
 		dim workFileIndex$*256
-
-
-		dim txt$*80
 		dim txt$(6)*70
-		dim extra(23)
 		dim item$(30)*20
-		dim extra$(11)*30
-		dim x$*10
+		! dim extra$(11)*30   unused - removed 10/1/2021 john
+
 		dim px$*10
 		dim x(15)
-		dim ln$*256
+		
 		dim ft$*21
 		dim rm$*60
 		dim ra(2)
@@ -374,12 +367,21 @@ def fn_setup
 		fn_setup_service(mat service_enabled)
 		open #hTrans=fnH: "Name=[Q]\UBmstr\ubTransVB.h[cno],KFName=[Q]\UBmstr\ubTrIndx.h[cno],Shr",i,i,k
 		open #hCustomer1=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,outIn,keyed  ! was file #1, but it was getting closed incorrectly
-	F_CUSTOMER_C: form pos 1,c 10,pos 41,c 30,pos 143,7*pd 2,pos 1821,n 1,pos 217,15*pd 5,pos 354,c 1,pos 1741,n 2,n 7,2*n 6,n 9,pd 5.2,n 3,3*n 9,3*n 2,3*n 3,n 1,3*n 9,3*pd 5.2,pos 1954,c 12,pos 1906,c 12
+		dim x$*10
+		dim aname$*30
+		dim xd(15)
+		dim alp$*1
+		dim extra(23)
+		! x$,aname$,mat a,final,mat xd,alp$,mat extra
+	F_CUSTOMER_C: form pos 1,c 10,pos 41,c 30,pos 143,7*pd 2,pos 1821,n 1,pos 217,15*pd 5,pos 354,c 1,pos 1741,n 2,n 7,2*n 6,n 9,pd 5.2,n 3,3*n 9,3*n 2,3*n 3,n 1,3*n 9,3*pd 5.2
 		open #hWork=fnH: "Name="&workFile$&",KFName="&workFileIndex$&",Shr,Use,RecL=74,KPs=1,KLn=10",internal,outIn,keyed
 		open #hCustomer2=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx2.h[cno],Shr",internal,outIn,keyed
 		open #hCustomer3=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx3.h[cno],Shr",internal,outIn,keyed
 		open #hCustomer4=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx4.h[cno],Shr",internal,outIn,keyed
 		open #hCustomer5=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx5.h[cno],Shr",internal,outIn,keyed
+		dim c$(0)*200
+		dim cN(0)
+		hCustomer1In=fn_openFio('U4 Meter Location',mat c$,mat cN, 1,1)
 		fncreg_read('Meter Reading Date Current',tmp$,date$("MMDDYY")) : d2=val(tmp$)
 	end if
 fnend
@@ -522,10 +524,10 @@ AUTO_REC: ! r:
 	x$=lpad$(trim$(resp$(1)(1:10)),10)
 	px$=x$
 	if trim$(x$)="" then goto SEL_ACC
-	read #hCustomer1,using F_CUSTOMER_C,key=x$,release: x$,aname$,mat a,final,mat d,alp$,mat extra,extra$(3) nokey AUTO_REC
+	read #hCustomer1,using F_CUSTOMER_C,key=x$,release: x$,aname$,mat a,final,mat xd,alp$,mat extra nokey AUTO_REC ! ,extra$(3)
 	if addmethod=am_customersInSequence and env$('client')<>"Choctaw" then
 		seq$=cnvrt$("pic(zz)",extra(1))&cnvrt$("pic(zzzzzzz)",extra(2))
-		read #hCustomer5,using F_CUSTOMER_C,key=seq$,release: x$,aname$,mat a,final,mat d,alp$,mat extra,extra$(7),extra$(3) nokey AUTO_REC
+		read #hCustomer5,using F_CUSTOMER_C,key=seq$,release: x$,aname$,mat a,final,mat xd,alp$,mat extra nokey AUTO_REC ! ,extra$(7),extra$(3)
 	end if
 	fnapply_default_rates(mat extra, mat a)
 	if final=1 or final=2 or final=3 or (trim$(px$)<>"" and x$<>px$) then goto READ_ROUTE_SEQUENCE ! ken  ! john -- this is so users can select an account without being pushed to the incorrect account with the same rt/seq
@@ -547,16 +549,16 @@ SEL_ACT_TOS: !
 	if addmethod=am_customersInSequence then
 		goto READ_ROUTE_SEQUENCE
 	else
-		read #hCustomer1,using 'form pos 41,c 30,pos 143,7*pd 2,pos 1821,n 1,pos 217,15*pd 5',key=x$,release: aname$,mat a,final,mat d nokey SEL_ACT_TOS
+		read #hCustomer1,using 'form pos 41,c 30,pos 143,7*pd 2,pos 1821,n 1,pos 217,15*pd 5',key=x$,release: aname$,mat a,final,mat xd nokey SEL_ACT_TOS
 		fnapply_default_rates(mat extra, mat a)
 		goto EnterReadings2
 	end if
 ! /r
 READ_ROUTE_SEQUENCE: ! r:
 	if env$('client')="Choctaw" then ! read in Account order
-		read #hCustomer1,using F_CUSTOMER_C: x$,aname$,mat a,final,mat d,alp$,mat extra,extra$(7),extra$(3) eof MENU1
+		read #hCustomer1,using F_CUSTOMER_C: x$,aname$,mat a,final,mat xd,alp$,mat extra eof MENU1 ! ,extra$(7),extra$(3)
 	else
-		read #hCustomer5,using F_CUSTOMER_C,release: x$,aname$,mat a,final,mat d,alp$,mat extra,extra$(7),extra$(3) eof MENU1
+		read #hCustomer5,using F_CUSTOMER_C,release: x$,aname$,mat a,final,mat xd,alp$,mat extra eof MENU1 ! ,extra$(7),extra$(3)
 	end if
 	fnapply_default_rates(mat extra, mat a)
 	if final=1 or final=2 or final=3 or (trim$(px$)<>"" and x$<>px$) then goto READ_ROUTE_SEQUENCE
@@ -601,8 +603,8 @@ def fn_meter_roll
 	end if
 	xcde=2 : xcd2=12 : mroll(2)=1
 	METER_ROLL_DONE: !
-	digits=len(str$(d(cde)))
-	x(xcde+xcd2)=10**digits-d(cde)+x(xcde)
+	digits=len(str$(xd(cde)))
+	x(xcde+xcd2)=10**digits-xd(cde)+x(xcde)
 	! ** means to the power of
 	METER_ROLL_XIT: !
 fnend
@@ -616,18 +618,18 @@ def fn_print_readings(hWork; printReadings_altHeading$*40) ! pr proof of reading
 		read #hWork,using Fwork: x$,mat x eof PR_TOTALS
 		totwat+=x(1): totele+=x(3): totgas+=x(2)
 		e1$=e2$=""
-		read #hCustomer1,using F_CUSTOMER_B,key=x$,release: e1$,e2$,mat d,f,mat a nokey PR_CUSTOMER_NOKEY
+		read #hCustomer1,using F_CUSTOMER_B,key=x$,release: e1$,e2$,mat xd,f,mat a nokey PR_CUSTOMER_NOKEY
 		F_CUSTOMER_B: form pos 11,2*c 30,pos 217,15*pd 5,pos 296,pd 4,pos 143,7*pd 2
 		! place usage in usage column if not usage already there so it shows on proof list
 		! Water
-		if f<>d1 then oldreading=d(1) else oldreading=d(2)
+		if f<>d1 then oldreading=xd(1) else oldreading=xd(2)
 		! if x(12)=0 then x(12)=x(1)-oldreading
 		if x(12)=0 and a(1)<>0 then x(12)=x(1)-oldreading ! A(1) checking was added 10/4/11 to prevent usage (and negative usage) on customers who have an (0) inactive rate code ! the whole line was commented out but added back in on 2/13/12
 		! Electric
-		if f<>d1 then oldreading=d(5) else oldreading=d(6)
+		if f<>d1 then oldreading=xd(5) else oldreading=xd(6)
 		if x(13)=0 then x(13)=x(3)-oldreading
 		! Gas
-		if f<>d1 then oldreading=d(9) else oldreading=d(10)
+		if f<>d1 then oldreading=xd(9) else oldreading=xd(10)
 		if x(14)=0 and a(4)<>0 then x(14)=max(0,x(2)-oldreading) ! A(4) checking was added 9/21/11 to prevent usage (and negative usage) on customers who have an (0) inactive rate code
 		PR_CUSTOMER_NOKEY: !
 		rc=0
@@ -679,7 +681,7 @@ MAKE_CORRECTIONS: ! r:
 	read #hWork,using Fwork,key=x$: x$,mat x nokey MENU1
 	total(1)-=1 ! SUBTRACT PROOF TOTALS
 	for j1=1 to 15 : total(j1+1)-=x(j1) : next j1
-	read #hCustomer1,using F_CUSTOMER_C,key=x$,release: x$,aname$,mat a,final,mat d,alp$,mat extra,extra$(3)
+	read #hCustomer1,using F_CUSTOMER_C,key=x$,release: x$,aname$,mat a,final,mat xd,alp$,mat extra ! ,extra$(3)
 	fnapply_default_rates(mat extra, mat a)
 	editmode=1
 	goto EnterReadings3 ! /r
@@ -718,7 +720,7 @@ def fn_checkWater
 	if wr1=0 then fn_us1(x$,d1)
 	if a(1)<>0 then ! skip routine if no water code
 		sn$=srvnam$(1)
-		if trim$(srvnam$(1))="" or mroll(1)=1 or (d(wr1)=0 and x(1)=0) then
+		if trim$(srvnam$(1))="" or mroll(1)=1 or (xd(wr1)=0 and x(1)=0) then
 			passcheck=ckpass
 			goto CheckWaterFinis
 		end if
@@ -726,19 +728,19 @@ def fn_checkWater
 			passcheck=ckpass
 			goto CheckWaterFinis ! don't give warning if usage entered
 		end if
-		if env$('client')="Billings" and len(str$(x(1)))=6 and len(str$(d(wr1)))=7 then x(1)=val(str$(d(wr1))(1:1)&str$(x(1)))
-		x4=x(1)-d(wr1)
-		sn$=srvnam$(1) : x0=x4 : prior_read=d(wr1) : cur_read=x(1)
+		if env$('client')="Billings" and len(str$(x(1)))=6 and len(str$(xd(wr1)))=7 then x(1)=val(str$(xd(wr1))(1:1)&str$(x(1)))
+		x4=x(1)-xd(wr1)
+		sn$=srvnam$(1) : x0=x4 : prior_read=xd(wr1) : cur_read=x(1)
 		if x4>=0 then goto CHECKWATER_L4260
 		if x(12)>0 then sn$=srvnam$(1) : goto CheckWaterFinis
 		if x4<0 then fn_meter_roll
 	end if  ! a(1)<>0
 	goto CheckWaterFinis
 	CHECKWATER_L4260: !
-	if d(3)=0 then goto CheckWaterFinis
+	if xd(3)=0 then goto CheckWaterFinis
 	if uum_water<>0 and x0<uum_water then
 		passcheck=ckpass
-	else if x4<d(3)-d(3)*pcent or x4>d(3)+d(3)*pcent then
+	else if x4<xd(3)-xd(3)*pcent or x4>xd(3)+xd(3)*pcent then
 		passcheck=ckfail
 	else
 		passcheck=ckpass
@@ -757,18 +759,18 @@ def fn_checkElec
 		goto CHECKELEC_FINIS
 	end if
 	L4350: !
-	if x(3)=0 and d(er1)=0 then goto CHECKELEC_FINIS
-	x2=x(3)-d(er1)
-	sn$=srvnam$(3) : x0=x2 : : prior_read=d(er1) : cur_read=x(3)
+	if x(3)=0 and xd(er1)=0 then goto CHECKELEC_FINIS
+	x2=x(3)-xd(er1)
+	sn$=srvnam$(3) : x0=x2 : : prior_read=xd(er1) : cur_read=x(3)
 	if x2>=0 then goto L4420
 	if x(13)>0 then sn$=srvnam$(3) : goto CHECKELEC_FINIS
 	if x2<0 then fn_meter_roll
 	goto CHECKELEC_FINIS
 	L4420: !
-	if d(7)=0 then goto CHECKELEC_FINIS
+	if xd(7)=0 then goto CHECKELEC_FINIS
 	if uum_electric<>0 and x0<uum_electric then
 		passcheck=ckpass
-	else if x2<d(7)-d(7)*pcent or x2>d(7)+d(7)*pcent then
+	else if x2<xd(7)-xd(7)*pcent or x2>xd(7)+xd(7)*pcent then
 		passcheck=ckfail
 	else
 		passcheck=ckpass
@@ -784,18 +786,18 @@ def fn_checkGas
 		goto CHECKGAS_FINIS
 	end if
 	if trim$(sn$)="Gas" and x(14)>0 then passcheck=ckpass : goto CHECKGAS_FINIS ! don't give warning if usage entered
-	if x(2)=0 and d(gr1)=0 then goto CHECKGAS_FINIS
-	x3=x(2)-d(gr1)
-	sn$=srvnam$(4): x0=x3 : prior_read=d(gr1): cur_read=x(2)
+	if x(2)=0 and xd(gr1)=0 then goto CHECKGAS_FINIS
+	x3=x(2)-xd(gr1)
+	sn$=srvnam$(4): x0=x3 : prior_read=xd(gr1): cur_read=x(2)
 	if x3>=0 then goto CHECKGAS_L4580
 	if x(14)>0 then sn$=srvnam$(4): goto CHECKGAS_FINIS
 	if x3<0 then fn_meter_roll
 	goto CHECKGAS_FINIS
 	CHECKGAS_L4580: !
-	if d(11)=0 then goto CHECKGAS_FINIS
+	if xd(11)=0 then goto CHECKGAS_FINIS
 	if uum_gas<>0 and x0<uum_gas then
 		passcheck=ckpass
-	else if x3<d(11)-d(11)*pcent or x3>d(11)+d(11)*pcent then
+	else if x3<xd(11)-xd(11)*pcent or x3>xd(11)+xd(11)*pcent then
 		passcheck=ckfail
 	else
 		passcheck=ckpass
@@ -865,10 +867,11 @@ def fn_hh_readings(ip1$; listonly) ! HH_READINGS: ! hand held routines
 	if listonly=1 then fnopenprn( 'Book '&ip1$)
 	j1=29 : j2=97
 	HH_W_READ: !
+	dim ln$*256
 	ln$="" : mat x=(0)
 	for j=j1 to j2
-		read #h_readings,using "Form POS 1,C 1",rec=j: c$ noRec HH_W_END
-		ln$=ln$&c$
+		read #h_readings,using "Form POS 1,C 1",rec=j: cx$ noRec HH_W_END
+		ln$=ln$&cx$
 	next j
 	x$=lpad$(trim$(ln$(1:10)),10) : x(1)=val(ln$(11:19))
 	mroll(1)=val(ln$(20:20)) : x(3)=val(ln$(21:29))
@@ -1001,14 +1004,14 @@ def fn_hh_readings(ip1$; listonly) ! HH_READINGS: ! hand held routines
 	goto HH_CONTINUE ! /r
 
 	HH_CONTINUE: ! Continue with standard Hand Held routine
-	read #hCustomer1,using F_CUSTOMER_C,key=x$,release: x$,aname$,mat a,final,mat d,alp$,mat extra,extra$(3) nokey HH_W_NXT
+	read #hCustomer1,using F_CUSTOMER_C,key=x$,release: x$,aname$,mat a,final,mat xd,alp$,mat extra nokey HH_W_NXT ! ,extra$(3)
 	fn_us1(x$,d1)
 	mat est1=(0)
 	if x(1)=999999 then est1(1,1)=1 : est1(1,2)=100
 	if x(2)=999999 then est1(3,1)=1 : est1(3,2)=100
 	if x(3)=999999 then est1(2,1)=1 : est1(2,2)=100
 	if sum(est1) then
-		read #hCustomer1,using F_CUSTOMER_A,key=x$,release: x$,e2$,mat a,f,final,mat d,mat extra,extra$(3) nokey HH_W_NXT
+		read #hCustomer1,using F_CUSTOMER_A,key=x$,release: x$,e2$,mat a,f,final,mat xd,mat extra nokey HH_W_NXT ! ,extra$(3)
 		gosub EST2B
 	end if
 	gosub CheckUnusual
@@ -1118,7 +1121,7 @@ EST3: ! r:
 	x$=lpad$(trim$(resp$(1)(1:10)),10)
 	if ckey=cancel or trim$(x$)="" then goto MENU1
 	x$=lpad$(trim$(x$),10) conv EST3
-	read #hCustomer1,using F_CUSTOMER_A,key=x$,release: x$,e2$,mat a,f,final,mat d,mat extra,extra$(3) nokey EST3
+	read #hCustomer1,using F_CUSTOMER_A,key=x$,release: x$,e2$,mat a,f,final,mat xd,mat extra nokey EST3 ! ,extra$(3)
 	fnapply_default_rates(mat extra, mat a)
 	F_CUSTOMER_A: form pos 1,c 10,pos 41,c 30,pos 143,7*pd 2,pos 296,pd 4,pos 1821,n 1,pos 217,15*pd 5,pos 1741,n 2,n 7,2*n 6,n 9,pd 5.2,n 3,3*n 9,3*n 2,3*n 3,n 1,3*n 9,3*pd 5.2,c 30,7*c 12,3*c 30
 	gosub EstIndividual
@@ -1143,7 +1146,7 @@ ASK_ROUTE: ! r:
 	if ckey=cancel then goto MENU1 ! finish
 	restore #hCustomer1:
 	EstRouteCustomerRead: !
-	read #hCustomer1,using F_CUSTOMER_A,release: x$,e2$,mat a,f,final,mat d,mat extra,extra$(3) eof ASK_ROUTE
+	read #hCustomer1,using F_CUSTOMER_A,release: x$,e2$,mat a,f,final,mat xd,mat extra eof ASK_ROUTE ! ,extra$(3)
 	if final=1 or final=2 or final=3 then goto EstRouteCustomerRead
 	fnapply_default_rates(mat extra, mat a)
 	! fn_us1(x$,d1)
@@ -1172,9 +1175,9 @@ EstIndividual: ! r:
 		fn_est5
 		! 1=water
 		! 3=gas
-		if f=d1 then oldwatread=d(2) else oldwatread=d(1) ! old water reading equals the prior reading if recalculation else current reading if new calculation
-		if f=d1 then oldelecread=d(6) else oldelecread=d(5) ! old electric reading equals the prior reading if recalculation else current reading if new calculation
-		if f=d1 then oldgasread=d(10) else oldgasread=d(9) ! old gas reading equals the prior reading if recalculation else current reading if new calculation
+		if f=d1 then oldwatread=xd(2) else oldwatread=xd(1) ! old water reading equals the prior reading if recalculation else current reading if new calculation
+		if f=d1 then oldelecread=xd(6) else oldelecread=xd(5) ! old electric reading equals the prior reading if recalculation else current reading if new calculation
+		if f=d1 then oldgasread=xd(10) else oldgasread=xd(9) ! old gas reading equals the prior reading if recalculation else current reading if new calculation
 		if est1(1,2)=0 then est1(1,2)=100
 		if est1(3,2)=0 then est1(3,2)=100
 		if est1(2,2)=0 then est1(2,2)=100
@@ -1201,6 +1204,14 @@ EstIndividual: ! r:
 	fn_accumulateProofTotals
 	L7220: !
 return  ! /r
+Finis: ! r:
+	close #hCustomer1: ioerr ignore
+	close #hCustomer2: ioerr ignore
+	close #hCustomer3: ioerr ignore
+	close #hCustomer4: ioerr ignore
+	close #hCustomer5: ioerr ignore
+	close #hCustomer1In: ioerr ignore
+goto Xit ! /r
 Xit: fnXit
 def fn_us1(x$,d1)
 	! rc1=0 ! SET USAGE FIELDS
@@ -1344,7 +1355,7 @@ ImportTabDelimited: ! r:
 		!       goto HH_CONTINUE
 
 		!   HH_CONTINUE: ! Continue with standard Hand Held routine
-		read #hCustomer1,using F_CUSTOMER_C,key=x$,release: x$,aname$,mat a,final,mat d,alp$,mat extra,extra$(3) nokey IT_W_NEXT
+		read #hCustomer1,using F_CUSTOMER_C,key=x$,release: x$,aname$,mat a,final,mat xd,alp$,mat extra nokey IT_W_NEXT ! ,extra$(3)
 		fnapply_default_rates(mat extra, mat a)
 		fn_us1(x$,d1)
 		mat est1=(0)
@@ -1352,7 +1363,7 @@ ImportTabDelimited: ! r:
 		if x(2)=999999 then est1(3,1)=1 : est1(3,2)=100
 		if x(3)=999999 then est1(2,1)=1 : est1(2,2)=100
 		if sum(est1)<>0 then
-			read #hCustomer1,using F_CUSTOMER_A,key=x$,release: x$,e2$,mat a,f,final,mat d,mat extra,extra$(3) nokey IT_W_NEXT
+			read #hCustomer1,using F_CUSTOMER_A,key=x$,release: x$,e2$,mat a,f,final,mat xd,mat extra nokey IT_W_NEXT ! ,extra$(3)
 			fnapply_default_rates(mat extra, mat a)
 			gosub EST2B
 		end if
@@ -1429,7 +1440,7 @@ def fn_holdingFileSave(hWork) ! probably requires more than just hWork
 	end if
 	fn_holdingFileSave=holdingFileSaveReturn
 fnend
-def fn_loadBookOrHoldingFile(&addmethod; ___,book_or_holding_file$,ihDirFileMask$*64)
+def fn_loadBookOrHoldingFile(&addmethod; ___,book_or_holding_file$,ihDirFileMask$*64,txt$*80)
 	if addmethod=am_fromHhFile then
 		book_or_holding_file$='Book'
 		ihDirFileMask$='Readings.*'
@@ -1524,6 +1535,7 @@ EnterReadings: ! r:
 	if alp$="*" then goto READ_ROUTE_SEQUENCE
 	EnterReadings2: !
 	fn_us1(x$,d1)
+	read #hCustomer1,using "Form POS 296,PD 4",key=x$,release: f nokey US1_XIT
 	EnterReadings3: !
 	fnTos
 	rc=0 : frac=0
@@ -1614,12 +1626,14 @@ EnterReadings: ! r:
 		fnTxt(lc,mypos1,10,11,1,"20",disa,empty$,fraro) ! reading
 		fnTxt(lc,mypos2,10,10,1,"10",disa,empty$,fraro) ! charge
 		fnTxt(lc,mypos3,10,11,1,"20",disa,empty$,fraro) ! usage
+		! pr 'point aaa'  : pause
+		if x(03)=0 then x(03)=xd(5) ! if lawn meter isn't entered, it should stay where it was last month
 		if editmode=1 then
-			resp$(rc+=1)=str$(x(03)) ! electric reading
+			resp$(rc+=1)=str$(x(03)) ! service 3 reading
 			resp$(rc+=1)=str$(x(10)) ! electric charge
 			resp$(rc+=1)=str$(x(13)) ! electric usage
 		else
-			resp$(rc+=1)=""
+			resp$(rc+=1)=str$(x(03)) ! service 3 reading
 			resp$(rc+=1)=""
 			resp$(rc+=1)=""
 		end if
@@ -1752,7 +1766,7 @@ EnterReadings: ! r:
 	ckey=fnAcs(mat resp$)
 	if ckey=8 then
 		fncustomer( x$)
-		read #hCustomer1,using F_CUSTOMER_C,key=x$,release: x$,aname$,mat a,final,mat d,alp$,mat extra,extra$(3)
+		read #hCustomer1,using F_CUSTOMER_C,key=x$,release: x$,aname$,mat a,final,mat xd,alp$,mat extra ! ,extra$(3)
 		fnapply_default_rates(mat extra, mat a)
 		goto EnterReadings3
 	end if
@@ -1773,15 +1787,21 @@ EnterReadings: ! r:
 		x(13)=val(resp$(rc+=1))
 		x(04)=val(resp$(rc+=1)) ! electric/lawn meter
 	else if service_type(3)=3.1 then ! lawn meter
-		x(03)=val(resp$(rc+=1))
+		x(03)=val(resp$(rc+=1)) 
 		x(10)=val(resp$(rc+=1))
 		x(13)=val(resp$(rc+=1))
 	else if service_type(3)=3.2 then
 		x(13)=val(resp$(rc+=1))
 	end if  ! if srvnam$(3)=...
-	if service_type(3)=3.1 and x(03)=0 and d(5)>0 and a(3)>0 then
-		x(03)=d(5) ! if they skip reading the lawn meters, just write the previous reading into the current reading
-	end if
+	
+	! r: this logic is obsoluete since I made lawn meter reading default to what it was last time
+	! if service_type(3)=3.1 and x(03)=0 and xd(5)>0 and a(3)>0 then
+	! 	x(03)=xd(5) ! if they skip reading the lawn meters, just write the previous reading into the current reading
+	!  
+	! 	! pr 'if they skip reading the lawn meters, just write the previous reading into the current reading' : pause
+	! end if
+	! /r
+	
 	if service_enabled(4) then
 		x(02)=val(resp$(rc+=1))
 		x(11)=val(resp$(rc+=1))
@@ -1872,7 +1892,7 @@ EnterReadings: ! r:
 	if addmethod=am_askAndEnterIndviduals and (editmode=0 or editme=1) then mat x=(0): goto SEL_ACC ! kj 92407
 	! If ADDMETHOD=am_askAndEnterIndviduals AND EDITMODE=1 Then Goto MENU1 ! kj 92407
 goto MENU1 ! /r
-def fn_setupFlexRead
+def fn_flexRead(myline,mypos,filnum,z$,begdate,enddate,selcode) ! library ready
 	if ~setupFlexRead then
 		setupFlexRead=1
 		dim colmask$(30),frColHdr$(30)*20,serviceName$(10)*20,item$(25)*70
@@ -1884,9 +1904,6 @@ def fn_setupFlexRead
 		tcode$(4)="C/M"
 		tcode$(5)="D/M"
 	end if
-fnend
-def fn_flexRead(myline,mypos,filnum,z$,begdate,enddate,selcode) ! library ready
-	if ~setupFlexRead then fn_setupFlexRead
 	z$=trim$(z$)
 	if z$<>'' then
 		open #tmp=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",i,i,k
@@ -2002,7 +2019,7 @@ def fn_meter_change_out
 	if trim$(servicetype$)="WA" then
 		fnLbl(lc+=1,1,srvnamc$(1),20,1)
 		fnTxt(lc,25,10,11,1,"30",0,"Enter the prior reading on the old meter")
-		resp$(resprc+=1)=str$(d(1))
+		resp$(resprc+=1)=str$(xd(1))
 		fnTxt(lc,37,10,10,1,"30",0,"Enter the current reading on the old meter.")
 		resp$(resprc+=1)=""
 		fnTxt(lc,49,10,11,1,"30",0,"Enter the beginning reading the new meter")
@@ -2012,7 +2029,7 @@ def fn_meter_change_out
 	else if trim$(servicetype$)="EL" then
 		fnLbl(lc+=1,1,srvnamc$(3),20,1)
 		fnTxt(lc,25,10,11,1,"30",0,"Enter the prior reading on the old meter")
-		resp$(resprc+=1)=str$(d(5))
+		resp$(resprc+=1)=str$(xd(5))
 		fnTxt(lc,37,10,10,1,"30",0,"Enter the current reading on the old meter.")
 		resp$(resprc+=1)=""
 		fnTxt(lc,49,10,11,1,"30",0,"Enter the beginning reading the new meter")
@@ -2022,7 +2039,7 @@ def fn_meter_change_out
 	else if trim$(servicetype$)="GA" then
 		fnLbl(lc+=1,1,srvnamc$(4),20,1)
 		fnTxt(lc,25,10,11,1,"30",0,"Enter the prior reading on the old meter")
-		resp$(resprc+=1)=str$(d(9))
+		resp$(resprc+=1)=str$(xd(9))
 		fnTxt(lc,37,10,10,1,"30",0,"Enter the current reading on the old meter.")
 		resp$(resprc+=1)=""
 		fnTxt(lc,49,10,11,1,"30",0,"Enter the beginning reading the new meter")
@@ -2065,7 +2082,7 @@ def fn_meter_change_out
 	if trim$(begx$)<>trim$(x$) then goto MCO_WORK_READ
 	begx$=""
 	MCO_L9320: !
-	read #hCustomer1,using MCO_F_CUSTOMER,key=x$,release: aname$, mat d nokey MCO_WORK_READ
+	read #hCustomer1,using MCO_F_CUSTOMER,key=x$,release: aname$, mat xd nokey MCO_WORK_READ
 	MCO_F_CUSTOMER: form pos 41,c 20,pos 217,15*pd 5
 	goto MCO_RECORD_READINGS
 	MCO_L9350: !
