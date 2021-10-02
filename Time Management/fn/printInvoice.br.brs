@@ -78,7 +78,7 @@ def fn_printInvoice(actNum$,mat billTo$,invNum$,invDate,mat desc$,mat amt,pbal; 
 	! r: set cnam$ and cLogo$
 	actNum$=trim$(actNum$)
 	
-	read #hClient,key=rpad$(actNum$,kln(hClient)): mat c$,mat cN 
+	read #hClient,using form$(hClient),key=rpad$(actNum$,kln(hClient)): mat c$,mat cN 
 	read #hProvider,key=c$(client_provider): mat p$,mat pN
 	dim cnam$*128
 	cnam$=rtrm$(p$(provider_name))
