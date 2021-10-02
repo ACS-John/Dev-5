@@ -739,13 +739,15 @@ def fn_CopySfileIoIniToFileIoIni
 		dim line$*256
 		do
 			linput #hIn_fileIoIni: line$  eof Csf2f_Eof
-			posForDev= pos(lwrc$(line$),'<for developer>')
-			if posForDev>0 then
+			posForDev=pos(lwrc$(line$),'<for developer>')
+			if posForDev>0 and env$('acsDeveloper')<>'' then
 				posForDev+=15
 				posEndDev=pos(lwrc$(line$),'</for developer>')-1
 				pr #hOut_FileIoIni: line$(posForDev:posEndDev)
 				! pr line$(posForDev:posEndDev)
 				! pause
+			else if posForDev>0 then ! but you're not a developer
+				! skip that line
 			else
 				pr #hOut_FileIoIni: line$
 				! pr line$
