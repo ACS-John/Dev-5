@@ -11,7 +11,7 @@ Client Balance Calculation ^ Client Billing\*
 >>Transaction Hamster                             ^ HamsterFio:TM Transaction
 >>Delete Transaction                              ^ Client Billing\*
 >>TransactionType                                 ^ HamsterFio:*
->>Import Transactions from Mint CSV to Checkbook  ^ Client Billing\Legacy\arinput_import_csv
+! >>Import Transactions from Mint CSV to Checkbook  ^ Client Billing\Legacy\arinput_import_csv
 >Unbilled Transactions (TMTrans Hamster)          ^ Client Billing\Legacy\TMTrans
 >Support                                          ^ Client Billing\Legacy\*
 >>Update Support Expiration Date                  ^ Client Billing\*

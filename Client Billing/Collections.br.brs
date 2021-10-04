@@ -2,20 +2,23 @@ autoLibrary
 fnTop(program$)
 
 ! r: setup
-dim pt(6)
+
+	dim entryType$(4)
+	entryType$(1)='Invoices'
+	entryType$(2)='Debit Memos'
+	entryType$(3)='Collections'
+	entryType$(4)='Credit Memos'
+	dim hd$(2)*50
+
+
 dim name$*25
 dim p$*5
 dim iv$*12
 dim tr(6)
-dim flo4$(5)
-dim sc4$(5)
-dim ot4$(5)
-dim fli4$(5)
-dim q(3)
+
+open #h_company=fnH: "Name=S:\Core\Data\acsllc\Company.h[cno],Shr",internal,input
 dim gln1(3)
 dim gln2(3)
-dim pgl(3)
-open #h_company=fnH: "Name=S:\Core\Data\acsllc\Company.h[cno],Shr",internal,input
 read #h_company,using 'form pos 161,3*n 1,pos 178,n 3,n 6,n 3,n 3,n 6,n 3': i3,i4,i5,mat gln1,mat gln2
 ! i3=1 ! ENTER G/L #'S
 close #h_company:
@@ -43,18 +46,14 @@ close #h_company:
 			gx=2
 			dim gl(10,4)
 			mat gl(10,2)=(0)
+			dim pgl(3)
 			mat pgl(1)=(0)
 			gpx=1
 		! end if
 
 		dim f3$*255
 		f3$='FORM POS 1,C 5,C 12,N 6,2*PD 5.2,PD 2,2*N 1,C 20,x 3,n 6,x 3,x 3,n 6,x 3,pd 5.2,x 3,n 6,x 3,pd 5.2,x 3,n 6,x 3,pd 5.2,x 3,n 6,x 3,pd 5.2,x 3,n 6,x 3,pd 5.2,x 3,n 6,x 3,pd 5.2,x 3,n 6,x 3,pd 5.2,x 3,n 6,x 3,pd 5.2,x 3,n 6,x 3,pd 5.2,x 3,n 6,x 3,pd 5.2'
-		dim sc1$(5)
-		sc1$(1)='0 = Completed'
-		sc1$(2)='1 = Invoices'
-		sc1$(3)='2 = Debit Memos'
-		sc1$(4)='3 = Collections'
-		sc1$(5)='4 = Credit Memos'
+
 		dim sc2$(9)
 
 		sc2$(1)='Client'
@@ -155,42 +154,61 @@ open #hCl2=fnH: "Name=S:\Core\Data\acsllc\Client.h[cno],KFName=S:\Core\Data\acsl
 ! /r
 
 ScreenAddMore: ! r:
+	dim pt(6)
 	if samOpt$(1)='' then mat samOpt$=('False') : samOpt$(3)='True'
 	fntos : rc=0
-	fnlbl(1,1,'Add:',8,1)
-	fnopt(1,10,'1 - Invoices')      	: resp$(rc+=1)=samOpt$(1)
-	fnopt(2,10,'2 - Debit Memos')   	: resp$(rc+=1)=samOpt$(2)
-	fnopt(3,10,'3 - Collections')   	: resp$(rc+=1)=samOpt$(3)
-	fnopt(4,10,'4 - Credit Memos')  	: resp$(rc+=1)=samOpt$(4)
-	fncmdset(11)
+	! fnlbl(1,1,'Add:',8,1)
+	
+	! fnLbl( 1,10,"A/R Input Proof Totals")
+	fnLbl( 2, 5,"Total Account #s:",20,1)
+	fnTxt( 2,26,0,11,0,'pointtwo',1) : resp$(rc+=1)=str$(pt(1))
+	fnLbl( 3, 5,"Total Invoices:",20,1)
+	fnTxt( 3,26,0,11,0,'pointtwo',1) : resp$(rc+=1)=str$(pt(2))
+	fnLbl( 4, 5,"Total Debit Memos:",20,1)
+	fnTxt( 4,26,0,11,0,'pointtwo',1) : resp$(rc+=1)=str$(pt(3))
+	fnLbl( 5, 5,"Total Collections:",20,1)
+	fnTxt( 5,26,0,11,0,'pointtwo',1) : resp$(rc+=1)=str$(pt(4))
+	fnLbl( 6,5,"Total Credit Memos:",20,1)
+	fnTxt( 6,26,0,11,0,'pointtwo',1) : resp$(rc+=1)=str$(pt(5))
+	fnLbl( 7,5,"Total Cash Sales:",20,1)
+	fnTxt( 7,26,0,11,0,'pointtwo',1) : resp$(rc+=1)=str$(pt(6))
+	fnLbl( 8,5,"Total Discounts Taken:",20,1)
+	fnTxt( 8,26,0,11,0,'pointtwo',1) : resp$(rc+=1)=str$(tdt)
+	
+	
+	
+	! fnopt(1,10,'1 - Invoices')      	: resp$(rc+=1)=samOpt$(1)
+	! fnopt(2,10,'2 - Debit Memos')   	: resp$(rc+=1)=samOpt$(2)
+	! fnopt(3,10,'3 - Collections')   	: resp$(rc+=1)=samOpt$(3)
+	! fnopt(4,10,'4 - Credit Memos')  	: resp$(rc+=1)=samOpt$(4)
+	fnButton(13, 1,'Add Invoice'     	,21) ! , 0,0)
+	fnButton(13, 16,'Add Debit Memo' 	,22) ! , 0,0)
+	fnButton(13, 32,'Add Collection' 	,23) ! , 1,0)
+	fnButton(13, 48,'Add Credit Memo'	,24) ! , 0,0)
+	fnCmdKey('Print Listing'   	,3, 0,0)
+	fnCmdKey('Finish'          	,5, 0,1)
+	! fncmdset(11)
 	ckey=fnacs(mat resp$)
 	if ckey=5 then
 		tr5=0
 		vf=1
 		goto ScreenTotals
-	else
-		tr5=srch(mat resp$,'True')
 	end if
-	! pr 'ckey=';ckey
-	! pr mat resp$
-	! pause
+	if ckey=3 then
+		gosub PrintEntryList
+	else if ckey=>21 and ckey<=24 then ! add one
+		tr5=0
+		if ckey=21 then tr5=1
+		if ckey=22 then tr5=2
+		if ckey=23 then tr5=3
+		if ckey=24 then tr5=4
+		hd$(1)="Add "&entryType$(tr5)
+		hd$(2)="Client Number as 0 to stop"
+		goto ScreenSomething1
+		! tr5=srch(mat resp$,'True')
+	end if
 
-	! pr newpage
-	! pr f ' 6,5,c 20': '0 = COMPLETED'
-	! pr f ' 7,5,c 20': '1 = INVOICES'
-	! pr f ' 8,5,c 20': '2 = DEBIT MEMOS'
-	! pr f ' 9,5,c 20': '3 = COLLECTIONS'
-	! pr f '10,5,c 20': '4 = CREDIT MEMOS'
-	! pr f ' 3,10,c 50': 'A/R Input Selection Menu'
-	! pr f '13,10,c 50':'Selection'
-	! L630: !
-	! pause
-	! input fields "13,29,n 1,eu,n": tr5 conv L630
-	! if tr5=0 then vf=1 : goto ScreenTotals
-	! if tr5<1 or tr5>4 then goto L630
-	dim hd$(2)*50
-	hd$(1)="A/R INPUT "&sc1$(tr5+1)(5:18)
-	hd$(2)="Client Number as 0 to stop"
+
 goto ScreenSomething1 ! /r
 
 ScreenSomething1: ! r:
@@ -380,7 +398,7 @@ PrintEntryList: ! r: requires:hTransBatch, localOnly: r,p$,iv$,tr(1),tr(3),tr(4)
 	! on fkey 5 goto Pel_finis
 	fnopenprn
 	pr #255,using 'form pos 1,c 8,pos 21,Cc 50': date$,env$('cnam')
-	pr #255,using 'pos 1,c 8,pos 58,c 15': time$,"Input Edit List"
+	pr #255,using 'form pos 1,c 8,pos 58,c 15': time$,"Input Edit List"
 	pr #255: "RefNo  Clnt  InvoiceNo";
 	pr #255: tab(34);"Date     Amount             Description           Discount          Tr Code"
 	do
@@ -418,7 +436,7 @@ AskMakeCorrection: ! r:
 		pt(tr5+1)=pt(tr5+1)-tr(3)
 		if ltrm$(p$)="-1" then pt(6)=pt(6)-tr(3)
 		if tr5=3 then tdt=tdt-tr(2)
-		hd$(1)="A/R Correct "&sc1$(tr5+1)(5:18)
+		hd$(1)="Edit "&entryType$(tr5)
 		hd$(2)="Enter Client as 0 to Delete this entry"
 		vf=1
 		goto ScreenSomething1
