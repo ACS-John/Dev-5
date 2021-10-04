@@ -36,10 +36,10 @@ def library fnInvoiceClose(invDate; filenameAddOn$*128)
 	fnInvoiceClose=fn_invoiceClose(invDate, filenameAddOn$)
 fnend
 def fn_invoiceClose(invDate; filenameAddOn$*128,___,invoiceFilenameBase$*64)
-	close #hClient:
-	close #hProvider:
-	close #hCollection:
-	close #hPrintCollection:
+	close #hClient: ioerr ignore
+	close #hProvider: ioerr ignore
+	close #hCollection: ioerr ignore
+	close #hPrintCollection: ioerr ignore
 	hClient=hProvider=hCollection=hPrintCollection=0
 	setup_printInvoice=0
 
@@ -103,12 +103,12 @@ def fn_printInvoice(actNum$,mat billTo$,invNum$,invDate,mat desc$,mat amt,pbal; 
 	tmpFile$='[temp]\tmp[session].pdf'
 	open #out=fnH: 'Name=PDF:,PrintFile=[at]'&tmpFile$&',Replace,RecL=5000',d,o
 	if ~hCollection then
-		dim tmpCollectionFile$*32
+		dim tmpCollectionFile$*256
 		tmpCollectionFile$='[temp]\tmpCollection[session].pdf'
 		open #hCollection=fnH: 'Name=PDF:,PrintFile=[at]'&tmpCollectionFile$&',Replace,RecL=5000',d,o
 		collectionPageCount=printCollectionPageCount=0
 
-		dim tmpPrintCollectionFile$*64
+		dim tmpPrintCollectionFile$*256
 		tmpPrintCollectionFile$='[temp]\tmpPrintCollection[session].pdf'
 		open #hPrintCollection=fnH: 'Name=PDF:,PrintFile=[at]'&tmpPrintCollectionFile$&',Replace,RecL=5000',d,o
 
@@ -134,7 +134,7 @@ def fn_printInvoice(actNum$,mat billTo$,invNum$,invDate,mat desc$,mat amt,pbal; 
 		fn_lauraStyleInvoiceBody(hPrintCollection,cnam$,cLogo$,invNum$,actNum$,mat billTo$,pbal,mat desc$,mat amt)
 		printCollectionPageCount+=1
 	end if
-	close #out:
+	! close #out:
 
 	! r: copy created temp pdf to it's places
 	dim invoiceFilenameBase$*64
@@ -152,7 +152,7 @@ def fn_printInvoice(actNum$,mat billTo$,invNum$,invDate,mat desc$,mat amt,pbal; 
 
 fnend
 
-def fn_lauraStyleInvoiceBody(out,cnam$*128,cLogo$*128,invNum$*12,actNum$,mat billTo$,pbal,mat desc$,mat amt; ___, totalAmt,pdfline$*151)
+def fn_lauraStyleInvoiceBody(out,cnam$*128,cLogo$*256,invNum$*12,actNum$,mat billTo$,pbal,mat desc$,mat amt; ___, totalAmt,pdfline$*151)
 	
 	staticSize=0
 	
@@ -160,6 +160,8 @@ def fn_lauraStyleInvoiceBody(out,cnam$*128,cLogo$*128,invNum$*12,actNum$,mat bil
 
 	! pr #out: '[BOLD][FONT TIMES][SETSIZE(8)][pos(+0,+6)][8LPI][LEFT]';
 	pr #out: '[pos(+0,+62)][pic(1,1,'&cLogo$&')]'
+	pr 'using logo: '&cLogo$
+	if ~exists(cLogo$) then pause
 	pr #out: '[FONT TIMES][SETSIZE(11)][pos(+0,+6)][6LPI][LEFT]'
 
 	pr #out: ''
