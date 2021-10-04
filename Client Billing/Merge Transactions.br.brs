@@ -3,50 +3,62 @@ autoLibrary
 fnTop(program$)
 fnStatus('Merging transactions...')
 ! pr ' entered '&program$ : pause
-open #hClient=fnH: 'Name=S:\Core\Data\acsllc\Client.h[cno],KFName=S:\Core\Data\acsllc\Client-Idx.h[cno],Shr',internal,outIn,keyed
-FclientBal: form pos 283,pd 5.2
-open #hTrans=fnH: 'Name=S:\Core\Data\acsllc\Transactions.h[cno],Shr',i,outi,r
-Ftrans: form pos 1,c 5,c 12,n 6,2*pd 5.2,pd 2,2*n 1,c 20,pd 3
+dim c$(0)*256
+dim cN(0)
+hClient=fn_openFio('CO Client',mat c$,mat cN)
+! open #hClient=fnH: 'Name=S:\Core\Data\acsllc\Client.h[cno],KFName=S:\Core\Data\acsllc\Client-Idx.h[cno],Shr',internal,outIn,keyed
+! FclientBal: form pos 283,pd 5.2
+! open #hTrans=fnH: 'Name=S:\Core\Data\acsllc\Transactions.h[cno],Shr',i,outi,r
+dim to$(0)*64
+dim toN(0)
+hTrans=fn_openFio('TM Transaction',mat to$,mat toN)
 open #hTransBatch=fnH: 'Name=[Temp]\transBatch.[session]',i,outi,r
 FtransBatch: form pos 1,c 5,c 12,n 6,2*pd 5.2,pd 2,2*n 1,c 20
 do ! r: main loop
 	ReadNext: !
 	dim clientId$*5
-	dim inv$*12
-	dim tr(6)
-	dim id$*20
-	read #hTransBatch,using FtransBatch: clientId$,inv$,mat tr,id$ eof Finis
+	read #hTransBatch,using FtransBatch: clientId$,to$(tr_inv),toN(tr_date),toN(tr_amtOrigional),toN(tr_amt),toN(tr_salesmanId),toN(tr_transCode),toN(tr_postCode),to$(tr_desc) eof Finis
 	! pr 'read transBatch clientId$='&clientId$ : pause
 	if trim$(clientId$)='-1' then
 		fnStatus('client=-1 trans detected and skipped')
-	else if tr(6)=9 then
-		fnStauts('Already processed transaction (tr(6)=9) detected and skipped')
+	else if toN(tr_postCode)=9 then
+		fnStauts('Already processed transaction (toN(tr_postCode)=9) detected and skipped')
 	else
-		read #hClient,using FclientBal,key=rpad$(trim$(clientId$),5): cBalance ! nokey NokeyClient 9/5/21 - i want to get errors if they happen here
-		inv$=lpad$(rtrm$(inv$),12)
+		read #hClient,using form$(hClient),key=rpad$(trim$(clientId$),5): mat c$,mat cN ! nokey NokeyClient 9/5/21 - i want to get errors if they happen here
+		to$(tr_inv)=lpad$(rtrm$(to$(tr_inv)),12)
 
-		if tr(5)<=3 or tr(5)=5 then cBalance+=tr(3) else cBalance-=tr(3) ! SIMPLEST WAY
-		! if tr(5)>=3 or tr(5)=5 then
-		! 	cBalance+-tr(3)
-		! else
-		! 	cBalance-=tr(3)
-		! end if
+		if toN(tr_transCode)<=3 or toN(tr_transCode)=5 then cN(client_balance)+=toN(tr_amt) else cN(client_balance)-=toN(tr_amt) ! SIMPLEST WAY
 
-		tr2=tr(2)
-		if tr(5)=3 then tr(3)+=tr2
-		tr(2)=tr(3)
-		if tr(5)=4 then tr(5)=6
-		if tr(5)=3 then tr(5)=4
-		if tr(5)=2 then tr(5)=5
+		if toN(tr_transCode)=3 then toN(tr_amt)=toN(tr_amtOrigional)
+		toN(tr_amtOrigional)=toN(tr_amt)
 
-		write #hTrans,using Ftrans,reserve: rpad$(trim$(clientId$),5),inv$,mat tr,id$,0
-		rewrite #hClient,using FclientBal,key=rpad$(trim$(clientId$),5): cBalance ! nokey NokeyClient
 
-		fnStatus('Updating client '&clientId$&' balance to '&str$(cBalance))
-		! fnStatusPause
+		! from Current COLLECTIONS program
+		! 1 Invoices
+		! 2 Debit Memos
+		! 3 Collections
+		! 4 Credit Memos
+	
+		! TO CO TransactionCode
+		! 1 Invoice
+		! 2 Finance Charge
+		! 3 Standard Charge
+		! 4 Collection
+		! 5 Debit Memo
+		! 6 Credit Memo
 
-		if tr(5)=4 then tr(2)=tr2
-		if tr(5)=4 then tr(3)=tr(3)-tr2
+		if toN(tr_transCode)=4 then toN(tr_transCode)=6
+		if toN(tr_transCode)=3 then toN(tr_transCode)=4
+		if toN(tr_transCode)=2 then toN(tr_transCode)=5
+
+
+		to$(tr_clientId)=rpad$(trim$(clientId$),5)
+		toN(tr_nta)=0
+		write #hTrans,using form$(hTrans): mat to$,mat toN
+		rewrite #hClient,using form$(hClient),key=to$(tr_clientId): mat c$,mat cN ! nokey NokeyClient
+
+		fnStatus('Updating client '&clientId$&' balance to '&str$(cN(client_balance)))
+
 		rewrite #hTransBatch,using 'form pos 37,n 1': 9
 	end if
 loop ! /r
@@ -64,7 +76,7 @@ NokeyClient: ! r:
 goto ReadNext ! /r
 
 Finis: ! r:
-	close #hClient:
+	fnCloseFile(hClient,'CO Client')
 	close #hTrans:
 	close #hTransBatch:
 
@@ -85,5 +97,6 @@ Finis: ! r:
 goto Xit ! /r
 
 Xit: fnXit
+include: fn_open
 include: ertn
 
