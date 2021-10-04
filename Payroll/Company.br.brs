@@ -3,7 +3,7 @@
 	autoLibrary
 	on error goto Ertn
  
-	if fnclient_has('P2') then fnstyp(11) else fnstyp(14) !  styp=11 for jobcost; styp=14 for regular payroll
+	if fnClientHas('P2') then fnstyp(11) else fnstyp(14) !  styp=11 for jobcost; styp=14 for regular payroll
 	fnTop(program$)
  
 	dim a$(3)*40,b$(2)*12,d$(10)*8

@@ -447,9 +447,9 @@ fnend
 		library 'S:\Core\Client.br': fnclient_has_mat
 		fnclient_has_mat=fnclient_has_mat(mat c_has$)
 	fnend
-	def library fnclient_has(ch_sys$*256)
-		library 'S:\Core\Client.br': fnclient_has
-		fnclient_has=fnclient_has(ch_sys$)
+	def library fnClientHas(ch_sys$*256)
+		library 'S:\Core\Client.br': fnClientHas
+		fnClientHas=fnClientHas(ch_sys$)
 	fnend
 	def library fnregistered_for_hh
 		library 'S:\Core\Client.br': fnregistered_for_hh
@@ -1795,7 +1795,7 @@ fnend
 		fnend
 	! /r
 ! /r
-! r: TM Client Billing
+! r: Client Billing
 	def library fnSearch(h,form$*128,nformat$*20,&sel$,klength)
 		library 'S:\Client Billing\fn\search.br': fnSearch
 		fnSearch=fnSearch(h,form$,nformat$,sel$,klength)

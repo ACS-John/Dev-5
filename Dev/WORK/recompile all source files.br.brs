@@ -56,8 +56,7 @@ def fn_updatesource
 	close #proc_file: 
 	execute "subproc "&msr_file$
 fnend 
-def fn_datetime
-	dim tm$*8
-	tm$=time$
-	fn_datetime=val(date$("CCYYMMDD")&tm$(1:2)&tm$(4:5))
+def fn_datetime(; ___,txm$*8)
+	txm$=time$
+	fn_datetime=val(date$("CCYYMMDD")&txm$(1:2)&txm$(4:5))
 fnend 

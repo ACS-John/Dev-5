@@ -24,7 +24,7 @@ fn_setup
 	mat system_abbr_list$(0)
 	mat system_name$(0)
 	fn_addIfLicensed('CM')
-	fn_addIfLicensed('TM')
+	fn_addIfLicensed('Client Billing')
 	fn_addIfLicensed('OE')
 	fn_addIfLicensed('CM')
 	fn_addIfLicensed('CL')
@@ -42,20 +42,26 @@ fn_setup
 		if uprc$(resp$)=uprc$("Yes") then
 			chain 'S:\Core\Programs\Update'
 		else
-			if env$('acsDebug')<>'' then pause
+			if env$('acsDebug')<>'' then 
+				pr 'udim(mat system_abbr_list$)=';udim(mat system_abbr_list$)
+				pr 'pr mat client_has$'
+				pr mat client_has$
+				pr 'fnClientHas(''Client Billing'')=';fnClientHas('Client Billing')
+				pause
+			end if
 			goto Xit
 		end if
 	end if
 
-	dim cursys$*2
+	dim cursys$*64
 	cursys$=fncursys$(cursys$)
 	dim cnam$*128
 	fncno(cno,cnam$) ! this call triggers the setting of the environment variable (env$('cnam')) i.e. setenv('cnam',[cursys]\company.h, pos 1, c 40 etc  )
-	if env$('acsDeveloper')<>'' and env$('cursys')='TM' then
+	if env$('acsDeveloper')<>'' and lwrc$(env$('cursys'))=lwrc$('Client Billing') then
 		dim dataFolder$*256
 		dataFolder$='S:\Core\Data\acsllc'
 	else
-		dataFolder$='[Q]\'&env$('cursys')&"mstr"
+		dataFolder$='[Q]\'&env$('cursys')&'mstr'
 	end if
 
 	!   h_plus=fn_open_plus_initial
@@ -84,7 +90,7 @@ fn_setup
 	fn_gridSetup
 	fn_checkFileVersionIfNecessary
 	! fnreg_read('Report_Cache',report_cache$)
-	if ~(env$('cursys')='TM' and env$('cno')='420') then
+	if ~(lwrc$(env$('CurSys'))=lwrc$('Client Billing') and env$('cno')='420') then
 		fncreg_write('Company Last Accessed Date and Time',date$('mm/dd/ccyy')&' '&time$)
 	end if
 	setenv('ForceScreenIOUpdate','')
@@ -97,8 +103,9 @@ if menu$='Exit and Logout' then
 end if
 goto Xit
 def fn_addIfLicensed(sysCode$)
-	! if (fnclient_has(sysCode$) or env$('acsDeveloper')<>'') and exists('S:\'&fnSystemNameFromAbbr$(sysCode$)&'\Menu.mnu') then
-	if fnclient_has(sysCode$) and exists('S:\'&fnSystemNameFromAbbr$(sysCode$)&'\Menu.mnu') then
+	! if (fnClientHas(sysCode$) or env$('acsDeveloper')<>'') and exists('S:\'&fnSystemNameFromAbbr$(sysCode$)&'\Menu.mnu') then
+	! on the next line:   srch(mat client_has$,sysCode$)   was   fnClientHas(sysCode$) 
+	if fnClientHas(sysCode$) and exists('S:\'&fnSystemNameFromAbbr$(sysCode$)&'\Menu.mnu') then
 		fnAddOneC(mat system_abbr_list$,sysCode$)
 		fnAddOneC(mat system_name$,fnSystemNameFromAbbr$(sysCode$))
 	end if
@@ -405,7 +412,7 @@ def fn_main
 				end if
 
 			else if env$('cursys')='GL' and fkey_value<>0 then
-				if fnclient_has('G2') and fkey_value=fkey_g2_employee then
+				if fnClientHas('G2') and fkey_value=fkey_g2_employee then
 						fnchain('S:\General Ledger\Accountants\Employee')
 				else if fkey_value=fkey_gl_Transactions  then
 					fnchain('S:\General Ledger\Enter Transactions')
@@ -440,7 +447,7 @@ def fn_main
 				else if fkey_value=fkey_change_billing_date then
 					fnchain('S:\Utility Billing\Company')
 				end if
-			else if env$('cursys')='TM' and fkey_value<>0 then
+			else if lwrc$(env$('CurSys'))=lwrc$('Client Billing') and fkey_value<>0 then
 				if fkey_value=fkey_tm_collections then
 					fnchain('S:\Client Billing\Collections')
 				else if fkey_value=fkey_tm_updateSupportExpir then
@@ -541,14 +548,14 @@ def fn_dashboardHeight
 	else if env$('cursys')="PR" then
 		dhReturn=1
 	else if env$('cursys')="GL" then
-		if fnclient_has('G2') then
+		if fnClientHas('G2') then
 			dhReturn=2
 		else
 			dhReturn=1
 		end if
 	else if env$('cursys')="UB" then
 		dhReturn=1
-	else if env$('cursys')="TM" then
+	else if lwrc$(env$('cursys'))=lwrc$("Client Billing") then
 		dhReturn=3
 	else
 		dhReturn=0
@@ -622,7 +629,7 @@ def fn_dashboardDraw
 			tmp_btn_width=10 : tmpBtnItem=0
 			fn_ddAddButton('Accounts',fkey_gl_accounts:=5001,tmpBtnItem+=1,tmp_btn_width,1,'General Ledger Master')
 			fn_ddAddButton('Transactions',fkey_gl_Transactions:=5002,tmpBtnItem+=1,tmp_btn_width,1,'Enter Transactions')
-			if fnClient_has('G2') then
+			if fnClientHas('G2') then
 				tmpBtnItem=0
 				fn_ddAddButton('Employee',fkey_g2_employee:=5011,tmpBtnItem+=1,tmp_btn_width, 2)
 			end if
@@ -642,7 +649,7 @@ def fn_dashboardDraw
 				fnLbl(1,40,'Total Accounts Receivable:',26,1,0,1)
 				fnLbl(1,68,str$(fntotal_ar),4,0,0,1)
 			end if
-		else if env$('cursys')="TM" then
+		else if lwrc$(env$('cursys'))=lwrc$("Client Billing") then
 			tmp_btn_width=30 : tmpBtnItem=0
 			fn_ddAddButton('Update Support Expiration Date',fkey_tm_updateSupportExpir:=5002,tmpBtnItem+=1,tmp_btn_width,1)
 			fn_ddAddButton('Collections',fkey_tm_collections:=5001,tmpBtnItem+=1,tmp_btn_width,1)
@@ -794,7 +801,7 @@ def fn_getProgramList_add(gpla_file$*256;___,sign$)
 			else
 				requirment$=''
 			end if
-			if requirment$='' or fnclient_has(requirment$) then
+			if requirment$='' or fnClientHas(requirment$) then
 				glpa_program_count+=1
 				program_item_count=udim(mat program_item$)
 				mat program_plus$(glpa_program_count)

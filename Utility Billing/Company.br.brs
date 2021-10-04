@@ -229,7 +229,7 @@ DoLoad: ! r:
 	fncreg_read('unusual usage minimum water',uum_water$)
 	fncreg_read('unusual usage minimum gas',uum_gas$)
 	fncreg_read('unusual usage minimum electric',uum_electric$)
-	if fnclient_has('UB-EFT') then
+	if fnClientHas('UB-EFT') then
 		imd$    =fnEftData$('Immediate Destination'           )
 		imo$    =fnEftData$('Immediate Origin'                )
 		imoName$=fnEftData$('Immediate Origin Name'           )
@@ -281,7 +281,7 @@ DoSave: ! r:
 	fncreg_write('unusual usage minimum electric',uum_electric$)
 	fncreg_write('Route Low',str$(bkno1)) ! Route Number Range Low
 	fncreg_write('Route High',str$(bkno2)) ! Route Number Range High
-	if fnclient_has('UB-EFT') then
+	if fnClientHas('UB-EFT') then
 		fnEftData$('Immediate Destination'           ,imd$    )
 		fnEftData$('Immediate Origin'                ,imo$    )
 		fnEftData$('Immediate Origin Name'           ,imoName$)

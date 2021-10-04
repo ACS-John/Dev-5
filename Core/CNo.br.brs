@@ -11,7 +11,7 @@ def library fnCno(&cno; &cnam$)
 	! r: read cnam
 	dim cnam_read$*40
 	cnam_read$=''
-	if env$('ACSDeveloper')<>'' and env$('cursys')='TM' then
+	if env$('ACSDeveloper')<>'' and lwrc$(env$('CurSys'))=lwrc$('Client Billing') then
 		open #tf1=fnH: "Name=S:\Core\Data\acsllc\Company.h[cno],Shr",internal,input ioerr CNAM_XIT
 	else
 		open #tf1=fnH: "Name=[Q]\[cursys]mstr\Company.h[cno],Shr",internal,input ioerr CNAM_XIT
@@ -193,6 +193,12 @@ def fn_setup_systemCache
 			fnAddOneN(mat sIsAddOnN 	,            sN(sys_isAddOn)     )
 		loop
 		EoS: !
+		if env$('client')='ACS' then
+			fnAddOneC(mat sAbbr$     	,'client billing'  )
+			fnAddOneC(mat sName$     	,'Client Billing'  )
+			fnAddOneC(mat sNumber$   	,''  )
+			fnAddOneN(mat sIsAddOnN 	,0     )
+		end if
 		close #hS:
 	end if
 fnend
@@ -271,8 +277,8 @@ def library fncursys$(; cursys_set$*256,resetCache)
 	cursys_cache$=fn_standardizeSysId$(cursys_cache$)
 	if env$('CurSys')<>cursys_cache$ then
 		fnSetEnv('CurSys',cursys_cache$)
+		fnSetEnv('CurSystem',fnSystemNameFromAbbr$)
 		! just fnSystemNameFromAbbr$ instead       --->      fnSetEnv('CurSystem',fn_systemNameFromAbbr$(cursys_cache$))
-		execute 'config substitute [CurSys] '&cursys_cache$
 	end if
 	fncursys$=cursys_cache$
 fnend
