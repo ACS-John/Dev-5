@@ -1795,41 +1795,41 @@ fnend
 		fnend
 	! /r
 ! /r
-! r: TM Time Management
+! r: TM Client Billing
 	def library fnSearch(h,form$*128,nformat$*20,&sel$,klength)
-		library 'S:\Time Management\fn\search.br': fnSearch
+		library 'S:\Client Billing\fn\search.br': fnSearch
 		fnSearch=fnSearch(h,form$,nformat$,sel$,klength)
 	fnend
 	def library fnReassignNTA(filename$*256,keyForm$,ntaForm$)
-		library 'S:\Time Management\fn\printInvoice.br': fnReassignNTA
+		library 'S:\Client Billing\fn\printInvoice.br': fnReassignNTA
 		fnReassignNTA=fnReassignNTA(filename$,keyForm$,ntaForm$)
 	fnend
 	def library fnInvoiceOpen
-		library 'S:\Time Management\fn\printInvoice.br': fnInvoiceOpen
+		library 'S:\Client Billing\fn\printInvoice.br': fnInvoiceOpen
 		fnInvoiceOpen=fnInvoiceOpen
 	fnend
 	def library fnInvoiceAdd(actnum$,mat billto$,invNum$,invDate,mat desc$,mat amt,pbal)
-		library 'S:\Time Management\fn\printInvoice.br': fnInvoiceAdd
+		library 'S:\Client Billing\fn\printInvoice.br': fnInvoiceAdd
 		fnInvoiceAdd=fnInvoiceAdd(actnum$,mat billto$,invNum$,invDate,mat desc$,mat amt,pbal)
 	fnend
 	def library fnInvoiceClose(inv_date; filenameAddOn$*128)
-		library 'S:\Time Management\fn\printInvoice.br': fnInvoiceClose
+		library 'S:\Client Billing\fn\printInvoice.br': fnInvoiceClose
 		fnInvoiceClose=fnInvoiceClose(inv_date, filenameAddOn$)
 	fnend
 	def library fnEmailQueuedInvoices(emailDate$)
-		library 'S:\Time Management\Email Queued Invoices.br': fnEmailQueuedInvoices
+		library 'S:\Client Billing\Email Queued Invoices.br': fnEmailQueuedInvoices
 		fnEmailQueuedInvoices=fnEmailQueuedInvoices(emailDate$)
 	fnend
 	def library fnRead30Categories(mat dimTo30$)
-		library 'S:\Time Management\Category.br': fnRead30Categories
+		library 'S:\Client Billing\Category.br': fnRead30Categories
 		fnRead30Categories=fnRead30Categories(mat dimTo30$)
 	fnend
 	def library fnCustomerHasEbilling(Client_id$)
-		library 'S:\Time Management\fn\customerHasEbilling.br': fnCustomerHasEbilling
+		library 'S:\Client Billing\fn\customerHasEbilling.br': fnCustomerHasEbilling
 		fnCustomerHasEbilling=fnCustomerHasEbilling(Client_id$)
 	fnend
 	def library fnMergeInvoices
-		library 'S:\Time Management\ACS Invoices.br': fnMergeInvoices
+		library 'S:\Client Billing\ACS Invoices.br': fnMergeInvoices
 		fnMergeInvoices=fnMergeInvoices
 	fnend
 ! /r

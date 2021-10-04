@@ -1,0 +1,35 @@
+! *** TM - Client Billing PROGRAMMER ***
+Programmer - TM
+>Billing Method                ^ HamsterFio:CO *
+>Billing Frequency             ^ HamsterFio:CO *
+>Month                         ^ HamsterFio:CO *
+Programmer - Core Access
+>Reg                           ^ HamsterFio:CO *
+>City State Zip                ^ HamsterFio:CO *
+>System Registry               ^ HamsterFio:CO *
+>State                         ^ HamsterFio:CO *
+>1099 Boxes                    ^ HamsterFio:CO *
+>1099 Type                     ^ HamsterFio:CO *
+>Race                          ^ HamsterFio:CO *
+
+Programmer - Layouts (old)
+>Print Layout(s)              ^ Core\Programs\PrintLay2
+>Print Several Layouts (old)  ^ Core\Programs\PrintLay1
+
+Programmer - Utilities (legacy)
+>Locate                       ^ Core\Locate
+>KeyStat                      ^ Core\Programs\*
+>Amortization                 ^ Core\Programs\Amortiz
+>FlexDir                      ^ Core\Programs\*
+
+Programmer - Testing
+>N2Index                      ^ Test\*
+>Print 1099s                  ^ Test\Print1099
+>Payment10                    ^ acsEA\*
+>EA Applicant Search          ^ Test\ApplicantSearch
+>Picture                      ^ Test\Pic
+>ComboF                       ^ Test\*
+>Fine Transaction             ^ Test\FineTransaction
+>Pay Transaction              ^ Test\PayTransaction
+>Test Disabled Text Box       ^ Test\TxtDisable
+>Test Flex                    ^ Test\Flex
