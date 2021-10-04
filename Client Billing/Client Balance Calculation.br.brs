@@ -1,6 +1,6 @@
 fn_setup
 ! enableDelete=1
-enableFixCurrentBalance
+! enableFixCurrentBalance=1
 do
 	fnToS
 	dim resp$(10)*128
@@ -83,7 +83,11 @@ def fn_DoCalculation(; justOne$,___,reportInitialized)
 	end if
 	dim c$(0)*256
 	dim cN(0)
-	hClient=fn_openFio('CO Client',mat c$,mat cN,1)
+	if enableFixCurrentBalance then
+		hClient=fn_openFio('CO Client',mat c$,mat cN)
+	else 
+		hClient=fn_openFio('CO Client',mat c$,mat cN,1)
+	end if
 	fnOpenPrn
 	pr #255,using 'form pos 1,C 6,2*(x 2,Cr 18),x 2,C 40': 'Client','Calculated Balance','Current Balance','Client Name'
 	for item=1 to udim(mat client$)
@@ -95,11 +99,17 @@ def fn_DoCalculation(; justOne$,___,reportInitialized)
 			pr #255,using 'form pos 1,C 6,2*(x 2,pic(---,---,---,--#.##)),x 2,C 40': client$(item),balance(item),cN(client_balance),c$(client_name)
 		end if
 		if enableFixCurrentBalance and balance(item)<>cN(client_balance) and c$(client_name)<>'!!!NO SUCH CLIENT!!!' then
+			! pr 'would change '&client$(item)&' balance from ';cN(client_balance);' to ';balance(item)
 			cN(client_balance)=balance(item)
 			rewrite #hClient,using form$(hClient),key=rpad$(trim$(client$(item)),kln(hClient)): mat c$,mat cN
 		end if
 	next item
-	close #hClient:
+	! pause
+	if enableFixCurrentBalance then
+		fnCloseFile(hClient,'CO Client')
+	else
+		close #hClient:
+	end if
 	fnClosePrn
 	! /r
 fnend
