@@ -161,7 +161,7 @@ def fn_lauraStyleInvoiceBody(out,cnam$*128,cLogo$*256,invNum$*12,actNum$,mat bil
 	! pr #out: '[BOLD][FONT TIMES][SETSIZE(8)][pos(+0,+6)][8LPI][LEFT]';
 	pr #out: '[pos(+0,+62)][pic(1,1,'&cLogo$&')]'
 	pr 'using logo: '&cLogo$
-	if ~exists(cLogo$) then pause
+	if ~exists(cLogo$) then pr 'logo file ('&cLogo$&') (specified in CO Provider) does not exist.' : pause
 	pr #out: '[FONT TIMES][SETSIZE(11)][pos(+0,+6)][6LPI][LEFT]'
 
 	pr #out: ''

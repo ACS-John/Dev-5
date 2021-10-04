@@ -136,7 +136,7 @@ CompanyAdd: ! r:
 	if fn_company_already_exists(cno_selected)=1 then goto Menu1
 	fnputcno(cno_selected)
 	fnCheckFileVersion
-	if env$('cursys')='PR' or env$('cursys')='SU' or env$('cursys')='TM' or env$('cursys')='CL' then ! no AddCNo necessary - just copy in from *.h99999 and go straight to Company Information
+	if env$('cursys')='PR' or env$('cursys')='SU' or lwrc$(env$('CurSys'))=lwrc$('Client Billing') or env$('cursys')='CL' then ! no AddCNo necessary - just copy in from *.h99999 and go straight to Company Information
 		if exists('S:\'&fnSystemNameFromAbbr$&'\mstr\*.h99999') then
 			fnCopy('S:\'&fnSystemNameFromAbbr$&'\mstr\*.h99999',fn_dataFolder$&'\*.h[cno]', 0,'errornotify')
 		else if exists('S:\acs'&env$('cursys')&'\mstr\*.h99999') then
@@ -280,7 +280,7 @@ def fn_setup
 	fn_systemSetup
 fnend
 def fn_dataFolder$*256(; ___,return$*256)
-	if env$('acsDeveloper')<>'' and env$('cursys')='TM' then
+	if lwrc$(env$('cursys'))=lwrc$('Client Billing') then
 		return$='S:\Core\Data\acsllc'
 	else
 		return$='[Q]\'&env$('cursys')&"mstr"
@@ -329,7 +329,7 @@ def fn_setup_on_cursys_change(&cno,&cnam$)
 		fncno(cno,cnam$)
 	end if
 
-	if ~exists('[Q]\'&cursys$&'mstr') and cursys$<>'CO' and cursys$<>'TM' then execute 'mkdir "[Q]\'&cursys$&'mstr"'
+	if ~exists('[Q]\'&cursys$&'mstr') and cursys$<>'CO' and cursys$<>'Client Billing' then execute 'mkdir "[Q]\'&cursys$&'mstr"'
 
 fnend
 

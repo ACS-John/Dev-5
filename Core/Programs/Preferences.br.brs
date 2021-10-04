@@ -29,7 +29,7 @@ win_height=20
 
 	dim receipt_printer$*256
 	fnureg_read('Printer.Receipt',receipt_printer$)
-	if fnclient_has('U4') then
+	if fnClientHas('U4') then
 		dim hhto$*256
 		fnureg_read('Hand Held To File',hhto$)
 		dim hhfro$*256
@@ -43,23 +43,23 @@ win_height=20
 		fnreg_read('Meter Location Id Sequential',u4_meterLocationIdSequential$, 'True')
 		fnreg_read('Hand Held includeFinalBilled',u4_includeFinalBilled$, 'False')
 	end if
-	if fnclient_has('UB') then
+	if fnClientHas('UB') then
 		fnreg_read('Collections pr in Account Order',ub_collPrintInAccountOrder$,'False')
 		fnreg_read('Collections Disable Deposit List',ub_collDisableDepositList$,'False')
 		fnureg_read('ub_total_ar_on_dashboard',ub_total_ar_on_dashboard$,'False')
 	end if
-	if fnclient_has('GL') then
+	if fnClientHas('GL') then
 		fnreg_read('Enter Transactions - retain some fields between additions',gl_retainFieldsDuringAdd$,'False')
 	end if
-	if fnclient_has('PR') then
+	if fnClientHas('PR') then
 		fnreg_read('Check History - enable long names when printing',pr_ckHstEnableLongNames$,'False')
 		fnreg_read('Print Payroll Checks - Print checks which net zero',pr_prNetZeroChecks$,fnPrPrintNetZeroDefault$)
-		if fnclient_has('CL') then
+		if fnClientHas('CL') then
 			fnreg_read('Post to Checkbook - Populate Checkbook Payee from Payroll Employee',pr_prEmpToClPayee$,'True')
 			! fnreg_read('Post to Checkbook - Prefix (optional)',pr_clPayeePrefix$)
 		end if
 	end if
-	if fnclient_has('EM') then
+	if fnClientHas('EM') then
 		dim em_emailReplyTo$*128
 		dim em_smtpServer$*128
 		dim em_emailFrom$*128
@@ -510,7 +510,7 @@ do
 	fnLbl(lc+=1,1,'Print Payroll Checks',win_width,2)
 	fnChk(lc+=1,col2_pos,'Print checks which net zero',1)
 	resp$(resp_pr_prNetZeroChecks:=gl_rc+=1)=pr_prNetZeroChecks$
-	if fnclient_has('CL') then
+	if fnClientHas('CL') then
 		lc+=1
 		fnLbl(lc+=1,1,'Post to Checkbook',win_width,2)
 		fnChk(lc+=1,col2_pos,'Populate Checkbook Payee from Payroll Employee',1)
@@ -532,7 +532,7 @@ do
 	else
 		pr_ckHstEnableLongNames$=resp$(resp_pr_ckHstEnableLongNames)
 		pr_prNetZeroChecks$=resp$(resp_pr_prNetZeroChecks)
-		if fnclient_has('CL') then
+		if fnClientHas('CL') then
 			pr_prEmpToClPayee$=resp$(resp_pr_prEmpToClPayee)
 			! pr_clPayeePrefix$=resp$(resp_pr_clPayeePrefix)
 		end if
@@ -633,7 +633,7 @@ def fn_save
 	fnureg_write('Disable_MultiSession',disable_multisession$)
 	fnureg_write('Save As Path',save_path$)
 	fnureg_write('Printer.Receipt',receipt_printer$)
-	if fnclient_has('U4') then
+	if fnClientHas('U4') then
 		fnreg_write('Hand Held Device',u4_device$)
 		fnreg_write('Meter Location Id Sequential',u4_meterLocationIdSequential$)
 		fnreg_write('Hand Held includeFinalBilled',u4_includeFinalBilled$)
@@ -641,23 +641,23 @@ def fn_save
 		fnureg_write('Hand Held From File',hhfro$)
 		fnureg_write('Hand Held Run File',hhrun$)
 	end if
-	if fnclient_has('UB') then
+	if fnClientHas('UB') then
 		fnreg_write('Collections pr in Account Order',ub_collPrintInAccountOrder$)
 		fnreg_write('Collections Disable Deposit List',ub_collDisableDepositList$)
 		fnureg_write('ub_total_ar_on_dashboard',ub_total_ar_on_dashboard$)
 	end if
-	if fnclient_has('GL') then
+	if fnClientHas('GL') then
 		fnreg_write('Enter Transactions - retain some fields between additions',gl_retainFieldsDuringAdd$)
 	end if
-	if fnclient_has('PR') then
+	if fnClientHas('PR') then
 		fnreg_write('Check History - enable long names when printing',pr_ckHstEnableLongNames$)
 		fnreg_write('Print Payroll Checks - Print checks which net zero',pr_prNetZeroChecks$)
-		if fnclient_has('CL') then
+		if fnClientHas('CL') then
 			fnreg_write('Post to Checkbook - Populate Checkbook Payee from Payroll Employee',pr_prEmpToClPayee$)
 			! fnreg_write('Post to Checkbook - Prefix (optional)',pr_clPayeePrefix$)
 		end if
 	end if
-	if fnclient_has('EM') then
+	if fnClientHas('EM') then
 		fnreg_write('email.ReplyTo',em_emailReplyTo$)
 		fnreg_write('email.smtpServer',em_smtpServer$)
 		fnreg_write('email.From',em_emailFrom$)
@@ -687,21 +687,21 @@ def fn_nav_buttons
 	fnButtonOrDisabled(screen<>screen_theme,nb_lc+=1,nb_pos,'Theme',1002, '',nb_len)
 	fnButtonOrDisabled(screen<>screen_print,nb_lc+=1,nb_pos,'Printer',1003, '',nb_len)
 	nb_lc+=1
-	if fnclient_has('PR') then
+	if fnClientHas('PR') then
 		fnButtonOrDisabled(screen<>screen_pr,nb_lc+=1,nb_pos,'Payroll',1007, '',nb_len)
 	end if
-	if fnclient_has('GL') then
+	if fnClientHas('GL') then
 		fnButtonOrDisabled(screen<>screen_gl,nb_lc+=1,nb_pos,'General Ledger',1006, '',nb_len)
 	end if
-	if fnclient_has('UB') then
+	if fnClientHas('UB') then
 		fnButtonOrDisabled(screen<>screen_ub,nb_lc+=1,nb_pos,'Utility Billing',1005, '',nb_len)
 	end if
 
-	if fnclient_has('U4') then
+	if fnClientHas('U4') then
 		fnButtonOrDisabled(screen<>screen_hh,nb_lc+=1,nb_pos,'(UB) Hand Held',1004, '',nb_len)
 	end if
 
-	if fnclient_has('EM') then
+	if fnClientHas('EM') then
 		fnButtonOrDisabled(screen<>screen_em,nb_lc+=1,nb_pos,'Email',1008, '',nb_len)
 	end if
 	fnLbl(22,1,'')

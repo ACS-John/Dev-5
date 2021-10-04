@@ -64,7 +64,7 @@ L410: linput #1: ln$ eof L540
 	goto L410
 L540: !
 	close #1: ioerr ignore
-	if fnclient_has('G2') then open #1: "Name=S:\General Ledger\Accountants\Menu.mnu",display,input else goto L700
+	if fnClientHas('G2') then open #1: "Name=S:\General Ledger\Accountants\Menu.mnu",display,input else goto L700
 L560: !
 	linput #1: ln$ eof L690
 	if ln$(1:1)<>">" then goto L560 ! skip headings

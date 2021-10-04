@@ -22,15 +22,15 @@ def library fnCheckFileVersion
 		fn_cfv_general_ledger
 	else if env$('cursys')='PR' then
 		fn_cfv_payroll
-		if fnclient_has('P2') then
+		if fnClientHas('P2') then
 			fn_cfv_job_cost_payroll
 		end if
 	else if env$('cursys')='UB' then
 		fn_cfv_utility_billing
 	else if env$('cursys')='CL' then
 		fn_cfv_checkbook
-	else if env$('cursys')='TM' then
-		fn_cfv_time_management
+	else if lwrc$(env$('CurSys'))=lwrc$('Client Billing') then
+		fn_cfv_client_billing
 	end if
 	fnStatus('CheckFileVersion Completed')
 fnend
@@ -159,7 +159,7 @@ def fn_getFileInfo(name$*512,kfname$*512,mat tmpkps,mat tmpkln,&tmpversion,&tmpr
 	fn_getFileInfo=returnN
 fnend
 
-def fn_cfv_time_management
+def fn_cfv_client_billing
 	! open #h_tmwk1=fnH:
 	! fn_check_version(tmpversion,version_proper,'')
 fnend
@@ -1139,7 +1139,7 @@ def fn_ini_move(cursys$*2)
 		fn_programMoveAdd('acsPR\newprinput','Payroll\Enter Time Sheets')
 		fn_programMoveAdd('acsPR\newprCkPrt','Payroll\Print Payroll Checks')
 		fn_programMoveAdd('Payroll\Print 1099 Forms','Payroll\Print 1099-NEC Forms')
-		if fnclient_has('P2') then
+		if fnClientHas('P2') then
 			fn_programMoveAdd('acsPR\Category','Payroll\Job Cost\Category')
 		end if
 	else if cursys$='UB' then
@@ -1172,7 +1172,7 @@ def fn_ini_move(cursys$*2)
 		fn_programMoveAdd('acsGL\ACGLTB','General Ledger\Trial Balance')
 		fn_programMoveAdd('acsGL\AcGLBalC','General Ledger\Comparative Balance Sheet')
 		fn_programMoveAdd('acsGL\AcGLBalY','General Ledger\Period Comparison Balance Sheet')
-		if fnclient_has('G2') then ! Accountant's General Ledger Add-On
+		if fnClientHas('G2') then ! Accountant's General Ledger Add-On
 			fn_programMoveAdd('acsGL\AcPrReg','General Ledger\Accountants\Print Payroll Registers')
 			fn_programMoveAdd('acsGL\Employee','General Ledger\Accountants\Employee')
 		end if
@@ -1210,14 +1210,14 @@ fnend
 def fn_reg_rename(cursys$*2)
 	if cursys$='PR' then
 		! nuffin yet
-		if fnclient_has('P2') then
+		if fnClientHas('P2') then
 			! nuffin yet
 		end if
 	else if cursys$='UB' then
 		! fn_rrOne('acsUB\ubDepChg','Utility Billing\Deposit Change List')  <-- just wrong - only with program caption name changes, not file name changes.
 	else if cursys$='GL' then
 		! nuffin yet
-		if fnclient_has('G2') then ! Accountant's General Ledger Add-On
+		if fnClientHas('G2') then ! Accountant's General Ledger Add-On
 			! nuffin yet
 		end if
 	else if cursys$='CL' then

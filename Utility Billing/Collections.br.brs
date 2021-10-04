@@ -1197,7 +1197,7 @@ def fn_ecp_import(h_ecp)
 	dim ecp_filename$*256
 	dim ei_line$*512
 	dim ei_item$(0)*256
-	if ~fnclient_has('U5') then
+	if ~fnClientHas('U5') then
 		mat ml$(2)
 		ml$(1)="You must purchase the ACS Utility Billing External Collections Processing"
 		ml$(2)="module to import this type of CSV."

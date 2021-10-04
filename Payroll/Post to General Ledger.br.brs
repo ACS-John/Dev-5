@@ -26,7 +26,7 @@
 	fnDedNames(mat fullname$,mat abbrevname$,mat dedcode,mat newcalcode,mat newdedfed,mat dedfica,mat dedst,mat deduc,mat gl$)
 	open #4: "Name=[Q]\PRmstr\PayrollChecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno]",i,i,k
 	d1=fnPayPeriodEndingDate
-	if fnclient_has('CL') then ! exists("[Q]\CLmstr") then
+	if fnClientHas('CL') then ! exists("[Q]\CLmstr") then
 		mat ml$(3)
 		ml$(1)="Normally you would not take this menu option to post"
 		ml$(2)="General Ledger if you have the Checkbook system."

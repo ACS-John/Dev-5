@@ -243,7 +243,7 @@ def fn_client$*18
 		pr "env$('client') is blank." : pause
 	end if
 	! /r
-	fn_getClientLicense(mat client_has$)
+	fn_getClientLicense(mat clientHas$)
 	if srch(mat client_name$,login_name$)>0 then
 		clientReturn$=login_name$
 	else
@@ -280,10 +280,10 @@ def library fnClientNameShort$*18(; clientId$,___,return$*18,which)
 	fnClientNameShort$=return$
 fnend
 
-def fn_getClientLicense(mat client_has$)
+def fn_getClientLicense(mat clientHas$)
 	if setup_client_has$<>env$('client') then
 		setup_client_has$=env$('client')
-		mat client_has$(0)
+		mat clientHas$(0)
 		! r: big if statement
 		client_has_system_count=0
 		if env$('client')='ACS' then
@@ -293,7 +293,7 @@ def fn_getClientLicense(mat client_has$)
 			! fn_getClientLicense_add('PR')
 			! fn_getClientLicense_add('GL')
 			! fn_getClientLicense_add('OE')
-			fn_getClientLicense_add('TM')
+			fn_getClientLicense_add('Client Billing')	! fn_getClientLicense_add('TM')
 			fn_getClientLicense_add('EM')
 		! else if env$('client')='Albany' then ! demo undelivered - not on support but needed to debug Past Due Trun Off List from ACS 4 - test in ACS 5 locally
 		!   fn_userLimit(1)
@@ -604,17 +604,17 @@ def fn_getClientLicense(mat client_has$)
 	end if
 fnend
 def fn_getClientLicense_add(ch_item$*256)
-	client_has_system_count=udim(mat client_has$)
+	client_has_system_count=udim(mat clientHas$)
 	if client_has_system_count=0 then
 		client_has_system_count=2
-		dim client_has$(0)*256
-		mat client_has$(1)
-		client_has$(1)='CO'
+		dim clientHas$(0)*256
+		mat clientHas$(1)
+		clientHas$(1)='CO'
 	else
 		client_has_system_count+=1
 	end if
-	mat client_has$(client_has_system_count)
-	client_has$(client_has_system_count)=ch_item$
+	mat clientHas$(client_has_system_count)
+	clientHas$(client_has_system_count)=ch_item$
 fnend
 def library fnclient_has_mat(mat c_has$) ! returns a list of system each client owns
 	fn_setup
@@ -622,20 +622,19 @@ def library fnclient_has_mat(mat c_has$) ! returns a list of system each client 
 fnend
 def fn_clientHasMat(mat c_has$)
 	if env$('client')='' then pr 'fn_clientHasMat called but env client not set.' : pause
-	fn_getClientLicense(mat client_has$)
-	mat c_has$(udim(mat client_has$))
-	mat c_has$=client_has$
+	fn_getClientLicense(mat clientHas$)
+	mat c_has$(udim(mat clientHas$))
+	mat c_has$=clientHas$
 	fn_clientHasMat=client_has_system_count
 fnend
-def library fnclient_has(ch_sys$*256)
+def library fnClientHas(ch_sys$*256)
 	fn_setup
-	fnclient_has=fn_client_has(ch_sys$)
+	fnClientHas=fn_clientHas(ch_sys$)
 fnend
-def fn_client_has(ch_sys$*256)
-	fn_getClientLicense(mat client_has$)
-	ch_return=0
-	if srch(mat client_has$,uprc$(ch_sys$))>0 then ch_return=1
-	fn_client_has=ch_return
+def fn_clientHas(ch_sys$*256; ___,returnN)
+	fn_getClientLicense(mat clientHas$)
+	if srch(mat clientHas$,uprc$(ch_sys$))>0 or srch(mat clientHas$,ch_sys$)>0 then returnN=1
+	fn_clientHas=returnN
 fnend
 def fn_userLimit(userLimit)
 	if env$('acsProduct')='ACS Online' then
@@ -676,28 +675,28 @@ def fn_userCount
 fnend
 ! r: def library fnuser_limit_exceeded
 ! fn_setup
-! fn_getClientLicense(mat client_has$)
+! fn_getClientLicense(mat clientHas$)
 !   fnuser_limit_exceeded=user_limit_exceeded
 ! /r fnend
 
 def library fnregistered_for_hh
 	fn_setup
-	fn_getClientLicense(mat client_has$)
-	fnRegistered_for_hh=fn_client_has('U4') ! fn_registered_for_hh
+	fn_getClientLicense(mat clientHas$)
+	fnRegistered_for_hh=fn_clientHas('U4') ! fn_registered_for_hh
 fnend
 def library fnRegistered_for_job_cost_pr
 	fn_setup
-	fn_getClientLicense(mat client_has$)
-	fnRegistered_for_job_cost_pr=fn_client_has('P4')
+	fn_getClientLicense(mat clientHas$)
+	fnRegistered_for_job_cost_pr=fn_clientHas('P4')
 fnend
 def library fnRegistered_for_GlBudgetMgmt
 	fn_setup
-	fn_getClientLicense(mat client_has$)
-	fnRegistered_for_GlBudgetMgmt=fn_client_has('GB')
+	fn_getClientLicense(mat clientHas$)
+	fnRegistered_for_GlBudgetMgmt=fn_clientHas('GB')
 fnend
 def library fnhand_held_device$*20
 	fn_setup
-	fn_getClientLicense(mat client_has$)
+	fn_getClientLicense(mat clientHas$)
 	fnhand_held_device$=fn_hand_held_device$
 fnend
 def fn_hand_held_device$*20
@@ -938,8 +937,8 @@ def fn_client_support_setup(client_id,mat css_system_id$,mat css_system_support_
 		open #h_support=fnH: "Name=S:\Core\Data\acsllc\support.h420,Version=2,KFName=S:\Core\Data\acsllc\support-idx.h420,version=0,Shr",i,i,k
 		restore #h_support: ! ,key>==lpad$(trim$(client_id$),kln(h_support)):
 		do
-			read #h_support,using F_SUPPORT: cln$,scode,scode$,sdt1,stm$,sup_exp_date,scst eof CSS_SUPPORT_EOF
-			F_SUPPORT: form pos 1,c 6,n 2,c 2,n 8,c 2,n 8,n 10.2,4*c 50
+			read #h_support,using F_SUPPORT: cln$,scode$,sdt1,stm$,sup_exp_date,scst eof CSS_SUPPORT_EOF
+			F_SUPPORT: form pos 1,c 6,pos 9,c 2,n 8,c 2,n 8,n 10.2,4*c 50
 			cln=val(cln$)
 			if cln=client_id then
 				if srch(mat css_client_owns$,fn_system_code_standardize$(scode$))>0 then

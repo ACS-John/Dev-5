@@ -39,7 +39,7 @@
 		ot2$(j)=str$(j+3)&",25,n 10.2,ut,n"
 		fl2$(j)=fl1$(j)
 	next j
-	enableEbilling=fnClient_has('EM')
+	enableEbilling=fnClientHas('EM')
 	open #hClient=fnH: "Name=S:\Core\Data\acsllc\Client.h[cno],KFName=S:\Core\Data\acsllc\Client-Idx.h[cno],Shr",i,i,k ! 1
 	! open #hClient2=fnH: "Name=S:\Core\Data\acsllc\Client.h[cno],KFName=S:\Core\Data\acsllc\CLIndx2.h[cno],Shr",i,i,k ! 32
 ! /r

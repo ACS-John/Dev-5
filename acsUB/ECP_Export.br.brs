@@ -18,7 +18,7 @@
 	fncno(cno)
 	fnTop(program$,cap$="Export for External Collections Process")
 !
-	if ~fnclient_has('U5') then
+	if ~fnClientHas('U5') then
 		mat m$(2)
 		m$(1)="You must purchase the ACS Utility Billing External Collections Processing"
 		m$(2)="module to access these features"

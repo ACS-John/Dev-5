@@ -17,7 +17,7 @@ do
 	fnComboFio(ln,col2pos,'CO Client', 2)
 	resp$(resp_client=rc+=1)=coClient$
 
-	! fnComboA(ln,col2pos,'TM Provider', 2)
+	! fnComboA(ln,col2pos,'CO Provider', 2)
 	fnLbl(ln+=1,1,'Provider:', col1len,1)
 	fnComboFio(ln,col2pos,'CO Provider', 2)
 	fnButton(ln+=1,(val(env$('Session_Cols'))-8),'Refresh',ck_refresh=19, 'reapply the filters')

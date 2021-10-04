@@ -3,7 +3,7 @@ fn_setup
 fnTop(program$)
  
  
-	if ~fnclient_has('UB-EFT') then
+	if ~fnClientHas('UB-EFT') then
 		mat ml$(2)
 		ml$(1)="You must purchase the ACS Utility Billing EFT"
 		ml$(2)="module to access these features"

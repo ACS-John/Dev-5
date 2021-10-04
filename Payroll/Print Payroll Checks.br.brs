@@ -107,7 +107,7 @@ fnreg_read('Post to Checkbook - Populate Checkbook Payee from Payroll Employee',
 	close #20:
 
 	mat hnames$=abrevName$ : bankgl$=gln$(15)
-	if fnclient_has('CL') then fn_open_acscl
+	if fnClientHas('CL') then fn_open_acscl
 
 	if bankcode=0 then bankcode=1
 	check_number=ckno
@@ -139,7 +139,7 @@ MAIN_QUESTIONS: ! r:
 	fnTxt(5,41,8,0,1,"30",0,"")
 	resp$(5)=str$(beginningEmployeeNumber)
 	fnLbl(6,1,"Post to ACS Checkbook",38,1)
-	if fnclient_has('CL') then
+	if fnClientHas('CL') then
 		fncomboa("prckprt-3",6,41,mat opt_yn$)
 		if acsclcv$="Y" then resp$(6)=opt_yn$(1) else resp$(6)=opt_yn$(2)
 	else
@@ -286,7 +286,7 @@ goto MAIN_QUESTIONS
 		open #hCheck=fnH: "Name=[Q]\PRmstr\PayrollChecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno]",internal,outIn,keyed
 		open #hHourBreak=fnH: "Name=[Q]\PRmstr\HourBreakdown.h[cno],KFName=[Q]\PRmstr\HourBreakdown-idx.h[cno]",internal,outIn,keyed
 		open #hDd=fnH: "Name=[Q]\PRmstr\DD.h[cno],RecL=72,KFName=[Q]\PRmstr\DDidx1.h[cno],Shr,kps=1,kln=10,Use",internal,outIn,keyed
-		if fnclient_has('GL') and gl_installed=1 then
+		if fnClientHas('GL') and gl_installed=1 then
 			gl_installed=0
 			open #h_gl_glbrec=fnH: "Name=[Q]\GLmstr\GLBREC.h[cno],KFName=[Q]\GLmstr\GLRECIDX.h[cno],Shr",internal,outIn,keyed ioerr L1440
 			gl_installed=1
