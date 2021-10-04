@@ -99,7 +99,7 @@ def fn_printInvoice(actNum$,mat billTo$,invNum$,invDate,mat desc$,mat amt,pbal; 
 	!	gosub LauraStyleInvoiceBody
 	! LauraStyleInvoiceBody: ! r:
 	customerHasEbilling=fnCustomerHasEbilling(actNum$)
-	dim tmpFile$*16
+	dim tmpFile$*256
 	tmpFile$='[temp]\tmp[session].pdf'
 	open #out=fnH: 'Name=PDF:,PrintFile=[at]'&tmpFile$&',Replace,RecL=5000',d,o
 	if ~hCollection then
