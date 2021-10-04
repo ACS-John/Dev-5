@@ -15,7 +15,7 @@ fnAutomatedSavePoint('before Merge')
 	dim prg$*256
 	fnprg(prg$)
 	if fnstyp<>99 then
-		if fnstyp=9 then prg$="S:\acsTM\tmMenu" else prg$="S:\acsGL\acGLAuto"
+		if fnstyp=9 then prg$="S:\Client Billing\Legacy\tmMenu" else prg$="S:\acsGL\acGLAuto"
 		fnprg(prg$,2)
 		open #hCompany=fnH: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,input
 		read #hCompany,using 'Form Pos 150,2*N 1': use_dept,use_sub ! read fund and sub codes from general

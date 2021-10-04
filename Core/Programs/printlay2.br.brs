@@ -18,7 +18,7 @@
 	if wbversion$<'4.20hi' then io1$(1)="2,21,C 40/150,U" else io1$(1)="2,21,40/C 150,U"
  
 ! source_path$="S:\acsPR\Layouts\rptrail.lay"
-	source_path$="S:\acsTM\Layouts\*.lay"
+	source_path$="S:\Client Billing\Legacy\Layouts\*.lay"
 ! source_path$="S:\acsUB\Layouts\*.lay"
 ! source_path$="S:\acsUB\Layouts\UBmstr-vb.lay"
 L210: !

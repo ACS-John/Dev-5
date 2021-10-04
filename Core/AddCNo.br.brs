@@ -82,11 +82,8 @@ else if env$('cursys')='GL' then ! r:
 	open #1: "Name=[Q]\GLmstr\ACTrans.h[cno],Size=0,RecL=72,Replace,NoShr",internal,output
 	close #1:
 end if  ! /r
-if exists('S:\'&fnSystemNameFromAbbr$&'\Company.br') then
-	fnchain('S:\'&fnSystemNameFromAbbr$&'\Company.br')
-else
-	fnchain('S:\acs'&env$('cursys')&'\Company')
-end if
+fnchain('S:\'&fnSystemNameFromAbbr$&'\Company.br')
+
  
 Xit: fnchain("S:\Core\Programs\Select Company")
 include: ertn

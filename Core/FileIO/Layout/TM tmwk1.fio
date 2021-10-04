@@ -2,7 +2,7 @@ S:\Core\Data\acsllc\tmwk1.h[cno], wk_, 0
 recl=2484
 ===================================================
 ! tm enter time and charges work file
-! work file created in 'Time Management\Enter Time and Charges.br.brs' and used in 'Time Management\Enter Time and Charges Merge.br.brs'
+! work file created in 'Client Billing\Enter Time and Charges.br.brs' and used in 'Client Billing\Enter Time and Charges Merge.br.brs'
 client      	,Client Number       	,C    5,              	, ! k$
 b7          	,??                   	,N    1,              	, ! b(7)  value of 2 usually - not sure what this is
 date        	,Date                 	,N    6, date(mmddyy)	, ! b(4) format: mmddyy

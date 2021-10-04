@@ -19,7 +19,7 @@
 	pr #win,fields "3,2,Cr 41,N": "Ext/VolId to pr all (blank to select):"
 	io1$(1)="2,44,N 1,U,N"
 	io1$(2)="3,44,14/c 50,U,N"
-	ev$="lay/S:\acsTM\Layouts"
+	ev$="lay/S:\Client Billing\Legacy\Layouts"
 L220: rinput #win,fields io1$(2): ev$ conv CONV1 ! pp was on io1$(1)
 	if ce>0 then io1$(ce)(ce1:ce2)="U": ce=0
 	if cmdkey>0 then goto L310 else ce=curfld

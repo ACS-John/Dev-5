@@ -1,0 +1,61 @@
+! *** TM - Client Billing ***
+Client Balance Calculation ^ Client Billing\*
+--File--
+>Client                                           ^ HamsterFio:CO *
+>Prices                                           ^ HamsterFio:CO *
+>Rates                                            ^ HamsterFio:CO *
+>Provider                                         ^ HamsterFio:CO *
+>Support                                          ^ HamsterFio:CO *
+>Transactions                                     ^ Client Billing\Legacy\*
+>>Transaction Explorer                            ^ Client Billing\Transaction Explorer
+>>Transaction Hamster                             ^ HamsterFio:TM Transaction
+>>Delete Transaction                              ^ Client Billing\*
+>>TransactionType                                 ^ HamsterFio:*
+>>Import Transactions from Mint CSV to Checkbook  ^ Client Billing\Legacy\arinput_import_csv
+>Unbilled Transactions (TMTrans Hamster)          ^ Client Billing\Legacy\TMTrans
+>Support                                          ^ Client Billing\Legacy\*
+>>Update Support Expiration Date                  ^ Client Billing\*
+>Support2                                         ^ Client Billing\Legacy\*
+>Category                                         ^ Client Billing\*
+>Service Code                                     ^ Client Billing\Legacy\svmaint
+>Invoice Description                              ^ Client Billing\Legacy\ivdmaint
+! >Monthly Transactions                           ^ Client Billing\Legacy\arfmmoth
+! >Employee                                       ^ Client Billing\Legacy\emaint
+! >Company Information (Support)                  ^ acsSU\Company
+>Systems                                          ^ HamsterFio:CO *
+>Time Frame                                       ^ HamsterFio:*
+>Client Labels                                    ^ Client Billing\Legacy\CliLabel
+! >Client (Support)                               ^ acsSU\Client
+>Contact                                          ^ HamsterFio:Contact                   ^EM
+>TimeSheet                                        ^ HamsterFio:TimeSheet
+--Daily--
+>Enter Time and Charges                           ^ Client Billing\*
+>Collections                                      ^ Client Billing\*
+! >Unbilled Work In Process                       ^ Client Billing\Legacy\tmunblwk
+! >Productivity Report                            
+! >>Employee                                      ^ Client Billing\Legacy\tmempprd
+! >>Summary                                       ^ Client Billing\Legacy\tmempdpt
+! >Zero Current Period                            ^ Client Billing\Legacy\emzercur
+>Enter Pre-Printed Invoices                       ^ Client Billing\Legacy\*
+>Enter and Print Invoices                         ^ Client Billing\*
+! >Print Work Schedules                           ^ Client Billing\Legacy\tmwrksch
+! >Print Messages                                 ^ Client Billing\Legacy\armessag
+>Email Queued Invoices                            ^ Client Billing\*                     ^EM
+--Monthly--
+>Import CSV to Time Sheets                        ^ Client Billing\*
+>Print Monthly Billing Summary                    ^ Client Billing\Legacy\tmmobsum
+! >Post to General Ledger                         ^ Client Billing\Legacy\arpostgl       ^GL
+! >Month End Closing                              ^ Client Billing\Legacy\tmpytd
+! Generate
+! >Finance Charges                                ^ Client Billing\Legacy\arfinchg
+! >Standard Charges                               ^ Client Billing\Legacy\arstdchg
+--Print--
+! >AR Transaction Listing                         ^ Client Billing\Legacy\artrlist
+! >Statements                                       ^ Client Billing\Legacy\arprtbil
+! >AR Aged Trial Balance                          ^ Client Billing\Legacy\artb
+! >Journals                                       ^ Client Billing\Legacy\arjourn
+>ACS Invoices                                     ^ Client Billing\*
+! Annually
+! >Service Production Report                      ^ Client Billing\Legacy\tmsrvprd
+! >YTD Billing Summary                            ^ Client Billing\*
+! >Zero YTD Information                           ^ Client Billing\Legacy\tmzytd

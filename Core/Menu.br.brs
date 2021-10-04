@@ -160,7 +160,7 @@ def fn_setupOnCursysChange
 		fnputcno(cno)
 		fncno(cno)
 	end if
-	! if ~exists('[Q]\INI\acs'&env$('cursys')) then execute 'mkdir [Q]\INI\acs'&env$('cursys')
+
 	if env$('cursys')='UB' then
 		fnureg_read('ub_total_ar_on_dashboard',ub_total_ar_on_dashboard$)
 	end if
@@ -442,9 +442,9 @@ def fn_main
 				end if
 			else if env$('cursys')='TM' and fkey_value<>0 then
 				if fkey_value=fkey_tm_collections then
-					fnchain('S:\Time Management\Collections')
+					fnchain('S:\Client Billing\Collections')
 				else if fkey_value=fkey_tm_updateSupportExpir then
-					fnchain('S:\Time Management\Update support expiration date')
+					fnchain('S:\Client Billing\Update support expiration date')
 				else if fkey_value=fkey_tm_contact then
 					fn_callHamsterFio('Contact')
 				end if
@@ -921,11 +921,7 @@ def fn_displayMenu
 		end if
 		fn_dm_add('&Company',str$(x+=1))
 		fn_dm_add(' &Select','S:\Core\Programs\Select Company.br')
-		if exists('S:\'&fnSystemNameFromAbbr$&'\Company.br') then
-			fn_dm_add(' Configure','S:\'&fnSystemNameFromAbbr$&'\Company.br')
-		else
-			fn_dm_add(' Configure','S:\acs[cursys]\Company.br')
-		end if
+		fn_dm_add(' Configure','S:\'&fnSystemNameFromAbbr$&'\Company.br')
 		if fnclient_is_converting then
 			fn_dm_add(' -')
 			fn_dm_add(' Import','S:\Core\Company Import.br')
@@ -991,8 +987,8 @@ def fn_displayMenu
 			! fn_dm_add(' Locate 1','S:\Core\Locate.br')
 			if exists('S:\Core\Data\acsllc\Company.h420') and env$('acsDeveloper')<>'' and serial=34660 then
 				fn_dm_add('ACS LLC')
-				fn_dm_add(' Client','HamsterFio:CO Client') ! S:\acsTM\Client.br
-				fn_dm_add(' Support','S:\acsTM\Support.br')
+				fn_dm_add(' Client','HamsterFio:CO Client') ! S:\Client Billing\Legacy\Client.br
+				fn_dm_add(' Support','S:\Client Billing\Legacy\Support.br')
 			end if
 		end if
 	end if  ! ~dm_setup
