@@ -359,7 +359,7 @@ fnend
 def fn_summaryAccumulate
 	! pr 'fn_summaryAccumulate   totalInvoicesPrinted=';totalInvoicesPrinted !
 	if ~hSummary then
-		open #hSummary=fnH: 'Name=PrnSummary[session],RecL=80,replace',d,o ! ioerr SI_ADD
+		open #hSummary=fnH: 'Name=[temp]\[session],RecL=80,replace',d,o ! ioerr SI_ADD
 		pr #hSummary: '{\fs16'  ! set the RTF Font Size to 8
 		pr #hSummary: 'Clnt   Name           Date      Prev Bal    New Amt     Total Due   Inv No  '
 		pr #hSummary: '_____ ______________  ________  __________  __________  __________  __________'
@@ -374,8 +374,8 @@ def fn_summaryAccumulate
 fnend
 def fn_summaryRelease
 	close  #hSummary:
-	if exists('PrnSummary[session]') then
-		open #hSummary=fnH: 'Name=PrnSummary[session]',display,input ! ioerr SpFinis
+	if exists('[temp]\PrnSummary[session]') then
+		open #hSummary=fnH: 'Name=[temp]\PrnSummary[session]',display,input ! ioerr SpFinis
 		fnsavetoasstart('[at]'&fnReportCacheFolderCurrent$&'\Invoice\Archive\ACS Invoice Summary '&date$(days(invDateMmDdYy,'mmddyy'),'ccyy-mm')&'.rtf')
 
 		fnOpenPrn('Summary')
