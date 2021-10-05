@@ -1806,7 +1806,7 @@ fnend
 		fnSearch=fnSearch(h,form$,nformat$,sel$,klength)
 	fnend
 	def library fnReassignNTA(filename$*256,keyForm$,ntaForm$)
-		library 'S:\Client Billing\fn\invoice.br': fnReassignNTA
+		library 'S:\Client Billing\fn\reassignNTA.br': fnReassignNTA
 		fnReassignNTA=fnReassignNTA(filename$,keyForm$,ntaForm$)
 	fnend
 	def library fnInvoiceOpen
