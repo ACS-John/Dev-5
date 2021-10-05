@@ -3,7 +3,7 @@ fn_setup
 fnTop(program$)
 client_id_sageAx$='3811'
 client_id_brc$='90'
-enableMinimumMonthlyBill=1
+enableMinimumMonthlyBill=100
 
 invoice_number=fncreg_read('Last Invoice Number',tmp$)
 invoice_number+=1
@@ -16,7 +16,7 @@ fnStatus('Commit your work.  This data is saved in the repository.')
 execute 'sy "C:\ACS\Util\Dev-5 Commit.cmd"'
 ! /r
 ! r: main loop (produceInvoices)
-	fnStatus('producing Invoice Archive...')
+	fnStatus('producing Invoices...')
 	open #hClient=fnH: 'Name=S:\Core\Data\acsllc\Client.h[cno],KFName=S:\Core\Data\acsllc\Client-Idx.h[cno],Shr',i,i,k
 	! pr 're-indexing support, just in case - probably not necessary to do so often, but one time there was this problem.'
 	! fnIndex('S:\Core\Data\acsllc\support.h[cno]','S:\Core\Data\acsllc\support-idx.h[cno]','1/7,6/2')
@@ -37,30 +37,17 @@ execute 'sy "C:\ACS\Util\Dev-5 Commit.cmd"'
 	dim inv_category(30)
 	dim inv_service_code$(30)
 	dim inv_gl$(30)*12
-	dim client_id$*5
-	dim client_addr$(3)*30
 	do
+		dim client_id$*5
+		dim client_addr$(3)*30
 		read #hClient,using 'form pos 1,c 5,3*c 30,pos 283,pd 5.2': client_id$,mat client_addr$,pbal eof EoClient
-
 
 		client_id$=trim$(client_id$)
 
-		if client_id$='ajj' then 
-			pr client_id$&' - '&fnClientNameShort$(client_id$)
-			debug=1
-			pause 
-		else 
-			debug=0
-		end if
-
-
 		fn_billforMaint(client_id$,invTotal)
-		! if client_id$='4132' then pr client_id$&' - before fn_billForNonMaint' : pause
+
 		fn_billForNonMaint(client_id$,invTotal)
-		! if invTotal then
-		! 	pr client_id$&' - '&client_addr$(1)&'     ';invTotal
-		! end if
-		
+
 		! r: debug point
 		! pr '*'&client_id$&'*'
 		! if client_id$='4132' or client_id$='911' then 
@@ -136,10 +123,10 @@ def fn_billForMaint(client_id$,&invTotal)
 				needsRenewal=1
 			end if
 
-			if stm$='Mo' and needsRenewal then
-				pr 'monthly bill encountered.  please test code before accepting.'
-				pause
-			end if
+			! seems to be working fine    if stm$='Mo' and needsRenewal then
+			! seems to be working fine    	pr 'monthly bill encountered.  please test code before accepting.'
+			! seems to be working fine    	pause
+			! seems to be working fine    end if
 
 
 			if needsRenewal then
@@ -246,11 +233,11 @@ def fn_billForNonMaint(client_id$,&invTotal; ___,wo_desc$*30,hTimeSheet) ! add c
 fnend
 def fn_print_inv
 	! if debug then pr 'debug print_inv' :  pause
-	if enableMinimumMonthlyBill and invTotal>0 and invTotal<100 then
+	if enableMinimumMonthlyBill and invTotal>0 and invTotal<enableMinimumMonthlyBill then
 		invLine+=1
 		if invLine<30 then
-			inv_item$(invLine)='Minimum Monthly Billing of $100.00'
-			inv_amt(invLine)=100-sum(mat inv_amt)
+			inv_item$(invLine)='Minimum Monthly Billing of '&trim$(cnvrt$('pic($$$$$$#.##)',enableMinimumMonthlyBill))
+			inv_amt(invLine)=enableMinimumMonthlyBill-sum(mat inv_amt)
 			invTotal+=inv_amt(invLine)
 			inv_service_code$(invLine)='19'
 			inv_gl$(invLine)='  0  1160  0'
@@ -261,7 +248,7 @@ def fn_print_inv
 		F_TMWK2a: form pos 1,c 5,n 1,n 6,c 12,30*c 6,30*c 128,30*pd 5.2,30*n 2,30*c 2,30*c 12
 	end if
 	if invTotal=>1 or pbal=>1 then
-		fn_summaryAccumulate
+		fn_summaryAdd
 		fnStatus('adding an $'&str$(sum(mat inv_amt))&' invoice for '&client_id$&' - '&client_addr$(1))
 		! pr '  adding invoice '&iv$&' for '&client_id$
 		fnInvoiceAdd(client_id$, mat client_addr$,iv$,invDateMmDdYy,mat inv_item$,mat inv_amt,pbal)
@@ -355,8 +342,8 @@ def fn_combineIntoTmSht(file_from$*256; ___,tce_key$,wo_desc$*30,h_from,h_to,toI
 	close #h_from:
 	close #h_to:
 fnend
-def fn_summaryAccumulate
-	! pr 'fn_summaryAccumulate   totalInvoicesPrinted=';totalInvoicesPrinted !
+def fn_summaryAdd
+	! pr 'fn_summaryAdd   totalInvoicesPrinted=';totalInvoicesPrinted !
 	if ~hSummary then
 		open #hSummary=fnH: 'Name=[temp]\PrnSummary[session],RecL=80,replace',d,o ! ioerr SI_ADD
 		pr #hSummary: '{\fs16'  ! set the RTF Font Size to 8
@@ -371,7 +358,7 @@ def fn_summaryAccumulate
 		totalPreviousBalances+=pbal
 	end if
 fnend
-def fn_summaryRelease
+def fn_summaryRelease(; ___,line$*80)
 	close  #hSummary:
 	if exists('[temp]\PrnSummary[session]') then
 		open #hSummary=fnH: 'Name=[temp]\PrnSummary[session]',display,input ! ioerr SpFinis
@@ -379,7 +366,6 @@ def fn_summaryRelease
 
 		fnOpenPrn('Summary')
 		pr #255: '\ql'
-		dim line$*80
 		do
 			linput #hSummary: line$ eof SpEoI
 			pr #255: line$

@@ -13,7 +13,7 @@ if env$('acsDeveloper')<>'' then
 	testDesc$(2)='something number two' : testAmt(2)=200.00
 	testPbal=12345.67
 	
-	fn_printInvoice(testActNum$,mat testBillTo$,testInvNum$,testInvDate,mat testDesc$,mat testAmt,testPbal)
+	fn_invoiceAdd(testActNum$,mat testBillTo$,testInvNum$,testInvDate,mat testDesc$,mat testAmt,testPbal)
 	fn_invoiceClose(invDate, 'test')
 	
 	pr 'NOTE: This test makes an email invoice which is not displayed. You can find it here:'
@@ -38,9 +38,9 @@ fnend
 def fn_invoiceClose(invDate; filenameAddOn$*128,___,invoiceFilenameBase$*64)
 	close #hClient: ioerr ignore
 	close #hProvider: ioerr ignore
-	close #hCollection: ioerr ignore
-	close #hPrintCollection: ioerr ignore
-	hClient=hProvider=hCollection=hPrintCollection=0
+	close #hAc: ioerr ignore
+	close #hPc: ioerr ignore
+	hClient=hProvider=hAc=hPc=0
 	setup_printInvoice=0
 
 	invoiceFilenameBase$='ACS Invoice '
@@ -50,21 +50,30 @@ def fn_invoiceClose(invDate; filenameAddOn$*128,___,invoiceFilenameBase$*64)
 	end if
 	invoiceFilenameBase$&='.pdf'
 	
-	fnCopy(tmpCollectionFile$,'[at]'&fnReportCacheFolderCurrent$&'\'&invoiceFilenameBase$)
-	fnCopy(tmpCollectionFile$,'[at]'&fnReportCacheFolderCurrent$&'\Invoice\Archive\'&invoiceFilenameBase$)
-	fnCopy(tmpPrintCollectionFile$,'[at]'&fnReportCacheFolderCurrent$&'\Invoice\Print\(print only) '&invoiceFilenameBase$)
-	if env$('acsDeveloper')<>'' then ! ='John' then
-		fnCopy(tmpCollectionFile$,'[at]D:\ACS\Doc\Invoices\'&invoiceFilenameBase$)
+	fnCopy(tmpArchiveCollectionFile$,'[at]'&fnReportCacheFolderCurrent$&'\'&invoiceFilenameBase$) ! traditional Report Cache - use the archive here so it has them all
+	fnCopy(tmpArchiveCollectionFile$,'[at]'&fnReportCacheFolderCurrent$&'\Invoice\Archive\'&invoiceFilenameBase$)
+	if exists(tmpPrintCollectionFile$) then
+		fnCopy(tmpPrintCollectionFile$,'[at]'&fnReportCacheFolderCurrent$&'\Invoice\Print\(print only) '&invoiceFilenameBase$)
 	end if
-	collectionPageCount=printCollectionPageCount=0
+	if env$('acsDeveloper')<>'' then ! ='John' then
+		fnCopy(tmpArchiveCollectionFile$,'[at]D:\ACS\Doc\Invoices\'&invoiceFilenameBase$)
+	end if
+	archiveCollectionPageCount=printCollectionPageCount=0
+	
+	pr 'after invoice close' : pause
+	
 fnend
 
 def library fnInvoiceAdd(actNum$,mat billTo$,invNum$,invDate,mat desc$,mat amt,pbal)
 	if ~setup then fn_setup
-	fnInvoiceAdd=fn_printInvoice(actNum$,mat billTo$,invNum$,invDate,mat desc$,mat amt,pbal)
+	fnInvoiceAdd=fn_invoiceAdd(actNum$,mat billTo$,invNum$,invDate,mat desc$,mat amt,pbal)
 fnend
-def fn_printInvoice(actNum$,mat billTo$,invNum$,invDate,mat desc$,mat amt,pbal; ___,totalAmt)
-	if ~setup_printInvoice then
+! r: dims for variables shared by fn_invoiceAdd (set) and fn_invoiceClose (used)
+dim tmpArchiveCollectionFile$*256
+dim tmpPrintCollectionFile$*256
+! /r
+def fn_invoiceAdd(actNum$,mat billTo$,invNum$,invDate,mat desc$,mat amt,pbal; ___,totalAmt,hIs,tmpSingleInvoiceFile$*256,clientHasEbilling,invoiceNameBase$*64)
+	if ~setup_printInvoice then ! r: openFio client and provider 
 		setup_printInvoice=1
 		dim c$(0)*256
 		dim cN(0)
@@ -72,84 +81,66 @@ def fn_printInvoice(actNum$,mat billTo$,invNum$,invDate,mat desc$,mat amt,pbal; 
 		dim p$(0)*256
 		dim pN(0)
 		hProvider=fn_openFio('CO Provider',mat p$,mat pN, 1)
-	end if
+	end if ! /r
 	! forcePrintAcePdf=0
 	! disableRtf=1
-	! r: set cnam$ and cLogo$
-	actNum$=trim$(actNum$)
+	! r: get cnam$ and cLogo$
+		actNum$=trim$(actNum$)
+		read #hClient,using form$(hClient),key=rpad$(actNum$,kln(hClient)): mat c$,mat cN 
+		read #hProvider,using form$(hProvider),key=c$(client_provider): mat p$,mat pN
+		dim cnam$*128
+		cnam$=rtrm$(p$(provider_name))
+		dim cLogo$*128
+		cLogo$=rtrm$(p$(provider_logo))
+		c$(client_provider)=trim$(c$(client_provider))
+	! /r
+
+	! r: make the individual file
+	tmpSingleInvoiceFile$='[temp]\invoiceSingle[session].pdf'
+	open #hIs=fnH: 'Name=PDF:,PrintFile=[at]'&tmpSingleInvoiceFile$&',Replace,RecL=5000',d,o
+	fn_lauraStyleInvoiceBody(hIs,cnam$,cLogo$,invNum$,actNum$,mat billTo$,pbal,mat desc$,mat amt)
+	close #hIs:
+	! /r
+	clientHasEbilling=fnCustomerHasEbilling(actNum$)
+	if clientHasEbilling then pr actNum$&' is on ebilling.' else pr actNum$&' is NOT on ebilling.'
+	! r: if on ebilling copy the individual file into Ebilling\
+	if clientHasEbilling then
+		invoiceNameBase$='Invoice '
+		invoiceNameBase$&=date$(days(invDate,'mmddyy'),'ccyy-mm')
+		invoiceNameBase$&=' inv '&trim$(invNum$)
+		invoiceNameBase$&=' act '&trim$(actNum$)
+		invoiceNameBase$&='.pdf'
+		fnCopy(tmpSingleInvoiceFile$,'[at]'&fnReportCacheFolderCurrent$&'\Ebilling\'&invoiceNameBase$)
+	end if
+	! /r
+
+	! r: archive (gets everything)
+		if ~hAc then
+			tmpArchiveCollectionFile$='[temp]\invoiceArchiveCollection[session].pdf'
+			open #hAc=fnH: 'Name=PDF:,PrintFile=[at]'&tmpArchiveCollectionFile$&',Replace,RecL=5000',d,o
+			archiveCollectionPageCount=0
+		end if
+		if archiveCollectionPageCount then
+			pr #hAc: newpage
+		end if
+		fn_lauraStyleInvoiceBody(hAc,cnam$,cLogo$,invNum$,actNum$,mat billTo$,pbal,mat desc$,mat amt)
+		archiveCollectionPageCount+=1
+	! /r
+	! r: print collection (only stuff that needs to be printed this month)
+		if ~hPc then
+			tmpPrintCollectionFile$='[temp]\invoicePrintCollection[session].pdf'
+			open #hPc=fnH: 'Name=PDF:,PrintFile=[at]'&tmpPrintCollectionFile$&',Replace,RecL=5000',d,o
+			printCollectionPageCount=0
+		end if
+		if printCollectionPageCount and ~clientHasEbilling then
+			pr #hPc: newpage
+		end if
+		if ~clientHasEbilling then
+			fn_lauraStyleInvoiceBody(hPc,cnam$,cLogo$,invNum$,actNum$,mat billTo$,pbal,mat desc$,mat amt)
+			printCollectionPageCount+=1
+		end if
+	! /r
 	
-	read #hClient,using form$(hClient),key=rpad$(actNum$,kln(hClient)): mat c$,mat cN 
-	read #hProvider,using form$(hProvider),key=c$(client_provider): mat p$,mat pN
-	dim cnam$*128
-	cnam$=rtrm$(p$(provider_name))
-	dim cLogo$*128
-	cLogo$=rtrm$(p$(provider_logo))
-	c$(client_provider)=trim$(c$(client_provider))
-	! if c$(client_provider)='css' then  ! Stern and Stern, Recoveries Unlimited and Peter Engler Designs
-	! 	cnam$='Commercial Software Solutions LLC'
-	! 	cLogo$='S:\Client Billing\resource\cssLogo.png'
-	! else if c$(client_provider)='acs' then 
-	! 	cnam$='Advanced Computer Services LLC'
-	! 	cLogo$='S:\Core\Icon\bwLogo.jpg' ! 's:\Client Billing\Legacy\bwlogo2.jpg'
-	! else if c$(client_provider)='jb' then 
-	! 	cnam$='John Bowman'
-	! 	cLogo$='S:\Core\Icon\John.png'
-	! end if
-	! /r
-	!	gosub LauraStyleInvoiceBody
-	! LauraStyleInvoiceBody: ! r:
-	customerHasEbilling=fnCustomerHasEbilling(actNum$)
-	dim tmpFile$*256
-	tmpFile$='[temp]\tmp[session].pdf'
-	open #out=fnH: 'Name=PDF:,PrintFile=[at]'&tmpFile$&',Replace,RecL=5000',d,o
-	if ~hCollection then
-		dim tmpCollectionFile$*256
-		tmpCollectionFile$='[temp]\tmpCollection[session].pdf'
-		open #hCollection=fnH: 'Name=PDF:,PrintFile=[at]'&tmpCollectionFile$&',Replace,RecL=5000',d,o
-		collectionPageCount=printCollectionPageCount=0
-
-		dim tmpPrintCollectionFile$*256
-		tmpPrintCollectionFile$='[temp]\tmpPrintCollection[session].pdf'
-		open #hPrintCollection=fnH: 'Name=PDF:,PrintFile=[at]'&tmpPrintCollectionFile$&',Replace,RecL=5000',d,o
-
-	end if
-
-	! make the individual file
-	fn_lauraStyleInvoiceBody(out,cnam$,cLogo$,invNum$,actNum$,mat billTo$,pbal,mat desc$,mat amt)
-
-	! make the collection files
-	if collectionPageCount then
-		pr #hCollection: newpage
-	end if
-	if printCollectionPageCount and ~customerHasEbilling then
-		pr #hPrintCollection: newpage
-	end if
-
-	! archive (gets everything)
-	fn_lauraStyleInvoiceBody(hCollection,cnam$,cLogo$,invNum$,actNum$,mat billTo$,pbal,mat desc$,mat amt)
-	collectionPageCount+=1
-
-	! print collection (only stuff that needs to be printed this month)
-	if ~customerHasEbilling then
-		fn_lauraStyleInvoiceBody(hPrintCollection,cnam$,cLogo$,invNum$,actNum$,mat billTo$,pbal,mat desc$,mat amt)
-		printCollectionPageCount+=1
-	end if
-	! close #out:
-
-	! r: copy created temp pdf to it's places
-	dim invoiceFilenameBase$*64
-	invoiceFilenameBase$='Invoice '
-	invoiceFilenameBase$&=date$(days(invDate,'mmddyy'),'ccyy-mm')
-	invoiceFilenameBase$&=' inv '&trim$(invNum$)
-	invoiceFilenameBase$&=' act '&trim$(actNum$)
-	invoiceFilenameBase$&='.pdf'
-
-	if customerHasEbilling then
-		fnCopy(tmpFile$,'[at]'&fnReportCacheFolderCurrent$&'\Ebilling\'&invoiceFilenameBase$)
-	end if
-	! /r
-	! return ! /r
-
 fnend
 
 def fn_lauraStyleInvoiceBody(out,cnam$*128,cLogo$*256,invNum$*12,actNum$,mat billTo$,pbal,mat desc$,mat amt; ___, totalAmt,pdfline$*151)
