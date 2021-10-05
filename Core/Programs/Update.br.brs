@@ -152,7 +152,7 @@ def fn_update
 	else
 		fnStatus('Systems on Support:')
 		for client_has_item=1 to client_has_count
-			fnStatus('   '&fnSystemNameForty$(client_has$(client_has_item)))
+			fnStatus('   '&fnSystemName$(client_has$(client_has_item)))
 			dim support_text$*256
 			u_which=srch(mat system_id$,client_has$(client_has_item))
 			if u_which>0 then

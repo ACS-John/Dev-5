@@ -221,41 +221,28 @@ def library fnSystemIsAddOn( sia_systemAbbr$*256; ___,returnN)
 	end if
 	fnSystemIsAddOn=returnN
 fnend
-def library fnSystemName$*256(; sysNo$*256,___,return$*256,which) ! from ID or Abbr
-	! inherrits mat sNumber$, mat sAbbr$
+
+def library fnSystemName$*256(; sysNo$*256)
 	if ~setup then fn_setup
-	fn_setup_systemCache
-	sysNo$=lwrc$(trim$(sysNo$))
-	
+	fnSystemName$=fn_systemName$( sysNo$)
+fnend
+def library fnSystemNameForty$*40(; sysNo$*256)
+	if ~setup then fn_setup
+	fnSystemNameForty$=fn_systemName$( sysNo$)(1:40)
+fnend
+def fn_systemName$*256(; sysNo$*256,___,return$*256,which)
+	! inherrits: mat sAbbr$, mat sName$
+	if ~setup_systemCache then fn_setup_systemCache
 	if sysNo$='' then sysNo$=env$('CurSys')
-	
-	which=srch(mat sNumber$,sysNo$)
-	if which<=0 then
-		! if uprc$(sysNo$)='P1' then pr fn_standardizeSysId$(sysNo$) : pause
-		which=srch(mat sAbbr$,lwrc$(fn_standardizeSysId$(sysNo$)))
-	end if
-	
-	if which then
+	sysNo$=lwrc$(sysNo$)
+
+	which=srch(mat sAbbr$,sysNo$)
+	if which>0 then
 		return$=sName$(which)
 	end if
-	fnSystemName$=return$
+	fn_systemName$=return$
 fnend
-def library fnSystemNameForty$*40(; as2n_abbr$*256,___,return$*40)
-	if ~setup then fn_setup
-	fnSystemNameForty$=fn_systemNameForty$( as2n_abbr$)
-fnend
-def fn_systemNameForty$*40(; abbr$*256,___,return$*40,which)
-	! requies local: mat sAbbr$
-	if ~setup_systemCache then fn_setup_systemCache
-	if abbr$='' then abbr$=env$('CurSys')
-	abbr$=lwrc$(abbr$)
 
-	which=srch(mat sAbbr$,abbr$)
-	if which>0 then
-		return$=sName$(which)(1:40)
-	end if
-	fn_systemNameForty$=return$
-fnend
 def library fnCurSys$(; cursys_set$*256,resetCache,___,curSystem$*256)
 	if ~setup then fn_setup
 	if cursys_set$<>'' then
@@ -283,7 +270,7 @@ def library fnCurSys$(; cursys_set$*256,resetCache,___,curSystem$*256)
 	if env$('CurSys')<>cursys_cache$ then
 		fnSetEnv('CurSys',cursys_cache$)
 
-		curSystem$=fn_systemNameForty$
+		curSystem$=fn_systemName$
 		fnSetEnv('CurSystem',curSystem$)
 		! just fnSystemNameForty$ instead       ---> 
 	end if
