@@ -26,31 +26,16 @@ do ! r: main loop
 	else
 		read #hClient,using form$(hClient),key=rpad$(trim$(clientId$),5): mat c$,mat cN ! nokey NokeyClient 9/5/21 - i want to get errors if they happen here
 		to$(tr_inv)=lpad$(rtrm$(to$(tr_inv)),12)
-
-		if toN(tr_transCode)<=3 or toN(tr_transCode)=5 then cN(client_balance)+=toN(tr_amt) else cN(client_balance)-=toN(tr_amt) ! SIMPLEST WAY
+		
+		if toN(tr_transCode)=1 then cN(client_balance)+=toN(tr_amt) ! Invoice
+		if toN(tr_transCode)=2 then cN(client_balance)+=toN(tr_amt) ! Finance Charge
+		if toN(tr_transCode)=3 then cN(client_balance)+=toN(tr_amt) ! Standard Charge
+		if toN(tr_transCode)=4 then cN(client_balance)-=toN(tr_amt) ! Collection
+		if toN(tr_transCode)=5 then cN(client_balance)+=toN(tr_amt) ! Debit Memo
+		if toN(tr_transCode)=6 then cN(client_balance)-=toN(tr_amt) ! Credit Memo
 
 		if toN(tr_transCode)=3 then toN(tr_amt)=toN(tr_amtOrigional)
 		toN(tr_amtOrigional)=toN(tr_amt)
-
-
-		! from Current COLLECTIONS program
-		! 1 Invoices
-		! 2 Debit Memos
-		! 3 Collections
-		! 4 Credit Memos
-	
-		! TO CO TransactionCode
-		! 1 Invoice
-		! 2 Finance Charge
-		! 3 Standard Charge
-		! 4 Collection
-		! 5 Debit Memo
-		! 6 Credit Memo
-
-		if toN(tr_transCode)=4 then toN(tr_transCode)=6
-		if toN(tr_transCode)=3 then toN(tr_transCode)=4
-		if toN(tr_transCode)=2 then toN(tr_transCode)=5
-
 
 		to$(tr_clientId)=rpad$(trim$(clientId$),5)
 		toN(tr_nta)=0

@@ -3,11 +3,27 @@ fnTop(program$)
 
 ! r: setup
 
-	dim entryType$(4)
+		! from Current COLLECTIONS program
+		tr5_invoice   	=1 ! 1 Invoices
+		tr5_debit     	=5 ! 2 Debit Memos
+		tr5_collection	=4 ! 3 Collections
+		tr5_credit    	=6 ! 4 Credit Memos
+	
+		! TO CO TransactionCode
+		! 1 Invoice
+		! 2 Finance Charge
+		! 3 Standard Charge
+		! 4 Collection
+		! 5 Debit Memo
+		! 6 Credit Memo
+
+	dim entryType$(6)
 	entryType$(1)='Invoices'
-	entryType$(2)='Debit Memos'
-	entryType$(3)='Collections'
-	entryType$(4)='Credit Memos'
+	entryType$(2)=''
+	entryType$(3)=''
+	entryType$(4)='Collections'
+	entryType$(5)='Debit Memos'
+	entryType$(6)='Credit Memos'
 	dim hd$(2)*50
 
 
@@ -154,24 +170,24 @@ open #hCl2=fnH: "Name=S:\Core\Data\acsllc\Client.h[cno],KFName=S:\Core\Data\acsl
 ! /r
 
 ScreenAddMore: ! r:
-	dim pt(6)
+	dim pt(10)
 	if samOpt$(1)='' then mat samOpt$=('False') : samOpt$(3)='True'
 	fntos : rc=0
 	! fnlbl(1,1,'Add:',8,1)
 	
 	! fnLbl( 1,10,"A/R Input Proof Totals")
 	fnLbl( 2, 5,"Total Account #s:",20,1)
-	fnTxt( 2,26,0,11,0,'pointtwo',1) : resp$(rc+=1)=str$(pt(1))
+	fnTxt( 2,26,0,11,0,'pointtwo',1) : resp$(rc+=1)=str$(totalAccount)
 	fnLbl( 3, 5,"Total Invoices:",20,1)
-	fnTxt( 3,26,0,11,0,'pointtwo',1) : resp$(rc+=1)=str$(pt(2))
+	fnTxt( 3,26,0,11,0,'pointtwo',1) : resp$(rc+=1)=str$(pt(tr5_invoice))
 	fnLbl( 4, 5,"Total Debit Memos:",20,1)
-	fnTxt( 4,26,0,11,0,'pointtwo',1) : resp$(rc+=1)=str$(pt(3))
+	fnTxt( 4,26,0,11,0,'pointtwo',1) : resp$(rc+=1)=str$(pt(tr5_debit))
 	fnLbl( 5, 5,"Total Collections:",20,1)
-	fnTxt( 5,26,0,11,0,'pointtwo',1) : resp$(rc+=1)=str$(pt(4))
+	fnTxt( 5,26,0,11,0,'pointtwo',1) : resp$(rc+=1)=str$(pt(tr5_collection))
 	fnLbl( 6,5,"Total Credit Memos:",20,1)
-	fnTxt( 6,26,0,11,0,'pointtwo',1) : resp$(rc+=1)=str$(pt(5))
+	fnTxt( 6,26,0,11,0,'pointtwo',1) : resp$(rc+=1)=str$(pt(tr5_credit))
 	fnLbl( 7,5,"Total Cash Sales:",20,1)
-	fnTxt( 7,26,0,11,0,'pointtwo',1) : resp$(rc+=1)=str$(pt(6))
+	fnTxt( 7,26,0,11,0,'pointtwo',1) : resp$(rc+=1)=str$(totalCashSales)
 	fnLbl( 8,5,"Total Discounts Taken:",20,1)
 	fnTxt( 8,26,0,11,0,'pointtwo',1) : resp$(rc+=1)=str$(tdt)
 	
@@ -198,10 +214,11 @@ ScreenAddMore: ! r:
 		gosub PrintEntryList
 	else if ckey=>21 and ckey<=24 then ! add one
 		tr5=0
-		if ckey=21 then tr5=1
-		if ckey=22 then tr5=2
-		if ckey=23 then tr5=3
-		if ckey=24 then tr5=4
+		if ckey=21 then tr5=tr5_invoice    	! Invoices
+		if ckey=22 then tr5=tr5_debit      	! Debit Memos
+		if ckey=23 then tr5=tr5_collection 	! Collections
+		if ckey=24 then tr5=tr4_credit     	! Credit Memos
+
 		hd$(1)="Add "&entryType$(tr5)
 		hd$(2)="Client Number as 0 to stop"
 		goto ScreenSomething1
@@ -212,8 +229,8 @@ ScreenAddMore: ! r:
 goto ScreenSomething1 ! /r
 
 ScreenSomething1: ! r:
-	if tr5=4 or tr5=3 then sc2$(7)="G/L # to Credit" else sc2$(7)="G/L # to Debit"
-	if tr5=3 then sc2$(6)="Discount Amount" else sc2$(6)=""
+	if tr5=tr5_credit or tr5=tr5_collection then sc2$(7)="G/L # to Credit" else sc2$(7)="G/L # to Debit"
+	if tr5=tr5_collection then sc2$(6)="Discount Amount" else sc2$(6)=""
 	if gx=0 then sc2$(7)=" "
 	L710: !
 	pr newpage
@@ -270,10 +287,10 @@ ScreenSomething2: ! r:
 	L1060: !
 	fli1$(4)="6,30,n 11.2,ut,n"
 	if r1>0 then goto L1170
-	if tr5=3 then fli1$(4)="6,30,n 11.2,ue,n"
+	if tr5=tr5_collection then fli1$(4)="6,30,n 11.2,ue,n"
 	input fields mat fli1$: p$,iv$,tr(1),tr(3),id$,tr(2),mat pgl,mat gl conv L1240
 	if cmdkey=2 then goto L920
-	if tr5<>3 then goto L1200
+	if tr5<>tr5_collection then goto L1200
 	fli1$(4)="6,30,n 11.2,ut,n"
 	! if sz=4 then gl(1,2)=gln1(2): gl(1,1)=gln1(1): gl(1,3)=tr(3)
 	! if sz=3 then gl(1,1)=gln1(2): gl(1,2)=gln1(3): gl(1,3)=tr(3)
@@ -320,7 +337,7 @@ ScreenSomething2: ! r:
 	next j
 	L1460: !
 	
-	if tr5=3 then gla=gla-tr(2)
+	if tr5=tr5_collection then gla=gla-tr(2)
 	if gla<>tr(3) then
 		pr f "11,2,c 75": " G/L allocations do not agree with total amount.  Press enter to continue."
 		input fields "11,78,c 1,EU,n": pause$
@@ -330,11 +347,11 @@ ScreenSomething2: ! r:
 	
 	L1520: !
 	if ltrm$(p$)<>"-1" then
-		pt(1)+=val(p$) conv ignore
+		totalAccount+=val(p$) conv ignore
 	end if
-	pt(tr5+1)=pt(tr5+1)+tr(3)
-	if tr5=3 then tdt=tdt+tr(2)
-	if ltrm$(p$)="-1" then pt(6)=pt(6)+tr(3)
+	pt(tr5)+=tr(3)
+	if tr5=tr5_collection then tdt+=tr(2)
+	if ltrm$(p$)="-1" then totalCashSales+=tr(3)
 	if vf=1 then goto RewrTransNow
 	r3=r3+1
 	tr(5)=tr5
@@ -356,18 +373,18 @@ ScreenTotals: ! r:
 		pr newpage
 		pr f ' 3,10,cc 50':"A/R Input Proof Totals"
 		pr f ' 6,5,cr 20': "Total Account #s:"
-		pr f ' 6,26,n 11.2': pt(1)
+		pr f ' 6,26,n 11.2': totalAccounttotalAccount
 		pr f ' 7,5,cr 20': "Total Invoices:"
-		pr f ' 7,26,n 11.2': pt(2)
+		pr f ' 7,26,n 11.2': pt(tr5_invoice)
 		pr f ' 8,5,cr 20': "Total Debit Memos:"
-		pr f ' 8,26,n 11.2': pt(3)
+		pr f ' 8,26,n 11.2': pt(tr5_debit)
 		pr f ' 9,5,cr 20': "Total Collections:"
-		pr f ' 9,26,n 11.2': pt(4)
+		pr f ' 9,26,n 11.2': pt(tr5_collection)
 		pr f '10,5,cr 20': "Total Credit Memos:"
-		pr f '10,26,n 11.2': pt(5)
+		pr f '10,26,n 11.2': pt(tr5_credit)
 
 		pr f "11,5,C 20": "Total Cash Sales"
-		pr f '11,26,n 11.2': pt(6)
+		pr f '11,26,n 11.2': totalCashSales
 		pr f "12,5,C 22": "Total Discounts Taken"
 		pr f "12,26,n 11.2": tdt
 		pr f '13,10,cc 50':""
@@ -432,10 +449,10 @@ AskMakeCorrection: ! r:
 		Faddr: form pos 1,c 5,c 12,n 6,2*pd 5.2,pd 2,2*n 1,c 20
 		if ltrm$(p$)="0" or ltrm$(p$)="" then goto AskMakeCorrection
 		tr5=tr(5)
-		if p><-1 then pt(1)=pt(1)-val(p$) conv ignore
-		pt(tr5+1)=pt(tr5+1)-tr(3)
-		if ltrm$(p$)="-1" then pt(6)=pt(6)-tr(3)
-		if tr5=3 then tdt=tdt-tr(2)
+		if p><-1 then totalAccount-=val(p$) conv ignore
+		pt(tr5)-=tr(3)
+		if ltrm$(p$)="-1" then totalCashSales-=tr(3)
+		if tr5=tr5_collection then tdt-=tr(2)
 		hd$(1)="Edit "&entryType$(tr5)
 		hd$(2)="Enter Client as 0 to Delete this entry"
 		vf=1
