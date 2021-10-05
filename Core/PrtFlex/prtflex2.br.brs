@@ -1,46 +1,35 @@
-! Prtflex2 ! DO NOT RENUMBER
-! Replace S:\Core\PrtFlex\PrtFlex2
-! r: libraries
-	autoLibrary
-! /r
-	on error goto Ertn
+autoLibrary
+on error goto Ertn
 ! r: dims
-	dim programfolder$*60,datafolder$*256,gridname$*40
-	dim name$*30,colmask$*3,tt$*200,colhdr$(80)*30,colmask$(80)*3
-	dim response$(87)*80,text$*40, lastgridresponse$*87,resp$(10)*60
-	dim options$(300)*87,ln$*132,item$(80)*80,abbrev$*20,open_read$*80,tg(11)
-	dim z$*8,rp$*3,py$(8)*25,ss$*11,pb$(10)*2,pl$(5)*13,pf$(7)*6,pa$(8)*1
-	dim pm(40),adr(2)
-	dim dg$(6)*6,pc$(5)*5,pcd(5),oc$(5)*2,ocd(5),va$(5)*2,vaa(5)
-	dim df$*1,dr$*9,dc$*2,da$*17,extra(23),extra$(11)*30,item$(80)*50
-	dim abbrev$*20,open_read$*80,tg(11)
-	dim saddr$*40,scity$*20,sstate$*2,szip$*11,msgnum$*12,maddr$*39,mcity$*20,mstate$*2,mzip$*11,atime$*8,crn$*9,dtl$*8,name$(3)*25,ss$*11,race$*18,sex$*1
-	dim tg(11),p$*10
-	dim ck1$*1,ck2$*1,ck3$*1,ck4$*1,ck5$*1,ck5d$*60,amt(7),amt2(5),cksa$*1,eshome$*1,esstreet$*30,weather$*1,sign$*1,signhelp$*30,witname$*30
-	dim ifnot$*80,comment$*80,worker$*20,amt3(12),hes$(10)*10
-	dim chk4b1$*1,status$*10,payee$(3)*5,payamt(3),chk4c1$*1,chk4c2$*1
-	dim vod$*80,chk4d1$*1,chk4d2$*1,chk4d3$*1,chk4d4$*1,existingss$*12
-	dim chk4d5$*1,chk4d6$*1,chk4d7$*1,chk4d8$*1,otherspec$*40,chk4d9$*1
-	dim heap$*1,chk4d21$*1,comment2$*150,votime$*8,holdname$(3)*30
+	dim response$(87)*80
+	dim resp$(10)*60
+	dim tg(11)
+	dim p$*10
 ! /r
-	fnTop(program$,"Print Flex")
-	programfolder$=env$('cursys')&"mstr"
-	datafolder$='[Q]\'&env$('cursys')&"mstr"
-	dataext$='.h[cno]'
-	columns=1
+fnTop(program$,"Print Flex")
+dim programfolder$*256
+programfolder$='[cursys]mstr'
+dim datafolder$*256
+datafolder$='[Q]\[cursys]mstr'
+dataext$='.h[cno]'
+columns=1
 ! r: OPENFILES: The following lines will be proc in from a display file                          you have created. They are in the same file as the read                         statements explained above.  Don't forget the del lines to
 !               remove the old reads in case they dont match
 	open #1: "name="&datafolder$&"\ubtransvb.h[cno],kfname="&datafolder$&"\ubtrindx.h[cno],Use,RecL=102,KPs=1,KLn=19",i,i,k
 ! /r
 	open #11: "Name=[Temp]\Gridname.tmp",i,i,r
+	dim gridname$*40
 	read #11,using 'Form POS 1,C 40',rec=1: gridname$
 	close #11:
 	if env$('cursys')='UB' and rln(1)=102 then gosub ASKTRANSET
 PRINTGRID: ! r: Prints the grid
+	dim item$(0)*50
 	mat item$(columns)
 	mat item$=("")
+	dim colhdr$(0)*30
 	mat colhdr$(columns)
 	mat colhdr$=("")
+	dim colmask$(0)*3
 	mat colmask$(columns)
 	mat colmask$=("")
 	fnTos
@@ -61,21 +50,22 @@ READ_NEXT: gosub READDATAFILES ! reads the database for the grid information    
 	! fnLbl(15,1,"Export the grid to a fixed width file, for later use.")
 	fnCmdSet(52)
 	fnAcs(mat response$,ckey) ! CALL items selected
+	dim lastgridresponse$*87
 	lastgridresponse$=response$(1)
 	if ckey=5 then chain "S:\Core\prtflex\Grids",programfolder$,datafolder$
-! fnXit(CURSYS$)
+! fnXit
 ! /r
  
 READDATAFILES: !  r: These read statements will be contained in a display                            file that matches the data base name plus _info
-L9010: form pos 1,c 10,n 8,n 1,12*pd 4.2,6*pd 5,pd 4.2,n 1
+	L9010: form pos 1,c 10,n 8,n 1,12*pd 4.2,6*pd 5,pd 4.2,n 1
 	read #1,using L9010: p$,tdate,tcode,tamount,mat tg,we,wu,er,eu,gr,gu,tbal,pcode eof EOFONREAD
-	return  ! /r
+return  ! /r
 GRIDHEADING: ! r: The following lines will be generated each time a grid is                        printed.  Don't ever renumber this program unless you are                       prepared to spend some time figuring out where lines are!
 	colhdr$(1)="Name" : colmask$(1)="80"
-	return  ! /r
+return  ! /r
 GRIDDETAILS: ! r: The following lines are generated lines.  They will be                          removed and added back just before each grid is printed
 	item$(1)=e$(2)
-	return  ! /r
+return  ! /r
 DONE: close #1: ioerr ignore
 Xit: fnXit
  

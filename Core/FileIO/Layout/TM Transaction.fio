@@ -4,7 +4,7 @@ recl=60
 ===================================================
 clientId    	,Client Id          	,c    5   	,              	, ! SPos= 1    aka=k$     ComboFio(CO Client)
 inv         	,Invoice Number     	,c   12   	,              	, ! SPos= 6    aka=iv$
-date        	,Date               	,n    6   	, date(mmddyy) 	, ! SPos=18    aka=b(4),tr(1)
+date        	,Date               	,n    6   	, date(mmddyy)	, ! SPos=18    aka=b(4),tr(1)
 amtOrigional	,Origional Amount   	,pd   5.2 	,              	, ! SPos=24    aka=amt,tr(2)
 amt         	,Amount             	,pd   5.2 	,              	, ! SPos=29    aka=amt,tr(3)
 salesmanId  	,Salesman Id        	,pd   2   	,              	, ! SPos=34    aka=tr(4)

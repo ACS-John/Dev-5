@@ -11,7 +11,7 @@ Menu1: ! r:
 	for ch_item=2 to udim(mat client_has$) ! starting at 2 to always skip CO = which is always #1
 		if ~fnSystemIsAddOn(client_has$(ch_item)) then
 			ch_line+=1
-			fnButtonOrDisabled((~env$('cursys')==client_has$(ch_item)),ch_line,1,fnSystemNameFromAbbr$(client_has$(ch_item))(1:37),1000+ch_item, '',37,1)
+			fnButtonOrDisabled((~env$('cursys')==client_has$(ch_item)),ch_line,1,fnSystemNameForty$(client_has$(ch_item))(1:37),1000+ch_item, '',37,1)
 		end if
 	next ch_item
 	! /r
@@ -136,11 +136,11 @@ CompanyAdd: ! r:
 	if fn_company_already_exists(cno_selected)=1 then goto Menu1
 	fnputcno(cno_selected)
 	fnCheckFileVersion
-	if env$('cursys')='PR' or env$('cursys')='SU' or lwrc$(env$('CurSys'))=lwrc$('Client Billing') or env$('cursys')='CL' then ! no AddCNo necessary - just copy in from *.h99999 and go straight to Company Information
-		if exists('S:\'&fnSystemNameFromAbbr$&'\mstr\*.h99999') then
-			fnCopy('S:\'&fnSystemNameFromAbbr$&'\mstr\*.h99999',fn_dataFolder$&'\*.h[cno]', 0,'errornotify')
-		else if exists('S:\acs'&env$('cursys')&'\mstr\*.h99999') then
-			fnCopy('S:\acs'&env$('cursys')&'\mstr\*.h99999',fn_dataFolder$&'\*.h[cno]', 0,'errornotify')
+	if env$('cursys')='PR' or env$('cursys')='SU' or env$('cursystem')='Client Billing' or env$('cursys')='CL' then ! no AddCNo necessary - just copy in from *.h99999 and go straight to Company Information
+		if exists('S:\[cursystem]\mstr\*.h99999') then
+			fnCopy('S:\[cursystem]\mstr\*.h99999',fn_dataFolder$&'\*.h[cno]', 0,'errornotify')
+		else if exists('S:\acs[cursys]\mstr\*.h99999') then
+			fnCopy('S:\acs[cursys]\mstr\*.h99999',fn_dataFolder$&'\*.h[cno]', 0,'errornotify')
 		end if
 		if env$('cursys')='CL' then ! r: special processing for CL
 			mat ml$(5)
@@ -153,17 +153,17 @@ CompanyAdd: ! r:
 				fnchain("S:\acsCL\Conversion\GLBLD-CNV")
 			end if
 		end if  ! /r
-		if exists ('S:\'&fnSystemNameFromAbbr$(env$('cursys'))&'\Company.br') then
-			fnchain('S:\'&fnSystemNameFromAbbr$(env$('cursys'))&'\Company.br')
+		if exists ('S:\[cursystem]\Company.br') then
+			fnchain('S:\[cursystem]\Company.br')
 		else
-			fnchain("S:\acs"&env$('cursys')&"\Company")
+			fnchain("S:\acs[cursys]\Company")
 		end if
 	else if env$('cursys')='UB' then
 		fnchain("S:\Core\AddCNo")
-	else if exists('S:\'&fnSystemNameFromAbbr$(env$('cursys'))&'\Company.br') then
-		fnchain('S:\'&fnSystemNameFromAbbr$(env$('cursys'))&'\Company.br')
+	else if exists('S:\[cursystem]\Company.br') then
+		fnchain('S:\[cursystem]\Company.br')
 	else
-		fnchain("S:\acs"&env$('cursys')&"\AddCNo")
+		fnchain("S:\acs[cursys]\AddCNo")
 	end if
 ! /r
 Xit: fnXit
@@ -213,10 +213,10 @@ Xit: fnXit
 	def fn_companyConfigure(scno)
 		setenv("xit_override","")
 		setenv("xit_override","S:\Core\Programs\Select Company")
-		if exists('S:\'&fnSystemNameFromAbbr$(env$('cursys'))&'\Company.br') then
-			fnchain('S:\'&fnSystemNameFromAbbr$(env$('cursys'))&'\Company.br')
+		if exists('S:\[cursystem]\Company.br') then
+			fnchain('S:\[cursystem]\Company.br')
 		else
-			fnchain('S:\acs'&env$('cursys')&'\Company.br')
+			fnchain('S:\acs[cursys]\Company.br')
 		end if
 	fnend
 	def fn_companyCopy(scno)
@@ -280,10 +280,10 @@ def fn_setup
 	fn_systemSetup
 fnend
 def fn_dataFolder$*256(; ___,return$*256)
-	if lwrc$(env$('cursys'))=lwrc$('Client Billing') then
+	if env$('cursystem')='Client Billing' then
 		return$='S:\Core\Data\acsllc'
 	else
-		return$='[Q]\'&env$('cursys')&"mstr"
+		return$='[Q]\[cursys]mstr'
 	end if
 	fn_dataFolder$=return$
 fnend
@@ -329,7 +329,7 @@ def fn_setup_on_cursys_change(&cno,&cnam$)
 		fncno(cno,cnam$)
 	end if
 
-	if ~exists('[Q]\'&cursys$&'mstr') and cursys$<>'CO' and cursys$<>'Client Billing' then execute 'mkdir "[Q]\'&cursys$&'mstr"'
+	if ~exists('[Q]\[cursys]mstr') and cursys$<>'CO' and cursys$<>'Client Billing' then execute 'mkdir "[Q]\[cursys]mstr"'
 
 fnend
 

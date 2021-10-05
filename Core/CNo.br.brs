@@ -11,12 +11,12 @@ def library fnCno(&cno; &cnam$)
 	! r: read cnam
 	dim cnam_read$*40
 	cnam_read$=''
-	if env$('ACSDeveloper')<>'' and lwrc$(env$('CurSys'))=lwrc$('Client Billing') then
-		open #tf1=fnH: "Name=S:\Core\Data\acsllc\Company.h[cno],Shr",internal,input ioerr CNAM_XIT
+	if env$('ACSDeveloper')<>'' and env$('cursystem')='Client Billing' then
+		open #tf1=fnH: 'Name=S:\Core\Data\acsllc\Company.h[cno],Shr',internal,input ioerr CNAM_XIT
 	else
-		open #tf1=fnH: "Name=[Q]\[cursys]mstr\Company.h[cno],Shr",internal,input ioerr CNAM_XIT
+		open #tf1=fnH: 'Name=[Q]\[cursys]mstr\Company.h[cno],Shr',internal,input ioerr CNAM_XIT
 	end if
-	read #tf1,using "Form pos 1,C 40": cnam_read$ ioerr ignore
+	read #tf1,using 'Form pos 1,C 40': cnam_read$ ioerr ignore
 	close #tf1:
 	CNAM_XIT: !
 	! /r
@@ -40,7 +40,7 @@ fnend
 def library fnget_company_number_list(mat cno_list; sysid$*256)
 	if ~setup then fn_setup
 	if sysid$='' then sysid$=env$('cursys')
-	fngetdir2('[Q]\'&sysid$&"mstr",mat filename$,'/od /ta',"Company.*")
+	fngetdir2('[Q]\'&sysid$&'mstr',mat filename$,'/od /ta','Company.*')
 	company_count=filename_item=0
 	mat cno_list(99999)
 	for filename_item=1 to udim(mat filename$)
@@ -61,7 +61,7 @@ def fn_CnoLegacyNtoCReg(legacyFilename$*256,legacyForm$*64,registryKey$*128; val
 	if get_or_put=1 then
 		fncreg_read(registryKey$,fscode$) : valuePassedIn=val(fscode$)
 		if valuePassedIn=0 then
-			open #tmp=fnH: "Name="&legacyFilename$,i,outi,r ioerr LegacyOpenFail
+			open #tmp=fnH: 'Name='&legacyFilename$,i,outi,r ioerr LegacyOpenFail
 			read #tmp,using legacyForm$,rec=1: valuePassedIn noRec ignore
 			close #tmp: ioerr ignore
 			fncreg_write(registryKey$,str$(valuePassedIn))
@@ -76,20 +76,20 @@ def library fnpedat$*20(;pedat$*20)
 	if ~setup then fn_setup
 	! Get_or_Put=1 then GET
 	! Get_or_Put=2 then PUT
-	if trim$(pedat$)="" then get_or_put=1 else get_or_put=2
+	if trim$(pedat$)='' then get_or_put=1 else get_or_put=2
 	if get_or_put=1 then
 		fncreg_read('Pay Period Ending Date',pedat$)
 		if pedat$='' then
 			dim pedatLegacyFile$*256
-			if exists("[temp]\pedat-[session].h[cno]") then
-				pedatLegacyFile$="[temp]\pedat-[session].h[cno]"
-			else if exists("[temp]\pedat$-[session].h[cno]") then
-				pedatLegacyFile$="[temp]\pedat$-[session].h[cno]"
+			if exists('[temp]\pedat-[session].h[cno]') then
+				pedatLegacyFile$='[temp]\pedat-[session].h[cno]'
+			else if exists('[temp]\pedat$-[session].h[cno]') then
+				pedatLegacyFile$='[temp]\pedat$-[session].h[cno]'
 			else
 				goto xLegacyOpenFail
 			end if
-			open #tmp=fnH: "Name="&pedatLegacyFile$,i,outi,r ioerr xLegacyOpenFail
-			read #tmp,using "Form POS 1,C 20",rec=1: pedat$ noRec ignore
+			open #tmp=fnH: 'Name='&pedatLegacyFile$,i,outi,r ioerr xLegacyOpenFail
+			read #tmp,using 'Form POS 1,C 20',rec=1: pedat$ noRec ignore
 			close #tmp: ioerr ignore
 			fncreg_write('Pay Period Ending Date',pedat$)
 			xLegacyOpenFail: !
@@ -101,40 +101,40 @@ def library fnpedat$*20(;pedat$*20)
 fnend
 def library fnfscode(;fscode)
 	if ~setup then fn_setup
-	fnfscode=fn_CnoLegacyNtoCReg("[temp]\fscode-[session].dat","Form POS 1,N 9",'Financial Statement Code', fscode)
+	fnfscode=fn_CnoLegacyNtoCReg('[temp]\fscode-[session].dat','Form POS 1,N 9','Financial Statement Code', fscode)
 fnend
 def library fnpriorcd(;PriorCD)
 	if ~setup then fn_setup
-	fnpriorcd=fn_CnoLegacyNtoCReg("[temp]\priorcd-[session].dat","Form POS 1,N 9",'PriorCD', PriorCD)
+	fnpriorcd=fn_CnoLegacyNtoCReg('[temp]\priorcd-[session].dat','Form POS 1,N 9','PriorCD', PriorCD)
 fnend
 def library fnpgnum(;pgnum)
 	if ~setup then fn_setup
-	fnpgnum=fn_CnoLegacyNtoCReg("[temp]\PgNum-[session].dat","Form POS 1,N 9",'PgNum', pgnum)
+	fnpgnum=fn_CnoLegacyNtoCReg('[temp]\PgNum-[session].dat','Form POS 1,N 9','PgNum', pgnum)
 fnend
 def library fnrx(;rx)
 	if ~setup then fn_setup
-	fnrx=fn_CnoLegacyNtoCReg("[temp]\rx-[session].dat","Form POS 1,N 9",'rx', rx)
+	fnrx=fn_CnoLegacyNtoCReg('[temp]\rx-[session].dat','Form POS 1,N 9','rx', rx)
 fnend
 def library fnstyp(;STyp)
 	if ~setup then fn_setup
-	fnstyp=fn_CnoLegacyNtoCReg('[temp]\STyp-[session].dat',"Form POS 1,N 9",'STyp', STyp)
+	fnstyp=fn_CnoLegacyNtoCReg('[temp]\STyp-[session].dat','Form POS 1,N 9','STyp', STyp)
 fnend
 def library fnps(;ps)
 	if ~setup then fn_setup
-	fnps=fn_CnoLegacyNtoCReg("[temp]\ps-[session].dat","Form POS 1,N 9",'ps', ps)
+	fnps=fn_CnoLegacyNtoCReg('[temp]\ps-[session].dat','Form POS 1,N 9','ps', ps)
 fnend
 def library fnUseDeptNo
 	if ~setup then fn_setup
-	if env$('cursys')<>"GL" then
+	if env$('cursys')<>'GL' then
 		pr 'needs to read use department number setting some other way because cursys is not GL' : pause
-		! open #tmp=fnH: "Name=[Temp]\gld1-[session].dat,Use,RecL=9",i,outi,r
-		! read #tmp ,using "Form POS 150, n 1",rec=1: gld1 noRec ignore
+		! open #tmp=fnH: 'Name=[Temp]\gld1-[session].dat,Use,RecL=9',i,outi,r
+		! read #tmp ,using 'Form POS 150, n 1',rec=1: gld1 noRec ignore
 		! close #tmp:
 	end if
 	if useDeptNosetup<>val(env$('cno')) then
 		useDeptNosetup=val(env$('cno'))
-		open #company=fnH: "Name=[Q]\GLmstr\Company.h[cno],Shr",i,i,r
-		read #company ,using "Form POS 150, n 1",rec=1: gld1 noRec ignore
+		open #company=fnH: 'Name=[Q]\GLmstr\Company.h[cno],Shr',i,i,r
+		read #company ,using 'Form POS 150, n 1',rec=1: gld1 noRec ignore
 		close #company:
 	end if
 	fnUseDeptNo=gld1
@@ -147,8 +147,8 @@ def library fndat(&dat$;get_or_put)
 	if get_or_put=0 or get_or_put=1 then
 		fnreg_read('Report Heading Date',dat$)
 		dat$=trim$(dat$)
-		if dat$="" then
-			dat$=date$("Month DD, CCYY")
+		if dat$='' then
+			dat$=date$('Month DD, CCYY')
 			fnreg_write('Report Heading Date',dat$)
 		end if
 	else if get_or_put=2 then
@@ -221,55 +221,60 @@ def library fnSystemIsAddOn( sia_systemAbbr$*256; ___,returnN)
 	end if
 	fnSystemIsAddOn=returnN
 fnend
-def library fnSystemNameFromId$*256(; sysno$,___,return$*256) ! from ID or Abbr
+def library fnSystemName$*256(; sysNo$*256,___,return$*256,which) ! from ID or Abbr
 	! inherrits mat sNumber$, mat sAbbr$
 	if ~setup then fn_setup
 	fn_setup_systemCache
-	sysno$=lwrc$(trim$(sysno$))
+	sysNo$=lwrc$(trim$(sysNo$))
 	
-	if sysno$='' then sysno$=env$('CurSys')
+	if sysNo$='' then sysNo$=env$('CurSys')
 	
-	sWhich=srch(mat sNumber$,sysno$)
-	if sWhich<=0 then
-		! if uprc$(sysno$)='P1' then pr fn_standardizeSysId$(sysno$) : pause
-		sWhich=srch(mat sAbbr$,lwrc$(fn_standardizeSysId$(sysno$)))
+	which=srch(mat sNumber$,sysNo$)
+	if which<=0 then
+		! if uprc$(sysNo$)='P1' then pr fn_standardizeSysId$(sysNo$) : pause
+		which=srch(mat sAbbr$,lwrc$(fn_standardizeSysId$(sysNo$)))
 	end if
 	
-	if sWhich then
-		return$=sName$(sWhich)
+	if which then
+		return$=sName$(which)
 	end if
-	fnSystemNameFromId$=return$
+	fnSystemName$=return$
 fnend
-def library fnSystemNameFromAbbr$*40(; as2n_abbr$*256,___,return$*40)
+def library fnSystemNameForty$*40(; as2n_abbr$*256,___,return$*40)
 	if ~setup then fn_setup
-	fn_setup_systemCache
-	if as2n_abbr$='' then as2n_abbr$=env$('CurSys')
-	as2n_abbr$=lwrc$(as2n_abbr$)
-
-	sWhich=srch(mat sAbbr$,as2n_abbr$)
-	if sWhich>0 then
-		return$=sName$(sWhich)(1:40)
-	end if
-	fnSystemNameFromAbbr$=return$
+	fnSystemNameForty$=fn_systemNameForty$( as2n_abbr$)
 fnend
-def library fncursys$(; cursys_set$*256,resetCache)
+def fn_systemNameForty$*40(; abbr$*256,___,return$*40,which)
+	! requies local: mat sAbbr$
+	if ~setup_systemCache then fn_setup_systemCache
+	if abbr$='' then abbr$=env$('CurSys')
+	abbr$=lwrc$(abbr$)
+
+	which=srch(mat sAbbr$,abbr$)
+	if which>0 then
+		return$=sName$(which)(1:40)
+	end if
+	fn_systemNameForty$=return$
+fnend
+def library fnCurSys$(; cursys_set$*256,resetCache,___,curSystem$*256)
 	if ~setup then fn_setup
 	if cursys_set$<>'' then
+		dim cursys_cache$*256
 		cursys_cache$=uprc$(cursys_set$)
 		fnreg_write(session$&'.CurSys',cursys_cache$)
 	else
 		cursys_cache$=uprc$(env$('CurSys'))
 	end if
 
-	if cursys_cache$="" or resetCache then
+	if cursys_cache$='' or resetCache then
 		fnreg_read(session$&'.CurSys',cursys_cache$)
-		if cursys_cache$="" then
+		if cursys_cache$='' then
 			fngetdir2('S:\',mat system_abbr_list$, '/ON','??.mnu')
 			if udim(system_abbr_list$)=>1 then
 				cursys_cache$=trim$(system_abbr_list$(1)(1:len(system_abbr_list$(1))-4))
 			end if
-			if cursys_cache$="" then
-				cursys_cache$="CO"
+			if cursys_cache$='' then
+				cursys_cache$='CO'
 			end if
 		end if
 	end if
@@ -277,18 +282,28 @@ def library fncursys$(; cursys_set$*256,resetCache)
 	cursys_cache$=fn_standardizeSysId$(cursys_cache$)
 	if env$('CurSys')<>cursys_cache$ then
 		fnSetEnv('CurSys',cursys_cache$)
-		fnSetEnv('CurSystem',fnSystemNameFromAbbr$)
-		! just fnSystemNameFromAbbr$ instead       --->      fnSetEnv('CurSystem',fn_systemNameFromAbbr$(cursys_cache$))
+
+		curSystem$=fn_systemNameForty$
+		fnSetEnv('CurSystem',curSystem$)
+		! just fnSystemNameForty$ instead       ---> 
 	end if
+	! gosub SetEnvCurSysData
+	! SetEnvCurSysData: ! r:
+		if curSystem$='Client Billing' then
+			fnSetEnv('CurSysData','S:\Core\Data\acsllc')
+		else
+			fnSetEnv('CurSysData','[Q]\[cursys]mstr')
+		end if
+	! return ! /r
 	fncursys$=cursys_cache$
 fnend
 def fn_standardizeSysId$(return$)
-	if uprc$(return$)="P1" then return$="PR" ! Payroll
-	if uprc$(return$)="P2" then return$="PR" ! Job Cost Payroll
-	if uprc$(return$)="P4" then return$="PR" ! version 4 Payroll
-	if uprc$(return$)="G1" then return$="GL" ! General Ledger
-	if uprc$(return$)="G2" then return$="GL" ! Accountant's GL
-	if uprc$(return$)="G3" then return$="GL" ! Budget Management
+	if uprc$(return$)='P1' then return$='PR' ! Payroll
+	if uprc$(return$)='P2' then return$='PR' ! Job Cost Payroll
+	if uprc$(return$)='P4' then return$='PR' ! version 4 Payroll
+	if uprc$(return$)='G1' then return$='GL' ! General Ledger
+	if uprc$(return$)='G2' then return$='GL' ! Accountant's GL
+	if uprc$(return$)='G3' then return$='GL' ! Budget Management
 	fn_standardizeSysId$=return$
 fnend
 include: fn_open

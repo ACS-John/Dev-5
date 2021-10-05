@@ -482,7 +482,7 @@ def fn_setQ(setQ$*256)
 		goto Xit
 	end if
 	fnmakesurepathexists('[Q]\Data\')
-	! fnmakesurepathexists('[Q]\'&env$('CurSys')&'mstr\')  ! removed 3/30/21 - was making mstr folder as cursys is not set yet
+	! fnmakesurepathexists('[Q]\[CurSys]mstr\')  ! removed 3/30/21 - was making mstr folder as cursys is not set yet
 	! if env$('acsDebug')<>'' then
 	!   pr 'SetQ to '&env$('Q')
 	!   pause

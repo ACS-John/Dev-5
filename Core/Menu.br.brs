@@ -57,11 +57,11 @@ fn_setup
 	cursys$=fncursys$(cursys$)
 	dim cnam$*128
 	fncno(cno,cnam$) ! this call triggers the setting of the environment variable (env$('cnam')) i.e. setenv('cnam',[cursys]\company.h, pos 1, c 40 etc  )
-	if env$('acsDeveloper')<>'' and lwrc$(env$('cursys'))=lwrc$('Client Billing') then
+	if env$('acsDeveloper')<>'' and env$('cursystem')='Client Billing' then
 		dim dataFolder$*256
 		dataFolder$='S:\Core\Data\acsllc'
 	else
-		dataFolder$='[Q]\'&env$('cursys')&'mstr'
+		dataFolder$='[Q]\[cursys]mstr'
 	end if
 
 	!   h_plus=fn_open_plus_initial
@@ -90,7 +90,7 @@ fn_setup
 	fn_gridSetup
 	fn_checkFileVersionIfNecessary
 	! fnreg_read('Report_Cache',report_cache$)
-	if ~(lwrc$(env$('CurSys'))=lwrc$('Client Billing') and env$('cno')='420') then
+	if ~(env$('cursystem')='Client Billing' and env$('cno')='420') then
 		fncreg_write('Company Last Accessed Date and Time',date$('mm/dd/ccyy')&' '&time$)
 	end if
 	setenv('ForceScreenIOUpdate','')
@@ -103,11 +103,11 @@ if menu$='Exit and Logout' then
 end if
 goto Xit
 def fn_addIfLicensed(sysCode$)
-	! if (fnClientHas(sysCode$) or env$('acsDeveloper')<>'') and exists('S:\'&fnSystemNameFromAbbr$(sysCode$)&'\Menu.mnu') then
+	! if (fnClientHas(sysCode$) or env$('acsDeveloper')<>'') and exists('S:\'&fnSystemNameForty$(sysCode$)&'\Menu.mnu') then
 	! on the next line:   srch(mat client_has$,sysCode$)   was   fnClientHas(sysCode$) 
-	if fnClientHas(sysCode$) and exists('S:\'&fnSystemNameFromAbbr$(sysCode$)&'\Menu.mnu') then
+	if fnClientHas(sysCode$) and exists('S:\'&fnSystemNameForty$(sysCode$)&'\Menu.mnu') then
 		fnAddOneC(mat system_abbr_list$,sysCode$)
-		fnAddOneC(mat system_name$,fnSystemNameFromAbbr$(sysCode$))
+		fnAddOneC(mat system_name$,fnSystemNameForty$(sysCode$))
 	end if
 fnend
 def fn_checkFileVersionIfNecessary
@@ -180,7 +180,7 @@ def fn_setupOnCursysChange
 	end if
 fnend
 def fn_captionUpdate
-	setenv('Program_Caption',fnSystemNameFromAbbr$(env$('cursys')))
+	setenv('Program_Caption',fnSystemNameForty$)
 	fnCompanyName(0,screen_width)
 fnend
 def fn_main
@@ -447,7 +447,7 @@ def fn_main
 				else if fkey_value=fkey_change_billing_date then
 					fnchain('S:\Utility Billing\Company')
 				end if
-			else if lwrc$(env$('CurSys'))=lwrc$('Client Billing') and fkey_value<>0 then
+			else if env$('cursystem')='Client Billing' and fkey_value<>0 then
 				if fkey_value=fkey_tm_collections then
 					fnchain('S:\Client Billing\Collections')
 				else if fkey_value=fkey_tm_updateSupportExpir then
@@ -496,7 +496,7 @@ def fn_callHamsterFio(tmpCap$*128)
 	else
 		tmpCursys$=env$('cursys')
 	end if
-	fnTop('S:\'&fnSystemNameFromAbbr$&'\'&tmpCap$&'.br',tmpCap$)
+	fnTop('S:\[cursystem]\'&tmpCap$&'.br',tmpCap$)
 	fnHamsterFio(tmpCursys$&' '&tmpCap$)
 	fnXit
 fnend
@@ -555,7 +555,7 @@ def fn_dashboardHeight
 		end if
 	else if env$('cursys')="UB" then
 		dhReturn=1
-	else if lwrc$(env$('cursys'))=lwrc$("Client Billing") then
+	else if env$('cursystem')='Client Billing' then
 		dhReturn=3
 	else
 		dhReturn=0
@@ -649,7 +649,7 @@ def fn_dashboardDraw
 				fnLbl(1,40,'Total Accounts Receivable:',26,1,0,1)
 				fnLbl(1,68,str$(fntotal_ar),4,0,0,1)
 			end if
-		else if lwrc$(env$('cursys'))=lwrc$("Client Billing") then
+		else if env$('cursystem')='Client Billing' then
 			tmp_btn_width=30 : tmpBtnItem=0
 			fn_ddAddButton('Update Support Expiration Date',fkey_tm_updateSupportExpir:=5002,tmpBtnItem+=1,tmp_btn_width,1)
 			fn_ddAddButton('Collections',fkey_tm_collections:=5001,tmpBtnItem+=1,tmp_btn_width,1)
@@ -684,9 +684,9 @@ fnend
 def fn_getProgramList(mat program_plus$,mat program_name$,mat program_name_trim$,mat program_file$,mat ss_text$; ___,glpa_program_count)
 	mat program_plus$(0) : mat program_name$(0) : mat program_name_trim$(0) : mat program_file$(0) : mat ss_text$(0)
 
-	fn_getProgramList_add('S:\'&fnSystemNameFromAbbr$&'\Menu.mnu')
+	fn_getProgramList_add('S:\[cursystem]\Menu.mnu')
 	if env$("ACSDeveloper")<>"" then
-		fn_getProgramList_add('S:\'&fnSystemNameFromAbbr$&'\Programmer.mnu')
+		fn_getProgramList_add('S:\[cursystem]\Programmer.mnu')
 	end if  ! serial=env$('ACSDeveloper')<>''
 	if env$('cursys')='PR' then
 		dim employee$(0)*256
@@ -928,7 +928,7 @@ def fn_displayMenu
 		end if
 		fn_dm_add('&Company',str$(x+=1))
 		fn_dm_add(' &Select','S:\Core\Programs\Select Company.br')
-		fn_dm_add(' Configure','S:\'&fnSystemNameFromAbbr$&'\Company.br')
+		fn_dm_add(' Configure','S:\[cursystem]\Company.br')
 		if fnclient_is_converting then
 			fn_dm_add(' -')
 			fn_dm_add(' Import','S:\Core\Company Import.br')

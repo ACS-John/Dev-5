@@ -7,8 +7,8 @@ dim ml$(10)*80
 dim resp$(40)*128
 
 fnTop(program$,"Add New "&env$('cursys')&" Company [cno]")
-if exists('S:\'&fnSystemNameFromAbbr$&'\mstr\*.h99999') then
-	fnCopy('S:\'&fnSystemNameFromAbbr$&'\mstr\*.h99999','[Q]\[cursys]mstr\*.h[cno]')
+if exists('S:\[cursystem]\mstr\*.h99999') then
+	fnCopy('S:\[cursystem]\mstr\*.h99999','[Q]\[cursys]mstr\*.h[cno]')
 else if exists('S:\acs[cursys]\mstr\*.h99999') then
 	fnCopy('S:\acs[cursys]\mstr\*.h99999','[Q]\[cursys]mstr\*.h[cno]')
 end if
@@ -82,7 +82,7 @@ else if env$('cursys')='GL' then ! r:
 	open #1: "Name=[Q]\GLmstr\ACTrans.h[cno],Size=0,RecL=72,Replace,NoShr",internal,output
 	close #1:
 end if  ! /r
-fnchain('S:\'&fnSystemNameFromAbbr$&'\Company.br')
+fnchain('S:\[cursystem]\Company.br')
 
  
 Xit: fnchain("S:\Core\Programs\Select Company")
