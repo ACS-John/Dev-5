@@ -1271,6 +1271,11 @@ fnend
 		fnshortpath$=fnshortpath$(longpath$)
 	fnend
 ! r: S:\Core\CNo.br - SYSTEM
+	def library fnStandardizeSysId$(return$*256)
+		library 'S:\Core\CNo.br': fnStandardizeSysId$
+		fnStandardizeSysId$=fn_standardizeSysId$(return$)
+	fnend
+	fnend
 	def library fnSystemIsAddOn( sia_systemAbbr$*256)
 		library 'S:\Core\CNo.br': fnSystemIsAddOn
 		fnSystemIsAddOn=fnSystemIsAddOn( sia_systemAbbr$)
