@@ -60,7 +60,7 @@ def fn_invoiceClose(invDate; filenameAddOn$*128,___,invoiceFilenameBase$*64)
 	end if
 	archiveCollectionPageCount=printCollectionPageCount=0
 	
-	pr 'after invoice close' : pause
+	! pr 'after invoice close' : pause
 	
 fnend
 
