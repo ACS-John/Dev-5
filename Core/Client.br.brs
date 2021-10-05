@@ -100,24 +100,24 @@ fnend
 			fn_setupClient_add('AJJMaplewood'					, 'ajj',        0) ! 58650
 			fn_setupClient_add("Ed Horton" 						,'5535',        0)! Ed processes like ACS
 
-			fn_setupClient_add("Allendale" 						, '200',        0)
+			! fn_setupClient_add("Allendale" 						, '200',        0)
 			fn_setupClient_add("Ash Grove" 						, '286',    19016)
 			fn_setupClient_add("Bethany" 								, '380',    34326)
 			fn_setupClient_add("Billings"								, '440',    33534)
 			fn_setupClient_add("Blucksberg" 						, '465',    34564)
-			fn_setupClient_add("Brier Lake"						, '578',    20306)
-			fn_setupClient_add("BRCorp"									,'7000',    50775) ! 50775 is actually DAVID KALINSKI PERSONAL COPY, but it is what Gordon is using.
+			fn_setupClient_add("Brier Lake"							, '578',    20306)
+			! fn_setupClient_add("BRCorp"									,'7000',    50775) ! 50775 is actually DAVID KALINSKI PERSONAL COPY, but it is what Gordon is using.
 			fn_setupClient_add("Campbell"								, '700',    33942)
 			fn_setupClient_add("Carr Plumbing"					, '780',    34610)
 			fn_setupClient_add("Cerro Gordo V"					, '850',    34508) ! 33994)
 			fn_setupClient_add("Cerro Gordo T"					, '970',    34508)
 			fn_setupClient_add("Chatom"									, '911',    15678)
 			fn_setupClient_add("Choctaw"								, '918',    34214)
-			fn_setupClient_add("Crane"									,'1120',        0)
+			! fn_setupClient_add("Crane"									,'1120',        0)
 			fn_setupClient_add("Crockett County"				,'1141',    15110)
 			fn_setupClient_add("Divernon"								,'1350',    33698)
 			fn_setupClient_add("Dorothy Salch"					,'3812',    34494)
-			fn_setupClient_add("Durden"									,'1406',    16410)
+			! fn_setupClient_add("Durden"									,'1406',    16410)
 			fn_setupClient_add("Edinburg"								,'1478',    34022)
 			fn_setupClient_add("Edison"									,'1480',    34022)
 			fn_setupClient_add("Evelyn Pareya"					,'3385',    34366)
@@ -126,14 +126,14 @@ fnend
 			fn_setupClient_add("Framemasters"					,'1864',        0)
 			fn_setupClient_add("Franklin Co Hosp"			,'1876',    33668)
 			fn_setupClient_add("French Settlement"			,'1880',    33380)
-			fn_setupClient_add("Fulton"									,'1890',    33720) ! Utilities Board
+			! fn_setupClient_add("Fulton"									,'1890',    33720) ! Utilities Board
 			fn_setupClient_add("Galena"									,'1945',    34566)
-			fn_setupClient_add("Garrity"								,'1950',        0)
+			! fn_setupClient_add("Garrity"								,'1950',        0)
 			fn_setupClient_add("Grandview"							,'2050',    34040)
 			fn_setupClient_add("GreeneCo"								,'2070',    33910)
-			fn_setupClient_add("Halfway"								,'2130',    33768)
+			! fn_setupClient_add("Halfway"								,'2130',    33768)
 			fn_setupClient_add("Hope Welty"						, '851',    34152)
-			fn_setupClient_add("Laco Vinyl"						,'2222',        0)
+			! fn_setupClient_add("Laco Vinyl"						,'2222',        0)
 			fn_setupClient_add("Payroll Done Right"		,'3393',        0)
 			fn_setupClient_add("Peter Engler"					, 'ped',        0)
 			fn_setupClient_add("Kathys Bookkeeping"		,'3979',    33672)
@@ -142,7 +142,7 @@ fnend
 			fn_setupClient_add("Moweaqua"								,'3045',    34594) ! 200032790) ! 33986 <--??  I don't know where that came from - 200032790 was their 4.13 version
 			fn_setupClient_add("Morrisonville"					,'3050',    34408) ! 32242  <-- that's white hall's but there was a mistake in license file for a while
 			fn_setupClient_add("Omaha"									,'3320',    33346)
-			fn_setupClient_add("Pennington"						,'3431',    33332)
+			fn_setupClient_add("Pennington"							,'3431',    33332)
 			fn_setupClient_add("Purdy"									,'3610',    34570)
 			fn_setupClient_add("Raymond"								,'3660',    32798)
 			fn_setupClient_add("RecoverysUnlimited"		,'3670',        0)
@@ -152,10 +152,10 @@ fnend
 			fn_setupClient_add("Starr County Gas"			,'4127',    33390)
 			fn_setupClient_add("Stern and Stern"				,'4132',200014280)
 			fn_setupClient_add("Thayer"									,'4245',    32800)
-			fn_setupClient_add("Thomasboro"						,'4260',    34068)
+			fn_setupClient_add("Thomasboro"							,'4260',    34068)
 			fn_setupClient_add("Unity"									,'4380',    34478)
-			fn_setupClient_add("White Hall"						,'4625',    32242)
-			fn_setupClient_add("World Wide"						,'4650',    33604)
+			fn_setupClient_add("White Hall"							,'4625',    32242)
+			fn_setupClient_add("World Wide"							,'4650',    33604)
 			fn_setupClient_add("Zaleski"								,'4710',    34164)
 			! r: removed
 			! fn_setupClient_add("Lamar" ,1,33854)
@@ -299,9 +299,9 @@ def fn_getClientLicense(mat clientHas$)
 		!   fn_userLimit(1)
 		!   if days(date)<=days(20151231,'ccyymmdd') then  fn_getClientLicense_add('UB') : fn_setUbLimit(500)
 		!   if days(date)<=days(20151231,'ccyymmdd') then fn_getClientLicense_add('U4')
-		else if env$('client')='BRCorp' then
-			fn_userLimit(99)
-			fn_getClientLicense_add('OE')
+		! else if env$('client')='BRCorp' then
+		! 	fn_userLimit(99)
+		! 	fn_getClientLicense_add('OE')
 		else if env$('client')='Ed Horton' then
 			fn_userLimit(1)
 			fn_getClientLicense_add('CL')
@@ -317,12 +317,12 @@ def fn_getClientLicense(mat clientHas$)
 			! canceled 2/7/2018 as per Debbie  -   fn_getClientLicense_add('PR')
 			! canceled 2/7/2018 as per Debbie  -   fn_getClientLicense_add('GL')
 			! canceled 2/7/2018 as per Debbie  -   fn_getClientLicense_add('CL')
-		else if env$('client')='Allendale' then
-			if days(date$)<=days('02/28/2020','mm/dd/ccyy') then
-				fn_userLimit(1)
-				fn_getClientLicense_add('UB') : fn_setUbLimit(500) ! U3 Utility Billing (<500 Customers)
-				fn_getClientLicense_add('U4') ! U4 Utility Billing Hand Held Add-On
-			end if
+		! else if env$('client')='Allendale' then
+		! 	if days(date$)<=days('02/28/2020','mm/dd/ccyy') then
+		! 		fn_userLimit(1)
+		! 		fn_getClientLicense_add('UB') : fn_setUbLimit(500) ! U3 Utility Billing (<500 Customers)
+		! 		fn_getClientLicense_add('U4') ! U4 Utility Billing Hand Held Add-On
+		! 	end if
 		else if env$('client')='Bethany' then
 			fn_userLimit(2) ! second user added 9/22/2021
 			fn_getClientLicense_add('UB') : fn_setUbLimit(1000) ! U2 Utility Billing (500-1000 customers)
@@ -829,7 +829,7 @@ def fn_payroll_client_state$*2(; client$*64,___,return$*2,which)
 		fn_pcs_add("Crockett County",'TX')
 		!   fn_pcs_add('Diamond','MO')
 		fn_pcs_add("Divernon",'IL')
-		fn_pcs_add("Durden",'LA')
+		! fn_pcs_add("Durden",'LA')
 		fn_pcs_add("Edinburg",'IL')
 		fn_pcs_add("Edison",'GA')
 		fn_pcs_add("Ed Horton",'IL')

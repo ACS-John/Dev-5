@@ -1279,13 +1279,13 @@ fnend
 		library 'S:\Core\CNo.br': fnUseDeptNo
 		fnUseDeptNo=fnUseDeptNo
 	fnend
-	def library fnSystemNameFromAbbr$*40(; systemAbbreviation$*256)
-		library 'S:\Core\CNo.br': fnSystemNameFromAbbr$
-		fnSystemNameFromAbbr$=fnSystemNameFromAbbr$( systemAbbreviation$)
+	def library fnSystemNameForty$*40(; sysId$*256)
+		library 'S:\Core\CNo.br': fnSystemNameForty$
+		fnSystemNameForty$=fnSystemNameForty$( sysId$)
 	fnend
-	def library fnSystemNameFromId$*256(; sysno$)
-		library 'S:\Core\CNo.br': fnSystemNameFromId$
-		fnSystemNameFromId$=fnSystemNameFromId$(sysno$)
+	def library fnSystemName$*256(; sysId$*256)
+		library 'S:\Core\CNo.br': fnSystemName$
+		fnSystemName$=fnSystemName$(sysId$)
 	fnend
 
 ! /r

@@ -29,7 +29,7 @@ def library fnCheckFileVersion
 		fn_cfv_utility_billing
 	else if env$('cursys')='CL' then
 		fn_cfv_checkbook
-	else if lwrc$(env$('CurSys'))=lwrc$('Client Billing') then
+	else if env$('cursystem')='Client Billing' then
 		fn_cfv_client_billing
 	end if
 	fnStatus('CheckFileVersion Completed')
@@ -37,12 +37,12 @@ fnend
 def fn_cfv_addMissingFiles(; ___,path$*256,prog$*256,ext$*128,item)
 	dim camf_filename$(0)*256
 	mat camf_filename$(0)
-	fnGetDir2('S:\'&fnSystemNameFromAbbr$&'\mstr\',mat camf_filename$, '','*.h99999')
+	fnGetDir2('S:\'&fnSystemNameForty$&'\mstr\',mat camf_filename$, '','*.h99999')
 	for item=1 to udim(mat camf_filename$)
 		fnGetPp(camf_filename$(item),path$,prog$,ext$)
 		! if lwrc$(camf_filename$(item))='department' then pause
 		if ~exists('[Q]\'&env$('cursys')&'mstr\'&prog$&'.h[cno]') then
-			fnCopy('S:\'&fnSystemNameFromAbbr$&'\mstr\'&camf_filename$(item),'[Q]\'&env$('cursys')&'mstr\'&prog$&'.h[cno]')
+			fnCopy('S:\[cursystem]\mstr\'&camf_filename$(item),'[Q]\[cursys]mstr\'&prog$&'.h[cno]')
 		end if
 	next item
 fnend
@@ -618,22 +618,22 @@ def fn_cfv_checkbook
 	end if
 
 fnend
-def fn_checkbookTrmstr_v0_to_v1(; ___,trmstr,pause$,amt,j)
-	! converts the CL TRmstr file to version 1
-	! meainging the amount changes from G 10.2 to PD 10.2
-	fnStatus("Checkbook update Trans to v1: Updating Transaction file.")
-	open #trmstr=fnH: "Name=[Q]\CLmstr\TrMstr.h[cno]",i,outi,r
-	if version(trmstr)=1 then
-	else
-		version(trmstr,1)
-		for j=1 to lrec(trmstr)
-			read #trmstr,using 'form pos 18,n 10.2': amt eof L240
-			rewrite #trmstr,using 'form pos 18,pd 10.2': amt
-		next j
-		L240: !
-		close #trmstr:
-	end if
-fnend
+	def fn_checkbookTrmstr_v0_to_v1(; ___,trmstr,pause$,amt,j)
+		! converts the CL TRmstr file to version 1
+		! meainging the amount changes from G 10.2 to PD 10.2
+		fnStatus("Checkbook update Trans to v1: Updating Transaction file.")
+		open #trmstr=fnH: "Name=[Q]\CLmstr\TrMstr.h[cno]",i,outi,r
+		if version(trmstr)=1 then
+		else
+			version(trmstr,1)
+			for j=1 to lrec(trmstr)
+				read #trmstr,using 'form pos 18,n 10.2': amt eof L240
+				rewrite #trmstr,using 'form pos 18,pd 10.2': amt
+			next j
+			L240: !
+			close #trmstr:
+		end if
+	fnend
 def fn_cfv_payroll
 	if exists("[Q]\PRmstr")=0 then execute "MkDir [Q]\PRmstr"
 	! if ~exists('[Q]\INI\Payroll') then execute 'mkdir "[Q]\INI\Payroll"'
@@ -796,24 +796,24 @@ def fn_cfv_payroll
 		end if
 	end if
 fnend
-def fn_version(filename$*256; ___,returnN,hTmp)
-	open #hTmp=fnH: 'Name='&filename$&',Shr',internal,input
-	returnN=version(hTmp)
-	close #hTmp:
-	fn_version=returnN
-fnend
-Check4124OnPrGlindex: ! r:
- if err=4124 and (Check4124OnPrGlindexCount+=1)<=2 then
-	 fnIndex('[Q]\PRmstr\GLMstr.h[cno]','[Q]\PRmstr\GLIndex.h[cno]','1 12')
-	 goto PrGlindex
- else
-		fnStatus('Failure.')
-		fnStatus('* Data File: PRmstr\GLMstr.h[cno]')
-		fnStatus('* Index: PRmstr\GLIndex.h[cno]')
-		fnStatus('* reindex completed however error 4124 persist.')
-		fnStatusPause
- end if
- goto ERTN ! /r
+	def fn_version(filename$*256; ___,returnN,hTmp)
+		open #hTmp=fnH: 'Name='&filename$&',Shr',internal,input
+		returnN=version(hTmp)
+		close #hTmp:
+		fn_version=returnN
+	fnend
+	Check4124OnPrGlindex: ! r:
+	 if err=4124 and (Check4124OnPrGlindexCount+=1)<=2 then
+		 fnIndex('[Q]\PRmstr\GLMstr.h[cno]','[Q]\PRmstr\GLIndex.h[cno]','1 12')
+		 goto PrGlindex
+	 else
+			fnStatus('Failure.')
+			fnStatus('* Data File: PRmstr\GLMstr.h[cno]')
+			fnStatus('* Index: PRmstr\GLIndex.h[cno]')
+			fnStatus('* reindex completed however error 4124 persist.')
+			fnStatusPause
+	 end if
+	 goto ERTN ! /r
 def fn_cfv_job_cost_payroll
 	! if ~exists('[Q]\INI\Payroll\Job Cost') then execute 'mkdir "[Q]\INI\Payroll\Job Cost"'
 	fn_ini_move('JC')

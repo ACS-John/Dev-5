@@ -15,10 +15,10 @@
 	dim dataFolder$*256
 	dataFolder$='[Q]\[cursys]mstr' ! data folder grid folder is for use and updating by customer
 	dim programFolder$*256
-	if ~exists('S:\acs'&env$('cursys')) and exists('S:\'&fnSystemNameFromAbbr$) then
-		programFolder$=os_fileName$('S:\'&fnSystemNameFromAbbr$)
+	if ~exists('S:\acs[cursys]') and exists('S:\[cursystem]') then
+		programFolder$=os_fileName$('S:\[cursystem]')
 	else
-		programFolder$=os_fileName$('S:\acs'&env$('cursys')) ! program grid folder (and sub-folder and files) are for distribution.  files and folders only distribute if they are missing.  makes updating them difficult.
+		programFolder$=os_fileName$('S:\acs[cursys]') ! program grid folder (and sub-folder and files) are for distribution.  files and folders only distribute if they are missing.  makes updating them difficult.
 	end if
 ! r: make any missing folders in the data directory
 	if ~exists(dataFolder$&'\Grid') then

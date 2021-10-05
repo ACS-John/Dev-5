@@ -2,7 +2,7 @@ S:\Core\Data\acsllc\Support.h420, support_, 0
 S:\Core\Data\acsllc\Support-Idx.H420 ,  client/sysno
 recl=246
 ===================================================
-client      	,Client ID          	, C   6       	,                 	, !   Pos=1    Line=1 
+client      	,Client ID          	, C   6       	,                 	, !   Pos=1    Line=1  ComboFio(CO Client)
 sysno       	,Sys#               	, C   2       	,                 	, !   Pos=7    Line=3 
 sysid       	,System ID          	, C   2       	,                 	, !   Pos=9    Line=4  ComboFio(CO Systems)
 date_start 	,Starting Date      	, N   8       	, date(ccyymmdd  	, !   Pos=11   Line=6 

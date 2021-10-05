@@ -716,7 +716,7 @@ Xit: fnend
 				borderText$&='(Session '&session$(len(session$):len(session$))&') '
 			end if
 			dim systemName$*128
-			systemName$=fnSystemNameFromAbbr$(env$('cursys'))
+			systemName$=fnSystemNameForty$
 			if systemName$=cap$ then ! pr border:
 				borderText$&='- '&systemName$
 			else
@@ -726,7 +726,7 @@ Xit: fnend
 				pr #0, border: borderText$
 			end if
 
-			fn_companyName(0,Session_Cols) ! fn_companyName(0,Session_Cols,trim$(cap$(1:pos(cap$,'(')-1))) ! fnSystemNameFromAbbr$(cursys$))
+			fn_companyName(0,Session_Cols) ! fn_companyName(0,Session_Cols,trim$(cap$(1:pos(cap$,'(')-1))) ! fnSystemNameForty$(cursys$))
 
 			if not grid_present then
 				row=ceil((Session_Rows-ace_lyne_max)/2 )

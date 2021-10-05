@@ -14,12 +14,6 @@ invoiceDateCcyymmdd=date(days(invDateMmDdYy,'mmddyy'),'ccyymmdd')
 ! r: make a quick backup
 fnStatus('Commit your work.  This data is saved in the repository.')
 execute 'sy "C:\ACS\Util\Dev-5 Commit.cmd"'
-! fnStatusPause
-
-! fnStatus('Custom Saving to "D:\ACS\ACS LLC 420.zip"...')  ! these were nice ideas when the data wasnt in core.
-! fnFileSaveAs('*.*', 'D:\ACS\ACS LLC 420.zip')             ! these were nice ideas when the data wasnt in core.
-! fnAutomatedSavePoint('before')                            ! these were nice ideas when the data wasnt in core.
-
 ! /r
 ! r: main loop (produceInvoices)
 	fnStatus('producing Invoice Archive...')
@@ -51,11 +45,13 @@ execute 'sy "C:\ACS\Util\Dev-5 Commit.cmd"'
 
 		client_id$=trim$(client_id$)
 
-		! if client_id$='911' then pr client_id$&' - '&fnClientNameShort$(client_id$) : pause
-		! if client_id$='3379' then pr '3379 - Kathy Bacon' : pause
-		! if client_id$='3385' then pr '3385 - Evelyn Pareya' : pause
-		! if client_id$='3045' then pr '3045 - Moweaqua' : debug=1 : pause else debug=0
-		! if client_id$='4132' then pr '4132 - Stern' : pause
+		if client_id$='ajj' then 
+			pr client_id$&' - '&fnClientNameShort$(client_id$)
+			debug=1
+			pause 
+		else 
+			debug=0
+		end if
 
 
 		fn_billforMaint(client_id$,invTotal)
@@ -132,10 +128,13 @@ def fn_billForMaint(client_id$,&invTotal)
 	do
 		read #hSupport,using Fsupport: cln$,scode$,stm$,sup_exp_date,supCost eof EoSupport
 		cln$=trim$(cln$)
+		! if cln$='ajj' then pr 'found '&cln$ : pause
 
 		if cln$=client_id$ then
 			needsRenewal=0 ! if it expires this month
-			if int(invoiceDateCcyymmdd*.01)=int(sup_exp_date*.01) then needsRenewal=1
+			if date(days(invoiceDateCcyymmdd,'ccyymmdd'),'ccyymm')=date(days(sup_exp_date,'mmddyy'),'ccyymm') then 
+				needsRenewal=1
+			end if
 
 			if stm$='Mo' and needsRenewal then
 				pr 'monthly bill encountered.  please test code before accepting.'
@@ -165,8 +164,8 @@ def fn_billForMaint(client_id$,&invTotal)
 					if scode$='U4' then
 						inv_item$(invLine)=inv_item$(invLine)&' Maintenance for (UB) Hand Held Add-On'
 					else
-						inv_item$(invLine)=inv_item$(invLine)&' Maintenance for '&trim$(fnSystemNameFromId$(scode$))
-						if trim$(fnSystemNameFromId$(scode$))='' then
+						inv_item$(invLine)=inv_item$(invLine)&' Maintenance for '&trim$(fnSystemName$(scode$))
+						if trim$(fnSystemName$(scode$))='' then
 							pr ' sending blank system name  scode$='&scode$
 							pr '   client_id=';client_id$
 							pause
@@ -227,9 +226,9 @@ def fn_billForNonMaint(client_id$,&invTotal; ___,wo_desc$*30,hTimeSheet) ! add c
 				!     pause  ! inv_item$(invLine)=str$(inp3)&' hours at a rate of '&&' on '&cnvrt$('pic(##/##/##)',inp6)
 				inv_item$(invLine)=str$(inp3)&' hours at a rate of '&cnvrt$('pic($$#.##)',inp4)&' on '&cnvrt$('pic(##/##/##)',inp6)
 			else if inp7=2 then
-				inv_item$(invLine)=str$(inp3)&' hours of '&trim$(fnSystemNameFromId$(b8$))&' programming on '&cnvrt$('pic(##/##/##)',inp6)
+				inv_item$(invLine)=str$(inp3)&' hours of '&trim$(fnSystemName$(b8$))&' programming on '&cnvrt$('pic(##/##/##)',inp6)
 			else
-				inv_item$(invLine)=str$(inp3)&' hours of '&trim$(fnSystemNameFromId$(b8$))&' support on '&cnvrt$('pic(##/##/##)',inp6)
+				inv_item$(invLine)=str$(inp3)&' hours of '&trim$(fnSystemName$(b8$))&' support on '&cnvrt$('pic(##/##/##)',inp6)
 			end if
 
 			inv_amt(invLine)=inp5
@@ -359,7 +358,7 @@ fnend
 def fn_summaryAccumulate
 	! pr 'fn_summaryAccumulate   totalInvoicesPrinted=';totalInvoicesPrinted !
 	if ~hSummary then
-		open #hSummary=fnH: 'Name=[temp]\[session],RecL=80,replace',d,o ! ioerr SI_ADD
+		open #hSummary=fnH: 'Name=[temp]\PrnSummary[session],RecL=80,replace',d,o ! ioerr SI_ADD
 		pr #hSummary: '{\fs16'  ! set the RTF Font Size to 8
 		pr #hSummary: 'Clnt   Name           Date      Prev Bal    New Amt     Total Due   Inv No  '
 		pr #hSummary: '_____ ______________  ________  __________  __________  __________  __________'

@@ -226,7 +226,7 @@ def fn_creg_setup
 		dim cregFileData$*256
 		dim cregFileIndex$*256
 
-		if env$('acsDeveloper')<>'' and lwrc$(env$('CurSys'))=lwrc$('Client Billing') then
+		if env$('acsDeveloper')<>'' and env$('cursystem')='Client Billing' then
 			dim dataFolder$*256
 			dataFolder$='S:\Core\Data\acsllc'
 		else
