@@ -1801,19 +1801,19 @@ fnend
 		fnSearch=fnSearch(h,form$,nformat$,sel$,klength)
 	fnend
 	def library fnReassignNTA(filename$*256,keyForm$,ntaForm$)
-		library 'S:\Client Billing\fn\printInvoice.br': fnReassignNTA
+		library 'S:\Client Billing\fn\invoice.br': fnReassignNTA
 		fnReassignNTA=fnReassignNTA(filename$,keyForm$,ntaForm$)
 	fnend
 	def library fnInvoiceOpen
-		library 'S:\Client Billing\fn\printInvoice.br': fnInvoiceOpen
+		library 'S:\Client Billing\fn\invoice.br': fnInvoiceOpen
 		fnInvoiceOpen=fnInvoiceOpen
 	fnend
 	def library fnInvoiceAdd(actnum$,mat billto$,invNum$,invDate,mat desc$,mat amt,pbal)
-		library 'S:\Client Billing\fn\printInvoice.br': fnInvoiceAdd
+		library 'S:\Client Billing\fn\invoice.br': fnInvoiceAdd
 		fnInvoiceAdd=fnInvoiceAdd(actnum$,mat billto$,invNum$,invDate,mat desc$,mat amt,pbal)
 	fnend
 	def library fnInvoiceClose(inv_date; filenameAddOn$*128)
-		library 'S:\Client Billing\fn\printInvoice.br': fnInvoiceClose
+		library 'S:\Client Billing\fn\invoice.br': fnInvoiceClose
 		fnInvoiceClose=fnInvoiceClose(inv_date, filenameAddOn$)
 	fnend
 	def library fnEmailQueuedInvoices(emailDate$)

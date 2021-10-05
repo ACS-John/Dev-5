@@ -272,8 +272,6 @@ def library fnCurSys$(; cursys_set$*256,resetCache,___,curSystem$*256)
 
 		curSystem$=fn_systemName$
 		fnSetEnv('CurSystem',curSystem$)
-		! just fnSystemNameForty$ instead       ---> 
-	end if
 	! gosub SetEnvCurSysData
 	! SetEnvCurSysData: ! r:
 		if curSystem$='Client Billing' then
@@ -282,6 +280,7 @@ def library fnCurSys$(; cursys_set$*256,resetCache,___,curSystem$*256)
 			fnSetEnv('CurSysData','[Q]\[cursys]mstr')
 		end if
 	! return ! /r
+	end if
 	fncursys$=cursys_cache$
 fnend
 def fn_standardizeSysId$(return$)

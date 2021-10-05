@@ -2,6 +2,6 @@
 [Q]\Data\FavoritesUserSys.idx, user/system
 [Q]\Data\FavoritesProgram.idx, program
 ===================================================
-user$   ,    unique computer id,   C 40,  ! maybe this should be login_name$ 
-system$ ,    System ID,            C 2,   ! 
-Program$,    Program Caption,      C 128, ! 
+user$   	, unique computer id 	, C  40,   , ! maybe this should be login_name$ 
+system$ 	, System ID           	, C   2,   , ! 
+Program$	, Program Caption    	, C 128,   , ! 

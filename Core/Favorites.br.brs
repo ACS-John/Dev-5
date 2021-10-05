@@ -11,6 +11,7 @@ def library fnFavoriteAdd(programCaption$*256)
 	favData$(fav_user)=env$('Unique_Computer_ID')
 	favData$(fav_system)=env$('cursys')
 	favData$(fav_program)=programCaption$
+	if favData$(fav_system)='CLIENT BILLING' then favData$(fav_system)='TM'
 	write #hFav,using form$(hFav): mat favData$,mat favDataN
 	fnCloseFile(hFav,'CO Favorites')
 fnend
@@ -31,6 +32,7 @@ def library fnFavoriteList(mat favorite$)
 	restore #hFav,key>=fn_favKey$: nokey fl_eof
 	do
 		read #hFav,using form$(hFav):mat favData$,mat favDataN eof fl_eof
+		if favData$(fav_system)='TM' then favData$(fav_system)='CLIENT BILLING'
 		flMatch=0
 		if rtrm$(favData$(fav_user))=env$('Unique_Computer_ID') and favData$(fav_system)=env$('cursys') then
 			flMatch=1
