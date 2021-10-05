@@ -27,7 +27,7 @@ execute 'sy "C:\ACS\Util\Dev-5 Commit.cmd"'
 	fn_combineIntoTmSht('S:\Core\Data\acsllc\TimeSheet.h[cno]')
 	! pr 'ok go do FileIo on TM Tmp TimeSheet now' : pause
 
-	fnStatus('Printing Invoices...')
+	! fnStatus('Printing Invoices...')
 	fnInvoiceOpen
 
 	open #h_tmwk2=fnH: 'Name=S:\Core\Data\acsllc\tmpInvoice.h[cno],Replace,RecL=4675,Shr',internal,outIn
@@ -44,7 +44,7 @@ execute 'sy "C:\ACS\Util\Dev-5 Commit.cmd"'
 
 		client_id$=trim$(client_id$)
 		
-		fnStatus('reviewing account '&client_id$)
+		! fnStatus('reviewing account '&client_id$)
 		
 		fn_billforMaint(client_id$,invTotal)
 
@@ -107,7 +107,6 @@ execute 'sy "C:\ACS\Util\Dev-5 Commit.cmd"'
 def fn_billForMaint(client_id$,&invTotal)
 	! loads of locals
 
-
 	dim iv$*12
 	iv$=rpad$(str$(invoice_number),12)
 	
@@ -122,16 +121,10 @@ def fn_billForMaint(client_id$,&invTotal)
 
 		if cln$=client_id$ then
 			needsRenewal=0 ! if it expires this month
-			
-			
-			
-			
-			
-			
-			
+
 			numLeft=date(days(invoiceDateCcyymmdd,'ccyymmdd'),'ccyymm')
 			numRight=date(days(sup_exp_date,'ccyymmdd'),'ccyymm')
-			if numRight<=0 then pr 'numRight<=0' : pause
+			! if numRight<=0 then pr 'numRight<=0' : pause
 			if numRight=0 then numRight=date(days(sup_exp_date,'mmddyy'),'ccyymm')
 			
 			if numLeft=numRight then 
