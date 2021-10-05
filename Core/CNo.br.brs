@@ -283,7 +283,10 @@ def library fnCurSys$(; cursys_set$*256,resetCache,___,curSystem$*256)
 	end if
 	fncursys$=cursys_cache$
 fnend
-def fn_standardizeSysId$(return$)
+def library fnStandardizeSysId$(return$*256)
+	fnStandardizeSysId$=fn_standardizeSysId$(return$)
+fnend
+def fn_standardizeSysId$(return$*256)
 	if uprc$(return$)='P1' then return$='PR' ! Payroll
 	if uprc$(return$)='P2' then return$='PR' ! Job Cost Payroll
 	if uprc$(return$)='P4' then return$='PR' ! version 4 Payroll
