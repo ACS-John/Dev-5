@@ -43,7 +43,9 @@ execute 'sy "C:\ACS\Util\Dev-5 Commit.cmd"'
 		read #hClient,using 'form pos 1,c 5,3*c 30,pos 283,pd 5.2': client_id$,mat client_addr$,pbal eof EoClient
 
 		client_id$=trim$(client_id$)
-
+		
+		fnStatus('reviewing account '&client_id$)
+		
 		fn_billforMaint(client_id$,invTotal)
 
 		fn_billForNonMaint(client_id$,invTotal)
@@ -111,6 +113,7 @@ def fn_billForMaint(client_id$,&invTotal)
 	
 	client_id$=trim$(client_id$)
 	
+	
 	restore #hSupport: ! ,key>=rpad$(client_id$,kln(hSupport)): ! nokey EoSupport
 	do
 		read #hSupport,using Fsupport: cln$,scode$,stm$,sup_exp_date,supCost eof EoSupport
@@ -119,7 +122,19 @@ def fn_billForMaint(client_id$,&invTotal)
 
 		if cln$=client_id$ then
 			needsRenewal=0 ! if it expires this month
-			if date(days(invoiceDateCcyymmdd,'ccyymmdd'),'ccyymm')=date(days(sup_exp_date,'mmddyy'),'ccyymm') then 
+			
+			
+			
+			
+			
+			
+			
+			numLeft=date(days(invoiceDateCcyymmdd,'ccyymmdd'),'ccyymm')
+			numRight=date(days(sup_exp_date,'ccyymmdd'),'ccyymm')
+			if numRight<=0 then pr 'numRight<=0' : pause
+			if numRight=0 then numRight=date(days(sup_exp_date,'mmddyy'),'ccyymm')
+			
+			if numLeft=numRight then 
 				needsRenewal=1
 			end if
 
@@ -129,7 +144,7 @@ def fn_billForMaint(client_id$,&invTotal)
 			! seems to be working fine    end if
 
 
-			if needsRenewal then
+			if needsRenewal then ! r: renew it
 
 				if supCost=0 then supCost=fn_price(scode$,stm$)
 				if supCost=0 then pr 'zero support price???' : pause
@@ -167,7 +182,8 @@ def fn_billForMaint(client_id$,&invTotal)
 				invTotal+=supCost
 
 				if debug then pr '   ';client_id$;' billForMaint Match encountered ';supCost
-			end if
+			
+			end if	! /r
 		end if
 	loop ! while cln$=client_id$ ! commented out to work around a critical nokey problem above.  should severely slow things down though
 	EoSupport: !
