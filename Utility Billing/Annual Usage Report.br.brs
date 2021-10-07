@@ -35,9 +35,9 @@
 	opt_accum_type$(accum_type_average:=2)='Average'
 ! /r
 ! r: open files
-	open #h_trans=fnH: "Name=[Q]\UBmstr\UBTransVB.h[cno],KFName=[Q]\UBmstr\UBTrIndx.h[cno],Shr",i,i,k
-! open #h_customer=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",i,i,k
-	open #h_customer=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx5.h[cno],Shr",i,i,k
+	open #hTrans=fnH: "Name=[Q]\UBmstr\UBTransVB.h[cno],KFName=[Q]\UBmstr\UBTrIndx.h[cno],Shr",i,i,k
+! open #hCustomer=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",i,i,k
+	open #hCustomer=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx5.h[cno],Shr",i,i,k
 ! /r
 ! r: get default answers
 	dim scr1_resp$(14)*80
@@ -48,10 +48,11 @@
 		next resp_item
 	else
 BDR_READ: !
-		read #h_customer,using 'form pos 1,c 10',release: z$ eof EO_BUILD_DEFAULT_RESP ! get the first account number
-		restore #h_trans,key>=z$&"         ": nokey BDR_READ
+		read #hCustomer,using 'form pos 1,c 10',release: z$ eof EO_BUILD_DEFAULT_RESP ! get the first account number
+		restore #hTrans,key>=z$&"         ": nokey BDR_READ
 L230: !
-		read #h_trans,using F_TRANS: p$,tdate,tcode,tamount,mat tg,wr,wu,er,eu,gr,gu,tbal,pcode eof EO_BUILD_DEFAULT_RESP
+		read #hTrans,using F_TRANS: p$,tdate,tcode,tamount,mat tg,wr,wu,er,eu,gr,gu,tbal,pcode eof EO_BUILD_DEFAULT_RESP
+		! fn_apply_default_rates(wr,er,gr)     this would be historically inaccurate
 		if p$<>z$ then goto L300 ! history record must belong to this customer
 		if tcode<>1 then goto L230 ! charge transaction
 		if tdate<magicdate then goto L230 ! only last two years
@@ -65,8 +66,24 @@ L300: !
 EO_BUILD_DEFAULT_RESP: !
 	end if
 ! /r
+
+
+
+
+!  functional well untested, but also unused       def fn_apply_default_rates(s1rateCode,s3rateCode,s4rateCode)
+!  functional well untested, but also unused       dim extra(21),a(7)
+!  functional well untested, but also unused       	a(1)=s1rateCode
+!  functional well untested, but also unused       	a(3)=s3rateCode
+!  functional well untested, but also unused       	a(4)=s4rateCode
+!  functional well untested, but also unused       	fn_apply_default_rates=fnapply_default_rates(mat extra, mat a)
+!  functional well untested, but also unused       	s1rateCode=a(1)
+!  functional well untested, but also unused       	s3rateCode=a(3)
+!  functional well untested, but also unused       	s4rateCode=a(4)
+!  functional well untested, but also unused       fnend
+
+
 SCREEN1: ! r:
-	restore #h_customer:
+	restore #hCustomer:
 	fnTos(sn$="ubusage2")
 	rc=0
 	fnLbl(1,1,"Billing dates to be printed:",35,1)
@@ -127,7 +144,7 @@ L560: !
 F_OUT: form pos 1,c 12,c 25,13*pic(----,---,---)
 	gosub HDR
 	do
-		read #h_customer,using F_CUSTOMER: z$,e$,s4_deposit_date,servicecode,route eof DONE
+		read #hCustomer,using F_CUSTOMER: z$,e$,s4_deposit_date,servicecode,route eof DONE
 		if route<>route_prior and route_prior<>0 then
 			fn_print_total("Route "&str$(route_prior)&" Totals",mat total_usage_route,mat total_usage_route_code_date,mat total_count_route,mat total_count_route_code_date)
 			pr #255: newpage
@@ -138,13 +155,13 @@ F_OUT: form pos 1,c 12,c 25,13*pic(----,---,---)
 		end if
 		route_prior=route
 F_CUSTOMER: form pos 1,c 10,x 30,c 30,pos 213,pd 4,pos codepos,pd 2,pos 1741,n 2
-!   restore #h_trans,key>=z$&"         ": nokey TRANS_NOKEY
-		restore #h_trans,key>=z$&rpt$(chr$(0),9): nokey TRANS_NOKEY
+!   restore #hTrans,key>=z$&"         ": nokey TRANS_NOKEY
+		restore #hTrans,key>=z$&rpt$(chr$(0),9): nokey TRANS_NOKEY
 		accum_average_divider=0
 READ_TRANSACTION: !
-		read #h_trans,using F_TRANS: p$,tdate,tcode,tamount,mat tg,wr,wu,er,eu,gr,gu,tbal,pcode eof CUSTOMER_RECORD_FINIS
+		read #hTrans,using F_TRANS: p$,tdate,tcode,tamount,mat tg,wr,wu,er,eu,gr,gu,tbal,pcode eof CUSTOMER_RECORD_FINIS
 F_TRANS: form pos 1,c 10,n 8,n 1,12*pd 4.2,6*pd 5,pd 4.2,n 1
-! if trim$(z$)='101379.00' and tdate=20141001 then pr z$;tdate : pause !   restore #h_trans,key>=z$&"         ": nokey TRANS_NOKEY
+! if trim$(z$)='101379.00' and tdate=20141001 then pr z$;tdate : pause !   restore #hTrans,key>=z$&"         ": nokey TRANS_NOKEY
 		if p$<>z$ then goto CUSTOMER_RECORD_FINIS ! history record must belong to this customer
 		if tcode<>1 then goto READ_TRANSACTION ! charge transactions only
 ! r: determine usage
@@ -234,7 +251,7 @@ def fn_print_total(totals_heading$*80,mat total_usage_grand,mat total_usage_gran
 		pr #255,using F_OUT: "","  Total Usage",mat total_usage_grand
 fnend
 DONE: ! r:
-	close #h_customer:
+	close #hCustomer:
 	if file(255)=-1 then goto Xit ! printer never opened
 	fn_print_total("Route "&str$(route_prior)&" Totals",mat total_usage_route,mat total_usage_route_code_date,mat total_count_route,mat total_count_route_code_date)
 	fn_print_total("Grand Totals",mat total_usage_grand,mat total_usage_grand_code_date,mat total_count_grand,mat total_count_grand_code_date)
@@ -246,4 +263,4 @@ INVALID_DATES_MSGBOX: ! r:
 	msgline$(1)="You have entered dates in an"
 	msgline$(2)="invalid format.  Use mmddyy format."
 	fnmsgbox(mat msgline$,resp$,'',1)
-	goto SCREEN1 ! /r
+goto SCREEN1 ! /r
