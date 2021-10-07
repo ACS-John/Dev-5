@@ -42,11 +42,12 @@ def fn_sendEmail(mat toEmail$,emailMessage$*10000; _
 		dim em_emailFrom$*256
 		dim em_emailReplyTo$*256
 		dim em_smtpServer$*100
-		fnreg_read('email.ReplyTo',em_emailReplyTo$) ! ,'noreply@@utilitybilling.us')
-		fnreg_read('email.smtpServer',em_smtpServer$,'smtp.office365.com:587')
-		fnreg_read('email.From',em_emailFrom$,'acs-billing@utilitybilling.us')
-		fnreg_read('email.FromPassword',em_emailFromPassword$,'ACSbilling1224.')
-		fnreg_read('email.Port',em_emailPort$,'25')
+		dim em_emailFromPassword$*64
+		fnreg_read('email.ReplyTo'    	,em_emailReplyTo$) ! ,'noreply@@utilitybilling.us'
+		fnreg_read('email.smtpServer' 	,em_smtpServer$        	,'smtp.gmail.com') ! 'smtp.office365.com:587'
+		fnreg_read('email.From'        	,em_emailFrom$         	,'billing@advancedcomputer.services') ! 'acs-billing@utilitybilling.us'
+		fnreg_read('email.FromPassword'	,em_emailFromPassword$	,'asdfghjkl;qwErtyuiopop[zxcvbnm') ! '76HLUJCaa%' ! old: 'ACSbilling1224.'
+		fnreg_read('email.Port'        	,em_emailPort$         	,'465')
 		if trim$(em_smtpServer$)='' or trim$(em_emailFrom$)='' or trim$(em_emailFromPassword$)='' then
 			dim txt$(0)*256
 			mat txt$(0)
