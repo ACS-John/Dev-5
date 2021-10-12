@@ -1,4 +1,3 @@
-! Replace S:\acsUB\ubBudLst
 ! -- Budget Customer List
  
 	autoLibrary

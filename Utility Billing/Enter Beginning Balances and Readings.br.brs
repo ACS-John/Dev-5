@@ -1,4 +1,3 @@
-! Replace S:\acsUB\ubCorAmt
 autoLibrary
 on error goto Ertn
 fnTop(program$)

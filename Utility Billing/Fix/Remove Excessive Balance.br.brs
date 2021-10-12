@@ -1,6 +1,6 @@
 autoLibrary
 on error goto Ertn
-fnTop(program$,"Remove Excessive Balance")
+fnTop(program$)
 
 dim billingdate$*10
 dim msgtext$(1)*1000

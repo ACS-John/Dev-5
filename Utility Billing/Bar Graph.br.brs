@@ -1,4 +1,3 @@
-! Replace S:\acsUB\ubbargraph
 ! pr bar graph of earnings by month for current year of prior year.
 
 autoLibrary

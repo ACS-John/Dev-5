@@ -1442,7 +1442,7 @@ fnend
 		fnGetServiceCodesMetered=fnGetServiceCodesMetered(mat serviceCodeMetered$)
 	fnend
 	def library fncmbact(lyne,mypos; addall,container,indexfile$*256)
-		library 'S:\acsUB\CmbAct.br': fncmbact
+		library 'S:\Utility Billing\fn\CmbAct.br': fncmbact
 		fncmbact=fncmbact(lyne,mypos, addall,container,indexfile$)
 	fnend
 	def library fnLastBillingDate(; &d1,get_or_put)
@@ -1498,7 +1498,7 @@ fnend
 		fntotal_ar=fntotal_ar
 	fnend
 	def library fnfix_trans_breakdowns(do_fix,do_report)
-		library 'S:\acsUB\check_balance_breakdowns.br': fnfix_trans_breakdowns
+		library 'S:\Utility Billing\Check Balance Breakdowns.br': fnfix_trans_breakdowns
 		fnfix_trans_breakdowns=fnfix_trans_breakdowns(do_fix,do_report)
 	fnend
 	! r: UB-EFT

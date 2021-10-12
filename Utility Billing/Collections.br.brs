@@ -1,4 +1,3 @@
-! (formerly) S:\acsUB\Collections  and before that acsUB\ubIpColl
 	fn_setup ! r:
 	fnTop(program$) ! for now use the settings from Enter Collections for page formatting of reports
 	open #hCustomer1=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,outIn,keyed

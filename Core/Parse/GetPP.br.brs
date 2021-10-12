@@ -8,7 +8,7 @@ def library fnGetPp(&input$,&path$,&prog$,&ext$)
 	!                             dir\program
 	!                             dir\program.ext
 	!                             dir\dir\program.ext
-	! path$:  the path to the input program (i.e. "S:\acsUB\")
+	! path$:  the path to the input program (i.e. "S:\Utility Billing\")
 	! prog$:  the file name (without it's extension) (i.e. "ubmenu")
 	! ext$:   the input progams extension (period included) (i.e. ".wb")
 	! The -1 in pos(x,y,-1) causes search to run backwards from end to front

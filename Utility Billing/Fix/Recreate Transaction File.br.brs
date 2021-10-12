@@ -1,23 +1,21 @@
-! Replace S:\acsUB\UBRECRTR
- 
-	autoLibrary
-	on error goto Ertn
- 
-	dim p$*10,z$*10,o(2),adr(2)
-	dim gb(10),tg(11),d(15)
- 
-	fnTop(program$)
-	fnTos
-	mylen=30
-	mypos=mylen+2
-	fnLbl(1,1,"Transaction Date:" ,mylen,1)
-	fnTxt(1,mypos,10,0,0,"3")
-	resp$(1)=date$("ccyymmdd")
-	fnLbl(3,1,"Warning ! Do not continue",mylen,1)
-	fnLbl(4,1,"without consulting ACS",mylen,1)
-	fnLbl(4,15,"",mylen,1)
-	fnCmdSet(2)
-	ckey=fnAcs(mat resp$)
+autoLibrary
+on error goto Ertn
+fnTop(program$)
+
+dim p$*10,z$*10,o(2),adr(2)
+dim gb(10),tg(11),d(15)
+
+fnTos
+mylen=30
+mypos=mylen+2
+fnLbl(1,1,"Transaction Date:" ,mylen,1)
+fnTxt(1,mypos,10,0,0,"3")
+resp$(1)=date$("ccyymmdd")
+fnLbl(3,1,"Warning ! Do not continue",mylen,1)
+fnLbl(4,1,"without consulting ACS",mylen,1)
+fnLbl(4,15,"",mylen,1)
+fnCmdSet(2)
+ckey=fnAcs(mat resp$)
 L180: !
 x=pos(resp$(1),"/",1)
 if x>0 then resp$(1)(x:x)="": goto L180
@@ -45,7 +43,7 @@ loop
 READ_CUSTOMER_EOF: !
 	close #1:
 	close #2:
-	execute "Index [Q]\UBmstr\UBTransVB.h[cno]"&' '&"[Q]\UBmstr\UBTrIndx.h[cno] 1 19 Replace DupKeys -n"
+	fnIndex('[Q]\UBmstr\UBTransVB.h[cno]','[Q]\UBmstr\UBTrIndx.h[cno]','1 19')
 goto Xit
 Xit: fnXit
 include: ertn

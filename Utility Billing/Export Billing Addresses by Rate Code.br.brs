@@ -1,4 +1,3 @@
-! formerly S:\acsUB\ubNamLst
 ! r: setup library, dims, constants, fnTop, etc
 autoLibrary
 on error goto Ertn

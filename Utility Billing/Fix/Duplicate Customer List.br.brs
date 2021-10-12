@@ -1,14 +1,11 @@
-! Replace S:\acsUB\duplicate_customer_report
- 
 	autoLibrary
 	on error goto Ertn
- 
-	dim z$*10,e$(4)*30,cnam$*40,dat$*20,idx$(5)*40
-	dim item1$(6)*22,cap$*128
-	dim a2(10),a1(10),a(10),tt$*200,ab$(4)*30,extra$(11)*30
- 
-	fnTop(program$,cap$="Duplicate Customer List")
-	fncno(cno,cnam$)
+
+	dim z$*10,e$(4)*30,dat$*20,idx$(5)*40
+	dim item1$(6)*22
+	dim a2(10),a(10),extra$(11)*30
+
+	fnTop(program$)
 	fndat(dat$,1)
 	on fkey 5 goto DONE
 	fnopenprn
@@ -27,12 +24,12 @@ DONE: !
 	fncloseprn
 Xit: !
 	fnXit
- 
+
 PgOf: !
 	pr #255: newpage
 	fn_header
 	continue
- 
+
 def fn_has_dupe(z$)
 		hd_return=0
 		z_one$=z_two$=''
@@ -51,6 +48,6 @@ def fn_header
 		pr #255: ""
 		pr #255: "\ql {\ul     Customer No}     {\ul Name                             }    {\ul Meter Address                }   {\ul   Balance} {\ul}"
 fnend
- 
+
 include: ertn
- 
+

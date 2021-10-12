@@ -1,6 +1,3 @@
-! formerly S:\acsUB\UBowed
-
-
 autoLibrary
 on error goto Ertn
 

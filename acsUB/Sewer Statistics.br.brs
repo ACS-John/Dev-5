@@ -1,10 +1,9 @@
-! replace S:\acsUB\sewerstats.br
 ! Calculates average customers billed and average sewer charges over a given time period
 autoLibrary
 dim resp$(2)*40,z$*10,a$*10,transkey$*19,dt(1),chg(1),ccnt(1),cycle(1,1),cyclecnt(1),avg(2,1),txt$*23
 fn_main
 def fn_main
-	fnTop(program$,"Sewer Statistics")
+	fnTop(program$)
 	fn_getrange
 	fn_openfiles
 	fn_calculate

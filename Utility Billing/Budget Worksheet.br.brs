@@ -1,27 +1,26 @@
-! Replace S:\acsUB\BudRpt1
-!
-	autoLibrary
-	on error goto Ertn
-!
-	dim ba(13),bt1(14,2),badr(2),n$*25,txt$*40
-	dim t1(11),t2(11),t3(11),cap$*128,message$*40,serviceName$(10)*20,service$(10)*2,hdr$*255,underline$*255,budget$*255
-	fnTop(program$, cap$="Worksheet")
-!
-	fnGetServices(mat serviceName$,mat service$)
-	hdr$="{\ul  Date   }"
-	underline$="          "
-	for j=1 to 10
-		if trim$(serviceName$(j))<>"" then
-			hdr$=hdr$&"  {\ul "&lpad$(rtrm$(serviceName$(j)(1:8)),8)&"}"
-			underline$=underline$&"{\ul         }  "
-			totserv=totserv+1
-		end if
-	next j
-	hdr$=hdr$&"  {\ul Net Bill}"
-	underline$=underline$&"{\ul         }  "
-	totserv1=totserv+2
-	mat t1(totserv1) : mat t2(totserv1) : mat t3(totserv1)
-!
+autoLibrary
+on error goto Ertn
+
+dim ba(13),bt1(14,2),badr(2),n$*25,txt$*40
+dim t1(11),t2(11),t3(11)
+dim message$*40,serviceName$(10)*20,service$(10)*2,hdr$*255,underline$*255,budget$*255
+fnTop(program$)
+
+fnGetServices(mat serviceName$,mat service$)
+hdr$="{\ul  Date   }"
+underline$="          "
+for j=1 to 10
+	if trim$(serviceName$(j))<>"" then
+		hdr$=hdr$&"  {\ul "&lpad$(rtrm$(serviceName$(j)(1:8)),8)&"}"
+		underline$=underline$&"{\ul         }  "
+		totserv=totserv+1
+	end if
+next j
+hdr$=hdr$&"  {\ul Net Bill}"
+underline$=underline$&"{\ul         }  "
+totserv1=totserv+2
+mat t1(totserv1) : mat t2(totserv1) : mat t3(totserv1)
+
 BUD1: ! INITILIZE BUDGET FILE
 	bud1=bg1=bg2=0
 	open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,outIn,keyed
@@ -50,7 +49,7 @@ L360: !
 	fnopenprn
 	gosub HEADING
 goto READ_BUDMSTR
-!
+
 READ_BUDMSTR: !
 	read #81,using L490: z$,mat ba,mat badr eof DONE
 	if env$('client')="Findlay" then ba(8)=0 ! don't show the penalty budget on form

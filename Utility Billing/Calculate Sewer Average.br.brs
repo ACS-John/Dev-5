@@ -1,6 +1,5 @@
-! formerly S:\acsUB\Sewer ! dont forget to change lines 510 &  640
 autoLibrary
-dim cd1(8),x(13),message$(5)*80,message$*60,tg(11),extra(23)
+dim message$(5)*80,message$*60,tg(11)
 on error goto Ertn
 fnTop(program$)
  
@@ -21,7 +20,7 @@ L220: !
 restore #hCustomer:
  
 SCR1: !
-	fnTos(sn$:="ubsewer-1b")
+	fnTos
 	mylen=47 : mypos=49
 	fnLbl(1,1,"Billing Dates for Months to Average:",mylen,1)
 	for j=1 to 8
@@ -39,9 +38,9 @@ SCR1: !
 	if ckey=3 then clear_averages=1 else clear_averages=0
 	for j=1 to 8
 L310: !
-	x=pos(resp$(j),"/",1)
-	if x>0 then
-		resp$(j)(x:x)=""
+	xp=pos(resp$(j),"/",1)
+	if xp>0 then
+		resp$(j)(xp:xp)=""
 		goto L310
 	end if
 next j
@@ -52,6 +51,7 @@ if filter_sewer_code=0 and ~clear_averages then
 	fnmsgbox(mat message$,resp$,'',0)
 	goto SCR1
 end if
+dim cd1(8)
 for j=1 to 8
 	cd1(j)=val(resp$(j)) conv SCR1
 	fncreg_write(sn$&'.billing date.'&str$(j),resp$(j))
@@ -77,7 +77,8 @@ L500: form pos 1,c 10,pos 145,pd 2,pos 1822,n 9
 	if clear_averages then
 		t3=0
 	else
-		t1=t2=t3=x=0
+		t1=t2=t3=xc=0
+		dim x(13)
 		mat x=(0)
 		restore #h_trans,key>=x$&"         ": nokey L480
 		READ_TRANS: !
@@ -90,8 +91,8 @@ L500: form pos 1,c 10,pos 145,pd 2,pos 1822,n 9
 			if cd1(j1)=tdate then
 				t1=t1+1
 				t2=t2+wu
-				x=x+1
-				x(x)=wu
+				xc+=1
+				x(xc)=wu
 				goto READ_TRANS
 			end if
 		next j1
@@ -126,6 +127,7 @@ HDR: ! r:
 return ! /r
 APPLY_DEFAULT_RATE: ! r:
 	a(2)=customer_sewer_rate_code
+	dim extra(23)
 	fnapply_default_rates(mat extra, mat a)
 	customer_sewer_rate_code=a(2)
 return ! /r

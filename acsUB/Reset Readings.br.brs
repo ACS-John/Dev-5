@@ -1,4 +1,3 @@
-! Replace S:\acsUB\reset_readings
 ! -- reset current or prior reading to what it was on a given transaction date.
 
 autoLibrary
@@ -9,7 +8,7 @@ dim a(7),b(11),c(4),d(15),g(12)
 dim p$*10,o(2),tg(11),meteradr$*30,custname$*30
 dim extra(23)
 
-fnTop(program$,"Reset Readings")
+fnTop(program$)
 dim srvnam$(10)*20,srv$(10)*2
 fnGetServices(mat srvnam$,mat srv$)
 
