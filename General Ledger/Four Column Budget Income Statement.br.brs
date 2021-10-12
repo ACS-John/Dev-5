@@ -99,8 +99,8 @@ L690: ! r:
 	if ds=1 then dollar$="$" else dollar$=" "
 	if annualb><0 or total2><0 or total<>0 or ls+ds+ul+ic>0 then
 		sp2=22-sp-1
-		if ul=1 then pr #255,using L841: d$(1:sp2),dollar$,"{\ul ",annualb,"}",dollar$,"{\ul ",total,"}",dollar$,"{\ul ",total2,"}",dollar$,"{\ul ",unexpend,"}" pageoflow PGOF : goto L840
-		pr #255,using L840: d$(1:sp2),dollar$,annualb,dollar$,total,dollar$,total2,dollar$,unexpend pageoflow PGOF
+		if ul=1 then pr #255,using L841: d$(1:sp2),dollar$,"{\ul ",annualb,"}",dollar$,"{\ul ",total,"}",dollar$,"{\ul ",total2,"}",dollar$,"{\ul ",unexpend,"}" pageoflow PgOf : goto L840
+		pr #255,using L840: d$(1:sp2),dollar$,annualb,dollar$,total,dollar$,total2,dollar$,unexpend pageoflow PgOf
 		L840: form pos sp,c sp2,pos 22,c 1,pic(--,---,---.##),x 1,c 1,pic(--,---,---.##),x 1,c 1,pic(--,---,---.##),x 1,c 1,pic(---,---,---.##),skip 1
 		L841: form pos sp,c sp2,pos 22,c 1,c 5,pic(--,---,---.##),c 1,x 1,c 1,c 5,pic(--,---,---.##),c 1,x 1,c 1,c 5,pic(--,---,---.##),c 1,x 1,c 1,c 5,pic(---,---,---.##),c 1,skip 1
 		total=total2=annualb=unexpend=0
@@ -118,9 +118,9 @@ FinRecT: ! r:
 	if ds=1 then dollar$="$" else dollar$=" "
 	sp2=22-sp-1
 	if ul=1 then
-		pr #255,using L841: d$(1:sp2),dollar$,"{\ul ",accum1,"}",dollar$,"{\ul ",accum2,"}",dollar$,"{\ul ",accum3,"}",dollar$,"{\ul ",accum4,"}" pageoflow PGOF
+		pr #255,using L841: d$(1:sp2),dollar$,"{\ul ",accum1,"}",dollar$,"{\ul ",accum2,"}",dollar$,"{\ul ",accum3,"}",dollar$,"{\ul ",accum4,"}" pageoflow PgOf
 	else
-		pr #255,using L840: d$(1:sp2),dollar$,accum1,dollar$,accum2,dollar$,accum3,dollar$,accum4 pageoflow PGOF
+		pr #255,using L840: d$(1:sp2),dollar$,accum1,dollar$,accum2,dollar$,accum3,dollar$,accum4 pageoflow PgOf
 	end if
 	gosub AccumReset
 	if ul<>1 then gosub PrUnderlines
@@ -171,7 +171,7 @@ PrHeaderSecondary: ! r:
 		gosub PrHeaderPrimary
 	end if
 return ! /r
-PGOF: gosub PrHeaderSecondary: continue
+PgOf: gosub PrHeaderSecondary: continue
 PrUnderlines: ! r:
 	if ul=0 then goto L1500
 	if ul=1 then goto L1470

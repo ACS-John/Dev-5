@@ -167,11 +167,11 @@ def fn_teDE(mat fs$,mat fsN,mp1,&notrans,actpd,mat accum,foot$*132,tabnote,&tota
 	sp2=dollar-fsN(fsd_startPos)-1
 	if fsN(fsd_underline)=1 then
 		tmpStartPos=fsN(fsd_startPos)
-		pr #255,using F_withoutUl: fs$(fsd_description)(1:sp2),dollar$,"{\ul ",total,"}" pageoflow PGOF  ! atlantis underline
+		pr #255,using F_withoutUl: fs$(fsd_description)(1:sp2),dollar$,"{\ul ",total,"}" pageoflow PgOf  ! atlantis underline
 		F_withoutUl: form pos tmpStartPos,c sp2,pos dollar,c 1,c 5,pic(---,---,---.##),c 2,skip 0  ! ! atlantis underline
 	else
 		tmpStartPos=fsN(fsd_startPos)
-		pr #255,using F_withUl:    fs$(fsd_description)(1:sp2),dollar$,total pageoflow PGOF
+		pr #255,using F_withUl:    fs$(fsd_description)(1:sp2),dollar$,total pageoflow PgOf
 		F_withUl:    form pos tmpStartPos,c sp2,pos dollar,c 1,pic(---,---,---.##),skip 0
 	end if
 	total=0
@@ -188,9 +188,9 @@ def fn_teTP(mat fs$,mat fsN,mat accum,foot$*132,tabnote; ___,dollar$,sp2,j,accum
 	dollar=24+14*fsN(fsd_column) ! if  CP=1 Then dOLLAR=50+14*fsN(fsd_column) Else dOLLAR=24+14*fsN(fsd_column)
 	sp2=dollar-fsN(fsd_startPos)-1
 	if fsN(fsd_underline)=1 then
-		pr #255,using F_withoutUl: fs$(fsd_description)(1:sp2),dollar$,"{\ul ",accum1,"}" pageoflow PGOF
+		pr #255,using F_withoutUl: fs$(fsd_description)(1:sp2),dollar$,"{\ul ",accum1,"}" pageoflow PgOf
 	else
-		pr #255,using F_withUl:    fs$(fsd_description)(1:sp2),dollar$,accum1 pageoflow PGOF
+		pr #255,using F_withUl:    fs$(fsd_description)(1:sp2),dollar$,accum1 pageoflow PgOf
 	end if
 	if env$('acsDeveloper')<>'' and trim$(fs$(fsd_description))='PROFIT OR LOSS' then
 		pr trim$(fs$(fsd_description)),dollar$,accum1
@@ -254,7 +254,7 @@ def fn_footerPrint(foot$*132,tabnote; eofcode,___,sk,fl) ! FooterPrint
 		fn_header(reportHeading1$,reportHeading2$)
 	end if
 fnend
-PGOF: ! r: foot$,tabnote
+PgOf: ! r: foot$,tabnote
 	fn_footerPrint(foot$,tabnote)
 continue ! /r
 def fn_underline(mat fsN)

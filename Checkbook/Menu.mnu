@@ -1,42 +1,42 @@
 ! *** CL - Checkbook ***
-Transaction                               ^ Checkbook\*
->Running Bank Balance                     ^ Checkbook\*
+Transaction                               ^ [cursystem]\*
+>Running Bank Balance                     ^ [cursystem]\*
 >Transaction Journals                     ^ acsCL\TrJr
 >Remove Old Transactions                  ^ acsCL\RmTrans
 >Endorse Checks                           ^ acsCL\endorsment
-Unpaid Invoice                            ^ Checkbook\*
+Unpaid Invoice                            ^ [cursystem]\*
 >Print Selected Invoice Listing           ^ acsCL\PrintSelectInvoice
->Unpaid Invoice Listing (Current)         ^ Checkbook\*
->Unpaid Invoice Summary                   ^ Checkbook\*
->Report of Invoices Due by Selected Dates ^ Checkbook\*
+>Unpaid Invoice Listing (Current)         ^ [cursystem]\*
+>Unpaid Invoice Summary                   ^ [cursystem]\*
+>Report of Invoices Due by Selected Dates ^ [cursystem]\*
 Paid Invoice                              ^ acsCL\PaidInvoice
->Remove Paid Invoices                     ^ Checkbook\*
-Bank                                      ^ Checkbook\*
->Bank Reconciliation                      ^ Checkbook\*
->Select Bank Account                      ^ Checkbook\*
+>Remove Paid Invoices                     ^ [cursystem]\*
+Bank                                      ^ [cursystem]\*
+>Bank Reconciliation                      ^ [cursystem]\*
+>Select Bank Account                      ^ [cursystem]\*
 >Unclear All Entries by Bank              ^ acsCL\UnClBank
-Payee                                     ^ Checkbook\*
->Payee Labels                             ^ Checkbook\*
+Payee                                     ^ [cursystem]\*
+>Payee Labels                             ^ [cursystem]\*
 >Payee Listing                            ^ acsCL\PayList
 >Remove Payee Records                     ^ acsCL\PayDump
 >Payee Fund Listing                       ^ acsCL\VNFund
 >Check Listing by Payee                   ^ acsCL\CkLstV
 >Payee Type                               ^ HamsterFio:Payee Type
 General Ledger
->Chart of Accounts                        ^ Checkbook\*
+>Chart of Accounts                        ^ [cursystem]\*
 >General Ledger Control                   ^ acsCL\GLControl
 Other Files
 >Department Breakdown                     ^ acsCL\department
-Print Checks                              ^ Checkbook\*
+Print Checks                              ^ [cursystem]\*
 Print
 >Accounts Payable Listing - Any Time      ^ acsCL\CPInvLst
 >Accounts Payable Listing (Aged)          ^ acsCL\AgedAP
->Claims or Purchases Report               ^ Checkbook\*
->GL Distribution Report                   ^ Checkbook\*                    ^ GL
->Print 1099-NEC Forms                     ^ Checkbook\*
+>Claims or Purchases Report               ^ [cursystem]\*
+>GL Distribution Report                   ^ [cursystem]\*                    ^ GL
+>Print 1099-NEC Forms                     ^ [cursystem]\*
 Import/Export                                    
 >Transfer to Accountant                   ^ acsCL\TrToCPA
->Post to General Ledger                   ^ Checkbook\*                    ^ GL
->Import General Ledger Chart of Accounts  ^ Checkbook\*                    ^ GL
+>Post to General Ledger                   ^ [cursystem]\*                    ^ GL
+>Import General Ledger Chart of Accounts  ^ [cursystem]\*                    ^ GL
 ! >Import Payee Records from General Ledger ^ acsCL\initglpay ! never used still hardcoded to A: - removed 8/7/20 
 

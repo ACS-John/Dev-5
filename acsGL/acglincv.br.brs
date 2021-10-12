@@ -141,8 +141,8 @@ L1150: if percent=0 then goto L1380
 	if pppd>999.99 then pppd=999.99
 	if ppcvar<-999.99 then ppcvar=999.99
 	if ppyvar<-999.99 then ppyvar=999.99
-	if ul=1 then pr #255,using L1361: d$(1:sp2),dollar$,"{\UL ",total,"}",pdpct,percent$,dollar$,"{\UL ",total2,"}",ytdpct,percent$,dollar$,"{\UL ",total3,"}",pppd,percent$,dollar$,"{\UL ",total4,"}",ppyear,percent$,dollar$,"{\UL ",total5,"}",ppcvar,percent$,dollar$,"{\UL ",total6,"}",ppyvar,percent$ pageoflow PGOF : goto L1360
-	pr #255,using L1360: d$(1:sp2),dollar$,total,pdpct,percent$,dollar$,total2,ytdpct,percent$,dollar$,total3,pppd,percent$,dollar$,total4,ppyear,percent$,dollar$,total5,ppcvar,percent$,dollar$,total6,ppyvar,percent$ pageoflow PGOF
+	if ul=1 then pr #255,using L1361: d$(1:sp2),dollar$,"{\UL ",total,"}",pdpct,percent$,dollar$,"{\UL ",total2,"}",ytdpct,percent$,dollar$,"{\UL ",total3,"}",pppd,percent$,dollar$,"{\UL ",total4,"}",ppyear,percent$,dollar$,"{\UL ",total5,"}",ppcvar,percent$,dollar$,"{\UL ",total6,"}",ppyvar,percent$ pageoflow PgOf : goto L1360
+	pr #255,using L1360: d$(1:sp2),dollar$,total,pdpct,percent$,dollar$,total2,ytdpct,percent$,dollar$,total3,pppd,percent$,dollar$,total4,ppyear,percent$,dollar$,total5,ppcvar,percent$,dollar$,total6,ppyvar,percent$ pageoflow PgOf
 L1360: form pos sp,c sp2,pos 31,c 1,pic(--,---,---.##),pic(-----.##),c 2,c 1,pic(--,---,---.##),pic(-----.##),c 2,c 1,pic(--,---,---.##),pic(-----.##),c 2,c 1,pic(--,---,---.##),pic(-----.##),c 2,c 1,pic(--,---,---.##),pic(-----.##),c 2,c 1,pic(--,---,---.##),pic(-----.##),c 1,skip redir
 L1361: form pos sp,c sp2,pos 31,c 1,c 5,pic(--,---,---.##),c 1,pic(-----.##),c 2,c 1,c 5,pic(--,---,---.##),c 1,pic(-----.##),c 2,c 1,c 5,pic(--,---,---.##),c 1,pic(-----.##),c 2,c 1,c 5,pic(--,---,---.##),c 1,pic(-----.##),c 2,c 1,c 5,pic(--,---,---.##),c 1,pic(-----.##),c 2,c 1,c 5,pic(--,---,---.##) ,c 1,pic(-----.##),c 1
 L1370: form pos sp,c sp2,pos 31,c 1,c 5,pic(--,---,---.##),c 1,pic(-----.##),c 2,c 1,c 5,pic(--,---,---.##),c 1,pic(-----.##),c 2,c 1,c 5,pic(--,---,---.##),c 1,pic(-----.##),c 2,c 1,c 5,pic(--,---,---.##),c 1,pic(-----.##),c 2,c 1,c 5,pic(--,---,---.##),c 1,pic(-----.##),c 2,c 1,c 5,pic(--,---,---.##),c 1,pic(-----.##),skip redir
@@ -189,8 +189,8 @@ L1510: if ap=0 then ap=1
 	if ppcvar<-999.99 then ppcvar=-999.99
 	if ppcvar>999.99 then ppcvar=999.99
 	sp2=31-sp-1
-	if ul=1 then pr #255,using L1370: d$(1:sp2),dollar$,"{\UL ",accum1,"}",pdpct,percent$,dollar$,"{\UL ",accum2,"}",ytdpct,percent$,dollar$,"{\UL ",accum3,"}",pppd,percent$,dollar$,"{\UL ",accum4,"}",ppyear,percent$,dollar$,"{\UL ",accum5,"}",ppcvar,percent$,dollar$,"{\UL ",accum6,"}",ppyvar,percent$ pageoflow PGOF : goto L1830
-	pr #255,using L1360: d$(1:sp2),dollar$,accum1,pdpct,percent$,dollar$,accum2,ytdpct,percent$,dollar$,accum3,pppd,percent$,dollar$,accum4,ppyear,percent$,dollar$,accum5,ppcvar,percent$,dollar$,accum6,ppyvar,percent$ pageoflow PGOF
+	if ul=1 then pr #255,using L1370: d$(1:sp2),dollar$,"{\UL ",accum1,"}",pdpct,percent$,dollar$,"{\UL ",accum2,"}",ytdpct,percent$,dollar$,"{\UL ",accum3,"}",pppd,percent$,dollar$,"{\UL ",accum4,"}",ppyear,percent$,dollar$,"{\UL ",accum5,"}",ppcvar,percent$,dollar$,"{\UL ",accum6,"}",ppyvar,percent$ pageoflow PgOf : goto L1830
+	pr #255,using L1360: d$(1:sp2),dollar$,accum1,pdpct,percent$,dollar$,accum2,ytdpct,percent$,dollar$,accum3,pppd,percent$,dollar$,accum4,ppyear,percent$,dollar$,accum5,ppcvar,percent$,dollar$,accum6,ppyvar,percent$ pageoflow PgOf
 L1830: if percent=0 and ic=1 then : _
 		goto L2630
 	gosub L1940
@@ -228,7 +228,7 @@ L2090: form skip sk,pos tabnote,c fl,pos 165,c 8,skip 1
 	gosub L2290
 L2130: return
  
-PGOF: gosub FOOTER: continue
+PgOf: gosub FOOTER: continue
 L2160: if percent=0 then goto L2280
 	if ul=0 then goto L2260
 	if ul=1 then goto L2230

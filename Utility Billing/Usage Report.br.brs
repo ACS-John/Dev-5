@@ -17,7 +17,7 @@ if trim$(serviceName$(4))="Gas" or trim$(srv$(4))="GA" then service4enabled=1
 sequenceRoute=1
 sequenceAccount=2
 open #h_trans=fnH: "Name=[Q]\UBmstr\UBTransVB.h[cno],KFName=[Q]\UBmstr\UBTrIndx.h[cno],Shr",i,i,k
-open #h_customer_1=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",i,i,k ! 1
+open #hCustomer1=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",i,i,k ! 1
 	! /r
 SCREEN1: ! r:
 	fnTos
@@ -220,7 +220,7 @@ fnend
 def fn_hasSewer(acctno$)
 	! this function returns 1 if the customer account has a sewer service1enabled
 	dim hs_a(7)
-	read #h_customer_1,using F_CUSTOMER_1,key=acctno$: hs_z$,mat hs_a
+	read #hCustomer1,using F_CUSTOMER_1,key=acctno$: hs_z$,mat hs_a
 	F_CUSTOMER_1: form pos 1,c 10,x 132,7*pd 2
 	if hs_a(2)<>0 then let fn_hasSewer=1 else let fn_hasSewer=0
 fnend

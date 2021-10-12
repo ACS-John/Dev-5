@@ -44,7 +44,7 @@ L170: form pos 1,n 2,c 78,2*c 132,n 3,3*n 1,100*pd 6.3,20*c 50,40*pd 2,80*n 1
 	gosub HDR
 	goto PRTRPT
  
-PGOF: pr #255: newpage : gosub HDR : continue
+PgOf: pr #255: newpage : gosub HDR : continue
  
 HDR: !
 	pr #255,using "form pos 1,c 25": "Page "&str$(pgno+=1)&" "&date$

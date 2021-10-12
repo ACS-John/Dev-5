@@ -111,7 +111,7 @@ START_PRINT: !
 	fnwait(message$,1)
 	on fkey 5 goto DONE
 	fnopenprn
-	on pageoflow goto PGOF
+	on pageoflow goto PgOf
 L1070: open #2: "Name=[Q]\GLmstr\PRmstr.h[cno],Kfn_ame=[Q]\GLmstr\PRIndex.h[cno],Shr",i,i,k
 	if frm=2 then gosub WK_HEADER
 L1090: m1=0
@@ -227,7 +227,7 @@ L2130: p3=0
 	t1=t2=t3=t4=t5=0
 return
 
-PGOF: !
+PgOf: !
 	pr #255: newpage
 	gosub WK_HEADER
 	continue

@@ -60,11 +60,11 @@ READ_GLBREC: !
 	if fndate_mmddyy_to_ccyymmdd(a(1))>lcd then goto READ_GLBREC
 RD_NXT: !
 	if a(3)<>0 then goto READ_GLBREC
-	pr #255,using 'Form POS 1,C 12,POS 15,C 30,POS 48,PIC(ZZ/ZZ/ZZ),POS 58,N 13.2': c$,p$,a(1),a(2) pageoflow PGOF
+	pr #255,using 'Form POS 1,C 12,POS 15,C 30,POS 48,PIC(ZZ/ZZ/ZZ),POS 58,N 13.2': c$,p$,a(1),a(2) pageoflow PgOf
 	tot+=a(2)
 	goto READ_GLBREC
  
-PGOF: !
+PgOf: !
 	pr #255: newpage
 	gosub HDR
 continue

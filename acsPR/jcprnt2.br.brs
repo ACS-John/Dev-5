@@ -45,7 +45,7 @@ L170: form pos 1,n 2,c 78,2*c 132,n 3,3*n 1,100*pd 6.3,20*c 50,40*pd 2,80*n 1
 	gosub HDR
 	goto PRTRPT
  
-PGOF: pr #255: newpage : gosub HDR : continue
+PgOf: pr #255: newpage : gosub HDR : continue
  
 HDR: !
 	pr #255,using "form pos 1,c 25": "Page "&str$(pgno+=1)&" "&date$
@@ -96,7 +96,7 @@ L19834: cn=val(cn$(7:11))
 	x8=0
 	x9=0
 	if sd = 1 then goto L19833
-L19900: pr #255, using L19910: jn$(1:6),n$(1:25),c(3),c(4),c(5),c(6),c(7),c(8),c(9) pageoflow PGOF
+L19900: pr #255, using L19910: jn$(1:6),n$(1:25),c(3),c(4),c(5),c(6),c(7),c(8),c(9) pageoflow PgOf
 L19910: form skip 1,pos 1,c 6,pos 9,c 25,pos 35,n 11.2,pos 50,n 10.2,pos 63,n 3,pos 67,n 11.2,pos 80,n 11.2,pos 92,n 11.2,pos 110,n 11.2,skip 0
 	if file$(255)(1:4)<>"PRN:" then pr #255:
 	mat t=t+c

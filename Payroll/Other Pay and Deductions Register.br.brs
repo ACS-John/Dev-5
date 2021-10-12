@@ -115,30 +115,30 @@ START_REPORT: !  r: main report loop
   if int(numberded1/2)=numberded1/2 then
     ! if rpTemp(4)>99.99 then
       ! pr #255,using 'form pos 1,Cr 46,c ': name$(4)&' (-1) too large to fit on next line:',' '&str$(rpTemp(4))
-      pr #255,using L1040: eno,em$(1:15),rpTemp(1),rpTemp(2),rpTemp(3),-1,rpXxxx,mat printline1,totTemp pageoflow PGOF
+      pr #255,using L1040: eno,em$(1:15),rpTemp(1),rpTemp(2),rpTemp(3),-1,rpXxxx,mat printline1,totTemp pageoflow PgOf
       pr #255,using 'form pos 40,N 12.2 ': rpTemp(4)
       L1040: form pos 1,pic(zzzzzzzz),pos 10,c 15,n 7.2,n 8.2,pos 40,n 6.2,n 6.2,pos 52,n 8.2,pos 60,numberded1*n 12.2,n 12.2,skip 1
       line2part1$(41:41+12)=cnvrt$('N 12.2',rpTemp(4))
     ! else
-    !   pr #255,using L1040: eno,em$(1:15),rpTemp(1),rpTemp(2),rpTemp(3),rpTemp(4),rpXxxx,mat printline1,totTemp pageoflow PGOF
+    !   pr #255,using L1040: eno,em$(1:15),rpTemp(1),rpTemp(2),rpTemp(3),rpTemp(4),rpXxxx,mat printline1,totTemp pageoflow PgOf
     ! end if
   else
     ! if rpTemp(4)>99.99 then
       ! pr #255,using 'form pos 1,Cr 46,c ': name$(4)&' (-1) too large to fit on next line:',' '&str$(rpTemp(4))
       line2part1$(41:41+12)=cnvrt$('N 12.2',rpTemp(4))
-      pr #255,using L105b: eno,em$(1:15),rpTemp(1),rpTemp(2),rpTemp(3),0,rpXxxx,mat printline1,totTemp pageoflow PGOF
+      pr #255,using L105b: eno,em$(1:15),rpTemp(1),rpTemp(2),rpTemp(3),0,rpXxxx,mat printline1,totTemp pageoflow PgOf
       L105b: form pos 1,pic(zzzzzzzz),pos 10,c 15,n 7.2,n 8.2,pos 40,n 6.2,nz 6.2,pos 52,n 8.2,pos 60,numberded1*n 12.2,x 6,n 12.2,skip 1
     ! else
-    !   pr #255,using L105a: eno,em$(1:15),rpTemp(1),rpTemp(2),rpTemp(3),rpTemp(4),rpXxxx,mat printline1,totTemp pageoflow PGOF
+    !   pr #255,using L105a: eno,em$(1:15),rpTemp(1),rpTemp(2),rpTemp(3),rpTemp(4),rpXxxx,mat printline1,totTemp pageoflow PgOf
     !   L105a: form pos 1,pic(zzzzzzzz),pos 10,c 15,n 7.2,n 8.2,pos 40,n 6.2,n 6.2,pos 52,n 8.2,pos 60,numberded1*n 12.2,x 6,n 12.2,skip 1
     ! end if
   end if
   dim line2part1$*65
-  pr #255,using L1060: line2part1$,mat printline2 pageoflow PGOF
+  pr #255,using L1060: line2part1$,mat printline2 pageoflow PgOf
   line2part1$=''
   L1060: form pos 1,c 65,numberded2*n 12.2,skip 1
 return  ! /r
-PGOF: ! r:
+PgOf: ! r:
   pr #255: newpage
   gosub HDR
   continue

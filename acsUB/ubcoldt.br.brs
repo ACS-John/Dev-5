@@ -56,7 +56,7 @@ L430: read #2,using 'Form POS 1,C 10,N 8,N 1,12*PD 4.2,6*PD 5,PD 4.2,N 1': p$,td
 	c$=" "
 	if tcode=4 then c$="CM" else if tcode=5 then c$="DM"
 	if ti1$="True" then
-		pr #255,using 'Form POS 1,C 10,N 10.2,C 4,PIC(ZZZZ/ZZ/ZZ),SZ1*N 9.2': p$,tamount,c$,tdate,mat alloc pageoflow PGOF
+		pr #255,using 'Form POS 1,C 10,N 10.2,C 4,PIC(ZZZZ/ZZ/ZZ),SZ1*N 9.2': p$,tamount,c$,tdate,mat alloc pageoflow PgOf
 	end if
 	if sum(alloc)<>tamount then goto L642 else goto L655
 L642: !
@@ -68,7 +68,7 @@ L655: !
 if resp$="Cancel" then goto Xit
 goto L430
 
-PGOF: pr #255: newpage
+PgOf: pr #255: newpage
 	gosub HDR
 continue
 
@@ -87,7 +87,7 @@ PRTOTALS: !
 	pr #255: "    ************ Totals ************"
 	pr #255: tab(34);"{\ul       Total}  {\ul    Reg.Col}  {\ul   Cr.Memos}  {\ul   Db.Memos}"
 	for j=1 to sz1
-		pr #255,using 'Form POS 4,C 30,N 11.2,3*N 12.2': scr1$(j),r(j+3,1),r(j+3,2),r(j+3,3),r(j+3,4) pageoflow PGOF
+		pr #255,using 'Form POS 4,C 30,N 11.2,3*N 12.2': scr1$(j),r(j+3,1),r(j+3,2),r(j+3,3),r(j+3,4) pageoflow PgOf
 	next j
 	pr #255: ""
 	pr #255,using 'Form POS 4,C 30,N 11.2,3*N 12.2': "Total      ",r(1,1),r(1,2),r(1,3),r(1,4)

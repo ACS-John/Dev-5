@@ -80,8 +80,8 @@ L690: next j
   if total><0 then goto L750
   if ls+ul+ds+ic>0 then goto L750 else goto READ_TOP
 L750: sp2=dollar-sp-1
-  if ul=1 then pr #255,using L761: d$(1:sp2),dollar$,"{\ul ",total,"}" pageoflow PGOF : goto L770 ! atlantis underline
-  pr #255,using L770: d$(1:sp2),dollar$,total pageoflow PGOF
+  if ul=1 then pr #255,using L761: d$(1:sp2),dollar$,"{\ul ",total,"}" pageoflow PgOf : goto L770 ! atlantis underline
+  pr #255,using L770: d$(1:sp2),dollar$,total pageoflow PgOf
 L761: form pos sp,c sp2,pos dollar,c 1,c 5,pic(---,---,---.##),c 2,skip redir  ! ! atlantis underline
 L770: form pos sp,c sp2,pos dollar,c 1,pic(---,---,---.##),skip redir
   total=0
@@ -96,8 +96,8 @@ L840: if ap=0 then ap=1
   if ds=1 then dollar$="$" else dollar$=" "
   dollar=24+14*bc ! if  CP=1 Then dOLLAR=50+14*BC Else dOLLAR=24+14*BC
   sp2=dollar-sp-1
-  if ul=1 then pr #255,using L761: d$(1:sp2),dollar$,"{\ul ",accum1,"}" pageoflow PGOF : goto L900
-  pr #255,using L770: d$(1:sp2),dollar$,accum1 pageoflow PGOF
+  if ul=1 then pr #255,using L761: d$(1:sp2),dollar$,"{\ul ",accum1,"}" pageoflow PgOf : goto L900
+  pr #255,using L770: d$(1:sp2),dollar$,accum1 pageoflow PgOf
 L900: gosub SET_ACCUM
   if ul=1 then goto L920 ! atlantis underline
   gosub UNDERLINE
@@ -144,7 +144,7 @@ L1270: form skip sk,pos tabnote,c fl,skip 1
   gosub HEADER
 EO_FOOTER: return
 !
-PGOF: !
+PgOf: !
   gosub L1220
   continue
 !

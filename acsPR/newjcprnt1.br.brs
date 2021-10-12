@@ -42,7 +42,7 @@ L360: form pos 1,n 2,c 78,2*c 132,n 3,3*n 1,100*pd 6.3,20*c 50,40*pd 2,80*n 1
 	gosub HDR
 	goto PRTRPT
  
-PGOF: pr #255: newpage : gosub HDR : continue
+PgOf: pr #255: newpage : gosub HDR : continue
  
 HDR: ! r:
 	pr #255,using "form pos 1,c 25": "Page "&str$(pgno+=1)&" "&date$
@@ -98,7 +98,7 @@ L820: on zdiv goto L1220
 	x8=0
 	x9=0
 	if sd = 1 then goto L720
-L1000: pr #255, using L1010: jn$(1:8),n$(1:23),cn$(7:11),k$(1:18),c(5),c(7),c(8),c(9),c(10),c(11) pageoflow PGOF
+L1000: pr #255, using L1010: jn$(1:8),n$(1:23),cn$(7:11),k$(1:18),c(5),c(7),c(8),c(9),c(10),c(11) pageoflow PgOf
 L1010: form skip 1,pos 1,c 8,pos 9,c 23,pos 33,c 11,pos 46,c 18,pos 64,n 3,pos 79,n 8.2,pos 88,n 6.2,pos 96,n 6.2,pos 106,n 8.2,pos 119,n 8.2,skip 0
 	if file$(255)(1:4)<>"PRN:" then pr #255:
 	mat t=t+c

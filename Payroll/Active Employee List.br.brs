@@ -32,11 +32,11 @@ TOPOFLOOP: !
 	open #5: "Name=[Temp]\Temp1.[Session],KFName=[Temp]\TempIdx."&session$,internal,outIn,keyed
 	L390: !
 	read #5,using L320: eno,last$,first$,mid$,lpd,em4 eof DONE
-	pr #255,using L410: eno,trim$(first$)&" "&trim$(mid$)&" "&trim$(last$),lpd,em4 pageoflow PGOF
+	pr #255,using L410: eno,trim$(first$)&" "&trim$(mid$)&" "&trim$(last$),lpd,em4 pageoflow PgOf
 	L410: form pos 1,n 8,x 3,c 30,x 3,pic(zz/zz/zz),x 9,n 2,skip 1
 goto L390
  
-PGOF: ! r:
+PgOf: ! r:
 	pr #255: newpage
 	gosub HDR
 continue ! /r

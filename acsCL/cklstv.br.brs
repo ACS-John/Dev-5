@@ -36,7 +36,7 @@ HDR: ! r: Page Heading
 	pr #255,using 'Form Pos 1,C 80': "Chk/Ref# Date   Amount      Payee No Name/Description"
 	pr #255,using 'Form Pos 1,C 80': "________ ______ ___________ ________ ___________________________________"
 return ! /r
-PGOF: ! r:
+PgOf: ! r:
 	pr #255: newpage
 	gosub HDR
 continue ! /r
@@ -48,15 +48,15 @@ BODY: ! r:
 	if tcde<>1 then goto BODY ! checks only
 	if tr$(4)<>vn$ and vn$<>"" then gosub TOTALS
 	if tr$(4)<>vn$ then gosub SUBHEADING
-	pr #255,using 'Form POS 1,C 8,X 1,C 6,N 12.2,X 1,C 8,X 1,C 35': tr$(1),tr$(2),val(tr$(3)),tr$(4) pageoflow PGOF
+	pr #255,using 'Form POS 1,C 8,X 1,C 6,N 12.2,X 1,C 8,X 1,C 35': tr$(1),tr$(2),val(tr$(3)),tr$(4) pageoflow PgOf
 	total1+=val(tr$(3))
 goto BODY ! /r
 SUBHEADING: ! r:
 	ytdp=typ=ta(1)=ta(2)=0 : vn$=nam$=ad1$=ad2$=csz$=ss$=ph$=""
 	read #paymstr,using 'Form POS 1,C 8,4*C 30,PD 5.2,N 2,C 11,2*PD 3,C 12',key=tr$(4): vn$,nam$,ad1$,ad2$,csz$,ytdp,typ,ss$,mat ta,ph$ nokey PR_NOKEY
-	pr #255,using 'Form POS 1,C 80': "Vendor: "&trim$(vn$)&". "&nam$ pageoflow PGOF : goto PAST_PR_NOKEY
+	pr #255,using 'Form POS 1,C 80': "Vendor: "&trim$(vn$)&". "&nam$ pageoflow PgOf : goto PAST_PR_NOKEY
 	PR_NOKEY: !
-	pr #255,using 'Form POS 1,C 80': "Vendor: "&trim$(tr$(4))&". (This Vendor has been Deleted)" pageoflow PGOF
+	pr #255,using 'Form POS 1,C 80': "Vendor: "&trim$(tr$(4))&". (This Vendor has been Deleted)" pageoflow PgOf
 	PAST_PR_NOKEY: !
 	total1=0
 return ! /r

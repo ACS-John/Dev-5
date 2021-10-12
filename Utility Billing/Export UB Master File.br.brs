@@ -25,8 +25,8 @@ MENU1: ! r:
 MainLoop: ! r:
 	dim delim$*1
 	delim$=tab$
-	open #h_customer=fnH: "Name=[Q]\UBmstr\Customer.h[cno]"&',shr',i,outi,r
-	! open #h_customer=fnH: "Name=[Q]\UBmstr\Customer.h[cno]",i,i,r
+	open #hCustomer=fnH: "Name=[Q]\UBmstr\Customer.h[cno]"&',shr',i,outi,r
+	! open #hCustomer=fnH: "Name=[Q]\UBmstr\Customer.h[cno]",i,i,r
 	fnMakeSurePathExists(dest$)
 	open #2: "Name="&br_filename$(dest$)&",RecL=2500,Replace,EOL=CRLF",d,o ioerr MENU1
 	! form pos 1,c 14,c 1,c 30,c 1,c 30,c 1,c 30,c 1,c 30,c 1,c 12,c 1,n 4,c 1,n 4,c 1,n 4,c 1,n 4,c 1,n 4,c 1,n 4,c 1,n 4,c 1,n 8.2,c 1,n 8.2,c 1,n 8.2,c 1,n 8.2,c 1,n 8.2,c 1,n 8.2,c 1,n 8.2,c 1,n 8.2,c 1,n 8.2,c 1,n 8.2,c 1,n 8.2,c 1
@@ -47,7 +47,7 @@ MainLoop: ! r:
 		dim gb(10)
 		dim extra$(11)*30
 		dim email$*30
-		read #h_customer,using F_CUSTOMER: z$,mat e$,f$(1),mat a,mat b,mat c,mat d,bal,f,mat g,mat adr,alp$,f$(2),f$(3),bra,mat gb,finalBillingCode,mat extra$,email$ eof Finis
+		read #hCustomer,using F_CUSTOMER: z$,mat e$,f$(1),mat a,mat b,mat c,mat d,bal,f,mat g,mat adr,alp$,f$(2),f$(3),bra,mat gb,finalBillingCode,mat extra$,email$ eof Finis
 		F_CUSTOMER: form pos 1,c 10,4*c 30,c 12,7*pd 2,11*pd 4.2,4*pd 4,15*pd 5,pd 4.2,pd 4,12*pd 4.2,2*pd 3,c 7,2*c 12,pd 3,10*pd 5.2,pos 1821,n 1,pos 1864,c 30,c 12,c 12,c 12,c 12,c 12,c 12,c 12,c 30,c 30,c 30,pos 1978,c 30
 		gosub ALT_BILL_ADR
 		dim addr$(4)*40
@@ -140,7 +140,7 @@ MainLoop: ! r:
 		! /r
 	loop ! /r
 Finis: ! r:
-	close #h_customer: ioerr ignore
+	close #hCustomer: ioerr ignore
 	close #2: ioerr ignore
 	close #3: ioerr ignore
 goto Xit ! /r

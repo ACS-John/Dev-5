@@ -164,14 +164,14 @@ SCREEN1: !
 		route(extra(1))+=sum(pencolumn)
 		! pr extra(1)
 		if printadr<>1 then
-			pr #255,using F_PRINT_LINE: z$,e$(2),mat pencolumn,bal pageoflow PGOF
+			pr #255,using F_PRINT_LINE: z$,e$(2),mat pencolumn,bal pageoflow PgOf
 		end if
 		if printadr=1 then
-			pr #255,using F_PRINT_LINE: z$,e$(2),mat pencolumn,bal,e$(1)(1:25) pageoflow PGOF
+			pr #255,using F_PRINT_LINE: z$,e$(2),mat pencolumn,bal,e$(1)(1:25) pageoflow PgOf
 		end if
 		if printmail=1 then
-			pr #255,using "Form POS 15,C 30": e$(3) pageoflow PGOF
-			pr #255,using "Form POS 15,C 30": e$(4) pageoflow PGOF
+			pr #255,using "Form POS 15,C 30": e$(3) pageoflow PgOf
+			pr #255,using "Form POS 15,C 30": e$(4) pageoflow PgOf
 		end if
 		F_PRINT_LINE: form pos 1,c 10,x 4,c 30,pos 52,pencount*pic(---------.##),x 2,pic(-------.##),x 2,c 25
 	loop
@@ -199,7 +199,7 @@ EO_CUSTOMER: !
 	close #hTrans2: ioerr ignore
 	fncloseprn
 goto Xit ! /r
-PGOF: ! r:
+PgOf: ! r:
 	pr #255: newpage
 	gosub HDR
 continue  ! /r

@@ -2,8 +2,8 @@
 ! -- Tranfer Data From Computer to Hand Held
 fn_setup
 fnTop(program$)
-open #h_customer_i1=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",i,i,k
-open #h_customer_i5=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx5.h[cno],Shr",i,i,k
+open #hCustomeri1=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",i,i,k
+open #hCustomeri5=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx5.h[cno],Shr",i,i,k
 goto Screen1
 
 Screen1: ! r:
@@ -111,11 +111,11 @@ AskRange: ! r:
 		goto AskRange
 	end if
 	mat resp$=("")
-	! read #h_customer_i1,using F_CUSTOMER,key=bk1$,release: z$,mat e$,mat a,final,mat d,mat f$,route,sequence,extra$(3),extra$(7),extra(1),alp$ eof AskRange ! get first and last route and sequence number to select
-	! read #h_customer_i1,using F_CUSTOMER,key=bk2$,release: z$,mat e$,mat a,final,mat d,mat f$,last_route,last_sequence,extra$(3),extra$(7),extra(1),alp$ eof AskRange
-	read #h_customer_i1,using 'form pos 1741,n 2,n 7',key=bk1$,release: route,sequence ! get first and last route and sequence number to select
-	read #h_customer_i1,using 'form pos 1741,n 2,n 7',key=bk2$,release: last_route,last_sequence
-	restore #h_customer_i5,key=cnvrt$("pic(zz)",route)&cnvrt$("pic(zzzzzzz",sequence):
+	! read #hCustomeri1,using F_CUSTOMER,key=bk1$,release: z$,mat e$,mat a,final,mat d,mat f$,route,sequence,extra$(3),extra$(7),extra(1),alp$ eof AskRange ! get first and last route and sequence number to select
+	! read #hCustomeri1,using F_CUSTOMER,key=bk2$,release: z$,mat e$,mat a,final,mat d,mat f$,last_route,last_sequence,extra$(3),extra$(7),extra(1),alp$ eof AskRange
+	read #hCustomeri1,using 'form pos 1741,n 2,n 7',key=bk1$,release: route,sequence ! get first and last route and sequence number to select
+	read #hCustomeri1,using 'form pos 1741,n 2,n 7',key=bk2$,release: last_route,last_sequence
+	restore #hCustomeri5,key=cnvrt$("pic(zz)",route)&cnvrt$("pic(zzzzzzz",sequence):
 	NextReadForRange: !
 	if fn_customerRead=-54 then goto AskRange
 	! if (route=last_route and sequence>last_sequence) or route>last_route Then Goto AskRange
@@ -186,7 +186,7 @@ StartForSelectAll: ! r:
 	! 	fn_getFilterAccount(mat filterAccount$)
 	! end if
 	if bk1=0 then bk1=1
-	restore #h_customer_i5,key>=cnvrt$("pic(zz)",bk1)&"       ": nokey AskRoute
+	restore #hCustomeri5,key>=cnvrt$("pic(zz)",bk1)&"       ": nokey AskRoute
 goto NextReadForAll ! /r
 
 SendRecordToOutFile: ! r:
@@ -319,8 +319,8 @@ Finis: ! r: Transfer to or from Hand Held Computer
 	dim out_filename_report$*512
 	out_filename_report$=file$(h_out)
 	close #h_out: ioerr ignore
-	close #h_customer_i1: ioerr ignore
-	close #h_customer_i5: ioerr ignore
+	close #hCustomeri1: ioerr ignore
+	close #hCustomeri5: ioerr ignore
 
 	dim hhrun$*256
 	fnureg_read('Hand Held Run File',hhrun$)
@@ -1447,7 +1447,7 @@ fnend
 def fn_searchScreen(x$,&res$)
 	fnCustomerSearch(x$)
 	if x$<>"" then
-		read #h_customer_i1,using "Form POS 1,C 10,x 30,c 30",key=x$: z$,e2$
+		read #hCustomeri1,using "Form POS 1,C 10,x 30,c 30",key=x$: z$,e2$
 		res$=rpad$(trim$(z$),10)&" "&trim$(e2$)
 	end if
 fnend
@@ -1740,7 +1740,7 @@ def fn_customerRead(; accountKey$,locationId) ! all values read are passed back 
 		close #hLocationByLocationID:
 		LastLocationIdOnFile=locationN(loc_LocationID)
 	end if ! /r
-	! #h_customer_i1 and #h_customer_i5 are inherited local variables
+	! #hCustomeri1 and #hCustomeri5 are inherited local variables
 	dim extra$(11)*30
 	crReturn=0
 	! r: clear all the variables that are returned (locally) by this function
@@ -1759,14 +1759,14 @@ def fn_customerRead(; accountKey$,locationId) ! all values read are passed back 
 	F_CUSTOMER: form pos 1,c 10,4*c 30,pos 143,7*pd 2,pos 1821,n 2,pos 217,15*pd 5,pos 131,c 12,pos 361,2*c 12,pos 1741,n 2,n 7,pos 1864,C 30,7*C 12,3*C 30,pos 1741,n 2,pos 354,c 7
 	if accountKey$='' and locationId=0 then ! read Sequential
 		CrReadSequential: !
-		read #h_customer_i5,using F_CUSTOMER: z$,mat e$,mat a,final,mat d,mat f$,route,sequence,mat extra$,extra(1),alp$ eof CrEoF
+		read #hCustomeri5,using F_CUSTOMER: z$,mat e$,mat a,final,mat d,mat f$,route,sequence,mat extra$,extra(1),alp$ eof CrEoF
 		if udim(mat filterAccount$)>0 and trim$(filterAccount$(1))<>'' then
 			if srch(mat filterAccount$,trim$(z$))<=0 then
 				goto CrReadSequential
 			end if
 		end if
 	else if locationId<>0 then
-		z$=lpad$(trim$(fnAccountFromLocationId$(locationId,1)),kln(h_customer_i1))
+		z$=lpad$(trim$(fnAccountFromLocationId$(locationId,1)),kln(hCustomeri1))
 		if trim$(z$)='' then
 			if locationId>LastLocationIdOnFile then
 				goto CrEoF
@@ -1775,10 +1775,10 @@ def fn_customerRead(; accountKey$,locationId) ! all values read are passed back 
 				goto CrFinis
 			end if
 		else
-			read #h_customer_i1,using F_CUSTOMER,key=z$: z$,mat e$,mat a,final,mat d,mat f$,route,sequence,mat extra$,extra(1),alp$ nokey CrNoKey
+			read #hCustomeri1,using F_CUSTOMER,key=z$: z$,mat e$,mat a,final,mat d,mat f$,route,sequence,mat extra$,extra(1),alp$ nokey CrNoKey
 		end if
 	else
-		read #h_customer_i1,using F_CUSTOMER,key=accountKey$: z$,mat e$,mat a,final,mat d,mat f$,route,sequence,mat extra$,extra(1),alp$ nokey CrNoKey
+		read #hCustomeri1,using F_CUSTOMER,key=accountKey$: z$,mat e$,mat a,final,mat d,mat f$,route,sequence,mat extra$,extra(1),alp$ nokey CrNoKey
 	end if
 	crReturn=1
 	goto CrFinis

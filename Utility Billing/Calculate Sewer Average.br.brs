@@ -5,8 +5,8 @@ on error goto Ertn
 fnTop(program$)
  
 open #h_trans=fnH: "Name=[Q]\UBmstr\ubTransvb.h[cno],KFName=[Q]\UBmstr\ubTrIndx.h[cno],Shr",i,i,k
-open #h_customer=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,outIn,keyed
-read #h_customer,using L500: x$,customer_sewer_rate_code,oldavg eof DONE
+open #hCustomer=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,outIn,keyed
+read #hCustomer,using L500: x$,customer_sewer_rate_code,oldavg eof DONE
 gosub APPLY_DEFAULT_RATE
 restore #h_trans,key>=x$&"         ": nokey L220
 L160: !
@@ -18,7 +18,7 @@ if j>8 then goto L220
 resp$(j)=str$(tdate)
 goto L160
 L220: !
-restore #h_customer:
+restore #hCustomer:
  
 SCR1: !
 	fnTos(sn$:="ubsewer-1b")
@@ -69,7 +69,7 @@ message$="Calculating: please wait..."
 fnwait(message$,1)
 gosub HDR
 L480: !
-read #h_customer,using L500: x$,customer_sewer_rate_code,oldavg eof DONE
+read #hCustomer,using L500: x$,customer_sewer_rate_code,oldavg eof DONE
 gosub APPLY_DEFAULT_RATE
 if customer_sewer_rate_code<>filter_sewer_code then goto L480 ! only average certain rate codes
 L500: form pos 1,c 10,pos 145,pd 2,pos 1822,n 9
@@ -100,14 +100,14 @@ L500: form pos 1,c 10,pos 145,pd 2,pos 1822,n 9
 	EO_TRANS: !
 		if t1>0 then t3=int((t2+.5)/t1) else t3=0
 	end if
-	rewrite #h_customer,using "Form POS 1822,N 9": t3
+	rewrite #hCustomer,using "Form POS 1822,N 9": t3
 	pr #255,using L660: x$,oldavg,t3,x(1),x(2),x(3),x(4) pageoflow PAGE
 	L660: form pos 1,c 12,6*nz 9
 	L670: !
 goto L480 ! /r
  
 DONE: !
-	close #h_customer:
+	close #hCustomer:
 	fncloseprn
 Xit: fnXit
  

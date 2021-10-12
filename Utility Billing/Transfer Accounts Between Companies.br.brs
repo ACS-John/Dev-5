@@ -102,7 +102,7 @@ L960: !
 	L1040: !
 	gosub ALTBILLADDR
 	write #26,using mstrform$: z2$,mat e$,f$(1),mat a,mat b,mat c,mat d,bal,f,mat g,mat ta,alp$,f$(2),f$(3),bra,mat gb,mat rw4,df$,dr$,dc$,da$,mat extra,mat extra$
-	pr #255,using 'form pos 1,c 10,pos 15,c 30,pos 50,n 10.2': z$,e$(2),bal pageoflow PGOF
+	pr #255,using 'form pos 1,c 10,pos 15,c 30,pos 50,n 10.2': z$,e$(2),bal pageoflow PgOf
 	delete #1,key=z$:
 goto MENU2
 
@@ -155,7 +155,7 @@ HDR: ! r:
 	pr #255,using "Form POS 2,C 9,POS 15,C 4,POS 53,C 7": "Act. Num.","Name","Balance"
 return  ! /r
 
-PGOF: ! r:
+PgOf: ! r:
 	pr #255: newpage
 	gosub HDR
 continue  ! /r

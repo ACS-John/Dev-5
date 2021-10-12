@@ -325,40 +325,40 @@ fnend
 ! 	fnStatus('UBMaster Conversion for Merriam Woods complete.')
 ! fnend
 def fn_ub_cust_route_from_acctno(cno)
-	open #h_customer=fnH: "Name=[Q]\UBmstr\Customer.h"&str$(cno)&",Shr",i,outi,r
+	open #hCustomer=fnH: "Name=[Q]\UBmstr\Customer.h"&str$(cno)&",Shr",i,outi,r
 	do
-		read #h_customer,using 'Form Pos 1,C 10,pos 1741,n 2,n 7': z$,route_number,sequence_number eof UCRFA_CUSTOMER_EOF
+		read #hCustomer,using 'Form Pos 1,C 10,pos 1741,n 2,n 7': z$,route_number,sequence_number eof UCRFA_CUSTOMER_EOF
 		if route_number=0 then
 			route_number=sequence_number=0
 			route_number=val(z$(1:2)) conv UCRFA_SKIP_IT
 			sequence_number=val(z$(3:7)) conv ignore
-			rewrite #h_customer,using 'Form Pos 1,C 10,pos 1741,n 2,n 7': z$,route_number,sequence_number
+			rewrite #hCustomer,using 'Form Pos 1,C 10,pos 1741,n 2,n 7': z$,route_number,sequence_number
 		end if
 		UCRFA_SKIP_IT: !
 	loop
 	UCRFA_CUSTOMER_EOF: !
-	close #h_customer:
+	close #hCustomer:
 fnend
 def fn_ub_combine_services(service_from,service_to)
 	! r: customer
 	dim g(12), gb(10)
-	open #h_customer=fnH: "Name=[Q]\UBmstr\Customer.h[cno],Shr",i,outi,r
+	open #hCustomer=fnH: "Name=[Q]\UBmstr\Customer.h[cno],Shr",i,outi,r
 	do
-		read #h_customer,using 'Form Pos 1,C 10,pos 300,12*pd 4.2,pos 388,10*pd 5.2': z$,mat g,mat gb eof UCCS_CUSTOMER_EOF
+		read #hCustomer,using 'Form Pos 1,C 10,pos 300,12*pd 4.2,pos 388,10*pd 5.2': z$,mat g,mat gb eof UCCS_CUSTOMER_EOF
 		if g(service_from)<>0 or gb(service_from)<>0 then
 			g(service_to)+=g(service_from)
 			gb(service_to)+=gb(service_from)
 			g(service_from)=0
 			gb(service_from)=0
-			rewrite #h_customer,using 'Form Pos 1,C 10,pos 300,12*pd 4.2,pos 388,10*pd 5.2': z$,mat g,mat gb
+			rewrite #hCustomer,using 'Form Pos 1,C 10,pos 300,12*pd 4.2,pos 388,10*pd 5.2': z$,mat g,mat gb
 		end if
 	loop
 	UCCS_CUSTOMER_EOF: !
-	close #h_customer:
+	close #hCustomer:
 	! /r
 	! r: transactions
 	dim tg(11)
-	open #h_customer=fnH: "Name=[Q]\UBmstr\UBTransVB.h[cno],Shr",i,outi,r
+	open #hCustomer=fnH: "Name=[Q]\UBmstr\UBTransVB.h[cno],Shr",i,outi,r
 	do
 		read #h_ubtrans,using 'form pos 1,c 10,x 8,x 1,x 4,12*pd 4.2': x$,mat tg eof UCCS_TRANS_EOF
 		if tg(service_from)<>0 then

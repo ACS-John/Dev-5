@@ -2,16 +2,16 @@
 library program$: fnworkOrderAdd
 library 'S:\Core\Library': fnXit,fnTop,fnask_account,fnH
 fnTop(program$)
-open #h_customer=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",i,i,k 
+open #hCustomer=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",i,i,k 
 do
-	if fnask_account('Work Order',z$,h_customer)=5 then 
+	if fnask_account('Work Order',z$,hCustomer)=5 then 
 		goto Xit
 	else
 		fnworkOrderAdd(z$)
 	end if 
 loop
 Xit: !
-close #h_customer:
+close #hCustomer:
 fnXit
 def library fnworkOrderAdd(z$*10)
 	if ~wo_setup then ! r:
@@ -40,14 +40,14 @@ def library fnworkOrderAdd(z$*10)
 	end if ! /r
 
 	dat$=date$("Month DD, CCYY")
-	open #wo_h_customer=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",i,i,k 
+	open #wo_hCustomer=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",i,i,k 
 	! really only need these: (z$,mat e$,mat i$,mat line$,mat a,mat b,mat d,mat f$,mat extra$)
-	read #wo_h_customer,using F_CUSTOMER_1,key=z$: z$,mat e$,f$(1),mat a,mat b,mat c,mat d,bal,f,mat g,mat adr,alp$,f$(2),f$(3),bra,mat gb,mat rw4,df$,dr$,dc$,da$,mat extra,mat extra$
+	read #wo_hCustomer,using F_CUSTOMER_1,key=z$: z$,mat e$,f$(1),mat a,mat b,mat c,mat d,bal,f,mat g,mat adr,alp$,f$(2),f$(3),bra,mat gb,mat rw4,df$,dr$,dc$,da$,mat extra,mat extra$
 	cell$=extra$(8)
 	F_CUSTOMER_1: form pos 1,c 10,4*c 30,c 12,7*pd 2,11*pd 4.2,4*pd 4,15*pd 5,pd 4.2,pd 4,12*pd 4.2,2*pd 3,c 7,2*c 12,pd 3,10*pd 5.2,78*pd 5,13*pd 4.2,13*n 6,156*pd 4.2,13*n 6,13*pd 4.2,c 1,c 9,c 2,c 17,n 2,n 7,2*n 6,n 9,pd 5.2,n 3,3*n 9,3*n 2,3*n 3,n 1,3*n 9,3*pd 5.2,c 30,7*c 12,3*c 30
 	customer_name$=e$(2)
 	customer_phone_number$=extra$(2)
-	close #wo_h_customer:
+	close #wo_hCustomer:
 
 	WO_TOS: !
 	fnTos(sn$="workorder")

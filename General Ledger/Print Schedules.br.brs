@@ -67,7 +67,7 @@
 				for rv=1 to 13 : by(rv)=-by(rv) : next rv
 				L580: !
 				if cm=1 then
-					pr #255,using L660: d$,dollar$,curmo,dollar$,cb pageoflow PGOF
+					pr #255,using L660: d$,dollar$,curmo,dollar$,cb pageoflow PgOf
 					j1=j1+1
 					dollar$=" "
 					L660: form pos 1,c 50,pos 51,c 1,pic(--,---,---.##),pos 67,c 1,pic(--,---,---.##)
@@ -80,7 +80,7 @@
 					else
 					  dol$="FORM POS 1,C 32,14*PIC(---,---,---.##)"
 					end if
-					pr #255,using dol$: d$(1:30),mat by,cb pageoflow PGOF
+					pr #255,using dol$: d$(1:30),mat by,cb pageoflow PgOf
 					mat byt=byt+by
 				else if cm=3 then
 					if dp=1 then
@@ -88,10 +88,10 @@
 					else
 					  dol$="FORM POS 1,C 42,13*PIC(---,---,---.##)"
 					end if
-					pr #255,using dol$: d$(1:40),mat by pageoflow PGOF
+					pr #255,using dol$: d$(1:40),mat by pageoflow PgOf
 					mat byt=byt+by
 				else
-					pr #255,using L610: d$,dollar$,cb pageoflow PGOF
+					pr #255,using L610: d$,dollar$,cb pageoflow PgOf
 					L610: form pos 1,c 50,pos 67,c 1,pic(--,---,---.##)
 					dollar$=" "
 				end if
@@ -124,7 +124,7 @@ PrintTotals: ! r:
 		else
 			dol$="FORM POS 1,C 32,14*PIC(---,---,---.##)"
 		end if
-		pr #255,using dol$: "  Totals",mat byt,ytdtot pageoflow PGOF
+		pr #255,using dol$: "  Totals",mat byt,ytdtot pageoflow PgOf
 		dol$="FORM POS 1,C 32,14*'  ============'"
 		pr #255,using dol$: ""
 	else if cm=3 then
@@ -135,7 +135,7 @@ PrintTotals: ! r:
 		else
 			dol$="FORM POS 1,C 42,13*PIC(---,---,---.##)"
 		end if
-		pr #255,using dol$: "  Totals",mat byt pageoflow PGOF
+		pr #255,using dol$: "  Totals",mat byt pageoflow PgOf
 		dol$="FORM POS 1,C 42,13*'  ============'"
 		pr #255,using dol$: ""
 	else
@@ -154,7 +154,7 @@ PrintPageFooter: ! r:
 		pr #255: newpage
 	end if
 return ! /r
-PGOF: ! r:
+PgOf: ! r:
 	gosub PrintPageFooter
 	gosub PrintHeadings
 continue ! /r

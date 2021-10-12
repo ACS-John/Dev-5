@@ -102,11 +102,11 @@ SOMETHING: !
 	if cb<0 then : _
 		crtotal+=cb : p1=54 else : _
 		drtotal+=cb : p1=40
-	pr #255,using 'Form Pos 1,pic(ZZZ),X 1,pic(ZZZZZZ),X 1,pic(ZZZ),X 2,C 22,POS P1,N 12.2,POS 68,C 62': dno,ano,sno,d$(1:22),cb,p$ pageoflow PGOF : _
-	pr #255,using "Form Pos 68,C 62": p$ pageoflow PGOF
+	pr #255,using 'Form Pos 1,pic(ZZZ),X 1,pic(ZZZZZZ),X 1,pic(ZZZ),X 2,C 22,POS P1,N 12.2,POS 68,C 62': dno,ano,sno,d$(1:22),cb,p$ pageoflow PgOf : _
+	pr #255,using "Form Pos 68,C 62": p$ pageoflow PgOf
 return
  
-PGOF: pr #255: newpage : gosub HDR : continue
+PgOf: pr #255: newpage : gosub HDR : continue
  
 Xit: fnXit
  

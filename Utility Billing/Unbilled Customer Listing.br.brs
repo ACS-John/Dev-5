@@ -45,7 +45,7 @@ READ_CUSTOMER: ! r: main loop
 	if startcd=1 and prtbkno<>route then goto TOTALS
 	if final=3 then final$="Final=3" else final$=""
 	if final=4 then final$="Final=4"
-	if printadr=1 then pr #255,using L490: z$,e$(2),f,bal,e$(1)(1:25),final$ pageoflow PGOF else pr #255,using L491: z$,e$(2),f,bal,final$ pageoflow PGOF
+	if printadr=1 then pr #255,using L490: z$,e$(2),f,bal,e$(1)(1:25),final$ pageoflow PgOf else pr #255,using L491: z$,e$(2),f,bal,final$ pageoflow PgOf
 	L490: form pos 1,c 10,pos 13,c 30,pos 45,pic(zz/zz/zz),n 15.2,x 2,c 25,x 2,c 8
 	L491: form pos 1,c 10,pos 13,c 30,pos 45,pic(zz/zz/zz),n 15.2,x 2,c 8
 	tbal=tbal+bal
@@ -68,7 +68,7 @@ HDR: ! r:
 	if printadr=1 then pr #255: " {\ul Number   }  {\ul Name             }             {\ul Last Billing}      {\ul Balance}  {\ul Meter Address}"
 	pr #255: ""
 return ! /r
-PGOF: ! r:
+PgOf: ! r:
 	pr #255: newpage
 	gosub HDR
 continue ! /r

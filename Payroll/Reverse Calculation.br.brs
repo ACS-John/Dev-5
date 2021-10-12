@@ -260,7 +260,7 @@ POSTGL2: ! r:
 	eno$=lpad$(str$(teno),8)
 	read #1,using 'form pos 9,c 30',key=eno$,release: em$ nokey L2340
 	L2160: !
-	pr #255,using L2180: teno,em$,mat tgl,-tcp(31)+tcp(29)+tcp(30) pageoflow PGOF
+	pr #255,using L2180: teno,em$,mat tgl,-tcp(31)+tcp(29)+tcp(30) pageoflow PgOf
 	L2180: form pos 1,pic(zzzzzzzz),pos 15,c 30,pos 50,pic(zzz),x 1,pic(zzzzz#),x 1,pic(zzz),n 12.2,skip 1
 	for j=1 to 24 ! ACCUMULATE 24 WITHHOLDINGS
 		if j<=4 then goto L2240
@@ -321,7 +321,7 @@ POSTGL4: ! r:
 	if glb=2 then goto Xit
 fnchain("S:\General Ledger\Merge") ! /r
 Xit: fnXit
-PGOF: ! r:
+PgOf: ! r:
 	pr #255: newpage
 	gosub GlDistHeaders
 continue  ! /r
@@ -331,22 +331,22 @@ POST_WH_AND_NET: ! r: ASSIGN G/L NUMBERS AND POST TO GL WORK FILE
 		if t(j)<0 then goto L2950
 		if j<=4 then goto L2850 else goto L2870
 		L2850: !
-		pr #255,using L2180: 0," ",prgl(j,1),prgl(j,2),prgl(j,3),-t(j) pageoflow PGOF
+		pr #255,using L2180: 0," ",prgl(j,1),prgl(j,2),prgl(j,3),-t(j) pageoflow PgOf
 		goto L2930
 		L2870: !
-		pr #255,using L2920: 0," ",gl$(j-4),-t(j) pageoflow PGOF
+		pr #255,using L2920: 0," ",gl$(j-4),-t(j) pageoflow PgOf
 		if j<25 then goto L2890 else goto L2910
 		L2890: !
-		pr #255,using L2920: 0," ",gl$(j-4),-t(j) pageoflow PGOF
+		pr #255,using L2920: 0," ",gl$(j-4),-t(j) pageoflow PgOf
 		goto L2920
 		L2910: !
-		pr #255,using L2920: 0," ",gl$(j-11),-t(j) pageoflow PGOF
+		pr #255,using L2920: 0," ",gl$(j-11),-t(j) pageoflow PgOf
 		L2920: form pos 1,pic(zzzzzzzz),pos 15,c 30,pos 50,c 12,n 12.2,skip 1
 		L2930: !
 		totaldr=totaldr+t(j)
 		goto L2980
 		L2950: !
-		pr #255,using L2960: 0," ",prgl(j,1),prgl(j,2),prgl(j,3),-t(j) pageoflow PGOF
+		pr #255,using L2960: 0," ",prgl(j,1),prgl(j,2),prgl(j,3),-t(j) pageoflow PgOf
 		L2960: form pos 1,pic(zzzzzzzz),pos 15,c 30,pos 50,pic(zzz),x 1,pic(zzzzz#),x 1,pic(zzz),x 12,n 12.2,skip 1
 		totalcr=totalcr+t(j)
 		L2980: !

@@ -65,7 +65,7 @@ do ! r: main loop
 	dim bp(13)
 	read #hGlmstr,using 'Form POS 13,C 50,POS 81,41*PD 6.2',key=k$: d$,bb,cb,mat bc,mat bp
 	ce=0
-	pr #255,using 'Form POS 9,PIC(ZZZ),X 6,PIC(ZZZZZZ),X 9,PIC(ZZZ),X 4,C 35,X 1,N 2,X 1,C 1,X 11,N 2,X 1,C 1,X 4,N 11.2': val(k$(1:3)),val(k$(4:9)),val(k$(10:12)),d$(1:35),fm(1),fm2$,fm(3),fm4$,am pageoflow PGOF
+	pr #255,using 'Form POS 9,PIC(ZZZ),X 6,PIC(ZZZZZZ),X 9,PIC(ZZZ),X 4,C 35,X 1,N 2,X 1,C 1,X 11,N 2,X 1,C 1,X 4,N 11.2': val(k$(1:3)),val(k$(4:9)),val(k$(10:12)),d$(1:35),fm(1),fm2$,fm(3),fm4$,am pageoflow PgOf
 	if am>0 then am1=am1+am else am2=am2+am
 	if fm(2)=1 then
 		first=fm(1)
@@ -105,7 +105,7 @@ HDR: ! r:
 	dim scr$(8)*20
 	pr #255,using 'Form POS 4,C 12,X 2,C 12,C 13,POS 43,C 12,POS 73,C 60': scr$(1),scr$(2),scr$(3),"Description","1st Month/Yr   Last Month/Yr   Amount"
 return ! /r
-PGOF: ! r:
+PgOf: ! r:
 	pr #255: newpage
 	gosub HDR
 continue ! /r

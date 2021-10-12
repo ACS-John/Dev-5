@@ -1,99 +1,99 @@
 ! *** GL - General Ledger ***
 File
->Accounts                                           ^ General Ledger\*
->Financial Statement Design                         ^ General Ledger\*
->Payee                                              ^ General Ledger\*
->>Payee Transaction List                            ^ General Ledger\*
->Schedule                                           ^ General Ledger\*
->Bank Reconciliation                                ^ General Ledger\*
->>Access Bank Rec File                              ^ General Ledger\*
+>Accounts                                           ^ [cursystem]\*
+>Financial Statement Design                         ^ [cursystem]\*
+>Payee                                              ^ [cursystem]\*
+>>Payee Transaction List                            ^ [cursystem]\*
+>Schedule                                           ^ [cursystem]\*
+>Bank Reconciliation                                ^ [cursystem]\*
+>>Access Bank Rec File                              ^ [cursystem]\*
 ! removed 2/10/2017 - will anyone notice?  >Ratios  ^ acsGL\Ratio
 >Payee Type                                         ^ acsGL\payeetype
-Period Ending Dates                                 ^ General Ledger\*
-Enter Transactions                                  ^ General Ledger\*
-Enter Transactions (Legacy)                         ^ General Ledger\*
+Period Ending Dates                                 ^ [cursystem]\*
+Enter Transactions                                  ^ [cursystem]\*
+Enter Transactions (Legacy)                         ^ [cursystem]\*
 ! >Post Transactions                                  ^ acsGL\GLJCMrge <-- removed 4-9-21 Laura and John agreed   (  GENERAL LEDGER JOB COST MERGE  )
 >Remove Entries Posted by Mistake                   ^ acsGL\UNPost
 ! removed 2/10/2017 - will anyone notice?    Automatic Processing
 ! removed 2/10/2017 - will anyone notice?    >Select Automatic Processing Programs                              ^ acsGL\SelAuto
 ! removed 2/10/2017 - will anyone notice?    >Begin Automatic Processing                              ^ acsGL\AutoProc
-Enter Standard Adjustments                          ^ General Ledger\*
->Post Standard Adjustments                          ^ General Ledger\*
->Prior Period Adjustments                           ^ General Ledger\*
+Enter Standard Adjustments                          ^ [cursystem]\*
+>Post Standard Adjustments                          ^ [cursystem]\*
+>Prior Period Adjustments                           ^ [cursystem]\*
 Print
 >Trial Balance Worksheet                            ^ acsGL\ACGLWkSh
->Trial Balance                                      ^ General Ledger\*
+>Trial Balance                                      ^ [cursystem]\*
 >Budget Worksheet                                   ^ acsGL\BudWkSh
->Transactions Journal                               ^ General Ledger\*
+>Transactions Journal                               ^ [cursystem]\*
 >Chart of Accounts                                  ^ acsGL\acGLCHRT
 Financial Statements
 >Print Cover Letter                                 ^ acsGL\CoverLetterPrint
 >>Edit Cover Letter                                 ^ EditInWordProcessor:[Q]\GLmstr\ACGLCovF.h[cno] forceAtlantis makeIfNecessary
->Balance Sheet                                      ^ General Ledger\*
->>Comparative Balance Sheet                         ^ General Ledger\*
->>Period Comparison Balance Sheet                   ^ General Ledger\*
->>Fund Comparison Balance Sheet                     ^ General Ledger\*
->Income Statement                                   ^ General Ledger\*
+>Balance Sheet                                      ^ [cursystem]\*
+>>Comparative Balance Sheet                         ^ [cursystem]\*
+>>Period Comparison Balance Sheet                   ^ [cursystem]\*
+>>Fund Comparison Balance Sheet                     ^ [cursystem]\*
+>Income Statement                                   ^ [cursystem]\*
 >>Quarterly Income Statement                        ^ acsGL\ACGLINCQ
 >>Income Statement with Percents                    ^ acsGL\ACGLINCP
 >>Comparative Income Statement                      ^ acsGL\ACGLINCC
->>Income Statement with Budget                      ^ General Ledger\*
+>>Income Statement with Budget                      ^ [cursystem]\*
 >>Income Statement with Varience                    ^ acsGL\ACGLINCV
 >>Income Statement showing YTD Only                 ^ acsGL\ACGLINC1
->>Four Column Budget Income Statement               ^ General Ledger\*
+>>Four Column Budget Income Statement               ^ [cursystem]\*
 >>Four Column Budget With Percent                   ^ acsGL\ACGLINC4p
 >>Six Column Budget Income Statement                ^ acsGL\ACGLINCb6
 >>Income Statement with GASB Budget                 ^ acsGL\ACGLINCo
 >>Income Statement with Year Comparison             ^ acsGL\ACGLINYY
 >>Income Statement-Month & Year Budgets             ^ acsGL\ACGLINc6b
->Change in Financial Position                       ^ General Ledger\*
+>Change in Financial Position                       ^ [cursystem]\*
 >>Change Amount (FP)                                ^ acsGL\ACGLCHGS
 >>Comparative (FP)                                  ^ acsGL\acGLChg
 >>Comparative Change Amount (FP)                    ^ acsGL\acGLChgC
 >Cash Flow Statement                                ^ acsGL\ACGLCASH
 >>Cash Flow Statement With Budget                   ^ acsGL\acGLCASB
 >>Cash Flow with Fund Comparison                    ^ acsGL\acGLCasF
->>Cash Flow with YTD Budget Comparison              ^ General Ledger\*
+>>Cash Flow with YTD Budget Comparison              ^ [cursystem]\*
 >Retained Earnings Statement
 >>Edit Retained Earnings Statement                  ^ EditInWordProcessor:[Q]\GLmstr\ACGLStmt.h[cno] forceAtlantis makeIfNecessary
->>Print Retained Earnings Statement                 ^ General Ledger\*
->Print Schedules                                    ^ General Ledger\*
+>>Print Retained Earnings Statement                 ^ [cursystem]\*
+>Print Schedules                                    ^ [cursystem]\*
 >Financial Statements Notes                         ^ acsGL\acGLNote
 ! removed 3/14/17   -  doesnt seem that anyone is using it.   >Print Bar Graph of Earnings                        ^ acsGL\bargraph
 Monthly
->Post Entries from Holding File                     ^ General Ledger\*
->Close Month                                        ^ General Ledger\*
+>Post Entries from Holding File                     ^ [cursystem]\*
+>Close Month                                        ^ [cursystem]\*
 Annually
->Print Accumulated Trial Balance                    ^ General Ledger\*
->Close Books at Year End                            ^ General Ledger\*
+>Print Accumulated Trial Balance                    ^ [cursystem]\*
+>Close Books at Year End                            ^ [cursystem]\*
 >Clear Accumulated Transactions                     ^ acsGL\acGLClr
 >Enter Budget Amounts                               ^ acsGL\BudInpt
->Print 1099-NEC Forms                               ^ General Ledger\*   
->Create Electronic 1099s                            ^ General Ledger\*
+>Print 1099-NEC Forms                               ^ [cursystem]\*   
+>Create Electronic 1099s                            ^ [cursystem]\*
 ! no longer necessary, unless files get too large >Dump Old Payee Transactions                ^ acsGL\*
 Error Recovery
 >Generate Reversing Entries                       ^ acsGL\Reverse 
 >Remove Entries Posted by Mistake                 ^ acsGL\Unpost
->Reassign Transaction Addresses                   ^ General Ledger\*
->Fix Current Period Transaction Dates             ^ General Ledger\*
->Fix Current Balance                              ^ General Ledger\*
->Fix Period Accumulators from History             ^ General Ledger\*
+>Reassign Transaction Addresses                   ^ [cursystem]\*
+>Fix Current Period Transaction Dates             ^ [cursystem]\*
+>Fix Current Balance                              ^ [cursystem]\*
+>Fix Period Accumulators from History             ^ [cursystem]\*
 Utilities
 >Duplicate Range of Accounts                       ^ acsGL\BldRange
 ! removed 7/12/2021 - does anyone really ever use this?? i really doubt it -john  >Consolidate Master Files                         ^ acsGL\COMBGL
 >Create ASCII File                                ^ acsGL\ASCIIGLM
->Create Checkbook System Files                    ^ General Ledger\*
+>Create Checkbook System Files                    ^ [cursystem]\*
 >Reorganize Company                               ^ acsGL\GlReorganize
 >Period Names                                     ^ HamsterFio:*
->Test Balance Sheet Design                        ^ General Ledger\*
+>Test Balance Sheet Design                        ^ [cursystem]\*
 >Test Income Statement Design                     ^ acsGL\acglinct
 >Reprint Year End Trial Balance                   ^ acsGL\yearendtb
 Budget Management                                 ^ acsGL\bgmaint2                                        ^ GB
 
 General Ledger Accountants Add-On                 ^                                                       ^ G2
->Employee                                         ^ General Ledger\Accountants\*                          ^ G2
+>Employee                                         ^ [cursystem]\Accountants\*                          ^ G2
 >Monthly                                          ^                                                       ^ G2
->>Print Payroll Registers                         ^ General Ledger\Accountants\*                          ^ G2
+>>Print Payroll Registers                         ^ [cursystem]\Accountants\*                          ^ G2
 >>Print Deductions Register                       ^ acsGL\OtherDeductions                                 ^ G2
 >>Print Deductions Register-YTD QTD               ^ acsGL\OtherDeductionsYTD                              ^ G2
 >>Post Payroll Checks                             ^ acsGL\PRMerge                                         ^ G2
@@ -102,10 +102,10 @@ General Ledger Accountants Add-On                 ^                             
 >>Print Texas Unemployment Report                 ^ acsgl\prtexasuc                                       ^ G2
 >>State UnEmp.-Electronic Submission              ^ acsgl\elecuc                                          ^ G2
 >>Print 941 Summary                               ^ acsGL\PR941                                           ^ G2
->>Zero QTD Payroll Information                    ^ General Ledger\Accountants\*                          ^ G2
+>>Zero QTD Payroll Information                    ^ [cursystem]\Accountants\*                          ^ G2
 >>Fix YTD - QTD Earnings                          ^ acsgl\fixytdqtd                                       ^ G2
 >Annually                                                                                                 ^ G2
 ! >>W-2 Supplemental Information                  ^ acsgl\w2box16   <-- moved into Employee file          ^ G2
->>Print W-2 Forms                                 ^ General Ledger\Print W-2 Forms                        ^ G2
+>>Print W-2 Forms                                 ^ [cursystem]\Print W-2 Forms                        ^ G2
 >>Create Electronic W-2s                          ^ acsGL\glElecW2                                        ^ G2
 >>Zero YTD Payroll Information                    ^ acsGL\PRZYTD                                          ^ G2

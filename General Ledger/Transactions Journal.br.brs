@@ -73,18 +73,18 @@ PR_JOURNAL: ! r:
 	PJ_PRINT_REC: ! 
 	if tr$="999999999999" then tr$=" "
 	if tr(5)>0 then 
-		pr #255,using L550: ltrm$(tr$),tr(4),td$,tr(1),tr(2),tr(3),tr(5) pageoflow PGOF
+		pr #255,using L550: ltrm$(tr$),tr(4),td$,tr(1),tr(2),tr(3),tr(5) pageoflow PgOf
 	else 
-		pr #255,using L560: ltrm$(tr$),tr(4),td$,tr(1),tr(2),tr(3),tr(5) pageoflow PGOF
+		pr #255,using L560: ltrm$(tr$),tr(4),td$,tr(1),tr(2),tr(3),tr(5) pageoflow PgOf
 	end if 
 	L550: form pos 3,cc 12,pos 16,pic(zz/zz/zz),pos 26,c 30,pos 57,pic(zzz),pic(zzzzzz),pic(zzz),pos 69,pic(------,---,---.##)
 	L560: form pos 3,cc 12,pos 16,pic(zz/zz/zz),pos 26,c 30,pos 57,pic(zzz),pic(zzzzzz),pic(zzz),pos 82,pic(------,---,---.##)
 	goto L620
 	! pr #255: ""
 	if tr(5)>=0 then 
-		pr #255,using L600: tr(1),tr(2),tr(3),tr(5) pageoflow PGOF
+		pr #255,using L600: tr(1),tr(2),tr(3),tr(5) pageoflow PgOf
 	else 
-		pr #255,using L610: tr(1),tr(2),tr(3),tr(5) pageoflow PGOF
+		pr #255,using L610: tr(1),tr(2),tr(3),tr(5) pageoflow PgOf
 	end if 
 	L600: form pos 57,pic(zzz),pic(zzzzzz),pic(zzz),pos 69,pic(------,---,---.##)
 	L610: form pos 57,pic(zzz),pic(zzzzzz),pic(zzz),pos 85,pic(--,---,---.##)
@@ -117,11 +117,11 @@ PJ_SOME_TOTAL: ! r:
 	if tr(6)><1 and uprc$(oldtrans$(1:21))><"DISBURSEMENTS JOURNAL" then 
 		goto L810
 	end if 
-	pr #255,using L800: net pageoflow PGOF
+	pr #255,using L800: net pageoflow PgOf
 	L800: form pos 100,pic(---,---,---.##)
 	L810: ! 
 	if uprc$(a$(tr(6))(1:21))><uprc$(oldtrans$) or t9=9 then goto L830
-	pr #255: pageoflow PGOF
+	pr #255: pageoflow PgOf
 	L830: ! 
 	net=0
 return  ! /r
@@ -170,7 +170,7 @@ EO_JOURNAL: ! r:
 	L1210: !
 	fncloseprn
 goto Xit ! /r
-PGOF: ! r:
+PgOf: ! r:
 	pr #255: newpage
 	gosub HDR
 continue  ! /r

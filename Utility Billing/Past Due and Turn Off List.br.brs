@@ -140,21 +140,21 @@ L690: !
 	if pastduebalance=1 and excludelast=1 then bal=bal-month(2) ! don't show last month in past due balance column
 !
 	if printadr and pr_s4_meter_number then
-		pr #255,using F_REPORT_LINE: z$,e$(1:25),bal,f,az$,lev$,metradr$(1:25),fn_s4_meter_number$ pageoflow PGOF
+		pr #255,using F_REPORT_LINE: z$,e$(1:25),bal,f,az$,lev$,metradr$(1:25),fn_s4_meter_number$ pageoflow PgOf
 	else if pr_s4_meter_number then
-		pr #255,using F_REPORT_LINE: z$,e$(1:25),bal,f,az$,lev$,fn_s4_meter_number$ pageoflow PGOF
+		pr #255,using F_REPORT_LINE: z$,e$(1:25),bal,f,az$,lev$,fn_s4_meter_number$ pageoflow PgOf
 	else if printadr then
-		pr #255,using F_REPORT_LINE: z$,e$(1:25),bal,f,az$,lev$,metradr$(1:25) pageoflow PGOF
+		pr #255,using F_REPORT_LINE: z$,e$(1:25),bal,f,az$,lev$,metradr$(1:25) pageoflow PgOf
 	else
-		pr #255,using F_REPORT_LINE: z$,e$(1:25),bal,f,az$,lev$ pageoflow PGOF
+		pr #255,using F_REPORT_LINE: z$,e$(1:25),bal,f,az$,lev$ pageoflow PgOf
 	end if
 	if trans_accumulate_execption$<>'' then
-		pr #255,using 'form pos 64,C 24': trans_accumulate_execption$ pageoflow PGOF
+		pr #255,using 'form pos 64,C 24': trans_accumulate_execption$ pageoflow PgOf
 	end if
 	if pr_blank_lines_for_notes$='True' then
-		pr #255: '' pageoflow PGOF
-		pr #255: rpt$('_',71) pageoflow PGOF
-		pr #255: '' pageoflow PGOF
+		pr #255: '' pageoflow PgOf
+		pr #255: rpt$('_',71) pageoflow PgOf
+		pr #255: '' pageoflow PgOf
 	end if
 F_REPORT_LINE: form pos 1,c 12,c 25,n 12.2,pic(bbzz/zz/zzbb),x 3,c 4,x 1,c 1,x 2,c 25,x 2,c 25
 !
@@ -190,12 +190,12 @@ L970: form pos 1,c 70,cr 14
 	end if
 	return  ! /r
 TOTAL_BOOK: ! r:
-	pr #255: "" pageoflow PGOF
-	pr #255: "" pageoflow PGOF
+	pr #255: "" pageoflow PgOf
+	pr #255: "" pageoflow PgOf
 	pr #255: "Totals For Route Number ";holdrt;
-	pr #255,using F_PR_TOTAL: s2 pageoflow PGOF
+	pr #255,using F_PR_TOTAL: s2 pageoflow PgOf
 F_PR_TOTAL: form pos 38,pic(-,---,---.##)
-	pr #255: "" pageoflow PGOF
+	pr #255: "" pageoflow PgOf
 	s1=0
 	s2=0
 	holdrt=route
@@ -214,7 +214,7 @@ DONE: ! r:
 	close #hTrans: ioerr ignore
 	fncloseprn
 	goto Xit ! /r
-PGOF: ! r:
+PgOf: ! r:
 	pr #255: newpage
 	gosub HDR1
 	continue  ! /r

@@ -27,13 +27,13 @@ def fn_customer(; &editOne$,___,editOne,ckey)
 	! /r
 	dim customer$(0)*256
 	dim customerN(0)
-	h_customer_1=fn_openFio('UB Customer',mat customer$,mat customerN)
-	h_customer_2=h_customer_1+1
-	! open #h_customer_1=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,outIn,keyed ! 1
-	! open #h_customer_2=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx2.h[cno],Shr",internal,outIn,keyed  ! 11
-	! open #h_customer_3=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx3.h[cno],Shr",internal,outIn,keyed ! Meter address
-	! open #h_customer_4=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx4.h[cno],Shr",internal,outIn,keyed
-	! open #h_customer_5=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx5.h[cno],Shr",internal,outIn,keyed
+	hCustomer1=fn_openFio('UB Customer',mat customer$,mat customerN)
+	hCustomer2=hCustomer1+1
+	! open #hCustomer1=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,outIn,keyed ! 1
+	! open #hCustomer2=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx2.h[cno],Shr",internal,outIn,keyed  ! 11
+	! open #hCustomer3=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx3.h[cno],Shr",internal,outIn,keyed ! Meter address
+	! open #hCustomer4=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx4.h[cno],Shr",internal,outIn,keyed
+	! open #hCustomer5=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx5.h[cno],Shr",internal,outIn,keyed
 	F_CUSTOMER_1: form pos 1,c 10,4*c 30,c 12,7*pd 2,11*pd 4.2,4*pd 4,15*pd 5,pd 4.2,pd 4,12*pd 4.2,2*pd 3,c 7,2*c 12,pd 3,10*pd 5.2,pos 1712,c 1,c 9,c 2,c 17,n 2,n 7,2*n 6,n 9,pd 5.2,n 3,3*n 9,3*n 2,3*n 3,n 1,3*n 9,3*pd 5.2,c 30,7*c 12,3*c 30
 	open #h_citystzip=fnH: "Name=[Q]\Data\CityStZip.dat,KFName=[Q]\Data\CityStZip.Idx,Use,RecL=30,KPs=1,KLn=30,Shr",internal,outIn,keyed
 	! /r
@@ -50,9 +50,9 @@ def fn_customer(; &editOne$,___,editOne,ckey)
 	jbact$=x$ ! ken 80905
 	if len(x$)<>10 then goto AskAcct
 
-	read #h_customer_1,using form$(h_customer_1),key=x$: mat customer$,mat customerN nokey ACCOUNT_X_NOKEY
+	read #hCustomer1,using form$(hCustomer1),key=x$: mat customer$,mat customerN nokey ACCOUNT_X_NOKEY
 	fn_customer2legacy(mat customer$,mat customerN,z$,mat e$,f$(1),mat a,mat b,mat c,mat d,bal,lastBillingDate,mat g,mat adr,alp$,f$(2),f$(3),bra_legacy,mat gb,df$,dr$,dc$,da$,mat extra,mat extra$)
-	! read #h_customer_1,using F_CUSTOMER_1,key=x$: z$,mat e$,f$(1),mat a,mat b,mat c,mat d,bal,lastBillingDate,mat g,mat adr,alp$,f$(2),f$(3),bra_legacy,mat gb,df$,dr$,dc$,da$,mat extra,mat extra$ nokey ACCOUNT_X_NOKEY
+	! read #hCustomer1,using F_CUSTOMER_1,key=x$: z$,mat e$,f$(1),mat a,mat b,mat c,mat d,bal,lastBillingDate,mat g,mat adr,alp$,f$(2),f$(3),bra_legacy,mat gb,df$,dr$,dc$,da$,mat extra,mat extra$ nokey ACCOUNT_X_NOKEY
 
 	fnFixPd(mat extra)
 	gosub REMOVE_INCORRECT_ALLOCATIONS
@@ -81,11 +81,11 @@ def fn_customer(; &editOne$,___,editOne,ckey)
 	REWRITE_RECORD: ! r:
 		gosub ALT_ADDRESS_SAVE ! rewrite alternate billing address
 		if holdz$<>z$ then goto ASK_CONFIRM_KEY_CHANGE
-		release #h_customer_2: ioerr ignore
+		release #hCustomer2: ioerr ignore
 
 		fn_legacy2customer(mat customer$,mat customerN,z$,mat e$,f$(1),mat a,mat b,mat c,mat d,bal,lastBillingDate,mat g,mat adr,alp$,f$(2),f$(3),bra_legacy,mat gb,df$,dr$,dc$,da$,mat extra,mat extra$)
-		rewrite #h_customer_1,using form$(h_customer_1),key=z$: mat customer$,mat customerN
-		! rewrite #h_customer_1,using F_CUSTOMER_1,key=z$: z$,mat e$,f$(1),mat a,mat b,mat c,mat d,bal,lastBillingDate,mat g,mat adr,alp$,f$(2),f$(3),bra_legacy,mat gb,df$,dr$,dc$,da$,mat extra,mat extra$
+		rewrite #hCustomer1,using form$(hCustomer1),key=z$: mat customer$,mat customerN
+		! rewrite #hCustomer1,using F_CUSTOMER_1,key=z$: z$,mat e$,f$(1),mat a,mat b,mat c,mat d,bal,lastBillingDate,mat g,mat adr,alp$,f$(2),f$(3),bra_legacy,mat gb,df$,dr$,dc$,da$,mat extra,mat extra$
 
 		if ad1 then let fn_record_previous_update(z$) ! &' '&e$(2))
 		if oldService1DepositAmount<>b(8) then
@@ -123,7 +123,7 @@ def fn_customer(; &editOne$,___,editOne,ckey)
 			goto ASK_CONFIRM_KEY_CHANGE
 		end if  ! /r
 	ACC_KEY_CHANGE_TEST_EXIST: ! r:
-		read #h_customer_1,using 'form pos 1,c 10',key=z$: p$ nokey ACC_KC_VALID_ROUTE_TEST
+		read #hCustomer1,using 'form pos 1,c 10',key=z$: p$ nokey ACC_KC_VALID_ROUTE_TEST
 		mat ml$(2)
 		ml$(1)="Account "&trim$(z$)&" already exists."
 		ml$(2)="You must use a different account."
@@ -139,8 +139,8 @@ def fn_customer(; &editOne$,___,editOne,ckey)
 		end if
 
 		fn_legacy2customer(mat customer$,mat customerN,z$,mat e$,f$(1),mat a,mat b,mat c,mat d,bal,lastBillingDate,mat g,mat adr,alp$,f$(2),f$(3),bra_legacy,mat gb,df$,dr$,dc$,da$,mat extra,mat extra$)
-		rewrite #h_customer_1,using form$(h_customer_1),key=x$: mat customer$,mat customerN ! z$ changed to x$ on 1/2/19
-		! rewrite #h_customer_1,using F_CUSTOMER_1: z$,mat e$,f$(1),mat a,mat b,mat c,mat d,bal,lastBillingDate,mat g,mat adr,alp$,f$(2),f$(3),bra_legacy,mat gb,df$,dr$,dc$,da$,mat extra,mat extra$
+		rewrite #hCustomer1,using form$(hCustomer1),key=x$: mat customer$,mat customerN ! z$ changed to x$ on 1/2/19
+		! rewrite #hCustomer1,using F_CUSTOMER_1: z$,mat e$,f$(1),mat a,mat b,mat c,mat d,bal,lastBillingDate,mat g,mat adr,alp$,f$(2),f$(3),bra_legacy,mat gb,df$,dr$,dc$,da$,mat extra,mat extra$
 
 		if z$<>holdz$ or extra(1)<>holdroute or extra(2)><holdseq then fixgrid=1
 		open #h_ubtransvb=fnH: "Name=[Q]\UBmstr\ubTransVB.h[cno],KFName=[Q]\UBmstr\ubTrIndx.h[cno],Shr,Use,RecL=102,KPs=1,KLn=19",internal,outIn,keyed
@@ -174,7 +174,7 @@ def fn_customer(; &editOne$,___,editOne,ckey)
 		end if
 		if fnConfirmDeleteHard('customer',"Account "&trim$(x$)) then
 			gosub BUD4 ! delete budget info
-			delete #h_customer_1,key=x$:
+			delete #hCustomer1,key=x$:
 			gosub DEL_CASS
 			delete #h_ubadrbil,key=x$: nokey ignore
 			gosub DEL_HIST
@@ -197,7 +197,7 @@ def fn_customer(; &editOne$,___,editOne,ckey)
 		end if
 		goto AAS_FINIS ! /r
 		AAS_FINIS: !
-		release #h_customer_2: ioerr ignore
+		release #hCustomer2: ioerr ignore
 	return  ! /r
 	BREAKDOWN_NOT_EQUAL: ! r:
 		mat ml$(4)
@@ -511,7 +511,7 @@ def fn_customer(; &editOne$,___,editOne,ckey)
 		fnCmdKey("&Cancel",5,0,1,"Stops without recording any changes")
 		fnAcs(mat custInfo$,ckey) ! CALL main screen
 		if ckey=5 then
-			release #h_customer_1: ioerr ignore
+			release #hCustomer1: ioerr ignore
 			release #h_ubadrbil: ioerr ignore
 			if ad1=1 then
 				goto ADD_CANCEL
@@ -771,12 +771,12 @@ def fn_customer(; &editOne$,___,editOne,ckey)
 		fnmsgbox(mat ml$,resp$,'',48)
 	goto DEPOSIT_HIST_XIT ! /r
 	TRANS_HIST: ! r:
-		release #h_customer_1:
+		release #hCustomer1:
 		fntransfile(jbact$,bal,mat gb)
-		read #h_customer_1,key=jbact$:
+		read #hCustomer1,key=jbact$:
 	goto NameScreen ! /r
 	AskAcct: ! r:
-		release #h_customer_1: ioerr ignore
+		release #hCustomer1: ioerr ignore
 		ad1=0 ! add code - used to tell other parts of the program, that I am currently adding a customer record.
 		if editOne then
 			if ckey=0 then
@@ -787,7 +787,7 @@ def fn_customer(; &editOne$,___,editOne,ckey)
 				goto Finis
 			end if
 		end if
-		ckey=fn_ask_account('ubfm',x$,h_customer_1, 'Edit',1)
+		ckey=fn_ask_account('ubfm',x$,hCustomer1, 'Edit',1)
 		jbact$=hact$=x$
 		if ckey=2 then ! add
 			ad1=1
@@ -810,7 +810,7 @@ def fn_customer(; &editOne$,___,editOne,ckey)
 		if ckey=5 then goto AskAcct
 		x$=lpad$(trim$(resp$(1)),10)
 		if trim$(x$)="" then goto ADD_RECORD
-		read #h_customer_1,using F_CUSTOMER_1,key=x$: z$ nokey ADD_CONTINUE
+		read #hCustomer1,using F_CUSTOMER_1,key=x$: z$ nokey ADD_CONTINUE
 		mat ml$(2)
 		ml$(1)="A record with this number already exists!"
 		ml$(2)="Select a different account."
@@ -818,7 +818,7 @@ def fn_customer(; &editOne$,___,editOne,ckey)
 	goto ADD_RECORD
 		!
 	ADD_CANCEL: !
-		delete #h_customer_1,key=x$: ioerr ignore
+		delete #hCustomer1,key=x$: ioerr ignore
 	goto ADD_RECORD
 	! /r
 	ADD_CONTINUE: ! r:
@@ -830,18 +830,18 @@ def fn_customer(; &editOne$,___,editOne,ckey)
 		fn_apply_default_rates(mat extra, mat a)
 
 		fn_legacy2customer(mat customer$,mat customerN,z$,mat e$,f$(1),mat a,mat b,mat c,mat d,bal,lastBillingDate,mat g,mat adr,alp$,f$(2),f$(3),bra_legacy,mat gb,df$,dr$,dc$,da$,mat extra,mat extra$)
-		write #h_customer_1,using form$(h_customer_1): mat customer$,mat customerN
-		! 		write #h_customer_1,using F_CUSTOMER_1: z$,mat e$,f$(1),mat a,mat b,mat c,mat d,bal,lastBillingDate,mat g,mat adr,alp$,f$(2),f$(3),bra_legacy,mat gb,df$,dr$,dc$,da$
+		write #hCustomer1,using form$(hCustomer1): mat customer$,mat customerN
+		! 		write #hCustomer1,using F_CUSTOMER_1: z$,mat e$,f$(1),mat a,mat b,mat c,mat d,bal,lastBillingDate,mat g,mat adr,alp$,f$(2),f$(3),bra_legacy,mat gb,df$,dr$,dc$,da$
 
 		fixgrid=1
-		read #h_customer_1,using 'Form POS 1,C 10',key=z$: z$ ! this line should lock the record and set the SAME paramater for use in add_cancel
+		read #hCustomer1,using 'Form POS 1,C 10',key=z$: z$ ! this line should lock the record and set the SAME paramater for use in add_cancel
 	goto EDIT_LOADED_CUSTOMER ! /r
 
 	Finis: ! r: close files and leave
 	! close #2: ioerr ignore
-	fn_close_file(h_customer_2)
+	fn_close_file(hCustomer2)
 	fnCloseFile(hLocation,'U4 Meter Location')
-	fnCloseFile(h_customer_1,'UB Customer')
+	fnCloseFile(hCustomer1,'UB Customer')
 	setup_MeterLocation=0
 	fn_close_file(h_ubadrbil)
 	fn_close_file(h_citystzip)
@@ -851,11 +851,11 @@ def fn_customer(; &editOne$,___,editOne,ckey)
 	fn_close_file(h_budtrans)
 	fn_close_file(h_budmstr)
 	fn_close_file(h_budtrans)
-	! fn_close_file(h_customer_1)
-	! fn_close_file(h_customer_2)
-	! fn_close_file(h_customer_3)
-	! fn_close_file(h_customer_4)
-	! fn_close_file(h_customer_5) ! /r
+	! fn_close_file(hCustomer1)
+	! fn_close_file(hCustomer2)
+	! fn_close_file(hCustomer3)
+	! fn_close_file(hCustomer4)
+	! fn_close_file(hCustomer5) ! /r
 fnend
 def library fnDepositChangeLog(z$*10,odp,ndp,chgDateMmDdYy,comment$*32)
 	if ~setup then fn_setup
@@ -1227,7 +1227,7 @@ fnend
 def fn_customer_name$*30(cn_account$*10)
 	dim customer_name_return$*30
 	customer_name_return$=''
-	read #h_customer_1,using 'form pos 41,C 30',key=cn_account$,release: customer_name_return$ ioerr ignore
+	read #hCustomer1,using 'form pos 41,C 30',key=cn_account$,release: customer_name_return$ ioerr ignore
 	fn_customer_name$=rtrm$(customer_name_return$)
 fnend
 def fn_accountKeyChange_meter(key_from$*10,key_to$*10)
@@ -1269,7 +1269,7 @@ def fn_customer_grid(cg_line,cg_pos)
 	CG_EO_CUSTOMER: !
 	close #cg_file_num:
 fnend
-def fn_key_tweak(&kt_key$,h_customer_1)
+def fn_key_tweak(&kt_key$,hCustomer1)
 	! function tweaks the customer account key to make it valid if it is not.  if it succeeds it returns a 1, otherwise it returns a 0
 	kt_return=kt_key_addition=0
 	kt_read_account$=''
@@ -1277,12 +1277,12 @@ def fn_key_tweak(&kt_key$,h_customer_1)
 	do
 		kt_key$=rpad$(trim$(kt_key$),10)
 		!   pr 'trying Rpadded account key: "'&kt_key$&'"'
-		read #h_customer_1,using 'Form POS 1,C 10',key>=kt_key$,release: kt_read_account$ nokey KT_TRY_LPADDED
+		read #hCustomer1,using 'Form POS 1,C 10',key>=kt_key$,release: kt_read_account$ nokey KT_TRY_LPADDED
 		if kt_key$=kt_read_account$ then kt_return=1 : goto KT_FINIS
 		KT_TRY_LPADDED: !
 		kt_key$=lpad$(trim$(kt_key$),10)
 		!   pr 'trying Lpadded account key: "'&kt_key$&'"'
-		read #h_customer_1,using 'Form POS 1,C 10',key>=kt_key$,release: kt_read_account$ nokey KT_TWEAK
+		read #hCustomer1,using 'Form POS 1,C 10',key>=kt_key$,release: kt_read_account$ nokey KT_TWEAK
 		if kt_key$=kt_read_account$ then kt_return=1 : goto KT_FINIS
 		!
 		KT_TWEAK: !
@@ -1318,11 +1318,11 @@ def fn_key_tweak(&kt_key$,h_customer_1)
 	fn_key_tweak=kt_return
 fnend
 
-def library fnask_account(prev_list_id$,&x$,h_customer_1; select_button_text$,aas_button_enable_add)
+def library fnask_account(prev_list_id$,&x$,hCustomer1; select_button_text$,aas_button_enable_add)
 	if ~setup then fn_setup
-	fnask_account=fn_ask_account(prev_list_id$,x$,h_customer_1, select_button_text$,aas_button_enable_add)
+	fnask_account=fn_ask_account(prev_list_id$,x$,hCustomer1, select_button_text$,aas_button_enable_add)
 fnend
-def fn_ask_account(prev_list_id$,&x$,h_customer_1; select_button_text$,aas_button_enable_add)
+def fn_ask_account(prev_list_id$,&x$,hCustomer1; select_button_text$,aas_button_enable_add)
 !  function returns:
 !    2 = (if AAS_button_enable_add) for Add
 !    1 = Edit or Select
@@ -1392,7 +1392,7 @@ def fn_ask_account(prev_list_id$,&x$,h_customer_1; select_button_text$,aas_butto
 		ckey=fnAcs(mat resp$)
 		x$=trim$(resp$(1)(1:10))
 		if account_selection_method=asm_text and ckey=1 then
-			if ~fn_key_tweak(x$,h_customer_1) then
+			if ~fn_key_tweak(x$,hCustomer1) then
 				mat ml$(2)
 				ml$(1)="Account "&x$&' could not be found.'
 				ml$(2)="Select a different account."
@@ -1441,7 +1441,7 @@ def fn_ask_account(prev_list_id$,&x$,h_customer_1; select_button_text$,aas_butto
 	AA_FINIS: !
 	fn_record_previous_save
 	fnureg_write('ubfm.account_selection_method',str$(account_selection_method))
-	release #h_customer_1:
+	release #hCustomer1:
 	fn_ask_account=ckey
 fnend
 def library fnapply_default_rates(mat extra, mat a)

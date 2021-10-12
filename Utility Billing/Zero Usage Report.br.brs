@@ -50,10 +50,10 @@ READ_CUSTOMER: ! r:
 	end if
 	if startcd=1 and prtbkno<>route then goto TOTALS
 	if printadr=1 then
-		pr #255,using L550: z$,e$(2),currentread,priorread,e$(1)(1:25) pageoflow PGOF
+		pr #255,using L550: z$,e$(2),currentread,priorread,e$(1)(1:25) pageoflow PgOf
 		L550: form pos 1,c 10,pos 13,c 30,pos 43,n 13,x 4,n 13,x 3,c 25
 	else
-		pr #255,using L550: z$,e$(2),currentread,priorread pageoflow PGOF
+		pr #255,using L550: z$,e$(2),currentread,priorread pageoflow PgOf
 	end if
 	tbal=tbal+bal
 goto READ_CUSTOMER ! /r
@@ -69,7 +69,7 @@ HDR: ! r:
 	if printadr=1 then pr #255: " {\ul Number   }  {\ul Name             }           {\ul Current Reading}    {\ul Prior Reading}  {\ul Meter Address}"
 	pr #255: ""
 return ! /r
-PGOF: ! r:
+PgOf: ! r:
 	pr #255: newpage
 	gosub HDR
 continue ! /r

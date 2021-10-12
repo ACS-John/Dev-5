@@ -19,13 +19,13 @@ def library fnub_cnv_ubmstr_vb
 	fnub_index_customer
 	fnIndex("[Q]\UBmstr\UBAdrBil.h[cno]","[Q]\UBmstr\adrIndex.h[cno]","1 10")
 
-	open #h_customer=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno]",internal,outIn,keyed 
+	open #hCustomer=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno]",internal,outIn,keyed 
 	if version(1)=1 then goto Xit
 	open #h81=fnH: "Name=[Q]\UBmstr\BudMstr.h[cno],KFName=[Q]\UBmstr\BudIdx1.h[cno],Shr,Use,RecL=80,KPs=1,KLn=10",internal,outIn,keyed 
 	open #h82=fnH: "Name=[Q]\UBmstr\BudTrans.h[cno],Shr,Use,RecL=149",i,outi,r 
 	do
 		ReadCustomer: !
-		read #h_customer,using F_CUSTOMER: z$,mat e$,f$(1),mat a,mat b,mat c,mat d,bal,f,mat g,mat adr,alp$,f$(2),f$(3),bra,mat gb,mat rw4,df$,dr$,dc$,da$,mat extra,mat extra$ eof EoCustomer
+		read #hCustomer,using F_CUSTOMER: z$,mat e$,f$(1),mat a,mat b,mat c,mat d,bal,f,mat g,mat adr,alp$,f$(2),f$(3),bra,mat gb,mat rw4,df$,dr$,dc$,da$,mat extra,mat extra$ eof EoCustomer
 		form pos 1,c 10,4*c 30,c 12,7*pd 2,11*pd 4.2,4*pd 4,15*pd 5,pd 4.2,pd 4,12*pd 4.2,2*pd 3,c 7,2*c 12,pd 3,10*pd 5.2,78*pd 5,13*pd 4.2,13*n 6,156*pd 4.2,13*n 6,13*pd 4.2,c 1,c 9,c 2,c 17,n 2,n 7,2*n 6,n 9,pd 5.2,n 3,3*n 9,3*n 2,3*n 3,n 1,3*n 9,3*pd 5.2,c 30,7*c 12,3*c 30
 		extra(1)=val(z$(1:2)) conv ReadCustomer ! route
 		extra(2)=val(z$(3:7)) conv ReadCustomer ! sequence
@@ -52,7 +52,7 @@ def library fnub_cnv_ubmstr_vb
 		for j=1 to udim(extra)
 			if extra(j)<-99999 then extra(j)=0
 		next j
-		rewrite #h_customer,using F_CUSTOMER: z$,mat e$,f$(1),mat a,mat b,mat c,mat d,bal,f,mat g,mat adr,alp$,f$(2),f$(3),bra,mat gb,mat rw4,df$,dr$,dc$,da$,mat extra,mat extra$
+		rewrite #hCustomer,using F_CUSTOMER: z$,mat e$,f$(1),mat a,mat b,mat c,mat d,bal,f,mat g,mat adr,alp$,f$(2),f$(3),bra,mat gb,mat rw4,df$,dr$,dc$,da$,mat extra,mat extra$
 		F_CUSTOMER: form pos 1,c 10,4*c 30,c 12,7*pd 2,11*pd 4.2,4*pd 4,15*pd 5,pd 4.2,pd 4,12*pd 4.2,2*pd 3,c 7,2*c 12,pd 3,10*pd 5.2,78*pd 5,13*pd 4.2,13*n 6,156*pd 4.2,13*n 6,13*pd 4.2,c 1,c 9,c 2,c 17,n 2,n 7,2*n 6,n 9,pd 5.2,n 3,3*n 9,3*n 2,3*n 3,n 1,3*n 9,3*pd 5.2,c 30,7*c 12,3*c 30
 		if b(10)<>0 then  ! updating the budget billing file
 			mat badr=(0): ba(12)=b(10)
@@ -60,10 +60,10 @@ def library fnub_cnv_ubmstr_vb
 		end if
 	loop
 	EoCustomer: !
-	version(h_customer,1)
+	version(hCustomer,1)
 	version(h81,1)
 	version(h82,1)
-	close #h_customer: ioerr ignore
+	close #hCustomer: ioerr ignore
 	close #h81: ioerr ignore
 	close #h82: ioerr ignore
 	fnIndex("[Q]\UBmstr\BudMstr.h[cno]","[Q]\UBmstr\BudIdx1.h[cno]", '1 10')
