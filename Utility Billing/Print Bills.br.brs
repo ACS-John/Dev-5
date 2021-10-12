@@ -211,8 +211,8 @@ PrintBill_Basic: ! r: set prefrences for clients
 	end if
 	! if env$('acsDeveloper')<>'' then pause
 	if enable_BulkSort then gosub BulkSort
-	open #h_customer_1=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,outIn,keyed  ! open in account order
-	open #h_customer_2=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx5.h[cno],Shr",i,i,k  ! open in route-sequence
+	open #hCustomer1=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,outIn,keyed  ! open in account order
+	open #hCustomer2=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx5.h[cno],Shr",i,i,k  ! open in route-sequence
 	open #h_ubtransvb=fnH: "Name=[Q]\UBmstr\UBTransVB.h[cno],KFName=[Q]\UBmstr\UBTrIndx.h[cno],Shr",i,i,k 
 	if enable_cass_sort then gosub Sort1
 ! /r
@@ -331,7 +331,7 @@ Screen1: ! r:
 	else 
 		starting_key$=lpad$(trim$(resp$(6)(1:10)),10)
 		if trim$(starting_key$)<>"" then 
-			read #h_customer_1,using 'form pos 1,c 10,pos 1741,n 2,n 7',key=starting_key$,release: z$,route,sequence nokey Screen1
+			read #hCustomer1,using 'form pos 1,c 10,pos 1741,n 2,n 7',key=starting_key$,release: z$,route,sequence nokey Screen1
 			!    starting_place_enabled=1
 		end if 
 	end if 
@@ -367,15 +367,15 @@ Screen1: ! r:
 	else if enable_cass_sort then
 		restore #hAddr:
 	else 
-		restore #h_customer_2:
+		restore #hCustomer2:
 	end if
 
 	if trim$(starting_key$)="" and route_filter=0 then ! if no beginning account or starting route #, start at beginning of file
-		restore #h_customer_2,key>="         ": 
+		restore #hCustomer2,key>="         ": 
 	else if trim$(starting_key$)<>"" then 
-		restore #h_customer_2,key=cnvrt$("pic(zz)",route)& cnvrt$("pic(zzzzzzz)",sequence): nokey Screen1
+		restore #hCustomer2,key=cnvrt$("pic(zz)",route)& cnvrt$("pic(zzzzzzz)",sequence): nokey Screen1
 	else if trim$(starting_key$)="" and route_filter>0 then ! selected a route and no beginning Account
-		restore #h_customer_2,key>=cnvrt$("pic(zz)",route_filter)&"       ": 
+		restore #hCustomer2,key>=cnvrt$("pic(zz)",route_filter)&"       ": 
 	end if 
 
 	hCustomer=fn_openFio('UB Customer',mat c$,mat cN, 1)
@@ -395,17 +395,17 @@ MainLoop: ! r: main loop
 	if filter_selected_only=1 then goto ScrAskIndividual
 	if enable_BulkSort=1 then 
 		read #hAddr,using 'form pos 1,pd 3': r6 eof Finis
-		read #h_customer_1,using F_CUSTOMER_A,rec=r6,release: z$,mat e$,f$,a3,mat b,final,mat d,bal,f,mat g,mat gb,route,serviceToMmddYy,serviceFromMmddYy,est noRec MainLoop ! READ_BulkSort
+		read #hCustomer1,using F_CUSTOMER_A,rec=r6,release: z$,mat e$,f$,a3,mat b,final,mat d,bal,f,mat g,mat gb,route,serviceToMmddYy,serviceFromMmddYy,est noRec MainLoop ! READ_BulkSort
 	else if enable_BulkSort=2 then 
 		L680: ! 
 		read #hBulk2,using 'form pos 22,c 10': z$ eof Finis
-		read #h_customer_1,using F_CUSTOMER_A,key=z$,release: z$,mat e$,f$,a3,mat b,final,mat d,bal,f,mat g,mat gb,route,serviceToMmddYy,serviceFromMmddYy,est nokey MainLoop ! READ_CASSSORT
+		read #hCustomer1,using F_CUSTOMER_A,key=z$,release: z$,mat e$,f$,a3,mat b,final,mat d,bal,f,mat g,mat gb,route,serviceToMmddYy,serviceFromMmddYy,est nokey MainLoop ! READ_CASSSORT
 	else if enable_cass_sort then 
 		read #hAddr,using 'form pos 1,pd 3': r6 eof Finis
 		read #hSort1Sequence,using "Form POS 1,C 5,C 4,C 10",rec=r6: zip5$,cr$,z$ noRec MainLoop ! READ_CASSSORT
-		read #h_customer_1,using F_CUSTOMER_A,key=z$,release: z$,mat e$,f$,a3,mat b,final,mat d,bal,f,mat g,mat gb,route,serviceToMmddYy,serviceFromMmddYy,est nokey MainLoop ! READ_CASSSORT
+		read #hCustomer1,using F_CUSTOMER_A,key=z$,release: z$,mat e$,f$,a3,mat b,final,mat d,bal,f,mat g,mat gb,route,serviceToMmddYy,serviceFromMmddYy,est nokey MainLoop ! READ_CASSSORT
 	else 
-		read #h_customer_2,using F_CUSTOMER_A: z$,mat e$,f$,a3,mat b,final,mat d,bal,f,mat g,mat gb,route,serviceToMmddYy,serviceFromMmddYy,est eof Finis
+		read #hCustomer2,using F_CUSTOMER_A: z$,mat e$,f$,a3,mat b,final,mat d,bal,f,mat g,mat gb,route,serviceToMmddYy,serviceFromMmddYy,est eof Finis
 	end if 
 	F_CUSTOMER_A: form pos 1,c 10,4*c 30,c 12,pos 147,pd 2,pos 157,11*pd 4.2,pos 1821,n 1,pos 217,15*pd 5,pd 4.2,pd 4,12*pd 4.2,pos 388,10*pd 5.2,pos 1741,n 2,pos 1750,2*n 6,pos 1831,n 9
 	if route_filter<>0 and route_filter><route and enable_BulkSort=0 then goto Finis
@@ -472,7 +472,7 @@ MainLoop: ! r: main loop
 	end if
 	if testMode and billsPrintedCount(2)=>4 then 
 		fn_closeBillPrinter
-		restore #h_customer_1:
+		restore #hCustomer1:
 		mat billsPrintedCount=(0)
 		goto Screen1
 	end if
@@ -542,7 +542,7 @@ ScrAskIndividual: ! r: account selection screen
 	ckey=fnAcs(mat resp$)
 	if ckey=5 or trim$(resp$(1))='' then goto Finis
 	starting_key$=lpad$(trim$(resp$(1)(1:10)),10)
-	read #h_customer_1,using F_CUSTOMER_A,key=starting_key$,release: z$,mat e$,f$,a3,mat b,final,mat d,bal,f,mat g,mat gb,route,serviceFromMmddYy,serviceToMmddYy,est nokey ScrAskIndividual
+	read #hCustomer1,using F_CUSTOMER_A,key=starting_key$,release: z$,mat e$,f$,a3,mat b,final,mat d,bal,f,mat g,mat gb,route,serviceFromMmddYy,serviceToMmddYy,est nokey ScrAskIndividual
 goto AfterCustomerRead ! /r
 
 def fn_closeBillPrinter
@@ -555,10 +555,10 @@ fnend
 Finis: ! r:
 	close #hCustomer: ioerr ignore
 	hCustomer=0
-	close #h_customer_1: ioerr ignore
-	h_customer_1=0
-	close #h_customer_2: ioerr ignore
-	h_customer_2=0
+	close #hCustomer1: ioerr ignore
+	hCustomer1=0
+	close #hCustomer2: ioerr ignore
+	hCustomer2=0
 	close #h_ubtransvb: ioerr ignore
 	h_ubtransvb=0
 	close #hAddr: ioerr ignore
@@ -2339,15 +2339,15 @@ BulkSort: ! r: sort in bulk sort code sequence
 		open #hBulk2=fnH: "Name=[temp]\Temp.[session],KFName=[temp]\Tempidx.[session]",i,i,k 
 	end if
 return  ! /r
-Sort1: ! r: Select & Sort - sorts Cass1 file    requires: (h_customer_2,&enable_cass_sort,&hSort1Sequence,&hAddr,d1,route_filter,... ;  ___,z$*10,customerLastBillingDate,route
+Sort1: ! r: Select & Sort - sorts Cass1 file    requires: (hCustomer2,&enable_cass_sort,&hSort1Sequence,&hAddr,d1,route_filter,... ;  ___,z$*10,customerLastBillingDate,route
 	enable_cass_sort=0 ! replaces old s5 variable
 	open #h_cass1=fnH: "Name=[Q]\UBmstr\Cass1.h[cno],KFName=[Q]\UBmstr\Cass1Idx.h[cno],Shr",i,i,k ioerr Xit_Sort1
 	open #hSort1Sequence=fnH: "Name=[temp]\Temp.[session],Replace,RecL=19",internal,output 
 	enable_cass_sort=1
 	if route_filter=0 then routekey$="" else routekey$=cnvrt$("N 2",route_filter)&"       " ! key off first record in route (route # no longer part of customer #)
-	restore #h_customer_2,search>=routekey$: 
+	restore #hCustomer2,search>=routekey$: 
 	do 
-		read #h_customer_2,using 'form pos 1,c 10,pos 296,pd 4,pos 1741,n 2': z$,customerLastBillingDate,route eof END5
+		read #hCustomer2,using 'form pos 1,c 10,pos 296,pd 4,pos 1741,n 2': z$,customerLastBillingDate,route eof END5
 		if route_filter and route_filter><route then goto END5
 		if customerLastBillingDate=d1 then 
 			zip5$=cr$=""

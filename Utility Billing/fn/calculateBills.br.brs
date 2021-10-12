@@ -47,7 +47,7 @@ def fn_calculateBills(goal$*11)
 	fnopenprn
 
 	open #h_ratemst=fnH: "Name=[Q]\UBmstr\ubData\RateMst.h[cno],KFName=[Q]\UBmstr\ubData\RateIdx1.h[cno],Shr",i,i,k
-	open #h_customer=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,outIn,keyed
+	open #hCustomer=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,outIn,keyed
 	F_CUSTOMER: form pos 11,2*c 30,pos 143,7*pd 2,pos 157,11*pd 4.2,pos 201,4*pd 4,pos 217,15*pd 5,pos 292,pd 4.2,pos 296,pd 4,pos 300,12*pd 4.2,pos 388,10*pd 5.2,pos 1741,n 2,n 7,2*n 6,n 9,pd 5.2,n 3,3*n 9,3*n 2,3*n 3,n 1,3*n 9,3*pd 5.2,c 30,7*c 12,3*c 30
 	F_CUSTOMER_W_ACCT: form pos 1,c 10,2*c 30,pos 143,7*pd 2,pos 157,11*pd 4.2,pos 201,4*pd 4,pos 217,15*pd 5,pos 292,pd 4.2,pos 296,pd 4,pos 300,12*pd 4.2,pos 388,10*pd 5.2,pos 1741,n 2,n 7,2*n 6,n 9,pd 5.2,n 3,3*n 9,3*n 2,3*n 3,n 1,3*n 9,3*pd 5.2,c 30,7*c 12,3*c 30
 	open #hTrans=fnH: "Name=[Q]\UBmstr\UBTransVB.h[cno],KFName=[Q]\UBmstr\UBTrIndx.h[cno],Shr",internal,outIn,keyed
@@ -66,10 +66,10 @@ TOP: ! r:
 		if r3=>lrec(h_work) then goto FINIS
 		read #h_work,using F_WORK,rec=r3+=1: x$,mat x eof FINIS,noRec TOP
 		if x$(1:2)="00" or uprc$(x$)=uprc$("   DELETED") then goto TOP
-		read #h_customer,using F_CUSTOMER,key=x$: meteradr$,custname$,mat a,mat b,mat c,mat d, bal,f,mat g,mat gb,mat extra nokey NKT9
+		read #hCustomer,using F_CUSTOMER,key=x$: meteradr$,custname$,mat a,mat b,mat c,mat d, bal,f,mat g,mat gb,mat extra nokey NKT9
 
 	else if goal$='recalculate' then
-		read #h_customer,using F_CUSTOMER_W_ACCT: x$,meteradr$,custname$,mat a,mat b,mat c,mat d, bal,f,mat g,mat gb,mat extra eof FINIS
+		read #hCustomer,using F_CUSTOMER_W_ACCT: x$,meteradr$,custname$,mat a,mat b,mat c,mat d, bal,f,mat g,mat gb,mat extra eof FINIS
 		if f<>d1 then goto TOP
 		mat x=(0)
 		x(1)=d(1) ! current water reading
@@ -169,7 +169,7 @@ TOP: ! r:
 			end if
 		next j
 		! if env$('acsDeveloper')<>'' and trim$(x$)='100260.00' then pr ' just before write #customer' : pause
-		rewrite #h_customer,using F_CUSTOMER,key=x$: meteradr$,custname$,mat a,mat b,mat c,mat d,bal,f,mat g,mat gb,mat extra conv CONV_CUSTOMER_REWRITE
+		rewrite #hCustomer,using F_CUSTOMER,key=x$: meteradr$,custname$,mat a,mat b,mat c,mat d,bal,f,mat g,mat gb,mat extra conv CONV_CUSTOMER_REWRITE
 		fn_write_new_trans
 	end if
 goto TOP ! /r
@@ -190,7 +190,7 @@ CONV_CUSTOMER_REWRITE: ! r:
 goto TOP ! /r
 FINIS: ! r:
 	fn_t9notification
-	close #h_customer: ioerr ignore
+	close #hCustomer: ioerr ignore
 	if goal$='calculate' then
 		close #h_work,free: ioerr ignore
 		fnFree(work_addr$)

@@ -1457,9 +1457,9 @@ fnend
 		library 'S:\Utility Billing\Customer.br': fnCustomer
 		fnCustomer=fnCustomer( editOne$)
 	fnend
-	def library fnask_account(prev_list_id$,&x$,h_customer; select_button_text$,aa_button_enable_add)
+	def library fnask_account(prev_list_id$,&x$,hCustomer; select_button_text$,aa_button_enable_add)
 		library 'S:\Utility Billing\Customer.br': fnask_account
-		fnask_account=fnask_account(prev_list_id$,x$,h_customer, select_button_text$,aa_button_enable_add)
+		fnask_account=fnask_account(prev_list_id$,x$,hCustomer, select_button_text$,aa_button_enable_add)
 	fnend
 	def library fncmbrt2(lyne,mypos; all)
 		library 'S:\Utility Billing\fn\cmbRt2.br': fncmbrt2
@@ -1494,7 +1494,7 @@ fnend
 		fnub_cnv_adrbil=fnub_cnv_adrbil
 	fnend
 	def library fntotal_ar
-		library 'S:\acsUB\TotalBal.br': fntotal_ar
+		library 'S:\Utility Billing\View Total Accounts Receivable.br': fntotal_ar
 		fntotal_ar=fntotal_ar
 	fnend
 	def library fnfix_trans_breakdowns(do_fix,do_report)

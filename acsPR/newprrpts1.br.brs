@@ -100,11 +100,11 @@ def fn_print_designed_report(rn)
 	lf2=len(rtrm$(pfd$))
 	pf$(lf1:lf1)=" "
 	pfd$(lf2:lf2)=" "
-	pf$=rtrm$(pf$)&" pageoflow pgof"
-	pfd$=rtrm$(pfd$)&" pageoflow pgof"
+	pf$=rtrm$(pf$)&" pageoflow PgOf"
+	pfd$=rtrm$(pfd$)&" pageoflow PgOf"
 	lf1=len(rtrm$(gpf$))
 	gpf$(lf1:lf1)=" "
-	gpf$=rtrm$(gpf$)&" pageoflow pgof"
+	gpf$=rtrm$(gpf$)&" pageoflow PgOf"
 	pr #h_tmp_dr,using F_C255: rf1$
 	F_C255: form pos 1,c 255
 	! pr #h_tmp_dr,Using 2050: AF1$

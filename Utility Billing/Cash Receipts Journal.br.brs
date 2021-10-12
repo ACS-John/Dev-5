@@ -30,7 +30,7 @@ dim scr1$(10)*30
 mat scr1$(sz1)
 dim alloc(10)
 mat alloc(sz1)
-open #h_customer=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",i,i,k
+open #hCustomer=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",i,i,k
 open #h_trans:=2: "Name=[Q]\UBmstr\UBTransVB.h[cno],KFName=[Q]\UBmstr\UBTrIndx.h[cno],Shr",i,i,k
 
 fnopenprn
@@ -38,7 +38,7 @@ gosub HDR
 
 MAIN_LOOP_TOP: !
 	dim nam$*30
-	read #h_customer,using 'Form POS 1,C 10,POS 41,C 28,pos 1741,n 2',release: z$,nam$,extra1 eof PRTOTALS
+	read #hCustomer,using 'Form POS 1,C 10,POS 41,C 28,pos 1741,n 2',release: z$,nam$,extra1 eof PRTOTALS
 	restore #h_trans,key>=z$&"         ": nokey MAIN_LOOP_TOP
 READ_TRANS: !
 	read #h_trans,using 'Form POS 1,C 10,N 8,N 1,12*PD 4.2,6*PD 5,PD 4.2,N 1': p$,tdate,tcode,tamount,mat tg,wr,wu,er,eu,gr,gu,tbal,pcode eof MAIN_LOOP_TOP
@@ -67,7 +67,7 @@ READ_TRANS: !
 		c$="DM"
 	end if
 	if ti1$="True" then
-		pr #255,using 'Form POS 1,C 10,N 10.2,C 4,PIC(ZZZZ/ZZ/ZZ),SZ1*N 9.2,X 3,C 30': z$,tamount,c$,tdate,mat alloc,nam$(1:25) pageoflow PGOF
+		pr #255,using 'Form POS 1,C 10,N 10.2,C 4,PIC(ZZZZ/ZZ/ZZ),SZ1*N 9.2,X 3,C 30': z$,tamount,c$,tdate,mat alloc,nam$(1:25) pageoflow PgOf
 	end if
 	if extra1<0 or extra1>200 then extra1=200
 	if sum(alloc)<>tamount then
@@ -81,7 +81,7 @@ READ_TRANS: !
 	if resp$="Cancel" then goto Xit
 goto READ_TRANS
 
-PGOF: ! r:
+PgOf: ! r:
 	pr #255: newpage
 	gosub HDR
 	continue  ! /r
@@ -90,7 +90,7 @@ PRTOTALS: ! r:
 	pr #255: "    ************ Totals ************"
 	pr #255: tab(34);"{\ul       Total}  {\ul    Reg.Col}  {\ul   Cr.Memos}  {\ul   Db.Memos}"
 	for j=1 to sz1
-		pr #255,using 'Form POS 4,C 30,N 11.2,3*N 12.2': scr1$(j),r(j+3,1),r(j+3,2),r(j+3,3),r(j+3,4) pageoflow PGOF
+		pr #255,using 'Form POS 4,C 30,N 11.2,3*N 12.2': scr1$(j),r(j+3,1),r(j+3,2),r(j+3,3),r(j+3,4) pageoflow PgOf
 	next j
 	pr #255: ""
 	pr #255,using 'Form POS 4,C 30,N 11.2,3*N 12.2': "Total      ",r(1,1),r(1,2),r(1,3),r(1,4)
@@ -98,7 +98,7 @@ PRTOTALS: ! r:
 		pr #255,using "form skip 2,c 20": "Route Totals"
 		for j=1 to 200
 			if route(j)<>0 then
-				pr #255,using "form pos 1,c 10,pic(zzz,zzz,zzz.##)": "Route "&cnvrt$("pic(zzz)",j),route(j) pageoflow PGOF
+				pr #255,using "form pos 1,c 10,pic(zzz,zzz,zzz.##)": "Route "&cnvrt$("pic(zzz)",j),route(j) pageoflow PgOf
 			end if
 		next j
 	end if

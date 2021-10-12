@@ -46,16 +46,16 @@ def fn_undobilling
 		Ftrans: form c 10,n 8,x 1,12*pd 4.2,6*pd 5,pd 4.2
 		fnAutomatedSavePoint('before')
 		! open data files
-		open #h_customer=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno]",internal,outIn,keyed
+		open #hCustomer=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno]",internal,outIn,keyed
 		open #hTrans=fnH: "Name=[Q]\UBmstr\ubtransvb.h[cno],KFName=[Q]\UBmstr\ubtrindx.h[cno]",internal,outIn,keyed
 		open #hTrans2=fnH: "Name=[Q]\UBmstr\ubtransvb.h[cno],KFName=[Q]\UBmstr\UBTrdt.h[cno]",internal,outIn,keyed
 		fnopenprn
 		fn_printHeader
 		do
 			if filter=do_individual then
-				read #h_customer,using Fcustomer,key=lpad$(cust$,kln(h_customer)): acct$,custname$,custroute,mat readings,balance,chargedate,mat charges,mat breakdown,mat readingdates
+				read #hCustomer,using Fcustomer,key=lpad$(cust$,kln(hCustomer)): acct$,custname$,custroute,mat readings,balance,chargedate,mat charges,mat breakdown,mat readingdates
 			else
-				read #h_customer,using Fcustomer: acct$,custname$,custroute,mat readings,balance,chargedate,mat charges,mat breakdown,mat readingdates eof CustDone ! get every customer one at a time
+				read #hCustomer,using Fcustomer: acct$,custname$,custroute,mat readings,balance,chargedate,mat charges,mat breakdown,mat readingdates eof CustDone ! get every customer one at a time
 			end if
 			! if trim$(acct$)='1000000.01' then pause
 			if filter<>do_route or custroute=route then ! if a route was selected and customer doesn't match, skip customer
@@ -110,7 +110,7 @@ def fn_undobilling
 						mat readings(1:12)=(0) : mat charges(1:12)=(0) : balance=0 : chargedate=0 : mat breakdown(1:10)=(0) : mat readingdates(1:2)=(0)
 					end if
 					! rewrite customer master record
-					rewrite #h_customer,using Fcustomer: acct$,custname$,custroute,mat readings,balance,chargedate,mat charges,mat breakdown,mat readingdates
+					rewrite #hCustomer,using Fcustomer: acct$,custname$,custroute,mat readings,balance,chargedate,mat charges,mat breakdown,mat readingdates
 					! delete rolled-back transaction
 					delete #hTrans:
 					pr #255,using "form pos 5,c 10,x 5,pic(zz/zz/zz)": trcust$(1),str$(trdate(1)) pageoflow PrintPageOverflow
@@ -131,7 +131,7 @@ def fn_undobilling
 		mat msgtext$(1)=("Customers reversed: "&str$(undoCount))
 		fnmsgbox(mat msgtext$,answer$,"Report",0)
 		fncloseprn
-		close #h_customer: ioerr ignore
+		close #hCustomer: ioerr ignore
 		close #hTrans: ioerr ignore
 		close #hTrans2: ioerr ignore
 		if filter=do_individual then goto ASK_OPTIONS

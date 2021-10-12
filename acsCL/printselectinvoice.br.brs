@@ -55,7 +55,7 @@ DONE: ! r:
 	close #paytrans:
 goto Xit ! /r
 Xit: fnXit
-PGOF: pr #255: newpage : gosub HEADER : continue
+PgOf: pr #255: newpage : gosub HEADER : continue
 HEADER: ! r:
 	pr #255,using 'Form POS 1,PIC(ZZ/ZZ/ZZ),CC 107': prd,env$('cnam')
 	pr #255,using 'Form POS 1,C 4,N 4,CC 107,SKIP 1,POS 1,C 8': "Page",pg1+=1,"Selected Invoice Listing for Bank "&ltrm$(str$(bankcode)),date$
@@ -66,8 +66,8 @@ return ! /r
 READ_AND_PRINT: ! r:
 	nam$=""
 	read #paymstr1,using 'Form POS 9,C 30',key=hvn$,release: nam$ nokey ignore
-	pr #255,using 'Form POS 65,C 14,SKIP 1,POS 30,C 33,PIC(ZZZ,ZZZ,ZZZ.##CR)': "____________",nam$,t1 pageoflow PGOF
-	pr #255: "" pageoflow PGOF
+	pr #255,using 'Form POS 65,C 14,SKIP 1,POS 30,C 33,PIC(ZZZ,ZZZ,ZZZ.##CR)': "____________",nam$,t1 pageoflow PgOf
+	pr #255: "" pageoflow PgOf
 	t1=0
 return ! /r
 EO_PAYTRANS: ! r:
@@ -87,7 +87,7 @@ BREAKDOWN: ! r:
 		if newkey$<>vn$ & iv$ then goto EO_UNPDALOC
 		if sum(gl)<>0 or aa<>0 then ! only non-zero allocations print
 			if startxx=0 then
-				pr #255,using 'Form POS 1,C 10,C 12,2*PIC(ZZZZ/ZZ/ZZ),X 2,C 18,PIC(ZZZ,ZZZ,ZZZ.##CR),POS 79,N 3,N 6,N 3,X 1,C 30,X 1,PIC(---,--#.##)': vn$,iv$,val(up$(1)),val(up$(2)),up$(4),upa,mat gl, de$, aa pageoflow PGOF
+				pr #255,using 'Form POS 1,C 10,C 12,2*PIC(ZZZZ/ZZ/ZZ),X 2,C 18,PIC(ZZZ,ZZZ,ZZZ.##CR),POS 79,N 3,N 6,N 3,X 1,C 30,X 1,PIC(---,--#.##)': vn$,iv$,val(up$(1)),val(up$(2)),up$(4),upa,mat gl, de$, aa pageoflow PgOf
 			else if startxx>0 then
 				pr #255,using 'Form POS 79,N 3,N 6,N 3,X 1,C 30,X 1,PIC(---,--#.##)': mat gl, de$, aa
 			end if
@@ -96,7 +96,7 @@ BREAKDOWN: ! r:
 	loop
 	EO_UNPDALOC: !
 	if startxx=0 then
-		pr #255,using 'Form POS 1,C 10,C 12,2*PIC(ZZZZ/ZZ/ZZ),X 2,C 18,PIC(ZZZ,ZZZ,ZZZ.##CR),POS 79,N 3,N 6,N 3,X 1,C 30,X 1,PIC(---,--#.##)': vn$,iv$,val(up$(1)),val(up$(2)),up$(4),upa,mat gl, de$, aa pageoflow PGOF
+		pr #255,using 'Form POS 1,C 10,C 12,2*PIC(ZZZZ/ZZ/ZZ),X 2,C 18,PIC(ZZZ,ZZZ,ZZZ.##CR),POS 79,N 3,N 6,N 3,X 1,C 30,X 1,PIC(---,--#.##)': vn$,iv$,val(up$(1)),val(up$(2)),up$(4),upa,mat gl, de$, aa pageoflow PgOf
 		! only on noRec if startxx=0 (no allocations)
 	end if
 return

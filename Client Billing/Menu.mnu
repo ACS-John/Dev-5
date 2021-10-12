@@ -1,61 +1,61 @@
 ! *** Client Billing ***
-Client Balance Calculation ^ Client Billing\*
+Client Balance Calculation ^ [cursystem]\*
 --File--
 >Client                                           ^ HamsterFio:CO *
 >Prices                                           ^ HamsterFio:CO *
 >Rates                                            ^ HamsterFio:CO *
 >Provider                                         ^ HamsterFio:CO *
 >Support                                          ^ HamsterFio:CO *
->Transactions                                     ^ Client Billing\Legacy\*
->>Transaction Explorer                            ^ Client Billing\Transaction Explorer
+>Transactions                                     ^ [cursystem]\Legacy\*
+>>Transaction Explorer                            ^ [cursystem]\Transaction Explorer
 >>Transaction Hamster                             ^ HamsterFio:TM Transaction
->>Delete Transaction                              ^ Client Billing\*
+>>Delete Transaction                              ^ [cursystem]\*
 >>TransactionType                                 ^ HamsterFio:*
-! >>Import Transactions from Mint CSV to Checkbook  ^ Client Billing\Legacy\arinput_import_csv
->Unbilled Transactions (TMTrans Hamster)          ^ Client Billing\Legacy\TMTrans
->Support                                          ^ Client Billing\Legacy\*
->>Update Support Expiration Date                  ^ Client Billing\*
->Support2                                         ^ Client Billing\Legacy\*
->Category                                         ^ Client Billing\*
->Service Code                                     ^ Client Billing\Legacy\svmaint
->Invoice Description                              ^ Client Billing\Legacy\ivdmaint
-! >Monthly Transactions                           ^ Client Billing\Legacy\arfmmoth
-! >Employee                                       ^ Client Billing\Legacy\emaint
+! >>Import Transactions from Mint CSV to Checkbook  ^ [cursystem]\Legacy\arinput_import_csv
+>Unbilled Transactions (TMTrans Hamster)          ^ [cursystem]\Legacy\TMTrans
+>Support                                          ^ [cursystem]\Legacy\*
+>>Update Support Expiration Date                  ^ [cursystem]\*
+>Support2                                         ^ [cursystem]\Legacy\*
+>Category                                         ^ [cursystem]\*
+>Service Code                                     ^ [cursystem]\Legacy\svmaint
+>Invoice Description                              ^ [cursystem]\Legacy\ivdmaint
+! >Monthly Transactions                           ^ [cursystem]\Legacy\arfmmoth
+! >Employee                                       ^ [cursystem]\Legacy\emaint
 ! >Company Information (Support)                  ^ acsSU\Company
 >Systems                                          ^ HamsterFio:CO *
 >Time Frame                                       ^ HamsterFio:*
->Client Labels                                    ^ Client Billing\Legacy\CliLabel
+>Client Labels                                    ^ [cursystem]\Legacy\CliLabel
 ! >Client (Support)                               ^ acsSU\Client
 >Contact                                          ^ HamsterFio:Contact                   ^EM
 >TimeSheet                                        ^ HamsterFio:TimeSheet
 --Daily--
->Enter Time and Charges                           ^ Client Billing\*
->Collections                                      ^ Client Billing\*
-! >Unbilled Work In Process                       ^ Client Billing\Legacy\tmunblwk
+>Enter Time and Charges                           ^ [cursystem]\*
+>Collections                                      ^ [cursystem]\*
+! >Unbilled Work In Process                       ^ [cursystem]\Legacy\tmunblwk
 ! >Productivity Report                            
-! >>Employee                                      ^ Client Billing\Legacy\tmempprd
-! >>Summary                                       ^ Client Billing\Legacy\tmempdpt
-! >Zero Current Period                            ^ Client Billing\Legacy\emzercur
->Enter Pre-Printed Invoices                       ^ Client Billing\Legacy\*
->Enter and Print Invoices                         ^ Client Billing\*
-! >Print Work Schedules                           ^ Client Billing\Legacy\tmwrksch
-! >Print Messages                                 ^ Client Billing\Legacy\armessag
->Email Queued Invoices                            ^ Client Billing\*                     ^EM
+! >>Employee                                      ^ [cursystem]\Legacy\tmempprd
+! >>Summary                                       ^ [cursystem]\Legacy\tmempdpt
+! >Zero Current Period                            ^ [cursystem]\Legacy\emzercur
+>Enter Pre-Printed Invoices                       ^ [cursystem]\Legacy\*
+>Enter and Print Invoices                         ^ [cursystem]\*
+! >Print Work Schedules                           ^ [cursystem]\Legacy\tmwrksch
+! >Print Messages                                 ^ [cursystem]\Legacy\armessag
+>Email Queued Invoices                            ^ [cursystem]\*                     ^EM
 --Monthly--
->Import CSV to Time Sheets                        ^ Client Billing\*
->Print Monthly Billing Summary                    ^ Client Billing\Legacy\tmmobsum
-! >Post to General Ledger                         ^ Client Billing\Legacy\arpostgl       ^GL
-! >Month End Closing                              ^ Client Billing\Legacy\tmpytd
+>Import CSV to Time Sheets                        ^ [cursystem]\*
+>Print Monthly Billing Summary                    ^ [cursystem]\Legacy\tmmobsum
+! >Post to General Ledger                         ^ [cursystem]\Legacy\arpostgl       ^GL
+! >Month End Closing                              ^ [cursystem]\Legacy\tmpytd
 ! Generate
-! >Finance Charges                                ^ Client Billing\Legacy\arfinchg
-! >Standard Charges                               ^ Client Billing\Legacy\arstdchg
+! >Finance Charges                                ^ [cursystem]\Legacy\arfinchg
+! >Standard Charges                               ^ [cursystem]\Legacy\arstdchg
 --Print--
-! >AR Transaction Listing                         ^ Client Billing\Legacy\artrlist
-! >Statements                                       ^ Client Billing\Legacy\arprtbil
-! >AR Aged Trial Balance                          ^ Client Billing\Legacy\artb
-! >Journals                                       ^ Client Billing\Legacy\arjourn
->ACS Invoices                                     ^ Client Billing\*
+! >AR Transaction Listing                         ^ [cursystem]\Legacy\artrlist
+! >Statements                                       ^ [cursystem]\Legacy\arprtbil
+! >AR Aged Trial Balance                          ^ [cursystem]\Legacy\artb
+! >Journals                                       ^ [cursystem]\Legacy\arjourn
+>ACS Invoices                                     ^ [cursystem]\*
 ! Annually
-! >Service Production Report                      ^ Client Billing\Legacy\tmsrvprd
-! >YTD Billing Summary                            ^ Client Billing\*
-! >Zero YTD Information                           ^ Client Billing\Legacy\tmzytd
+! >Service Production Report                      ^ [cursystem]\Legacy\tmsrvprd
+! >YTD Billing Summary                            ^ [cursystem]\*
+! >Zero YTD Information                           ^ [cursystem]\Legacy\tmzytd

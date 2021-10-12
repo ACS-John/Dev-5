@@ -19,7 +19,7 @@
 		read #1,using FORM_CUSTOMER: z$,mat e$,mat a,final,bal,route,sequence,extra$(1) eof DONE
 FORM_CUSTOMER: form pos 1,c 10,pos 11,4*c 30,pos 143,5*pd 2,pos 1806,3*n 2,pos 153,2*pd 2,pos 1821,n 1,pos 292,pd 4.2,pos 1741,n 2,n 7,pos 1864,c 30
 		if fn_has_dupe(z$) then
-			pr #255,using FORM_OUT: rec(1),z$,e$(2),e$(1),bal,mat a2 pageoflow PGOF
+			pr #255,using FORM_OUT: rec(1),z$,e$(2),e$(1),bal,mat a2 pageoflow PgOf
 FORM_OUT: form n 4,x 1,c 10,x 5,c 30,x 7,c 30,n 11.2,x 1,10*nz 3
 		end if  ! fn_has_dupe(z$)
 	loop
@@ -28,7 +28,7 @@ DONE: !
 Xit: !
 	fnXit
  
-PGOF: !
+PgOf: !
 	pr #255: newpage
 	fn_header
 	continue

@@ -57,7 +57,7 @@ if qtr=2 then begdate=taxyear*10000+0612: enddate=val(taxyear$)*10000+0618
 if qtr=3 then begdate=taxyear*10000+0912: enddate=val(taxyear$)*10000+0918
 if qtr=4 then begdate=taxyear*10000+1212: enddate=val(taxyear$)*10000+1218
  
-on pageoflow goto PGOF
+on pageoflow goto PgOf
 open #2: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr",i,i,k
 gosub HDR
 open #4: "Name=[Q]\PRmstr\payrollchecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno]",internal,outIn,keyed
@@ -149,7 +149,7 @@ L1360: ! r:
 	pr #255,using L1470: ss$,em$(1)(1:28),m1,h3,h2
 	L1470: form pos 1,c 11,pos 14,c 28,pos 42,pic(--,---,---.##),pos 57,pic(--,---,---.##),pos 70,pic(----,---.##),skip 1
 	t1+=m1 : t2+=h3 : t3+=h2
-	pr #255: pageoflow PGOF
+	pr #255: pageoflow PgOf
 	p1=p1+2
 	L1510: !
 return ! /r
@@ -165,7 +165,7 @@ PAGETOTALS: ! r:
 	p3=t1=t2=t3=0
 return ! /r
 L1640: pr #255: newpage
-PGOF: ! r:
+PgOf: ! r:
 	gosub PAGETOTALS
 	pr #255: newpage
 	gosub HDR

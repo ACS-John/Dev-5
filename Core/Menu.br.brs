@@ -795,6 +795,7 @@ def fn_getProgramList_add(gpla_file$*256;___,sign$)
 			str2mat(temp$,mat program_item$,'^')
 			if udim(program_item$)=>2 and pos(program_item$(2),'*')>0 then
 				program_item$(2)=srep$(program_item$(2),'*',trim$(trim$(program_item$(1)),'>'))
+				program_item$(2)=srep$(program_item$(2),'[cursystem]',env$('cursystem'))
 			end if
 			if udim(mat program_item$)>=3 then
 				requirment$=trim$(program_item$(3))

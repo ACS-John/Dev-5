@@ -157,13 +157,13 @@ LOOP_TOP: ! r:
 	if ti2=6 and final<>3 then goto L570
 	L690: !
 	if opt=6 then ! route sequence
-		pr #255,using F_OUT_ROUTE_SEQ: z$,e$(2),e$(1),route,sequence,mat a2 pageoflow PGOF
+		pr #255,using F_OUT_ROUTE_SEQ: z$,e$(2),e$(1),route,sequence,mat a2 pageoflow PgOf
 		F_OUT_ROUTE_SEQ: form x 5,c 10,x 5,c 30,x 7,c 30,n 2,x 1,n 7,x 1,10*nz 3
 	else if print_balance then
-		pr #255,using F_OUT_W_BAL: z$,e$(2),e$(1),bal,mat a2 pageoflow PGOF
+		pr #255,using F_OUT_W_BAL: z$,e$(2),e$(1),bal,mat a2 pageoflow PgOf
 		F_OUT_W_BAL: form x 5,c 10,x 5,c 30,x 7,c 30,n 11.2,x 1,10*nz 3
 	else
-		pr #255,using F_OUT_NOBAL: z$,e$(2),e$(1),mat a2 pageoflow PGOF
+		pr #255,using F_OUT_NOBAL: z$,e$(2),e$(1),mat a2 pageoflow PgOf
 		F_OUT_NOBAL: form x 5,c 10,x 5,c 30,x 7,c 30,x 12,10*nz 3
 	end if
 	if trim$(e$(3))="" then e$(3)=extra$(1): extra$(1)=""
@@ -184,7 +184,7 @@ LOOP_TOP: ! r:
 	end if
 goto LOOP_TOP ! /r
  
-PGOF: ! r:
+PgOf: ! r:
 	pr #255: newpage
 	gosub HEADER
 continue ! /r

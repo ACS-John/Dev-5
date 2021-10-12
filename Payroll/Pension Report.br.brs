@@ -42,7 +42,7 @@
 	end if
 PRINT_ONE: ! r:
 	if pension_amount<>0 then ! skip if no pension wh
-		pr #255,using F_LINE_OUT: em$(1:24),ss$,reg_earnings,ded_pension,pension_amount,reg_earnings+ded_pension pageoflow PGOF
+		pr #255,using F_LINE_OUT: em$(1:24),ss$,reg_earnings,ded_pension,pension_amount,reg_earnings+ded_pension pageoflow PgOf
 		F_LINE_OUT: form pos 1,c 24,c 12,4*n 12.2
 		total_salary+=reg_earnings
 		total_ded+=ded_pension
@@ -66,7 +66,7 @@ HDR: ! r:
 	pr #255: "\ql   "
 	pr #255: "Name                    SS Number     Total Wage     Ded/Add     Pension  Pension Wage"
 return  ! /r
-PGOF: ! r:
+PgOf: ! r:
 	pr #255: newpage
 	gosub HDR
 continue  ! /r

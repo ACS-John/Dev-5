@@ -61,13 +61,13 @@ PRINTIT: !
 	L610: form pos 1,c 10,pos 11,4*c 30,pos 143,7*pd 2,pos 131,c 12,pos 361,c 12,pos 373,c 12,pos 217,15*pd 5,pos 300,10*pd 4.2
 	if a(srvc)=tc or tc=0 then goto L630 else goto L540
 	L630: !
-	pr #255,using L660: z$,e$(2),e$(1),meter$,usage,amount pageoflow PGOF
+	pr #255,using L660: z$,e$(2),e$(1),meter$,usage,amount pageoflow PgOf
 	totusage=totusage+usage
 	totamount=totamount+amount
 	L660: form x 5,c 10,x 5,c 30,x 7,c 30,x 2,c 12,x 2,pic(zzzzzzzzz),x 2,n 12.2,skip 2
 goto L540
 
-PGOF: pr #255: newpage
+PgOf: pr #255: newpage
 	gosub HDR
 continue
 

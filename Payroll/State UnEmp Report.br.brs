@@ -224,7 +224,7 @@ L1650: !
 		ptotal(col_item)+=col_amt(col_item)
 		grand_total(col_item)+=col_amt(col_item) ! grand totals
 	next col_item
-	pr #255: pageoflow PGOF
+	pr #255: pageoflow PgOf
 	p1=p1+2
 L1780: !
 	return  ! /r
@@ -239,7 +239,7 @@ PAGE_TOTALS: ! r:
 	p3=0
 	mat ptotal=(0)
 return  ! /r
-PGOF: ! r:
+PgOf: ! r:
 	gosub PAGE_TOTALS
 	gosub HDR
 continue  ! /r

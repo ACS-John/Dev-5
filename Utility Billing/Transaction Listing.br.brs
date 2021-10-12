@@ -102,16 +102,16 @@ fnreg_write('ubtrlist.include_no_activity_accounts',str$(include_no_activity_acc
 ! on fkey 5 goto DONE
 fnopenprn
 if seq=1 then
-	open #h_customer=1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",i,i,k
+	open #hCustomer=1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",i,i,k
 else
-	open #h_customer=1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx5.h[cno],Shr",i,i,k
+	open #hCustomer=1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx5.h[cno],Shr",i,i,k
 end if
 open #ubtransvb=2: "Name=[Q]\UBmstr\UBTransVB.h[cno],KFName=[Q]\UBmstr\UBTrIndx.h[cno],Shr",i,i,k
 gosub HDR
 do
 READ_CUSTOMER: ! r: report main loop
 	holdroute=route : tdate=0
-	read #h_customer,using 'Form POS 1,C 10,POS 41,C 30,POS 292,PD 4.2,POS 388,10*PD 5.2,POS 1741,N 2': z$,e$(2),bal,mat gb,route eof EO_CUSTOMER
+	read #hCustomer,using 'Form POS 1,C 10,POS 41,C 30,POS 292,PD 4.2,POS 388,10*PD 5.2,POS 1741,N 2': z$,e$(2),bal,mat gb,route eof EO_CUSTOMER
 	if seq=2 and holdroute<>0 and holdroute<>route then gosub PRINT_SUB_TOTALS ! consider subtotals
 	noneprinted=0
 	foot$=""
@@ -167,7 +167,7 @@ q9=9
 if t9<>0 then gosub ACCUM_TOTALS
 if seq=2 then gosub PRINT_SUB_TOTALS
 gosub PRINT_TOTALS
-close #h_customer:
+close #hCustomer:
 close #ubtransvb:
 goto DONE ! /r Goto PRINT_GRAND_TOTALS  ! can't get totals by route in Account sequence
 HDR: ! r:
@@ -197,18 +197,18 @@ PRINT_INFO: !  r: If TAMOUNT=0 Then Goto 1460
 	if tcode=4 then code$=" CM" : pos2=84 : r3=r3+tamount ! COLUMN 3
 	if tcode=5 then code$=" DM" : pos2=69 : r2=r2+tamount ! COLUMN 2
 	if firstone=1 and lastone=0 then ! first transaction and customer has more than 1 transaction
-		pr #255,using 'Form POS 1,C 10,POS 12,C 30,POS 43,PIC(ZZZZ/ZZ/ZZ),POS 53,PIC(ZZ,ZZZ,ZZ#.## CR),POS POS2,N 12.2,C 4': z$,e$(2),tdate,begbal,tamount,code$ pageoflow PGOF
+		pr #255,using 'Form POS 1,C 10,POS 12,C 30,POS 43,PIC(ZZZZ/ZZ/ZZ),POS 53,PIC(ZZ,ZZZ,ZZ#.## CR),POS POS2,N 12.2,C 4': z$,e$(2),tdate,begbal,tamount,code$ pageoflow PgOf
 	else if lastone=2 and firstone=2 then ! No Transactions
-		pr #255,using 'Form POS 1,C 10,POS 12,C 30,POS 53,PIC(ZZ,ZZZ,ZZ#.## CR),POS 100,PIC(ZZ,ZZZ,ZZ#.## CR),C 16': z$,e$(2),begbal,bal,foot$ pageoflow PGOF
+		pr #255,using 'Form POS 1,C 10,POS 12,C 30,POS 53,PIC(ZZ,ZZZ,ZZ#.## CR),POS 100,PIC(ZZ,ZZZ,ZZ#.## CR),C 16': z$,e$(2),begbal,bal,foot$ pageoflow PgOf
 	else if firstone=0 and lastone=0 then ! Not the First nor the Last Transaction
-		pr #255,using 'Form POS 43,PIC(ZZZZ/ZZ/ZZ),POS POS2,N 12.2,C 4': tdate,tamount,code$ pageoflow PGOF
+		pr #255,using 'Form POS 43,PIC(ZZZZ/ZZ/ZZ),POS POS2,N 12.2,C 4': tdate,tamount,code$ pageoflow PgOf
 	else if firstone=0 and lastone=1 then ! Last Transaction of a series
-		pr #255,using 'Form POS 43,PIC(ZZZZ/ZZ/ZZ),POS POS2,N 12.2,C 4,POS 100,PIC(ZZ,ZZZ,ZZ#.## CR),C 16': tdate,tamount,code$,bal,foot$ pageoflow PGOF
-		if skip_line_after_account then pr #255: "" pageoflow PGOF
+		pr #255,using 'Form POS 43,PIC(ZZZZ/ZZ/ZZ),POS POS2,N 12.2,C 4,POS 100,PIC(ZZ,ZZZ,ZZ#.## CR),C 16': tdate,tamount,code$,bal,foot$ pageoflow PgOf
+		if skip_line_after_account then pr #255: "" pageoflow PgOf
 	else if firstone=1 and lastone=1 then ! Only One Transaction
 	! pr #255: "FIRST AND LAST" :   if env$('ACSDeveloper')<>'' and trim$(z$)=debug_account_of_interest$ then pr 'tdate=';tdate : pause
-		pr #255,using 'Form POS 1,C 10,POS 12,C 30,POS 43,PIC(ZZZZ/ZZ/ZZ),POS 53,PIC(ZZ,ZZZ,ZZ#.## CR),POS POS2,N 12.2,C 4,POS 100,PIC(ZZ,ZZZ,ZZ#.## CR),C 16': z$,e$(2),tdate,begbal,tamount,code$,bal,foot$ pageoflow PGOF
-		if skip_line_after_account then pr #255: "" pageoflow PGOF
+		pr #255,using 'Form POS 1,C 10,POS 12,C 30,POS 43,PIC(ZZZZ/ZZ/ZZ),POS 53,PIC(ZZ,ZZZ,ZZ#.## CR),POS POS2,N 12.2,C 4,POS 100,PIC(ZZ,ZZZ,ZZ#.## CR),C 16': z$,e$(2),tdate,begbal,tamount,code$,bal,foot$ pageoflow PgOf
+		if skip_line_after_account then pr #255: "" pageoflow PgOf
 	end if
 	if lastone=1 or lastone=2 then gosub ACCUM_TOTALS
 	! pr #40,Using "form pos 1,c 11,n 12.2": Z$,S4
@@ -235,7 +235,7 @@ return  ! /r
 !      begbal=bal+tamount : r1+=begbal
 !    end if
 !  return  ! /r
-PGOF: ! r:
+PgOf: ! r:
 	if ~raw_output then
 		pr #255: newpage
 		gosub HDR
@@ -255,12 +255,12 @@ return  ! /r
 PRINT_TOTALS: ! r:
 	pr #255: ""
 	pr #255: ""
-	pr #255,using 'Form POS 25,C 23,Nz 3,POS 53,N 13.2,POS 68,N 13.2,POS 84,N 12.2,POS 100,N 13.2': "Totals                ",0,s1,s2,s3,s4 pageoflow PGOF
+	pr #255,using 'Form POS 25,C 23,Nz 3,POS 53,N 13.2,POS 68,N 13.2,POS 84,N 12.2,POS 100,N 13.2': "Totals                ",0,s1,s2,s3,s4 pageoflow PgOf
 	pr #255: ""
 	pr #255,using "form pos 1,c 40": "Balance Breakdown by Type of Service:"
 	for j=1 to 10
 		if trim$(serviceName$(j))<>"" then
-			pr #255,using 'Form POS 5,C 30,N 10.2': serviceName$(j),tgb(j) pageoflow PGOF
+			pr #255,using 'Form POS 5,C 30,N 10.2': serviceName$(j),tgb(j) pageoflow PgOf
 		end if
 		bdtotal+=tgb(j)
 	next j
@@ -276,12 +276,12 @@ return  ! /r
 PRINT_SUB_TOTALS: ! r:
 	pr #255: ""
 	pr #255: ""
-	pr #255,using 'Form POS 34,C 16,POS 53,N 13.2,POS 68,N 13.2,POS 84,N 12.2,POS 100,N 13.2': "Sub-Totals",st1,st2,st3,st4 pageoflow PGOF
+	pr #255,using 'Form POS 34,C 16,POS 53,N 13.2,POS 68,N 13.2,POS 84,N 12.2,POS 100,N 13.2': "Sub-Totals",st1,st2,st3,st4 pageoflow PgOf
 	pr #255: ""
 	st1=st2=st3=st4=0
 	for j=1 to 10
 		if trim$(serviceName$(j))<>"" then
-			pr #255,using 'Form POS 5,C 30,N 10.2': serviceName$(j),subtotal_gb(j) pageoflow PGOF
+			pr #255,using 'Form POS 5,C 30,N 10.2': serviceName$(j),subtotal_gb(j) pageoflow PgOf
 		end if
 	next j
 	mat subtotal_gb=(0)
@@ -292,7 +292,7 @@ PRINT_SUB_TOTALS: ! r:
 	tc$(4)="Credit Memos"
 	tc$(5)="Debit Memos"
 	for j=1 to 5
-		pr #255,using 'Form POS 5,C 25,N 15.2': tc$(j),st1(j) pageoflow PGOF
+		pr #255,using 'Form POS 5,C 25,N 15.2': tc$(j),st1(j) pageoflow PgOf
 	next j
 	mat st1=(0)
 return  ! /r
@@ -301,11 +301,11 @@ return  ! /r
 !     gosub HDR
 !     pr #255: ""
 !     pr #255: ""
-!     pr #255,using 'Form POS 34,C 16,POS 53,N 13.2,POS 68,N 13.2,POS 84,N 12.2,POS 100,N 13.2': "Grand Totals",grand_total_a1,grand_total_a2,grand_total_a3,grand_total_a4 pageoflow PGOF
+!     pr #255,using 'Form POS 34,C 16,POS 53,N 13.2,POS 68,N 13.2,POS 84,N 12.2,POS 100,N 13.2': "Grand Totals",grand_total_a1,grand_total_a2,grand_total_a3,grand_total_a4 pageoflow PgOf
 !     pr #255: ""
 !     for j=1 to 10
 !       if trim$(serviceName$(j))<>"" then
-!         pr #255,using 'Form POS 5,C 30,N 10.2': serviceName$(j),ggb(j) pageoflow PGOF
+!         pr #255,using 'Form POS 5,C 30,N 10.2': serviceName$(j),ggb(j) pageoflow PgOf
 !       end if
 !     next j
 !     pr #255: "    ______________________________  __________"
@@ -315,7 +315,7 @@ return  ! /r
 !     tc$(4)="Credit Memos"
 !     tc$(5)="Debit Memos"
 !     for j=1 to 5
-!       pr #255,using 'Form POS 5,C 25,N 15.2': tc$(j),t1(j) pageoflow PGOF
+!       pr #255,using 'Form POS 5,C 25,N 15.2': tc$(j),t1(j) pageoflow PgOf
 !     next j
 !   goto DONE ! /r
 DONE: !

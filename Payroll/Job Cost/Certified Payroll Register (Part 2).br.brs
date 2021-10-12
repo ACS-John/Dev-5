@@ -131,7 +131,7 @@ MOVEINFO: ! r:
 	pl1$(5)=lpad$(str$(em2),6) ! pL1$(5)=LPAD$(STR$(TDN),6)
 goto L520 ! /r
  
-PGOF: ! r:
+PgOf: ! r:
 	pr #255: newpage
 	gosub L1300
 continue ! /r
@@ -156,13 +156,13 @@ L1450: ! r:
 	if hr1(8)=0 then goto L1510
 	lnp=lnp+1
 	if lnp>5 then lnp=6
-	pr #255,using L1500: pl1$(lnp),mat hr1,tdet2," REG",gp1+gp2,x3*ded(1),x3*ded(2),x3*(ded(3)+ded(4)+ded(5)),gp1+gp2-(x3*ded(1)+x3*ded(2)+x3*(ded(3)+ded(4)+ded(5))) pageoflow PGOF
+	pr #255,using L1500: pl1$(lnp),mat hr1,tdet2," REG",gp1+gp2,x3*ded(1),x3*ded(2),x3*(ded(3)+ded(4)+ded(5)),gp1+gp2-(x3*ded(1)+x3*ded(2)+x3*(ded(3)+ded(4)+ded(5))) pageoflow PgOf
 	L1500: form pos 1,c 30,9*n 6.2,c 6,n 9.2,3*n 8.2,n 9.2
 	L1510: !
 	if hr2(8)=0 then goto L1560
 	lnp=lnp+1
 	if lnp>5 then lnp=6
-	if hr1(8)=0 then pr #255,using L1500: pl1$(lnp),mat hr2,tdet3," OVT",gp1+gp2,x3*ded(1),x3*ded(2),x3*(ded(3)+ded(4)+ded(5)),gp1+gp2-(x3*ded(1)+x3*ded(2)+x3*(ded(3)+ded(4)+ded(5))) pageoflow PGOF else pr #255,using L1550: pl1$(lnp),mat hr2,tdet3," OVT" pageoflow PGOF
+	if hr1(8)=0 then pr #255,using L1500: pl1$(lnp),mat hr2,tdet3," OVT",gp1+gp2,x3*ded(1),x3*ded(2),x3*(ded(3)+ded(4)+ded(5)),gp1+gp2-(x3*ded(1)+x3*ded(2)+x3*(ded(3)+ded(4)+ded(5))) pageoflow PgOf else pr #255,using L1550: pl1$(lnp),mat hr2,tdet3," OVT" pageoflow PgOf
 	L1550: form pos 1,c 30,9*n 6.2,c 6
 	L1560: !
 	hr8=hr8+hr1(8)+hr2(8)
@@ -174,7 +174,7 @@ L1610: ! r:
 	lnp=lnp+1
 	if lnp>5 then goto L1680
 	for j=lnp to 5
-		pr #255,using L1660: pl1$(j) pageoflow PGOF
+		pr #255,using L1660: pl1$(j) pageoflow PgOf
 		L1660: form pos 1,c 30,skip 1
 	next j
 	L1680: !
@@ -193,11 +193,11 @@ L1610: ! r:
 	lnp=0
 return ! /r
 TOTALS: ! r:
-	pr #255,using L1850: "* * * *  Totals for Job # ",jn$,"* * * *" pageoflow PGOF
+	pr #255,using L1850: "* * * *  Totals for Job # ",jn$,"* * * *" pageoflow PgOf
 	L1850: form pos 10,c 26,c 7,c 8,skip 1
-	pr #255: tab(6);"Total Hours   Gross Pay     Total        Total" pageoflow PGOF
-	pr #255: tab(31);"Deductions     Net-Pay" pageoflow PGOF
-	pr #255,using L1890: thr,jgp,gded,jgp-gded pageoflow PGOF
+	pr #255: tab(6);"Total Hours   Gross Pay     Total        Total" pageoflow PgOf
+	pr #255: tab(31);"Deductions     Net-Pay" pageoflow PgOf
+	pr #255,using L1890: thr,jgp,gded,jgp-gded pageoflow PgOf
 	L1890: form pos 5,4*n 12.2,skip 2
 	thr=0
 	jgp=0

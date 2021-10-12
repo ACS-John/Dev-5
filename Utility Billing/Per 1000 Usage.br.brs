@@ -82,7 +82,7 @@ end if
 ! return  ! /r
  
 ! r: main loop
-on pageoflow goto PGOF
+on pageoflow goto PgOf
 fnopenprn
 dayFilter=days(d1,'mmddyy')
 dim over(0)
@@ -171,6 +171,6 @@ def fn_overageListPrint(mat over,highestRange)
 		pr #255: "{\ul                                                                                }"
 	end if
 fnend
-PGOF: pr #255: newpage : continue
+PgOf: pr #255: newpage : continue
 include:ertn
 include:fn_open

@@ -121,7 +121,7 @@ MENU1: ! r:
 goto FINIS ! /r
  
 def fn_start_print
-	on pageoflow goto PGOF
+	on pageoflow goto PgOf
 	open #2: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr",i,i,k
 	open #4: "Name=[Q]\PRmstr\payrollchecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno]",internal,outIn,keyed
 	open #3: "Name=[Q]\PRmstr\Department.h[cno],Shr, KFName=[Q]\PRmstr\DeptIdx.h[cno],Shr",internal,outIn,keyed
@@ -250,7 +250,7 @@ def fn_totals
 	t3=0
 	t4=0
 fnend
-PGOF: ! r:
+PgOf: ! r:
 	pr #255: newpage
 	gosub WK_HEADER
 continue ! /r

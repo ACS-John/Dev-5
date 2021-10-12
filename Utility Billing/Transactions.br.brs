@@ -442,9 +442,9 @@ def fn_printTrans ! very local function - lots of inherritance
 		account_balance=val(fnCustomerData$(lpad$(rtrm$(z$),10),'balance'      , 1))
 		nam$           =    fnCustomerData$(lpad$(rtrm$(z$),10),'name'         , 1)
 		metraddr$      =    fnCustomerData$(lpad$(rtrm$(z$),10),'Meter Address'   )
-		! open #h_customer=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",i,i,k
-		! read #h_customer,using 'Form POS 11,c 30,C 28,pos 292,PD 4.2',key=lpad$(rtrm$(z$),10),release: metraddr$,nam$,account_balance nokey PT_NO_CUSTOMER
-		! close #h_customer: ioerr ignore
+		! open #hCustomer=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",i,i,k
+		! read #hCustomer,using 'Form POS 11,c 30,C 28,pos 292,PD 4.2',key=lpad$(rtrm$(z$),10),release: metraddr$,nam$,account_balance nokey PT_NO_CUSTOMER
+		! close #hCustomer: ioerr ignore
 		restore #trans,key>=lpad$(rtrm$(z$),10)&"         ": nokey PT_FINIS
 	end if
 	gosub HDR
@@ -514,15 +514,15 @@ def fn_printTrans ! very local function - lots of inherritance
 		! if env$('acsDeveloper')<>"" then pause
 		if trim$(z$)="[All]" then
 			if cx$="CHG" then
-				pr #255,using 'Form POS 1,c 10,x 1,'&printlineform$: transAcct$,cx$,tdate,mat alloc$,tamount,usage(1),usage(2),usage(3) pageoflow PGOF
+				pr #255,using 'Form POS 1,c 10,x 1,'&printlineform$: transAcct$,cx$,tdate,mat alloc$,tamount,usage(1),usage(2),usage(3) pageoflow PgOf
 			else
-				pr #255,using 'Form POS 1,c 10,x 1,'&printlineform$: transAcct$,cx$,tdate,mat alloc,tamount,usage(1),usage(2),usage(3) pageoflow PGOF
+				pr #255,using 'Form POS 1,c 10,x 1,'&printlineform$: transAcct$,cx$,tdate,mat alloc,tamount,usage(1),usage(2),usage(3) pageoflow PgOf
 			end if
 		else
 			if cx$="CHG" then
-				pr #255,using 'Form POS 1,'&printlineform$: cx$,tdate,mat alloc$,tamount,usage(1),usage(2),usage(3) pageoflow PGOF
+				pr #255,using 'Form POS 1,'&printlineform$: cx$,tdate,mat alloc$,tamount,usage(1),usage(2),usage(3) pageoflow PgOf
 			else
-				pr #255,using 'Form POS 1,'&printlineform$: cx$,tdate,mat alloc,tamount,usage(1),usage(2),usage(3) pageoflow PGOF
+				pr #255,using 'Form POS 1,'&printlineform$: cx$,tdate,mat alloc,tamount,usage(1),usage(2),usage(3) pageoflow PgOf
 			end if
 		end if  ! trim$(z$)="[All]"   /   else
 		if tcode=tcode_charge     then
@@ -543,7 +543,7 @@ def fn_printTrans ! very local function - lots of inherritance
 		!	end if
 		!end if
 	loop
-	PGOF: ! r:
+	PgOf: ! r:
 		pr #255: newpage
 		gosub HDR
 	continue  ! /r

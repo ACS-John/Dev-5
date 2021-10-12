@@ -81,7 +81,7 @@ if resp$(resp_OptComplete)="True" then fullform=1 ! pr full form
 if resp$(resp_OptFillIn)="True" then fullform=2 ! fill in blanks
  
 fnopenprn
-on pageoflow goto PGOF
+on pageoflow goto PgOf
 open #hEmployee=fnH: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr",i,i,k ! was #2
 gosub HDR
 open #4: "Name=[Q]\PRmstr\payrollchecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno]",internal,outIn,keyed
@@ -138,7 +138,7 @@ PRINT_LINE: !
 	pr #255,using L1200: ss$,em$(1)(1:28),m2,max(m2-feducmax,0),tw
 	L1200: form pos 1,c 11,pos 14,c 28,pos 42,pic(--,---,---.##),pos 57,pic(--,---,---.##),pos 70,pic(----,---.##)
 	t1+=m2 : t2+=max(m2-feducmax,0) : t3+=tw
-	pr #255: "" pageoflow PGOF
+	pr #255: "" pageoflow PgOf
 return
  
 TOTALS: ! r:
@@ -151,7 +151,7 @@ TOTALS: ! r:
 	fncloseprn
 return ! /r
  
-PGOF: pr #255: newpage : gosub HDR : continue
+PgOf: pr #255: newpage : gosub HDR : continue
  
 PRINT_940: ! r: only fills in the blanks at this time
 	! r: VBOPENPRINT

@@ -27,7 +27,7 @@
 		if resp$(2)=opt$(2) then : _
 			open #customer: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\UBIndx2.h[cno],Shr",i,i,k
 	fnopenprn
-	on pageoflow goto PGOF
+	on pageoflow goto PgOf
 	gosub HDR
 READ_CUSTOMER: !
 	read #customer,using 'Form POS 1,C 10,pos 41,C 30,POS 1859,PD 5.2': z$, customer_name$, escrow_bal eof DONE
@@ -36,7 +36,7 @@ READ_CUSTOMER: !
 	total_escrow+=escrow_bal
 	goto READ_CUSTOMER
  
-PGOF: pr #255: newpage : gosub HDR : continue
+PgOf: pr #255: newpage : gosub HDR : continue
  
 HDR: !
 	pr #255,using 'Form POS 20,Cc 40': "",cnam$

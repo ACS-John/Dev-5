@@ -46,7 +46,7 @@ do
 	read #h_trans1,using Ftrans,rec=trans1_rec: p$,tdate,tcode,tamount,mat tg,wr,wu,er,eu,gr,gu,tbal,pcode noRec NEXT_REC
 	pr trans1_rec
 	if fn_has_dupe then
-		pr #255,using FORM_OUT: trans1_rec,p$,tdate,tamount pageoflow PGOF
+		pr #255,using FORM_OUT: trans1_rec,p$,tdate,tamount pageoflow PgOf
 		FORM_OUT: form n 8,x 1,c 10,x 1,x 1,pic(zzzz/zz/zz),n 11.2
 	end if  ! fn_has_dupe(z$)
 loop
@@ -57,7 +57,7 @@ FINIS: !
 Xit: !
 fnXit
  
-PGOF: ! r:
+PgOf: ! r:
 	pr #255: newpage
 	fn_header
 continue ! /r

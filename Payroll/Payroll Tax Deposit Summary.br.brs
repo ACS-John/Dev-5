@@ -60,11 +60,11 @@ do
 				deptot(dep,2)+=cp(2)+cp(3)
 			end if
 			! pr #255: 'employee number: '&str$(heno)&' employee record: '&str$(rec(h_employee))&' check number: '&str$(ckno)&' check history record number: '&str$(rec(h_checks))
-			pr #255,using 'form pos 1,pic(zzzz/zz/zz),pos 11,19*n 10.2,n 4': prd,cp(31),cp(2)+cp(3),cp(1),cp(4),cp(5),cp(6),cp(7),cp(8),cp(9),cp(10),cp(11),cp(12),cp(13),cp(14),cp(32),cp(2)+cp(3) pageoflow PGOF
+			pr #255,using 'form pos 1,pic(zzzz/zz/zz),pos 11,19*n 10.2,n 4': prd,cp(31),cp(2)+cp(3),cp(1),cp(4),cp(5),cp(6),cp(7),cp(8),cp(9),cp(10),cp(11),cp(12),cp(13),cp(14),cp(32),cp(2)+cp(3) pageoflow PgOf
 			cp15throughCp24=cp(15)+cp(16)+cp(17)+cp(18)+cp(19)+cp(20)+cp(21)+cp(22)+cp(23)+cp(24)
 			if cp15throughCp24<>0 then
 				pr #255,using 'form pos 61,10*c 10': ab$(11),ab$(12),ab$(13),ab$(14),ab$(15),ab$(16),ab$(17),ab$(18),ab$(19),ab$(20)
-				pr #255,using 'form pos 59,10*n 10.2': cp(15),cp(16),cp(17),cp(18),cp(19),cp(20),cp(21),cp(22),cp(23),cp(24) pageoflow PGOF
+				pr #255,using 'form pos 59,10*n 10.2': cp(15),cp(16),cp(17),cp(18),cp(19),cp(20),cp(21),cp(22),cp(23),cp(24) pageoflow PgOf
 			end if
 			for j=1 to 32 : tx(j)+=cp(j) : next j
 			tx(34)+=tdc(10)
@@ -74,15 +74,15 @@ do
 	loop while eno=heno
 loop
 
-PGOF: ! r:
+PgOf: ! r:
 	pr #255: newpage
 	gosub PrHeader
 continue ! /r
 PrFinalTotals: ! r: EoF target
 	pr #255:''
-	pr #255,using 'form pos 4,c 5,pos 11,16*n 10.2,n 5': "Total",tx(31),tx(2)+tx(3),tx(1),tx(4),tx(5),tx(6),tx(7),tx(8), tx(9),tx(10),tx(11),tx(12),tx(13),tx(14),tx(32),tx(2)+tx(3) pageoflow PGOF
+	pr #255,using 'form pos 4,c 5,pos 11,16*n 10.2,n 5': "Total",tx(31),tx(2)+tx(3),tx(1),tx(4),tx(5),tx(6),tx(7),tx(8), tx(9),tx(10),tx(11),tx(12),tx(13),tx(14),tx(32),tx(2)+tx(3) pageoflow PgOf
 	if tx(15)+tx(16)+tx(17)+tx(18)+tx(19)+tx(20)+tx(21)+tx(22)+tx(23)+tx(24)<>0 then
-		pr #255,using 'form pos 59,10*n 10.2': tx(15),tx(16),tx(17),tx(18),tx(19),tx(20),tx(21),tx(22),tx(23),tx(24) pageoflow PGOF
+		pr #255,using 'form pos 59,10*n 10.2': tx(15),tx(16),tx(17),tx(18),tx(19),tx(20),tx(21),tx(22),tx(23),tx(24) pageoflow PgOf
 	end if
 	pr #255: ''
 	pr #255: ''

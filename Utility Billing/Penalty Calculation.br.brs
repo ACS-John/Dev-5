@@ -29,7 +29,7 @@ EO_MINIMUMBAL: !
 	fn_scr_main
 	if ckey=5 then goto Xit
 	fnAutomatedSavePoint('before')
-	open #h_customer:=1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,outIn,keyed
+	open #hCustomer:=1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,outIn,keyed
 	open #h_trans:=2: "Name=[Q]\UBmstr\ubTransVB.h[cno],KFName=[Q]\UBmstr\ubtrindx.h[cno],Shr",internal,outIn,keyed
 	open #hTrans2=fnH: "Name=[Q]\UBmstr\ubTransVB.h[cno],KFName=[Q]\UBmstr\UBTrdt.h[cno],Shr",internal,outIn,keyed
 
@@ -53,7 +53,7 @@ EO_MINIMUMBAL: !
 	fn_print_header
 	do
 READ_CUSTOMER: !
-		read #h_customer,using 'Form POS 1,C 10,4*C 30,POS 143,7*PD 2,POS 292,PD 4.2,PD 4,12*PD 4.2,POS 388,10*PD 5.2,POS 1741,N 2,N 7,2*N 6,N 9,PD 5.2,N 3,3*N 9,3*N 2,3*N 3,N 1,3*N 9,3*PD 5.2,pos 217,15*pd 5': z$,mat e$,mat a,bal,f,mat g,mat gb,mat extra,mat d eof EO_CUSTOMER
+		read #hCustomer,using 'Form POS 1,C 10,4*C 30,POS 143,7*PD 2,POS 292,PD 4.2,PD 4,12*PD 4.2,POS 388,10*PD 5.2,POS 1741,N 2,N 7,2*N 6,N 9,PD 5.2,N 3,3*N 9,3*N 2,3*N 3,N 1,3*N 9,3*PD 5.2,pos 217,15*pd 5': z$,mat e$,mat a,bal,f,mat g,mat gb,mat extra,mat d eof EO_CUSTOMER
 		! if env$('acsDeveloper')<>'' and trim$(z$)='100001.00' then debug_this_account=1 else debug_this_account=0
 		if debug_this_account then show_math=1 else show_math=0
 		route_number=extra(1)
@@ -73,13 +73,13 @@ EO_READ: !
 !
 EO_CUSTOMER: !
 	fn_print_totals
-	close #h_customer: ioerr ignore
+	close #hCustomer: ioerr ignore
 	close #h_trans: ioerr ignore
 	close #hTrans2: ioerr ignore
 	fncloseprn
 	goto Xit
 
-PGOF: !
+PgOf: !
 	pr #255: newpage
 	fn_print_header
 continue
@@ -303,7 +303,7 @@ def fn_pencal ! penalty calculation
 	WRITE_2: !
 	write #h_trans,using 'Form POS 1,C 10,N 8,N 1,12*PD 4.2,6*PD 5,PD 4.2,N 1': z$,pendat,2,tamount,mat tg,0,0,0,0,0,0,bal,pcode
 	PAST_WRITE_2: !
-	rewrite #h_customer,using 'Form POS 292,PD 4.2,POS 388,10*PD 5.2': bal,mat gb
+	rewrite #hCustomer,using 'Form POS 292,PD 4.2,POS 388,10*PD 5.2': bal,mat gb
 
 	totb+=bal
 	if route_number<0 or route_number>99 then route_number=99
@@ -336,18 +336,18 @@ def fn_print_record
 	! if env$('client')="Kimberling" then
 	!  int_tmp=PENCOLUMN(1)-G(10) ! MAX(0,round((g(12)-g(11))*.0075,2))
 	!  pen_tmp=G(10) ! MAX(0,round(pencolumn(1)-int_tmp,2))
-	!  pr #255,using F_PRLINE_KIM: z$,e$(2),pen_tmp,int_tmp,bal pageoflow PGOF
+	!  pr #255,using F_PRLINE_KIM: z$,e$(2),pen_tmp,int_tmp,bal pageoflow PgOf
 	!  F_PRLINE_KIM: form pos 1,c 10,x 4,c 30,pos 52,2*pic(---------.##),x 2,pic(-------.##),x 2,c 25
 	!  pen_accum+=pen_tmp
 	!  int_accum+=int_tmp
 	if printadr=1 then
-		pr #255,using F_PRLINE: z$,e$(2),mat pencolumn,bal,e$(1)(1:25) pageoflow PGOF
+		pr #255,using F_PRLINE: z$,e$(2),mat pencolumn,bal,e$(1)(1:25) pageoflow PgOf
 	else
-		pr #255,using F_PRLINE: z$,e$(2),mat pencolumn,bal pageoflow PGOF
+		pr #255,using F_PRLINE: z$,e$(2),mat pencolumn,bal pageoflow PgOf
 	end if
 	if printmail=1 then
-		pr #255,using "Form POS 15,C 30": e$(3) pageoflow PGOF
-		pr #255,using "Form POS 15,C 30": e$(4) pageoflow PGOF
+		pr #255,using "Form POS 15,C 30": e$(3) pageoflow PgOf
+		pr #255,using "Form POS 15,C 30": e$(4) pageoflow PgOf
 	end if  ! printmail=1
 	F_PRLINE: form pos 1,c 10,x 4,c 30,pos 52,pencount*pic(---------.##),x 2,pic(-------.##),x 2,c 25
 fnend
@@ -372,13 +372,13 @@ def fn_print_totals
 	pr #255,using 'form skip 2,c 20': "Totals by Route"
 	for j=1 to 99
 		if route(j)<>0 then
-			pr #255,using "form pos 1,c 10,pic(zzz,zzz.zz)": "Route "&cnvrt$("pic(zz)",j),route(j) pageoflow PGOF
+			pr #255,using "form pos 1,c 10,pic(zzz,zzz.zz)": "Route "&cnvrt$("pic(zz)",j),route(j) pageoflow PgOf
 		end if
 	next j
 	restore #1:
 	do
 		read #1,using "Form POS 292,PD 4.2": bal eof PT_EO1
-		totalbal=totalbal+bal
+		totalbal+=bal
 	loop
 	PT_EO1: !
 	pr #255:

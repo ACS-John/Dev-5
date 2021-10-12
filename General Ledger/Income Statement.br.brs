@@ -121,10 +121,10 @@ L850: sp2=49-sp-1
 ! If DS=1 Then dOLLAR$="": foRM$="Form POS SP,C SP2,POS 50,C 1,C 5,PIC($$$$,$$$,$$$.##),C 1,POS 74,C 1,C 5,PIC($$$$$$,$$$,$$$.##),C 1,skip 1" Else foRM$="Form POS SP,C SP2,POS 50,C 1,C 5,PIC(----,---,---.##),C 1,POS 74,C 1,C 5,PIC(------,---,---.##),C 1,skip 1"
 ! if debug_this then pr #255: '***'
 	if ul=1 then
-		pr #255,using L856: d$(1:sp2),dollar$,"{\ul ",total,"}",dollar$,"{\ul ",total2,"}" pageoflow PGOF
+		pr #255,using L856: d$(1:sp2),dollar$,"{\ul ",total,"}",dollar$,"{\ul ",total2,"}" pageoflow PgOf
 L856: form pos sp,c sp2,pos 50,c 1,c 5,pic(----,---,---.##),c 1,pos 74,c 1,c 5,pic(------,---,---.##),c 1,skip 1
 	else
-		pr #255,using L870: d$(1:sp2),dollar$,total,dollar$,total2 pageoflow PGOF
+		pr #255,using L870: d$(1:sp2),dollar$,total,dollar$,total2 pageoflow PgOf
 L870: form pos sp,c sp2,pos 49,c 1,pic(-----,---,---.##),pos 67,c 1,pic(-------,---,---.##),skip 1
 	end if
 ! if debug_this then pr #255: '***'
@@ -152,9 +152,9 @@ L970: if ap=0 then ap=1
 	end if
 ! pr some sub total like thingies
 	if ul=1 then
-		pr #255,using L856: d$(1:sp2),dollar$,"{\ul ",accum1,"}",dollar$,"{\ul ",accum2,"}" pageoflow PGOF
+		pr #255,using L856: d$(1:sp2),dollar$,"{\ul ",accum1,"}",dollar$,"{\ul ",accum2,"}" pageoflow PgOf
 	else
-		pr #255,using L870: d$(1:sp2),dollar$,accum1,dollar$,accum2 pageoflow PGOF
+		pr #255,using L870: d$(1:sp2),dollar$,accum1,dollar$,accum2 pageoflow PgOf
 	end if
 	gosub RESET_ACCUM_ARRAY
 	if ul=1 then goto L1050
@@ -202,7 +202,7 @@ L1340: form skip sk,pos tabnote,c fl,pos 80,c 8,skip 1
 	gosub HDR_REPORT
 HDR_COLUMN_XIT: !
 return  ! /r
-PGOF: ! r:
+PgOf: ! r:
 	gosub HDR_COLUMN_B
 	continue  ! /r
 L1410: ! r:

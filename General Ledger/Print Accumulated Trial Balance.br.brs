@@ -101,7 +101,7 @@ L640: if s1=3 and n2$<n1$ then goto SCREEN1
   ! if fnUseDeptNo=0 or fnprocess=1 then goto READ_GLMSTR ! L840
   n$=cnvrt$("N 3",costCenterFilter)&"         "
   restore #h_glmstr,key>=n$: nokey SCREEN1
-  on pageoflow goto PGOF
+  on pageoflow goto PgOf
   on fkey 5 goto TOTALS
 goto mainLoopInit ! /r (costCenterFilter)
 mainLoopInit: ! r: main loop setup (costCenterFilter)
@@ -160,7 +160,7 @@ TOTALS: ! r: EOF ON MASTER FILE
   fncloseprn
   goto Xit ! /r
 Xit: fnXit
-PGOF: ! r:
+PgOf: ! r:
   pr #255: newpage
   gosub HDR
 continue ! /r
