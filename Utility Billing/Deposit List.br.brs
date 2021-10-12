@@ -1,5 +1,3 @@
-! formerly S:\acsUB\UBCustDp
-! -- Customer Deposit List
 ! r: setup stuff
 	autoLibrary
 	on error goto Ertn

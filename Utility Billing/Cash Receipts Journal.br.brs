@@ -1,5 +1,3 @@
-! formerly S:\acsUB\UBColPrn
-
 autoLibrary
 fnTop(program$)
 

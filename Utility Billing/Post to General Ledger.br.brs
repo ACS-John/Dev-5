@@ -54,7 +54,7 @@ SCREEN2: !
 	fnCmdKey("&Cancel",5,0,1,"Returns to menu without saving any changes on the screen.")
 	ckey=fnAcs(mat resp$)
 	if ckey=5 then goto L580
-	if ckey=3 then chain "S:\acsUB\chartofaccounts"
+	if ckey=3 then chain "S:\Utility Billing\Chart of Accounts"
 	for j=1 to 30
 		gln$(j)=fnagl$(resp$(j))
 	next j
@@ -193,7 +193,7 @@ L1450: goto L1410
 L1460: next j
 	pr #255,using "form pos 20,n 13.2,n 13.2": totaldebits,totalcredits
 	fncloseprn
-	if gli=1 then let fnchain("S:\General Ledger\Merge")
+	if gli=1 then fnchain("S:\General Ledger\Merge")
 Xit: fnXit
 HDR: ! r:
 	pr #255: "\qc  {\f181 \fs18 \b "&env$('cnam')&"}"
@@ -297,7 +297,7 @@ fnCmdKey("&Create Accounts",3,0,0,"Allows you to create a chart of account (limi
 fnCmdKey("&Cancel",5,0,1,"Return to main screen without saving any changes.")
 ckey=fnAcs(mat resp$)
 if ckey=5 then goto GL_INFORMATION
-if ckey=3 then chain "S:\acsUB\chartofaccounts"
+if ckey=3 then fnChain("S:\Utility Billing\Chart of Accounts")
 service$=resp$(1)
 ratecode=val(resp$(2))
 gl$(1)=fnagl$(resp$(3))

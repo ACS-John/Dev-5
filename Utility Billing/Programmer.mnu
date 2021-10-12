@@ -1,22 +1,21 @@
 Utility Billing Programmer ^ ACS Utility Billing
 Programmer
->Initialize Meter Location Table from Active Customers  ^ Utility Billing\Hand Held\Fix\*         ^ U4
+>Initialize Meter Location Table from Active Customers  ^ [cursystem]\Hand Held\Fix\*         ^ U4
 >Transaction Hamster                                    ^ HamsterFio:UB Transaction
->Meter Location                                         ^ Utility Billing\Hand Held\*             ^ U4
->Meter Information                                      ^ Utility Billing\Hand Held\*             ^ U4
->Meter Address                                          ^ HamsterFio:UB Meter Address             ^ U4
->Hand Held Device                                       ^ HamsterFio:U4 Device                    ^ U4
+>Meter Location                                         ^ [cursystem]\Hand Held\*             ^ U4
+>Meter Information                                      ^ [cursystem]\Hand Held\*             ^ U4
+>Meter Address                                          ^ HamsterFio:UB Meter Address         ^ U4
+>Hand Held Device                                       ^ HamsterFio:U4 Device                ^ U4
 
->Customer Hamster                                       ^ HamsterFio:Customer
->WorkOrder Hamster                                      ^ acsUB\workorderHamster
->Type Of Service                                        ^ Utility Billing\*
->Type of Services (All Companies)                       ^ Utility Billing\*
->Customer Hamster                                       ^ acsUB\Customer_Hamster
+>Customer HamsterFio                                    ^ HamsterFio:Customer
+>Customer Hamster                                       ^ acsUB\*
+>WorkOrder Hamster                                      ^ acsUB\*
+>Type Of Service                                        ^ [cursystem]\*
+>Type of Services (All Companies)                       ^ [cursystem]\*
 >Deposit1 HamsterFio                                    ^ HamsterFio:Deposit1
 >Deposit2 HamsterFio                                    ^ HamsterFio:Deposit2
->Swap Current and Prior Readings                        ^ Utility Billing\swap_cur_prior
->Reset Readings                                         ^ acsUB\Reset_Readings
->Duplicate Customer List                                ^ acsUB\duplicate_customer_report
->Duplicate Transaction Report (has issues)              ^ acsUB\DupTr
+>Swap Current and Prior Readings                        ^ [cursystem]\Fix\*
+>Reset Readings                                         ^ acsUB\*
+>Duplicate Customer List                                ^ acsUB\*
 >Test
 >>UB Customer Search                                    ^ Test\CustomerSearch

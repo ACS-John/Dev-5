@@ -1,4 +1,3 @@
-! formerly S:\acsUB\ubBilJrn
 ! -- pr Billing Journal
 ! r: setup
 autoLibrary

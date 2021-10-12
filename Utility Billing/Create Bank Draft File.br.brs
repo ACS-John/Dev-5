@@ -1,4 +1,3 @@
-! formerly S:\acsUB\BkDraft
 fn_setup
 fnTop(program$)
  
@@ -16,7 +15,7 @@ fnTop(program$)
 	fnureg_read('Bank Draft File',pth$,env$('Desktop')&'\bkdraft.dat')
 	fnLastBillingDate(d1)
 	
-	fnTos(sn$="BKDraft")
+	fnTos
 	mylen=13
 	mypos=mylen+2
 	respc=0

@@ -1,5 +1,3 @@
-! formerly S:\acsUB\UBDATfix
-! -- Change Wrong Billing Date
 ! r: setup
 	autoLibrary
 	on error goto Ertn
@@ -8,7 +6,7 @@
 	fnTop(program$)
 ! /r
 SCREEN1: ! r:
-	fnTos(sn$:="DatFix2")
+	fnTos
 	fnLbl(1,1,'Bad Billing Date:',24,1)
 	fnTxt(1,26,8,0,0,"1")
 	resp$(1)=str$(d1)

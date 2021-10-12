@@ -1,4 +1,3 @@
-! formerly S:\acsUB\expubm
 fn_setup
 fnTop(program$)
 dim serviceName$(10)*20

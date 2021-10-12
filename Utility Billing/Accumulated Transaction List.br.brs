@@ -1,4 +1,3 @@
-! formerly S:\acsUB\ubAccTr
 autoLibrary
 on error goto Ertn
 fnTop(program$)

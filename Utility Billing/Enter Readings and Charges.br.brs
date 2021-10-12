@@ -1,4 +1,3 @@
-! formerly S:\acsUB\UBIpChg
 fn_setup
 fnTop(program$)
 goto MENU1

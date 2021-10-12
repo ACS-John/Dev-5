@@ -1,9 +1,8 @@
-! Replace S:\acsUB\swap_cur_prior
 ! -- for all billing dates that match - put the lower of prior/current water readings into prior and the higher into current
-!
+
 	autoLibrary
 	on error goto Ertn
-!
+
 	dim x$*10,x(15),w(5),r(4),gb(10),rt(10,3),ba(13),da(2),txt$(3)*80,txt$*50
 	dim a(7),b(11),c(4),d(15),g(12),rw(22,13),d$*6,dat$*20,bt1(14,2)
 	dim p$*10,o(2),bt2(14,2),badr(2),dp$*60,tg(11),transkey$*19,meteradr$*30,custname$*30
@@ -11,9 +10,9 @@
 	dim serviceName$(10)*20,serviceCode$(10)*2,tax_code$(10)*1,work$*80
 	dim penatly$(10)*1,subjectto(10)
 	dim extra(23),extra$(11)*30,client$*30
-	dim cap$*128,work$*80,work_addr$*80
-!
-	fnTop(program$,cap$="Swap Current and Prior Readings for Water")
+	dim work$*80,work_addr$*80
+
+	fnTop(program$,"Swap Current and Prior Readings for Water")
 	fnLastBillingDate(d1)
 	fnGetServices(mat serviceName$,mat service$,mat tax_code$,mat penalty$,mat subjectto)
 	for j=1 to udim(serviceName$)

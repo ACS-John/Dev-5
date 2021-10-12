@@ -1,6 +1,4 @@
-! formerly S:\acsUB\ubPenCa2
 ! Additional Penalty Calculation ( calculates a standard dollar amount of penalty of each penalty charge in their system
-
 	autoLibrary
 	on error goto Ertn
 
