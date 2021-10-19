@@ -103,15 +103,15 @@ Menu1: ! r:
 	else if ckey>1000 and ckey<1200 then ! Select System 1001-1199 reserved for system selection
 		cursys$=client_has$(ckey-1000)
 		fnreg_write(session$&'.CurSys',cursys$)
-		fncursys$(cursys$)
-		fn_setup_on_cursys_change(cno,cnam$)
+		fnCurSys$(cursys$)
+		fn_setupOnCursysChange(cno,cnam$)
 		chain program$
 	else if fkey_client>0 and ckey=fkey_client then
 		fnClientSelect
 		fn_systemSetup
 		if udim(mat client_has$)=>2 and srch(mat client_has$,env$('cursys'))<=0 then ! change it to the second available system (1st is CO) if they don't have the currently selected system
-			fncursys$(client_has$(2))
-			fn_setup_on_cursys_change(cno,cnam$)
+			fnCurSys$(client_has$(2))
+			fn_setupOnCursysChange(cno,cnam$)
 		end if
 	else if ckey=15 then ! SAVE
 		gosub CompanySelect
@@ -306,22 +306,22 @@ def fn_systemSetup
 	gosub IfCoTryAgain
 
 	dim cursys$*40
-	!  cursys$=fncursys$
+	!  cursys$=fnCurSys$
 	fnreg_read(session$&'.CurSys',cursys$)
-	cursys$=fncursys$(cursys$)
-	fn_setup_on_cursys_change(cno,cnam$)
+	cursys$=fnCurSys$(cursys$)
+	fn_setupOnCursysChange(cno,cnam$)
 fnend
 IfCoTryAgain: ! r: if cursys=CO than just pick the first thing they are licensed for
 	if ( env$('cursys')='CO' or srch(mat client_has$,env$('cursys'))<=0 ) and udim(mat client_has$)=>2 then
 		cursys$=client_has$(2)
 		fnreg_write(session$&'.CurSys',cursys$)
-		fncursys$(cursys$)
-		fn_setup_on_cursys_change(cno,cnam$)
+		fnCurSys$(cursys$)
+		fn_setupOnCursysChange(cno,cnam$)
 		! fnchain(program$)
 	end if
 return ! /r
 dim cnam$*80
-def fn_setup_on_cursys_change(&cno,&cnam$)
+def fn_setupOnCursysChange(&cno,&cnam$)
 	fnCno(cno,cnam$)
 	if ~cno then
 		cno=1

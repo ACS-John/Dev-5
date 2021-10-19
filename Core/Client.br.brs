@@ -920,12 +920,11 @@ def library fnclient_support(mat css_system_id$,mat css_system_support_end_date,
 	fnclient_support=fn_client_support(mat css_system_id$,mat css_system_support_end_date,mat css_on_support, css_grace_days)
 fnend
 def fn_client_support(mat css_system_id$,mat css_system_support_end_date,mat css_on_support; css_grace_days)
-	client_id=val(env$('Client_ID'))
-	fn_client_support=fn_client_support_setup(client_id,mat css_system_id$,mat css_system_support_end_date,mat css_on_support, css_grace_days)
+	fn_client_support=fn_client_support_setup(env$('Client_ID'),mat css_system_id$,mat css_system_support_end_date,mat css_on_support, css_grace_days)
 fnend
-def fn_client_support_setup(client_id,mat css_system_id$,mat css_system_support_end_date,mat css_on_support; css_days_grace)
+def fn_client_support_setup(client_id$,mat css_system_id$,mat css_system_support_end_date,mat css_on_support; css_days_grace)
 	! css_days_grace=day grace period to allow users to update after support has expired.
-	if css_setup<>client_id then ! r:
+	if css_setup$<>client_id$ then ! r:
 		cache_css_client_owns_count=fn_clientHasMat(mat css_client_owns$)
 		mat css_client_owns$(cache_css_client_owns_count)
 		mat css_system_id$(cache_css_client_owns_count)
@@ -938,9 +937,9 @@ def fn_client_support_setup(client_id,mat css_system_id$,mat css_system_support_
 		restore #h_support: ! ,key>==lpad$(trim$(client_id$),kln(h_support)):
 		do
 			read #h_support,using F_SUPPORT: cln$,scode$,sdt1,stm$,sup_exp_date,scst eof CSS_SUPPORT_EOF
-			F_SUPPORT: form pos 1,c 6,pos 9,c 2,n 8,c 2,n 8,n 10.2,4*c 50
-			cln=val(cln$)
-			if cln=client_id then
+			F_SUPPORT: form pos 1,v 6,pos 9,c 2,n 8,c 2,n 8,n 10.2,4*c 50
+			! cln=val(cln$) conv ignore
+			if cln$=rtrm$(client_id$) then
 				if srch(mat css_client_owns$,fn_system_code_standardize$(scode$))>0 then
 					cache_css_system_count+=1
 					mat cache_css_system_id$(cache_css_system_count)
@@ -952,7 +951,7 @@ def fn_client_support_setup(client_id,mat css_system_id$,mat css_system_support_
 		loop
 		CSS_SUPPORT_EOF: !
 		close #h_support:
-		css_setup=client_id
+		css_setup$=client_id$
 	end if  ! /r
 	! r: move cache_* arrays into passed in and out arrays
 		mat css_system_id$(cache_css_system_count)
@@ -984,7 +983,7 @@ def fn_system_code_standardize$(st_code$*256)
 	! if st_code$='G1' then st_code$='GL'
 	if st_code$='G1' then st_code$='GL'
 	if st_code$='G3' then st_code$='G2' ! Accountant's GL Add On
-	if st_code$='U1' then st_code$='UB' ! UB No Discount
+	if st_code$='U1' then st_code$='UB' ! UB 1000+ NoDiscount
 	if st_code$='U2' then st_code$='UB' ! UB 500-1000 Customers
 	if st_code$='U3' then st_code$='UB' ! UB <500 Customers
 	! U4 is UB handheld add on in both
