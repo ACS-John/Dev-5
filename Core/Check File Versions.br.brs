@@ -41,7 +41,7 @@ def fn_cfv_addMissingFiles(; ___,path$*256,prog$*256,ext$*128,item)
 	for item=1 to udim(mat camf_filename$)
 		fnGetPp(camf_filename$(item),path$,prog$,ext$)
 		! if lwrc$(camf_filename$(item))='department' then pause
-		if ~exists('[Q]\'&env$('cursys')&'mstr\'&prog$&'.h[cno]') then
+		if ~exists('[Q]\[CurSys]mstr\'&prog$&'.h[cno]') then
 			fnCopy('S:\[cursystem]\mstr\'&camf_filename$(item),'[Q]\[cursys]mstr\'&prog$&'.h[cno]')
 		end if
 	next item
@@ -168,7 +168,7 @@ def fn_cfv_utility_billing
 	if exists("[Q]\UBmstr\UBdata")=0 then execute 'MkDir "[Q]\UBmstr\UBdata"'
 	if exists("[Q]\WorkOrder")=0 then execute 'MkDir "[Q]\WorkOrder"'
 	! if ~exists('[Q]\INI\Utility Billing') then execute 'mkdir "[Q]\INI\Utility Billing"'
-	! if ~exists('[Q]\INI\acs'&env$('cursys')&'\UBdata') then execute 'mkdir [Q]\INI\acs'&env$('cursys')&'\UBdata'
+	! if ~exists('[Q]\INI\acsUB\UBdata') then execute 'mkdir [Q]\INI\acsUB\UBdata'
 	fn_ini_move(env$('cursys'))
 	fnIniToReg
 	fn_reg_rename(env$('cursys'))

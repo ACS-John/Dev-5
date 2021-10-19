@@ -27,7 +27,7 @@ CompanyLoad: ! r:
 	close #hCompany: ioerr ignore
 return  ! /r
 CompanySave: ! r:
-	fnFree('[Q]\'&env$('cursys')&'mstr\Company.h[cno]')
+	fnFree('[Q]\[cursys]mstr\Company.h[cno]')
 	dim fileiosubs$(0)*512
 	hCompany=fnOpenFile(env$('cursys')&' Company',mat Comp$,mat CompN,mat form$, 0,0,0,unused$,mat unused$,mat unused,mat fileiosubs$,supressprompt:=2)
 	write #hCompany,using form$(hCompany): mat Comp$,mat CompN

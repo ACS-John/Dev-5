@@ -321,7 +321,7 @@ def fn_opMain(omFileOpen$*256)
 				fnreg_write('Last Open Partial Path',omFileOpen$(1:pos(omFileOpen$,'\',-1)))
 				fnreg_write('Last Open Partial System',env$('cursys'))
 				fnreg_write('Last Open Partial Company Number',env$('cno'))
-				fn_copy_files_in(env$('temp')&'\acs\OpenPartial\'&env$('cursys')&'mstr\','.h'&str$(source_company_number),source_company_number)
+				fn_copy_files_in('[temp]\acs\OpenPartial\[cursys]mstr\','.h'&str$(source_company_number),source_company_number)
 				opScreenReturn+=1
 				setenv('force_reindex','yes')
 				fnCheckFileVersion
@@ -420,9 +420,9 @@ def fn_extract_appropriate_files(eafSourceFile$*256,eafSourceFilter$*128,eafDest
 	execute 'sy -s "'&env$('temp')&'\acs\openPartial'&session$&'.cmd"'
 fnend
 def fn_copy_files_in(company_import_path$*256,company_import_extension$,destination_company_number)
-	fnFree('[Q]\'&env$('cursys')&'mstr\*.h'&str$(destination_company_number))
-	fnStatus('Existing files ('&os_filename$('[Q]\'&env$('cursys')&'mstr\*.h'&str$(destination_company_number))&') have been removed.')
-	cfiReturn=fnCopy(company_import_path$&'*'&company_import_extension$,'[Q]\'&env$('cursys')&'mstr\*.h'&str$(destination_company_number))
+	fnFree('[Q]\[CurSys]mstr\*.h'&str$(destination_company_number))
+	fnStatus('Existing files ('&os_filename$('[Q]\[CurSys]mstr\*.h'&str$(destination_company_number))&') have been removed.')
+	cfiReturn=fnCopy(company_import_path$&'*'&company_import_extension$,'[Q]\[CurSys]mstr\*.h'&str$(destination_company_number))
 	if cfiReturn>0 then
 		if env$('cursys')='UB' then
 			cfiReturn=fn_ub_copy_extras(company_import_path$,company_import_extension$,destination_company_number)
@@ -449,7 +449,7 @@ def fn_ub_copy_extras(company_import_path$*256,company_import_extension$,destina
 	! /r
 	! r: import notes folder
 	if exists(company_import_path$&'UBmstr\notes'&company_import_extension$) then
-		fnFree('[Q]\'&env$('cursys')&'mstr\notes.h'&str$(destination_company_number))
+		fnFree('[Q]\[CurSys]mstr\notes.h'&str$(destination_company_number))
 		execute 'sy xcopy "'&company_import_path$&'UBmstr\notes'&company_import_extension$&'\*.*" "'&os_filename$('[Q]\UBmstr\notes.h'&str$(destination_company_number))&'\*.*" /t /y'
 		fnStatus('UB Notes imported.')
 	end if  ! exists [import path][Q]\UBmstr\notes.h[company_import_extension]
@@ -465,9 +465,9 @@ def fn_automatedSavePoint(fileNameAddition$*128)
 		dim asp_path$*256
 		dim asp_filename$*256
 		dim asp_saveFilter$*64
-		asp_saveFilter$=env$('cursys')&'mstr\*.h[cno]'
-		asp_path$=env$('temp')&'\acs\Automated Saves'
-		asp_filename$=env$('cursys')&' Company [cno] '&date$('CCYY-MM-DD')&' '&srep$(time$,':','-')&' '&env$('Program_Caption')&' - '&fileNameAddition$&'.zip'
+		asp_saveFilter$='[cursys]mstr\*.h[cno]'
+		asp_path$='[temp]\acs\Automated Saves'
+		asp_filename$='[cursys] Company [cno] '&date$('CCYY-MM-DD')&' '&srep$(time$,':','-')&' '&env$('Program_Caption')&' - '&fileNameAddition$&'.zip'
 		fnmakesurepathexists(asp_path$&'\')
 		fn_FileSaveAs(asp_saveFilter$, asp_path$&'\'&asp_filename$,1,1)
 	end if
