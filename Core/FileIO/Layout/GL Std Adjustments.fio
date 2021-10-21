@@ -4,5 +4,5 @@ recl=59
 ===================================================
 ref   	,Reference    	, c  12   ,   , ! Pos= 1  
 desc  	,Description 	, c  30   ,   , ! Pos=13    
-gl    	,GL Account   	, c  12   ,   , ! Pos=43  mastk=glaccount comboFio(GL Account,1)
+gl    	,GL Account   	, c  12   ,   , ! Pos=43  glaccount
 amt   	,Amount       	, pd  5.2 ,   , ! Pos=55  mask=32

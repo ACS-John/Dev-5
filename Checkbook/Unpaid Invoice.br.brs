@@ -38,7 +38,7 @@
 	open #paytrans=4: "Name=[Q]\CLmstr\PayTrans.h[cno],KFName=[Q]\CLmstr\UnPdIdx1.h[cno],Shr",internal,outIn,keyed
 	open #unpdaloc=5: "Name=[Q]\CLmstr\UnPdAloc.h[cno],KFName=[Q]\CLmstr\Uaidx2.h[cno],Shr",internal,outIn,keyed
 	t1(1)=bal : upi=t1(5) : t1(3)=t1(1)-t1(2)
-	if fnregistered_for_job_cost_pr then havejc=1 : gosub JCBLD
+	if fnClientHas('P4') then havejc=1 : gosub JCBLD ! fn_clientHas('P4') means the cleint is registered for Job Cost Payroll
 goto MENU1 ! /r
 MENU1: ! r:
 	mat chdr$(16) : mat cmask$(16) : mat item$(16)

@@ -1,3 +1,3 @@
 autoLibrary
-fnFixWordingOnGrid("S:\acsUB\Layouts\UBmstr-vb.LAY","S:\acsUB\grid\Customer\Customer.fil")
+fnFixWordingOnGrid('S:\acs[cursys]\Layouts\UBmstr-vb.LAY','S:\[curSystem]\grid\Customer\Customer.fil')
 fnXit

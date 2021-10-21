@@ -94,113 +94,113 @@ fnend
 			mat client_name$(client_count)
 			mat client_cno$(client_count)
 			mat client_brserial(client_count)
-			!  fn_setupClient_add("ACS",1,0) ! TEMP
+			!  fn_setupClient_add('ACS',1,0) ! TEMP
 
-			fn_setupClient_add("ACS" 										, '420',    34660) ! 58650
+			fn_setupClient_add('ACS' 										, '420',    34660) ! 58650
 			fn_setupClient_add('AJJMaplewood'					, 'ajj',        0) ! 58650
-			fn_setupClient_add("Ed Horton" 						,'5535',        0)! Ed processes like ACS
+			fn_setupClient_add('Ed Horton' 						,'5535',        0)! Ed processes like ACS
 
-			! fn_setupClient_add("Allendale" 						, '200',        0)
-			fn_setupClient_add("Ash Grove" 						, '286',    19016)
-			fn_setupClient_add("Bethany" 								, '380',    34326)
-			fn_setupClient_add("Billings"								, '440',    33534)
-			fn_setupClient_add("Blucksberg" 						, '465',    34564)
-			fn_setupClient_add("Brier Lake"							, '578',    20306)
-			! fn_setupClient_add("BRCorp"									,'7000',    50775) ! 50775 is actually DAVID KALINSKI PERSONAL COPY, but it is what Gordon is using.
-			fn_setupClient_add("Campbell"								, '700',    33942)
-			fn_setupClient_add("Carr Plumbing"					, '780',    34610)
-			fn_setupClient_add("Cerro Gordo V"					, '850',    34508) ! 33994)
-			fn_setupClient_add("Cerro Gordo T"					, '970',    34508)
-			fn_setupClient_add("Chatom"									, '911',    15678)
-			fn_setupClient_add("Choctaw"								, '918',    34214)
-			! fn_setupClient_add("Crane"									,'1120',        0)
-			fn_setupClient_add("Crockett County"				,'1141',    15110)
-			fn_setupClient_add("Divernon"								,'1350',    33698)
-			fn_setupClient_add("Dorothy Salch"					,'3812',    34494)
-			! fn_setupClient_add("Durden"									,'1406',    16410)
-			fn_setupClient_add("Edinburg"								,'1478',    34022)
-			fn_setupClient_add("Edison"									,'1480',    34022)
-			fn_setupClient_add("Evelyn Pareya"					,'3385',    34366)
-			fn_setupClient_add("Exeter"									,'1615',    31210)
-			fn_setupClient_add("Findlay"								,'1700',    34132)
-			fn_setupClient_add("Framemasters"					,'1864',        0)
-			fn_setupClient_add("Franklin Co Hosp"			,'1876',    33668)
-			fn_setupClient_add("French Settlement"			,'1880',    33380)
-			! fn_setupClient_add("Fulton"									,'1890',    33720) ! Utilities Board
-			fn_setupClient_add("Galena"									,'1945',    34566)
-			! fn_setupClient_add("Garrity"								,'1950',        0)
-			fn_setupClient_add("Grandview"							,'2050',    34040)
-			fn_setupClient_add("GreeneCo"								,'2070',    33910)
-			! fn_setupClient_add("Halfway"								,'2130',    33768)
-			fn_setupClient_add("Hope Welty"						, '851',    34152)
-			! fn_setupClient_add("Laco Vinyl"						,'2222',        0)
-			fn_setupClient_add("Payroll Done Right"		,'3393',        0)
-			fn_setupClient_add("Peter Engler"					, 'ped',        0)
-			fn_setupClient_add("Kathys Bookkeeping"		,'3979',    33672)
-			fn_setupClient_add("Kincaid"								,'2532',    33652)
-			fn_setupClient_add("Millry"									,'3025',    33968)
-			fn_setupClient_add("Moweaqua"								,'3045',    34594) ! 200032790) ! 33986 <--??  I don't know where that came from - 200032790 was their 4.13 version
-			fn_setupClient_add("Morrisonville"					,'3050',    34408) ! 32242  <-- that's white hall's but there was a mistake in license file for a while
-			fn_setupClient_add("Omaha"									,'3320',    33346)
-			fn_setupClient_add("Pennington"							,'3431',    33332)
-			fn_setupClient_add("Purdy"									,'3610',    34570)
-			fn_setupClient_add("Raymond"								,'3660',    32798)
-			fn_setupClient_add("RecoverysUnlimited"		,'3670',        0)
+			! fn_setupClient_add('Allendale' 						, '200',        0)
+			fn_setupClient_add('Ash Grove' 						, '286',    19016)
+			fn_setupClient_add('Bethany' 								, '380',    34326)
+			fn_setupClient_add('Billings'								, '440',    33534)
+			fn_setupClient_add('Blucksberg' 						, '465',    34564)
+			fn_setupClient_add('Brier Lake'							, '578',    20306)
+			! fn_setupClient_add('BRCorp'									,'7000',    50775) ! 50775 is actually DAVID KALINSKI PERSONAL COPY, but it is what Gordon is using.
+			fn_setupClient_add('Campbell'								, '700',    33942)
+			fn_setupClient_add('Carr Plumbing'					, '780',    34610)
+			fn_setupClient_add('Cerro Gordo V'					, '850',    34508) ! 33994)
+			fn_setupClient_add('Cerro Gordo T'					, '970',    34508)
+			fn_setupClient_add('Chatom'									, '911',    15678)
+			fn_setupClient_add('Choctaw'								, '918',    34214)
+			! fn_setupClient_add('Crane'									,'1120',        0)
+			fn_setupClient_add('Crockett County'				,'1141',    15110)
+			fn_setupClient_add('Divernon'								,'1350',    33698)
+			fn_setupClient_add('Dorothy Salch'					,'3812',    34494)
+			! fn_setupClient_add('Durden'									,'1406',    16410)
+			fn_setupClient_add('Edinburg'								,'1478',    34022)
+			fn_setupClient_add('Edison'									,'1480',    34022)
+			fn_setupClient_add('Evelyn Pareya'					,'3385',    34366)
+			fn_setupClient_add('Exeter'									,'1615',    31210)
+			fn_setupClient_add('Findlay'								,'1700',    34132)
+			fn_setupClient_add('Framemasters'					,'1864',        0)
+			fn_setupClient_add('Franklin Co Hosp'			,'1876',    33668)
+			fn_setupClient_add('French Settlement'			,'1880',    33380)
+			! fn_setupClient_add('Fulton'									,'1890',    33720) ! Utilities Board
+			fn_setupClient_add('Galena'									,'1945',    34566)
+			! fn_setupClient_add('Garrity'								,'1950',        0)
+			fn_setupClient_add('Grandview'							,'2050',    34040)
+			fn_setupClient_add('GreeneCo'								,'2070',    33910)
+			! fn_setupClient_add('Halfway'								,'2130',    33768)
+			fn_setupClient_add('Hope Welty'						, '851',    34152)
+			! fn_setupClient_add('Laco Vinyl'						,'2222',        0)
+			fn_setupClient_add('Payroll Done Right'		,'3393',        0)
+			fn_setupClient_add('Peter Engler'					, 'ped',        0)
+			fn_setupClient_add('Kathys Bookkeeping'		,'3979',    33672)
+			fn_setupClient_add('Kincaid'								,'2532',    33652)
+			fn_setupClient_add('Millry'									,'3025',    33968)
+			fn_setupClient_add('Moweaqua'								,'3045',    34594) ! 200032790) ! 33986 <--??  I don't know where that came from - 200032790 was their 4.13 version
+			fn_setupClient_add('Morrisonville'					,'3050',    34408) ! 32242  <-- that's white hall's but there was a mistake in license file for a while
+			fn_setupClient_add('Omaha'									,'3320',    33346)
+			fn_setupClient_add('Pennington'							,'3431',    33332)
+			fn_setupClient_add('Purdy'									,'3610',    34570)
+			fn_setupClient_add('Raymond'								,'3660',    32798)
+			fn_setupClient_add('RecoverysUnlimited'		,'3670',        0)
 			fn_setupClient_add('R R Crawford'					, '760',    12466)  ! owns a system, but is stalling support until their old stuff breaks.
-			fn_setupClient_add("Thomas Richardson"			,'3720',     7718)
-			fn_setupClient_add("Scottville Rural"			,'3840',    33390)
-			fn_setupClient_add("Starr County Gas"			,'4127',    33390)
-			fn_setupClient_add("Stern and Stern"				,'4132',200014280)
-			fn_setupClient_add("Thayer"									,'4245',    32800)
-			fn_setupClient_add("Thomasboro"							,'4260',    34068)
-			fn_setupClient_add("Unity"									,'4380',    34478)
-			fn_setupClient_add("White Hall"							,'4625',    32242)
-			fn_setupClient_add("World Wide"							,'4650',    33604)
-			fn_setupClient_add("Zaleski"								,'4710',    34164)
+			fn_setupClient_add('Thomas Richardson'			,'3720',     7718)
+			fn_setupClient_add('Scottville Rural'			,'3840',    33390)
+			fn_setupClient_add('Starr County Gas'			,'4127',    33390)
+			fn_setupClient_add('Stern and Stern'				,'4132',200014280)
+			fn_setupClient_add('Thayer'									,'4245',    32800)
+			fn_setupClient_add('Thomasboro'							,'4260',    34068)
+			fn_setupClient_add('Unity'									,'4380',    34478)
+			fn_setupClient_add('White Hall'							,'4625',    32242)
+			fn_setupClient_add('World Wide'							,'4650',    33604)
+			fn_setupClient_add('Zaleski'								,'4710',    34164)
 			! r: removed
-			! fn_setupClient_add("Lamar" ,1,33854)
-			! fn_setupClient_add("Albany" ,190,15376) ! notifed me 9/22/15 that they were switching UB providers
-			! fn_setupClient_add("Ashland" ,300,33584)
-			! fn_setupClient_add("Battlefield" ,369,33306)
-			! fn_setupClient_add("Brazeal" ,570,34418)
-			! fn_setupClient_add("Brumbaugh" ,7007,200033202) ! Limited BR license
-			! fn_setupClient_add("Carrizo" ,800,34416)
-			! fn_setupClient_add("Colyell" ,980,33948)
-			! fn_setupClient_add("Community Dev" ,982,34156)
+			! fn_setupClient_add('Lamar' ,1,33854)
+			! fn_setupClient_add('Albany' ,190,15376) ! notifed me 9/22/15 that they were switching UB providers
+			! fn_setupClient_add('Ashland' ,300,33584)
+			! fn_setupClient_add('Battlefield' ,369,33306)
+			! fn_setupClient_add('Brazeal' ,570,34418)
+			! fn_setupClient_add('Brumbaugh' ,7007,200033202) ! Limited BR license
+			! fn_setupClient_add('Carrizo' ,800,34416)
+			! fn_setupClient_add('Colyell' ,980,33948)
+			! fn_setupClient_add('Community Dev' ,982,34156)
 			! fn_setupClient_add('Diamond' ,1345,0)
-			! fn_setupClient_add("Eldorado" ,1500,33352)
-			! fn_setupClient_add("Energy Exchanger" ,1550,10172)
-			! fn_setupClient_add("FirstBaptist" ,1695,33380) ! <-- note it's the same as French Settlement - one of them is wrong, but First Baptist of Frnaklinton's license is 4.1 and not currently necessary, so just commenting them out for now.
-			! fn_setupClient_add("Franklin and Son" ,1870,32454)
-			! fn_setupClient_add("Franklinton" ,1876,0) ! Town of
-			! fn_setupClient_add("Gilbertown",1985,0)
-			! fn_setupClient_add("Granby",2040,34098) ! no longer using as of 6/13/2016
-			! fn_setupClient_add("Schachtner Portnoy" ,3828,200008100)
-			! fn_setupClient_add("Illiopolis",2340,0)
-			! fn_setupClient_add("Kimberling",2530,19212)
-			! fn_setupClient_add("Lovington",2689,32720)
-			! fn_setupClient_add("Loma Linda",2690,33244)
-			! fn_setupClient_add("Nancy Mouser",2795,34318)
-			! fn_setupClient_add("Merriam Woods",2900,31702) support ended 12312020
-			! fn_setupClient_add("Miller Hardware",3005,14668)
-			! fn_setupClient_add("Monticello",3040,12196)
-			! fn_setupClient_add("Northwest",3241,11176 )
-			! fn_setupClient_add("Oakland",3250,34260)
-			! fn_setupClient_add("Petromark",3535,33620)
-			! fn_setupClient_add("Philo",3534,34150)
-			! fn_setupClient_add("PiattCO",3536,20832)
+			! fn_setupClient_add('Eldorado' ,1500,33352)
+			! fn_setupClient_add('Energy Exchanger' ,1550,10172)
+			! fn_setupClient_add('FirstBaptist' ,1695,33380) ! <-- note it's the same as French Settlement - one of them is wrong, but First Baptist of Frnaklinton's license is 4.1 and not currently necessary, so just commenting them out for now.
+			! fn_setupClient_add('Franklin and Son' ,1870,32454)
+			! fn_setupClient_add('Franklinton' ,1876,0) ! Town of
+			! fn_setupClient_add('Gilbertown',1985,0)
+			! fn_setupClient_add('Granby',2040,34098) ! no longer using as of 6/13/2016
+			! fn_setupClient_add('Schachtner Portnoy' ,3828,200008100)
+			! fn_setupClient_add('Illiopolis',2340,0)
+			! fn_setupClient_add('Kimberling',2530,19212)
+			! fn_setupClient_add('Lovington',2689,32720)
+			! fn_setupClient_add('Loma Linda',2690,33244)
+			! fn_setupClient_add('Nancy Mouser',2795,34318)
+			! fn_setupClient_add('Merriam Woods',2900,31702) support ended 12312020
+			! fn_setupClient_add('Miller Hardware',3005,14668)
+			! fn_setupClient_add('Monticello',3040,12196)
+			! fn_setupClient_add('Northwest',3241,11176 )
+			! fn_setupClient_add('Oakland',3250,34260)
+			! fn_setupClient_add('Petromark',3535,33620)
+			! fn_setupClient_add('Philo',3534,34150)
+			! fn_setupClient_add('PiattCO',3536,20832)
 			! fn_setupClient_add('Sheila',770,0)
-			! fn_setupClient_add("Riverside",3725,18332)
-			! fn_setupClient_add("Sangamon",3815,34066)
-			! fn_setupClient_add("Washington Parrish",4510,34116)
-			! fn_setupClient_add("Waverly",4515,34430)
-			! fn_setupClient_add("West Accounting",4560,30176)   retired as of 02/22/2018
-			! fn_setupClient_add("West Rest Haven",4567,34032)
-			! fn_setupClient_add("Willard",4650,33514)
-			! fn_setupClient_add("Demo",20001,34450)
-			! fn_setupClient_add("Demo",20002,34450)
-			! fn_setupClient_add("Demo",20003,34450)
-			! fn_setupClient_add("Demo",20004,34450)
+			! fn_setupClient_add('Riverside',3725,18332)
+			! fn_setupClient_add('Sangamon',3815,34066)
+			! fn_setupClient_add('Washington Parrish',4510,34116)
+			! fn_setupClient_add('Waverly',4515,34430)
+			! fn_setupClient_add('West Accounting',4560,30176)   retired as of 02/22/2018
+			! fn_setupClient_add('West Rest Haven',4567,34032)
+			! fn_setupClient_add('Willard',4650,33514)
+			! fn_setupClient_add('Demo',20001,34450)
+			! fn_setupClient_add('Demo',20002,34450)
+			! fn_setupClient_add('Demo',20003,34450)
+			! fn_setupClient_add('Demo',20004,34450)
 			! /r
 		end if
 	fnend
@@ -313,7 +313,7 @@ def fn_getClientLicense(mat clientHas$)
 		else if env$('client')='Ash Grove' then
 			fn_userLimit(1)
 			fn_getClientLicense_add('UB') : fn_setUbLimit(1000) ! U2 Utility Billing (500-1000 customers)
-			fn_getClientLicense_add('U4') : u4_device$="Boson" ! U4 Utility Billing Hand Held Add-On
+			fn_getClientLicense_add('U4') : u4_device$='Boson' ! U4 Utility Billing Hand Held Add-On
 			! canceled 2/7/2018 as per Debbie  -   fn_getClientLicense_add('PR')
 			! canceled 2/7/2018 as per Debbie  -   fn_getClientLicense_add('GL')
 			! canceled 2/7/2018 as per Debbie  -   fn_getClientLicense_add('CL')
@@ -326,20 +326,20 @@ def fn_getClientLicense(mat clientHas$)
 		else if env$('client')='Bethany' then
 			fn_userLimit(2) ! second user added 9/22/2021
 			fn_getClientLicense_add('UB') : fn_setUbLimit(1000) ! U2 Utility Billing (500-1000 customers)
-			fn_getClientLicense_add('U4') : u4_device$="Itron FC300" ! U4 Utility Billing Hand Held Add-On
+			fn_getClientLicense_add('U4') : u4_device$='Itron FC300' ! U4 Utility Billing Hand Held Add-On
 			fn_getClientLicense_add('PR')
 			fn_getClientLicense_add('GL')
 			fn_getClientLicense_add('CL')
 		else if env$('client')='Brier Lake' then
 			fn_userLimit(1)
 			fn_getClientLicense_add('UB') : fn_setUbLimit(500) ! U3 Utility Billing (<500 Customers)
-		else if env$('client')='Billings' and (env$('Unique_Computer_Id')="58973139-FC9B-1A95-F234-C145E2B22211" or env$('Unique_Computer_Id')="50A59A38-38BF-A82F-9868-04C4E5DD281A") then ! Limit to only UB stuff for (Katrina or Gale)
+		else if env$('client')='Billings' and (env$('Unique_Computer_Id')='58973139-FC9B-1A95-F234-C145E2B22211' or env$('Unique_Computer_Id')='50A59A38-38BF-A82F-9868-04C4E5DD281A') then ! Limit to only UB stuff for (Katrina or Gale)
 			fn_userLimit(2) ! actually licensed for 3 users, but has two separate installations
 			fn_getClientLicense_add('UB') : fn_setUbLimit(500) ! U3 Utility Billing (<500 Customers)
-			fn_getClientLicense_add('U4') : u4_device$="Boson" ! U4 Utility Billing Hand Held Add-On
+			fn_getClientLicense_add('U4') : u4_device$='Boson' ! U4 Utility Billing Hand Held Add-On
 			fn_getClientLicense_add('UB-EFT')
 			!     fn_getClientLicense_add('CR')
-		else if env$('client')='Billings' and env$('Unique_Computer_Id')="BD04113D-C102-BA29-78AC-D23201FDC70C" then ! Limit to NOT UB stuff for Chris Hopkins
+		else if env$('client')='Billings' and env$('Unique_Computer_Id')='BD04113D-C102-BA29-78AC-D23201FDC70C' then ! Limit to NOT UB stuff for Chris Hopkins
 			fn_userLimit(1) ! actually licensed for 3 users, but has two separate installations
 			fn_getClientLicense_add('GL')
 			fn_getClientLicense_add('PR')
@@ -347,7 +347,7 @@ def fn_getClientLicense(mat clientHas$)
 		else if env$('client')='Billings' then
 			fn_userLimit(3)
 			fn_getClientLicense_add('UB') : fn_setUbLimit(500) ! U3 Utility Billing (<500 Customers)
-			fn_getClientLicense_add('U4') : u4_device$="Boson" ! U4 Utility Billing Hand Held Add-On
+			fn_getClientLicense_add('U4') : u4_device$='Boson' ! U4 Utility Billing Hand Held Add-On
 			fn_getClientLicense_add('GL')
 			fn_getClientLicense_add('PR')
 			fn_getClientLicense_add('CL')
@@ -357,7 +357,7 @@ def fn_getClientLicense(mat clientHas$)
 		else if env$('client')='Blucksberg' then
 			fn_userLimit(1)
 			fn_getClientLicense_add('UB') : fn_setUbLimit(9999) ! U1 Utility Billing (no discount)
-			fn_getClientLicense_add('U4') : u4_device$="Itron FC300" ! U4 Utility Billing Hand Held Add-On
+			fn_getClientLicense_add('U4') : u4_device$='Itron FC300' ! U4 Utility Billing Hand Held Add-On
 		! else if env$('client')='Brumbaugh' then
 		! 	fn_userLimit(64)
 		! 	fn_getClientLicense_add('CM')
@@ -366,7 +366,7 @@ def fn_getClientLicense(mat clientHas$)
 			fn_getClientLicense_add('CL')
 			fn_getClientLicense_add('PR')
 			fn_getClientLicense_add('UB') : fn_setUbLimit(1000) ! U2 Utility Billing (500-1000 customers)
-			fn_getClientLicense_add('U4') : u4_device$="Badger Beacon"
+			fn_getClientLicense_add('U4') : u4_device$='Badger Beacon'
 			fn_getClientLicense_add('UB-EFT')
 		else if env$('client')='Carr Plumbing' then
 			fn_userLimit(1)
@@ -374,14 +374,14 @@ def fn_getClientLicense(mat clientHas$)
 		else if env$('client')='Chatom' then
 			fn_userLimit(1)
 			fn_getClientLicense_add('UB') : fn_setUbLimit(1000) ! U2 Utility Billing (500-1000 customers)
-			fn_getClientLicense_add('U4') : u4_device$="Boson" ! U4 Utility Billing Hand Held Add-On
+			fn_getClientLicense_add('U4') : u4_device$='Boson' ! U4 Utility Billing Hand Held Add-On
 		else if env$('client')='Cerro Gordo V' then
 			fn_userLimit(2)
 			fn_getClientLicense_add('GL')
 			fn_getClientLicense_add('PR')
 			fn_getClientLicense_add('CL')
 			fn_getClientLicense_add('UB') : fn_setUbLimit(1000) ! U2 Utility Billing (500-1000 customers)
-			fn_getClientLicense_add('U4') : u4_device$="Boson" ! U4 Utility Billing Hand Held Add-On
+			fn_getClientLicense_add('U4') : u4_device$='Boson' ! U4 Utility Billing Hand Held Add-On
 		else if env$('client')='Cerro Gordo T' then
 			fn_userLimit(1)
 			fn_getClientLicense_add('GL')
@@ -402,7 +402,7 @@ def fn_getClientLicense(mat clientHas$)
 		! 	fn_getClientLicense_add('GL')
 		! 	fn_getClientLicense_add('PR')
 		! 	fn_getClientLicense_add('CL')
-		! 	! fn_getClientLicense_add('U4') : u4_device$="Boson" ! ACEECA MEZ 1500 ! U4 Utility Billing Hand Held Add-On
+		! 	! fn_getClientLicense_add('U4') : u4_device$='Boson' ! ACEECA MEZ 1500 ! U4 Utility Billing Hand Held Add-On
 
 		else if env$('client')='Edinburg' then
 			fn_userLimit(2)
@@ -410,7 +410,7 @@ def fn_getClientLicense(mat clientHas$)
 			fn_getClientLicense_add('GL')
 			fn_getClientLicense_add('PR')
 			fn_getClientLicense_add('CL')
-			fn_getClientLicense_add('U4') : u4_device$="Boson" ! ACEECA MEZ 1500 ! U4 Utility Billing Hand Held Add-On
+			fn_getClientLicense_add('U4') : u4_device$='Boson' ! ACEECA MEZ 1500 ! U4 Utility Billing Hand Held Add-On
 		else if env$('client')='Edison' then
 			fn_userLimit(3)
 			fn_getClientLicense_add('UB') : fn_setUbLimit(1000) ! U3 Utility Billing (<500 Customers)
@@ -434,7 +434,7 @@ def fn_getClientLicense(mat clientHas$)
 		else if env$('client')='Findlay' then
 			fn_userLimit(2)
 			fn_getClientLicense_add('UB') : fn_setUbLimit(1000) ! U2 Utility Billing (500-1000 customers)
-			fn_getClientLicense_add('U4') : u4_device$="Itron FC300" ! U4 Utility Billing Hand Held Add-On
+			fn_getClientLicense_add('U4') : u4_device$='Itron FC300' ! U4 Utility Billing Hand Held Add-On
 			!   else if env$('client')='Franklin and Son' then
 			!     fn_userLimit(1)
 			!     fn_getClientLicense_add('PR')
@@ -463,7 +463,7 @@ def fn_getClientLicense(mat clientHas$)
 		! 	fn_getClientLicense_add('CM')
 		else if env$('client')='GreeneCo' then
 			fn_getClientLicense_add('UB') : fn_setUbLimit(500) ! U3 Utility Billing (<500 Customers)
-			fn_getClientLicense_add('U4') : u4_device$="EZReader" ! U4 Utility Billing Hand Held Add-On
+			fn_getClientLicense_add('U4') : u4_device$='EZReader' ! U4 Utility Billing Hand Held Add-On
 		else if env$('client')='Hope Welty' then
 			fn_userLimit(1)
 			fn_getClientLicense_add('GL')
@@ -484,19 +484,19 @@ def fn_getClientLicense(mat clientHas$)
 		else if env$('client')='Kincaid' and env$('Unique_Computer_Id')='03000200-0400-0500-0006-000700080009' then
 			fn_userLimit(1)
 			fn_getClientLicense_add('UB') : fn_setUbLimit(1000) ! U2 Utility Billing (500-1000 customers)
-			fn_getClientLicense_add('U4') : u4_device$="Boson" ! U4 Utility Billing Hand Held Add-On
+			fn_getClientLicense_add('U4') : u4_device$='Boson' ! U4 Utility Billing Hand Held Add-On
 			fn_getClientLicense_add('U5') ! UB External Collections Processing - given freely on 5/27/21
 		else if env$('client')='Kincaid' then
 			fn_userLimit(2)
 			fn_getClientLicense_add('UB') : fn_setUbLimit(1000) ! U2 Utility Billing (500-1000 customers)
-			fn_getClientLicense_add('U4') : u4_device$="Boson" ! U4 Utility Billing Hand Held Add-On
+			fn_getClientLicense_add('U4') : u4_device$='Boson' ! U4 Utility Billing Hand Held Add-On
 			fn_getClientLicense_add('U5') ! UB External Collections Processing - given freely on 5/27/21
 			!     fn_getClientLicense_add('GL')
 			fn_getClientLicense_add('PR')
 		! else if env$('client')='Lovington' then
 		! 	fn_userLimit(1)
 		! 	fn_getClientLicense_add('UB') : fn_setUbLimit(9999) ! U1 Utility Billing (no discount)
-		! 	fn_getClientLicense_add('U4') : u4_device$="Sensus" ! U4 Utility Billing Hand Held Add-On
+		! 	fn_getClientLicense_add('U4') : u4_device$='Sensus' ! U4 Utility Billing Hand Held Add-On
 		! 	fn_getClientLicense_add('GL')
 		! 	fn_getClientLicense_add('PR')
 		! 	fn_getClientLicense_add('CL')
@@ -511,15 +511,15 @@ def fn_getClientLicense(mat clientHas$)
 		else if env$('client')='Millry' then
 			fn_userLimit(4)
 			fn_getClientLicense_add('UB') : fn_setUbLimit(1000) ! U2 Utility Billing (500-1000 customers)
-			fn_getClientLicense_add('U4') : u4_device$="Itron FC300" ! U4 Utility Billing Hand Held Add-On
+			fn_getClientLicense_add('U4') : u4_device$='Itron FC300' ! U4 Utility Billing Hand Held Add-On
 		else if env$('client')='Morrisonville' then
 			fn_userLimit(1)
 			fn_getClientLicense_add('UB') : fn_setUbLimit(500) ! U3 Utility Billing (<500 Customers)
-			fn_getClientLicense_add('U4') : u4_device$="EZReader" ! U4 Utility Billing Hand Held Add-On
+			fn_getClientLicense_add('U4') : u4_device$='EZReader' ! U4 Utility Billing Hand Held Add-On
 		else if env$('client')='Moweaqua' then
 			fn_userLimit(1)
 			fn_getClientLicense_add('UB') : fn_setUbLimit(1000) ! U2 Utility Billing (500-1000 customers)
-			fn_getClientLicense_add('U4') : u4_device$="Badger Beacon" ! "Badger Connect C" 7/14/21 switched to newer Badger interface (Beacon) from Connect C     ! U4 Utility Billing Hand Held Add-On
+			fn_getClientLicense_add('U4') : u4_device$='Badger Beacon' ! 'Badger Connect C' 7/14/21 switched to newer Badger interface (Beacon) from Connect C     ! U4 Utility Billing Hand Held Add-On
 		else if env$('client')='Pennington' then
 			fn_userLimit(1)
 			fn_getClientLicense_add('UB') : fn_setUbLimit(500) ! U3 Utility Billing (<500 Customers)
@@ -530,7 +530,7 @@ def fn_getClientLicense(mat clientHas$)
 		else if env$('client')='Purdy' then
 			fn_userLimit(2)
 			fn_getClientLicense_add('UB') : fn_setUbLimit(500) ! U3 Utility Billing (<500 Customers)
-			fn_getClientLicense_add('U4') : u4_device$="Aclara" ! U4 Utility Billing Hand Held Add-On
+			fn_getClientLicense_add('U4') : u4_device$='Aclara' ! U4 Utility Billing Hand Held Add-On
 		else if env$('client')='Omaha' then
 			if days(date$)<=days('03/03/2018','mm/dd/ccyy') then fn_userLimit(3) else fn_userLimit(1) ! 2 user bonus for 60 days
 			fn_getClientLicense_add('UB') : fn_setUbLimit(9999) ! U1 Utility Billing (no discount)
@@ -553,7 +553,7 @@ def fn_getClientLicense(mat clientHas$)
 		! else if env$('client')='Sheila' then
 		! 	fn_userLimit(1)
 		! 	fn_getClientLicense_add('UB') : fn_setUbLimit(500) ! U3 Utility Billing (<500 Customers)
-		! 	fn_getClientLicense_add('U4') : u4_device$="Aclara" ! U4 Utility Billing Hand Held Add-On
+		! 	fn_getClientLicense_add('U4') : u4_device$='Aclara' ! U4 Utility Billing Hand Held Add-On
 		! 	fn_getClientLicense_add('CL')
 		! 	fn_getClientLicense_add('GL')
 		! 	fn_getClientLicense_add('PR')
@@ -651,12 +651,9 @@ def fn_userLimit(userLimit)
 	end if
 
 fnend
-def fn_userCount
-	ucReturn=0
-	exec 'status users >'&env$('temp')&'"\acsUsers[session].tmp"' ! don't use [temp] yet - called before it is set by core\start.br
+def fn_userCount(; ___,hStUsers,returnN,ucListStarted,ucLine$*256)
+	exec 'status users >"'&env$('temp')&'\acsUsers[session].tmp"' ! don't use [temp] yet - called before it is set by core\start.br
 	open #hStUsers=fnH: 'name='&env$('temp')&'\acsUsers[session].tmp',d,input ! don't use [temp] yet - called before it is set by core\start.br
-	dim ucLine$*256
-	ucListStarted=0
 	do
 		linput #hStUsers: ucLine$ eof UcEof
 		if lwrc$(trim$(ucLine$))='current users on network:' then
@@ -664,14 +661,14 @@ def fn_userCount
 		else if ucListStarted then
 			! fnaddonec(mat activeUsers$,ucLine$)
 			if lwrc$(trim$(ucline$(pos(ucline$,' '):len(ucline$))))=lwrc$(env$('client')) then
-				ucReturn+=1
+				returnN+=1
 			end if
 		end if
 	loop
 	UcEof: !
 	close #hStUsers:
-	fnfree(env$('temp')&'\acsUsers[session].tmp')
-	fn_userCount=ucReturn
+	fnfree(env$('temp')&'\acsUsers[session].tmp') ! don't use [temp] yet - called before it is set by core\start.br
+	fn_userCount=returnN
 fnend
 ! r: def library fnuser_limit_exceeded
 ! fn_setup
@@ -679,21 +676,21 @@ fnend
 !   fnuser_limit_exceeded=user_limit_exceeded
 ! /r fnend
 
-def library fnregistered_for_hh
-	fn_setup
-	fn_getClientLicense(mat clientHas$)
-	fnRegistered_for_hh=fn_clientHas('U4') ! fn_registered_for_hh
-fnend
-def library fnRegistered_for_job_cost_pr
-	fn_setup
-	fn_getClientLicense(mat clientHas$)
-	fnRegistered_for_job_cost_pr=fn_clientHas('P4')
-fnend
-def library fnRegistered_for_GlBudgetMgmt
-	fn_setup
-	fn_getClientLicense(mat clientHas$)
-	fnRegistered_for_GlBudgetMgmt=fn_clientHas('GB')
-fnend
+! def library fnregistered_for_hh ! use fnClientHas('U4') instead 
+! 	fn_setup
+! 	fn_getClientLicense(mat clientHas$)
+! 	fnRegistered_for_hh=fn_clientHas('U4') ! fn_registered_for_hh
+! fnend
+! def library fnRegistered_for_job_cost_pr ! use fnClientHas('P4') instead 
+! 	fn_setup
+! 	fn_getClientLicense(mat clientHas$)
+! 	fnRegistered_for_job_cost_pr=fn_clientHas('P4') ! 
+! fnend
+! def library fnRegistered_for_GlBudgetMgmt ! use fnClientHas('GB') instead
+! 	fn_setup
+! 	fn_getClientLicense(mat clientHas$)
+! 	fnRegistered_for_GlBudgetMgmt=fn_clientHas('GB')
+! fnend
 def library fnhand_held_device$*20
 	fn_setup
 	fn_getClientLicense(mat clientHas$)
@@ -754,23 +751,23 @@ def library fnub_printbill_program$*256
 		fn_upp_add('Blucksberg'        	,'(basic)'	) ! 'PrintBill_Blucksberg'
 
 		! r: old removed lines
-			! fn_upp_add("Ashland","ubprtbl1_ashland")
-			! fn_upp_add("Franklinton","ubprtbl1_Franklinton")
-			! fn_upp_add("Kimberling","ubprtbl1_Kimberling") ! these are unused but also a nice 4 per page bill that looks pretty comprehensive - move the logic to (basic) if used elsewhere
-			! fn_upp_add("Illiopolis","ubprtbl1_Illiopolis")
-			! fn_upp_add("Oakland","ubprtbl1_Oakland")
-			! fn_upp_add("Gilbertown","ubprtbl1_Gilbertown")
-			! fn_upp_add("Waverly","ubprtbl1_Waverly")
+			! fn_upp_add('Ashland','ubprtbl1_ashland')
+			! fn_upp_add('Franklinton','ubprtbl1_Franklinton')
+			! fn_upp_add('Kimberling','ubprtbl1_Kimberling') ! these are unused but also a nice 4 per page bill that looks pretty comprehensive - move the logic to (basic) if used elsewhere
+			! fn_upp_add('Illiopolis','ubprtbl1_Illiopolis')
+			! fn_upp_add('Oakland','ubprtbl1_Oakland')
+			! fn_upp_add('Gilbertown','ubprtbl1_Gilbertown')
+			! fn_upp_add('Waverly','ubprtbl1_Waverly')
 			! >>Bills-Laser (3 per page) ^ ubPrtThree
-			! fn_upp_add("Ash Grove","ubprtprace_ash")  removed as it was a duplicate line and this one was ignored anyway - also removed ignored program from updates.  5/20/20
-			! fn_upp_add("Albany","ubprtthree_Albany")
-			! fn_upp_add("Colyell","ubprtlas_colyell")
-			! fn_upp_add("Carrizo","ubprtthree_Carrizo")
-			! fn_upp_add("Ed","ubprtthree_barcode")
-			! fn_upp_add("Gilbertown","ubprtthree_Gilb")
-			! fn_upp_add("Granby","ubprt3prace_Granby")
-			! fn_upp_add("Riverside","ubprtthree_River")
-			! fn_upp_add("Sangamon","ubprtthree_san")
+			! fn_upp_add('Ash Grove','ubprtprace_ash')  removed as it was a duplicate line and this one was ignored anyway - also removed ignored program from updates.  5/20/20
+			! fn_upp_add('Albany','ubprtthree_Albany')
+			! fn_upp_add('Colyell','ubprtlas_colyell')
+			! fn_upp_add('Carrizo','ubprtthree_Carrizo')
+			! fn_upp_add('Ed','ubprtthree_barcode')
+			! fn_upp_add('Gilbertown','ubprtthree_Gilb')
+			! fn_upp_add('Granby','ubprt3prace_Granby')
+			! fn_upp_add('Riverside','ubprtthree_River')
+			! fn_upp_add('Sangamon','ubprtthree_san')
 			! >>Bills-Dot Matrix 4x6 ^ S:\acsUB\ubPrtBl14X6
 			! >>Bills-Dot Matrix 3.5x6 ^ S:\acsUB\Bill35X6
 			! >>Bills-Dot Matrix 3.5x7.5 ^ S:\acsUB\Bill35X75
@@ -793,15 +790,15 @@ def library fnub_printbill_program$*256
 	! if env$('acsDeveloper')<>'' then pr 'upp_return$='&upp_return$ : pause
 	fnub_printbill_program$=upp_return$
 fnend
-def fn_upp_add(ua_client$,ua_program$*128)
-	ub_printbill_count+=1
-	ub_printbill_client$(ub_printbill_count)=ua_client$
-	if ua_program$='(basic)' then
-		ub_printbill_program$(ub_printbill_count)=ua_program$
-	else
-		ub_printbill_program$(ub_printbill_count)='S:\acsUB\'&ua_program$&'.br'
-	end if
-fnend
+	def fn_upp_add(ua_client$,ua_program$*128)
+		ub_printbill_count+=1
+		ub_printbill_client$(ub_printbill_count)=ua_client$
+		if ua_program$='(basic)' then
+			ub_printbill_program$(ub_printbill_count)=ua_program$
+		else
+			ub_printbill_program$(ub_printbill_count)='S:\acsUB\'&ua_program$&'.br'
+		end if
+	fnend
 def library fnpayroll_client_state$*2(; client$*64,___,return$*2,which)
 		if ~setup then fn_setup
 		fnpayroll_client_state$=fn_payroll_client_state$( client$)
@@ -814,55 +811,55 @@ def fn_payroll_client_state$*2(; client$*64,___,return$*2,which)
 		mat pr_clientstate_client$(999)
 		mat pr_clientstate_state$(999)
 		pr_clientstate_count=0
-		!   fn_upp_add("Ash Grove","ubprtlas_ashgrove")
-		fn_pcs_add("ACS","NJ")
-		!   fn_pcs_add("Lamar",'MS')
-		fn_pcs_add("Ash Grove",'MO')
-		!   fn_pcs_add("Battlefield",'MO')
-		fn_pcs_add("Bethany",'IL')
-		fn_pcs_add("Billings",'MO')
-		fn_pcs_add("Campbell",'MO')
-		fn_pcs_add("Carr Plumbing",'AR')
-		fn_pcs_add("Cerro Gordo V",'IL')
-		fn_pcs_add("Cerro Gordo T",'IL')
-		!   fn_pcs_add("Community Dev",'TN')
-		fn_pcs_add("Crockett County",'TX')
+		!   fn_upp_add('Ash Grove','ubprtlas_ashgrove')
+		fn_pcs_add('ACS','NJ')
+		!   fn_pcs_add('Lamar','MS')
+		fn_pcs_add('Ash Grove','MO')
+		!   fn_pcs_add('Battlefield','MO')
+		fn_pcs_add('Bethany','IL')
+		fn_pcs_add('Billings','MO')
+		fn_pcs_add('Campbell','MO')
+		fn_pcs_add('Carr Plumbing','AR')
+		fn_pcs_add('Cerro Gordo V','IL')
+		fn_pcs_add('Cerro Gordo T','IL')
+		!   fn_pcs_add('Community Dev','TN')
+		fn_pcs_add('Crockett County','TX')
 		!   fn_pcs_add('Diamond','MO')
-		fn_pcs_add("Divernon",'IL')
-		! fn_pcs_add("Durden",'LA')
-		fn_pcs_add("Edinburg",'IL')
-		fn_pcs_add("Edison",'GA')
-		fn_pcs_add("Ed Horton",'IL')
-		! fn_pcs_add("Energy Exchanger",'OK')  dropped support of april 2019, removed april 2020
-		!   fn_pcs_add("Franklin and Son",'AR')
-		!   fn_pcs_add("Franklinton",'LA')
-		fn_pcs_add("Galena",'MO')
-		!   fn_pcs_add("GreeneCo",'MO')
-		fn_pcs_add("Hope Welty",'IL')
-		fn_pcs_add("Kincaid",'IL')
-		! fn_pcs_add("Kimberling",'MO')
-		fn_pcs_add("Kathys Bookkeeping",'OK')
-		!		fn_pcs_add("Lovington",'IL')
-		! 		fn_pcs_add("Merriam Woods",'MO')
-		!   fn_pcs_add("Monticello",'IL')
-		!   fn_pcs_add("Nancy Mouser",'OK')
-		!   fn_pcs_add("Northwest",'AR')
-		fn_pcs_add("Oklahoma",'OK')
-		fn_pcs_add("Payroll Done Right",'OR')
-		fn_pcs_add("Peter Engler",'MO')
-		!   fn_pcs_add("Philo",'IL')
-		!   fn_pcs_add("PiattCO",'IL')
-		! fn_pcs_add("Raymond",'IL')
-		fn_pcs_add("R R Crawford",'KY')
-		!   fn_pcs_add("Riverside",'IN') ! Indiana tax table is out of date...  and looks pretty complicated:  http://www.in.gov/dor/reference/files/dn01.pdf
-		! fn_pcs_add("Sheila",'MO')
-		fn_pcs_add("Thomas Richardson",'LA')
-		fn_pcs_add("Thomasboro",'IL')
-		fn_pcs_add("Unity",'IL')
-		!   fn_pcs_add("Washington Parrish",'LA')
-		!   fn_pcs_add("West Rest Haven",'')
-		!   fn_pcs_add("West Accounting",'OR')
-		fn_pcs_add("Zaleski",'TX')
+		fn_pcs_add('Divernon','IL')
+		! fn_pcs_add('Durden','LA')
+		fn_pcs_add('Edinburg','IL')
+		fn_pcs_add('Edison','GA')
+		fn_pcs_add('Ed Horton','IL')
+		! fn_pcs_add('Energy Exchanger','OK')  dropped support of april 2019, removed april 2020
+		!   fn_pcs_add('Franklin and Son','AR')
+		!   fn_pcs_add('Franklinton','LA')
+		fn_pcs_add('Galena','MO')
+		!   fn_pcs_add('GreeneCo','MO')
+		fn_pcs_add('Hope Welty','IL')
+		fn_pcs_add('Kincaid','IL')
+		! fn_pcs_add('Kimberling','MO')
+		fn_pcs_add('Kathys Bookkeeping','OK')
+		!		fn_pcs_add('Lovington','IL')
+		! 		fn_pcs_add('Merriam Woods','MO')
+		!   fn_pcs_add('Monticello','IL')
+		!   fn_pcs_add('Nancy Mouser','OK')
+		!   fn_pcs_add('Northwest','AR')
+		fn_pcs_add('Oklahoma','OK')
+		fn_pcs_add('Payroll Done Right','OR')
+		fn_pcs_add('Peter Engler','MO')
+		!   fn_pcs_add('Philo','IL')
+		!   fn_pcs_add('PiattCO','IL')
+		! fn_pcs_add('Raymond','IL')
+		fn_pcs_add('R R Crawford','KY')
+		!   fn_pcs_add('Riverside','IN') ! Indiana tax table is out of date...  and looks pretty complicated:  http://www.in.gov/dor/reference/files/dn01.pdf
+		! fn_pcs_add('Sheila','MO')
+		fn_pcs_add('Thomas Richardson','LA')
+		fn_pcs_add('Thomasboro','IL')
+		fn_pcs_add('Unity','IL')
+		!   fn_pcs_add('Washington Parrish','LA')
+		!   fn_pcs_add('West Rest Haven','')
+		!   fn_pcs_add('West Accounting','OR')
+		fn_pcs_add('Zaleski','TX')
 		mat pr_clientstate_client$(pr_clientstate_count)
 		mat pr_clientstate_state$(pr_clientstate_count)
 
@@ -904,7 +901,7 @@ def library fnclient_has_on_support_item(chosi_item$*256; days_grace)
 fnend
 def fn_client_has_on_support_item(chosi_item$*256; days_grace)
 	client_id=val(env$('Client_ID'))
-	fn_client_support_setup(env$('client_id'),mat chosi_system_id$,mat chosi_system_support_end_date,mat chosi_on_support, days_grace)
+	fn_client_support_setup(env$('Client_ID'),mat chosi_system_id$,mat chosi_system_support_end_date,mat chosi_on_support, days_grace)
 	chosi_retun=0
 	chosi_which=srch(mat chosi_system_id$,chosi_item$)
 	if chosi_which>0 then
@@ -933,7 +930,7 @@ def fn_client_support_setup(client_id$,mat css_system_id$,mat css_system_support
 		mat cache_css_system_id$(0)
 		mat cache_css_system_sup_end_date(0)
 		cache_css_system_count=0
-		open #h_support=fnH: "Name=S:\Core\Data\acsllc\support.h420,Version=2,KFName=S:\Core\Data\acsllc\support-idx.h420,version=0,Shr",i,i,k
+		open #h_support=fnH: 'Name=S:\Core\Data\acsllc\support.h420,Version=2,KFName=S:\Core\Data\acsllc\support-idx.h420,version=0,Shr',i,i,k
 		restore #h_support: ! ,key>==lpad$(trim$(client_id$),kln(h_support)):
 		do
 			read #h_support,using F_SUPPORT: cln$,scode$,sdt1,stm$,sup_exp_date,scst eof CSS_SUPPORT_EOF

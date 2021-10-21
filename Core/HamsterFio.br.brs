@@ -7,10 +7,10 @@ def library fnHamsterFio(fileid$*64)
 
 	! if env$('client')='Brumbaugh' then
 	! 	defaultFileLayoutExtension$=''
-	! 	defaultFileLayoutPath$="S:\FileLay\"
+	! 	defaultFileLayoutPath$='S:\FileLay\'
 	! else
 		defaultFileLayoutExtension$='.fio'
-		defaultFileLayoutPath$="S:\Core\FileIO\Layout\"
+		defaultFileLayoutPath$='S:\Core\FileIO\Layout\'
 	! end if
 	dim hfData$(0)*2048
 	dim hfDataN(0)
@@ -18,16 +18,16 @@ def library fnHamsterFio(fileid$*64)
 	hFile=fn_openFio(fileid$,mat hfData$,mat hfDataN)
 	if hFile then
 		dim hfLabel$(0)*128
-		fn_hfLayoutRead(defaultFileLayoutPath$&fileid$&defaultFileLayoutExtension$,mat hfDataAll$,mat hfLabel$,mat hfFieldType$,mat hfStorageLen,mat hfMask,mat hfFieldLen)
+		fn_hfLayoutRead(defaultFileLayoutPath$&fileid$&defaultFileLayoutExtension$,mat hfDataAll$,mat hfLabel$,mat hfFieldType$,mat hfStorageLen,mat hfMask$,mat hfFieldLen)
 		! pause
-		fnHamster(fileid$,mat hfLabel$,mat hfFieldLen,hFile,mat hfDataAll$,mat hfFieldType$,mat hfStorageLen,mat hfMask,mat startingPosition,mat comboBox$)
+		fnHamster2(fileid$,mat hfLabel$,mat hfFieldLen,hFile,mat hfDataAll$,mat hfFieldType$,mat hfStorageLen,mat hfMask$,mat startingPosition,mat comboBox$)
 	end if
 fnend
 
-def fn_hfLayoutRead(hfLayoutFilename$*256,mat hfDataAll$,mat hfLabel$,mat hfFieldType$,mat hfStorageLen,mat hfMask,mat hfFieldLen; ___,limit_to_list$,posComma,posComboFio,posComboF,posComboA,hamsterColumn,hfItem,line$*1024,past_header)
+def fn_hfLayoutRead(hfLayoutFilename$*256,mat hfDataAll$,mat hfLabel$,mat hfFieldType$,mat hfStorageLen,mat hfMask$,mat hfFieldLen; ___,limit_to_list$,posComma,posComboFio,posComboF,posComboA,hamsterColumn,hfItem,line$*1024,past_header)
 	dim hfItem$(0)*1024
 	open #hLay=fnH: 'name='&hfLayoutFilename$,d,i
-	mat hfDataAll$(0) : mat hfLabel$(0) : mat hfFieldType$(0) : mat hfStorageLen(0) : mat hfMask(0) : mat hfFieldLen(0)
+	mat hfDataAll$(0) : mat hfLabel$(0) : mat hfFieldType$(0) : mat hfStorageLen(0) : mat hfMask$(0) : mat hfFieldLen(0)
 	dim comboBox$(0,9)*256 ! comboBox$(0,8)*256<-worked most of the time.    comboBox$(60,64)*256
 	mat comboBox$(0,udim(mat comboBox$,2)) ! mat comboBox$=('') !
 	do
@@ -49,7 +49,7 @@ def fn_hfLayoutRead(hfLayoutFilename$*256,mat hfDataAll$,mat hfLabel$,mat hfFiel
 			hfItem$(3)(1:posSpace-1)=''
 			hfItem$(3)=trim$(hfItem$(3))
 			fnAddOneN(mat hfStorageLen,val(hfItem$(3)))
-			fnAddOneN(mat hfMask,0) ! accumulated last
+			fnAddOneC(mat hfMask$,'') ! accumulated last
 			tmp=int(hfStorageLen(hfItem))
 			if uprc$(hfFieldType$(hfItem))='PD' then tmp=tmp*2-1
 			fnAddOneN(mat hfFieldLen,tmp)
@@ -58,7 +58,7 @@ def fn_hfLayoutRead(hfLayoutFilename$*256,mat hfDataAll$,mat hfLabel$,mat hfFiel
 
 				if udim(mat hfItem$)=>5 then hamsterColumn=5 else hamsterColumn=4
 
-				if pos(lwrc$(hfItem$(hamsterColumn)),' required=true')>0 then hfMask(hfitem)+=1000
+				if pos(lwrc$(hfItem$(hamsterColumn)),' required=true')>0 then hfMask$(hfitem)=str$(val(hfMask$(hfitem))+1000)
 				do while pos(hfItem$(hamsterColumn),'= ')>0
 					hfItem$(hamsterColumn)=srep$(hfItem$(hamsterColumn),'= ','=')
 				loop
@@ -69,47 +69,62 @@ def fn_hfLayoutRead(hfLayoutFilename$*256,mat hfDataAll$,mat hfLabel$,mat hfFiel
 				posComboF=pos(lwrc$(hfItem$(hamsterColumn)),' combof(')
 				posComboA=pos(lwrc$(hfItem$(hamsterColumn)),' comboa(')
 				posComboFio=pos(lwrc$(hfItem$(hamsterColumn)),' combofio(')
+				posGlAccount=pos(lwrc$(hfItem$(hamsterColumn)),' glaccount')
+
 
 				if hamsterColumn=5 and hfItem$(hamsterColumn-1)='date(mmddyy)' then
-
-				else if posMask>0 then
-					! r: masked text box
-					posSpaceAfter=pos(hfItem$(hamsterColumn),' ',posMask+1)
-					! pr hfItem$(hamsterColumn) : pause
-					mask$=lwrc$(hfItem$(hamsterColumn)(posMask+6:posSpaceAfter-1))
-					if mask$='currency' or mask$='pointtwo' then
-						tmp=32
-					else if mask$='glaccount' then !   old unused format: mask=glnumber
-						tmp=53          !  this could also need to be 50, 51 or 52  jb 6/7/2021
-						fnGetUseDeptAndSub(useDept,useSub)
-						if ~useDept and ~useSub then
-							tmp=50
-						else if useDept and ~useSub then
-							tmp=51
-						else if ~useDept and useSub then
-							tmp=52
-						else if useDept and useSub then
-							tmp=53
-						end if
-						! see fnagl$ logic in
-						! C:\ACS\Dev-5\Core\fn\agl$.br.brs
-						pr 'found it -aaa in hamster fio-  mask$='&mask$ : pause
-					else if mask$='mmddyy' then
-						tmp=1
-					else if mask$='ccyymmdd' then
-						tmp=3
-					else if mask$='number' then
-						tmp=30
+					! todo: seems like i should set a date format for the grid here
+				else if posMask>0 then ! glaccount selection box
+					if mask$='glaccount' then
 					else
-						tmp=val(hfItem$(hamsterColumn)(posMask+6:posSpaceAfter))
-					end if
-					if tmp=0 then
-						if hfFieldType$(hfItem)='N' or hfFieldType$(hfItem)='PD' or hfFieldType$(hfItem)='G' and fp(hfStorageLen(hfItem))=2 then
+						! r: masked text box (except glaccount)
+						! pr hfItem$(hamsterColumn) : pause
+						posSpaceAfter=pos(hfItem$(hamsterColumn),' ',posMask+1)
+						mask$=lwrc$(hfItem$(hamsterColumn)(posMask+6:posSpaceAfter-1))
+						if mask$='currency' or mask$='pointtwo' then
 							tmp=32
+						! else if mask$='glaccount' then !   old unused format: mask=glnumber
+						! 	tmp=53          !  this could also need to be 50, 51 or 52  jb 6/7/2021
+						! 	fnGetUseDeptAndSub(useDept,useSub)
+						! 	if ~useDept and ~useSub then
+						! 		tmp=50
+						! 	else if useDept and ~useSub then
+						! 		tmp=51
+						! 	else if ~useDept and useSub then
+						! 		tmp=52
+						! 	else if useDept and useSub then
+						! 		tmp=53
+						! 	end if
+						! 	! see fnagl$ logic in
+						! 	! C:\ACS\Dev-5\Core\fn\agl$.br.brs
+						! 	! pr 'found it -aaa in hamster fio-  mask$='&mask$ : pause
+						else if mask$='mmddyy' then
+							tmp=1
+						else if mask$='ccyymmdd' then
+							tmp=3
+						else if mask$='number' then
+							tmp=30
+						else
+							tmp=val(hfItem$(hamsterColumn)(posMask+6:posSpaceAfter))
 						end if
+						if tmp=0 then
+							if hfFieldType$(hfItem)='N' or hfFieldType$(hfItem)='PD' or hfFieldType$(hfItem)='G' and fp(hfStorageLen(hfItem))=2 then
+								tmp=32
+							end if
+						end if
+						hfMask$(hfitem)=str$(val(hfMask$(hfitem))+tmp)
+						! /r
 					end if
-					hfMask(hfitem)+=tmp
-					! /r
+				else if posGlAccount then
+				
+					posSpaceAfter=pos(hfItem$(hamsterColumn),' ',posMask+1)
+					mask$=lwrc$(hfItem$(hamsterColumn)(posMask+6:posSpaceAfter-1))
+				
+					hfMask$(hfitem)='glaccount'
+					line$='comboFio(GL Account)'
+					posComboFio=1
+					mat comboBox$(hfItem,udim(mat comboBox$,2))
+					goto ToComboFio
 				else if posComboF>0 or posComboA>0 or posComboFio>0 then
 				! if env$('acsDeveloper')<>'' then debugCombo=1
 					! r: comoboboxes
@@ -128,6 +143,7 @@ def fn_hfLayoutRead(hfLayoutFilename$*256,mat hfDataAll$,mat hfLabel$,mat hfFiel
 						! pr "comboBox$(";hfItem;",1)='ComboA'"
 						! /r
 					else if posComboFio>0 then ! r:  support for comboFio(CO Table)   and   comboFio(CO Table,2) (adds [All] option)
+						ToComboFio: !
 						line$=srep$(line$,'ComboFio','combofio')
 						line$=srep$(line$,'comboFio','combofio')
 						line$=srep$(line$,'COMBOFIO','combofio')
@@ -143,8 +159,6 @@ def fn_hfLayoutRead(hfLayoutFilename$*256,mat hfDataAll$,mat hfLabel$,mat hfFiel
 							! pause
 						end if
 						comboBox$(hfItem,1)='ComboF'
-
-
 						! r: set mat comboBox$(hfItem,2-8) based on cfTable$ (fileio layout id)
 							! fn_addToMatComboBox(x,'ComboF,data_file$,key_pos,key_len,desc_pos,desc_len,index_file$,limit_to_list)
 							! r: comboBox$(x,y) Legend for ComoboF
@@ -260,7 +274,6 @@ def fn_hfLayoutRead(hfLayoutFilename$*256,mat hfDataAll$,mat hfLabel$,mat hfFiel
 					end if
 					! /r
 				end if
-			! /r
 			end if
 			! /r
 		end if
