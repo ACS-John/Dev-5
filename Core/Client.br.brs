@@ -904,7 +904,7 @@ def library fnclient_has_on_support_item(chosi_item$*256; days_grace)
 fnend
 def fn_client_has_on_support_item(chosi_item$*256; days_grace)
 	client_id=val(env$('Client_ID'))
-	fn_client_support_setup(client_id,mat chosi_system_id$,mat chosi_system_support_end_date,mat chosi_on_support, days_grace)
+	fn_client_support_setup(env$('client_id'),mat chosi_system_id$,mat chosi_system_support_end_date,mat chosi_on_support, days_grace)
 	chosi_retun=0
 	chosi_which=srch(mat chosi_system_id$,chosi_item$)
 	if chosi_which>0 then
