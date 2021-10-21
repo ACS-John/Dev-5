@@ -271,10 +271,8 @@ def library fnCurSys$(; cursys_set$*256,resetCache,___,curSystem$*256)
 		fnSetEnv('CurSys',cursys_cache$)
 		curSystem$=fn_systemName$
 		fnSetEnv('CurSystem',curSystem$)
-
-		pr 'set curSys to '&env$('cursys')
-		pr 'set curSystem to '&env$('cursystem') : pause
-
+		! pr 'set curSys to '&env$('cursys')
+		! pr 'set curSystem to '&env$('cursystem') : pause
 	! gosub SetEnvCurSysData
 	! SetEnvCurSysData: ! r:
 		if curSystem$='Client Billing' then
