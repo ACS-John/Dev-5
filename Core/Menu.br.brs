@@ -126,16 +126,16 @@ def fn_gridSetup
 	! grid_height$=str$(grid_height)
 	screen_width=115
 	! dim program_grid_spec$*128
-	info_col_width=18 ! minimum of 15!!!
+	info_colWidth=18 ! minimum of 15!!!
 	program_grid_line=2+dashboard_height
 	if enableFavorites and env$('FavoritesOpen')='True' then
 		favorite_width=35
-		program_grid_col=info_col_width+favorite_width+2+2+1
+		program_grid_col=info_colWidth+favorite_width+2+2+1
 		favorite_height=grid_height-1
 	else
-		program_grid_col=info_col_width+2
+		program_grid_col=info_colWidth+2
 	end if
-	favorite_left=info_col_width+2
+	favorite_left=info_colWidth+2
 	if dashboard_height>0 then program_grid_line=program_grid_line+1
 	! program_grid_spec$=str$(program_grid_line)&','&str$(program_grid_col)&',List '&grid_height$&'/63'
 	mat headings$(5)
@@ -195,38 +195,38 @@ def fn_main
 			fn_updateProgramGrid
 			fn_displayButtons
 			if ~enableFavorites then
-				fnLbl(program_grid_line,1,'Filter:',info_col_width,1)
+				fnLbl(program_grid_line,1,'Filter:',info_colWidth,1)
 			end if
 			fnreg_read('Last Save Date',last_save_date$)
 			dim last_save$*128
 			fnreg_read('Last Save File',last_save$)
 			dim tmp_tooltip$*2048
 			tmp_tooltip$='Last successful Save As was to the file\n'&last_save$&'\n on '&last_save_date$
-			fnPicBut(program_grid_line,2,'',fkey_facebook:=1449,'S:\Core\Icon\facebook.png:ISOTROPIC',2,3, '','Join the conversation on facebook.')
-			fnLbl(program_grid_line+2,1,last_save_date$(1:info_col_width),info_col_width,2,0,0,0,tmp_tooltip$)
-			fnLbl(program_grid_line+3,1,last_save$(pos(last_save$,'\',-1)+1:len(last_save$))(1:info_col_width),info_col_width,2,0,0,0,tmp_tooltip$)
-			fnLbl(program_grid_line+4,1,login_name$(1:info_col_width),info_col_width,2,0,0,0,'Login Name is "'&login_name$&'"')
+			! fnPicBut(program_grid_line,2,'',fkey_facebook:=1449,'S:\Core\Icon\facebook.png:ISOTROPIC',2,3, '','Join the conversation on facebook.')
+			fnLbl(program_grid_line+2,1,last_save_date$(1:info_colWidth),info_colWidth,2,0,0,0,tmp_tooltip$)
+			fnLbl(program_grid_line+3,1,last_save$(pos(last_save$,'\',-1)+1:len(last_save$))(1:info_colWidth),info_colWidth,2,0,0,0,tmp_tooltip$)
+			fnLbl(program_grid_line+4,1,login_name$(1:info_colWidth),info_colWidth,2,0,0,0,'Login Name is "'&login_name$&'"')
 			if env$('Decimal_Assumed')<>'Decimal Required' then
-				fnLbl(program_grid_line+5,1,env$('Decimal_Assumed'),info_col_width,2)
+				fnLbl(program_grid_line+5,1,env$('Decimal_Assumed'),info_colWidth,2)
 			end if
-			fnButtonOrDisabled(env$('enableClientSelection')=='Yes',program_grid_line+6,1,env$('client')(1:info_col_width),fkey_client:=5201, 'Client Name is "'&env$('client')&'"',info_col_width)
+			fnButtonOrDisabled(env$('enableClientSelection')=='Yes',program_grid_line+6,1,env$('client')(1:info_colWidth),fkey_client:=5201, 'Client Name is "'&env$('client')&'"',info_colWidth)
 			if env$('ACSDeveloper')<>'' then
-				fnLbl(program_grid_line+8 ,1,"ACS Developer"(1:info_col_width),info_col_width,2)
-				fnLbl(program_grid_line+9 ,1,env$('ACSDeveloper')(1:info_col_width),info_col_width,2)
-				fnLbl(program_grid_line+10,1,env$('acsUserId')(1:info_col_width),info_col_width,2)
+				fnLbl(program_grid_line+8 ,1,"ACS Developer"(1:info_colWidth),info_colWidth,2)
+				fnLbl(program_grid_line+9 ,1,env$('ACSDeveloper')(1:info_colWidth),info_colWidth,2)
+				fnLbl(program_grid_line+10,1,env$('acsUserId')(1:info_colWidth),info_colWidth,2)
 			end if
 			if env$('BR_MODEL')='CLIENT/SERVER' then
-				fnLbl(program_grid_line+11,1,'Client'(1:info_col_width),info_col_width,2)
+				fnLbl(program_grid_line+11,1,'Client'(1:info_colWidth),info_colWidth,2)
 			end if
 			if env$('BR_XP_Mode')='True' then
-				fnLbl(program_grid_line+13,1,'XP Compatibility'(1:info_col_width),info_col_width,2)
+				fnLbl(program_grid_line+13,1,'XP Compatibility'(1:info_colWidth),info_colWidth,2)
 			end if
 			tmp_tooltip$="ACS was last updated on "&last_update$&'\n to version '&version_current$&'.'
-			fnLbl(screen_height-8,1,'ACS '&rtrm$(version_current$,'0'),info_col_width,2,0,0,0,tmp_tooltip$)
+			fnLbl(screen_height-8,1,'ACS '&rtrm$(version_current$,'0'),info_colWidth,2,0,0,0,tmp_tooltip$)
 			if env$('acsProduct')<>'ACS Online' then
-				fnLbl(screen_height-7,1,last_update$(1:info_col_width),info_col_width,2,0,0,0,tmp_tooltip$)
+				fnLbl(screen_height-7,1,last_update$(1:info_colWidth),info_colWidth,2,0,0,0,tmp_tooltip$)
 			end if
-			fnLbl(screen_height-5,1,'BR! '&wbversion$,info_col_width,2)
+			fnLbl(screen_height-5,1,'BR! '&wbversion$,info_colWidth,2)
 			fn_dashboardDraw
 			if enableFavorites then fn_favoritesDraw
 			fn_displayMenu

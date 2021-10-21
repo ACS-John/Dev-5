@@ -155,10 +155,10 @@
 		fncd=(x-int(x*.01)*100)*10000+int(x*.01)
 	fnend
 	def library fnFormNumb$(numb,decimals,size)
-		fnformnumb$=lpad$(cnvrt$("N 10."&str$(decimals),numb),size)
+		fnformnumb$=lpad$(cnvrt$('N 10.'&str$(decimals),numb),size)
 	fnend
 	def library fnpause(;unused)
-		if env$("ACSDeveloper")<>"" then pr 'fnpause enacted.' : exe 'go XITPAUSE step'
+		if env$('ACSDeveloper')<>'' then pr 'fnpause enacted.' : exe 'go XITPAUSE step'
 	XITPAUSE: fnend
 
 	def library fnGetUseDeptAndSub(&useDept,&useSub; ___,guSys$,gudsSetupTimeN)
@@ -213,7 +213,7 @@
 		! must dim an array to 0 before you can add a first item
 		!    Mat addTo$ - the array to add One$ item to
 		!    One$ - the One$ item to add to Mat addTo$
-		!    skipBlanks - if =1 than only add One$ if Trim$(One$)<>""
+		!    skipBlanks - if =1 than only add One$ if Trim$(One$)<>''
 		!    skipDupes - if =1 than only add One$ if One$ is not yet in Mat addTo$
 		!    This function returns the number of items in the array
 		size=udim(mat addTo$)
@@ -450,14 +450,6 @@ fnend
 	def library fnClientHas(ch_sys$*256)
 		library 'S:\Core\Client.br': fnClientHas
 		fnClientHas=fnClientHas(ch_sys$)
-	fnend
-	def library fnregistered_for_hh
-		library 'S:\Core\Client.br': fnregistered_for_hh
-		fnregistered_for_hh=fnregistered_for_hh
-	fnend
-	def library fnregistered_for_job_cost_pr
-		library 'S:\Core\Client.br': fnregistered_for_job_cost_pr
-		fnregistered_for_job_cost_pr=fnregistered_for_job_cost_pr
 	fnend
 	def library fnub_printbill_program$*256
 		library 'S:\Core\Client.br': fnub_printbill_program$
@@ -895,6 +887,10 @@ fnend
 	def library fnHamster(uniqueWord$*20,mat lbl$,mat fln,hIn,mat p$; mat flTyp$,mat sln,mat mask,mat startPos,mat incontrol$,mat mxl)
 		library 'S:\Core\Hamster.br': fnHamster
 		fnHamster=fnHamster(uniqueWord$,mat lbl$,mat fln,hIn,mat p$, mat flTyp$,mat sln,mat mask,mat startPos,mat incontrol$,mat mxl)
+	fnend
+	def library fnHamster2(uniqueWord$*20,mat lbl$,mat fln,hIn,mat p$; mat flTyp$,mat sln,mat mask$,mat startPos,mat incontrol$,mat mxl)
+		library 'S:\Core\Hamster.br': fnHamster2
+		fnHamster2=fnHamster2(uniqueWord$,mat lbl$,mat fln,hIn,mat p$, mat flTyp$,mat sln,mat mask$,mat startPos,mat incontrol$,mat mxl)
 	fnend
 	def library fnH2AddComboF(hac_screen_item,hac_data_file$*256,hac_key_pos,hac_key_len,hac_desc_pos,hac_desc_len,hac_index_file$*256,hac_limit_to_list)
 		library 'S:\Core\Hamster_Setup.br': fnH2AddComboF
@@ -1535,10 +1531,6 @@ fnend
 		library 'S:\acsGL\company.br': fnLastAccountingPeriodClosed
 		fnLastAccountingPeriodClosed=fnLastAccountingPeriodClosed( setit)
 	fnend
-	def library fnregistered_for_GlBudgetMgmt
-		library 'S:\Core\Client.br': fnregistered_for_GlBudgetMgmt
-		fnregistered_for_GlBudgetMgmt=fnregistered_for_GlBudgetMgmt
-	fnend
 	def library fnAddGlPayee
 		library 'S:\General Ledger\fn\addGlPayee.br': fnAddGlPayee
 		fnAddGlPayee=fnAddGlPayee
@@ -1689,7 +1681,7 @@ fnend
 	fnend
 
 	def library fnPrPrintNetZeroDefault$(; ___,return$)
-		if env$('client')="Divernon" or env$('client')="Payroll Done Right" then
+		if env$('client')='Divernon' or env$('client')='Payroll Done Right' then
 			return$='True'
 		else
 			return$='False'

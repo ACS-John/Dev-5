@@ -28,14 +28,14 @@ MENU1: ! r:
 	fnButton(frame_line+=1,1,"Estimate Readings",fky_estimateReadings:=2004,'',0,moe_button_width,frame_current)
 	fnButton(frame_line+=1,1,"Import from Tab Delimited Text File",fky_importTabDelimited:=2006,'',0,moe_button_width,frame_current)
 
-	if fnregistered_for_hh then
+	if fnClientHas('U4') then
 		! fnLbl(frame_line+=2,2,"Hand Held:",0,0,0,frame_current)
 		! fnButton(frame_line+=1,1,'Import from Hand Held to Book'     ,fky_importHHtoBook:=2007,'Retrieve Hand Held File'                                                               ,0,moe_button_width,frame_current)
 		! fnButton(frame_line+=1,1,'Load Hand Held Book'               ,fky_loadBook:=2005      ,'Generally for use after "Retreive (Import) from Hand Held to Book"'                    ,0,moe_button_width,frame_current)
 		fnButton(frame_line+=2,1,'Hand Held Books'               ,fky_loadBook:=2005      ,'Generally for use after "Retreive (Import) from Hand Held to Book"'                    ,0,moe_button_width,frame_current)
 
 		! fnButton(frame_line+=1,1,'Import and Load Hand Held (Book 1)',fky_importAndLoad:=2009 ,'Completes "Import to Hand Held to Book" (using book 1) and then "Load Hand Held Book".',0,moe_button_width,frame_current)
-	end if  ! fnregistered_for_hh
+	end if
 ! r: add the grid
 
 	chc=0
@@ -309,7 +309,7 @@ def fn_setup
 
 		dim px$*10
 		dim x(15)
-		
+
 		dim ft$*21
 		dim rm$*60
 		dim ra(2)
@@ -1786,21 +1786,21 @@ EnterReadings: ! r:
 		x(13)=val(resp$(rc+=1))
 		x(04)=val(resp$(rc+=1)) ! electric/lawn meter
 	else if service_type(3)=3.1 then ! lawn meter
-		x(03)=val(resp$(rc+=1)) 
+		x(03)=val(resp$(rc+=1))
 		x(10)=val(resp$(rc+=1))
 		x(13)=val(resp$(rc+=1))
 	else if service_type(3)=3.2 then
 		x(13)=val(resp$(rc+=1))
 	end if  ! if srvnam$(3)=...
-	
+
 	! r: this logic is obsoluete since I made lawn meter reading default to what it was last time
 	! if service_type(3)=3.1 and x(03)=0 and xd(5)>0 and a(3)>0 then
 	! 	x(03)=xd(5) ! if they skip reading the lawn meters, just write the previous reading into the current reading
-	!  
+	!
 	! 	! pr 'if they skip reading the lawn meters, just write the previous reading into the current reading' : pause
 	! end if
 	! /r
-	
+
 	if service_enabled(4) then
 		x(02)=val(resp$(rc+=1))
 		x(11)=val(resp$(rc+=1))

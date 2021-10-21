@@ -4,13 +4,13 @@
 recl=416
 ===================================================
 Account             	,    Account Number                           	,  C  12      , !  Pos=1-3 DNO^Department Number,Pos=4-9 ANO^Major Account Number,Pos=10-12 SNO^Sub Account Number
-Description$       	,    Description                              	,  C  50      , !  Pos=13        D$        ^Desc
-RefBalSheet1       	,    Balance Sheet Ref Number                	,  PD  3      , !  Pos=63        RF(1)     ^BalShtRf1     combof({comment area},[Q]\GLmstr\acglfnsb.h[cno],1,5,6,30,[Q]\GLmstr\agfsidx4.h[cno]) ! ,0,0, Select the balance sheet reference number where this account should appear on the balance sheet."1)
-RefBalSheet2       	,    Secondary Balance Sheet Ref Number     	,  PD  3      , !  Pos=66        RF(2)     ^BalShtRf2     combof(ignore,[Q]\GLmstr\acglfnsc.h[cno],1,5,6,30,[Q]\GLmstr\agfsidx1.h[cno]) ! ,0,0, "Select the balance sheet reference number where this account should appear on the secondary balance sheet.",1)
-RefIncome1          	,    Income Statement Ref Number             	,  PD  3      , !  Pos=69        RF(3)     ^IncStmtRf1    combof(ignore,[Q]\GLmstr\acglfnsi.h[cno],1,5,6,30,[Q]\GLmstr\agfsidx3.h[cno]) ! ,0,0, "Select the income statement reference number where this account should appear on the income statement.",1)
-RefIncome2          	,    Secondary Income Statement Ref Number  	,  PD  3      , !  Pos=72        RF(4)     ^IncStmtRf2    combof(ignore,[Q]\GLmstr\acglfnsj.h[cno],1,5,6,30,[Q]\GLmstr\agfsidx2.h[cno]) ! ,0,0, "Select the income statement reference number where this account should appear on the secondary income statement.",1)
-RefFund1            	,    Fund Statement Ref Number               	,  PD  3      , !  Pos=75        RF(5)     ^FundStmtRf1   combof(ignore,[Q]\GLmstr\acglfnsf.h[cno],1,5,6,30,[Q]\GLmstr\agfsidx5.h[cno]) ! ,0,0, "Select the cash flow reference number where this account should appear on the cash flow statement.",1)
-RefFund2            	,    Secondary Fund Statement Ref Number    	,  PD  3      , !  Pos=78        RF(6)     ^FundStmtRf2   combof(ignore,[Q]\GLmstr\acglfnsg.h[cno],1,5,6,30,[Q]\GLmstr\agfsidx6.h[cno]) ! ,0,0, "Select the cash flow reference number where this account should appear on the cash flow statement.",1)
+description        	,    Description                              	,  C  50      , !  Pos=13        D$        ^Desc
+RefBalSheet1       	,    Balance Sheet Ref Number                	,  PD  3      , !  Pos=63        RF(1)     ^BalShtRf1     combof({comment area},[Q]\GLmstr\acglfnsb.h[cno],1,5,6,30,[Q]\GLmstr\agfsidx4.h[cno]) 
+RefBalSheet2       	,    Secondary Balance Sheet Ref Number     	,  PD  3      , !  Pos=66        RF(2)     ^BalShtRf2     combof(ignore,[Q]\GLmstr\acglfnsc.h[cno],1,5,6,30,[Q]\GLmstr\agfsidx1.h[cno])
+RefIncome1          	,    Income Statement Ref Number             	,  PD  3      , !  Pos=69        RF(3)     ^IncStmtRf1    combof(ignore,[Q]\GLmstr\acglfnsi.h[cno],1,5,6,30,[Q]\GLmstr\agfsidx3.h[cno])
+RefIncome2          	,    Secondary Income Statement Ref Number  	,  PD  3      , !  Pos=72        RF(4)     ^IncStmtRf2    combof(ignore,[Q]\GLmstr\acglfnsj.h[cno],1,5,6,30,[Q]\GLmstr\agfsidx2.h[cno])
+RefFund1            	,    Fund Statement Ref Number               	,  PD  3      , !  Pos=75        RF(5)     ^FundStmtRf1   combof(ignore,[Q]\GLmstr\acglfnsf.h[cno],1,5,6,30,[Q]\GLmstr\agfsidx5.h[cno])
+RefFund2            	,    Secondary Fund Statement Ref Number    	,  PD  3      , !  Pos=78        RF(6)     ^FundStmtRf2   combof(ignore,[Q]\GLmstr\acglfnsg.h[cno],1,5,6,30,[Q]\GLmstr\agfsidx6.h[cno])
 BalanceBeginning    	,    Beginning Account Balance               	,  PD  6.2    , !  Pos=81        BB        ^AccBal-Begin   mask=10
 BalanceCurrent     	,    Current Account Balance                 	,  PD  6.2    , !  Pos=87        CB        ^Bal            mask=10
 BalMthEndCrYrPer01 	,    Balance Current Year-Period 1           	,  PD  6.2    , !  Pos=93        BC(01)    ^Bal-CY-M1     mask=10

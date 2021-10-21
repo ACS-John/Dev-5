@@ -3,14 +3,35 @@
 ! mat fln     array of field lengths
 ! hIn         open file handle
 ! mat p$      array of
-def library fnHamster(uw$*20,mat lbl$,mat fln,hIn,mat p$; mat flTyp$,mat sln,mat mask,mat startPos,mat incontrol$,mat mxl)
-	! r: setup
+def library fnHamster2(uw$*20,mat lbl$,mat fln,hIn,mat p$; mat flTyp$,mat sln,mat mask$,mat startPos,mat incontrol$,mat mxl)
+	autoLibrary
+	on error goto Ertn
+	fnHamster2=fn_hamster(uw$,mat lbl$,mat fln,hIn,mat p$, mat flTyp$,mat sln,mat mask$,mat startPos,mat incontrol$,mat mxl)
+fnend
+
+def library fnHamster(uw$*20,mat lbl$,mat fln,hIn,mat p$; mat flTyp$,mat sln,mat mask,mat startPos,mat incontrol$,mat mxl, ___,maskCount,x)
 	autoLibrary
 	on error goto Ertn
 
+	dim h1Mask$(0)
+	maskCount=udim(mat mask)
+	mat h1Mask$(maskCount)
+	for x=1 to maskCount
+		h1Mask$(x)=str$(mask(x))
+	nex x
+
+	fnHamster=fn_hamster(uw$,mat lbl$,mat fln,hIn,mat p$, mat flTyp$,mat sln,mat mask$,mat startPos,mat incontrol$,mat mxl)
+fnend
+
+def fn_hamster(uw$*20,mat lbl$,mat fln,hIn,mat p$; mat flTyp$,mat sln,mat mask$,mat startPos,mat incontrol$,mat mxl,___,enableGlAccount)
+	! r: setup
+
+
 	dim sln2(199)
 	dim fltyp2$(199)*2
-	dim mask2(199),startPos2(199)
+	dim mask2$(199)
+	dim mask2N(199)
+	dim startPos2(199)
 	dim option$(199)*256
 	dim control$(60,26)*256
 	dim p2$(100)*1024 ! used to hold mat P$ + 1 more response for Add Loop
@@ -22,14 +43,14 @@ def library fnHamster(uw$*20,mat lbl$,mat fln,hIn,mat p$; mat flTyp$,mat sln,mat
 	! /r
 	! r: prepare arrays
 		mat flxItem$(199) : mat flxhdr$(199) : mat sln2(199) : mat fltyp2$(199)
-		mat mask2(199) : mat startPos2(199) : mat option$(199) : mat control$(60,26)
+		mat mask2$(199) : mat mask2N(199) : mat startPos2(199) : mat option$(199) : mat control$(60,26)
 		row_select=1 : opt_cancel=5 : opt_add=4 : opt_edit=3
 		opt_delete=7 : right=1
 		itemCount=udim(mat p$)
 		mat hComboF(itemCount)
 
-		if udim(incontrol$,1)<>0 then
-			mat control$(udim(incontrol$,1),udim(incontrol$,2))
+		if udim(mat incontrol$,1)<>0 then
+			mat control$(udim(mat incontrol$,1),udim(mat incontrol$,2))
 			mat control$=incontrol$
 		end if
 		if udim(mat startPos)<>itemCount then
@@ -39,30 +60,32 @@ def library fnHamster(uw$*20,mat lbl$,mat fln,hIn,mat p$; mat flTyp$,mat sln,mat
 		end if
 		for j=1 to itemCount
 			if udim(mat control$,1)=>j and lwrc$(control$(j,1))='combof' and control$(j,7)<>'' then ! it is a combof that has an index
-				fltyp2$(j)="c"
+				fltyp2$(j)='c'
 				open #hComboF(j)=fnH: 'name='&control$(j,2)&',kfname='&control$(j,7)&',Shr',i,i,k
-			else if udim(flTyp$)<>itemCount then
-				fltyp2$(j)="g"
-			else if j>udim(flTyp$) then
-				fltyp2$(j)="g"
-			else if flTyp$(j)="" then
-				fltyp2$(j)="g"
+			else if udim(mat flTyp$)<>itemCount then
+				fltyp2$(j)='g'
+			else if j>udim(mat flTyp$) then
+				fltyp2$(j)='g'
+			else if flTyp$(j)='' then
+				fltyp2$(j)='g'
 			else
 				fltyp2$(j)=lwrc$(flTyp$(j))
 			end if
-			if udim(sln)<>itemCount then
+			if udim(mat sln)<>itemCount then
 				sln2(j)=fln(j)
 			else if sln(j)=0 then
 				sln2(j)=fln(j)
 			else
 				sln2(j)=sln(j)
 			end if
-			if udim(mask)<>itemCount then
-				mask2(j)=0
+			if udim(mat mask$)<>itemCount then
+				mask2$(j)=''
+				mask2N(j)=0
 			else
-				mask2(j)=mask(j)
+				mask2$(j)=mask$(j)
+				mask2N(j)=val(mask$(j)) conv ignore
 			end if
-			if mask2(j)=1 then fln(j)=8
+			if mask2N(j)=1 then fln(j)=8
 			if j=1 then goto SKIP_startPos
 			if udim(mat startPos)=itemCount then
 				startPos2(j)=startPos(j)
@@ -72,7 +95,7 @@ def library fnHamster(uw$*20,mat lbl$,mat fln,hIn,mat p$; mat flTyp$,mat sln,mat
 				startPos2(j)=startPos2(j-1)+int(sln2(j-1))
 			else if udim(mat startPos)=itemCount then
 				startPos2(j)=startPos2(j-1)+int(sln2(j-1))
-			else if udim(startPos)=0 then
+			else if udim(mat startPos)=0 then
 				startPos2(j)=startPos2(j-1)+int(sln2(j-1))
 			else if startPos(j)=0 then
 				startPos2(j)=startPos2(j-1)+int(sln2(j-1))
@@ -82,15 +105,15 @@ def library fnHamster(uw$*20,mat lbl$,mat fln,hIn,mat p$; mat flTyp$,mat sln,mat
 			end if
 			SKIP_startPos: !
 		next j
-		mat mask2(itemCount) : mat sln2(itemCount) : mat fltyp2$(itemCount) : mat startPos2(itemCount) : mat keyorder(itemCount)
+		mat mask2$(itemCount) : mat mask2N(itemCount) : mat sln2(itemCount) : mat fltyp2$(itemCount) : mat startPos2(itemCount) : mat keyorder(itemCount)
 	! /r
 	! Gosub KEYORDER_BUILD
 	! r: Build Flex Headers and Flex Mask
 		mat flxhdr$(itemCount+1) : fhc=0 : flxhdr$(fhc+=1)='Rec'
 		for j=2 to itemCount+1
-			if mask2(j-1)<20000 then flxhdr$(fhc+=1)=lbl$(j-1)
+			if mask2N(j-1)<20000 then flxhdr$(fhc+=1)=lbl$(j-1)
 			controlX=j-1
-			testmask=mask2(controlX)
+			testmask=mask2N(controlX)
 			if testmask=>1000 and testmask<2000 then testmask-=1000
 			if controlX<=udim(mat control$,1) and lwrc$(control$(controlX,1))='combof' and control$(controlX,7)<>'' then
 			else if testmask=>1 and testmask<=29 then
@@ -104,8 +127,9 @@ def library fnHamster(uw$*20,mat lbl$,mat fln,hIn,mat p$; mat flTyp$,mat sln,mat
 			else if testmask=>40 and testmask<=49 then
 				cmask$(fhc)=str$(testmask)
 			else if testmask=>50 and testmask<=53 then
-				! cmask$(fhc)=str$(testmask) 
-				cmask$(fhc)='glaccount' ! str$(testmask) 
+				! cmask$(fhc)=str$(testmask)
+				cmask$(fhc)='glaccount' ! str$(testmask)
+				pr 'mask2$(controlX)='&mask2$(controlX)
 				pr 'hamster - building flex header as '&cmask$(fhc)&' for provided testMask of '&str$(testmask)&'.' : pause
 			else
 				cmask$(fhc)='80'
@@ -131,7 +155,15 @@ def library fnHamster(uw$*20,mat lbl$,mat fln,hIn,mat p$; mat flTyp$,mat sln,mat
 	return ! /r
 	Menu1: ! r:
 		fnTos
-		fnflexinit1(uw$&"2b",1,1,20,108,mat flxhdr$,mat cmask$,row_select)
+		if srch(mat mask2$,'glaccount')>0 then
+			enableGlAccount=1
+		end if
+		if enableGlAccount then
+			dim gla$(0)*128
+			dim glaN(0)
+			hGl=fn_openFio('GL Account',mat gla$,mat glaN, 1)
+		end if
+		fnflexinit1(uw$&'2b',1,1,20,108,mat flxhdr$,mat cmask$,row_select)
 		for j1=1 to lrec(hIn)
 			pRec=j1
 			gosub ReadP ! Read #hIn,Using FRM$,Rec=J1: MAT P$ noRec (just past fnflexadd1)
@@ -139,16 +171,23 @@ def library fnHamster(uw$*20,mat lbl$,mat fln,hIn,mat p$; mat flTyp$,mat sln,mat
 				fic=0 : flxItem$(fic+=1)=str$(rec(hIn))
 				for j2=2 to itemCount+1
 					controlX=j2-1
-					if mask2(controlX)<20000 then
+					if mask2N(controlX)<20000 then
 						dim hcfDesc$*128,hcfKey$*128
 						hcfDesc$='' ! p$(controlX)
 						if controlX<=udim(mat control$,1) and lwrc$(control$(controlX,1))='combof' and control$(controlX,7)<>'' then
 							hcfKey$=rpad$(trim$(p$(controlX))(1:kln(hComboF(controlX))),kln(hComboF(controlX)))
 							read #hComboF(controlX),using 'form pos '&control$(controlX,5)&',c '&control$(controlX,6),key=hcfKey$: hcfDesc$ nokey ignore
 							hcfDesc$=rtrm$(hcfDesc$)
-							if mask2(controlX)=>50 and mask2(controlX)<=53 then
-								hcfDesc$&=' - desc here' : pr 'bbb in hamster' : pause
+							if mask2$(controlX)='glaccount' then
+								! hcfDesc$&=' - desc here' ! pr 'bbb in hamster' : pause
+								hcfDesc$=fnrglbig$(hcfDesc$)
+								! read #hGl,using form$(hGl),key=rpad$(hcfDesc$(1:12),12): mat gla$,mat glaN nokey ignore
+								! hcfDesc$&=gla$(gl_description) ! ' - desc here' ! pr 'bbb in hamster' : pause
+								pr 'hcfDesc$='&hcfDesc$
 							end if
+							! if mask2N(controlX)=>50 and mask2N(controlX)<=53 then
+							! 	hcfDesc$&=' - desc here' : pr 'bbb in hamster' : pause
+							! end if
 						end if
 						flxItem$(fic+=1)=p$(controlX)&' '&hcfDesc$
 						!           if hcfDesc$<>'' then pr 'flxItem$('&str$(fic)&')="'&flxItem$(fic)&'" hcfDesc$="'&hcfDesc$&'"' : pause
@@ -163,11 +202,11 @@ def library fnHamster(uw$*20,mat lbl$,mat fln,hIn,mat p$; mat flTyp$,mat sln,mat
 				hComboF(hComboFitem)=0
 			end if
 		next hComboFitem
-		fnLbl(21,20," ") ! move command buttons down one line so search box ok
-		fnCmdKey("Edi&t",opt_edit,1)
-		fnCmdKey("&Add",opt_add)
-		fnCmdKey("&Delete",opt_delete)
-		fnCmdKey("E&xit",opt_cancel,0,1)
+		fnLbl(21,20,' ') ! move command buttons down one line so search box ok
+		fnCmdKey('Edi&t',opt_edit,1)
+		fnCmdKey('&Add',opt_add)
+		fnCmdKey('&Delete',opt_delete)
+		fnCmdKey('E&xit',opt_cancel,0,1)
 		fnAcs(mat resp$,menu1_opt)
 		pRec=val(resp$(1)) conv Menu1
 		if pRec=0 and menu1_opt=opt_edit then menu1_opt=opt_add
@@ -184,7 +223,7 @@ def library fnHamster(uw$*20,mat lbl$,mat fln,hIn,mat p$; mat flTyp$,mat sln,mat
 	ToEdit: ! r: ADD and EDIT routines
 			gosub ReadP
 	ToAdd: !
-			if menu1_opt=opt_add then mat p$=("")
+			if menu1_opt=opt_add then mat p$=('')
 			if itemCount>30 then
 				j2=int(itemCount/2) : myflen=0
 				for j=1 to j2
@@ -204,47 +243,47 @@ def library fnHamster(uw$*20,mat lbl$,mat fln,hIn,mat p$; mat flTyp$,mat sln,mat
 					lc=0 : colpos=mypos+myflen+4 : col+=1
 					mypos=colpos+mylen+2
 				end if
-				if mask2(ic+1)=>20000 then ic+=1 : goto SKIP_LABEL_AND_CONTROL
-				fnLbl(lc+=1,colpos,lbl$(ic+=1)&":",mylen,right)
-				if mask2(ic)>10000 then
+				if mask2N(ic+1)=>20000 then ic+=1 : goto SKIP_LABEL_AND_CONTROL
+				fnLbl(lc+=1,colpos,lbl$(ic+=1)&':',mylen,right)
+				if mask2N(ic)>10000 then
 					disable=1
-					mask2(ic)-=10000
+					mask2N(ic)-=10000
 				else
 					disable=0
 				end if
-				if j<udim(mxl) then maxlen=mxl(j) else maxlen=0
-				if j>udim(control$,1) or trim$(control$(j,1))="" or lwrc$(control$(j,1))="txt" then
+				if j<udim(mat mxl) then maxlen=mxl(j) else maxlen=0
+				if j>udim(mat control$,1) or trim$(control$(j,1))='' or lwrc$(control$(j,1))='txt' then
 					if fln(j)>40 and (maxlen=0 or maxlen>40) then
 						maxlen=fln(j)
 						fln(j)=40
 					end if
-					fnTxt(lc,mypos,fln(j),maxlen,0,str$(mask2(ic)),disable) ! p$(j)
-				else if lwrc$(control$(j,1))="comboa" then
+					fnTxt(lc,mypos,fln(j),maxlen,0,str$(mask2N(ic)),disable) ! p$(j)
+				else if lwrc$(control$(j,1))='comboa' then
 					mat option$(999)
 					L1160: !
 					cj+=1
-					if cj<udim(control$,2)-1 and trim$(control$(j,cj))<>"" then
+					if cj<udim(mat control$,2)-1 and trim$(control$(j,cj))<>'' then
 						option$(cj)=control$(j,cj+1)
 						goto L1160
 					else
 						mat option$(cj-1)
 					end if
-					fnComboa(uw$&"A"&str$(j),lc,mypos,mat option$) ! p$(j)
-				else if lwrc$(control$(j,1))="combof" then
-					fnCombof(uw$&"F"&str$(j),lc,mypos,val(control$(j,4))+val(control$(j,6))+3,control$(j,2),val(control$(j,3)),val(control$(j,4)),val(control$(j,5)),val(control$(j,6)),control$(j,7),val(control$(j,8)))
+					fnComboa(uw$&'A'&str$(j),lc,mypos,mat option$) ! p$(j)
+				else if lwrc$(control$(j,1))='combof' then
+					fnCombof(uw$&'F'&str$(j),lc,mypos,val(control$(j,4))+val(control$(j,6))+3,control$(j,2),val(control$(j,3)),val(control$(j,4)),val(control$(j,5)),val(control$(j,6)),control$(j,7),val(control$(j,8)))
 				end if
 				! done adding control and label
-				if disable=1 then mask2(ic)+=10000
+				if disable=1 then mask2N(ic)+=10000
 				SKIP_LABEL_AND_CONTROL: !
 			next j
-			fnLbl(lc+1,20," ") ! move command buttons down one line so search box ok
+			fnLbl(lc+1,20,' ') ! move command buttons down one line so search box ok
 			if menu1_opt=opt_add then
 				fnChk(lc+=1,mypos,'Add Loop',right)
 				p2$(alana)='False'
 			end if
 			if addloop$='' then p2$(alana)='False' else p2$(alana)=addloop$
-			fnCmdKey("&Save",1,1)
-			fnCmdKey("&Cancel",opt_cancel,0,1)
+			fnCmdKey('&Save',1,1)
+			fnCmdKey('&Cancel',opt_cancel,0,1)
 
 			fnAcs(mat p2$,ckey)
 			mat p$(1:udim(mat p$))=p2$(1:udim(mat p$))
@@ -261,49 +300,49 @@ def library fnHamster(uw$*20,mat lbl$,mat fln,hIn,mat p$; mat flTyp$,mat sln,mat
 		! Read 1st Item
 		j=1
 		dim tmp$*512
-		if fltyp2$(j)="c" or fltyp2$(j)="cr" then
-			tmp$="Form Pos "&str$(startPos2(j))&",c "&str$(sln2(j))
+		if fltyp2$(j)='c' or fltyp2$(j)='cr' then
+			tmp$='Form Pos '&str$(startPos2(j))&',c '&str$(sln2(j))
 			read #hIn,using tmp$,rec=pRec,reserve: p$(j) noRec PNOREC eof PEOF
-		else if fltyp2$(j)="g" then
-			tmp$="Form Pos "&str$(startPos2(j))&",g "&str$(sln2(j))
+		else if fltyp2$(j)='g' then
+			tmp$='Form Pos '&str$(startPos2(j))&',g '&str$(sln2(j))
 			read #hIn,using tmp$,rec=pRec,reserve: p$(j) noRec PNOREC eof PEOF
-		else if fltyp2$(j)="n" or fltyp2$(j)="pd" then
-			tmp$="Form Pos "&str$(startPos2(j))&","&fltyp2$(j)&" "&str$(sln2(j))
+		else if fltyp2$(j)='n' or fltyp2$(j)='pd' then
+			tmp$='Form Pos '&str$(startPos2(j))&','&fltyp2$(j)&' '&str$(sln2(j))
 			read #hIn,using tmp$,rec=pRec,reserve: t noRec PNOREC eof PEOF
 			p$(j)=str$(t)
-		else if fltyp2$(j)="pd" and ord(p$(j))=15 then
-			p$(j)=""
+		else if fltyp2$(j)='pd' and ord(p$(j))=15 then
+			p$(j)=''
 		end if
 		! Read 2nd to Last Item
 		for j=2 to itemCount-1
-			if fltyp2$(j)="c" or fltyp2$(j)="cr" then
-				tmp$="Form Pos "&str$(startPos2(j))&",c "&str$(sln2(j))
+			if fltyp2$(j)='c' or fltyp2$(j)='cr' then
+				tmp$='Form Pos '&str$(startPos2(j))&',c '&str$(sln2(j))
 				reread #hIn,using tmp$,reserve: p$(j) noRec PNOREC eof PEOF
-			else if fltyp2$(j)="g" then
-				tmp$="Form Pos "&str$(startPos2(j))&",g "&str$(sln2(j))
+			else if fltyp2$(j)='g' then
+				tmp$='Form Pos '&str$(startPos2(j))&',g '&str$(sln2(j))
 				reread #hIn,using tmp$,reserve: p$(j) noRec PNOREC eof PEOF
-			else if fltyp2$(j)="n" or fltyp2$(j)="pd" then
-				tmp$="Form Pos "&str$(startPos2(j))&","&fltyp2$(j)&" "&str$(sln2(j))
+			else if fltyp2$(j)='n' or fltyp2$(j)='pd' then
+				tmp$='Form Pos '&str$(startPos2(j))&','&fltyp2$(j)&' '&str$(sln2(j))
 				reread #hIn,using tmp$,reserve: t noRec PNOREC eof PEOF
 				p$(j)=str$(t)
-			else if fltyp2$(j)="pd" and ord(p$(j))=15 then
-				p$(j)=""
+			else if fltyp2$(j)='pd' and ord(p$(j))=15 then
+				p$(j)=''
 			end if
 		next j
 		! read Last Item
 		j=itemCount
-		if fltyp2$(j)="c" or fltyp2$(j)="cr" then
-			tmp$="Form Pos "&str$(startPos2(j))&",c "&str$(sln2(j))
+		if fltyp2$(j)='c' or fltyp2$(j)='cr' then
+			tmp$='Form Pos '&str$(startPos2(j))&',c '&str$(sln2(j))
 			reread #hIn,using tmp$,release: p$(j) noRec PNOREC eof PEOF
-		else if fltyp2$(j)="g" then
-			tmp$="Form Pos "&str$(startPos2(j))&",g "&str$(sln2(j))
+		else if fltyp2$(j)='g' then
+			tmp$='Form Pos '&str$(startPos2(j))&',g '&str$(sln2(j))
 			reread #hIn,using tmp$,release: p$(j) noRec PNOREC eof PEOF
-		else if fltyp2$(j)="n" or fltyp2$(j)="pd" then
-			tmp$="Form Pos "&str$(startPos2(j))&","&fltyp2$(j)&" "&str$(sln2(j))
+		else if fltyp2$(j)='n' or fltyp2$(j)='pd' then
+			tmp$='Form Pos '&str$(startPos2(j))&','&fltyp2$(j)&' '&str$(sln2(j))
 			reread #hIn,using tmp$,release: t noRec PNOREC eof PEOF
 			p$(j)=str$(t)
-		else if fltyp2$(j)="pd" and ord(p$(j))=15 then
-			p$(j)=""
+		else if fltyp2$(j)='pd' and ord(p$(j))=15 then
+			p$(j)=''
 		end if
 		goto ReadP_XIT
 		PNOREC: !
@@ -343,28 +382,33 @@ def library fnHamster(uw$*20,mat lbl$,mat fln,hIn,mat p$; mat flTyp$,mat sln,mat
 			end if
 		end if
 		for j=1 to itemCount
-			if j<=udim(control$,1) and lwrc$(control$(j,1))="combof" then
+			if j<=udim(mat control$,1) and lwrc$(control$(j,1))='combof' then
 				p$(j)=p$(j)(1:val(control$(j,4)))
+				pause
+				if mask$(j)='glaccount' then
+					p$(j)=fnagl$(p$(j))
+				end if
+				
 			end if
 			crflag=0
-			if fltyp2$(j)="cr" then
+			if fltyp2$(j)='cr' then
 				p$(j)=lpad$(trim$(p$(j)),sln2(j))
-				fltyp2$(j)="c"
+				fltyp2$(j)='c'
 				crflag=1
 			end if
-			if lwrc$(fltyp2$(j))<>"pd" then p$(j)=p$(j)(1:sln2(j))
-			if fltyp2$(j)="c" or fltyp2$(j)="g" or fltyp2$(j)="cr" then
-				tmp$="Form Pos "&str$(startPos2(j))&","&fltyp2$(j)&" "
+			if lwrc$(fltyp2$(j))<>'pd' then p$(j)=p$(j)(1:sln2(j))
+			if fltyp2$(j)='c' or fltyp2$(j)='g' or fltyp2$(j)='cr' then
+				tmp$='Form Pos '&str$(startPos2(j))&','&fltyp2$(j)&' '
 				tmp$=tmp$&str$(sln2(j))
 				rewrite #hIn,using tmp$,same,reserve: p$(j)
-				! pr 'Rewr$ - '&TMP$&"   P$("&STR$(J)&")="&P$(J)
+				! pr 'Rewr$ - '&TMP$&'   P$('&STR$(J)&')='&P$(J)
 			end if
-			if crflag=1 then 
+			if crflag=1 then
 				crflag=0
-				fltyp2$(j)="cr"
+				fltyp2$(j)='cr'
 			end if
-			if fltyp2$(j)="n" or fltyp2$(j)="pd" then
-				tmp$="Form Pos "&str$(startPos2(j))&","&fltyp2$(j)&" "
+			if fltyp2$(j)='n' or fltyp2$(j)='pd' then
+				tmp$='Form Pos '&str$(startPos2(j))&','&fltyp2$(j)&' '
 				tmp$=tmp$&str$(sln2(j)) : t=val(p$(j))
 				rewrite #hIn,using tmp$,same,reserve: t
 			end if
@@ -374,7 +418,7 @@ def library fnHamster(uw$*20,mat lbl$,mat fln,hIn,mat p$; mat flTyp$,mat sln,mat
 	return ! /r
 	SpecialNoKey: ! r:
 		! pr 'Special Nokey routine' ! XXX
-		key$=""
+		key$=''
 		read #hIn,using keyForm$,rec=pRec: mat blank$
 		for j=1 to udim(mat blank$)
 			key$&=blank$(j)
@@ -396,4 +440,6 @@ def fn_keyForm$*1024(mat blank$,&key$,hIn; ___,return$*1024)
 	! pr 'return$='&return$ ! XXX
 	fn_keyForm$=return$
 fnend
+
+include: fn_open
 include: ertn

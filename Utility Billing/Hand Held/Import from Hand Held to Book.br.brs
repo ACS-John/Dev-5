@@ -2,7 +2,7 @@
 ! -- Transfer Data From Hand Held to Computer
 library program$: fnRetrieveHandHeldFile
 fn_setup
-if ~fnregistered_for_hh then ! r:
+if ~fnClientHas('U4') then ! r:
 	mat ml$(2) 
 	ml$(1)="You must purchase the ACS Utility Billing Hand Held"
 	ml$(2)="module to access these features"
