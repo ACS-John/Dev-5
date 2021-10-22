@@ -270,6 +270,7 @@ def library fnCurSys$(; cursys_set$*256,resetCache,___,curSystem$*256)
 	if env$('CurSys')<>cursys_cache$ then
 		fnSetEnv('CurSys',cursys_cache$)
 		curSystem$=fn_systemName$
+		if curSystem$='' then pr 'BLANK curSystem$' : pause
 		fnSetEnv('CurSystem',curSystem$)
 
 		! pr 'set curSys to '&env$('cursys')

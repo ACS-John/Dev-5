@@ -57,7 +57,7 @@ fn_setup
 	cursys$=fncursys$(cursys$)
 	dim cnam$*128
 	fncno(cno,cnam$) ! this call triggers the setting of the environment variable (env$('cnam')) i.e. setenv('cnam',[cursys]\company.h, pos 1, c 40 etc  )
-	if env$('acsDeveloper')<>'' and env$('cursystem')='Client Billing' then
+	if env$('acsDeveloper')<>'' and env$('cursys')='CLIENT BILLING' then
 		dim dataFolder$*256
 		dataFolder$='S:\Core\Data\acsllc'
 	else
@@ -105,6 +105,7 @@ goto Xit
 def fn_addIfLicensed(sysCode$)
 	! if (fnClientHas(sysCode$) or env$('acsDeveloper')<>'') and exists('S:\'&fnSystemNameForty$(sysCode$)&'\Menu.mnu') then
 	! on the next line:   srch(mat client_has$,sysCode$)   was   fnClientHas(sysCode$) 
+	! if uprc$(sysCode$)='CLIENT BILLING' then pause
 	if fnClientHas(sysCode$) and exists('S:\'&fnSystemNameForty$(sysCode$)&'\Menu.mnu') then
 		fnAddOneC(mat system_abbr_list$,sysCode$)
 		fnAddOneC(mat system_name$,fnSystemNameForty$(sysCode$))
@@ -682,6 +683,7 @@ def library fnGetProgramList(mat program_plus$,mat program_name$,mat program_nam
 	fnGetProgramList=fn_getProgramList(mat program_plus$,mat program_name$,mat program_name_trim$,mat program_file$,mat ss_text$)
 fnend
 def fn_getProgramList(mat program_plus$,mat program_name$,mat program_name_trim$,mat program_file$,mat ss_text$; ___,glpa_program_count)
+	pr 'in fn_getProgramList' : pause
 	mat program_plus$(0) : mat program_name$(0) : mat program_name_trim$(0) : mat program_file$(0) : mat ss_text$(0)
 
 	fn_getProgramList_add('S:\[cursystem]\Menu.mnu')

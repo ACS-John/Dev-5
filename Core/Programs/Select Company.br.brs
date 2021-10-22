@@ -280,7 +280,7 @@ def fn_setup
 	fn_systemSetup
 fnend
 def fn_dataFolder$*256(; ___,return$*256)
-	if env$('cursystem')='Client Billing' then
+	if env$('cursys')='CLIENT BILLING' then
 		return$='S:\Core\Data\acsllc'
 	else
 		return$='[Q]\[cursys]mstr'
