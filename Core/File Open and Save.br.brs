@@ -9,7 +9,7 @@ def library fnFileSaveAs(save_what$; saveFileName$*256)
 	if ~setup then fn_setup
 	fnFileSaveAs=fn_FileSaveAs(save_what$, saveFileName$)
 fnend
-def fn_FileSaveAs(save_what$; fsa_automatedSaveFileName$*256,suppressErrorLog,disableCopyToLocal)
+def fn_FileSaveAs(save_what$*128; fsa_automatedSaveFileName$*256,suppressErrorLog,disableCopyToLocal)
 	dim save_name$*256,ln$*512
 	dim save_log_filename$*256
 	failure=0
