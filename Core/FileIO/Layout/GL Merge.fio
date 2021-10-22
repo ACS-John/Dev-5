@@ -19,4 +19,4 @@ ven							,ven               							, C 	  8				,              	, ! sPos=71  aka
 jv1							,notSure1	                			, C 	 6				,              	, ! sPos=79 aka=jv$(1)
 jv2							,breakdown code maybe      		, C 	 5				,              	, ! sPos=79 aka=jv$(2)    in Payroll Type Transaction - carry breakdown code for posting employee record
 jv3							,notSure3	                			, C 	 3				,              	, ! sPos=79 aka=jv$(3)
-bank			  		,Bank GL Account          			, C 	 12  			,              	, ! sPos=93 aka=key$
+bank			  		,Bank GL Account          			, C 	 12  			,              	, ! sPos=93 aka=key$ glaccount

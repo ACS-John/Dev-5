@@ -7,7 +7,7 @@ Client Balance Calculation ^ [cursystem]\*
 >Provider                                         ^ HamsterFio:CO *
 >Support                                          ^ HamsterFio:CO *
 >Transactions                                     ^ [cursystem]\Legacy\*
->>Transaction Explorer                            ^ [cursystem]\Transaction Explorer
+>>Transaction Explorer                            ^ [cursystem]\*
 >>Transaction Hamster                             ^ HamsterFio:TM Transaction
 >>Delete Transaction                              ^ [cursystem]\*
 >>TransactionType                                 ^ HamsterFio:*
@@ -17,7 +17,7 @@ Client Balance Calculation ^ [cursystem]\*
 >>Update Support Expiration Date                  ^ [cursystem]\*
 >Support2                                         ^ [cursystem]\Legacy\*
 >Category                                         ^ [cursystem]\*
->Service Code                                     ^ [cursystem]\Legacy\svmaint
+>Service Code                                     ^ [cursystem]\Legacy\*
 >Invoice Description                              ^ [cursystem]\Legacy\ivdmaint
 ! >Monthly Transactions                           ^ [cursystem]\Legacy\arfmmoth
 ! >Employee                                       ^ [cursystem]\Legacy\emaint
@@ -51,7 +51,7 @@ Client Balance Calculation ^ [cursystem]\*
 ! >Standard Charges                               ^ [cursystem]\Legacy\arstdchg
 --Print--
 ! >AR Transaction Listing                         ^ [cursystem]\Legacy\artrlist
-! >Statements                                       ^ [cursystem]\Legacy\arprtbil
+! >Statements                                     ^ [cursystem]\Legacy\arprtbil
 ! >AR Aged Trial Balance                          ^ [cursystem]\Legacy\artb
 ! >Journals                                       ^ [cursystem]\Legacy\arjourn
 >ACS Invoices                                     ^ [cursystem]\*

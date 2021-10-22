@@ -638,9 +638,9 @@ fnend
 		library 'S:\Core\fn\agl$.br': fnagl$
 		fnagl$=fnagl$(x$)
 	fnend
-	def library fnrgl$*60(x$; returnmaxlength)
+	def library fnrgl$*60(x$; returnmaxlength,leaveDescFileOpen) ! passed '  1  101  1' returns '1-101-1 Account Description'
 		library 'S:\Core\fn\rgl$.br': fnrgl$
-		fnrgl$=fnrgl$(x$, returnmaxlength)
+		fnrgl$=fnrgl$(x$, returnmaxlength,leaveDescFileOpen)
 	fnend
 	def library fnrglbig$*60(x$)
 		! library 'S:\Core\fnRGLbig$.br': fnrglbig$

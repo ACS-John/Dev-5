@@ -155,14 +155,6 @@ def fn_hamster(uw$*20,mat lbl$,mat fln,hIn,mat p$; mat flTyp$,mat sln,mat mask$,
 	return ! /r
 	Menu1: ! r:
 		fnTos
-		if srch(mat mask2$,'glaccount')>0 then
-			enableGlAccount=1
-		end if
-		if enableGlAccount then
-			dim gla$(0)*128
-			dim glaN(0)
-			hGl=fn_openFio('GL Account',mat gla$,mat glaN, 1)
-		end if
 		fnflexinit1(uw$&'2b',1,1,20,108,mat flxhdr$,mat cmask$,row_select)
 		for j1=1 to lrec(hIn)
 			pRec=j1
@@ -179,19 +171,16 @@ def fn_hamster(uw$*20,mat lbl$,mat fln,hIn,mat p$; mat flTyp$,mat sln,mat mask$,
 							read #hComboF(controlX),using 'form pos '&control$(controlX,5)&',c '&control$(controlX,6),key=hcfKey$: hcfDesc$ nokey ignore
 							hcfDesc$=rtrm$(hcfDesc$)
 							if mask2$(controlX)='glaccount' then
-								! hcfDesc$&=' - desc here' ! pr 'bbb in hamster' : pause
-								hcfDesc$=fnrglbig$(hcfDesc$)
-								! read #hGl,using form$(hGl),key=rpad$(hcfDesc$(1:12),12): mat gla$,mat glaN nokey ignore
-								! hcfDesc$&=gla$(gl_description) ! ' - desc here' ! pr 'bbb in hamster' : pause
-								pr 'hcfDesc$='&hcfDesc$
+								flxItem$(fic+=1)=fnrgl$(p$(controlX), 60,1)
+							else 
+								flxItem$(fic+=1)=p$(controlX)&' '&hcfDesc$
 							end if
-							! if mask2N(controlX)=>50 and mask2N(controlX)<=53 then
-							! 	hcfDesc$&=' - desc here' : pr 'bbb in hamster' : pause
-							! end if
+						else
+							flxItem$(fic+=1)=p$(controlX)&' '&hcfDesc$
 						end if
-						flxItem$(fic+=1)=p$(controlX)&' '&hcfDesc$
 						!           if hcfDesc$<>'' then pr 'flxItem$('&str$(fic)&')="'&flxItem$(fic)&'" hcfDesc$="'&hcfDesc$&'"' : pause
 					end if
+							fnrgl$('', 0,0) ! close the left open gl desc file
 				next j2
 				fnflexadd1(mat flxItem$)
 			end if
@@ -270,7 +259,15 @@ def fn_hamster(uw$*20,mat lbl$,mat fln,hIn,mat p$; mat flTyp$,mat sln,mat mask$,
 					end if
 					fnComboa(uw$&'A'&str$(j),lc,mypos,mat option$) ! p$(j)
 				else if lwrc$(control$(j,1))='combof' then
-					fnCombof(uw$&'F'&str$(j),lc,mypos,val(control$(j,4))+val(control$(j,6))+3,control$(j,2),val(control$(j,3)),val(control$(j,4)),val(control$(j,5)),val(control$(j,6)),control$(j,7),val(control$(j,8)))
+					if mask2$(j)='glaccount' then
+						!  fnqgl(myline,mypos; container,x,forceGLsysIfPossible,qgllength)
+						fnQgl(lc,mypos) !  6 is not the container, val(control$(j,6)))
+						p2$(j)=fnrgl$(p2$(j))
+						! pause
+					else 
+						! fnComboF(sfn$*100,lyne,ps,width,df$*200,psk,lnk,psd,lnd; if$*200,limlis,unused_userOrReplace,ttt$*200,contain,tabcon,keyFormat$)
+						fnCombof(uw$&'F'&str$(j),lc,mypos,val(control$(j,4))+val(control$(j,6))+3,control$(j,2),val(control$(j,3)),val(control$(j,4)),val(control$(j,5)),val(control$(j,6)),control$(j,7),val(control$(j,8)))
+					end if
 				end if
 				! done adding control and label
 				if disable=1 then mask2N(ic)+=10000
@@ -384,7 +381,7 @@ def fn_hamster(uw$*20,mat lbl$,mat fln,hIn,mat p$; mat flTyp$,mat sln,mat mask$,
 		for j=1 to itemCount
 			if j<=udim(mat control$,1) and lwrc$(control$(j,1))='combof' then
 				p$(j)=p$(j)(1:val(control$(j,4)))
-				pause
+				! pause
 				if mask$(j)='glaccount' then
 					p$(j)=fnagl$(p$(j))
 				end if

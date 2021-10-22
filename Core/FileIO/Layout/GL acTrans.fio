@@ -3,7 +3,7 @@
 recl=72
 ! GL Transactions Accumulated
 ===================================================
-acct    	, GL Account        	, C 12     	,                 	, ! pos 1   TR(1-3) ComboFio(GL Account,1)
+acct    	, GL Account        	, C 12     	,                 	, ! pos 1   TR(1-3) glaccount
 date    	, Date               	, N  6    	, date(mmddyy)   	, ! pos 13  TR(4)
 amt     	, Amount            	, PD 6.2  	,                 	, ! pos 19  TR(5)
 type    	, Transaction Type 	, N  2    	,                 	, ! pos 25  TR(6) ComboFio(GL TransactionType,1)

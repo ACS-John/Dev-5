@@ -184,7 +184,7 @@ def fn_comboF(sfn$*100,lyne,ps,width,df$*200,psk,lnk,psd,lnd; if$*200,limlis,ure
 	if psd<>0 and lnd<>0 then
 		form$&=',Pos '&str$(psd)&',C '&str$(lnd) : nodesc=0
 	end if
-	becky$=sfn$&env$('cno')&'[SESSION].tmp' ! combof_whr$='[temp]\acs\'&becky$
+	becky$=sfn$&'[cno][SESSION].tmp' ! combof_whr$='[temp]\acs\'&becky$
 	!
 	if width=0 then width=lnk+lnd+1
 	dim combokeycurrent$*512,combokeyprior$*512
@@ -307,11 +307,10 @@ def library fnFlexInit1(sfn$*100,lyne,ps,height,width,mat ch$; mat colMask$,selt
 		goto FLEXINIT1_COMPLETE
 	end if
 	if ~setup then fn_setup
-	! fncno(cno)
 	all_hdr$=all_mask$=''
 	! fn_get_flexhandle
 	filenumber=fn_get_flexhandle(1)
-	sfn$=trim$(sfn$)&env$('cno')
+	sfn$=trim$(sfn$)&'[cno]'
 	optfile$=sfn$&'[SESSION].tmp'
 	hdr_count=udim(ch$) : hdrfile$=sfn$&'.hdr'
 	if usr<>0 then goto USEPREVIOUS
@@ -2132,7 +2131,7 @@ CLOSECOMPANY: !
 	end if	! /r
 	qglsetupkeycurrent$='qglCursys='&qgl_cursys$&',add_all_or_blank='&str$(add_all_or_blank)
 	if qglsetupkeycurrent$=qglsetupkeyprior$ then
-!		pr 'saving time ';timesavecount+=1 : pause
+		!		pr 'saving time ';timesavecount+=1 : pause
 		goto QGLFINIS
 	else
 		qglsetupkeyprior$=qglsetupkeycurrent$
@@ -2142,14 +2141,14 @@ CLOSECOMPANY: !
 		else if add_all_or_blank=2 then
 			mat qgloption$(option_count+=1) : qgloption$(option_count)=''
 		end if
-! read the chart of accounts from the appropriate system into an array
+		! read the chart of accounts from the appropriate system into an array
 		if qgl_cursys$='GL' or qgl_cursys$='CL' or qgl_cursys$='PR' or qgl_cursys$='UB' or qgl_cursys$='CR' then
 			! pr 'reading chart of accounts from: '&qgl_cursys$ : pause
 			open #hAccts=fnH: 'Name=[Q]\'&qgl_cursys$&'mstr\GLmstr.h[cno],KFName=[Q]\'&qgl_cursys$&'mstr\glIndex.h[cno],Shr',i,i,k ioerr QGL_ERROR
 		end if
 		do
 			read #hAccts,using glmstr_form$: qglopt$,desc$ noRec QGL_LOOP_COMPLETE eof EO_QGL_GLMSTR ioerr QGL_ERROR
-! reformat the options for typing
+			! reformat the options for typing
 			if use_dept<>0 and use_sub<>0 then
 				qglopt$=trim$(qglopt$(1:3))&'-'&trim$(qglopt$(4:9))&'-'&trim$(qglopt$(10:12))
 			else if use_dept=0 and use_sub<>0 then
@@ -2159,24 +2158,24 @@ CLOSECOMPANY: !
 			else if use_dept<>0 and use_sub=0 then
 				qglopt$=trim$(qglopt$(1:3))&'-'&trim$(qglopt$(4:9))
 			end if
-!	 add spaces to the end of it
-!	 - for spacing of the description,
-!	 and the description
+			!	 add spaces to the end of it
+			!	 - for spacing of the description,
+			!	 and the description
 			qglopt$=(rpad$(qglopt$,14)&desc$)(1:qgllength)
-!		write it into the comobobox option file
-!		pr #whr,using 'Form Pos 1,C 81': qglOpt$
+			!		write it into the comobobox option file
+			!		pr #whr,using 'Form Pos 1,C 81': qglOpt$
 			mat qgloption$(option_count+=1) : qgloption$(option_count)=qglopt$
-QGL_LOOP_COMPLETE: !
+			QGL_LOOP_COMPLETE: !
 		loop
-EO_QGL_GLMSTR: !
-		close #hAccts: ioerr ignore
-	end if
+	EO_QGL_GLMSTR: !
+			close #hAccts: ioerr ignore
+		end if
 	goto QGLFINIS
-QGL_ERROR: !
-	pr 'err ';err;' on line ';line
-	pause
+	QGL_ERROR: !
+		pr 'err ';err;' on line ';line
+		pause
 	goto QGLFINIS
-QGLFINIS: ! WRITE_QGL_ACE: ! add it to the screen ace script file
+	QGLFINIS: ! WRITE_QGL_ACE: ! add it to the screen ace script file
 	dim qgloptfile$*199
 	qgloptfile$=qgl_cursys$&'GLNumber'
 	fn_comboA(qgloptfile$,myline,mypos,mat qgloption$, 'Select from the Chart of Accounts ('&qgl_cursys$&').',qgllength,qglcontainer,qgltabcon,qglsetupkeycurrent$)
@@ -2260,14 +2259,17 @@ def library fnCompanyName(window,win_cols)
 	fnCompanyName=fn_companyName(window,win_cols)
 fnend
 def fn_companyName(window,win_cols)
-	pr #window, fields '1,08,CC 18,[screenheader]': date$('Month dd, ccyy')(1:18)
-	pr #window, fields '1,27,CC 05,[screenheader]': env$('cno')
-	pr #window, fields '1,33,CC 51,[screenheader]': env$('Program_Caption')(1:51)
-	pr #window, fields '1,86,22/CC 24,[screenheader]': env$('cnam')(1:24)
+	! pr #window, f '1,08,{display size}/CC {soflow size},[screenheader]': "text" ! (1:{soflow size})
+	pr #window, f '1,08,15/CC 40,[screenheader]': date$('Month dd, ccyy') ! (1:18)
+	! pr #window, fields '2,08,40/CC 40,[screenheader]': date$('Month dd, ccyy') ! (1:18)
+	! pause
+	pr #window, f '1,27, 5/CC  5,[screenheader]': env$('cno')
+	pr #window, f '1,33,51/CC 40,[screenheader]': env$('Program_Caption')(1:51)
+	pr #window, f '1,86,22/CC 40,[screenheader]': env$('cnam')(1:40)
 	if env$('tmp_acs_back_arrow')='' then ! it is not the main menu.
 		! pr #window, fields '1,'&str$(win_cols-05)&',P 1/2,[buttons],1505': 'S:\Core\Icon\Properties.png' ioerr ignore
 	end if
-	pr #window, fields '1,'&str$(win_cols-02)&',P 1/2,[buttons],1504': 'S:\Core\Icon\help_icon.png' ioerr ignore
+	pr #window, f '1,'&str$(win_cols-02)&',P 1/2,[buttons],1504': 'S:\Core\Icon\help_icon.png' ioerr ignore
 fnend
 
 include: fn_setup
