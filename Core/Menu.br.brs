@@ -683,7 +683,7 @@ def library fnGetProgramList(mat program_plus$,mat program_name$,mat program_nam
 	fnGetProgramList=fn_getProgramList(mat program_plus$,mat program_name$,mat program_name_trim$,mat program_file$,mat ss_text$)
 fnend
 def fn_getProgramList(mat program_plus$,mat program_name$,mat program_name_trim$,mat program_file$,mat ss_text$; ___,glpa_program_count)
-	pr 'in fn_getProgramList' : pause
+	! pr 'in fn_getProgramList' : pause
 	mat program_plus$(0) : mat program_name$(0) : mat program_name_trim$(0) : mat program_file$(0) : mat ss_text$(0)
 
 	fn_getProgramList_add('S:\[cursystem]\Menu.mnu')
