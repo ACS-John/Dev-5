@@ -1,7 +1,7 @@
 ! (C) COPYRIGHT - 1986 - ADVANCED COMPUTER SERVICES, INC.
 	on error goto Ertn
 	autoLibrary
-	fnTop(program$,"Service Code")
+	fnTop(program$)
 	dim sc$*4,ds$*30,holdsc$*4,scode$*4
 	dim dat$*20
 	dim sb$(4),sd$(4),se$(4)*25,pl$(4,3)*30
@@ -19,8 +19,9 @@
 	se$(4)="STANDARD FEES - YTD"
 	gosub L1780
 	open #1: "Name=S:\Core\Data\acsllc\SCMSTR.h[cno],KFName=S:\Core\Data\acsllc\SCIndex.h[cno],Shr",internal,outIn,keyed ioerr L2000
-	goto L260
-L260: pr newpage
+goto Scr1
+Scr1: ! r:
+	pr newpage
 	pr f "3,9,c 55,N": "SERVICE CODE MASTER FILE"
 	pr f "4,6,C 72,N": "COMPANY NUMBER [cno]  "&ltrm$(env$('cnam'))
 	pr f "6,9,c 55,n": "1 = INITIAL FILE PREPARATION"
@@ -33,8 +34,9 @@ L260: pr newpage
 L360: input fields "14,28,N 1,EU,N": ti conv L360
 	if ti=0 then goto L1700
 	restore #1,key>="    ": nokey L390 eof L390
-L390: on ti goto L410,L580,L930,L1260,L400 none L360
-L400: chain "S:\Client Billing\Legacy\TMSCLIST"
+L390: on ti goto L410,L580,L930,PrProofList,L400 none L360 
+! /r
+L400: fnchain("S:\Client Billing\Legacy\Print Service Code Listing")
 L410: pr newpage
 	center=42-int(len(rtrm$(env$('cnam')))/2)
 	pr f "5,"&str$(center)&",C 50,N": env$('cnam')
@@ -44,7 +46,7 @@ L410: pr newpage
 	pr f "12,20,c 50,n": "ENTER PASSWORD TO CONTINUE; ELSE PRESS ENTER TO"
 	pr f "13,20,c 23,n": "RETURN TO THE SUB-MENU."
 L490: input fields "13,50,C 5,IE,n": a$ conv L490
-	if uprc$(a$)="THINK" then goto L510 else goto L260
+	if uprc$(a$)="THINK" then goto L510 else goto Scr1
 L510: i2=1
 	close #1: ioerr L530
 L530: open #1: "Name=S:\Core\Data\acsllc\SCMSTR.h[cno],KFName=S:\Core\Data\acsllc\SCIndex.h[cno]",internal,outIn,keyed ioerr L550
@@ -59,7 +61,7 @@ L590: pr newpage
 L620: pr f mat sd$: mat se$
 	if ti=3 or convc>0 then goto L710
 L640: input fields "5,30,C 4,eu,n": scode$ conv L640
-	if ltrm$(rtrm$(scode$))="0" or rtrm$(scode$)="" then goto L260
+	if ltrm$(rtrm$(scode$))="0" or rtrm$(scode$)="" then goto Scr1
 	scode$=lpad$(rtrm$(scode$),4)
 	read #1,using L570,key=scode$: sc$,ds$,th,sf nokey L730
 	oldti=2
@@ -80,7 +82,7 @@ L770: if cmdkey=6 then goto L1860
 	goto L730
 L840: sc$=lpad$(rtrm$(sc$),4)
 	if ti=3 then goto L1040
-	if rtrm$(sc$)="" or ltrm$(rtrm$(sc$))="0" then goto L260
+	if rtrm$(sc$)="" or ltrm$(rtrm$(sc$))="0" then goto Scr1
 	read #1,using L880,key=sc$: sc$ nokey L910
 L880: form pos 1,c 4
 	pr f "5,35,c 30,h,n": "DUPLICATE SERVICE CODE NUMBER"
@@ -93,7 +95,7 @@ L930: !
 	pr f "10,15,c 50,n": "ENTER SERVICE CODE NUMBER, ENTER 0 WHEN COMPLETED"
 L950: !
 	input fields "10,70,c 4,eu,n": scode$ conv L950
-	if ltrm$(rtrm$(scode$))="0" or rtrm$(scode$)="" then goto L260
+	if ltrm$(rtrm$(scode$))="0" or rtrm$(scode$)="" then goto Scr1
 	scode$=lpad$(rtrm$(scode$),4)
 	read #1,using L570,key=scode$: sc$,ds$,th,sf nokey L950
 	holdsc$=sc$
@@ -130,68 +132,73 @@ L1220: !
 	if oldti=2 then ti=2
 	oldti=0
 goto L390
-L1260: !
+PrProofList: ! r:
 	pr newpage
-	if process=1 then goto L1340
-	pr f "8,10,c 50,n": "POSITION PAPER FOR SERVICE CODE PROOF LIST"
-	pr f "12,10,c 25,n": "ENTER DATE FOR PROOF LIST"
-L1300: !
-	rinput fields "12,40,c 20,uE,n": dat$ conv L1300
-	namtab=66-int(len(rtrm$(env$('cnam')))/2)
-	dattab=66-int(len(rtrm$(dat$))/2)
-	pr newpage
-	L1340: !
-	pr f "10,10,c 50,n": "PRINT SERVICE CODE PROOF LIST IN PROCESS"
-	pr f "23,2,C 30,N": "Press F5 to stop"
-	on fkey 5 goto L1670
+	! if process=1 then goto L1340
+	! pr f "8,10,c 50,n": "POSITION PAPER FOR SERVICE CODE PROOF LIST"
+	! pr f "12,10,c 25,n": "ENTER DATE FOR PROOF LIST"
+	! L1300: !
+	! rinput fields "12,40,c 20,uE,n": dat$ conv L1300
+	! namtab=66-int(len(rtrm$(env$('cnam')))/2)
+	! dattab=66-int(len(rtrm$(dat$))/2)
+	! pr newpage
+	! L1340: !
+	! pr f "10,10,c 50,n": "PRINT SERVICE CODE PROOF LIST IN PROCESS"
+	! pr f "23,2,C 30,N": "Press F5 to stop"
+	! on fkey 5 goto L1670
 	fnopenprn
-L1380: !
-	j=0
-	eofc=0
-L1400: !
-	read #1,using L570: sc$,ds$,th,sf eof L1640
-	j=j+1
-	pl$(1,j)=sc$
-	pl$(2,j)=ds$
-	pl$(3,j)=str$(th)
-	pl$(4,j)=str$(sf)
-	if j=3 then goto L1480
-goto L1400
-L1480: !
-	if pcnt><0 then goto L1510
-	pr #255,using L1500: date$,env$('cnam'),time$,"SERVICE CODE PROOF LIST",dat$
-	L1500: form skip 3,pos 1,c 8,pos namtab,c 40,skip 1,pos 1,c 8,pos 55,c 24,skip 1,pos dattab,c 20,skip 2
-	L1510: !
-	for i=1 to 4
-		pr #255,using L1530: se$(i),pl$(i,1),pl$(i,2),pl$(i,3)
-		L1530: form pos 1,c 25,pos 30,c 30,pos 65,c 30,pos 100,c 30,skip 1
-	next i
-	pr #255:
-	mat pl$=(" ")
-	if eofc=1 then goto L1670
-	pcnt=pcnt+1
-	if pcnt=11 then goto L1610
-goto L1380
-L1610: !
-	pr #255: newpage
-	pcnt=0
-goto L1380
+	do
+		j=0
+		eofc=0
+		do
+			read #1,using L570: sc$,ds$,th,sf eof L1640
+			j=j+1
+			pl$(1,j)=sc$
+			pl$(2,j)=ds$
+			pl$(3,j)=str$(th)
+			pl$(4,j)=str$(sf)
+			if j=3 then goto L1480
+		loop
+	L1480: !
+		if ~pcnt then 
+			pr #255,using L1500: date$,env$('cnam'),time$,"SERVICE CODE PROOF LIST",dat$
+			L1500: form skip 3,pos 1,c 8,pos namtab,c 40,skip 1,pos 1,c 8,pos 55,c 24,skip 1,pos dattab,c 20,skip 2
+		end if
+		for i=1 to 4
+			pr #255,using L1530: se$(i),pl$(i,1),pl$(i,2),pl$(i,3)
+			L1530: form pos 1,c 25,pos 30,c 30,pos 65,c 30,pos 100,c 30,skip 1
+		next i
+		pr #255:
+		mat pl$=(" ")
+		if eofc=1 then goto L1670
+		pcnt=pcnt+1
+		if pcnt=11 then 
+			pr #255: newpage
+			pcnt=0
+		end if
+	loop
+
+
+
 L1640: !
 	if j=0 then goto L1670
 	eofc=1
-	goto L1480
-L1670: fncloseprn
-	on fkey 5 ignore
-	goto L260
-L1700: close #1:
-	if new1=1 then goto L1730
-	if ti=0 and i2=0 then goto Xit
-L1730: execute "Index S:\Core\Data\acsllc\SCMSTR.h[cno]"&' '&"S:\Core\Data\acsllc\SCIndex.h[cno] 1 4 REPLACE DupKeys"
-	if i2=1 then chain "S:\Client Billing\Legacy\SVMAINT"
-	if t1=0 then goto L1770
-chain "S:\Client Billing\Legacy\SVMAINT"
-L1770: !
-goto Xit
+goto L1480
+L1670: !
+	fncloseprn
+	! on fkey 5 ignore
+goto Scr1 ! /r
+
+L1700: !
+	close #1:
+	if new1<>1 and ti=0 and i2=0 then 
+		goto Xit
+	end if
+	fnIndex('S:\Core\Data\acsllc\SCMSTR.h[cno]','S:\Core\Data\acsllc\SCIndex.h[cno]','1 4')
+	if i2=1 then fnchain(program$)
+	if t1=0 then goto Xit
+fnchain(program$)
+
 L1780: ! r:
 	dim hlp$(20)*78,flh$(22)*18,a$*5
 	open #10: "Name=S:\Client Billing\Legacy\SC.HLP,Shr",i,outi,r

@@ -12,10 +12,10 @@ def fn_acsSystemInitialize(; syInitMode)
 	if ~syInitMode or env$('acsVersion')='' then
 		startStatusLine=0 : pr newpage
 		if syInitMode=2 then
-			fn_startStatus("Loading Collection-Master Add-On core components..." )
+			fn_startStatus('Loading Collection-Master Add-On core components...' )
 		else
-			fn_startStatus("Loading ACS System..." )
-			if env$('ACSDeveloper')='' and login_name$<>'niceguywinning@gmail.com' then exe "config statusLine off"
+			fn_startStatus('Loading ACS System...' )
+			if env$('ACSDeveloper')='' and login_name$<>'niceguywinning@gmail.com' then exe 'config statusLine off'
 			! r: set environment variables based on login_name$ and/or BR_MODEL
 			! if env$('ACSDeveloper')<>'' then setenv('disableAutomatedSavePoints','Yes') else setenv('disableAutomatedSavePoints','')
 			if env$('ACSDeveloper')<>'' or login_name$='acsbowman' or login_name$='niceguywinning@gmail.com' then
@@ -68,7 +68,7 @@ def fn_acsSystemInitialize(; syInitMode)
 			fn_startStatus('Collecting local environment variables...')
 			fn_csEnv
 			if env$('client_acsDeveloper')<>'' then setenv('acsDeveloper',env$('client_acsDeveloper'))
-			fnSetEnv('local_program_dir','@:'&env$("CLIENT_BR")(1:pos(env$("CLIENT_BR"),'\',-1)-1))
+			fnSetEnv('local_program_dir','@:'&env$('CLIENT_BR')(1:pos(env$('CLIENT_BR'),'\',-1)-1))
 			fnSetEnv('userprofile','@::'&env$('client_userprofile'))
 		else
 			fnSetEnv('local_program_dir',os_filename$('S:'))
@@ -79,16 +79,16 @@ def fn_acsSystemInitialize(; syInitMode)
 			exe 'config substitute [ScreenIO_ScreenFldDrive] S:'
 		end if
 
-		exe "load S:\Core\Menu.br,Resident" error ignore ! hopefully will decrease the amount of time it takes to load the menu between programs
-		exe "load S:\Core\Library.br,Resident" error ignore
-		!  fails on windows XP  !  exe "load S:\Core\Start.br,Resident"
-		exe "load S:\Core\Index.br,Resident"
-		exe "load S:\Core\ACS_Component.br,Resident"
-		exe "load S:\Core\fn\windowsStart.br,Resident"
+		exe 'load S:\Core\Menu.br,Resident' error ignore ! hopefully will decrease the amount of time it takes to load the menu between programs
+		exe 'load S:\Core\Library.br,Resident' error ignore
+		!  fails on windows XP  !  exe 'load S:\Core\Start.br,Resident'
+		exe 'load S:\Core\Index.br,Resident'
+		exe 'load S:\Core\ACS_Component.br,Resident'
+		exe 'load S:\Core\fn\windowsStart.br,Resident'
 		exe 'load "S:\Core\FileIO\fileio.br",Resident'
-		!  maybe but not yet ...     exe "load S:\Core\Client.br,resident"
+		!  maybe but not yet ...     exe 'load S:\Core\Client.br,resident'
 		if env$('acsEnableComplier')='Yes' and env$('BR_MODEL')<>'CLIENT/SERVER' and ~syInitMode then
-			fncheckcompiled ! sets the current directory to "S:" if it is not already
+			fncheckcompiled ! sets the current directory to 'S:' if it is not already
 		end if
 		if env$('acsEnableComplier')='Yes' and env$('BR_MODEL')<>'CLIENT/SERVER' then fn_updateVersionForInno
 		if env$('BR_MODEL')='CLIENT/SERVER' then
@@ -115,7 +115,7 @@ def fn_acsSystemInitialize(; syInitMode)
 		end if
 		if env$('client_temp')='' then fnSetEnv('Client_TEMP',env$('Temp'))
 		fnSetEnv('temp',env$('temp'), conSubOnly=1)
-		if ~fn_rightsTest(env$('Q'),"Try Run As Administrator.",'Data') then goto Xit
+		if ~fn_rightsTest(env$('Q'),'Try Run As Administrator.','Data') then goto Xit
 		if ~fn_rightsTest(env$('temp'),'Correct your Temp environment variable.','Temp') then goto Xit ! to %USERPROFILE%\AppData\Local\Temp
 		fn_spoolPath$(1)
 		! r: set to last client selected (if appropriate)
@@ -127,19 +127,19 @@ def fn_acsSystemInitialize(; syInitMode)
 		! /r
 		if syInitMode<>2 then
 			if env$('acsProduct')='ACS Online' then
-				setenv("Icon","S:\Core\Icon\ACS Client 32x32-32bit.ico") ! commented out because it made the icon look funny - filled with white and so long as i change the icon on the brclient executable than I'll shouldn't need to re-set it anyway.
+				setenv('Icon','S:\Core\Icon\ACS Client 32x32-32bit.ico') ! commented out because it made the icon look funny - filled with white and so long as i change the icon on the brclient executable than I'll shouldn't need to re-set it anyway.
 			else
 				! this isn't even necessary because the dll and exe have updated icons.
-				setenv("Icon","S:\Core\Icon\ACS BR.ico") ! setenv("Icon","S:\Core\Icon\ACS-v5-32b.ico") ! "S:\Core\Icon\ACS-v5-32x32-32bit.ico"
+				setenv('Icon','S:\Core\Icon\ACS BR.ico') ! setenv('Icon','S:\Core\Icon\ACS-v5-32b.ico') ! 'S:\Core\Icon\ACS-v5-32x32-32bit.ico'
 			end if
-			fnMakeSurepathExists("[Q]\Data\")
+			fnMakeSurepathExists('[Q]\Data\')
 			fnMakeSurepathExists('[Q]\Report Cache\')
 			if fn_moveCoreData('CityStZip.dat') then fn_moveCoreData('CityStZip.idx',1)
 			if fn_moveCoreData('1099Box.dat') then fn_moveCoreData('1099Box.idx',1)
 			! fn_udf_resolve
-			! if exists(udf$&"Reads_and_Chgs.h1") then
-			!   fn_moveData(udf$&"Reads_and_Chgs.h*","[Q]\UBmstr\Reads_and_Chgs.h*",1)
-			!   fn_moveData(udf$&"Reads_and_Chgs-Key.h*","[Q]\UBmstr\Reads_and_Chgs-Key.h*",1)
+			! if exists(udf$&'Reads_and_Chgs.h1') then
+			!   fn_moveData(udf$&'Reads_and_Chgs.h*','[Q]\UBmstr\Reads_and_Chgs.h*',1)
+			!   fn_moveData(udf$&'Reads_and_Chgs-Key.h*','[Q]\UBmstr\Reads_and_Chgs-Key.h*',1)
 			!  end if
 			dim workingDir$*512
 			if env$('br_model')='CLIENT/SERVER' then
@@ -192,7 +192,7 @@ def fn_acsSystemInitialize(; syInitMode)
 				fn_writeProc(''   ,'exe ''load "''&program$&''"''')
 			end if
 		end if
-		fnSetEnv("PD",'S:\') ! for modified fnsnap compatibility (Core\fnsnap)
+		fnSetEnv('PD','S:\') ! for modified fnsnap compatibility (Core\fnsnap)
 		! if syInitMode then disableConScreenOpenDflt=1 else disableConScreenOpenDflt=0
 		fn_startStatus('Identifying your system...')
 		fn_uniqueComputerId_initialize ! called to initialize env$('unique_computer_id')
@@ -316,7 +316,7 @@ def fn_acsUserId_Initialize
 		exe 'config substitute [acsUserId] u'&acs_userid$
 	end if
 fnend
-Xit: exe "System"
+Xit: exe 'System'
 def fn_setup
 	if ~setup then
 		setup=1
@@ -344,10 +344,10 @@ def fn_rightsTest(folder$*256,rt_how_to_fix$*256,folderName$; additional_text_fo
 	returnN=0
 	if skipmsg=1 then goto RT_PASS
 	if err=4205 then
-		msgbox("Insufficient rights to access "&folderName$&" Folder ("&os_filename$(folder$)&")"&chr$(13)&rt_how_to_fix$&chr$(13)&additional_text_for_failure$)
+		msgbox('Insufficient rights to access '&folderName$&' Folder ('&os_filename$(folder$)&')'&chr$(13)&rt_how_to_fix$&chr$(13)&additional_text_for_failure$)
 		returnN=0
 	else if err then
-		msgbox("Error "&str$(err)&" in rights test - making/removing a file in "&folderName$&" Folder ("&os_filename$(folder$)&")"&chr$(13)&rt_how_to_fix$&chr$(13)&additional_text_for_failure$)
+		msgbox('Error '&str$(err)&' in rights test - making/removing a file in '&folderName$&' Folder ('&os_filename$(folder$)&')'&chr$(13)&rt_how_to_fix$&chr$(13)&additional_text_for_failure$)
 		if env$('ACSDeveloper')<>'' then pause
 		returnN=0
 	end if
@@ -365,7 +365,7 @@ def fn_moveData(file_name$*256,destination_name$*256; ignore_exists)
 	fn_moveData=md_return
 fnend
 def fn_moveCoreData(file_name$*256; ignore_exists)
-	fn_moveCoreData=fn_moveData('S:\Core\Data\'&file_name$,"[Q]\Data\"&file_name$, ignore_exists)
+	fn_moveCoreData=fn_moveData('S:\Core\Data\'&file_name$,'[Q]\Data\'&file_name$, ignore_exists)
 fnend
 def fn_mapToVirturalDrive(path_to_map$*256,drive_id$*2)
 	exe 'config drive '&drive_id$(1:1)&','&rtrm$(path_to_map$,'\')&',X,\' ioerr ignore
@@ -435,12 +435,12 @@ fnend
 ! fnend /r
 ! def fn_get_udf(&udf$) r:
 !   dim oldudf$*256
-!   if oldudf$<>"" then
+!   if oldudf$<>'' then
 !     udf$=oldudf$
-!   else if env$("ScreenAceTemp")="" then !    NEW - just return blank - we do not need to make anything
-!     udf$=oldudf$="" ! app_data$&"\ACS\Temp\"
+!   else if env$('ScreenAceTemp')='' then !    NEW - just return blank - we do not need to make anything
+!     udf$=oldudf$='' ! app_data$&'\ACS\Temp\'
 !   else
-!     oldudf$=udf$=fnshortpath$(env$("ScreenAceTemp"))&'\'
+!     oldudf$=udf$=fnshortpath$(env$('ScreenAceTemp'))&'\'
 !   end if
 !   udf$(3:len(udf$))=srep$(udf$(3:len(udf$)),'\\','\')
 ! fnend /r
@@ -499,7 +499,7 @@ fnend
 def fn_updateNeeded(acs_version_prior$,acs_version_running$; ___,returnN)
 	if acs_version_running$<acs_version_prior$ and lwrc$(env$('acsIgnoreDataVersion'))<>'yes' then
 		returnN=1
-		msgbox("The ACS Software version ("&acs_version_running$&") of this workstation is less than the last version ("&acs_version_prior$&") used to access ACS Data."&chr$(13)&"You must update this workstation to continue.")
+		msgbox('The ACS Software version ('&acs_version_running$&') of this workstation is less than the last version ('&acs_version_prior$&') used to access ACS Data.'&chr$(13)&'You must update this workstation to continue.')
 	end if
 	fn_updateNeeded=returnN
 fnend
@@ -540,7 +540,7 @@ fnend
 def fn_csEnv
 	dim ce_line$*2048
 	dim ce_prefix$
-	ce_prefix$="Client_"
+	ce_prefix$='Client_'
 	dim ce_field$*2048
 	dim ce_value$*2048
 	dim ce_os_temp_file$*1048
@@ -562,12 +562,12 @@ def fn_csEnv
 	CE_MAKE_TEMP_FILE: !
 	fnmakesurepathexists(ce_br_temp_file$)
 	exe '*sys -M set > "'&ce_os_temp_file$&'"'
-	open #hOsSet=fn_h: "Name="&ce_br_temp_file$,display,input error CE_DEBUG_OPEN_ERR ! error XIT_fn_csEnv
+	open #hOsSet=fn_h: 'Name='&ce_br_temp_file$,display,input error CE_DEBUG_OPEN_ERR ! error XIT_fn_csEnv
 	do
 		linput #hOsSet: ce_line$ error XIT_LOOP
 		gw_wholeline=len(rtrm$(ce_line$))
 		gw_addlen=1
-		gw_posfnwp=pos(uprc$(ce_line$),"=")
+		gw_posfnwp=pos(uprc$(ce_line$),'=')
 		if gw_posfnwp>0 then
 			gw_equal =pos(ce_line$,'=')
 			gw_nextequal =pos(ce_line$,'=',gw_posfnwp+gw_addlen)
@@ -610,8 +610,8 @@ def fn_csEnv
 		close #hOsSet,free: error ignore
 	!
 	! XIT_fn_csEnv: !
-	exe "*sy -M CD > "&ce_os_temp_file$
-	open #hOsCd=fn_h: "Name="&ce_br_temp_file$,display,input error XIT_FNCS_OS_PATH
+	exe '*sy -M CD > '&ce_os_temp_file$
+	open #hOsCd=fn_h: 'Name='&ce_br_temp_file$,display,input error XIT_FNCS_OS_PATH
 	linput #hOsCd: client_os_path$ error ignore
 	close #hOsCd,free: error ignore
 	fnSetEnv('client_os_path',client_os_path$)
@@ -715,7 +715,7 @@ def fn_updateAlienFolder(localAlien$*512,sourceFolder$*512,filterFrom$,filterTo$
 fnend
 
 def fn_UpdateQScreenIO
-	if env$('acsDeveloper')='' then ! because I used: mklink /J "C:\Users\John\OneDrive\ACS\Dev-5 Data\Core\ScreenIO\Screen" "C:\ACS\Dev-5\Core\ScreenIO\Screen"
+	if env$('acsDeveloper')='' then ! because I used: mklink /J 'C:\Users\John\OneDrive\ACS\Dev-5 Data\Core\ScreenIO\Screen' 'C:\ACS\Dev-5\Core\ScreenIO\Screen'
 		fnMakeSurepathExists(env$('QBase')&'\Core\ScreenIO\screen\')
 		fnCopy('S:\Core\ScreenIO\screen\*.*'      ,env$('QBase')&'\Core\ScreenIO\screen\*.*'      )
 	end if

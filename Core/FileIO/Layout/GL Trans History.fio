@@ -3,7 +3,7 @@
 recl=72
 ===================================================
 ! GL Transactions Currentpro
-gl          	,GL Account                   	, C 	12    	, ! pos 1   TR(1),TR(2),TR(3)
+gl          	,GL Account                   	, C 	12    	, ! pos 1   glaccount    TR(1),TR(2),TR(3)
 dateMMDD    	,Date MMDD                    	, N 	 4    	, ! pos 13  
 dateYY      	,Date YY                      	, N 	 2    	, ! pos 17  
 Amt         	,Amount                       	, PD	 6.2  	, ! pos 19  TR(5)

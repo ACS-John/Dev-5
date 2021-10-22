@@ -42,7 +42,7 @@ fn_setup
 		if uprc$(resp$)=uprc$("Yes") then
 			chain 'S:\Core\Programs\Update'
 		else
-			if env$('acsDebug')<>'' then 
+			if env$('acsDebug')<>'' then
 				pr 'udim(mat system_abbr_list$)=';udim(mat system_abbr_list$)
 				pr 'pr mat client_has$'
 				pr mat client_has$
@@ -103,9 +103,6 @@ if menu$='Exit and Logout' then
 end if
 goto Xit
 def fn_addIfLicensed(sysCode$)
-	! if (fnClientHas(sysCode$) or env$('acsDeveloper')<>'') and exists('S:\'&fnSystemNameForty$(sysCode$)&'\Menu.mnu') then
-	! on the next line:   srch(mat client_has$,sysCode$)   was   fnClientHas(sysCode$) 
-	! if uprc$(sysCode$)='CLIENT BILLING' then pause
 	if fnClientHas(sysCode$) and exists('S:\'&fnSystemNameForty$(sysCode$)&'\Menu.mnu') then
 		fnAddOneC(mat system_abbr_list$,sysCode$)
 		fnAddOneC(mat system_name$,fnSystemNameForty$(sysCode$))
@@ -230,7 +227,7 @@ def fn_main
 			fnLbl(screen_height-5,1,'BR! '&wbversion$,info_colWidth,2)
 			fn_dashboardDraw
 			if enableFavorites then fn_favoritesDraw
-			fn_displayMenu
+			fn_dropDownMenus
 			! if env$('cursys')="PR" then
 			!   fnchk(1,65,'Enable 2018 Federal Withholdings (for testing)', 1,fraDashboard)
 			!   if env$('taxYear')='2018' then resp$(2)='^' else resp$(2)='False'
@@ -339,11 +336,11 @@ def fn_main
 				menu_option$=srep$(menu_option$,'%report_cache_folder_current%',fnReportCacheFolderCurrent$)
 				execute 'sy -c -w explorer "'&os_filename$(menu_option$(1:len(menu_option$)-1))&'"'
 			! else if trim$(menu_option$)='*UpdateFileIO*' then
-			! 
+			!
 			! 	pause
 			! 	setenv('ForceScreenIOUpdate','Yes')
 			! 	execute 'Proc R'
-			
+
 			else
 				pr 'menu_option$=';menu_option$
 			end if
@@ -683,7 +680,7 @@ def library fnGetProgramList(mat program_plus$,mat program_name$,mat program_nam
 	fnGetProgramList=fn_getProgramList(mat program_plus$,mat program_name$,mat program_name_trim$,mat program_file$,mat ss_text$)
 fnend
 def fn_getProgramList(mat program_plus$,mat program_name$,mat program_name_trim$,mat program_file$,mat ss_text$; ___,glpa_program_count)
-	! pr 'in fn_getProgramList' : pause
+
 	mat program_plus$(0) : mat program_name$(0) : mat program_name_trim$(0) : mat program_file$(0) : mat ss_text$(0)
 
 	fn_getProgramList_add('S:\[cursystem]\Menu.mnu')
@@ -785,20 +782,26 @@ fnend
 ! 	pause
 ! 	read #hUbCustomer,next:
 ! goto UbNextCustomer
-def fn_getProgramList_add(gpla_file$*256;___,sign$)
-	dim ss_category$(1)*80
-	dim program_item$(1)*512
+def fn_getProgramList_add(gpla_file$*256;___,sign$,lineCount,h)
 
-	open #1: 'Name='&gpla_file$,display,input ioerr GPLA_Xit
-	linput #1: temp$ eof GPLA_EOF ! just consume first line
+	open #h=1: 'Name='&gpla_file$,display,input ioerr GPLA_Xit
+	linput #h: temp$ eof GPLA_EOF ! just consume first line
+	lineCount=1
 	do
-		linput #1: temp$ eof GPLA_EOF
+		linput #h: temp$ eof GPLA_EOF
+		lineCount+=1
 		if trim$(temp$)<>'' and trim$(temp$)(1:1)<>'!' then
+			dim program_item$(0)*512
 			str2mat(temp$,mat program_item$,'^')
 			if udim(program_item$)=>2 and pos(program_item$(2),'*')>0 then
 				program_item$(2)=srep$(program_item$(2),'*',trim$(trim$(program_item$(1)),'>'))
+
 				program_item$(2)=srep$(program_item$(2),'[cursystem]',env$('cursystem'))
+
+				! if pos(program_item$(2),'[cursystem]')>0 then pr 'AAA [cursystem] still in there. linecount=';linecount;bell : pause
+
 			end if
+
 			if udim(mat program_item$)>=3 then
 				requirment$=trim$(program_item$(3))
 			else
@@ -818,7 +821,13 @@ def fn_getProgramList_add(gpla_file$*256;___,sign$)
 				program_name$(glpa_program_count)=srep$(rtrm$(program_item$(1)),'>','         ')
 				program_name_trim$(glpa_program_count)=trim$(program_name$(glpa_program_count))
 
-				if program_item_count>1 then program_file$(glpa_program_count)=trim$(program_item$(2))
+				if program_item_count=>2 then
+					program_item$(2)=srep$(program_item$(2),'[cursystem]',env$('cursystem')) ! do it again, because without this the test below sometimes fails - not sure why the first srep is not enough
+					! if pos(program_item$(2),'[cursystem]')>0 then pr 'CCC [cursystem] still in there. linecount=';linecount;bell : pause
+
+					program_file$(glpa_program_count)=trim$(program_item$(2))
+
+				end if
 
 				if trim$(program_file$(glpa_program_count))='' then
 					program_plus$(glpa_program_count)='**' ! fn_get_one_plus$(h_plus,env$('cursys'),program_file$(glpa_program_count))
@@ -828,7 +837,11 @@ def fn_getProgramList_add(gpla_file$*256;___,sign$)
 				gt_count=len(program_item$(1)(1:10))-len(srep$(program_item$(1)(1:10),'>',''))
 
 				for gt_item=1 to 10
-					if gt_count=gt_item-1 then mat ss_category$(gt_item) : ss_category$(gt_item)=program_name$(glpa_program_count)
+					if gt_count=gt_item-1 then
+						dim ss_category$(1)*80
+						mat ss_category$(gt_item)
+						ss_category$(gt_item)=program_name$(glpa_program_count)
+					end if
 				next gt_item
 				for ss_cat_item=1 to udim(mat ss_category$)
 					ss_text$(glpa_program_count)=ss_text$(glpa_program_count)&' - '&ltrm$(ss_category$(ss_cat_item))
@@ -840,15 +853,16 @@ def fn_getProgramList_add(gpla_file$*256;___,sign$)
 		end if
 	loop
 	GPLA_EOF: !
-	close #1: ioerr ignore
+	close #h: ioerr ignore
+	linecount=0
 	GPLA_Xit: !
 fnend
-def fn_programLevel(tmp$*512; ___,returnN)
-	do
-		returnN+=1
-	loop while tmp$(returnN:returnN)='>'
-	fn_programLevel=returnN
-fnend
+	def fn_programLevel(tmp$*512; ___,returnN) ! returns count of leading > in tmp$
+		do
+			returnN+=1
+		loop while tmp$(returnN:returnN)='>'
+		fn_programLevel=returnN
+	fnend
 def fn_updateProgramGrid
 	col_return=1
 	col_plus=2
@@ -894,7 +908,7 @@ def fn_upgShowIt(upg_item)
 	program_grid_row$(col_ss_text)=ss_text$(upg_item)
 	fnflexadd1(mat program_grid_row$)
 fnend
-def fn_displayMenu
+def fn_dropDownMenus
 	if ~dm_setup then
 		dm_setup=1
 		dim m_a$(1)*256,m_b$(1)*256,m_c$(1)*256
@@ -1004,12 +1018,12 @@ def fn_displayMenu
 	end if  ! ~dm_setup
 	fnDisplayMenu(mat m_a$,mat m_b$,mat m_c$)
 fnend
-def fn_dm_add(a$*256; b$*256,c$*1)
-	mat m_a$(udim(mat m_a$)+1) : m_a$(udim(mat m_a$))=a$
-	mat m_b$(udim(mat m_b$)+1) : m_b$(udim(mat m_b$))=b$
-	if c$='' then c$='E'
-	mat m_c$(udim(mat m_c$)+1) : m_c$(udim(mat m_c$))=c$
-fnend
+	def fn_dm_add(a$*256; b$*256,c$*1)
+		mat m_a$(udim(mat m_a$)+1) : m_a$(udim(mat m_a$))=a$
+		mat m_b$(udim(mat m_b$)+1) : m_b$(udim(mat m_b$))=b$
+		if c$='' then c$='E'
+		mat m_c$(udim(mat m_c$)+1) : m_c$(udim(mat m_c$))=c$
+	fnend
 def fn_chain(c_program$*128)
 	pr newpage
 	fnchain(c_program$)

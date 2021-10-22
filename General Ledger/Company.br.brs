@@ -27,7 +27,7 @@ fnTop(program$)
 gltyp=7
 fnstyp(0)
  
-open #glmstr=11: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLIndex.h[cno],Shr",internal,outIn,keyed ioerr L220
+open #hGlmstr=11: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLIndex.h[cno],Shr",internal,outIn,keyed ioerr L220
  
 L220: !
 open #20: "Name=[Q]\GLmstr\GLBucket.h[cno],RecL=1,Use",i,outi,r
