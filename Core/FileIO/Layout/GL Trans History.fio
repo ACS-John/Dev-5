@@ -1,15 +1,16 @@
 [Q]\GLmstr\ACTrans.h[cno], th_, 0
-[Q]\GLmstr\AcTrIdx.h[cno], KPs=gl,nta,dateYY,dateMMDD
+[Q]\GLmstr\AcTrIdx.h[cno], glDept/glAcct/glSub/PostingCode/date(5:6)/date(1:4)
 recl=72
 ===================================================
-! GL Transactions Currentpro
-gl          	,GL Account                   	, C 	12    	, ! pos 1   glaccount    TR(1),TR(2),TR(3)
-dateMMDD    	,Date MMDD                    	, N 	 4    	, ! pos 13  
-dateYY      	,Date YY                      	, N 	 2    	, ! pos 17  
-Amt         	,Amount                       	, PD	 6.2  	, ! pos 19  TR(5)
-TranCode    	,Transaction Type             	, C 	 2    	, ! pos 25  TR(6)
-PostingCode 	,Posting Code                 	, C 	 2    	, ! pos 27  TR(7)
-Ref          	,Reference Number             	, C 	12    	, ! pos 29  TR$  
-Desc         	,Description                  	, C 	30    	, ! pos 41  TD$  
-Nta          	,Next Transaction Address    	, n 	 2    	, ! pos 71  nta
+! GL Transactions Accumulated
+acct    	, GL Account        	, C 12     	,                 	, ! glaccount                         	pos 1   TR(1-3) 
+date    	, Date               	, N  6    	, date(mmddyy)   	, !                                    	pos 13  TR(4)
+amt     	, Amount            	, PD 6.2  	,                 	, !                                    	pos 19  TR(5)
+type    	, Transaction Type 	, N  2    	,                 	, ! ComboFio(GL TransactionType,1)  	pos 25  TR(6)   
+posted  	, Posted            	, N  2    	,                 	, !                                    	pos 27  TR(7)
+ref     	, Reference Number 	, C 12    	,                 	, !                                    	pos 29  TR$  
+desc    	, Description       	, C 30    	,                 	, !                                    	pos 41  TD$  
+period  	, Period            	, N  2    	,                 	, ! ComboFio(GL Period Names,1)      	pos 71  PCDE    
+
+
 #eof#
