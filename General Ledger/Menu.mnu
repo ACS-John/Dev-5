@@ -14,8 +14,7 @@ Enter Transactions                                  ^ [cursystem]\*
 Enter Transactions (Legacy)                         ^ [cursystem]\*
 ! >Post Transactions                                  ^ acsGL\GLJCMrge <-- removed 4-9-21 Laura and John agreed   (  GENERAL LEDGER JOB COST MERGE  )
 >Remove Entries Posted by Mistake                   ^ acsGL\UNPost
-Enter Standard Adjustments                          ^ [cursystem]\*
-Enter Standard Adjustments                    ^ HamsterFio:Std Adjustments
+Enter Standard Adjustments                          ^ HamsterFio:Std Adjustments
 >Post Standard Adjustments                          ^ [cursystem]\*
 >Prior Period Adjustments                           ^ [cursystem]\*
 Print
