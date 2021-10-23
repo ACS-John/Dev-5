@@ -3,4 +3,4 @@
 recl=27
 ===================================================
 key     	,Type         	,  N   2	, !  Pos=1  Required=True  Mask=1030
-desc$   	,Description  	,  C  25	, !  Pos=3  Required=True
+desc    	,Description  	,  C  25	, !  Pos=3  

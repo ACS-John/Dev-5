@@ -8,7 +8,7 @@ File
 >Bank Reconciliation                                ^ [cursystem]\*
 >>Access Bank Rec File                              ^ [cursystem]\*
 ! removed 2/10/2017 - will anyone notice?  >Ratios  ^ acsGL\Ratio
->Payee Type                                         ^ acsGL\payeetype
+>Payee Type                                         ^ HamsterFio:*
 Period Ending Dates                                 ^ [cursystem]\*
 Enter Transactions                                  ^ [cursystem]\*
 Enter Transactions (Legacy)                         ^ [cursystem]\*

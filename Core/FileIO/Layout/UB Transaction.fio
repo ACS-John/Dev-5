@@ -4,8 +4,8 @@
 recl=102
 ===================================================
 acct$   	,  Customer Number         	, C  10    	,                 	, !  SPos=  1
-tdate   	,  Date                     	, N   8    	, date(ccyymmdd) 	, !  SPos= 11  CCYYMMDD
-tcode   	,  Transaction Type        	, N   1    	,                 	, !  SPos= 19  1=Charge,2=Penalty,3=Collection,4=Credit Memo,5=Debit Memo
+tdate   	,  Date                     	, N   8    	, date(ccyymmdd) 	, !  SPos= 11 
+tcode   	,  Transaction Type        	, N   1    	,                 	, !  SPos= 19  comboA(1 Charge,2 Penalty,3 Collection,4 Credit Memo,5 Debit Memo)
 tamount 	,  Amount                   	, PD  4.2  	,                 	, !  SPos= 20
 tg_1    	,  S1 (Water) Amount       	, PD  4.2  	,                 	, !  SPos= 24
 tg_2    	,  S2 (Sewer) Amount       	, PD  4.2  	,                 	, !  SPos= 28
