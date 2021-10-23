@@ -88,9 +88,9 @@ Utilities
 Budget Management                                 ^ acsGL\bgmaint2                                        ^ GB
 
 General Ledger Accountants Add-On                 ^                                                       ^ G2
->Employee                                         ^ [cursystem]\Accountants\*                          ^ G2
+>Employee                                         ^ [cursystem]\Accountants\*                             ^ G2
 >Monthly                                          ^                                                       ^ G2
->>Print Payroll Registers                         ^ [cursystem]\Accountants\*                          ^ G2
+>>Print Payroll Registers                         ^ [cursystem]\Accountants\*                             ^ G2
 >>Print Deductions Register                       ^ acsGL\OtherDeductions                                 ^ G2
 >>Print Deductions Register-YTD QTD               ^ acsGL\OtherDeductionsYTD                              ^ G2
 >>Post Payroll Checks                             ^ acsGL\PRMerge                                         ^ G2
@@ -99,10 +99,9 @@ General Ledger Accountants Add-On                 ^                             
 >>Print Texas Unemployment Report                 ^ acsgl\prtexasuc                                       ^ G2
 >>State UnEmp.-Electronic Submission              ^ acsgl\elecuc                                          ^ G2
 >>Print 941 Summary                               ^ acsGL\PR941                                           ^ G2
->>Zero QTD Payroll Information                    ^ [cursystem]\Accountants\*                          ^ G2
+>>Zero QTD Payroll Information                    ^ [cursystem]\Accountants\*                             ^ G2
 >>Fix YTD - QTD Earnings                          ^ acsgl\fixytdqtd                                       ^ G2
 >Annually                                                                                                 ^ G2
-! >>W-2 Supplemental Information                  ^ acsgl\w2box16   <-- moved into Employee file          ^ G2
->>Print W-2 Forms                                 ^ [cursystem]\Print W-2 Forms                        ^ G2
+>>Print W-2 Forms                                 ^ [cursystem]\Print W-2 Forms                           ^ G2
 >>Create Electronic W-2s                          ^ acsGL\glElecW2                                        ^ G2
 >>Zero YTD Payroll Information                    ^ acsGL\PRZYTD                                          ^ G2
