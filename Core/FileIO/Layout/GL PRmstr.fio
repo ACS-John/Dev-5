@@ -1,0 +1,46 @@
+[Q]\GLmstr\PRmstr.h[cno]  ,  gpr_  , 0
+[Q]\GLmstr\PRIndex.h[cno] ,  eno
+===================================================
+ENo                   	,Employee             	,N   4  	,  , ! mask=30       displayLen=12     mask=30
+Name                  	,Name                  	,C  25  	,  , !
+Address               	,Address               	,c  25  	,  , !
+CSZ                   	,CSZ                   	,c  25  	,  , !
+SSN                   	,SSN                   	,c  11  	,  , !
+M1                    	,M(1)                   ,PD 5.2		,  , ! mask=32
+M2                    	,M(2)                   ,PD 5.2		,  , ! mask=32
+M3                    	,M(3)                   ,PD 5.2		,  , ! mask=32
+M4                    	,M(4)                   ,PD 5.2		,  , ! mask=32
+M5                    	,M(5)                   ,PD 5.2		,  , ! mask=32
+M6                    	,M(6)                   ,PD 5.2		,  , ! mask=32
+M7                    	,M(7)                   ,PD 5.2		,  , ! mask=32
+M8                    	,M(8)                   ,PD 5.2		,  , ! mask=32
+M9                    	,M(9)                   ,PD 5.2		,  , ! mask=32
+M10                   	,M(10)                  ,PD 5.2	,  , ! mask=32
+M11                   	,M(11)                  ,PD 5.2	,  , ! mask=32
+M12                   	,M(12)                  ,PD 5.2	,  , ! mask=32
+M13                   	,M(13)                  ,PD 5.2	,  , ! mask=32
+M14                   	,M(14)                  ,PD 5.2	,  , ! mask=32
+M15                   	,M(15)                  ,PD 5.2	,  , ! mask=32
+M16                   	,M(16)                  ,PD 5.2	,  , ! mask=32
+M17                   	,M(17)                  ,PD 5.2	,  , ! mask=32
+M18                   	,M(18)                  ,PD 5.2	,  , ! mask=32
+M19                   	,M(19)                  ,PD 5.2	,  , ! mask=32
+M20                   	,M(20)                  ,PD 5.2	,  , ! mask=32
+M21                   	,M(21)                  ,PD 5.2	,  , ! mask=32
+M22                   	,M(22)                  ,PD 5.2	,  , ! mask=32
+M23                   	,M(23)                  ,PD 5.2	,  , ! mask=32
+M24                   	,M(24)                  ,PD 5.2	,  , ! mask=32
+M25                   	,M(25)                  ,PD 5.2	,  , ! mask=32
+M26                   	,M(26)                  ,PD 5.2	,  , ! mask=32
+M27                   	,M(27)                  ,PD 5.2	,  , ! mask=32
+M28                   	,M(28)                  ,PD 5.2	,  , ! mask=32
+M29                   	,M(29)                  ,PD 5.2	,  , ! mask=32
+M30                   	,M(30)                  ,PD 5.2	,  , ! mask=32
+M31                   	,M(31)                  ,PD 5.2	,  , ! mask=32
+M32                   	,M(32)                  ,PD 5.2	,  , ! mask=32
+M33                   	,M(33)                  ,PD 5.2	,  , ! mask=32
+M34                   	,M(34)                  ,PD 5.2	,  , ! mask=32
+M35                   	,M(35)                  ,PD 5.2	,  , ! mask=32
+M36                   	,M(36)                  ,PD 5.2	,  , ! mask=32
+fta                   	, First Check Addr     ,N  5   	,  , ! mask=30
+nta                   	, Last Check Addr      ,N  5   	,  , ! mask=30

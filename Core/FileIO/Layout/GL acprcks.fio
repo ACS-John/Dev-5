@@ -1,0 +1,25 @@
+[Q]\GLmstr\AcPrCks.h[cno]  ,  apc_  , 0
+===================================================
+ENo                   	,Employee             	,N   4  ,    , ! mask=30       displayLen=12     mask_number
+Date                  	,Date                  	,PD  4  ,    , ! mask=30       displayLen=12     mask_number
+ckno                  	,Check Number         	,PD  4  ,    , ! mask=30       displayLen=12     mask_number
+D4                    	,D(4)                  	,PD  5.2,    , ! mask=32       displayLen=12     mask_pointtwo
+D5                    	,D(5)                  	,PD  5.2,    , ! mask=32       displayLen=12     mask_pointtwo
+D6                    	,D(6)                  	,PD  5.2,    , ! mask=32       displayLen=12     mask_pointtwo
+D7                    	,D(7)                  	,PD  5.2,    , ! mask=32       displayLen=12     mask_pointtwo
+D8                    	,D(8)                  	,PD  5.2,    , ! mask=32       displayLen=12     mask_pointtwo
+D9                    	,D(9)                  	,PD  5.2,    , ! mask=32       displayLen=12     mask_pointtwo
+D10                   	,D(10)                 	,PD  5.2,    , ! mask=32       displayLen=12     mask_pointtwo
+D11                   	,D(11)                 	,PD  5.2,    , ! mask=32       displayLen=12     mask_pointtwo
+D12                   	,D(12)                 	,PD  5.2,    , ! mask=32       displayLen=12     mask_pointtwo
+D13                   	,D(13)                 	,PD  5.2,    , ! mask=32       displayLen=12     mask_pointtwo
+D14                   	,D(14)                 	,PD  5.2,    , ! mask=32       displayLen=12     mask_pointtwo
+D15                   	,D(15)                 	,PD  5.2,    , ! mask=32       displayLen=12     mask_pointtwo
+D16                   	,D(16)                 	,PD  5.2,    , ! mask=32       displayLen=12     mask_pointtwo
+D17                   	,D(17)                 	,PD  5.2,    , ! mask=32       displayLen=12     mask_pointtwo
+D18                   	,D(18)                 	,PD  5.2,    , ! mask=32       displayLen=12     mask_pointtwo
+D19                   	,D(19)                 	,PD  5.2,    , ! mask=32       displayLen=12     mask_pointtwo
+D20                   	,D(20)                 	,PD  5.2,    , ! mask=32       displayLen=12     mask_pointtwo
+D21                   	,D(21)                 	,PD  5.2,    , ! mask=32       displayLen=12     mask_pointtwo
+D22                   	,D(22)                 	,PD  5.2,    , ! mask=32       displayLen=12     mask_pointtwo
+NTA                   	,NTA                   	,PD  3  ,    , ! mask=30       displayLen=12     mask_number

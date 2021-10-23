@@ -2,12 +2,11 @@ General Ledger ^ ACS General Ledger
 General Ledger - Programmer
 >Hamsters
 
->TransactionType                         ^ HamsterFio:*
->Transactions - Accumulated (AcTrans)    ^ HamsterFio:acTrans
->HamsterFio:glTrans                      ^ HamsterFio:GL Trans Current
->Transactions - Current (GLTrans)        ^ acsGL\GLTrans
->glMstr                                  ^ HamsterFio:glMstr
->>Year                                   ^ acsGL\year
+>Transactions Current (actrans)          ^ HamsterFio:Trans Current
+>Transactions History (gltrans)          ^ HamsterFio:Trans History
+>Transaction Types                       ^ HamsterFio:TransactionType
+! >Transactions - Current (GLTrans)        ^ acsGL\GLTrans  ! just use Transactions Current (HamsterFio:Trans Current) instead.  that's all that program is anyway
+>glMstr                                  ^ HamsterFio:Account
 >>Vendor                                 ^ acsGL\Vendor
 >>GLMaster                               ^ acsGL\glmstr_hamster
 >Build Range                             ^ acsGL\BldRange
@@ -21,5 +20,5 @@ General Ledger - Programmer
 Accountants Add-On ^ ACS General Ledger for Accountants
 General Ledger Accountants Add-On - Programmer
 >File
->>AcPrCks Hamster                        ^ acsGL\AcPrCks_Hamster
->>PRMstr Hamster                         ^ acsGL\PRMstr_Hamster
+>AcPrCks                                 ^ HamsterFio:*
+>>PRMstr                                 ^ HamsterFio:*
