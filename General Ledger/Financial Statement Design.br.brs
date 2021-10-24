@@ -3,7 +3,7 @@ fn_setup
 fnTop(program$)
  
 ScrMenu1: ! r:
-	fnTos(sn$="FsDesign")
+	fnTos
 	mylen=20: mypos=mylen+3 : right=1
 	! fnFra(1,1,6,60,"Financial Statement Choices","Choose the financial statement to work with.")
 	frame=0 ! 1
@@ -35,7 +35,7 @@ ScrMenu1: ! r:
 	if ckey=3 then let fn_print_proof
 goto ScrGrid ! /r
 ScrGrid: ! r:
-	fnTos(sn$="FSDesign")
+	fnTos
 	fnlbl(1,1,id$(selection))
 	fnflexinit1('fin_stmtgl',lc=3,1,10,70,mat chdr$,mat cmask$,1)
 	restore #hFSDesign:
@@ -104,7 +104,7 @@ ScrGrid: ! r:
 	end if
 goto ScrGrid ! /r
 AddEdit: ! r:
-	fnTos(sn$="fin_stmt1")
+	fnTos
 	mylen=25: mypos=mylen+3 : right=1
 	fnLbl(1,1,"F/S Number:",mylen,right)
 	fnTxt(1,mypos,5,0,right,"30",0,"",0 )
