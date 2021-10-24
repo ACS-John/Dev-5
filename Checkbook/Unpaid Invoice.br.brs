@@ -42,25 +42,26 @@
 goto MENU1 ! /r
 MENU1: ! r:
 	mat chdr$(16) : mat cmask$(16) : mat item$(16)
-	chdr$(1)='Ref': chdr$(2)='Payee': chdr$(3)='Invoice'
-	chdr$(4)='Date'
-	chdr$(5)='Due Date' : chdr$(6)='P O #'
-	chdr$(7)='Description' : chdr$(8)='Amount'
-	chdr$(9)='Disc Amt' : chdr$(10)='Disc Date'
-	chdr$(11)='Pay Code' : chdr$(12)='Bank'
-	chdr$(13)='ChkNum' : chdr$(14)='Date Paid'
-	chdr$(15)='Post Code' : chdr$(16)='Post Date'
-	cmask$(1)="30"
-	cmask$(2)="": cmask$(3)="" : cmask$(4)='1'
-	cmask$(5)='1' : cmask$(6)='': cmask$(7)=''
-	cmask$(8)='10' : cmask$(9)='10' : cmask$(10)='1'
-	cmask$(11)='30': cmask$(12)='30'
-	cmask$(13)='30': cmask$(14)='3'
-	cmask$(15)='30': cmask$(16)='1'
+	chdr$( 1)='Ref'         	: cmask$( 1)='30' 
+	chdr$( 2)='Payee'       	: cmask$( 2)=''   
+	chdr$( 3)='Invoice'     	: cmask$( 3)=''   
+	chdr$( 4)='Date'        	: cmask$( 4)='1'  
+	chdr$( 5)='Due Date'    	: cmask$( 5)='1'  
+	chdr$( 6)='P O #'       	: cmask$( 6)=''   
+	chdr$( 7)='Description' 	: cmask$( 7)=''   
+	chdr$( 8)='Amount'      	: cmask$( 8)='10' 
+	chdr$( 9)='Disc Amt'    	: cmask$( 9)='10' 
+	chdr$(10)='Disc Date'   	: cmask$(10)='1'  
+	chdr$(11)='Pay Code'    	: cmask$(11)='30' 
+	chdr$(12)='Bank'        	: cmask$(12)='30' 
+	chdr$(13)='ChkNum'      	: cmask$(13)='30' 
+	chdr$(14)='Date Paid'   	: cmask$(14)='3'  
+	chdr$(15)='Post Code'   	: cmask$(15)='30' 
+	chdr$(16)='Post Date'   	: cmask$(16)='1' 
+
 DISPLAY_INVOICE_GRID: !
 	fnTos
-	respc=0
-	frame=0
+	respc=frame=0
 	fnflexinit1('UnpaidFile',1,1,20,85,mat chdr$,mat cmask$,1,0)
 	restore #paytrans:
 READ_INVOICE_GRID: ! r: read unpaid invoice file and populate the grid
@@ -545,13 +546,13 @@ def fn_test_key(holdkey$*20,vn$,iv$)
 		unpaidkey$=rpad$(ltrm$(vn$),8)&rpad$(ltrm$(iv$),12)
 		read #ivpaid,using 'Form Pos 1,C 8',key=unpaidkey$,release: x$ nokey TEST2
 	goto TEST_KEY_FAIL_ON_IV
-	
+
 	TEST2: !
 		! pass goes to test_key_pass - fail goes to test_key_fail_on_paytrans
 		open #testpaytrans=fnH: "Name=[Q]\CLmstr\PayTrans.h[cno],KFName=[Q]\CLmstr\UnPdIdx1.h[cno],SHR",internal,outIn,keyed
 		read #testpaytrans,using 'Form Pos 1,C 8',key=newkey$,release: x$ nokey TEST_KEY_OK
 	goto TEST_KEY_FAIL_ON_PAYTRANS
-	
+
 	TEST_KEY_FAIL_ON_PAYTRANS: !
 		mat ml$(3)=("")
 		ml$(1)="The invoice number "&trim$(iv$)&" for Payee "&trim$(vn$)
@@ -559,7 +560,7 @@ def fn_test_key(holdkey$*20,vn$,iv$)
 		ml$(3)="Please change the Invoice Number or the Payee."
 		fnmsgbox(mat ml$,resp$,'',0)
 	goto TEST_KEY_FAIL
-	
+
 	TEST_KEY_FAIL_ON_IV: !
 		mat ml$(3)=("")
 		ml$(1)="The invoice number "&trim$(iv$)&" for Payee "&trim$(vn$)
@@ -567,17 +568,17 @@ def fn_test_key(holdkey$*20,vn$,iv$)
 		ml$(3)="Please change the Invoice Number or the Payee."
 		fnmsgbox(mat ml$,resp$,'',0)
 	goto TEST_KEY_FAIL
-	
+
 	TEST_KEY_OK: !
 		! pr 'fnTest Key PASSED'
 		fn_test_key=1
 	goto EO_TEST_KEY
-	
+
 	TEST_KEY_FAIL: !
 	! pr 'fnTest Key FAILED'
 		fn_test_key=2
 	goto EO_TEST_KEY
-	
+
 	EO_TEST_KEY: !
 	! If FILE(IVPAID)<>0 Then Close #IVPAID:
 	if file(testpaytrans)<>0 then close #testpaytrans: ioerr ignore
