@@ -25,6 +25,7 @@ Payee                                     ^ [cursystem]\*
 General Ledger
 >Chart of Accounts                        ^ [cursystem]\*
 >General Ledger Control                   ^ acsCL\GLControl
+! >General Ledger Control                   ^ HamsterFio:CL GL Control    (close but inferior to old design still)
 Other Files
 >Department Breakdown                     ^ acsCL\department
 Print Checks                              ^ [cursystem]\*

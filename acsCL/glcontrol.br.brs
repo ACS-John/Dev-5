@@ -1,24 +1,22 @@
-! Replace S:\Core\GLControl
-! Checkbook Transaction Allocation File - Hamster
-! pretty useless to the end user - but quite usefull to the programmer
+! Replace S:\acsCL\GLControl
 autoLibrary
 on error goto Ertn
 fnTop(program$,'General Ledger Control')
-dim lbl$(6)*38,tln(6),p$(6)*160,fltyp$(6),sln(6),mask(6),c$(6,8)*40
  
 ! r: BUILD_LAYOUT
-
 	ic=0 ! temporary Item Counter      
 	number=30
-  !  Field Labels                                          	: Display Length : Field Type     : Storage Len : mask
-	lbl$(ic+=1)="Fund Number"                              	: tln(ic+=1)=3  : fltyp$(ic)='N' : sln(ic)= 3 : mask(ic)=1000+number
-	lbl$(ic+=1)="Description"                              	: tln(ic+=1)=30 : fltyp$(ic)='C' : sln(ic)=30 : mask(ic)=0
-	lbl$(ic+=1)="General Ledger Number Due To"           	: tln(ic+=1)=9  : fltyp$(ic)='C' : sln(ic)= 9 : mask(ic)=0
-	lbl$(ic+=1)="General Ledger Number Due From"         	: tln(ic+=1)=9  : fltyp$(ic)='C' : sln(ic)= 9 : mask(ic)=0
-	lbl$(ic+=1)="General Ledger Number Accounts Payable" 	: tln(ic+=1)=12 : fltyp$(ic)='C' : sln(ic)=12 : mask(ic)=0
-	lbl$(ic+=1)="General Ledger Number for Discounts"    	: tln(ic+=1)=12 : fltyp$(ic)='C' : sln(ic)=12 : mask(ic)=0
+	dim lbl$(6)*38,tln(6),p$(6)*160,fltyp$(6),sln(6),mask(6)
+  !  Field Labels                                          	: Display Len : Field Type     : Storage Len : mask
+	lbl$(ic+=1)="Fund Number"                              	: tln(ic)=3  : fltyp$(ic)='N' : sln(ic)= 3 : mask(ic)=1000+number
+	lbl$(ic+=1)="Description"                              	: tln(ic)=30 : fltyp$(ic)='C' : sln(ic)=30 : mask(ic)=0
+	lbl$(ic+=1)="General Ledger Number Due To"           	: tln(ic)=9  : fltyp$(ic)='C' : sln(ic)= 9 : mask(ic)=0
+	lbl$(ic+=1)="General Ledger Number Due From"         	: tln(ic)=9  : fltyp$(ic)='C' : sln(ic)= 9 : mask(ic)=0
+	lbl$(ic+=1)="General Ledger Number Accounts Payable" 	: tln(ic)=12 : fltyp$(ic)='C' : sln(ic)=12 : mask(ic)=0
+	lbl$(ic+=1)="General Ledger Number for Discounts"    	: tln(ic)=12 : fltyp$(ic)='C' : sln(ic)=12 : mask(ic)=0
 
 ! ** Combo Boxes **
+	dim c$(6,8)*40
 	! CL=Field Number  : C$(CL,1)='ComboF'
 	! C$(CL,2)=Linked File Name
 	! C$(CL,3)=Key Position         : C$(CL,4)=Key Length
