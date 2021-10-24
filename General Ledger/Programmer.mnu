@@ -7,7 +7,7 @@ General Ledger - Programmer
 >Transaction Types                       ^ HamsterFio:TransactionType
 ! >Transactions - Current (GLTrans)        ^ acsGL\GLTrans  ! just use Transactions Current (HamsterFio:Trans Current) instead.  that's all that program is anyway
 >glMstr                                  ^ HamsterFio:Account
->>Vendor                                 ^ acsGL\Vendor
+>>Vendor                                  ^ HamsterFio:*
 >>GLMaster                               ^ acsGL\glmstr_hamster
 >Build Range                             ^ acsGL\BldRange
 >Fix Reference Numbers                   ^ acsGL\FixRef

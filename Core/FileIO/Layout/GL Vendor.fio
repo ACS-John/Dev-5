@@ -1,0 +1,12 @@
+[Q]\GLmstr\gl1099.dat  ,  ven_          , 0
+[Q]\GLmstr\gl109idx.idx  ,  id
+! recl=127
+===================================================
+id        	,Vendor                 	, cr  8   , , !  Required=True 
+name      	,Name                   	, C  35   , , !
+adr1      	,Address (1)           	, C  20   , , !
+adr2      	,Address (2)           	, C  20   , , ! 
+csz       	,City State and Zip    	, C  20   , , ! comboFio(CO City State Zip)
+ytd       	,YTD Purchases         	, PD  5.2 , , ! 
+box       	,1099 Box               	, N  2    , , ! combof(ignore,[Q]\Data\1099Box.dat,1,2,3,60,[Q]\Data\1099Box.idx,1)
+ssn       	,Federal ID or SSN     	, C  11   , , ! 
