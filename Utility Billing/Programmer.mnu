@@ -17,5 +17,6 @@ Programmer
 >Swap Current and Prior Readings                        ^ [cursystem]\Fix\*
 >Reset Readings                                         ^ acsUB\*
 >Duplicate Customer List                                ^ acsUB\*
+>Chart of Accounts                                    ^ HamsterFio:*
 >Test
 >>UB Customer Search                                    ^ Test\CustomerSearch

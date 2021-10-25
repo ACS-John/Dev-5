@@ -1,0 +1,15 @@
+[Q]\CLmstr\GLmstr.h[cno]  ,  gl_  , 0
+[Q]\CLmstr\GLIndex.h[cno] ,  dept/acct/sub
+
+recl=62
+===================================================
+dept   	,Department                 	, n   3   ,   , ! mask=30    
+acct  	,Account                    	, c   6   ,   , ! mask=30    
+sub   	,Sub Account               	, c   3   ,   , ! mask=30    
+desc  	,Description               	, c  50   ,   , !     
+
+
+
+
+
+
