@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<SwithMailSettings>
+  <ServerSettings>
+    <FromName>ACS Billing</FromName>
+    <FromAddress>billing@advancedcomputer.services</FromAddress>
+    <Username>john@advancedcomputer.services</Username>
+    <Password>/mW/PMRZfu4o5Xgj403LWmAEDrsz0jhDFx4Ac52Tqig=</Password>
+    <ObscurePassword>True</ObscurePassword>
+    <MailServer>smtp.gmail.com</MailServer>
+    <MailServerPort>587</MailServerPort>
+    <SSL>True</SSL>
+    <Encoding />
+    <RequestReceipt>False</RequestReceipt>
+    <MessageID>False</MessageID>
+  </ServerSettings>
+  <EmailAddresses>
+    <To>niceguywinning@gmail.com</To>
+    <CC />
+    <BCC />
+    <ReplyTo />
+  </EmailAddresses>
+  <Attachments>
+    <AttachmentPath />
+  </Attachments>
+  <EmailContent>
+    <HTML>True</HTML>
+    <DontReplaceNewLine>True</DontReplaceNewLine>
+    <Subject>test subject</Subject>
+    <Body>&lt;p&gt;this is my &lt;b&gt;first&lt;/b&gt; email.&lt;/p&gt;
+</Body>
+    <BodyTxtFile />
+  </EmailContent>
+</SwithMailSettings>
