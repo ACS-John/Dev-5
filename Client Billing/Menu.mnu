@@ -1,5 +1,4 @@
 ! *** Client Billing ***
-Client Balance Calculation ^ [cursystem]\*
 --File--
 >Client                                           ^ HamsterFio:CO *
 >Prices                                           ^ HamsterFio:CO *
@@ -13,7 +12,7 @@ Client Balance Calculation ^ [cursystem]\*
 >>TransactionType                                 ^ HamsterFio:*
 ! >>Import Transactions from Mint CSV to Checkbook  ^ [cursystem]\Legacy\arinput_import_csv
 >Unbilled Transactions (TMTrans Hamster)          ^ [cursystem]\Legacy\TMTrans
->Support                                          ^ [cursystem]\Legacy\*
+>Support (Legacy)                                 ^ [cursystem]\Legacy\*
 >>Update Support Expiration Date                  ^ [cursystem]\*
 >Support2                                         ^ [cursystem]\Legacy\*
 >Category                                         ^ [cursystem]\*
@@ -22,6 +21,7 @@ Client Balance Calculation ^ [cursystem]\*
 ! >Monthly Transactions                           ^ [cursystem]\Legacy\arfmmoth
 ! >Employee                                       ^ [cursystem]\Legacy\emaint
 ! >Company Information (Support)                  ^ acsSU\Company
+>Systems 2                                        ^ HamsterFio:CO *
 >Systems                                          ^ HamsterFio:CO *
 >Time Frame                                       ^ HamsterFio:*
 >Client Labels                                    ^ [cursystem]\Legacy\CliLabel
@@ -59,3 +59,5 @@ Client Balance Calculation ^ [cursystem]\*
 ! >Service Production Report                      ^ [cursystem]\Legacy\tmsrvprd
 ! >YTD Billing Summary                            ^ [cursystem]\*
 ! >Zero YTD Information                           ^ [cursystem]\Legacy\tmzytd
+Error Checking
+>Client Balance Calculation ^ [cursystem]\*

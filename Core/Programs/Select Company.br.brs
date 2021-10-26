@@ -11,7 +11,7 @@ Menu1: ! r:
 	for ch_item=2 to udim(mat client_has$) ! starting at 2 to always skip CO = which is always #1
 		if ~fnSystemIsAddOn(client_has$(ch_item)) then
 			ch_line+=1
-			fnButtonOrDisabled((~env$('cursys')==client_has$(ch_item)),ch_line,1,fnSystemNameForty$(client_has$(ch_item))(1:37),1000+ch_item, '',37,1)
+			fnButtonOrDisabled((~env$('cursys')==client_has$(ch_item)),ch_line,1,fnSystemName$(client_has$(ch_item))(1:37),1000+ch_item, '',37,1)
 		end if
 	next ch_item
 	! /r

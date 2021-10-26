@@ -1,0 +1,7 @@
+S:\Core\Data\acsllc\acsSystems.dat, sys_, 0
+S:\Core\Data\acsllc\acsSystems.idx,  id
+===================================================
+id       ,Id                	,C  16   , ! 
+name     ,Name              	,C  64  
+isChild  ,Is an Add-On     	,N   1   , !  1=yes (it is an add-on)  else no
+parent   ,Add-On to System	,C  16   , !

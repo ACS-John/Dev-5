@@ -719,7 +719,7 @@ Xit: fnend
 				borderText$&='(Session '&session$(len(session$):len(session$))&') '
 			end if
 			dim systemName$*128
-			systemName$=fnSystemNameForty$
+			systemName$=fnSystemName$
 			if systemName$=cap$ then ! pr border:
 				borderText$&='- '&systemName$
 			else

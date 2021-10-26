@@ -52,7 +52,7 @@ def fn_reportCacheFolderCurrent$*512(; ___,return$*512)
 		report_cache_base$=os_filename$('[Q]\Report Cache')
 	end if
 	if report_cache_base$='' then report_cache_base$=os_filename$('[Q]\Report Cache')
-	return$=rtrm$(report_cache_base$,'\')&'\'&fnSystemNameForty$
+	return$=rtrm$(report_cache_base$,'\')&'\'&fnSystemName$
 	return$=rtrm$(return$,'\')&'\'&fn_safeFilename$(env$('cnam'))&' ([cno])'
 	return$=fnSrepEnv$(return$)
 	if env$('BR_MODEL')='CLIENT/SERVER' then ! client gets a parallel report cache with only thir own stuff in it

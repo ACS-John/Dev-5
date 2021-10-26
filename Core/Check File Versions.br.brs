@@ -37,7 +37,7 @@ fnend
 def fn_cfv_addMissingFiles(; ___,path$*256,prog$*256,ext$*128,item)
 	dim camf_filename$(0)*256
 	mat camf_filename$(0)
-	fnGetDir2('S:\'&fnSystemNameForty$&'\mstr\',mat camf_filename$, '','*.h99999')
+	fnGetDir2('S:\'&fnSystemName$&'\mstr\',mat camf_filename$, '','*.h99999')
 	for item=1 to udim(mat camf_filename$)
 		fnGetPp(camf_filename$(item),path$,prog$,ext$)
 		! if lwrc$(camf_filename$(item))='department' then pause

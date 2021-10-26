@@ -973,7 +973,7 @@ def library fnsystem_code_standardize$(st_code$*256)
 	fnsystem_code_standardize$=fn_system_code_standardize$(st_code$)
 fnend
 def fn_system_code_standardize$(st_code$*256)
-	! this function is to translate from systems.h420 to
+	! this function is to translate (to top level system) from 'CO Systems 2.sys_ID' to 'CO Systems 2.sys_Parent' value (or leave at id if no parent)
 	! cursys type codes
 	!
 	st_code$=uprc$(st_code$)

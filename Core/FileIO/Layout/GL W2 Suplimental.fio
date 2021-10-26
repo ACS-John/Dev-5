@@ -1,0 +1,36 @@
+[Q]\[cursys]mstr\W2Box16.h[cno]  ,  gc_  , 0
+[Q]\[cursys]mstr\W2Index.h[cno] ,  client
+
+recl=158
+===================================================
+Client         	,Client ID       	,c   8   ,   , !
+Box11Desc      	,Box 11 Desc     	,c  12   ,   , !
+Box11Amount   	,Box 11 Amount  	,N  10.2 ,   , !
+Box11Fed       	,Box 11 Fed      	,c   1   ,   , !
+Box11FICA      	,Box 11 FICA     	,c   1   ,   , !
+Box11State    	,Box 11 State   	,c   1   ,   , !
+UnusedDesc    	,Unused Desc    	,c  12   ,   , !
+UnusedAmount  	,Unused Amount  	,N  10.2 ,   , !
+UnusedFed      	,Unused Fed      	,c   1   ,   , !
+UnusedFICA    	,Unused FICA    	,c   1   ,   , !
+UnusedState   	,Unused State   	,c   1   ,   , !
+Box12aDesc   	,Box 12a Desc   	,c  12   ,   , !
+Box12aAmount 	,Box 12a Amount 	,N  10.2 ,   , !
+Box12aFed     	,Box 12a Fed     	,c   1   ,   , !
+Box12aFICA   	,Box 12a FICA   	,c   1   ,   , !
+Box12aState  	,Box 12a State  	,c   1   ,   , !
+Box12bDesc   	,Box 12b Desc   	,c  12   ,   , !
+Box12bAmount 	,Box 12b Amount 	,N  10.2 ,   , !
+Box12bFed     	,Box 12b Fed     	,c   1   ,   , !
+Box12bFICA   	,Box 12b FICA   	,c   1   ,   , !
+Box12bState  	,Box 12b State  	,c   1   ,   , !
+Box12cDesc   	,Box 12c Desc   	,c  12   ,   , !
+Box12cAmount 	,Box 12c Amount 	,N  10.2 ,   , !
+Box12cFed     	,Box 12c Fed     	,c   1   ,   , !
+Box12cFICA   	,Box 12c FICA   	,c   1   ,   , !
+Box12cState  	,Box 12c State  	,c   1   ,   , !
+Box12dDesc   	,Box 12d Desc   	,c  12   ,   , !
+Box12dAmount 	,Box 12d Amount 	,N  10.2 ,   , !
+Box12dFed     	,Box 12d Fed     	,c   1   ,   , !
+Box12dFICA   	,Box 12d FICA   	,c   1   ,   , !
+Box12dState  	,Box 12d State  	,c   1   ,   , !

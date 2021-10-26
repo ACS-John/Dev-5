@@ -1,18 +1,17 @@
 ! *** GL - General Ledger ***
 File
 >Accounts                                           ^ [cursystem]\*
->Financial Statement Design                         ^ [cursystem]\*
 >Payee                                              ^ [cursystem]\*
 >>Payee Transaction List                            ^ [cursystem]\*
+>>Payee Type                                         ^ HamsterFio:*
 >Schedule                                           ^ [cursystem]\*
 >Bank Reconciliation                                ^ [cursystem]\*
 >>Access Bank Rec File                              ^ [cursystem]\*
 ! removed 2/10/2017 - will anyone notice?  >Ratios  ^ acsGL\Ratio
->Payee Type                                         ^ HamsterFio:*
 Period Ending Dates                                 ^ [cursystem]\*
 Enter Transactions                                  ^ [cursystem]\*
-Enter Transactions (Legacy)                         ^ [cursystem]\*
-! >Post Transactions                                  ^ acsGL\GLJCMrge <-- removed 4-9-21 Laura and John agreed   (  GENERAL LEDGER JOB COST MERGE  )
+! removed 10/21/2021 as no remaining issues in new program -jb      Enter Transactions (Legacy)  ^ [cursystem]\*
+! >Post Transactions                                ^ acsGL\GLJCMrge <-- removed 4-9-21 Laura and John agreed   (  GENERAL LEDGER JOB COST MERGE  )
 >Remove Entries Posted by Mistake                   ^ acsGL\UNPost
 Enter Standard Adjustments                          ^ HamsterFio:Std Adjustments
 >Post Standard Adjustments                          ^ [cursystem]\*
@@ -24,6 +23,7 @@ Print
 >Transactions Journal                               ^ [cursystem]\*
 >Chart of Accounts                                  ^ acsGL\acGLCHRT
 Financial Statements
+>Financial Statement Design                         ^ [cursystem]\*
 >Print Cover Letter                                 ^ acsGL\CoverLetterPrint
 >>Edit Cover Letter                                 ^ EditInWordProcessor:[Q]\GLmstr\ACGLCovF.h[cno] forceAtlantis makeIfNecessary
 >Balance Sheet                                      ^ [cursystem]\*

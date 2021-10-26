@@ -72,7 +72,7 @@ def fn_CnoLegacyNtoCReg(legacyFilename$*256,legacyForm$*64,registryKey$*128; val
 	end if
 	fn_CnoLegacyNtoCReg=valuePassedIn
 fnend
-def library fnpedat$*20(;pedat$*20)
+def library fnPeDat$*20(;pedat$*20)
 	if ~setup then fn_setup
 	! Get_or_Put=1 then GET
 	! Get_or_Put=2 then PUT
@@ -99,27 +99,27 @@ def library fnpedat$*20(;pedat$*20)
 	end if
 	fnpedat$=pedat$
 fnend
-def library fnfscode(;fscode)
+def library fnFsCode(;fscode)
 	if ~setup then fn_setup
 	fnfscode=fn_CnoLegacyNtoCReg('[temp]\fscode-[session].dat','Form POS 1,N 9','Financial Statement Code', fscode)
 fnend
-def library fnpriorcd(;PriorCD)
+def library fnPriorcd(;PriorCD)
 	if ~setup then fn_setup
 	fnpriorcd=fn_CnoLegacyNtoCReg('[temp]\priorcd-[session].dat','Form POS 1,N 9','PriorCD', PriorCD)
 fnend
-def library fnpgnum(;pgnum)
+def library fnPgNum(;pgnum)
 	if ~setup then fn_setup
 	fnpgnum=fn_CnoLegacyNtoCReg('[temp]\PgNum-[session].dat','Form POS 1,N 9','PgNum', pgnum)
 fnend
-def library fnrx(;rx)
+def library fnRx(;rx)
 	if ~setup then fn_setup
 	fnrx=fn_CnoLegacyNtoCReg('[temp]\rx-[session].dat','Form POS 1,N 9','rx', rx)
 fnend
-def library fnstyp(;STyp)
+def library fnStyp(;STyp)
 	if ~setup then fn_setup
 	fnstyp=fn_CnoLegacyNtoCReg('[temp]\STyp-[session].dat','Form POS 1,N 9','STyp', STyp)
 fnend
-def library fnps(;ps)
+def library fnPs(;ps)
 	if ~setup then fn_setup
 	fnps=fn_CnoLegacyNtoCReg('[temp]\ps-[session].dat','Form POS 1,N 9','ps', ps)
 fnend
@@ -139,10 +139,10 @@ def library fnUseDeptNo
 	end if
 	fnUseDeptNo=gld1
 fnend
-def library fndat(&dat$;get_or_put)
+def library fnDat(&dat$;get_or_put)
 	if ~setup then fn_setup
 	! Get_or_Put=0 then READ Dat$ (default to Read)
-	! Get_or_Put=1 then READ Dat$
+	! Get_or_Put=0or1 then READ Dat$
 	! Get_or_Put=2 then REWRITE Dat$
 	if get_or_put=0 or get_or_put=1 then
 		fnreg_read('Report Heading Date',dat$)
@@ -155,7 +155,7 @@ def library fndat(&dat$;get_or_put)
 		fnreg_write('Report Heading Date',dat$)
 	end if
 fnend
-def library fnprg(&curprg$; g_p,___,curprg_tmp$*1024)
+def library fnPrg(&curprg$; g_p,___,curprg_tmp$*1024)
 	if ~setup then fn_setup
 	if g_p=2 then ! Put
 		!     r: remove leading  S:\
@@ -176,29 +176,26 @@ def fn_setup_systemCache
 	if ~setup_systemCache then
 		setup_systemCache=1
 		dim s$(0)*128,sN(0)
-		hS=fn_openFio('CO Systems',mat s$,mat sN, 1)
-		dim sAbbr$(0)*256
-		mat sAbbr$(0)
+		hS=fn_openFio('CO Systems 2',mat s$,mat sN, 1)
+		dim sId$(0)*256
+		mat sId$(0)
 		dim sName$(0)*256
 		mat sName$(0)
-		dim sNumber$(0)
-		mat sNumber$(0)
 		dim sIsAddOnN(0)
 		mat sIsAddOnN(0)
 		do
 			read #hS,using form$(hS): mat s$,mat sN eof EoS
-			fnAddOneC(mat sAbbr$     	,trim$(lwrc$(s$(sys_id     )))   )
+			fnAddOneC(mat sId$       	,trim$(lwrc$(s$(sys_id     )))   )
 			fnAddOneC(mat sName$     	,trim$(      s$(sys_name   ))    )
-			fnAddOneC(mat sNumber$  	,trim$(      s$(sys_number ))    )
-			fnAddOneN(mat sIsAddOnN 	,            sN(sys_isAddOn)     )
+			fnAddOneN(mat sIsAddOnN 	,            sN(sys_isChild)     )
 		loop
 		EoS: !
-		if env$('client')='ACS' then
-			fnAddOneC(mat sAbbr$     	,'client billing'  )
-			fnAddOneC(mat sName$     	,'Client Billing'  )
-			fnAddOneC(mat sNumber$   	,''  )
-			fnAddOneN(mat sIsAddOnN 	,0     )
-		end if
+		! ! if env$('client')='ACS' then
+		! 	fnAddOneC(mat sId$       	,'client billing'  )
+		! 	fnAddOneC(mat sName$     	,'Client Billing'  )
+		! 	! fnAddOneC(mat sNumber$   	,''  )
+		! 	fnAddOneN(mat sIsAddOnN 	,0     )
+		! ! end if
 		close #hS:
 	end if
 fnend
@@ -207,7 +204,7 @@ def library fnSystemIsAddOn( sia_systemAbbr$*256; ___,returnN)
 	if ~setup then fn_setup
 	fn_setup_systemCache
 	sia_systemAbbr$=lwrc$(trim$(sia_systemAbbr$))
-	sia_which=srch(mat sAbbr$,sia_systemAbbr$)
+	sia_which=srch(mat sId$,sia_systemAbbr$)
 	if sia_which>0 then
 		returnN=sIsAddOnN(sia_which)
 		if returnN<>1 and returnN<>0 then
@@ -226,22 +223,18 @@ def library fnSystemName$*256(; sysNo$*256)
 	if ~setup then fn_setup
 	fnSystemName$=fn_systemName$( sysNo$)
 fnend
-def library fnSystemNameForty$*40(; sysNo$*256)
-	if ~setup then fn_setup
-	fnSystemNameForty$=fn_systemName$( sysNo$)(1:40)
-fnend
-def fn_systemName$*256(; sysNo$*256,___,return$*256,which)
-	! inherrits: mat sAbbr$, mat sName$
-	if ~setup_systemCache then fn_setup_systemCache
-	if sysNo$='' then sysNo$=env$('CurSys')
-	sysNo$=lwrc$(sysNo$)
-
-	which=srch(mat sAbbr$,sysNo$)
-	if which>0 then
-		return$=sName$(which)
-	end if
-	fn_systemName$=return$
-fnend
+	def fn_systemName$*256(; sysNo$*256,___,return$*256,which)
+		! inherrits: mat sId$, mat sName$
+		if ~setup_systemCache then fn_setup_systemCache
+		if sysNo$='' then sysNo$=env$('CurSys')
+		sysNo$=lwrc$(sysNo$)
+	
+		which=srch(mat sId$,sysNo$)
+		if which>0 then
+			return$=sName$(which)
+		end if
+		fn_systemName$=return$
+	fnend
 
 def library fnCurSys$(; cursys_set$*256,resetCache,___,curSystem$*256)
 	if ~setup then fn_setup

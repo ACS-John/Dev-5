@@ -20,7 +20,7 @@ fn_setup
 		end if
 	end if
 	dim system_abbr_list$(0)*20
-	dim system_name$(0)*40
+	dim system_name$(0)*256
 	mat system_abbr_list$(0)
 	mat system_name$(0)
 	fn_addIfLicensed('CM')
@@ -103,9 +103,9 @@ if menu$='Exit and Logout' then
 end if
 goto Xit
 def fn_addIfLicensed(sysCode$)
-	if fnClientHas(sysCode$) and exists('S:\'&fnSystemNameForty$(sysCode$)&'\Menu.mnu') then
+	if fnClientHas(sysCode$) and exists('S:\'&fnSystemName$(sysCode$)&'\Menu.mnu') then
 		fnAddOneC(mat system_abbr_list$,sysCode$)
-		fnAddOneC(mat system_name$,fnSystemNameForty$(sysCode$))
+		fnAddOneC(mat system_name$,fnSystemName$(sysCode$))
 	end if
 fnend
 def fn_checkFileVersionIfNecessary
@@ -178,7 +178,7 @@ def fn_setupOnCursysChange
 	end if
 fnend
 def fn_captionUpdate
-	setenv('Program_Caption',fnSystemNameForty$)
+	setenv('Program_Caption',fnSystemName$)
 	fnCompanyName(0,screen_width)
 fnend
 def fn_main
@@ -207,7 +207,7 @@ def fn_main
 			if env$('Decimal_Assumed')<>'Decimal Required' then
 				fnLbl(program_grid_line+5,1,env$('Decimal_Assumed'),info_colWidth,2)
 			end if
-			fnButtonOrDisabled(env$('enableClientSelection')=='Yes',program_grid_line+6,1,env$('client')(1:info_colWidth),fkey_client:=5201, 'Client Name is "'&env$('client')&'"',info_colWidth)
+			fnButtonOrDisabled(env$('enableClientSelection')=='Yes',program_grid_line+6,1,env$('client')(1:info_colWidth),fkey_client:=5201, 'You are amazing.',info_colWidth)
 			if env$('ACSDeveloper')<>'' then
 				fnLbl(program_grid_line+8 ,1,"ACS Developer"(1:info_colWidth),info_colWidth,2)
 				fnLbl(program_grid_line+9 ,1,env$('ACSDeveloper')(1:info_colWidth),info_colWidth,2)

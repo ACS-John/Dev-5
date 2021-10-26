@@ -20,7 +20,8 @@
     <ReplyTo />
   </EmailAddresses>
   <Attachments>
-    <AttachmentPath />
+    <AttachmentPath>C:\ACS\Dev-5\Core\SwithMail\readme.txt</AttachmentPath>
+    <AttachmentPath>C:\ACS\Dev-5\Core\xit.br</AttachmentPath>
   </Attachments>
   <EmailContent>
     <HTML>True</HTML>
