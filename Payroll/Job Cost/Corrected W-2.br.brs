@@ -1,4 +1,3 @@
-!  formerly S:\acsPR\newcorrectedPRW2A
 ! used to file a corrected w2 using prace.exe
  
 autoLibrary

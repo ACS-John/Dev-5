@@ -2,7 +2,7 @@
 ! format the answer to fnQgl -
 	! acctIn$ should be formatted as though it were just read in and is ready
 	!    for a read Key=...   ie '  0   100  0'
-def library fnrgl$*60(acctIn$; returnMaxLength,leaveDescFileOpen,___,desc$*50,return$*60)
+def library fnRgl$*60(acctIn$; returnMaxLength,leaveDescFileOpen,___,desc$*50,return$*60)
 	autoLibrary
 	if returnMaxLength=0 then returnMaxLength=35
 
