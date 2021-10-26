@@ -15,7 +15,7 @@ end if
 mat txt$(txt_item+=1) : txt$(txt_item)='Licensed Systems:'
 for c_has_item=1 to c_has_count
 	mat txt$(txt_item+=1) : txt$(txt_item)
-	txt$(txt_item)=chr$(9)&rpad$(fnSystemNameForty$(c_has$(c_has_item)),40)
+	txt$(txt_item)=chr$(9)&rpad$(fnSystemName$(c_has$(c_has_item))(1:40),40)
 	! r: add support information
 	which=srch(mat system_id$,c_has$(c_has_item))
 	mat txt$(txt_item+=1) : txt$(txt_item)

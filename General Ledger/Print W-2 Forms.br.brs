@@ -27,9 +27,9 @@ for j=1 to 4
 	fl1$(j+4)=str$(j+7)&",37,N 1,UT,N"
 next j
 dim w2laser_output_filename$*256
-!
+
 dim w2Copy$*68
-!
+
 dim W2CopyFile$(6)*128,w2ssnMask(6)
 W2CopyFile$(1)='S:\Core\pdf\2016\W-2\Copy A.pdf' : w2ssnMask(1)=0
 W2CopyFile$(2)='S:\Core\pdf\2016\W-2\Copy 1.pdf' : w2ssnMask(2)=0
@@ -37,7 +37,7 @@ W2CopyFile$(3)='S:\Core\pdf\2016\W-2\Copy B.pdf' : w2ssnMask(3)=0
 W2CopyFile$(4)='S:\Core\pdf\2016\W-2\Copy C.pdf' : w2ssnMask(4)=1
 W2CopyFile$(5)='S:\Core\pdf\2016\W-2\Copy 2.pdf' : w2ssnMask(5)=1
 W2CopyFile$(6)='S:\Core\pdf\2016\W-2\Copy D.pdf' : w2ssnMask(6)=1
-!
+
  
 ! /r
 ASK_INFO: !
@@ -58,9 +58,9 @@ end if
 if exportFormatID=0 then
 	fnpa_open('',w2Copy$,'PDF')
 end if
-open #hEmployee=fnH: "Name=[Q]\GLmstr\PRmstr.h[cno],KFName=[Q]\GLmstr\PRINDEX.h[cno],Shr",i,i,k
+open #hEmployee=fnH: "Name=[Q]\GLmstr\PRmstr.h[cno],KFName=[Q]\GLmstr\PRIndex.h[cno],Shr",i,i,k
 box16=0
-open #hW2Box16=fnH: "Name=[Q]\GLmstr\W2Box16.h[cno],KFName=[Q]\GLmstr\W2INDEX.h[cno],Shr",i,i,k ioerr w2b16openfail
+open #hW2Box16=fnH: "Name=[Q]\GLmstr\W2Box16.h[cno],KFName=[Q]\GLmstr\W2Index.h[cno],Shr",i,i,k ioerr w2b16openfail
 box16=1
 w2b16openfail: !
 cLocality$="NO"

@@ -38,7 +38,7 @@ def library fnrgl$*60(acctIn$; returnMaxLength,leaveDescFileOpen,___,desc$*50,re
 
 	AcctNoKey: !
 		if ~leaveDescFileOpen then
-			close #hAcct:
+			close #hAcct: ioerr ignore
 			hAcct=0
 		end if
 	goto Finis

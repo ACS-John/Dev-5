@@ -170,7 +170,7 @@ def fn_index_sys_do_one(cno,system_id$*128)
 			fn_index('[Q]\GLmstr\schedule'&str$(sn)&'.H'&str$(cno),'[Q]\GLmstr\schedule_idx'&str$(sn)&'.h'&str$(cno),'1 12')
 		next sn
 		fn_index('[Q]\GLmstr\TransCodes.h'&str$(cno),'[Q]\GLmstr\transcodes-idx.h'&str$(cno),'1 2')
-		fn_index('[Q]\GLmstr\W2Box16.h'&str$(cno),'[Q]\GLmstr\W2INDEX.h'&str$(cno),'1 8')
+		fn_index('[Q]\GLmstr\W2Box16.h'&str$(cno),'[Q]\GLmstr\W2Index.h'&str$(cno),'1 8')
 
 		fn_index('[Q]\GLmstr\ACGLFNSB.h'&str$(cno),'[Q]\GLmstr\agfsidx4.h'&str$(cno),',1 5')
 		fn_index('[Q]\GLmstr\ACGLFNSc.h'&str$(cno),'[Q]\GLmstr\agfsidx1.h'&str$(cno),',1 5')

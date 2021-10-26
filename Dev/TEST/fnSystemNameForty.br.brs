@@ -1,2 +1,0 @@
-autoLibrary
-pr fnSystemNameForty$('ub')

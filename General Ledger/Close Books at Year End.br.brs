@@ -89,7 +89,7 @@ open #hAcPrCks=fnH: "Name=[Q]\GLmstr\acprcks.h[cno],SIZE=0,RecL=110,Replace",int
 close #hAcPrCks: ioerr ignore
 ! /r
 ! r: reset some stuff in "[Q]\GLmstr\PRmstr.h[cno]"
-open #hPrMstr=fnH: "Name=[Q]\GLmstr\PRmstr.h[cno],KFName=[Q]\GLmstr\PRINDEX.h[cno]",internal,outIn,keyed ioerr SCR2
+open #hPrMstr=fnH: "Name=[Q]\GLmstr\PRmstr.h[cno],KFName=[Q]\GLmstr\PRIndex.h[cno]",internal,outIn,keyed ioerr SCR2
 do
 	read #hPrMstr,using 'Form POS 271,2*N 5': n1,n2 eof L500
 	rewrite #hPrMstr,using 'Form POS 271,2*N 5': 0,0

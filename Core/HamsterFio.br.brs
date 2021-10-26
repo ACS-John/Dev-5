@@ -20,7 +20,7 @@ def library fnHamsterFio(fileid$*64)
 		dim hfLabel$(0)*128
 		fn_hfLayoutRead(defaultFileLayoutPath$&fileid$&defaultFileLayoutExtension$,mat hfDataAll$,mat hfLabel$,mat hfFieldType$,mat hfStorageLen,mat hfMask$,mat hfFieldLen)
 		! pause
-		fnHamster2(fileid$,mat hfLabel$,mat hfFieldLen,hFile,mat hfDataAll$,mat hfFieldType$,mat hfStorageLen,mat hfMask$,mat startingPosition,mat comboBox$)
+		fnHamster2b(fileid$,mat hfLabel$,mat hfFieldLen,hFile,mat hfDataAll$,mat hfFieldType$,mat hfStorageLen,mat hfMask$,mat startingPosition,mat comboBox$)
 	end if
 fnend
 
@@ -181,6 +181,7 @@ def fn_hfLayoutRead(hfLayoutFilename$*256,mat hfDataAll$,mat hfLabel$,mat hfFiel
 								if fn_amc('CO Client'          	,'S:\Core\Data\acsllc\Client.h[cno]   ,1, 5, 6,30,S:\Core\Data\acsllc\Client-Idx.h[cno]') then goto CfGotIt
 								if fn_amc('CO Provider'        	,'S:\Core\Data\acsllc\Provider.h[cno] ,1,11,12,64,S:\Core\Data\acsllc\Provider-Idx.h[cno]') then goto CfGotIt
 								if fn_amc('CO Systems'         	,'S:\Core\Data\acsllc\Systems.h420    ,1, 2, 3,50,S:\Core\Data\acsllc\Systems-Idx.h420') then goto CfGotIt
+								if fn_amc('CO Systems 2'       	,'S:\Core\Data\acsllc\acsSystems.dat  ,1,16,17,64,S:\Core\Data\acsllc\acsSystems.idx') then goto CfGotIt
 								if fn_amc('TM Time Frame'      	,'S:\Core\Data\acsllc\TimeFrame.h[cno],1, 2, 3,50,S:\Core\Data\acsllc\TimeFrame-Idx.h[cno]') then goto CfGotIt
 								if fn_amc('TM Category'        	,'S:\Core\Data\acsllc\Category.h[cno] ,1, 3, 4,30,S:\Core\Data\acsllc\Category_Id_Idx.h[cno]') then goto CfGotIt
 							! /r

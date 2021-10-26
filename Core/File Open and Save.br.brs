@@ -216,7 +216,7 @@ def fn_fileListToArchiveList(mat fileList$,mat archiveList$)
 		if posCompany>0 then
 			dim systemName$*40
 			companyNumber$=fileList$(fileItem)(posCompany+9:len(fileList$(fileItem)))
-			systemName$=fnSystemNameForty$(fileList$(fileItem)(1:2))
+			systemName$=fnSystemName$(fileList$(fileItem)(1:2))
 			mat archiveList$(archiveCount+=1)
 			archiveList$(archiveCount)=systemName$&' - Company '&companyNumber$
 			mat archiveSysAbbr$(archiveCount)
@@ -315,7 +315,7 @@ def fn_opMain(omFileOpen$*256)
 				omSourceFilter$='*.h'&str$(source_company_number)
 			end if
 			fn_extract_appropriate_files(tmpFileOpen$,omSourceFilter$,env$('temp')&'\acs\OpenPartial\')
-			if fn_analyze_7zip_compresslog(env$('temp')&'\acs\OpenPartial_Log.txt','Successfully Opened '&fnSystemNameForty$&' company '&str$(destination_company_number)&' from ',omFileOpen$, 1) then
+			if fn_analyze_7zip_compresslog(env$('temp')&'\acs\OpenPartial_Log.txt','Successfully Opened '&fnSystemName$&' company '&str$(destination_company_number)&' from ',omFileOpen$, 1) then
 				fnreg_write('Last Open Partial Date',date$('ccyy/mm/dd'))
 				fnreg_write('Last Open Partial File',omFileOpen$(pos(omFileOpen$,'\',-1)+1:len(omFileOpen$)))
 				fnreg_write('Last Open Partial Path',omFileOpen$(1:pos(omFileOpen$,'\',-1)))
