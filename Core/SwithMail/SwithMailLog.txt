@@ -1,0 +1,10 @@
+10/27/2021 11:18:28 AM - Failure - SendTo: "niceguywinning@gmail.com,niceguywinning@pm.me" - CC: "" - BCC: "" - Subject: "Test Email" - Attachments: "readme.txt, xit.br" - Unable to read data from the transport connection: net_io_connectionclosed.
+
+Failure sending mail.
+10/27/2021 11:19:31 AM - Failure - SendTo: "niceguywinning@gmail.com,niceguywinning@pm.me" - CC: "" - BCC: "" - Subject: "Test Email" - Attachments: "readme.txt, xit.br" - Unable to read data from the transport connection: net_io_connectionclosed.
+
+Failure sending mail.
+10/27/2021 12:49:48 PM - Failure - SendTo: "niceguywinning@gmail.com,niceguywinning@pm.me" - CC: "" - BCC: "" - Subject: "test subject" - Attachments: "readme.txt, xit.br" - The SMTP server requires a secure connection or the client was not authenticated. The server response was: 5.7.0 Authentication Required. Learn more at
+10/27/2021 12:49:58 PM - Failure - SendTo: "niceguywinning@gmail.com,niceguywinning@pm.me" - CC: "" - BCC: "" - Subject: "test subject" - Attachments: "readme.txt, xit.br" - The SMTP server requires a secure connection or the client was not authenticated. The server response was: 5.7.0 Authentication Required. Learn more at
+10/27/2021 12:50:02 PM - Success - SendTo: "niceguywinning@gmail.com,niceguywinning@pm.me" - CC: "" - BCC: "" - Subject: "test subject" - Attachments: "readme.txt, xit.br"
+10/27/2021 1:08:17 PM - Success - SendTo: "niceguywinning@gmail.com,niceguywinning@pm.me" - CC: "" - BCC: "" - Subject: "Test Email" - Attachments: "readme.txt, xit.br"

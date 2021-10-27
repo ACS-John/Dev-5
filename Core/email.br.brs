@@ -28,10 +28,10 @@
 	! fnSendEmail('niceguywinning@gmail.com',tstBody$, tstSubject$,program$,mat ccEmails$,mat bccEmail$)
 end ! /r
 
-def library fnSendEmail(mat toEmail$,emailMessage$*10000; subject$*256,attachFile$*256,mat ccEmail$,mat bccEmail$)
-	if ~setup then fn_setup
-	fnSendEmail=fn_sendEmail(mat toEmail$,emailMessage$, subject$,attachFile$,mat ccEmail$,mat bccEmail$)
-fnend
+! def library fnSendEmail(mat toEmail$,emailMessage$*10000; subject$*256,attachFile$*256,mat ccEmail$,mat bccEmail$)
+! 	if ~setup then fn_setup
+! 	fnSendEmail=fn_sendEmail(mat toEmail$,emailMessage$, subject$,attachFile$,mat ccEmail$,mat bccEmail$)
+! fnend
 def fn_sendEmail(mat toEmail$,emailMessage$*10000; _
 		subject$*256,attachFile$*256,mat ccEmail$,mat bccEmail$, ___, _
 		hResult,line$*1024,toPart$*512,ccPart$*512,bccPart$*512,attachFilePart$*512, _

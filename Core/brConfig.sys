@@ -1,6 +1,23 @@
 Application_Name ACS 5
 include Drive.sys
-include printer.sys
+
+rem r: formerly printer.sys inclusion - now it is just the part we use
+rem include printer.sys
+rem Printer Type NWP
+Printer [FONT TIMES], "\Efont='Times New Roman'"
+Printer [SETFONT(FontName)], "\Efont='FontName'"
+Printer [SETSIZE(PointSize)], "\E(sPointSizeV" ! This is not enabled yet, but will be very soon
+Printer [LPI(xxx)], "\E&lxxxD"
+Printer [CPI(NNN)], "\E(sNNNH"
+Printer [BOLD], "\E(s1B"
+Printer [/BOLD], "\E(s0B"
+Printer [POS(ROW,COL)], "\E&aROWrCOLC" ! Set Position in Rows and Columns, Vertical, Horizontal. Use +- for Relative
+Printer [LEFT], "\Eleft_justify"  ! left justify thefollowing data
+Printer [RIGHT], "\Eright_justify"
+Printer [CENTER], "\Ecenter"
+Printer [PUSH], "\E&f0S"
+Printer [POP], "\E&f1S"
+rem end of printer.sys lines
 
 Editor "C:\Program Files (x86)\Notepad++\Notepad++.exe"
 

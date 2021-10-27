@@ -78,7 +78,7 @@ def fn_emailQueuedInvoices(email_date$; ___,pdfname$*255,pdfline$*1000,ppos,ppos
 						attachment$=fnReportCacheFolderCurrent$&'\'&trim$(pdfname$)
 						dim tmpTo$*512
 						tmpTo$=trim$(contact$(con_bemail))
-						if fnSendEmail(tmpTo$,emailBody$,"ACS Invoice ",attachment$)>0 then 
+						if fnSwithEmail(tmpTo$,emailBody$,"ACS Invoice ",attachment$)>0 then 
 							fnRename(attachment$,fnReportCacheFolderCurrent$&'\Sent\'&trim$(pdfname$))
 						else
 							dim mg$(0)*128
