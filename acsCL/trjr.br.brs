@@ -79,7 +79,7 @@ READ_TRMSTR: !
 	if tcde=1 then de$=rpad$(ltrm$(vn$),8)&" "&de$(1:26)
 	if bank_code><wbc then goto ENDALL
 	if tcde><wcd then goto END1
-	if fndate_mmddyy_to_ccyymmdd(tr2)<dt1 or fndate_mmddyy_to_ccyymmdd(tr2)>dt2 then : _
+	if fndate_mmddyy_to_ccyymmdd(tr2)<dt1 or (fndate_mmddyy_to_ccyymmdd(tr2)>dt2 and dt2<>0) then : _
 		goto READ_TRMSTR
 	sq$=" "
 	if tcde><1 then goto L750
