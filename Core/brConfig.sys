@@ -2,8 +2,6 @@ Application_Name ACS 5
 include Drive.sys
 
 rem r: formerly printer.sys inclusion - now it is just the part we use
-rem include printer.sys
-rem Printer Type NWP
 Printer [FONT TIMES], "\Efont='Times New Roman'"
 Printer [SETFONT(FontName)], "\Efont='FontName'"
 Printer [SETSIZE(PointSize)], "\E(sPointSizeV" ! This is not enabled yet, but will be very soon
