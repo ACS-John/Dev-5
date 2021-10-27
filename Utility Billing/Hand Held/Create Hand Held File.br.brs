@@ -541,7 +541,13 @@ def fn_badgerBeacon(account$*10,srvCode$*2)
 		fn_record_addC(24,'GAL')                                                 ! Register_Unit_Of_Measure
 		fn_record_addC(19,fn_meterInfo$('reading multipler',account$,srvCode$))  ! Register_Resolution
 		fn_record_addC(20,fn_meterInfo$('Transmitter Number',account$,srvCode$)) ! Endpoint_SN'                 Meter Location - Transmitter Serial Number
-		fn_record_addC(19,fn_meterInfo$('Meter Type',account$,srvCode$))         ! Endpoint_Type                meter type - read type
+		
+		if env$('client')='Moweaqua' then 
+			fn_record_addC(19,fn_meterInfo$('Meter Type',account$,srvCode$)(1:1))   ! just the first letter of the type code for Moweaqua
+		else
+			fn_record_addC(19,fn_meterInfo$('Meter Type',account$,srvCode$))         ! Endpoint_Type                meter type - read type
+		end if
+		
 		fn_record_addN(13,sequence)                                              ! Read_Sequence                Sequence
 		fn_record_addN(15,fn_unusualUsage('high',account$,srvCode$, 1))
 		fn_record_addN(14,fn_unusualUsage('low' ,account$,srvCode$, 1))
