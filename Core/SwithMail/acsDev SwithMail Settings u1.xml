@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <SwithMailSettings>
   <ServerSettings>
     <FromName>ACS Billing</FromName>
@@ -26,12 +26,9 @@
   <EmailContent>
     <HTML>True</HTML>
     <DontReplaceNewLine>True</DontReplaceNewLine>
-    <Subject>test subject</Subject>
+    <Subject>Test Email</Subject>
     <Body>&lt;p&gt;this is my &lt;b&gt;first&lt;/b&gt; email.&lt;/p&gt;
 </Body>
     <BodyTxtFile />
   </EmailContent>
-  <Logging>
-    <Log>True</Log>
-  </Logging>
 </SwithMailSettings>

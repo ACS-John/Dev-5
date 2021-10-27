@@ -1,11 +1,10 @@
-﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <SwithMailSettings>
   <ServerSettings>
     <FromName>ACS Billing</FromName>
     <FromAddress>billing@advancedcomputer.services</FromAddress>
-    <Username>john@advancedcomputer.services</Username>
+    <Username>billing@advancedcomputer.services</Username>
     <Password>asdfghjkl;qwErtyuiopop[zxcvbnm</Password>
-    <ObscurePassword>False</ObscurePassword>
     <MailServer>smtp.gmail.com</MailServer>
     <MailServerPort>587</MailServerPort>
     <SSL>True</SSL>
@@ -26,12 +25,9 @@
   <EmailContent>
     <HTML>True</HTML>
     <DontReplaceNewLine>True</DontReplaceNewLine>
-    <Subject>test subject</Subject>
+    <Subject>Test Email</Subject>
     <Body>&lt;p&gt;this is my &lt;b&gt;first&lt;/b&gt; email.&lt;/p&gt;
 </Body>
     <BodyTxtFile />
   </EmailContent>
-  <Logging>
-    <Log>True</Log>
-  </Logging>
 </SwithMailSettings>

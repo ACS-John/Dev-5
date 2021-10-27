@@ -271,9 +271,9 @@ def library fnProgramDataDir$*256
 	library 'S:\Core\Start.br': fnProgramDataDir$
 	fnProgramDataDir$=fnProgramDataDir$
 fnend
-def library fnSendEmail(mat toEmail$,emailMessage$*10000; subject$*256,attachFile$*1024,mat ccEmails$,mat bccEmail$)
-	library 'S:\Core\email.br': fnSendEmail
-	fnSendEmail=fnSendEmail(mat toEmail$,emailMessage$, subject$,attachFile$,mat ccEmails$,mat bccEmail$)
+def library fnSwithEmail(mat toEmail$,emailMessage$*10000; subject$*256,mat attachFile$,mat ccEmails$,mat bccEmail$)
+	library 'S:\Core\SwithMail\SwithMail.br': fnSwithEmail
+	fnSendEmail=fnSwithEmail(mat toEmail$,emailMessage$, subject$,mat attachFile$,mat ccEmails$,mat bccEmail$)
 fnend
 
 ! r: ScreenIO

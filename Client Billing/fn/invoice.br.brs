@@ -1,7 +1,7 @@
 if env$('acsDeveloper')<>'' then
 	! r: test zone
 	fn_setup
-	testActNum$='ajj'
+	testActNum$='3660'
 	dim testBillTo$(3)*60
 	testBillTo$(1)='American Jiu Jitsu of Maplewood'
 	testBillTo$(2)='something Valley St'
@@ -149,11 +149,11 @@ def fn_lauraStyleInvoiceBody(out,cnam$*128,cLogo$*256,invNum$*12,actNum$,mat bil
 	
 	pdfline$="[pos(+0,+7)][SETSIZE(14)][FONT TIMES][Bold]"&rpt$('_',67)&"[/BOLD][SETSIZE(8)][SETFONT(Lucida Sans)]"
 
-	! pr #out: '[BOLD][FONT TIMES][SETSIZE(8)][pos(+0,+6)][8LPI][LEFT]';
+	! pr #out: '[BOLD][FONT TIMES][SETSIZE(8)][pos(+0,+6)][LPI(8)][LEFT]';
 	pr #out: '[pos(+0,+62)][pic(1,1,'&cLogo$&')]'
 	pr 'using logo: '&cLogo$
 	if ~exists(cLogo$) then pr 'logo file ('&cLogo$&') (specified in CO Provider) does not exist.' : pause
-	pr #out: '[FONT TIMES][SETSIZE(11)][pos(+0,+6)][6LPI][LEFT]'
+	pr #out: '[FONT TIMES][SETSIZE(11)][pos(+0,+6)][LPI(6)][LEFT]'
 
 	pr #out: ''
 	pr #out: ''
@@ -167,7 +167,7 @@ def fn_lauraStyleInvoiceBody(out,cnam$*128,cLogo$*256,invNum$*12,actNum$,mat bil
 	pr #out: '[LEFT][pos(+4,+7)][BOLD]'&trim$(billTo$(1))&'[/BOLD]'
 	pr #out: '[pos(+0,+7)]'&trim$(billTo$(2))
 	pr #out: '[pos(+0,+7)]'&trim$(billTo$(3))
-	pr #out: '[8LPI]'
+	pr #out: '[LPI(8)]'
 	pr #out: ''
 	pr #out: '[SETSIZE(36)][BOLD][CENTER]'
 	pr #out: '[pos(+0,+40)]Invoice'
