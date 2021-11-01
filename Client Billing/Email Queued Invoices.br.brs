@@ -69,7 +69,7 @@ def fn_emailQueuedInvoices(email_date$; ___,pdfname$*255,pdfline$*1000,ppos,ppos
 						emailBody$&='<p>'
 						emailBody$&='Sincerely,<br>'
 						emailBody$&='Your ACS team!<br>'
-						emailBody$&='<a href="http://advancedcomputer.services">Advanced Computer Services LLC</a><br>'
+						emailBody$&='<a href="http://advancedcomputer.services"	>Advanced Computer Services LLC</a><br>'
 						emailBody$&='4 Syme Ave<br>'
 						emailBody$&='West Orange, NJ 07052<br>'
 						emailBody$&='1-800-643-6318</p>'

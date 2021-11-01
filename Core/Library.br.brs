@@ -896,15 +896,15 @@ fnend
 		library 'S:\Core\Hamster_Setup.br': fnH2AddComboA
 		fnH2AddComboA=fnH2AddComboA(hac_screen_item,mat hac_option$)
 	fnend
-	def library fnHamster2(a$*20; h_file)
+	def library fnHamster2(a$*128; h_file)
 		library 'S:\Core\Hamster_Setup.br': fnHamster2
 		fnHamster2=fnHamster2(a$, h_file)
 	fnend
-	def library fnHamster2b(uniqueWord$*20,mat lbl$,mat fln,hIn,mat p$; mat flTyp$,mat sln,mat mask$,mat startPos,mat incontrol$,mat mxl)
+	def library fnHamster2b(uniqueWord$*128,mat lbl$,mat fln,hIn,mat p$; mat flTyp$,mat sln,mat mask$,mat startPos,mat incontrol$,mat mxl)
 		library 'S:\Core\Hamster.br': fnHamster2b
 		fnHamster2b=fnHamster2b(uniqueWord$,mat lbl$,mat fln,hIn,mat p$, mat flTyp$,mat sln,mat mask$,mat startPos,mat incontrol$,mat mxl)
 	fnend
-	def library fnhamster_print(a$*20,mat b$,mat l,c,mat e$; mat f$,mat d,mat g,mat h,mat j$,mat k)
+	def library fnhamster_print(a$*128,mat b$,mat l,c,mat e$; mat f$,mat d,mat g,mat h,mat j$,mat k)
 		library 'S:\Core\Hamster_print.br': fnhamster_print
 		fnhamster_print=fnhamster_print(a$,mat b$,mat l,c,mat e$,mat f$,mat d,mat g,mat h,mat j$,mat k)
 	fnend

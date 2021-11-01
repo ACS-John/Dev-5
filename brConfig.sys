@@ -4,6 +4,7 @@ rem WorkPath needs to be above Drive.sys, so that Drive.sys can override it in s
 include Drive.sys
 rem r: printer.sys - but just the parts we use without types
 rem Printer Type NWP
+Printer [PIC(XX,YY,IMGNAME)], "\Epicture='XX,YY,IMGNAME'"
 Printer [FONT TIMES], "\Efont='Times New Roman'"
 Printer [SETFONT(FontName)], "\Efont='FontName'"
 Printer [SETSIZE(PointSize)], "\E(sPointSizeV"
