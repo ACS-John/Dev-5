@@ -3,13 +3,13 @@
 ! mat fln     array of field lengths
 ! hIn         open file handle
 ! mat p$      array of
-def library fnHamster2b(uw$*20,mat lbl$,mat fln,hIn,mat p$; mat flTyp$,mat sln,mat mask$,mat startPos,mat incontrol$,mat mxl)
+def library fnHamster2b(uw$*128,mat lbl$,mat fln,hIn,mat p$; mat flTyp$,mat sln,mat mask$,mat startPos,mat incontrol$,mat mxl)
 	autoLibrary
 	on error goto Ertn
 	fnHamster2b=fn_hamster(uw$,mat lbl$,mat fln,hIn,mat p$, mat flTyp$,mat sln,mat mask$,mat startPos,mat incontrol$,mat mxl)
 fnend
 
-def library fnHamster(uw$*20,mat lbl$,mat fln,hIn,mat p$; mat flTyp$,mat sln,mat mask,mat startPos,mat incontrol$,mat mxl, ___,maskCount,x)
+def library fnHamster(uw$*128,mat lbl$,mat fln,hIn,mat p$; mat flTyp$,mat sln,mat mask,mat startPos,mat incontrol$,mat mxl, ___,maskCount,x)
 	autoLibrary
 	on error goto Ertn
 
@@ -23,7 +23,7 @@ def library fnHamster(uw$*20,mat lbl$,mat fln,hIn,mat p$; mat flTyp$,mat sln,mat
 	fnHamster=fn_hamster(uw$,mat lbl$,mat fln,hIn,mat p$, mat flTyp$,mat sln,mat mask$,mat startPos,mat incontrol$,mat mxl)
 fnend
 
-def fn_hamster(uw$*20,mat lbl$,mat fln,hIn,mat p$; mat flTyp$,mat sln,mat mask$,mat startPos,mat incontrol$,mat mxl,___,enableGlAccount)
+def fn_hamster(uw$*128,mat lbl$,mat fln,hIn,mat p$; mat flTyp$,mat sln,mat mask$,mat startPos,mat incontrol$,mat mxl,___,enableGlAccount)
 	! r: setup
 
 

@@ -185,7 +185,7 @@ fnend
 def fn_billForNonMaint(client_id$,&invTotal; ___,wo_desc$*30,hTimeSheet) ! add charges not under maintenance to maintenance invoices
 	! dim timesheet$(0)*128
 	! dim timesheetN(0)
-	! hTimeSheet=fn_open('TM timeSheet',mat timesheet$, mat timesheetN, mat form$)
+	! hTimeSheet=fn_open('Client Billing TimeSheet',mat timesheet$, mat timesheetN, mat form$)
 	open #hTimeSheet=fnH: 'Name=[Temp]\TmSht[session],KFName=[Temp]\TmSht-idx[session]',internal,outIn,keyed
 	dim inp7
 	read #hTimeSheet,using F_time,key=>rpad$(client_id$,kln(hTimeSheet)): inp1$,inp2,inp3,inp4,inp5  ,inp6	,inp7,b6  	,b7  ,	b8$,sc,       o_o 	,wo_desc$ nokey TM_XIT2
