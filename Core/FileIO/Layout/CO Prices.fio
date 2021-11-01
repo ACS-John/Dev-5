@@ -3,7 +3,7 @@ S:\Core\Data\acsllc\Prices-Idx.H420 ,  sysid/timeFrame
 recl=14
 ===================================================
 sysid         	,System ID         	, C   2    	,               	, !   Pos=1  ComboFio(CO Systems,1)
-timeFrame     	,Time Frame ID    	, C   2    	,               	, !   Pos=3  ComboFio(TM Time Frame,1)
+timeFrame     	,Time Frame ID    	, C   2    	,               	, !   Pos=3  ComboFio(Client Billing Time Frame,1)
 price         	,Price             	, N  10.2  	,               	, 
 
 

@@ -24,7 +24,7 @@ def fn_DoCalculation(; justOne$,___,reportInitialized)
 	
 	dim d$(0)*128
 	dim dN(0)
-	hTran=fn_openFio('TM Transaction',mat d$,mat dN, ~enableDelete)
+	hTran=fn_openFio('Client Billing Transaction',mat d$,mat dN, ~enableDelete)
 	! r: build mat client$ and mat balance from Transaction file
 	mat client$(0)
 	mat balance(0)

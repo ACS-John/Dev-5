@@ -7,7 +7,7 @@
 >Support                                          ^ HamsterFio:CO *
 >Transactions                                     ^ [cursystem]\Legacy\*
 >>Transaction Explorer                            ^ [cursystem]\*
->>Transaction Hamster                             ^ HamsterFio:TM Transaction
+>>Transaction Hamster                             ^ HamsterFio:Transaction
 >>Delete Transaction                              ^ [cursystem]\*
 >>TransactionType                                 ^ HamsterFio:*
 ! >>Import Transactions from Mint CSV to Checkbook  ^ [cursystem]\Legacy\arinput_import_csv

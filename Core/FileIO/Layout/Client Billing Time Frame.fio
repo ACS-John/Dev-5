@@ -3,5 +3,5 @@ S:\Core\Data\acsllc\TimeFrame-Idx.h[cno]   ,  id
 
 recl=52
 ===================================================
-id    , ID             ,  C   2 , ! SPos=1   Required=True
-name  , Description    ,  C  50 , ! SPos=3   Required=True
+id    	, ID              	,  C   2 , ! SPos=1   Required=True
+name  	, Description    	,  C  50 , ! SPos=3   Required=True

@@ -20,7 +20,7 @@ do ! main loop
 	end if ! /r
 	fnflexinit1('tmTran',3,1,10,10,mat heading$,mat mask$) ! r: draw the flexgrid
 	dim trans$(0)*80,transN(0)
-	hTrans=fn_openFio('TM Transaction',mat trans$,mat transN, 1)
+	hTrans=fn_openFio('Client Billing Transaction',mat trans$,mat transN, 1)
  
 	dim item$(11)*128
 	do
@@ -42,7 +42,7 @@ do ! main loop
 		fnflexAdd1(mat item$)
 	loop
 	EoFlexDraw: ! /r
-	fnCloseFile(hTrans,'TM Transaction')
+	fnCloseFile(hTrans,'Client Billing Transaction')
  
 	fnCmdKey('Delete',ck_delete:=4)
 	fnCmdKey('Exit',ck_exit:=5,0,1)
@@ -66,7 +66,7 @@ def fn_transDesc$(transCode; ___,return$,x)
 		transDesc_setup=1
 		dim tc$(0)*64
 		dim tcN(0)
-		hTcode=fn_openFio('TM TransactionType',mat tc$,mat tcN, 1)
+		hTcode=fn_openFio('Client Billing Transaction Type',mat tc$,mat tcN, 1)
 		mat transCodes(0)
 		mat transDesc$(0)
 		do
@@ -75,7 +75,7 @@ def fn_transDesc$(transCode; ___,return$,x)
 			fnAddOneC(mat transDesc$,trim$(tc$(tc_desc)))
 		loop
 		EoTcode: !
-		fnCloseFile(hTcode,'TM TransactionType')
+		fnCloseFile(hTcode,'Client Billing Transaction Type')
 	end if
 	x=srch(mat transCodes, transCode)
 	return$=transDesc$(x)
@@ -113,7 +113,7 @@ DeleteTransaction: ! r: requires selectedRecord
 	mat mg$(0)
 	fnAddOneC(mat mg$,'Would you like to update the Client Balance?')
 	fnMsgBox(mat mg$,updateClientBalance$,'',mb_question+mb_yesno)
-	hTrans=fn_openFio('TM Transaction',mat trans$,mat transN)
+	hTrans=fn_openFio('Client Billing Transaction',mat trans$,mat transN)
 	read #hTrans,using form$(hTrans),rec=selectedRecord: mat trans$,mat transN
 	if updateClientBalance$='Yes' then
 		hClient=fn_openFio('CO Client',mat client$,mat clientN)
@@ -138,7 +138,7 @@ DeleteTransaction: ! r: requires selectedRecord
 		fnCloseFile(hClient,'CO Client')
 	end if
 	delete #hTrans,rec=selectedRecord:
-	fnCloseFile(hTrans,'TM Transaction')
+	fnCloseFile(hTrans,'Client Billing Transaction')
 	
 return ! /r
 Finis: ! r:

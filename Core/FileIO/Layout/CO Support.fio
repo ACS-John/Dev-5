@@ -6,7 +6,7 @@ client      	,Client ID          	, C   6       	,                 	, !   Pos=1 
 sysno       	,Sys#               	, C   2       	,                 	, !   Pos=7    Line=3 
 sysid       	,System ID          	, C   2       	,                 	, !   Pos=9    Line=4  ComboFio(CO Systems)
 date_start 	,Starting Date      	, N   8       	, date(ccyymmdd  	, !   Pos=11   Line=6 
-time_frame  	,Time Frame         	, C   2       	,                 	, !   Pos=19   Line=8  ComboFio(TM Time Frame)
+time_frame  	,Time Frame         	, C   2       	,                 	, !   Pos=19   Line=8  ComboFio(Client Billing Time Frame)
 date_end    	,Ending Date        	, N   8       	, date(ccyymmdd) 	, !   Pos=21   Line=7 
 cost        	,Cost to User       	, N   10.2    	,                 	, !   Pos=29   Line=10 
 Name        	,Name               	, C   50      	,                 	, !   Pos=39   Line=0 
