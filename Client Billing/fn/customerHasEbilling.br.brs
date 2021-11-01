@@ -10,7 +10,7 @@ def library fnCustomerHasEbilling(clientId$;___,hContact,returnN)
 	! this returns the emailbilling status of a client if returnN is selected
 	dim contact$(0)*256
 	dim contactN(0)
-	hContact=fn_openFio('TM Contact',mat contact$,mat contactN, 1) ! the 1 means opened for input only
+	hContact=fn_openFio('Client Billing Contact',mat contact$,mat contactN, 1) ! the 1 means opened for input only
 	clientId$=rpad$(trim$(clientId$),kln(hContact))
 	restore #hContact,key=>clientId$: nokey CheFinis
 	do
