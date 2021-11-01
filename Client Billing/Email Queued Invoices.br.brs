@@ -9,14 +9,14 @@ def fn_emailEntryScreen
 	fnTos
 	rc=cf=pdfdate=0
 	cf+=1 : fradate=cf : mylen=26 : mypos=mylen+2
-	fnLbl(1,1,"Email Invoices Created On:",mylen,1,0,pdfdate)
-	fnTxt(1,mypos,10,0,1,"3",0,today$,pdfdate)
+	fnLbl(1,1,'Email Invoices Created On:',mylen,1,0,pdfdate)
+	fnTxt(1,mypos,10,0,1,'3',0,today$,pdfdate)
 	if use_date=0 then use_date=date('mmddyy') ! *10000+100+date('yy')
 	resp$(rc+=1)=str$(use_date)
-	! if trim$(use_date$)="" then use_date$=date("mm/dd/yy")
+	! if trim$(use_date$)='' then use_date$=date('mm/dd/yy')
 	! resp$(rc+=1)=use_date$
-	fnCmdKey("Next",1,1,0,"Emails all PDF invoices created on this date")
-	fnCmdKey("Cancel",5,0,1,"Returns to main menu")
+	fnCmdKey('Next',1,1,0,'Emails all PDF invoices created on this date')
+	fnCmdKey('Cancel',5,0,1,'Returns to main menu')
 	ckey=fnAcs(mat resp$)
 	if ckey=5 then 
 		goto Tf_XIT
@@ -36,10 +36,10 @@ def fn_emailQueuedInvoices(email_date$; ___,pdfname$*255,pdfline$*1000,ppos,ppos
 	fnmakesurepathexists(fnReportCacheFolderCurrent$&'\Ebilling\Sent\')
 	dim contact$(0)*255
 	dim contactN(0)
-	hContact=fn_openFio("TM Contact",mat contact$,mat contactN, 1,1)
+	hContact=fn_openFio('TM Contact',mat contact$,mat contactN, 1,1)
 
 	dim filename$(0)*256
-	fnGetDir2('fnReportCacheFolderCurrent$&"\Ebilling',mat filename$, '','Invoice*.pdf')
+	fnGetDir2(fnReportCacheFolderCurrent$&'\Ebilling',mat filename$, '','Invoice*.pdf')
 	for fileItem=1 to udim(mat filename$)
 		pdfline$=filename$(fileItem)
 		linput #hList: pdfline$ eof EmailInvoiceFinis
@@ -47,24 +47,24 @@ def fn_emailQueuedInvoices(email_date$; ___,pdfname$*255,pdfline$*1000,ppos,ppos
 		! pause 
 		if pdfline$(1:7)='Invoice' then 
 			pdfname$=pdfline$(1:len(pdfline$))
-			posClientNo=pos(pdfname$,"act ")
-			ppos2=pos(pdfname$,".",ppos+1)
+			posClientNo=pos(pdfname$,'act ')
+			ppos2=pos(pdfname$,'.',ppos+1)
 			clientno$=trim$(pdfname$(posClientNo+4:pos(pdfline$,' ',posClientNo+4)))
 			pr 'act=';clientno$
 			pause
-			testday$=pdfname$(ppos2+1:pos(pdfname$,".",ppos2+1)-1)
+			testday$=pdfname$(ppos2+1:pos(pdfname$,'.',ppos2+1)-1)
 			! if on selected date
 			! print testday$ : print email_date$ : pause 
-			if days(testday$,"mmddyy")=days(email_date$,"ccyymmdd") then 
+			if days(testday$,'mmddyy')=days(email_date$,'ccyymmdd') then 
 				! print clientno$ : pause ! send emails
-				restore #hContact,key=rpad$(Clientno$,5," "): nokey skipthis
+				restore #hContact,key=rpad$(Clientno$,5,' '): nokey skipthis
 				do while file(hContact)=0
 					read #hContact,using form$(hContact): mat contact$,mat contactN eof ignore
 					if trim$(clientno$)=trim$(contact$(con_clientid)) and contactN(con_emailbilling)=1 then
 					
 						dim emailBody$*1024
 						emailBody$='<p>'
-						emailBody$&=trim$(contact$(con_name))&",<br>Your invoice is attached to this email.</p>"
+						emailBody$&=trim$(contact$(con_name))&',<br>Your invoice is attached to this email.</p>'
 						emailBody$&='<p>Thanks for choosing for ebilling.  If you have any problems accessing or viewing your invoice, please call us.</p>'
 						emailBody$&='<p>'
 						emailBody$&='Sincerely,<br>'
@@ -78,7 +78,7 @@ def fn_emailQueuedInvoices(email_date$; ___,pdfname$*255,pdfline$*1000,ppos,ppos
 						attachment$=fnReportCacheFolderCurrent$&'\'&trim$(pdfname$)
 						dim tmpTo$*512
 						tmpTo$=trim$(contact$(con_bemail))
-						if fnSwithEmail(tmpTo$,emailBody$,"ACS Invoice ",attachment$)>0 then 
+						if fnSwithEmail(tmpTo$,emailBody$,'ACS Invoice ',attachment$)>0 then 
 							fnRename(attachment$,fnReportCacheFolderCurrent$&'\Sent\'&trim$(pdfname$))
 						else
 							dim mg$(0)*128
@@ -93,13 +93,13 @@ def fn_emailQueuedInvoices(email_date$; ___,pdfname$*255,pdfline$*1000,ppos,ppos
 							fnMsgBox(mat mg$, mbResp$,'',mb_ok+mb_exclamation)
 						end if 
 					end if 
-				loop while rpad$(clientno$,5," ")=rpad$(contact$(con_clientid),5," ")
+				loop while rpad$(clientno$,5,' ')=rpad$(contact$(con_clientid),5,' ')
 				skipthis: ! no key 
 			end if 
 		end if 
 	nex fileItem
 	EmailInvoiceFinis: ! close and done 
-	fnRename(fnReportCacheFolderCurrent$&'\Ebilling\sendingnow.txt',fnReportCacheFolderCurrent$&'\Ebilling\Sent\sent'&date$("mmddyy")&time$(1:2)&time$(4:5)&time$(7:8)&'.txt')
+	fnRename(fnReportCacheFolderCurrent$&'\Ebilling\sendingnow.txt',fnReportCacheFolderCurrent$&'\Ebilling\Sent\sent'&date$('mmddyy')&time$(1:2)&time$(4:5)&time$(7:8)&'.txt')
 fnend
 include: fn_setup
 include: fn_open

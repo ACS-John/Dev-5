@@ -2,7 +2,23 @@ Application_Name ACS 5
 WorkPath %Temp%
 rem WorkPath needs to be above Drive.sys, so that Drive.sys can override it in some special cases
 include Drive.sys
-include Core\Printer.sys
+rem r: printer.sys - but just the parts we use without types
+rem Printer Type NWP
+Printer [FONT TIMES], "\Efont='Times New Roman'"
+Printer [SETFONT(FontName)], "\Efont='FontName'"
+Printer [SETSIZE(PointSize)], "\E(sPointSizeV"
+Printer [LPI(xxx)], "\E&lxxxD"
+Printer [CPI(NNN)], "\E(sNNNH"
+Printer [BOLD], "\E(s1B"
+Printer [/BOLD], "\E(s0B"
+Printer [POS(ROW,COL)], "\E&aROWrCOLC" ! Set Position in Rows and Columns, Vertical, Horizontal. Use +- for Relative
+Printer [LEFT], "\Eleft_justify"  ! left justify thefollowing data
+Printer [RIGHT], "\Eright_justify"
+Printer [CENTER], "\Ecenter"
+Printer [PUSH], "\E&f0S"
+Printer [POP], "\E&f1S"
+rem /r printer.sys 
+
 rem include Core\PDF.sys
 
 Rem Editor "c:\Program Files\Notepad++\Notepad++.exe"
