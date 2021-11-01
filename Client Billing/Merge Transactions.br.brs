@@ -11,7 +11,7 @@ hClient=fn_openFio('CO Client',mat c$,mat cN)
 ! open #hTrans=fnH: 'Name=S:\Core\Data\acsllc\Transactions.h[cno],Shr',i,outi,r
 dim to$(0)*64
 dim toN(0)
-hTrans=fn_openFio('TM Transaction',mat to$,mat toN)
+hTrans=fn_openFio('Client Billing Transaction',mat to$,mat toN)
 open #hTransBatch=fnH: 'Name=[Temp]\transBatch.[session]',i,outi,r
 FtransBatch: form pos 1,c 5,c 12,n 6,2*pd 5.2,pd 2,2*n 1,c 20
 do ! r: main loop

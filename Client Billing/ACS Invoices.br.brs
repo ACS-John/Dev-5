@@ -25,7 +25,7 @@ execute 'sy "C:\ACS\Util\Dev-5 Commit.cmd"'
 
 	! fnIndex('[Temp]\TmSht[session]','[Temp]\TmSht-idx[session]','1,5')
 	fn_combineIntoTmSht('S:\Core\Data\acsllc\TimeSheet.h[cno]')
-	! pr 'ok go do FileIo on TM Tmp TimeSheet now' : pause
+	! pr 'ok go do FileIo on Client Billing Tmp TimeSheet now' : pause
 
 	! fnStatus('Printing Invoices...')
 	fnInvoiceOpen

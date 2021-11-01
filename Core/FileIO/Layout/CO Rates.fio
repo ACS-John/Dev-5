@@ -4,7 +4,7 @@ S:\Core\Data\acsllc\Rates-Idx.h[cno] ,  provider/system/client/timeFrame
 provider  	,Provider           	,C   11   	, , ! ComboFio(CO Provider,1)
 system    	,System              	,C    2   	, , ! ComboFio(CO Systems,2)
 client    	,Client             	,C    5    	, , ! ComboFio(CO Client,2)
-timeFrame	,Time Frame         	,C   64   	, , ! ComboFio(TM Time Frame,1) XXomboA(xx,Hour,Day,Month,Year)
+timeFrame	,Time Frame         	,C   64   	, , ! ComboFio(Client Billing Time Frame,1) XXomboA(xx,Hour,Day,Month,Year)
 rate      	,Rate               	,N   10.2 	, , !
 name      	,Name/Description  	,C   64   	, , !
 
