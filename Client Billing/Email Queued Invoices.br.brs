@@ -36,13 +36,13 @@ def fn_emailQueuedInvoices(email_date$; ___,pdfname$*255,pdfline$*1000,ppos,ppos
 	fnmakesurepathexists(fnReportCacheFolderCurrent$&'\Ebilling\Sent\')
 	dim contact$(0)*255
 	dim contactN(0)
-	hContact=fn_openFio('TM Contact',mat contact$,mat contactN, 1,1)
+	hContact=fn_openFio('Client Billing Contact',mat contact$,mat contactN, 1,1)
 
 	dim filename$(0)*256
 	fnGetDir2(fnReportCacheFolderCurrent$&'\Ebilling',mat filename$, '','Invoice*.pdf')
 	for fileItem=1 to udim(mat filename$)
 		pdfline$=filename$(fileItem)
-		linput #hList: pdfline$ eof EmailInvoiceFinis
+		! linput #hList: pdfline$ eof EmailInvoiceFinis
 		! if it exists then look up customer to information
 		! pause 
 		if pdfline$(1:7)='Invoice' then 
@@ -99,7 +99,7 @@ def fn_emailQueuedInvoices(email_date$; ___,pdfname$*255,pdfline$*1000,ppos,ppos
 		end if 
 	nex fileItem
 	EmailInvoiceFinis: ! close and done 
-	fnRename(fnReportCacheFolderCurrent$&'\Ebilling\sendingnow.txt',fnReportCacheFolderCurrent$&'\Ebilling\Sent\sent'&date$('mmddyy')&time$(1:2)&time$(4:5)&time$(7:8)&'.txt')
+	! fnRename(fnReportCacheFolderCurrent$&'\Ebilling\sendingnow.txt',fnReportCacheFolderCurrent$&'\Ebilling\Sent\sent'&date$('mmddyy')&time$(1:2)&time$(4:5)&time$(7:8)&'.txt')
 fnend
 include: fn_setup
 include: fn_open
