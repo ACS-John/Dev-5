@@ -2,36 +2,10 @@
 ! -- Rate File editor
 fn_setup
 fnTop(program$)
-open #hRate1=fnH: "Name=[Q]\UBmstr\ubData\RateMst.h[cno],KFName=[Q]\UBmstr\ubData\RateIdx1.h[cno],Use,RecL=374,KPs=1,KLn=4,Shr",internal,outIn,keyed 
-open #hRate2=fnH: "Name=[Q]\UBmstr\ubData\RateMst.h[cno],KFName=[Q]\UBmstr\ubData\RateIdx2.h[cno],Use,RecL=374,KPs=5,KLn=25,Shr",internal,outIn,keyed 
+open #hRate1=fnH: "Name=[Q]\UBmstr\ubData\RateMst.h[cno],KFName=[Q]\UBmstr\ubData\RateIdx1.h[cno],Use,RecL=374,KPs=1,KLn=4,Shr",internal,outIn,keyed
+open #hRate2=fnH: "Name=[Q]\UBmstr\ubData\RateMst.h[cno],KFName=[Q]\UBmstr\ubData\RateIdx2.h[cno],Use,RecL=374,KPs=5,KLn=25,Shr",internal,outIn,keyed
 goto ScreenGrid ! program starts with flex grid of all rates currently in file
-def fn_setup
-	if ~setup then
-		setup=1
-		autoLibrary
-		! 
-		dim k$*25,k$(20)*25,rt$(35)*50,option$(10),msgline$(5)*40,snm$(10)*20
-		dim item$(4)*30,resp$(40)*50,resp$*50,resp$(35)*50
-		! 
-		on error goto Ertn
-		!
-		fnGetServices(mat snm$,mat srv$)
-		dim serviceCodeMetered$(0)*2
-		fnGetServiceCodesMetered(mat serviceCodeMetered$)
-		optionCount=0
-		for j=1 to 10
-			if trim$(snm$(j))<>"" then option$(optionCount+=1)=srv$(j)
-		next j
-		mat option$(optionCount)
-		!
-		library 'S:\Core\Library': fnFileioEnums
-		dim fioEnum$(1)*1024 ! "The maximum length of a BR statement is now 2000 characters" -brwiki
-		fnFileioEnums('UB Customer',mat fioEnum$)
-		for index=1 to udim(mat fioEnum$)
-			execute fioEnum$(index)
-		next index
-	end if
-fnend
+
 ScreenGrid: ! r:
 	fnTos
 	myline=1 : mypos=1 : height=10 : width=50
@@ -45,16 +19,16 @@ ScreenGrid: ! r:
 	colmask$(4)="36"
 	mat colmask(4)
 	fnflexinit1("ubrate",myline,mypos,height,width,mat colhdr$,mat colmask$,1)
-	restore #hRate1: 
-	do 
+	restore #hRate1:
+	do
 		read #hRate1,using 'Form POS 1,C 2,G 2,C 50,32*G 10': mat rt$ eof L1010
 		item$(1)=rt$(1)&rt$(2)
 		item$(2)=rt$(3)(1:30)
 		item$(3)=rt$(4)
 		item$(4)=rt$(8)
 		fnflexadd1(mat item$)
-	loop 
-L1010: ! 
+	loop
+L1010: !
 	fnLbl(11,50,"",0,0)
 	fnCmdKey("Edit",1,1,0,"Allows you to access the record that is highlited")
 	fnCmdKey("&Add",2,0,0,"Add new rates")
@@ -63,17 +37,17 @@ L1010: !
 	fnCmdKey("&Complete",5,0,1,"Return to menu")
 	ckey=fnAcs(mat resp$) ! CALL FLEXGRID
 	k$=rpad$(resp$(1),4)
-	if ckey=5 then 
+	if ckey=5 then
 		goto Xit
-	else if ckey=2 then 
+	else if ckey=2 then
 		goto AddNewRecord
-	else if ckey=3 then 
+	else if ckey=3 then
 		gosub PrintProof
-	else if ckey=1 then 
+	else if ckey=1 then
 		goto RateEdit
-	else if ckey=4 then 
+	else if ckey=4 then
 		gosub DeleteRec
-	end if 
+	end if
 	goto ScreenGrid
 	goto Xit
 ! /r
@@ -82,9 +56,9 @@ DeleteRec: ! r:
 	msgline$(1)="Delete this rate record?"
 	msgline$(2)=k$ ! rt$(1)&rt$(2)
 	fnmsgbox(mat msgline$,resp$,'',36)
-	if uprc$(resp$)(1:1)="Y" then 
+	if uprc$(resp$)(1:1)="Y" then
 		delete #hRate1,key=k$: ! rt$(1)&rt$(2):
-	end if 
+	end if
 return  ! /r
 AddNewRecord: ! r:
 	mat rt$=("")
@@ -99,20 +73,20 @@ AddNewRecord: ! r:
 	ckey=fnAcs(mat resp$) ! CALL ADD NEW RECORD
 	if ckey=5 then goto ScreenGrid
 	rt$=uprc$(resp$(1)) ! service type
-	if rtrm$(rt$)="" then 
+	if rtrm$(rt$)="" then
 		mat msgline$(1)
 		msgline$(1)="Invalid Service Type"
 		fnmsgbox(mat msgline$,resp$,'',16)
 		goto AddNewRecord
-	end if 
+	end if
 
 	g1=0 : g1=val(resp$(2)) conv ignore ! rate code
-	if g1=0 then 
+	if g1=0 then
 		mat msgline$(1)
 		msgline$(1)="Rate codes must be from 1 to 99!"
 		fnmsgbox(mat msgline$,resp$,'',16)
 		goto AddNewRecord
-	end if 
+	end if
 
 	rt$=rt$
 	mat rt$=("")
@@ -124,13 +98,13 @@ AddNewRecord: ! r:
 	msgline$(1)="Invalid Service Type"
 	fnmsgbox(mat msgline$,resp$,'',16)
 	goto AddNewRecord
-	ANR_SERVICE_TYPE_IS_VALID: ! 
+	ANR_SERVICE_TYPE_IS_VALID: !
 
 	rt$(2)=lpad$(str$(g1),2)
 	k$=rt$(1)&rt$(2)
 	read #hRate1,using 'Form POS 1,C 2,G 2,C 50,32*G 10',key=k$: mat rt$ nokey L470
 	goto RateEdit ! existing record
-	L470: ! 
+	L470: !
 	write #hRate1,using 'Form POS 1,C 2,G 2,C 50,32*G 10': mat rt$
 goto RateEdit ! /r
 RateEdit: ! r: maintain rate file
@@ -172,26 +146,26 @@ RateEdit: ! r: maintain rate file
 	if ckey=5 then goto ScreenGrid
 
 	rt$(1)=uprc$(rt$(1)) ! service type
-	if rtrm$(rt$(1))="" then 
+	if rtrm$(rt$(1))="" then
 		mat msgline$(1)
 		msgline$(1)="Invalid Service Type: "&rt$(1)
 		fnmsgbox(mat msgline$,resp$,'',16)
 		goto RateEdit
-	end if 
+	end if
 	g1=0 : g1=val(rt$(2)) conv ignore ! rate code
-	if g1=0 then 
+	if g1=0 then
 		mat msgline$(1)
 		msgline$(1)="Rate codes must be from 1 to 99!"
 		fnmsgbox(mat msgline$,resp$,'',48)
 		goto RateEdit
-	end if 
+	end if
 	for j=1 to udim(option$)
 		if rt$(1)=uprc$(option$(j)) then goto RM_SERVICE_TYPE_VALID
 	next j
 	mat msgline$(1)
 	msgline$(1)="Invalid Service Type: "&rt$(1)
 	fnmsgbox(mat msgline$,resp$,'',16)
-	RM_SERVICE_TYPE_VALID: ! 
+	RM_SERVICE_TYPE_VALID: !
 	rt$(2)=lpad$(str$(g1),2)
 	k$=rt$(1)&rt$(2)
 	rewrite #hRate1,using 'Form POS 1,C 2,G 2,C 50,32*G 10',key=k$: mat rt$
@@ -211,11 +185,11 @@ PrintProof: ! r:
 	restore #ti2,key>=k$: ! Nokey ScreenGrid
 	fnopenprn
 	pg=0
-	do 
+	do
 		read #ti2,using 'Form POS 1,C 2,G 2,C 50,32*G 10',release: mat rt$ eof PRINT_PROOF_FINIS
 		gosub PrintOneRate
-	loop 
-	PRINT_PROOF_FINIS: ! 
+	loop
+	PRINT_PROOF_FINIS: !
 	fncloseprn
 return  ! /r
 PrintOneRate: ! r:
@@ -226,24 +200,25 @@ PrintOneRate: ! r:
 	pr #255: "Usage From     Usage To    Rate Per Unit"
 	pr #255: "__________    __________   _____________"
 	for j=1 to udim(option$)
-		if trim$(rt$(j*3+3))<>"" or trim$(rt$(j*3+4))<>"" or trim$(rt$(j*3+5))<>"" then 
-			if trim$(rt$(j*3+3))<>"0" or trim$(rt$(j*3+4))<>"0" or trim$(rt$(j*3+5))<>"0" then 
+		if trim$(rt$(j*3+3))<>"" or trim$(rt$(j*3+4))<>"" or trim$(rt$(j*3+5))<>"" then
+			if trim$(rt$(j*3+3))<>"0" or trim$(rt$(j*3+4))<>"0" or trim$(rt$(j*3+5))<>"0" then
 				pr #255,using 'Form POS 1,3*C 14': rt$(j*3+3),rt$(j*3+4),rt$(j*3+5)
-			end if 
-		end if 
+			end if
+		end if
 	next j
 	pr #255: ""
 	pr #255: ""
 	if pg+=1<3 then goto P1R_FINIS
 	pr #255: newpage
 	pg=0
-	P1R_FINIS: ! 
+	P1R_FINIS: !
 return  ! /r
 Xit: fnXit
+
 def library fnapplyDefaultRatesFio(mat customerN)
 	if ~setup then fn_setup
 	fnapplyDefaultRatesFio=fn_applyDefaultRatesFio(mat customerN)
-fnend 
+fnend
 def fn_applyDefaultRatesFio(mat customerN)
 	! r: get legacy from fileio variables
 	dim extra(23),a(7)
@@ -314,4 +289,32 @@ def fn_applyDefaultRatesFio(mat customerN)
 	customerN(c_s10rate)=a(7)
 	! /r
 fnend
+
+def fn_setup(; ___,index,optionCount)
+	if ~setup then
+		setup=1
+		autoLibrary
+
+		dim k$*25,k$(20)*25,rt$(35)*50,option$(10),msgline$(5)*40,snm$(10)*20
+		dim item$(4)*30,resp$(40)*50,resp$*50,resp$(35)*50
+
+		on error goto Ertn
+
+		fnGetServices(mat snm$,mat srv$)
+		dim serviceCodeMetered$(0)*2
+		fnGetServiceCodesMetered(mat serviceCodeMetered$)
+
+		for j=1 to 10
+			if trim$(snm$(j))<>'' then option$(optionCount+=1)=srv$(j)
+		next j
+		mat option$(optionCount)
+
+		dim fioEnum$(1)*1024 ! "The maximum length of a BR statement is now 2000 characters" -brwiki
+		fnFileioEnums('UB Customer',mat fioEnum$)
+		for index=1 to udim(mat fioEnum$)
+			execute fioEnum$(index)
+		next index
+	end if
+fnend
+
 include: ertn
