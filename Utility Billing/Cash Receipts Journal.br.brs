@@ -14,9 +14,10 @@ fnGetServices(mat serviceName$,mat srv$)
 ! r: Screen1
 	ld1=val(date$(days(date$('ccyymm')&'01','ccyymmdd')-1,'ccyymm')&'01') ! low (beginning of last month)
 	hd1=date(days(date$('ccyymm')&'01','ccyymmdd')-1,'ccyymmdd') ! high (end of last month)
-	fnPcReg_Read('include details'      	,enableDetails$, 'True',1)
-	fnPcReg_Read('include Route Totals'	,enableRouteTotals$, 'False',alsoApplyDefaultIfReadBlank)
-	fnPcReg_Read('include Rate Totals' 	,enableRateTotals$, 'False',alsoApplyDefaultIfReadBlank)
+	fnPcReg_Read('include details'      	,enableDetails$    	, 'True',1)
+	fnPcReg_Read('include Route Totals'	,enableRouteTotals$	, 'False',1)
+	fnPcReg_Read('include Rate Totals' 	,enableRateTotals$ 	, 'False',1)
+	fnPcReg_Read('Collections Only'     	,collectionsOnly$  	, 'False',1)
 
 	fnTos
 	mylen=33 : mypos=mylen+2 : lc=rc=0
@@ -33,6 +34,8 @@ fnGetServices(mat serviceName$,mat srv$)
 	resp$(rc_TotalByRoute=rc+=1)=enableRouteTotals$
 	fnChk(lc+=1,mypos,'Show Totals by Rate:',1)
 	resp$(rc_TotalByRate=rc+=1)=enableRateTotals$
+	fnChk(lc+=1,mypos,'Collections Only:',1)
+	resp$(rc_collectionsOnly=rc+=1)=collectionsOnly$
 	fnCmdSet(3)
 	ckey=fnAcs(mat resp$)
 	if ckey=5 then goto Xit
@@ -45,6 +48,8 @@ fnGetServices(mat serviceName$,mat srv$)
 	if enableRouteTotals$='True' then enableRouteTotals=1 else enableRouteTotals=0
 	enableRateTotals$=resp$(rc_TotalByRate)
 	if enableRateTotals$='True' then enableRateTotals=1 else enableRateTotals=0
+	collectionsOnly$=resp$(rc_TotalByRate)
+	if collectionsOnly$='True' then collectionsOnly=1 else collectionsOnly=0
 
 	fnPcReg_write('include details'      	,enableDetails$)
 	fnPcReg_write('include Route Totals'	,enableRouteTotals$)
@@ -72,7 +77,7 @@ do
 		if ld1<>0 and tDate<ld1 then goto NextTrans
 		if hd1<>0 and tDate>hd1 then goto NextTrans
 
-		if tCode=>3 and tCode<=5 and tAmount then ! don't pr charges or penalties
+		if (collectionsOnly and tCode=3) or (tCode=>3 and tCode<=5) and tAmount then ! don't pr charges or penalties
 			if enableTotals then ! r: accumulate mat ro
 				if tCode=3 then ti2=1 ! REG.COLLECTION
 				if tCode=4 then ti2=2 ! CREDIT MEMO
