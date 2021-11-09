@@ -36,6 +36,7 @@ fnGetServices(mat serviceName$,mat srv$)
 	resp$(rc_TotalByRate=rc+=1)=enableRateTotals$
 	fnChk(lc+=1,mypos,'Collections Only:',1)
 	resp$(rc_collectionsOnly=rc+=1)=collectionsOnly$
+	fnLbl(lc,40,'(filter Credit and Debit Memos)')
 	fnCmdSet(3)
 	ckey=fnAcs(mat resp$)
 	if ckey=5 then goto Xit
@@ -188,7 +189,9 @@ def fn_addToRateTotals(mat rX,rCode,Amt,tCode,mat count; rIndex)
 	else
 		rX(rIndex)+=Amt
 	end if
-	count(rIndex)+=1
+	if Amt<>0 then
+		count(rIndex)+=1
+	end if
 fnend
 PrHeader: ! r:
 	if ~setup_header then ! r: initialize sz1, hd1$, mat scr1$ and mat alloc
@@ -211,7 +214,7 @@ PrHeader: ! r:
 		dim alloc(10)
 		mat alloc(sz1)
 	end if ! /r
-	if enableHeader then
+	if enableHeader then ! r:
 		pr #255: '\qc  {\f181 \fs20 \b '&env$('cnam')&'}'
 		pr #255: '\qc  {\f181 \fs28 \b '&env$('program_caption')&'}'
 		! need date$,time$
@@ -222,7 +225,7 @@ PrHeader: ! r:
 		if enableDetails then
 			pr #255: '\ql '&hd1$
 		end if
-	end if
+	end if ! /r
 return  ! /r
 PgOf: ! r:
 	pr #255: newpage
