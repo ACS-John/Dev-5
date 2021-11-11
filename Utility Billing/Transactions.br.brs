@@ -173,18 +173,16 @@ def fn_transfile(; hact$*81,&bal,mat gb)
 		else if ckey=5 then
 			goto Tf_XIT
 		else
-			if z$='[All]' then editrec=val(resp$(1)) else editrec=val(resp$(2))
 			if opt_columns and ckey=opt_columns then
 				fn_columnSelect
 			else if ckey=opt_print then
 				fn_printTrans
-			else if ckey=opt_edit then
+			end if
+			if z$='[All]' then editrec=val(resp$(1)) else editrec=val(resp$(2))
+			if ckey=opt_edit then
 				fn_TransactionEdit(editrec)
 			else if enableDelete and ckey=optDelete then
-
-
-
-					fn_transactionDelete(editrec,bal,mat gb)
+				fn_transactionDelete(editrec,bal,mat gb)
 			end if
 		end if
 	loop ! /r
