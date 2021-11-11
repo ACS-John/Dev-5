@@ -134,6 +134,7 @@ def fn_openPrn(; baseNameAddition$*128,prgCapForSettingsOverride$*256,programCap
 	else
 		! if env$('acsDeveloper')<>'' then pr 'fnOpenPrn skipped any action due to file(255)=-1.  ' : pause
 	end if
+	fn_openPrn=255
 Xit: fnend
 
 def library fnClosePrn(;forceWordProcessor$)

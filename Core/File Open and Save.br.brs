@@ -20,7 +20,7 @@ def fn_FileSaveAs(save_what$*128; fsa_automatedSaveFileName$*256,suppressErrorLo
 	if fsa_automatedSaveFileName$<>'' then
 		save_name$=fsa_automatedSaveFileName$
 	else
-		open #h_tmp=fnH: "Name=SAVE:"&fnsave_as_path$&"\*.zip,RecL=1,replace",external,output ioerr SAVE_AS_OPEN_ERR
+		open #h_tmp=fnH: 'Name=SAVE:'&fnsave_as_path$&'\*.zip,RecL=1,replace',external,output ioerr SAVE_AS_OPEN_ERR
 		save_name$=os_filename$(file$(h_tmp))
 		close #h_tmp,free:
 		fnCopy('S:\drive.sys','[Q]\*.*')
@@ -118,7 +118,7 @@ def fn_FileSaveAs(save_what$*128; fsa_automatedSaveFileName$*256,suppressErrorLo
 		ml$(1)='Select a different file name.'
 		ml$(2)='Error: '&str$(err)
 		fnmsgbox(mat ml$)
-		pr "Err:";err;" Line:";line
+		pr 'Err:';err;' Line:';line
 	end if
 	SAVE_AS_XIT: !
 	!  fn_fsa_clean_up
@@ -147,9 +147,9 @@ def fn_analyze_7zip_compresslog(arc_filename$*256,success_text_line1$*256,save_n
 			ml$(3)=arc_filename$
 			ml$(4)='Display the log now?'
 
-			fnmsgbox(mat ml$,resp$,"ACS",4+64)
-			if resp$="Yes" then
-				! if env$('acsDeveloper')<>'' then pr 'just before fnEditFile("text","'&arc_filename$&'")' : pause
+			fnmsgbox(mat ml$,resp$,'ACS',4+64)
+			if resp$='Yes' then
+				! if env$('acsDeveloper')<>'' then pr 'just before fnEditFile('text',"'&arc_filename$&'")' : pause
 				fnEditFile('text',arc_filename$)
 			end if
 		end if
@@ -162,7 +162,7 @@ def fn_analyze_7zip_compresslog(arc_filename$*256,success_text_line1$*256,save_n
 			mat ml$(2)
 			ml$(1)=success_text_line1$
 			ml$(2)=save_name$
-			fnmsgbox(mat ml$,resp$,"ACS",0)
+			fnmsgbox(mat ml$,resp$,'ACS',0)
 		end if
 	end if
 	goto ARC_XIT
@@ -170,7 +170,7 @@ def fn_analyze_7zip_compresslog(arc_filename$*256,success_text_line1$*256,save_n
 	mat ml$(2)
 	ml$(1)='FAILURE: The log file could not be opened.'
 	ml$(2)=arc_filename$
-	fnmsgbox(mat ml$,resp$,"ACS",0)
+	fnmsgbox(mat ml$,resp$,'ACS',0)
 	if env$('acsDeveloper')<>'' then pause
 	ARC_XIT: !
 	fn_analyze_7zip_compresslog=~failure
@@ -230,7 +230,7 @@ fnend
 def fn_openPartial
 	dim opFileOpen$*256
 	fnFree(br_filename$(env$('temp')&'\acs\Open_Log.txt'))
-	open #h_tmp=fnH: "Name=OPEN:"&env$('at')&"ACS Data Set (*.zip) |"&fnsave_as_path$&"\*.zip,RecL=1,Shr",external,input ioerr OP_OP_ERR
+	open #h_tmp=fnH: 'Name=OPEN:'&env$('at')&'ACS Data Set (*.zip) |'&fnsave_as_path$&'\*.zip,RecL=1,Shr',external,input ioerr OP_OP_ERR
 	opFileOpen$=os_filename$(file$(h_tmp))
 	close #h_tmp:
 	dim fileList$(0)*256,archiveList$(0)*50
@@ -260,8 +260,8 @@ def fn_openPartial
 		ml$(1)='Select a different file name.'
 		ml$(2)='Error: '&str$(err)
 		fnmsgbox(mat ml$,resp$)
-		!     if err=4150 then pr "Could not create file:";file$(1) : fnpause ! file$(1) is blank!
-		pr "Err:";err;" Line:";line
+		!     if err=4150 then pr 'Could not create file:';file$(1) : fnpause ! file$(1) is blank!
+		pr 'Err:';err;' Line:';line
 	end if
 	OP_XIT: !
 fnend
@@ -269,17 +269,17 @@ def fn_opMain(omFileOpen$*256)
 	! destination_company_number=val(env$('cno'))
 	fn_automatedSavePoint('before Open')
 	OpmAskWhichToOpen: ! r: screen
-	fnTos(sn$="Open Partial")
+	fnTos
 	col1_width=24 : col2_pos=col1_width+2 : lc=rc=0
-	fnLbl(lc+=1,1,"Source File:",col1_width,1)
+	fnLbl(lc+=1,1,'Source File:',col1_width,1)
 	fnTxt(lc,col2_pos,30,256,0,'',1,'select any data file from the data set to be imported.  i.e. Z:\vol002\CLmstr\BankIdx.h2')
 	resp$(rc+=1)=omFileOpen$
-	fnLbl(lc+=2,1,"Company to Load:",col1_width,1)
+	fnLbl(lc+=2,1,'Company to Load:',col1_width,1)
 	fncomboa('compList',lc,col2_pos,mat archiveList$)
 	resp$(resp_fileSource:=rc+=1)=archiveList$(1)
-	! fnLbl(lc+=1,1,"Destination Company Number:",col1_width,1)
+	! fnLbl(lc+=1,1,'Destination Company Number:',col1_width,1)
 	! fnTxt(lc,col2_pos,5,5,0,'1030',0,'')
-	! fnLbl(lc,col2_pos+7,"(only applies if a specific Source Company is selected)")
+	! fnLbl(lc,col2_pos+7,'(only applies if a specific Source Company is selected)')
 	! resp$(resp_cnoDestination:=rc+=1)=str$(destination_company_number)
 	fnCmdSet(2)
 	ckey=fnAcs(mat resp$)

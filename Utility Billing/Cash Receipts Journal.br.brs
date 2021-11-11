@@ -2,16 +2,16 @@ autoLibrary
 fnTop(program$)
 on error goto Ertn
 
-dim ro(20,4)
-dim tg(11)
-dim resp$(7)*40
-dim ml$(3)*90
+dim tab$*1
+tab$=chr$(9)
 
-enableHeader=1 ! <--  disabling this is really a developer only option.
+
+
+
 dim serviceName$(10)*20,srv$(10)
 fnGetServices(mat serviceName$,mat srv$)
 
-! r: Screen1
+Screen1: ! r:
 	ld1=val(date$(days(date$('ccyymm')&'01','ccyymmdd')-1,'ccyymm')&'01') ! low (beginning of last month)
 	hd1=date(days(date$('ccyymm')&'01','ccyymmdd')-1,'ccyymmdd') ! high (end of last month)
 	fnPcReg_Read('include details'      	,enableDetails$    	, 'True',1)
@@ -20,6 +20,7 @@ fnGetServices(mat serviceName$,mat srv$)
 	fnPcReg_Read('Collections Only'     	,collectionsOnly$  	, 'False',1)
 
 	fnTos
+	dim resp$(64)*128
 	mylen=33 : mypos=mylen+2 : lc=rc=0
 	lc+=1
 	fnLbl(lc+=1,1,'Starting Date (blank for all):',mylen,1)
@@ -37,9 +38,11 @@ fnGetServices(mat serviceName$,mat srv$)
 	fnChk(lc+=1,mypos,'Collections Only:',1)
 	resp$(rc_collectionsOnly=rc+=1)=collectionsOnly$
 	fnLbl(lc,40,'(filter Credit and Debit Memos)')
-	fnCmdSet(3)
+	fnCmdKey('&Print',1,1)
+	fnCmdKey('&Cancel',ck_cancel=5,0,1)
+	fnCmdKey('Export',ck_export=12)
 	ckey=fnAcs(mat resp$)
-	if ckey=5 then goto Xit
+	if ckey=ck_cancel then goto Xit
 	ld1=val(resp$(rc_ld1))
 	hd1=val(resp$(rc_hd1))
 	enableDetails$=resp$(rc_indludeDetails)
@@ -49,40 +52,58 @@ fnGetServices(mat serviceName$,mat srv$)
 	if enableRouteTotals$='True' then enableRouteTotals=1 else enableRouteTotals=0
 	enableRateTotals$=resp$(rc_TotalByRate)
 	if enableRateTotals$='True' then enableRateTotals=1 else enableRateTotals=0
-	collectionsOnly$=resp$(rc_TotalByRate)
+	collectionsOnly$=resp$(rc_collectionsOnly)
 	if collectionsOnly$='True' then collectionsOnly=1 else collectionsOnly=0
 
 	fnPcReg_write('include details'      	,enableDetails$)
 	fnPcReg_write('include Route Totals'	,enableRouteTotals$)
 	fnPcReg_write('include Rate Totals' 	,enableRateTotals$)
 
+	exportNow=0
+	enableHeader=1
+	enableTotals=1
+	enableAllocTest=1
+	if ckey=ck_export then
+		exportNow=1
+		enableDetails=0
+		enableTotals=0
+		enableRateTotals=0
+		enableRouteTotals=0
+		enableHeader=0
+		enableAllocTest=0
+	end if
 
 ! /r
 ! r: Main Loop
 dim c$(0)*200
 dim cN(0)
-hCustomer=fn_openFio('UB Customer',mat c$, mat cN, 1) ! open #hCustomer=fnH: 'Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr',i,i,k
+if exportNow then
+	open #hOut=fnH: 'Name=SAVE:'&fnsave_as_path$&'\*.tab,RecL=2048,replace',display,output ioerr Screen1
+else
+	hOut=fnopenprn
+end if
+hCustomer=fn_openFio('UB Customer',mat c$, mat cN, 1)
 open #hTrans:=fnH: 'Name=[Q]\UBmstr\UBTransVB.h[cno],KFName=[Q]\UBmstr\UBTrIndx.h[cno],Shr',i,i,k
-fnopenprn
 gosub PrHeader
 r01count=r02count=r03count=r04count=r05count=r06count=r07count=r08count=r09count=r10count=0
 do
-	! read #hCustomer,using 'Form POS 1,C 10,POS 41,C 28,pos 1741,n 2',release: c$(c_account),c$(c_name),cN(c_route) eof PrTotals
 	read #hCustomer,using form$(hCustomer),release: mat c$,mat cN eof PrTotals
 	fnApplyDefaultRatesFio(mat cN)
 	restore #hTrans,key>=c$(c_account)&'         ': nokey NextCustomer
 	do
+		dim tg(11)
 		! read #hTrans,using 'Form POS 1,C 10,N 8,N 1,12*PD 4.2,6*PD 5,PD 4.2,N 1': p$,tDate,tCode,tAmount,mat tg,wr,wu,er,eu,gr,gu,tbal,pcode eof NextCustomer
 		read #hTrans,using 'Form POS 1,C 10,N 8,N 1,12*PD 4.2': p$,tDate,tCode,tAmount,mat tg eof NextCustomer
 		if p$<>c$(c_account) then goto NextCustomer
 		if ld1<>0 and tDate<ld1 then goto NextTrans
 		if hd1<>0 and tDate>hd1 then goto NextTrans
-
-		if (collectionsOnly and tCode=3) or (tCode=>3 and tCode<=5) and tAmount then ! don't pr charges or penalties
+		! if tcode=4 then pause
+		if ((collectionsOnly and tCode=3) or (~collectionsOnly and tCode=>3 and tCode<=5)) and tAmount then ! don't pr charges or penalties
 			if enableTotals then ! r: accumulate mat ro
 				if tCode=3 then ti2=1 ! REG.COLLECTION
 				if tCode=4 then ti2=2 ! CREDIT MEMO
 				if tCode=5 then ti2=3 ! DEBIT MEMO
+				dim ro(20,4)
 				if tCode=5 then
 					ro(1,1)-=tAmount
 				else
@@ -104,18 +125,34 @@ do
 			end if ! /r
 
 			if enableDetails then ! r: print the detail line
-				dim cd$*4
-				cd$=''
-				if tCode=4 then
-					cd$='CM'
-				else if tCode=5 then
-					cd$='DM'
-				else
-				end if
-				pr #255,using 'Form pos 1,c 10,n 10.2,c 4,pic(zzzz/zz/zz),sz1*n 9.2,x 3,c 30': c$(c_account),tAmount,cd$,tDate,mat alloc,c$(c_name)(1:25) pageoflow PgOf
+
+				pr #hOut,using 'Form pos 1,c 10,n 10.2,c 4,pic(zzzz/zz/zz),sz1*n 9.2,x 3,c 30': c$(c_account),tAmount,cd$,tDate,mat alloc,c$(c_name)(1:25) pageoflow PgOf
+			end if ! /r
+			if exportNow then ! r:
+				pr #hOut: '"'&c$(c_account)&'"'                          	&tab$;
+				pr #hOut: cnvrt$('pic(----,---,--#.##)',tAmount)       	&tab$;
+				! pr tCode,fn_tranTypeDesc$(tCode) : if tCode<>3 then pr 'fixed it' : pause
+				pr #hOut: fn_tranTypeDesc$(tCode)                       	&tab$;
+				pr #hOut: cnvrt$('pic(zzzz/zz/zz)',tDate)              	&tab$;
+				for x=1 to udim(mat alloc)
+					pr #hOut: cnvrt$('pic(----,---,--#.##)',alloc(x))    	&tab$;
+				nex x
+				pr #hOut: c$(c_name)(1:25)                               	&tab$;
+				if cN(c_s01rate) then pr #hOut: srv$( 1)&' '&str$(cN(c_s01rate))&tab$; else pr #hOut: '   '&tab$;
+				if cN(c_s02rate) then pr #hOut: srv$( 2)&' '&str$(cN(c_s02rate))&tab$; else pr #hOut: '   '&tab$;
+				if cN(c_s03rate) then pr #hOut: srv$( 3)&' '&str$(cN(c_s03rate))&tab$; else pr #hOut: '   '&tab$;
+				if cN(c_s04rate) then pr #hOut: srv$( 4)&' '&str$(cN(c_s04rate))&tab$; else pr #hOut: '   '&tab$;
+				if cN(c_s05rate) then pr #hOut: srv$( 5)&' '&str$(cN(c_s05rate))&tab$; else pr #hOut: '   '&tab$;
+				if cN(c_s06rate) then pr #hOut: srv$( 6)&' '&str$(cN(c_s06rate))&tab$; else pr #hOut: '   '&tab$;
+				if cN(c_s07rate) then pr #hOut: srv$( 7)&' '&str$(cN(c_s07rate))&tab$; else pr #hOut: '   '&tab$;
+				if cN(c_s08rate) then pr #hOut: srv$( 8)&' '&str$(cN(c_s08rate))&tab$; else pr #hOut: '   '&tab$;
+				if cN(c_s09rate) then pr #hOut: srv$( 9)&' '&str$(cN(c_s09rate))&tab$; else pr #hOut: '   '&tab$;
+				if cN(c_s10rate) then pr #hOut: srv$(10)&' '&str$(cN(c_s10rate))&tab$; else pr #hOut: '   '&tab$;
+				pr #hOut: ''
 			end if ! /r
 
-			if sum(alloc)<>tAmount then ! r: test transaction allocstions add up to total
+			if enableAllocTest and sum(alloc)<>tAmount then ! r: test transaction allocstions add up to total
+				dim ml$(0)*128
 				mat ml$(3)
 				ml$(1)='The breakdown on a collection transaction dated '&str$(tDate)& ' for customer '&c$(c_account)
 				ml$(2)='does not balance.  Your totals will be off by '& trim$(cnvrt$('pic($$$,$$$.## cr)',tAmount-sum(alloc)))&'.'
@@ -123,8 +160,7 @@ do
 				fnmsgbox(mat ml$,resp$,'',49)
 				if resp$='Cancel' then goto Xit
 			end if ! /r
-
-			if enableRouteTotals then ! r:
+			if enableRouteTotals or exportNow then ! r:
 				dim routeIndex
 				if cN(c_route)<0 or cN(c_route)>200 then
 					routeIndex=200
@@ -134,8 +170,7 @@ do
 				dim routeTotal(200)
 				routeTotal(routeIndex)+=tAmount
 			end if ! /r
-
-			if enableRateTotals then ! r:
+			if enableRateTotals or exportNow then ! r:
 				dim r01(0) ! rate total accumulator
 				dim r02(0) ! rate total accumulator
 				dim r03(0) ! rate total accumulator
@@ -179,7 +214,7 @@ loop
 ! /r
 def fn_addToRateTotals(mat rX,rCode,Amt,tCode,mat count; rIndex)
 	rIndex=rCode+1
-	if udim(mat rX)<rIndex then 
+	if udim(mat rX)<rIndex then
 		mat rX(rIndex)
 		mat count(rIndex)
 	end if
@@ -192,6 +227,18 @@ def fn_addToRateTotals(mat rX,rCode,Amt,tCode,mat count; rIndex)
 	if Amt<>0 then
 		count(rIndex)+=1
 	end if
+fnend
+def fn_tranTypeDesc$*18(tCode; ___,return$*18)
+	if tCode=4 then
+		if exportNow then return$='Credit Memo' else return$='CM'
+	else if tCode=5 then
+		if exportNow then return$='Debit Memo' else return$='DM'
+	else if tCode=3 then
+		if exportNow then return$='Collection' else return$=''
+	else 
+		if exportNow then return$='Unknown ('&str$(tCode)&')' else return$=''
+	end if
+	fn_tranTypeDesc$=return$
 fnend
 PrHeader: ! r:
 	if ~setup_header then ! r: initialize sz1, hd1$, mat scr1$ and mat alloc
@@ -214,40 +261,61 @@ PrHeader: ! r:
 		dim alloc(10)
 		mat alloc(sz1)
 	end if ! /r
+	if exportNow then ! r:
+		pr #hOut: 'Account'                       	&tab$;
+		pr #hOut: 'Amount'                        	&tab$;
+		pr #hOut: 'TransType'                     	&tab$;
+		pr #hOut: 'TransDate'                     	&tab$;
+		for x=1 to udim(mat alloc)
+			pr #hOut: 'alloc '&str$(x)              	&tab$;
+		nex x
+		pr #hOut: 'customer name'                 	&tab$;
+		pr #hOut: 's01rate'&tab$;
+		pr #hOut: 's02rate'&tab$;
+		pr #hOut: 's03rate'&tab$;
+		pr #hOut: 's04rate'&tab$;
+		pr #hOut: 's05rate'&tab$;
+		pr #hOut: 's06rate'&tab$;
+		pr #hOut: 's07rate'&tab$;
+		pr #hOut: 's08rate'&tab$;
+		pr #hOut: 's09rate'&tab$;
+		pr #hOut: 's10rate'&tab$;
+		pr #hOut: ''
+	end if ! /r
 	if enableHeader then ! r:
-		pr #255: '\qc  {\f181 \fs20 \b '&env$('cnam')&'}'
-		pr #255: '\qc  {\f181 \fs28 \b '&env$('program_caption')&'}'
+		pr #hOut: '\qc  {\f181 \fs20 \b '&env$('cnam')&'}'
+		pr #hOut: '\qc  {\f181 \fs28 \b '&env$('program_caption')&'}'
 		! need date$,time$
 		if ld1 and hd1 then
-			pr #255: '\qc  {\f181 \fs18 \b From '&cnvrt$('pic(zzzz/zz/zz)',ld1)& '  To '&cnvrt$('pic(zzzz/zz/zz)',hd1)&'}'
+			pr #hOut: '\qc  {\f181 \fs18 \b From '&cnvrt$('pic(zzzz/zz/zz)',ld1)& '  To '&cnvrt$('pic(zzzz/zz/zz)',hd1)&'}'
 		end if
-		pr #255: ''
+		pr #hOut: ''
 		if enableDetails then
-			pr #255: '\ql '&hd1$
+			pr #hOut: '\ql '&hd1$
 		end if
 	end if ! /r
 return  ! /r
 PgOf: ! r:
-	pr #255: newpage
+	pr #hOut: newpage
 	gosub PrHeader
 continue  ! /r
 PrTotals: ! r:
 	if enableTotals then ! r:
-		pr #255: ''
-		pr #255: '    ************ Totals ************'
-		pr #255: tab(34);'{\ul       Total}  {\ul    Reg.Col}  {\ul   Cr.Memos}  {\ul   Db.Memos}'
+		pr #hOut: ''
+		pr #hOut: '    ************ Totals ************'
+		pr #hOut: tab(34);'{\ul       Total}  {\ul    Reg.Col}  {\ul   Cr.Memos}  {\ul   Db.Memos}'
 		for j=1 to sz1
-			pr #255,using 'Form POS 4,C 30,N 11.2,3*N 12.2': scr1$(j),ro(j+3,1),ro(j+3,2),ro(j+3,3),ro(j+3,4) pageoflow PgOf
+			pr #hOut,using 'Form POS 4,C 30,N 11.2,3*N 12.2': scr1$(j),ro(j+3,1),ro(j+3,2),ro(j+3,3),ro(j+3,4) pageoflow PgOf
 		next j
-		pr #255: ''
-		pr #255,using 'Form POS 4,C 30,N 11.2,3*N 12.2': 'Total      ',ro(1,1),ro(1,2),ro(1,3),ro(1,4)
+		pr #hOut: ''
+		pr #hOut,using 'Form POS 4,C 30,N 11.2,3*N 12.2': 'Total      ',ro(1,1),ro(1,2),ro(1,3),ro(1,4)
 	end if ! /r
 	if enableRouteTotals then ! r:
-		pr #255: ''
-		pr #255: '    ************ Route Totals ************'
+		pr #hOut: ''
+		pr #hOut: '    ************ Route Totals ************'
 		for j=1 to udim(mat routeTotal)
 		if routeTotal(j) then
-				pr #255,using 'form pos 1,c 10,pic(zzz,zzz,zzz.##)': 'Route '&cnvrt$('pic(zzz)',j),routeTotal(j) pageoflow PgOf
+				pr #hOut,using 'form pos 1,c 10,pic(zzz,zzz,zzz.##)': 'Route '&cnvrt$('pic(zzz)',j),routeTotal(j) pageoflow PgOf
 			end if
 		next j
 	end if ! /r
@@ -263,18 +331,26 @@ PrTotals: ! r:
 		fn_prRateTotal(mat r09,srv$( 9),serviceName$( 9),mat r09count)
 		fn_prRateTotal(mat r10,srv$(10),serviceName$(10),mat r10count)
 	end if ! /r
-	fncloseprn
+	if exportNow then ! r:
+		dim saveName$*512
+		saveName$=os_filename$(file$(hOut))
+		close #hOut:
+		exe 'sy -c "'&saveName$&'"'
+		! /r
+	else
+		fncloseprn
+	end if
 goto Xit ! /r
 def fn_prRateTotal(mat r0,serviceId$,serviceName$*128,mat count;___,x)
 	if sum(mat r0) then
-		pr #255: ''
-		pr #255: '    ************ Rate Totals for '&trim$(serviceName$)&' ************'
+		pr #hOut: ''
+		pr #hOut: '    ************ Rate Totals for '&trim$(serviceName$)&' ************'
 		for x=1 to udim(mat r0)
 			if r0(x) then
-				pr #255: serviceId$&' '&str$(x-1)&':   '&cnvrt$('pic(----,---,--#.##)',r0(x))&' from '&str$(count(x))&' customers'
+				pr #hOut: serviceId$&' '&str$(x-1)&':   '&cnvrt$('pic(----,---,--#.##)',r0(x))&' from '&str$(count(x))&' customers'
 			end if
 		nex x
-		pr #255: 'Total for '&trim$(serviceName$)&' was '&trim$(cnvrt$('pic(----,---,--#.##)',sum(mat r0)))&' from '&str$(sum(mat count))&' customers'
+		pr #hOut: 'Total for '&trim$(serviceName$)&' was '&trim$(cnvrt$('pic(----,---,--#.##)',sum(mat r0)))&' from '&str$(sum(mat count))&' customers'
 	end if
 fnend
 Xit: fnXit
