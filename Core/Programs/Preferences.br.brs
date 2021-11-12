@@ -712,7 +712,7 @@ def fn_setup
 		autoLibrary
 		on error goto Ertn
 		dim resp$(20)*256
-		dim background_picture$*256,atlantis_exe$*80,word_exe$*256,save_path$*256
+		dim background_picture$*256,atlantis_exe$*90,word_exe$*256,save_path$*256
 		dim text_editor$*256
 		default_min_fontsize_height$='18' ! '15'   ! '14'
 		default_min_fontsize_width$=  '7' !  '8'   !  '6'
