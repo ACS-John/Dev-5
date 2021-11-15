@@ -187,18 +187,8 @@ goto ScreenOne ! /r
 	goto ScreenOne ! /r
 ScrPost: ! r:
 	fn_createContras(hMerge,mat kList$,mat kReceipts,mat kDisbursements,contraEntryDateN)
-	
-	! pr 'point b' : pause
-	
 	contraTotal=fn_contraTotal(hMerge,contraDisb,contraRcpt,contraOthr)
-
-	! pr 'point c',contraDisb,contraRcpt,contraOthr : pause
-	
-	
-	
 	fnTos : lc=respc=0
-	! fnFra(1,1,6,60,'Posting Options','You would only use the After_The_Fact options if you are maintaining the payroll records within the general ledger system.',0)
-
 	lc=4
 	fnOpt(lc+=1,2,'Post to General Ledger',0,0)
 	resp$(1)='True'
@@ -514,7 +504,7 @@ def fn_scrPayrollAdd(; ___,lendeditRecordc,lc)
 	fnTxt(lc,mypos,12,0,0,'',0,'Enter check number.',0)
 	resp$(3)=tr$
 	fnLbl(lc+=1,1,'Employee:',mylen,1)
-	fncombof('PRmstr',lc,mypos,35,'[Q]\GLmstr\PRmstr.h[cno]',1,4,5,30,'[Q]\GLmstr\PRIndex.h[cno]',1,0, 'Choose from the list of employees.  Click Add Employee to add a new employee not shown on list.',0)
+	fncombof('PRmstr',lc,mypos,35,'[Q]\GLmstr\PRmstr.h[cno]',1,4,5,25,'[Q]\GLmstr\PRIndex.h[cno]',1,0, 'Choose from the list of employees.  Click Add Employee to add a new employee not shown on list.',0)
 	if prx(1) then resp$(4)=str$(prx(1)) else resp$(4)=''
 	lc+=1
 	fnLbl(lc+=1,1,'General Ledger:',mylen,1)
@@ -576,9 +566,9 @@ def fn_scrPayrollAdd(; ___,lendeditRecordc,lc)
 		tr5=transactionAmt=val(resp$(2)) ! amount
 		tr$=resp$(3) ! ref #
 		prx(1)=val(resp$(4)(1:4)): vn$=resp$(4)(1:4) ! employee
-		td$=resp$(4)(5:30) ! transaction description = employee name
 		dim empName$*30
-		empName$=td$
+		empName$=td$=rtrm$(resp$(4)(6:30)) ! resp$(4)(5:30) ! transaction description = employee name
+		! pr 'empName$='&empName$ : pause
 		gl$=fnagl$(resp$(5))
 		fnPcReg_write('Payroll Check GL Account',gl$)
 		for j=2 to 19
@@ -641,6 +631,7 @@ fnend
 				td$='Eic' ! eic as positive
 			end if
 			if prx(j)<>0 then
+				! pr 'at write td$='&td$ : pause
 				write #hMerge,using F_merge: allocgl$,tr4,prx(j),sx_payrollCheck,postingCode,tr$,td$,vn$,jv2$,glBank$ ! gross wage
 			end if
 		next j
@@ -1069,7 +1060,6 @@ def fn_transactionSave(hMerge,transAdr,gl$,tr4,tr5,tType,postingCode,tr$,td$*30,
 	end if
 fnend
 
-
 def fn_clearVar(&hMtemp,&transactionAmt,&td$,&vn$,&gl$,&totalalloc, _
 	&gl_retainFieldsDuringAdd$)
 	!  clear entry screen
@@ -1168,10 +1158,10 @@ def fn_buildMatK(hMerge,mat kList$,mat kReceipts,mat kDisbursements,mat kAdjustm
 	restore #hMerge:
 	do
 		read #hMerge,using 'Form pos 19,PD 6.2,N 2,pos 93,C 12': tAmt,tranType,key$ eof FinisBuildMatK
-		
+
 		if tranType=5 then tranType=7
 		if tranType=6 then tranType=8
-		
+
 		count+=1
 
 		kWhich=srch(mat kList$,key$)
@@ -1248,7 +1238,7 @@ def fn_prProofTotals(hAccount,totalDebits,totalCredits, _
 	fncloseprn
 fnend
 def fn_prProofList(hMerge; _
-	___,holdtr$,tr$,tr4,tr5,tType,postingCode,td$,vn$,jv2$,key$,printkey$, _
+	___,holdtr$,tr$,tr4,allocAmt,tType,postingCode,td$*30,vn$,jv2$,key$,printkey$, _
 	netamount)
 	fnopenprn
 	gosub PrProofListHeader
@@ -1256,15 +1246,15 @@ def fn_prProofList(hMerge; _
 	restore #hMerge:
 	do
 		holdtr$=tr$
-		if fn_readMerge(0,gl$,tr4,tr5,tType,postingCode,tr$,td$,vn$,jv2$,key$)=-4270 then goto PE_FINIS
+		if fn_readMerge(0,gl$,tr4,allocAmt,tType,postingCode,tr$,td$,vn$,jv2$,key$)=-4270 then goto PE_FINIS
 		if trim$(holdtr$)<>'' and holdtr$<>tr$ then
 			pr #255,using 'Form pos 10,c 10,n 14.2,skip 1': 'Net',netamount
 			netamount=0
 		end if
 		if tType=sx_adjustment then prntkey$='' else printkey$=key$
-		pr #255,using F_PE_LINE: gl$,tr4,tr5,tType,postingCode,tr$,td$,vn$,printkey$,'',jv2$ pageoflow PrProofListPgOf
+		pr #255,using F_PE_LINE: gl$,tr4,allocAmt,tType,postingCode,tr$,td$,vn$,printkey$,'',jv2$ pageoflow PrProofListPgOf
 		F_PE_LINE: form pos 1,c 12,x 2,pic(zz/zz/zz),n 11.2,x 2,pic(zz),x 2,pic(zz),c 13,c 30,c 10,c 12,c 7,c 7
-		netamount+=tr5
+		netamount+=allocAmt
 	loop
 	PE_FINIS: !
 	pr #255,using 'Form pos 10,c 10,n 14.2,skip 1': 'Net',netamount : netamount=0
@@ -1348,7 +1338,7 @@ def fn_contraTotal(hMerge,&contraDisb,&contraRcpt,&contraOthr; ___,glAcct$*12,am
 	restore #hMerge:
 	do
 		read #hMerge,using F_merge: glAcct$,contraEntryDateN,amt,type,postCode,id9$,desc$ eof CtEoMerge
-		
+
 		if id9$='999999999999' and pos(desc$,'Contra Entry')>0 then
 			if type=1 then 								! 1 = Disbursements   -  credits from checks or purchases
 				contraDisb+=amt
@@ -1374,9 +1364,9 @@ def fn_clearContrasAndPosted(hMerge; ___,tr$*12,postCode,type) ! also cleans up 
 			delete #hMerge:
 		end if
 		if type=5 or type=6 then
-			if type=5 then 
+			if type=5 then
 				type=7
-			else if type=6 then 
+			else if type=6 then
 				type=8
 			end if
 			rewrite #hMerge,using 'form pos 25,n 2': type

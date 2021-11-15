@@ -175,7 +175,7 @@ def fn_index_sys_do_one(cno,system_id$*128)
 		fn_index('[Q]\GLmstr\ACGLFNSB.h'&str$(cno),'[Q]\GLmstr\agfsidx4.h'&str$(cno),',1 5')
 		fn_index('[Q]\GLmstr\ACGLFNSc.h'&str$(cno),'[Q]\GLmstr\agfsidx1.h'&str$(cno),',1 5')
 
-		fn_index('[Q]\GLmstr\Year.h'&str$(cno),'[Q]\GLmstr\Year-Idx.h[cno]'&str$(cno),',1 1')
+		fn_index('[Q]\GLmstr\Year.h'&str$(cno),'[Q]\GLmstr\Year-Idx.h'&str$(cno),',1 1')
 
 		exe 'con sub [FinancialStatementCode] C' ! secondary
 		fnReIndex('GL FSDesign')
@@ -232,7 +232,7 @@ def fn_index_sys_do_one(cno,system_id$*128)
 		! fn_index('[Q]\PRmstr\rpwork[unique_computer_id].h'&str$(cno), '[Q]\PRmstr\rpwork[unique_computer_id]Idx2.h'&str$(cno),'1/27 8/14')
 		dim filename$(0)*256
 		dim kfname$(2)*256
-		fnGetDir2('[Q]\PRmstr\',mat filename$, '','rpwork*.h[cno]')
+		fnGetDir2('[Q]\PRmstr\',mat filename$, '','rpwork*.h'&str$(cno))
 		for fileItem=1 to udim(mat filename$)
 			if pos(lwrc$(filename$(fileItem)),'idx.')<=0 and pos(lwrc$(filename$(fileItem)),'idx2.')<=0 then
 				kfname$(1)=srep$(filename$(fileItem),'.','Idx.')
@@ -269,7 +269,7 @@ def fn_index_sys_do_one(cno,system_id$*128)
 		fnIndex('S:\Core\Data\acsllc\IVDesc.h'&str$(cno),'S:\Core\Data\acsllc\IVDIndex.h'&str$(cno),'1,6')
 		fnIndex('S:\Core\Data\acsllc\SCMSTR.h'&str$(cno),'S:\Core\Data\acsllc\SCIndex.h'&str$(cno),'1 4')
 		! fnIndex('[Temp]\TmSht[session]','[Temp]\TmSht-idx[session]','1,5')
-		fnReassignNTA('S:\Core\Data\acsllc\Transactions.h[cno]','Form pos 1,C 5','Form Pos 58,PD 3')
+		fnReassignNTA('S:\Core\Data\acsllc\Transactions.h'&str$(cno),'Form pos 1,C 5','Form Pos 58,PD 3')
 		! /r
 	end if
 fnend
