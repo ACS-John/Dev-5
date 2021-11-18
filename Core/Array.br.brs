@@ -291,6 +291,23 @@ def library fnArrayReverseC(mat in$,mat out$)
 		out$(in_udim-in_item+1)=in$(in_item)
 	next in_item
 fnend
+
+def library fnArraySortC(mat arrayOne$; ___,index,count)
+	! sorts a string array alphabetically
+	count=udim(mat arrayOne$)
+
+	dim a1tmp$(0)
+	mat a1tmp$(count) 
+	mat a1tmp$=arrayOne$
+
+	dim order(0)
+	mat order(count)
+	mat order=aIdx(arrayOne$) ! 106
+	for index=1 to count
+		arrayOne$(index)=a1tmp$(order(index))
+	next index
+	fnArraySortC=count
+fnend
 def library fn2arraySortNc(mat arrayOneN,mat arrayTwo$; ___,a1count,a2count,index,count)
 	! sorts both arrays based on the ascending order of the values in the arrayOneN
 	! r: get array count ( and ensure arrays are the same size)
@@ -305,18 +322,18 @@ def library fn2arraySortNc(mat arrayOneN,mat arrayTwo$; ___,a1count,a2count,inde
 	end if
 	count=a1count ! at this point a1count and a2count should be equal anyway
 	! /r
-	
+
 	dim a1tmpN(0)
 	mat a1tmpN(count)
 	mat a1tmpN=arrayOneN
-	
+
 	dim a2tmp$(0)*512
 	mat a2tmp$(count)
 	mat a2tmp$=arrayTwo$
-	
+
 	dim sorted(0)
 	mat sorted=aidx(arrayOneN)
-	for index=1 to udim(mat functions$)
+	for index=1 to count ! udim(mat functions$)
 		arrayOneN(index)=a1tmpN(sorted(index))
 		arrayTwo$(index)=a2tmp$(sorted(index))
 	next index
@@ -371,5 +388,16 @@ def fn_arrayItemRemoveC(mat array$,itemToRemove)
 	else
 		mat array$(itemToRemove:udim(mat array$)-1)=array$(itemToRemove+1:udim(mat array$))
 		mat array$(udim(mat array$)-1)
+	end if
+fnend
+def library fnArrayItemRemoveN(mat arrayN,itemToRemove)
+	fnArrayItemRemoveN=fn_arrayItemRemoveN(mat arrayN,itemToRemove)
+fnend
+def fn_arrayItemRemoveN(mat arrayN,itemToRemove)
+	if itemToRemove=udim(mat arrayN) then
+		mat arrayN(itemToRemove-1)
+	else
+		mat arrayN(itemToRemove:udim(mat arrayN)-1)=arrayN(itemToRemove+1:udim(mat arrayN))
+		mat arrayN(udim(mat arrayN)-1)
 	end if
 fnend

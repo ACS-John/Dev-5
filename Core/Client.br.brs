@@ -149,7 +149,7 @@ fnend
 			fn_setupClient_add('R R Crawford'					, '760',    12466)  ! owns a system, but is stalling support until their old stuff breaks.
 			fn_setupClient_add('Thomas Richardson'			,'3720',     7718)
 			fn_setupClient_add('Scottville Rural'			,'3840',    33390)
-			fn_setupClient_add('Starr County Gas'			,'4127',    33390)
+			! fn_setupClient_add('Starr County Gas'			,'4127',    33390)
 			fn_setupClient_add('Stern and Stern'				,'4132',200014280)
 			fn_setupClient_add('Thayer'									,'4245',    32800)
 			fn_setupClient_add('Thomasboro'							,'4260',    34068)
@@ -352,7 +352,7 @@ def fn_getClientLicense(mat clientHas$)
 			fn_getClientLicense_add('PR')
 			fn_getClientLicense_add('CL')
 			fn_getClientLicense_add('UB-EFT')
-			if days(date$)<=days('09/15/2019','mm/dd/ccyy') then fn_getClientLicense_add('EM')  ! Alpha testing
+			! if days(date$)<=days('09/15/2019','mm/dd/ccyy') then fn_getClientLicense_add('EM')  ! Alpha testing
 			!     fn_getClientLicense_add('CR')
 		else if env$('client')='Blucksberg' then
 			fn_userLimit(1)
@@ -532,7 +532,7 @@ def fn_getClientLicense(mat clientHas$)
 			fn_getClientLicense_add('UB') : fn_setUbLimit(500) ! U3 Utility Billing (<500 Customers)
 			fn_getClientLicense_add('U4') : u4_device$='Aclara' ! U4 Utility Billing Hand Held Add-On
 		else if env$('client')='Omaha' then
-			if days(date$)<=days('03/03/2018','mm/dd/ccyy') then fn_userLimit(3) else fn_userLimit(1) ! 2 user bonus for 60 days
+			! if days(date$)<=days('03/03/2018','mm/dd/ccyy') then fn_userLimit(3) else fn_userLimit(1) ! 2 user bonus for 60 days
 			fn_getClientLicense_add('UB') : fn_setUbLimit(9999) ! U1 Utility Billing (no discount)
 			fn_getClientLicense_add('U4') : u4_device$='READy Water'
 		else if env$('client')='Raymond' then
@@ -546,10 +546,10 @@ def fn_getClientLicense(mat clientHas$)
 		else if env$('client')='Scottville Rural' then
 			fn_userLimit(1)
 			fn_getClientLicense_add('UB') : fn_setUbLimit(500) ! U3 Utility Billing (<500 Customers)
-			if days(date$)<=days('12/31/2020','mm/dd/ccyy') then fn_getClientLicense_add('U5') ! UB External Collections Processing
-		else if env$('client')='Starr County Gas' then
-			fn_userLimit(1)
-			if days(date$)<=days('04/15/2018','mm/dd/ccyy') then fn_getClientLicense_add('UB') : fn_setUbLimit(9999)
+			! if days(date$)<=days('12/31/2020','mm/dd/ccyy') then fn_getClientLicense_add('U5') ! UB External Collections Processing
+		! else if env$('client')='Starr County Gas' then
+		! 	fn_userLimit(1)
+		! 	if days(date$)<=days('04/15/2018','mm/dd/ccyy') then fn_getClientLicense_add('UB') : fn_setUbLimit(9999)
 		! else if env$('client')='Sheila' then
 		! 	fn_userLimit(1)
 		! 	fn_getClientLicense_add('UB') : fn_setUbLimit(500) ! U3 Utility Billing (<500 Customers)
@@ -603,19 +603,19 @@ def fn_getClientLicense(mat clientHas$)
 		! /r
 	end if
 fnend
-def fn_getClientLicense_add(ch_item$*256)
-	client_has_system_count=udim(mat clientHas$)
-	if client_has_system_count=0 then
-		client_has_system_count=2
-		dim clientHas$(0)*256
-		mat clientHas$(1)
-		clientHas$(1)='CO'
-	else
-		client_has_system_count+=1
-	end if
-	mat clientHas$(client_has_system_count)
-	clientHas$(client_has_system_count)=ch_item$
-fnend
+	def fn_getClientLicense_add(ch_item$*256)
+		client_has_system_count=udim(mat clientHas$)
+		if client_has_system_count=0 then
+			client_has_system_count=2
+			dim clientHas$(0)*256
+			mat clientHas$(1)
+			clientHas$(1)='CO'
+		else
+			client_has_system_count+=1
+		end if
+		mat clientHas$(client_has_system_count)
+		clientHas$(client_has_system_count)=ch_item$
+	fnend
 def library fnclient_has_mat(mat c_has$) ! returns a list of system each client owns
 	fn_setup
 	fnclient_has_mat=fn_clientHasMat(mat c_has$)
@@ -997,8 +997,8 @@ def fn_client_is_converting(; ___,returnN)
 		returnN=1
 	! else if env$('client')='R R Crawford'       and days(date$)<=days('3/31/2021','mm/dd/ccyy') then
 	! 	returnN=1
-	else if env$('client')='Peter Engler'       and days(date$)<=days('12/31/2022','mm/dd/ccyy') then
-		returnN=1
+	! else if env$('client')='Peter Engler'       and days(date$)<=days('12/31/2022','mm/dd/ccyy') then
+	! 	returnN=1
 	! else if env$('client')='Kathys Bookkeeping' and days(date$)<=days('3/31/2021','mm/dd/ccyy')  then
 	! 	returnN=1
 	end if

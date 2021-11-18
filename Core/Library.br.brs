@@ -1129,6 +1129,10 @@ fnend
 		library 'S:\Core\Array.br': fnArrayItemRemoveC
 		fnArrayItemRemoveC=fnArrayItemRemoveC(mat array$,itemToRemove)
 	fnend
+	def library fnArrayItemRemoveN(mat arrayN,itemToRemove)
+		library 'S:\Core\Array.br': fnArrayItemRemoveN
+		fnArrayItemRemoveN=fnArrayItemRemoveN(mat arrayN,itemToRemove)
+	fnend
 	def library fnSetForCombo$*256(mat option$,key$; kpos,klen)
 		library 'S:\Core\Array.br': fnSetForCombo$
 		fnSetForCombo$=fnSetForCombo$(mat option$,key$, kpos,klen)
@@ -1148,6 +1152,10 @@ fnend
 	def library fn2arraySortNc(mat arrayOneN,mat arrayTwo$) ! untested unimplemented
 		library 'S:\Core\Array.br': fn2arraySortNc
 		fn2arraySortNc=fn2arraySortNc(mat arrayOneN,mat arrayTwo$)
+	fnend
+	def library fnArraySortC(mat array$)
+		library 'S:\Core\Array.br': fnArraySortC
+		fnArraySortC=fnArraySortC(mat array$)
 	fnend
 	def library fnArrayAddC(mat array_combined$,mat arrayPartOne$,mat arrayPartTwo$)
 		library 'S:\Core\Array.br': fnArrayAddC

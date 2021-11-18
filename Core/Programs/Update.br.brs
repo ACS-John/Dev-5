@@ -14,18 +14,63 @@ force_update=1
 	fnclient_support(mat system_id$,mat system_support_end_date,mat on_support,grace_days)
 ! /r
 fnTop(program$,"ACS Update")
-! r: main loop
-	fnStatus('launching update')
-	if ~fn_simple_connectivity_test then
-!   fnStatus('No newer update is available.')
-		fnStatusPause
-	else
-		fn_drive_sys_must_exist
-		fn_update_license
-		fn_update
+
+fnToS : lc=rc=0 : col1len=32 : col2pos=34
+	dim resp$(10)*128
+	lc+=1
+	fnLbl(lc+=1,1,'Last Automated Update Completed:',col1len,1)
+	fnTxt(lc,col2pos,10, 128,0,'',1) : fnreg_read('Last Update',resp$(rc_lastUpdate=rc+=1), '(never)',1) : if resp$(rc_lastUpdate)<>'(never)' then last_update$=date$(days(resp$(rc_lastUpdate),'ccyy/mm/dd'),'mm/dd/ccyy')
+	lc+=1
+	fnOpt(lc+=1,15,'Automated FTP Update'  , 0) : fnPcReg_read('Update Automated',resp$(rc_auto=rc+=1), 'True' ,1)
+	fnOpt(lc+=1,15,'Manual Download Update', 0) : fnPcReg_read('Update Manual'   ,resp$(rc_manual=rc+=1), 'False',1)
+	fnCmdSet(2)
+ckey=fnAcs(mat resp$)
+if ckey<>5 then 
+	fnPcReg_write('Update Automated',resp$(rc_auto))
+	fnPcReg_write('Update Manual'   ,resp$(rc_manual))
+	if resp$(rc_auto)='True' then ! r: Automated Update
+		fnStatus('launching automated update')
+		if ~fn_simple_connectivity_test then
+			fnStatusPause
+		else
+			fn_drive_sys_must_exist
+			fn_update_license
+			fn_update
+		end if 
+		! /r
+	else ! r: Manual Update
+		fnclient_support(mat system_id$,mat system_support_end_date,mat on_support,grace_days)
+		fnArraySortC(mat system_id$)
+		itemToRemove=srch(mat system_id$,'G2')                 	: if itemToRemove>0 then fnArrayItemRemoveC(mat system_id$,itemToRemove) : fnArrayItemRemoveN(mat system_support_end_date,itemToRemove) : fnArrayItemRemoveN(mat on_support,itemToRemove)
+		itemToRemove=srch(mat system_id$,'UB-EFT')             	: if itemToRemove>0 then fnArrayItemRemoveC(mat system_id$,itemToRemove) : fnArrayItemRemoveN(mat system_support_end_date,itemToRemove) : fnArrayItemRemoveN(mat on_support,itemToRemove)
+		itemToRemove=srch(mat system_id$,'HH')                 	: if itemToRemove>0 then fnArrayItemRemoveC(mat system_id$,itemToRemove) : fnArrayItemRemoveN(mat system_support_end_date,itemToRemove) : fnArrayItemRemoveN(mat on_support,itemToRemove)
+		itemToRemove=srch(mat system_id$,'P4')                 	: if itemToRemove>0 then fnArrayItemRemoveC(mat system_id$,itemToRemove) : fnArrayItemRemoveN(mat system_support_end_date,itemToRemove) : fnArrayItemRemoveN(mat on_support,itemToRemove)
+		itemToRemove=srch(mat system_id$,'U4')                 	: if itemToRemove>0 then fnArrayItemRemoveC(mat system_id$,itemToRemove) : fnArrayItemRemoveN(mat system_support_end_date,itemToRemove) : fnArrayItemRemoveN(mat on_support,itemToRemove)
+		itemToRemove=srch(mat system_id$,'U5')                 	: if itemToRemove>0 then fnArrayItemRemoveC(mat system_id$,itemToRemove) : fnArrayItemRemoveN(mat system_support_end_date,itemToRemove) : fnArrayItemRemoveN(mat on_support,itemToRemove)
+		itemToRemove=srch(mat system_id$,'GB')                 	: if itemToRemove>0 then fnArrayItemRemoveC(mat system_id$,itemToRemove) : fnArrayItemRemoveN(mat system_support_end_date,itemToRemove) : fnArrayItemRemoveN(mat on_support,itemToRemove)
+		itemToRemove=srch(mat system_id$,'EM')                 	: if itemToRemove>0 then fnArrayItemRemoveC(mat system_id$,itemToRemove) : fnArrayItemRemoveN(mat system_support_end_date,itemToRemove) : fnArrayItemRemoveN(mat on_support,itemToRemove)
+		itemToRemove=srch(mat system_id$,'Client Billing')     	: if itemToRemove>0 then fnArrayItemRemoveC(mat system_id$,itemToRemove) : fnArrayItemRemoveN(mat system_support_end_date,itemToRemove) : fnArrayItemRemoveN(mat on_support,itemToRemove)
+		dim url$*512
+		manHitCount=0
+		url$='http://planetacs.net/acs5update/'
+		for x=1 to udim(mat system_id$)
+			if on_support(x) then
+				url$&=system_id$(x)&'_'
+				manHitCount+=1
+			end if
+		nex x
+		url$=url$(1:len(url$)-1) ! remove last underscore
+		url$&='.html'
+		if manHitCount then
+			execute 'sy -C start '&url$
+			execute 'System'
+		end if
+		! /r
 	end if
+end if
+goto Xit
 Xit: fnXit
-! /r
+
 def fn_setup
 	setup=1
 	autoLibrary
@@ -131,7 +176,7 @@ def fn_update_license
 	fn_execute('-c',env$('temp')&'\acs_5_Update_Support_Cache.exe /DIR="'&fn_acs_installation_path$&'" /NOICONS /NOCANCEL /SILENT')
 	fn_update_license=1
 fnend
-def fn_update
+def fn_update(; ___,u_which,support_text$*256,client_has_count)
 	if env$('acsClient')='Ed Horton' then
 		mat client_has$(5)
 		client_has$(1)='UB'
@@ -153,7 +198,6 @@ def fn_update
 		fnStatus('Systems on Support:')
 		for client_has_item=1 to client_has_count
 			fnStatus('   '&fnSystemName$(client_has$(client_has_item)))
-			dim support_text$*256
 			u_which=srch(mat system_id$,client_has$(client_has_item))
 			if u_which>0 then
 				if days(date('ccyymmdd'),'ccyymmdd')<=days(system_support_end_date(u_which),'ccyymmdd') then

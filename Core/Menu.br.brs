@@ -39,6 +39,9 @@ fn_setup
 		ml$(3)='still receiving this message contact ACS at 1-800-643-6318'
 		ml$(4)='Perform an Update now?'
 		fnmsgbox(mat ml$,resp$,'',16+4)
+		
+		! add option for manual update
+		
 		if uprc$(resp$)=uprc$("Yes") then
 			chain 'S:\Core\Programs\Update'
 		else
@@ -79,8 +82,7 @@ fn_setup
 	fnTop(program$)
 
 	dim last_update$*128
-	fnreg_read('Last Update',last_update$)
-	if last_update$='' then last_update$='(never updated)'
+	fnreg_read('Last Update',last_update$, '(never)',1)
 	!     setenv('Icon','S:\Core\Icon\ACS-v5.ico')
 	if env$('guimode')='OFF' then execute 'config gui on'
 	if env$('FavoritesOpen')='' then
@@ -99,7 +101,7 @@ fn_setup
 fn_main
 
 if menu$='Exit and Logout' then
-	execute "System Logoff"
+	execute 'System Logoff'
 end if
 goto Xit
 def fn_addIfLicensed(sysCode$)
@@ -1028,7 +1030,7 @@ def fn_chain(c_program$*128)
 	pr newpage
 	fnchain(c_program$)
 fnend
-Xit: execute "System"
+Xit: execute 'System'
 include: fn_open
 include: fn_setup
 
