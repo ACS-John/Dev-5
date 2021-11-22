@@ -910,7 +910,7 @@ def fn_print_bill_campbell(z$,mat mg$,serviceFrom,serviceTo)
 		open #h_pbcampbel_customer=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",i,i,k 
 		F_PBCAMPBEL_CUSTOMER: form pos 1,c 10,c 30,x 90,c 12,pos 147,pd 2,pos 157,11*pd 4.2,pos 1821,n 1,pos 217,15*pd 5,pd 4.2,pd 4,12*pd 4.2,pos 385,pd 3,pos 388,10*pd 5.2,pos 1741,n 2,pos 1750,2*n 6
 		blankbefore=1
-		blankafter=3
+		blankafter=4
 	end if 
 	read #h_pbcampbel_customer,using F_PBCAMPBEL_CUSTOMER,key=z$: z$,pbcampbel_meter_address$,f$,a3,mat b,final,mat d,bal,f,mat g,mat gb,route,serviceFromMmddYy,serviceToMmddYy
 	fn_override_service_date(serviceFrom,serviceTo,serviceFromMmddYy,serviceToMmddYy)
