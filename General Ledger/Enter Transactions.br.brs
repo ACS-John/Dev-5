@@ -302,7 +302,7 @@ def fn_scrMain(hMerge; editRecord,heading$*64,glBank$*12,transDate,bankAcctName$
 		fnTxt(lc,mypos,20,0,1,'',1,'Disabled General Ledger selection')
 		resp$(respc_AllocGl=5)=''
 		! fnLbl(lc,45,'Amount:',mylen,1)
-		fnTxt(lc,50,13,0,1,'10',1,'Disabled Allocatin Amount',0 )
+		fnTxt(lc,50,13,0,1,'10',1,'Disabled Allocation Amount',0 )
 		resp$(respc_AllocAmt=6)=''
 		lc-=2
 	else
@@ -367,12 +367,21 @@ def fn_scrMain(hMerge; editRecord,heading$*64,glBank$*12,transDate,bankAcctName$
 		transactionAmt=val(resp$(2))      	! amount
 		tr$=resp$(3)                     	  	! ref #
 
+
+	if selx=sx_disbursement or selx=sx_sale then
+		fnButtonOrDisabled(~editRecord,6,63,'Extract',ck_extract,'Extracts general ledger numbers from payee records')
+		if disable_payee=1 then payeeButton$='Enable Payee' else payeeButton$='Disable Payee'
+		fnButton(6,73+3,payeeButton$,ck_payeeTogle,'Allows you to disable or enable the payee field.',1,12)
+		fnButton(6,87+3,'Payee File',ck_payeeAdd,'Allows you to add a payee record.',1,10)
+	end if
+
+
 		if selx=sx_receipt or selx=sx_adjustment or selx=sx_sale then
 			td$=resp$(respc_desc)            	! description
 		else if selx=sx_payrollCheck then
 			vn$=resp$(respc_payee)(1:4)      	! employee
 			td$=resp$(respc_payee)(6:inf)    	! description
-		else
+		else ! sx_disbursement
 			vn$=resp$(respc_payee)(1:8)      	! payee
 			td$=resp$(respc_payee)(10:inf)  	! description
 		end if
@@ -901,16 +910,8 @@ fnend
 		end if
 	fnend
 	def fn_totalGrid(hAccount,mat kList$,mat kReceipts,mat kDisbursements,mat kAdjustments,lc,ps)
-		! r: setup
-		dim chdr_proof_total$(6),cmask3$(6),glitem3$(6)*128
-		chdr_proof_total$(1)='G/L Account'  	: cmask3$(1)=''
-		chdr_proof_total$(2)='Beg Balance'  	: cmask3$(2)='10'
-		chdr_proof_total$(3)='Receipts'     	: cmask3$(3)='10'
-		chdr_proof_total$(4)='Disbursements'	: cmask3$(4)='10'
-		chdr_proof_total$(5)='Adjustments'  	: cmask3$(5)='10'
-		chdr_proof_total$(6)='End Balance'  	: cmask3$(6)='10'
+		if ~setup_cHdr then gosub Setup_cHdr
 
-		! /r
 		dim kBegBalance(0)
 		mat kBegBalance(udim(mat kList$))
 		dim kEndBalance(0)
@@ -936,7 +937,20 @@ fnend
 			! end if
 		next j
 	fnend
+Setup_cHdr: ! r:  ( for fn_totalGrid and for fn_prProofTotals )
+	if ~setup_cHdr then
+		setup_cHdr=1
+		dim chdr_proof_total$(6)              , cmask3$(6)       ,glitem3$(6)*128
+		chdr_proof_total$(1)='G/L Account'  	: cmask3$(1)=''
+		chdr_proof_total$(2)='Beg Balance'  	: cmask3$(2)='10'
+		chdr_proof_total$(3)='Receipts'     	: cmask3$(3)='10'
+		chdr_proof_total$(4)='Disbursements'	: cmask3$(4)='10'
+		chdr_proof_total$(5)='Adjustments'  	: cmask3$(5)='10'
+		chdr_proof_total$(6)='End Balance'  	: cmask3$(6)='10'
 
+		
+	end if
+return ! /r
 def fn_transactionAdd(hMerge,typeOfEntryN,glBank$,transDate; ___, _
 	returnN,gl$*12,tr$*12,tr4,tr5,tType,postingCode,lrPrior,smResponse)
 	! if trPrior$='' then fnpcreg_read('last Reference Number',trPrior$)
@@ -1204,7 +1218,7 @@ def fn_prProofTotals(hAccount,totalDebits,totalCredits, _
 		glBank$,contraEntryDateN, _
 		mat kList$,mat kReceipts,mat kDisbursements,mat kAdjustments,mat chdr_proof_total$,mat glitem3$ _
 		; ___,j,mylen)
-
+	if ~setup_cHdr then gosub Setup_cHdr
 	dim kBegBalance(0),kEndBalance(0)
 	mat kBegBalance(udim(mat kList$))
 	mat kEndBalance(udim(mat kList$))

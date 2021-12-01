@@ -169,8 +169,8 @@ def fn_cfv_utility_billing
 	if exists("[Q]\WorkOrder")=0 then execute 'MkDir "[Q]\WorkOrder"'
 	! if ~exists('[Q]\INI\Utility Billing') then execute 'mkdir "[Q]\INI\Utility Billing"'
 	! if ~exists('[Q]\INI\acsUB\UBdata') then execute 'mkdir [Q]\INI\acsUB\UBdata'
-	fn_ini_move(env$('cursys'))
-	fnIniToReg
+	! fn_ini_move(env$('cursys'))
+	! fnIniToReg
 	fn_reg_rename(env$('cursys'))
 	! r: move ubBkNo.h into CReg and delete ubBkNo.h
 	if exists('[Q]\UBmstr\ubBkNo.h[cno]') then
@@ -324,8 +324,8 @@ def fn_cfv_checkbook
 	! Checkbook Only
 	if exists("[Q]\CLmstr")=0 then execute "MkDir [Q]\CLmstr"
 	! if ~exists('[Q]\INI\Checkbook') then execute 'mkdir "[Q]\INI\Checkbook"'
-	fn_ini_move(env$('cursys'))
-	fnIniToReg
+	! fn_ini_move(env$('cursys'))
+	! fnIniToReg
 	fn_reg_rename(env$('cursys'))
 
 	! if ~exists('[Q]\CLmstr\PayeeType.dat') and exists('S:\acsCL\PayeeType.dat') then
@@ -637,8 +637,8 @@ fnend
 def fn_cfv_payroll
 	if exists("[Q]\PRmstr")=0 then execute "MkDir [Q]\PRmstr"
 	! if ~exists('[Q]\INI\Payroll') then execute 'mkdir "[Q]\INI\Payroll"'
-	fn_ini_move(env$('cursys'))
-	fnIniToReg
+	! fn_ini_move(env$('cursys'))
+	! fnIniToReg
 	fn_reg_rename(env$('cursys'))
 	! r: move DDInfo.h into CReg and delete DDInfo.h
 	if exists('[Q]\PRmstr\DDInfo.h[cno]') then
@@ -816,7 +816,7 @@ fnend
 	 goto ERTN ! /r
 def fn_cfv_job_cost_payroll
 	! if ~exists('[Q]\INI\Payroll\Job Cost') then execute 'mkdir "[Q]\INI\Payroll\Job Cost"'
-	fn_ini_move('JC')
+	! fn_ini_move('JC')
 	! r: JCMSTR.h
 	fn_file_setup_data("[Q]\PRmstr\JCMSTR.h[cno]",300,0)
 	fn_file_setup_index("[Q]\PRmstr\JCINDX.h[cno]",'1','6')
@@ -834,8 +834,8 @@ def fn_cfv_general_ledger
 	if exists("[Q]\GLmstr")=0 then execute "MkDir [Q]\GLmstr"
 	! if ~exists('[Q]\INI\General Ledger') then execute 'mkdir "[Q]\INI\General Ledger"'
 	! if ~exists('[Q]\INI\General Ledger\Accountants') then execute 'mkdir "[Q]\INI\General Ledger\Accountants"'
-	fn_ini_move(env$('cursys'))
-	fnIniToReg
+	! fn_ini_move(env$('cursys'))
+	! fnIniToReg
 	fn_reg_rename(env$('cursys'))
 
 	if ~exists('[Q]\GLmstr\PayeeType.dat') then
@@ -1125,99 +1125,99 @@ fnend
 L9000: ! r: skip bad schedule records
 	reread #tmp, using "Form POS 1,c 2": a$ eof EO_TMP ioerr ignore
 goto L3920 ! /r
-def fn_ini_move(cursys$*2)
-	dim imProgramOld$(0)*256
-	dim imProgramNew$(0)*256
-	imProgramCount=0
-	mat imProgramOld$(imProgramCount)
-	mat imProgramNew$(imProgramCount)
-	if cursys$='PR' then
-		fn_programMoveAdd('acsPR\newprfm','Payroll\Employee')
-		fn_programMoveAdd('acsPR\newprcalk','Payroll\Calculation')
-		fn_programMoveAdd('acsPR\newprRevCal','Payroll\Reverse Calculation')
-		fn_programMoveAdd('acsPR\newprchangedate','Payroll\Change Payroll Dates')
-		fn_programMoveAdd('acsPR\newprinput','Payroll\Enter Time Sheets')
-		fn_programMoveAdd('acsPR\newprCkPrt','Payroll\Print Payroll Checks')
-		fn_programMoveAdd('Payroll\Print 1099 Forms','Payroll\Print 1099-NEC Forms')
-		if fnClientHas('P2') then
-			fn_programMoveAdd('acsPR\Category','Payroll\Job Cost\Category')
-		end if
-	else if cursys$='UB' then
-		fn_programMoveAdd('acsUB\ubBudLst','Utility Billing\Budget Customer List')
-		fn_programMoveAdd('acsUB\BudRpt1','Utility Billing\Budget Worksheet')
-		! fn_programMoveAdd('acsUB\Export_IMSB','Utility Billing\Export File for IMSB')
-		fn_programMoveAdd('acsUB\ECP_Export','Utility Billing\Export for External Collections Process')
-		fn_programMoveAdd('acsUB\totalBal','Utility Billing\View Total Accounts Receivable')
-		fn_programMoveAdd('acsUB\ubbargraph','Utility Billing\Bar Graph')
-		fn_programMoveAdd('acsUB\billingrpt','Utility Billing\Secondary Water Usage Report')
-		fn_programMoveAdd('acsUB\averagesewer','Utility Billing\Average Sewer Usage Report')
-		fn_programMoveAdd('acsUB\ubdelinq','Utility Billing\Past Due Balance Breakdown')
-		fn_programMoveAdd('acsUB\bill-rpt','Utility Billing\Final Billing Report')
-		fn_programMoveAdd('acsUB\ubNotes','Utility Billing\Print Customer Notes')
-		fn_programMoveAdd('acsUB\ubfm','Utility Billing\Customer')
-		fn_programMoveAdd('acsUB\ubipcoll','Utility Billing\Collections')
-		fn_programMoveAdd('acsUB\ubPDTnOf','Utility Billing\Past Due Turn Off List')
-		fn_programMoveAdd('acsUB\ubUsage','Utility Billing\Usage Report')
-		fn_programMoveAdd('acsUB\ubIpChg','Utility Billing\Enter Readings and Charges')
-		fn_programMoveAdd('acsUB\workOrderAdd','Utility Billing\Work Order Add')
-		fn_programMoveAdd('acsUB\workOrderList','Utility Billing\Work Order List')
-		fn_programMoveAdd('acsUB\ubBilJrn','Utility Billing\Billing Journal')
-		fn_programMoveAdd('acsUB\ubRate','Utility Billing\Rates')
-		fn_programMoveAdd('acsUB\BkDraft','Utility Billing\Create Bank Draft File')
-		fn_programMoveAdd('acsUB\ubpencal','Utility Billing\Penalty Calculation')
-		fn_programMoveAdd('acsUB\ubUnbill','Utility Billing\Unbilled Customer Listing')
-		fn_programMoveAdd('acsUB\FlexTran','Utility Billing\Transactions')
-		fn_programMoveAdd('acsUB\ubNoUsage','Utility Billing\Zero Usage Report')
-		fn_programMoveAdd('acsUB\Per1000','Utility Billing\Per 1000 Usage')
-		fn_programMoveAdd('acsUB\PrintBill','Utility Billing\Print Bills')
-		fn_programMoveAdd('acsUB\analyze','Utility Billing\Rate Analysis')
-		fn_programMoveAdd('acsUB\label','Utility Billing\Labels')
-	else if cursys$='GL' then
-		fn_programMoveAdd('acsGL\glPrt109','General Ledger\Print 1099 Forms')
-		fn_programMoveAdd('General Ledger\Print 1099 Forms','General Ledger\Print 1099-NEC Forms')
-		fn_programMoveAdd('acsGL\acGLClos','General Ledger\Close Books at Year End')
-		fn_programMoveAdd('acsGL\CloseMonth','General Ledger\Close Month')
-		fn_programMoveAdd('acsGL\AcGLAcTB','General Ledger\Print Accumulated Trial Balance')
-		fn_programMoveAdd('acsGL\GLInput','General Ledger\Enter Transactions')
-		fn_programMoveAdd('acsGL\AcGlInc4','General Ledger\Four Column Budget Income Statement')
-		fn_programMoveAdd('acsGL\ACGLTB','General Ledger\Trial Balance')
-		fn_programMoveAdd('acsGL\AcGLBalC','General Ledger\Comparative Balance Sheet')
-		fn_programMoveAdd('acsGL\AcGLBalY','General Ledger\Period Comparison Balance Sheet')
-		if fnClientHas('G2') then ! Accountant's General Ledger Add-On
-			fn_programMoveAdd('acsGL\AcPrReg','General Ledger\Accountants\Print Payroll Registers')
-			fn_programMoveAdd('acsGL\Employee','General Ledger\Accountants\Employee')
-		end if
-	else if cursys$='CL' then
-		fn_programMoveAdd('acsCL\Transaction','Checkbook\Transaction')
-		fn_programMoveAdd('acsCL\cl1099','Checkbook\Print 1099 Forms')
-		fn_programMoveAdd('Checkbook\Print 1099 Forms','Checkbook\Print 1099-NEC Forms') ! XXX TODO: we did not move the page in the help files.
-		fn_programMoveAdd('acsCL\payee','Checkbook\Payee')
-		fn_programMoveAdd('acsCL\UnpaidInvoice','Checkbook\Unpaid Invoice')
-	end if
-	dim favData$(0)*128,favDataN(0)
-	hFavProgram=fn_openFio('CO Favorites',mat favData$,mat favDataN, 0,2)
-	for imItem=1 to imProgramCount
-		dim imIniFrom$*256
-		dim imIniTo$*256
-		dim imbrFrom$*256
-		dim imbrTo$*256
-		imBrFrom$='S:\'&imProgramOld$(imItem)&'.br'
-		imBrTo$  ='S:\'&imProgramNew$(imItem)&'.br'
-		imIniFrom$=fn_programIniFileName$(imProgramOld$(imItem), 1)
-		imIniTo$  =fn_programIniFileName$(imProgramNew$(imItem), 1)
-			 ! if pos(lwrc$(imBrFrom$),'acglbalc')>0 then pause
-! if pos(lwrc$(imIniFrom$),'ubipcoll')>0 and env$('acsdeveloper')<>'' then pause
-		if ~(imIniFrom$='S:\Core\Default\Program.ini' or imIniTo$='S:\Core\Default\Program.ini') then
-			fn_rename(imIniFrom$,imIniTo$)
-		end if
-		fnKeyChange(hFavProgram,'form pos '&str$(kps(hFavProgram))&',C '&str$(kln(hFavProgram)),imBrFrom$,imBrTo$)
-	nex imItem
-	hFavProgram=fnCloseFile(hFavProgram,'CO Favorites')
-fnend
-def fn_programMoveAdd(programNameOld$*256,programNameNew$*256)
-	fnAddOneC(mat imProgramOld$,programNameOld$)
-	imProgramCount=fnAddOneC(mat imProgramNew$,programNameNew$)
-fnend
+! def fn_ini_move(cursys$*2)
+! 	dim imProgramOld$(0)*256
+! 	dim imProgramNew$(0)*256
+! 	imProgramCount=0
+! 	mat imProgramOld$(imProgramCount)
+! 	mat imProgramNew$(imProgramCount)
+! 	if cursys$='PR' then
+! 		fn_programMoveAdd('acsPR\newprfm','Payroll\Employee')
+! 		fn_programMoveAdd('acsPR\newprcalk','Payroll\Calculation')
+! 		fn_programMoveAdd('acsPR\newprRevCal','Payroll\Reverse Calculation')
+! 		fn_programMoveAdd('acsPR\newprchangedate','Payroll\Change Payroll Dates')
+! 		fn_programMoveAdd('acsPR\newprinput','Payroll\Enter Time Sheets')
+! 		fn_programMoveAdd('acsPR\newprCkPrt','Payroll\Print Payroll Checks')
+! 		fn_programMoveAdd('Payroll\Print 1099 Forms','Payroll\Print 1099-NEC Forms')
+! 		if fnClientHas('P2') then
+! 			fn_programMoveAdd('acsPR\Category','Payroll\Job Cost\Category')
+! 		end if
+! 	else if cursys$='UB' then
+! 		fn_programMoveAdd('acsUB\ubBudLst','Utility Billing\Budget Customer List')
+! 		fn_programMoveAdd('acsUB\BudRpt1','Utility Billing\Budget Worksheet')
+! 		! fn_programMoveAdd('acsUB\Export_IMSB','Utility Billing\Export File for IMSB')
+! 		fn_programMoveAdd('acsUB\ECP_Export','Utility Billing\Export for External Collections Process')
+! 		fn_programMoveAdd('acsUB\totalBal','Utility Billing\View Total Accounts Receivable')
+! 		fn_programMoveAdd('acsUB\ubbargraph','Utility Billing\Bar Graph')
+! 		fn_programMoveAdd('acsUB\billingrpt','Utility Billing\Secondary Water Usage Report')
+! 		fn_programMoveAdd('acsUB\averagesewer','Utility Billing\Average Sewer Usage Report')
+! 		fn_programMoveAdd('acsUB\ubdelinq','Utility Billing\Past Due Balance Breakdown')
+! 		fn_programMoveAdd('acsUB\bill-rpt','Utility Billing\Final Billing Report')
+! 		fn_programMoveAdd('acsUB\ubNotes','Utility Billing\Print Customer Notes')
+! 		fn_programMoveAdd('acsUB\ubfm','Utility Billing\Customer')
+! 		fn_programMoveAdd('acsUB\ubipcoll','Utility Billing\Collections')
+! 		fn_programMoveAdd('acsUB\ubPDTnOf','Utility Billing\Past Due Turn Off List')
+! 		fn_programMoveAdd('acsUB\ubUsage','Utility Billing\Usage Report')
+! 		fn_programMoveAdd('acsUB\ubIpChg','Utility Billing\Enter Readings and Charges')
+! 		fn_programMoveAdd('acsUB\workOrderAdd','Utility Billing\Work Order Add')
+! 		fn_programMoveAdd('acsUB\workOrderList','Utility Billing\Work Order List')
+! 		fn_programMoveAdd('acsUB\ubBilJrn','Utility Billing\Billing Journal')
+! 		fn_programMoveAdd('acsUB\ubRate','Utility Billing\Rates')
+! 		fn_programMoveAdd('acsUB\BkDraft','Utility Billing\Create Bank Draft File')
+! 		fn_programMoveAdd('acsUB\ubpencal','Utility Billing\Penalty Calculation')
+! 		fn_programMoveAdd('acsUB\ubUnbill','Utility Billing\Unbilled Customer Listing')
+! 		fn_programMoveAdd('acsUB\FlexTran','Utility Billing\Transactions')
+! 		fn_programMoveAdd('acsUB\ubNoUsage','Utility Billing\Zero Usage Report')
+! 		fn_programMoveAdd('acsUB\Per1000','Utility Billing\Per 1000 Usage')
+! 		fn_programMoveAdd('acsUB\PrintBill','Utility Billing\Print Bills')
+! 		fn_programMoveAdd('acsUB\analyze','Utility Billing\Rate Analysis')
+! 		fn_programMoveAdd('acsUB\label','Utility Billing\Labels')
+! 	else if cursys$='GL' then
+! 		fn_programMoveAdd('acsGL\glPrt109','General Ledger\Print 1099 Forms')
+! 		fn_programMoveAdd('General Ledger\Print 1099 Forms','General Ledger\Print 1099-NEC Forms')
+! 		fn_programMoveAdd('acsGL\acGLClos','General Ledger\Close Books at Year End')
+! 		fn_programMoveAdd('acsGL\CloseMonth','General Ledger\Close Month')
+! 		fn_programMoveAdd('acsGL\AcGLAcTB','General Ledger\Print Accumulated Trial Balance')
+! 		fn_programMoveAdd('acsGL\GLInput','General Ledger\Enter Transactions')
+! 		fn_programMoveAdd('acsGL\AcGlInc4','General Ledger\Four Column Budget Income Statement')
+! 		fn_programMoveAdd('acsGL\ACGLTB','General Ledger\Trial Balance')
+! 		fn_programMoveAdd('acsGL\AcGLBalC','General Ledger\Comparative Balance Sheet')
+! 		fn_programMoveAdd('acsGL\AcGLBalY','General Ledger\Period Comparison Balance Sheet')
+! 		if fnClientHas('G2') then ! Accountant's General Ledger Add-On
+! 			fn_programMoveAdd('acsGL\AcPrReg','General Ledger\Accountants\Print Payroll Registers')
+! 			fn_programMoveAdd('acsGL\Employee','General Ledger\Accountants\Employee')
+! 		end if
+! 	else if cursys$='CL' then
+! 		fn_programMoveAdd('acsCL\Transaction','Checkbook\Transaction')
+! 		fn_programMoveAdd('acsCL\cl1099','Checkbook\Print 1099 Forms')
+! 		fn_programMoveAdd('Checkbook\Print 1099 Forms','Checkbook\Print 1099-NEC Forms') ! XXX TODO: we did not move the page in the help files.
+! 		fn_programMoveAdd('acsCL\payee','Checkbook\Payee')
+! 		fn_programMoveAdd('acsCL\UnpaidInvoice','Checkbook\Unpaid Invoice')
+! 	end if
+! 	dim favData$(0)*128,favDataN(0)
+! 	hFavProgram=fn_openFio('CO Favorites',mat favData$,mat favDataN, 0,2)
+! 	for imItem=1 to imProgramCount
+! 		dim imIniFrom$*256
+! 		dim imIniTo$*256
+! 		dim imbrFrom$*256
+! 		dim imbrTo$*256
+! 		imBrFrom$='S:\'&imProgramOld$(imItem)&'.br'
+! 		imBrTo$  ='S:\'&imProgramNew$(imItem)&'.br'
+! 		imIniFrom$=fn_programIniFileName$(imProgramOld$(imItem), 1)
+! 		imIniTo$  =fn_programIniFileName$(imProgramNew$(imItem), 1)
+! 			 ! if pos(lwrc$(imBrFrom$),'acglbalc')>0 then pause
+! ! if pos(lwrc$(imIniFrom$),'ubipcoll')>0 and env$('acsdeveloper')<>'' then pause
+! 		if ~(imIniFrom$='S:\Core\Default\Program.ini' or imIniTo$='S:\Core\Default\Program.ini') then
+! 			fn_rename(imIniFrom$,imIniTo$)
+! 		end if
+! 		fnKeyChange(hFavProgram,'form pos '&str$(kps(hFavProgram))&',C '&str$(kln(hFavProgram)),imBrFrom$,imBrTo$)
+! 	nex imItem
+! 	hFavProgram=fnCloseFile(hFavProgram,'CO Favorites')
+! fnend
+! def fn_programMoveAdd(programNameOld$*256,programNameNew$*256)
+! 	fnAddOneC(mat imProgramOld$,programNameOld$)
+! 	imProgramCount=fnAddOneC(mat imProgramNew$,programNameNew$)
+! fnend
 def fn_reg_rename(cursys$*2)
 	if cursys$='PR' then
 		! nuffin yet

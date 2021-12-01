@@ -1095,10 +1095,10 @@ fnend
 		library 'S:\Core\Reg.br': fnreg_rename
 		fnreg_rename=fnreg_rename(field_name_old$,fieldNameNew$)
 	fnend
-	def library fnIniToReg
-		library 'S:\Core\Reg.br': fnIniToReg
-		fnIniToReg=fnIniToReg
-	fnend
+	! def library fnIniToReg
+	! 	library 'S:\Core\Reg.br': fnIniToReg
+	! 	fnIniToReg=fnIniToReg
+	! fnend
 	def library fnReadProgramPrintProperty(key$*80,&value$; programFileOverride$*256)
 		library 'S:\Core\program_properties.br': fnReadProgramPrintProperty
 		fnReadProgramPrintProperty=fnReadProgramPrintProperty(key$,value$, programFileOverride$)
@@ -1292,7 +1292,6 @@ fnend
 		library 'S:\Core\CNo.br': fnSystemName$
 		fnSystemName$=fnSystemName$(sysId$)
 	fnend
-! /r
 ! r: cno   S:\Core\CNo.br - COMPANY NUMBER (and misc)
 	def library fncno(&cno;&cnam$)
 		library 'S:\Core\CNo.br': fncno

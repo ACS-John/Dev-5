@@ -4,10 +4,11 @@ dim tr$(0)*128
 dim trN(0)
 hTrans=fn_openFio('Client Billing Transaction',mat tr$,mat trN, 1)
 dim coClient$*40
-coClient$='[All]'
-coProvider$='[All]'
+fnPcReg_Read('filter client'  	,coClient$  , '[All]',1)
+dim coProvider$*128
+fnPcReg_Read('filter provider'	,coProvider$, '[All]',1)
 do
-	fntos : rc=0
+	fntos : rc=ln=0
 	dim resp$(16)*256
 	col1pos= 2
 	col1len=20
@@ -20,7 +21,9 @@ do
 	! fnComboA(ln,col2pos,'CO Provider', 2)
 	fnLbl(ln+=1,1,'Provider:', col1len,1)
 	fnComboFio(ln,col2pos,'CO Provider', 2)
-	fnButton(ln+=1,(val(env$('Session_Cols'))-8),'Refresh',ck_refresh=19, 'reapply the filters')
+	fnButton(ln+=1,(val(env$('Session_Cols'))-12),'Refresh',ck_refresh=19, 'reapply the filters')
+	resp$(resp_provider=rc+=1)=trim$(coProvider$)
+
 
 	ln+=1
 	! r: add grid
@@ -43,24 +46,28 @@ do
 		do
 			read #hTrans,using form$(hTrans): mat tr$,mat trN eof TransGridAddEoF
 			if coClient$='[All]' or trim$(coClient$)=trim$(tr$(tr_clientId)) then
-				! r: add record to grid
-				dim item$(0)*128
-				mat item$(11)
-
-				mat item$=('')
-				item$(1 )=     tr$(tr_clientId     	)
-				item$(2 )=     tr$(tr_inv          	)
-				item$(3 )=str$(trN(tr_date         	))
-				item$(4 )=str$(trN(tr_amtOrigional	))
-				item$(5 )=str$(trN(tr_amt          	))
-				item$(6 )=str$(trN(tr_salesmanId  	))
-				item$(7 )=str$(trN(tr_transCode   	))
-				item$(8 )=str$(trN(tr_postCode    	))
-				item$(9 )=     tr$(tr_desc         	)
-				item$(10)=str$(tnN(tr_nta          	))
-				item$(11)=fn_clientProvider$(tr$(tr_clientId))
-				fnFlexAdd1(mat item$)
-				! /r
+				dim provider$*128
+				provider$=fn_clientProvider$(tr$(tr_clientId))
+				if provider$='[All]' or trim$(provider$)=coProvider$ then
+					! r: add record to grid
+					dim item$(0)*128
+					mat item$(11)
+					
+					mat item$=('')
+					item$(1 )=     tr$(tr_clientId     	)
+					item$(2 )=     tr$(tr_inv          	)
+					item$(3 )=str$(trN(tr_date         	))
+					item$(4 )=str$(trN(tr_amtOrigional	))
+					item$(5 )=str$(trN(tr_amt          	))
+					item$(6 )=str$(trN(tr_salesmanId  	))
+					item$(7 )=str$(trN(tr_transCode   	))
+					item$(8 )=str$(trN(tr_postCode    	))
+					item$(9 )=     tr$(tr_desc         	)
+					item$(10)=str$(tnN(tr_nta          	))
+					item$(11)=provider$
+					fnFlexAdd1(mat item$)
+					! /r
+				end if
 			end if
 		loop
 		TransGridAddEoF: !
@@ -72,7 +79,8 @@ do
 	fnCmdKey("Exit"  	,ck_cancel=5,0,1)
 	ckey=fnacs(mat resp$)
 	if ckey<>ck_cancel then
-		coClient$=resp$(resp_client)
+		coClient$  =resp$(resp_client  	) : fnPcReg_write('filter client'  	,coClient$  )
+		coProvider$=resp$(resp_provider	) : fnPcReg_write('filter provider'	,coProvider$)
 		if ckey=ck_add then
 		else if ckey=ck_edit then
 			pr 'ck_edit' : pause
