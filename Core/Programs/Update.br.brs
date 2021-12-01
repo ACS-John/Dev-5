@@ -2,7 +2,7 @@
 force_update=1
 ! r: dims and constants
 	if ~setup then fn_setup
-! dim message$(1)*256
+
 	dim batch_name$*256
 	dim script_name$*256
 	dim return_name$*256
@@ -64,6 +64,11 @@ if ckey<>5 then
 		if manHitCount then
 			execute 'sy -C start '&url$
 			execute 'System'
+		else
+			dim message$(0)*256
+			fnAddOneC(mat message$,'Nothing is licensed to update.')
+			fnAddOneC(mat message$,'If this message is in error, contact ACS Support.')
+			fnMsgBox(mat message$)
 		end if
 		! /r
 	end if
