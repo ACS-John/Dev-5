@@ -146,6 +146,11 @@ def library fnComboFio(lyne,ps,layoutName$*128; limlis,whichIndex,ttt$*200, ___,
 		lnk=11 
 		psd=12 
 		lnd=64 
+	else if layoutName$='Client Billing Transaction Type' then
+		psk= 1 
+		lnk= 1 
+		psd= 2 
+		lnd=18 
 	else
 		pr ' currently fnComboFio does yet read position and key info for your layoutname - please add logic for it here'
 		pr '      layoutName$="'&layoutName$&'"'

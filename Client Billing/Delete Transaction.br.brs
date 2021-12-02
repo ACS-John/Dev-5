@@ -61,6 +61,10 @@ do ! main loop
 		end if
 	end if
 loop
+def library fnTransactionTypeDescription$(transCode)
+	if ~setup then fn_setup
+	fnTransactionTypeDescription$=fn_transDesc$(transCode)
+fnend
 def fn_transDesc$(transCode; ___,return$,x)
 	if ~transDesc_setup then
 		transDesc_setup=1
@@ -80,6 +84,10 @@ def fn_transDesc$(transCode; ___,return$,x)
 	x=srch(mat transCodes, transCode)
 	return$=transDesc$(x)
 	fn_transDesc$=return$
+fnend
+def library fnClientName$*30(clientId$)
+	if ~setup then fn_setup
+	fnClientName$=fn_clientName$(clientId$)
 fnend
 def fn_clientName$*30(clientId$; ___,return$*30,x)
 	if ~clientName_setup then
