@@ -1253,7 +1253,7 @@ fnend
 	fnend
 ! /r
 ! r: ini functions and quick calls
-	def library fnIniOpen(ii_file$*256)
+	def library fnIniOpen(ii_file$*256) ! unused as of 12/1/2021 but previously fully functional
 		library 'S:\Core\ini.br': fnIniOpen
 		fnIniOpen=fnIniOpen(ii_file$)
 	fnend
@@ -1831,5 +1831,14 @@ fnend
 		library 'S:\Client Billing\ACS Invoices.br': fnMergeInvoices
 		fnMergeInvoices=fnMergeInvoices
 	fnend
+	def library fnTransactionTypeDescription$(typeCode)
+		library 'S:\Client Billing\Delete Transaction.br': fnTransactionTypeDescription$
+		fnTransactionTypeDescription$=fnTransactionTypeDescription$(typeCode)
+	fnend
+	def library fnClientName$*30(clientId$)
+		library 'S:\Client Billing\Delete Transaction.br': fnClientName$
+		fnClientName$=fnClientName$(clientId$)
+	fnend
+
 ! /r
 

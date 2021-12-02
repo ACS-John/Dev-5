@@ -27,13 +27,13 @@ on error goto Ertn
 	endd=begd+3000
 	transstartdate=date('mm')*10000+100+date('yy') ! changed default to beginning of month as per billing's suggestion on 2/9/12    ! begd
 	transenddate=date('mmddyy') ! val(date$(4:5))*10000+val(date$(7:8))*100+val(date$(1:2))
-	open #20: "Name=[Q]\CLmstr\Company.h[cno],Shr",i,i,r ioerr CHAIN_SELCNO
+	open #20: "Name=[Q]\CLmstr\Company.h[cno],Shr",i,i,r
 	read #20,using 'Form Pos 152,N 2',rec=1,release: wbc : close #20:
-	gosub OPEN_TRANSACTION_FILES
+	gosub OpenTransactionFiles
 	open #h_tralloc=fnH: "Name=[Q]\CLmstr\TrAlloc.h[cno],KFName=[Q]\CLmstr\TrAlloc-Idx.h[cno],Shr",internal,outIn,keyed
 ! /r
-SCREEN1: ! r:
-	! select limitations for the menu1's record selection grid
+Screen1: ! r:
+	! select limitations for the Menu1's record selection grid
 	fnTos
 	lc=0 : mylen=25 : mypos=mylen+2 : width=100
 	fnLbl(lc+=1,1,'Transaction Grid Selection Criteria',width,center)
@@ -85,23 +85,23 @@ SCREEN1: ! r:
 	postingcode$=resp$(7)
 	sourcecode$=resp$(8)
 	if trim$(resp$(9))<>"" then selectedck=1 else selectedck=0
-	if trim$(resp$(9))="" then goto MENU1
+	if trim$(resp$(9))="" then goto Menu1
 	if wbc=0 then wbc=1
 	if trim$(tcde$)="" or trim$(tcde$)="[All]" then tcde$="1" : tcdekey=1 ! try defaulting to check
 	check_ref$=cnvrt$("pic(ZZ)",wbc)&str$(tcdekey)&lpad$(rtrm$(resp$(9)),8)
 	read #h_trmstr(1),using 'Form Pos 1,C 3,C 8,G 6,PD 10.2,C 8,C 35,N 1,N 6,N 1',key=check_ref$: newkey$,tr$(1),tr$(2),tr3,tr$(4),tr$(5),posting_code,clr,scd nokey TRY_RECEIPT
-	editrec=rec(h_trmstr(1)): goto DO_EDIT
+	editrec=rec(h_trmstr(1)): goto DoTransactionEdit
 	TRY_RECEIPT: !
 	tcde$="2" ! try as receipt
 	check_ref$=cnvrt$("pic(ZZ)",wbc)&str$(tcdekey)&lpad$(rtrm$(resp$(9)),8)
-	read #h_trmstr(1),using 'Form Pos 1,C 3,C 8,G 6,PD 10.2,C 8,C 35,N 1,N 6,N 1',key=check_ref$: newkey$,tr$(1),tr$(2),tr3,tr$(4),tr$(5),posting_code,clr,scd nokey MENU1
-	editrec=rec(h_trmstr(1)): goto DO_EDIT
-goto MENU1 ! /r
-OPEN_TRANSACTION_FILES: ! r:
+	read #h_trmstr(1),using 'Form Pos 1,C 3,C 8,G 6,PD 10.2,C 8,C 35,N 1,N 6,N 1',key=check_ref$: newkey$,tr$(1),tr$(2),tr3,tr$(4),tr$(5),posting_code,clr,scd nokey Menu1
+	editrec=rec(h_trmstr(1)): goto DoTransactionEdit
+goto Menu1 ! /r
+OpenTransactionFiles: ! r:
 	open #h_trmstr(1)=fnH: "Name=[Q]\CLmstr\TrMstr.h[cno],KFName=[Q]\CLmstr\TrIdx1.h[cno],Shr",internal,outIn,keyed
 	open #h_trmstr(2)=fnH: "Name=[Q]\CLmstr\TrMstr.h[cno],KFName=[Q]\CLmstr\TrIdx2.h[cno],Shr",internal,outIn,keyed
 return  ! /r
-MENU1: ! r:
+Menu1: ! r:
 	fnTos
 	lc=0 : mylen=30 : mypos=mylen+2
 	fc=0 ! frame count
@@ -203,14 +203,14 @@ MENU1: ! r:
 	fnCmdKey('E&dit',3,1,0,"Highlight any entry and click edit to change or review the complete entry.")
 	fnCmdKey('&Add Deposit (Receipt)',2,0,0,"Allows you to enter deposits into the files.")
 	fnCmdKey('Add &Check (Disbursment)',8,0,0,"Allows you to add hand written checks to the checkbook files.")
-	fnCmdKey('&ReIndex',7,0,0,"Allows you to reindex the check history files. Should only be necessary if power failures have corrupted the files.")
+	fnCmdKey('&ReIndex',7,0,0,"Allows you to ReIndex the check history files. Should only be necessary if power failures have corrupted the files.")
 	fnCmdKey('&Change Selection Criteria',6,0,0,"Allows you to return to first screen and change date ranges, etc.")
 	fnCmdKey('E&xit',5,0,1,"Exits the checkbook system.")
 	ckey=fnAcs(mat resp$)
 	if ckey=5 or ckey=cancel then goto Xit
 	if ckey=2 or ckey=8 then addloopcode=1 else addloopcode=0
 	! pas=1
-	if ckey=6 then pas=0: goto SCREEN1
+	if ckey=6 then pas=0: goto Screen1
 	wbc=val(resp$(1)(1:2)) ! working bank(s) code
 	bn$=resp$(2) ! bank name
 	bankbalance=val(resp$(3)) ! bank balance
@@ -227,49 +227,49 @@ MENU1: ! r:
 	if ckey=2 then
 		typeofentry=2
 		editrec=0
-		goto ADD
+		goto TransactionAdd
 	else if ckey=8 then
 		typeofentry=1
 		editrec=0
-		goto ADD
+		goto TransactionAdd
 	else if ckey=3 then
 		typeofentry=tcde
 		! typeofentry=2
 		allocations_messed_with=false
 		editrec=val(resp$(11))
-		goto DO_EDIT
+		goto DoTransactionEdit
 	else if ckey=1 then
-		goto SCREEN1
+		goto Screen1
 	else if ckey=6 then
-		gosub REINDEX
-		goto MENU1
+		gosub ReIndex
+		goto Menu1
 	end if
-goto MENU1 ! /r only if somehow got through without a valid ckey
-ADD: ! r:
+goto Menu1 ! /r only if somehow got through without a valid ckey
+TransactionAdd: ! r:
 	editrec=hamt=tr3=posting_code=clr=0
 	scd=8 : tcde=typeofentry
 	bank_code=wbc
 	! tcde set by add button
 	tr$(1)=tr$(3)=tr$(4)=tr$(5)='' : tr$(2)=date$("mmddyy")
-goto FM_SCREEN ! /r
-STANDARD_BREAKDOWN: ! r:
+goto TransactionFm ! /r
+StandardBreakdown: ! r:
 ! pull standard gl breakdowns from payee file
 ! uses - tr$(4), tralloc (file), bank_code, tcde, tr$(1)
 ! returns - nothing - it's all in the TrAlloc file additions and removal
 ! what if allocate 2nd time
 ! ** first remove all old allocations for this check
 	key$=lpad$(str$(bank_code),2)&str$(tcde)&rpad$(tr$(1),8)
-	restore #h_tralloc,key>=key$: nokey REMOVE_TRALLOC_FOR_KEY_EOF
-REMOVE_TRALLOC_FOR_KEY_READ: !
-	read #h_tralloc,using 'Form Pos 1,C 11': newkey$ eof REMOVE_TRALLOC_FOR_KEY_EOF
+	restore #h_tralloc,key>=key$: nokey RemoveTrAllocForKeyEoF
+RemoveTrAllocForKeyRead: !
+	read #h_tralloc,using 'Form Pos 1,C 11': newkey$ eof RemoveTrAllocForKeyEoF
 	if newkey$=key$ then
 		delete #h_tralloc:
-		goto REMOVE_TRALLOC_FOR_KEY_READ
+		goto RemoveTrAllocForKeyRead
 	else
-		goto REMOVE_TRALLOC_FOR_KEY_EOF
+		goto RemoveTrAllocForKeyEoF
 	end if
-	goto REMOVE_TRALLOC_FOR_KEY_READ
-REMOVE_TRALLOC_FOR_KEY_EOF: ! eo first...
+	goto RemoveTrAllocForKeyRead
+RemoveTrAllocForKeyEoF: ! eo first...
 
 
 ! ** next add new allocations that match what they have in their payee file or receipt file (typeofentry=2=reading from receipt file
@@ -315,15 +315,15 @@ XIT_READSTGL: !
 	close #payeegl:
 	XIT_STGL: !
 return  ! /r
-DO_EDIT: ! r:
-	if editrec=0 then goto MENU1
-	read #h_trmstr(1),using 'Form POS 1,N 2,N 1,C 8,G 6,pd 10.2,C 8,C 35,N 1,N 6,N 1',rec=editrec,reserve: bank_code,tcde,tr$(1),tr$(2),tx3,tr$(4),tr$(5),posting_code,clr,scd ! noRec MENU1
+DoTransactionEdit: ! r:
+	if editrec=0 then goto Menu1
+	read #h_trmstr(1),using 'Form POS 1,N 2,N 1,C 8,G 6,pd 10.2,C 8,C 35,N 1,N 6,N 1',rec=editrec,reserve: bank_code,tcde,tr$(1),tr$(2),tx3,tr$(4),tr$(5),posting_code,clr,scd ! noRec Menu1
 	tr$(3)=str$(tx3)
 	ad1=0
-! if posting_code>0 then gosub crgl1
+	! if posting_code>0 then gosub crgl1
 	hamt=val(tr$(3)) : hkey$=key$ : tr3=val(tr$(3))
-	goto FM_SCREEN ! /r
-SAVE: ! r:
+goto TransactionFm ! /r
+Save: ! r:
 	save_good=false
 	if editrec>0 then goto EMPTY_BANK_MSG
 	check_key$=cnvrt$("pic(ZZ)",wbc)&str$(tcde)&lpad$(rtrm$(tr$(1)),8)
@@ -332,25 +332,25 @@ SAVE: ! r:
 	ml$(1)="You already have a transaction with reference # "&trim$(tr$(1))&"."
 	fnmsgbox(mat ml$,resp$,'',0)
 	tr$(1)=""
-	goto FM_SCREEN
+	goto TransactionFm
 	EMPTY_BANK_MSG: !
 	if bank_code=0 then
 		mat ml$(1)
 		ml$(1)="You must first select a Bank."
 		fnmsgbox(mat ml$,resp$,'',0)
-		goto EO_SAVE
+		goto EoSave
 	end if
 	! if trim$(tr$(4))='' and tcde=1 and trim$(uprc$(tr$(5)))<>"VOID" then mat ml$(1)
 	! ml$(1)="You must first select a Payee."
 	! fnmsgbox(mat ml$,resp$,'',0)
-	! goto eo_save
+	! goto EoSave
 	! end if
 	if allocationstotal=val(tr$(3)) then goto RELEASE_TRMSTR1 ! allow zero checks to go thru as long as the allocations = 0 also
 	if trim$(tr$(3))='0.00' and trim$(uprc$(tr$(5)))<>"VOID" then
 		mat ml$(1)
 		ml$(1)="You must first enter an amount."
 		fnmsgbox(mat ml$,resp$,'',0)
-		goto EO_SAVE
+		goto EoSave
 	end if
 RELEASE_TRMSTR1: release #h_trmstr(1):
 	if editrec<>0 then
@@ -416,7 +416,7 @@ RELEASE_TRMSTR1: release #h_trmstr(1):
 	ml$(1)="You already have a transaction with reference # "&trim$(tr$(1))&"."
 	fnmsgbox(mat ml$,resp$,'',0)
 	tr$(1)=""
-	goto FM_SCREEN
+	goto TransactionFm
 	L2250: !
 	tr2=val(tr$(2)): write #h_trmstr(1),using 'Form POS 1,N 2,N 1,C 8,G 6,pd 10.2,C 8,C 35,N 1,N 6,N 1',reserve: bank_code,tcde,tr$(1),tr2,tx3,tr$(4),tr$(5),posting_code,clr,scd
 	editrec=rec(h_trmstr(1))
@@ -428,12 +428,12 @@ RELEASE_TRMSTR1: release #h_trmstr(1):
 		ml$(3)='the Allocations'
 		ml$(4)='You are off by '&str$(val(tr$(3))-allocationstotal)
 		fnmsgbox(mat ml$,yn$,'',48)
-		goto EO_SAVE
+		goto EoSave
 	end if
 	save_good=1
-	EO_SAVE: !
+	EoSave: !
 return  ! /r
-VOID_TRANSACTION: ! r:
+TransactionVoid: ! r:
 	! uses:    bank_code, tcde, tr$(1), h_tralloc
 	! returns: tr$(3) and tr$(5)
 	tr$(3)='0'
@@ -451,7 +451,7 @@ VOID_TRANSACTION: ! r:
 	end if
 	VOID_EO_TRALLOC: !
 return  ! /r
-DELETE_TRANSACTION: ! r:
+TransactionDelete: ! r:
 	fnTos
 	lc=0 : width=50
 	fnLbl(lc+=1,1,'Delete Transaction Options',width,center)
@@ -462,7 +462,7 @@ DELETE_TRANSACTION: ! r:
 	resp$(2)='True'
 	fnCmdSet(2)
 	ckey=fnAcs(mat resp$)
-	if ckey=5 or ckey=cancel then goto DELETE_TRANSACTION_DONE
+	if ckey=5 or ckey=cancel then goto TransactionDelete_DONE
 	updatebankbalance$=resp$(1)
 	deletetransactionallocation$=resp$(2)
 	if updatebankbalance$='True' then
@@ -486,9 +486,9 @@ DELETE_TRANSACTION: ! r:
 		release #h_tralloc:
 	end if
 	delete #h_trmstr(1),release:
-	DELETE_TRANSACTION_DONE: !
+	TransactionDelete_DONE: !
 return  ! /r
-ADD_ALLOCATION: ! r:
+AllocationAdd: ! r:
 	adding_allocation=1
 	trabank_code=bank_code : tratcde=tcde
 	track$=lpad$(trim$(tr$(1)),8) : tradesc$=tr$(5)(1:12)
@@ -496,14 +496,14 @@ ADD_ALLOCATION: ! r:
 	! write #h_tralloc,using 'Form Pos 1,N 2,N 1,C 8,C 12,PD 5.2,C 30,G 6,X 3,C 12,N 1',reserve: trabank_code,tratcde,track$,tragl$,traamt,tradesc$,traivd$,trapo$,tragde
 	! read #h_tralloc,using 'Form Pos 1,N 2,N 1,C 8,C 12,PD 5.2,C 30,G 6,X 3,C 12,N 1',same,reserve: trabank_code,tratcde,track$,tragl$,traamt,tradesc$,traivd$,trapo$,tragde
 return  ! /r
-READ_ALLOCATION: ! r: uses allocrec and returns ???
+AllocationRead: ! r: uses allocrec and returns ???
 	if allocrec=0 then
 		track$=lpad$(trim$(tr$(1)),8)
 	else
 		read #h_tralloc,using 'Form Pos 1,N 2,N 1,C 8,C 12,pd 5.2,C 30,G 6,X 3,C 12,N 1',rec=allocrec,reserve: trabank_code,tratcde,track$,tragl$,traamt,tradesc$,traivd$,trapo$,tragde
 	end if
 return  ! /r
-FM_ALLOCATION: ! r:
+AllocationFm: ! r:
 	allocations_messed_with=1
 	fnTos
 	lc=0 : mylen=22 : mypos=mylen+2
@@ -546,11 +546,11 @@ FM_ALLOCATION: ! r:
 	traivd$=resp$(7)
 	trapo$=resp$(8)
 	tragde=val(resp$(9))
-	if ckey=1 then gosub SAVE_ALLOC
+	if ckey=1 then gosub AllocationSave
 	if ckey=1 and adding_allocation=1 then
 		tragl$=""
 		traamt=0
-		goto FM_ALLOCATION
+		goto AllocationFm
 ! add loop
 	end if
 	CANCEL_ALLOC: ! r:
@@ -563,7 +563,7 @@ FM_ALLOCATION: ! r:
 	EO_ALLOC: !
 	adding_allocation=0
 return  ! /r
-SAVE_ALLOC: ! r:
+AllocationSave: ! r:
 	track$=lpad$(trim$(track$),8)
 	if adding_allocation=0 then
 		rewrite #h_tralloc,using 'form pos 1,N 2,N 1,C 8,C 12,PD 5.2,C 30,G 6,X 3,C 12,N 1',release: trabank_code,tratcde,track$,tragl$,traamt,tradesc$,traivd$,trapo$,tragde
@@ -571,18 +571,18 @@ SAVE_ALLOC: ! r:
 		write #h_tralloc,using 'form pos 1,N 2,N 1,C 8,C 12,PD 5.2,C 30,G 6,X 3,C 12,N 1': trabank_code,tratcde,track$,tragl$,traamt,tradesc$,traivd$,trapo$,tragde
 	end if
 return  ! /r
-DEL_ALLOCATION: ! r: uses allocrec
+AllocationDelete: ! r: uses allocrec
 	allocations_messed_with=1
-	delete #h_tralloc,rec=allocrec: noRec DEL_ALLOCATION_NOREC
+	delete #h_tralloc,rec=allocrec: noRec AllocationDeleteNoRec
 return  ! /r
-DEL_ALLOCATION_NOREC: ! r:
-	mat ml$(3)
-	ml$(1)='Delete Allocation Error'
-	ml$(2)="You must select an Allocation Record to delete"
-	ml$(3)="before clicking the Delete Allocation button."
-	fnmsgbox(mat ml$,ok$,'',48)
-continue  ! /r
-FM_SCREEN: ! r: requires typeofentry, scd, and many more
+	AllocationDeleteNoRec: ! r:
+		mat ml$(3)
+		ml$(1)='Delete Allocation Error'
+		ml$(2)="You must select an Allocation Record to delete"
+		ml$(3)="before clicking the Delete Allocation button."
+		fnmsgbox(mat ml$,ok$,'',48)
+	continue  ! /r
+TransactionFm: ! r: requires typeofentry, scd, and many more
 	fnTos
 	lc=0 ! line count
 	fc=0 ! frame count
@@ -683,11 +683,11 @@ EO_FLEX2: ! /r
 	holdtr1$=tr$(1)
 	if ckey=3 then
 		if fnConfirmDeleteHard('transaction','Refercence Number '&trim$(tr$(1))) then
-			gosub DELETE_TRANSACTION
+			gosub TransactionDelete
 		end if
-		goto MENU1
+		goto Menu1
 	else if ckey=5 or ckey=cancel then
-		goto MENU1
+		goto Menu1
 	else if ckey=1 or ckey=4 or ckey=6 or ckey=7 or ckey=8 or ckey=9 then
 		bank_code=val(resp$(1)(1:2))
 		tcde=val(resp$(2)(1:1))
@@ -705,18 +705,18 @@ EO_FLEX2: ! /r
 		ml$(2)='Please correct the Check Amount or the Allocations'
 		ml$(3)='You are off by '&str$(val(tr$(3))-allocationstotal)
 		fnmsgbox(mat ml$,yn$,'',48)
-		goto FM_SCREEN
+		goto TransactionFm
 	end if
 	if (ckey=1 or ckey=8) and trim$(tr$(1))="" then
 		mat ml$(1)
 		ml$(1)="You must first enter a Reference Number."
 		fnmsgbox(mat ml$,resp$,'',0)
-		goto FM_SCREEN
+		goto TransactionFm
 	end if
 	if ckey=6 then
 		allocrec=val(resp$(10))
-		gosub DEL_ALLOCATION
-		goto FM_SCREEN
+		gosub AllocationDelete
+		goto TransactionFm
 	end if
 	if holdtr1$=tr$(1) and editrec>0 then goto L3780 ! r: duplicate transaction?
 	check_key$=cnvrt$("pic(ZZ)",wbc)&str$(tcde)&lpad$(rtrm$(tr$(1)),8)
@@ -725,42 +725,42 @@ EO_FLEX2: ! /r
 	ml$(1)="You already have a transaction with reference # "&trim$(tr$(1))&"."
 	fnmsgbox(mat ml$,resp$,'',0)
 	tr$(1)=""
-	goto FM_SCREEN
+	goto TransactionFm
 L3780: ! /r
 	if ckey=8 then
-		gosub ADD_ALLOCATION
-		gosub FM_ALLOCATION
-		goto FM_SCREEN
+		gosub AllocationAdd
+		gosub AllocationFm
+		goto TransactionFm
 	else if ckey=7 then
 		allocrec=val(resp$(10))
-		gosub READ_ALLOCATION
-		gosub FM_ALLOCATION
-		goto FM_SCREEN
+		gosub AllocationRead
+		gosub AllocationFm
+		goto TransactionFm
 	else if ckey=4 then
 		if fnConfirmHard('void','transaction','Refercence Number '&trim$(tr$(1))) then
-			gosub VOID_TRANSACTION
-			gosub SAVE
+			gosub TransactionVoid
+			gosub Save
 		end if
-		goto MENU1
+		goto Menu1
 	else if ckey=10 then
 		fnaddpayee
-		goto FM_SCREEN
+		goto TransactionFm
 	else if ckey=11 then
 		fnaddreceipt
-		goto FM_SCREEN
+		goto TransactionFm
 	end if
-	gosub SAVE
-	if save_good=false then goto FM_SCREEN
-	if ckey=9 then gosub STANDARD_BREAKDOWN : goto FM_SCREEN ! the record must be good save first!!!
+	gosub Save
+	if save_good=false then goto TransactionFm
+	if ckey=9 then gosub StandardBreakdown : goto TransactionFm ! the record must be good save first!!!
 	if trim$(check_ref$)<>"" then
 		check_ref$=""
-		goto SCREEN1
+		goto Screen1
 	else if editrec<>0 then ! return to main screen after edit
-		goto MENU1
+		goto Menu1
 	end if
-goto ADD ! if resp$(12)='True' then goto add
-goto MENU1 ! /r
-REINDEX: ! r: drops deleted records and reindexes trmstr
+goto TransactionAdd ! if resp$(12)='True' then goto TransactionAdd
+goto Menu1 ! /r
+ReIndex: ! r: drops deleted records and reindexes trmstr
 	close #h_trmstr(1):
 	close #h_trmstr(2):
 	close #h_tralloc:
@@ -768,8 +768,7 @@ REINDEX: ! r: drops deleted records and reindexes trmstr
 	fnIndex("[Q]\CLmstr\TrMstr.h[cno]","[Q]\CLmstr\TrIdx1.h[cno]","1 11")
 	fnIndex("[Q]\CLmstr\TrMstr.h[cno]","[Q]\CLmstr\TrIdx2.h[cno]","28/1 8/11")
 	fnIndex("[Q]\CLmstr\Tralloc.h[cno]","[Q]\CLmstr\Tralloc-idx.h[cno]","1 11")
-	gosub OPEN_TRANSACTION_FILES
+	gosub OpenTransactionFiles
 return  ! /r
 Xit: fnXit
-CHAIN_SELCNO: fnchain("S:\Core\programs\Select Company")
 include: ertn
