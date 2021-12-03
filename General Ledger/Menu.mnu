@@ -11,7 +11,6 @@ File
 Period Ending Dates                                 ^ [cursystem]\*
 Enter Transactions                                  ^ [cursystem]\*
 Enter Transactions (Legacy)                         ^ [cursystem]\*
-! removed 10/21/2021 as no remaining issues in new program -jb      Enter Transactions (Legacy)  ^ [cursystem]\*
 ! >Post Transactions                                ^ acsGL\GLJCMrge <-- removed 4-9-21 Laura and John agreed   (  GENERAL LEDGER JOB COST MERGE  )
 >Remove Entries Posted by Mistake                   ^ acsGL\UNPost
 Enter Standard Adjustments                          ^ HamsterFio:Std Adjustments
