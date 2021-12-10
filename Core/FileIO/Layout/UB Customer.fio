@@ -119,7 +119,7 @@ phoneMain         	,    Phone Number – Main                                     
 s01serialNumber   	,    Service 1 (Water) – Serial Number                      	,  C    12    ,               , ! SPos=1906 EPos=1917   aka=extra$(3)
 s03serialNumber   	,    Service 3 (Electric or Lawn Meter) – Serial Number    	,  C    12    ,               , ! SPos=1918 EPos=1929   aka=extra$(4)
 s04serialNumber   	,    Service 4 (Gas) – Serial Number                        	,  C    12    ,               , ! SPos=1930 EPos=1941   aka=extra$(5)
-unused05          	,    5                                                      		,  C    12    ,               , ! SPos=1942 EPos=1953   aka=extra$(6)
+bulk              	,    bulk sort                                                	,  C    12    ,               , ! SPos=1942 EPos=1953   aka=extra$(6)
 unused06          	,    6                                                      		,  C    12    ,               , ! SPos=1954 EPos=1965   aka=extra$(7)
 phoneCell         	,    Phone Number – Cell                                     	,  C    12    ,               , ! SPos=1966 EPos=1977   aka=extra$(8)
 email             	,    email address                                           	,  C    30    ,               , ! SPos=1978 EPos=2007   aka=extra$(9)

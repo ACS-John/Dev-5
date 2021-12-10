@@ -121,49 +121,21 @@ do
 loop until ckey=ck_cancel
 close #hTrans: ioerr ignore
 goto Xit
+
+
 def fn_transactionAdd(hTrans; ___,col1pos,col1len,col2pos,rc,ln, _
 	resp_client,resp_type,resp_amt,resp_inv,resp_desc, _
 	ck_cancel,ck_save, _
 	hClient)
 	! inherrits local mat form$,mat c$,mat cN, mat tr$,mat tN,mat resp$
-	fnToS
-	col1pos= 2
-	col1len=20
-	col2pos=col1len+col1pos+2
-	fnLbl(ln+=1,1,'Client:'       , col1len,1) : fnComboFio(ln,col2pos,'CO Client'  , 1) : resp$(resp_client=rc+=1)=''
-	ln+=1
-	fnLbl(ln+=1,1,'Transaction Date:', col1len,1) : 	fnTxt(ln,col2pos,10, 0,1,'3',0,'') : resp$(resp_date=rc+=1) 	=''
-	ln+=1
-	fnLbl(ln+=1,1,'Trans Type:'   , col1len,1) : fnComboFio(ln,col2pos,'Client Billing Transaction Type', 1) : resp$(resp_type=rc+=1)=''
-	ln+=1
-	fnLbl(ln+=1,1,'Amount:', col1len,1) : fnTxt(ln,col2pos,10, 0,1,'32',0,'') : resp$(resp_amt=rc+=1)=''
-	fnLbl(ln+=1,1,'Invoice:', col1len,1) : fnTxt(ln,col2pos,12, 0,1,'',0,'') : resp$(resp_inv=rc+=1)=''
-	fnLbl(ln+=1,1,'Description:', col1len,1) : fnTxt(ln,col2pos,20) : resp$(resp_desc=rc+=1)=''
-	ln+=1
-	fnLbl(ln,1,'', 105) ! 100 is too small
-	fnCmdKey('Save',ck_save=1,1)
-	fnCmdKey('Cancel',ck_cancel=5,0,1)
-	ckey=fnAcs(mat resp$)
-	if ckey=ck_save then
-		! pause
-		mat tr$=('')
-		mat trN=(0)
-
-		tr$(tr_clientId    	)=resp$(resp_client)(1:5)
-		tr$(tr_inv         	 	)=lpad$(resp$(resp_inv),11)
-		trN(tr_date        	)=date(days(resp$(resp_date),'ccyymmdd'),'mmddyy')
-		trN(tr_amtOrigional	)=val(resp$(resp_amt) )
-		trN(tr_amt         	 	)=val(resp$(resp_amt) )
-		trN(tr_salesmanId  	)=0
-		trN(tr_transCode   	)=val(resp$(resp_type)(1:1))
-		trN(tr_postCode    	)=0
-		tr$(tr_desc        	)=resp$(resp_desc)
-		trN(tr_nta          	)=0
+	mat tr$=('')
+	mat trN=(0)
+	if fn_transactionFm(mat tr$,mat trN) then
 		hClient=fn_openFio('CO Client',mat c$,mat cN)
 		read #hClient,using form$(hClient),key=tr$(tr_clientId): mat c$,mat cN
-		pr 'id     =';c$(client_id)
-		pr 'type   =';resp$(resp_type)(1:1)
-		pr 'balance before=';cN(client_balance)
+		! pr 'id     =';c$(client_id)
+		! pr 'type   =';resp$(resp_type)(1:1)
+		! pr 'balance before=';cN(client_balance)
 		if trN(tr_transCode)=1 or trN(tr_transCode)=2 or trN(tr_transCode)=3 or trN(tr_transCode)=5 then ! Invoice, Finance Charge, Standard Charge, Debit Memo
 			cN(client_balance)+=trN(tr_amt)
 		else if trN(tr_transCode)=4 or trN(tr_transCode)=6 then ! Collection, Credit Memo
@@ -172,17 +144,65 @@ def fn_transactionAdd(hTrans; ___,col1pos,col1len,col2pos,rc,ln, _
 			pr 'ERROR: unrecognized transaction type: ';trN(tr_transCode)
 			pause
 		end if
-		pr 'balance after=';cN(client_balance)
-		pause
+		! pr 'balance after=';cN(client_balance)
+		! pause
 		if trN(tr_transCode)=1 and trim$(tr$(tr_desc))='' then tr$(tr_desc)='CHARGE'
 		write #hTrans,using form$(hTrans): mat tr$,mat trN
 		rewrite #hClient,using form$(hClient),key=tr$(tr_clientId): mat c$,mat cN
 		close #hClient:
-	else if ckey=ck_cancel then
 	end if
-	fn_transactionAdd=ckey
 fnend
-
+def fn_transactionEdit(hTrans,transRec; ___,col1pos,col1len,col2pos,rc,ln, _
+	resp_client,resp_type,resp_amt,resp_inv,resp_desc, _
+	ck_cancel,ck_save, _
+	hClient)
+	! inherrits local mat form$,mat c$,mat cN, mat tr$,mat tN,mat resp$
+	read #hTrans,using form$(hTrans),rec=transRec: mat tr$,mat trN norec TeNoRec
+	if fn_transactionFm(mat tr$,mat trN) then
+		
+	end if
+	TeNoRec: !
+fnend
+	def fn_transactionFm(mat tr$,mat trN; ___,returnN)
+		fnToS
+		col1pos= 2
+		col1len=20
+		col2pos=col1len+col1pos+2
+		fnLbl(ln+=1,1,'Client:'       , col1len,1) : fnComboFio(ln,col2pos,'CO Client'  , 1) : resp$(resp_client=rc+=1)=tr$(tr_clientId)
+		ln+=1
+		fnLbl(ln+=1,1,'Transaction Date:', col1len,1) : 	fnTxt(ln,col2pos,10, 0,1,'3',0,'') : resp$(resp_date=rc+=1) 	=str$(trN(tr_date))
+		ln+=1
+		fnLbl(ln+=1,1,'Trans Type:'   , col1len,1) : fnComboFio(ln,col2pos,'Client Billing Transaction Type', 1) : resp$(resp_type=rc+=1)=str$(trN(tr_transCode))
+		ln+=1
+		fnLbl(ln+=1,1,'Amount:', col1len,1) : fnTxt(ln,col2pos,10, 0,1,'32',0,'') : resp$(resp_amt=rc+=1)=str$(trN(tr_amt))
+		fnLbl(ln+=1,1,'Invoice:', col1len,1) : fnTxt(ln,col2pos,12, 0,1,'',0,'') : resp$(resp_inv=rc+=1)=tr$(tr_inv)
+		fnLbl(ln+=1,1,'Description:', col1len,1) : fnTxt(ln,col2pos,20) : resp$(resp_desc=rc+=1)=tr$(tr_desc)
+		ln+=1
+		fnLbl(ln,1,'', 105) ! 100 is too small
+		fnCmdKey('Save',ck_save=1,1)
+		fnCmdKey('Cancel',ck_cancel=5,0,1)
+		ckey=fnAcs(mat resp$)
+		if ckey=ck_save then
+			! pause
+			mat tr$=('')
+			mat trN=(0)
+	
+			tr$(tr_clientId    	)=resp$(resp_client)(1:5)
+			tr$(tr_inv         	 	)=lpad$(resp$(resp_inv),11)
+			trN(tr_date        	)=date(days(resp$(resp_date),'ccyymmdd'),'mmddyy')
+			trN(tr_amtOrigional	)=val(resp$(resp_amt) )
+			trN(tr_amt         	 	)=val(resp$(resp_amt) )
+			trN(tr_salesmanId  	)=0
+			trN(tr_transCode   	)=val(resp$(resp_type)(1:1))
+			trN(tr_postCode    	)=0
+			tr$(tr_desc        	)=resp$(resp_desc)
+			trN(tr_nta          	)=0
+			returnN=1
+		else
+			returnN=0
+		end if
+		fn_transactionFm=returnN
+	fnend
 dim c$(0)*256
 dim cN(0)
 def fn_clientProvider$*128(client$*64; ___,return$*128,which,hClient)
