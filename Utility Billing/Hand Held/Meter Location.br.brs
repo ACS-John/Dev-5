@@ -218,11 +218,11 @@ def fn_InitialializeMeterLocation
 		fn_accountFromLocIdViaLocation$(1, 0) ! close the files it had opened previously
 		fnCloseFile(hAddress,table$)
 		fnCloseFile(hInfo,'UB Meter Info')
-		if exists('[Q]\UBmstr\Meter(old).h[cno]') then
-			fnFree('[Q]\UBmstr\Meter.h[cno]')
-		else
-			fnRename('[Q]\UBmstr\Meter.h[cno]','[Q]\UBmstr\Meter(old).h[cno]')
-		end if
+		! if exists('[Q]\UBmstr\Meter(old).h[cno]') then
+		fnFree('[Q]\UBmstr\Meter.h[cno]')
+		! else
+		! 	fnRename('[Q]\UBmstr\Meter.h[cno]','[Q]\UBmstr\Meter(old).h[cno]')   !   this always got an 4148 because file 301 was an open meter.h whatever
+		! end if
 		fnFree('[Q]\UBmstr\Meter_Idx.h[cno]')
 		! if env$('acsDeveloper')<>'' then fnStatusPause
 		fnStatusClose

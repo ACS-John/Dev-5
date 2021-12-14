@@ -101,22 +101,25 @@ include: filenamesPopUpperCase
 	COPY_XIT: !
 	fn_Copy=copy_return
 fnend
-def library fnFree(fileToDelete$*256)
+def library fnFree(fileToDelete$*256; ___,returnN)
 	if ~setup then fn_setup
 	fileToDelete$=fnSrepEnv$(fileToDelete$)
-	freeReturn=0
 	fileToDelete$=trim$(fileToDelete$,'"')
-	if exists(fileToDelete$) then
+	! pr 'fileToDelete$="'&fileToDelete$&'"'
+	! pr 'inside exists returns ';exists(fileToDelete$)
+	! pr 'Free "'&fileToDelete$&'" -n'
+	! fnpause
+	! if exists(fileToDelete$) then
 		execute 'Free "'&fileToDelete$&'" -n' ioerr FreeErr
-		freeReturn=1
-	else
-		freeReturn=-4152
-	end if
+		returnN=1
+	! else
+	! 	returnN=-4152
+	! end if
 	goto FreeXit
 	FreeErr: !
-	freeReturn=-err
+	returnN=-err
 	FreeXit: !
-	fnFree=freeReturn
+	fnFree=returnN
 fnend
 def library fnRename(from$*256,to$*256; ___,returnN)
 	if ~setup then fn_setup

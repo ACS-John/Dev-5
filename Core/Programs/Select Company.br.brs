@@ -188,24 +188,29 @@ Xit: fnXit
 		COC_FINIS: !
 		fn_companyName$=return$
 	fnend
-	def fn_companyDelete(cno; fileToDelete$*256,___,returnN)
-		if fnConfirmDeleteHard('company',str$(cno)&'. '&fn_companyName$(cno)) then
+	def fn_companyDelete(cnoToDelete; ___,fileToDelete$*256,returnN,freeResponse)
+		if fnConfirmDeleteHard('company',str$(cnoToDelete)&'. '&fn_companyName$(cnoToDelete)) then
 			fileToDelete$=fnSrepEnv$(fn_dataFolder$)
-			if exists(fileToDelete$&'\company.h'&str$(cno)) then
-				fnFree(fileToDelete$&'\*.h'&str$(cno))
-				if exists(fileToDelete$&'\UBData\*.h[cno]') and cno<>1 then
-					fnFree(fileToDelete$&'\UBData\*.h[cno]')
-				end if
-				fnFree(fileToDelete$&'\*.h'&str$(cno)) ! execute 'Free "'&fileToDelete$&'\*.h'&str$(cno)&'" -n'
+			
+			! pr 'before exists('&fileToDelete$&'\company.h'&str$(cnoToDelete);exists(fileToDelete$&'\company.h'&str$(cnoToDelete))
+			freeResponse=fnFree(fileToDelete$&'\*.h'&str$(cnoToDelete))
+			! pr 'freeResponse=';freeResponse
+			! pr 'after  exists('&fileToDelete$&'\company.h'&str$(cnoToDelete);exists(fileToDelete$&'\company.h'&str$(cnoToDelete))
+			! fnPause
+			
+			if cnoToDelete<>1 then fnFree(fileToDelete$&'\UBData\*.h'&str$(cnoToDelete))
+
+			if exists(fileToDelete$&'\company.h'&str$(cnoToDelete)) then
 				mat mg$(1)
-				mg$(1)='Company Number '&str$(cno)&' has been Deleted!'
-				fnmsgbox(mat mg$,resp$,'',0)
-				returnN=1
-			else
-				mat mg$(1)
-				mg$(1)='Company Number '&str$(cno)&' failed to delete.'
+				mg$(1)='Company Number '&str$(cnoToDelete)&' failed to delete.'
 				fnmsgbox(mat mg$,resp$,'',0)
 				returnN=0
+				fnpause
+			else
+				mat mg$(1)
+				mg$(1)='Company Number '&str$(cnoToDelete)&' has been Deleted!'
+				fnmsgbox(mat mg$,resp$,'',0)
+				returnN=1
 			end if
 		end if
 		fn_companyDelete=returnN

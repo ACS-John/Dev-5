@@ -1,5 +1,7 @@
 Time and Date 		Sys	Program(s) and Change(s) Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
 ______________________	___	____________________________________________________________________________________________________________________________________________________________________________________________________________________________________                                                                                                                              
+8:09 AM 12/14/2021	UB	Corrected issues with Add Company
+8:08 AM 12/14/2021	CO	Fixed an issue causing Delete Company to fail
 10:45 12/21/2021	CO	5.75183  
 10:44 AM 12/3/2021	GL	Enter Transactions (Legacy) was added back to menu as some client just prefer the older process 
 10:56 12/21/2021	CO	5.75182   
