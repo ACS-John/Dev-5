@@ -6,7 +6,7 @@ on error goto Ertn
 dim ml$(10)*80
 dim resp$(40)*128
 
-fnTop(program$,"Add New "&env$('cursys')&" Company [cno]")
+fnTop(program$,'Add New '&env$('cursys')&' Company [cno]')
 if exists('S:\[cursystem]\mstr\*.h99999') then
 	fnCopy('S:\[cursystem]\mstr\*.h99999','[Q]\[cursys]mstr\*.h[cno]')
 else if exists('S:\acs[cursys]\mstr\*.h99999') then
@@ -19,33 +19,35 @@ if env$('cursys')='CL' then ! r:
 	ml$(2)='ACS Accounts Payable system?'
 	ml$(3)='This is only chance.'
 	fnmsgbox(mat ml$,resp$,'',36)
-	if resp$='Yes' then fnchain("S:\acsCL\Conversion\APmstr-Cnv")
+	if resp$='Yes' then fnchain('S:\acsCL\Conversion\APmstr-Cnv')
 	! /r
 else if env$('cursys')='UB' then ! r:
-	open #1: "Name=[Q]\UBmstr\Company.h[cno],RecL=129,Replace,Shr",i,outi,r
-	write #1,using "Form POS 1,C 40",rec=1: empty$
-	close #1:
-	open #1: "Name=[Q]\UBmstr\Customer.h[cno],Size=0,RecL=2067,Replace",internal,output
-	close #1:
-	open #2: "Name=[Q]\UBmstr\ubTransVB.h[cno],KFName=[Q]\UBmstr\ubTrIndx.h[cno],Replace,RecL=102,KPs=1,KLn=19",internal,outIn,keyed
-	close #2:
-	open #2: "Name=[Q]\UBmstr\ubTransVB.h[cno],KFName=[Q]\UBmstr\UBTrdt.h[cno],KPs=11/1,KLn=8/10",internal,outIn,keyed
-	close #2:
+	open #hTmp=fnH: 'Name=[Q]\UBmstr\Company.h[cno],Replace,RecL=129',i,outIn,r
+	write #hTmp,using 'Form POS 1,C 40',rec=1: empty$
+	close #hTmp:
+	open #hTmp=fnH: 'Name=[Q]\UBmstr\Customer.h[cno],Replace,RecL=2067',internal,outIn,r
+	close #hTmp:
+	open #hTmp=fnH: 'Name=[Q]\UBmstr\ubTransVB.h[cno],Replace,RecL=102',internal,outIn,r
+	! open #2: "Name=[Q]\UBmstr\ubTransVB.h[cno],KFName=[Q]\UBmstr\ubTrIndx.h[cno],Replace,RecL=102,KPs=1,KLn=19",internal,outIn,keyed
+	close #hTmp:
+	! open #2: "Name=[Q]\UBmstr\ubTransVB.h[cno],KFName=[Q]\UBmstr\UBTrdt.h[cno],Use,RecL=102,KPs=11/1,KLn=8/10",internal,outIn,keyed
+	! close #2:
 
-	open #3: "Name=[Q]\UBmstr\ubAdrBil.h[cno],KFName=[Q]\UBmstr\AdrIndex.h[cno],Use,RecL=130,KPs=1,KLn=10",internal,outIn,keyed
-	close #3:
-	open #1: "Name=[Q]\UBmstr\Cass1.h[cno],RecL=111,Replace",internal,output
-	close #1:
+	! open #3: "Name=[Q]\UBmstr\ubAdrBil.h[cno],KFName=[Q]\UBmstr\AdrIndex.h[cno],Use,RecL=130,KPs=1,KLn=10",internal,outIn,keyed
+	open #hTmp=fnH: 'Name=[Q]\UBmstr\ubAdrBil.h[cno],Replace,RecL=130',i,outIn,r
+	close #hTmp:
+	open #hTmp=fnH: 'Name=[Q]\UBmstr\Cass1.h[cno],Replace,RecL=111',i,outIn,r
+	close #hTmp:
 	! open #1: "Name=[Q]\UBmstr\Deposit1.h[cno],KFName=[Q]\UBmstr\DepIdx1.h[cno],Replace,RecL=16,KPs=1,KLn=10",internal,outIn,keyed
 	! close #1:
-	open #1: "Name=[Q]\UBmstr\Deposit2.h[cno],Replace,RecL=73",i,outi,r
-	close #1:
-	open #1: "Name=[Q]\UBmstr\BudMstr.h[cno],KFName=[Q]\UBmstr\BudIdx1.h[cno],Replace,RecL=80,KPs=1,KLn=10",internal,outIn,keyed
-	close #1:
-	open #1: "Name=[Q]\UBmstr\BudTrans.h[cno],Replace,RecL=149",i,outi,r
-	close #1:
-	open #1: "Name=[Q]\UBmstr\UBAdrBil.h[cno],KFName=[Q]\UBmstr\NoteIdx1.h[cno],Replace,RecL=130,KPs=1,KLn=10",internal,outIn,keyed
-	close #1:
+	open #hTmp=fnH: 'Name=[Q]\UBmstr\Deposit2.h[cno],Replace,RecL=73',i,outIn,r
+	close #hTmp:
+	open #hTmp=fnH: 'Name=[Q]\UBmstr\BudMstr.h[cno],Replace,RecL=80',i,outIn,r
+	close #hTmp:
+	open #hTmp=fnH: 'Name=[Q]\UBmstr\BudTrans.h[cno],Replace,RecL=149',i,outIn,r
+	close #hTmp:
+	open #hTmp=fnH: 'Name=[Q]\UBmstr\UBAdrBil.h[cno],Replace,RecL=130',i,outIn,r
+	close #hTmp:
 	fncreg_write('Route Low',str$(bkno1)) ! Route Number Range Low
 	fncreg_write('Route High',str$(bkno2)) ! Route Number Range High
 
@@ -56,7 +58,7 @@ else if env$('cursys')='GL' then ! r:
 	GlMenu1: !
 	fnTos
 	mylen=37 : mypos=mylen+2
-	fnLbl(1,1,"Copy Chart of Accounts from Company:",mylen,1)
+	fnLbl(1,1,'Copy Chart of Accounts from Company:',mylen,1)
 	fncmbcno(1,mypos)
 	fnCmdSet(2)
 	ckey=fnAcs(mat resp$)
@@ -69,7 +71,7 @@ else if env$('cursys')='GL' then ! r:
 	if cno<1 or cno=fro_cno then goto GlMenu1
 
 	fnCopy('[Q]\GLmstr\*.h'&str$(fro_cno),'[Q]\GLmstr\*.h[cno]')
-	open #20: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLIndex.h[cno],NoShr",internal,outIn,keyed
+	open #20: 'Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLIndex.h[cno],NoShr',internal,outIn,keyed
 	do
 		read #20,using 'Form POS 87,PD 6.2': cb eof EO_GLMSTR
 		rewrite #20,using 'Form POS 81,42*PD 6.2,POS 333,2*PD 3,13*pd 6.2': mat zer
@@ -77,13 +79,13 @@ else if env$('cursys')='GL' then ! r:
 	EO_GLMSTR: !
 	close #20:
 
-	execute "drop [Q]\GLmstr\GLTrans.h[cno]"
+	execute 'drop [Q]\GLmstr\GLTrans.h[cno]'
 	! fnDel('[Q]\GLmstr\glTrans-IdxAcct.h[cno]')    maybe a good idea??
-	open #1: "Name=[Q]\GLmstr\ACTrans.h[cno],Size=0,RecL=72,Replace,NoShr",internal,output
+	open #1: 'Name=[Q]\GLmstr\ACTrans.h[cno],Size=0,RecL=72,Replace,NoShr',internal,output
 	close #1:
 end if  ! /r
 fnchain('S:\[cursystem]\Company.br')
 
  
-Xit: fnchain("S:\Core\Programs\Select Company")
+Xit: fnchain('S:\Core\Programs\Select Company')
 include: ertn
