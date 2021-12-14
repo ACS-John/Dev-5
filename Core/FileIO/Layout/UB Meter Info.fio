@@ -2,10 +2,10 @@
 [Q]\UBmstr\Meter_Idx.h[cno] ,  customer/serviceId
 recl=384
 ===================================================
-customer$          ,    Account No           	,  C 10    , ! comboFio(UB Customer,1)
-serviceId$         ,    Service ID          	,  c  2    , ! comboa(ignored,*custom:UB ServiceCodes*)
-longitude$         ,    Longitude           	,  c 17    , !
-latitude$          ,    Latitude             	,  c 17    , ! 
-meterNumber$       ,    Meter Number        	,  c 12    , ! 
-transmitter$       ,    Transmitter Number 	,  c 20    , ! 
-meterType$         ,    Meter Type          	,  c  5    , ! comboFio(U4 Meter Type,1)
+customer      	,    Account No           	,  C 10    , ! comboFio(UB Customer,1)
+serviceId     	,    Service ID           	,  c  2    , ! comboa(ignored,*custom:UB ServiceCodes*)
+longitude     	,    Longitude            	,  c 17    , !
+latitude      	,    Latitude             	,  c 17    , ! 
+meterNumber   	,    Meter Number        	,  c 12    , ! 
+transmitter   	,    Transmitter Number  	,  c 20    , ! 
+meterType     	,    Meter Type           	,  c  5    , ! comboFio(U4 Meter Type,1)

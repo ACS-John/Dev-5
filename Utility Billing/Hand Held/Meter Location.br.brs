@@ -119,71 +119,7 @@ def fn_InitialializeMeterLocation
 		fncreg_write('u4 meter location account numbers left justified','True')
 		restore #hLocation:
 	end if
-	! no longer necessary         if exists('[Q]\UBmstr\MeterAddress.h[cno]') then
-	! no longer necessary         	! r: import UB Meter Address (and subordinate UB Meter Info data into U4 Meter Location)
-	! no longer necessary         		fnStatus('Initializing U4 Meter Location table...')
-	! no longer necessary         		hAddress=fn_openFio('UB Meter Address',mat addr$,mat addrN, 0,2)
-	! no longer necessary         		fnStatus('Record Count of UB Meter Address: '&str$(lrec(hAddress)))
-	! no longer necessary         		dim loacationRecordsAdded(11)
-	! no longer necessary         		mat loacationRecordsAdded=(0)
-	! no longer necessary         		fnStatus('Record Count of UB Meter Info: '&str$(lrec(hInfo)))
-	! no longer necessary         		do
-	! no longer necessary         			mat location$=('') : mat locationN=(0)
-	! no longer necessary         			read #hAddress,using form$(hAddress): mat addr$,mat addrN eof EoAddress
-	! no longer necessary         			locationId=addrN(loc_LocationID)
-	! no longer necessary         			account$=trim$(fn_accountFromLocIdViaLocation$(locationId, 1))
-	! no longer necessary         			if account$='' then
-	! no longer necessary         				fnStatus('No account found for Location ID '&str$(locationId)&' from Address file.')
-	! no longer necessary         			else
-	! no longer necessary         				locationN(loc_locationID     )=locationId
-	! no longer necessary         				location$(loc_name           )=addr$(ma_Name)
-	! no longer necessary         				location$(loc_activeCustomer )=account$
-	! no longer necessary         				servicesFound=0
-	! no longer necessary         				for serviceItem=1 to udim(mat serviceName$)
-	! no longer necessary         					if serviceCode$(serviceItem)<>'' then
-	! no longer necessary         						if ~imlImportFromInfo then goto InfoNokey
-	! no longer necessary         						mat info$=('') : mat infoN=(0)
-	! no longer necessary         						info$(meter_customer )=trim$(account$)
-	! no longer necessary         						info$(meter_serviceId)=serviceCode$(serviceItem)
-	! no longer necessary         						read #hInfo,using form$(hInfo),key=fnBuildKey$('UB Meter Info',mat info$,mat infoN): mat info$,mat infoN nokey InfoNokey
-	! no longer necessary         						servicesFound+=1
-	! no longer necessary         						location$(loc_serviceId      )=info$(meter_serviceId      )
-	! no longer necessary         						location$(loc_longitude      )=info$(meter_longitude      )
-	! no longer necessary         						location$(loc_latitude       )=info$(meter_latitude       )
-	! no longer necessary         						location$(loc_meterNumber    )=info$(meter_meterNumber    )
-	! no longer necessary         						location$(loc_transmitter    )=info$(meter_transmitter    )
-	! no longer necessary         						location$(loc_meterType      )=info$(meter_meterType      )
-	! no longer necessary         						fnstatus('importing '&account$&'.'&location$(loc_serviceId)&'.'&str$(locationId)&': ')
-	! no longer necessary         						fn_locationWrite(mat location$,mat locationN)
-	! no longer necessary         						loacationRecordsAdded(serviceItem)+=1
-	! no longer necessary         						if deleteEnabled then delete #hInfo:
-	! no longer necessary         						InfoNokey: !
-	! no longer necessary         					end if
-	! no longer necessary         				next serviceItem
-	! no longer necessary         				if servicesFound=0 then
-	! no longer necessary         					if udim(mat serviceCodeMetered$)=1 then ! only one metered service, it is safe to assume
-	! no longer necessary         						location$(loc_serviceId      )=serviceCodeMetered$(1)
-	! no longer necessary         					else
-	! no longer necessary         						pr 'no locations found for "'&account$&'"- just write a record without any services'
-	! no longer necessary         						pause
-	! no longer necessary         					end if
-	! no longer necessary         					fn_locationWrite(mat location$,mat locationN)
-	! no longer necessary         					loacationRecordsAdded(11)+=1
-	! no longer necessary         				end if
-	! no longer necessary         				if deleteEnabled then delete #hAddress:
-	! no longer necessary         			end if
-	! no longer necessary         		loop
-	! no longer necessary         		EoAddress: !
-	! no longer necessary         		for x=1 to 10
-	! no longer necessary         			if serviceName$(x)<>'' and loacationRecordsAdded(x)>0 then
-	! no longer necessary         				fnStatus('Imported '&str$(loacationRecordsAdded(x))&' records '&serviceName$(x)&' from Info (with added data from Address)')
-	! no longer necessary         			end if
-	! no longer necessary         		nex x
-	! no longer necessary         		if loacationRecordsAdded(11) then
-	! no longer necessary         			fnStatus('Imported '&str$(loacationRecordsAdded(11))&' records  with NO service from Info.')
-	! no longer necessary         		end if
-	! no longer necessary         	! /r
-	! no longer necessary         end if
+
 	if imlImportFromInfo then
 		! r: import from Info only - if you're importing both, do address first, because it add's this info too, this one is to add whatever is left after the other one.  it still leaves ones with accounts which do not point to a customer record.
 			fnStatus('checking Meter Information file for valid data to migrate to Meter Location table')
@@ -279,7 +215,7 @@ def fn_locationWrite(mat location$,mat locationN; leaveFileOpen) ! inherits loca
 		LwNoKeyEncountered: !
 	nex lwIndex
 	goto LwWrite
-	!
+
 	LwRewrite: ! r:
 		if locationN(loc_locationID)=0 then
 			pr 'attempted to rewrite a record setting its locationID to 0'
@@ -290,7 +226,7 @@ def fn_locationWrite(mat location$,mat locationN; leaveFileOpen) ! inherits loca
 			rewrite #hLocation(1),using form$(hLocation(1)),key=lwKey$: mat location$,mat locationN
 		end if
 	goto LwFinis ! /r
-	!
+
 	LwWrite: ! r:
 		if locationN(loc_locationID)=0 then
 			if u4_meterLocationIdSequential$='True' then
@@ -475,20 +411,7 @@ def library fnLocationIdFromAccountAndServ$*30(account$*10,serviceId$*2; field$*
 	end if
 	fnLocationIdFromAccountAndServ$=lfaReturn$
 fnend
-! r: obosoluete   def library fnMeterAddressLocationID(meterAddress$*30; leaveFileOpen) ! returns the locationID for a provided meterAddress$
-!    obosoluete    	if ~setup then fn_setup
-!    obosoluete    	if leaveFileOpen and hMaLocationByName<>0 then goto maliPastOpen
-!    obosoluete    	dim location$(0)*128,locationN(0),locationKey$*128
-!    obosoluete    	hMaLocationByName=fn_openFio(table$,mat location$,mat locationN, 1,2)
-!    obosoluete    	maliPastOpen: !
-!    obosoluete    	locationN(loc_LocationID)=-1
-!    obosoluete    	read #hMaLocationByName,using form$(hMaLocationByName),key=rpad$(meterAddress$,KLN(hMaLocationByName)),release: mat location$,mat locationN nokey ignore
-!    obosoluete    	if ~leaveFileOpen then
-!    obosoluete    		close #hMaLocationByName:
-!    obosoluete    		hMaLocationByName=0
-!    obosoluete    	end if
-!    obosoluete    	fnMeterAddressLocationID=locationN(loc_LocationID)
-! /r obosoluete    fnend
+
 def library fnMeterAddressName$*30(locationId; leaveFileOpen) ! returns the meterAddress$ for a provided LocationID
 	if ~setup then fn_setup
 	if leaveFileOpen and hMaLocationByLocationId<>0 then goto manPastOpen
@@ -502,11 +425,9 @@ def library fnMeterAddressName$*30(locationId; leaveFileOpen) ! returns the mete
 	end if
 	fnMeterAddressName$=location$(loc_name)
 fnend
-def fn_newLocationIdNonSequential(account$)
-	! if env$('client')='Campbell' then
-	newLocationIdNonSequential=val(fnCustomerData$(account$,'route'))*100000+val(fnCustomerData$(account$,'sequence'))
-	! end if
-	fn_newLocationIdNonSequential=newLocationIdNonSequential
+def fn_newLocationIdNonSequential(account$; ___,returnN)
+	returnN=val(fnCustomerData$(account$,'route'))*100000+val(fnCustomerData$(account$,'sequence'))
+	fn_newLocationIdNonSequential=returnN
 fnend
 
 def fn_newLocationIdSequential(; alterAmount)
@@ -517,31 +438,6 @@ def fn_newLocationIdSequential(; alterAmount)
 	fncreg_write('Last Location ID Assigned',str$(nliLastLocation))
 	fn_newLocationIdSequential=nliLastLocation ! pr 'fn_newLocationIdSequential is returning ';nliLastLocation
 fnend
-! def fn_askAddNew$(meterAddressBefore$*30,meterAddressAfter$*80) r: unused fns
-!   mat mg$(0)
-!   fnAddOneC(mat mg$,'The Meter Address was changed from')
-!   fnAddOneC(mat mg$,'From: "'&meterAddressBefore$&'"')
-!   fnAddOneC(mat mg$,'  To: "'&meterAddressAfter$&'"')
-!   fnAddOneC(mat mg$,'')
-!   fnAddOneC(mat mg$,'Is this a new entry?')
-!   fnAddOneC(mat mg$,'')
-!   fnAddOneC(mat mg$,'  Yes    - Add an entry to Meter Address file')
-!   fnAddOneC(mat mg$,'  No     - Update previous entry in Meter Address file')
-!   fnAddOneC(mat mg$,'  Cancel - Revert Changes')
-!   fnmsgbox(mat mg$, aaResponse$, '', 3) ! mtype 3 is yes/no/cancel
-!   fn_askAddNew$=aaResponse$
-! fnend
-! def fn_askAddDuplicate$(meterAddressBefore$*30,meterAddressAfter$*80)
-!   mat mg$(0)
-!   fnAddOneC(mat mg$,'The new Meter Address entered already exist.')
-!   fnAddOneC(mat mg$,'')
-!   fnAddOneC(mat mg$,'Do you want to continue?')
-!   fnAddOneC(mat mg$,'')
-!   fnAddOneC(mat mg$,'  Yes    - use "'&meterAddressAfter$&'" as entered.')
-!   fnAddOneC(mat mg$,'  No     - revert to "'&meterAddressBefore$&'"')
-!   fnmsgbox(mat mg$, aaResponse$, '', 4) ! mtype 4 is yes/no
-!   fn_askAddDuplicate$=aaResponse$
-! fnend  /r
 
 def library fnCustomerMeterLocationSelect(account$*10,serviceCode$*2) ! cmls
 	if ~setup then fn_setup

@@ -28,18 +28,11 @@ else if env$('cursys')='UB' then ! r:
 	open #hTmp=fnH: 'Name=[Q]\UBmstr\Customer.h[cno],Replace,RecL=2067',internal,outIn,r
 	close #hTmp:
 	open #hTmp=fnH: 'Name=[Q]\UBmstr\ubTransVB.h[cno],Replace,RecL=102',internal,outIn,r
-	! open #2: "Name=[Q]\UBmstr\ubTransVB.h[cno],KFName=[Q]\UBmstr\ubTrIndx.h[cno],Replace,RecL=102,KPs=1,KLn=19",internal,outIn,keyed
 	close #hTmp:
-	! open #2: "Name=[Q]\UBmstr\ubTransVB.h[cno],KFName=[Q]\UBmstr\UBTrdt.h[cno],Use,RecL=102,KPs=11/1,KLn=8/10",internal,outIn,keyed
-	! close #2:
-
-	! open #3: "Name=[Q]\UBmstr\ubAdrBil.h[cno],KFName=[Q]\UBmstr\AdrIndex.h[cno],Use,RecL=130,KPs=1,KLn=10",internal,outIn,keyed
 	open #hTmp=fnH: 'Name=[Q]\UBmstr\ubAdrBil.h[cno],Replace,RecL=130',i,outIn,r
 	close #hTmp:
 	open #hTmp=fnH: 'Name=[Q]\UBmstr\Cass1.h[cno],Replace,RecL=111',i,outIn,r
 	close #hTmp:
-	! open #1: "Name=[Q]\UBmstr\Deposit1.h[cno],KFName=[Q]\UBmstr\DepIdx1.h[cno],Replace,RecL=16,KPs=1,KLn=10",internal,outIn,keyed
-	! close #1:
 	open #hTmp=fnH: 'Name=[Q]\UBmstr\Deposit2.h[cno],Replace,RecL=73',i,outIn,r
 	close #hTmp:
 	open #hTmp=fnH: 'Name=[Q]\UBmstr\BudMstr.h[cno],Replace,RecL=80',i,outIn,r
@@ -48,13 +41,13 @@ else if env$('cursys')='UB' then ! r:
 	close #hTmp:
 	open #hTmp=fnH: 'Name=[Q]\UBmstr\UBAdrBil.h[cno],Replace,RecL=130',i,outIn,r
 	close #hTmp:
+	bkno1=1 : bkno2=9
 	fncreg_write('Route Low',str$(bkno1)) ! Route Number Range Low
 	fncreg_write('Route High',str$(bkno2)) ! Route Number Range High
 
 	fnindex_sys(val(env$('cno')),'UB')
 ! /r
 else if env$('cursys')='GL' then ! r:
-	dim zer(57)
 	GlMenu1: !
 	fnTos
 	mylen=37 : mypos=mylen+2
@@ -74,6 +67,7 @@ else if env$('cursys')='GL' then ! r:
 	open #20: 'Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLIndex.h[cno],NoShr',internal,outIn,keyed
 	do
 		read #20,using 'Form POS 87,PD 6.2': cb eof EO_GLMSTR
+		dim zer(57)
 		rewrite #20,using 'Form POS 81,42*PD 6.2,POS 333,2*PD 3,13*pd 6.2': mat zer
 	loop
 	EO_GLMSTR: !
