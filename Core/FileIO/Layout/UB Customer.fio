@@ -66,7 +66,7 @@ netBill           	,    Current Bill – Net Bill                           				, 
 grossBill         	,    Current Bill – Gross Bill                          			,  PD    4.2  ,               , ! SPos= 344 EPos=347   aka=g(12)
 adr1              	,  (unused) 1                                             			,  PD    3    ,               , ! SPos= 348 EPos=350   aka=adr1
 adr2              	,  (unused) 2                                             			,  PD    3    ,               , ! SPos= 351 EPos=353   aka=adr2
-alphaSort         	, Alpha Sort Field                                       			,  C     7    ,               , ! SPos=354  EPos=360   aka=alp$
+alphaSort         	, Alpha Sort Field                                       			,  C     7    ,               , ! SPos= 354 EPos=360   aka=alp$
 s03meterNumber    	,  Service 3 (Electric) - Meter Number                  			,  C    12    ,               , ! SPos= 361 EPos=372   aka=f2$
 s04meterNumber    	,  Service 4 (Gas) – Meter Number                     				,  C    12    ,               , ! SPos= 373 EPos=384   aka=f3$
 bra               	,  (unused) 3                                           				,  pd    3    ,               , ! SPos= 385 EPos=387   aka=bra  (used to be alternate billing address – now that's extra(22))
