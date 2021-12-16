@@ -2378,7 +2378,7 @@ BulkSort: ! r: sort in bulk sort code sequence
 		restore #hCustomer:
 		close #hBs3Out: ioerr ignore
 		hBs3Out=0
-		fnIndex('[temp]\Temp.[session] [temp]\Tempidx.[session]','1,26')
+		fnIndex('[temp]\Temp.[session]','[temp]\Tempidx.[session]','1,26')
 		open #hBulk3=fnH: 'Name=[temp]\Temp.[session],KFName=[temp]\Tempidx.[session]',i,i,k
 
 	end if
