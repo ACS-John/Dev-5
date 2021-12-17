@@ -32,7 +32,7 @@ def fn_sreg_read(fieldName$*128,&fieldValue$; defaultIfNotRead$*128)
 	dim tmpfieldValue$*256,key_compare$*128
 	fieldName$=rpad$(lwrc$(trim$(fieldName$)),128)
 	tmpfieldValue$=fieldValue$=''
-	! pr 'read #reg_h'
+	! pr 'read #hReg'
 	read #sreg_h,using 'form pos 1,C 128,v 256',key=fieldName$,release: key_compare$,tmpfieldValue$ ioerr SREG_LOAD_IOERR ! XXX
 	SREG_LOAD_IOERR: !
 	if key_compare$=fieldName$ then
@@ -47,11 +47,9 @@ def fn_sreg_write(fieldName$*128,fieldValue$*256)
 	 if env$('ACSDeveloper')<>'' then
 		 fieldName$=rpad$(lwrc$(trim$(fieldName$)),128)
 		 rewrite #sreg_h,using 'form pos 1,c 128,c 256',key=fieldName$: fieldName$,fieldValue$ nokey SREG_WRITE ! XXX
-		 ! pr 'rewrite #reg_h'
 		 goto SREG_SAVE_XIT
 		 SREG_WRITE: !
 		 write #sreg_h,using 'form pos 1,c 128,c 256': fieldName$,fieldValue$
-		 ! pr 'write #reg_h'
 		 SREG_SAVE_XIT: !
 		 ! pr 'save ';trim$(fieldName$);'=';fieldValue$
 	 end if
@@ -135,8 +133,7 @@ def fn_regRead(rr_fieldName$*128,&rr_fieldValue$; rr_defaultIfNotRead$*128,alsoU
 	dim rr_tmpfieldValue$*256,rr_key_compare$*128
 	rr_fieldName$=rpad$(lwrc$(trim$(rr_fieldName$)),128)
 	rr_tmpfieldValue$=rr_fieldValue$=''
-	! pr 'read #reg_h'
-	read #reg_h,using 'form pos 1,C 128,v 256',key=rr_fieldName$,release: rr_key_compare$,rr_tmpfieldValue$ ioerr REG_LOAD_IOERR ! XXX
+	read #hReg,using 'form pos 1,C 128,v 256',key=rr_fieldName$,release: rr_key_compare$,rr_tmpfieldValue$ ioerr REG_LOAD_IOERR ! XXX
 	REG_LOAD_IOERR: !
 	if rr_key_compare$=rr_fieldName$ then
 		rr_fieldValue$=rtrm$(rr_tmpfieldValue$)
@@ -151,24 +148,22 @@ def fn_regRead(rr_fieldName$*128,&rr_fieldValue$; rr_defaultIfNotRead$*128,alsoU
 fnend
 def fn_regWrite(rw_fieldName$*128,rw_fieldValue$*256)
 	rw_fieldName$=rpad$(lwrc$(trim$(rw_fieldName$)),128)
-	rewrite #reg_h,using 'form pos 1,c 128,c 256',key=rw_fieldName$: rw_fieldName$,rw_fieldValue$ nokey REG_WRITE ! XXX
-	! pr 'rewrite #reg_h'
+	rewrite #hReg,using 'form pos 1,c 128,c 256',key=rw_fieldName$: rw_fieldName$,rw_fieldValue$ nokey REG_WRITE ! XXX
 	goto REG_SAVE_XIT
 	REG_WRITE: !
-	write #reg_h,using 'form pos 1,c 128,c 256': rw_fieldName$,rw_fieldValue$
-	! pr 'write #reg_h'
+	write #hReg,using 'form pos 1,c 128,c 256': rw_fieldName$,rw_fieldValue$
 	REG_SAVE_XIT: !
 	! pr 'save ';trim$(rw_fieldName$);'=';rw_fieldValue$
 	fn_regWrite=val(rw_fieldValue$) conv ignore
 fnend
 def fn_regRename(fieldName_old$*128,fieldNameNew$*128)
 	fieldName_old$=rpad$(lwrc$(trim$(fieldName_old$)),128)
-	rewrite #reg_h,using 'form pos 1,c 128',key=fieldName_old$: fieldNameNew$ nokey ignore
+	rewrite #hReg,using 'form pos 1,c 128',key=fieldName_old$: fieldNameNew$ nokey ignore
 fnend
 def fn_regSetup
 	autoLibrary
 	fnmakesurepathexists('[Q]\Data\')
-	open #reg_h=fnH: 'Name=[Q]\Data\reg.dat,Version=1,KFName=[Q]\Data\reg.idx,Use,RecL=384,KPs=1,KLn=128,Shr',internal,outIn,keyed
+	open #hReg=fnH: 'Name=[Q]\Data\reg.dat,Version=1,KFName=[Q]\Data\reg.idx,Use,RecL=384,KPs=1,KLn=128,Shr',internal,outIn,keyed
 	fn_regSetup=1
 	on error goto Ertn
 fnend
@@ -270,7 +265,8 @@ fnend
 
 ! GLOBAL - affects ALL registries
 def library fnReg_close ! closes all registries (sreg, creg and reg)
-	close #reg_h: ioerr ignore
+	close #hReg: ioerr ignore
+	hReg=0
 	reg_setup=0
 	fn_mcregClose
 	fn_creg_close
