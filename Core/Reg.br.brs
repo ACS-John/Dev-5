@@ -148,6 +148,7 @@ def fn_regRead(rr_fieldName$*128,&rr_fieldValue$; rr_defaultIfNotRead$*128,alsoU
 fnend
 def fn_regWrite(rw_fieldName$*128,rw_fieldValue$*256)
 	rw_fieldName$=rpad$(lwrc$(trim$(rw_fieldName$)),128)
+	if file(hReg)=-1 then fn_regSetup
 	rewrite #hReg,using 'form pos 1,c 128,c 256',key=rw_fieldName$: rw_fieldName$,rw_fieldValue$ nokey REG_WRITE ! XXX
 	goto REG_SAVE_XIT
 	REG_WRITE: !
