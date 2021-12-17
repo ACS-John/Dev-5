@@ -1,9 +1,9 @@
 ! Replace S:\acsGL\Company
 ! GL Company Information File Editor
- 
+
 autoLibrary
 on error goto Ertn
- 
+
 dim a$(3)*40,b$(2)*12,c$*5,d(2),e$(2)*12,lastact$*12,tb$*30
 dim miscname$(10)*20
 dim dedcode(10)
@@ -21,41 +21,41 @@ dim gl$(5)*12
 dim dedOrAddOption$(2)
 	dedOrAddOption$(1)="Deducttion"
 	dedOrAddOption$(2)="Addition"
- 
- 
+
+
 fnTop(program$)
 gltyp=7
 fnstyp(0)
- 
-open #hGlmstr=11: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLIndex.h[cno],Shr",internal,outIn,keyed ioerr L220
- 
-L220: !
+
+! open #hGlmstr=fnH: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLIndex.h[cno],Shr",internal,outIn,keyed ioerr ignore
+
 open #20: "Name=[Q]\GLmstr\GLBucket.h[cno],RecL=1,Use",i,outi,r
 if lrec(20)=0 then
 	write #20,using 'Form POS 1,N 1',rec=1: 1
 end if
 read #20,using 'Form POS 1,N 1',rec=1: glb
 close #20:
- 
+
 open #company=1: "Name=[Q]\GLmstr\Company.h[cno],Shr",i,outi,r ioerr BLD_COINFO
 goto READ_COINFO
- 
-COINFO_READ_ERR: close #company: ioerr BLD_COINFO : goto BLD_COINFO
- 
+
+COINFO_READ_ERR: !
+	close #company: ioerr BLD_COINFO
+goto BLD_COINFO
+
 BLD_COINFO: !
 	open #company=1: "Name=[Q]\GLmstr\Company.h[cno],RecL=882,Replace",i,outi,r
 COINFO_WRITE: !
 	write #company,using 'Form POS 1,3*C 40,2*C 12,C 5,2*N 1,2*C 12,N 3,N 6,N 3,PD 7.2,C 30,POS 298,15*PD 4,POS 382,N 2,N 2,PD 5.3,PD 5.2,PD 5.3,PD 5.2,G 1,PD 5.3,PD 5.2,N 1,10*C 20,50*N 1,10*C 12',rec=1: mat a$,mat b$,c$,mat d,mat e$,a1,a2,a3,ucm,tb$,mat prgl,jccode,nap,ficarate,ficawage,feducrat,feducwag,actr$,mcr,mcm,reccode,mat miscname$,mat dedcode,mat dedfed,mat dedfica,mat dedst,mat deduc,mat miscgl$
- 
+
 READ_COINFO: !
 read #company,using 'Form POS 1,3*C 40,2*C 12,C 5,2*N 1,2*C 12,N 3,N 6,N 3,PD 7.2,C 30,POS 298,15*PD 4,POS 382,N 2,N 2,PD 5.3,PD 5.2,PD 5.3,PD 5.2,G 1,PD 5.3,PD 5.2,N 1,10*C 20,50*N 1,10*C 12',rec=1: mat a$,mat b$,c$,mat d,mat e$,a1,a2,a3,ucm,tb$,mat prgl,jccode,nap,ficarate,ficawage,feducrat,feducwag,actr$,mcr,mcm,reccode,mat miscname$,mat dedcode,mat dedfed,mat dedfica,mat dedst,mat deduc,mat miscgl$ conv COINFO_WRITE, ioerr COINFO_READ_ERR
- 
+
 lastgl$=cnvrt$("pic(zz#)",a1)&cnvrt$("pic(zzzzz#)",a2)&cnvrt$("pic(zz#)",a3)
 SCREEN_1: ! r:
 	fnTos
-	mylen=30: mypos=mylen+3 : right=1
+	mylen=30 : mypos=mylen+3 : right=1
 	respc=0
-	fnLbl(1,30,"Company # [cno]")
 	fnLbl(3,1,"Company Name:",mylen,right)
 	fnTxt(3,mypos,40,0,left,"",0,"",0 )
 	resp$(resp_cnam:=respc+=1)=a$(1)
@@ -124,7 +124,7 @@ SCREEN_1: ! r:
 		lastgl$=fnagl$(resp$(resp_lastBalSheetAccount)) : a1=val(lastgl$(1:3)) : a2=val(lastgl$(4:9)) : a3=val(lastgl$(10:12)) ! gl number
 		if resp$(resp_AllocExpToJc)="True" then jcc$="Y": jccode=1 else jcc$="N": jccode=0
 		if resp$(resp_glb)=postingOption$(1) then glb$="P": glb=1 else glb$="R": glb=2
-		
+
 		if ckey=4 then !  save and exit
 			gosub SAVE
 			goto Xit
@@ -158,7 +158,7 @@ SCREEN_2: ! r:
 	end if
 	if ckey=2 then goto SCREEN_1
 goto SCREEN_3 ! /r
- 
+
 SCREEN_3: ! r:
 	for j=1 to 5
 		gl$(j)=cnvrt$("pic(zz#)",prgl(j,1))&cnvrt$("pic(zzzzz#)",prgl(j,2))&cnvrt$("pic(zz#)",prgl(j,3))
@@ -223,7 +223,7 @@ SCREEN_3: ! r:
 		goto Xit
 	end if
 goto SCREEN_4 ! /r
- 
+
 SCREEN_4: ! r:
 	fnTos
 	mylen=32: mypos=mylen+3 : right=1
@@ -272,7 +272,7 @@ SCREEN_4: ! r:
 	gosub SAVE
 	close #company:
 goto Xit ! /r
- 
+
 Xit: fnXit
 SAVE: ! r:
 	rewrite #company,using 'Form POS 1,3*C 40,2*C 12,C 5,2*N 1,2*C 12,N 3,N 6,N 3,PD 7.2,C 30,POS 298,15*PD 4,POS 382,N 2,N 2,PD 5.3,PD 5.2,PD 5.3,PD 5.2,G 1,PD 5.3,PD 5.2,N 1,10*C 20,50*N 1,10*C 12',rec=1: mat a$,mat b$,c$,mat d,mat e$,a1,a2,a3,ucm,tb$,mat prgl,jccode,nap,ficarate,ficawage,feducrat,feducwag,unused,mcr,mcm,reccode,mat miscname$,mat dedcode,mat dedfed,mat dedfica,mat dedst,mat deduc,mat miscgl$
@@ -284,14 +284,14 @@ return ! /r
 def library fnLastAccountingPeriodClosed(; setit,___,h,returnN)
 	autoLibrary
 	if setit then
-		open #h=fnH: "Name=[Q]\GLmstr\Company.h[cno],Shr",i,outi,r  
+		open #h=fnH: "Name=[Q]\GLmstr\Company.h[cno],Shr",i,outi,r
 		rewrite #h,using 'Form Pos 296,n 2',rec=1: setit
 		close #h:
 		returnN=setit
 	else
-		open #h=fnH: "Name=[Q]\GLmstr\Company.h[cno],Shr",i,outi,r  
+		open #h=fnH: "Name=[Q]\GLmstr\Company.h[cno],Shr",i,outi,r
 		read #h,using 'Form Pos 296,n 2',rec=1: returnN
-		close #h: 
+		close #h:
 	end if
 	fnLastAccountingPeriodClosed=returnN
 fnend
