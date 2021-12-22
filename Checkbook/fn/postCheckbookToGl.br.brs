@@ -209,14 +209,14 @@ def library fnPostCheckbookToGl(; enablePost,___,pg)
 		if lrec(hWork)=0 then goto EndAll
 		
 		close #hWork:
-		open #hControl=fnH: "Name=[Temp]\CONTROL.[wsid],RecL=128,Replace",internal,output
+		open #hControl=fnH: "Name=[Temp]\Control.[wsid],RecL=128,Replace",internal,output
 		write #hControl,using Fsort: "! SORT FOR G/L DISTRIBUTION LIST IN PROCESS"
 		write #hControl,using Fsort: "FILE [Temp]\WORK.[Session],,,[Temp]\Addr.[Session],,,,,A,N"
 		write #hControl,using Fsort: "MASK 1,26,C,A"
 		Fsort: form pos 1,c 128
 		close #hControl:
 		fnFree('[Temp]\Addr.[session]')
-		execute 'Sort [Temp]\CONTROL.[wsid] -n'
+		execute 'Sort [Temp]\Control.[wsid] -n'
 		open #hAddr=fnH: 'Name=[Temp]\Addr.[session]',internal,input ioerr EndAll
 		open #hWork=fnH: 'Name=[Temp]\WORK.[session]',i,i,r
 		if pr1$<>"N" then
