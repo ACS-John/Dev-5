@@ -3,32 +3,32 @@ fn_setup
 fnTop(program$)
 Screen1: ! r:
 	fnTos
-	fnLbl(1,1,"Sort by:",20,1)
-	fncomboa("ublabels-ord",1,22,mat optSequence$,"The labels can be printed in customer # order,customer name order, or in bar code sequence")
+	fnLbl(1,1,'Sort by:',20,1)
+	fncomboa('ublabels-ord',1,22,mat optSequence$,'The labels can be printed in customer # order,customer name order, or in bar code sequence')
 	fnreg_read('ublabel.sequence',resp$(1),optSequence$(sequence_account),1)
 
-	fnLbl(3,1,"Print Address:",20,1)
-	fncomboa("ubnamlst-act",3,22,mat optAddress$)
+	fnLbl(3,1,'Print Address:',20,1)
+	fncomboa('ubnamlst-act',3,22,mat optAddress$)
 	fnreg_read('ublabel.address',resp$(2), optAddress$(ao_billing),1)
 
-	fnLbl(5,1,"Line 1:",20,1)
-	fncomboa("ublabel_tl1",5,22,mat optLineX$,'',70)
+	fnLbl(5,1,'Line 1:',20,1)
+	fncomboa('ublabel_tl1',5,22,mat optLineX$,'',70)
 	fnreg_read('ublabel.line 1',resp$(3), optLineX$(1),1)
 
-	fnLbl(6,1,"Line 2:",20,1)
-	fncomboa("ublabel_tl2",6,22,mat optLineX$,'',70)
+	fnLbl(6,1,'Line 2:',20,1)
+	fncomboa('ublabel_tl2',6,22,mat optLineX$,'',70)
 	fnreg_read('ublabel.line 2',resp$(4), optLineX$(2),1)
 
-	fnLbl(7,1,"Line 3:",20,1)
-	fncomboa("ublabel_tl3",7,22,mat optLineX$,'',70)
+	fnLbl(7,1,'Line 3:',20,1)
+	fncomboa('ublabel_tl3',7,22,mat optLineX$,'',70)
 	fnreg_read('ublabel.line 3',resp$(5), optLineX$(3),1)
 
-	fnLbl(8,1,"Line 4:",20,1)
-	fncomboa("ublabel_tl4",8,22,mat optLineX$,'',70)
+	fnLbl(8,1,'Line 4:',20,1)
+	fncomboa('ublabel_tl4',8,22,mat optLineX$,'',70)
 	fnreg_read('ublabel.line 4',resp$(6), optLineX$(4),1)
 
-	fnLbl(9,1,"Line 5:",20,1)
-	fncomboa("ublabel_tl5",9,22,mat optLineX$,'',70)
+	fnLbl(9,1,'Line 5:',20,1)
+	fncomboa('ublabel_tl5',9,22,mat optLineX$,'',70)
 	fnreg_read('ublabel.line 5',resp$(7), optLineX$(5),1)
 
 	fnCmdSet(2)
@@ -42,20 +42,22 @@ Screen1: ! r:
 	fnreg_write('ublabel.line 4',resp$(6))
 	fnreg_write('ublabel.line 5',resp$(7))
 	! annbc=sequence_name ! default to name sequence
-	pt$(5)=""
+	pt$(5)=''
 	if resp$(1)=optSequence$(sequence_account) then
 		annbc=sequence_account
 	! else if resp$(1)=optSequence$(sequence_name) then
 	! 	annbc=sequence_name
 	else if resp$(1)=optSequence$(sequence_bar_code) then
 		annbc=sequence_bar_code
-		pt$(5)="BAR"
+		pt$(5)='BAR'
 	else if resp$(1)=optSequence$(sequence_route) then
 		annbc=sequence_route
 	else if resp$(1)=optSequence$(sequence_grid) then
 		annbc=sequence_grid
 	else if resp$(1)=optSequence$(sequence_bulk_sort) then
 		annbc=sequence_bulk_sort
+	else if resp$(1)=optSequence$(sequence_alphaSort) then
+		annbc=sequence_alphaSort
 	end if
 
 	altaddr=srch(mat optAddress$,resp$(2))
@@ -77,10 +79,14 @@ Screen1: ! r:
 		gosub BulkSort
 		gosub OpenFiles
 		goto BulkRead
+	else if annbc=sequence_alphaSort then
+		gosub AlphaSort
+		gosub OpenFiles
+		goto AlphaRead
 	end if
 Screen2: !
 	fnTos
-	fnLbl(1,1,"Select by:",12,0,0)
+	fnLbl(1,1,'Select by:',12,0,0)
 	if annbc=sequence_account then
 		dim optFilterEnabled$(7)*50
 		optFilterEnabled$(1)=optFilter$(1)
@@ -112,7 +118,7 @@ Screen2: !
 		optFilterEnabled$(4)=optFilter$(6)
 		mat optFilterEnabled$(4)
 	end if
-	fncomboa("ublabels-ord",1,14,mat optFilterEnabled$,'',30)
+	fncomboa('ublabels-ord',1,14,mat optFilterEnabled$,'',30)
 	resp$(1)=optFilterEnabled$(1)
 	gosub OpenFiles
 	fnCmdSet(6)
@@ -132,35 +138,43 @@ Top: ! r:
 	if annbc=sequence_bar_code then
 		BARCODE_READ_ADDR: !
 		read #addr,using 'Form POS 1,PD 3': r6 eof Finis
-		read #6,using "Form POS 1,C 16,C 10",rec=r6: srt$,z$ noRec Top
-		if rtrm$(x$)<>"" and x$<>z$ then goto BARCODE_READ_ADDR
-		x$=""
-		read #customer,using 'Form POS 1,C 10,4*C 30,POS 296,PD 4,POS 373,C 12,POS 1741,N 2,N 7,pos 1864,C 30,pos 1821,n 1',key=z$: z$,mat e$,f,f3$,route,seq,extra$(1),final nokey Top
+		read #6,using 'Form POS 1,C 16,C 10',rec=r6: srt$,z$ noRec Top
+		if rtrm$(x$)<>'' and x$<>z$ then goto BARCODE_READ_ADDR
+		x$=''
+		read #customer,using 'Form POS 1,C 10,4*C 30,POS 296,PD 4,POS 373,C 12,POS 1741,N 2,N 7,pos 1864,C 30,pos 1821,n 1',key=z$: z$,mat e$,lastBillingDate,f3$,route,seq,extra$(1),final nokey Top
 		meter_address$=e$(1)
 		if annbc=sequence_bar_code and filter_selection=6 and bk>0 and bk<>route then goto BARCODE_READ_ADDR ! skip if barcoded and by route, but not right route
 	else if annbc=sequence_bulk_sort then
 		BulkRead: !
 		read #6,using 'form pos 22,c 10': z$ eof Finis
-		if rtrm$(x$)<>"" and x$<>z$ then goto BulkRead
-		x$=""
-		read #customer,using 'Form POS 1,C 10,4*C 30,POS 296,PD 4,POS 373,C 12,POS 1741,N 2,N 7,pos 1864,C 30,pos 1942,c 12,pos 1821,n 1',key=z$: z$,mat e$,f,f3$,route,seq,extra$(1),bulksort$,final nokey Top
+		if rtrm$(x$)<>'' and x$<>z$ then goto BulkRead
+		x$=''
+		read #customer,using 'Form POS 1,C 10,4*C 30,POS 296,PD 4,POS 373,C 12,POS 1741,N 2,N 7,pos 1864,C 30,pos 1942,c 12,pos 1821,n 1',key=z$: z$,mat e$,lastBillingDate,f3$,route,seq,extra$(1),bulksort$,final nokey Top
 		meter_address$=e$(1)
 		if annbc=sequence_bulk_sort and filter_selection=6 and bk>0 and bk<>route then goto BulkRead ! skip if barcoded and by route, but not right route
+	else if annbc=sequence_alphaSort then
+		AlphaRead: !
+		read #hAlphaSort,using 'form pos 22,c 10': z$ eof Finis
+		if rtrm$(x$)<>'' and x$<>z$ then goto AlphaRead
+		x$=''
+		read #customer,using 'Form POS 1,C 10,4*C 30,POS 296,PD 4,POS 373,C 12,POS 1741,N 2,N 7,pos 1864,C 30,pos 1942,c 12,pos 1821,n 1',key=z$: z$,mat e$,lastBillingDate,f3$,route,seq,extra$(1),bulksort$,final nokey Top
+		meter_address$=e$(1)
+		if filter_selection=6 and bk>0 and bk<>route then goto AlphaRead ! skip if barcoded and by route, but not right route
 	else
-		read #customer,using 'Form POS 1,C 10,4*C 30,C 12,POS 296,PD 4,POS 373,C 12,POS 1741,N 2,N 7,pos 1864,C 30,pos 1821,n 1': z$,mat e$,f$(1),f,f3$,route,seq,extra$(1),final eof Finis
+		read #customer,using 'Form POS 1,C 10,4*C 30,C 12,POS 296,PD 4,POS 373,C 12,POS 1741,N 2,N 7,pos 1864,C 30,pos 1821,n 1': z$,mat e$,f$(1),lastBillingDate,f3$,route,seq,extra$(1),final eof Finis
 		meter_address$=e$(1)
 	end if
 	PAST_READ: !
-	if filter_selection=3 and d1=f then goto Top
+	if filter_selection=3 and d1=lastBillingDate then goto Top
 	if filter_selection=4 and z$>h1$ then goto Finis
 	if filter_selection=6 and bk>0 and route<>bk then goto Top
-	if filter_selection=2 and d1><f then goto Top
+	if filter_selection=2 and d1><lastBillingDate then goto Top
 	THERE: !
 	fn_getAddressLines
 goto AddLabel ! /r
 AddLabel: ! r:
 ! if annbc=sequence_bulk_sort then
-!   labeltext$(1)=labeltext$(1)&"  "&bulksort$ ! if bulk sort than auto add bulk sort code on to the end of the Top line
+!   labeltext$(1)=labeltext$(1)&'  '&bulksort$ ! if bulk sort than auto add bulk sort code on to the end of the Top line
 ! else
 	fn_set_line_text(labeltext$(1),line_1_print)
 ! end if
@@ -212,10 +226,10 @@ fnend
 Xit: fnXit
 SelectRangeOfAccounts: ! r: select range of accounts
 	fnTos
-	fnLbl(1,1,"Starting Account:",20)
+	fnLbl(1,1,'Starting Account:',20)
 	fncmbact(1,22,1)
 	resp$(1)=l1$
-	fnLbl(2,1,"Ending Account:",20)
+	fnLbl(2,1,'Ending Account:',20)
 	fncmbact(2,22,1)
 	resp$(2)=h1$
 	fnCmdSet(22)
@@ -224,15 +238,15 @@ SelectRangeOfAccounts: ! r: select range of accounts
 	l1$=lpad$(trim$(resp$(1)(1:10)),10)
 	h1$=lpad$(trim$(resp$(2)(1:10)),10)
 	if ckey=6 then fnCustomerSearch(resp$(1)) else goto L1470
-	if trim$(l1$)="" then l1$=resp$(1) : goto SelectRangeOfAccounts
-	if trim$(h1$)="" then h1$=resp$(1) : goto SelectRangeOfAccounts
+	if trim$(l1$)='' then l1$=resp$(1) : goto SelectRangeOfAccounts
+	if trim$(h1$)='' then h1$=resp$(1) : goto SelectRangeOfAccounts
 	goto SelectRangeOfAccounts
 	L1470: !
 	if ckey=2 then goto Screen2
 	l1$=lpad$(l1$,10) : h1$=lpad$(h1$,10)
 	if h1$<l1$ then
 		mat msgline$(1)
-		msgline$(1)="You have entered invalid accounts!"
+		msgline$(1)='You have entered invalid accounts!'
 		fnmsgbox(mat msgline$,resp$,'',48)
 		goto SelectRangeOfAccounts
 	end if
@@ -240,11 +254,11 @@ SelectRangeOfAccounts: ! r: select range of accounts
 goto Top ! /r
 SelectIndividualAccounts: ! r: select individual accounts
 	fnTos
-	fnLbl(1,1,"Account:",15)
+	fnLbl(1,1,'Account:',15)
 	fncmbact(1,17)
 	resp$(1)=selz$
-	fnLbl(3,1,"Last selection: "&hz$,35,0)
-	if trim$(sele$(2))<>"" then fnLbl(2,17,sele$(2),20,0)
+	fnLbl(3,1,'Last selection: '&hz$,35,0)
+	if trim$(sele$(2))<>'' then fnLbl(2,17,sele$(2),20,0)
 	fnCmdSet(23)
 	ckey=fnAcs(mat resp$)
 	if ckey=2 then
@@ -259,20 +273,20 @@ SelectIndividualAccounts: ! r: select individual accounts
 ! L1660: !
 	z$=lpad$(rtrm$(resp$(1)(1:10)),10)
 	hz$=z$
-	if rtrm$(z$)="" then goto Finis
-	selz$="": mat sele$=("")
-	read #customer,using 'Form POS 1,C 10,4*C 30,POS 296,PD 4,POS 373,C 12,POS 1741,N 2,N 7,pos 1864,C 30,pos 1821,n 1',key=z$: z$,mat e$,f,f3$,route,seq,extra$(1),final nokey SelectIndividualAccounts
+	if rtrm$(z$)='' then goto Finis
+	selz$='': mat sele$=('')
+	read #customer,using 'Form POS 1,C 10,4*C 30,POS 296,PD 4,POS 373,C 12,POS 1741,N 2,N 7,pos 1864,C 30,pos 1821,n 1',key=z$: z$,mat e$,lastBillingDate,f3$,route,seq,extra$(1),final nokey SelectIndividualAccounts
 	meter_address$=e$(1)
 goto THERE ! /r
 SelectByRoute: ! r: selects by route
 	fnTos
 	respc=0
-	fnLbl(1,1,"Route Number:",15,0)
+	fnLbl(1,1,'Route Number:',15,0)
 	fncmbrt2(1,17)
-	resp$(respc+=1)="1"
-	fnLbl(2,1,"Sequence Number:",15,0)
-	fnTxt(2,17,7,7,1,"20",0,"The sequence number is only required if you wish to start in the middle of a route")
-	resp$(respc+=1)=""
+	resp$(respc+=1)='1'
+	fnLbl(2,1,'Sequence Number:',15,0)
+	fnTxt(2,17,7,7,1,'20',0,'The sequence number is only required if you wish to start in the middle of a route')
+	resp$(respc+=1)=''
 	fnCmdSet(22)
 	ckey=fnAcs(mat resp$) ! select labels by route
 	if ckey=5 then goto Xit
@@ -286,60 +300,60 @@ SelectByRoute: ! r: selects by route
 goto Top ! /r
 ! SCR4F3: ! r: select starting account name
 ! 	fnTos
-! 	fnLbl(1,1,"Customer Name:",15,0)
-! 	fnTxt(1,17,30,30,1,"",0,"Search and find the exact customer name if you wish to start with a specific customer")
-! 	resp$(1)=""
-! 	if trim$(sele$(2))<>"" then
+! 	fnLbl(1,1,'Customer Name:',15,0)
+! 	fnTxt(1,17,30,30,1,'',0,'Search and find the exact customer name if you wish to start with a specific customer')
+! 	resp$(1)=''
+! 	if trim$(sele$(2))<>'' then
 ! 		fnLbl(2,17,sele$(2),20,0)
 ! 	end if
 ! 	fnCmdSet(21)
 ! 	ckey=fnAcs(mat resp$) ! select starting customer name
 ! 	if ckey=5 then goto Xit
 ! 	if ckey=6 then fnCustomerSearch(resp$(1))
-! 	restore #customer,key>="       ": nokey ignore
+! 	restore #customer,key>='       ': nokey ignore
 ! 	SCR4F3_READ_CUSTOMER: !
-! 	read #customer,using 'Form POS 1,C 10,4*C 30,POS 296,PD 4,POS 373,C 12,POS 1741,N 2,N 7,pos 1864,C 30,pos 1821,n 1': z$,mat e$,f,f3$,route,seq,extra$(1),final eof SCR4F3_NO_MATCH
+! 	read #customer,using 'Form POS 1,C 10,4*C 30,POS 296,PD 4,POS 373,C 12,POS 1741,N 2,N 7,pos 1864,C 30,pos 1821,n 1': z$,mat e$,lastBillingDate,f3$,route,seq,extra$(1),final eof SCR4F3_NO_MATCH
 ! 	meter_address$=e$(1)
-! 	if trim$(resp$(1))="" then goto SCR4F3_FINIS
+! 	if trim$(resp$(1))='' then goto SCR4F3_FINIS
 ! 	if lpad$(resp$(1),10)<>z$ then goto SCR4F3_READ_CUSTOMER
 ! 	SCR4F3_FINIS: !
 ! goto PAST_READ ! 
 ! SCR4F3_NO_MATCH: ! r:
 ! 	mat msgline$(1)
-! 	msgline$(1)="No matching name found!"
+! 	msgline$(1)='No matching name found!'
 ! 	fnmsgbox(mat msgline$,resp$,'',48)
 ! goto SelectStartingCustomer ! /r
 ! ! /r
 Sort1: ! r: SELECT & SORT
 	gosub OpenCass
 	close #6: ioerr ignore
-	open #6: "Name=[Temp]\Work.[session],Replace,RecL=26",internal,output
-	s5=1
+	open #6: 'Name=[Temp]\Work.[session],Replace,RecL=26',internal,output
+	sort1setup=1
 	restore #1:
 	do
-		read #customer,using "Form POS 1,C 10,POS 296,PD 4,pos 1864,C 30,pos 1821,n 1": z$,f,extra$(1),final eof END5
-		cr$=bc$=""
-		read #5,using "Form POS 96,C 12,C 4": bc$,cr$ nokey SORT1_NEXT ioerr SORT1_NEXT
-		write #6,using "Form POS 1,C 16,C 10": bc$(1:5)&cr$&bc$(6:12),z$
-		SORT1_NEXT: !
+		read #customer,using 'Form POS 1,C 10,POS 296,PD 4,pos 1864,C 30,pos 1821,n 1': z$,lastBillingDate,extra$(1),final eof Sort1EoCustomer
+		xcr$=bc$=''
+		read #5,using 'Form POS 96,C 12,C 4': bc$,xcr$ nokey Sort1NextCustomer ioerr Sort1NextCustomer
+		write #6,using 'Form POS 1,C 16,C 10': bc$(1:5)&xcr$&bc$(6:12),z$
+		Sort1NextCustomer: !
 	loop
-	END5: !
+	Sort1EoCustomer: !
 	close #6: ioerr ignore
 	close #9: ioerr ignore
-	open #9: "Name=[Temp]\CONTROL.[session],Size=0,RecL=128,Replace",internal,output
-	write #9,using 'Form POS 1,C 128': "File [Temp]\Work.[session],,,[Temp]\Addr.[session],,,,,A,N"
-	write #9,using 'Form POS 1,C 128': "Mask 1,26,C,A"
+	open #9: 'Name=[Temp]\Control.[session],Size=0,RecL=128,Replace',internal,output
+	write #9,using 'Form POS 1,C 128': 'File [Temp]\Work.[session],,,[Temp]\Addr.[session],,,,,A,N'
+	write #9,using 'Form POS 1,C 128': 'Mask 1,26,C,A'
 	close #9:
-	execute "Free [Temp]\Addr.[session] -n" ioerr ignore
-	execute "Sort [Temp]\CONTROL.[session] -n"
-	open #6: "Name=[Temp]\Work.[session]",i,i,r
+	execute 'Free [Temp]\Addr.[session] -n' ioerr ignore
+	execute 'Sort [Temp]\Control.[session] -n'
+	open #6: 'Name=[Temp]\Work.[session]',i,i,r
 	close #addr: ioerr ignore
-	open #addr=7: "Name=[Temp]\Addr.[session]",i,i,r
+	open #addr=7: 'Name=[Temp]\Addr.[session]',i,i,r
 return  ! /r
 BarCode: ! r:
 	gosub OpenCass
 	if file(5)=-1 then goto BARCODE_XIT
-	labeltext$(5)=""
+	labeltext$(5)=''
 	read #5,using 'Form POS 1,C 10,POS 96,C 12': z2$,bc$ nokey BARCODE_XIT
 	for j=1 to 4
 		labeltext$(j)=labeltext$(j+1) ! move everything up one to allow for BarCode
@@ -350,7 +364,7 @@ return  ! /r
 SelectStartingCustomer: ! r: select customer to start with
 	fnTos
 	mylen=26 : mypos=mylen+2
-	fnLbl(1,1,"Starting account:",mylen,0)
+	fnLbl(1,1,'Starting account:',mylen,0)
 	fncmbact(1,mypos,1)
 	if trim$(selz$)='' then resp$(1)='[All]' else resp$(1)=selz$
 	fnCmdSet(5)
@@ -363,26 +377,26 @@ SelectStartingCustomer: ! r: select customer to start with
 	end if
 	if ckey=5 then goto Xit
 	z$=lpad$(trim$(resp$(1)(1:10)),10)
-	if trim$(z$)="[All]" then restore #1: : goto Top
-	selz$="": mat sele$=("")
-	read #customer,using 'Form POS 1,C 10,4*C 30,POS 296,PD 4,POS 373,C 12,POS 1741,N 2,N 7,pos 1864,C 30,pos 1821,n 1',key=z$: z$,mat e$,f,f3$,route,seq,extra$(1),final nokey SelectStartingCustomer
+	if trim$(z$)='[All]' then restore #1: : goto Top
+	selz$='': mat sele$=('')
+	read #customer,using 'Form POS 1,C 10,4*C 30,POS 296,PD 4,POS 373,C 12,POS 1741,N 2,N 7,pos 1864,C 30,pos 1821,n 1',key=z$: z$,mat e$,lastBillingDate,f3$,route,seq,extra$(1),final nokey SelectStartingCustomer
 	meter_address$=e$(1)
 goto THERE ! /r
 ReadFromGrid: ! r: select customers from grid
 	fnTos
-	fnLbl(1,1,"Grid name (including folders):",30,0)
-	fnTxt(1,30,30,66,0,"70",0,"You must first export a fixed width file from the gird program (remember the name!)")
-	resp$(1)=""
-	fnLbl(2,40,"",30,0)
+	fnLbl(1,1,'Grid name (including folders):',30,0)
+	fnTxt(1,30,30,66,0,'70',0,'You must first export a fixed width file from the gird program (remember the name!)')
+	resp$(1)=''
+	fnLbl(2,40,'',30,0)
 	fnCmdSet(3)
 	ckey=fnAcs(mat resp$) ! select starting customer #
 	if ckey=5 then goto Xit
-	open #6: "Name="&trim$(resp$(1)),display,input ioerr ReadFromGrid
+	open #6: 'Name='&trim$(resp$(1)),display,input ioerr ReadFromGrid
 	do
 		LIN6: !
 		linput #6: x$ eof Finis
 		z$=lpad$(trim$(x$(1:10)),10)
-		read #customer,using 'Form POS 1,C 10,4*C 30,POS 296,PD 4,POS 373,C 12,POS 1741,N 2,N 7,pos 1864,C 30,pos 1821,n 1',key=z$: z$,mat e$,f,f3$,route,seq,extra$(1),final nokey LIN6
+		read #customer,using 'Form POS 1,C 10,4*C 30,POS 296,PD 4,POS 373,C 12,POS 1741,N 2,N 7,pos 1864,C 30,pos 1821,n 1',key=z$: z$,mat e$,lastBillingDate,f3$,route,seq,extra$(1),final nokey LIN6
 		meter_address$=e$(1)
 		fn_getAddressLines
 		gosub AddLabel
@@ -395,8 +409,8 @@ fnend
 def fn_customerAddress(z$*10,mat addr$; ca_address_type,ca_closeFiles)
 	if ~ca_setup then
 		ca_setup=1
-		open #h_ca_customer=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno]"&',Shr',i,i,k
-		open #adrbil=fnH: "Name=[Q]\UBmstr\ubAdrBil.h[cno],KFName=[Q]\UBmstr\AdrIndex.h[cno],Shr",i,i,k
+		open #h_ca_customer=fnH: 'Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno]'&',Shr',i,i,k
+		open #adrbil=fnH: 'Name=[Q]\UBmstr\ubAdrBil.h[cno],KFName=[Q]\UBmstr\AdrIndex.h[cno],Shr',i,i,k
 	end if
 	if ca_address_type=0 then ca_address_type=ao_billing
 	altaddr=ca_address_type
@@ -405,8 +419,8 @@ def fn_customerAddress(z$*10,mat addr$; ca_address_type,ca_closeFiles)
 	read #h_ca_customer,using 'Form POS 11,4*C 30,pos 1864,C 30,pos 1854,PD 5.2',key=lpad$(z$,kln(h_ca_customer)): mat e$,extra$(1),extra(22) nokey CA_FINIS
 	fn_getAddressLines
 	CA_FINIS: !
-	if trim$(pe$(2))="" then pe$(2)=pe$(3): pe$(3)=""
-	if trim$(pe$(3))="" then pe$(3)=pe$(4): pe$(4)=""
+	if trim$(pe$(2))='' then pe$(2)=pe$(3): pe$(3)=''
+	if trim$(pe$(3))='' then pe$(3)=pe$(4): pe$(4)=''
 	mat addr$(4)
 	mat addr$=pe$
 	if ca_closeFiles then
@@ -437,7 +451,7 @@ def fn_getAddressLines
 	end if
 	goto GAL_XIT
 	GAL_USE_ALT_ADDR: ! r:
-	read #adrbil,using "Form POS 11,4*C 30",key=z$: mat ba$ nokey GAL_USE_PRIME_ADR
+	read #adrbil,using 'Form POS 11,4*C 30',key=z$: mat ba$ nokey GAL_USE_PRIME_ADR
 	fn_alternate_address
 	goto GAL_XIT ! /r
 	GAL_USE_PRIME_ADR: ! r:
@@ -445,52 +459,71 @@ def fn_getAddressLines
 	goto GAL_XIT ! /r
 	GAL_XIT: !
 fnend
-def fn_alternate_address
-	e1=0
-	mat pe$=("")
-	for j=1 to 4
-		if rtrm$(ba$(j))<>"" then pe$(e1+=1)=ba$(j)
-	next j
-fnend
-def fn_primary_address
-	e1=0 : mat pe$=("")
-	for j=2 to 4
-		if rtrm$(e$(j))<>"" then pe$(e1+=1)=e$(j)
-	next j
-	if trim$(extra$(1))<>'' then pe$(4)=pe$(3) : pe$(3)=extra$(1)
-fnend
-BulkSort: ! r: bulk sort order
-	open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno]",i,i,k  ! open in Account order
-	open #6: "Name=[Temp]\Temp.[session],Replace,RecL=31",internal,output
+	def fn_alternate_address
+		e1=0
+		mat pe$=('')
+		for j=1 to 4
+			if rtrm$(ba$(j))<>'' then pe$(e1+=1)=ba$(j)
+		next j
+	fnend
+	def fn_primary_address
+		e1=0 : mat pe$=('')
+		for j=2 to 4
+			if rtrm$(e$(j))<>'' then pe$(e1+=1)=e$(j)
+		next j
+		if trim$(extra$(1))<>'' then pe$(4)=pe$(3) : pe$(3)=extra$(1)
+	fnend
+
+AlphaSort: ! r: alphaSort order
+	open #hAsCustomer=fnH: 'Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno]',i,i,k  ! open in Account order
+	open #hAsSequence=fnH: 'Name=[Temp]\Temp.[session],Replace,RecL=31',internal,output
 	do
-		read #1,using "Form POS 1,C 10,pos 1741,n 2,pos 1743,n 7,pos 1942,c 12": z$,route,seq,bulk$ eof BULKSORT_FINIS
-		write #6,using "Form POS 1,C 12,n 2,n 7,c 10": bulk$,route,seq,z$
+		read #hAsCustomer,using 'Form POS 1,C 10,pos 1741,n 2,pos 1743,n 7,pos 354,c 7': z$,route,seq,alphaSort$ eof AlphaSortFinis
+		write #hAsSequence,using 'Form POS 1,C 12,n 2,n 7,c 10': alphaSort$,route,seq,z$
+	loop
+	AlphaSortFinis: !
+	close #hAsCustomer: ioerr ignore
+	hAsCustomer=0
+	close #hAsSequence: ioerr ignore
+	hAsSequence=0
+	execute 'Index [Temp]\Temp.[session] [Temp]\Tempidx.[session] 1,19,Replace,DupKeys -n' ioerr AlphaSortXit
+	open #hAlphaSort=6: 'Name=[Temp]\Temp.[session],KFName=[Temp]\Tempidx.[session]',i,i,k
+	AlphaSortXit: !
+return  ! /r
+BulkSort: ! r: bulk sort order
+	open #hBsCustomer=fnH: 'Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno]',i,i,k  ! open in Account order
+	open #hBsSequence=fnH: 'Name=[Temp]\Temp.[session],Replace,RecL=31',internal,output
+	do
+		read #hBsCustomer,using 'Form POS 1,C 10,pos 1741,n 2,pos 1743,n 7,pos 1942,c 12': z$,route,seq,bulk$ eof BULKSORT_FINIS
+		write #hBsSequence,using 'Form POS 1,C 12,n 2,n 7,c 10': bulk$,route,seq,z$
 	loop
 	BULKSORT_FINIS: !
-	close #1: ioerr ignore
-	close #6: ioerr ignore
-	execute "Index [Temp]\Temp.[session] [Temp]\Tempidx.[wsid] 1,19,Replace,DupKeys -n" ioerr BULKSORT_XIT
-	open #6: "Name=[Temp]\Temp.[session],KFName=[Temp]\Tempidx.[wsid]",i,i,k
+	close #hBsCustomer: ioerr ignore
+	hBsCustomer=0
+	close #hBsSequence: ioerr ignore
+	hBsSequence=0
+	execute 'Index [Temp]\Temp.[session] [Temp]\Tempidx.[session] 1,19,Replace,DupKeys -n' ioerr BULKSORT_XIT
+	open #6: 'Name=[Temp]\Temp.[session],KFName=[Temp]\Tempidx.[session]',i,i,k
 	BULKSORT_XIT: !
 return  ! /r
 OpenFiles: ! r:
 	close #customer=1: ioerr ignore
-	if annbc=sequence_account or annbc=sequence_bar_code or annbc=sequence_grid or annbc=sequence_bulk_sort then
-		open #customer: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",i,i,k
+	if annbc=sequence_account or annbc=sequence_bar_code or annbc=sequence_grid or annbc=sequence_bulk_sort or annbc=sequence_alphaSort then
+		open #customer: 'Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr',i,i,k
 	! else if annbc=sequence_name then
-	! 	open #customer: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\UBIndx2.h[cno],Shr",i,i,k
+	! 	open #customer: 'Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\UBIndx2.h[cno],Shr',i,i,k
 	else if annbc=sequence_route then
-		open #customer: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx5.h[cno],Shr",i,i,k
+		open #customer: 'Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx5.h[cno],Shr',i,i,k
 	end if
 	close #adrbil=3: ioerr ignore
-	open #adrbil: "Name=[Q]\UBmstr\ubAdrBil.h[cno],KFName=[Q]\UBmstr\AdrIndex.h[cno],Shr",i,i,k
-	execute "drop [Temp]\label.dat -n" ioerr ignore
+	open #adrbil: 'Name=[Q]\UBmstr\ubAdrBil.h[cno],KFName=[Q]\UBmstr\AdrIndex.h[cno],Shr',i,i,k
+	execute 'drop [Temp]\label.dat -n' ioerr ignore
 	fnLastBillingDate(d1)
-	if annbc=sequence_bar_code and s5=0 then gosub Sort1
+	if annbc=sequence_bar_code and ~sort1setup then gosub Sort1
 return  ! /r
 OpenCass: ! r:
 	if file(5)=-1 then
-		open #5: "Name=[Q]\UBmstr\Cass1.h[cno],KFName=[Q]\UBmstr\Cass1Idx.h[cno],Shr",i,i,k ioerr ignore
+		open #5: 'Name=[Q]\UBmstr\Cass1.h[cno],KFName=[Q]\UBmstr\Cass1Idx.h[cno],Shr',i,i,k ioerr ignore
 	end if
 return  ! /r
 def fn_setup
@@ -510,40 +543,41 @@ def fn_setup
 
 	dim optLineX$(9)*70
 	mat optLineX$(0)
-	line_x_blank                   =fnAddoneC(mat optLineX$,"(blank)"                                                        )
-	line_x_account_number          =fnAddoneC(mat optLineX$,"Account"                                                        )
-	line_x_accountRightJustified   =fnAddoneC(mat optLineX$,"Account (right justified)"                                      )
-	line_x_meter_address           =fnAddoneC(mat optLineX$,"Meter Address"                                                  )
-	line_x_customer_name           =fnAddoneC(mat optLineX$,"Name"                                                           )
-	line_x_mailing_address_line_1  =fnAddoneC(mat optLineX$,"Mailing Address Line 1"                                         )
-	line_x_mailing_address_line_2  =fnAddoneC(mat optLineX$,"Mailing Address Line 2 or if blank City State Zip"              )
-	line_x_mailing_address_line_3  =fnAddoneC(mat optLineX$,"City State Zip if Mailing Address Line 2 not blank"             )
-	line_x_meter_route_and_sequenc =fnAddoneC(mat optLineX$,trim$(srvName$(4))&" Meter, Route and Sequence Numbers"          )
-	line_x_account_meter4_and_seq  =fnAddoneC(mat optLineX$,"Account, "&trim$(srvName$(4))&" Meter, and Sequence Numbers"    )
-	line_x_meterAndSequence        =fnAddoneC(mat optLineX$,trim$(srvName$(4))&" Meter and Sequence Numbers"                 )
+	line_x_blank                   =fnAddoneC(mat optLineX$,'(blank)'                                                        )
+	line_x_account_number          =fnAddoneC(mat optLineX$,'Account'                                                        )
+	line_x_accountRightJustified   =fnAddoneC(mat optLineX$,'Account (right justified)'                                      )
+	line_x_meter_address           =fnAddoneC(mat optLineX$,'Meter Address'                                                  )
+	line_x_customer_name           =fnAddoneC(mat optLineX$,'Name'                                                           )
+	line_x_mailing_address_line_1  =fnAddoneC(mat optLineX$,'Mailing Address Line 1'                                         )
+	line_x_mailing_address_line_2  =fnAddoneC(mat optLineX$,'Mailing Address Line 2 or if blank City State Zip'              )
+	line_x_mailing_address_line_3  =fnAddoneC(mat optLineX$,'City State Zip if Mailing Address Line 2 not blank'             )
+	line_x_meter_route_and_sequenc =fnAddoneC(mat optLineX$,trim$(srvName$(4))&' Meter, Route and Sequence Numbers'          )
+	line_x_account_meter4_and_seq  =fnAddoneC(mat optLineX$,'Account, '&trim$(srvName$(4))&' Meter, and Sequence Numbers'    )
+	line_x_meterAndSequence        =fnAddoneC(mat optLineX$,trim$(srvName$(4))&' Meter and Sequence Numbers'                 )
 
 	dim optAddress$(3)*30
-	optAddress$(ao_primary  :=1)="Primary Address"
-	optAddress$(ao_alternate:=2)="Alternate Billing Address"
-	optAddress$(ao_billing  :=3)="Billing Address"
+	optAddress$(ao_primary  :=1)='Primary Address'
+	optAddress$(ao_alternate:=2)='Alternate Billing Address'
+	optAddress$(ao_billing  :=3)='Billing Address'
 
 	dim optSequence$(6)*22
 	sequenceCount=0
-	optSequence$(sequence_account  :=sequenceCount+=1)="Account"
-	! optSequence$(sequence_name:=2)="Customer Name"
-	optSequence$(sequence_bar_code :=sequenceCount+=1)="Bar Code"
-	optSequence$(sequence_route    :=sequenceCount+=1)="Route"
-	optSequence$(sequence_grid     :=sequenceCount+=1)="Grid"
-	optSequence$(sequence_bulk_sort:=sequenceCount+=1)="Bulk Sort Code"
+	optSequence$(sequence_account  :=sequenceCount+=1)='Account'
+	! optSequence$(sequence_name:=2)='Customer Name'
+	optSequence$(sequence_bar_code :=sequenceCount+=1)='Bar Code'
+	optSequence$(sequence_route    :=sequenceCount+=1)='Route'
+	optSequence$(sequence_grid     :=sequenceCount+=1)='Grid'
+	optSequence$(sequence_bulk_sort:=sequenceCount+=1)='Bulk Sort Code'
+	optSequence$(sequence_alphaSort:=sequenceCount+=1)='AlphaSort'
 
 	dim optFilter$(7)*50
-	optFilter$(1)="[All]"
-	optFilter$(2)="Customers billed last month"
-	optFilter$(3)="Customers not billed last billing"
-	optFilter$(4)="Range of Accounts"
-	optFilter$(5)="Individual accounts"
-	optFilter$(6)="Route"
-	optFilter$(7)="Active Customers"
+	optFilter$(1)='[All]'
+	optFilter$(2)='Customers billed last month'
+	optFilter$(3)='Customers not billed last billing'
+	optFilter$(4)='Range of Accounts'
+	optFilter$(5)='Individual accounts'
+	optFilter$(6)='Route'
+	optFilter$(7)='Active Customers'
 ! /r
 fnend
 include: ertn
