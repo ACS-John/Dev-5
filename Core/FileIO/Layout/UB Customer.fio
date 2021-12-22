@@ -107,7 +107,7 @@ s08rate           	,   Service 8 – Rate Code                                  		
 s02units          	,   Service 2 (Sewer) – Number of Units                     	,  N     3    ,               , ! SPos=1812 EPos=1814   aka=extra(14)
 s03units          	,   Service 3 (Electric or Lawn Meter) – Number of Units  	,  N     3    ,               , ! SPos=1815 EPos=1817   aka=extra(15)
 s04units          	,   Service 4 (Gas) – Number of Units                       	,  N     3    ,               , ! SPos=1818 EPos=1820   aka=extra(16)
-finalBilling      	,   Final Billing Code                                       	,  N     1    ,               , ! SPos=1821 EPos=1821  comboA(ignore,0 Active, 1 Inactive/Final Billed, 2 Inactive/Deposit Refunded, 3 Active/but Do Not Bill, 4 Finaled/but Not Billed)
+finalBilling      	,   Final Billing Code                                       	,  N     1    ,               , ! SPos=1821 comboA(x,0 Active, 1 Inactive/Final Billed, 2 Inactive/Deposit Refunded, 3 Active/but Do Not Bill, 4 Finaled/but Not Billed)
 s02averageUsage   	,   Service 2 (Sewer) – Average Usage                       	,  N     9    ,               , ! SPos=1822 EPos=1830   aka=extra(18)
 estimationDate    	,   Estimated Date                                           	,  N     9    ,               , ! SPos=1831 EPos=1839   aka=extra(19)
 unused09          	,   9                                                       		,  N     9    ,               , ! SPos=1840 EPos=1848   aka=extra(20)
