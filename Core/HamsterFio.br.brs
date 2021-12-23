@@ -52,6 +52,7 @@ def fn_hfLayoutRead(hfLayoutFilename$*256,mat hfDataAll$,mat hfLabel$,mat hfFiel
 			fnAddOneC(mat hfMask$,'') ! accumulated last
 			tmp=int(hfStorageLen(hfItem))
 			if uprc$(hfFieldType$(hfItem))='PD' then tmp=tmp*2-1
+			if uprc$(hfFieldType$(hfItem))='V' then hfFieldType$(hfItem)='C'
 			fnAddOneN(mat hfFieldLen,tmp)
 			! /r
 			if udim(mat hfItem$)=> 4 then ! r: If at least 4 columns than try to process the 5th(or 4th, if no 5th)
