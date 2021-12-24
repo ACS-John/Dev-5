@@ -55,10 +55,35 @@ def fn_confirmHard(chVerb$,whatYouAreVerbingGeneral$*32,whatYouAreVerbingSpecifi
 	resp$(1)=''
 	fnCmdSet(2)
 	ckey=fnAcs(mat resp$)
-	e$=uprc$(trim$(resp$(1)))
+	! e$=uprc$(trim$(resp$(1)))
 	if ckey<>5 and uprc$(trim$(resp$(1)))=typeWord$ then
 		returnN=1
 	end if
 	fn_confirmHard=returnN
 fnend
+
+def library fnConfirmOpen(filename$*256,filterDesc$*128; ___,returnN,lc)
+	if ~setup then fn_setup
+	fnTos
+	fnLbl(lc+=1,1,"**** WARNING ****",60,2)
+	lc+=1
+	fnLbl(lc+=1,1,'You choosen to open ',60,2)
+	fnLbl(lc+=1,1,filterDesc$,60,2)
+	fnLbl(lc+=1,1,'from',60,2)
+	fnLbl(lc+=1,1,filename$,60,2)
+	lc+=1
+	fnLbl(lc+=1,1,'This action is irreversable without technical support.',60,2)
+	fnLbl(lc+=1,1,'Any '&filterDesc$&' data currently open will be overwritten',60,2)
+	fnLbl(lc+=1,1,'and permantly lost if not previously saved elsewhere.',60,2)
+	lc+=1
+	fnLbl(lc+=1,11,'Enter OPEN to continue:',23,1)
+	fnTxt(lc,35,4)
+	coResp$(1)=''
+	fnCmdSet(2)
+	ckey=fnAcs(mat coResp$)
+	dim coResp$(1)*64
+	if ckey<>5 and uprc$(trim$(coResp$(1)))='OPEN' then returnN=1
+	fnConfirmOpen=returnN
+fnend
+
 include: fn_setup

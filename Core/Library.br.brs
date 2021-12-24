@@ -337,7 +337,6 @@ def library fnReIndex(fileioLayout$*255; indexNum)
 	library 'S:\Core\FileIO\fileio.br': fnReIndex
 	fnReIndex=fnReIndex(fileioLayout$, env$('Program_Caption'),indexNum) ! ,path$*255)
 fnend
-
 ! /r
 
 ! r: Confirm
@@ -345,12 +344,10 @@ def library fnConfirm(Verb$*64; textAddition$*2048,Confirm_Dont_Ask_Again_Key$*2
 	library 'S:\Core\Confirm.br': fnConfirm
 	fnConfirm=fnConfirm(Verb$, textAddition$,Confirm_Dont_Ask_Again_Key$)
 fnend
-
 def library fnConfirmHard(chVerb$; whatYouAreVerbingGeneral$*20,whatYouAreVerbingSpecific$*60)
 	library 'S:\Core\Confirm.br': fnConfirmHard
 	fnConfirmHard=fnConfirmHard(chVerb$, whatYouAreVerbingGeneral$,whatYouAreVerbingSpecific$)
 fnend
-
 def library fnConfirmDelete(What_You_Deleting$*60; Confirm_Dont_Ask_Again_Key$*28)
 	library 'S:\Core\Confirm.br': fnConfirmDelete
 	fnConfirmDelete=fnConfirmDelete(What_You_Deleting$,Confirm_Dont_Ask_Again_Key$)
@@ -358,6 +355,10 @@ fnend
 def library fnConfirmDeleteHard(whatYouAreDeletingGeneral$*32,whatYouAreDeletingSpecific$*60)
 	library 'S:\Core\Confirm.br': fnConfirmDeleteHard
 	fnConfirmDeleteHard=fnConfirmDeleteHard(whatYouAreDeletingGeneral$,whatYouAreDeletingSpecific$)
+fnend
+def library fnConfirmOpen(filename$*256,filterDesc$*128)
+	library 'S:\Core\Confirm.br': fnConfirmOpen
+	fnConfirmOpen=fnConfirmOpen(filename$, filterDesc$)
 fnend
 ! /r
 def library fnEncodeBase64(&content$)

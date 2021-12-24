@@ -265,10 +265,11 @@ def fn_openPartial
 	end if
 	OP_XIT: !
 fnend
+
 def fn_opMain(omFileOpen$*256)
 	! destination_company_number=val(env$('cno'))
 	fn_automatedSavePoint('before Open')
-	OpmAskWhichToOpen: ! r: screen
+	OpmAskWhichToOpen: !
 	fnTos
 	col1_width=24 : col2_pos=col1_width+2 : lc=rc=0
 	fnLbl(lc+=1,1,'Source File:',col1_width,1)
@@ -283,13 +284,16 @@ def fn_opMain(omFileOpen$*256)
 	! resp$(resp_cnoDestination:=rc+=1)=str$(destination_company_number)
 	fnCmdSet(2)
 	ckey=fnAcs(mat resp$)
-	! /r
+
 	dim selectedSource$*128
 	selectedSource$=resp$(resp_fileSource)
 	sourceWhich=srch(mat archiveList$,selectedSource$)
 	if ckey=5 or sourceWhich<=0 then
 		opScreenReturn=0
 	else
+
+		if ~fnConfirmOpen(omFileOpen$,selectedSource$) then goto OpmAskWhichToOpen
+
 		if selectedSource$='(All Companies)' then
 			fn_fileOpenEverything( omFileOpen$)
 			opScreenReturn=1
@@ -314,6 +318,7 @@ def fn_opMain(omFileOpen$*256)
 			else
 				omSourceFilter$='*.h'&str$(source_company_number)
 			end if
+
 			fn_extract_appropriate_files(tmpFileOpen$,omSourceFilter$,env$('temp')&'\acs\OpenPartial\')
 			if fn_analyze_7zip_compresslog(env$('temp')&'\acs\OpenPartial_Log.txt','Successfully Opened '&fnSystemName$&' company '&str$(destination_company_number)&' from ',omFileOpen$, 1) then
 				fnreg_write('Last Open Partial Date',date$('ccyy/mm/dd'))

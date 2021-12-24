@@ -8,15 +8,15 @@
 	dim tr(7),tr$*12,td$*30,tcde(10,2),dedcode(10),empname$*30
 	dim miscname$(10)*20
 	dim key$*12,k(30,8),camt(5)
-	dim d(2),cgl$(5)*12
+	dim xd(2),cgl$(5)*12
 	dim pgl(5,3)
-	dim pr(19)
+	dim xpr(19)
 ! dim contra(6)
 	dim miscgl$(10)*12
 	dim jv$(3)*8,vn$(4)*30
 	dim typeofentry_option$(6)*18,message$*100,glitem$(4)*30
 	dim glitem2$(7)*30,ml$(4)*100,text$*80,bankname$*40,k_list$(30)*12
-	dim pr(19)
+
 
 	fnTop(program$)
 	gltyp=7
@@ -74,7 +74,7 @@
 	cmask2$(7)=""
 
 	open #1: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,input
-	read #1,using 'Form POS 150,2*N 1,POS 298,15*PD 4,POS 382,N 2,POS 418,10*C 20,10*N 1,POS 668,10*C 12': mat d,mat pgl,jccode,mat miscname$,mat dedcode,mat miscgl$
+	read #1,using 'Form POS 150,2*N 1,POS 298,15*PD 4,POS 382,N 2,POS 418,10*C 20,10*N 1,POS 668,10*C 12': mat xd,mat pgl,jccode,mat miscname$,mat dedcode,mat miscgl$
 	close #1:
 ! /r
 	open #h_glmstr=fnH: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLIndex.h[cno],Shr",internal,outIn,keyed
@@ -752,7 +752,7 @@ PAYROLL: ! r:
 	resp$(3)=tr$
 	fnLbl(6,1,"Employee #:",mylen,right)
 	fncombof("PRmstr",6,mypos,35,"[Q]\GLmstr\PRmstr.h[cno]",1,4,5,30,"[Q]\GLmstr\PRIndex.h[cno]",1,0, "Choose from the list of employees.  Click Add Employee to add a new employee not shown on list.",0)
-	resp$(4)=str$(pr(1))
+	resp$(4)=str$(xpr(1))
 	fnLbl(7,1,"General Ledger #:",mylen,right)
 	fnqgl(7,mypos,0,2,1)
 	resp$(5)=fnrgl$(gl$)
@@ -765,38 +765,38 @@ PAYROLL: ! r:
 	fnFra(8,1,10,70,"Payroll Breakdown","Enter the check breakdown.")
 	fnLbl(1,1,"Total Wage:",mylen,right,0,1)
 	fnTxt(1,22,12,0,right,"10",0,"Total wage before any deductions (gross).",1)
-	resp$(7)=str$(pr(2))
+	resp$(7)=str$(xpr(2))
 	fnLbl(2,1,"Federal W/H:",mylen,right,0,1)
 	fnTxt(2,22,12,0,right,"10",0,"Total Federal withholdings entered as a positive figure).",1)
-	resp$(8)=str$(pr(3))
+	resp$(8)=str$(xpr(3))
 	fnLbl(3,1,"Fica W/H:",mylen,right,0,1)
 	fnTxt(3,22,12,0,right,"10",0,"Total Fica withholdings entered as a positive figure).",1)
-	resp$(9)=str$(pr(4))
+	resp$(9)=str$(xpr(4))
 	fnLbl(4,1,"State W/H:",mylen,right,0,1)
 	fnTxt(4,22,12,0,right,"10",0,"Total state withholdings entered as a positive figure).",1)
-	resp$(10)=str$(pr(5))
+	resp$(10)=str$(xpr(5))
 	fnLbl(5,1,"Local W/H:",mylen,right,0,1)
 	fnTxt(5,22,12,0,right,"10",0,"Total local withholdings entered as a positive figure).",1)
-	resp$(11)=str$(pr(6))
+	resp$(11)=str$(xpr(6))
 	for j=1 to 5
 		fnLbl(j+5,1,trim$(miscname$(j))&":",mylen,right,0,1)
 		fnTxt(j+5,22,12,0,right,"10",0,"Total "&trim$(miscname$(j))&" (enter as a positive figure).",1)
-		resp$(j+11)=str$(pr(j+6))
+		resp$(j+11)=str$(xpr(j+6))
 	next j
 	for j=6 to 10
 		fnLbl(j-5,30,trim$(miscname$(j))&":",mylen,right,0,1)
 		fnTxt(j-5,51,12,0,right,"10",0,"Total "&trim$(miscname$(j))&" (enter as a positive figure).",1)
-		resp$(j+11)=str$(pr(j+6))
+		resp$(j+11)=str$(xpr(j+6))
 	next j
 	fnLbl(6,30,"Tips:",mylen,right,0,1)
 	fnTxt(6,51,12,0,right,"10",0,"Total tips entered as a positive figure).",1)
-	resp$(22)=str$(pr(17))
+	resp$(22)=str$(xpr(17))
 	fnLbl(7,30,"Weeks Worked:",mylen,right,0,1)
 	fnTxt(7,51,12,0,right,"30",0,"Total weeks worked during pay period.",1)
-	resp$(23)=str$(pr(18))
+	resp$(23)=str$(xpr(18))
 	fnLbl(8,30,"Eic:",mylen,right,0,1)
 	fnTxt(8,51,12,0,right,"10",0,"Total Earned Income Credit applied.",1)
-	resp$(24)=str$(pr(19))
+	resp$(24)=str$(xpr(19))
 	if sel=1 or sel=6 then let fnButton(6,53,"E&xtract",15,"Extracts general ledger numbers from payee records",1,8)
 	if disable_payee=1 and (sel=1 or sel=6) then payee_button$ ="Enable &Payee" else payee_button$ ="Disable &Payee"
 	if sel=1 or sel=6 then let fnButton(6,64,payee_button$,16,"Allows you to disable or enable the payee field.",1,12)
@@ -818,7 +818,7 @@ PAYROLL: ! r:
 		goto SCREEN_1
 	else if ckey=6 then
 		transactionamt=0
-		mat pr=(0)
+		mat xpr=(0)
 		tr$=""
 		vn$=""
 		goto SCREEN_1
@@ -828,25 +828,25 @@ PAYROLL: ! r:
 	tr(4)=val(resp$(1)) ! date
 	tr(5)=transactionamt=val(resp$(2)) ! amount
 	tr$=resp$(3) ! ref #
-	pr(1)=val(resp$(4)(1:4)): vn$=resp$(4)(1:4) ! employee number
+	xpr(1)=val(resp$(4)(1:4)): vn$=resp$(4)(1:4) ! employee number
 	td$=resp$(4)(5:30) ! transaction description = employee name
 	empname$=td$
 	gl$=fnagl$(resp$(5))
 	for j=2 to 19
-		pr(j)=val(resp$(j+5))
+		xpr(j)=val(resp$(j+5))
 	next j
 	wh=0
 	for j=1 to 19
-		if j>2 and j<7 then wh=wh+pr(j)
+		if j>2 and j<7 then wh=wh+xpr(j)
 		if j<7 or j>16 then goto L7300
-		if dedcode(j-6)=2 then wh=wh-pr(j) else wh=wh+pr(j)
-L7300: if j=17 then wh=wh+pr(j)
-		if j=19 then wh=wh-pr(j)
+		if dedcode(j-6)=2 then wh=wh-xpr(j) else wh=wh+xpr(j)
+L7300: if j=17 then wh=wh+xpr(j)
+		if j=19 then wh=wh-xpr(j)
 	next j
-	if tr(5)=pr(2)-wh then goto WRITE_PAYROLL_TRANS
+	if tr(5)=xpr(2)-wh then goto WRITE_PAYROLL_TRANS
 	mat ml$(3)
 	ml$(1)="Total wages less deductions do not equal the net check!"
-	ml$(2)=" Net entered:" &ltrm$(cnvrt$("PIC($$$$,$$$.##CR)",transactionamt))&"   Calculated net: "&ltrm$(cnvrt$("PIC($$$$,$$$.##CR)",pr(2)-wh))
+	ml$(2)=" Net entered:" &ltrm$(cnvrt$("PIC($$$$,$$$.##CR)",transactionamt))&"   Calculated net: "&ltrm$(cnvrt$("PIC($$$$,$$$.##CR)",xpr(2)-wh))
 	ml$(3)="Click ok to return to the entry screen."
 	fnmsgbox(mat ml$,resp$,'',49)
 	goto PAYROLL ! /r
@@ -866,24 +866,24 @@ WRITE_PAYROLL_TRANS: ! r:
 			td$=miscname$(j-6) ! miscellaneous deductions
 		end if
 		if j>2 and j<7 then
-			pr(j)=-pr(j) ! reverse sign on fica, etc
+			xpr(j)=-xpr(j) ! reverse sign on fica, etc
 		else if j>6 and j<17 and dedcode(j-6)=1 then
-			pr(j)=-pr(j)
+			xpr(j)=-xpr(j)
 !       ! turn sign around on any of ten deductions coded as additions
 		else if j=17 then
-			pr(j)=-pr(j)
+			xpr(j)=-xpr(j)
 			td$="Tips"
 			allocgl$=gl$ ! tips
 		else if j=19 then
-			pr(j)=pr(j)
+			xpr(j)=xpr(j)
 			td$="Eic" ! eic as positive
 		end if
-		if pr(j)<>0 then
-			write #h_gl_work,using F_2A,rec=lrec(h_gl_work)+1: allocgl$,tr(4),pr(j),tr(6),tr(7),tr$,td$,vn$,mat jv$,key$ ! gross wage
+		if xpr(j)<>0 then
+			write #h_gl_work,using F_2A,rec=lrec(h_gl_work)+1: allocgl$,tr(4),xpr(j),tr(6),tr(7),tr$,td$,vn$,mat jv$,key$ ! gross wage
 		end if
 	next j
 	transactionamt=0
-	mat pr=(0)
+	mat xpr=(0)
 	vn$=""
 	fn_increment_tr
 	goto MAIN ! /r
