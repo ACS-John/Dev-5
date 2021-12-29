@@ -133,7 +133,7 @@ PrintBill_Basic: ! r: set prefrences for clients
 		message1_line_count=3
 		include_zero_bal=include_credit_bal=1
 		enable_BulkSort=1
-	else if env$('client')='Billings' or env$('client')='Alien Electric' then
+	else if env$('client')='Billings' then
 		message1_line_count=3
 		include_zero_bal=include_credit_bal=1
 		enable_BulkSort=3 ! 1   12/14/2021 - sort by alphasort+route+sequence
@@ -194,7 +194,8 @@ PrintBill_Basic: ! r: set prefrences for clients
 		poundBeforeAccount$='#' ! only for diff - making sure things match - then take it back out. it's lame
 		usPostagePermitNumber=1
 		enable_BulkSort=1
-
+	else if env$('client')='Alien Electric' then
+		usPostagePermitNumber=555
 	end if
 	! /r
 !   enable_cassSort=1
@@ -473,7 +474,7 @@ MainLoop: ! r: main loop
 		! fn_print_bill_Exeter(z$,mat mg$,serviceFromMmddYy,serviceToMmddYy,d4)
 	else if env$('client')='Edinburg' then
 		fn_print_bill_edinburg(z$,mat mg$,d1,serviceFromOverride,serviceToOverride,d4) ! ,serviceTo,penaltyDueDate)  ! ~and)
-	else if env$('client')='Billings' or env$('client')='Diamond'  or env$('client')='Alien Electric' then
+	else if env$('client')='Billings' or env$('client')='Diamond' then
 		fn_print_bill_billings(mat mg$,mat g,mat b,bal,mat penalty$,d1,serviceFromMmddYy,serviceToMmddYy,d4,mat pe$,final$,z$) !
 	else if env$('client')='Choctaw' then
 		fn_print_bill_choctaw(z$,mat g,mat b,mat penalty$,d1,serviceFromMmddYy,serviceToMmddYy,d4,mat e$,final)
@@ -989,6 +990,7 @@ def fn_print_bill_campbell(z$,mat mg$,serviceFrom,serviceTo)
 	pr #255: "" ! line 16
 	pr #255: "" ! line 17
 	pr #255: "" ! line 18
+	!if count=3 then pr #255: "" ! skip down a line on the third one only
 	pr #255,using 'Form pos 1,pic(zz/zz/zz),Pos 9,N 8.2,N 8.2,X 2,PIC(ZZ/ZZ/ZZ),POS 42,3*N 12.2,N 12.2': serviceTo,g(12),g(11),serviceTo,g(12),g(11),g(12),g(11) ! line 19
 	if (count+1)/3=int((count+1)/3) then goto PBCAMPBEL_L1250
 	if blankafter<>0 then
