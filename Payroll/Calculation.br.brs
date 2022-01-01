@@ -547,7 +547,7 @@ def fn_federalTax(taxYear,fedpct,totalGrossPay,ded,stdWhFed,fedExempt,payPeriods
 		! fjs=federal  joint              standard     fjc=federal  joint              W-4 Step 2 checked
 		! fss=federal  single             standard     fsc=federal  single             W-4 Step 2 checked
 		! fhs=federal  head of household  standard     fhc=federal  head of household  W-4 Step 2 checked
-		if taxYear=2021 then
+		if taxYear=2021 or taxYear=2022 then 
 			fed_annual_wh_allowance=0
 			! r: fjs=federal  joint              standard
 			dim fjs(8,3)
