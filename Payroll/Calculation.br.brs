@@ -13,20 +13,75 @@
 ! stdWhFed - Standard Federal Withholding
 fn_setup
 fnTop(program$)
-gosub Screen1
-if ckey=5 then goto Xit
+! r: screen1
+	fnGetPayrollDates(beg_date,end_date)
+	d1=fnPayPeriodEndingDate
+	dim d1$*20
+	d1$=date$('Month DD, CCYY')
 
-dat$=lpad$(str$(d1),6)
-mo1=val(dat$(5:6)) : da=val(dat$(7:8)) : yr=val(dat$(3:4))
-ppd=round(yr*365+int(yr/4)+motab(mo1)+da,2)
-d1=mo1*10000+da*100+yr
+	fnTos
+	rc=lc=0: mylen=42: mypos=45
+	lc+=1
+	fnLbl(lc+=1,1,'Pay Period Ending Date:',mylen,1)
+	fnTxt(lc   ,mypos,10,0,1,'1003',0,'Enter the date which you want used for your earnings records. ')
+	resp$(resp_d1N=rc+=1)=str$(d1)
+	lc+=1
+	fnLbl(lc+=1,1,'Report Heading Date:',mylen,1)
+	fnTxt(lc   ,mypos,20,0,0,' ',1,'the date for use in report headings') ! disabled on 1/12/20, doesn't seem like something people should be changing.
+	resp$(resp_d1S=rc+=1)=d1$
+	lc+=1
+	fnChk(lc+=1,46,'Accrue Vacation and Sick Leave this period:',1)
+	resp$(rc+=1)='False'
+	lc+=1
+	fnChk(lc+=1,46,'Skip Federal Withholdings:',1)  :	resp$(resp_skipWh1=rc+=1)='False'
+	fnChk(lc+=1,46,'Skip State Withholdings:',1)    :	resp$(resp_skipWh2=rc+=1)='False'
+	fnChk(lc+=1,46,'Skip Fica Withholdings:',1)     :	resp$(resp_skipWh3=rc+=1)='False'
+	fnChk(lc+=1,46,'Skip Standard Withholdings:',1) :	resp$(resp_skipWh4=rc+=1)='False'
+	lc+=1
+	fnLbl(lc+=1,1,'Standard Federal % Override:',mylen,1,0)
+	fnTxt(lc   ,mypos,4,0,1,'32',0,'Normally zero. The government allows you to use a standard percent on bonuses, etc. See Circular E for allowable %.')
+	resp$(resp_stdFedOverride=rc+=1)=''
+
+	fnCmdKey('Calculate',1,1,0,'Proceed with calculations.')
+	fnCmdKey('Cancel',5,0,1,'Returns to menu without calculating')
+	ckey=fnAcs(mat resp$)
+	if ckey=5 then 
+		goto Xit
+	else
+		prd=d1=val(resp$(resp_d1N))
+		d1$=resp$(resp_d1S)
+		if resp$(3)(1:1)='T' then accrueVacaAndSick=1 else accrueVacaAndSick=0
+
+		taxYear=val(str$(d1)(1:4)) ! =2019
+
+		fnPayPeriodEndingDate(d1)
+		fnSetPayrollDatesForYear(taxYear)
+		fnGetPayrollDates(beg_date,end_date)
+
+		dim enableSkipWithholdingN(4)
+		mat enableSkipWithholdingN=(0)
+
+		if resp$(resp_skipWh1)(1:1)='T' then enableSkipWithholdingN(esw_federal)=1
+		if resp$(resp_skipWh2)(1:1)='T' then enableSkipWithholdingN(esw_state)=1
+		if resp$(resp_skipWh3)(1:1)='T' then enableSkipWithholdingN(esw_fica)=1
+		if resp$(resp_skipWh4)(1:1)='T' then enableSkipWithholdingN(esw_standard)=1
+		fedpct=val(resp$(resp_stdFedOverride)) ! federal wh percent
+		dim dat$*20
+		dat$=lpad$(str$(d1),6)
+		mo1=val(dat$(5:6)) : da=val(dat$(7:8)) : yr=val(dat$(3:4))
+		ppd=round(yr*365+int(yr/4)+motab(mo1)+da,2)
+		d1=mo1*10000+da*100+yr
+	end if
+! /r
 fnAutomatedSavePoint('before')
 fn_setupOpenFiles
 open #hRpWork=fnH: 'Name=[Q]\PRmstr\rpwork[unique_computer_id].h[cno],KFName=[Q]\PRmstr\rpwork[unique_computer_id]Idx.h[cno]',internal,outIn,keyed  ! was 3
-F_RPWORK: form pos 1,c 8,n 3,5*pd 4.2,25*pd 5.2,2*pd 4.2
+F_rpWork: form pos 1,c 8,n 3,5*pd 4.2,25*pd 5.2,2*pd 4.2
 goto ReadRpWork
 ReadRpWork: ! r:  read rpwork, read employee, call calc deduction etc  basically beginning of main loop
-	read #hRpWork,using F_RPWORK: x$,dep,mat _inp,gpd,mat hr eof Finis
+	dim _inp(29)
+	dim x$*8
+	read #hRpWork,using F_rpWork: x$,dep,mat _inp,gpd,mat hr eof Finis
 	! r: force test or check an entry from rpWork
 	! fnpause
 	! x$    ='      27'
@@ -42,6 +97,7 @@ ReadRpWork: ! r:  read rpwork, read employee, call calc deduction etc  basically
 	deptKey$=cnvrt$('pic(zzzzzzz#)',val(x$))&cnvrt$('pic(zz#)',dep)
 	eno=val(x$)
 	if eno=0 then goto ReadRpWork
+	dim n$*8
 	if n$<>x$ then
 		twc=totalWagesYtd=tfy=cafy=eicytd=deducy=0
 		if rtrm$(n$)<>'' then gosub ReallocateStateByDept
@@ -83,13 +139,16 @@ ReadRpWork: ! r:  read rpwork, read employee, call calc deduction etc  basically
 			goto ReadRpWork
 		end if
 		if ~enableSkipWithholdingN(esw_federal) then
-			fed_wh=fn_federalTax(taxYear,fedpct,totalGrossPay,ded,stdWhFed,fedExempt,payPeriodsPerYear,marital,w4Year$,w4Step3,w4step4a,w4step4b,w4step4c)
+			fed_wh=fn_federalTax(taxYear,fedpct,totalGrossPay,ded,stdWhFed,fedExempt,payPeriodsPerYear,marital,w4Year$,w4step2,w4Step3,w4step4a,w4step4b,w4step4c)
 		end if
 		! cafeteria plan - maybe???
 		totalWagesYtd=0
+		dim stuc(10)
 		mat stuc=(0)
+		dim tcd(3)
 		read #hDepartment,using 'form pos 48,n 2',key=deptKey$: tcd(1) ! get state code
 		dim ytdTotal(32)
+		dim caf(20)
 		fn_determineEarnings(hPrChecks,eno, dep,beg_date,end_date,mat ytdTotal,ytdFICA,ytdMedicare,ytdEic,ytdWages,mat caf)
 		for j=1 to 20
 			if newdedfed(j)=2 and newdedcode(j)=newdedcode_Deduct then
@@ -104,6 +163,8 @@ ReadRpWork: ! r:  read rpwork, read employee, call calc deduction etc  basically
 	!   Where Federal Withholdings are divided out into each department.
 	! gpd = gross pay per department
 	! pog = percent of gross
+	dim tdt(4)
+	dim tdet(17)
 	read #hDepartment,using 'Form POS 1,N 8,n 3,c 12,4*N 6,3*N 2,pd 4.2,23*PD 4.2',key=deptKey$: teno,tdn,gl$,mat tdt,mat tcd,tli,mat tdet ! Nokey X
 	if totalGrossPay=0 then pog=1: goto L1620 ! Allow checks to calculate with no gross pay
 	if totalGrossPay=gpd then pog=1 : goto L1620
@@ -136,7 +197,7 @@ ReadRpWork: ! r:  read rpwork, read employee, call calc deduction etc  basically
 		end if
 		if newcalcode(j)=2 then _inp(j+9)=round(_inp(j+9)*gpd/100,2)
 		! L1700: !
-		if enableSkipWithholdingN(4) then _inp(j+9)=0
+		if enableSkipWithholdingN(esw_standard) then _inp(j+9)=0
 		L1710: !
 	next j
 	hrsSick-=_inp(3) : hrsVaca-=_inp(4)
@@ -169,18 +230,18 @@ ReadRpWork: ! r:  read rpwork, read employee, call calc deduction etc  basically
 	end if
 	NO_EXCESS_TIPS: !
 	gosub FicaUnEmp
-goto FEDWH_DEPT ! /r
+goto FedWh_Dept ! /r
 EmployeeNotFound: ! r:
 	n$=' '
 	mat ml$(1)
 	ml$(1)='Employee Number '&x$&' is not on file. No check calculated.'
 	fnmsgbox(mat ml$,resp$,'',0)
 goto ReadRpWork ! /r
-FEDWH_DEPT: ! r: Fed WH for Dept ! Federal Withholding for Department
+FedWh_Dept: ! r: Fed WH for Dept ! Federal Withholding for Department
 	if showDetails then fnStatus('federal  withholding for department calculating')
 	f4=round(fed_wh*pog,2)
 	stwh(tcd(1),1)+=gpd : eic4=0 ! Calculate EIC
-	if eicCode then
+	if eicCode then ! r: eid
 		g2=totalGrossPay
 		eic1=round(8970/eicCode/payPeriodsPerYear,2)                ! this is one of the lines that change every year (formerly line 1800)
 		eic2=round(16450/eicCode/payPeriodsPerYear,2)               ! this is one of the lines that change every year (formerly line 1810)
@@ -190,7 +251,8 @@ FEDWH_DEPT: ! r: Fed WH for Dept ! Federal Withholding for Department
 		if g2>eic2 then eic4=eic3-(totalGrossPay-eic2)*.09588
 		if ytdTotal(25)+eic4<0 then eic4=-ytdTotal(25)
 		eic4=round(eic4*pog,2)
-	end if
+	end if ! /r
+	dim tcp(32)
 	tcp(1)=f4 : tcp(2)=sswh : tcp(3)=mcwh : tcp(4)=tcp4
 	for j=5 to 24
 		tcp(j)=_inp(j+5)
@@ -217,6 +279,7 @@ FEDWH_DEPT: ! r: Fed WH for Dept ! Federal Withholding for Department
 	! if env$('client')='Washington Parrish' then tcp(32)=tcp(32)+tcp(30) ! add tips which is really an other compensation back to net
 	! the following commented lines may have to be put back in and the tdet array extended to hold them  ???  kj
 	! SS_WAGE: !
+	dim tdc(10)
 	if ficaCode=9 then
 		tdc(7)=0
 	else
@@ -272,61 +335,6 @@ FEDWH_DEPT: ! r: Fed WH for Dept ! Federal Withholding for Department
 goto ReadRpWork
 ! /r
 
-Screen1: ! r:
-	fnGetPayrollDates(beg_date,end_date)
-	d1=fnPayPeriodEndingDate
-	dim d1$*20
-	d1$=date$('Month DD, CCYY')
-
-	fnTos
-	rc=lc=0: mylen=42: mypos=45
-	lc+=1
-	fnLbl(lc+=1,1,'Pay Period Ending Date:',mylen,1)
-	fnTxt(lc   ,mypos,10,0,1,'1003',0,'Enter the date which you want used for your earnings records. ')
-	resp$(resp_d1N=rc+=1)=str$(d1)
-	lc+=1
-	fnLbl(lc+=1,1,'Report Heading Date:',mylen,1)
-	fnTxt(lc   ,mypos,20,0,0,' ',1,'the date for use in report headings') ! disabled on 1/12/20, doesn't seem like something people should be changing.
-	resp$(resp_d1S=rc+=1)=d1$
-	lc+=1
-	fnChk(lc+=1,46,'Accrue Vacation and Sick Leave this period:',1)
-	resp$(rc+=1)='False'
-	lc+=1
-	fnChk(lc+=1,46,'Skip Federal Withholdings:',1)  :	resp$(resp_skipWh1=rc+=1)='False'
-	fnChk(lc+=1,46,'Skip State Withholdings:',1)    :	resp$(resp_skipWh2=rc+=1)='False'
-	fnChk(lc+=1,46,'Skip Fica Withholdings:',1)     :	resp$(resp_skipWh3=rc+=1)='False'
-	fnChk(lc+=1,46,'Skip Standard Withholdings:',1) :	resp$(resp_skipWh4=rc+=1)='False'
-	lc+=1
-	fnLbl(lc+=1,1,'Standard Federal % Override:',mylen,1,0)
-	fnTxt(lc   ,mypos,4,0,1,'32',0,'Normally zero. The government allows you to use a standard percent on bonuses, etc. See Circular E for allowable %.')
-	resp$(resp_stdFedOverride=rc+=1)=''
-
-	fnCmdKey('Calculate',1,1,0,'Proceed with calculations.')
-	fnCmdKey('Cancel',5,0,1,'Returns to menu without calculating')
-	ckey=fnAcs(mat resp$)
-	if ckey<>5 then
-		prd=d1=val(resp$(resp_d1N))
-		d1$=resp$(resp_d1S)
-		if resp$(3)(1:1)='T' then accrueVacaAndSick=1 else accrueVacaAndSick=0
-
-		taxYear=val(str$(d1)(1:4)) ! =2019
-
-		fnPayPeriodEndingDate(d1)
-		fnSetPayrollDatesForYear(taxYear)
-		fnGetPayrollDates(beg_date,end_date)
-
-		dim enableSkipWithholdingN(4)
-		mat enableSkipWithholdingN=(0)
-
-		if resp$(resp_skipWh1)(1:1)='T' then enableSkipWithholdingN(esw_federal)=1
-		if resp$(resp_skipWh2)(1:1)='T' then enableSkipWithholdingN(esw_state)=1
-		if resp$(resp_skipWh3)(1:1)='T' then enableSkipWithholdingN(esw_fica)=1
-		if resp$(resp_skipWh4)(1:1)='T' then enableSkipWithholdingN(4)=1
-		fedpct=val(resp$(resp_stdFedOverride)) ! federal wh percent
-
-	end if
-return  ! /r
-
 Finis: ! r:
 	if rtrm$(n$)<>'' then gosub ReallocateStateByDept
 	fn_setupCloseFiles
@@ -371,94 +379,125 @@ CalculateAllDeductionsAllDept: ! r:  returns totalGrossPay,ded,t3 (and probably 
 			L3090: !
 		next j
 		totalGrossPay+=gpd
-		read #hRpWork,using F_RPWORK: newx$,newdep,mat _inp,gpd,mat hr eof L3150
+		dim newx$*8
+		read #hRpWork,using F_rpWork: newx$,newdep,mat _inp,gpd,mat hr eof L3150
 		if env$('client')='Payroll Done Right' then gosub West_Acc_WorkmansComp ! env$('client')='West Accounting' or
 	loop while newx$=x$
 	L3150: !
 	workkey$=cnvrt$('pic(zzzzzzz#)',eno)&cnvrt$('pic(zz#)',dep)
 	restore #hRpWork,key>=workkey$:
-	read #hRpWork,using F_RPWORK: x$,dep,mat _inp,gpd,mat hr eof Finis
+	read #hRpWork,using F_rpWork: x$,dep,mat _inp,gpd,mat hr eof Finis
 	if env$('client')='Payroll Done Right' then gosub West_Acc_WorkmansComp !  11/14/2017 - env$('client')='Payroll Done Right'  Does not want any special processing for deduction 8        ! env$('client')='West Accounting' or
 	! pr 'B right after read rpwork  _inp(6)=';_inp(6) : pause
 return  ! /r
-def fn_federalTax(taxYear,fedpct,totalGrossPay,ded,stdWhFed,fedExempt,payPeriodsPerYear,marital,w4Year$,w4Step3,w4step4a,w4step4b,w4step4c; ___,returnN,t2,j2,previousBreak,withholdingPercentage,atLeast,baseAmt)
+def fn_federalTax(taxYear,fedpct,totalGrossPay,ded,stdWhFed,fedExempt,payPeriodsPerYear, _
+marital,w4Year$,w4step2,w4Step3,w4step4a,w4step4b,w4step4c; ___,returnN,t2,j2,previousBreak, _
+withholdingPercentage,atLeast,baseAmt,estPayPeriodNetPay,estPayPeriodNetPay,estAnnualNetPay)
 	! https://www.irs.gov/pub/irs-pdf/p15t.pdf
 	! https://www.irs.gov/pub/irs-pdf/fw4.pdf
 	! https://www.irs.gov/pub/irs-pdf/p15.pdf
 
 	! retains: setupFederalTables,fed_annual_wh_allowance,mat fjs,mat fss,mat fhs,mat fjc,mat fsc,mat fhc,mat ft
 	! ded = federal deduction addition for all departments (deduct before calculating federal taxes)
-	if ~setupFederalTables then
+	if ~setupFederalTables or taxYear<=2019 then
 		setupFederalTables=1
-		! r: (2017-2019) Federal - SINGLE person (mat ft(1-8,1-3))
-		dim ft(8,6)
-		if taxYear<=2017 then !  (includes head of household)
-			fed_annual_wh_allowance=4050 ! (was 4000)   Withholding allowance. The 2016 amount for one withholding allowance on an annual basis is $4,050
-			! Page 46 from   https://www.irs.gov/pub/irs-pdf/p15.pdf
-			ft(1,1)=     0 : ft(1,2)=     0    : ft(1,3)=0
-			ft(2,1)=  2300 : ft(2,2)=     0    : ft(2,3)=0.1
-			ft(3,1)= 11625 : ft(3,2)=   932.5  : ft(3,3)=0.15
-			ft(4,1)= 40250 : ft(4,2)=  5226.25 : ft(4,3)=0.25
-			ft(5,1)= 94200 : ft(5,2)= 18713.75 : ft(5,3)=0.28
-			ft(6,1)=193950 : ft(6,2)= 46643.75 : ft(6,3)=0.33
-			ft(7,1)=419000 : ft(7,2)=120910.25 : ft(7,3)=0.35
-			ft(8,1)=420700 : ft(8,2)=121505.25 : ft(8,3)=0.396
-		else if taxYear=2018 then !  (includes head of household)
-			fed_annual_wh_allowance=4150
-			ft(1,1)=     0 : ft(1,2)=     0    : ft(1,3)=0
-			ft(2,1)=  3700 : ft(2,2)=     0    : ft(2,3)=0.1
-			ft(3,1)= 13225 : ft(3,2)=   952.5  : ft(3,3)=0.12
-			ft(4,1)= 42400 : ft(4,2)=  4453.5  : ft(4,3)=0.22
-			ft(5,1)= 86200 : ft(5,2)= 14089.5  : ft(5,3)=0.24
-			ft(6,1)=161200 : ft(6,2)= 32089.5  : ft(6,3)=0.32
-			ft(7,1)=203700 : ft(7,2)= 45689.5  : ft(7,3)=0.35
-			ft(8,1)=503700 : ft(8,2)=150689.5  : ft(8,3)=0.37
-		else if taxYear=2019 then !  (includes head of household)
-			fed_annual_wh_allowance=4200
-			ft(1,1)=     0 : ft(1,2)=     0    : ft(1,3)=0
-			ft(2,1)=  3800 : ft(2,2)=     0    : ft(2,3)=0.1
-			ft(3,1)= 13500 : ft(3,2)=   970    : ft(3,3)=0.12
-			ft(4,1)= 43275 : ft(4,2)=  4543    : ft(4,3)=0.22
-			ft(5,1)= 88000 : ft(5,2)= 14382.5  : ft(5,3)=0.24
-			ft(6,1)=164525 : ft(6,2)= 32748.5  : ft(6,3)=0.32
-			ft(7,1)=207900 : ft(7,2)= 46628.5  : ft(7,3)=0.35
-			ft(8,1)=514100 : ft(8,2)=153798.5  : ft(8,3)=0.37
-		end if
-		! /r
-		! r: (2017-2019) Federal - MARRIED person (mat ft(1-8,4,6))
-		if taxYear<=2017 then
-			! Page 46 from   https://www.irs.gov/pub/irs-pdf/p15.pdf
-			fed_annual_wh_allowance=4050
-			ft(1,4)=     0  : ft(1,5)=     0    : ft(1,6)=0
-			ft(2,4)=  8650  : ft(2,5)=     0    : ft(2,6)=0.1
-			ft(3,4)= 27300  : ft(3,5)=  1865    : ft(3,6)=0.15
-			ft(4,4)= 84550  : ft(4,5)= 10452.5  : ft(4,6)=0.25
-			ft(5,4)=161750  : ft(5,5)= 29752.5  : ft(5,6)=0.28
-			ft(6,4)=242000  : ft(6,5)= 52222.5  : ft(6,6)=0.33
-			ft(7,4)=425350  : ft(7,5)=112728    : ft(7,6)=0.35
-			ft(8,4)=479350  : ft(8,5)=131628    : ft(8,6)=0.396
-		else if taxYear=2018 then
-			fed_annual_wh_allowance=4150
-			ft(1,4)=     0  : ft(1,5)=     0    : ft(1,6)=0
-			ft(2,4)= 11550  : ft(2,5)=     0    : ft(2,6)=0.1
-			ft(3,4)= 30600  : ft(3,5)=  1905    : ft(3,6)=0.12
-			ft(4,4)= 88950  : ft(4,5)=  8907    : ft(4,6)=0.22
-			ft(5,4)=176550  : ft(5,5)= 28179    : ft(5,6)=0.24
-			ft(6,4)=326550  : ft(6,5)= 64179    : ft(6,6)=0.32
-			ft(7,4)=411550  : ft(7,5)= 91379    : ft(7,6)=0.35
-			ft(8,4)=611550  : ft(8,5)=161379    : ft(8,6)=0.37
-		else if taxYear=2019 then
-			fed_annual_wh_allowance=4200
-			ft(1,4)=     0  : ft(1,5)=     0    : ft(1,6)=0
-			ft(2,4)= 11800  : ft(2,5)=     0    : ft(2,6)=0.1
-			ft(3,4)= 31200  : ft(3,5)=  1940    : ft(3,6)=0.12
-			ft(4,4)= 90750  : ft(4,5)=  9086    : ft(4,6)=0.22
-			ft(5,4)=180200  : ft(5,5)= 28765    : ft(5,6)=0.24
-			ft(6,4)=333250  : ft(6,5)= 65497    : ft(6,6)=0.32
-			ft(7,4)=420000  : ft(7,5)= 93257    : ft(7,6)=0.35
-			ft(8,4)=624150  : ft(8,5)=164709.5  : ft(8,6)=0.37
-		end if
-		! /r
+
+		if taxYear<=2017 then ! r: 
+			dim ft(8,6)
+			if marital=1 or marital=3 or marital=4 then
+				! 1 - Married - filing jointly
+				! 3 - Married - filing joint return - only one working
+				! 4 - Married - filing joint - both working
+				fed_annual_wh_allowance=4050 ! (was 4000)   Withholding allowance. The 2016 amount for one withholding allowance on an annual basis is $4,050
+				! Page 46 from   https://www.irs.gov/pub/irs-pdf/p15.pdf
+				ft(1,1)=     0 : ft(1,2)=     0    : ft(1,3)=0
+				ft(2,1)=  2300 : ft(2,2)=     0    : ft(2,3)=0.1
+				ft(3,1)= 11625 : ft(3,2)=   932.5  : ft(3,3)=0.15
+				ft(4,1)= 40250 : ft(4,2)=  5226.25 : ft(4,3)=0.25
+				ft(5,1)= 94200 : ft(5,2)= 18713.75 : ft(5,3)=0.28
+				ft(6,1)=193950 : ft(6,2)= 46643.75 : ft(6,3)=0.33
+				ft(7,1)=419000 : ft(7,2)=120910.25 : ft(7,3)=0.35
+				ft(8,1)=420700 : ft(8,2)=121505.25 : ft(8,3)=0.396
+			else if marital=0 or marital=5 or marital=2 then
+				! 0 - Single
+				! 5 - Married - filing seperate - both working
+				! 2 - Single - Head of Household
+				! Page 46 from   https://www.irs.gov/pub/irs-pdf/p15.pdf
+				fed_annual_wh_allowance=4050
+				ft(1,4)=     0  : ft(1,5)=     0    : ft(1,6)=0
+				ft(2,4)=  8650  : ft(2,5)=     0    : ft(2,6)=0.1
+				ft(3,4)= 27300  : ft(3,5)=  1865    : ft(3,6)=0.15
+				ft(4,4)= 84550  : ft(4,5)= 10452.5  : ft(4,6)=0.25
+				ft(5,4)=161750  : ft(5,5)= 29752.5  : ft(5,6)=0.28
+				ft(6,4)=242000  : ft(6,5)= 52222.5  : ft(6,6)=0.33
+				ft(7,4)=425350  : ft(7,5)=112728    : ft(7,6)=0.35
+				ft(8,4)=479350  : ft(8,5)=131628    : ft(8,6)=0.396
+			else
+				pr bell;'invalid marital=';marital : pause
+			end if
+		end if ! /r 
+		if taxYear=2018 then ! r: 
+			if marital=1 or marital=3 or marital=4 then
+				! 1 - Married - filing jointly
+				! 3 - Married - filing joint return - only one working
+				! 4 - Married - filing joint - both working
+				fed_annual_wh_allowance=4150
+				ft(1,1)=     0 : ft(1,2)=     0    : ft(1,3)=0
+				ft(2,1)=  3700 : ft(2,2)=     0    : ft(2,3)=0.1
+				ft(3,1)= 13225 : ft(3,2)=   952.5  : ft(3,3)=0.12
+				ft(4,1)= 42400 : ft(4,2)=  4453.5  : ft(4,3)=0.22
+				ft(5,1)= 86200 : ft(5,2)= 14089.5  : ft(5,3)=0.24
+				ft(6,1)=161200 : ft(6,2)= 32089.5  : ft(6,3)=0.32
+				ft(7,1)=203700 : ft(7,2)= 45689.5  : ft(7,3)=0.35
+				ft(8,1)=503700 : ft(8,2)=150689.5  : ft(8,3)=0.37
+			else if marital=0 or marital=5 or marital=2 then
+				! 0 - Single
+				! 5 - Married - filing seperate - both working
+				! 2 - Single - Head of Household
+				fed_annual_wh_allowance=4150
+				ft(1,4)=     0  : ft(1,5)=     0    : ft(1,6)=0
+				ft(2,4)= 11550  : ft(2,5)=     0    : ft(2,6)=0.1
+				ft(3,4)= 30600  : ft(3,5)=  1905    : ft(3,6)=0.12
+				ft(4,4)= 88950  : ft(4,5)=  8907    : ft(4,6)=0.22
+				ft(5,4)=176550  : ft(5,5)= 28179    : ft(5,6)=0.24
+				ft(6,4)=326550  : ft(6,5)= 64179    : ft(6,6)=0.32
+				ft(7,4)=411550  : ft(7,5)= 91379    : ft(7,6)=0.35
+				ft(8,4)=611550  : ft(8,5)=161379    : ft(8,6)=0.37
+			else
+				pr bell;'invalid marital=';marital : pause
+			end if
+		end if ! /r
+		if taxYear=2019 then ! r: 
+			if marital=1 or marital=3 or marital=4 then
+				! 1 - Married - filing jointly
+				! 3 - Married - filing joint return - only one working
+				! 4 - Married - filing joint - both working
+				fed_annual_wh_allowance=4200
+				ft(1,1)=     0 : ft(1,2)=     0    : ft(1,3)=0
+				ft(2,1)=  3800 : ft(2,2)=     0    : ft(2,3)=0.1
+				ft(3,1)= 13500 : ft(3,2)=   970    : ft(3,3)=0.12
+				ft(4,1)= 43275 : ft(4,2)=  4543    : ft(4,3)=0.22
+				ft(5,1)= 88000 : ft(5,2)= 14382.5  : ft(5,3)=0.24
+				ft(6,1)=164525 : ft(6,2)= 32748.5  : ft(6,3)=0.32
+				ft(7,1)=207900 : ft(7,2)= 46628.5  : ft(7,3)=0.35
+				ft(8,1)=514100 : ft(8,2)=153798.5  : ft(8,3)=0.37
+			else if marital=0 or marital=5 or marital=2 then
+				! 0 - Single
+				! 5 - Married - filing seperate - both working
+				! 2 - Single - Head of Household
+				fed_annual_wh_allowance=4200
+				ft(1,4)=     0  : ft(1,5)=     0    : ft(1,6)=0
+				ft(2,4)= 11800  : ft(2,5)=     0    : ft(2,6)=0.1
+				ft(3,4)= 31200  : ft(3,5)=  1940    : ft(3,6)=0.12
+				ft(4,4)= 90750  : ft(4,5)=  9086    : ft(4,6)=0.22
+				ft(5,4)=180200  : ft(5,5)= 28765    : ft(5,6)=0.24
+				ft(6,4)=333250  : ft(6,5)= 65497    : ft(6,6)=0.32
+				ft(7,4)=420000  : ft(7,5)= 93257    : ft(7,6)=0.35
+				ft(8,4)=624150  : ft(8,5)=164709.5  : ft(8,6)=0.37
+			else
+				pr bell;'invalid marital=';marital : pause
+			end if
+		end if ! /r
 		if taxYear=2020 then ! r: 2020 Federal Tables
 		! Page 6 from   https://www.irs.gov/pub/irs-pdf/p15t.pdf
 		! fjs=federal  joint              standard     fjc=federal  joint              W-4 Step 2 checked
@@ -678,7 +717,7 @@ def fn_federalTax(taxYear,fedpct,totalGrossPay,ded,stdWhFed,fedExempt,payPeriods
 	end if
 	! r: set mat fedTable
 		dim fedTable(8,3)
-		if taxYear<=2019 then
+		if taxYear<=2019 then ! r:
 			mat fedTable(8,6)
 			mat fedTable=ft
 			if marital=0 then ! 0 - Single
@@ -691,7 +730,8 @@ def fn_federalTax(taxYear,fedpct,totalGrossPay,ded,stdWhFed,fedExempt,payPeriods
 				! 5 - Married - filing seperate - both working
 				j2=4
 			end if
-		else ! taxYear=>2020
+		end if ! /r
+		if taxYear=>2020 then ! r:
 			j2=0 !  not used
 			mat fedTable(8,3)
 			mat fedTable=(0)
@@ -700,48 +740,55 @@ def fn_federalTax(taxYear,fedpct,totalGrossPay,ded,stdWhFed,fedExempt,payPeriods
 				! 3 - Married - filing joint return - only one working
 				! 4 - Married - filing joint - both working
 				if w4step2 then mat fedTable=fjc else mat fedTable=fjs
+				fn_detail('Federal Table: Married Filing Jointly')
 			else if marital=0 or marital=5 then
 				! 0 - Single
 				! 5 - Married - filing seperate - both working
 				if w4step2 then mat fedTable=fsc else mat fedTable=fss
+				fn_detail('Federal Table: Single of Married Filing Seperately')
 			else if marital=2 then
 				! 2 - Single - Head of Household
 				if w4step2 then mat fedTable=fhc else mat fedTable=fhs
+				fn_detail('Federal Table: Head of Household')
 			else
 				pr bell;'invalid marital=';marital : pause
 			end if
-		end if
+			if w4step2 then fn_detail('Federal Table: W-4 Step 2 Enabled') else fn_detail('Federal Table: STANDARD')
+		end if ! /r
 	! /r
 ! pause
+	estPayPeriodNetPay=totalGrossPay-ded-(w4step4b/payPeriodsPerYear)
 	if fedpct>0 then
 		returnN=round((totalGrossPay-ded)*fedpct,2)
 	else if stdWhFed=-1 or enableSkipWithholdingN(esw_federal) then ! no federal withholding
 		returnN=0
 	else if stdWhFed then
 		returnN=stdWhFed
+	else if estPayPeriodNetPay<=0 then
+		returnN=withholdingPercentage=0
 	else
-		estPayPeriodNetPay=totalGrossPay-ded-(w4step4b/payPeriodsPerYear)
-		if estPayPeriodNetPay<=0 then
-			returnN=estAnnualNetPay=withholdingPercentage=fedTaxesAnnualEstimate=0
-		else
-			! tableRow was j1
-			estAnnualNetPay=round(estPayPeriodNetPay*payPeriodsPerYear,2)+w4step4a ! estAnnualNetPay (previously g2) - estimated annual net pay
-			if w4Year$='2019' then
-				estAnnualNetPay-=fedExempt*fed_annual_wh_allowance
-			else ! w4Year$='2020' or w4Year$='none' then
-				estAnnualNetPay-=w4step3
-			end if
-			tableRow=fn_table_line(mat fedTable,estAnnualNetPay)
-			atLeast=fedTable(tableRow,1)
-			baseAmt=fedTable(tableRow,2)
-			withholdingPercentage=fedTable(tableRow,3)
-
-			returnN=baseAmt+(estAnnualNetPay-atLeast)*withholdingPercentage
-			returnN=returnN/payPeriodsPerYear
-			returnN=round(returnN,2)
-
-			returnN+=addOnFed+w4step4c
+		estAnnualNetPay=round(estPayPeriodNetPay*payPeriodsPerYear,2)+w4step4a ! estAnnualNetPay (previously g2) - estimated annual net pay
+		if w4Year$='2019' then
+			estAnnualNetPay-=fedExempt*fed_annual_wh_allowance
+		else ! w4Year$='2020' or w4Year$='none' then
+			estAnnualNetPay-=w4step3
 		end if
+		tableRow=fn_table_line(mat fedTable,estAnnualNetPay)
+		atLeast=fedTable(tableRow,1)
+		baseAmt=fedTable(tableRow,2)
+		fn_detail('  federal table Row='&str$(tableRow))
+		fn_detail('            atLeast='&str$(atLeast))
+		fn_detail('            baseAmt='&str$(baseAmt))
+		withholdingPercentage=fedTable(tableRow,3)
+		returnN=baseAmt+(estAnnualNetPay-atLeast)*withholdingPercentage
+		fn_detail('returnN(&'&str$(returnN)&')=baseAmt('&str$(baseAmt)&')+(estAnnualNetPay('&str$(estAnnualNetPay)&')-atLeast('&str$(atLeast)&'))*withholdingPercentage('&str$(withholdingPercentage)&')')
+		returnN=returnN/payPeriodsPerYear
+		fn_detail(' /payPeriodsPerYear='&str$(returnN)&'')
+		returnN=round(returnN,2)
+		fn_detail(' addOnFed='&str$(addOnFed)&'')
+		fn_detail(' w4step4c='&str$(w4step4c)&'')
+		returnN+=addOnFed+w4step4c
+		fn_detail(' Fed WH Tax Returning '&str$(returnN))
 	end if
 	FwhFinis: !
 	! pr 'federal withholding is ';returnN : pause
@@ -1829,7 +1876,7 @@ ReallocateStateByDept: ! r: (reallocate state taxes based on earnings by dept an
 			else if stwh(tcd(1),2)><0 then
 				goto L870
 			else if stdWhSt then
-				if enableSkipWithholdingN(4)<>1 then stwh(tcd(1),2)=stdWhSt
+				if ~enableSkipWithholdingN(esw_standard) then stwh(tcd(1),2)=stdWhSt
 				goto L870
 			end if
 			if enableSkipWithholdingN(esw_state) then s3=0: goto L860
@@ -1950,7 +1997,7 @@ def library fnCheckPayrollCalculation(; ___, _
 	returnN, _
 	lc,respc,col1_len, _
 	marital,payCode,allowances,stateAddOn,w4Year$,wages,pppy,fedWh, _
-	col1_pos,col1_len,col2_pos,col2_len,testStateTax,testFederalTax)
+	col1_pos,col1_len,col2_pos,col2_len,testStateTax,testFederalTax,w4step2$,w4step2)
 	! mat resp$,resp_*
 	if ~setup_checkCalculation then ! r:
 		setup_checkCalculation=1
@@ -2029,6 +2076,8 @@ def library fnCheckPayrollCalculation(; ___, _
 		fnLbl(              lc+=1,col1_pos,'EIC Code:',col1_len,1)
 		fncomboa('EICCode', lc   ,col2_pos,mat eicOption$,'',25)
 		fnPcReg_read('EIC Code',resp$(resp_EicCode=respc+=1), eicOption$(1))
+		fnChk(lc+=1,46,'W-4 Step 2',1)
+		fnPcReg_read('W-4 Step 2',resp$(resp_w4step2=respc+=1), w4step2$)
 
 		if clientState$='IL' then
 			lc+=1
@@ -2068,15 +2117,16 @@ def library fnCheckPayrollCalculation(; ___, _
 			goto XitCheckStateCalculation
 		else
 			! r: do test the calc.
-			fnPcReg_write('current taxable wages' 	,resp$(resp_wages))
-			fnPcReg_write('Federal Withholding'   	,resp$(resp_fedWh))
-			fnPcReg_write('Marital Status'         	,resp$(resp_married))
+			fnPcReg_write('current taxable wages'  	,resp$(resp_wages))
+			fnPcReg_write('Federal Withholding'    	,resp$(resp_fedWh))
+			fnPcReg_write('Marital Status'          	,resp$(resp_married))
 			fnPcReg_write('Pay Code'                	,resp$(resp_payCode))
-			fnPcReg_write('State Exemptions'       	,resp$(resp_stExeptions))
-			fnPcReg_write('State Tax Add-On'       	,resp$(resp_StateAddOn))
+			fnPcReg_write('State Exemptions'        	,resp$(resp_stExeptions))
+			fnPcReg_write('State Tax Add-On'        	,resp$(resp_StateAddOn))
 			fnPcReg_write('W-4 Year'                	,resp$(resp_w4year))
 			fnPcReg_write('Tax Year'                	,resp$(resp_taxYear))
 			fnPcReg_write('EIC Code'                	,resp$(resp_EicCode))
+			fnPcReg_write('W-4 Step 2'               	,resp$(resp_w4step2))
 			if clientState$='IL' then
 				fnEmployeeData$(0,'IL W-4 Line 1 Allowances',resp$(rc_stateExemptions1))
 				fnEmployeeData$(0,'IL W-4 Line 2 Allowances',resp$(rc_ilw4line2))
@@ -2098,7 +2148,8 @@ def library fnCheckPayrollCalculation(; ___, _
 			fedWh         =val(resp$(resp_fedWh         	)     ) ! Federal Withholding
 			taxYear       =val(resp$(resp_taxYear       	)     ) ! taxYear
 			eicCode       =val(resp$(resp_EicCode       	)(1:2)) ! eic code
-			eno=0
+			w4step2$      =    resp$(resp_w4step2       	)
+			if w4step2$='True' then w4step2=1 else w4step2=0
 			showDetails=1 ! a global variable that tells routines to show more info about calcuatlions for users when Checking Payroll Calculations
 
 			pppy=fn_payPeriodsPerYear(payCode)
@@ -2111,9 +2162,10 @@ def library fnCheckPayrollCalculation(; ___, _
 			fnStatus('              Married: '&marriedOption$(marital+1))
 			fnStatus('              eicCode: '&str$(eicCode            ))
 			fnStatus('               w4year: '&w4year$                  )
+			fnStatus('              w4step2: '&str$(w4step2            ))
 			
-			testStateTax=fn_stateTax(eno,wages,pppy,allowances,marital,eicCode,fedWh,stateAddOn,w4year$,taxYear)
-			testFederalTax=fn_federalTax(taxYear,fedpct,wages,ded,stdWhFed,fedExempt,pppy,marital,w4Year$,w4Step3,w4step4a,w4step4b,w4step4c)
+			testStateTax=fn_stateTax(0,wages,pppy,allowances,marital,eicCode,fedWh,stateAddOn,w4year$,taxYear)
+			testFederalTax=fn_federalTax(taxYear,fedpct,wages,ded,stdWhFed,fedExempt,pppy,marital,w4Year$,w4step2,w4Step3,w4step4a,w4step4b,w4step4c)
 			
 			fnStatus('Calculated '&fnpayroll_client_state$&' State WithHolding: '&str$( testStateTax ))
 			fnStatus('Calculated Federal WithHolding: '&str$( testFederalTax ))
@@ -2141,20 +2193,8 @@ def fn_setup
 	on error goto Ertn
 
 	dim stwh(10,2)
-	dim _inp(29)
-	dim dat$*20
-	dim caf(20)
 	dim resp$(64)*256
-	dim tdt(4)
-	dim tcd(3)
-	dim tdet(17)
-	dim tdc(10)
-	dim tcp(32)
-	dim x$*8
-	dim n$*8
-	dim stuc(10)
-	dim newx$*8
-	dim ml$(1)*256
+	dim ml$(0)*256
 
 	dim motab(12)
 	mtc=0 ! motab counter
