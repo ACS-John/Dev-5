@@ -399,8 +399,8 @@ withholdingPercentage,atLeast,baseAmt,estPayPeriodNetPay,estPayPeriodNetPay,estA
 
 	! retains: setupFederalTables,fed_annual_wh_allowance,mat fjs,mat fss,mat fhs,mat fjc,mat fsc,mat fhc,mat ft
 	! ded = federal deduction addition for all departments (deduct before calculating federal taxes)
-	if ~setupFederalTables or taxYear<=2019 then
-		setupFederalTables=1
+	if setupFederalTables<>taxYear or taxYear<=2019 then
+		setupFederalTables=taxYear
 
 		if taxYear<=2017 then ! r: 
 			dim ft(8,6)
@@ -953,7 +953,7 @@ def fn_stateTax(eno,wages,pppy,allowances,marital,eicCode,fedWh,addOnSt,w4year$,
 	else if clientState$='LA' then
 		returnN=fn_wh_louisiana(eno,marital,wages,pppy,allowances)
 	else if clientState$='MO' then
-		returnN=fn_wh_missouri(wages,marital,fedWh,allowances,pppy)
+		returnN=fn_wh_missouri(taxYear,wages,marital,fedWh,allowances,pppy)
 	else if clientState$='MS' then
 		returnN=fn_wh_mississippi(wages,pppy,addOnSt)
 	else if clientState$='NV' then
@@ -1033,8 +1033,8 @@ fnend
 	def fn_wh_arkansas(eno,war_wages_taxable_current,payPeriodsPerYear,allowances, _
 		married,wga_eicCode; ___, _
 		s1,annualPersonalCredit,returnN,stAllowances,adjEstAnnWages)
-		if ~setup_arwh then ! r: setup AR Arkansas
-			setup_arwh=1
+		if setup_arwh<>taxYear then ! r: setup AR Arkansas
+			setup_arwh=taxYear
 			dim ar(0,0)
 			if taxYear<=2020 then ! r:
 				mat ar(6,3)
@@ -1455,11 +1455,11 @@ fnend
 		if returnN<.1 then returnN=0
 		fn_wh_louisiana=returnN
 	fnend
-	def fn_wh_missouri(taxableWagesCurrent,marital,fed_wh,allowances,payPeriodsPerYear; _
-											___,returnN,tableRow,stStandardDeduction,h1,h2,stAnnualGrossTaxableIncome,h3)
-		! revised 1/3/2021
-		if ~setup_mowh then  ! r: MO Missouri
-			setup_mowh=1
+	def fn_wh_missouri(taxYear,taxableWagesCurrent,marital,fed_wh,allowances,payPeriodsPerYear; _
+											___,returnN,tableRow,stStandardDeduction,stAnnualGrossTaxableIncome,h3)
+		! revised 1/4/2022
+		if setup_mowh<>taxYear then  ! r: MO Missouri
+			setup_mowh=taxYear
 			if taxYear=2020 then ! r:
 				dim mo(9,3)
 				! read #h_tables,using 'Form POS 31,102*PD 6.4',rec=28: mat mo ! Missouri
@@ -1478,7 +1478,7 @@ fnend
 				stStdDed_spouseDoesNotWork  	=24400
 				stStdDed_headOfHousehold    	=18350
 				! /r
-			else if taxYear=>2021 then ! r:
+			else if taxYear=2021 then ! r:
 				dim mo(9,3)
 				mo( 1,1)=   0 : mo( 1,2)=fn_n2(mat mo,1)  : mo( 1,3)=0.015
 				mo( 2,1)=1088 : mo( 2,2)=fn_n2(mat mo,2)  : mo( 2,3)=0.02
@@ -1495,13 +1495,28 @@ fnend
 				stStdDed_spouseDoesNotWork  	=25100
 				stStdDed_headOfHousehold    	=18800
 				! /r
-	
-				! fn_debugPrint2d(mat mo)
-	
+			else if taxYear=>2022 then ! r:
+				dim mo(9,3)
+				mo( 1,1)=   0 : mo( 1,2)=fn_n2(mat mo,1)  : mo( 1,3)=0.015
+				mo( 2,1)=1121 : mo( 2,2)=fn_n2(mat mo,2)  : mo( 2,3)=0.02
+				mo( 3,1)=2242 : mo( 3,2)=fn_n2(mat mo,3)  : mo( 3,3)=0.025
+				mo( 4,1)=3363 : mo( 4,2)=fn_n2(mat mo,4)  : mo( 4,3)=0.03
+				mo( 5,1)=4484 : mo( 5,2)=fn_n2(mat mo,5)  : mo( 5,3)=0.035
+				mo( 6,1)=5605 : mo( 6,2)=fn_n2(mat mo,6)  : mo( 6,3)=0.04
+				mo( 7,1)=6726 : mo( 7,2)=fn_n2(mat mo,7)  : mo( 7,3)=0.045
+				mo( 8,1)=7847 : mo( 8,2)=fn_n2(mat mo,8)  : mo( 8,3)=0.05
+				mo( 9,1)=8968 : mo( 9,2)=fn_n2(mat mo,9)  : mo( 9,3)=0.053
+				stStdDed_single              	=12950
+				stStdDed_spouseWorks         	=12950
+				stStdDed_filingSeperate      	=12950
+				stStdDed_spouseDoesNotWork  	=25900
+				stStdDed_headOfHousehold    	=19400
+				! /r
 			end if
+			! fn_debugPrzint2d(mat mo)
 	
 		end if ! /r
-	
+		! r: set stStandardDeduction
 		if marital=1 then ! 1 - Married - filing jointly
 			stStandardDeduction=stStdDed_spouseWorks
 		else if marital=2 then ! 2 - Single - Head of Household
@@ -1513,31 +1528,10 @@ fnend
 		else if marital=5 then ! 5 - Married - filing seperate - both working
 			stStandardDeduction=stStdDed_filingSeperate
 		end if
-		! if stStandardDeduction=0 then pr bell; : pause
-		! stStandardDeduction=min(stStandardDeduction,fed_wh)
-		if showDetails then
-			fnStatus('State Standard Deduction is '&str$(stStandardDeduction))
-		end if
-		h1=0
-		! if marital=1 or marital=3 or marital=4 or marital=5 then ! Married - *
-		! 	h1=3925
-		! else if marital=2 then ! 2 - Single - Head of Household
-		! 	h1=7850
-		! else ! 0 - Single
-		! 	h1=4700
-		! end if
-		h2=0
-		! if allowances then
-		! 	if marital=0 then  ! single
-		! 		h2=1200+(allowances-1)*1200
-		! 	else if marital=1 or marital=3 or marital=4 or marital=5 then
-		! 		h2=min(allowances,2)*1200+max(allowances-2,0)*1200 ! married
-		! 	else if marital=2 then  ! head of house hold
-		! 		h2=3500+max(allowances-4,0)*1200
-		! 	end if
-		! end if
+		fn_detail('State Standard Deduction is '&str$(stStandardDeduction))
+		! /r
 		stAnnualGrossTaxableIncome=round(taxableWagesCurrent*payPeriodsPerYear,2)
-		h3=max(0,stAnnualGrossTaxableIncome-h1-h2-stStandardDeduction)
+		h3=max(0,stAnnualGrossTaxableIncome-stStandardDeduction)
 		tableRow=fn_table_line(mat mo,h3)
 		returnN=(mo(tableRow,2)+(h3-mo(tableRow,1))*mo(tableRow,3))/payPeriodsPerYear
 		returnN=round(returnN,0)
