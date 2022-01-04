@@ -1597,7 +1597,7 @@ fnend
 		fn_wh_mississippi=returnN
 	fnend
 	def fn_wh_oklahoma(taxableWagesCurrent,payPeriodsPerYear,allowances,marital; _
-			___,g2,j2,tableRow,returnN)
+			___,estAnnualNetPay,j2,tableRow,returnN)
 		!  REV. 1/01/07
 		if ~setup_okwh then ! r:
 			setup_okwh=1
@@ -1624,11 +1624,11 @@ fnend
 			! ok(8,4)=27600  : ok(8,5)=395 : ok(8,6)=0.0525
 			! /r
 		end if ! /r
-		g2=taxableWagesCurrent*payPeriodsPerYear
-		g2=g2-allowances*1000
+		estAnnualNetPay=taxableWagesCurrent*payPeriodsPerYear
+		estAnnualNetPay-=allowances*1000
 		if marital=0 or marital=2 then j2=1 else j2=4 ! single of married
-		tableRow=fn_table_line(mat ok,g2)
-		returnN=ok(tableRow,j2+1)+(g2-ok(tableRow,j2))*ok(tableRow,j2+2)
+		tableRow=fn_table_line(mat ok,estAnnualNetPay)
+		returnN=ok(tableRow,j2+1)+(estAnnualNetPay-ok(tableRow,j2))*ok(tableRow,j2+2)
 		returnN=returnN/payPeriodsPerYear
 		returnN=round(returnN,0)
 		fn_wh_oklahoma=returnN
