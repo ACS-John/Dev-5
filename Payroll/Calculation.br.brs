@@ -943,7 +943,7 @@ def fn_stateTax(eno,wages,pppy,allowances,marital,eicCode,fedWh,addOnSt,w4year$,
 	else if clientState$='FL' then
 		returnN=0 ! no state income tax
 	else if clientState$='GA' then
-		returnN=fn_wh_georgia(eno,wages,pppy,marital,eicCode)
+		returnN=fn_wh_georgia(taxYear,eno,wages,pppy,marital,eicCode)
 	else if clientState$='IL' then
 		returnN=fn_wh_illinois(taxYear,eno,wages,pppy)
 	else if clientState$='IN' then
@@ -1118,7 +1118,7 @@ fnend
 		! h3=min(h3,1200)
 		fn_wh_arizona=returnN
 	fnend
-	def fn_wh_georgia(eno,taxableWagesCurrent,payPeriodsPerYear,married,wga_eicCode; ___,returnN, _
+	def fn_wh_georgia(taxYear,eno,taxableWagesCurrent,payPeriodsPerYear,married,wga_eicCode; ___,returnN, _
 		dependents,exemptions,tableName$,annualPersonalAllowance,stDeduction, _
 		tmp,tmp1,tmp2,tmp4,wagesAnnualTaxable,dependentAllowance, _
 		personalAllowance)
@@ -1126,36 +1126,69 @@ fnend
 		! updated 2/1/2021
 		! taxableWagesCurrent - formerly b8
 		! payPeriodsPerYear - formerly stwh(tcd1,1)
-		if ~wga_setup then
-			wga_setup=1
-			gaAnnualDependantAllowance=3000
-			! r: single Table F Page 45 of Employeer's Tax Guide - Rev Dec 2020
-			dim gawhTableF(6,3)
-			gawhTableF(1,1)=    0 : gawhTableF(1,2)=   0.00 : gawhTableF(1,3)=0.01
-			gawhTableF(2,1)= 1000 : gawhTableF(2,2)=  10.00 : gawhTableF(2,3)=0.02
-			gawhTableF(3,1)= 3000 : gawhTableF(3,2)=  50.00 : gawhTableF(3,3)=0.03
-			gawhTableF(4,1)= 5000 : gawhTableF(4,2)= 110.00 : gawhTableF(4,3)=0.04
-			gawhTableF(5,1)= 7000 : gawhTableF(5,2)= 190.00 : gawhTableF(5,3)=0.05
-			gawhTableF(6,1)=10000 : gawhTableF(6,2)= 340.00 : gawhTableF(6,3)=0.0575
-			! /r
-			! r: single Table G Page 46 of Employeer's Tax Guide - Rev Dec 2020
-			dim gawhTableG(6,3)
-			gawhTableG(1,1)=    0 : gawhTableG(1,2)=   0.00 : gawhTableG(1,3)=0.01
-			gawhTableG(2,1)=  500 : gawhTableG(2,2)=   5.00 : gawhTableG(2,3)=0.02
-			gawhTableG(3,1)= 1500 : gawhTableG(3,2)=  25.00 : gawhTableG(3,3)=0.03
-			gawhTableG(4,1)= 2500 : gawhTableG(4,2)=  55.00 : gawhTableG(4,3)=0.04
-			gawhTableG(5,1)= 3500 : gawhTableG(5,2)=  95.00 : gawhTableG(5,3)=0.05
-			gawhTableG(6,1)= 5000 : gawhTableG(6,2)= 170.00 : gawhTableG(6,3)=0.0575
-			! /r
-			! r: single Table H Page 47 of Employeer's Tax Guide - Rev Dec 2020
-			dim gawhTableH(6,3)
-			gawhTableH(1,1)=    0 : gawhTableH(1,2)=   0.00 : gawhTableH(1,3)=0.01
-			gawhTableH(2,1)=  750 : gawhTableH(2,2)=   7.50 : gawhTableH(2,3)=0.02
-			gawhTableH(3,1)= 2250 : gawhTableH(3,2)=  37.50 : gawhTableH(3,3)=0.03
-			gawhTableH(4,1)= 3750 : gawhTableH(4,2)=  82.50 : gawhTableH(4,3)=0.04
-			gawhTableH(5,1)= 5250 : gawhTableH(5,2)= 142.50 : gawhTableH(5,3)=0.05
-			gawhTableH(6,1)= 7000 : gawhTableH(6,2)= 230.00 : gawhTableH(6,3)=0.0575
-			! /r
+		if ~wga_setup<>taxYear then
+			wga_setup=taxYear
+			if taxYear and taxYear<=2021 then ! r:
+				gaAnnualDependantAllowance=3000
+				! r: single Table F Page 45 of Employeer's Tax Guide - Rev Dec 2020
+				dim gawhTableF(6,3)
+				gawhTableF(1,1)=    0 : gawhTableF(1,2)=   0.00 : gawhTableF(1,3)=0.01
+				gawhTableF(2,1)= 1000 : gawhTableF(2,2)=  10.00 : gawhTableF(2,3)=0.02
+				gawhTableF(3,1)= 3000 : gawhTableF(3,2)=  50.00 : gawhTableF(3,3)=0.03
+				gawhTableF(4,1)= 5000 : gawhTableF(4,2)= 110.00 : gawhTableF(4,3)=0.04
+				gawhTableF(5,1)= 7000 : gawhTableF(5,2)= 190.00 : gawhTableF(5,3)=0.05
+				gawhTableF(6,1)=10000 : gawhTableF(6,2)= 340.00 : gawhTableF(6,3)=0.0575
+				! /r
+				! r: single Table G Page 46 of Employeer's Tax Guide - Rev Dec 2020
+				dim gawhTableG(6,3)
+				gawhTableG(1,1)=    0 : gawhTableG(1,2)=   0.00 : gawhTableG(1,3)=0.01
+				gawhTableG(2,1)=  500 : gawhTableG(2,2)=   5.00 : gawhTableG(2,3)=0.02
+				gawhTableG(3,1)= 1500 : gawhTableG(3,2)=  25.00 : gawhTableG(3,3)=0.03
+				gawhTableG(4,1)= 2500 : gawhTableG(4,2)=  55.00 : gawhTableG(4,3)=0.04
+				gawhTableG(5,1)= 3500 : gawhTableG(5,2)=  95.00 : gawhTableG(5,3)=0.05
+				gawhTableG(6,1)= 5000 : gawhTableG(6,2)= 170.00 : gawhTableG(6,3)=0.0575
+				! /r
+				! r: single Table H Page 47 of Employeer's Tax Guide - Rev Dec 2020
+				dim gawhTableH(6,3)
+				gawhTableH(1,1)=    0 : gawhTableH(1,2)=   0.00 : gawhTableH(1,3)=0.01
+				gawhTableH(2,1)=  750 : gawhTableH(2,2)=   7.50 : gawhTableH(2,3)=0.02
+				gawhTableH(3,1)= 2250 : gawhTableH(3,2)=  37.50 : gawhTableH(3,3)=0.03
+				gawhTableH(4,1)= 3750 : gawhTableH(4,2)=  82.50 : gawhTableH(4,3)=0.04
+				gawhTableH(5,1)= 5250 : gawhTableH(5,2)= 142.50 : gawhTableH(5,3)=0.05
+				gawhTableH(6,1)= 7000 : gawhTableH(6,2)= 230.00 : gawhTableH(6,3)=0.0575
+				! /r
+				! /r
+			else ! if ~taxYear or taxYear=>2022 then ! r:
+				gaAnnualDependantAllowance=3000
+				! r: single Table F Page 45 of Employeer's Tax Guide - Rev Dec 2021
+				dim gawhTableF(6,3)
+				gawhTableF(1,1)=    0 : gawhTableF(1,2)=   0.00 : gawhTableF(1,3)=0.01
+				gawhTableF(2,1)= 1000 : gawhTableF(2,2)=  10.00 : gawhTableF(2,3)=0.02
+				gawhTableF(3,1)= 3000 : gawhTableF(3,2)=  50.00 : gawhTableF(3,3)=0.03
+				gawhTableF(4,1)= 5000 : gawhTableF(4,2)= 110.00 : gawhTableF(4,3)=0.04
+				gawhTableF(5,1)= 7000 : gawhTableF(5,2)= 190.00 : gawhTableF(5,3)=0.05
+				gawhTableF(6,1)=10000 : gawhTableF(6,2)= 340.00 : gawhTableF(6,3)=0.0575
+				! /r
+				! r: single Table G Page 46 of Employeer's Tax Guide - Rev Dec 2021
+				dim gawhTableG(6,3)
+				gawhTableG(1,1)=    0 : gawhTableG(1,2)=   0.00 : gawhTableG(1,3)=0.01
+				gawhTableG(2,1)=  500 : gawhTableG(2,2)=   5.00 : gawhTableG(2,3)=0.02
+				gawhTableG(3,1)= 1500 : gawhTableG(3,2)=  25.00 : gawhTableG(3,3)=0.03
+				gawhTableG(4,1)= 2500 : gawhTableG(4,2)=  55.00 : gawhTableG(4,3)=0.04
+				gawhTableG(5,1)= 3500 : gawhTableG(5,2)=  95.00 : gawhTableG(5,3)=0.05
+				gawhTableG(6,1)= 5000 : gawhTableG(6,2)= 170.00 : gawhTableG(6,3)=0.0575
+				! /r
+				! r: single Table H Page 47 of Employeer's Tax Guide - Rev Dec 2021
+				dim gawhTableH(6,3)
+				gawhTableH(1,1)=    0 : gawhTableH(1,2)=   0.00 : gawhTableH(1,3)=0.01
+				gawhTableH(2,1)=  750 : gawhTableH(2,2)=   7.50 : gawhTableH(2,3)=0.02
+				gawhTableH(3,1)= 2250 : gawhTableH(3,2)=  37.50 : gawhTableH(3,3)=0.03
+				gawhTableH(4,1)= 3750 : gawhTableH(4,2)=  82.50 : gawhTableH(4,3)=0.04
+				gawhTableH(5,1)= 5250 : gawhTableH(5,2)= 142.50 : gawhTableH(5,3)=0.05
+				gawhTableH(6,1)= 7000 : gawhTableH(6,2)= 230.00 : gawhTableH(6,3)=0.0575
+				! /r
+				! /r
+			end if
 		end if
 		stDeduction=fn_gaStandardDeduction(married,wga_eicCode)
 		annualPersonalAllowance=fn_gaPersonalAllowance(married,wga_eicCode)
