@@ -945,7 +945,7 @@ def fn_stateTax(eno,wages,pppy,allowances,marital,eicCode,fedWh,addOnSt,w4year$,
 	else if clientState$='GA' then
 		returnN=fn_wh_georgia(eno,wages,pppy,marital,eicCode)
 	else if clientState$='IL' then
-		returnN=fn_wh_illinois(eno,wages,pppy)
+		returnN=fn_wh_illinois(taxYear,eno,wages,pppy)
 	else if clientState$='IN' then
 		returnN=fn_wh_indiana(wages,pppy,allowances)
 	else if clientState$='KY' then ! added 10/03/2016 for R R Crawford Engineering
@@ -1278,21 +1278,28 @@ fnend
 			end if
 			fn_gaPersonalAllowance=returnN
 		fnend
-	def fn_wh_illinois(eno,taxableWagesCurrent,payPeriodsPerYear; ___,g2,returnN,line1allowances,line2allowances,estAnnualNetPay)
-		! 			! no table
-	
+	def fn_wh_illinois(taxYear,eno,taxableWagesCurrent,payPeriodsPerYear; ___,g2,returnN, _
+	line1allowances,line2allowances,estAnnualNetPay,exemptionAllowance,incomeTaxRate)
+		! 			! no table - updated 1/4/2022 from  https://www2.illinois.gov/rev/forms/withholding/Documents/currentyear/IL-700-T.pdf (Effective January 1, 2022)
+		incomeTaxRate=.0495
 		line1allowances=val(fnEmployeeData$(eno,'IL W-4 Line 1 Allowances'))
 		line2allowances=val(fnEmployeeData$(eno,'IL W-4 Line 2 Allowances'))
-	
+		if taxYear and taxYear<=2021 then
+			exemptionAllowance=2375
+		else ! if ~taxYear or taxYear=>2022 then
+			exemptionAllowance=2425
+		end if
 		estAnnualNetPay=taxableWagesCurrent*payPeriodsPerYear
-		returnN=.0495*(estAnnualNetPay-((line1allowances*2375)+(line2allowances*1000)/payPeriodsPerYear))
-	
-		fn_detail('Employee Number: '&str$(eno)                                      )
-		fn_detail('IL W-4 Line 1 Allowances: '&str$(line1allowances)           )
-		fn_detail('IL W-4 Line 2 Allowances: '&str$(line2allowances)           )
-		fn_detail('taxable Wages Current: '&str$(taxableWagesCurrent)  )
-		fn_detail('Pay Periods Per Year: '&str$(payPeriodsPerYear)       )
-		fn_detail('Calculated Annual Tax: '&str$(returnN)                             )
+		returnN=incomeTaxRate*(estAnnualNetPay-((line1allowances*exemptionAllowance)+(line2allowances*1000)/payPeriodsPerYear))
+		
+		fn_detail('Employee Number: '&str$(eno)                          	)
+		fn_detail('Income Tax Rate: '&str$(incomeTaxRate)               	)
+		fn_detail('Exemption Allowance: '&str$(exemptionAllowance)     	)
+		fn_detail('IL W-4 Line 1 Allowances: '&str$(line1allowances)   	)
+		fn_detail('IL W-4 Line 2 Allowances: '&str$(line2allowances)   	)
+		fn_detail('taxable Wages Current: '&str$(taxableWagesCurrent)  	)
+		fn_detail('Pay Periods Per Year: '&str$(payPeriodsPerYear)     	)
+		fn_detail('Calculated Annual Tax: '&str$(returnN)               	)
 	
 	
 		returnN=round(returnN/payPeriodsPerYear,2)

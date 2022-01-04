@@ -812,75 +812,77 @@ fnend
 def fn_payroll_client_state$*2(; client$*64,___,return$*2,which)
 	if ~pcs_setup then ! r:
 		pcs_setup=1
-		dim pr_clientstate_client$(1)*128
-		dim pr_clientstate_state$(1)*2
-		mat pr_clientstate_client$(999)
-		mat pr_clientstate_state$(999)
+		dim pr_clientstate_client$(0)*64
+		dim pr_clientstate_state$(0)*2
+		mat pr_clientstate_client$(0)
+		mat pr_clientstate_state$(0)
 		pr_clientstate_count=0
+		fn_pcs_add('ACS'                   	,'NJ')
+		fn_pcs_add('Ash Grove'             	,'MO')
+		fn_pcs_add('Bethany'               	,'IL')
+		fn_pcs_add('Billings'              	,'MO')
+		fn_pcs_add('Campbell'              	,'MO')
+		fn_pcs_add('Carr Plumbing'         	,'AR')
+		fn_pcs_add('Cerro Gordo V'         	,'IL')
+		fn_pcs_add('Cerro Gordo T'         	,'IL')
+		fn_pcs_add('Crockett County'       	,'TX')
+		fn_pcs_add('Divernon'              	,'IL')
+		fn_pcs_add('Edinburg'              	,'IL')
+		fn_pcs_add('Edison'                	,'GA')
+		fn_pcs_add('Ed Horton'             	,'IL')
+		fn_pcs_add('Galena'                	,'MO')
+		fn_pcs_add('Hope Welty'            	,'IL')
+		fn_pcs_add('Kincaid'               	,'IL')
+		fn_pcs_add('Kathys Bookkeeping'   	,'OK')
+		fn_pcs_add('Oklahoma'              	,'OK')
+		fn_pcs_add('Payroll Done Right'   	,'OR')
+		fn_pcs_add('Peter Engler'          	,'MO')
+		fn_pcs_add('R R Crawford'          	,'KY')
+		fn_pcs_add('Thomas Richardson'     	,'LA')
+		fn_pcs_add('Thomasboro'            	,'IL')
+		fn_pcs_add('Unity'                  	,'IL')
+		fn_pcs_add('Zaleski'                	,'TX')
 		!   fn_upp_add('Ash Grove','ubprtlas_ashgrove')
-		fn_pcs_add('ACS','NJ')
 		!   fn_pcs_add('Lamar','MS')
-		fn_pcs_add('Ash Grove','MO')
 		!   fn_pcs_add('Battlefield','MO')
-		fn_pcs_add('Bethany','IL')
-		fn_pcs_add('Billings','MO')
-		fn_pcs_add('Campbell','MO')
-		fn_pcs_add('Carr Plumbing','AR')
-		fn_pcs_add('Cerro Gordo V','IL')
-		fn_pcs_add('Cerro Gordo T','IL')
 		!   fn_pcs_add('Community Dev','TN')
-		fn_pcs_add('Crockett County','TX')
 		!   fn_pcs_add('Diamond','MO')
-		fn_pcs_add('Divernon','IL')
-		! fn_pcs_add('Durden','LA')
-		fn_pcs_add('Edinburg','IL')
-		fn_pcs_add('Edison','GA')
-		fn_pcs_add('Ed Horton','IL')
-		! fn_pcs_add('Energy Exchanger','OK')  dropped support of april 2019, removed april 2020
+		!   fn_pcs_add('Durden','LA')
+		!   fn_pcs_add('Energy Exchanger','OK')  dropped support of april 2019, removed april 2020
 		!   fn_pcs_add('Franklin and Son','AR')
 		!   fn_pcs_add('Franklinton','LA')
-		fn_pcs_add('Galena','MO')
 		!   fn_pcs_add('GreeneCo','MO')
-		fn_pcs_add('Hope Welty','IL')
-		fn_pcs_add('Kincaid','IL')
-		! fn_pcs_add('Kimberling','MO')
-		fn_pcs_add('Kathys Bookkeeping','OK')
-		!		fn_pcs_add('Lovington','IL')
-		! 		fn_pcs_add('Merriam Woods','MO')
+		!   fn_pcs_add('Kimberling','MO')
+		!   fn_pcs_add('Lovington','IL')
+		!   fn_pcs_add('Merriam Woods','MO')
 		!   fn_pcs_add('Monticello','IL')
 		!   fn_pcs_add('Nancy Mouser','OK')
 		!   fn_pcs_add('Northwest','AR')
-		fn_pcs_add('Oklahoma','OK')
-		fn_pcs_add('Payroll Done Right','OR')
-		fn_pcs_add('Peter Engler','MO')
 		!   fn_pcs_add('Philo','IL')
 		!   fn_pcs_add('PiattCO','IL')
-		! fn_pcs_add('Raymond','IL')
-		fn_pcs_add('R R Crawford','KY')
+		!   fn_pcs_add('Raymond','IL')
 		!   fn_pcs_add('Riverside','IN') ! Indiana tax table is out of date...  and looks pretty complicated:  http://www.in.gov/dor/reference/files/dn01.pdf
-		! fn_pcs_add('Sheila','MO')
-		fn_pcs_add('Thomas Richardson','LA')
-		fn_pcs_add('Thomasboro','IL')
-		fn_pcs_add('Unity','IL')
+		!   fn_pcs_add('Sheila','MO')
 		!   fn_pcs_add('Washington Parrish','LA')
 		!   fn_pcs_add('West Rest Haven','')
 		!   fn_pcs_add('West Accounting','OR')
-		fn_pcs_add('Zaleski','TX')
-		mat pr_clientstate_client$(pr_clientstate_count)
-		mat pr_clientstate_state$(pr_clientstate_count)
 
 	end if  ! /r
 
 	if client$='' then client$=env$('client')
-	return$='--'
 	which=srch(mat pr_clientstate_client$,client$)
 	if which>0 then
 		return$=pr_clientstate_state$(which)
+	else
+		return$='--'
 	end if
 	fn_payroll_client_state$=return$
 fnend
-def fn_pcs_add(pa_client$*128,pa_state$*2)
-	pr_clientstate_count+=1
+def fn_pcs_add(pa_client$*128,pa_state$*2; ___,pr_clientstate_count)
+	! builds local: mat pr_clientstate_client$ and mat pr_clientstate_state$
+	pr_clientstate_count=udim(mat pr_clientstate_client$)+1
+	mat pr_clientstate_client$(pr_clientstate_count)
+	mat pr_clientstate_state$(pr_clientstate_count)
 	pr_clientstate_client$(pr_clientstate_count)=pa_client$
 	pr_clientstate_state$(pr_clientstate_count)=pa_state$
 fnend

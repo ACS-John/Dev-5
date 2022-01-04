@@ -1,5 +1,6 @@
 ! transactions explorer
 fn_setup
+fnTop(program$)
 dim tr$(0)*128
 dim trN(0)
 hTrans=fn_openFio('Client Billing Transaction',mat tr$,mat trN) ! , 1)
