@@ -514,9 +514,9 @@ fnend
 		library 'S:\Core\Programs\1099.br': fn1099print_close
 		fn1099print_close=fn1099print_close
 	fnend
-	def library fnask_1099_info(&seltp,&type,&min1,&beg_date,&end_date)
-		library 'S:\Core\Programs\1099.br': fnask_1099_info
-		fnask_1099_info=fnask_1099_info(seltp,type,min1,beg_date,end_date)
+	def library fnAsk1099Info(&seltp,&type,&min1,&beg_date,&end_date)
+		library 'S:\Core\Programs\1099.br': fnAsk1099Info
+		fnAsk1099Info=fnAsk1099Info(seltp,type,min1,beg_date,end_date)
 	fnend
 ! /r
 ! r: Favorites
