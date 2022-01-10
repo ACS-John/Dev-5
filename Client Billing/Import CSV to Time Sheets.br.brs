@@ -1,8 +1,6 @@
 fn_setup
 fnTop(program$)
 
-dim sage_code$*128
-dim resp$(20)*1048
 client_id_sage_ax$='3811'
 client_id_brc$='90'
 client_id_framemasters$='1864'
@@ -17,8 +15,7 @@ label$(1)='Starting Date'
 label$(2)='Ending Date'
 dim empName$(5)*64
 dim filename$(5)*1024
-fn_askDatesAndFile(mat label$,mat filter_date,mat empName$,mat filename$)
-if fkey=93 or fkey=99 then goto Xit
+if fn_askDatesAndFile(mat label$,mat filter_date,mat empName$,mat filename$)=5 then goto Xit
 goto MainBody ! /r
 MainBody: ! r:
 mat ctHandles(0)
@@ -31,7 +28,7 @@ for fileItem=1 to fileNameCount
 	the_date_prior=the_date=0
 	if fileItem=1 then
 		open #h_out=fnH: 'Name=S:\Core\Data\acsllc\TimeSheet.h[cno],RecL=86,KFName=S:\Core\Data\acsllc\TimeSheet-Idx.h[cno],Replace,KPs=1,KLn=5',internal,outIn,keyed
-		open #h_support=fnH: "Name=S:\Core\Data\acsllc\SUPPORT.h[cno],KFName=S:\Core\Data\acsllc\support-idx.h[cno],Shr",i,i,k
+		open #h_support=fnH: 'Name=S:\Core\Data\acsllc\SUPPORT.h[cno],KFName=S:\Core\Data\acsllc\support-idx.h[cno],Shr',i,i,k
 		fnopenprn
 	else
 		pr #255: ''
@@ -54,14 +51,29 @@ for fileItem=1 to fileNameCount
 		isEmptyLine=fn_lineIsEmpty(line$)
 		if ~isEmptyLine then
 			dim item$(0)*1024
-			str2mat(line$,mat item$,delim$,"QUOTES:TRIM")
+			str2mat(line$,mat item$,delim$,'QUOTES:TRIM')
 			if item$(1)<>'' then the_date=fn_get_the_date(item$(1))
+			
 			if the_date<the_date_prior and the_date_prior>20151218 then
-				pr file$(h_in)
-				pr 'line '&str$(line_count)
+				pr '________________________ exception ________________________'
+				pr 'File: '&file$(h_in)
+				pr 'Line: '&str$(line_count)
 				pr 'the_date('&str$(the_date)&')<the_date_prior('&str$(the_date_prior)&') - that indicates a problem'
 				pause
 			end if
+			
+						
+			if days(the_date,'ccyymmdd')-180>days(the_date_prior,'ccyymmdd') and the_date_prior then
+				pr '________________________ exception ________________________'
+				pr 'File: '&file$(h_in)
+				pr 'Line: '&str$(line_count)
+				pr 'Date: '&date$(days(the_date,'ccyymmdd'),'mm/dd/ccyy')
+				pr 'Date (prior line): '&date$(days(the_date_prior,'ccyymmdd'),'mm/dd/ccyy')
+				pr 'the_date-180('&date$(days(the_date,'ccyymmdd')-180,'mm/dd/ccyy')&') )>the_date_prior('&date$(days(the_date_prior,'ccyymmdd'),'mm/dd/ccyy')&') - that indicates a potential problem - a jump of more than 90 days forward.  Check the month and year are correct.'
+				pause
+			end if
+
+			
 			if the_date=>filter_date(1) and the_date<=filter_date(2) then
 				! if fileItem=2 then pr 'body:',line_count,line$ : pause
 				if udim(mat item$)>9 and item$(4)<>'#N/A' and val(item$(7))>0 then ! entry
@@ -70,6 +82,7 @@ for fileItem=1 to fileNameCount
 					! if client_id$='970' then pause
 					hours=val(item$(7))
 					! expense=val(item$(8))
+					dim sage_code$*128
 					if rtrm$(item$(13),cr$)<>'' then sage_code$=rtrm$(item$(13),cr$)
 					dim description$*1024
 					description$=item$(12)
@@ -408,19 +421,20 @@ def fn_get_the_date(gtd_source$*256)
 	fn_get_the_date=gtd_return
 fnend
 def fn_askDatesAndFile(mat label$,mat filter_date,mat empName$,mat filename$; ___,x)
-	fnTos(sn$="ask_"&str$(udim(mat label$))&'_dates')
+	dim resp$(20)*1048
+	fnTos(sn$='ask_'&str$(udim(mat label$))&'_dates')
 	respc=0
 	for ad_line=1 to udim(mat label$)
 		fnLbl(ad_line+1,1,label$(ad_line),25,1)
-		fnTxt(ad_line+1,27,8,0,1,"3")
+		fnTxt(ad_line+1,27,8,0,1,'3')
 		resp$(respc+=1)=str$(filter_date(ad_line))
 	next ad_line
 	ad_line+=1
-	fnLbl(ad_line+=1,1,'Employee 1:',25,1) : fnTxt(ad_line,27,8,64) : fnTxt(ad_line,37,40,256,0,"70")
-	fnLbl(ad_line+=1,1,'Employee 2:',25,1) : fnTxt(ad_line,27,8,64) : fnTxt(ad_line,37,40,256,0,"70")
-	fnLbl(ad_line+=1,1,'Employee 3:',25,1) : fnTxt(ad_line,27,8,64) : fnTxt(ad_line,37,40,256,0,"70")
-	fnLbl(ad_line+=1,1,'Employee 4:',25,1) : fnTxt(ad_line,27,8,64) : fnTxt(ad_line,37,40,256,0,"70")
-	fnLbl(ad_line+=1,1,'Employee 5:',25,1) : fnTxt(ad_line,27,8,64) : fnTxt(ad_line,37,40,256,0,"70")
+	fnLbl(ad_line+=1,1,'Employee 1:',25,1) : fnTxt(ad_line,27,8,64) : fnTxt(ad_line,37,40,256,0,'70')
+	fnLbl(ad_line+=1,1,'Employee 2:',25,1) : fnTxt(ad_line,27,8,64) : fnTxt(ad_line,37,40,256,0,'70')
+	fnLbl(ad_line+=1,1,'Employee 3:',25,1) : fnTxt(ad_line,27,8,64) : fnTxt(ad_line,37,40,256,0,'70')
+	fnLbl(ad_line+=1,1,'Employee 4:',25,1) : fnTxt(ad_line,27,8,64) : fnTxt(ad_line,37,40,256,0,'70')
+	fnLbl(ad_line+=1,1,'Employee 5:',25,1) : fnTxt(ad_line,27,8,64) : fnTxt(ad_line,37,40,256,0,'70')
 	fnureg_read('TM Employee 1 Name',resp$(resp_e1name:=respc+=1)) : fnureg_read('TM Employee 1 TimeSheet CSV',resp$(resp_e1_file:=respc+=1))
 	fnureg_read('TM Employee 2 Name',resp$(resp_e2name:=respc+=1)) : fnureg_read('TM Employee 2 TimeSheet CSV',resp$(resp_e2_file:=respc+=1))
 	fnureg_read('TM Employee 3 Name',resp$(resp_e3name:=respc+=1)) : fnureg_read('TM Employee 3 TimeSheet CSV',resp$(resp_e3_file:=respc+=1))

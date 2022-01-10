@@ -195,7 +195,7 @@ def fn_cReg_read(cr_fieldName$*128,&cr_fieldValue$; cr_defaultIfNotRead$*128,cr_
 fnend
 def fn_cReg_write(cw_fieldName$*128,cw_fieldValue$*256)
 	cw_fieldName$=rpad$(lwrc$(trim$(cw_fieldName$)),128)
-	rewrite #hCreg,using 'form pos 1,c 128,c 256',key=cw_fieldName$: cw_fieldName$,cw_fieldValue$ nokey CREG_WRITE ! XXX
+	rewrite #hCreg,using 'form pos 1,c 128,c 256',key=cw_fieldName$: cw_fieldName$,cw_fieldValue$ nokey CREG_WRITE err CReg_PreEtrn
 	! pr 'rewrite #hCreg'
 	goto CREG_SAVE_XIT
 	CREG_WRITE: !
@@ -205,8 +205,9 @@ def fn_cReg_write(cw_fieldName$*128,cw_fieldValue$*256)
 	! pr 'save ';trim$(cw_fieldName$);'=';cw_fieldValue$
 	fn_cReg_write=val(cw_fieldValue$) conv ignore
 fnend
+
 CReg_PreEtrn: ! r:
-	if err=4126 then
+	if err=4126 or err=4124 then ! added 4124 for rewrite on 1/10/2022
 		fn_creg_close
 		fnIndex(cregFileData$,cregFileIndex$,'1 128')
 		fn_creg_setup
@@ -249,7 +250,6 @@ fnend
 def library fnPcReg_write(fieldName$*128,fieldValue$*256; ___,pcId$*128)
 	fn_creg_setup
 	pcId$=env$('program_caption')&'.'&rtrm$(fieldName$)
-	! pr 'rite pcId$='&pcId$
 	fnPcReg_write=fn_cReg_write(pcId$,fieldValue$)
 fnend
 

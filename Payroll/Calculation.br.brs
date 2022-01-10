@@ -1598,7 +1598,7 @@ fnend
 	fnend
 	def fn_wh_oklahoma(taxableWagesCurrent,payPeriodsPerYear,allowances,marital; _
 			___,estAnnualNetPay,j2,tableRow,returnN)
-		!  REV. 1/01/07
+		!  revised 1/4/2022
 		if ~setup_okwh then ! r:
 			setup_okwh=1
 			dim ok(7,6)

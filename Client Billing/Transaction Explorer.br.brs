@@ -37,6 +37,7 @@ do
 		dim ch$(0)                 	, colMask$(0)
 		mat ch$(0)
 		mat colMask$(0)
+		fnAddOneC(mat ch$,'Rec'              	) : fnAddOneC(mat colMask$,'10')
 		fnAddOneC(mat ch$,'Invoice'          	) : fnAddOneC(mat colMask$,''  )
 		fnAddOneC(mat ch$,'Date'             	) : fnAddOneC(mat colMask$,'1' )
 		fnAddOneC(mat ch$,'Amount'           	) : fnAddOneC(mat colMask$,'10')
@@ -79,6 +80,7 @@ do
 							mat item$(0)
 							mat item$=('')
 							
+							fnAddOneC(mat item$,str$(rec(hTrans)        	) 	)
 							fnAddOneC(mat item$,     tr$(tr_inv          	) 	)
 							fnAddOneC(mat item$,str$(trN(tr_date         	))	)
 							fnAddOneC(mat item$,str$(trN(tr_amt          	))	)
@@ -112,7 +114,11 @@ do
 		if ckey=ck_add then
 			fn_transactionAdd(hTrans)
 		else if ckey=ck_edit then
-			pr 'ck_edit' : pause
+			 
+			pr resp$(1) 
+			pause
+			transRec=val(resp$(1))
+			fn_transactionEdit(hTrans,transRec)
 		else if ckey=ck_delete then
 			pr 'ck_delete' : pause
 		! else if ckey=ck_refresh then ! nothing needs to be done, just loop

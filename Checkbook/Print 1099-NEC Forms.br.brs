@@ -7,7 +7,7 @@
 	on error goto Ertn
 ! /r
 ! r: body of program
-	if fnask_1099_info(seltp,unused_type,minamt,beg_date,end_date) then
+	if fnAsk1099Info(seltp,unused_type,minamt,beg_date,end_date) then
 		open #payee=fnH: "Name=[Q]\CLmstr\PayMstr.h[cno],KFName=[Q]\CLmstr\PayIdx2.h[cno],Shr",i,i,k
 		open #trmstr2=fnH: "Name=[Q]\CLmstr\TrMstr.h[cno],KFName=[Q]\CLmstr\TrIdx2.h[cno],Shr",i,i,k
 		do
