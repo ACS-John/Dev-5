@@ -1,5 +1,5 @@
 enableFavorites=1
-enableUbCustomerEdit=1
+if env$('client')<>'White Hall' then enableUbCustomers=1 else enableUbCustomers=0 ! White Hall has 1043 active customers - it takes too long to load over and over.
 fn_setup
 
 ! r: setup once (additional setup stuff that just needs to be run once)
@@ -170,6 +170,7 @@ def fn_setupOnCursysChange
 
 	if env$('cursys')='UB' then
 		fnureg_read('ub_total_ar_on_dashboard',ub_total_ar_on_dashboard$)
+		fnureg_read('ub_showCustomers',ub_showCustomers$,'True')
 	end if
 
 	dashboard_height=fn_dashboardHeight
@@ -646,8 +647,8 @@ def fn_dashboardDraw
 			fn_ddAddButton('Collections',fkey_ub_collection:=5002,tmpBtnItem+=1,tmp_btn_width)
 			fn_ddAddButton('Customer',fkey_ub_customer:=5003,tmpBtnItem+=1,tmp_btn_width)
 			if ub_total_ar_on_dashboard$='True' then
-				fnLbl(1,40,'Total Accounts Receivable:',26,1,0,1)
-				fnLbl(1,68,str$(fntotal_ar),4,0,0,1)
+				fnLbl(1,40,'Accounts Receivable:'	,26,1,0,1) : fnLbl(1,68,str$(fnTotal_ar)            	,4,0,0,1)
+				fnLbl(2,40,'Active Customers:'   	,26,1,0,1) : fnLbl(2,68,str$(fnActiveCustomerCount)	,4,0,0,1)
 			end if
 		else if env$('cursystem')='Client Billing' then
 			tmp_btn_width=30 : tmpBtnItem=0
@@ -733,50 +734,52 @@ def fn_getProgramList(mat program_plus$,mat program_name$,mat program_name_trim$
 		EoPrEmployee: !
 		fnCloseFile(hPrEmployee,'PR Employee')
 	else if env$('cursys')='UB' then
-		! open #hUbCustomer=fnH: 'Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr',i,i,k
-		dim customer$(0)*256
-		dim customerN(0)
-		hUbCustomer=fn_openFio('UB Customer',mat customer$,mat customerN, 1)
-		! r: add header item
-		program_item_count=udim(mat program_file$)+1
-		mat program_plus$(program_item_count)
-		mat program_name$(program_item_count)
-		mat program_name_trim$(program_item_count)
-		mat program_file$(program_item_count)
-		mat ss_text$(program_item_count)
-		mat program_level(program_item_count)
-
-		program_plus$(program_item_count)='**'
-		program_name$(program_item_count)='Active Customers'
-		program_name_trim$(program_item_count)=trim$(program_name$(program_item_count))
-		program_file$(program_item_count)=''
-		ss_text$(program_item_count)='' ! program_name$(program_item_count)
-		program_level(program_item_count)=1
-		! /r
-		do
-			read #hUbCustomer,using form$(hUbCustomer): mat customer$,mat customerN eof EoUbCustomer ! ioerr UbCustomerReadErr
-			if customerN(c_finalBilling)=0 or customerN(c_finalBilling)=3 or customerN(c_finalBilling)=4 then
-				! r: add customer: item
-				program_item_count=udim(mat program_file$)+1
-				mat program_plus$(program_item_count)
-				mat program_name$(program_item_count)
-				mat program_name_trim$(program_item_count)
-				mat program_file$(program_item_count)
-				mat ss_text$(program_item_count)
-				mat program_level(program_item_count)
-
-				program_plus$(program_item_count)=''
-				program_name$(program_item_count)=customer$(c_account)&' '&rtrm$(customer$(c_name))
-				program_name_trim$(program_item_count)=trim$(program_name$(program_item_count))
-				program_file$(program_item_count)='customer:'&customer$(c_account)
-				ss_text$(program_item_count)=program_name$(program_item_count)
-				program_level(program_item_count)=2
-				! /r
-			end if
-			UbNextCustomer: !
-		loop
-		EoUbCustomer: !
-		fnCloseFile(hUbCustomer,'UB Customer')
+		if enableUbCustomers then
+			! open #hUbCustomer=fnH: 'Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr',i,i,k
+			dim customer$(0)*256
+			dim customerN(0)
+			hUbCustomer=fn_openFio('UB Customer',mat customer$,mat customerN, 1)
+			! r: add header item
+			program_item_count=udim(mat program_file$)+1
+			mat program_plus$(program_item_count)
+			mat program_name$(program_item_count)
+			mat program_name_trim$(program_item_count)
+			mat program_file$(program_item_count)
+			mat ss_text$(program_item_count)
+			mat program_level(program_item_count)
+	
+			program_plus$(program_item_count)='**'
+			program_name$(program_item_count)='Active Customers'
+			program_name_trim$(program_item_count)=trim$(program_name$(program_item_count))
+			program_file$(program_item_count)=''
+			ss_text$(program_item_count)='' ! program_name$(program_item_count)
+			program_level(program_item_count)=1
+			! /r
+			do
+				read #hUbCustomer,using form$(hUbCustomer): mat customer$,mat customerN eof EoUbCustomer ! ioerr UbCustomerReadErr
+				if customerN(c_finalBilling)=0 or customerN(c_finalBilling)=3 or customerN(c_finalBilling)=4 then
+					! r: add customer: item
+					program_item_count=udim(mat program_file$)+1
+					mat program_plus$(program_item_count)
+					mat program_name$(program_item_count)
+					mat program_name_trim$(program_item_count)
+					mat program_file$(program_item_count)
+					mat ss_text$(program_item_count)
+					mat program_level(program_item_count)
+	
+					program_plus$(program_item_count)=''
+					program_name$(program_item_count)=customer$(c_account)&' '&rtrm$(customer$(c_name))
+					program_name_trim$(program_item_count)=trim$(program_name$(program_item_count))
+					program_file$(program_item_count)='customer:'&customer$(c_account)
+					ss_text$(program_item_count)=program_name$(program_item_count)
+					program_level(program_item_count)=2
+					! /r
+				end if
+				UbNextCustomer: !
+			loop
+			EoUbCustomer: !
+			fnCloseFile(hUbCustomer,'UB Customer')
+		end if ! enableUbCustomers
 	end if
 fnend
 ! UbCustomerReadErr: !

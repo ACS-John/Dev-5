@@ -103,7 +103,7 @@ fnend
 			fn_setupClient_add('Bethany' 								,   '380',    34326)
 			fn_setupClient_add('Billings'								,   '440',    33534)
 			fn_setupClient_add('Blucksberg' 						,   '465',    34564)
-			fn_setupClient_add('Brier Lake'							,   '578',    20306)
+			fn_setupClient_add('Brier Lake'						,   '578',    20306)
 			fn_setupClient_add('Campbell'								,   '700',    33942)
 			fn_setupClient_add('Carr Plumbing'					,   '780',    34610)
 			fn_setupClient_add('Cerro Gordo V'					,   '850',    34508) ! 33994)
@@ -113,7 +113,7 @@ fnend
 			fn_setupClient_add('Crockett County'				,  '1141',    15110)
 			fn_setupClient_add('Divernon'								,  '1350',    33698)
 			fn_setupClient_add('Dorothy Salch'					,  '3812',    34494)
-			fn_setupClient_add('Ed Horton'							,  '5535',        0)! Ed processes like ACS
+			fn_setupClient_add('Ed Horton'							,  '5535',        0) ! Ed processes like ACS
 			fn_setupClient_add('Edinburg'								,  '1478',    34022)
 			fn_setupClient_add('Edison'									,  '1480',    34022)
 			fn_setupClient_add('Evelyn Pareya'					,  '3385',    34366)
@@ -125,7 +125,7 @@ fnend
 			fn_setupClient_add('Galena'									,  '1945',    34566)
 			fn_setupClient_add('Grandview'							,  '2050',    34040)
 			fn_setupClient_add('GreeneCo'								,  '2070',    33910)
-			fn_setupClient_add('Hope Welty'							,   '851',    34152)
+			fn_setupClient_add('Hope Welty'						,   '851',    34152)
 			fn_setupClient_add('Payroll Done Right'		,  '3393',        0)
 			fn_setupClient_add('Peter Engler'					,   'ped',        0)
 			fn_setupClient_add('Kathys Bookkeeping'		,  '3979',    33672)
@@ -134,19 +134,19 @@ fnend
 			fn_setupClient_add('Moweaqua'								,  '3045',    34594) ! 200032790) ! 33986 <--??  I don't know where that came from - 200032790 was their 4.13 version
 			fn_setupClient_add('Morrisonville'					,  '3050',    34408) ! 32242  <-- that's white hall's but there was a mistake in license file for a while
 			fn_setupClient_add('Omaha'									,  '3320',    33346)
-			fn_setupClient_add('Pennington'							,  '3431',    33332)
+			fn_setupClient_add('Pennington'						,  '3431',    33332)
 			fn_setupClient_add('Purdy'									,  '3610',    34570)
 			fn_setupClient_add('Raymond'								,  '3660',    32798)
 			fn_setupClient_add('RecoverysUnlimited'		,  '3670',        0)
-			fn_setupClient_add('R R Crawford'					,   '760',    12466)  ! owns a system, but is stalling support until their old stuff breaks.
+			fn_setupClient_add('R R Crawford'					,   '760',    12466) ! owns a system, but is stalling support until their old stuff breaks.
 			fn_setupClient_add('Thomas Richardson'			,  '3720',     7718)
 			fn_setupClient_add('Scottville Rural'			,  '3840',    33390)
 			fn_setupClient_add('Stern and Stern'				,  '4132',200014280)
 			fn_setupClient_add('Thayer'									,  '4245',    32800)
-			fn_setupClient_add('Thomasboro'							,  '4260',    34068)
+			fn_setupClient_add('Thomasboro'						,  '4260',    34068)
 			fn_setupClient_add('Unity'									,  '4380',    34478)
-			fn_setupClient_add('White Hall'							,  '4625',    32242)
-			fn_setupClient_add('World Wide'							,  '4650',    33604)
+			fn_setupClient_add('White Hall'						,  '4625',    32242)
+			fn_setupClient_add('World Wide'						,  '4650',    33604)
 			fn_setupClient_add('Zaleski'								,  '4710',    34164)
 			! r: removed
 			! fn_setupClient_add('Allendale'							,   '200',        0)
@@ -591,7 +591,7 @@ def fn_getClientLicense(mat clientHas$)
 		!   fn_getClientLicense_add('PR')
 		else if env$('client')='White Hall' then
 			fn_userLimit(2)
-			fn_getClientLicense_add('UB')
+			fn_getClientLicense_add('UB') !   1000+  -  fn_setUbLimit     do they not have one???
 			!   else if env$('client')='Willard' then
 			!     fn_userLimit(1)
 			!     fn_getClientLicense_add('GL')
@@ -682,21 +682,6 @@ fnend
 !   fnuser_limit_exceeded=user_limit_exceeded
 ! /r fnend
 
-! def library fnregistered_for_hh ! use fnClientHas('U4') instead
-! 	fn_setup
-! 	fn_getClientLicense(mat clientHas$)
-! 	fnRegistered_for_hh=fn_clientHas('U4') ! fn_registered_for_hh
-! fnend
-! def library fnRegistered_for_job_cost_pr ! use fnClientHas('P4') instead
-! 	fn_setup
-! 	fn_getClientLicense(mat clientHas$)
-! 	fnRegistered_for_job_cost_pr=fn_clientHas('P4') !
-! fnend
-! def library fnRegistered_for_GlBudgetMgmt ! use fnClientHas('GB') instead
-! 	fn_setup
-! 	fn_getClientLicense(mat clientHas$)
-! 	fnRegistered_for_GlBudgetMgmt=fn_clientHas('GB')
-! fnend
 def library fnhand_held_device$*20
 	fn_setup
 	fn_getClientLicense(mat clientHas$)

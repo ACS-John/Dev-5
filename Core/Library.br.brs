@@ -1064,6 +1064,20 @@ fnend
 		library 'S:\Core\Reg.br': fnPcReg_read
 		fnPcReg_read=fnPcReg_read(reg_field_name$,reg_field_value$, reg_field_default$,cr_alsoApplyDefaultIfReadBlank)
 	fnend
+		def library fnPcRegRead$*256(fieldName$*128; default$*128,alsoApplyDefaultIfReadBlank,___,return$*256)
+			library 'S:\Core\Reg.br': fnPcReg_read
+			fnPcReg_read(fieldName$,return$, default$,alsoApplyDefaultIfReadBlank)
+			fnPcRegRead$=return$
+		fnend
+		def library fnPcRegReadN(fieldName$*128; defaultN,___,alsoApplyDefaultIfReadBlank,default$*128,return$*256,returnN)
+			if defaultN then default$=str$(defaultN) ! : alsoApplyDefaultIfReadBlank=1
+			library 'S:\Core\Reg.br': fnPcReg_read
+			returnN=fnPcReg_read(fieldName$,return$, default$,1) ! ,alsoApplyDefaultIfReadBlank)
+			if ~returnN then returnN=defaultN ! fixes when it's been read as '0' and thus default was not applied
+			fnPcRegReadN=returnN
+			! pr 'fnPcRegReadN should be returning the value of '&return$ 
+		fnend
+	
 	def library fnPcReg_write(reg_field_name$*128,reg_field_value$*256)
 		library 'S:\Core\Reg.br': fnPcReg_write
 		fnPcReg_write=fnPcReg_write(reg_field_name$,reg_field_value$)
@@ -1096,10 +1110,6 @@ fnend
 		library 'S:\Core\Reg.br': fnreg_rename
 		fnreg_rename=fnreg_rename(field_name_old$,fieldNameNew$)
 	fnend
-	! def library fnIniToReg
-	! 	library 'S:\Core\Reg.br': fnIniToReg
-	! 	fnIniToReg=fnIniToReg
-	! fnend
 	def library fnReadProgramPrintProperty(key$*80,&value$; programFileOverride$*256)
 		library 'S:\Core\program_properties.br': fnReadProgramPrintProperty
 		fnReadProgramPrintProperty=fnReadProgramPrintProperty(key$,value$, programFileOverride$)
@@ -1495,6 +1505,10 @@ fnend
 	def library fntotal_ar
 		library 'S:\Utility Billing\View Total Accounts Receivable.br': fntotal_ar
 		fntotal_ar=fntotal_ar
+	fnend
+	def library fnActiveCustomerCount
+		library 'S:\Utility Billing\View Total Accounts Receivable.br': fnActiveCustomerCount
+		fnActiveCustomerCount=fnActiveCustomerCount
 	fnend
 	def library fnfix_trans_breakdowns(do_fix,do_report)
 		library 'S:\Utility Billing\Check Balance Breakdowns.br': fnfix_trans_breakdowns

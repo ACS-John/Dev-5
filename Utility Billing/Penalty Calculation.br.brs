@@ -50,8 +50,8 @@ if fn_scrMain then !
 		dim xd(15)    ! only (11) used
 		read #hCustomer,using Fcustomer: z$,mat e$,mat xa,bal,lastBillingDate,mat g,mat gb,mat extra,mat 	xd eof EoCustomer
 		
-		! if env$('acsDeveloper')<>'' and trim$(z$)='100001.00' then debug_this_account=1 else debug_this_account=0
-		if debug_this_account then showMath=1 else showMath=0
+		! if env$('acsDeveloper')<>'' and trim$(z$)='100004.11' then debugThisAccount=1 else debugThisAccount=0
+		if debugThisAccount then showMath=1 else showMath=0
 		route_number=extra(1)
 		! if env$('client')='Divernon' and bal<0 then goto CustomerRead
 		if bud1=1 then
@@ -105,7 +105,8 @@ def fn_scrMain(; returnN)
 			fnpcreg_write('minBal',str$(minimumBal))
 			fnFree('[Q]\UBmstr\minBal.h[cno]')
 		end if
-		minimumBal=fnpcreg_read('minBal','1')
+		minimumBal=fnPcregReadN('minBal', 1)
+		! pr 'minimumBal=';minimumBal : pause
 	! /r
 
 	dim resp$(32)*128
@@ -114,26 +115,31 @@ def fn_scrMain(; returnN)
 	fnTos
 	mylen=27
 	mypos=mylen+2
-	fnLbl(1,1,'Penalty Date:',mylen,right)
-	fnTxt(1,mypos,10,0,1,'1003')
+	lc=0
+	fnLbl(lc+=1,1,'Penalty Date:',mylen,right)
+	fnTxt(lc,mypos,10,0,1,'1003')
 	resp$(1)=str$(pendat)
-	fnLbl(2,1,'Last Billing Date:',mylen,right)
-	fnTxt(2,mypos,10,0,1,'1003')
+	fnLbl(lc+=1,1,'Last Billing Date:',mylen,right)
+	fnTxt(lc,mypos,10,0,1,'1003')
 	resp$(2)=str$(bildat)
-	fnLbl(3,1,'Report Heading Date:',mylen,right)
-	fnTxt(3,mypos,20)
+	fnLbl(lc+=1,1,'Report Heading Date:',mylen,right)
+	fnTxt(lc,mypos,20)
 	resp$(3)=dat$
-	fnChk(4,31,'Print Meter Address:',right)
+	lc+=1
+	fnChk(lc+=1,31,'Print Meter Address:',right)
 	resp$(4)='False'
-	fnChk(5,31,'Print Mailing Address:',right)
+	fnChk(lc+=1,31,'Print Mailing Address:',right)
 	resp$(5)='False'
-	fnLbl(6,1,'Minimum Balance:',mylen,right)
-	fnTxt(6,mypos,8,0,1,'10',0,'The customer''s balance must be at least this amount before a penalty will be calculated.')
+	lc+=1
+	fnLbl(lc+=1,1,'Minimum Balance:',mylen,right)
+	fnTxt(lc,mypos,8,0,1,'10',0,'The customer''s balance must be at least this amount before a penalty will be calculated.')
 	resp$(6)=str$(minimumBal)
-	fnFra(8,1,2,45,'Base for calculating penalty','The penalty can either be calculated on current bill or the total balance owed.',0)
-	fnOpt(1,2,'Base penalty on current bill',0,1)
+	lc+=1
+	fnFra(lc+=1,1,2,45,'Base for calculating penalty','The penalty can either be calculated on current bill or the total balance owed.',0)
+	flc=0
+	fnOpt(flc+=1,2,'Base penalty on current bill',0,1)
 	resp$(7)='True'
-	fnOpt(2,2,'Base penalty on total balance',0,1)
+	fnOpt(flc+=1,2,'Base penalty on total balance',0,1)
 	resp$(8)='False'
 	if env$('client')='Colyell' or env$('client')='Cerro Gordo V' then ! can change the default on that to: Base penalty on total balance
 		resp$(7)='False'
@@ -150,9 +156,6 @@ def fn_scrMain(; returnN)
 		if resp$(5)='True' then printmail=1 ! wants meter mailing address
 		minimumBal=val(resp$(6))
 		fnpcreg_write('minBal',str$(minimumBal))
-		! open #minBal:=5: 'Name=[Q]\UBmstr\minBal.h[cno],Use,RecL=10,Shr',i,outi,r
-		! rewrite #minBal,using 'Form pos 1,n 10.2',rec=1,release: minimumBal
-		! close #minBal:
 		if resp$(7)='True' then penaltybase$='Bill' ! base penalties on current bill
 		if resp$(8)='True' then penaltybase$='Balance' ! base penalties on current balance
 		dim msgline$(1)*80
@@ -190,7 +193,7 @@ def fn_pencal ! penalty calculation
 	! 	basepenalty(10)=bal-basepenalty(9) ! lovington allocate water and sewer penalty in ration of water to sewer
 	! 	goto GOT_BASEPENALTY ! lovington
 	end if
-	! if debug_this_account then pause
+	! if debugThisAccount then pause
 	if env$('client')='Franklinton' then fn_franklinton : goto L1370
 	if penaltybase$='Bill' and bal<g(11) then ! use the balance to calculate penalty if balance less than last bill
 		if showMath then pr #255: '     *** use the balance ('&str$(bal)&') to calculate penalty if balance less than last bill ('&str$(g(11))&')( usebalance=1 )'
@@ -225,7 +228,7 @@ def fn_pencal ! penalty calculation
 			negatives+=gb(j)
 		end if
 	! L1060: !
-	! if debug_this_account then pr ' mat basepenalty should get set here subjectto('&str$(j)&')=';subjectto(j) : pause
+	! if debugThisAccount then pr ' mat basepenalty should get set here subjectto('&str$(j)&')=';subjectto(j) : pause
 		if subjectto(j)>0 then ! accumulate all charges by the penalty they are subject to
 			if showMath then
 				pr #255: '     accumulate all charges by the penalty they are subject to'
@@ -276,13 +279,33 @@ def fn_pencal ! penalty calculation
 			rt(1,3)=0
 			mc1=0 ! nokey but still amount take up a column and calculate 0
 			L1240: !
-			if env$('client')='Riverside' and j=10 then ! r:
+			if env$('client')='White Hall' then enableBaseAddition=1 ! adds the minimum Amount to the Percentage instead of taking the highest of the two.
+			if enableBaseAddition then ! r:  ! adds the minimum Amount to the Percentage instead of taking the highest of the two.
+				! if debugThisAccount then pause
+				! if env$('client')='Exeter' then basepenalty(9)=basepenalty(10) : basepenalty(10)=0  ! XXX  This is for the first month only!
+				if showMath and round(basepenalty(j)*rt(1,3),2)<>0 then
+					pr #255: '     calculated Penalty Base is '&penaltybase$&' '&str$(basepenalty(j))
+					pr #255: '     Penalty: tg('&str$(j)&')=round('&str$(basepenalty(j))&'*'&str$(rt(1,3))&',2)'
+					tg(j)=round(basepenalty(j)*rt(1,3),2)
+					pr #255: '     tg('&str$(j)&')='&str$(tg(j))
+				else
+					tg(j)=round(basepenalty(j)*rt(1,3),2) ! penalty based on base amount that was accumulated for each penalty field * rate for that penalty code
+				end if
+				if showMath then
+					! pr #255: '     tg('&str$(j)&')=max('&str$(mc1)&','&str$(tg(j))&')'
+					pr #255: '     tg('&str$(j)&')='&str$(tg(j))&'+'&str$(mc1)
+				end if
+				tg(j)+=mc1 ! max(mc1,tg(j))
+				
+				
+			! /r
+			else if env$('client')='Riverside' and j=10 then ! r:
 				g(10)=round(rt(1,3)*min(mc1,g(1)+g(2)+g(3)+g(4)+g(5)+g(6)+g(7)+g(8)),2)
 				g(10)=g(10)+rt(2,3)*round(max(0,g(1)+g(2)+g(3)+g(4)+g(5)+g(6)+g(7)+g(8)-mc1),2)
 				g(10)=max(0,g(10))
 				tg(10)=g(10)
 			else ! /r
-				! if debug_this_account then pause
+				! if debugThisAccount then pause
 				! if env$('client')='Exeter' then basepenalty(9)=basepenalty(10) : basepenalty(10)=0  ! XXX  This is for the first month only!
 				if showMath and round(basepenalty(j)*rt(1,3),2)<>0 then
 					pr #255: '     calculated Penalty Base is '&penaltybase$&' '&str$(basepenalty(j))
