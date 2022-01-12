@@ -38,7 +38,7 @@ def fn_hamster(uw$*128,mat lbl$,mat fln,hIn,mat p$; mat flTyp$,mat sln,mat mask$
 	dim keyorder(199) ! contains a 0 if not a key, else contains it's sequence in the order of fields used to make the key
 	dim cmask$(199) ! Flexgrid Column Mask
 	dim flxItem$(199)*2048,flxhdr$(199)*80 ! flexgrid item and header
-	dim key$*80 ! dynamically built key
+	dim key$*512 ! dynamically built key
 	dim resp$(256)*1024
 	! /r
 	! r: prepare arrays
