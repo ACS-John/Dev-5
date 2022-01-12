@@ -301,11 +301,11 @@ def fn_1099print(vn$*8,nam$*30,mat empAddr$,ss$*11,mat box; ___, _
 		! pr 'printing with  left  =';left    
 		! pause
 		
-		fnreg_read('1099 - 3 Per Page',threePerPage$,'True' )
-		fnreg_read('1099 - Enable Background',enableBackground$,'True' )
+		fnPcReg_read('3 Per Page',threePerPage$,'True' )
+		fnPcReg_read('Enable Background',enableBackground$,'True' )
 		fnureg_read('1099 - Export Filename',output_filename$,os_filename$(env$('Desktop')&'\ACS [TaxYear] 1099 Export (Company [CompanyNumber]).txt'))
 		dim ph$*12
-		fncreg_read('Phone Number',ph$)
+		fnCreg_read('Phone Number',ph$)
 		copyCurrentN=fnPcRegReadN('Copy Current',2)
 		if ten99Export$='True' then
 			dim output_filename$*256
