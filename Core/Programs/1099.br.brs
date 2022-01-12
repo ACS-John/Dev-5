@@ -15,10 +15,6 @@
 
 def fn_1099testPrint
 	! r: test values
-	dim testVn$*8
-	testVn$='Account'
-	dim testName$
-	testName$='Recipient Name'
 	dim testAddr$(3)*60
 	testAddr$(1)='Recipient Addr part 1'
 	testAddr$(2)='Recipient Addr part 2'
@@ -37,7 +33,9 @@ def fn_1099testPrint
 	testBox(10)=90001000
 	! /r
 	disableCopyAWarning=1
-	fn_1099print(testVn$,testName$,mat testAddr$,'111-22-3344',mat testBox)
+	fn_1099print('account1','Recipient One'  ,mat testAddr$,'111-11-1111',mat testBox)
+	fn_1099print('Account2','Recipient Two'  ,mat testAddr$,'222-22-2222',mat testBox)
+	fn_1099print('Account3','Recipient Three',mat testAddr$,'333-33-3333',mat testBox)
 	disableCopyAWarning=0
 	fn_1099print_close
 fnend
@@ -56,7 +54,6 @@ def fn_setup
 		optCopy$(3)='B - For Recipient'
 		optCopy$(4)='C - For Payer'
 		optCopy$(5)='2 - To be filed with recipient;;s state income tax return, when required'
-	dim copyCurrent$*72
 	dim copyFile$(5)*128,ssnMask(5)
 	taxYear$=date$(days(date$)-120,'CCYY')
 	copyFile$(1)='S:\Core\pdf\'&taxYear$&'\1099-Nec\Copy A.pdf' : ssnMask(1)=0
@@ -74,7 +71,7 @@ def library fnAsk1099Info(&seltpN,&typeN,&minAmt,&beg_date,&end_date)
 fnend
 def fn_ask1099Info(&seltpN,&typeN,&minAmt,&beg_date,&end_date; ___, _
 	returnN,rc,lc,mylen,mypos,mylen,resc_taxYear,respc_deduction,respc_minAmt,respc_phone, _
-	respc_Print1099,respc_twoPerPage,respc_export_ams,resp_export_file, _ 
+	respc_Print1099,respc_threePerPage,respc_export_ams,resp_export_file, _ 
 	ckey_defaultFilename,ckey_margins,ckey_test)
 	! local retained values: awi_setup$, taxYear$, mat deductionFullName$, mat deductionOption$,deductionOptionCount, and many many more
 	if awi_setup$<>env$('cursys')&env$('cno') then ! r: read or set values for ASK_INFO screen
@@ -101,8 +98,8 @@ def fn_ask1099Info(&seltpN,&typeN,&minAmt,&beg_date,&end_date; ___, _
 		fnpcreg_read('Print 1099'       	,destinationOpt$(1)	,'True' )
 		fnpcreg_read('Export 1'         	,destinationOpt$(2)	,'False')
 		fnpcreg_read('Enable Background'	,enableBackground$	,'True' )
-		fnpcreg_read('2 Per Page'       	,twoPerPage$       	,'False')
-		fnpcreg_read('Copy Current'     	,copyCurrent$,optCopy$(2)) : copyCurrent=max(1,srch(mat optCopy$,copyCurrent$))
+		fnpcreg_read('3 Per Page'       	,threePerPage$       	,'True')
+		copyCurrentN=fnPcRegReadN('Copy Current',2)
 		fnureg_read('1099 - Export Filename',output_filename$,os_filename$(env$('Desktop')&'\ACS [TaxYear] 1099 Export (Company [CompanyNumber]).txt'))
 		fncreg_read('Phone Number',ph$)
 		dim seltp$*256
@@ -142,12 +139,11 @@ def fn_ask1099Info(&seltpN,&typeN,&minAmt,&beg_date,&end_date; ___, _
 	resp$(respc_Print1099:=rc+=1)=destinationOpt$(1)
 	fnLbl(lc+=1,5,'Copy:',12,1,0)
 	fncomboa('Copy',lc,19,mat optCopy$, '',20)
-	resp$(respc_copyCurrent:=rc+=1)=copyCurrent$
-	fnLbl(lc+=1,20,'(2 per page is not yet available with Backgrounds)',50,0)
+	resp$(respc_copyCurrent:=rc+=1)=optCopy$(copyCurrentN)
 	fnChk(lc+=1,20,'Enable Background',1)
 	resp$(respc_enableBackground:=rc+=1)=enableBackground$
-	fnChk(lc+=1,20,'2 Per Page',1)
-	resp$(respc_twoPerPage:=rc+=1)=twoPerPage$
+	fnChk(lc+=1,20,'3 Per Page',1)
+	resp$(respc_threePerPage:=rc+=1)=threePerPage$
 	lc+=1
 	fnOpt(lc+=1,3,'Export for Advanced Micro Solutions')
 	resp$(respc_export_ams:=rc+=1)=destinationOpt$(2)
@@ -177,9 +173,10 @@ def fn_ask1099Info(&seltpN,&typeN,&minAmt,&beg_date,&end_date; ___, _
 		ph$=resp$(respc_phone)
 		beg_date=val(taxYear$&'0101')
 		end_date=val(taxYear$&'1231')
-		copyCurrent$=resp$(respc_copyCurrent)
+		copyCurrentN=srch(mat optCopy$,resp$(respc_copyCurrent))
+		if copyCurrentN<=0 then pause
 		enableBackground$=resp$(respc_enableBackground)
-		twoPerPage$=resp$(respc_twoPerPage)
+		threePerPage$=resp$(respc_threePerPage)
 		destinationOpt$(1)=resp$(respc_Print1099)
 		destinationOpt$(2)=resp$(respc_export_ams)
 		output_filename$=resp$(resp_export_file)
@@ -218,15 +215,15 @@ def fn_ask1099Info(&seltpN,&typeN,&minAmt,&beg_date,&end_date; ___, _
 		if env$('cursys')='PR' then
 			fnpcreg_write('1099 Box to Print',type$)
 		end if
-		fncreg_write('1099 - Copy Current',copyCurrent$)
+		fnpcreg_write('Copy Current',str$(copyCurrentN))
 		fnpcreg_write('Print 1099',destinationOpt$(1))
 		fnpcreg_write('Enable Background',enableBackground$)
-		fnpcreg_write('2 Per Page',twoPerPage$)
+		fnpcreg_write('3 Per Page',threePerPage$)
 		fnpcreg_write('Export 1',destinationOpt$(2))
 		fnureg_write('1099 - Export Filename',output_filename$)
 		fncreg_write('Phone Number',ph$)
 		! /r
-		if copyCurrent$=optCopy$(1) and enableBackground$='True' and ~disableCopyAWarning then fnFormCopyAwithBackgroundWarn
+		if copyCurrentN=1 and enableBackground$='True' and ~disableCopyAWarning then fnFormCopyAwithBackgroundWarn
 		if ckey=ckey_test then
 			fn_1099testPrint
 			goto ASK_INFO
@@ -235,27 +232,41 @@ def fn_ask1099Info(&seltpN,&typeN,&minAmt,&beg_date,&end_date; ___, _
 	end if
 	fn_ask1099Info=returnN
 fnend
-	def fn_ask_margins
-		fnreg_read('1099 - Form 1 Y'	,amResp$(1),'5' )
-		fnreg_read('1099 - Form 2 Y'	,amResp$(2),'144')
-		fnreg_read('1099 - X'        	,amResp$(3),'5' )
+	def fn_ask_margins(; ___,lc,mypos,mylen)
+		! sets local form1y,form2y,left
+		dim amResp$(10)*64
+		gosub SetDefaultMargins
+		amResp$(1)=fnPcRegRead$('Form 1 Y'	,defaultMargin$(1))
+		amResp$(2)=fnPcRegRead$('Form 2 Y'	,defaultMargin$(2))
+		amResp$(3)=fnPcRegRead$('Form 3 Y'	,defaultMargin$(3))
+		amResp$(4)=fnPcRegRead$('X'        	,defaultMargin$(4))
 		fnTos
 		lc=0 : mylen=30 : mypos=mylen+2
 		fnLbl(lc+=1,1,'Form 1 Distance from Top (mm):',mylen,1) 	: fnTxt(lc,mypos,3,0,1,'30')
 		fnLbl(lc+=1,1,'Form 2 Distance from Top (mm):',mylen,1) 	: fnTxt(lc,mypos,3,0,1,'30')
+		fnLbl(lc+=1,1,'Form 3 Distance from Top (mm):',mylen,1) 	: fnTxt(lc,mypos,3,0,1,'30')
+		lc+=1
 		fnLbl(lc+=1,1,'Left Margin Size (mm):',mylen,1)          	: fnTxt(lc,mypos,3,0,1,'30')
 		fnCmdSet(4)
 		fnAcs(mat amResp$,ckey)
 		if ckey<>5 then
-			fnreg_write('1099 - Form 1 Y' 	,amResp$(1))
-			fnreg_write('1099 - Form 2 Y' 	,amResp$(2))
-			fnreg_write('1099 - X'         	,amResp$(3))
-			topmargin 	=val(amResp$(1))
-			bottom    	=val(amResp$(2))
+			fnPcReg_write('Form 1 Y' 	,amResp$(1))
+			fnPcReg_write('Form 2 Y' 	,amResp$(2))
+			fnPcReg_write('Form 3 Y' 	,amResp$(3))
+			fnPcReg_write('X'         	,amResp$(4))
+			form1y 	=val(amResp$(1))
+			form2y    	=val(amResp$(2))
 			left      	=val(amResp$(3))
 		end if
 	fnend
-
+	SetDefaultMargins: ! r:
+		defaultMargin$(1)=  '0' ! form 1 top margin
+		defaultMargin$(2)= '90' ! form 2 top margin
+		defaultMargin$(3)='180' ! form 3 top margin
+		defaultMargin$(4)=  '5' ! left
+	return ! /r
+def fn_read1099margins(one$,two$,three$,four$)
+fnend
 def library fn1099print(vn$*8,nam$*30,mat empAddr$,ss$*11,mat box)
 	if ~setup then fn_setup
 	fn1099print=fn_1099print(vn$,nam$,mat empAddr$,ss$,mat box)
@@ -278,16 +289,24 @@ def fn_1099print(vn$*8,nam$*30,mat empAddr$,ss$*11,mat box; ___, _
 			fed$='12-456789012'
 		end if
 		fnpcreg_read('Export 1' ,ten99Export$,'False')
-		topmargin 	=fnreg_read('1099 - Form 1 Y'	,tmp$,'5'  )
-		bottom    	=fnreg_read('1099 - Form 2 Y'	,tmp$,'144')
-		left      	=fnreg_read('1099 - X'        	,tmp$,'5'  )
-		fnreg_read('1099 - 2 Per Page',twoPerPage$,'False' )
+		gosub SetDefaultMargins
+		form1y 	=fnPcRegReadN('Form 1 Y'	,val(defaultMargin$(1)))
+		form2y 	=fnPcRegReadN('Form 2 Y'	,val(defaultMargin$(2)))
+		form3y 	=fnPcRegReadN('Form 3 Y'	,val(defaultMargin$(3)))
+		left   	=fnPcRegReadN('X'        	,val(defaultMargin$(4)))
+		
+		! pr 'printing with form1y =';form1y 
+		! pr 'printing with  form2y=';form2y  
+		! pr 'printing with form3y =';form3y 
+		! pr 'printing with  left  =';left    
+		! pause
+		
+		fnreg_read('1099 - 3 Per Page',threePerPage$,'True' )
 		fnreg_read('1099 - Enable Background',enableBackground$,'True' )
 		fnureg_read('1099 - Export Filename',output_filename$,os_filename$(env$('Desktop')&'\ACS [TaxYear] 1099 Export (Company [CompanyNumber]).txt'))
 		dim ph$*12
 		fncreg_read('Phone Number',ph$)
-		fnpcreg_read('Copy Current'    ,copyCurrent$,optCopy$(1)) : copyCurrent=max(1,srch(mat optCopy$,copyCurrent$))
-
+		copyCurrentN=fnPcRegReadN('Copy Current',2)
 		if ten99Export$='True' then
 			dim output_filename$*256
 			output_filename$=srep$(output_filename$,'[CompanyNumber]',env$('cno'))
@@ -298,7 +317,7 @@ def fn_1099print(vn$*8,nam$*30,mat empAddr$,ss$*11,mat box; ___, _
 			output_filename$=srep$(output_filename$,'[TAXYEAR]',taxYear$)
 			open #hExport=fnH: 'Name='&br_filename$(output_filename$)&',REPLACE',d,o ioerr ASK_INFO
 		else
-			fnpa_open('',copyCurrent$,'PDF')
+			fnpa_open('',optCopy$(copyCurrentN),'PDF')
 		end if
 	end if ! /r
 
@@ -346,10 +365,11 @@ def fn_1099print(vn$*8,nam$*30,mat empAddr$,ss$*11,mat box; ___, _
 		column3 	= left + 137
 		column4 	= left + 168
 		ten99Count+=1
-		if ten99Count=1 then yOffset=topmargin
-		if ten99Count=2 then yOffset=bottom
+		if ten99Count=1 then yOffset=form1y
+		if ten99Count=2 then yOffset=form2y
+		if ten99Count=3 then yOffset=form3y
 		if enableBackground$='True' and ten99Count=1 then
-			fnpa_background(CopyFile$(copyCurrent))
+			fnpa_background(CopyFile$(copyCurrentN))
 		end if
 		fnpa_FontSize
 		! ! r: draw developer lines
@@ -399,7 +419,7 @@ def fn_1099print(vn$*8,nam$*30,mat empAddr$,ss$*11,mat box; ___, _
 			! /r
 		! /r
 
-		if twoPerPage$='False' or ten99Count=2 then
+		if threePerPage$='False' or ten99Count=3 then
 			fnpa_newpage
 			ten99Count=0
 		end if
@@ -429,7 +449,7 @@ fnend
 			lineXy(13)=74 ! Account number
 			lineXy(14)=75 ! box 5b,6b,7b
 		end if
-		fn_line=lineXy(lineNumber)
+		fn_line=lineXy(lineNumber)+yOffset
 	fnend
 
 def library fn1099print_close
