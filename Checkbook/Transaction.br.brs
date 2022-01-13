@@ -457,7 +457,7 @@ TransactionDelete: ! r:
 	fnLbl(lc+=1,1,'Delete Transaction Options',width,center)
 	ln+=1
 	fnChk(lc+=1,1,'Update Bank Balance')
-	resp$(1)="True"
+	resp$(1)='True'
 	fnChk(lc+=1,1,'Delete Transaction Allocations too')
 	resp$(2)='True'
 	fnCmdSet(2)

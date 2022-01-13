@@ -99,7 +99,7 @@ SCR2: ! r:
 	if ips>0 and ips=<udim(code$) then resp$(respc+=1)=code$(ips+1) else resp$(respc+=1)=""
 	fncomboa("DataNames2",12,mylen+3,mat code$,"If you want limit the report to a value in a particular field in the employee record, Indicate which field it is by locatiing the ID number of the field using Help button.",25,0)
 	fnChk(13,mylen+3,"Summarize Departmental Records:",1)
-	if sd= 1 then resp$(respc+=1)="TRUE" else resp$(respc+=1)="FALSE"
+	if sd= 1 then resp$(respc+=1)='True' else resp$(respc+=1)='False'
 	fnCmdKey("&Next",1,1,0,"Save changes and move to next questions" )
 	fnCmdKey("&Delete",4,0,0,"Deletes this report from your system.")
 	fnCmdKey("&Cancel",5,0,1,"Return to selection screen.")
@@ -188,7 +188,7 @@ SCR4: ! r:
 		fncomboa("DataNames",j+2,1,mat code$,"",25,1)
 		fnTxt(j+2,37,3,0,0,"30",0,"The position is the starting position acress the page where this column should print.",1)
 		resp$(respc+=1)=str$(pp(j))
-		if ti(j)=1 then resp$(respc+=1)="True" else resp$(respc+=1)="False"
+		if ti(j)=1 then resp$(respc+=1)='True' else resp$(respc+=1)='False'
 		fnChk(j+2,48,"",1,1) ! total the column
 	next j
 	fnCmdKey("&Next",1,1,0,"Save changes on this report design." )
@@ -204,7 +204,7 @@ SCR4: ! r:
 			next j1
 			L1330: !
 			pp(x)=val(resp$(j-1))
-			if resp$(j)="True" then ti(x)=1 else ti(x)=0
+			if resp$(j)='True' then ti(x)=1 else ti(x)=0
 		next j
 		if rptn=rn then
 			rewrite #h_prreport,using F_PRREPORT,key=rptn$: rn,rt$,mat ch$,ips,sd,cp,mat psc,mat inp,mat pp,mat ti

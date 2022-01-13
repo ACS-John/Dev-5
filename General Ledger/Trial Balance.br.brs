@@ -21,13 +21,13 @@ Screen1: ! r:
 	fnTos
 	lc=rc=0 : mylen=25 : mypos=mylen+2
 	! fnChk(lc+=1,mypos,"List All Details",1)
-	! resp$(1)="True"
+	! resp$(1)='True'
 	fnLbl(lc+=1,1,"Cost Center:",mylen,1)
 	fnTxt(lc,mypos,5,0,0,'number')
 	resp$(rc_costCenter=rc+=1)=""
 	lc+=1
 	fnChk(lc+=1,mypos,"Subtotal after each fund",1)
-	resp$(rc_subtotalFund=rc+=1)="True"
+	resp$(rc_subtotalFund=rc+=1)='True'
 	lc+=1
 	fnLbl(lc+=1,1,"Starting Account:",mylen,1)
 	fnqgl(lc,mypos,0,1)
@@ -51,7 +51,7 @@ Screen1: ! r:
 	costcent=val(resp$(rc_costCenter))
 	dim n$*12
 	n$=lpad$(str$(costcent),3)&"     0  0"
-	if resp$(rc_subtotalFund)="True" then subt=1 else subt=0
+	if resp$(rc_subtotalFund)='True' then subt=1 else subt=0
 	sl1$=fnagl$(resp$(rc_acctStart))
 	sl2$=fnagl$(resp$(rc_acctEnd))
 	restore #hAcct,key>=n$: nokey Screen1

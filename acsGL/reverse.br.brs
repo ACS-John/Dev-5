@@ -30,7 +30,7 @@ MENU1: !
 	fnTxt(10,mypos,12,0,1,"",0,"",0 )
 	resp$(6)=r_rn$
 	fnChk(11,mypos,"Reverse Entry Now:",1)
-	resp$(7)="True"
+	resp$(7)='True'
 	fnCmdKey("&Next",1,1,0,"Proceed with reversing adjustments.")
 	fnCmdKey("&Cancel",5,0,1,"Return to menu without reversing.")
 	ckey=fnAcs(mat resp$)
@@ -38,10 +38,10 @@ MENU1: !
 	s_ad=val(resp$(1))
 	s_rn$=resp$(2)
 	s_tc=val(resp$(3))
-	if resp$(4)="True" then sh$="Y" else sh$="N"
+	if resp$(4)='True' then sh$="Y" else sh$="N"
 	r_ad=val(resp$(5))
 	r_rn$=resp$(6)
-	if resp$(7)="True" then re$="Y" else re$="N"
+	if resp$(7)='True' then re$="Y" else re$="N"
 	s_rn$=uprc$(rtrm$(ltrm$(s_rn$)))
 
 	open #glmstr=1: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLIndex.h[cno],Shr",internal,outIn,keyed

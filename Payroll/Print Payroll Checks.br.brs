@@ -362,17 +362,17 @@ ALLIGNMENT: ! r:
 	fnTos
 	respc=0 : rc=0
 	fnOpt(1,3,"Reprint same check",0,franum)
-	resp$(rc+=1)="False"
+	resp$(rc+=1)='False'
 	fnOpt(2,3,"Print next",0,franum)
-	resp$(rc+=1)="False"
+	resp$(rc+=1)='False'
 	fnOpt(3,3,"Print all remaining",0,franum)
-	resp$(rc+=1)="True"
+	resp$(rc+=1)='True'
 	if env$('client')='Billings' then resp$(2)='True' : resp$(3)='False'
 	fnCmdSet(2)
 	ckey=fnAcs(mat resp$) ! allignment
-	if resp$(1)="True" then allign=1
-	if resp$(2)="True" then allign=2
-	if resp$(3)="True" then allign=3
+	if resp$(1)='True' then allign=1
+	if resp$(2)='True' then allign=2
+	if resp$(3)='True' then allign=3
 	if ckey=5 then getout=1: allign=2: goto CheckPrintTop ! write history on last check and quit
 	on allign goto ReprintSameCheck,CheckPrintTop,CheckPrintTop none ALLIGNMENT
 ! /r

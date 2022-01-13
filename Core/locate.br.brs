@@ -39,9 +39,9 @@ MAIN: !
 	fnTxt(lc,ps,38)
 	resp$(rc+=1)=filter$
 	fnChk(lc+=1,ps,'Append Previous Report',0)
-	resp$(rc+=1)="False"
+	resp$(rc+=1)='False'
 	fnChk(lc+=1,ps,'Renumber all Programs',0)
-	resp$(rc+=1)="False"
+	resp$(rc+=1)='False'
 	lc+=1 ! blank line
 	fnLbl(lc+=1,1,"Insert this Line:",lngth,1)
 	fnTxt(lc,ps,40,78,0,"",0,"This will be executed after Renumber, if you choose to, a good example is '45 ! this is a dumb comment'" )
@@ -67,7 +67,7 @@ MAIN: !
 	next j
 	L500: pr "Found "&str$(j-1)&" files."
 	open #2: "Name="&procfile$&",Replace",d,o
-	if uprc$(app_prev$)="FALSE" then fnFree(report$)
+	if uprc$(app_prev$)='False' then fnFree(report$)
 	L530: pr #2: "print border: 'Locating...'"
 	! pr #2: "ProcErr Return" ! quietly continue on error ! XXX
 	for j=1 to udim(brfn$)
@@ -86,7 +86,7 @@ MAIN: !
 			pr #2: "List '"&lc$&"' Replace '"&rep$&"' >"&subprocfile$ : _
 			pr #2: "SubProc "&subprocfile$ : _
 			pr #2: "Replace "&brfn$(j)
-		if rnm$="True" then              pr #2: "Renum"
+		if rnm$='True' then              pr #2: "Renum"
 		if insline$<>"" then             pr #2: insline$
 		if rep$<>"" or insline$<>"" then pr #2: "Replace "&brfn$(j)
 		if rep$="" and lc2$="" then      pr #2: "List '"&lc$&"' >>"&report$

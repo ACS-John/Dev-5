@@ -17,15 +17,15 @@
  
 	fnTop(program$,cap$="Build Transactions")
 LOOP_STEP_1: !
-	delubtransvb$="True"
-! removebaddates$="True" ! Gosub MENU1
+	delubtransvb$='True'
+! removebaddates$='True' ! Gosub MENU1
 	fn_ub_build_transactions
 	goto Xit
 MENU1: ! r:
 	fnTos
 	fnLbl(1,1,"Convert Transactions")
-	fnChk(4,1,"Delete existing transaction file before conversion") : resp$(1)="True"
-	fnChk(5,1,"Remove Transactions with Bad Dates") : resp$(2)="False"
+	fnChk(4,1,"Delete existing transaction file before conversion") : resp$(1)='True'
+	fnChk(5,1,"Remove Transactions with Bad Dates") : resp$(2)='False'
 	fnCmdSet(2)
 	ckey=fnAcs(mat resp$)
 	delubtransvb$=resp$(1) : removebaddates$=resp$(2)
@@ -35,13 +35,13 @@ return  ! /r
 Xit: chain "S:\acsUB\conversion\UBmstr-vb"
 def library fnub_cnv_build_transactions
 	autoLibrary
-	delubtransvb$="True"
-	! removebaddates$="True" ! Gosub MENU1
+	delubtransvb$='True'
+	! removebaddates$='True' ! Gosub MENU1
 	fnub_cnv_build_transactions=fn_ub_build_transactions
 fnend
 def fn_ub_build_transactions
 		fnStatus('Building Transactions...')
-		if uprc$(delubtransvb$)=uprc$("True") and exists("[Q]\UBmstr\ubtransvb.h[cno]") then execute "Free [Q]\UBmstr\ubtransvb.h[cno] -n"
+		if uprc$(delubtransvb$)=uprc$('True') and exists("[Q]\UBmstr\ubtransvb.h[cno]") then execute "Free [Q]\UBmstr\ubtransvb.h[cno] -n"
  
 		fnStatus('   * an error indexing ubindx5 on the next line is acceptable')
 		fnub_index_customer
@@ -137,7 +137,7 @@ PHASE4: !
 		close #master:
 		close #transvb:
 		fnIndex("[Q]\UBmstr\UBTransvb.h[cno]", "[Q]\UBmstr\UBTrindx.h[cno]","1 19")
-		if removebaddates$="True" then let fn_removebaddates
+		if removebaddates$='True' then let fn_removebaddates
 		fnStatus('    Build Transaction - write_count='&str$(write_count))
 		fnStatus('Building Transactions complete.')
 fnend  ! fn_ub_build_transactions

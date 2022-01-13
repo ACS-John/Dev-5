@@ -93,9 +93,9 @@ ADD_EDIT_SCHEDULES: ! r:
 	fnTxt(3,mypos,80,0,left,"",0,"",0 )
 	resp$(3)=ft$
 	fnChk(4,mypos,"Print Dollar Signs:",1)
-	if dp=1 then resp$(4)="True" else resp$(4)="False"
+	if dp=1 then resp$(4)='True' else resp$(4)='False'
 	fnChk(5,mypos,"Reverse Sign:",1)
-	if rs=1 then resp$(5)="True" else resp$(5)="False"
+	if rs=1 then resp$(5)='True' else resp$(5)='False'
 	fnLbl(6,1,"Type of Schedule:",mylen,right)
 	option$(1)="Print Year to Date Only"
 	option$(2)="Print Current Month and Year to Date"
@@ -111,8 +111,8 @@ ADD_EDIT_SCHEDULES: ! r:
 	sn=val(resp$(1)(1:3)) conv ADD_EDIT_SCHEDULES
 	schnam$=resp$(2)
 	ft$=resp$(3)
-	if resp$(4)="True" then dp=1 else dp=0
-	if resp$(5)="True" then rs=1 else rs=0
+	if resp$(4)='True' then dp=1 else dp=0
+	if resp$(5)='True' then rs=1 else rs=0
 	for j=1 to j
 		if resp$(6)=option$(j) then cm=j
 	next j

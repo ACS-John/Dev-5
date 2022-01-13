@@ -81,39 +81,39 @@ ASKTRANSET: ! r:
 	cf+=1 : fratype=cf
 	fnOpt(1,3,"[All]",0,fratype)
 	if sel_code=1 or sel_code=0 then
-		resp$(rc+=1)="True"
+		resp$(rc+=1)='True'
 	else
-		resp$(rc+=1)="False"
+		resp$(rc+=1)='False'
 	end if
 	fnOpt(2,3,"Charges",0,fratype)
 	if sel_code=2 then
-		resp$(rc+=1)="True"
+		resp$(rc+=1)='True'
 	else
-		resp$(rc+=1)="False"
+		resp$(rc+=1)='False'
 	end if
 	fnOpt(3,3,"Penalties",0,fratype)
 	if sel_code=3 then
-		resp$(rc+=1)="True"
+		resp$(rc+=1)='True'
 	else
-		resp$(rc+=1)="False"
+		resp$(rc+=1)='False'
 	end if
 	fnOpt(4,3,"Collections",0,fratype)
 	if sel_code=4 then
-		resp$(rc+=1)="True"
+		resp$(rc+=1)='True'
 	else
-		resp$(rc+=1)="False"
+		resp$(rc+=1)='False'
 	end if
 	fnOpt(5,3,"Credit Memos",0,fratype)
 	if sel_code=5 then
-		resp$(rc+=1)="True"
+		resp$(rc+=1)='True'
 	else
-		resp$(rc+=1)="False"
+		resp$(rc+=1)='False'
 	end if
 	fnOpt(6,3,"Debit Memos",0,fratype)
 	if sel_code=6 then
-		resp$(rc+=1)="True"
+		resp$(rc+=1)='True'
 	else
-		resp$(rc+=1)="False"
+		resp$(rc+=1)='False'
 	end if
 	fnFra(1,30,3,42,"Date Range","You can transactions for any date range or leave these blank to see all transactions.")
 	cf+=1 : fradate=cf : mylen=26 : mypos=mylen+2
@@ -137,17 +137,17 @@ ASKTRANSET: ! r:
 	fnCmdKey("&Cancel",5,0,1,"Returns to customer record")
 	ckey=fnAcs(mat resp$)
 	if ckey=cancel then goto Xit_ASKTRANSET
-	if resp$(1)="True" then
+	if resp$(1)='True' then
 		sel_code=1
-	else if resp$(2)="True" then
+	else if resp$(2)='True' then
 		sel_code=2
-	else if resp$(3)="True" then
+	else if resp$(3)='True' then
 		sel_code=3
-	else if resp$(4)="True" then
+	else if resp$(4)='True' then
 		sel_code=4
-	else if resp$(5)="True" then
+	else if resp$(5)='True' then
 		sel_code=5
-	else if resp$(6)="True" then
+	else if resp$(6)='True' then
 		sel_code=6
 	end if
 	beg_date=val(resp$(7))

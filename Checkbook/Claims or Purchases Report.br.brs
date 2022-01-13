@@ -263,7 +263,7 @@ ASK_TI1: ! r:
 	fncomboa("claims-srt",2,40,mat item1$,tt$)
 	resp$(respc+=1)=item1$(1)
 	fnChk(3,41,"Include previously paid Invoices:",1)
-	resp$(respc+=1)="False"
+	resp$(respc+=1)='False'
 	fnLbl(5,1,"Starting Date:",38,1)
 	fnTxt(5,40,8,0,1,"1",0,"Only applicable if including previously paid invoices!")
 	resp$(respc+=1)=""
@@ -281,7 +281,7 @@ ASK_TI1: ! r:
 	fncomboa("claims-3",10,40,mat item2$,"You have a choice of listing all unpaid invoices on the report, or just those that have been selected for payment")
 	resp$(respc+=1)=item2$(1)
 	fnChk(11,41,"Include payroll checks:",1)
-	resp$(respc+=1)="False"
+	resp$(respc+=1)='False'
 	fnLbl(13,1,"Beginning Position of Department Number:",43,1)
 	fnTxt(13,46,2,0,1,"30",0,"If you have departmental breakdowns within a fund, you must identify the first digit of the department # within the general ledger number")
 	resp$(respc+=1)=" "

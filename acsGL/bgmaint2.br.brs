@@ -535,47 +535,47 @@ fnTos
 respc=0 : right=1 : mylen=25 : mypos=mylen+3
 fnLbl(lyne+=1,1,"Check the columns your want prirted",38,1)
 fnChk(lyne+=2,mypos,"GL Description:",1)
-resp$(respc+=1)="False"
+resp$(respc+=1)='False'
 fnTxt(lyne,mypos+5,2,0,0,"30",0,"Maximum column width can not exceed the defaults that are displayed.")
 resp$(respc+=1)=str$(an2(lyne-2))
 fnChk(lyne+=1,mypos,"Budget Amount:",1)
-resp$(respc+=1)="False"
+resp$(respc+=1)='False'
 fnTxt(lyne,mypos+5,2,0,0,"30",0,"Maximum column width can not exceed the defaults that are displayed.")
 resp$(respc+=1)=str$(an2(lyne-2))
 fnChk(lyne+=1,mypos,"Paid / Received:",1)
-resp$(respc+=1)="False"
+resp$(respc+=1)='False'
 fnTxt(lyne,mypos+5,2,0,0,"30",0,"Maximum column width can not exceed the defaults that are displayed.")
 resp$(respc+=1)=str$(an2(lyne-2))
 fnChk(lyne+=1,mypos,"Unpaid Expenses:",1)
-resp$(respc+=1)="False"
+resp$(respc+=1)='False'
 fnTxt(lyne,mypos+5,2,0,0,"30",0,"Maximum column width can not exceed the defaults that are displayed.")
 resp$(respc+=1)=str$(an2(lyne-2))
 fnChk(lyne+=1,mypos,"Changed Amount:",1)
-resp$(respc+=1)="False"
+resp$(respc+=1)='False'
 fnTxt(lyne,mypos+5,2,0,0,"30",0,"Maximum column width can not exceed the defaults that are displayed.")
 resp$(respc+=1)=str$(an2(lyne-2))
 fnChk(lyne+=1,mypos,"New Budget:",1)
-resp$(respc+=1)="False"
+resp$(respc+=1)='False'
 fnTxt(lyne,mypos+5,2,0,0,"30",0,"Maximum column width can not exceed the defaults that are displayed.")
 resp$(respc+=1)=str$(an2(lyne-2))
 fnChk(lyne+=1,mypos,"Next Years Budget:",1)
-resp$(respc+=1)="False"
+resp$(respc+=1)='False'
 fnTxt(lyne,mypos+5,2,0,0,"30",0,"Maximum column width can not exceed the defaults that are displayed.")
 resp$(respc+=1)=str$(an2(lyne-2))
 fnChk(lyne+=1,mypos,"Reason for Change:",1)
-resp$(respc+=1)="False"
+resp$(respc+=1)='False'
 fnTxt(lyne,mypos+5,2,0,0,"30",0,"Maximum column width can not exceed the defaults that are displayed.")
 resp$(respc+=1)=str$(an2(lyne-2))
 fnChk(lyne+=1,mypos,"Budget Remaining:",1)
-resp$(respc+=1)="False"
+resp$(respc+=1)='False'
 fnTxt(lyne,mypos+5,2,0,0,"30",0,"Maximum column width can not exceed the defaults that are displayed.")
 resp$(respc+=1)=str$(an2(lyne-2))
 fnChk(lyne+=1,mypos,"General Ledger Number:",1)
-resp$(respc+=1)="False"
+resp$(respc+=1)='False'
 fnTxt(lyne,mypos+5,2,0,0,"30",0,"Maximum column width can not exceed the defaults that are displayed.")
 resp$(respc+=1)=str$(an2(lyne-2))
 fnChk(lyne+=1,mypos,"% of Budget Used:",1)
-resp$(respc+=1)="False"
+resp$(respc+=1)='False'
 fnTxt(lyne,mypos+5,2,0,0,"30",0,"Maximum column width can not exceed the defaults that are displayed.")
 resp$(respc+=1)=str$(an2(lyne-2))
 fnLbl(lyne+=1,1,"Report Heading Date:",mylen,1)
@@ -585,17 +585,17 @@ fnCmdKey("&Next",1,1,0,"Display ")
 fnCmdKey("E&xit",5,0,1,"Returns to main menu")
 ckey=fnAcs(mat resp$) ! pr setup
 if ckey=5 then goto DISPLAY_GRID
-if resp$(1)="True" then 	an1$(1)="Y" : an2(1)=val(resp$(2))
-if resp$(3) ="True" then an1$(2)= "Y" : an2(2)=val( resp$(4))
-if resp$(5) ="True" then an1$(3)= "Y" : an2(3)=val( resp$(6))
-if resp$(7) ="True" then an1$(4)= "Y" : an2(4)=val( resp$(8))
-if resp$(9) ="True" then an1$(5)= "Y" : an2(5)=val(resp$(10))
-if resp$(11)="True" then an1$(6)= "Y" : an2(6)=val(resp$(12))
-if resp$(13)="True" then an1$(7)= "Y" : an2(7)=val(resp$(14))
-if resp$(15)="True" then an1$(8)= "Y" : an2(8)=val(resp$(16))
-if resp$(17)="True" then an1$(9)= "Y" : an2(9)=val(resp$(18))
-if resp$(19)="True" then an1$(10)="Y": an2(10)=val(resp$(20))
-if resp$(21)="True" then an1$(11)="Y": an2(11)=val(resp$(22))
+if resp$(1)='True' then 	an1$(1)="Y" : an2(1)=val(resp$(2))
+if resp$(3) ='True' then an1$(2)= "Y" : an2(2)=val( resp$(4))
+if resp$(5) ='True' then an1$(3)= "Y" : an2(3)=val( resp$(6))
+if resp$(7) ='True' then an1$(4)= "Y" : an2(4)=val( resp$(8))
+if resp$(9) ='True' then an1$(5)= "Y" : an2(5)=val(resp$(10))
+if resp$(11)='True' then an1$(6)= "Y" : an2(6)=val(resp$(12))
+if resp$(13)='True' then an1$(7)= "Y" : an2(7)=val(resp$(14))
+if resp$(15)='True' then an1$(8)= "Y" : an2(8)=val(resp$(16))
+if resp$(17)='True' then an1$(9)= "Y" : an2(9)=val(resp$(18))
+if resp$(19)='True' then an1$(10)="Y": an2(10)=val(resp$(20))
+if resp$(21)='True' then an1$(11)="Y": an2(11)=val(resp$(22))
 rdate$=resp$(23)
 for j=1 to 11
 	if an2(1)>maxan2(j) then
@@ -742,12 +742,12 @@ INCLUDE_CHANGES: ! r:
 fnTos
 respc=0: mylen=40: mypos=mylen+3 : lyne=0
 fnChk(lyne+=1,mypos,"Include Changes in Remaining Balance:",1)
-resp$(respc+=1)="True"
+resp$(respc+=1)='True'
 fnCmdKey("&Next",1,1,0,"Continue with re-calculations. ")
 fnCmdKey("E&xit",5,0,1,"Returns to main menu")
 ckey=fnAcs(mat resp$) ! include changes if remaining balance
 if ckey=5 then goto MENU1
-if resp$(1)="True" then ti3=1 else ti3=2
+if resp$(1)='True' then ti3=1 else ti3=2
 chg=1
 goto READD_TOTALS ! /r
 !
@@ -755,9 +755,9 @@ ASK_ABOUT_HISTORY: ! r:
 fnTos
 respc=0: mylen=40: mypos=mylen+3 : lyne=0
 fnChk(lyne+=1,mypos,"Include Actual Receitps and Expenditures:",1)
-resp$(respc+=1)="True"
+resp$(respc+=1)='True'
 fnChk(lyne+=1,mypos,"Include Budget Amounts:",1)
-resp$(respc+=1)="True"
+resp$(respc+=1)='True'
 fnLbl(lyne+=1,1,"Years to Review:",mylen,1)
 fnTxt(lyne,mypos,2,0,0,"30",0,"Year code in YY format.")
 resp$(respc+=1)=""
@@ -769,8 +769,8 @@ fnCmdKey("&Next",1,1,0,"Display ")
 fnCmdKey("E&xit",5,0,1,"Returns to main menu")
 ckey=fnAcs(mat resp$) ! ask prior years
 if ckey=5 then goto MENU1
-if resp$(1)="True" then needactual=1 else needactual=0
-if resp$(2)="True" then needbudget=1 else needbudget=0
+if resp$(1)='True' then needactual=1 else needactual=0
+if resp$(2)='True' then needbudget=1 else needbudget=0
 totalextra=0
 for j=1 to 5
 	year(j)=val(resp$(j+2))

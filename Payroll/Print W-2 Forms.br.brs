@@ -233,7 +233,7 @@ READ_EMPLOYEE: ! r:
 		gosub BOX16_process
 		for dedItem=1 to 20
 			if trim$(fullname$(dedItem))<>'' then
-				if dedyn$(dedItem)="True" and miscded(dedItem)<>0 then
+				if dedyn$(dedItem)='True' and miscded(dedItem)<>0 then
 					if box12which(dedItem)=box_12a then
 						if box12aCode$='' and box12aAmt$='' then
 							box12aCode$=lpad$(dedcode$(dedItem),4)
@@ -325,7 +325,7 @@ Finis: ! r:
 		gosub PrintW2
 		fnpa_finis
 	end if
-	if enableW3$="True" then let fnw3(taxYear$,empId$,mat a$,mat w,dcb,state$,stcode$)
+	if enableW3$='True' then let fnw3(taxYear$,empId$,mat a$,mat w,dcb,state$,stcode$)
 	if exportFormatID then
 			mat tmpMsgLine$(2)
 			tmpMsgLine$(1)='Export file created:'

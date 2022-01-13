@@ -3,14 +3,14 @@ fnTop(program$)
 MENU1: ! r:
 	fnTos : chk_align=0
 	fnLbl(1,1,"Scan:")
-	fnChk(2,5,"Scan Customer Balance Breakdowns",chk_align) : resp$(1)="True"
-	fnChk(3,5,"Scan Transaction Breakdowns"     ,chk_align) : resp$(2)="True"
+	fnChk(2,5,"Scan Customer Balance Breakdowns",chk_align) : resp$(1)='True'
+	fnChk(3,5,"Scan Transaction Breakdowns"     ,chk_align) : resp$(2)='True'
 	fnLbl(5,1,"Error Handling:")
-	fnChk(6,5,"Report Erroneous Transactions"   ,chk_align) : resp$(3)="True"
-	fnChk(7,5,"Fix Erroneous Transactions"      ,chk_align) : resp$(4)="False"
+	fnChk(6,5,"Report Erroneous Transactions"   ,chk_align) : resp$(3)='True'
+	fnChk(7,5,"Fix Erroneous Transactions"      ,chk_align) : resp$(4)='False'
 	fnLbl(9,1,"Miscellaneous:")
-	fnChk(10,5,"Move Credit Balnces to Other"   ,chk_align) : resp$(5)="False"
-	fnChk(11,5,"  and apply credits"            ,chk_align) : resp$(6)="False"
+	fnChk(10,5,"Move Credit Balnces to Other"   ,chk_align) : resp$(5)='False'
+	fnChk(11,5,"  and apply credits"            ,chk_align) : resp$(6)='False'
 	fnCmdSet(2)
 	ckey=fnAcs(mat resp$)
 	if ckey<>5 then 

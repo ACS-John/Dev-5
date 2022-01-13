@@ -284,15 +284,15 @@ ASK_MONTHLY: ! ask monthly info or ytd info
 	fnTos(sn$="ACglcasf2") : _
 	mylen=30: mypos=mylen+3 : right=1
 	fnOpt(1,2,"Print Monthly Figures" ,0,0) : _
-	resp$(2)="False"
+	resp$(2)='False'
 	fnOpt(2,2,"Print Year to Date Figures" ,0,0) : _
-	resp$(2)="True"
+	resp$(2)='True'
 	fnCmdKey("&Next",1,1,0,"Prints the financial statement.")
 	fnCmdKey("&Cancel",5,0,1,"Returns to menu without posting.")
 	ckey=fnAcs(mat resp$)
 	if ckey=5 then goto Xit
-	if resp$(1)="True" then monthly=1
-	if resp$(2)="True" then monthly=2
+	if resp$(1)='True' then monthly=1
+	if resp$(2)='True' then monthly=2
 return
  
 include: ertn

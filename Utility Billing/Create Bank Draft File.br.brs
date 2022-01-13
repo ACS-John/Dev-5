@@ -36,7 +36,7 @@ fnTop(program$)
 	d1=val(resp$(1))
 	d2=val(resp$(2))
 	pth$=trim$(resp$(respc_bankDraftFile))
-	if resp$(4)="True" then postub=1
+	if resp$(4)='True' then postub=1
 	
 	fnureg_write('Bank Draft File',pth$)
 	

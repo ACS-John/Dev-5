@@ -183,36 +183,36 @@ ASK_PERIOD: ! r:
 	respc=0
 	fnFra(1,1,2,50,"Print from current month files or history"," ")
 	fnOpt(1,3,"Current Period Transactions",0,1)
-	resp$(respc+=1)="True"
+	resp$(respc+=1)='True'
 	fnOpt(2,3,"Prior Period Transactions",0,1)
-	resp$(respc+=1)="False"
+	resp$(respc+=1)='False'
 	fnFra(5,1,8,50,"Select Journals to Print"," ")
 	fnChk(1,3,"Disbursements Journal",0,2)
-	resp$(respc+=1)="True"
+	resp$(respc+=1)='True'
 	fnChk(2,3,"Receipts Journal",0,2)
-	resp$(respc+=1)="True"
+	resp$(respc+=1)='True'
 	fnChk(3,3,"General Journal (Adj)",0,2)
-	resp$(respc+=1)="True"
+	resp$(respc+=1)='True'
 	fnChk(4,3,"General Journal (A/P)",0,2)
-	resp$(respc+=1)="False"
+	resp$(respc+=1)='False'
 	fnChk(5,3,"General Journal (Payroll)",0,2)
-	resp$(respc+=1)="False"
+	resp$(respc+=1)='False'
 	fnChk(6,3,"General Journal (A/R)",0,2)
-	resp$(respc+=1)="False"
+	resp$(respc+=1)='False'
 	fnChk(7,3,"Sales Journal",0,2)
-	resp$(respc+=1)="False"
+	resp$(respc+=1)='False'
 	fnChk(8,3,"Purchases Journal",0,2)
-	resp$(respc+=1)="False"
+	resp$(respc+=1)='False'
 	fnLbl(16,1,"Prior period code (blank for all):",35,0)
 	fnTxt(16,37,2,0,1,"30",0,"Prior period code is only applicable if printing from history.  Enter the period code for the month you want printed. Use blank for all and also if you chose current period transactions.")
 	resp$(respc+=1)=" "
 	fnCmdSet(2)
 	ckey=fnAcs(mat resp$)
 	if ckey=5 then goto Xit
-	if resp$(1)="True" then cur_prior=1 else cur_prior=2
+	if resp$(1)='True' then cur_prior=1 else cur_prior=2
 	mat journal_to_print=(0)
 	for j=1 to 8
-		if resp$(j+2)="True" then journal_to_print(j)=1
+		if resp$(j+2)='True' then journal_to_print(j)=1
 	next j
 	prior_period=val(resp$(11)) ! prior period code
 	if prior_period<0 or prior_period>13 then prior_period=0

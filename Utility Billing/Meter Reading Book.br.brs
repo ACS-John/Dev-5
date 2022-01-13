@@ -49,17 +49,17 @@ MENU1: ! r:
 	resp$(2)=fn_reg_try$('ubMetrRt.service type',option$(1))
 	lc+=1
 	fnChk(lc+=1,mylen+2,"Print Footnotes:",1)
-	resp$(3)=fn_reg_try$('ubMetrRt.print footnotes',"False")
+	resp$(3)=fn_reg_try$('ubMetrRt.print footnotes','False')
 	fnChk(lc+=1,mylen+2,"Double Space:",1)
-	resp$(4)=fn_reg_try$('ubMetrRt.double space',"False")
+	resp$(4)=fn_reg_try$('ubMetrRt.double space','False')
 	fnChk(lc+=1,mylen+2,"Blank Used Column:",1)
-	resp$(5)=fn_reg_try$('ubMetrRt.blank used column',"False")
+	resp$(5)=fn_reg_try$('ubMetrRt.blank used column','False')
 	fnChk(lc+=1,mylen+2,"Show Disconnects:",1)
-	resp$(6)=fn_reg_try$('ubMetrRt.show disconnects',"False")
+	resp$(6)=fn_reg_try$('ubMetrRt.show disconnects','False')
 	fnChk(lc+=1,mylen+2,"Print Prior Usage:",1)
-	resp$(7)=fn_reg_try$('ubMetrRt.print prior usage',"False")
+	resp$(7)=fn_reg_try$('ubMetrRt.print prior usage','False')
 	fnChk(lc+=1,mylen+2,"Skip Meter Number:",1)
-	resp$(rc_disableMeterNo=8)=fn_reg_try$('ubMetrRt.skip meter number',"False")
+	resp$(rc_disableMeterNo=8)=fn_reg_try$('ubMetrRt.skip meter number','False')
 	lc+=1
 	fnLbl(lc+=1,1,"Number of Blank Lines:",mylen-2,1)
 	fnTxt(lc,mylen+2,2,0,0,"30",0,"If you want extra space between accounts, enter the number of lines.")
@@ -67,9 +67,9 @@ MENU1: ! r:
 	lc+=1
 	fnFra(lc+=1,10,2,26,"Order for printing","The billing journal can be printed if route # sequence, Account sequence or name sequence.",0)
 	fnOpt(1,2,"Route Number Sequence",0,1)
-	resp$(10)=fn_reg_try$('ubMetrRt.route number sequence',"True")
+	resp$(10)=fn_reg_try$('ubMetrRt.route number sequence','True')
 	fnOpt(2,2,"Account Sequence",0,1)
-	resp$(11)=fn_reg_try$('ubMetrRt.account sequence',"False")
+	resp$(11)=fn_reg_try$('ubMetrRt.account sequence','False')
 	fnCmdSet(3)
 	ckey=fnAcs(mat resp$)
 	if ckey=5 then goto Xit
@@ -83,8 +83,8 @@ MENU1: ! r:
 	enablePrior=0     	: if resp$(7)(1:1)="T" then enablePrior=1 ! pr prior months usage
 	enableMeterNo=0   	: if resp$(rc_disableMeterNo)(1:1)="F" then enableMeterNo=1 ! don't pr meter number
 	extralines=val(resp$(9))
-	if resp$(10)="True" then seq=1
-	if resp$(11)="True" then seq=2
+	if resp$(10)='True' then seq=1
+	if resp$(11)='True' then seq=2
 	fnreg_write('ubMetrRt.route',resp$(1))
 	fnreg_write('ubMetrRt.service type',resp$(2))
 	fnreg_write('ubMetrRt.print footnotes',resp$(3))

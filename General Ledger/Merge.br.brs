@@ -144,15 +144,15 @@ ScrMissingGl: ! r:
 		fnLbl(5,10, "     Description: "&p$ ,mylen,left)
 		fnLbl(7,5, "This general ledger account does not exist!" ,60,0)
 		fnOpt(8,10,"Add this Account",0,0)
-		resp$(respc_accountAdd=rc+=1)="True"
+		resp$(respc_accountAdd=rc+=1)='True'
 		fnOpt(9,10,"Change Account Number",0,0)
-		resp$(respc_AccountChg=rc+=1)="True"
-		resp$(1)="False"
+		resp$(respc_AccountChg=rc+=1)='True'
+		resp$(1)='False'
 		fnCmdKey("&Next",1,1,0,"Allows you to either add the account or change the account number.")
 		ckey=fnAcs(mat resp$)
-		if resp$(respc_accountAdd)="True" then
+		if resp$(respc_accountAdd)='True' then
 			goto ADD
-		else if resp$(respc_AccountChg)="True" then
+		else if resp$(respc_AccountChg)='True' then
 			! r: Change Account
 			fnTos
 			mylen=23: mypos=mylen+3

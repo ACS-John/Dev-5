@@ -84,7 +84,7 @@
 	fncomboa("pruc1-3",3,30,mat qtr_option$,"Enter the quarter you are processing.")
 	resp$(respc+=1)=quarter$
 	fnChk(5,40,"Round to Whole Dollars:",1)
-	resp$(respc+=1)="False"
+	resp$(respc+=1)='False'
 	fnChk(6,40,"Show Total Column:",1)
 	resp$(respc+=1)=column$(1)
 	fnChk(7,40,"Show Excess Wage Column:",1)
@@ -208,10 +208,10 @@ L1640: !
 L1650: !
 	h3=m1-h2
 	if round$="Y" then h3=round(h3,0)
-	if column$(1)<>"True" then m1=0 ! no total column
-	if column$(2)<>"True" then h3=0 ! no excess column
-	if column$(3)<>"True" then h2=0 ! no taxable column
-	if column$(4)<>"True" then state_wh=0 ! no state withholding column
+	if column$(1)<>'True' then m1=0 ! no total column
+	if column$(2)<>'True' then h3=0 ! no excess column
+	if column$(3)<>'True' then h2=0 ! no taxable column
+	if column$(4)<>'True' then state_wh=0 ! no state withholding column
 ! pr #255,using L1710: ss$,em$(1)(1:28),m1,h3,h2,state_wh
 ! L1710: form pos 1,c 11,pos 14,c 28,pos 42,pic(--,---,---.zz),pos 57,pic(--,---,---.zz),pos 70,pic(----,---.zz),pos 83,pic(----,---.zz),skip 1
 	pr #255: rpad$(ss$,11)&'   '&em$(1)(1:28);
@@ -277,7 +277,7 @@ def fn_print_line_str(mat pl_str$; pl_pos)
 	pl_line$=''
 	if pl_pos=0 then pl_pos=42
 	for pl_item=1 to udim(mat column$)
-		if column$(pl_item)="True" then
+		if column$(pl_item)='True' then
 			pl_line$=pl_line$&pl_str$(pl_item)
 		end if
 	next pl_item
@@ -287,7 +287,7 @@ def fn_print_line_amt(mat pl_amt,mat pl_form$; pl_pos)
 	pl_line$=''
 	if pl_pos=0 then pl_pos=42
 	for pl_item=1 to udim(mat column$)
-		if column$(pl_item)="True" then
+		if column$(pl_item)='True' then
 			pl_line$=pl_line$&cnvrt$(pl_form$(pl_item),pl_amt(pl_item))
 		end if
 	next pl_item

@@ -67,7 +67,7 @@ do ! r: the first screen
 		!   next fund_item
 		fncreg_write('Close each fund to a separate account',resp$(rc_close1))
 		fncreg_write('Close all departments to one retained earnings (equity) account',resp$(rc_close2))
-		if resp$(rc_close1)="True" then
+		if resp$(rc_close1)='True' then
 			closeDeptToRetainedEarnings=0
 		else
 			closeDeptToRetainedEarnings=1

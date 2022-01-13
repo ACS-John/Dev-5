@@ -326,20 +326,20 @@ def fn_checkfile(hact$*8,hCheckIdx3,hCheckIdx1,hEmployee)
 		fnFra(1,1,3,26,"Information to be Shown","You can choose to have the checks listed as one total or have the department breakdowns shown.  You cannot select both!",0)
 		cf+=1 : fratype=cf
 		fnOpt(1,3,"Departmental Details",0,fratype)
-		if checkonly=1 then resp$(rc+=1)="True" else resp$(rc+=1)="False"
+		if checkonly=1 then resp$(rc+=1)='True' else resp$(rc+=1)='False'
 		fnOpt(2,3,"Check only",0,fratype)
-		if details=1 then resp$(rc+=1)="True" else resp$(rc+=1)="False"
-		if details=0 and checkonly=0 then resp$(rc)="True"
+		if details=1 then resp$(rc+=1)='True' else resp$(rc+=1)='False'
+		if details=0 and checkonly=0 then resp$(rc)='True'
 		fnFra(6,1,6,26,"Print options","You can get totals by any combination of the following options.",0)
 		cf+=1 : fratype=cf
 		fnChk(1,3,"Grand Totals",0,fratype)
-		if grand=1 then resp$(rc+=1)="True" else             resp$(rc+=1)="False"
+		if grand=1 then resp$(rc+=1)='True' else             resp$(rc+=1)='False'
 		fnChk(2,3,"Quarterly Totals",0,fratype)
-		if quarterly=1 then resp$(rc+=1)="True" else         resp$(rc+=1)="False"
+		if quarterly=1 then resp$(rc+=1)='True' else         resp$(rc+=1)='False'
 		fnChk(3,3,"Annual Totals",0,fratype)
-		if annual=1 then resp$(rc+=1)="True" else            resp$(rc+=1)="False"
+		if annual=1 then resp$(rc+=1)='True' else            resp$(rc+=1)='False'
 		fnChk(4,3,"Employee Totals",0,fratype)
-		if employee=1 then resp$(rc+=1)="True" else          resp$(rc+=1)="False"
+		if employee=1 then resp$(rc+=1)='True' else          resp$(rc+=1)='False'
 		fnFra(1,30,6,42,"Date Range","You can transactions for any date range or leave these blank to see all transactions.")
 		cf+=1 : fradate=cf : mylen=26 : mypos=mylen+2
 		fnLbl(1,1,"Starting Date:",mylen,1,0,fradate)
@@ -367,7 +367,7 @@ def fn_checkfile(hact$*8,hCheckIdx3,hCheckIdx1,hEmployee)
 		rc_employee=rc+=1
 		if trim$(hact$)<>"" then
 			resp$(rc)=hact$
-		else if resp$(rc)="" or trim$(resp$(rc))="True" then
+		else if resp$(rc)="" or trim$(resp$(rc))='True' then
 			resp$(rc)="[All]"
 		end if
 		fnLbl(15,20,"Column format to use:",40,1)
@@ -382,12 +382,12 @@ def fn_checkfile(hact$*8,hCheckIdx3,hCheckIdx1,hEmployee)
 		if ckey=cancel then goto CheckFileXit
 		checkonly=details=grand=quarterly=annual=employee=0 : holdnam$=""
 		eno=holdeno=printeno=holdckno=printckno=0 : mat cp1=(0)
-		if resp$(1)="True" then checkonly=1
-		if resp$(2)="True" then details=1
-		if resp$(3)="True" then grand=1
-		if resp$(4)="True" then quarterly=1
-		if resp$(5)="True" then annual=1
-		if resp$(6)="True" then employee=1
+		if resp$(1)='True' then checkonly=1
+		if resp$(2)='True' then details=1
+		if resp$(3)='True' then grand=1
+		if resp$(4)='True' then quarterly=1
+		if resp$(5)='True' then annual=1
+		if resp$(6)='True' then employee=1
 		beg_date=val(resp$(7))
 		end_date=val(resp$(8))
 		qtr1=val(resp$(9))
@@ -460,7 +460,7 @@ def fn_checkfile(hact$*8,hCheckIdx3,hCheckIdx1,hEmployee)
 		oldgridname$=gridname$
 		resp$(1)=gridname$
 		for j=1 to udim(hf)
-			if hf(j)=1 then resp$(j+1)="True"
+			if hf(j)=1 then resp$(j+1)='True'
 			hf$(j)=rtrm$(name$(j))&r$
 		next j
 		if justopen=1 then goto DoJustOpen
@@ -472,15 +472,15 @@ def fn_checkfile(hact$*8,hCheckIdx3,hCheckIdx1,hEmployee)
 		resp$(rc+=1)=resp$(1)
 		for j=1 to 23
 			fnChk(linecnt+=1,16,name$(j),1,rratype)
-			if hf(j)=1 then resp$(rc+=1)="True" else resp$(rc+=1)="False"
+			if hf(j)=1 then resp$(rc+=1)='True' else resp$(rc+=1)='False'
 		next j
 		linecnt=2
 		for j=1 to 22
 			fnChk(linecnt+=1,35,name$(j+23),1,rratype)
-			if hf(j+23)=1 then resp$(rc+=1)="True" else resp$(rc+=1)="False"
+			if hf(j+23)=1 then resp$(rc+=1)='True' else resp$(rc+=1)='False'
 		next j
 		fnChk(linecnt+=1,35,name$(46),1,rratype)
-		if hf(46)=1 then resp$(rc+=1)="True" else resp$(rc+=1)="False"
+		if hf(46)=1 then resp$(rc+=1)='True' else resp$(rc+=1)='False'
 		fnCmdKey("&Next",1,1,0,"Begins printing your report.")
 		if addone=0 then fnCmdKey("&Add",2,0,0,"Allows you to add another report or grid format..")
 		if addone=1 then fnCmdKey("&Save This Format",4,0,0,"Save this format for later use.")
@@ -500,7 +500,7 @@ def fn_checkfile(hact$*8,hCheckIdx3,hCheckIdx1,hEmployee)
 					goto L2620
 				end if
 				for j=1 to 46
-					if resp$(j+1)="True" then hf(j)=1 else hf(j)=0
+					if resp$(j+1)='True' then hf(j)=1 else hf(j)=0
 				next j
 				DoJustOpen: !
 				dim hfm$*500

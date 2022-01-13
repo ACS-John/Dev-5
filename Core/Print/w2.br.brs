@@ -239,9 +239,9 @@ def library fnask_w2_info(&taxYear$,&beg_date,&end_date,&empStart$,&empEnd$,&ssr
 		w2Copy$=resp$(respc_w2copy) : w2Copy=srch(mat optW2Copy$,resp$(respc_w2copy))
 		enableBackground$=resp$(respc_enableBackground)
 		enableW3$=resp$(respc_w3)
-		if resp$(respc_PrintW2)="True" then
+		if resp$(respc_PrintW2)='True' then
 			exportFormatID=0
-		else if resp$(respc_export_ams)="True" then
+		else if resp$(respc_export_ams)='True' then
 			exportFormatID=1
 		end if
 		w2destinationOpt$(1)=resp$(respc_PrintW2)

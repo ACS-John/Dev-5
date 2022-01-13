@@ -77,13 +77,13 @@ SCREEN_PENSION1: ! r:
 	cf+=1 : fratype=cf
 	for j=1 to 20
 		fnChk(j,3,fullname$(j),0,fratype)
-		resp$(rc+=1)="False"
+		resp$(rc+=1)='False'
 	next j
 	fnFra(1,30,20,23,"Pension Deduction","Mark the pension deduction that you want printed on the report",0)
 	cf+=1 : fratype=cf
 	for j=1 to 20
 		fnOpt(j,3,fullname$(j),0,fratype)
-		resp$(rc+=1)="False"
+		resp$(rc+=1)='False'
 	next j
 	fnFra(1,60,3,42,"Date Range","Enter the beginning and ending date range covered by this report.")
 	cf+=1 : fradate=cf : mylen=26 : mypos=mylen+2
@@ -98,10 +98,10 @@ SCREEN_PENSION1: ! r:
 	ckey=fnAcs(mat resp$)
 	if ckey=5 then goto Xit
 	for j=1 to 20
-		if resp$(j)="True" then sel_ded(j)=1
+		if resp$(j)='True' then sel_ded(j)=1
 	next j
 	for j=1 to 20
-		if resp$(j+20)="True" then sel_pen(j)=1
+		if resp$(j+20)='True' then sel_pen(j)=1
 	next j
 	beg_date=val(resp$(41))
 	end_date=val(resp$(42))

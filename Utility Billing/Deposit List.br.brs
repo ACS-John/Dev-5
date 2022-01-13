@@ -42,11 +42,11 @@
 	resp$(1)=trim$(dat$)
 	fnLbl(3,1,"Sequence:",mylen,1)
 	fnOpt(3,mypos,"Name")
-	if seq=1 then resp$(2)="True" else resp$(2)="False"
+	if seq=1 then resp$(2)='True' else resp$(2)='False'
 	fnOpt(4,mypos,"Route and Sequence Number")
-	if seq<>1 then resp$(3)="True" else resp$(3)="False"
+	if seq<>1 then resp$(3)='True' else resp$(3)='False'
 	fnChk(6,mylen+4,"Subtotal By Route:",1)
-	if subtotal$='True' then resp$(resp_subtotal:=4)='True' else resp$(resp_subtotal:=4)="False"
+	if subtotal$='True' then resp$(resp_subtotal:=4)='True' else resp$(resp_subtotal:=4)='False'
 	fnLbl(8,1,"Final Billing Code:",mylen,1)
 	fncomboa("final_bill",8,mypos,mat filter_option$,"",25)
 	resp$(resp_filter:=5)=filter_default$
@@ -54,7 +54,7 @@
 	ckey=fnAcs(mat resp$)
 	if ckey=5 then goto Xit
 	dat$=resp$(1)
-	if resp$(2)="True" then seq=1 else seq=2 ! 1=name sequence  2= route sequence
+	if resp$(2)='True' then seq=1 else seq=2 ! 1=name sequence  2= route sequence
 	subtotal$=resp$(resp_subtotal)
 	filter_choice=srch(mat filter_option$,resp$(resp_filter))
 ! r: save answers
@@ -91,7 +91,7 @@ do ! r: main loop
 		end if
 	end if
 	mat totalb=totalb+b_
-	if seq=2 and subtotal$="True" then ! consider subtotals
+	if seq=2 and subtotal$='True' then ! consider subtotals
 		if holdroute>0 and holdroute<>route then gosub PrintSubTotals
 	end if
 	gosub PrintDetails

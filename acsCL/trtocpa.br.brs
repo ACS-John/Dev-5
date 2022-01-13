@@ -34,7 +34,7 @@ MAIN: ! r:
 	! rESP$(2)=""
 	lc+=1
 	fnChk(lc+=1,mypos,"Transfer previously posted transactions:",1)
-	if resp$(3)="" then resp$(3)="False"
+	if resp$(3)="" then resp$(3)='False'
 	lc+=1
 	fnLbl(lc+=1,1,"Destination Path:",mylen,right)
 	fnTxt(lc,mypos,66)

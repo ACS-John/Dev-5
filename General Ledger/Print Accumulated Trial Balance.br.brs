@@ -48,11 +48,11 @@ SCREEN1: ! r:
   resp$(respc_periodCode:=rc+=1)="" ! STR$(LMU)
   fnFra(5,1,5,90,"Selection Type"," ",0) : frameno=1
   fnOpt(1,3,"Print All GL Accounts",0,frameno)
-  resp$(respc_printAll:=rc+=1)="True"
+  resp$(respc_printAll:=rc+=1)='True'
   fnOpt(2,3,"Print Selected GL Accounts",0,frameno)
-  resp$(respc_printSelected:=rc+=1)="False"
+  resp$(respc_printSelected:=rc+=1)='False'
   fnOpt(3,3,"Print a Range of Accounts",0,frameno)
-  resp$(respc_printRange:=rc+=1)="False"
+  resp$(respc_printRange:=rc+=1)='False'
   mylen=6 : mypos=mylen+2
   fnLbl(4,1+10,'First:',mylen,right,0,frameno)
   fnqgl(4,mypos+10,frameno,2)
@@ -77,9 +77,9 @@ SCREEN1: ! r:
   lastCapitalAccount$=cogl$(3)=fnagl$(resp$(respc_lastCapitalAccount))
   petro_opt$=resp$(respc_prBalFirst)
   periodToPrint=val(resp$(respc_periodCode)) ! period code to print
-  if resp$(respc_printAll)="True" then s1=1 ! method of selecting
-  if resp$(respc_printSelected)="True" then s1=2
-  if resp$(respc_printRange)="True" then s1=3
+  if resp$(respc_printAll)='True' then s1=1 ! method of selecting
+  if resp$(respc_printSelected)='True' then s1=2
+  if resp$(respc_printRange)='True' then s1=3
   n1$=fnagl$(resp$(respc_rangeStart))
   n2$=fnagl$(resp$(respc_rangeEnd))
   startday=days(resp$(resp_dateStart),'ccyymmdd')

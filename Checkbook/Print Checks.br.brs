@@ -147,17 +147,17 @@ SCR_CKPRT7: !
 	fnLbl(1,1,"",40,0)
 	fnLbl(1,1,"Print Options:",38,0)
 	fnOpt(2,3,inl$(1),0)
-	resp$(respc+=1)="False"
+	resp$(respc+=1)='False'
 	fnOpt(3,3,inl$(2),0)
-	resp$(respc+=1)="True" !  if ckoption=1 or ckoption=3 then resp$(respc+=1)="True" else resp$(respc+=1)="False"
+	resp$(respc+=1)='True' !  if ckoption=1 or ckoption=3 then resp$(respc+=1)='True' else resp$(respc+=1)='False'
 	fnOpt(4,3,inl$(3),0)
 	if ckoption=2 then
-		resp$(respc+=1)="True"
+		resp$(respc+=1)='True'
 	else
-		resp$(respc+=1)="False"
+		resp$(respc+=1)='False'
 		if trim$(inl$(4))<>"" then
 			fnOpt(5,3,inl$(4),0)
-			resp$(respc+=1)="False"
+			resp$(respc+=1)='False'
 		end if
 	end if
 	fnCmdSet(2)
@@ -768,7 +768,7 @@ def fn_cknum ! CHECK FOR DUPLICATE CHECK NUMBERS
 	fnLbl(3,10," Amount: "&dtr$(3),45,0)
 	fnLbl(4,10," To: "&dtr$(5),45,0)
 	fnChk(6,48,"Delete the previous entry:",1)
-	resp$(respc+=1)="False"
+	resp$(respc+=1)='False'
 	fnLbl(8,1,"New check number (if applicable):",45,1)
 	fnTxt(8,48,8,0,1,"30",0,"You will never enter the new check number if you are deleting the old check.")
 	resp$(respc+=1)=""
@@ -1285,11 +1285,11 @@ def fn_scr_main_questions(;___,ckey)
 	respc=0
 	fnLbl(1,1,"Method of Printing checks:",38,1)
 	fnOpt(1,40,"Enter and pr Checks",0)
-	if ckoption<=1 then resp$(respc+=1)="True" else resp$(respc+=1)="False"
+	if ckoption<=1 then resp$(respc+=1)='True' else resp$(respc+=1)='False'
 	fnOpt(2,40,"Print Checks for Selected Invoices",0)
-	if ckoption=2 then resp$(respc+=1)="True" else resp$(respc+=1)="False"
+	if ckoption=2 then resp$(respc+=1)='True' else resp$(respc+=1)='False'
 	fnOpt(3,40,"Reprint from Check History",0)
-	if ckoption=3 then resp$(respc+=1)="True" else resp$(respc+=1)="False"
+	if ckoption=3 then resp$(respc+=1)='True' else resp$(respc+=1)='False'
 	fnLbl(5,1,"Date of Checks:",38,1)
 	fnTxt(5,40,10,0,1,"3",0,"")
 	resp$(respc+=1)=date$("ccYYMMDD")

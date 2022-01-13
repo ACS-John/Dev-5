@@ -28,9 +28,9 @@
 	fncomboa("paylist-srt",2,27,mat item1$,tt$)
 	resp$(respc+=1)=item1$(1)
 	fnChk(4,29,"Print G/L Breakdowns:",1)
-	resp$(respc+=1)="False"
+	resp$(respc+=1)='False'
 	fnChk(6,29,"Print Total Payments:",1)
-	resp$(respc+=1)="False"
+	resp$(respc+=1)='False'
 	fnLbl(8,1,"Transaction Starting Date:",25,1)
 	fnTxt(8,27,8,0,0,"3",0,'Blank for All (Only applicable if need Total Payments Printed)')
 	resp$(respc+=1)=" "

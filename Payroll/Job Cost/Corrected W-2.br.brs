@@ -73,9 +73,9 @@ ASK_INFO: !
 	fnFra(8,1,3,60,"Printing or Exporting","You have the option to either pr the W-2s or export them to another system for printing.")
 	cf+=1 : franum=cf : mylen=26 : mypos=mylen+2
 	fnOpt(1,3,"Print W-2",0,franum)
-	resp$(rc+=1)="True"
+	resp$(rc+=1)='True'
 	fnOpt(2,3,"Export to another system",0,franum)
-	resp$(rc+=1)="False"
+	resp$(rc+=1)='False'
 	fnFra(13,1,3,60,"Identify the Following Deductions","You have twenty miscellaneous deductions available to you. If you have Qualified Pension or Dependent Care, start with the first deduction and count down to identify the number of the deduction.")
 	cf+=1 : franum=cf
 	fnLbl(1,1,"Qualified Pension Plan:",mylen,1,0,franum)
@@ -106,8 +106,8 @@ ASK_INFO: !
 	ssmax=val(resp$(2))
 	mcrate=val(resp$(3))
 	mcmax=val(resp$(4))
-	if resp$(5)="True" then w1=4 else w1=3
-	if resp$(6)="True" then w1=3
+	if resp$(5)='True' then w1=4 else w1=3
+	if resp$(6)='True' then w1=3
 	pn1=val(resp$(7))
 	dc1=val(resp$(8))
 	namcde$=resp$(9)
@@ -612,7 +612,7 @@ ASK_DEDUCTIONS: ! r: ask if any misecllaneous deductions should pr in box 12
 	for j=1 to 20
 		fnLbl(j+4,1,fullname$(j),mylen,1,0,0)
 		fnChk(j+4,26,"",0,0)
-		resp$(rc+=1)="False"
+		resp$(rc+=1)='False'
 		fnTxt(j+4,35,2,0,1,"30",0,"Enter the box number on the W-2 where this deduction should print.",0)
 		resp$(rc+=1)=str$(box12(j))
 		fnTxt(j+4,45,2,0,1,"",0,"Enter the Code that should appear in the box.",0)
@@ -624,7 +624,7 @@ ASK_DEDUCTIONS: ! r: ask if any misecllaneous deductions should pr in box 12
 	if ckey=5 then goto Xit
 	x=0
 	for j=1 to 20
-		x+=1: if resp$(x)="True" then dedyn$(j)="Y"
+		x+=1: if resp$(x)='True' then dedyn$(j)="Y"
 		x+=1: box12(j)=val(resp$(x))
 		x+=1: dedcode$(j)=resp$(x)
 	next j

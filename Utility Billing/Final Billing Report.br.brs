@@ -14,13 +14,13 @@ Scr1: ! r:
 	fncmbrt2(2,17,0)
 	resp$(2)="[All]"
 	fnChk(4,2,"Outstanding Balances Only")
-	resp$(3)="False"
+	resp$(3)='False'
 	fnCmdSet(3)
 	ckey=fnAcs(mat resp$)
 	if ckey=5 then goto Xit
 	d1=val(resp$(1)) conv Scr1
 	if uprc$(resp$(2))=uprc$("[All]") then route=0 else route=val(resp$(2))
-	if resp$(3)="False" then oob$="N" else oob$="Y"
+	if resp$(3)='False' then oob$="N" else oob$="Y"
 goto ReportInit ! /r
 ReportInit: ! r:
 	! fnwait("Printing: please wait...",1)

@@ -330,7 +330,7 @@ SELECT_ST: !
 	fnCmdKey("&Cancel",5,0,1,"Returns to menu.")
 	ckey=fnAcs(mat resp$)
 	for j=1 to 51
-		if resp$(j)="True" then stu(j)=1
+		if resp$(j)='True' then stu(j)=1
 	next j
 
 L3180: ! pr NEWPAGE ! commenting this line might screw up window 101 repeat processing

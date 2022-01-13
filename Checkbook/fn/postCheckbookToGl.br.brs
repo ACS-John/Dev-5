@@ -43,16 +43,16 @@ def library fnPostCheckbookToGl(; enablePost,___,pg)
 	fnTxt(2,46,10,0,1,"3",0,"Normally this would be the last day of the month, unless you post more often than once a month!")
 	resp$(2)=date$('ccyymmdd') ! ""
 	fnChk(4,47,"Include previously posted transactions:",1)
-	resp$(3)="False"
+	resp$(3)='False'
 	fnLbl(5,1,"Basis for Accounting:",44,1)
 	fncomboa("CashOrAccrual",5,46,mat optCashOrAccrual$,"If you record expenses as they are paid, you are on a cash basis.  If you wish to record unpaid invoices (accounts payable) as well as paid expenses, you are on an accrual basis.")
 	resp$(4)=optCashOrAccrual$(1)
 	fnChk(6,47,"Combine Payroll Entries:",1)
-	resp$(5)="True"
+	resp$(5)='True'
 	fnChk(7,47,"Print General Ledger Distribution Listing:",1)
-	resp$(6)="True"
+	resp$(6)='True'
 	fnChk(8,47,"Update After the Fact Payroll records:",1)
-	resp$(7)="False"
+	resp$(7)='False'
 	fnLbl(10,1,"Post to General Ledger Company Number:",44,1)
 	fnTxt(10,46,5,0,1,"30",1,"Only change this default answer if wish to post to a different company than the one you are assigned to.")
 	! protected this option on 5/19/2020 - i don't think they should ever change this.  if i am wrong i'll put it back in - john bowman  (to put it back list:   [cno]" ! &str$(gl2)   )

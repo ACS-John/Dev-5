@@ -35,9 +35,9 @@ MAIN: !
 	fnTxt(lc,ps,38)
 	resp$(rc+=1)=filter$
 	fnChk(lc+=1,ps,'Append Previous Report',0)
-	resp$(rc+=1)="FALSE"
+	resp$(rc+=1)='False'
 	fnChk(lc+=1,ps,'Renumber all Programs',0)
-	resp$(rc+=1)="FALSE"
+	resp$(rc+=1)='False'
 !  fnTxt(LC,PS,18,40)
 	!  rESP$(RC+=1)=LC2$
 	lc+=1 ! blank line
@@ -61,7 +61,7 @@ MAIN: !
 	next j
 L490: pr "Found "&str$(j-1)&" files."
 	open #2: "Name="&procfile$&",Replace",d,o
-	if uprc$(app_prev$)="FALSE" then           execute "free Locate-Report.txt -n" ioerr L520
+	if app_prev$='False' then           execute "free Locate-Report.txt -n" ioerr L520
 L520: pr #2: "print border: 'Locating...'"
 ! pr #2: "ProcErr Return" ! quietly continue on error ! XXX
 	for j=1 to udim(brfn$)

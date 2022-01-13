@@ -24,15 +24,15 @@ MAIN_SCREEN: !
 	fnTxt(1,mypos,20,0,0,"",0,"Recommended to use full alpha date format.") : _
 	resp$(resp+=1)=dat$
 	fnChk(2,mypos,"Print All Jobs:",left) : _
-	resp$(resp+=1)="False"
+	resp$(resp+=1)='False'
 	fnChk(3,mypos,"Print One Job Per Page:",left) : _
-	resp$(resp+=1)="False"
+	resp$(resp+=1)='False'
 	fnCmdSet(2)
 	ckey=fnAcs(mat resp$)
 	if ckey=5 then goto Xit
 	dat$=resp$(1) ! heading date
-	if resp$(2)="True" then prtjob$="Y" else prtjob$="N"
-	if resp$(3)="True" then perpag$="Y" else perpad$="N"
+	if resp$(2)='True' then prtjob$="Y" else prtjob$="N"
+	if resp$(3)='True' then perpag$="Y" else perpad$="N"
  
 	fndat(dat$,2)
 	if prtjob$="N" then goto ASKJOB

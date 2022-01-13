@@ -7,12 +7,12 @@ ScrMenu1: ! r:
 	mylen=20: mypos=mylen+3 : right=1
 	! fnFra(1,1,6,60,"Financial Statement Choices","Choose the financial statement to work with.")
 	frame=0 ! 1
-	fnOpt(1,2,id$(1),0,frame)  : resp$(1)="True"
-	fnOpt(2,2,id$(2),0,frame)  : resp$(2)="False"
-	fnOpt(3,2,id$(3),0,frame)  : resp$(3)="False"
-	                                                fnOpt(1,35,id$(4),0,frame) : resp$(4)="False"
-	                                                fnOpt(2,35,id$(5),0,frame) : resp$(5)="False"
-	                                                fnOpt(3,35,id$(6),0,frame) : resp$(6)="False"
+	fnOpt(1,2,id$(1),0,frame)  : resp$(1)='True'
+	fnOpt(2,2,id$(2),0,frame)  : resp$(2)='False'
+	fnOpt(3,2,id$(3),0,frame)  : resp$(3)='False'
+	                                                fnOpt(1,35,id$(4),0,frame) : resp$(4)='False'
+	                                                fnOpt(2,35,id$(5),0,frame) : resp$(5)='False'
+	                                                fnOpt(3,35,id$(6),0,frame) : resp$(6)='False'
 	
 	
 	fnCmdKey("&Next",1,1,0,"Access the chosen financial statement design.")
@@ -22,12 +22,12 @@ ScrMenu1: ! r:
 	ckey=fnAcs(mat resp$)
 	if ckey=5 then goto Xit
 	if ckey=2 then chain "S:\acsGL\Bld_D_Records"
-	if resp$(1)="True" then selection=1
-	if resp$(2)="True" then selection=2
-	if resp$(3)="True" then selection=3
-	if resp$(4)="True" then selection=4
-	if resp$(5)="True" then selection=5
-	if resp$(6)="True" then selection=6
+	if resp$(1)='True' then selection=1
+	if resp$(2)='True' then selection=2
+	if resp$(3)='True' then selection=3
+	if resp$(4)='True' then selection=4
+	if resp$(5)='True' then selection=5
+	if resp$(6)='True' then selection=6
 	f1=selection
 	close #1: ioerr ignore
   open #hFSDesign=1: "Name=[Q]\GLmstr\"&fil$(f1)&",KFName=[Q]\GLmstr\"&idx$(f1)&",Shr",internal,outIn,keyed ioerr ScrMenu1
@@ -126,12 +126,12 @@ AddEdit: ! r:
 	fnTxt(5,mypos,2,0,0,"30",0,"Number of blank lines following this line.",0 )
 	resp$(5)=str$(ls)
 	fnChk(6,mypos,"Dollar Sign:",1)
-	if ds=1 then resp$(6)="True" else resp$(6)="False"
+	if ds=1 then resp$(6)='True' else resp$(6)='False'
 	fnLbl(7,1,"Underlines:",mylen,right)
 	fnTxt(7,mypos,1,0,0,"30",0,"Number of under lines following the amount.",0 )
 	resp$(7)=str$(ul)
 	fnChk(8,mypos,"Reverse Sign:",1)
-	if rs=1 then resp$(8)="True" else resp$(8)="False"
+	if rs=1 then resp$(8)='True' else resp$(8)='False'
 	fnLbl(9,1,"Balance Sheet Column:",mylen,right)
 	fnTxt(9,mypos,1,0,0,"30",0,"One of three columns available.",0 )
 	resp$(9)=str$(bc)
@@ -159,9 +159,9 @@ AddEdit: ! r:
 	te$=resp$(3)(1:1)
 	sp=val(resp$(4))
 	ls=val(resp$(5))
-	if resp$(6)="True" then ds=1 else ds=0 ! dollar sign
+	if resp$(6)='True' then ds=1 else ds=0 ! dollar sign
 	ul=val(resp$(7))
-	if resp$(8)="True" then rs=1 else rs=0 ! reverse sign
+	if resp$(8)='True' then rs=1 else rs=0 ! reverse sign
 	bc=val(resp$(9))
 	ap=val(resp$(10))
 	for j=1 to 9

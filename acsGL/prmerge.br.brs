@@ -104,13 +104,13 @@ L870: fnTos
 	fnLbl(4,10, "  Gross Pay: "&cnvrt$("pic(-------.zz)",tr(5)) ,mylen,left)
 	fnLbl(7,5, "This employee number does not exist!" ,60,0)
 	fnOpt(8,10,"Add this Employee",0,0) : _
-	resp$(1)="True"
+	resp$(1)='True'
 	fnOpt(9,10,"Change Employee Number",0,0) : _
-	resp$(2)="False"
+	resp$(2)='False'
 	fnCmdKey("&Next",1,1,0,"Allows you to either add the employee or change the employee #.")
 	ckey=fnAcs(mat resp$)
-	if resp$(1)="True" then gosub ADD : goto L220
-	if resp$(2)="True" then gosub CHANGE_EMPLOYEE_NUMBER : goto L220
+	if resp$(1)='True' then gosub ADD : goto L220
+	if resp$(2)='True' then gosub CHANGE_EMPLOYEE_NUMBER : goto L220
 	goto L80
  
 ADD: !

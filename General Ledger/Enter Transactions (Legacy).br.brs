@@ -105,13 +105,13 @@ SCREEN_1: ! r:
 	fnFra(1,1,4,60,"Method of Entry","Choose the method of transaction entry.")
 	if post=0 then text$="Regular Input" else text$="Correction or Addition to previous input"
 	fnOpt(1,2,text$,0,1)
-	resp$(respc_regularInput:=rc+=1)="True"
+	resp$(respc_regularInput:=rc+=1)='True'
 	fnOpt(2,2," Erase previous input transactions" ,0,1)
-	resp$(respc_erasePrevious:=rc+=1)="False"
+	resp$(respc_erasePrevious:=rc+=1)='False'
 	fnOpt(3,2,"Input from Client Checkbook Diskette",0,1)
-	resp$(respc_inputClientCL:=rc+=1)="False"
+	resp$(respc_inputClientCL:=rc+=1)='False'
 ! fnOpt(4,2,"Input from Client A/R  Diskette",0,1) ! this option has errors and seems to be no longer used, so i removed it 12/29/2015
-! resp$(4)="False"
+! resp$(4)='False'
 	fnLbl(7,1,"Type Of Entry:",mylen,right)
 	fncomboa("TypeOfEntry1",7,mypos,mat typeofentry_option$,"You must indicate the type of entry you will be entering.",18)
 	if sel=0 then sel=3
@@ -131,11 +131,11 @@ SCREEN_1: ! r:
 	ckey=fnAcs(mat resp$)
 	if ckey=5 then goto Xit
 ! pOST=1 ! code as unposted once leave this screen
-	if post=1 and resp$(respc_regularInput)="True" then gosub CHECK_FOR_CONTRAS ! remove any contra entries created in previous run
-	if resp$(respc_regularInput) ="True" then pt1=j=1
-	if resp$(respc_erasePrevious)="True" then pt1=2
-	if resp$(respc_inputClientCL)="True" then pt1=3
-! if resp$(4)="True" then pt1=4
+	if post=1 and resp$(respc_regularInput)='True' then gosub CHECK_FOR_CONTRAS ! remove any contra entries created in previous run
+	if resp$(respc_regularInput) ='True' then pt1=j=1
+	if resp$(respc_erasePrevious)='True' then pt1=2
+	if resp$(respc_inputClientCL)='True' then pt1=3
+! if resp$(4)='True' then pt1=4
 	sel=sel1=srch(mat typeofentry_option$,resp$(respc_entryType)) ! val(resp$(respc_entryType)(1:1)) ! type of transaction
 ! if sel<=1 then pause
 ! If SEL=4 Then Goto SCREEN_1 ! temporary line do not access payroll checks
@@ -225,31 +225,31 @@ POSTING_OPTIONS: ! r:
 	fnTos(sn$="GLInput6")
 ! fnFra(1,1,6,60,"Posting Options","You would only use the After_The_Fact options if you are maintaining the payroll records within the general ledger system.",0)
 	fnOpt(1,2,"Post to General Ledger",0,0)
-	resp$(1)="True"
+	resp$(1)='True'
 	fnOpt(2,2,"Automatic Processing",0,0)
-	resp$(2)="False"
+	resp$(2)='False'
 	fnOpt(3,2,"Post After-The-Fact Payroll only",0,0)
-	resp$(3)="False"
+	resp$(3)='False'
 	fnOpt(4,2,"Post both General Ledger and After-The-Fact Payroll",0,0)
-	resp$(4)="False"
+	resp$(4)='False'
 	fnOpt(5,2,"Return to Menu without posting",0,0)
-	resp$(5)="False"
+	resp$(5)='False'
 	fnCmdSet(2)
 	ckey=fnAcs(mat resp$)
 	fnfscode(0)
 	gosub CREATE_CONTRA_ENTRIES
-	if resp$(5)="True" or ckey=5 then goto Xit ! return w/o posting
-	if resp$(2)="True" then let fnprocess(1) else let fnprocess(0)
-	if resp$(4)="True" then let fnprocess(4) ! post both
-	if resp$(1)="True" then goto ACGLMRGE
-	if resp$(3)="True" then let fnchain("S:\acsGL\PRMerge")
+	if resp$(5)='True' or ckey=5 then goto Xit ! return w/o posting
+	if resp$(2)='True' then let fnprocess(1) else let fnprocess(0)
+	if resp$(4)='True' then let fnprocess(4) ! post both
+	if resp$(1)='True' then goto ACGLMRGE
+	if resp$(3)='True' then let fnchain("S:\acsGL\PRMerge")
 	open #h_process=fnH: "Name=[Q]\GLmstr\Process.h[cno],RecL=128,Use",i,outi,r
 	if lrec(h_process)=0 then write #h_process,using "form pos 1,n 1": 0
-	if resp$(2)="True" then rewrite #h_process,using "form pos 1,n 1",rec=1: 1 else rewrite #h_process,using "form pos 1,n 1",rec=1: 0 ! code for post payroll and gl both
-	if resp$(4)="True" then rewrite #h_process,using "form pos 1,n 1",rec=1: 4 ! code for posting pr and gl both
+	if resp$(2)='True' then rewrite #h_process,using "form pos 1,n 1",rec=1: 1 else rewrite #h_process,using "form pos 1,n 1",rec=1: 0 ! code for post payroll and gl both
+	if resp$(4)='True' then rewrite #h_process,using "form pos 1,n 1",rec=1: 4 ! code for posting pr and gl both
 	close #h_process:
-	if resp$(4)="True" then goto ACGLMRGE ! post both
-	if resp$(2)="True" then let fnchain("S:\acsGL\autoproc")
+	if resp$(4)='True' then goto ACGLMRGE ! post both
+	if resp$(2)='True' then let fnchain("S:\acsGL\autoproc")
 	goto Xit ! /r
 Xit: fnXit
 

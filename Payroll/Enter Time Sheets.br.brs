@@ -12,18 +12,18 @@ SCREEN_1: !
 	rc=franum=0
 	fnFra(1,1,3,50,"Payroll Time Sheet Entry","You would only add to previous entries if the last batch was not calculated.",0)
 	franum+=1
-	fnOpt(1,3,"Regular Time Sheet Entry",0,franum)     : resp$(rc+=1)="True"
-	fnOpt(2,3,"Additions to Previous Input",0,franum)  : resp$(rc+=1)="False"
+	fnOpt(1,3,"Regular Time Sheet Entry",0,franum)     : resp$(rc+=1)='True'
+	fnOpt(2,3,"Additions to Previous Input",0,franum)  : resp$(rc+=1)='False'
 	fnFra(6,1,2,50,"Pay Period Ending Date","You must enter the pay perod ending date.  You can not have more than one payroll with the same date.")
 	franum+=1 : mylen=23 : mypos=mylen+2
 	fnLbl(1,1,"Pay Period Ending Date:",mylen,1,0,franum)
 	fnTxt(1,mypos,10,0,1,"1",0,"Use mmddyy.",franum)   : resp$(rc+=1)=str$(prd)
 	fnFra(10,1,6,50,"Method of Entry","You can select specific employees to pay; you can automatically calculate salaried persons; or you can pull from a another system.")
 	franum+=1 : mylen=18 : mypos=mylen+2
-	fnOpt(1,3,"Select employees to pay",0,franum)              : resp$(rc+=1)="True"
-	fnOpt(2,3,"Automatically pay salaried employees",0,franum) : resp$(rc+=1)="False"
-	fnOpt(3,3,"Pull time from time card system",0,franum)      : resp$(rc+=1)="False"
-	fnOpt(4,3,"Pull time from job cost system",0,franum)       : resp$(rc+=1)="False"
+	fnOpt(1,3,"Select employees to pay",0,franum)              : resp$(rc+=1)='True'
+	fnOpt(2,3,"Automatically pay salaried employees",0,franum) : resp$(rc+=1)='False'
+	fnOpt(3,3,"Pull time from time card system",0,franum)      : resp$(rc+=1)='False'
+	fnOpt(4,3,"Pull time from job cost system",0,franum)       : resp$(rc+=1)='False'
 	fnLbl(6,1,"Employment Status:",mylen,1,0,franum)
 	fncombof("EmpStatus",6,mypos,25,"[Q]\PRmstr\EmpStatus.dat",1,2,3,25,"[Q]\PRmstr\EmpStatus.idx",0,0, "Only necessary if automatically paying salaried people. ",franum,0)
 	resp$(rc+=1)=""
@@ -35,9 +35,9 @@ SCREEN_1: !
 		resp_skipDedAdd=rc
 		for j=1 to 19 step 2
 			if trim$(dednames$(j))<>"" then x$=":" else x$=""
-			fnChk(linecnt+=1,20,trim$(dednames$(j))&x$,1,franum) : resp$(rc+=1)="False"
+			fnChk(linecnt+=1,20,trim$(dednames$(j))&x$,1,franum) : resp$(rc+=1)='False'
 			if trim$(dednames$(j+1))<>"" then x$=":" else x$=""
-			fnChk(linecnt,45,trim$(dednames$(j+1))&x$,1,franum)  : resp$(rc+=1)="False"
+			fnChk(linecnt,45,trim$(dednames$(j+1))&x$,1,franum)  : resp$(rc+=1)='False'
 		next j
 		
 	end if
@@ -45,22 +45,22 @@ SCREEN_1: !
 	fnCmdKey("&Cancel",5,0,1,"Returns to customer record")
 	ckey=fnAcs(mat resp$)
 	if ckey=5 then goto Xit
-	if resp$(1)="True" then ! Regular Time Sheet Entry
+	if resp$(1)='True' then ! Regular Time Sheet Entry
 		noauto=ti1=1
 		additional=1
-	else if resp$(2)="True" then ! Additions to Previous Input
+	else if resp$(2)='True' then ! Additions to Previous Input
 		noauto=ti1=2
 		additional=2
 	end if
 	prd=val(resp$(3))
  
-	if resp$(4)="True" then
+	if resp$(4)='True' then
 		noauto=ti1=1
-	else if resp$(5)="True" then
+	else if resp$(5)='True' then
 		noauto=ti1=2
-	else if resp$(6)="True" then
+	else if resp$(6)='True' then
 		pullFromTimeCardSystem=99
-	else if resp$(7)="True" then
+	else if resp$(7)='True' then
 		jobcost=1
 	end if
 	em4=val(resp$(8)(1:2))
@@ -69,7 +69,7 @@ SCREEN_1: !
 		mat skipit$(1:20)=('N')
 	else
 		for j=1 to 20
-			if resp$(j+resp_skipDedAdd)="True" then skipit$(j)="Y" else skipit$(j)="N"
+			if resp$(j+resp_skipDedAdd)='True' then skipit$(j)="Y" else skipit$(j)="N"
 		next j
 	end if
  
@@ -100,16 +100,16 @@ SCREEN_1: !
 	! 	resp_skipDedAdd=rc
 	! 	for j=1 to 19 step 2
 	! 		if trim$(dednames$(j))<>"" then x$=":" else x$=""
-	! 		fnChk(linecnt+=1,20,trim$(dednames$(j))&x$,1,franum) : resp$(rc+=1)="False"
+	! 		fnChk(linecnt+=1,20,trim$(dednames$(j))&x$,1,franum) : resp$(rc+=1)='False'
 	! 		if trim$(dednames$(j+1))<>"" then x$=":" else x$=""
-	! 		fnChk(linecnt,45,trim$(dednames$(j+1))&x$,1,franum)  : resp$(rc+=1)="False"
+	! 		fnChk(linecnt,45,trim$(dednames$(j+1))&x$,1,franum)  : resp$(rc+=1)='False'
 	! 	next j
 	! 	fnCmdKey("&Next",1,1,0,"Proceed to next screen.")
 	! 	fnCmdKey("&Cancel",5,0,1,"Returns to customer record")
 	! 	ckey=fnAcs(mat resp$)
 	! 	if ckey<>5 then
 	! 		for j=1 to 20
-	! 			if resp$(j+resp_skipDedAdd)="True" then skipit$(j)="Y" else skipit$(j)="N"
+	! 			if resp$(j+resp_skipDedAdd)='True' then skipit$(j)="Y" else skipit$(j)="N"
 	! 		next j
 	! 	end if
 	! end if
@@ -703,12 +703,12 @@ PRINT_LISTING: !
 	PrList_Screen: !
 	fnTos
 	fnLbl(1,1,"Sequence:",11,right)
-	fnOpt(1,13,"Account Order",0) : if printorder<>2 then resp$(1)="True" else resp$(1)='False'
-	fnOpt(2,13,"Order Entered",0) : if printorder=2 then resp$(2)='True' else resp$(2)="False"
+	fnOpt(1,13,"Account Order",0) : if printorder<>2 then resp$(1)='True' else resp$(1)='False'
+	fnOpt(2,13,"Order Entered",0) : if printorder=2 then resp$(2)='True' else resp$(2)='False'
 	fnCmdKey("&Next",1,1,0,"Proceed to next screen.")
 	ckey=fnAcs(mat resp$)
-	if resp$(1)="False" and resp$(2)="False" then goto PrList_Screen
-	if resp$(1)="True" then printorder=1 else printorder=2
+	if resp$(1)='False' and resp$(2)='False' then goto PrList_Screen
+	if resp$(1)='True' then printorder=1 else printorder=2
 	fncreg_write('enter time sheets proof sequence',str$(printorder))
 	fnopenprn
 	L3160: !

@@ -18,24 +18,24 @@
 	mylen=50: mypos=mylen+3 : right=1
 	fnFra(1,1,2,55,"Method of Budget Entry"," ",0)
 	fnOpt(1,3,"Enter new Budget amounts",0,1)
-	resp$(rc+=1)="True"
+	resp$(rc+=1)='True'
 	fnOpt(2,3,"Pull Budget from Budget Management System",0,1)
-	resp$(rc+=1)="False"
+	resp$(rc+=1)='False'
 	fnFra(5,1,3,55,"Method of Allocating Budget"," ",0)
 	fnOpt(1,3,"Divide new budget evenly between months",0,2)
-	resp$(rc+=1)="True"
+	resp$(rc+=1)='True'
 	fnOpt(2,3,"Allocate full amount to month 12",0,2)
-	resp$(rc+=1)="False"
+	resp$(rc+=1)='False'
 	fnOpt(3,3,"Allocate full amount to month 1",0,2)
-	resp$(rc+=1)="False"
+	resp$(rc+=1)='False'
 	fnCmdSet(2)
 !
 	ckey=fnAcs(mat resp$)
 	if ckey=5 then goto Xit
-	if resp$(1)="True" then method=1 else method=2
-	if resp$(3)="True" then method_to_allocate=1 ! divide evenly
-	if resp$(4)="True" then method_to_allocate=2 ! all to month 12
-	if resp$(5)="True" then method_to_allocate=3 ! all to month 1
+	if resp$(1)='True' then method=1 else method=2
+	if resp$(3)='True' then method_to_allocate=1 ! divide evenly
+	if resp$(4)='True' then method_to_allocate=2 ! all to month 12
+	if resp$(5)='True' then method_to_allocate=3 ! all to month 1
 	if method=2 then gosub L790
 	if method=2 then gosub BUDGET_FILE_NUM
 	open #1: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLIndex.h[cno],Shr",internal,outIn,keyed
@@ -95,15 +95,15 @@ L790: ! PULL FROM BUDGET MANAGEMENT SYSTEM  (select budget #)
 	mylen=50: mypos=mylen+3 : right=1
 	fnFra(1,1,2,55,"Update Current Budget or New Budget"," ",0)
 	fnOpt(1,3,"Update Current Budget for Changes",0,1)
-	resp$(rc+=1)="True"
+	resp$(rc+=1)='True'
 	fnOpt(2,3,"Update for New Budget Year",0,1)
-	resp$(rc+=1)="False"
+	resp$(rc+=1)='False'
 !
 	fnCmdSet(2)
 !
 	ckey=fnAcs(mat resp$)
 	if ckey=5 then goto Xit
-	if resp$(1)="True" then budyear=1 else budyear=2
+	if resp$(1)='True' then budyear=1 else budyear=2
 	if budyear=1 then p1=37 else p1=43 ! CURRENT YEARS BUDGET OR NEXT YEARS BUDGET
 	return
 !

@@ -33,9 +33,9 @@ MENU1: !
 	fnTos
 	fnLbl(1,1,"Convert Transactions")
 	fnChk(4,1,"Delete existing transaction file before conversion")
-	resp$(1)="True"
+	resp$(1)='True'
 	fnChk(5,1,"Remove Transactions with Bad Dates")
-	resp$(2)="False"
+	resp$(2)='False'
 	fnCmdSet(2)
 	ckey=fnAcs(mat resp$)
 	delubtransvb$=resp$(1)
@@ -48,7 +48,7 @@ CONVERT_CNO: !
 	pr "conversion of cno=[cno] has begun."
  
  
-	if uprc$(delubtransvb$)=uprc$("True") and exists("[Q]\UBmstr\ubtransvb.h[cno]") then execute "Free [Q]\UBmstr\ubtransvb.h[cno]"
+	if uprc$(delubtransvb$)=uprc$('True') and exists("[Q]\UBmstr\ubtransvb.h[cno]") then execute "Free [Q]\UBmstr\ubtransvb.h[cno]"
  
 	open #master=3: "Name=[Q]\UBmstr\ubMaster.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,outIn,keyed
  
@@ -128,7 +128,7 @@ PHASE4: !
 	fnIndex("[Q]\UBmstr\UBTransVB.h[cno]","[Q]\UBmstr\UBTrIndx.h[cno]","1 19")
 	pr "Transactions for company [cno] were built successfully."
 	pr ""
-	if removebaddates$="True" then gosub REMOVEBADDATES
+	if removebaddates$='True' then gosub REMOVEBADDATES
 return
  
 TRANSLATE_TRANSCODE: !

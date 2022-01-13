@@ -73,16 +73,16 @@ SCREEN1: !
 	fnTxt(3,mypos,10,0,1,"3",0,"Enter the Last day of the period being posted.")
 	resp$(3)=str$(hd1)
 	fnChk(4,30,"General Ledger Installed:",1,0)
-	if gli=1 then resp$(4)="True" else resp$(4)="False"
+	if gli=1 then resp$(4)='True' else resp$(4)='False'
 	fnChk(5,30,"Print Report:",1,0)
-	if printreport=1 then resp$(5)="True" else resp$(5)="False"
+	if printreport=1 then resp$(5)='True' else resp$(5)='False'
 	fnChk(6,30,"Show Details:",1,0)
-	if showdetails=1 then resp$(6)="True" else resp$(6)="False"
+	if showdetails=1 then resp$(6)='True' else resp$(6)='False'
 	fnFra(8,1,2,60,"Method of Posting","You can either post on a Cash basis which only effects Cash and Revenues or you can post on an accrual method also effecting receivables.")
 	fnOpt(1,3,"Cash Basis",0,1)
-	if basis=0 or basis=1 then resp$(7)="True"
+	if basis=0 or basis=1 then resp$(7)='True'
 	fnOpt(2,3,"Accrual Method",0,1)
-	if basis=2 then resp$(8)="False"
+	if basis=2 then resp$(8)='False'
 	fnCmdKey("&Post",1,1,0,"Begins the posting process.")
 	fnCmdKey("&Assign GL Numbers",2,0,0,"Assign general ledger numbers to the various revenue accounts.")
 	fnCmdKey("&Cancel",5,0,1,"Returns to menu without saving any changes on the screen.")
@@ -90,11 +90,11 @@ SCREEN1: !
 	if ckey=5 then goto Xit
 	dat$=resp$(1) : ld1=val(resp$(2)) : hd1=val(resp$(3))
 	postingdate=val(resp$(3)(5:8))*100+val(resp$(3)(3:4))
-	if resp$(4)="True" then gli=1 else gli=0
-	if resp$(5)="True" then printreport=1 else printreport=0
-	if resp$(6)="True" then showdetails=1
-	basis=0 : if resp$(7)="True" then basis=cash=1
-	if resp$(8)="True" then basis=accrual=2
+	if resp$(4)='True' then gli=1 else gli=0
+	if resp$(5)='True' then printreport=1 else printreport=0
+	if resp$(6)='True' then showdetails=1
+	basis=0 : if resp$(7)='True' then basis=cash=1
+	if resp$(8)='True' then basis=accrual=2
 	if ld1>hd1 and ld1>0 and hd1>0 then
 		mat msgline$(1): msgline$(1)="Ending Date Before Starting Date!"
 		fnmsgbox(mat msgline$,resp$,'',48) : goto SCREEN1

@@ -58,7 +58,7 @@ SCREEN1: !
 	fncmbrt2(9,pf) : _
 	resp$(respc+=1)="[All]"
 	fnChk(10,pf,"Select Accounts to Print",1) : _
-	resp$(respc+=1)="False"
+	resp$(respc+=1)='False'
 	fnCmdSet(3) : _
 	ckey=fnAcs(mat resp$)
 	if ckey=5 then goto ENDSCR
@@ -73,7 +73,7 @@ SCREEN1: !
 	if resp$(7)="[All]" then : _
 		prtbkno=0 else : _
 		prtbkno = val(resp$(7))
-	if resp$(8)="True" then sl1=1: z$="" else sl1=0
+	if resp$(8)='True' then sl1=1: z$="" else sl1=0
 	if trim$(a$)<>"" then read #2,using L460,key=a$: z$,route,sequence nokey SCREEN1 : _
 		holdz$=z$: begin=1 : _
 		st1=1

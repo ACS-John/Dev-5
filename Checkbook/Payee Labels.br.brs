@@ -143,7 +143,7 @@ return ! /r
 def fn_payeeAddLabel(vn$*8,nam$*30,ad1$*30,ad2$*30,csz$*30) ! uses local printpayeenum$
 	dim labeltext$(5)*120
 	mat labeltext$=('')
-	if printpayeenum$="True" then 
+	if printpayeenum$='True' then 
 		labeltext$(1)=vn$
 	end if
 	labeltext$(2)= nam$

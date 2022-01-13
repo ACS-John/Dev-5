@@ -1056,7 +1056,7 @@ EstimateRoute: ! r: ESTIMATEING ROUTINE
 	fnFra(1,1,8,mylen+50,"Select and Configure Services to Estimate")
 	fnLbl(2,mylen+12,"% of Average",15,0,0,1)
 	for j=1 to 3
-		resp$(j*2-1)="False" : resp$(j*2)=""
+		resp$(j*2-1)='False' : resp$(j*2)=""
 		if srvest$(j)="" or srvest$(j)="Unused" then disable=1 else disable=0
 		fnChk(j+2,mylen,srvest$(j),0,1) ! add disable here
 		! fnTxt(J+2,MYLEN+4,2,0,0,"30",DISABLE,EMPTY$,1)
@@ -1065,14 +1065,14 @@ EstimateRoute: ! r: ESTIMATEING ROUTINE
 	fnLbl(7,1,"% of average would normally be from 75 to 125 %",52,2,0,1)
 	fnFra(11,1,3,50,"Account Selection Method")
 	fnOpt(1,1,"Individual Accounts",0,2)
-	resp$(7)="False"
+	resp$(7)='False'
 	fnOpt(2,1,"Route",0,2)
-	resp$(8)="True"
+	resp$(8)='True'
 	fnCmdSet(2)
 	ckey=fnAcs(mat resp$)
 	if ckey=cancel then goto MENU1
 	for j=1 to 3
-		if uprc$(resp$(j*2-1))=uprc$("True") then est1(j,1)=1 else est1(j,1)=0
+		if uprc$(resp$(j*2-1))=uprc$('True') then est1(j,1)=1 else est1(j,1)=0
 		est1(j,2)=val(resp$(j*2)) conv EstimateRoute
 	next j
 	if est1(1,1)=0 and est1(2,1)=0 and est1(3,1)=0 then
@@ -1098,8 +1098,8 @@ EstimateRoute: ! r: ESTIMATEING ROUTINE
 		end if
 	next j
 	! if ckey=cancel then goto MENU1
-	if uprc$(resp$(7))=uprc$("True") then estimationMode=1
-	if uprc$(resp$(8))=uprc$("True") then estimationMode=2 ! select route #
+	if uprc$(resp$(7))=uprc$('True') then estimationMode=1
+	if uprc$(resp$(8))=uprc$('True') then estimationMode=2 ! select route #
 	fn_est_dates
 	if estimationMode=1 then goto EST3 ! selecting individual accounts to estimate
 	if estimationMode=2 then goto ASK_ROUTE
@@ -1405,9 +1405,9 @@ def fn_holdingFileSave(hWork) ! probably requires more than just hWork
 	resp$(1)=""
 	fnFra(4,1,3,94,"Create new file or append to existing file","If you have a different file for each route, you will always take the option to create a new file.  If you only use one file, clean it on the first batch of readings and append the rest.")
 	fnOpt(1,1,"Create new file (deletes all previous readings in holding file)",0,1)
-	resp$(respc_CreateNew:=2)="False"
+	resp$(respc_CreateNew:=2)='False'
 	fnOpt(2,1,"Append to existing file (retain previous readings, merge new ones in, overwrites duplicates)",0,1)
-	resp$(3)="True"
+	resp$(3)='True'
 	fnCmdKey("&Save",1,1)
 	fnCmdKey("&Cancel",5,0,1)
 	ckey=fnAcs(mat resp$)
@@ -1415,7 +1415,7 @@ def fn_holdingFileSave(hWork) ! probably requires more than just hWork
 		holdingFileSaveReturn=1
 		bk1=val(resp$(1)) conv HoldingFileSave
 		if bk1<=0 then goto HoldingFileSave
-		if uprc$(resp$(respc_CreateNew))=uprc$("True") and exists('[Q]\UBmstr\IpHold'&str$(bk1)&'.h[cno]') then ! Create New Holding File
+		if uprc$(resp$(respc_CreateNew))=uprc$('True') and exists('[Q]\UBmstr\IpHold'&str$(bk1)&'.h[cno]') then ! Create New Holding File
 			fnFree('[Q]\UBmstr\IpHold'&str$(bk1)&'.h[cno]')
 		end if
 		! Append to Existing Holding File
@@ -1988,9 +1988,9 @@ def fn_meter_change_out
 		rc=0 : lc=0
 		fnFra(1,1,2,49,"Method of Change Out")
 		fnOpt(1,1,"Current customer only",0,1)
-		resp$(1)="True"
+		resp$(1)='True'
 		fnOpt(2,1,"All Customers",0,1)
-		resp$(2)="False"
+		resp$(2)='False'
 		fnLbl(5,1,"Service Type:",18,1)
 		fncomboa("ServiceType",5,20,mat serviceoption$)
 		resp$(3)=serviceoption$(1)
@@ -2002,8 +2002,8 @@ def fn_meter_change_out
 		if ckey=5 then goto Mco_Xit
 		servicetype$=resp$(3)(1:2)
 		begx$=resp$(4)(1:10)
-		if resp$(2)="True" then method$="File" : goto MCO_UPDATE_FULL_FILE ! working from a file
-		if resp$(1)="True" then method$="Customer" : goto MCO_RECORD_READINGS
+		if resp$(2)='True' then method$="File" : goto MCO_UPDATE_FULL_FILE ! working from a file
+		if resp$(1)='True' then method$="Customer" : goto MCO_RECORD_READINGS
 	loop
 	MCO_RECORD_READINGS: !
 	fnTos

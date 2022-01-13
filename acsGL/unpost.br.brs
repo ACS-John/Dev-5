@@ -19,7 +19,7 @@ MENU1: ! r:
 	resp$(2)="" ! STR$(fndate_mmddyy_to_ccyymmdd(ENDDAT))
 	lc+=1
 	fnChk(lc+=1,50,'Process History instead of Current Transactions',1)
-	resp$(3)="False"
+	resp$(3)='False'
 	lc+=1
 	fnChk(lc+=1,50,'Remove Duplicates Only',1)
 	resp$(4)='False'

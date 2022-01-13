@@ -22,9 +22,9 @@ fnTos ! r:
 		resp$(a*6-4)=serviceCode$(a)
 		fnTxt(a+2,34,3)
 		fnChk(a+2,41,"",align=0,container=0,tabcon=0)
-		if taxCode$(a)="Y" then resp$(a*6-3)="True" else resp$(a*6-3)="False"
+		if taxCode$(a)="Y" then resp$(a*6-3)='True' else resp$(a*6-3)='False'
 		fnChk(a+2,49,"",align=0,container=0,tabcon=0)
-		if penalty$(a)="Y" then resp$(a*6-2)="True" else resp$(a*6-2)="False"
+		if penalty$(a)="Y" then resp$(a*6-2)='True' else resp$(a*6-2)='False'
 		resp$(a*6-1)=str$(subjectTo(a))
 		fnTxt(a+2,58,2,0,0,"30")
 		resp$(a*6)=str$(orderToApply(a))
@@ -36,12 +36,12 @@ fnTos ! r:
 		for a=1 to 10
 			serviceName$(a)=resp$(a*6-5)
 			serviceCode$(a)=uprc$(resp$(a*6-4))
-			if resp$(a*6-3)="True" then
+			if resp$(a*6-3)='True' then
 				taxCode$(a)="Y"
 			else
 				taxCode$(a)="N"
 			end if
-			if resp$(a*6-2)="True" then
+			if resp$(a*6-2)='True' then
 				penalty$(a)="Y"
 			else
 				penalty$(a)="N"

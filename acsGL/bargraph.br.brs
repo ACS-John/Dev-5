@@ -42,8 +42,8 @@ SCR1: !
 	ckey=fnAcs(mat resp$)
 	if ckey=5 then goto Xit
 	year=val(resp$(1))
-	if resp$(2)="True" then pullfrom$="Current"
-	if resp$(3)="True" then pullfrom$="Prior"
+	if resp$(2)='True' then pullfrom$="Current"
+	if resp$(3)='True' then pullfrom$="Prior"
 	glnumber$=fnagl$(resp$(4))
 	read #1,using L430,key=glnumber$: dno$,ano$,sno$ nokey SCR1
 L430: form pos 1,c 3,c 6,c 3

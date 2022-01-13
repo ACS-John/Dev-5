@@ -24,7 +24,7 @@ fnLbl(7,1,"Report Heading Dage:",mylen,1)
 fnTxt(7,mypos,20)
 resp$(respc+=1)=dat$
 fnChk(9,mypos+10,"Skip customers with credit balance:",1)
-resp$(respc+=1)="False"
+resp$(respc+=1)='False'
 fnCmdSet(3)
 fnAcs(mat resp$,ckey,1)
 if ckey=5 then goto Xit
@@ -36,7 +36,7 @@ for j=1 to 3
 next j
 dat$=resp$(4)
 fndat(dat$,2)
-if resp$(5)="True" then skipcr=1
+if resp$(5)='True' then skipcr=1
 
 
 fnopenprn
