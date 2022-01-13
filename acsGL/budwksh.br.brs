@@ -14,7 +14,7 @@ open #1: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLINDEX.h[cno],Shr",i,
 open #12: "Name=[Q]\GLmstr\BudgetInfo.h[cno],KFName=[Q]\GLmstr\BudIndx.h[cno],Use,RecL=28,KPs=1,KLn=14,Shr",internal,outIn,keyed
 if fnprocess=1 then goto L440
 ! defaults
-	pba$='False' : bud$="False"
+	pba$='False' : bud$='False'
 	SCREEN1: !
 	fnTos(sn$='BudgetWksht')
 	lc=0 : mylen=40 : mypos=mylen+2
@@ -38,7 +38,7 @@ if fnprocess=1 then goto L440
 	fnTxt(lc,mypos,8,8,1,"1",0,"Reqired only if you want balance and budget from two years ago.")
 	resp$(7)=str$(priorpriordate) ! two years ago
 	fnChk(lc+=1,mypos,"Year Already Closed:",1)
-	resp$(8)="False"
+	resp$(8)='False'
 	fnCmdSet(3)
 	ckey=fnAcs(mat resp$)
 	if ckey=5 then goto Xit
@@ -49,7 +49,7 @@ if fnprocess=1 then goto L440
 	bud$=resp$(5)
 	priordate=val(resp$(6))
 	priorpriordate=val(resp$(7))
-	if resp$(8)="True" then yearclosed=1
+	if resp$(8)='True' then yearclosed=1
 	yr1$=resp$(6)(5:6) : if len(yr1$)=1 then let yr1$=resp$(6)(4:5) ! fixed kln conflict error for len(5) dates in resp$
 	yr2$=resp$(7)(5:6) : if len(yr2$)=1 then let yr2$=resp$(7)(4:5)
 	read #1,using L530,key>=gln1$: n$,d$,cb,mat bp,mat bm,mat revb nokey L440
@@ -133,7 +133,7 @@ L1200: !
 return ! /r
 
 PRINT_MASTER_RECORD: ! r:
-	if pba$="True" then
+	if pba$='True' then
 		fnTos(sn$='Budwksh-add-ba')
 		lc=0 : mylen=50 : mypos=mylen+2
 		fnLbl(lc+=1,1,'Enter Proposed Budget',40,2,+2)
@@ -148,7 +148,7 @@ PRINT_MASTER_RECORD: ! r:
 		bud=val(resp$(1)) : tbud+=bud
 	end if
 	if priordate=0 and priorpriordate=0 then goto L1360 else goto L1430
-	L1360: if pba$="True" then goto L1400
+	L1360: if pba$='True' then goto L1400
 	pr #255,using L1380: dno,ano,sno,d$(1:22),bp(12),cb,cyb," ______________" pageoflow NWPGE
 	L1380: form pos 1,pic(zzz),x 1,pic(zzzzzz),x 1,pic(zzz),x 2,c 22,pos 47,pic(-----,---.##),pos 75,pic(-----,---.##),pos 104,pic(-----,---.##),pos 122,c 15,skip 1
 	goto L1410
@@ -156,7 +156,7 @@ PRINT_MASTER_RECORD: ! r:
 	L1410: form pos 1,pic(zzz),x 1,pic(zzzzzz),x 1,pic(zzz),x 2,c 22,pos 47,pic(-----,---.##),pos 75,pic(-----,---.##),pos 104,pic(-----,---.##),pos 122,c 15,skip 1
 	goto L1580
 	L1430: if priordate>0 and priorpriordate=0 then goto L1440 else goto L1510
-	L1440: if pba$="True" then goto L1450 else goto L1480
+	L1440: if pba$='True' then goto L1450 else goto L1480
 	L1450: pr #255,using L1460: dno,ano,sno,d$(1:22),oldcb,oldbud,cb,cyb,cnvrt$("PIC(----,---,---.zz)",bud) pageoflow NWPGE
 	L1460: form pos 1,pic(zzz),x 1,pic(zzzzzz),x 1,pic(zzz),x 2,c 22,pos 34,4*pic(----,---,---.##),c 15,skip 2
 	goto L1580
@@ -164,7 +164,7 @@ PRINT_MASTER_RECORD: ! r:
 	L1490: form pos 1,pic(zzz),x 1,pic(zzzzzz),x 1,pic(zzz),x 2,c 22,pos 34,4*pic(----,---,---.##),c 15,skip 2
 	goto L1580
 	L1510: if priordate>0 and priorpriordate>0 then goto L1520 else goto L1580
-	L1520: if pba$="True" then goto L1530 else goto L1560
+	L1520: if pba$='True' then goto L1530 else goto L1560
 	L1530: pr #255,using L1540: dno,ano,sno,d$(1:22),priorcb,priorbud,oldcb,oldbud,cb,cyb,cnvrt$("PIC(----,---,---.zz)",bud) pageoflow NWPGE
 	L1540: form pos 1,pic(zzz),x 1,pic(zzzzzz),x 1,pic(zzz),x 2,c 22,pos 34,6*pic(----,---,---.##),c 15,skip 2
 	goto L1580

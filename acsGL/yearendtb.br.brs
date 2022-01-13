@@ -24,12 +24,12 @@ SCREEN1: !
 	fnTos(sn$="GLTB") : _
 	lc=0 : mylen=25 : mypos=mylen+2
 	fnChk(lc+=1,mypos,"List All Details",right) : _
-	resp$(1)="True"
+	resp$(1)='True'
 	fnLbl(lc+=1,1,"Cost Center:",mylen,right)
 	fnTxt(lc,mypos,5,0,0,'number') : _
 	resp$(2)=""
 	fnChk(lc+=1,mypos,"Subtotal after each fund",right) : _
-	resp$(3)="True"
+	resp$(3)='True'
 	fnLbl(lc+=1,1,"Starting Account:",mylen,right)
 	fnqgl(lc,mypos,0,1) : _
 	resp$(4)="[All]"
@@ -39,10 +39,10 @@ SCREEN1: !
 	fnCmdSet(3)
 	ckey=fnAcs(mat resp$)
 	if ckey=5 then goto Xit
-	if resp$(1)="True" then pt=0 else pt=1
+	if resp$(1)='True' then pt=0 else pt=1
 	costcent=val(resp$(2)) : _
 	n$=lpad$(str$(costcent),3)&"     0  0"
-	if resp$(3)="True" then subt=1 else subt=0
+	if resp$(3)='True' then subt=1 else subt=0
 	sl1$=fnagl$(resp$(4)) : _
 	sl2$=fnagl$(resp$(5))
 START_REPORT: !

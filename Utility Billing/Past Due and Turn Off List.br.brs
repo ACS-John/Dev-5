@@ -75,11 +75,11 @@ L400: x=pos(resp$(j),"/",1)
 	firstday(3)=(val(resp$(3)(1:6))*100)+1
 	lbill=val(resp$(4))
 	aai$=printal$=resp$(5)
-	printadr$=resp$(6) : if printadr$="True" then printadr=1 ! wants meter address printed
-	excludecurrent$=resp$(7) : if excludecurrent$="True" then excludecurrent=1 ! do not list those owing just the current month
-	excludelast$=resp$(8) : if excludelast$="True" then excludelast=1 ! do not list those owing just the current month and last month
-	pastduebalance$=resp$(9) : if pastduebalance$="True" then pastduebalance=1 ! only show past due amount in balance column
-	pr_s4_meter_number$=resp$(10) : if pr_s4_meter_number$="True" then pr_s4_meter_number=1 ! only show past due amount in balance column
+	printadr$=resp$(6) : if printadr$='True' then printadr=1 ! wants meter address printed
+	excludecurrent$=resp$(7) : if excludecurrent$='True' then excludecurrent=1 ! do not list those owing just the current month
+	excludelast$=resp$(8) : if excludelast$='True' then excludelast=1 ! do not list those owing just the current month and last month
+	pastduebalance$=resp$(9) : if pastduebalance$='True' then pastduebalance=1 ! only show past due amount in balance column
+	pr_s4_meter_number$=resp$(10) : if pr_s4_meter_number$='True' then pr_s4_meter_number=1 ! only show past due amount in balance column
 	pr_blank_lines_for_notes$=resp$(11)
 	accountSequence$=resp$(rc_accountSequence)
 	fncreg_write('ubpdtnof.aai',aai$)

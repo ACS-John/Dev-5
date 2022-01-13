@@ -212,7 +212,7 @@ def fn_selectSchedules(mat prtsch)
 	if ckey<>5 then
 		mat prtsch(totallisted)
 		for j=1 to totallisted
-			if resp$(j)="True" then
+			if resp$(j)='True' then
 				prtsch(j)=scheduleno(j)
 			end if
 		next j

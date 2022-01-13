@@ -429,7 +429,7 @@ Bud2: ! r: requires x1$
 	if ck1=5 then goto L5080 ! 7/06/05  KJ
 	L5030: !
 	for j=1 to 5
-		if uprc$(resp$(j))=uprc$("True") then bd3(j)=1
+		if uprc$(resp$(j))=uprc$('True') then bd3(j)=1
 		if bd3(j)=0 then bd2(j)=0
 	next j
 	if sum(bd2)=0 then goto Bud2

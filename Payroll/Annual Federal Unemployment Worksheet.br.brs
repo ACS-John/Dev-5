@@ -54,9 +54,9 @@ fnFra(lc+=1,1,5,40,"Option for printing","The system can print the form or just 
 	lc=0
 	frameId=1
 	fnOpt(lc+=1,2,"Print complete form",0,frameId)
-	resp$(resp_OptComplete:=respc+=1)="True"
+	resp$(resp_OptComplete:=respc+=1)='True'
 	fnOpt(lc+=1,2,"Fill in the blanks",0,frameId)
-	resp$(resp_OptFillIn:=respc+=1)="False"
+	resp$(resp_OptFillIn:=respc+=1)='False'
 	lc+=1 : col1len=12 : col2pos=14
 	fnLbl(lc+=1,1,"Top Margin:",col1len,1,0,frameId)
 	fnTxt(lc,col2pos,3,0,0,"30",0,"Reduce the top margin to move the pr up. Increse to move down.",frameId)
@@ -77,8 +77,8 @@ futaqtr1=val(resp$(resp_qtr1))
 futaqtr2=val(resp$(resp_qtr2))
 futaqtr3=val(resp$(resp_qtr3))
 futaqtr4=val(resp$(resp_qtr4))
-if resp$(resp_OptComplete)="True" then fullform=1 ! pr full form
-if resp$(resp_OptFillIn)="True" then fullform=2 ! fill in blanks
+if resp$(resp_OptComplete)='True' then fullform=1 ! pr full form
+if resp$(resp_OptFillIn)='True' then fullform=2 ! fill in blanks
  
 fnopenprn
 on pageoflow goto PgOf

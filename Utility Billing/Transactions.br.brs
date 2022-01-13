@@ -20,15 +20,16 @@ def fn_setup
 		tcode_debit       	=5
 
 		dim transType$(5)*11
-		transType$(tcode_charge    )="Charge"
-		transType$(tcode_penalty   )="Penalty"
-		transType$(tcode_collection)="Collection"
-		transType$(tcode_credit    )="Credit Memo"
-		transType$(tcode_debit     )="Debit Memo"
+		transType$(tcode_charge    )='Charge'
+		transType$(tcode_penalty   )='Penalty'
+		transType$(tcode_collection)='Collection'
+		transType$(tcode_credit    )='Credit Memo'
+		transType$(tcode_debit     )='Debit Memo'
 
 		dim serviceName$(10)*20
 		dim srv$(10)*2
 		fnGetServices(mat serviceName$, mat srv$)
+		for trimItem=1 to udim(mat serviceName$) : serviceName$(trimItem)=trim$(serviceName$(trimItem)) : next trimItem
 
 	end if
 fnend
@@ -40,7 +41,7 @@ def fn_trans_total_as_of(;customer_key$,date_ccyymmdd, trans_type)
 	! transaction_type or blank for all
 	if ~ttao_setup then
 		ttao_setup=1
-		open #ttao_h_trans=fnH: "Name=[Q]\UBmstr\ubtransvb.h[cno],KFName=[Q]\UBmstr\UBTrIndx.h[cno],Shr",i,i,k
+		open #ttao_h_trans=fnH: 'Name=[Q]\UBmstr\ubtransvb.h[cno],KFName=[Q]\UBmstr\UBTrIndx.h[cno],Shr',i,i,k
 		dim ttao_key$*19
 	end if
 	ttao_return=0
@@ -49,7 +50,7 @@ def fn_trans_total_as_of(;customer_key$,date_ccyymmdd, trans_type)
 	ttao_key$=customer_key$&lpad$(str$(date_ccyymmdd),8)&cnvrt$('pic(z)',trans_type)
 	restore #ttao_h_trans,key>=ttao_key$: nokey TTAO_FINIS
 	do
-		read #ttao_h_trans,using "Form pos 1,c 10,N 8,N 1,pd 4.2": ttao_customer_read$,ttao_date,ttao_code,ttao_amount eof TTAO_FINIS
+		read #ttao_h_trans,using 'Form pos 1,c 10,N 8,N 1,pd 4.2': ttao_customer_read$,ttao_date,ttao_code,ttao_amount eof TTAO_FINIS
 		if lpad$(ttao_customer_read$,10)=lpad$(customer_key$,10) or trim$(ttao_customer_read$)<>'' then
 			if ~date_ccyymmdd or ttao_date=>date_ccyymmdd then
 				if trans_type=0 or trans_type=ttao_code then
@@ -66,76 +67,70 @@ def library fntransfile(; hact$*81,&bal,mat gb)
 	if ~setup then fn_setup
 	fntransfile=fn_transfile( hact$,bal,mat gb)
 fnend
-def fn_transfile(; hact$*81,&bal,mat gb)
+def fn_transfile(; hact$*81,&bal,mat gb,___,rc,cf,opt_back,resp_type1,resp_type2,resp_type3,resp_type4, _
+	resp_type5,resp_type6)
 
 	enableDelete=0 ! 
 	if env$('acsDeveloper')<>'' then enableDelete=1
 
 	dim resp$(10)*80
 	dim totalalloc(10),totalusage(3),usage(3)
+	if ~beg_date then beg_date=date('mm')*10000+100+date('yy')-1
 
 	ScreenAskFilters: ! r:
 	fnTos
 	rc=cf=0
-	fnFra(1,1,6,23,"Transaction Type","You can review all transactions or any specific type of transaction",0)
+	fnFra(1,1,6,23,'Transaction Type','You can review all transactions or any specific type of transaction',0)
 	cf+=1 : fratype=cf
-	fnOpt(1,3,"[All]",0,fratype)
-	if sel_code=1 or sel_code=0 then resp$(rc+=1)="True" else resp$(rc+=1)="False"
-	fnOpt(2,3,"Charges",0,fratype)
-	if sel_code=2 then resp$(rc+=1)="True" else resp$(rc+=1)="False"
-	fnOpt(3,3,"Penalties",0,fratype)
-	if sel_code=3 then resp$(rc+=1)="True" else resp$(rc+=1)="False"
-	fnOpt(4,3,"Collections",0,fratype)
-	if sel_code=4 then resp$(rc+=1)="True" else resp$(rc+=1)="False"
-	fnOpt(5,3,"Credit Memos",0,fratype)
-	if sel_code=5 then resp$(rc+=1)="True" else resp$(rc+=1)="False"
-	fnOpt(6,3,"Debit Memos",0,fratype)
-	if sel_code=6 then resp$(rc+=1)="True" else resp$(rc+=1)="False"
-	fnFra(1,30,3,42,"Date Range","You can transactions for any date range or leave these blank to see all transactions.")
+	dim tf$(2)
+	tf$(1)='False'
+	tf$(2)='True'
+	fnOpt(1,3,'[All]',0,fratype)      	: resp_type1=rc+=1 : if (selectedType=1 or ~selectedType) then resp$(resp_type1)='True' else resp$(resp_type1)='False'
+	fnOpt(2,3,'Charges',0,fratype)    	: resp$(resp_type2=rc+=1)=tf$((selectedType==2)+1) ! if selectedType=2 then resp$(rc+=1)='True' else resp$(rc+=1)='False'
+	fnOpt(3,3,'Penalties',0,fratype)  	: resp$(resp_type3=rc+=1)=tf$((selectedType==3)+1)  ! if selectedType=3 then resp$(rc+=1)='True' else resp$(rc+=1)='False'
+	fnOpt(4,3,'Collections',0,fratype)	: resp$(resp_type4=rc+=1)=tf$((selectedType==4)+1)  ! if selectedType=4 then resp$(rc+=1)='True' else resp$(rc+=1)='False'
+	fnOpt(5,3,'Credit Memos',0,fratype)	: resp$(resp_type5=rc+=1)=tf$((selectedType==5)+1)  ! if selectedType=5 then resp$(rc+=1)='True' else resp$(rc+=1)='False'
+	fnOpt(6,3,'Debit Memos',0,fratype)	: resp$(resp_type6=rc+=1)=tf$((selectedType==6)+1)  ! if selectedType=6 then resp$(rc+=1)='True' else resp$(rc+=1)='False'
+	fnFra(1,30,3,42,'Date Range','You can transactions for any date range or leave these blank to see all transactions.')
 	cf+=1 : fradate=cf : mylen=26 : mypos=mylen+2
-	fnLbl(1,1,"Starting Date:",mylen,1,0,fradate)
-	fnTxt(1,mypos,10,0,1,"3",0,empty$,fradate)
-	if beg_date=0 then beg_date=date('mm')*10000+100+date('yy')-1
-	resp$(rc+=1)=str$(beg_date)
-	fnLbl(2,1,"Ending Date:",mylen,1,0,fradate)
-	fnTxt(2,mypos,10,0,1,"3",0,empty$,fradate)
-	resp$(rc+=1)=str$(end_date)
-	fnFra(6,30,2,60,"Account","You review transactions for all accounts or for an individual.")
+	fnLbl(1,1,'Starting Date:',mylen,1,0,fradate) 	: fnTxt(1,mypos,10,0,1,'3',0,empty$,fradate) : 	resp$(rc+=1)=str$(beg_date)
+	fnLbl(2,1,'Ending Date:',mylen,1,0,fradate)   	: fnTxt(2,mypos,10,0,1,'3',0,empty$,fradate) : 	resp$(rc+=1)=str$(end_date)
+	fnFra(6,30,2,60,'Account','You review transactions for all accounts or for an individual.')
 	cf+=1 : fraaccount=cf
-	fnLbl(1,1,"Account:",8,1,0,fraaccount)
+	fnLbl(1,1,'Account:',8,1,0,fraaccount)
 	if trim$(hact$)<>'' then
 		fnTxt(1,10,10,0,1,'',1,'',fraaccount)
 		resp$(rc+=1)=hact$
 	else
 		fncmbact(1,10,1,fraaccount)
 		rc+=1
-		if resp$(rc)="" then resp$(rc)="[All]"
+		if resp$(rc)='' then resp$(rc)='[All]'
 	end if
-	fnCmdKey("Next",1,1,0,"Displays a list of transactions on the screen")
-	fnCmdKey("Print",2,0,0,"Prints a transaction listing. (To get totals, you can only select one type of transaction at a time.")
-	fnCmdKey("Cancel",5,0,1,"Returns to customer record")
+	fnCmdKey('Next',1,1,0,'Displays a list of transactions on the screen')
+	fnCmdKey('Print',2,0,0,'Prints a transaction listing. (To get totals, you can only select one type of transaction at a time.')
+	fnCmdKey('Cancel',5,0,1,'Returns to customer record')
 	ckey=fnAcs(mat resp$)
 	if ckey=5 then
-		goto Tf_XIT
+		goto TfXit
 	else
-		if resp$(1)="True" then
-			sel_code=1
-		else if resp$(2)="True" then
-			sel_code=2
-		else if resp$(3)="True" then
-			sel_code=3
-		else if resp$(4)="True" then
-			sel_code=4
-		else if resp$(5)="True" then
-			sel_code=5
-		else if resp$(6)="True" then
-			sel_code=6
+		if resp$(resp_type1)='True' then
+			selectedType=1
+		else if resp$(resp_type2)='True' then
+			selectedType=2
+		else if resp$(resp_type3)='True' then
+			selectedType=3
+		else if resp$(resp_type4)='True' then
+			selectedType=4
+		else if resp$(resp_type5)='True' then
+			selectedType=5
+		else if resp$(resp_type6)='True' then
+			selectedType=6
 		end if
 		beg_date=val(resp$(7))
 		end_date=val(resp$(8))
 		z$=resp$(9)(1:10)
 		if ckey=2 then
-			! if trim$(z$)<>"" and trim$(z$)<>"[All]"  then
+			! if trim$(z$)<>'' and trim$(z$)<>'[All]'  then
 				fn_printTrans ! pr report of charges
 				goto ScreenAskFilters
 			! else
@@ -151,34 +146,35 @@ def fn_transfile(; hact$*81,&bal,mat gb)
 	do
 		fnTos
 		stgFlexLine=0
-		fnButton(stgFlexLine+=1,1,'Columns',opt_columns:=6)
+		fnButton(stgFlexLine+=1,1,'Columns',ck_columns:=6)
 		if z$<>'[All]' then
 			fnLbl(stgFlexLine+=1,1,'Account:',8,1)
 			fnTxt(stgFlexLine,10,10,0,0,'',1)
 			resp$(1)=z$
 		end if
-		fn_flextran(stgFlexLine+=1,1,0,z$,beg_date,end_date,sel_code)
+		fn_flextran(stgFlexLine+=1,1,0,z$,beg_date,end_date,selectedType)
 		fnCmdKey('Back',opt_back:=2,0,0,'Return to filter selection')
 
 		if enableDelete then
-			fnCmdKey("Delete",optDelete:=8,0,0,"Displays a list of transactions on the screen")
+			fnCmdKey('Delete',optDelete:=8,0,0,'Displays a list of transactions on the screen')
 		end if
 
 		fnCmdKey('Edit',opt_edit:=1,1,0)
 		fnCmdKey('Print',opt_print:=4,0,0)
-		fnCmdKey('Close',5,0,1)
+		fnCmdKey('Back',5,0,1)
 		ckey=fnAcs(mat resp$)
 		if ckey=opt_back then
 			goto ScreenAskFilters
 		else if ckey=5 then
-			goto Tf_XIT
+			goto TfXit
 		else
-			if opt_columns and ckey=opt_columns then
+			if ck_columns and ckey=ck_columns then
 				fn_columnSelect
 			else if ckey=opt_print then
 				fn_printTrans
 			end if
-			if z$='[All]' then editrec=val(resp$(1)) else editrec=val(resp$(2))
+			editrec=0
+			if z$='[All]' then editrec=val(resp$(1)) else editrec=val(resp$(2)) conv ScreenTransGrid
 			if ckey=opt_edit then
 				fn_TransactionEdit(editrec)
 			else if enableDelete and ckey=optDelete then
@@ -186,7 +182,7 @@ def fn_transfile(; hact$*81,&bal,mat gb)
 			end if
 		end if
 	loop ! /r
-	Tf_XIT: !
+	TfXit: !
 fnend
 def fn_transactionDelete(editrec,&bal,mat gb; ___,tranRec,runningBalance)
 
@@ -308,32 +304,32 @@ def fn_lastTBalBeforeRec(hTranRelative,z$,recNum; ___,returnN) ! reqires local m
 	fn_lastTBalBeforeRec=returnN
 fnend
 def fn_TransactionEdit(editrec; ___,transAcct$,tdate,tcode,tamount,serviceItem,s1use,s3use,s4use,lc,mylen,mypos,rc,s1use,s3use,s4use)
-	open #trans=fnH: "Name=[Q]\UBmstr\ubtransvb.h[cno],Shr",i,outi,r
-	read #trans,using "Form pos 1,c 10,N 8,N 1,pd 4.2,pos 73,pd 5,pos 83,pd 5,pos 93,pd 5",rec=editrec: transAcct$,tdate,tcode,tamount,s1use,s3use,s4use
+	open #trans=fnH: 'Name=[Q]\UBmstr\ubtransvb.h[cno],Shr',i,outi,r
+	read #trans,using 'Form pos 1,c 10,N 8,N 1,pd 4.2,pos 73,pd 5,pos 83,pd 5,pos 93,pd 5',rec=editrec: transAcct$,tdate,tcode,tamount,s1use,s3use,s4use
 	fnTos
 	mylen=20 : mypos=mylen+2
-	fnLbl(lc+=1,1,"Record:",mylen)
+	fnLbl(lc+=1,1,'Record:',mylen)
 	fnTxt(lc,mypos,10,0,0,empty$,1)
 	resp$(rc+=1)=str$(editrec)
-	fnLbl(lc+=1,1,"Customer:",mylen)
+	fnLbl(lc+=1,1,'Customer:',mylen)
 	fnTxt(lc,mypos,10,0,0,empty$,1)
 	resp$(rc+=1)=transAcct$
-	fnLbl(lc+=1,1,"Date:",mylen)
-	fnTxt(lc,mypos,10,0,0,"3")
+	fnLbl(lc+=1,1,'Date:',mylen)
+	fnTxt(lc,mypos,10,0,0,'3')
 	resp$(respc_tDate:=rc+=1)=str$(tdate)
-	fnLbl(lc+=1,1,"Type:",mylen)
+	fnLbl(lc+=1,1,'Type:',mylen)
 	fnTxt(lc,mypos,12,0,0,empty$,1)
 	resp$(rc+=1)=transType$(tcode)
-	fnLbl(lc+=1,1,"Amount:",mylen)
-	fnTxt(lc,mypos,10,0,0,"10",1)
+	fnLbl(lc+=1,1,'Amount:',mylen)
+	fnTxt(lc,mypos,10,0,0,'10',1)
 	resp$(rc+=1)=str$(tamount)
 	if tcode=1 then !  if it is a charge then
 		lc+=1
 		rcServiceBase=rc
 		for serviceItem=1 to 10
 			if (serviceItem=1 or serviceItem=3 or serviceItem=4) and fn_serviceIsMetered(serviceItem) then
-				fnLbl(lc+=1, 1,trim$(serviceName$(serviceItem))&" Usage:",mylen)
-				fnTxt(lc    ,22,10,0,1,"number")
+				fnLbl(lc+=1, 1,serviceName$(serviceItem)&' Usage:',mylen)
+				fnTxt(lc    ,22,10,0,1,'number')
 				rc+=1
 				if serviceItem=1 then resp$(rc)=str$(s1use)
 				if serviceItem=3 then resp$(rc)=str$(s3use)
@@ -358,12 +354,12 @@ def fn_TransactionEdit(editrec; ___,transAcct$,tdate,tcode,tamount,serviceItem,s
 				end if
 			nex serviceItem
 		end if
-		rewrite #trans,using "Form pos 11,N 8,pos 73,pd 5,pos 83,pd 5,pos 93,pd 5",rec=editrec: tdate,s1use,s3use,s4use
+		rewrite #trans,using 'Form pos 11,N 8,pos 73,pd 5,pos 83,pd 5,pos 93,pd 5',rec=editrec: tdate,s1use,s3use,s4use
 	end if
 	close #trans:
 fnend
 dim msgbox$(3)*128
-def fn_printTrans ! very local function - lots of inherritance
+def fn_printTrans(; ___,hPtTrans1,hPtTrans2) ! very local function - lots of inherritance
 	! dim scr1$(10)*30
 	dim alloc(10)
 	dim r(20,4)
@@ -372,11 +368,11 @@ def fn_printTrans ! very local function - lots of inherritance
 	dim name$(10)*20
 	! r: ask print_balance
 	msgbox_default=256
-	if env$('client')="White Hall" then msgbox_default=0
+	if env$('client')='White Hall' then msgbox_default=0
 	mat msgbox$(3)
-	msgbox$(1)="Include balance column?"
-	msgbox$(2)="The balances listed were the account balance at the time the transaction completed"
-	msgbox$(3)="and will be misleading if transactions were processed out of date sequence."
+	msgbox$(1)='Include balance column?'
+	msgbox$(2)='The balances listed were the account balance at the time the transaction completed'
+	msgbox$(3)='and will be misleading if transactions were processed out of date sequence.'
 	fnmsgbox(mat msgbox$,resp$,'',32+3+msgbox_default)
 	if resp$='Cancel' then goto PT_XIT
 	if resp$='Yes' then
@@ -386,42 +382,42 @@ def fn_printTrans ! very local function - lots of inherritance
 	end if
 	! /r
 	fnopenprn('','Transactions')
-	if trim$(serviceName$(3))<>"Electric" and srv$(3)="EL" then ptShowElecUsed=1 ! electric readings are being used for a reduction meter
-	if trim$(serviceName$(4))<>"Gas" and srv$(4)="GA" then ptShowGasUsed=1 ! gas readings are being used for a reduction meter
-	if trim$(z$)="[All]" then hd1$="{\ul  Account }     {\ul     Date   }" else hd1$="    {\ul    Date   }"
+	if serviceName$(3)<>'Electric' and srv$(3)='EL' then ptShowElecUsed=1 ! electric readings are being used for a reduction meter
+	if serviceName$(4)<>'Gas' and srv$(4)='GA' then ptShowGasUsed=1 ! gas readings are being used for a reduction meter
+	if trim$(z$)='[All]' then hd1$='{\ul  Account }     {\ul     Date   }' else hd1$='    {\ul    Date   }'
 	sz1=0
 	x=0
 	for j=1 to 10
 		if j=3 and ptShowElecUsed=1 then goto L1010 ! skp heading is electric field is used to hold other readings w/o matching changes (eg Kimberling City as reduction meters)
 		if j=4 and ptShowGasUsed=1 then goto L1010 ! skp heading is gas field is used to hold other readings w/o matching changes (eg Kimberling City as reduction meters)
-		x2=pos(trim$(serviceName$(j))," ",1)
-		if x2>0 then serviceName$(j)=serviceName$(j)(1:2)&"-"&serviceName$(j)(x2+1:len(serviceName$(j))) ! if service name two words long, use part of both
-		if trim$(serviceName$(j))<>"" then
+		x2=pos(serviceName$(j),' ',1)
+		if x2>0 then serviceName$(j)=serviceName$(j)(1:2)&'-'&serviceName$(j)(x2+1:len(serviceName$(j))) ! if service name two words long, use part of both
+		if (serviceName$(j))<>'' then
 			sz1+=1 ! scr1$(sz1+=1)=serviceName$(j)
-			hd1$&="  {\ul "&lpad$(rtrm$(serviceName$(j)(1:6)),6)&"}" : name$(x+=1)=serviceName$(j)
-		end if  ! trim$(serviceName$(j))<>"" then
+			hd1$&='  {\ul '&lpad$(rtrm$(serviceName$(j)(1:6)),6)&'}' : name$(x+=1)=serviceName$(j)
+		end if  ! (serviceName$(j))<>'' then
 		L1010: !
 	next j
-	hd1$&="{\ul     Total}"
+	hd1$&='{\ul     Total}'
 	if print_balance then
-		hd1$&="  {\ul   Balance }"
+		hd1$&='  {\ul   Balance }'
 	else
-		if trim$(serviceName$(1))="Water" then
-			hd1$&="  {\ul   Wa Used }"
+		if serviceName$(1)='Water' then
+			hd1$&='  {\ul   Wa Used }'
 			water=1
 		end if
-		if trim$(serviceName$(3))="Electric" then
-			hd1$&="  {\ul   El Used }"
+		if serviceName$(3)='Electric' then
+			hd1$&='  {\ul   El Used }'
 			electric=1
 		else if ptShowElecUsed=1 then
-			hd1$&="  {\ul      Used }"
+			hd1$&='  {\ul      Used }'
 			electric=1
 		end if
-		if trim$(serviceName$(4))="Gas" then
-			hd1$&="  {\ul   Ga Used }"
+		if (serviceName$(4))='Gas' then
+			hd1$&='  {\ul   Ga Used }'
 			gas=1
 		else if ptShowGasUsed=1 then
-			hd1$&="  {\ul      Used }"
+			hd1$&='  {\ul      Used }'
 			gas=1
 		end if
 	end if
@@ -429,44 +425,44 @@ def fn_printTrans ! very local function - lots of inherritance
 	mat alloc(sz1) : mat totalalloc(sz1)
 	mat totalalloc=(0) : mat totalusage=(0) : totaltamount=0
 	mat totalalloc=(0) : mat totalusage=(0) : totaltamount=0
-	close #trans: ioerr ignore
-	open #trans=2: "Name=[Q]\UBmstr\ubtransvb.h[cno],KFName=[Q]\UBmstr\ubTrIndx.h[cno],Shr",internal,outIn,keyed
-	open #trans2=fnH: "Name=[Q]\UBmstr\ubtransvb.h[cno],KFName=[Q]\UBmstr\UBTrdt.h[cno],Shr",internal,outIn,keyed
-	if trim$(z$)="[All]" then
-		restore #trans:
+	! close #trans: ioerr ignore
+	open #hPtTrans1=fnH: 'Name=[Q]\UBmstr\ubtransvb.h[cno],KFName=[Q]\UBmstr\ubTrIndx.h[cno],Shr',internal,outIn,keyed
+	open #hPtTrans2=fnH: 'Name=[Q]\UBmstr\ubtransvb.h[cno],KFName=[Q]\UBmstr\UBTrdt.h[cno],Shr',internal,outIn,keyed
+	if trim$(z$)='[All]' then
+		restore #hPtTrans1:
 	else
 		dim nam$*30
 		dim metraddr$*30
-		account_balance=val(fnCustomerData$(lpad$(rtrm$(z$),10),'balance'      , 1))
-		nam$           =    fnCustomerData$(lpad$(rtrm$(z$),10),'name'         , 1)
-		metraddr$      =    fnCustomerData$(lpad$(rtrm$(z$),10),'Meter Address'   )
-		! open #hCustomer=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",i,i,k
+		nam$            	=    	fnCustomerData$(lpad$(rtrm$(z$),10),'name'         	, 1)
+		metraddr$       	=    	fnCustomerData$(lpad$(rtrm$(z$),10),'Meter Address'	   )
+		account_balance	=val(	fnCustomerData$(lpad$(rtrm$(z$),10),'balance'      	, 1))
+		! open #hCustomer=fnH: 'Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr',i,i,k
 		! read #hCustomer,using 'Form POS 11,c 30,C 28,pos 292,PD 4.2',key=lpad$(rtrm$(z$),10),release: metraddr$,nam$,account_balance nokey PT_NO_CUSTOMER
 		! close #hCustomer: ioerr ignore
-		restore #trans,key>=lpad$(rtrm$(z$),10)&"         ": nokey PT_FINIS
+		restore #trans,key>=lpad$(rtrm$(z$),10)&'         ': nokey PT_FINIS
 	end if
 	gosub HDR
 	do
-		PT_TRANS_READ: !
+		PtNextTrans: !
 		read #trans,using 'Form POS 1,C 10,N 8,N 1,12*PD 4.2,6*PD 5,PD 4.2,N 1': transAcct$,tdate,tcode,tamount,mat tg,wr,wu,er,eu,gr,gu,tbal,pcode eof PT_FINIS
-		if trim$(z$)<>"[All]" and transAcct$<>lpad$(rtrm$(z$),10) then goto PT_FINIS
-		if beg_date<>0 and tdate<beg_date then goto PT_TRANS_READ
-		if end_date<>0 and tdate>end_date then goto PT_TRANS_READ
-		if tamount=0 then goto PT_TRANS_READ
-		if sel_code>1 and tcode<>sel_code-1 then goto PT_TRANS_READ
-		if tcode=tcode_collection then ti2=1 ! REG.COLLECTION
-		if tcode=tcode_credit     then ti2=2 ! CREDIT MEMO
-		if tcode=tcode_debit      then ti2=3 ! DEBIT MEMO
+		if trim$(z$)<>'[All]' and transAcct$<>lpad$(rtrm$(z$),10) then goto PT_FINIS
+		if beg_date<>0 and tdate<beg_date then goto PtNextTrans
+		if end_date<>0 and tdate>end_date then goto PtNextTrans
+		if tamount=0 then goto PtNextTrans
+		if selectedType>1 and tcode<>selectedType-1 then goto PtNextTrans
+		if tcode=tcode_collection 	then ti2=1 ! REG.COLLECTION
+		if tcode=tcode_credit     	then ti2=2 ! CREDIT MEMO
+		if tcode=tcode_debit       	then ti2=3 ! DEBIT MEMO
 		! if tcode=tcode_penalty then pause
 		! if trim$(transAcct$)='100145.00' then pr transAcct$;tg(4) : pause
 		if ti2=3 then r(1,1)-=tamount else r(1,1)+=tamount
 		r(1,ti2+1)+=tamount
 		x=0
 		for j=1 to 10
-			if trim$(serviceName$(j))<>"" then
-				if j=3 and srv$(3)="EL" and trim$(serviceName$(3))<>"Electric" and trim$(serviceName$(3))<>"Lawn Meter" then ! electic being used for reduction meter
+			if (serviceName$(j))<>'' then
+				if j=3 and srv$(3)='EL' and serviceName$(3)<>'Electric' and serviceName$(3)<>'Lawn Meter' then ! electic being used for reduction meter
 					goto L1370
-				else if j=4 and srv$(4)="GA" and trim$(serviceName$(4))<>"Gas" then ! gas being used for reduction meter
+				else if j=4 and srv$(4)='GA' and serviceName$(4)<>'Gas' then ! gas being used for reduction meter
 					goto L1370
 				end if
 				alloc(x+=1)=tg(j)
@@ -479,61 +475,61 @@ def fn_printTrans ! very local function - lots of inherritance
 				L1370: !
 			end if
 		next j
-		cx$=" "
-		if tcode=tcode_charge     then cx$="CHG"
-		if tcode=tcode_penalty    then cx$="PN"
-		if tcode=tcode_collection then cx$="COL"
-		if tcode=tcode_credit     then cx$="CM"
-		if tcode=tcode_debit      then cx$="DM"
+		cx$=' '
+		if tcode=tcode_charge     then cx$='CHG'
+		if tcode=tcode_penalty    then cx$='PN'
+		if tcode=tcode_collection then cx$='COL'
+		if tcode=tcode_credit     then cx$='CM'
+		if tcode=tcode_debit      then cx$='DM'
 		service=0
 		if water=1      	then service+=1 : usage(service)=wu ! water
 		if electric=1   	then service+=1 : usage(service)=eu ! Electric
 		if gas=1        	then service+=1 : usage(service)=gu ! Gas
 		dim printlineform$*1024
-		if cx$="CHG" then
-			let printlineform$="c 4,PIC(ZZZZ/ZZ/ZZ),SZ1*c 8,n 10.2,3*pic(--------.--),x 1"
-			! build string alloc$ and set penalty to ""
-			mat alloc$(udim(alloc)) : mat alloc$=("")
+		if cx$='CHG' then
+			printlineform$='c 4,PIC(ZZZZ/ZZ/ZZ),SZ1*c 8,n 10.2,3*pic(--------.--),x 1'
+			! build string alloc$ and set penalty to ''
+			mat alloc$(udim(alloc)) : mat alloc$=('')
 			for counter=1 to udim(alloc)
-				let alloc$(counter)=str$(alloc(counter))
-				if pos(alloc$(counter),".")=0 then let alloc$(counter)=alloc$(counter)&".00"
-				if len(alloc$(counter))-pos(alloc$(counter),".")<2 then alloc$(counter)=alloc$(counter)&"0"
-				if len(alloc$(counter))-pos(alloc$(counter),".")<2 then alloc$(counter)=alloc$(counter)&"0" ! get both decimals if needed
-				alloc$(counter)=lpad$(alloc$(counter),8," ")
+				alloc$(counter)=str$(alloc(counter))
+				if pos(alloc$(counter),'.')=0 then alloc$(counter)=alloc$(counter)&'.00'
+				if len(alloc$(counter))-pos(alloc$(counter),'.')<2 then alloc$(counter)=alloc$(counter)&'0'
+				if len(alloc$(counter))-pos(alloc$(counter),'.')<2 then alloc$(counter)=alloc$(counter)&'0' ! get both decimals if needed
+				alloc$(counter)=lpad$(alloc$(counter),8,' ')
 				next counter
 			penaltyindex=fn_getPenaltyIndex(mat serviceName$)
-			if penaltyindex<>0 then alloc$(penaltyindex)=""
+			if penaltyindex<>0 then alloc$(penaltyindex)=''
 		else
-			let printlineform$="c 4,PIC(ZZZZ/ZZ/ZZ),SZ1*N 8.2,n 10.2,3*pic(--------.--),x 1"
+			printlineform$='c 4,PIC(ZZZZ/ZZ/ZZ),SZ1*N 8.2,n 10.2,3*pic(--------.--),x 1'
 		end if
 		if print_balance then
 			usage(1)=tbal
 		end if
-		! if env$('acsDeveloper')<>"" then pause
-		if trim$(z$)="[All]" then
-			if cx$="CHG" then
-				pr #255,using 'Form POS 1,c 10,x 1,'&printlineform$: transAcct$,cx$,tdate,mat alloc$,tamount,usage(1),usage(2),usage(3) pageoflow PgOf
+		! if env$('acsDeveloper')<>'' then pause
+		if trim$(z$)='[All]' then
+			if cx$='CHG' then
+				pr #255,using 'Form pos 1,c 10,x 1,'&printlineform$: transAcct$,cx$,tdate,mat alloc$,tamount,usage(1),usage(2),usage(3) pageoflow PgOf
 			else
-				pr #255,using 'Form POS 1,c 10,x 1,'&printlineform$: transAcct$,cx$,tdate,mat alloc,tamount,usage(1),usage(2),usage(3) pageoflow PgOf
+				pr #255,using 'Form pos 1,c 10,x 1,'&printlineform$: transAcct$,cx$,tdate,mat alloc,tamount,usage(1),usage(2),usage(3) pageoflow PgOf
 			end if
 		else
-			if cx$="CHG" then
-				pr #255,using 'Form POS 1,'&printlineform$: cx$,tdate,mat alloc$,tamount,usage(1),usage(2),usage(3) pageoflow PgOf
+			if cx$='CHG' then
+				pr #255,using 'Form pos 1,'&printlineform$: cx$,tdate,mat alloc$,tamount,usage(1),usage(2),usage(3) pageoflow PgOf
 			else
-				pr #255,using 'Form POS 1,'&printlineform$: cx$,tdate,mat alloc,tamount,usage(1),usage(2),usage(3) pageoflow PgOf
+				pr #255,using 'Form pos 1,'&printlineform$: cx$,tdate,mat alloc,tamount,usage(1),usage(2),usage(3) pageoflow PgOf
 			end if
-		end if  ! trim$(z$)="[All]"   /   else
+		end if  ! trim$(z$)='[All]'   /   else
 		if tcode=tcode_charge     then
 			mat totalalloc=totalalloc+alloc: totaltamount+=tamount  ! charges
 			mat totalusage=totalusage+usage
 			! reverse penaltyindex charges
 			if penaltyindex<>0 then totalalloc(penaltyindex)-=alloc(penaltyindex)
 		end if
-		if tcode=tcode_penalty    then mat totalalloc=totalalloc+alloc: totaltamount+=tamount ! penalties
-		if tcode=tcode_collection then mat totalalloc=totalalloc-alloc: totaltamount-=tamount ! collections
-		if tcode=tcode_credit     then mat totalalloc=totalalloc-alloc: totaltamount-=tamount ! credit memos
-		if tcode=tcode_debit      then mat totalalloc=totalalloc+alloc: totaltamount+=tamount ! debit memos
-		!if env$('acsDeveloper')<>"" then
+		if tcode=tcode_penalty    	then mat totalalloc=totalalloc+alloc : totaltamount+=tamount ! penalties
+		if tcode=tcode_collection 	then mat totalalloc=totalalloc-alloc : totaltamount-=tamount ! collections
+		if tcode=tcode_credit     	then mat totalalloc=totalalloc-alloc : totaltamount-=tamount ! credit memos
+		if tcode=tcode_debit       	then mat totalalloc=totalalloc+alloc : totaltamount+=tamount ! debit memos
+		!if env$('acsDeveloper')<>'' then
 		!	if lamt2<>totaltamount then
 		!		lamt2=totaltamount
 		!		print totaltamount
@@ -547,69 +543,84 @@ def fn_printTrans ! very local function - lots of inherritance
 	continue  ! /r
 	HDR: ! r:
 	! need date$,time$
-		pr #255: "\qc  {\f181 \fs20 \b "&env$('cnam')&" }"
+		pr #255: '\qc  {\f181 \fs20 \b '&env$('cnam')&' }'
 		if nam$<>'' then
-			pr #255: "\qc  {\f181 \fs20 \b "&trim$(nam$)&" }"
+			pr #255: '\qc  {\f181 \fs20 \b '&trim$(nam$)&' }'
 		end if
 		if metraddr$<>'' then
-			pr #255: "\qc  {\f181 \fs20 \b "&trim$(metraddr$)&" }"
+			pr #255: '\qc  {\f181 \fs20 \b '&trim$(metraddr$)&' }'
 		end if
-		pr #255: "\qc  {\f181 \fs20 \b "&trim$(z$)&" }"
-		pr #255: "\qc  {\f181 \fs28 \b Transaction List }"
+		pr #255: '\qc  {\f181 \fs20 \b '&trim$(z$)&' }'
+		pr #255: '\qc  {\f181 \fs28 \b Transaction List }'
 		if beg_date<>0 and end_date<>0 then
-			pr #255: "\qc  {\f181 \fs18 \b From "&cnvrt$("pic(zzzz/zz/zz)",beg_date)& "  To "&cnvrt$("pic(zzzz/zz/zz)",end_date)&"}"
+			pr #255: '\qc  {\f181 \fs18 \b From '&cnvrt$('pic(zzzz/zz/zz)',beg_date)& '  To '&cnvrt$('pic(zzzz/zz/zz)',end_date)&'}'
 		end if  ! beg_date<>0 and end_date<>0
-		pr #255: ""
-		pr #255: "\ql "
+		pr #255: ''
+		pr #255: '\ql '
 		pr #255: hd1$
 	return  ! /r
 	PT_FINIS: !
 	! r: totals
-	pr #255,using "form skip 1,pos 10,c 20": "Totals"
+	pr #255,using 'form skip 1,pos 10,c 20': 'Totals'
 	for j=1 to udim(mat alloc)
-		pr #255,using "form pos 1,c 20,pic(---,---,---.##)": name$(j),totalalloc(j)
+		pr #255,using 'form pos 1,c 20,pic(---,---,---.##)': name$(j),totalalloc(j)
 	next j
-	pr #255,using "form pos 1,c 20,pic(---,---,---.##)": "Total Amount",totaltamount
-	if water=1 then pr #255,using "form pos 1,c 20,pic(---,---,---)": "Water Usage",totalusage(1)
-	if electric=1 and water=1 then pr #255,using "form pos 1,c 20,pic(---,---,---)": "Electric Usage",totalusage(2) ! electric 2nd metered service
-	if electric=1 and water=0 then pr #255,using "form pos 1,c 20,pic(---,---,---)": "Electric Usage",totalusage(1) ! electric is 1st metered service
-	if gas=1 and electric=1 and water=1 then pr #255,using "form pos 1,c 20,pic(---,---,---)": "Gas Usage",totalusage(3) ! gas is third service
-	if gas=1 and electric=0 and water=1 then pr #255,using "form pos 1,c 20,pic(---,---,---)": "Gas Usage",totalusage(2) ! gas is second metered service
-	if gas=1 and electric=0 and water=0 then pr #255,using "form pos 1,c 20,pic(---,---,---)": "Gas Usage",totalusage(1) ! gas is first  metered service
-	pr #255,using "form skip 1,pos 1,cr 18,pic(-,---,---,--#.##)": "Current Balance:",account_balance
+	pr #255,using 'form pos 1,c 20,pic(---,---,---.##)': 'Total Amount',totaltamount
+	if water=1 then pr #255,using 'form pos 1,c 20,pic(---,---,---)': 'Water Usage',totalusage(1)
+	if electric=1 then 
+		if water=1 then 
+			pr #255,using 'form pos 1,c 20,pic(---,---,---)': 'Electric Usage',totalusage(2) ! electric 2nd metered service
+		else ! if ~water then 
+			pr #255,using 'form pos 1,c 20,pic(---,---,---)': 'Electric Usage',totalusage(1) ! electric is 1st metered service
+		end if
+	end if
+	if gas=1 then
+		if electric=1 and water=1 then 
+			pr #255,using 'form pos 1,c 20,pic(---,---,---)': 'Gas Usage',totalusage(3) ! gas is third service
+		else if electric=0 and water=1 then 
+			pr #255,using 'form pos 1,c 20,pic(---,---,---)': 'Gas Usage',totalusage(2) ! gas is second metered service
+		else if electric=0 and water=0 then 
+			pr #255,using 'form pos 1,c 20,pic(---,---,---)': 'Gas Usage',totalusage(1) ! gas is first  metered service
+		end if
+	end if
+	pr #255,using 'form skip 1,pos 1,cr 18,pic(-,---,---,--#.##)': 'Current Balance:',account_balance
 	! /r
 	PT_NO_CUSTOMER: !
-	close #trans: ioerr ignore
+	close #hPtTrans1: ioerr ignore
+	close #hPtTrans2: ioerr ignore
 	fncloseprn
 	PT_XIT: !
 fnend
 def fn_getPenaltyIndex(mat serviceName$;___,pindex,moveone)
 	! this function returns the slot for penalty
 	for pindex=1 to udim(mat serviceName$)
-		if trim$((serviceName$(pindex)))="" then let moveone+=1
-		if trim$(uprc$(serviceName$(pindex)))="PENALTY" then
-			let fn_getPenaltyIndex=pindex-moveone
+		if trim$((serviceName$(pindex)))='' then moveone+=1
+		if trim$(uprc$(serviceName$(pindex)))='PENALTY' then
+			fn_getPenaltyIndex=pindex-moveone
 		end if
 	next pindex
 fnend
 def fn_flextran(myline,mypos; hTrans,z$,begdate,enddate,selcode)
 
-	dim colmask$(30),colhdr$(30)*20,item$(25)*70,tg(11)
-	dim srv$(10)*2,serviceName$(10)*20
+	dim srv$(10)*2
+	dim serviceName$(10)*20
 
-	if hTrans=0 then
-		close_hTrans=1
-		open #hTrans=fnH: "Name=[Q]\UBmstr\ubTransVB.h[cno],KFName=[Q]\UBmstr\ubTrIndx.h[cno],Shr",i,i,k
+	if ~hTrans then
+		open #hTrans=fnH: 'Name=[Q]\UBmstr\ubTransVB.h[cno],KFName=[Q]\UBmstr\ubTrIndx.h[cno],Shr',i,i,k
+		hTransOpened=1
 	end if
 	hTrans_lrec_len=len(str$(lrec(hTrans)))
+	dim colhdr$(30)*20
+	dim colmask$(30)
 	fn_columnGet(mat colhdr$,mat colmask$,ftShowElecUsed,ftShowGasUsed)
+	dim item$(25)*70
 	fn_columnEnabledGet(mat colEnabled)
 	forceAllColumnsOn=0
 	if forceAllColumnsOn then mat colEnabled(25) : mat colEnabled=(1)
-	if trim$(z$)="[All]" then
-		z$=""
+	if trim$(z$)='[All]' then
+		z$=''
 		colEnabled(2)=1
-	else if trim$(z$)<>"" then
+	else if trim$(z$)<>'' then
 		z$=lpad$(trim$(z$),10)
 		colEnabled(2)=0
 	end if
@@ -625,153 +636,110 @@ def fn_flextran(myline,mypos; hTrans,z$,begdate,enddate,selcode)
 			colMask_enabled$(colHeaderEnabledCount)=colmask$(hdrItem)
 		end if
 	nex hdrItem
-	fnflexinit1("ubtrans_b",myline,mypos,25,100,mat colHdr_enabled$,mat colMask_enabled$,1)
+	fnflexinit1('ubtrans_b',myline,mypos,25,100,mat colHdr_enabled$,mat colMask_enabled$,1)
 	if trim$(z$)='' then
 		restore #hTrans:
 	else
-		restore #hTrans,key>=lpad$(z$,10)&"         ": nokey FlexTranFinis
+		restore #hTrans,key>=lpad$(z$,10)&'         ': nokey FlexTranFinis
 	end if
 	do
-		READ_UBTRANSVB: !
+		TrReadTrans: !
+		dim tg(11)
 		read #hTrans,using 'Form POS 1,C 10,N 8,N 1,12*PD 4.2,6*PD 5,PD 4.2,N 1': transAcct$,tdate,tcode,tamount,mat tg,wr,wu,er,eu,gr,gu,tbal,pcode eof FlexTranFinis
 		if lpad$(transAcct$,10)<>lpad$(z$,10) and trim$(z$)<>'' then goto FlexTranFinis !       ! not same account
-		if selcode>1 and tcode<>selcode-1 then goto READ_UBTRANSVB
-		if begdate>20000000 and tdate<begdate then goto READ_UBTRANSVB
-		if enddate>20000000 and tdate>enddate then goto READ_UBTRANSVB
+		if selcode>1 and tcode<>selcode-1 then goto TrReadTrans
+		if begdate>20000000 and tdate<begdate then goto TrReadTrans
+		if enddate>20000000 and tdate>enddate then goto TrReadTrans
 		! if tcode=0 then tcode=1 ! temporary to prevent bad transaction codes
 		items=0
-		item$(items+=1)=lpad$(str$(rec(hTrans)),hTrans_lrec_len,'0')
-		if colEnabled(2) then
-			 item$(items+=1)=transAcct$
-		end if
-		item$(items+=1)=str$(tdate)
-		if tcode<1 or tcode>udim(mat transType$) then
-			item$(items+=1)='(invalid)'
-		else
-			item$(items+=1)=transType$(tcode)
-		end if
-		item$(items+=1)=str$(tamount)
-		colEnabledItem=items ! +1
+		item$(items+=1)=lpad$(str$(rec(hTrans)),hTrans_lrec_len,'0') ! item$(1)= record number
+		if colEnabled(2) then item$(items+=1)=transAcct$
+		item$(items+=1)=str$(tdate)                                     ! item$(2)= transaction Date
+		item$(items+=1)='(invalid)' : if tcode and tcode<=udim(mat transType$) then item$(items)=transType$(tcode) ! item$(3)= transaction Type
+		item$(items+=1)=str$(tamount)                                   ! item$(3)= transaction Amount
+		colEnabledItem=items
 		for j=1 to 10
-			if j=3 and ftShowElecUsed=1 then goto L440
-			if j=4 and ftShowGasUsed=1 then goto L440
-			if trim$(serviceName$(j))<>"" then
-				if colEnabled(colEnabledItem+=1) then
-					! pr colhdr$(colEnabledItem) : pause
-					item$(items+=1)=cnvrt$("pic(-------.zz)",tg(j))
-				end if
+			if (j=3 or j=4) and ftShowElecUsed=1 then goto Ft_J3or4FtPass
+			if (serviceName$(j))<>'' then
+				if colEnabled(colEnabledItem+=1) then item$(items+=1)=cnvrt$('pic(-------.zz)',tg(j)) ! pr colhdr$(colEnabledItem) : pause
 			end if
-			L440: !
+			Ft_J3or4FtPass: !
 		next j
-		if colEnabled(colEnabledItem+=1) then
-			! pr colhdr$(colEnabledItem) : pause
-			item$(items+=1)=cnvrt$("pic(-------.zz)",tg(11)) ! net
+		if colEnabled(colEnabledItem+=1) then item$(items+=1)=cnvrt$('pic(-------.zz)',tg(11)) ! pr colhdr$(colEnabledItem) : pause ! net
+		if (serviceName$(1))<>'' then
+			if colEnabled(colEnabledItem+=1) then item$(items+=1)=str$(wr) 	! pr colhdr$(colEnabledItem) : pause
+			if colEnabled(colEnabledItem+=1) then item$(items+=1)=str$(wu)
 		end if
-		if trim$(serviceName$(1))<>"" then
-			if colEnabled(colEnabledItem+=1) then
-				! pr colhdr$(colEnabledItem) : pause
-				item$(items+=1)=str$(wr)
-			end if
-			if colEnabled(colEnabledItem+=1) then
-				item$(items+=1)=str$(wu)
-			end if
+		if (serviceName$(3))='Electric' or srv$(3)='EL' then
+			if colEnabled(colEnabledItem+=1) then item$(items+=1)=str$(er)
+			if colEnabled(colEnabledItem+=1) then item$(items+=1)=str$(eu)
 		end if
-		if trim$(serviceName$(3))="Electric" or trim$(srv$(3))="EL" then
-			if colEnabled(colEnabledItem+=1) then
-				item$(items+=1)=str$(er)
-			end if
-			if colEnabled(colEnabledItem+=1) then
-				item$(items+=1)=str$(eu)
-			end if
+		if (serviceName$(3))='Lawn Meter' then
+			if colEnabled(colEnabledItem+=1) then item$(items+=1)=str$(er)
+			if colEnabled(colEnabledItem+=1) then item$(items+=1)=str$(eu)
 		end if
-		if trim$(serviceName$(3))="Lawn Meter" then
-			if colEnabled(colEnabledItem+=1) then
-				item$(items+=1)=str$(er)
-			end if
-			if colEnabled(colEnabledItem+=1) then
-				item$(items+=1)=str$(eu)
-			end if
+		if (serviceName$(4))='Gas' or srv$(4)='GA' then
+			if colEnabled(colEnabledItem+=1) then item$(items+=1)=str$(gr)
+			if colEnabled(colEnabledItem+=1) then item$(items+=1)=str$(gu)
 		end if
-		if trim$(serviceName$(4))="Gas" or trim$(srv$(4))="GA" then
-			if colEnabled(colEnabledItem+=1) then
-				item$(items+=1)=str$(gr)
-			end if
-			if colEnabled(colEnabledItem+=1) then
-				item$(items+=1)=str$(gu)
-			end if
-		end if
-		if colEnabled(colEnabledItem+=1) then
-			item$(items+=1)=str$(tbal)
-		end if
+		if colEnabled(colEnabledItem+=1) then item$(items+=1)=str$(tbal)
 		fnflexadd1(mat item$)
 	loop
 	FlexTranFinis: !
-	if close_hTrans=1 then close #hTrans: : close_hTrans=0
+	if hTransOpened then 
+		close #hTrans: ioerr ignore
+		hTrans=hTransOpened=0
+	end if
 fnend
 def fn_columnGet(mat colhdr$,mat colmask$,&ftShowElecUsed,&ftShowGasUsed)
 	mat colhdr$(30)
 	mat colmask$(30)
-	colhdr$(1)="Rec"
-	colhdr$(2)="Account"
-	colhdr$(3)="Date"
-	colhdr$(4)="Type"
-	colhdr$(5)="Amount"
-	colmask$(1)=""
-	colmask$(2)=""
-	colmask$(3)="3"
-	colmask$(4)=""
-	colmask$(5)="10"
+	colhdr$(1)='Rec'
+	colhdr$(2)='Account'
+	colhdr$(3)='Date'
+	colhdr$(4)='Type'
+	colhdr$(5)='Amount'
+	colmask$(1)=''
+	colmask$(2)=''
+	colmask$(3)='3'
+	colmask$(4)=''
+	colmask$(5)='10'
 	headerCount=5
-	if trim$(serviceName$(3))<>"Electric" and srv$(3)="EL" then ftShowElecUsed=1
-	if trim$(serviceName$(4))<>"Gas" and srv$(4)="GA" then ftShowGasUsed=1
+	if (serviceName$(3))<>'Electric' and srv$(3)='EL' then ftShowElecUsed=1
+	if (serviceName$(4))<>'Gas' and srv$(4)='GA' then ftShowGasUsed=1
 	for j=1 to 10
-		if j=3 and ftShowElecUsed=1 then goto L220
-		if j=4 and ftShowGasUsed=1 then goto L220
-		if trim$(serviceName$(j))<>"" then
-			colhdr$(headerCount+=1)=trim$(serviceName$(j))(1:min(8,len(trim$(serviceName$(j)))))
-			colmask$(headerCount)="10"
+		if (j=3 or j=4) and ftShowElecUsed=1 then goto Cg_J3or4FtPass
+		if (serviceName$(j))<>'' then
+			colhdr$(headerCount+=1)=(serviceName$(j))(1:min(8,len((serviceName$(j)))))  : colmask$(headerCount)='10'
 		end if
-		L220: !
+		Cg_J3or4FtPass: !
 	next j
-	colhdr$(headerCount+=1)="Net" : colmask$(headerCount)="10"
-	for j=1 to 4
-		if trim$(serviceName$(j))<>"" and j=1 then
-			colhdr$(headerCount+=1)="Water Reading"
-			colmask$(headerCount)="20"
-			colhdr$(headerCount+=1)="Water Used"
-			colmask$(headerCount)="20"
-		end if
-		if trim$(serviceName$(j))="Electric" and j=3 then
-			colhdr$(headerCount+=1)="Elec Reading"
-			colmask$(headerCount)="20"
-			colhdr$(headerCount+=1)="Elec Used"
-			colmask$(headerCount)="20"
-		else if trim$(srv$(j))="EL" and j=3 then
-			colhdr$(headerCount+=1)=" 2nd Reading"
-			colmask$(headerCount)="20"
-			colhdr$(headerCount+=1)=" 2nd Used"
-			colmask$(headerCount)="20"
-		end if
-		if trim$(serviceName$(j))="Lawn Meter" and j=3 then
-			colhdr$(headerCount+=1)="Lawn Reading"
-			colmask$(headerCount)="20"
-			colhdr$(headerCount+=1)="Lawn Used"
-			colmask$(headerCount)="20"
-		end if
-		if uprc$(trim$(serviceName$(j)))="GAS" and j=4 then
-			colhdr$(headerCount+=1)="Gas Reading"
-			colmask$(headerCount)="20"
-			colhdr$(headerCount+=1)="Gas Used"
-			colmask$(headerCount)="20"
-		else if uprc$(trim$(srv$(j)))="GA" and j=4 then
-			colhdr$(headerCount+=1)="3nd Reading"
-			colmask$(headerCount)="20"
-			colhdr$(headerCount+=1)="3rd Used"
-			colmask$(headerCount)="20"
-		end if
-	next j
-	colhdr$(headerCount+=1)="Balance"
-	colmask$(headerCount)="10"
+	colhdr$(headerCount+=1)='Net'              	: colmask$(headerCount)='10'
+
+	if (serviceName$(1))<>'' then
+		colhdr$(headerCount+=1)='Water Reading' 	: colmask$(headerCount)='20'
+		colhdr$(headerCount+=1)='Water Used'   	: colmask$(headerCount)='20'
+	end if
+	if (serviceName$(3))='Electric' then
+		colhdr$(headerCount+=1)='Elec Reading' 	: colmask$(headerCount)='20'
+		colhdr$(headerCount+=1)='Elec Used'    	: colmask$(headerCount)='20'
+	else if srv$(3)='EL' then
+		colhdr$(headerCount+=1)=' 2nd Reading' 	: colmask$(headerCount)='20'
+		colhdr$(headerCount+=1)=' 2nd Used'    	: colmask$(headerCount)='20'
+	end if
+	if (serviceName$(3))='Lawn Meter' then
+		colhdr$(headerCount+=1)='Lawn Reading' 	: colmask$(headerCount)='20'
+		colhdr$(headerCount+=1)='Lawn Used'    	: colmask$(headerCount)='20'
+	end if
+	if uprc$((serviceName$(4)))='GAS' then
+		colhdr$(headerCount+=1)='Gas Reading'  	: colmask$(headerCount)='20'
+		colhdr$(headerCount+=1)='Gas Used'      	: colmask$(headerCount)='20'
+	else if uprc$(srv$(4))='GA' then
+		colhdr$(headerCount+=1)='3nd Reading'  	: colmask$(headerCount)='20'
+		colhdr$(headerCount+=1)='3rd Used'      	: colmask$(headerCount)='20'
+	end if
+	colhdr$(headerCount+=1)='Balance'          	: colmask$(headerCount)='10'
+	
 	mat colhdr$(headerCount)
 	mat colmask$(headerCount)
 fnend

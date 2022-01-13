@@ -84,20 +84,20 @@ SCREEN_1: ! r:
 	fnTxt(11,mypos,2,0,left,"30",0,"",0 )
 	resp$(resp_nap:=respc+=1)=str$(nap)
 	fnChk(12,60,"Use Department Number Field:",1)
-	resp$(resp_useDeptNo:=respc+=1)="False"
-	if d(1)=1 then resp$(resp_useDeptNo)="True" else resp$(resp_useDeptNo)="False"
+	resp$(resp_useDeptNo:=respc+=1)='False'
+	if d(1)=1 then resp$(resp_useDeptNo)='True' else resp$(resp_useDeptNo)='False'
 	fnChk(13,60,"Use Sub Number Field:",1)
 	resp_useSubAcct:=respc+=1
-	if d(2)=1 then resp$(resp_useSubAcct)="True" else resp$(resp_useSubAcct)="False"
+	if d(2)=1 then resp$(resp_useSubAcct)='True' else resp$(resp_useSubAcct)='False'
 	fnChk(15,60,"Utilize Bank Reconciliation:",1)
 	resp_useBankRec:=respc+=1
-	if recc$="Y" or reccode=1 then resp$(resp_useBankRec)="True" else resp$(resp_useBankRec)="False"
+	if recc$="Y" or reccode=1 then resp$(resp_useBankRec)='True' else resp$(resp_useBankRec)='False'
 	fnLbl(16,1,"Last Balance Sheet Account #:",mylen,right)
 	fnqgl(16,mypos,0,2,1)
 	resp$(resp_lastBalSheetAccount:=respc+=1)=fnrgl$(lastgl$)
 	fnChk(17,60,"Allocate Expenses to Job Cost:",1)
 	resp_AllocExpToJc:=respc+=1
-	if jcc$="Y" or jccode=1 then resp$(resp_AllocExpToJc)="True" else resp$(resp_AllocExpToJc)="False"
+	if jcc$="Y" or jccode=1 then resp$(resp_AllocExpToJc)='True' else resp$(resp_AllocExpToJc)='False'
 	fnLbl(18,1,"Posting Method:",mylen,right)
 	fncomboa("PostMethod",18,mypos,mat postingOption$,"Normally you would post immediately. You would only consider posting to holding files if the general ledger is months behind.",mylen)
 	resp_glb=respc+=1
@@ -118,11 +118,11 @@ SCREEN_1: ! r:
 		ucm=val(resp$(resp_ucm))
 		tb$=resp$(resp_typeOfBusiness)
 		nap=val(resp$(resp_nap))
-		if resp$(resp_useDeptNo) ="True" then d1$="Y": d(1)=1 else d1$="N": d(1)=0
-		if resp$(resp_useSubAcct)="True" then d2$="Y": d(2)=1 else d2$="N": d(2)=0
-		if resp$(resp_useBankRec)="True" then recc$="Y": reccode=1 else recc$="N": reccode=0
+		if resp$(resp_useDeptNo) ='True' then d1$="Y": d(1)=1 else d1$="N": d(1)=0
+		if resp$(resp_useSubAcct)='True' then d2$="Y": d(2)=1 else d2$="N": d(2)=0
+		if resp$(resp_useBankRec)='True' then recc$="Y": reccode=1 else recc$="N": reccode=0
 		lastgl$=fnagl$(resp$(resp_lastBalSheetAccount)) : a1=val(lastgl$(1:3)) : a2=val(lastgl$(4:9)) : a3=val(lastgl$(10:12)) ! gl number
-		if resp$(resp_AllocExpToJc)="True" then jcc$="Y": jccode=1 else jcc$="N": jccode=0
+		if resp$(resp_AllocExpToJc)='True' then jcc$="Y": jccode=1 else jcc$="N": jccode=0
 		if resp$(resp_glb)=postingOption$(1) then glb$="P": glb=1 else glb$="R": glb=2
 
 		if ckey=4 then !  save and exit
@@ -242,13 +242,13 @@ SCREEN_4: ! r:
 		if dedcode(j)=0 then dedcode(j)=1
 		resp$(resp+=1)=dedOrAddOption$(dedcode(j))
 		fnChk(j+8,41,"",1)
-		if dedfed(j)>0 then resp$(resp+=1)="True" else resp$(resp+=1)="False"
+		if dedfed(j)>0 then resp$(resp+=1)='True' else resp$(resp+=1)='False'
 		fnChk(j+8,47,"",1)
-		if dedfica(j)>0 then resp$(resp+=1)="True" else resp$(resp+=1)="False"
+		if dedfica(j)>0 then resp$(resp+=1)='True' else resp$(resp+=1)='False'
 		fnChk(j+8,53,"",1)
-		if dedst(j)>0 then resp$(resp+=1)="True" else resp$(resp+=1)="False"
+		if dedst(j)>0 then resp$(resp+=1)='True' else resp$(resp+=1)='False'
 		fnChk(j+8,59,"",1)
-		if deduc(j)>0 then resp$(resp+=1)="True" else resp$(resp+=1)="False"
+		if deduc(j)>0 then resp$(resp+=1)='True' else resp$(resp+=1)='False'
 		linecount=j+8
 		fnqgl(linecount,64,0,2,1)
 		resp$(resp+=1)=fnrgl$(miscgl$(j))
@@ -263,10 +263,10 @@ SCREEN_4: ! r:
 	for j=1 to 10
 		miscname$(j)=resp$(resp+=1)
 		if resp$(resp+=1)=dedOrAddOption$(1) then dedcode(j)=1 else dedcode(j)=2
-		if resp$(resp+=1)="True" then dedfed(j)=1 else dedfed(j)=0
-		if resp$(resp+=1)="True" then dedfica(j)=1 else dedfica(j)=0
-		if resp$(resp+=1)="True" then dedst(j)=1 else dedst(j)=0
-		if resp$(resp+=1)="True" then deduc(j)=1 else deduc(j)=0
+		if resp$(resp+=1)='True' then dedfed(j)=1 else dedfed(j)=0
+		if resp$(resp+=1)='True' then dedfica(j)=1 else dedfica(j)=0
+		if resp$(resp+=1)='True' then dedst(j)=1 else dedst(j)=0
+		if resp$(resp+=1)='True' then deduc(j)=1 else deduc(j)=0
 		miscgl$(j)=fnagl$(resp$(resp+=1))
 	next j
 	gosub SAVE

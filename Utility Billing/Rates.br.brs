@@ -173,15 +173,15 @@ goto ScreenGrid ! /r
 PrintProof: ! r:
 	fnTos
 	fnOpt(1,14,"Code Sequence")
-	resp$(1)="True"
+	resp$(1)='True'
 	fnOpt(2,14,"Name Sequence")
-	resp$(2)="False"
+	resp$(2)='False'
 	fnCmdSet(2)
 	ckey=fnAcs(mat resp$) ! CALLS PROOF LIST
 	if ckey=5 then goto ScreenGrid
 	ti2=hRate1 ! default to code sequence
-	if uprc$(resp$(1))=uprc$("True") then ti2=hRate1: k$="    " ! code sequence
-	if uprc$(resp$(2))=uprc$("True") then ti2=hRate2: k$=rpt$(chr$(0),25) ! name sequence
+	if uprc$(resp$(1))=uprc$('True') then ti2=hRate1: k$="    " ! code sequence
+	if uprc$(resp$(2))=uprc$('True') then ti2=hRate2: k$=rpt$(chr$(0),25) ! name sequence
 	restore #ti2,key>=k$: ! Nokey ScreenGrid
 	fnopenprn
 	pg=0

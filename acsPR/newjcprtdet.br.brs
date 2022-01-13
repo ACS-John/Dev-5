@@ -39,24 +39,24 @@ fnTos
 	fnTxt(1,mypos,8,0,1,"1")
 	resp$(resp+=1)=str$(dat1)
 	fnChk(2,mypos,"Print all Jobs:",left)
-	resp$(resp+=1)="False"
+	resp$(resp+=1)='False'
 	fnChk(3,mypos,"Print Details:",left)
-	resp$(resp+=1)="False"
+	resp$(resp+=1)='False'
 	fnChk(4,mypos,"Summarize by Category:",left)
-	resp$(resp+=1)="False"
+	resp$(resp+=1)='False'
 	fnChk(5,mypos,"Summarize by Job:",left)
-	resp$(resp+=1)="False"
+	resp$(resp+=1)='False'
 	fnChk(6,mypos,"Start Jobs On a New Page:",left)
-	resp$(resp+=1)="False"
+	resp$(resp+=1)='False'
 	fnCmdSet(2)
 	ckey=fnAcs(mat resp$)
 	if ckey=5 then goto Xit
 	dat1=val(resp$(1)) ! date
-	if resp$(2)="True" then prtjob$="Y" else prtjob$="N"
-	if resp$(3)="True" then prtdet$="Y" else prtdet$="N"
-	if resp$(4)="True" then sumcat$="Y" else sumcat$="N"
-	if resp$(5)="True" then sumjob$="Y" else sumjob$="N"
-	if resp$(6)="True" then prtpag$="Y" else prtpag$="N"
+	if resp$(2)='True' then prtjob$="Y" else prtjob$="N"
+	if resp$(3)='True' then prtdet$="Y" else prtdet$="N"
+	if resp$(4)='True' then sumcat$="Y" else sumcat$="N"
+	if resp$(5)='True' then sumjob$="Y" else sumjob$="N"
+	if resp$(6)='True' then prtpag$="Y" else prtpag$="N"
 	if prtdet$="N" and sumcat$="N" and sumjob$="N" then goto L520 else noread=1
 L520: if prtjob$="Y" then goto L700
  

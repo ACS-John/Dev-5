@@ -12,9 +12,9 @@ autoLibrary
 	fncmbact(2,28)
 	resp$(2)=selz$
 	fnChk(3,29,"Print Grand Totals:",1)
-	resp$(3)="True"
+	resp$(3)='True'
 	fnChk(4,29,"Print Details:",1)
-	resp$(4)="True"
+	resp$(4)='True'
 	fnLbl(5,1,"Billing Date:",25,1)
 	fnTxt(5,28,8,0,right,"1001",0,"Enter the last billing date.",0 )
 	resp$(5)=str$(d1)
@@ -23,8 +23,8 @@ autoLibrary
 	if ckey=5 then goto Xit
 	fan$=lpad$(rtrm$(resp$(1)(1:10)),10)
 	lan$=lpad$(rtrm$(resp$(2)(1:10)),10)
-	if resp$(3)="True" then print_grand_totals$="Y"
-	if resp$(4)="True" then print_details$="Y"
+	if resp$(3)='True' then print_grand_totals$="Y"
+	if resp$(4)='True' then print_details$="Y"
 	d1=val(resp$(5))
 goto STARTREPORT
  

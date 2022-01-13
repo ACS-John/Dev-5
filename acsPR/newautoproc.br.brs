@@ -47,11 +47,11 @@ Main: ! r:
 	next j
 	fnFra(22,1,4,30,"Period to Print","Select the type of processing.")
 	fnOpt(1,3,"Weekly",0,1)
-	if wmq=1 then resp$(respc+=1)="True" else resp$(respc+=1)="False"
+	if wmq=1 then resp$(respc+=1)='True' else resp$(respc+=1)='False'
 	fnOpt(2,3,"Monthly",0,1)
-	if wmq=2 then resp$(respc+=1)="True" else resp$(respc+=1)="False"
+	if wmq=2 then resp$(respc+=1)='True' else resp$(respc+=1)='False'
 	fnOpt(3,3,"Quarterly",0,1)
-	if wmq=3 then resp$(respc+=1)="True" else resp$(respc+=1)="False"
+	if wmq=3 then resp$(respc+=1)='True' else resp$(respc+=1)='False'
 	fnCmdKey("&Next",1,1,0,"Selects the highlited company to be included in automatic processing.")
 	fnCmdKey("C&omplete",2,0,0,"Finished selecting companies; begin porcessing.")
 	fnCmdKey("&Cancel",5,0,1)
@@ -60,9 +60,9 @@ Main: ! r:
 	if ckey=2 and count>0 then goto L550
 	clnam$(count+=1)=resp$(1)(1:30)
 	clnum(count)=val(resp$(1)(33:37))
-	if resp$(3)="True" then wk(count)=1: wmq=1
-	if resp$(4)="True" then mo(count)=1: wmq=2
-	if resp$(5)="True" then qt(count)=1: wmq=3
+	if resp$(3)='True' then wk(count)=1: wmq=1
+	if resp$(4)='True' then mo(count)=1: wmq=2
+	if resp$(5)='True' then qt(count)=1: wmq=3
 	if ckey=1 then goto Main
 	L550: !
 goto WRITE_EM ! /r

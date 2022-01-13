@@ -12,7 +12,7 @@ MAIN: ! r:
 	mypos=mylen+2
 	fnLbl(2,1,"Billing Date:",mylen,1)   :	fnTxt(2,mypos,8,8,0,"1")   :	resp$(1)=str$(d1)
 	fnLbl(3,1,"Route Number:",mylen,1)   :	fncmbrt2(3,mypos)          :	resp$(2)="[All]"
-	fnChk(4,23,"Print Meter Address:",1) :  resp$(3)="True"
+	fnChk(4,23,"Print Meter Address:",1) :  resp$(3)='True'
 	fnCmdSet(3)
 	ckey=fnAcs(mat resp$)
 	if ckey=5 then goto Xit
@@ -22,7 +22,7 @@ MAIN: ! r:
 	else
 		prtbkno=val(resp$(2))
 	end if
-	if resp$(3)="True" then printadr=1 ! wants meter address printed
+	if resp$(3)='True' then printadr=1 ! wants meter address printed
 	if d1<10100 or d1>123199 then goto MAIN
 	fnopenprn
 	open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx5.h[cno],Shr",i,i,k

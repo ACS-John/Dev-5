@@ -51,15 +51,15 @@ resp$(3)=str$(filter_date_end)
 ! fnLbl(5,2,"Note: Use CCYYMMDD format for all dates",50)
 fnFra(6,1,2,60,"Choose Balance To Be Printed","You can pr the current balance or the balance as of the ending date selected abov.")
 fnOpt(1,3,"Use the actual current balance",0,1)
-resp$(4)="True"
+resp$(4)='True'
 fnOpt(2,3,"Use the balance as of the ending date",0,1)
-resp$(5)="False"
+resp$(5)='False'
 fnFra(11,1,2,60,"Choose Order for Printing","You can pr in account order or in route sequence with subtotals.")
 fnOpt(1,3,"Account Sequence ",0,2)
-if seq=1 then resp$(6)="True" else resp$(6)='False'
+if seq=1 then resp$(6)='True' else resp$(6)='False'
 fnOpt(2,3,"Route Sequence",0,2)
 resp_seq=7
-if seq=2 then resp$(resp_seq)="True" else resp$(resp_seq)='False'
+if seq=2 then resp$(resp_seq)='True' else resp$(resp_seq)='False'
 fnChk(16,3,"Skip line after each account", 0,0) ! fnChk(lyne,ps,txt$*196; align,contain,tabcon)
 resp_skip_line=8
 if skip_line_after_account then resp$(resp_skip_line)='True' else resp$(resp_skip_line)='False'
@@ -75,10 +75,10 @@ if ckey=5 then goto Xit
 dat$=resp$(1)
 filter_date_start=val(resp$(2))
 filter_date_end=val(resp$(3))
-if resp$(4)="True" then print_tbal=1
-if resp$(5)="True" then print_tbal=2
-if resp$(6)="True" then seq=1
-if resp$(resp_seq)="True" then seq=2
+if resp$(4)='True' then print_tbal=1
+if resp$(5)='True' then print_tbal=2
+if resp$(6)='True' then seq=1
+if resp$(resp_seq)='True' then seq=2
 if resp$(resp_skip_line)='True' then skip_line_after_account=1 else skip_line_after_account=0
 if resp$(resp_zero_balance)='True' then include_zero_balance_accounts=1 else include_zero_balance_accounts=0
 if resp$(resp_no_activity)='True' then include_no_activity_accounts=1 else include_no_activity_accounts=0

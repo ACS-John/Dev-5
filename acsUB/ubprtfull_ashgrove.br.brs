@@ -76,7 +76,7 @@ SCREEN1: !
 	fncmbrt2(19,pf)
 	resp$(respc+=1)="[All]"
 	fnChk(20,pf,"Select Accounts to Print",1)
-	resp$(respc+=1)="False"
+	resp$(respc+=1)='False'
 ! fnLbl(18,1,"Previous Balance Due By:",LL,1)
 ! fnTxt(18,PF,35,35,0,"",0,"Example: 10:00AM, August 30")
 	! rESP$(RESPC+=1)=PREBAL$
@@ -121,7 +121,7 @@ SCREEN1: !
 	else
 		prtbkno = val(resp$(17))
 	end if
-	if resp$(18)="True" then sl1=1: z$="" else sl1=0
+	if resp$(18)='True' then sl1=1: z$="" else sl1=0
 	prebal$=resp$(19)
 	dueby$=resp$(20)
 	goto L640 ! If TRIM$(PREBAL$)="" OR TRIM$(DUEBY$)="" Then Goto 550 Else Goto 560

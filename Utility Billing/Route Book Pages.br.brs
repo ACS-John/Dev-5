@@ -56,31 +56,31 @@ MENU1: !
 	resp$(3)=option$(1)
 	fnFra(5,1,4,45,"Single Wide or Double Wide","Allow one or two customers per page.",0)
 	fnOpt(1,2,"Singe Wide",0,1) 
-	resp$(4)="True"
+	resp$(4)='True'
 	fnOpt(2,2,"Double Wide - Different customers",0,1) 
-	resp$(5)="False"
+	resp$(5)='False'
 	fnOpt(3,2,"Double Wide - Different services",0,1) 
-	resp$(6)="False"
-	if env$('client')="Franklinton" or env$('client')="Divernon" then resp$(4)="False": resp$(6)="True"
+	resp$(6)='False'
+	if env$('client')="Franklinton" or env$('client')="Divernon" then resp$(4)='False': resp$(6)='True'
 	fnChk(11,28,"Select Accounts to Print:",1) 
-	resp$(7)="False"
+	resp$(7)='False'
 	fnFra(13,1,2,45,"Option for printing","The system can pr the actual form or just fill in the blanks on a pre-printed form.",0)
 	fnOpt(1,2,"Print complete form",0,2) 
-	resp$(8)="True"
+	resp$(8)='True'
 	fnOpt(2,2,"Fill in the blanks",0,2)
-	if env$('client')="Carrizo" then resp$(9)="True" else resp$(9)="False"
+	if env$('client')="Carrizo" then resp$(9)='True' else resp$(9)='False'
 	fnCmdSet(3) 
 	ckey=fnAcs(mat resp$)
 	if ckey=5 then goto Xit
 	if uprc$(resp$(1))=uprc$("[All]") then route=0 else         route=val(resp$(1))
 	svt$=resp$(2)
 	svt2$=resp$(3)
-	if resp$(4)="True" then width=1
-	if resp$(5)="True" then width=2
-	if resp$(6)="True" then width=3
-	if resp$(7)="True" then selectone=1 else selectone=0
-	if resp$(8)="True" then formoption=1 ! complete form
-	if resp$(9)="True" then formoption=2 ! fill in blanks
+	if resp$(4)='True' then width=1
+	if resp$(5)='True' then width=2
+	if resp$(6)='True' then width=3
+	if resp$(7)='True' then selectone=1 else selectone=0
+	if resp$(8)='True' then formoption=1 ! complete form
+	if resp$(9)='True' then formoption=2 ! fill in blanks
 	service=1 ! only printing one service if not                                                answered as all
 	for j=1 to 10
 		if svt$=trim$(srv$(j)) then service$=snm$(j)(1:10)

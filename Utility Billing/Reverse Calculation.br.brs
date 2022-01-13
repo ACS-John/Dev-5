@@ -41,7 +41,7 @@ ASK1: !
 	fncmbrt2(7,29)
 	resp$(respc+=1)="[All]"
 	fnChk(8,29,"Print Status Report")
-	resp$(respc+=1)="True"
+	resp$(respc+=1)='True'
 	fnCmdSet(2)
 	ckey=fnAcs(mat resp$)
 	if ckey=5 then goto Xit
@@ -62,7 +62,7 @@ ASK1: !
 	olddat=val(resp$(3))
 	reqz12$=resp$(4)
 	if reqz12$="[All]" then reqz12$=""
-	if uprc$(resp$(5))=uprc$("True") then sr$="Y" else sr$="N"
+	if uprc$(resp$(5))=uprc$('True') then sr$="Y" else sr$="N"
 	if sr$="Y" then let fnopenprn
 	if sr$="Y" and secondpass<>1 then let fn_srhdr
 	secondpass=1

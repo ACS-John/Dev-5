@@ -70,7 +70,7 @@ SCREEN1: !
 	resp$(rc+=1)=opt$(1)
 	fnFra(12,1,2,45,"Base graph on usage or dollars","You can either analyze dollars or usage.",0)
 	fnOpt(1,2,"Use Usage",0,1)
-	resp$(rc+=1)="True"
+	resp$(rc+=1)='True'
 	fnOpt(2,2,"Use Dollars",0,1)
 	fnCmdSet(2)
 	ckey=fnAcs(mat resp$)
@@ -98,7 +98,7 @@ SCREEN1: !
 	if resp$(25)="Water"        then codepos=143 : service=1 : opt=1
 	if resp$(25)=trim$(opt$(2)) then codepos=147 : service=3 : opt=2
 	if resp$(25)=trim$(opt$(3)) then codepos=149 : service=4 : opt=3
-	if resp$(26)="True" then baseon=1 else baseon=2 ! 1=usage  2=dollars
+	if resp$(26)='True' then baseon=1 else baseon=2 ! 1=usage  2=dollars
 	for j=1 to 24
 		actualdate$(j)=resp$(j)
 	next j

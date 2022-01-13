@@ -272,13 +272,13 @@ Screen1: ! r:
 	lc+=1
 	fnLbl(lc+=1,1,"Filter:",25,1)
 	fnOpt(lc,pf,"All")
-	resp$(respc_filter_none:=respc+=1)="True"
+	resp$(respc_filter_none:=respc+=1)='True'
 	fnOpt(lc+=1,pf,"Select Individuals")
-	resp$(respc_filter_individuals:=respc+=1)="False"
+	resp$(respc_filter_individuals:=respc+=1)='False'
 	fnOpt(lc+=1,pf,"Past Due Only")
-	resp$(respc_filter_past_due:=respc+=1)="False"
+	resp$(respc_filter_past_due:=respc+=1)='False'
 	fnOpt(lc+=1,pf,"All Except Past Due")
-	resp$(respc_filter_not_past_due:=respc+=1)="False"
+	resp$(respc_filter_not_past_due:=respc+=1)='False'
 
 	if message1_line_count then
 		lc+=1
@@ -348,10 +348,10 @@ Screen1: ! r:
 	else
 		route_filter=val(resp$(respc_route))
 	end if
-	if resp$(respc_filter_none        )="True" then filter_none=1          else filter_none=0
-	if resp$(respc_filter_individuals )="True" then filter_selected_only=1 else filter_selected_only=0
-	if resp$(respc_filter_past_due    )="True" then filter_past_due_only=1 else filter_past_due_only=0
-	if resp$(respc_filter_not_past_due)="True" then filter_no_past_due=1   else filter_no_past_due=0
+	if resp$(respc_filter_none        )='True' then filter_none=1          else filter_none=0
+	if resp$(respc_filter_individuals )='True' then filter_selected_only=1 else filter_selected_only=0
+	if resp$(respc_filter_past_due    )='True' then filter_past_due_only=1 else filter_past_due_only=0
+	if resp$(respc_filter_not_past_due)='True' then filter_no_past_due=1   else filter_no_past_due=0
 	for mg1_item=1 to message1_line_count
 		mg$(mg1_item)=resp$(respc_mg1(mg1_item))
 		fncreg_write('bill message '&str$(mg1_item),mg$(mg1_item))

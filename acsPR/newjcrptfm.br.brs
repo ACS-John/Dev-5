@@ -78,7 +78,7 @@ SCR2: ! add/edit first screen of report
 	fncomboa("DataNames2",12,mylen+3,mat ty2$,"If you want limit the report to a value in a particular field in the report record, Indicate which field it is by locating the ID number.",25,0)
 	resp$(respc+=1)=str$(psc)
 	fnChk(13,mylen+3,"Summarize Category Records:",1)
-	if sd= 1 then resp$(respc+=1)="TRUE" else resp$(respc+=1)="FALSE"
+	if sd= 1 then resp$(respc+=1)='True' else resp$(respc+=1)='False'
 	fnLbl(14,1,"Selection Codes:",mylen,1)
 	code1$(1)="1 - Equal to" : _
 	code1$(2)="2 - Equal to or greater than" : _
@@ -163,11 +163,11 @@ SCR4: ! edit/columns
 	fnTxt(6,mypos,1,1,0,"30",0,"") : _
 	resp$(respc+=1)=str$(dp(column))
 	fnChk(7,mypos,"Detail Print:",left)
-	if fc(column)=1 then resp$(respc+=1)="True" else resp$(respc+=1)="False"
+	if fc(column)=1 then resp$(respc+=1)='True' else resp$(respc+=1)='False'
 	fnChk(8,mypos,"Total by Job:",left)
-	if tcj(column)=1 then resp$(respc+=1)="True" else resp$(respc+=1)="False"
+	if tcj(column)=1 then resp$(respc+=1)='True' else resp$(respc+=1)='False'
 	fnChk(9,mypos,"Grand Totals:",left)
-	if tcs(column)=1 then resp$(respc+=1)="True" else resp$(respc+=1)="False"
+	if tcs(column)=1 then resp$(respc+=1)='True' else resp$(respc+=1)='False'
 	fnCmdKey("&Next",1,1,0,"Save changes and move to next column" ) : _
 	fnCmdKey("&Review Variables",2,0,0,"Get a list of variables that can be used in a formula.") : _
 	fnCmdKey("&Delete",4,0,0,"Deletes this column from the report.") : _
@@ -229,9 +229,9 @@ EDIT_ADD_REPORT: !
 	resp$(respc+=1)=rt$
 	fnLbl(4,1,"Colort #:",mylen,left)
 	fnChk(2,mypos,"Print All Jobs:",left) : _
-	resp$(respc+=1)="False"
+	resp$(respc+=1)='False'
 	fnChk(3,mypos,"Print One Job Per Page:",left) : _
-	resp$(respc+=1)="False"
+	resp$(respc+=1)='False'
 	fnCmdSet(2)
 	ckey=fnAcs(mat resp$)
 	if ckey=5 then goto Xit

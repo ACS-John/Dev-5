@@ -46,19 +46,19 @@
 	fncomboa("ubnamlst-act",3,25,mat item2$)
 	resp$(respc+=1)=item2$(3)
 	fnChk(5,29,"Print Rate Codes")
-	resp$(respc+=1)="False"
+	resp$(respc+=1)='False'
 	fnChk(6,29,"Print Address")
-	resp$(respc+=1)="False"
+	resp$(respc+=1)='False'
 	fnChk(8,29,"Print Balance")
 	fnLbl(8,45,"(Route Sequence never prints Balance)",23,1)
-	resp$(resp_print_balance:=respc+=1)="True"
+	resp$(resp_print_balance:=respc+=1)='True'
 	fnChk(9,29,"Print Phone")
-	resp$(resp_print_phone:=respc+=1)="False"
+	resp$(resp_print_phone:=respc+=1)='False'
 	fnChk(10,29,"Print Cell")
-	resp$(resp_print_cell:=respc+=1)="False"
+	resp$(resp_print_cell:=respc+=1)='False'
 
 	fnChk(11,29,"Print Email")
-	resp$(resp_print_email:=respc+=1)="False"
+	resp$(resp_print_email:=respc+=1)='False'
 
 
 	fnCmdSet(2)
@@ -79,12 +79,12 @@
 		q0=5 : opt=6 : turn$="N"
 	end if
 	dat$=resp$(2)
-	if resp$(4)="True" then ti3=1 else ti3=0
-	if resp$(5)="True" then print_address=1 else print_address=0
-	if resp$(resp_print_balance)="True" then print_balance=1 else print_balance=0
-	if resp$(resp_print_phone)  ="True" then print_phone=1 else print_phone=0
-	if resp$(resp_print_cell)   ="True" then print_cell=1 else print_cell=0
-	if resp$(resp_print_email)  ="True" then print_email=1 else print_email=0
+	if resp$(4)='True' then ti3=1 else ti3=0
+	if resp$(5)='True' then print_address=1 else print_address=0
+	if resp$(resp_print_balance)='True' then print_balance=1 else print_balance=0
+	if resp$(resp_print_phone)  ='True' then print_phone=1 else print_phone=0
+	if resp$(resp_print_cell)   ='True' then print_cell=1 else print_cell=0
+	if resp$(resp_print_email)  ='True' then print_email=1 else print_email=0
 	if resp$(3)=item2$(1) then
 		ti2=1
 	else if resp$(3)=item2$(2) then

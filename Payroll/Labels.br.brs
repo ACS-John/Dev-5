@@ -127,9 +127,9 @@ SCR1: ! r:
 	else if resp$(1)=item1$(4) then
 		prtall=emp_status
 	end if
-	if resp$(2) ="True" then empyn$="Y" else empyn$="N"
-	if resp$(3) ="True" then ssyn$="Y" else ssn$="N"
-	if resp$(4) ="True" then empadryn$="Y" else empadryn$="N"
+	if resp$(2) ='True' then empyn$="Y" else empyn$="N"
+	if resp$(3) ='True' then ssyn$="Y" else ssn$="N"
+	if resp$(4) ='True' then empadryn$="Y" else empadryn$="N"
 	date_to_select=val(resp$(5)) ! payroll date to use in selecting employees
 	date_to_print=val(resp$(6)) ! payroll date to pr on label
 	empstatuse=val(resp$(7)) ! employment status used as criteria

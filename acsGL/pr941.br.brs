@@ -39,7 +39,7 @@ MENU1: !
 	if val(date$(4:5))=9 or val(date$(4:5))=10 or val(date$(4:5))=11 then resp$(respc+=1)=option1$(3) ! September filing
 	if val(date$(4:5))=12 or val(date$(4:5))=1 or val(date$(4:5))=2 then resp$(respc+=1)=option1$(4) ! December
 	fnChk(3,30,"Print Worksheet:",1)
-	resp$(respc+=1)="True"
+	resp$(respc+=1)='True'
 	fnFra(5,1,4,30,"Tax Liability","Enter the total tax liability by month")
 	fnLbl(1,1,"Month 1:",10,1,0,1)
 	fnTxt(1,13,12,0,1,"10",0,"",1)
@@ -87,7 +87,7 @@ L790: if qtr=1 then begdate=val(taxyear$)*10000+0312: enddate=val(taxyear$)*1000
 	if qtr=2 then begdate=val(taxyear$)*10000+0612: enddate=val(taxyear$)*10000+0618
 	if qtr=3 then begdate=val(taxyear$)*10000+0912: enddate=val(taxyear$)*10000+0918
 	if qtr=4 then begdate=val(taxyear$)*10000+1212: enddate=val(taxyear$)*10000+1218
-	if resp$(3)="True" then frm=2 else frm=1 ! need a worksheet
+	if resp$(3)='True' then frm=2 else frm=1 ! need a worksheet
 	box15a=val(resp$(4)) ! first month liability
 	box15b=val(resp$(5))
 	box15c=val(resp$(6))

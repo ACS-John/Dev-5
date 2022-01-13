@@ -80,7 +80,7 @@ SCREEN_1: ! r:
 	resp$(10)=str$(mcm)
 	fram2=2: fnFra(13,1,8,90,"General Ledger Information")
 	fnChk(1,30,"General Ledger Installed:",1,fram2)
-	if gli=1 then resp$(11)="True" else resp$(11)="False"
+	if gli=1 then resp$(11)='True' else resp$(11)='False'
 	fnLbl(2,1,"Cash In Bank:",mylen,right,0,fram2)
 	fnqgl(2,32,fram2,2,1)
 	resp$(12)=fnrgl$(gln$(15))
@@ -111,7 +111,7 @@ SCREEN_1: ! r:
 	ssmax=val(resp$(8)) ! pr ssmax : pause
 	mcr=val(resp$(9))
 	mcm=val(resp$(10))
-	if resp$(11)="True" then gli=1 else gli=0
+	if resp$(11)='True' then gli=1 else gli=0
 	gln$(15)=fnagl$(resp$(12)) ! bank
 	gln$(1)=fnagl$(resp$(13)) ! fed
 	gln$(2)=fnagl$(resp$(14)) ! fica
@@ -176,13 +176,13 @@ SCREEN_2: ! r:
 		if newcalcode(j)=0 then newcalcode(j)=1 ! stop subscript error
 		resp$(resp+=1)=opt_std_or_percent$(newcalcode(j))
 		fnChk(j+5,pos_col(6),"",1)
-		if newdedfed(j)>0 then resp$(resp+=1)="True" else resp$(resp+=1)="False"
+		if newdedfed(j)>0 then resp$(resp+=1)='True' else resp$(resp+=1)='False'
 		fnChk(j+5,pos_col(7),"",1)
-		if dedfica(j)>0 then resp$(resp+=1)="True" else resp$(resp+=1)="False"
+		if dedfica(j)>0 then resp$(resp+=1)='True' else resp$(resp+=1)='False'
 		fnChk(j+5,pos_col(8),"",1)
-		if dedst(j)>0 then resp$(resp+=1)="True" else resp$(resp+=1)="False"
+		if dedst(j)>0 then resp$(resp+=1)='True' else resp$(resp+=1)='False'
 		fnChk(j+5,pos_col(9),"",1)
-		if deduc(j)>0 then resp$(resp+=1)="True" else resp$(resp+=1)="False"
+		if deduc(j)>0 then resp$(resp+=1)='True' else resp$(resp+=1)='False'
 		linecount=j+5
 		fnqgl(linecount,pos_col(10),0,2,1)
 		resp$(resp+=1)=fnrgl$(gl$(j))
@@ -202,10 +202,10 @@ SCREEN_2: ! r:
 		if resp$(resp)=opt_ded_or_add$(3) then newdedcode(j)=3 ! benefit
 		if resp$(resp+=1)=opt_std_or_percent$(1) then newcalcode(j)=1
 		if resp$(resp)=opt_std_or_percent$(2) then newcalcode(j)=2 ! percent method of calucalating
-		if resp$(resp+=1)="True" then newdedfed(j)=1 else newdedfed(j)=0
-		if resp$(resp+=1)="True" then dedfica(j)=1 else dedfica(j)=0
-		if resp$(resp+=1)="True" then dedst(j)=1 else dedst(j)=0
-		if resp$(resp+=1)="True" then deduc(j)=1 else deduc(j)=0
+		if resp$(resp+=1)='True' then newdedfed(j)=1 else newdedfed(j)=0
+		if resp$(resp+=1)='True' then dedfica(j)=1 else dedfica(j)=0
+		if resp$(resp+=1)='True' then dedst(j)=1 else dedst(j)=0
+		if resp$(resp+=1)='True' then deduc(j)=1 else deduc(j)=0
 		gl$(j)=fnagl$(resp$(resp+=1))
 	next j
 	if ckey=2 then goto SCREEN_1

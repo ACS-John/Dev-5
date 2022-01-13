@@ -25,12 +25,12 @@ MAIN_SCREEN: !
 	fnTxt(1,mypos,20,0,0,"",0,"Recommended to use full alpha date format.") : _
 	resp$(resp+=1)=dat$
 	fnChk(2,mypos,"Print Category Names:",left) : _
-	resp$(resp+=1)="False"
+	resp$(resp+=1)='False'
 	fnCmdSet(2)
 	ckey=fnAcs(mat resp$)
 	if ckey=5 then goto Xit
 	dat$=resp$(1) ! heading date
-	if resp$(2)="True" then prtcat$="Y" else prtcat$="N"
+	if resp$(2)='True' then prtcat$="Y" else prtcat$="N"
 	dattab=60-len(rtrm$(dat$))/2
 	fndat(dat$,2)
  

@@ -40,7 +40,7 @@ SCREEN1: ! r:
 			! mat resp$(udim(resp$)+1)
 			! chkrow+=2
 			fnChk(8,34,"Only include those billed for sewer",1)
-			resp$(respc_OnlySewer:=respc+=1)="False"
+			resp$(respc_OnlySewer:=respc+=1)='False'
 		! end if
 	! next servicecount
 	fnCmdSet(3)
@@ -71,7 +71,7 @@ gosub HDR
 do ! r: main report loop
 	read #hCustomerForReport,using F_Customer: z$,name$,mat dx,CustomerLastBillingDate,route eof TOTAL_AND_FINISH
 	F_Customer: form pos 1,c 10,pos 41,C 30,pos 217,15*pd 5,pos 296,pd 4,pos 1741,n 2
-	if resp$(respc_OnlySewer)="True" and fn_hasSewer(z$)=0 then goto nextcustomer
+	if resp$(respc_OnlySewer)='True' and fn_hasSewer(z$)=0 then goto nextcustomer
 	if reportSequence=sequenceAccount and filterRoute and route<>filterRoute then goto NextCustomer
 	dx(1)=dx(3)=dx(5)=dx(7)=dx(9)=dx(11)=0
 	restore #h_trans,key>=z$&"         ": nokey L570

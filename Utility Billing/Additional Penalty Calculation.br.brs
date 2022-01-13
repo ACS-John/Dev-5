@@ -60,9 +60,9 @@ SCREEN1: !
 	resp$(rc+=1)=str$(bildat)
  
 	fnChk(4,31,"Print Meter Address:",1)
-	resp$(rc+=1)="False"
+	resp$(rc+=1)='False'
 	fnChk(5,31,"Print Mailing Address:",1)
-	resp$(rc+=1)="False"
+	resp$(rc+=1)='False'
 	fnLbl(6,1,"Minimum Balance:",mylen,1)
 	fnTxt(6,mypos,8,0,1,"10",0,"The customer's balance must be at least this amount before a penalty will be calculated.")
 	resp$(rc+=1)=str$(minimumbal)
@@ -77,8 +77,8 @@ SCREEN1: !
 	if ckey=5 then goto Xit
 	pendat=val(resp$(1)(5:6)&resp$(1)(7:8)&resp$(1)(3:4))
 	bildat=val(resp$(2)(5:6)&resp$(2)(7:8)&resp$(2)(3:4))
-	if resp$(3)="True" then printadr=1 ! wants meter address printed
-	if resp$(4)="True" then printmail=1 ! wants meter mailing address
+	if resp$(3)='True' then printadr=1 ! wants meter address printed
+	if resp$(4)='True' then printmail=1 ! wants meter mailing address
 	minimumbal=val(resp$(5))
 	penaltyamt=val(resp$(6))
 	skip_s10r9$=resp$(7)

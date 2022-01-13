@@ -183,7 +183,7 @@ JCBLD_FINIS: !
 !
 CODE_FOR_PAYMENT: ! r:
 	lastrec=nextrec=total=0
-	displayattop$="True"
+	displayattop$='True'
 	close #clearing: ioerr ignore
 	open #clearing=fnH: "Name=[Q]\CLmstr\clearing.H"&wsid$&",replace,RecL=114",i,outi,r  ! kj wrong recl
 	if displayunpaid=1 then
@@ -255,7 +255,7 @@ resp$(respc+=1)=displayattop$
 	fnflexinit1('unpaidinv',5,27,15,55,mat chdr$,mat cmask$,1)
 	respc_selectedrec=respc+=1
 	restore #clearing:
-	if nextrec>0 and displayattop$="True" then goto L4890 else goto L5030
+	if nextrec>0 and displayattop$='True' then goto L4890 else goto L5030
 L4890: for j=nextrec to lrec(clearing) ! read starting with next record
 		read #clearing,using 'Form POS 1,C 8,C 12,2*G 6,C 12,C 18,G 10.2,n 1,n 2,G 8,G 6,N 1,n 6,n 10.2,n 8',rec=j: flxitm$(4), flxitm$(5), flxitm$(6),flxitm$(7), flxitm$(8), up$(4),upa,pcde,bcde,ckn,dp,gde,pdte,disamt,ddate eof L4940
 		flxitm$(9)=str$(upa) : flxitm$(10)=str$(disamt)

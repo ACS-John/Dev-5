@@ -57,7 +57,7 @@ SCREEN1: !
 	fncmbrt2(9,pf)
 	resp$(respc+=1)="[All]"
 	fnChk(10,pf,"Select Accounts to Print:",1)
-	resp$(respc+=1)="False"
+	resp$(respc+=1)='False'
 	fnLbl(11,1,"Date Meter Read:",ll,1)
 	fnTxt(11,pf,8,8,1,"1",0,tt$)
 	resp$(respc+=1)=cnvrt$("pic(zzzzzz)",newd3)
@@ -82,7 +82,7 @@ SCREEN1: !
 	else
 		prtbkno = val(resp$(7))
 	end if
-	if resp$(8)="True" then sl1=1 : z$="" else sl1=0
+	if resp$(8)='True' then sl1=1 : z$="" else sl1=0
 	if trim$(a$)<>"" then
 		read #2,using L500,key=a$: z$,route,sequence nokey SCREEN1
 		holdz$=z$: begin=1

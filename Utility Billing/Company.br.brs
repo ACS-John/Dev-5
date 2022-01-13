@@ -91,15 +91,15 @@ MAIN: ! r:
 			resp$(respc+=1)=serviceCode$(service_item) ! resp$(respc_service_base+service_item*6-4)=serviceCode$(service_item)
 			fnChk(service_item+2,41,"",align=0,fra,tabcon=0,disable_for_client)
 			if tax_code$(service_item)="Y" then 
-				resp$(respc+=1)="True" ! resp$(respc_service_base+service_item*6-3)="True"
+				resp$(respc+=1)='True' ! resp$(respc_service_base+service_item*6-3)='True'
 			else 
-				resp$(respc+=1)="False" ! resp$(respc_service_base+service_item*6-3)="False"
+				resp$(respc+=1)='False' ! resp$(respc_service_base+service_item*6-3)='False'
 			end if 
 			fnChk(service_item+2,49,"",align=0,fra,tabcon=0,disable_for_client)
 			if penalty$(service_item)="Y" then 
-				resp$(respc+=1)="True" ! resp$(respc_service_base+service_item*6-2)="True"
+				resp$(respc+=1)='True' ! resp$(respc_service_base+service_item*6-2)='True'
 			else 
-				resp$(respc+=1)="False" ! resp$(respc_service_base+service_item*6-2)="False"
+				resp$(respc+=1)='False' ! resp$(respc_service_base+service_item*6-2)='False'
 			end if 
 			fnTxt(service_item+2,58,2,0,0,"30",disable_for_client,'',fra)
 			resp$(respc+=1)=str$(subjectto(service_item)) ! resp$(respc_service_base+service_item*6-1)=str$(subjectto(service_item))
@@ -178,12 +178,12 @@ MAIN: ! r:
 			for service_item=1 to 10
 				serviceName$(service_item)=resp$(respc+=1) ! resp$(respc_service_base+service_item*6-5)
 				serviceCode$(service_item)=uprc$(resp$(respc+=1)) ! uprc$(resp$(respc_service_base+service_item*6-4))
-				if resp$(respc+=1)="True" then ! resp$(respc_service_base+service_item*6-3)="True" then
+				if resp$(respc+=1)='True' then ! resp$(respc_service_base+service_item*6-3)='True' then
 					tax_code$(service_item)="Y"
 				else 
 					tax_code$(service_item)="N"
 				end if 
-				if resp$(respc+=1)="True" then ! resp$(respc_service_base+service_item*6-2)="True" then
+				if resp$(respc+=1)='True' then ! resp$(respc_service_base+service_item*6-2)='True' then
 					penalty$(service_item)="Y"
 				else 
 					penalty$(service_item)="N"
@@ -224,8 +224,8 @@ DoLoad: ! r:
 	close #hCompany: 
 	fnLastBillingDate(lastBillingDate)
 	if pcent=0 then pcent=100
-	if uprc$(rcpt$)=uprc$("Y") then rcpt$="True" else rcpt$="False"
-	if uprc$(escrow$)=uprc$("Y") then escrow$="True" else escrow$="False"
+	if uprc$(rcpt$)=uprc$("Y") then rcpt$='True' else rcpt$='False'
+	if uprc$(escrow$)=uprc$("Y") then escrow$='True' else escrow$='False'
 	fncreg_read('unusual usage minimum water',uum_water$)
 	fncreg_read('unusual usage minimum gas',uum_gas$)
 	fncreg_read('unusual usage minimum electric',uum_electric$)
@@ -268,8 +268,8 @@ goto DoLoad ! /r
 
 DoSave: ! r:
 	! r: Company Save
-	if rcpt$="True" then rcpt$="Y" else rcpt$="N"
-	if escrow$="True" then escrow$="Y" else escrow$="N"
+	if rcpt$='True' then rcpt$="Y" else rcpt$="N"
+	if escrow$='True' then escrow$="Y" else escrow$="N"
 	maintac=1 ! maintac was variable used for maintaining accumulated transaction file, no longer used but be want history to be retained no matter what (so set it to 1)
 	close #1,free: ioerr ignore
 	open #hCompany=fnH: "Name=[Q]\UBmstr\Company.h[cno],Size=0,RecL=133,Replace",internal,outIn 

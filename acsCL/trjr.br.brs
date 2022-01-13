@@ -32,11 +32,11 @@ MAIN: !
 	fncomboa("claims-act",4,40,mat item2$)
 	resp$(respc+=1)=item2$(1)
 	fnChk(7,40,"Print Disbursments Journal:",1)
-	resp$(respc+=1)="True"
+	resp$(respc+=1)='True'
 	fnChk(8,40,"Print Receipts Journal:",1)
-	resp$(respc+=1)="True"
+	resp$(respc+=1)='True'
 	fnChk(9,40,"Print Adjustments Journal:",1)
-	resp$(respc+=1)="False"
+	resp$(respc+=1)='False'
 	fnLbl(11,1,"Bank Account:",38,1)
 	fncombof("Bankmstr",11,40,20,"[Q]\CLmstr\bankmstr.h[cno]",1,2,3,15,"[Q]\CLmstr\Bankidx1.h[cno]",1,0, "Select bank account for printing") : _
 	resp$(respc+=1)=str$(wbc)

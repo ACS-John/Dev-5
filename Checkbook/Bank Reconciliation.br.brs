@@ -476,24 +476,24 @@ DPAMENU: ! r:
 	fnFra(1,1,9,60,"Reconciliation Options","Used to clear deposita by amounts and not by reference number",0)
 	frame=1
 	fnOpt(1,3,"Erase Previous Amounts & Dates",0,frame)
-	if sel_code=1 or sel_code=0 then resp$(respc+=1)="True" else resp$(respc+=1)="False"
+	if sel_code=1 or sel_code=0 then resp$(respc+=1)='True' else resp$(respc+=1)='False'
 	fnOpt(2,3,"Enter Deposit Amounts",0,frame)
-	if sel_code=2 then resp$(respc+=1)="True" else resp$(respc+=1)="False"
+	if sel_code=2 then resp$(respc+=1)='True' else resp$(respc+=1)='False'
 	fnOpt(3,3,"Enter Types to Add Together",0,frame)
-	if sel_code=3 then resp$(respc+=1)="True" else resp$(respc+=1)="False"
+	if sel_code=3 then resp$(respc+=1)='True' else resp$(respc+=1)='False'
 	fnOpt(4,3,"Enter Dates to Add Together",0,frame)
-	if sel_code=4 then resp$(respc+=1)="True" else resp$(respc+=1)="False"
+	if sel_code=4 then resp$(respc+=1)='True' else resp$(respc+=1)='False'
 	fnOpt(5,3,"Clear Matches",0,frame)
-	if sel_code=5 then resp$(respc+=1)="True" else resp$(respc+=1)="False"
+	if sel_code=5 then resp$(respc+=1)='True' else resp$(respc+=1)='False'
 	fnOpt(6,3,"Print listing of Un-Matched",0,frame)
-	if sel_code=6 then resp$(respc+=1)="True" else resp$(respc+=1)="False"
+	if sel_code=6 then resp$(respc+=1)='True' else resp$(respc+=1)='False'
 	fnOpt(7,3,"Print Listing of All Entries",0,frame)
-	if sel_code=7 then resp$(respc+=1)="True" else resp$(respc+=1)="False"
+	if sel_code=7 then resp$(respc+=1)='True' else resp$(respc+=1)='False'
 	fnOpt(8,3,"Make Corrections",0,frame)
-	if sel_code=8 then resp$(respc+=1)="True" else resp$(respc+=1)="False"
+	if sel_code=8 then resp$(respc+=1)='True' else resp$(respc+=1)='False'
 ! fnCOMBOA("bankrec-3",3,30,MAT ITEM3$,"Select the funtion you would like to perform.  Normally you would Erase Previous, Enter Amounts, Clear Matches and check your totals")!
 	resp$(respc+=1)=item3$(1)
-	resp$(2)="True"
+	resp$(2)='True'
 	if t1 =0 and t2=0 then goto L3890
 	fnLbl(12,1,"Deposits Entered: "&cnvrt$("pic(ZZ,ZZZ,ZZZ.##)",t1),40,0)
 	fnLbl(13,1,"Deposits Cleared: "&cnvrt$("pic(ZZ,ZZZ,ZZZ.##)",t2),40,0)
@@ -733,7 +733,7 @@ goto DPAMENU ! /r
 Xit: fnXit
 CLEAR_TRANSACTIONS_FROM_LIST: ! r:
 	lastrec=nextrec=total=0
-	displayattop$="True"
+	displayattop$='True'
 	if ti3=1 then type$="Checks" else type$="Deposits"
 	close #clearing: ioerr ignore
 	open #clearing=89: "Name=[Q]\CLmstr\clearing.H"&wsid$&",replace,RecL=33",i,outi,r
@@ -776,7 +776,7 @@ L6240: !
 !
 	fnflexinit1('Deposit-1',5,3,15,55,mat chdr$,mat cmask$,1) : pr '__________init___________ displayattop$='&displayattop$&', nextrec='&str$(nextrec)
 	restore #clearing:
-	if nextrec>0 and displayattop$="True" then
+	if nextrec>0 and displayattop$='True' then
 		fn_ctfl_add_grid_items(1)
 		fn_ctfl_add_grid_items(2)
 	else ! display them all in indexed order

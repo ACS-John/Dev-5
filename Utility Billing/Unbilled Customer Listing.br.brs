@@ -19,7 +19,7 @@ MAIN: ! r: main screen
 	fncmbrt2(3,mypos)
 	resp$(2)="[All]"
 	fnChk(4,23,"Print Meter Address:",1)
-	resp$(3)="True"
+	resp$(3)='True'
 	fnCmdSet(3)
 	ckey=fnAcs(mat resp$)
 	if ckey=5 then goto Xit
@@ -27,7 +27,7 @@ goto Initialize ! /r
 Initialize: ! r:
 	d1=val(resp$(1))
 	if resp$(2)="[All]" then prtbkno=0 else prtbkno = val(resp$(2))
-	if resp$(3)="True" then printadr=1 ! wants meter address printed
+	if resp$(3)='True' then printadr=1 ! wants meter address printed
 	if d1<10100 or d1>123199 then goto MAIN
 	fnopenprn
 	open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx5.h[cno],Shr",i,i,k

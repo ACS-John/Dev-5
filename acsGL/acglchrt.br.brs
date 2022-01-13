@@ -19,9 +19,9 @@
 	mylen=50: mypos=mylen+3 : right=1
 	fnFra(1,1,2,70,"Chart of Accounts"," ",0)
 	fnOpt(1,3,"Print Financial Statement Reference Numbers",0,1)
-	resp$(rc+=1)="False"
+	resp$(rc+=1)='False'
 	fnOpt(2,3,"Print Account Numbers and Names only",0,1)
-	resp$(rc+=1)="True"
+	resp$(rc+=1)='True'
 	fnLbl(5,1,"Beginning General Ledger Number (blank for all):",mylen,right)
 	fnqgl(5,mypos,0,2)
 	resp$(1)=""
@@ -31,7 +31,7 @@
 	fnCmdSet(2)
 	ckey=fnAcs(mat resp$)
 	if ckey=5 then goto Xit
-	if resp$(1)="True" then selx=1 else selx=2
+	if resp$(1)='True' then selx=1 else selx=2
 	if trim$(resp$(3))<>"" then gl1$=fnagl$(resp$(3))
 	if trim$(resp$(4))<>"" then gl2$=fnagl$(resp$(4))
 

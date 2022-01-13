@@ -52,7 +52,7 @@ SCREEN1: !
 	fncmbrt2(5,pf)
 	resp$(respc+=1)="[All]"
 	fnChk(6,pf,"Select Accounts to Print:",1)
-	resp$(respc+=1)="False"
+	resp$(respc+=1)='False'
 	fnLbl(8,1,"Service From Date:",ll,1)
 	fnTxt(8,pf,8,8,1,"1")
 	resp$(respc+=1)=cnvrt$("pic(zzzzzz)",0)
@@ -77,7 +77,7 @@ SCREEN1: !
 	else
 		prtbkno = val(resp$(5))
 	end if
-	if resp$(6)="True" then sl1=1: z$="" else sl1=0
+	if resp$(6)='True' then sl1=1: z$="" else sl1=0
 	pr service_from=val(resp$(7)) : service_to=val(resp$(8))
 	if service_from<>0 and service_to<>0 then use_entered_dates=1 else use_entered_dates=0
 	if trim$(a$)<>"" then

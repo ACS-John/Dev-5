@@ -39,23 +39,23 @@ Scr1: ! r:
 	fnTxt(2,21,8,0,0,"1001")
 	resp$(2)=str$(lbill)
 	fnChk(3,1,"Skip customers who only owe current bill")
-	resp$(3)="False"
+	resp$(3)='False'
 	fnChk(4,1,"Skip customers with credit balance")
-	resp$(4)="False"
+	resp$(4)='False'
 	fnChk(5,1,"Only show past due amounts (not current month)")
-	resp$(5)="True"
+	resp$(5)='True'
 	fnChk(6,1,"Skip accounts with Zero balances")
-	resp$(6)="True"
+	resp$(6)='True'
 	fnCmdSet(3)
 	L350: !
 	ckey=fnAcs(mat resp$)
 	if ckey=5 then goto Xit
 	d1=val(resp$(1))
 	lbill=val(resp$(2))
-	if uprc$(resp$(3))=uprc$("True") then skipcurrent=1
-	if uprc$(resp$(4))=uprc$("True") then skipcredits=1
-	if uprc$(resp$(5))=uprc$("True") then pastdueonly=1
-	if uprc$(resp$(6))=uprc$("True") then skipzero=1
+	if uprc$(resp$(3))=uprc$('True') then skipcurrent=1
+	if uprc$(resp$(4))=uprc$('True') then skipcredits=1
+	if uprc$(resp$(5))=uprc$('True') then pastdueonly=1
+	if uprc$(resp$(6))=uprc$('True') then skipzero=1
 	if lbill<10100 or lbill>123199 then goto L350
 	if d1<10100 or d1>123199 then goto L350
 	d7=int(d1/10000)
