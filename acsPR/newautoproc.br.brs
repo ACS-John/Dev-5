@@ -15,7 +15,7 @@ goto BUILD_PRCLNT
 BUILD_PRCLNT: ! r:
 	open #prclnt=1: "Name=[Q]\PRmstr\prclnt.dat,Size=0,RecL=48,REPLACE",i,outi,r
 	for j=1 to 20
-		write #prclnt,using 'Form POS 1,N 5,C 40,3*N 1',rec=j: 0," ",0,0,0
+		write #prclnt,using 'form pos 1,N 5,C 40,3*N 1',rec=j: 0," ",0,0,0
 	next j
  
 	if trim$(mysys$)='' then sys$=fncursys$&"mstr" else sys$=mysys$&"mstr"
@@ -78,7 +78,7 @@ BLD_ACNO: ! r:
 		x=115
 		open #x: "Name="&sys$&"\Company.h"&filename$(fx)(10:14),internal,input ioerr L650
 		dim cnam$*40
-		read #x,using "Form pos 1,c 40": cnam$
+		read #x,using "form pos 1,c 40": cnam$
 		close #x:
 		opt$(fx)=cnam$(1:30)&" ("&cnvrt$("pic(#####)",val(filename$(fx)(10:14)))&")"(1:40)
 		L650: !
@@ -89,7 +89,7 @@ return ! /r
 WRITE_EM: ! r:
 	restore #prclnt:
 	for j=1 to 20
-		rewrite #prclnt,using 'Form POS 1,N 5,C 40,3*N 1',rec=j: clnum(j),clnam$(j),wk(j),mo(j),qt(j)
+		rewrite #prclnt,using 'form pos 1,N 5,C 40,3*N 1',rec=j: clnum(j),clnam$(j),wk(j),mo(j),qt(j)
 	next j
 goto BEGIN_AUTO ! /r
 BEGIN_AUTO: ! r:

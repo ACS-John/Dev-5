@@ -235,45 +235,45 @@ fnend
 
 def fn_getDocket$*30(docket_fileno$)
 	dim docket_no$*30
-	read #h_internal,using "FORM POS 27,C 30",key=docket_fileno$&cnvrt$("N 3",0)&cnvrt$("N 2",2)&"MAIN      ",release: docket_no$ nokey L17420 
+	read #h_internal,using "form pos 27,C 30",key=docket_fileno$&cnvrt$("N 3",0)&cnvrt$("N 2",2)&"MAIN      ",release: docket_no$ nokey L17420 
 	let fn_getDocket$=docket_no$ 
 	! if trim$(docket_no$)="" and trim$(master_data$(master_docket_no))<>"" then 
 	!  let fn_getDocket$=docket_no$=master_data$(master_docket_no) 
 	!  let fnmessagebox("Warning, Internal Docket Number is missing\nUsing MASTER.DOCKET_NO instead\n"&docket_no$,64,"Problem with Docket/Case #") 
-	!  rewrite #h_internal,using "FORM POS 27,C 30",key=docket_fileno$&cnvrt$("N 3",0)&cnvrt$("N 2",2)&"MAIN      ",release: docket_no$ nokey L17420
+	!  rewrite #h_internal,using "form pos 27,C 30",key=docket_fileno$&cnvrt$("N 3",0)&cnvrt$("N 2",2)&"MAIN      ",release: docket_no$ nokey L17420
 	! end if
 	L17420: !
 fnend 
 def fn_getJmtNo$*30(jmt_fileno$)
 	dim jmt_no$*30
-	read #h_internal,using "FORM POS 27,C 30",key=jmt_fileno$&cnvrt$("N 3",0)&cnvrt$("N 2",2)&"JUDGMENT  ",release: jmt_no$ nokey JMN_XIT
+	read #h_internal,using "form pos 27,C 30",key=jmt_fileno$&cnvrt$("N 3",0)&cnvrt$("N 2",2)&"JUDGMENT  ",release: jmt_no$ nokey JMN_XIT
 	let fn_getJmtNo$=jmt_no$
 	! if trim$(jmt_no$)="" and trim$(master_data$(master_jmt_no))<>"" then 
 	!  let fn_getJmtNo$=jmt_no$=master_data$(master_jmt_no)
 	!  let fnmessagebox("Warning, Internal Judgment Number is missing\nUsing MASTER.JMT_NO instead\n"&jmt_no$,mb_information+mb_okonly,"Problem with Judgment Number")
-	!  rewrite #h_internal,using "FORM POS 27,C 30",key=jmt_fileno$&cnvrt$("N 3",0)&cnvrt$("N 2",2)&"JUDGMENT  ",release: jmt_no$ nokey JMN_XIT
+	!  rewrite #h_internal,using "form pos 27,C 30",key=jmt_fileno$&cnvrt$("N 3",0)&cnvrt$("N 2",2)&"JUDGMENT  ",release: jmt_no$ nokey JMN_XIT
 	! end if  ! jmt_no$="" and master.jmt_no<>""
 	JMN_XIT: ! 
 fnend  ! fn_getJmtNo$
 def fn_getEdiRefno$*30(edi_fileno$)
 	dim edi_refno_no$*30
-	read #h_internal,using "FORM POS 27,C 30",key=edi_fileno$&cnvrt$("N 3",0)&cnvrt$("N 2",28)&"MAIN      ",release: edi_refno_no$ nokey L17480 
+	read #h_internal,using "form pos 27,C 30",key=edi_fileno$&cnvrt$("N 3",0)&cnvrt$("N 2",28)&"MAIN      ",release: edi_refno_no$ nokey L17480 
 	let fn_getEdiRefno$=edi_refno_no$ 
 	! if trim$(edi_refno_no$)="" and trim$(master_data$(master_forw_refno))<>"" then 
 	!  let fn_getEdiRefno$=edi_refno_no$=master_data$(master_forw_refno) 
 	!  let fnmessagebox("Warning, Internal EDI_REFNO # is missing\nUsing MASTER.FORW_REFNO instead\n"&edi_refno_no$,64,"Problem with FORW_REFNO/Edi Ref #") 
-	!  rewrite #h_internal,using "FORM POS 27,C 30",key=edi_fileno$&cnvrt$("N 3",0)&cnvrt$("N 2",28)&"MAIN      ",release: edi_refno_no$ nokey L17480
+	!  rewrite #h_internal,using "form pos 27,C 30",key=edi_fileno$&cnvrt$("N 3",0)&cnvrt$("N 2",28)&"MAIN      ",release: edi_refno_no$ nokey L17480
 	! end if
 	L17480: !
 fnend 
 def fn_getFoFile$*30(fofile_fileno$)
 	dim fofile$*30
-	read #h_internal,using "FORM POS 27,C 30",key=fofile_fileno$&cnvrt$("N 3",0)&cnvrt$("N 2",1)&"MAIN      ",release: fofile$ nokey L17496 
+	read #h_internal,using "form pos 27,C 30",key=fofile_fileno$&cnvrt$("N 3",0)&cnvrt$("N 2",1)&"MAIN      ",release: fofile$ nokey L17496 
 	let fn_getFoFile$=fofile$ 
 	! if trim$(fofile$)="" and trim$(master_data$(master_forw_fileno))<>"" then 
 	!  let fn_getFoFile$=fofile$=master_data$(master_forw_fileno) 
 	!  let fnmessagebox("Warning, Internal Forw File Number is missing\nUsing MASTER.FORW_FILENO instead\n"&fofile$,64,"Problem with Forw Fileno #") 
-	!  rewrite #h_internal,using "FORM POS 27,C 30",key=fofile_fileno$&cnvrt$("N 3",0)&cnvrt$("N 2",1)&"MAIN      ",release: fofile$ nokey L17496
+	!  rewrite #h_internal,using "form pos 27,C 30",key=fofile_fileno$&cnvrt$("N 3",0)&cnvrt$("N 2",1)&"MAIN      ",release: fofile$ nokey L17496
 	! end if
 	L17496: !
 fnend 

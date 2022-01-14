@@ -23,7 +23,7 @@
  
 	if fnGlAskFormatPriorCdPeriod=5 then goto Xit ! sets fnps,fnpriorcd,fnfscode (primary/secondary,current year/Prior,period to print)
 	open #20: "Name=[Q]\GLmstr\Company.h[cno],Shr",i,i,r
-	read #20,using 'Form Pos 384,n 2,pos 296,N 2',rec=1: nap,lmu
+	read #20,using 'form pos 384,n 2,pos 296,N 2',rec=1: nap,lmu
  
 	pors=1
 	mp1=69
@@ -39,7 +39,7 @@ L350: form pos mp1,pd 3,pos 81,41*pd 6.2
 	fnTos(sn$="Acglincy") : _
 	mylen=30: mypos=mylen+3 : right=1
 	fnLbl(1,1,"Cost Center or Department #:",mylen,right)
-	fnTxt(1,mypos,3,0,right,"30",0,"Enter the cost center or department number if you wish to pr only one department, else leave blank for all.",0 ) : _
+	fnTxt(1,mypos,3,0,right,'30',0,"Enter the cost center or department number if you wish to pr only one department, else leave blank for all.",0 ) : _
 	resp$(1)=""
 	fnLbl(2,1,"(Blank for all Departments)",mylen,right)
 	fnCmdKey("&Next",1,1,0,"Prints the financial statement.")

@@ -11,7 +11,7 @@ L100: if fnprocess=0 then goto Xit
  
 	pgnum=fnpgnum
 	open #20: "Name=[Q]\GLmstr\ACGLPGMN.h[cno],Shr",i,i,r ioerr MSGBOX1 : _
-	read #20,using 'Form POS 1,C 35,POS 71,N 3,x 1,2*N 1',rec=pgnum+=1: prg$,pn,ps,srq eof Xit,noRec Xit : _
+	read #20,using 'form pos 1,C 35,pos 71,N 3,x 1,2*N 1',rec=pgnum+=1: prg$,pn,ps,srq eof Xit,noRec Xit : _
 	close #20:
 	if rtrm$(prg$)="" then goto L220
 	fnprg(prg$,put=2)
@@ -29,13 +29,13 @@ L220: fnkillauto : fnpgnum(-1) : _
 	! ! CHECK FOR ADDITIONAL COMPANIES
 	open #glclnt=1: "Name=[Q]\GLmstr\glClnt.dat,NoShr",i,outi,r ioerr Xit
 	for j=2 to 20
-		read #glclnt,using 'Form POS 1,N 5',rec=j: cno
+		read #glclnt,using 'form pos 1,N 5',rec=j: cno
 		if cno<>0 then goto L300
 	next j
 	goto Xit
  
 L300: fnputcno(cno) : fnprocess(process=1)
-	rewrite #glclnt,using 'Form POS 1,N 5,C 40',rec=j: 0," "
+	rewrite #glclnt,using 'form pos 1,N 5,C 40',rec=j: 0," "
 	close #glclnt:
 	goto L100
  

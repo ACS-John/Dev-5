@@ -6,7 +6,7 @@
 	dim bp(13)
 	dim resp$(128)*256
 	open #company=fnH: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,input
-	read #company,using 'Form Pos 150,2*N 1,Pos 384,n 2': use_dept,use_sub,nap
+	read #company,using 'form pos 150,2*N 1,pos 384,n 2': use_dept,use_sub,nap
 	close #company:
 	fnGetFundList(mat fund_list)
 	! r: debug setup
@@ -27,7 +27,7 @@
 	! /r
 	do ! r: main loop
 
-		read #hGlMstr,using 'Form POS 1,C 12,Pos 81,2*PD 6.2,pos 327,pd 6.2,pos 171,13*pd 6.2': gln$, bb,cb,pbp,mat bp eof Xit
+		read #hGlMstr,using 'form pos 1,C 12,pos 81,2*PD 6.2,pos 327,pd 6.2,pos 171,13*pd 6.2': gln$, bb,cb,pbp,mat bp eof Xit
 		cbOrigional=cb
 		! debug_gl$=' 10   592  0'
 		! if gln$=debug_gl$ then pr ' found it. ' : debug=1 : pause else debug=0
@@ -67,7 +67,7 @@
 			pr '       new current balance is=';cb
 			pause
 		end if ! /r
-		rewrite #hGlMstr,using 'Form POS 81,2*PD 6.2': bb,cb
+		rewrite #hGlMstr,using 'form pos 81,2*PD 6.2': bb,cb
 	loop ! /r
 Xit: fnXit
 	def fn_is_a_retained_earn_account(gl$)

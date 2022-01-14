@@ -12,7 +12,7 @@
 	fnTop(program$,cap$="Print Schedules")
 	fncno(cno,cnam$)
 	open #20: "Name=CNO.H"&wsid$,i,i,r  : _
-	read #20,using 'Form POS 141,6*N 1,3*N 2,C 6,POS 195,2*C 20',rec=1: process,ps,filno,priorcd,mat d,fscode,lmu,actpd,actpd$,pedat$,cch$ : _
+	read #20,using 'form pos 141,6*N 1,3*N 2,C 6,pos 195,2*C 20',rec=1: process,ps,filno,priorcd,mat d,fscode,lmu,actpd,actpd$,pedat$,cch$ : _
 	close #20:
 	if process=1 then prtall=1 : goto L320
 L160: pr newpage

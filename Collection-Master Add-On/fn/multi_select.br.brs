@@ -167,7 +167,7 @@ GRID_SEARCH: ! r: Search Grid
 		! If it's a new Search, just search
 	end if
 	nsearch=nsearch_start=prior_match 
-	goto L59385    ! ** Skip the last match & start searching again!
+	goto L59385    ! ** skip the last match & start searching again!
 	SEARCH_LOOP: !
 	search_pass=0 
 	do while nsearch<>0 and search_pass<2 
@@ -1839,7 +1839,7 @@ def fn_table_unique_key_list(stukl_handle,mat stukl_key_list$) ! stukl_
 	dim stukl_key$*128,stukl_form$*80
 	stukl_key_pos=kps(stukl_handle)
 	stukl_key_len=kln(stukl_handle)
-	stukl_form$=cform$("Form Pos "&str$(stukl_key_pos)&",C "&str$(stukl_key_len))
+	stukl_form$=cform$("form pos "&str$(stukl_key_pos)&",C "&str$(stukl_key_len))
 	mat stukl_key_list$(0)
 	read #stukl_handle,using stukl_form$: stukl_key$ eof STUKL_EOF
 	gosub STUKL_ADD

@@ -296,13 +296,13 @@ def fn_hamster(uw$*128,mat lbl$,mat fln,hIn,mat p$; mat flTyp$,mat sln,mat mask$
 		j=1
 		dim tmp$*512
 		if fltyp2$(j)='c' or fltyp2$(j)='cr' then
-			tmp$='Form Pos '&str$(startPos2(j))&',c '&str$(sln2(j))
+			tmp$='form pos '&str$(startPos2(j))&',c '&str$(sln2(j))
 			read #hIn,using tmp$,rec=pRec,reserve: p$(j) noRec PNOREC eof PEOF
 		else if fltyp2$(j)='g' then
-			tmp$='Form Pos '&str$(startPos2(j))&',g '&str$(sln2(j))
+			tmp$='form pos '&str$(startPos2(j))&',g '&str$(sln2(j))
 			read #hIn,using tmp$,rec=pRec,reserve: p$(j) noRec PNOREC eof PEOF
 		else if fltyp2$(j)='n' or fltyp2$(j)='pd' then
-			tmp$='Form Pos '&str$(startPos2(j))&','&fltyp2$(j)&' '&str$(sln2(j))
+			tmp$='form pos '&str$(startPos2(j))&','&fltyp2$(j)&' '&str$(sln2(j))
 			read #hIn,using tmp$,rec=pRec,reserve: t noRec PNOREC eof PEOF
 			p$(j)=str$(t)
 		else if fltyp2$(j)='pd' and ord(p$(j))=15 then
@@ -311,13 +311,13 @@ def fn_hamster(uw$*128,mat lbl$,mat fln,hIn,mat p$; mat flTyp$,mat sln,mat mask$
 		! Read 2nd to Last Item
 		for j=2 to itemCount-1
 			if fltyp2$(j)='c' or fltyp2$(j)='cr' then
-				tmp$='Form Pos '&str$(startPos2(j))&',c '&str$(sln2(j))
+				tmp$='form pos '&str$(startPos2(j))&',c '&str$(sln2(j))
 				reread #hIn,using tmp$,reserve: p$(j) noRec PNOREC eof PEOF
 			else if fltyp2$(j)='g' then
-				tmp$='Form Pos '&str$(startPos2(j))&',g '&str$(sln2(j))
+				tmp$='form pos '&str$(startPos2(j))&',g '&str$(sln2(j))
 				reread #hIn,using tmp$,reserve: p$(j) noRec PNOREC eof PEOF
 			else if fltyp2$(j)='n' or fltyp2$(j)='pd' then
-				tmp$='Form Pos '&str$(startPos2(j))&','&fltyp2$(j)&' '&str$(sln2(j))
+				tmp$='form pos '&str$(startPos2(j))&','&fltyp2$(j)&' '&str$(sln2(j))
 				reread #hIn,using tmp$,reserve: t noRec PNOREC eof PEOF
 				p$(j)=str$(t)
 			else if fltyp2$(j)='pd' and ord(p$(j))=15 then
@@ -327,13 +327,13 @@ def fn_hamster(uw$*128,mat lbl$,mat fln,hIn,mat p$; mat flTyp$,mat sln,mat mask$
 		! read Last Item
 		j=itemCount
 		if fltyp2$(j)='c' or fltyp2$(j)='cr' then
-			tmp$='Form Pos '&str$(startPos2(j))&',c '&str$(sln2(j))
+			tmp$='form pos '&str$(startPos2(j))&',c '&str$(sln2(j))
 			reread #hIn,using tmp$,release: p$(j) noRec PNOREC eof PEOF
 		else if fltyp2$(j)='g' then
-			tmp$='Form Pos '&str$(startPos2(j))&',g '&str$(sln2(j))
+			tmp$='form pos '&str$(startPos2(j))&',g '&str$(sln2(j))
 			reread #hIn,using tmp$,release: p$(j) noRec PNOREC eof PEOF
 		else if fltyp2$(j)='n' or fltyp2$(j)='pd' then
-			tmp$='Form Pos '&str$(startPos2(j))&','&fltyp2$(j)&' '&str$(sln2(j))
+			tmp$='form pos '&str$(startPos2(j))&','&fltyp2$(j)&' '&str$(sln2(j))
 			reread #hIn,using tmp$,release: t noRec PNOREC eof PEOF
 			p$(j)=str$(t)
 		else if fltyp2$(j)='pd' and ord(p$(j))=15 then
@@ -393,7 +393,7 @@ def fn_hamster(uw$*128,mat lbl$,mat fln,hIn,mat p$; mat flTyp$,mat sln,mat mask$
 			end if
 			if lwrc$(fltyp2$(j))<>'pd' then p$(j)=p$(j)(1:sln2(j))
 			if fltyp2$(j)='c' or fltyp2$(j)='g' or fltyp2$(j)='cr' then
-				tmp$='Form Pos '&str$(startPos2(j))&','&fltyp2$(j)&' '
+				tmp$='form pos '&str$(startPos2(j))&','&fltyp2$(j)&' '
 				tmp$=tmp$&str$(sln2(j))
 				rewrite #hIn,using tmp$,same,reserve: p$(j)
 				! pr 'Rewr$ - '&TMP$&'   P$('&STR$(J)&')='&P$(J)
@@ -403,7 +403,7 @@ def fn_hamster(uw$*128,mat lbl$,mat fln,hIn,mat p$; mat flTyp$,mat sln,mat mask$
 				fltyp2$(j)='cr'
 			end if
 			if fltyp2$(j)='n' or fltyp2$(j)='pd' then
-				tmp$='Form Pos '&str$(startPos2(j))&','&fltyp2$(j)&' '
+				tmp$='form pos '&str$(startPos2(j))&','&fltyp2$(j)&' '
 				tmp$=tmp$&str$(sln2(j)) : t=val(p$(j))
 				rewrite #hIn,using tmp$,same,reserve: t
 			end if
@@ -423,9 +423,9 @@ def fn_hamster(uw$*128,mat lbl$,mat fln,hIn,mat p$; mat flTyp$,mat sln,mat mask$
 fnend
 
 def fn_keyForm$*1024(mat blank$,&key$,hIn; ___,return$*1024)
-	return$='Form ' : key$='' : j=0
+	return$='form ' : key$='' : j=0
 	do while kps(hIn,j+=1)>0
-		return$&='Pos '&str$(kps(hIn,j))&','
+		return$&='pos '&str$(kps(hIn,j))&','
 		return$&='C '&str$(kln(hIn,j))&','
 		blank$(j)=rpt$(chr$(48),kln(hIn,j))
 		key$&=blank$(j)

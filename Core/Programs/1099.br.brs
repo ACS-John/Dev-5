@@ -236,23 +236,23 @@ fnend
 		! sets local form1y,form2y,left
 		dim amResp$(10)*64
 		gosub SetDefaultMargins
-		amResp$(1)=fnPcRegRead$('Form 1 Y'	,defaultMargin$(1))
-		amResp$(2)=fnPcRegRead$('Form 2 Y'	,defaultMargin$(2))
-		amResp$(3)=fnPcRegRead$('Form 3 Y'	,defaultMargin$(3))
+		amResp$(1)=fnPcRegRead$('form 1 Y'	,defaultMargin$(1))
+		amResp$(2)=fnPcRegRead$('form 2 Y'	,defaultMargin$(2))
+		amResp$(3)=fnPcRegRead$('form 3 Y'	,defaultMargin$(3))
 		amResp$(4)=fnPcRegRead$('X'        	,defaultMargin$(4))
 		fnTos
 		lc=0 : mylen=30 : mypos=mylen+2
-		fnLbl(lc+=1,1,'Form 1 Distance from Top (mm):',mylen,1) 	: fnTxt(lc,mypos,3,0,1,'30')
-		fnLbl(lc+=1,1,'Form 2 Distance from Top (mm):',mylen,1) 	: fnTxt(lc,mypos,3,0,1,'30')
-		fnLbl(lc+=1,1,'Form 3 Distance from Top (mm):',mylen,1) 	: fnTxt(lc,mypos,3,0,1,'30')
+		fnLbl(lc+=1,1,'form 1 Distance from Top (mm):',mylen,1) 	: fnTxt(lc,mypos,3,0,1,'30')
+		fnLbl(lc+=1,1,'form 2 Distance from Top (mm):',mylen,1) 	: fnTxt(lc,mypos,3,0,1,'30')
+		fnLbl(lc+=1,1,'form 3 Distance from Top (mm):',mylen,1) 	: fnTxt(lc,mypos,3,0,1,'30')
 		lc+=1
 		fnLbl(lc+=1,1,'Left Margin Size (mm):',mylen,1)          	: fnTxt(lc,mypos,3,0,1,'30')
 		fnCmdSet(4)
 		fnAcs(mat amResp$,ckey)
 		if ckey<>5 then
-			fnPcReg_write('Form 1 Y' 	,amResp$(1))
-			fnPcReg_write('Form 2 Y' 	,amResp$(2))
-			fnPcReg_write('Form 3 Y' 	,amResp$(3))
+			fnPcReg_write('form 1 Y' 	,amResp$(1))
+			fnPcReg_write('form 2 Y' 	,amResp$(2))
+			fnPcReg_write('form 3 Y' 	,amResp$(3))
 			fnPcReg_write('X'         	,amResp$(4))
 			form1y 	=val(amResp$(1))
 			form2y    	=val(amResp$(2))
@@ -280,7 +280,7 @@ def fn_1099print(vn$*8,nam$*30,mat empAddr$,ss$*11,mat box; ___, _
 			open #hCompany=fnH: 'Name=[Q]\[CurSys]mstr\company.h[cno],Shr', internal,input,relative
 			dim companyNameAddr$(3)*40
 			dim fed$*12
-			read #hCompany,using 'Form POS 1,3*C 40,C 12': mat companyNameAddr$,fed$
+			read #hCompany,using 'form pos 1,3*C 40,C 12': mat companyNameAddr$,fed$
 			close #hCompany:
 		else
 			companyNameAddr$(1)='Test Company - The first company to try'
@@ -290,9 +290,9 @@ def fn_1099print(vn$*8,nam$*30,mat empAddr$,ss$*11,mat box; ___, _
 		end if
 		fnpcreg_read('Export 1' ,ten99Export$,'False')
 		gosub SetDefaultMargins
-		form1y 	=fnPcRegReadN('Form 1 Y'	,val(defaultMargin$(1)))
-		form2y 	=fnPcRegReadN('Form 2 Y'	,val(defaultMargin$(2)))
-		form3y 	=fnPcRegReadN('Form 3 Y'	,val(defaultMargin$(3)))
+		form1y 	=fnPcRegReadN('form 1 Y'	,val(defaultMargin$(1)))
+		form2y 	=fnPcRegReadN('form 2 Y'	,val(defaultMargin$(2)))
+		form3y 	=fnPcRegReadN('form 3 Y'	,val(defaultMargin$(3)))
 		left   	=fnPcRegReadN('X'        	,val(defaultMargin$(4)))
 		
 		! pr 'printing with form1y =';form1y 

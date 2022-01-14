@@ -34,7 +34,7 @@ L310: form pos 7,c 40
 	msgline$(2)=n$
 	fnoldmsgbox(mat response$,cap$, mat msgline$,2)
 	if response$(1)="Y" then goto L360 else goto L220
-L360: rewrite #1,using 'Form POS 157,N 2',key=jn$: 9 nokey L220
+L360: rewrite #1,using 'form pos 157,N 2',key=jn$: 9 nokey L220
 	goto L220
  
 L390: pr newpage

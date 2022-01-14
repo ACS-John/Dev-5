@@ -3,7 +3,7 @@ on error goto Ertn
 fnTop(program$)
 
 open #20: "Name=[Q]\CLmstr\Company.h[cno],Shr",i,outi,r
-read #20,using 'Form POS 152,N 2',rec=1,release: wbc
+read #20,using 'form pos 152,N 2',rec=1,release: wbc
 close #20:
 ASK1: !
 	dim resp$(1)*60
@@ -24,7 +24,7 @@ ASK1: !
 		wbc=val(resp$(1)(1:2))
 	end if
 	open #20: "Name=[Q]\CLmstr\Company.h[cno],Shr",i,outi,r
-	rewrite #20,using 'Form POS 152,N 2',rec=1: wbc
+	rewrite #20,using 'form pos 152,N 2',rec=1: wbc
 	close #20:
 goto Xit
 

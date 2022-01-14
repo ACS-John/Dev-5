@@ -23,7 +23,7 @@ fnopenprn
 if file$(255)(1:3)<>"PRN" then jbskip=1
 dim dedcode(20)
 open #1: "Name=[Q]\PRmstr\Company.h[cno],Shr",i,i,r
-read #1,using 'Form POS 618,10*N 1,POS 758,N 2',rec=1: mat dedcode,un
+read #1,using 'form pos 618,10*N 1,pos 758,N 2',rec=1: mat dedcode,un
 close #1:
  
 dim fullname$(20)*20,abrevname$(20)*8,dedfed(20),calcode(20),dedfica(20),dedst(20),deduc(20),gl$(20)*12
@@ -218,7 +218,7 @@ DETERMINE_EARNINGS: ! r:
 	checkkey$=cnvrt$("pic(zzzzzzz#)",eno)&cnvrt$("pic(zz#)",0)&cnvrt$("pd 6",0) ! index employee#,department# and payroll date
 	restore #7,key>=checkkey$: nokey L2500
 	L2180: !
-	read #7,using "Form POS 1,N 8,n 3,PD 6,N 7,5*PD 3.2,37*PD 5.2": heno,tdn,prd,oldckno,mat tdc,mat tcp eof STORE_VARIABLES : lastrec=rec(3)
+	read #7,using "form pos 1,N 8,n 3,PD 6,N 7,5*PD 3.2,37*PD 5.2": heno,tdn,prd,oldckno,mat tdc,mat tcp eof STORE_VARIABLES : lastrec=rec(3)
 	if heno<>eno then goto STORE_VARIABLES
 	if prd<beg_date or prd>end_date then goto L2180 ! not this year
 	if prd>=qtr1 and prd<qtr2 then mat qtr1tcp=qtr1tcp+tcp ! 1st qtr earnings
@@ -264,7 +264,7 @@ ACCUMULATE_DEPT_TOTALS: ! r:
 	L2590: !
 	tdep(j2,1)=tdep(j2,1)+tcp(31)-tcp(30) ! total wage less tips
 	deptgl$=""
-	read #8,using "Form pos 12,c 12,pos 62,2*pd 4.2",key=cnvrt$("pic(ZZZZZZZ#)",eno)&cnvrt$("pic(ZZ#)",tdn): deptgl$,tdet(2),tdet(3) ! Nokey 1660
+	read #8,using "form pos 12,c 12,pos 62,2*pd 4.2",key=cnvrt$("pic(ZZZZZZZ#)",eno)&cnvrt$("pic(ZZ#)",tdn): deptgl$,tdet(2),tdet(3) ! Nokey 1660
 	tdep(j2,2)=val(deptgl$(1:3)) ! salary for this department
 	tdep(j2,3)=val(deptgl$(4:9))
 	tdep(j2,4)=val(deptgl$(10:12))

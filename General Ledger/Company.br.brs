@@ -31,9 +31,9 @@ fnstyp(0)
 
 open #20: "Name=[Q]\GLmstr\GLBucket.h[cno],RecL=1,Use",i,outi,r
 if lrec(20)=0 then
-	write #20,using 'Form POS 1,N 1',rec=1: 1
+	write #20,using 'form pos 1,N 1',rec=1: 1
 end if
-read #20,using 'Form POS 1,N 1',rec=1: glb
+read #20,using 'form pos 1,N 1',rec=1: glb
 close #20:
 
 open #company=1: "Name=[Q]\GLmstr\Company.h[cno],Shr",i,outi,r ioerr BLD_COINFO
@@ -46,10 +46,10 @@ goto BLD_COINFO
 BLD_COINFO: !
 	open #company=1: "Name=[Q]\GLmstr\Company.h[cno],RecL=882,Replace",i,outi,r
 COINFO_WRITE: !
-	write #company,using 'Form POS 1,3*C 40,2*C 12,C 5,2*N 1,2*C 12,N 3,N 6,N 3,PD 7.2,C 30,POS 298,15*PD 4,POS 382,N 2,N 2,PD 5.3,PD 5.2,PD 5.3,PD 5.2,G 1,PD 5.3,PD 5.2,N 1,10*C 20,50*N 1,10*C 12',rec=1: mat a$,mat b$,c$,mat d,mat e$,a1,a2,a3,ucm,tb$,mat prgl,jccode,nap,ficarate,ficawage,feducrat,feducwag,actr$,mcr,mcm,reccode,mat miscname$,mat dedcode,mat dedfed,mat dedfica,mat dedst,mat deduc,mat miscgl$
+	write #company,using 'form pos 1,3*C 40,2*C 12,C 5,2*N 1,2*C 12,N 3,N 6,N 3,PD 7.2,C 30,pos 298,15*PD 4,pos 382,N 2,N 2,PD 5.3,PD 5.2,PD 5.3,PD 5.2,G 1,PD 5.3,PD 5.2,N 1,10*C 20,50*N 1,10*C 12',rec=1: mat a$,mat b$,c$,mat d,mat e$,a1,a2,a3,ucm,tb$,mat prgl,jccode,nap,ficarate,ficawage,feducrat,feducwag,actr$,mcr,mcm,reccode,mat miscname$,mat dedcode,mat dedfed,mat dedfica,mat dedst,mat deduc,mat miscgl$
 
 READ_COINFO: !
-read #company,using 'Form POS 1,3*C 40,2*C 12,C 5,2*N 1,2*C 12,N 3,N 6,N 3,PD 7.2,C 30,POS 298,15*PD 4,POS 382,N 2,N 2,PD 5.3,PD 5.2,PD 5.3,PD 5.2,G 1,PD 5.3,PD 5.2,N 1,10*C 20,50*N 1,10*C 12',rec=1: mat a$,mat b$,c$,mat d,mat e$,a1,a2,a3,ucm,tb$,mat prgl,jccode,nap,ficarate,ficawage,feducrat,feducwag,actr$,mcr,mcm,reccode,mat miscname$,mat dedcode,mat dedfed,mat dedfica,mat dedst,mat deduc,mat miscgl$ conv COINFO_WRITE, ioerr COINFO_READ_ERR
+read #company,using 'form pos 1,3*C 40,2*C 12,C 5,2*N 1,2*C 12,N 3,N 6,N 3,PD 7.2,C 30,pos 298,15*PD 4,pos 382,N 2,N 2,PD 5.3,PD 5.2,PD 5.3,PD 5.2,G 1,PD 5.3,PD 5.2,N 1,10*C 20,50*N 1,10*C 12',rec=1: mat a$,mat b$,c$,mat d,mat e$,a1,a2,a3,ucm,tb$,mat prgl,jccode,nap,ficarate,ficawage,feducrat,feducwag,actr$,mcr,mcm,reccode,mat miscname$,mat dedcode,mat dedfed,mat dedfica,mat dedst,mat deduc,mat miscgl$ conv COINFO_WRITE, ioerr COINFO_READ_ERR
 
 lastgl$=cnvrt$("pic(zz#)",a1)&cnvrt$("pic(zzzzz#)",a2)&cnvrt$("pic(zz#)",a3)
 SCREEN_1: ! r:
@@ -75,13 +75,13 @@ SCREEN_1: ! r:
 	fnTxt(8,mypos,5,0,left,"",0,"",0 )
 	resp$(resp_stateUcRate:=respc+=1)=c$
 	fnLbl(9,1,"State U/C Maximum:",mylen,right)
-	fnTxt(9,mypos,10,0,left,"10",0,"",0 )
+	fnTxt(9,mypos,10,0,left,'10',0,"",0 )
 	resp$(resp_ucm:=respc+=1)=str$(ucm)
 	fnLbl(10,1,"Type of Business:",mylen,right)
 	fnTxt(10,mypos,30,0,left,"",0,"",0 )
 	resp$(resp_typeOfBusiness:=respc+=1)=tb$
 	fnLbl(11,1,"Number of Periods:",mylen,right)
-	fnTxt(11,mypos,2,0,left,"30",0,"",0 )
+	fnTxt(11,mypos,2,0,left,'30',0,"",0 )
 	resp$(resp_nap:=respc+=1)=str$(nap)
 	fnChk(12,60,"Use Department Number Field:",1)
 	resp$(resp_useDeptNo:=respc+=1)='False'
@@ -171,19 +171,19 @@ SCREEN_3: ! r:
 	fnTxt(3,mypos,8,0,left,"34",0,"Format would be 6.2 ",0 )
 	resp$(1)=str$(ficarate)
 	fnLbl(4,1,"Social Security Maximum Wage:",mylen,right)
-	fnTxt(4,mypos,12,0,left,"10",0,"Example would be 90000.00 ",0 )
+	fnTxt(4,mypos,12,0,left,'10',0,"Example would be 90000.00 ",0 )
 	resp$(2)=str$(ficawage)
 	fnLbl(5,1,"Federal U/C Rate:",mylen,right)
 	fnTxt(5,mypos,8,0,left,"34",0,"Example would be .800 ",0 )
 	resp$(3)=str$(feducrat)
 	fnLbl(6,1,"Federal U/C Maximum Wage:",mylen,right)
-	fnTxt(6,mypos,12,0,left,"10",0,"An example of the Federal unemployment compensation rate would be 9000.00 ",0 )
+	fnTxt(6,mypos,12,0,left,'10',0,"An example of the Federal unemployment compensation rate would be 9000.00 ",0 )
 	resp$(4)=str$(feducwag)
 	fnLbl(7,1,"Medicare Rate:",mylen,right)
 	fnTxt(7,mypos,8,0,left,"34",0,"Format would be 1.45",0 )
 	resp$(5)=str$(mcr)
 	fnLbl(8,1,"Medicare Maximum Wage:",mylen,right)
-	fnTxt(8,mypos,12,0,left,"10",0,"There is no maximun at this time.  Ener enough 9s to exceed the highest paid employee.  (eg.  9999999.00 ",0 )
+	fnTxt(8,mypos,12,0,left,'10',0,"There is no maximun at this time.  Ener enough 9s to exceed the highest paid employee.  (eg.  9999999.00 ",0 )
 	resp$(6)=str$(mcm)
 	fnLbl(10,25,"General Ledger Account Numbers")
 	fnLbl(11,1,"Federal Withholding:",mylen,right)
@@ -275,9 +275,9 @@ goto Xit ! /r
 
 Xit: fnXit
 SAVE: ! r:
-	rewrite #company,using 'Form POS 1,3*C 40,2*C 12,C 5,2*N 1,2*C 12,N 3,N 6,N 3,PD 7.2,C 30,POS 298,15*PD 4,POS 382,N 2,N 2,PD 5.3,PD 5.2,PD 5.3,PD 5.2,G 1,PD 5.3,PD 5.2,N 1,10*C 20,50*N 1,10*C 12',rec=1: mat a$,mat b$,c$,mat d,mat e$,a1,a2,a3,ucm,tb$,mat prgl,jccode,nap,ficarate,ficawage,feducrat,feducwag,unused,mcr,mcm,reccode,mat miscname$,mat dedcode,mat dedfed,mat dedfica,mat dedst,mat deduc,mat miscgl$
+	rewrite #company,using 'form pos 1,3*C 40,2*C 12,C 5,2*N 1,2*C 12,N 3,N 6,N 3,PD 7.2,C 30,pos 298,15*PD 4,pos 382,N 2,N 2,PD 5.3,PD 5.2,PD 5.3,PD 5.2,G 1,PD 5.3,PD 5.2,N 1,10*C 20,50*N 1,10*C 12',rec=1: mat a$,mat b$,c$,mat d,mat e$,a1,a2,a3,ucm,tb$,mat prgl,jccode,nap,ficarate,ficawage,feducrat,feducwag,unused,mcr,mcm,reccode,mat miscname$,mat dedcode,mat dedfed,mat dedfica,mat dedst,mat deduc,mat miscgl$
 	open #20: "Name=[Q]\GLmstr\GLBucket.h[cno],RecL=1,Use",i,outi,r
-	rewrite #20,using 'Form POS 1,N 1',rec=1: glb
+	rewrite #20,using 'form pos 1,N 1',rec=1: glb
 	close #20:
 return ! /r
 
@@ -285,12 +285,12 @@ def library fnLastAccountingPeriodClosed(; setit,___,h,returnN)
 	autoLibrary
 	if setit then
 		open #h=fnH: "Name=[Q]\GLmstr\Company.h[cno],Shr",i,outi,r
-		rewrite #h,using 'Form Pos 296,n 2',rec=1: setit
+		rewrite #h,using 'form pos 296,n 2',rec=1: setit
 		close #h:
 		returnN=setit
 	else
 		open #h=fnH: "Name=[Q]\GLmstr\Company.h[cno],Shr",i,outi,r
-		read #h,using 'Form Pos 296,n 2',rec=1: returnN
+		read #h,using 'form pos 296,n 2',rec=1: returnN
 		close #h:
 	end if
 	fnLastAccountingPeriodClosed=returnN

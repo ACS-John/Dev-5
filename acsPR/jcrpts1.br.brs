@@ -63,11 +63,11 @@ L570: open #11: "Name=PROC.[Session],SIZE=0,RecL=255",d,o
 	! uses S:\acsPR\JCRpt-Mod as a base"
 	pr #11: '00051 RN$="';rn$;'"'
 	pf$="19900 pr #255, USING 19910: "
-	af$="19910 FORM SKIP 1"
+	af$="19910 form skip 1"
 	gpf$="20140 pr #255, USING 20150: "
-	gaf$="20150 FORM SKIP 2,""Grand Totals"""
+	gaf$="20150 form skip 2,""Grand Totals"""
 	jpf$="20025 pr #255, USING 20026: "
-	jaf$="20026 FORM SKIP 1,""Job Totals"""
+	jaf$="20026 form skip 1,""Job Totals"""
 	upf$="20000 pr #255,using 20020: "
 	uaf$="20020 form skip 0"
 	pr #11: "19850 on zdiv goto 25000"
@@ -117,30 +117,30 @@ L1060: if f$(j)(1:3)="x10" or f$(j)(1:3)="X10" then : _
 			i$="k$(1:"&str$(ppr(j))&")"
 		if rtrm$(i$)="" then cn=1 else cn=0
 		if rtrm$(i$)="" then i$="c("&str$(j)&")"
-		if fc(j)=1 then goto L1170 ! Skip Detail Print
+		if fc(j)=1 then goto L1170 ! skip Detail Print
 		pf$=rtrm$(pf$)&","&i$ ! pr Statement
 		if j=<1 then goto L1150
 		if fc(j-1)=1 then goto L1150
 		if pp(j)<pp(j-1)+ppr(j-1) then af$=af$&",skip 1"
 L1150: if cn=1 then : _
-			af$=rtrm$(af$)&",POS "&str$(pp(j))&",N "&str$(ppr(j)) : _
-			! Form Statement
+			af$=rtrm$(af$)&",pos "&str$(pp(j))&",N "&str$(ppr(j)) : _
+			! form Statement
 		if cn<>1 then : _
 			af$=rtrm$(af$)&",pos "&str$(pp(j))&",C "&str$(ppr(j)) : _
-			! Form Statement
+			! form Statement
 L1170: if tcs(j)=0 then goto L1210
 		i$(1:1)="t"
 		gpf$=rtrm$(gpf$)&","&i$ ! pr Stmt-Grand Totals
 		gaf$=rtrm$(gaf$)&",pos "&str$(pp(j))&",N "&str$(ppr(j)) : _
-		! Form Statement Grand Totals
+		! form Statement Grand Totals
 L1210: if tcj(j)=0 then goto L1270
 		i$(1:1)="s"
 		jpf$=rtrm$(jpf$)&","&i$ ! pr Stmt-Job Totals
 		jaf$=rtrm$(jaf$)&",pos "&str$(pp(j))&",N "&str$(ppr(j)) : _
-		! Form Statement Job Totals
+		! form Statement Job Totals
 		upf$=rtrm$(upf$)&","""&underlin$(1:ppr(j))&""""
 		uaf$=rtrm$(uaf$)&",pos "&str$(pp(j))&",C "&str$(ppr(j)) : _
-		! Underline Form Statement
+		! Underline form Statement
 L1270: if dp(j)=0 then goto L1340
 		if fc(j)=1 then goto L1300
 		af$=rtrm$(af$)&"."&str$(dp(j)) ! Add Decimal Points

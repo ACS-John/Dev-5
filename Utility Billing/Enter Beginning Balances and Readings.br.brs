@@ -61,7 +61,7 @@ SCREEN2: ! r:
 	fnTxt(1,mypos,10,0,1,"",1)
 	resp$(1)=z$
 	fnLbl(2,1,"Balance:",mylen,1)
-	fnTxt(2,mypos,9,0,1,"10")
+	fnTxt(2,mypos,9,0,1,'10')
 	resp$(2)=str$(bal)
 	fnLbl(4,mypos,"Balance",10,2,1)
 	fnLbl(4,mypos2,"Reading",10,2,1)
@@ -72,7 +72,7 @@ SCREEN2: ! r:
 			respc+=1
 			resp_line+=1
 			fnLbl(resp_line,1,srv$(j),mylen,1)
-			fnTxt(resp_line,mypos,9,0,1,"10")
+			fnTxt(resp_line,mypos,9,0,1,'10')
 			resp$(respc)=str$(gb(j))
 		end if
 		if trim$(srv$(j))<>"" and (j=1) then

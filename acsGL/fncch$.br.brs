@@ -5,10 +5,10 @@ def library fncch$*20(; cch$*20)
 	if trim$(cch$)="" then get_or_put=get else get_or_put=put
 	open #h=fnH: "Name=[Q]\GLmstr\Company.h[cno],Shr",i,outi,r
 	if get_or_put=get then 
-		read #h,using "Form POS 276,C 20",rec=1: cch$ noRec Finis
+		read #h,using "form pos 276,C 20",rec=1: cch$ noRec Finis
 	end if
 	if get_or_put=put then 
-		rewrite #h,using "Form Pos 276,C 20",rec=1: cch$
+		rewrite #h,using "form pos 276,C 20",rec=1: cch$
 	end if
 	Finis: close #h:
 	fncch$=cch$

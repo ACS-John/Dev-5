@@ -10,7 +10,7 @@
 !
 	fnLastBillingDate(d1)
 	open #21: "Name=[Q]\UBmstr\Company.h[cno],Shr",internal,input
-	read #21,using "Form POS 41,2*C 40": at$(2),at$(3)
+	read #21,using "form pos 41,2*C 40": at$(2),at$(3)
 	close #21:
 	penalty_rate=.1 ! if env$('client')='Findlay' then penalty_rate=.1 else penalty_rate=.05
 	at$(1)=env$('cnam')
@@ -179,8 +179,8 @@
 		if prtbkno><route then goto END5
 	L1270: if f><d1 then goto L1230
 		zip5$=cr$=""
-		read #5,using "Form POS 96,C 5,POS 108,C 4",key=z$: zip5$,cr$ nokey L1300
-	L1300: write #6,using "Form POS 1,C 5,C 4,C 10": zip5$,cr$,z$
+		read #5,using "form pos 96,C 5,pos 108,C 4",key=z$: zip5$,cr$ nokey L1300
+	L1300: write #6,using "form pos 1,C 5,C 4,C 10": zip5$,cr$,z$
 		goto L1230
 	!
 	END5: close #6:
@@ -406,8 +406,8 @@
 		open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",i,i,k  ! open in Account order
 		open #6: "Name=[Temp]\Temp.[Session],Replace,RecL=31",internal,output
 		do
-			read #1,using "Form POS 1,C 10,pos 1741,n 2,pos 1743,n 7,pos 1942,c 12": z$,route,seq,bulk$ eof L3040
-			write #6,using "Form POS 1,C 12,n 2,n 7,c 10": bulk$,route,seq,z$
+			read #1,using "form pos 1,C 10,pos 1741,n 2,pos 1743,n 7,pos 1942,c 12": z$,route,seq,bulk$ eof L3040
+			write #6,using "form pos 1,C 12,n 2,n 7,c 10": bulk$,route,seq,z$
 		loop
 	L3040: close #1: ioerr ignore
 		close #6: ioerr ignore

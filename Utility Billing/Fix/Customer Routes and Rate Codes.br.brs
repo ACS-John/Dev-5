@@ -41,8 +41,8 @@ OldWorkFromFixedWidthList: ! r: change route and sequence numbers from a text fi
 	route=val(ln$(81:87))
 	! sEQUENCE=VAL(LN$(9:15))
 	sequence=val(ln$(73:79))
-	read #1,using "Form POS 1,c 10,pos 1741,n 2,pos 1743,n 7",key=z$: oldz$,oldroute,oldsequence nokey L250
-	rewrite #1,using "Form pos 1741,n 2,pos 1743,n 7": route,sequence
+	read #1,using "form pos 1,c 10,pos 1741,n 2,pos 1743,n 7",key=z$: oldz$,oldroute,oldsequence nokey L250
+	rewrite #1,using "form pos 1741,n 2,pos 1743,n 7": route,sequence
 	goto READ_CUSTOMER
  
 	L250: !

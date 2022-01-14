@@ -41,7 +41,7 @@ EmployeeAdd: ! r:
 	respc=0 : frac=0
 	mylen=25 : mypos=mylen+2
 	fnLbl(1,1,"Employee Number:",mylen,1)
-	fnTxt(1,mylen+3,8,8,1,"30",0,"Employee numbers must be numeric.")
+	fnTxt(1,mylen+3,8,8,1,'30',0,"Employee numbers must be numeric.")
 	resp$(respc+=1)=str$(eno)
 	fnCmdKey("&Next",1,1,0,"Process employee information.")
 	fnCmdKey("&Cancel",5,0,1,"Returns to maintenance screen.")
@@ -119,7 +119,7 @@ def fn_employeeEdit(ent; employeeAdding)
 		fn_navButtons(lc(1),deptCount)
 		lc(1)+=1 : lc(2)=lc(1)
 		fnLbl(lc(1)+=1,1,'Employee Number:',mylen,1)
-		fnTxt(lc(1)   ,mylen+3,8,8,1,"30",0,"Employee numbers must be numeric.")
+		fnTxt(lc(1)   ,mylen+3,8,8,1,'30',0,"Employee numbers must be numeric.")
 		resp$(resp_eno=respc+=1)=str$(eno)
 		! r: col 1 top section
 		lc(1)+=1
@@ -164,10 +164,10 @@ def fn_employeeEdit(ent; employeeAdding)
 	
 		! lc(2)+=1
 		! fnLbl(             lc(2)+=1,col3_pos,'Dependants - Under 17:',col3_len,1)
-		! fnTxt(             lc(2)   ,col4_pos,2,0,1,"30",0,"Employee numbers must be numeric.")
+		! fnTxt(             lc(2)   ,col4_pos,2,0,1,'30',0,"Employee numbers must be numeric.")
 		! resp$(resp_dependentsMinor=respc+=1)=str$(dependentsMinor)
 		! fnLbl(             lc(2)+=1,col3_pos,'Dependants - Other:',col3_len,1)
-		! fnTxt(             lc(2)   ,col4_pos,2,0,1,"30",0,"Employee numbers must be numeric.")
+		! fnTxt(             lc(2)   ,col4_pos,2,0,1,'30',0,"Employee numbers must be numeric.")
 		! resp$(resp_dependentsOther=respc+=1)=str$(dependentsOther)
 	
 		! /r
@@ -369,7 +369,7 @@ ScrDepartment: ! r:
 	fnTxt(1,mylen+3,8,8,1,"1030",1,"Employee numbers must be numeric.",fram1)
 	resp$(respc+=1)=str$(eno)
 	fnLbl(2,1,"Department Number:",mylen,1,0,fram1)
-	fnTxt(2,mylen+3,3,3,1,"30",0,"Department numbers must be numeric and no department number can be used twice on the same employee.",fram1)
+	fnTxt(2,mylen+3,3,3,1,'30',0,"Department numbers must be numeric and no department number can be used twice on the same employee.",fram1)
 	resp$(respc+=1)=str$(tdn)
 	fnLbl(2,35,"General Ledger Acct:",mylen,1,0,fram1)
 	fnqgl(2,58,fram1)
@@ -384,41 +384,41 @@ ScrDepartment: ! r:
 	fnTxt(4,mylen+3,8,8,1,"1",0,"Last increase date is only used for information purposes.  Use MMDDYY format.",fram1)
 	resp$(respc+=1)=str$(tdt(3))
 	fnLbl(4,35,"Last Increase Amt:",mylen,1,0,fram1)
-	fnTxt(4,58,12,12,1,"10",0,"Just a method of storing the amount of the last pay increase.  You must enter by hand.",fram1)
+	fnTxt(4,58,12,12,1,'10',0,"Just a method of storing the amount of the last pay increase.  You must enter by hand.",fram1)
 	resp$(respc+=1)=str$(tli)
 	fnLbl(5,1,"Last Payroll Date:",mylen,1,0,fram1)
 	fnTxt(5,mylen+3,8,8,1,"1",0,"Last payroll date is updated each time pay is calculated.  Use MMDDYY format.  Do not change this date.",fram1)
 	resp$(respc+=1)=str$(tdt(4))
 	fnLbl(5,35,"State Code:",mylen,1,0,fram1)
-	! fnTxt(5,58,2,2,1,"30",0,"You must enter a state code, even if you have no state withholdings.",FRAM1)
+	! fnTxt(5,58,2,2,1,'30',0,"You must enter a state code, even if you have no state withholdings.",FRAM1)
 	fncomboa("StateCode",5,58,mat state_option$,"",11,fram1)
 	if tcd(1)=0 or tcd(1)>10 then tcd(1)=1 ! default state code to 1
 	resp$(respc+=1)=state_option$(tcd(1))
 	fnLbl(6,1,"Workmans Code:",mylen,1,0,fram1)
-	fnTxt(6,mylen+3,2,2,1,"30",0,"You workmans comp code is used for grouping certain types of work on the workmans comp report.",fram1)
+	fnTxt(6,mylen+3,2,2,1,'30',0,"You workmans comp code is used for grouping certain types of work on the workmans comp report.",fram1)
 	resp$(respc+=1)=str$(tcd(2))
 	fnLbl(6,35,"Union Code:",mylen,1,0,fram1)
-	fnTxt(6,58,2,2,1,"30",0,"You union code is used for grouping employees for the union report.",fram1)
+	fnTxt(6,58,2,2,1,'30',0,"You union code is used for grouping employees for the union report.",fram1)
 	resp$(respc+=1)=str$(tcd(3))
 	! fram1=1 : fnFra(3,1,6,97,departmentCap$)
 	fram2=2 : fnFra(12,1,3,97,"Salary and Pay Rates")
 
 	fnLbl(1,1,"Salary:",mylen,1,0,fram2)
-	fnTxt(1,mylen+3,12,12,1,"10",0,"Enter the salary for the pay period.",fram2)
+	fnTxt(1,mylen+3,12,12,1,'10',0,"Enter the salary for the pay period.",fram2)
 	resp$(respc+=1)=str$(tdet(1))
 	fnLbl(2,1,"Regular Hourly Rate:",mylen,1,0,fram2)
-	fnTxt(2,mylen+3,12,12,1,"10",0,"Enter the regular hourly rate.",fram2)
+	fnTxt(2,mylen+3,12,12,1,'10',0,"Enter the regular hourly rate.",fram2)
 	resp$(respc+=1)=str$(tdet(2))
 	fnLbl(2,35,"O/T Hourly Rate:",mylen,1,0,fram2)
-	fnTxt(2,58,12,12,1,"10",0,"Enter the overtime hourly rate.",fram2)
+	fnTxt(2,58,12,12,1,'10',0,"Enter the overtime hourly rate.",fram2)
 	resp$(respc+=1)=str$(tdet(3))
 	fram3=3 : fnFra(14+3,1,10,97,"Deductions and Additions")
 	for j=1 to 10
 		fnLbl(j,1,dednames$(j*2-1),mylen,1,0,fram3)
-		fnTxt(j,mylen+3,12,12,1,"10",0,"Enter the standard amount or the percent.",fram3)
+		fnTxt(j,mylen+3,12,12,1,'10',0,"Enter the standard amount or the percent.",fram3)
 		resp$(respc+=1)=str$(tdet(j*2-1+3))
 		fnLbl(j,35,dednames$(j*2),mylen,1,0,fram3)
-		fnTxt(j,58,12,12,1,"10",0,"Enter the standard amount or the percent.",fram3)
+		fnTxt(j,58,12,12,1,'10',0,"Enter the standard amount or the percent.",fram3)
 		resp$(respc+=1)=str$(tdet(j*2+3))
 	next j
 
@@ -481,7 +481,7 @@ def fn_departmentAdd(eno,&deptNew; ___,returnN)
 	respc=0 : frac=0
 	mylen=25 : mypos=mylen+2
 	fnLbl(1,1,"Department Number:",mylen,1)
-	fnTxt(1,mylen+3,3,3,1,"30",0,"Department numbers must be numeric.")
+	fnTxt(1,mylen+3,3,3,1,'30',0,"Department numbers must be numeric.")
 	resp$(respc+=1)=''
 	fnCmdKey("&Next",1,1,0,"Process department information.")
 	fnCmdKey("&Cancel",5,0,1,"Returns to maintenance screen.")
@@ -546,7 +546,7 @@ def fn_askMat(eno,mat id$; ___,lc,respc,tmp)
 	lc+=1
 	for tmp=1 to udim(mat id$)
 		fnLbl(lc+=1,1,id$(tmp)&':',col1_len,1)
-		fnTxt(lc,col2_pos,5, 0,1,"30",0,'')
+		fnTxt(lc,col2_pos,5, 0,1,'30',0,'')
 		resp$(respc+=1)=fnEmployeeData$(eno,id$(tmp))
 	next tmp
 	fnCmdKey("C&omplete",1,1,0,"Saves any changes and returns to Employee screen.")
@@ -714,7 +714,7 @@ def fn_openFiles
 	open #hCheckIdx1=fnH: "Name=[Q]\PRmstr\PayrollChecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno],Shr",internal,outIn,keyed
 	open #hCheckIdx3=fnH: "Name=[Q]\PRmstr\PayrollChecks.h[cno],KFName=[Q]\PRmstr\checkidx3.h[cno],Shr",internal,outIn,keyed
 	open #hDepartment=fnH: "Name=[Q]\PRmstr\Department.h[cno],KFName=[Q]\PRmstr\DeptIdx.h[cno],Shr",internal,outIn,keyed
-		Fdept: Form pos 1,n 8,n 3,c 12,4*n 6,3*n 2,pd 4.2,23*pd 4.2
+		Fdept: form pos 1,n 8,n 3,c 12,4*n 6,3*n 2,pd 4.2,23*pd 4.2
 		!  pos 1   n  8   teno
 		!          n  3   tdn
 		!          c 12   gl$
@@ -741,7 +741,7 @@ def fn_EmployeeDepartments(eno,mat empDept,mat empDeptRec; ___,teno,deptNumber)
 	mat empDeptRec(0)
 	restore #hEdcDept,key>=cnvrt$("pic(zzzzzzz#)",eno)&"   ": nokey EdcFinis
 	do
-		read #hEdcDept,using 'Form POS 1,N 8,N 3': teno,deptNumber eof EdcFinis
+		read #hEdcDept,using 'form pos 1,N 8,N 3': teno,deptNumber eof EdcFinis
 		if teno=eno then
 			fnAddOneN(mat empDept,deptNumber)
 			fnAddOneN(mat empDeptRec,rec(hEdcDept))
@@ -861,7 +861,7 @@ Xit: fnXit
 DD: ! r:
 	key$=fn_dDkey$(eno)
 	hDd=fn_dDopen
-	read #hDd,using "Form pos 11,C 1,N 9,N 2,C 17",key=key$: dd$,rtn,acc,acn$ nokey DdReadNoKey
+	read #hDd,using "form pos 11,C 1,N 9,N 2,C 17",key=key$: dd$,rtn,acc,acn$ nokey DdReadNoKey
 AskDd: !
 	if ~setup_askdd then
 		setup_askdd=1
@@ -896,7 +896,7 @@ AskDd: !
 	next j
 	if resp$(respc)='' then let resp$(respc)=optDirectDepositAccountType$(1)
 	fnLbl(5,1,"Employee Bank Account Number:",mylen,right)
-	! fnTxt(5,mylen+3,17,17,1,"30",0,"Enter the employee's bank account number. ")
+	! fnTxt(5,mylen+3,17,17,1,'30',0,"Enter the employee's bank account number. ")
 	fnTxt(5,mylen+3,17,17,1,'30',0,"Enter the employee's bank account number. ")
 	resp$(respc+=1)=acn$
 	fnCmdKey("&Save",1,1,0,"Saves the information on the screen." )
@@ -924,13 +924,13 @@ AskDd: !
 		goto AskDd
 	else if ckey=1 or ckey=4 then
 		key$=rpad$(str$(eno),10)
-		rewrite #hDd,using "Form pos 11,C 1,N 9,N 2,C 17",key=key$: dd$,rtn,acc,acn$
+		rewrite #hDd,using "form pos 11,C 1,N 9,N 2,C 17",key=key$: dd$,rtn,acc,acn$
 		goto DdFinis
 	end if
 goto AskDd ! /r
 DdReadNoKey: ! r:
 	dd$='N' : rtn=acc=0 : acn$='' ! defaults
-	write #hDd,using "Form pos 1,C 10,C 1,N 9,N 2,C 17": key$,dd$,rtn,acc,acn$ nokey DdReadNoKey
+	write #hDd,using "form pos 1,C 10,C 1,N 9,N 2,C 17": key$,dd$,rtn,acc,acn$ nokey DdReadNoKey
 goto AskDd ! /r
 DdFinis: ! r:
 	fn_dDclose
@@ -949,7 +949,7 @@ fnend
 def fn_dDdelete(eno)
 	! delete the record
 	hDd=fn_dDopen
-	fnKeyDelete(hDd,'Form POS 1,N 8',cnvrt$("pic(zzzzzzz#)",eno))
+	fnKeyDelete(hDd,'form pos 1,N 8',cnvrt$("pic(zzzzzzz#)",eno))
 	fn_dDclose
 fnend
 def fn_DirectDepositKeyChange(from$,to$)

@@ -138,7 +138,7 @@
 01034     open #(flin:=fnH): "name=work[Session].tmp",internal,outIn 
 01036     execute "free "&flnm$&" -N"
 01038     open #(flout:=fnH): "NAME="&flnm$&",recl="&str$(rln(flin))&",replace,version=1",internal,output 
-01040     flfrm$=cform$("FORM C "&str$(rln(flin)))
+01040     flfrm$=cform$("form C "&str$(rln(flin)))
 01042     read #flin,using flfrm$: f$ eof 1050
 01044     write #flout,using flfrm$: f$
 01046     goto 1042
@@ -270,7 +270,7 @@
           ! PFILE  = Printer file reference if different from 255 (0=255 by default)
 01720     if not pfile then pfile=255
 01730     if uprc$(ptype$(1:2))="HP" then 
-01732       if lgl then pr #pfile,using "FORM C 100,SKIP 0": chr$(27)&"&a9360v4950H "&reference$&chr$(27)&"&a0002v0002H" else pr #pfile,using "FORM C 100,SKIP 0": chr$(27)&"&a7360v4950H "&reference$&chr$(27)&"&a0002v0002H"
+01732       if lgl then pr #pfile,using "form C 100,skip 0": chr$(27)&"&a9360v4950H "&reference$&chr$(27)&"&a0002v0002H" else pr #pfile,using "form C 100,skip 0": chr$(27)&"&a7360v4950H "&reference$&chr$(27)&"&a0002v0002H"
 01738     end if 
 01740   fnend 
 01799 ! ----------------------------
@@ -366,7 +366,7 @@
           ! 11,5,C,A,23,3,C,A,26,4,PD,A,16,7,C,A"
 02270     close #srtcnt: ! 
 02280     execute "SORT "&srtcnt$
-02290 ! FRMSRT: FORM PD 3
+02290 ! FRMSRT: form PD 3
 02300     execute "free "&srtcnt$ ioerr 2310
 02310   fnend 
 02350   def library fnmap(street$*100,city$*50,state$,zip$) !:
@@ -412,7 +412,7 @@
 02600 ! ----------------------------
 02610   def library fnupdate_version(filename$,dirname$,mat versions,dircopy$,oldform$*500,newform$*500;lastrec,delete_lastrec) !:
           ! +----------------------------------------------------------------+!:
-          ! |  Updates a specified file based on FORM statement passed      | !:
+          ! |  Updates a specified file based on form statement passed      | !:
           ! |                                                               | !:
           ! +----------------------------------------------------------------+!
 02620     dim a$(2)*400,a(2)
@@ -927,23 +927,23 @@
 04688   infile_recl=min(32000,infile_lrec)
 04690   open #infile: "name="&infile$&",RECL="&str$(infile_recl),external,input,relative 
 04692   infile_rec=0
-04694   infile_frm$="FORM C "&str$(infile_recl)
+04694   infile_frm$="form C "&str$(infile_recl)
 04696   if infile_recl=32000 then 
 04698     if infile_rec*infile_recl+infile_recl<=infile_lrec then 
 04700       read #infile,using infile_frm$: inrec$ !:
             pr #outfile: inrec$ !:
-            ! fnPROGRESS(PROGWIN,INFILE_LREC,REC(INFILE),"10",INFILE$) !:
+            ! fnPROGRESS(PROGWIN,INFILE_LREC,REC(INFILE),'10',INFILE$) !:
             infile_rec+=1
 04702       goto 4698
 04704     else 
-04706       infile_frm$="FORM C "&str$(infile_lrec-infile_rec*32000)
+04706       infile_frm$="form C "&str$(infile_lrec-infile_rec*32000)
 04708       close #infile: 
 04710       open #infile: "name="&infile$&",RECL="&str$(infile_lrec-infile_rec*32000),external,input,relative 
 04712     end if 
 04714   end if 
 04716   read #infile,using infile_frm$,pos=infile_rec*infile_recl+1: inrec$ !:
         pr #outfile: inrec$ !:
-        ! fnPROGRESS(PROGWIN,INFILE_LREC,REC(INFILE),"10",INFILE$)
+        ! fnPROGRESS(PROGWIN,INFILE_LREC,REC(INFILE),'10',INFILE$)
 04718 FRMINPUT: form c 1
 04720   dim inrec$*32500
 04722 ! CLOSE #PROGWIN: !:
@@ -1647,7 +1647,7 @@
 10040 keylen=kln(flnr)
 10060 savecurfld=curfld
 10065 close #flnr: 
-10070 choice$=fndialog$("10","10",60,"File "&flnm$&" has duplicate key records. This condition will not prevent the system from working, but could cause inefficiencies and some lost data. You can continue without deleting the duplicates or elect to delete them now","Delete","Continue","List",1,dupa,0,0)
+10070 choice$=fndialog$('10','10',60,"File "&flnm$&" has duplicate key records. This condition will not prevent the system from working, but could cause inefficiencies and some lost data. You can continue without deleting the duplicates or elect to delete them now","Delete","Continue","List",1,dupa,0,0)
 10080 if choice$="Delete" then goto DELDUPS0
 10082 if choice$="Continue" then dupa=2
 10090 if choice$="List" then 
@@ -2043,7 +2043,7 @@
 12160   m=srch(mat upgm$,lwrc$(mpgm$))
 12170   if m<1 then goto ZMENUACCESS
 12180   useraccess=val(env$("USERACCESS")) !:
-        read #useraccess,using "Form pos 74,n 1",key=rpad$(env$("USER_NAME"),10)&rpad$(mname$,10)&mseq$&rpad$(mpgm$,50): mlvl nokey 12200
+        read #useraccess,using "form pos 74,n 1",key=rpad$(env$("USER_NAME"),10)&rpad$(mname$,10)&mseq$&rpad$(mpgm$,50): mlvl nokey 12200
 12190   if mlvl<2 then goto ZMENUACCESS
 12200   fnmenuaccess=1
 12210 ZMENUACCESS: fnend 
@@ -2259,7 +2259,7 @@
 30110 ! ------------------------------------------------
 30150 def library fncf$*2000(a$*2000) !:
         !    !:
-        ! | Condense a FORM statement                                   | !:
+        ! | Condense a form statement                                   | !:
         ! |                                                             | !:
         !    !
 30160   dim as$(1)*2000,an(10),ap(1),acf$*2000
@@ -2305,11 +2305,11 @@
 30360 fnend 
 30370 def library fncform$*2000(a$*2000) !:
         !    !:
-        ! | Make a compile FORM statement using FNCF$                   | !:
+        ! | Make a compile form statement using FNCF$                   | !:
         ! |                                                             | !:
         !    !
 30375   library env$("PD")&"Core\fnsnap\fnsnap_dll.br": fncf$
-30380   fncform$=cform$("FORM "&fncf$(a$))
+30380   fncform$=cform$("form "&fncf$(a$))
 30390 fnend 
 30400 ! ================================================================
 30410 ! 
@@ -2421,7 +2421,7 @@
 31045     execute "config attribute [BLANK]N/W:T,font=SYSTEMPC"
 31050     pct_windev=windev
 31060     if file(pct_windev)>-1 then pct_windev+=1 : goto 31060
-31070     if sr$="" then sr$="10"
+31070     if sr$="" then sr$='10'
 31080     fnwin(sr$,"5",str$(val(sr$)+2),"72",srep$(caption$,","," "),"DS[X]","[W]",pct_windev,1)
 31090     pctwrk$="1,5,C 62,N/W:T": !:
           pr #pct_windev,fields pctwrk$: "0     1     2     3     4     5     6     7     8     9     0"
@@ -2453,7 +2453,7 @@
       ! 
 31210 def library fnprintform$*40(filnum,formfile,shortname$) !:
         ! +----------------------------------------------------------------+!:
-        ! | Send MACRO/FONT/GRAPHIC/FORM to open pr file               | !:
+        ! | Send MACRO/FONT/GRAPHIC/form to open pr file               | !:
         ! |                                                               | !:
         ! +----------------------------------------------------------------+!
 31220 ! FILNUM      =  Open pr file that includes recl=32000 and eol=none !:
@@ -2791,7 +2791,7 @@
 38030   mat dopts$(3)
 38035   if not len(suffix$) then dtext$="Processing please wait" !:
           dcol$=str$(ip((80-len(dtext$))/2)) !:
-          drow$="10" !:
+          drow$='10' !:
           dlen=len(dtext$) !:
           dremove=colwidth=0
 38040   read #dialog_dat,rec=dlnr: drec,dcol,drow,dlen,dsep,mat dopts$,dfltopt,dremove,dtitle$,dtext$ noRec 38045 eof 38045
@@ -2871,7 +2871,7 @@
         ! +----------------------------------------------------------------+!
 38520 ! NAME = DEFAULT FILE NAME TO DISPLAY OR BLANK IF NO DEFAULT
 38522   if header$<="" then header$="Output File" else header$=trim$(header$)
-38530   pdfwin=fnwin("10","10","11","70",header$,"DS","[X]",pdfwin,1)
+38530   pdfwin=fnwin('10','10',"11","70",header$,"DS","[X]",pdfwin,1)
 38540   pr #pdfwin, fields "2,2,c ": "File name"
 38550   rinput #pdfwin, fields "2,12,45/c 80,[D]",attr "[A]": name$
 38560   if not fkey=esc and not fnok then goto 38550
@@ -3526,7 +3526,7 @@
 41770   hbase=hrec
 41771   for _a=1 to hfld : linput #htxt: h$ : next _a
 41780   close #htxt: : htxt=0
-41785 ! fnWAITWIN(H$(POS(H$,"|")+1:INF),H$(1:POS(H$,"|")-1),"OK",1) !:
+41785 ! fnWAITWIN(H$(pos(H$,"|")+1:INF),H$(1:pos(H$,"|")-1),"OK",1) !:
         ! INPUT FIELDS "28,75,c 1": PAUSE$
 41790   fnhelptip(hpath$,hfile$,htitle$,hbase+hfld,hrow,hcol)
 41800   fnhelp=hbase
@@ -3661,7 +3661,7 @@
 42760   if infile$="efile\w2*.*" then !:
           open #(in:=fnH): "name=open:"&infile$&",recl="&str$(inlen),external,input else !:
           open #(in:=fnH): "name="&infile$&",recl="&str$(inlen),external,input 
-42770   frm_infile$=cform$("FORM C "&str$(inlen))
+42770   frm_infile$=cform$("form C "&str$(inlen))
 42780   open #(save:=fnH): "name="&outfile$&",recl="&str$(inlen+2)&",replace",d,o 
 42790   outfile$=os_filename$(file$(save))
 42800 READ_IN: read #in,using frm_infile$: in_a$ eof ZVIEW_EXT
@@ -3868,7 +3868,7 @@
 44420   fnhpinit$=hpinit$
 44425 fnend 
 44500 def library fnxgridtot(gridamount,gridrow,gridcol,gridwin,mat gridwidth,mat gridform$)
-44502   gridmask$=gridform$(gridcol) ! (1:POS(GRIDFORM$(GRIDCOL),",")-1)
+44502   gridmask$=gridform$(gridcol) ! (1:pos(GRIDFORM$(GRIDCOL),",")-1)
 44504   pr #gridwin,fields str$(gridrow)&","&str$(sum(mat gridwidth(1:gridcol-1)))&","&gridmask$&",W/W:T": gridamount
 44506 end def 
 50000 ! ----------PRINT-BOX-MACRO-------------------------
@@ -4076,7 +4076,7 @@
 50580 ZSIGNBOX: fnend 
 50585 ! ----------------------------------------------------------------
 50590 GET_PASSWORD: ! 
-50600 passwin=fnwin("10","10","12","50","Enter Password","DS","X",passwin,0)
+50600 passwin=fnwin('10','10',"12","50","Enter Password","DS","X",passwin,0)
 50610 pr #passwin,fields "2,2,c": "Enter password"
 50620 rinput #passwin,fields "2,20,c 10,Ix": pass$
 50630 passwin=fnclswin(1)
@@ -5855,9 +5855,9 @@
         ! direct disk access version of FNPICK. Includes Paging and scrolling.!:
         ! EX stands for extra as in multiple fields and alternate index support
 75010 ! Starting Row, Starting Column, items Per Page,  KEY field (passed !:
-        ! by reference), Keyed FILE Ref Number, Form Statement, OPTIONAL Number!:
+        ! by reference), Keyed FILE Ref Number, form Statement, OPTIONAL Number!:
         ! of fields, Returned & Actual KEY FIELD sequence numbers specified by !:
-        ! FORM$ (If omitted, nbr of key fields will be 2, ret & act key field !:
+        ! form$ (If omitted, nbr of key fields will be 2, ret & act key field !:
         ! nbrs will be 1), OPTIONAL Cancel 'F' key (If omitted, no Function key !:
         ! processing will occur.), Window Title, Window Type, The TOTAL length !:
         ! of all fields added together, Help Key, Help File, Help Element
@@ -5907,7 +5907,7 @@
 75181       if key_check and not selfields$(key_check)=key_check_field$ then goto 75180
 75184       goto 75210
 75190       mat selfields$=("") !:
-            read #filenbr,using "FORM C "&str$(kln(filenbr)),keyonly: selfields$(retkeyfield) !:
+            read #filenbr,using "form C "&str$(kln(filenbr)),keyonly: selfields$(retkeyfield) !:
             if retkeyfield>1 then desfield=1 !:
             else !:
               desfield=retkeyfield+1
@@ -5917,7 +5917,7 @@
 75221       if key_check and not selfields$(key_check)=key_check_field$ then goto 75220
 75224       goto 75260
 75230       mat selfields$=("") !:
-            read #filenbr,using "FORM C "&str$(kln(filenbr)),prior,keyonly: selfields$(retkeyfield) !:
+            read #filenbr,using "form C "&str$(kln(filenbr)),prior,keyonly: selfields$(retkeyfield) !:
             if retkeyfield>1 then desfield=1 !:
             else !:
               desfield=retkeyfield+1
@@ -6467,7 +6467,7 @@
 81200   cfil=cfil1 : !:
         ckey=1: !:
         cflds=2: !:
-        cfilform$=cform$("form c 5,POS 6,c 30")
+        cfilform$=cform$("form c 5,pos 6,c 30")
 81210   restore #cfil,search=cstart$: nokey SRCHJC1 ioerr ZSRCHJC
 81220   fnsrchjc=0
 81230   if not afkey=2 then goto ZSRCHJC else goto SRCHJC1
@@ -6491,7 +6491,7 @@
 81340   cfil=cfil1 : !:
         ckey=1: !:
         cflds=2: !:
-        cfilform$=cform$("form c 4,POS 5,c 30")
+        cfilform$=cform$("form c 4,pos 5,c 30")
 81350   restore #cfil,search=cstart$: nokey SRCHJCCD1 ioerr ZSRCHJCCD
 81360   fnsrchjccd=0
 81370   if not afkey=2 then goto ZSRCHJCCD else goto SRCHJCCD1
@@ -6660,16 +6660,16 @@
 83130   next a
 83140   recno=scrno+1
 83150   if version(sfil)<2 then !:
-          wscrnform$="Form X 50,21*(C "&str$(winlen)&",X "&str$(78-winlen)&"),60*C 20" !:
+          wscrnform$="form X 50,21*(C "&str$(winlen)&",X "&str$(78-winlen)&"),60*C 20" !:
         else !:
-          wscrnform$="Form X 50,21*(C "&str$(winlen)&",X "&str$(78-winlen)&"),60*C 40"
+          wscrnform$="form X 50,21*(C "&str$(winlen)&",X "&str$(78-winlen)&"),60*C 40"
 83160   wscrnform$=cform$(wscrnform$)
 83170   if screen><scrno then 
 83180     read #sfil,using wscrnform$,rec=recno: mat sscreen$,mat sinflda$
 83190     mat shelp$=("X")
 83200     restore #(sfil+1),search=cnvrt$("pic(###)",scrno): nokey 83260 eof 83260
 83210     read #sfil+1,using "form n 3,n 2": hscrno,hfldno eof 83260
-83220     if hscrno=scrno then reread #sfil+1, using "form POS 6,c 1,c 2,c 200": hlevel$,hloc$,htext$ else goto 83260
+83220     if hscrno=scrno then reread #sfil+1, using "form pos 6,c 1,c 2,c 200": hlevel$,hloc$,htext$ else goto 83260
 83230     if hfldno>0 then shelp$(hfldno)=hlevel$&rtrm$(hloc$)&";"&rtrm$(htext$)&";"
 83240     goto 83210
 83250   end if 

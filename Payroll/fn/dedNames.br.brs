@@ -38,7 +38,7 @@ def library fnDedNames(mat fullname$; mat abrevname$,mat dedcode,mat calcode,mat
 		if exists("[Q]\PRmstr\DedNames.h[cno]") then 
 			open #hdednames=fnH: "Name=[Q]\PRmstr\DedNames.h[cno]",i,i,r 
 			read #hdednames,using fDedNames,rec=1: mat cache_fullname$,mat cache_abrevname$,mat cache_dedcode,mat cache_calcode,mat cache_dedfed,mat cache_dedfica,mat cache_dedst,mat cache_deduc,mat cache_gl$
-			fDedNames: Form POS 1,20*C 20,20*C 8,120*N 1,20*C 12
+			fDedNames: form pos 1,20*C 20,20*C 8,120*N 1,20*C 12
 		else
 			open #hdednames=fnH: "Name=[Q]\PRmstr\DedNames.h[cno],RecL=920,use",i,outi,r 
 			write #hdednames,using fDedNames: mat cache_fullname$,mat cache_abrevname$,mat cache_dedcode,mat cache_calcode,mat cache_dedfed,mat cache_dedfica,mat cache_dedst,mat cache_deduc,mat cache_gl$

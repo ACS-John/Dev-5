@@ -9,7 +9,7 @@
  
 	fnTop(program$,"Post Transactions")
 	open #1: "Name=[Q]\GLmstr\Company.h[cno],Shr",i,i,r
-	read #1,using 'Form POS 382,N 2',rec=1: jccode 
+	read #1,using 'form pos 382,N 2',rec=1: jccode 
 	close #1:
 	if jccode<>1 then goto L460
 	pr newpage

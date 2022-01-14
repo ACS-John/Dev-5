@@ -59,7 +59,7 @@ CHECK_FOR_OLD_DATE: ! r:
 	foundone=0
 	checkkey$=cnvrt$("pic(zzzzzzz#)",eno)&cnvrt$("pic(zz#)",0)&cnvrt$("pd 6",0) ! index employee#,department# and payroll date
 	restore #4,key>=checkkey$: nokey L690
-L650: read #4,using "Form POS 1,N 8,n 3,PD 6,N 7,5*PD 3.2,37*PD 5.2": heno,tdn,prd,ckno,mat tdc,mat tcp eof L690
+L650: read #4,using "form pos 1,N 8,n 3,PD 6,N 7,5*PD 3.2,37*PD 5.2": heno,tdn,prd,ckno,mat tdc,mat tcp eof L690
 	if heno<>eno then goto L690
 	if prd=date_to_select then foundone=1 : goto L690 ! FOUND A MATCHING OLD PAYROLL DATE
 	goto L650
@@ -109,7 +109,7 @@ SCR1: ! r:
 	fnTxt(10,mypos,12,0,1,"1",0,'Used for placing a date on the label. Leave blank if not applilcable."') !
 	resp$(respc+=1)=""
 	fnLbl(11,1,"Employment Status to pr (if applicable):",mylen,1)
-	fnTxt(11,mypos,2,0,1,"30",0,'Used for selectiing a specific employment status code. Leave blank if not applilcable."') !
+	fnTxt(11,mypos,2,0,1,'30',0,'Used for selectiing a specific employment status code. Leave blank if not applilcable."') !
 	resp$(respc+=1)=""
 	fnLbl(13,1,"Starting Employee Number (if applicable):",mylen,1)
 	fncombof("Employee",13,mypos,20,"[Q]\PRmstr\Employee.h[cno]",1,8,9,20,"[Q]\PRmstr\EmployeeIdx-no.h[cno]",1,0, "Select starting employee record for printing. Only applicable if not starting with first employee.")

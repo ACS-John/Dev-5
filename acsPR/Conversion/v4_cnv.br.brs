@@ -73,7 +73,7 @@ def fn_pr_conversion_department(cno; medicare_is_seperated)
 		read #h_rpmstr,using 'form pos 1,n 8,c 30,pos 122,n 2,pos 162,n 6,pos 173,2*pd 3': eno,em$,em6,lpd,mat ta eof DONE
 		adr=ta(1)
 		do 
-			read #h_rptrail,using 'Form POS 1,N 8,N 3,N 3,N 6,N 3,4*N 6,3*N 2,24*PD 4.2,5*PD 3.2,POS 471,PD 4.2,POS 165,PD 3.2,60*PD 5.2,PD 3',rec=adr: teno,tdn,gl1,gl2,gl3,mat tdt,mat tcd,tli,mat tdet,mat tdy,mat tdc,mcwh,mat ty,mat tqm,mat tcp,nta
+			read #h_rptrail,using 'form pos 1,N 8,N 3,N 3,N 6,N 3,4*N 6,3*N 2,24*PD 4.2,5*PD 3.2,pos 471,PD 4.2,pos 165,PD 3.2,60*PD 5.2,PD 3',rec=adr: teno,tdn,gl1,gl2,gl3,mat tdt,mat tcd,tli,mat tdet,mat tdy,mat tdc,mcwh,mat ty,mat tqm,mat tcp,nta
 			gosub CONVERSION
 			if nta<>0 then adr=nta
 		loop until nta=0
@@ -116,7 +116,7 @@ def fn_pr_conversion_department(cno; medicare_is_seperated)
 		cp(31)=ty(21) ! total wage
 		cp(32)=0 ! don't have net
 		gl$=cnvrt$("pic(zz#)",gl1)&cnvrt$("pic(zzzzz#)",gl2)&cnvrt$("pic(zz#)",gl3)
-		write #12,using 'Form POS 1,N 8,n 3,c 12,4*N 6,3*N 2,pd 4.2,23*PD 4.2': eno,tdn,gl$,mat tdt,mat tcd,tli,mat newtdet ! department record
+		write #12,using 'form pos 1,N 8,n 3,c 12,4*N 6,3*N 2,pd 4.2,23*PD 4.2': eno,tdn,gl$,mat tdt,mat tcd,tli,mat newtdet ! department record
 		if ~foundhistory then ! else  write check file later
 			fn_payrollchecks_write
 		end if 
@@ -187,7 +187,7 @@ CREATENAMES: ! r:
 		execute "Rename [Q]\PRmstr\PRCOINFO.h[cno]"&' '&"[Q]\PRmstr\Company.h[cno]"
 	end if 
 	open #h_company=fnH: "Name=[Q]\PRmstr\Company.h[cno]",internal,input 
-	read #h_company,using 'Form POS 1,3*C 40,C 12,PD 6.3,PD 6.2,PD 5.2,10*C 8,N 2,PD 4.2,PD 3.3,12*PD 4.2,10*PD 3.3,25*C 12,31*N 1,10*C 6,3*PD 4.3,3*PD 3.2,4*PD 4.2,N 1,2*C 6,N 2': mat a$,fid$,mcr,mcm,feducrat,mat d$,loccode,feducmax,ficarate,ficamaxw,ficawh,mat m,mat r,mat e$,mat gln$,gli,mat dedcode,mat calcode,mat dedfed,mat rpnames2$ ! eof L370 ioerr L330
+	read #h_company,using 'form pos 1,3*C 40,C 12,PD 6.3,PD 6.2,PD 5.2,10*C 8,N 2,PD 4.2,PD 3.3,12*PD 4.2,10*PD 3.3,25*C 12,31*N 1,10*C 6,3*PD 4.3,3*PD 3.2,4*PD 4.2,N 1,2*C 6,N 2': mat a$,fid$,mcr,mcm,feducrat,mat d$,loccode,feducmax,ficarate,ficamaxw,ficawh,mat m,mat r,mat e$,mat gln$,gli,mat dedcode,mat calcode,mat dedfed,mat rpnames2$ ! eof L370 ioerr L330
 	close #h_company: 
 	for j=1 to 10
 		newdedcode(j)=dedcode(j)
@@ -229,7 +229,7 @@ def fn_prcode_validate !  PRCODE - verify it exist, if not create it with one bl
 fnend 
 def fn_payrollchecks_write
 	if newtdc(1)>999 then newtdc(1)=999
-	write #h_payrollchecks,using "Form POS 1,N 8,n 3,PD 6,N 7,5*PD 3.2,37*PD 5.2": eno,tdn,prd,ckno,mat newtdc,mat cp ! payroll check history
+	write #h_payrollchecks,using "form pos 1,N 8,n 3,PD 6,N 7,5*PD 3.2,37*PD 5.2": eno,tdn,prd,ckno,mat newtdc,mat cp ! payroll check history
 	payrollcheck_write_count+=1
 fnend 
 dim a$*40,em$*30,ta(2),cp(32),tcp(22) ! ,hc(5),thc(5),d$*20,whc(10),message$*40

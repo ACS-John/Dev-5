@@ -26,9 +26,9 @@ fnTos ! r:
 		fnChk(a+2,49,"",align=0,container=0,tabcon=0)
 		if penalty$(a)="Y" then resp$(a*6-2)='True' else resp$(a*6-2)='False'
 		resp$(a*6-1)=str$(subjectTo(a))
-		fnTxt(a+2,58,2,0,0,"30")
+		fnTxt(a+2,58,2,0,0,'30')
 		resp$(a*6)=str$(orderToApply(a))
-		fnTxt(a+2,72,2,0,0,"30")
+		fnTxt(a+2,72,2,0,0,'30')
 	next a
 	fnCmdSet(4)
 	ckey=fnAcs(mat resp$)

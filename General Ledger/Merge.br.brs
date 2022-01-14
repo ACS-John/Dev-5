@@ -18,7 +18,7 @@ fnAutomatedSavePoint('before Merge')
 		if fnstyp=9 then prg$="S:\Client Billing\Legacy\tmMenu" else prg$="S:\acsGL\acGLAuto"
 		fnprg(prg$,2)
 		open #hCompany=fnH: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,input
-		read #hCompany,using 'Form Pos 150,2*N 1': use_dept,use_sub ! read fund and sub codes from general
+		read #hCompany,using 'form pos 150,2*N 1': use_dept,use_sub ! read fund and sub codes from general
 		close #hCompany:
 	end if
 	open #hAccount=fnH: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLIndex.h[cno],Shr",internal,outIn,keyed
@@ -27,7 +27,7 @@ fnAutomatedSavePoint('before Merge')
 	open #hGlTrans=fnH: 'Name=[Q]\GLmstr\GLTrans.h[cno],kfname=[Q]\GLmstr\glTrans-IdxAcct.h[cno],Shr',internal,outIn,keyed
 	FglTrans: form pos 1,c 12,n 6,pd 6.2,n 2,n 2,c 12,c 30,pd 3
 	open #hMerge=fnH: "Name=[Q]\GLmstr\GL_Work_[acsUserId].h[cno],NoShr",internal,outIn
-	F_merge1: Form POS 1,C 12,N 6,PD 6.2,N 2,N 2,C 12,C 30,C 8,POS 93,C 12
+	F_merge1: form pos 1,C 12,N 6,PD 6.2,N 2,N 2,C 12,C 30,C 8,pos 93,C 12
 	F_merge2: form pos 1,c 12,n 6,pd 6.2,n 2,n 2,c 12,c 30
 	F_merge3: form pos 27,n 2
 	open #hPaymstr=fnH: "Name=[Q]\GLmstr\PayMstr.h[cno],Version=1,KFName=[Q]\GLmstr\PayIdx1.h[cno],Shr",internal,outIn,keyed
@@ -114,7 +114,7 @@ do ! r:  main loop - cycle through Merge file
 	clr     =0                    	! cleared date
 	scd     =0                    	! source code
 	if tcde=2 then tx3=-tx3 ! turn sign around on bank rec file for receipts
-	write #hBankRec,using 'Form POS 79,c 12,pos 3,N 1,C 8,G 6,pd 10.2,C 8,C 35,N 1,N 6,N 1': bankgl$,tcde,tr$(1),tr$(2),tx3,tr$(4),tr$(5),pcde,clr,scd
+	write #hBankRec,using 'form pos 79,c 12,pos 3,N 1,C 8,G 6,pd 10.2,C 8,C 35,N 1,N 6,N 1': bankgl$,tcde,tr$(1),tr$(2),tx3,tr$(4),tr$(5),pcde,clr,scd
 	form pos 1,c 12,c 12,c 30,c 2,n 6,pd 5.2,n 1
 	
 	EoBankRec: ! /r
@@ -157,8 +157,8 @@ ScrMissingGl: ! r:
 			fnTos
 			mylen=23: mypos=mylen+3
 			fnLbl(1,1,"General Ledger Number:",mylen,1)
-			fnQglBig(1,mypos,0,2,1)
-			resp$(1)=fnRglBig$(gl$)
+			fnQgl(1,mypos,0,2,1,60)
+			resp$(1)=fnRgl$(gl$,60)
 			fnCmdKey("&Next",1,1,0,"Will change to the selected account.")
 			ckey=fnAcs(mat resp$)
 			if ckey<>5 then
@@ -177,15 +177,15 @@ ScrMissingGl: ! r:
 		mylen=23 : mypos=mylen+3 : rc=0
 		if use_dept then
 			fnLbl(1,26,"Fund #",6,2)
-			fnTxt(2,26,3,0,1,"30",0,"Fund portion of the general ledger number",0 )
+			fnTxt(2,26,3,0,1,'30',0,"Fund portion of the general ledger number",0 )
 			resp$(rc+=1)=str$(dno)
 		end if
 		fnLbl(2,1,"General Ledger Number:",mylen,1)
-		fnTxt(2,31,6,0,1,"30",0,"Main part of the general ledger number",0 )
+		fnTxt(2,31,6,0,1,'30',0,"Main part of the general ledger number",0 )
 		resp$(rc+=1)=str$(ano)
 		if use_sub then
 			fnLbl(1,40,"Sub #",6,2)
-			fnTxt(2,40,3,0,1,"30",0,"Sub portion of the general ledger number",0 )
+			fnTxt(2,40,3,0,1,'30',0,"Sub portion of the general ledger number",0 )
 			resp$(rc+=1)=str$(sno)
 		end if
 		fnLbl(3,1,"Description:",mylen,1)
@@ -210,7 +210,7 @@ ScrMissingGl: ! r:
 			if ~use_dept and ~use_sub then d$=resp$(2)
 			if use_dept and ~use_sub then d$=resp$(3)
 			glBank$=cnvrt$("N 3",dno)&cnvrt$("N 6",ano)&cnvrt$("N 3",sno)
-			read #hAccount,using 'Form POS 1,N 3',key=glBank$: dno nokey ignore
+			read #hAccount,using 'form pos 1,N 3',key=glBank$: dno nokey ignore
 			mat ta=(0)
 			cb=0
 			dim zo(50)

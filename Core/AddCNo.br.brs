@@ -23,7 +23,7 @@ if env$('cursys')='CL' then ! r:
 	! /r
 else if env$('cursys')='UB' then ! r:
 	open #hTmp=fnH: 'Name=[Q]\UBmstr\Company.h[cno],Replace,RecL=129',i,outIn,r
-	write #hTmp,using 'Form POS 1,C 40',rec=1: empty$
+	write #hTmp,using 'form pos 1,C 40',rec=1: empty$
 	close #hTmp:
 	open #hTmp=fnH: 'Name=[Q]\UBmstr\Customer.h[cno],Replace,RecL=2067',internal,outIn,r
 	close #hTmp:
@@ -66,9 +66,9 @@ else if env$('cursys')='GL' then ! r:
 	fnCopy('[Q]\GLmstr\*.h'&str$(fro_cno),'[Q]\GLmstr\*.h[cno]')
 	open #20: 'Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLIndex.h[cno],NoShr',internal,outIn,keyed
 	do
-		read #20,using 'Form POS 87,PD 6.2': cb eof EO_GLMSTR
+		read #20,using 'form pos 87,PD 6.2': cb eof EO_GLMSTR
 		dim zer(57)
-		rewrite #20,using 'Form POS 81,42*PD 6.2,POS 333,2*PD 3,13*pd 6.2': mat zer
+		rewrite #20,using 'form pos 81,42*PD 6.2,pos 333,2*PD 3,13*pd 6.2': mat zer
 	loop
 	EO_GLMSTR: !
 	close #20:

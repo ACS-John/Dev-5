@@ -226,10 +226,10 @@ L1660: if g(3)=0 then t$="" else t$=service$(3)
 	if bal<=0 then penalty=0
 	if env$('client')="Cerro Gordo V" and bal<0 then g(5)=0
 	pr #255: ""
-	pr #255,using 'Form POS 7,C 20,POS 38,C 25': est$,pe$(1)(1:25)
-	pr #255,using 'Form POS 1,CR 7,X 1,PIC(ZZ/ZZ/ZZ),NZ 13.2,POS 38,C 25': 'DUE BY:',d4,bal,pe$(2)(1:25)
-	pr #255,using 'Form POS 13,C 18,POS 38,C 25': e$(1)(1:18),pe$(3)(1:25)
-	pr #255,using 'Form POS 2,C 10,X 5,C 10,POS 38,C 25': z$,final$,pe$(4)(1:25)
+	pr #255,using 'form pos 7,C 20,pos 38,C 25': est$,pe$(1)(1:25)
+	pr #255,using 'form pos 1,CR 7,X 1,PIC(ZZ/ZZ/ZZ),NZ 13.2,pos 38,C 25': 'DUE BY:',d4,bal,pe$(2)(1:25)
+	pr #255,using 'form pos 13,C 18,pos 38,C 25': e$(1)(1:18),pe$(3)(1:25)
+	pr #255,using 'form pos 2,C 10,X 5,C 10,pos 38,C 25': z$,final$,pe$(4)(1:25)
 	bills+=1
 	pr #255,using L1910: mg$(1)
 	pr #255,using L1910: mg$(2)

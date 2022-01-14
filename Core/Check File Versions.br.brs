@@ -175,7 +175,7 @@ def fn_cfv_utility_billing
 	! r: move ubBkNo.h into CReg and delete ubBkNo.h
 	if exists('[Q]\UBmstr\ubBkNo.h[cno]') then
 		open #h_ubbkno=fnH: "Name=[Q]\UBmstr\ubBkNo.h[cno]",i,outi,r
-		read #h_ubbkno,using "Form POS 1,2*N 3",rec=1: bkno1,bkno2  noRec CFVUB_RPDATE_NOREC
+		read #h_ubbkno,using "form pos 1,2*N 3",rec=1: bkno1,bkno2  noRec CFVUB_RPDATE_NOREC
 		fncreg_write('Route Low',str$(bkno1)) ! Route Number Range Low
 		fncreg_write('Route High',str$(bkno2)) ! Route Number Range High
 		CFVUB_RPDATE_NOREC: !
@@ -202,10 +202,10 @@ def fn_cfv_utility_billing
 	end if
 
 	fn_file_setup_data("[Q]\UBmstr\Customer.h[cno]",2067,1)
-	fn_file_setup_index("[Q]\UBmstr\ubIndex.h[cno]","1","10")
+	fn_file_setup_index("[Q]\UBmstr\ubIndex.h[cno]","1",'10')
 	fn_file_setup_index("[Q]\UBmstr\ubIndx2.h[cno]","354","7")
-	fn_file_setup_index("[Q]\UBmstr\ubIndx3.h[cno]","11","30")
-	fn_file_setup_index("[Q]\UBmstr\ubIndx4.h[cno]","41","30")
+	fn_file_setup_index("[Q]\UBmstr\ubIndx3.h[cno]","11",'30')
+	fn_file_setup_index("[Q]\UBmstr\ubIndx4.h[cno]","41",'30')
 	fn_file_setup_index("[Q]\UBmstr\ubIndx5.h[cno]","1741/1743","2/7")
 
 	fn_file_setup_data("[Q]\UBmstr\ubAdrBil.h[cno]",130,0)
@@ -294,7 +294,7 @@ def fn_cfv_utility_billing
 
 	if exists('[Q]\UBmstr\IpChg01.h[cno]') then
 		open #hupipchg=fnH: "Name=[Q]\UBmstr\IpChg01.h[cno],RecL=80,Use",internal,outIn ioerr ubipchgOpenErr
-		read #hupipchg,using "Form pos 1,N 6": d2 ioerr ignore
+		read #hupipchg,using "form pos 1,N 6": d2 ioerr ignore
 		close #hupipchg,free:
 		for wsidItem=1 to 99
 			fnFree('[Q]\UBmstr\IpChg'&cnvrt$('pic(##)',wsidItem)&'.h[cno]')
@@ -305,7 +305,7 @@ def fn_cfv_utility_billing
 	if exists("[Q]\UBmstr\per1000.h[cno]") then
 		dim range(16)
 		open #hPer1000=fnH: "Name=[Q]\UBmstr\per1000.h[cno],Shr",i,outi,r
-		read #hPer1000,using "Form pos 1,16*n 10,n 2,c 1": mat range,wrate,weg$
+		read #hPer1000,using "form pos 1,16*n 10,n 2,c 1": mat range,wrate,weg$
 		fncreg_write('Per 1000 Usage - Rate Code ',weg$)
 		fncreg_write('Per 1000 Usage - Service for Analysis ',str$(wrate))
 		for rangeItem=1 to 16
@@ -581,7 +581,11 @@ def fn_cfv_checkbook
 	!     pr 'Record Length Error in File: '&tmpfile$
 	!     pr '         RLn: '&str$(tmprln)
 	!   end if
-	if tmprln=72 or tmprln=80 then fnglmstrtorecl62
+	if tmprln=72 or tmprln=80 then
+		fnCopy('[Q]\CLmstr\GLmstr.h[cno]','[Q]\CLmstr\GLmstr.h[cno]',62)
+		fnRemoveDeletedRecords('[Q]\CLmstr\GLmstr.h[cno]')
+		fnIndex('[Q]\CLmstr\GLmstr.h[cno]','[Q]\CLmstr\GLIndex.h[cno]','1,12')
+	end if
 	!   x=1 : if tmpkps(x)<>1 then
 	!     pr 'Key Position ('&str$(x)&') Error in '&kfname$
 	!     pr '      KPs('&str$(x)&'): '&str$(tmpkps(x))
@@ -682,7 +686,7 @@ def fn_cfv_payroll
 	if exists('[Q]\PRmstr\rpDate.h[cno]') then
 		open #h_pr_rpdate=fnH: "Name=[Q]\PRmstr\rpDate.h[cno]",i,outi,r
 		dim cfvpr_rpdate_d$*20
-		read #h_pr_rpdate,using 'Form POS 1,N 6,C 20': cfvpr_rpdate_ppd,cfvpr_rpdate_d$  noRec CFVPR_RPDATE_NOREC
+		read #h_pr_rpdate,using 'form pos 1,N 6,C 20': cfvpr_rpdate_ppd,cfvpr_rpdate_d$  noRec CFVPR_RPDATE_NOREC
 		fncreg_write('calculation date',str$(cfvpr_rpdate_ppd)) ! quarter ending date, i think - definately NOT the payroll calculation date!
 		fncreg_write('calculation date text',cfvpr_rpdate_d$) ! quarter ending date
 	CFVPR_RPDATE_NOREC: !
@@ -1065,9 +1069,9 @@ def fn_cfv_general_ledger
 		goto L4050
 	end if
 	open #tmp=fnH: 'Name='&name$&',KFName='&kfname$&',Shr',internal,outIn,keyed
-	L3920: read #tmp, using "Form POS 1,N 2,2*C 78,3*N 1,80*C 12": sn,sn$,ft$,dp,rs,cm,mat gl$ eof EO_TMP conv L9000
+	L3920: read #tmp, using "form pos 1,N 2,2*C 78,3*N 1,80*C 12": sn,sn$,ft$,dp,rs,cm,mat gl$ eof EO_TMP conv L9000
 	if sn=0 then goto L3920
-	rewrite #tmp, using "Form POS 1,N 3,2*C 78,3*N 1": sn,sn$,ft$,dp,rs,cm
+	rewrite #tmp, using "form pos 1,N 3,2*C 78,3*N 1": sn,sn$,ft$,dp,rs,cm
 	if exists("[Q]\GLmstr\schedule"&str$(sn)&".h[cno]")=0 then open #schedule=fnH: "Name=[Q]\GLmstr\schedule"&str$(sn)&".h[cno],KFName=[Q]\GLmstr\schedule_idx"&str$(sn)&".h[cno]"&',replace,RecL=12,kps=1,kln=12,Shr',internal,outIn,keyed: version(schedule,1): close #schedule:
 	if exists("[Q]\GLmstr\schedule_idx"&str$(sn)&".h[cno]")=0 then
 		fnIndex("[Q]\GLmstr\schedule"&str$(sn)&".h[cno]","[Q]\GLmstr\schedule_idx"&str$(sn)&".h[cno]","1 12")
@@ -1123,7 +1127,7 @@ def fn_rename(from$*256,to$*256)
 	end if
 fnend
 L9000: ! r: skip bad schedule records
-	reread #tmp, using "Form POS 1,c 2": a$ eof EO_TMP ioerr ignore
+	reread #tmp, using "form pos 1,c 2": a$ eof EO_TMP ioerr ignore
 goto L3920 ! /r
 ! def fn_ini_move(cursys$*2)
 ! 	dim imProgramOld$(0)*256

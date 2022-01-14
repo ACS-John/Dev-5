@@ -13,7 +13,7 @@ cm$(5)="80" : cm$(6)="80"
 fnflexinit1('flex_test',1,1,10,50,mat chdr$,mat cm$,0,repl=1)
 open #1: "Name=Sample\FlexTest,RecL=200,Use",internal,outIn
 READ_1: ! 
-read #1,using "Form POS 1,C 10,2*C 30,C 20,C 2,C 5": mat item$ eof EOF1
+read #1,using "form pos 1,C 10,2*C 30,C 20,C 2,C 5": mat item$ eof EOF1
 fnflexadd1(mat item$)
 goto READ_1
 EOF1: close #1:

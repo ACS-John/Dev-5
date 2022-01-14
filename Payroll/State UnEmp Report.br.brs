@@ -54,7 +54,7 @@
 	fncreg_read('calculation date text',quarter_ending_date$)
 	fnGetPayrollDates(beg_date,end_date,qtr1,qtr2,qtr3,qtr4)
 	open #1: "Name=[Q]\PRmstr\Company.h[cno],Shr",internal,input
-	read #1,using 'Form POS 1,3*C 40,2*C 12,PD 5.2,10*C 8,N 2,PD 4.2,PD 3.3,PD 4.2,PD 4.2,10*PD 4.2,10*PD 3.3,10*C 12,POS 618,30*N 1': mat a$,mat b$,feducrat,mat d$,loccode,feducmax,ficarate,ficamaxw,ficawh,mat m,mat r,mat e$
+	read #1,using 'form pos 1,3*C 40,2*C 12,PD 5.2,10*C 8,N 2,PD 4.2,PD 3.3,PD 4.2,PD 4.2,10*PD 4.2,10*PD 3.3,10*C 12,pos 618,30*N 1': mat a$,mat b$,feducrat,mat d$,loccode,feducmax,ficarate,ficamaxw,ficawh,mat m,mat r,mat e$
 	close #1:
 	ficamaxw=ficamaxw*10
 	fnDedNames(mat fullname$,mat abbrevname$,mat dedcode,mat calcode,mat dedfed,mat dedfica,mat dedst,mat deduc)
@@ -129,14 +129,14 @@
 	open #h_payrollchecks:=4: "Name=[Q]\PRmstr\payrollchecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno]",internal,outIn,keyed
 	gosub HDR
 TOP: !
-	read #2,using "Form POS 1,N 8,3*C 30,C 11": eno,mat em$,ss$ eof DONE
+	read #2,using "form pos 1,N 8,3*C 30,C 11": eno,mat em$,ss$ eof DONE
 	m1=m2=h2=h3=dcq=dcy=0 : mat ytdtotal=(0)
 	mat qtr1tcp=(0): mat qtr2tcp=(0): mat qtr3tcp=(0): mat qtr4tcp=(0)
 	mat ytdtota(0)
 	checkkey$=cnvrt$("pic(zzzzzzz#)",eno)&cnvrt$("pic(zz#)",0)&cnvrt$("pd 6",0) ! index employee#,department# and payroll date
 	restore #h_payrollchecks,key>=checkkey$: nokey ANALYZE_WAGES
 MAIN_LOOP: ! r:
-	read #h_payrollchecks,using "Form POS 1,N 8,n 3,PD 6,N 7,5*PD 3.2,37*PD 5.2": heno,tdn,prd,ckno,mat tdc,mat tcp eof ANALYZE_WAGES
+	read #h_payrollchecks,using "form pos 1,N 8,n 3,PD 6,N 7,5*PD 3.2,37*PD 5.2": heno,tdn,prd,ckno,mat tdc,mat tcp eof ANALYZE_WAGES
 	if heno<>eno then goto ANALYZE_WAGES
 	if prd<beg_date or prd>end_date then goto MAIN_LOOP ! not this year
 	if department$<>'[All]' and tdn<>val(department$(1:3)) then goto MAIN_LOOP
@@ -192,7 +192,7 @@ FINIS: close #2: ioerr ignore
 	fncloseprn
 	fnXit ! /r
 SUBTOTALS: ! r:
-	if m1=0 then goto L1780 ! SKIP IF QUARTERLY WAGE=0
+	if m1=0 then goto L1780 ! skip IF QUARTERLY WAGE=0
 	p3=p3+1
 	if round$="Y" then m1=round(m1,0)
 	if m2<m(stcode) then goto L1640

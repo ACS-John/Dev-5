@@ -1,4 +1,4 @@
-! S:\acsCL\unpaidinvoice - backup copy in C:\ACS\Dev-5\acsCL\UnpaidInvoice(before_overhaul09-28-2016).br.brs
+!  CL unpaid invoice - backup copy in C:\ACS\Dev-5\acsCL\UnpaidInvoice(before_overhaul09-28-2016).br.brs
 autoLibrary
 fnTop(program$,"Test DatePicker")
  
@@ -13,7 +13,7 @@ fnLbl(1,1,trim$(env$('cnam')(1:30))&"-"&'',65,2)
 					restore #clearing:
 					if nextrec>0 and displayattop$='True' then goto L4890 else goto L5030
 				L4890: for j=nextrec to lrec(clearing) ! read starting with next record
-						read #clearing,using 'Form POS 1,C 8,C 12,2*G 6,C 12,C 18,G 10.2,n 1,n 2,G 8,G 6,N 1,n 6,n 10.2,n 8',rec=j: flxitm$(4), flxitm$(5), flxitm$(6),flxitm$(7), flxitm$(8), up$(4),upa,pcde,bcde,ckn,dp,gde,pdte,disamt,ddate eof L4940
+						read #clearing,using 'form pos 1,C 8,C 12,2*G 6,C 12,C 18,G 10.2,n 1,n 2,G 8,G 6,N 1,n 6,n 10.2,n 8',rec=j: flxitm$(4), flxitm$(5), flxitm$(6),flxitm$(7), flxitm$(8), up$(4),upa,pcde,bcde,ckn,dp,gde,pdte,disamt,ddate eof L4940
 						flxitm$(9)=str$(upa) : flxitm$(10)=str$(disamt)
 						flxitm$(11)=str$(ddate) : flxitm$(3)=str$(pcde)
 						flxitm$(2)= flxitm$(12)=str$(bcde): flxitm$(13)=str$(ckn)
@@ -25,7 +25,7 @@ fnLbl(1,1,trim$(env$('cnam')(1:30))&"-"&'',65,2)
 				L4940: next j
 				if nextrec=1 then goto L5020 ! thinks it rereads the 1st record twice
 				for j=1 to max(nextrec-1,1) ! read records previously coded or skipped
-					read #clearing,using 'Form POS 1,C 8,C 12,2*G 6,C 12,C 18,G 10.2,n 1,n 2,G 8,G 6,N 1,n 6,n 10.2,n 8',rec=j: flxitm$(4), flxitm$(5), flxitm$(6),flxitm$(7), flxitm$(8), up$(4),upa,pcde,bcde,ckn,dp,gde,pdte,disamt,ddate eof L5070
+					read #clearing,using 'form pos 1,C 8,C 12,2*G 6,C 12,C 18,G 10.2,n 1,n 2,G 8,G 6,N 1,n 6,n 10.2,n 8',rec=j: flxitm$(4), flxitm$(5), flxitm$(6),flxitm$(7), flxitm$(8), up$(4),upa,pcde,bcde,ckn,dp,gde,pdte,disamt,ddate eof L5070
 					flxitm$(9)=str$(upa) : flxitm$(10)=str$(disamt)
 					flxitm$(11)=str$(ddate) : flxitm$(3)=str$(pcde)
 					flxitm$(2)= flxitm$(12)=str$(bcde): flxitm$(13)=str$(ckn)
@@ -36,7 +36,7 @@ fnLbl(1,1,trim$(env$('cnam')(1:30))&"-"&'',65,2)
 				next j
 				L5020: goto L5070
 				L5030: !
-				read #clearing,using 'Form POS 1,C 8,C 12,2*G 6,C 12,C 18,G 10.2,n 1,n 2,G 8,G 6,N 1,n 6,n 10.2,n 8': flxitm$(4), flxitm$(5), flxitm$(6),flxitm$(7), flxitm$(8), up$(4),upa,pcde,bcde,ckn,dp,gde,pdte,disamt,ddate eof L5070
+				read #clearing,using 'form pos 1,C 8,C 12,2*G 6,C 12,C 18,G 10.2,n 1,n 2,G 8,G 6,N 1,n 6,n 10.2,n 8': flxitm$(4), flxitm$(5), flxitm$(6),flxitm$(7), flxitm$(8), up$(4),upa,pcde,bcde,ckn,dp,gde,pdte,disamt,ddate eof L5070
 				flxitm$(9)=str$(upa) : flxitm$(10)=str$(disamt)
 				flxitm$(11)=str$(ddate) : flxitm$(3)=str$(pcde)
 				flxitm$(2)= flxitm$(12)=str$(bcde): flxitm$(13)=str$(ckn)
@@ -50,10 +50,10 @@ fnFra(2,1,13,23,"Approval Options"," ")
 fnButton(1,2,"&Approve All",62,"Will select to pay all unpaid invoices",1,18,1)
 fnButton(3,2,"&Approve by Range",63,"Enter a range of reference numbers to approve.  The reference # is the number to the left assigned by the computer.",1,18,1)
 fnLbl(4,4,"From:",5,1,0,1)
-fnTxt(4,11,5,0,1,"30",0,"Select the first reference # to be approved",1)
+fnTxt(4,11,5,0,1,'30',0,"Select the first reference # to be approved",1)
 resp$(respc+=1)=""
 fnLbl(5,4,"To:",5,1,0,1)
-fnTxt(5,11,5,0,1,"30",0,"Select the last reference # to be approved",1)
+fnTxt(5,11,5,0,1,'30',0,"Select the last reference # to be approved",1)
 resp$(respc+=1)=""
 fnButton(7,2,"&Approve by Due Date",64,"Approve all invoices due by a certain date.",1,18,1)
 fnLbl(8,2,"Date:",5,1,0,1)
@@ -66,7 +66,7 @@ fnTxt(11,11,8,0,1,"",0,"Enter payee # to approve all invoices on that payee",1)
 resp$(respc+=1)=""
 if displayunpaid=1 or displayunpaid=0 then wording$="Total Selected:" else wording$= "Total Unapproved:"
 fnLbl(2,28,wording$,18,1)
-fnTxt(2,49,12,0,1,"10",0," ")
+fnTxt(2,49,12,0,1,'10',0," ")
 resp$(respc+=1)=str$(total)
 fnChk(3,47,"Display at Top:",1)
 resp$(respc+=1)=displayattop$

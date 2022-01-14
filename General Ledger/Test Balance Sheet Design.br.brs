@@ -22,7 +22,7 @@ Screen1: ! r:
   fnTos(sn$="GLInput")
   mylen=30: mypos=mylen+3 : right=1
   fnLbl(1,1,"Cost Center or Department #:",mylen,right)
-  fnTxt(1,mypos,3,0,right,"30",0,"Enter the cost center or department number if you wish to pr only one department, else leave blank for all.",0 )
+  fnTxt(1,mypos,3,0,right,'30',0,"Enter the cost center or department number if you wish to pr only one department, else leave blank for all.",0 )
   resp$(1)=""
   fnLbl(2,1,"(Blank for all Departments)",mylen,right)
   fnCmdKey("&Next",1,1,0,"Prints the financial statement.")
@@ -59,7 +59,7 @@ L520: if notrans=1 then goto L660
   if br>=val(r$) and val(r$)><0 then goto L610
 L540: ! read general ledger master file for amounts
   form pd 3
-L560: read #3,using 'Form POS MP1,PD 3,POS 87,27*PD 6.2': br,cb,mat by,mat bp eof L650
+L560: read #3,using 'form pos MP1,PD 3,pos 87,27*PD 6.2': br,cb,mat by,mat bp eof L650
   cb=1
   if br=0 then goto L560
   if fnfscode=0 then goto L610

@@ -14,12 +14,12 @@ dim k$(3)*30
 fnTop(program$)
  
 open #1: "Name=[Q]\GLmstr\Company.h[cno],Shr",i,outi,r
-read #1,using 'Form POS 386,PD 5.3,PD 5.2,PD 5.3,PD 5.2',rec=1: ficarate,ficawage,feducrat,feducwag
+read #1,using 'form pos 386,PD 5.3,PD 5.2,PD 5.3,PD 5.2',rec=1: ficarate,ficawage,feducrat,feducwag
 close #1:
 ficarate=ficarate/100
 feducrat=feducrat/100
 open #hCompany=fnH: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,input
-read #hCompany,using 'Form POS 1,3*C 40,2*C 12,POS 618,40*N 1': mat a$,mat b$,mat dedcode,mat dedfed,mat dedfica,mat dedst
+read #hCompany,using 'form pos 1,3*C 40,2*C 12,pos 618,40*N 1': mat a$,mat b$,mat dedcode,mat dedfed,mat dedfica,mat dedst
 close #hCompany:
 for j=1 to 3 : a$(j)=a$(j)(1:30) : next j
 for j=1 to 4
@@ -177,7 +177,7 @@ BOX16_process: ! r: Box 16
 	! if trim$(kz$)='14' then pause
 	dim in4$(30)
 	dim fw2box16$*255
-	fw2box16$="FORM  POS 1,C 8"&rpt$(",C 12,G 10.2,3*G 1",6)
+	fw2box16$="form  pos 1,C 8"&rpt$(",C 12,G 10.2,3*G 1",6)
 	read #hW2Box16,using fw2box16$,key=rpad$(trim$(kz$),kln(hW2Box16)): kz$,mat in4$ nokey b16ReadLPad
 	goto b16PastRead
 	b16ReadLPad: !

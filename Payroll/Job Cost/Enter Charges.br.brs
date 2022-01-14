@@ -56,7 +56,7 @@ L360: !
 	fncmbsubcat(5,mypos)
 	resp$(respc+=1)=str$(ji2(2))
 	fnLbl(6,1,"Amount:",mylen,1)
-	fnTxt(6,mypos,10,10,0,"10",0,"Amount to be charged to job.")
+	fnTxt(6,mypos,10,10,0,'10',0,"Amount to be charged to job.")
 	resp$(respc+=1)=str$(ji2(3))
 	fnLbl(7,1,"Description:",mylen,1)
 	fnTxt(7,mypos,30,30,0,"",0,"Use any description you choose.")
@@ -184,9 +184,9 @@ CORRECTIONS: !
 	ch2$(5)="Cat"
 	ch2$(6)="Sub-Cat": ch2$(7)="Amount": ch2$(8)="Description"
 	mat ch2$(8) ! : Mat CM2$(8) : Mat ITEM2$(8)
-	cm2$(1)="30": cm2$(2)="": cm2$(3)="1"
+	cm2$(1)='30': cm2$(2)="": cm2$(3)="1"
 	cm2$(4)=""
-	cm2$(5)="30": cm2$(6)="30": cm2$(7)="10"
+	cm2$(5)='30': cm2$(6)='30': cm2$(7)='10'
 	cm2$(8)=""
 	cm2$(8): ch2$(8): item2$(8)
 	fnflexinit1('Cat',1,1,10,70,mat ch2$,mat cm2$,1,usefile)

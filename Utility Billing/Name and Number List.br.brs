@@ -122,7 +122,7 @@ LOOP_TOP: ! r:
 	end if
 	L490: !
 	if uprc$(turn$)="Y" then
-		read #7,using "Form POS 1,PD 3": addr eof DONE
+		read #7,using "form pos 1,PD 3": addr eof DONE
 	else
 		goto L570
 	end if
@@ -261,7 +261,7 @@ READ_FROM_GRID: ! r: READ CUSTOMER # FROM GRID
 return  ! /r
 CHECK_ALTERNATE: ! r: check for alternate billing address
 	mat ab$=('')
-	read #3,using "Form POS 11,4*C 30",key=z$: mat ab$ nokey L1690
+	read #3,using "form pos 11,4*C 30",key=z$: mat ab$ nokey L1690
 	if trim$(ab$(1))="" and trim$(ab$(2))="" and trim$(ab$(3))="" and trim$(ab$(4))="" then
 		goto L1690
 	end if

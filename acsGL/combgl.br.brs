@@ -42,16 +42,16 @@ MAIN: !
 	cno1=cno
 	execute "Copy [Q]\GLmstr\*.H"&str$(cno1)&' '&"[Q]\GLmstr\*.H"&str$(dcno)&" -n" ioerr MAIN
 	open #1: "Name=[Q]\GLmstr\Company.h"&str$(dcno)&"",internal,outIn 
-	read #1,using ' Form POS 1,C 40': n$
+	read #1,using ' form pos 1,C 40': n$
 	n$(25:40)=" (Consolidated)"
-	rewrite #1,using ' Form POS 1,C 40': n$
+	rewrite #1,using ' form pos 1,C 40': n$
 	close #1:
 	open #1: "Name=[Q]\GLmstr\GLmstr.H"&str$(dcno)&"",internal,output
 goto MAIN
  
 L390: open #2: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLIndex.h[cno]",i,i,k ioerr MAIN
-L400: read #2,using 'Form POS 1,C 416': a$ eof L430
-	write #1,using 'Form POS 1,C 416': a$
+L400: read #2,using 'form pos 1,C 416': a$ eof L430
+	write #1,using 'form pos 1,C 416': a$
 	goto L400
 L430: close #2:
 	goto MAIN

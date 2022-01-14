@@ -40,8 +40,8 @@ GetStarted: !
 
 	pr newpage
 	fnopenprn
-	pr #255,using "Form pos 1,C 20,Cc 90": date$('mm/dd/yy'),env$('cnam')
-	pr #255,using "Form pos 1,C 20,Cc 90": time$,"Chart of Accounts"
+	pr #255,using "form pos 1,C 20,Cc 90": date$('mm/dd/yy'),env$('cnam')
+	pr #255,using "form pos 1,C 20,Cc 90": time$,"Chart of Accounts"
 	pr #255,using 'form pos 1,Cc 130': dat$
 	pr #255:
 	gosub L680
@@ -67,7 +67,7 @@ goto L420
 
 L570: !
 	pr #255: newpage
-	pr #255,using "Form pos 1,C 20,Cc 90": date$('mm/dd/yy'),env$('cnam')
+	pr #255,using "form pos 1,C 20,Cc 90": date$('mm/dd/yy'),env$('cnam')
 	pr #255: time$;tab(57);"Chart of Accounts"
 	pr #255,using 'form pos 1,Cc 130': dat$
 	pr #255:

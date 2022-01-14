@@ -10,7 +10,7 @@ dim a$(3)*40,b$*12,g$*12,d$(10)*8,tty(10),e$(10)*12
 dim dedfed(10),dedcode(10)
 
 open #1: "Name=[Q]\PRmstr\Company.h[cno],Shr",internal,input 
-read #1,using 'Form POS 1,3*C 40,C 12,POS 150,10*C 8,N 2,POS 317,10*C 12,POS 618,10*N 1,POS 638,10*N 1,POS 133,PD 6.3,PD 6.2,POS 236,PD 3.3,PD 4.2': mat a$,b$,mat d$,loccode,mat e$,mat dedcode,mat dedfed,mcrate,mcmax,ssrate,ssmax 
+read #1,using 'form pos 1,3*C 40,C 12,pos 150,10*C 8,N 2,pos 317,10*C 12,pos 618,10*N 1,pos 638,10*N 1,pos 133,PD 6.3,PD 6.2,pos 236,PD 3.3,PD 4.2': mat a$,b$,mat d$,loccode,mat e$,mat dedcode,mat dedfed,mcrate,mcmax,ssrate,ssmax 
 close #1: ! company was prcoinfo before conversion
 mcmax=9999999
 for j=1 to 3: a$(j)=a$(j)(1:30): next j
@@ -39,7 +39,7 @@ if em6=2 then w(3)=0 : w(12)=w3                           ! NO SS ALL MC        
 if em6=9 then w(3)=w(5)=w(11)=w(12)=0                     ! NO SS OR MC
 ty(2)=w(3)
 ty(15)=w3-w(3)
-rewrite #2,using 'Form POS 173,PD 5.2,POS 238,PD 5.2': ty(2),ty(15)
+rewrite #2,using 'form pos 173,PD 5.2,pos 238,PD 5.2': ty(2),ty(15)
 mat w=(0)
 nqp=dcb=w3=0
 if ta>0 then goto L240 else goto L220

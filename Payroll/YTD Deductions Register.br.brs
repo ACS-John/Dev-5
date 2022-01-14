@@ -54,7 +54,7 @@ MENU1: !
 	restore #4,key>=checkkey$: nokey ReadEmp
 	do
 		L510: !
-		read #4,using "Form POS 1,N 8,n 3,PD 6,N 7,5*PD 3.2,37*PD 5.2": heno,tdn,prd,ckno,mat tdc,mat tcp eof PRINT_INFO
+		read #4,using "form pos 1,N 8,n 3,PD 6,N 7,5*PD 3.2,37*PD 5.2": heno,tdn,prd,ckno,mat tdc,mat tcp eof PRINT_INFO
 		if heno<>eno then goto PRINT_INFO
 		if prd<beg_date or prd>end_date then goto L510 ! not this year
 		mat ytdtotal=ytdtotal+tcp

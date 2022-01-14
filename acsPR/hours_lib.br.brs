@@ -38,8 +38,8 @@ def library fnHours(eno)
 		chdr$(8)="Balance" 
 		cmask$(5)='3'
 		cmask$(6)='10'
-		cmask$(7)="10" 
-		cmask$(8)="10" 
+		cmask$(7)='10' 
+		cmask$(8)='10' 
 		fnflexinit1('Hours',lc+2,1,15,66,mat chdr$,mat cmask$,1) 
 		lc+=18
 		if hact$="[All]" then 
@@ -53,7 +53,7 @@ def library fnHours(eno)
 		balance=0
 		oldclass$=""
 	READHOURBREAKDOWN: !
-		holdempno=empno: oldclass$=class$: read #hBreakdown,using "Form pos 1,n 8,c 5,n 8,2*n 9.2",release: empno,class$,tdate,increase,decrease eof EOBREAKDOWN
+		holdempno=empno: oldclass$=class$: read #hBreakdown,using "form pos 1,n 8,c 5,n 8,2*n 9.2",release: empno,class$,tdate,increase,decrease eof EOBREAKDOWN
 		if hact$="[All]" then empkey$=lpad$(str$(empno),8): goto L310
 		if empno<>eno then goto EOBREAKDOWN
 		empkey$=lpad$(str$(eno),8)
@@ -108,7 +108,7 @@ def library fnHours(eno)
 		read #hEmployee,using "form pos 9,c 30",key=empkey$,release: empname$ nokey ignore
 		if addhours=1 then class$="": increase=decrease=0
 		if edithours=1 then 
-			read #hBreakdown,using "Form pos 1,n 8,c 5,n 8,2*n 9.2",rec=editrec: empno,class$,tdate,increase,decrease noRec ADD_FM_DONE
+			read #hBreakdown,using "form pos 1,n 8,c 5,n 8,2*n 9.2",rec=editrec: empno,class$,tdate,increase,decrease noRec ADD_FM_DONE
 		end if
 		fnTos
 		respc=0 : lc=0 : mylen=21 : mypos=mylen+2: mat resp$=(""): right=1
@@ -141,10 +141,10 @@ def library fnHours(eno)
 		L740: !
 		if increase=0 and decrease=0 and addhours=1 then goto ADDFM  ! do not add blank records
 		if addhours=1 then 
-			write #hBreakdown,using "Form pos 1,n 8,c 5,n 8,2*n 9.2": empno,class$,tdate,increase,decrease 
+			write #hBreakdown,using "form pos 1,n 8,c 5,n 8,2*n 9.2": empno,class$,tdate,increase,decrease 
 			goto ADDFM
 		else if edithours=1 then 
-			rewrite #hBreakdown,using "Form pos 1,n 8,c 5,n 8,2*n 9.2",rec=editrec: empno,class$,tdate,increase,decrease 
+			rewrite #hBreakdown,using "form pos 1,n 8,c 5,n 8,2*n 9.2",rec=editrec: empno,class$,tdate,increase,decrease 
 			edithours=0
 			goto ADD_FM_DONE
 		end if

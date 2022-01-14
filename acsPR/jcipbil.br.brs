@@ -59,7 +59,7 @@ L510: if cmdkey=5 then goto L730
 	if inp(2)<10100 or inp(2)>123199 then ce=3: goto ERR1
 	if inp(1)=0 then ce=2: goto ERR1
 	jn$=lpad$(rtrm$(jn$),6)
-	read #1,using 'Form POS 150,PD 7.2,N 2',key=jn$: b3 nokey L600
+	read #1,using 'form pos 150,PD 7.2,N 2',key=jn$: b3 nokey L600
 goto L660
  
 L600: msgline$(1)="Job Number not found."
@@ -135,10 +135,10 @@ goto L200
 L1300: for j=1 to rw
 		read #2,using L700,rec=j: jn$,mat inp noRec Xit
 		if ltrm$(jn$)="" or ltrm$(rtrm$(jn$))="0" then goto L1370
-		read #1,using 'Form POS 150,PD 7.2,N 2',key=jn$: b3,b4 nokey L1370
+		read #1,using 'form pos 150,PD 7.2,N 2',key=jn$: b3,b4 nokey L1370
 		b3=b3+inp(1)
 		if inp(3)><0 then b4=inp(3)
-		rewrite #1,using 'Form POS 150,PD 7.2,N 2',key=jn$: b3,b4
+		rewrite #1,using 'form pos 150,PD 7.2,N 2',key=jn$: b3,b4
 L1370: next j
 goto Xit
  

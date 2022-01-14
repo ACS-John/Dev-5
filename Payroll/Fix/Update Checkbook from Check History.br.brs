@@ -51,7 +51,7 @@ DELETE_ACSCL: ! delete old check records
 	bal=bal-otr3
 	delete #8,key=clk$:
 	restore #tralloc,key>=clk$: nokey WRITE_ACSCL
-RD_TRALLOC: read #tralloc,using 'Form Pos 1,C 11': newkey$ eof WRITE_ACSCL
+RD_TRALLOC: read #tralloc,using 'form pos 1,C 11': newkey$ eof WRITE_ACSCL
 	if newkey$=clk$ then delete #tralloc: : goto RD_TRALLOC
 WRITE_ACSCL: !
 	tr$(2)=lpad$(str$(dat),6)

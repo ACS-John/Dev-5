@@ -198,13 +198,13 @@ ADD: ! r:
 	if useSub  then fnLbl(1,40,"Sub #",6,2)
 	fnLbl(2,1,"General Ledger Number:",mylen,right)
 	if useDept then 
-		fnTxt(2,26,3,0,right,"30",0,"Enter the fund portion of the general ledger number.",0 ) 
+		fnTxt(2,26,3,0,right,'30',0,"Enter the fund portion of the general ledger number.",0 ) 
 		resp$(rc+=1)=str$(dno)
 	end if
-	fnTxt(2,31,6,0,right,"30",0,"Enter the main part of the general ledger number.",0 ) 
+	fnTxt(2,31,6,0,right,'30',0,"Enter the main part of the general ledger number.",0 ) 
 	resp$(rc+=1)=str$(ano)
 	if useSub then 
-		fnTxt(2,40,3,0,right,"30",0,"Enter the sub portion of the general ledger number.",0 ) 
+		fnTxt(2,40,3,0,right,'30',0,"Enter the sub portion of the general ledger number.",0 ) 
 		resp$(rc+=1)=str$(sno)
 	end if
 	fnLbl(3,1,"Description:",mylen,right)
@@ -225,7 +225,7 @@ ADD: ! r:
 	if ~useDept and ~useSub then d$=resp$(2)
 	if useDept and ~useSub then d$=resp$(3)
 	key$=cnvrt$("N 3",dno)&cnvrt$("N 6",ano)&cnvrt$("N 3",sno)
-	read #4,using 'Form POS 1,N 3',key=key$: dno nokey L2310 ! 
+	read #4,using 'form pos 1,N 3',key=key$: dno nokey L2310 ! 
 ! MSGBOX2: !
 	mat ml$(3) 
 	ml$(1)="General ledger account # "&key$&" already " 

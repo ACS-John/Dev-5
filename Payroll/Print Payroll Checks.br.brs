@@ -90,7 +90,7 @@ fnreg_read('Post to Checkbook - Populate Checkbook Payee from Payroll Employee',
 	ssr1=fnss_employee*.01
 	ssr2=fnss_employer*.01
 	open #20: 'Name=[Q]\PRmstr\prCode.h[cno],Shr',internal,input
-	read #20,using 'Form pos 2,pos 5,N 5': ckno
+	read #20,using 'form pos 2,pos 5,N 5': ckno
 	close #20:
 	d1=fnPayPeriodEndingDate
 	fnGetPayrollDates(old_beg_date,old_end_date,read_qtr1,read_qtr2,read_qtr3,read_qtr4)
@@ -103,7 +103,7 @@ fnreg_read('Post to Checkbook - Populate Checkbook Payee from Payroll Employee',
 	fncreg_read('Comp Time Code',compcode$)
 	fnDedNames(mat fullname$,mat abrevName$,mat dedcode,mat calcode,mat dedfed,mat dedfica,mat dedSt,mat dedUc,mat gl$)
 	open #20: 'Name=[Q]\PRmstr\Company.h[cno],Shr',internal,input
-	read #20,using 'Form pos 1,x 120,pos 150,10*C 8,pos 437,15*C 12,N 1': mat d$,mat gln$,gl_installed
+	read #20,using 'form pos 1,x 120,pos 150,10*C 8,pos 437,15*C 12,N 1': mat d$,mat gln$,gl_installed
 	close #20:
 
 	mat hnames$=abrevName$ : bankgl$=gln$(15)
@@ -306,7 +306,7 @@ ScrMainQestions: ! r:
 		mat v=(0) : v1=1
 		! If env$('client')='WashingtonParrish' Then Goto 1110
 		dd$=''
-		read #hDd,using 'Form pos 1,C 10,C 1,N 9,N 2,N 17',key=rpad$(str$(eno),10): key$,dd$,rtn,acc,acn nokey ignore
+		read #hDd,using 'form pos 1,C 10,C 1,N 9,N 2,N 17',key=rpad$(str$(eno),10): key$,dd$,rtn,acc,acn nokey ignore
 		if uprc$(dd$)='Y' and ddcode$='D' then goto L1570
 		if uprc$(dd$)<>'Y' and ddcode$='R' then goto L1570
 		if ddcode$='A' then goto L1570 ! all
@@ -566,7 +566,7 @@ def fn_build_check_record
 	key$=lpad$(str$(bankcode),2)&str$(tcde)&rpad$(tr$(1),8)
 	restore #h_clTransAlloc,key>=key$: nokey L4610
 	do
-		read #h_clTransAlloc,using 'Form pos 1,C 11': newkey$ eof L4610
+		read #h_clTransAlloc,using 'form pos 1,C 11': newkey$ eof L4610
 		if newkey$=key$ then
 			delete #h_clTransAlloc:
 		end if
@@ -690,7 +690,7 @@ def fn_cknum(; returnN) ! check for duplicate check numbers
 		key$=lpad$(str$(bankcode),2)&'1'&lpad$(str$(check_number),8)
 		restore #h_clTransAlloc,key>=key$: nokey CnXit
 		do
-			read #h_clTransAlloc,using 'Form pos 1,C 11': newkey$ eof CnXit
+			read #h_clTransAlloc,using 'form pos 1,C 11': newkey$ eof CnXit
 			if newkey$=key$ then
 				delete #h_clTransAlloc:
 			end if
@@ -722,6 +722,7 @@ def fn_mgl ! WRITE BENEFITS & FICA MATCH
 			
 			L5900: !
 			gl$=mgl$(j2-5)
+			if env$('client')='Crockett County' then fnCleanGl$(gl$)
 			read #h_clGl,using F_CL_GLMSTR,key=gl$,release: de$ nokey InvalidGlNumber
 
 			EXLNKD_L5920: !
@@ -915,15 +916,15 @@ def fn_check_legacy(; extra_lines_at_top,extra_lines_at_bottom)
 	fn_check_dynamic(21+extra_lines_at_bottom,6,6,7,13)
 fnend
 def fn_check_acs
-	pr #255,using 'Form skip 3,pos 80,pic(ZZ/ZZ/ZZ)': dat
-	pr #255,using 'Form skip 2,pos 10,c 30,pos 74,c 18': em$(1),ca$
-	pr #255,using 'Form skip 2,pos 9,C 62': eng$(1:n1)
-	pr #255,using 'Form pos 9,C 62': eng$(n1+1:128)
+	pr #255,using 'form skip 3,pos 80,pic(ZZ/ZZ/ZZ)': dat
+	pr #255,using 'form skip 2,pos 10,c 30,pos 74,c 18': em$(1),ca$
+	pr #255,using 'form skip 2,pos 9,C 62': eng$(1:n1)
+	pr #255,using 'form pos 9,C 62': eng$(n1+1:128)
 	for j=1 to 3
 		pr #255: ''
 	next j
 	for j=1 to 3
-		pr #255,using 'Form pos 12,C 60': em$(j)
+		pr #255,using 'form pos 12,C 60': em$(j)
 	next j
 	pr #255,using 'form pos 1,c 1,skip 7': ''
 fnend
@@ -934,15 +935,15 @@ def fn_check_bethany
 	if sc1$='C' then pr #255: : pr #255: : pr #255: : pr #255: : pr #255:
 	datepos=65
 	pr #255:
-	pr #255,using 'Form pos 9,C 62': eng$(1:n1)
-	pr #255,using 'Form pos 9,C 62': eng$(n1+1:128)
+	pr #255,using 'form pos 9,C 62': eng$(1:n1)
+	pr #255,using 'form pos 9,C 62': eng$(n1+1:128)
 	for j=1 to 3
 		pr #255: ''
 	next j
-	pr #255,using 'Form pos 55,pic(ZZ/ZZ/ZZ),X 4,C 18': dat,ca$
+	pr #255,using 'form pos 55,pic(ZZ/ZZ/ZZ),X 4,C 18': dat,ca$
 	pr #255:
 	for j=1 to 3
-		pr #255,using 'Form pos 12,C 60': em$(j)
+		pr #255,using 'form pos 12,C 60': em$(j)
 	next j
 	pr #255,using 'form pos 1,c 1,skip 9': '' ! changed skip 6 to skip 9 on 10/17/2016
 fnend
@@ -952,16 +953,16 @@ def fn_check_billings
 	pr #255,using 'form pos 40,c 38,skip 1': 'Void After 60 Days'
 	pr #255: ''
 	pr #255: ''
-	pr #255,using 'Form pos 9,C 62': eng$(1:n1)
-	pr #255,using 'Form pos 9,C 62': eng$(n1+1:128)
-	pr #255,using 'Form pos 63,pic(ZZ/ZZ/ZZ),X 4,C 18': dat,ca$
+	pr #255,using 'form pos 9,C 62': eng$(1:n1)
+	pr #255,using 'form pos 9,C 62': eng$(n1+1:128)
+	pr #255,using 'form pos 63,pic(ZZ/ZZ/ZZ),X 4,C 18': dat,ca$
 	pr #255: ''
 	pr #255: ''
 	pr #255: ''
 	pr #255: ''
-	pr #255,using 'Form pos 12,C 60': em$(1)
-	pr #255,using 'Form pos 12,C 60': em$(2)
-	pr #255,using 'Form pos 12,C 60': em$(3)
+	pr #255,using 'form pos 12,C 60': em$(1)
+	pr #255,using 'form pos 12,C 60': em$(2)
+	pr #255,using 'form pos 12,C 60': em$(3)
 	pr #255: ''
 	pr #255: ''
 	pr #255: ''
@@ -975,14 +976,14 @@ fnend
 def fn_check_cerrogordo
 	pr #255: '' : pr #255: '' : pr #255: ''
 	pr #255: '' : pr #255: '' : pr #255: ''
-	pr #255,using 'Form pos 9,C 62': eng$(1:n1)
-	pr #255,using 'Form pos 9,C 62': eng$(n1+1:128)
+	pr #255,using 'form pos 9,C 62': eng$(1:n1)
+	pr #255,using 'form pos 9,C 62': eng$(n1+1:128)
 	pr #255: ''
-	pr #255,using 'Form pos 53,pic(ZZ/ZZ/ZZ),X 6,C 18': dat,ca$
+	pr #255,using 'form pos 53,pic(ZZ/ZZ/ZZ),X 6,C 18': dat,ca$
 	pr #255: ''
 	pr #255: ''
 	for j=1 to 3
-		pr #255,using 'Form pos 12,C 60': em$(j)
+		pr #255,using 'form pos 12,C 60': em$(j)
 	next j
 	pr #255: ''
 	pr #255: ''
@@ -999,15 +1000,15 @@ def fn_check_divernon
 	pr #255: ''
 	pr #255: ''
 	if sc1$='C' then pr #255: : pr #255: : pr #255: : pr #255: : pr #255:
-	pr #255,using 'Form pos 55,pic(ZZ/ZZ/ZZ),X 4,C 18': dat,ca$
-	pr #255,using 'Form pos 9,C 62': eng$(1:n1)
-	pr #255,using 'Form pos 9,C 62': eng$(n1+1:128)
+	pr #255,using 'form pos 55,pic(ZZ/ZZ/ZZ),X 4,C 18': dat,ca$
+	pr #255,using 'form pos 9,C 62': eng$(1:n1)
+	pr #255,using 'form pos 9,C 62': eng$(n1+1:128)
 	pr #255: ''
 	pr #255: ''
 	pr #255: ''
-	pr #255,using 'Form pos 12,C 60': em$(1)
-	pr #255,using 'Form pos 12,C 60': em$(2)
-	pr #255,using 'Form pos 12,C 60': em$(3)
+	pr #255,using 'form pos 12,C 60': em$(1)
+	pr #255,using 'form pos 12,C 60': em$(2)
+	pr #255,using 'form pos 12,C 60': em$(3)
 	pr #255: ''
 	pr #255: ''
 	pr #255: ''
@@ -1022,15 +1023,15 @@ def fn_check_edinburg
 	if sc1$='C' then pr #255: : pr #255: : pr #255: : pr #255: : pr #255:
 	datepos=65
 	pr #255:
-	pr #255,using 'Form pos 9,C 62': eng$(1:n1)
-	pr #255,using 'Form pos 9,C 62': eng$(n1+1:128)
+	pr #255,using 'form pos 9,C 62': eng$(1:n1)
+	pr #255,using 'form pos 9,C 62': eng$(n1+1:128)
 	for j=1 to 3
 		pr #255: ''
 	next j
-	pr #255,using 'Form pos 55,pic(ZZ/ZZ/ZZ),X 4,C 18': dat,ca$
+	pr #255,using 'form pos 55,pic(ZZ/ZZ/ZZ),X 4,C 18': dat,ca$
 	pr #255:
 	for j=1 to 3
-		pr #255,using 'Form pos 12,C 60': em$(j)
+		pr #255,using 'form pos 12,C 60': em$(j)
 	next j
 	pr #255,using 'form pos 1,c 1,skip 6': ''
 	pr #255: : pr #255:
@@ -1038,16 +1039,16 @@ fnend
 def fn_check_hope_welty
 	pr #255: : pr #255: : pr #255: : pr #255: : pr #255: : pr #255:
 	pr #255: : pr #255:
-	pr #255,using 'Form pos 9,C 62': eng$(1:n1)
-	pr #255,using 'Form pos 9,C 62': eng$(n1+1:128)
+	pr #255,using 'form pos 9,C 62': eng$(1:n1)
+	pr #255,using 'form pos 9,C 62': eng$(n1+1:128)
 	pr #255:
-	pr #255,using 'Form pos 53,pic(ZZ/ZZ/ZZ),X 6,C 18': dat,ca$
+	pr #255,using 'form pos 53,pic(ZZ/ZZ/ZZ),X 6,C 18': dat,ca$
 	x=3
 	for j=1 to x
 		pr #255: ''
 	next j
 	for j=1 to 3
-		pr #255,using 'Form pos 12,C 60': em$(j)
+		pr #255,using 'form pos 12,C 60': em$(j)
 	next j
 	pr #255: ''
 	pr #255: ''
@@ -1073,13 +1074,13 @@ def fn_check_tom_richardson
 	pr #255: ''
 	pr #255: ''
 	pr #255: ''
-	pr #255,using 'Form pos 67,pic(ZZ/ZZ/ZZ)': dat
-	pr #255,using 'Form pos 9,C 62,X 4,C 18': eng$(1:n1),ca$
-	pr #255,using 'Form pos 9,C 62': eng$(n1+1:128)
+	pr #255,using 'form pos 67,pic(ZZ/ZZ/ZZ)': dat
+	pr #255,using 'form pos 9,C 62,X 4,C 18': eng$(1:n1),ca$
+	pr #255,using 'form pos 9,C 62': eng$(n1+1:128)
 	pr #255: ''
-	pr #255,using 'Form pos 12,C 60': em$(1)
-	pr #255,using 'Form pos 12,C 60': em$(2)
-	pr #255,using 'Form pos 12,C 60': em$(3)
+	pr #255,using 'form pos 12,C 60': em$(1)
+	pr #255,using 'form pos 12,C 60': em$(2)
+	pr #255,using 'form pos 12,C 60': em$(3)
 	pr #255: ''
 	pr #255: ''
 	pr #255: ''
@@ -1090,16 +1091,16 @@ def fn_check_tom_richardson
 fnend
 def fn_check_thomasboro
 	pr #255: : pr #255: : pr #255: : pr #255: : pr #255: : pr #255:
-	pr #255,using 'Form pos 9,C 62': eng$(1:n1)
-	pr #255,using 'Form pos 9,C 62': eng$(n1+1:128)
+	pr #255,using 'form pos 9,C 62': eng$(1:n1)
+	pr #255,using 'form pos 9,C 62': eng$(n1+1:128)
 	pr #255: : pr #255: : pr #255:
-	pr #255,using 'Form pos 53,pic(ZZ/ZZ/ZZ),X 6,C 18': dat,ca$
+	pr #255,using 'form pos 53,pic(ZZ/ZZ/ZZ),X 6,C 18': dat,ca$
 	x=3
 	for j=1 to x
 		pr #255: ''
 	next j
 	for j=1 to 3
-		pr #255,using 'Form pos 12,C 60': em$(j)
+		pr #255,using 'form pos 12,C 60': em$(j)
 	next j
 	pr #255: ''
 	pr #255: ''
@@ -1115,15 +1116,15 @@ def fn_check_unity
 	if sc1$='C' then pr #255: : pr #255: : pr #255: : pr #255: : pr #255:
 	datepos=65
 	pr #255:
-	pr #255,using 'Form pos 9,C 62': eng$(1:n1)
-	pr #255,using 'Form pos 9,C 62': eng$(n1+1:128)
+	pr #255,using 'form pos 9,C 62': eng$(1:n1)
+	pr #255,using 'form pos 9,C 62': eng$(n1+1:128)
 	for j=1 to 3
 		pr #255: ''
 	next j
-	pr #255,using 'Form pos 55,pic(ZZ/ZZ/ZZ),X 4,C 18': dat,ca$
+	pr #255,using 'form pos 55,pic(ZZ/ZZ/ZZ),X 4,C 18': dat,ca$
 	pr #255:
 	for j=1 to 3
-		pr #255,using 'Form pos 12,C 60': em$(j)
+		pr #255,using 'form pos 12,C 60': em$(j)
 	next j
 	pr #255,using 'form pos 1,c 1,skip 6': ''
 fnend
@@ -1131,15 +1132,15 @@ def fn_check_payrollDoneRight
 	for j=1 to 8
 		pr #255: ''                                                ! line 1-8
 	next j
-	pr #255,using 'Form pos 65,pic(ZZ/ZZ/ZZ),X 4,C 18': dat,ca$  ! line 9
-	pr #255,using 'Form pos 9,C 62': eng$(1:n1)                   ! line 10
-	pr #255,using 'Form pos 9,C 62': eng$(n1+1:128)               ! line 11
+	pr #255,using 'form pos 65,pic(ZZ/ZZ/ZZ),X 4,C 18': dat,ca$  ! line 9
+	pr #255,using 'form pos 9,C 62': eng$(1:n1)                   ! line 10
+	pr #255,using 'form pos 9,C 62': eng$(n1+1:128)               ! line 11
 	pr #255: ''                                                   ! line 12
 	pr #255: ''                                                   ! line 13
 	pr #255: ''                                                   ! line 14
-	pr #255,using 'Form pos 12,C 60': em$(1)                     ! line 15
-	pr #255,using 'Form pos 12,C 60': em$(2)                     ! line 16
-	pr #255,using 'Form pos 12,C 60': em$(3)                     ! line 17
+	pr #255,using 'form pos 12,C 60': em$(1)                     ! line 15
+	pr #255,using 'form pos 12,C 60': em$(2)                     ! line 16
+	pr #255,using 'form pos 12,C 60': em$(3)                     ! line 17
 	for j=1 to 8
 		pr #255: ''                                                ! line 18-25
 	next j
@@ -1415,7 +1416,7 @@ def fn_extract_comp_time
 	key$=lpad$(str$(eno),8)&'             '
 	restore #hHourBreak,key>=key$: nokey EOBREAKDOWN
 	READHOURBREAKDOWN: !
-	read #hHourBreak,using 'Form pos 1,n 8,c 5,n 8,2*n 9.2',release: empno2,class$,tdate,increase,decrease eof EOBREAKDOWN ! kj 4/18/07
+	read #hHourBreak,using 'form pos 1,n 8,c 5,n 8,2*n 9.2',release: empno2,class$,tdate,increase,decrease eof EOBREAKDOWN ! kj 4/18/07
 	if empno2<>eno then goto EOBREAKDOWN
 	if trim$(class$)<>trim$(compcode$) then goto READHOURBREAKDOWN
 	balance+=increase-decrease
@@ -1431,7 +1432,7 @@ def fn_determine_earnings
 	checkkey$=cnvrt$('pic(zzzzzzz#)',eno)&cnvrt$('pic(zz#)',0)&cnvrt$('pd 6',0) ! indexed by employee#,department# and payroll date
 	restore #hCheck,key>=checkkey$: nokey L6920
 	L6580: !
-	read #hCheck,using 'Form pos 1,N 8,n 3,PD 6,N 7,5*PD 3.2,37*PD 5.2': heno,tdn,prd,oldckno,mat tdc,mat tcp eof STORE_VARIABLES : lastrec=rec(hcheck)
+	read #hCheck,using 'form pos 1,N 8,n 3,PD 6,N 7,5*PD 3.2,37*PD 5.2': heno,tdn,prd,oldckno,mat tdc,mat tcp eof STORE_VARIABLES : lastrec=rec(hcheck)
 	if heno<>eno then goto STORE_VARIABLES
 	if prd<beg_date or prd>end_date then ! not this year
 		goto L6580
@@ -1481,7 +1482,7 @@ def fn_accumulate_dept_totals1(&tdepXcount,mat tdep,tdn,&rate) ! probably others
 	adt_L1790: !
 	tdep(j2,1)=tdep(j2,1)+tcp(31)-tcp(30) ! total wage less tips
 	deptgl$=''
-	read #hDepartment,using 'Form pos 12,c 12,pos 62,2*pd 4.2',key=cnvrt$('pic(ZZZZZZZ#)',eno)&cnvrt$('pic(ZZ#)',tdn): deptgl$,tdet(2),tdet(3) ! Nokey 1660
+	read #hDepartment,using 'form pos 12,c 12,pos 62,2*pd 4.2',key=cnvrt$('pic(ZZZZZZZ#)',eno)&cnvrt$('pic(ZZ#)',tdn): deptgl$,tdet(2),tdet(3) ! Nokey 1660
 	tdep(j2,2)=val(deptgl$(1:3)) ! salary for this department
 	tdep(j2,3)=val(deptgl$(4:9))
 	tdep(j2,4)=val(deptgl$(10:12))

@@ -57,7 +57,7 @@ PrHeader: ! r:
 return ! /r
 Finis: ! r:
 	pr #255: ""
-	pr #255,using "Form POS 16,C 21,N 12.2": "Net Amount of Change:",t1
+	pr #255,using "form pos 16,C 21,N 12.2": "Net Amount of Change:",t1
 	fncloseprn
 goto Xit ! /r
 

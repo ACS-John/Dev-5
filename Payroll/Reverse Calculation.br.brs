@@ -18,7 +18,7 @@ fnTop(program$)
 cd1=val(date$(4:5)&date$(7:8)&date$(1:2))
 fnDedNames(mat fullname$,mat abrevname$,mat dedcode,mat newcalcode,mat newdedfed,mat dedfica,mat dedst,mat deduc,mat gl$)
 open #1: "Name=[Q]\PRmstr\Company.h[cno],Shr",internal,input
-read #1,using 'Form POS 605,C 12,N 1': bankgl$,gli
+read #1,using 'form pos 605,C 12,N 1': bankgl$,gli
 close #1:
 if gli=1 then
 	gosub POSTGL0
@@ -37,7 +37,7 @@ else
 end if
 open #9: "Name=[Q]\CLmstr\BankMstr.h[cno],KFName=[Q]\CLmstr\BankIdx1.h[cno],Shr",internal,outIn,keyed
 open #20: "Name=[Q]\CLmstr\Company.h[cno],Shr",i,i,r ioerr L330
-read #20,using 'Form POS 152,N 2',rec=1: bcde
+read #20,using 'form pos 152,N 2',rec=1: bcde
 close #20:
 cli=1
 L330: !
@@ -60,7 +60,7 @@ ASK_EMPLOYEE_NO: !
 	fnTxt(2,28,12,0,1,"3",0,"You can reverse a check from any pay period.  Be sure the payroll date is correct.")
 	resp$(respc+=1)=str$(d1)
 	fnLbl(3,1,"Check Number:",25,1)
-	fnTxt(3,28,8,0,1,"30",0,"Only applicable if checks have been printed. ")
+	fnTxt(3,28,8,0,1,'30',0,"Only applicable if checks have been printed. ")
 	resp$(respc+=1)= ""
 	if exists('[Q]\CLmstr\BankMstr.h[cno]') then
 		fnLbl(4,1,"Bank Code for Checkbook:",25,1)
@@ -106,7 +106,7 @@ L780: form pos 132,2*pd 4.2
 	checkkey$=cnvrt$("pic(ZZZZZZZ#)",eno)&"         "
 	restore #4,key>=checkkey$: nokey UPDATE_MASTER
 do
-	read #4,using "Form POS 1,N 8,n 3,PD 6,N 7,5*PD 3.2,37*PD 5.2": heno,tdn,prd,ckno,mat tdc,mat cp eof UPDATE_MASTER
+	read #4,using "form pos 1,N 8,n 3,PD 6,N 7,5*PD 3.2,37*PD 5.2": heno,tdn,prd,ckno,mat tdc,mat cp eof UPDATE_MASTER
 	if heno<>eno then goto UPDATE_MASTER
 	if prd=d1 then mat tcp=tcp+cp : delete #4:
 	cxk=1
@@ -121,7 +121,7 @@ UPDATE_MASTER: !
 	! UPDATE_DEPARTMENT: !
 	restore #hDepartment,key>=cnvrt$("pic(zzzzzzz#)",eno)&"   ": nokey L1040
 	do
-		read #hDepartment,using 'Form POS 1,N 8,n 3,pos 42,n 6': teno,tdn,lastpd eof L1040
+		read #hDepartment,using 'form pos 1,N 8,n 3,pos 42,n 6': teno,tdn,lastpd eof L1040
 		if teno=eno and fndate_mmddyy_to_ccyymmdd(lastpd)=d1 then
 			rewrite #hDepartment,using "form pos 42,n 6": 0
 		end if
@@ -431,10 +431,10 @@ return  ! /r
 !   fnTos
 !   respc=0: mypos=50
 !   fnLbl(1,1,"Number of Days in this Pay Period:",mypos,1)
-!   fnTxt(1,mypos+3,10,0,1,"30",0,"In order to know how much to accure, the system needs to know the days to accure.")
+!   fnTxt(1,mypos+3,10,0,1,'30',0,"In order to know how much to accure, the system needs to know the days to accure.")
 !   resp$(1)=str$(day)
 !   fnLbl(2,1,"Number of Days to Expense in Last Month:",mypos,1)
-!   fnTxt(2,mypos+3,10,0,1,"30",0,"In order to know how much to accure, the system needs to know the days to accure.")
+!   fnTxt(2,mypos+3,10,0,1,'30',0,"In order to know how much to accure, the system needs to know the days to accure.")
 !   resp$(2)=str$(dayslm)
 !   fnLbl(3,1,"G/L # for Due From Other Funds on Fund # "&oldtgl$(1:3)&":",mypos,1)
 !   fnqgl(3,mypos+3,0,2,pas)
@@ -459,11 +459,11 @@ return  ! /r
 CREATE_LIST: ! r:
 	open #13: "Name=[Temp]\prreverse[Session],size=0,RecL=128,replace",internal,outIn
 	L4000: !
-	read #1,using "FORM pos 1,n 8,pos 132,2*PD 4.2",release: eno,em10,em11 eof L4100
+	read #1,using "form pos 1,n 8,pos 132,2*PD 4.2",release: eno,em10,em11 eof L4100
 	checkkey$=cnvrt$("pic(ZZZZZZZ#)",eno)&"         "
 	restore #4,key>=checkkey$: nokey L4000
 	L4040: !
-	read #4,using "Form POS 1,N 8,n 3,PD 6,N 7,5*PD 3.2,37*PD 5.2": heno,tdn,prd,ckno,mat tdc,mat cp eof L4000
+	read #4,using "form pos 1,N 8,n 3,PD 6,N 7,5*PD 3.2,37*PD 5.2": heno,tdn,prd,ckno,mat tdc,mat cp eof L4000
 	if heno<>eno then goto L4000
 	if prd=d1 then goto L4080
 	goto L4040

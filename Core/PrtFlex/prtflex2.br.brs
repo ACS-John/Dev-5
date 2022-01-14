@@ -19,7 +19,7 @@ columns=1
 ! /r
 	open #11: "Name=[Temp]\Gridname.tmp",i,i,r
 	dim gridname$*40
-	read #11,using 'Form POS 1,C 40',rec=1: gridname$
+	read #11,using 'form pos 1,C 40',rec=1: gridname$
 	close #11:
 	if env$('cursys')='UB' and rln(1)=102 then gosub ASKTRANSET
 PRINTGRID: ! r: Prints the grid

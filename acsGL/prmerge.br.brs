@@ -35,7 +35,7 @@ REWRITE_RECORD: !
 L330: r9=lrec(3)+1
 	nca=0
 	d(1)=eno: d(2)=holdtr4 : d(3)=val(holdtr$)
-	write #3,using ' Form POS 1,N 4,2*PD 4,19*PD 5.2,PD 3',rec=r9,reserve: mat d,nca duprec L330
+	write #3,using ' form pos 1,N 4,2*PD 4,19*PD 5.2,PD 3',rec=r9,reserve: mat d,nca duprec L330
 	mat d=(0)
 	if adr(2)=0 then goto L430
 	read #3,using L400,rec=adr(2),reserve: nca

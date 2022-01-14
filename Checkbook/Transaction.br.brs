@@ -28,7 +28,7 @@ on error goto Ertn
 	transstartdate=date('mm')*10000+100+date('yy') ! changed default to beginning of month as per billing's suggestion on 2/9/12    ! begd
 	transenddate=date('mmddyy') ! val(date$(4:5))*10000+val(date$(7:8))*100+val(date$(1:2))
 	open #20: "Name=[Q]\CLmstr\Company.h[cno],Shr",i,i,r
-	read #20,using 'Form Pos 152,N 2',rec=1,release: wbc : close #20:
+	read #20,using 'form pos 152,N 2',rec=1,release: wbc : close #20:
 	gosub OpenTransactionFiles
 	open #h_tralloc=fnH: "Name=[Q]\CLmstr\TrAlloc.h[cno],KFName=[Q]\CLmstr\TrAlloc-Idx.h[cno],Shr",internal,outIn,keyed
 ! /r
@@ -89,12 +89,12 @@ Screen1: ! r:
 	if wbc=0 then wbc=1
 	if trim$(tcde$)="" or trim$(tcde$)="[All]" then tcde$="1" : tcdekey=1 ! try defaulting to check
 	check_ref$=cnvrt$("pic(ZZ)",wbc)&str$(tcdekey)&lpad$(rtrm$(resp$(9)),8)
-	read #h_trmstr(1),using 'Form Pos 1,C 3,C 8,G 6,PD 10.2,C 8,C 35,N 1,N 6,N 1',key=check_ref$: newkey$,tr$(1),tr$(2),tr3,tr$(4),tr$(5),posting_code,clr,scd nokey TRY_RECEIPT
+	read #h_trmstr(1),using 'form pos 1,C 3,C 8,G 6,PD 10.2,C 8,C 35,N 1,N 6,N 1',key=check_ref$: newkey$,tr$(1),tr$(2),tr3,tr$(4),tr$(5),posting_code,clr,scd nokey TRY_RECEIPT
 	editrec=rec(h_trmstr(1)): goto DoTransactionEdit
 	TRY_RECEIPT: !
 	tcde$="2" ! try as receipt
 	check_ref$=cnvrt$("pic(ZZ)",wbc)&str$(tcdekey)&lpad$(rtrm$(resp$(9)),8)
-	read #h_trmstr(1),using 'Form Pos 1,C 3,C 8,G 6,PD 10.2,C 8,C 35,N 1,N 6,N 1',key=check_ref$: newkey$,tr$(1),tr$(2),tr3,tr$(4),tr$(5),posting_code,clr,scd nokey Menu1
+	read #h_trmstr(1),using 'form pos 1,C 3,C 8,G 6,PD 10.2,C 8,C 35,N 1,N 6,N 1',key=check_ref$: newkey$,tr$(1),tr$(2),tr3,tr$(4),tr$(5),posting_code,clr,scd nokey Menu1
 	editrec=rec(h_trmstr(1)): goto DoTransactionEdit
 goto Menu1 ! /r
 OpenTransactionFiles: ! r:
@@ -169,7 +169,7 @@ Menu1: ! r:
 	restore #h_trmstr(1):
 	transactionsTotal=0
 	READ_TRMSTR1_1: !
-	read #h_trmstr(1),using 'Form Pos 1,C 3,C 8,G 6,PD 10.2,C 8,C 35,N 1,N 6,N 1': newkey$,tr$(1),tr$(2),tr3,tr$(4),tr$(5),posting_code,clr,scd eof EO_FLEX1
+	read #h_trmstr(1),using 'form pos 1,C 3,C 8,G 6,PD 10.2,C 8,C 35,N 1,N 6,N 1': newkey$,tr$(1),tr$(2),tr3,tr$(4),tr$(5),posting_code,clr,scd eof EO_FLEX1
 	if wbc<>0 and val(newkey$(1:2))<>wbc then goto READ_TRMSTR1_1
 	if wtt<>0 and val(newkey$(3:3))<>wtt then goto READ_TRMSTR1_1
 	if wpayee$<>'[All]' and trim$(wpayee$)<>trim$(tr$(4)) then goto READ_TRMSTR1_1
@@ -261,7 +261,7 @@ StandardBreakdown: ! r:
 	key$=lpad$(str$(bank_code),2)&str$(tcde)&rpad$(tr$(1),8)
 	restore #h_tralloc,key>=key$: nokey RemoveTrAllocForKeyEoF
 RemoveTrAllocForKeyRead: !
-	read #h_tralloc,using 'Form Pos 1,C 11': newkey$ eof RemoveTrAllocForKeyEoF
+	read #h_tralloc,using 'form pos 1,C 11': newkey$ eof RemoveTrAllocForKeyEoF
 	if newkey$=key$ then
 		delete #h_tralloc:
 		goto RemoveTrAllocForKeyRead
@@ -293,7 +293,7 @@ READ_PAYEEGL: !
 	goto EO_READSTGL
 GET_TOTAL: !
 	do until totalamt>=val(tr$(3))
-		read #payeegl,using 'Form Pos 1,C 8,c 12,n 6.2,c 30': payeekey$,payeegl$,percent,gldesc$ eof EO_READSTGL
+		read #payeegl,using 'form pos 1,C 8,c 12,n 6.2,c 30': payeekey$,payeegl$,percent,gldesc$ eof EO_READSTGL
 		if vn$<>payeekey$ then goto EO_READSTGL
 		allocamt=round(val(tr$(3))*percent*.01,2)
 		totalalloc+=percent
@@ -306,7 +306,7 @@ GET_TOTAL: !
 EO_READSTGL: !
 	if totalamt<>val(tr$(3)) then
 		allocamt-=totalamt-val(tr$(3))
-		rewrite #h_tralloc,using 'Form Pos 24,Pd 5.2',rec=lastrec: allocamt noRec ASSIGN_IF_EMPTY
+		rewrite #h_tralloc,using 'form pos 24,Pd 5.2',rec=lastrec: allocamt noRec ASSIGN_IF_EMPTY
 ! plug any rounding differences into last allocation
 	end if
 ASSIGN_IF_EMPTY: if trim$(tr$(5))="" then tr$(5)=resp$(6)(9:30) ! assign a name if none entered
@@ -317,7 +317,7 @@ XIT_READSTGL: !
 return  ! /r
 DoTransactionEdit: ! r:
 	if editrec=0 then goto Menu1
-	read #h_trmstr(1),using 'Form POS 1,N 2,N 1,C 8,G 6,pd 10.2,C 8,C 35,N 1,N 6,N 1',rec=editrec,reserve: bank_code,tcde,tr$(1),tr$(2),tx3,tr$(4),tr$(5),posting_code,clr,scd ! noRec Menu1
+	read #h_trmstr(1),using 'form pos 1,N 2,N 1,C 8,G 6,pd 10.2,C 8,C 35,N 1,N 6,N 1',rec=editrec,reserve: bank_code,tcde,tr$(1),tr$(2),tx3,tr$(4),tr$(5),posting_code,clr,scd ! noRec Menu1
 	tr$(3)=str$(tx3)
 	ad1=0
 	! if posting_code>0 then gosub crgl1
@@ -327,7 +327,7 @@ Save: ! r:
 	save_good=false
 	if editrec>0 then goto EMPTY_BANK_MSG
 	check_key$=cnvrt$("pic(ZZ)",wbc)&str$(tcde)&lpad$(rtrm$(tr$(1)),8)
-	read #h_trmstr(1),using 'Form Pos 1,C 11',key=check_key$: newkey$ nokey EMPTY_BANK_MSG
+	read #h_trmstr(1),using 'form pos 1,C 11',key=check_key$: newkey$ nokey EMPTY_BANK_MSG
 	mat ml$(1)
 	ml$(1)="You already have a transaction with reference # "&trim$(tr$(1))&"."
 	fnmsgbox(mat ml$,resp$,'',0)
@@ -354,7 +354,7 @@ Save: ! r:
 	end if
 RELEASE_TRMSTR1: release #h_trmstr(1):
 	if editrec<>0 then
-		read #h_trmstr(1),using 'Form POS 1,N 2,N 1,C 8,Pos 18,PD 10.2,pos 71,n 1',rec=editrec,reserve: oldbank_code,oldtcde,oldtr1$,oldtr3,oldposting_code
+		read #h_trmstr(1),using 'form pos 1,N 2,N 1,C 8,pos 18,PD 10.2,pos 71,n 1',rec=editrec,reserve: oldbank_code,oldtcde,oldtr1$,oldtr3,oldposting_code
 	end if
  
 	! if allocations changed on a posted transaction tell them to update their general ledger
@@ -388,9 +388,9 @@ RELEASE_TRMSTR1: release #h_trmstr(1):
 		restore #h_tralloc,key=oldkey$: nokey EO_UPDATE_TRALLOC_KEYS
 		READ_TRALLOC_UPDATE: !
 		do
-			read #h_tralloc,using 'Form Pos 1,C 11',reserve: readkey$ eof L2130
+			read #h_tralloc,using 'form pos 1,C 11',reserve: readkey$ eof L2130
 			if oldkey$=readkey$ then
-				rewrite #h_tralloc,using 'Form Pos 1,C 11',release: newkey$
+				rewrite #h_tralloc,using 'form pos 1,C 11',release: newkey$
 			end if
 		loop while oldkey$=readkey$
 		release #h_tralloc:
@@ -407,18 +407,18 @@ RELEASE_TRMSTR1: release #h_trmstr(1):
 	tx3=val(tr$(3))
 	if editrec<>0 then
 		tr2=val(tr$(2))
-		rewrite #h_trmstr(1),using 'Form POS 1,N 2,N 1,C 8,G 6,pd 10.2,C 8,C 35,N 1,N 6,N 1',same,reserve: bank_code,tcde,tr$(1),tr2,tx3,tr$(4),tr$(5),posting_code,clr,scd
+		rewrite #h_trmstr(1),using 'form pos 1,N 2,N 1,C 8,G 6,pd 10.2,C 8,C 35,N 1,N 6,N 1',same,reserve: bank_code,tcde,tr$(1),tr2,tx3,tr$(4),tr$(5),posting_code,clr,scd
 		goto L2260
 	end if
 	check_key$=cnvrt$("pic(ZZ)",wbc)&str$(tcde)&lpad$(rtrm$(tr$(1)),8)
-	read #h_trmstr(1),using 'Form Pos 1,C 11',key=check_key$: newkey$ nokey L2250
+	read #h_trmstr(1),using 'form pos 1,C 11',key=check_key$: newkey$ nokey L2250
 	mat ml$(1)
 	ml$(1)="You already have a transaction with reference # "&trim$(tr$(1))&"."
 	fnmsgbox(mat ml$,resp$,'',0)
 	tr$(1)=""
 	goto TransactionFm
 	L2250: !
-	tr2=val(tr$(2)): write #h_trmstr(1),using 'Form POS 1,N 2,N 1,C 8,G 6,pd 10.2,C 8,C 35,N 1,N 6,N 1',reserve: bank_code,tcde,tr$(1),tr2,tx3,tr$(4),tr$(5),posting_code,clr,scd
+	tr2=val(tr$(2)): write #h_trmstr(1),using 'form pos 1,N 2,N 1,C 8,G 6,pd 10.2,C 8,C 35,N 1,N 6,N 1',reserve: bank_code,tcde,tr$(1),tr2,tx3,tr$(4),tr$(5),posting_code,clr,scd
 	editrec=rec(h_trmstr(1))
 	L2260: !
 	if ckey=1 and allocationstotal<>val(tr$(3)) then
@@ -441,9 +441,9 @@ TransactionVoid: ! r:
 	key$=cnvrt$('pic(ZZ)',bank_code)&str$(tcde)&lpad$(trim$(tr$(1)),8)
 	restore #h_tralloc,key>=key$: nokey VOID_EO_TRALLOC
 	VOID_READ_TRALLOC: !
-	read #h_tralloc,using 'Form Pos 1,C 11,C 12,pd 5.2,C 30,G 6,X 3,C 12,G 1': newkey$,item$(1),tmp,item$(3),item$(4),item$(5),item$(6) eof VOID_EO_TRALLOC
+	read #h_tralloc,using 'form pos 1,C 11,C 12,pd 5.2,C 30,G 6,X 3,C 12,G 1': newkey$,item$(1),tmp,item$(3),item$(4),item$(5),item$(6) eof VOID_EO_TRALLOC
 	if key$=newkey$ then
-		rewrite #h_tralloc,using 'Form Pos 24,PD 5.2,C 30',release: 0,'Void'
+		rewrite #h_tralloc,using 'form pos 24,PD 5.2,C 30',release: 0,'Void'
 		goto VOID_READ_TRALLOC
 	else
 		release #h_tralloc:
@@ -477,7 +477,7 @@ TransactionDelete: ! r:
 		key$=cnvrt$('pic(ZZ)',bank_code)&str$(tcde)&lpad$(trim$(tr$(1)),8)
 		restore #h_tralloc,key>=key$: nokey DONE_DELETETRALLOC
 		do
-			read #h_tralloc,using 'Form Pos 1,C 11',reserve: oldkey$ eof DONE_DELETETRALLOC
+			read #h_tralloc,using 'form pos 1,C 11',reserve: oldkey$ eof DONE_DELETETRALLOC
 			if oldkey$=key$ then
 				delete #h_tralloc,release:
 			end if
@@ -493,14 +493,14 @@ AllocationAdd: ! r:
 	trabank_code=bank_code : tratcde=tcde
 	track$=lpad$(trim$(tr$(1)),8) : tradesc$=tr$(5)(1:12)
 	tragl$=traivd$=trapo$='' : traamt=0 : tragde=posting_code
-	! write #h_tralloc,using 'Form Pos 1,N 2,N 1,C 8,C 12,PD 5.2,C 30,G 6,X 3,C 12,N 1',reserve: trabank_code,tratcde,track$,tragl$,traamt,tradesc$,traivd$,trapo$,tragde
-	! read #h_tralloc,using 'Form Pos 1,N 2,N 1,C 8,C 12,PD 5.2,C 30,G 6,X 3,C 12,N 1',same,reserve: trabank_code,tratcde,track$,tragl$,traamt,tradesc$,traivd$,trapo$,tragde
+	! write #h_tralloc,using 'form pos 1,N 2,N 1,C 8,C 12,PD 5.2,C 30,G 6,X 3,C 12,N 1',reserve: trabank_code,tratcde,track$,tragl$,traamt,tradesc$,traivd$,trapo$,tragde
+	! read #h_tralloc,using 'form pos 1,N 2,N 1,C 8,C 12,PD 5.2,C 30,G 6,X 3,C 12,N 1',same,reserve: trabank_code,tratcde,track$,tragl$,traamt,tradesc$,traivd$,trapo$,tragde
 return  ! /r
 AllocationRead: ! r: uses allocrec and returns ???
 	if allocrec=0 then
 		track$=lpad$(trim$(tr$(1)),8)
 	else
-		read #h_tralloc,using 'Form Pos 1,N 2,N 1,C 8,C 12,pd 5.2,C 30,G 6,X 3,C 12,N 1',rec=allocrec,reserve: trabank_code,tratcde,track$,tragl$,traamt,tradesc$,traivd$,trapo$,tragde
+		read #h_tralloc,using 'form pos 1,N 2,N 1,C 8,C 12,pd 5.2,C 30,G 6,X 3,C 12,N 1',rec=allocrec,reserve: trabank_code,tratcde,track$,tragl$,traamt,tradesc$,traivd$,trapo$,tragde
 	end if
 return  ! /r
 AllocationFm: ! r:
@@ -656,7 +656,7 @@ TransactionFm: ! r: requires typeofentry, scd, and many more
 	key$=cnvrt$('pic(ZZ)',bank_code)&str$(tcde)&lpad$(trim$(tr$(1)),8)
 	restore #h_tralloc,key>=key$: nokey EO_FLEX2
 READ_TRALLOC_1: !
-	read #h_tralloc,using 'Form Pos 1,C 11,C 12,pd 5.2,C 30,G 6,X 3,C 12,G 1': newkey$,item$(2),tmp,item$(4),item$(5),item$(6),item$(7) eof EO_FLEX2
+	read #h_tralloc,using 'form pos 1,C 11,C 12,pd 5.2,C 30,G 6,X 3,C 12,G 1': newkey$,item$(2),tmp,item$(4),item$(5),item$(6),item$(7) eof EO_FLEX2
 	if key$<>newkey$ then goto EO_FLEX2
 	allocationstotal+=tmp
 	item$(1)=str$(rec(h_tralloc))
@@ -720,7 +720,7 @@ EO_FLEX2: ! /r
 	end if
 	if holdtr1$=tr$(1) and editrec>0 then goto L3780 ! r: duplicate transaction?
 	check_key$=cnvrt$("pic(ZZ)",wbc)&str$(tcde)&lpad$(rtrm$(tr$(1)),8)
-	read #h_trmstr(1),using 'Form Pos 1,C 11',key=check_key$: newkey$ nokey L3780
+	read #h_trmstr(1),using 'form pos 1,C 11',key=check_key$: newkey$ nokey L3780
 	mat ml$(1)
 	ml$(1)="You already have a transaction with reference # "&trim$(tr$(1))&"."
 	fnmsgbox(mat ml$,resp$,'',0)

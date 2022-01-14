@@ -25,12 +25,12 @@
 	if ckey=5 or ckey=cancel then goto Xit else : _
 		rd1=val(resp$(1))
 READ_CHECKS: !
-	read #1,using "Form POS 1,N 8,n 3,PD 6,N 7,5*PD 3.2,37*PD 5.2": heno,tdn,prd,realckno,mat tdc,mat cp eof END1
+	read #1,using "form pos 1,N 8,n 3,PD 6,N 7,5*PD 3.2,37*PD 5.2": heno,tdn,prd,realckno,mat tdc,mat cp eof END1
 	if prd>=rd1 then goto KEEP
 	goto READ_CHECKS
  
 KEEP: !
-	write #work1,using "Form POS 1,N 8,n 3,PD 6,N 7,5*PD 3.2,37*PD 5.2": heno,tdn,prd,realckno,mat tdc,mat cp
+	write #work1,using "form pos 1,N 8,n 3,PD 6,N 7,5*PD 3.2,37*PD 5.2": heno,tdn,prd,realckno,mat tdc,mat cp
 	goto READ_CHECKS
  
 END1: !

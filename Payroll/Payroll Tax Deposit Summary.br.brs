@@ -47,13 +47,13 @@ open #h_employee=fnH: "Name=[Q]\PRmstr\Employee.h[cno],Shr",i,i,r
 open #h_checks=fnH: "Name=[Q]\PRmstr\payrollchecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno]",internal,outIn,keyed
 do
 	ReadEmployee: !
-	read #h_employee,using "Form POS 1,N 8,C 30": eno,em$ eof PrFinalTotals
+	read #h_employee,using "form pos 1,N 8,C 30": eno,em$ eof PrFinalTotals
 	checkkey$=cnvrt$("pic(ZZZZZZZ#)",eno)&"         "
 	foundone=1
 	restore #h_checks,key>=checkkey$: nokey ReadEmployee
 	do
 		dim tdc(10)
-		read #h_checks,using "Form POS 1,N 8,n 3,PD 6,N 7,5*PD 3.2,37*PD 5.2": heno,dep,prd,ckno,mat tdc,mat cp eof ReadEmployee
+		read #h_checks,using "form pos 1,N 8,n 3,PD 6,N 7,5*PD 3.2,37*PD 5.2": heno,dep,prd,ckno,mat tdc,mat cp eof ReadEmployee
 		if eno=heno and prd=>beg_date and prd<=end_date then
 			if dep>0 then ! department 0 not totaled
 				deptot(dep,1)+=cp(31)

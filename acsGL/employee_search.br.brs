@@ -26,7 +26,7 @@ def library fnemployee_search(&x$;fixgrid)
 	usefile=fnflexinit1('Employee',1,1,10,70,mat ch$,mat cm$,1,usefile)
 	if usefile>0 then goto L280 ! file already exists, do not recreate
 	READ_FILE: !
-		read #file_num,using 'Form POS 1,c 4,3*c 25,c 11': mat item$ eof L280 ioerr ERR_READ
+		read #file_num,using 'form pos 1,c 4,3*c 25,c 11': mat item$ eof L280 ioerr ERR_READ
 		fnflexadd1(mat item$)
 	goto READ_FILE
 

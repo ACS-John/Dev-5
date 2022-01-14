@@ -20,9 +20,9 @@ autoLibrary
 ! /r
   fnTop(program$,cap$="Print Accumulated Trial Balance")
   open #20: "Name=[Q]\GLmstr\Company.h[cno],Shr",i,i,r
-  read #20,using 'Form Pos 152,3*C 12',rec=1: mat cogl$
-  read #20,using "Form pos 296,N 2",rec=1: lmu
-  read #20,using 'Form Pos 384,n 2',rec=1: nap
+  read #20,using 'form pos 152,3*C 12',rec=1: mat cogl$
+  read #20,using "form pos 296,N 2",rec=1: lmu
+  read #20,using 'form pos 384,n 2',rec=1: nap
   close #20:
   fncreg_read('Last "Capital" Account',lastCapitalAccount$,cogl$(3))
   fncreg_Read('Print Ending Balance on First Line',petro_opt$,'False')
@@ -44,7 +44,7 @@ SCREEN1: ! r:
   fnChk(2,mypos,"Print Ending Balance on First Line:",1,0)
   resp$(respc_prBalFirst:=rc+=1)=petro_opt$
   fnLbl(3,1,"Period Code to pr (blank for all):",mylen,right)
-  fnTxt(3,mypos,2,0,1,"30",0,"You can pr any month or the entire year.")
+  fnTxt(3,mypos,2,0,1,'30',0,"You can pr any month or the entire year.")
   resp$(respc_periodCode:=rc+=1)="" ! STR$(LMU)
   fnFra(5,1,5,90,"Selection Type"," ",0) : frameno=1
   fnOpt(1,3,"Print All GL Accounts",0,frameno)
@@ -69,7 +69,7 @@ SCREEN1: ! r:
   fnTxt(2,mypos,10,0,1,"3",0,"Enter a date to filter results or blank for all",frameno)
   resp$(resp_dateEnd:=rc+=1)=date$(endday,'ccyymmdd')
   fnLbl(4,1,'Fund Number:',mylen,right,0,frameno,0,"Select a Cost Center to filter results or blank for all") ! costCenterFilter
-  fnTxt(4,mypos,2,0,1,"30",0,"Select a Cost Center to filter results or blank for all",frameno)
+  fnTxt(4,mypos,2,0,1,'30',0,"Select a Cost Center to filter results or blank for all",frameno)
   resp$(resp_costCenter:=rc+=1)=""
   fnCmdSet(2)
   ckey=fnAcs(mat resp$)

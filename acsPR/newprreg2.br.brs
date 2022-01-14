@@ -23,7 +23,7 @@ def fn_payroll_register_2(; det,include_tips_in_other_wh,append_reg1,ppdOverride
 	fnTop(program$,"Payroll Registers")
 	! r: read ckno
 	open #hPrCode=fnH: "Name=[Q]\PRmstr\prCode.h[cno],Shr",internal,input ioerr GetCkNoEnd
-	read #hPrCode,using 'Form POS 5,N 5': ckno
+	read #hPrCode,using 'form pos 5,N 5': ckno
 	close #hPrCode:
 	GetCkNoEnd: ! /r
 
@@ -59,7 +59,7 @@ def fn_payroll_register_2(; det,include_tips_in_other_wh,append_reg1,ppdOverride
 	open #hDepartment=fnH: "Name=[Q]\PRmstr\Department.h[cno],KFName=[Q]\PRmstr\DeptIdx.h[cno]",internal,outIn,keyed
 	! Read #hDepartment,Using 370,Rec=adr: eno, dep1,lpd,tcd(1),mat tdet,mat hc,mcwh,mat cp
 	P2ReadChecks: !
-	read #hTrans,using "Form POS 1,N 8,n 3,PD 6,N 7,5*PD 3.2,37*PD 5.2": eno,dep1,prdate,ckno,mat tdc,mat cp eof EoPayrollChecks
+	read #hTrans,using "form pos 1,N 8,n 3,PD 6,N 7,5*PD 3.2,37*PD 5.2": eno,dep1,prdate,ckno,mat tdc,mat cp eof EoPayrollChecks
 	!  if eno=307 then pr 'eno '&str$(eno) : exe 'break other_wh' : break_is_on=1 else if break_is_on then exe 'break other_wh off' : break_is_on=0
 	! mcwh now in cp(3)
 	if eno=0 and dep1=0 then goto P2ReadChecks
@@ -275,7 +275,7 @@ P2Header: ! r:
 		pr #255: "\qc  {\f181 \fs16 \b "&trim$(deptname$)&"}"
 		pr #255: "\ql   "
 		! pr #255,Using 1860: A$,"Payroll Register",D$,TRIM$(DEPTNAME$)
-		! Form SKIP 2,POS 1,CC 132,SKIP 1,POS 58,C 18,SKIP 1,POS 1,CC 132,SKIP 1,POS 1,CC 132,SKIP 2
+		! form skip 2,pos 1,CC 132,skip 1,pos 58,C 18,skip 1,pos 1,CC 132,skip 1,pos 1,CC 132,skip 2
 		L1860: pr #255: tab(29);"<----------------Hours----------------->";
 		pr #255: tab(71);"<-Pay->";
 		pr #255: tab(79);"<-----------------Deductions---------------->";

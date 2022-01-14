@@ -84,7 +84,7 @@ L940: form c 9,skip 0
 		if p4=0 then m1=1 else m1=val(a$(j3,3)(1:p4-1))
 		l=int(val(a$(j3,3)(p1:pos(srep$(a$(j3,3),'^','~'),'~')-1))) ! FIELD STORAGE LENGTH
 ! pos(srep$(a$(j3,3),'^','~'),'~')-1         was      P3
-		if p2>1 then dp=val(a$(j3,3)(p2:pos(srep$(a$(j3,3),'^','~'),'~')-1)) else dp=0 ! DECIMAL POS.
+		if p2>1 then dp=val(a$(j3,3)(p2:pos(srep$(a$(j3,3),'^','~'),'~')-1)) else dp=0 ! DECIMAL pos.
 ! pos(srep$(a$(j3,3),'^','~'),'~')-1      was     P3
 		if uprc$(a$(j3,3)(1:p1-2))="PD" then al=l*2-1 else al=l !   ACTUAL FIELD LENGTH
 		l=l*m1 ! TOTAL STORAGE LENGTH

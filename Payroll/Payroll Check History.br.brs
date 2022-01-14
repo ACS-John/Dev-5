@@ -136,7 +136,7 @@ def fn_checkfile(hact$*8,hCheckIdx3,hCheckIdx1,hEmployee)
 		end if
 	goto SCREEN2 ! /r
 	SCREEN3: ! r:
-		read #hCheckIdx3,using "Form POS 1,N 8,n 3,PD 6,N 7,5*PD 3.2,37*PD 5.2",rec=editrec: heno,tdn,prd,ckno,mat tdc,mat tcp noRec SCREEN2
+		read #hCheckIdx3,using "form pos 1,N 8,n 3,PD 6,N 7,5*PD 3.2,37*PD 5.2",rec=editrec: heno,tdn,prd,ckno,mat tdc,mat tcp noRec SCREEN2
 		mat holdtdc=tdc: mat holdtcp=tcp ! hold arrays to see if dollar changes
 	SCREEN3_ADD: !
 		fnTos(sn$="CheckHistory-3")
@@ -144,7 +144,7 @@ def fn_checkfile(hact$*8,hCheckIdx3,hCheckIdx1,hEmployee)
 		if addcode=1 then disablecode=0 else disablecode=1
 		fnLbl(lc+=1,1,"Employee #:",mylen,1)
 		if disablecode then
-		fnTxt(lc,mypos,8,0,0,"30",disablecode)
+		fnTxt(lc,mypos,8,0,0,'30',disablecode)
 		else
 			fncmbemp(lc,mypos,1)
 		end if
@@ -156,7 +156,7 @@ def fn_checkfile(hact$*8,hCheckIdx3,hCheckIdx1,hEmployee)
 		fnTxt(lc,mypos,10,0,0,"3")
 		resp$(rc+=1)=str$(prd)
 		fnLbl(lc+=1,1,"Check #:",mylen,1)
-		fnTxt(lc,mypos,10,0,0,"30")
+		fnTxt(lc,mypos,10,0,0,'30')
 		resp$(rc+=1)=str$(ckno)
 		fnLbl(lc+=1,1,"Regular Hours:",mylen,1)
 		fnTxt(lc,mypos,10,0,0,"32")
@@ -174,54 +174,54 @@ def fn_checkfile(hact$*8,hCheckIdx3,hCheckIdx1,hEmployee)
 		fnTxt(lc,mypos,10,0,0,"32")
 		resp$(rc+=1)=str$(tdc(5))
 		fnLbl(lc+=1,1,"Regular Earnings:",mylen,1)
-		fnTxt(lc,mypos,10,0,0,"10")
+		fnTxt(lc,mypos,10,0,0,'10')
 		resp$(rc+=1)=str$(tcp(26))
 		fnLbl(lc+=1,1,"Overtime Earnings:",mylen,1)
-		fnTxt(lc,mypos,10,0,0,"10")
+		fnTxt(lc,mypos,10,0,0,'10')
 		resp$(rc+=1)=str$(tcp(27))
 		fnLbl(lc+=1,1,"Other Compensation:",mylen,1)
-		fnTxt(lc,mypos,10,0,0,"10")
+		fnTxt(lc,mypos,10,0,0,'10')
 		resp$(rc+=1)=str$(tcp(28))
 		fnLbl(lc+=1,1,"Meals:",mylen,1)
-		fnTxt(lc,mypos,10,0,0,"10")
+		fnTxt(lc,mypos,10,0,0,'10')
 		resp$(rc+=1)=str$(tcp(29))
 		fnLbl(lc+=1,1,"Tips:",mylen,1)
-		fnTxt(lc,mypos,10,0,0,"10")
+		fnTxt(lc,mypos,10,0,0,'10')
 		resp$(rc+=1)=str$(tcp(30))
 		fnLbl(lc+=1,1,"Total Wage:",mylen,1)
-		fnTxt(lc,mypos,10,0,0,"10")
+		fnTxt(lc,mypos,10,0,0,'10')
 		resp$(rc+=1)=str$(tcp(31))
 		fnLbl(lc+=1,1,"Net Pay:",mylen,1)
-		fnTxt(lc,mypos,10,0,0,"10")
+		fnTxt(lc,mypos,10,0,0,'10')
 		resp$(rc+=1)=str$(tcp(32))
 		fnLbl(lc+=2,1,"Workmans Comp Wages:",mylen,1)
-		fnTxt(lc,mypos,10,0,0,"10")
+		fnTxt(lc,mypos,10,0,0,'10')
 		resp$(rc+=1)=str$(tdc(6))
 		fnLbl(lc+=1,1,"SS Wages:",mylen,1)
-		fnTxt(lc,mypos,10,0,0,"10")
+		fnTxt(lc,mypos,10,0,0,'10')
 		resp$(rc+=1)=str$(tdc(7))
 		fnLbl(lc+=1,1,"Medicare Wages:",mylen,1)
-		fnTxt(lc,mypos,10,0,0,"10")
+		fnTxt(lc,mypos,10,0,0,'10')
 		resp$(rc+=1)=str$(tdc(8))
 		fnLbl(lc+=1,1,"Federal U/C Wages:",mylen,1)
-		fnTxt(lc,mypos,10,0,0,"10")
+		fnTxt(lc,mypos,10,0,0,'10')
 		resp$(rc+=1)=str$(tdc(9))
 		fnLbl(lc+=1,1,"State U/C Wages:",mylen,1)
-		fnTxt(lc,mypos,10,0,0,"10")
+		fnTxt(lc,mypos,10,0,0,'10')
 		resp$(rc+=1)=str$(tdc(10))
 
 		mypos+=37 : lc=2
 		fnLbl(lc+=1,38,"Federal Wh:",mylen,1)
-		fnTxt(lc,mypos,10,0,0,"10")
+		fnTxt(lc,mypos,10,0,0,'10')
 		resp$(rc+=1)=str$(tcp(1))
 		fnLbl(lc+=1,38,"SS Withholdings:",mylen,1)
-		fnTxt(lc,mypos,10,0,0,"10")
+		fnTxt(lc,mypos,10,0,0,'10')
 		resp$(rc+=1)=str$(tcp(2))
 		fnLbl(lc+=1,38,"Medicare Wh:",mylen,1)
-		fnTxt(lc,mypos,10,0,0,"10")
+		fnTxt(lc,mypos,10,0,0,'10')
 		resp$(rc+=1)=str$(tcp(3))
 		fnLbl(lc+=1,38,"State Wh:",mylen,1)
-		fnTxt(lc,mypos,10,0,0,"10")
+		fnTxt(lc,mypos,10,0,0,'10')
 		resp$(rc+=1)=str$(tcp(4))
 		for j=1 to 20
 			if trim$(dednames$(j))="" then
@@ -229,7 +229,7 @@ def fn_checkfile(hact$*8,hCheckIdx3,hCheckIdx1,hEmployee)
 			else
 				fnLbl(lc+=1,38,dednames$(j)&":",mylen,1)
 			end if
-			fnTxt(lc,mypos,10, 0,0,"10",fn_isBlank(dednames$(j)))
+			fnTxt(lc,mypos,10, 0,0,'10',fn_isBlank(dednames$(j)))
 			resp$(rc+=1)=str$(tcp(j+4))
 		next j
 		fnCmdKey('&Save',save,1,0)
@@ -299,7 +299,7 @@ def fn_checkfile(hact$*8,hCheckIdx3,hCheckIdx1,hEmployee)
 				fnmsgbox(mat mg$,resp$,cap$,0+48) ! ok + excl
 				goto SCREEN3_ADD
 			else
-				write #hCheckIdx3,using "Form POS 1,N 8,n 3,PD 6,N 7,5*PD 3.2,37*PD 5.2": heno,tdn,prd,ckno,mat tdc,mat tcp
+				write #hCheckIdx3,using "form pos 1,N 8,n 3,PD 6,N 7,5*PD 3.2,37*PD 5.2": heno,tdn,prd,ckno,mat tdc,mat tcp
 				addcode=0
 				goto SCREEN2
 			end if
@@ -318,7 +318,7 @@ def fn_checkfile(hact$*8,hCheckIdx3,hCheckIdx1,hEmployee)
 		end if
 	goto SCREEN2 ! /r
 	Screen3Save: ! r:
-		rewrite #hCheckIdx3,using "Form POS 1,N 8,n 3,PD 6,N 7,5*PD 3.2,37*PD 5.2",rec=editrec: heno,tdn,prd,ckno,mat tdc,mat tcp: eno=heno
+		rewrite #hCheckIdx3,using "form pos 1,N 8,n 3,PD 6,N 7,5*PD 3.2,37*PD 5.2",rec=editrec: heno,tdn,prd,ckno,mat tdc,mat tcp: eno=heno
 	return ! /r
 	ScrFilters: ! r:
 		fnTos(sn$="CHECKhISTORY")
@@ -507,10 +507,10 @@ def fn_checkfile(hact$*8,hCheckIdx3,hCheckIdx1,hEmployee)
 				dim hd$*500
 				dim ul$*500
 				if enableLongName then 
-					hfm$="FORM POS 1,c 25"
+					hfm$="form pos 1,c 25"
 					ul$=hd$="                         "
 				else
-						hfm$="FORM POS 1,c 12"
+						hfm$="form pos 1,c 12"
 						ul$=hd$="            "
 				end if 
 				hs1=0: hs2=0
@@ -670,22 +670,22 @@ def fn_checkfile(hact$*8,hCheckIdx3,hCheckIdx1,hEmployee)
 		mat colhdr$(48) : mat colmask$(48)
 		x=2
 		colhdr$(1)="Rec" : colhdr$(2)="Desc"
-		colmask$(1)="30": colmask$(2)=""
-		if hf(1)=1 then colhdr$(x+=1)=name$(1) : colmask$(x)="30" ! employee #
-		if hf(2)=1 then colhdr$(x+=1)=name$(2) : colmask$(x)="30" ! dept #
+		colmask$(1)='30': colmask$(2)=""
+		if hf(1)=1 then colhdr$(x+=1)=name$(1) : colmask$(x)='30' ! employee #
+		if hf(2)=1 then colhdr$(x+=1)=name$(2) : colmask$(x)='30' ! dept #
 		if hf(3)=1 then colhdr$(x+=1)=name$(3) : colmask$(x)="3" ! Payroll Date
-		if hf(4)=1 then colhdr$(x+=1)=name$(4) : colmask$(x)="30" ! check stop
+		if hf(4)=1 then colhdr$(x+=1)=name$(4) : colmask$(x)='30' ! check stop
 		if hf(5)=1 then colhdr$(x+=1)=name$(5) : colmask$(x)="32"
 		if hf(6)=1 then colhdr$(x+=1)=name$(6) : colmask$(x)="32" ! ot hours
 		if hf(7)=1 then colhdr$(x+=1)=name$(7) : colmask$(x)="32"
 		if hf(8)=1 then colhdr$(x+=1)=name$(8) : colmask$(x)="32"
 		if hf(9)=1 then colhdr$(x+=1)=name$(9) : colmask$(x)="32"
-		if hf(10)=1 then colhdr$(x+=1)=name$(10) : colmask$(x)="10"
-		if hf(11)=1 then colhdr$(x+=1)=name$(11) : colmask$(x)="10"
-		if hf(12)=1 then colhdr$(x+=1)=name$(12) : colmask$(x)="10"
-		if hf(13)=1 then colhdr$(x+=1)=name$(13) : colmask$(x)="10"
+		if hf(10)=1 then colhdr$(x+=1)=name$(10) : colmask$(x)='10'
+		if hf(11)=1 then colhdr$(x+=1)=name$(11) : colmask$(x)='10'
+		if hf(12)=1 then colhdr$(x+=1)=name$(12) : colmask$(x)='10'
+		if hf(13)=1 then colhdr$(x+=1)=name$(13) : colmask$(x)='10'
 		for j=14 to 46
-			if hf(j)=1 then colhdr$(x+=1)=name$(j) : colmask$(x)="10"
+			if hf(j)=1 then colhdr$(x+=1)=name$(j) : colmask$(x)='10'
 		next j
 		mat colhdr$(x) : mat colmask$(x) : mat printitem$(x)
 		fnflexinit1("prchecks",1,1,20,100,mat colhdr$,mat colmask$,1)
@@ -698,7 +698,7 @@ def fn_checkfile(hact$*8,hCheckIdx3,hCheckIdx1,hEmployee)
 		holdtdn=tdn
 		holdprd=prd
 		L4310: !
-		read #hCheckIdx3,using "Form POS 1,N 8,n 3,PD 6,N 7,5*PD 3.2,37*PD 5.2",release: eno,tdn,prd,ckno,mat tdc,mat tcp eof EoChecks
+		read #hCheckIdx3,using "form pos 1,N 8,n 3,PD 6,N 7,5*PD 3.2,37*PD 5.2",release: eno,tdn,prd,ckno,mat tdc,mat tcp eof EoChecks
 		if trim$(hact$)<>"[All]" and hact$<>cnvrt$("pic(zzzzzzzz)",eno) then goto ConsiderAnnual
 		if beg_date<>0 and prd<beg_date then goto L4310
 		if end_date><0 and prd>end_date then goto L4310

@@ -34,20 +34,20 @@ fnLbl(lc+=1,1,"Ending Date of Tax Year:",col1len,1)
 fnTxt(lc,col2pos,12,0,0,"3",0,"If filing annually, this would be the last day of the year.")
 resp$(respc+=1)=str$(end_date)
 fnLbl(lc+=1,1,"Deposits Made:",col1len,1)
-fnTxt(lc,col2pos,12,0,0,"10",0,"Total deposits made for this time frame.")
+fnTxt(lc,col2pos,12,0,0,'10',0,"Total deposits made for this time frame.")
 resp$(respc+=1)=str$(deposits)
 lc+=1
 fnLbl(lc+=1,1,"FUTA Tax Liability 1st Qtr:",col1len,1)
-fnTxt(lc,col2pos,12,0,0,"10",0,"Total FUTA Tax Libality for the first quarter.")
+fnTxt(lc,col2pos,12,0,0,'10',0,"Total FUTA Tax Libality for the first quarter.")
 resp$(resp_qtr1:=respc+=1)=str$(futaqtr1)
 fnLbl(lc+=1,1,"FUTA Tax Liability 2nd Qtr:",col1len,1)
-fnTxt(lc,col2pos,12,0,0,"10",0,"Total FUTA Tax Libality for the second quarter.")
+fnTxt(lc,col2pos,12,0,0,'10',0,"Total FUTA Tax Libality for the second quarter.")
 resp$(resp_qtr2:=respc+=1)=str$(futaqtr2)
 fnLbl(lc+=1,1,"FUTA Tax Liability 3rd Qtr:",col1len,1)
-fnTxt(lc,col2pos,12,0,0,"10",0,"Total FUTA Tax Libality for the third quarter.")
+fnTxt(lc,col2pos,12,0,0,'10',0,"Total FUTA Tax Libality for the third quarter.")
 resp$(resp_qtr3:=respc+=1)=str$(futaqtr3)
 fnLbl(lc+=1,1,"FUTA Tax Liability 4th Qtr:",col1len,1)
-fnTxt(lc,col2pos,12,0,0,"10",0,"Total FUTA Tax Libality for the fourth quarter.")
+fnTxt(lc,col2pos,12,0,0,'10',0,"Total FUTA Tax Libality for the fourth quarter.")
 resp$(resp_qtr4:=respc+=1)=str$(futaqtr4)
 lc+=1
 fnFra(lc+=1,1,5,40,"Option for printing","The system can print the form or just fill in the blanks on a pre-printed form.",0)
@@ -59,10 +59,10 @@ fnFra(lc+=1,1,5,40,"Option for printing","The system can print the form or just 
 	resp$(resp_OptFillIn:=respc+=1)='False'
 	lc+=1 : col1len=12 : col2pos=14
 	fnLbl(lc+=1,1,"Top Margin:",col1len,1,0,frameId)
-	fnTxt(lc,col2pos,3,0,0,"30",0,"Reduce the top margin to move the pr up. Increse to move down.",frameId)
+	fnTxt(lc,col2pos,3,0,0,'30',0,"Reduce the top margin to move the pr up. Increse to move down.",frameId)
 	resp$(resp_top:=respc+=1)=str$(8)
 	fnLbl(lc+=1,1,"Left Margin:",col1len,1,0,frameId)
-	fnTxt(lc,col2pos,3,0,0,"30",0,"Reduce the left margin to move the pr left. Increse to move right.",frameId)
+	fnTxt(lc,col2pos,3,0,0,'30',0,"Reduce the left margin to move the pr left. Increse to move right.",frameId)
 	resp$(resp_left:=respc+=1)=str$(5)
  
 fnCmdSet(2)
@@ -93,7 +93,7 @@ do
 	mat ytdtotal=(0)
 	checkkey$=cnvrt$("pic(zzzzzzz#)",eno)&cnvrt$("pic(zz#)",0)&cnvrt$("pd 6",0) ! index employee#,department# and payroll date
 	restore #4,key>=checkkey$: nokey ANALYZE_WAGES
-	L780: read #4,using "Form POS 1,N 8,n 3,PD 6,N 7,5*PD 3.2,37*PD 5.2": heno,tdn,prd,ckno,mat tdc,mat tcp eof ANALYZE_WAGES
+	L780: read #4,using "form pos 1,N 8,n 3,PD 6,N 7,5*PD 3.2,37*PD 5.2": heno,tdn,prd,ckno,mat tdc,mat tcp eof ANALYZE_WAGES
 	if heno<>eno then goto ANALYZE_WAGES
 	if prd<beg_date or prd>end_date then goto L780 ! not this year
 	mat ytdtotal=ytdtotal+tcp
@@ -108,13 +108,13 @@ do
 	end if
 loop
 HDR: ! r:
-	pr #255,using 'Form POS 20,Cc 40,Cr 20': env$('program_caption'),"Page "&str$(p2+=1)
-	pr #255,using 'Form POS 20,CC 40': "For year ending "&cnvrt$("pic(zzzz/zz/zz)",end_date)
+	pr #255,using 'form pos 20,Cc 40,Cr 20': env$('program_caption'),"Page "&str$(p2+=1)
+	pr #255,using 'form pos 20,CC 40': "For year ending "&cnvrt$("pic(zzzz/zz/zz)",end_date)
 	pr #255: ""
 	pr #255,using L940: "     Rate",a$(1),"Fed ID",b$(1)
 	L940: form pos 1,c 9,pos 17,c 40,pos 59,c 6,pos 69,c 40
-	pr #255,using 'Form POS 3,PIC(ZZZZ.##),POS 17,C 40': feducrat,a$(2)
-	pr #255,using 'Form POS 17,C 40': a$(3)
+	pr #255,using 'form pos 3,PIC(ZZZZ.##),pos 17,C 40': feducrat,a$(2)
+	pr #255,using 'form pos 17,C 40': a$(3)
 	pr #255: ""
 	pr #255: tab(44);"Total Wages   Excess Wages    Taxable"
 	pr #255: " SS Number             Name";
@@ -167,7 +167,7 @@ PRINT_940: ! r: only fills in the blanks at this time
 	fnpa_fontsize(20)
 	if fullform=1 then
 		fnpa_background('S:\Core\pdf\2018\940-PR\Page 1.pdf')
-		! fnpa_pic("S:\acsPR\Form 940 Front.bmp",1,1)
+		! fnpa_pic("S:\acsPR\form 940 Front.bmp",1,1)
 		! fnpa_pic("S:\acsPR\2009.bmp",34+leftmargin,5)
 		! fnpa_pic("S:\acsPR\2010.bmp",34+leftmargin,5)
 		! fnpa_pic("S:\acsPR\2011.bmp",34+leftmargin,5)
@@ -217,7 +217,7 @@ PRINT_940: ! r: only fills in the blanks at this time
 	if (t3*feducrat/100)-deposits<=0 then let fnpa_txt(cnvrt$("pic(-----------.##)",abs((t3*feducrat/100)-deposits)),column3+leftmargin,31+topmargin) ! overpaid
 	fnpa_newpage
 	fnpa_background('S:\Core\pdf\2018\940-PR\Page 2.pdf')
-	! fnpa_pic("S:\acsPR\Form 940 pg2.bmp",1,1)
+	! fnpa_pic("S:\acsPR\form 940 pg2.bmp",1,1)
 	
 	if fullform=1 then x=2.5: y=1 else x=0: y=0 ! adjust for bad alignment
 	lyne=26.4 +topmargin-x : leftmargin=leftmargin-y

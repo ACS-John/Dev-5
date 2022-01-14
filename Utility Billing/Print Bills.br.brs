@@ -414,7 +414,7 @@ MainLoop: ! r: main loop
 		read #hCustomer1,using F_customerA,key=z$: z$,mat e$,f$,a3,mat b,final,mat d,bal,f,mat g,mat gb,route,serviceToMmddYy,serviceFromMmddYy,est nokey MainLoop ! READ_CASSSORT
 	else if enable_cassSort then
 		read #hAddr,using 'form pos 1,pd 3': r6 eof Finis
-		read #hSort1Sequence,using "Form POS 1,C 5,C 4,C 10",rec=r6: zip5$,cr$,z$ noRec MainLoop ! READ_CASSSORT
+		read #hSort1Sequence,using "form pos 1,C 5,C 4,C 10",rec=r6: zip5$,cr$,z$ noRec MainLoop ! READ_CASSSORT
 		read #hCustomer1,using F_customerA,key=z$,release: z$,mat e$,f$,a3,mat b,final,mat d,bal,f,mat g,mat gb,route,serviceToMmddYy,serviceFromMmddYy,est nokey MainLoop ! READ_CASSSORT
 	else
 		read #hCustomer2,using F_customerA: z$,mat e$,f$,a3,mat b,final,mat d,bal,f,mat g,mat gb,route,serviceToMmddYy,serviceFromMmddYy,est eof Finis
@@ -640,7 +640,7 @@ Bud2: ! r: the heart of it...
 return  ! /r
 def fn_getCompanyAddr(mat at$)
 	open #h_company=fnH: "Name=[Q]\UBmstr\Company.h[cno],Shr",internal,input
-	read #h_company,using "Form POS 41,2*C 40": at$(2),at$(3)
+	read #h_company,using "form pos 41,2*C 40": at$(2),at$(3)
 	close #h_company:
 	h_company=0
 	at$(1)=env$('cnam')
@@ -949,9 +949,9 @@ def fn_print_bill_campbell(z$,mat mg$,serviceFrom,serviceTo)
 			pr #255: ""
 		next j
 	end if
-	pr #255,using 'Form POS 1,C 30': e$(1) ! Line 1
-	pr #255,using 'Form POS 1,C 30': pbcampbel_addr$(1) ! Line 2
-	pr #255,using 'Form POS 1,C 30': pbcampbel_addr$(2) ! Line 3
+	pr #255,using 'form pos 1,C 30': e$(1) ! Line 1
+	pr #255,using 'form pos 1,C 30': pbcampbel_addr$(1) ! Line 2
+	pr #255,using 'form pos 1,C 30': pbcampbel_addr$(2) ! Line 3
 	pr #255: "" ! Line 4
 	pr #255: "" ! Line 5
 	pr #255: "" ! Line 5
@@ -991,7 +991,7 @@ def fn_print_bill_campbell(z$,mat mg$,serviceFrom,serviceTo)
 	pr #255: "" ! line 17
 	pr #255: "" ! line 18
 	!if count=3 then pr #255: "" ! skip down a line on the third one only
-	pr #255,using 'Form pos 1,pic(zz/zz/zz),Pos 9,N 8.2,N 8.2,X 2,PIC(ZZ/ZZ/ZZ),POS 42,3*N 12.2,N 12.2': serviceTo,g(12),g(11),serviceTo,g(12),g(11),g(12),g(11) ! line 19
+	pr #255,using 'form pos 1,pic(zz/zz/zz),pos 9,N 8.2,N 8.2,X 2,PIC(ZZ/ZZ/ZZ),pos 42,3*N 12.2,N 12.2': serviceTo,g(12),g(11),serviceTo,g(12),g(11),g(12),g(11) ! line 19
 	if (count+1)/3=int((count+1)/3) then goto PBCAMPBEL_L1250
 	if blankafter<>0 then
 		for j=1 to blankafter
@@ -1199,10 +1199,10 @@ def fn_print_bill_cerro(z$,mat mg$,mat penalty$,serviceFrom,serviceTo)
 	if bal<=0 then penalty=0
 	if bal<0 then g(5)=0
 	pr #255: ""
-	pr #255,using 'Form POS 7,C 20,POS 38,C 25': est$,pe$(1)(1:25)
-	pr #255,using 'Form POS 1,CR 7,X 1,PIC(ZZ/ZZ/ZZ),NZ 13.2,POS 38,C 25': 'DUE BY:',d4,bal,pe$(2)(1:25)
-	pr #255,using 'Form POS 13,C 18,POS 38,C 25': e$(1)(1:18),pe$(3)(1:25)
-	pr #255,using 'Form POS 2,C 10,X 5,C 10,POS 38,C 25': z$,final$,pe$(4)(1:25)
+	pr #255,using 'form pos 7,C 20,pos 38,C 25': est$,pe$(1)(1:25)
+	pr #255,using 'form pos 1,CR 7,X 1,PIC(ZZ/ZZ/ZZ),NZ 13.2,pos 38,C 25': 'DUE BY:',d4,bal,pe$(2)(1:25)
+	pr #255,using 'form pos 13,C 18,pos 38,C 25': e$(1)(1:18),pe$(3)(1:25)
+	pr #255,using 'form pos 2,C 10,X 5,C 10,pos 38,C 25': z$,final$,pe$(4)(1:25)
 	bills+=1
 	pr #255,using 'form pos 2,c 30': mg$(1)
 	pr #255,using 'form pos 2,c 30': mg$(2)
@@ -1746,15 +1746,15 @@ def fn_print_bill_omaha(z$,mat mg$,mat mg2$,serviceFrom,pbo_service_to,mat penal
 		pr #255,using PBO_L1810: bal+penalty,d4,bal,pe$(2)(1:25),fn_mg2$
 	end if
 	PBO_L1810: form pos 4,nz 7.2,x 1,pic(zz/zz/zz),nz 13.2,pos 38,c 25,pos pboposrightcol,c message2_max_len
-	pr #255,using 'Form pos 16,c 18,pos 38,c 25,pos pboPosRightCol,c 30': e$(1)(1:18),pe$(3)(1:25),mg$(1) ! fn_mg2$
-	pr #255,using 'Form pos 5,c 10,x 5,c 10,pos 38,c 25,pos pboPosRightCol,c 30': z$,final$,pe$(4)(1:25),mg$(2) ! fn_mg2$
-	! pr #255,using "Form POS 5,C 30,pos pboPosRightCol,c message2_max_len": mg$(1)
-	! pr #255,using "Form POS 5,C 30,pos pboPosRightCol,c message2_max_len": mg$(2)
+	pr #255,using 'form pos 16,c 18,pos 38,c 25,pos pboPosRightCol,c 30': e$(1)(1:18),pe$(3)(1:25),mg$(1) ! fn_mg2$
+	pr #255,using 'form pos 5,c 10,x 5,c 10,pos 38,c 25,pos pboPosRightCol,c 30': z$,final$,pe$(4)(1:25),mg$(2) ! fn_mg2$
+	! pr #255,using "form pos 5,C 30,pos pboPosRightCol,c message2_max_len": mg$(1)
+	! pr #255,using "form pos 5,C 30,pos pboPosRightCol,c message2_max_len": mg$(2)
 	if bills=3 then ! Bottom of Page
 		bills=0
 		pr #255: newpage
 	else
-		if allign<>1 then ! it isn't a REPRINT so SKIP TOTALS
+		if allign<>1 then ! it isn't a REPRINT so skip TOTALS
 			billsPrintedCount(3)+=1
 		end if
 	end if
@@ -1797,7 +1797,7 @@ def fn_print_bill_pennington(z$,mat mg$,mat mg2$,serviceFrom,serviceTo,penaltyDu
 	if g(6)=0 then
 		pr #255,using pbpennington_L810: gTmpCustomerAddress$(3) ! e$(4)
 	else
-		pr #255,using 'form pos 11,C 20,Pos 32,n 9.2,pos 45,c 30': "Business License Fee",g(6),gTmpCustomerAddress$(3) ! e$(4)
+		pr #255,using 'form pos 11,C 20,pos 32,n 9.2,pos 45,c 30': "Business License Fee",g(6),gTmpCustomerAddress$(3) ! e$(4)
 	end if
 	if g(8)=0 then
 		pr #255,using pbpennington_L810: gTmpCustomerAddress$(4) ! csz$
@@ -2353,8 +2353,8 @@ BulkSort: ! r: sort in bulk sort code sequence
 		open #hBs2Customer=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",i,i,k  ! open in Account order
 		open #hBs2Out=fnH: "Name=[temp]\Temp.[session],Replace,RecL=31",internal,output
 		do
-			read #hBs2Customer,using "Form POS 1,C 10,pos 1741,n 2,pos 1743,n 7,pos 1942,c 12": z$,route,seq,bulk$ eof BS2_EO_CUSTOMER
-			write #hBs2Out,using "Form POS 1,C 12,n 2,n 7,c 10": bulk$,route,seq,z$
+			read #hBs2Customer,using "form pos 1,C 10,pos 1741,n 2,pos 1743,n 7,pos 1942,c 12": z$,route,seq,bulk$ eof BS2_EO_CUSTOMER
+			write #hBs2Out,using "form pos 1,C 12,n 2,n 7,c 10": bulk$,route,seq,z$
 		loop
 		BS2_EO_CUSTOMER: !
 		close #hBs2Customer: ioerr ignore
@@ -2369,7 +2369,7 @@ BulkSort: ! r: sort in bulk sort code sequence
 		open #hBs3Out=fnH: 'Name=[temp]\Temp.[session],Replace,RecL=64',internal,output
 		do
 			read #hCustomer,using form$(hCustomer): mat c$, mat cN eof BS_EO_CUSTOMER
-			write #hBs3Out,using "Form POS 1,C 7,n 2,n 7,c 10": c$(c_alphaSort),cN(c_route),cN(c_sequence),c$(c_account)
+			write #hBs3Out,using "form pos 1,C 7,n 2,n 7,c 10": c$(c_alphaSort),cN(c_route),cN(c_sequence),c$(c_account)
 			! field     C/N Len Spos
 			! alphaSort  C    7    1
 			! route      N    2    8
@@ -2397,8 +2397,8 @@ Sort1: ! r: Select & Sort - sorts Cass1 file    requires: (hCustomer2,&enable_ca
 		if route_filter and route_filter><route then goto END5
 		if customerLastBillingDate=d1 then
 			zip5$=cr$=""
-			read #h_cass1,using "Form POS 96,C 5,POS 108,C 4",key=z$: zip5$,cr$ nokey ignore
-			write #hSort1Sequence,using "Form POS 1,C 5,C 4,C 10": zip5$,cr$,z$
+			read #h_cass1,using "form pos 96,C 5,pos 108,C 4",key=z$: zip5$,cr$ nokey ignore
+			write #hSort1Sequence,using "form pos 1,C 5,C 4,C 10": zip5$,cr$,z$
 		end if
 	loop
 

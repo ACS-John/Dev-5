@@ -70,8 +70,8 @@ def library fnask_w2_info(&taxYear$,&beg_date,&end_date,&empStart$,&empEnd$,&ssr
 		fncreg_read('Dependent Care Benefits',tmp$) : dc1=val(tmp$)
 		fncreg_read('W-2 - State',state$)
 
-		fnreg_read('W-2 - Form 1 Y'              ,tmp$   ,'10' ) : topmargin=val(tmp$)
-		fnreg_read('W-2 - Form 2 Y'              ,tmp$   ,'151') : bottom=val(tmp$)
+		fnreg_read('W-2 - form 1 Y'              ,tmp$   ,'10' ) : topmargin=val(tmp$)
+		fnreg_read('W-2 - form 2 Y'              ,tmp$   ,'151') : bottom=val(tmp$)
 		enableDateRange=0
 		disableSSMCedit=0
 		enableEmpRange=0
@@ -148,13 +148,13 @@ def library fnask_w2_info(&taxYear$,&beg_date,&end_date,&empStart$,&empEnd$,&ssr
 	fnTxt(1,mypos,10,0,1,"34",disableSSMCedit,"Use format such as .062.",franum)
 	resp$(respc_ssrate:=rc+=1)=str$(ssrate)
 	fnLbl(2,1,"Maximum Wage Subject to SS Withholdings:",mylen,1,0,franum)
-	fnTxt(2,mypos,10,0,1,"10",disableSSMCedit,"Enter the maximum wage subject to social security withholdings for the current year just ended.",franum)
+	fnTxt(2,mypos,10,0,1,'10',disableSSMCedit,"Enter the maximum wage subject to social security withholdings for the current year just ended.",franum)
 	resp$(respc_ssmax:=rc+=1)=str$(ssmax)
 	fnLbl(4,1,"Medicare Withholding Rate:",mylen,1,0,franum)
 	fnTxt(4,mypos,10,0,1,"34",disableSSMCedit,"Use format such as .0145 .",franum)
 	resp$(respc_mcrate:=rc+=1)=str$(mcrate)
 	fnLbl(5,1,"Maximum Wage Subject to Medicare Withholdings:",mylen,1,0,franum)
-	fnTxt(5,mypos,10,0,1,"10",disableSSMCedit,"At the present time there is no maximum.  Enter a number larger than any one's wages can be. For example, 999999.00",franum)
+	fnTxt(5,mypos,10,0,1,'10',disableSSMCedit,"At the present time there is no maximum.  Enter a number larger than any one's wages can be. For example, 999999.00",franum)
 	resp$(respc_mcmax:=rc+=1)=str$(mcmax)
 
 	fra3Y=fra2Y+fra2Height+2 : fra3Height=6
@@ -183,10 +183,10 @@ def library fnask_w2_info(&taxYear$,&beg_date,&end_date,&empStart$,&empEnd$,&ssr
 		fnFra(fra4Y,1,2,fraWidth,"Identify the Following Deductions","You have twenty miscellaneous deductions available to you. If you have Qualified Pension or Dependent Care, start with the first deduction and count down to identify the number of the deduction.")
 		cf+=1 : franum=cf
 		fnLbl(1,1,"Qualified Pension Plan:",mylen,1,0,franum)
-		fnTxt(1,mypos,2,0,1,"30",0,"If you have a qualified pension plan that requires the pension plan box to be checked, count down from your 1st miscellaneous deduction to determine the number to enter here.",franum)
+		fnTxt(1,mypos,2,0,1,'30',0,"If you have a qualified pension plan that requires the pension plan box to be checked, count down from your 1st miscellaneous deduction to determine the number to enter here.",franum)
 		resp$(respc_qpenplan:=rc+=1)=str$(pn1)
 		fnLbl(2,1,"Dependent Care Benefits:",mylen,1,0,franum)
-		fnTxt(2,mypos,2,0,1,"30",0,"If you have dependent care benefits that should be identifies on the W-2, count down from your 1st miscellaneous deduction to determine the number to enter here.",franum)
+		fnTxt(2,mypos,2,0,1,'30',0,"If you have dependent care benefits that should be identifies on the W-2, count down from your 1st miscellaneous deduction to determine the number to enter here.",franum)
 		resp$(respc_depCareBen:=rc+=1)=str$(dc1)
 	else if enableAskState then
 		fra4Y=fra3y+fra3Height+2 ! 25
@@ -296,22 +296,22 @@ def fn_setup
 fnend
 def fn_ask_margins
 ! if env$('acsdeveloper')='' then pr bell; : goto am_xit
-	fnreg_read('W-2 - Form 1 Y',amResp$(1),'10' )
-	fnreg_read('W-2 - Form 2 Y',amResp$(2),'151')
+	fnreg_read('W-2 - form 1 Y',amResp$(1),'10' )
+	fnreg_read('W-2 - form 2 Y',amResp$(2),'151')
 	fnreg_read('W-2 - X'       ,amResp$(3),'12' )
 	fnTos
 	mylen=30 : mypos=mylen+2
-	fnLbl(lc+=1,1,"Form 1 Distance from Top (mm):",mylen,1)
+	fnLbl(lc+=1,1,"form 1 Distance from Top (mm):",mylen,1)
 	fnTxt(lc,mypos,3,0,1,'30')
-	fnLbl(lc+=1,1,"Form 2 Distance from Top (mm):",mylen,1)
+	fnLbl(lc+=1,1,"form 2 Distance from Top (mm):",mylen,1)
 	fnTxt(lc,mypos,3,0,1,'30')
 	fnLbl(lc+=1,1,"Left Margin Size (mm):",mylen,1)
 	fnTxt(lc,mypos,3,0,1,'30')
 	fnCmdSet(4)
 	fnAcs(mat amResp$,ckey)
 	if ckey<>5 then
-		fnreg_write('W-2 - Form 1 Y' ,amResp$(1))
-		fnreg_write('W-2 - Form 2 Y' ,amResp$(2))
+		fnreg_write('W-2 - form 1 Y' ,amResp$(1))
+		fnreg_write('W-2 - form 2 Y' ,amResp$(2))
 		fnreg_write('W-2 - X'        ,amResp$(3))
 		topmargin= val(amResp$(1))
 		bottom=    val(amResp$(2))

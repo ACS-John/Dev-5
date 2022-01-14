@@ -15,13 +15,13 @@ ScreenGrid: ! r:
 	colhdr$(4)="1st Rate"
 	mat colhdr$(4)
 	colmask$(1)=colmask$(2)=""
-	colmask$(3)="10"
+	colmask$(3)='10'
 	colmask$(4)="36"
 	mat colmask(4)
 	fnflexinit1("ubrate",myline,mypos,height,width,mat colhdr$,mat colmask$,1)
 	restore #hRate1:
 	do
-		read #hRate1,using 'Form POS 1,C 2,G 2,C 50,32*G 10': mat rt$ eof L1010
+		read #hRate1,using 'form pos 1,C 2,G 2,C 50,32*G 10': mat rt$ eof L1010
 		item$(1)=rt$(1)&rt$(2)
 		item$(2)=rt$(3)(1:30)
 		item$(3)=rt$(4)
@@ -102,27 +102,27 @@ AddNewRecord: ! r:
 
 	rt$(2)=lpad$(str$(g1),2)
 	k$=rt$(1)&rt$(2)
-	read #hRate1,using 'Form POS 1,C 2,G 2,C 50,32*G 10',key=k$: mat rt$ nokey L470
+	read #hRate1,using 'form pos 1,C 2,G 2,C 50,32*G 10',key=k$: mat rt$ nokey L470
 	goto RateEdit ! existing record
 	L470: !
-	write #hRate1,using 'Form POS 1,C 2,G 2,C 50,32*G 10': mat rt$
+	write #hRate1,using 'form pos 1,C 2,G 2,C 50,32*G 10': mat rt$
 goto RateEdit ! /r
 RateEdit: ! r: maintain rate file
-	read #hRate1,using 'Form POS 1,C 2,G 2,C 50,32*G 10',key=k$: mat rt$ nokey ignore
+	read #hRate1,using 'form pos 1,C 2,G 2,C 50,32*G 10',key=k$: mat rt$ nokey ignore
 	fnTos
 	c1=20 : c2=32 : c3=44
 	fnLbl(1,1,"Service Type:",20,1)
 	! fncomboa("ubrate3",1,22,mat option$,"All codes must be between 1 and 99",2)
 	fnTxt(1,22,2,0,0,"",1)
 	fnLbl(1,29,"Rate Code:",10,1)
-	fnTxt(1,40,2,0,0,"30",1)
+	fnTxt(1,40,2,0,0,'30',1)
 
 	fnLbl(2,1,"Description:",20,1)
 	fnTxt(2,22,50)
 	fnLbl(3,1,"Minimum Charge:",20,1)
 	fnTxt(3,22,9,0,1,"32")
 	fnLbl(3,30,"Minimum Usage:",20,1)
-	fnTxt(3,51,9,0,1,"30")
+	fnTxt(3,51,9,0,1,'30')
 
 	fnLbl(5,c1,"Usage",9,2)
 	fnLbl(5,c2,"Usage",9,2)
@@ -132,8 +132,8 @@ RateEdit: ! r: maintain rate file
 	fnLbl(6,c3,"Per Unit",9,2)
 	! x=7
 	for lin=6 to 15
-		fnTxt(lin+1,c1,9,10,1,"30",0) ! 0 decimal
-		fnTxt(lin+1,c2,9,10,1,"30",0)
+		fnTxt(lin+1,c1,9,10,1,'30',0) ! 0 decimal
+		fnTxt(lin+1,c2,9,10,1,'30',0)
 		fnTxt(lin+1,c3,9,9,1,"36")
 		! x=x+3
 	next lin
@@ -168,7 +168,7 @@ RateEdit: ! r: maintain rate file
 	RM_SERVICE_TYPE_VALID: !
 	rt$(2)=lpad$(str$(g1),2)
 	k$=rt$(1)&rt$(2)
-	rewrite #hRate1,using 'Form POS 1,C 2,G 2,C 50,32*G 10',key=k$: mat rt$
+	rewrite #hRate1,using 'form pos 1,C 2,G 2,C 50,32*G 10',key=k$: mat rt$
 goto ScreenGrid ! /r
 PrintProof: ! r:
 	fnTos
@@ -186,7 +186,7 @@ PrintProof: ! r:
 	fnopenprn
 	pg=0
 	do
-		read #ti2,using 'Form POS 1,C 2,G 2,C 50,32*G 10',release: mat rt$ eof PRINT_PROOF_FINIS
+		read #ti2,using 'form pos 1,C 2,G 2,C 50,32*G 10',release: mat rt$ eof PRINT_PROOF_FINIS
 		gosub PrintOneRate
 	loop
 	PRINT_PROOF_FINIS: !
@@ -202,7 +202,7 @@ PrintOneRate: ! r:
 	for j=1 to udim(option$)
 		if trim$(rt$(j*3+3))<>"" or trim$(rt$(j*3+4))<>"" or trim$(rt$(j*3+5))<>"" then
 			if trim$(rt$(j*3+3))<>"0" or trim$(rt$(j*3+4))<>"0" or trim$(rt$(j*3+5))<>"0" then
-				pr #255,using 'Form POS 1,3*C 14': rt$(j*3+3),rt$(j*3+4),rt$(j*3+5)
+				pr #255,using 'form pos 1,3*C 14': rt$(j*3+3),rt$(j*3+4),rt$(j*3+5)
 			end if
 		end if
 	next j

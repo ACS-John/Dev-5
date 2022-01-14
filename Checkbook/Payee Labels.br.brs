@@ -98,15 +98,15 @@ ASK_VN: ! r:
 goto GetStarted ! /r
 
 GetStarted: ! r:
-	read #hPaymstr,using 'Form Pos 1,C 8,4*C 30',key=vn$: vn$,nam$,ad1$,ad2$,csz$ nokey ASK_VN
+	read #hPaymstr,using 'form pos 1,C 8,4*C 30',key=vn$: vn$,nam$,ad1$,ad2$,csz$ nokey ASK_VN
 	goto L530
 	ReadForFirstPayee: !
 	if trim$(vn$)='' or trim$(vn$)="0" then goto READ_PAYMSTR
 	vn$=lpad$(rtrm$(vn$),8)
-	read #hPaymstr,using 'Form Pos 1,C 8,4*C 30',key>=vn$: vn$,nam$,ad1$,ad2$,csz$ eof Finis
+	read #hPaymstr,using 'form pos 1,C 8,4*C 30',key>=vn$: vn$,nam$,ad1$,ad2$,csz$ eof Finis
 	goto L520
 	READ_PAYMSTR: !
-	read #hPaymstr,using 'Form Pos 1,C 8,4*C 30': vn$,nam$,ad1$,ad2$,csz$ eof Finis
+	read #hPaymstr,using 'form pos 1,C 8,4*C 30': vn$,nam$,ad1$,ad2$,csz$ eof Finis
 	L520: !
 	if prtall=check_range and curbal=0 then
 		goto READ_PAYMSTR
@@ -130,9 +130,9 @@ ProcessCheckRange: ! r: uses: ebc,c1,hTrmstr,hPaymstr
 	restore #hTrmstr,key>=tr4$: nokey EO_OPT2
 	do
 		READ_TRMSTR: !
-		read #hTrmstr,using 'Form POS 4,C 8,POS 28,C 8': checkNumber$,vn$ eof EO_OPT2
+		read #hTrmstr,using 'form pos 4,C 8,pos 28,C 8': checkNumber$,vn$ eof EO_OPT2
 		if c2>0 and checkNumber$>lpad$(str$(c2),8) then goto EO_OPT2
-		read #hPaymstr,using 'Form Pos 1,C 8,4*C 30',key=vn$: vn$,nam$,ad1$,ad2$,csz$ nokey READ_TRMSTR
+		read #hPaymstr,using 'form pos 1,C 8,4*C 30',key=vn$: vn$,nam$,ad1$,ad2$,csz$ nokey READ_TRMSTR
 		if printPayeeAddress$<>'True' then
 			ad1$=ad2$=csz$=''
 		end if

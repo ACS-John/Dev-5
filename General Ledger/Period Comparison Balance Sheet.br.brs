@@ -19,8 +19,8 @@
 		! sets fnps,fnpriorcd,fnfscode (primary/secondary,current year/Prior,             period to print)
 	! fnfscode
 	! fnpriorcd
-	open #1: "Name=[Q]\GLmstr\Company.h[cno],Shr",i,i,r: read #1,using "Form pos 384,N 2",rec=1: nap : close #1:
-	open #1: "Name=[Q]\GLmstr\Company.h[cno],Shr",i,i,r: read #1,using "Form pos 296,N 2",rec=1: lmu : close #1:
+	open #1: "Name=[Q]\GLmstr\Company.h[cno],Shr",i,i,r: read #1,using "form pos 384,N 2",rec=1: nap : close #1:
+	open #1: "Name=[Q]\GLmstr\Company.h[cno],Shr",i,i,r: read #1,using "form pos 296,N 2",rec=1: lmu : close #1:
 	m1$(1)="  January" : m1$(2)=" February" : _
 	m1$(3)="    March" : m1$(4)="    April" : _
 	m1$(5)="      May" : m1$(6)="     June" : _
@@ -75,8 +75,8 @@ L530: form pos sp,c 50,skip 1
 L580: if notrans=1 then goto L820 ! 8/4/88
 	if br>=val(r$) and val(r$)><0 then goto L630
 L600: ! READ GENERAL LEDGER MASTER FILE FOR AMOUNTS
-L610: read #3,using 'Form POS MP1,PD 3,POS 87,27*PD 6.2': br,cb,mat by,mat bp eof L810
-	if br=0 then goto L610 ! SKIP IF NO REFERENCE #
+L610: read #3,using 'form pos MP1,PD 3,pos 87,27*PD 6.2': br,cb,mat by,mat bp eof L810
+	if br=0 then goto L610 ! skip IF NO REFERENCE #
 L630: if br=val(r$) then goto L640 else goto L790
 L640: if fnpriorcd=2 then goto L770
 	for j=1 to 13

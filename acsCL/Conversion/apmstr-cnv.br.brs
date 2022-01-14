@@ -1,4 +1,3 @@
-! Replace S:\acsCL\Conversion\APmstr-Cnv
 ! Pull stuff from old Accounts Payable into new Checkbook company
 def library fnApMstrConversion
   autoLibrary
@@ -41,14 +40,14 @@ SCR1: !
   open #paytrans=fnH: "Name=[Q]\CLmstr\PayTrans.h[cno],Version=2,Size=0,RecL=114,Replace",i,outi,r
   open #unpdaloc=fnH: "Name=[Q]\CLmstr\UnPdAloc.h[cno],SIZE=0,RecL=70,Replace",i,outi,r
   do
-    read #apmstr,using 'Form POS 1,C 8,4*C 30,POS 159,C 12,POS 176,PD 5.2,POS 219,N 2,C 11,POS 213,2*PD 3': vn$,nam$,ad1$,ad2$,csz$,ph$,ytdp,typ,ss$,mat ta eof EO_11
+    read #apmstr,using 'form pos 1,C 8,4*C 30,pos 159,C 12,pos 176,PD 5.2,pos 219,N 2,C 11,pos 213,2*PD 3': vn$,nam$,ad1$,ad2$,csz$,ph$,ytdp,typ,ss$,mat ta eof EO_11
     gosub UNPDMSTR
     mat ta=(0)
     lr2=lrec(payalloc)+1
-    write #payalloc,using 'Form POS 1,C 8,N 3,N 6,N 3,PD 3.2,C 30,PD 3',rec=lr2: vn$,mat gl,100,"",0
+    write #payalloc,using 'form pos 1,C 8,N 3,N 6,N 3,PD 3.2,C 30,PD 3',rec=lr2: vn$,mat gl,100,"",0
     mat ta=(lr2)
     lr1=lrec(paymstr)+1
-    write #paymstr,using 'Form POS 1,C 8,4*C 30,PD 5.2,N 2,C 11,2*PD 3,C 12',rec=lr1: vn$,nam$,ad1$,ad2$,csz$,ytdp,typ,ss$,mat ta,ph$
+    write #paymstr,using 'form pos 1,C 8,4*C 30,PD 5.2,N 2,C 11,2*PD 3,C 12',rec=lr1: vn$,nam$,ad1$,ad2$,csz$,ytdp,typ,ss$,mat ta,ph$
   loop
 EO_11: ! r:
   close #paymstr:
@@ -72,7 +71,7 @@ UNPDMSTR: ! r: BUILD UNPAID FILE
   adr=ta(1)
   READ_APTRANS: !
   if adr=0 then goto EO_UNPDMSTR
-  read #aptrans,using 'Form POS 1,C 8,C 12,C 20,8*PD 5.2,6*PD 4,3*N 1,N 2,6*C 12,5*C 20,5*PD 5.2,PD 3',rec=adr,reserve: v$,iv$,id$,mat a,mat dt,mat cd,dgl$,mat gl$,mat gld$,mat gla,nta noRec EO_UNPDMSTR
+  read #aptrans,using 'form pos 1,C 8,C 12,C 20,8*PD 5.2,6*PD 4,3*N 1,N 2,6*C 12,5*C 20,5*PD 5.2,PD 3',rec=adr,reserve: v$,iv$,id$,mat a,mat dt,mat cd,dgl$,mat gl$,mat gld$,mat gla,nta noRec EO_UNPDMSTR
   if dt(4)>0 then adr=nta: goto READ_APTRANS ! only unpaids
   if a(2)=0 then goto UNPDMSTR_ATZ
   mat aa=(0)
@@ -83,10 +82,10 @@ UNPDMSTR: ! r: BUILD UNPAID FILE
     gla(j)=-gla(j)
     XB: !
     lr4=lrec(unpdaloc)+1
-    write #unpdaloc,using 'Form POS 1,C 8,2*C 12,PD 5.2,C 30,PD 3',rec=lr4: vn$,iv$,gl$(j),gla(j),gld$(j),0
+    write #unpdaloc,using 'form pos 1,C 8,2*C 12,PD 5.2,C 30,PD 3',rec=lr4: vn$,iv$,gl$(j),gla(j),gld$(j),0
     if aa(1)=0 then aa(1)=lr4
     if aa(2)>0 then
-      rewrite #unpdaloc,using 'Form POS 68,PD 3',rec=aa(2): lr4
+      rewrite #unpdaloc,using 'form pos 68,PD 3',rec=aa(2): lr4
     end if
     aa(2)=lr4
     NXJ: !
@@ -107,7 +106,7 @@ UNPDMSTR: ! r: BUILD UNPAID FILE
   up$(3)="" ! po #
   up$(4)=id$(1:18)
   lr3=lrec(paytrans)+1
-  write #paytrans,using 'Form POS 1,C 8,c 12,2*G 6,C 12,C 18,G 10.2,n 1,n 2,G 8,G 6,N 1,n 6,n 10.2,n 8': vn$,iv$,mat up$,upa,pcde,bcde,ckn,dp,gde,pdte,disamt,ddate
+  write #paytrans,using 'form pos 1,C 8,c 12,2*G 6,C 12,C 18,G 10.2,n 1,n 2,G 8,G 6,N 1,n 6,n 10.2,n 8': vn$,iv$,mat up$,upa,pcde,bcde,ckn,dp,gde,pdte,disamt,ddate
   UNPDMSTR_ATZ: !
   adr=nta
   goto READ_APTRANS

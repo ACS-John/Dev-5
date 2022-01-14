@@ -82,7 +82,7 @@ SCR2: ! r:
 	fnTos
 	respc=0: mylen=15: mypos=mylen+3
 	fnLbl(1,1,"Report #:",mylen,1)
-	fnTxt(1,mypos,2,2,0,"30",0,"")
+	fnTxt(1,mypos,2,2,0,'30',0,"")
 	resp$(respc+=1)=str$(rn)
 	fnLbl(2,1,"Report Title:",mylen,1)
 	fnTxt(2,mypos,78,0,0,"",0,"")
@@ -186,7 +186,7 @@ SCR4: ! r:
 		if inp(j)>0 and inp(j)=<udim(code$) then resp$(respc+=1)=code$(inp(j)+1) else resp$(respc+=1)=" "
 	! if inp(j)>0 and inp(j)=<udim(code$) then resp$(respc+=1)=code$(inp(j)  ) else resp$(respc+=1)=" "
 		fncomboa("DataNames",j+2,1,mat code$,"",25,1)
-		fnTxt(j+2,37,3,0,0,"30",0,"The position is the starting position acress the page where this column should print.",1)
+		fnTxt(j+2,37,3,0,0,'30',0,"The position is the starting position acress the page where this column should print.",1)
 		resp$(respc+=1)=str$(pp(j))
 		if ti(j)=1 then resp$(respc+=1)='True' else resp$(respc+=1)='False'
 		fnChk(j+2,48,"",1,1) ! total the column

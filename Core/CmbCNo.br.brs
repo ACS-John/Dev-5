@@ -26,7 +26,7 @@ def library fncmbcno(myline,mypos; mysys$,___,dataPath$*256)
 			opt$(a)=filename$(a)(10:end)
 			open #x=fnH: 'Name='&dataPath$&'\Company.h'&opt$(a),internal,input 
 			dim cnam$*40
-			read #x,using 'Form pos 1,c 40': cnam$
+			read #x,using 'form pos 1,c 40': cnam$
 			close #x: 
 			if val(opt$(a))=99999 then 
 				kill99999=1

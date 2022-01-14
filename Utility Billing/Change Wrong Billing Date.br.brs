@@ -44,10 +44,10 @@ READ_UBTRANS: ! r: main loop
 	if z_start$<>'' and p$<z_start$ then goto READ_UBTRANS
 	if z_end$<>'' and p$>z_end$ then goto READ_UBTRANS
 	if tdate=d1 and tcode=1 then
-		read #1,using "Form POS 296,PD 4",key=p$: f
+		read #1,using "form pos 296,PD 4",key=p$: f
 		if f><hd1 then goto READ_UBTRANS ! skip if not Last Billing Date
-		rewrite #hTrans1,using "Form POS 11,n 8": d2
-		rewrite #1,using "Form POS 296,PD 4": hd2
+		rewrite #hTrans1,using "form pos 11,n 8": d2
+		rewrite #1,using "form pos 296,PD 4": hd2
 		recordUpdateCount+=1
 		if bud1 then gosub BUD2
 	end if

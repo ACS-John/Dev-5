@@ -16,7 +16,7 @@ def library fncat_srch2(&cn$,&ckey;fixgrid)
 		fnflexinit1('Cat',1,1,10,70,mat ch$,mat cm$,1,usefile)
 		restore #category:
 READ_FILE: !
-		read #category,using 'Form POS 1,c 5,c 25': mat item$ eof L270 ioerr ERR_READ
+		read #category,using 'form pos 1,c 5,c 25': mat item$ eof L270 ioerr ERR_READ
 		fnflexadd1(mat item$)
 		goto READ_FILE
  

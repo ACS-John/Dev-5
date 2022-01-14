@@ -20,24 +20,24 @@ MAIN: !
 	open #2: 'Name=[Q]\UBmstr\Deposit2.h[cno],KFName=[Q]\UBmstr\Deposit2Index.h[cno],Shr,Use,RecL=73,KPs=1,KLn=10',internal,outIn,keyed ! "Name=[Q]\UBmstr\Deposit2.h[cno]",i,outi,r ioerr MAIN
  
 TOP: !
-	read #1,using "Form POS 11,2*PD 3": mat ta eof L240
-	rewrite #1,using "Form POS 11,2*PD 3": 0,0
+	read #1,using "form pos 11,2*PD 3": mat ta eof L240
+	rewrite #1,using "form pos 11,2*PD 3": 0,0
 goto TOP
  
 L240: !
 	lr2=lrec(2)
 	if lr2=0 then goto Xit
-	rewrite #2,using "Form POS 71,PD 3",rec=1: lr2
+	rewrite #2,using "form pos 71,PD 3",rec=1: lr2
 	for j=1 to lr2
-		read #2,using "Form POS 1,C 10,POS 71,PD 3",rec=j: k$,nta noRec L350
-		read #1,using "Form POS 11,2*PD 3",key=k$: mat ta nokey L350
+		read #2,using "form pos 1,C 10,pos 71,PD 3",rec=j: k$,nta noRec L350
+		read #1,using "form pos 11,2*PD 3",key=k$: mat ta nokey L350
 		if ta(1)=0 then ta(1)=j
 		if ta(2)>0 then
-			rewrite #2,using "Form POS 71,PD 3",rec=ta(2): j
+			rewrite #2,using "form pos 71,PD 3",rec=ta(2): j
 		end if
 		ta(2)=j
-		rewrite #1,using "Form POS 11,2*PD 3",key=k$: mat ta
-		rewrite #2,using "Form POS 71,PD 3",rec=j: 0
+		rewrite #1,using "form pos 11,2*PD 3",key=k$: mat ta
+		rewrite #2,using "form pos 71,PD 3",rec=j: 0
 		L350: !
 	next j
 goto Xit

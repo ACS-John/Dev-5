@@ -251,7 +251,7 @@ AskFund: ! r:
 	mylen=1: mypos=mylen+3
 	fnLbl(1,4,"Fund                 Description ")
 	for j=1 to 10
-		fnTxt(j+1,mypos,3,0,right,"30",0,"Enter the fund number.")
+		fnTxt(j+1,mypos,3,0,right,'30',0,"Enter the fund number.")
 		resp$(j*2-1)=str$(fundnum(j))
 		fnTxt(j+1,mypos+10,20,0,0,"",0,"Enter the fund description.")
 		resp$(j*2)=funddesc$(j)

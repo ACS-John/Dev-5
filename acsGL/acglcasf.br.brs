@@ -22,7 +22,7 @@
 	priorcd=fnpriorcd
 	udf$=env$('temp')&'\'
 	monthly=1 ! default to monthly information
-	open #20: "Name=[Q]\GLmstr\Company.h[cno],Shr",i,i,r: read #20,using 'Form Pos 384,n 2',rec=1: nap : close #20:
+	open #20: "Name=[Q]\GLmstr\Company.h[cno],Shr",i,i,r: read #20,using 'form pos 384,n 2',rec=1: nap : close #20:
 	fscode=fnfscode
 	pors=1
 	gosub L2370
@@ -37,7 +37,7 @@
 	fnTos
 	mylen=30: mypos=mylen+3 : right=1
 	fnLbl(1,1,"Cost Center or Department #:",mylen,right)
-	fnTxt(1,mypos,3,0,right,"30",0,"Enter the cost center or department number if you wish to pr only one department, else leave blank for all.",0 ) : _
+	fnTxt(1,mypos,3,0,right,'30',0,"Enter the cost center or department number if you wish to pr only one department, else leave blank for all.",0 ) : _
 	resp$(1)=""
 	fnLbl(2,1,"(Blank for all Departments)",mylen,right)
 	fnCmdKey("&Next",1,1,0,"Prints the financial statement.")
@@ -254,7 +254,7 @@ L2400: fnTos
 	mylen=1: mypos=mylen+3
 	fnLbl(1,4,"Fund                 Description ")
 	for j=1 to 10
-		fnTxt(j+1,mypos,3,0,right,"30",0,"Enter the fund number.") : _
+		fnTxt(j+1,mypos,3,0,right,'30',0,"Enter the fund number.") : _
 		resp$(j*2-1)=str$(fundnum(j))
 		fnTxt(j+1,mypos+10,40,0,0,"",0,"Enter the fund description.") : _
 		resp$(j*2)=funddesc$(j)

@@ -3,7 +3,7 @@ fixPayrollDate=20201220 ! ccyymmdd
 fixCheckNo=1001
 open #hCheck=fnH: "Name=[Q]\PRmstr\PayrollChecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno]",internal,outIn,keyed
 do
-	read #hCheck,using "Form POS 1,N 8,n 3,PD 6,N 7": heno,tdn,prd,ckno eof EoCheck ioerr CheckReadErr
+	read #hCheck,using "form pos 1,N 8,n 3,PD 6,N 7": heno,tdn,prd,ckno eof EoCheck ioerr CheckReadErr
 	NextCheck: !
 loop
 EoCheck: !

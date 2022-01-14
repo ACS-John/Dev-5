@@ -18,7 +18,7 @@ do ! r: main loop
 	restore #hChecks,key>=checkkey$: nokey START
 	do
 		dim tcp(32),tdc(10)
-		read #hChecks,using 'Form POS 1,N 8,n 3,PD 6,N 7,5*PD 3.2,37*PD 5.2': heno,tdn,prd,ckno,mat tdc,mat tcp eof CALL_1099_LIBRARY
+		read #hChecks,using 'form pos 1,N 8,n 3,PD 6,N 7,5*PD 3.2,37*PD 5.2': heno,tdn,prd,ckno,mat tdc,mat tcp eof CALL_1099_LIBRARY
 		if heno<>eno then goto CALL_1099_LIBRARY
 		if prd=>beg_date and prd<=end_date then
 			amt1=tcp(seltp+4)

@@ -32,7 +32,7 @@
 	fnTos(sn$="GLInput")
 	mylen=30: mypos=mylen+3 : right=1
 	fnLbl(1,1,"Cost Center or Department #:",mylen,right)
-	fnTxt(1,mypos,3,0,right,"30",0,"Enter the cost center or department number if you wish to pr only one department, else leave blank for all.",0 )
+	fnTxt(1,mypos,3,0,right,'30',0,"Enter the cost center or department number if you wish to pr only one department, else leave blank for all.",0 )
 	resp$(1)=""
 	fnLbl(2,1,"(Blank for all Departments)",mylen,right)
 	fnCmdKey("&Next",1,1,0,"Prints the financial statement.")
@@ -118,7 +118,7 @@ L820: !
 	if total><0 or total2><0 then goto L850
 	if ls+ul+ds+ic>0 then goto L850 else goto READ_ACGLFNS
 L850: sp2=49-sp-1
-! If DS=1 Then dOLLAR$="": foRM$="Form POS SP,C SP2,POS 50,C 1,C 5,PIC($$$$,$$$,$$$.##),C 1,POS 74,C 1,C 5,PIC($$$$$$,$$$,$$$.##),C 1,skip 1" Else foRM$="Form POS SP,C SP2,POS 50,C 1,C 5,PIC(----,---,---.##),C 1,POS 74,C 1,C 5,PIC(------,---,---.##),C 1,skip 1"
+! If DS=1 Then dOLLAR$="": form$="form pos SP,C SP2,pos 50,C 1,C 5,PIC($$$$,$$$,$$$.##),C 1,pos 74,C 1,C 5,PIC($$$$$$,$$$,$$$.##),C 1,skip 1" Else form$="form pos SP,C SP2,pos 50,C 1,C 5,PIC(----,---,---.##),C 1,pos 74,C 1,C 5,PIC(------,---,---.##),C 1,skip 1"
 ! if debug_this then pr #255: '***'
 	if ul=1 then
 		pr #255,using L856: d$(1:sp2),dollar$,"{\ul ",total,"}",dollar$,"{\ul ",total2,"}" pageoflow PgOf
@@ -146,9 +146,9 @@ L970: if ap=0 then ap=1
 	sp2=49-sp-1
 	if ds=1 then
 		dollar$=""
-		form$="Form POS SP,C SP2,POS 50,C 1,C 5,PIC($---,---,---.##),C 1,POS 74,C 1,C 5,PIC($-----,---,---.##),C 1,skip 1"
+		form$="form pos SP,C SP2,pos 50,C 1,C 5,PIC($---,---,---.##),C 1,pos 74,C 1,C 5,PIC($-----,---,---.##),C 1,skip 1"
 	else
-		form$="Form POS SP,C SP2,POS 50,C 1,C 5,PIC(----,---,---.##),C 1,POS 74,C 1,C 5,PIC(------,---,---.##),C 1,skip 1"
+		form$="form pos SP,C SP2,pos 50,C 1,C 5,PIC(----,---,---.##),C 1,pos 74,C 1,C 5,PIC(------,---,---.##),C 1,skip 1"
 	end if
 ! pr some sub total like thingies
 	if ul=1 then

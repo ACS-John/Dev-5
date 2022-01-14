@@ -265,7 +265,7 @@ PrRouteTotal: ! r:
 		pr #255: tab(27);'{\ul Totals for Route Number '&str$(route_number)&'}'
 		for j=1 to sz1
 			!   if trim$(px$(j))<>'Penalty' then ! don't allow any penalties go thur totals
-			pr #255,using 'Form POS 1,C 30,N 15.2': px$(j),tx(j)
+			pr #255,using 'form pos 1,C 30,N 15.2': px$(j),tx(j)
 			!   end if  ! trim$(px$(j))<>'Penalty'
 		next j
 	end if
@@ -285,7 +285,7 @@ EoCustomer: ! r:
 			for j=1 to sz1
 				! if trim$(px$(j))<>'Penalty' then ! don't allow any penalties go thur totals
 				if tx(j) or gx(j) then
-					pr #255,using 'Form POS 1,C 30,N 15.2,X 6,N 15.2': px$(j),tx(j),gx(j)
+					pr #255,using 'form pos 1,C 30,N 15.2,X 6,N 15.2': px$(j),tx(j),gx(j)
 				end if
 				! end if  ! trim$(px$(j))<>'Penalty' then
 			next j
@@ -407,7 +407,7 @@ PrTotalsByCode: ! r: pr TOTALS BY CODE
 return  ! /r
 def fn_rateName$*40(rateCode$; ___,return$*40)
 	return$=''
-	read #hRate,using 'Form POS 5,C 40',key=rateCode$,release: return$ nokey ignore
+	read #hRate,using 'form pos 5,C 40',key=rateCode$,release: return$ nokey ignore
 	fn_rateName$=return$
 fnend
 def fn_readFromHistory(; ___,returnN)

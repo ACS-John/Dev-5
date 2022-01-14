@@ -33,10 +33,10 @@ fnTop(program$)
 	fnChk(lc+=1,46,'Accrue Vacation and Sick Leave this period:',1)
 	resp$(rc+=1)='False'
 	lc+=1
-	fnChk(lc+=1,46,'Skip Federal Withholdings:',1)  :	resp$(resp_skipWh1=rc+=1)='False'
-	fnChk(lc+=1,46,'Skip State Withholdings:',1)    :	resp$(resp_skipWh2=rc+=1)='False'
-	fnChk(lc+=1,46,'Skip Fica Withholdings:',1)     :	resp$(resp_skipWh3=rc+=1)='False'
-	fnChk(lc+=1,46,'Skip Standard Withholdings:',1) :	resp$(resp_skipWh4=rc+=1)='False'
+	fnChk(lc+=1,46,'skip Federal Withholdings:',1)  :	resp$(resp_skipWh1=rc+=1)='False'
+	fnChk(lc+=1,46,'skip State Withholdings:',1)    :	resp$(resp_skipWh2=rc+=1)='False'
+	fnChk(lc+=1,46,'skip Fica Withholdings:',1)     :	resp$(resp_skipWh3=rc+=1)='False'
+	fnChk(lc+=1,46,'skip Standard Withholdings:',1) :	resp$(resp_skipWh4=rc+=1)='False'
 	lc+=1
 	fnLbl(lc+=1,1,'Standard Federal % Override:',mylen,1,0)
 	fnTxt(lc   ,mypos,4,0,1,'32',0,'Normally zero. The government allows you to use a standard percent on bonuses, etc. See Circular E for allowable %.')
@@ -126,11 +126,11 @@ ReadRpWork: ! r:  read rpwork, read employee, call calc deduction etc  basically
 			end if
 			if sickCode>0 then hrsSick+=sickCode ! Accrue Sick
 			if sickCode>0 then  ! and env$('client')<>'Battlefield'
-				write #hBreakdown,using 'Form pos 1,n 8,c 5,n 8,2*n 9.2': eno,'Sick',prd,sickCode,0 ioerr ignore
+				write #hBreakdown,using 'form pos 1,n 8,c 5,n 8,2*n 9.2': eno,'Sick',prd,sickCode,0 ioerr ignore
 			end if
 			if vaca>0 then hrsVaca+=vaca ! Accrue Vacation
 			if vaca>0 then ! and env$('client')<>'Battlefield'
-				write #hBreakdown,using 'Form pos 1,n 8,c 5,n 8,2*n 9.2': eno,'Vac',prd,vaca,0 ioerr ignore
+				write #hBreakdown,using 'form pos 1,n 8,c 5,n 8,2*n 9.2': eno,'Vac',prd,vaca,0 ioerr ignore
 			end if
 		end if
 		! /r
@@ -165,7 +165,7 @@ ReadRpWork: ! r:  read rpwork, read employee, call calc deduction etc  basically
 	! pog = percent of gross
 	dim tdt(4)
 	dim tdet(17)
-	read #hDepartment,using 'Form POS 1,N 8,n 3,c 12,4*N 6,3*N 2,pd 4.2,23*PD 4.2',key=deptKey$: teno,tdn,gl$,mat tdt,mat tcd,tli,mat tdet ! Nokey X
+	read #hDepartment,using 'form pos 1,N 8,n 3,c 12,4*N 6,3*N 2,pd 4.2,23*PD 4.2',key=deptKey$: teno,tdn,gl$,mat tdt,mat tcd,tli,mat tdet ! Nokey X
 	if totalGrossPay=0 then pog=1: goto L1620 ! Allow checks to calculate with no gross pay
 	if totalGrossPay=gpd then pog=1 : goto L1620
 	if totalGrossPay=0 then
@@ -203,14 +203,14 @@ ReadRpWork: ! r:  read rpwork, read employee, call calc deduction etc  basically
 	hrsSick-=_inp(3) : hrsVaca-=_inp(4)
 	! if env$('client')='Battlefield' then goto L1760
 	if _inp(3)>0 then ! write sick hours taken to breakdown file
-		write #hBreakdown,using 'Form pos 1,n 8,c 5,n 8,2*n 9.2': eno,'Sick',prd,0,_inp(3) ioerr ignore
+		write #hBreakdown,using 'form pos 1,n 8,c 5,n 8,2*n 9.2': eno,'Sick',prd,0,_inp(3) ioerr ignore
 	end if
 	if _inp(4)>0 then ! write vacation hours taken to breakdown file
-		write #hBreakdown,using 'Form pos 1,n 8,c 5,n 8,2*n 9.2': eno,'Vac',prd,0,_inp(4) ioerr ignore
+		write #hBreakdown,using 'form pos 1,n 8,c 5,n 8,2*n 9.2': eno,'Vac',prd,0,_inp(4) ioerr ignore
 	end if
 	! L1760: !
 	if _inp(5)>0 then ! write holiday hours taken to breakdown file
-		write #hBreakdown,using 'Form pos 1,n 8,c 5,n 8,2*n 9.2': eno,'Hol',prd,0,_inp(5) ioerr ignore
+		write #hBreakdown,using 'form pos 1,n 8,c 5,n 8,2*n 9.2': eno,'Hol',prd,0,_inp(5) ioerr ignore
 	end if
 	if sck(4)=999 then sck(4)=1000 ! system will only hold 999 maximum accrued sick hours.  If maximum is set at 999, assume no maximum
 	if sck(4)<>0 and hrsSick>sck(4) then hrsSick=sck(4)
@@ -327,7 +327,7 @@ FedWh_Dept: ! r: Fed WH for Dept ! Federal Withholding for Department
 	twc+=wc : tdc(6)=wc
 	rewrite #hDepartment,using 'form pos 42,n 6,pos 58,23*pd 4.2',key=deptKey$: d1,mat tdet
 	tcp(4)=0
-	write #hPrChecks,using 'Form POS 1,N 8,n 3,PD 6,N 7,5*PD 3.2,37*PD 5.2': eno,tdn,prd,0,mat tdc,mat tcp
+	write #hPrChecks,using 'form pos 1,N 8,n 3,PD 6,N 7,5*PD 3.2,37*PD 5.2': eno,tdn,prd,0,mat tdc,mat tcp
 	! fnStatus('WRITING payroll check with tcp(4)='&str$(tcp(4))&' and tcp(32)='&str$(tcp(32)))
 	! fnStatusPause
 	totalWagesYtd+=gpd : cafy+=ficat3 : eicytd+=ytdTotal(25)
@@ -348,7 +348,7 @@ CalculateAllDeductionsAllDept: ! r:  returns totalGrossPay,ded,t3 (and probably 
 	totalGrossPay=t3=ded=0
 	do
 		for j=1 to 20
-			if (j+9)=17 and (env$('client')='Payroll Done Right') then goto L3090 ! if processing _inp(17) SKIP IT do not process it.   ! env$('client')='West Accounting' or
+			if (j+9)=17 and (env$('client')='Payroll Done Right') then goto L3090 ! if processing _inp(17) skip IT do not process it.   ! env$('client')='West Accounting' or
 			if newdedfed(j)>=1 and newdedcode(j)=newdedcode_Deduct then
 				! r:  department.tdc1  State Code
 					sc1=1
@@ -901,7 +901,7 @@ def fn_determineEarnings(hPrChecks,eno,dep,beg_date,end_date,mat ytdTotal,&ytdFI
 	checkkey$=cnvrt$('pic(zzzzzzz#)',eno)&cnvrt$('pic(zz#)',dep)&cnvrt$('pd 6',0) ! index employee#,department# and payroll date
 	restore #hPrChecks,key>=checkkey$: nokey dePrCkNokey
 	do
-		read #hPrChecks,using 'Form POS 1,N 8,n 3,PD 6,N 7,5*PD 3.2,37*PD 5.2': heno,tdn,prdate,ckno,mat tdc,mat tcp eof dePrCkEof
+		read #hPrChecks,using 'form pos 1,N 8,n 3,PD 6,N 7,5*PD 3.2,37*PD 5.2': heno,tdn,prdate,ckno,mat tdc,mat tcp eof dePrCkEof
 		if heno=eno and prdate=>beg_date and prdate<=end_date then
 			mat ytdTotal=ytdTotal+tcp
 		end if
@@ -1495,7 +1495,7 @@ fnend
 			setup_mowh=taxYear
 			if taxYear=2020 then ! r:
 				dim mo(9,3)
-				! read #h_tables,using 'Form POS 31,102*PD 6.4',rec=28: mat mo ! Missouri
+				! read #h_tables,using 'form pos 31,102*PD 6.4',rec=28: mat mo ! Missouri
 				mo( 1,1)=   0 : mo( 1,2)=  0  : mo( 1,3)=0.015
 				mo( 2,1)=1053 : mo( 2,2)= 16  : mo( 2,3)=0.02
 				mo( 3,1)=2106 : mo( 3,2)= 37  : mo( 3,3)=0.025
@@ -1602,7 +1602,7 @@ fnend
 		if ~setup_okwh then ! r:
 			setup_okwh=1
 			dim ok(7,6)
-			! read #h_tables,using 'Form POS 31,102*PD 6.4',rec=39: mat ok ! Oklahoma
+			! read #h_tables,using 'form pos 31,102*PD 6.4',rec=39: mat ok ! Oklahoma
 			! r: single
 			ok(1,1)=    0 : ok(1,2)=   0   : ok(1,3)=0
 			ok(2,1)= 6350 : ok(2,2)=   0   : ok(2,3)=0.005
@@ -1645,7 +1645,7 @@ fnend
 	
 		if ~wor_setup then ! r:
 			wor_setup=1
-			! read #h_tables,using 'Form POS 31,102*PD 6.4',rec=40: mat or1,mat or2
+			! read #h_tables,using 'form pos 31,102*PD 6.4',rec=40: mat or1,mat or2
 			!  r: Withholding Table for Single with fewer than 3 allowances
 			dim or1(0,0)
 			if taxYear=2019 then ! r:
@@ -1892,13 +1892,13 @@ ReallocateStateByDept: ! r: (reallocate state taxes based on earnings by dept an
 	! Read #hDepartment,Using 610,Rec=TRA: tdt(4),TCD(1),ty4,tqm4,tcp4,tcp31,TCP22,NTA,MAT DST
 	do
 		TopStDeptLoop: !
-		read #hDepartment,using 'Form POS 1,N 8,n 3,c 12,4*N 6,3*N 2,pd 4.2,23*PD 4.2': teno,tdn,gl$,mat tdt,mat tcd,tli,mat tdet eof EoStDeptLoop
+		read #hDepartment,using 'form pos 1,N 8,n 3,c 12,4*N 6,3*N 2,pd 4.2,23*PD 4.2': teno,tdn,gl$,mat tdt,mat tcd,tli,mat tdet eof EoStDeptLoop
 		if teno=oldeno then
 			if showDetails then fnStatus('department read employee '&str$(eno)&' department '&str$(tdn))
 			if d1><tdt(4) then goto TopStDeptLoop
 			holdtdn=tdn
 			olddeptkey$=cnvrt$('pic(zzzzzzz#)',oldeno)&cnvrt$('pic(zz#)',holdtdn)
-			read #hPrChecks,using 'Form POS 1,N 8,n 3,PD 6,N 7,5*PD 3.2,37*PD 5.2',key=cnvrt$('pic(zzzzzzz#)',oldeno)&cnvrt$('pic(zz#)',tdn)&cnvrt$('pd 6',prd): heno,tdn,prdate,ckno,mat tdc,mat tcp nokey TopStDeptLoop
+			read #hPrChecks,using 'form pos 1,N 8,n 3,PD 6,N 7,5*PD 3.2,37*PD 5.2',key=cnvrt$('pic(zzzzzzz#)',oldeno)&cnvrt$('pic(zz#)',tdn)&cnvrt$('pd 6',prd): heno,tdn,prdate,ckno,mat tdc,mat tcp nokey TopStDeptLoop
 			if showDetails then fnStatus('read check history: heno='&str$(heno)&',tdn='&str$(tdn)&',prdate='&str$(prdate)&',ckno='&str$(ckno)&'...')
 			dst3=0
 			for j=1 to 20
@@ -1951,9 +1951,9 @@ ReallocateStateByDept: ! r: (reallocate state taxes based on earnings by dept an
 			tcp(32)-=tcp4
 			tcp(4)=tcp4
 			rewritekey$=cnvrt$('pic(zzzzzzz#)',oldeno)&cnvrt$('pic(zz#)',holdtdn)&cnvrt$('pd 6',prd) ! index employee#,department# and payroll date
-			rewrite #hPrChecks,using 'Form pos 80,pd 5.2,poS 220,pd 5.2',key=rewritekey$: tcp(4),tcp(32)
+			rewrite #hPrChecks,using 'form pos 80,pd 5.2,pos 220,pd 5.2',key=rewritekey$: tcp(4),tcp(32)
 			fn_report_stuff
-			rewrite #hDepartment,using 'Form pos 42,n 6',key=olddeptkey$: tdt(4)
+			rewrite #hDepartment,using 'form pos 42,n 6',key=olddeptkey$: tdt(4)
 		end if
 	loop while teno=oldeno
 	EoStDeptLoop: !
@@ -2243,20 +2243,20 @@ def fn_setup
 	dim sucw(10)
 	! dim sucr(10)
 	! dim dedcode(10),calcode(10),dedfed(10)
-	! read #20,using 'Form POS 145,PD 5.2,POS 230,N 2,PD 4.2,PD 3.3,12*PD 4.2,10*PD 3.3,POS 618,30*N 1,POS 708,3*PD 4.3,3*PD 3.2,4*PD 4.2,POS 133,PD 6.3,PD 6.2': fucr,loccode,feducmax,ficarate,ficamax,ficamxr,mat sucw,mat sucr,mat dedcode,mat calcode,mat dedfed,mat sck,vacm,MinHourlyWage,mat wcm,ficar2,ficamx2
-	! REMOVED:UNUSED POS 145       PD 5.2  fucr
-	! REMOVED:UNUSED POS 230        N  2   loccode
+	! read #20,using 'form pos 145,PD 5.2,pos 230,N 2,PD 4.2,PD 3.3,12*PD 4.2,10*PD 3.3,pos 618,30*N 1,pos 708,3*PD 4.3,3*PD 3.2,4*PD 4.2,pos 133,PD 6.3,PD 6.2': fucr,loccode,feducmax,ficarate,ficamax,ficamxr,mat sucw,mat sucr,mat dedcode,mat calcode,mat dedfed,mat sck,vacm,MinHourlyWage,mat wcm,ficar2,ficamx2
+	! REMOVED:UNUSED pos 145       PD 5.2  fucr
+	! REMOVED:UNUSED pos 230        N  2   loccode
 	!                              PD 4.2  feducmax
 	!                              PD 3.3  ficarate
 	!                          12*	PD 4.2 ficamax,ficamxr,mat sucw(1-10)
 	! REMOVED:UNUSED           10*	PD 3.3 mat sucr(1-10)
-	! REMOVED:UNUSED POS 618   30*	N  1   mat dedcode(1-10),mat calcode(1-10),mat dedfed(1-10)
-	!                POS 708    3* PD 4.3  mat sck(1-3)
+	! REMOVED:UNUSED pos 618   30*	N  1   mat dedcode(1-10),mat calcode(1-10),mat dedfed(1-10)
+	!                pos 708    3* PD 4.3  mat sck(1-3)
 	!                           3* PD 3.2  sck(4),vacm,MinHourlyWage
 	!                           4* PD 4.2  mat wcm(1-4)
-	!                POS 133       PD 6.3  ficar2
+	!                pos 133       PD 6.3  ficar2
 	!                              PD 6.2  ficamx2
-	read #20,using 'Form POS 230,x 2,PD 4.2,PD 3.3,12*PD 4.2,POS 708,3*PD 4.3,3*PD 3.2,4*PD 4.2,POS 133,PD 6.3,PD 6.2': feducmax,ficarate,ficamax,ficamxr,mat sucw,mat sck,vacm,MinHourlyWage,mat wcm,ficar2,ficamx2
+	read #20,using 'form pos 230,x 2,PD 4.2,PD 3.3,12*PD 4.2,pos 708,3*PD 4.3,3*PD 3.2,4*PD 4.2,pos 133,PD 6.3,PD 6.2': feducmax,ficarate,ficamax,ficamxr,mat sucw,mat sck,vacm,MinHourlyWage,mat wcm,ficar2,ficamx2
 	close #20:
 	mat wcm(5)
 	wcm(5)=wcm(1)*12 ! make an annual wcm and set it equal to monthly*12

@@ -15,7 +15,7 @@
 	dim holdkey$*20,resp$(256)*128
 
 	open #20: "Name=[Q]\CLmstr\Company.h[cno],Shr",i,i,r
-	read #20,using 'Form POS 150,2*N 1,C 2',rec=1: mat d,bc$
+	read #20,using 'form pos 150,2*N 1,C 2',rec=1: mat d,bc$
 	if d(1)=0 and d(2)=0 then
 		glnMask$='50'
 	else if d(1)=1 and d(2)=0 then
@@ -29,7 +29,7 @@
 
 	bankcode=val(bc$)
 	open #bankmstr=fnH: "Name=[Q]\CLmstr\BankMstr.h[cno],KFName=[Q]\CLmstr\BankIdx1.h[cno],Shr",internal, outin, keyed
-	read #bankmstr,using 'Form POS 45,PD 6.2,PD 6.2',key=bc$,release: bal,upi nokey ignore
+	read #bankmstr,using 'form pos 45,PD 6.2,PD 6.2',key=bc$,release: bal,upi nokey ignore
 	close #bankmstr:
 	open #glmstr=fnH: "Name=[Q]\CLmstr\GLmstr.h[cno],KFName=[Q]\CLmstr\GLIndex.h[cno],Shr",internal,outIn,keyed
 	open #paymstr1=13: "Name=[Q]\CLmstr\PayMstr.h[cno],KFName=[Q]\CLmstr\PayIdx1.h[cno],Shr",internal,outIn,keyed
@@ -65,7 +65,7 @@ DISPLAY_INVOICE_GRID: !
 	fnflexinit1('UnpaidFile',1,1,20,85,mat chdr$,mat cmask$,1,0)
 	restore #paytrans:
 READ_INVOICE_GRID: ! r: read unpaid invoice file and populate the grid
-	read #paytrans,using 'Form POS 1,C 8,c 12,2*G 6,C 12,C 18,G 10.2,n 1,n 2,G 8,G 6,N 1,n 6,n 10.2,n 8': vn$,iv$,mat up$,upa,pcde,bcde,ckn,dp,gde,pdte,disamt,ddate eof EO_INVOICE_GRID noRec L970
+	read #paytrans,using 'form pos 1,C 8,c 12,2*G 6,C 12,C 18,G 10.2,n 1,n 2,G 8,G 6,N 1,n 6,n 10.2,n 8': vn$,iv$,mat up$,upa,pcde,bcde,ckn,dp,gde,pdte,disamt,ddate eof EO_INVOICE_GRID noRec L970
 	item$(1)=str$(rec(paytrans))
 	item$(2)=vn$: item$(3)=iv$: item$(4)=up$(1)
 	item$(5)=up$(2) : item$(6)=up$(3) : item$(7)=up$(4)
@@ -112,26 +112,26 @@ PRINTLISTING: ! r: pr listings
 	gosub HDR
 	t1=0
 	for j=rf2 to lrec(4)
-		read #paytrans,using 'Form POS 1,C 8,C 12,2*G 6,C 12,C 18,G 10.2,G 1,G 2,G 8,G 6,N 1',rec=j,release: mat in1$,ckn,dp,gde noRec NEXTRECORD
+		read #paytrans,using 'form pos 1,C 8,C 12,2*G 6,C 12,C 18,G 10.2,G 1,G 2,G 8,G 6,N 1',rec=j,release: mat in1$,ckn,dp,gde noRec NEXTRECORD
 		if rtrm$(in1$(1))="" then goto NEXTRECORD
 		t0=val(in1$(7)) conv L1440
 		t1=t1+t0
 L1440: !
-		pr #255,using 'Form POS 1,N 5,X 2,C 10,C 14,2*C 8,C 14,C 20,C 12,C 6,G 4,N 10,N 8': j,mat in1$,ckn,dp pageoflow NEWPGE
+		pr #255,using 'form pos 1,N 5,X 2,C 10,C 14,2*C 8,C 14,C 20,C 12,C 6,G 4,N 10,N 8': j,mat in1$,ckn,dp pageoflow NEWPGE
 		aa2=0
 !   r5=aa(1)
 		restore #unpdaloc,key>=in1$(1)&"            ": nokey NEXTRECORD
 L1480: !
-		read #unpdaloc,using 'Form POS 1,c 8,c 12,c 12,PD 5.2,C 30',release: vnkey$,vniv$,gl$,aa,de$ eof NEXTRECORD
+		read #unpdaloc,using 'form pos 1,c 8,c 12,c 12,PD 5.2,C 30',release: vnkey$,vniv$,gl$,aa,de$ eof NEXTRECORD
 		if in1$(1)<>vnkey$ then goto NEXTRECORD ! not same vendor
 		if in1$(2)<>vniv$ then goto L1480 ! not same invoice
 		aa2=aa2+aa
-		pr #255,using 'Form POS 47,c 12,X 2,C 20,N 10.2': gl$,de$(1:20),aa pageoflow NEWPGE
+		pr #255,using 'form pos 47,c 12,X 2,C 20,N 10.2': gl$,de$(1:20),aa pageoflow NEWPGE
 		goto L1480
 		pr #255:
 NEXTRECORD: !
 	next j
-	pr #255,using 'Form POS 81,C 10,SKIP 1,POS 81,N 10.2,SKIP 1,POS 81,C 10,SKIP 1': "__________",t1,"=========="
+	pr #255,using 'form pos 81,C 10,skip 1,pos 81,N 10.2,skip 1,pos 81,C 10,skip 1': "__________",t1,"=========="
 !
 	fncloseprn
 	on fkey 99 ignore
@@ -143,8 +143,8 @@ continue ! /r
 HDR: ! r:
 	pg+=1
 	fnopenprn
-	pr #255,using 'Form POS 1,C 8,Cc 82': date$,env$('cnam')
-	pr #255,using 'Form POS 1,C 4,N 4,POS 36,C 40': "Page",pg,"Unpaid Invoice File Listing"
+	pr #255,using 'form pos 1,C 8,Cc 82': date$,env$('cnam')
+	pr #255,using 'form pos 1,C 4,N 4,pos 36,C 40': "Page",pg,"Unpaid Invoice File Listing"
 	pr #255: ""
 	pr #255: "                             Invoice    Due     PO Number                                   Pay   Bank   Check     Date "
 	pr #255: "Ref#  Payee #   Invoice Numb   Date    Date     GL Number   Description            Amount   Code  Code   Number    Paid "
@@ -195,13 +195,13 @@ CODE_FOR_PAYMENT: ! r:
 	end if
 	close #paytrans: ioerr ignore
 	open #paytrans=4: "Name=[Q]\CLmstr\PayTrans.h[cno],KFName=[Q]\CLmstr\UnPdIdx1.h[cno],Shr",internal,outIn,keyed
-L4700: read #paytrans,using 'Form POS 1,C 8,C 12,2*G 6,C 12,C 18,G 10.2,n 1,n 2,G 8,G 6,N 1,n 6,n 10.2,n 8': vn$,iv$,mat up$,upa,pcde,bcde,ckn,dp,gde,pdte,disamt,ddate eof DISPLAY_GRID
+L4700: read #paytrans,using 'form pos 1,C 8,C 12,2*G 6,C 12,C 18,G 10.2,n 1,n 2,G 8,G 6,N 1,n 6,n 10.2,n 8': vn$,iv$,mat up$,upa,pcde,bcde,ckn,dp,gde,pdte,disamt,ddate eof DISPLAY_GRID
 	if displayunpaid=1 and pcde=1 then goto L4760 ! if only choose selected, don't allow others to list
 	if displayall=1 then goto L4760
 	if displayunpaid=2 and pcde=0 then goto L4760 ! if only choose selected, don't allow others to list
 	if displayunpaid<>0 then goto L4700 ! if displayed has an answer,but no match go back
 ! If PCDE<>0 Then Goto 14820  ! go back to read record in don't want selected invoices to show on grid  (not sure how to default)
-L4760: write #clearing,using 'Form POS 1,C 8,C 12,2*G 6,C 12,C 18,G 10.2,n 1,n 2,G 8,G 6,N 1,n 6,n 10.2,n 8': vn$,iv$,mat up$,upa,pcde,bcde,ckn,dp,gde,pdte,disamt,ddate
+L4760: write #clearing,using 'form pos 1,C 8,C 12,2*G 6,C 12,C 18,G 10.2,n 1,n 2,G 8,G 6,N 1,n 6,n 10.2,n 8': vn$,iv$,mat up$,upa,pcde,bcde,ckn,dp,gde,pdte,disamt,ddate
 	if pcde=1 and displayunpaid<>2 then total+=upa ! total paids
 	if pcde=0 and displayunpaid=2 then total+=upa ! total unpaids
 	goto L4700
@@ -228,10 +228,10 @@ fnFra(2,1,13,23,"Approval Options"," ")
 fnButton(1,2,"&Approve All",62,"Will select to pay all unpaid invoices",1,18,1)
 fnButton(3,2,"&Approve by Range",63,"Enter a range of reference numbers to approve.  The reference # is the number to the left assigned by the computer.",1,18,1)
 fnLbl(4,4,"From:",5,1,0,1)
-fnTxt(4,11,5,0,1,"30",0,"Select the first reference # to be approved",1)
+fnTxt(4,11,5,0,1,'30',0,"Select the first reference # to be approved",1)
 resp$(respc_rangefrom:=respc+=1)=""
 fnLbl(5,4,"To:",5,1,0,1)
-fnTxt(5,11,5,0,1,"30",0,"Select the last reference # to be approved",1)
+fnTxt(5,11,5,0,1,'30',0,"Select the last reference # to be approved",1)
 resp$(respc_rangeto:=respc+=1)=""
 fnButton(7,2,"&Approve by Due Date",64,"Approve all invoices due by a certain date.",1,18,1)
 fnLbl(8,2,"Date:",5,1,0,1)
@@ -247,7 +247,7 @@ else
 	wording$= "Total Unapproved:"
 end if
 fnLbl(2,28,wording$,18,1)
-fnTxt(2,49,12,0,1,"10",0," ")
+fnTxt(2,49,12,0,1,'10',0," ")
 resp$(respc_total:=respc+=1)=str$(total)
 fnChk(3,47,"Display at Top:",1)
 resp$(respc+=1)=displayattop$
@@ -257,7 +257,7 @@ resp$(respc+=1)=displayattop$
 	restore #clearing:
 	if nextrec>0 and displayattop$='True' then goto L4890 else goto L5030
 L4890: for j=nextrec to lrec(clearing) ! read starting with next record
-		read #clearing,using 'Form POS 1,C 8,C 12,2*G 6,C 12,C 18,G 10.2,n 1,n 2,G 8,G 6,N 1,n 6,n 10.2,n 8',rec=j: flxitm$(4), flxitm$(5), flxitm$(6),flxitm$(7), flxitm$(8), up$(4),upa,pcde,bcde,ckn,dp,gde,pdte,disamt,ddate eof L4940
+		read #clearing,using 'form pos 1,C 8,C 12,2*G 6,C 12,C 18,G 10.2,n 1,n 2,G 8,G 6,N 1,n 6,n 10.2,n 8',rec=j: flxitm$(4), flxitm$(5), flxitm$(6),flxitm$(7), flxitm$(8), up$(4),upa,pcde,bcde,ckn,dp,gde,pdte,disamt,ddate eof L4940
 		flxitm$(9)=str$(upa) : flxitm$(10)=str$(disamt)
 		flxitm$(11)=str$(ddate) : flxitm$(3)=str$(pcde)
 		flxitm$(2)= flxitm$(12)=str$(bcde): flxitm$(13)=str$(ckn)
@@ -269,7 +269,7 @@ fnflexadd1(mat flxitm$)
 L4940: next j
 if nextrec=1 then goto L5020 ! thinks it rereads the 1st record twice
 for j=1 to max(nextrec-1,1) ! read records previously coded or skipped
-	read #clearing,using 'Form POS 1,C 8,C 12,2*G 6,C 12,C 18,G 10.2,n 1,n 2,G 8,G 6,N 1,n 6,n 10.2,n 8',rec=j: flxitm$(4), flxitm$(5), flxitm$(6),flxitm$(7), flxitm$(8), up$(4),upa,pcde,bcde,ckn,dp,gde,pdte,disamt,ddate eof L5070
+	read #clearing,using 'form pos 1,C 8,C 12,2*G 6,C 12,C 18,G 10.2,n 1,n 2,G 8,G 6,N 1,n 6,n 10.2,n 8',rec=j: flxitm$(4), flxitm$(5), flxitm$(6),flxitm$(7), flxitm$(8), up$(4),upa,pcde,bcde,ckn,dp,gde,pdte,disamt,ddate eof L5070
 	flxitm$(9)=str$(upa) : flxitm$(10)=str$(disamt)
 	flxitm$(11)=str$(ddate) : flxitm$(3)=str$(pcde)
 	flxitm$(2)= flxitm$(12)=str$(bcde): flxitm$(13)=str$(ckn)
@@ -280,7 +280,7 @@ fnflexadd1(mat flxitm$)
 next j
 L5020: goto L5070
 L5030: !
-read #clearing,using 'Form POS 1,C 8,C 12,2*G 6,C 12,C 18,G 10.2,n 1,n 2,G 8,G 6,N 1,n 6,n 10.2,n 8': flxitm$(4), flxitm$(5), flxitm$(6),flxitm$(7), flxitm$(8), up$(4),upa,pcde,bcde,ckn,dp,gde,pdte,disamt,ddate eof L5070
+read #clearing,using 'form pos 1,C 8,C 12,2*G 6,C 12,C 18,G 10.2,n 1,n 2,G 8,G 6,N 1,n 6,n 10.2,n 8': flxitm$(4), flxitm$(5), flxitm$(6),flxitm$(7), flxitm$(8), up$(4),upa,pcde,bcde,ckn,dp,gde,pdte,disamt,ddate eof L5070
 flxitm$(9)=str$(upa) : flxitm$(10)=str$(disamt)
 flxitm$(11)=str$(ddate) : flxitm$(3)=str$(pcde)
 flxitm$(2)= flxitm$(12)=str$(bcde): flxitm$(13)=str$(ckn)
@@ -318,7 +318,7 @@ if ckey=66 then goto APPROVE_BY_PAYEE ! approve all invoices for a specific paye
 goto APPROVE ! /r  (used to just fall though to approve here)
 APPROVE: ! r: clear or unclear selected invoices
 	if selectedrec>0 then
-		read #clearing,using 'Form POS 1,C 8,C 12,2*G 6,C 12,C 18,G 10.2,n 1,n 2,G 8,G 6,N 1,n 6,n 10.2,n 8',rec=selectedrec: vn$,iv$,mat up$,upa,pcde,bcde,ckn,dp,gde,pdte,disamt,ddate
+		read #clearing,using 'form pos 1,C 8,C 12,2*G 6,C 12,C 18,G 10.2,n 1,n 2,G 8,G 6,N 1,n 6,n 10.2,n 8',rec=selectedrec: vn$,iv$,mat up$,upa,pcde,bcde,ckn,dp,gde,pdte,disamt,ddate
 		if pcde=0 then pcde=1 : newbcde=bankcode : goto L5540 ! if no previous payment code, use new one; if it has a payment code, change it
 		if pcde=1 and dp=0 then pcde=0 : newbcde=0: goto L5540 ! change from yes to no
 		if pcde=0 then pcde=1 : newbcde= bankcode: goto L5540 ! change from no to yes
@@ -326,8 +326,8 @@ APPROVE: ! r: clear or unclear selected invoices
 		L5540: !
 		if pcde=1 then flxitm$(3)="Yes" else if pcde=0 then flxitm$(3)="No" else if pcde=1 and dp>0 then flxitm$(3)="Paid"
 		! pr PCDE,BCDE
-		rewrite #clearing,using 'Form POS 73,n 1,n 2',rec=selectedrec: pcde,newbcde
-		rewrite #paytrans,using 'Form POS 73,n 1,n 2',key=vn$ & iv$: pcde,newbcde ! update the transaction history
+		rewrite #clearing,using 'form pos 73,n 1,n 2',rec=selectedrec: pcde,newbcde
+		rewrite #paytrans,using 'form pos 73,n 1,n 2',key=vn$ & iv$: pcde,newbcde ! update the transaction history
 		lastrec=selectedrec
 		if lastrec+1<=lrec(clearing) then nextrec=lastrec+1 else nextrec=1
 	end if
@@ -347,48 +347,48 @@ goto CODE_FOR_PAYMENT ! /r
 PAY_ALL: ! r: pay all unpaid invoices
 restore #paytrans:
 L5710: !
-read #paytrans,using 'Form POS 1,C 8,C 12,2*G 6,C 12,C 18,G 10.2,n 1,n 2,G 8,G 6,N 1,n 6,n 10.2,n 8': vn$,iv$,mat up$,upa,pcde,bcde,ckn,dp,gde,pdte,disamt,ddate eof L5760
+read #paytrans,using 'form pos 1,C 8,C 12,2*G 6,C 12,C 18,G 10.2,n 1,n 2,G 8,G 6,N 1,n 6,n 10.2,n 8': vn$,iv$,mat up$,upa,pcde,bcde,ckn,dp,gde,pdte,disamt,ddate eof L5760
 if bcde=0 then bcde=bankcode
 if pcde=0 then pcde=1: goto L5740
 goto L5710
 L5740: !
-rewrite #paytrans,using 'Form POS 73,n 1,n 2': pcde,bcde ! update the transaction history
+rewrite #paytrans,using 'form pos 73,n 1,n 2': pcde,bcde ! update the transaction history
 goto L5710
 L5760: !
 goto CODE_FOR_PAYMENT ! /r
 APPROVE_BY_RANGE: ! r: clear by reference # range
 for j=rangefrom to rangeto
-	read #clearing,using 'Form POS 1,C 8,C 12,2*G 6,C 12,C 18,G 10.2,n 1,n 2,G 8,G 6,N 1,n 6,n 10.2,n 8',rec=j: vn$,iv$,mat up$,upa,pcde,bcde,ckn,dp,gde,pdte,disamt,ddate eof L5860 noRec L5860
+	read #clearing,using 'form pos 1,C 8,C 12,2*G 6,C 12,C 18,G 10.2,n 1,n 2,G 8,G 6,N 1,n 6,n 10.2,n 8',rec=j: vn$,iv$,mat up$,upa,pcde,bcde,ckn,dp,gde,pdte,disamt,ddate eof L5860 noRec L5860
 	if pcde>0 then goto L5850 ! already coded
 	if pcde=0 then pcde=1
 	if bcde=0 then bcde=bankcode ! don't change bank # if one                                                      previously entered
-	rewrite #paytrans,using 'Form POS 73,n 1,n 2',key=vn$ & iv$: pcde,bcde ! update the transaction history
-	rewrite #clearing,using 'Form POS 73,n 1,n 2',rec=j: pcde,bcde ! update the transaction history
+	rewrite #paytrans,using 'form pos 73,n 1,n 2',key=vn$ & iv$: pcde,bcde ! update the transaction history
+	rewrite #clearing,using 'form pos 73,n 1,n 2',rec=j: pcde,bcde ! update the transaction history
 L5850: !
 next j
 L5860: !
 goto CODE_FOR_PAYMENT ! /r
 CLEAR_BY_DUEDATE: ! r: clear any invoices with due date less than or equal the one entered
 for j=1 to lrec(clearing)
-	read #clearing,using 'Form POS 1,C 8,C 12,2*G 6,C 12,C 18,G 10.2,n 1,n 2,G 8,G 6,N 1,n 6,n 10.2,n 8',rec=j: vn$,iv$,mat up$,upa,pcde,bcde,ckn,dp,gde,pdte,disamt,ddate eof L5970 noRec L5970
+	read #clearing,using 'form pos 1,C 8,C 12,2*G 6,C 12,C 18,G 10.2,n 1,n 2,G 8,G 6,N 1,n 6,n 10.2,n 8',rec=j: vn$,iv$,mat up$,upa,pcde,bcde,ckn,dp,gde,pdte,disamt,ddate eof L5970 noRec L5970
 	if val(up$(2))<=duedate then goto L5910 else goto L5960
 L5910: !
 	if pcde>0 then goto L5960 ! already coded
 	if pcde=0 then pcde=1
 	if bcde=0 then bcde=bankcode ! don't change bank # if one previously entered
-	rewrite #paytrans,using 'Form POS 73,n 1,n 2',key=vn$ & iv$: pcde,bcde ! update the transaction history
-	rewrite #clearing,using 'Form POS 73,n 1,n 2',rec=j: pcde,bcde ! update the transaction history
+	rewrite #paytrans,using 'form pos 73,n 1,n 2',key=vn$ & iv$: pcde,bcde ! update the transaction history
+	rewrite #clearing,using 'form pos 73,n 1,n 2',rec=j: pcde,bcde ! update the transaction history
 L5960: !
 next j
 L5970: !
 goto CODE_FOR_PAYMENT ! /r
 APPROVE_BY_PAYEE: ! r: select payee to pay
 restore #paytrans:
-L6000: read #paytrans,using 'Form POS 1,C 8,C 12,2*G 6,C 12,C 18,G 10.2,n 1,n 2,G 8,G 6,N 1,n 6,n 10.2,n 8': vn$,iv$,mat up$,upa,pcde,bcde,ckn,dp,gde,pdte,disamt,ddate eof L6060 : lastrec=rec(paytrans)
+L6000: read #paytrans,using 'form pos 1,C 8,C 12,2*G 6,C 12,C 18,G 10.2,n 1,n 2,G 8,G 6,N 1,n 6,n 10.2,n 8': vn$,iv$,mat up$,upa,pcde,bcde,ckn,dp,gde,pdte,disamt,ddate eof L6060 : lastrec=rec(paytrans)
 if uprc$(lpad$(rtrm$(payeevn$),8))<>uprc$(vn$) then goto L6000
 if pcde<>1 then pcde=1
 if bcde=0 then bcde=bankcode ! don't change bank # if one                                                      previously entered
-rewrite #paytrans,using 'Form POS 73,n 1,n 2',rec=lastrec: pcde,bcde ! update the transaction history
+rewrite #paytrans,using 'form pos 73,n 1,n 2',rec=lastrec: pcde,bcde ! update the transaction history
 goto L6000
 L6060: goto CODE_FOR_PAYMENT ! /r
 JOBCOST: ! r:
@@ -409,7 +409,7 @@ fnLbl(lc+=2,1,"Sub-category #:",mylen,1)
 fncmbsubcat(lc,mypos)
 resp$(respc+=1)=str$(subcat)
 fnLbl(lc+=1,1,"Amount:",mylen,1)
-fnTxt(lc,mypos,12,0,1,"10",0,"Enter the amount allocated to this category.")
+fnTxt(lc,mypos,12,0,1,'10',0,"Enter the amount allocated to this category.")
 resp$(respc+=1)=str$(amt)
 fnLbl(lc+=1,1,"Description:",mylen,1)
 fnTxt(lc,mypos,25,0,0,"",0,"Enter the descritpion for the allocation.")
@@ -508,8 +508,8 @@ execute "Index [Q]\CLmstr\JCBreakdownS"&wsid$&".h[cno],[Q]\CLmstr\jcbrkidx"&wsid
 return ! /r
 HDR2: ! r: header for jub cost listing
 fnopenprn
-pr #255,using 'Form POS 1,C 8,Cc 82': date$,env$('cnam')
-pr #255,using 'Form POS 1,C 4,N 4,POS 36,C 40': "Page",pg,"Job Cost Entry Listing"
+pr #255,using 'form pos 1,C 8,Cc 82': date$,env$('cnam')
+pr #255,using 'form pos 1,C 4,N 4,pos 36,C 40': "Page",pg,"Job Cost Entry Listing"
 pr #255: ""
 pr #255: " Payee #    Invoice #    Job #    Cat #  Sub-Cat   Amount  Descripton"
 pr #255: " _______    _________    _____    _____  _______   ______  __________"
@@ -544,13 +544,13 @@ def fn_test_key(holdkey$*20,vn$,iv$)
 		close #ivpaid: ioerr ignore
 		open #ivpaid=fnH: "Name=[Q]\CLmstr\IvPaid.h[cno],KFName=[Q]\CLmstr\IvIndex.h[cno]",internal,outIn,keyed
 		unpaidkey$=rpad$(ltrm$(vn$),8)&rpad$(ltrm$(iv$),12)
-		read #ivpaid,using 'Form Pos 1,C 8',key=unpaidkey$,release: x$ nokey TEST2
+		read #ivpaid,using 'form pos 1,C 8',key=unpaidkey$,release: x$ nokey TEST2
 	goto TEST_KEY_FAIL_ON_IV
 
 	TEST2: !
 		! pass goes to test_key_pass - fail goes to test_key_fail_on_paytrans
 		open #testpaytrans=fnH: "Name=[Q]\CLmstr\PayTrans.h[cno],KFName=[Q]\CLmstr\UnPdIdx1.h[cno],SHR",internal,outIn,keyed
-		read #testpaytrans,using 'Form Pos 1,C 8',key=newkey$,release: x$ nokey TEST_KEY_OK
+		read #testpaytrans,using 'form pos 1,C 8',key=newkey$,release: x$ nokey TEST_KEY_OK
 	goto TEST_KEY_FAIL_ON_PAYTRANS
 
 	TEST_KEY_FAIL_ON_PAYTRANS: !
@@ -600,7 +600,7 @@ def fn_addInvoice(vn$,iv$,aiRecordNumberToEdit)
 	!
 	if RecordNumberToEdit then !
 		editing=1
-		read #paytrans,using 'Form POS 1,C 8,C 12,2*G 6,C 12,C 18,G 10.2,n 1,n 2,G 8,G 6,N 1,n 6,n 10.2,n 8',rec=aiRecordNumberToEdit,release: vn$,iv$,mat up$,upa,pcde,bcde,ckn,dp,gde,pdte,disamt,ddate
+		read #paytrans,using 'form pos 1,C 8,C 12,2*G 6,C 12,C 18,G 10.2,n 1,n 2,G 8,G 6,N 1,n 6,n 10.2,n 8',rec=aiRecordNumberToEdit,release: vn$,iv$,mat up$,upa,pcde,bcde,ckn,dp,gde,pdte,disamt,ddate
 		mat resp$=("")
 		holdkey$=vn$&iv$
 	else ! add  (ckey=1)
@@ -647,10 +647,10 @@ ai_ADD_UNPAID_INVOICES_TOS: ! r:
 	fnTxt(lc,mypos,18,0,0,"",0,"",frame)
 	resp$(6)=up$(4)(1:18)
 	fnLbl(lc+=1,1,"Amount:",mylen,1,0,frame)
-	fnTxt(lc,mypos,12,0,1,"10",0,"Enter the total invoice amount.",frame)
+	fnTxt(lc,mypos,12,0,1,'10',0,"Enter the total invoice amount.",frame)
 	resp$(7)=str$(upa)
 	fnLbl(lc+=1,1,"Discount Amount:",mylen,1,0,frame)
-	fnTxt(lc,mypos,12,0,1,"10",0,"Enter any discount allowed.",frame)
+	fnTxt(lc,mypos,12,0,1,'10',0,"Enter any discount allowed.",frame)
 	resp$(8)=str$(disamt)
 	fnLbl(lc+=1,1,"Discount Date:",mylen,1,0,frame)
 	fnTxt(lc,mypos,10,0,1,"ccyymmdd",0,"",frame)
@@ -751,9 +751,9 @@ aiFinis: !
 fnend
 def fn_InvoiceSave  ! write any new invoices and matching allocations
 	if editing=0 then
-		write #paytrans,using 'Form POS 1,Cr 8,C 12,2*G 6,C 12,C 18,G 10.2,n 1,n 2,G 8,G 6,N 1,n 6,n 10.2,n 8': vn$,iv$,mat up$,upa,pcde,bcde,ckn,dp,gde,pdte,disamt,ddate
+		write #paytrans,using 'form pos 1,Cr 8,C 12,2*G 6,C 12,C 18,G 10.2,n 1,n 2,G 8,G 6,N 1,n 6,n 10.2,n 8': vn$,iv$,mat up$,upa,pcde,bcde,ckn,dp,gde,pdte,disamt,ddate
 	else if editing=1 then
-		rewrite #paytrans,using 'Form POS 1,Cr 8,C 12,2*G 6,C 12,C 18,G 10.2,n 1,n 2,G 8,G 6,N 1,n 6,n 10.2,n 8',rec=rec(paytrans): lpad$(rtrm$(vn$),8),lpad$(rtrm$(iv$),12),mat up$,upa,pcde,bcde,ckn,dp,gde,pdte,disamt,ddate
+		rewrite #paytrans,using 'form pos 1,Cr 8,C 12,2*G 6,C 12,C 18,G 10.2,n 1,n 2,G 8,G 6,N 1,n 6,n 10.2,n 8',rec=rec(paytrans): lpad$(rtrm$(vn$),8),lpad$(rtrm$(iv$),12),mat up$,upa,pcde,bcde,ckn,dp,gde,pdte,disamt,ddate
 		do
 			delete #unpdaloc,key=lpad$(rtrm$(vn$),8)&lpad$(rtrm$(iv$),12): nokey a_awi_delOldAllocFinis eof a_awi_delOldAllocFinis ! delete any previous allocations because all we know about them is the invoice # and vendor#(can't identify which ones to update. change or add
 		loop
@@ -794,7 +794,7 @@ def fn_readAlloctaitonsInto2dArray(key$*20,mat alloc2d$)
 	rai2a_return=0
 	restore #unpdaloc,key>=lpad$(rtrm$(vn$),8)&lpad$(rtrm$(iv$),12): nokey ai_EO_unpdaloc
 	do
-		read #unpdaloc,using 'Form POS 1,C 8,C 12,c 12,PD 5.2,C 30': hvn$,hiv$,gl$,allocAmount,gldesc$ eof ai_EO_unpdaloc
+		read #unpdaloc,using 'form pos 1,C 8,C 12,c 12,PD 5.2,C 30': hvn$,hiv$,gl$,allocAmount,gldesc$ eof ai_EO_unpdaloc
 		if vn$=hvn$ and iv$=hiv$ and (trim$(gl$&gldesc$)<>'' and allocAmount<>0) then
 			mat alloc2d$(rai2a_return+=1,udim(mat alloc2d$,2))
 			alloc2d$(rai2a_return,1)=gl$
@@ -811,10 +811,10 @@ def fn_InvoiceAllocateFromPayee(mat alloc2d$,vn$,upa,paymstr1,payeegl) ! ai_READ
 	restore #payeegl,key>=vn$: nokey ai_XIT
 	iafp_count=0
 	do
-		read #payeegl,using 'Form Pos 1,C 8,c 12,n 6.2,c 30': payeekey$,payeegl$,percent,gldesc$ eof ai_EO_READSTGL
+		read #payeegl,using 'form pos 1,C 8,c 12,n 6.2,c 30': payeekey$,payeegl$,percent,gldesc$ eof ai_EO_READSTGL
 		if vn$<>payeekey$ then goto ai_EO_READSTGL
 		if trim$(payeegl$)="" or payeegl$="  0     0   0" then goto ai_NEXT
-		read #glmstr,using 'Form POS 13,C 30',key=payeegl$,release: de$ nokey ai_NEXT
+		read #glmstr,using 'form pos 13,C 30',key=payeegl$,release: de$ nokey ai_NEXT
 		mat alloc2d$(iafp_count+=1,udim(mat alloc2d$,2))
 		alloc2d$(iafp_count,1)=payeegl$
 		alloc2d$(iafp_count,2)=str$(round(upa*percent*.01,2))
@@ -878,10 +878,11 @@ def fn_InvoiceAllocationFM(vn$,iv$; selected_alloc$*50)
 	resp$(respc+=1)=iv$
 	lc+=1
 	fnLbl(lc+=1,1,"General Ledger:",mylen,1)
-	fnqglbig(lc,mypos,0,2)
-	resp$(iaf_respc_gl:=respc+=1)=fnrglbig$(iaf_gl$)
+	fnqgl(lc,mypos,0,2,0,60)
+
+	resp$(iaf_respc_gl:=respc+=1)=fnRgl$(iaf_gl$,60)
 	fnLbl(lc+=1,1,"Amount:",mylen,1)
-	fnTxt(lc,mypos,12,0,1,"10")
+	fnTxt(lc,mypos,12,0,1,'10')
 	resp$(iaf_respc_amt:=respc+=1)=str$(iaf_amt)
 	fnLbl(lc+=1,1,"Description:",mylen,1)
 	fnTxt(lc,mypos,18)

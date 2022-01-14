@@ -23,7 +23,7 @@ on error goto Ertn
 	fndat(d$(4))
 	dim at$(3)*40
 	open #21: 'Name=[Q]\UBmstr\Company.h[cno],Shr',internal,input
-	read #21,using 'Form POS 1,3*C 40': at$(1),at$(2),at$(3)
+	read #21,using 'form pos 1,3*C 40': at$(1),at$(2),at$(3)
 	close #21:
 	z=21
 	at$(1)=trim$(at$(1))(1:z)
@@ -172,7 +172,7 @@ def fn_prnt1
 	P1_NEXT_LN: !
 	ln$=''
 	do
-		read #h_template,using 'Form POS 1,C 1',rec=r+=1: ln3$ eof P1_END1 noRec P1_END1
+		read #h_template,using 'form pos 1,C 1',rec=r+=1: ln3$ eof P1_END1 noRec P1_END1
 		if ln3$=chr$(13) then goto P1_L2310
 		ln$=ln$&ln3$
 		if len(rtrm$(ln$))>3900 then
@@ -379,31 +379,31 @@ def fn_print_standard_form ! used by (not) Blucksberg Mtn Water, possibly others
 	pr #255: ''
 	pr #255: ''
 	pr #255: ''
-	pr #255,using 'Form pos 7,C 40': trim$(at$(1))
-	pr #255,using 'Form pos 7,C 40': trim$(at$(2))
-	pr #255,using 'Form pos 7,C 40': trim$(at$(3))
+	pr #255,using 'form pos 7,C 40': trim$(at$(1))
+	pr #255,using 'form pos 7,C 40': trim$(at$(2))
+	pr #255,using 'form pos 7,C 40': trim$(at$(3))
 	pr #255: ''
 	pr #255: ''
 	pr #255: ''
-	pr #255,using 'Form pos 8,C 80': trim$(at$(1))&' Final Disconnect Notice   '&cnvrt$('pic(zz/zz/zz',d1)&'   '&trim$(z$)
+	pr #255,using 'form pos 8,C 80': trim$(at$(1))&' Final Disconnect Notice   '&cnvrt$('pic(zz/zz/zz',d1)&'   '&trim$(z$)
 	pr #255: ''
-	pr #255,using 'Form pos 9,C 73': mis$(1)
-	pr #255,using 'Form pos 9,C 73': mis$(2)
-	pr #255,using 'Form pos 9,C 73': mis$(3)
-	pr #255,using 'Form pos 9,C 73': mis$(4)
+	pr #255,using 'form pos 9,C 73': mis$(1)
+	pr #255,using 'form pos 9,C 73': mis$(2)
+	pr #255,using 'form pos 9,C 73': mis$(3)
+	pr #255,using 'form pos 9,C 73': mis$(4)
 	pr #255: ''
-	pr #255,using 'Form pos 9,C 73': 'Service  '&water$&'         '&gas$&'                Reconnection Fee: $'&cnvrt$('pic(###,##z.zz)',reconnect_fee)
-	pr #255,using 'Form POS 18,2*C 14,X 5,C 30': f$(1),f$(3),meter_address$
+	pr #255,using 'form pos 9,C 73': 'Service  '&water$&'         '&gas$&'                Reconnection Fee: $'&cnvrt$('pic(###,##z.zz)',reconnect_fee)
+	pr #255,using 'form pos 18,2*C 14,X 5,C 30': f$(1),f$(3),meter_address$
 	pr #255: ''
-	pr #255,using 'Form pos 13,C 11,N 10.2': 'Amount Due:',bal
-	pr #255: ''
-	pr #255: ''
+	pr #255,using 'form pos 13,C 11,N 10.2': 'Amount Due:',bal
 	pr #255: ''
 	pr #255: ''
-	pr #255,using 'Form pos 50,C 30': addr$(1)
-	pr #255,using 'Form pos 50,C 30': addr$(2)
-	pr #255,using 'Form pos 50,C 30': addr$(3)
-	pr #255,using 'Form pos 50,C 30': addr$(4)
+	pr #255: ''
+	pr #255: ''
+	pr #255,using 'form pos 50,C 30': addr$(1)
+	pr #255,using 'form pos 50,C 30': addr$(2)
+	pr #255,using 'form pos 50,C 30': addr$(3)
+	pr #255,using 'form pos 50,C 30': addr$(4)
 	! 4 more lines from this point before next page
 	pr #255: newpage
 fnend
@@ -414,33 +414,33 @@ def fn_print_blucksberg(mat a,mat at$,mat mis$,mat f$,meter_address$*30,z$,mat a
 	pr #255: ''
 	pr #255: ''
 	pr #255: ''
-	pr #255,using 'Form pos 7,C 40': trim$(at$(1))
-	pr #255,using 'Form pos 7,C 40': trim$(at$(2))
-	pr #255,using 'Form pos 7,C 40': trim$(at$(3))
+	pr #255,using 'form pos 7,C 40': trim$(at$(1))
+	pr #255,using 'form pos 7,C 40': trim$(at$(2))
+	pr #255,using 'form pos 7,C 40': trim$(at$(3))
 	pr #255: ''
 	pr #255: ''
 	pr #255: ''
-	pr #255,using 'Form pos 8,C 80': trim$(at$(1))&' Final Disconnect Notice   '&cnvrt$('pic(zz/zz/zz',d1)&'   '&trim$(z$)
+	pr #255,using 'form pos 8,C 80': trim$(at$(1))&' Final Disconnect Notice   '&cnvrt$('pic(zz/zz/zz',d1)&'   '&trim$(z$)
 	pr #255: ''
-	pr #255,using 'Form pos 9,C 73': mis$(1)
-	pr #255,using 'Form pos 9,C 73': mis$(2)
-	pr #255,using 'Form pos 9,C 73': mis$(3)
-	pr #255,using 'Form pos 9,C 73': 
+	pr #255,using 'form pos 9,C 73': mis$(1)
+	pr #255,using 'form pos 9,C 73': mis$(2)
+	pr #255,using 'form pos 9,C 73': mis$(3)
+	pr #255,using 'form pos 9,C 73': 
 	pr #255: ''
 	if a(1)=0 then water$='     ' else water$='Water'
 	if a(4)=0 then gas$='   ' else gas$='Gas'
-	pr #255,using 'Form pos 9,C 73': 'Service  '&water$&'         '&gas$&'                Reconnection Fee: $25.00'
-	pr #255,using 'Form POS 18,2*C 14,X 5,C 30': f$(1),f$(3),meter_address$
+	pr #255,using 'form pos 9,C 73': 'Service  '&water$&'         '&gas$&'                Reconnection Fee: $25.00'
+	pr #255,using 'form pos 18,2*C 14,X 5,C 30': f$(1),f$(3),meter_address$
 	pr #255: ''
-	pr #255,using 'Form pos 7,C': 'Amount Due: '&cnvrt$('pic(---,$$$,$$z.zz)',bal)
-	pr #255: ''
-	pr #255: ''
+	pr #255,using 'form pos 7,C': 'Amount Due: '&cnvrt$('pic(---,$$$,$$z.zz)',bal)
 	pr #255: ''
 	pr #255: ''
-	pr #255,using 'Form pos 7,C 30': addr$(1)
-	pr #255,using 'Form pos 7,C 30': addr$(2)
-	pr #255,using 'Form pos 7,C 30': addr$(3)
-	pr #255,using 'Form pos 7,C 30': addr$(4)
+	pr #255: ''
+	pr #255: ''
+	pr #255,using 'form pos 7,C 30': addr$(1)
+	pr #255,using 'form pos 7,C 30': addr$(2)
+	pr #255,using 'form pos 7,C 30': addr$(3)
+	pr #255,using 'form pos 7,C 30': addr$(4)
 	! 4 more lines from this point before next page
 	pr #255: newpage
 fnend

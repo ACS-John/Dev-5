@@ -11,7 +11,7 @@
 		read #trmstr,using L140,rec=j: d1 noRec NEXT_J
 L140: form pos 12,n 6
 		d1=fncd(d1)
-		rewrite #trmstr,using 'Form POS 85,N 2,N 6',rec=j: 19,d1
+		rewrite #trmstr,using 'form pos 85,N 2,N 6',rec=j: 19,d1
 NEXT_J: !
 	next j
 	close #trmstr:

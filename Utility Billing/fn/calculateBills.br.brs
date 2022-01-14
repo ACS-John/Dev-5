@@ -418,7 +418,7 @@ def fn_cuuMain(serviceNumber,usagePrior,reading,&usageCurrent,&r9_usage_is_zero;
 	if ~setup_cuuMain then
 		setup_cuuMain=1
 		open #hCompany=fnH: "Name=[Q]\UBmstr\Company.h[cno]",internal,input 
-		read #hCompany,using "Form POS 1,x 129,n 4": pcent
+		read #hCompany,using "form pos 1,x 129,n 4": pcent
 		close #hCompany: 
 		! pr pcent : pause
 		pcent=pcent/100

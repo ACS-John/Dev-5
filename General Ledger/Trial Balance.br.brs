@@ -7,7 +7,7 @@ on error goto Ertn
 fnTop(program$)
 open #hCompany=fnH: "Name=[Q]\GLmstr\Company.h[cno]",i,i,r
 dim cogl$(2)*12
-read #hCompany,using 'Form POS 152,2*C 12',rec=1: mat cogl$
+read #hCompany,using 'form pos 152,2*C 12',rec=1: mat cogl$
 close #hCompany:
 
 open #hAcct=fnH: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLIndex.h[cno],Shr",i,i,k ! formerly #1

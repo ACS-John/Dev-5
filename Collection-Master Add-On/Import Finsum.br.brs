@@ -58,7 +58,7 @@ for trustItem=1 TO sourceTrustCount
 	fncom(trustItem,sourceTrustCount,10)
 
 	hFinSum=Fnget_File('Name='&trustPath$(trustItem)&'\FINSUM,KFName='&trustPath$(trustItem)&'\FNSUMTA.IDX,shr','INPUT')
-	F_Trust: FORM Pos 1,2*C 8,Pos 263,6*Pd 6.2,8*Pd 6.2,Pos 455,Pd 4,Pos 477,B 2,Pos 517,C 8
+	F_Trust: form pos 1,2*C 8,pos 263,6*Pd 6.2,8*Pd 6.2,pos 455,Pd 4,pos 477,B 2,pos 517,C 8
 	if hFinSum>0 then
 		pr file$(hFinSum)
 		do
@@ -191,8 +191,8 @@ def fn_setup_categ(; basePath$*512,___,returnN)
 		fnmessagebox("Warning COULD NOT OPEN FINANCIAL"&lf$&basePath$&'\COMMON\HEADING'&lf$&"Error:"&Str$(Err)&" Line:"&Str$(Line)&" - In "&program$,16,"Error!")
 		Categ_Worked=0
 	else
-		read #hHeading,using 'FORM 30*C 30',rec=1,release: mat heading$(19:48) norec ignore
-		read #hHeading,using 'FORM 18*C 30',rec=2,release: mat heading$(1:18) norec ignore
+		read #hHeading,using 'form 30*C 30',rec=1,release: mat heading$(19:48) norec ignore
+		read #hHeading,using 'form 18*C 30',rec=2,release: mat heading$(1:18) norec ignore
 		close #hHeading: ioerr ignore
 	end if
 	for z=1 to 48
@@ -213,7 +213,7 @@ def fn_setup_categ(; basePath$*512,___,returnN)
 		end if
 		if _finlstat>99 then mat finlstat$(99)
 		for j=1 to 99
-			Autostatus2$(J)=Finlstat$(J)(Pos(Finlstat$(J),',')+1:Len(Finlstat$(J)))
+			Autostatus2$(J)=Finlstat$(J)(pos(Finlstat$(J),',')+1:Len(Finlstat$(J)))
 		next j
 	end if
 	fn_setup_categ=returnN

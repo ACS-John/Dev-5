@@ -1,6 +1,35 @@
 ! test changes
 ! r: functions that do not redirect
 
+	def fnCleanGl$(gl$; ___,dash1pos,dash2pos,gl1,gl2,gl3)
+		gl$=trim$(gl$)
+		gl$=srep$(gl$,' ','-')
+		do
+			gl$=srep$(gl$,'--','-')
+		loop until pos(gl$,'--')<=0
+		gl1=0
+		gl2=0
+		gl3=0
+		dash1pos=pos(gl$,'-')
+		dash2pos=pos(gl$,'-',dash1pos+1)
+		if dash1pos<=0 and dash2pos<=0 then
+			gl1=0
+			gl2=val(gl$)
+			gl3=0
+		else if dash1pos>0 and dash2pos<=0  then 
+			! ie '1-101', but never '101-1' - would need to add logic to make that work
+			gl1=val(gl$(1:dash1pos-1))
+			gl2=val(gl$(dash1pos+1  ))
+			gl3=0
+		else if dash1pos>0 and dash2pos>0  then 
+			gl1=val(gl$(1:dash1pos-1          	))
+			gl2=val(gl$(dash1pos+1:dash2pos-1	))
+			gl3=val(gl$(dash2pos+1:inf       	))
+		end if 
+
+		gl$=lpad$(str$(gl1),3)&lpad$(str$(gl2),6)&lpad$(str$(gl3),3)
+	fnend
+
 	def library fnFileIoLayoutPath$*512(fileio$*64) ! ; ___,defaultFileLayoutPath$*256,defaultFileLayoutExtension$)
 		! if env$('client')='Brumbaugh' then
 		! 	defaultFileLayoutExtension$=''
@@ -198,7 +227,7 @@
 				if gudsSetup$(1:2)<>guSys$ or fn_stime>gudsSetupTimeN+3 then
 					gudsSetup$=guSys$&'-'&str$(fn_stime)
 					open #hCompany=fnH: 'Name=[Q]\'&guSys$&'mstr\Company.h[cno],Shr',internal,input ioerr GudsDefault
-					read #hCompany,using 'Form Pos 150,2*N 1': useDept,useSub
+					read #hCompany,using 'form pos 150,2*N 1': useDept,useSub
 					close #hCompany: ioerr ignore
 					useDeptCache=useDept
 					useSubCache =useSub
@@ -643,43 +672,29 @@ fnend
 		library 'S:\Core\Programs\Update.br': fnAcsInstallationPath$
 		fnAcsInstallationPath$=fnAcsInstallationPath$( longFileName)
 	fnend
-	def library fnqgl(myline,mypos; container,x,forceGLsysIfPossible,qgllength)
-		library 'S:\Core\ACS_Component.br': fnqgl
-		fnqgl=fnqgl(myline,mypos,container,x,forceGLsysIfPossible,qgllength)
+	def library fnQgl(myline,mypos; container,x,forceGLsysIfPossible,qgllength)
+		library 'S:\Core\ACS_Component.br': fnQgl
+		fnQgl=fnQgl(myline,mypos,container,x,forceGLsysIfPossible,qgllength)
 	fnend
-	def library fnqglbig(myline,mypos; container,x,forceGLsysIfPossible)
-		library 'S:\Core\ACS_Component.br': fnqgl
-		fnqglbig=fnqgl(myline,mypos,container,x,forceGLsysIfPossible,60)
-	fnend
-	def library fnqgl25(myline,mypos; container,x,forceGLsysIfPossible)
-		library 'S:\Core\ACS_Component.br': fnqgl
-		fnqgl=fnqgl(myline,mypos,container,x,forceGLsysIfPossible,25)
-	fnend
-	def library fnagl$*12(&x$)
+	def library fnAgl$*12(&x$)
 		library 'S:\Core\fn\agl$.br': fnagl$
 		fnagl$=fnagl$(x$)
 	fnend
-	def library fnrgl$*60(x$; returnmaxlength,leaveDescFileOpen) ! passed '  1  101  1' returns '1-101-1 Account Description'
+	def library fnRgl$*60(x$; returnmaxlength,leaveDescFileOpen) ! passed '  1  101  1' returns '1-101-1 Account Description'
 		library 'S:\Core\fn\rgl$.br': fnrgl$
 		fnrgl$=fnrgl$(x$, returnmaxlength,leaveDescFileOpen)
 	fnend
-	def library fnrglbig$*60(x$)
-		! library 'S:\Core\fnRGLbig$.br': fnrglbig$
-		! fnrglbig$=fnrglbig$(x$)
-		library 'S:\Core\fn\rgl$.br': fnrgl$
-		fnrglbig$=fnrgl$(x$, 60)
+	def library fnOsVer(&osver$;get_or_put)
+		library 'S:\Core\OSVer.br': fnOsVer
+		fnOsVer=fnOsVer(osver$,get_or_put)
 	fnend
-	def library fnosver(&osver$;get_or_put)
-		library 'S:\Core\OSVer.br': fnosver
-		fnosver=fnosver(osver$,get_or_put)
+	def library fnDec2hex(input_dec,&output_hex$)
+		library 'S:\Core\Dec2Hex.br': fnDec2hex
+		fnDec2hex=fnDec2hex(input_dec, output_hex$)
 	fnend
-	def library fndec2hex(input_dec,&output_hex$)
-		library 'S:\Core\Dec2Hex.br': fndec2hex
-		fndec2hex=fndec2hex(input_dec, output_hex$)
-	fnend
-	def library fnhex2dec(input_hex$)
-		library 'S:\Core\fn\hex2dec.br': fnhex2dec
-		fnhex2dec=fnhex2dec(input_hex$)
+	def library fnHex2dec(input_hex$)
+		library 'S:\Core\fn\hex2dec.br': fnHex2dec
+		fnHex2dec=fnHex2dec(input_hex$)
 	fnend
 	def library fnwin3b(win,&cap$,win_height,win_width; display_cnam,button_option,win_align,pr_newpg)
 		library 'S:\Core\Ace\Win3B.br': fnwin3b
@@ -1666,10 +1681,6 @@ fnend
 	def library fnpaymstr_v0_to_v1
 		library 'S:\acsCL\Conversion\PayMstr-v0-to-v1.br': fnpaymstr_v0_to_v1
 		fnpaymstr_v0_to_v1=fnpaymstr_v0_to_v1
-	fnend
-	def library fnglmstrtorecl62
-		library 'S:\acsCL\Conversion\GLMstr-to-RecL62.br': fnglmstrtorecl62
-		fnglmstrtorecl62=fnglmstrtorecl62
 	fnend
 	def library fnaddpayee
 		library 'S:\Checkbook\Payee.br': fnaddpayee

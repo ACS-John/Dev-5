@@ -50,7 +50,7 @@ PJ_PRINT_REC: !
 	L600: form pos 57,pic(zzz),pic(zzzzzz),pic(zzz),pos 69,pic(------,---,---.##)
 	L610: form pos 57,pic(zzz),pic(zzzzzz),pic(zzz),pos 85,pic(--,---,---.##)
 	L620: ! 
-	goto L690 ! SKIP ACCUMULATING ARRAY TOTALS
+	goto L690 ! skip ACCUMULATING ARRAY TOTALS
 	! r:  ACCUMULATING ARRAY TOTALS
 	if tg1=0 then goto L670
 	for j=1 to tg1

@@ -45,7 +45,7 @@ SCR2: ! r: requires svce$, returns mat use_to, mat use_from, probably more
 	dim use_to(11)
 	dim use_from(11)
 	open #20: "Name=[Q]\UBmstr\ubData\RateMst.h[cno],KFName=[Q]\UBmstr\ubData\RateIdx1.h[cno],Shr",i,i,k
-	read #20,using "Form POS 55,32*G 10",key=svce$: mat rt$ ioerr SCR1
+	read #20,using "form pos 55,32*G 10",key=svce$: mat rt$ ioerr SCR1
 	close #20:
 	fnTos
 	rc=rtc=0 : mylen=20 : mypos=mylen+2
@@ -53,10 +53,10 @@ SCR2: ! r: requires svce$, returns mat use_to, mat use_from, probably more
 	fnTxt(1,mypos,55,0,0,"",1)
 	resp$(rc+=1)=rateToAnalyze$
 	fnLbl(2,1,"Minimum Charge:",mylen,1)
-	fnTxt(2,mypos,9,0,1,"10")
+	fnTxt(2,mypos,9,0,1,'10')
 	resp$(rc+=1)=rt$(rtc+=1)
 	fnLbl(3,1,"Minimum Usage:",mylen,1)
-	fnTxt(3,mypos,9,0,1,"30")
+	fnTxt(3,mypos,9,0,1,'30')
 	resp$(rc+=1)=rt$(rtc+=1)
 	fnFra(4,1,12,45,"Rate Breakdown")
 	fnLbl(1,5,"Usage",10,2,0,1)
@@ -67,9 +67,9 @@ SCR2: ! r: requires svce$, returns mat use_to, mat use_from, probably more
 	fnLbl(2,32,"Per Unit",15,2,0,1)
 	for j=1 to 10
 		txt$=str$(j)&"." : fnLbl(j+2,1,txt$,3,1,0,1)
-		fnTxt(j+2,05,10,0,1,"30",0,mt$,1)
+		fnTxt(j+2,05,10,0,1,'30',0,mt$,1)
 		resp$(rc+=1)=rt$(rtc+=1)
-		fnTxt(j+2,17,10,0,1,"30",0,mt$,1)
+		fnTxt(j+2,17,10,0,1,'30',0,mt$,1)
 		resp$(rc+=1)=rt$(rtc+=1)
 		fnTxt(j+2,34,10,0,1,"46",0,mt$,1)
 		resp$(rc+=1)=rt$(rtc+=1)

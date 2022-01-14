@@ -38,13 +38,13 @@ Scr1: ! r:
 	fnLbl(2,1,"Last Billing Date:",19,1)
 	fnTxt(2,21,8,0,0,"1001")
 	resp$(2)=str$(lbill)
-	fnChk(3,1,"Skip customers who only owe current bill")
+	fnChk(3,1,"skip customers who only owe current bill")
 	resp$(3)='False'
-	fnChk(4,1,"Skip customers with credit balance")
+	fnChk(4,1,"skip customers with credit balance")
 	resp$(4)='False'
 	fnChk(5,1,"Only show past due amounts (not current month)")
 	resp$(5)='True'
-	fnChk(6,1,"Skip accounts with Zero balances")
+	fnChk(6,1,"skip accounts with Zero balances")
 	resp$(6)='True'
 	fnCmdSet(3)
 	L350: !

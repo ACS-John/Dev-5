@@ -39,13 +39,13 @@ ADD_EDIT_REC: !
 	deptname$="": read #9,using "form pos 4,c 20",key=rpad$(ltrm$(dp$),3): deptname$ nokey L370
 L370: if addrec=1 then dp$="": mat mgl$=(""): goto L400
 	k$=dp$=lpad$(uprc$(rtrm$(dp$)),3)
-	read #1,using "Form POS 1,G 3,11*C 12",key=k$,release: dp$,mat mgl$ nokey MENU1
+	read #1,using "form pos 1,G 3,11*C 12",key=k$,release: dp$,mat mgl$ nokey MENU1
 L400: !
 	fnTos
 	respc=0
 	fnLbl(1,1,deptname$,50,2)
 	fnLbl(2,1,"Department #:",15,1)
-	fnTxt(2,18,3,3,1,"30",0,"Department # to change or add.")
+	fnTxt(2,18,3,3,1,'30',0,"Department # to change or add.")
 	resp$(respc+=1)=dp$
 	fnLbl(3,1,label1$(1),15,1)
 	fnqgl(3,18,0,2)
@@ -82,10 +82,10 @@ DELETE_RECORD: !
 L680: delete #1,key=dp$: nokey MENU1
 	goto MENU1
 REWRITE_RECORD: !
-	rewrite #1,using "Form POS 1,G 3,11*C 12",key=dp$: dp$,mat mgl$ nokey L740
+	rewrite #1,using "form pos 1,G 3,11*C 12",key=dp$: dp$,mat mgl$ nokey L740
 	goto MENU1
 ADD_RECORD: !
-L740: write #1,using "Form POS 1,G 3,11*C 12": dp$,mat mgl$
+L740: write #1,using "form pos 1,G 3,11*C 12": dp$,mat mgl$
 	goto MENU1
  
 CREATE_FILES: !
@@ -101,7 +101,7 @@ return
 	hp1=66-int(len(rtrm$(env$('cnam')))/2)
 	fnopenprn (cp,58,230,process)
 	gosub HDR4
-L900: read #1,using "Form POS 1,G 3,11*C 12",release: dp$,mat mgl$ eof END4
+L900: read #1,using "form pos 1,G 3,11*C 12",release: dp$,mat mgl$ eof END4
 	pr #255,using L920: dp$,mat mgl$ pageoflow NWPG
 L920: form pos 1,c 6,11*c 14,skip 1
 	goto L900

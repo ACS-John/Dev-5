@@ -58,12 +58,12 @@ PHASE1: !
 	pr 'moving trans from ubAccTrn to ubTranVB'
 	open #acctrn=1: "Name=[Q]\UBmstr\ubAccTrn.h[cno],KFName=[Q]\UBmstr\ubAcTIx1.h[cno],Shr",internal,outIn,keyed
 	if rln(acctrn)=64 or rln(acctrn)=72 then : _
-		acctrn_form$='Form Pos 1,C 10,pd 4.2,N 8,n 1,n 1,10*pd 4.2' : _
+		acctrn_form$='form pos 1,C 10,pd 4.2,N 8,n 1,n 1,10*pd 4.2' : _
 	else : _
 		if rln(acctrn)=62 or rln(acctrn)=70 then : _
-			acctrn_form$='Form Pos 1,C 10,pd 4.2,N 8,n 1,n 1,10*pd 4.2' else : _
+			acctrn_form$='form pos 1,C 10,pd 4.2,N 8,n 1,n 1,10*pd 4.2' else : _
 			if rln(acctrn)=68 then : _
-				acctrn_form$='Form Pos 1,C 10,pd 4.2,n 8,n 1,n 1,10*pd 4.2'
+				acctrn_form$='form pos 1,C 10,pd 4.2,n 8,n 1,n 1,10*pd 4.2'
 READ_ACCTRN: !
 L530: read #acctrn,using acctrn_form$: p$,tamt,tdate,transcode,postcode,g(1),g(2),g(3),g(4),g(5),g(6),g(7),g(8),g(9),g(10) eof PHASE2 ioerr R68F
 	pr f "1,1,C 20,R,N": str$(accnt+=1)&"/"&str$(lrec(acctrn))
@@ -80,7 +80,7 @@ PHASE2: !
 	pr 'moving trans from ubTrans to ubTranVB'
 	open #trans=2: "Name=[Q]\UBmstr\ubTrans.h[cno]",internal,input
 READ_TRANS: !
-L680: read #trans,using 'Form Pos 1,C 10,pd 4.2,pd 4,n 1,n 1,pd 3': p$,tamt,tdate,transcode,postcode,nta eof PHASE3
+L680: read #trans,using 'form pos 1,C 10,pd 4.2,pd 4,n 1,n 1,pd 3': p$,tamt,tdate,transcode,postcode,nta eof PHASE3
 	if postcode=5 then goto L680 ! don't get trans from current file that also been transferred to history
 ! If TDATE=101504 AND TRANSCODE=1 Then Goto 680 ! temporary !!!! skip october 15, 2004 charges
 	read #master,using 'form pos 1,c 10,pos 300,11*pd 4.2',key=p$: z$,mat g nokey READ_TRANS
@@ -143,15 +143,15 @@ EOTT: return  ! end of translate transcode
 R68F: !
 	if rln(acctrn)<>68 then goto ERTN
 	if r68f=0 then : _
-		acctrn_form$='Form Pos 1,C 10,pd 4.2,n 8,n 1,n 1,10*pd 4.2' : _
+		acctrn_form$='form pos 1,C 10,pd 4.2,n 8,n 1,n 1,10*pd 4.2' : _
 	else : _
-		acctrn_form$='Form Pos 1,C 10,pd 4.2,x 2,n 6,n 1,n 1,10*pd 4.2'
+		acctrn_form$='form pos 1,C 10,pd 4.2,x 2,n 6,n 1,n 1,10*pd 4.2'
 	if r68f=1 then r68f=0 else r68f=1
 	continue
  
 REMOVEBADDATES: !
 	open #transvb=11: "Name=[Q]\UBmstr\UBTransVB.h[cno],KFName=[Q]\UBmstr\UBTrIndx.h[cno],Shr,RecL=102,KPs=1,KLn=19,Use",internal,outIn,keyed
-L1240: read #transvb,using "Form Pos 11,N 8": tdate eof L1270
+L1240: read #transvb,using "form pos 11,N 8": tdate eof L1270
 	tdate$=str$(tdate) : _
 	if val(tdate$(1:4))<1950 or val(tdate$(1:4))>2049 or val(tdate$(5:6))<1 or val(tdate$(5:6))>12 or val(tdate$(7:8))<1 or val(tdate$(7:8))>31 then : _
 		delete #transvb:

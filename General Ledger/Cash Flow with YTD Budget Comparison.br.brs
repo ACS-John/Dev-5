@@ -18,7 +18,7 @@
 	priorcd=fnpriorcd
 	fnopenprn
 	open #20: "Name=[Q]\GLmstr\Company.h[cno],Shr",i,i,r
-	read #20,using 'Form Pos 384,n 2',rec=1: nap
+	read #20,using 'form pos 384,n 2',rec=1: nap
 	close #20:
 	fscode=fnfscode
 	if nap<12 or nap>13 then nap=12
@@ -32,7 +32,7 @@
 	fnTos
 	mylen=30: mypos=mylen+3 : right=1
 	fnLbl(1,1,"Cost Center or Department #:",mylen,right)
-	fnTxt(1,mypos,3,0,right,"30",0,"Enter the cost center or department number if you wish to pr only one department, else leave blank for all.",0 ) : _
+	fnTxt(1,mypos,3,0,right,'30',0,"Enter the cost center or department number if you wish to pr only one department, else leave blank for all.",0 ) : _
 	resp$(1)=""
 	fnLbl(2,1,"(Blank for all Departments)",mylen,right)
 	fnCmdKey("&Next",1,1,0,"Prints the financial statement.")
@@ -248,10 +248,10 @@ TeC: ! r:
 	mylen=30: mypos=mylen+3 : right=1
 	fnLbl(1,10,d$)
 	fnLbl(3,1,"Total Amount YTD:",mylen,right)
-	fnTxt(3,mypos,12,0,right,"10",0,"Enter the total for the year.",0 )
+	fnTxt(3,mypos,12,0,right,'10',0,"Enter the total for the year.",0 )
 	resp$(1)=str$(total2)
 	fnLbl(4,1,"Total Budget Year to Date:",mylen,right)
-	fnTxt(4,mypos,12,0,right,"10",0,"Enter the annual budget.",0 )
+	fnTxt(4,mypos,12,0,right,'10',0,"Enter the annual budget.",0 )
 	resp$(2)=str$(annualb)
 	fnCmdKey("&Next",1,1,0,"Accept the answer.")
 	fnCmdKey("&Cancel",5,0,1,"Returns to menu without posting.")

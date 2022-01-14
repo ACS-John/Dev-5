@@ -53,13 +53,13 @@ def fn_ub_build_transactions
 		fnStatus('converting transactions from History Transactions (ubAccTrn.h[cno])')
 		open #h_ubacctrn=1: "Name=[Q]\UBmstr\ubAccTrn.h[cno]",internal,outIn
 		if env$('client')='Franklinton' then
-			acctrn_form$='Form Pos 1,C 10,pd 4.2,x 2,n 6,n 1,n 1,10*pd 4.2' ! Franklinton only
+			acctrn_form$='form pos 1,C 10,pd 4.2,x 2,n 6,n 1,n 1,10*pd 4.2' ! Franklinton only
 		else if rln(h_ubacctrn)=64 or rln(h_ubacctrn)=72 then
-			acctrn_form$='Form Pos 1,C 10,pd 4.2,N 8,n 1,n 1,10*pd 4.2'
+			acctrn_form$='form pos 1,C 10,pd 4.2,N 8,n 1,n 1,10*pd 4.2'
 		else if rln(h_ubacctrn)=62 or rln(h_ubacctrn)=70 then
-			acctrn_form$='Form Pos 1,C 10,pd 4.2,N 8,n 1,n 1,10*pd 4.2'
+			acctrn_form$='form pos 1,C 10,pd 4.2,N 8,n 1,n 1,10*pd 4.2'
 		else if rln(h_ubacctrn)=68 then
-			acctrn_form$='Form Pos 1,C 10,pd 4.2,n 8,n 1,n 1,10*pd 4.2'
+			acctrn_form$='form pos 1,C 10,pd 4.2,n 8,n 1,n 1,10*pd 4.2'
 		else ! seems to be a problem
 			pr 'unrecognised ubacctrn record length' : fnpause
 		end if
@@ -123,7 +123,7 @@ def fn_ub_build_transactions
 !        goto NEXT_MONTH
 EO_DELETE_MATCHING_TRANS: !  /r
 					fn_fix_trans_breakdown(mat g,tamt)
-!         if sum(g)=tamt then ! SKIP ANY TRANSACTIONS THAT DON'T ADD UP
+!         if sum(g)=tamt then ! skip ANY TRANSACTIONS THAT DON'T ADD UP
 					write #transvb,using 'form pos 1,c 10,n 8,n 1,12*pd 4.2,6*pd 5,pd 4.2,n 1': p$,tdate,transcode,tamt,mat g,mat xru,bal,postcode
 !         if trim$(p$)='209740.00' and month=1 then pr 'tdate=';tdate; 'tamt=';tamt : for x=1 to udim(mat rw4,1) : pr rw4(x,1) : next x :  pause
 					write_count+=1
@@ -157,7 +157,7 @@ fnend  ! fn_translate_transcode
 def fn_removebaddates
 	open #transvb=11: "Name=[Q]\UBmstr\ubTransVB.h[cno],KFName=[Q]\UBmstr\ubTrIndx.h[cno],Shr,RecL=102,KPs=1,KLn=19,Use",internal,outIn,keyed
 	do
-		read #transvb,using "Form Pos 11,N 8": tdate eof TRANSVB_EOF
+		read #transvb,using "form pos 11,N 8": tdate eof TRANSVB_EOF
 		tdate$=str$(tdate)
 		if val(tdate$(1:4))<1950 or val(tdate$(1:4))>2049 or val(tdate$(5:6))<1 or val(tdate$(5:6))>12 or val(tdate$(7:8))<1 or val(tdate$(7:8))>31 then
 			delete #transvb:
@@ -182,7 +182,7 @@ def fn_transaction_conv(h_trans)
 		if sum(g)-g(10)=tamt or transcode=1 then g(10)=0 ! don't include penaltiies unless they are needed to total to the transaction amount
 		if transcode=2 and g(10)=tamt then g(1)=g(2)=g(3)=g(4)=g(5)=g(6)=g(7)=g(8)=g(9)=0 ! make sure all other charges are zero on penalty records where g(10) is the penalty field
 		fn_translate_transcode
-		if postcode=5 then goto READ_TRANS ! Skip all transaction type 5s.
+		if postcode=5 then goto READ_TRANS ! skip all transaction type 5s.
 		if len(str$(tdate))<=6 then tdate=fndate_mmddyy_to_ccyymmdd(tdate)
 		if len(str$(fdate))<=6 then fdate=fndate_mmddyy_to_ccyymmdd(fdate)
  

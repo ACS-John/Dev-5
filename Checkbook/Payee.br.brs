@@ -45,7 +45,7 @@ def fn_addpayee
 		editrec=0
 		restore #paymstr:
 		READ_PAYMSTR_1: !
-		read #paymstr,using 'Form Pos 1,C 8,4*c 30,x 5,n 2,c 11,x 6,c 12,c 30,c 50,c 12,c 20',release: vn$,nam$,ad1$,ad2$,csz$,typ,ss$,ph$,contact$,email$,fax$,myact$ eof EO_FLEX1
+		read #paymstr,using 'form pos 1,C 8,4*c 30,x 5,n 2,c 11,x 6,c 12,c 30,c 50,c 12,c 20',release: vn$,nam$,ad1$,ad2$,csz$,typ,ss$,ph$,contact$,email$,fax$,myact$ eof EO_FLEX1
 		item$(1)=str$(rec(paymstr))
 		item$(2)=vn$
 		item$(3)=nam$
@@ -76,7 +76,7 @@ def fn_addpayee
 		if ckey=2 or ckey=3 then editrec=val(resp$(1))
 		if editrec=0 then goto MENU1
 		if ckey=2 or ckey=3 then
-			read #paymstr,using 'Form Pos 1,C 8,4*c 30,x 5,n 2,c 11,x 6,c 12,c 30,c 50,c 12,c 20',rec=editrec: vn$,nam$,ad1$,ad2$,csz$,typ,ss$,ph$,contact$,email$,fax$,myact$
+			read #paymstr,using 'form pos 1,C 8,4*c 30,x 5,n 2,c 11,x 6,c 12,c 30,c 50,c 12,c 20',rec=editrec: vn$,nam$,ad1$,ad2$,csz$,typ,ss$,ph$,contact$,email$,fax$,myact$
 		end if
 		if ckey=2 then xedit=1 : holdvn$=vn$: goto EDIT_PAYEE
 		if ckey=3 then gosub DELETE_PAYEE
@@ -87,7 +87,7 @@ def fn_addpayee
 		! if there are any - than tell them, and don't delete.
 		open #paytrans=fnH: "Name=[Q]\CLmstr\Paytrans.h[cno],KFName=[Q]\CLmstr\UnPdIdx1.h[cno],Shr",internal,outIn,keyed
 		restore #paytrans,key>=vn$&rpt$(chr$(0),12): nokey L490
-		read #paytrans,using 'Form Pos 1,C 8',release: x$
+		read #paytrans,using 'form pos 1,C 8',release: x$
 		if x$=vn$ then
 			mat ml$(2)
 			ml$(1)="A Unpaid Invoice for this payee exists"
@@ -99,7 +99,7 @@ def fn_addpayee
 		delete #paymstr,rec=editrec:
 		restore #payeegl,key>=vn$: nokey EO_DELETE_PAYEE
 		DELETE_PAYEEGL_LOOP: !
-		read #payeegl,using 'Form Pos 1,C 8': payeekey$ eof EO_DELETE_PAYEE
+		read #payeegl,using 'form pos 1,C 8': payeekey$ eof EO_DELETE_PAYEE
 		if payeekey$=vn$ then
 			delete #payeegl:
 			goto DELETE_PAYEEGL_LOOP
@@ -109,9 +109,9 @@ def fn_addpayee
 		open #trans=fnH: "Name=[Q]\CLmstr\TrMstr.h[cno],KFName=[Q]\CLmstr\TrIdx2.h[cno],Shr",internal,outIn,keyed
 		restore #trans, key>=holdvn$&rpt$(chr$(0),kln(trans)-len(holdvn$)): nokey EO_DEL_KEY_ON_TRANS
 		L590: !
-		read #trans,using 'Form Pos 28,C 8': x$ eof EO_DEL_KEY_ON_TRANS
+		read #trans,using 'form pos 28,C 8': x$ eof EO_DEL_KEY_ON_TRANS
 		if x$=vn$ then
-			rewrite #trans,using 'Form Pos 28,Cr 8': ''
+			rewrite #trans,using 'form pos 28,Cr 8': ''
 			goto L590
 		end if
 		EO_DEL_KEY_ON_TRANS: !
@@ -178,7 +178,7 @@ def fn_addpayee
 		if trim$(vn$)="" then goto EO_FLEX3
 		restore #payeegl,key>=vn$: nokey EO_FLEX3
 		do
-			read #payeegl,using 'Form Pos 1,C 8,c 12,n 6.2,c 30',release: payeekey$,payeegl$,percent,gldesc$ eof EO_FLEX3
+			read #payeegl,using 'form pos 1,C 8,c 12,n 6.2,c 30',release: payeekey$,payeegl$,percent,gldesc$ eof EO_FLEX3
 			if vn$<>payeekey$ then goto EO_FLEX3
 			glitem$(1)=str$(rec(payeegl))
 			glitem$(2)=payeekey$
@@ -205,7 +205,7 @@ def fn_addpayee
 		if xedit=1 and holdvn$<>vn$ then goto L1190
 		goto L1210
 		L1190: !
-			read #paymstr,using 'Form Pos 1,C 8',key=vn$: oldvn$ nokey L1210
+			read #paymstr,using 'form pos 1,C 8',key=vn$: oldvn$ nokey L1210
 			if add=1 then goto L1205
 			mat ml$(2)
 			ml$(1)="You already have a payee number "&vn$
@@ -226,10 +226,10 @@ def fn_addpayee
 			fnmsgbox(mat ml$,resp$,cap$,16)
 		goto EDIT_PAYEE ! /r
 		L1230: !
-			read #citystzip,using 'Form POS 1,C 30',key=rpad$(ltrm$(csz$),30),release: citystzip$ nokey L1240
+			read #citystzip,using 'form pos 1,C 30',key=rpad$(ltrm$(csz$),30),release: citystzip$ nokey L1240
 		goto L1250
 		L1240: !
-			write #citystzip,using 'Form POS 1,C 30': csz$
+			write #citystzip,using 'form pos 1,C 30': csz$
 		L1250: !
 		typ=val(resp$(6)(1:2)) ! type
 		ss$=resp$(7) ! ss or fed id
@@ -247,14 +247,14 @@ def fn_addpayee
 			payeekey$=gldesc$=payeegl$=""
 			goto GL_BREAKDOWNS ! add gl breakdown
 		else if ckey=7 then
-			read #payeegl,using 'Form Pos 1,C 8,c 12,n 6.2,c 30',rec=gldistrec,release: payeekey$,payeegl$,percent,gldesc$
+			read #payeegl,using 'form pos 1,C 8,c 12,n 6.2,c 30',rec=gldistrec,release: payeekey$,payeegl$,percent,gldesc$
 			goto GL_BREAKDOWNS ! edit gl breakdown
 		end if
 		tac=0
 		! READ_STANDARD_BREAKDOWNS: !
 		restore #payeegl,key>=vn$: nokey EO_TEST
 		do
-			read #payeegl,using 'Form Pos 1,C 8,c 12,n 6.2,c 30',release: payeekey$,payeegl$,percent,gldesc$ eof EO_TEST
+			read #payeegl,using 'form pos 1,C 8,c 12,n 6.2,c 30',release: payeekey$,payeegl$,percent,gldesc$ eof EO_TEST
 			if vn$=payeekey$ then tac+=percent
 		loop while vn$=payeekey$
 		EO_TEST: !
@@ -269,9 +269,9 @@ def fn_addpayee
 	SAVE_PAYEE: ! r:
 	if xedit=1 and vn$<>holdvn$ then gosub KEY_CHANGE
 	if xedit=1 then
-		rewrite #paymstr, using 'Form Pos 1,Cr 8,4*C 30,x 5,N 2,C 11,x 6,C 12,C 30,C 50,C 12,C 20': vn$,nam$,ad1$,ad2$,csz$,typ,ss$,ph$,contact$,email$,fax$,myact$
+		rewrite #paymstr, using 'form pos 1,Cr 8,4*C 30,x 5,N 2,C 11,x 6,C 12,C 30,C 50,C 12,C 20': vn$,nam$,ad1$,ad2$,csz$,typ,ss$,ph$,contact$,email$,fax$,myact$
 	else if add=1 then
-		write #paymstr,using 'Form Pos 1,Cr 8,4*C 30,x 5,N 2,C 11,x 6,C 12,C 30,C 50,C 12,C 20': vn$,nam$,ad1$,ad2$,csz$,typ,ss$,ph$,contact$,email$,fax$,myact$ duprec MSGBOX3
+		write #paymstr,using 'form pos 1,Cr 8,4*C 30,x 5,N 2,C 11,x 6,C 12,C 30,C 50,C 12,C 20': vn$,nam$,ad1$,ad2$,csz$,typ,ss$,ph$,contact$,email$,fax$,myact$ duprec MSGBOX3
 	end if
 	goto MENU1 ! /r
 	KEY_CHANGE: ! r:
@@ -279,9 +279,9 @@ def fn_addpayee
 	open #trans=fnH: "Name=[Q]\CLmstr\TrMstr.h[cno],KFName=[Q]\CLmstr\TrIdx2.h[cno],Shr",internal,outIn,keyed
 	restore #trans,key>=holdvn$&rpt$(chr$(0),11): nokey EO_CHANGE_KEY_ON_TRANS
 	L1530: !
-	read #trans,using 'Form Pos 28,C 8': x$ eof EO_CHANGE_KEY_ON_TRANS
+	read #trans,using 'form pos 28,C 8': x$ eof EO_CHANGE_KEY_ON_TRANS
 	if x$=holdvn$ then
-		rewrite #trans,using 'Form Pos 28,Cr 8',release: vn$
+		rewrite #trans,using 'form pos 28,Cr 8',release: vn$
 		goto L1530
 	end if
 	EO_CHANGE_KEY_ON_TRANS: !
@@ -289,13 +289,13 @@ def fn_addpayee
 
 	! Change references to this file in the sub-file PayeeGLBreakdown
 
-  !	fnKeyChange(payeegl,'Form Pos 1,Cr 8',holdvn$,vn$)  todo: implement this in place of the following routine:  (and test it)
+  !	fnKeyChange(payeegl,'form pos 1,Cr 8',holdvn$,vn$)  todo: implement this in place of the following routine:  (and test it)
 
 	restore #payeegl,key=holdvn$: nokey EO_CHANGE_KEY_ON_PAYEEGL
 	L1600: !
-	read #payeegl,using 'Form Pos 1,C 8': x$ eof EO_CHANGE_KEY_ON_PAYEEGL
+	read #payeegl,using 'form pos 1,C 8': x$ eof EO_CHANGE_KEY_ON_PAYEEGL
 	if x$=holdvn$ then
-		rewrite #payeegl,using 'Form Pos 1,Cr 8': vn$
+		rewrite #payeegl,using 'form pos 1,Cr 8': vn$
 		goto L1600
 	end if
 	EO_CHANGE_KEY_ON_PAYEEGL: !
@@ -304,9 +304,9 @@ def fn_addpayee
 	open #paytrans=fnH: "Name=[Q]\CLmstr\Paytrans.h[cno],KFName=[Q]\CLmstr\UnPdIdx1.h[cno],Shr",internal,outIn,keyed
 	restore #paytrans,key>=holdvn$&rpt$(chr$(0),12): nokey EO_CHANGE_KEY_ON_PAYTRANS
 	L1670: !
-	read #paytrans,using 'Form Pos 1,C 8': x$ eof EO_CHANGE_KEY_ON_PAYTRANS
+	read #paytrans,using 'form pos 1,C 8': x$ eof EO_CHANGE_KEY_ON_PAYTRANS
 	if x$=holdvn$ then
-		rewrite #paytrans,using 'Form Pos 1,Cr 8': vn$
+		rewrite #paytrans,using 'form pos 1,Cr 8': vn$
 		goto L1670
 	end if
 	EO_CHANGE_KEY_ON_PAYTRANS: !
@@ -315,9 +315,9 @@ def fn_addpayee
 	! Change references to this file in the linked file UnPdAloc
 	open #unpdaloc=fnH: "Name=[Q]\CLmstr\UnPdAloc.h[cno],KFName=[Q]\CLmstr\UAIdx2.h[cno],Shr",internal,outIn,keyed
 	restore #unpdaloc,key>=holdvn$&rpt$(chr$(0),kln(unpdaloc)-len(holdvn$)): nokey EO_CHANGE_KEY_ON_UNPDALOC
-	read #unpdaloc,using 'Form Pos 1,C 8': x$ eof EO_CHANGE_KEY_ON_UNPDALOC
+	read #unpdaloc,using 'form pos 1,C 8': x$ eof EO_CHANGE_KEY_ON_UNPDALOC
 	if x$=holdvn$ then
-		rewrite #unpdaloc,using 'Form Pos 1,Cr 8': vn$
+		rewrite #unpdaloc,using 'form pos 1,Cr 8': vn$
 		goto L1670
 	end if
 	EO_CHANGE_KEY_ON_UNPDALOC: !
@@ -365,7 +365,7 @@ CHECK_HISTORY: ! r:
 	restore #trans,key>=key$: nokey EO_FLEX2
 	transactionstotal=0
 	READ_TRANS: !
-	read #trans,using 'Form Pos 1,n 2,n 1,C 8,G 6,PD 10.2,C 8,C 35,N 1,N 6,N 1',release: bank_code,tcde,tr$(1),tr$(2),tr3,tr$(4),tr$(5),pcde,clr,scd eof EO_FLEX2
+	read #trans,using 'form pos 1,n 2,n 1,C 8,G 6,PD 10.2,C 8,C 35,N 1,N 6,N 1',release: bank_code,tcde,tr$(1),tr$(2),tr3,tr$(4),tr$(5),pcde,clr,scd eof EO_FLEX2
 	if trim$(vn$)<>trim$(tr$(4)) then goto EO_FLEX2
 	if transactionstartingdate<>0 and transactionstartingdate>fndate_mmddyy_to_ccyymmdd(val(tr$(2))) then goto READ_TRANS
 	if transactionendingdate<>0 and transactionendingdate<fndate_mmddyy_to_ccyymmdd(val(tr$(2))) then goto READ_TRANS
@@ -380,7 +380,7 @@ CHECK_HISTORY: ! r:
 	goto READ_TRANS
 	EO_FLEX2: !
 	fnLbl(5,1,'Transactions Total:',mylen,1)
-	fnTxt(5,mypos,12,0,1,"10",1,'This is the total of only the transactions shown in the Transaction Grid above. ')
+	fnTxt(5,mypos,12,0,1,'10',1,'This is the total of only the transactions shown in the Transaction Grid above. ')
 	resp$(3)=str$(transactionstotal)
 	fnCmdKey('&Refresh',2,1,0,"If you select a date range, you must refresh the screen to see the transactions for that date range.")
 	fnCmdKey('&Close',5,0,1)
@@ -416,9 +416,9 @@ GL_BREAKDOWNS: ! r:
 	if ckey=4 and gldistrec>0 then
 		delete #payeegl,rec=gldistrec:
 	else if ckey=1 and gldistrec=0 then
-		write #payeegl,using 'Form Pos 1,C 8,c 12,n 6.2,c 30': payeekey$,payeegl$,percent,gldesc$
+		write #payeegl,using 'form pos 1,C 8,c 12,n 6.2,c 30': payeekey$,payeegl$,percent,gldesc$
 	else if ckey=1 and gldistrec>0 then
-		rewrite #payeegl,using 'Form Pos 1,C 8,c 12,n 6.2,c 30',rec=gldistrec: payeekey$,payeegl$,percent,gldesc$
+		rewrite #payeegl,using 'form pos 1,C 8,c 12,n 6.2,c 30',rec=gldistrec: payeekey$,payeegl$,percent,gldesc$
 	end if
 	goto EDIT_PAYEE ! /r
 	! execute "Index [Q]\CLmstr\payeeglbreakdown.h[cno]"&' '&"[Q]\CLmstr\Payeeglbkdidx.h[cno] 1 8 Replace DupKeys -n"

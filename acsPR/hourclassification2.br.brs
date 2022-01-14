@@ -29,8 +29,8 @@ def library fnhours(eno)
 		chdr$(3)="Name" : chdr$(4)="Classification" 
 		chdr$(5)="Date" : chdr$(6)="Increase" 
 		chdr$(7)="Decrease" : chdr$(8)="Balance" 
-		cmask$(5)='3' : cmask$(6)='10' : cmask$(7)="10" 
-		cmask$(8)="10" 
+		cmask$(5)='3' : cmask$(6)='10' : cmask$(7)='10' 
+		cmask$(8)='10' 
 		fnflexinit1('Hours',lc+2,1,15,120,mat chdr$,mat cmask$,1) 
 		lc+=18
 		key$=lpad$(str$(eno),8)&"             " 
@@ -38,7 +38,7 @@ def library fnhours(eno)
 		balance=0 : oldclass$=""
 		READHOURBREAKDOWN: !
 		oldclass$=class$
-		read #breakdown,using "Form pos 1,n 8,c 5,n 8,2*n 9.2",release: empno,class$,tdate,increase,decrease eof EOBREAKDOWN
+		read #breakdown,using "form pos 1,n 8,c 5,n 8,2*n 9.2",release: empno,class$,tdate,increase,decrease eof EOBREAKDOWN
 		if empno<>eno then goto EOBREAKDOWN
 		empkey$=lpad$(str$(eno),8)
 		empname$="": read #hEmployee,using "form pos 9,c 30",key=empkey$,release: empname$ nokey L310
@@ -80,7 +80,7 @@ def library fnhours(eno)
 		L490: !
 		if addhours=1 then class$="" : increase=decrease=0
 		if edithours=1 then 
-			read #breakdown,using "Form pos 1,n 8,c 5,n 8,2*n 9.2",rec=editrec: empno,class$,tdate,increase,decrease noRec ADD_FM_DONE
+			read #breakdown,using "form pos 1,n 8,c 5,n 8,2*n 9.2",rec=editrec: empno,class$,tdate,increase,decrease noRec ADD_FM_DONE
 		end if
 		fnTos
 		respc=0 : lc=0 : mylen=21 : mypos=mylen+2: mat resp$=(""): right=1
@@ -112,11 +112,11 @@ def library fnhours(eno)
 	L670: !
 		if increase=0 and decrease=0 and addhours=1 then goto ADDFM             ! do not add blank records
 		if addhours=1 then 
-			write #breakdown,using "Form pos 1,n 8,c 5,n 8,2*n 9.2": empno,class$,tdate,increase,decrease 
+			write #breakdown,using "form pos 1,n 8,c 5,n 8,2*n 9.2": empno,class$,tdate,increase,decrease 
 			goto ADDFM
 		end if
 		if edithours=1 then 
-			rewrite #breakdown,using "Form pos 1,n 8,c 5,n 8,2*n 9.2",rec=editrec: empno,class$,tdate,increase,decrease 
+			rewrite #breakdown,using "form pos 1,n 8,c 5,n 8,2*n 9.2",rec=editrec: empno,class$,tdate,increase,decrease 
 			edithours=0
 			goto ADD_FM_DONE
 		end if

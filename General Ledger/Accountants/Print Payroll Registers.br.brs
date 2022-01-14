@@ -28,7 +28,7 @@
 	beg_date=val(resp$(1))
 	end_date=val(resp$(2))
  
-	open #1: "Name=[Q]\GLmstr\Company.h[cno],Shr",i,outi,r: read #1,using 'Form POS 386,PD 5.3,PD 5.2,PD 5.3,PD 5.2,POS 407,PD 5.3,PD 5.2,POS 418,10*C 20,10*N 1',rec=1: ficarate,ficawage,feducrat,feducwag,mcr,mcm,mat miscname$,mat dedcode : close #1:
+	open #1: "Name=[Q]\GLmstr\Company.h[cno],Shr",i,outi,r: read #1,using 'form pos 386,PD 5.3,PD 5.2,PD 5.3,PD 5.2,pos 407,PD 5.3,PD 5.2,pos 418,10*C 20,10*N 1',rec=1: ficarate,ficawage,feducrat,feducwag,mcr,mcm,mat miscname$,mat dedcode : close #1:
 	ficarate=ficarate/100 : feducrat=feducrat/100 : mcr=mcr/100
 	open #h_prmstr=fnH: "Name=[Q]\GLmstr\PRmstr.h[cno],KFName=[Q]\GLmstr\PRIndex.h[cno],Shr",internal,outIn,keyed
 	fPrmstr: form pos 1,n 4,3*c 25,c 11,36*pd 5.2,2*n 5
@@ -41,12 +41,12 @@ L360: if sum(empd)=0 then goto L390
 	pr #255,using L870: eno,"Total",empd(4),empd(5),empd(6),empd(7),empd9,empd(8),empd(22),empd(19),empd(21) pageoflow PGOF1
 	pr #255:
 	mat empd=(0)
-L390: read #h_prmstr,using 'Form POS 1,N 4,3*C 25,POS 271,2*N 5': eno,mat k$,mat adr eof L650
+L390: read #h_prmstr,using 'form pos 1,N 4,3*C 25,pos 271,2*N 5': eno,mat k$,mat adr eof L650
 ! if eno=19 then pr eno : pause
 	if adr(1)=0 then goto L390
 	ca=adr(1)
 	do
-		read #h_acprcks,using 'Form N 4,2*PD 4,19*PD 5.2,PD 3',rec=ca: mat d,nca conv L350
+		read #h_acprcks,using 'form N 4,2*PD 4,19*PD 5.2,PD 3',rec=ca: mat d,nca conv L350
 		if fndate_mmddyy_to_ccyymmdd(d(2))<beg_date or fndate_mmddyy_to_ccyymmdd(d(2))>end_date then goto L470
 		fn_941_breakdown
 		fn_accumulate_totals

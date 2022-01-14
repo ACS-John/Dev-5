@@ -40,7 +40,7 @@ L340: form pos 1,n 3,n 6,n 3,pos mp1,pd 3,pos mp2,pd 3,pos 81,41*pd 6.2
 	fnTos(sn$="ACglincf") : _
 	mylen=30: mypos=mylen+3 : right=1
 	fnLbl(1,1,"Cost Center or Department #:",mylen,right)
-	fnTxt(1,mypos,3,0,right,"30",0,"Enter the cost center or department number if you wish to pr only one department, else leave blank for all.",0 ) : _
+	fnTxt(1,mypos,3,0,right,'30',0,"Enter the cost center or department number if you wish to pr only one department, else leave blank for all.",0 ) : _
 	resp$(1)=""
 	fnLbl(2,1,"(Blank for all Departments)",mylen,right)
 	fnCmdKey("&Next",1,1,0,"Prints the financial statement.")
@@ -258,7 +258,7 @@ L2530: form pos 1,10*n 3,10*c 20
 	mylen=1: mypos=mylen+3
 	fnLbl(1,4,"Fund                 Description ")
 	for j=1 to 10
-		fnTxt(j+1,mypos,3,0,right,"30",0,"Enter the fund number.") : _
+		fnTxt(j+1,mypos,3,0,right,'30',0,"Enter the fund number.") : _
 		resp$(j*2-1)=str$(fundnum(j))
 		fnTxt(j+1,mypos+10,20,0,0,"",0,"Enter the fund description.") : _
 		resp$(j*2)=funddesc$(j)

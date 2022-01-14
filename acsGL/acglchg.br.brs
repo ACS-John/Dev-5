@@ -13,7 +13,7 @@
 	if fnGlAskFormatPriorCdPeriod=5 then goto Xit
 	fncno(cno,cnam$)
 	udf$=env$('temp')&'\'
-	open #20: "Name=[Q]\GLmstr\Company.h[cno],Shr",i,i,r: read #20,using 'Form Pos 152,3*C 12',rec=1: mat cogl$ : close #20:
+	open #20: "Name=[Q]\GLmstr\Company.h[cno],Shr",i,i,r: read #20,using 'form pos 152,3*C 12',rec=1: mat cogl$ : close #20:
 	actpd=fnactpd : fscode=fnfscode
 	pors=1
 	on fkey 5 goto L1830
@@ -42,7 +42,7 @@ L340: close #1:
 	fnTos
 	mylen=30: mypos=mylen+3 : right=1
 	fnLbl(1,1,"Cost Center or Department #:",mylen,right)
-	fnTxt(1,mypos,3,0,right,"30",0,"Enter the cost center or department number if you wish to pr only one department, else leave blank for all.",0 ) : _
+	fnTxt(1,mypos,3,0,right,'30',0,"Enter the cost center or department number if you wish to pr only one department, else leave blank for all.",0 ) : _
 	resp$(1)=""
 	fnLbl(2,1,"(Blank for all Departments)",mylen,right)
 	fnCmdKey("&Next",1,1,0,"Prints the financial statement.")

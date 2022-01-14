@@ -7,9 +7,9 @@ def library fnglmstr_338_416
 	open #1: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLIndex.h[cno]",internal,outIn,keyed
 	do
 		dim revb(13)
-		read #1,using 'Form POS 339,13*PD 6.2': mat revb eof DONE
+		read #1,using 'form pos 339,13*PD 6.2': mat revb eof DONE
 		mat revb=(0)
-		rewrite #1,using 'Form POS 339,13*PD 6.2': mat revb
+		rewrite #1,using 'form pos 339,13*PD 6.2': mat revb
 	loop
 	DONE: !
 	close #1:

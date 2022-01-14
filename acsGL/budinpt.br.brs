@@ -11,7 +11,7 @@
 !
 !
 	open #1: "Name=[Q]\GLmstr\Company.h[cno],Shr",i,i,r
-	read #1,using 'Form Pos 384,N 2',rec=1: nap
+	read #1,using 'form pos 384,N 2',rec=1: nap
 	close #1:
 !
 	fnTos(sn$="BudgetAmount")
@@ -53,7 +53,7 @@ L450: fnLbl(1,1," General Ledger Number:",mylen,right)
 	fnqgl(1,mypos,0,2)
 	resp$(1)=fnrgl$(k$)
 	fnLbl(2,1," Budget Amount:",mylen,right)
-	fnTxt(2,mypos,12,0,1,"10",0,"Enter the total budget amount for this account.  Use negative amounts on revenues (any negative balance accounts).")
+	fnTxt(2,mypos,12,0,1,'10',0,"Enter the total budget amount for this account.  Use negative amounts on revenues (any negative balance accounts).")
 	resp$(2)=""
 	fnCmdSet(2)
 	ckey=fnAcs(mat resp$)
@@ -88,7 +88,7 @@ Xit: fnXit
 L790: ! PULL FROM BUDGET MANAGEMENT SYSTEM  (select budget #)
 !
 	open #1: "Name=[Q]\GLmstr\Company.h[cno],Shr",i,i,r
-	read #1,using 'Form Pos 384,N 2',rec=1: nap
+	read #1,using 'form pos 384,N 2',rec=1: nap
 	close #1:
 	pr newpage
 	fnTos(sn$="BudgetAmount3")
@@ -111,7 +111,7 @@ BUDGET_FILE_NUM: ! r:
 	fnTos(sn$="BudgetAmount4")
 	mylen=50: mypos=mylen+3 : right=1
 	fnLbl(1,1," Budget File Number to Pull:",mylen,right)
-	fnTxt(1,mypos,3,0,1,"30",0,"You can have different budget files in the budget management system.  Enter the budget file you wish to pull.")
+	fnTxt(1,mypos,3,0,1,'30',0,"You can have different budget files in the budget management system.  Enter the budget file you wish to pull.")
 	resp$(1)=""
 	fnCmdSet(2)
 	ckey=fnAcs(mat resp$)
@@ -121,7 +121,7 @@ BUDGET_FILE_NUM: ! r:
 return ! /r
 !
 L1090: ! PULL FROM BUDGET MANAGEMENT SYSTEM  (select budget #)
-L1100: read #2,using 'Form POS 1,N 3,N 6,N 3,POS P1,PD 6.2,POS 149,C 1': mat in1,cd$ eof EOF2
+L1100: read #2,using 'form pos 1,N 3,N 6,N 3,pos P1,PD 6.2,pos 149,C 1': mat in1,cd$ eof EOF2
 	if cd$<>"B" then goto L1100
 	k$=cnvrt$("N 3",in1(1))&cnvrt$("N 6",in1(2))&cnvrt$("N 3",in1(3))
 	rewrite #2,using L1140: 0 ! SET CHANGES TO ZERO IN BUDGET WORKFILE

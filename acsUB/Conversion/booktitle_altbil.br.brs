@@ -15,12 +15,12 @@ L310: rinput fields mat io1$: cno conv L310
 	if cno=0 or cmdkey=5 or cmdkey=99 then goto Xit
 	open #1: "Name=[Q]\UBmstr\ubadrbil.h"&str$(cno),i,outi,r
 	for j=1 to lrec(1)
-		read #1,using "Form Pos 11,4*c 40",rec=j: mat ab$ noRec L390
+		read #1,using "form pos 11,4*c 40",rec=j: mat ab$ noRec L390
 		for x=1 to 4
 			ab$(x)=fnbooktitle$(ab$(x))
 		next x
 ! pr NAM$
-		rewrite #1,using "Form Pos 11,4*C 40",rec=j: mat ab$ noRec L390
+		rewrite #1,using "form pos 11,4*C 40",rec=j: mat ab$ noRec L390
 L390: next j
 	goto DONE
 !

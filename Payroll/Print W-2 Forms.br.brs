@@ -26,7 +26,7 @@
 	dim k$(3)*30
  
 	fnTop(program$)
-	fw2box16$="FORM  POS 1,C 8"&rpt$(",C 12,G 10.2,3*G 1",6)
+	fw2box16$="form  pos 1,C 8"&rpt$(",C 12,G 10.2,3*G 1",6)
  
 	open #hCompany=fnH: "Name=[Q]\PRmstr\Company.h[cno],Shr",internal,input
 	read #hCompany,using Fcompany: mat a$,empId$,mat d$,loccode,NOTssmax,mat e$
@@ -173,7 +173,7 @@ READ_EMPLOYEE: ! r:
 		restore #hChecks,key>=checkkey$: nokey READ_EMPLOYEE
 		do
 			READ_CHECK: !
-			read #hChecks,using "Form POS 1,N 8,n 3,PD 6,N 7,5*PD 3.2,37*PD 5.2": heno,tdn,prd,ckno,mat tdc,mat tcp eof EO_CHECKS_FOR_EMP
+			read #hChecks,using "form pos 1,N 8,n 3,PD 6,N 7,5*PD 3.2,37*PD 5.2": heno,tdn,prd,ckno,mat tdc,mat tcp eof EO_CHECKS_FOR_EMP
 			if heno<>eno then goto EO_CHECKS_FOR_EMP
 			if prd<beg_date or prd>end_date then goto READ_CHECK ! not this year
 			read #hDepartment,using "form pos 48,n 2", key=cnvrt$("pic(zzzzzzz#)",eno)&cnvrt$("pic(zzz)",tdn): tcd nokey ignore ! get state code

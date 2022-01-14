@@ -19,7 +19,7 @@ ASKSUBCAT: ! r:
 	else if ckey=98 then
 		goto EDITREC
 	else if ckey=3 then
-		read #1,using "Form POS 1,C 3,C 25": cde$,des$ eof ASKSUBCAT
+		read #1,using "form pos 1,C 3,C 25": cde$,des$ eof ASKSUBCAT
 		cde$=uprc$(lpad$(rtrm$(cde$),3))
 		holdcde$=cde$
 		goto EDITREC
@@ -37,7 +37,7 @@ ADDREC: ! r:
 	fnTos(sn$="Ask-sub-cat")
 	respc=0
 	fnLbl(1,1,"Sub-category #:",16,right)
-	fnTxt(1,19,3,3,0,"30",0,"Assign any number that has not been used before.")
+	fnTxt(1,19,3,3,0,'30',0,"Assign any number that has not been used before.")
 	resp$(respc+=1)=""
 	fnCmdKey("&Next",1,1,0,"Record this sub category record.")
 	fnCmdKey("E&xit",5,0,1,"Returns to main screen.")
@@ -61,7 +61,7 @@ EDITREC: ! r:
 	fnTos(sn$="Edit-sub-cat")
 	respc=0
 	fnLbl(1,1,"Sub-category #:",16,right)
-	fnTxt(1,19,3,3,0,"30",0,"Can be any three digit number.")
+	fnTxt(1,19,3,3,0,'30',0,"Can be any three digit number.")
 	resp$(respc+=1)=cde$
 	fnLbl(2,1,"Description:",16,right)
 	fnTxt(2,19,30,30,0,"",0,"")

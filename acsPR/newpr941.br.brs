@@ -30,7 +30,7 @@ MENU1: ! r:
 	respc=0
 	if val(date$(4:5))=1 then taxyear=val(date$(1:2))+2000-1 else taxyear =val(date$(1:2))+2000 ! current tax year (if processing in jan, assume last year)
 	fnLbl(1,1,"Tax Year:",26,1)
-	fnTxt(1,30,4,0,0,"30",0,"")
+	fnTxt(1,30,4,0,0,'30',0,"")
 	resp$(respc+=1)=str$(taxyear)
 	option1$(1)="March 31"
 	option1$(2)="June 30"
@@ -46,39 +46,39 @@ MENU1: ! r:
 	resp$(respc+=1)='True'
 	fnFra(5,1,4,30,"Tax Liability","Enter the total tax liability by month")
 	fnLbl(1,1,"Month 1:",10,1,0,1)
-	fnTxt(1,13,12,0,1,"10",0,"",1)
+	fnTxt(1,13,12,0,1,'10',0,"",1)
 	resp$(respc+=1)=""
 	fnLbl(2,1,"Month 2:",10,1,0,1)
-	fnTxt(2,13,12,0,1,"10",0,"",1)
+	fnTxt(2,13,12,0,1,'10',0,"",1)
 	resp$(respc+=1)=""
 	fnLbl(3,1,"Month 3:",10,1,0,1)
-	fnTxt(3,13,12,0,1,"10",0,"",1)
+	fnTxt(3,13,12,0,1,'10',0,"",1)
 	resp$(respc+=1)=""
 	fnFra(11,1,7,72,"Adjustments","Enter any applicable adjustments")
 	mylen=52
 	fnLbl(1,1,"Current quarter's fraction of cents:",mylen,1,0,2)
-	fnTxt(1,mylen+3,12,0,1,"10",0,"",2)
+	fnTxt(1,mylen+3,12,0,1,'10',0,"",2)
 	resp$(respc+=1)=""
 	fnLbl(2,1,"Current quarter's sick pay:",mylen,1,0,2)
-	fnTxt(2,mylen+3,12,0,1,"10",0,"",2)
+	fnTxt(2,mylen+3,12,0,1,'10',0,"",2)
 	resp$(respc+=1)=""
 	fnLbl(3,1,"Current quarter's adjustments for tips and ins:",mylen,1,0,2)
-	fnTxt(3,mylen+3,12,0,1,"10",0,"",2)
+	fnTxt(3,mylen+3,12,0,1,'10',0,"",2)
 	resp$(respc+=1)=""
 	fnLbl(4,1,"Current year's income tax withholding:",mylen,1,0,2)
-	fnTxt(4,mylen+3,12,0,1,"10",0,"",2)
+	fnTxt(4,mylen+3,12,0,1,'10',0,"",2)
 	resp$(respc+=1)=""
 	fnLbl(5,1,"Prior quarters' ss and medicare taxes:",mylen,1,0,2)
-	fnTxt(5,mylen+3,12,0,1,"10",0,"",2)
+	fnTxt(5,mylen+3,12,0,1,'10',0,"",2)
 	resp$(respc+=1)=""
 	fnLbl(6,1,"Special Additions to Federal income taxes:",mylen,1,0,2)
-	fnTxt(6,mylen+3,12,0,1,"10",0,"",2)
+	fnTxt(6,mylen+3,12,0,1,'10',0,"",2)
 	resp$(respc+=1)=""
 	fnLbl(7,1,"Special Additions to ss and medicare:",mylen,1,0,2)
-	fnTxt(7,mylen+3,12,0,1,"10",0,"",2)
+	fnTxt(7,mylen+3,12,0,1,'10',0,"",2)
 	resp$(respc+=1)=""
 	fnLbl(20,1,"Total deposits for quarter including overpayments:",mylen+1,1,0,0)
-	fnTxt(20,mylen+4,12,0,1,"10",0,"",0)
+	fnTxt(20,mylen+4,12,0,1,'10',0,"",0)
 	resp$(respc+=1)=""
 	fnCmdSet(2): ckey=fnAcs(mat resp$)
 	if ckey=5 then goto Xit
@@ -133,7 +133,7 @@ def fn_start_print
 	mat ytdtotal=(0)
 	checkkey$=cnvrt$("pic(zzzzzzz#)",eno)&cnvrt$("pic(zz#)",0)&cnvrt$("pd 6",0) ! index employee#,department# and payroll date
 	restore #4,key>=checkkey$: nokey ANALYZE_WAGES
-	L1210: read #4,using "Form POS 1,N 8,n 3,PD 6,N 7,5*PD 3.2,37*PD 5.2": heno,tdn,prd,ckno,mat tdc,mat tcp eof ANALYZE_WAGES
+	L1210: read #4,using "form pos 1,N 8,n 3,PD 6,N 7,5*PD 3.2,37*PD 5.2": heno,tdn,prd,ckno,mat tdc,mat tcp eof ANALYZE_WAGES
 	if heno<>eno then goto ANALYZE_WAGES
 	if prd<beg_date or prd>end_date then goto L1210 ! not this year
 	if em5=1 then pedate=begdate+19: box1+=1 ! monthly pay period
@@ -141,7 +141,7 @@ def fn_start_print
 	if em5=3 then pedate=begdate+14 : box1+=1 ! bi-weekly
 	if em5=4 then pedate=begdate+7: box1+=1 ! weekly
 	!   deptkey$=cnvrt$("pic(zzzzzzz#)",eno)&cnvrt$("pic(zz#)",tdn)
-	! Form POS 48,N 2
+	! form pos 48,N 2
 	if prd>=qtr1 and prd<qtr2 then mat qtr1tcp=qtr1tcp+tcp: mat tpt=tpt+tcp ! 1st qtr earnings
 	if prd>=qtr2 and prd<qtr3 then mat qtr2tcp=qtr2tcp+tcp : mat tpt=tpt+tcp
 	if prd>=qtr3 and prd<qtr4 then mat qtr3tcp=qtr3tcp+tcp : mat tpt=tpt+tcp
@@ -364,7 +364,7 @@ def fn_print941_origional
 	fnpa_txt(cnvrt$("pic(-,---,---.##)",box15c),tab4,74)
 	fnpa_txt(cnvrt$("pic(-,---,---.##)",box15a+box15b+box15c),tab4,82)
 fnend
-def fn_csz ! EXTRACT  CITY$,STATE$,ZIP$ FORM CSZ$
+def fn_csz ! EXTRACT  CITY$,STATE$,ZIP$ form CSZ$
 	L3680: !
 	p1=pos(csz$,".",1)
 	if p1>0 then csz$(p1:p1)=" ": p2=p1: goto L3680
@@ -409,7 +409,7 @@ def fn_print941_info ! pr 941 information
 	pr #255,using "form pos 5,cr 20,x 1,pic(-,---,---.##)": "7h",box7h
 	pr #255,using "form pos 5,cr 20,x 1,pic(-,---,---.##)": "8",box8
 	pr #255,using "form pos 5,cr 20,x 1,pic(-,---,---.##)": "9",box9
-	pr #255,using "form pos 5,cr 20,x 1,pic(-,---,---.##)": "10",box10
+	pr #255,using "form pos 5,cr 20,x 1,pic(-,---,---.##)": '10',box10
 	pr #255,using "form pos 5,cr 20,x 1,pic(-,---,---.##)": "11",box11
 	pr #255,using "form pos 5,cr 20,x 1,pic(-,---,---.##)": "12",box12
 	pr #255,using "form pos 5,cr 20,x 1,pic(-,---,---.##)": "13",box13

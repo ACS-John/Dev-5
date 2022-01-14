@@ -58,11 +58,11 @@ MENU1: ! r:
 	resp$(6)=fn_reg_try$('ubMetrRt.show disconnects','False')
 	fnChk(lc+=1,mylen+2,"Print Prior Usage:",1)
 	resp$(7)=fn_reg_try$('ubMetrRt.print prior usage','False')
-	fnChk(lc+=1,mylen+2,"Skip Meter Number:",1)
+	fnChk(lc+=1,mylen+2,"skip Meter Number:",1)
 	resp$(rc_disableMeterNo=8)=fn_reg_try$('ubMetrRt.skip meter number','False')
 	lc+=1
 	fnLbl(lc+=1,1,"Number of Blank Lines:",mylen-2,1)
-	fnTxt(lc,mylen+2,2,0,0,"30",0,"If you want extra space between accounts, enter the number of lines.")
+	fnTxt(lc,mylen+2,2,0,0,'30',0,"If you want extra space between accounts, enter the number of lines.")
 	resp$(9)=fn_reg_try$('ubMetrRt.# of blank lines',str$(extralines))
 	lc+=1
 	fnFra(lc+=1,10,2,26,"Order for printing","The billing journal can be printed if route # sequence, Account sequence or name sequence.",0)
@@ -106,7 +106,7 @@ fnopenprn
 on pageoflow goto PgOf
 gosub PrHeader
 LOOP_TOP: ! r: main loop
-	read #hCustomer,using 'Form POS 1,C 10,4*C 30,C 12,POS 217,15*PD 5,POS 373,C 12,POS 361,C 12,POS 1741,N 2,POS 1821,N 1,pos 143,7*pd 2,pos 1806,3*n 2,pos 1821,n 1,pos 1942,c 12': z$,mat e$,f1$,mat d,f3$,f$(2),extra(1),fbc,mat a,extra(11),extra(12),extra(13),extra(17),bulksort$ eof Finis
+	read #hCustomer,using 'form pos 1,C 10,4*C 30,C 12,pos 217,15*PD 5,pos 373,C 12,pos 361,C 12,pos 1741,N 2,pos 1821,N 1,pos 143,7*pd 2,pos 1806,3*n 2,pos 1821,n 1,pos 1942,c 12': z$,mat e$,f1$,mat d,f3$,f$(2),extra(1),fbc,mat a,extra(11),extra(12),extra(13),extra(17),bulksort$ eof Finis
 	if extra(17)>0 and skipdisconnects=0 then goto LOOP_TOP
 	if route=0 then goto L790
 	if extra(1)<>route then goto LOOP_TOP
@@ -170,7 +170,7 @@ LOOP_TOP: ! r: main loop
 	L940: ! If env$('client')="Thomasboro" AND FBC<>0 Then Goto 500
 	if fbc><0 then e$(2)="Disconnect"
 	if env$('client')="Thomasboro" then 
-		pr #255,using 'Form POS 1,C 10,X 1,C 18,X 1,C 20,X 1,X_service*c 43': z$,e$(2)(1:18),e$(1)(1:20),mat x_service$
+		pr #255,using 'form pos 1,C 10,X 1,C 18,X 1,C 20,X 1,X_service*c 43': z$,e$(2)(1:18),e$(1)(1:20),mat x_service$
 		goto L1050
 	end if
 	
@@ -184,20 +184,20 @@ LOOP_TOP: ! r: main loop
 		end if
 		
 		if enablePrior=1 then 
-			pr #255,using 'Form POS 1,C 10,X 1,C 18,X 1,C 12,X 1,C 20,X 1,X_service*c 35,n 9': z$,e$(2)(1:18),meterNo$,e$(1)(1:20),mat x_service$
+			pr #255,using 'form pos 1,C 10,X 1,C 18,X 1,C 12,X 1,C 20,X 1,X_service*c 35,n 9': z$,e$(2)(1:18),meterNo$,e$(1)(1:20),mat x_service$
 		else if usedcolumn=0 then 
 			
 			pr #255,using L1032: z$,e$(2)(1:18),meterNo$,e$(1)(1:20),mat x_service$
 			L1032: form pos 1,c 10,x 1,c 18,x 1,c 12,x 1,c 20,x 1,x_service*c 26
 		else if usedcolumn=1 then 
-			pr #255,using 'Form POS 1,C 10,X 1,C 18,X 1,C 12,X 1,C 20,X 1,X_service*c 43,x 3': z$,e$(2)(1:18),meterNo$,e$(1)(1:20),mat x_service$
+			pr #255,using 'form pos 1,C 10,X 1,C 18,X 1,C 12,X 1,C 20,X 1,X_service*c 43,x 3': z$,e$(2)(1:18),meterNo$,e$(1)(1:20),mat x_service$
 		end if 
 	else if enablePrior=1 then 
-		pr #255,using 'Form POS 1,C 10,X 1,C 18,X 1,C 20,X 1,X_service*c 35,n 9': z$,e$(2)(1:18),e$(1)(1:20),mat x_service$
+		pr #255,using 'form pos 1,C 10,X 1,C 18,X 1,C 20,X 1,X_service*c 35,n 9': z$,e$(2)(1:18),e$(1)(1:20),mat x_service$
 	else if usedcolumn=0 then 
-		pr #255,using 'Form POS 1,C 10,X 1,C 18,X 1,C 20,X 1,X_service*c 26': z$,e$(2)(1:18),e$(1)(1:20),mat x_service$
+		pr #255,using 'form pos 1,C 10,X 1,C 18,X 1,C 20,X 1,X_service*c 26': z$,e$(2)(1:18),e$(1)(1:20),mat x_service$
 	else if usedcolumn=1 then 
-		pr #255,using 'Form POS 1,C 10,X 1,C 18,X 1,C 20,X 1,X_service*c 43,x 3': z$,e$(2)(1:18),e$(1)(1:20),mat x_service$
+		pr #255,using 'form pos 1,C 10,X 1,C 18,X 1,C 20,X 1,X_service*c 43,x 3': z$,e$(2)(1:18),e$(1)(1:20),mat x_service$
 	end if 
 	L1050: ! 
 	if remark=1 then 
@@ -304,7 +304,7 @@ def fn_campbell_meter_book ! Campbell Special Routine (printed once a year, one 
 		dim g(12)
 		! read #hCustomer,using F_CAMPBELL_CUSTOMER: z$,mat e$,f1$,watcode,elecode,litecode,mat d,f3$,c4,f$(2), mat g eof CAMPBELL_Finis
 		! F_CAMPBELL_CUSTOMER:  form pos 1,c 10,4*c 30,c 12,pos 143,pd 2,pos 147,pd 2,pos 177,pd 4.2,pos 217,15*pd 5,pos 373,c 12,pos 213,pd 4,pos 361,c 12,pos 300,12*pd 4.2
-		read #hCustomer,using 'Form POS 1,C 10,4*C 30,C 12,POS 217,15*PD 5,POS 373,C 12,POS 361,C 12,POS 1741,N 2,POS 1821,N 1,pos 143,7*pd 2,pos 1806,3*n 2,pos 1821,n 1,pos 1942,c 12,pos 300,12*pd 4.2': z$,mat e$,f1$,mat d,f3$,f$(2),extra(1),fbc,mat a,extra(11),extra(12),extra(13),extra(17),bulksort$,mat g eof Finis
+		read #hCustomer,using 'form pos 1,C 10,4*C 30,C 12,pos 217,15*PD 5,pos 373,C 12,pos 361,C 12,pos 1741,N 2,pos 1821,N 1,pos 143,7*pd 2,pos 1806,3*n 2,pos 1821,n 1,pos 1942,c 12,pos 300,12*pd 4.2': z$,mat e$,f1$,mat d,f3$,f$(2),extra(1),fbc,mat a,extra(11),extra(12),extra(13),extra(17),bulksort$,mat g eof Finis
 		watcode=a(1)
 		! elecode=a(3) ! no longer used  
 		! litecode=    ! no longer used

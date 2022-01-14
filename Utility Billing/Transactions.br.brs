@@ -50,7 +50,7 @@ fnend
 		ttao_key$=customer_key$&lpad$(str$(date_ccyymmdd),8)&cnvrt$('pic(z)',trans_type)
 		restore #ttao_h_trans,key>=ttao_key$: nokey TTAO_FINIS
 		do
-			read #ttao_h_trans,using 'Form pos 1,c 10,N 8,N 1,pd 4.2': ttao_customer_read$,ttao_date,ttao_code,ttao_amount eof TTAO_FINIS
+			read #ttao_h_trans,using 'form pos 1,c 10,N 8,N 1,pd 4.2': ttao_customer_read$,ttao_date,ttao_code,ttao_amount eof TTAO_FINIS
 			if lpad$(ttao_customer_read$,10)=lpad$(customer_key$,10) or trim$(ttao_customer_read$)<>'' then
 				if ~date_ccyymmdd or ttao_date=>date_ccyymmdd then
 					if trans_type=0 or trans_type=ttao_code then
@@ -305,7 +305,7 @@ fnend
 	fnend
 	def fn_TransactionEdit(editrec; ___,transAcct$,tDate,tcode,tamount,serviceItem,s1use,s3use,s4use,lc,mylen,mypos,rc,s1use,s3use,s4use)
 		open #trans=fnH: 'Name=[Q]\UBmstr\ubtransvb.h[cno],Shr',i,outi,r
-		read #trans,using 'Form pos 1,c 10,N 8,N 1,pd 4.2,pos 73,pd 5,pos 83,pd 5,pos 93,pd 5',rec=editrec: transAcct$,tDate,tcode,tamount,s1use,s3use,s4use
+		read #trans,using 'form pos 1,c 10,N 8,N 1,pd 4.2,pos 73,pd 5,pos 83,pd 5,pos 93,pd 5',rec=editrec: transAcct$,tDate,tcode,tamount,s1use,s3use,s4use
 		fnTos
 		mylen=20 : mypos=mylen+2
 		fnLbl(lc+=1,1,'Record:',mylen)
@@ -354,7 +354,7 @@ fnend
 					end if
 				nex serviceItem
 			end if
-			rewrite #trans,using 'Form pos 11,N 8,pos 73,pd 5,pos 83,pd 5,pos 93,pd 5',rec=editrec: tDate,s1use,s3use,s4use
+			rewrite #trans,using 'form pos 11,N 8,pos 73,pd 5,pos 83,pd 5,pos 93,pd 5',rec=editrec: tDate,s1use,s3use,s4use
 		end if
 		close #trans:
 	fnend
@@ -437,14 +437,14 @@ fnend
 			metraddr$       	=    	fnCustomerData$(lpad$(rtrm$(z$),10),'Meter Address'	   )
 			account_balance	=val(	fnCustomerData$(lpad$(rtrm$(z$),10),'balance'      	, 1))
 			! open #hCustomer=fnH: 'Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr',i,i,k
-			! read #hCustomer,using 'Form POS 11,c 30,C 28,pos 292,PD 4.2',key=lpad$(rtrm$(z$),10),release: metraddr$,nam$,account_balance nokey PT_NO_CUSTOMER
+			! read #hCustomer,using 'form pos 11,c 30,C 28,pos 292,PD 4.2',key=lpad$(rtrm$(z$),10),release: metraddr$,nam$,account_balance nokey PT_NO_CUSTOMER
 			! close #hCustomer: ioerr ignore
 			restore #trans,key>=lpad$(rtrm$(z$),10)&'         ': nokey PT_FINIS
 		end if
 		gosub HDR
 		do
 			PtNextTrans: !
-			read #trans,using 'Form POS 1,C 10,N 8,N 1,12*PD 4.2,6*PD 5,PD 4.2,N 1': transAcct$,tDate,tcode,tamount,mat tg,wr,wu,er,eu,gr,gu,tbal,pcode eof PT_FINIS
+			read #trans,using 'form pos 1,C 10,N 8,N 1,12*PD 4.2,6*PD 5,PD 4.2,N 1': transAcct$,tDate,tcode,tamount,mat tg,wr,wu,er,eu,gr,gu,tbal,pcode eof PT_FINIS
 			if trim$(z$)<>'[All]' and transAcct$<>lpad$(rtrm$(z$),10) then goto PT_FINIS
 			if beg_date<>0 and tDate<beg_date then goto PtNextTrans
 			if end_date<>0 and tDate>end_date then goto PtNextTrans
@@ -508,15 +508,15 @@ fnend
 			! if env$('acsDeveloper')<>'' then pause
 			if trim$(z$)='[All]' then
 				if cx$='CHG' then
-					pr #255,using 'Form pos 1,c 10,x 1,'&printlineform$: transAcct$,cx$,tDate,mat alloc$,tamount,usage(1),usage(2),usage(3) pageoflow PgOf
+					pr #255,using 'form pos 1,c 10,x 1,'&printlineform$: transAcct$,cx$,tDate,mat alloc$,tamount,usage(1),usage(2),usage(3) pageoflow PgOf
 				else
-					pr #255,using 'Form pos 1,c 10,x 1,'&printlineform$: transAcct$,cx$,tDate,mat alloc,tamount,usage(1),usage(2),usage(3) pageoflow PgOf
+					pr #255,using 'form pos 1,c 10,x 1,'&printlineform$: transAcct$,cx$,tDate,mat alloc,tamount,usage(1),usage(2),usage(3) pageoflow PgOf
 				end if
 			else
 				if cx$='CHG' then
-					pr #255,using 'Form pos 1,'&printlineform$: cx$,tDate,mat alloc$,tamount,usage(1),usage(2),usage(3) pageoflow PgOf
+					pr #255,using 'form pos 1,'&printlineform$: cx$,tDate,mat alloc$,tamount,usage(1),usage(2),usage(3) pageoflow PgOf
 				else
-					pr #255,using 'Form pos 1,'&printlineform$: cx$,tDate,mat alloc,tamount,usage(1),usage(2),usage(3) pageoflow PgOf
+					pr #255,using 'form pos 1,'&printlineform$: cx$,tDate,mat alloc,tamount,usage(1),usage(2),usage(3) pageoflow PgOf
 				end if
 			end if  ! trim$(z$)='[All]'   /   else
 			if tcode=tcode_charge     then
@@ -631,7 +631,7 @@ fnend
 		do
 			TrReadTrans: !
 			dim tg(11)
-			read #hTrans,using 'Form POS 1,C 10,N 8,N 1,12*PD 4.2,6*PD 5,PD 4.2,N 1': transAcct$,tDate,tcode,tamount,mat tg,wr,wu,er,eu,gr,gu,tbal,pcode eof FlexTranFinis
+			read #hTrans,using 'form pos 1,C 10,N 8,N 1,12*PD 4.2,6*PD 5,PD 4.2,N 1': transAcct$,tDate,tcode,tamount,mat tg,wr,wu,er,eu,gr,gu,tbal,pcode eof FlexTranFinis
 			if lpad$(transAcct$,10)<>lpad$(z$,10) and trim$(z$)<>'' then goto FlexTranFinis !       ! not same account
 			if selcode>1 and tcode<>selcode-1 then goto TrReadTrans
 			if (begDate>20000000 and tDate<begDate) or (endDate>20000000 and tDate>endDate) then goto TrReadTrans

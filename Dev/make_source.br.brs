@@ -35,7 +35,7 @@ fnend  ! fn_make_source_init
 def fn_make_source_add(msa_item$*256,dir_source$*128,dir_destination$*128)
 	mat prg_list$(prg_list_count+=1)
 	prg_list$(prg_list_count)=msa_item$
-	! pr #proc_file: 'SKIP 2 IF ERR '&msa_item$
+	! pr #proc_file: 'skip 2 IF ERR '&msa_item$
 	! pr #proc_file: 'List <"'&msa_item$&'" >"'&srep$(lwrc$(msa_item$&'.brs'),lwrc$(dir_source$),dir_destination$)&'"'
 	pr #proc_file: 'Load "'&msa_item$&'"'
 	pr #proc_file: 'Renum Labels_Only'

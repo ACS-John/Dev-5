@@ -2,9 +2,9 @@
 	dim b$*40,keyform$*80,blank$(10)
 	open #fin:=1: "Name=Test\Temp.dat,KFName=Test\Temp.idx,Replace,RecL=64,KPs=1/3,KLn=2/2,Shr",internal,outIn,keyed 
 	open #fish:=2: "Name=Test\Temp.dat,KFName=Test\TempFish.idx,Use,RecL=64,KPs=10,KLn=10,Shr",internal,outIn,keyed 
-	keyform$='Form ' : key$=''
+	keyform$='form ' : key$=''
 	do while kps(fin,j+=1)>0
-		keyform$=keyform$&'Pos '&str$(kps(fin,j))&','
+		keyform$=keyform$&'pos '&str$(kps(fin,j))&','
 		keyform$=keyform$&'C '&str$(kln(fin,j))&','
 		blank$(j)=rpt$(chr$(0),kln(fin,j))
 		key$=key$&blank$(j)
@@ -13,19 +13,19 @@
 	mat blank$(j-1)
 	write #fin,using keyform$,reserve: mat blank$
 	read #fin,key=key$: 
-	rewrite #fin,using 'Form Pos 1,N 2',same,reserve: 8
+	rewrite #fin,using 'form pos 1,N 2',same,reserve: 8
 	read #fin,same: ! kj
-	rewrite #fin,using 'Form Pos 3,N 2',same,reserve: 9
+	rewrite #fin,using 'form pos 3,N 2',same,reserve: 9
 	read #fin,same: ! kj
-	rewrite #fin,using 'Form Pos 5,C 40',same,reserve: 'eight - nine'
+	rewrite #fin,using 'form pos 5,C 40',same,reserve: 'eight - nine'
 	release #fin: 
 	close #fin: 
 	close #fish: ioerr L220
 L220: open #tmpfile:=12: "Name=TEST\Temp.dat,KFName=TEST\Temp.idx,Shr",internal,outIn,keyed 
 	key$=lpad$(str$(8),2)&lpad$(str$(9),2) 
-	read #tmpfile,using 'Form Pos 1,N 2,N 2,C 40',key=key$,reserve: a,b,b$
+	read #tmpfile,using 'form pos 1,N 2,N 2,C 40',key=key$,reserve: a,b,b$
 ! kEY$=CNVRT$("PIC(##)",8)&CNVRT$("PIC(##)",9) 
-	! Read #TMPFILE,Using 'Form Pos 1,N 2,N 2,C 40',Key=KEY$,Reserve: A,B,B$ 
+	! Read #TMPFILE,Using 'form pos 1,N 2,N 2,C 40',Key=KEY$,Reserve: A,B,B$ 
 	! Rick Graham's suggestion
 	rewrite #tmpfile,using 'form pos 1,n 2,n 2,c 40',reserve: a,b,b$
 	read #tmpfile,using 'form pos 1,n 2,n 2,c 40',same,reserve: a,b,b$

@@ -423,7 +423,7 @@ CalculateUC: ! r: determine quarterly wages
 	m1=m1+tqm(16)-dcq
 	if ta=0 then goto L4200 else goto L4340 ! read_DEPARTMENT
 L4200: if m2=0 then goto L4340 ! skip if total wage =0
-	if m1=0 then goto L4340 ! SKIP IF QUARTERLY WAGE=0
+	if m1=0 then goto L4340 ! skip IF QUARTERLY WAGE=0
 	p3=p3+1
 	if m2<m(sr1) then goto L4290
 	if m2-m1>m(sr1) then goto L4270

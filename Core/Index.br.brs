@@ -270,7 +270,7 @@ def fn_index_sys_do_one(cno,system_id$*128)
 		fnIndex('S:\Core\Data\acsllc\IVDesc.h'&str$(cno),'S:\Core\Data\acsllc\IVDIndex.h'&str$(cno),'1,6')
 		fnIndex('S:\Core\Data\acsllc\SCMSTR.h'&str$(cno),'S:\Core\Data\acsllc\SCIndex.h'&str$(cno),'1 4')
 		! fnIndex('[Temp]\TmSht[session]','[Temp]\TmSht-idx[session]','1,5')
-		fnReassignNTA('S:\Core\Data\acsllc\Transactions.h'&str$(cno),'Form pos 1,C 5','Form Pos 58,PD 3')
+		fnReassignNTA('S:\Core\Data\acsllc\Transactions.h'&str$(cno),'form pos 1,C 5','form pos 58,PD 3')
 		! /r
 	end if
 fnend

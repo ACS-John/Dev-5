@@ -43,10 +43,10 @@ L310: rinput fields mat io1$: cno conv L310
 	if cno=0 or cmdkey=5 or cmdkey=99 then goto Xit
 	open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubindex.h[cno],Shr",internal,outIn,keyed
 	for j=1 to lrec(1)
-		read #1,using "Form Pos 71,c 30",rec=j: nam$ noRec L390
+		read #1,using "form pos 71,c 30",rec=j: nam$ noRec L390
 		nam$=fn_booktitle$(nam$)
 		pr nam$
-		rewrite #1,using "Form Pos 71,c 30",rec=j: nam$ noRec L390
+		rewrite #1,using "form pos 71,c 30",rec=j: nam$ noRec L390
 L390: next j
 	goto DONE
  

@@ -21,9 +21,9 @@ open #ivpaid=fnH: "Name=[Q]\CLmstr\IvPaid.h[cno],KFName=[Q]\CLmstr\IVIndex.h[cno
 open #work=fnH: "Name=[Q]\CLmstr\Work.[session],Size=0,RecL=34,Replace",internal,output
 do
 	READ_IVPAID: !
-	read #ivpaid,using 'Form POS 1,C 8,C 12,G 6,G 8': vn$,iv$,dp,ckn eof EO_IVPAID
+	read #ivpaid,using 'form pos 1,C 8,C 12,G 6,G 8': vn$,iv$,dp,ckn eof EO_IVPAID
 	if fndate_mmddyy_to_ccyymmdd(dp)<=rd1 then goto READ_IVPAID
-	write #work,using 'Form POS 1,C 8,C 12,G 6,G 8': vn$,iv$,dp,ckn
+	write #work,using 'form pos 1,C 8,C 12,G 6,G 8': vn$,iv$,dp,ckn
 loop
 EO_IVPAID: !
 close #ivpaid:

@@ -629,7 +629,7 @@
             goto SETCELL
 54250 ! --------------------------------!:
           ! ?Set the distance between cells.  The number is 1/2 the       ?:
-54260     ! IF POS(CCELLS$(CELL)(CSS:CSE-1),"tg")=1 THEN !:                                           x$=FNTWIPS$(.5*VAL(CCELLS$(CELL)(CSS+2:CSE-1))) !:                                    cALL$=SREP$(CALL$,"\trgaph108\trleft-108","\trgaph"&X$&"\trleft-"&X$&" ") !:          GOTO SETCELL
+54260     ! IF pos(CCELLS$(CELL)(CSS:CSE-1),"tg")=1 THEN !:                                           x$=FNTWIPS$(.5*VAL(CCELLS$(CELL)(CSS+2:CSE-1))) !:                                    cALL$=SREP$(CALL$,"\trgaph108\trleft-108","\trgaph"&X$&"\trleft-"&X$&" ") !:          GOTO SETCELL
 54261     if pos(ccells$(cell)(css:cse-1),"tg")=1 then !:
             x$=fntwips$(.5*val(ccells$(cell)(css+2:cse-1))) !:
             call$=srep$(call$,"\trgaph108\trleft-108","\trgaph"&x$) !:
@@ -813,7 +813,7 @@
 60080   infile_recl=min(32000,infile_lrec)
 60090   open #infile: "name="&infile$&",RECL="&str$(infile_recl),external,input,relative 
 60100   infile_rec=0
-60110   infile_frm$="FORM C "&str$(infile_recl)
+60110   infile_frm$="form C "&str$(infile_recl)
 60120   if infile_recl=32000 then 
 60130 L60130: if infile_rec*infile_recl+infile_recl<=infile_lrec then 
 60140       read #infile,using infile_frm$: inrec$ !:
@@ -821,7 +821,7 @@
             infile_rec+=1
 60150       goto L60130
 60160     else 
-60170       infile_frm$="FORM C "&str$(infile_lrec-infile_rec*32000)
+60170       infile_frm$="form C "&str$(infile_lrec-infile_rec*32000)
 60180       close #infile: 
 60190       open #infile: "name="&infile$&",RECL="&str$(infile_lrec-infile_rec*32000),external,input,relative 
 60200     end if 

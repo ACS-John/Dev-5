@@ -33,7 +33,7 @@ fnTop(program$)
 	cl=1 : c$(cl,1)='ComboF'
 	c$(cl,2)="[Q]\GLmstr\GLmstr.h[cno]"
 	c$(cl,3)="1" : c$(cl,4)="12"
-	c$(cl,5)="13" : c$(cl,6)="30"
+	c$(cl,5)="13" : c$(cl,6)='30'
 	c$(cl,7)="[Q]\GLmstr\glindex.h[cno]"
 	! C$(CL,8)=limit to list option ('1'=Yes; '0'=No)
 
@@ -42,7 +42,7 @@ fnTop(program$)
 	c$(cl,2)='S:\Core\Data\TransactionCode.dat' ! "[Q]\GLmstr\transcode.h[cno]"
 	! c$(cl,3)="1" : c$(cl,4)="2"
 	c$(cl,3)="1" : c$(cl,4)="1"
-	! c$(cl,5)="3" : c$(cl,6)="30"
+	! c$(cl,5)="3" : c$(cl,6)='30'
 	c$(cl,5)="2" : c$(cl,6)="18"
 	c$(cl,7)='S:\Core\Data\TransactionCode.idx' ! "[Q]\GLmstr\transcode-idx.h[cno]"
 	! C$(CL,8)=limit to list option ('1'=Yes; '0'=No)

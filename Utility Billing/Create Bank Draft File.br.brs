@@ -74,7 +74,7 @@ HDR1: ! r: ! FILE HEADER RECORD
 	fct$=time$(1:2)&time$(4:5) ! FILE CREATION TIME
 	fidm$="A" ! FILE ID MODIFIER
 	rsz$="094" ! RECORD SIZE
-	bf$="10" ! BLOCKING FACTOR
+	bf$='10' ! BLOCKING FACTOR
 	dim ion$*23
 	ion$=fnEftData$('Immediate Origin Name')  ! (23) IMMEDIATE ORIGIN NAME  (name of bank the city uses)
 	fc$="1" ! FORMAT CODE
@@ -124,7 +124,7 @@ WritePostingEntry: ! r:
 		if order(j)=1 then alloc(x+=1)=gb(j)
 	next j
 	m=bal : n=d2 : o(1)=3
-	write #6,using "Form POS 1,C 10,PD 4.2,PD 4,2*N 1,POS 24,C 9,SZ1*PD 4.2,5*PD 3,PD 4.2": z$,m,n,mat o,rcpt$,mat alloc,mat bd2
+	write #6,using "form pos 1,C 10,PD 4.2,PD 4,2*N 1,pos 24,C 9,SZ1*PD 4.2,5*PD 3,PD 4.2": z$,m,n,mat o,rcpt$,mat alloc,mat bd2
 return ! /r
  
 CTRL1: ! r: COMPANY/BATCH CONTROL RECORD
@@ -155,7 +155,7 @@ CTRL1: ! r: COMPANY/BATCH CONTROL RECORD
 	L1230: form pos 1,g 1,2*pic(######),pic(########),pic(##########),2*pic(############),c 38,c 1
 	if bkfactor=0 then goto L1280
 	for j=1 to bkfactor
-		pr #hOut,using "Form POS 1,C 94": "9999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999"
+		pr #hOut,using "form pos 1,C 94": "9999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999"
 	next j
 	L1280: !
 return  ! /r
@@ -173,7 +173,7 @@ Finis: ! r:
 	do
 		linput #hTmpIn: a$ eof L1590
 		if a$(94:94)="X" then a$(94:94)=""
-		write #hTmpOut,using "Form POS 1,C 94,C 1,c 1": rpad$(a$,94),chr$(13),chr$(10)
+		write #hTmpOut,using "form pos 1,C 94,C 1,c 1": rpad$(a$,94),chr$(13),chr$(10)
 	loop
 	L1590: !
 	close #hTmpOut:
@@ -211,7 +211,7 @@ Merge: ! r:
 		read #6,using L1890,rec=r6: z$,m,n,mat o,rcpt$,mat alloc,mat bd2 noRec L1860
 		L1890: form pos 1,c 10,pd 4.2,pd 4,2*n 1,pos 24,c 9,sz1*pd 4.2,5*pd 3,pd 4.2
 		if p$(1:2)="  " and m=0 then goto L1860
-		read #hCustomer,using 'Form POS 292,PD 4.2,POS 388,10*PD 5.2,pos 1859,pd 5.2',key=z$: bal,mat gb nokey L1860
+		read #hCustomer,using 'form pos 292,PD 4.2,pos 388,10*PD 5.2,pos 1859,pd 5.2',key=z$: bal,mat gb nokey L1860
 		if o(1)=3 then tcode=3 ! collection
 		if o(1)=4 then tcode=4 ! credit memo
 		if o(1)=5 then tcode=5 ! debit memo
@@ -221,7 +221,7 @@ Merge: ! r:
 		for j=1 to 10
 			if trim$(srvname$(j))<>"" then tg(j)=alloc(x+=1)
 		next j
-		write #7,using 'Form POS 1,C 10,N 8,N 1,12*PD 4.2,6*PD 5,PD 4.2,N 1': z$,tmp,tcode,m,mat tg,0,0,0,0,0,0,bal,pcode
+		write #7,using 'form pos 1,C 10,N 8,N 1,12*PD 4.2,6*PD 5,PD 4.2,N 1': z$,tmp,tcode,m,mat tg,0,0,0,0,0,0,bal,pcode
 		j2=0
 		for j=1 to 10
 			if trim$(srvname$(j))<>'' then
@@ -233,9 +233,9 @@ Merge: ! r:
 				end if
 			end if
 		next j
-		rewrite #hCustomer,using 'Form POS 292,PD 4.2,POS 388,10*PD 5.2,pos 1859,pd 5.2',key=z$: bal,mat gb
+		rewrite #hCustomer,using 'form pos 292,PD 4.2,pos 388,10*PD 5.2,pos 1859,pd 5.2',key=z$: bal,mat gb
 		o(2)=9
-		rewrite #6,using "Form POS 19,2*N 1",rec=r6: mat o
+		rewrite #6,using "form pos 19,2*N 1",rec=r6: mat o
 	loop
 	L2120: !
 	close #6,free:

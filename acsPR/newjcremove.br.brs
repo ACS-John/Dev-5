@@ -38,7 +38,7 @@ ASKJOB: !
 	ml$(1)="Do you really want to delete job # "&jn$ : _
 	fnmsgbox(mat ml$,resp$,cap$,36)
 	if resp$="Yes" then goto L350 else goto ASKJOB
-L350: rewrite #1,using 'Form POS 157,N 2',key=jn$: 9 nokey ASKJOB
+L350: rewrite #1,using 'form pos 157,N 2',key=jn$: 9 nokey ASKJOB
 	goto ASKJOB
  
 DELETE_THEM: !
@@ -57,7 +57,7 @@ DELETE_THEM: !
 	ot4=1
 	write #13,using L530,rec=1: " ","",mat tr," ",ot4
 L530: form pos 1,c 12,c 6,n 5,pd 3,pd 2,n 6,4*pd 4.2,pd 5.2,c 30,pd 3
-L540: read #1,using "Form POS 1,C 6,C 40,3*C 30,N 6,2*PD 7.2,N 2,C 30,C 12,C 60": jn$,n$,mat a$,mat b,contact$,ph$,email$ eof EOF1
+L540: read #1,using "form pos 1,C 6,C 40,3*C 30,N 6,2*PD 7.2,N 2,C 30,C 12,C 60": jn$,n$,mat a$,mat b,contact$,ph$,email$ eof EOF1
 	form pos 1,c 6,c 40,3*c 30,n 6,2*pd 7.2,n 2
 	if b(4)=9 then goto L540
 	cn$=jn$&"     "
@@ -82,7 +82,7 @@ L710: form pos 86,pd 3
 	goto L660
 L770: write #12,using L590: cn$,k$,mat l,mat ta
 	goto L610
-L790: write #11,using "Form POS 1,C 6,C 40,3*C 30,N 6,2*PD 7.2,N 2,C 30,C 12,C 60": jn$,n$,mat a$,mat b,contact$,ph$,email$
+L790: write #11,using "form pos 1,C 6,C 40,3*C 30,N 6,2*PD 7.2,N 2,C 30,C 12,C 60": jn$,n$,mat a$,mat b,contact$,ph$,email$
 	goto L540
  
 EOF1: close #1,free:

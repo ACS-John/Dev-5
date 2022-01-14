@@ -18,12 +18,12 @@ fnopenprn
 gosub Hdr
 vn$=iv$=""
 do
-	read #paytrans,using 'Form POS 1,C 8,C 12,2*G 6,C 12,C 18,N 10.2,N 1,N 2,G 8,G 6': vn$,iv$,ivd,dd,po$,ade$,amt,cde eof Finis
+	read #paytrans,using 'form pos 1,C 8,C 12,2*G 6,C 12,C 18,N 10.2,N 1,N 2,G 8,G 6': vn$,iv$,ivd,dd,po$,ade$,amt,cde eof Finis
 	L230: !
 	if fndate_mmddyy_to_ccyymmdd(dd)>d2(wd2) then goto TOT1
 	vnam$=""
-	read #paymstr,using 'Form POS 9,C 30',key=vn$,release: vnam$ nokey ignore
-	pr #255,using 'Form POS 1,C 10,C 32,C 12,2*PIC(ZZZZ/ZZ/ZZ),X 2,C 18,POS 99,N 10.2': vn$, vnam$,iv$,ivd,dd,ade$(1:18),amt pageoflow NEWPGE
+	read #paymstr,using 'form pos 9,C 30',key=vn$,release: vnam$ nokey ignore
+	pr #255,using 'form pos 1,C 10,C 32,C 12,2*PIC(ZZZZ/ZZ/ZZ),X 2,C 18,pos 99,N 10.2': vn$, vnam$,iv$,ivd,dd,ade$(1:18),amt pageoflow NEWPGE
 	t1+=amt
 loop
 Finis: ! r:
@@ -43,13 +43,13 @@ goto Xit ! /r
 Xit: fnXit
 NEWPGE: pr #255: newpage: gosub HDR : continue 
 TOT1: ! r: pr DATE TOTAL
-	pr #255,using 'Form POS 99,"----------",SKIP 1,POS 76,C 23,N 10.2': "Total Due by "&cnvrt$("PIC(####/##/##)",d2(wd2)),t1 
+	pr #255,using 'form pos 99,"----------",skip 1,pos 76,C 23,N 10.2': "Total Due by "&cnvrt$("PIC(####/##/##)",d2(wd2)),t1 
 	pr #255: ""
 	t2(wd2)=t1
 	if wd2=d2 or Finis=1 then goto Finis
 	wd2+=1
 	if wd2>d2 or fndate_mmddyy_to_ccyymmdd(dd)>d2(d2) then wd2=d2 : goto Finis
-	goto L420 ! DONT SKIP BETWEEN DATES
+	goto L420 ! DONT skip BETWEEN DATES
 	pr #255: newpage
 	gosub HDR
 L420: !

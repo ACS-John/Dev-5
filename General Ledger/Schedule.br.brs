@@ -1,5 +1,5 @@
 ! formerly S:\acsGL\glSchFM
-! Schedule File  (Maintenance routines) was Form POS 1,N 2,2*C 78,3*N  1,80*c 12  now Form POS 1,N 3,2*C 78,3*N  1  Breakdowns in seperate file
+! Schedule File  (Maintenance routines) was form pos 1,N 2,2*C 78,3*N  1,80*c 12  now form pos 1,N 3,2*C 78,3*N  1  Breakdowns in seperate file
 ! r: setup, open files, library, set constants, on err, etc
 	autoLibrary
 	on error goto Ertn
@@ -44,7 +44,7 @@ SCHEDULEGRID: ! r:
 	fnflexinit1('schedulegl',lc=1,1,10,70,mat chdr$,mat cmask$,1)
 	restore #10:
 READ_SCHEDULE: ! read schedule file
-	read #schedule,using 'Form POS 1,N 3,2*C 78,3*N 1': sn,schnam$,ft$,dp,rs,cm eof EO_SCHEDULE_GRID noRec L350
+	read #schedule,using 'form pos 1,N 3,2*C 78,3*N 1': sn,schnam$,ft$,dp,rs,cm eof EO_SCHEDULE_GRID noRec L350
 	item$(1)=str$(rec(schedule))
 	item$(2)=str$(sn): item$(3)=schnam$: item$(4)=ft$
 	item$(5)=str$(dp) : item$(6)=str$(rs) : item$(7)=str$(cm)
@@ -69,11 +69,11 @@ EO_SCHEDULE_GRID: !
 		schnam$=ft$=""
 		goto ADD_EDIT_SCHEDULES ! add
 	else if ckey=2 then
-		read #schedule,using 'Form POS 1,N 3,2*C 78,3*N 1',rec=editrec: sn,schnam$,ft$,dp,rs,cm noRec SCHEDULEGRID
+		read #schedule,using 'form pos 1,N 3,2*C 78,3*N 1',rec=editrec: sn,schnam$,ft$,dp,rs,cm noRec SCHEDULEGRID
 		holdsn=sn
 		goto ADD_EDIT_SCHEDULES
 	else if ckey=8 then
-		read #schedule,using 'Form POS 1,N 3,2*C 78,3*N 1',rec=editrec,release: sn,schnam$,ft$,dp,rs,cm noRec SCHEDULEGRID
+		read #schedule,using 'form pos 1,N 3,2*C 78,3*N 1',rec=editrec,release: sn,schnam$,ft$,dp,rs,cm noRec SCHEDULEGRID
 		gosub DELETEIT
 		goto SCHEDULEGRID
 	end if
@@ -272,7 +272,7 @@ BUILD_LAYOUT: ! r:
 	! cL=2 : c$(CL,1)='ComboF'
 	! c$(CL,2)="[Q]\GLmstr\transcode.h[cno]"
 	! c$(CL,3)="1" : c$(CL,4)="2"
-	! c$(CL,5)="3" : c$(CL,6)="30"
+	! c$(CL,5)="3" : c$(CL,6)='30'
 	! c$(CL,7)="[Q]\GLmstr\transcode-idx.h[cno]"
 	! c$(CL,8)="1"
 	! lIMIT_TO_LIST$=('1'=yes' ; '0'=NO)

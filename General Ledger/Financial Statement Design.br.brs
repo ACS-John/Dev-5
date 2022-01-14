@@ -107,7 +107,7 @@ AddEdit: ! r:
 	fnTos
 	mylen=25: mypos=mylen+3 : right=1
 	fnLbl(1,1,"F/S Number:",mylen,right)
-	fnTxt(1,mypos,5,0,right,"30",0,"",0 )
+	fnTxt(1,mypos,5,0,right,'30',0,"",0 )
 	resp$(1)=rno$
 	fnLbl(2,1,"Description::",mylen,right)
 	fnTxt(2,mypos,50,0,left,"",0,"",0 )
@@ -120,34 +120,34 @@ AddEdit: ! r:
 	fncomboa("TypeOfEntry",3,mypos,mat option2$,"Each entry must have a type of transaction.",60)
 	resp$(3)=choice$
 	fnLbl(4,1,"Starting pr Position:",mylen,right)
-	fnTxt(4,mypos,3,0,0,"30",0,"Number of spaces to indent.",0 )
+	fnTxt(4,mypos,3,0,0,'30',0,"Number of spaces to indent.",0 )
 	resp$(4)=str$(sp)
-	fnLbl(5,1,"Lines to Skip:",mylen,right)
-	fnTxt(5,mypos,2,0,0,"30",0,"Number of blank lines following this line.",0 )
+	fnLbl(5,1,"Lines to skip:",mylen,right)
+	fnTxt(5,mypos,2,0,0,'30',0,"Number of blank lines following this line.",0 )
 	resp$(5)=str$(ls)
 	fnChk(6,mypos,"Dollar Sign:",1)
 	if ds=1 then resp$(6)='True' else resp$(6)='False'
 	fnLbl(7,1,"Underlines:",mylen,right)
-	fnTxt(7,mypos,1,0,0,"30",0,"Number of under lines following the amount.",0 )
+	fnTxt(7,mypos,1,0,0,'30',0,"Number of under lines following the amount.",0 )
 	resp$(7)=str$(ul)
 	fnChk(8,mypos,"Reverse Sign:",1)
 	if rs=1 then resp$(8)='True' else resp$(8)='False'
 	fnLbl(9,1,"Balance Sheet Column:",mylen,right)
-	fnTxt(9,mypos,1,0,0,"30",0,"One of three columns available.",0 )
+	fnTxt(9,mypos,1,0,0,'30',0,"One of three columns available.",0 )
 	resp$(9)=str$(bc)
 	fnLbl(10,1,"Accumulator to Print:",mylen,right)
-	fnTxt(10,mypos,1,0,0,"30",0,"One of nine sets of totals available for total records.",0 )
+	fnTxt(10,mypos,1,0,0,'30',0,"One of nine sets of totals available for total records.",0 )
 	resp$(10)=str$(ap)
 	for j=1 to 9
 		fnLbl(10+j,1,"Clear Accumulator # "&str$(j)&":",mylen,right)
-		fnTxt(10+j,mypos,1,0,0,"30",0,"Place a one by each accumulator that should be cleared after this line is printed.",0 )
+		fnTxt(10+j,mypos,1,0,0,'30',0,"Place a one by each accumulator that should be cleared after this line is printed.",0 )
 		resp$(10+j)=str$(ac(j))
 	next j
 	fnLbl(20,1,"Base Item for %:",mylen,right)
-	fnTxt(20,mypos,5,0,0,"30",0,"Enter the reference # of the line that should be used in calculating this percent.",0 )
+	fnTxt(20,mypos,5,0,0,'30',0,"Enter the reference # of the line that should be used in calculating this percent.",0 )
 	resp$(20)=str$(rnp)
 	fnLbl(21,1,"Cost Center Code:",mylen,right)
-	fnTxt(21,mypos,3,0,0,"30",0,"Enter the fund number for ability to pr one fund at a time.",0 )
+	fnTxt(21,mypos,3,0,0,'30',0,"Enter the fund number for ability to pr one fund at a time.",0 )
 	resp$(21)=str$(fc)
 	fnCmdKey("&Save",1,1,0,"Saves changes.")
 	fnCmdKey("&Cancel",5,0,1,"Returns to list of fin_stmts withouit saving any changes.")
@@ -296,7 +296,7 @@ def fn_print_proof_hdr
 	L2130: form pos 1,c 8,pos 38,c 39,c 32,skip 1,pos hp2,c 20,skip 2
 	pr #255,using L2150: "Type Of","Start","Lines","$","Under","Rev","Bs","# To","*** Clear Accumulator ***","Base","CC"
 	L2150: form pos 51,c 7,x 2,c 5,x 1,c 5,x 4,c 1,x 1,c 5,x 2,c 3,x 2,c 2,x 2,c 4,x 2,c 25,x 1,c 4,x 2,c 2,skip 1
-	pr #255,using L2170: "Ref #","Description","Entry","Print","Skip","Sign","Line","Sign","Col","Print","1","2","3","4","5","6","7","8","9","Item","Code"
+	pr #255,using L2170: "Ref #","Description","Entry","Print","skip","Sign","Line","Sign","Col","Print","1","2","3","4","5","6","7","8","9","Item","Code"
 	L2170: form pos 1,c 5,x 19,c 11,x 16,c 5,x 3,c 5,x 2,c 4,x 1,c 4,x 2,c 4,x 1,c 4,x 1,c 3,x 1,c 5,x 2,c 1,x 2,c 1,x 2,c 1,x 2,c 1,x 2,c 1,x 2,c 1,x 2,c 1,x 2,c 1,x 2,c 1,x 1,c 4,x 1,c 4,skip 2
 fnend
 Xit: fnXit
@@ -341,14 +341,14 @@ def fn_setup
 		id$(6)=" 6. Secondary Fund / Cash Flow" : fil$(6)="ACGLFNSG.h[cno]" : idx$(6)="agfsidx6.h[cno]"
 		! r: Column headers
 		ic=0 ! temporary Item Counter
-		number$="30"
+		number$='30'
 		! Field Labels               Field Masks
 		mat chdr$(24)              : mat cmask$(24)
 		chdr$(ic+=1)="Ref #"       : cmask$(ic)=number$
 		chdr$(ic+=1)="F/S #"       : cmask$(ic)=""
 		chdr$(ic+=1)="Description" : cmask$(ic)=""
 		chdr$(ic+=1)="Type"        : cmask$(ic)=""
-		chdr$(ic+=1)="Pos"         : cmask$(ic)=number$
+		chdr$(ic+=1)="pos"         : cmask$(ic)=number$
 		chdr$(ic+=1)="LineSkip"    : cmask$(ic)=number$
 		chdr$(ic+=1)="$"           : cmask$(ic)=number$
 		chdr$(ic+=1)="UndrL"       : cmask$(ic)=number$

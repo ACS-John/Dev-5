@@ -44,7 +44,7 @@ MENU1: !
 	fsttrl=1
 	restore #2,key>=cnvrt$("pic(zzzzzzz#)",eno)&"   ": nokey L390
 	L480: !
-	read #2,using 'Form POS 1,N 8,n 3,c 12,4*N 6,3*N 2,pd 4.2,23*PD 4.2': teno,tdn,gl$,mat tdt,mat tcd,tli,mat tdet eof L390
+	read #2,using 'form pos 1,N 8,n 3,c 12,4*N 6,3*N 2,pd 4.2,23*PD 4.2': teno,tdn,gl$,mat tdt,mat tcd,tli,mat tdet eof L390
 	if teno<>eno then goto L390
 	
 	if tdet(1)> 0 then payrate=tdet(1) else payrate=tdet(2) ! set payrate as salary or hourly
@@ -52,7 +52,7 @@ MENU1: !
 	checkkey$=cnvrt$("pic(zzzzzzz#)",eno)&cnvrt$("pic(zz#)",tdn)&cnvrt$("pd 6",0) ! index employee#,department# and payroll date
 	restore #4,key>=checkkey$: nokey L480
 	L550: !
-	read #4,using "Form POS 1,N 8,n 3,PD 6,N 7,5*PD 3.2,37*PD 5.2": heno,ctdn,prd,ckno,mat tdc,mat tcp eof L610
+	read #4,using "form pos 1,N 8,n 3,PD 6,N 7,5*PD 3.2,37*PD 5.2": heno,ctdn,prd,ckno,mat tdc,mat tcp eof L610
 	if heno<>teno then goto L610 ! read next department
 	if prd<beg_date or prd>end_date then goto L550 ! not this year
 	if ctdn<>tdn then goto L550 ! not same department

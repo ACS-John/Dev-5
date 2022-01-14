@@ -192,7 +192,7 @@ goto NextReadForAll ! /r
 SendRecordToOutFile: ! r:
 	! if trim$(z$)='100100.99' then pause
 
-	if udim(mat filterAccount$)<>0 or final=0 or u4_includeFinalBilled$='True' then ! SKIP IF FINAL BILLED
+	if udim(mat filterAccount$)<>0 or final=0 or u4_includeFinalBilled$='True' then ! skip IF FINAL BILLED
 		if ~(selection_method=sm_meterTypes) or deviceSelected$=fn_meterInfo$('Device',z$,serviceCodeMetered$(1)) then
 			if ~filterNoLocationId or val(fn_meterInfo$('Location_ID',z$,'WA'))>0 then
 				dim ft$*20
@@ -567,7 +567,7 @@ def fn_badgerConnectC ! older than BadgerBeacon
 		rt$=cnvrt$("pic(##)",extra(1))&"  "
 		if env$('client')='Raymond' then manual_or_dialog$="N"
 		if env$('client')='Raymond' and trim$(extra$(7))='' then extra$(7)='54'
-		pr #h_out,using 'Form POS 1,C 8,2*C 20,C 9,C 4,C 1,C 1,C 2,C 2,C 9,C 1,3*PIC(#########),C 8,C 2,C 2,C 4,C 15,C 8,C 1,3*C 6,C 2,PIC(######),C 20,C 30,C 3,C 2,C 2,C 2,C 6,C 18,C 1': "",e$(2)(1:20),e$(1)(1:20),trim$(extra$(3))(1:9),"","A","","1 ","  ","        "," ",d(1)+(d(3)*2),d(1),0,"        ","  ","  ",rt$,z$,"        ",manual_or_dialog$(1:1)," "," "," ",extra$(7)(1:2),sequence," "," "," "," "," "," "," "," ","X"
+		pr #h_out,using 'form pos 1,C 8,2*C 20,C 9,C 4,C 1,C 1,C 2,C 2,C 9,C 1,3*PIC(#########),C 8,C 2,C 2,C 4,C 15,C 8,C 1,3*C 6,C 2,PIC(######),C 20,C 30,C 3,C 2,C 2,C 2,C 6,C 18,C 1': "",e$(2)(1:20),e$(1)(1:20),trim$(extra$(3))(1:9),"","A","","1 ","  ","        "," ",d(1)+(d(3)*2),d(1),0,"        ","  ","  ",rt$,z$,"        ",manual_or_dialog$(1:1)," "," "," ",extra$(7)(1:2),sequence," "," "," "," "," "," "," "," ","X"
 		! serial # can be extra$(3) rather than f$(1)
 		! replaced UPRC$(TRIM$(F$(1)))(1:1) with manual_or_dialog$
 		goto BadgerCcNextSequence
@@ -575,7 +575,7 @@ def fn_badgerConnectC ! older than BadgerBeacon
 		BadgerCcElectric: !
 		if a(3)=0 or trim$(serviceName$(3))<>"Electric" then goto BadgerCcNextSequence
 		m$=ltrm$(f$(2))(1:10)
-		pr #h_out,using 'Form POS 1,C 8,2*C 20,C 9,C 4,C 1,C 1,C 2,C 2,C 9,C 1,3*PIC(#########),C 8,C 2,C 2,C 4,C 15,C 8,C 1,3*C 6,C 2,PIC(######),C 20,C 30,C 3,C 2,C 2,C 2,C 6,C 18,C 1': " ",e$(2)(1:20),e$(1)(1:20),trim$(extra$(3))(1:9)," ","A"," ","3 "," ",f$(2)(1:9)," ",d(5)+(d(7)*1.5),d(5),0," "," "," "," ",z$," ",uprc$(trim$(f1$))(1:1)," "," "," ",extra$(7)(1:2),sequence," "," "," "," "," "," "," "," ","X"
+		pr #h_out,using 'form pos 1,C 8,2*C 20,C 9,C 4,C 1,C 1,C 2,C 2,C 9,C 1,3*PIC(#########),C 8,C 2,C 2,C 4,C 15,C 8,C 1,3*C 6,C 2,PIC(######),C 20,C 30,C 3,C 2,C 2,C 2,C 6,C 18,C 1': " ",e$(2)(1:20),e$(1)(1:20),trim$(extra$(3))(1:9)," ","A"," ","3 "," ",f$(2)(1:9)," ",d(5)+(d(7)*1.5),d(5),0," "," "," "," ",z$," ",uprc$(trim$(f1$))(1:1)," "," "," ",extra$(7)(1:2),sequence," "," "," "," "," "," "," "," ","X"
 		L2010: form pos 1,c 8,2*c 20,c 9,c 4,c 1,c 1,c 2,c 2,c 9,c 1,3*pic(#########),c 8,c 2,c 2,c 4,c 15,c 8,c 1,3*c 6,c 2,pic(######),c 20,c 30,c 3,c 2,c 2,c 2,c 6,c 18,c 1
 		goto BadgerCcNextSequence
 
@@ -936,7 +936,7 @@ def fn_itron_close
 			! itron_rhd_current=rec(h_out)
 		else if rec_type$='RTR' then ! route trailer
 			itron_rtr_current=rec(h_out)
-			rewrite #h_out,using 'form pos 18,n 4,pos 34,N 4,N 4,N 4,Pos 52,3*N 4',rec=itron_rtr_current: itron_rdg_count,itron_rff_count,itron_cus_count,itron_mtr_count,itron_mtr_g_count,itron_mtr_w_count,itron_mtr_e_count noRec ignore
+			rewrite #h_out,using 'form pos 18,n 4,pos 34,N 4,N 4,N 4,pos 52,3*N 4',rec=itron_rtr_current: itron_rdg_count,itron_rff_count,itron_cus_count,itron_mtr_count,itron_mtr_g_count,itron_mtr_w_count,itron_mtr_e_count noRec ignore
 			itron_rdg_count=0
 			itron_rdg_count=0
 			itron_rff_count=0
@@ -1453,7 +1453,7 @@ fnend
 def fn_searchScreen(x$,&res$)
 	fnCustomerSearch(x$)
 	if x$<>"" then
-		read #hCustomeri1,using "Form POS 1,C 10,x 30,c 30",key=x$: z$,e2$
+		read #hCustomeri1,using "form pos 1,C 10,x 30,c 30",key=x$: z$,e2$
 		res$=rpad$(trim$(z$),10)&" "&trim$(e2$)
 	end if
 fnend
@@ -1530,7 +1530,7 @@ def fn_pcent
 	if ~pcent_setup then
 		pcent_setup=1
 		open #h_company=fnH: "Name=[Q]\UBmstr\Company.h[cno]",internal,input
-		read #h_company,using "Form POS 130,n 4": pcent_return
+		read #h_company,using "form pos 130,n 4": pcent_return
 		close #h_company:
 		if pcent_return=0 then pcent_return=100
 		pcent_return=pcent_return*.01 ! convert to percent

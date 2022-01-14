@@ -18,7 +18,7 @@
 	fnopenprn
 
 	open #20: 'Name=[Q]\GLmstr\GLBucket.h[cno],Shr',i,i,r ioerr L260
-	read #20,using 'Form POS 1,N 1',rec=1: glb noRec ignore
+	read #20,using 'form pos 1,N 1',rec=1: glb noRec ignore
 	close #20:
 	if glb=2 then fn_askaccrue
 	L260: !
@@ -61,7 +61,7 @@ ASK_DATE: !
 	end if
 
 	open #1: 'Name=[Q]\PRmstr\Company.h[cno],Shr',internal,input
-	read #1,using 'Form POS 1,C 40,POS 437,15*C 12,N 1,POS 618,10*N 1': a$,mat prgl$,glinstal ! need to get from other file
+	read #1,using 'form pos 1,C 40,pos 437,15*C 12,N 1,pos 618,10*N 1': a$,mat prgl$,glinstal ! need to get from other file
 	for j=1 to 4 ! 1=fed 2=fica/med 3=med 4=state
 		if j=3 then
 			prgl(j,1)=val(prgl$(2)(1:3))
@@ -92,7 +92,7 @@ ASK_DATE: !
 	do
 		DEPT_READ: !
 		mat oldtgl=tgl
-		read #6,using 'Form POS 1,N 8,POS 12,n 3,n 6,n 3,pos 42,n 6': teno,mat tgl,paydat eof L1400
+		read #6,using 'form pos 1,N 8,pos 12,n 3,n 6,n 3,pos 42,n 6': teno,mat tgl,paydat eof L1400
 		! If fndate_mmddyy_to_ccyymmdd(PAYDAT)<DAT1 OR fndate_mmddyy_to_ccyymmdd(PAYDAT)>DAT2 Then Goto 770 ! payroll date in department record must match
 		dim oldtgl$*12
 		oldtgl$=tgl$
@@ -102,7 +102,7 @@ ASK_DATE: !
 		checkkey$=cnvrt$('pic(zzzzzzzz)',teno)&'         '
 		restore #4,key>=checkkey$: nokey DEPT_READ
 		L840: !
-		read #4,using 'Form POS 1,N 8,n 3,PD 6,N 7,5*PD 3.2,37*PD 5.2': heno,tdn,prdate,ckno,mat tdc,mat tcp eof DEPT_READ
+		read #4,using 'form pos 1,N 8,n 3,PD 6,N 7,5*PD 3.2,37*PD 5.2': heno,tdn,prdate,ckno,mat tdc,mat tcp eof DEPT_READ
 		if heno<>teno then goto DEPT_READ
 		if prdate<dat1 or prdate>dat2 then goto L840
 		! If SUM(TGL)=0 Then Goto 500
