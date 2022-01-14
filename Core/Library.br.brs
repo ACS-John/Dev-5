@@ -1,5 +1,19 @@
 ! test changes
 ! r: functions that do not redirect
+
+	def library fnFileIoLayoutPath$*512(fileio$*64) ! ; ___,defaultFileLayoutPath$*256,defaultFileLayoutExtension$)
+		! if env$('client')='Brumbaugh' then
+		! 	defaultFileLayoutExtension$=''
+		! 	defaultFileLayoutPath$='S:\FileLay\'
+		! else
+		!	defaultFileLayoutExtension$='.fio'
+		!	defaultFileLayoutPath$='S:\Core\FileIO\Layout\'
+		! end if
+	
+		! fnFileIoLayoutPath$=defaultFileLayoutPath$&fileio$&defaultFileLayoutExtension$
+		fnFileIoLayoutPath$='S:\Core\FileIO\Layout\'&fileio$&'.fio'
+	fnend
+
 	def library fnVal(stringToConvert$*128; ___,returnN)
 		returnN=val(stringToConvert$) conv ValConv
 		goto ValXit
@@ -337,6 +351,12 @@ def library fnReIndex(fileioLayout$*255; indexNum)
 	library 'S:\Core\FileIO\fileio.br': fnReIndex
 	fnReIndex=fnReIndex(fileioLayout$, env$('Program_Caption'),indexNum) ! ,path$*255)
 fnend
+def library fnFileIoExport(fileio$*64; dialogType,fileName$*300,includeRecNums,keyNumber,startKey$,keyMatch$,startRec,mat records,searchMatch$,launch)
+	library 'S:\Core\FileIO\fileio.br': fnCsvExport
+	fnFileIoExport=fnCsvExport(fileio$, dialogType,fileName$,includeRecNums,keyNumber,startKey$,keyMatch$,startRec,mat records,searchMatch$,launch)
+fnend
+
+
 ! /r
 
 ! r: Confirm
@@ -881,6 +901,11 @@ fnend
 	fnend
 ! /r
 ! r: hamster
+
+	def library fnFioLayoutRead(fileio$*64,mat dataAll$,mat label$,mat fieldType$,mat storageLen,mat mask$,mat fieldLen)
+		library 'S:\Core\HamsterFio.br': fnFioLayoutRead
+		fnFioLayoutRead=fnFioLayoutRead(fileio$,mat dataAll$,mat label$,mat fieldType$,mat storageLen,mat mask$,mat fieldLen)
+	fnend
 	def library fnHamsterFio(fileid$*64)
 		library 'S:\Core\HamsterFio.br': fnHamsterFio
 		fnHamsterFio=fnHamsterFio(fileid$)

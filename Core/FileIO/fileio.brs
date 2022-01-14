@@ -5,7 +5,7 @@
 !  Created: 03/28/06
 ! Modified: 02/11/19
 !
-def fnVersion=113
+def fnVersion=118
 !
 !
 ! #Autonumber# 500,1
@@ -37,7 +37,7 @@ def fnVersion=113
 
 ! #Autonumber# 1000,2
 SETTINGS: ! ***** Set Global Defaults For The Library Here
-   def FnDefaultSettings(&Defaultfilelayoutpath$;&Promptonfilecreate,&PromptOnUpdate,&Createlogfile,&EnforceDupkeys,&StartFileNumber,&CheckIndex,&CompressColumns,&MaxColWidth,&NewLine$,&LogLibrary$,&LogLayout$,&AnimateDatacrawler,&TemplatePath$,&IgnoreLayouts$,&CloseFileSimple,&AuditPath$,&ScreenIOPath$,&FileLayoutExtension$,&FilterBoxFileList,&FilterBoxData,&SaveSelectedCols$,&DateFormatExport$,&DateFormatDisplay$)
+   def FnDefaultSettings(&Defaultfilelayoutpath$;&Promptonfilecreate,&PromptOnUpdate,&Createlogfile,&EnforceDupkeys,&StartFileNumber,&CheckIndex,&CompressColumns,&MaxColWidth,&NewLine$,&LogLibrary$,&LogLayout$,&AnimateDatacrawler,&GenerateScreenBtn,&TemplatePath$,&IgnoreLayouts$,&CloseFileSimple,&AuditPath$,&ScreenIOPath$,&FileLayoutExtension$,&FilterBoxFileList,&FilterBoxData,&SaveSelectedCols$,&DateFormatExport$,&DateFormatDisplay$)
       let EnforceDupkeys=1  ! Enforce that key number 1 is unique key
       let Defaultfilelayoutpath$="filelay\" ! Path To Your File Layouts
       let FileLayoutExtension$="" ! Extension for your File Layouts
@@ -52,6 +52,7 @@ SETTINGS: ! ***** Set Global Defaults For The Library Here
       let LogLibrary$="" ! Log Library to use, defaults to None (use FileIO's internal log functionality)
       let LogLayout$="" ! Log file layout, defaults to Internal File (for use with FileIO's internal log functionality)
       let AnimateDatacrawler=1 ! Use ScreenIO Animation for Datacrawler (if available, will not cause error if not available)
+      let GenerateScreenBtn=1 ! Use ScreenIO's fnMakeScreen function to generate screens from within fileio.
       let TemplatePath$="filelay\template\" ! Default Template Path
       let IgnoreLayouts$="" ! List any Ignore Layouts here.
       let CloseFileSimple=0 ! Use simple comparison for fnCloseFile
@@ -64,11 +65,11 @@ SETTINGS: ! ***** Set Global Defaults For The Library Here
       let DateFormatDisplay$='m/d/cy' ! Format of Dates when displaying in Data Crawler
    fnend
 
-   def fnReadSettings(mat SSettingNames$,mat SSettings$,mat NSettingNames$,mat NSettings$,&ReadSettings;___,Defaultfilelayoutpath$*255,NewLine$*255,LogLibrary$*255,Promptonfilecreate,PromptOnUpdate,Createlogfile,EnforceDupkeys,StartFileNumber,CheckIndex,CompressColumns,MaxColWidth,LogLibrary$*255,LogLayout$,AnimateDatacrawler,TemplatePath$*255,IgnoreLayouts$*255,CloseFileSimple,Star$,AuditPath$*255,ScreenIOPath$*255,FileLayoutExtension$,FilterBoxFileList,FilterBoxData,SaveSelectedCols$*64,DateFormatExport$*64,DateFormatDisplay$*64)
+   def fnReadSettings(mat SSettingNames$,mat SSettings$,mat NSettingNames$,mat NSettings$, &ReadSettings; ___,Defaultfilelayoutpath$*255, NewLine$*255, LogLibrary$*255, Promptonfilecreate, PromptOnUpdate, Createlogfile, EnforceDupkeys, StartFileNumber, CheckIndex, CompressColumns, MaxColWidth, LogLibrary$*255, LogLayout$, AnimateDatacrawler, GenerateScreenBtn, TemplatePath$*255, IgnoreLayouts$*255, CloseFileSimple, Star$, AuditPath$*255, ScreenIOPath$*255, FileLayoutExtension$, FilterBoxFileList, FilterBoxData, SaveSelectedCols$*64, DateFormatExport$*64, DateFormatDisplay$*64)
       let Star$=fnNeedStar$
 
       ! Read Defaults
-      let fnDefaultSettings(Defaultfilelayoutpath$,Promptonfilecreate,PromptOnUpdate,Createlogfile,EnforceDupkeys,StartFileNumber,CheckIndex,CompressColumns,MaxColWidth,NewLine$,LogLibrary$,LogLayout$,AnimateDatacrawler,TemplatePath$,IgnoreLayouts$,CloseFileSimple,AuditPath$,ScreenIOPath$,FileLayoutExtension$,FilterBoxFileList,FilterBoxData,SaveSelectedCols$,DateFormatExport$,DateFormatDisplay$)
+      let fnDefaultSettings(Defaultfilelayoutpath$,Promptonfilecreate,PromptOnUpdate,Createlogfile,EnforceDupkeys,StartFileNumber,CheckIndex,CompressColumns,MaxColWidth,NewLine$,LogLibrary$,LogLayout$,AnimateDatacrawler,GenerateScreenBtn,TemplatePath$,IgnoreLayouts$,CloseFileSimple,AuditPath$,ScreenIOPath$,FileLayoutExtension$,FilterBoxFileList,FilterBoxData,SaveSelectedCols$,DateFormatExport$,DateFormatDisplay$)
 
       ! Read Custom Settings
       if exists("fileio.ini") then
@@ -80,10 +81,16 @@ SETTINGS: ! ***** Set Global Defaults For The Library Here
       end if
 
       ! Detect fnAnimate routines, enable/disable Loading Animation
-      if AnimateDatacrawler and exists(ScreenIOPath$) then
-         library ScreenIOPath$ : fnAnimate, fnPrepareAnimation, fnCloseAnimation
+      if len(trim$(ScreenIOPath$)) and exists(ScreenIOPath$) then
+         if AnimateDataCrawler then
+            library ScreenIOPath$ : fnAnimate, fnPrepareAnimation, fnCloseAnimation, fnMakeScreen
+         end if
+         if GenerateScreenBtn then
+            library ScreenIOPath$ : fnMakeScreen
+         end if
       else
          let AnimateDatacrawler=0
+         let GenerateScreenBtn=0
       end if
 
       ! Calculate Special Settings
@@ -118,6 +125,7 @@ SETTINGS: ! ***** Set Global Defaults For The Library Here
       let nSettingNames$(10)="filterboxfilelist"
       let nSettingNames$(11)="filterboxdata"
       let nSettingNames$(12)="promptonupdate"
+      let nSettingNames$(13)="generatescreenbtn"
 
       let SSettings$(1)=Defaultfilelayoutpath$
       let SSettings$(2)=NewLine$
@@ -144,13 +152,14 @@ SETTINGS: ! ***** Set Global Defaults For The Library Here
       let NSettings(10)=filterboxfilelist
       let NSettings(11)=filterboxData
       let NSettings(12)=PromptOnUpdate
+      let NSettings(13)=GenerateScreenBtn
 
       let ReadSettings=1
    fnend
 
    dim ReadSettings
    dim SSettingNames$(12),SSettings$(12)*255
-   dim NSettingNames$(12),NSettings(12)
+   dim NSettingNames$(13),NSettings(13)
 
    def fnSettings$*255(SettingName$;___,SettingSub)
       if ~ReadSettings then let fnReadSettings(mat SSettingNames$,mat SSettings$,mat NSettingNames$,mat NSettings$,ReadSettings)
@@ -291,7 +300,7 @@ DIMS: ! Dimension Statements For Data Crawler
 
    library : Fnreadlayouts,fnShowData,fnGetFileNumber, fnLog, fnLogArray
 !
-SELECTDATAFILE: ! ***** Datafile Selection Routine #Autonumber# 7000,10
+SELECTDATAFILE: ! ***** Datafile Selection Routine #Autonumber# 7000,5
 
    let fnReadLayouts(Mat Lvdir_Listing$)
    let fnCheckForNewExtension(mat LvDir_Listing$)
@@ -304,13 +313,19 @@ SELECTDATAFILE: ! ***** Datafile Selection Routine #Autonumber# 7000,10
    if Udim(Mat Lvdir_Listing$)>15 then let Lvdir_Widths(1)-=2 ! Make Room For Scrollbar
 
    let _Logging=fnSettings("createlogfile")
+   let _GenerateScreen=fnSettings("generatescreenbtn")
 
    dim HT$(1)*2000
    ! let HT$(1)="3;Run Once to set the Start Reference Point. Then test an Operation on your Files. Run again to display all changes found in the selected files.;"
 
    print #Dc_Window, fields str$(ScreenRows-5)&",3,CC 10,/W:W,B43;"&str$(ScreenRows-5)&",27,CC 10,/W:W,B44" : "Quit","View"
    print #Dc_Window, fields str$(ScreenRows-5)&",15,CC 10,/W:W,B47", help "3;Run Once to set the Start Reference Point. Then test an Operation on your Files. Run again to display all changes found in the selected files.;"  : "Compare"
-   print #Dc_Window, fields str$(ScreenRows-2)&",10,CC 20,/W:W,B45" : "Generate Code"
+   if _GenerateScreen then
+      print #Dc_Window, fields str$(ScreenRows-2)&",10,10/CC 20,/W:W,B49;"&str$(ScreenRows-2)&",21,9/CC 20,/W:W,B45" : "Generate Screen","Generate Code"
+   else
+      print #Dc_Window, fields str$(ScreenRows-2)&",10,CC 20,/W:W,B45" : "Generate Code"
+   end if
+
    print #Dc_Window, fields str$(ScreenRows-3)&",32,CC 6,/W:W,B8", help "3;Check for Updates (F8);" : "v"&str$(fnVersion)
    print #Dc_Window, fields str$(ScreenRows-2)&",32,CC 6,/W:W,B9", help "3;View FileIO Recent Changes;" : "Log"
    print #Dc_Window, fields str$(ScreenRows-3)&",10,CC 20,/W:W,B46" : "New Layout Wizard"
@@ -318,7 +333,6 @@ SELECTDATAFILE: ! ***** Datafile Selection Routine #Autonumber# 7000,10
    print #Dc_Window, fields "1,2,LIST "&str$(ScreenRows-8)&"/37,=" : (Mat Lvdir_Listing$)
    print #Dc_Window, fields "1,2,LIST "&str$(ScreenRows-8)&"/37,SORT" : 1
    ! print #Dc_Window, fields str$(ScreenRows-4)&",12,C" : "Show Raw Data"
-
 
    if fn43 and fnSettings("filterboxfilelist")  then
       let FilterBox$=str$(ScreenRows-7)&",2,FILTER 37,/W:W,1,2,FULLROW,ALL"
@@ -371,6 +385,9 @@ SELECTDATAFILE: ! ***** Datafile Selection Routine #Autonumber# 7000,10
          print #Dc_Window, fields "1,2,LIST "&str$(ScreenRows-8)&"/37,=" : (Mat Lvdir_Listing$)
          print #Dc_Window, fields "1,2,LIST "&str$(ScreenRows-8)&"/37,SORT" : 1
       end if
+      if Dc_Key=49 then ! Generate Screen using ScreenIO
+         let fnMakeScreen(Lvdir_listing$(Chosen),1) error OldScreenIO
+      end if
       if Dc_Key=8 then
          let fnCheckForUpdates
       end if
@@ -390,6 +407,17 @@ ENDDATACRAWLER: ! #Autonumber# 8000,10
       execute "system"
    end if
    stop
+
+OldScreenIO: ! Error this old version of ScreenIO doesn't support this feature.
+   if (1==msgbox(`This feature is not supported in this older version of ScreenIO.
+
+      Please upgrade to the latest ScreenIO by downloading it from:
+      http://www.sageax.com/downloads/ScreenIO.zip.
+
+      Would you like us to download it for you?`,"Upgrade ScreenIO","yN")) then
+      execute "system -C -M start http://www.sageax.com/downloads/ScreenIO.zip"
+   end if
+   continue
 !
 ! #Autonumber# 10000,1
 ! *****************
@@ -3816,8 +3844,15 @@ OPENFILE: ! This Function Opens The Requested File And Returns Filenum
 ERROR_OPENFILE: ! An Error Was Found Opening The File
    if IgnoreErrors then goto ReturnFailed
    print "Error parsing file layout or opening file "&filename$&": "&Str$(Err)&" on line: "&Str$(Line)
-   print "A key specified in your file layout could not be found."
-   print "Check your file layout header for errors."
+   if err=608 then
+      print "Open Permission Conflict. If the file has already been opened Input Only,"
+      print "then it cannot be opened OutIn. Change the earlier open to OutIn."
+   else if err=4152 then
+      print "A key specified in your file layout could not be found."
+      print "Check your file layout header for errors."
+   else
+      print "Check your file layout header for errors."
+   end if
    pause  ! Give User A Chance To Check Variables
    execute "system"
 
@@ -4108,7 +4143,7 @@ UPDATE: ! Updates File To Latest Version
          let LongMessage$="The file layout has been updated. Before proceeding, we must update the data file to the newest version. "
          let LongMessage$(99999:0)="Choose Yes to continue, or No to Abort.\n\nIf you recently got an update, choose Yes.\n\n"
          let LongMessage$(99999:0)="If you don't know why you're seeing this message, choose No to Abort and then contact your vendor for support."
-         let LongMessage$=srep$(LongMessage$,"\n",hex$("0d0a"))
+         let LongMessage$=srep$(LongMessage$,"\n",hex$("0D0A"))
 
          if ~fnSettings("promptonupdate") or (2==msgbox(LongMessage$,"Update","yn","QST")) then ! If don't Prompt, or if they chose "Yes"
             let Star$=fnNeedStar$
@@ -4521,7 +4556,6 @@ BuildKey: ! This function builds a key off of mat F$ and mat F
 
       if (trim$(layout$)<>"") and (udim(mat f$)+udim(mat F)) then
          if Layout$<>BK_LastLayout$ then
-
             library : fnReadEntireLayout, fnKey$
 
             mat BK_Keys$(0)
@@ -4537,7 +4571,6 @@ BuildKey: ! This function builds a key off of mat F$ and mat F
             next Index
 
             let BK_LastLayout$=Layout$
-
          end if
 
          if udim(mat BK_Keys$) then
@@ -5858,7 +5891,7 @@ READLAYOUTS: ! ***** Reads Into A Given Array The List Of File Layouts
       open #(Dirfile:=Fngetfilenumber) : "Name=xxx", display,input
       READFILENAME: ! Read The Next File Name
       linput #Dirfile: Dummy$ eof DONEREADINGFILENAMES
-			if trim$(uprc$(dummy$(pos(dummy$,'.',-1)+1:inf)))=trim$(uprc$(filelayoutextension$(2:4))) and ~pos(dummy$,"<DIR>") then ! if trim$(uprc$(dummy$(11:13)))=trim$(uprc$(FileLayoutExtension$(2:4))) and ~pos(dummy$,"<DIR>") then
+      if trim$(uprc$(dummy$(11:13)))=trim$(uprc$(FileLayoutExtension$(2:4))) and ~pos(dummy$,"<DIR>") then
          mat dirlist$(udim(dirlist$)+1)
          let dummy$=trim$(dummy$(44:99))
          if FileLayoutExtension$<>'' and FileLayoutExtension$><"." then
@@ -6789,9 +6822,9 @@ BeginAudit: ! ***** This function will create an Audit Comparison folder for all
 
 
                if len(trim$(InvoiceFile$)) then
-                  execute 'sy -M -s sendemail -s '&EmailConf$(conf_server)&' -t '&EmailAddressString$&' -f '&EmailConf$(conf_fromaddr)&' -xu '&EmailConf$(conf_UserAccount)&' -xp '&EmailConf$(conf_password)&' -u "'&Subject$&'" -m "'&EmailMessage$&'" -a "'&os_filename$(InvoiceFile$)&'"'&CCEmailSTring$&BCCEmail$&' -v -q -l EmailLog.'&Wsid$
+                  execute 'sy -M -s -t120 sendemail -s '&EmailConf$(conf_server)&' -t '&EmailAddressString$&' -f '&EmailConf$(conf_fromaddr)&' -xu '&EmailConf$(conf_UserAccount)&' -xp '&EmailConf$(conf_password)&' -u "'&Subject$&'" -m "'&EmailMessage$&'" -a "'&os_filename$(InvoiceFile$)&'"'&CCEmailSTring$&BCCEmail$&' -v -q -l EmailLog.'&Wsid$
                else
-                  execute 'sy -M -s sendemail -s '&EmailConf$(conf_server)&' -t '&EmailAddressString$&' -f '&EmailConf$(conf_fromaddr)&' -xu '&EmailConf$(conf_UserAccount)&' -xp '&EmailConf$(conf_password)&' -u "'&Subject$&'" -m "'&EmailMessage$&'"'&CCEmailSTring$&BCCEmail$&' -v -q -l EmailLog.'&Wsid$
+                  execute 'sy -M -s -t120 sendemail -s '&EmailConf$(conf_server)&' -t '&EmailAddressString$&' -f '&EmailConf$(conf_fromaddr)&' -xu '&EmailConf$(conf_UserAccount)&' -xp '&EmailConf$(conf_password)&' -u "'&Subject$&'" -m "'&EmailMessage$&'"'&CCEmailSTring$&BCCEmail$&' -v -q -l EmailLog.'&Wsid$
                end if
                execute 'type EmailLog.[WSID] >>EmailLog.txt'
                open #(Resultfile:=Fngetfilenumber): "name=EmailLog.[WSID],recl=512",display,input
