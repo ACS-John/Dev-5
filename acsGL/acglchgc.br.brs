@@ -11,7 +11,7 @@
 	fnTop(program$,cap$="Comparative Change Amount")
 	if fnGlAskFormatPriorCdPeriod=5 then goto Xit
 	udf$=env$('temp')&'\'
-	open #20: "Name=[Q]\GLmstr\Company.h[cno],Shr",i,i,r: read #20,using 'Form Pos 152,3*C 12',rec=1: mat cogl$ : close #20:
+	open #20: "Name=[Q]\GLmstr\Company.h[cno],Shr",i,i,r: read #20,using 'form pos 152,3*C 12',rec=1: mat cogl$ : close #20:
 	actpd=fnactpd : fscode=fnfscode : priorcd=fnpriorcd
 	on fkey 5 goto L2060
 	mp1=75
@@ -44,7 +44,7 @@ L350: close #1:
 	fnTos
 	mylen=30: mypos=mylen+3 : right=1
 	fnLbl(1,1,"Cost Center or Department #:",mylen,right)
-	fnTxt(1,mypos,3,0,right,"30",0,"Enter the cost center or department number if you wish to pr only one department, else leave blank for all.",0 ) : _
+	fnTxt(1,mypos,3,0,right,'30',0,"Enter the cost center or department number if you wish to pr only one department, else leave blank for all.",0 ) : _
 	resp$(1)=""
 	fnLbl(2,1,"(Blank for all Departments)",mylen,right)
 	fnCmdKey("&Next",1,1,0,"Prints the financial statement.")
@@ -100,10 +100,10 @@ L870: fnTos(sn$="ACglchgs2") : _
 	fnTxt(1,mypos,50,0,right,"",0,"Enter the description if not accurate.",0 ) : _
 	resp$(1)=d$
 	fnLbl(2,1,"Total Year to Date:",mylen,right)
-	fnTxt(2,mypos,12,0,right,"10",0,"Enter the total for the year.",0 ) : _
+	fnTxt(2,mypos,12,0,right,'10',0,"Enter the total for the year.",0 ) : _
 	resp$(2)=str$(total)
 	fnLbl(3,1,"Total Last Year to Date:",mylen,right)
-	fnTxt(3,mypos,12,0,right,"10",0,"Enter the total for last year.",0 ) : _
+	fnTxt(3,mypos,12,0,right,'10',0,"Enter the total for last year.",0 ) : _
 	resp$(3)=str$(total2)
 	fnCmdKey("&Next",1,1,0,"Accept the answer.")
 	fnCmdKey("&Cancel",5,0,1,"Returns to menu without posting.")

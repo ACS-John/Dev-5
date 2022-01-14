@@ -21,7 +21,7 @@ id$(6)=' 6. Secondary Fund / Cash Flow File' 	: fil$(6)='ACGLFNSG.h[cno]' : idx$
 	lbl$(ic+=1)='Description'            	: fltyp$(ic)='c' : sln(ic)=50 : mask(ic)= 0 : sp(ic)= 6 : tln(ic)=50
 	lbl$(ic+=1)='Type of Entry'         	: fltyp$(ic)='C' : sln(ic)= 1 : mask(ic)= 0 : sp(ic)=56 : tln(ic)= 1
 	lbl$(ic+=1)='Starting Print'        	: fltyp$(ic)='N' : sln(ic)= 2 : mask(ic)=30 : sp(ic)=57 : tln(ic)= 2
-	lbl$(ic+=1)='Lines to Skip'         	: fltyp$(ic)='N' : sln(ic)= 2 : mask(ic)=30 : sp(ic)=59 : tln(ic)= 2
+	lbl$(ic+=1)='Lines to skip'         	: fltyp$(ic)='N' : sln(ic)= 2 : mask(ic)=30 : sp(ic)=59 : tln(ic)= 2
 	lbl$(ic+=1)='Dollar Sign'           		: fltyp$(ic)='N' : sln(ic)= 1 : mask(ic)=30 : sp(ic)=61 : tln(ic)= 1
 	lbl$(ic+=1)='Underlines'             	: fltyp$(ic)='N' : sln(ic)= 1 : mask(ic)=30 : sp(ic)=62 : tln(ic)= 1
 	lbl$(ic+=1)='Reverse Sign'           	: fltyp$(ic)='N' : sln(ic)= 1 : mask(ic)=30 : sp(ic)=63 : tln(ic)= 1

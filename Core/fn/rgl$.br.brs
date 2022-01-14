@@ -15,7 +15,7 @@ def library fnRgl$*60(acctIn$; returnMaxLength,leaveDescFileOpen,___,desc$*50,re
 	if hAcct=0 then
 		open #hAcct=fnH: 'Name=[Q]\[cursys]mstr\GLmstr.h[cno],KFName=[Q]\[cursys]mstr\GLIndex.h[cno],Shr',i,i,k ioerr L_ERR_OPEN_FOR_DESC
 	end if
-	read #hAcct,using 'Form Pos 13,C 50',key=acctIn$: desc$ ioerr AcctNoKey
+	read #hAcct,using 'form pos 13,C 50',key=acctIn$: desc$ ioerr AcctNoKey
 	if ~leaveDescFileOpen then
 		close #hAcct:
 		hAcct=0

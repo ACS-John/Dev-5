@@ -34,9 +34,9 @@
  
 	open #1: 'Name=[Q]\PRmstr\Company.h[cno],recl=759,version=0,use',i,outi,r
 	if lrec(1)=0 then 
-		write #1,using 'Form POS 1,3*C 40,C 12,PD 6.3,PD 6.2,PD 5.2,10*C 8,N 2,PD 4.2,PD 3.3,12*PD 4.2,10*PD 3.3,25*C 12,31*N 1,10*C 6,3*PD 4.3,3*PD 3.2,4*PD 4.2,N 1,2*C 6,N 2'       	: mat a$,fid$,mcr,mcm,feducrat,mat d$,loccode,feducmax,ficarate,ssmax,ficawh,mat xm,mat r,mat e$,mat gln$,gli,mat dedcode,mat calcode,mat dedfed,mat rpnames2$,mat sck,vacm,mhw,mat wcm,tc,mat jn$,dc
+		write #1,using 'form pos 1,3*C 40,C 12,PD 6.3,PD 6.2,PD 5.2,10*C 8,N 2,PD 4.2,PD 3.3,12*PD 4.2,10*PD 3.3,25*C 12,31*N 1,10*C 6,3*PD 4.3,3*PD 3.2,4*PD 4.2,N 1,2*C 6,N 2'       	: mat a$,fid$,mcr,mcm,feducrat,mat d$,loccode,feducmax,ficarate,ssmax,ficawh,mat xm,mat r,mat e$,mat gln$,gli,mat dedcode,mat calcode,mat dedfed,mat rpnames2$,mat sck,vacm,mhw,mat wcm,tc,mat jn$,dc
 	end if
-	read #1,using 'Form POS 1,3*C 40,C 12,PD 6.3,PD 6.2,PD 5.2,10*C 8,N 2,PD 4.2,PD 3.3,12*PD 4.2,10*PD 3.3,25*C 12,31*N 1,10*C 6,3*PD 4.3,3*PD 3.2,4*PD 4.2,N 1,2*C 6,N 2',rec=1 	: mat a$,fid$,mcr,mcm,feducrat,mat d$,loccode,feducmax,ficarate,ssmax,ficawh,mat xm,mat r,mat e$,mat gln$,gli,mat dedcode,mat calcode,mat dedfed,mat rpnames2$,mat sck,vacm,mhw,mat wcm,tc,mat jn$,dc ioerr L290
+	read #1,using 'form pos 1,3*C 40,C 12,PD 6.3,PD 6.2,PD 5.2,10*C 8,N 2,PD 4.2,PD 3.3,12*PD 4.2,10*PD 3.3,25*C 12,31*N 1,10*C 6,3*PD 4.3,3*PD 3.2,4*PD 4.2,N 1,2*C 6,N 2',rec=1 	: mat a$,fid$,mcr,mcm,feducrat,mat d$,loccode,feducmax,ficarate,ssmax,ficawh,mat xm,mat r,mat e$,mat gln$,gli,mat dedcode,mat calcode,mat dedfed,mat rpnames2$,mat sck,vacm,mhw,mat wcm,tc,mat jn$,dc ioerr L290
 	ssmax=ssmax*10
 	L290: !
 	close #1:
@@ -64,19 +64,19 @@ SCREEN_1: ! r:
 	fnTxt(5,mypos,10,0,left,"33",0,"In 2007 the rate was .8% and should be entered as .8 and not .008",fram1)
 	resp$(5)=str$(feducrat)
 	fnLbl(6,1,"Federal U/C Maximum Wage:",mylen,right,0,fram1)
-	fnTxt(6,mypos,12,0,left,"10",0,"",fram1)
+	fnTxt(6,mypos,12,0,left,'10',0,"",fram1)
 	resp$(6)=str$(feducmax)
 	fnLbl(7,1,"Social Security Rate:",mylen,right,0,fram1)
 	fnTxt(7,mypos,10,0,left,"33",0,"Sample format 6.2",fram1 )
 	resp$(7)=str$(ficarate)
 	fnLbl(8,1,"SS Maximum Wage:",mylen,right,0,fram1)
-	fnTxt(8,mypos,12,0,left,"10",0,"The maximum was 97500 for the year 2007.  See a 941 form.",fram1)
+	fnTxt(8,mypos,12,0,left,'10',0,"The maximum was 97500 for the year 2007.  See a 941 form.",fram1)
 	resp$(8)=str$(ssmax)
 	fnLbl(9,1,"Medicare Rate:",mylen,right,0,fram1)
 	fnTxt(9,mypos,10,0,left,"33",0,"Format would be 1.450",fram1)
 	resp$(9)=str$(mcr)
 	fnLbl(10,1,"Medicare Maximum Wage:",mylen,right,0,fram1)
-	fnTxt(10,mypos,12,0,left,"10",0,"Use 999999.99 since there no maximum wage at this time.",fram1)
+	fnTxt(10,mypos,12,0,left,'10',0,"Use 999999.99 since there no maximum wage at this time.",fram1)
 	resp$(10)=str$(mcm)
 	fram2=2: fnFra(13,1,8,90,"General Ledger Information")
 	fnChk(1,30,"General Ledger Installed:",1,fram2)
@@ -227,7 +227,7 @@ SCREEN_3: ! r:
 		resp$(resp+=1)=d$(j)
 		fnTxt(j+3,19,12,0,left,"",0,"Enter the state id #.",0 )
 		resp$(resp+=1)=e$(j)
-		fnTxt(j+3,32,12,0,left,"10",0,"Enter the maximum wage subject to state unemployment (See your state u/c report.",0 )
+		fnTxt(j+3,32,12,0,left,'10',0,"Enter the maximum wage subject to state unemployment (See your state u/c report.",0 )
 		resp$(resp+=1)=str$(xm(j))
 		fnTxt(j+3,49,8,0,left,"33",0,"Enter the state unemployment rate (See your state u/c report. Enter in percent format. Example: 5% as 5.00",0 )
 		resp$(resp+=1)=str$(r(j))
@@ -255,7 +255,7 @@ SCREEN_4: ! r:
 	mylen=45: mypos=mylen+3 : right=1: resp=0
 	fram3=1: fnFra(1,1,6,60,"Vacation and Sick Pay Information")
 	fnLbl(1,1,"Days employed before accruing sick hours",mylen,right,0,fram3)
-	fnTxt(1,mypos,8,0,0,"30",0,"",fram3)
+	fnTxt(1,mypos,8,0,0,'30',0,"",fram3)
 	resp$(1)=str$(sck(1))
 	fnLbl(2,1,"Sick hours accrued after eligibility period:",mylen,right,0,fram3)
 	fnTxt(2,mypos,8,0,0,"33",0,"",fram3)
@@ -271,23 +271,23 @@ SCREEN_4: ! r:
 	resp$(5)=str$(vacm)
 	fram4=2: fnFra(9,1,3,60,"Miscellaneous Payroll Information")
 	fnLbl(1,1,"Minimum Hourly Wage:",mylen,right,0,fram4)
-	fnTxt(1,mypos,10,0,0,"10",0,"",fram4)
+	fnTxt(1,mypos,10,0,0,'10',0,"",fram4)
 	resp$(6)=str$(mhw)
 	fnLbl(2,1,"Local Withholding Code:",mylen,right,0,fram4)
-	fnTxt(2,mypos,2,0,0,"30",0,"If one of the twenty miscellaneous dedutions is used for local withholdings, then enter the number of the deduction.",fram4)
+	fnTxt(2,mypos,2,0,0,'30',0,"If one of the twenty miscellaneous dedutions is used for local withholdings, then enter the number of the deduction.",fram4)
 	resp$(7)=str$(loccode)
 	fram5=3: fnFra(14,1,5,60,"Workman's Compensation Limits")
 	fnLbl(1,1,"Monthly:",mylen,right,0,fram5)
-	fnTxt(1,mypos,10,0,0,"10",0,"If you pay workman's comp and there are limits on the maximum wage subject to workman's comp, then enter that maximum wage under the proper pay period.",fram5)
+	fnTxt(1,mypos,10,0,0,'10',0,"If you pay workman's comp and there are limits on the maximum wage subject to workman's comp, then enter that maximum wage under the proper pay period.",fram5)
 	resp$(8)=str$(wcm(1))
 	fnLbl(2,1,"Semi-Monthly:",mylen,right,0,fram5)
-	fnTxt(2,mypos,10,0,0,"10",0,"If you pay workman's comp and there are limits on the maximum wage subject to workman's comp, then enter that maximum wage under the proper pay period.",fram5)
+	fnTxt(2,mypos,10,0,0,'10',0,"If you pay workman's comp and there are limits on the maximum wage subject to workman's comp, then enter that maximum wage under the proper pay period.",fram5)
 	resp$(9)=str$(wcm(2))
 	fnLbl(3,1,"Bi-Weekly:",mylen,right,0,fram5)
-	fnTxt(3,mypos,10,0,0,"10",0,"If you pay workman's comp and there are limits on the maximum wage subject to workman's comp, then enter that maximum wage under the proper pay period.",fram5)
+	fnTxt(3,mypos,10,0,0,'10',0,"If you pay workman's comp and there are limits on the maximum wage subject to workman's comp, then enter that maximum wage under the proper pay period.",fram5)
 	resp$(10)=str$(wcm(3))
 	fnLbl(4,1,"Weekly:",mylen,right,0,fram5)
-	fnTxt(4,mypos,10,0,0,"10",0,"If you pay workman's comp and there are limits on the maximum wage subject to workman's comp, then enter that maximum wage under the proper pay period.",fram5)
+	fnTxt(4,mypos,10,0,0,'10',0,"If you pay workman's comp and there are limits on the maximum wage subject to workman's comp, then enter that maximum wage under the proper pay period.",fram5)
 	resp$(11)=str$(wcm(4))
 	fnCmdKey("&Next",1,1,0,"Moves to next screen of company information.")
 	fnCmdKey("&Save and Exit",4,0,0,"Saves any changes and returns to menu.")
@@ -387,7 +387,7 @@ goto Xit
 DONE: ! r:
 	open #1: "Name=[Q]\PRmstr\Company.h[cno]",i,outi,r
 	ssmax=ssmax*.1
-	rewrite #1,using 'Form POS 1,3*C 40,C 12,PD 6.3,PD 6.2,PD 5.2,10*C 8,N 2,PD 4.2,PD 3.3,12*PD 4.2,10*PD 3.3,25*C 12,31*N 1,10*C 6,3*PD 4.3,3*PD 3.2,4*PD 4.2,N 1,2*C 6,N 2',rec=1: mat a$,fid$,mcr,mcm,feducrat,mat d$,loccode,feducmax,ficarate,ssmax,ficawh,mat xm,mat r,mat e$,mat gln$,gli,mat dedcode,mat calcode,mat dedfed,mat rpnames2$,mat sck,vacm,mhw,mat wcm,tc,mat jn$,dc
+	rewrite #1,using 'form pos 1,3*C 40,C 12,PD 6.3,PD 6.2,PD 5.2,10*C 8,N 2,PD 4.2,PD 3.3,12*PD 4.2,10*PD 3.3,25*C 12,31*N 1,10*C 6,3*PD 4.3,3*PD 3.2,4*PD 4.2,N 1,2*C 6,N 2',rec=1: mat a$,fid$,mcr,mcm,feducrat,mat d$,loccode,feducmax,ficarate,ssmax,ficawh,mat xm,mat r,mat e$,mat gln$,gli,mat dedcode,mat calcode,mat dedfed,mat rpnames2$,mat sck,vacm,mhw,mat wcm,tc,mat jn$,dc
 	close #1:
 	fnDedNames(mat fullname$,mat abrevname$,mat newdedcode,mat newcalcode,mat newdedfed,mat dedfica,mat dedst,mat deduc,mat gl$,1)
 goto Xit ! /r

@@ -1,6 +1,6 @@
 !  Replace S:\acsPR\prW2b
 ! pr W-2s for second state - chained to from newprw2a (now Payroll\PrintW2Forms)  though (9/27/2016)
-	! FORM TYPE 22222 FOR WAGE AND TAX STATEMENT  - 1993
+	! form TYPE 22222 FOR WAGE AND TAX STATEMENT  - 1993
  
 autoLibrary
 on error goto Ertn
@@ -68,7 +68,7 @@ FINIS: ! r:
 	fncloseprn
 goto Xit ! /r
 Xit: fnXit
-PRINTW2: ! r: pr W2 FORM
+PRINTW2: ! r: pr W2 form
 	fnopenprn
 	! if rtrm$(file$(255))="PRN:/SELECT" then pr #255,using ' form pos 1,c 9': hex$("2B0205000A1021")
 	pr #255,using L740: ss$

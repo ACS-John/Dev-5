@@ -22,7 +22,7 @@ def fn_balanceSheet(; defaultFormat$)
 		mylen=33
 		mypos=mylen+3 : right=1
 		fnLbl(1,1,"Cost Center or Department Number:",mylen,right)
-		fnTxt(1,mypos,3,0,right,"30",0,"Enter the cost center or department number if you wish to pr only one department, else leave blank for all.",0 )
+		fnTxt(1,mypos,3,0,right,'30',0,"Enter the cost center or department number if you wish to pr only one department, else leave blank for all.",0 )
 		resp$(1)=""
 		fnLbl(2,1,"(Blank for all Departments)",mylen,right)
 		fnCmdKey("&Next",1,1,0,"Prints the financial statement.")
@@ -134,7 +134,7 @@ def fn_tePrnDetailAndEquity(mat fs$,mat fsN,mp1,&notrans,actpd,mat accum,foot$*1
 	De_ReadGlMasterAmounts: ! read general ledger master file for amounts
 	dim by(13)
 	dim bp(13)
-	read #hGl,using 'Form POS mp1,PD 3,POS 87,27*PD 6.2': br,cb,mat by,mat bp eof De_EoGlMasterAmounts
+	read #hGl,using 'form pos mp1,PD 3,pos 87,27*PD 6.2': br,cb,mat by,mat bp eof De_EoGlMasterAmounts
 	if br=0 then goto De_ReadGlMasterAmounts
 	if fnfscode=0 or (fnfscode=actpd and fnpriorcd=1) then goto De_L610
 	if fnfscode<1 or fnfscode>12 then let fnfscode(1)

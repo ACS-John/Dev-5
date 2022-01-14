@@ -68,7 +68,7 @@ dim tr$(13)*12
 ! /r
 ! r: get mat amt$(13,9)
 	dim amt$(13,9)*70
-	! FORM 1098
+	! form 1098
 	amt$(1,1)='1-0600-Mortgage interest received from payer/borrower'
 	amt$(1,2)='2'
 	amt$(1,3)='3'
@@ -78,7 +78,7 @@ dim tr$(13)*12
 	amt$(1,7)='7'
 	amt$(1,8)='8'
 	amt$(1,9)='9'
-	! FORM 1099-A
+	! form 1099-A
 	amt$(2,1)='1'
 	amt$(2,2)='2-0010-Amount of debt outstanding'
 	amt$(2,3)='3-0010-Amount of debt satisfied'
@@ -88,7 +88,7 @@ dim tr$(13)*12
 	amt$(2,7)='7'
 	amt$(2,8)='8'
 	amt$(2,9)='9'
-	! FORM 1099-B
+	! form 1099-B
 	amt$(3,1)='1'
 	amt$(3,2)='2-0001-Stocks bonds etc'
 	amt$(3,3)='3-0001-Bartering'
@@ -98,7 +98,7 @@ dim tr$(13)*12
 	amt$(3,7)='7-0001-Unrealized profit (or loss) on open contracts 12/31/87'
 	amt$(3,8)='8-0001-Unrealized profit (or loss) on open contracts 12/31/88'
 	amt$(3,9)='9-0001-Aggregate profit (or loss)'
-	! FORM 1099-DIV
+	! form 1099-DIV
 	amt$(4,1)='1-0010-Ordinary dividends'
 	amt$(4,2)='2-0010-Total capital gains distributions'
 	amt$(4,3)='3-0010-28% rate gain'
@@ -108,7 +108,7 @@ dim tr$(13)*12
 	amt$(4,7)='7-0010-Nontaxable distributions'
 	amt$(4,8)='8-0010-Federal income tax withheld'
 	amt$(4,9)='9-0010-Investment expenses'
-	! FORM 1099-G
+	! form 1099-G
 	amt$(5,1)='1-0010-Unemployment compensation'
 	amt$(5,2)='2-0010-State or local income tax refunds'
 	amt$(5,3)='3'
@@ -118,7 +118,7 @@ dim tr$(13)*12
 	amt$(5,7)='7-0600-Agriculture payments'
 	amt$(5,8)='8'
 	amt$(5,9)='9'
-	! FORM 1099-INT
+	! form 1099-INT
 	amt$(6,1)='1-0010-Earnings from savings'
 	amt$(6,2)='2-0010-Early withdrawal penalty'
 	amt$(6,3)='3-0010-U S Savings bonds etc'
@@ -128,7 +128,7 @@ dim tr$(13)*12
 	amt$(6,7)='7'
 	amt$(6,8)='8'
 	amt$(6,9)='9'
-	! FORM 1099-MISC
+	! form 1099-MISC
 	amt$(7,1)='1-0600-Rents'
 	amt$(7,2)='2-0600-Royalties'
 	amt$(7,3)='3-0600-Prizes and awards'
@@ -138,7 +138,7 @@ dim tr$(13)*12
 	amt$(7,7)='7-0600-Nonemployee compensation'
 	amt$(7,8)='8-0600-Substitute payments in lieu of dividends or interest'
 	amt$(7,9)='9-5000-Direct sales indicator'
-	! FORM 1099-OID
+	! form 1099-OID
 	amt$(8,1)='1-0010-Total original issue discount for year'
 	amt$(8,2)='2-0010-Other periodic interest'
 	amt$(8,3)='3-0010-Early withdrawal penalty'
@@ -148,7 +148,7 @@ dim tr$(13)*12
 	amt$(8,7)='7'
 	amt$(8,8)='8'
 	amt$(8,9)='9'
-	! FORM 1099-PATR
+	! form 1099-PATR
 	amt$(9,1)='1-0010-Patronage dividends'
 	amt$(9,2)='2-0010-Nonpatronage distributions'
 	amt$(9,3)='3-0010-Per-unit retain allocations'
@@ -158,7 +158,7 @@ dim tr$(13)*12
 	amt$(9,7)='7-0010-Energy investment credit'
 	amt$(9,8)='8-0010-Jobs credit'
 	amt$(9,9)='9-0010-Low-income housing credit'
-	! FORM 1099-R
+	! form 1099-R
 	amt$(10,1)='1-0001-Gross distribution'
 	amt$(10,2)='2-0001-Taxable amount'
 	amt$(10,3)='3-0001-Amount eligible for capital gain election'
@@ -168,7 +168,7 @@ dim tr$(13)*12
 	amt$(10,7)='7'
 	amt$(10,8)='8-0001-Other'
 	amt$(10,9)='9-0001-State income tax withheld'
-	! FORM 1099-S
+	! form 1099-S
 	amt$(11,1)='1'
 	amt$(11,2)='2-0001-Gross proceeds'
 	amt$(11,3)='3'
@@ -178,7 +178,7 @@ dim tr$(13)*12
 	amt$(11,7)='7'
 	amt$(11,8)='8'
 	amt$(11,9)='9'
-	! FORM 5498
+	! form 5498
 	amt$(12,1)='1-0001-Regular IRA contributions'
 	amt$(12,2)='2-0001-Rollover IRA contributions'
 	amt$(12,3)='3-0001-Life insurance cost included'
@@ -188,7 +188,7 @@ dim tr$(13)*12
 	amt$(12,7)='7'
 	amt$(12,8)='8'
 	amt$(12,9)='9'
-	! FORM W-2G
+	! form W-2G
 	amt$(13,1)='1-0600-Gross winnings'
 	amt$(13,2)='2-0001-Federal income tax withheld'
 	amt$(13,3)='3-0001-State income tax withheld'
@@ -214,7 +214,7 @@ dim tr$(13)*12
 	tr$(12)="W W-2G"
 
 	open #20: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,input
-	read #20,using 'Form POS 1,3*C 40,C 12': mat a$,b$
+	read #20,using 'form pos 1,3*C 40,C 12': mat a$,b$
 	close #20:
 
 	ficamax=oldmax
@@ -286,14 +286,14 @@ MAIN: !
 	fnTxt(14,mypos,40,0,0,"",0,"",0 )
 	resp$(10)=cn$
 	fnLbl(15,1,"Contact Phone Number:",mylen,right)
-	fnTxt(15,mypos,10,0,0,"30",0,"",0 )
+	fnTxt(15,mypos,10,0,0,'30',0,"",0 )
 	resp$(11)=str$(cpn)
 	mylen=60: mypos=mylen+3
 	fnLbl(17,1,"(O)riginal, (R)eplacdment or (C)orrection file (O/R/C):",mylen,right)
 	fnTxt(17,mypos,1,0,0,"",0,"",0 )
 	resp$(12)=orc$
 	fnLbl(18,1,"Payer Phone Number:",mylen,right)
-	fnTxt(18,mypos,10,0,0,"30",0,"",0 )
+	fnTxt(18,mypos,10,0,0,'30',0,"",0 )
 	resp$(13)=str$(ppn)
 	fnCmdKey("&Next",1,1,0,"Moves to next questions.")
 	fnCmdKey("&Cancel",5,0,1,"Returns to menu.")
@@ -337,7 +337,7 @@ L3180: ! pr NEWPAGE ! commenting this line might screw up window 101 repeat proc
 	close #102: ioerr ignore
 	open #102: "SROW=6,SCOL=20,ERow=20,ECOL=58,Border=SR,Caption=<"&env$('program_caption'),display,outIn
 	pr #102: newpage
-	pr #102,fields "2,2,C 17,N": "Select Form Type:"
+	pr #102,fields "2,2,C 17,N": "Select form Type:"
 	for j=1 to 13
 		wrd2$(j)=cnvrt$("N 2",j)&".  "&tr$(j)(3:18)
 		io2$(j)=str$(j+1)&",20,C 18"
@@ -398,10 +398,10 @@ ASKDAT: !
 	gosub RECA
 	if lrec(1)=0 then goto L3800
 L3790: pr f "12,32,N 3,UT,N": r1/lrec(1)*100
-L3800: read #1,using 'Form Pos 1,C 8,4*c 30,x 5,n 2,c 11,x 6,c 12',release: vn$,nam$,ad1$,ad2$,csz$,typ,ss$,ph$ eof END1
+L3800: read #1,using 'form pos 1,C 8,4*c 30,x 5,n 2,c 11,x 6,c 12',release: vn$,nam$,ad1$,ad2$,csz$,typ,ss$,ph$ eof END1
 	restore #2,key>=vn$: nokey L3800
 	ytdp=0 ! do not use ytdp from payee record
-L3830: read #trans,using 'Form POS 1,c 8,N 6,PD 5.2,C 12,C 30,PD 3',release: trvn$,dt,am,rn$,de$,nta eof L3900
+L3830: read #trans,using 'form pos 1,c 8,N 6,PD 5.2,C 12,C 30,PD 3',release: trvn$,dt,am,rn$,de$,nta eof L3900
 	if trim$(trvn$)<>trim$(vn$) then goto L3900
 	x=fndate_mmddyy_to_ccyymmdd(dt)
 	if x<transactionstartingdate then goto L3830
@@ -575,7 +575,7 @@ PROCESS: ! r:
 	pr f "12,32,C 20": "  0% COMPLETED"
 return ! /r
  
-CSZ: ! r: EXTRACT  CITY$,STATE$,ZIP$ FORM CSZ$
+CSZ: ! r: EXTRACT  CITY$,STATE$,ZIP$ form CSZ$
 	L5500: p1=pos(csz$,".",1)
 	if p1>0 then csz$(p1:p1)="": goto L5500
 	p1=pos(csz$,",",1)-1

@@ -16,7 +16,7 @@
 	if fnGlAskFormatPriorCdPeriod=5 then goto Xit
 	fnfscode
 	fnpriorcd
-	open #20: "Name=[Q]\GLmstr\Company.h[cno],Shr",i,i,r: read #20,using "Form pos 296,N 2",rec=1: lmu : close #20:
+	open #20: "Name=[Q]\GLmstr\Company.h[cno],Shr",i,i,r: read #20,using "form pos 296,N 2",rec=1: lmu : close #20:
 	open #hAcGlSchs1:=1: "Name=[Q]\GLmstr\ACGLSCHS.h[cno],KFName=[Q]\GLmstr\schindex.h[cno],Shr",i,i,k ioerr DONE
 	open #3: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLIndex.h[cno],Shr",i,i,k
 	if fnprocess=1 then
@@ -76,17 +76,17 @@
 					for l=lmu to 2 step -1 : by(l)=by(l)-by(l-1) : next l
 					L700: !
 					if dp=1 then
-					  dol$="FORM POS 1,C 32,14*PIC(---,---,--$.##)"
+					  dol$="form pos 1,C 32,14*PIC(---,---,--$.##)"
 					else
-					  dol$="FORM POS 1,C 32,14*PIC(---,---,---.##)"
+					  dol$="form pos 1,C 32,14*PIC(---,---,---.##)"
 					end if
 					pr #255,using dol$: d$(1:30),mat by,cb pageoflow PgOf
 					mat byt=byt+by
 				else if cm=3 then
 					if dp=1 then
-					  dol$="FORM POS 1,C 42,13*PIC(---,---,--$.##)"
+					  dol$="form pos 1,C 42,13*PIC(---,---,--$.##)"
 					else
-					  dol$="FORM POS 1,C 42,13*PIC(---,---,---.##)"
+					  dol$="form pos 1,C 42,13*PIC(---,---,---.##)"
 					end if
 					pr #255,using dol$: d$(1:40),mat by pageoflow PgOf
 					mat byt=byt+by
@@ -117,26 +117,26 @@ PrintTotals: ! r:
 		pr #255,using L660: "    Total",dollar$,cmtot,dollar$,ytdtot
 		pr #255,using L920: "==============","=============="
 	else if cm=2 then
-		dol$="FORM POS 1,C 32,14*'  ------------'"
+		dol$="form pos 1,C 32,14*'  ------------'"
 		pr #255,using dol$: ""
 		if dp=1 then
-			dol$="FORM POS 1,C 32,14*PIC(---,---,--$.##)"
+			dol$="form pos 1,C 32,14*PIC(---,---,--$.##)"
 		else
-			dol$="FORM POS 1,C 32,14*PIC(---,---,---.##)"
+			dol$="form pos 1,C 32,14*PIC(---,---,---.##)"
 		end if
 		pr #255,using dol$: "  Totals",mat byt,ytdtot pageoflow PgOf
-		dol$="FORM POS 1,C 32,14*'  ============'"
+		dol$="form pos 1,C 32,14*'  ============'"
 		pr #255,using dol$: ""
 	else if cm=3 then
-		dol$="FORM POS 1,C 42,13*'  ------------'"
+		dol$="form pos 1,C 42,13*'  ------------'"
 		pr #255,using dol$: ""
 		if dp=1 then
-			dol$="FORM POS 1,C 42,13*PIC(---,---,--$.##)"
+			dol$="form pos 1,C 42,13*PIC(---,---,--$.##)"
 		else
-			dol$="FORM POS 1,C 42,13*PIC(---,---,---.##)"
+			dol$="form pos 1,C 42,13*PIC(---,---,---.##)"
 		end if
 		pr #255,using dol$: "  Totals",mat byt pageoflow PgOf
-		dol$="FORM POS 1,C 42,13*'  ============'"
+		dol$="form pos 1,C 42,13*'  ============'"
 		pr #255,using dol$: ""
 	else
 		pr #255,using 'form pos 67,c 14': "______________"

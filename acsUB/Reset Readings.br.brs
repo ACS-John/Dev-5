@@ -38,7 +38,7 @@ SCREEN1: !
 
 	restore #h_trans,key=str$(d1): nokey SCREEN1
 	do
-		read #h_trans,using 'Form POS 1,C 10,N 8,N 1,12*PD 4.2,6*PD 5,PD 4.2,N 1': p$,tdate,tcode,tamount,mat tg,_wr,wu,er,eu,gr,gu,tbal,pcode eof Xit
+		read #h_trans,using 'form pos 1,C 10,N 8,N 1,12*PD 4.2,6*PD 5,PD 4.2,N 1': p$,tdate,tcode,tamount,mat tg,_wr,wu,er,eu,gr,gu,tbal,pcode eof Xit
 		if tdate<>d1 then goto Xit
 		read #hCustomer,using F_CUSTOMER,key=p$: meteradr$,custname$,mat a,mat b,mat c,mat d, bal,f,mat g,mat gb,mat extra nokey NEXT_ONE
 		! if trim$(p$)='100002.00' then pause

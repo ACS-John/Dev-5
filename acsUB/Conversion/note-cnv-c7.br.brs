@@ -21,8 +21,8 @@ def library fnub_cnv_note_phase_1
   end if
   open #work=fnH: "Name=[Temp]\Work.[Session],Replace,RecL=16",internal,output
   READ_NOTE1_PHASE1: !
-  read #note1,using 'Form POS 1,C 7,2*PD 3': z$,a1,a2 eof EO1
-  write #work,using 'Form POS 1,C 7,C 3,2*PD 3': z$,".00",a1,a2
+  read #note1,using 'form pos 1,C 7,2*PD 3': z$,a1,a2 eof EO1
+  write #work,using 'form pos 1,C 7,C 3,2*PD 3': z$,".00",a1,a2
   goto READ_NOTE1_PHASE1
 
   EO1: !
@@ -51,12 +51,12 @@ def library fnub_cnv_note_phase_1
 	end if
 	fnStatus("Initial Record Len of "&file$(note2)&" is "&str$(rln(note2))&".")
 	READ_NOTE1_PHASE2: !
-	read #note1,using 'Form POS 1,C 10,2*PD 3': rk$,mat ra eof EO3
+	read #note1,using 'form pos 1,C 10,2*PD 3': rk$,mat ra eof EO3
 	r32=ra(1)
 	do
 		if r32<1 then goto READ_NOTE1_PHASE2
-		read #note2,using 'Form POS 1,C 07,C 60,PD 3',rec=r32: k32$,rm$,n32 conv READ_NOTE1_PHASE2
-		rewrite #note2,using 'Form POS 1,C 10,C 60,PD 3',rec=r32: rk$,rm$,n32
+		read #note2,using 'form pos 1,C 07,C 60,PD 3',rec=r32: k32$,rm$,n32 conv READ_NOTE1_PHASE2
+		rewrite #note2,using 'form pos 1,C 10,C 60,PD 3',rec=r32: rk$,rm$,n32
 		r32=n32
 	loop
 
@@ -80,19 +80,19 @@ def library fnub_cnv_note_phase_1
 	open #note1b=fnH: "Name=[Q]\UBmstr\Note1.h[cno],KFName=[Q]\UBmstr\NoteIdx1.h[cno]",internal,outIn,keyed
 	open #note2b=fnH: "Name=[Q]\UBmstr\Note2.h[cno]",i,outi,r
 	L50100: !
-	read #hCustomer,using 'Form POS 1,C 10': z$ eof EO4
+	read #hCustomer,using 'form pos 1,C 10': z$ eof EO4
 	if z$(8:10)=".00" then goto L50100 ! skip base records
 	x$=z$(1:7)&".00"
 	mat newra=(0)
-	read #note1b,using 'Form POS 1,C 10,2*PD 3',key=x$: rk$,mat ra nokey L50100
-	write #note1b,using 'Form POS 1,C 10,2*PD 3': z$,0,0
+	read #note1b,using 'form pos 1,C 10,2*PD 3',key=x$: rk$,mat ra nokey L50100
+	write #note1b,using 'form pos 1,C 10,2*PD 3': z$,0,0
 	r32=ra(1)
 	do
 		if r32<1 then goto L50100
-		read #note2b,using 'Form POS 1,C 10,C 60,PD 3',rec=r32: rk$,rm$,r32
+		read #note2b,using 'form pos 1,C 10,C 60,PD 3',rec=r32: rk$,rm$,r32
 		n32=lrec(note2b)+1
 		if r32>0 then ntr=n32+1 else ntr=0
-		write #note2b,using 'Form POS 1,C 10,C 60,PD 3',rec=n32: z$,rm$,ntr
+		write #note2b,using 'form pos 1,C 10,C 60,PD 3',rec=n32: z$,rm$,ntr
 		if newra(1)=0 then newra(1)=n32
 		newra(2)=n32
 		rewrite #note1b,using 'form pos 11,2*pd 3',key=z$: mat newra

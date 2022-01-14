@@ -25,7 +25,7 @@ def library fnPostCheckbookToGl(; enablePost,___,pg)
 		up1$="C"
 		open #hFund=9: "Name=[Q]\CLmstr\FundMstr.h[cno],KFName=[Q]\CLmstr\FundIdx1.h[cno],Shr",i,i,k
 		do
-			read #hFund,using 'Form Pos 52,C 12': gw$ eof EoFund
+			read #hFund,using 'form pos 52,C 12': gw$ eof EoFund
 			accrual=val(gw$) conv L230
 			if accrual>0 then
 				up1$="A"
@@ -54,7 +54,7 @@ def library fnPostCheckbookToGl(; enablePost,___,pg)
 	fnChk(8,47,"Update After the Fact Payroll records:",1)
 	resp$(7)='False'
 	fnLbl(10,1,"Post to General Ledger Company Number:",44,1)
-	fnTxt(10,46,5,0,1,"30",1,"Only change this default answer if wish to post to a different company than the one you are assigned to.")
+	fnTxt(10,46,5,0,1,'30',1,"Only change this default answer if wish to post to a different company than the one you are assigned to.")
 	! protected this option on 5/19/2020 - i don't think they should ever change this.  if i am wrong i'll put it back in - john bowman  (to put it back list:   [cno]" ! &str$(gl2)   )
 	resp$(8)=env$('cno')
 	fnCmdSet(2)
@@ -91,7 +91,7 @@ def library fnPostCheckbookToGl(; enablePost,___,pg)
 	
 	ReadTran: ! r: main loop
 		dim de$*30
-		read #hTran,using 'Form POS 1,n 2,n 1,C 8,N 6,PD 10.2,POS 28,C 8,C 30,POS 71,N 1,X 6,N 1': trbank_code,trtcde,checkNumber$,pd,ca1,vn$,de$,pcde,scd eof End1
+		read #hTran,using 'form pos 1,n 2,n 1,C 8,N 6,PD 10.2,pos 28,C 8,C 30,pos 71,N 1,X 6,N 1': trbank_code,trtcde,checkNumber$,pd,ca1,vn$,de$,pcde,scd eof End1
 
 		! pr 'Read a Transaction: '&checkNumber$&' - '&date$(days(pd,'mmddyy'),'mm/dd/ccyy'),ca1
 
@@ -106,7 +106,7 @@ def library fnPostCheckbookToGl(; enablePost,___,pg)
 		restore #hAloc,key>=cnvrt$("pic(zz)",trbank_code)&cnvrt$("pic(#)",trtcde)&checkNumber$: nokey NoAllocations
 		! pr 'tran passed test AA and BB and has Allocations' : pause
 		ReadNextAlloc: !
-		read #hAloc,using 'Form POS 1,N 2,N 1,c 8,C 12,PD 5.2,C 12,X 18,C 6,POS 80,N 1': bank_code,tcde,trck$,gl$,amt,iv$,ivd$,gde eof ReadTran
+		read #hAloc,using 'form pos 1,N 2,N 1,c 8,C 12,PD 5.2,C 12,X 18,C 6,pos 80,N 1': bank_code,tcde,trck$,gl$,amt,iv$,ivd$,gde eof ReadTran
 		ivd=val(ivd$) conv ignore
 		if up1$="C" and gde=2 then gde=1 ! don't allow old accrual codes mess up cash basis
 		if ivd=0 then ivd=pd ! kJ   10/02/06   skipping receipts w/o invoice numbers
@@ -114,7 +114,7 @@ def library fnPostCheckbookToGl(; enablePost,___,pg)
 		if bank_code<>trbank_code or trtcde<>tcde or checkNumber$<>trck$ then
 			goto RewritePcde ! thru, allocation doesn/t belong to this transaction
 		else if amt=0 then
-			goto ReadNextAlloc ! SKIP 0
+			goto ReadNextAlloc ! skip 0
 		end if
 
 		if scd=4 then gosub PrdBld
@@ -172,22 +172,22 @@ def library fnPostCheckbookToGl(; enablePost,___,pg)
 		end if
 
 		if fndate_mmddyy_to_ccyymmdd(pd)>dt2 then
-			write #hWork,using 'Form POS 1,C 12,N 6,2*C 8,C 30,PD 5.2,N 2,2*N 1': gl$,ivd,ltrm$(iv$)(1:8),vn$,de$,amt, 0, 4, 0
+			write #hWork,using 'form pos 1,C 12,N 6,2*C 8,C 30,PD 5.2,N 2,2*N 1': gl$,ivd,ltrm$(iv$)(1:8),vn$,de$,amt, 0, 4, 0
 		else
-			write #hWork,using 'Form POS 1,C 12,N 6,2*C 8,C 30,PD 5.2,N 2,2*N 1': gl$,ivd,checkNumber$,vn$,de$,amt,0,tcde,scd
+			write #hWork,using 'form pos 1,C 12,N 6,2*C 8,C 30,PD 5.2,N 2,2*N 1': gl$,ivd,checkNumber$,vn$,de$,amt,0,tcde,scd
 		end if
 		gde=2
 	goto RewriteGde
 
 	RewriteGde: ! r:
 		if enablePost then
-			rewrite #hAloc,using 'Form POS 80,N 1': gde
+			rewrite #hAloc,using 'form pos 80,N 1': gde
 		end if
 	goto ReadNextAlloc ! /r
 
 	WriteWork: ! r:
 		! pr 'Writting a Transaction: '&checkNumber$&' - '&date$(days(ivd,'mmddyy'),'mm/dd/ccyy'),amt
-		write #hWork,using 'Form POS 1,C 12,N 6,2*C 8,C 30,PD 5.2,N 2,2*N 1': gl$,ivd,checkNumber$,vn$,de$,amt,bank_code,tcde,scd
+		write #hWork,using 'form pos 1,C 12,N 6,2*C 8,C 30,PD 5.2,N 2,2*N 1': gl$,ivd,checkNumber$,vn$,de$,amt,bank_code,tcde,scd
 	AfterWriteWork: !
 		if pcde=0 or pcde=2 then pcde+=1
 		if gde=0 or gde=2 then gde+=1
@@ -195,7 +195,7 @@ def library fnPostCheckbookToGl(; enablePost,___,pg)
 
 	RewritePcde: !
 		if enablePost then
-			rewrite #hTran,using 'Form POS 71,N 1': pcde
+			rewrite #hTran,using 'form pos 71,N 1': pcde
 		end if
 		if scd=4 then gosub PrdWrite
 	goto ReadTran ! /r
@@ -224,8 +224,8 @@ def library fnPostCheckbookToGl(; enablePost,___,pg)
 			pr #255: "____________  ________  ________  ________  Regular GL Postings___________  __________  __________" pageoflow NewPge
 		end if
 		L1240: !
-		read #hAddr,using 'Form POS 1,PD 3': r5 eof EndAll
-		read #hWork,using 'Form POS 1,C 12,N 6,2*C 8,C 30,PD 5.2,N 2,2*N 1',rec=r5: gl$,ivd,checkNumber$,vn$,de$,amt,bank_code,tcde,scd noRec L1240
+		read #hAddr,using 'form pos 1,PD 3': r5 eof EndAll
+		read #hWork,using 'form pos 1,C 12,N 6,2*C 8,C 30,PD 5.2,N 2,2*N 1',rec=r5: gl$,ivd,checkNumber$,vn$,de$,amt,bank_code,tcde,scd noRec L1240
 		if amt=0 then goto L1240
 
 		if gl$(1:3)="  0" then gl$(1:3)="   "
@@ -236,14 +236,14 @@ def library fnPostCheckbookToGl(; enablePost,___,pg)
 		gosub PRGL
 		if pr1$="Y" then
 			dim pde$*30
-			pr #255,using 'Form POS 1,C 14,PIC(ZZ/ZZ/ZZ),X 2,2*C 10,C 30,2*N 12.2': pgl$,pivd,"  ","  ",pde$,pa1,pa2 pageoflow NewPge
+			pr #255,using 'form pos 1,C 14,PIC(ZZ/ZZ/ZZ),X 2,2*C 10,C 30,2*N 12.2': pgl$,pivd,"  ","  ",pde$,pa1,pa2 pageoflow NewPge
 		end if
 		pa1=pa2=sc2=0
 		L1350: !
 		if tc1=0 and tc2=0 then goto L1410
 		if pr1$="N" then goto L1400
 		pr #255: "                                            ______________________________  __________  __________" pageoflow NewPge
-		pr #255,using 'Form POS 45,C 30,2*N 12.2': "GL   "&hgl$&" TOTAL",tc1,tc2
+		pr #255,using 'form pos 45,C 30,2*N 12.2': "GL   "&hgl$&" TOTAL",tc1,tc2
 		pr #255: "                                            ______________________________  __________  __________" pageoflow NewPge
 		L1400: !
 		tc1=tc2=0
@@ -331,22 +331,22 @@ def library fnPostCheckbookToGl(; enablePost,___,pg)
 		if sc2=4 then gosub PRGL
 		if pr1$<>"N" then
 			if sc2=4 then
-				pr #255,using 'Form POS 1,C 14,PIC(ZZ/ZZ/ZZ),X 2,2*C 10,C 30,2*N 12.2': pgl$,pivd," "," ",pde$,pa1,pa2 pageoflow NewPge
+				pr #255,using 'form pos 1,C 14,PIC(ZZ/ZZ/ZZ),X 2,2*C 10,C 30,2*N 12.2': pgl$,pivd," "," ",pde$,pa1,pa2 pageoflow NewPge
 			end if
 			pr #255: "                                            ______________________________  __________  __________" pageoflow NewPge
-			pr #255,using 'Form POS 45,C 30,2*N 12.2': "GL # "&hgl$&" Total",tc1,tc2
+			pr #255,using 'form pos 45,C 30,2*N 12.2': "GL # "&hgl$&" Total",tc1,tc2
 			pr #255: "                                            ______________________________  __________  __________"
 		end if
 		for j=1 to 99
 			gl$=""
 			if tbc(j,1)=0 and tbc(j,2)=0 then goto L2130
-			read #hBank,using 'Form POS 33,C 12', key=lpad$(str$(j),2): gl$ nokey L2100
+			read #hBank,using 'form pos 33,C 12', key=lpad$(str$(j),2): gl$ nokey L2100
 			if gl$(1:3)="  0" then gl$(1:3)="   "
 			if gl$(10:12)="  0" then gl$(10:12)="   "
 			L2100: !
 			gosub BankGL
 			if pr1$="Y" then
-				pr #255,using 'Form POS 45,C 30,2*N 12.2': "Bank   "&gl$,tbc(j,2),tbc(j,1) pageoflow NewPge
+				pr #255,using 'form pos 45,C 30,2*N 12.2': "Bank   "&gl$,tbc(j,2),tbc(j,1) pageoflow NewPge
 			end if
 			gc1=gc1+tbc(j,2): gc2=gc2+tbc(j,1)
 			L2130: !
@@ -357,13 +357,13 @@ def library fnPostCheckbookToGl(; enablePost,___,pg)
 		for j=1 to 99
 			gl$=""
 			if apc(j,2)=0 and apc(j,3)=0 then goto L2240
-			read #hFund,using 'Form Pos 52,C 12',key=lpad$(str$(apc(j,1)),3): gl$ nokey L2210
+			read #hFund,using 'form pos 52,C 12',key=lpad$(str$(apc(j,1)),3): gl$ nokey L2210
 			if gl$(1:3)="  0" then gl$(1:3)="   "
 			if gl$(10:12)="  0" then gl$(10:12)="   "
 			L2210: !
 			gosub APGL
 			if pr1$="Y" then
-				pr #255,using 'Form POS 45,C 30,2*N 12.2': "A/P    "&gl$,apc(j,3),apc(j,2) pageoflow NewPge
+				pr #255,using 'form pos 45,C 30,2*N 12.2': "A/P    "&gl$,apc(j,3),apc(j,2) pageoflow NewPge
 			end if
 			gc1=gc1+apc(j,3)
 			gc2=gc2+apc(j,2)
@@ -371,7 +371,7 @@ def library fnPostCheckbookToGl(; enablePost,___,pg)
 		next j
 		if pr1$="N" then goto L2300
 		pr #255: "                                            ______________________________  __________  __________" pageoflow NewPge
-		pr #255,using 'Form POS 45,C 30,2*N 12.2': "Final Total",gc1,gc2 pageoflow NewPge
+		pr #255,using 'form pos 45,C 30,2*N 12.2': "Final Total",gc1,gc2 pageoflow NewPge
 		pr #255: "                                            ======================================================" pageoflow NewPge
 		fncloseprn
 		L2300: !
@@ -382,7 +382,7 @@ def library fnPostCheckbookToGl(; enablePost,___,pg)
 		close #20: ioerr ignore
 		! removed 5/20/20 - jb - nothing ever read this in anyway.  a better way would be to write it with fncreg_write
 		! open #20: "Name=[Q]\CLmstr\PostDat.h[cno],Replace,RecL=12",i,outi,r
-		! write #20,using 'Form POS 1,2*N 6',rec=1: d1,d2
+		! write #20,using 'form pos 1,2*N 6',rec=1: d1,d2
 		! close #20:
 		if glb=2 then
 			goto Xit
@@ -398,7 +398,7 @@ def library fnPostCheckbookToGl(; enablePost,___,pg)
 		open #unpdaloc=7: "Name=[Q]\CLmstr\UnPdAloc.h[cno],KFName=[Q]\CLmstr\Uaidx2.h[cno],Shr",internal,outIn,keyed
 		open #paymstr=8: "Name=[Q]\CLmstr\PayMstr.h[cno],KFName=[Q]\CLmstr\PayIdx1.h[cno],Shr",i,i,k
 		READ_PAYTRANS: !
-		read #paytrans,using 'Form POS 1,C 8,C 12,N 6,POS 45,C 18,POS 96,N 1,N 6': vn$,iv$,dd,de$,pcde,pdte eof L2610
+		read #paytrans,using 'form pos 1,C 8,C 12,N 6,pos 45,C 18,pos 96,N 1,N 6': vn$,iv$,dd,de$,pcde,pdte eof L2610
 		if include_prev_posted$="Y" then goto L2450
 		if pcde=2 then goto READ_PAYTRANS
 		L2450: !
@@ -410,17 +410,17 @@ def library fnPostCheckbookToGl(; enablePost,___,pg)
 		L2500: !
 		if fndate_mmddyy_to_ccyymmdd(dd)>dt2 then goto READ_PAYTRANS
 		L2510: !
-		read #paymstr,using 'Form POS 9,C 30',key=vn$: de$ nokey L2520
+		read #paymstr,using 'form pos 9,C 30',key=vn$: de$ nokey L2520
 		L2520: !
 		restore #unpdaloc,key>=vn$&iv$: nokey READ_PAYTRANS
 		L2540: !
-		read #unpdaloc,using 'Form POS 1,c 8,c 12,C 12,PD 5.2': trvn$,triv$,gl$,amt eof READ_PAYTRANS
+		read #unpdaloc,using 'form pos 1,c 8,c 12,C 12,PD 5.2': trvn$,triv$,gl$,amt eof READ_PAYTRANS
 		if vn$<>trvn$ or iv$<>triv$ then goto READ_PAYTRANS
 		if amt=0 then goto L2580
-		write #hWork,using 'Form POS 1,C 12,N 6,2*C 8,C 30,PD 5.2,N 2,2*N 1': gl$,dd,ltrm$(iv$)(1:8),vn$,de$,amt,0,4,0
+		write #hWork,using 'form pos 1,C 12,N 6,2*C 8,C 30,PD 5.2,N 2,2*N 1': gl$,dd,ltrm$(iv$)(1:8),vn$,de$,amt,0,4,0
 		L2580: !
 		if enablePost then
-			rewrite #paytrans,using 'Form POS 96,N 1,N 6': 2,d2 ioerr L2590
+			rewrite #paytrans,using 'form pos 96,N 1,N 6': 2,d2 ioerr L2590
 		end if
 		L2590: !
 		goto L2540
@@ -435,7 +435,7 @@ def library fnPostCheckbookToGl(; enablePost,___,pg)
 		if sc2><4 then goto L2720
 		gosub PRGL
 		if pr1$="Y" then
-			pr #255,using 'Form POS 1,C 14,PIC(ZZ/ZZ/ZZ),X 2,2*C 10,C 30,2*N 12.2': pgl$,pivd,"  ","  ",pde$,pa1,pa2 pageoflow NewPge
+			pr #255,using 'form pos 1,C 14,PIC(ZZ/ZZ/ZZ),X 2,2*C 10,C 30,2*N 12.2': pgl$,pivd,"  ","  ",pde$,pa1,pa2 pageoflow NewPge
 		end if
 		L2720: !
 		pa1=pa2=0
@@ -447,7 +447,7 @@ def library fnPostCheckbookToGl(; enablePost,___,pg)
 	GLBucketStuff: ! r:
 		if enablePost then
 			open #glbucket=fnH: "Name=[Q]\GLmstr\GLBucket.h[cno]",i,i,r ioerr L2830 ! [cno]" ! &str$(gl2)
-			read #glbucket,using 'Form POS 1,N 1',rec=1: glb noRec ignore
+			read #glbucket,using 'form pos 1,N 1',rec=1: glb noRec ignore
 			close #glbucket:
 			L2830: !
 			dim glwk$*256
@@ -525,14 +525,14 @@ def library fnPostCheckbookToGl(; enablePost,___,pg)
 		if rtrm$(gw$(1:3))="" then
 			goto L3160
 		else
-			read #hFund,using 'Form Pos 52,C 12',key=gw$(1:3): bgl$ nokey L3160
+			read #hFund,using 'form pos 52,C 12',key=gw$(1:3): bgl$ nokey L3160
 		end if
 		goto L3170
 		L3160: !
-		read #hBank,using 'Form POS 33,C 12', key=lpad$(str$(wbank_code),2): bgl$ nokey L3170
+		read #hBank,using 'form pos 33,C 12', key=lpad$(str$(wbank_code),2): bgl$ nokey L3170
 		L3170: !
 		if enablePost then
-			write #glwk,using 'Form Pos 1,C 12,N 6,PD 6.2,2*N 2,C 12,C 30,C 8,C 6,C 5,C 3,C 12': gw$,tr4,tr5,tr6,0,tr$,td$,"","","","",bgl$
+			write #glwk,using 'form pos 1,C 12,N 6,PD 6.2,2*N 2,C 12,C 30,C 8,C 6,C 5,C 3,C 12': gw$,tr4,tr5,tr6,0,tr$,td$,"","","","",bgl$
 		end if
 		gosub CreateFundTransfers
 		EO_SOMETHING: !
@@ -554,10 +554,10 @@ ReverseApEntries: ! r: Reverse AP Entries
 	apc(j,1)=ap1
 	apc(j,3)+=amt
 	p1=75 : gw$=""
-	read #hFund,using 'Form Pos 52,C 12',key=lpad$(str$(ap1),3): gw$ nokey L3350
+	read #hFund,using 'form pos 52,C 12',key=lpad$(str$(ap1),3): gw$ nokey L3350
 	goto L3360
 	L3350: !
-	read #hFund,using 'Form Pos 52,C 12',key=lpad$(str$(0),3): gw$ nokey L3360
+	read #hFund,using 'form pos 52,C 12',key=lpad$(str$(0),3): gw$ nokey L3360
 	L3360: !
 	gosub REGGL2
 	tbc(bank_code,1)=tbc(bank_code,1)+amt
@@ -568,13 +568,13 @@ ReverseApEntries: ! r: Reverse AP Entries
 		ap2=1
 	end if
 	p1=75 : gw$=""
-	read #hFund,using 'Form Pos 52,C 12',key=lpad$(str$(ap1),3): gw$ nokey L3430
+	read #hFund,using 'form pos 52,C 12',key=lpad$(str$(ap1),3): gw$ nokey L3430
 	L3430: !
-	pr #255,using 'Form POS 1,C 14,PIC(ZZ/ZZ/ZZ),X 2,C 12,C 8,C 30,POS P1,N 12.2': gw$,pd,checkNumber$,"","Reverse AP",amt pageoflow NewPge
+	pr #255,using 'form pos 1,C 14,PIC(ZZ/ZZ/ZZ),X 2,C 12,C 8,C 30,pos P1,N 12.2': gw$,pd,checkNumber$,"","Reverse AP",amt pageoflow NewPge
 	p1=87: gw$=""
-	read #hBank,using 'Form POS 33,C 12', key=lpad$(str$(bank_code),2): gw$ nokey L3460
+	read #hBank,using 'form pos 33,C 12', key=lpad$(str$(bank_code),2): gw$ nokey L3460
 	L3460: !
-	pr #255,using 'Form POS 1,C 14,PIC(ZZ/ZZ/ZZ),X 2,C 12,C 8,C 30,POS P1,N 12.2': gw$,pd,checkNumber$,"","Take Out of Bank",amt pageoflow NewPge
+	pr #255,using 'form pos 1,C 14,PIC(ZZ/ZZ/ZZ),X 2,C 12,C 8,C 30,pos P1,N 12.2': gw$,pd,checkNumber$,"","Take Out of Bank",amt pageoflow NewPge
 	L3470: !
 return  ! /r
 PrdBld: ! r:
@@ -596,7 +596,7 @@ PrdWrite: ! r:
 	prd(2)=pd
 	prd(3)=val(checkNumber$) conv ignore
 	prd(22)=ca1
-	write #glwk2wsid,using 'Form POS 1,N 4,2*PD 4,19*PD 5.2,PD 3': mat prd
+	write #glwk2wsid,using 'form pos 1,N 4,2*PD 4,19*PD 5.2,PD 3': mat prd
 	L3850: !
 	mat prd=(0)
 return  ! /r
@@ -614,14 +614,14 @@ CreateFundTransfers: ! r:
 	else if val(gl2$(1:3))=0 and val(gl2$(4:9))=0 and val(gl2$(10:12))=0 then
 		goto EO_FUNDTR ! no interfund entries if no gl # in i/f file
 	end if
-	read #hFund,using 'Form Pos 52,C 12',key=bgl$(1:3): bankgl3$ nokey EO_FUNDTR
-	if gde>1 and gl3$=bankgl3$ then goto EO_FUNDTR ! Skip as check if previously posted interfund transfers in the Unpaid Invoice File (will post in unpaid file if AP numbers same in fund file
+	read #hFund,using 'form pos 52,C 12',key=bgl$(1:3): bankgl3$ nokey EO_FUNDTR
+	if gde>1 and gl3$=bankgl3$ then goto EO_FUNDTR ! skip as check if previously posted interfund transfers in the Unpaid Invoice File (will post in unpaid file if AP numbers same in fund file
 	if enablePost then
-		write #glwk,using 'Form Pos 1,C 12,N 6,PD 6.2,2*N 2,C 12,C 30,C 8,C 6,C 5,C 3,C 12': gw$(1:3)&gl1$,tr4,-tr5,tr6,0,tr$,td$,"","","","",bgl$
-		write #glwk,using 'Form Pos 1,C 12,N 6,PD 6.2,2*N 2,C 12,C 30,C 8,C 6,C 5,C 3,C 12': bgl$(1:3)&gl2$,tr4,tr5,tr6,0,tr$,td$,"","","","",bgl$
+		write #glwk,using 'form pos 1,C 12,N 6,PD 6.2,2*N 2,C 12,C 30,C 8,C 6,C 5,C 3,C 12': gw$(1:3)&gl1$,tr4,-tr5,tr6,0,tr$,td$,"","","","",bgl$
+		write #glwk,using 'form pos 1,C 12,N 6,PD 6.2,2*N 2,C 12,C 30,C 8,C 6,C 5,C 3,C 12': bgl$(1:3)&gl2$,tr4,tr5,tr6,0,tr$,td$,"","","","",bgl$
 	end if
 	if pr1$="Y" then
-		pr #255,using 'Form POS 1,X 14,C 60': "Transferred from "&gw$(1:3)&gl1$&" to "&bgl$(1:3)&gl2$&cnvrt$("N 10.2",tr5) pageoflow NewPge
+		pr #255,using 'form pos 1,X 14,C 60': "Transferred from "&gw$(1:3)&gl1$&" to "&bgl$(1:3)&gl2$&cnvrt$("N 10.2",tr5) pageoflow NewPge
 	end if
 	EO_FUNDTR: !
 return  ! /r
@@ -640,7 +640,7 @@ fnend  !
 		open #unpdaloc=7: "Name=[Q]\CLmstr\UnPdAloc.h[cno],KFName=[Q]\CLmstr\Uaidx2.h[cno],Shr",internal,outIn,keyed
 		open #paytrans=6: "Name=[Q]\CLmstr\PayTrans.h[cno],KFName=[Q]\CLmstr\UnPdIdx1.h[cno],Shr",internal,outIn,keyed
 		CB_CU_READ: !
-		read #paytrans,using 'Form POS 1,C 8,C 12,N 6,POS 45,C 18,POS 96,N 1,N 6,pos 63,g 10.2': vn$,iv$,dd,de$,pcde,pdte,upa eof EO_PAYTRANS_TEST
+		read #paytrans,using 'form pos 1,C 8,C 12,N 6,pos 45,C 18,pos 96,N 1,N 6,pos 63,g 10.2': vn$,iv$,dd,de$,pcde,pdte,upa eof EO_PAYTRANS_TEST
 		invalloc=0
 		if include_prev_posted$="Y" then goto L4440
 		if pcde=2 then goto CB_CU_READ
@@ -648,10 +648,10 @@ fnend  !
 		! If PDTE=0 Then Goto 4400
 		if fndate_mmddyy_to_ccyymmdd(dd)<dt1 then goto CB_CU_READ
 		if fndate_mmddyy_to_ccyymmdd(dd)>dt2 then goto CB_CU_READ
-		read #paymstr,using 'Form POS 9,C 30',key=vn$: de$ nokey CB_CU_READ
+		read #paymstr,using 'form pos 9,C 30',key=vn$: de$ nokey CB_CU_READ
 		restore #unpdaloc,key>=vn$&iv$: nokey CB_CU_READ
 		do
-			read #unpdaloc,using 'Form POS 1,c 8,c 12,C 12,PD 5.2': trvn$,triv$,gl$,amt eof CB_CU_FINIS
+			read #unpdaloc,using 'form pos 1,c 8,c 12,C 12,PD 5.2': trvn$,triv$,gl$,amt eof CB_CU_FINIS
 			if vn$<>trvn$ or iv$<>triv$ then goto CB_CU_FINIS
 			invalloc+=amt
 		loop
@@ -678,7 +678,7 @@ fnend  !
 		do
 			totalloc=0
 			CB_TT_READ: !
-			read #hTran,using 'Form POS 1,n 2,n 1,C 8,N 6,PD 10.2,POS 28,C 8,C 30,POS 71,N 1,X 6,N 1': trbank_code,trtcde,checkNumber$,pd,ca1,vn$,de$,pcde,scd eof EO_TRMSTR_TEST
+			read #hTran,using 'form pos 1,n 2,n 1,C 8,N 6,PD 10.2,pos 28,C 8,C 30,pos 71,N 1,X 6,N 1': trbank_code,trtcde,checkNumber$,pd,ca1,vn$,de$,pcde,scd eof EO_TRMSTR_TEST
 			if scd=4 and fndate_mmddyy_to_ccyymmdd(pd)>dt2 then 
 				goto CB_TT_READ
 			else if fndate_mmddyy_to_ccyymmdd(pd)<dt1 then 
@@ -686,7 +686,7 @@ fnend  !
 			end if
 			restore #hAloc,key>=cnvrt$("pic(zz)",trbank_code)&cnvrt$("pic(#)",trtcde)&checkNumber$: nokey CB_TT_READ
 			do
-				read #hAloc,using 'Form POS 1,N 2,N 1,c 8,C 12,PD 5.2,C 12,X 18,C 6,POS 80,N 1': bank_code,tcde,trck$,gl$,amt,iv$,ivd$,gde eof CB_TT_FINIS ! eof EO_TRMSTR_TEST
+				read #hAloc,using 'form pos 1,N 2,N 1,c 8,C 12,PD 5.2,C 12,X 18,C 6,pos 80,N 1': bank_code,tcde,trck$,gl$,amt,iv$,ivd$,gde eof CB_TT_FINIS ! eof EO_TRMSTR_TEST
 				ivd=val(ivd$) conv ignore ! ivd$ logic added 8/12/2015 to prevent merriam wood's error here from using characters in this field
 				if up1$="C" and gde=2 then gde=1 ! don't allow old accrual codes mess up cash basis
 				if ivd=0 then ivd=pd ! kJ   10/02/06   skipping receipts w/o invoice numbers

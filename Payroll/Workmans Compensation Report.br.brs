@@ -44,7 +44,7 @@ MENU1: !
     restore #h_payrollchecks,key>=checkkey$: nokey NEXT_DEPARTMENT
 ! pr #255: '     *restore h_payrollchecks: '&checkkey$
     do
-      read #h_payrollchecks,using "Form POS 1,N 8,n 3,PD 6,N 7,5*PD 3.2,37*PD 5.2": heno,tdn,prd,ckno,mat tdc,mat tcp eof NEXT_DEPARTMENT
+      read #h_payrollchecks,using "form pos 1,N 8,n 3,PD 6,N 7,5*PD 3.2,37*PD 5.2": heno,tdn,prd,ckno,mat tdc,mat tcp eof NEXT_DEPARTMENT
 !   if heno=teno and tdept><tdn then let fn_print_accumulated : goto NEXT_DEPARTMENT
       if heno<>teno or tdept<>tdn then
 !         pr #255: '(A)'

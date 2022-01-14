@@ -12,13 +12,13 @@
 	fncreg_read('calculation date',tmp$) : ppd=val(tmp$)
 	fncreg_read('calculation date text',d$)
 	open #1: "Name=[Q]\PRmstr\Company.h[cno],Shr",internal,input
-	read #1,using 'Form POS 1,C 40,POS 618,30*N 1': a$,mat dedcode,mat calcode,mat dedfed : close #1:
+	read #1,using 'form pos 1,C 40,pos 618,30*N 1': a$,mat dedcode,mat calcode,mat dedfed : close #1:
 	open #1: "Name=[Q]\PRmstr\Employee.h[cno],Shr",i,i,r
 	open #2: "Name=[Q]\PRmstr\RPTRAIL.h[cno],Shr",i,i,r
 	open #hpraddr=fnH: "Name=[Q]\PRmstr\praddr1.h[cno]",internal,input
 	open #4: "Name=[Q]\PRmstr\PR401K.DAT,RecL=235,Replace",d,o
 	ReadPrAddr1: !
-	read #hpraddr,using 'Form POS 1,PD 3': address eof END1
+	read #hpraddr,using 'form pos 1,PD 3': address eof END1
 	read #1,using L240,rec=address: eno,mat em$,ss$,em16,lpd,mat ta,bd noRec ReadPrAddr1
 	L240: form pos 1,n 8,3*c 30,c 11,pos 156,2*n 6,pos 173,2*pd 3,pos 191,n 6
 	if lpd><ppd then goto ReadPrAddr1
@@ -73,7 +73,7 @@ L520: ! r:
 	L730: form pos 1,c 9,3*c 12,c 2,c 10,c 2,c 10,3*c 30,c 20,c 2,c 5,4*c 8,c 9,c 8
 goto ReadPrAddr1 ! /r
  
-CSZ: ! r: EXTRACT  CITY$,STATE$,ZIP$ FORM CSZ$
+CSZ: ! r: EXTRACT  CITY$,STATE$,ZIP$ form CSZ$
 	dim csz$*30
 	csz$=uprc$(rtrm$(csz$))
 L790: p1=pos(csz$,".",1)

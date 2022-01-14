@@ -27,14 +27,14 @@ open #hTrans2=fnH: "Name=[Q]\UBmstr\ubTransVB.h[cno],KFName=[Q]\UBmstr\UBTrdt.h[
  
 do
 	L280: !
-	read #hTrans,using 'Form POS 1,C 10,N 8,N 1,12*PD 4.2,6*PD 5,PD 4.2,N 1': z$,tdate,tcode,tamount,mat tg,wr,wu,er,eu,gr,gu,tbal,pcode eof Xit
+	read #hTrans,using 'form pos 1,C 10,N 8,N 1,12*PD 4.2,6*PD 5,PD 4.2,N 1': z$,tdate,tcode,tamount,mat tg,wr,wu,er,eu,gr,gu,tbal,pcode eof Xit
 	if tdate=ubpendat and tcode=2 then
-		read #1,using 'Form POS 1,C 10,4*C 30,POS 143,7*PD 2,POS 292,PD 4.2,PD 4,12*PD 4.2,POS 388,10*PD 5.2',key=z$: z$,mat e$,mat a,bal,f,mat g,mat gb nokey L280
+		read #1,using 'form pos 1,C 10,4*C 30,pos 143,7*PD 2,pos 292,PD 4.2,PD 4,12*PD 4.2,pos 388,10*PD 5.2',key=z$: z$,mat e$,mat a,bal,f,mat g,mat gb nokey L280
 		bal=bal-tamount
 		for j=1 to 10
 			if uprc$(penalty$(j))="Y" then gb(j)-=tg(j) ! subtract penalty breakdown from balance breakdown
 		next j
-		rewrite #1,using 'Form POS 1,C 10,4*C 30,POS 143,7*PD 2,POS 292,PD 4.2,PD 4,12*PD 4.2,POS 388,10*PD 5.2',key=z$: z$,mat e$,mat a,bal,f,mat g,mat gb
+		rewrite #1,using 'form pos 1,C 10,4*C 30,pos 143,7*PD 2,pos 292,PD 4.2,PD 4,12*PD 4.2,pos 388,10*PD 5.2',key=z$: z$,mat e$,mat a,bal,f,mat g,mat gb
 		delete #hTrans:
 	end if
 loop

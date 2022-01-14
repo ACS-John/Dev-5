@@ -10,7 +10,7 @@
 	dim desc$(10)*20,beg(10),inc(10),disb(10),end(10),bank$(90)*25,begb(90),endb(90),bankdr(90),bankcr(90),tr$*12,td$*30,tr(7)
  
 	open #20: "Name=CNO.H"&wsid$,i,i,r  : _
-	read #20,using 'Form POS 145,2*N 1,POS 159,2*C 12,POS 195,C 20',rec=1: mat d,mat cogl$,pedat$ : _
+	read #20,using 'form pos 145,2*N 1,pos 159,2*C 12,pos 195,C 20',rec=1: mat d,mat cogl$,pedat$ : _
 	close #20:
 	on fkey 5 goto Xit
 	data "GENERAL"

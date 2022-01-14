@@ -185,9 +185,9 @@ def fn_comboF(sfn$*100,lyne,ps,width,df$*200,psk,lnk,psd,lnd; if$*200,limlis,ure
 	width=min(width,81) : sfn$=trim$(sfn$) : df$=trim$(df$)
 	if$=trim$(if$)
 	dim form$*200
-	form$='Form Pos '&str$(psk)&','&keyFormat$&' '&str$(lnk) : nodesc=1
+	form$='form pos '&str$(psk)&','&keyFormat$&' '&str$(lnk) : nodesc=1
 	if psd<>0 and lnd<>0 then
-		form$&=',Pos '&str$(psd)&',C '&str$(lnd) : nodesc=0
+		form$&=',pos '&str$(psd)&',C '&str$(lnd) : nodesc=0
 	end if
 	becky$=sfn$&'[cno][SESSION].tmp' ! combof_whr$='[temp]\acs\'&becky$
 	!
@@ -340,8 +340,8 @@ def library fnFlexInit1(sfn$*100,lyne,ps,height,width,mat ch$; mat colMask$,selt
 	next j
 	for j=1 to udim(ch$) : all_hdr$=all_hdr$&ch$(j)&chr$(9) : next j
 	for j=1 to udim(mat colMask$) : all_mask$=all_mask$&colMask$(j)&chr$(9) : next j
-	pr #filenumber,using 'Form pos 1,C '&str$(len(all_hdr$)): all_hdr$
-	pr #filenumber,using 'Form pos 1,C '&str$(len(all_mask$)): all_mask$
+	pr #filenumber,using 'form pos 1,C '&str$(len(all_hdr$)): all_hdr$
+	pr #filenumber,using 'form pos 1,C '&str$(len(all_mask$)): all_mask$
 	close #filenumber:
 	! hdrfile name is expected by screen ace to be the same name as
 	!  	 ! optfile$ only with the added .hdr extenstion
@@ -367,7 +367,7 @@ def library fnFlexAdd1(mat item$; ___,all_item$*6491) ! this function may need t
 		mat2str(mat item$,all_item$,hex$('09'))
 		flexhandle=fn_get_flexhandle
 		grid_populated+=1
-		pr #flexhandle,using 'Form pos 1,C '&str$(len(all_item$)): all_item$ ioerr ignore
+		pr #flexhandle,using 'form pos 1,C '&str$(len(all_item$)): all_item$ ioerr ignore
 	end if
 fnend
 def library fnFra(lyne,ps,hi,wd; cap$*128,tooltip$*300,contain,tabcon)
@@ -424,7 +424,7 @@ def library fnCmdSet(bon)
 	else if bon=15 then
 		fnCmdKey('&Add',1,1)	:	fnCmdKey('&Cancel',5,0,1)
 	else if bon=17 then
-		fnCmdKey('&Next',1,1)	:	fnCmdKey('&Skip',2,0,1)	:	fnCmdKey('&Finish',3)
+		fnCmdKey('&Next',1,1)	:	fnCmdKey('&skip',2,0,1)	:	fnCmdKey('&Finish',3)
 	else if bon=19 then
 		fnCmdKey('&Next',1,1)	:	fnCmdKey('&Finish',2)		:	fnCmdKey('&Cancel',5,0,1)
 	else if bon=21 then
@@ -1182,7 +1182,7 @@ def fn_ace_rd_picbut(; ___,lyne$,pos$,comkey$,height$,width$,container,tabcon,de
 
 
 fnend
-Fc80: Form Pos 1,C 80
+Fc80: form pos 1,C 80
 def fn_ace_rd_tab
 	lyne=val(control$(2))
 	ps=val(control$(3))
@@ -2119,20 +2119,20 @@ def library fnqgl(myline,mypos; qglcontainer,add_all_or_blank,forceGLsysIfPossib
 		setupqgl$=qgl_cursys$
 		open #company=fnH: 'Name=[Q]\'&qgl_cursys$&'mstr\Company.h[cno],Shr',internal,input ioerr CLOSECOMPANY
 		if qgl_cursys$='CL' then
-			read #company,using 'Form Pos 150,2*N 1': use_dept,use_sub ! read it from checkbook
+			read #company,using 'form pos 150,2*N 1': use_dept,use_sub ! read it from checkbook
 		else if qgl_cursys$='GL' then
-			read #company,using 'Form Pos 150,2*N 1': use_dept,use_sub ! read it from General Ledger
+			read #company,using 'form pos 150,2*N 1': use_dept,use_sub ! read it from General Ledger
 		else if qgl_cursys$='PR' or qgl_cursys$='UB' or qgl_cursys$='CR' then
 			use_dept=1 : use_sub=1 ! default both to yes if from pr chart of accounts
 		end if
 CLOSECOMPANY: !
 		close #company: ioerr ignore
-		if use_dept<>0 and use_sub<>0 then glmstr_form$='Form Pos 1,C 12'
-		if use_dept =0 and use_sub<>0 then glmstr_form$='Form Pos 4,C 09'
-		if use_dept =0 and use_sub =0 then glmstr_form$='Form Pos 4,C 06'
-		if use_dept<>0 and use_sub =0 then glmstr_form$='Form Pos 1,C 09'
+		if use_dept<>0 and use_sub<>0 then glmstr_form$='form pos 1,C 12'
+		if use_dept =0 and use_sub<>0 then glmstr_form$='form pos 4,C 09'
+		if use_dept =0 and use_sub =0 then glmstr_form$='form pos 4,C 06'
+		if use_dept<>0 and use_sub =0 then glmstr_form$='form pos 1,C 09'
 ! add description to the form
-		glmstr_form$=glmstr_form$&',Pos 13,C 50'
+		glmstr_form$=glmstr_form$&',pos 13,C 50'
 	end if	! /r
 	qglsetupkeycurrent$='qglCursys='&qgl_cursys$&',add_all_or_blank='&str$(add_all_or_blank)
 	if qglsetupkeycurrent$=qglsetupkeyprior$ then
@@ -2168,7 +2168,7 @@ CLOSECOMPANY: !
 			!	 and the description
 			qglopt$=(rpad$(qglopt$,14)&desc$)(1:qgllength)
 			!		write it into the comobobox option file
-			!		pr #whr,using 'Form Pos 1,C 81': qglOpt$
+			!		pr #whr,using 'form pos 1,C 81': qglOpt$
 			mat qgloption$(option_count+=1) : qgloption$(option_count)=qglopt$
 			QGL_LOOP_COMPLETE: !
 		loop

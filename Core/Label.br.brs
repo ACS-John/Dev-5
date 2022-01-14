@@ -17,7 +17,7 @@ def library fnAddLabel(mat in_labeltext$)
 		labeltext$(j)=in_labeltext$(j)(1:min(len(in_labeltext$(j)),120))
 	next j
 	open #tmp=fnH: "Name="&gLabelFileName$&",RecL=600,Use",internal,output
-	write #tmp,using "Form POS 1,5*C 120": mat labeltext$
+	write #tmp,using "form pos 1,5*C 120": mat labeltext$
 	close #tmp:
 	mat labeltext$=("")
 
@@ -146,7 +146,7 @@ def library fnLabel(mat linestyle$)
 		L2Next: !
 		mat wabel$=("") : fn_testMatLab$
 		do
-			read #hLabelTemp,using "Form POS 1,5*C 120": mat labeltext$ eof L2Done
+			read #hLabelTemp,using "form pos 1,5*C 120": mat labeltext$ eof L2Done
 			! wabel$(10,3,4) wabel$(x,y,z) wabel$(Up/Down,left/right,LabelLine)
 			laby=laby+1
 			if laby>3 then laby=1 : labx=labx+1
@@ -169,7 +169,7 @@ def library fnLabel(mat linestyle$)
 		fnopenprn
 		fnwait("Printing: Please wait...",1)
 		if top_marg>0 then
-			pr #255,using "Form pos 1,c 1,skip "&str$(top_marg): ''
+			pr #255,using "form pos 1,c 1,skip "&str$(top_marg): ''
 		end if
 		for x=1 to 10
 			for z=1 to 5
@@ -220,7 +220,7 @@ def library fnLabel(mat linestyle$)
 					pr #20: 'Call Print.AddText("'&trim$(wabel$(x,1,z))&'",'&str$(labelPos1)&','&str$(lyne+=addy+ymargin)&')'
 					pr #20: 'Call Print.AddText("'&trim$(wabel$(x,2,z))&'",'&str$(labelPos2)&','&str$(lyne+ymargin)&')'
 					pr #20: 'Call Print.AddText("'&trim$(wabel$(x,3,z))&'",'&str$(labelPos3)&','&str$(lyne+ymargin)&')'
-					!      Form POS labelPos1,C 25,POS labelPos2,C 25,POS labelPos3,C 25
+					!      form pos labelPos1,C 25,pos labelPos2,C 25,pos labelPos3,C 25
 				end if
 			next z
 			if x<10 then lyne+=addy*1.9
@@ -233,7 +233,7 @@ def library fnLabel(mat linestyle$)
 		fnwait("Printing: Please wait...",1)
 		gosub OepnLabelFile
 		do
-			read #hLabelTemp,using "Form POS 1,5*C 120": mat labeltext$ eof L1Done
+			read #hLabelTemp,using "form pos 1,5*C 120": mat labeltext$ eof L1Done
 			for z=1 to 5
 				!   If UPRC$(LINESTYLE$(Z))="BAR" AND LABELTEXT$(Z)<>"" Then
 				!   fnBARCODE(LABELTEXT$(Z),labelPos1) : pr #255: ''

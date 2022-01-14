@@ -57,7 +57,7 @@ START_REPORT: !  r: main report loop
   open #1: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr",internal,outIn,keyed
   do
     ReadEmployee: !
-    read #1,using "Form POS 1,N 8,C 30,pos 162,n 6": eno,em$,lastpaydate eof FINALTOTALS
+    read #1,using "form pos 1,N 8,C 30,pos 162,n 6": eno,em$,lastpaydate eof FINALTOTALS
     if fndate_mmddyy_to_ccyymmdd(lastpaydate)<>ppd then goto ReadEmployee
     mat rpTemp=(0): mat tcp=(0)
     a=pos (rtrm$(em$)," ",1)
@@ -68,7 +68,7 @@ START_REPORT: !  r: main report loop
     checkkey$=cnvrt$("pic(ZZZZZZZ#)",eno)&"         "
     restore #4,key>=checkkey$: nokey ReadEmployee
     do
-      read #4,using "Form POS 1,N 8,n 3,PD 6,N 7,5*PD 3.2,37*PD 5.2": heno,tdn,prd,ckno,mat tdc,mat cp eof L680
+      read #4,using "form pos 1,N 8,n 3,PD 6,N 7,5*PD 3.2,37*PD 5.2": heno,tdn,prd,ckno,mat tdc,mat cp eof L680
       if heno=eno and prd=ppd then
         holdckno=ckno
         mat tcp=tcp+cp : mat ttdc=ttdc+tdc

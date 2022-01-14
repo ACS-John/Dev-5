@@ -33,13 +33,13 @@ PrReport: ! r:
 	do
 		dim z$*10
 		dim e$(4)*30
-		read #1,using 'Form POS 1,C 10,4*C 30,POS 1821,N 1,POS 292,PD 4.2,PD 4,POS 227,PD 5,POS 1741,N 2,pos 185,4*pd 4.2': z$,mat e$,finalbil,bal,lastbilldate,usage,extra(1),watdep,sewdep,elecdep,gasdep eof Finis
+		read #1,using 'form pos 1,C 10,4*C 30,pos 1821,N 1,pos 292,PD 4.2,PD 4,pos 227,PD 5,pos 1741,N 2,pos 185,4*pd 4.2': z$,mat e$,finalbil,bal,lastbilldate,usage,extra(1),watdep,sewdep,elecdep,gasdep eof Finis
 		deposit=watdep+sewdep+elecdep+gasdep
 	loop until finalbil>0
 	if d1<>0 and d1<>lastbilldate then goto PrReport
 	if route>0 and extra(1)<>route then goto PrReport
 	if oob$="Y" and bal<=0 then goto PrReport
-	pr #255,using 'Form POS 1,C 10,X 1,C 30,X 1,N 10.2,X 3,PIC(ZZ/ZZ/ZZ),X 2,N 9.2': z$,e$(2),bal,lastbilldate,deposit pageoflow PgOf
+	pr #255,using 'form pos 1,C 10,X 1,C 30,X 1,N 10.2,X 3,PIC(ZZ/ZZ/ZZ),X 2,N 9.2': z$,e$(2),bal,lastbilldate,deposit pageoflow PgOf
 goto PrReport
 ! /r
 PrHeader: ! r:

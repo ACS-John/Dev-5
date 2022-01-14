@@ -8,7 +8,7 @@
 	dim resp$(10)*80
 	fnTop(program$)
 	open #hCompany=fnH: "Name=[Q]\GLmstr\Company.h[cno],Shr",i,i,r
-	read #hCompany,using 'Form Pos 384,N 2',rec=1: nap
+	read #hCompany,using 'form pos 384,N 2',rec=1: nap
 	close #hCompany:
 	fnGetFundList(mat fund_list)
 ! /r
@@ -23,7 +23,7 @@ do ! r: the first screen
 	resp$(rc_erase:=rc+=1)=""
 	lc+=1
 	fnLbl(lc+=1,1,"Year being closed:",mylen,1)
-	fnTxt(lc,mypos,2,0,1,"30",0,"Enter the two digit code for the year you are closing.")
+	fnTxt(lc,mypos,2,0,1,'30',0,"Enter the two digit code for the year you are closing.")
 	resp$(rc_year:=rc+=1)=""
  
 	if fnUseDeptNo then
@@ -91,8 +91,8 @@ close #hAcPrCks: ioerr ignore
 ! r: reset some stuff in "[Q]\GLmstr\PRmstr.h[cno]"
 open #hPrMstr=fnH: "Name=[Q]\GLmstr\PRmstr.h[cno],KFName=[Q]\GLmstr\PRIndex.h[cno]",internal,outIn,keyed ioerr SCR2
 do
-	read #hPrMstr,using 'Form POS 271,2*N 5': n1,n2 eof L500
-	rewrite #hPrMstr,using 'Form POS 271,2*N 5': 0,0
+	read #hPrMstr,using 'form pos 271,2*N 5': n1,n2 eof L500
+	rewrite #hPrMstr,using 'form pos 271,2*N 5': 0,0
 loop
 L500: !
 close #hPrMstr:

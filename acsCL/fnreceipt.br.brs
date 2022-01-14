@@ -31,7 +31,7 @@ def library fnaddreceipt
 	READ_RECEIPT_1: ! 
 	dim rec$*8
 	dim nam$*30
-	read #receipt,using 'Form Pos 1,C 8,c 30,',release: rec$,nam$ eof EO_FLEX1
+	read #receipt,using 'form pos 1,C 8,c 30,',release: rec$,nam$ eof EO_FLEX1
 	item$(1)=str$(rec(receipt)) 
 	item$(2)=rec$ : item$(3)=nam$ 
 	fnflexadd1(mat item$)
@@ -53,7 +53,7 @@ def library fnaddreceipt
 	if ckey=2 or ckey=3 then editrec=val(resp$(1))
 	if editrec=0 then goto MENU1
 	if ckey=2 or ckey=3 then 
-		read #receipt,using 'Form Pos 1,C 8,c 30',rec=editrec: rec$,nam$
+		read #receipt,using 'form pos 1,C 8,c 30',rec=editrec: rec$,nam$
 	end if
 	if ckey=2 then xedit=1 : goto EDIT_RECEIPT
 	if ckey=3 then gosub DELETE_RECEIPT : goto MENU1
@@ -62,7 +62,7 @@ def library fnaddreceipt
 		! if there are any - than tell them, and don't delete.
 		open #paytrans=fnH: "Name=[Q]\CLmstr\Paytrans.h[cno],KFName=[Q]\CLmstr\UnPdIdx1.h[cno],Shr",internal,outIn,keyed 
 		restore #paytrans,key>=rec$&rpt$(chr$(0),12): nokey L490
-		read #paytrans,using 'Form Pos 1,C 8': x$
+		read #paytrans,using 'form pos 1,C 8': x$
 		if x$=rec$ then 
 			
 			mat ml$(2) 
@@ -76,7 +76,7 @@ def library fnaddreceipt
 		restore #receiptgl,key>=rec$: nokey EO_DELETE_RECEIPT
 		DELETE_RECEIPTGL_LOOP: ! 
 		dim receiptkey$*8
-		read #receiptgl,using 'Form Pos 1,C 8': receiptkey$ eof EO_DELETE_RECEIPT
+		read #receiptgl,using 'form pos 1,C 8': receiptkey$ eof EO_DELETE_RECEIPT
 		if receiptkey$=rec$ then 
 			delete #receiptgl: 
 			goto DELETE_RECEIPTGL_LOOP
@@ -85,9 +85,9 @@ def library fnaddreceipt
 		! 
 		open #trans=fnH: "Name=[Q]\CLmstr\TrMstr.h[cno],KFName=[Q]\CLmstr\TrIdx2.h[cno],Shr",internal,outIn,keyed 
 		restore #trans, key>=holdrec$&rpt$(chr$(0),kln(trans)-len(holdrec$)): nokey EO_DEL_KEY_ON_TRANS
-		L590: read #trans,using 'Form Pos 28,C 8': x$ eof EO_DEL_KEY_ON_TRANS
+		L590: read #trans,using 'form pos 28,C 8': x$ eof EO_DEL_KEY_ON_TRANS
 		if x$=rec$ then 
-			rewrite #trans,using 'Form Pos 28,Cr 8': '' 
+			rewrite #trans,using 'form pos 28,Cr 8': '' 
 			goto L590
 		end if
 		EO_DEL_KEY_ON_TRANS: ! 
@@ -127,7 +127,7 @@ def library fnaddreceipt
 		READ_RECEIPT_GL: ! 
 			dim receiptgl$*12
 			dim gldesc$*30
-			read #receiptgl,using 'Form Pos 1,C 8,c 12,n 6.2,c 30': receiptkey$,receiptgl$,percent,gldesc$ eof EO_FLEX3
+			read #receiptgl,using 'form pos 1,C 8,c 12,n 6.2,c 30': receiptkey$,receiptgl$,percent,gldesc$ eof EO_FLEX3
 			if rec$<>receiptkey$ then goto EO_FLEX3
 			glitem$(1)=str$(rec(receiptgl)) : glitem$(2)=receiptkey$
 			glitem$(3)=receiptgl$ : glitem$(4)=str$(percent)
@@ -150,14 +150,14 @@ def library fnaddreceipt
 			percent=gldistrec=0: receiptkey$=gldesc$=receiptgl$=""
 			goto GL_BREAKDOWNS ! add gl breakdown
 		else if ckey=7 then 
-			read #receiptgl,using 'Form Pos 1,C 8,c 12,n 6.2,c 30',rec=gldistrec: receiptkey$,receiptgl$,percent,gldesc$
+			read #receiptgl,using 'form pos 1,C 8,c 12,n 6.2,c 30',rec=gldistrec: receiptkey$,receiptgl$,percent,gldesc$
 			goto GL_BREAKDOWNS ! edit gl breakdown
 		end if 
 		tac=0
 		READ_STANDARD_BREAKDOWNS: ! 
 		restore #receiptgl,key>=rec$: nokey EO_TEST
 		L1020: !
-		read #receiptgl,using 'Form Pos 1,C 8,c 12,n 6.2,c 30': receiptkey$,receiptgl$,percent,gldesc$ eof EO_TEST
+		read #receiptgl,using 'form pos 1,C 8,c 12,n 6.2,c 30': receiptkey$,receiptgl$,percent,gldesc$ eof EO_TEST
 		if rec$<>receiptkey$ then goto EO_TEST
 		tac+=percent
 		goto L1020
@@ -173,9 +173,9 @@ def library fnaddreceipt
 		SAVE_RECEIPT: ! 
 		if xedit=1 and rec$<>holdrec$ then gosub KEY_CHANGE
 		if xedit=1 then 
-			rewrite #receipt, using 'Form Pos 1,Cr 8,C 30': rec$,nam$
+			rewrite #receipt, using 'form pos 1,Cr 8,C 30': rec$,nam$
 		else if add=1 then 
-			write #receipt,using 'Form Pos 1,Cr 8,C 30': rec$,nam$ duprec MSGBOX3
+			write #receipt,using 'form pos 1,Cr 8,C 30': rec$,nam$ duprec MSGBOX3
 		end if  
 	goto MENU1 ! /r
 	KEY_CHANGE: ! r: don't do on receipts
@@ -184,9 +184,9 @@ def library fnaddreceipt
 		open #trans=fnH: "Name=[Q]\CLmstr\TrMstr.h[cno],KFName=[Q]\CLmstr\TrIdx2.h[cno],Shr",internal,outIn,keyed 
 		restore #trans,key>=holdrec$&rpt$(chr$(0),11): nokey EO_CHANGE_KEY_ON_TRANS
 		L1230: ! 
-		read #trans,using 'Form Pos 28,C 8': x$ eof EO_CHANGE_KEY_ON_TRANS
+		read #trans,using 'form pos 28,C 8': x$ eof EO_CHANGE_KEY_ON_TRANS
 		if x$=holdrec$ then 
-			rewrite #trans,using 'Form Pos 28,Cr 8',release: rec$
+			rewrite #trans,using 'form pos 28,Cr 8',release: rec$
 			goto L1230
 		end if 
 		EO_CHANGE_KEY_ON_TRANS: ! 
@@ -195,9 +195,9 @@ def library fnaddreceipt
 		! Change references to this file in the sub-file ReceiptGLBreakdown
 		restore #receiptgl,search=holdrec$: nokey EO_CHANGE_KEY_ON_RECEIPTGL
 		L1300: !
-		read #receiptgl,using 'Form Pos 1,C 8': x$ eof EO_CHANGE_KEY_ON_RECEIPTGL
+		read #receiptgl,using 'form pos 1,C 8': x$ eof EO_CHANGE_KEY_ON_RECEIPTGL
 		if x$=holdrec$ then 
-			rewrite #receiptgl,using 'Form Pos 1,Cr 8': rec$
+			rewrite #receiptgl,using 'form pos 1,Cr 8': rec$
 			goto L1300
 		end if 
 	EO_CHANGE_KEY_ON_RECEIPTGL: ! 
@@ -206,9 +206,9 @@ def library fnaddreceipt
 	open #paytrans=fnH: "Name=[Q]\CLmstr\Paytrans.h[cno],KFName=[Q]\CLmstr\UnPdIdx1.h[cno],Shr",internal,outIn,keyed 
 	restore #paytrans,key>=holdrec$&rpt$(chr$(0),12): nokey EO_CHANGE_KEY_ON_PAYTRANS
 	L1370: !
-	read #paytrans,using 'Form Pos 1,C 8': x$ eof EO_CHANGE_KEY_ON_PAYTRANS
+	read #paytrans,using 'form pos 1,C 8': x$ eof EO_CHANGE_KEY_ON_PAYTRANS
 	if x$=holdrec$ then 
-		rewrite #paytrans,using 'Form Pos 1,Cr 8': rec$
+		rewrite #paytrans,using 'form pos 1,Cr 8': rec$
 		goto L1370
 	end if 
 	EO_CHANGE_KEY_ON_PAYTRANS: ! 
@@ -217,9 +217,9 @@ def library fnaddreceipt
 	! Change references to this file in the linked file UnPdAloc
 	open #unpdaloc=fnH: "Name=[Q]\CLmstr\UnPdAloc.h[cno],KFName=[Q]\CLmstr\UAIdx2.h[cno],Shr",internal,outIn,keyed 
 	restore #unpdaloc,key>=holdrec$&rpt$(chr$(0),kln(unpdaloc)-len(holdrec$)): nokey EO_CHANGE_KEY_ON_UNPDALOC
-	read #unpdaloc,using 'Form Pos 1,C 8': x$ eof EO_CHANGE_KEY_ON_UNPDALOC
+	read #unpdaloc,using 'form pos 1,C 8': x$ eof EO_CHANGE_KEY_ON_UNPDALOC
 	if x$=holdrec$ then 
-		rewrite #unpdaloc,using 'Form Pos 1,Cr 8': rec$
+		rewrite #unpdaloc,using 'form pos 1,Cr 8': rec$
 		goto L1370
 	end if 
 	EO_CHANGE_KEY_ON_UNPDALOC: ! 
@@ -256,9 +256,9 @@ def library fnaddreceipt
 		if ckey=4 and gldistrec>0 then 
 			delete #receiptgl,rec=gldistrec: 
 		else if ckey=1 and gldistrec=0 then 
-			write #receiptgl,using 'Form Pos 1,C 8,c 12,n 6.2,c 30': receiptkey$,receiptgl$,percent,gldesc$
+			write #receiptgl,using 'form pos 1,C 8,c 12,n 6.2,c 30': receiptkey$,receiptgl$,percent,gldesc$
 		else if ckey=1 and gldistrec>0 then 
-			rewrite #receiptgl,using 'Form Pos 1,C 8,c 12,n 6.2,c 30',rec=gldistrec: receiptkey$,receiptgl$,percent,gldesc$
+			rewrite #receiptgl,using 'form pos 1,C 8,c 12,n 6.2,c 30',rec=gldistrec: receiptkey$,receiptgl$,percent,gldesc$
 		end if 
 	goto EDIT_RECEIPT ! /r
 	Xit: ! 

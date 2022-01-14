@@ -26,7 +26,7 @@ def library fnfinstmt_v0_to_v1
 			PHASE1: ! gosub FIND1
 			st1=rno : st2=99999 : rnp=0
 			READ_1: ! 
-			read #hgl,using 'Form POS 1,G 5,POS 75,N 1': rno,ic eof PHASE1_EOF,conv PHASE1_READ_CONV
+			read #hgl,using 'form pos 1,G 5,pos 75,N 1': rno,ic eof PHASE1_EOF,conv PHASE1_READ_CONV
 			read_count+=1
 			pr 'read_1 did'; ! pause
 			if rno=0 then delete #hgl: : goto READ_1
@@ -38,7 +38,7 @@ def library fnfinstmt_v0_to_v1
 
 			PHASE1_READ_CONV: ! 
 			!     pr 'PHASE1_READ_CONV,read_count=';read_count : pause
-			read #hgl,using 'Form POS 1,C 5,POS 75,N 1': rno$ eof PHASE1_EOF
+			read #hgl,using 'form pos 1,C 5,pos 75,N 1': rno$ eof PHASE1_EOF
 			delete #hgl: 
 			delete_count+=1
 			goto READ_1
@@ -51,7 +51,7 @@ def library fnfinstmt_v0_to_v1
 			!   pr 'PHASE2,read_count=';read_count : pause
 			restore #hgl,key>=lpad$(str$(st1),5): nokey PHASE2_EOF
 			do 
-				read #hgl,using 'Form POS 1,G 5,POS 75,N 1': rno,ic eof PHASE2_EOF
+				read #hgl,using 'form pos 1,G 5,pos 75,N 1': rno,ic eof PHASE2_EOF
 				pr 'do read did';
 				!     if end1=1 then pr 'end1=1' : pause ! goto PHASE2_EOF
 				if rno<st2 then pr 'going back to L390' : goto L390
@@ -59,7 +59,7 @@ def library fnfinstmt_v0_to_v1
 				rnp=0
 				goto PHASE1
 				L390: !
-				rewrite #hgl,using 'Form POS 79,N 5': rnp
+				rewrite #hgl,using 'form pos 79,N 5': rnp
 			!     pr 'rewrite did' : pause
 			loop 
 			PHASE2_EOF: ! 

@@ -5,10 +5,10 @@ fnTop(program$)
 fnTos
 fnLbl(1,5,"Show Customers who have sewer usage")
 fnLbl(2,1,"Greater than:",20,1)
-fnTxt(2,23,9,0,right,"30",0,"Enter the minimum usage you want cosidered in your Report. (Blank for all)",0 )
+fnTxt(2,23,9,0,right,'30',0,"Enter the minimum usage you want cosidered in your Report. (Blank for all)",0 )
 resp$(2)=""
 fnLbl(3,1,"Less than:",20,1)
-fnTxt(3,23,9,0,right,"30",0,"Enter the maximum usage you want cosidered in your Report (Blank for all).",0 )
+fnTxt(3,23,9,0,right,'30',0,"Enter the maximum usage you want cosidered in your Report (Blank for all).",0 )
 resp$(3)=""
 fnCmdSet(2)
 ckey=fnAcs(mat resp$)

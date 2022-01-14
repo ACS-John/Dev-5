@@ -57,20 +57,20 @@ MENU1: ! r:
 	end if
 ! /r
 READ_H_TRANS: ! r: main loop
-	read #h_trans,using 'Form POS 1,C 12,N 6,PD 6.2,N 2,N 2,C 12,C 30': t$,s,k,mat n,l$,p$ eof EO_H_TRANS
-	reread #h_trans,using 'Form POS 1,C 70': hd_key_one$
+	read #h_trans,using 'form pos 1,C 12,N 6,PD 6.2,N 2,N 2,C 12,C 30': t$,s,k,mat n,l$,p$ eof EO_H_TRANS
+	reread #h_trans,using 'form pos 1,C 70': hd_key_one$
 	if fndate_mmddyy_to_ccyymmdd(s)<begdat or fndate_mmddyy_to_ccyymmdd(s)>enddat then goto READ_H_TRANS
 ! if val(t$(1:3))=0 and val(t$(4:9))=0 and val(t$(10:12))=0 then goto READ_H_TRANS
 	if t$(3:3)=" " then t$(3:3)="0"
 	if t$(12:12)=" " then t$(12:12)="0"
-	read #1,using 'Form POS 81,2*PD 6.2',key=t$: bb,cb nokey DEL_H_TRANS ! delete any transactions without a matching master record.
+	read #1,using 'form pos 81,2*PD 6.2',key=t$: bb,cb nokey DEL_H_TRANS ! delete any transactions without a matching master record.
 	cb=cb-k
 	if uprc$(code$)="H" then bb=bb-k
-	rewrite #1,using 'Form POS 81,2*PD 6.2',key=t$: bb,cb
+	rewrite #1,using 'form pos 81,2*PD 6.2',key=t$: bb,cb
 DEL_H_TRANS: !
 ! rec_to_delete=rec(h_trans)
 ! if trim$(l$)='4905' and t$='  6   507  1' then pause
-	if ~del_dupe_only or fn_has_dupe(h_trans_dupe,rec(h_trans),'Form pos 1,C 70') then
+	if ~del_dupe_only or fn_has_dupe(h_trans_dupe,rec(h_trans),'form pos 1,C 70') then
 		fnStatus('deleting transaction: '&hd_key_one$)
 		delete #h_trans: ioerr ignore
 	end if  ! ~del_dupe_only or fn_has_dupe
@@ -80,23 +80,23 @@ EO_H_TRANS: ! /r
 	fnStatus('Reassigning Transaction Addresses...') ! r:
 	restore #1,key>="            ": eof ignore
 	do
-		read #1,using 'Form POS 333,2*PD 3': mat ta eof L470
-		rewrite #1,using 'Form POS 333,2*PD 3': 0,0
+		read #1,using 'form pos 333,2*PD 3': mat ta eof L470
+		rewrite #1,using 'form pos 333,2*PD 3': 0,0
 	loop
 L470: !
 	lr2=lrec(2)
-	if uprc$(code$)<>"H" then rewrite #h_trans,using 'Form POS 71,PD 3',rec=1: lr2
+	if uprc$(code$)<>"H" then rewrite #h_trans,using 'form pos 71,PD 3',rec=1: lr2
 	for j=1 to lr2
-		read #h_trans,using 'Form POS 1,C 12,POS 71,PD 3',rec=j: k$,nta noRec L580
+		read #h_trans,using 'form pos 1,C 12,pos 71,PD 3',rec=j: k$,nta noRec L580
 		if k$="  0     0  0" then goto L580
-		read #1,using 'Form POS 333,2*PD 3',key=k$: mat ta nokey L580
+		read #1,using 'form pos 333,2*PD 3',key=k$: mat ta nokey L580
 		if ta(1)=0 then ta(1)=j
 		if ta(2)>0 then
-			rewrite #h_trans,using 'Form POS 71,PD 3',rec=ta(2): j
+			rewrite #h_trans,using 'form pos 71,PD 3',rec=ta(2): j
 		end if
 		ta(2)=j
-		rewrite #1,using 'Form POS 333,2*PD 3',key=k$: mat ta
-		if uprc$(code$)<>"H" then rewrite #h_trans,using 'Form POS 71,PD 3',rec=j: 0
+		rewrite #1,using 'form pos 333,2*PD 3',key=k$: mat ta
+		if uprc$(code$)<>"H" then rewrite #h_trans,using 'form pos 71,PD 3',rec=j: 0
 L580: !
 	next j
 ! /r

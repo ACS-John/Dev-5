@@ -92,8 +92,8 @@ do
 	restore #hTrans,key>=c$(c_account)&'         ': nokey NextCustomer
 	do
 		dim tg(11)
-		! read #hTrans,using 'Form POS 1,C 10,N 8,N 1,12*PD 4.2,6*PD 5,PD 4.2,N 1': p$,tDate,tCode,tAmount,mat tg,wr,wu,er,eu,gr,gu,tbal,pcode eof NextCustomer
-		read #hTrans,using 'Form POS 1,C 10,N 8,N 1,12*PD 4.2': p$,tDate,tCode,tAmount,mat tg eof NextCustomer
+		! read #hTrans,using 'form pos 1,C 10,N 8,N 1,12*PD 4.2,6*PD 5,PD 4.2,N 1': p$,tDate,tCode,tAmount,mat tg,wr,wu,er,eu,gr,gu,tbal,pcode eof NextCustomer
+		read #hTrans,using 'form pos 1,C 10,N 8,N 1,12*PD 4.2': p$,tDate,tCode,tAmount,mat tg eof NextCustomer
 		if p$<>c$(c_account) then goto NextCustomer
 		if ld1<>0 and tDate<ld1 then goto NextTrans
 		if hd1<>0 and tDate>hd1 then goto NextTrans
@@ -126,7 +126,7 @@ do
 
 			if enableDetails then ! r: print the detail line
 
-				pr #hOut,using 'Form pos 1,c 10,n 10.2,c 4,pic(zzzz/zz/zz),sz1*n 9.2,x 3,c 30': c$(c_account),tAmount,cd$,tDate,mat alloc,c$(c_name)(1:25) pageoflow PgOf
+				pr #hOut,using 'form pos 1,c 10,n 10.2,c 4,pic(zzzz/zz/zz),sz1*n 9.2,x 3,c 30': c$(c_account),tAmount,cd$,tDate,mat alloc,c$(c_name)(1:25) pageoflow PgOf
 			end if ! /r
 			if exportNow then ! r:
 				pr #hOut: '"'&c$(c_account)&'"'                          	&tab$;
@@ -305,10 +305,10 @@ PrTotals: ! r:
 		pr #hOut: '    ************ Totals ************'
 		pr #hOut: tab(34);'{\ul       Total}  {\ul    Reg.Col}  {\ul   Cr.Memos}  {\ul   Db.Memos}'
 		for j=1 to sz1
-			pr #hOut,using 'Form POS 4,C 30,N 11.2,3*N 12.2': scr1$(j),ro(j+3,1),ro(j+3,2),ro(j+3,3),ro(j+3,4) pageoflow PgOf
+			pr #hOut,using 'form pos 4,C 30,N 11.2,3*N 12.2': scr1$(j),ro(j+3,1),ro(j+3,2),ro(j+3,3),ro(j+3,4) pageoflow PgOf
 		next j
 		pr #hOut: ''
-		pr #hOut,using 'Form POS 4,C 30,N 11.2,3*N 12.2': 'Total      ',ro(1,1),ro(1,2),ro(1,3),ro(1,4)
+		pr #hOut,using 'form pos 4,C 30,N 11.2,3*N 12.2': 'Total      ',ro(1,1),ro(1,2),ro(1,3),ro(1,4)
 	end if ! /r
 	if enableRouteTotals then ! r:
 		pr #hOut: ''

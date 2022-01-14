@@ -137,11 +137,11 @@ goto Top ! /r
 Top: ! r:
 	if annbc=sequence_bar_code then
 		BARCODE_READ_ADDR: !
-		read #addr,using 'Form POS 1,PD 3': r6 eof Finis
-		read #6,using 'Form POS 1,C 16,C 10',rec=r6: srt$,z$ noRec Top
+		read #addr,using 'form pos 1,PD 3': r6 eof Finis
+		read #6,using 'form pos 1,C 16,C 10',rec=r6: srt$,z$ noRec Top
 		if rtrm$(x$)<>'' and x$<>z$ then goto BARCODE_READ_ADDR
 		x$=''
-		read #customer,using 'Form POS 1,C 10,4*C 30,POS 296,PD 4,POS 373,C 12,POS 1741,N 2,N 7,pos 1864,C 30,pos 1821,n 1',key=z$: z$,mat e$,lastBillingDate,f3$,route,seq,extra$(1),final nokey Top
+		read #customer,using 'form pos 1,C 10,4*C 30,pos 296,PD 4,pos 373,C 12,pos 1741,N 2,N 7,pos 1864,C 30,pos 1821,n 1',key=z$: z$,mat e$,lastBillingDate,f3$,route,seq,extra$(1),final nokey Top
 		meter_address$=e$(1)
 		if annbc=sequence_bar_code and filter_selection=6 and bk>0 and bk<>route then goto BARCODE_READ_ADDR ! skip if barcoded and by route, but not right route
 	else if annbc=sequence_bulk_sort then
@@ -149,7 +149,7 @@ Top: ! r:
 		read #6,using 'form pos 22,c 10': z$ eof Finis
 		if rtrm$(x$)<>'' and x$<>z$ then goto BulkRead
 		x$=''
-		read #customer,using 'Form POS 1,C 10,4*C 30,POS 296,PD 4,POS 373,C 12,POS 1741,N 2,N 7,pos 1864,C 30,pos 1942,c 12,pos 1821,n 1',key=z$: z$,mat e$,lastBillingDate,f3$,route,seq,extra$(1),bulksort$,final nokey Top
+		read #customer,using 'form pos 1,C 10,4*C 30,pos 296,PD 4,pos 373,C 12,pos 1741,N 2,N 7,pos 1864,C 30,pos 1942,c 12,pos 1821,n 1',key=z$: z$,mat e$,lastBillingDate,f3$,route,seq,extra$(1),bulksort$,final nokey Top
 		meter_address$=e$(1)
 		if annbc=sequence_bulk_sort and filter_selection=6 and bk>0 and bk<>route then goto BulkRead ! skip if barcoded and by route, but not right route
 	else if annbc=sequence_alphaSort then
@@ -157,11 +157,11 @@ Top: ! r:
 		read #hAlphaSort,using 'form pos 22,c 10': z$ eof Finis
 		if rtrm$(x$)<>'' and x$<>z$ then goto AlphaRead
 		x$=''
-		read #customer,using 'Form POS 1,C 10,4*C 30,POS 296,PD 4,POS 373,C 12,POS 1741,N 2,N 7,pos 1864,C 30,pos 1942,c 12,pos 1821,n 1',key=z$: z$,mat e$,lastBillingDate,f3$,route,seq,extra$(1),bulksort$,final nokey Top
+		read #customer,using 'form pos 1,C 10,4*C 30,pos 296,PD 4,pos 373,C 12,pos 1741,N 2,N 7,pos 1864,C 30,pos 1942,c 12,pos 1821,n 1',key=z$: z$,mat e$,lastBillingDate,f3$,route,seq,extra$(1),bulksort$,final nokey Top
 		meter_address$=e$(1)
 		if filter_selection=6 and bk>0 and bk<>route then goto AlphaRead ! skip if barcoded and by route, but not right route
 	else
-		read #customer,using 'Form POS 1,C 10,4*C 30,C 12,POS 296,PD 4,POS 373,C 12,POS 1741,N 2,N 7,pos 1864,C 30,pos 1821,n 1': z$,mat e$,f$(1),lastBillingDate,f3$,route,seq,extra$(1),final eof Finis
+		read #customer,using 'form pos 1,C 10,4*C 30,C 12,pos 296,PD 4,pos 373,C 12,pos 1741,N 2,N 7,pos 1864,C 30,pos 1821,n 1': z$,mat e$,f$(1),lastBillingDate,f3$,route,seq,extra$(1),final eof Finis
 		meter_address$=e$(1)
 	end if
 	PAST_READ: !
@@ -264,7 +264,7 @@ SelectIndividualAccounts: ! r: select individual accounts
 	if ckey=2 then
 		fnCustomerSearch(resp$(1))
 		selz$=lpad$(rtrm$(resp$(1)(1:10)),10)
-		read #customer,using 'Form POS 1,C 10,4*C 30,POS 296,PD 4,POS 373,C 12,POS 1741,N 2,N 7,pos 1864,C 30,pos 1821,n 1',key=selz$: selz$,mat sele$,extra$(1),final nokey ignore
+		read #customer,using 'form pos 1,C 10,4*C 30,pos 296,PD 4,pos 373,C 12,pos 1741,N 2,N 7,pos 1864,C 30,pos 1821,n 1',key=selz$: selz$,mat sele$,extra$(1),final nokey ignore
 		goto SelectIndividualAccounts
 	end if
 	if ckey=5 then goto Xit
@@ -275,7 +275,7 @@ SelectIndividualAccounts: ! r: select individual accounts
 	hz$=z$
 	if rtrm$(z$)='' then goto Finis
 	selz$='': mat sele$=('')
-	read #customer,using 'Form POS 1,C 10,4*C 30,POS 296,PD 4,POS 373,C 12,POS 1741,N 2,N 7,pos 1864,C 30,pos 1821,n 1',key=z$: z$,mat e$,lastBillingDate,f3$,route,seq,extra$(1),final nokey SelectIndividualAccounts
+	read #customer,using 'form pos 1,C 10,4*C 30,pos 296,PD 4,pos 373,C 12,pos 1741,N 2,N 7,pos 1864,C 30,pos 1821,n 1',key=z$: z$,mat e$,lastBillingDate,f3$,route,seq,extra$(1),final nokey SelectIndividualAccounts
 	meter_address$=e$(1)
 goto THERE ! /r
 SelectByRoute: ! r: selects by route
@@ -312,7 +312,7 @@ goto Top ! /r
 ! 	if ckey=6 then fnCustomerSearch(resp$(1))
 ! 	restore #customer,key>='       ': nokey ignore
 ! 	SCR4F3_READ_CUSTOMER: !
-! 	read #customer,using 'Form POS 1,C 10,4*C 30,POS 296,PD 4,POS 373,C 12,POS 1741,N 2,N 7,pos 1864,C 30,pos 1821,n 1': z$,mat e$,lastBillingDate,f3$,route,seq,extra$(1),final eof SCR4F3_NO_MATCH
+! 	read #customer,using 'form pos 1,C 10,4*C 30,pos 296,PD 4,pos 373,C 12,pos 1741,N 2,N 7,pos 1864,C 30,pos 1821,n 1': z$,mat e$,lastBillingDate,f3$,route,seq,extra$(1),final eof SCR4F3_NO_MATCH
 ! 	meter_address$=e$(1)
 ! 	if trim$(resp$(1))='' then goto SCR4F3_FINIS
 ! 	if lpad$(resp$(1),10)<>z$ then goto SCR4F3_READ_CUSTOMER
@@ -331,18 +331,18 @@ Sort1: ! r: SELECT & SORT
 	sort1setup=1
 	restore #1:
 	do
-		read #customer,using 'Form POS 1,C 10,POS 296,PD 4,pos 1864,C 30,pos 1821,n 1': z$,lastBillingDate,extra$(1),final eof Sort1EoCustomer
+		read #customer,using 'form pos 1,C 10,pos 296,PD 4,pos 1864,C 30,pos 1821,n 1': z$,lastBillingDate,extra$(1),final eof Sort1EoCustomer
 		xcr$=bc$=''
-		read #5,using 'Form POS 96,C 12,C 4': bc$,xcr$ nokey Sort1NextCustomer ioerr Sort1NextCustomer
-		write #6,using 'Form POS 1,C 16,C 10': bc$(1:5)&xcr$&bc$(6:12),z$
+		read #5,using 'form pos 96,C 12,C 4': bc$,xcr$ nokey Sort1NextCustomer ioerr Sort1NextCustomer
+		write #6,using 'form pos 1,C 16,C 10': bc$(1:5)&xcr$&bc$(6:12),z$
 		Sort1NextCustomer: !
 	loop
 	Sort1EoCustomer: !
 	close #6: ioerr ignore
 	close #9: ioerr ignore
 	open #9: 'Name=[Temp]\Control.[session],Size=0,RecL=128,Replace',internal,output
-	write #9,using 'Form POS 1,C 128': 'File [Temp]\Work.[session],,,[Temp]\Addr.[session],,,,,A,N'
-	write #9,using 'Form POS 1,C 128': 'Mask 1,26,C,A'
+	write #9,using 'form pos 1,C 128': 'File [Temp]\Work.[session],,,[Temp]\Addr.[session],,,,,A,N'
+	write #9,using 'form pos 1,C 128': 'Mask 1,26,C,A'
 	close #9:
 	execute 'Free [Temp]\Addr.[session] -n' ioerr ignore
 	execute 'Sort [Temp]\Control.[session] -n'
@@ -354,7 +354,7 @@ BarCode: ! r:
 	gosub OpenCass
 	if file(5)=-1 then goto BARCODE_XIT
 	labeltext$(5)=''
-	read #5,using 'Form POS 1,C 10,POS 96,C 12': z2$,bc$ nokey BARCODE_XIT
+	read #5,using 'form pos 1,C 10,pos 96,C 12': z2$,bc$ nokey BARCODE_XIT
 	for j=1 to 4
 		labeltext$(j)=labeltext$(j+1) ! move everything up one to allow for BarCode
 	next j
@@ -372,14 +372,14 @@ SelectStartingCustomer: ! r: select customer to start with
 	if ckey=6 then
 		fnCustomerSearch(resp$(1))
 		selz$=lpad$(rtrm$(resp$(1)(1:10)),10)
-		read #customer,using 'Form POS 1,C 10,4*C 30,POS 296,PD 4,POS 373,C 12,POS 1741,N 2,N 7,pos 1864,C 30,pos 1821,n 1',key=selz$: selz$,mat sele$,extra$(1),final nokey ignore
+		read #customer,using 'form pos 1,C 10,4*C 30,pos 296,PD 4,pos 373,C 12,pos 1741,N 2,N 7,pos 1864,C 30,pos 1821,n 1',key=selz$: selz$,mat sele$,extra$(1),final nokey ignore
 		goto SelectStartingCustomer
 	end if
 	if ckey=5 then goto Xit
 	z$=lpad$(trim$(resp$(1)(1:10)),10)
 	if trim$(z$)='[All]' then restore #1: : goto Top
 	selz$='': mat sele$=('')
-	read #customer,using 'Form POS 1,C 10,4*C 30,POS 296,PD 4,POS 373,C 12,POS 1741,N 2,N 7,pos 1864,C 30,pos 1821,n 1',key=z$: z$,mat e$,lastBillingDate,f3$,route,seq,extra$(1),final nokey SelectStartingCustomer
+	read #customer,using 'form pos 1,C 10,4*C 30,pos 296,PD 4,pos 373,C 12,pos 1741,N 2,N 7,pos 1864,C 30,pos 1821,n 1',key=z$: z$,mat e$,lastBillingDate,f3$,route,seq,extra$(1),final nokey SelectStartingCustomer
 	meter_address$=e$(1)
 goto THERE ! /r
 ReadFromGrid: ! r: select customers from grid
@@ -396,7 +396,7 @@ ReadFromGrid: ! r: select customers from grid
 		LIN6: !
 		linput #6: x$ eof Finis
 		z$=lpad$(trim$(x$(1:10)),10)
-		read #customer,using 'Form POS 1,C 10,4*C 30,POS 296,PD 4,POS 373,C 12,POS 1741,N 2,N 7,pos 1864,C 30,pos 1821,n 1',key=z$: z$,mat e$,lastBillingDate,f3$,route,seq,extra$(1),final nokey LIN6
+		read #customer,using 'form pos 1,C 10,4*C 30,pos 296,PD 4,pos 373,C 12,pos 1741,N 2,N 7,pos 1864,C 30,pos 1821,n 1',key=z$: z$,mat e$,lastBillingDate,f3$,route,seq,extra$(1),final nokey LIN6
 		meter_address$=e$(1)
 		fn_getAddressLines
 		gosub AddLabel
@@ -416,7 +416,7 @@ def fn_customerAddress(z$*10,mat addr$; ca_address_type,ca_closeFiles)
 	altaddr=ca_address_type
 	mat pe$=('')
 	z$=lpad$(trim$(z$),kln(h_ca_customer))
-	read #h_ca_customer,using 'Form POS 11,4*C 30,pos 1864,C 30,pos 1854,PD 5.2',key=lpad$(z$,kln(h_ca_customer)): mat e$,extra$(1),extra(22) nokey CA_FINIS
+	read #h_ca_customer,using 'form pos 11,4*C 30,pos 1864,C 30,pos 1854,PD 5.2',key=lpad$(z$,kln(h_ca_customer)): mat e$,extra$(1),extra(22) nokey CA_FINIS
 	fn_getAddressLines
 	CA_FINIS: !
 	if trim$(pe$(2))='' then pe$(2)=pe$(3): pe$(3)=''
@@ -437,7 +437,7 @@ def fn_getAddressLines
 	else if altaddr=ao_primary then
 		goto GAL_USE_PRIME_ADR
 	else !   (default)   if altaddr=ao_billing then
-		if customer then read #customer,using 'Form pos 1854,PD 5.2',key=z$: extra(22) ! else it is called from the library function fncustomer_address, which already read it
+		if customer then read #customer,using 'form pos 1854,PD 5.2',key=z$: extra(22) ! else it is called from the library function fncustomer_address, which already read it
 		if extra(22)=0 or extra(22)=2 then
 			do_not_use_alt_addr=1
 		else
@@ -451,7 +451,7 @@ def fn_getAddressLines
 	end if
 	goto GAL_XIT
 	GAL_USE_ALT_ADDR: ! r:
-	read #adrbil,using 'Form POS 11,4*C 30',key=z$: mat ba$ nokey GAL_USE_PRIME_ADR
+	read #adrbil,using 'form pos 11,4*C 30',key=z$: mat ba$ nokey GAL_USE_PRIME_ADR
 	fn_alternate_address
 	goto GAL_XIT ! /r
 	GAL_USE_PRIME_ADR: ! r:
@@ -478,8 +478,8 @@ AlphaSort: ! r: alphaSort order
 	open #hAsCustomer=fnH: 'Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno]',i,i,k  ! open in Account order
 	open #hAsSequence=fnH: 'Name=[Temp]\Temp.[session],Replace,RecL=31',internal,output
 	do
-		read #hAsCustomer,using 'Form POS 1,C 10,pos 1741,n 2,pos 1743,n 7,pos 354,c 7': z$,route,seq,alphaSort$ eof AlphaSortFinis
-		write #hAsSequence,using 'Form POS 1,C 12,n 2,n 7,c 10': alphaSort$,route,seq,z$
+		read #hAsCustomer,using 'form pos 1,C 10,pos 1741,n 2,pos 1743,n 7,pos 354,c 7': z$,route,seq,alphaSort$ eof AlphaSortFinis
+		write #hAsSequence,using 'form pos 1,C 12,n 2,n 7,c 10': alphaSort$,route,seq,z$
 	loop
 	AlphaSortFinis: !
 	close #hAsCustomer: ioerr ignore
@@ -494,8 +494,8 @@ BulkSort: ! r: bulk sort order
 	open #hBsCustomer=fnH: 'Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno]',i,i,k  ! open in Account order
 	open #hBsSequence=fnH: 'Name=[Temp]\Temp.[session],Replace,RecL=31',internal,output
 	do
-		read #hBsCustomer,using 'Form POS 1,C 10,pos 1741,n 2,pos 1743,n 7,pos 1942,c 12': z$,route,seq,bulk$ eof BULKSORT_FINIS
-		write #hBsSequence,using 'Form POS 1,C 12,n 2,n 7,c 10': bulk$,route,seq,z$
+		read #hBsCustomer,using 'form pos 1,C 10,pos 1741,n 2,pos 1743,n 7,pos 1942,c 12': z$,route,seq,bulk$ eof BULKSORT_FINIS
+		write #hBsSequence,using 'form pos 1,C 12,n 2,n 7,c 10': bulk$,route,seq,z$
 	loop
 	BULKSORT_FINIS: !
 	close #hBsCustomer: ioerr ignore

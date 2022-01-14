@@ -12,8 +12,8 @@
 	fnTop(program$,cap$="Reprint Year End Trial Balance")
 	fncno(cno,cnam$)
 	open #20: "Name=[Q]\GLmstr\Company.h[cno]",i,i,r  : _
-	read #20,using 'Form POS 150,2*N 1',rec=1: d(1),d(2) : _
-	read #20,using 'Form POS 152,2*C 12',rec=1: mat cogl$ : _
+	read #20,using 'form pos 150,2*N 1',rec=1: d(1),d(2) : _
+	read #20,using 'form pos 152,2*C 12',rec=1: mat cogl$ : _
 	close #20:
 	a$(1)="C/D" : a$(2)="C/R" : a$(3)="ADJ" : _
 	a$(4)="A/P" : a$(5)="PR" : a$(6)="A/R" : _

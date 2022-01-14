@@ -41,7 +41,7 @@ READ_CUSTOMER: ! r: main loop
 	read #1,using L420: z$,mat e$,final,bal,f,route eof TOTALS
 	L420: form pos 1,c 10,4*c 30,pos 1821,n 1,pos 292,pd 4.2,pd 4,pos 1741,n 2
 	if f=d1 then goto READ_CUSTOMER
-	if final=1 or final=2 then goto READ_CUSTOMER           ! Skip if InActive
+	if final=1 or final=2 then goto READ_CUSTOMER           ! skip if InActive
 	if startcd=1 and prtbkno<>route then goto TOTALS
 	if final=3 then final$="Final=3" else final$=""
 	if final=4 then final$="Final=4"
@@ -52,7 +52,7 @@ READ_CUSTOMER: ! r: main loop
 goto READ_CUSTOMER ! /r
 TOTALS: ! r:
 	pr #255: rpt$(" ",55)&"{\ul             }"
-	pr #255,using "Form POS 56,N 12.2": tbal
+	pr #255,using "form pos 56,N 12.2": tbal
 	pr #255: rpt$(" ",55)&"{\ul \strike             }"
 goto DONE ! /r
 HDR: ! r:

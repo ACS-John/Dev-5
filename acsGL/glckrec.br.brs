@@ -46,21 +46,21 @@
 	! fnwait("Printing: Please wait...",1)
 	on fkey 5 goto DONE
 	open #glbrec=1: "Name=[Q]\GLmstr\glbrec.h[cno],KFName=[Q]\GLmstr\glrecidx.h[cno],Shr",i,i,k ioerr Xit
-	read #glbrec,using 'Form POS 1,C 12,C 12,C 30,C 2,N 6,PD 5.2,N 1',key>=currgl$&"            ": gl$,c$,p$,s$,mat a nokey DONE
+	read #glbrec,using 'form pos 1,C 12,C 12,C 30,C 2,N 6,PD 5.2,N 1',key>=currgl$&"            ": gl$,c$,p$,s$,mat a nokey DONE
 	fnopenprn
 	if currgl$<>gl$ then goto DONE
 	gosub HDR
-	pr #255,using 'Form POS 20,C 35,N 16.2': "* Balance Per Bank Statement *",bankbal
+	pr #255,using 'form pos 20,C 35,N 16.2': "* Balance Per Bank Statement *",bankbal
 	pr #255: ""
 	goto RD_NXT
  
 READ_GLBREC: !
-	read #glbrec,using 'Form POS 1,C 12,C 12,C 30,C 2,N 6,PD 5.2,N 1': gl$,c$,p$,s$,mat a eof TOTAL
+	read #glbrec,using 'form pos 1,C 12,C 12,C 30,C 2,N 6,PD 5.2,N 1': gl$,c$,p$,s$,mat a eof TOTAL
 	if currgl$<>gl$ then goto TOTAL
 	if fndate_mmddyy_to_ccyymmdd(a(1))>lcd then goto READ_GLBREC
 RD_NXT: !
 	if a(3)<>0 then goto READ_GLBREC
-	pr #255,using 'Form POS 1,C 12,POS 15,C 30,POS 48,PIC(ZZ/ZZ/ZZ),POS 58,N 13.2': c$,p$,a(1),a(2) pageoflow PgOf
+	pr #255,using 'form pos 1,C 12,pos 15,C 30,pos 48,PIC(ZZ/ZZ/ZZ),pos 58,N 13.2': c$,p$,a(1),a(2) pageoflow PgOf
 	tot+=a(2)
 	goto READ_GLBREC
  
@@ -70,18 +70,18 @@ PgOf: !
 continue
  
 TOTAL: !
-	pr #255,using 'Form POS 59,C 12': "------------"
-	pr #255,using 'Form POS 57,N 14.2': bankbal-tot
-	pr #255,using 'Form POS 59,C 12': "============"
+	pr #255,using 'form pos 59,C 12': "------------"
+	pr #255,using 'form pos 57,N 14.2': bankbal-tot
+	pr #255,using 'form pos 59,C 12': "============"
 	goto DONE
  
 HDR: !
-	pr #255,using 'Form POS 1,C 8,Cc 56': date$('mm/dd/yy'),env$('cnam')
-	pr #255,using 'Form POS 1,C 8,Cc 56': time$,cap$
-	pr #255,using 'Form POS 29,C 3,X 1,C 6,X 1,C 3': currgl$(1:3),currgl$(4:9),currgl$(10:12)
-	pr #255,using 'Form POS 1,Cc 72': dat$
+	pr #255,using 'form pos 1,C 8,Cc 56': date$('mm/dd/yy'),env$('cnam')
+	pr #255,using 'form pos 1,C 8,Cc 56': time$,cap$
+	pr #255,using 'form pos 29,C 3,X 1,C 6,X 1,C 3': currgl$(1:3),currgl$(4:9),currgl$(10:12)
+	pr #255,using 'form pos 1,Cc 72': dat$
 	pr #255: ""
-	pr #255,using 'Form POS 1,C 12,POS 15,C 5,POS 50,C 4,POS 65,C 6': "Check Number","Payee","Date","Amount"
+	pr #255,using 'form pos 1,C 12,pos 15,C 5,pos 50,C 4,pos 65,C 6': "Check Number","Payee","Date","Amount"
 	pr #255: ""
 return
  

@@ -27,7 +27,7 @@ Screen1: ! r:
 	fnTos(sn$="GLInput")
 	mylen=30: mypos=mylen+3 : right=1
 	fnLbl(1,1,"Cost Center or Department #:",mylen,right)
-	fnTxt(1,mypos,3,0,right,"30",0,"Enter the cost center or department number if you wish to pr only one department, else leave blank for all.",0 )
+	fnTxt(1,mypos,3,0,right,'30',0,"Enter the cost center or department number if you wish to pr only one department, else leave blank for all.",0 )
 	resp$(1)=""
 	fnLbl(2,1,"(Blank for all Departments)",mylen,right)
 	fnCmdKey("&Next",1,1,0,"Prints the financial statement.")
@@ -127,7 +127,7 @@ def fn_teDE(mat fs$,mat fsN,mp1,&notrans,actpd,mat accum,foot$*132,tabnote,&tota
 	dim bp(13)
  
  
-	read #hGl,using 'Form POS MP1,PD 3,POS 87,27*PD 6.2': br,cb,mat by,mat bp eof EoGlMasterAmounts
+	read #hGl,using 'form pos MP1,PD 3,pos 87,27*PD 6.2': br,cb,mat by,mat bp eof EoGlMasterAmounts
 	if br=0 then goto ReadGlMasterAmounts
 	if fnfscode=0 or (fnfscode=actpd and fnpriorcd=1) then goto L610
 	if fnfscode<1 or fnfscode>12 then let fnfscode(1)

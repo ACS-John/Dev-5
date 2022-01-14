@@ -124,13 +124,13 @@ L1230: open #22: "Name=[Q]\UCReport,RecL=512,eol=crlf,replace",d,o
 
 BEGINNING_OF_FILE: gosub RECRA : gosub RECRE
 	open #255: "Name=PRN:/SELECT,PAGEOFLOW=58,RecL=220",d,o
-	pr #255,using "form SKIP 2,pos 20,cc 40,skip 1,pos 20,cc 40": "Electronic Edit List",cnvrt$("pic(zz/zz/zzzz",endingdate)
+	pr #255,using "form skip 2,pos 20,cc 40,skip 1,pos 20,cc 40": "Electronic Edit List",cnvrt$("pic(zz/zz/zzzz",endingdate)
 ! READ_EMPLOYEE: Read #1,Using 1370: ENO,MAT EM$,SS$,EM6,EM16,TA Eof END1
 READ_EMPLOYEE: read #1,using L1360: eno,mat em$,ss$,mat m eof END1
 L1360: form pos 1,n 4,3*c 25,c 11,36*pd 5.2,2*n 5
 	m1=m2=m3=m4=0
 	gosub NAME_BREAKDOWN
-! Form POS 1,N 8,3*C 30,C 11,POS 122,N 2,POS 156,N 6,POS 173,PD 3
+! form pos 1,N 8,3*C 30,C 11,pos 122,N 2,pos 156,N 6,pos 173,PD 3
 	r1=r1+1
 	p1=pos(em$(3),",",1) : comma=1
 	if p1=0 then p1=pos(em$(3)," ",1): comma=0
@@ -143,7 +143,7 @@ L1480: p1=pos(ss$,"-",1)
 	if p1>0 then ss$(p1:p1)="": goto L1480 else ssn=val(ss$)
 ! READ_DEPARTMENT: Read #2,Using 1500,Rec=TA: TENO,TCD,MAT TY,MAT TQM,TA
 ! If SS$="459499366" Then Pause
-! Form POS 1,N 8,POS 48,N 2,POS 168,38*PD 5.2,POS 468,PD 3
+! form pos 1,N 8,pos 48,N 2,pos 168,38*PD 5.2,pos 468,PD 3
 ! If TCD<1 OR TCD>10 Then tCD=1
 	gosub CALCULATEUC ! determine wages for quarter
 ! If TA>0 Then Goto 1480
@@ -432,7 +432,7 @@ CALCULATEUC: ! determine quarterly wages
 	m2=m2+m(1)-dcy
 	m1=m1+m(2)-dcq
 	if m2=0 then goto L4280 ! skip if total wage =0
-	if m1=0 then goto L4280 ! SKIP IF QUARTERLY WAGE=0
+	if m1=0 then goto L4280 ! skip IF QUARTERLY WAGE=0
 	p3=p3+1
 	if m2<m(sr1) then goto L4230
 	if m2-m1>m(sr1) then goto L4210

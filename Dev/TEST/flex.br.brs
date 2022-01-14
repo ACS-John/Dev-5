@@ -21,7 +21,7 @@ SCREEN1: !
 	fnflexinit1('TrAlloc-tran2',17,1,4,90,mat chdr$,mat cmask$,1)
 	open #h_tralloc=fnH: "Name=[Q]\CLmstr\TrAlloc.h[cno],KFName=[Q]\CLmstr\TrAlloc-Idx.h[cno],Shr",i,i,k
 	do
-		read #h_tralloc,using 'Form Pos 1,C 11,C 12,pd 5.2,C 30,G 6,X 3,C 12,G 1': newkey$,item$(2),tmp,item$(4),item$(5),item$(6),item$(7) eof EOF1
+		read #h_tralloc,using 'form pos 1,C 11,C 12,pd 5.2,C 30,G 6,X 3,C 12,G 1': newkey$,item$(2),tmp,item$(4),item$(5),item$(6),item$(7) eof EOF1
 		allocationstotal+=tmp
 		item$(1)=str$(rec(h_tralloc))
 		item$(3)=str$(tmp)

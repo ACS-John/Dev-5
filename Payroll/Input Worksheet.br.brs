@@ -16,7 +16,7 @@ READ_EMPLOYEE: ! r: main loop
 	fsttrl=1
 	restore #2,key>=cnvrt$("pic(zzzzzzz#)",eno)&"   ": nokey READ_EMPLOYEE
 	L260: !
-	read #2,using 'Form POS 1,N 8,n 3,c 12,4*N 6,3*N 2,pd 4.2,23*PD 4.2': teno,tdn,gl$,mat tdt,mat tcd,tli,mat tdet eof READ_EMPLOYEE
+	read #2,using 'form pos 1,N 8,n 3,c 12,4*N 6,3*N 2,pd 4.2,23*PD 4.2': teno,tdn,gl$,mat tdt,mat tcd,tli,mat tdet eof READ_EMPLOYEE
 	if teno<>eno then pr #255: pageoflow NEWPGE: goto READ_EMPLOYEE
 	if fsttrl=1 then goto L320
 	pr #255,using L300: tdn,tdet(2),rpt$("  __________",3) pageoflow NEWPGE

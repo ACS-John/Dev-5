@@ -12,7 +12,7 @@
 	fnTop(program$,cap$="Print Texas Unemployment Report")
 	fncno(cno,cnam$)
 	open #1: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,input  : _
-	read #1,using 'Form POS 1,3*C 40,2*C 12,C 5,POS 188,PD 7.2,POS 658,10*N 1': mat a$,mat b$,c$,ucm,mat deduc : _
+	read #1,using 'form pos 1,3*C 40,2*C 12,C 5,pos 188,PD 7.2,pos 658,10*N 1': mat a$,mat b$,c$,ucm,mat deduc : _
 	close #1:
 	if fnprocess=1 then goto L280
  

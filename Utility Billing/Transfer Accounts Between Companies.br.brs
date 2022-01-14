@@ -12,7 +12,7 @@
 !
 	cno=val(env$('cno'))
 	fnTop(program$)
-	ubstd$="Form Pos 1,C 10,4*C 30,C 12,7*PD 2,11*PD 4.2,4*PD 4,15*PD 5,PD 4.2,PD 4,12*PD 4.2,2*PD 3,C 7,2*C 12,PD 3,10*PD 5.2,78*PD 5,13*PD 4.2,13*N 6,156*PD 4.2,13*N 6,13*PD 4.2,C 1,C 9,C 2,C 17"
+	ubstd$="form pos 1,C 10,4*C 30,C 12,7*PD 2,11*PD 4.2,4*PD 4,15*PD 5,PD 4.2,PD 4,12*PD 4.2,2*PD 3,C 7,2*C 12,PD 3,10*PD 5.2,78*PD 5,13*PD 4.2,13*N 6,156*PD 4.2,13*N 6,13*PD 4.2,C 1,C 9,C 2,C 17"
 	ubextra$=",n 2,n 7,n 6,n 6,n 9,pd 5.2,n 3,3*n 9,3*n 2,3*n 3,n 1,3*n 9,3*pd 5.2,c 30,7*c 12,3*c 30"
 	mstrform$=rtrm$(ubstd$)&rtrm$(ubextra$)
 MENU1: !
@@ -72,7 +72,7 @@ L700: !
 	read #1,using mstrform$,key=z$: z$,mat e$,f$(1),mat a,mat b,mat c,mat d,bal,f,mat g,mat ta,alp$,f$(2),f$(3),bra,mat gb,mat rw4,df$,dr$,dc$,da$,mat extra,mat extra$ nokey L700
 	z2$=z$
 L820: !
-	read #26,using "Form POS 1,C 10",key=z2$: z2$ nokey L960
+	read #26,using "form pos 1,C 10",key=z2$: z2$ nokey L960
 
 MENU3: !
 	fnTos
@@ -120,8 +120,8 @@ FINIS: ! r:
 	fncloseprn
 goto DONE ! /r
 ALTBILLADDR: ! r: alternate billing address
-	read #3,using "Form POS 1,C 10,4*C 30",key=z$: z$,mat ab$ nokey L1440
-	write #23,using "Form POS 1,C 10,4*C 30": z2$,mat ab$
+	read #3,using "form pos 1,C 10,4*C 30",key=z$: z$,mat ab$ nokey L1440
+	write #23,using "form pos 1,C 10,4*C 30": z2$,mat ab$
 	L1440: !
 return  ! /r
 ! def fn_moveKeyPartialMatches(hFrom,hTo,MatchPos,MatchLen,matchType$)
@@ -149,10 +149,10 @@ DONE: ! r:
 	fnindex_sys(co2)
 Xit: fnXit ! /r
 HDR: ! r:
-	pr #255,using "Form POS 1,Cc 80": "Accounts Transferred from Company Number "&str$(co1)&" to Company Number "&str$(co2)
-	pr #255,using "Form POS 5,CC 70": date$
+	pr #255,using "form pos 1,Cc 80": "Accounts Transferred from Company Number "&str$(co1)&" to Company Number "&str$(co2)
+	pr #255,using "form pos 5,CC 70": date$
 	pr #255: ""
-	pr #255,using "Form POS 2,C 9,POS 15,C 4,POS 53,C 7": "Act. Num.","Name","Balance"
+	pr #255,using "form pos 2,C 9,pos 15,C 4,pos 53,C 7": "Act. Num.","Name","Balance"
 return  ! /r
 
 PgOf: ! r:

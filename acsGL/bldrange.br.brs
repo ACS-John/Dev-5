@@ -10,7 +10,7 @@
 	! fnconsole(off=0)
 	fnTop(program$,"Duplicate Range of Accounts")
 	open #company=1: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,input
-	read #company,using 'Form Pos 150,2*N 1': use_dept,use_sub ! read fund and sub codes from general
+	read #company,using 'form pos 150,2*N 1': use_dept,use_sub ! read fund and sub codes from general
 	close #company:
 	open #1: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLIndex.h[cno],Shr",internal,outIn,keyed
 	fil$(1)="ACGLFNSB" : idx$(1)="agfsidx4"
@@ -30,10 +30,10 @@ MAIN: !
 	fnLbl(6,1,"First new general ledger # to be used:",mylen,right,0,1)
 	fnLbl(5,44,"Fund #",6,1,0,1)
 	fnLbl(5,58,"Sub #",6,2,0,1)
-	if use_dept=1 then let fnTxt(6,46,3,0,right,"30",0,"Enter the fund portion of the general ledger number.",1 ) else let fnTxt(6,46,3,0,right,"30",1,"Enter the fund portion of the general ledger number.",1 ) ! : rESP$(RC+=1)=STR$(DNO)
-	fnTxt(6,51,6,0,right,"30",0,"Enter the main part of the general ledger number.",1 )
+	if use_dept=1 then let fnTxt(6,46,3,0,right,'30',0,"Enter the fund portion of the general ledger number.",1 ) else let fnTxt(6,46,3,0,right,'30',1,"Enter the fund portion of the general ledger number.",1 ) ! : rESP$(RC+=1)=STR$(DNO)
+	fnTxt(6,51,6,0,right,'30',0,"Enter the main part of the general ledger number.",1 )
 	resp$(rc+=1)=""
-	if use_sub=1 then let fnTxt(6,60,3,0,right,"30",0,"Enter the sub portion of the general ledger number.",1 ) else let fnTxt(6,60,3,0,right,"30",1,"Enter the sub portion of the general ledger number.",1 )
+	if use_sub=1 then let fnTxt(6,60,3,0,right,'30',0,"Enter the sub portion of the general ledger number.",1 ) else let fnTxt(6,60,3,0,right,'30',1,"Enter the sub portion of the general ledger number.",1 )
 		resp$(rc+=1)=""
 	fnFra(9,1,8,125,"Duplicating Matching Range of Financial Statement Formats"," ",0)
  
@@ -50,7 +50,7 @@ MAIN: !
 	fncombof("fs-inc-2",5,85,25,"[Q]\GLmstr\acglfnsi.h[cno]",1,5,6,30,"[Q]\GLmstr\agfsidx3.h[cno]",0,pas, "If you are duplicating income statement accounts, enter the last income statement reference to be duplicated.",2)
 	resp$(rc+=1)="" ! last income statement ref # to be duplicated
 	fnLbl(7,1,"First new reference # to be used:",mylen,right,0,2)
-	fnTxt(7,mylen+3,5,0,right,"30",0,"Enter the first new financial statement reference number to be matched with the new general ledger numbers.",2 )
+	fnTxt(7,mylen+3,5,0,right,'30',0,"Enter the first new financial statement reference number to be matched with the new general ledger numbers.",2 )
 	resp$(rc+=1)=""
 	fnCmdSet(2)
 	ckey=fnAcs(mat resp$)

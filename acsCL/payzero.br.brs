@@ -11,8 +11,8 @@
  
 	open #1: "Name=[Q]\CLmstr\PayMstr.h[cno],KFName=[Q]\CLmstr\PayIdx1.h[cno],Shr",internal,outIn,keyed
 	restore #1,key>="        ": eof Xit
-L150: read #1,using 'Form POS 129,PD 5.2': ytdp eof Xit
-	rewrite #1,using 'Form POS 129,PD 5.2': 0
+L150: read #1,using 'form pos 129,PD 5.2': ytdp eof Xit
+	rewrite #1,using 'form pos 129,PD 5.2': 0
 	goto L150
 Xit: stop
  

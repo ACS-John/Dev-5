@@ -4,7 +4,7 @@ def library fnSearch(file_num,form$*128,numeric_format$*20,selection$,key_length
 	! file_num   	- use the file # of the file in your main program which is to          be searched
 	! heading$   	- define as x characters - this is the heading on the search co      columns  - use format simular to: HEADING$=" Account #횼ame컴컴컴컴컴컴컴컴컴컴컴Meter Address컴컴횭alance"
 	! fs_info$(3)	- fs_info$(1) must always be the numeric key to the main       file - fs_info$(2) must always be the alpha index (name used for search) -      fs_info must always be numeric and be the 4th thing read - these are contr      olled by the form statement you send to this library
-	! form$      	- form statement for reading master record - must be full form      at such as:  Form pos 1,c 10,pos 11,c 30,pos 89,c 10,pos 102,n 6  - must        have the key in the first position statement and a numeric in the fourth
+	! form$      	- form statement for reading master record - must be full form      at such as:  form pos 1,c 10,pos 11,c 30,pos 89,c 10,pos 102,n 6  - must        have the key in the first position statement and a numeric in the fourth
 	! key_length 	- numeric LENGTH of the index used to access the actual            record in the main prgram
 	! you can have one column of numeric information on the search screen - it      must always be the fourth item - fs_info - enter the format that would be        used in a cnvrt$ statement after the open (   such as "pic(zz/zz/zz)"
 

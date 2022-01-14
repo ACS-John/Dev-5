@@ -20,7 +20,7 @@ def library fnburden_srch(&x$;fixgrid)
 	fnflexinit1('BurdenSrch',1,1,10,70,mat ch$,mat cm$,1,usefile)
 	if usefile>0 then goto L300 ! file already exists, do not recreate
 	READ_FILE: ! 
-	read #file_num,using 'Form POS 1,c 8,c 30,n 6.3': item$(1),item$(2),rate eof L300 ioerr ERR_READ
+	read #file_num,using 'form pos 1,c 8,c 30,n 6.3': item$(1),item$(2),rate eof L300 ioerr ERR_READ
 	item$(3)=cnvrt$("pic(zzz.###)",rate)
 	fnflexadd1(mat item$)
 	goto READ_FILE

@@ -59,7 +59,7 @@ READ_BUDMSTR: !
 	L490: form pos 1,c 10,pd 4,12*pd 5.2,2*pd 3
 	read #1,using L510,key=z$: n$,bal nokey READ_BUDMSTR
 	L510: form pos 26,c 25,pos 292,pd 4.2
-	pr #255,using "Form POS 1,C 12,C 25": z$,n$ pageoflow NEWPGE
+	pr #255,using "form pos 1,C 12,C 25": z$,n$ pageoflow NEWPGE
 	pr #255: "" pageoflow NEWPGE
 	pr #255: hdr$ pageoflow NEWPGE
 	ta1=badr(1)
@@ -87,7 +87,7 @@ READ_BUDMSTR: !
 		L720: !
 	next j
 	t1(service+1)=bt1(12,2)
-	pr #255,using "Form POS 1,PIC(ZZ/ZZ/ZZ),TOTSERV1*N 10.2": mat t1 pageoflow NEWPGE
+	pr #255,using "form pos 1,PIC(ZZ/ZZ/ZZ),TOTSERV1*N 10.2": mat t1 pageoflow NEWPGE
 	t1(1)=0
 	mat t2=t2+t1 : mat t3=t3+t1
 	t2+=1 : t3+=1
@@ -99,14 +99,14 @@ READ_BUDMSTR: !
 	goto L570
 	L810: !
 	pr #255: underline$ ! "{\ul         }  {\ul         }  {\ul         }  {\ul         }  {\ul         }  {\ul         }" Pageoflow NEWPGE
-	pr #255,using "Form POS 1,C 7,PIC(Z),TOTSERV1*N 10.2": "Total",mat t2 pageoflow NEWPGE
+	pr #255,using "form pos 1,C 7,PIC(Z),TOTSERV1*N 10.2": "Total",mat t2 pageoflow NEWPGE
 	if t2<2 then goto L870
 	for j=1 to udim(t2)
 		if t2(j)>0 then t2(j)=t2(j)/t2
 	next j
 	L870: !
 	pr #255: underline$ ! "{\ul         }  {\ul         }  {\ul         }  {\ul         }  {\ul         }  {\ul         }" Pageoflow NEWPGE
-	pr #255,using "Form POS 1,C 7,PIC(Z),TOTSERV1*N 10.2": "Average",mat t2 pageoflow NEWPGE
+	pr #255,using "form pos 1,C 7,PIC(Z),TOTSERV1*N 10.2": "Average",mat t2 pageoflow NEWPGE
 	pr #255: "" pageoflow NEWPGE
 	budget$="Current Budget Amounts: "
 	for j=1 to 10
@@ -120,7 +120,7 @@ READ_BUDMSTR: !
 	pr #255: "Number of Budget Payments Not Received:"&cnvrt$("PIC(ZZ#)",bt1) pageoflow NEWPGE
 	pr #255: "Total Budget Payments Not Received:"&cnvrt$("PIC($$$,$$$.$$ CR",btdue) pageoflow NEWPGE
 	pr #255: "Excess Budget Billings Over Actual Billing (Under=Cr):"&cnvrt$("PIC($$$,$$$.$$ CR",(totalbudget-totactual)) pageoflow NEWPGE
-	pr #255, using "Form Pos 1,C 78": "{\ul \strike "&rpt$(" ",58)&"}" pageoflow NEWPGE
+	pr #255, using "form pos 1,C 78": "{\ul \strike "&rpt$(" ",58)&"}" pageoflow NEWPGE
 	mat t2=(0) : t2=0
 goto READ_BUDMSTR
  

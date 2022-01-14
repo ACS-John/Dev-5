@@ -25,10 +25,10 @@
 	gosub PrHdr ! pr header
 	do
 		ReadDD: !
-		read #dd,using "Form pos 1,C 10,C 1,N 9,N 2,N 17": key$,dd$,rtn,acc,acn eof Finis
+		read #dd,using "form pos 1,C 10,C 1,N 9,N 2,N 17": key$,dd$,rtn,acc,acn eof Finis
 		if uprc$(dd$)="Y" then   ! Y means Yes Direct Deposit is active for this person
 			key$=lpad$(rtrm$(ltrm$(key$)),8)
-			read #hEmployee,using 'Form pos 9,3*C 30,Pos 162,N 6,Pos 173',key=key$: mat em$,em17 nokey ReadDD
+			read #hEmployee,using 'form pos 9,3*C 30,pos 162,N 6,pos 173',key=key$: mat em$,em17 nokey ReadDD
 			pr #255,using "form pos 1,c 40,n 14,n 4,n 17": key$&" "&em$(1),rtn,acc,acn pageoflow PrNewPg
 		end if
 	loop

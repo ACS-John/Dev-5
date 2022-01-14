@@ -21,7 +21,7 @@
 	fscode=fnfscode
 	priorcd=fnpriorcd
 	open #20: "Name=[Q]\GLmstr\Company.h[cno],Shr",i,i,r  : _
-	read #20,using 'Form Pos 384,n 2',rec=1: nap : close #20:
+	read #20,using 'form pos 384,n 2',rec=1: nap : close #20:
 	if nap<12 or nap> 13 then nap=12
 	in3$(1)="8,5,N 12.2,UT,N" : in3$(2)="8,25,N 12.2,UT,N" : _
 	in3$(3)="8,45,N 12.2,UT,N" : in3$(4)="8,65,N 12.2,UT,N"

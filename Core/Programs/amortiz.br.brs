@@ -11,8 +11,8 @@
  
 	wd4$(1)="1. Regular"
 	wd4$(2)="2. Condensed"
-	pfm$="FORM POS 1,N 6,x 3,pic(zz),""/"",pic(##),""/"",pic(####),"
-	pfm2$="FORM POS 1,c 6,x 3,pic(zz/##/####),"
+	pfm$="form pos 1,N 6,x 3,pic(zz),""/"",pic(##),""/"",pic(####),"
+	pfm2$="form pos 1,c 6,x 3,pic(zz/##/####),"
 	for j=1 to 6
 		pfm$=pfm$&"PIC(-----,---,---.##),"
 		pfm2$=pfm2$&"PIC(-----,---,---.##),"
@@ -24,13 +24,13 @@ MENU1: close #101: ioerr ignore
 	fnTos
 	lc=0: rc=0
 	fnLbl(lc+=1,1,"Loan Amount:",18,1)
-	fnTxt(lc,20,20,0,0,"10"): response$(rc+=1)=str$(la)
+	fnTxt(lc,20,20,0,0,'10'): response$(rc+=1)=str$(la)
 	fnLbl(lc+=1,1,"Interest Rate (ie: .15):",18,1)
 	fnTxt(lc,20,20,0,0,"43") : response$(rc+=1)=str$(ir)
 	fnLbl(lc+=1,1,"Years Loan is for:",18,1)
-	fnTxt(lc,20,2,0,0,"30"): response$(rc+=1)=str$(n)
+	fnTxt(lc,20,2,0,0,'30'): response$(rc+=1)=str$(n)
 	fnLbl(lc+=1,1,"Payments Per Year:",18,1)
-	fnTxt(lc,20,2,0,0,"30"): response$(rc+=1)=str$(y)
+	fnTxt(lc,20,2,0,0,'30'): response$(rc+=1)=str$(y)
 	fnLbl(lc+=2,1,"Note: An Interest Rate of 15% should be entered as 0.15",57,2)
 ! tEXT$="Payment:"
 ! fnPRF(PFX,6,1,22,1,TEXT$)

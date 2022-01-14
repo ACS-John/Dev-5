@@ -24,7 +24,7 @@ MAIN: !
 	code$(4)="Gas"
 	fncomboa("Service",2,mylen+3,mat code$,"",16)
 	fnLbl(2,1,"Rate Code",mylen,1)
-	fnTxt(3,mypos,3,3,0,"30")
+	fnTxt(3,mypos,3,3,0,'30')
 	resp$(3)=""
 	fnCmdSet(3)
 	ckey=fnAcs(mat resp$)

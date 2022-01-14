@@ -41,13 +41,13 @@ TRANSACTION_ENTRY: !
 	fncmbjob(1,mypos)
 	resp$(respc+=1)=jn$
 	fnLbl(2,1,"Amount:",mylen,1)
-	fnTxt(2,mypos,10,10,0,"10",0,"Amount to be charged to job.")
+	fnTxt(2,mypos,10,10,0,'10',0,"Amount to be charged to job.")
 	resp$(respc+=1)=str$(inp(1))
 	fnLbl(3,1,"Date:",mylen,1)
 	fnTxt(3,mypos,8,8,0,"1",0,"Date of transaction")
 	resp$(respc+=1)=str$(inp(2))
 	fnLbl(4,1,"Status:",mylen,1)
-	fnTxt(4,mypos,2,2,0,"30",0,"")
+	fnTxt(4,mypos,2,2,0,'30',0,"")
 	resp$(respc+=1)=str$(inp(3))
 	fnCmdKey("&Save",1,1,0,"Saves all changes.")
 	fnCmdKey("Co&rrection",7,0,0,"Make a correction to any entry.")
@@ -115,10 +115,10 @@ POSTTOJOBS: !
 	for j=1 to lrec(3)
 		read #3,using L640,rec=j: jn$,mat inp noRec L1050
 		if ltrm$(jn$)="" or ltrm$(rtrm$(jn$))="0" then goto L1050
-		read #11,using 'Form POS 150,PD 7.2,N 2',key=jn$: b3,b4 nokey L1050
+		read #11,using 'form pos 150,PD 7.2,N 2',key=jn$: b3,b4 nokey L1050
 		b3=b3+inp(1)
 		if inp(3)><0 then b4=inp(3)
-		rewrite #11,using 'Form POS 150,PD 7.2,N 2',key=jn$: b3,b4
+		rewrite #11,using 'form pos 150,PD 7.2,N 2',key=jn$: b3,b4
 L1050: next j
 	close #3,free:
 goto Xit
@@ -140,9 +140,9 @@ CORRECTIONS: !
 	ch2$(1)="Rec #": ch2$(2)="Job #": ch2$(3)="Amount": ch2$(4)="Date #"
 	ch2$(5)="Status"
 	mat ch2$(5) ! : Mat CM2$(5) : Mat ITEM2$(5)
-	cm2$(1)="30": cm2$(2)="": cm2$(3)="10"
+	cm2$(1)='30': cm2$(2)="": cm2$(3)='10'
 	cm2$(4)="1"
-	cm2$(5)="30"
+	cm2$(5)='30'
 	cm2$(5): ch2$(5): item2$(5)
 	fnflexinit1('Cat',1,1,10,70,mat ch2$,mat cm2$,1,usefile)
 	restore #3:

@@ -495,7 +495,7 @@ def fn_mergeInvoices
 			rewrite #h_tmtraddr,using 'form pos 1,pd 3',rec=1,release: lta4
 			NEXT_ONE: !
 		next j
-		if abs(xb(7))<>3 then  ! SKIP AR IF WRITE OFF
+		if abs(xb(7))<>3 then  ! skip AR IF WRITE OFF
 			write #h_artrans,using 'form pos 1,c 5,c 12,n 6,2*pd 5.2,pd 2,2*n 1,c 20,pd 3',reserve: k$,iv$,xb(4),amt,amt,0,1,0,'CHARGE',0
 			ar1+=amt
 		end if

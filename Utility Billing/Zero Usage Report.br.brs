@@ -75,7 +75,7 @@ PgOf: ! r:
 continue ! /r
 TOTALS: ! r:
 ! pr #255: RPT$(" ",55)&"{\ul             }"
-	! pr #255,Using "Form POS 56,N 12.2": TBAL
+	! pr #255,Using "form pos 56,N 12.2": TBAL
 	! pr #255: RPT$(" ",55)&"{\ul \strike             }"
 goto DONE ! /r
 DONE: ! r:

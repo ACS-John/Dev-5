@@ -28,7 +28,7 @@
 	if ckey=5 then goto Xit
 	beg_date=val(resp$(1))
 	end_date=val(resp$(2))
-	open #1: "Name=[Q]\GLmstr\Company.h[cno],Shr",i,outi,r: read #1,using 'Form POS 386,PD 5.3,PD 5.2,PD 5.3,PD 5.2,POS 407,PD 5.3,PD 5.2,POS 418,10*C 20,10*N 1',rec=1: ficarate,ficawage,feducrat,feducwag,mcr,mcm,mat miscname$,mat dedcode : _
+	open #1: "Name=[Q]\GLmstr\Company.h[cno],Shr",i,outi,r: read #1,using 'form pos 386,PD 5.3,PD 5.2,PD 5.3,PD 5.2,pos 407,PD 5.3,PD 5.2,pos 418,10*C 20,10*N 1',rec=1: ficarate,ficawage,feducrat,feducwag,mcr,mcm,mat miscname$,mat dedcode : _
 	close #1:
 	for j=1 to 10
 		miscname$(j)=lpad$(rtrm$(miscname$(j)(1:9)),9)
@@ -45,12 +45,12 @@
 		mat empd=(0)
 	end if
 	L400: !
-	read #1,using 'Form POS 1,N 4,3*C 25,POS 271,2*N 5': eno,mat k$,mat adr eof PrTotals
+	read #1,using 'form pos 1,N 4,3*C 25,pos 271,2*N 5': eno,mat k$,mat adr eof PrTotals
 	mat empd=(0)
 	if adr(1)=0 then goto L400
 	ca=adr(1)
 	L440: !
-	read #2,using 'Form N 4,2*PD 4,19*PD 5.2,PD 3',rec=ca: mat d,nca conv L400
+	read #2,using 'form N 4,2*PD 4,19*PD 5.2,PD 3',rec=ca: mat d,nca conv L400
 	if fndate_mmddyy_to_ccyymmdd(d(2))<beg_date or fndate_mmddyy_to_ccyymmdd(d(2))>end_date then goto L480
 	gosub L670
 	gosub L790

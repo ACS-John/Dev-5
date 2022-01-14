@@ -15,7 +15,7 @@ dim tg(11)
 hTrans=fn_openFio('UB Transaction',mat t$,mat tN)
  
 	do
-		read #hOld,using 'Form POS 1,C 10,N 8,N 1,12*PD 4.2,6*PD 5,PD 4.2,N 1': p$,tdate,tcode,tamount,mat tg,wr,wu,er,eu,gr,gu,tbal,pcode eof EoOld
+		read #hOld,using 'form pos 1,C 10,N 8,N 1,12*PD 4.2,6*PD 5,PD 4.2,N 1': p$,tdate,tcode,tamount,mat tg,wr,wu,er,eu,gr,gu,tbal,pcode eof EoOld
 		if ~fn_transAlreadyExist(p$,tdate,tcode,tamount) then
 			mat t$=('') : mat tN=(0)
 			t$(trans_acct)=p$

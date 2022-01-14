@@ -32,14 +32,14 @@ fnopenprn
 fn_hdr1
 L350: if d(1)>0 then goto L360 else goto L390
 L360: !
-L390: read #h_prmstr,using 'Form POS 1,N 4,3*C 25,POS 271,2*N 5': eno,mat k$,mat adr eof FINIS
+L390: read #h_prmstr,using 'form pos 1,N 4,3*C 25,pos 271,2*N 5': eno,mat k$,mat adr eof FINIS
 if adr(1)=0 then goto L390
 ca=adr(1)
 do
-	read #h_acprcks,using 'Form N 4,2*PD 4,19*PD 5.2,PD 3',rec=ca: mat d,nca conv L350
+	read #h_acprcks,using 'form N 4,2*PD 4,19*PD 5.2,PD 3',rec=ca: mat d,nca conv L350
 	if fndate_mmddyy_to_ccyymmdd(d(2))=date_bad then
 		d(2)=date(days(date_good,'ccyymmdd'),'mmddyy')
-		rewrite #h_acprcks,using 'Form N 4,2*PD 4,19*PD 5.2,PD 3',rec=ca: mat d,nca
+		rewrite #h_acprcks,using 'form N 4,2*PD 4,19*PD 5.2,PD 3',rec=ca: mat d,nca
 		fn_print_1
 	end if
 	if nca=0 then goto L350

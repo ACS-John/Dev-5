@@ -46,16 +46,16 @@ L410: !
 	open #1: "Name=[Q]\GLmstr\PayMstr.h[cno],KFName=[Q]\GLmstr\payidx1.h[cno],Shr",i,i,k  ! Ioerr 580
 	do
 		dim vn$(4)*30,contact$*30,email$*50,myact$*20
-		read #1,using 'Form Pos 1,C 8,4*c 30,x 5,n 2,c 11,x 6,c 12,c 30,c 50,c 12,c 20': vn$,mat vn$,typ,ss$,ph$,contact$,email$,fax$,myact$ eof Eo1
-		write #2,using 'Form Pos 1,C 8,4*c 30,x 5,n 2,c 11,x 6,c 12,c 30,c 50,c 12,c 20': vn$,mat vn$,typ,ss$,ph$,contact$,email$,fax$,myact$
+		read #1,using 'form pos 1,C 8,4*c 30,x 5,n 2,c 11,x 6,c 12,c 30,c 50,c 12,c 20': vn$,mat vn$,typ,ss$,ph$,contact$,email$,fax$,myact$ eof Eo1
+		write #2,using 'form pos 1,C 8,4*c 30,x 5,n 2,c 11,x 6,c 12,c 30,c 50,c 12,c 20': vn$,mat vn$,typ,ss$,ph$,contact$,email$,fax$,myact$
 	loop
 	Eo1: !
 	close #1:
 	open #1: "Name=[Q]\GLmstr\PRmstr.h[cno],KFName=[Q]\GLmstr\PRIndex.h[cno],Shr",i,i,k ioerr L410
 	vn$(3)=""
 	do
-		read #1,using 'Form POS 1,N 4,3*C 25,C 11,PD 5.2': eno,vn$(1),vn$(2),vn$(4),ss$,ytdp eof L580
-		write #2,using 'Form POS 1,G 8,4*C 30,PD 5.2,N 2,C 11': eno,mat vn$,ytdp,0,ss$
+		read #1,using 'form pos 1,N 4,3*C 25,C 11,PD 5.2': eno,vn$(1),vn$(2),vn$(4),ss$,ytdp eof L580
+		write #2,using 'form pos 1,G 8,4*C 30,PD 5.2,N 2,C 11': eno,mat vn$,ytdp,0,ss$
 	loop
 	L580: !
 	close #1:

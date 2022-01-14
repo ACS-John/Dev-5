@@ -282,10 +282,10 @@ def fn_translateRateAbbreviations(from$*2,to$*2)
 	open #h1=fnH: "Name=[Q]\UBmstr\ubData\RateMst.h[cno],KFName=[Q]\UBmstr\ubData\RateIdx1.h[cno],Use,RecL=374,KPs=1,KLn=4,Shr",internal,outIn,keyed
 	open #h2=fnH: "Name=[Q]\UBmstr\ubData\RateMst.h[cno],KFName=[Q]\UBmstr\ubData\RateIdx2.h[cno],Use,RecL=374,KPs=5,KLn=25,Shr",internal,outIn,keyed
 	do
-		read #h1,using 'Form POS 1,C 2': rate_type$ eof EO_RATE
+		read #h1,using 'form pos 1,C 2': rate_type$ eof EO_RATE
 		if rate_type$=from$ then
 			rate_type$=to$
-			rewrite #h1,using 'Form POS 1,C 2': rate_type$
+			rewrite #h1,using 'form pos 1,C 2': rate_type$
 		end if
 	loop
 	EO_RATE: !
@@ -327,12 +327,12 @@ fnend
 def fn_ub_cust_route_from_acctno(cno)
 	open #hCustomer=fnH: "Name=[Q]\UBmstr\Customer.h"&str$(cno)&",Shr",i,outi,r
 	do
-		read #hCustomer,using 'Form Pos 1,C 10,pos 1741,n 2,n 7': z$,route_number,sequence_number eof UCRFA_CUSTOMER_EOF
+		read #hCustomer,using 'form pos 1,C 10,pos 1741,n 2,n 7': z$,route_number,sequence_number eof UCRFA_CUSTOMER_EOF
 		if route_number=0 then
 			route_number=sequence_number=0
 			route_number=val(z$(1:2)) conv UCRFA_SKIP_IT
 			sequence_number=val(z$(3:7)) conv ignore
-			rewrite #hCustomer,using 'Form Pos 1,C 10,pos 1741,n 2,n 7': z$,route_number,sequence_number
+			rewrite #hCustomer,using 'form pos 1,C 10,pos 1741,n 2,n 7': z$,route_number,sequence_number
 		end if
 		UCRFA_SKIP_IT: !
 	loop
@@ -344,13 +344,13 @@ def fn_ub_combine_services(service_from,service_to)
 	dim g(12), gb(10)
 	open #hCustomer=fnH: "Name=[Q]\UBmstr\Customer.h[cno],Shr",i,outi,r
 	do
-		read #hCustomer,using 'Form Pos 1,C 10,pos 300,12*pd 4.2,pos 388,10*pd 5.2': z$,mat g,mat gb eof UCCS_CUSTOMER_EOF
+		read #hCustomer,using 'form pos 1,C 10,pos 300,12*pd 4.2,pos 388,10*pd 5.2': z$,mat g,mat gb eof UCCS_CUSTOMER_EOF
 		if g(service_from)<>0 or gb(service_from)<>0 then
 			g(service_to)+=g(service_from)
 			gb(service_to)+=gb(service_from)
 			g(service_from)=0
 			gb(service_from)=0
-			rewrite #hCustomer,using 'Form Pos 1,C 10,pos 300,12*pd 4.2,pos 388,10*pd 5.2': z$,mat g,mat gb
+			rewrite #hCustomer,using 'form pos 1,C 10,pos 300,12*pd 4.2,pos 388,10*pd 5.2': z$,mat g,mat gb
 		end if
 	loop
 	UCCS_CUSTOMER_EOF: !
@@ -364,7 +364,7 @@ def fn_ub_combine_services(service_from,service_to)
 		if tg(service_from)<>0 then
 			tg(service_to)+=tg(service_from)
 			tg(service_from)=0
-			rewrite #h_ubtrans,using 'Form Pos 1,C 10,pos 300,12*pd 4.2,pos 388,10*pd 5.2': x$,mat tg
+			rewrite #h_ubtrans,using 'form pos 1,C 10,pos 300,12*pd 4.2,pos 388,10*pd 5.2': x$,mat tg
 		end if
 	loop
 	UCCS_TRANS_EOF: !

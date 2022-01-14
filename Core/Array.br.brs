@@ -342,7 +342,7 @@ fnend
 def library fnChrCount(String_To_Search$*10480,Chr_To_Count$*1)
 	Chr_Count=0
 	do
-		Cc_Pos_Chr=Pos(String_To_Search$,Chr_To_Count$,Cc_Pos_Chr+1)
+		Cc_Pos_Chr=pos(String_To_Search$,Chr_To_Count$,Cc_Pos_Chr+1)
 		if Cc_Pos_Chr>0 then Chr_Count+=1
 	loop Until Cc_Pos_Chr<=0
 	fnChrCount=Chr_Count

@@ -86,9 +86,9 @@ PRINTIT: ! r:
 	loop
 ! /r
 PR_TOTALS: ! r:
-	pr #255,using "Form POS 101,C 28": "____________  ____________"
-	pr #255,using "Form POS 101,N 12,X 2,N 12.2": totusage,totamount
-	pr #255,using "Form POS 101,C 28": "============  ============"
+	pr #255,using "form pos 101,C 28": "____________  ____________"
+	pr #255,using "form pos 101,N 12,X 2,N 12.2": totusage,totamount
+	pr #255,using "form pos 101,C 28": "============  ============"
 	pr #255,using 'form pos 1,c 20,pic(zzzz,zzz,zzz)': "Total Customers:",count
 	if count>0 then pr #255,using 'form pos 1,c 20,pic(zzzz,zzz,zzz)': "Average Usage:",round(totusage/count,0)
 	if count>0 then pr #255,using 'form pos 1,c 20,pic(z,zzz,zzz.##)': "Average Amount:",round(totamount/count,2)
@@ -100,10 +100,10 @@ PgOf: ! r:
 continue  ! /r
 HDR: ! r:
 	p2=p2+1
-	pr #255,using "Form POS 1,CC 80": env$('cnam')
-	pr #255,using "Form POS 1,CC 80": "Consumption List - "&srvc$
-	pr #255,using " Form POS 1,CC 80": "Rate Code "&str$(rcode)
-	pr #255,using "Form POS 110,C 5,PIC(ZZZ)": "Page ",p2
+	pr #255,using "form pos 1,CC 80": env$('cnam')
+	pr #255,using "form pos 1,CC 80": "Consumption List - "&srvc$
+	pr #255,using " form pos 1,CC 80": "Rate Code "&str$(rcode)
+	pr #255,using "form pos 110,C 5,PIC(ZZZ)": "Page ",p2
 	pr #255: ""
 	if tc<>0 then pr #255,using L740: srvc$&" Code ",tc
 	L740: form pos 41,c 9,n 2,skip 2

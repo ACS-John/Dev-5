@@ -16,7 +16,7 @@
 	fnTop(program$,cap$="Payroll")
 	fncno(cno,cnam$)
 	open #1: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,input  : _
-	read #1,using 'Form POS 418,10*C 20,10*N 1': mat miscname$,mat dedcode : _
+	read #1,using 'form pos 418,10*C 20,10*N 1': mat miscname$,mat dedcode : _
 	close #1:
  
 	sc1$(1)="Description:" : _
@@ -72,7 +72,7 @@ ASK_NEW_NUMBER: !  add new employee
 	fnTos(sn$="Payroll2") : _
 	mylen=20: mypos=mylen+3 : right=1
 	fnLbl(1,1,"Employee Number:",mylen,right)
-	fnTxt(1,mypos,4,0,0,"30",0,"Enter new employee number.",0 ) : _
+	fnTxt(1,mypos,4,0,0,'30',0,"Enter new employee number.",0 ) : _
 	resp$(1)=""
 	fnCmdKey("&Next",1,1,0,"")
 	fnCmdKey("&Cancel",5,0,1,"")
@@ -82,13 +82,13 @@ ASK_NEW_NUMBER: !  add new employee
 	addemployee=1 ! code for adding new employee
 DISPLAY_RECORD: !
 	en$=lpad$(str$(en1),4)
-	read #1,using 'Form POS 1,N 4,3*C 25,C 11,36*PD 5.2,2*N 5',key=en$: eno,mat k$,ss$,mat m,mat ta nokey DISPLAY_EMPLOYEE
+	read #1,using 'form pos 1,N 4,3*C 25,C 11,36*PD 5.2,2*N 5',key=en$: eno,mat k$,ss$,mat m,mat ta nokey DISPLAY_EMPLOYEE
 	disable=1: goto DISPLAY_EMPLOYEE
 DISPLAY_EMPLOYEE: !
 	fnTos(sn$="Payroll3") : _
 	mylen=15: mypos=mylen+3 : right=1
 	fnLbl(1,1,"Employee Number:",mylen,right)
-	fnTxt(1,mypos,4,0,0,"30",disable,"",0 ) : _
+	fnTxt(1,mypos,4,0,0,'30',disable,"",0 ) : _
 	resp$(1)=str$(en1)
 	fnLbl(2,1,"Employee Name:",mylen,right)
 	fnTxt(2,mypos,25,0,0,"",0,"",0 ) : _
@@ -106,9 +106,9 @@ DISPLAY_EMPLOYEE: !
 	fnLbl(1,70,"Y T D         Q T D ",24,0)
 	for j=1 to 18
 		fnLbl(j+1,42,sc1$(j+8),mylen2,right)
-		fnTxt(j+1,mypos,12,0,0,"10",0,"",0 ) : _
+		fnTxt(j+1,mypos,12,0,0,'10',0,"",0 ) : _
 		resp$(j*2-1+5)=str$(m(j*2-1) )
-		fnTxt(j+1,mypos+14,12,0,0,"10",0,"",0 ) : _
+		fnTxt(j+1,mypos+14,12,0,0,'10',0,"",0 ) : _
 		resp$(j*2+5)=str$(m(j*2) )
 	next j
 	fnCmdKey("&Next",1,1,0,"")
@@ -160,10 +160,10 @@ L1200: form pos 1,n 4,pos 108,pd 3
 	goto L1180
 L1240: if ckey=6 then eno=0: mat k$=(""): ss$="": mat m=(0): mat ta=(0) : _
 		goto MAIN
-L1250: if ckey=1 and addemployee=1 then mat ta=(0): write #1,using 'Form POS 1,N 4,3*C 25,C 11,36*PD 5.2,2*N 5': eno,mat k$,ss$,mat m,mat ta: addemployee=0 else goto L1280
+L1250: if ckey=1 and addemployee=1 then mat ta=(0): write #1,using 'form pos 1,N 4,3*C 25,C 11,36*PD 5.2,2*N 5': eno,mat k$,ss$,mat m,mat ta: addemployee=0 else goto L1280
 	new1=1
 	eno=0: mat k$=(""): ss$="": mat m=(0): mat ta=(0): goto MAIN
-L1280: if ckey=1 then rewrite #1,using 'Form POS 1,N 4,3*C 25,C 11,36*PD 5.2,2*N 5',key=en$: eno,mat k$,ss$,mat m,mat ta nokey L1290
+L1280: if ckey=1 then rewrite #1,using 'form pos 1,N 4,3*C 25,C 11,36*PD 5.2,2*N 5',key=en$: eno,mat k$,ss$,mat m,mat ta nokey L1290
 L1290: eno=0: mat k$=(""): ss$="": mat m=(0): mat ta=(0): goto MAIN
  
 INITIAL_BUILD: !
@@ -184,7 +184,7 @@ PROOF_LIST: !
 	restore #1,key>="    ": eof L1470, nokey L1470
 L1470: fnopenprn
 	gosub HDR
-L1490: read #1,using 'Form POS 1,N 4,3*C 25,C 11,36*PD 5.2,2*N 5': eno,mat k$,ss$,mat m eof L1610
+L1490: read #1,using 'form pos 1,N 4,3*C 25,C 11,36*PD 5.2,2*N 5': eno,mat k$,ss$,mat m eof L1610
 	pl=pl+1
 	l1(pl)=eno
 	l2$(pl)=k$(1)
@@ -242,18 +242,18 @@ return
 	pr newpage
 	pr f "10,15,Cc 43,N": "Reassigning Transaction Addresses..."
 	restore #1,key>="    ": eof L2070
-L2070: read #1,using 'Form POS 271,2*N 5': mat ta eof L2100
-	rewrite #1,using 'Form POS 271,2*N 5': 0,0
+L2070: read #1,using 'form pos 271,2*N 5': mat ta eof L2100
+	rewrite #1,using 'form pos 271,2*N 5': 0,0
 	goto L2070
 L2100: lr2=lrec(2)
 ! REWRITE #2,USING 2360,REC=1: LR2
 	for j=1 to lr2
-		read #2,using 'Form POS 1,C 4,POS 108,PD 3',rec=j: en$,nta noRec L2210
-		read #1,using 'Form POS 271,2*N 5',key=en$: mat ta nokey L2210
+		read #2,using 'form pos 1,C 4,pos 108,PD 3',rec=j: en$,nta noRec L2210
+		read #1,using 'form pos 271,2*N 5',key=en$: mat ta nokey L2210
 		if ta(1)=0 then ta(1)=j
 		if ta(2)>0 then rewrite #2,using L2200,rec=ta(2): j
 		ta(2)=j
-		rewrite #1,using 'Form POS 271,2*N 5',key=en$: mat ta
+		rewrite #1,using 'form pos 271,2*N 5',key=en$: mat ta
 		rewrite #2,using L2200,rec=j: 0
 L2200: form pos 108,pd 3
 L2210: next j
@@ -278,18 +278,18 @@ L2340: fnTos(sn$="Payroll4") : _
 	fnTxt(1,mypos,1,0,0,"1",0,"Date of check.",0 ) : _
 	resp$(1)=str$(prd(1))
 	fnLbl(2,1,"Check Number:",mylen,right)
-	fnTxt(2,mypos,8,0,0,"30",0,"",0 ) : _
+	fnTxt(2,mypos,8,0,0,'30',0,"",0 ) : _
 	resp$(2)=str$(prd(2))
 	fnLbl(3,1,"Gross Wage:",mylen,right)
-	fnTxt(3,mypos,12,0,0,"10",0,"",0 ) : _
+	fnTxt(3,mypos,12,0,0,'10',0,"",0 ) : _
 	resp$(3)=str$(prd(3))
 	for j=1 to 17
 		fnLbl(j+3,1,sc1$(j+9),mylen,right)
-		fnTxt(j+3,mypos,12,0,0,"10",0,"",0 ) : _
+		fnTxt(j+3,mypos,12,0,0,'10',0,"",0 ) : _
 		resp$(j+3)=str$(prd(j+3))
 	next j
 	fnLbl(21,1,"Net Pay:",mylen,right)
-	fnTxt(21,mypos,12,0,0,"10",0,"",0 ) : _
+	fnTxt(21,mypos,12,0,0,'10',0,"",0 ) : _
 	resp$(21)=str$(prd(21))
 	fnCmdKey("&Next",1,1,0,"")
 	fnCmdKey("&Cancel",5,0,1,"")
@@ -333,7 +333,7 @@ L2770: if add=0 then mat prd=prd-pr1 ! file maintenance
 		m(m1)=m(m1)+prd(j)
 		m(m1+1)=m(m1+1)+prd(j)
 	next j
-	rewrite #1,using 'Form POS 1,N 4,3*C 25,C 11,36*PD 5.2,2*N 5',key=en$: eno,mat k$,ss$,mat m,mat ta
+	rewrite #1,using 'form pos 1,N 4,3*C 25,C 11,36*PD 5.2,2*N 5',key=en$: eno,mat k$,ss$,mat m,mat ta
 	adr=nca
 	if add=1 then mat pr1=(0): mat prd=(0): goto L2330
 	if add=0 then goto L2300

@@ -25,8 +25,8 @@ def library fnpaytrans_v1_to_v2
 		fnCopy("[Q]\CLmstr\PayTrans.h[cno]","[Q]\CLmstr\PayTrans.h[cno]",114)
 		open #paytrans1=1: "Name=[Q]\CLmstr\PayTrans.h[cno],KFName=[Q]\CLmstr\UnPdIdx1.h[cno]",internal,outIn,keyed
 		for j=1 to lrec(paytrans1)
-			read #paytrans1,using 'Form Pos 96,N 1,N 6': gde,pdte eof L320
-			rewrite #paytrans1,using 'Form Pos 90,N 1,N 6,N 10.2,N 8': gde,pdte,disamt=0,ddate=0
+			read #paytrans1,using 'form pos 96,N 1,N 6': gde,pdte eof L320
+			rewrite #paytrans1,using 'form pos 90,N 1,N 6,N 10.2,N 8': gde,pdte,disamt=0,ddate=0
 		next j
 L320: version(paytrans1,2)
 		close #paytrans1:

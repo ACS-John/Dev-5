@@ -118,30 +118,30 @@ SCREEN1_NEW: ! r:
 	fnTxt(lyne,mypos,4,0,0,"1030",0,"Enter the year for which the wages were paid in ccyy format.",0)
 	resp$(resp_paymentYear:=rc+=1)=str$(yr)
 	fnLbl(lyne+=1,col3,"Social Security Maximum Wage:",mylen,1,0,0)
-	fnTxt(lyne,mypos,10,0,0,"10",disable,"Enter the social security maximum wage for the year just completed.",0)
+	fnTxt(lyne,mypos,10,0,0,'10',disable,"Enter the social security maximum wage for the year just completed.",0)
 	resp$(resp_ssmax:=rc+=1)=str$(ssmax)
 	fnLbl(lyne+=1,col3,"Social Security Rate:",mylen,1,0,0)
 	fnTxt(lyne,mypos,6,0,0,"34",disable,"Enter the social security rate for the year just completed.",0)
 	resp$(resp_ssrate:=rc+=1)=str$(ssrate)
 	fnLbl(lyne+=1,col3,"Medicare Maximum Wage:",mylen,1,0,0)
-	fnTxt(lyne,mypos,10,0,0,"10",disable,"Enter the medicare maximum wage for the year just completed.",0)
+	fnTxt(lyne,mypos,10,0,0,'10',disable,"Enter the medicare maximum wage for the year just completed.",0)
 	resp$(resp_mcmax:=rc+=1)=str$(mcmax)
 	fnLbl(lyne+=1,col3,"Medicare Rate:",mylen,1,0,0)
-	fnTxt(lyne,mypos,6,0,0,"30",disable,"Enter the medicare rate for the year just completed.",0)
+	fnTxt(lyne,mypos,6,0,0,'30',disable,"Enter the medicare rate for the year just completed.",0)
 	resp$(resp_mcrate:=rc+=1)=str$(mcrate)
 	!
 	lyne=10 : mylen=69 : mypos=mylen+2
 	fnLbl(lyne+=1,1,"Miscellaneous Deduction Containing Employer Cost Group-Term Life Ins:",mylen,1,0,0)
-	fnTxt(lyne,mypos,2,0,0,"30",0,"",0)
+	fnTxt(lyne,mypos,2,0,0,'30',0,"",0)
 	resp$(resp_ins:=rc+=1)=str$(ins)
 	fnLbl(lyne+=1,1,"Miscellaneous Deduction Used For Pension:",mylen,1,0,0)
-	fnTxt(lyne,mypos,2,0,0,"30",0,"",0)
+	fnTxt(lyne,mypos,2,0,0,'30',0,"",0)
 	resp$(resp_pen:=rc+=1)=str$(pen)
 	fnLbl(lyne+=1,1,"Miscellaneous Deduction Used For Deferred Compensation:",mylen,1)
-	fnTxt(lyne,mypos,2,0,0,"30",0,"",0)
+	fnTxt(lyne,mypos,2,0,0,'30',0,"",0)
 	resp$(resp_dfc:=rc+=1)=str$(dfc)
 	fnLbl(lyne+=1,1,"Miscellaneous Deduction Used For Dependent Care Assistance:",mylen,1)
-	fnTxt(lyne,mypos,2,0,0,"30",0,"",0)
+	fnTxt(lyne,mypos,2,0,0,'30',0,"",0)
 	resp$(resp_dcan:=rc+=1)=str$(dcan)
 	lyne+=1
 	mylen=31 : mypos=mylen+2
@@ -153,16 +153,16 @@ SCREEN1_NEW: ! r:
 	fnTxt(lyne,mypos,17,0,0,"",0,"",0)
 	resp$(resp_emppin:=rc+=1)=emppin$
 	fnLbl(lyne+=1,1,"Resub Indicator:",mylen,1)
-	fnTxt(lyne,mypos,1,0,0,"30",0,"",0)
+	fnTxt(lyne,mypos,1,0,0,'30',0,"",0)
 	resp$(resp_resub:=rc+=1)=resub$
 				fnLbl(lyne+=1,1,"Resub TLCN:",mylen,1)
-				fnTxt(lyne,mypos,6,0,0,"30",0,"",0)
+				fnTxt(lyne,mypos,6,0,0,'30',0,"",0)
 				resp$(resp_tlcn:=rc+=1)=tlcn$
 	fnLbl(lyne+=1,1,"Contact Name:",mylen,1)
-	fnTxt(lyne,mypos,27,0,0,"30",0,"",0)
+	fnTxt(lyne,mypos,27,0,0,'30',0,"",0)
 	resp$(resp_contact:=rc+=1)=contact$
 	fnLbl(lyne+=1,1,"Contact Phone Number:",mylen,1)
-	fnTxt(lyne,mypos,15,0,0,"30",0,"",0)
+	fnTxt(lyne,mypos,15,0,0,'30',0,"",0)
 	resp$(resp_contactph:=rc+=1)=contactph$
 				fnLbl(lyne+=1,1,"Contact Phone Extension:",mylen,1)
 				fnTxt(lyne,mypos,5,0,0,"",0,"",0)
@@ -171,17 +171,17 @@ SCREEN1_NEW: ! r:
 	fnTxt(lyne,mypos,40,0,0,"",0,"",0)
 	resp$(resp_email:=rc+=1)=email$
 	fnLbl(lyne+=1,1,"Terminating Business Indicator:",mylen,1)
-	fnTxt(lyne,mypos,1,0,0,"30",0,"",0)
+	fnTxt(lyne,mypos,1,0,0,'30',0,"",0)
 	resp$(resp_terminat:=rc+=1)=terminat$
 	lyne+=1
 	mylen=62 : mypos=mylen+2
 	fnLbl(lyne+=1,1,"Some states require filing electronic W-2s.",80,2)
 	fnLbl(lyne+=1,1,"Answer the following questions if you wish to create 'RS' records during this run.",80,2)
 	fnLbl(lyne+=1,1,"State code used in your record to identify the selected state:",mylen,1)
-	fnTxt(lyne,mypos,2,0,0,"30",0,"",0)
+	fnTxt(lyne,mypos,2,0,0,'30',0,"",0)
 	resp$(resp_state_code:=rc+=1)=str$(sr1)
 	fnLbl(lyne+=1,1,"Appropriate FIPS postal numeric code:",mylen,1)
-	fnTxt(lyne,mypos,2,0,0,"30",0,"",0)
+	fnTxt(lyne,mypos,2,0,0,'30',0,"",0)
 	resp$(resp_fips:=rc+=1)=str$(sr2)
 	fnLbl(lyne+=1,1,'(See an appendix in your electronic booklet for the postal code!)',80,2)
 	!
@@ -289,7 +289,7 @@ L2070: p1=pos(ss$,"-",1)
 	if p1>0 then ss$(p1:p1)="": goto L2070 else ssn=val(ss$)
 	checkkey$=cnvrt$("pic(zzzzzzz#)",eno)&cnvrt$("pic(zz#)",0)&cnvrt$("pd 6",0) ! index employee#,department# and payroll date
 	restore #hChecks,key>=checkkey$: nokey NEXT_EMPLOYEE
-L2120: read #hChecks,using "Form POS 1,N 8,n 3,PD 6,N 7,5*PD 3.2,37*PD 5.2": heno,tdn,prd,ckno,mat tdc,mat tcp eof L2480
+L2120: read #hChecks,using "form pos 1,N 8,n 3,PD 6,N 7,5*PD 3.2,37*PD 5.2": heno,tdn,prd,ckno,mat tdc,mat tcp eof L2480
 	if heno<>eno then goto L2480
 	if prd<beg_date or prd>end_date then goto L2120 ! not this year
 ! form pos 1,n 8,pos 48,n 2,pos 168,21*pd 5.2,pos 468,pd 3

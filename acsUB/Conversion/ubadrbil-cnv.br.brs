@@ -28,13 +28,13 @@ def library fnub_cnv_adrbil
 	if rln(1)=100 then goto L210 else goto L230
 	L210: !
 		! note!!!!   may have to change a$(3) to a$(4), etc and form on next line
-		read #1,using 'Form POS 11,3*C 30',rec=bra: a$(1),a$(2),a$(3) noRec L180
+		read #1,using 'form pos 11,3*C 30',rec=bra: a$(1),a$(2),a$(3) noRec L180
 	goto L240
 	L230: !
-	read #1,using 'Form POS 11,4*C 30',rec=bra: mat a$ noRec L180
+	read #1,using 'form pos 11,4*C 30',rec=bra: mat a$ noRec L180
 	L240: !
 		if trim$(a$(1))="" and trim$(a$(2))="" and trim$(a$(3))="" and trim$(a$(4))="" then goto L180
-		write #2,using 'Form POS 1,C 10,4*C 30,': z$,mat a$
+		write #2,using 'form pos 1,C 10,4*C 30,': z$,mat a$
 	goto L180
  
 	END1: !

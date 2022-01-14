@@ -60,7 +60,7 @@ if seq=1 then resp$(6)='True' else resp$(6)='False'
 fnOpt(2,3,"Route Sequence",0,2)
 resp_seq=7
 if seq=2 then resp$(resp_seq)='True' else resp$(resp_seq)='False'
-fnChk(16,3,"Skip line after each account", 0,0) ! fnChk(lyne,ps,txt$*196; align,contain,tabcon)
+fnChk(16,3,"skip line after each account", 0,0) ! fnChk(lyne,ps,txt$*196; align,contain,tabcon)
 resp_skip_line=8
 if skip_line_after_account then resp$(resp_skip_line)='True' else resp$(resp_skip_line)='False'
 fnChk(17,3,"Include Accounts with Zero Balances", 0,0) ! fnChk(lyne,ps,txt$*196; align,contain,tabcon)
@@ -111,7 +111,7 @@ gosub HDR
 do
 READ_CUSTOMER: ! r: report main loop
 	holdroute=route : tdate=0
-	read #hCustomer,using 'Form POS 1,C 10,POS 41,C 30,POS 292,PD 4.2,POS 388,10*PD 5.2,POS 1741,N 2': z$,e$(2),bal,mat gb,route eof EO_CUSTOMER
+	read #hCustomer,using 'form pos 1,C 10,pos 41,C 30,pos 292,PD 4.2,pos 388,10*PD 5.2,pos 1741,N 2': z$,e$(2),bal,mat gb,route eof EO_CUSTOMER
 	if seq=2 and holdroute<>0 and holdroute<>route then gosub PRINT_SUB_TOTALS ! consider subtotals
 	noneprinted=0
 	foot$=""
@@ -127,7 +127,7 @@ READ_CUSTOMER: ! r: report main loop
 	lastone=0: firstone=1 : have_tbal=0
 READ_UBTRANSVB: !
 ! tdate=0
-	read #ubtransvb,using 'Form POS 1,C 10,N 8,N 1,12*PD 4.2,6*PD 5,PD 4.2,N 1': p$,tdate,tcode,tamount,mat tg,wr,wu,er,eu,gr,gu,tbal,pcode eof READ_CUSTOMER
+	read #ubtransvb,using 'form pos 1,C 10,N 8,N 1,12*PD 4.2,6*PD 5,PD 4.2,N 1': p$,tdate,tcode,tamount,mat tg,wr,wu,er,eu,gr,gu,tbal,pcode eof READ_CUSTOMER
 	if p$=z$ and tbal<>0 then have_tbal=1 ! try to see if only transactions on customer were when converted and transaction balances were not set
 	if p$<>z$ then tdate=0
 	if p$<>z$ and noneprinted=0 then tamount=0 ! no transactions found
@@ -138,7 +138,7 @@ TEST_TRANS: !
 	if filter_date_start<>0 and tdate<filter_date_start then goto READ_UBTRANSVB
 !                              if env$('ACSDeveloper')<>'' and trim$(z$)=debug_account_of_interest$ then pause
 	testp$=""
-	read #ubtransvb,using 'Form POS 1,C 10,n 8': testp$,testtdate eof ignore
+	read #ubtransvb,using 'form pos 1,C 10,n 8': testp$,testtdate eof ignore
 	if testp$<>p$ then lastone=1
 	if filter_date_end>0 and testtdate>filter_date_end then lastone=1
 	gosub PRINT_INFO
@@ -146,7 +146,7 @@ TEST_TRANS: !
 	if lastone=1 then
 		goto READ_CUSTOMER
 	else
-		reread #ubtransvb,using 'Form POS 1,C 10,N 8,N 1,12*PD 4.2,6*PD 5,PD 4.2,N 1': p$,tdate,tcode,tamount,mat tg,wr,wu,er,eu,gr,gr,tbal,pcode eof READ_CUSTOMER
+		reread #ubtransvb,using 'form pos 1,C 10,N 8,N 1,12*PD 4.2,6*PD 5,PD 4.2,N 1': p$,tdate,tcode,tamount,mat tg,wr,wu,er,eu,gr,gr,tbal,pcode eof READ_CUSTOMER
 	end if
 	goto TEST_TRANS
 !   ----------      pr 'nothing hits this line!!!' : pause ! nothing hits this line!!!
@@ -177,7 +177,7 @@ HDR: ! r:
 	if filter_date_start<>0 and filter_date_end<>0 then
 		pr #255: "\qc {\f181 \fs18 \b "&trim$("From "&cnvrt$("pic(zzzz/zz/zz)",filter_date_start)&" to "&cnvrt$("pic(zzzz/zz/zz)",filter_date_end))&"}"
 	end if
-	pr #255,using 'Form POS 1,C 20,POS 107,C 12': "\ql","Page "&str$(p2+=1)
+	pr #255,using 'form pos 1,C 20,pos 107,C 12': "\ql","Page "&str$(p2+=1)
 	pr #255: tab(58);"Beginning";tab(106);"Current"
 	pr #255: "           {\ul Customer Name}                 {\ul    Date    }     {\ul  Balance }        {\ul    Debits}   {\ul    Credits}      {\ul    Balance}"
 return  ! /r
@@ -197,17 +197,17 @@ PRINT_INFO: !  r: If TAMOUNT=0 Then Goto 1460
 	if tcode=4 then code$=" CM" : pos2=84 : r3=r3+tamount ! COLUMN 3
 	if tcode=5 then code$=" DM" : pos2=69 : r2=r2+tamount ! COLUMN 2
 	if firstone=1 and lastone=0 then ! first transaction and customer has more than 1 transaction
-		pr #255,using 'Form POS 1,C 10,POS 12,C 30,POS 43,PIC(ZZZZ/ZZ/ZZ),POS 53,PIC(ZZ,ZZZ,ZZ#.## CR),POS POS2,N 12.2,C 4': z$,e$(2),tdate,begbal,tamount,code$ pageoflow PgOf
+		pr #255,using 'form pos 1,C 10,pos 12,C 30,pos 43,PIC(ZZZZ/ZZ/ZZ),pos 53,PIC(ZZ,ZZZ,ZZ#.## CR),pos POS2,N 12.2,C 4': z$,e$(2),tdate,begbal,tamount,code$ pageoflow PgOf
 	else if lastone=2 and firstone=2 then ! No Transactions
-		pr #255,using 'Form POS 1,C 10,POS 12,C 30,POS 53,PIC(ZZ,ZZZ,ZZ#.## CR),POS 100,PIC(ZZ,ZZZ,ZZ#.## CR),C 16': z$,e$(2),begbal,bal,foot$ pageoflow PgOf
+		pr #255,using 'form pos 1,C 10,pos 12,C 30,pos 53,PIC(ZZ,ZZZ,ZZ#.## CR),pos 100,PIC(ZZ,ZZZ,ZZ#.## CR),C 16': z$,e$(2),begbal,bal,foot$ pageoflow PgOf
 	else if firstone=0 and lastone=0 then ! Not the First nor the Last Transaction
-		pr #255,using 'Form POS 43,PIC(ZZZZ/ZZ/ZZ),POS POS2,N 12.2,C 4': tdate,tamount,code$ pageoflow PgOf
+		pr #255,using 'form pos 43,PIC(ZZZZ/ZZ/ZZ),pos POS2,N 12.2,C 4': tdate,tamount,code$ pageoflow PgOf
 	else if firstone=0 and lastone=1 then ! Last Transaction of a series
-		pr #255,using 'Form POS 43,PIC(ZZZZ/ZZ/ZZ),POS POS2,N 12.2,C 4,POS 100,PIC(ZZ,ZZZ,ZZ#.## CR),C 16': tdate,tamount,code$,bal,foot$ pageoflow PgOf
+		pr #255,using 'form pos 43,PIC(ZZZZ/ZZ/ZZ),pos POS2,N 12.2,C 4,pos 100,PIC(ZZ,ZZZ,ZZ#.## CR),C 16': tdate,tamount,code$,bal,foot$ pageoflow PgOf
 		if skip_line_after_account then pr #255: "" pageoflow PgOf
 	else if firstone=1 and lastone=1 then ! Only One Transaction
 	! pr #255: "FIRST AND LAST" :   if env$('ACSDeveloper')<>'' and trim$(z$)=debug_account_of_interest$ then pr 'tdate=';tdate : pause
-		pr #255,using 'Form POS 1,C 10,POS 12,C 30,POS 43,PIC(ZZZZ/ZZ/ZZ),POS 53,PIC(ZZ,ZZZ,ZZ#.## CR),POS POS2,N 12.2,C 4,POS 100,PIC(ZZ,ZZZ,ZZ#.## CR),C 16': z$,e$(2),tdate,begbal,tamount,code$,bal,foot$ pageoflow PgOf
+		pr #255,using 'form pos 1,C 10,pos 12,C 30,pos 43,PIC(ZZZZ/ZZ/ZZ),pos 53,PIC(ZZ,ZZZ,ZZ#.## CR),pos POS2,N 12.2,C 4,pos 100,PIC(ZZ,ZZZ,ZZ#.## CR),C 16': z$,e$(2),tdate,begbal,tamount,code$,bal,foot$ pageoflow PgOf
 		if skip_line_after_account then pr #255: "" pageoflow PgOf
 	end if
 	if lastone=1 or lastone=2 then gosub ACCUM_TOTALS
@@ -255,12 +255,12 @@ return  ! /r
 PRINT_TOTALS: ! r:
 	pr #255: ""
 	pr #255: ""
-	pr #255,using 'Form POS 25,C 23,Nz 3,POS 53,N 13.2,POS 68,N 13.2,POS 84,N 12.2,POS 100,N 13.2': "Totals                ",0,s1,s2,s3,s4 pageoflow PgOf
+	pr #255,using 'form pos 25,C 23,Nz 3,pos 53,N 13.2,pos 68,N 13.2,pos 84,N 12.2,pos 100,N 13.2': "Totals                ",0,s1,s2,s3,s4 pageoflow PgOf
 	pr #255: ""
 	pr #255,using "form pos 1,c 40": "Balance Breakdown by Type of Service:"
 	for j=1 to 10
 		if trim$(serviceName$(j))<>"" then
-			pr #255,using 'Form POS 5,C 30,N 10.2': serviceName$(j),tgb(j) pageoflow PgOf
+			pr #255,using 'form pos 5,C 30,N 10.2': serviceName$(j),tgb(j) pageoflow PgOf
 		end if
 		bdtotal+=tgb(j)
 	next j
@@ -276,12 +276,12 @@ return  ! /r
 PRINT_SUB_TOTALS: ! r:
 	pr #255: ""
 	pr #255: ""
-	pr #255,using 'Form POS 34,C 16,POS 53,N 13.2,POS 68,N 13.2,POS 84,N 12.2,POS 100,N 13.2': "Sub-Totals",st1,st2,st3,st4 pageoflow PgOf
+	pr #255,using 'form pos 34,C 16,pos 53,N 13.2,pos 68,N 13.2,pos 84,N 12.2,pos 100,N 13.2': "Sub-Totals",st1,st2,st3,st4 pageoflow PgOf
 	pr #255: ""
 	st1=st2=st3=st4=0
 	for j=1 to 10
 		if trim$(serviceName$(j))<>"" then
-			pr #255,using 'Form POS 5,C 30,N 10.2': serviceName$(j),subtotal_gb(j) pageoflow PgOf
+			pr #255,using 'form pos 5,C 30,N 10.2': serviceName$(j),subtotal_gb(j) pageoflow PgOf
 		end if
 	next j
 	mat subtotal_gb=(0)
@@ -292,7 +292,7 @@ PRINT_SUB_TOTALS: ! r:
 	tc$(4)="Credit Memos"
 	tc$(5)="Debit Memos"
 	for j=1 to 5
-		pr #255,using 'Form POS 5,C 25,N 15.2': tc$(j),st1(j) pageoflow PgOf
+		pr #255,using 'form pos 5,C 25,N 15.2': tc$(j),st1(j) pageoflow PgOf
 	next j
 	mat st1=(0)
 return  ! /r
@@ -301,11 +301,11 @@ return  ! /r
 !     gosub HDR
 !     pr #255: ""
 !     pr #255: ""
-!     pr #255,using 'Form POS 34,C 16,POS 53,N 13.2,POS 68,N 13.2,POS 84,N 12.2,POS 100,N 13.2': "Grand Totals",grand_total_a1,grand_total_a2,grand_total_a3,grand_total_a4 pageoflow PgOf
+!     pr #255,using 'form pos 34,C 16,pos 53,N 13.2,pos 68,N 13.2,pos 84,N 12.2,pos 100,N 13.2': "Grand Totals",grand_total_a1,grand_total_a2,grand_total_a3,grand_total_a4 pageoflow PgOf
 !     pr #255: ""
 !     for j=1 to 10
 !       if trim$(serviceName$(j))<>"" then
-!         pr #255,using 'Form POS 5,C 30,N 10.2': serviceName$(j),ggb(j) pageoflow PgOf
+!         pr #255,using 'form pos 5,C 30,N 10.2': serviceName$(j),ggb(j) pageoflow PgOf
 !       end if
 !     next j
 !     pr #255: "    ______________________________  __________"
@@ -315,7 +315,7 @@ return  ! /r
 !     tc$(4)="Credit Memos"
 !     tc$(5)="Debit Memos"
 !     for j=1 to 5
-!       pr #255,using 'Form POS 5,C 25,N 15.2': tc$(j),t1(j) pageoflow PgOf
+!       pr #255,using 'form pos 5,C 25,N 15.2': tc$(j),t1(j) pageoflow PgOf
 !     next j
 !   goto DONE ! /r
 DONE: !
@@ -327,7 +327,7 @@ Xit: fnXit
 DETERMINE_CURRRENT_BALANCE: !  r: determine current balance by subtracting or adding any transactions with a later date than the highest transaction date entered.
 	restore #ubtransvb,key>=z$&"         ": nokey L2140
 	READ_UBTRANSVB2: !
-	read #ubtransvb,using 'Form POS 1,C 10,N 8,N 1,12*PD 4.2,6*PD 5,PD 4.2,N 1': p$,tdate,tcode,tamount,mat tg,wr,wu,er,eu,gr,gu,tbal,pcode eof L2140
+	read #ubtransvb,using 'form pos 1,C 10,N 8,N 1,12*PD 4.2,6*PD 5,PD 4.2,N 1': p$,tdate,tcode,tamount,mat tg,wr,wu,er,eu,gr,gu,tbal,pcode eof L2140
 	! If TRIM$(Z$)="100018.00" Then Pause
 	if p$<>z$ then goto L2140
 	if filter_date_end<>0 and tdate>filter_date_end then goto L2080
@@ -343,7 +343,7 @@ DETERMINE_BEGINNING_BALANCE: ! r:
 	! If TRIM$(Z$)="100018.00" Then Pause
 	begbal=bal
 	restore #ubtransvb,key>=z$&"         ": nokey L2290
-	L2190: read #ubtransvb,using 'Form POS 1,C 10,N 8,N 1,12*PD 4.2,6*PD 5,PD 4.2,N 1': p$,tdate,tcode,tamount,mat tg,wr,wu,er,eu,gr,gu,tbal,pcode eof L2290
+	L2190: read #ubtransvb,using 'form pos 1,C 10,N 8,N 1,12*PD 4.2,6*PD 5,PD 4.2,N 1': p$,tdate,tcode,tamount,mat tg,wr,wu,er,eu,gr,gu,tbal,pcode eof L2290
 	if p$<>z$ then goto L2290
 	! If TRIM$(Z$)="100018.00" Then Pause
 	if tdate>=filter_date_start and tdate<=filter_date_end then goto L2230 else goto L2280

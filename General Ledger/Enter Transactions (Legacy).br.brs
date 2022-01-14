@@ -42,7 +42,7 @@
 	chdr_proof_total$(5)='Adjustments'
 	chdr_proof_total$(6)='End Balance'
 	cmask3$(1)=''
-	cmask3$(2)=cmask3$(3)=cmask3$(4)=cmask3$(5)="10"
+	cmask3$(2)=cmask3$(3)=cmask3$(4)=cmask3$(5)='10'
 	cmask3$(6)='10'
 ! General Ledger Breakdown Grid
 	mat chdr$(5)
@@ -74,7 +74,7 @@
 	cmask2$(7)=""
 
 	open #1: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,input
-	read #1,using 'Form POS 150,2*N 1,POS 298,15*PD 4,POS 382,N 2,POS 418,10*C 20,10*N 1,POS 668,10*C 12': mat xd,mat pgl,jccode,mat miscname$,mat dedcode,mat miscgl$
+	read #1,using 'form pos 150,2*N 1,pos 298,15*PD 4,pos 382,N 2,pos 418,10*C 20,10*N 1,pos 668,10*C 12': mat xd,mat pgl,jccode,mat miscname$,mat dedcode,mat miscgl$
 	close #1:
 ! /r
 	open #h_glmstr=fnH: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLIndex.h[cno],Shr",internal,outIn,keyed
@@ -279,7 +279,7 @@ MAIN: ! r:
 	end if
 	fnLbl(4,36,message$,50,left)
 
-	fnTxt(4,mypos,13,0,right,"10",0,"Enter the net transaction amount. If correcting a transaction, change the allocations and net will be adjusted accordingly.",0 )
+	fnTxt(4,mypos,13,0,right,'10',0,"Enter the net transaction amount. If correcting a transaction, change the allocations and net will be adjusted accordingly.",0 )
 	if sel=3 then resp$(2)="" else resp$(2)=str$(transactionamt)
 	fnLbl(5,1,"Reference #:",mylen,right)
 	fnTxt(5,mypos,12,0,0,"",0,"Enter check number, receipt # or adjusting entry number",0)
@@ -303,11 +303,11 @@ MAIN: ! r:
 	resp$(5)=fnrgl$(gl$)
 	if sel=3 then
 		fnLbl(7,60,"Net Adj:",8,right)
-		fnTxt(7,70,13,0,right,"10",1,"Amount to allocated to this general ledger number. Not applicable to adjustments.",0 )
+		fnTxt(7,70,13,0,right,'10',1,"Amount to allocated to this general ledger number. Not applicable to adjustments.",0 )
 		resp$(6)=str$(totalalloc)
 	else
 		fnLbl(7,60,"Amount:",8,right)
-		fnTxt(7,70,13,0,right,"10",0,"Amount to allocated to this general ledger number. Not applicable to adjustments.",0 )
+		fnTxt(7,70,13,0,right,'10',0,"Amount to allocated to this general ledger number. Not applicable to adjustments.",0 )
 		resp$(6)=""
 	end if
 	seltype=tr(6) : if tr(6)>4 then seltype=tr(6)-2
@@ -328,7 +328,7 @@ MAIN: ! r:
 	restore #glallocations:
 	mat glitem$(4)
 	do  ! READ_GL_ALLOCATIONS: !
-		read #glallocations,using 'Form Pos 1,c 12,pd 10.2,c 30': allocgl$,allocamt,td$ eof EO_FLEX1
+		read #glallocations,using 'form pos 1,c 12,pd 10.2,c 30': allocgl$,allocamt,td$ eof EO_FLEX1
 		glitem$(1)=str$(rec(glallocations))
 		glitem$(2)=allocgl$
 		glitem$(3)=str$(allocamt)
@@ -492,7 +492,7 @@ EXTRACT: ! r:
 	glkey$=lpad$(rtrm$(vn$),8)
 	restore #payeegl,key>=glkey$: nokey L4780
 READPAYEEGL: !
-	read #payeegl,using 'Form Pos 1,C 8,c 12,n 6.2,c 30',release: payeekey$,payeegl$,percent,td$ eof L4740
+	read #payeegl,using 'form pos 1,C 8,c 12,n 6.2,c 30',release: payeekey$,payeegl$,percent,td$ eof L4740
 	if payeekey$<>glkey$ then goto L4740
 	if percent=0 and lrec(glallocations)=0 then percent=100
 	allocamt=round(transactionamt*(percent*.01),2)
@@ -500,12 +500,12 @@ READPAYEEGL: !
 	goto READPAYEEGL
 L4740: !
 	if totalalloc<>transactionamt then
-		read #glallocations,using "Form pos 13,pd 10.2",rec=lrec(glallocations): lastallocation noRec L4770
+		read #glallocations,using "form pos 13,pd 10.2",rec=lrec(glallocations): lastallocation noRec L4770
 	else
 		goto L4770
 	end if
 	lastallocation+=transactionamt-totalalloc
-	rewrite #glallocations,using "Form pos 13,pd 10.2",rec=lrec(glallocations): lastallocation
+	rewrite #glallocations,using "form pos 13,pd 10.2",rec=lrec(glallocations): lastallocation
 	L4770: !
 	allocamt=0: ! kj  eXTRACT=0
 	L4780: !
@@ -518,7 +518,7 @@ DELETE_TRANS: ! r: deletes entire transaction
 	fnmsgbox(mat ml$,resp$,'',49)
 	if resp$="OK" then goto L5120 else goto MAIN
 L5120: restore #glallocations:
-L5130: read #glallocations,using "Form pos 1,c 12,pd 10.2,c 30,pd 5": gl$,allocation,td$,transadr eof L5170
+L5130: read #glallocations,using "form pos 1,c 12,pd 10.2,c 30,pd 5": gl$,allocation,td$,transadr eof L5170
 	delete #glallocations:
 	delete #h_gl_work,rec=transadr: ioerr ignore
 	goto L5130
@@ -573,7 +573,7 @@ L5310: !
 	if trim$(vn$)="" then goto EO_FLEX3
 	restore #payeegl,key>=vn$: nokey EO_FLEX3
 	do
-		read #payeegl,using 'Form Pos 1,C 8,c 12,n 6.2,c 30': payeekey$,payeegl$,percent,td$ eof EO_FLEX3
+		read #payeegl,using 'form pos 1,C 8,c 12,n 6.2,c 30': payeekey$,payeegl$,percent,td$ eof EO_FLEX3
 		if vn$<>payeekey$ then goto EO_FLEX3
 		glitem$(1)=str$(rec(payeegl))
 		glitem$(2)=payeekey$
@@ -610,7 +610,7 @@ PROOF_TOTALS: ! r: add and display proof totals
 	mat k_list$=("            "): mat k=(0) : td=tc=0
 	restore #h_gl_work:
 	do
-		read #h_gl_work,using "Form POS 1,c 12,N 6,PD 6.2,N 2,N 2,C 12,C 30,C 8 ,C 6,C 5,C 3,C 12": gl$,tr(4),tr(5),tr(6),tr(7),tr$,td$,vn$,mat jv$,key$ eof SCREEN_PROOF_TOTALS
+		read #h_gl_work,using "form pos 1,c 12,N 6,PD 6.2,N 2,N 2,C 12,C 30,C 8 ,C 6,C 5,C 3,C 12": gl$,tr(4),tr(5),tr(6),tr(7),tr$,td$,vn$,mat jv$,key$ eof SCREEN_PROOF_TOTALS
 !   pr 'read an entruy from work file:'&gl$&' - '&key$ : pause
 
 		for j=1 to 30
@@ -641,10 +641,10 @@ SCREEN_PROOF_TOTALS: !
 	fnTos(sn$="proof_totals")
 	mylen=20: mypos=mylen+3 : right=1
 	fnLbl(1,1,"Total Debits:",mylen,right)
-	fnTxt(1,mypos,15,0,right,"10",1,"This is total debits including adjustments",0 )
+	fnTxt(1,mypos,15,0,right,'10',1,"This is total debits including adjustments",0 )
 	resp$(1)=str$(td)
 	fnLbl(2,1,"Total Credits:",mylen,right)
-	fnTxt(2,mypos,15,0,right,"10",1,"This is total credits including adjustments",0 )
+	fnTxt(2,mypos,15,0,right,'10',1,"This is total credits including adjustments",0 )
 	resp$(2)=str$(tc)
 	fnLbl(4,1,"Type of Entry:",mylen,right)
 	fnTxt(4,mypos,15,0,0,"",1)
@@ -715,7 +715,7 @@ PPT_L6240: !
 		for j=1 to 30
 			if trim$(k_list$(j))<>"" then ! skip blanks
 				glitem3$(1)=k_list$(j)
-				glitem3$(2)=cnvrt$("Pic(-------,---,---.##)",k(j,4)) ! cmask3$(2)=cmask3$(3)=cmask3$(4)=cmask3$(5)="10"
+				glitem3$(2)=cnvrt$("Pic(-------,---,---.##)",k(j,4)) ! cmask3$(2)=cmask3$(3)=cmask3$(4)=cmask3$(5)='10'
 				glitem3$(3)=cnvrt$("Pic(-------,---,---.##)",-k(j,5))
 				glitem3$(4)=cnvrt$("Pic(-------,---,---.##)",k(j,6))
 				glitem3$(5)=cnvrt$("Pic(-------,---,---.##)",k(j,7))
@@ -745,7 +745,7 @@ PAYROLL: ! r:
 	if sel=3 then let fnLbl(4,1,"Amount:",mylen,right) else let fnLbl(4,1,"Net Amount:",mylen,right)
 	fnLbl(4,36,message$,50,left)
 
-	fnTxt(4,mypos,12,0,right,"10",0,"Enter the net transaction amount. If correcting a transaction, change the allocations and net will be adjusted accordingly.",0 )
+	fnTxt(4,mypos,12,0,right,'10',0,"Enter the net transaction amount. If correcting a transaction, change the allocations and net will be adjusted accordingly.",0 )
 	if sel=3 then resp$(2)="" else resp$(2)=str$(transactionamt)
 	fnLbl(5,1,"Reference #:",mylen,right)
 	fnTxt(5,mypos,12,0,0,"",0,"Enter check number.",0)
@@ -758,44 +758,44 @@ PAYROLL: ! r:
 	resp$(5)=fnrgl$(gl$)
 	if sel=3 then let fnLbl(7,60,"Net Adj:",mylen,right) else let fnLbl(7,60,"Amount:",mylen,right)
 	if sel=3 or sel=4 then disable=1 else disable=0
-	fnTxt(7,70,13,0,right,"10",disable,"Amount to allocated to this general ledger number. Not applicable to adjustments.",0 )
+	fnTxt(7,70,13,0,right,'10',disable,"Amount to allocated to this general ledger number. Not applicable to adjustments.",0 )
 	if sel=3 then resp$(6)=str$(totalalloc) else resp$(6)=""
 	fnLbl(1,4,"Type of Entry: "&typeofentry$(4:20),36,right)
 	fnLbl(1,38,"Bank Account: "&bankname$,50,right)
 	fnFra(8,1,10,70,"Payroll Breakdown","Enter the check breakdown.")
 	fnLbl(1,1,"Total Wage:",mylen,right,0,1)
-	fnTxt(1,22,12,0,right,"10",0,"Total wage before any deductions (gross).",1)
+	fnTxt(1,22,12,0,right,'10',0,"Total wage before any deductions (gross).",1)
 	resp$(7)=str$(xpr(2))
 	fnLbl(2,1,"Federal W/H:",mylen,right,0,1)
-	fnTxt(2,22,12,0,right,"10",0,"Total Federal withholdings entered as a positive figure).",1)
+	fnTxt(2,22,12,0,right,'10',0,"Total Federal withholdings entered as a positive figure).",1)
 	resp$(8)=str$(xpr(3))
 	fnLbl(3,1,"Fica W/H:",mylen,right,0,1)
-	fnTxt(3,22,12,0,right,"10",0,"Total Fica withholdings entered as a positive figure).",1)
+	fnTxt(3,22,12,0,right,'10',0,"Total Fica withholdings entered as a positive figure).",1)
 	resp$(9)=str$(xpr(4))
 	fnLbl(4,1,"State W/H:",mylen,right,0,1)
-	fnTxt(4,22,12,0,right,"10",0,"Total state withholdings entered as a positive figure).",1)
+	fnTxt(4,22,12,0,right,'10',0,"Total state withholdings entered as a positive figure).",1)
 	resp$(10)=str$(xpr(5))
 	fnLbl(5,1,"Local W/H:",mylen,right,0,1)
-	fnTxt(5,22,12,0,right,"10",0,"Total local withholdings entered as a positive figure).",1)
+	fnTxt(5,22,12,0,right,'10',0,"Total local withholdings entered as a positive figure).",1)
 	resp$(11)=str$(xpr(6))
 	for j=1 to 5
 		fnLbl(j+5,1,trim$(miscname$(j))&":",mylen,right,0,1)
-		fnTxt(j+5,22,12,0,right,"10",0,"Total "&trim$(miscname$(j))&" (enter as a positive figure).",1)
+		fnTxt(j+5,22,12,0,right,'10',0,"Total "&trim$(miscname$(j))&" (enter as a positive figure).",1)
 		resp$(j+11)=str$(xpr(j+6))
 	next j
 	for j=6 to 10
 		fnLbl(j-5,30,trim$(miscname$(j))&":",mylen,right,0,1)
-		fnTxt(j-5,51,12,0,right,"10",0,"Total "&trim$(miscname$(j))&" (enter as a positive figure).",1)
+		fnTxt(j-5,51,12,0,right,'10',0,"Total "&trim$(miscname$(j))&" (enter as a positive figure).",1)
 		resp$(j+11)=str$(xpr(j+6))
 	next j
 	fnLbl(6,30,"Tips:",mylen,right,0,1)
-	fnTxt(6,51,12,0,right,"10",0,"Total tips entered as a positive figure).",1)
+	fnTxt(6,51,12,0,right,'10',0,"Total tips entered as a positive figure).",1)
 	resp$(22)=str$(xpr(17))
 	fnLbl(7,30,"Weeks Worked:",mylen,right,0,1)
-	fnTxt(7,51,12,0,right,"30",0,"Total weeks worked during pay period.",1)
+	fnTxt(7,51,12,0,right,'30',0,"Total weeks worked during pay period.",1)
 	resp$(23)=str$(xpr(18))
 	fnLbl(8,30,"Eic:",mylen,right,0,1)
-	fnTxt(8,51,12,0,right,"10",0,"Total Earned Income Credit applied.",1)
+	fnTxt(8,51,12,0,right,'10',0,"Total Earned Income Credit applied.",1)
 	resp$(24)=str$(xpr(19))
 	if sel=1 or sel=6 then let fnButton(6,53,"E&xtract",15,"Extracts general ledger numbers from payee records",1,8)
 	if disable_payee=1 and (sel=1 or sel=6) then payee_button$ ="Enable &Payee" else payee_button$ ="Disable &Payee"
@@ -914,12 +914,12 @@ EditAllocations: ! r:  editing glallocation while still being entered into alloc
 	editrecord=val(resp$(7))
 	if editall=19 then editrecord=1
 	EA_READ_GLALLOC: !
-	read #glallocations,using "Form pos 1,c 12,pd 10.2,c 30,pd 5",rec=editrecord: gl$,allocation,td$,transadr noRec EA_FINIS
+	read #glallocations,using "form pos 1,c 12,pd 10.2,c 30,pd 5",rec=editrecord: gl$,allocation,td$,transadr noRec EA_FINIS
 	holdallocation=allocation
 	fnTos(sn$="GLInput3")
 	mylen=18: mypos=mylen+3 : right=1
 	fnLbl(2,1,"Amount:",mylen,right)
-	fnTxt(2,mypos,13,0,right,"10",0,"Enter the amount of this breakdown.",0 )
+	fnTxt(2,mypos,13,0,right,'10',0,"Enter the amount of this breakdown.",0 )
 	resp$(1)=str$(allocation)
 	fnLbl(1,1,"General Ledger #:",mylen,right)
 	fnqgl(1,mypos,0,2,1)
@@ -949,7 +949,7 @@ EditAllocations: ! r:  editing glallocation while still being entered into alloc
 		allocation=val(resp$(1))
 		transactionamt+=allocation-holdallocation ! update net amount of transaction
 		td$=resp$(3)
-		rewrite #glallocations,using "Form pos 1,c 12,pd 10.2,c 30",rec=editrecord: allocgl$,allocation,td$
+		rewrite #glallocations,using "form pos 1,c 12,pd 10.2,c 30",rec=editrecord: allocgl$,allocation,td$
 		totalalloc+=allocation-holdallocation !
 	end if
 	if editall=1 then
@@ -968,7 +968,7 @@ def fn_pr_proof_list(; ___,tr$*12,td$*30)
 		holdtr$=tr$
 		read #h_gl_work,using F_2B: gl$,tr(4),tr(5),tr(6),tr(7),tr$,td$,vn$,mat jv$,key$ eof PE_FINIS
 		if trim$(holdtr$)<>"" and holdtr$<>tr$ then
-			pr #255,using "Form pos 10,c 10,n 14.2,skip 1": "Net",netamount
+			pr #255,using "form pos 10,c 10,n 14.2,skip 1": "Net",netamount
 			netamount=0
 		end if
 		if tr(6)=3 then prntkey$="" else printkey$=key$
@@ -977,7 +977,7 @@ def fn_pr_proof_list(; ___,tr$*12,td$*30)
 		netamount+=tr(5)
 	loop
 	PE_FINIS: !
-	pr #255,using "Form pos 10,c 10,n 14.2,skip 1": "Net",netamount : netamount=0
+	pr #255,using "form pos 10,c 10,n 14.2,skip 1": "Net",netamount : netamount=0
 	fncloseprn
 fnend
 PROOF_LIST_PGOF: ! r:

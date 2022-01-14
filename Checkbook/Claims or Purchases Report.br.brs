@@ -26,7 +26,7 @@ ASK_SORT: !
 	execute "Index [Q]\CLmstr\unpdaloc.h[cno]"&' '&"[Q]\CLmstr\Uaidx2.h[cno] 1 20 Replace DupKeys -n" ! index in vendor, reference order
 	open #unpdaloc=8: "Name=[Q]\CLmstr\UnPdAloc.h[cno],KFName=[Q]\CLmstr\Uaidx2.h[cno],Shr",i,i,k
 	READ_PAYTRANS: !
-	read #paytrans,using 'Form POS 1,C 8,C 12,2*G 6,C 12,C 18,g 10.2,G 1': vn$,iv$,ivd,dd,po$,de$,upa,cde eof L420
+	read #paytrans,using 'form pos 1,C 8,C 12,2*G 6,C 12,C 18,g 10.2,G 1': vn$,iv$,ivd,dd,po$,de$,upa,cde eof L420
 	if coded=2 and cde=0 then goto READ_PAYTRANS
 	if fndate_mmddyy_to_ccyymmdd(dd)>fndate_mmddyy_to_ccyymmdd(d2) then goto READ_PAYTRANS
 	if ti1$<>"C" and (fndate_mmddyy_to_ccyymmdd(ivd)<ld1 or fndate_mmddyy_to_ccyymmdd(ivd)>hd1) then
@@ -35,23 +35,23 @@ ASK_SORT: !
 	ivnum+=1 ! Unique Number for each Invoice
 	restore #unpdaloc,key>=vn$&"            ":
 	READ_UNPDALOC: !
-	read #unpdaloc,using 'Form pos 1,c 8,c 12,N 3,N 6,N 3,PD 5.2,C 30': alvn$,aliv$,mat gl,amt,ade$ noRec READ_PAYTRANS eof READ_PAYTRANS
+	read #unpdaloc,using 'form pos 1,c 8,c 12,N 3,N 6,N 3,PD 5.2,C 30': alvn$,aliv$,mat gl,amt,ade$ noRec READ_PAYTRANS eof READ_PAYTRANS
 	if alvn$<>vn$ then goto READ_PAYTRANS
 	if trim$(aliv$)<>trim$(iv$) then goto READ_UNPDALOC
 	if fund=2 then de$=ade$(1:18)
 	if sum(gl)=0 and amt=0 then goto L410 ! don't write zero records
-	write #clwork,using 'Form POS 1,C 8,C 12,2*G 6,C 12,C 18,pd 10.2,G 1,N 3,N 6,N 3,N 8': vn$,iv$,ivd,dd,po$,de$(1:18),amt,cde,mat gl,ivnum
+	write #clwork,using 'form pos 1,C 8,C 12,2*G 6,C 12,C 18,pd 10.2,G 1,N 3,N 6,N 3,N 8': vn$,iv$,ivd,dd,po$,de$(1:18),amt,cde,mat gl,ivnum
 	L410: !
 	goto READ_UNPDALOC
 	L420: !
 	close #paytrans: : close #unpdaloc: : close #clwork:
 	upa=0 ! this sort is ok. it sorts a temporary work file. leave in
 	open #tmp=9: "Name=[Temp]\Control,Size=0,RecL=128,Replace",internal,output
-	write #tmp,using 'Form POS 1,C 128': "File CLWork"&wsid$&".h[cno],[Q]\CLmstr,,[Temp]\Addr,,,,,A,N"
+	write #tmp,using 'form pos 1,C 128': "File CLWork"&wsid$&".h[cno],[Q]\CLmstr,,[Temp]\Addr,,,,,A,N"
 	if fund=2 then
-		write #tmp,using 'Form POS 1,C 128': "Mask 74,12,N,A" ! "Mask 74,3,N,A,1,20,C,A,86,4,N,A"
+		write #tmp,using 'form pos 1,C 128': "Mask 74,12,N,A" ! "Mask 74,3,N,A,1,20,C,A,86,4,N,A"
 	else
-		write #tmp,using 'Form POS 1,C 128': "Mask 1,20,C,A,86,4,N,A"
+		write #tmp,using 'form pos 1,C 128': "Mask 1,20,C,A,86,4,N,A"
 	end if
 	close #tmp:
 	execute "Free [Temp]\Addr -n" ioerr ignore
@@ -73,12 +73,12 @@ ASK_SORT: !
 	L640: !
 	fnopenprn
 	vn$="": iv$=""
-L660: read #addr,using 'Form POS 1,PD 3': r4 eof END1
+L660: read #addr,using 'form pos 1,PD 3': r4 eof END1
 	if r4=0 then goto L660
-	read #clwork,using 'Form POS 86,N 4',rec=r4: ivnum
+	read #clwork,using 'form pos 86,N 4',rec=r4: ivnum
 	if hivnum=0 then upa=0 : goto L700 else goto L760
 	L700: !
-	read #clwork,using 'Form POS 1,C 8,C 12,2*G 6,C 12,C 18,pd 10.2,G 1,N 3,N 6,N 3,N 8',rec=r4: vn$,iv$,ivd,dd,po$,ade$,amt,cde,mat gl,ivnum
+	read #clwork,using 'form pos 1,C 8,C 12,2*G 6,C 12,C 18,pd 10.2,G 1,N 3,N 6,N 3,N 8',rec=r4: vn$,iv$,ivd,dd,po$,ade$,amt,cde,mat gl,ivnum
 	upa=upa+amt
 	hivnum=ivnum
 	gl$=cnvrt$("PIC(ZZ#)",gl(1))&cnvrt$("PIC(ZZZZZZ)",gl(2))&cnvrt$("PIC(ZZ#)",gl(3))
@@ -111,30 +111,30 @@ L660: read #addr,using 'Form POS 1,PD 3': r4 eof END1
 	t3=t3+upa : if rtrm$(ltrm$(iv$))="Received" or rtrm$(ltrm$(iv$))="Adjustment" then goto L970 else ft(3)=ft(3)+upa : dp(3)=dp(3)+upa
 	L970: !
 	vnam$=""
-	read #paymstr,using 'Form POS 9,C 30',key=vn$,release: vnam$ nokey L1000
+	read #paymstr,using 'form pos 9,C 30',key=vn$,release: vnam$ nokey L1000
 	goto L1010
 	L1000: !
 	if prcode=1 then
-		read #rpmstr,using 'Form POS 9,C 30',key=vn$: vnam$ nokey ignore
+		read #rpmstr,using 'form pos 9,C 30',key=vn$: vnam$ nokey ignore
 	end if
 	L1010: !
 	if trim$(vnam$)='CRIS PERRY' then pr 'vn$='&vn$ : pause
-	pr #255,using 'Form POS 1,C 32,C 12,2*PIC(ZZZZ/ZZ/ZZ),X 2,C 18,POS 87,N 10.2,POS 99,C 4,C 7,C 3': vnam$,iv$,ivd,dd,ade$(1:18),upa,gl$(1:3),gl$(4:9),gl$(10:12) pageoflow NEWPGE
+	pr #255,using 'form pos 1,C 32,C 12,2*PIC(ZZZZ/ZZ/ZZ),X 2,C 18,pos 87,N 10.2,pos 99,C 4,C 7,C 3': vnam$,iv$,ivd,dd,ade$(1:18),upa,gl$(1:3),gl$(4:9),gl$(10:12) pageoflow NEWPGE
 	upa=0
 	if endcode=1 then goto L1360
 	goto L700
 	L1050: !
 	if gl$(3:3)=" " then gl$(3:3)="0"
 	if gl$(12:12)=" " then gl$(12:12)="0"
-	read #work,using 'Form POS 13,pd 10.2',key=gl$: gla nokey L1120
+	read #work,using 'form pos 13,pd 10.2',key=gl$: gla nokey L1120
 	if amt<-20202020 then amt=0
 	gla=gla+amt
-	rewrite #work,using 'Form POS 13,pd 10.2': gla
+	rewrite #work,using 'form pos 13,pd 10.2': gla
 	goto L1150
 	L1120: !
 	if amt<-20202020 then amt=0
 	if amt<>0 then
-		write #work,using 'Form POS 1,C 12,pd 10.2': gl$,amt
+		write #work,using 'form pos 1,C 12,pd 10.2': gl$,amt
 	end if
 L1150: !
 return ! /r
@@ -151,19 +151,19 @@ L1360: ! r:
 	L1390: !
 	gosub TOTAL_FUND
 	pr #255: tab(87);"__________"
-	pr #255,using 'Form POS 67,C 18,N 12.2': "Final Total",t3 pageoflow NEWPGE
+	pr #255,using 'form pos 67,C 18,N 12.2': "Final Total",t3 pageoflow NEWPGE
 	pr #255: tab(87);"=========="
 	restore #work,key>="            ": nokey Finis
 	L1440: !
-	read #work,using 'Form POS 1,C 12,pd 10.2': gl$,gla eof Finis
+	read #work,using 'form pos 1,C 12,pd 10.2': gl$,gla eof Finis
 	if hf$="" or hf$=gl$(1:3) then goto L1470
 	gosub TOTNOFX
 	L1470: !
 	hf$=gl$(1:3)
 	de$=""
-	read #glmstr,using 'Form POS 13,C 50',key=gl$: de$ nokey L1500
+	read #glmstr,using 'form pos 13,C 50',key=gl$: de$ nokey L1500
 	L1500: !
-	pr #255,using 'Form POS 12,C 14,C 50,N 12.2': gl$,de$,gla pageoflow NEWPGE
+	pr #255,using 'form pos 12,C 14,C 50,N 12.2': gl$,de$,gla pageoflow NEWPGE
 	tnofx+=gla
 goto L1440 ! /r
  
@@ -171,7 +171,7 @@ TOTNOFX: ! r:
 	pr #255: tab(78);"__________"
 	! If FUND<>2 Then Goto 1550
 	if val(hf$)>0 then fd$="Total for Fund #: "&ltrm$(hf$) else fd$="Total"
-	pr #255,using 'Form POS 12,C 14,C 50,N 12.2': "",fd$,tnofx pageoflow NEWPGE
+	pr #255,using 'form pos 12,C 14,C 50,N 12.2': "",fd$,tnofx pageoflow NEWPGE
 	pr #255: pageoflow NEWPGE
 	tnofx=0
 return ! /r
@@ -185,7 +185,7 @@ Xit: fnXit
  
 TOTAL_FUND: ! r:
 	pr #255: tab(87);"__________"
-	pr #255,using 'Form POS 67,C 18,N 12.2': "Fund   Total",ft(3) pageoflow NEWPGE
+	pr #255,using 'form pos 67,C 18,N 12.2': "Fund   Total",ft(3) pageoflow NEWPGE
 	mat ft=(0)
 return  ! /r
  
@@ -196,7 +196,7 @@ ASK_PP1: ! r:
 	if pp1yn$="N" then goto END8
 	ld1=fndate_mmddyy_to_ccyymmdd(ld1) : hd1=fndate_mmddyy_to_ccyymmdd(hd1)
 	READ_TRMSTR: !
-	read #trmstr,using 'Form POS 1,N 2,N 1,C 8,G 6,PD 10.2,C 8,C 35,pos 78,n 1': bank_code,tcde,tr$(1),tr$(2),tr3,tr$(4),tr$(5),scd eof END8
+	read #trmstr,using 'form pos 1,N 2,N 1,C 8,G 6,PD 10.2,C 8,C 35,pos 78,n 1': bank_code,tcde,tr$(1),tr$(2),tr3,tr$(4),tr$(5),scd eof END8
 	tr$(3)=str$(tr3)
 	if tcde=2 then goto READ_TRMSTR ! skip receipts
 	if pr$="N" and scd=4 then goto READ_TRMSTR ! skip payroll checks
@@ -212,7 +212,7 @@ ASK_PP1: ! r:
 	key$=cnvrt$("Pic(zz)",bank_code)&str$(tcde)&tr$(1)
 	restore #tralloc,key=key$: nokey READ_TRMSTR
 	READ_TRALLOC: !
-	read #tralloc,using 'Form Pos 1,C 11,N 3,N 6,N 3,PD 5.2,C 30,C 6,X 3,C 12,N 1': newkey$,mat gl,amt,de$,ivd$,po$,pc eof READ_TRMSTR
+	read #tralloc,using 'form pos 1,C 11,N 3,N 6,N 3,PD 5.2,C 30,C 6,X 3,C 12,N 1': newkey$,mat gl,amt,de$,ivd$,po$,pc eof READ_TRMSTR
 	ivd=val(ivd$) conv ignore
 	if newkey$<>key$ then goto READ_TRMSTR
 	if ivd=0 then goto L2270
@@ -227,7 +227,7 @@ ASK_PP1: ! r:
 		paid$="Paid"
 	end if
 	WRITE_CLWORK: !
-	write #clwork,using 'Form POS 1,C 8,C 12,2*G 6,C 12,C 18,pd 10.2,G 1,N 3,N 6,N 3,N 8': tr$(4),paid$,ivd,0,po$,de$(1:18),amt,0,mat gl,ck1
+	write #clwork,using 'form pos 1,C 8,C 12,2*G 6,C 12,C 18,pd 10.2,G 1,N 3,N 6,N 3,N 8': tr$(4),paid$,ivd,0,po$,de$(1:18),amt,0,mat gl,ck1
 	EO_TRALLOC_LOOP: !
 goto READ_TRALLOC ! /r
  
@@ -242,11 +242,11 @@ SUB_FT2: ! r:
 	pr #255: "Fund   Amount"
 	pr #255: "____  __________"
 	if ft2(1000)<>0 then
-		pr #255,using 'Form POS 1,N 4,N 12.2': 0,ft2(1000) pageoflow NEWPGE
+		pr #255,using 'form pos 1,N 4,N 12.2': 0,ft2(1000) pageoflow NEWPGE
 	end if
 	for j=1 to 999
 		if ft2(j)<>0 then
-			pr #255,using 'Form POS 1,N 4,N 12.2': j,ft2(j) pageoflow NEWPGE
+			pr #255,using 'form pos 1,N 4,N 12.2': j,ft2(j) pageoflow NEWPGE
 		end if
 	next j
 return ! /r
@@ -283,10 +283,10 @@ ASK_TI1: ! r:
 	fnChk(11,41,"Include payroll checks:",1)
 	resp$(respc+=1)='False'
 	fnLbl(13,1,"Beginning Position of Department Number:",43,1)
-	fnTxt(13,46,2,0,1,"30",0,"If you have departmental breakdowns within a fund, you must identify the first digit of the department # within the general ledger number")
+	fnTxt(13,46,2,0,1,'30',0,"If you have departmental breakdowns within a fund, you must identify the first digit of the department # within the general ledger number")
 	resp$(respc+=1)=" "
 	fnLbl(14,1,"Ending Position of Department Number:",43,1)
-	fnTxt(14,46,2,0,1,"30",0,"Last digit representing department #. Example: GL # '001001600000' The beginning position would be 6 and the ending 7 if department number was the 16.")
+	fnTxt(14,46,2,0,1,'30',0,"Last digit representing department #. Example: GL # '001001600000' The beginning position would be 6 and the ending 7 if department number was the 16.")
 	resp$(respc+=1)=" "
 	fnCmdSet(2)
 	ckey=fnAcs(mat resp$)
@@ -326,14 +326,14 @@ return  ! /r
 HDR: ! r:
 	fd$=""
 	fund$=gl$(1:3)
-	read #hFund,using 'Form POS 4,C 25',key=fund$: fd$ nokey ignore ! changed from "nokey ignore" in an attempt to fix error 201
+	read #hFund,using 'form pos 4,C 25',key=fund$: fd$ nokey ignore ! changed from "nokey ignore" in an attempt to fix error 201
 	nofx=1 : pg+=1
-	pr #255,using 'Form POS 1,C 8,CC 86': date$,env$('cnam')
+	pr #255,using 'form pos 1,C 8,CC 86': date$,env$('cnam')
 	if ti1$="C" then tmp$="Claims" else tmp$="Purchases"
-	pr #255,using 'Form POS 1,C 8,POS 30,C 50': time$,tmp$&" Report-"&rtrm$(ty1$)&"-"&rtrm$(ty2$)
-	pr #255,using 'Form POS 1,C 4,N 4,CC 86': "Page",pg,date$("Month DD, CCYY")
+	pr #255,using 'form pos 1,C 8,pos 30,C 50': time$,tmp$&" Report-"&rtrm$(ty1$)&"-"&rtrm$(ty2$)
+	pr #255,using 'form pos 1,C 4,N 4,CC 86': "Page",pg,date$("Month DD, CCYY")
 	if fund<>2 then fd$=""
-	pr #255,using 'Form POS 1,Cc 102': fd$
+	pr #255,using 'form pos 1,Cc 102': fd$
 	pr #255: ""
 	pr #255: "                                              Invoice     Due                           Total          GL    "
 	pr #255: "Payee Name                      Invoice Numb    Date      Date    Description            Due          Number"

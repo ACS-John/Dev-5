@@ -59,7 +59,7 @@ SCR2: ! add/edit first screen of report
 	fnTos(sn$="Report-add") : _
 	respc=0: mylen=15: mypos=mylen+3
 	fnLbl(1,1,"Report #:",mylen,1)
-	fnTxt(1,mypos,2,2,0,"30",0,"") : _
+	fnTxt(1,mypos,2,2,0,'30',0,"") : _
 	resp$(respc+=1)=str$(rn)
 	fnLbl(2,1,"Report Title:",mylen,1)
 	fnTxt(2,mypos,78,78,0,"",0,"") : _
@@ -136,7 +136,7 @@ SCR3: ! ask column # to edit
 	fnTos(sn$="ask-column") : _
 	respc=0: mylen=15: mypos=mylen+3
 	fnLbl(1,1,"Column #:",mylen,1)
-	fnTxt(1,mypos,2,2,0,"30",0,"Column numbers must be from 1 to 20,") : _
+	fnTxt(1,mypos,2,2,0,'30',0,"Column numbers must be from 1 to 20,") : _
 	resp$(respc+=1)=str$(column)
 	fnCmdSet(2)
 	ckey=fnAcs(mat resp$) ! acs column
@@ -154,13 +154,13 @@ SCR4: ! edit/columns
 	fnTxt(3,mypos,50,50,0,"",0,"See instructions for creating the formula for the information that is to pr in this column.") : _
 	resp$(respc+=1)=f$(column)
 	fnLbl(4,1,"Starting Position:",mylen,left)
-	fnTxt(4,mypos,3,3,0,"30",0,"") : _
+	fnTxt(4,mypos,3,3,0,'30',0,"") : _
 	resp$(respc+=1)=str$(pp(column))
 	fnLbl(5,1,"Field Size:",mylen,left)
-	fnTxt(5,mypos,3,3,0,"30",0,"") : _
+	fnTxt(5,mypos,3,3,0,'30',0,"") : _
 	resp$(respc+=1)=str$(ppr(column))
 	fnLbl(6,1,"Decimal Positions:",mylen,left)
-	fnTxt(6,mypos,1,1,0,"30",0,"") : _
+	fnTxt(6,mypos,1,1,0,'30',0,"") : _
 	resp$(respc+=1)=str$(dp(column))
 	fnChk(7,mypos,"Detail Print:",left)
 	if fc(column)=1 then resp$(respc+=1)='True' else resp$(respc+=1)='False'
@@ -222,7 +222,7 @@ EDIT_ADD_REPORT: !
 	fnTos(sn$="namlst1") : _
 	mylen=25 : mypos=mylen+2: respc=0: left=1
 	fnLbl(1,1,"Report #:",mylen,left)
-	fnTxt(1,mypos,2,0,0,"30",0,"Each report must be assigned a unique number between 1 and 100.") : _
+	fnTxt(1,mypos,2,0,0,'30',0,"Each report must be assigned a unique number between 1 and 100.") : _
 	resp$(respc+=1)=str$(rn)
 	fnLbl(2,1,"Report Name:",mylen,left)
 	fnTxt(2,mypos,51,0,0,"",0,"Give each report a unique descriptive name.") : _
@@ -294,7 +294,7 @@ L2330: form skip 1,pos 1,c 30,skip 2
 		pr #255,using L2360: psc(j),psc(j+20),psc(j+40),psc(j+60),psc(j+80)
 L2360: form pos 1,5*n 20.3
 	next j
-	pr #255,using L2390: "Formula for Value","Starting","# of pr Positions","# of Decimal","Skip Detail Print","Total Column","Overall Totals"
+	pr #255,using L2390: "Formula for Value","Starting","# of pr Positions","# of Decimal","skip Detail Print","Total Column","Overall Totals"
 L2390: form skip 1,pos 1,c 17,pos 39,c 8,pos 48,c 20,pos 71,c 12,pos 84,c 17,pos 103,c 12,pos 119,c 14
 	pr #255,using L2410: "to be Printed","Print Position","Required","Positions","by Job","by System"
 L2410: form pos 1,c 13,pos 38,c 14,pos 53,c 8,pos 72,c 9,pos 107,c 6,pos 123,c 9,skip 2

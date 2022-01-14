@@ -29,7 +29,7 @@ SCR1: !
 	fnTos(sn$='CloseYear3')
 	lc=0 : mylen=20 : mypos=mylen+2 : width=50
 	fnLbl(lc+=1,1,"Year to Print:",18,1)
-	fnTxt(lc,mypos,4,0,1,"30",0,"You must choose the year to use printing a chart.")
+	fnTxt(lc,mypos,4,0,1,'30',0,"You must choose the year to use printing a chart.")
 	resp$(1)=""
 	fnFra(lc+=1,1,2,45,"Current Year or Prior Year","Indicate if the information is to be pulled form the current files or prior files.",0)
 	fnOpt(1,2,"Pull from Current",0,1)

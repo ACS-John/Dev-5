@@ -21,9 +21,9 @@ def library fnunpdaloc_v1_to_v2
 ! make sure the Key is right justified
 		open #unpdaloc=1: "Name=[Q]\CLmstr\UnPdAloc.h[cno],KFName=[Q]\CLmstr\UAIdx1.h[cno]",internal,outIn,keyed
 		for j=1 to lrec(unpdaloc)
-			read #unpdaloc,using 'Form Pos 1,C 8,c 12',rec=j: vn$,iv$ noRec L330
+			read #unpdaloc,using 'form pos 1,C 8,c 12',rec=j: vn$,iv$ noRec L330
 			vn$=lpad$(rtrm$(vn$),8): iv$=lpad$(rtrm$(iv$),12)
-			rewrite #unpdaloc,using 'Form Pos 1,Cr 8,c 12',rec=j: vn$,iv$
+			rewrite #unpdaloc,using 'form pos 1,Cr 8,c 12',rec=j: vn$,iv$
 L330: next j
 		close #unpdaloc:
 		fnIndex("[Q]\CLmstr\UnPdAloc.h[cno]","[Q]\CLmstr\UAIdx1.h[cno]","9 12")

@@ -1,10 +1,10 @@
 open #trmstr=1: "Name=[Q]\CLmstr\TRMSTR.h[cno]",internal,outIn
 open #2: "Name=[Q]\CLmstr\TRALLOC.h[cno]",i,outi,r
-L110: read #trmstr,using 'Form POS 1,N 2,N 1,C 8,POS 79,2*PD 3': bank_code,tcde,checkNumber$,mat tr eof END1
+L110: read #trmstr,using 'form pos 1,N 2,N 1,C 8,pos 79,2*PD 3': bank_code,tcde,checkNumber$,mat tr eof END1
 	v1=val(checkNumber$) conv L110
 	if v1<7822 or v1>7848 then goto L110
 	checkNumber$=cnvrt$("N 8",v1-3000)
-	rewrite #trmstr,using 'Form POS 4,C 8': checkNumber$
+	rewrite #trmstr,using 'form pos 4,C 8': checkNumber$
 	ta=0
 	r2=tr(1)
 L200: if r2=0 then goto L250

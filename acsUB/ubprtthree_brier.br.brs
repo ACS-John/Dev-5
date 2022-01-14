@@ -9,7 +9,7 @@ dim gb(10),pe$(4)*30,ba$(4)*30,at$(3)*40
 
 fnLastBillingDate(d1)
 open #21: "Name=[Q]\UBmstr\Company.h[cno],Shr",internal,input
-read #21,using "Form POS 41,2*C 40": at$(2),at$(3)
+read #21,using "form pos 41,2*C 40": at$(2),at$(3)
 close #21:
 open #ratemst:=8: "Name=[Q]\UBmstr\ubData\RateMst.h[cno],KFName=[Q]\UBmstr\ubData\RateIdx1.h[cno],Shr",i,i,k
 at$(1)=env$('cnam')
@@ -211,8 +211,8 @@ BULKSORT: ! r: bulk sort order
 	open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",i,i,k  ! open in Account order
 	open #6: "Name=[Temp]\Temp.[session],Replace,RecL=31",internal,output
 	do
-		read #1,using "Form POS 1,C 10,pos 1741,n 2,pos 1743,n 7,pos 1942,c 12": z$,route,seq,bulk$ eof L2220
-		write #6,using "Form POS 1,C 12,n 2,n 7,c 10": bulk$,route,seq,z$
+		read #1,using "form pos 1,C 10,pos 1741,n 2,pos 1743,n 7,pos 1942,c 12": z$,route,seq,bulk$ eof L2220
+		write #6,using "form pos 1,C 12,n 2,n 7,c 10": bulk$,route,seq,z$
 	loop
 	L2220: !
 	close #1: ioerr ignore

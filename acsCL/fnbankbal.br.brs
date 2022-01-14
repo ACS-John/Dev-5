@@ -5,10 +5,10 @@ def library fnbankbal(bankCode; ___,returnN,key$*2,bal)
 	open #hBank=fnH: "Name=[Q]\CLmstr\Bankmstr.h[cno],KFName=[Q]\CLmstr\BankIdx1.h[cno],Shr",i,i,k
 	if bankCode then
 		key$=cnvrt$('Pic(zz)',bankCode)
-		read #hBank,using 'Form Pos 45,PD 6.2',key=key$: returnN
+		read #hBank,using 'form pos 45,PD 6.2',key=key$: returnN
 	else
 		do
-			read #hBank,using 'Form Pos 45,PD 6.2': bal eof EohBank
+			read #hBank,using 'form pos 45,PD 6.2': bal eof EohBank
 			returnN+=bal
 		loop
 		EohBank: !

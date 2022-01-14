@@ -42,7 +42,7 @@ L400: pr newpage
 	pr f mat fl1$: mat sc1$
 	pr f "24,11,C 09,B,1": "Next (F1)"
 	pr f "24,21,C 10,B,2": "Print (F2)"
-	pr f "24,32,C 26,B,3": "Skip to Next Employee (F3)"
+	pr f "24,32,C 26,B,3": "skip to Next Employee (F3)"
 	pr f "24,59,C 09,B,5": "Stop (F5)"
 L460: input fields mat io1$: eno,mat inp conv CONV1
 	if ce>0 then io1$(ce)(ce1:ce2)="U": ce=0

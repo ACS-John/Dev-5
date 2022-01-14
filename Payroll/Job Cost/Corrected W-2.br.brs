@@ -17,7 +17,7 @@ dim dedcode$(20)*2
 dim dedyn$(20)*1
 dim miscded(20),box12(20),txt$*80,totalbox12(20)
 dim fm4$*255
-fm4$="FORM  POS 1,C 8"&rpt$(",C 12,G 10.2,3*G 1",6)
+fm4$="form  pos 1,C 8"&rpt$(",C 12,G 10.2,3*G 1",6)
 open #1: "Name=[Q]\PRmstr\Company.h[cno],Shr",internal,input
 read #1,using 'form pos 1,3*c 40,c 12,pos 150,10*c 8,n 2,pos 317,10*c 12,pos 618,10*n 1,pos 638,10*n 1': mat a$,b$,mat d$,loccode,mat e$,mat dedcode,mat dedfed
 for j=1 to 3: a$(j)=a$(j)(1:30): next j
@@ -62,13 +62,13 @@ ASK_INFO: !
 	fnTxt(1,mypos,10,0,1,"34",0,"Use format such as .062.",franum)
 	resp$(rc+=1)=str$(ssrate)
 	fnLbl(2,1,"Maximum Wage Subject to SS Withholdings:",mylen,1,0,franum)
-	fnTxt(2,mypos,10,0,1,"10",0,"Enter the maximum wage subject to social security withholdings for the current year just ended.",franum)
+	fnTxt(2,mypos,10,0,1,'10',0,"Enter the maximum wage subject to social security withholdings for the current year just ended.",franum)
 	resp$(rc+=1)=str$(ssmax)
 	fnLbl(4,1,"Medicare Withholding Rate:",mylen,1,0,franum)
 	fnTxt(4,mypos,10,0,1,"34",0,"Use format such as .0145 .",franum)
 	resp$(rc+=1)=str$(mcrate)
 	fnLbl(5,1,"Maximum Wage Subject to Medicare Withholdings:",mylen,1,0,franum)
-	fnTxt(5,mypos,10,0,1,"10",0,"At the present time there is no maximum.  Enter a number larger than any one's wages can be. For example, 999999.00",franum)
+	fnTxt(5,mypos,10,0,1,'10',0,"At the present time there is no maximum.  Enter a number larger than any one's wages can be. For example, 999999.00",franum)
 	resp$(rc+=1)=str$(mcmax)
 	fnFra(8,1,3,60,"Printing or Exporting","You have the option to either pr the W-2s or export them to another system for printing.")
 	cf+=1 : franum=cf : mylen=26 : mypos=mylen+2
@@ -79,10 +79,10 @@ ASK_INFO: !
 	fnFra(13,1,3,60,"Identify the Following Deductions","You have twenty miscellaneous deductions available to you. If you have Qualified Pension or Dependent Care, start with the first deduction and count down to identify the number of the deduction.")
 	cf+=1 : franum=cf
 	fnLbl(1,1,"Qualified Pension Plan:",mylen,1,0,franum)
-	fnTxt(1,mypos,2,0,1,"30",0,"If you have a qualified pension plan that requires the pension plan box to be checked, count down from your 1st miscellaneous deduction to determine the number to enter here.",franum)
+	fnTxt(1,mypos,2,0,1,'30',0,"If you have a qualified pension plan that requires the pension plan box to be checked, count down from your 1st miscellaneous deduction to determine the number to enter here.",franum)
 	resp$(rc+=1)=str$(pn1)
 	fnLbl(2,1,"Dependent Care Benefits:",mylen,1,0,franum)
-	fnTxt(2,mypos,2,0,1,"30",0,"If you have dependent care benefits that should be identifies on the W-2, count down from your 1st miscellaneous deduction to determine the number to enter here.",franum)
+	fnTxt(2,mypos,2,0,1,'30',0,"If you have dependent care benefits that should be identifies on the W-2, count down from your 1st miscellaneous deduction to determine the number to enter here.",franum)
 	resp$(rc+=1)=str$(dc1)
 	fnLbl(18,1,"Employee Name Format-(F)irst name 1st; (L)ast name 1st:",57,1,0,0)
 	fnTxt(18,60,1,0,1,"",0,"Is the first name shown first in the employee record or is the Last name shoun first. Indicate with an F or an L.",0)
@@ -90,13 +90,13 @@ ASK_INFO: !
 	fnFra(20,1,3,60,"W-2 Alignment","You can move the pr up or down on either W-2 by increasing or decreasing the millimeters on the top margin.")
 	cf+=1 : franum=cf
 	fnLbl(1,1,"Top Margin - Top W-2:",mylen,1,0,franum)
-	fnTxt(1,mypos,3,0,1,"30",0,"Decrease the top margin to move the pr up. Increase the top margin to move the W-2 down.",franum)
+	fnTxt(1,mypos,3,0,1,'30',0,"Decrease the top margin to move the pr up. Increase the top margin to move the W-2 down.",franum)
 	resp$(rc+=1)=str$(topmargin)
 	fnLbl(2,1,"Top Margin - Bottom W-2:",mylen,1,0,franum)
-	fnTxt(2,mypos,3,0,1,"30",0,"The spacing on the bottom W-2 is controlled seperate from the top W-2.",franum)
+	fnTxt(2,mypos,3,0,1,'30',0,"The spacing on the bottom W-2 is controlled seperate from the top W-2.",franum)
 	resp$(rc+=1)=str$(bottom)
 	fnLbl(3,1,"Position of Pension X:",mylen,1,0,franum)
-	fnTxt(3,mypos,3,0,1,"30",0,"Increasing the position of the X will move it right.  Decreasing will move it left.",franum)
+	fnTxt(3,mypos,3,0,1,'30',0,"Increasing the position of the X will move it right.  Decreasing will move it left.",franum)
 	resp$(rc+=1)=str$(posx)
 	fnCmdKey("&Next",1,1,0,"Proceed to next screen.")
 	fnCmdKey("&Cancel",5,0,1,"Returns to menu")
@@ -147,7 +147,7 @@ F_employee: form pos 1,n 8,3*c 30,c 11,pos 122,n 2
 L1160: first=1
 	checkkey$=cnvrt$("pic(zzzzzzz#)",eno)&cnvrt$("pic(zz#)",0)&cnvrt$("pd 6",0) ! index employee#,department# and payroll date
 	restore #4,key>=checkkey$: nokey L1040
-L1190: read #4,using "Form POS 1,N 8,n 3,PD 6,N 7,5*PD 3.2,37*PD 5.2": heno,tdn,prd,ckno,mat tdc,mat tcp eof L1650
+L1190: read #4,using "form pos 1,N 8,n 3,PD 6,N 7,5*PD 3.2,37*PD 5.2": heno,tdn,prd,ckno,mat tdc,mat tcp eof L1650
 	if heno<>eno then goto L1650
 	if prd<beg_date or prd>end_date then goto L1190 ! not this year
 	read #2,using "form pos 48,n 2", key=cnvrt$("pic(zzzzzzz#)",eno)&cnvrt$("pic(zzz)",tdn): tcd nokey L1230 ! get state code
@@ -343,7 +343,7 @@ TOT1: ! r:
 	mat k$=(""): ss$=stcode$=state$=pf$="": eno=0: k$(1)="Total Sheet"
 	x$=" ": p1=58: p2=126
 goto PRINTW2 ! /r
-PRINTW2: ! r: pr W2 FORM
+PRINTW2: ! r: pr W2 form
 	gosub ASK_OLD_INFO
 	column1=15
 	column2=60
@@ -613,7 +613,7 @@ ASK_DEDUCTIONS: ! r: ask if any misecllaneous deductions should pr in box 12
 		fnLbl(j+4,1,fullname$(j),mylen,1,0,0)
 		fnChk(j+4,26,"",0,0)
 		resp$(rc+=1)='False'
-		fnTxt(j+4,35,2,0,1,"30",0,"Enter the box number on the W-2 where this deduction should print.",0)
+		fnTxt(j+4,35,2,0,1,'30',0,"Enter the box number on the W-2 where this deduction should print.",0)
 		resp$(rc+=1)=str$(box12(j))
 		fnTxt(j+4,45,2,0,1,"",0,"Enter the Code that should appear in the box.",0)
 		resp$(rc+=1)=dedcode$(j)
@@ -673,52 +673,52 @@ ASK_OLD_INFO: ! r:
 	fnTxt(lc,mypos,11,0,0,"")
 	resp$(rc+=1)=ss$
 	fnLbl(lc+=1,1,"Total Wage:",mylen,1)
-	fnTxt(lc,mypos,10,0,0,"10")
+	fnTxt(lc,mypos,10,0,0,'10')
 	resp$(rc+=1)=str$(w(2))
 	fnLbl(lc+=1,1,"SS Wages:",mylen,1)
-	fnTxt(lc,mypos,10,0,0,"10")
+	fnTxt(lc,mypos,10,0,0,'10')
 	resp$(rc+=1)=str$(w(5))
 	fnLbl(lc+=1,1,"Medicare Wages:",mylen,1)
-	fnTxt(lc,mypos,10,0,0,"10")
+	fnTxt(lc,mypos,10,0,0,'10')
 	resp$(rc+=1)=str$(w(11))
 	fnLbl(lc+=1,1,"State Wages:",mylen,1)
-	fnTxt(lc,mypos,10,0,0,"10")
+	fnTxt(lc,mypos,10,0,0,'10')
 	resp$(rc+=1)=str$(w(9))
 	mypos+=37: fnLbl(lc=1,38,"Federal Wh:",mylen,1)
-	fnTxt(lc,mypos,10,0,0,"10")
+	fnTxt(lc,mypos,10,0,0,'10')
 	resp$(rc+=1)=str$(w(1))
 	fnLbl(lc+=1,38,"SS Withholdings:",mylen,1)
-	fnTxt(lc,mypos,10,0,0,"10")
+	fnTxt(lc,mypos,10,0,0,'10')
 	resp$(rc+=1)=str$(w(3))
 	fnLbl(lc+=1,38,"Medicare Wh:",mylen,1)
-	fnTxt(lc,mypos,10,0,0,"10")
+	fnTxt(lc,mypos,10,0,0,'10')
 	resp$(rc+=1)=str$(w(12))
 	fnLbl(lc+=1,38,"State Wh:",mylen,1)
-	fnTxt(lc,mypos,10,0,0,"10")
+	fnTxt(lc,mypos,10,0,0,'10')
 	resp$(rc+=1)=str$(w(7))
 	fnLbl(lc+=1,38,"Box 12a Code:",mylen,1)
 	fnTxt(lc,mypos,2,0,0,"")
 	resp$(rc+=1)=box1a$
 	fnLbl(lc+=1,38,"Box 12a Amount:",mylen,1)
-	fnTxt(lc,mypos,10,0,0,"10")
+	fnTxt(lc,mypos,10,0,0,'10')
 	resp$(rc+=1)=str$(box1)
 	fnLbl(lc+=1,38,"Box 12b Code:",mylen,1)
 	fnTxt(lc,mypos,2,0,0,"")
 	resp$(rc+=1)=box2a$
 	fnLbl(lc+=1,38,"Box 12b Amount:",mylen,1)
-	fnTxt(lc,mypos,10,0,0,"10")
+	fnTxt(lc,mypos,10,0,0,'10')
 	resp$(rc+=1)=str$(box2)
 	fnLbl(lc+=1,38,"Box 12c Code:",mylen,1)
 	fnTxt(lc,mypos,2,0,0,"")
 	resp$(rc+=1)=box3a$
 	fnLbl(lc+=1,38,"Box 12c Amount:",mylen,1)
-	fnTxt(lc,mypos,10,0,0,"10")
+	fnTxt(lc,mypos,10,0,0,'10')
 	resp$(rc+=1)=str$(box3)
 	fnLbl(lc+=1,38,"Box 12d Code:",mylen,1)
 	fnTxt(lc,mypos,2,0,0,"")
 	resp$(rc+=1)=box4a$
 	fnLbl(lc+=1,38,"Box 12d Amount:",mylen,1)
-	fnTxt(lc,mypos,10,0,0,"10")
+	fnTxt(lc,mypos,10,0,0,'10')
 	resp$(rc+=1)=str$(box4)
 	fnCmdKey('&Next',1,1,0)
 	fnCmdKey('&Cancel',5,0,1)

@@ -470,7 +470,7 @@
         ! -------------------------------- !
 11165   if widths>180 then fs$="04" : fst$="06" else !:
           if widths>120 then fs$="06": fst$="08" else !:
-            fs$="08": fst$="10"
+            fs$="08": fst$='10'
 11166 ! -------------------------------- !:
         ! ?emove grid lines if NOLINES is true                          !:
         ! ?                                                             !:
@@ -1567,7 +1567,7 @@
           pict_name$=srep$(picpath$&"\"&trim$(data$(pict_start+7:pict_end-1)),"\\","\") else !:
           pict_name$=trim$(data$(pict_start+7:pict_end-1))
 53050   fntype(pict_name$,rtffile)
-53052   ! x=POS(PICT_NAME$,"\",-1)+1 !:                                                         pr #RTFFILE: "{\par \fs16 Figure: "&PICT_NAME$(X:LEN(PICT_NAME$))&" \par }"
+53052   ! x=pos(PICT_NAME$,"\",-1)+1 !:                                                         pr #RTFFILE: "{\par \fs16 Figure: "&PICT_NAME$(X:LEN(PICT_NAME$))&" \par }"
 53054   pr #rtffile: srep$(data$(pict_end+2:len(data$)),"|","}{\tab}{")&"}"&crlf$
 53080 else if pos("1234567890",data$(1:1))>0 then 
 53082   mat ccells$(udim(cells$)) : fncells(rtffile,data$,mat cells$)
@@ -1640,7 +1640,7 @@
           ! ?Set the distance between cells.  The number is 1/2 the       !:
           ! ?distance measured in inches converted to twips               !:
           ! -------------------------------- !
-54260     ! IF POS(CCELLS$(CELL)(CSS:CSE-1),"tg")=1 THEN !:                                           x$=FNTWIPS$(.5*VAL(CCELLS$(CELL)(CSS+2:CSE-1))) !:                                    cALL$=SREP$(CALL$,"\trgaph108\trleft-108","\trgaph"&X$&"\trleft-"&X$&" ") !:          GOTO SETCELL
+54260     ! IF pos(CCELLS$(CELL)(CSS:CSE-1),"tg")=1 THEN !:                                           x$=FNTWIPS$(.5*VAL(CCELLS$(CELL)(CSS+2:CSE-1))) !:                                    cALL$=SREP$(CALL$,"\trgaph108\trleft-108","\trgaph"&X$&"\trleft-"&X$&" ") !:          GOTO SETCELL
 54261     if pos(ccells$(cell)(css:cse-1),"tg")=1 then !:
             x$=fntwips$(.5*val(ccells$(cell)(css+2:cse-1))) !:
             call$=srep$(call$,"\trgaph108\trleft-108","\trgaph"&x$) !:
@@ -1862,7 +1862,7 @@
 60080   infile_recl=min(32000,infile_lrec)
 60090   open #infile: "name="&infile$&",RECL="&str$(infile_recl),external,input,relative 
 60100   infile_rec=0
-60110   infile_frm$="FORM C "&str$(infile_recl)
+60110   infile_frm$="form C "&str$(infile_recl)
 60120   if infile_recl=32000 then 
 60130     if infile_rec*infile_recl+infile_recl<=infile_lrec then 
 60140       read #infile,using infile_frm$: inrec$ !:
@@ -1870,7 +1870,7 @@
             infile_rec+=1
 60150       goto 60130
 60160     else 
-60170       infile_frm$="FORM C "&str$(infile_lrec-infile_rec*32000)
+60170       infile_frm$="form C "&str$(infile_lrec-infile_rec*32000)
 60180       close #infile: 
 60190       open #infile: "name="&infile$&",RECL="&str$(infile_lrec-infile_rec*32000),external,input,relative 
 60200     end if 

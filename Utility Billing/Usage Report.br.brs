@@ -76,7 +76,7 @@ do ! r: main report loop
 	dx(1)=dx(3)=dx(5)=dx(7)=dx(9)=dx(11)=0
 	restore #h_trans,key>=z$&"         ": nokey L570
 	do
-		read #h_trans,using 'Form POS 1,C 10,N 8,pos 68,6*PD 5': transAcct$,transDate,trans_s1reading,trans_s1usage,trans_s3reading,trans_s3usage,trans_s5reading,trans_s5usage eof L570
+		read #h_trans,using 'form pos 1,C 10,N 8,pos 68,6*PD 5': transAcct$,transDate,trans_s1reading,trans_s1usage,trans_s3reading,trans_s3usage,trans_s5reading,trans_s5usage eof L570
 	loop until transDate=filterBillingDateCcyymdd or transAcct$<>z$
 	if transDate=filterBillingDateCcyymdd then
 		dx(1) =trans_s1reading
@@ -189,7 +189,7 @@ def fn_printTotals(totalRoute)
 			if ~totalRoute then
 				line$&="    "&cnvrt$("n 10",totalGrand(1,1))&"      "&cnvrt$("n 10",totalGrand(1,2))
 			end if
-			pr #255,using "Form POS 25,C 120": line$
+			pr #255,using "form pos 25,C 120": line$
 		end if
 
 		line$=''
@@ -199,7 +199,7 @@ def fn_printTotals(totalRoute)
 		if ~totalRoute then
 			line$&="    "&cnvrt$("n 10",totalGrand(2,1))&"      "&cnvrt$("n 10",totalGrand(2,2))
 		end if
-		pr #255,using "Form POS 25,C 120": line$
+		pr #255,using "form pos 25,C 120": line$
 
 		line$=''
 		if service4enabled then
@@ -208,7 +208,7 @@ def fn_printTotals(totalRoute)
 		if ~totalRoute then
 			line$&="    "&cnvrt$("n 10",totalGrand(3,1))&"      "&cnvrt$("n 10",totalGrand(3,2))
 		end if
-		pr #255,using "Form POS 25,C 120": line$
+		pr #255,using "form pos 25,C 120": line$
 
 		if totalRoute=1 then
 			pr #255: newpage

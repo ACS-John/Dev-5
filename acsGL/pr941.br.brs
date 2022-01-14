@@ -17,7 +17,7 @@ dim city$*15,state$*2,zip$*9,csz$*40,x$*40
 
 
 open #1: "Name=[Q]\GLmstr\Company.h[cno],Shr",i,i,r
-read #1,using 'Form POS 1,3*C 40,2*C 12,C 5,2*N 1,2*C 12,N 3,N 6,N 3,PD 7.2,C 30,POS 298,15*PD 4,POS 382,N 2,N 2,PD 5.3,PD 5.2,PD 5.3,PD 5.2,G 1,PD 5.3,PD 5.2,N 1,10*C 20,50*N 1,10*C 12',rec=1: mat a$,mat b$,c$,mat d,mat e$,a1,a2,a3,ucm,tb$,mat unused3,unused1,unused2,ficarate,ficawage,feducrat,feducwag,actr$,mcr,mcm,reccode,mat unused4$,mat dedcode,mat dedfed,mat dedfica,mat unused7,mat unused6,mat unused5$
+read #1,using 'form pos 1,3*C 40,2*C 12,C 5,2*N 1,2*C 12,N 3,N 6,N 3,PD 7.2,C 30,pos 298,15*PD 4,pos 382,N 2,N 2,PD 5.3,PD 5.2,PD 5.3,PD 5.2,G 1,PD 5.3,PD 5.2,N 1,10*C 20,50*N 1,10*C 12',rec=1: mat a$,mat b$,c$,mat d,mat e$,a1,a2,a3,ucm,tb$,mat unused3,unused1,unused2,ficarate,ficawage,feducrat,feducwag,actr$,mcr,mcm,reccode,mat unused4$,mat dedcode,mat dedfed,mat dedfica,mat unused7,mat unused6,mat unused5$
 close #1:
 ficarate=ficarate/100
 mcr=mcr*.01
@@ -26,7 +26,7 @@ MENU1: !
 	respc=0
 	if val(date$(4:5))=1 then taxyear=val(date$(1:2))+2000-1 else taxyear =val(date$(1:2))+2000 ! current tax year (if processing in jan, assume last year)
 	fnLbl(1,1,"Tax Year:",26,1)
-	fnTxt(1,30,4,0,0,"30",0,"")
+	fnTxt(1,30,4,0,0,'30',0,"")
 	resp$(respc+=1)=str$(taxyear)
 	option1$(1)="March 31"
 	option1$(2)="June 30"
@@ -42,39 +42,39 @@ MENU1: !
 	resp$(respc+=1)='True'
 	fnFra(5,1,4,30,"Tax Liability","Enter the total tax liability by month")
 	fnLbl(1,1,"Month 1:",10,1,0,1)
-	fnTxt(1,13,12,0,1,"10",0,"",1)
+	fnTxt(1,13,12,0,1,'10',0,"",1)
 	resp$(respc+=1)=""
 	fnLbl(2,1,"Month 2:",10,1,0,1)
-	fnTxt(2,13,12,0,1,"10",0,"",1)
+	fnTxt(2,13,12,0,1,'10',0,"",1)
 	resp$(respc+=1)=""
 	fnLbl(3,1,"Month 3:",10,1,0,1)
-	fnTxt(3,13,12,0,1,"10",0,"",1)
+	fnTxt(3,13,12,0,1,'10',0,"",1)
 	resp$(respc+=1)=""
 	fnFra(11,1,7,72,"Adjustments","Enter any applicable adjustments")
 	mylen=52
 	fnLbl(1,1,"Current quarter's fraction of cents:",mylen,1,0,2)
-	fnTxt(1,mylen+3,12,0,1,"10",0,"",2)
+	fnTxt(1,mylen+3,12,0,1,'10',0,"",2)
 	resp$(respc+=1)=""
 	fnLbl(2,1,"Current quarter's sick pay:",mylen,1,0,2)
-	fnTxt(2,mylen+3,12,0,1,"10",0,"",2)
+	fnTxt(2,mylen+3,12,0,1,'10',0,"",2)
 	resp$(respc+=1)=""
 	fnLbl(3,1,"Current quarter's adjustments for tips and ins:",mylen,1,0,2)
-	fnTxt(3,mylen+3,12,0,1,"10",0,"",2)
+	fnTxt(3,mylen+3,12,0,1,'10',0,"",2)
 	resp$(respc+=1)=""
 	fnLbl(4,1,"Current year's income tax withholding:",mylen,1,0,2)
-	fnTxt(4,mylen+3,12,0,1,"10",0,"",2)
+	fnTxt(4,mylen+3,12,0,1,'10',0,"",2)
 	resp$(respc+=1)=""
 	fnLbl(5,1,"Prior quarters' ss and medicare taxes:",mylen,1,0,2)
-	fnTxt(5,mylen+3,12,0,1,"10",0,"",2)
+	fnTxt(5,mylen+3,12,0,1,'10',0,"",2)
 	resp$(respc+=1)=""
 	fnLbl(6,1,"Special Additions to Federal income taxes:",mylen,1,0,2)
-	fnTxt(6,mylen+3,12,0,1,"10",0,"",2)
+	fnTxt(6,mylen+3,12,0,1,'10',0,"",2)
 	resp$(respc+=1)=""
 	fnLbl(7,1,"Special Additions to ss and medicare:",mylen,1,0,2)
-	fnTxt(7,mylen+3,12,0,1,"10",0,"",2)
+	fnTxt(7,mylen+3,12,0,1,'10',0,"",2)
 	resp$(respc+=1)=""
 	fnLbl(20,1,"Total deposits for quarter including overpayments:",mylen+1,1,0,0)
-	fnTxt(20,mylen+4,12,0,1,"10",0,"",0)
+	fnTxt(20,mylen+4,12,0,1,'10',0,"",0)
 	resp$(respc+=1)=""
 	fnCmdSet(2)
 	ckey=fnAcs(mat resp$)
@@ -123,7 +123,7 @@ L1090: m1=0
 ! Read #2,Using 1120: ENO,MAT EM$,SS$,EM5,EM6,TA Eof WK_END
 	read #2,using L1170: mat k,mat k$,mat l$,mat m eof WK_END
 L1170: form pos 1,n 4,3*c 25,c 11,36*pd 5.2,2*n 5
-!  Form POS 1,N 8,3*C 30,C 11,POS 120,2*N 2,POS 173,PD 3
+!  form pos 1,N 8,3*C 30,C 11,pos 120,2*N 2,pos 173,PD 3
 	for j=1 to 10
 		if dedfed(j)=1 and dedcode(j)=1 then dwy+=m(j+10): dwq+=m(j+11)
 		if dedfica(j)=1 and dedcode(j)=1 then dfy=dfy+m(j+10): dfq=dfq+m(j+11)
@@ -138,7 +138,7 @@ L1170: form pos 1,n 4,3*c 25,c 11,36*pd 5.2,2*n 5
 ! kEY$=CNVRT$("pic(ZZZZZZZZ)",ENO)&RPT$(CHR$(0),6) : _
 	! Restore #4,Key>=KEY$:
 ! Read #4,Using 1270: DEPENO,PRD Nokey 1360 Eof 1360
-! Form POS 1,N 8,PD 6
+! form pos 1,N 8,PD 6
 ! If EM5=1 Then pEDATE=BEGDATE+19 ! monthly pay period
 ! If EM5=2 Then pEDATE=BEGDATE+15 ! semi-monthly
 ! If EM5=3 Then pEDATE=BEGDATE+14 ! bi-weekly
@@ -388,7 +388,7 @@ L3830: close #3: ioerr L3840
 L3840: !
 	fnpa_finis
 return
-CSZ: ! EXTRACT  CITY$,STATE$,ZIP$ FORM CSZ$
+CSZ: ! EXTRACT  CITY$,STATE$,ZIP$ form CSZ$
 L3890: p1=pos(csz$,".",1)
 	if p1>0 then csz$(p1:p1)=" ": p2=p1: goto L3890
 ! IF P2>0 AND CSZ$(P2+1:P2+1)=" " THEN cSZ$(P2+1:P2+1)="" ! dump any extra spaces

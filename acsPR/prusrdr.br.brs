@@ -9,7 +9,7 @@
 	fnTop(program$,cap$="User Designed Report (2)")
 	open #1: "Name=S:\acsPR\JCReport.mst,KFName=S:\acsPR\JCReport.idx,Shr",i,i,k
 	for j=1 to 20 : _
-		read #1,using 'Form POS 1,N 2,C 74': rn(j),rn$(j) eof L110 : _
+		read #1,using 'form pos 1,N 2,C 74': rn(j),rn$(j) eof L110 : _
 	next j
 L110: close #1:
 L120: pr newpage : _

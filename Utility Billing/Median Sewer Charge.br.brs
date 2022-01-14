@@ -86,7 +86,7 @@ L540: form pos 1,c 10,n 8,n 1,12*pd 4.2,6*pd 5,pd 4.2,n 1
 	goto L530
 
 L620: if t1>0 then t3=int(t2/t1) else t3=0
-	write #5,using "Form POS 1,C 10,N 12.2": x$,t3
+	write #5,using "form pos 1,C 10,N 12.2": x$,t3
 	goto L470
 
 DONE: ! 
@@ -104,7 +104,7 @@ L840: execute "Index [Q]\UBmstr\MEANs.h[cno],[Q]\UBmstr\MEANIDX.h[cno] 11,12,REP
 	open #5: "Name=[Q]\UBmstr\MEANs.h[cno],KFName=[Q]\UBmstr\MEANIDX.h[cno],Shr",internal,outIn,keyed 
 	gosub HEADER
 	means=int(lrec(5)/2)
-L880: read #5,using "Form POS 1,C 10,N 12.2": z$,t3 eof L940
+L880: read #5,using "form pos 1,C 10,N 12.2": z$,t3 eof L940
 	x=x+1
 	pr #255,using L910: z$,t3 pageoflow L950
 L910: form pos 11,c 10,x 3,n 12.2,skip 1

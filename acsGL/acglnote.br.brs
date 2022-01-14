@@ -27,7 +27,7 @@ if tempx=13 then actpd$="thirteen"
 if tempx=14 then actpd$="fourteen"
 L170: !
 	open #1: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,input
-	read #1,using 'Form POS 195,C 30': tb$
+	read #1,using 'form pos 195,C 30': tb$
 	close #1:
 	tb$="("&trim$(tb$)&")"
 	if fnprocess=1 then t=2 : goto L290

@@ -11,7 +11,7 @@ dim gb(10),pe$(4)*30,ba$(4)*30,at$(3)*40,billstart$*5,billend$*5
 
 fnLastBillingDate(d1)
 open #21: "Name=[Q]\UBmstr\Company.h[cno],Shr",internal,input 
-read #21,using "Form POS 41,2*C 40": at$(2),at$(3)
+read #21,using "form pos 41,2*C 40": at$(2),at$(3)
 close #21: 
 at$(1)=env$('cnam')
 z=21
@@ -103,7 +103,7 @@ L570: if sl1=1 then goto SCREEN3
 	if s5=0 then goto L640
 L590: read #7,using L600: r6 eof F5_CANCEL
 L600: form pos 1,pd 3
-	read #6,using "Form POS 1,C 5,C 4,C 10",rec=r6: zip5$,cr$,z$ noRec L590
+	read #6,using "form pos 1,C 5,C 4,C 10",rec=r6: zip5$,cr$,z$ noRec L590
 	read #1,using L650,key=z$: z$,mat e$,f$,a3,mat b,final,mat d,bal,f,mat g,bra,mat gb,route nokey L590
 	goto L650
 L640: read #2,using L650: z$,mat e$,f$,a3,mat b,final,mat d,bal,f,mat g,bra,mat gb,route eof F5_CANCEL
@@ -184,8 +184,8 @@ L1220: form pos 1,c 10,pos 296,pd 4,pos 1741
 	if prtbkno><route then goto END5
 L1250: if f><d1 then goto L1210
 	zip5$=cr$=""
-	read #5,using "Form POS 96,C 5,POS 108,C 4",key=z$: zip5$,cr$ nokey L1280
-L1280: write #6,using "Form POS 1,C 5,C 4,C 10": zip5$,cr$,z$
+	read #5,using "form pos 96,C 5,pos 108,C 4",key=z$: zip5$,cr$ nokey L1280
+L1280: write #6,using "form pos 1,C 5,C 4,C 10": zip5$,cr$,z$
 	goto L1210
 !
 END5: close #6: 

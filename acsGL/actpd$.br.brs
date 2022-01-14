@@ -7,9 +7,9 @@ def library fnactpd$(;actpd$)
 		fncno(cno)
 		open #tmp=fnH: "Name=[Q]\GLmstr\Company.h[cno],Shr",i,outi,r
 		if get_or_put=get then : _
-			read #tmp,using "Form POS 270,C 6",rec=1: actpd$ noRec CLOSE_TMP
+			read #tmp,using "form pos 270,C 6",rec=1: actpd$ noRec CLOSE_TMP
 		if get_or_put=put then : _
-			rewrite #tmp,using "Form POS 270,C 6",rec=1: actpd$
+			rewrite #tmp,using "form pos 270,C 6",rec=1: actpd$
 CLOSE_TMP: close #tmp:
 		fnactpd$=actpd$
 Xit: !

@@ -9,7 +9,7 @@ FORM1: form n 4,x 6,n 4
 for x=1 to 20
 	write #1,using FORM1: x ! ,X+50
 	asdf=rec(1)
-	rewrite #1,using "Form Pos 11,N 4",rec=asdf: x+50
+	rewrite #1,using "form pos 11,N 4",rec=asdf: x+50
 next x
 
 close #1: : close #2: 

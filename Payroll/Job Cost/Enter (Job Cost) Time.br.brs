@@ -87,17 +87,17 @@ L420: fnTos
 	fncmbsubcat(9,mypos)
 	resp$(respc+=1)=str$(ji2(2))
 	fnLbl(10,1,"Amount:",mylen,1)
-	fnTxt(10,mypos,10,10,0,"10",0,"Amount to be charged to job. Payroll will be extended as it is posted.")
+	fnTxt(10,mypos,10,10,0,'10',0,"Amount to be charged to job. Payroll will be extended as it is posted.")
 	resp$(respc+=1)=str$(ji2(3))
 	fnLbl(11,1,"Deduction/Addition Code:",mylen,1)
 	fncomboa("Deductions",11,mypos,mat comboname$,empty$,23)
 	if ji2(4)=0 then resp$(respc+=1)=comboname$(1): goto L700
 	if ji2(4)>0 and ji2(4)<=20 then resp$(respc+=1)=comboname$(ji2(4)) else resp$(respc+=1)=""
 L700: fnLbl(12,1,"Units:",mylen,1)
-	fnTxt(12,mypos,6,6,0,"30",0,"Enter units, if applicable.")
+	fnTxt(12,mypos,6,6,0,'30',0,"Enter units, if applicable.")
 	resp$(respc+=1)=str$(ji2(5))
 	fnLbl(13,1,"Personnel Burden:",mylen,1)
-	fnTxt(13,mypos,10,10,0,"10",0,"Personnel burden will calculated automatically if you have the burden % set up on each employee.")
+	fnTxt(13,mypos,10,10,0,'10',0,"Personnel burden will calculated automatically if you have the burden % set up on each employee.")
 	resp$(respc+=1)=str$(pt)
 	picture=0
 	fnCmdKey("&Save",1,1,0,"Saves all changes.")
@@ -149,7 +149,7 @@ L1060: ji2(3)=val(resp$(10)) ! amount
 	pt=val(resp$(13)) ! personnel burden
 	gosub UPDATE_AMOUNT
 	empnam$=""
-	read #1,using "FORM POS 9,C 30",key=cnvrt$("pic(ZZZZZZZ#)",ji1(1)): empnam$ nokey L1110
+	read #1,using "form pos 9,C 30",key=cnvrt$("pic(ZZZZZZZ#)",ji1(1)): empnam$ nokey L1110
 L1110: if addone=1 then goto L1120 else goto L1150
 L1120: write #3,using L1140: mat ji1, jn$, mat ji2, pt, empnam$, sal
 	goto L1160
@@ -234,11 +234,11 @@ CORRECTIONS: !
 	ch2$(13)="Units"
 	ch2$(14)="Burden"
 	mat ch2$(14) ! : Mat CM2$(14) : Mat ITEM2$(14)
-	cm2$(1)="30": cm2$(2)="30": cm2$(3)="30"
+	cm2$(1)='30': cm2$(2)='30': cm2$(3)='30'
 	cm2$(4)="1"
-	cm2$(5)="30": cm2$(6)="32": cm2$(7)="32"
-	cm2$(8)="": cm2$(9)="30": cm2$(10)="30"
-	cm2$(11)="10": cm2$(12)="30": cm2$(13)="30": cm2$(14)="10"
+	cm2$(5)='30': cm2$(6)="32": cm2$(7)="32"
+	cm2$(8)="": cm2$(9)='30': cm2$(10)='30'
+	cm2$(11)='10': cm2$(12)='30': cm2$(13)='30': cm2$(14)='10'
 	fnflexinit1('Cat',1,1,10,70,mat ch2$,mat cm2$,1,usefile)
 	restore #3:
 	do
@@ -266,7 +266,7 @@ CORRECTIONS: !
 	if ckey=4 then delete #3,rec=editrec: : goto CORRECTIONS
 goto CORRECTIONS
 UPDATE_AMOUNT: !
-	read #2,using 'Form POS 1,N 8,n 3,c 12,4*N 6,3*N 2,pd 4.2,23*PD 4.2',key=cnvrt$("pic(ZZZZZZZ#)",ji1(1))&cnvrt$("pic(ZZ#)",ji1(4)): teno,tdn,gl$,mat tdt,mat tcd,tli,mat tdet nokey L2270
+	read #2,using 'form pos 1,N 8,n 3,c 12,4*N 6,3*N 2,pd 4.2,23*PD 4.2',key=cnvrt$("pic(ZZZZZZZ#)",ji1(1))&cnvrt$("pic(ZZ#)",ji1(4)): teno,tdn,gl$,mat tdt,mat tcd,tli,mat tdet nokey L2270
 goto L2280
 L2270: !
 	mat ml$(2)

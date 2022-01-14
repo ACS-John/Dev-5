@@ -42,10 +42,10 @@
 
 	fncreg_read('Second Penalty Calculation Min Balance',minimumbal$) : minimumbal=val(minimumbal$) conv ignore
 	fncreg_read('Second Penalty Calculation Penalty Amount',penaltyamt$) : penaltyamt=val(penaltyamt$) conv ignore
-	fncreg_read('Second Penalty Calculation Skip Service 10 Rate 9 Customers',skip_s10r9$) ! : penaltyamt=val(penaltyamt$) conv ignore
+	fncreg_read('Second Penalty Calculation skip Service 10 Rate 9 Customers',skip_s10r9$) ! : penaltyamt=val(penaltyamt$) conv ignore
 	if minimumbal=0 then
 		open #minbal:=5: "Name=[Q]\UBmstr\Minbal.h[cno],Shr",i,outi,r ioerr ignore
-		read #minbal,using 'Form POS 1,n 10.2',rec=1,release: minimumbal ioerr ignore
+		read #minbal,using 'form pos 1,n 10.2',rec=1,release: minimumbal ioerr ignore
 		close #minbal: ioerr ignore
 	end if
 
@@ -64,12 +64,12 @@ SCREEN1: !
 	fnChk(5,31,"Print Mailing Address:",1)
 	resp$(rc+=1)='False'
 	fnLbl(6,1,"Minimum Balance:",mylen,1)
-	fnTxt(6,mypos,8,0,1,"10",0,"The customer's balance must be at least this amount before a penalty will be calculated.")
+	fnTxt(6,mypos,8,0,1,'10',0,"The customer's balance must be at least this amount before a penalty will be calculated.")
 	resp$(rc+=1)=str$(minimumbal)
 	fnLbl(7,1,"Penalty Amount:",mylen,1)
-	fnTxt(7,mypos,8,0,1,"10",0,"Amount of penalty.")
+	fnTxt(7,mypos,8,0,1,'10',0,"Amount of penalty.")
 	resp$(rc+=1)=str$(penaltyamt)
-	fnChk(9,31,"Skip Customers with a "&trim$(serviceName$(10))&" Rate Code of 9",1)
+	fnChk(9,31,"skip Customers with a "&trim$(serviceName$(10))&" Rate Code of 9",1)
 	resp$(rc+=1)=skip_s10r9$
 	fnLbl(10,50,'') ! avoids error 857 caused by check box (skip customers...) - it is a bug in acs_component - jb 2019/08/22
 	fnCmdSet(2)
@@ -98,7 +98,7 @@ SCREEN1: !
  
 	fncreg_write('Second Penalty Calculation Min Balance',str$(minimumbal))
 	fncreg_write('Second Penalty Calculation Penalty Amount',str$(penaltyamt))
-	fncreg_write('Second Penalty Calculation Skip Service 10 Rate 9 Customers',skip_s10r9$)
+	fncreg_write('Second Penalty Calculation skip Service 10 Rate 9 Customers',skip_s10r9$)
 	fnAutomatedSavePoint('before')
 	open #customer=1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,outIn,keyed
 	open #h_trans=fnH: "Name=[Q]\UBmstr\ubTransVB.h[cno],KFName=[Q]\UBmstr\ubtrindx.h[cno],Shr",internal,outIn,keyed
@@ -109,7 +109,7 @@ SCREEN1: !
 	gosub HDR
 	do
 		READ_CUSTOMER: ! r:
-		read #customer,using 'Form POS 1,C 10,4*C 30,POS 143,7*PD 2,POS 292,PD 4.2,PD 4,12*PD 4.2,POS 388,10*PD 5.2,POS 1741,N 2,N 7,2*N 6,N 9,PD 5.2,N 3,3*N 9,3*N 2,3*N 3,N 1,3*N 9,3*PD 5.2,C 30,7*C 12,3*C 30': z$,mat e$,mat a,bal,f,mat g,mat gb,mat extra eof EO_CUSTOMER
+		read #customer,using 'form pos 1,C 10,4*C 30,pos 143,7*PD 2,pos 292,PD 4.2,PD 4,12*PD 4.2,pos 388,10*PD 5.2,pos 1741,N 2,N 7,2*N 6,N 9,PD 5.2,N 3,3*N 9,3*N 2,3*N 3,N 1,3*N 9,3*PD 5.2,C 30,7*C 12,3*C 30': z$,mat e$,mat a,bal,f,mat g,mat gb,mat extra eof EO_CUSTOMER
 		! If TRIM$(Z$)="100120.06" Then Pause
 		if skip_s10r9$='True' and a(7)=9 then
 			!   pr 'skipping '&z$&' because service 10 rate code is a 9'
@@ -145,19 +145,19 @@ SCREEN1: !
 		transkey$=z$&cnvrt$("pic(########)",pendat)&cnvrt$("pic(#)",tcode)
 		tamount=sum(tg)
 		! add all penalties into total transaction amount
-		read #h_trans,using 'Form POS 1,C 10,N 8,N 1,12*PD 4.2,6*PD 5,PD 4.2,N 1',key=transkey$: y$,olddate,oldcode,oldamount,mat oldtg nokey L990 ! check for recalk
+		read #h_trans,using 'form pos 1,C 10,N 8,N 1,12*PD 4.2,6*PD 5,PD 4.2,N 1',key=transkey$: y$,olddate,oldcode,oldamount,mat oldtg nokey L990 ! check for recalk
 		bal=bal-oldamount
 		for j=1 to 10
 			gb(j)=gb(j)-tg(j) ! take off of balance breakdown
 		next j
-		rewrite #h_trans,using 'Form POS 1,C 10,N 8,N 1,12*PD 4.2,6*PD 5,PD 4.2,N 1': z$,pendat,2,tamount,mat tg,0,0,0,0,0,0,bal,pcode
+		rewrite #h_trans,using 'form pos 1,C 10,N 8,N 1,12*PD 4.2,6*PD 5,PD 4.2,N 1': z$,pendat,2,tamount,mat tg,0,0,0,0,0,0,bal,pcode
 		goto L1000
 		
 		L990: !
-		write #h_trans,using 'Form POS 1,C 10,N 8,N 1,12*PD 4.2,6*PD 5,PD 4.2,N 1': z$,pendat,2,tamount,mat tg,0,0,0,0,0,0,bal,pcode
+		write #h_trans,using 'form pos 1,C 10,N 8,N 1,12*PD 4.2,6*PD 5,PD 4.2,N 1': z$,pendat,2,tamount,mat tg,0,0,0,0,0,0,bal,pcode
 		L1000: !
 		totb+=bal
-		rewrite #customer,using 'Form POS 292,PD 4.2,POS 388,10*PD 5.2': bal,mat gb
+		rewrite #customer,using 'form pos 292,PD 4.2,pos 388,10*PD 5.2': bal,mat gb
 		if extra(1)<0 or extra(1)>99 then extra(1)=99
 		route(extra(1))+=sum(pencolumn)
 		! pr extra(1)
@@ -168,8 +168,8 @@ SCREEN1: !
 			pr #255,using F_PRINT_LINE: z$,e$(2),mat pencolumn,bal,e$(1)(1:25) pageoflow PgOf
 		end if
 		if printmail=1 then
-			pr #255,using "Form POS 15,C 30": e$(3) pageoflow PgOf
-			pr #255,using "Form POS 15,C 30": e$(4) pageoflow PgOf
+			pr #255,using "form pos 15,C 30": e$(3) pageoflow PgOf
+			pr #255,using "form pos 15,C 30": e$(4) pageoflow PgOf
 		end if
 		F_PRINT_LINE: form pos 1,c 10,x 4,c 30,pos 52,pencount*pic(---------.##),x 2,pic(-------.##),x 2,c 25
 	loop
@@ -180,7 +180,7 @@ EO_CUSTOMER: !
 		tmp$=tmp$&" {\ul"&rpt$(" ",12)&"}"
 	next j
 	pr #255: tmp$
-	pr #255,using "Form POS 17,C 30,x 5,pencount*N 12.2,N 12.2": "Overall Totals",mat coltot,totb
+	pr #255,using "form pos 17,C 30,x 5,pencount*N 12.2,N 12.2": "Overall Totals",mat coltot,totb
 	tmp$= rpt$(" ",52)&"{\ul \strike"&rpt$(" ",12)&"}"
 	for j=1 to udim(mat columnhead$)
 		tmp$=tmp$&" {\ul \strike"&rpt$(" ",12)&"}"

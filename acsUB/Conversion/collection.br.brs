@@ -24,11 +24,11 @@ do
 	tdate=fndate_mmddyy_to_ccyymmdd(n)
 	tamount=m
 	for j=1 to 10 : tg(j)=alloc(j): next j
-	read #2,using 'Form POS 1,C 10,N 8,N 1,12*PD 4.2,6*PD 5,PD 4.2,N 1',key=x$&cnvrt$("pic(########)",tdate)&str$(tcode): p$ nokey L420
-	rewrite #2,using 'Form POS 1,C 10,N 8,N 1,12*PD 4.2,6*PD 5,PD 4.2,N 1',key=x$&cnvrt$("pic(########)",tdate)&str$(tcode): x$,tdate,tcode,tamount,mat tg,wr,wu,er,eu,gr,gu,tbal,pcode
+	read #2,using 'form pos 1,C 10,N 8,N 1,12*PD 4.2,6*PD 5,PD 4.2,N 1',key=x$&cnvrt$("pic(########)",tdate)&str$(tcode): p$ nokey L420
+	rewrite #2,using 'form pos 1,C 10,N 8,N 1,12*PD 4.2,6*PD 5,PD 4.2,N 1',key=x$&cnvrt$("pic(########)",tdate)&str$(tcode): x$,tdate,tcode,tamount,mat tg,wr,wu,er,eu,gr,gu,tbal,pcode
 	goto L430
 	L420: !
-	write #2,using 'Form POS 1,C 10,N 8,N 1,12*PD 4.2,6*PD 5,PD 4.2,N 1': x$,tdate,tcode,tamount,mat tg,wr,wu,er,eu,gr,gu,tbal,pcode
+	write #2,using 'form pos 1,C 10,N 8,N 1,12*PD 4.2,6*PD 5,PD 4.2,N 1': x$,tdate,tcode,tamount,mat tg,wr,wu,er,eu,gr,gu,tbal,pcode
 	L430: !
 loop
 L440: !

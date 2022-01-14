@@ -38,13 +38,13 @@
 	end_date=val(resp$(2))
 	begytd_date=val(resp$(3)) : _
 	endytd_date=val(resp$(4))
-	open #1: "Name=[Q]\GLmstr\Company.h[cno],Shr",i,outi,r: read #1,using 'Form POS 386,PD 5.3,PD 5.2,PD 5.3,PD 5.2,POS 407,PD 5.3,PD 5.2,POS 418,10*C 20,10*N 1',rec=1: ficarate,ficawage,feducrat,feducwag,mcr,mcm,mat miscname$,mat dedcode : _
+	open #1: "Name=[Q]\GLmstr\Company.h[cno],Shr",i,outi,r: read #1,using 'form pos 386,PD 5.3,PD 5.2,PD 5.3,PD 5.2,pos 407,PD 5.3,PD 5.2,pos 418,10*C 20,10*N 1',rec=1: ficarate,ficawage,feducrat,feducwag,mcr,mcm,mat miscname$,mat dedcode : _
 	close #1:
 	ficarate=ficarate/100 : feducrat=feducrat/100 : mcr=mcr/100
 	nametab=66-int(len(rtrm$(cnam$))/2)
 	open #1: "Name=[Q]\GLmstr\PRmstr.h[cno],KFName=[Q]\GLmstr\PRIndex.h[cno],Shr",internal,outIn,keyed
 	open #2: "Name=[Q]\GLmstr\ACPRCKS.h[cno],Shr",i,outi,r
-L380: read #1,using 'Form POS 1,N 4,3*C 25,C 11,36*PD 5.2,2*N 5': eno,mat k$,ss$,mat m,mat adr eof Xit
+L380: read #1,using 'form pos 1,N 4,3*C 25,C 11,36*PD 5.2,2*N 5': eno,mat k$,ss$,mat m,mat adr eof Xit
 	fixqtr=fixytd=0
 	if beg_date>0 and end_date>0 then fixqtr=1: goto L410 else goto L440
 L410: for j=2 to 36 step 2 ! set qtd to zero
@@ -56,7 +56,7 @@ L450: for j=1 to 35 step 2 ! set year to date to zero
 	next j
 L480: if adr(1)=0 then goto REWRITE_MASTER
 	ca=adr(1)
-L500: read #2,using 'Form N 4,2*PD 4,19*PD 5.2,PD 3',rec=ca: mat d,nca noRec REWRITE_MASTER
+L500: read #2,using 'form N 4,2*PD 4,19*PD 5.2,PD 3',rec=ca: mat d,nca noRec REWRITE_MASTER
 	if fixqtr=0 or (fndate_mmddyy_to_ccyymmdd(d(2))<beg_date or fndate_mmddyy_to_ccyymmdd(d(2))>end_date) then goto L560
 	x=3
 	for j=2 to 36 step 2
@@ -71,7 +71,7 @@ L610: if nca=0 then goto REWRITE_MASTER
 	ca=nca
 	goto L500
 REWRITE_MASTER: !
-	rewrite #1,using 'Form POS 1,N 4,3*C 25,C 11,36*PD 5.2,2*N 5': eno,mat k$,ss$,mat m
+	rewrite #1,using 'form pos 1,N 4,3*C 25,C 11,36*PD 5.2,2*N 5': eno,mat k$,ss$,mat m
 	goto L380
 Xit: fnXit
  

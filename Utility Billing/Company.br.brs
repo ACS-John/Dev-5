@@ -37,28 +37,28 @@ MAIN: ! r:
 		mylen=44
 		mypos=mylen+2
 		fnLbl(lc+=1,1,"Starting Route Number:",mylen,1)
-		fnTxt(lc,mypos,2,0,1,"30") 
+		fnTxt(lc,mypos,2,0,1,'30') 
 		resp$(resp_route_low=respc+=1)=str$(bkno1)
 		fnLbl(lc+=1,1,"Ending Route Number:",mylen,1)
-		fnTxt(lc,mypos,2,0,1,"30") 
+		fnTxt(lc,mypos,2,0,1,'30') 
 		resp$(resp_route_high=respc+=1)=str$(bkno2)
 
 		lc+=1
 
 		fnLbl(lc+=1,1,"Unusual Usage Percent:",mylen,1)
-		fnTxt(lc,mypos,4,0,1,"30",0,"Percent to use for determining unusual usage   (Example: 50% as 50)")
+		fnTxt(lc,mypos,4,0,1,'30',0,"Percent to use for determining unusual usage   (Example: 50% as 50)")
 		resp$(resp_pcent=respc+=1)=str$(pcent)
 		lc+=1
 		fnLbl(lc+=1,1,"Water Unusual Usage Minimum:",mylen,1)
-		fnTxt(lc,mypos,4,0,1,"30",0,"Do not report unusual usage if below this minimum.")
+		fnTxt(lc,mypos,4,0,1,'30',0,"Do not report unusual usage if below this minimum.")
 		resp$(resp_uum_water=respc+=1)=uum_water$
 	
 		fnLbl(lc+=1,1,"Electric Unusual Usage Minimum:",mylen,1)
-		fnTxt(lc,mypos,4,0,1,"30",0,"Do not report unusual usage if below this minimum.")
+		fnTxt(lc,mypos,4,0,1,'30',0,"Do not report unusual usage if below this minimum.")
 		resp$(resp_uum_gas=respc+=1)=uum_gas$
 	
 		fnLbl(lc+=1,1,"Gas Unusual Usage Minimum:",mylen,1)
-		fnTxt(lc,mypos,4,0,1,"30",0,"Do not report unusual usage if below this minimum.")
+		fnTxt(lc,mypos,4,0,1,'30',0,"Do not report unusual usage if below this minimum.")
 		resp$(resp_uum_electric=respc+=1)=uum_electric$
 	
 		! /r
@@ -101,11 +101,11 @@ MAIN: ! r:
 			else 
 				resp$(respc+=1)='False' ! resp$(respc_service_base+service_item*6-2)='False'
 			end if 
-			fnTxt(service_item+2,58,2,0,0,"30",disable_for_client,'',fra)
+			fnTxt(service_item+2,58,2,0,0,'30',disable_for_client,'',fra)
 			resp$(respc+=1)=str$(subjectto(service_item)) ! resp$(respc_service_base+service_item*6-1)=str$(subjectto(service_item))
-			fnTxt(service_item+2,68,2,0,0,"30",disable_for_client,'',fra)
+			fnTxt(service_item+2,68,2,0,0,'30',disable_for_client,'',fra)
 			resp$(respc+=1)=str$(ordertoapply(service_item)) ! resp$(respc_service_base+service_item*6)=str$(ordertoapply(service_item))
-			fnTxt(service_item+2,76,2,0,0,"30",0,'',fra)
+			fnTxt(service_item+2,76,2,0,0,'30',0,'',fra)
 			resp$(respc+=1)=str$(onlyMonth(service_item))
 			fn_cmb_rate(serviceCode$(service_item),service_item+2,82,'Select Default or 0 for None',fra)
 			resp$(respc+=1)=default_rate$(service_item)
@@ -220,7 +220,7 @@ DoLoad: ! r:
 	
 	
 	open #hCompany=fnH: "Name=[Q]\UBmstr\Company.h[cno]",internal,input 
-	read #hCompany,using "Form POS 1,3*C 40,X 6,N 1,C 1,c 1,n 4": mat CompanyNameAndAddr$,maintac,rcpt$,escrow$,pcent ioerr DoLoadCompanyReadErr
+	read #hCompany,using "form pos 1,3*C 40,X 6,N 1,C 1,c 1,n 4": mat CompanyNameAndAddr$,maintac,rcpt$,escrow$,pcent ioerr DoLoadCompanyReadErr
 	close #hCompany: 
 	fnLastBillingDate(lastBillingDate)
 	if pcent=0 then pcent=100
@@ -273,7 +273,7 @@ DoSave: ! r:
 	maintac=1 ! maintac was variable used for maintaining accumulated transaction file, no longer used but be want history to be retained no matter what (so set it to 1)
 	close #1,free: ioerr ignore
 	open #hCompany=fnH: "Name=[Q]\UBmstr\Company.h[cno],Size=0,RecL=133,Replace",internal,outIn 
-	write #hCompany,using "Form POS 1,3*C 40,x 6,N 1,C 1,c 1,n 4": mat CompanyNameAndAddr$,maintac,rcpt$,escrow$,pcent
+	write #hCompany,using "form pos 1,3*C 40,x 6,N 1,C 1,c 1,n 4": mat CompanyNameAndAddr$,maintac,rcpt$,escrow$,pcent
 	close #hCompany: 
 	fnLastBillingDate(lastBillingDate,1)
 	fncreg_write('unusual usage minimum water',uum_water$)
@@ -315,7 +315,7 @@ def fn_cmb_rate(searchcode$,cr_lyne,cr_pos,ttt$*300,fra)
 	rates$(1)=" 0=Not applicable"
 	do 
 		CR_READ_RATE: ! 
-		read #hRate,using "Form POS 1,C 54",release: rt$ eof CR_EO_RATE
+		read #hRate,using "form pos 1,C 54",release: rt$ eof CR_EO_RATE
 		if trim$(rt$(1:2))<>searchcode$ then goto CR_READ_RATE
 		cr_rate_item+=1
 		rates$(cr_rate_item)=rt$(3:4)&"="&rt$(5:25)

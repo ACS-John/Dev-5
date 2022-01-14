@@ -28,7 +28,7 @@
 	mat tcp=(0) : mat ttdc=(0)
 	restore #4,key>=checkkey$: nokey READ_EMPLOYEE
 	READ_TRANS: !
-	read #4,using "Form POS 1,N 8,n 3,PD 6,N 7,5*PD 3.2,37*PD 5.2": heno,tdn,prd,ckno,mat tdc,mat cp eof PRINT_ONE
+	read #4,using "form pos 1,N 8,n 3,PD 6,N 7,5*PD 3.2,37*PD 5.2": heno,tdn,prd,ckno,mat tdc,mat cp eof PRINT_ONE
 	if heno=eno then
 		if prd<beg_date or prd>end_date then goto READ_TRANS
 		mat tcp=tcp+cp : mat ttdc=ttdc+tdc

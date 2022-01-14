@@ -24,12 +24,12 @@
 	newdedcode_Add    =2
 	newdedcode_Benefit=3
 	open #12: "Name=[Q]\CLmstr\BankMstr.h[cno],KFName=[Q]\CLmstr\BankIdx1.h[cno],Shr",i,i,k ioerr BankReadFinis
-	read #12,using 'Form POS 57,G 8',key=lpad$(str$(bankcode),2),release: cl_bank_last_check$ nokey ignore
+	read #12,using 'form pos 57,G 8',key=lpad$(str$(bankcode),2),release: cl_bank_last_check$ nokey ignore
 	close #12: ioerr ignore
 	BankReadFinis: !
 	
 	open #1: "Name=[Q]\PRmstr\prCode.h[cno],Shr",internal,input ioerr CkNoReadFinis
-	read #1,using 'Form POS 5,N 8': ckno
+	read #1,using 'form pos 5,N 8': ckno
 	close #1:
 	CkNoReadFinis: !
 	
@@ -52,7 +52,7 @@ AskCheckNo: ! r:
 	fnTos
 	respc=0
 	fnLbl(1,1,"Beginning Check Number:",20,1)
-	fnTxt(1,23,8,0,1,"30",0," ")
+	fnTxt(1,23,8,0,1,'30',0," ")
 	resp$(respc+=1)=str$(ckno)
 	fnLbl(1,1,"",34,1) ! bigger screen
 	fnLbl(2,1,"Payroll Date:",20,1)
@@ -112,7 +112,7 @@ LoopTop: ! r: main loop
 	checkkey$=cnvrt$("pic(ZZZZZZZ#)",eno)&"         "
 	dirdep$=rpad$(str$(eno),10)
 	dd$=""
-	read #h_dd,using "Form pos 1,C 10,C 1,N 9,N 2,N 17",key=dirdep$: key$,dd$,rtn,acc,acn nokey ignore
+	read #h_dd,using "form pos 1,C 10,C 1,N 9,N 2,N 17",key=dirdep$: key$,dd$,rtn,acc,acn nokey ignore
 	! if env$('client')="West Rest Haven" then goto L690
 	a=pos(rtrm$(em$)," ",1) : b=pos(rtrm$(em$)," ",a+1)
 	em$=rtrm$(em$(max(a,b):30))&" "&em$(1:a) error ignore
@@ -121,7 +121,7 @@ LoopTop: ! r: main loop
 	do
 		dim tdc(10)
 		dim cp(32)
-		read #hCheck1,using "Form POS 1,N 8,n 3,PD 6,N 7,5*PD 3.2,37*PD 5.2": heno,tdn,prd,realckno,mat tdc,mat cp eof EoCheck1
+		read #hCheck1,using "form pos 1,N 8,n 3,PD 6,N 7,5*PD 3.2,37*PD 5.2": heno,tdn,prd,realckno,mat tdc,mat cp eof EoCheck1
 		if heno=eno and prd=fndate_mmddyy_to_ccyymmdd(ppd) then 
 			if prd=fndate_mmddyy_to_ccyymmdd(ppd) then holdrealckno=realckno
 			mat tcp=tcp+cp : mat ttdc=ttdc+tdc

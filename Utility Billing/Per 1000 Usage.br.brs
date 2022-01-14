@@ -41,7 +41,7 @@ fnLbl(3,1,"Service for Analysis:",mylen,1)
 fncomboa('servicCodessMetered',3,mypos,mat serviceCodeMetered$)
 resp$(respc+=1)=serviceCodeMetered$(1)
 fnLbl(4,1,"Rate Code (blank for all):",mylen,1)
-fnTxt(4,mypos,2,0,1,"30")
+fnTxt(4,mypos,2,0,1,'30')
 resp$(respc+=1)="0"
 fnLbl(6,1,"Usage Break Points:",mylen,1)
 for a = 1 to udim(mat range)
@@ -141,8 +141,8 @@ def fn_usageChartPrint(dayFilter,rateFilter,serviceWhich,mat range,mat cust)
 		pr #255: "\qc For "&serviceName$(serviceWhich)
 	end if
 	pr #255: "\ql "
-	pr #255,using "Form POS 7,C 18,C 30": " Usage In","  Total"
-	pr #255,using "Form POS 7,C 18,C 30": " Gallons ","Customers"
+	pr #255,using "form pos 7,C 18,C 30": " Usage In","  Total"
+	pr #255,using "form pos 7,C 18,C 30": " Gallons ","Customers"
 	for j=1 to udim(mat range)
 		if j=1 then
 			pr #255,using L990: "Under "&ltrm$(cnvrt$("PIC(ZZZZ,ZZ#)",range(2))),cust(j)

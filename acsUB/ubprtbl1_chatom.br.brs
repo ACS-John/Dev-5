@@ -11,7 +11,7 @@
 	fncno(cno,cnam$)
 	fnLastBillingDate(d1)
 	open #21: "Name=[Q]\UBmstr\Company.h[cno],Shr",internal,input
-	read #21,using "Form POS 41,2*C 40": at$(2),at$(3)
+	read #21,using "form pos 41,2*C 40": at$(2),at$(3)
 	close #21:
 	cnam$='Chatom Utilities'
 	z=21
@@ -166,8 +166,8 @@ L1180: form pos 1,c 10,pos 296,pd 4,pos 1741
 	if prtbkno><route then goto END5
 L1210: if f><d1 then goto L1170
 	zip5$=cr$=""
-	read #5,using "Form POS 96,C 5,POS 108,C 4",key=z$: zip5$,cr$ nokey L1240
-L1240: write #6,using "Form POS 1,C 5,C 4,C 10": zip5$,cr$,z$
+	read #5,using "form pos 96,C 5,pos 108,C 4",key=z$: zip5$,cr$ nokey L1240
+L1240: write #6,using "form pos 1,C 5,C 4,C 10": zip5$,cr$,z$
 	goto L1170
  
 END5: close #6:
@@ -367,8 +367,8 @@ fnend
 def fn_bulksort ! bulk sort order
 		open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",i,i,k  ! open in Account order
 		open #6: "Name=[Temp]\Temp.[Session],Replace,RecL=31",internal,output
-L2730: read #1,using "Form POS 1,C 10,pos 1741,n 2,pos 1743,n 7,pos 1942,c 12": z$,route,seq,bulk$ eof L2760
-		write #6,using "Form POS 1,C 12,n 2,n 7,c 10": bulk$,route,seq,z$
+L2730: read #1,using "form pos 1,C 10,pos 1741,n 2,pos 1743,n 7,pos 1942,c 12": z$,route,seq,bulk$ eof L2760
+		write #6,using "form pos 1,C 12,n 2,n 7,c 10": bulk$,route,seq,z$
 		goto L2730
 L2760: close #1: ioerr ignore
 		close #6: ioerr ignore

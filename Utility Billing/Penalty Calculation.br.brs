@@ -94,11 +94,11 @@ def fn_scrMain(; returnN)
 		if exists('[Q]\UBmstr\minBal.h[cno]') then
 			! r: get it the old way
 				open #minBal:=fnH: 'Name=[Q]\UBmstr\minBal.h[cno],Use,RecL=10,Shr',i,outi,r
-				read #minBal,using 'Form pos 1,n 10.2',rec=1,release: minimumBal noRec SET_DEFAULT_MINUMUMBAL
+				read #minBal,using 'form pos 1,n 10.2',rec=1,release: minimumBal noRec SET_DEFAULT_MINUMUMBAL
 				goto EO_MINIMUMBAL
 				SET_DEFAULT_MINUMUMBAL: !
 				minimumBal=1.00
-				write #minBal,using 'Form pos 1,n 10.2',rec=1,release: minimumBal
+				write #minBal,using 'form pos 1,n 10.2',rec=1,release: minimumBal
 				EO_MINIMUMBAL: !
 				close #minBal:
 			! /r
@@ -273,7 +273,7 @@ def fn_pencal ! penalty calculation
 			if env$('client')='Pennington' and pencode=0 then pencode=1 ! default to one so codes don't have to be added to old customer records
 			if env$('client')='Granby' and pencode=0 then pencode=1 ! default to one so codes don't have to be added to old customer records
 			dim rt(10,3)
-			read #hRate,using 'Form pos 55,32*G 10',key=penaltycode$&lpad$(str$(pencode),2): mc1,mu1,mat rt nokey L1230
+			read #hRate,using 'form pos 55,32*G 10',key=penaltycode$&lpad$(str$(pencode),2): mc1,mu1,mat rt nokey L1230
 			goto L1240
 			L1230: !
 			rt(1,3)=0
@@ -321,7 +321,7 @@ def fn_pencal ! penalty calculation
 				tg(j)=max(mc1,tg(j))
 				if env$('client')='Pennington' then ! r:
 					if xa(6)=0 then xa(6)=1 ! default tax code to 1
-					read #hRate,using 'Form pos 55,32*G 10',key='TX'&lpad$(str$(xa(6)),2): mc1,mu1,mat rt nokey L1330 ! read Pennington's sales tax rate
+					read #hRate,using 'form pos 55,32*G 10',key='TX'&lpad$(str$(xa(6)),2): mc1,mu1,mat rt nokey L1330 ! read Pennington's sales tax rate
 					! tg(j)=round(tg(j)*(1+rt(1,3)),2) ! Pennington adds sales tax to penalty; but now they say they don't.  Not sure what happened there.
 				end if  ! /r
 			end if
@@ -405,8 +405,8 @@ fnend
 			pr #255,using F_PRLINE: z$,e$(2),mat pencolumn,bal pageoflow PgOf
 		end if
 		if printmail=1 then
-			pr #255,using 'Form pos 15,C 30': e$(3) pageoflow PgOf
-			pr #255,using 'Form pos 15,C 30': e$(4) pageoflow PgOf
+			pr #255,using 'form pos 15,C 30': e$(3) pageoflow PgOf
+			pr #255,using 'form pos 15,C 30': e$(4) pageoflow PgOf
 		end if  ! printmail=1
 		F_PRLINE: form pos 1,c 10,x 4,c 30,pos 52,pencount*pic(---------.##),x 2,pic(-------.##),x 2,c 25
 	fnend
@@ -419,9 +419,9 @@ fnend
 		next j
 		pr #255: tmp$
 		! if env$('client')='Kimberling' then
-		!   pr #255,using 'Form pos 17,C 30,x 5,3*N 12.2': 'Overall Totals',pen_accum,int_accum,totb
+		!   pr #255,using 'form pos 17,C 30,x 5,3*N 12.2': 'Overall Totals',pen_accum,int_accum,totb
 		! else
-		pr #255,using 'Form pos 17,C 30,x 5,pencount*N 12.2,N 12.2': 'Overall Totals',mat coltot,totb
+		pr #255,using 'form pos 17,C 30,x 5,pencount*N 12.2,N 12.2': 'Overall Totals',mat coltot,totb
 		! end if
 		tmp$=rpt$(' ',52)&'{\ul \strike'&rpt$(' ',12)&'}'
 		for j=1 to column_count

@@ -101,7 +101,7 @@ L500: form pos 1,c 10,pos 145,pd 2,pos 1822,n 9
 	EO_TRANS: !
 		if t1>0 then t3=int((t2+.5)/t1) else t3=0
 	end if
-	rewrite #hCustomer,using "Form POS 1822,N 9": t3
+	rewrite #hCustomer,using "form pos 1822,N 9": t3
 	pr #255,using L660: x$,oldavg,t3,x(1),x(2),x(3),x(4) pageoflow PAGE
 	L660: form pos 1,c 12,6*nz 9
 	L670: !
@@ -118,9 +118,9 @@ PAGE: ! r:
 continue ! /r
 HDR: ! r:
 	p1=p1+1
-	pr #255,using "Form POS 20,CC 40,POS 70,C 5,N 4": env$('cnam'),"Page ",p1
-	pr #255,using "Form POS 20,CC 40": "Calculate Sewer Average"
-	pr #255,using "Form POS 20,CC 40": "Sewer Averages for Sewer Code "&ltrm$(str$(filter_sewer_code))
+	pr #255,using "form pos 20,CC 40,pos 70,C 5,N 4": env$('cnam'),"Page ",p1
+	pr #255,using "form pos 20,CC 40": "Calculate Sewer Average"
+	pr #255,using "form pos 20,CC 40": "Sewer Averages for Sewer Code "&ltrm$(str$(filter_sewer_code))
 	pr #255: ""
 	pr #255: " Acct.Num.    Old Avg  New Avg "&cnvrt$("pic(zzzzz/zz/zz)",cd1(1))&cnvrt$("pic(zzzzz/zz/zz)",cd1(2))&cnvrt$("pic(zzzzz/zz/zz)",cd1(3))&cnvrt$("pic(zzzzz/zz/zz)",cd1(4))
 	! pr #255: "__________    _______  _______ ___________ ___________ ___________ ___________"

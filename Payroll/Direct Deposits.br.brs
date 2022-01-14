@@ -79,7 +79,7 @@ MainLoop: ! r: main loop
 	gosub BatchHeaderRecord
 	do
 		READ_DD: !
-		! read #dd,using "Form pos 1,C 10,C 1,N 9,N 2,N 17": key$,dd$,rtn,acc,acn eof Finis
+		! read #dd,using "form pos 1,C 10,C 1,N 9,N 2,N 17": key$,dd$,rtn,acc,acn eof Finis
 		read #dd,using form$(dd): mat dd$,mat ddN eof Finis
 		! key$	=dd$(dd_eno)
 		! dd$		=dd$(dd_enable)
@@ -91,12 +91,12 @@ MainLoop: ! r: main loop
 		if ddN(dd_routing)=0 and ddN(dd_accType)=0 then goto READ_DD
 		if uprc$(dd$(dd_enable))='Y' then  ! Y means Yes Direct Deposit is active for this person
 			dd$(dd_eno)=lpad$(rtrm$(ltrm$(dd$(dd_eno))),8)
-			read #hEmployee,using 'Form pos 9,3*C 30,Pos 162,N 6,Pos 173',key=dd$(dd_eno): mat em$,lastPayrollDate nokey READ_DD
+			read #hEmployee,using 'form pos 9,3*C 30,pos 162,N 6,pos 173',key=dd$(dd_eno): mat em$,lastPayrollDate nokey READ_DD
 			if fndate_mmddyy_to_ccyymmdd(lastPayrollDate)<payrollDate then goto READ_DD    ! first screen emp data had a last PR Date lower than the Payroll Date specified in this program.
 			checkkey$=dd$(dd_eno)&"         "
 			restore #hChecks,key>=checkkey$: nokey READ_DD
 			ReadCheck: !
-			read #hChecks,using "Form POS 1,N 8,n 3,PD 6,N 7,5*PD 3.2,37*PD 5.2": heno,tdn,prd,ckno,mat tdc,mat cp eof L970
+			read #hChecks,using "form pos 1,N 8,n 3,PD 6,N 7,5*PD 3.2,37*PD 5.2": heno,tdn,prd,ckno,mat tdc,mat cp eof L970
 			if heno=val(dd$(dd_eno)) then
 				if prd><payrollDate then goto ReadCheck
 				mat tcp=tcp+cp
@@ -137,14 +137,14 @@ FileHeaderRecord: ! r: (1) File Header Record
 	fct$=time$(1:2)&time$(4:5) ! File Creation Time
 	fidm$="A" ! File ID Modifier
 	rsz$="094" ! Record Size
-	bf$="10" ! Blocking Factor
+	bf$='10' ! Blocking Factor
 	fc$="1" ! Format Code
 	dim idn$*23 ! (23) Immediate Destination Name
 	idn$="Federal Reserve Bank   " ! (23) Immediate Destination Name
 	rc$="" ! Reference Code
 	! before 5/5/19  write #hDdout,using F_ddout_1: 1,pcde,federalrouting$,bankrouting$,fcd$,fct$,fidm$,rsz$,bf$,fc$,idn$,bankname$,rc$,"0",crlf$
 	write #hDdout,using F_ddout_1: 1,pcde,bankrouting$,bankrouting$,fcd$,fct$,fidm$,rsz$,bf$,fc$,idn$,bankname$,rc$,"0",crlf$
-	F_ddout_1: Form POS 1,G 1,PIC(##),C 10,C 10,G 6,G 4,C 1,C 3,C 2,C 1,C 23,C 23,C 7,C 1,c 2
+	F_ddout_1: form pos 1,G 1,PIC(##),C 10,C 10,G 6,G 4,C 1,C 3,C 2,C 1,C 23,C 23,C 7,C 1,c 2
 return ! /r
 BatchHeaderRecord: ! r: (5) Company/Batch Header Record
 	scc=220 ! Service Class Code
@@ -156,7 +156,7 @@ BatchHeaderRecord: ! r: (5) Company/Batch Header Record
 	osc$="1" ! Originator Status Code
 	bn=1 !  BN=Batch Number
 	write #hDdout,using F_ddout_5: 5,scc,env$('cnam')(1:16),cdd$="Payroll",'9'&fedid$,ecc$,ced$,fncd(d2),eed$,"",osc$,bankaccount$,bn,crlf$
-	F_ddout_5: Form POS 1,G 1,PIC(###),C 16,C 20,C 10,C 3,C 10,PIC(######),G 6,G 3,G 1,C 8,PIC(#######),c 2
+	F_ddout_5: form pos 1,G 1,PIC(###),C 16,C 20,C 10,C 3,C 10,PIC(######),G 6,G 3,G 1,C 8,PIC(#######),c 2
 return ! /r
 
 EntryDetailRecord: ! r: (6) entry detail
@@ -174,7 +174,7 @@ EntryDetailRecord: ! r: (6) entry detail
 	if testfile=1 then tcp(32)=0
 	! pr 'tcp(32)=';tcp(32) : pause
 	write #hDdout,using F_ddout_6a: 6,tc,int(ddN(dd_routing)/10),str$(ddN(dd_routing))(len(str$(ddN(dd_routing))):len(str$(ddN(dd_routing)))),dd$(dd_account),tcp(32)*100,z$,em$(1)(1:22),"",ari,lpad$(trim$(bankaccount$),8),tn$,crlf$         ! changed dr$ to str(ddN(dd_routing)) ; also da$ to dd$(dd_account)  ! entry to place money in employees account
-	F_ddout_6a: Form POS 1,G 1,G 2,pic(########),C 1,C 17,PIC(##########),C 15,C 22,G 2,N 1,C 8,c 7,c 2
+	F_ddout_6a: form pos 1,G 1,G 2,pic(########),C 1,C 17,PIC(##########),C 15,C 22,G 2,N 1,C 8,c 7,c 2
 	pr #255: z$&" "&em$(1)&" "&str$(tcp(32)) pageoflow ReportPgof
 	totalDebit+=(tcp(32)*100)
 	totalCredit+=(tcp(32)*100) ! added this for the batch totals - ??
@@ -200,7 +200,7 @@ BatchControlRecord: ! r: (8) Company/Batch Control Record
 	end if
 
 	! write #hDdout,using F_ddout_8: 8,scc,eac,eh,totalDebit,totalCredit,fedid$,mac$,"",bankaccount$,bn,crlf$ ! removed *100 from totalDebit and from totalCredit
-	! F_ddout_8: Form POS 1,G 1,PIC(###),PIC(######),PIC(##########),2*PIC(############),C 10,C 19,C 6,C 8,PIC(#######),c 2
+	! F_ddout_8: form pos 1,G 1,PIC(###),PIC(######),PIC(##########),2*PIC(############),C 10,C 19,C 6,C 8,PIC(#######),c 2
 	! File Control Record
 	bactr=1 ! Batch Count
 	tn2=tn1+4         ! total number Records (all 6 Records plus the 1&5 plus 8&9)
@@ -219,13 +219,13 @@ BatchControlRecord: ! r: (8) Company/Batch Control Record
 		goto Xit
 	end if
 	! write #hDdout,using F_ddout_6b: 6,27,int(bnkrtn/10),str$(bnkrtn)(len(str$(bnkrtn)):len(str$(bnkrtn))),bankaccount$,totalDebit,"","","",ari,lpad$(trim$(bankaccount$),8),tn$,crlf$        ! changed dr$ to str(ddN(dd_routing)) ; also da$ to dd$(dd_account)  ! total entry for  debiting customer account
-	! F_ddout_6b: Form POS 1,G 1,G 2,pic(########),C 1,C 17,PIC(##########),C 15,C 22,G 2,N 1,C 8,c 7,c 2
+	! F_ddout_6b: form pos 1,G 1,G 2,pic(########),C 1,C 17,PIC(##########),C 15,C 22,G 2,N 1,C 8,c 7,c 2
 	if uprc$(trim$(bankname$))="RESOURCE BANK" then
 		write #hDdout,using F_ddout_8: 8,scc,eac,eh,0,totalCredit,'1'&fedid$,mac$,"",bankaccount$,bn,crlf$ ! no total debit for Resource Bank
 	else
 		write #hDdout,using F_ddout_8: 8,scc,eac,eh,totalDebit,totalCredit,'1'&fedid$,mac$,"",bankaccount$,bn,crlf$ ! removed *100 from totalDebit and from totalCredit
 	end if 
-	F_ddout_8: Form POS 1,G 1,PIC(###),PIC(######),PIC(##########),2*PIC(############),C 10,C 19,C 6,C 8,PIC(#######),c 2
+	F_ddout_8: form pos 1,G 1,PIC(###),PIC(######),PIC(##########),2*PIC(############),C 10,C 19,C 6,C 8,PIC(#######),c 2
 	! 5/5/19 moved the write out for 8 record to after 6 record write out
 return ! /r
 FileControlRecord: ! r: (9) requires bkfactor,bactr,blctr,eac,eh,totalDebit,totalCredit,crlf$
@@ -234,12 +234,12 @@ FileControlRecord: ! r: (9) requires bkfactor,bactr,blctr,eac,eh,totalDebit,tota
 	else
 		write #hDdout,using F_ddout_9a: 9,bactr,blctr,eac,eh,totalDebit,totalCredit,rpt$(" ",38)," ",crlf$    ! removed *100 from totalDebit and totalCredit
 	end if
-	F_ddout_9a: Form POS 1,G 1,2*PIC(######),PIC(########),PIC(##########),2*PIC(############),C 38,C 1,c 2
+	F_ddout_9a: form pos 1,G 1,2*PIC(######),PIC(########),PIC(##########),2*PIC(############),C 38,C 1,c 2
 	if bkfactor<>0 then
 		for j=1 to bkfactor
 			! pr "l22="&STR$(L22+=1)
 			write #hDdout,using F_ddout_9b: rpt$("9",94)&crlf$
-			F_ddout_9b: Form POS 1,C 96
+			F_ddout_9b: form pos 1,C 96
 		next j
 	end if
 return ! /r

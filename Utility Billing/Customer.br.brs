@@ -67,7 +67,7 @@ def fn_customer(; &editOne$,___,editOne,ckey)
 		oldService4DepositAmount=b(11)
 		!   old_gas_deposit=b(11)
 		mat ab$=('')
-		read #h_ubadrbil,using "Form POS 11,4*C 30",key=z$: mat ab$ nokey ignore
+		read #h_ubadrbil,using "form pos 11,4*C 30",key=z$: mat ab$ nokey ignore
 		! pb=bal
 		odp=b(8)+b(9)+b(11)
 	goto NameScreen ! /r
@@ -102,7 +102,7 @@ def fn_customer(; &editOne$,___,editOne,ckey)
 		end if
 		if olde3$=e$(3) then goto PAST_CASS_DELETE ! delete bar code if address changes
 		if cassopen=0 then goto PAST_CASS_DELETE
-		read #h_cass1,using 'Form POS 1,C 10,POS 96,C 12',key=z$: z2$,bc$ nokey PAST_CASS_DELETE
+		read #h_cass1,using 'form pos 1,C 10,pos 96,C 12',key=z$: z2$,bc$ nokey PAST_CASS_DELETE
 		delete #h_cass1,key=z$: ioerr ignore
 	PAST_CASS_DELETE: !
 	! probably change customer in ubtrans-vb here !Gosub 5130
@@ -231,12 +231,12 @@ def fn_customer(; &editOne$,___,editOne,ckey)
 			if trim$(srvnam$(j))<>"" then  ! have this service
 				x+=1 : lyne+=1
 				fnLbl(lyne,1,trim$(srvnam$(j))&":",20,1,0,1)
-				fnTxt(lyne,22,10,0,1,"10",0,"Enter budget amounts where applicable.  All other services will be calculated as normal.",1)
+				fnTxt(lyne,22,10,0,1,'10',0,"Enter budget amounts where applicable.  All other services will be calculated as normal.",1)
 				budgetinfo$(x)=str$(ba(j+1))
 			end if
 		next j
 		lyne+=1 : fnLbl(lyne,1,"Net Bill:",20,1,0,1)
-		fnTxt(lyne,22,10,10,1,"10",0,"Net would never have a value unless all items above were budgeted",1)
+		fnTxt(lyne,22,10,10,1,'10',0,"Net would never have a value unless all items above were budgeted",1)
 		budgetinfo$(x+=1)=str$(ba(12))
 		fnCmdKey("&Next",1,1)
 		fnCmdKey("Access &Transactions",8,0)
@@ -304,22 +304,22 @@ def fn_customer(; &editOne$,___,editOne,ckey)
 				if trim$(srvnam$(j))<>"" then ! they have this service
 					x+=2
 					fnLbl(lyne+=1,1,trim$(srvnam$(j))&":",20,1,0,1)
-					fnTxt(lyne,22,10,10,1,"10",0,empty$,1)
+					fnTxt(lyne,22,10,10,1,'10',0,empty$,1)
 					budgetinfo$(x-1)=str$(bt1(j+1,1))
 					budgetinfo$(x)=str$(bt1(j+1,2))
-					fnTxt(lyne,34,10,10,1,"10",0,empty$,1)
+					fnTxt(lyne,34,10,10,1,'10',0,empty$,1)
 				end if
 			next j
 			lyne+=1 : fnLbl(lyne,1,"Net Bill:",20,1,0,1)
 			budgetinfo$(x+=1)=str$(bt1(12,1))
-			fnTxt(lyne,22,10,10,1,"10",0,empty$,1)
+			fnTxt(lyne,22,10,10,1,'10',0,empty$,1)
 			budgetinfo$(x+=1)=str$(bt1(12,2))
-			fnTxt(lyne,34,10,10,1,"10",0,empty$,1)
+			fnTxt(lyne,34,10,10,1,'10',0,empty$,1)
 			lyne+=1 : fnLbl(lyne,1,"Gross Bill:",20,1,0,1)
 			budgetinfo$(x+=1)=str$(bt1(13,1))
-			fnTxt(lyne,22,10,10,1,"10",0,empty$,1)
+			fnTxt(lyne,22,10,10,1,'10',0,empty$,1)
 			budgetinfo$(x+=1)=str$(bt1(13,2))
-			fnTxt(lyne,34,10,10,1,"10",0,empty$,1)
+			fnTxt(lyne,34,10,10,1,'10',0,empty$,1)
 			lyne+=1 : fnLbl(lyne,1,"Date paid:",20,1,0,1)
 			budgetinfo$(x+=1)=str$(bt1(14,1))
 			fnTxt(lyne,22,8,8,1,"1",0,'',1)
@@ -395,7 +395,7 @@ def fn_customer(; &editOne$,___,editOne,ckey)
 		mylen=25 : mylen+2
 		fnLbl(1,1,"Account:",15,1)               : fnTxt(1,17,10,10,1)                     : custInfo$(respc+=1)=trim$(z$)
 		fnLbl(1,26,"Route:",8,1)                 : fncmbrt2(1,36,1)                        : custInfo$(respc+=1)=str$(extra(1))
-		fnLbl(1,45,"Sequence:",11,1)             : fnTxt(1,58,7,7,1,"30")                  : custInfo$(respc+=1)=str$(extra(2))
+		fnLbl(1,45,"Sequence:",11,1)             : fnTxt(1,58,7,7,1,'30')                  : custInfo$(respc+=1)=str$(extra(2))
 		fnFra(3,1,4,48,"Customer Information")   : fraCustInfo=frac+=1
 		fnLbl(1,1,"Name:",13,1,0,fraCustInfo)    : fnTxt(1,15,25,30,0,"",0,"",fraCustInfo) : custInfo$(respc+=1)=e$(2)
 		fnLbl(2,1,"Address:",13,1,0,fraCustInfo) : fnTxt(2,15,25,30,0,"",0,"",fraCustInfo) : custInfo$(respc+=1)=e$(3)
@@ -419,7 +419,7 @@ def fn_customer(; &editOne$,___,editOne,ckey)
 		fnTxt(13,27,20,30,0,"",0)
 		custInfo$(respc+=1)=extra$(9)
 		fnLbl(14,1,"Current Balance:",mylen,1)
-		fnTxt(14,27,12,12,1,"10",disableBalanceEdit)
+		fnTxt(14,27,12,12,1,'10',disableBalanceEdit)
 		custInfo$(respc+=1)=str$(bal)
 		fnLbl(15,1,"Last Billing Date:",mylen,1)
 		fnTxt(15,27,8,8,1,"1")
@@ -750,7 +750,7 @@ def fn_customer(; &editOne$,___,editOne,ckey)
 		dh_ch$(4)="After"
 		dim dh_cm$(4)
 		mat dh_cm$(4)
-		dh_cm$(1)=("3") : dh_cm$(2)="" : dh_cm$(3)="10" : dh_cm$(4)="10"
+		dh_cm$(1)=("3") : dh_cm$(2)="" : dh_cm$(3)='10' : dh_cm$(4)='10'
 		fnflexinit1("deposit",5,1,10,70,mat dh_ch$,mat dh_cm$,1)
 		do while k32$=z$
 			item$(1)=str$(dt1)
@@ -758,7 +758,7 @@ def fn_customer(; &editOne$,___,editOne,ckey)
 			item$(3)=str$(dp1)
 			item$(4)=str$(dp2)
 			fnflexadd1(mat item$)
-			read #h_deposit2,using 'Form POS 1,C 10,G 8,C 32,2*N 10.2,PD 3': k32$,dt1,dp$,dp1,dp2 eof L7160
+			read #h_deposit2,using 'form pos 1,C 10,G 8,C 32,2*N 10.2,PD 3': k32$,dt1,dp$,dp1,dp2 eof L7160
 		loop
 		L7160: !
 		fnCmdSet(2)
@@ -834,7 +834,7 @@ def fn_customer(; &editOne$,___,editOne,ckey)
 		! 		write #hCustomer1,using F_CUSTOMER_1: z$,mat e$,f$(1),mat a,mat b,mat c,mat d,bal,lastBillingDate,mat g,mat adr,alp$,f$(2),f$(3),bra_legacy,mat gb,df$,dr$,dc$,da$
 
 		fixgrid=1
-		read #hCustomer1,using 'Form POS 1,C 10',key=z$: z$ ! this line should lock the record and set the SAME paramater for use in add_cancel
+		read #hCustomer1,using 'form pos 1,C 10',key=z$: z$ ! this line should lock the record and set the SAME paramater for use in add_cancel
 	goto EDIT_LOADED_CUSTOMER ! /r
 
 	Finis: ! r: close files and leave
@@ -951,7 +951,7 @@ ServiceScreen: ! r:
 					fnLbl(srvLine+=1,1,"Demand Multiplier:",srvCol1len,1) : fnTxt(srvLine,srvCol2pos,9,0,1,"33") : rateInfo$(respc+=1)=str$(d(14)*.001)
 					fnLbl(srvLine+=1,1,"Average Usage:"    ,srvCol1len,1) : fnTxt(srvLine,srvCol2pos,9,0,1,"20") : rateInfo$(respc+=1)=str$(extra(9))
 					fnLbl(srvLine+=1,1,"Usage Multiplier:" ,srvCol1len,1) : fnTxt(srvLine,srvCol2pos,9,0,1,"33") : rateInfo$(respc+=1)=str$(extra(8)*.001)
-					fnLbl(srvLine+=1,1,"Security Light $:" ,srvCol1len,1) : fnTxt(srvLine,srvCol2pos,9,0,1,"10") : rateInfo$(respc+=1)=str$(extra(6))
+					fnLbl(srvLine+=1,1,"Security Light $:" ,srvCol1len,1) : fnTxt(srvLine,srvCol2pos,9,0,1,'10') : rateInfo$(respc+=1)=str$(extra(6))
 					fnLbl(srvLine+=1,1,"Num of Lights:"    ,srvCol1len,1) : fnTxt(srvLine,srvCol2pos,3,0,1,"20") : rateInfo$(respc+=1)=str$(extra(7))
 					fnLbl(srvLine+=1,1,"Units per Meter:"  ,srvCol1len,1) : fnTxt(srvLine,srvCol2pos,3,0,1,"20") : rateInfo$(respc+=1)=str$(extra(15))
 				end if
@@ -960,9 +960,9 @@ ServiceScreen: ! r:
 			if srv$(service_code)="GA" then ! show all of gas information (unless field is used for something other than gas)
 				fnLbl(srvLine+=1,1,"Meter Number:"   ,srvCol1len,1) : fnTxt(srvLine,srvCol2pos,12          ) : rateInfo$(respc+=1)=f$(3)
 				fnLbl(srvLine+=1,1,"Serial Number:"  ,srvCol1len,1) : fnTxt(srvLine,srvCol2pos,12          ) : rateInfo$(respc+=1)=extra$(5)
-				fnLbl(srvLine+=1,1,"Deposit:"        ,srvCol1len,1) : fnTxt(srvLine,srvCol2pos, 8,0,1,"10") : rateInfo$(respc+=1)=str$(b(11))
+				fnLbl(srvLine+=1,1,"Deposit:"        ,srvCol1len,1) : fnTxt(srvLine,srvCol2pos, 8,0,1,'10') : rateInfo$(respc+=1)=str$(b(11))
 				fnLbl(srvLine+=1,1,"Deposit Date:"   ,srvCol1len,1) : fnTxt(srvLine,srvCol2pos, 8,0,1,"1" ) : rateInfo$(respc+=1)=str$(c(4))
-				fnLbl(srvLine+=1,1,"Standard Charge:",srvCol1len,1) : fnTxt(srvLine,srvCol2pos,10,0,1,"10") : rateInfo$(respc+=1)=str$(b(4))
+				fnLbl(srvLine+=1,1,"Standard Charge:",srvCol1len,1) : fnTxt(srvLine,srvCol2pos,10,0,1,'10') : rateInfo$(respc+=1)=str$(b(4))
 				fnLbl(srvLine+=1,1,"Current Reading:",srvCol1len,1) : fnTxt(srvLine,srvCol2pos,12,0,1,"20") : rateInfo$(respc+=1)=str$(d(9))
 				fnLbl(srvLine+=1,1,"Prior Reading:"  ,srvCol1len,1) : fnTxt(srvLine,srvCol2pos,12,0,1,"20") : rateInfo$(respc+=1)=str$(d(10))
 				fnLbl(srvLine+=1,1,"Usage - Current:",srvCol1len,1) : fnTxt(srvLine,srvCol2pos,12,0,1,"20") : rateInfo$(respc+=1)=str$(d(11))
@@ -971,13 +971,13 @@ ServiceScreen: ! r:
 				fnLbl(srvLine+=1,1,"Number of Units:",srvCol1len,1) : fnTxt(srvLine,srvCol2pos, 3,0,1,"20") : rateInfo$(respc+=1)=str$(extra(16))
 			end if
 		else if service_code=5 then
-			fnLbl(srvLine+=1,1,"Standard Charge:",srvCol1len,1) : fnTxt(srvLine,srvCol2pos,10,0,1,"10",0) : rateInfo$(respc+=1)=str$(b(5))
+			fnLbl(srvLine+=1,1,"Standard Charge:",srvCol1len,1) : fnTxt(srvLine,srvCol2pos,10,0,1,'10',0) : rateInfo$(respc+=1)=str$(b(5))
 		else if service_code=6 then
-			fnLbl(srvLine+=1,1,"Standard Charge:",srvCol1len,1) : fnTxt(srvLine,srvCol2pos,10,0,1,"10") : rateInfo$(respc+=1)=str$(b(6))
+			fnLbl(srvLine+=1,1,"Standard Charge:",srvCol1len,1) : fnTxt(srvLine,srvCol2pos,10,0,1,'10') : rateInfo$(respc+=1)=str$(b(6))
 		else if service_code=7 then
 				! (place holder for future developemnt)
 		else if service_code=8 then
-			fnLbl(srvLine+=1,1,"Standard Charge:",srvCol1len,1) : fnTxt(srvLine,srvCol2pos,10,0,1,"10") : rateInfo$(respc+=1)=str$(b(7))
+			fnLbl(srvLine+=1,1,"Standard Charge:",srvCol1len,1) : fnTxt(srvLine,srvCol2pos,10,0,1,'10') : rateInfo$(respc+=1)=str$(b(7))
 		else if service_code=9 then
 				! (place holder for future developemnt)
 		else if service_code=10 then
@@ -1256,7 +1256,7 @@ def fn_customer_grid(cg_line,cg_pos)
 	fnflexinit1('Cust2',cg_line,cg_pos,10,72,mat cg_ch$,mat cg_cm$,1)
 	do
 		CG_READ_FILE: !
-		read #cg_file_num,using 'Form POS 1,C 10,pos 1821,c 1,POS 41,C 30,C 30,POS 1864,C 30,POS 101,C 30,POS 11,C 30,POS 1741,C 2,C 7,POS 1894,C 12,POS 131,C 12,pos 354, c 7': mat cg_item$ eof CG_EO_CUSTOMER ioerr CG_ERR_READ
+		read #cg_file_num,using 'form pos 1,C 10,pos 1821,c 1,pos 41,C 30,C 30,pos 1864,C 30,pos 101,C 30,pos 11,C 30,pos 1741,C 2,C 7,pos 1894,C 12,pos 131,C 12,pos 354, c 7': mat cg_item$ eof CG_EO_CUSTOMER ioerr CG_ERR_READ
 		fnflexadd1(mat cg_item$)
 	loop
 	!
@@ -1277,12 +1277,12 @@ def fn_key_tweak(&kt_key$,hCustomer1)
 	do
 		kt_key$=rpad$(trim$(kt_key$),10)
 		!   pr 'trying Rpadded account key: "'&kt_key$&'"'
-		read #hCustomer1,using 'Form POS 1,C 10',key>=kt_key$,release: kt_read_account$ nokey KT_TRY_LPADDED
+		read #hCustomer1,using 'form pos 1,C 10',key>=kt_key$,release: kt_read_account$ nokey KT_TRY_LPADDED
 		if kt_key$=kt_read_account$ then kt_return=1 : goto KT_FINIS
 		KT_TRY_LPADDED: !
 		kt_key$=lpad$(trim$(kt_key$),10)
 		!   pr 'trying Lpadded account key: "'&kt_key$&'"'
-		read #hCustomer1,using 'Form POS 1,C 10',key>=kt_key$,release: kt_read_account$ nokey KT_TWEAK
+		read #hCustomer1,using 'form pos 1,C 10',key>=kt_key$,release: kt_read_account$ nokey KT_TWEAK
 		if kt_key$=kt_read_account$ then kt_return=1 : goto KT_FINIS
 		!
 		KT_TWEAK: !
@@ -1554,7 +1554,7 @@ def fn_setup
 	dim serviceCodeMetered$(0)*2
 	fnGetServiceCodesMetered(mat serviceCodeMetered$)
 	open #20: "Name=[Q]\UBmstr\Company.h[cno],Shr",i,i,r
-	read #20,using "Form POS 81,C 30,pos 129,c 1",rec=1: newe4$,escrow$
+	read #20,using "form pos 81,C 30,pos 129,c 1",rec=1: newe4$,escrow$
 	close #20:
 	j=first_service=0
 	do until first_service<>0
@@ -1580,7 +1580,7 @@ def fn_getRateCodeOptions(service_code,&ratecode,mat rates$ ) ! get applicable r
 		rates$(1)=" 0=Not applicable"
 	end if
 	do
-		read #h_rate1,using "Form POS 1,C 54",release: rt$ eof GCODE_FINIS
+		read #h_rate1,using "form pos 1,C 54",release: rt$ eof GCODE_FINIS
 		if trim$(rt$(1:2))=searchcode$ then
 			rates$(x+=1)=rt$(3:4)&"="&rt$(5:25)
 			if ratecode=val(rt$(3:4)) then rateInfo$(3)=rt$(3:4)&"="&rt$(5:25)

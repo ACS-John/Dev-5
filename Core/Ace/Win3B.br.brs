@@ -89,7 +89,7 @@ def fn_win3b(win,&cap$,win_height,win_width; display_cnam,button_option,win_alig
 	temp_file$=env$('temp')&"\Win-"&cnvrt$("pic(###)",win)&".tmp"
 	close #win: ioerr ignore
 	open #win: "Name="&temp_file$&",Size=0,RecL=80,Replace",internal,outIn
-	write #win,using 'Form POS 1,5*N 4': win,sc,ec,sr,er
+	write #win,using 'form pos 1,5*N 4': win,sc,ec,sr,er
 	close #win: ioerr ignore
 	open #win: "SRow="&str$(sr)&",SCol="&str$(sc)&",ERow="&str$(er)&",ECol="&str$(ec)&",Border=Sr,Caption=<"&cap$,display,outIn
 	pr #win: newpage
@@ -140,7 +140,7 @@ def fn_fkey(scrline,mat fkey$,mat disfk,&em$,es; _
 	if win=0 then goto NO_TEMP_FILE
 	temp_file$=env$('temp')&'\'&"Win-"&cnvrt$("pic(###)",win)&".tmp"
 	open #tfn=fnH: "Name="&temp_file$&",RecL=80,use",internal,outIn ioerr NO_TEMP_FILE
-	read #tfn,using 'Form POS 1,5*N 4': win_align,sc,ec,sr,er ioerr NO_TEMP_FILE
+	read #tfn,using 'form pos 1,5*N 4': win_align,sc,ec,sr,er ioerr NO_TEMP_FILE
 	startpos=int((ec-sc-totallen)/2+sc)+1
 	goto L270
 	NO_TEMP_FILE: !

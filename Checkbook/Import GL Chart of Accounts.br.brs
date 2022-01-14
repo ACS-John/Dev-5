@@ -49,8 +49,8 @@ do
 		open #1: "Name=[Q]\CLmstr\GLmstr.H[cno],Size=0,RecL=62,Replace",internal,output
 		do
 			dim de$*50
-			read #2,using 'Form POS 1,C 12,C 50': gl$,de$ eof END1
-			write #1,using 'Form POS 1,C 12,C 50': gl$,de$
+			read #2,using 'form pos 1,C 12,C 50': gl$,de$ eof END1
+			write #1,using 'form pos 1,C 12,C 50': gl$,de$
 		loop
 		END1: !
 		close #1:

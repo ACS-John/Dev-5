@@ -29,7 +29,7 @@ SCREEN_1: !
 	resp$(rc+=1)=""
 	if ~fnArrayEmpty(mat dednames$) then
 		
-		fnFra(18,1,10,50,"Skip Deductions This Pay Period","You can skip any deduction this pay period by checking the deduction below.")
+		fnFra(18,1,10,50,"skip Deductions This Pay Period","You can skip any deduction this pay period by checking the deduction below.")
 		franum+=1
 		linecnt=0
 		resp_skipDedAdd=rc
@@ -95,7 +95,7 @@ SCREEN_1: !
 	! else
 	! 	fnTos
 	! 	rc=franum=linecnt=0
-	! 	fnFra(1,1,10,50,"Skip Deductions This Pay Period","You can skip any deduction this pay period by checking the deduction below.")
+	! 	fnFra(1,1,10,50,"skip Deductions This Pay Period","You can skip any deduction this pay period by checking the deduction below.")
 	! 	franum+=1
 	! 	resp_skipDedAdd=rc
 	! 	for j=1 to 19 step 2
@@ -149,7 +149,7 @@ ENTER_TIME: !
 	! DUPLICATE_DATE_TEST: ! r: ! dont allow to calculate if reversing calculation needs to be run
 	restore #2,key>=cnvrt$("pic(zzzzzzz#)",eno)&"   ": nokey DUPLICATE_DATE_TEST_XIT
 	do
-		read #2,using 'FORM POS 1,n 8,POS 42,n 6': depeno,tdt4 eof DUPLICATE_DATE_TEST_XIT
+		read #2,using 'form pos 1,n 8,pos 42,n 6': depeno,tdt4 eof DUPLICATE_DATE_TEST_XIT
 		if depeno<>eno then goto DUPLICATE_DATE_TEST_XIT
 		if tdt4=prd then
 			mat ml$(0)
@@ -168,11 +168,11 @@ ENTER_TIME: !
 	restore #2,key>=cnvrt$("pic(zzzzzzz#)",eno)&"   ":
 	L1340: !
 	if goprev=0 then
-		read #2,using 'Form POS 1,N 8,n 3,c 12,4*N 6,3*N 2,pd 4.2,23*PD 4.2': teno,dep,gl$,mat tdt,mat tcd,tli,mat tdet eof ASK_EMPLOYEE
+		read #2,using 'form pos 1,N 8,n 3,c 12,4*N 6,3*N 2,pd 4.2,23*PD 4.2': teno,dep,gl$,mat tdt,mat tcd,tli,mat tdet eof ASK_EMPLOYEE
 	else if goprev=1 then
 		semp-=1
 		goprev=0
-		read #2,using 'Form POS 1,N 8,n 3,c 12,4*N 6,3*N 2,pd 4.2,23*PD 4.2',prior: teno,dep,gl$,mat tdt,mat tcd,tli,mat tdet eof ASK_EMPLOYEE
+		read #2,using 'form pos 1,N 8,n 3,c 12,4*N 6,3*N 2,pd 4.2,23*PD 4.2',prior: teno,dep,gl$,mat tdt,mat tcd,tli,mat tdet eof ASK_EMPLOYEE
 	end if
 	if teno=eno and goprev=0 then semp+=1
 	if teno<>eno then semp=0
@@ -212,48 +212,48 @@ ENTER_TIME: !
 	fnLbl(2,1,"Employee Name: "&rtrm$(em$),60,2,0,franum)
 	fnLbl(3,1,"Department Number: "&str$(dep)&" "&fnDeptName$(dep),60,2,0,franum)
 	fnLbl(5,1,"Regular Hours:",mylen,1,0,franum)
-	fnTxt(5,mylen+2,12,0,1,"10",0,".",franum)
+	fnTxt(5,mylen+2,12,0,1,'10',0,".",franum)
 	resp$(rc+=1)=str$(inpX(1))
 	fnLbl(6,1,"Overtime Hours:",mylen,1,0,franum)
-	fnTxt(6,mylen+2,12,0,1,"10",0,".",franum)
+	fnTxt(6,mylen+2,12,0,1,'10',0,".",franum)
 	resp$(rc+=1)=str$(inpX(2))
 	fnLbl(7,1,"Sick Hours:",mylen,1,0,franum)
-	fnTxt(7,mylen+2,12,0,1,"10",0,".",franum)
+	fnTxt(7,mylen+2,12,0,1,'10',0,".",franum)
 	resp$(rc+=1)=str$(inpX(3))
 	fnLbl(8,1,"Vacation Hours:",mylen,1,0,franum)
-	fnTxt(8,mylen+2,12,0,1,"10",0,".",franum)
+	fnTxt(8,mylen+2,12,0,1,'10',0,".",franum)
 	resp$(rc+=1)=str$(inpX(4))
 	fnLbl(9,1,"Holiday Hours:",mylen,1,0,franum)
-	fnTxt(9,mylen+2,12,0,1,"10",0,".",franum)
+	fnTxt(9,mylen+2,12,0,1,'10',0,".",franum)
 	resp$(rc+=1)=str$(inpX(5))
 	fnLbl(10,1,"Salary:",mylen,1,0,franum)
-	fnTxt(10,mylen+2,12,0,1,"10",0,".",franum)
+	fnTxt(10,mylen+2,12,0,1,'10',0,".",franum)
 	resp$(rc+=1)=str$(inpX(6))
 	fnLbl(11,1,"Other Compensation:",mylen,1,0,franum)
-	fnTxt(11,mylen+2,12,0,1,"10",0,".",franum)
+	fnTxt(11,mylen+2,12,0,1,'10',0,".",franum)
 	resp$(rc+=1)=str$(inpX(7))
 	fnLbl(12,1,"Meals:",mylen,1,0,franum)
-	fnTxt(12,mylen+2,12,0,1,"10",0,".",franum)
+	fnTxt(12,mylen+2,12,0,1,'10',0,".",franum)
 	resp$(rc+=1)=str$(inpX(8))
 	fnLbl(13,1,"Tips:",mylen,1,0,franum)
-	fnTxt(13,mylen+2,12,0,1,"10",0,".",franum)
+	fnTxt(13,mylen+2,12,0,1,'10',0,".",franum)
 	resp$(rc+=1)=str$(inpX(9))
 	fnLbl(15,1,"Reg Hourly Rate:",mylen,1,0,franum)
-	fnTxt(15,mylen+2,12,0,1,"10",0,".",franum)
+	fnTxt(15,mylen+2,12,0,1,'10',0,".",franum)
 	resp$(rc+=1)=str$(hr(1))
 	fnLbl(16,1,"O/T Hourly Rate:",mylen,1,0,franum)
-	fnTxt(16,mylen+2,12,0,1,"10",0,".",franum)
+	fnTxt(16,mylen+2,12,0,1,'10',0,".",franum)
 	resp$(rc+=1)=str$(hr(2))
 	for j=1 to 20
 		if trim$(dednames$(j))="" then name$(j)="" else name$(j)=trim$(dednames$(j))&":"
 		if skipit$(j)="Y" then inpX(j+9)=0
 		disable_deduction=0 : if trim$(name$(j))='' then disable_deduction=1
 		fnLbl(j+4,25,trim$(name$(j)),mylen,1,0,franum)
-		fnTxt(j+4,47,12,0,1,"10",disable_deduction,".",franum)
+		fnTxt(j+4,47,12,0,1,'10',disable_deduction,".",franum)
 		resp$(rc+=1)=str$(inpX(j+9))
 	next j
 	fnCmdKey("&Next",1,1,0,"Record this time" )
-	if editmode=0 then fnCmdKey("&Skip Department F2",2,0,0,"Skips this department.")
+	if editmode=0 then fnCmdKey("&skip Department F2",2,0,0,"Skips this department.")
 	if editmode=0 and semp>=1 then fnCmdKey("&Prev Department",12,0,0,"Go back to last department.")
 	if editmode=1 then fnCmdKey("&Delete Department",10,0,0,"Deletes the hours, etc for this department.")
 	if editmode=0 then fnCmdKey("&Track Hours",8,0,0,"Track hours other than those entered above.")
@@ -346,42 +346,42 @@ PROOF_TOTALS: !
 	fnLbl(2,1,"Total Employees/Departments Entered: "&str$(count_employees_entered),60,2,0,franum)
 	fnLbl(3,1,"Total Employee Numbers Entered: "&str$(teno),60,2,0,franum)
 	fnLbl(5,1,"Regular Hours:",mylen,1,0,franum)
-	fnTxt(5,mylen+2,12,0,1,"10",1,".",franum)
+	fnTxt(5,mylen+2,12,0,1,'10',1,".",franum)
 	resp$(rc+=1)=str$(tinp(1))
 	fnLbl(6,1,"Overtime Hours:",mylen,1,0,franum)
-	fnTxt(6,mylen+2,12,0,1,"10",1,".",franum)
+	fnTxt(6,mylen+2,12,0,1,'10',1,".",franum)
 	resp$(rc+=1)=str$(tinp(2))
 	fnLbl(7,1,"Sick Hours:",mylen,1,0,franum)
-	fnTxt(7,mylen+2,12,0,1,"10",1,".",franum)
+	fnTxt(7,mylen+2,12,0,1,'10',1,".",franum)
 	resp$(rc+=1)=str$(tinp(3))
 	fnLbl(8,1,"Vacation Hours:",mylen,1,0,franum)
-	fnTxt(8,mylen+2,12,0,1,"10",1,".",franum)
+	fnTxt(8,mylen+2,12,0,1,'10',1,".",franum)
 	resp$(rc+=1)=str$(tinp(4))
 	fnLbl(9,1,"Holiday Hours:",mylen,1,0,franum)
-	fnTxt(9,mylen+2,12,0,1,"10",1,".",franum)
+	fnTxt(9,mylen+2,12,0,1,'10',1,".",franum)
 	resp$(rc+=1)=str$(tinp(5))
 	fnLbl(10,1,"Salary:",mylen,1,0,franum)
-	fnTxt(10,mylen+2,12,0,1,"10",1,".",franum)
+	fnTxt(10,mylen+2,12,0,1,'10',1,".",franum)
 	resp$(rc+=1)=str$(tinp(6))
 	fnLbl(11,1,"Other Compensation:",mylen,1,0,franum)
-	fnTxt(11,mylen+2,12,0,1,"10",1,".",franum)
+	fnTxt(11,mylen+2,12,0,1,'10',1,".",franum)
 	resp$(rc+=1)=str$(tinp(7))
 	fnLbl(12,1,"Meals:",mylen,1,0,franum)
-	fnTxt(12,mylen+2,12,0,1,"10",1,".",franum)
+	fnTxt(12,mylen+2,12,0,1,'10',1,".",franum)
 	resp$(rc+=1)=str$(tinp(8))
 	fnLbl(13,1,"Tips:",mylen,1,0,franum)
-	fnTxt(13,mylen+2,12,0,1,"10",1,".",franum)
+	fnTxt(13,mylen+2,12,0,1,'10',1,".",franum)
 	resp$(rc+=1)=str$(tinp(9))
 	fnLbl(15,1,"Reg Hourly Rate:",mylen,1,0,franum)
-	fnTxt(15,mylen+2,12,0,1,"10",1,".",franum)
+	fnTxt(15,mylen+2,12,0,1,'10',1,".",franum)
 	resp$(rc+=1)=str$(hr(1))
 	fnLbl(16,1,"O/T Hourly Rate:",mylen,1,0,franum)
-	fnTxt(16,mylen+2,12,0,1,"10",1,".",franum)
+	fnTxt(16,mylen+2,12,0,1,'10',1,".",franum)
 	resp$(rc+=1)=str$(hr(2))
 	for j=1 to 20
 		if trim$(dednames$(j))="" then name$(j)="" else name$(j)=trim$(dednames$(j))&":"
 		fnLbl(j+4,25,trim$(name$(j)),mylen,1,0,franum)
-		fnTxt(j+4,47,12,0,1,"10",1,".",franum)
+		fnTxt(j+4,47,12,0,1,'10',1,".",franum)
 		resp$(rc+=1)=str$(tinp(j+9))
 	next j
 	fnCmdKey("Co&rrections",1,0,0,"Correct any entries.")
@@ -446,7 +446,7 @@ L4200: !
 L4290: !
 	restore #2,key>=cnvrt$("pic(zzzzzzz#)",eno)&"   ":
 L4300: !
-	read #2,using 'FORM POS 1,n 8,n 3,POS 58,23*PD 4.2': depeno,dep,mat tdet
+	read #2,using 'form pos 1,n 8,n 3,pos 58,23*PD 4.2': depeno,dep,mat tdet
 	if depeno<>eno then goto TheNextOne
 	simplekey$=en$&cnvrt$("n 3",dep)&cnvrt$("n 5",cno) ! timecard
 	reghrs=othrs=vachrs=sickhrs=holhrs=othercomp=0 ! timecard
@@ -569,9 +569,9 @@ PullFromJobCost: ! r:
 	open #h_rpwork:=3: "Name=[Q]\PRmstr\rpwork[unique_computer_id].h[cno],KFName=[Q]\PRmstr\rpwork[unique_computer_id]Idx.h[cno]",internal,outIn,keyed
 ! Restore #hEmployee:
 ! Read #hEmployee,Using 5480: EN$ Eof 5520
-! Form POS 1,C 8
+! form pos 1,C 8
 ! Rewrite #hEmployee,Using 5500,Key=EN$: 0
-! Form POS 168,PD 5.2
+! form pos 168,PD 5.2
 ! Goto 5470
 	holdeno=eno=holddep=dep=0
 	mat h=(0)
@@ -848,7 +848,7 @@ def fn_setup
 	sc1$(30)="Reg Hourly Rate"
 	sc1$(31)="O/T Hourly Rate"
  
-	f1$="Form POS 1,C 20" ! need this for edit list
+	f1$="form pos 1,C 20" ! need this for edit list
 	f2$=f1$
 	for j=1 to 9
 		f1$=rtrm$(f1$)&",PIC(------------)"

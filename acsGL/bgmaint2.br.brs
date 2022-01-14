@@ -34,12 +34,12 @@
 	mat maxan2=an2
 	an2(8)=40 : an2(9)=12 : an2(10)=12: an2(11)=12
 	open #company=1: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,input
-	read #company,using 'Form Pos 150,2*N 1': use_dept,use_sub
+	read #company,using 'form pos 150,2*N 1': use_dept,use_sub
 	close #1:
 	open #1: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLIndex.h[cno],Shr",internal,outIn,keyed
 	! format:  budget #^bud^n 2,budget name^bud$^c 50,range of g/l #^gl$(40) (1 to 2, 3 to 4, etc)
 	open #5: "Name=[Q]\GLmstr\BudInfo.h[cno],use,KFName=[Q]\GLmstr\BudInfo_Index.h[cno],RecL=532,KPs=1,KLn=2",internal,outIn,keyed
-	read #5,using 'Form N 2,C 50,40*C 12': bud,bud$,mat gl$ noRec MAINTAIN_RANGE_FILE, eof MAINTAIN_RANGE_FILE
+	read #5,using 'form N 2,C 50,40*C 12': bud,bud$,mat gl$ noRec MAINTAIN_RANGE_FILE, eof MAINTAIN_RANGE_FILE
 	open #12: "Name=[Q]\GLmstr\BudgetInfo.h[cno],KFName=[Q]\GLmstr\BudIndx.h[cno],Use,RecL=28,KPs=1,KLn=14,Shr",internal,outIn,keyed
 
 	open #2: "Name=[Q]\GLmstr\Budget"&str$(bud)&".h[cno],KFName=[Q]\GLmstr\BgIndx"&str$(bud)&".h[cno],Shr",internal,outIn,keyed ioerr MENU1
@@ -139,27 +139,27 @@ READD_TOTALS: ! r:
 ! from general ledger __________________________________________________
 g1$=""
 restore #1,search>="": nokey END1
-L1100: read #1,using 'Form POS 1,C 12,C 50,POS 87,PD 6.2,POS 249,13*PD 6.2': g1$,gd$,cb,mat bm eof END1
+L1100: read #1,using 'form pos 1,C 12,C 50,pos 87,PD 6.2,pos 249,13*PD 6.2': g1$,gd$,cb,mat bm eof END1
 for j=1 to 40 step 2
 	if g1$>=gl$(j) and g1$<=gl$(j+1) then goto L1150
 next j
 goto L1100
 L1150: mat bg=(0) : ex$="" : cd$="B"
 ! If TI1=5 Then Goto 1170
-read #2,using 'Form POS 1,C 12,6*PD 6.2,2*C 50,C 1',key=g1$&cd$: g1$,mat bg,gd$,ex$,cd$ nokey L1210
+read #2,using 'form pos 1,C 12,6*PD 6.2,2*C 50,C 1',key=g1$&cd$: g1$,mat bg,gd$,ex$,cd$ nokey L1210
 bg(1)=sum(bm) : bg(2)=cb : bg(3)=0
 bg(5)=bg(1)+bg(4) ! NEW BUDGET = BUDGET FROM FILE + CHANGES
-rewrite #2,using 'Form POS 1,C 12,6*PD 6.2,2*C 50,C 1',key=g1$&cd$: g1$,mat bg,gd$,ex$,cd$ nokey L1220
+rewrite #2,using 'form pos 1,C 12,6*PD 6.2,2*C 50,C 1',key=g1$&cd$: g1$,mat bg,gd$,ex$,cd$ nokey L1220
 goto L1100
 L1210: bg(1)=sum(bm) : bg(2)=cb : bg(3)=0
 bg(5)=bg(1)+bg(4) : gd$=gd$ : cd$="B"
-L1220: write #2,using 'Form POS 1,C 12,6*PD 6.2,2*C 50,C 1': g1$,mat bg,gd$,ex$,cd$
+L1220: write #2,using 'form pos 1,C 12,6*PD 6.2,2*C 50,C 1': g1$,mat bg,gd$,ex$,cd$
 goto L1100
 !
 END1: ! end on g/l
 cd$="X": mat bg=(0): gd$=ex$="" ! write one blank line at end of file
 g1$="999999999999"
-! Write #2,Using 'Form POS 1,C 12,6*PD 6.2,2*C 50,C 1': G1$,MAT BG,GD$,EX$,CD$    why was it doing this  ??? kj
+! Write #2,Using 'form pos 1,C 12,6*PD 6.2,2*C 50,C 1': G1$,MAT BG,GD$,EX$,CD$    why was it doing this  ??? kj
 close #2:
 execute "Index [Q]\GLmstr\Budget"&str$(bud)&".h[cno],[Q]\GLmstr\BGINDX"&str$(bud)&".h[cno],1/149,12/1,Replace,DupKeys -n"
 open #2: "Name=[Q]\GLmstr\Budget"&str$(bud)&".h[cno],KFName=[Q]\GLmstr\BgIndx"&str$(bud)&".h[cno],Shr",internal,outIn,keyed
@@ -176,9 +176,9 @@ L1410: read #4,using L1420: g1$,d1,amt,tcde eof L1500
 L1420: form pos 1,c 12,n 6,pd 6.2,n 2
 if g1$(3:3)=" " then g1$(3:3)="0"
 if g1$(12:12)=" " then g1$(12:12)="0"
-read #2,using 'Form POS 1,C 12,6*PD 6.2,2*C 50,C 1',key=g1$&"B": g1$,mat bg,gd$,ex$,cd$ nokey L1410
+read #2,using 'form pos 1,C 12,6*PD 6.2,2*C 50,C 1',key=g1$&"B": g1$,mat bg,gd$,ex$,cd$ nokey L1410
 bg(2)=bg(2)+amt
-rewrite #2,using 'Form POS 1,C 12,6*PD 6.2,2*C 50,C 1',key=g1$&"B": g1$,mat bg,gd$,ex$,cd$
+rewrite #2,using 'form pos 1,C 12,6*PD 6.2,2*C 50,C 1',key=g1$&"B": g1$,mat bg,gd$,ex$,cd$
 goto L1410
 !
 L1500: close #4:
@@ -195,13 +195,13 @@ L1590: form pos 1,c 8,c 12,pos 27,n 6,pos 96,n 1
 	if fndate_mmddyy_to_ccyymmdd(d1)<fd1 or fndate_mmddyy_to_ccyymmdd(d1)>fd2 then goto L1720
 ! Read #4,Using 1600,Rec=AA: G1$,AMT,NAA
 	restore #4,key>=lpad$(rtrm$(vn$),8)&lpad$(rtrm$(iv$),12): nokey L1720
-L1640: read #4,using 'Form POS 1,C 8,C 12,c 12,PD 5.2,C 30': hvn$,hiv$,g1$,amt,gd$ eof L1720
+L1640: read #4,using 'form pos 1,C 8,C 12,c 12,PD 5.2,C 30': hvn$,hiv$,g1$,amt,gd$ eof L1720
 	if vn$=hvn$ and iv$<>hiv$ then goto L1640
 	if vn$<>hvn$ or iv$<>hiv$ then goto L1720
 	form pos 21,c 12,pd 5.2,x 30,pd 3
-	read #2,using 'Form POS 1,C 12,6*PD 6.2,2*C 50,C 1',key=g1$&"B": g1$,mat bg,gd$,ex$,cd$ nokey L1710
+	read #2,using 'form pos 1,C 12,6*PD 6.2,2*C 50,C 1',key=g1$&"B": g1$,mat bg,gd$,ex$,cd$ nokey L1710
 	bg(3)=bg(3)+amt
-	rewrite #2,using 'Form POS 1,C 12,6*PD 6.2,2*C 50,C 1',key=g1$&"B": g1$,mat bg,gd$,ex$,cd$
+	rewrite #2,using 'form pos 1,C 12,6*PD 6.2,2*C 50,C 1',key=g1$&"B": g1$,mat bg,gd$,ex$,cd$
 L1710: goto L1640
 L1720: next j
 ! from check history (checks not posted)
@@ -215,14 +215,14 @@ if pcde=1 or pcde=3 then goto L1780
 if d1<fd1 or d1>fd2 then goto L1780
 key$=lpad$(str$(bcde),2)&str$(tcde)&rpad$(iv$,8)
 restore #4,key>=key$: nokey L1780
-L1830: read #4,using 'Form Pos 1,C 11,c 12,pd 5.2,pos 65,pd 3,pos 80,n 1': newkey$,g1$,amt,naa,gde
+L1830: read #4,using 'form pos 1,C 11,c 12,pd 5.2,pos 65,pd 3,pos 80,n 1': newkey$,g1$,amt,naa,gde
 if newkey$<>key$ then goto L1780
 read #4,using L1860,rec=aa: g1$,amt,naa,gde noRec L1780
 L1860: form pos 12,c 12,pd 5.2,pos 65,pd 3,pos 80,n 1
 if gde>0 then goto L1910
-read #2,using 'Form POS 1,C 12,6*PD 6.2,2*C 50,C 1',key=g1$&"B": g1$,mat bg,gd$,ex$,cd$ nokey L1910
+read #2,using 'form pos 1,C 12,6*PD 6.2,2*C 50,C 1',key=g1$&"B": g1$,mat bg,gd$,ex$,cd$ nokey L1910
 if tcde=2 or tcde=3 then bg(3)=bg(3)-amt else bg(3)=bg(3)+amt
-rewrite #2,using 'Form POS 1,C 12,6*PD 6.2,2*C 50,C 1',key=g1$&"B": g1$,mat bg,gd$,ex$,cd$
+rewrite #2,using 'form pos 1,C 12,6*PD 6.2,2*C 50,C 1',key=g1$&"B": g1$,mat bg,gd$,ex$,cd$
 L1910: goto L1830
 ! from purchase order file_________________________________________
 L1930: close #3: ioerr L1940
@@ -236,9 +236,9 @@ aa=aa(1)
 L2010: if aa=0 then goto L1970
 read #4,using L2030,rec=aa: pt1,pt2,pt3,g1$,naa
 L2030: form pos 52,pd 3,pd 5.2,pd 3,pos 91,c 12,pos 103,pd 3
-read #2,using 'Form POS 1,C 12,6*PD 6.2,2*C 50,C 1',key=g1$&"B": g1$,mat bg,gd$,ex$,cd$ nokey L2070
+read #2,using 'form pos 1,C 12,6*PD 6.2,2*C 50,C 1',key=g1$&"B": g1$,mat bg,gd$,ex$,cd$ nokey L2070
 bg(3)=bg(3)+(pt1-pt3)*pt2
-rewrite #2,using 'Form POS 1,C 12,6*PD 6.2,2*C 50,C 1',key=g1$&"B": g1$,mat bg,gd$,ex$,cd$
+rewrite #2,using 'form pos 1,C 12,6*PD 6.2,2*C 50,C 1',key=g1$&"B": g1$,mat bg,gd$,ex$,cd$
 L2070: aa=naa : goto L2010
 L2080: !
 close #3: ioerr ignore
@@ -246,22 +246,22 @@ close #4: ioerr ignore
 close #2: ioerr ignore
 open #2: "Name=[Q]\GLmstr\Budget"&str$(bud)&".h[cno],KFName=[Q]\GLmstr\BgIndx"&str$(bud)&".h[cno],Shr",internal,outIn,keyed
 do
-	read #2,using 'Form POS 1,C 12,6*PD 6.2,2*C 50,C 1': g1$,mat bg,gd$,ex$,cd$ eof READD_SUB_TOTALS
+	read #2,using 'form pos 1,C 12,6*PD 6.2,2*C 50,C 1': g1$,mat bg,gd$,ex$,cd$ eof READD_SUB_TOTALS
 	bg(5)=bg(1)+bg(4) ! update new balance for any changes
-	rewrite #2,using 'Form POS 1,C 12,6*PD 6.2,2*C 50,C 1': g1$,mat bg,gd$,ex$,cd$
+	rewrite #2,using 'form pos 1,C 12,6*PD 6.2,2*C 50,C 1': g1$,mat bg,gd$,ex$,cd$
 loop
 READD_SUB_TOTALS: !
 mat t=(0): mat s=(0)
 restore #2:
-L2190: read #2,using 'Form POS 1,C 12,6*PD 6.2,2*C 50,C 1': g1$,mat bg,gd$,ex$,cd$ eof L2240
+L2190: read #2,using 'form pos 1,C 12,6*PD 6.2,2*C 50,C 1': g1$,mat bg,gd$,ex$,cd$ eof L2240
 if cd$="B" then mat t=t+bg: mat s=s+bg
 if cd$="S" then
 	mat bg=s: mat s=(0)
-	rewrite #2,using 'Form POS 1,C 12,6*PD 6.2,2*C 50,C 1': g1$,mat bg,gd$,ex$,cd$
+	rewrite #2,using 'form pos 1,C 12,6*PD 6.2,2*C 50,C 1': g1$,mat bg,gd$,ex$,cd$
 end if
 if cd$="T" then
 	mat bg=t: mat t=(0)
-	rewrite #2,using 'Form POS 1,C 12,6*PD 6.2,2*C 50,C 1': g1$,mat bg,gd$,ex$,cd$
+	rewrite #2,using 'form pos 1,C 12,6*PD 6.2,2*C 50,C 1': g1$,mat bg,gd$,ex$,cd$
 end if
 goto L2190
 L2240: restore #2:
@@ -294,7 +294,7 @@ fnLbl(1,1,bud$,50,right) ! move cmdkeys down
 frame=0
 fnflexinit1('bgmaintgrid',2,1,20,95,mat chdr$,mat cmask$,1,0)
 READ_BUDGET_GRID: ! read budget items
-read #2,using 'Form POS 1,C 12,6*PD 6.2,2*C 50,C 1': g1$,mat bg,gd$,ex$,cd$ eof EO_BUDGET_GRID noRec L2650
+read #2,using 'form pos 1,C 12,6*PD 6.2,2*C 50,C 1': g1$,mat bg,gd$,ex$,cd$ eof EO_BUDGET_GRID noRec L2650
 if needactual=0 and needbudget=0 then goto L2610
 read #1,using "form pos 13,c 30,pos 237,pd 6.2",key=g1$: name$,prioryear nokey L2610
 restore #12,search>=g1$&"  ": nokey L2610 eof L2610
@@ -307,7 +307,7 @@ for j=1 to 5
 	if val(oldyr$)=year(j) and needbudget=0 and needactual=1 then item$(x+j)=str$(oldbud) ! only actual
 next j
 goto L2520
-L2610: if cd$="A" or cd$="X" then mat cmask$=(""): cmask$(1)="30": : mat item$=(""): item$(1)=str$(rec(2)): item$(2)=gd$: item$(10)=g1$: goto L2640
+L2610: if cd$="A" or cd$="X" then mat cmask$=(""): cmask$(1)='30': : mat item$=(""): item$(1)=str$(rec(2)): item$(2)=gd$: item$(10)=g1$: goto L2640
 mat cmask$=holdcmask$
 item$(1)=str$(rec(2))
 item$(10)=g1$
@@ -340,7 +340,7 @@ if ckey=1 then
 	mat resp$=(""): goto MAINTAIN_NONB_RECORDS
 end if
 if ckey=2 then
-	rec2=val(resp$(1)) : read #2,using 'Form POS 1,C 12,6*PD 6.2,2*C 50,C 1',rec=rec2,release: g1$,mat bg,gd$,ex$,cd$
+	rec2=val(resp$(1)) : read #2,using 'form pos 1,C 12,6*PD 6.2,2*C 50,C 1',rec=rec2,release: g1$,mat bg,gd$,ex$,cd$
 	mat resp$=("")
 	holdkey$=g1$&cd$
 else
@@ -374,13 +374,13 @@ if use_dept =1 then let fnLbl(1,26,"Fund #",6,2)
 if use_sub =1 then let fnLbl(1,40,"Sub #",6,2)
 fnLbl(2,1,"General Ledger Number:",mylen,right)
 if use_dept=1 then
-	let fnTxt(2,26,3,0,right,"30",0,"Enter the fund portion of the general ledger number.",0 )
+	let fnTxt(2,26,3,0,right,'30',0,"Enter the fund portion of the general ledger number.",0 )
 	resp$(rc+=1)=g1$(1:3)
 end if
-fnTxt(2,31,6,0,right,"30",0,"Enter the main part of the general ledger number.",0 )
+fnTxt(2,31,6,0,right,'30',0,"Enter the main part of the general ledger number.",0 )
 resp$(rc+=1)=g1$(4:9)
 if use_sub=1 then
-	fnTxt(2,40,3,0,right,"30",0,"Enter the sub portion of the general ledger number.",0 )
+	fnTxt(2,40,3,0,right,'30',0,"Enter the sub portion of the general ledger number.",0 )
 	resp$(rc+=1)=g1$(10:12)
 end if
 fnLbl(3,1,"Description:",mylen,right)
@@ -406,7 +406,7 @@ if use_dept=0 and use_sub=1 then gd$=resp$(3): cd$=resp$(4)(1:1)
 if use_dept=0 and use_sub=0 then gd$=resp$(2): cd$=resp$(3)(1:1)
 if use_dept=1 and use_sub=0 then gd$=resp$(3): cd$=resp$(4)(1:1)
 key$=cnvrt$("N 3",dno)&cnvrt$("N 6",ano)&cnvrt$("N 3",sno)&"B"
-read #2,using 'Form POS 1,c 13',key=key$: oldkey$ nokey L3240
+read #2,using 'form pos 1,c 13',key=key$: oldkey$ nokey L3240
 MSGBOX1: !
 mat ml$(3)
 ml$(1)="General ledger account # "&key$&" already "
@@ -419,10 +419,10 @@ WRITE_NEW_RECORD: !
 mat bg=(0) : ex$="": edit=1
 g1$=key$(1:12)
 write_new_record
-write #2,using 'Form POS 1,C 12,6*PD 6.2,2*C 50,C 1': g1$,mat bg,gd$,ex$,cd$
+write #2,using 'form pos 1,C 12,6*PD 6.2,2*C 50,C 1': g1$,mat bg,gd$,ex$,cd$
 if cd$="B" then goto MAINTAIN_LINE_ITEM else goto DISPLAY_GRID
 REWRITE_EXISTING_RECORD: !
-rewrite #2,using 'Form POS 1,C 12,6*PD 6.2,2*C 50,C 1',rec=rec2: g1$,mat bg,gd$,ex$,cd$
+rewrite #2,using 'form pos 1,C 12,6*PD 6.2,2*C 50,C 1',rec=rec2: g1$,mat bg,gd$,ex$,cd$
 goto DISPLAY_GRID ! /r
 MAINTAIN_LINE_ITEM: ! r:
 if cd$="B" then goto L3350 else goto MAINTAIN_NONB_RECORDS
@@ -433,23 +433,23 @@ fnLbl(1,1,"Account #:",mylen,right)
 fnqgl(1,mypos)
 resp$(respc+=1)=fnrgl$(g1$)
 fnLbl(2,1,"Budget:",mylen,right)
-fnTxt(2,mypos,12,0,0,"10",0,"Approved budget at the beginning of the year")
+fnTxt(2,mypos,12,0,0,'10',0,"Approved budget at the beginning of the year")
 resp$(respc+=1)=str$(bg(1))
 fnLbl(3,1,"Actual Amount:",mylen,right)
-fnTxt(3,mypos,12,0,0,"10",0,"Actual expenditures or receiptsfor the year.")
+fnTxt(3,mypos,12,0,0,'10',0,"Actual expenditures or receiptsfor the year.")
 resp$(respc+=1)=str$(bg(2))
 fnLbl(4,1,"Unpaid Expenses:",mylen,right)
-fnTxt(4,mypos,12,0,0,"10",0,"Accounts payable, etc.")
+fnTxt(4,mypos,12,0,0,'10',0,"Accounts payable, etc.")
 resp$(respc+=1)=str$(bg(3))
 fnLbl(5,1,"Changes:",mylen,right)
-fnTxt(5,mypos,12,0,0,"10",0,"Changes for the year.")
+fnTxt(5,mypos,12,0,0,'10',0,"Changes for the year.")
 resp$(respc+=1)=str$(bg(4))
 ! If TI3=2 Then rEMAINING= BG(1)-BG(2)-BG(3) Else rEMAINING=BG(1)-BG(2)-BG(3)+BG(4)
 ! fnLbl(6,1,"Remaining:",MYLEN,RIGHT)
-! fnTxt(6,MYPOS,12,0,0,"10",0,"Balance remaining on the budget.")
+! fnTxt(6,MYPOS,12,0,0,'10',0,"Balance remaining on the budget.")
 ! rESP$(RESPC+=1)=STR$(REMAINING)
 fnLbl(6,1,"New Budget:",mylen,right)
-fnTxt(6,mypos,12,0,0,"10",0,"New Budget for this year.")
+fnTxt(6,mypos,12,0,0,'10',0,"New Budget for this year.")
 resp$(respc+=1)=str$(bg(5))
 fnLbl(8,1,"Description:",mylen,right)
 fnTxt(8,mypos,50,0,0,"",0,"Description of Line Item.")
@@ -512,7 +512,7 @@ for j=1 to 6
 next j
 remaining=bg(1)-bg(2)-bg(3)-bg(4) ! remaining balance
 bg(5)=bg(1)+bg(4) ! make new budget equal the old budget plus changes
-if holdg1$<>g1$ then read #2,using 'Form POS 1,C 12,6*PD 6.2,2*C 50,C 1',key=g1$&cd$: oldg1$ nokey L3850
+if holdg1$<>g1$ then read #2,using 'form pos 1,C 12,6*PD 6.2,2*C 50,C 1',key=g1$&cd$: oldg1$ nokey L3850
 goto L3850
 mat ml$(2)
 ml$(1)="You are attempting to change the record number to  an existing"
@@ -520,9 +520,9 @@ ml$(2)="record number.  Take OK to change to a different number. "
 fnmsgbox(mat ml$,resp$,'',0)
 goto MAINTAIN_LINE_ITEM
 L3850: if add=1 then goto L3880
-rewrite #2,using 'Form POS 1,C 12,6*PD 6.2,2*C 50,C 1',rec=rec2: g1$,mat bg,gd$,ex$,cd$
+rewrite #2,using 'form pos 1,C 12,6*PD 6.2,2*C 50,C 1',rec=rec2: g1$,mat bg,gd$,ex$,cd$
 goto L3900
-L3880: write #2,using 'Form POS 1,C 12,6*PD 6.2,2*C 50,C 1': g1$,mat bg,gd$,ex$,cd$
+L3880: write #2,using 'form pos 1,C 12,6*PD 6.2,2*C 50,C 1': g1$,mat bg,gd$,ex$,cd$
 add=0
 L3900: restore #2:
 goto DISPLAY_GRID ! /r
@@ -536,47 +536,47 @@ respc=0 : right=1 : mylen=25 : mypos=mylen+3
 fnLbl(lyne+=1,1,"Check the columns your want prirted",38,1)
 fnChk(lyne+=2,mypos,"GL Description:",1)
 resp$(respc+=1)='False'
-fnTxt(lyne,mypos+5,2,0,0,"30",0,"Maximum column width can not exceed the defaults that are displayed.")
+fnTxt(lyne,mypos+5,2,0,0,'30',0,"Maximum column width can not exceed the defaults that are displayed.")
 resp$(respc+=1)=str$(an2(lyne-2))
 fnChk(lyne+=1,mypos,"Budget Amount:",1)
 resp$(respc+=1)='False'
-fnTxt(lyne,mypos+5,2,0,0,"30",0,"Maximum column width can not exceed the defaults that are displayed.")
+fnTxt(lyne,mypos+5,2,0,0,'30',0,"Maximum column width can not exceed the defaults that are displayed.")
 resp$(respc+=1)=str$(an2(lyne-2))
 fnChk(lyne+=1,mypos,"Paid / Received:",1)
 resp$(respc+=1)='False'
-fnTxt(lyne,mypos+5,2,0,0,"30",0,"Maximum column width can not exceed the defaults that are displayed.")
+fnTxt(lyne,mypos+5,2,0,0,'30',0,"Maximum column width can not exceed the defaults that are displayed.")
 resp$(respc+=1)=str$(an2(lyne-2))
 fnChk(lyne+=1,mypos,"Unpaid Expenses:",1)
 resp$(respc+=1)='False'
-fnTxt(lyne,mypos+5,2,0,0,"30",0,"Maximum column width can not exceed the defaults that are displayed.")
+fnTxt(lyne,mypos+5,2,0,0,'30',0,"Maximum column width can not exceed the defaults that are displayed.")
 resp$(respc+=1)=str$(an2(lyne-2))
 fnChk(lyne+=1,mypos,"Changed Amount:",1)
 resp$(respc+=1)='False'
-fnTxt(lyne,mypos+5,2,0,0,"30",0,"Maximum column width can not exceed the defaults that are displayed.")
+fnTxt(lyne,mypos+5,2,0,0,'30',0,"Maximum column width can not exceed the defaults that are displayed.")
 resp$(respc+=1)=str$(an2(lyne-2))
 fnChk(lyne+=1,mypos,"New Budget:",1)
 resp$(respc+=1)='False'
-fnTxt(lyne,mypos+5,2,0,0,"30",0,"Maximum column width can not exceed the defaults that are displayed.")
+fnTxt(lyne,mypos+5,2,0,0,'30',0,"Maximum column width can not exceed the defaults that are displayed.")
 resp$(respc+=1)=str$(an2(lyne-2))
 fnChk(lyne+=1,mypos,"Next Years Budget:",1)
 resp$(respc+=1)='False'
-fnTxt(lyne,mypos+5,2,0,0,"30",0,"Maximum column width can not exceed the defaults that are displayed.")
+fnTxt(lyne,mypos+5,2,0,0,'30',0,"Maximum column width can not exceed the defaults that are displayed.")
 resp$(respc+=1)=str$(an2(lyne-2))
 fnChk(lyne+=1,mypos,"Reason for Change:",1)
 resp$(respc+=1)='False'
-fnTxt(lyne,mypos+5,2,0,0,"30",0,"Maximum column width can not exceed the defaults that are displayed.")
+fnTxt(lyne,mypos+5,2,0,0,'30',0,"Maximum column width can not exceed the defaults that are displayed.")
 resp$(respc+=1)=str$(an2(lyne-2))
 fnChk(lyne+=1,mypos,"Budget Remaining:",1)
 resp$(respc+=1)='False'
-fnTxt(lyne,mypos+5,2,0,0,"30",0,"Maximum column width can not exceed the defaults that are displayed.")
+fnTxt(lyne,mypos+5,2,0,0,'30',0,"Maximum column width can not exceed the defaults that are displayed.")
 resp$(respc+=1)=str$(an2(lyne-2))
 fnChk(lyne+=1,mypos,"General Ledger Number:",1)
 resp$(respc+=1)='False'
-fnTxt(lyne,mypos+5,2,0,0,"30",0,"Maximum column width can not exceed the defaults that are displayed.")
+fnTxt(lyne,mypos+5,2,0,0,'30',0,"Maximum column width can not exceed the defaults that are displayed.")
 resp$(respc+=1)=str$(an2(lyne-2))
 fnChk(lyne+=1,mypos,"% of Budget Used:",1)
 resp$(respc+=1)='False'
-fnTxt(lyne,mypos+5,2,0,0,"30",0,"Maximum column width can not exceed the defaults that are displayed.")
+fnTxt(lyne,mypos+5,2,0,0,'30',0,"Maximum column width can not exceed the defaults that are displayed.")
 resp$(respc+=1)=str$(an2(lyne-2))
 fnLbl(lyne+=1,1,"Report Heading Date:",mylen,1)
 fnTxt(lyne,mypos,30,0,0,"",0,"Date you want printed in heading of the report.")
@@ -641,7 +641,7 @@ bob4=int((lhdr-len(rtrm$(bud$)))/2)
 restore #2,search>="": nokey MENU1 ioerr L4420
 gosub HDR
 L4700: ! r:
-read #2,using 'Form POS 1,C 12,6*PD 6.2,2*C 50,C 1': g1$,mat bg,gd$,ex$,cd$ eof L4970
+read #2,using 'form pos 1,C 12,6*PD 6.2,2*C 50,C 1': g1$,mat bg,gd$,ex$,cd$ eof L4970
 L4710: form pos 1,c lhdr,skip 1,pos 1,c lhdr,skip 1
 line$=""
 if an1$(1)="Y" then line$=line$&gd$(1:an2(1))&"  "
@@ -694,7 +694,7 @@ if ad1=1 then bud=0: bud$="": mat gl$=("")
 fnTos
 respc=0 : mylen=20 : mypos=20: mypos2=60: lyne=3
 fnLbl(1,1,"Budget #:",mylen,right)
-fnTxt(1,mylen+3,2,0,0,"30",0,"")
+fnTxt(1,mylen+3,2,0,0,'30',0,"")
 resp$(respc+=1)=str$(bud)
 fnLbl(2,1,"Description:",14,right)
 fnTxt(2,mylen+3,50,0,0,"",0,"Enter your budget file name. Enter the range of general ledger numbers below to be included in this budget.")
@@ -759,10 +759,10 @@ resp$(respc+=1)='True'
 fnChk(lyne+=1,mypos,"Include Budget Amounts:",1)
 resp$(respc+=1)='True'
 fnLbl(lyne+=1,1,"Years to Review:",mylen,1)
-fnTxt(lyne,mypos,2,0,0,"30",0,"Year code in YY format.")
+fnTxt(lyne,mypos,2,0,0,'30',0,"Year code in YY format.")
 resp$(respc+=1)=""
 for j=1 to 4
-	fnTxt(lyne+=1,mypos,2,0,0,"30",0,"Year code in YY format.")
+	fnTxt(lyne+=1,mypos,2,0,0,'30',0,"Year code in YY format.")
 	resp$(respc+=1)=""
 next j
 fnCmdKey("&Next",1,1,0,"Display ")
@@ -790,7 +790,7 @@ GRID_SPECS: ! r:
 	chdr$(11)="Reason"
 	chdr$(12)="TOE"
 	chdr$(13)="Prior Amount"
-	cmask$(1)='' : cmask$(2)='10' : cmask$(3)="10"
+	cmask$(1)='' : cmask$(2)='10' : cmask$(3)='10'
 	cmask$(4)='10'
 	cmask$(5)='10' : cmask$(6)='10': cmask$(7)='10'
 	cmask$(8)='10': cmask$(9)='10' : cmask$(10)=''
@@ -798,9 +798,9 @@ GRID_SPECS: ! r:
 	x=13 ! add extra columns for old history
 	for j=1 to 5
 		if needactual=1 and year(j)>0 then chdr$(x+=1)="Amount-"&cnvrt$("pic(##)",year(j))
-			cmask$(x)="10"
+			cmask$(x)='10'
 		if needbudget=1 and year(j)>0 then chdr$(x+=1)="Budget-"&cnvrt$("pic(##)",year(j))
-			cmask$(x)="10"
+			cmask$(x)='10'
 	next j
 	x=0
 	mat holdcmask$=cmask$

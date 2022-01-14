@@ -119,7 +119,7 @@ L1170: form pos 10,n 10.2,x 8,n 10.2,x 9,n 10.2,x 8,n 10.2,pos 77,n 12.2
 	if align=3 then pr #255: newpage: goto L1330
 	fncloseprn
 	pr newpage
-	pr f "10,5,C 60": "CHECK FORM ALIGNMENT"
+	pr f "10,5,C 60": "CHECK form ALIGNMENT"
 	pr f "12,5,C 60": "ENTER 1 TO REPRINT SAME STATEMENT"
 	pr f "13,5,C 60": "      2 TO PRINT NEXT STATEMENT AND STOP"
 	pr f "14,5,C 60": "      3 TO PRINT ALL REMAINING STATEMENTS"

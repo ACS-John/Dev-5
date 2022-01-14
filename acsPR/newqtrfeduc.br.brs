@@ -30,7 +30,7 @@ MENU1: ! r:
 	respc=0
 	if val(date$(4:5))=1 then taxyear=val(date$(1:2))+2000-1 else taxyear =val(date$(1:2))+2000 ! current tax year (if processing in jan, assume last year)
 	fnLbl(1,1,"Tax Year:",26,1)
-	fnTxt(1,30,4,0,0,"30",0,"")
+	fnTxt(1,30,4,0,0,'30',0,"")
 	resp$(respc+=1)=str$(taxyear)
 	option1$(1)="March 31"
 	option1$(2)="June 30"
@@ -72,7 +72,7 @@ L650: !
 	checkkey$=cnvrt$("pic(zzzzzzz#)",eno)&cnvrt$("pic(zz#)",0)&cnvrt$("pd 6",0) ! index employee#,department# and payroll date
 	restore #4,key>=checkkey$: nokey ANALYZE_WAGES
 	L730: !
-	read #4,using "Form POS 1,N 8,n 3,PD 6,N 7,5*PD 3.2,37*PD 5.2": heno,tdn,prd,ckno,mat tdc,mat tcp eof ANALYZE_WAGES
+	read #4,using "form pos 1,N 8,n 3,PD 6,N 7,5*PD 3.2,37*PD 5.2": heno,tdn,prd,ckno,mat tdc,mat tcp eof ANALYZE_WAGES
 	if heno<>eno then goto ANALYZE_WAGES
 	if prd<beg_date or prd>end_date then goto L730 ! not this year
 	if em5=1 then pedate=begdate+19: box1+=1 ! monthly pay period

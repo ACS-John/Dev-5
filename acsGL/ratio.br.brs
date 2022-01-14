@@ -1,5 +1,5 @@
 ! Replace S:\acsGL\ratio
-! Ratio File  (was: Form POS 1,G 3,C 40,280*PD 4',Key=AC$: HAC$,NA$,MAT R  Now:  Form POS 1,G 3,C 40,80*c 12',Key=AC$: HAC$,NA$,MAT gl$
+! Ratio File  (was: form pos 1,G 3,C 40,280*PD 4',Key=AC$: HAC$,NA$,MAT R  Now:  form pos 1,G 3,C 40,80*c 12',Key=AC$: HAC$,NA$,MAT gl$
 
 	autoLibrary
 	on error goto Ertn
@@ -31,7 +31,7 @@ RATIOMSTGRID: !
 	restore #ratiomst:
 	fnflexinit1('Ratiomst1',lc=1,1,10,50,mat chdr$,mat cmask$,1)
 READ_RATIOMST: ! read Ratiomst file
-	read #ratiomst,using 'Form POS 1,G 3,C 40,80*c 12': hac$,na$,mat gl$ eof EO_RATIOMST_GRID
+	read #ratiomst,using 'form pos 1,G 3,C 40,80*c 12': hac$,na$,mat gl$ eof EO_RATIOMST_GRID
 	item$(1)=str$(rec(ratiomst))
 	item$(2)=hac$: item$(3)=na$
 	fnflexadd1(mat item$)
@@ -60,11 +60,11 @@ EO_RATIOMST_GRID: !
 	end if
 ! to ADD_EDIT_Ratiomst ! add
 	if ckey=2 then
-		read #ratiomst,using 'Form POS 1,G 3,C 40,80*c 12',rec=editrec: hac$,na$,mat gl$ noRec RATIOMSTGRID
+		read #ratiomst,using 'form pos 1,G 3,C 40,80*c 12',rec=editrec: hac$,na$,mat gl$ noRec RATIOMSTGRID
 		holdsn=sn
 		goto ADD_EDIT_RATIOMST
 	else if ckey=8 then
-		read #ratiomst,using 'Form POS 1,G 3,C 40,80*c 12',rec=editrec,release: hac$,na$,mat gl$ noRec RATIOMSTGRID
+		read #ratiomst,using 'form pos 1,G 3,C 40,80*c 12',rec=editrec,release: hac$,na$,mat gl$ noRec RATIOMSTGRID
 		delete #ratiomst,rec=editrec:
 		goto RATIOMSTGRID
 	end if
@@ -100,10 +100,10 @@ MSGBOX1: !
 	ml$(3)="else Cancel to prevent changing the #."
 	fnmsgbox(mat ml$,resp$,'',49)
 	if resp$="OK" then goto L780 else goto ADD_EDIT_RATIOMST
-L780: rewrite #ratiomst,using 'Form POS 1,G 3,C 40,80*c 12',rec=editrec: hac$,na$,mat gl$
+L780: rewrite #ratiomst,using 'form pos 1,G 3,C 40,80*c 12',rec=editrec: hac$,na$,mat gl$
 	goto L830
 
-WRITE_NEW_RATIOMST: write #ratiomst,using 'Form POS 1,G 3,C 40,80*c 12',rec=editrec: hac$,na$,mat gl$
+WRITE_NEW_RATIOMST: write #ratiomst,using 'form pos 1,G 3,C 40,80*c 12',rec=editrec: hac$,na$,mat gl$
 	new1=1
 L830: goto RATIOMSTGRID
 
@@ -125,7 +125,7 @@ return
 PROOF: restore #ratiomst,key>="   ": eof L1010 ioerr RATIOMSTGRID
 L1010: on fkey 5 goto L1330
 	fnopenprn
-L1030: read #ratiomst,using 'Form POS 1,G 3,C 40,80*c 12',key=ac$: hac$,na$,mat gl$ eof L1330
+L1030: read #ratiomst,using 'form pos 1,G 3,C 40,80*c 12',key=ac$: hac$,na$,mat gl$ eof L1330
 	pr #255,using L1050: date$('mm/dd/yy'),time$,"Print Ratio File Proof List"
 L1050: form skip 1,pos 1,c 8,skip 1,pos 1,c 8,pos 51,c 31,skip 1
 	pr #255,using L1070: env$('cnam'),dat$

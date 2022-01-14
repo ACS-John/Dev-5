@@ -12,8 +12,8 @@ def library fnGlAccountSearch(&account$ ) ! ; fixgrid)
 	ch$(4)="B/S Ref" 	: ch$(5)="B/S Ref2"    	: ch$(6)="I/C Ref"
 	ch$(7)="I/C Ref2"	: ch$(8)="Fund Ref"    	: ch$(9)="Fund Ref2"
 	mat cm$(9)
-	cm$(1)=cm$(2)="80": cm$(3)="10"
-	cm$(4)=cm$(5)=cm$(6)=cm$(7)=cm$(8)=cm$(9)="30"
+	cm$(1)=cm$(2)="80": cm$(3)='10'
+	cm$(4)=cm$(5)=cm$(6)=cm$(7)=cm$(8)=cm$(9)='30'
 	! if fixgrid=99 then usefile=0 else usefile=1 ! set to rebuild grid file only as you exit ubfm and the    fixgrid code has been changed to necessary
 	! usefile=fnflexinit1('Acct',1,1,10,70,mat ch$,mat cm$,1,usefile)
 	fnflexinit1('Acct',1,1,10,70,mat ch$,mat cm$,1)
@@ -22,7 +22,7 @@ def library fnGlAccountSearch(&account$ ) ! ; fixgrid)
 		dim item$(10)*50
 		ReadAccount: !
 		dim rf(6)
-		read #hAccount,using 'Form POS 1,C 12,c 50,pos 87,pd 6.2,pos 63,6*pd 3': item$(1),item$(2),cb,mat rf eof EoAccount ioerr ERR_READ
+		read #hAccount,using 'form pos 1,C 12,c 50,pos 87,pd 6.2,pos 63,6*pd 3': item$(1),item$(2),cb,mat rf eof EoAccount ioerr ERR_READ
 		item$(3)=str$(cb)
 		for j=1 to 6
 			item$(j+3)=str$(rf(j))

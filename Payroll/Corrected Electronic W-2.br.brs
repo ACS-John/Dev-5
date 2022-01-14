@@ -125,19 +125,19 @@ SCR1: !
 	fnTxt(7,mypos,5,0,0,"",0,"Enter the zip code for the company being submitted.",0)
 	resp$(rc+=1)=zip$
 	fnLbl(8,1,"Federal ID #:",mylen,1,0,0)
-	fnTxt(8,mypos,9,0,0,"30",0,"Enter the Federal Id number without slashes or dashes.",0)
+	fnTxt(8,mypos,9,0,0,'30',0,"Enter the Federal Id number without slashes or dashes.",0)
 	resp$(rc+=1)=str$(b1)
 	fnLbl(9,1,"Payment Year:",mylen,1,0,0)
-	fnTxt(9,mypos,4,0,0,"30",0,"Enter the year for which the wages were paid in ccyy format.",0)
+	fnTxt(9,mypos,4,0,0,'30',0,"Enter the year for which the wages were paid in ccyy format.",0)
 	resp$(rc+=1)=str$(yr)
 	fnLbl(10,1,"Social Security Maximum Wage:",mylen,1,0,0)
-	fnTxt(10,mypos,10,0,0,"10",0,"Enter the social security maximum wage for the year just completed.",0)
+	fnTxt(10,mypos,10,0,0,'10',0,"Enter the social security maximum wage for the year just completed.",0)
 	resp$(rc+=1)=str$(ssmax)
 	fnLbl(11,1,"Social Security Rate:",mylen,1,0,0)
 	fnTxt(11,mypos,6,0,0,"34",0,"Enter the social security rate for the year just completed.",0)
 	resp$(rc+=1)=str$(ssrate)
 	fnLbl(12,1,"Medicare Maximum Wage:",mylen,1,0,0)
-	fnTxt(12,mypos,10,0,0,"10",0,"Enter the medicare maximum wage for the year just completed.",0)
+	fnTxt(12,mypos,10,0,0,'10',0,"Enter the medicare maximum wage for the year just completed.",0)
 	resp$(rc+=1)=str$(mcmax)
 	fnLbl(13,1,"Medicare Rate:",mylen,1,0,0)
 	fnTxt(13,mypos,6,0,0,"34",0,"Enter the medicare rate for the year just completed.",0)
@@ -255,7 +255,7 @@ L2280: p1=pos(ss$,"-",1)
 	if p1>0 then ss$(p1:p1)="": goto L2280 else ssn=val(ss$)
 	checkkey$=cnvrt$("pic(zzzzzzz#)",eno)&cnvrt$("pic(zz#)",0)&cnvrt$("pd 6",0) ! index employee#,department# and payroll date
 	restore #4,key>=checkkey$: nokey L2170
-L2320: read #4,using "Form POS 1,N 8,n 3,PD 6,N 7,5*PD 3.2,37*PD 5.2": heno,tdn,prd,ckno,mat tdc,mat tcp eof L2680
+L2320: read #4,using "form pos 1,N 8,n 3,PD 6,N 7,5*PD 3.2,37*PD 5.2": heno,tdn,prd,ckno,mat tdc,mat tcp eof L2680
 	if heno<>eno then goto L2680
 	if prd<beg_date or prd>end_date then goto L2320 ! not this year
 	form pos 1,n 8,pos 48,n 2,pos 168,21*pd 5.2,pos 468,pd 3
@@ -642,7 +642,7 @@ return
 EXTRACT_ORIGINAL: ! r:
 	restore #4,key>=checkkey$: nokey L2170
 	L6040: !
-	read #4,using "Form POS 1,N 8,n 3,PD 6,N 7,5*PD 3.2,37*PD 5.2": heno,tdn,prd,ckno,mat tdc,mat tcp eof L6370
+	read #4,using "form pos 1,N 8,n 3,PD 6,N 7,5*PD 3.2,37*PD 5.2": heno,tdn,prd,ckno,mat tdc,mat tcp eof L6370
 	if heno<>eno then goto L6370
 	if prd<orgbeg_date or prd>orgend_date then goto L6040 ! not this year
 	form pos 1,n 8,pos 48,n 2,pos 168,21*pd 5.2,pos 468,pd 3

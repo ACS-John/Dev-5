@@ -33,7 +33,7 @@ enableblankLineAfterNet=1
 	dim dedcode(10)
 	dim pgl(5,3)
 	dim miscgl$(10)*12
-	read #hCompany,using 'Form POS 298,15*PD 4,POS 382,N 2,POS 418,10*C 20,10*N 1,POS 668,10*C 12': mat pgl,jccode,mat miscname$,mat dedcode,mat miscgl$
+	read #hCompany,using 'form pos 298,15*PD 4,pos 382,N 2,pos 418,10*C 20,10*N 1,pos 668,10*C 12': mat pgl,jccode,mat miscname$,mat dedcode,mat miscgl$
 	for j=1 to udim(mat miscname$) : miscname$(j)=trim$(miscname$(j)) : next j
 	close #hCompany:
 
@@ -340,7 +340,7 @@ def fn_scrMain(hMerge; editRecord,heading$*64,glBank$*12,transDate,bankAcctName$
 	dim allocItem$(4)*128
 	mat allocItem$(4)
 	do
-		read #hMtemp,using 'Form Pos 1,c 12,pd 10.2,c 30': allocgl$,allocAmt,td$ eof EO_FLEX1
+		read #hMtemp,using 'form pos 1,c 12,pd 10.2,c 30': allocgl$,allocAmt,td$ eof EO_FLEX1
 		allocItem$(1)=str$(rec(hMtemp))
 		allocItem$(2)=fnrgl$(allocgl$)
 		allocItem$(3)=str$(allocAmt)
@@ -777,7 +777,7 @@ def fn_editAllocation(editrecord; editall,___,ckey,mylen,mypos)
 	! editrecord=val(resp$(7))
 	! if editall=19 then editrecord=1
 	do
-		read #hMtemp,using 'Form pos 1,c 12,pd 10.2,c 30,pd 5',rec=editrecord: gl$,allocation,td$,transAdr noRec EA_FINIS
+		read #hMtemp,using 'form pos 1,c 12,pd 10.2,c 30,pd 5',rec=editrecord: gl$,allocation,td$,transAdr noRec EA_FINIS
 		holdallocation=allocation
 		TosEditAllocation: !
 		fnTos
@@ -813,7 +813,7 @@ def fn_editAllocation(editrecord; editall,___,ckey,mylen,mypos)
 			allocation=val(resp$(1))
 			transactionAmt+=allocation-holdallocation ! update net amount of transaction
 			td$=resp$(3)
-			rewrite #hMtemp,using 'Form pos 1,c 12,pd 10.2,c 30',rec=editrecord: allocgl$,allocation,td$
+			rewrite #hMtemp,using 'form pos 1,c 12,pd 10.2,c 30',rec=editrecord: allocgl$,allocation,td$
 			totalalloc+=allocation-holdallocation
 		end if
 		editrecord+=1
@@ -1099,7 +1099,7 @@ def fn_extract(&hMtemp,vn$,transactionAmt; ___, _
 		open #hMtemp=fnH: 'Name=[Q]\GLmstr\Allocations[acsUserId].h[cno],Version=1,replace,RecL=59',i,outi,r
 
 		do
-			read #hPayeeGl,using 'Form Pos 1,C 8,c 12,n 6.2,c 30',release: payeekey$,payeegl$,percent,td$ eof ExtractEoPgl
+			read #hPayeeGl,using 'form pos 1,C 8,c 12,n 6.2,c 30',release: payeekey$,payeegl$,percent,td$ eof ExtractEoPgl
 			if payeekey$=glkey$ then
 				if percent=0 and lrec(hMtemp)=0 then percent=100
 				allocAmt=round(transactionAmt*(percent*.01),2)
@@ -1112,9 +1112,9 @@ def fn_extract(&hMtemp,vn$,transactionAmt; ___, _
 		ExtractEoPgl: !
 
 		if totalalloc<>transactionAmt and lrec(hMtemp)>0 then ! r: if it doesn't add up put the difference on the last allocation
-			read #hMtemp,using 'Form pos 13,pd 10.2',rec=lrec(hMtemp): lastallocation noRec ignore
+			read #hMtemp,using 'form pos 13,pd 10.2',rec=lrec(hMtemp): lastallocation noRec ignore
 			lastallocation+=transactionAmt-totalalloc
-			rewrite #hMtemp,using 'Form pos 13,pd 10.2',rec=lrec(hMtemp): lastallocation
+			rewrite #hMtemp,using 'form pos 13,pd 10.2',rec=lrec(hMtemp): lastallocation
 		end if 	! /r
 
 		ExtractFinis: !
@@ -1171,7 +1171,7 @@ def fn_buildMatK(hMerge,mat kList$,mat kReceipts,mat kDisbursements,mat kAdjustm
 	totalDebits=totalCredits=count=0
 	restore #hMerge:
 	do
-		read #hMerge,using 'Form pos 19,PD 6.2,N 2,pos 93,C 12': tAmt,tranType,key$ eof FinisBuildMatK
+		read #hMerge,using 'form pos 19,PD 6.2,N 2,pos 93,C 12': tAmt,tranType,key$ eof FinisBuildMatK
 
 		if tranType=5 then tranType=7
 		if tranType=6 then tranType=8
@@ -1262,7 +1262,7 @@ def fn_prProofList(hMerge; _
 		holdtr$=tr$
 		if fn_readMerge(0,gl$,tr4,allocAmt,tType,postingCode,tr$,td$,vn$,jv2$,key$)=-4270 then goto PE_FINIS
 		if trim$(holdtr$)<>'' and holdtr$<>tr$ then
-			pr #255,using 'Form pos 10,c 10,n 14.2,skip 1': 'Net',netamount
+			pr #255,using 'form pos 10,c 10,n 14.2,skip 1': 'Net',netamount
 			netamount=0
 		end if
 		if tType=sx_adjustment then prntkey$='' else printkey$=key$
@@ -1271,7 +1271,7 @@ def fn_prProofList(hMerge; _
 		netamount+=allocAmt
 	loop
 	PE_FINIS: !
-	pr #255,using 'Form pos 10,c 10,n 14.2,skip 1': 'Net',netamount : netamount=0
+	pr #255,using 'form pos 10,c 10,n 14.2,skip 1': 'Net',netamount : netamount=0
 	fncloseprn
 fnend
 PrProofListPgOf: ! r:

@@ -18,7 +18,7 @@ goto MainLoop ! /r
 MainLoop: ! r:
 	fnAutomatedSavePoint('before')
 	open #1: "Name=[Q]\GLmstr\Company.h[cno],Shr",i,outi,r
-	read #1,using 'Form pos 384,n 2,POS 417,N 1',rec=1: nap,reccode
+	read #1,using 'form pos 384,n 2,pos 417,N 1',rec=1: nap,reccode
 	close #1:
 	fn_currentToAccumlatedTrans
 	OPEN_GLMSTR: !
@@ -26,10 +26,10 @@ MainLoop: ! r:
 	fnStatus("Closing Month...")
 	do
 		dim bc(13)
-		read #hAcct,using 'Form POS 87,14*PD 6.2': cb,mat bc eof EoAcct
+		read #hAcct,using 'form pos 87,14*PD 6.2': cb,mat bc eof EoAcct
 		bc(actpd)=cb
 		bb=cb
-		rewrite #hAcct,using 'Form POS 81,PD 6.2,POS 93,13*PD 6.2,POS 333,2*PD 3': bb,mat bc,0,0
+		rewrite #hAcct,using 'form pos 81,PD 6.2,pos 93,13*PD 6.2,pos 333,2*PD 3': bb,mat bc,0,0
 	loop
 	EoAcct: !
 	close #hAcct:
@@ -39,7 +39,7 @@ MainLoop: ! r:
 	fnActPd(actpd)
 
 	open #1: "Name=[Q]\GLmstr\GLTrans.h[cno],Size=0,RecL=73,Replace",internal,output
-	write #1,using 'Form POS 1,N 3,N 6,N 3,N 6,PD 6.2,2*N 2,C 12,C 30,PD 3': 0,0,0,0,0,0,0," "," ",1
+	write #1,using 'form pos 1,N 3,N 6,N 3,N 6,PD 6.2,2*N 2,C 12,C 30,PD 3': 0,0,0,0,0,0,0," "," ",1
 	close #1:
 	fnIndex('[Q]\GLmstr\GLTrans.h[cno]','[Q]\GLmstr\glTrans-IdxAcct.h[cno]','1 12')
 	if reccode=0 then 
@@ -48,7 +48,7 @@ MainLoop: ! r:
 	else 
 		open #hBankRec=fnH: "Name=[Q]\GLmstr\GLBRec.h[cno],KFName=[Q]\GLmstr\GLRecIdx.h[cno]",internal,outIn,keyed ioerr FileDrop
 		do
-			read #hBankRec,using 'Form POS 63,PD 5.2,POS 68,N 1': a2,a3 eof EoGlBrec
+			read #hBankRec,using 'form pos 63,PD 5.2,pos 68,N 1': a2,a3 eof EoGlBrec
 			if a3=1 or a2=0 then delete #hBankRec:
 		loop
 	end if
@@ -64,9 +64,9 @@ def fn_currentToAccumlatedTrans(; ___,hTransAccumulated,hTransCurrent,tr$*12,td$
 	open #hTransCurrent=fnH: "Name=[Q]\GLmstr\GLTrans.h[cno]",internal,input
 	do
 		dim tr(7)
-		read #hTransCurrent,using 'Form POS 1,N 3,N 6,N 3,N 6,PD 6.2,2*N 2,C 12,C 30,N 2': mat tr,tr$,td$ eof CTAT_EoTransCurrent
+		read #hTransCurrent,using 'form pos 1,N 3,N 6,N 3,N 6,PD 6.2,2*N 2,C 12,C 30,N 2': mat tr,tr$,td$ eof CTAT_EoTransCurrent
 		if tr(1)+tr(2)+tr(3)<>0 then
-			write #hTransAccumulated,using 'Form POS 1,N 3,N 6,N 3,N 6,PD 6.2,2*N 2,C 12,C 30,N 2': mat tr,tr$,td$,actpd
+			write #hTransAccumulated,using 'form pos 1,N 3,N 6,N 3,N 6,PD 6.2,2*N 2,C 12,C 30,N 2': mat tr,tr$,td$,actpd
 		end if
 	loop
 	CTAT_EoTransCurrent: !

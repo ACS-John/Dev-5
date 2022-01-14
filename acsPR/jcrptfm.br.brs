@@ -293,7 +293,7 @@ L2690: form skip 1,pos 1,c 30,skip 2
 		pr #255,using L2720: psc(j),psc(j+20),psc(j+40),psc(j+60),psc(j+80)
 L2720: form pos 1,5*n 20.3
 	next j
-	pr #255,using L2750: "Formula for Value","Starting","# of pr Positions","# of Decimal","Skip Detail Print","Total Column","Overall Totals"
+	pr #255,using L2750: "Formula for Value","Starting","# of pr Positions","# of Decimal","skip Detail Print","Total Column","Overall Totals"
 L2750: form skip 1,pos 1,c 17,pos 39,c 8,pos 48,c 20,pos 71,c 12,pos 84,c 17,pos 103,c 12,pos 119,c 14
 	pr #255,using L2770: "to be Printed","Print Position","Required","Positions","by Job","by System"
 L2770: form pos 1,c 13,pos 38,c 14,pos 53,c 8,pos 72,c 9,pos 107,c 6,pos 123,c 9,skip 2

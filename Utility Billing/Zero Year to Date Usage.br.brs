@@ -14,8 +14,8 @@ if rtrm$(uprc$(resp$(1)))<>"ZERO" then goto SCREEN1
 open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,outIn,keyed
 dim z$*10
 do
-	read #1,using "Form POS 1,C 10": z$ eof DONE
-	rewrite #1,using "Form POS 232,PD 5,POS 252,PD 5,POS 272,PD 5": 0,0,0
+	read #1,using "form pos 1,C 10": z$ eof DONE
+	rewrite #1,using "form pos 232,PD 5,pos 252,PD 5,pos 272,PD 5": 0,0,0
 loop
 DONE: !
 close #1:

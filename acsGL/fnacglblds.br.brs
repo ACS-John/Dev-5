@@ -9,7 +9,7 @@ def library fnacglblds
 		fncno(cno)
 		fnTop(program$)
 		open #20: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,input  : _
-		read #20,using 'Form POS 150,2*N 1': mat d : _
+		read #20,using 'form pos 150,2*N 1': mat d : _
 		close #20:
  
 		flo$(1)="1,5,C 60,R,N"
@@ -90,7 +90,7 @@ def library fnacglblds
 		if d(1)=0 then fli$(2)(11:11)="C"
 		if d(2)=0 then fli$(2)(12:12)="E"
 		fnFree("[Q]\GLmstr\ACGLScr.h[cno]")
-L380: open #20: "Name=[Q]\GLmstr\ACGLScr.h[cno],Size=0,RecL=4281",internal,output: write #20,using 'Form POS 1,31*C 15,30*C 20,65*C 18,65*C 30': mat flo$,mat scr$,mat fli$,mat otd$ : _
+L380: open #20: "Name=[Q]\GLmstr\ACGLScr.h[cno],Size=0,RecL=4281",internal,output: write #20,using 'form pos 1,31*C 15,30*C 20,65*C 18,65*C 30': mat flo$,mat scr$,mat fli$,mat otd$ : _
 		close #20:
 goto Xit
 

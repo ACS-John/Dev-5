@@ -132,7 +132,7 @@ MENU1: !
 	loop  ! /r
 ALT_BILL_ADR: ! r:
 	mat ab$=("")
-	read #h_alt_bill,using 'Form POS 11,3*C 30',key=z$: mat ab$ nokey ignore
+	read #h_alt_bill,using 'form pos 11,3*C 30',key=z$: mat ab$ nokey ignore
 	return  ! /r
 HEADER: ! r:
 	pr #h_ecp: 'Account Key'&delim$;

@@ -26,8 +26,8 @@ def library fnpaymstr_v0_to_v1
 		open #payeegl=fnH: "Name=[Q]\CLmstr\payeeglbreakdown.h[cno],KFName=[Q]\CLmstr\Payeeglbkdidx.h[cno],Use,RecL=56,KPs=1,KLn=8,Shr",internal,outIn,keyed
 		version(payeegl,1)
 	READ_PAYALLOC: !
-		read #payalloc,using 'Form POS 1,C 8,C 12,PD 3.2,C 30': vn$,gl$,pct,de$ eof EO_PAYALLOC
-		write #payeegl,using 'Form POS 1,C 8,C 12,n 6.2,C 30': vn$,gl$,pct,de$
+		read #payalloc,using 'form pos 1,C 8,C 12,PD 3.2,C 30': vn$,gl$,pct,de$ eof EO_PAYALLOC
+		write #payeegl,using 'form pos 1,C 8,C 12,n 6.2,C 30': vn$,gl$,pct,de$
 	goto READ_PAYALLOC
 
 	EO_PAYALLOC: !

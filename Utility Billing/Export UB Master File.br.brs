@@ -77,7 +77,7 @@ def fn_exportCustomer(dest$*256,delim$*1; ___, _
 
 		dim ab$(3)*30
 		mat ab$=('')
-		read #hAdrBil,using 'Form POS 11,3*C 30',key=z$: mat ab$ nokey ignore
+		read #hAdrBil,using 'form pos 11,3*C 30',key=z$: mat ab$ nokey ignore
 
 		dim addr$(4)*40
 		fncustomer_address(z$,mat addr$)

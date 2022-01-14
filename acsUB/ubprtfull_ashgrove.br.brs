@@ -218,8 +218,8 @@ L1410: form pos 1,c 10,pos 296,pd 4,pos 1741
 	if prtbkno><route then goto END5
 L1440: if _f><d1 then goto L1400
 	zip5$=cr$=""
-	read #5,using "Form POS 96,C 5,POS 108,C 4",key=z$: zip5$,cr$ nokey L1470
-L1470: write #6,using "Form POS 1,C 5,C 4,C 10": zip5$,cr$,z$
+	read #5,using "form pos 96,C 5,pos 108,C 4",key=z$: zip5$,cr$ nokey L1470
+L1470: write #6,using "form pos 1,C 5,C 4,C 10": zip5$,cr$,z$
 goto L1400 ! /r
 END5: ! r:
 	close #6:
@@ -428,8 +428,8 @@ BulkSort: ! r:bulk sort order
 	open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",i,i,k  ! open in Account order
 	open #6: "Name=[Temp]\Temp.[Session],Replace,RecL=31",internal,output
 	do
-		read #1,using "Form POS 1,C 10,pos 1741,n 2,pos 1743,n 7,pos 1942,c 12": z$,route,seq,bulk$ eof L3080
-		write #6,using "Form POS 1,C 12,n 2,n 7,c 10": bulk$,route,seq,z$
+		read #1,using "form pos 1,C 10,pos 1741,n 2,pos 1743,n 7,pos 1942,c 12": z$,route,seq,bulk$ eof L3080
+		write #6,using "form pos 1,C 12,n 2,n 7,c 10": bulk$,route,seq,z$
 	loop
 	L3080: !
 	close #1: ioerr ignore

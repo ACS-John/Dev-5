@@ -23,7 +23,7 @@ def library fnjob_srch(&jn$;fixgrid)
 	usefile=fnflexinit1('Job',1,1,10,70,mat ch$,mat cm$,1,usefile)
 	if usefile>0 then goto L280 ! file already exists, do not recreate
 	READ_FILE: ! 
-		read #h,using 'Form POS 1,c 6,c 40,c 30,x 30,c 30': mat item$ eof L280 ioerr ERR_READ
+		read #h,using 'form pos 1,c 6,c 40,c 30,x 30,c 30': mat item$ eof L280 ioerr ERR_READ
 		fnflexadd1(mat item$)
 	goto READ_FILE
 

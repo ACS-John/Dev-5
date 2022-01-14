@@ -23,13 +23,13 @@ resp$(respc+=1)=''
 fnLbl(7,1,"Report Heading Dage:",mylen,1)
 fnTxt(7,mypos,20)
 resp$(respc+=1)=dat$
-fnChk(9,mypos+10,"Skip customers with credit balance:",1)
+fnChk(9,mypos+10,"skip customers with credit balance:",1)
 resp$(respc+=1)='False'
 fnCmdSet(3)
 fnAcs(mat resp$,ckey,1)
 if ckey=5 then goto Xit
 for j=1 to 3
-	! x=POS(RESP$(J),"/",1)
+	! x=pos(RESP$(J),"/",1)
 	! If X>0 Then rESP$(J)(X:X)="": Goto 300
 	lastday(j)=val(resp$(j))
 	firstday(j)=(val(resp$(j)(1:6))*100)+1
@@ -45,7 +45,7 @@ open #2: "Name=[Q]\UBmstr\UBTransVB.h[cno],KFName=[Q]\UBmstr\UBTrIndx.h[cno],Shr
 open #hCustomer=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",i,i,k
 do ! r: main (customer) loop
 	dim z$*10,e$*30,bal
-	read #hCustomer,using 'Form POS 1,C 10,POS 41,C 30,POS 292,PD 4.2': z$,e$,bal eof Finis
+	read #hCustomer,using 'form pos 1,C 10,pos 41,C 30,pos 292,PD 4.2': z$,e$,bal eof Finis
 	if bal<>0 then
 		if bal<0 and skipcr=1 then goto NextCustomer
 		if bal<0 then
@@ -55,7 +55,7 @@ do ! r: main (customer) loop
 			gosub TransLoop
 		end if
 		if sum(month)=(0) and bal<>0 then month(4)=bal
-		pr #255,using 'Form POS 1,C 12,C 20,5*N 11.2': z$,e$(1:20),month(1),month(2),month(3),month(4),bal pageoflow PgOf
+		pr #255,using 'form pos 1,C 12,C 20,5*N 11.2': z$,e$(1:20),month(1),month(2),month(3),month(4),bal pageoflow PgOf
 		totcolumn1+=month(1) : totcolumn2+=month(2)
 		totcolumn3+=month(3) : totcolumn4+=month(4) : totbal+=bal
 	end if
@@ -65,7 +65,7 @@ PrHeader: ! r:
 	pr #255: "\qc  {\f181 \fs22 \b "&env$('cnam')&"}"
 	pr #255: "\qc  {\f181 \fs28 \b "&env$('program_caption')&"}"
 	pr #255: "\qc  {\f181 \fs22 \b "&trim$(dat$)&"}"
-	pr #255,using 'Form POS 1,C 82,C 9': "\ql "&date$,"Page "&str$(p2+=1)
+	pr #255,using 'form pos 1,C 82,C 9': "\ql "&date$,"Page "&str$(p2+=1)
 	pr #255: "{\ul Account No}  {\ul Customer Name}        {\ul "&(cnvrt$("PIC(zzZZ/ZZ/ZZ)",lastday(1)))(1:10)&"} {\ul "&(cnvrt$("PIC(zzZZ/ZZ/ZZ)",lastday(2)))(1:10)&"} {\ul "&(cnvrt$("PIC(zzZZ/ZZ/ZZ)",lastday(3)))(1:10)&"} {\ul      Older} {\ul    Balance}"
 return ! /r
 PgOf: ! r:
@@ -74,7 +74,7 @@ PgOf: ! r:
 continue ! /r
 Finis: ! r:
 	pr #255: "                                 __________ __________ __________ __________ __________"
-	pr #255,using 'Form POS 1,C 12,C 20,5*N 11.2': "","",totcolumn1,totcolumn2,totcolumn3,totcolumn4,totbal pageoflow PgOf
+	pr #255,using 'form pos 1,C 12,C 20,5*N 11.2': "","",totcolumn1,totcolumn2,totcolumn3,totcolumn4,totbal pageoflow PgOf
 	pr #255: "                                 {\ul \strike           } {\ul \strike           } {\ul \strike           } {\ul \strike           } {\ul \strike           }"
 	close #hCustomer: ioerr ignore
 	close #2: ioerr ignore
@@ -86,7 +86,7 @@ TransLoop: ! r:
 	mat month=(0)
 	restore #2,key>=z$&"         ": nokey EoTrans
 	do
-		read #2,using 'Form POS 1,C 10,N 8,N 1,PD 4.2': p$,tdate,tcode,tamount eof EoTrans
+		read #2,using 'form pos 1,C 10,N 8,N 1,PD 4.2': p$,tdate,tcode,tamount eof EoTrans
 		if p$<>z$ then goto TlTransFinis
 		if tcode =3 or tcode=4 then goto TlNextTrans ! skip collections or cm
 		for j=1 to 3

@@ -36,7 +36,7 @@ L90: pr newpage : _
 	if file$(255)(1:3)<>"PRN" then jbskip=1
  
 	open #1: "Name=[Q]\PRmstr\Company.h[cno],Shr",internal,input  : _
-	read #1,using 'Form POS 1,C 40': aa$ : _
+	read #1,using 'form pos 1,C 40': aa$ : _
 	close #1:
  
 	open #1: "Name=S:\acsPR\JCReport.MST,KFName=S:\acsPR\jcReport.Idx,Shr",i,i,k

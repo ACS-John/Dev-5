@@ -16,7 +16,7 @@ L150: rinput fields mat io1$: cno,csz$ conv L150
 	if cno=0 or cmdkey=5 or cmdkey=99 then goto Xit
 	open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubindex.h[cno],Shr",internal,outIn,keyed
 	for j=1 to lrec(1)
-		rewrite #1,using "Form Pos 101,c 30",rec=j: csz$ noRec L210
+		rewrite #1,using "form pos 101,c 30",rec=j: csz$ noRec L210
 		pr f "1,1,N 10,R,N": j
 L210: next j
 	goto DONE
