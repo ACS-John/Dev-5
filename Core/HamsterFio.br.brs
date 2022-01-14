@@ -3,25 +3,20 @@ end
 
 def library fnHamsterFio(fileid$*64)
 	if ~setup then fn_setup
-	dim defaultFileLayoutPath$*256
-
-	! if env$('client')='Brumbaugh' then
-	! 	defaultFileLayoutExtension$=''
-	! 	defaultFileLayoutPath$='S:\FileLay\'
-	! else
-		defaultFileLayoutExtension$='.fio'
-		defaultFileLayoutPath$='S:\Core\FileIO\Layout\'
-	! end if
 	dim hfData$(0)*2048
 	dim hfDataN(0)
 	dim hfDataAll$(0)*2048
 	hFile=fn_openFio(fileid$,mat hfData$,mat hfDataN)
 	if hFile then
 		dim hfLabel$(0)*128
-		fn_hfLayoutRead(defaultFileLayoutPath$&fileid$&defaultFileLayoutExtension$,mat hfDataAll$,mat hfLabel$,mat hfFieldType$,mat hfStorageLen,mat hfMask$,mat hfFieldLen)
-		! pause
+		fn_hfLayoutRead(fnFileIoLayoutPath$(fileid$),mat hfDataAll$,mat hfLabel$,mat hfFieldType$,mat hfStorageLen,mat hfMask$,mat hfFieldLen)
 		fnHamster2b(fileid$,mat hfLabel$,mat hfFieldLen,hFile,mat hfDataAll$,mat hfFieldType$,mat hfStorageLen,mat hfMask$,mat startingPosition,mat comboBox$)
 	end if
+fnend
+
+def library fnFioLayoutRead(fileio$*64,mat dataAll$,mat label$,mat fieldType$,mat storageLen,mat mask$,mat fieldLen)
+	if ~setup then fn_setup
+	fnFioLayoutRead=fn_hfLayoutRead(fnFileIoLayoutPath$(fileio$),mat dataAll$,mat label$,mat fieldType$,mat storageLen,mat mask$,mat fieldLen)
 fnend
 
 def fn_hfLayoutRead(hfLayoutFilename$*256,mat hfDataAll$,mat hfLabel$,mat hfFieldType$,mat hfStorageLen,mat hfMask$,mat hfFieldLen; ___,limit_to_list$,posComma,posComboFio,posComboF,posComboA,hamsterColumn,hfItem,line$*1024,past_header)
