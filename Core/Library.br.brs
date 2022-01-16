@@ -1662,10 +1662,6 @@ fnend
 		library 'S:\Checkbook\fn\postCheckbookToGl.br': fnPostCheckbookToGl
 		fnPostCheckbookToGl( enablePost)
 	fnend
-	def library fnpaytrans_v1_to_v2
-		library 'S:\acsCL\Conversion\PayTrans-v1-to-v2.br': fnpaytrans_v1_to_v2
-		fnpaytrans_v1_to_v2=fnpaytrans_v1_to_v2
-	fnend
 	def library fnaddpayee
 		library 'S:\Checkbook\Payee.br': fnaddpayee
 		fnaddpayee=fnaddpayee
