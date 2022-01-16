@@ -1,0 +1,6 @@
+S:\Core\Data\Checkbook\PostingCode.dat  ,  PostCode_  , 1
+S:\Core\Data\Checkbook\PostingCode.Idx  ,  key
+recl=26
+===================================================
+key     ,  Type          ,  N  1        , !  Pos=1  Required=True  Mask=1030
+desc$   ,  Description  ,  C  25      , !  Pos=2  Required=True

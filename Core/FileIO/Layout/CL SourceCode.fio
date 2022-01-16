@@ -1,5 +1,5 @@
-S:\acsCL\SourceCode.dat  ,  SourceCode_  , 1
-S:\acsCL\SourceCode.Idx  ,  key
+S:\Core\Data\Checkbook\SourceCode.dat  ,  SourceCode_  , 1
+S:\Core\Data\Checkbook\SourceCode.Idx  ,  key
 recl=26
 ===================================================
 key     ,    Type         ,  N  1       , !  Pos=1  Required=True  Mask=1030

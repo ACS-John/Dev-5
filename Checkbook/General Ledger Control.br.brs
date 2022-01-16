@@ -1,4 +1,3 @@
-! Replace S:\acsCL\GLControl
 autoLibrary
 on error goto Ertn
 fnTop(program$)

@@ -1,10 +1,10 @@
 [Q]\CLmstr\UnpdAloc.h[cno], unpdaloc_, 2
 [Q]\CLmstr\UAIdx1.h[CNo], iv
 [Q]\CLmstr\UAIdx2.h[CNo], vn/iv
-===================================================
 ! recl=67
-vn$,            Payee Key,                      Cr   8  ,   ! 
-iv$,            Invoice Number,                 C   12  ,   ! SPos=9
-gl$,            General Ledger Number,          C   12  ,   ! SPos=21
-amt,            Amount,                         PD   5.2,   ! 
-Desc$,          Description,                    C   30  ,   ! 
+===================================================
+vn   	,Payee Key              	,Cr   8  	,  , ! 
+iv   	,Invoice Number        	,C   12  	,  , ! SPos=9
+gl   	,General Ledger Number 	,C   12  	,  , ! SPos=21 glaccount
+amt  	,Amount                  	,PD   5.2	,  , ! 
+Desc 	,Description            	,C   30  	,  , ! 

@@ -23,7 +23,7 @@ do ! r: main loop
 		if prd=>beg_date and prd<=end_date then
 			amt1=tcp(seltp+4)
 
-				box(type)+=amt1
+			box(type)+=amt1
 
 		end if
 	loop

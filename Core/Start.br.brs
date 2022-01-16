@@ -226,7 +226,7 @@ def fn_acsSystemInitialize(; syInitMode)
 			fn_UpdateQFileIO
 		end if
 
-		if lwrc$(env$('ForceScreenIOUpdate'))='yes' then
+		if lwrc$(env$('ForceScreenIOUpdate'))='yes' or ~exists( '[Q]\Core\Fileio\layout\CO Systems 2.fio' ) then
 			fn_UpdateQFileIO
 			fn_UpdateQScreenIO
 			setenv('ForceScreenIOUpdate','')

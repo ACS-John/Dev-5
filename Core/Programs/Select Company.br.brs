@@ -149,8 +149,8 @@ CompanyAdd: ! r:
 			ml$(3)='This is only chance.'
 			fnmsgbox(mat ml$,resp$,'',36)
 			if resp$='Yes' then
-				fnApMstrConversion
-				fnchain('S:\acsCL\Conversion\GLBLD-CNV')
+				fnImportCLfromAP
+				goto Xit
 			end if
 		end if  ! /r
 		if exists ('S:\[cursystem]\Company.br') then
@@ -268,6 +268,7 @@ Xit: fnXit
 			close #h_company:
 		end if
 	fnend
+
 def fn_setup
 	if ~setup then
 		setup=1
@@ -284,6 +285,7 @@ def fn_setup
 
 	fn_systemSetup
 fnend
+
 def fn_dataFolder$*256(; ___,return$*256)
 	if env$('cursys')='CLIENT BILLING' then
 		return$='S:\Core\Data\acsllc'

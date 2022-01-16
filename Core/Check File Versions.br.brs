@@ -115,7 +115,7 @@ def fn_min_rln(mr_filename$*512,mr_rln_minimum)
 	end if  !
 fnend  ! fn_min_rln
 def fn_recl(filename$*512; ___,hTmp,returnN)
-	open #hTmp=fnH: "Name="&filename$&",Shr",internal,input
+	open #hTmp=fnH: 'Name='&filename$&',Shr',internal,input
 	returnN=rln(hTmp)
 	close #hTmp:
 	fn_recl=returnN
@@ -164,9 +164,9 @@ def fn_cfv_client_billing
 	! fn_check_version(tmpversion,version_proper,'')
 fnend
 def fn_cfv_utility_billing
-	if exists("[Q]\UBmstr")=0 then execute 'MkDir "[Q]\UBmstr"'
-	if exists("[Q]\UBmstr\UBdata")=0 then execute 'MkDir "[Q]\UBmstr\UBdata"'
-	if exists("[Q]\WorkOrder")=0 then execute 'MkDir "[Q]\WorkOrder"'
+	if exists('[Q]\UBmstr')=0 then execute 'MkDir "[Q]\UBmstr"'
+	if exists('[Q]\UBmstr\UBdata')=0 then execute 'MkDir "[Q]\UBmstr\UBdata"'
+	if exists('[Q]\WorkOrder')=0 then execute 'MkDir "[Q]\WorkOrder"'
 	! if ~exists('[Q]\INI\Utility Billing') then execute 'mkdir "[Q]\INI\Utility Billing"'
 	! if ~exists('[Q]\INI\acsUB\UBdata') then execute 'mkdir [Q]\INI\acsUB\UBdata'
 	! fn_ini_move(env$('cursys'))
@@ -174,8 +174,8 @@ def fn_cfv_utility_billing
 	fn_reg_rename(env$('cursys'))
 	! r: move ubBkNo.h into CReg and delete ubBkNo.h
 	if exists('[Q]\UBmstr\ubBkNo.h[cno]') then
-		open #h_ubbkno=fnH: "Name=[Q]\UBmstr\ubBkNo.h[cno]",i,outi,r
-		read #h_ubbkno,using "form pos 1,2*N 3",rec=1: bkno1,bkno2  noRec CFVUB_RPDATE_NOREC
+		open #h_ubbkno=fnH: 'Name=[Q]\UBmstr\ubBkNo.h[cno]',i,outi,r
+		read #h_ubbkno,using 'form pos 1,2*N 3',rec=1: bkno1,bkno2  noRec CFVUB_RPDATE_NOREC
 		fncreg_write('Route Low',str$(bkno1)) ! Route Number Range Low
 		fncreg_write('Route High',str$(bkno2)) ! Route Number Range High
 		CFVUB_RPDATE_NOREC: !
@@ -187,7 +187,7 @@ def fn_cfv_utility_billing
 	! do company different
 	! - don't make it exist,
 	! - and skip out if it don't exist
-	name$="[Q]\UBmstr\Company.h[cno]"
+	name$='[Q]\UBmstr\Company.h[cno]'
 	kfname$=''
 	myrln=133
 	version_proper=0
@@ -197,30 +197,30 @@ def fn_cfv_utility_billing
 			fnStatus('Record Length Error in File: '&tmpfile$)
 			fnStatus('         RLn: '&str$(tmprln))
 			fnStatus('Fixing the Record Length of Company')
-			fnCopy("[Q]\UBmstr\Company.h[cno]",'',133)
+			fnCopy('[Q]\UBmstr\Company.h[cno]','',133)
 		end if
 	end if
 
-	fn_file_setup_data("[Q]\UBmstr\Customer.h[cno]",2067,1)
-	fn_file_setup_index("[Q]\UBmstr\ubIndex.h[cno]","1",'10')
-	fn_file_setup_index("[Q]\UBmstr\ubIndx2.h[cno]","354","7")
-	fn_file_setup_index("[Q]\UBmstr\ubIndx3.h[cno]","11",'30')
-	fn_file_setup_index("[Q]\UBmstr\ubIndx4.h[cno]","41",'30')
-	fn_file_setup_index("[Q]\UBmstr\ubIndx5.h[cno]","1741/1743","2/7")
+	fn_file_setup_data('[Q]\UBmstr\Customer.h[cno]',2067,1)
+	fn_file_setup_index('[Q]\UBmstr\ubIndex.h[cno]','1','10')
+	fn_file_setup_index('[Q]\UBmstr\ubIndx2.h[cno]','354','7')
+	fn_file_setup_index('[Q]\UBmstr\ubIndx3.h[cno]','11','30')
+	fn_file_setup_index('[Q]\UBmstr\ubIndx4.h[cno]','41','30')
+	fn_file_setup_index('[Q]\UBmstr\ubIndx5.h[cno]','1741/1743','2/7')
 
-	fn_file_setup_data("[Q]\UBmstr\ubAdrBil.h[cno]",130,0)
-	fn_file_setup_index("[Q]\UBmstr\AdrIndex.h[cno]",'1','10')
+	fn_file_setup_data('[Q]\UBmstr\ubAdrBil.h[cno]',130,0)
+	fn_file_setup_index('[Q]\UBmstr\AdrIndex.h[cno]','1','10')
 
-	!     fn_file_setup_data("[Q]\UBmstr\Deposit1.h[cno]",16,0)
-	!     fn_file_setup_index("[Q]\UBmstr\DepIdx1.h[cno]",'1','10')
-	fn_file_setup_data("[Q]\UBmstr\Deposit2.h[cno]",73,0)
-	fn_file_setup_index("[Q]\UBmstr\Deposit2Index.h[cno]",'1','10')
+	!     fn_file_setup_data('[Q]\UBmstr\Deposit1.h[cno]',16,0)
+	!     fn_file_setup_index('[Q]\UBmstr\DepIdx1.h[cno]','1','10')
+	fn_file_setup_data('[Q]\UBmstr\Deposit2.h[cno]',73,0)
+	fn_file_setup_index('[Q]\UBmstr\Deposit2Index.h[cno]','1','10')
 
-	fn_file_setup_data("[Q]\UBmstr\workOrder.h[cno]",600,0)
-	fn_file_setup_index("[Q]\UBmstr\wkIndex.h[cno]",'1/11','10/8')
+	fn_file_setup_data('[Q]\UBmstr\workOrder.h[cno]',600,0)
+	fn_file_setup_index('[Q]\UBmstr\wkIndex.h[cno]','1/11','10/8')
 
-	fn_file_setup_data("[Q]\UBmstr\MeterType.h[cno]",128,1)
-	fn_file_setup_index("[Q]\UBmstr\MeterTypeIdx.h[cno]",'1','5')
+	fn_file_setup_data('[Q]\UBmstr\MeterType.h[cno]',128,1)
+	fn_file_setup_index('[Q]\UBmstr\MeterTypeIdx.h[cno]','1','5')
 	version_meterType=fn_version('[Q]\UBmstr\MeterType.h[cno]')
 	if version_meterType=1 then
 		open #hMeterType=fnH: 'Name=[Q]\UBmstr\MeterType.h[cno],Shr',internal,outin
@@ -263,15 +263,15 @@ def fn_cfv_utility_billing
 		close #hMeterType:
 	end if
 
-	! no need, replaced by U4 Meter Location    !   fn_file_setup_data("[Q]\UBmstr\Meter.h[cno]",384,1)
-	! no need, replaced by U4 Meter Location    !   fn_file_setup_index("[Q]\UBmstr\Meter_Idx.h[cno]",'1/11','10/2')
+	! no need, replaced by U4 Meter Location    !   fn_file_setup_data('[Q]\UBmstr\Meter.h[cno]',384,1)
+	! no need, replaced by U4 Meter Location    !   fn_file_setup_index('[Q]\UBmstr\Meter_Idx.h[cno]','1/11','10/2')
 
 	hMeterLocation=fnInitialializeMeterLocation
 	fnCloseFile(hMeterLocation,'U4 Meter Location')
 
 	if exists('[Q]\UBmstr\CityStZip.dat') then
 		fnStatus('Migrating UB City State Zip records into Core City State Zip table...')
-		open #hUbCsz=fnH: "Name=[Q]\UBmstr\CityStZip.dat,KFName=[Q]\UBmstr\CityStZip.idx,Use,RecL=30,KPs=1,KLn=30,Shr",internal,outIn,keyed
+		open #hUbCsz=fnH: 'Name=[Q]\UBmstr\CityStZip.dat,KFName=[Q]\UBmstr\CityStZip.idx,Use,RecL=30,KPs=1,KLn=30,Shr',internal,outIn,keyed
 		dim cszData$(0)*128,cszDataN(0),csz$*30
 		hCoCsz:=fn_openFio('CO City State Zip',mat cszData$,mat cszDataN)
 		do
@@ -293,8 +293,8 @@ def fn_cfv_utility_billing
 	fn_rename('[Q]\UBmstr\Collections-[wsid].h[cno]','[Q]\UBmstr\Collections-[acsUserId].h[cno]')
 
 	if exists('[Q]\UBmstr\IpChg01.h[cno]') then
-		open #hupipchg=fnH: "Name=[Q]\UBmstr\IpChg01.h[cno],RecL=80,Use",internal,outIn ioerr ubipchgOpenErr
-		read #hupipchg,using "form pos 1,N 6": d2 ioerr ignore
+		open #hupipchg=fnH: 'Name=[Q]\UBmstr\IpChg01.h[cno],RecL=80,Use',internal,outIn ioerr ubipchgOpenErr
+		read #hupipchg,using 'form pos 1,N 6': d2 ioerr ignore
 		close #hupipchg,free:
 		for wsidItem=1 to 99
 			fnFree('[Q]\UBmstr\IpChg'&cnvrt$('pic(##)',wsidItem)&'.h[cno]')
@@ -302,10 +302,10 @@ def fn_cfv_utility_billing
 		ubipchgOpenErr: !
 		fncreg_write('Meter Reading Date Current',str$(d2))
 	end if
-	if exists("[Q]\UBmstr\per1000.h[cno]") then
+	if exists('[Q]\UBmstr\per1000.h[cno]') then
 		dim range(16)
-		open #hPer1000=fnH: "Name=[Q]\UBmstr\per1000.h[cno],Shr",i,outi,r
-		read #hPer1000,using "form pos 1,16*n 10,n 2,c 1": mat range,wrate,weg$
+		open #hPer1000=fnH: 'Name=[Q]\UBmstr\per1000.h[cno],Shr',i,outi,r
+		read #hPer1000,using 'form pos 1,16*n 10,n 2,c 1': mat range,wrate,weg$
 		fncreg_write('Per 1000 Usage - Rate Code ',weg$)
 		fncreg_write('Per 1000 Usage - Service for Analysis ',str$(wrate))
 		for rangeItem=1 to 16
@@ -315,27 +315,22 @@ def fn_cfv_utility_billing
 		fnFree('[Q]\UBmstr\per1000.h[cno]')
 	end if
 
-	fn_file_setup_data("[Q]\UBmstr\ubData\RateMst.h[cno]",374,0)
-	fn_file_setup_index("[Q]\UBmstr\ubData\RateIdx1.h[cno]",'1','4')
-	fn_file_setup_index("[Q]\UBmstr\ubData\RateIdx2.h[cno]",'5','25')
+	fn_file_setup_data('[Q]\UBmstr\ubData\RateMst.h[cno]',374,0)
+	fn_file_setup_index('[Q]\UBmstr\ubData\RateIdx1.h[cno]','1','4')
+	fn_file_setup_index('[Q]\UBmstr\ubData\RateIdx2.h[cno]','5','25')
 
 fnend
 def fn_cfv_checkbook
 	! Checkbook Only
-	if exists("[Q]\CLmstr")=0 then execute "MkDir [Q]\CLmstr"
+	if exists('[Q]\CLmstr')=0 then execute 'MkDir [Q]\CLmstr'
 	! if ~exists('[Q]\INI\Checkbook') then execute 'mkdir "[Q]\INI\Checkbook"'
 	! fn_ini_move(env$('cursys'))
 	! fnIniToReg
 	fn_reg_rename(env$('cursys'))
 
-	! if ~exists('[Q]\CLmstr\PayeeType.dat') and exists('S:\acsCL\PayeeType.dat') then
-	!   fnCopy('S:\acsCL\PayeeType.dat','[Q]\CLmstr\PayeeType.dat')
-	!   fnCopy('S:\acsCL\PayeeType.Idx','[Q]\CLmstr\PayeeType.Idx')
-	! end if
-
 	CL_TRMSTR1: ! Primary Non-Split Index
-	fn_file_setup_data("[Q]\CLmstr\TrMstr.h[cno]",78,2)
-	fn_file_setup_index("[Q]\CLmstr\TrIdx1.h[cno]",'1','11')
+	fn_file_setup_data('[Q]\CLmstr\TrMstr.h[cno]',78,2)
+	fn_file_setup_index('[Q]\CLmstr\TrIdx1.h[cno]','1','11')
 	fn_getFileInfo(g_fs_name$,g_fs_kfname$,mat tmpkps,mat tmpkln,tmpversion,tmprln,tmpfile$)
 	if ~fn_check_version(tmpversion,version_proper:=2,g_fs_name$) then
 		if tmpversion=0 or tmpversion=-1 then
@@ -343,20 +338,20 @@ def fn_cfv_checkbook
 			goto CL_TRMSTR1
 		end if
 		if tmpversion=1 then
-			fntrmstr_v1_to_v2
+			fn_checkbookTrmstr_v1_to_v2
 			goto CL_TRMSTR1
 		end if
 	end if
 	! CL_TRMSTR2: ! Secondary Split Index
-	fn_file_setup_index("[Q]\CLmstr\TrIdx2.h[cno]",'28/1','8/11')
+	fn_file_setup_index('[Q]\CLmstr\TrIdx2.h[cno]','28/1','8/11')
 	! CL_TRMSTR3: ! Secondary 3-Split Index
-	fn_file_setup_index("[Q]\CLmstr\TrIdx3.h[cno]",'16/12/4','2/4/8')
+	fn_file_setup_index('[Q]\CLmstr\TrIdx3.h[cno]','16/12/4','2/4/8')
 	!
 	CL_TRALLOC: ! 1 file and 1 key
 	! (index file did not exists in previous versions,
 	! so it'll build it if need be here, before it opens it)
-	name$="[Q]\CLmstr\TrAlloc.h[cno]"
-	kfname$="[Q]\CLmstr\TrAlloc-Idx.h[cno]"
+	name$='[Q]\CLmstr\TrAlloc.h[cno]'
+	kfname$='[Q]\CLmstr\TrAlloc-Idx.h[cno]'
 	myrln=80
 	version_proper=2
 	fn_make_data_file_exist(name$,myrln,version_proper)
@@ -366,7 +361,7 @@ def fn_cfv_checkbook
 	fn_getFileInfo(name$,kfname$,mat tmpkps,mat tmpkln,tmpversion,tmprln,tmpfile$)
 	fn_check_version(tmpversion,version_proper,tmpfile$)
 	if tmpversion=1 or tmpversion=0 or tmpversion=-1 then
-		fntralloc_v1_to_v2
+		fn_checkbookTrAlloc_v1_to_v2
 		goto CL_TRALLOC
 	end if
 	if tmprln<>myrln then
@@ -386,8 +381,8 @@ def fn_cfv_checkbook
 	! it is important that if conversion from version 1 to 2 occur on this
 	! that this file process before PayTrans - the file it is linked to
 	! So that record sequence is maintained.
-	name$="[Q]\CLmstr\UnPdAloc.h[cno]"
-	kfname$="[Q]\CLmstr\UAIdx1.h[cno]"
+	name$='[Q]\CLmstr\UnPdAloc.h[cno]'
+	kfname$='[Q]\CLmstr\UAIdx1.h[cno]'
 	myrln=67
 	version_proper=2
 	fn_make_data_file_exist(name$,myrln,version_proper)
@@ -398,7 +393,7 @@ def fn_cfv_checkbook
 	fn_getFileInfo(name$,kfname$,mat tmpkps,mat tmpkln,tmpversion,tmprln,tmpfile$)
 	fn_check_version(tmpversion,version_proper,tmpfile$)
 	if tmpversion=1 or tmpversion=0 or tmpversion=-1 then
-		fnunpdaloc_v1_to_v2
+		fn_checkbookUnpdaloc_v1_to_v2
 		goto CL_UNPDALOC1
 	end if
 	if tmprln<>myrln then
@@ -418,8 +413,8 @@ def fn_cfv_checkbook
 	end if
 
 	! CL_UNPDALOC2: ! Secondary, Non-Split Index
-	name$="[Q]\CLmstr\UnPdAloc.h[cno]"
-	kfname$="[Q]\CLmstr\UAIdx2.h[cno]"
+	name$='[Q]\CLmstr\UnPdAloc.h[cno]'
+	kfname$='[Q]\CLmstr\UAIdx2.h[cno]'
 	if lwrc$(env$('force_reindex'))='yes' or ~exists(kfname$) then
 		fnIndex(name$,kfname$,'1 20')
 	end if
@@ -434,8 +429,8 @@ def fn_cfv_checkbook
 	end if
 
 	CL_PAYTRANS1: ! Primary Non-Split Index
-	name$="[Q]\CLmstr\PayTrans.h[cno]"
-	kfname$="[Q]\CLmstr\UnPdIdx1.h[cno]"
+	name$='[Q]\CLmstr\PayTrans.h[cno]'
+	kfname$='[Q]\CLmstr\UnPdIdx1.h[cno]'
 	myrln=114
 	version_proper=2
 	fn_make_data_file_exist(name$,myrln,version_proper)
@@ -445,13 +440,13 @@ def fn_cfv_checkbook
 	fn_getFileInfo(name$,kfname$,mat tmpkps,mat tmpkln,tmpversion,tmprln,tmpfile$)
 	fn_check_version(tmpversion,version_proper,tmpfile$)
 	if tmpversion=1 or tmpversion=0 or tmpversion=-1 then
-		fnpaytrans_v1_to_v2 : goto CL_PAYTRANS1
+		fn_checkbookPaytrans_v1_to_v2 : goto CL_PAYTRANS1
 	end if
 	if tmprln<>myrln then
 		pr 'Record Length Error in File: '&tmpfile$
 		pr '         RLn: '&str$(tmprln)
 		pr 'Fixing it'
-		fnCopy("[Q]\CLmstr\PayTrans.h[cno]",'',myrln)
+		fnCopy('[Q]\CLmstr\PayTrans.h[cno]','',myrln)
 	end if
 	x=1 : if tmpkps(x)<>1 then
 		pr 'Key Position ('&str$(x)&') Error in '&kfname$
@@ -463,8 +458,8 @@ def fn_cfv_checkbook
 	end if
 
 	! CL_PAYTRANS2: ! seconday 3-Split Index
-	name$="[Q]\CLmstr\PayTrans.h[cno]"
-	kfname$="[Q]\CLmstr\UnPdIdx2.h[cno]"
+	name$='[Q]\CLmstr\PayTrans.h[cno]'
+	kfname$='[Q]\CLmstr\UnPdIdx2.h[cno]'
 	if lwrc$(env$('force_reindex'))='yes' or ~exists(kfname$) then
 		fnIndex(name$,kfname$,'31/27/1 2/4/26')
 	end if
@@ -495,8 +490,8 @@ def fn_cfv_checkbook
 	end if
 
 	CL_PAYMSTR1: ! Primary Non-Split Index
-	name$="[Q]\CLmstr\PayMstr.h[cno]"
-	kfname$="[Q]\CLmstr\PayIdx1.h[cno]"
+	name$='[Q]\CLmstr\PayMstr.h[cno]'
+	kfname$='[Q]\CLmstr\PayIdx1.h[cno]'
 	myrln=736
 	version_proper=1
 	fn_make_data_file_exist(name$,myrln,version_proper)
@@ -506,7 +501,8 @@ def fn_cfv_checkbook
 	fn_getFileInfo(name$,kfname$,mat tmpkps,mat tmpkln,tmpversion,tmprln,tmpfile$)
 	fn_check_version(tmpversion,version_proper,tmpfile$)
 	if tmpversion=0 or tmpversion=-1 then
-		fnpaymstr_v0_to_v1 : goto CL_PAYMSTR1
+		fn_checkbookPaymstr_v0_to_v1
+		goto CL_PAYMSTR1
 	end if
 	if tmprln<>myrln then
 		pr 'Record Length Error in File: '&tmpfile$
@@ -521,8 +517,8 @@ def fn_cfv_checkbook
 		pr '      KLn('&str$(x)&'): '&str$(tmpkln(x))
 	end if
 	! CL_RECMSTR1: ! Primary Non-Split Index
-	name$="[Q]\CLmstr\RecMstr.h[cno]"
-	kfname$="[Q]\CLmstr\RecIdx1.h[cno]"
+	name$='[Q]\CLmstr\RecMstr.h[cno]'
+	kfname$='[Q]\CLmstr\RecIdx1.h[cno]'
 	myrln=38
 	version_proper=1
 	fn_make_data_file_exist(name$,myrln,version_proper)
@@ -532,7 +528,7 @@ def fn_cfv_checkbook
 	fn_getFileInfo(name$,kfname$,mat tmpkps,mat tmpkln,tmpversion,tmprln,tmpfile$)
 	fn_check_version(tmpversion,version_proper,tmpfile$)
 	if tmpversion=0 or tmpversion=-1 then
-		fnpaymstr_v0_to_v1
+		fn_checkbookPaymstr_v0_to_v1
 		goto CL_PAYMSTR1
 	end if
 	if tmprln<>myrln then
@@ -549,8 +545,8 @@ def fn_cfv_checkbook
 	end if
 
 	! CL_PAYMSTR2: ! Secondary, Non-Split Index
-	name$="[Q]\CLmstr\PayMstr.h[cno]"
-	kfname$="[Q]\CLmstr\PayIdx2.h[cno]"
+	name$='[Q]\CLmstr\PayMstr.h[cno]'
+	kfname$='[Q]\CLmstr\PayIdx2.h[cno]'
 	if lwrc$(env$('force_reindex'))='yes' or ~exists(kfname$) then
 		fnIndex(name$,kfname$,'9 30')
 	end if
@@ -565,16 +561,16 @@ def fn_cfv_checkbook
 	end if
 
 	! CL_GLMSTR1: ! Primary Non-Split Index
-	name$="[Q]\CLmstr\GLmstr.h[cno]"
-	kfname$="[Q]\CLmstr\GLIndex.h[cno]"
+	name$='[Q]\CLmstr\GLmstr.h[cno]'
+	kfname$='[Q]\CLmstr\GLIndex.h[cno]'
 	myrln=62
 	!   version_proper=0
 	!   fn_make_data_file_exist(name$,myrln,version_proper)
 	!   if lwrc$(env$('force_reindex'))='yes' or ~exists(kfname$) then
 	!     fnIndex(name$,kfname$,'1 12')
 	!   end if
-	fn_file_setup_data("[Q]\CLmstr\GLmstr.h[cno]",62,1)
-	fn_file_setup_index("[Q]\CLmstr\GLIndex.h[cno]",'1','12')
+	fn_file_setup_data('[Q]\CLmstr\GLmstr.h[cno]',62,1)
+	fn_file_setup_index('[Q]\CLmstr\GLIndex.h[cno]','1','12')
 	fn_getFileInfo(g_fs_name$,g_fs_kfname$,mat tmpkps,mat tmpkln,tmpversion,tmprln,tmpfile$)
 	fn_check_version(tmpversion,version_proper,tmpfile$)
 	!   if tmprln<>myrln then
@@ -596,57 +592,167 @@ def fn_cfv_checkbook
 	!   end if
 
 	! CL_PAYEEGLBREAKDOWN: ! Primary Non-Split Index
-	fn_file_setup_data("[Q]\CLmstr\payeeglbreakdown.h[cno]",56,1)
-	fn_file_setup_index("[Q]\CLmstr\payeeglbkdidx.h[cno]",'1','8')
+	fn_file_setup_data('[Q]\CLmstr\payeeglbreakdown.h[cno]',56,1)
+	fn_file_setup_index('[Q]\CLmstr\payeeglbkdidx.h[cno]','1','8')
 	! CL_GLCONTROL: ! Primary Non-Split Index
-	fn_file_setup_data("[Q]\CLmstr\fundmstr.h[cno]",75,0)
-	fn_file_setup_index("[Q]\CLmstr\fundidx1.h[cno]",'1','3')
+	fn_file_setup_data('[Q]\CLmstr\fundmstr.h[cno]',75,0)
+	fn_file_setup_index('[Q]\CLmstr\fundidx1.h[cno]','1','3')
 	fn_getFileInfo(g_fs_name$,g_fs_kfname$,mat tmpkps,mat tmpkln,tmpversion,tmprln,tmpfile$)
 	fn_check_version(tmpversion,version_proper,tmpfile$)
-	if tmprln=63 then 
+	if tmprln=63 then
 		fnCopy('[Q]\CLmstr\FundMstr.h[cno]','[Q]\CLmstr\FundMstr.h[cno]',75)
 		fnIndex('[Q]\CLmstr\FundMstr.h[cno]','[Q]\CLmstr\fundidx1.h[cno]','1,3')
 	end if
-	!
-	fn_file_setup_data("[Q]\CLmstr\BankMstr.h[cno]",64,1)
-	fn_file_setup_index("[Q]\CLmstr\BankIdx1.h[cno]",'1','2')
+
+	fn_file_setup_data('[Q]\CLmstr\BankMstr.h[cno]',64,1)
+	fn_file_setup_index('[Q]\CLmstr\BankIdx1.h[cno]','1','2')
 	if ~exists('[Q]\CLmstr\PayeeType.dat') then
-		open #hPayeeType=fnH: "Name=[Q]\CLmstr\PayeeType.dat,Version=1,KFName=[Q]\CLmstr\PayeeType.Idx,Use,RecL=27,KPs=1,KLn=2,Shr",internal,outIn,keyed
+		open #hPayeeType=fnH: 'Name=[Q]\CLmstr\PayeeType.dat,Version=1,KFName=[Q]\CLmstr\PayeeType.Idx,Use,RecL=27,KPs=1,KLn=2,Shr',internal,outIn,keyed
 		write #hPayeeType,using 'form pos 1,n 2,C 25': 0,'Not Applicable'
 		write #hPayeeType,using 'form pos 1,n 2,C 25': 7,'Non-Employee Compensation'
 		close #hPayeeType:
 	end if
 
-	if exists("[Q]\CLmstr\PostDat.h[cno]") then
+	if exists('[Q]\CLmstr\PostDat.h[cno]') then
 		fnFree('[Q]\CLmstr\PostDat.h[cno]')
 	end if
 
 fnend
-	def fn_checkbookTrmstr_v0_to_v1(; ___,trmstr,pause$,amt,j)
-		! converts the CL TRmstr file to version 1
-		! meainging the amount changes from G 10.2 to PD 10.2
-		fnStatus("Checkbook update Trans to v1: Updating Transaction file.")
-		open #trmstr=fnH: "Name=[Q]\CLmstr\TrMstr.h[cno]",i,outi,r
-		if version(trmstr)=1 then
+	def fn_checkbookUnpdaloc_v1_to_v2(; ___,unpdaloc,vn$*8,iv$*12,j)
+			fnStatus('Payment Allocation file until it is updating from v1 to v2')
+			open #unpdaloc=1: 'Name=[Q]\CLmstr\UnPdAloc.h[cno],KFName=[Q]\CLmstr\UAIdx1.h[cno]',internal,outIn,keyed
+			if version(unpdaloc)=2 then
+				fnStatus('UnPdAloc is already version 2')
+			else
+				version(unpdaloc,2)
+				close #unpdaloc:
+				fnCopy('[Q]\CLmstr\UnPdAloc.h[cno]','[Q]\CLmstr\UnPdAloc.h[cno]',67) ! change the record length
+				! r: make sure the Key is right justified
+				open #unpdaloc=1: 'Name=[Q]\CLmstr\UnPdAloc.h[cno],KFName=[Q]\CLmstr\UAIdx1.h[cno]',internal,outIn,keyed
+				for j=1 to lrec(unpdaloc)
+					read #unpdaloc,using 'form pos 1,C 8,c 12',rec=j: vn$,iv$ noRec L330
+					vn$=lpad$(rtrm$(vn$),8): iv$=lpad$(rtrm$(iv$),12)
+					rewrite #unpdaloc,using 'form pos 1,Cr 8,c 12',rec=j: vn$,iv$
+					L330: !
+				next j
+				close #unpdaloc:
+				! /r
+				fnIndex('[Q]\CLmstr\UnPdAloc.h[cno]','[Q]\CLmstr\UAIdx1.h[cno]','9 12')
+				fnIndex('[Q]\CLmstr\UnPdAloc.h[cno]','[Q]\CLmstr\UAIdx2.h[cno]','1 20')
+			end if
+	fnend
+	def fn_checkbookPaytrans_v1_to_v2(; ___,paytrans1,j,gde,pdte,disamt,ddate)
+		open #paytrans1=1: 'Name=[Q]\CLmstr\PayTrans.h[cno],KFName=[Q]\CLmstr\UnPdIdx1.h[cno]',internal,outIn,keyed
+		if version(paytrans1)=2 then
+			fnStatus('PayTrans is already version 2')
 		else
-			version(trmstr,1)
-			for j=1 to lrec(trmstr)
-				read #trmstr,using 'form pos 18,n 10.2': amt eof L240
-				rewrite #trmstr,using 'form pos 18,pd 10.2': amt
+			fnStatus('updating PayTrans from v1 to v2')
+			close #paytrans1:
+
+			! change the record length of the file
+			fnCopy('[Q]\CLmstr\PayTrans.h[cno]','[Q]\CLmstr\PayTrans.h[cno]',114)
+			open #paytrans1=1: 'Name=[Q]\CLmstr\PayTrans.h[cno],KFName=[Q]\CLmstr\UnPdIdx1.h[cno]',internal,outIn,keyed
+			for j=1 to lrec(paytrans1)
+				read #paytrans1,using 'form pos 96,N 1,N 6': gde,pdte eof L320
+				rewrite #paytrans1,using 'form pos 90,N 1,N 6,N 10.2,N 8': gde,pdte,disamt=0,ddate=0
 			next j
-			L240: !
-			close #trmstr:
+			L320: !
+			version(paytrans1,2)
+			close #paytrans1:
+			fnIndex('[Q]\CLmstr\PayTrans.h[cno]','[Q]\CLmstr\UnPdIdx1.h[cno]','1 20')
+			fnIndex('[Q]\CLmstr\PayTrans.h[cno]','[Q]\CLmstr\UnPdIdx2.h[cno]','31/27/1 2/4/26')
 		end if
 	fnend
+	def fn_checkbookPaymstr_v0_to_v1(;___,paymstr,payalloc,payeegl,vn$*8,de$*30,gl$*12,pct)
+		open #paymstr=fnH: 'Name=[Q]\CLmstr\PayMstr.h[cno]',i,outi,r
+		if version(paymstr)=1 then
+
+			fnStatus('PayMstr is already version 1')
+		else
+			fnStatus('updating PayMstr:  v0 to v1')
+			close #paymstr:
+			fnCopy('[Q]\CLmstr\PayMstr.h[cno]','[Q]\CLmstr\PayMstr.h[cno]',736)
+			fnIndex('[Q]\CLmstr\PayMstr.h[cno]','[Q]\CLmstr\PayIdx2.h[cno]','9 30')
+			open #paymstr1=fnH: 'Name=[Q]\CLmstr\PayMstr.h[cno],KFName=[Q]\CLmstr\PayIdx1.h[cno]',internal,outIn,keyed
+			open #paymstr2=fnH: 'Name=[Q]\CLmstr\PayMstr.h[cno],KFName=[Q]\CLmstr\PayIdx2.h[cno]',internal,outIn,keyed
+			version(paymstr1,1)
+			open #payalloc=fnH: 'Name=[Q]\CLmstr\PayAlloc.h[cno]',i,i,r ioerr EO_PAYALLOC
+			open #payeegl=fnH: 'Name=[Q]\CLmstr\payeeglbreakdown.h[cno],KFName=[Q]\CLmstr\Payeeglbkdidx.h[cno],Use,RecL=56,KPs=1,KLn=8,Shr',internal,outIn,keyed
+			version(payeegl,1)
+			do
+				read #payalloc,using 'form pos 1,C 8,C 12,PD 3.2,C 30': vn$,gl$,pct,de$ eof EO_PAYALLOC
+				write #payeegl,using 'form pos 1,C 8,C 12,n 6.2,C 30': vn$,gl$,pct,de$
+			loop
+
+			EO_PAYALLOC: !
+			version(paymstr1,1)
+			close #paymstr1: ioerr ignore
+			close #paymstr2: ioerr ignore
+			close #payeegl: ioerr ignore
+			close #payalloc,free: ioerr ignore
+			fnIndex('[Q]\CLmstr\PayMstr.h[cno]','[Q]\CLmstr\Paydx1.h[cno]','1 8')
+			fnIndex('[Q]\CLmstr\PayMstr.h[cno]','[Q]\CLmstr\PayIdx2.h[cno]','9 30')
+			fnIndex('[Q]\CLmstr\payeeglbreakdown.h[cno]','[Q]\CLmstr\payeeglbkdidx.h[cno]','1 8')
+		end if
+	fnend
+	def fn_checkbookTrAlloc_v1_to_v2(; ___,tralloc)
+		fnStatus('Updating Checkbook Transaction Allocation from v1 to v2')
+		! fnwait(message$='Converting: please wait...',0)
+		fnIndex('[Q]\CLmstr\TrAlloc.h[cno]','[Q]\CLmstr\TrAlloc-Idx.h[cno]','1 11')
+		open #tralloc=fnH: 'Name=[Q]\CLmstr\TrAlloc.h[cno],KFName=[Q]\CLmstr\TrAlloc-Idx.h[cno]',internal,outIn,keyed
+		close #tralloc:
+		open #tralloc: 'Name=[Q]\CLmstr\TrAlloc.h[cno],KFName=[Q]\CLmstr\TrAlloc-Idx.h[cno]',internal,outIn,keyed
+		if version(tralloc)=2 then fnStatus('TrAlloc is already version 2') : goto Tralloc1to2_Finis
+		version(tralloc,2)
+	goto Tralloc1to2_Finis
+
+	Tralloc1to2_Finis: !
+		close #tralloc:
+		fnCopy('[Q]\CLmstr\TrAlloc.h[cno]','[Q]\CLmstr\TrAlloc.h[cno]',80)
+		fnIndex('[Q]\CLmstr\TrAlloc.h[cno]','[Q]\CLmstr\TrAlloc-Idx.h[cno]','1 11')
+fnend
+	def fn_checkbookTrmstr_v0_to_v1(; ___,hTr,pause$,amt,j)
+		! converts the CL TRmstr file to version 1
+		! meainging the amount changes from G 10.2 to PD 10.2
+		fnStatus('Checkbook update Trans to v1: Updating Transaction file.')
+		open #hTr=fnH: 'Name=[Q]\CLmstr\TrMstr.h[cno]',i,outi,r
+		if version(hTr)=1 then
+		else
+			version(hTr,1)
+			for j=1 to lrec(hTr)
+				read #hTr,using 'form pos 18,n 10.2': amt eof L240
+				rewrite #hTr,using 'form pos 18,pd 10.2': amt
+			next j
+			L240: !
+			close #hTr:
+		end if
+	fnend
+	def fn_checkbookTrmstr_v1_to_v2(; ___,hTr)
+		! converts the CL TRmstr file from version 1 to Version 2
+		fnStatus('Checkbook update Trans from v1 to v2')
+
+		open #hTr=fnH: 'Name=[Q]\CLmstr\TRmstr.h[cno]',i,outi,r
+		if version(hTr)<>1 and version(hTr)<>2 then
+			fnStatus('TRmstr is not version 1.  You must update it to version 1 before running this conversion program')
+		else if version(hTr)=2 then
+			fnStatus('TRmstr is already version 2')
+		else
+			version(trmstr,2)
+		end if
+		close #hTr: ioerr ignore
+		fnCopy('[Q]\CLmstr\TRmstr.h[cno]','[Q]\CLmstr\TRmstr.h[cno]',78)
+		fnIndex('[Q]\CLmstr\TrMstr.h[cno]','[Q]\CLmstr\TrIdx1.h[cno]','1 11')
+		fnIndex('[Q]\CLmstr\TrMstr.h[cno]','[Q]\CLmstr\TrIdx2.h[cno]','28/1 8/11')
+	fnend
 def fn_cfv_payroll
-	if exists("[Q]\PRmstr")=0 then execute "MkDir [Q]\PRmstr"
-	! if ~exists('[Q]\INI\Payroll') then execute 'mkdir "[Q]\INI\Payroll"'
+	if exists('[Q]\PRmstr')=0 then execute 'MkDir [Q]\PRmstr'
+	! if ~exists('[Q]\INI\Payroll') then execute 'mkdir '[Q]\INI\Payroll''
 	! fn_ini_move(env$('cursys'))
 	! fnIniToReg
 	fn_reg_rename(env$('cursys'))
 	! r: move DDInfo.h into CReg and delete DDInfo.h
 	if exists('[Q]\PRmstr\DDInfo.h[cno]') then
-		open #h_prDdinfo=fnH: "Name=[Q]\PRmstr\DDInfo.h[cno],USE,RecL=256",i,outi,r
+		open #h_prDdinfo=fnH: 'Name=[Q]\PRmstr\DDInfo.h[cno],USE,RecL=256',i,outi,r
 		if lrec(h_prDdinfo)>=1 then
 			dim ddinfo_path$*30
 			dim ddinfo_bankaccount$*20
@@ -655,7 +761,7 @@ def fn_cfv_payroll
 			dim ddinfo_fedid$*12
 			dim ddinfo_bankname$*23
 			dim ddinfo_banksaccount$*12
-			read #h_prDdinfo,using "form pos 1,c 30,c 20,c 20,c 20,c 12,c 23,c 12",rec=1: ddinfo_path$,ddinfo_bankaccount$,ddinfo_bankrouting$,ddinfo_federalrouting$,ddinfo_fedid$,ddinfo_bankname$,ddinfo_banksaccount$ ioerr CfvPrDdInfoNoRec
+			read #h_prDdinfo,using 'form pos 1,c 30,c 20,c 20,c 20,c 12,c 23,c 12',rec=1: ddinfo_path$,ddinfo_bankaccount$,ddinfo_bankrouting$,ddinfo_federalrouting$,ddinfo_fedid$,ddinfo_bankname$,ddinfo_banksaccount$ ioerr CfvPrDdInfoNoRec
 			fncreg_write('Direct Deposit Save File Path',ddinfo_path$) ! The path should contain the drive designation, any folders and a file name. Eg  'A:\DirDep.txt'
 			fncreg_write('Direct Deposit Source Bank Account',ddinfo_bankaccount$) ! The right hand set of numbers at the bottom of your checks.
 			fncreg_write('Direct Deposit Source Bank Routing',ddinfo_bankrouting$) ! The middle set of numbers at the bottom of your checks.
@@ -669,8 +775,8 @@ def fn_cfv_payroll
 	! /r
 	! r: move CheckInfo.h into CReg and delete checkinfo.h
 	if exists('[Q]\PRmstr\Checkinfo.h[cno]') then
-		open #h_pr_checkinfo=fnH: "Name=[Q]\PRmstr\Checkinfo.h[cno],USE,RecL=128",i,outi,r
-		read #h_pr_checkinfo,using "form pos 1,3*c 1,c 3,c 1,n 3,c 5",rec=1: pre$,acsclcv$,ficam1$,sc1$,accr$,bankcode,compcode$ noRec CFVPR_CHECKINFO_NOREC
+		open #h_pr_checkinfo=fnH: 'Name=[Q]\PRmstr\Checkinfo.h[cno],USE,RecL=128',i,outi,r
+		read #h_pr_checkinfo,using 'form pos 1,3*c 1,c 3,c 1,n 3,c 5',rec=1: pre$,acsclcv$,ficam1$,sc1$,accr$,bankcode,compcode$ noRec CFVPR_CHECKINFO_NOREC
 		fncreg_write('Prenumbered Checks',pre$)
 		fncreg_write('Post to CL',acsclcv$)
 		fncreg_write('Post Employer Portion of FiCA',ficam1$)
@@ -684,7 +790,7 @@ def fn_cfv_payroll
 	! /r
 	! r: move rpDate.h into CReg and delete rpDate.h
 	if exists('[Q]\PRmstr\rpDate.h[cno]') then
-		open #h_pr_rpdate=fnH: "Name=[Q]\PRmstr\rpDate.h[cno]",i,outi,r
+		open #h_pr_rpdate=fnH: 'Name=[Q]\PRmstr\rpDate.h[cno]',i,outi,r
 		dim cfvpr_rpdate_d$*20
 		read #h_pr_rpdate,using 'form pos 1,N 6,C 20': cfvpr_rpdate_ppd,cfvpr_rpdate_d$  noRec CFVPR_RPDATE_NOREC
 		fncreg_write('calculation date',str$(cfvpr_rpdate_ppd)) ! quarter ending date, i think - definately NOT the payroll calculation date!
@@ -693,37 +799,37 @@ def fn_cfv_payroll
 		close #h_pr_rpdate,free:
 	end if
 	! /r
-	fn_file_setup_data("[Q]\PRmstr\DeptName.h[cno]",32,0)
-	fn_file_setup_index("[Q]\PRmstr\DeptNameIdx-idx.h[cno]",'1','3')
+	fn_file_setup_data('[Q]\PRmstr\DeptName.h[cno]',32,0)
+	fn_file_setup_index('[Q]\PRmstr\DeptNameIdx-idx.h[cno]','1','3')
 
-	fn_file_setup_data("[Q]\PRmstr\Department.h[cno]",149,0)
-	fn_file_setup_index("[Q]\PRmstr\DeptIdx.h[cno]",'1/9','8/3')
+	fn_file_setup_data('[Q]\PRmstr\Department.h[cno]',149,0)
+	fn_file_setup_index('[Q]\PRmstr\DeptIdx.h[cno]','1/9','8/3')
 
-	fn_file_setup_data("[Q]\PRmstr\dd.h[cno]",72,0)
-	fn_file_setup_index("[Q]\PRmstr\DDidx1.h[cno]",'1','10')
+	fn_file_setup_data('[Q]\PRmstr\dd.h[cno]',72,0)
+	fn_file_setup_index('[Q]\PRmstr\DDidx1.h[cno]','1','10')
 
-	fn_file_setup_data("[Q]\PRmstr\mglmstr.h[cno]",135,0)
-	fn_file_setup_index("[Q]\PRmstr\mglidx1-idx.h[cno]",'1','3')
+	fn_file_setup_data('[Q]\PRmstr\mglmstr.h[cno]',135,0)
+	fn_file_setup_index('[Q]\PRmstr\mglidx1-idx.h[cno]','1','3')
 
-	fn_file_setup_data("[Q]\PRmstr\HourBreakdown.h[cno]",39,0)
-	fn_file_setup_index("[Q]\PRmstr\HourBreakdown-idx.h[cno]",'1/9/14','8/5/8')
+	fn_file_setup_data('[Q]\PRmstr\HourBreakdown.h[cno]',39,0)
+	fn_file_setup_index('[Q]\PRmstr\HourBreakdown-idx.h[cno]','1/9/14','8/5/8')
 	! r: Dates.h
-	fn_file_setup_data("[Q]\PRmstr\Dates.h[cno]",76,0)
-	open #tmp=fnH: "Name=[Q]\PRmstr\Dates.h[cno],Use,RecL=76,Shr",i,outi,r
-	read #tmp,using "form pos 1,6*n 8",rec=1: beg_date,end_date,qtr1,qtr2,qtr3,qtr4 noRec PR_WRITE_BLANK_DATE_REC
+	fn_file_setup_data('[Q]\PRmstr\Dates.h[cno]',76,0)
+	open #tmp=fnH: 'Name=[Q]\PRmstr\Dates.h[cno],Use,RecL=76,Shr',i,outi,r
+	read #tmp,using 'form pos 1,6*n 8',rec=1: beg_date,end_date,qtr1,qtr2,qtr3,qtr4 noRec PR_WRITE_BLANK_DATE_REC
 	goto PR_CLOSE_DATE
 	PR_WRITE_BLANK_DATE_REC: !
-	write #tmp,using "form pos 1,6*n 8",rec=1: beg_date,end_date,qtr1,qtr2,qtr3,qtr4
+	write #tmp,using 'form pos 1,6*n 8',rec=1: beg_date,end_date,qtr1,qtr2,qtr3,qtr4
 	PR_CLOSE_DATE: !
 	close #tmp:
 	! /r
-	fn_file_setup_data("[Q]\PRmstr\PayrollChecks.h[cno]",224,0)
-	fn_file_setup_index("[Q]\PRmstr\CheckIdx.h[cno]",'1','17')
-	fn_file_setup_index("[Q]\PRmstr\CheckIdx2.h[cno]",'9/12/1','3/6/8')
-	fn_file_setup_index("[Q]\PRmstr\checkidx3.h[cno]",'1/12/9','8/6/3')
+	fn_file_setup_data('[Q]\PRmstr\PayrollChecks.h[cno]',224,0)
+	fn_file_setup_index('[Q]\PRmstr\CheckIdx.h[cno]','1','17')
+	fn_file_setup_index('[Q]\PRmstr\CheckIdx2.h[cno]','9/12/1','3/6/8')
+	fn_file_setup_index('[Q]\PRmstr\checkidx3.h[cno]','1/12/9','8/6/3')
 
 	! r: DedNames.h setup
-	! if exists("[Q]\PRmstr\dednames.h[cno]")=0 then
+	! if exists('[Q]\PRmstr\dednames.h[cno]')=0 then
 	dim pr_dednames_fullname$(20)*20
 	dim pr_dednames_abrevname$(20)*8
 	dim pr_dednames_newcalcode(20)
@@ -733,7 +839,7 @@ def fn_cfv_payroll
 	dim pr_dednames_dedst(20)
 	dim pr_dednames_deduc(20)
 	dim pr_dednames_gl$(20)*12
-	open #h_dednames=fnH: "Name=[Q]\PRmstr\dednames.h[cno],RecL=920,use",i,outi,r
+	open #h_dednames=fnH: 'Name=[Q]\PRmstr\dednames.h[cno],RecL=920,use',i,outi,r
 	if lrec(h_dednames)=0 then
 		write #h_dednames,using 'form pos 1,20*c 20,20*c 8,120*n 1,20*c 12': mat pr_dednames_fullname$,mat pr_dednames_abrevname$,mat pr_dednames_newdedcode,mat pr_dednames_newcalcode,mat pr_dednames_newdedfed,mat pr_dednames_dedfica,mat pr_dednames_dedst,mat pr_dednames_deduc,mat pr_dednames_gl$
 	end if
@@ -741,11 +847,11 @@ def fn_cfv_payroll
 	! end if
 	! /r
 	PrGlindex: !
-	open #hTmp=fnH: "Name=[Q]\PRmstr\GLMstr.h[cno],Version=0,KFName=[Q]\PRmstr\GLIndex.h[cno],Use,RecL=62,KPs=1,KLn=12,Shr",internal,outIn,keyed ioerr Check4124OnPrGlindex
+	open #hTmp=fnH: 'Name=[Q]\PRmstr\GLMstr.h[cno],Version=0,KFName=[Q]\PRmstr\GLIndex.h[cno],Use,RecL=62,KPs=1,KLn=12,Shr',internal,outIn,keyed ioerr Check4124OnPrGlindex
 	close #hTmp:
 
 	if ~exists('[Q]\PRmstr\EmpStatus.dat') then
-		open #h_pr_emp_status=fnH: "Name=[Q]\PRmstr\EmpStatus.dat,KFName=[Q]\PRmstr\Empstatus.idx,Use,RecL=32,KPs=1,KLn=2,Shr",internal,outIn,keyed
+		open #h_pr_emp_status=fnH: 'Name=[Q]\PRmstr\EmpStatus.dat,KFName=[Q]\PRmstr\Empstatus.idx,Use,RecL=32,KPs=1,KLn=2,Shr',internal,outIn,keyed
 		write #h_pr_emp_status,using 'form pos 1,N 2,C 25': 9,'Terminated'
 	end if
 	if exists('[Q]\PRmstr\RPMstr.h[cno]') and ~exists('[Q]\PRmstr\Employee.h[cno]') then
@@ -819,39 +925,39 @@ fnend
 	 end if
 	 goto ERTN ! /r
 def fn_cfv_job_cost_payroll
-	! if ~exists('[Q]\INI\Payroll\Job Cost') then execute 'mkdir "[Q]\INI\Payroll\Job Cost"'
+	! if ~exists('[Q]\INI\Payroll\Job Cost') then execute 'mkdir '[Q]\INI\Payroll\Job Cost''
 	! fn_ini_move('JC')
 	! r: JCMSTR.h
-	fn_file_setup_data("[Q]\PRmstr\JCMSTR.h[cno]",300,0)
-	fn_file_setup_index("[Q]\PRmstr\JCINDX.h[cno]",'1','6')
-	fn_file_setup_index("[Q]\PRmstr\JCINDX2.h[cno]",'7','25')
+	fn_file_setup_data('[Q]\PRmstr\JCMSTR.h[cno]',300,0)
+	fn_file_setup_index('[Q]\PRmstr\JCINDX.h[cno]','1','6')
+	fn_file_setup_index('[Q]\PRmstr\JCINDX2.h[cno]','7','25')
 	! /r
 fnend
 def fn_cfv_general_ledger
 	! General Ledger Only
-	fn_file_setup_data("[Q]\GLmstr\ACTrans.h[cno]",72,0)
-	fn_file_setup_index("[Q]\GLmstr\AcTrIdx.h[cno]",'1/71/17/13','12/2/2/4')
+	fn_file_setup_data('[Q]\GLmstr\ACTrans.h[cno]',72,0)
+	fn_file_setup_index('[Q]\GLmstr\AcTrIdx.h[cno]','1/71/17/13','12/2/2/4')
 
-	fn_file_setup_data("[Q]\GLmstr\GLTrans.h[cno]",73,0)
+	fn_file_setup_data('[Q]\GLmstr\GLTrans.h[cno]',73,0)
 	fn_file_setup_index('[Q]\GLmstr\glTrans-IdxAcct.h[cno]','1','12')
 
-	if exists("[Q]\GLmstr")=0 then execute "MkDir [Q]\GLmstr"
-	! if ~exists('[Q]\INI\General Ledger') then execute 'mkdir "[Q]\INI\General Ledger"'
-	! if ~exists('[Q]\INI\General Ledger\Accountants') then execute 'mkdir "[Q]\INI\General Ledger\Accountants"'
+	if exists('[Q]\GLmstr')=0 then execute 'MkDir [Q]\GLmstr'
+	! if ~exists('[Q]\INI\General Ledger') then execute 'mkdir '[Q]\INI\General Ledger''
+	! if ~exists('[Q]\INI\General Ledger\Accountants') then execute 'mkdir '[Q]\INI\General Ledger\Accountants''
 	! fn_ini_move(env$('cursys'))
 	! fnIniToReg
 	fn_reg_rename(env$('cursys'))
 
 	if ~exists('[Q]\GLmstr\PayeeType.dat') then
-		open #hPayeeType=fnH: "Name=[Q]\GLmstr\PayeeType.dat,Version=1,KFName=[Q]\GLmstr\PayeeType.Idx,Use,RecL=27,KPs=1,KLn=2,Shr",internal,outIn,keyed
+		open #hPayeeType=fnH: 'Name=[Q]\GLmstr\PayeeType.dat,Version=1,KFName=[Q]\GLmstr\PayeeType.Idx,Use,RecL=27,KPs=1,KLn=2,Shr',internal,outIn,keyed
 		write #hPayeeType,using 'form pos 1,n 2,C 25': 0,'Not Applicable'
 		write #hPayeeType,using 'form pos 1,n 2,C 25': 7,'Non-Employee Compensation'
 		close #hPayeeType:
 	end if
 
 	! BudgetInfo: ! Primary Non-Split Index
-	name$="[Q]\GLmstr\BudgetInfo.h[cno]"
-	kfname$="[Q]\GLmstr\BudIndx.h[cno]"
+	name$='[Q]\GLmstr\BudgetInfo.h[cno]'
+	kfname$='[Q]\GLmstr\BudIndx.h[cno]'
 	myrln=28
 	version_proper=0
 	fn_make_data_file_exist(name$,myrln,version_proper)
@@ -859,8 +965,8 @@ def fn_cfv_general_ledger
 		fnIndex(name$,kfname$,'1 14')
 	end if
 	! GL_GLMSTR1: ! Primary Non-Split Index
-	name$="[Q]\GLmstr\GLmstr.h[cno]"
-	kfname$="[Q]\GLmstr\GLIndex.h[cno]"
+	name$='[Q]\GLmstr\GLmstr.h[cno]'
+	kfname$='[Q]\GLmstr\GLIndex.h[cno]'
 	myrln=416
 	version_proper=0
 	fn_make_data_file_exist(name$,myrln,version_proper)
@@ -884,8 +990,8 @@ def fn_cfv_general_ledger
 	end if
 	!
 	! GL_GLMSTR2: ! Secondary, Non-Split Index
-	name$="[Q]\GLmstr\GLmstr.h[cno]"
-	kfname$="[Q]\GLmstr\GLIndx2.h[cno]"
+	name$='[Q]\GLmstr\GLmstr.h[cno]'
+	kfname$='[Q]\GLmstr\GLIndx2.h[cno]'
 	if lwrc$(env$('force_reindex'))='yes' or ~exists(kfname$) then
 		fnIndex(name$,kfname$,'13 30')
 	end if
@@ -903,16 +1009,16 @@ def fn_cfv_general_ledger
 		fnIndex(name$,kfname$,'13 30')
 	end if
 
-	fn_file_setup_data("[Q]\GLmstr\AcGLFnSc.h[cno]",83,1)
-	fn_file_setup_index("[Q]\GLmstr\agfsidx1.h[cno]",'1','5')	! add delete for '[Q]\GLmstr\F nScIndx.h[cno]' - it was the old name of agfsidx1 (without the space in it)
+	fn_file_setup_data('[Q]\GLmstr\AcGLFnSc.h[cno]',83,1)
+	fn_file_setup_index('[Q]\GLmstr\agfsidx1.h[cno]','1','5')	! add delete for '[Q]\GLmstr\F nScIndx.h[cno]' - it was the old name of agfsidx1 (without the space in it)
 	! Six Files, with 1 primary index each
 	!         acglfnsj, acglfnsi, acglfnsb, acglfnsc, acglfnsf, acglfnsg
-	fn_file_setup_data("[Q]\GLmstr\acglfnsj.h[cno]",83,1)
-	fn_file_setup_index("[Q]\GLmstr\agfsidx2.h[cno]",'1','5')
+	fn_file_setup_data('[Q]\GLmstr\acglfnsj.h[cno]',83,1)
+	fn_file_setup_index('[Q]\GLmstr\agfsidx2.h[cno]','1','5')
 	! add delete for '[Q]\GLmstr\F nsjindx.h[cno]' - it was the old name of agfsidx1 (without the space in it)
 	! r: GLmstr\acglfnsi
-	name$="[Q]\GLmstr\acglfnsi.h[cno]"
-	kfname$="[Q]\GLmstr\agfsidx3.h[cno]"
+	name$='[Q]\GLmstr\acglfnsi.h[cno]'
+	kfname$='[Q]\GLmstr\agfsidx3.h[cno]'
 	fn_file_setup_data(name$,83,1)
 	fn_file_setup_index(kfname$,'1','5')
 	! myrln=83
@@ -938,19 +1044,19 @@ def fn_cfv_general_ledger
 		pr '      KLn('&str$(x)&'): '&str$(tmpkln(x))
 	end if
 
-	fn_file_setup_data("[Q]\GLmstr\acglfnsb.h[cno]",83,1)
-	fn_file_setup_index("[Q]\GLmstr\agfsidx4.h[cno]",'1','5')
+	fn_file_setup_data('[Q]\GLmstr\acglfnsb.h[cno]',83,1)
+	fn_file_setup_index('[Q]\GLmstr\agfsidx4.h[cno]','1','5')
 
-	fn_file_setup_data("[Q]\GLmstr\acglfnsf.h[cno]",83,1)
-	fn_file_setup_index("[Q]\GLmstr\agfsidx5.h[cno]",'1','5')
+	fn_file_setup_data('[Q]\GLmstr\acglfnsf.h[cno]',83,1)
+	fn_file_setup_index('[Q]\GLmstr\agfsidx5.h[cno]','1','5')
 
-	fn_file_setup_data("[Q]\GLmstr\acglfnsg.h[cno]",83,1)
-	fn_file_setup_index("[Q]\GLmstr\agfsidx6.h[cno]",'1','5')
+	fn_file_setup_data('[Q]\GLmstr\acglfnsg.h[cno]',83,1)
+	fn_file_setup_index('[Q]\GLmstr\agfsidx6.h[cno]','1','5')
 
 	! /r
 	! PAYEEGLBREAKDOWN: !
-	name$="[Q]\GLmstr\payeeglbreakdown.h[cno]"
-	kfname$="[Q]\GLmstr\Payeeglbkdidx.h[cno]"
+	name$='[Q]\GLmstr\payeeglbreakdown.h[cno]'
+	kfname$='[Q]\GLmstr\Payeeglbkdidx.h[cno]'
 	myrln=56
 	version_proper=1
 	fn_make_data_file_exist(name$,myrln,version_proper)
@@ -971,10 +1077,10 @@ def fn_cfv_general_ledger
 		goto L3510
 	end if
 	! GLPAYMSTR: ! Primary, Non-Split Index  (Vendor or payee files in g/l)
-	if exists("[Q]\GLmstr\gl1099.h[cno]")<>0 then fnglpayee_v0_to_v1
-	if exists("[Q]\GLmstr\gl1099.h[cno]")<>0 then fnFree("[Q]\GLmstr\gl1099.h[cno]")
-	name$="[Q]\GLmstr\PayMstr.h[cno]"
-	kfname$="[Q]\GLmstr\Payidx1.h[cno]"
+	if exists('[Q]\GLmstr\gl1099.h[cno]')<>0 then fnglpayee_v0_to_v1
+	if exists('[Q]\GLmstr\gl1099.h[cno]')<>0 then fnFree('[Q]\GLmstr\gl1099.h[cno]')
+	name$='[Q]\GLmstr\PayMstr.h[cno]'
+	kfname$='[Q]\GLmstr\Payidx1.h[cno]'
 	myrln=276
 	version_proper=1
 	fn_make_data_file_exist(name$,myrln,version_proper)
@@ -998,8 +1104,8 @@ def fn_cfv_general_ledger
 	end if
 
 		! GLTR1099: ! Primary, Non-Split Index  (Vendor transactions)
-	name$="[Q]\GLmstr\GlTr1099.h[cno]"
-	kfname$="[Q]\GLmstr\gltridx1.h[cno]"
+	name$='[Q]\GLmstr\GlTr1099.h[cno]'
+	kfname$='[Q]\GLmstr\gltridx1.h[cno]'
 	myrln=64
 	version_proper=1
 	fn_make_data_file_exist(name$,myrln,version_proper)
@@ -1020,10 +1126,10 @@ def fn_cfv_general_ledger
 		fnFree(kfname$)
 		goto L3690
 	end if
-	
+
 	! GLBREC: ! Primary, Non-Split Index
-	name$="[Q]\GLmstr\Glbrec.h[cno]"
-	kfname$="[Q]\GLmstr\glrecidx.h[cno]"
+	name$='[Q]\GLmstr\Glbrec.h[cno]'
+	kfname$='[Q]\GLmstr\glrecidx.h[cno]'
 	myrln=68
 	version_proper=1
 	fn_make_data_file_exist(name$,myrln,version_proper)
@@ -1054,8 +1160,8 @@ def fn_cfv_general_ledger
 
 	! SCHEDULE: ! Primary, Non-Split Index  (General ledger schedules)
 	dim sn$*78,ft$*78,gl$(80)*12
-	name$="[Q]\GLmstr\acglschs.h[cno]"
-	kfname$="[Q]\GLmstr\schindex.h[cno]"
+	name$='[Q]\GLmstr\acglschs.h[cno]'
+	kfname$='[Q]\GLmstr\schindex.h[cno]'
 	myrln=162
 	version_proper=1
 	fn_make_data_file_exist(name$,myrln,version_proper)
@@ -1069,17 +1175,17 @@ def fn_cfv_general_ledger
 		goto L4050
 	end if
 	open #tmp=fnH: 'Name='&name$&',KFName='&kfname$&',Shr',internal,outIn,keyed
-	L3920: read #tmp, using "form pos 1,N 2,2*C 78,3*N 1,80*C 12": sn,sn$,ft$,dp,rs,cm,mat gl$ eof EO_TMP conv L9000
+	L3920: read #tmp, using 'form pos 1,N 2,2*C 78,3*N 1,80*C 12': sn,sn$,ft$,dp,rs,cm,mat gl$ eof EO_TMP conv L9000
 	if sn=0 then goto L3920
-	rewrite #tmp, using "form pos 1,N 3,2*C 78,3*N 1": sn,sn$,ft$,dp,rs,cm
-	if exists("[Q]\GLmstr\schedule"&str$(sn)&".h[cno]")=0 then open #schedule=fnH: "Name=[Q]\GLmstr\schedule"&str$(sn)&".h[cno],KFName=[Q]\GLmstr\schedule_idx"&str$(sn)&".h[cno]"&',replace,RecL=12,kps=1,kln=12,Shr',internal,outIn,keyed: version(schedule,1): close #schedule:
-	if exists("[Q]\GLmstr\schedule_idx"&str$(sn)&".h[cno]")=0 then
-		fnIndex("[Q]\GLmstr\schedule"&str$(sn)&".h[cno]","[Q]\GLmstr\schedule_idx"&str$(sn)&".h[cno]","1 12")
+	rewrite #tmp, using 'form pos 1,N 3,2*C 78,3*N 1': sn,sn$,ft$,dp,rs,cm
+	if exists('[Q]\GLmstr\schedule'&str$(sn)&'.h[cno]')=0 then open #schedule=fnH: 'Name=[Q]\GLmstr\schedule'&str$(sn)&'.h[cno],KFName=[Q]\GLmstr\schedule_idx'&str$(sn)&'.h[cno],replace,RecL=12,kps=1,kln=12,Shr',internal,outIn,keyed: version(schedule,1): close #schedule:
+	if exists('[Q]\GLmstr\schedule_idx'&str$(sn)&'.h[cno]')=0 then
+		fnIndex('[Q]\GLmstr\schedule'&str$(sn)&'.h[cno]','[Q]\GLmstr\schedule_idx'&str$(sn)&'.h[cno]','1 12')
 	end if
-	open #schedule=fnH: "Name=[Q]\GLmstr\schedule"&str$(sn)&".h[cno],KFName=[Q]\GLmstr\schedule_idx"&str$(sn)&".h[cno]"&',use,RecL=12,kps=1,kln=12,Shr',internal,outIn,keyed: version(schedule,1) ! open to update gl breakdowns
+	open #schedule=fnH: 'Name=[Q]\GLmstr\schedule'&str$(sn)&'.h[cno],KFName=[Q]\GLmstr\schedule_idx'&str$(sn)&'.h[cno],use,RecL=12,kps=1,kln=12,Shr',internal,outIn,keyed: version(schedule,1) ! open to update gl breakdowns
 	for j=1 to 80
 		if val(gl$(j))=0 then goto L4010
-		write #schedule,using "form pos 1,c 12": gl$(j)
+		write #schedule,using 'form pos 1,c 12': gl$(j)
 	L4010: next j
 	close #schedule:
 	goto L3920
@@ -1105,7 +1211,7 @@ def fn_cfv_general_ledger
 	! /r
 
 	if ~exists('[Q]\GLmstr\Period.h[cno]') then
-		open #hGlPeriod=fnH: "Name=[Q]\GLmstr\Period.h[cno],Version=1,KFName=[Q]\GLmstr\Period-Idx.h[cno],Use,RecL=35,KPs=1,KLn=2,Shr",internal,outIn,keyed
+		open #hGlPeriod=fnH: 'Name=[Q]\GLmstr\Period.h[cno],Version=1,KFName=[Q]\GLmstr\Period-Idx.h[cno],Use,RecL=35,KPs=1,KLn=2,Shr',internal,outIn,keyed
 		for periodRecord=1 to 12
 			write #hGlPeriod,using 'form pos 1,N 2,C 30': periodRecord,date$(days(cnvrt$('pic(##)',periodRecord)&'0117','mmddyy'),'month')
 		nex periodRecord
@@ -1127,9 +1233,9 @@ def fn_rename(from$*256,to$*256)
 	end if
 fnend
 L9000: ! r: skip bad schedule records
-	reread #tmp, using "form pos 1,c 2": a$ eof EO_TMP ioerr ignore
+	reread #tmp, using 'form pos 1,c 2': a$ eof EO_TMP ioerr ignore
 goto L3920 ! /r
-! def fn_ini_move(cursys$*2)
+! def fn_ini_move(cursys$*2) r:
 ! 	dim imProgramOld$(0)*256
 ! 	dim imProgramNew$(0)*256
 ! 	imProgramCount=0
@@ -1221,7 +1327,7 @@ goto L3920 ! /r
 ! def fn_programMoveAdd(programNameOld$*256,programNameNew$*256)
 ! 	fnAddOneC(mat imProgramOld$,programNameOld$)
 ! 	imProgramCount=fnAddOneC(mat imProgramNew$,programNameNew$)
-! fnend
+! fnend /r
 def fn_reg_rename(cursys$*2)
 	if cursys$='PR' then
 		! nuffin yet

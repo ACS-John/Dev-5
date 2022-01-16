@@ -16,11 +16,11 @@ def fn_addpayee
 	dim ml$(3)*70,citystzip$*30,glitem$(5)*30,payeekey$*8,payeegl$*12
 	dim gldesc$*30,resp$(60)*50
 
-	open #trmstr2=fnH: "Name=[Q]\CLmstr\TrMstr.h[cno],KFName=[Q]\CLmstr\TrIdx2.h[cno],Shr",internal,outIn,keyed
-	open #paymstr=fnH: "Name=[Q]\CLmstr\PayMstr.h[cno],Version=1,KFName=[Q]\CLmstr\PayIdx1.h[cno],Shr",internal,outIn,keyed
-	open #paymstr2=fnH: "Name=[Q]\CLmstr\PayMstr.h[cno],KFName=[Q]\CLmstr\PayIdx2.h[cno],Shr",internal,outIn,keyed
-	open #payeegl=fnH: "Name=[Q]\CLmstr\PayeeGLBreakdown.h[cno],Version=1,KFName=[Q]\CLmstr\Payeeglbkdidx.h[cno],Shr",internal,outIn,keyed
-	open #citystzip=fnH: "Name=[Q]\Data\CityStZip.dat,KFName=[Q]\Data\CityStZip.Idx,Use,RecL=30,KPs=1,KLn=30,Shr",internal,outIn,keyed
+	open #trmstr2=fnH: 'Name=[Q]\CLmstr\TrMstr.h[cno],KFName=[Q]\CLmstr\TrIdx2.h[cno],Shr',internal,outIn,keyed
+	open #paymstr=fnH: 'Name=[Q]\CLmstr\PayMstr.h[cno],Version=1,KFName=[Q]\CLmstr\PayIdx1.h[cno],Shr',internal,outIn,keyed
+	open #paymstr2=fnH: 'Name=[Q]\CLmstr\PayMstr.h[cno],KFName=[Q]\CLmstr\PayIdx2.h[cno],Shr',internal,outIn,keyed
+	open #payeegl=fnH: 'Name=[Q]\CLmstr\PayeeGLBreakdown.h[cno],Version=1,KFName=[Q]\CLmstr\Payeeglbkdidx.h[cno],Shr',internal,outIn,keyed
+	open #citystzip=fnH: 'Name=[Q]\Data\CityStZip.dat,KFName=[Q]\Data\CityStZip.Idx,Use,RecL=30,KPs=1,KLn=30,Shr',internal,outIn,keyed
 
 	MENU1: ! r:
 		fnTos
@@ -61,12 +61,12 @@ def fn_addpayee
 		fnflexadd1(mat item$)
 		goto READ_PAYMSTR_1
 		EO_FLEX1: !
-		fnCmdKey("&Add",1,0,0,"Add new payee records")
-		fnCmdKey("&Edit",2,1,0,"Highlight any record and press Enter or click Edit or press Alt+E to change any existing payee record.")
-		fnCmdKey("&Delete",3,0,0,"Highlight any record and press Alt+D or click Delete to remove any existing payee record.")
-		fnCmdKey("E&xit",5,0,1,"Exit to menu")
+		fnCmdKey('&Add',1,0,0,'Add new payee records')
+		fnCmdKey('&Edit',2,1,0,'Highlight any record and press Enter or click Edit or press Alt+E to change any existing payee record.')
+		fnCmdKey('&Delete',3,0,0,'Highlight any record and press Alt+D or click Delete to remove any existing payee record.')
+		fnCmdKey('E&xit',5,0,1,'Exit to menu')
 		ckey=fnAcs(mat resp$)
-		add=xedit=0: holdvn$=""
+		add=xedit=0: holdvn$=''
 		if ckey=5 then
 			goto PayeeXIT
 		else if ckey=1 then
@@ -85,13 +85,13 @@ def fn_addpayee
 	DELETE_PAYEE: ! r:
 		! check for Linked Unpaid Invoices
 		! if there are any - than tell them, and don't delete.
-		open #paytrans=fnH: "Name=[Q]\CLmstr\Paytrans.h[cno],KFName=[Q]\CLmstr\UnPdIdx1.h[cno],Shr",internal,outIn,keyed
+		open #paytrans=fnH: 'Name=[Q]\CLmstr\Paytrans.h[cno],KFName=[Q]\CLmstr\UnPdIdx1.h[cno],Shr',internal,outIn,keyed
 		restore #paytrans,key>=vn$&rpt$(chr$(0),12): nokey L490
 		read #paytrans,using 'form pos 1,C 8',release: x$
 		if x$=vn$ then
 			mat ml$(2)
-			ml$(1)="A Unpaid Invoice for this payee exists"
-			ml$(2)="You may not delete it."
+			ml$(1)='A Unpaid Invoice for this payee exists'
+			ml$(2)='You may not delete it.'
 			fnmsgbox(mat ml$,resp$,cap$,0)
 			goto EO_DELETE
 		end if
@@ -106,7 +106,7 @@ def fn_addpayee
 		end if
 		EO_DELETE_PAYEE: !
 
-		open #trans=fnH: "Name=[Q]\CLmstr\TrMstr.h[cno],KFName=[Q]\CLmstr\TrIdx2.h[cno],Shr",internal,outIn,keyed
+		open #trans=fnH: 'Name=[Q]\CLmstr\TrMstr.h[cno],KFName=[Q]\CLmstr\TrIdx2.h[cno],Shr',internal,outIn,keyed
 		restore #trans, key>=holdvn$&rpt$(chr$(0),kln(trans)-len(holdvn$)): nokey EO_DEL_KEY_ON_TRANS
 		L590: !
 		read #trans,using 'form pos 28,C 8': x$ eof EO_DEL_KEY_ON_TRANS
@@ -120,51 +120,51 @@ def fn_addpayee
 	return ! /r
 
 	ADD_NEW_PAYEE: ! r:
-		vn$=nam$=ad1$=ad2$=csz$=ss$=ph$=contact$=email$=fax$=myact$=""
+		vn$=nam$=ad1$=ad2$=csz$=ss$=ph$=contact$=email$=fax$=myact$=''
 		typ=0
 	goto EDIT_PAYEE ! /r
 	EDIT_PAYEE: ! r:
 		fnTos
 		respc=0
 		mylen=28 : mypos=mylen+2
-		fnFra(1,1,12,70,"Payee Information"," ")
-		fnLbl(1,1,"Payee Number:",mylen,1,0,1)
-		fnTxt(1,mypos,8,0,1,"",0,"",1)
+		fnFra(1,1,12,70,'Payee Information',' ')
+		fnLbl(1,1,'Payee Number:',mylen,1,0,1)
+		fnTxt(1,mypos,8,0,1,'',0,'',1)
 		resp$(respc+=1)=vn$
-		fnLbl(2,1,"Payee Name:",mylen,1,0,1)
-		fnTxt(2,mypos,30,0,0,"",0,"",1)
+		fnLbl(2,1,'Payee Name:',mylen,1,0,1)
+		fnTxt(2,mypos,30,0,0,'',0,'',1)
 		resp$(respc+=1)=nam$
-		fnLbl(3,1,"Address:",mylen,1,0,1)
-		fnTxt(3,mypos,30,0,0,"",0,"",1)
+		fnLbl(3,1,'Address:',mylen,1,0,1)
+		fnTxt(3,mypos,30,0,0,'',0,'',1)
 		resp$(respc+=1)=ad1$
-		fnLbl(4,1,"Address:",mylen,1,0,1)
-		fnTxt(4,mypos,30,0,0,"",0,"",1)
+		fnLbl(4,1,'Address:',mylen,1,0,1)
+		fnTxt(4,mypos,30,0,0,'',0,'',1)
 		resp$(respc+=1)=ad2$
-		fnLbl(5,1,"City, St. Zip:",mylen,1,0,1)
-		fncombof("CityStZip",5,mypos,30,"[Q]\Data\CityStZip.dat",1,30,0,0,"[Q]\Data\CityStZip.idx",0,0, " ",1,0)
+		fnLbl(5,1,'City, St. Zip:',mylen,1,0,1)
+		fncombof('CityStZip',5,mypos,30,'[Q]\Data\CityStZip.dat',1,30,0,0,'[Q]\Data\CityStZip.idx',0,0, ' ',1,0)
 		resp$(respc+=1)=csz$
-		fnLbl(6,1,"Type:",mylen,1,0,1)
-		fncombof("Payeetype",6,mypos,27,"[Q]\CLmstr\PayeeType.dat",1,2,3,25,"",0,0, "The payee type is a code used to detemine which box should be used on a 1099 misc form.  Only enter a type code if the payee should get a 1099",1)
+		fnLbl(6,1,'Type:',mylen,1,0,1)
+		fncombof('Payeetype',6,mypos,27,'[Q]\CLmstr\PayeeType.dat',1,2,3,25,'',0,0, 'The payee type is a code used to detemine which box should be used on a 1099 misc form.  Only enter a type code if the payee should get a 1099',1)
 		resp$(respc+=1)=str$(typ)
-		fnLbl(7,1,"Federal ID or SS No.",mylen,1,0,1)
-		fnTxt(7,mypos,11,0,0,"",0,"",1)
+		fnLbl(7,1,'Federal ID or SS No.',mylen,1,0,1)
+		fnTxt(7,mypos,11,0,0,'',0,'',1)
 		resp$(respc+=1)=ss$
-		fnLbl(8,1,"Phone Number:",mylen,1,0,1)
-		fnTxt(8,mypos,12,0,0,"",0,"",1)
+		fnLbl(8,1,'Phone Number:',mylen,1,0,1)
+		fnTxt(8,mypos,12,0,0,'',0,'',1)
 		resp$(respc+=1)=ph$
-		fnLbl(9,1,"Contact Name:",mylen,1,0,1)
-		fnTxt(9,mypos,30,0,0,"",0,"",1)
+		fnLbl(9,1,'Contact Name:',mylen,1,0,1)
+		fnTxt(9,mypos,30,0,0,'',0,'',1)
 		resp$(respc+=1)=contact$
-		fnLbl(10,1,"E-mail Address:",mylen,1,0,1)
-		fnTxt(10,mypos,30,50,0,"",0,"",1)
+		fnLbl(10,1,'E-mail Address:',mylen,1,0,1)
+		fnTxt(10,mypos,30,50,0,'',0,'',1)
 		resp$(respc+=1)=email$
-		fnLbl(11,1,"Fax Number:",mylen,1,0,1)
-		fnTxt(11,mypos,12,0,0,"",0,"",1)
+		fnLbl(11,1,'Fax Number:',mylen,1,0,1)
+		fnTxt(11,mypos,12,0,0,'',0,'',1)
 		resp$(respc+=1)=fax$
-		fnLbl(12,1,"My Account Number:",mylen,1,0,1)
-		fnTxt(12,mypos,20,0,0,"",0,"",1)
+		fnLbl(12,1,'My Account Number:',mylen,1,0,1)
+		fnTxt(12,mypos,20,0,0,'',0,'',1)
 		resp$(respc+=1)=myact$
-		fnLbl(17,20,"Standard General Ledger Breakdowns",40,2,0,0)
+		fnLbl(17,20,'Standard General Ledger Breakdowns',40,2,0,0)
 		! General Ledger Breakdown Grid
 		mat chdr$(5) : mat cmask$(5) : mat glitem$(5)
 		chdr$(1)='Refenence'
@@ -175,7 +175,7 @@ def fn_addpayee
 		cmask$(1)=cmask$(2)=cmask$(3)=cmask$(5)=''
 		cmask$(4)='32'
 		fnflexinit1('PayeeGl',17,1,5,70,mat chdr$,mat cmask$,1,0,0)
-		if trim$(vn$)="" then goto EO_FLEX3
+		if trim$(vn$)='' then goto EO_FLEX3
 		restore #payeegl,key>=vn$: nokey EO_FLEX3
 		do
 			read #payeegl,using 'form pos 1,C 8,c 12,n 6.2,c 30',release: payeekey$,payeegl$,percent,gldesc$ eof EO_FLEX3
@@ -188,12 +188,12 @@ def fn_addpayee
 			fnflexadd1(mat glitem$)
 		loop
 		EO_FLEX3: !
-		fnLbl(21,1,"",1,0,0,0) ! add space before buttons
-		fnButton(lc=16,61,"Add",2,"Add a standard general ledger breakdowns",0,4)
-		fnButton(lc,67,"Edit",7,"Edit or Delete a standard general ledger breakdowns")
-		fnCmdKey("Save",1,1,0,"Saves and returns to Vendor selection")
-		fnCmdKey("&Transactions",4,0,0,"List all checks for this payee")
-		fnCmdKey("&Cancel",5,0,1,"Return to Vendor selection")
+		fnLbl(21,1,'',1,0,0,0) ! add space before buttons
+		fnButton(lc=16,61,'Add',2,'Add a standard general ledger breakdowns',0,4)
+		fnButton(lc,67,'Edit',7,'Edit or Delete a standard general ledger breakdowns')
+		fnCmdKey('Save',1,1,0,'Saves and returns to Vendor selection')
+		fnCmdKey('&Transactions',4,0,0,'List all checks for this payee')
+		fnCmdKey('&Cancel',5,0,1,'Return to Vendor selection')
 		ckey=fnAcs(mat resp$)
 		if ckey=5 then goto MENU1
 		vn$=lpad$(trim$(resp$(1)(1:8)),8)
@@ -208,21 +208,21 @@ def fn_addpayee
 			read #paymstr,using 'form pos 1,C 8',key=vn$: oldvn$ nokey L1210
 			if add=1 then goto L1205
 			mat ml$(2)
-			ml$(1)="You already have a payee number "&vn$
-			ml$(2)="Click ok to Cancel."
+			ml$(1)='You already have a payee number '&vn$
+			ml$(2)='Click ok to Cancel.'
 			fnmsgbox(mat ml$,resp$,cap$,16)
 		goto MENU1
 		L1205: ! r:
 			mat ml$(2)
-			ml$(1)="You already have a payee number "&vn$
-			ml$(2)="Click ok to Change the number."
+			ml$(1)='You already have a payee number '&vn$
+			ml$(2)='Click ok to Change the number.'
 			fnmsgbox(mat ml$,resp$,cap$,16)
 		goto EDIT_PAYEE ! /r
-		L1210: if trim$(vn$)="" then goto L1220 else goto L1230
+		L1210: if trim$(vn$)='' then goto L1220 else goto L1230
 		L1220: ! r:
 			mat ml$(2)
-			ml$(1)="You must have a unique payee number for ."
-			ml$(2)="each vendor.  Click ok to assign a payee number"
+			ml$(1)='You must have a unique payee number for .'
+			ml$(2)='each vendor.  Click ok to assign a payee number'
 			fnmsgbox(mat ml$,resp$,cap$,16)
 		goto EDIT_PAYEE ! /r
 		L1230: !
@@ -244,7 +244,7 @@ def fn_addpayee
 			goto EDIT_PAYEE
 		else if ckey=2 then
 			percent=gldistrec=0
-			payeekey$=gldesc$=payeegl$=""
+			payeekey$=gldesc$=payeegl$=''
 			goto GL_BREAKDOWNS ! add gl breakdown
 		else if ckey=7 then
 			read #payeegl,using 'form pos 1,C 8,c 12,n 6.2,c 30',rec=gldistrec,release: payeekey$,payeegl$,percent,gldesc$
@@ -261,9 +261,9 @@ def fn_addpayee
 		if tac=100 or tac=0 then goto SAVE_PAYEE
 		! MSGBOX4: ! percent breakdown doesn't add to 100 %
 		mat ml$(3)
-		ml$(1)="Your percentage breakdowns total "&str$(tac)&"."
-		ml$(2)="The percentage breakdown must add to 100%."
-		ml$(3)="Correct the percentages."
+		ml$(1)='Your percentage breakdowns total '&str$(tac)&'.'
+		ml$(2)='The percentage breakdown must add to 100%.'
+		ml$(3)='Correct the percentages.'
 		fnmsgbox(mat ml$,resp$,cap$,16)
 	goto EDIT_PAYEE ! /r
 	SAVE_PAYEE: ! r:
@@ -276,7 +276,7 @@ def fn_addpayee
 	goto MENU1 ! /r
 	KEY_CHANGE: ! r:
 	! change the references to this file in the Transaction file
-	open #trans=fnH: "Name=[Q]\CLmstr\TrMstr.h[cno],KFName=[Q]\CLmstr\TrIdx2.h[cno],Shr",internal,outIn,keyed
+	open #trans=fnH: 'Name=[Q]\CLmstr\TrMstr.h[cno],KFName=[Q]\CLmstr\TrIdx2.h[cno],Shr',internal,outIn,keyed
 	restore #trans,key>=holdvn$&rpt$(chr$(0),11): nokey EO_CHANGE_KEY_ON_TRANS
 	L1530: !
 	read #trans,using 'form pos 28,C 8': x$ eof EO_CHANGE_KEY_ON_TRANS
@@ -301,7 +301,7 @@ def fn_addpayee
 	EO_CHANGE_KEY_ON_PAYEEGL: !
 
 	! Change references to this file in the linked file PayTrans
-	open #paytrans=fnH: "Name=[Q]\CLmstr\Paytrans.h[cno],KFName=[Q]\CLmstr\UnPdIdx1.h[cno],Shr",internal,outIn,keyed
+	open #paytrans=fnH: 'Name=[Q]\CLmstr\Paytrans.h[cno],KFName=[Q]\CLmstr\UnPdIdx1.h[cno],Shr',internal,outIn,keyed
 	restore #paytrans,key>=holdvn$&rpt$(chr$(0),12): nokey EO_CHANGE_KEY_ON_PAYTRANS
 	L1670: !
 	read #paytrans,using 'form pos 1,C 8': x$ eof EO_CHANGE_KEY_ON_PAYTRANS
@@ -313,7 +313,7 @@ def fn_addpayee
 	close #paytrans:
 
 	! Change references to this file in the linked file UnPdAloc
-	open #unpdaloc=fnH: "Name=[Q]\CLmstr\UnPdAloc.h[cno],KFName=[Q]\CLmstr\UAIdx2.h[cno],Shr",internal,outIn,keyed
+	open #unpdaloc=fnH: 'Name=[Q]\CLmstr\UnPdAloc.h[cno],KFName=[Q]\CLmstr\UAIdx2.h[cno],Shr',internal,outIn,keyed
 	restore #unpdaloc,key>=holdvn$&rpt$(chr$(0),kln(unpdaloc)-len(holdvn$)): nokey EO_CHANGE_KEY_ON_UNPDALOC
 	read #unpdaloc,using 'form pos 1,C 8': x$ eof EO_CHANGE_KEY_ON_UNPDALOC
 	if x$=holdvn$ then
@@ -326,20 +326,20 @@ def fn_addpayee
 return ! /r
 MSGBOX3: ! r: dupkey
 	mat ml$(2)
-	ml$(1)="A record for payee number "&vn$&" already exists"
-	ml$(2)="You must select a different payee number."
+	ml$(1)='A record for payee number '&vn$&' already exists'
+	ml$(2)='You must select a different payee number.'
 	fnmsgbox(mat ml$,resp$,cap$,16)
 	goto EDIT_PAYEE ! /r
 CHECK_HISTORY: ! r:
-	open #trans=fnH: "Name=[Q]\CLmstr\TrMstr.h[cno],KFName=[Q]\CLmstr\TrIdx2.h[cno],Shr",i,i,k
+	open #trans=fnH: 'Name=[Q]\CLmstr\TrMstr.h[cno],KFName=[Q]\CLmstr\TrIdx2.h[cno],Shr',i,i,k
 	fnTos
 	lc=0 : mylen=25 : mypos=mylen+2 : width=50
 	lc+=1
 	fnLbl(lc+=1,30,'Check History Selection Criteria',width,center)
-	fnLbl(lc+=1,1,"Transaction Starting Date:",mylen,1)
+	fnLbl(lc+=1,1,'Transaction Starting Date:',mylen,1)
 	fnTxt(lc,mypos,8,0,0,'CCYYMMDD',0,'Blank for All')
 	resp$(1)=''
-	fnLbl(lc+=1,1,"Transaction Ending Date:",mylen,1)
+	fnLbl(lc+=1,1,'Transaction Ending Date:',mylen,1)
 	fnTxt(lc,mypos,8,0,0,'CCYYMMDD',0,'Blank for All')
 	resp$(2)=''
 	wbc=0
@@ -361,7 +361,7 @@ CHECK_HISTORY: ! r:
 	cmask$(4)='10'
 	cmask$(8)='1'
 	fnflexinit1('Gayee-'&str$(wbc)&'-'&str$(wtt),7,1,10,85,mat chdr$,mat cmask$,1,0,frame)
-	key$=vn$&cnvrt$('pic(Z#)',wbc)&cnvrt$("pic(#)",wtt)&rpt$(chr$(0),8)
+	key$=vn$&cnvrt$('pic(Z#)',wbc)&cnvrt$('pic(#)',wtt)&rpt$(chr$(0),8)
 	restore #trans,key>=key$: nokey EO_FLEX2
 	transactionstotal=0
 	READ_TRANS: !
@@ -382,7 +382,7 @@ CHECK_HISTORY: ! r:
 	fnLbl(5,1,'Transactions Total:',mylen,1)
 	fnTxt(5,mypos,12,0,1,'10',1,'This is the total of only the transactions shown in the Transaction Grid above. ')
 	resp$(3)=str$(transactionstotal)
-	fnCmdKey('&Refresh',2,1,0,"If you select a date range, you must refresh the screen to see the transactions for that date range.")
+	fnCmdKey('&Refresh',2,1,0,'If you select a date range, you must refresh the screen to see the transactions for that date range.')
 	fnCmdKey('&Close',5,0,1)
 	ckey=fnAcs(mat resp$)
 	if ckey=5 or ckey=cancel then goto EO_CHECK_HISTORY
@@ -396,14 +396,14 @@ return
 GL_BREAKDOWNS: ! r:
 	fnTos
 	respc=0 : mylen=28 : mypos=mylen+2
-	fnLbl(1,25,"Breakdown for "&nam$(1:20),40)
-	fnLbl(3,1,"General Ledger Number:",mylen,1)
+	fnLbl(1,25,'Breakdown for '&nam$(1:20),40)
+	fnLbl(3,1,'General Ledger Number:',mylen,1)
 	fnqgl(3,mypos)
 	resp$(respc+=1)=fnrgl$(payeegl$) ! think maybe here kj
 	fnLbl(4,1,'Percent:',mylen,1)
-	fnTxt(4,mypos,6,0,0,'32',0,"Percent of total check to be charged to this g/l account.  Enter 25% as 25.00!")
+	fnTxt(4,mypos,6,0,0,'32',0,'Percent of total check to be charged to this g/l account.  Enter 25% as 25.00!')
 	resp$(respc+=1)=str$(percent)
-	fnLbl(5,1,"Description:",mylen,1)
+	fnLbl(5,1,'Description:',mylen,1)
 	fnTxt(5,mypos,30)
 	resp$(respc+=1)=gldesc$
 	fnCmdSet(7)
@@ -421,7 +421,7 @@ GL_BREAKDOWNS: ! r:
 		rewrite #payeegl,using 'form pos 1,C 8,c 12,n 6.2,c 30',rec=gldistrec: payeekey$,payeegl$,percent,gldesc$
 	end if
 	goto EDIT_PAYEE ! /r
-	! execute "Index [Q]\CLmstr\payeeglbreakdown.h[cno]"&' '&"[Q]\CLmstr\Payeeglbkdidx.h[cno] 1 8 Replace DupKeys -n"
+	! execute 'Index [Q]\CLmstr\payeeglbreakdown.h[cno]'&' '&'[Q]\CLmstr\Payeeglbkdidx.h[cno] 1 8 Replace DupKeys -n'
 
 	PayeeXIT: !
 	close #trmstr2: ioerr ignore

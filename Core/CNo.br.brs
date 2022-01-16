@@ -172,11 +172,24 @@ def library fnPrg(&curprg$; g_p,___,curprg_tmp$*1024)
 	end if
 fnend
 
-def fn_setup_systemCache
+def fn_setup_systemCache(; ___,sysForm$*64)
 	if ~setup_systemCache then
 		setup_systemCache=1
 		dim s$(0)*128,sN(0)
-		hS=fn_openFio('CO Systems 2',mat s$,mat sN, 1)
+
+		! hS=fn_openFio('CO Systems 2',mat s$,mat sN, 1)
+		! sysForm$=form$(hs)
+		! removed fileio on 1/16/2022 because ACS failed to launch when no fileio existed in client's Data folder.
+
+		open #hS=fnH: 'Name=S:\Core\Data\acsllc\acsSystems.dat,KFName=S:\Core\Data\acsllc\acsSystems.idx,Shr',i,i,k
+		mat s$(3)
+		sys_id      	=1 
+		sys_name    	=2
+		sys_parent 	=3
+		mat sN(1)
+		sys_isChild	=1
+		sysForm$=cform$('form pos 1,c 16,c 64, pos 82,c 16,pos 81,n 1') ! form$(hs)
+	
 		dim sId$(0)*256
 		mat sId$(0)
 		dim sName$(0)*256
@@ -184,18 +197,12 @@ def fn_setup_systemCache
 		dim sIsAddOnN(0)
 		mat sIsAddOnN(0)
 		do
-			read #hS,using form$(hS): mat s$,mat sN eof EoS
+			read #hS,using sysForm$: mat s$,mat sN eof EoS
 			fnAddOneC(mat sId$       	,trim$(lwrc$(s$(sys_id     )))   )
 			fnAddOneC(mat sName$     	,trim$(      s$(sys_name   ))    )
 			fnAddOneN(mat sIsAddOnN 	,            sN(sys_isChild)     )
 		loop
 		EoS: !
-		! ! if env$('client')='ACS' then
-		! 	fnAddOneC(mat sId$       	,'client billing'  )
-		! 	fnAddOneC(mat sName$     	,'Client Billing'  )
-		! 	! fnAddOneC(mat sNumber$   	,''  )
-		! 	fnAddOneN(mat sIsAddOnN 	,0     )
-		! ! end if
 		close #hS:
 	end if
 fnend

@@ -1,4 +1,3 @@
-! Replace S:\acsCL\TrJr
 ! pr Transaction Journals
 
 	autoLibrary

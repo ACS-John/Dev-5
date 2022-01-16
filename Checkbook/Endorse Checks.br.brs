@@ -1,4 +1,3 @@
-! REPLACE S:\acsCL\Endorsment
 ! pr endorsment on back of check
 autoLibrary
 fnTop(program$)

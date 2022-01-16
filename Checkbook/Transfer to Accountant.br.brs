@@ -1,4 +1,3 @@
-! Replace S:\acsCL\TrToCPA
 ! Transfer to Accountant
  
 autoLibrary

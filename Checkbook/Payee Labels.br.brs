@@ -1,4 +1,3 @@
-! Replace S:\acsCL\Label
 ! pr labels for payees
 ! r: setup stuff
 	autoLibrary
@@ -9,9 +8,9 @@
 	fnTop(program$)
 
 	dim optSelection$(3)
-	optSelection$(print_all=1       )="[All]"
-	optSelection$(check_range=2     )="Range of Checks"
-	optSelection$(specific_payees=3 )="Specific payees"
+	optSelection$(print_all=1       )='[All]'
+	optSelection$(check_range=2     )='Range of Checks'
+	optSelection$(specific_payees=3 )='Specific payees'
 goto MAIN ! /r
 
 omitAddress=1
@@ -19,9 +18,9 @@ omitAddress=1
 MAIN: ! r:
 	fnTos
 	respc=0 : mylen=25 : mypos=mylen+2 : lc=0
-	fnLbl(lc+=1,1,"Print Labels For:",mylen,1)
-	! fnLbl(10,70," ")
-	fncomboa("cllabels",lc,mypos,mat optSelection$,"The labels can be printed in Customer Number order,Customer Name order, or in Bar Code sequence")
+	fnLbl(lc+=1,1,'Print Labels For:',mylen,1)
+	! fnLbl(10,70,' ')
+	fncomboa('cllabels',lc,mypos,mat optSelection$,'The labels can be printed in Customer Number order,Customer Name order, or in Bar Code sequence')
 	resp$(respc+=1)=optSelection$(1)
 	lc+=1
 	fnChk(lc+=1,mypos+2,'Print Payee Number',1)
@@ -29,19 +28,19 @@ MAIN: ! r:
 	fnChk(lc+=1,mypos+2,'Print Payee Address',1)
 	resp$(resp_enablePayeeAddress:=respc+=1)='True'
 	lc+=1
-	fnLbl(lc+=1,1,"Bank:",mylen,1)
-	fncombof('Bank',lc,mypos,33,"[Q]\CLmstr\BankMstr.h[cno]",1,2,3,30,"[Q]\CLmstr\BankIdx1.h[cno]",1)
+	fnLbl(lc+=1,1,'Bank:',mylen,1)
+	fncombof('Bank',lc,mypos,33,'[Q]\CLmstr\BankMstr.h[cno]',1,2,3,30,'[Q]\CLmstr\BankIdx1.h[cno]',1)
 	resp$(resp_bank:=respc+=1)=''
-	fnLbl(lc+=1,1,"Starting Check Number:",25,1)
-	fncombof('Check',lc,mypos,33,"[Q]\CLmstr\TrMstr.h[cno]",4,8,36,35)
+	fnLbl(lc+=1,1,'Starting Check Number:',25,1)
+	fncombof('Check',lc,mypos,33,'[Q]\CLmstr\TrMstr.h[cno]',4,8,36,35)
 	resp$(resp_checkStart:=respc+=1)=''
-	fnLbl(lc+=1,1,"Ending Check Number:",25,1)
-	fncombof('Check',lc,mypos,33,"[Q]\CLmstr\TrMstr.h[cno]",4,8,36,35)
+	fnLbl(lc+=1,1,'Ending Check Number:',25,1)
+	fncombof('Check',lc,mypos,33,'[Q]\CLmstr\TrMstr.h[cno]',4,8,36,35)
 	resp$(resp_checkEnd:=respc+=1)=''
-	fnLbl(lc+=1,1,"Starting Payee Number:",25,1)
-	! fnTxt(lc,27,8,0,1,'',0,'If you wish to start with a specific payee, enter their number.  Only appllicable to printing "All Payees"')!
+	fnLbl(lc+=1,1,'Starting Payee Number:',25,1)
+	! fnTxt(lc,27,8,0,1,'',0,'If you wish to start with a specific payee, enter their number.  Only appllicable to printing 'All Payees'')!
 	! rESP$(RESPC+=1)=''
-	fncombof("Payee",lc,27,20,"[Q]\CLmstr\PayMstr.h[cno]",1,8,9,20,"[Q]\CLmstr\Payidx1.h[cno]",1,0, "Select starting payee record for printing")
+	fncombof('Payee',lc,27,20,'[Q]\CLmstr\PayMstr.h[cno]',1,8,9,20,'[Q]\CLmstr\Payidx1.h[cno]',1,0, 'Select starting payee record for printing')
 	resp$(resp_payee:=respc+=1)=''
 	fnLbl(lc+=1,1,'.',70,1) ! just so the right side of the comboboxes for checks can be seen
 	fnCmdSet(2)
@@ -63,9 +62,9 @@ MAIN: ! r:
 	c2 =val(resp$(resp_checkEnd)(1:8)) ! ending check number
 	dim vn$*8 ! starting payee number
 	vn$=lpad$(rtrm$(resp$(resp_payee)(1:8)),8)
-	open #hPaymstr=fnH: "Name=[Q]\CLmstr\PayMstr.h[cno],KFName=[Q]\CLmstr\PayIdx1.h[cno],Shr",i,i,k
+	open #hPaymstr=fnH: 'Name=[Q]\CLmstr\PayMstr.h[cno],KFName=[Q]\CLmstr\PayIdx1.h[cno],Shr',i,i,k
 	dim nam$*30,ad1$*30,ad2$*30,csz$*30
-	open #hTrmstr=fnH: "Name=[Q]\CLmstr\TrMstr.h[cno],KFName=[Q]\CLmstr\TrIdx1.h[cno],Shr",i,i,k
+	open #hTrmstr=fnH: 'Name=[Q]\CLmstr\TrMstr.h[cno],KFName=[Q]\CLmstr\TrIdx1.h[cno],Shr',i,i,k
 	if prtall=check_range then
 		if wbc=0 or c1=0 then
 			dim message$(0)*256
@@ -85,8 +84,8 @@ MAIN: ! r:
 ASK_VN: ! r:
 	fnTos
 	respc=0 : mylen=20
-	fnLbl(1,1,"Payee to Print:",mylen,1)
-	fncombof("Payee",1,22,20,"[Q]\CLmstr\PayMstr.h[cno]",1,8,9,20,"[Q]\CLmstr\Payidx1.h[cno]",1,0, 'If you wish to start with a specific payee, enter their number.  Only appllicable to printing "All Payees"')
+	fnLbl(1,1,'Payee to Print:',mylen,1)
+	fncombof('Payee',1,22,20,'[Q]\CLmstr\PayMstr.h[cno]',1,8,9,20,'[Q]\CLmstr\Payidx1.h[cno]',1,0, 'If you wish to start with a specific payee, enter their number.  Only appllicable to printing "All Payees"')
 	resp$(respc+=1)=''
 	fnCmdSet(3)
 	ckey=fnAcs(mat resp$)
@@ -101,7 +100,7 @@ GetStarted: ! r:
 	read #hPaymstr,using 'form pos 1,C 8,4*C 30',key=vn$: vn$,nam$,ad1$,ad2$,csz$ nokey ASK_VN
 	goto L530
 	ReadForFirstPayee: !
-	if trim$(vn$)='' or trim$(vn$)="0" then goto READ_PAYMSTR
+	if trim$(vn$)='' or trim$(vn$)='0' then goto READ_PAYMSTR
 	vn$=lpad$(rtrm$(vn$),8)
 	read #hPaymstr,using 'form pos 1,C 8,4*C 30',key>=vn$: vn$,nam$,ad1$,ad2$,csz$ eof Finis
 	goto L520
@@ -126,7 +125,7 @@ goto Xit ! /r
 Xit: fnXit
 
 ProcessCheckRange: ! r: uses: ebc,c1,hTrmstr,hPaymstr
-	tr4$=cnvrt$("N 2",wbc)&str$(1)&cnvrt$("N 8",c1)
+	tr4$=cnvrt$('N 2',wbc)&str$(1)&cnvrt$('N 8',c1)
 	restore #hTrmstr,key>=tr4$: nokey EO_OPT2
 	do
 		READ_TRMSTR: !

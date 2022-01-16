@@ -95,7 +95,7 @@ fnreg_read('Post to Checkbook - Populate Checkbook Payee from Payroll Employee',
 	d1=fnPayPeriodEndingDate
 	fnGetPayrollDates(old_beg_date,old_end_date,read_qtr1,read_qtr2,read_qtr3,read_qtr4)
 	fncreg_read('Prenumbered Checks',pre$)
-	fncreg_read('Post to CL',acsclcv$)
+	fncreg_read('Post to CL',posttocl$)
 	fncreg_read('Post Employer Portion of FiCA',ficam1$)
 	fncreg_read('Check Format',sc1$)
 	fncreg_read('Print Vacation and Sick Leave on Check',accr$)
@@ -107,7 +107,7 @@ fnreg_read('Post to Checkbook - Populate Checkbook Payee from Payroll Employee',
 	close #20:
 
 	mat hnames$=abrevName$ : bankgl$=gln$(15)
-	if fnClientHas('CL') then fn_open_acscl
+	if fnClientHas('CL') then fn_openCheckbook
 
 	if bankcode=0 then bankcode=1
 	check_number=ckno
@@ -141,10 +141,10 @@ ScrMainQestions: ! r:
 	fnLbl(6,1,'Post to ACS Checkbook',38,1)
 	if fnClientHas('CL') then
 		fncomboa('prckprt-3',6,41,mat opt_yn$)
-		if acsclcv$='Y' then resp$(6)=opt_yn$(1) else resp$(6)=opt_yn$(2)
+		if posttocl$='Y' then resp$(6)=opt_yn$(1) else resp$(6)=opt_yn$(2)
 	else
 		fnTxt(6,41,3, 0,0,'',1,'ACS Checkbook license not detected.')
-		resp$(6)=opt_yn$(2) : acsclcv$='N'
+		resp$(6)=opt_yn$(2) : posttocl$='N'
 	end if
 	fnLbl(7,1,'Post Employer''s Portion of FiCA?',38,1)
 	fncomboa('prckprt-4',7,41,mat opt_yn$,'The system can generate and post the employer''s portion of FICA at the time the check is being written.',3)
@@ -195,7 +195,7 @@ ScrMainQestions: ! r:
 	ckdat$                  	=resp$(resp_date_of_checks)               ! check date
 	dat                     	=val(ckdat$(5:6)&ckdat$(7:8)&ckdat$(3:4))
 	beginningEmployeeNumber	=val(resp$(5))                             ! beginning employee #
-	acsclcv$                	=uprc$(resp$(6)(1:1))                     ! post Checkbook system
+	posttocl$                	=uprc$(resp$(6)(1:1))                     ! post Checkbook system
 	ficam1$                 	=uprc$(resp$(7)(1:1))                     ! post fica match
 	sc1$                    	=scc$(srch(mat opt_check_format$,resp$(8)))
 	ddcode$                 	=uprc$(resp$(9)(1:1))                     ! regular check or direct deposit
@@ -211,7 +211,7 @@ ScrMainQestions: ! r:
 	skip_alignment$        	=resp$(resp_skip_align)
 	if skip_alignment$='Yes' then allign=3
 
-	if acsclcv$='Y' then cl_installed=1 else cl_installed=0
+	if posttocl$='Y' then cl_installed=1 else cl_installed=0
 	if ficam1$='Y' then ficam1=1 else ficam1=0
 	if pre$='Y' then pre=1 else pre=0
 	! if env$('client')='Washington Parrish' and (prdate<10100 or prdate>123199) then goto ScrMainQestions
@@ -247,7 +247,7 @@ ScrMainQestions: ! r:
 	! /r
 	! r: save answers for next time
 	fncreg_write('Prenumbered Checks',pre$)
-	fncreg_write('Post to CL',acsclcv$)
+	fncreg_write('Post to CL',posttocl$)
 	fncreg_write('Post Employer Portion of FiCA',ficam1$)
 	fncreg_write('Check Format',sc1$)
 	fncreg_write('Print Vacation and Sick Leave on Check',accr$)
@@ -255,7 +255,7 @@ ScrMainQestions: ! r:
 	fncreg_write('Comp Time Code',compcode$)
 	fnreg_write('PR.Check print.skip alignment',skip_alignment$)
 	! /r
-	! r: get and validate bank code if ACSCL is in play
+	! r: get and validate bank code if ACS Checkbook is in play
 	if ~testCheckFormat then
 		if cl_installed=1 then
 			read #h_clBank,using F_clBank,key=lpad$(str$(bankcode),2),release: bn$,bal,upi nokey L1280 ioerr L1290
@@ -507,7 +507,7 @@ FINIS: !
 		close #h_clGl: ioerr ignore
 	end if
 Xit: fnXit
-def fn_open_acscl
+def fn_openCheckbook
 	open #h_clBank=fnH: 'Name=[Q]\CLmstr\BankMstr.h[cno],KFName=[Q]\CLmstr\BankIdx1.h[cno],Shr',internal,outIn,keyed ioerr OcFinis
 	cl_installed=1
 

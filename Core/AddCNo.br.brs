@@ -7,11 +7,13 @@ dim ml$(10)*80
 dim resp$(40)*128
 
 fnTop(program$,'Add New '&env$('cursys')&' Company [cno]')
+! r: copy h99999 into place
 if exists('S:\[cursystem]\mstr\*.h99999') then
 	fnCopy('S:\[cursystem]\mstr\*.h99999','[Q]\[cursys]mstr\*.h[cno]')
 else if exists('S:\acs[cursys]\mstr\*.h99999') then
 	fnCopy('S:\acs[cursys]\mstr\*.h99999','[Q]\[cursys]mstr\*.h[cno]')
 end if
+! /r
 
 if env$('cursys')='CL' then ! r:
 	mat ml$(5)
@@ -19,7 +21,7 @@ if env$('cursys')='CL' then ! r:
 	ml$(2)='ACS Accounts Payable system?'
 	ml$(3)='This is only chance.'
 	fnmsgbox(mat ml$,resp$,'',36)
-	if resp$='Yes' then fnchain('S:\acsCL\Conversion\APmstr-Cnv')
+	if resp$='Yes' then fnImportCLfromAP
 	! /r
 else if env$('cursys')='UB' then ! r:
 	open #hTmp=fnH: 'Name=[Q]\UBmstr\Company.h[cno],Replace,RecL=129',i,outIn,r

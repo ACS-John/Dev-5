@@ -44,7 +44,7 @@ def library fnFixWordingOnGrid(ev$*50,outputfile$*50)
 		p1=pos(a$(j3,3),' ',1)+1
 		p2=pos(a$(j3,3),'.',1)+1
 		p3=len(rtrm$(a$(j3,3))) ! was standard
-		! p3=pos(srep$(ln$,'^','~'),'~',1)-1 ! pos(A$(J3,3),'^',1)-1 ! for acsea and acscl only  (way John does layouts)
+		! p3=pos(srep$(ln$,'^','~'),'~',1)-1 ! pos(A$(J3,3),'^',1)-1 ! for acsea and Checkbook only  (way John does layouts)
 		p4=pos(a$(j3,3),'*',1)
 		if p4=0 then m1=1 else m1=val(a$(j3,3)(1:p4-1))
 		l=int(val(a$(j3,3)(p1:p3))) ! FIELD STORAGE LENGTH
