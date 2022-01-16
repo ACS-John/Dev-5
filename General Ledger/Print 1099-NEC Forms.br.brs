@@ -18,7 +18,7 @@ if fnAsk1099Info(seltp,unused_type,minamt,beg_date,end_date) then
 				if seltp=0 or seltp=typ then
 					mat box=(0)
 					if typ<1 or typ>8 then typ=1
-					box(typ)=ytdp
+					box(1)=ytdp ! box(typ)=ytdp  ! set to force box 1 (non employee compensation) for 2021 1099-NEC   (john working with Zaleski 1/16/22)
 					fn1099print(vn$,nam$,mat ad$,ss$,mat box)
 				end if
 			end if
