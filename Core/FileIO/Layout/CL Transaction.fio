@@ -5,16 +5,16 @@
 
 recl=84
 ===================================================
-bank$     , Bank                 , C   2   ,             , ! SPos= 1   newkey$(1:2) bank_code
-type$     , Type                 , C   1   ,             , ! SPos= 3   newkey$(3:3) tcde
-check$    , Check/Reference      , C   8   ,             , ! SPos= 4   tr$(1)       
-dateMmdd  , Date mmdd            , G   4   ,             , ! SPos=12   tr$(2)(1:4)  
-dateYy    , Date yy              , G   2   ,             , ! SPos=16   tr$(2)(5:6)  
-amount    , Amount               , PD 10.2 ,             , ! SPos=18   tr3          
-payee$    , Payee                , C   8   ,             , ! SPos=28   tr$(4)       
-name$     , Name/Description     , C  35   ,             , ! SPos=36   tr$(5)       
-post      , Posting Code         , N   1   ,             , ! SPos=71   posting_code
-clearDate , Statement Clear Date , N   6   , date(mmddyy), ! SPos=72   clr          
-scd       , Source Code          , N   1   ,             , ! SPos=78   scd          4=Payroll Check
+bank      	, Bank                 	, C   2   	,              	, ! SPos= 1   newkey$(1:2) bank_code
+type      	, Type                 	, C   1   	,              	, ! SPos= 3   newkey$(3:3) tcde
+check     	, Check/Reference     	, C   8   	,              	, ! SPos= 4   tr$(1)       
+dateMmdd  	, Date mmdd            	, G   4   	,              	, ! SPos=12   tr$(2)(1:4)  
+dateYy    	, Date yy              	, G   2   	,              	, ! SPos=16   tr$(2)(5:6)  
+amount    	, Amount               	, PD 10.2 	,              	, ! SPos=18   tr3          
+payee     	, Payee                	, C   8   	,              	, ! SPos=28   tr$(4)       
+name      	, Name/Description    	, C  35   	,              	, ! SPos=36   tr$(5)       
+post      	, Posting Code        	, N   1   	,              	, ! SPos=71   posting_code
+clearDate	, Statement Clear Date	, N   6   	, date(mmddyy)	, ! SPos=72   clr          
+scd       	, Source Code         	, N   1   	,              	, ! SPos=78   scd          4=Payroll Check
 
 

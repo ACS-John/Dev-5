@@ -1,6 +1,0 @@
-S:\acsCL\PostingCode.dat  ,  PostCode_  , 1
-S:\acsCL\PostingCode.Idx  ,  key
-recl=26
-===================================================
-key     ,  Type         ,  N  1       , !  Pos=1  Required=True  Mask=1030
-desc$   ,  Description  ,  C  25      , !  Pos=2  Required=True

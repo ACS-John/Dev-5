@@ -1,4 +1,3 @@
-! Replace S:\acsCL\PrintSelectInvoice
 autoLibrary
 on error goto Ertn
  

@@ -1,10 +1,9 @@
-! Replace S:\acsCL\UnpaidInvoiceHamster
 ! Checkbook UnpaidInvoice File
 autoLibrary
 on error goto Ertn
 ! Dimension Ony the Arrays you need (this is important for Hamster) 
 ! Additionally Never use exactaly 10 items in a file.
-fnTop(program$,"Unpaid Invoice (Hamster)")
+fnTop(program$,'Unpaid Invoice (Hamster)')
 dim cap$*128,lbl$(15)*38,tln(15),p$(15)*160,fltyp$(15),mask(15),sln(15)
 dim c$(15,8)*40
 gosub BUILD_LAYOUT
@@ -14,30 +13,30 @@ for j=1 to open_file_count
 	close #j: 
 next j
 gosub OPEN_FILE
-fnHamster("UnpaidInvoice",mat lbl$,mat tln,1,mat p$,mat fltyp$,mat sln,mat mask,mat sp,mat c$)
+fnHamster('UnpaidInvoice',mat lbl$,mat tln,1,mat p$,mat fltyp$,mat sln,mat mask,mat sp,mat c$)
 goto Xit
 OPEN_FILE: ! r:
 	open_file_count=0 ! this value is used in the close_file sub routine
-	open #first_file=open_file_count+=1: "Name=[Q]\CLmstr\PayTrans.h[cno],Version=2,KFName=[Q]\CLmstr\UnPdIdx1.h[cno],Use,RecL=114,KPs=1,KLn=20,Shr",internal,outIn,keyed 
-	open #open_file_count+=1: "Name=[Q]\CLmstr\PayTrans.h[cno],Version=2,KFName=[Q]\CLmstr\UnPdIdx2.h[cno],Use,RecL=114,KPs=31/27/1,KLn=2/4/26,Shr",internal,outIn,keyed 
+	open #first_file=open_file_count+=1: 'Name=[Q]\CLmstr\PayTrans.h[cno],Version=2,KFName=[Q]\CLmstr\UnPdIdx1.h[cno],Use,RecL=114,KPs=1,KLn=20,Shr',internal,outIn,keyed 
+	open #open_file_count+=1: 'Name=[Q]\CLmstr\PayTrans.h[cno],Version=2,KFName=[Q]\CLmstr\UnPdIdx2.h[cno],Use,RecL=114,KPs=31/27/1,KLn=2/4/26,Shr',internal,outIn,keyed 
 return ! /r
 BUILD_LAYOUT: ! r:
 ! ** Field Labels **
-	lbl$(1)="Vendor Key" 
-	lbl$(2)="Invoice Key" 
-	lbl$(3)="Invoice Date" 
-	lbl$(4)="Due Date" 
-	lbl$(5)="Purchase Order Number"
-	lbl$(6)="Description" 
-	lbl$(7)="Amount" 
-	lbl$(8)="Payment Code" 
-	lbl$(9)="Bank" 
-	lbl$(10)="Check Number"
-	lbl$(11)="Date Paid" 
-	lbl$(12)="Posting Code" 
-	lbl$(13)="Posting Date" 
-	lbl$(14)="Discount Amount" 
-	lbl$(15)="Discount Due Date"
+	lbl$(1)='Vendor Key' 
+	lbl$(2)='Invoice Key' 
+	lbl$(3)='Invoice Date' 
+	lbl$(4)='Due Date' 
+	lbl$(5)='Purchase Order Number'
+	lbl$(6)='Description' 
+	lbl$(7)='Amount' 
+	lbl$(8)='Payment Code' 
+	lbl$(9)='Bank' 
+	lbl$(10)='Check Number'
+	lbl$(11)='Date Paid' 
+	lbl$(12)='Posting Code' 
+	lbl$(13)='Posting Date' 
+	lbl$(14)='Discount Amount' 
+	lbl$(15)='Discount Due Date'
 ! ** Field Display Lengths ** 
 	mmddyy=8 : ccyymmdd=10 
 	! TC=0 ! Text Box Length Item Coutner
@@ -122,22 +121,22 @@ BUILD_LAYOUT: ! r:
 	limit_to_list$='1'
 	cl=8 
 	c$(cl,1)='ComboF' 
-	c$(cl,2)="[Q]\CLmstr\PaymentCode.dat" 
+	c$(cl,2)='S:\Core\Data\Checkbook\PaymentCode.dat' 
 	c$(cl,3)='1' : c$(cl,4)=str$(sln(cl)) 
 	c$(cl,5)=str$(sln(cl)+1) : c$(cl,6)='25' 
-	c$(cl,7)="[Q]\CLmstr\PaymentCode.Idx" : c$(cl,8)=limit_to_list$
+	c$(cl,7)='S:\Core\Data\Checkbook\PaymentCode.Idx' : c$(cl,8)=limit_to_list$
 	cl=9 
 	c$(cl,1)='ComboF' 
-	c$(cl,2)="[Q]\CLmstr\BankMstr.h[cno]" 
+	c$(cl,2)='[Q]\CLmstr\BankMstr.h[cno]' 
 	c$(cl,3)='1' : c$(cl,4)=str$(sln(cl)) 
 	c$(cl,5)=str$(sln(cl)+1) : c$(cl,6)='30' 
-	c$(cl,7)="[Q]\CLmstr\BankIdx1.h[cno]" : c$(cl,8)=limit_to_list$
+	c$(cl,7)='[Q]\CLmstr\BankIdx1.h[cno]' : c$(cl,8)=limit_to_list$
 	cl=12 
 	c$(cl,1)='ComboF' 
-	c$(cl,2)="S:\acsCL\PostingCode.dat" 
+	c$(cl,2)='S:\Core\Data\Checkbook\PostingCode.dat' 
 	c$(cl,3)='1' : c$(cl,4)=str$(sln(cl)) 
 	c$(cl,5)=str$(sln(cl)+1) : c$(cl,6)='25' 
-	c$(cl,7)="S:\acsCL\PostingCode.idx" : c$(cl,8)=limit_to_list$
+	c$(cl,7)='S:\Core\Data\Checkbook\PostingCode.idx' : c$(cl,8)=limit_to_list$
 return ! /r
 Xit: fnXit
 include: ertn

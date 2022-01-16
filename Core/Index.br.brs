@@ -247,7 +247,7 @@ def fn_index_sys_do_one(cno,system_id$*128)
 	! /r
 	else if 	system_id$='CL' then ! r:
 		fn_index('[Q]\CLmstr\BankMstr.h'&str$(cno), '[Q]\CLmstr\BankIdx1.h'&str$(cno),'1 2')
-		fn_index('[Q]\CLmstr\DPTMSTR.h'&str$(cno), '[Q]\CLmstr\DPTIDX1.h'&str$(cno),'1 5')
+		fn_index('[Q]\CLmstr\DptMstr.h'&str$(cno), '[Q]\CLmstr\dptidx1.h'&str$(cno),'1 5')
 		fn_index('[Q]\CLmstr\GLmstr.H'&str$(cno), '[Q]\CLmstr\GLINDEX.H'&str$(cno),'1 12')
 		fn_index('[Q]\CLmstr\IvPaid.h'&str$(cno), '[Q]\CLmstr\IVIndex.h'&str$(cno),' 1 20')
 		fn_index('[Q]\CLmstr\JCBreakdownS[wsid].h'&str$(cno), '[Q]\CLmstr\jcbrkidx[wsid].H'&str$(cno),'48 20')

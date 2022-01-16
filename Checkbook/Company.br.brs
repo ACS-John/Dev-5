@@ -1,13 +1,12 @@
-! Replace S:\acsCL\Company
 ! maintain company information file for checkbook management
-!
+
 	autoLibrary
 	on error goto Ertn
-!
+
 	dim a$(3)*40
 	dim b$(2)*12
 	dim c$*5
-	dim d(2)
+	dim xd(2)
 	dim e$(2)*12
 	dim lastact$*12
 	dim tb$*30
@@ -23,7 +22,7 @@
 	dim actr$*1
 	dim reccode$*1
 	dim resp$(150)*40
-!
+
 	fnTop(program$)
 	right=1 : center=2 : left=0
 	cancel=5 : save=1 : pointtwo$='32'
@@ -33,7 +32,7 @@
 	goto READ_COMPANY
 !
 READ_COMPANY: ! r:
-	read #company,using 'form pos 1,3*C 40,2*C 12,C 5,2*N 1,N 2,N 1,C 9,C 12,c 12,PD 7.2,C 30,pos 298,15*PD 4,pos 382,N 2,N 2,PD 5.3,PD 5.2,PD 5.3,PD 5.2,G 1,PD 5.3,PD 5.2,N 1,10*C 20,50*N 1,10*C 12',rec=1: mat a$,mat b$,c$,mat d,wbc,ar1,mat e$,lastact$,ucm,tb$,mat prgl,jccode,nap,ficarate,ficawage,feducrat,feducwag,prenum,mcr,mcm,reccode,mat miscname$,mat dedcode,mat dedfed,mat dedfica,mat dedst,mat deduc,mat miscgl$
+	read #company,using 'form pos 1,3*C 40,2*C 12,C 5,2*N 1,N 2,N 1,C 9,C 12,c 12,PD 7.2,C 30,pos 298,15*PD 4,pos 382,N 2,N 2,PD 5.3,PD 5.2,PD 5.3,PD 5.2,G 1,PD 5.3,PD 5.2,N 1,10*C 20,50*N 1,10*C 12',rec=1: mat a$,mat b$,c$,mat xd,wbc,ar1,mat e$,lastact$,ucm,tb$,mat prgl,jccode,nap,ficarate,ficawage,feducrat,feducwag,prenum,mcr,mcm,reccode,mat miscname$,mat dedcode,mat dedfed,mat dedfica,mat dedst,mat deduc,mat miscgl$
 	if actr$="0" or actr$="1" then actr=val(actr$)
 	if uprc$(actr$)="Y" then actr=1 else if uprc$(actr$)="N" then actr=0
 	gosub NEWSCREEN
@@ -58,7 +57,7 @@ READ_COMPANY: ! r:
 		pr 'unhandled ckey value' : pause
 	end if
 ! /r
-!
+
 NEWSCREEN: ! r:
 	fnTos
 	lc=0
@@ -93,8 +92,8 @@ NEWSCREEN: ! r:
 		if resp$(10)='True' then reccode=1 else reccode=0
 	end if
 	if page=2 then
-		if resp$(1)='True' then d(1)=1 else d(1)=0
-		if resp$(2)='True' then d(2)=1 else d(2)=0
+		if resp$(1)='True' then xd(1)=1 else xd(1)=0
+		if resp$(2)='True' then xd(2)=1 else xd(2)=0
 		lastact$=fnagl$(resp$(3))
 		if resp$(4)='True' then ar1=1 else ar1=0
 		resp$(5)=fnagl$(resp$(5)) : prgl(1,1)=val(resp$(5)(1:3)) : prgl(1,2)=val(resp$(5)(4:9)) : prgl(1,3)=val(resp$(5)(10:12))
@@ -178,9 +177,9 @@ PAGE2: ! r:
 	fnFra(04,1,5,framewidth=110,'General Ledger')
 	frame=fc+=1 : lc=0
 	fnChk(lc+=1,mypos,'Utilize Department Number Field',right,frame)
-	if d(1)=1 then resp$(1)='True' else resp$(1)='False'
+	if xd(1)=1 then resp$(1)='True' else resp$(1)='False'
 	fnChk(lc+=1,mypos,'Utilize Sub Account Number Field',right,frame)
-	if d(2)=1 then resp$(2)='True' else resp$(2)='False'
+	if xd(2)=1 then resp$(2)='True' else resp$(2)='False'
 	fnLbl(lc+=1,1,'Last Balance Sheet Account Number:',mylen,right,0,frame)
 	fnqgl(lc,mypos,frame,2)
 	resp$(3)=fnrgl$(lastact$)
@@ -282,10 +281,10 @@ PAGE4: ! r:
 return ! /r
 BUILD_COMPANY: ! r:
 	open #company=1: "Name=[Q]\CLmstr\Company.h[cno],Size=0,RecL=882,Replace",i,outi,r
-	write #company,using 'form pos 1,3*C 40,2*C 12,C 5,2*N 1,N 2,N 1,C 9,C 12,c 12,PD 7.2,C 30,pos 298,15*PD 4,pos 382,N 2,N 2,PD 5.3,PD 5.2,PD 5.3,PD 5.2,G 1,PD 5.3,PD 5.2,N 1,10*C 20,50*N 1,10*C 12',rec=1: mat a$,mat b$,c$,mat d,1,0,mat e$,lastact$,ucm,tb$,mat prgl,jccode,nap,ficarate,ficawage,feducrat,feducwag,prenum,mcr,mcm,reccode,mat miscname$,mat dedcode,mat dedfed,mat dedfica,mat dedst,mat deduc,mat miscgl$
+	write #company,using 'form pos 1,3*C 40,2*C 12,C 5,2*N 1,N 2,N 1,C 9,C 12,c 12,PD 7.2,C 30,pos 298,15*PD 4,pos 382,N 2,N 2,PD 5.3,PD 5.2,PD 5.3,PD 5.2,G 1,PD 5.3,PD 5.2,N 1,10*C 20,50*N 1,10*C 12',rec=1: mat a$,mat b$,c$,mat xd,1,0,mat e$,lastact$,ucm,tb$,mat prgl,jccode,nap,ficarate,ficawage,feducrat,feducwag,prenum,mcr,mcm,reccode,mat miscname$,mat dedcode,mat dedfed,mat dedfica,mat dedst,mat deduc,mat miscgl$
 goto READ_COMPANY ! /r
 SAVE: ! r:
-	rewrite #company,using 'form pos 1,3*C 40,2*C 12,C 5,2*N 1,N 2,N 1,C 9,C 12,c 12,PD 7.2,C 30,pos 298,15*PD 4,pos 382,N 2,N 2,PD 5.3,PD 5.2,PD 5.3,PD 5.2,G 1,PD 5.3,PD 5.2,N 1,10*C 20,50*N 1,10*C 12',rec=1: mat a$,mat b$,c$,mat d,wbc,ar1,mat e$,lastact$,ucm,tb$,mat prgl,jccode,nap,ficarate,ficawage,feducrat,feducwag,prenum,mcr,mcm,reccode,mat miscname$,mat dedcode,mat dedfed,mat dedfica,mat dedst,mat deduc,mat miscgl$
+	rewrite #company,using 'form pos 1,3*C 40,2*C 12,C 5,2*N 1,N 2,N 1,C 9,C 12,c 12,PD 7.2,C 30,pos 298,15*PD 4,pos 382,N 2,N 2,PD 5.3,PD 5.2,PD 5.3,PD 5.2,G 1,PD 5.3,PD 5.2,N 1,10*C 20,50*N 1,10*C 12',rec=1: mat a$,mat b$,c$,mat xd,wbc,ar1,mat e$,lastact$,ucm,tb$,mat prgl,jccode,nap,ficarate,ficawage,feducrat,feducwag,prenum,mcr,mcm,reccode,mat miscname$,mat dedcode,mat dedfed,mat dedfica,mat dedst,mat deduc,mat miscgl$
 return ! /r
 Xit: ! r:
 	close #company:

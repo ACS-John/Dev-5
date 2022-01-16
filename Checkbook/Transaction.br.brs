@@ -27,10 +27,10 @@ on error goto Ertn
 	endd=begd+3000
 	transstartdate=date('mm')*10000+100+date('yy') ! changed default to beginning of month as per billing's suggestion on 2/9/12    ! begd
 	transenddate=date('mmddyy') ! val(date$(4:5))*10000+val(date$(7:8))*100+val(date$(1:2))
-	open #20: "Name=[Q]\CLmstr\Company.h[cno],Shr",i,i,r
+	open #20: 'Name=[Q]\CLmstr\Company.h[cno],Shr',i,i,r
 	read #20,using 'form pos 152,N 2',rec=1,release: wbc : close #20:
 	gosub OpenTransactionFiles
-	open #h_tralloc=fnH: "Name=[Q]\CLmstr\TrAlloc.h[cno],KFName=[Q]\CLmstr\TrAlloc-Idx.h[cno],Shr",internal,outIn,keyed
+	open #h_tralloc=fnH: 'Name=[Q]\CLmstr\TrAlloc.h[cno],KFName=[Q]\CLmstr\TrAlloc-Idx.h[cno],Shr',internal,outIn,keyed
 ! /r
 Screen1: ! r:
 	! select limitations for the Menu1's record selection grid
@@ -38,34 +38,34 @@ Screen1: ! r:
 	lc=0 : mylen=25 : mypos=mylen+2 : width=100
 	fnLbl(lc+=1,1,'Transaction Grid Selection Criteria',width,center)
 	lc+=1
-	fnLbl(lc+=1,1,"Working Bank:",mylen,right)
-	fncombof('BankAll',lc,mypos,0,"[Q]\CLmstr\BankMstr.h[cno]",1,2,3,30,"[Q]\CLmstr\BankIdx1.h[cno]",add_all)
+	fnLbl(lc+=1,1,'Working Bank:',mylen,right)
+	fncombof('BankAll',lc,mypos,0,'[Q]\CLmstr\BankMstr.h[cno]',1,2,3,30,'[Q]\CLmstr\BankIdx1.h[cno]',add_all)
 	if wbc=0 then resp$(1)='[All]' else resp$(1)=str$(wbc)
-	fnLbl(lc+=1,1,"Working Transaction Type:",mylen,right)
-	fncombof('TransactionTypeall',lc,mypos,0,"S:\Core\Data\TransactionType.dat",1,1,2,25,"S:\Core\Data\TransactionType.idx",add_all)
+	fnLbl(lc+=1,1,'Working Transaction Type:',mylen,right)
+	fncombof('TransactionTypeall',lc,mypos,0,'S:\Core\Data\TransactionType.dat',1,1,2,25,'S:\Core\Data\TransactionType.idx',add_all)
 	if wtt=0 then resp$(2)='[All]' else resp$(2)=str$(wtt)
-	fnLbl(lc+=1,1,"Payee:",mylen,right)
-	fncombof('Payeeall',lc,mypos,0,"[Q]\CLmstr\PayMstr.h[cno]",1,8,9,30,"[Q]\CLmstr\PayIdx1.h[cno]",add_all)
+	fnLbl(lc+=1,1,'Payee:',mylen,right)
+	fncombof('Payeeall',lc,mypos,0,'[Q]\CLmstr\PayMstr.h[cno]',1,8,9,30,'[Q]\CLmstr\PayIdx1.h[cno]',add_all)
 	if wpayee$='' then resp$(3)='[All]' else resp$(3)=wpayee$
 	lc+=1
-	fnLbl(lc+=1,1,"Transaction Starting Date:",mylen,right)
+	fnLbl(lc+=1,1,'Transaction Starting Date:',mylen,right)
 	fnTxt(lc,mypos,8,0,left,ccyymmdd$,0,'Blank for All')
 	resp$(4)=str$(transstartdate)
-	fnLbl(lc+=1,1,"Transaction Ending Date:",mylen,right)
+	fnLbl(lc+=1,1,'Transaction Ending Date:',mylen,right)
 	fnTxt(lc,mypos,8,0,left,ccyymmdd$,0,'Blank for All')
 	resp$(5)=str$(transenddate)
-	fnLbl(lc+=1,1,"Statement Date Cleared:",mylen,right)
+	fnLbl(lc+=1,1,'Statement Date Cleared:',mylen,right)
 	fnTxt(lc,mypos,8,0,left,ccyymmdd$,0,'Blank for All')
 	resp$(6)=''
 	lc+=1
-	fnLbl(lc+=1,1,"Posting Status:",mylen,right)
-	fncombof('PostCodeall',lc,mypos,0,"S:\acsCL\PostingCode.dat",1,1,2,25,"S:\acsCL\PostingCode.idx",add_all)
+	fnLbl(lc+=1,1,'Posting Status:',mylen,right)
+	fncombof('PostCodeall',lc,mypos,0,'S:\Core\Data\Checkbook\PostingCode.dat',1,1,2,25,'S:\Core\Data\Checkbook\PostingCode.idx',add_all)
 	resp$(7)='[All]'
-	fnLbl(lc+=1,1,"Source:",mylen,right)
-	fncombof('SourceAll',lc,mypos,0,"S:\acsCL\SourceCode.dat",1,1,2,25,"S:\acsCL\SourceCode.idx",add_all)
+	fnLbl(lc+=1,1,'Source:',mylen,right)
+	fncombof('SourceAll',lc,mypos,0,'S:\Core\Data\Checkbook\SourceCode.dat',1,1,2,25,'S:\Core\Data\Checkbook\SourceCode.idx',add_all)
 	resp$(8)='[All]'
-	fnLbl(lc+=1,1,"Check/Reference #:",mylen,right)
-	fnTxt(lc,mypos,8,0,left,"",0,'Enter the check or reference # to access a specific transactin, else blank for all')
+	fnLbl(lc+=1,1,'Check/Reference #:',mylen,right)
+	fnTxt(lc,mypos,8,0,left,'',0,'Enter the check or reference # to access a specific transactin, else blank for all')
 	resp$(9)=''
 	fnCmdSet(2)
 	ckey=fnAcs(mat resp$)
@@ -84,22 +84,22 @@ Screen1: ! r:
 	statementdatecleared=val(resp$(6))
 	postingcode$=resp$(7)
 	sourcecode$=resp$(8)
-	if trim$(resp$(9))<>"" then selectedck=1 else selectedck=0
-	if trim$(resp$(9))="" then goto Menu1
+	if trim$(resp$(9))<>'' then selectedck=1 else selectedck=0
+	if trim$(resp$(9))='' then goto Menu1
 	if wbc=0 then wbc=1
-	if trim$(tcde$)="" or trim$(tcde$)="[All]" then tcde$="1" : tcdekey=1 ! try defaulting to check
-	check_ref$=cnvrt$("pic(ZZ)",wbc)&str$(tcdekey)&lpad$(rtrm$(resp$(9)),8)
+	if trim$(tcde$)='' or trim$(tcde$)='[All]' then tcde$='1' : tcdekey=1 ! try defaulting to check
+	check_ref$=cnvrt$('pic(ZZ)',wbc)&str$(tcdekey)&lpad$(rtrm$(resp$(9)),8)
 	read #h_trmstr(1),using 'form pos 1,C 3,C 8,G 6,PD 10.2,C 8,C 35,N 1,N 6,N 1',key=check_ref$: newkey$,tr$(1),tr$(2),tr3,tr$(4),tr$(5),posting_code,clr,scd nokey TRY_RECEIPT
 	editrec=rec(h_trmstr(1)): goto DoTransactionEdit
 	TRY_RECEIPT: !
-	tcde$="2" ! try as receipt
-	check_ref$=cnvrt$("pic(ZZ)",wbc)&str$(tcdekey)&lpad$(rtrm$(resp$(9)),8)
+	tcde$='2' ! try as receipt
+	check_ref$=cnvrt$('pic(ZZ)',wbc)&str$(tcdekey)&lpad$(rtrm$(resp$(9)),8)
 	read #h_trmstr(1),using 'form pos 1,C 3,C 8,G 6,PD 10.2,C 8,C 35,N 1,N 6,N 1',key=check_ref$: newkey$,tr$(1),tr$(2),tr3,tr$(4),tr$(5),posting_code,clr,scd nokey Menu1
 	editrec=rec(h_trmstr(1)): goto DoTransactionEdit
 goto Menu1 ! /r
 OpenTransactionFiles: ! r:
-	open #h_trmstr(1)=fnH: "Name=[Q]\CLmstr\TrMstr.h[cno],KFName=[Q]\CLmstr\TrIdx1.h[cno],Shr",internal,outIn,keyed
-	open #h_trmstr(2)=fnH: "Name=[Q]\CLmstr\TrMstr.h[cno],KFName=[Q]\CLmstr\TrIdx2.h[cno],Shr",internal,outIn,keyed
+	open #h_trmstr(1)=fnH: 'Name=[Q]\CLmstr\TrMstr.h[cno],KFName=[Q]\CLmstr\TrIdx1.h[cno],Shr',internal,outIn,keyed
+	open #h_trmstr(2)=fnH: 'Name=[Q]\CLmstr\TrMstr.h[cno],KFName=[Q]\CLmstr\TrIdx2.h[cno],Shr',internal,outIn,keyed
 return  ! /r
 Menu1: ! r:
 	fnTos
@@ -114,11 +114,11 @@ Menu1: ! r:
 	fnTxt(lc,mypos+5,30,0,center,'',disable,'',frame)
 	resp$(2)=bn$
 	fnTxt(lc,mypos+38,15,0,right,pointtwo$,disable,'',frame)
-	resp$(3)=str$(fnbankbal(wbc))
+	resp$(3)=str$(fn_bankBal(wbc))
 	fnLbl(lc+=1,1,'Transaction Type:',mylen,right,0,frame)
 	fnTxt(lc,mypos,1,0,left,'',disable,'',frame)
 	resp$(4)=str$(wtt)
-	! fncombof('TransactionTypeall',lc,mypos,0,"S:\Core\Data\TransactionType.dat",1,1,2,25,"S:\Core\Data\TransactionType.idx",add_all)
+	! fncombof('TransactionTypeall',lc,mypos,0,'S:\Core\Data\TransactionType.dat',1,1,2,25,'S:\Core\Data\TransactionType.idx',add_all)
 	fnTxt(lc,mypos+4,25,0,left,'',disable,'',frame)
 	resp$(5)=tcde$
 	lc+=1
@@ -200,12 +200,12 @@ Menu1: ! r:
 	fnTxt(13,mypos+30,15,0,right,pointtwo$,disable,'This is the total of only the transactions shown in the Transaction Grid above.  To update this total click the change button at the top and reselect your Transaction Grid Selection Criteria')
 	resp$(12)=str$(transactionsTotal)
 	! /r
-	fnCmdKey('E&dit',3,1,0,"Highlight any entry and click edit to change or review the complete entry.")
-	fnCmdKey('&Add Deposit (Receipt)',2,0,0,"Allows you to enter deposits into the files.")
-	fnCmdKey('Add &Check (Disbursment)',8,0,0,"Allows you to add hand written checks to the checkbook files.")
-	fnCmdKey('&ReIndex',7,0,0,"Allows you to ReIndex the check history files. Should only be necessary if power failures have corrupted the files.")
-	fnCmdKey('&Change Selection Criteria',6,0,0,"Allows you to return to first screen and change date ranges, etc.")
-	fnCmdKey('E&xit',5,0,1,"Exits the checkbook system.")
+	fnCmdKey('E&dit',3,1,0,'Highlight any entry and click edit to change or review the complete entry.')
+	fnCmdKey('&Add Deposit (Receipt)',2,0,0,'Allows you to enter deposits into the files.')
+	fnCmdKey('Add &Check (Disbursment)',8,0,0,'Allows you to add hand written checks to the checkbook files.')
+	fnCmdKey('&ReIndex',7,0,0,'Allows you to ReIndex the check history files. Should only be necessary if power failures have corrupted the files.')
+	fnCmdKey('&Change Selection Criteria',6,0,0,'Allows you to return to first screen and change date ranges, etc.')
+	fnCmdKey('E&xit',5,0,1,'Exits the checkbook system.')
 	ckey=fnAcs(mat resp$)
 	if ckey=5 or ckey=cancel then goto Xit
 	if ckey=2 or ckey=8 then addloopcode=1 else addloopcode=0
@@ -250,7 +250,7 @@ TransactionAdd: ! r:
 	scd=8 : tcde=typeofentry
 	bank_code=wbc
 	! tcde set by add button
-	tr$(1)=tr$(3)=tr$(4)=tr$(5)='' : tr$(2)=date$("mmddyy")
+	tr$(1)=tr$(3)=tr$(4)=tr$(5)='' : tr$(2)=date$('mmddyy')
 goto TransactionFm ! /r
 StandardBreakdown: ! r:
 ! pull standard gl breakdowns from payee file
@@ -274,21 +274,21 @@ RemoveTrAllocForKeyEoF: ! eo first...
 
 ! ** next add new allocations that match what they have in their payee file or receipt file (typeofentry=2=reading from receipt file
 	if typeofentry=2 then
-		open #payee=fnH: "Name=[Q]\CLmstr\RecMstr.h[cno],KFName=[Q]\CLmstr\recIdx1.h[cno],Shr",i,i,k
-		open #payeegl=fnH: "Name=[Q]\CLmstr\ReceiptGLBreakdown.h[cno],KFName=[Q]\CLmstr\ReceiptGLBkdIdx.h[cno],Shr",internal,outIn,keyed
+		open #payee=fnH: 'Name=[Q]\CLmstr\RecMstr.h[cno],KFName=[Q]\CLmstr\recIdx1.h[cno],Shr',i,i,k
+		open #payeegl=fnH: 'Name=[Q]\CLmstr\ReceiptGLBreakdown.h[cno],KFName=[Q]\CLmstr\ReceiptGLBkdIdx.h[cno],Shr',internal,outIn,keyed
 	else
-		open #payee=fnH: "Name=[Q]\CLmstr\PayMstr.h[cno],KFName=[Q]\CLmstr\PayIdx1.h[cno],Shr",i,i,k
-		open #payeegl=fnH: "Name=[Q]\CLmstr\PayeeGLBreakdown.h[cno],KFName=[Q]\CLmstr\PayeeGLBkdIdx.h[cno],Shr",internal,outIn,keyed
+		open #payee=fnH: 'Name=[Q]\CLmstr\PayMstr.h[cno],KFName=[Q]\CLmstr\PayIdx1.h[cno],Shr',i,i,k
+		open #payeegl=fnH: 'Name=[Q]\CLmstr\PayeeGLBreakdown.h[cno],KFName=[Q]\CLmstr\PayeeGLBkdIdx.h[cno],Shr',internal,outIn,keyed
 	end if
 
-	read #payee,using "form pos 1,c 8",key=lpad$(rtrm$(tr$(4)),8): vn$ nokey XIT_READSTGL
+	read #payee,using 'form pos 1,c 8',key=lpad$(rtrm$(tr$(4)),8): vn$ nokey XIT_READSTGL
 	restore #payeegl,key>=vn$: nokey EO_READSTGL
 	totalalloc=0 : totalamt=0
 READ_PAYEEGL: !
 	if val(tr$(3))<>0 then goto GET_TOTAL
 	mat ml$(3)
 	ml$(1)='You must enter the transaction amount before'
-	ml$(2)="you can pull the standard general ledger breakdowns."
+	ml$(2)='you can pull the standard general ledger breakdowns.'
 	fnmsgbox(mat ml$,ok$,'',48)
 	goto EO_READSTGL
 GET_TOTAL: !
@@ -299,7 +299,7 @@ GET_TOTAL: !
 		totalalloc+=percent
 		totalamt+=allocamt
 
-		write #h_tralloc,using 'form pos 1,C 11,C 12,PD 5.2,C 30,G 6,X 3,C 12,N 1': key$,payeegl$,allocamt,gldesc$,0,"",0
+		write #h_tralloc,using 'form pos 1,C 11,C 12,PD 5.2,C 30,G 6,X 3,C 12,N 1': key$,payeegl$,allocamt,gldesc$,0,'',0
 		lastrec=rec(h_tralloc)
 	loop
 
@@ -309,7 +309,7 @@ EO_READSTGL: !
 		rewrite #h_tralloc,using 'form pos 24,Pd 5.2',rec=lastrec: allocamt noRec ASSIGN_IF_EMPTY
 ! plug any rounding differences into last allocation
 	end if
-ASSIGN_IF_EMPTY: if trim$(tr$(5))="" then tr$(5)=resp$(6)(9:30) ! assign a name if none entered
+ASSIGN_IF_EMPTY: if trim$(tr$(5))='' then tr$(5)=resp$(6)(9:30) ! assign a name if none entered
 XIT_READSTGL: !
 	close #payee:
 	close #payeegl:
@@ -326,29 +326,29 @@ goto TransactionFm ! /r
 Save: ! r:
 	save_good=false
 	if editrec>0 then goto EMPTY_BANK_MSG
-	check_key$=cnvrt$("pic(ZZ)",wbc)&str$(tcde)&lpad$(rtrm$(tr$(1)),8)
+	check_key$=cnvrt$('pic(ZZ)',wbc)&str$(tcde)&lpad$(rtrm$(tr$(1)),8)
 	read #h_trmstr(1),using 'form pos 1,C 11',key=check_key$: newkey$ nokey EMPTY_BANK_MSG
 	mat ml$(1)
-	ml$(1)="You already have a transaction with reference # "&trim$(tr$(1))&"."
+	ml$(1)='You already have a transaction with reference # '&trim$(tr$(1))&'.'
 	fnmsgbox(mat ml$,resp$,'',0)
-	tr$(1)=""
+	tr$(1)=''
 	goto TransactionFm
 	EMPTY_BANK_MSG: !
 	if bank_code=0 then
 		mat ml$(1)
-		ml$(1)="You must first select a Bank."
+		ml$(1)='You must first select a Bank.'
 		fnmsgbox(mat ml$,resp$,'',0)
 		goto EoSave
 	end if
-	! if trim$(tr$(4))='' and tcde=1 and trim$(uprc$(tr$(5)))<>"VOID" then mat ml$(1)
-	! ml$(1)="You must first select a Payee."
+	! if trim$(tr$(4))='' and tcde=1 and trim$(uprc$(tr$(5)))<>'VOID' then mat ml$(1)
+	! ml$(1)='You must first select a Payee.'
 	! fnmsgbox(mat ml$,resp$,'',0)
 	! goto EoSave
 	! end if
 	if allocationstotal=val(tr$(3)) then goto RELEASE_TRMSTR1 ! allow zero checks to go thru as long as the allocations = 0 also
-	if trim$(tr$(3))='0.00' and trim$(uprc$(tr$(5)))<>"VOID" then
+	if trim$(tr$(3))='0.00' and trim$(uprc$(tr$(5)))<>'VOID' then
 		mat ml$(1)
-		ml$(1)="You must first enter an amount."
+		ml$(1)='You must first enter an amount.'
 		fnmsgbox(mat ml$,resp$,'',0)
 		goto EoSave
 	end if
@@ -410,12 +410,12 @@ RELEASE_TRMSTR1: release #h_trmstr(1):
 		rewrite #h_trmstr(1),using 'form pos 1,N 2,N 1,C 8,G 6,pd 10.2,C 8,C 35,N 1,N 6,N 1',same,reserve: bank_code,tcde,tr$(1),tr2,tx3,tr$(4),tr$(5),posting_code,clr,scd
 		goto L2260
 	end if
-	check_key$=cnvrt$("pic(ZZ)",wbc)&str$(tcde)&lpad$(rtrm$(tr$(1)),8)
+	check_key$=cnvrt$('pic(ZZ)',wbc)&str$(tcde)&lpad$(rtrm$(tr$(1)),8)
 	read #h_trmstr(1),using 'form pos 1,C 11',key=check_key$: newkey$ nokey L2250
 	mat ml$(1)
-	ml$(1)="You already have a transaction with reference # "&trim$(tr$(1))&"."
+	ml$(1)='You already have a transaction with reference # '&trim$(tr$(1))&'.'
 	fnmsgbox(mat ml$,resp$,'',0)
-	tr$(1)=""
+	tr$(1)=''
 	goto TransactionFm
 	L2250: !
 	tr2=val(tr$(2)): write #h_trmstr(1),using 'form pos 1,N 2,N 1,C 8,G 6,pd 10.2,C 8,C 35,N 1,N 6,N 1',reserve: bank_code,tcde,tr$(1),tr2,tx3,tr$(4),tr$(5),posting_code,clr,scd
@@ -526,7 +526,7 @@ AllocationFm: ! r:
 	fnTxt(lc,mypos,30,0,left)
 	resp$(6)=tradesc$
 	fnLbl(lc+=1,1,'Reference:',mylen,right)
-	fnTxt(lc,mypos,6,0,left,"",0)
+	fnTxt(lc,mypos,6,0,left,'',0)
 	resp$(7)=traivd$ ! the last zero above was disabled, why kj
 	fnLbl(lc+=1,1,'Purchase Order:',mylen,right)
 	fnTxt(lc,mypos,12,0,left)
@@ -548,7 +548,7 @@ AllocationFm: ! r:
 	tragde=val(resp$(9))
 	if ckey=1 then gosub AllocationSave
 	if ckey=1 and adding_allocation=1 then
-		tragl$=""
+		tragl$=''
 		traamt=0
 		goto AllocationFm
 ! add loop
@@ -578,8 +578,8 @@ return  ! /r
 	AllocationDeleteNoRec: ! r:
 		mat ml$(3)
 		ml$(1)='Delete Allocation Error'
-		ml$(2)="You must select an Allocation Record to delete"
-		ml$(3)="before clicking the Delete Allocation button."
+		ml$(2)='You must select an Allocation Record to delete'
+		ml$(3)='before clicking the Delete Allocation button.'
 		fnmsgbox(mat ml$,ok$,'',48)
 	continue  ! /r
 TransactionFm: ! r: requires typeofentry, scd, and many more
@@ -591,7 +591,7 @@ TransactionFm: ! r: requires typeofentry, scd, and many more
 	frame=fc+=1
 	lc=0 : mylen=23 : mypos=mylen+2
 	fnLbl(lc+=1,1,'Bank:',mylen,right,0,frame)
-	fncombof('Bank',lc,mypos,0,"[Q]\CLmstr\BankMstr.h[cno]",1,2,3,30,"[Q]\CLmstr\BankIdx1.h[cno]",limit_to_list,0,'',frame)
+	fncombof('Bank',lc,mypos,0,'[Q]\CLmstr\BankMstr.h[cno]',1,2,3,30,'[Q]\CLmstr\BankIdx1.h[cno]',limit_to_list,0,'',frame)
 	resp$(1)=str$(bank_code)
 	fnLbl(lc+=1,1,'Transaction Type:',mylen,right,0,frame)
 ! fncombof('TransactionType',lc,mypos,0,'S:\Core\Data\TransactionType.dat',1,1,2,25,'S:\Core\Data\TransactionType.idx',limit_to_list,0,'',frame)
@@ -610,27 +610,27 @@ TransactionFm: ! r: requires typeofentry, scd, and many more
 	resp$(4)=tr$(2)
 	fnLbl(lc+=1,1,'Transaction Amount:',mylen,right,0,frame)
 	fnTxt(lc,mypos,12,0,right,pointtwo$,0,'',frame)
-	resp$(5)=cnvrt$("N 10.2",val(tr$(3)))
+	resp$(5)=cnvrt$('N 10.2',val(tr$(3)))
 	if tcde=2 then ! typeofentry=2 then
 		fnLbl(lc+=1,1,'Receipt Type:',mylen,right,0,frame)
-		fncombof('ReceiptType',lc,mypos,0,"[Q]\CLmstr\RecMstr.h[cno]",1,8,9,30,"[Q]\CLmstr\RecIdx1.h[cno]",limit_to_list,0,'',frame)
+		fncombof('ReceiptType',lc,mypos,0,'[Q]\CLmstr\RecMstr.h[cno]',1,8,9,30,'[Q]\CLmstr\RecIdx1.h[cno]',limit_to_list,0,'',frame)
 		resp$(6)=tr$(4)
 		fnLbl(lc+=1,1,'Name/Description:',mylen,right,0,frame)
 	else if scd=4 then
 		fnLbl(lc+=1,1,'Payroll Employee Number:',mylen,right,0,frame)
-		fnTxt(lc,mypos,8,0,left,"",0,'Employee # for payroll checksl',frame)
+		fnTxt(lc,mypos,8,0,left,'',0,'Employee # for payroll checksl',frame)
 		resp$(6)=tr$(4)
 		fnLbl(lc+=1,1,'Payroll Employee Name:',mylen,right,0,frame)
 	else
 		fnLbl(lc+=1,1,'Payee:',mylen,right,0,frame)
-		fncombof('Payee',lc,mypos,0,"[Q]\CLmstr\PayMstr.h[cno]",1,8,9,30,"[Q]\CLmstr\PayIdx1.h[cno]",limit_to_list,0,'',frame)
+		fncombof('Payee',lc,mypos,0,'[Q]\CLmstr\PayMstr.h[cno]',1,8,9,30,'[Q]\CLmstr\PayIdx1.h[cno]',limit_to_list,0,'',frame)
 		resp$(6)=tr$(4)
 		fnLbl(lc+=1,1,'Name/Description:',mylen,right,0,frame)
 	end if
 	fnTxt(lc,mypos,35,0,left,'',0,'',frame)
 	resp$(7)=tr$(5)
 	fnLbl(lc+=1,1,'Posting Status:',mylen,right,0,frame)
-	fncombof('PostCode',lc,mypos,0,"S:\acsCL\PostingCode.dat",1,1,2,25,"S:\acsCL\PostingCode.idx",limit_to_list,0,'',frame)
+	fncombof('PostCode',lc,mypos,0,'S:\Core\Data\Checkbook\PostingCode.dat',1,1,2,25,'S:\Core\Data\Checkbook\PostingCode.idx',limit_to_list,0,'',frame)
 	resp$(8)=str$(posting_code)
 	fnLbl(lc+=1,1,'Statement Date Cleared:',mylen,right,0,frame)
 	fnTxt(lc,mypos,8,0,left,mmddyy$,0,'',frame)
@@ -644,7 +644,7 @@ TransactionFm: ! r: requires typeofentry, scd, and many more
 	chdr$(5)='Invoice'
 	chdr$(6)='PO Number'
 	chdr$(7)='PC'
-	mat cmask$=("")
+	mat cmask$=('')
 	cmask$(1)='30'
 	cmask$(2)=''
 	cmask$(3)='10'
@@ -664,7 +664,7 @@ READ_TRALLOC_1: !
 	fnflexadd1(mat item$)
 	goto READ_TRALLOC_1
 EO_FLEX2: ! /r
-	fnLbl(lc=15,1,'Allocation Total: $'&trim$(cnvrt$("N 15.2",allocationstotal)),40,right)
+	fnLbl(lc=15,1,'Allocation Total: $'&trim$(cnvrt$('N 15.2',allocationstotal)),40,right)
 	fnButton(lc=15,(61),'&Add',8,'Add Allocation')
 	fnButton(lc,(61+4+2),'&Edit',7,'Edit Allocation')
 	fnButton(lc,(61+4+2+5+2),'&Delete',6,'Delete Allocation')
@@ -675,10 +675,10 @@ EO_FLEX2: ! /r
 		fnButton(6,72,'&Payee File',10,'Add or Edit Payees',0,0,1)
 	end if
 	lc+=1
-	fnCmdKey('&Save',1,1,0,"Saves this record and any changes back to the files.")
-	fnCmdKey('&Delete',3,0,0,"Will delete this entry from your files.  You will have an option as to how to effect the bank balance.")
-	fnCmdKey('&Void',4,0,0,"Voids the transaction that is on the screen. It will adjust the bank balance. It leaves a voided transaction on file.")
-	fnCmdKey('&Cancel',5,0,1,"Returns to previous screen without saving any changes.")
+	fnCmdKey('&Save',1,1,0,'Saves this record and any changes back to the files.')
+	fnCmdKey('&Delete',3,0,0,'Will delete this entry from your files.  You will have an option as to how to effect the bank balance.')
+	fnCmdKey('&Void',4,0,0,'Voids the transaction that is on the screen. It will adjust the bank balance. It leaves a voided transaction on file.')
+	fnCmdKey('&Cancel',5,0,1,'Returns to previous screen without saving any changes.')
 	ckey=fnAcs(mat resp$)
 	holdtr1$=tr$(1)
 	if ckey=3 then
@@ -707,9 +707,9 @@ EO_FLEX2: ! /r
 		fnmsgbox(mat ml$,yn$,'',48)
 		goto TransactionFm
 	end if
-	if (ckey=1 or ckey=8) and trim$(tr$(1))="" then
+	if (ckey=1 or ckey=8) and trim$(tr$(1))='' then
 		mat ml$(1)
-		ml$(1)="You must first enter a Reference Number."
+		ml$(1)='You must first enter a Reference Number.'
 		fnmsgbox(mat ml$,resp$,'',0)
 		goto TransactionFm
 	end if
@@ -719,12 +719,12 @@ EO_FLEX2: ! /r
 		goto TransactionFm
 	end if
 	if holdtr1$=tr$(1) and editrec>0 then goto L3780 ! r: duplicate transaction?
-	check_key$=cnvrt$("pic(ZZ)",wbc)&str$(tcde)&lpad$(rtrm$(tr$(1)),8)
+	check_key$=cnvrt$('pic(ZZ)',wbc)&str$(tcde)&lpad$(rtrm$(tr$(1)),8)
 	read #h_trmstr(1),using 'form pos 1,C 11',key=check_key$: newkey$ nokey L3780
 	mat ml$(1)
-	ml$(1)="You already have a transaction with reference # "&trim$(tr$(1))&"."
+	ml$(1)='You already have a transaction with reference # '&trim$(tr$(1))&'.'
 	fnmsgbox(mat ml$,resp$,'',0)
-	tr$(1)=""
+	tr$(1)=''
 	goto TransactionFm
 L3780: ! /r
 	if ckey=8 then
@@ -752,8 +752,8 @@ L3780: ! /r
 	gosub Save
 	if save_good=false then goto TransactionFm
 	if ckey=9 then gosub StandardBreakdown : goto TransactionFm ! the record must be good save first!!!
-	if trim$(check_ref$)<>"" then
-		check_ref$=""
+	if trim$(check_ref$)<>'' then
+		check_ref$=''
 		goto Screen1
 	else if editrec<>0 then ! return to main screen after edit
 		goto Menu1
@@ -764,11 +764,32 @@ ReIndex: ! r: drops deleted records and reindexes trmstr
 	close #h_trmstr(1):
 	close #h_trmstr(2):
 	close #h_tralloc:
-	fnRemoveDeletedRecords("[Q]\CLmstr\TrMstr.h[cno]")
-	fnIndex("[Q]\CLmstr\TrMstr.h[cno]","[Q]\CLmstr\TrIdx1.h[cno]","1 11")
-	fnIndex("[Q]\CLmstr\TrMstr.h[cno]","[Q]\CLmstr\TrIdx2.h[cno]","28/1 8/11")
-	fnIndex("[Q]\CLmstr\Tralloc.h[cno]","[Q]\CLmstr\Tralloc-idx.h[cno]","1 11")
+	fnRemoveDeletedRecords('[Q]\CLmstr\TrMstr.h[cno]')
+	fnIndex('[Q]\CLmstr\TrMstr.h[cno]','[Q]\CLmstr\TrIdx1.h[cno]','1 11')
+	fnIndex('[Q]\CLmstr\TrMstr.h[cno]','[Q]\CLmstr\TrIdx2.h[cno]','28/1 8/11')
+	fnIndex('[Q]\CLmstr\Tralloc.h[cno]','[Q]\CLmstr\Tralloc-idx.h[cno]','1 11')
 	gosub OpenTransactionFiles
 return  ! /r
+
+def library fnbankbal(bankCode; ___,returnN,key$*2,bal)
+	autoLibrary
+	fnbankbal=fn_bankBal(bankCode)
+fnend
+def fn_bankBal(bankCode; ___,returnN,key$*2,bal)
+	open #hBank=fnH: 'Name=[Q]\CLmstr\Bankmstr.h[cno],KFName=[Q]\CLmstr\BankIdx1.h[cno],Shr',i,i,k
+	if bankCode then
+		key$=cnvrt$('Pic(zz)',bankCode)
+		read #hBank,using 'form pos 45,PD 6.2',key=key$: returnN
+	else
+		do
+			read #hBank,using 'form pos 45,PD 6.2': bal eof EohBank
+			returnN+=bal
+		loop
+		EohBank: !
+	end if
+	close #hBank:
+	fn_bankBal=returnN
+fnend
+
 Xit: fnXit
 include: ertn

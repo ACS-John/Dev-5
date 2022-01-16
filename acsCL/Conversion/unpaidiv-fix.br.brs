@@ -1,4 +1,3 @@
-! REPLACE S:\acsCL\conversion\unpaidiv-fix
 ! check for posting codes in unpaid file
 autoLibrary
 dim tr(2),up$(4),aa(2)

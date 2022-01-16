@@ -196,7 +196,7 @@ def fn_getList
 	dim fileName$(0)*512
 	mat fileName$(0)
 	pr 'inside this function you should build a list of file names to process' :  pause
-	! fnAddOneC(mat fileName$,'C:\ACS\Dev-5\acsCL\Conversion\apmstr-cnv.br.brs')
+	! fnAddOneC(mat fileName$,'C:\ACS\Dev-5\example system\path\Sample Program Name.br.brs')
 fnend
 def fn_acsToAcs2(&line$; ___,posX,removing$*12,adding$*7)
 	removing$=lwrc$('fnAcsOld(sn$,0,') ! must be lwrc$

@@ -4,20 +4,20 @@
 recl=736
 ! ACS code often refers to BR Version 0 of this as Version 1.
 ===================================================
-vn$       ,  Key                ,  C    8  ,   ! SPos=1
-nam$      ,  Name               ,  C   30  ,   ! SPos=9
-ad1$      ,  Address 1          ,  C   30  ,   ! SPos=39
-ad2$      ,  Address 2          ,  C   30  ,   ! SPos=69
-csz$      ,  City State Zip     ,  C   30  ,   ! SPos=99
-unsed$    ,  unused             ,  C    5  ,   ! SPos=129
-typ       ,  Type               ,  N    2  ,   ! SPos=134
-ss$       ,  Federal ID or SSN  ,  c   11  ,   ! SPos=136
-unsed2$   ,  unused2            ,  C    6  ,   ! SPos=147
-ph$       ,  Phone Number       ,  c   12  ,   ! SPos=153
-contact$  ,  Contact Name       ,  c   30  ,   ! SPos=165
-email$    ,  Email Address      ,  c   50  ,   ! SPos=195
-fax$      ,  Fax Number         ,  c   12  ,   ! SPos=245
-myact$    ,  My Account Number  ,  c   20  ,   ! SPos=257
+vn        	,  Key                	,  C    8  ,   ! SPos=1
+nam       	,  Name               	,  C   30  ,   ! SPos=9
+ad1       	,  Address 1          	,  C   30  ,   ! SPos=39
+ad2       	,  Address 2          	,  C   30  ,   ! SPos=69
+csz       	,  City State Zip     	,  C   30  ,   ! SPos=99
+unsed     	,  unused             	,  C    5  ,   ! SPos=129    formerly YTD PD 5.2    aka=ytdp
+typ       	,  Type               	,  N    2  ,   ! SPos=134
+ss        	,  Federal ID or SSN 	,  c   11  ,   ! SPos=136
+unsed2    	,  unused2            	,  C    6  ,   ! SPos=147
+ph        	,  Phone Number       	,  c   12  ,   ! SPos=153
+contact   	,  Contact Name       	,  c   30  ,   ! SPos=165
+email     	,  Email Address      	,  c   50  ,   ! SPos=195
+fax       	,  Fax Number         	,  c   12  ,   ! SPos=245
+myact     	,  My Account Number 	,  c   20  ,   ! SPos=257
 
 
 

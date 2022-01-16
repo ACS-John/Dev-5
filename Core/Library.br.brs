@@ -1654,50 +1654,31 @@ fnend
 	fnend
 ! /r
 ! r: CL   Checkbook
-	def library fnApMstrConversion
-	library 'S:\acsCL\Conversion\apmstr-cnv.br': fnApMstrConversion
-	fnApMstrConversion=fnApMstrConversion
+	def library fnImportCLfromAP
+	library 'S:\Checkbook\fn\importCLfromAP.br': fnImportCLfromAP
+	fnImportCLfromAP=fnImportCLfromAP
 	fnend
 	def library fnPostCheckbookToGl(; enablePost)
 		library 'S:\Checkbook\fn\postCheckbookToGl.br': fnPostCheckbookToGl
 		fnPostCheckbookToGl( enablePost)
 	fnend
-	def library fntrmstr_v1_to_v2
-		library 'S:\acsCL\Conversion\TrMstr-v1-to-v2.br': fntrmstr_v1_to_v2
-		fntrmstr_v1_to_v2=fntrmstr_v1_to_v2
-	fnend
-	def library fntralloc_v1_to_v2
-		library 'S:\acsCL\Conversion\TrAlloc-v1-to-v2.br': fntralloc_v1_to_v2
-		fntralloc_v1_to_v2=fntralloc_v1_to_v2
-	fnend
 	def library fnpaytrans_v1_to_v2
 		library 'S:\acsCL\Conversion\PayTrans-v1-to-v2.br': fnpaytrans_v1_to_v2
 		fnpaytrans_v1_to_v2=fnpaytrans_v1_to_v2
-	fnend
-	def library fnunpdaloc_v1_to_v2
-		library 'S:\acsCL\Conversion\UnPdAloc-v1-to-v2.br': fnunpdaloc_v1_to_v2
-		fnunpdaloc_v1_to_v2=fnunpdaloc_v1_to_v2
-	fnend
-	def library fnpaymstr_v0_to_v1
-		library 'S:\acsCL\Conversion\PayMstr-v0-to-v1.br': fnpaymstr_v0_to_v1
-		fnpaymstr_v0_to_v1=fnpaymstr_v0_to_v1
 	fnend
 	def library fnaddpayee
 		library 'S:\Checkbook\Payee.br': fnaddpayee
 		fnaddpayee=fnaddpayee
 	fnend
 	def library fnaddreceipt
-		library 'S:\acsCL\fnReceipt.br': fnaddreceipt
+		library 'S:\Checkbook\fn\addReceipt.br': fnaddreceipt
 		fnaddreceipt=fnaddreceipt
 	fnend
-	def library fnbankbal(x)
-		library 'S:\acsCL\fnBankBal.br': fnbankbal
-		fnbankbal=fnbankbal(x)
+	def library fnUpdateBankBal(bankCode,modification)
+		library 'S:\Checkbook\fn\updateBankBal.br': fnUpdateBankBal
+		fnUpdateBankBal=fnUpdateBankBal(bankCode,modification)
 	fnend
-	def library fnupdatebankbal(bank_code,modification)
-		library 'S:\acsCL\fnUpdateBankBal.br': fnupdatebankbal
-		fnupdatebankbal=fnupdatebankbal(bank_code,modification)
-	fnend
+	
 ! /r
 ! r: PR   payroll
 	def library fnEmployeeEdit(eno)

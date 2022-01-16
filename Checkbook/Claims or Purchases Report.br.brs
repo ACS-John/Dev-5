@@ -69,7 +69,7 @@ ASK_SORT: !
 	execute "Index [Temp]\Work,[Temp]\Indx,1,12,Replace,DupKeys -n"
 	open #work=6: "Name=[Temp]\Work,KFName=[Temp]\Indx",internal,outIn,keyed
 	open #hFund=fnH: "Name=[Q]\CLmstr\FundMstr.h[cno],KFName=[Q]\CLmstr\FundIdx1.h[cno],Shr",i,i,k ! 7
-	notused=1: open #11: "Name=[Q]\CLmstr\dptmSTR.h[cno],KFName=[Q]\CLmstr\dptidx1.h[cno]",i,i,k ioerr L640 : notused=0
+	notused=1: open #11: "Name=[Q]\CLmstr\DptMstr.h[cno],KFName=[Q]\CLmstr\dptidx1.h[cno]",i,i,k ioerr L640 : notused=0
 	L640: !
 	fnopenprn
 	vn$="": iv$=""

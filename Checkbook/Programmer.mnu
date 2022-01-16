@@ -1,13 +1,13 @@
 Checkbook Programmer^ ACS Checkbook
 Programmer
->Reorganize Unpaid Invoice File                    ^ acsCL\reorgunpaid
+>Reorganize Unpaid Invoices                        ^ [cursystem]\Fix\*
 >Unpaid Invoice (Hamster)                          ^ acsCL\UnpaidInvoiceHamster
->Transaction Allocation (Hamster)                  ^ acsCL\TrAlloc
 >Payee (Hamster)                                   ^ acsCL\PayeeHam
 >Transaction (Hamster)                             ^acsCL\TransactionHamster
-!   removed in favor of fileio   >Posting Code     ^ acsCL\PostingCode
->Payment Code                                      ^ acsCL\PaymentCode
-!   removed in favor of fileio   >Source Code      ^ acsCL\SourceCode
 !   removed in favor of fileio   >Payee Type       ^ acsCL\PayeeType
 !   removed in favor of fileio   >Transaction Type ^ acsCL\TransactionType
 >General Ledger Number                             ^ Test\GLNumber
+>Payment Code                                      ^ HamsterFio:*
+>Source Code                                       ^ HamsterFio:SourceCode
+>Posting Code                                      ^ HamsterFio:Posting Code
+>Transaction Allocation                            ^ HamsterFio: TransAllocation

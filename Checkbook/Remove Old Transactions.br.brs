@@ -1,6 +1,3 @@
-! Replace S:\acsCL\RmTrans
-! Remove Transactions
-
 autoLibrary
 fnTop(program$)
 on error goto Ertn
