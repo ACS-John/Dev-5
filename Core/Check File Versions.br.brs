@@ -776,9 +776,9 @@ def fn_cfv_payroll
 	! r: move CheckInfo.h into CReg and delete checkinfo.h
 	if exists('[Q]\PRmstr\Checkinfo.h[cno]') then
 		open #h_pr_checkinfo=fnH: 'Name=[Q]\PRmstr\Checkinfo.h[cno],USE,RecL=128',i,outi,r
-		read #h_pr_checkinfo,using 'form pos 1,3*c 1,c 3,c 1,n 3,c 5',rec=1: pre$,acsclcv$,ficam1$,sc1$,accr$,bankcode,compcode$ noRec CFVPR_CHECKINFO_NOREC
+		read #h_pr_checkinfo,using 'form pos 1,3*c 1,c 3,c 1,n 3,c 5',rec=1: pre$,posttoCheckbook$,ficam1$,sc1$,accr$,bankcode,compcode$ noRec CFVPR_CHECKINFO_NOREC
 		fncreg_write('Prenumbered Checks',pre$)
-		fncreg_write('Post to CL',acsclcv$)
+		fncreg_write('Post to CL',posttoCheckbook$)
 		fncreg_write('Post Employer Portion of FiCA',ficam1$)
 		fncreg_write('Check Format',sc1$)
 		fncreg_write('Print Vacation and Sick Leave on Check',accr$)
