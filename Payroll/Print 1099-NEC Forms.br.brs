@@ -22,7 +22,9 @@ do ! r: main loop
 		if heno<>eno then goto CALL_1099_LIBRARY
 		if prd=>beg_date and prd<=end_date then
 			amt1=tcp(seltp+4)
-			box(type)=box(type)+amt1
+
+				box(type)+=amt1
+
 		end if
 	loop
 	CALL_1099_LIBRARY: !

@@ -260,10 +260,11 @@ fnend
 		end if
 	fnend
 	SetDefaultMargins: ! r:
-		defaultMargin$(1)=  '0' ! form 1 top margin
-		defaultMargin$(2)= '90' ! form 2 top margin
-		defaultMargin$(3)='180' ! form 3 top margin
-		defaultMargin$(4)=  '5' ! left
+		! default Margin  =  2021/Zaleski   	! 2020 ! form 1 top margin
+		defaultMargin$(1)=          '3'    	!   '0' ! form 1 top margin
+		defaultMargin$(2)=         '97'    	!  '90' ! form 2 top margin
+		defaultMargin$(3)=        '180'    	! '180' ! form 3 top margin
+		defaultMargin$(4)=          '5'    	!   '5' ! left
 	return ! /r
 def fn_read1099margins(one$,two$,three$,four$)
 fnend
