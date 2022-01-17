@@ -1,11 +1,11 @@
-! Replace S:\Core\programs\1099.br
+! Replace S:\Core\Print\1099-NEC.br
 ! library for all 1099 forms
 
 
 ! r: testing zone
 	fn_setup
 
-	if fnAsk1099Info (seltpN,typeN,minAmt,beg_date,end_date) then
+	if fn1099NecAsk (seltpN,typeN,minAmt,beg_date,end_date) then
 		debug=1
 		fn_1099testPrint
 	end if
@@ -65,9 +65,9 @@ def fn_setup
 	end if
 fnend
 
-def library fnAsk1099Info(&seltpN,&typeN,&minAmt,&beg_date,&end_date)
+def library fn1099NecAsk(&seltpN,&typeN,&minAmt,&beg_date,&end_date)
 	if ~setup then fn_setup
-	fnAsk1099Info=fn_ask1099Info(seltpN,typeN,minAmt,beg_date,end_date)
+	fn1099NecAsk=fn_ask1099Info(seltpN,typeN,minAmt,beg_date,end_date)
 fnend
 def fn_ask1099Info(&seltpN,&typeN,&minAmt,&beg_date,&end_date; ___, _
 	returnN,rc,lc,mylen,mypos,mylen,resc_taxYear,respc_deduction,respc_minAmt,respc_phone, _
@@ -266,11 +266,9 @@ fnend
 		defaultMargin$(3)=        '180'    	! '180' ! form 3 top margin
 		defaultMargin$(4)=          '5'    	!   '5' ! left
 	return ! /r
-def fn_read1099margins(one$,two$,three$,four$)
-fnend
-def library fn1099print(vn$*8,nam$*30,mat empAddr$,ss$*11,mat box)
+def library fn1099NecPrint(vn$*8,nam$*30,mat empAddr$,ss$*11,mat box)
 	if ~setup then fn_setup
-	fn1099print=fn_1099print(vn$,nam$,mat empAddr$,ss$,mat box)
+	fn1099NecPrint=fn_1099print(vn$,nam$,mat empAddr$,ss$,mat box)
 fnend
 def fn_1099print(vn$*8,nam$*30,mat empAddr$,ss$*11,mat box; ___, _
 		lineN)
@@ -453,9 +451,9 @@ fnend
 		fn_line=lineXy(lineNumber)+yOffset
 	fnend
 
-def library fn1099print_close
+def library fn1099NecPrintClose
 	if ~setup then fn_setup
-	fn1099print_close=fn_1099print_close
+	fn1099NecPrintClose=fn_1099print_close
 fnend
 def fn_1099print_close
 		if ten99Export$='True' then
