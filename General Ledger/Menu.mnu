@@ -65,6 +65,7 @@ Annually
 >Close Books at Year End                            ^ [cursystem]\*
 >Clear Accumulated Transactions                     ^ acsGL\acGLClr
 >Enter Budget Amounts                               ^ acsGL\BudInpt
+>Print 1099-Misc Forms                              ^ [cursystem]\*   
 >Print 1099-NEC Forms                               ^ [cursystem]\*   
 >Create Electronic 1099s                            ^ [cursystem]\*
 ! no longer necessary, unless files get too large >Dump Old Payee Transactions                ^ acsGL\*
