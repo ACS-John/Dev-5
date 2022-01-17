@@ -555,17 +555,29 @@ fnend
 		library 'S:\Core\Print\w2.br': fn_FormCopyAwithBackgroundWarn
 	fn_FormCopyAwithBackgroundWarn=fn_FormCopyAwithBackgroundWarn
 	fnend
-	def library fn1099print(vn$*8,nam$*30,mat ad$,ss$*11,mat box)
-		library 'S:\Core\Programs\1099.br': fn1099print
-		fn1099print=fn1099print(vn$,nam$,mat ad$,ss$,mat box)
+	def library fn1099NecPrint(vn$*8,nam$*30,mat ad$,ss$*11,mat box)
+		library 'S:\Core\Print\1099-NEC.br': fn1099NecPrint
+		fn1099NecPrint=fn1099NecPrint(vn$,nam$,mat ad$,ss$,mat box)
 	fnend
-	def library fn1099print_close
-		library 'S:\Core\Programs\1099.br': fn1099print_close
-		fn1099print_close=fn1099print_close
+	def library fn1099NecPrintClose
+		library 'S:\Core\Print\1099-NEC.br': fn1099NecPrintClose
+		fn1099NecPrintClose=fn1099NecPrintClose
 	fnend
-	def library fnAsk1099Info(&seltp,&type,&min1,&beg_date,&end_date)
-		library 'S:\Core\Programs\1099.br': fnAsk1099Info
-		fnAsk1099Info=fnAsk1099Info(seltp,type,min1,beg_date,end_date)
+	def library fn1099NecAsk(&seltp,&type,&min1,&beg_date,&end_date)
+		library 'S:\Core\Print\1099-NEC.br': fn1099NecAsk
+		fn1099NecAsk=fn1099NecAsk(seltp,type,min1,beg_date,end_date)
+	fnend
+	def library fn1099MiscPrint(vn$*8,nam$*30,mat ad$,ss$*11,mat box)
+		library 'S:\Core\Print\1099-Misc.br': fn1099MiscPrint
+		fn1099MiscPrint=fn1099MiscPrint(vn$,nam$,mat ad$,ss$,mat box)
+	fnend
+	def library fn1099MiscPrintClose
+		library 'S:\Core\Print\1099-Misc.br': fn1099MiscPrintClose
+		fn1099MiscPrintClose=fn1099MiscPrintClose
+	fnend
+	def library fn1099MiscAsk(&seltp,&type,&min1,&beg_date,&end_date)
+		library 'S:\Core\Print\1099-Misc.br': fn1099MiscAsk
+		fn1099MiscAsk=fn1099MiscAsk(seltp,type,min1,beg_date,end_date)
 	fnend
 ! /r
 ! r: Favorites

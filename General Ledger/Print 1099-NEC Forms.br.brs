@@ -1,7 +1,7 @@
 autoLibrary
 fnTop(program$)
 on error goto Ertn
-if fnAsk1099Info(seltp,unused_type,minamt,beg_date,end_date) then
+if fn1099NecAsk(seltp,unused_type,minamt,beg_date,end_date) then
 	open #hPayee=fnH: 'Name=[Q]\GLmstr\PayMstr.h[cno],KFName=[Q]\GLmstr\PayIdx2.h[cno],Shr',internal,outIn,keyed
 	open #hTrans=fnH: 'Name=[Q]\GLmstr\GLTR1099.h[cno],KFName=[Q]\GLmstr\gltridx1.h[cno],Shr',internal,outIn,keyed
 	do
@@ -19,7 +19,7 @@ if fnAsk1099Info(seltp,unused_type,minamt,beg_date,end_date) then
 					mat box=(0)
 					if typ<1 or typ>8 then typ=1
 					box(1)=ytdp ! box(typ)=ytdp  ! set to force box 1 (non employee compensation) for 2021 1099-NEC   (john working with Zaleski 1/16/22)
-					fn1099print(vn$,nam$,mat ad$,ss$,mat box)
+					fn1099NecPrint(vn$,nam$,mat ad$,ss$,mat box)
 				end if
 			end if
 		end if
@@ -27,7 +27,7 @@ if fnAsk1099Info(seltp,unused_type,minamt,beg_date,end_date) then
 	EoPayee: !
 	close #hPayee: ioerr ignore
 	close #hTrans: ioerr ignore
-	fn1099print_close
+	fn1099NecPrintClose
 end if
 Xit: fnXit
 def fn_YearToDapPay(hTrans,key$; beg_date,end_date,___,returnN)

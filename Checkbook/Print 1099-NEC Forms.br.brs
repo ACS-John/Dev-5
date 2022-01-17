@@ -4,7 +4,7 @@
 	on error goto Ertn
 ! /r
 ! r: body of program
-	if fnAsk1099Info(seltp,unused_type,minamt,beg_date,end_date) then
+	if fn1099NecAsk(seltp,unused_type,minamt,beg_date,end_date) then
 		open #payee=fnH: 'Name=[Q]\CLmstr\PayMstr.h[cno],KFName=[Q]\CLmstr\PayIdx2.h[cno],Shr',i,i,k
 		open #trmstr2=fnH: 'Name=[Q]\CLmstr\TrMstr.h[cno],KFName=[Q]\CLmstr\TrIdx2.h[cno],Shr',i,i,k
 		do
@@ -20,14 +20,14 @@
 					mat box=(0)
 					if typ<1 or typ>8 then typ=1
 					box(typ)=ytdp
-					fn1099print(vn$,nam$,mat ad$,ss$,mat box)
+					fn1099NecPrint(vn$,nam$,mat ad$,ss$,mat box)
 				end if
 			end if
 		loop
 		FINIS: !
 		close #payee: ioerr ignore
 		close #trmstr2: ioerr ignore
-		fn1099print_close  !  if lz1$='E' then close #5: else    gosub RELEASE_PRINT
+		fn1099NecPrintClose  !  if lz1$='E' then close #5: else    gosub RELEASE_PRINT
 	end if
 goto Xit ! /r
 Xit: fnXit

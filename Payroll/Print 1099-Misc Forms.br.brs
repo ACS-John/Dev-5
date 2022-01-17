@@ -2,7 +2,7 @@
 autoLibrary
 on error goto Ertn
 fnTop(program$)
-if ~fn1099NecAsk(seltp,type,min1,beg_date,end_date) then goto Xit
+if ~fn1099MiscAsk(seltp,type,min1,beg_date,end_date) then goto Xit
 open #hEmployee=fnH: 'Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr',i,i,k
 open #hChecks=fnH: 'Name=[Q]\PRmstr\payrollchecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno]',internal,outIn,keyed
 do ! r: main loop
@@ -29,7 +29,7 @@ do ! r: main loop
 	loop
 	CALL_1099_LIBRARY: !
 	if box(type)=>min1 then
-		fn1099NecPrint(cnvrt$('n 8',eno),nam$(1:18),mat empAddr$,trim$(ss$),mat box)
+		fn1099MiscPrint(cnvrt$('n 8',eno),nam$(1:18),mat empAddr$,trim$(ss$),mat box)
 	end if
 loop
 ! /r
@@ -40,7 +40,7 @@ FINIS: ! r:
 	vn$=nam$=ss$=''
 	mat empAddr$=('')
 	mat box=(0)
-	fn1099NecPrintClose
+	fn1099MiscPrintClose
 goto Xit ! /r
 Xit: fnXit
 include: ertn
