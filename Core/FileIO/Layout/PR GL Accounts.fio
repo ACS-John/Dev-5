@@ -1,5 +1,5 @@
-[Q]\UBmstr\GLmstr.h[cno]  ,  gl_  , 0
-[Q]\UBmstr\GLIndex.h[cno] ,  acct
+[Q]\PRmstr\GLmstr.h[cno]  ,  gl_  , 0
+[Q]\PRmstr\GLIndex.h[cno] ,  acct
 
 recl=62
 ===================================================

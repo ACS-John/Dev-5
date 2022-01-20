@@ -56,7 +56,7 @@ def fn_setup
 		optCopy$(4)='C - For Payer'
 		optCopy$(5)='2 - To be filed with recipient;;s state income tax return, when required'
 	dim copyCurrent$*72
-	!
+
 	dim copyFile$(5)*128,ssnMask(5)
 	taxYear$=date$(days(date$)-120,'CCYY')
 	copyFile$(1)='S:\Core\pdf\'&taxYear$&'\1099-Misc\Copy A.pdf' : ssnMask(1)=0
