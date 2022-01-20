@@ -54,7 +54,7 @@ Screen2: ! r:
 	fnCmdKey('&Cancel',5,0,1,'Returns to menu without saving any changes on the screen.')
 	ckey=fnAcs(mat resp$)
 	if ckey<>5 then
-		if ckey=3 then fnHamsterFio('UB Chart of Accounts') : fnchain(program$)
+		if ckey=3 then fnHamsterFio('UB GL Accounts') : fnchain(program$)
 		for j=1 to 30
 			gln$(j)=fnagl$(resp$(j))
 		next j
@@ -328,7 +328,7 @@ MaintainGlInfo: ! r:
 	fnCmdKey('&Cancel',5,0,1,'Return to main screen without saving any changes.')
 	ckey=fnAcs(mat resp$)
 	if ckey=5 then goto ScreenGlInfo
-	if ckey=3 then fnHamsterFio('UB Chart of Accounts') : fnchain(program$)
+	if ckey=3 then fnHamsterFio('UB GL Accounts') : fnchain(program$)
 	service$=resp$(1)
 	ratecode=val(resp$(2))
 	gl$(1)=fnagl$(resp$(3))

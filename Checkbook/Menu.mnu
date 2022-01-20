@@ -23,7 +23,7 @@ Payee                                     ^ [cursystem]\*
 >Check Listing by Payee                   ^ [cursystem]\*
 >Payee Type                               ^ HamsterFio:Payee Type
 General Ledger
->Chart of Accounts                        ^ HamsterFio:*
+>Chart of Accounts                        ^ HamsterFio:CL GL Accounts
 >General Ledger Control                   ^ [cursystem]\*
 ! >General Ledger Control                   ^ HamsterFio:CL GL Control    (close but inferior to old design still)
 Other Files

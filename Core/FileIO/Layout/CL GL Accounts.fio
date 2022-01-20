@@ -1,0 +1,13 @@
+[Q]\CLmstr\GLmstr.h[cno]  ,  gl_  , 0
+[Q]\CLmstr\GLIndex.h[cno] ,  acct
+
+recl=62
+===================================================
+acct   	,GL Account                 	, C  12   ,   , ! glaccount
+desc  	,Description               	, c  50   ,   , !     
+
+
+
+
+
+
