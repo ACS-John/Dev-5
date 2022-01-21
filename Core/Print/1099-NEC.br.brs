@@ -20,17 +20,17 @@ def fn_1099testPrint
 	testAddr$(2)='Recipient Addr part 2'
 	testAddr$(3)='Recipient City State and Zip'
 	dim testBox(10)
-	! zz,zzz,zzz
-	testBox(1 )=90000100
-	testBox(2 )=90000200
-	testBox(3 )=90000300
-	testBox(4 )=90000400
-	testBox(5 )=90000500
-	testBox(6 )=90000600
-	testBox(7 )=90000700
-	testBox(8 )=90000800
-	testBox(9 )=90000900
-	testBox(10)=90001000
+	!            zzzzzzzzzz
+	testBox(1 )=9000000100
+	testBox(2 )=9000000200
+	testBox(3 )=9000000300
+	testBox(4 )=9000000400
+	testBox(5 )=9000000500
+	testBox(6 )=9000000600
+	testBox(7 )=9000000700
+	testBox(8 )=9000000800
+	testBox(9 )=9000000900
+	testBox(10)=9000001000
 	! /r
 	disableCopyAWarning=1
 	fn_1099print('account1','Recipient One'  ,mat testAddr$,'111-11-1111',mat testBox)
@@ -401,20 +401,20 @@ def fn_1099print(vn$*8,nam$*30,mat empAddr$,ss$*11,mat box; ___, _
 				fnpa_txt(vn$,column1,fn_line(13))
 			!/r
 			! r: right side
-				fnpa_txt(cnvrt$('pic(zz,zzz,zzz.zz',box(1)  ),column3  ,fn_line(5) )
+				fnpa_txt(cnvrt$('pic(zzzzzzzzzz.zz',box(1)  ),column3  ,fn_line(5) )
 				if box(2)>5000 then 
 					fnpa_txt('X'                                 ,column3+24,fn_line(6))
 				end if
-				fnpa_txt(cnvrt$('pic(zz,zzz,zzz.zz',box(3)  ),column3   ,fn_line(8) )
-				fnpa_txt(cnvrt$('pic(zz,zzz,zzz.zz',box(4)  ),column3   ,fn_line(10)) ! fed withheld
+				fnpa_txt(cnvrt$('pic(zzzzzzzzzz.zz',box(3)  ),column3   ,fn_line(8) )
+				fnpa_txt(cnvrt$('pic(zzzzzzzzzz.zz',box(4)  ),column3   ,fn_line(10)) ! fed withheld
 				
-				fnpa_txt(cnvrt$('pic(zz,zzz,zzz.zz',box(5)  ),column2   ,fn_line(12))
-				fnpa_txt(cnvrt$('pic(zz,zzz,zzz.zz',box(6)  ),column3   ,fn_line(12))
-				fnpa_txt(cnvrt$('pic(zz,zzz,zzz.zz',box(7)  ),column4   ,fn_line(12))
+				fnpa_txt(cnvrt$('pic(zzzzzzzzzz.zz',box(5)  ),column2   ,fn_line(12))
+				fnpa_txt(cnvrt$('pic(zzzzzzzzzz.zz',box(6)  ),column3   ,fn_line(12))
+				fnpa_txt(cnvrt$('pic(zzzzzzzzzz.zz',box(7)  ),column4   ,fn_line(12))
 				
-				fnpa_txt(cnvrt$('pic(zz,zzz,zzz.zz',box(8)  ),column2   ,fn_line(14))
-				fnpa_txt(cnvrt$('pic(zz,zzz,zzz.zz',box(9)  ),column3   ,fn_line(14))
-				fnpa_txt(cnvrt$('pic(zz,zzz,zzz.zz',box(10) ),column4   ,fn_line(14))
+				fnpa_txt(cnvrt$('pic(zzzzzzzzzz.zz',box(8)  ),column2   ,fn_line(14))
+				fnpa_txt(cnvrt$('pic(zzzzzzzzzz.zz',box(9)  ),column3   ,fn_line(14))
+				fnpa_txt(cnvrt$('pic(zzzzzzzzzz.zz',box(10) ),column4   ,fn_line(14))
 			! /r
 		! /r
 

@@ -33,9 +33,9 @@ fnreg_read('Post to Checkbook - Populate Checkbook Payee from Payroll Employee',
 	dim fullname$(20)*20
 	dim abrevName$(20)*8
 	dim ml$(2)*128 ! temp variable for messagebox message lines
-	dim dedfica(20),dedSt(20),dedUc(20),gl$(20)*12
+	dim dedfica(20),dedSt(20),dedUc(20)
 	dim dtr$(5)*35,key$*21
-	dim dept(6),bankgl$*12,gl$*12,bn$*30,text$*90,v(7,8),deptsum(6)
+	dim dept(6),bankgl$*12,bn$*30,text$*90,v(7,8),deptsum(6)
 	dim hnames$(20)*8
 	dim eng$*128,wording$(27)*9,amount(11)
 
@@ -102,6 +102,7 @@ fnreg_read('Post to Checkbook - Populate Checkbook Payee from Payroll Employee',
 	fncreg_read('CL Bank Code',bankcode$) : bankcode=val(bankcode$) : if bankcode=0 then bankcode=1
 	fncreg_read('Comp Time Code',compcode$)
 	fnDedNames(mat fullname$,mat abrevName$,mat dedcode,mat calcode,mat dedfed,mat dedfica,mat dedSt,mat dedUc,mat gl$)
+	dim gln$(20)*12
 	open #20: 'Name=[Q]\PRmstr\Company.h[cno],Shr',internal,input
 	read #20,using 'form pos 1,x 120,pos 150,10*C 8,pos 437,15*C 12,N 1': mat d$,mat gln$,gl_installed
 	close #20:
@@ -396,6 +397,7 @@ CheckPrintTop: ! r:
 	ttc(32)
 	mat dept=(0)
 	if gl_installed=1 then ! r: update GL's GLBREC
+		dim gl$*12
 		read #h_gl_glbrec,using 'form pos 1,c 12',key=bankgl$&lpad$(rtrm$(str$(check_number)),12): gl$ nokey L3300
 	else
 		goto L3320
@@ -613,10 +615,10 @@ def fn_build_check_record
 		 if j=3 then sd5$='FICA WH' : gl$=gln$(2) : fica0=val(ded$(j))
 		 if j=4 then sd5$='Medicare' : gl$=gln$(2) : medi0=val(ded$(j)): goto L4990
 		 if j=5 then sd5$='State WH' : gl$=gln$(3)
-		 if j>5 and j<26 then sd5$=abrevName$(j-5) : gl$=gl$(j-5)
+		 if j>5 and j<26 then sd5$=abrevName$(j-5) : gl$=gln$(j-5)
 		 if j=26 then gl$=gln$(1): sd5$='eic' : goto L4990 ! use federal
 		 if j=27 then goto L4990 ! skip tips i think
-		 ! If J=28 Then gL$=GLN$(1): sD5$='Meals' : Goto 4890 ! use wages
+		 ! If J=28 Then gL$=gln$(1): sD5$='Meals' : Goto 4890 ! use wages
 		 L4990: !
 		 cd1=1
 		 read #h_clGl,using F_CL_GLMSTR,key=rpad$(gl$,kln(h_clGl)),release: de$ nokey InvalidGlNumber
