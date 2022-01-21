@@ -11,9 +11,7 @@ def library fnDedNames(mat fullname$; mat abrevname$,mat dedcode,mat calcode,mat
 	RESTART: !
 	if ~setupDedNames then
 		setupDedNames=1
-		library 'S:\Core\Library': fnH
-		library 'S:\Core\Library': fnArrayWasPassedC
-		library 'S:\Core\Library': fnArrayWasPassedN
+		autoLibrary
 		dim cache_fullname$(20)*20
 		dim cache_abrevname$(20)*8
 		dim cache_dedcode(20)
@@ -24,25 +22,25 @@ def library fnDedNames(mat fullname$; mat abrevname$,mat dedcode,mat calcode,mat
 		dim cache_deduc(20)
 		dim cache_gl$(20)
 
-		mat cache_fullname$  =('')
-		mat cache_abrevname$ =('')
-		mat cache_dedcode    =(0)
-		mat cache_calcode    =(0)
-		mat cache_dedfed     =(0)
-		mat cache_dedfica    =(0)
-		mat cache_dedst      =(0)
-		mat cache_deduc      =(0)
-		mat cache_deduc      =(0)
-		mat cache_gl$        =('')
+		mat cache_fullname$  	=('')
+		mat cache_abrevname$ 	=('')
+		mat cache_dedcode    	=(0)
+		mat cache_calcode    	=(0)
+		mat cache_dedfed     	=(0)
+		mat cache_dedfica    	=(0)
+		mat cache_dedst      	=(0)
+		mat cache_deduc      	=(0)
+		mat cache_deduc      	=(0)
+		mat cache_gl$        	=('')
 
-		if exists("[Q]\PRmstr\DedNames.h[cno]") then 
-			open #hdednames=fnH: "Name=[Q]\PRmstr\DedNames.h[cno]",i,i,r 
+		if exists("[Q]\PRmstr\DedNames.h[cno]") then
+			open #hdednames=fnH: "Name=[Q]\PRmstr\DedNames.h[cno]",i,i,r
 			read #hdednames,using fDedNames,rec=1: mat cache_fullname$,mat cache_abrevname$,mat cache_dedcode,mat cache_calcode,mat cache_dedfed,mat cache_dedfica,mat cache_dedst,mat cache_deduc,mat cache_gl$
 			fDedNames: form pos 1,20*C 20,20*C 8,120*N 1,20*C 12
 		else
-			open #hdednames=fnH: "Name=[Q]\PRmstr\DedNames.h[cno],RecL=920,use",i,outi,r 
+			open #hdednames=fnH: "Name=[Q]\PRmstr\DedNames.h[cno],RecL=920,use",i,outi,r
 			write #hdednames,using fDedNames: mat cache_fullname$,mat cache_abrevname$,mat cache_dedcode,mat cache_calcode,mat cache_dedfed,mat cache_dedfica,mat cache_dedst,mat cache_deduc,mat cache_gl$
-		end if 
+		end if
 		close #hdednames:
 	end if
 
@@ -58,7 +56,7 @@ def library fnDedNames(mat fullname$; mat abrevname$,mat dedcode,mat calcode,mat
 	for fullnameItem=1 to udim(mat fullname$)
 		fullname$(fullnameItem)=cache_fullname$(fullnameItem) soflow ignore
 	nex fullnameItem
-	
+
 	! on error goto dnFINIS !  assumes that the erroring one and all further paramters were not passed
 	if fnArrayWasPassedC(mat abrevname$) then
 		mat abrevname$(udim(mat cache_abrevname$))
