@@ -181,7 +181,7 @@ PAGE2: ! r:
 	fnChk(lc+=1,mypos,'Utilize Sub Account Number Field',right,frame)
 	if xd(2)=1 then resp$(2)='True' else resp$(2)='False'
 	fnLbl(lc+=1,1,'Last Balance Sheet Account Number:',mylen,right,0,frame)
-	fnqgl(lc,mypos,frame,2)
+	fnQgl(lc,mypos,frame,2)
 	resp$(3)=fnrgl$(lastact$)
 	fnFra(11,1,2,framewidth,'Accounts Receivable')
 	frame=fc+=1 : lc=0
@@ -190,23 +190,23 @@ PAGE2: ! r:
 	fnFra(15,1,5,framewidth,'Payroll')
 	frame=fc+=1 : lc=0 : mylen=32 : mypos=mylen+2
 	fnLbl(lc+=1,1,'FICA Withholding GL Account:',mylen,right,0,frame)
-	fnqgl(lc,mypos,frame,2)
+	fnQgl(lc,mypos,frame,2)
 	resp$(5)=cnvrt$('pic(zz#)',prgl(1,1))&cnvrt$('pic(zzzzz#)',prgl(1,2))&cnvrt$('pic(zz#)',prgl(1,3))
 	resp$(5)=fnrgl$(resp$(5))
 	fnLbl(lc+=1,1,'Federal Withholding GL Account:',mylen,right,0,frame)
-	fnqgl(lc,mypos,frame,2)
+	fnQgl(lc,mypos,frame,2)
 	resp$(6)=cnvrt$('pic(zz#)',prgl(2,1))&cnvrt$('pic(zzzzz#)',prgl(2,2))&cnvrt$('pic(zz#)',prgl(2,3))
 	resp$(6)=fnrgl$(resp$(6))
 	fnLbl(lc+=1,1,'State Withholding GL Account:',mylen,right,0,frame)
-	fnqgl(lc,mypos,frame,2)
+	fnQgl(lc,mypos,frame,2)
 	resp$(7)=cnvrt$('pic(zz#)',prgl(3,1))&cnvrt$('pic(zzzzz#)',prgl(3,2))&cnvrt$('pic(zz#)',prgl(3,3))
 	resp$(7)=fnrgl$(resp$(7))
 	fnLbl(lc+=1,1,'Local Withholding GL Account:',mylen,right,0,frame)
-	fnqgl(lc,mypos,frame,2)
+	fnQgl(lc,mypos,frame,2)
 	resp$(8)=cnvrt$('pic(zz#)',prgl(4,1))&cnvrt$('pic(zzzzz#)',prgl(4,2))&cnvrt$('pic(zz#)',prgl(4,3))
 	resp$(8)=fnrgl$(resp$(8))
 	fnLbl(lc+=1,1,'Earned Income Credit GL Account:',mylen,right,0,frame)
-	fnqgl(lc,mypos,frame,2)
+	fnQgl(lc,mypos,frame,2)
 	resp$(9)=cnvrt$('pic(zz#)',prgl(5,1))&cnvrt$('pic(zzzzz#)',prgl(5,2))&cnvrt$('pic(zz#)',prgl(5,3))
 	resp$(9)=fnrgl$(resp$(9))
 return ! /r
@@ -275,7 +275,7 @@ PAGE4: ! r:
 		rc+=1 : if dedst(j)=1 then resp$(rc)='True' else resp$(rc)='False'
 		fnChk(j+lc,55,'',right)
 		rc+=1 : if deduc(j)=1 then resp$(rc)='True' else resp$(rc)='False'
-		fnqgl(lc+j,62,0,2)
+		fnQgl(lc+j,62,0,2)
 		resp$(rc+=1)=fnrgl$(miscgl$(j))
 	next j
 return ! /r

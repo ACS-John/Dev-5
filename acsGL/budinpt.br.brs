@@ -50,7 +50,7 @@ ENTER_BUDGET: !
 	k$="": read #1,using L440: k$ ioerr L450 eof L450 ! try to read next account
 L440: form pos 1,c 12
 L450: fnLbl(1,1," General Ledger Number:",mylen,right)
-	fnqgl(1,mypos,0,2)
+	fnQgl(1,mypos,0,2)
 	resp$(1)=fnrgl$(k$)
 	fnLbl(2,1," Budget Amount:",mylen,right)
 	fnTxt(2,mypos,12,0,1,'10',0,"Enter the total budget amount for this account.  Use negative amounts on revenues (any negative balance accounts).")

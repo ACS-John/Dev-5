@@ -30,10 +30,10 @@ Screen1: ! r:
 	resp$(rc_subtotalFund=rc+=1)='True'
 	lc+=1
 	fnLbl(lc+=1,1,"Starting Account:",mylen,1)
-	fnqgl(lc,mypos,0,1)
+	fnQgl(lc,mypos,0,1)
 	resp$(rc_acctStart=rc+=1)="[All]"
 	fnLbl(lc+=1,1,"Ending Account:",mylen,1)
-	fnqgl(lc,mypos,0,1)
+	fnQgl(lc,mypos,0,1)
 	resp$(rc_acctEnd=rc+=1)="[All]"
 	! fnCmdSet(3)
 		fnCmdKey("&Print with Details",1,1)

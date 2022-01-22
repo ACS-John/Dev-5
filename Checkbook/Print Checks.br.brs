@@ -449,7 +449,7 @@ def fn_scr_check_entry
 	fnLbl(1,41,"Amount             Description",12,0,0,2)
 	fnLbl(1,56,"Description",30,0,0,2)
 	for j=1 to 10
-		fnqgl(j+1,1,2,2)
+		fnQgl(j+1,1,2,2)
 		resp$(respc+=1)=fnrgl$(resp$(respc))
 		!
 		fnTxt(j+1,41,12,0,1,"currency",0,"",2)

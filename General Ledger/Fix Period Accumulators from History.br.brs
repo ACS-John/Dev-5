@@ -140,14 +140,14 @@ def fn_screen_1(nap,mat period_date_start,mat prior_period_date_start)
 		fnLbl(1,col3_pos,'Last Retained Earnings Account(s)')
 		for fund_item=1 to udim(mat fund_list)
 			fnLbl(myline+=1,col3_pos,"Fund "&str$(fund_list(fund_item))&":",9,1)
-			fnqgl(myline,col4_pos)
+			fnQgl(myline,col4_pos)
 			respc+=1
 			fncreg_read("last retained earnings account - fund "&str$(fund_list(fund_item)),resp$(respc)) : resp$(respc)=fnrgl$(resp$(respc))
 		next fund_item
 	else
 		col4_pos=col3_pos+32
 		fnLbl(1,col3_pos,'Last Retained Earnings Account:',31,1)
-		fnqgl(myline,col4_pos)
+		fnQgl(myline,col4_pos)
 		respc+=1
 		fncreg_read("last retained earnings account - no fund ",resp$(respc)) : resp$(respc)=fnrgl$(resp$(respc))
 	end if
@@ -156,7 +156,7 @@ def fn_screen_1(nap,mat period_date_start,mat prior_period_date_start)
 		myline+=1
 		col4_pos=col3_pos+32
 		fnLbl(myline+=1,col3_pos,'Debug Account:',31,1)
-		fnqgl(myline,col4_pos)
+		fnQgl(myline,col4_pos)
 		resp_debugAcct=respc+=1
 		dim debugAcct$*128
 		fncreg_read("debug account",debugAcct$)

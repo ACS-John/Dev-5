@@ -36,7 +36,7 @@ BANK_STMT_INFO: !
 	respc=0
 	mylen=30 : mypos=mylen+2
 	fnLbl(1,1,"Bank Account:",mylen,1)
-	fnqgl(1,mypos,0,2)
+	fnQgl(1,mypos,0,2)
 	resp$(respc+=1)=fnrgl$(wbc$)
 	fnLbl(3,1,"Statement Date:",mylen,1)
 	fnTxt(3,mypos,10,0,1,"3",0,"We suggest you always use the month end date.")

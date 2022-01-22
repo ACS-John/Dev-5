@@ -2078,7 +2078,7 @@ def fn_get_flexhandle(; forceclose)
 	fn_get_flexhandle=118
 fnend
 
-def library fnqgl(myline,mypos; qglcontainer,add_all_or_blank,forceGLsysIfPossible,qgllength,qgltabcon,hAccts)
+def library fnQgl(myline,mypos; qglcontainer,add_all_or_blank,forceGLsysIfPossible,qgllength,qgltabcon,hAccts,___,qgl_cursys$)
 	if ~setup then fn_setup
 	if qgllength=0 then qgllength=35
 
@@ -2087,12 +2087,12 @@ def library fnqgl(myline,mypos; qglcontainer,add_all_or_blank,forceGLsysIfPossib
 	! this function has an integrated fnComboA - similar to the one above
 
 	dim qglopt$*60
-	dim glmstr_form$*80
+	
 	dim qgloption$(1)*255
 
 	dim qglsetupkeycurrent$*128
 	dim qglsetupkeyprior$*128
-! r: set qgl_cursys$ (for fnqgl purposes only)
+	! r: set qgl_cursys$ (for fnQgl purposes only)
 	if forceGLsysIfPossible and exists('[Q]\GLmstr\Company.h[cno]') then
 		qgl_cursys$='GL'
 	else if env$('CurSys')='UB' and exists('[Q]\GLmstr\Company.h[cno]') then
@@ -2114,10 +2114,10 @@ def library fnqgl(myline,mypos; qglcontainer,add_all_or_blank,forceGLsysIfPossib
 	else
 		qgl_cursys$='GL'
 	end if
-! /r
+	! /r
 	if setupqgl$<>qgl_cursys$ then ! r:
 		setupqgl$=qgl_cursys$
-		open #company=fnH: 'Name=[Q]\'&qgl_cursys$&'mstr\Company.h[cno],Shr',internal,input ioerr CLOSECOMPANY
+		open #company=fnH: 'Name=[Q]\'&qgl_cursys$&'mstr\Company.h[cno],Shr',internal,input ioerr Qgl_closeCompany
 		if qgl_cursys$='CL' then
 			read #company,using 'form pos 150,2*N 1': use_dept,use_sub ! read it from checkbook
 		else if qgl_cursys$='GL' then
@@ -2125,14 +2125,15 @@ def library fnqgl(myline,mypos; qglcontainer,add_all_or_blank,forceGLsysIfPossib
 		else if qgl_cursys$='PR' or qgl_cursys$='UB' or qgl_cursys$='CR' then
 			use_dept=1 : use_sub=1 ! default both to yes if from pr chart of accounts
 		end if
-CLOSECOMPANY: !
+		Qgl_closeCompany: !
 		close #company: ioerr ignore
+		dim glmstr_form$*128
 		if use_dept<>0 and use_sub<>0 then glmstr_form$='form pos 1,C 12'
 		if use_dept =0 and use_sub<>0 then glmstr_form$='form pos 4,C 09'
 		if use_dept =0 and use_sub =0 then glmstr_form$='form pos 4,C 06'
 		if use_dept<>0 and use_sub =0 then glmstr_form$='form pos 1,C 09'
-! add description to the form
-		glmstr_form$=glmstr_form$&',pos 13,C 50'
+		! add description to the form
+		glmstr_form$&=',pos 13,C 50'
 	end if	! /r
 	qglsetupkeycurrent$='qglCursys='&qgl_cursys$&',add_all_or_blank='&str$(add_all_or_blank)
 	if qglsetupkeycurrent$=qglsetupkeyprior$ then
@@ -2186,6 +2187,123 @@ CLOSECOMPANY: !
 	fn_comboA(qgloptfile$,myline,mypos,mat qgloption$, 'Select from the Chart of Accounts ('&qgl_cursys$&').',qgllength,qglcontainer,qgltabcon,qglsetupkeycurrent$)
 	myline=mypos=con=0
 fnend
+def library fnRgl$*60(acctIn$; returnMaxLength,leaveDescFileOpen,forceGLsysIfPossible,___,desc$*50,return$*60,qgl_cursys$)
+	autoLibrary
+	! format the answer (resp$(x)) for fnQgl -
+	! acctIn$ should be formatted as though it were just read in and is ready
+	!    for a read Key=...   ie '  0   100  0'
+	! now also allowed '0   100  0  ')
+	if returnMaxLength=0 then returnMaxLength=35
+
+
+
+
+	! r: set qgl_cursys$ (for fnQgl purposes only)
+	if forceGLsysIfPossible and exists('[Q]\GLmstr\Company.h[cno]') then
+		qgl_cursys$='GL'
+	else if env$('CurSys')='UB' and exists('[Q]\GLmstr\Company.h[cno]') then
+		qgl_cursys$='GL'
+	else if env$('CurSys')='PR' then
+		if exists('[Q]\GLmstr\Company.h[cno]') then
+			qgl_cursys$='GL'
+		else if exists('[Q]\CLmstr\Company.h[cno]') then
+			qgl_cursys$='CL'
+		else
+			qgl_cursys$='PR'
+		end if
+	else if env$('CurSys')='CR' and exists('[Q]\GLmstr\Company.h[cno]') then
+		qgl_cursys$='GL'
+	else if env$('CurSys')='CR' and ~exists('[Q]\GLmstr\Company.h[cno]') then
+		qgl_cursys$='CR'
+	else if env$('CurSys')='CL' then
+		qgl_cursys$='CL'
+	else
+		qgl_cursys$='GL'
+	end if
+	! /r
+	if setupRgl$<>qgl_cursys$&env$('cno') then ! r:
+		setupRgl$=qgl_cursys$&env$('cno')
+		open #hCompany=fnH: 'Name=[Q]\'&qgl_cursys$&'mstr\Company.h[cno],Shr',internal,input ioerr Rgl_closeCompany
+		if qgl_cursys$='CL' then
+			read #hCompany,using 'form pos 150,2*N 1': useDept,useSub ! read it from checkbook
+		else if qgl_cursys$='GL' then
+			read #hCompany,using 'form pos 150,2*N 1': useDept,useSub ! read it from General Ledger
+		else if qgl_cursys$='PR' or qgl_cursys$='UB' or qgl_cursys$='CR' then
+			useDept=1 : useSub=1 ! default both to yes if from pr chart of accounts
+		end if
+		Rgl_closeCompany: !
+		close #hCompany: ioerr ignore
+	! 	setupRgl$=qgl_cursys$&env$('cno')
+	! 	fnGetUseDeptAndSub(useDept,useSub)
+	! 	hAcct=0
+	end if
+	! /r
+	
+	acctIn$=lpad$(rtrm$(acctIn$),12)
+
+	if ~hAcct then
+		open #hAcct=fnH: 'Name=[Q]\'&qgl_cursys$&'mstr\GLmstr.h[cno],KFName=[Q]\'&qgl_cursys$&'mstr\GLIndex.h[cno],Shr',i,i,k ioerr RglReadDescFinis
+	end if
+	! if env$('acsDeveloper')<>'' then desc$='(Desc Read Failed)'
+	read #hAcct,using 'form pos 13,C 50',key=acctIn$: desc$ ioerr ignore ! AcctNoKey
+	if ~leaveDescFileOpen then
+		close #hAcct:
+		hAcct=0
+	end if
+	RglReadDescFinis: !
+	
+	! reformat it from a read key= ready format to an input ready format
+	if useSub then
+		acctIn$(10:12)='-'&trim$(acctIn$(10:12))
+	else
+		acctIn$(10:12)=''
+	end if
+	acctIn$(4:9)=trim$(acctIn$(4:9))
+	if useDept then
+		acctIn$(1:3)=trim$(acctIn$(1:3))&'-'
+	else
+		acctIn$(1:3)=''
+	end if
+
+	
+	return$=rtrm$(rpad$(acctIn$,14)&desc$)(1:returnMaxLength)
+	
+	if trim$(return$)='0-0-0' or trim$(return$)='0-0' or trim$(return$)='0' or trim$(return$)='--' or trim$(return$)='-' then return$=''
+	fnRgl$=return$
+
+fnend
+def library fnAgl$*12(&x$; ___,return$*12,dash1,dash2,useDept,useSub)
+	! format the answer to fnQgl -
+	autoLibrary
+
+	if x$='[All]' or x$='' then
+		return$='  0     0  0'
+	else
+		fnGetUseDeptAndSub(useDept,useSub)
+		! strip off any description
+		x$=x$(1:14)
+		! find the position of the '-'s
+		dash1=pos(x$,'-')
+		dash2=pos(x$,'-',-1)
+		! reformat it into a read key= ready format
+		if dash1=0 and dash2=0 and len(x$)=12 then
+		! do nothing - it is already formatted properly
+		else if useDept<>0 and useSub<>0 then
+			x$=lpad$(trim$(x$(1:dash1-1)),3)&lpad$(trim$(x$(dash1+1:dash2-1)),6)&lpad$(trim$(x$(dash2+1:len(x$))),3)
+		else if useDept =0 and useSub<>0 then
+			x$='  0'&lpad$(trim$(x$(1:dash2-1)),6)&lpad$(trim$(x$(dash2+1:len(x$))),3)
+		else if useDept =0 and useSub =0 then
+			x$='  0'&lpad$(trim$(x$),6)&'  0'
+		else if useDept<>0 and useSub =0 then
+			x$=lpad$(trim$(x$(1:dash1-1)),3)&lpad$(trim$(x$(dash1+1:len(x$))),6)&'  0'
+		end if
+	
+			x$=lpad$(trim$(x$),12)
+			return$=x$(1:12)
+	end if
+	fnAgl$=return$
+fnend
+
 def fn_remove_crlf(&txt$)
 	lastx=x=0
 	do

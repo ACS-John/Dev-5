@@ -517,7 +517,7 @@ AllocationFm: ! r:
 	fnTxt(lc,mypos,8,0,right,'',disable)
 	resp$(3)=track$
 	fnLbl(lc+=1,1,'General Ledger Number:',mylen,right)
-	fnqgl(lc,mypos)
+	fnQgl(lc,mypos)
 	resp$(4)=fnrgl$(tragl$)
 	fnLbl(lc+=1,1,'Amount:',mylen,right)
 	fnTxt(lc,mypos,9,0,right,pointtwo$)

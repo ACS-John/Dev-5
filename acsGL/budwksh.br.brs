@@ -22,10 +22,10 @@ if fnprocess=1 then goto L440
 	fnTxt(lc,mypos,40)
 	resp$(1)=name$
 	fnLbl(lc+=1,1,'Starting Account:',mylen,1)
-	fnqgl(lc,mypos)
+	fnQgl(lc,mypos)
 	resp$(2)=fnrgl$(gln1$)
 	fnLbl(lc+=1,1,'Ending Account:',mylen,1)
-	fnqgl(lc,mypos)
+	fnQgl(lc,mypos)
 	resp$(3)=fnrgl$(gln2$)
 	fnChk(lc+=1,mypos,'Enter proposed budget amounts',1)
 	resp$(4)=pba$

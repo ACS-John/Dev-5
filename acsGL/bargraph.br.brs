@@ -36,7 +36,7 @@ SCR1: !
 	fnOpt(2,2,"Pull from Prior Year",0,1)
 	fnLbl(lc+=4,1,"Enter the Last Retained Earnings Account",width,0)
 	fnLbl(lc+=1,1,"or Equity Account:",width,0)
-	fnqgl(lc,mypos)
+	fnQgl(lc,mypos)
 	resp$(2)=""
 	fnCmdSet(2)
 	ckey=fnAcs(mat resp$)

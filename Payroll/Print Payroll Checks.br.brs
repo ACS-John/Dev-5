@@ -20,7 +20,7 @@ fnreg_read('Post to Checkbook - Populate Checkbook Payee from Payroll Employee',
 	dim tty(32)
 	dim mgl$(11)
 	dim ded$(29)
-	dim de$*30 ! description (from CL (for transaction allocations, i think)
+	
 	dim lcn$*8
 	dim tr(2)
 	dim tr$(5)*35
@@ -33,7 +33,7 @@ fnreg_read('Post to Checkbook - Populate Checkbook Payee from Payroll Employee',
 	dim fullname$(20)*20
 	dim abrevName$(20)*8
 	dim ml$(2)*128 ! temp variable for messagebox message lines
-	dim dedfica(20),dedSt(20),dedUc(20),gl$(20)*12
+	dim dedfica(20),dedSt(20),dedUc(20),dedGl$(20)*12
 	dim dtr$(5)*35,key$*21
 	dim dept(6),bankgl$*12,gl$*12,bn$*30,text$*90,v(7,8),deptsum(6)
 	dim hnames$(20)*8
@@ -101,7 +101,7 @@ fnreg_read('Post to Checkbook - Populate Checkbook Payee from Payroll Employee',
 	fncreg_read('Print Vacation and Sick Leave on Check',accr$)
 	fncreg_read('CL Bank Code',bankcode$) : bankcode=val(bankcode$) : if bankcode=0 then bankcode=1
 	fncreg_read('Comp Time Code',compcode$)
-	fnDedNames(mat fullname$,mat abrevName$,mat dedcode,mat calcode,mat dedfed,mat dedfica,mat dedSt,mat dedUc,mat gl$)
+	fnDedNames(mat fullname$,mat abrevName$,mat dedcode,mat calcode,mat dedfed,mat dedfica,mat dedSt,mat dedUc,mat dedGl$)
 	open #20: 'Name=[Q]\PRmstr\Company.h[cno],Shr',internal,input
 	read #20,using 'form pos 1,x 120,pos 150,10*C 8,pos 437,15*C 12,N 1': mat d$,mat gln$,gl_installed
 	close #20:
@@ -595,57 +595,61 @@ def fn_build_check_record
 	! WRITE ALLOCATIONS
 	if allign=1 then goto EoBuildCheckRecord
 	for j=1 to 29
-	 if val(ded$(j))=0 then goto L5230
-	 gl$=''
-	 on j goto L4840,L4910,L4910,L4910,L4910,L4910,L4910,L4910,L4910,L4910,L4910,L4910,L4910,L4910,L4910,L4910,L4910,L4910,L4910,L4910,L4910,L4910,L4910,L4910,L4910,L4910,L5220_Next_J1,L5220_Next_J1,BCR_GLN_VALIDATED none L5230
-
-	 L4840: !
-	 for j1=1 to tdepXcount
-		 if j<6 or j>25 then goto L4870 ! kj 91707
-		 if dedcode(j-5)=3 then goto L5230 ! kj 91707  don't write entries for benefits
-		 L4870: !
-		 alloc=tdep(j1,1)
-		 gl$=cnvrt$('N 3',tdep(j1,2))&cnvrt$('N 6',tdep(j1,3))&cnvrt$('N 3',tdep(j1,4))
-		 sd5$='Gross Pay'
-		 goto L4990
-		 L4910: !
-		 if j=2 then sd5$='Federal WH' : gl$=gln$(1)
-		 if j=3 then sd5$='FICA WH' : gl$=gln$(2) : fica0=val(ded$(j))
-		 if j=4 then sd5$='Medicare' : gl$=gln$(2) : medi0=val(ded$(j)): goto L4990
-		 if j=5 then sd5$='State WH' : gl$=gln$(3)
-		 if j>5 and j<26 then sd5$=abrevName$(j-5) : gl$=gl$(j-5)
-		 if j=26 then gl$=gln$(1): sd5$='eic' : goto L4990 ! use federal
-		 if j=27 then goto L4990 ! skip tips i think
-		 ! If J=28 Then gL$=GLN$(1): sD5$='Meals' : Goto 4890 ! use wages
-		 L4990: !
-		 cd1=1
-		 read #h_clGl,using F_CL_GLMSTR,key=rpad$(gl$,kln(h_clGl)),release: de$ nokey InvalidGlNumber
-		 F_CL_GLMSTR: form pos 13,c 30
-		 BCR_GLN_VALIDATED: !
-		 if j>1 then alloc=val(ded$(j))
-		 if j=29 then miscode=(alloc*100)+29 else miscode=j
-		 ! store # of deduction in the invoice date field;
-		 ! if weeks worked store weeks worked and code both
-		 if j>1 then alloc=-alloc
-		 if j<6 or j>25 then goto L5070 ! all tax w/h = negative
-		 if dedcode(j-5)=2 then alloc=-alloc ! reverse on additions to net
-		 L5070: !
-		 if j=30 then alloc=0 ! meals
-		 !       if env$('client')='Washington Parrish' and j=16 then alloc=0 ! don't allow tips to post on washington parrish
-		 if j=4 and ficam1=1 then alloc=alloc-medic3 ! prb 2012
-		 if j=3 and ficam1=1 then alloc=alloc-ficam3 ! prb 2012
-		 if alloc<>0 then  ! write non-zero allocations
-			 lr3=lrec(h_clTransAlloc)+1
-			 if j=3 then fica1=alloc : fica_rec=lr3
-			 if j=4 then medi1=alloc
-			 write #h_clTransAlloc,using F_ClTransAlloc,rec=lr3: bankcode,1,val(tr$(1)),gl$,alloc,de$(1:30),miscode,0
-			 F_ClTransAlloc:  form pos 1,n 2,n 1,g 8,c 12,pd 5.2,c 30,n 6,pd 3
-		 end if
-		 L5220_Next_J1: !
-	 if j=1 then next j1
-	 L5230: !
+		if val(ded$(j))=0 then goto L5230
+		gl$=''
+		on j goto L4840,L4910,L4910,L4910,L4910,L4910,L4910,L4910,L4910,L4910,L4910,L4910,L4910,L4910,L4910,L4910,L4910,L4910,L4910,L4910,L4910,L4910,L4910,L4910,L4910,L4910,L5220_Next_J1,L5220_Next_J1,BCR_GLN_VALIDATED none L5230
+	
+		L4840: !
+		for j1=1 to tdepXcount
+			if j<6 or j>25 then goto L4870 ! kj 91707
+			if dedcode(j-5)=3 then goto L5230 ! kj 91707  don't write entries for benefits
+			L4870: !
+			alloc=tdep(j1,1)
+			gl$=cnvrt$('N 3',tdep(j1,2))&cnvrt$('N 6',tdep(j1,3))&cnvrt$('N 3',tdep(j1,4))
+			sd5$='Gross Pay'
+			goto L4990
+			L4910: !
+			if j=2 then sd5$='Federal WH' : gl$=gln$(1)
+			if j=3 then sd5$='FICA WH' : gl$=gln$(2) : fica0=val(ded$(j))
+			if j=4 then sd5$='Medicare' : gl$=gln$(2) : medi0=val(ded$(j)): goto L4990
+			if j=5 then sd5$='State WH' : gl$=gln$(3)
+			if j>5 and j<26 then sd5$=abrevName$(j-5) : gl$=dedGl$(j-5)
+			if j=26 then gl$=gln$(1): sd5$='eic' : goto L4990 ! use federal
+			if j=27 then goto L4990 ! skip tips i think
+			! If J=28 Then gL$=GLN$(1): sD5$='Meals' : Goto 4890 ! use wages
+			L4990: !
+			cd1=1
+				! pr 'gl$="'&gl$&'"'
+				! pr 'fnCleanGl$="'&fnCleanGl$(gl$)&'"'
+				! pause
+			dim de$*30 ! description (from CL (for transaction allocations, i think)
+			read #h_clGl,using F_CL_GLMSTR,key=rpad$(gl$,kln(h_clGl)),release: de$ nokey InvalidGlNumber
+			F_CL_GLMSTR: form pos 13,c 30
+			BCR_GLN_VALIDATED: !
+			if j>1 then alloc=val(ded$(j))
+			if j=29 then miscode=(alloc*100)+29 else miscode=j
+			! store # of deduction in the invoice date field;
+			! if weeks worked store weeks worked and code both
+			if j>1 then alloc=-alloc
+			if j<6 or j>25 then goto L5070 ! all tax w/h = negative
+			if dedcode(j-5)=2 then alloc=-alloc ! reverse on additions to net
+			L5070: !
+			if j=30 then alloc=0 ! meals
+			!       if env$('client')='Washington Parrish' and j=16 then alloc=0 ! don't allow tips to post on washington parrish
+			if j=4 and ficam1=1 then alloc=alloc-medic3 ! prb 2012
+			if j=3 and ficam1=1 then alloc=alloc-ficam3 ! prb 2012
+			if alloc<>0 then  ! write non-zero allocations
+				lr3=lrec(h_clTransAlloc)+1
+				if j=3 then fica1=alloc : fica_rec=lr3
+				if j=4 then medi1=alloc
+				write #h_clTransAlloc,using F_ClTransAlloc,rec=lr3: bankcode,1,val(tr$(1)),gl$,alloc,de$(1:30),miscode,0
+				F_ClTransAlloc:  form pos 1,n 2,n 1,g 8,c 12,pd 5.2,c 30,n 6,pd 3
+			end if
+			L5220_Next_J1: !
+		if j=1 then next j1
+		L5230: !
 	next j
-	fn_mgl
+	fn_writeBenefitsAndFicaMatch
 	EoBuildCheckRecord: !
 fnend
 def fn_cknum(; returnN) ! check for duplicate check numbers
@@ -699,7 +703,9 @@ def fn_cknum(; returnN) ! check for duplicate check numbers
 	CnXit: !
 	fn_cknum=returnN
 fnend
-def fn_mgl ! WRITE BENEFITS & FICA MATCH
+def fn_writeBenefitsAndFicaMatch(; ___,j,j2,j4) ! WRITE BENEFITS & FICA MATCH (very local)
+	! updates local: cd1,tdep,fica2,sd5$,de$
+	! uses local: 
 	cd1=2
 	for j=1 to tdepXcount
 		mat mgl$=('            ')
@@ -707,22 +713,28 @@ def fn_mgl ! WRITE BENEFITS & FICA MATCH
 		L5790: form pos 4,11*c 12
 		L5800: !
 		for j2=6 to 16
-			if tdep(j,j2)=0 then goto L5980
-			if j2>6 then goto L5870
-			if ficam1=0 then goto L5980
-			sd5$=de$='FICA Match'
-			fica2+=tdep(j,j2)
-			j4=3
-			goto L5900
-			
-			L5870: !
-			if dedcode(j2-6)><3 then goto L5980
-			j4=j2-2
-			sd5$=de$=rtrm$(abrevName$(j4-4))&' Match'
+			if tdep(j,j2)=0 then 
+				goto L5980
+			else if j2>6 then 
+				if dedcode(j2-6)><3 then goto L5980
+				j4=j2-2
+				sd5$=de$=rtrm$(abrevName$(j4-4))&' Match'
+			else if ficam1=0 then 
+				goto L5980
+			else
+				sd5$=de$='FICA Match'
+				fica2+=tdep(j,j2)
+				j4=3
+				goto L5900
+			end if
+
 			
 			L5900: !
 			gl$=mgl$(j2-5)
-			if env$('client')='Crockett County' then fnCleanGl$(gl$)
+			! if env$('client')='Crockett County' then fnCleanGl$(gl$)
+			! pr 'gl$="'&gl$&'"'
+			! pr 'fnCleanGl$="'&fnCleanGl$(gl$)&'"'
+			! pause
 			read #h_clGl,using F_CL_GLMSTR,key=gl$,release: de$ nokey InvalidGlNumber
 
 			EXLNKD_L5920: !
@@ -1588,15 +1600,21 @@ InvalidGlNumber: ! r:
 	fnLbl(7,1,'The General Ledger Number is invalid.',40,0)
 	fnLbl(8,1,'Please select the correct one.',40,0)
 	fnLbl(3,1,'Correct General Ledger Number:',mylen,1)
-	fnqgl(3,mypos,0,2)
-	resp$(5)=fnrgl$(goodgl$)
+	fnQgl(3,mypos,0,2)
+	resp$(5)=fnRgl$(goodgl$)
 	fnCmdKey('&Next',1,1,0,'Continue with checkprinting.' )
 	fnCmdKey('E&xit',5,0,1,'Returns to menu')
 	ckey=fnAcs(mat resp$) ! bad general ledger numbers
 	if ckey=5 then goto Xit
-	gl$=fnagl$(resp$(5))
+	gl$=fnAgl$(resp$(5))
 	read #h_clGl,using F_CL_GLMSTR,key=gl$,release: de$ nokey InvalidGlNumber
-	on cd1 goto BCR_GLN_VALIDATED,EXLNKD_L5920 none BCR_GLN_VALIDATED
+	if cd1=1 then 
+		goto BCR_GLN_VALIDATED
+	else if cd1=2 then 
+		goto EXLNKD_L5920
+	else 
+		goto BCR_GLN_VALIDATED
+	end if
 ! /r
 
 def fn_getTestValues

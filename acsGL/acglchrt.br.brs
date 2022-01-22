@@ -23,10 +23,10 @@
 	fnOpt(2,3,"Print Account Numbers and Names only",0,1)
 	resp$(rc+=1)='True'
 	fnLbl(5,1,"Beginning General Ledger Number (blank for all):",mylen,right)
-	fnqgl(5,mypos,0,2)
+	fnQgl(5,mypos,0,2)
 	resp$(1)=""
 	fnLbl(6,1,"Ending General Ledger Number (blank for all):",mylen,right)
-	fnqgl(6,mypos,0,2)
+	fnQgl(6,mypos,0,2)
 	resp$(1)=""
 	fnCmdSet(2)
 	ckey=fnAcs(mat resp$)

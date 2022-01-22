@@ -173,7 +173,7 @@ LEFT_SIDE: !
 	mypos(1)=1: mypos (2)=50
 	for j=2 to 40 step 2
 		for x=1 to 2
-			fnqgl(j/2+1,mypos(x),0,2)
+			fnQgl(j/2+1,mypos(x),0,2)
 			if x =1 then resp$(resp+=1)=fnrgl$(gl$(j-1)) else resp$(resp+=1)=fnrgl$(gl$(j))
 		next x
 	next j
@@ -196,7 +196,7 @@ RIGHT_SIDE: !
 	fnLbl(1,35,"Right Side Of Ratio",30,0)
 	for j=2 to 40 step 2
 		for x=1 to 2
-			fnqgl(j/2+1,mypos(x),0,2)
+			fnQgl(j/2+1,mypos(x),0,2)
 			if x=1 then resp$(resp+=1)=fnrgl$(gl$(40+j-1)) else resp$(resp+=1)=fnrgl$(gl$(40+j))
 		next x
 	next j

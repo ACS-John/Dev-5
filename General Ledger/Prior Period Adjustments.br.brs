@@ -20,7 +20,7 @@ do ! r: main loop
 	lc=0
 	mylen=40 : mypos=mylen+2
 	fnLbl(lc+=1,1,'General Ledger Number:',mylen,1)
-	fnqgl(lc,mypos,0,2)
+	fnQgl(lc,mypos,0,2)
 	resp$(1)=''
 	fnLbl(lc+=1,1,'Adjustment Amount:',mylen,1)
 	fnTxt(lc,mypos,12,0,0,'pointtwo')

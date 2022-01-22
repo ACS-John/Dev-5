@@ -1,7 +1,7 @@
 ! test changes
 ! r: functions that do not redirect
 
-	def fnCleanGl$(gl$; ___,dash1pos,dash2pos,gl1,gl2,gl3)
+	def library fnCleanGl$(gl$; ___,dash1pos,dash2pos,gl1,gl2,gl3)
 		gl$=trim$(gl$)
 		gl$=srep$(gl$,' ','-')
 		do
@@ -27,7 +27,7 @@
 			gl3=val(gl$(dash2pos+1:inf       	))
 		end if 
 
-		gl$=lpad$(str$(gl1),3)&lpad$(str$(gl2),6)&lpad$(str$(gl3),3)
+		fnCleanGl$=lpad$(str$(gl1),3)&lpad$(str$(gl2),6)&lpad$(str$(gl3),3)
 	fnend
 
 	def library fnFileIoLayoutPath$*512(fileio$*64) ! ; ___,defaultFileLayoutPath$*256,defaultFileLayoutExtension$)
@@ -689,12 +689,12 @@ fnend
 		fnQgl=fnQgl(myline,mypos,container,x,forceGLsysIfPossible,qgllength)
 	fnend
 	def library fnAgl$*12(&x$)
-		library 'S:\Core\fn\agl$.br': fnagl$
-		fnagl$=fnagl$(x$)
+		library 'S:\Core\ACS_Component.br': fnAgl$
+		fnAgl$=fnAgl$(x$)
 	fnend
-	def library fnRgl$*60(x$; returnmaxlength,leaveDescFileOpen) ! passed '  1  101  1' returns '1-101-1 Account Description'
-		library 'S:\Core\fn\rgl$.br': fnrgl$
-		fnrgl$=fnrgl$(x$, returnmaxlength,leaveDescFileOpen)
+	def library fnRgl$*60(acct$; returnMaxLength,leaveDescFileOpen,forceGLsysIfPossible) ! passed '  1  101  1' returns '1-101-1 Account Description'
+		library 'S:\Core\ACS_Component.br': fnRgl$
+		fnRgl$=fnRgl$(acct$, returnMaxLength,leaveDescFileOpen,forceGLsysIfPossible)
 	fnend
 	def library fnOsVer(&osver$;get_or_put)
 		library 'S:\Core\OSVer.br': fnOsVer

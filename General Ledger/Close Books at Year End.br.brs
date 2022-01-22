@@ -34,7 +34,7 @@ do ! r: the first screen
 		! fnLbl(lc+=1,col3_pos,'Last Retained Earnings Account(s)')
 		! for fund_item=1 to udim(mat fund_list)
 		!   fnLbl(lc+=1,col3_pos,"Fund "&str$(fund_list(fund_item))&":",mylen,1)
-		!   fnqgl(lc,col4_pos)
+		!   fnQgl(lc,col4_pos)
 		!   rc+=1
 		!   fncreg_read("last retained earnings account - fund "&str$(fund_list(fund_item)),resp$(rc)) : resp$(rc)=fnrgl$(resp$(rc))
 		! next fund_item
@@ -51,7 +51,7 @@ do ! r: the first screen
 	! else
 	!   col4_pos=col3_pos+32
 	!   fnLbl(lc+=1,col3_pos,'Last Retained Earnings Account:',31,1)
-	!   fnqgl(lc,col4_pos)
+	!   fnQgl(lc,col4_pos)
 	!   rc+=1
 	!   fncreg_read("last retained earnings account - no fund ",resp$(rc)) : resp$(rc)=fnrgl$(resp$(rc))
 	end if
@@ -112,7 +112,7 @@ SCR2: !
 	fnLbl(lc+=1,1,"be reset with zero balances.",width,2)
 	fnLbl(lc+=1,1,"account will be reset with zero balances.",width,2)
 	fnLbl(lc+=1,1,"Enter Account Number:",mylen,1)
-	fnqgl(lc,mypos)
+	fnQgl(lc,mypos)
 	resp$(1)=''
 	fnCmdSet(11)
 	ckey=fnAcs(mat resp$)

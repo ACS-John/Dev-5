@@ -260,7 +260,7 @@ def fn_hamster(uw$*128,mat lbl$,mat fln,hIn,mat p$; mat flTyp$,mat sln,mat mask$
 					fnComboa(uw$&'A'&str$(j),lc,mypos,mat option$) ! p$(j)
 				else if lwrc$(control$(j,1))='combof' then
 					if mask2$(j)='glaccount' then
-						fnQgl(lc,mypos)	!  fnqgl(myline,mypos; container,x,forceGLsysIfPossible,qgllength)
+						fnQgl(lc,mypos)	!  fnQgl(myline,mypos; container,x,forceGLsysIfPossible,qgllength)
 						p2$(j)=fnrgl$(p2$(j))
 					else 
 						! fnComboF(sfn$*100       ,lyne,ps,  width                                   ,df$*200        ,psk               ,lnk                 ,psd                ,lnd                ;if$*200       ,limlis              ,unused_userOrReplace,ttt$*200,contain,tabcon,keyFormat$)

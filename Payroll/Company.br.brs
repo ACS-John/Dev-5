@@ -6,43 +6,46 @@ on error goto Ertn
 ! r: initialize stuff, set constants, etc
 if fnClientHas('P2') then fnstyp(11) else fnstyp(14) !  styp=11 for jobcost; styp=14 for regular payroll
 
-dim a$(3)*40,b$(2)*12,d$(10)*8
-dim xm(10),r(10)
-dim e$(10)*12
-dim rpnames2$(10)*6
-dim gln(45),glnt(45),gln$(15)*12
-dim dedcode(10),calcode(10),dedfed(10)
-dim sck(4)
-dim wcm(4),jn$(2)*6
 dim resp$(200)*40
-dim ml$(0)*100
-dim fullname$(20)*20
-dim newcalcode(20),newdedfed(20),dedfica(20),dedst(20),deduc(20)
-dim abrevname$(20)*8
-dim newdedcode(20)
-dim gl$(20)*12,fid$*12
-
-dim opt_ded_or_add$(3)*7
-opt_ded_or_add$(1)='Deduct'
-opt_ded_or_add$(2)='Add'
-opt_ded_or_add$(3)='Benefit'
-
-dim opt_std_or_percent$(2)*8
-opt_std_or_percent$(1)='Standard'
-opt_std_or_percent$(2)='Percent'
-
 
 open #1: 'Name=[Q]\PRmstr\Company.h[cno],recl=759,version=0,use',i,outi,r
+dim fPrCompany$*256
+fPrCompany$='form pos 1,3*C 40,C 12,PD 6.3,PD 6.2,PD 5.2,10*C 8,N 2,PD 4.2,PD 3.3,12*PD 4.2,10*PD 3.3,25*C 12,31*N 1,10*C 6,3*PD 4.3,3*PD 3.2,4*PD 4.2,N 1,2*C 6,N 2'
+dim a$(3)*40
+dim fid$*12
+dim d$(10)*8
+dim xm(10)
+dim xr(10)
+dim e$(10)*12
+dim gln$(15)*12
+dim dedcode(10)
+dim calcode(10)
+dim dedfed(10)
+dim rpnames2$(10)*6
+dim sck(4)
+dim wcm(4)
+dim jn$(2)*6
 if lrec(1)=0 then
-	write #1,using 'form pos 1,3*C 40,C 12,PD 6.3,PD 6.2,PD 5.2,10*C 8,N 2,PD 4.2,PD 3.3,12*PD 4.2,10*PD 3.3,25*C 12,31*N 1,10*C 6,3*PD 4.3,3*PD 3.2,4*PD 4.2,N 1,2*C 6,N 2'       	: mat a$,fid$,mcr,mcm,feducrat,mat d$,loccode,feducmax,ficarate,ssmax,ficawh,mat xm,mat r,mat e$,mat gln$,gli,mat dedcode,mat calcode,mat dedfed,mat rpnames2$,mat sck,vacm,mhw,mat wcm,tc,mat jn$,dc
+	write #1,using fPrCompany$       	: mat a$,fid$,mcr,mcm,feducrat,mat d$,loccode,feducmax,ficarate,ssmax,ficawh,mat xm,mat xr,mat e$,mat gln$,gli,mat dedcode,mat calcode,mat dedfed,mat rpnames2$,mat sck,vacm,mhw,mat wcm,tc,mat jn$,dc
 end if
-read #1,using 'form pos 1,3*C 40,C 12,PD 6.3,PD 6.2,PD 5.2,10*C 8,N 2,PD 4.2,PD 3.3,12*PD 4.2,10*PD 3.3,25*C 12,31*N 1,10*C 6,3*PD 4.3,3*PD 3.2,4*PD 4.2,N 1,2*C 6,N 2',rec=1 	: mat a$,fid$,mcr,mcm,feducrat,mat d$,loccode,feducmax,ficarate,ssmax,ficawh,mat xm,mat r,mat e$,mat gln$,gli,mat dedcode,mat calcode,mat dedfed,mat rpnames2$,mat sck,vacm,mhw,mat wcm,tc,mat jn$,dc ioerr L290
+read #1,using fPrCompany$,rec=1 	: mat a$,fid$,mcr,mcm,feducrat,mat d$,loccode,feducmax,ficarate,ssmax,ficawh,mat xm,mat xr,mat e$,mat gln$,gli,mat dedcode,mat calcode,mat dedfed,mat rpnames2$,mat sck,vacm,mhw,mat wcm,tc,mat jn$,dc ioerr L290
 ssmax=ssmax*10
 L290: !
 close #1:
 ! READNAMES: !
-fnDedNames(mat fullname$,mat abrevname$,mat newdedcode,mat newcalcode,mat newdedfed,mat dedfica,mat dedst,mat deduc,mat gln$)
+
+dim fullname$(20)*20
+dim abrevname$(20)*8
+dim newdedcode(20)
+dim newcalcode(20)
+dim newdedfed(20)
+dim dedFica(20)
+dim dedSt(20)
+dim dedUc(20)
+dim dedGl$(20)*12
+fnDedNames(mat fullname$,mat abrevname$,mat newdedcode,mat newcalcode,mat newdedfed,mat dedFica,mat dedSt,mat dedUc,mat dedGl$)
 goto Screen1 ! /r
+
 Screen1: ! r:
 	resp=0
 	fnTos
@@ -60,11 +63,11 @@ Screen1: ! r:
 	fnLbl(10,1,'Medicare Maximum Wage:',mylen,right,0,fram1)   	: fnTxt(10,mypos,12,0,left,'10',0,'Use 999999.99 since there no maximum wage at this time.',fram1)         	: resp$(10)=str$(mcm)
 	fram2=2: fnFra(13,1,8,90,'General Ledger Information')
 	fnChk(1,30,'General Ledger Installed:',1,fram2)                                        : resp$(11)='False' : 	if gli=1 then resp$(11)='True'
-	fnLbl(2,1,'Cash In Bank:',mylen,right,0,fram2)              	: fnqgl(2,32,fram2,2,1) : resp$(12)=fnrgl$(gln$(15))
-	fnLbl(3,1,'Federal W/H:',mylen,right,0,fram2)                	: fnqgl(3,32,fram2,2,1) : resp$(13)=fnrgl$(gln$(1))
-	fnLbl(4,1,'SS & Medicare W/H:',mylen,right,0,fram2)         	: fnqgl(4,32,fram2,2,1) : resp$(14)=fnrgl$(gln$(2))
-	fnLbl(5,1,'State W/H:',mylen,right,0,fram2)                  	: fnqgl(5,32,fram2,2,1) : resp$(15)=fnrgl$(gln$(3))
-	fnLbl(6,1,'EIC:',mylen,right,0,fram2)                         	: fnqgl(6,32,fram2,2,1) : resp$(16)=fnrgl$(gln$(14))
+	fnLbl(2,1,'Cash In Bank:',mylen,right,0,fram2)              	: fnQgl(2,32,fram2,2,1) : resp$(12)=fnRgl$(gln$(15),0,1)
+	fnLbl(3,1,'Federal W/H:',mylen,right,0,fram2)                	: fnQgl(3,32,fram2,2,1) : resp$(13)=fnRgl$(gln$( 1),0,1)
+	fnLbl(4,1,'SS & Medicare W/H:',mylen,right,0,fram2)         	: fnQgl(4,32,fram2,2,1) : resp$(14)=fnRgl$(gln$( 2),0,1)
+	fnLbl(5,1,'State W/H:',mylen,right,0,fram2)                  	: fnQgl(5,32,fram2,2,1) : resp$(15)=fnRgl$(gln$( 3),0,1)
+	fnLbl(6,1,'EIC:',mylen,right,0,fram2)                         	: fnQgl(6,32,fram2,2,1) : resp$(16)=fnRgl$(gln$(14),0,1)
 	fnCmdKey('&Next',1,1,0,'Moves to 2nd screen of company information.')
 	fnCmdKey('&Save and Exit',4,0,0,'Saves any changes and returns to menu without reviewing remainter of screens.')
 	fnCmdKey('&Cancel',5,0,1,'Returns to menu without saving any changes on any screen.')
@@ -81,14 +84,15 @@ Screen1: ! r:
 	mcr=val(resp$(9))
 	mcm=val(resp$(10))
 	if resp$(11)='True' then gli=1 else gli=0
-	gln$(15)=fnagl$(resp$(12)) ! bank
-	gln$(1)=fnagl$(resp$(13)) ! fed
-	gln$(2)=fnagl$(resp$(14)) ! fica
-	gln$(3)=fnagl$(resp$(15)) ! state
-	gln$(14)=fnagl$(resp$(16)) ! eic
+	gln$(15)=fnAgl$(resp$(12)) ! bank
+	gln$(1)=fnAgl$(resp$(13)) ! fed
+	gln$(2)=fnAgl$(resp$(14)) ! fica
+	gln$(3)=fnAgl$(resp$(15)) ! state
+	gln$(14)=fnAgl$(resp$(16)) ! eic
 	if mcr<=0 then mcr=1.45
 	if mcm<=0 then mcm=999999
 	if feducrat>5 then
+		dim ml$(0)*100
 		mat ml$(2)
 		ml$(1)='The Federal Unemployment Rate appears to be wrong!'
 		ml$(2)='Do you wish to continue anyway?'
@@ -97,18 +101,32 @@ Screen1: ! r:
 	end if
 	if ckey=4 then goto Finis
 goto Screen2 ! /r
+
 Screen2: ! r:
+	! r: screen2 setup
+	if ~setup_screen2 then ! r:
+		setup_screen2=1
+		dim opt_ded_or_add$(3)*7
+		opt_ded_or_add$(1)='Deduct'
+		opt_ded_or_add$(2)='Add'
+		opt_ded_or_add$(3)='Benefit'
+
+		dim opt_std_or_percent$(2)*8
+		opt_std_or_percent$(1)='Standard'
+		opt_std_or_percent$(2)='Percent'
+	end if ! /r
+	! /r
 	fnTos
 	mylen=32: mypos=mylen+3 : right=1
-	pos_col(1)=1 ! deduction numbers
-	pos_col(2)=5 ! deduction name
-	pos_col(3)=23 ! name
-	pos_col(4)=33 ! ded/add
-	pos_col(5)=43 ! std/pct
-	pos_col(6)=57 ! ded fed
-	pos_col(7)=62 ! ded fica
-	pos_col(8)=67 ! ded state
-	pos_col(9)=72 ! ded u/c
+	pos_col( 1)= 1 ! deduction numbers
+	pos_col( 2)= 5 ! deduction name
+	pos_col( 3)=23 ! name
+	pos_col( 4)=33 ! ded/add
+	pos_col( 5)=43 ! std/pct
+	pos_col( 6)=57 ! ded fed
+	pos_col( 7)=62 ! ded fica
+	pos_col( 8)=67 ! ded state
+	pos_col( 9)=72 ! ded u/c
 	pos_col(10)=75
 	fnLbl(1,1,'Enter your deductions names. Mark whether a deduction or addition.',90,left)
 	fnLbl(2,1,'A check mark will indicate "yes" to deduct before calculating Federal w/h, etc.',90,left)
@@ -139,17 +157,13 @@ Screen2: ! r:
 		fncomboa('std_or_percent',j+5,pos_col(5),mat opt_std_or_percent$,'Standard would a fixed amount each pay period.  Percent would indicate the deduction is a percent of gross pay.',8)
 		if newcalcode(j)=0 then newcalcode(j)=1 ! stop subscript error
 		resp$(resp+=1)=opt_std_or_percent$(newcalcode(j))
-		fnChk(j+5,pos_col(6),'',1)
-		if newdedfed(j)>0 then resp$(resp+=1)='True' else resp$(resp+=1)='False'
-		fnChk(j+5,pos_col(7),'',1)
-		if dedfica(j)>0 then resp$(resp+=1)='True' else resp$(resp+=1)='False'
-		fnChk(j+5,pos_col(8),'',1)
-		if dedst(j)>0 then resp$(resp+=1)='True' else resp$(resp+=1)='False'
-		fnChk(j+5,pos_col(9),'',1)
-		if deduc(j)>0 then resp$(resp+=1)='True' else resp$(resp+=1)='False'
+		fnChk(j+5,pos_col(6),'',1) : if newdedfed(j)>0 then resp$(resp+=1)='True' else resp$(resp+=1)='False'
+		fnChk(j+5,pos_col(7),'',1) : if dedFica(j)>0 then resp$(resp+=1)='True' else resp$(resp+=1)='False'
+		fnChk(j+5,pos_col(8),'',1) : if dedSt(j)>0 then resp$(resp+=1)='True' else resp$(resp+=1)='False'
+		fnChk(j+5,pos_col(9),'',1) : if dedUc(j)>0 then resp$(resp+=1)='True' else resp$(resp+=1)='False'
 		linecount=j+5
-		fnqgl(linecount,pos_col(10),0,2,1)
-		resp$(resp+=1)=fnrgl$(gl$(j))
+		fnQgl(linecount,pos_col(10),0,2,1)
+		resp$(resp+=1)=fnRgl$(dedGl$(j))
 	next j
 	fnCmdKey('&Next',1,1,0,'Moves to next screen of company information.')
 	fnCmdKey('&Save and Exit',4,0,0,'Saves any changes and returns to menu.')
@@ -167,10 +181,10 @@ Screen2: ! r:
 		if resp$(resp+=1)=opt_std_or_percent$(1) then newcalcode(j)=1
 		if resp$(resp)=opt_std_or_percent$(2) then newcalcode(j)=2 ! percent method of calucalating
 		if resp$(resp+=1)='True' then newdedfed(j)=1 else newdedfed(j)=0
-		if resp$(resp+=1)='True' then dedfica(j)=1 else dedfica(j)=0
-		if resp$(resp+=1)='True' then dedst(j)=1 else dedst(j)=0
-		if resp$(resp+=1)='True' then deduc(j)=1 else deduc(j)=0
-		gl$(j)=fnagl$(resp$(resp+=1))
+		if resp$(resp+=1)='True' then dedFica(j)=1 else dedFica(j)=0
+		if resp$(resp+=1)='True' then dedSt(j)=1 else dedSt(j)=0
+		if resp$(resp+=1)='True' then dedUc(j)=1 else dedUc(j)=0
+		dedGl$(j)=fnAgl$(resp$(resp+=1))
 	next j
 	if ckey=2 then goto Screen1
 	if ckey=4 then goto Finis
@@ -194,7 +208,7 @@ Screen3: ! r:
 		fnTxt(j+3,32,12,0,left,'10',0,'Enter the maximum wage subject to state unemployment (See your state u/c report.',0 )
 		resp$(resp+=1)=str$(xm(j))
 		fnTxt(j+3,49,8,0,left,'33',0,'Enter the state unemployment rate (See your state u/c report. Enter in percent format. Example: 5% as 5.00',0 )
-		resp$(resp+=1)=str$(r(j))
+		resp$(resp+=1)=str$(xr(j))
 	next j
 	fnCmdKey('&Next',1,1,0,'Moves to next screen of company information.')
 	fnCmdKey('&Save and Exit',4,0,0,'Saves any changes and returns to menu.')
@@ -207,7 +221,7 @@ Screen3: ! r:
 		d$(j)=resp$(resp+=1)
 		e$(j)=resp$(resp+=1)
 		xm(j)=val(resp$(resp+=1))
-		r(j)=val(resp$(resp+=1))
+		xr(j)=val(resp$(resp+=1))
 	next j
 	if ckey=2 then goto Screen2
 	if ckey=4 then goto Finis
@@ -351,9 +365,9 @@ goto Xit
 Finis: ! r:
 	open #hCompany=fnH: 'Name=[Q]\PRmstr\Company.h[cno]',i,outi,r
 	ssmax=ssmax*.1
-	rewrite #hCompany,using 'form pos 1,3*C 40,C 12,PD 6.3,PD 6.2,PD 5.2,10*C 8,N 2,PD 4.2,PD 3.3,12*PD 4.2,10*PD 3.3,25*C 12,31*N 1,10*C 6,3*PD 4.3,3*PD 3.2,4*PD 4.2,N 1,2*C 6,N 2',rec=1: mat a$,fid$,mcr,mcm,feducrat,mat d$,loccode,feducmax,ficarate,ssmax,ficawh,mat xm,mat r,mat e$,mat gln$,gli,mat dedcode,mat calcode,mat dedfed,mat rpnames2$,mat sck,vacm,mhw,mat wcm,tc,mat jn$,dc
+	rewrite #hCompany,using fPrCompany$,rec=1: mat a$,fid$,mcr,mcm,feducrat,mat d$,loccode,feducmax,ficarate,ssmax,ficawh,mat xm,mat xr,mat e$,mat gln$,gli,mat dedcode,mat calcode,mat dedfed,mat rpnames2$,mat sck,vacm,mhw,mat wcm,tc,mat jn$,dc
 	close #hCompany:
-	fnDedNames(mat fullname$,mat abrevname$,mat newdedcode,mat newcalcode,mat newdedfed,mat dedfica,mat dedst,mat deduc,mat gl$,1)
+	fnDedNames(mat fullname$,mat abrevname$,mat newdedcode,mat newcalcode,mat newdedfed,mat dedFica,mat dedSt,mat dedUc,mat dedGl$,1)
 goto Xit ! /r
 
 Xit: fnXit
