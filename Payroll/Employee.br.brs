@@ -372,7 +372,7 @@ ScrDepartment: ! r:
 	fnTxt(2,mylen+3,3,3,1,'30',0,"Department numbers must be numeric and no department number can be used twice on the same employee.",fram1)
 	resp$(respc+=1)=str$(tdn)
 	fnLbl(2,35,"General Ledger Acct:",mylen,1,0,fram1)
-	fnqgl(2,58,fram1)
+	fnQgl(2,58,fram1)
 	resp$(respc+=1)=fnrgl$(gl$)
 	fnLbl(3,1,"Last Review Date:",mylen,1,0,fram1)
 	fnTxt(3,mylen+3,8,8,1,"1",0,"Last review is only used for information purposes.  Use MMDDYY format.",fram1)

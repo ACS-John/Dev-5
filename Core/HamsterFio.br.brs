@@ -91,7 +91,7 @@ def fn_hfLayoutRead(hfLayoutFilename$*256,mat hfDataAll$,mat hfLabel$,mat hfFiel
 						! 	else if useDept and useSub then
 						! 		tmp=53
 						! 	end if
-						! 	! see fnagl$ logic in
+						! 	! see fnAgl$ logic in
 						! 	! C:\ACS\Dev-5\Core\fn\agl$.br.brs
 						! 	! pr 'found it -aaa in hamster fio-  mask$='&mask$ : pause
 						else if mask$='mmddyy' then

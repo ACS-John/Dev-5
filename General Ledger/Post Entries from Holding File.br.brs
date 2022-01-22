@@ -240,7 +240,7 @@ CHANGE_ACCOUNT: ! r:
 	fnTos
 	mylen=23: mypos=mylen+3
 	fnLbl(1,1,"Bank Account #:",mylen,right)
-	fnqgl(1,mypos,0,2,1) 
+	fnQgl(1,mypos,0,2,1) 
 	resp$(1)=fnrgl$(bankgl$)
 	fnCmdKey("&Next",1,1,0,"Continue posting.")
 	ckey=fnAcs(mat resp$)

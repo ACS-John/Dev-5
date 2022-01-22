@@ -48,13 +48,13 @@ L400: !
 	fnTxt(2,18,3,3,1,'30',0,"Department # to change or add.")
 	resp$(respc+=1)=dp$
 	fnLbl(3,1,label1$(1),15,1)
-	fnqgl(3,18,0,2)
+	fnQgl(3,18,0,2)
 	resp$(respc+=1)=fnrgl$(mgl$(1)) ! fica
 	x=1 : y=3
 	for j=1 to 20
 		if dedcode(j)=3 then 
 			fnLbl(y+=1,1,label1$(x+=1),15,1)
-			fnqgl(y,18,0,2)
+			fnQgl(y,18,0,2)
 			resp$(respc+=1)=fnrgl$(mgl$(j+1))
 		end if
 	next j

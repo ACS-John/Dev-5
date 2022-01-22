@@ -15,7 +15,7 @@
 	fnTos(sn$="glCkRec")
 	lc=0 : mylen=40 : mypos=mylen+2
 	fnLbl(lc+=1,1,"General Ledger Bank Account Number:",mylen,right)
-	fnqgl(lc,mypos)
+	fnQgl(lc,mypos)
 	resp$(1)=fnrgl$(resp$(1))
 	! iO1$(1)="2,43,Nz 3,UT,N" : iO1$(2)="2,47,Nz 6,UT,N"
 	! iO1$(3)="2,54,Nz 3,UT,N" : iO1$(4)="3,43,c 20,UT,N"

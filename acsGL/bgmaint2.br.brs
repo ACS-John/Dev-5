@@ -273,7 +273,7 @@ goto DISPLAY_GRID
 fnTos
 respc=0
 fnLbl(1,1,"Beginning General Ledger #:",30,1)
-fnqgl(1,33)
+fnQgl(1,33)
 resp$(1)=fnrgl$(gl$(1))
 fnCmdKey("&Next",1,1,0,"Display budget file starting with this account. ")
 fnCmdKey("&Back",2,0,0,"Takes you back one screen.")
@@ -430,7 +430,7 @@ L3350: holdg1$=g1$: holdcd$=cd$
 fnTos
 respc=0: mylen=20: mypos=mylen+3
 fnLbl(1,1,"Account #:",mylen,right)
-fnqgl(1,mypos)
+fnQgl(1,mypos)
 resp$(respc+=1)=fnrgl$(g1$)
 fnLbl(2,1,"Budget:",mylen,right)
 fnTxt(2,mypos,12,0,0,'10',0,"Approved budget at the beginning of the year")
@@ -702,9 +702,9 @@ resp$(respc+=1)=bud$
 fnLbl(3,30,"Range From:",mylen,0)
 fnLbl(3,70,"Range To:",mylen,0)
 for j=1 to 40 step 2
-	fnqgl(lyne+=1,mypos,0,2)
+	fnQgl(lyne+=1,mypos,0,2)
 	resp$(respc+=1)=fnrgl$(gl$(j))
-	fnqgl(lyne,mypos2,0,2)
+	fnQgl(lyne,mypos2,0,2)
 	resp$(respc+=1)=fnrgl$(gl$(j+1))
 next j
 fnCmdKey("&Complete",1,1,0,"Saves the changes and and builds the new file from the general ledger.")

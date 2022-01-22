@@ -228,7 +228,7 @@ def fn_l1800 ! OPEN G/L WORK FILES AND CREATE DUE TO AND DUE FROM ENTRIES
 	fnTos
 	respc=0: mypos=45
 	fnLbl(1,1,'Due to Payroll Clearing Account on Fund # '&oldtgl$(1:3)&':',mypos,1)
-	fnqgl(1,mypos+3,0,2,1)
+	fnQgl(1,mypos+3,0,2,1)
 	resp$(1)=fnrgl$(bankgl$)
 	fnCmdKey('&Next',1,1,0,'Continue posting.' )
 	fnCmdKey('E&xit',5,0,1,'Returns to menu')
@@ -273,7 +273,7 @@ def fn_finalscrctrlbookmulitfunds
 	fnTos
 	respc=0: mypos=45
 	fnLbl(1,1,'G/L # for Due From Other Funds on Fund # '&oldtgl$(1:3)&':',mypos,1)
-	fnqgl(1,mypos+3,0,2,1)
+	fnQgl(1,mypos+3,0,2,1)
 	resp$(1)=fnrgl$(bankgl$)
 	fnCmdKey('&Next',1,1,0,'Continue posting.' )
 	fnCmdKey('E&xit',5,0,1,'Returns to menu')
@@ -314,7 +314,7 @@ def fn_askaccrue
 	fnTxt(2,mypos+3,10,0,1,'30',0,'In order to know how much to accure, the system needs to know the days to accure.')
 	resp$(2)=str$(dayslm)
 	fnLbl(3,1,'G/L # for Due From Other Funds on Fund # '&oldtgl$(1:3)&':',mypos,1)
-	fnqgl(3,mypos+3,0,2,1)
+	fnQgl(3,mypos+3,0,2,1)
 	resp$(3)=fnrgl$(bankgl$)
 	fnLbl(4,1,'Last Day of Previous Month:',mypos,1)
 	fnTxt(4,mypos+3,10,0,1,'1',0,'Enter the month end date.')

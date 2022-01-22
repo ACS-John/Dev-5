@@ -11,7 +11,7 @@
 	fnTos
 	lc=0 : mylen=30 : mypos=mylen+2
 	fnLbl(lc+=1,1,"General Ledger Account Number:",mylen,right)
-	fnqgl(lc,mypos)
+	fnQgl(lc,mypos)
 	resp$(1)=fnrgl$('  0   700  0')
 ! pr RESP$(1) : fnPAUSE ! XXX
 	fnCmdSet(2)

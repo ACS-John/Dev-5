@@ -878,7 +878,7 @@ def fn_InvoiceAllocationFM(vn$,iv$; selected_alloc$*50)
 	resp$(respc+=1)=iv$
 	lc+=1
 	fnLbl(lc+=1,1,"General Ledger:",mylen,1)
-	fnqgl(lc,mypos,0,2,0,60)
+	fnQgl(lc,mypos,0,2,0,60)
 
 	resp$(iaf_respc_gl:=respc+=1)=fnRgl$(iaf_gl$,60)
 	fnLbl(lc+=1,1,"Amount:",mylen,1)

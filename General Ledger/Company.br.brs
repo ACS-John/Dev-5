@@ -93,7 +93,7 @@ SCREEN_1: ! r:
 	resp_useBankRec:=respc+=1
 	if recc$="Y" or reccode=1 then resp$(resp_useBankRec)='True' else resp$(resp_useBankRec)='False'
 	fnLbl(16,1,"Last Balance Sheet Account #:",mylen,right)
-	fnqgl(16,mypos,0,2,1)
+	fnQgl(16,mypos,0,2,1)
 	resp$(resp_lastBalSheetAccount:=respc+=1)=fnrgl$(lastgl$)
 	fnChk(17,60,"Allocate Expenses to Job Cost:",1)
 	resp_AllocExpToJc:=respc+=1
@@ -140,10 +140,10 @@ SCREEN_2: ! r:
 	fnLbl(4,1,"as blank to pr all details.",85,left)
 ! BEGCNT,BEGACCT,BEGSUB,ENDCNT,ENDACCT,ENCSUB
 	fnLbl(6,1,"First Account to summarize:",mylen,right)
-	fnqgl(6,mypos,0,2,1)
+	fnQgl(6,mypos,0,2,1)
 	resp$(1)=fnrgl$(e$(1))
 	fnLbl(7,1,"Last Account to summarize:",mylen,right)
-	fnqgl(7,mypos,0,2,1)
+	fnQgl(7,mypos,0,2,1)
 	resp$(2)=fnrgl$(e$(2))
 	fnCmdKey("&Next",1,1,0,"Moves to 3nd screen of company information.")
 	fnCmdKey("&Save",4,0,0,"Saves any changes and returns to menu without reviewing remainter of screens.")
@@ -187,19 +187,19 @@ SCREEN_3: ! r:
 	resp$(6)=str$(mcm)
 	fnLbl(10,25,"General Ledger Account Numbers")
 	fnLbl(11,1,"Federal Withholding:",mylen,right)
-	fnqgl(11,mypos,0,2,1)
+	fnQgl(11,mypos,0,2,1)
 	resp$(7)=fnrgl$(gl$(1))
 	fnLbl(12,1,"FICA Withholding:",mylen,right)
-	fnqgl(12,mypos,0,2,1)
+	fnQgl(12,mypos,0,2,1)
 	resp$(8)=fnrgl$(gl$(2))
 	fnLbl(13,1,"State Withholding:",mylen,right)
-	fnqgl(13,mypos,0,2,1)
+	fnQgl(13,mypos,0,2,1)
 	resp$(9)=fnrgl$(gl$(3))
 	fnLbl(14,1,"Local Withholding:",mylen,right)
-	fnqgl(14,mypos,0,2,1)
+	fnQgl(14,mypos,0,2,1)
 	resp$(10)=fnrgl$(gl$(4))
 	fnLbl(15,1,"Earned Income Credit:",mylen,right)
-	fnqgl(15,mypos,0,2,1)
+	fnQgl(15,mypos,0,2,1)
 	resp$(11)=fnrgl$(gl$(5))
 	fnCmdKey("&Next",1,1,0,"Moves to 4th screen of company information.")
 	fnCmdKey("&Save",4,0,0,"Saves any changes and returns to menu without reviewing remainter of screens.")
@@ -250,7 +250,7 @@ SCREEN_4: ! r:
 		fnChk(j+8,59,"",1)
 		if deduc(j)>0 then resp$(resp+=1)='True' else resp$(resp+=1)='False'
 		linecount=j+8
-		fnqgl(linecount,64,0,2,1)
+		fnQgl(linecount,64,0,2,1)
 		resp$(resp+=1)=fnrgl$(miscgl$(j))
 	next j
 	fnCmdKey("&Next",1,1,0,"Saves changes and returns to main menu.")

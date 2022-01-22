@@ -120,7 +120,7 @@ SCREEN_1: ! r:
 													!    if sel=j then resp$(4)=typeofentry_option$(j)
 													!  next j
 	fnLbl(8,1,"Bank Account:",mylen,right)
-	fnqgl(8,mypos,0,2,1)
+	fnQgl(8,mypos,0,2,1)
 	resp$(respc_bankGl:=rc+=1)=fnrgl$(bankgl$)
 	fnLbl(9,1,"Process Ending Date:",mylen,right)
 	fnTxt(9,mypos,8,0,right,"1001",0,"Process endings date must always be answered and will be the last day of the month or the last day of the period beding processed.",0 )
@@ -299,7 +299,7 @@ MAIN: ! r:
 		end if
 	end if
 	fnLbl(7,1,"General Ledger #:",mylen,right)
-	fnqgl(7,mypos,0,2,1)
+	fnQgl(7,mypos,0,2,1)
 	resp$(5)=fnrgl$(gl$)
 	if sel=3 then
 		fnLbl(7,60,"Net Adj:",8,right)
@@ -754,7 +754,7 @@ PAYROLL: ! r:
 	fncombof("PRmstr",6,mypos,35,"[Q]\GLmstr\PRmstr.h[cno]",1,4,5,30,"[Q]\GLmstr\PRIndex.h[cno]",1,0, "Choose from the list of employees.  Click Add Employee to add a new employee not shown on list.",0)
 	resp$(4)=str$(xpr(1))
 	fnLbl(7,1,"General Ledger #:",mylen,right)
-	fnqgl(7,mypos,0,2,1)
+	fnQgl(7,mypos,0,2,1)
 	resp$(5)=fnrgl$(gl$)
 	if sel=3 then let fnLbl(7,60,"Net Adj:",mylen,right) else let fnLbl(7,60,"Amount:",mylen,right)
 	if sel=3 or sel=4 then disable=1 else disable=0
@@ -922,7 +922,7 @@ EditAllocations: ! r:  editing glallocation while still being entered into alloc
 	fnTxt(2,mypos,13,0,right,'10',0,"Enter the amount of this breakdown.",0 )
 	resp$(1)=str$(allocation)
 	fnLbl(1,1,"General Ledger #:",mylen,right)
-	fnqgl(1,mypos,0,2,1)
+	fnQgl(1,mypos,0,2,1)
 	resp$(2)=fnrgl$(gl$)
 	fnLbl(3,1,"Description:",mylen,right)
 	fnTxt(3,mypos,30,0,left,"",0,"Enter description to be carried in the general ledger transaction.",0 )

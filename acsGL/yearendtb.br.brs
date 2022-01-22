@@ -31,10 +31,10 @@ SCREEN1: !
 	fnChk(lc+=1,mypos,"Subtotal after each fund",right) : _
 	resp$(3)='True'
 	fnLbl(lc+=1,1,"Starting Account:",mylen,right)
-	fnqgl(lc,mypos,0,1) : _
+	fnQgl(lc,mypos,0,1) : _
 	resp$(4)="[All]"
 	fnLbl(lc+=1,1,"Ending Account:",mylen,right)
-	fnqgl(lc,mypos,0,1) : _
+	fnQgl(lc,mypos,0,1) : _
 	resp$(5)="[All]"
 	fnCmdSet(3)
 	ckey=fnAcs(mat resp$)

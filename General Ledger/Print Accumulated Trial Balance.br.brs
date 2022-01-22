@@ -39,7 +39,7 @@ SCREEN1: ! r:
   fnTos(sn$="Acglactb")
   mylen=53: mypos=mylen+3 : rc=0 : right=1
   fnLbl(1,1,'General ledger number for the last "Capital" account:',mylen,right)
-  fnqgl(1,mypos,0,2)
+  fnQgl(1,mypos,0,2)
   resp$(respc_lastCapitalAccount:=rc+=1)=lastCapitalAccount$
   fnChk(2,mypos,"Print Ending Balance on First Line:",1,0)
   resp$(respc_prBalFirst:=rc+=1)=petro_opt$
@@ -55,10 +55,10 @@ SCREEN1: ! r:
   resp$(respc_printRange:=rc+=1)='False'
   mylen=6 : mypos=mylen+2
   fnLbl(4,1+10,'First:',mylen,right,0,frameno)
-  fnqgl(4,mypos+10,frameno,2)
+  fnQgl(4,mypos+10,frameno,2)
   resp$(respc_rangeStart:=rc+=1)=""
   fnLbl(5,1+10,'Last:',mylen,right,0,frameno)
-  fnqgl(5,mypos+10,frameno,2)
+  fnQgl(5,mypos+10,frameno,2)
   resp$(respc_rangeEnd:=rc+=1)=""
   fnFra(12,1,4,90,"Filters"," ",0) : frameno=2
   mylen=14 : mypos=mylen+2
@@ -230,7 +230,7 @@ SELECT_ACCOUNT: ! r:
   fnTos(sn$="Acglactb3")
   mylen=38: mypos=mylen+3 : right=1
   fnLbl(1,1,'General ledger # to print:',mylen,right,0,0)
-  fnqgl(1,mypos,0,2)
+  fnQgl(1,mypos,0,2)
   resp$(1)=""
   fnCmdSet(2)
   ckey=fnAcs(mat resp$)

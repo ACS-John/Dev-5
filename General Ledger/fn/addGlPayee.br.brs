@@ -345,7 +345,7 @@ GL_BREAKDOWNS: ! r: sub routine
 	respc=0 : mylen=28 : mypos=mylen+2
 	fnLbl(1,25,"Breakdown for "&nam$(1:20),40)
 	fnLbl(3,1,"General Ledger Number:",mylen,1)
-	fnqgl(3,mypos)
+	fnQgl(3,mypos)
 	resp$(respc+=1)=fnrgl$(payeegl$) ! think maybe here kj
 	fnLbl(4,1,'Percent:',mylen,1)
 	fnTxt(4,mypos,6,0,0,'32',0,"Percent of total check to be charged to this g/l account.  Enter 25% as 25.00!")
