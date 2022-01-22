@@ -22,28 +22,28 @@ read #1,using 'form pos 605,C 12,N 1': bankgl$,gli
 close #1:
 if gli=1 then
 	gosub POSTGL0
-	open #14: "Name=[Q]\GLmstr\GLBRec.h[cno],KFName=[Q]\GLmstr\GLRecIdx.h[cno],Shr",internal,outIn,keyed ioerr L250
+	open #14: "Name=[Q]\GLmstr\GLBRec.h[cno],KFName=[Q]\GLmstr\GLRecIdx.h[cno],Shr",i,outIn,k ioerr L250
 	goto L260
 	L250: !
 	gli=0
 	L260: !
 end if
-open #6: "Name=[Q]\CLmstr\TRMSTR.h[cno],KFName=[Q]\CLmstr\TRIDX1.h[cno],Shr",internal,outIn,keyed ioerr L330
-open #7: "Name=[Q]\CLmstr\TRMSTR.h[cno],KFName=[Q]\CLmstr\TRIDX2.h[cno],Shr",internal,outIn,keyed
+open #6: "Name=[Q]\CLmstr\TRMSTR.h[cno],KFName=[Q]\CLmstr\TRIDX1.h[cno],Shr",i,outIn,k ioerr L330
+open #7: "Name=[Q]\CLmstr\TRMSTR.h[cno],KFName=[Q]\CLmstr\TRIDX2.h[cno],Shr",i,outIn,k
 if exists("[Q]\CLmstr\Tralloc-Idx.h[cno]") then
-	open #tralloc:=8: "Name=[Q]\CLmstr\TrAlloc.h[cno],Version=2,KFName=[Q]\CLmstr\TrAlloc-Idx.h[cno],Shr",internal,outIn,keyed
+	open #tralloc:=8: "Name=[Q]\CLmstr\TrAlloc.h[cno],Version=2,KFName=[Q]\CLmstr\TrAlloc-Idx.h[cno],Shr",i,outIn,k
 else
 	open #tralloc:=8: "Name=[Q]\CLmstr\TrAlloc.h[cno],Shr",i,outi,r
 end if
-open #9: "Name=[Q]\CLmstr\BankMstr.h[cno],KFName=[Q]\CLmstr\BankIdx1.h[cno],Shr",internal,outIn,keyed
+open #9: "Name=[Q]\CLmstr\BankMstr.h[cno],KFName=[Q]\CLmstr\BankIdx1.h[cno],Shr",i,outIn,k
 open #20: "Name=[Q]\CLmstr\Company.h[cno],Shr",i,i,r ioerr L330
 read #20,using 'form pos 152,N 2',rec=1: bcde
 close #20:
 cli=1
 L330: !
-open #1: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr",internal,outIn,keyed
-open #hDepartment:=5: "Name=[Q]\PRmstr\Department.h[cno],Shr, KFName=[Q]\PRmstr\DeptIdx.h[cno],Shr",internal,outIn,keyed
-open #4: "Name=[Q]\PRmstr\payrollchecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno]",internal,outIn,keyed
+open #1: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr",i,outIn,k
+open #hDepartment:=5: "Name=[Q]\PRmstr\Department.h[cno],Shr, KFName=[Q]\PRmstr\DeptIdx.h[cno],Shr",i,outIn,k
+open #4: "Name=[Q]\PRmstr\payrollchecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno]",i,outIn,k
  
 d1=fnPayPeriodEndingDate
 dat$=cnvrt$("pic(########)",d1)

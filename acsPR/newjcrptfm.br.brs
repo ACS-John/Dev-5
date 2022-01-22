@@ -15,7 +15,7 @@
 	fnTop(program$,cap$="User Designed Reports - JC")
 	pg=3
  
-	open #1: "Name=S:\acsPR\JCREPORT.MST,KFName=S:\acsPR\JCREPORT.idx,Shr",internal,outIn,keyed
+	open #1: "Name=S:\acsPR\JCREPORT.MST,KFName=S:\acsPR\JCREPORT.idx,Shr",i,outIn,k
 	fnDedNames(mat fullname$,mat abbrevname$)
  
 	gosub DATA_FOR_COLUMNS

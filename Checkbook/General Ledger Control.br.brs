@@ -44,7 +44,7 @@ fnTop(program$)
 	c$(cl,5)='13' : c$(cl,6)='50'
 	c$(cl,7)='[Q]\CLmstr\GLIndex.h[cno]' : c$(cl,8)='1'
 ! /r
-open #hGc=fnH: 'Name=[Q]\CLmstr\FundMstr.h[cno],KFName=[Q]\CLmstr\FundIdx1.h[cno],Use,RecL=75,KPs=1,KLn=3,Shr',internal,outIn,keyed
+open #hGc=fnH: 'Name=[Q]\CLmstr\FundMstr.h[cno],KFName=[Q]\CLmstr\FundIdx1.h[cno],Use,RecL=75,KPs=1,KLn=3,Shr',i,outIn,k
 fnHamster('GLControl',mat lbl$,mat tln,hGc,mat p$,mat fltyp$,mat sln,mat mask,mat sp,mat c$)
 
 ! r: Fix Gl Accounts  

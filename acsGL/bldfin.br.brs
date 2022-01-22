@@ -10,7 +10,7 @@
  
 	fncno(cno)
  
-	open #1: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLIndex.h[cno],Shr",internal,outIn,keyed
+	open #1: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLIndex.h[cno],Shr",i,outIn,k
 	open #2: "Name=[Q]\GLmstr\ACGLFNSI.h[cno]",internal,output
 READ_GLMSTR: !
 	read #1,using L180: dno,ano,sno,d$,mat rf eof END1

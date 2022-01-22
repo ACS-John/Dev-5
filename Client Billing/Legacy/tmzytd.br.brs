@@ -18,14 +18,14 @@ on a goto L200,END1 none Scr1
 L200: !
 pr newpage
 	pr f "10,20,C 60,H,N": "ZERO YEAR TO DATE INFORMATION IN PROCESS"
-	open #1: "Name=S:\Core\Data\acsllc\EMmstr.h[cno],KFName=S:\Core\Data\acsllc\EMINDEX.h[cno],Shr",internal,outIn,keyed
+	open #1: "Name=S:\Core\Data\acsllc\EMmstr.h[cno],KFName=S:\Core\Data\acsllc\EMINDEX.h[cno],Shr",i,outIn,k
 	do
 		read #1,using 'form pos 1,c 9': eno$ eof Eo1
 		rewrite #1,using 'form pos 158,30*pd 4.2,pos 428,30*pd 5.2': mat cytdhrs,mat ncytdhrs,mat cytdamt,mat ncytdamt
 	loop
 	Eo1: !
 	close #1:
-	open #1: "Name=S:\Core\Data\acsllc\SCMSTR.h[cno],KFName=S:\Core\Data\acsllc\SCIndex.h[cno],Shr",internal,outIn,keyed
+	open #1: "Name=S:\Core\Data\acsllc\SCMSTR.h[cno],KFName=S:\Core\Data\acsllc\SCIndex.h[cno],Shr",i,outIn,k
 	F_Scmstr: form pos 35,pd 4.2,pd 5.2
 	do
 		read #1,using F_Scmstr: a1 eof EoScmstr

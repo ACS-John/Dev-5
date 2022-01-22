@@ -8,7 +8,7 @@
 	dim z$*10,e$(4)*30,f$(3)*12,c(4),g(12),adr(2),alp$*7,gb(10)
 	dim x$*10,p$*10
  
-	open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\uBIndex.h[cno]",internal,outIn,keyed
+	open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\uBIndex.h[cno]",i,outIn,k
 L130: read #1,using L140: alp$,final eof L190
 L140: form pos 354,c 7,pos 1821,n 1
 	if alp$(1:1)="*" and final=0 then final=1 ! cnange any zeros to ones

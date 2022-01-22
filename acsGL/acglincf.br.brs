@@ -226,7 +226,7 @@ L2170: eofcode=1
  
 Xit: fnXit
  
-BLDPCT1: open #10: "Name=[Temp]\Work.[Session],KFName=[Temp]\Addr.[Session],Replace,RecL=17,KPS=1,KLN=5",internal,outIn,keyed
+BLDPCT1: open #10: "Name=[Temp]\Work.[Session],KFName=[Temp]\Addr.[Session],Replace,RecL=17,KPS=1,KLN=5",i,outIn,k
 	for j=1 to lrec(3)
 		read #3,using L2290,rec=j: pc1,bb,cb noRec L2380
 L2290: form pos mp1,pd 3,pos 81,2*pd 6.2

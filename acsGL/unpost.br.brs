@@ -35,13 +35,13 @@ MENU1: ! r:
 ! r: get ready to run
 	fnStatus('date range: '&str$(begdat)&' - '&str$(enddat))
 	if del_dupe_only then let fnStatus('only deleting duplicate entries')
-	open #1: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLIndex.h[cno],Shr",internal,outIn,keyed
+	open #1: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLIndex.h[cno],Shr",i,outIn,k
 	if uprc$(code$)="H" then
 		fnStatus('Processing history instead of current transactions')
 		if del_dupe_only then
 			fnIndex("[Q]\GLmstr\AcTrans.h[cno]","[Q]\GLmstr\tmp70.h[cno]","1,70")
 		end if  ! del_dupe_only
-		open #h_trans=fnH: "Name=[Q]\GLmstr\AcTrans.h[cno],KFName=[Q]\GLmstr\AcTrIdx.h[cno],Shr",internal,outIn,keyed  ! 3
+		open #h_trans=fnH: "Name=[Q]\GLmstr\AcTrans.h[cno],KFName=[Q]\GLmstr\AcTrIdx.h[cno],Shr",i,outIn,k  ! 3
 		if del_dupe_only then
 			open #h_trans_dupe=fnH: "Name=[Q]\GLmstr\AcTrans.h[cno],KFName=[Q]\GLmstr\tmp70.h[cno],Shr",i,i,k
 		end if  ! del_dupe_only
@@ -50,7 +50,7 @@ MENU1: ! r:
 		if del_dupe_only then
 			fnIndex("[Q]\GLmstr\GLTrans.h[cno]","[Q]\GLmstr\tmp70.h[cno]","1,70")
 		end if  ! del_dupe_only
-		open #h_trans=fnH: 'Name=[Q]\GLmstr\GLTrans.h[cno],kfname=[Q]\GLmstr\glTrans-IdxAcct.h[cno],Shr',internal,outIn,keyed
+		open #h_trans=fnH: 'Name=[Q]\GLmstr\GLTrans.h[cno],kfname=[Q]\GLmstr\glTrans-IdxAcct.h[cno],Shr',i,outIn,k
 		if del_dupe_only then
 			open #h_trans_dupe=fnH: "Name=[Q]\GLmstr\GLTrans.h[cno],KFName=[Q]\GLmstr\tmp70.h[cno],Shr",i,i,k
 		end if  ! del_dupe_only

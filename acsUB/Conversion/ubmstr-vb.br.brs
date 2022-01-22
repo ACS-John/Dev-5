@@ -19,9 +19,9 @@ def library fnub_cnv_ubmstr_vb
 	fnub_index_customer
 	fnIndex("[Q]\UBmstr\UBAdrBil.h[cno]","[Q]\UBmstr\adrIndex.h[cno]","1 10")
 
-	open #hCustomer=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno]",internal,outIn,keyed 
+	open #hCustomer=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno]",i,outIn,k 
 	if version(1)=1 then goto Xit
-	open #h81=fnH: "Name=[Q]\UBmstr\BudMstr.h[cno],KFName=[Q]\UBmstr\BudIdx1.h[cno],Shr,Use,RecL=80,KPs=1,KLn=10",internal,outIn,keyed 
+	open #h81=fnH: "Name=[Q]\UBmstr\BudMstr.h[cno],KFName=[Q]\UBmstr\BudIdx1.h[cno],Shr,Use,RecL=80,KPs=1,KLn=10",i,outIn,k 
 	open #h82=fnH: "Name=[Q]\UBmstr\BudTrans.h[cno],Shr,Use,RecL=149",i,outi,r 
 	do
 		ReadCustomer: !

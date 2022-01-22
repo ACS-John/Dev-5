@@ -20,15 +20,15 @@ if fn_screen_1(nap,mat period_date_start,mat prior_period_date_start)=5 then got
 ! fn_report(env$('program_caption'))
 ! fn_report(date$('mm/dd/ccyy'))
 ! fn_report('')
-open #hTransHistory=fnH: "Name=[Q]\GLmstr\AcTrans.h[cno],KFName=[Q]\GLmstr\AcTrIdx.h[cno],Shr",internal,outIn,keyed
+open #hTransHistory=fnH: "Name=[Q]\GLmstr\AcTrans.h[cno],KFName=[Q]\GLmstr\AcTrIdx.h[cno],Shr",i,outIn,k
 FtransHistory: form pos 1,c 12,n 6,pd 6.2,n 2,pos 71,n 2
 if process_gltrans then
 fnIndex('[Q]\GLmstr\GLTrans.h[cno]','[Q]\GLmstr\glTrans-IdxAcct.h[cno]','1 12')
-open #hTransCurrent=fnH: 'Name=[Q]\GLmstr\GLTrans.h[cno],kfname=[Q]\GLmstr\glTrans-IdxAcct.h[cno],Shr',internal,outIn,keyed
+open #hTransCurrent=fnH: 'Name=[Q]\GLmstr\GLTrans.h[cno],kfname=[Q]\GLmstr\glTrans-IdxAcct.h[cno],Shr',i,outIn,k
 end if  ! process_gltrans
 FtransCurrent: form pos 1,c 12,n 6,pd 6.2,n 2
-open #hAcct1=fnH: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLIndex.h[cno],Shr",internal,outIn,keyed
-open #hAcct2=fnH: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\glIndx2.h[cno],Shr",internal,outIn,keyed
+open #hAcct1=fnH: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLIndex.h[cno],Shr",i,outIn,k
+open #hAcct2=fnH: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\glIndx2.h[cno],Shr",i,outIn,k
 Facct: form pos 1,c 12,x 50,6*pd 3,42*pd 6.2,2*pd 3,13*pd 6.2
 do
 	read #hAcct1,using Facct: gl$,mat rf,bb,cb,mat balance_current_year_month,mat balance_prior_year_month eof EO_GLMSTR

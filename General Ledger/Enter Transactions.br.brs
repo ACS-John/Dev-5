@@ -390,7 +390,7 @@ def fn_scrMain(hMerge; editRecord,heading$*64,glBank$*12,transDate,bankAcctName$
 		if allocAmt=0 and trim$(allocgl$)<>'' and lrec(hMtemp)=0 then allocAmt=transactionAmt
 		! r: Get TD$ from Payee
 			! requires vn$
-			open #hPaymstr=fnH: 'Name=[Q]\GLmstr\PayMstr.h[cno],Version=1,KFName=[Q]\GLmstr\PayIdx1.h[cno],Shr',internal,outIn,keyed
+			open #hPaymstr=fnH: 'Name=[Q]\GLmstr\PayMstr.h[cno],Version=1,KFName=[Q]\GLmstr\PayIdx1.h[cno],Shr',i,outIn,k
 			read #hPaymstr, using 'form pos 1,c 8',key=lpad$(rtrm$(vn$),8),release: x$ nokey GtdNokey
 			td$=resp$(4)(9:38) ! transaction description = vendor name when vendor entered
 			goto GtdpFinis
@@ -1091,7 +1091,7 @@ def fn_extract(&hMtemp,vn$,transactionAmt; ___, _
 	!  pull allocation breakdown from payee record
 	if trim$(vn$)<>'' then
 
-		open #hPayeeGl=fnH: 'Name=[Q]\GLmstr\PayeeGLBreakdown.h[cno],Version=1,KFName=[Q]\GLmstr\Payeeglbkdidx.h[cno],Use,RecL=56,KPs=1,KLn=8,Shr',internal,outIn,keyed
+		open #hPayeeGl=fnH: 'Name=[Q]\GLmstr\PayeeGLBreakdown.h[cno],Version=1,KFName=[Q]\GLmstr\Payeeglbkdidx.h[cno],Use,RecL=56,KPs=1,KLn=8,Shr',i,outIn,k
 		glkey$=lpad$(rtrm$(vn$),8)
 		restore #hPayeeGl,key>=glkey$: nokey ExtractFinis
 
@@ -1322,7 +1322,7 @@ def fn_openFiles(; reset,___,useOrReplace$)
 	dim key$*12
 	open #hMerge=fnH: 'Name=[Q]\GLmstr\GL_Work_[acsUserId].h[cno],RecL=104,'&useOrReplace$&',Shr',i,outi,r
 	F_merge: form pos 1,c 12,n 6,pd 6.2,n 2,n 2,c 12,c 30,c 8,x 6,c 5,x 3,c 12
-	open #hAccount=fnH: 'Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLIndex.h[cno],Shr',internal,outIn,keyed
+	open #hAccount=fnH: 'Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLIndex.h[cno],Shr',i,outIn,k
 fnend
 def fn_closeFiles ! always local
 	close #hMerge: ioerr ignore

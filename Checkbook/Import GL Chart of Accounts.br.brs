@@ -6,7 +6,7 @@ dim ml$(0)*128
 
  
 fnTop(program$)
-open #1: 'Name=[Q]\CLmstr\GLmstr.H[cno],KFName=[Q]\CLmstr\glindex.H[cno],Shr',internal,outIn,keyed
+open #1: 'Name=[Q]\CLmstr\GLmstr.H[cno],KFName=[Q]\CLmstr\glindex.H[cno],Shr',i,outIn,k
 do
 	MENU1: !
 	fnTos

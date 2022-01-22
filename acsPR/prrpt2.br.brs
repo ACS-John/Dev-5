@@ -18,7 +18,7 @@
 		io2$((z-1)*3+2)=c$&",38,Nz 3,UT,N"
 		io2$((z-1)*3+3)=c$&",62,N 1,UT,N"
 	next z
-	open #1: "Name=[Q]\PRmstr\PRReport.h[cno],KFName=[Q]\PRmstr\prrptidx.h[cno],Shr",internal,outIn,keyed
+	open #1: "Name=[Q]\PRmstr\PRReport.h[cno],KFName=[Q]\PRmstr\prrptidx.h[cno],Shr",i,outIn,k
  
 SCR1: pr newpage
 	close #101: ioerr L250

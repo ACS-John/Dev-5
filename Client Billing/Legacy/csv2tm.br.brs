@@ -25,7 +25,7 @@
 	if fkey=93 or fkey=99 then goto Xit
 	open #h_in=fnH: 'Name=D:\ACS\Doc\Timesheets\Time Sheet - Laura Smith.csv,RecL=100,Shr',external,input
 	! open #h_in=fnH: 'Name=C:\ACS\Doc\Timesheets\Time Sheet - John Bowman.csv,RecL=100,Shr',external,input
-	open #h_out=fnH: "Name=S:\Core\Data\acsllc\TimeSheet.h[cno],RecL=86,KFName=S:\Core\Data\acsllc\TimeSheet-Idx.h[cno],Replace,KPs=1,KLn=5",internal,outIn,keyed
+	open #h_out=fnH: "Name=S:\Core\Data\acsllc\TimeSheet.h[cno],RecL=86,KFName=S:\Core\Data\acsllc\TimeSheet-Idx.h[cno],Replace,KPs=1,KLn=5",i,outIn,k
 	open #h_support=fnH: "Name=S:\Core\Data\acsllc\SUPPORT.h[cno],KFName=S:\Core\Data\acsllc\support-idx.h[cno],Shr",i,i,k
 	F_support: form pos 1,c 6,n 2,c 2,x 8,x 2,n 8
 	fnopenprn

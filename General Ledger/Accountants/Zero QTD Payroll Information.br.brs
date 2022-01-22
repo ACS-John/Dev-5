@@ -27,7 +27,7 @@ Screen1: !
 	goto Screen1
 
 ZeroIt: ! r:
-	open #1: "Name=[Q]\GLmstr\PRmstr.h[cno],KFName=[Q]\GLmstr\PRIndex.h[cno],Shr",internal,outIn,keyed
+	open #1: "Name=[Q]\GLmstr\PRmstr.h[cno],KFName=[Q]\GLmstr\PRIndex.h[cno],Shr",i,outIn,k
 	L300: !
 		read #1,using 'form pos 91,36*PD 5.2': mat m eof L340
 		for j=2 to 36 step 2 : m(j)=0 : next j

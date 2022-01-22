@@ -11,9 +11,9 @@
 	mcr=mcr*.01
 	ssrate1=fnss_employee*.01
 	ssrate2=fnss_employer*.01
-	open #1: 'Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr',internal,outIn,keyed
+	open #1: 'Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr',i,outIn,k
 	open #3: 'Name=[Q]\PRmstr\Department.h[cno],KFName=[Q]\PRmstr\DeptIdx.h[cno],Shr',i,i,k
-	open #4: 'Name=[Q]\PRmstr\PayrollChecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno],Shr',internal,outIn,keyed
+	open #4: 'Name=[Q]\PRmstr\PayrollChecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno],Shr',i,outIn,k
 	open #7: 'Name=[Q]\PRmstr\MGLMSTR.h[cno],KFName=[Q]\PRmstr\MGLIDX1.h[cno],Shr',i,i,k
 	gosub CheckCheckbook
 	do
@@ -24,11 +24,11 @@ F_HIST: form pos 1,n 8,n 3,pd 6,n 7,5*pd 3.2,37*pd 5.2
 		if prd=20120224 then gosub BUILD_CHECK_RECORD
 	loop
 CheckCheckbook: ! r:
-	open #12: 'Name=[Q]\CLmstr\BankMstr.h[cno],KFName=[Q]\CLmstr\BankIdx1.h[cno],Shr',internal,outIn,keyed
+	open #12: 'Name=[Q]\CLmstr\BankMstr.h[cno],KFName=[Q]\CLmstr\BankIdx1.h[cno],Shr',i,outIn,k
 	open #15: 'Name=[Q]\CLmstr\Company.h[cno],Shr',i,outi,r
-	open #8: 'Name=[Q]\CLmstr\TrMstr.h[cno],KFName=[Q]\CLmstr\TrIdx1.h[cno],Shr',internal,outIn,keyed
-	open #22: 'Name=[Q]\CLmstr\TrMstr.h[cno],KFName=[Q]\CLmstr\TrIdx2.h[cno],Shr',internal,outIn,keyed
-	open #tralloc:=23: 'Name=[Q]\CLmstr\TrAlloc.h[cno],KFName=[Q]\CLmstr\TrAlloc-Idx.h[cno],Shr',internal,outIn,keyed
+	open #8: 'Name=[Q]\CLmstr\TrMstr.h[cno],KFName=[Q]\CLmstr\TrIdx1.h[cno],Shr',i,outIn,k
+	open #22: 'Name=[Q]\CLmstr\TrMstr.h[cno],KFName=[Q]\CLmstr\TrIdx2.h[cno],Shr',i,outIn,k
+	open #tralloc:=23: 'Name=[Q]\CLmstr\TrAlloc.h[cno],KFName=[Q]\CLmstr\TrAlloc-Idx.h[cno],Shr',i,outIn,k
 	read #15,using L3830,rec=1,release: bankcode,prenum,port
 L3830: form pos 152,n 2,pos 406,n 1,pos 788,n 1
 	read #12,using FM_BANK,key=lpad$(str$(bankcode),2),release: bn$,bal,upi,nckno nokey L3870

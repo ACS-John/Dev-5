@@ -21,7 +21,7 @@ fnTop(program$,'Fix Use Alternate Billing Address')
 	d1=val(resp$(1))
 ! /r
 ! r: main loop
-	open #hCustomer=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx5.h[cno],Shr",internal,outIn,keyed
+	open #hCustomer=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx5.h[cno],Shr",i,outIn,k
 	open #hAltBillAddr=fnH: "Name=[Q]\UBmstr\UBAdrBil.h[cno],KFName=[Q]\UBmstr\adrIndex.h[cno],Shr",i,i,k 
 	changeCount=0
 	do

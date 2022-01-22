@@ -60,8 +60,8 @@ if qtr=4 then begdate=taxyear*10000+1212: enddate=val(taxyear$)*10000+1218
 on pageoflow goto PgOf
 open #2: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr",i,i,k
 gosub HDR
-open #4: "Name=[Q]\PRmstr\payrollchecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno]",internal,outIn,keyed
-open #3: "Name=[Q]\PRmstr\Department.h[cno],Shr, KFName=[Q]\PRmstr\DeptIdx.h[cno],Shr",internal,outIn,keyed
+open #4: "Name=[Q]\PRmstr\payrollchecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno]",i,outIn,k
+open #3: "Name=[Q]\PRmstr\Department.h[cno],Shr, KFName=[Q]\PRmstr\DeptIdx.h[cno],Shr",i,outIn,k
 L650: !
 	read #2,using L660: eno,mat em$,ss$,em5,em6 eof DONE
 	L660: form pos 1,n 8,3*c 30,c 11,pos 120,2*n 2

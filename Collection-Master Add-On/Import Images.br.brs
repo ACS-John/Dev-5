@@ -28,11 +28,11 @@ oc_first=1 : oc_last=2 !  both open and closed
 for oc=oc_first to oc_last
 	if oc=1 then ! open
 		open #hImagesFrom:=fngethandle: 'NAME='&pathFrom$&'\data\IMAGES.INT,kfname='&pathFrom$&'\data\IMAGES.IDX,shr',i,i,k
-		open   #hImagesTo:=fngethandle: "NAME=IMAGES.INT//6,kfname=IMAGES.IDX//6,shr",internal,outin,keyed
+		open   #hImagesTo:=fngethandle: "NAME=IMAGES.INT//6,kfname=IMAGES.IDX//6,shr",i,outIn,k
 		! kps=1/9/13/76 kln=8/4/4/4
 	else if oc=2 then ! closed
 		open #hImagesFrom:=fngethandle: 'NAME='&pathFrom$&'\history\IMAGES.INT,kfname='&pathFrom$&'\history\IMAGES.IDX,shr',i,i,k
-		open   #hImagesTo:=fngethandle: "NAME=IMAGES.INT//1,kfname=IMAGES.IDX//1,shr",internal,outin,keyed 
+		open   #hImagesTo:=fngethandle: "NAME=IMAGES.INT//1,kfname=IMAGES.IDX//1,shr",i,outIn,k 
 	end if
 	readCount=0
 	for filenoItem=1 to udim(mat filenoList$)

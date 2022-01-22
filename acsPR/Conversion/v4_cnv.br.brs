@@ -40,7 +40,7 @@ def fn_pr_conversion_department(cno; medicare_is_seperated)
 	end if 
 	fnIndex('[Q]\PRmstr\RPMstr.h[cno]','[Q]\PRmstr\RPIndex.h[cno]','1 8')
 	fnIndex('[Q]\PRmstr\RPMstr.h[cno]','[Q]\PRmstr\RPIndx2.h[cno]','9 30')
-	open #h_rpmstr:=1: 'Name=[Q]\PRmstr\RPMstr.h[cno],KFName=[Q]\PRmstr\RPIndex.h[cno],Shr',internal,outIn,keyed 
+	open #h_rpmstr:=1: 'Name=[Q]\PRmstr\RPMstr.h[cno],KFName=[Q]\PRmstr\RPIndex.h[cno],Shr',i,outIn,k 
 	if rln(h_rpmstr)<196 then 
 		close #h_rpmstr: 
 		fnCopy('[Q]\PRmstr\RPMstr.h[cno]','[Q]\PRmstr\RPMstr.h[cno]',196)
@@ -54,16 +54,16 @@ def fn_pr_conversion_department(cno; medicare_is_seperated)
 	end if 
 
 	if fnIndex('[Q]\PRmstr\PRCkHist.h[cno]','[Q]\PRmstr\PRCKINDX.h[cno]','1 14') then 
-		open #h_prckhist=fnH: 'Name=[Q]\PRmstr\PRCkHist.h[cno],KFName=[Q]\PRmstr\PRCkIndx.h[cno],Shr',internal,outIn,keyed ioerr L320
+		open #h_prckhist=fnH: 'Name=[Q]\PRmstr\PRCkHist.h[cno],KFName=[Q]\PRmstr\PRCkIndx.h[cno],Shr',i,outIn,k ioerr L320
 		foundhistory=1 ! pr 'foundhistory : lrec(h_prckhist)='&str$(lrec(h_prckhist)) : pause
 	else 
 		foundhistory=0 ! pr 'was not able to index it - setting foundhistory to ZERO - history will not be created' : pause
 	end if 
 	L320: ! 
-	open #12: 'Name=[Q]\PRmstr\Department.h[cno],KFName=[Q]\PRmstr\DeptIdx.h[cno],RecL=149,kps=1,kln=11,replace',internal,outIn,keyed 
-	open #h_payrollchecks=fnH: 'Name=[Q]\PRmstr\PayrollChecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno],RecL=224,kps=1,kln=17,replace',internal,outIn,keyed 
+	open #12: 'Name=[Q]\PRmstr\Department.h[cno],KFName=[Q]\PRmstr\DeptIdx.h[cno],RecL=149,kps=1,kln=11,replace',i,outIn,k 
+	open #h_payrollchecks=fnH: 'Name=[Q]\PRmstr\PayrollChecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno],RecL=224,kps=1,kln=17,replace',i,outIn,k 
 	if exists('[Q]\PRmstr\dd.h[cno]')=0 then 
-		open #30: 'Name=[Q]\PRmstr\dd.h[cno],RecL=72,KFName=[Q]\PRmstr\DDidx1.h[cno],kps=1,kln=10,Use',internal,outIn,keyed 
+		open #30: 'Name=[Q]\PRmstr\dd.h[cno],RecL=72,KFName=[Q]\PRmstr\DDidx1.h[cno],kps=1,kln=10,Use',i,outIn,k 
 		close #30: ioerr ignore
 	end if 
 	fn_prcode_validate
@@ -161,7 +161,7 @@ def fn_pr_conversion_department(cno; medicare_is_seperated)
 
 	DONE: ! 
 		gosub CREATENAMES
-		open #h_deptname=fnH: 'Name=[Q]\PRmstr\DeptName.h[cno],KFName=[Q]\PRmstr\DeptNameIdx.h[cno],replace,RecL=32,kps=1,kln=3,Shr',internal,outIn,keyed 
+		open #h_deptname=fnH: 'Name=[Q]\PRmstr\DeptName.h[cno],KFName=[Q]\PRmstr\DeptNameIdx.h[cno],replace,RecL=32,kps=1,kln=3,Shr',i,outIn,k 
 		close #h_deptname: 
 		close #12: ioerr ignore
 		fnIndex('[Q]\PRmstr\Department.h[cno]','[Q]\PRmstr\DeptIdx.h[cno]','1 11')

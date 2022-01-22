@@ -18,7 +18,7 @@
 	execute "Copy [Q]\PRmstr\JCTRANS.h[cno] JCTRANS.X -n"
 	execute "Copy [Q]\PRmstr\JCCAT.h[cno] JCCAT.X -n"
  
-	open #1: "Name=JCMSTR.X,KFName=[Q]\PRmstr\JCIndx.h[cno]",internal,outIn,keyed
+	open #1: "Name=JCMSTR.X,KFName=[Q]\PRmstr\JCIndx.h[cno]",i,outIn,k
  
 ASKJOB: !
 	fnTos(sn$="jccpr1J") : _

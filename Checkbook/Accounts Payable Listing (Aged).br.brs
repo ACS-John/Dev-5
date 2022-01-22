@@ -36,7 +36,7 @@ bk(1,1)=0
 if bk(2,2)>0 then bk(2,1)=bk(1,2)+1
 if bk(3,2)>0 then bk(3,1)=bk(2,2)+1
 fnopenprn
-open #paytrans=4: 'Name=[Q]\CLmstr\PayTrans.h[cno],KFName=[Q]\CLmstr\UnPdIdx1.h[cno],Shr',internal,outIn,keyed
+open #paytrans=4: 'Name=[Q]\CLmstr\PayTrans.h[cno],KFName=[Q]\CLmstr\UnPdIdx1.h[cno],Shr',i,outIn,k
 open #paymstr=2: 'Name=[Q]\CLmstr\PayMstr.h[cno],KFName=[Q]\CLmstr\PayIdx1.h[cno],Shr',i,i,k
 gosub HDR
 do

@@ -284,7 +284,7 @@ MENU1READWORKEOF: ! /r
 		close #hWork:
 		fnFree(workFile$)
 		fnFree(workFileIndex$)
-		open #hWork=fnH: "Name="&workFile$&",KFName="&workFileIndex$&",Shr,Use,RecL=74,KPs=1,KLn=10",internal,outIn,keyed
+		open #hWork=fnH: "Name="&workFile$&",KFName="&workFileIndex$&",Shr,Use,RecL=74,KPs=1,KLn=10",i,outIn,k
 	else if fky_importAndLoad and ckey=fky_importAndLoad then
 		fnRetrieveHandHeldFile
 		fnTop(program$)
@@ -365,7 +365,7 @@ def fn_setup
 	! Open_Stuff: !
 		fn_setup_service(mat service_enabled)
 		open #hTrans=fnH: "Name=[Q]\UBmstr\ubTransVB.h[cno],KFName=[Q]\UBmstr\ubTrIndx.h[cno],Shr",i,i,k
-		open #hCustomer1=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,outIn,keyed  ! was file #1, but it was getting closed incorrectly
+		open #hCustomer1=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",i,outIn,k  ! was file #1, but it was getting closed incorrectly
 		dim x$*10
 		dim aname$*30
 		dim xd(15)
@@ -373,11 +373,11 @@ def fn_setup
 		dim extra(23)
 		! x$,aname$,mat a,final,mat xd,alp$,mat extra
 	F_CUSTOMER_C: form pos 1,c 10,pos 41,c 30,pos 143,7*pd 2,pos 1821,n 1,pos 217,15*pd 5,pos 354,c 1,pos 1741,n 2,n 7,2*n 6,n 9,pd 5.2,n 3,3*n 9,3*n 2,3*n 3,n 1,3*n 9,3*pd 5.2
-		open #hWork=fnH: "Name="&workFile$&",KFName="&workFileIndex$&",Shr,Use,RecL=74,KPs=1,KLn=10",internal,outIn,keyed
-		open #hCustomer2=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx2.h[cno],Shr",internal,outIn,keyed
-		open #hCustomer3=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx3.h[cno],Shr",internal,outIn,keyed
-		open #hCustomer4=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx4.h[cno],Shr",internal,outIn,keyed
-		open #hCustomer5=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx5.h[cno],Shr",internal,outIn,keyed
+		open #hWork=fnH: "Name="&workFile$&",KFName="&workFileIndex$&",Shr,Use,RecL=74,KPs=1,KLn=10",i,outIn,k
+		open #hCustomer2=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx2.h[cno],Shr",i,outIn,k
+		open #hCustomer3=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx3.h[cno],Shr",i,outIn,k
+		open #hCustomer4=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx4.h[cno],Shr",i,outIn,k
+		open #hCustomer5=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx5.h[cno],Shr",i,outIn,k
 		dim c$(0)*200
 		dim cN(0)
 		hCustomer1In=fn_openFio('U4 Meter Location',mat c$,mat cN, 1,1)
@@ -1044,7 +1044,7 @@ fnend
 EstimateRoute: ! r: ESTIMATEING ROUTINE
 	close #hWork:
 	execute 'Index '&workFile$&' '&workFileIndex$&' 1 10 Replace,DupKeys -n'
-	open #hWork=fnH: "Name="&workFile$&",KFName="&workFileIndex$,internal,outIn,keyed
+	open #hWork=fnH: "Name="&workFile$&",KFName="&workFileIndex$,i,outIn,k
 	ASK_EST: !
 	fnTos
 	! services=0
@@ -1424,7 +1424,7 @@ def fn_holdingFileSave(hWork) ! probably requires more than just hWork
 		holdingFile$="[Q]\UBmstr\IpHold"&str$(bk1)&".h[cno]"
 		holdingFileIndex$=env$('temp')&"\acs\IpHold"&str$(bk1)&"-Index.h[cno]"
 		fnIndex(holdingFile$,holdingFileIndex$,'1 10')
-		open #hld8=fnH: "Name="&holdingFile$&",KFName="&holdingFileIndex$&',Shr,Use,RecL=74,KPs=1,KLn=10',internal,outIn,keyed
+		open #hld8=fnH: "Name="&holdingFile$&",KFName="&holdingFileIndex$&',Shr,Use,RecL=74,KPs=1,KLn=10',i,outIn,k
 		restore #hWork: ! ,search>="": nokey AppendFinis
 		do
 			read #hWork,using Fwork: x$,mat x eof AppendFinis
@@ -2086,7 +2086,7 @@ def fn_meter_change_out
 	goto MCO_RECORD_READINGS
 	MCO_L9350: !
 	close #hWork: ioerr ignore
-	open #hWork: "Name="&workFile$&",KFName="&workFileIndex$,internal,outIn,keyed
+	open #hWork: "Name="&workFile$&",KFName="&workFileIndex$,i,outIn,k
 	goto Mco_Xit
 	mco_EnterReadings3: !
 	mco_return=3

@@ -10,7 +10,7 @@
 !
 !
 	on fkey 5 goto Xit
-	open #1: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLIndex.h[cno],Shr",internal,outIn,keyed
+	open #1: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLIndex.h[cno],Shr",i,outIn,k
 	fil$(1)="ACGLFNSB" : idx$(1)="agfsidx4"
 	fil$(2)="ACGLFNSc" : idx$(2)="agfsidx1"
 	fil$(3)="ACGLFNSi" : idx$(3)="agfsidx3"
@@ -47,7 +47,7 @@ L370: pr #win,fields "2,1,Cc 75,R,N": 'Create "D" records for a range of general
 	if ce>0 then io1$(ce)(ce1:ce2)="U": ce=0
 	if curfld<>8 or fin>0 then goto L550
 	close #2: ioerr L510
-L510: open #2: "Name=[Q]\GLmstr\"&fil$(fs)&".h[cno],KFName=[Q]\GLmstr\"&idx$(fs)&".h[cno],Shr",internal,outIn,keyed
+L510: open #2: "Name=[Q]\GLmstr\"&fil$(fs)&".h[cno],KFName=[Q]\GLmstr\"&idx$(fs)&".h[cno],Shr",i,outIn,k
 L520: read #2,using L920: rno eof L540
 	goto L520
 L540: pr #win,fields io1$(9): rno+20
@@ -80,7 +80,7 @@ L750: if fs<1 or fs>5 then ce=9: goto ERR1
 	ac(1)=3 ! indent all d records to position 3
 	rno=fin
 	close #2: ioerr L840
-L840: open #2: "Name=[Q]\GLmstr\"&fil$(fs)&".h[cno],KFName=[Q]\GLmstr\"&idx$(fs)&".h[cno],Shr",internal,outIn,keyed
+L840: open #2: "Name=[Q]\GLmstr\"&fil$(fs)&".h[cno],KFName=[Q]\GLmstr\"&idx$(fs)&".h[cno],Shr",i,outIn,k
 	restore #1,key=glk$: nokey L980
 L860: read #1,using L870: dno,ano,sno,d$,mat rf eof L980
 L870: form pos 1,n 3,n 6,n 3,c 50,6*pd 3,42*pd 6.2,2*pd 3

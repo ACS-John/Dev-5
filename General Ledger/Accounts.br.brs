@@ -7,15 +7,15 @@ dim ml$(0)*128
 open #hCompany=fnH: 'Name=[Q]\GLmstr\Company.h[cno],Shr',internal,input
 read #hCompany,using 'form pos 150,2*N 1': use_dept,use_sub ! read fund and sub codes from general
 close #hCompany:
-open #hClAcct=fnH: 'Name=[Q]\CLmstr\GLmstr.h[cno],KFName=[Q]\CLmstr\GLIndex.h[cno],Shr',internal,outIn,keyed ioerr OpenClAcctFinis
+open #hClAcct=fnH: 'Name=[Q]\CLmstr\GLmstr.h[cno],KFName=[Q]\CLmstr\GLIndex.h[cno],Shr',i,outIn,k ioerr OpenClAcctFinis
 checkbookEnabled=1
 OpenClAcctFinis: !
-open #hAccount=fnH: 'Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLIndex.h[cno],Shr',internal,outIn,keyed
-open #hAccountUnused=fnH: 'Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\glIndx2.h[cno],Shr',internal,outIn,keyed
+open #hAccount=fnH: 'Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLIndex.h[cno],Shr',i,outIn,k
+open #hAccountUnused=fnH: 'Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\glIndx2.h[cno],Shr',i,outIn,k
 Faccount: form pos 1,c 12,c 50,6*pd 3,42*pd 6.2,2*pd 3,13*pd 6.2
-open #hTransCurrent=fnH: 'Name=[Q]\GLmstr\GLTrans.h[cno],kfname=[Q]\GLmstr\glTrans-IdxAcct.h[cno],Shr',internal,outIn,keyed
+open #hTransCurrent=fnH: 'Name=[Q]\GLmstr\GLTrans.h[cno],kfname=[Q]\GLmstr\glTrans-IdxAcct.h[cno],Shr',i,outIn,k
 FtransCurrent: form pos 1,c 12,n 6,pd 6.2,2*n 2,c 12,c 30,pd 3
-open #hTransHistory=fnH: 'Name=[Q]\GLmstr\ACTrans.h[cno],KFName=[Q]\GLmstr\AcTrIdx.h[cno],Version=0,Use,RecL=72,KPs=1/71/17/13,KLn=12/2/2/4,Shr',internal,outIn,keyed
+open #hTransHistory=fnH: 'Name=[Q]\GLmstr\ACTrans.h[cno],KFName=[Q]\GLmstr\AcTrIdx.h[cno],Version=0,Use,RecL=72,KPs=1/71/17/13,KLn=12/2/2/4,Shr',i,outIn,k
 FtransHistory: form pos 1,c 12,n 6,pd 6.2,2*n 2,c 12,c 30,n 2
 
 Main: ! r:

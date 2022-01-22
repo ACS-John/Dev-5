@@ -30,7 +30,7 @@ c$(cl,5)='13'
 c$(cl,6)='50'
 c$(cl,7)="[Q]\CLmstr\GLIndex.h[cno]"
 c$(cl,8)='1'
-open #1: "Name=[Q]\CLmstr\BankMstr.h[cno],KFName=[Q]\CLmstr\BankIdx1.h[cno],Use,RecL=64,KPs=1,KLn=2,Shr",internal,outIn,keyed
+open #1: "Name=[Q]\CLmstr\BankMstr.h[cno],KFName=[Q]\CLmstr\BankIdx1.h[cno],Use,RecL=64,KPs=1,KLn=2,Shr",i,outIn,k
 dim p$(6)*160
 fnHamster("Bank",mat lbl$,mat tln,1,mat p$,mat fltyp$,mat sln,mat mask,mat sp,mat c$)
 close #1:
@@ -39,7 +39,7 @@ gosub FixGlNumbers
 Xit: fnXit
  
 FixGlNumbers: ! r:
-	open #1: "Name=[Q]\CLmstr\BankMstr.h[cno],KFName=[Q]\CLmstr\BankIdx1.h[cno],Shr",internal,outIn,keyed
+	open #1: "Name=[Q]\CLmstr\BankMstr.h[cno],KFName=[Q]\CLmstr\BankIdx1.h[cno],Shr",i,outIn,k
 	do
 		read #1,using "form pos 33,c 12": gl$ eof L410
 		gl$=lpad$(rtrm$(gl$),12)

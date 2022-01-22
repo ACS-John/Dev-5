@@ -16,7 +16,7 @@ magicdate=fndate_mmddyy_to_ccyymmdd(d1)-20000 ! don't start with anything older 
 
 fnGetServices(mat serviceName$,mat srv$)
 open #2: "Name=[Q]\UBmstr\UBTransVB.h[cno],KFName=[Q]\UBmstr\UBTrIndx.h[cno],Shr",i,i,k
-open #hCustomer=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,outIn,keyed
+open #hCustomer=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",i,outIn,k
 L260: !
 read #hCustomer,using Fcustomer,release: z$,bildat eof SCREEN1
 if bildat<>d1 then goto L260 ! current customer

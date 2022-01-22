@@ -11,7 +11,7 @@ fnTop(program$,"Budget Worksheet")
 gosub DETERMINE_DATE
 on fkey 5 goto L760
 open #1: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLINDEX.h[cno],Shr",i,i,k
-open #12: "Name=[Q]\GLmstr\BudgetInfo.h[cno],KFName=[Q]\GLmstr\BudIndx.h[cno],Use,RecL=28,KPs=1,KLn=14,Shr",internal,outIn,keyed
+open #12: "Name=[Q]\GLmstr\BudgetInfo.h[cno],KFName=[Q]\GLmstr\BudIndx.h[cno],Use,RecL=28,KPs=1,KLn=14,Shr",i,outIn,k
 if fnprocess=1 then goto L440
 ! defaults
 	pba$='False' : bud$='False'

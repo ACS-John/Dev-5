@@ -1,4 +1,4 @@
-open #1: "Name=S:\Core\Data\acsllc\Client.h[cno],KFName=S:\Core\Data\acsllc\Client-Idx.h[cno],Shr",internal,outIn,keyed 
+open #1: "Name=S:\Core\Data\acsllc\Client.h[cno],KFName=S:\Core\Data\acsllc\Client-Idx.h[cno],Shr",i,outIn,k 
 do
 	dim z$*5,a$(5)*30,ph$*12,ss$*11,dd(10),sc(10)
 	dim ca(10),ph2$*12,ss2$*11,ar(5)

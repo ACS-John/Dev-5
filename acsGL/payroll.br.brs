@@ -40,7 +40,7 @@
 	sc3$(2)="Check #:"
 	sc3$(21)="Net Pay:"
 	if exists ("[Q]\GLmstr\PRmstr.h[cno]") =0 then goto INITIAL_BUILD
-	open #1: "Name=[Q]\GLmstr\PRmstr.h[cno],KFName=[Q]\GLmstr\PRIndex.h[cno],Shr",internal,outIn,keyed ioerr L2900
+	open #1: "Name=[Q]\GLmstr\PRmstr.h[cno],KFName=[Q]\GLmstr\PRIndex.h[cno],Shr",i,outIn,k ioerr L2900
 	open #2: "Name=[Q]\GLmstr\ACPRCKS.h[cno],Shr",i,outi,r
 	goto MAIN
  

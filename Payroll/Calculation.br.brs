@@ -75,7 +75,7 @@ fnTop(program$)
 ! /r
 fnAutomatedSavePoint('before')
 fn_setupOpenFiles
-open #hRpWork=fnH: 'Name=[Q]\PRmstr\rpwork[unique_computer_id].h[cno],KFName=[Q]\PRmstr\rpwork[unique_computer_id]Idx.h[cno]',internal,outIn,keyed  ! was 3
+open #hRpWork=fnH: 'Name=[Q]\PRmstr\rpwork[unique_computer_id].h[cno],KFName=[Q]\PRmstr\rpwork[unique_computer_id]Idx.h[cno]',i,outIn,k  ! was 3
 F_rpWork: form pos 1,c 8,n 3,5*pd 4.2,25*pd 5.2,2*pd 4.2
 goto ReadRpWork
 ReadRpWork: ! r:  read rpwork, read employee, call calc deduction etc  basically beginning of main loop
@@ -2290,11 +2290,11 @@ def fn_setup
 
 fnend
 def fn_setupOpenFiles
-	open #hBreakdown=fnH: 'Name=[Q]\PRmstr\HourBreakdown.h[cno],KFName=[Q]\PRmstr\HourBreakdown-idx.h[cno],Shr',internal,outIn,keyed ioerr ignore ! formerly file #31
-	open #hEmployee=fnH: 'Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno]',internal,outIn,keyed  ! formerly file #1
-	open #hDepartment=fnH: 'Name=[Q]\PRmstr\Department.h[cno],KFName=[Q]\PRmstr\DeptIdx.h[cno],Shr',internal,outIn,keyed  ! was #2
-	open #hPrChecks=fnH: 'Name=[Q]\PRmstr\PayrollChecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno],Shr,Use,RecL=224,KPs=1,KLn=17',internal,outIn,keyed  ! was 4
-	open #hPayrollCheckIdx3_unused=fnH: 'Name=[Q]\PRmstr\PayrollChecks.h[cno],KFName=[Q]\PRmstr\checkidx3.h[cno],Shr',internal,outIn,keyed ! was 44
+	open #hBreakdown=fnH: 'Name=[Q]\PRmstr\HourBreakdown.h[cno],KFName=[Q]\PRmstr\HourBreakdown-idx.h[cno],Shr',i,outIn,k ioerr ignore ! formerly file #31
+	open #hEmployee=fnH: 'Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno]',i,outIn,k  ! formerly file #1
+	open #hDepartment=fnH: 'Name=[Q]\PRmstr\Department.h[cno],KFName=[Q]\PRmstr\DeptIdx.h[cno],Shr',i,outIn,k  ! was #2
+	open #hPrChecks=fnH: 'Name=[Q]\PRmstr\PayrollChecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno],Shr,Use,RecL=224,KPs=1,KLn=17',i,outIn,k  ! was 4
+	open #hPayrollCheckIdx3_unused=fnH: 'Name=[Q]\PRmstr\PayrollChecks.h[cno],KFName=[Q]\PRmstr\checkidx3.h[cno],Shr',i,outIn,k ! was 44
 fnend
 def fn_setupCloseFiles
 	close #hBreakdown:

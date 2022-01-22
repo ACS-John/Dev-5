@@ -7,10 +7,10 @@ scNotFoundCount=0
 open #3: "Name=S:\Core\Data\acsllc\TMWK[acsUserId].h[cno],NoShr",internal,input
 open #2: "Name=S:\Core\Data\acsllc\TMTRANS.h[cno],Shr",i,outi,r
 F2lta: form pos 54,pd 3
-open #1: "Name=S:\Core\Data\acsllc\Client.h[cno],KFName=S:\Core\Data\acsllc\Client-Idx.h[cno],Shr",internal,outIn,keyed
+open #1: "Name=S:\Core\Data\acsllc\Client.h[cno],KFName=S:\Core\Data\acsllc\Client-Idx.h[cno],Shr",i,outIn,k
 open #4: "Name=S:\Core\Data\acsllc\TMTRAddr.h[cno],Shr",i,outi,r
-open #hEmployee=fnH: "Name=S:\Core\Data\acsllc\EMmstr.h[cno],KFName=S:\Core\Data\acsllc\EMIndex.h[cno],Shr",internal,outIn,keyed
-open #hService=fnH: "Name=S:\Core\Data\acsllc\SCMSTR.h[cno],KFName=S:\Core\Data\acsllc\SCIndex.h[cno],Shr",internal,outIn,keyed
+open #hEmployee=fnH: "Name=S:\Core\Data\acsllc\EMmstr.h[cno],KFName=S:\Core\Data\acsllc\EMIndex.h[cno],Shr",i,outIn,k
+open #hService=fnH: "Name=S:\Core\Data\acsllc\SCMSTR.h[cno],KFName=S:\Core\Data\acsllc\SCIndex.h[cno],Shr",i,outIn,k
 
 LoopTop: !
 	dim k$*5

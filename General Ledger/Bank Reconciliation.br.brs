@@ -15,8 +15,8 @@ dim io7$(9),dpt(3),io8$(25),dpd(5,5)
 
 fnTop(program$, "Reconcile Bank")
 fndat(dat$)
-open #bankrec1:=1: "Name=[Q]\GLmstr\bankrec.h[cno],KFName=[Q]\GLmstr\Bankrec-idx.h[cno],Shr",internal,outIn,keyed
-! Open #BANKREC2:=2: "Name=[Q]\GLmstr\bankrec.h[cno],KFName=[Q]\GLmstr\bankx2.h[cno],Shr",Internal,outIn,Keyed  ! ????? ken
+open #bankrec1:=1: "Name=[Q]\GLmstr\bankrec.h[cno],KFName=[Q]\GLmstr\Bankrec-idx.h[cno],Shr",i,outIn,k
+! Open #BANKREC2:=2: "Name=[Q]\GLmstr\bankrec.h[cno],KFName=[Q]\GLmstr\bankx2.h[cno],Shr",i,outIn,k  ! ????? ken
 close #82: ioerr ignore
 open #82: "Name=[Q]\GLmstr\Bank2"&wsid$&".h[cno],Use,RecL=35",i,outi,r
 read #82,using "form pos 1,c 12",rec=1: wbc$ noRec L270

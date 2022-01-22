@@ -32,7 +32,7 @@ MSGBOX1: !
 if resp$="OK" then goto ScrOne else goto Xit
 
 L300: !
-	open #1: "Name=[Q]\GLmstr\PRmstr.h[cno],KFName=[Q]\GLmstr\PRIndex.h[cno],Shr",internal,outIn,keyed
+	open #1: "Name=[Q]\GLmstr\PRmstr.h[cno],KFName=[Q]\GLmstr\PRIndex.h[cno],Shr",i,outIn,k
 	do
 		read #1,using L320: x eof L350
 		L320: form pos 91,36*pd 5.2,2*n 5

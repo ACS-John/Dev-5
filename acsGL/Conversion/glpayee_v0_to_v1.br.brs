@@ -4,17 +4,17 @@
 def library fnglpayee_v0_to_v1
 	autoLibrary
 	fnStatus('updating Payee file format.')
-	open #1: "Name=[Q]\GLmstr\GL1099.h[cno],KFName=[Q]\GLmstr\GL109IDX.h[cno]",internal,outIn,keyed ioerr ignore
+	open #1: "Name=[Q]\GLmstr\GL1099.h[cno],KFName=[Q]\GLmstr\GL109IDX.h[cno]",i,outIn,k ioerr ignore
 	if ~exists("[Q]\GLmstr\PayMstr.h[cno]") then 
-		open #2: "Name=[Q]\GLmstr\PayMstr.h[cno],KFName=[Q]\GLmstr\payidx1.h[cno],RecL=276,kps=1,kln=8,replace",internal,outIn,keyed
+		open #2: "Name=[Q]\GLmstr\PayMstr.h[cno],KFName=[Q]\GLmstr\payidx1.h[cno],RecL=276,kps=1,kln=8,replace",i,outIn,k
 		version(2,1)
 		close #2:
 	end if
-	open #2: "Name=[Q]\GLmstr\PayMstr.h[cno]",i,outi,r  ! open #2: "Name=[Q]\GLmstr\PayMstr.h[cno],KFName=[Q]\GLmstr\payidx1.h[cno]",internal,outIn,keyed
+	open #2: "Name=[Q]\GLmstr\PayMstr.h[cno]",i,outi,r  ! open #2: "Name=[Q]\GLmstr\PayMstr.h[cno],KFName=[Q]\GLmstr\payidx1.h[cno]",i,outIn,k
 	if rln(2)<>276 then
 		close #2:
 		fnCopy("[Q]\GLmstr\PayMstr.h[cno]","[Q]\GLmstr\PayMstr.h[cno]",276)
-		open #2: "Name=[Q]\GLmstr\PayMstr.h[cno]",i,outi,r  ! open #2: "Name=[Q]\GLmstr\PayMstr.h[cno],KFName=[Q]\GLmstr\payidx1.h[cno]",internal,outIn,keyed
+		open #2: "Name=[Q]\GLmstr\PayMstr.h[cno]",i,outi,r  ! open #2: "Name=[Q]\GLmstr\PayMstr.h[cno],KFName=[Q]\GLmstr\payidx1.h[cno]",i,outIn,k
 	end if
 	do
 		dim nam$*35,ad1$*20,ad2$*20,csz$*20,ss$*11

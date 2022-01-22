@@ -106,7 +106,7 @@ dim lbl$(11)*38,tln(11),p$(11)*160,fltyp$(11),sln(11),mask(11),c$(11,8)*256 ! SP
 	c$(cl,7)='S:\Core\Data\acsllc\TimeFrame-Idx.h420'
 	c$(cl,8)=limit_to_list$
 ! /r
-open #1: 'Name=S:\Core\Data\acsllc\Support.h420,Version=2,KFName=S:\Core\Data\acsllc\Support-Idx.h420,Use,RecL=246,KPs=1/7,KLn=6/2,Shr',internal,outIn,keyed
+open #1: 'Name=S:\Core\Data\acsllc\Support.h420,Version=2,KFName=S:\Core\Data\acsllc\Support-Idx.h420,Use,RecL=246,KPs=1/7,KLn=6/2,Shr',i,outIn,k
 fnHamster("Support",mat lbl$,mat tln,1,mat p$,mat fltyp$,mat sln,mat mask,mat sp,mat c$)
 close #1:
 fnIndex('S:\Core\Data\acsllc\support.h420','S:\Core\Data\acsllc\support-idx.h420','1/7,6/2')

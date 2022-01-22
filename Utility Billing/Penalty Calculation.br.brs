@@ -5,13 +5,13 @@ fnTop(program$)
 if fn_scrMain then !
 	! r: initiate ( save, open, constants, headers, etc)
 	fnAutomatedSavePoint('before')
-	open #hCustomer:=fnH: 'Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr',internal,outIn,keyed
+	open #hCustomer:=fnH: 'Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr',i,outIn,k
 	Fcustomer: form pos 1,c 10,4*c 30,pos 143,7*pd 2,pos 292,pd 4.2,pd 4,12*pd 4.2,pos 388,10*pd 5.2,pos 1741,n 2,n 7,2*n 6,n 9,pd 5.2,n 3,3*n 9,3*n 2,3*n 3,n 1,3*n 9,3*pd 5.2,pos 217,15*pd 5
 	FCustomerBalGb: form pos 292,pd 4.2,pos 388,10*pd 5.2
 	FcustomerBal: form pos 292,pd 4.2
-	open #hTrans1:=fnH: 'Name=[Q]\UBmstr\ubTransVB.h[cno],KFName=[Q]\UBmstr\ubtrindx.h[cno],Shr',internal,outIn,keyed
+	open #hTrans1:=fnH: 'Name=[Q]\UBmstr\ubTransVB.h[cno],KFName=[Q]\UBmstr\ubtrindx.h[cno],Shr',i,outIn,k
 	Ftrans1: form pos 1,c 10,n 8,n 1,12*pd 4.2,6*pd 5,pd 4.2,n 1
-	open #hTrans2=fnH: 'Name=[Q]\UBmstr\ubTransVB.h[cno],KFName=[Q]\UBmstr\UBTrdt.h[cno],Shr',internal,outIn,keyed
+	open #hTrans2=fnH: 'Name=[Q]\UBmstr\ubTransVB.h[cno],KFName=[Q]\UBmstr\UBTrdt.h[cno],Shr',i,outIn,k
 
 	dim serviceName$(10)*20
 	dim service$(10)
@@ -446,7 +446,7 @@ fnend
 	fnend
 	def fn_bud1
 		bud1=0
-		open #81: 'Name=[Q]\UBmstr\BudMstr.h[cno],KFName=[Q]\UBmstr\BudIdx1.h[cno],Shr',internal,outIn,keyed ioerr EO_BUD1
+		open #81: 'Name=[Q]\UBmstr\BudMstr.h[cno],KFName=[Q]\UBmstr\BudIdx1.h[cno],Shr',i,outIn,k ioerr EO_BUD1
 		open #82: 'Name=[Q]\UBmstr\BudTrans.h[cno],Shr',i,outi,r
 		bud1=1
 		EO_BUD1: !

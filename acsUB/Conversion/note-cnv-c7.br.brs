@@ -32,7 +32,7 @@ def library fnub_cnv_note_phase_1
   execute "Rename [Temp]\Work."&session$&' '&"[Q]\UBmstr\Note1.h[cno] -n"
   fnCopy("[Q]\UBmstr\Note2.h[cno]","[Q]\UBmstr\Note2.h[cno]",73)
   fnIndex("[Q]\UBmstr\Note1.h[cno]","[Q]\UBmstr\NoteIdx1.h[cno]","1 10")
-  open #note1=fnH: "Name=[Q]\UBmstr\Note1.h[cno],KFName=[Q]\UBmstr\NoteIdx1.h[cno]",internal,outIn,keyed
+  open #note1=fnH: "Name=[Q]\UBmstr\Note1.h[cno],KFName=[Q]\UBmstr\NoteIdx1.h[cno]",i,outIn,k
   version(note1,1)
   close #note1: ioerr ignore
   fnStatus("[Q]\UBmstr\Note1.h[cno] converted successfully to version 1.")
@@ -40,7 +40,7 @@ def library fnub_cnv_note_phase_1
 
 	EOPHASE1: ! /r
 	! r: *** Phase 2 ***"
-	open #note1=fnH: "Name=[Q]\UBmstr\Note1.h[cno],KFName=[Q]\UBmstr\NoteIdx1.h[cno]",internal,outIn,keyed
+	open #note1=fnH: "Name=[Q]\UBmstr\Note1.h[cno],KFName=[Q]\UBmstr\NoteIdx1.h[cno]",i,outIn,k
 	open #note2=fnH: "Name=[Q]\UBmstr\Note2.h[cno]",i,outi,r
 	if version(note2)=>1 then
 		close #note2: ioerr ignore
@@ -77,7 +77,7 @@ def library fnub_cnv_note_phase_1
 		open #hCustomer=fnH: "Name=[Q]\UBmstr\ubMaster.h[cno]",i,i,r
 	end if
 	fnIndex("[Q]\UBmstr\Note1.h[cno]","[Q]\UBmstr\NoteIdx1.h[cno]","1 10")
-	open #note1b=fnH: "Name=[Q]\UBmstr\Note1.h[cno],KFName=[Q]\UBmstr\NoteIdx1.h[cno]",internal,outIn,keyed
+	open #note1b=fnH: "Name=[Q]\UBmstr\Note1.h[cno],KFName=[Q]\UBmstr\NoteIdx1.h[cno]",i,outIn,k
 	open #note2b=fnH: "Name=[Q]\UBmstr\Note2.h[cno]",i,outi,r
 	L50100: !
 	read #hCustomer,using 'form pos 1,C 10': z$ eof EO4

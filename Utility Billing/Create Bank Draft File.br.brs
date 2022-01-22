@@ -43,14 +43,14 @@ fnTop(program$)
 goto initialization ! /r
 initialization: ! r: initialization
 	! open #3: "Name=[Q]\UBmstr\UBAdrBil.h[cno],Shr",i,outi,r
-	open #hCustomer=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,outIn,keyed
+	open #hCustomer=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",i,outIn,k
 	close #22: ioerr ignore
 	open #hOut=fnH: "Name=[Temp]\BkDraft_Tmp_22.[Session],RecL=94,Replace",d,o
 	if postub=1 then
 		open #6: "Name=[Q]\UBmstr\Collections-"&env$('acsUserId')&".h[cno],RecL=91,Replace", internal,outIn,relative
 	end if
-	open #7: "Name=[Q]\UBmstr\ubTransVB.h[cno],KFName=[Q]\UBmstr\ubTrIndx.h[cno],Shr",internal,outIn,keyed
-	open #hTrans2=fnH: "Name=[Q]\UBmstr\ubTransVB.h[cno],KFName=[Q]\UBmstr\UBTrdt.h[cno],Shr",internal,outIn,keyed
+	open #7: "Name=[Q]\UBmstr\ubTransVB.h[cno],KFName=[Q]\UBmstr\ubTrIndx.h[cno],Shr",i,outIn,k
+	open #hTrans2=fnH: "Name=[Q]\UBmstr\ubTransVB.h[cno],KFName=[Q]\UBmstr\UBTrdt.h[cno],Shr",i,outIn,k
 	fnopenprn
 	gosub HdrP1
 	gosub HDR1

@@ -17,7 +17,7 @@ else
 	rd1=val(resp$(1))
 end if
 fnAutomatedSavePoint('before')
-open #ivpaid=fnH: "Name=[Q]\CLmstr\IvPaid.h[cno],KFName=[Q]\CLmstr\IVIndex.h[cno],Shr",internal,outIn,keyed
+open #ivpaid=fnH: "Name=[Q]\CLmstr\IvPaid.h[cno],KFName=[Q]\CLmstr\IVIndex.h[cno],Shr",i,outIn,k
 open #work=fnH: "Name=[Q]\CLmstr\Work.[session],Size=0,RecL=34,Replace",internal,output
 do
 	READ_IVPAID: !

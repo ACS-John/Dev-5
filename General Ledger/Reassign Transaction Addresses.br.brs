@@ -20,7 +20,7 @@ def library fnReassignTransactionAddresses(cno)
 fnend
 def fn_reassignTrA(cno)
 
-	open #hAcct=fnH: 'Name=[Q]\GLmstr\GLmstr.h'&str$(cno)&',KFName=[Q]\GLmstr\GLIndex.H'&str$(cno)&',Shr',internal,outIn,keyed
+	open #hAcct=fnH: 'Name=[Q]\GLmstr\GLmstr.h'&str$(cno)&',KFName=[Q]\GLmstr\GLIndex.H'&str$(cno)&',Shr',i,outIn,k
 	dim ta(2)
 	Facct: form pos 333,2*pd 3
 	open #hTrans=fnH: 'Name=[Q]\GLmstr\GLTrans.H'&str$(cno)&',Shr',i,outi,r

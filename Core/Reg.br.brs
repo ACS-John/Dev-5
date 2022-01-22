@@ -6,7 +6,7 @@ def fn_sreg_setup(; ___,returnN)
 		open #sreg_h=fnH: 'Name=S:\Core\Data\System Registry.dat,Version=1,KFName=S:\Core\Data\System Registry.idx,Shr',i,i,k
 		returnN=1
 	else
-		open #sreg_h=fnH: 'Name=S:\Core\Data\System Registry.dat,Version=1,KFName=S:\Core\Data\System Registry.idx,Use,RecL=384,KPs=1,KLn=128,Shr',internal,outIn,keyed
+		open #sreg_h=fnH: 'Name=S:\Core\Data\System Registry.dat,Version=1,KFName=S:\Core\Data\System Registry.idx,Use,RecL=384,KPs=1,KLn=128,Shr',i,outIn,k
 		returnN=2
 	end if
 	fn_sreg_setup=returnN
@@ -107,7 +107,7 @@ def fn_mcregSetup
 		mcregFileData$=env$('QBase')&'\Data\Multi-Client Registry.dat'
 		mcregFileIndex$=env$('QBase')&'\Data\Multi-Client Registry.idx'
 		if ~exists(mcregFileData$) then fnmakesurepathexists(mcregFileData$)
-		open #mcreg_h=fnH: 'Name='&mcregFileData$&',Version=1,KFName='&mcregFileIndex$&',Use,RecL=384,KPs=1,KLn=128,Shr',internal,outIn,keyed
+		open #mcreg_h=fnH: 'Name='&mcregFileData$&',Version=1,KFName='&mcregFileIndex$&',Use,RecL=384,KPs=1,KLn=128,Shr',i,outIn,k
 	end if
 	on error goto Ertn
 fnend
@@ -164,7 +164,7 @@ fnend
 def fn_regSetup
 	autoLibrary
 	fnmakesurepathexists('[Q]\Data\')
-	open #hReg=fnH: 'Name=[Q]\Data\reg.dat,Version=1,KFName=[Q]\Data\reg.idx,Use,RecL=384,KPs=1,KLn=128,Shr',internal,outIn,keyed
+	open #hReg=fnH: 'Name=[Q]\Data\reg.dat,Version=1,KFName=[Q]\Data\reg.idx,Use,RecL=384,KPs=1,KLn=128,Shr',i,outIn,k
 	fn_regSetup=1
 	on error goto Ertn
 fnend
@@ -234,7 +234,7 @@ def fn_creg_setup
 		cregFileData$ =datafolder$&'\reg-[CurSys].h[cno]'
 		cregFileIndex$=datafolder$&'\reg-[CurSys]-idx.h[cno]'
 		fnmakesurepathexists(cregFileData$)
-		open #hCreg=fnH: 'Name='&cregFileData$&',Version=1,KFName='&cregFileIndex$&',Use,RecL=384,KPs=1,KLn=128,Shr',internal,outIn,keyed
+		open #hCreg=fnH: 'Name='&cregFileData$&',Version=1,KFName='&cregFileIndex$&',Use,RecL=384,KPs=1,KLn=128,Shr',i,outIn,k
 		creg_setup$=env$('CNo')&env$('CurSys')&env$('client')
 	end if
 	on error goto Ertn

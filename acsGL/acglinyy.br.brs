@@ -33,7 +33,7 @@
 L330: form pos mp1,pd 3,pos 81,41*pd 6.2
 	form c 7,skip 0
 	nametab=int(44-len(rtrm$(env$('cnam')))/2)
-	pas=1 : open #4: "Name=[Temp]\Work.[Session],KFName=IDX."&wsid$&",Replace,RecL=33,KPS=1,KLN=5",internal,outIn,keyed
+	pas=1 : open #4: "Name=[Temp]\Work.[Session],KFName=IDX."&wsid$&",Replace,RecL=33,KPS=1,KLN=5",i,outIn,k
 	if actpd>0 and actpd<14 then goto L430
 	pr f "10,2,C 78": "THIS PROGRAM CANNOT PROCESS WITHOUT THE NUMBER OF THE ACCOUNTING PERIOD END"
 	pr f "12,2,C 60,N": "USE OPTION 1 ON THE MENU TO ENTER THIS INFORMATION"

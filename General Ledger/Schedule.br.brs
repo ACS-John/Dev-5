@@ -14,7 +14,7 @@
 	gosub BUILD_LAYOUT
 	if exists("[Q]\GLmstr\acglschs.h[cno]")=0 then
 		close #10: ioerr ignore
-		open #10: "Name=[Q]\GLmstr\ACGLSCHS.h[cno],KFName=[Q]\GLmstr\schindex.h[cno]",internal,outIn,keyed ioerr ignore
+		open #10: "Name=[Q]\GLmstr\ACGLSCHS.h[cno],KFName=[Q]\GLmstr\schindex.h[cno]",i,outIn,k ioerr ignore
 		close #10,free: ioerr ignore
 		CreateAcGlSchs: open #10: "Name=[Q]\GLmstr\ACGLSCHS.h[cno],SIZE=0,RecL=162",internal,output
 		CloseAcGlSchs: close #10: ioerr ignore
@@ -24,8 +24,8 @@
 		gosub INDEX
 	end if
 	L210: !
-	open #schedule:=10: "Name=[Q]\GLmstr\ACGLSCHS.h[cno],KFName=[Q]\GLmstr\schindex.h[cno],Shr",internal,outIn,keyed ioerr L1580
-	open #11: "Name=[Q]\GLmstr\ACGLSCHS.h[cno],KFName=[Q]\GLmstr\SchIndX2.h[cno],Shr",internal,outIn,keyed ioerr CloseAcGlSchs
+	open #schedule:=10: "Name=[Q]\GLmstr\ACGLSCHS.h[cno],KFName=[Q]\GLmstr\schindex.h[cno],Shr",i,outIn,k ioerr L1580
+	open #11: "Name=[Q]\GLmstr\ACGLSCHS.h[cno],KFName=[Q]\GLmstr\SchIndX2.h[cno],Shr",i,outIn,k ioerr CloseAcGlSchs
 	goto SCHEDULEGRID
 	close #10: ioerr ignore
 	execute "Index [Q]\GLmstr\ACGLSCHS.h[cno]"&' '&"[Q]\GLmstr\SchIndX2.h[cno] 3 30 Replace DupKeys -n"
@@ -218,7 +218,7 @@ OPEN_FILE: ! r:
 		gosub INDEX2
 	else
 		if exists("[Q]\GLmstr\schedule"&str$(sn)&"-idx.h[cno]")=0 then gosub INDEX2
-		open #open_file_count: "Name=[Q]\GLmstr\schedule"&str$(sn)&".h[cno],KFName=[Q]\GLmstr\schedule"&str$(sn)&"-idx.h[cno],Shr",internal,outIn,keyed
+		open #open_file_count: "Name=[Q]\GLmstr\schedule"&str$(sn)&".h[cno],KFName=[Q]\GLmstr\schedule"&str$(sn)&"-idx.h[cno],Shr",i,outIn,k
 	end if
 return ! /r
 FIXGLACCOUNTS: ! r: left pad general ledger number and reference number

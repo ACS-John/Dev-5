@@ -100,9 +100,9 @@ def fn_options(&route,&billingdate$) ! show options dialog to user and return se
 	end if
 fnend
 def fn_openfiles
-	open #hCustomer=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno]",internal,outIn,keyed
+	open #hCustomer=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno]",i,outIn,k
 	open #hTrans=fnH: "Name=[Q]\UBmstr\ubtransvb.h[cno],KFName=[Q]\UBmstr\ubtrindx.h[cno]",i,i,k
-	! open #hTrans2=fnH: "Name=[Q]\UBmstr\ubtransvb.h[cno],KFName=[Q]\UBmstr\UBTrdt.h[cno]",internal,outIn,keyed
+	! open #hTrans2=fnH: "Name=[Q]\UBmstr\ubtransvb.h[cno],KFName=[Q]\UBmstr\UBTrdt.h[cno]",i,outIn,k
 fnend
 def fn_printheader
 	pg+=1

@@ -57,17 +57,17 @@ ASK_SORT: !
 	execute "Free [Temp]\Addr -n" ioerr ignore
 	execute "Sort [Temp]\Control -n"
 	open #addr:=9: "Name=[Temp]\Addr",internal,input
-	open #paymstr:=13: "Name=[Q]\CLmstr\PayMstr.h[cno],KFName=[Q]\CLmstr\PayIdx1.h[cno],Shr",internal,outIn,keyed
+	open #paymstr:=13: "Name=[Q]\CLmstr\PayMstr.h[cno],KFName=[Q]\CLmstr\PayIdx1.h[cno],Shr",i,outIn,k
 	open #rpmstr:=23: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr",i,i,k ioerr L550
 	prcode=1
 	L550: !
 	open #clwork:=10: "Name=[Q]\CLmstr\CLWork"&wsid$&".h[cno],Shr",i,i,r
-	open #glmstr:=5: "Name=[Q]\CLmstr\GLmstr.h[cno],KFName=[Q]\CLmstr\GLIndex.h[cno],Shr",internal,outIn,keyed
+	open #glmstr:=5: "Name=[Q]\CLmstr\GLmstr.h[cno],KFName=[Q]\CLmstr\GLIndex.h[cno],Shr",i,outIn,k
 	open #work:=6: "Name=[Temp]\Work,Size=0,RecL=22,Replace",internal,output
 	close #work:
 	execute "Free [Temp]\Indx -n" ioerr ignore
 	execute "Index [Temp]\Work,[Temp]\Indx,1,12,Replace,DupKeys -n"
-	open #work=6: "Name=[Temp]\Work,KFName=[Temp]\Indx",internal,outIn,keyed
+	open #work=6: "Name=[Temp]\Work,KFName=[Temp]\Indx",i,outIn,k
 	open #hFund=fnH: "Name=[Q]\CLmstr\FundMstr.h[cno],KFName=[Q]\CLmstr\FundIdx1.h[cno],Shr",i,i,k ! 7
 	notused=1: open #11: "Name=[Q]\CLmstr\DptMstr.h[cno],KFName=[Q]\CLmstr\dptidx1.h[cno]",i,i,k ioerr L640 : notused=0
 	L640: !

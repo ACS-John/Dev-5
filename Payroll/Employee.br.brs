@@ -693,7 +693,7 @@ EmployeeChangeKey: ! r:
 	for fileItem=1 to udim(mat filename$)
 		if pos(lwrc$(filename$(fileItem)),'idx.')<=0 and pos(lwrc$(filename$(fileItem)),'idx2.')<=0 then
 			kfname$=srep$(filename$(fileItem),'.','Idx.')
-			open #h_rpwork=fnH: 'Name=[Q]\PRmstr\'&filename$(fileItem)&',KFName=[Q]\PRmstr\'&kfname$&',shr',internal,outIn,keyed ioerr RpworkOpenErr
+			open #h_rpwork=fnH: 'Name=[Q]\PRmstr\'&filename$(fileItem)&',KFName=[Q]\PRmstr\'&kfname$&',shr',i,outIn,k ioerr RpworkOpenErr
 			fnKeyChange(h_rpwork,'form pos 1,n 8',heno$,lpad$(str$(eno),8))
 			close #h_rpwork:
 		end if
@@ -708,12 +708,12 @@ EmployeeChangeKey: ! r:
 	CHGENO_XIT: !
 goto EmployeeEditXit ! /r
 def fn_openFiles
-	open #hEmployee=fnH: "name=[Q]\PRmstr\Employee.h[cno],version=1,kfName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr",internal,outIn,keyed
+	open #hEmployee=fnH: "name=[Q]\PRmstr\Employee.h[cno],version=1,kfName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr",i,outIn,k
 	F_employee: form pos 1,n 8,3*c 30,c 11,2*n 1,7*n 2,2*pd 3.3,6*pd 4.2,2*n 6,pd 5.2,n 1,c 4,x 1,c 12,n 6,4*n 12.2
-	open #hEmployeeIdx2=fnH: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-name.h[cno],Shr",internal,outIn,keyed
-	open #hCheckIdx1=fnH: "Name=[Q]\PRmstr\PayrollChecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno],Shr",internal,outIn,keyed
-	open #hCheckIdx3=fnH: "Name=[Q]\PRmstr\PayrollChecks.h[cno],KFName=[Q]\PRmstr\checkidx3.h[cno],Shr",internal,outIn,keyed
-	open #hDepartment=fnH: "Name=[Q]\PRmstr\Department.h[cno],KFName=[Q]\PRmstr\DeptIdx.h[cno],Shr",internal,outIn,keyed
+	open #hEmployeeIdx2=fnH: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-name.h[cno],Shr",i,outIn,k
+	open #hCheckIdx1=fnH: "Name=[Q]\PRmstr\PayrollChecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno],Shr",i,outIn,k
+	open #hCheckIdx3=fnH: "Name=[Q]\PRmstr\PayrollChecks.h[cno],KFName=[Q]\PRmstr\checkidx3.h[cno],Shr",i,outIn,k
+	open #hDepartment=fnH: "Name=[Q]\PRmstr\Department.h[cno],KFName=[Q]\PRmstr\DeptIdx.h[cno],Shr",i,outIn,k
 		Fdept: form pos 1,n 8,n 3,c 12,4*n 6,3*n 2,pd 4.2,23*pd 4.2
 		!  pos 1   n  8   teno
 		!          n  3   tdn
@@ -939,7 +939,7 @@ def fn_dDkey$*10(eno)
 	fn_dDkey$=rpad$(str$(eno),10)
 fnend
 def fn_dDopen
-	open #hDd=fnH: "Name=[Q]\PRmstr\dd.h[cno],RecL=72,KFName=[Q]\PRmstr\DDidx1.h[cno],kps=1,kln=10,Use",internal,outIn,keyed
+	open #hDd=fnH: "Name=[Q]\PRmstr\dd.h[cno],RecL=72,KFName=[Q]\PRmstr\DDidx1.h[cno],kps=1,kln=10,Use",i,outIn,k
 	fn_dDopen=hDd
 fnend
 def fn_dDclose

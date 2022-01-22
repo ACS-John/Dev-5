@@ -8,8 +8,8 @@ dim de$*30,tr$(5)*35
 open #20: 'Name=[Q]\CLmstr\Company.h[cno],Shr',internal,input
 read #20,using 'form pos 417,N 1': rcn
 close #20:
-open #trmstr:=1: 'Name=[Q]\CLmstr\TrMstr.h[cno],KFName=[Q]\CLmstr\TrIdx1.h[cno]',internal,outIn,keyed
-open #tralloc:=3: 'Name=[Q]\CLmstr\TrAlloc.h[cno],KFName=[Q]\CLmstr\TrAlloc-idx.h[cno]',internal,outIn,keyed
+open #trmstr:=1: 'Name=[Q]\CLmstr\TrMstr.h[cno],KFName=[Q]\CLmstr\TrIdx1.h[cno]',i,outIn,k
+open #tralloc:=3: 'Name=[Q]\CLmstr\TrAlloc.h[cno],KFName=[Q]\CLmstr\TrAlloc-idx.h[cno]',i,outIn,k
 L150: !
 	fnTos
 	mylen=30 : mypos=mylen+3 : lc=0

@@ -5,11 +5,11 @@ if fnAskFileName(filename$,'open','*.txt;*.csv','Tab Delimited',env$('cap'))>0 t
 	fnOpenPrn
  
 	open #hIn=fnH: 'name='&filename$,d,i
-	open #hCustomer=fnH: 'Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr',internal,outin,keyed
-	open #hCustomer2=fnH: 'Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx2.h[cno],Shr',internal,outin,keyed
-	open #hCustomer3=fnH: 'Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx3.h[cno],Shr',internal,outin,keyed
-	open #hCustomer4=fnH: 'Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx4.h[cno],Shr',internal,outin,keyed
-	open #hCustomer5=fnH: 'Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx5.h[cno],Shr',internal,outin,keyed
+	open #hCustomer=fnH: 'Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr',i,outIn,k
+	open #hCustomer2=fnH: 'Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx2.h[cno],Shr',i,outIn,k
+	open #hCustomer3=fnH: 'Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx3.h[cno],Shr',i,outIn,k
+	open #hCustomer4=fnH: 'Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx4.h[cno],Shr',i,outIn,k
+	open #hCustomer5=fnH: 'Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx5.h[cno],Shr',i,outIn,k
 	dim line$*512
 	dim item$(0)*80
 	dim col_account$(0)*80

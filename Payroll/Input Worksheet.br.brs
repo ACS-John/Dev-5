@@ -6,7 +6,7 @@ dim message$*40
 dim gl$*12,tdt(4),tcd(3),tdet(23)
 fnTop(program$)
 open #1: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr",i,i,k
-open #2: "Name=[Q]\PRmstr\Department.h[cno], KFName=[Q]\PRmstr\DeptIdx.h[cno]",internal,outIn,keyed
+open #2: "Name=[Q]\PRmstr\Department.h[cno], KFName=[Q]\PRmstr\DeptIdx.h[cno]",i,outIn,k
 fnopenprn
 gosub HDR
 READ_EMPLOYEE: ! r: main loop

@@ -30,7 +30,7 @@
 include: ertn
 OldWorkFromFixedWidthList: ! r: change route and sequence numbers from a text file
 	dim ln$*128
-	open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,outIn,keyed
+	open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",i,outIn,k
 	open #2: "Name=chg\newrouteseq.txt",display,input
 	fnopenprn
 	READ_CUSTOMER: !

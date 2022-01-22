@@ -36,8 +36,8 @@ open #1: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno
 open #2: "Name=[Q]\PRmstr\JCMSTR.h[cno],KFName=[Q]\PRmstr\JCIndx.h[cno],Shr",i,i,k
 open #3: "Name=[Temp]\Work."&session$,i,i,r
 open #4: "Name=[Temp]\Addr."&session$,internal,input ioerr Xit
-open #8: "Name=[Q]\PRmstr\Department.h[cno],KFName=[Q]\PRmstr\DeptIdx.h[cno]",internal,outIn,keyed
-open #7: "Name=[Q]\PRmstr\PayrollChecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno]",internal,outIn,keyed
+open #8: "Name=[Q]\PRmstr\Department.h[cno],KFName=[Q]\PRmstr\DeptIdx.h[cno]",i,outIn,k
+open #7: "Name=[Q]\PRmstr\PayrollChecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno]",i,outIn,k
 dim dr(7)
 read #3,using L430,rec=1: df,dt,mat dr
 L430: form pos 1,2*n 6,7*pd 3

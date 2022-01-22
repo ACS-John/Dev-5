@@ -7,7 +7,7 @@ autoLibrary
 service_from=5
 service_to=10
 ! r: customer file
-	open #hCustomer=fnH: "Name=[Q]\UBmstr\customer.h[cno],KFName=[Q]\UBmstr\ubindex.h[cno],SHR",internal,outIn,keyed 
+	open #hCustomer=fnH: "Name=[Q]\UBmstr\customer.h[cno],KFName=[Q]\UBmstr\ubindex.h[cno],SHR",i,outIn,k 
 	dim z$*10,charge(10)
 	F_CUSTOMER: form pos 1,c 10,pos 300,10*pd 4.2,pos 388,10*pd 5.2
 	customer_change_count=0
@@ -34,7 +34,7 @@ service_to=10
 	pr 'customer_change_count=';customer_change_count
 ! /r
 ! r: trans file
-	open #h_trans=fnH: "Name=[Q]\UBmstr\ubtransvb.h[cno],KFName=[Q]\UBmstr\ubtrindx.h[cno],SHR",internal,outIn,keyed 
+	open #h_trans=fnH: "Name=[Q]\UBmstr\ubtransvb.h[cno],KFName=[Q]\UBmstr\ubtrindx.h[cno],SHR",i,outIn,k 
 	dim a$*10,tg(10)
 	TRANSFORM: form c 10,n 8,n 1,12*pd 4.2,2*pd 5,pos 98,pd 4.2,n 1
 	trans_change_count=0

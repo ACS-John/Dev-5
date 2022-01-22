@@ -21,7 +21,7 @@
 		open #hAcTrans=fnH: 'Name=[Q]\GLmstr\AcTrans.h[cno],KFName=[Q]\GLmstr\AcTrIdx.h[cno]',i,i,k
 		startWithBalEndOfPriorYear=1
 	end if
-	open #hGlMstr=fnH: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLINDEX.h[cno],Shr",internal,outIn,keyed
+	open #hGlMstr=fnH: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLINDEX.h[cno],Shr",i,outIn,k
 	open #hGlTrans=fnH: "Name=[Q]\GLmstr\GLTrans.h[cno],Shr",i,i,r
 	fTransBoth: form pos 1,c 12,n 6,pd 6.2
 	! /r

@@ -7,9 +7,9 @@ fnTop(program$)
 
 dim dat$*20
 fndat(dat$)
-open #hPayee=fnH: "Name=[Q]\GLmstr\PayMstr.h[cno],KFName=[Q]\GLmstr\PayIdx2.h[cno],Shr",internal,outIn,keyed
-open #hPayee2=fnH: "Name=[Q]\GLmstr\PayMstr.h[cno],KFName=[Q]\GLmstr\payidx2.h[cno],Shr",internal,outIn,keyed
-open #hTran=fnH: "Name=[Q]\GLmstr\GLTR1099.h[cno],KFName=[Q]\GLmstr\gltridx1.h[cno],Shr",internal,outIn,keyed
+open #hPayee=fnH: "Name=[Q]\GLmstr\PayMstr.h[cno],KFName=[Q]\GLmstr\PayIdx2.h[cno],Shr",i,outIn,k
+open #hPayee2=fnH: "Name=[Q]\GLmstr\PayMstr.h[cno],KFName=[Q]\GLmstr\payidx2.h[cno],Shr",i,outIn,k
+open #hTran=fnH: "Name=[Q]\GLmstr\GLTR1099.h[cno],KFName=[Q]\GLmstr\gltridx1.h[cno],Shr",i,outIn,k
 if fnprocess=1 then goto GetStarted
 
 ASKDAT: ! r:

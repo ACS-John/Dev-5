@@ -27,7 +27,7 @@
 	right=1 : center=2 : left=0
 	cancel=5 : save=1 : pointtwo$='32'
 	pointthree$='33'
-	open #glmstr=11: "Name=[Q]\CLmstr\GLmstr.h[cno],KFName=[Q]\CLmstr\GLIndex.h[cno],Shr",internal,outIn,keyed ioerr ignore
+	open #glmstr=11: "Name=[Q]\CLmstr\GLmstr.h[cno],KFName=[Q]\CLmstr\GLIndex.h[cno],Shr",i,outIn,k ioerr ignore
 	open #company=1: "Name=[Q]\CLmstr\Company.h[cno],Shr",i,outi,r ioerr BUILD_COMPANY
 	goto READ_COMPANY
 !

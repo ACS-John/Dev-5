@@ -30,7 +30,7 @@
  
 	open #1: "Name=[Q]\GLmstr\Company.h[cno],Shr",i,outi,r: read #1,using 'form pos 386,PD 5.3,PD 5.2,PD 5.3,PD 5.2,pos 407,PD 5.3,PD 5.2,pos 418,10*C 20,10*N 1',rec=1: ficarate,ficawage,feducrat,feducwag,mcr,mcm,mat miscname$,mat dedcode : close #1:
 	ficarate=ficarate/100 : feducrat=feducrat/100 : mcr=mcr/100
-	open #h_prmstr=fnH: "Name=[Q]\GLmstr\PRmstr.h[cno],KFName=[Q]\GLmstr\PRIndex.h[cno],Shr",internal,outIn,keyed
+	open #h_prmstr=fnH: "Name=[Q]\GLmstr\PRmstr.h[cno],KFName=[Q]\GLmstr\PRIndex.h[cno],Shr",i,outIn,k
 	fPrmstr: form pos 1,n 4,3*c 25,c 11,36*pd 5.2,2*n 5
 	open #h_acprcks=fnH: "Name=[Q]\GLmstr\ACPRCKS.h[cno],Shr",i,outi,r
 	report$="Payroll Check Register"

@@ -120,8 +120,8 @@ ASK_INFO: !
 	goproc=0
 	if w1=2 then gosub L5930
 	open #1: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr",i,i,k
-	open #2: "Name=[Q]\PRmstr\department.h[cno],KFName=[Q]\PRmstr\deptidx.h[cno]",internal,outIn,keyed
-	open #4: "Name=[Q]\PRmstr\payrollchecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno]",internal,outIn,keyed
+	open #2: "Name=[Q]\PRmstr\department.h[cno],KFName=[Q]\PRmstr\deptidx.h[cno]",i,outIn,k
+	open #4: "Name=[Q]\PRmstr\payrollchecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno]",i,outIn,k
 	open #3: "Name=[Temp]\Addr."&session$,internal,input ioerr L960
 	close #3,free:
 L960: open #3: "Name=[Temp]\Addr.[Session],size=0,RecL=33,NoShr",internal,output

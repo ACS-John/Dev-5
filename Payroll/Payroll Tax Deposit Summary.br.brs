@@ -44,7 +44,7 @@ for j=1 to 20
 next j
 gosub PrHeader
 open #h_employee=fnH: "Name=[Q]\PRmstr\Employee.h[cno],Shr",i,i,r
-open #h_checks=fnH: "Name=[Q]\PRmstr\payrollchecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno]",internal,outIn,keyed
+open #h_checks=fnH: "Name=[Q]\PRmstr\payrollchecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno]",i,outIn,k
 do
 	ReadEmployee: !
 	read #h_employee,using "form pos 1,N 8,C 30": eno,em$ eof PrFinalTotals

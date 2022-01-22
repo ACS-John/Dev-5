@@ -186,7 +186,7 @@ def fn_billForNonMaint(client_id$,&invTotal; ___,wo_desc$*30,hTimeSheet) ! add c
 	! dim timesheet$(0)*128
 	! dim timesheetN(0)
 	! hTimeSheet=fn_open('Client Billing TimeSheet',mat timesheet$, mat timesheetN, mat form$)
-	open #hTimeSheet=fnH: 'Name=[Temp]\TmSht[session],KFName=[Temp]\TmSht-idx[session]',internal,outIn,keyed
+	open #hTimeSheet=fnH: 'Name=[Temp]\TmSht[session],KFName=[Temp]\TmSht-idx[session]',i,outIn,k
 	dim inp7
 	read #hTimeSheet,using F_time,key=>rpad$(client_id$,kln(hTimeSheet)): inp1$,inp2,inp3,inp4,inp5  ,inp6	,inp7,b6  	,b7  ,	b8$,sc,       o_o 	,wo_desc$ nokey TM_XIT2
 	F_time: form pos 1,                                                        v 5 ,n 9  ,2*pd 3.2 ,pd 4.2,n 6 	,n 2 ,pd 2	,pd 1,	c 2,n 4,x 12, pd 3	,c 30
@@ -315,7 +315,7 @@ fnend
 def fn_combineIntoTmSht(file_from$*256; ___,tce_key$,wo_desc$*30,h_from,h_to,toInp3,toInp5)
 
 	open #h_from=fnH: 'Name='&file_from$,internal,input
-	open #h_to=fnH: 'Name=[Temp]\TmSht[session],KFName=[Temp]\TmSht-idx[session],Replace,RecL='&str$(rln(h_from))&',KPs=1/36/25,KLn=5/2/6',internal,outIn,keyed
+	open #h_to=fnH: 'Name=[Temp]\TmSht[session],KFName=[Temp]\TmSht-idx[session],Replace,RecL='&str$(rln(h_from))&',KPs=1/36/25,KLn=5/2/6',i,outIn,k
 	do
 		read #h_from,using F_time: inp1$,inp2,inp3,inp4,inp5,inp6,inp7,b6,b7,b8$,sc,o_o,wo_desc$ eof TCE_EOF
 		
@@ -443,7 +443,7 @@ def fn_mergeInvoices
 	dim tmwk2_sc$(30)
 	open #h_artrans=fnH:  'Name=S:\Core\Data\acsllc\Transactions.h[cno],Shr',i,outi,r
 	open #h_tmtrans=fnH:  'Name=S:\Core\Data\acsllc\TMTRANS.h[cno],Shr',i,outi,r
-	open #h_clmstr=fnH:   'Name=S:\Core\Data\acsllc\Client.h[cno],KFName=S:\Core\Data\acsllc\Client-Idx.h[cno],Shr',internal,outIn,keyed
+	open #h_clmstr=fnH:   'Name=S:\Core\Data\acsllc\Client.h[cno],KFName=S:\Core\Data\acsllc\Client-Idx.h[cno],Shr',i,outIn,k
 	open #h_tmtraddr=fnH: 'Name=S:\Core\Data\acsllc\TMTRAddr.h[cno],Shr',i,outi,r
 	do  ! r: main loop
 		READ_TMWK: !

@@ -16,8 +16,8 @@
 	cmask$(3)=''
 
 	fnTop(program$)
-	open #4: "Name=[Q]\GLmstr\GLmstr.h[cno],Shr,KFName=[Q]\GLmstr\GLINDEX.h[cno],Shr",internal,outIn,keyed 
-	open #2: 'Name=[Q]\GLmstr\GLTrans.h[cno],kfname=[Q]\GLmstr\glTrans-IdxAcct.h[cno],Shr',internal,outIn,keyed
+	open #4: "Name=[Q]\GLmstr\GLmstr.h[cno],Shr,KFName=[Q]\GLmstr\GLINDEX.h[cno],Shr",i,outIn,k 
+	open #2: 'Name=[Q]\GLmstr\GLTrans.h[cno],kfname=[Q]\GLmstr\glTrans-IdxAcct.h[cno],Shr',i,outIn,k
 	gosub BUILD_LAYOUT
 MAIN: ! r:
 	fnTos
@@ -179,7 +179,7 @@ goto MAIN ! /r
 OPEN_FILE: ! r:
 	open_file_count=1 : close #3: ioerr ignore ! this value is used in the close_file sub routine
 	if exists("[Q]\GLmstr\GL"&cnvrt$("PIC(######)",review)&".h[cno]")=0 then gosub INDEX
-	open #open_file_count: "Name=[Q]\GLmstr\GL"&cnvrt$("PIC(######)",review)&".h[cno],KFName=[Q]\GLmstr\GL"&cnvrt$("PIC(######)",review)&"-idx.h[cno],RecL=104,kps=1,kln=12,USE",internal,outIn,keyed 
+	open #open_file_count: "Name=[Q]\GLmstr\GL"&cnvrt$("PIC(######)",review)&".h[cno],KFName=[Q]\GLmstr\GL"&cnvrt$("PIC(######)",review)&"-idx.h[cno],RecL=104,kps=1,kln=12,USE",i,outIn,k 
 return  ! /r
 
 CLOSE_FILE: ! r:

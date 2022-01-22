@@ -22,7 +22,7 @@ MainLoop: ! r:
 	close #1:
 	fn_currentToAccumlatedTrans
 	OPEN_GLMSTR: !
-	open #hAcct=fnH: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLINDEX.h[cno]",internal,outIn,keyed
+	open #hAcct=fnH: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLINDEX.h[cno]",i,outIn,k
 	fnStatus("Closing Month...")
 	do
 		dim bc(13)
@@ -46,7 +46,7 @@ MainLoop: ! r:
 		FileDrop: !
 		open #hBankRec=fnH: "Name=[Q]\GLmstr\GLBRec.h[cno],SIZE=0,RecL=68,Replace",internal,outIn
 	else 
-		open #hBankRec=fnH: "Name=[Q]\GLmstr\GLBRec.h[cno],KFName=[Q]\GLmstr\GLRecIdx.h[cno]",internal,outIn,keyed ioerr FileDrop
+		open #hBankRec=fnH: "Name=[Q]\GLmstr\GLBRec.h[cno],KFName=[Q]\GLmstr\GLRecIdx.h[cno]",i,outIn,k ioerr FileDrop
 		do
 			read #hBankRec,using 'form pos 63,PD 5.2,pos 68,N 1': a2,a3 eof EoGlBrec
 			if a3=1 or a2=0 then delete #hBankRec:

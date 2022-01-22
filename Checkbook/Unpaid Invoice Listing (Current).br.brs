@@ -55,7 +55,7 @@ L350: close #paytrans: : close #unpdaloc: : close #clwork:
 	fnFree('[temp]\INDX[session]')
 L510: !
 	execute 'INDEX [temp]\WORK,[temp]\INDX[session],1,12,Replace'
-	open #hWork=6: 'Name=[temp]\WORK,KFName=[temp]\INDX[session]',internal,outIn,keyed
+	open #hWork=6: 'Name=[temp]\WORK,KFName=[temp]\INDX[session]',i,outIn,k
 	open #hFund=fnH: 'Name=[Q]\CLmstr\FundMstr.h[cno],KFName=[Q]\CLmstr\FundIdx1.h[cno],Shr',i,i,k
 	fnopenprn
 	vn$='': iv$=''

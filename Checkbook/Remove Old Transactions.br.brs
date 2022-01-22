@@ -8,7 +8,7 @@ right=1 : center=2
 open #20: 'Name=[Q]\CLmstr\Company.h[cno],Shr',internal,input 
 read #20,using 'form pos 417,N 1': rcn
 close #20:
-open #trmstr:=fnH: 'Name=[Q]\CLmstr\TrMstr.h[cno],KFName=[Q]\CLmstr\TrIdx1.h[cno]',internal,outIn,keyed
+open #trmstr:=fnH: 'Name=[Q]\CLmstr\TrMstr.h[cno],KFName=[Q]\CLmstr\TrIdx1.h[cno]',i,outIn,k
 open #work1:=fnH: 'Name=[Q]\CLmstr\Work1.[wsid],version=2,Size=0,RecL=84,Replace',i,outi,r
 open #tralloc:=fnH: 'Name=[Q]\CLmstr\TrAlloc.h[cno],KFName=[Q]\CLmstr\TrAlloc-idx.h[cno]',i,i,k
 open #work2=fnH: 'Name=[Q]\CLmstr\Work2.[wsid],version=2,Size=0,RecL=80,Replace',i,outi,r

@@ -426,8 +426,8 @@ fnend
 		mat totalalloc=(0) : mat totalusage=(0) : totaltamount=0
 		mat totalalloc=(0) : mat totalusage=(0) : totaltamount=0
 		! close #trans: ioerr ignore
-		open #hPtTrans1=fnH: 'Name=[Q]\UBmstr\ubtransvb.h[cno],KFName=[Q]\UBmstr\ubTrIndx.h[cno],Shr',internal,outIn,keyed
-		open #hPtTrans2=fnH: 'Name=[Q]\UBmstr\ubtransvb.h[cno],KFName=[Q]\UBmstr\UBTrdt.h[cno],Shr',internal,outIn,keyed
+		open #hPtTrans1=fnH: 'Name=[Q]\UBmstr\ubtransvb.h[cno],KFName=[Q]\UBmstr\ubTrIndx.h[cno],Shr',i,outIn,k
+		open #hPtTrans2=fnH: 'Name=[Q]\UBmstr\ubtransvb.h[cno],KFName=[Q]\UBmstr\UBTrdt.h[cno],Shr',i,outIn,k
 		if trim$(z$)='[All]' then
 			restore #hPtTrans1:
 		else

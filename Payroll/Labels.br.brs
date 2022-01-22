@@ -21,7 +21,7 @@
 OPEN_KEYED: ! r:
 	open #1: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr",i,i,k
 	L270: form pos 1,n 8,3*c 30,c 11,pos 110,2*n 1,7*n 2,2*pd 3.3,6*pd 4.2,2*n 6
-	open #4: "Name=[Q]\PRmstr\payrollchecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno]",internal,outIn,keyed
+	open #4: "Name=[Q]\PRmstr\payrollchecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno]",i,outIn,k
 return ! /r
 GET_STARTED: ! r:
 	lb1=0

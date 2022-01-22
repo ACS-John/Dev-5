@@ -9,7 +9,7 @@
 	fnTop(program$)
 
 	open #2: "Name=[Q]\UBmstr\UBTransVB.h[cno],KFName=[Q]\UBmstr\UBTrIndx.h[cno],Shr",i,i,k 
-	open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,outIn,keyed 
+	open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",i,outIn,k 
 	open #5: "Name=[Q]\UBmstr\MEANs.h[cno],RecL=22,REPLACE",internal,output 
 	read #1,using L490: x$,a2 eof DONE
 	restore #2,key>=x$&"         ": nokey L230
@@ -101,7 +101,7 @@ PRINT_REPORT: !
 L820: close #2: ioerr L830
 L830: close #5: ioerr L840
 L840: execute "Index [Q]\UBmstr\MEANs.h[cno],[Q]\UBmstr\MEANIDX.h[cno] 11,12,REPLACE,DupKeys -n"
-	open #5: "Name=[Q]\UBmstr\MEANs.h[cno],KFName=[Q]\UBmstr\MEANIDX.h[cno],Shr",internal,outIn,keyed 
+	open #5: "Name=[Q]\UBmstr\MEANs.h[cno],KFName=[Q]\UBmstr\MEANIDX.h[cno],Shr",i,outIn,k 
 	gosub HEADER
 	means=int(lrec(5)/2)
 L880: read #5,using "form pos 1,C 10,N 12.2": z$,t3 eof L940

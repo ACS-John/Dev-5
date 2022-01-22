@@ -57,7 +57,7 @@ fnTop(program$)
 	if ~exists("[Q]\GLmstr\glstdidx.h[cno]") then 
 		gosub Index
 	end if
-	open #h=fnH: "Name=[Q]\GLmstr\bankrec.h[cno],KFName=[Q]\GLmstr\bankrec-idx.h[cno],Version=1,Shr",internal,outIn,keyed
+	open #h=fnH: "Name=[Q]\GLmstr\bankrec.h[cno],KFName=[Q]\GLmstr\bankrec-idx.h[cno],Version=1,Shr",i,outIn,k
 ! /r
 fnHamster("bankrec",mat lbl$,mat tln,h,mat p$,mat fltyp$,mat sln,mat mask,mat sp,mat c$)
 ! FixLeftPads: ! r: left pad general ledger number and reference number

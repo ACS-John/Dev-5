@@ -279,8 +279,8 @@ def fn_translateRateAbbreviations(from$*2,to$*2)
 	fnStatus('Translating Rate abbreviations from '&from$&' to '&to$)
 	from$=uprc$(from$)
 	to$=uprc$(to$)
-	open #h1=fnH: "Name=[Q]\UBmstr\ubData\RateMst.h[cno],KFName=[Q]\UBmstr\ubData\RateIdx1.h[cno],Use,RecL=374,KPs=1,KLn=4,Shr",internal,outIn,keyed
-	open #h2=fnH: "Name=[Q]\UBmstr\ubData\RateMst.h[cno],KFName=[Q]\UBmstr\ubData\RateIdx2.h[cno],Use,RecL=374,KPs=5,KLn=25,Shr",internal,outIn,keyed
+	open #h1=fnH: "Name=[Q]\UBmstr\ubData\RateMst.h[cno],KFName=[Q]\UBmstr\ubData\RateIdx1.h[cno],Use,RecL=374,KPs=1,KLn=4,Shr",i,outIn,k
+	open #h2=fnH: "Name=[Q]\UBmstr\ubData\RateMst.h[cno],KFName=[Q]\UBmstr\ubData\RateIdx2.h[cno],Use,RecL=374,KPs=5,KLn=25,Shr",i,outIn,k
 	do
 		read #h1,using 'form pos 1,C 2': rate_type$ eof EO_RATE
 		if rate_type$=from$ then

@@ -13,10 +13,6 @@ fnreg_read('Post to Checkbook - Populate Checkbook Payee from Payroll Employee',
 	dim tdet(17)
 	dim tdc(10)
 	dim tcp(32)
-	dim tdep(20,26)
-	dim ttc(32)
-	dim d$(10)*8
-	dim gln$(15)*12
 	dim tty(32)
 	dim mgl$(11)
 	dim ded$(29)
@@ -24,9 +20,9 @@ fnreg_read('Post to Checkbook - Populate Checkbook Payee from Payroll Employee',
 	dim lcn$*8
 	dim tr(2)
 	dim tr$(5)*35
-	dim resp$(25)*128,ttc(32),ttdc(10)
+	dim resp$(25)*128,ttdc(10)
 	dim qtr1tcp(32),qtr2tcp(32),qtr3tcp(32),qtr4tcp(32),ytdTotal(32)
-	dim quartertotals(32)
+	dim quarterTotals(32)
 	dim dedfed(20)
 	dim calcode(20)
 	dim dedcode(20)
@@ -102,9 +98,12 @@ fnreg_read('Post to Checkbook - Populate Checkbook Payee from Payroll Employee',
 	fncreg_read('CL Bank Code',bankcode$) : bankcode=val(bankcode$) : if bankcode=0 then bankcode=1
 	fncreg_read('Comp Time Code',compcode$)
 	fnDedNames(mat fullname$,mat abrevName$,mat dedcode,mat calcode,mat dedfed,mat dedfica,mat dedSt,mat dedUc,mat dedGl$)
-	open #20: 'Name=[Q]\PRmstr\Company.h[cno],Shr',internal,input
-	read #20,using 'form pos 1,x 120,pos 150,10*C 8,pos 437,15*C 12,N 1': mat d$,mat gln$,gl_installed
-	close #20:
+	! dim d$(10)*8  ! removed mat d$ as it was unused.
+	dim gln$(15)*12
+	open #hCompany=fnH: 'Name=[Q]\PRmstr\Company.h[cno],Shr',internal,input
+	! read #hCompany,using 'form pos 1,x 120,pos 150,10*C 8,pos 437,15*C 12,N 1': mat d$,mat gln$,gl_installed
+	read #hCompany,using 'form pos 437,15*C 12,N 1': mat gln$,gl_installed
+	close #hCompany:
 
 	mat hnames$=abrevName$ : bankgl$=gln$(15)
 	if fnClientHas('CL') then fn_openCheckbook
@@ -116,7 +115,7 @@ fnreg_read('Post to Checkbook - Populate Checkbook Payee from Payroll Employee',
 	if env$('client')='Divernon' or env$('client')='Thomasboro' or env$('client')='Edinburg' or env$('client')='Hope Welty' then
 		ficam1$='Y'
 	end if
-	ddcode$=fnPcRegRead$('Check Media','R')
+	checkMedia$=fnPcRegRead$('Check Media','R')
 	fnreg_read('PR.Check print.skip alignment',skip_alignment$) : if skip_alignment$='' then skip_alignment$='No'
 goto ScrMainQestions ! /r
 ScrMainQestions: ! r:
@@ -135,17 +134,17 @@ ScrMainQestions: ! r:
 		fnTxt(6,41,3, 0,0,'',1,'ACS Checkbook license not detected.')                     	: resp$(6)=opt_yn$(2) : posttocl$='N'
 	end if
 	fnLbl(7,1,'Post Employer''s Portion of FiCA?',38,1)
-	fncomboa('prckprt-4',7,41,mat opt_yn$,'The system can generate and post the employer''s portion of FICA at the time the check is being written.',3)
+	fncomboa('yn',7,41,mat opt_yn$,'The system can generate and post the employer''s portion of FICA at the time the check is being written.',3)
 	if ficam1$='Y' then resp$(7)=opt_yn$(1) else resp$(7)=opt_yn$(2)
 	fnLbl(8,1,'Check Format:',38,1)
-	fncomboa('ckprt-2',8,41,mat opt_check_format$)
+	fncomboa('sc1',8,41,mat opt_check_format$)
 	whichScc=srch(mat scc$,sc1$)
 	if whichScc>0 then resp$(8)=opt_check_format$(whichScc) else resp$(8)=opt_check_format$(4)
 	fnLbl(9,1,'Check Type (Regular or Direct Deposit):',38,1)
-	fncomboa('ckprt-5',9,41,mat opt_checkMedia$,'If you have direct deposits, you can use this option to pr check on plain paper to give the employees.',15)
-	if ddcode$='R' then resp$(9)=opt_checkMedia$(1)
-	if ddcode$='D' then resp$(9)=opt_checkMedia$(2)
-	if ddcode$='A' then resp$(9)=opt_checkMedia$(3)
+	fncomboa('checkMedia',9,41,mat opt_checkMedia$,'If you have direct deposits, you can use this option to pr check on plain paper to give the employees.',15)
+	if checkMedia$='R' then resp$(9)=opt_checkMedia$(1)
+	if checkMedia$='D' then resp$(9)=opt_checkMedia$(2)
+	if checkMedia$='A' then resp$(9)=opt_checkMedia$(3)
 	fnLbl(10,1,'Print Vacation and Sick Leave?',38,1)
 	fncomboa('prckprt-6',10,41,mat opt_yn$)
 	if accr$='Y' then resp$(10)=opt_yn$(1) else resp$(10)=opt_yn$(2)
@@ -186,7 +185,7 @@ ScrMainQestions: ! r:
 	posttocl$               	=uprc$(resp$(6)(1:1))                      	! post Checkbook system
 	ficam1$                 	=uprc$(resp$(7)(1:1))                      	! post fica match
 	sc1$                    	=scc$(srch(mat opt_check_format$,resp$(8)))
-	ddcode$                 	=uprc$(resp$(9)(1:1))                      	! [R]egular check or [D]irect deposit
+	checkMedia$            	=uprc$(resp$(9)(1:1))                      	! [R]egular check or [D]irect deposit
 	accr$                   	=uprc$(resp$(10)(1:1))                     	! pr vac and sick
 	if resp_cl_bankcode then
 		bankcode              	=val(resp$(resp_cl_bankcode)(1:3))        	! bank code
@@ -223,7 +222,7 @@ ScrMainQestions: ! r:
 	fncreg_write('Post to CL',posttocl$)
 	fncreg_write('Post Employer Portion of FiCA',ficam1$)
 	fncreg_write('Check Format',sc1$)
-	fnPcReg_write('Check Media',ddcode$)
+	fnPcReg_write('Check Media',checkMedia$)
 	fncreg_write('Print Vacation and Sick Leave on Check',accr$)
 	fncreg_write('CL Bank Code',str$(bankcode))
 	fncreg_write('Comp Time Code',compcode$)
@@ -251,26 +250,29 @@ ScrMainQestions: ! r:
 	end if
 	L1300: ! /r
 	! if env$('client')<>'Washington Parrish' then prdate=d1
+	! r: open files
 	if ~testCheckFormat then
 		if cl_installed then
 			open #hMgl=fnH: 'Name=[Q]\PRmstr\MGLMSTR.h[cno],KFName=[Q]\PRmstr\MGLIDX1.h[cno],Shr',i,i,k ! 7
 		end if
 		! unused removed 12/22/2020     open #praddr=1: 'Name=[Q]\PRmstr\prAddr1.h[cno],Shr',internal,input
 		open #hEmployee=fnH: 'Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr',i,i,k
-		open #hDepartment=fnH: 'Name=[Q]\PRmstr\Department.h[cno],KFName=[Q]\PRmstr\DeptIdx.h[cno]',internal,outIn,keyed
-		open #hCheck=fnH: 'Name=[Q]\PRmstr\PayrollChecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno]',internal,outIn,keyed
-		open #hHourBreak=fnH: 'Name=[Q]\PRmstr\HourBreakdown.h[cno],KFName=[Q]\PRmstr\HourBreakdown-idx.h[cno]',internal,outIn,keyed
-		open #hDd=fnH: 'Name=[Q]\PRmstr\DD.h[cno],RecL=72,KFName=[Q]\PRmstr\DDidx1.h[cno],Shr,kps=1,kln=10,Use',internal,outIn,keyed
+		open #hDepartment=fnH: 'Name=[Q]\PRmstr\Department.h[cno],KFName=[Q]\PRmstr\DeptIdx.h[cno]',i,outIn,k
+		open #hCheck=fnH: 'Name=[Q]\PRmstr\PayrollChecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno]',i,outIn,k
+		open #hHourBreak=fnH: 'Name=[Q]\PRmstr\HourBreakdown.h[cno],KFName=[Q]\PRmstr\HourBreakdown-idx.h[cno]',i,outIn,k
+		open #hDd=fnH: 'Name=[Q]\PRmstr\DD.h[cno],RecL=72,KFName=[Q]\PRmstr\DDidx1.h[cno],Shr,kps=1,kln=10,Use',i,outIn,k
 		if fnClientHas('GL') and gl_installed=1 then
 			gl_installed=0
-			open #h_gl_glbrec=fnH: 'Name=[Q]\GLmstr\GLBREC.h[cno],KFName=[Q]\GLmstr\GLRECIDX.h[cno],Shr',internal,outIn,keyed ioerr L1440
+			open #h_gl_glbrec=fnH: 'Name=[Q]\GLmstr\GLBREC.h[cno],KFName=[Q]\GLmstr\GLRECIDX.h[cno],Shr',i,outIn,k ioerr L1440
 			gl_installed=1
 			L1440: !
 		end if
 	end if
+	! /r
 	MAIN_LOOP_TOP: !
 	s1=1
 	ReadNextEmployee: !
+		eno=tdn=prd=0 ! added by john 1/22/2022 
 		if testCheckFormat then
 			fn_getTestValues
 			goto L1570
@@ -281,25 +283,33 @@ ScrMainQestions: ! r:
 		! If env$('client')='WashingtonParrish' Then Goto 1110
 		dd$=''
 		read #hDd,using 'form pos 1,C 10,C 1,N 9,N 2,N 17',key=rpad$(str$(eno),10): key$,dd$,rtn,acc,acn nokey ignore
-		if uprc$(dd$)='Y' and ddcode$='D' then goto L1570
-		if uprc$(dd$)<>'Y' and ddcode$='R' then goto L1570
-		if ddcode$='A' then goto L1570 ! all
+		if uprc$(dd$)='Y' and checkMedia$='D' then goto L1570
+		if uprc$(dd$)<>'Y' and checkMedia$='R' then goto L1570
+		if checkMedia$='A' then goto L1570 ! all
 	goto ReadNextEmployee
 	L1570: !
 	if beginningEmployeeNumber>eno then goto ReadNextEmployee ! start with certain employee
 	tdepXcount=0
+	dim tdep(20,26)
 	mat tdep=(0)
 	tdc1=tdc2=tdc3=tdc4=tdc5=0
 	tpd3=tpd4=tpd5=0
 	tdct=rate=0
 	s1=1
 	! If fndate_mmddyy_to_ccyymmdd(LPD)><D1 Then Goto 1360  ! with comment can reprint any payroll
+! pr '*prd=';prd
 	if ~testCheckFormat then
-		fn_determine_earnings
+		dim ttc(32)
+		fn_determineEarnings(eno,tdn,prd,check_number,beg_date,end_date,mat ttc,mat ttdc,mat tcp,mat qtr1tcp,mat qtr2tcp,mat qtr3tcp,mat qtr4tcp,mat ytdTotal,mat tdc,mat tty,fedyr,ficayr,stateyr,wagesqtr,fedqtr,ficaqtr,stateqtr,medyr,medqtr,eicyr,eicqtr,wagesqtr,hCheck)
 	end if
+! if eno=5 and tdn=3 then
+! 	pr 'prd=';prd
+! 	pr 'abb eno='&str$(eno)&' tdn='&str$(tdn)&'   gl$="'&gl$&'" sd5$='&sd5$
+! 	pause
+! end if
 	if pr_prNetZeroChecks$='True' and ttc(32)=0 and fndate_mmddyy_to_ccyymmdd(lpd)=d1 then goto ProduceThatCheck ! pr zero checks
 	if ttc(32)=0 then goto ReadNextEmployee ! no earnings
-if eno=5 and tdn=3 then pr 'aaa eno=5 tdn=3   gl$="'&gl$&'" sd5$='&sd5$ : pause !
+
 	ProduceThatCheck: !
 	! Mat TCP=(0)
 	! Mat TDC=(0)
@@ -479,15 +489,15 @@ Finis: ! r:
 goto Xit ! /r
 Xit: fnXit
 def fn_openCheckbook
-	open #h_clBank=fnH: 'Name=[Q]\CLmstr\BankMstr.h[cno],KFName=[Q]\CLmstr\BankIdx1.h[cno],Shr',internal,outIn,keyed ioerr OcFinis
+	open #h_clBank=fnH: 'Name=[Q]\CLmstr\BankMstr.h[cno],KFName=[Q]\CLmstr\BankIdx1.h[cno],Shr',i,outIn,k ioerr OcFinis
 	cl_installed=1
 
 	open #h_clPayee=fnH: 'Name=[Q]\CLmstr\PayMstr.h[cno],KFName=[Q]\CLmstr\PayIdx1.h[cno],Shr',i,i,k
-	! open #14: 'Name=[Q]\CLmstr\PayMstr.h[cno],KFName=[Q]\CLmstr\PayIdx2.h[cno],Shr',internal,outIn,keyed
-	open #h_clTrans1=fnH: 'Name=[Q]\CLmstr\TrMstr.h[cno],KFName=[Q]\CLmstr\TrIdx1.h[cno],Shr',internal,outIn,keyed
-	open #h_clTrans2=fnH: 'Name=[Q]\CLmstr\TrMstr.h[cno],KFName=[Q]\CLmstr\TrIdx2.h[cno],Shr',internal,outIn,keyed
-	open #h_clTransAlloc=fnH: 'Name=[Q]\CLmstr\TrAlloc.h[cno],Version=2,KFName=[Q]\CLmstr\TrAlloc-Idx.h[cno],Shr',internal,outIn,keyed
-	open #h_clGl=fnH: 'Name=[Q]\CLmstr\GLmstr.h[cno],KFName=[Q]\CLmstr\GLINDEX.h[cno],Shr',internal,outIn,keyed
+	! open #14: 'Name=[Q]\CLmstr\PayMstr.h[cno],KFName=[Q]\CLmstr\PayIdx2.h[cno],Shr',i,outIn,k
+	open #h_clTrans1=fnH: 'Name=[Q]\CLmstr\TrMstr.h[cno],KFName=[Q]\CLmstr\TrIdx1.h[cno],Shr',i,outIn,k
+	open #h_clTrans2=fnH: 'Name=[Q]\CLmstr\TrMstr.h[cno],KFName=[Q]\CLmstr\TrIdx2.h[cno],Shr',i,outIn,k
+	open #h_clTransAlloc=fnH: 'Name=[Q]\CLmstr\TrAlloc.h[cno],Version=2,KFName=[Q]\CLmstr\TrAlloc-Idx.h[cno],Shr',i,outIn,k
+	open #h_clGl=fnH: 'Name=[Q]\CLmstr\GLmstr.h[cno],KFName=[Q]\CLmstr\GLINDEX.h[cno],Shr',i,outIn,k
 	read #h_clBank,using F_clBank,key=lpad$(str$(bankcode),2),release: bn$,bal,upi,ckno nokey ignore
 	F_clBank: form pos 3,c 30,pos 45,pd 6.2,pd 6.2,g 8
 	ckno+=1
@@ -630,7 +640,6 @@ def fn_buildCheckRecord
 	fn_writeBenefitsAndFicaMatch
 	EoBuildCheckRecord: !
 fnend
-
 	def fn_writeBenefitsAndFicaMatch(; ___,j,j2,j4) ! WRITE BENEFITS & FICA MATCH (very local)
 		! updates local: cd1,tdep,fica2,sd5$,de$
 		! uses local:
@@ -675,6 +684,14 @@ fnend
 		next j
 		! fn_FICA_FIX
 	fnend
+		! r: def fn_fica_fix ! fix rounding problem on fica
+		! 	fica3=fica0+medi0+fica1+medi1+fica2
+		! 	if fica3=0 then goto FICA_END
+		! 	read #h_clTransAlloc,using F_ClTransAlloc,rec=fica_rec: bankcode,a1,tr1,gl$,alloc
+		! 	alloc=alloc-fica3
+		! 	rewrite #h_clTransAlloc,using F_ClTransAlloc,rec=fica_rec: bankcode,a1,tr1,gl$,alloc
+		! 	FICA_END: fica3=fica0=medi0=fica1=medi1=fica2=0
+		! /r fnend
 def fn_cknum(; returnN) ! check for duplicate check numbers
 	returnN=1 ! returns 0 if Exit is chosen
 	if testCheckFormat then goto CnXit
@@ -744,7 +761,7 @@ def fn_print_check
 	end if
 	n1=fn_EnglishAmount(ttc(32),mat eng$, englishAmountBreakPoint)
 	!
-	if uprc$(ddcode$)='D' then eng$='Direct Deposit' : ca$='V O I D'
+	if uprc$(checkMedia$)='D' then eng$='Direct Deposit' : ca$='V O I D'
 	!
 	if env$('client')='ACS' then
 		fn_check_acs
@@ -1414,89 +1431,114 @@ def fn_extract_comp_time
 	goto READHOURBREAKDOWN
 	EOBREAKDOWN: !
 fnend
-def fn_determine_earnings
-	mat caf=(0): mat ttc=(0): mat ttdc=(0)
-	mat tcp=(0): mat qtr1tcp=(0): mat qtr2tcp=(0): mat qtr3tcp=(0)
-	mat qtr4tcp=(0): mat ytdTotal=(0): mat tdc=(0): mat tty=(0)
+def fn_determineEarnings(eno,&tdn,&prd,&check_number, _
+	beg_date,end_date, _
+	mat ttc, _
+	mat ttdc, _
+	mat tcp, _
+	mat qtr1tcp, _
+	mat qtr2tcp, _
+	mat qtr3tcp, _
+	mat qtr4tcp, _
+	mat ytdTotal, _
+	mat tdc, _
+	mat tty, _
+	&fedyr,&ficayr,&stateyr,&wagesqtr,&fedqtr,&ficaqtr,&stateqtr,&medyr,	 _
+	&medqtr,&eicyr,&eicqtr,&wagesqtr,hCheck ; ___,heno,oldckno,lastrec,checkkey$)
+	mat ttc=(0)
+	mat ttdc=(0)
+	mat tcp=(0)
+	mat qtr1tcp=(0)
+	mat qtr2tcp=(0)
+	mat qtr3tcp=(0)
+	mat qtr4tcp=(0)
+	mat ytdTotal=(0)
+	mat tdc=(0)
+	mat tty=(0)
 	fedyr=ficayr=stateyr=wagesqtr=fedqtr=ficaqtr=stateqtr=medyr=0
 	medqtr=eicyr=eicqtr=wagesqtr=0
 	checkkey$=cnvrt$('pic(zzzzzzz#)',eno)&cnvrt$('pic(zz#)',0)&cnvrt$('pd 6',0) ! indexed by employee#,department# and payroll date
-	restore #hCheck,key>=checkkey$: nokey L6920
-	L6580: !
-	read #hCheck,using 'form pos 1,N 8,n 3,PD 6,N 7,5*PD 3.2,37*PD 5.2': heno,tdn,prd,oldckno,mat tdc,mat tcp eof STORE_VARIABLES : lastrec=rec(hcheck)
-	if heno<>eno then goto STORE_VARIABLES
-	if prd<beg_date or prd>end_date then ! not this year
-		goto L6580
-	end if
-	if prd>=qtr1 and prd<qtr2 then mat qtr1tcp=qtr1tcp+tcp ! 1st qtr earnings
-	if prd>=qtr2 and prd<qtr3 then mat qtr2tcp=qtr2tcp+tcp
-	if prd>=qtr3 and prd<qtr4 then mat qtr3tcp=qtr3tcp+tcp
-	if prd>=qtr4 and prd<=end_date then mat qtr4tcp=qtr4tcp+tcp
-	mat ytdTotal=ytdTotal+tcp
-	mat tty=tty+tcp
-	if prd=d1 then mat ttc=ttc+tcp: mat ttdc=ttdc+tdc ! total for this check
-	if prd=d1 then fn_accumulate_dept_totals1(tdepXcount,mat tdep,tdn,rate)
-	! if env$('client')='Energy Exchanger' then fn_accumulate_dept_totals2
-	if prd=d1 then rewrite #hCheck,using 'form pos 18,n 7',rec=lastrec: check_number
-	goto L6580
-	STORE_VARIABLES: !
+	restore #hCheck,key=>checkkey$: nokey DetermineEarningsFinis
+	do
+		read #hCheck,using 'form pos 1,N 8,n 3,PD 6,N 7,5*PD 3.2,37*PD 5.2': heno,tdn,prd,oldckno,mat tdc,mat tcp eof DetermineEarningsEoCheck
+		lastrec=rec(hcheck)
+		if heno=eno and prd>=beg_date and prd<=end_date then 
+			! lastQualifiedTdn=tdn
+			! lastQualifiedPrd=prd
+			if prd>=qtr1 and prd<qtr2 then mat qtr1tcp=qtr1tcp+tcp ! 1st qtr earnings
+			if prd>=qtr2 and prd<qtr3 then mat qtr2tcp=qtr2tcp+tcp
+			if prd>=qtr3 and prd<qtr4 then mat qtr3tcp=qtr3tcp+tcp
+			if prd>=qtr4 and prd<=end_date then mat qtr4tcp=qtr4tcp+tcp
+			mat ytdTotal=ytdTotal+tcp
+			mat tty=tty+tcp
+			if prd=d1 then 
+				mat ttc=ttc+tcp : mat ttdc=ttdc+tdc ! total for this check
+				fn_accumulate_dept_totals1(tdepXcount,mat tdep,tdn,rate)
+			end if
+			! if env$('client')='Energy Exchanger' then fn_accumulate_dept_totals2
+			if prd=d1 then rewrite #hCheck,using 'form pos 18,n 7',rec=lastrec: check_number
+		end if
+	loop while heno=eno
+	DetermineEarningsEoCheck: !
+	! prd=lastQualifiedPrd
+	! tdn=lastQualifiedTdn
 	!   wagesyr=ytdTotal(31) ! total wages
-	fedyr=ytdTotal(1) ! ytdl fed
-	ficayr=ytdTotal(2) ! fica year to date
-	medyr=ytdTotal(3) ! medicare year to date
+	fedyr  =ytdTotal(1) ! ytdl fed
+	ficayr =ytdTotal(2) ! fica year to date
+	medyr  =ytdTotal(3) ! medicare year to date
 	stateyr=ytdTotal(4) ! total state  quarter
-	eicyr=ytdTotal(25) ! eic
-	if prd>=qtr1 and prd<qtr2     then mat quartertotals=qtr1tcp
-	if prd>=qtr2 and prd<qtr3     then mat quartertotals=qtr2tcp
-	if prd>=qtr3 and prd<qtr4     then mat quartertotals=qtr3tcp
-	if prd>=qtr4 and prd<end_date then mat quartertotals=qtr4tcp
-	wagesqtr=quartertotals(31) ! total wages quarter
-	fedqtr=quartertotals(1) ! total fed  quarter
-	ficaqtr=quartertotals(2) ! total fica quarter
-	medqtr=quartertotals(3) ! total medicare quarter
-	stateqtr=quartertotals(4) ! total state  quarter
-	eicqtr=quartertotals(25) ! EIC qtr
+	eicyr  =ytdTotal(25) ! eic
+	if prd>=qtr1 and prd<qtr2     then mat quarterTotals=qtr1tcp
+	if prd>=qtr2 and prd<qtr3     then mat quarterTotals=qtr2tcp
+	if prd>=qtr3 and prd<qtr4     then mat quarterTotals=qtr3tcp
+	if prd>=qtr4 and prd<end_date then mat quarterTotals=qtr4tcp
+	wagesqtr	=quarterTotals(31) ! total wages quarter
+	fedqtr  	=quarterTotals(1)  ! total fed  quarter
+	ficaqtr 	=quarterTotals(2)  ! total fica quarter
+	medqtr  	=quarterTotals(3)  ! total medicare quarter
+	stateqtr	=quarterTotals(4)  ! total state  quarter
+	eicqtr  	=quarterTotals(25) ! EIC qtr
 	!   for j=1 to 20
 	!     if dedfed(j)=1 then dedfedyr+=ytdTotal(j+4) ! deduct for federal wh
 	!   next j
-	L6920: !
+	DetermineEarningsFinis: !
 fnend
-def fn_accumulate_dept_totals1(&tdepXcount,mat tdep,tdn,&rate) ! probably others too
-	! ACCUMULATE CURRENT INFO FROM EACH DEPARTMENT
-	if tdepXcount<>0 then
-		for j2=1 to tdepXcount
-			if tdep(j2,5)=tdn then goto adt_L1790
-		next j2
-	end if
-	tdepXcount=tdepXcount+1
-	j2=tdepXcount
-	adt_L1790: !
-	tdep(j2,1)=tdep(j2,1)+tcp(31)-tcp(30) ! total wage less tips
-	deptgl$=''
-	read #hDepartment,using 'form pos 12,c 12,pos 62,2*pd 4.2',key=cnvrt$('pic(ZZZZZZZ#)',eno)&cnvrt$('pic(ZZ#)',tdn): deptgl$,tdet(2),tdet(3) ! Nokey 1660
-	tdep(j2,2)=val(deptgl$(1:3)) ! salary for this department
-	tdep(j2,3)=val(deptgl$(4:9))
-	tdep(j2,4)=val(deptgl$(10:12))
-	tdep(j2,5)=tdn
-	fn_fica_matching
-	tdep(j2,6)=ficam2+medic2 ! fica+match
-	for j3=1 to 20
-		tdep(j2,j3+6)=tdep(j2,j3+6)+tcp(j3+4)
-	next j3
-	if s1=1 then
-		if rate=0 then rate=tdet(2)
-		if rate>0 then rt$='PAY RATE'&cnvrt$('N 10.2',rate) else rt$=''
-	end if
-	tpd3=tpd3+round(tdc(3)*tdet(2),2) ! sick pay
-	tpd4=tpd4+round(tdc(4)*tdet(2),2) ! vacation pay
-	tpd5=tpd5+round(tdc(5)*tdet(2),2) ! if env$('client')='West Rest Haven'' then tpd5=tpd5+round(tdc(5)*(tdet(2)*1.5),2) else tpd5=tpd5+round(tdc(5)*tdet(2),2)
-	tdc1=ttdc(1) ! Regular Hours
-	tdc2=ttdc(2) ! OverTime Hours
-	tdc3=ttdc(3)
-	tdc4=ttdc(4)
-	tdc5=ttdc(5)
-	!   ttdct=ttdc(1)+ttdc(2)+ttdc(3)+ttdc(4)+ttdc(5) ! Total Hours
-fnend
+	def fn_accumulate_dept_totals1(&tdepXcount,mat tdep,tdn,&rate) ! probably others too
+		! ACCUMULATE CURRENT INFO FROM EACH DEPARTMENT
+		if tdepXcount<>0 then
+			for j2=1 to tdepXcount
+				if tdep(j2,5)=tdn then goto adt_L1790
+			next j2
+		end if
+		tdepXcount=tdepXcount+1
+		j2=tdepXcount
+		adt_L1790: !
+		tdep(j2,1)=tdep(j2,1)+tcp(31)-tcp(30) ! total wage less tips
+		deptgl$=''
+		read #hDepartment,using 'form pos 12,c 12,pos 62,2*pd 4.2',key=cnvrt$('pic(ZZZZZZZ#)',eno)&cnvrt$('pic(ZZ#)',tdn): deptgl$,tdet(2),tdet(3) ! Nokey 1660
+		tdep(j2,2)=val(deptgl$(1:3)) ! salary for this department
+		tdep(j2,3)=val(deptgl$(4:9))
+		tdep(j2,4)=val(deptgl$(10:12))
+		tdep(j2,5)=tdn
+		fn_fica_matching
+		tdep(j2,6)=ficam2+medic2 ! fica+match
+		for j3=1 to 20
+			tdep(j2,j3+6)=tdep(j2,j3+6)+tcp(j3+4)
+		next j3
+		if s1=1 then
+			if rate=0 then rate=tdet(2)
+			if rate>0 then rt$='PAY RATE'&cnvrt$('N 10.2',rate) else rt$=''
+		end if
+		tpd3=tpd3+round(tdc(3)*tdet(2),2) ! sick pay
+		tpd4=tpd4+round(tdc(4)*tdet(2),2) ! vacation pay
+		tpd5=tpd5+round(tdc(5)*tdet(2),2) ! if env$('client')='West Rest Haven'' then tpd5=tpd5+round(tdc(5)*(tdet(2)*1.5),2) else tpd5=tpd5+round(tdc(5)*tdet(2),2)
+		tdc1=ttdc(1) ! Regular Hours
+		tdc2=ttdc(2) ! OverTime Hours
+		tdc3=ttdc(3)
+		tdc4=ttdc(4)
+		tdc5=ttdc(5)
+		!   ttdct=ttdc(1)+ttdc(2)+ttdc(3)+ttdc(4)+ttdc(5) ! Total Hours
+	fnend
 ! r: def fn_accumulate_dept_totals2
 ! 	for v1=1 to 6
 ! 		if tdn=deptsum(v1) then goto L8090 ! determine if dept # used on this employee already
@@ -1533,29 +1575,22 @@ fnend
 ! 	next j
 ! 	! ROUTINE TO ACCUMULATE HOURS ETC. FOR SUMMARY
 ! /r fnend
-def fn_fica_fix ! fix rounding problem on fica
-	fica3=fica0+medi0+fica1+medi1+fica2
-	if fica3=0 then goto FICA_END
-	read #h_clTransAlloc,using F_ClTransAlloc,rec=fica_rec: bankcode,a1,tr1,gl$,alloc
-	alloc=alloc-fica3
-	rewrite #h_clTransAlloc,using F_ClTransAlloc,rec=fica_rec: bankcode,a1,tr1,gl$,alloc
-	FICA_END: fica3=fica0=medi0=fica1=medi1=fica2=0
-fnend
-def fn_fica_matching ! CALCULATE MATCHING FICA
-	ficawg=round(tcp(2)/ssr1,2) ! employee's fica rate
-	ficam2=round(ficawg*ssr2,2) ! employers fica rate
-	mediwg=tcp(3)/.0145 ! employee medicare rate
-	medic2=round(mediwg*.0145,2) ! employers medicare rate
-	if fmeno=eno then goto SENO
-	fmeno=eno
-	ficam3=ficam2
-	medic3=medic2
-	goto MFEND
-	SENO: ! same employee
-	ficam3=ficam3+ficam2
-	medic3=medic3+medic2
-	MFEND: !
-fnend
+
+	def fn_fica_matching ! CALCULATE MATCHING FICA
+		ficawg=round(tcp(2)/ssr1,2) ! employee's fica rate
+		ficam2=round(ficawg*ssr2,2) ! employers fica rate
+		mediwg=tcp(3)/.0145 ! employee medicare rate
+		medic2=round(mediwg*.0145,2) ! employers medicare rate
+		if fmeno=eno then goto SENO
+		fmeno=eno
+		ficam3=ficam2
+		medic3=medic2
+		goto MFEND
+		SENO: ! same employee
+		ficam3=ficam3+ficam2
+		medic3=medic3+medic2
+		MFEND: !
+	fnend
 
 InvalidGlNumber: ! r:
 	fnTos

@@ -29,7 +29,7 @@ TOPOFLOOP: !
 	gosub HDR
 	close #5:
 	execute "INDEX [Temp]\Temp1.[Session] [Temp]\TempIdx.[Session] 9 50 Replace DupKeys"
-	open #5: "Name=[Temp]\Temp1.[Session],KFName=[Temp]\TempIdx."&session$,internal,outIn,keyed
+	open #5: "Name=[Temp]\Temp1.[Session],KFName=[Temp]\TempIdx."&session$,i,outIn,k
 	L390: !
 	read #5,using L320: eno,last$,first$,mid$,lpd,em4 eof DONE
 	pr #255,using L410: eno,trim$(first$)&" "&trim$(mid$)&" "&trim$(last$),lpd,em4 pageoflow PgOf

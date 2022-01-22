@@ -34,7 +34,7 @@
 		miscname$(j)=lpad$(rtrm$(miscname$(j)(1:9)),9)
 	next j
 	nametab=66-int(len(env$('program_caption'))/2)
-	open #1: "Name=[Q]\GLmstr\PRmstr.h[cno],KFName=[Q]\GLmstr\PRIndex.h[cno],Shr",internal,outIn,keyed
+	open #1: "Name=[Q]\GLmstr\PRmstr.h[cno],KFName=[Q]\GLmstr\PRIndex.h[cno],Shr",i,outIn,k
 	open #2: "Name=[Q]\GLmstr\ACPRCKS.h[cno],Shr",i,outi,r
 	fnopenprn
 	gosub L620

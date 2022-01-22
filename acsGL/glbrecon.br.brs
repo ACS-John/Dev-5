@@ -43,7 +43,7 @@
 	se$(6)="Amount:"
 	se$(7)="Cleared Bank (1=YES)"
 OPEN_FILES: !
-	open #1: "Name=[Q]\GLmstr\GLBREC.h[cno],KFName=[Q]\GLmstr\GLRecIdx.h[cno],Shr",internal,outIn,keyed ioerr L2660
+	open #1: "Name=[Q]\GLmstr\GLBREC.h[cno],KFName=[Q]\GLmstr\GLRecIdx.h[cno],Shr",i,outIn,k ioerr L2660
 	goto L2390
 L480: pr newpage
 	close #101: ioerr L500

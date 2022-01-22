@@ -11,7 +11,7 @@
 	fncno(cno)
  
  
-	open #2: "Name=[Q]\PRmstr\JCCAT.h[cno],KFName=[Q]\PRmstr\CatIndx.h[cno],Shr",internal,outIn,keyed
+	open #2: "Name=[Q]\PRmstr\JCCAT.h[cno],KFName=[Q]\PRmstr\CatIndx.h[cno],Shr",i,outIn,k
 	open #3: "Name=[Temp]\Work."&session$,internal,input
 	open #4: "Name=[Q]\PRmstr\JCPRH1.h[cno],Shr",internal,output
 	open #5: "Name=[Q]\PRmstr\JCTRANS.h[cno],Shr",i,outi,r

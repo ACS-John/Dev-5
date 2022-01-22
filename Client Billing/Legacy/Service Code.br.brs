@@ -18,7 +18,7 @@
 	se$(3)="TOTAL HOURS - YTD"
 	se$(4)="STANDARD FEES - YTD"
 	gosub L1780
-	open #1: "Name=S:\Core\Data\acsllc\SCMSTR.h[cno],KFName=S:\Core\Data\acsllc\SCIndex.h[cno],Shr",internal,outIn,keyed ioerr L2000
+	open #1: "Name=S:\Core\Data\acsllc\SCMSTR.h[cno],KFName=S:\Core\Data\acsllc\SCIndex.h[cno],Shr",i,outIn,k ioerr L2000
 goto Scr1
 Scr1: ! r:
 	pr newpage
@@ -49,7 +49,7 @@ L490: input fields "13,50,C 5,IE,n": a$ conv L490
 	if uprc$(a$)="THINK" then goto L510 else goto Scr1
 L510: i2=1
 	close #1: ioerr L530
-L530: open #1: "Name=S:\Core\Data\acsllc\SCMSTR.h[cno],KFName=S:\Core\Data\acsllc\SCIndex.h[cno]",internal,outIn,keyed ioerr L550
+L530: open #1: "Name=S:\Core\Data\acsllc\SCMSTR.h[cno],KFName=S:\Core\Data\acsllc\SCIndex.h[cno]",i,outIn,k ioerr L550
 	close #1,free: ioerr L550
 L550: open #1: "Name=S:\Core\Data\acsllc\SCMSTR.h[cno],SIZE=0,RecL=43,NoShr",i,outi,r
 	goto L1700

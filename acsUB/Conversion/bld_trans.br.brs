@@ -48,7 +48,7 @@ def fn_ub_build_transactions
 		open #master=3: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",i,i,k
  
 		! open NEW files
-		open #transvb=11: "Name=[Q]\UBmstr\ubTransVB.h[cno],KFName=[Q]\UBmstr\ubTrIndx.h[cno],Shr,RecL=102,KPs=1,KLn=19,Use",internal,outIn,keyed
+		open #transvb=11: "Name=[Q]\UBmstr\ubTransVB.h[cno],KFName=[Q]\UBmstr\ubTrIndx.h[cno],Shr,RecL=102,KPs=1,KLn=19,Use",i,outIn,k
     ! r: convert transactions from ubAccTrn
 		fnStatus('converting transactions from History Transactions (ubAccTrn.h[cno])')
 		open #h_ubacctrn=1: "Name=[Q]\UBmstr\ubAccTrn.h[cno]",internal,outIn
@@ -155,7 +155,7 @@ def fn_translate_transcode
 	end if  ! end of translate transcode
 fnend  ! fn_translate_transcode
 def fn_removebaddates
-	open #transvb=11: "Name=[Q]\UBmstr\ubTransVB.h[cno],KFName=[Q]\UBmstr\ubTrIndx.h[cno],Shr,RecL=102,KPs=1,KLn=19,Use",internal,outIn,keyed
+	open #transvb=11: "Name=[Q]\UBmstr\ubTransVB.h[cno],KFName=[Q]\UBmstr\ubTrIndx.h[cno],Shr,RecL=102,KPs=1,KLn=19,Use",i,outIn,k
 	do
 		read #transvb,using "form pos 11,N 8": tdate eof TRANSVB_EOF
 		tdate$=str$(tdate)

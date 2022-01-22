@@ -21,10 +21,10 @@ open #hCustomer=fnH: 'Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\UBIndex.
 open #hTrans=fnH: 'Name=[Q]\UBmstr\ubTransVB.h[cno],KFName=[Q]\UBmstr\ubtrindx.h[cno]',i,i,k
 open #14: 'Name=[Q]\GLmstr\GL_Work_[acsUserId].h[cno],Replace,RecL=104',internal,output ioerr ignore
 if ~exists('[Q]\UBmstr\glinfo.h[cno]') then
-	open #15: 'Name=[Q]\UBmstr\Glinfo.h[cno],KFName=[Q]\UBmstr\glinfoidx.h[cno],Shr,Use,RecL=89,KPs=1,KLn=23',internal,outIn,keyed
+	open #15: 'Name=[Q]\UBmstr\Glinfo.h[cno],KFName=[Q]\UBmstr\glinfoidx.h[cno],Shr,Use,RecL=89,KPs=1,KLn=23',i,outIn,k
 	close #15:
 end if
-open #15: 'Name=[Q]\UBmstr\Glinfo.h[cno],KFName=[Q]\UBmstr\glinfoidx.h[cno],Shr',internal,outIn,keyed
+open #15: 'Name=[Q]\UBmstr\Glinfo.h[cno],KFName=[Q]\UBmstr\glinfoidx.h[cno],Shr',i,outIn,k
 
 fnstyp(14)
 !  styp=11 for jobcost; styp=14 for regular payroll

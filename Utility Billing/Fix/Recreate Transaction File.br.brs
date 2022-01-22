@@ -21,7 +21,7 @@ x=pos(resp$(1),"/",1)
 if x>0 then resp$(1)(x:x)="": goto L180
 trandate=val(resp$(1))
 if ckey=5 then goto Xit
-open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],NoShr",internal,outIn,keyed
+open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],NoShr",i,outIn,k
 open #2: "Name=[Q]\UBmstr\UBTransVB.h[cno],RecL=102,Replace",internal,output
 do
 	L240: read #1,using L250: z$,bal,mat d,mat gb eof READ_CUSTOMER_EOF

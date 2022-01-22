@@ -9,7 +9,7 @@
  
 	fnTop(program$,"Fix Reference Numbers")
 	fncno(cno)
-	open #1: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLIndex.h[cno],Shr",internal,outIn,keyed
+	open #1: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLIndex.h[cno],Shr",i,outIn,k
 	fil$(1)="ACGLFNSB" : idx$(1)="agfsidx4"
 	fil$(2)="ACGLFNSc" : idx$(2)="agfsidx1"
 	fil$(3)="ACGLFNSi" : idx$(3)="agfsidx3"
@@ -20,7 +20,7 @@
 	on fkey 5 goto Xit
 	pr newpage
 	close #2: ioerr L230
-L230: open #2: "Name=[Q]\GLmstr\"&fil$(6)&"&.h1,KFName=[Q]\GLmstr\"&idx$(6)&".h1",internal,outIn,keyed
+L230: open #2: "Name=[Q]\GLmstr\"&fil$(6)&"&.h1,KFName=[Q]\GLmstr\"&idx$(6)&".h1",i,outIn,k
 L240: read #1,using L250: dno,ano,sno,d$,mat rf eof L350
 L250: form pos 1,n 3,n 6,n 3,c 50,6*pd 3,42*pd 6.2,2*pd 3
 	restore #2:

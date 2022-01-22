@@ -19,7 +19,7 @@ def library fnfinstmt_v0_to_v1
 		fnIndex('[Q]\GLmstr\'&fil$(j)&'.h[cno]','[Q]\GLmstr\'&idx$(j)&'.h[cno]','1 5')
 
 		if j=2 or j=5 then 
-			open #hgl=fnH: "Name=[Q]\GLmstr\"&fil$(j)&".h[cno],KFName=[Q]\GLmstr\"&idx$(j)&".h[cno]",internal,outIn,keyed 
+			open #hgl=fnH: "Name=[Q]\GLmstr\"&fil$(j)&".h[cno],KFName=[Q]\GLmstr\"&idx$(j)&".h[cno]",i,outIn,k 
 			version(1,1)
 			delete_count=read_count=0
 			end1=st1=st2=rno=rnp=0

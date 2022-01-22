@@ -27,7 +27,7 @@ for fileItem=1 to fileNameCount
 	line_count=0
 	the_date_prior=the_date=0
 	if fileItem=1 then
-		open #h_out=fnH: 'Name=S:\Core\Data\acsllc\TimeSheet.h[cno],RecL=86,KFName=S:\Core\Data\acsllc\TimeSheet-Idx.h[cno],Replace,KPs=1,KLn=5',internal,outIn,keyed
+		open #h_out=fnH: 'Name=S:\Core\Data\acsllc\TimeSheet.h[cno],RecL=86,KFName=S:\Core\Data\acsllc\TimeSheet-Idx.h[cno],Replace,KPs=1,KLn=5',i,outIn,k
 		open #h_support=fnH: 'Name=S:\Core\Data\acsllc\SUPPORT.h[cno],KFName=S:\Core\Data\acsllc\support-idx.h[cno],Shr',i,i,k
 		fnopenprn
 	else

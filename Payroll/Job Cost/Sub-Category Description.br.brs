@@ -7,7 +7,7 @@
 	dim cde$*3,des$*30,sc$*3,cnt$*25,message$*40
  
 	fnTop(program$)
-	open #1: "Name=[Q]\PRmstr\SCMSTR.h[cno],KFName=[Q]\PRmstr\SCIndex.h[cno],Shr",internal,outIn,keyed
+	open #1: "Name=[Q]\PRmstr\SCMSTR.h[cno],KFName=[Q]\PRmstr\SCIndex.h[cno],Shr",i,outIn,k
 	Fprmstr: form pos 1,c 3,c 30
  
 ASKSUBCAT: ! r:

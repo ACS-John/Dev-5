@@ -8,7 +8,7 @@ def fn_updateSupportExpirationDate(; clientKey$*5)
 	
 	! r: open files
 		! CO Support
-		open #hSupport   =fnH: "Name=S:\Core\Data\acsllc\Support.h420,Version=2,KFName=S:\Core\Data\acsllc\Support-Idx.h420,Use,RecL=246,KPs=1/7,KLn=6/2,Shr",internal,outIn,keyed
+		open #hSupport   =fnH: "Name=S:\Core\Data\acsllc\Support.h420,Version=2,KFName=S:\Core\Data\acsllc\Support-Idx.h420,Use,RecL=246,KPs=1/7,KLn=6/2,Shr",i,outIn,k
 		F_support: form pos 1,C 6,x 2,c 2,n 8,c 2,n 8,n 10
 	! /r	
 

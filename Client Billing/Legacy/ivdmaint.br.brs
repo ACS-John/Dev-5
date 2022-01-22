@@ -9,7 +9,7 @@
  
 	io1$(1)="14,5,C 55,U,N": io1$(2)="16,40,N 10.2,U,N"
 	io1$(3)="18,33,N 3,U,N": io1$(4)="18,38,N 6,U,N": io1$(5)="18,46,N 3,U,N"
-	open #1: "Name=S:\Core\Data\acsllc\IVDesc.h[cno],KFName=S:\Core\Data\acsllc\IVDIndex.h[cno],Shr",internal,outIn,keyed ioerr L980
+	open #1: "Name=S:\Core\Data\acsllc\IVDesc.h[cno],KFName=S:\Core\Data\acsllc\IVDIndex.h[cno],Shr",i,outIn,k ioerr L980
 L130: pr newpage
 	pr f "3,9,C 50,N": "INVOICE DESCRIPTION FILE MENU"
 	pr f "4,6,C 72,N": "COMPANY NUMBER [cno]  "&ltrm$(cnam$)

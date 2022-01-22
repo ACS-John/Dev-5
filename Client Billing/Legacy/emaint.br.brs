@@ -26,7 +26,7 @@ L180: form pos 1,103*c 18
 	close #1:
 	
 	gosub L1270
-	open #1: "Name=S:\Core\Data\acsllc\EMmstr.h[cno],KFName=S:\Core\Data\acsllc\EMIndex.h[cno],Shr",internal,outIn,keyed ioerr L2370
+	open #1: "Name=S:\Core\Data\acsllc\EMmstr.h[cno],KFName=S:\Core\Data\acsllc\EMIndex.h[cno],Shr",i,outIn,k ioerr L2370
 L300: pr newpage
 	on fkey 5 goto L300
 	pr f "3,9,C 60": "Employee Master File"

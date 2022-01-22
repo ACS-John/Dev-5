@@ -3,8 +3,8 @@ autoLibrary
 on error goto Ertn
 dim vn$*8,nam$*30,ad1$*30,ad2$*30,csz$*30,ss$*11,ta(2) ! PayMstr
 fnTop(program$)
-open #trmstr=fnH: 'Name=[Q]\CLmstr\TrMstr.h[cno],KFName=[Q]\CLmstr\TrIdx2.h[cno],Shr',internal,outIn,keyed
-open #paymstr=fnH: 'Name=[Q]\CLmstr\PayMstr.h[cno],KFName=[Q]\CLmstr\PayIdx1.h[cno],Shr',internal,outIn,keyed
+open #trmstr=fnH: 'Name=[Q]\CLmstr\TrMstr.h[cno],KFName=[Q]\CLmstr\TrIdx2.h[cno],Shr',i,outIn,k
+open #paymstr=fnH: 'Name=[Q]\CLmstr\PayMstr.h[cno],KFName=[Q]\CLmstr\PayIdx1.h[cno],Shr',i,outIn,k
 fnTos
 respc=0 : mylen=25 : mypos=mylen+2
 fnLbl(1,40,'',1,1)

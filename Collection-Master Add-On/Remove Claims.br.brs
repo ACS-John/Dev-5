@@ -237,43 +237,43 @@ PRINT_DELETE_REPORT: ! r:
 return ! /r
 OPEN_FILES: ! r:
 	open #h_removed:=fngethandle: "name=removed.mw/temp,replace,recl=100",d,o 
-	! OPEN #H_Extra:=fngethandle: "NAME=EXTRA//6,KFNAME=EXTRAI//6,SHR",INTERNAL,OUTIN,KEYED 
+	! OPEN #H_Extra:=fngethandle: "NAME=EXTRA//6,KFNAME=EXTRAI//6,SHR",i,outIn,k 
 	h_extra=fnopen_extra(mat extra_handles)
-	! OPEN #H_Masterdate:=fngethandle: "NAME=MASTER//6,KFNAME=dateidxb//6,SHR",INTERNAL,OUTIN,KEYED  
-	! OPEN #H_Masterx:=fngethandle: "NAME=MASTER//6,KFNAME=MASTERX//6,SHR",INTERNAL,OUTIN,KEYED 
+	! OPEN #H_Masterdate:=fngethandle: "NAME=MASTER//6,KFNAME=dateidxb//6,SHR",i,outIn,k  
+	! OPEN #H_Masterx:=fngethandle: "NAME=MASTER//6,KFNAME=MASTERX//6,SHR",i,outIn,k 
 	h_masterx=fnopen_master(mat master_handles) 
 	h_masterdate=master_handles(7)
 	h_invoice=fnopen_invoice(mat invoice_handles)
-	! OPEN #H_Active:=fngethandle: "NAME=ACTIVE.INT//6,KFNAME=ACTIVE.IDX//6,SHR",INTERNAL,OUTIN,KEYED
-	! OPEN #H_Activedte:=fngethandle: "NAME=ACTIVE.INT//6,KFNAME=ACTIVE.DTE//6,SHR",INTERNAL,OUTIN,KEYED 
+	! OPEN #H_Active:=fngethandle: "NAME=ACTIVE.INT//6,KFNAME=ACTIVE.IDX//6,SHR",i,outIn,k
+	! OPEN #H_Activedte:=fngethandle: "NAME=ACTIVE.INT//6,KFNAME=ACTIVE.DTE//6,SHR",i,outIn,k 
 	h_active=fnopen_active(mat active_handles)
-	! OPEN #H_Finan:=fngethandle: "NAME=FINAN.INT//6,KFNAME=FINAN.IDX//6,shr",INTERNAL,OUTIN,KEYED 
+	! OPEN #H_Finan:=fngethandle: "NAME=FINAN.INT//6,KFNAME=FINAN.IDX//6,shr",i,outIn,k 
 	h_finan=fnopen_finan(mat finan_handles)
-	! OPEN #H_Buckets:=fngethandle: "NAME=BUCKETS.INT//6,shr,KFNAME=BUCKETS.IDX//6",INTERNAL,OUTIN,KEYED 
+	! OPEN #H_Buckets:=fngethandle: "NAME=BUCKETS.INT//6,shr,KFNAME=BUCKETS.IDX//6",i,outIn,k 
 	h_buckets=fnopen_buckets(mat buckets_handles)
-	! OPEN #H_Diarydat:=fngethandle: "name=diary.int//6,kfname=diary.dat//6,shr",INTERNAL,OUTIN,KEYED IOERR 20100
-	! OPEN #H_Diaryfil:=fngethandle: "name=diary.int//6,kfname=diary.fil//6,shr",INTERNAL,OUTIN,KEYED IOERR 20110
+	! OPEN #H_Diarydat:=fngethandle: "name=diary.int//6,kfname=diary.dat//6,shr",i,outIn,k IOERR 20100
+	! OPEN #H_Diaryfil:=fngethandle: "name=diary.int//6,kfname=diary.fil//6,shr",i,outIn,k IOERR 20110
 	! OPEN #H_Diaryque:=fngethandle: "name=diary.int//6,kfname=diary.que//6,shr",i,i,k IOERR 20120
 	h_diaryfil=fnopen_diaryint(mat diary_handles)
-	! OPEN #H_Internal:=fngethandle: "NAME=INTERNAL//6,KFNAME=INTERNAL.IDX//6,SHR",INTERNAL,OUTIN,KEYED  
-	! OPEN #H_Internalrel:=fngethandle: "NAME=INTERNAL//6,KFNAME=INTERNAL.REL//6,SHR",INTERNAL,OUTIN,KEYED 
+	! OPEN #H_Internal:=fngethandle: "NAME=INTERNAL//6,KFNAME=INTERNAL.IDX//6,SHR",i,outIn,k  
+	! OPEN #H_Internalrel:=fngethandle: "NAME=INTERNAL//6,KFNAME=INTERNAL.REL//6,SHR",i,outIn,k 
 	h_internal=fnopen_internal_backbone(mat internal_handles)
-	! OPEN #H_Debtor:=fngethandle: "NAME=DEBTOR//6,KFNAME=DEBTOR.IDX//6,SHR",INTERNAL,OUTIN,KEYED  
+	! OPEN #H_Debtor:=fngethandle: "NAME=DEBTOR//6,KFNAME=DEBTOR.IDX//6,SHR",i,outIn,k  
 	! Fnopen_Debt("INTERNAL//6") 
 	! Fnopen_Debt("DEBTOR//6") 
 	h_debtor=fnopen_debtor(mat debtor_handles)
-	! OPEN #H_Caption:=fngethandle: "NAME=CAPTION//6,KFNAME=CAPTION.IDX//6,SHR",INTERNAL,OUTIN,KEYED 
+	! OPEN #H_Caption:=fngethandle: "NAME=CAPTION//6,KFNAME=CAPTION.IDX//6,SHR",i,outIn,k 
 	h_caption=fnopen_caption(mat caption_handles)
-	! OPEN #H_Property:=fngethandle: "NAME=PROPERTY//6,KFNAME=PROPERTY.IDX//6,SHR",INTERNAL,OUTIN,KEYED 
+	! OPEN #H_Property:=fngethandle: "NAME=PROPERTY//6,KFNAME=PROPERTY.IDX//6,SHR",i,outIn,k 
 	h_property=fnopen_property(mat property_handles)
-	! OPEN #H_Infinity:=fngethandle: "Name=infinity.int//6,kfname=infinity.idx//6,shr",INTERNAL,OUTIN,KEYED  
-	! OPEN #H_Infinitycdx:=fngethandle: "Name=infinity.int//6,kfname=infinity.cdx//6,shr",INTERNAL,OUTIN,KEYED  
-	! OPEN #H_Infinitydax:=fngethandle: "Name=infinity.int//6,kfname=infinity.dax//6,shr",INTERNAL,OUTIN,KEYED 
+	! OPEN #H_Infinity:=fngethandle: "Name=infinity.int//6,kfname=infinity.idx//6,shr",i,outIn,k  
+	! OPEN #H_Infinitycdx:=fngethandle: "Name=infinity.int//6,kfname=infinity.cdx//6,shr",i,outIn,k  
+	! OPEN #H_Infinitydax:=fngethandle: "Name=infinity.int//6,kfname=infinity.dax//6,shr",i,outIn,k 
 	h_infinity=fnopen_infinity(mat infinity_handles)
-	! OPEN #H_Changes:=fngethandle: "Name=changes.int//6,kfname=changes.idx//6,shr",INTERNAL,OUTIN,KEYED  
-	! OPEN #H_Changesrec:=fngethandle: "Name=changes.int//6,kfname=changes.rec//6,shr",INTERNAL,OUTIN,KEYED 
+	! OPEN #H_Changes:=fngethandle: "Name=changes.int//6,kfname=changes.idx//6,shr",i,outIn,k  
+	! OPEN #H_Changesrec:=fngethandle: "Name=changes.int//6,kfname=changes.rec//6,shr",i,outIn,k 
 	h_changes=fnopen_changes(mat changes_handles)
-	! OPEN #H_Bookmark:=fngethandle: "Name=Bookmark.Int//6,KFName=Bookmark.Idx//6,Shr",INTERNAL,OUTIN,KEYED 
+	! OPEN #H_Bookmark:=fngethandle: "Name=Bookmark.Int//6,KFName=Bookmark.Idx//6,Shr",i,outIn,k 
 	h_bookmark=fnopen_bookmark(mat bookmark_handles)
 	h_dchanges=fnopen_dchanges(mat dchanges)
 	h_tags=fnopen_tags(mat tags) 
