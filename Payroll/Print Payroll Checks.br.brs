@@ -20,7 +20,7 @@ fnreg_read('Post to Checkbook - Populate Checkbook Payee from Payroll Employee',
 	dim tty(32)
 	dim mgl$(11)
 	dim ded$(29)
-	
+
 	dim lcn$*8
 	dim tr(2)
 	dim tr$(5)*35
@@ -35,7 +35,7 @@ fnreg_read('Post to Checkbook - Populate Checkbook Payee from Payroll Employee',
 	dim ml$(2)*128 ! temp variable for messagebox message lines
 	dim dedfica(20),dedSt(20),dedUc(20),dedGl$(20)*12
 	dim dtr$(5)*35,key$*21
-	dim dept(6),bankgl$*12,gl$*12,bn$*30,text$*90,v(7,8),deptsum(6)
+	dim dept(6),bankgl$*12,bn$*30,text$*90,v(7,8),deptsum(6)
 	dim hnames$(20)*8
 	dim eng$*128,wording$(27)*9,amount(11)
 
@@ -112,12 +112,11 @@ fnreg_read('Post to Checkbook - Populate Checkbook Payee from Payroll Employee',
 	if bankcode=0 then bankcode=1
 	check_number=ckno
 	if check_number>9999999 then check_number-=10000000
-	! if env$('client')='West Rest Haven' then sc1$='C'
 	if env$('client')='Billings' or env$('client')='Diamond' then sc1$='CSS'
 	if env$('client')='Divernon' or env$('client')='Thomasboro' or env$('client')='Edinburg' or env$('client')='Hope Welty' then
 		ficam1$='Y'
 	end if
-	ddcode$=fnPcRegRead$('Check Media','R') ! ddcode$='R'
+	ddcode$=fnPcRegRead$('Check Media','R')
 	fnreg_read('PR.Check print.skip alignment',skip_alignment$) : if skip_alignment$='' then skip_alignment$='No'
 goto ScrMainQestions ! /r
 ScrMainQestions: ! r:
@@ -178,24 +177,24 @@ ScrMainQestions: ! r:
 	if ckey=5 then goto Xit ! /r
 	if ckey=ck_TestCheck then testCheckFormat=1 else testCheckFormat=0
 	! r: validate answers (and move to local variables from mat resp$)
-	d1                       	=val(resp$(resp_payroll_date))            ! payroll date
-	pre$                     	=uprc$(resp$(2)(1:1))                     ! pre-numbered checks Y or N
-	check_number            	=val(resp$(3))                            ! check #
-	ckdat$                  	=resp$(resp_date_of_checks)               ! check date
+	d1                       	=val(resp$(resp_payroll_date))            	! payroll date
+	pre$                     	=uprc$(resp$(2)(1:1))                      	! pre-numbered checks Y or N
+	check_number            	=val(resp$(3))                             	! check #
+	ckdat$                  	=resp$(resp_date_of_checks)               	! check date
 	dat                     	=val(ckdat$(5:6)&ckdat$(7:8)&ckdat$(3:4))
-	beginningEmployeeNumber	=val(resp$(5))                             ! beginning employee #
-	posttocl$                	=uprc$(resp$(6)(1:1))                     ! post Checkbook system
-	ficam1$                 	=uprc$(resp$(7)(1:1))                     ! post fica match
+	beginningEmployeeNumber	=val(resp$(5))                              	! beginning employee #
+	posttocl$               	=uprc$(resp$(6)(1:1))                      	! post Checkbook system
+	ficam1$                 	=uprc$(resp$(7)(1:1))                      	! post fica match
 	sc1$                    	=scc$(srch(mat opt_check_format$,resp$(8)))
-	ddcode$                 	=uprc$(resp$(9)(1:1))                     ! [R]egular check or [D]irect deposit
-	accr$                   	=uprc$(resp$(10)(1:1))                    ! pr vac and sick
+	ddcode$                 	=uprc$(resp$(9)(1:1))                      	! [R]egular check or [D]irect deposit
+	accr$                   	=uprc$(resp$(10)(1:1))                     	! pr vac and sick
 	if resp_cl_bankcode then
-		bankcode              	=val(resp$(resp_cl_bankcode)(1:3))        ! bank code
+		bankcode              	=val(resp$(resp_cl_bankcode)(1:3))        	! bank code
 	end if
 	if resp_combcode then
-		compcode$             	=resp$(resp_combcode)(1:5)                ! comp time code
+		compcode$             	=resp$(resp_combcode)(1:5)                	! comp time code
 	end if
-	! date_of_checks=val(ckdat$)
+
 	prdmmddyy=val(ckdat$(5:6))*10000+val(ckdat$(7:8))*100+val(ckdat$(3:4)) ! convert date back to mmddyy format
 	skip_alignment$        	=resp$(resp_skip_align)
 	if skip_alignment$='Yes' then allign=3
@@ -203,28 +202,13 @@ ScrMainQestions: ! r:
 	if posttocl$='Y' then cl_installed=1 else cl_installed=0
 	if ficam1$='Y' then ficam1=1 else ficam1=0
 	if pre$='Y' then pre=1 else pre=0
-	! if env$('client')='Washington Parrish' and (prdate<10100 or prdate>123199) then goto ScrMainQestions
+
 	beg_date=val(str$(d1)(1:4)&'0101')
 	end_date=val(str$(d1)(1:4)&'1231')
 	qtr1=val(str$(d1)(1:4)&str$(read_qtr1)(5:8))
 	qtr2=val(str$(d1)(1:4)&str$(read_qtr2)(5:8))
 	qtr3=val(str$(d1)(1:4)&str$(read_qtr3)(5:8))
 	qtr4=val(str$(d1)(1:4)&str$(read_qtr4)(5:8))
-
-	! if d1<old_beg_date or d1>old_end_date then ! not this year
-	!   mat ml$(4)
-	!   ml$(1)='The Payroll Date you have chosen ('&cnvrt$('pic(zzzz/zz/zz)',d1)&') is is outside your years'
-	!   ml$(2)='beginning  and ending date range ('&cnvrt$('pic(zzzz/zz/zz)',old_beg_date)&' - '&cnvrt$('pic(zzzz/zz/zz)',old_end_date)&').'
-	!   ml$(3)='Checks with a payroll date outside this date range can not be processed.'
-	!   ml$(4)='Would you like to 'Change Payroll Dates' now?'
-	!   fnmsgbox(mat ml$,resp$,'',16+4)
-	!   if resp$='Yes' then
-	!     fnchain('S:\Payroll\Change Payroll Dates')
-	!   else ! if resp$='No' then
-	!     goto ScrMainQestions
-	!   end if
-	! end if
-	! pause
 
 	if check_number<0 then
 		mat ml$(2)
@@ -303,7 +287,6 @@ ScrMainQestions: ! r:
 	goto ReadNextEmployee
 	L1570: !
 	if beginningEmployeeNumber>eno then goto ReadNextEmployee ! start with certain employee
-
 	tdepXcount=0
 	mat tdep=(0)
 	tdc1=tdc2=tdc3=tdc4=tdc5=0
@@ -316,6 +299,7 @@ ScrMainQestions: ! r:
 	end if
 	if pr_prNetZeroChecks$='True' and ttc(32)=0 and fndate_mmddyy_to_ccyymmdd(lpd)=d1 then goto ProduceThatCheck ! pr zero checks
 	if ttc(32)=0 then goto ReadNextEmployee ! no earnings
+if eno=5 and tdn=3 then pr 'aaa eno=5 tdn=3   gl$="'&gl$&'" sd5$='&sd5$ : pause !
 	ProduceThatCheck: !
 	! Mat TCP=(0)
 	! Mat TDC=(0)
@@ -325,10 +309,8 @@ ScrMainQestions: ! r:
 	ttc(28)=ttc(28)+ttc(29)+ttc(30) ! OTHER COMP-CURRENT
 	ttc(1)=ttc(1)-ttc(25)
 	tty(1)=tty(1)-tty(25)
-	L2070: !
-	if cl_installed=1 then 
-		if ~fn_cknum then goto Xit
-	end if
+	RePrintLandsHere: !
+	if cl_installed=1 and ~fn_cknum then goto Xit
 	fnopenprn
 	if sc1$='SCS' then fn_print_stub  	: fn_print_check 	: fn_print_stub
 	if sc1$='CSS' then fn_print_check 	: fn_print_stub  	: fn_print_stub
@@ -336,12 +318,12 @@ ScrMainQestions: ! r:
 	if sc1$='SCC' then fn_print_stub  	: fn_print_check 	: fn_print_check
 	if sc1$='CS'  then fn_print_check 	: fn_print_stub
 	if sc1$='SC'  then fn_print_stub  	: fn_print_check
-	L2150: !
-	if fp(d1*.01)>.9 then
-		hd1=19000000+fncd(d1)
-	else
-		hd1=20000000+fncd(d1)
-	end if
+	! L2150: !
+	! if fp(d1*.01)>.9 then
+	! 	hd1=19000000+fncd(d1)
+	! else
+	! 	hd1=20000000+fncd(d1)
+	! end if
 	! hsk$=lpad$(str$(eno),8)&cnvrt$('PD 6',hd1)
 	if ~testCheckFormat and (allign=3 or skip_alignment$='Yes') then
 		pr #255: chr$(12) ! NEWPAGE
@@ -354,31 +336,29 @@ goto ScrAlign
 ScrAlign: ! r:
 	fnTos
 	respc=0 : rc=0
-	fnOpt(1,3,'Reprint same check',0,franum)
-	resp$(rc+=1)='False'
-	fnOpt(2,3,'Print next',0,franum)
-	resp$(rc+=1)='False'
-	fnOpt(3,3,'Print all remaining',0,franum)
-	resp$(rc+=1)='True'
+	fnOpt(1,3,'Reprint same check' 		) : resp$(rc+=1)='False'
+	fnOpt(2,3,'Print next'          	) : resp$(rc+=1)='False'
+	fnOpt(3,3,'Print all remaining'	) : resp$(rc+=1)='True'
 	if env$('client')='Billings' then resp$(2)='True' : resp$(3)='False'
 	fnCmdSet(2)
 	ckey=fnAcs(mat resp$) ! ScrAlign
-	if resp$(1)='True' then allign=1
-	if resp$(2)='True' then allign=2
-	if resp$(3)='True' then allign=3
+	if resp$(1)='True' then allign=1 ! Reprint same check
+	if resp$(2)='True' then allign=2 ! Print next
+	if resp$(3)='True' then allign=3 ! Print all remaining
 	if ckey=5 then getout=1: allign=2: goto CheckPrintTop ! write history on last check and quit
 	on allign goto ReprintSameCheck,CheckPrintTop,CheckPrintTop none ScrAlign
 ! /r
 ReprintSameCheck: ! r:
 	if pre then
-		if cl_installed=1 then fn_build_check_record
+		if cl_installed=1 then fn_buildCheckRecord
 		check_number+=1
 		if check_number>9999999 then check_number-=10000000
 	end if
-goto L2070 ! /r
+goto RePrintLandsHere ! /r
 
 CheckPrintTop: ! r:
-	if cl_installed=1 then fn_build_check_record
+
+	if cl_installed=1 then fn_buildCheckRecord
 	tdc1=tdc2=0
 	tdc3=tdc4=tdc5=0
 	tpd3=tpd4=tpd5=0
@@ -397,7 +377,7 @@ CheckPrintTop: ! r:
 	write #h_gl_glbrec,using F_GL_GLBREC: bankgl$,lpad$(rtrm$(str$(check_number)),12),em$(1),'PR',dat,ttc22,0
 	F_GL_GLBREC: form pos 1,2*c 12,c 30,c 2,n 6,pd 5.2,n 1
 	L3320: ! /r
-	if getout=1 then goto FINIS
+	if getout=1 then goto Finis
 	ttc(32)=0
 	check_number=check_number+1
 	if check_number>9999999 then check_number-=10000000
@@ -485,10 +465,10 @@ EoEmployee: ! r:
 	close #hCheck:
 	if gl_installed=1 then close #h_gl_glbrec:
 	fncloseprn
-goto FINIS ! /r
-FINIS: !
+goto Finis ! /r
+Finis: ! r:
 	if cl_installed=1 then
-		if allign=4 then fn_build_check_record
+		if allign=4 then fn_buildCheckRecord
 		close #h_clBank: ioerr ignore
 		close #h_clPayee: ioerr ignore
 		close #h_clTrans1: ioerr ignore
@@ -496,6 +476,7 @@ FINIS: !
 		close #h_clTransAlloc: ioerr ignore
 		close #h_clGl: ioerr ignore
 	end if
+goto Xit ! /r
 Xit: fnXit
 def fn_openCheckbook
 	open #h_clBank=fnH: 'Name=[Q]\CLmstr\BankMstr.h[cno],KFName=[Q]\CLmstr\BankIdx1.h[cno],Shr',internal,outIn,keyed ioerr OcFinis
@@ -513,7 +494,7 @@ def fn_openCheckbook
 	if ckno>9999999 then ckno-=10000000
 	OcFinis: !
 fnend
-def fn_build_check_record
+def fn_buildCheckRecord
 	tr$(1)=cnvrt$('N 8',check_number)
 	tr$(2)=cnvrt$('N 6',dat)
 	tr$(3)=cnvrt$('N 10.2',ttc(32))
@@ -523,7 +504,7 @@ def fn_build_check_record
 		ded$(1)=str$(ttc(31))
 		for j=2 to 25
 			! ADD MEDICARE TO FICA  no kj
-			if j=3 then 
+			if j=3 then
 				ded$(j)=str$(ttc(2))
 			else
 				ded$(j)=str$(ttc(j-1))
@@ -533,7 +514,7 @@ def fn_build_check_record
 		! ded$(26)=str$(ttc(30)) ! tips
 		! ded$(27)=str$(tdc1) ! reg hourly rate
 		! ded$(28)=str$(tdc2) ! ot rate
-		if tdc1=0 then 
+		if tdc1=0 then
 			! if em(5)=1 then ded$(29)='4' ! weeks worked
 			if em(5)=2 then ded$(29)='2'
 			if em(5)=3 then ded$(29)='2'
@@ -586,9 +567,10 @@ def fn_build_check_record
 	if allign=1 then goto EoBuildCheckRecord
 	for j=1 to 29
 		if val(ded$(j))=0 then goto L5230
+		dim gl$*12
 		gl$=''
 		on j goto L4840,L4910,L4910,L4910,L4910,L4910,L4910,L4910,L4910,L4910,L4910,L4910,L4910,L4910,L4910,L4910,L4910,L4910,L4910,L4910,L4910,L4910,L4910,L4910,L4910,L4910,L5220_Next_J1,L5220_Next_J1,BCR_GLN_VALIDATED none L5230
-	
+
 		L4840: !
 		for j1=1 to tdepXcount
 			if j<6 or j>25 then goto L4870 ! kj 91707
@@ -598,17 +580,17 @@ def fn_build_check_record
 			gl$=cnvrt$('N 3',tdep(j1,2))&cnvrt$('N 6',tdep(j1,3))&cnvrt$('N 3',tdep(j1,4))
 			sd5$='Gross Pay'
 			goto L4990
-			
+
 			L4910: !
-			if j=2 then sd5$='Federal WH' : gl$=gln$(1)
-			if j=3 then sd5$='FICA WH' : gl$=gln$(2) : fica0=val(ded$(j))
-			if j=4 then sd5$='Medicare' : gl$=gln$(2) : medi0=val(ded$(j)): goto L4990
-			if j=5 then sd5$='State WH' : gl$=gln$(3)
+			if j=2 then sd5$='Federal WH' 	: gl$=gln$(1)
+			if j=3 then sd5$='FICA WH'    	: gl$=gln$(2) : fica0=val(ded$(j))
+			if j=4 then sd5$='Medicare'   	: gl$=gln$(2) : medi0=val(ded$(j)): goto L4990
+			if j=5 then sd5$='State WH'   	: gl$=gln$(3)
 			if j>5 and j<26 then sd5$=abrevName$(j-5) : gl$=dedGl$(j-5)
 			if j=26 then gl$=gln$(1): sd5$='eic' : goto L4990 ! use federal
-			if j=27 then goto L4990 ! skip tips i think
+			! if j=27 then goto L4990 ! skip tips i think
 			! If J=28 Then gL$=GLN$(1): sD5$='Meals' : Goto 4890 ! use wages
-			
+
 			L4990: !
 			cd1=1
 				! pr 'gl$="'&gl$&'"'
@@ -632,8 +614,12 @@ def fn_build_check_record
 			if j=3 and ficam1=1 then alloc=alloc-ficam3 ! prb 2012
 			if alloc<>0 then  ! write non-zero allocations
 				lr3=lrec(h_clTransAlloc)+1
-				if j=3 then fica1=alloc : fica_rec=lr3
-				if j=4 then medi1=alloc
+				if j=3 then
+					fica1=alloc
+					fica_rec=lr3
+				else if j=4 then
+					medi1=alloc
+				end if
 				write #h_clTransAlloc,using F_ClTransAlloc,rec=lr3: bankcode,1,val(tr$(1)),gl$,alloc,de$(1:30),miscode,0
 				F_ClTransAlloc:  form pos 1,n 2,n 1,g 8,c 12,pd 5.2,c 30,n 6,pd 3
 			end if
@@ -644,6 +630,51 @@ def fn_build_check_record
 	fn_writeBenefitsAndFicaMatch
 	EoBuildCheckRecord: !
 fnend
+
+	def fn_writeBenefitsAndFicaMatch(; ___,j,j2,j4) ! WRITE BENEFITS & FICA MATCH (very local)
+		! updates local: cd1,tdep,fica2,sd5$,de$
+		! uses local:
+		cd1=2
+		for j=1 to tdepXcount
+			mat mgl$=('            ')
+			read #hMgl,using L5790,key=lpad$(str$(tdep(j,5)),3): mat mgl$ nokey L5800
+			L5790: form pos 4,11*c 12
+			L5800: !
+			for j2=6 to 16
+				if tdep(j,j2)=0 then
+					goto L5980
+				else if j2>6 then
+					if dedcode(j2-6)><3 then goto L5980
+					j4=j2-2
+					sd5$=de$=rtrm$(abrevName$(j4-4))&' Match'
+				else if ficam1=0 then
+					goto L5980
+				else
+					sd5$=de$='FICA Match'
+					fica2+=tdep(j,j2)
+					j4=3
+					goto L5900
+				end if
+	
+	
+				L5900: !
+				gl$=mgl$(j2-5)
+				! if env$('client')='Crockett County' then fnCleanGl$(gl$)
+				! pr 'gl$="'&gl$&'"'
+				! pr 'fnCleanGl$="'&fnCleanGl$(gl$)&'"'
+				! pause
+				read #h_clGl,using F_CL_GLMSTR,key=gl$,release: de$ nokey InvalidGlNumber
+	
+				EXLNKD_L5920: !
+				if ~testCheckFormat then
+					lr3=lrec(h_clTransAlloc)+1
+					write #h_clTransAlloc,using F_ClTransAlloc,rec=lr3: bankcode,1,val(tr$(1)),gl$,tdep(j,j2),de$(1:30),j4,0
+				end if
+				L5980: !
+			next j2
+		next j
+		! fn_FICA_FIX
+	fnend
 def fn_cknum(; returnN) ! check for duplicate check numbers
 	returnN=1 ! returns 0 if Exit is chosen
 	if testCheckFormat then goto CnXit
@@ -669,7 +700,7 @@ def fn_cknum(; returnN) ! check for duplicate check numbers
 	fnCmdKey('&Next',1,1,0,'Continue with checkprinting.' )
 	fnCmdKey('E&xit',5,0,1,'Returns to menu')
 	ckey=fnAcs(mat resp$) ! dupllicate check number
-	if ckey=5 then 
+	if ckey=5 then
 		returnN=0
 		goto CnXit
 	else
@@ -679,7 +710,7 @@ def fn_cknum(; returnN) ! check for duplicate check numbers
 		check_number=ckn2
 		tr$(1)=lpad$(str$(ckn2),8)
 		goto L5410
-	
+
 		L5670: !
 		bal=bal+val(dtr$(3))
 		delete #h_clTrans1,key=dk$:
@@ -695,50 +726,6 @@ def fn_cknum(; returnN) ! check for duplicate check numbers
 	CnXit: !
 	fn_cknum=returnN
 fnend
-def fn_writeBenefitsAndFicaMatch(; ___,j,j2,j4) ! WRITE BENEFITS & FICA MATCH (very local)
-	! updates local: cd1,tdep,fica2,sd5$,de$
-	! uses local: 
-	cd1=2
-	for j=1 to tdepXcount
-		mat mgl$=('            ')
-		read #hMgl,using L5790,key=lpad$(str$(tdep(j,5)),3): mat mgl$ nokey L5800
-		L5790: form pos 4,11*c 12
-		L5800: !
-		for j2=6 to 16
-			if tdep(j,j2)=0 then 
-				goto L5980
-			else if j2>6 then 
-				if dedcode(j2-6)><3 then goto L5980
-				j4=j2-2
-				sd5$=de$=rtrm$(abrevName$(j4-4))&' Match'
-			else if ficam1=0 then 
-				goto L5980
-			else
-				sd5$=de$='FICA Match'
-				fica2+=tdep(j,j2)
-				j4=3
-				goto L5900
-			end if
-
-			
-			L5900: !
-			gl$=mgl$(j2-5)
-			! if env$('client')='Crockett County' then fnCleanGl$(gl$)
-			! pr 'gl$="'&gl$&'"'
-			! pr 'fnCleanGl$="'&fnCleanGl$(gl$)&'"'
-			! pause
-			read #h_clGl,using F_CL_GLMSTR,key=gl$,release: de$ nokey InvalidGlNumber
-
-			EXLNKD_L5920: !
-			if ~testCheckFormat then
-				lr3=lrec(h_clTransAlloc)+1
-				write #h_clTransAlloc,using F_ClTransAlloc,rec=lr3: bankcode,1,val(tr$(1)),gl$,tdep(j,j2),de$(1:30),j4,0
-			end if
-			L5980: !
-		next j2
-	next j
-	! fn_FICA_FIX
-fnend
 ! r: Check pr routines
 def fn_print_check
 	if ttc(32)<=0 then
@@ -749,7 +736,7 @@ def fn_print_check
 	!
 	! if env$('client')='Merriam Woods' then
 	! 	englishAmountBreakPoint=65
-	! else 
+	! else
 	if env$('client')='Payroll Done Right' and env$('cno')='18' then
 		englishAmountBreakPoint=82
 	else
@@ -1600,11 +1587,11 @@ InvalidGlNumber: ! r:
 	if ckey=5 then goto Xit
 	gl$=fnAgl$(resp$(5))
 	read #h_clGl,using F_CL_GLMSTR,key=gl$,release: de$ nokey InvalidGlNumber
-	if cd1=1 then 
+	if cd1=1 then
 		goto BCR_GLN_VALIDATED
-	else if cd1=2 then 
+	else if cd1=2 then
 		goto EXLNKD_L5920
-	else 
+	else
 		goto BCR_GLN_VALIDATED
 	end if
 ! /r
