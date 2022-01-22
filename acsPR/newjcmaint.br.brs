@@ -18,12 +18,12 @@ dim cm2$(13),item2$(13)*30
  
 fnTop(program$,cap$="Job Cost")
 ! r: opens
-open #1: "Name=[Q]\PRmstr\JCMSTR.h[cno],KFName=[Q]\PRmstr\JCIndx.h[cno],Shr",internal,outIn,keyed ioerr L4890
-open #4: "Name=[Q]\PRmstr\JCMSTR.h[cno],KFName=[Q]\PRmstr\JCINDX2.h[cno],Shr",internal,outIn,keyed ioerr ignore
+open #1: "Name=[Q]\PRmstr\JCMSTR.h[cno],KFName=[Q]\PRmstr\JCIndx.h[cno],Shr",i,outIn,k ioerr L4890
+open #4: "Name=[Q]\PRmstr\JCMSTR.h[cno],KFName=[Q]\PRmstr\JCINDX2.h[cno],Shr",i,outIn,k ioerr ignore
  
-open #2: "Name=[Q]\PRmstr\JCCAT.h[cno],KFName=[Q]\PRmstr\CatIndx.h[cno],Shr",internal,outIn,keyed ioerr ignore
+open #2: "Name=[Q]\PRmstr\JCCAT.h[cno],KFName=[Q]\PRmstr\CatIndx.h[cno],Shr",i,outIn,k ioerr ignore
 open #3: "Name=[Q]\PRmstr\JCTRANS.h[cno],Shr",i,outi,r ioerr ignore
-open #16: "Name=[Q]\PRmstr\Category.h[cno],KFName=[Q]\PRmstr\categoryIDX.h[cno],Shr",internal,outIn,keyed ioerr ignore
+open #16: "Name=[Q]\PRmstr\Category.h[cno],KFName=[Q]\PRmstr\categoryIDX.h[cno],Shr",i,outIn,k ioerr ignore
 ! /r
 MENU1: !
 	ndep=0
@@ -701,8 +701,8 @@ RECREATE_GRID: ! r:
 	fncombof("CJobALL.h[cno]",lyne,mypos,43,"[Q]\PRmstr\jcmstr.h[cno]",1,6,7,25,"[Q]\PRmstr\jcindx.h[cno]" ,2)
 	execute "Index [Q]\PRmstr\JCMSTR.h[cno],[Q]\PRmstr\JCIndx.h[cno],1,6,Replace,DupKeys -N" ioerr ignore
 	execute "Index [Q]\PRmstr\JCMSTR.h[cno],[Q]\PRmstr\JCINDX2.h[cno],7,25,Replace,DupKeys -N" ioerr ignore
-	open #1: "Name=[Q]\PRmstr\JCMSTR.h[cno],KFName=[Q]\PRmstr\JCIndx.h[cno],Shr",internal,outIn,keyed ioerr Xit
-	open #4: "Name=[Q]\PRmstr\JCMSTR.h[cno],KFName=[Q]\PRmstr\JCINDX2.h[cno],Shr",internal,outIn,keyed ioerr Xit
+	open #1: "Name=[Q]\PRmstr\JCMSTR.h[cno],KFName=[Q]\PRmstr\JCIndx.h[cno],Shr",i,outIn,k ioerr Xit
+	open #4: "Name=[Q]\PRmstr\JCMSTR.h[cno],KFName=[Q]\PRmstr\JCINDX2.h[cno],Shr",i,outIn,k ioerr Xit
 return ! /r
 RECREATE_CAT_GRID: ! r:
 	close #2: ioerr ignore
@@ -712,7 +712,7 @@ RECREATE_CAT_GRID: ! r:
 	fncombof("CCatALL.h[cno]",lyne,mypos,43,"[Q]\PRmstr\jccat.h[cno]",1,11,12,25,"[Q]\PRmstr\catindx.h[cno]" ,2)
 	execute "Index [Q]\PRmstr\JCCAT.h[cno],[Q]\PRmstr\CatIndx.h[cno],1,11,Replace,DupKeys -N" ioerr L5220
 	L5220: !
-	open #2: "Name=[Q]\PRmstr\JCCAT.h[cno],KFName=[Q]\PRmstr\CatIndx.h[cno],Shr",internal,outIn,keyed ioerr Xit
+	open #2: "Name=[Q]\PRmstr\JCCAT.h[cno],KFName=[Q]\PRmstr\CatIndx.h[cno],Shr",i,outIn,k ioerr Xit
 return ! /r
 DELETE_CATEGORY: ! r:
 	read #2,using L1360,key=cn$: mat ta nokey L5360

@@ -38,7 +38,7 @@
 	if resp$(5)='True' then method_to_allocate=3 ! all to month 1
 	if method=2 then gosub L790
 	if method=2 then gosub BUDGET_FILE_NUM
-	open #1: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLIndex.h[cno],Shr",internal,outIn,keyed
+	open #1: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLIndex.h[cno],Shr",i,outIn,k
 	fnopenprn
 !
 	pr #255: "   GL Number    New Budget  Old Budget"
@@ -117,7 +117,7 @@ BUDGET_FILE_NUM: ! r:
 	ckey=fnAcs(mat resp$)
 	if ckey=5 then goto Xit
 	bud=val(resp$(1)) ! budget file number to pull
-	open #2: "Name=[Q]\GLmstr\Budget"&str$(bud)&".h[cno],KFName=[Q]\GLmstr\BgIndx"&str$(bud)&".h[cno],Shr",internal,outIn,keyed ioerr BUDGET_FILE_NUM
+	open #2: "Name=[Q]\GLmstr\Budget"&str$(bud)&".h[cno],KFName=[Q]\GLmstr\BgIndx"&str$(bud)&".h[cno],Shr",i,outIn,k ioerr BUDGET_FILE_NUM
 return ! /r
 !
 L1090: ! PULL FROM BUDGET MANAGEMENT SYSTEM  (select budget #)

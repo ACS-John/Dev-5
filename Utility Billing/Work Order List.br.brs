@@ -27,7 +27,7 @@ def library fnWorkOrderList(; z$*10)
 	end_date=val(resp$(2)) ! ending day of year
 	askz$=lpad$(trim$(resp$(3)(1:10)),10)
 	fnopenprn
-	open #h_workorder=fnH: "Name=[Q]\UBmstr\WorkOrder.h[cno],KFName=[Q]\UBmstr\wkIndex.h[cno],Shr",internal,outIn,keyed
+	open #h_workorder=fnH: "Name=[Q]\UBmstr\WorkOrder.h[cno],KFName=[Q]\UBmstr\wkIndex.h[cno],Shr",i,outIn,k
 	gosub PWL_HDR
 	if trim$(askz$)="[All]" or trim$(askz$)="" then 
 		restore #h_workorder: 

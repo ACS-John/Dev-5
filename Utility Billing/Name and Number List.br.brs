@@ -31,7 +31,7 @@
 	item2$(5)="Only Alternate Addresses"
 	item2$(6)="Active, But Not Being Billed"
 
-	open #3: "Name=[Q]\UBmstr\ubAdrBil.h[cno],KFName=[Q]\UBmstr\AdrIndex.h[cno],Shr",internal,outIn,keyed
+	open #3: "Name=[Q]\UBmstr\ubAdrBil.h[cno],KFName=[Q]\UBmstr\AdrIndex.h[cno],Shr",i,outIn,k
 ! /r
 ! MENU1: ! r:
 	fnTos

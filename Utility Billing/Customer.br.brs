@@ -13,13 +13,13 @@ def fn_customer(; &editOne$,___,editOne,ckey)
 		editOne=1
 	end if
 	! r: open files
-	open #h_ubadrbil=fnH: "Name=[Q]\UBmstr\ubAdrBil.h[cno],KFName=[Q]\UBmstr\AdrIndex.h[cno],Shr,Use,RecL=130,KPs=1,KLn=10",internal,outIn,keyed  ! was :=3
+	open #h_ubadrbil=fnH: "Name=[Q]\UBmstr\ubAdrBil.h[cno],KFName=[Q]\UBmstr\AdrIndex.h[cno],Shr,Use,RecL=130,KPs=1,KLn=10",i,outIn,k  ! was :=3
 	FadrBil: form pos 1,c 10,4*c 30
 	gosub Cass1Open
 	fn_setup_depositChange ! INITIALIZE DEPOSIT TRACKING FILES
 	! r: BUD1: ! INITILIZE BUDGET FILE
 	bud1=0
-	open #h_budmstr=fnH: "Name=[Q]\UBmstr\BudMstr.h[cno],KFName=[Q]\UBmstr\BudIdx1.h[cno],Shr,Use,RecL=80,KPs=1,KLn=10",internal,outIn,keyed  ! was 81
+	open #h_budmstr=fnH: "Name=[Q]\UBmstr\BudMstr.h[cno],KFName=[Q]\UBmstr\BudIdx1.h[cno],Shr,Use,RecL=80,KPs=1,KLn=10",i,outIn,k  ! was 81
 	F_BUDMSTR: form pos 1,c 10,pd 4,12*pd 5.2,2*pd 3
 	open #h_budtrans=fnH: "Name=[Q]\UBmstr\BudTrans.h[cno],Shr,Use,RecL=149",i,outi,r  ! was 82
 	F_BUDTRANS: form pos 1,c 10,2*pd 4,24*pd 5.2,2*pd 4,pd 3
@@ -29,13 +29,13 @@ def fn_customer(; &editOne$,___,editOne,ckey)
 	dim customerN(0)
 	hCustomer1=fn_openFio('UB Customer',mat customer$,mat customerN)
 	hCustomer2=hCustomer1+1
-	! open #hCustomer1=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,outIn,keyed ! 1
-	! open #hCustomer2=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx2.h[cno],Shr",internal,outIn,keyed  ! 11
-	! open #hCustomer3=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx3.h[cno],Shr",internal,outIn,keyed ! Meter address
-	! open #hCustomer4=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx4.h[cno],Shr",internal,outIn,keyed
-	! open #hCustomer5=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx5.h[cno],Shr",internal,outIn,keyed
+	! open #hCustomer1=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",i,outIn,k ! 1
+	! open #hCustomer2=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx2.h[cno],Shr",i,outIn,k  ! 11
+	! open #hCustomer3=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx3.h[cno],Shr",i,outIn,k ! Meter address
+	! open #hCustomer4=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx4.h[cno],Shr",i,outIn,k
+	! open #hCustomer5=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx5.h[cno],Shr",i,outIn,k
 	F_CUSTOMER_1: form pos 1,c 10,4*c 30,c 12,7*pd 2,11*pd 4.2,4*pd 4,15*pd 5,pd 4.2,pd 4,12*pd 4.2,2*pd 3,c 7,2*c 12,pd 3,10*pd 5.2,pos 1712,c 1,c 9,c 2,c 17,n 2,n 7,2*n 6,n 9,pd 5.2,n 3,3*n 9,3*n 2,3*n 3,n 1,3*n 9,3*pd 5.2,c 30,7*c 12,3*c 30
-	open #h_citystzip=fnH: "Name=[Q]\Data\CityStZip.dat,KFName=[Q]\Data\CityStZip.Idx,Use,RecL=30,KPs=1,KLn=30,Shr",internal,outIn,keyed
+	open #h_citystzip=fnH: "Name=[Q]\Data\CityStZip.dat,KFName=[Q]\Data\CityStZip.Idx,Use,RecL=30,KPs=1,KLn=30,Shr",i,outIn,k
 	! /r
 
 	goto AskAcct
@@ -143,12 +143,12 @@ def fn_customer(; &editOne$,___,editOne,ckey)
 		! rewrite #hCustomer1,using F_CUSTOMER_1: z$,mat e$,f$(1),mat a,mat b,mat c,mat d,bal,lastBillingDate,mat g,mat adr,alp$,f$(2),f$(3),bra_legacy,mat gb,df$,dr$,dc$,da$,mat extra,mat extra$
 
 		if z$<>holdz$ or extra(1)<>holdroute or extra(2)><holdseq then fixgrid=1
-		open #h_ubtransvb=fnH: "Name=[Q]\UBmstr\ubTransVB.h[cno],KFName=[Q]\UBmstr\ubTrIndx.h[cno],Shr,Use,RecL=102,KPs=1,KLn=19",internal,outIn,keyed
-		open #hTrans2=fnH:      "Name=[Q]\UBmstr\ubTransVB.h[cno],KFName=[Q]\UBmstr\UBTrdt.h[cno],Shr",internal,outIn,keyed
+		open #h_ubtransvb=fnH: "Name=[Q]\UBmstr\ubTransVB.h[cno],KFName=[Q]\UBmstr\ubTrIndx.h[cno],Shr,Use,RecL=102,KPs=1,KLn=19",i,outIn,k
+		open #hTrans2=fnH:      "Name=[Q]\UBmstr\ubTransVB.h[cno],KFName=[Q]\UBmstr\UBTrdt.h[cno],Shr",i,outIn,k
 		fnKeyChange(h_ubtransvb,'form pos 1,c 10',holdz$,z$) ! change # in history transactions
 		close #h_ubtransvb:
 		close #hTrans2:
-		open #h_workorder=fnH: "Name=[Q]\UBmstr\WorkOrder.h[cno],KFName=[Q]\UBmstr\wkIndex.h[cno],Shr",internal,outIn,keyed
+		open #h_workorder=fnH: "Name=[Q]\UBmstr\WorkOrder.h[cno],KFName=[Q]\UBmstr\wkIndex.h[cno],Shr",i,outIn,k
 		fnKeyChange(h_workorder,'form pos 1,c 10',holdz$,z$)
 		close #h_workorder:
 		fn_accountKeyChange_meter(holdz$,z$)
@@ -367,7 +367,7 @@ def fn_customer(; &editOne$,___,editOne,ckey)
 	 L4100: !
 	return ! /r
 	Cass1Open: ! r:
-		open #h_cass1=fnH: "Name=[Q]\UBmstr\Cass1.h[cno],KFName=[Q]\UBmstr\CASS1IDX.h[cno],Shr",internal,outIn,keyed ioerr Cass1OpenFinis
+		open #h_cass1=fnH: "Name=[Q]\UBmstr\Cass1.h[cno],KFName=[Q]\UBmstr\CASS1IDX.h[cno],Shr",i,outIn,k ioerr Cass1OpenFinis
 		cassopen=1
 		Cass1OpenFinis: !
 	return  ! /r
@@ -377,8 +377,8 @@ def fn_customer(; &editOne$,___,editOne,ckey)
 		end if
 	return  ! /r
 	DEL_HIST: ! r: Delete History with old account
-		open #h_ubtransvb=fnH: "Name=[Q]\UBmstr\ubTransVB.h[cno],KFName=[Q]\UBmstr\ubTrIndx.h[cno],Shr",internal,outIn,keyed
-		open #hTrans2=fnH: "Name=[Q]\UBmstr\ubTransVB.h[cno],KFName=[Q]\UBmstr\UBTrdt.h[cno],Shr",internal,outIn,keyed
+		open #h_ubtransvb=fnH: "Name=[Q]\UBmstr\ubTransVB.h[cno],KFName=[Q]\UBmstr\ubTrIndx.h[cno],Shr",i,outIn,k
+		open #hTrans2=fnH: "Name=[Q]\UBmstr\ubTransVB.h[cno],KFName=[Q]\UBmstr\UBTrdt.h[cno],Shr",i,outIn,k
 		restore #h_ubtransvb,key>=x$&"         ": nokey DEL_HIST_FINIS
 		do
 			read #h_ubtransvb,using 'form pos 1,c 10,n 8,n 1,12*pd 4.2,6*pd 5,pd 4.2,n 1': p$,tdate eof DEL_HIST_FINIS
@@ -863,7 +863,7 @@ def library fnDepositChangeLog(z$*10,odp,ndp,chgDateMmDdYy,comment$*32)
 	fnDepositChangeLog=fn_depositChangeLog(z$,odp,ndp,chgDateMmDdYy,comment$)
 fnend
 def fn_setup_depositChange
-	open #h_deposit2=fnH: 'Name=[Q]\UBmstr\Deposit2.h[cno],KFName=[Q]\UBmstr\Deposit2Index.h[cno],Shr,Use,RecL=73,KPs=1,KLn=10',internal,outIn,keyed ! "Name=[Q]\UBmstr\Deposit2.h[cno],Shr,Use,RecL=73",i,outi,r  ! was 42
+	open #h_deposit2=fnH: 'Name=[Q]\UBmstr\Deposit2.h[cno],KFName=[Q]\UBmstr\Deposit2Index.h[cno],Shr,Use,RecL=73,KPs=1,KLn=10',i,outIn,k ! "Name=[Q]\UBmstr\Deposit2.h[cno],Shr,Use,RecL=73",i,outi,r  ! was 42
 fnend
 def fn_depositChangeLog(z$,odp,ndp,chgDateMmDdYy,comment$*32)
 	! requires local:  #h_deposit2

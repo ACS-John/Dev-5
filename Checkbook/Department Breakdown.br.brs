@@ -2,7 +2,7 @@
 autoLibrary
 on error goto Ertn
 fnTop(program$)
-open #h=fnH: 'Name=[Q]\CLmstr\DptMstr.h[cno],KFName=[Q]\CLmstr\dptidx1.h[cno],Use,RecL=35,KPs=1,KLn=5,Shr',internal,outIn,keyed
+open #h=fnH: 'Name=[Q]\CLmstr\DptMstr.h[cno],KFName=[Q]\CLmstr\dptidx1.h[cno],Use,RecL=35,KPs=1,KLn=5,Shr',i,outIn,k
 dim lbl$(3)*24                	, tln(3)    , fltyp$(3)     , mask(3)
 lbl$(1)='Fund Number'        	: tln(1)= 3 : fltyp$(1)='n' : mask(1)=3
 lbl$(2)='Department Number'  	: tln(2)= 2 : fltyp$(2)='n' : mask(2)=3

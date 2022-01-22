@@ -2,9 +2,9 @@ autoLibrary
 on error goto Ertn
 fnTop(program$)
 
-open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],NoShr",internal,outIn,keyed
-open #2: "Name=[Q]\UBmstr\UBTransVB.h[cno],KFName=[Q]\UBmstr\UBTrIndx.h[cno],Shr,USE,RecL=102,KPs=1,KLn=19",internal,outIn,keyed
-open #hTrans2=fnH: "Name=[Q]\UBmstr\ubTransVB.h[cno],KFName=[Q]\UBmstr\UBTrdt.h[cno],Shr,Use,KPs=11/1,KLn=8/10",internal,outIn,keyed
+open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],NoShr",i,outIn,k
+open #2: "Name=[Q]\UBmstr\UBTransVB.h[cno],KFName=[Q]\UBmstr\UBTrIndx.h[cno],Shr,USE,RecL=102,KPs=1,KLn=19",i,outIn,k
+open #hTrans2=fnH: "Name=[Q]\UBmstr\ubTransVB.h[cno],KFName=[Q]\UBmstr\UBTrdt.h[cno],Shr,Use,KPs=11/1,KLn=8/10",i,outIn,k
 dim srv$(10)*20
 fnGetServices(mat srv$)
 for j=1 to udim(srv$)

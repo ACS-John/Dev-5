@@ -32,28 +32,28 @@ MENU1: !
 	co2=val(resp$(2)(43:47))
 	if co1=0 or co2=0 then goto MENU1
 	close #1: ioerr ignore
-	open #1: "Name=[Q]\UBmstr\Customer.h"&str$(co1)&",Shr,KFName=[Q]\UBmstr\UBIndex.h"&str$(co1)&",Shr",internal,outIn,keyed  ! Ioerr MENU1
+	open #1: "Name=[Q]\UBmstr\Customer.h"&str$(co1)&",Shr,KFName=[Q]\UBmstr\UBIndex.h"&str$(co1)&",Shr",i,outIn,k  ! Ioerr MENU1
 	close #2: ioerr ignore
-	open #2: "Name=[Q]\UBmstr\ubTransVB.h"&str$(co1)&",Shr,KFName=[Q]\UBmstr\ubTrIndx.h"&str$(co1)&",Shr",internal,outIn,keyed
-	open #hTrans2=fnH: "Name=[Q]\UBmstr\ubTransVB.h"&str$(co1)&",Shr,KFName=[Q]\UBmstr\UBTrdt.h"&str$(co1)&",Shr",internal,outIn,keyed
+	open #2: "Name=[Q]\UBmstr\ubTransVB.h"&str$(co1)&",Shr,KFName=[Q]\UBmstr\ubTrIndx.h"&str$(co1)&",Shr",i,outIn,k
+	open #hTrans2=fnH: "Name=[Q]\UBmstr\ubTransVB.h"&str$(co1)&",Shr,KFName=[Q]\UBmstr\UBTrdt.h"&str$(co1)&",Shr",i,outIn,k
 	close #3: ioerr ignore
-	open #3: "Name=[Q]\UBmstr\UBADRBIL.h"&str$(co1)&",Shr,KFName=[Q]\UBmstr\AdrIndex.h"&str$(co1)&",Shr",internal,outIn,keyed
+	open #3: "Name=[Q]\UBmstr\UBADRBIL.h"&str$(co1)&",Shr,KFName=[Q]\UBmstr\AdrIndex.h"&str$(co1)&",Shr",i,outIn,k
 	close #41: ioerr ignore
-	open #41: "Name=[Q]\UBmstr\DEPOSIT1.h"&str$(co1)&",Shr,KFName=[Q]\UBmstr\DEPIDX1.h"&str$(co1)&",Shr,USE,RecL=16,KPS=1,KLN=10",internal,outIn,keyed
+	open #41: "Name=[Q]\UBmstr\DEPOSIT1.h"&str$(co1)&",Shr,KFName=[Q]\UBmstr\DEPIDX1.h"&str$(co1)&",Shr,USE,RecL=16,KPS=1,KLN=10",i,outIn,k
 	close #42: ioerr ignore
-	open #42: 'Name=[Q]\UBmstr\Deposit2.h[cno],KFName=[Q]\UBmstr\Deposit2Index.h[cno],Shr,Use,RecL=73,KPs=1,KLn=10',internal,outIn,keyed ! "Name=[Q]\UBmstr\DEPOSIT2.h"&str$(co1)&",Shr,USE,RecL=73",i,outi,r
+	open #42: 'Name=[Q]\UBmstr\Deposit2.h[cno],KFName=[Q]\UBmstr\Deposit2Index.h[cno],Shr,Use,RecL=73,KPs=1,KLn=10',i,outIn,k ! "Name=[Q]\UBmstr\DEPOSIT2.h"&str$(co1)&",Shr,USE,RecL=73",i,outi,r
 	close #26: ioerr ignore
-	open #26: "Name=[Q]\UBmstr\Customer.h"&str$(co2)&",Shr,KFName=[Q]\UBmstr\UBIndex.h"&str$(co2)&",Shr",internal,outIn,keyed  ! Ioerr MENU1
-	open #11: "Name=[Q]\UBmstr\Customer.h"&str$(co2)&",Shr,KFName=[Q]\UBmstr\UBIndx2.h"&str$(co2)&",Shr",internal,outIn,keyed
-	open #unused0=fnH: "Name=[Q]\UBmstr\Customer.h"&str$(co2)&",Shr,KFName=[Q]\UBmstr\UBIndx3.h"&str$(co2)&",Shr",internal,outIn,keyed
-	open #unused1=fnH: "Name=[Q]\UBmstr\Customer.h"&str$(co2)&",Shr,KFName=[Q]\UBmstr\UBIndx4.h"&str$(co2)&",Shr",internal,outIn,keyed
-	open #unused2=fnH: "Name=[Q]\UBmstr\Customer.h"&str$(co2)&",Shr,KFName=[Q]\UBmstr\UBIndx5.h"&str$(co2)&",Shr",internal,outIn,keyed
-	open #hUbTranVb=fnH: "Name=[Q]\UBmstr\ubTransVB.h"&str$(co2)&",Shr,KFName=[Q]\UBmstr\ubTrIndx.h"&str$(co2)&",Shr",internal,outIn,keyed
-	open #hUbTranVb2=fnH: "Name=[Q]\UBmstr\ubTransVB.h"&str$(co2)&",Shr,KFName=[Q]\UBmstr\UBTrdt.h"&str$(co2)&",Shr",internal,outIn,keyed
+	open #26: "Name=[Q]\UBmstr\Customer.h"&str$(co2)&",Shr,KFName=[Q]\UBmstr\UBIndex.h"&str$(co2)&",Shr",i,outIn,k  ! Ioerr MENU1
+	open #11: "Name=[Q]\UBmstr\Customer.h"&str$(co2)&",Shr,KFName=[Q]\UBmstr\UBIndx2.h"&str$(co2)&",Shr",i,outIn,k
+	open #unused0=fnH: "Name=[Q]\UBmstr\Customer.h"&str$(co2)&",Shr,KFName=[Q]\UBmstr\UBIndx3.h"&str$(co2)&",Shr",i,outIn,k
+	open #unused1=fnH: "Name=[Q]\UBmstr\Customer.h"&str$(co2)&",Shr,KFName=[Q]\UBmstr\UBIndx4.h"&str$(co2)&",Shr",i,outIn,k
+	open #unused2=fnH: "Name=[Q]\UBmstr\Customer.h"&str$(co2)&",Shr,KFName=[Q]\UBmstr\UBIndx5.h"&str$(co2)&",Shr",i,outIn,k
+	open #hUbTranVb=fnH: "Name=[Q]\UBmstr\ubTransVB.h"&str$(co2)&",Shr,KFName=[Q]\UBmstr\ubTrIndx.h"&str$(co2)&",Shr",i,outIn,k
+	open #hUbTranVb2=fnH: "Name=[Q]\UBmstr\ubTransVB.h"&str$(co2)&",Shr,KFName=[Q]\UBmstr\UBTrdt.h"&str$(co2)&",Shr",i,outIn,k
 	close #23: ioerr ignore
-	open #23: "Name=[Q]\UBmstr\UBADRBIL.h"&str$(co2)&",Shr,KFName=[Q]\UBmstr\AdrIndex.h"&str$(co2)&",Shr",internal,outIn,keyed  ! Ioerr MENU1
+	open #23: "Name=[Q]\UBmstr\UBADRBIL.h"&str$(co2)&",Shr,KFName=[Q]\UBmstr\AdrIndex.h"&str$(co2)&",Shr",i,outIn,k  ! Ioerr MENU1
 	close #51: ioerr ignore
-	open #51: "Name=[Q]\UBmstr\Deposit1.h"&str$(co2)&",Shr,KFName=[Q]\UBmstr\DepIdx1.h"&str$(co2)&",Shr,Use,RecL=16,KPs=1,KLn=10",internal,outIn,keyed ioerr MENU1
+	open #51: "Name=[Q]\UBmstr\Deposit1.h"&str$(co2)&",Shr,KFName=[Q]\UBmstr\DepIdx1.h"&str$(co2)&",Shr,Use,RecL=16,KPs=1,KLn=10",i,outIn,k ioerr MENU1
 	close #52: ioerr ignore
 	open #52: "Name=[Q]\UBmstr\Deposit2.h"&str$(co2)&",Shr,USE,RecL=73",i,outi,r
 	fnopenprn

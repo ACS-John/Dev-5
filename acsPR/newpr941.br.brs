@@ -123,8 +123,8 @@ goto FINIS ! /r
 def fn_start_print
 	on pageoflow goto PgOf
 	open #2: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr",i,i,k
-	open #4: "Name=[Q]\PRmstr\payrollchecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno]",internal,outIn,keyed
-	open #3: "Name=[Q]\PRmstr\Department.h[cno],Shr, KFName=[Q]\PRmstr\DeptIdx.h[cno],Shr",internal,outIn,keyed
+	open #4: "Name=[Q]\PRmstr\payrollchecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno]",i,outIn,k
+	open #3: "Name=[Q]\PRmstr\Department.h[cno],Shr, KFName=[Q]\PRmstr\DeptIdx.h[cno],Shr",i,outIn,k
 	if frm=2 then gosub WK_HEADER
 	L1140: read #2,using L1150: eno,mat em$,ss$,em5,em6 eof WK_END
 	L1150: form pos 1,n 8,3*c 30,c 11,pos 120,2*n 2

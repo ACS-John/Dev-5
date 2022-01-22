@@ -6,7 +6,7 @@ fnStatus('Merging transactions...')
 dim c$(0)*256
 dim cN(0)
 hClient=fn_openFio('CO Client',mat c$,mat cN)
-! open #hClient=fnH: 'Name=S:\Core\Data\acsllc\Client.h[cno],KFName=S:\Core\Data\acsllc\Client-Idx.h[cno],Shr',internal,outIn,keyed
+! open #hClient=fnH: 'Name=S:\Core\Data\acsllc\Client.h[cno],KFName=S:\Core\Data\acsllc\Client-Idx.h[cno],Shr',i,outIn,k
 ! FclientBal: form pos 283,pd 5.2
 ! open #hTrans=fnH: 'Name=S:\Core\Data\acsllc\Transactions.h[cno],Shr',i,outi,r
 dim to$(0)*64

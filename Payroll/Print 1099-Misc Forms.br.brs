@@ -4,7 +4,7 @@ on error goto Ertn
 fnTop(program$)
 if ~fn1099MiscAsk(seltp,type,min1,beg_date,end_date) then goto Xit
 open #hEmployee=fnH: 'Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr',i,i,k
-open #hChecks=fnH: 'Name=[Q]\PRmstr\payrollchecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno]',internal,outIn,keyed
+open #hChecks=fnH: 'Name=[Q]\PRmstr\payrollchecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno]',i,outIn,k
 do ! r: main loop
 	START: !
 	dim empAddr$(3)*30

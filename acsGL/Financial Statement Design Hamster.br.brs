@@ -66,7 +66,7 @@ do
 	if resp$(4)='True' then selection=4
 	if resp$(5)='True' then selection=5
 	if resp$(6)='True' then selection=6
-	open #1: 'Name=[Q]\GLmstr\'&fil$(selection)&',KFName=[Q]\GLmstr\'&idx$(selection)&',Use,RecL=83,KPs=1,KLn=5,Shr',internal,outIn,keyed
+	open #1: 'Name=[Q]\GLmstr\'&fil$(selection)&',KFName=[Q]\GLmstr\'&idx$(selection)&',Use,RecL=83,KPs=1,KLn=5,Shr',i,outIn,k
 	fnHamster('Acglfnsb',mat lbl$,mat tln,1,mat p$,mat fltyp$,mat sln,mat mask,mat sp,mat c$)
 	close #1: ioerr ignore
 	fnIndex('[Q]\GLmstr\'&fil$(selection),'[Q]\GLmstr\'&idx$(selection),'1 5')

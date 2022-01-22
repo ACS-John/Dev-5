@@ -1,8 +1,8 @@
 ! Replace Test\RewriteReserve
 dim b$*40,keyform$*80,blank$(10)
-open #fin:=1: "Name=Temp.dat,KFName=Temp.idx,Use,RecL=64,KPs=1/3,KLn=2/2,Shr",internal,outIn,keyed 
+open #fin:=1: "Name=Temp.dat,KFName=Temp.idx,Use,RecL=64,KPs=1/3,KLn=2/2,Shr",i,outIn,k 
 close #fin: 
-open #fin: "Name=Temp.dat,KFName=Temp.idx,Use,RecL=64,KPs=1/3,KLn=2/2,Shr",internal,outIn,keyed 
+open #fin: "Name=Temp.dat,KFName=Temp.idx,Use,RecL=64,KPs=1/3,KLn=2/2,Shr",i,outIn,k 
 keyform$='form ' : key$=''
 do while kps(fin,j+=1)>0
 	keyform$=keyform$&'pos '&str$(kps(fin,j))&','
@@ -19,7 +19,7 @@ rewrite #fin,using 'form pos 3,N 2',same,reserve: 9
 rewrite #fin,using 'form pos 5,C 40',same,reserve: 'eight - nine'
 release #fin: 
 close #fin: 
-open #tmpfile:=12: "Name=Temp.dat,KFName=Temp.idx,Shr",internal,outIn,keyed 
+open #tmpfile:=12: "Name=Temp.dat,KFName=Temp.idx,Shr",i,outIn,k 
 key$=lpad$(str$(8),2)&lpad$(str$(9),2) !:
 read #tmpfile,using 'form pos 1,N 2,N 2,C 40',key=key$,reserve: a,b,b$
 rewrite #tmpfile,using 'form pos 1,n 2,n 2,c 40',reserve: a,b,b$

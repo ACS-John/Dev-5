@@ -42,7 +42,7 @@ END1: !
 L410: !
 	close #2: ioerr ignore
 	open #2: "Name="&dv$&"PayMstr.h[cno],SIZE=0,RecL=276,Replace",internal,output
-	open #payeegl=fnH: "Name=[Q]\CLmstr\PayeeGLBreakdown.h[cno],Version=1,KFName=[Q]\CLmstr\Payeeglbkdidx.h[cno],Use,RecL=56,KPs=1,KLn=8,Shr",internal,outIn,keyed
+	open #payeegl=fnH: "Name=[Q]\CLmstr\PayeeGLBreakdown.h[cno],Version=1,KFName=[Q]\CLmstr\Payeeglbkdidx.h[cno],Use,RecL=56,KPs=1,KLn=8,Shr",i,outIn,k
 	open #1: "Name=[Q]\GLmstr\PayMstr.h[cno],KFName=[Q]\GLmstr\payidx1.h[cno],Shr",i,i,k  ! Ioerr 580
 	do
 		dim vn$(4)*30,contact$*30,email$*50,myact$*20

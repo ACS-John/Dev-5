@@ -17,8 +17,8 @@ fnHamster('UnpaidInvoice',mat lbl$,mat tln,1,mat p$,mat fltyp$,mat sln,mat mask,
 goto Xit
 OPEN_FILE: ! r:
 	open_file_count=0 ! this value is used in the close_file sub routine
-	open #first_file=open_file_count+=1: 'Name=[Q]\CLmstr\PayTrans.h[cno],Version=2,KFName=[Q]\CLmstr\UnPdIdx1.h[cno],Use,RecL=114,KPs=1,KLn=20,Shr',internal,outIn,keyed 
-	open #open_file_count+=1: 'Name=[Q]\CLmstr\PayTrans.h[cno],Version=2,KFName=[Q]\CLmstr\UnPdIdx2.h[cno],Use,RecL=114,KPs=31/27/1,KLn=2/4/26,Shr',internal,outIn,keyed 
+	open #first_file=open_file_count+=1: 'Name=[Q]\CLmstr\PayTrans.h[cno],Version=2,KFName=[Q]\CLmstr\UnPdIdx1.h[cno],Use,RecL=114,KPs=1,KLn=20,Shr',i,outIn,k 
+	open #open_file_count+=1: 'Name=[Q]\CLmstr\PayTrans.h[cno],Version=2,KFName=[Q]\CLmstr\UnPdIdx2.h[cno],Use,RecL=114,KPs=31/27/1,KLn=2/4/26,Shr',i,outIn,k 
 return ! /r
 BUILD_LAYOUT: ! r:
 ! ** Field Labels **

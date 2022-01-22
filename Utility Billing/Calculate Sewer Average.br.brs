@@ -4,7 +4,7 @@ on error goto Ertn
 fnTop(program$)
  
 open #h_trans=fnH: "Name=[Q]\UBmstr\ubTransvb.h[cno],KFName=[Q]\UBmstr\ubTrIndx.h[cno],Shr",i,i,k
-open #hCustomer=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,outIn,keyed
+open #hCustomer=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",i,outIn,k
 read #hCustomer,using L500: x$,customer_sewer_rate_code,oldavg eof DONE
 gosub APPLY_DEFAULT_RATE
 restore #h_trans,key>=x$&"         ": nokey L220

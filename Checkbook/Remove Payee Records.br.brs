@@ -11,9 +11,9 @@ fndat(dat$)
 open #20: 'Name=[Q]\CLmstr\Company.h[cno],Shr',i,i,r: read #20,using 'form pos 150,2*N 1',rec=1: mat d
 close #20:
 open #trmstr2=22: 'Name=[Q]\CLmstr\TrMstr.h[cno],KFName=[Q]\CLmstr\TrIdx2.h[cno],Shr',i,i,k
-open #paymstr1=1: 'Name=[Q]\CLmstr\PayMstr.h[cno],KFName=[Q]\CLmstr\PayIdx1.h[cno],Shr',internal,outIn,keyed
-open #paymstr2=2: 'Name=[Q]\CLmstr\PayMstr.h[cno],KFName=[Q]\CLmstr\PayIdx2.h[cno],Shr',internal,outIn,keyed
-open #payeeglbreakdown=fnH: 'Name=[Q]\CLmstr\PayeeGLBreakdown.h[cno],KFName=[Q]\CLmstr\PayeeGLBkdidx.h[cno],Shr',internal,outIn,keyed
+open #paymstr1=1: 'Name=[Q]\CLmstr\PayMstr.h[cno],KFName=[Q]\CLmstr\PayIdx1.h[cno],Shr',i,outIn,k
+open #paymstr2=2: 'Name=[Q]\CLmstr\PayMstr.h[cno],KFName=[Q]\CLmstr\PayIdx2.h[cno],Shr',i,outIn,k
+open #payeeglbreakdown=fnH: 'Name=[Q]\CLmstr\PayeeGLBreakdown.h[cno],KFName=[Q]\CLmstr\PayeeGLBkdidx.h[cno],Shr',i,outIn,k
 fnTos
 respc=0 : mylen=21 : mypos=mylen+2
 fnLbl(1,1,'Oldest Retained Date:',mylen,1)

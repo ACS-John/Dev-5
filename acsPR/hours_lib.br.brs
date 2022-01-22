@@ -11,8 +11,8 @@ def library fnHours(eno)
 	dim impname$*25,empname$*30
 	dim flxitm$(8)*30,key$*21,ml$(3)*80
 
-	open #hBreakdown=fnH: "Name=[Q]\PRmstr\HourBreakdown.h[cno],KFName=[Q]\PRmstr\HourBreakdown-idx.h[cno],Shr",internal,outIn,keyed 
-	open #hClassification=fnH: "Name=[Q]\PRmstr\HourClass.h[cno],KFName=[Q]\PRmstr\HourClass-idx.h[cno],Shr",internal,outIn,keyed ioerr MSGBOX3
+	open #hBreakdown=fnH: "Name=[Q]\PRmstr\HourBreakdown.h[cno],KFName=[Q]\PRmstr\HourBreakdown-idx.h[cno],Shr",i,outIn,k 
+	open #hClassification=fnH: "Name=[Q]\PRmstr\HourClass.h[cno],KFName=[Q]\PRmstr\HourClass-idx.h[cno],Shr",i,outIn,k ioerr MSGBOX3
 	open #hEmployee=fnH: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr",i,i,k 
 	MAIN: ! 
 		addhours=edithours=0
@@ -179,7 +179,7 @@ def library fnHours(eno)
 	close #hEmployee: ioerr ignore
 fnend 
 ! initial setup
-! open #hBreakdown=fnH: "Name=[Q]\PRmstr\HourBreakdown.h[cno],RecL=39,KFName=[Q]\PRmstr\HourBreakdown-idx.h[cno],kps=1/9/14,kln=8/5/8,replace",internal,outIn,keyed 
+! open #hBreakdown=fnH: "Name=[Q]\PRmstr\HourBreakdown.h[cno],RecL=39,KFName=[Q]\PRmstr\HourBreakdown-idx.h[cno],kps=1/9/14,kln=8/5/8,replace",i,outIn,k 
 ! close #hBreakdown: 
 ! fnIndex('[Q]\PRmstr\HourBreakdown.h[cno]','[Q]\PRmstr\HourBreakdown-idx.h[cno]','1/9/14 8/5/8')
 include: ertn

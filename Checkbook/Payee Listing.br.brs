@@ -9,10 +9,10 @@ dim gl$*12,gldesc$*30,key$*19,tr$(5)*35,payeegl$*12,payeekey$*12
 
 dim dat$*20
 fndat(dat$)
-open #1: 'Name=[Q]\CLmstr\PayMstr.h[cno],KFName=[Q]\CLmstr\PAYIDX1.h[cno],Shr',internal,outIn,keyed
-open #2: 'Name=[Q]\CLmstr\PayMstr.h[cno],KFName=[Q]\CLmstr\PAYIDX2.h[cno],Shr',internal,outIn,keyed
-open #trmstr2=31: 'Name=[Q]\CLmstr\TRMSTR.h[cno],KFName=[Q]\CLmstr\TRIDX2.h[cno],Shr',internal,outIn,keyed
-open #payeegl=3: 'Name=[Q]\CLmstr\payeeGLBreakdown.h[cno],KFName=[Q]\CLmstr\Payeeglbkdidx.h[cno],Shr',internal,outIn,keyed
+open #1: 'Name=[Q]\CLmstr\PayMstr.h[cno],KFName=[Q]\CLmstr\PAYIDX1.h[cno],Shr',i,outIn,k
+open #2: 'Name=[Q]\CLmstr\PayMstr.h[cno],KFName=[Q]\CLmstr\PAYIDX2.h[cno],Shr',i,outIn,k
+open #trmstr2=31: 'Name=[Q]\CLmstr\TRMSTR.h[cno],KFName=[Q]\CLmstr\TRIDX2.h[cno],Shr',i,outIn,k
+open #payeegl=3: 'Name=[Q]\CLmstr\payeeGLBreakdown.h[cno],KFName=[Q]\CLmstr\Payeeglbkdidx.h[cno],Shr',i,outIn,k
 	fnTos
 	respc=0
 	fnLbl(1,1,'Report Heading Date:',25,1)

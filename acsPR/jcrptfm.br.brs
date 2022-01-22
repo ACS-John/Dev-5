@@ -15,7 +15,7 @@
 	fnconsole(1)
 	pg=3
  
-	open #1: "Name=S:\acsPR\JCREPORT.MST,KFName=S:\acsPR\JCREPORT.idx,Shr",internal,outIn,keyed
+	open #1: "Name=S:\acsPR\JCREPORT.MST,KFName=S:\acsPR\JCREPORT.idx,Shr",i,outIn,k
  
 MENU1: pr newpage
 	fnopenwin(win=101,09,20,15,59,cap$)

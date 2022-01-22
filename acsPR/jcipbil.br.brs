@@ -13,7 +13,7 @@
 	c1=3
 	fnconsole(1)
  
-	open #1: "Name=[Q]\PRmstr\JCMSTR.h[cno],KFName=[Q]\PRmstr\JCIndx.h[cno],Shr",internal,outIn,keyed
+	open #1: "Name=[Q]\PRmstr\JCMSTR.h[cno],KFName=[Q]\PRmstr\JCIndx.h[cno],Shr",i,outIn,k
 	open #2: "Name=[Temp]\Work."&session$,internal,output ioerr L180
 	close #2,free:
 L180: open #2: "Name=[Temp]\Work.[Session],SIZE=0,RecL=17,Replace",i,outi,r

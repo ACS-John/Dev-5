@@ -112,7 +112,7 @@ GridSelection: ! r:
 GridColumns: !  r: Displays all vaiables in the data base and allows you to                        choose the ones you want in your grid
 	mat item$(2)
 	close #hgridfile: ioerr ignore
-	open #hgridfile:=15: 'Name='&fullGridName$&',KFName='&fullGridIndx$&',RecL=80,KPs=1,KLn=3,use',internal,outIn,keyed ioerr SelectDataBase
+	open #hgridfile:=15: 'Name='&fullGridName$&',KFName='&fullGridIndx$&',RecL=80,KPs=1,KLn=3,use',i,outIn,k ioerr SelectDataBase
 	fnTos
 	fnLbl(1,1,uprc$(gridName$),20,2,3)
 	mat colHdr$(2)
@@ -256,7 +256,7 @@ PrintGrid: ! r: Creates grid lines for prtflex2
 
 	! This section generates the program lines needed to create the column            headings and column masks
 	close #hgridfile: ioerr ignore
-	open #hgridfile:=15: 'Name='&fullGridName$&',KFName='&fullGridIndx$&',RecL=80,KPs=1,KLn=3,use',internal,outIn,keyed ioerr SelectDataBase
+	open #hgridfile:=15: 'Name='&fullGridName$&',KFName='&fullGridIndx$&',RecL=80,KPs=1,KLn=3,use',i,outIn,k ioerr SelectDataBase
 	open #h_gridspecs1:=10: 'Name=[Temp]\GridSpecs1.tmp,RecL=255,Replace',d,o  ! temporary file to hold generated lines for grid specifications
 	pr #h_gridspecs1,using F_GRIDSPECS1: 'procerr return' ! skip next line if no lines exist
 	pr #h_gridspecs1,using F_GRIDSPECS1: 'del 10010,10480' ! delete any lines from previous grid

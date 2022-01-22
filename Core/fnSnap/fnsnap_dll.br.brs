@@ -1643,7 +1643,7 @@
 10020 ! ------------------------
 10022 ! DIM A$*2000
 10025 dupa=0
-10030 open #flnr: "NAME="&flnm$&",KFNAME="&kfnm$&",SHR",internal,outIn,keyed 
+10030 open #flnr: "NAME="&flnm$&",KFNAME="&kfnm$&",SHR",i,outIn,k 
 10040 keylen=kln(flnr)
 10060 savecurfld=curfld
 10065 close #flnr: 
@@ -1759,7 +1759,7 @@
 10910 close #reportlog: 
 10920 end if 
 10925 if save_days>0 then del_day$=str$(days(date)+save_days) else del_day$="0"
-10940 open #reportlog: "name=reportlog.fil,recl=300,kfname=reportlog.idx,kps=112,kln=75,use",internal,outIn,keyed 
+10940 open #reportlog: "name=reportlog.fil,recl=300,kfname=reportlog.idx,kps=112,kln=75,use",i,outIn,k 
 10941 FRMLOG: form c 8,c 3,c 40,3*c 20,c 15,c 60,3*zd 6,c 10,c 80
 10942 delby$="" !:
       delday=0
@@ -1804,7 +1804,7 @@
           msgbox("No report log file exists.") !:
           goto ZZREPRINT
 11160   if file(reportlog)>-1 then reportlog+=1: goto 11160
-11170   open #reportlog: "name="&logname$&",kfname="&logkey$&",shr",internal,outIn,keyed 
+11170   open #reportlog: "name="&logname$&",kfname="&logkey$&",shr",i,outIn,k 
 11180   dim dmu$(1),dsq$(1),dpg$(1)*40,dnm$(1)*50,dapath$(1)*65,dpath$(1)*65,ddate(1),dtyp$(1)*15,ddsc$(1)*80,duser$(1)*20,ddel(1),d$*2000
 11190   dim dpg$*40,dlnm$*20,dunm$*20,ddelby$*20,dnm$*50,dflpath$*60,dpath$*65,ddate,dtyp$*15,ddsc$*80,duser$*20,ddel
 11200   dim dmnth$(1),dmonth$(1)*15,dqty(1)
@@ -2059,7 +2059,7 @@
           logkey$="reportlog.idx"
 12260   reportog=10
 12270   if file(reportlog)>-1 then reportlog+=1: goto 12270
-12280   open #reportlog: "name="&logname$&",kfname="&logkey$&",shr,release",internal,outIn,keyed 
+12280   open #reportlog: "name="&logname$&",kfname="&logkey$&",shr,release",i,outIn,k 
 12290 CLEANLOG1: read #reportlog,using FRMLOG: dmu$,dsq$,dpg$,dlnm$,dunm$,ddelby$,dflnm$,dflpath$,ddat,sday,ddel,dtyp$,ddsc$ eof ZCLEANLOG
 12295   if not sday then !:
           sday=30 !:

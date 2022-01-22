@@ -24,7 +24,7 @@ for locItem=1 to udim(mat locList$)
   location$=locList$(locItem)
   dim filenameOld$(0)*256
   dim filenameNew$(0)*256
-  open #hInt:=fngethandle: 'name='&env$('temp')&'\diff.dat,kfname='&env$('temp')&'\diff.idx,recl=2048,kps=1,kln=8,replace',internal,outIn,keyed
+  open #hInt:=fngethandle: 'name='&env$('temp')&'\diff.dat,kfname='&env$('temp')&'\diff.idx,recl=2048,kps=1,kln=8,replace',i,outIn,k
   fngetdir2('C:\SageAX\ACC\wb\cdsk\pbjsent - q4 - submitted\',mat filenameOld$, '/s','e_q4.'&location$&'.*.*',mat unusedDate$,mat unusedTime$,1)
   fngetdir2('C:\Users\John\Desktop\pbjExport\'               ,mat filenameNew$, '/s','e_q4.'&location$&'.*.*',mat unusedDate$,mat unusedTime$,1)
   for fileItem=1 to udim(filename$)

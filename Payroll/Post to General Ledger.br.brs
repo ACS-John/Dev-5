@@ -87,7 +87,7 @@ ASK_DATE: !
 	nametab=36-len(rtrm$(a$))/2
 	close #1:
 	open #2: 'Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr',i,i,k
-	open #6: 'Name=[Q]\PRmstr\Department.h[cno],KFName=[Q]\PRmstr\DeptId4.h[cno],Shr',internal,outIn,keyed
+	open #6: 'Name=[Q]\PRmstr\Department.h[cno],KFName=[Q]\PRmstr\DeptId4.h[cno],Shr',i,outIn,k
 	fn_pr_hdr
 	do
 		DEPT_READ: !

@@ -3,16 +3,16 @@
 fn_setup
 fnTop(program$)
 
-open #hEmployee=fnH: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr",internal,outIn,keyed
+open #hEmployee=fnH: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr",i,outIn,k
 if ~exists("[Q]\PRmstr\PayrollChecks.h[cno]") then
-	open #hTmp=fnH: "Name=[Q]\PRmstr\PayrollChecks.h[cno],KFName=[Q]\PRmstr\checkidx3.h[cno],RecL=224,use",internal,outIn,keyed
+	open #hTmp=fnH: "Name=[Q]\PRmstr\PayrollChecks.h[cno],KFName=[Q]\PRmstr\checkidx3.h[cno],RecL=224,use",i,outIn,k
 	close #hTmp:
 	gosub ReIndexPayrollChecks
 else if ~exists("[Q]\PRmstr\checkidx.h[cno],Shr") then
 	gosub ReIndexPayrollChecks
 end if
-open #hCheckIdx1=fnH: "Name=[Q]\PRmstr\PayrollChecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno],Shr",internal,outIn,keyed
-open #hCheckIdx3=fnH: "Name=[Q]\PRmstr\PayrollChecks.h[cno],KFName=[Q]\PRmstr\checkidx3.h[cno],Shr",internal,outIn,keyed
+open #hCheckIdx1=fnH: "Name=[Q]\PRmstr\PayrollChecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno],Shr",i,outIn,k
+open #hCheckIdx3=fnH: "Name=[Q]\PRmstr\PayrollChecks.h[cno],KFName=[Q]\PRmstr\checkidx3.h[cno],Shr",i,outIn,k
 hact$=""
 fn_checkfile(hact$,hCheckIdx3,hCheckIdx1,hEmployee)
 close #hEmployee: ioerr ignore
@@ -66,7 +66,7 @@ def fn_checkfile(hact$*8,hCheckIdx3,hCheckIdx1,hEmployee)
 	next j
 	L320: !
 	if exists("[Q]\PRmstr\payrollreports.h[cno]") =0 then 
-		open #hPrReport=fnH: "Name=[Q]\PRmstr\payrollreports.h[cno],KFName=[Q]\PRmstr\reportidx.h[cno],RecL=85,kps=1,kln=30,replace",internal,outIn,keyed
+		open #hPrReport=fnH: "Name=[Q]\PRmstr\payrollreports.h[cno],KFName=[Q]\PRmstr\reportidx.h[cno],RecL=85,kps=1,kln=30,replace",i,outIn,k
 		! 1 - 30 Name c 30
 		! 31 - 76 selections 46*n 1
 		close #hPrReport:
@@ -76,7 +76,7 @@ def fn_checkfile(hact$*8,hCheckIdx3,hCheckIdx1,hEmployee)
 	end if
 	
 	
-	open #hPrReport=fnH: "Name=[Q]\PRmstr\payrollreports.h[cno],KFName=[Q]\PRmstr\reportidx.h[cno],Shr",internal,outIn,keyed
+	open #hPrReport=fnH: "Name=[Q]\PRmstr\payrollreports.h[cno],KFName=[Q]\PRmstr\reportidx.h[cno],Shr",i,outIn,k
 	if kln(hPrReport)<>30 then
 		close #hPrReport:
 		fnFree('[Q]\PRmstr\payrollreports.h[cno]')

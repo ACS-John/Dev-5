@@ -76,9 +76,9 @@ def library fnPostCheckbookToGl(; enablePost,___,pg)
 	!   pr f "13,34,C 12,B,99": "Cancel (Esc)"
 	!   on fkey 99 goto Xit
 	fnopenprn
-	open #hTran=fnH: "Name=[Q]\CLmstr\TrMstr.h[cno],KFName=[Q]\CLmstr\TrIdx1.h[cno],Shr",internal,outIn,keyed
-	open #hAloc=fnH: "Name=[Q]\CLmstr\TrAlloc.h[cno],KFName=[Q]\CLmstr\tralloc-idx.h[cno],Shr",internal,outIn,keyed
-	open #hBank=fnH: "Name=[Q]\CLmstr\BankMstr.h[cno],KFName=[Q]\CLmstr\BankIdx1.h[cno],Shr",internal,outIn,keyed
+	open #hTran=fnH: "Name=[Q]\CLmstr\TrMstr.h[cno],KFName=[Q]\CLmstr\TrIdx1.h[cno],Shr",i,outIn,k
+	open #hAloc=fnH: "Name=[Q]\CLmstr\TrAlloc.h[cno],KFName=[Q]\CLmstr\tralloc-idx.h[cno],Shr",i,outIn,k
+	open #hBank=fnH: "Name=[Q]\CLmstr\BankMstr.h[cno],KFName=[Q]\CLmstr\BankIdx1.h[cno],Shr",i,outIn,k
 	open #hWork=fnH: "Name=[Temp]\WORK.[session],RecL=76,Replace",internal,output
 	if ~fn_breakdownsAddUp then goto Xit ! gosub CHECK_BREAKDOWNS
 	gosub GLBucketStuff
@@ -394,8 +394,8 @@ def library fnPostCheckbookToGl(; enablePost,___,pg)
 	End1: ! r:
 		if scd=4 and pa1+pa2<>0 then gosub CombinePR
 		if up1$="C" then goto End2
-		open #paytrans=6: "Name=[Q]\CLmstr\PayTrans.h[cno],KFName=[Q]\CLmstr\UnPdIdx1.h[cno],Shr",internal,outIn,keyed
-		open #unpdaloc=7: "Name=[Q]\CLmstr\UnPdAloc.h[cno],KFName=[Q]\CLmstr\Uaidx2.h[cno],Shr",internal,outIn,keyed
+		open #paytrans=6: "Name=[Q]\CLmstr\PayTrans.h[cno],KFName=[Q]\CLmstr\UnPdIdx1.h[cno],Shr",i,outIn,k
+		open #unpdaloc=7: "Name=[Q]\CLmstr\UnPdAloc.h[cno],KFName=[Q]\CLmstr\Uaidx2.h[cno],Shr",i,outIn,k
 		open #paymstr=8: "Name=[Q]\CLmstr\PayMstr.h[cno],KFName=[Q]\CLmstr\PayIdx1.h[cno],Shr",i,i,k
 		READ_PAYTRANS: !
 		read #paytrans,using 'form pos 1,C 8,C 12,N 6,pos 45,C 18,pos 96,N 1,N 6': vn$,iv$,dd,de$,pcde,pdte eof L2610
@@ -637,8 +637,8 @@ fnend  !
 		cb_cu_return=1
 		restore #hTran:
 		open #paymstr=8: "Name=[Q]\CLmstr\PayMstr.h[cno],KFName=[Q]\CLmstr\PayIdx1.h[cno],Shr",i,i,k
-		open #unpdaloc=7: "Name=[Q]\CLmstr\UnPdAloc.h[cno],KFName=[Q]\CLmstr\Uaidx2.h[cno],Shr",internal,outIn,keyed
-		open #paytrans=6: "Name=[Q]\CLmstr\PayTrans.h[cno],KFName=[Q]\CLmstr\UnPdIdx1.h[cno],Shr",internal,outIn,keyed
+		open #unpdaloc=7: "Name=[Q]\CLmstr\UnPdAloc.h[cno],KFName=[Q]\CLmstr\Uaidx2.h[cno],Shr",i,outIn,k
+		open #paytrans=6: "Name=[Q]\CLmstr\PayTrans.h[cno],KFName=[Q]\CLmstr\UnPdIdx1.h[cno],Shr",i,outIn,k
 		CB_CU_READ: !
 		read #paytrans,using 'form pos 1,C 8,C 12,N 6,pos 45,C 18,pos 96,N 1,N 6,pos 63,g 10.2': vn$,iv$,dd,de$,pcde,pdte,upa eof EO_PAYTRANS_TEST
 		invalloc=0

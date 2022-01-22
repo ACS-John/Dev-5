@@ -135,7 +135,7 @@ def fn_getFileInfo(name$*512,kfname$*512,mat tmpkps,mat tmpkln,&tmpversion,&tmpr
 	if kfname$='' then
 		open #hTmp=fnH: 'Name='&name$&',Shr',i,outi,r error GetFileInfoFail
 	else
-		open #hTmp=fnH: 'Name='&name$&',KFName='&kfname$&',Shr',internal,outIn,keyed error GetFileInfoFail
+		open #hTmp=fnH: 'Name='&name$&',KFName='&kfname$&',Shr',i,outIn,k error GetFileInfoFail
 	end if
 
 	mat tmpkps=(0)
@@ -271,7 +271,7 @@ def fn_cfv_utility_billing
 
 	if exists('[Q]\UBmstr\CityStZip.dat') then
 		fnStatus('Migrating UB City State Zip records into Core City State Zip table...')
-		open #hUbCsz=fnH: 'Name=[Q]\UBmstr\CityStZip.dat,KFName=[Q]\UBmstr\CityStZip.idx,Use,RecL=30,KPs=1,KLn=30,Shr',internal,outIn,keyed
+		open #hUbCsz=fnH: 'Name=[Q]\UBmstr\CityStZip.dat,KFName=[Q]\UBmstr\CityStZip.idx,Use,RecL=30,KPs=1,KLn=30,Shr',i,outIn,k
 		dim cszData$(0)*128,cszDataN(0),csz$*30
 		hCoCsz:=fn_openFio('CO City State Zip',mat cszData$,mat cszDataN)
 		do
@@ -607,7 +607,7 @@ def fn_cfv_checkbook
 	fn_file_setup_data('[Q]\CLmstr\BankMstr.h[cno]',64,1)
 	fn_file_setup_index('[Q]\CLmstr\BankIdx1.h[cno]','1','2')
 	if ~exists('[Q]\CLmstr\PayeeType.dat') then
-		open #hPayeeType=fnH: 'Name=[Q]\CLmstr\PayeeType.dat,Version=1,KFName=[Q]\CLmstr\PayeeType.Idx,Use,RecL=27,KPs=1,KLn=2,Shr',internal,outIn,keyed
+		open #hPayeeType=fnH: 'Name=[Q]\CLmstr\PayeeType.dat,Version=1,KFName=[Q]\CLmstr\PayeeType.Idx,Use,RecL=27,KPs=1,KLn=2,Shr',i,outIn,k
 		write #hPayeeType,using 'form pos 1,n 2,C 25': 0,'Not Applicable'
 		write #hPayeeType,using 'form pos 1,n 2,C 25': 7,'Non-Employee Compensation'
 		close #hPayeeType:
@@ -620,7 +620,7 @@ def fn_cfv_checkbook
 fnend
 	def fn_checkbookUnpdaloc_v1_to_v2(; ___,unpdaloc,vn$*8,iv$*12,j)
 			fnStatus('Payment Allocation file until it is updating from v1 to v2')
-			open #unpdaloc=1: 'Name=[Q]\CLmstr\UnPdAloc.h[cno],KFName=[Q]\CLmstr\UAIdx1.h[cno]',internal,outIn,keyed
+			open #unpdaloc=1: 'Name=[Q]\CLmstr\UnPdAloc.h[cno],KFName=[Q]\CLmstr\UAIdx1.h[cno]',i,outIn,k
 			if version(unpdaloc)=2 then
 				fnStatus('UnPdAloc is already version 2')
 			else
@@ -628,7 +628,7 @@ fnend
 				close #unpdaloc:
 				fnCopy('[Q]\CLmstr\UnPdAloc.h[cno]','[Q]\CLmstr\UnPdAloc.h[cno]',67) ! change the record length
 				! r: make sure the Key is right justified
-				open #unpdaloc=1: 'Name=[Q]\CLmstr\UnPdAloc.h[cno],KFName=[Q]\CLmstr\UAIdx1.h[cno]',internal,outIn,keyed
+				open #unpdaloc=1: 'Name=[Q]\CLmstr\UnPdAloc.h[cno],KFName=[Q]\CLmstr\UAIdx1.h[cno]',i,outIn,k
 				for j=1 to lrec(unpdaloc)
 					read #unpdaloc,using 'form pos 1,C 8,c 12',rec=j: vn$,iv$ noRec L330
 					vn$=lpad$(rtrm$(vn$),8): iv$=lpad$(rtrm$(iv$),12)
@@ -642,7 +642,7 @@ fnend
 			end if
 	fnend
 	def fn_checkbookPaytrans_v1_to_v2(; ___,paytrans1,j,gde,pdte,disamt,ddate)
-		open #paytrans1=1: 'Name=[Q]\CLmstr\PayTrans.h[cno],KFName=[Q]\CLmstr\UnPdIdx1.h[cno]',internal,outIn,keyed
+		open #paytrans1=1: 'Name=[Q]\CLmstr\PayTrans.h[cno],KFName=[Q]\CLmstr\UnPdIdx1.h[cno]',i,outIn,k
 		if version(paytrans1)=2 then
 			fnStatus('PayTrans is already version 2')
 		else
@@ -651,7 +651,7 @@ fnend
 
 			! change the record length of the file
 			fnCopy('[Q]\CLmstr\PayTrans.h[cno]','[Q]\CLmstr\PayTrans.h[cno]',114)
-			open #paytrans1=1: 'Name=[Q]\CLmstr\PayTrans.h[cno],KFName=[Q]\CLmstr\UnPdIdx1.h[cno]',internal,outIn,keyed
+			open #paytrans1=1: 'Name=[Q]\CLmstr\PayTrans.h[cno],KFName=[Q]\CLmstr\UnPdIdx1.h[cno]',i,outIn,k
 			for j=1 to lrec(paytrans1)
 				read #paytrans1,using 'form pos 96,N 1,N 6': gde,pdte eof L320
 				rewrite #paytrans1,using 'form pos 90,N 1,N 6,N 10.2,N 8': gde,pdte,disamt=0,ddate=0
@@ -673,11 +673,11 @@ fnend
 			close #paymstr:
 			fnCopy('[Q]\CLmstr\PayMstr.h[cno]','[Q]\CLmstr\PayMstr.h[cno]',736)
 			fnIndex('[Q]\CLmstr\PayMstr.h[cno]','[Q]\CLmstr\PayIdx2.h[cno]','9 30')
-			open #paymstr1=fnH: 'Name=[Q]\CLmstr\PayMstr.h[cno],KFName=[Q]\CLmstr\PayIdx1.h[cno]',internal,outIn,keyed
-			open #paymstr2=fnH: 'Name=[Q]\CLmstr\PayMstr.h[cno],KFName=[Q]\CLmstr\PayIdx2.h[cno]',internal,outIn,keyed
+			open #paymstr1=fnH: 'Name=[Q]\CLmstr\PayMstr.h[cno],KFName=[Q]\CLmstr\PayIdx1.h[cno]',i,outIn,k
+			open #paymstr2=fnH: 'Name=[Q]\CLmstr\PayMstr.h[cno],KFName=[Q]\CLmstr\PayIdx2.h[cno]',i,outIn,k
 			version(paymstr1,1)
 			open #payalloc=fnH: 'Name=[Q]\CLmstr\PayAlloc.h[cno]',i,i,r ioerr EO_PAYALLOC
-			open #payeegl=fnH: 'Name=[Q]\CLmstr\payeeglbreakdown.h[cno],KFName=[Q]\CLmstr\Payeeglbkdidx.h[cno],Use,RecL=56,KPs=1,KLn=8,Shr',internal,outIn,keyed
+			open #payeegl=fnH: 'Name=[Q]\CLmstr\payeeglbreakdown.h[cno],KFName=[Q]\CLmstr\Payeeglbkdidx.h[cno],Use,RecL=56,KPs=1,KLn=8,Shr',i,outIn,k
 			version(payeegl,1)
 			do
 				read #payalloc,using 'form pos 1,C 8,C 12,PD 3.2,C 30': vn$,gl$,pct,de$ eof EO_PAYALLOC
@@ -699,9 +699,9 @@ fnend
 		fnStatus('Updating Checkbook Transaction Allocation from v1 to v2')
 		! fnwait(message$='Converting: please wait...',0)
 		fnIndex('[Q]\CLmstr\TrAlloc.h[cno]','[Q]\CLmstr\TrAlloc-Idx.h[cno]','1 11')
-		open #tralloc=fnH: 'Name=[Q]\CLmstr\TrAlloc.h[cno],KFName=[Q]\CLmstr\TrAlloc-Idx.h[cno]',internal,outIn,keyed
+		open #tralloc=fnH: 'Name=[Q]\CLmstr\TrAlloc.h[cno],KFName=[Q]\CLmstr\TrAlloc-Idx.h[cno]',i,outIn,k
 		close #tralloc:
-		open #tralloc: 'Name=[Q]\CLmstr\TrAlloc.h[cno],KFName=[Q]\CLmstr\TrAlloc-Idx.h[cno]',internal,outIn,keyed
+		open #tralloc: 'Name=[Q]\CLmstr\TrAlloc.h[cno],KFName=[Q]\CLmstr\TrAlloc-Idx.h[cno]',i,outIn,k
 		if version(tralloc)=2 then fnStatus('TrAlloc is already version 2') : goto Tralloc1to2_Finis
 		version(tralloc,2)
 	goto Tralloc1to2_Finis
@@ -847,19 +847,19 @@ def fn_cfv_payroll
 	! end if
 	! /r
 	PrGlindex: !
-	open #hTmp=fnH: 'Name=[Q]\PRmstr\GLMstr.h[cno],Version=0,KFName=[Q]\PRmstr\GLIndex.h[cno],Use,RecL=62,KPs=1,KLn=12,Shr',internal,outIn,keyed ioerr Check4124OnPrGlindex
+	open #hTmp=fnH: 'Name=[Q]\PRmstr\GLMstr.h[cno],Version=0,KFName=[Q]\PRmstr\GLIndex.h[cno],Use,RecL=62,KPs=1,KLn=12,Shr',i,outIn,k ioerr Check4124OnPrGlindex
 	close #hTmp:
 
 	if ~exists('[Q]\PRmstr\EmpStatus.dat') then
-		open #h_pr_emp_status=fnH: 'Name=[Q]\PRmstr\EmpStatus.dat,KFName=[Q]\PRmstr\Empstatus.idx,Use,RecL=32,KPs=1,KLn=2,Shr',internal,outIn,keyed
+		open #h_pr_emp_status=fnH: 'Name=[Q]\PRmstr\EmpStatus.dat,KFName=[Q]\PRmstr\Empstatus.idx,Use,RecL=32,KPs=1,KLn=2,Shr',i,outIn,k
 		write #h_pr_emp_status,using 'form pos 1,N 2,C 25': 9,'Terminated'
 	end if
 	if exists('[Q]\PRmstr\RPMstr.h[cno]') and ~exists('[Q]\PRmstr\Employee.h[cno]') then
 		! r: Convert from RPMstr.h[cno] to Employee.h[cno]
 		! only significant difference is that mat ta(2) has been removed to make room for w4step2 (initialized to 0 here)
 		open #hIn  =fnH: 'Name=[Q]\PRmstr\RPMstr.h[cno],NoShr',i,outi,r
-		open #hOut =fnH: 'Name=[Q]\PRmstr\Employee.h[cno],version=0,KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],New,RecL=196,KPs=1,KLn=8,Shr',internal,outIn,keyed
-		open #hOut2=fnH: 'Name=[Q]\PRmstr\Employee.h[cno],version=0,KFName=[Q]\PRmstr\EmployeeIdx-name.h[cno],Use,RecL=196,KPs=9,KLn=30,Shr',internal,outIn,keyed
+		open #hOut =fnH: 'Name=[Q]\PRmstr\Employee.h[cno],version=0,KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],New,RecL=196,KPs=1,KLn=8,Shr',i,outIn,k
+		open #hOut2=fnH: 'Name=[Q]\PRmstr\Employee.h[cno],version=0,KFName=[Q]\PRmstr\EmployeeIdx-name.h[cno],Use,RecL=196,KPs=9,KLn=30,Shr',i,outIn,k
 
 		dim em$(3)*30
 		dim rs(2)
@@ -949,7 +949,7 @@ def fn_cfv_general_ledger
 	fn_reg_rename(env$('cursys'))
 
 	if ~exists('[Q]\GLmstr\PayeeType.dat') then
-		open #hPayeeType=fnH: 'Name=[Q]\GLmstr\PayeeType.dat,Version=1,KFName=[Q]\GLmstr\PayeeType.Idx,Use,RecL=27,KPs=1,KLn=2,Shr',internal,outIn,keyed
+		open #hPayeeType=fnH: 'Name=[Q]\GLmstr\PayeeType.dat,Version=1,KFName=[Q]\GLmstr\PayeeType.Idx,Use,RecL=27,KPs=1,KLn=2,Shr',i,outIn,k
 		write #hPayeeType,using 'form pos 1,n 2,C 25': 0,'Not Applicable'
 		write #hPayeeType,using 'form pos 1,n 2,C 25': 7,'Non-Employee Compensation'
 		close #hPayeeType:
@@ -1174,15 +1174,15 @@ def fn_cfv_general_ledger
 	else
 		goto L4050
 	end if
-	open #tmp=fnH: 'Name='&name$&',KFName='&kfname$&',Shr',internal,outIn,keyed
+	open #tmp=fnH: 'Name='&name$&',KFName='&kfname$&',Shr',i,outIn,k
 	L3920: read #tmp, using 'form pos 1,N 2,2*C 78,3*N 1,80*C 12': sn,sn$,ft$,dp,rs,cm,mat gl$ eof EO_TMP conv L9000
 	if sn=0 then goto L3920
 	rewrite #tmp, using 'form pos 1,N 3,2*C 78,3*N 1': sn,sn$,ft$,dp,rs,cm
-	if exists('[Q]\GLmstr\schedule'&str$(sn)&'.h[cno]')=0 then open #schedule=fnH: 'Name=[Q]\GLmstr\schedule'&str$(sn)&'.h[cno],KFName=[Q]\GLmstr\schedule_idx'&str$(sn)&'.h[cno],replace,RecL=12,kps=1,kln=12,Shr',internal,outIn,keyed: version(schedule,1): close #schedule:
+	if exists('[Q]\GLmstr\schedule'&str$(sn)&'.h[cno]')=0 then open #schedule=fnH: 'Name=[Q]\GLmstr\schedule'&str$(sn)&'.h[cno],KFName=[Q]\GLmstr\schedule_idx'&str$(sn)&'.h[cno],replace,RecL=12,kps=1,kln=12,Shr',i,outIn,k: version(schedule,1): close #schedule:
 	if exists('[Q]\GLmstr\schedule_idx'&str$(sn)&'.h[cno]')=0 then
 		fnIndex('[Q]\GLmstr\schedule'&str$(sn)&'.h[cno]','[Q]\GLmstr\schedule_idx'&str$(sn)&'.h[cno]','1 12')
 	end if
-	open #schedule=fnH: 'Name=[Q]\GLmstr\schedule'&str$(sn)&'.h[cno],KFName=[Q]\GLmstr\schedule_idx'&str$(sn)&'.h[cno],use,RecL=12,kps=1,kln=12,Shr',internal,outIn,keyed: version(schedule,1) ! open to update gl breakdowns
+	open #schedule=fnH: 'Name=[Q]\GLmstr\schedule'&str$(sn)&'.h[cno],KFName=[Q]\GLmstr\schedule_idx'&str$(sn)&'.h[cno],use,RecL=12,kps=1,kln=12,Shr',i,outIn,k: version(schedule,1) ! open to update gl breakdowns
 	for j=1 to 80
 		if val(gl$(j))=0 then goto L4010
 		write #schedule,using 'form pos 1,c 12': gl$(j)
@@ -1211,7 +1211,7 @@ def fn_cfv_general_ledger
 	! /r
 
 	if ~exists('[Q]\GLmstr\Period.h[cno]') then
-		open #hGlPeriod=fnH: 'Name=[Q]\GLmstr\Period.h[cno],Version=1,KFName=[Q]\GLmstr\Period-Idx.h[cno],Use,RecL=35,KPs=1,KLn=2,Shr',internal,outIn,keyed
+		open #hGlPeriod=fnH: 'Name=[Q]\GLmstr\Period.h[cno],Version=1,KFName=[Q]\GLmstr\Period-Idx.h[cno],Use,RecL=35,KPs=1,KLn=2,Shr',i,outIn,k
 		for periodRecord=1 to 12
 			write #hGlPeriod,using 'form pos 1,N 2,C 30': periodRecord,date$(days(cnvrt$('pic(##)',periodRecord)&'0117','mmddyy'),'month')
 		nex periodRecord

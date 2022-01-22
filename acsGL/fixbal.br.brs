@@ -10,7 +10,7 @@
  
 	fncno(cno)
  
-	open #glmstr=1: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLIndex.h[cno],Shr",internal,outIn,keyed
+	open #glmstr=1: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLIndex.h[cno],Shr",i,outIn,k
 READ_GLMSTR: !
 	read #glmstr,using 'form pos 1,N 3,N 6,N 3,C 50,6*PD 3,42*PD 6.2,2*PD 3': dno,ano,sno,d$,mat rf,bb,cb eof END1
 	if cb=0 then cb=bb else goto READ_GLMSTR

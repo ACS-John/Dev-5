@@ -14,8 +14,8 @@ fnwait
 open #paytrans=4: 'Name=[Q]\CLmstr\PayTrans.h[cno],KFName=[Q]\CLmstr\unpdidx1.h[cno],Shr',i,i,k
 open #glmstr=7: 'Name=[Q]\CLmstr\GLmstr.h[cno],KFName=[Q]\CLmstr\GLINDEX.h[cno],Shr',i,i,k
 open #unpdaloc=8: 'Name=[Q]\CLmstr\UnPdAloc.h[cno],KFName=[Q]\CLmstr\UAIdx2.h[cno],Shr',i,i,k
-open #work=9: 'Name='&env$('temp')&'\work.tmp,KFName='&env$('temp')&'\addr.tmp,KPS=1,KLN=12,RecL=68,Replace',internal,outIn,keyed
-open #paymstr=13: 'Name=[Q]\CLmstr\PayMstr.h[cno],KFName=[Q]\CLmstr\PayIdx1.h[cno],Shr',internal,outIn,keyed
+open #work=9: 'Name='&env$('temp')&'\work.tmp,KFName='&env$('temp')&'\addr.tmp,KPS=1,KLN=12,RecL=68,Replace',i,outIn,k
+open #paymstr=13: 'Name=[Q]\CLmstr\PayMstr.h[cno],KFName=[Q]\CLmstr\PayIdx1.h[cno],Shr',i,outIn,k
 gosub HDR
 READ_PAYTRANS: !
 read #paytrans,using 'form pos 1,C 8,C 12,2*G 6,C 12,C 18,G 10.2,G 1': vn$,iv$,ivd,dd,po$,de$,upa,cde eof END1

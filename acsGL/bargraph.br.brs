@@ -13,7 +13,7 @@
 	open #20: "Name=[Q]\GLmstr\Company.h[cno],Shr",i,outi,r
 	read #20,using 'form pos 296,pos 384,n 2': lmu,nap : close #20:
 !
-	open #1: "Name=[Q]\GLmstr\Period.h[cno],Version=1,KFName=[Q]\GLmstr\Period-Idx.h[cno],Use,RecL=35,KPs=1,KLn=2,Shr",internal,outIn,keyed
+	open #1: "Name=[Q]\GLmstr\Period.h[cno],Version=1,KFName=[Q]\GLmstr\Period-Idx.h[cno],Use,RecL=35,KPs=1,KLn=2,Shr",i,outIn,k
 L170: read #1,using "form pos 1, n 2,c 25": month,month$ eof L210 noRec L210
 	if month<1 or month>13 then goto L170
 	month(month)=month
@@ -21,9 +21,9 @@ L170: read #1,using "form pos 1, n 2,c 25": month,month$ eof L210 noRec L210
 	goto L170
 L210: close #1:
 !
-	open #1: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLINDEX.h[cno],Shr",internal,outIn,keyed
-	open #11: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\glIndx2.h[cno],Shr",internal,outIn,keyed
-	open #12: "Name=[Q]\GLmstr\BudgetInfo.h[cno],KFName=[Q]\GLmstr\BudIndx.h[cno],Use,RecL=28,KPs=1,KLn=14,Shr",internal,outIn,keyed
+	open #1: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLINDEX.h[cno],Shr",i,outIn,k
+	open #11: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\glIndx2.h[cno],Shr",i,outIn,k
+	open #12: "Name=[Q]\GLmstr\BudgetInfo.h[cno],KFName=[Q]\GLmstr\BudIndx.h[cno],Use,RecL=28,KPs=1,KLn=14,Shr",i,outIn,k
 SCR1: !
 	t5=0
 	fnTos(sn$='CloseYear3')

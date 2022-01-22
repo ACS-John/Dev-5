@@ -21,23 +21,23 @@ fnAutomatedSavePoint('before Merge')
 		read #hCompany,using 'form pos 150,2*N 1': use_dept,use_sub ! read fund and sub codes from general
 		close #hCompany:
 	end if
-	open #hAccount=fnH: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLIndex.h[cno],Shr",internal,outIn,keyed
+	open #hAccount=fnH: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLIndex.h[cno],Shr",i,outIn,k
 	F_Glmstr1: form pos 87,pd 6.2,pos 333,2*pd 3
 	F_Glmstr2: form pos 1,c 12,c 50,6*pd 3,42*pd 6.2,2*pd 3
-	open #hGlTrans=fnH: 'Name=[Q]\GLmstr\GLTrans.h[cno],kfname=[Q]\GLmstr\glTrans-IdxAcct.h[cno],Shr',internal,outIn,keyed
+	open #hGlTrans=fnH: 'Name=[Q]\GLmstr\GLTrans.h[cno],kfname=[Q]\GLmstr\glTrans-IdxAcct.h[cno],Shr',i,outIn,k
 	FglTrans: form pos 1,c 12,n 6,pd 6.2,n 2,n 2,c 12,c 30,pd 3
 	open #hMerge=fnH: "Name=[Q]\GLmstr\GL_Work_[acsUserId].h[cno],NoShr",internal,outIn
 	F_merge1: form pos 1,C 12,N 6,PD 6.2,N 2,N 2,C 12,C 30,C 8,pos 93,C 12
 	F_merge2: form pos 1,c 12,n 6,pd 6.2,n 2,n 2,c 12,c 30
 	F_merge3: form pos 27,n 2
-	open #hPaymstr=fnH: "Name=[Q]\GLmstr\PayMstr.h[cno],Version=1,KFName=[Q]\GLmstr\PayIdx1.h[cno],Shr",internal,outIn,keyed
+	open #hPaymstr=fnH: "Name=[Q]\GLmstr\PayMstr.h[cno],Version=1,KFName=[Q]\GLmstr\PayIdx1.h[cno],Shr",i,outIn,k
 	if ~exists("[Q]\GLmstr\bankrec.h[cno]") then
-		open #hBankRec=fnH: "Name=[Q]\GLmstr\bankrec.h[cno],KFName=[Q]\GLmstr\bankrec-idx.h[cno],Version=1,RecL=91,use,kps=79/3/4,kln=12/1/8,Shr",internal,outIn,keyed
+		open #hBankRec=fnH: "Name=[Q]\GLmstr\bankrec.h[cno],KFName=[Q]\GLmstr\bankrec-idx.h[cno],Version=1,RecL=91,use,kps=79/3/4,kln=12/1/8,Shr",i,outIn,k
 		close #hBankRec:
 		fnIndex("[Q]\GLmstr\bankrec.h[cno]","[Q]\GLmstr\bankrec-idx.h[cno]","79/3/4 12/1/8")
 	end if
-	open #hBankRec=fnH: "Name=[Q]\GLmstr\BankRec.h[cno],KFName=[Q]\GLmstr\BankRec-idx.h[cno],Shr",internal,outIn,keyed
-	open #hTr1099=fnH: "Name=[Q]\GLmstr\GLTR1099.h[cno],KFName=[Q]\GLmstr\gltrIdx1.h[cno],Shr",internal,outIn,keyed
+	open #hBankRec=fnH: "Name=[Q]\GLmstr\BankRec.h[cno],KFName=[Q]\GLmstr\BankRec-idx.h[cno],Shr",i,outIn,k
+	open #hTr1099=fnH: "Name=[Q]\GLmstr\GLTR1099.h[cno],KFName=[Q]\GLmstr\gltrIdx1.h[cno],Shr",i,outIn,k
 ! /r
 
 do ! r:  main loop - cycle through Merge file

@@ -37,7 +37,7 @@ on error goto Ertn
 	! c$(CL,5)=STR$(SLN(CL)+1) : c$(CL,6)='30'
 	! c$(CL,7)='[Q]\CLmstr\BankIdx1.h[cno]' : c$(CL,8)=LIMIT_TO_LIST$
 ! /r
-open #h=fnH: 'Name=[Q]\CLmstr\IvPaid.h[cno],KFName=[Q]\CLmstr\IVIndex.h[cno],Use,RecL=34,KPs=1,KLn=20,Shr',internal,outIn,keyed
+open #h=fnH: 'Name=[Q]\CLmstr\IvPaid.h[cno],KFName=[Q]\CLmstr\IVIndex.h[cno],Use,RecL=34,KPs=1,KLn=20,Shr',i,outIn,k
 fnHamster('PaidInvoice',mat lbl$,mat tln,1,mat p$,mat fltyp$,mat sln,mat mask,mat sp,mat c$)
 goto Xit
 

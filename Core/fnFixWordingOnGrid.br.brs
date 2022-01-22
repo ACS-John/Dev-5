@@ -19,7 +19,7 @@ def library fnFixWordingOnGrid(ev$*50,outputfile$*50)
 		fnGetServices(mat serviceName$,mat srv$)
 	end if
 	open #2: 'Name='&ev$,display,input
-	open #15: 'Name=[Temp]\Temp.[Session],KFName=[Temp]\TempIdx.[Session],RecL=87,KPs=1,KLn=30,Replace',internal,outIn,keyed
+	open #15: 'Name=[Temp]\Temp.[Session],KFName=[Temp]\TempIdx.[Session],RecL=87,KPs=1,KLn=30,Replace',i,outIn,k
 	do
 		linput #2: ln$ eof Finis
 		ln$=srep$(ln$,chr$(9),'')
@@ -122,7 +122,7 @@ fnend
 
 MoveItToText: ! r:
 	dim miitLine$*87
-	open #hMiitIn =fnH: 'Name=[Temp]\Temp.[Session],KFName=[Temp]\TempIdx.[Session],RecL=87,KPs=1,KLn=30,use',internal,outIn,keyed
+	open #hMiitIn =fnH: 'Name=[Temp]\Temp.[Session],KFName=[Temp]\TempIdx.[Session],RecL=87,KPs=1,KLn=30,use',i,outIn,k
 	open #hMiitOut=fnH: 'Name='&outputfile$&',RecL=87,Replace',d,o
 	Fmitt: form pos 1,c 87
 	do

@@ -32,7 +32,7 @@ L280: rinput fields mat fli$: dat$,d1 conv L280
 	fnopenprn
 	pr f "10,15,c 50,h": "A/R AGED TRIAL BALANCE PROGRAM IN PROCESS"
 	pr f "23,2,C 30,N": "Press F5 to stop"
-	open #1: "Name=S:\Core\Data\acsllc\Client.h[cno],KFName=S:\Core\Data\acsllc\Client-Idx.h[cno],Shr",internal,outIn,keyed ioerr Ertn
+	open #1: "Name=S:\Core\Data\acsllc\Client.h[cno],KFName=S:\Core\Data\acsllc\Client-Idx.h[cno],Shr",i,outIn,k ioerr Ertn
 	open #2: "Name=S:\Core\Data\acsllc\Transactions.h[cno],Shr",i,i,r ioerr Ertn
 	gosub L550
 L400: read #1,using L420: z$,e$(1),am6,am16,mat ta eof L700 ioerr Ertn

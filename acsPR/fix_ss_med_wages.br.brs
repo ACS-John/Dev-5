@@ -7,7 +7,7 @@ open #1: "Name=[Q]\PRmstr\Company.h[cno]",i,outi,r
 read #1,using 'form pos 1,3*x 40,x 12,PD 6.3',rec=1: mcr
 close #1:
 mcr=mcr*.01
-open #4: "Name=[Q]\PRmstr\PayrollChecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno],Shr",internal,outIn,keyed 
+open #4: "Name=[Q]\PRmstr\PayrollChecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno],Shr",i,outIn,k 
 do
 	dim tdc(10),tcp(32)
 	read #4,using F_HIST: heno,tdn,prdate,ckno,mat tdc,mat tcp eof Finis

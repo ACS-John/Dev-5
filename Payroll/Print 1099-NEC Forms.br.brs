@@ -4,7 +4,7 @@ on error goto Ertn
 fnTop(program$)
 if ~fn1099NecAsk(seltp,type,min1,beg_date,end_date) then goto Xit
 open #hEmployee=fnH: 'Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr',i,i,k
-open #hChecks=fnH: 'Name=[Q]\PRmstr\payrollchecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno]',internal,outIn,keyed
+open #hChecks=fnH: 'Name=[Q]\PRmstr\payrollchecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno]',i,outIn,k
 do ! r: main loop
 	START: !
 	dim empAddr$(3)*30
@@ -23,7 +23,7 @@ do ! r: main loop
 		if prd=>beg_date and prd<=end_date then
 			amt1=tcp(seltp+4)
 
-			box(type)+=amt1
+			box(type)+=amt1 ! shouldn't the type here be a replaced with a 1  ?  - 
 
 		end if
 	loop

@@ -31,7 +31,7 @@ Screen1: ! r:
 goto MainLoop ! /r
 
 MainLoop: ! r:
-open #hCustomer=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,outIn,keyed
+open #hCustomer=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",i,outIn,k
 Fcustomer: form pos 1,c 10,pos 41,c 30,pos 292,pd 4.2
 open #hTrans=fnH: "Name=[Q]\UBmstr\UBTransVB.h[cno],KFName=[Q]\UBmstr\UBTrIndx.h[cno],Shr",i,i,k
 Ftran: form pos 1,c 10,n 8,n 1,pd 4.2,pd 4.2

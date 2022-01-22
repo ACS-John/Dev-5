@@ -80,16 +80,16 @@ loop until lwrc$(pas$)=lwrc$("CLOSE") ! /r
 
 fnAutomatedSavePoint('before')
 
-open #hGlMstr1=fnH: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLINDEX.h[cno],Shr",internal,outIn,keyed
-open #hGlMstr2=fnH: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\glIndx2.h[cno],Shr",internal,outIn,keyed
+open #hGlMstr1=fnH: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLINDEX.h[cno],Shr",i,outIn,k
+open #hGlMstr2=fnH: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\glIndx2.h[cno],Shr",i,outIn,k
 fGlMstr1: form pos 1,c 12,pos 81,41*pd 6.2
-open #hBudgetInfo=fnH: "Name=[Q]\GLmstr\BudgetInfo.h[cno],KFName=[Q]\GLmstr\BudIndx.h[cno],Shr",internal,outIn,keyed
+open #hBudgetInfo=fnH: "Name=[Q]\GLmstr\BudgetInfo.h[cno],KFName=[Q]\GLmstr\BudIndx.h[cno],Shr",i,outIn,k
 ! r: empty GLmstr\acprcks - file handle (#1) used to conflict hGlMstr1 (also #1) and it didn't close, but it did ioerr ignore, so it probably didn't do anything for years
 open #hAcPrCks=fnH: "Name=[Q]\GLmstr\acprcks.h[cno],SIZE=0,RecL=110,Replace",internal,output ioerr ignore
 close #hAcPrCks: ioerr ignore
 ! /r
 ! r: reset some stuff in "[Q]\GLmstr\PRmstr.h[cno]"
-open #hPrMstr=fnH: "Name=[Q]\GLmstr\PRmstr.h[cno],KFName=[Q]\GLmstr\PRIndex.h[cno]",internal,outIn,keyed ioerr SCR2
+open #hPrMstr=fnH: "Name=[Q]\GLmstr\PRmstr.h[cno],KFName=[Q]\GLmstr\PRIndex.h[cno]",i,outIn,k ioerr SCR2
 do
 	read #hPrMstr,using 'form pos 271,2*N 5': n1,n2 eof L500
 	rewrite #hPrMstr,using 'form pos 271,2*N 5': 0,0

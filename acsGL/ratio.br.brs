@@ -15,7 +15,7 @@
 	if exists("[Q]\GLmstr\ratiomst.h[cno]")=0 then gosub CREATE_FILES
 	if exists("[Q]\GLmstr\ratioidx.h[cno]")=0 then gosub INDEX
 	if exists("[Q]\GLmstr\schindx2.h[cno]")=0 then gosub INDEX
-L180: open #ratiomst: "Name=[Q]\GLmstr\RatioMST.h[cno],KFName=[Q]\GLmstr\RatioIDX.h[cno],Shr",internal,outIn,keyed ioerr L1380
+L180: open #ratiomst: "Name=[Q]\GLmstr\RatioMST.h[cno],KFName=[Q]\GLmstr\RatioIDX.h[cno],Shr",i,outIn,k ioerr L1380
 	goto RATIOMSTGRID
 	close #ratiomst: ioerr L210
 L210: execute "Index [Q]\GLmstr\RatioMST.h[cno]"&' '&"[Q]\GLmstr\SchIndX2.h[cno] 3 30 Replace DupKeys -n"
@@ -113,9 +113,9 @@ L830: goto RATIOMSTGRID
 
 CREATE_FILES: !
 	close #ratiomst: ioerr L910
-L910: open #ratiomst: "Name=[Q]\GLmstr\RatioMST.h[cno],KFName=[Q]\GLmstr\RatioIDX.h[cno]",internal,outIn,keyed ioerr L930
+L910: open #ratiomst: "Name=[Q]\GLmstr\RatioMST.h[cno],KFName=[Q]\GLmstr\RatioIDX.h[cno]",i,outIn,k ioerr L930
 	close #ratiomst,free: ioerr L930
-L930: open #ratiomst: "Name=[Q]\GLmstr\ratiomst.h[cno],KFName=[Q]\GLmstr\ratioidx.h[cno],RecL=1163,KPs=1,KLn=3,replace",internal,outIn,keyed
+L930: open #ratiomst: "Name=[Q]\GLmstr\ratiomst.h[cno],KFName=[Q]\GLmstr\ratioidx.h[cno],RecL=1163,KPs=1,KLn=3,replace",i,outIn,k
 L940: close #ratiomst: ioerr L950
 L950: close #11: ioerr L970
 INDEX: ! (main Ratio files)

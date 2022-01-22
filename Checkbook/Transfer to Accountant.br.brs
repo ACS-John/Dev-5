@@ -61,7 +61,7 @@ MAIN: ! r:
 	else
 		glwk$='[Q]\GLmstr\GL_Work_[acsUserId].h[cno]'
 	end if
-	open #trmstr=1: 'Name=[Q]\CLmstr\TrMstr.h[cno],KFName=[Q]\CLmstr\TrIdx1.h[cno],Shr',internal,outIn,keyed
+	open #trmstr=1: 'Name=[Q]\CLmstr\TrMstr.h[cno],KFName=[Q]\CLmstr\TrIdx1.h[cno],Shr',i,outIn,k
 	open #tralloc=2: 'Name=[Q]\CLmstr\TrAlloc.h[cno],Version=2,KFName=[Q]\CLmstr\TrAlloc-Idx.h[cno],Shr',i,i,k
 	open #glwk101=3: 'Name=[Q]\CLmstr\GLWK101.h[cno],Size=0,RecL=104,Replace',internal,output
 	open #glwk201=4: 'Name=[Q]\CLmstr\GLWK201.h[cno],Size=0,RecL=110,Replace',internal,output
@@ -191,7 +191,7 @@ TRY_TO_SEND_TO_GL: ! r:
 	fnCopy('[Q]\CLmstr\GLWK101.h[cno]','[Q]\GLmstr\GL_Work_[acsUserId].h[cno]')
 	fnCopy('[Q]\CLmstr\GLWK201.h[cno]','[Q]\GLmstr\GLWK2[acsUserId].h[cno]')
 	if lr4=0 then goto L1550
-	open #1: 'Name=[Q]\GLmstr\PRmstr.h[cno],KFName=[Q]\GLmstr\PRIndex.h[cno],Shr',internal,outIn,keyed ioerr L1550
+	open #1: 'Name=[Q]\GLmstr\PRmstr.h[cno],KFName=[Q]\GLmstr\PRIndex.h[cno],Shr',i,outIn,k ioerr L1550
 	fnprg('S:\acsGL\PRMerge',2)
 	fnstyp(99)
 	L1550: !
@@ -277,7 +277,7 @@ BUCKET: ! r: MOVE TO GLBUCKET
 		write #9,using 'form pos 1,C 12,N 6,PD 6.2,2*N 2,C 12,C 30,C 8,C 6,C 5,C 3,C 12': gl$,tr4,tr5,tr6,tr7,tr$,td$,ven$,j$,j$,j$,bgl$
 	loop
 	L2160: !
-	open #1: 'Name=[Q]\GLmstr\PRmstr.h[cno],KFName=[Q]\GLmstr\PRIndex.h[cno],Shr',internal,outIn,keyed ioerr Xit
+	open #1: 'Name=[Q]\GLmstr\PRmstr.h[cno],KFName=[Q]\GLmstr\PRIndex.h[cno],Shr',i,outIn,k ioerr Xit
 fnchain('S:\acsGL\PRMerge') ! /r
  
 MSGBOX1: ! r:

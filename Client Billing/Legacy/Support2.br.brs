@@ -24,7 +24,7 @@ fnTop(program$)
 	!
 	fnH2AddComboF(1,'S:\Core\Data\acsllc\Client.h420',1,5,6,30,'S:\Core\Data\acsllc\Client-Idx.h420',1)
 ! /r
-open #h=1: "Name=S:\Core\Data\acsllc\Support.h420,Version=2,KFName=S:\Core\Data\acsllc\Support-Idx.h420,Use,RecL=246,KPs=1/7,KLn=6/2,Shr",internal,outIn,keyed
+open #h=1: "Name=S:\Core\Data\acsllc\Support.h420,Version=2,KFName=S:\Core\Data\acsllc\Support-Idx.h420,Use,RecL=246,KPs=1/7,KLn=6/2,Shr",i,outIn,k
 ! fnHamster("Client",mat lbl$,mat tln,1,mat p$,mat fltyp$,mat sln,mat mask,mat sp,mat c$)
 fnHamster2("support")
 close #h: 

@@ -15,7 +15,7 @@ autoLibrary
   fnTop(program$)
   fnDedNames(mat fullname$,mat abbrevname$,mat newdedcode)
 	d1=fnPayPeriodEndingDate
-  open #4: "Name=[Q]\PRmstr\payrollchecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno]",internal,outIn,keyed
+  open #4: "Name=[Q]\PRmstr\payrollchecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno]",i,outIn,k
 ! r: setup mat name$, mat dedname$, numberded1, numberded2
   name$(1)="O/T"
   name$(2)="Other"
@@ -54,7 +54,7 @@ START_REPORT: !  r: main report loop
   on fkey 5 goto DONE
   fnopenprn
   gosub HDR
-  open #1: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr",internal,outIn,keyed
+  open #1: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr",i,outIn,k
   do
     ReadEmployee: !
     read #1,using "form pos 1,N 8,C 30,pos 162,n 6": eno,em$,lastpaydate eof FINALTOTALS

@@ -106,7 +106,7 @@ def fn_balanceBreakdowns(do_fix,do_report) ! assumes balance is right, puts the 
 	dim gb(10)
 	gb_other=fnservice_other
 	fnopenprn
-	open #hCustomer=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,outIn,keyed 
+	open #hCustomer=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",i,outIn,k 
 	do 
 		read #hCustomer,using F_CUSTOMER: z$,mat service_rate_code,bal,mat customer_g,mat gb eof CUSTOMER_EOF
 		F_CUSTOMER: form pos 1,c 10,pos 143,7*pd 2,pos 292,pd 4.2,pos 300,10*pd 4.2,pos 388,10*pd 5.2
@@ -198,7 +198,7 @@ def fn_moveCredit(do_move_credit)
 	dim z$*10,service_rate_code(7)
 	dim gb(10)
 	gb_other=fnservice_other
-	open #hCustomer=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,outIn,keyed 
+	open #hCustomer=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",i,outIn,k 
 	do 
 		read #hCustomer,using F_CUSTOMER: z$,mat service_rate_code,bal,mat customer_g,mat gb eof MC_CUSTOMER_EOF
 		read_count+=1
@@ -225,7 +225,7 @@ def fn_applyCreditFromOther(do_apply_credit)
 	dim z$*10,service_rate_code(7)
 	dim gb(10)
 	gb_other=fnservice_other
-	open #hCustomer=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,outIn,keyed 
+	open #hCustomer=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",i,outIn,k 
 	do 
 		read #hCustomer,using F_CUSTOMER: z$,mat service_rate_code,bal,mat customer_g,mat gb eof ACFO_CUSTOMER_EOF
 		read_count+=1

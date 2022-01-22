@@ -123,7 +123,7 @@ def fn_InitialializeMeterLocation
 	if imlImportFromInfo then
 		! r: import from Info only - if you're importing both, do address first, because it add's this info too, this one is to add whatever is left after the other one.  it still leaves ones with accounts which do not point to a customer record.
 			fnStatus('checking Meter Information file for valid data to migrate to Meter Location table')
-			open #hCustomerOutinUnused=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,outin,keyed
+			open #hCustomerOutinUnused=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",i,outIn,k
 			open #hCustomer=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",i,i,k
 			restore #hInfo:
 			do

@@ -23,7 +23,7 @@ on error goto Ertn
 	!                                             	execute 'Index [Q]\PRmstr\MGLMstr.h[cno],[Q]\PRmstr\MGLIdx1.h[cno],1,3,Replace,DupKeys'
 	!                                             end if ! /r
 	
-	open #hMgl=fnH: 'Name=[Q]\PRmstr\MGLMstr.h[cno],KFName=[Q]\PRmstr\MGLIdx1.h[cno],Shr',internal,outIn,keyed
+	open #hMgl=fnH: 'Name=[Q]\PRmstr\MGLMstr.h[cno],KFName=[Q]\PRmstr\MGLIdx1.h[cno],Shr',i,outIn,k
 	open #hDept=fnH: 'Name=[Q]\PRmstr\DeptName.h[cno],KFName=[Q]\PRmstr\DeptNameIdx.h[cno],Shr',i,i,k
 ! /r
 

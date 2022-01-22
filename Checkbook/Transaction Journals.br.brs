@@ -53,9 +53,9 @@ MAIN: !
 	open #trmstr=1: 'Name=[Q]\CLmstr\TrMstr.h[cno],KFName=[Q]\CLmstr\TrIdx1.h[cno],Shr',i,i,k
 	open #tralloc=2: 'Name=[Q]\CLmstr\TrAlloc.h[cno],KFName=[Q]\CLmstr\TrAlloc-Idx.h[cno],Shr',i,i,k
 	open #glmstr=4: 'Name=[Q]\CLmstr\GLmstr.h[cno],KFName=[Q]\CLmstr\GLIndex.h[cno],Shr',i,i,k
-	open #work=3: 'Name=[temp]\WORK,KFName=[temp]\ADDR,RecL=40,KPS=1,KLN=12,Replace',internal,outIn,keyed  : _
+	open #work=3: 'Name=[temp]\WORK,KFName=[temp]\ADDR,RecL=40,KPS=1,KLN=12,Replace',i,outIn,k  : _
 	! this file is used to total Amounts by General Ledger Number
-	open #bankmstr=12: 'Name=[Q]\CLmstr\BankMstr.h[cno],KFName=[Q]\CLmstr\BankIdx1.h[cno],Shr',internal,outIn,keyed
+	open #bankmstr=12: 'Name=[Q]\CLmstr\BankMstr.h[cno],KFName=[Q]\CLmstr\BankIdx1.h[cno],Shr',i,outIn,k
 	read #bankmstr,using 'form pos 3,C 30,C 12,PD 6.2',key=cnvrt$('N 2',wbc),release: bn$ nokey MAIN
 	close #bankmstr:
 	bn$=rtrm$(bn$)

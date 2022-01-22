@@ -14,7 +14,7 @@ fnTop(program$,"Import Time from Time Clock System")
 dim pathtotimecard$*200
 pathtotimecard$="c:\progra~1\acs\"
  
-open #1: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr",internal,outIn,keyed
+open #1: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr",i,outIn,k
 open #2: "Name=[Q]\PRmstr\RPTRAIL.h[cno],Shr",i,outi,r
  
 ASK_PAYROLL_DATE: !
@@ -40,7 +40,7 @@ gosub HDR
 on fkey 5 goto L580
 dim simple$*50
 simple$=pathtotimecard$&"TimeCard.h[cno]"
-open #3: "Name="&pathtotimecard$&"TimeCard\SimpleSummary,KFName="&pathtotimecard$&"TimeCard\SSIndex,Replace,RecL=46,KPs=1,KLn=16",internal,outIn,keyed
+open #3: "Name="&pathtotimecard$&"TimeCard\SimpleSummary,KFName="&pathtotimecard$&"TimeCard\SSIndex,Replace,RecL=46,KPs=1,KLn=16",i,outIn,k
 open #5: "Name="&simple$&",RecL=76",display,input
 L410: !
 dim ln$*76

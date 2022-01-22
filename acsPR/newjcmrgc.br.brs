@@ -9,7 +9,7 @@
 	fncno(cno)
  
  
-	open #2: "Name=[Q]\PRmstr\JCCAT.h[cno],KFName=[Q]\PRmstr\CatIndx.h[cno],Shr",internal,outIn,keyed
+	open #2: "Name=[Q]\PRmstr\JCCAT.h[cno],KFName=[Q]\PRmstr\CatIndx.h[cno],Shr",i,outIn,k
 	open #3: "Name=jccharges."&wsid$,internal,input
 	open #5: "Name=[Q]\PRmstr\JCTRANS.h[cno],Shr",i,outi,r
 L170: read #3,using L180: rn$,dat,jn$,mat ji2,empnam$ eof L400

@@ -27,7 +27,7 @@ fnTop(program$)
 gltyp=7
 fnstyp(0)
 
-! open #hGlmstr=fnH: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLIndex.h[cno],Shr",internal,outIn,keyed ioerr ignore
+! open #hGlmstr=fnH: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLIndex.h[cno],Shr",i,outIn,k ioerr ignore
 
 open #20: "Name=[Q]\GLmstr\GLBucket.h[cno],RecL=1,Use",i,outi,r
 if lrec(20)=0 then

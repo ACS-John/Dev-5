@@ -11,7 +11,7 @@ fnCmdSet(2)
 ckey=fnAcs(mat resp$)
 if ckey=5 then goto Xit
 if rtrm$(uprc$(resp$(1)))<>"ZERO" then goto SCREEN1
-open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,outIn,keyed
+open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",i,outIn,k
 dim z$*10
 do
 	read #1,using "form pos 1,C 10": z$ eof DONE

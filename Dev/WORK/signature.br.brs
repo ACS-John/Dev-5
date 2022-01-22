@@ -4,7 +4,7 @@ dim docname$*30
 dim msgline$(5)*200
 dim cddrive$*1
 dim response$(5)*30
-open #1: "Name=S:\Core\Docnames,KFName=S:\Core\DocIndex,USE,RecL=39,KPS=1,KLN=30",internal,outIn,keyed
+open #1: "Name=S:\Core\Docnames,KFName=S:\Core\DocIndex,USE,RecL=39,KPS=1,KLN=30",i,outIn,k
 ! read #1,using 60:docname$,docline,docposition,docsigchoice,cddrive$
  
 MAINSCREEN: ! r:

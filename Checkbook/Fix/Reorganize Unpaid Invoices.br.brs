@@ -3,8 +3,8 @@ autoLibrary
 fnTop(program$)
 on error goto Ertn
 
-open #paytrans=fnH: 'Name=[Q]\CLmstr\PayTrans.h[cno],KFName=[Q]\CLmstr\UnPdIdx1.h[cno],Shr',internal,outIn,keyed
-open #unpdaloc=fnH: 'Name=[Q]\CLmstr\UnPdAloc.h[cno],KFName=[Q]\CLmstr\Uaidx2.h[cno],Shr',internal,outIn,keyed
+open #paytrans=fnH: 'Name=[Q]\CLmstr\PayTrans.h[cno],KFName=[Q]\CLmstr\UnPdIdx1.h[cno],Shr',i,outIn,k
+open #unpdaloc=fnH: 'Name=[Q]\CLmstr\UnPdAloc.h[cno],KFName=[Q]\CLmstr\Uaidx2.h[cno],Shr',i,outIn,k
 open #newunpdaloc=fnH: 'Name=[Q]\CLmstr\NewUnPdAloc.h[cno],RecL=67,replace',internal,outIn
 ReadUnpaidInvoice: ! read unpaid invoice file
 read #paytrans,using 'form pos 1,C 8,c 12,2*G 6,C 12,C 18,G 10.2,n 1,n 2,G 8,G 6,N 1,n 6,n 10.2,n 8': vn$,iv$,mat up$,upa,pcde,bcde,ckn,dp,gde,pdte,disamt,ddate eof L260

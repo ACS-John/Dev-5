@@ -14,7 +14,7 @@
  
 OPEN_FILE: ! : _
 	open_file_count=0 ! this value is used in the close_file sub routine
-	open #open_file_count+=1: "Name=[Q]\PRmstr\hourclass.h[cno],Version=1,KFName=[Q]\PRmstr\hourclass-Idx.h[cno],Use,RecL=35,KPs=1,KLn=5,Shr",internal,outIn,keyed
+	open #open_file_count+=1: "Name=[Q]\PRmstr\hourclass.h[cno],Version=1,KFName=[Q]\PRmstr\hourclass-Idx.h[cno],Use,RecL=35,KPs=1,KLn=5,Shr",i,outIn,k
 return
  
 CLOSE_FILE: for j=1 to open_file_count : close #j: : next j : return

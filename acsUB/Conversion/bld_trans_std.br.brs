@@ -50,13 +50,13 @@ CONVERT_CNO: !
  
 	if uprc$(delubtransvb$)=uprc$('True') and exists("[Q]\UBmstr\ubtransvb.h[cno]") then execute "Free [Q]\UBmstr\ubtransvb.h[cno]"
  
-	open #master=3: "Name=[Q]\UBmstr\ubMaster.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,outIn,keyed
+	open #master=3: "Name=[Q]\UBmstr\ubMaster.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",i,outIn,k
  
 ! open NEW files
-	open #transvb=11: "Name=[Q]\UBmstr\UBTransVB.h[cno],KFName=[Q]\UBmstr\UBTrIndx.h[cno],Shr,RecL=102,KPs=1,KLn=19,Use",internal,outIn,keyed
+	open #transvb=11: "Name=[Q]\UBmstr\UBTransVB.h[cno],KFName=[Q]\UBmstr\UBTrIndx.h[cno],Shr,RecL=102,KPs=1,KLn=19,Use",i,outIn,k
 PHASE1: !
 	pr 'moving trans from ubAccTrn to ubTranVB'
-	open #acctrn=1: "Name=[Q]\UBmstr\ubAccTrn.h[cno],KFName=[Q]\UBmstr\ubAcTIx1.h[cno],Shr",internal,outIn,keyed
+	open #acctrn=1: "Name=[Q]\UBmstr\ubAccTrn.h[cno],KFName=[Q]\UBmstr\ubAcTIx1.h[cno],Shr",i,outIn,k
 	if rln(acctrn)=64 or rln(acctrn)=72 then : _
 		acctrn_form$='form pos 1,C 10,pd 4.2,N 8,n 1,n 1,10*pd 4.2' : _
 	else : _
@@ -150,7 +150,7 @@ R68F: !
 	continue
  
 REMOVEBADDATES: !
-	open #transvb=11: "Name=[Q]\UBmstr\UBTransVB.h[cno],KFName=[Q]\UBmstr\UBTrIndx.h[cno],Shr,RecL=102,KPs=1,KLn=19,Use",internal,outIn,keyed
+	open #transvb=11: "Name=[Q]\UBmstr\UBTransVB.h[cno],KFName=[Q]\UBmstr\UBTrIndx.h[cno],Shr,RecL=102,KPs=1,KLn=19,Use",i,outIn,k
 L1240: read #transvb,using "form pos 11,N 8": tdate eof L1270
 	tdate$=str$(tdate) : _
 	if val(tdate$(1:4))<1950 or val(tdate$(1:4))>2049 or val(tdate$(5:6))<1 or val(tdate$(5:6))>12 or val(tdate$(7:8))<1 or val(tdate$(7:8))>31 then : _

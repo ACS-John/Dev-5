@@ -9,8 +9,8 @@ pk$='A-F'
  fnunpack$(master_formc$,master_formn$)
  master_formall$=fnget_formall$
  gosub enumMaster
- open #main_read:=fngethandle: 'name=master//6,kfname=masterx//6,shr',internal,outin,keyed
- open #h_internal:=fngethandle: "NAME=INTERNAL//6,KFNAME=INTERNAL.IDX//6,SHR",internal,outin,keyed
+ open #main_read:=fngethandle: 'name=master//6,kfname=masterx//6,shr',i,outIn,k
+ open #h_internal:=fngethandle: "NAME=INTERNAL//6,KFNAME=INTERNAL.IDX//6,SHR",i,outIn,k
 
 
 choice=fnMenu(env$('program_caption'),Mat Selmenu$, pk$,'John Bowman Services LLC') ! ,0,1) ! ; &Pk$, Title$*80, Footer$*80, Nnp, Autonumber,Mstart,Mat Custom_Menubar$, Mat Custom_Menuprg$, Mat Custom_Menustatus$,&Menu_Startup$,Menu_Offset,M_Timeout,M_Trust$*30,M_F93_Enable)
@@ -96,7 +96,7 @@ FFIT: ! r:
 	limitRecordsProcessed=0 ! 50000
 	timeStart=fnStime(time$)
 	!open #hOut:=fngethandle: 'Name='&reportFile$&',RecL=1024,Replace',d,o 
-	open #hInf:=fngethandle: "name=infinity.int//6,kfname=infinity.idx//6,shr",internal,outin,keyed
+	open #hInf:=fngethandle: "name=infinity.int//6,kfname=infinity.idx//6,shr",i,outIn,k
 	Ffit_AskFile: !
 	open #hOut:=fngethandle: "Name=SAVE:"&reportFile$&",RecL=1024,replace",d,o ioerr SAVE_AS_OPEN_ERR
 	reportFile$=os_filename$(file$(hOut))

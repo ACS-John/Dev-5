@@ -43,7 +43,7 @@
 	fn_add('Misc 18',10, 'PD',4.2)
 	fn_add('Misc 19',10, 'PD',4.2)
 	fn_add('Misc 20',10, 'PD',4.2)
-	open #1: "Name=[Q]\PRmstr\Department.h[cno],KFName=[Q]\PRmstr\DeptIdx.h[cno],use,RecL=149,kps=1/9,kln=8/3,Shr",internal,outIn,keyed
+	open #1: "Name=[Q]\PRmstr\Department.h[cno],KFName=[Q]\PRmstr\DeptIdx.h[cno],use,RecL=149,kps=1/9,kln=8/3,Shr",i,outIn,k
 	fnHamster("department",mat lbl$,mat fln,1,mat p$,mat fltyp$,mat sln,mat mask)
 	close #1:
 	execute "Index [Q]\PRmstr\department.h[cno]"&' '&"[Q]\PRmstr\deptidx.h[cno] 1 11,Replace" ioerr Xit

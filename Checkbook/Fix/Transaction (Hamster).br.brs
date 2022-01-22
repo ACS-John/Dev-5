@@ -13,9 +13,9 @@ autoLibrary
 !
 OPEN_FILE: !
   open_file_count=0 ! this value is used in the close_file sub routine
-  open #open_file_count+=1: 'Name=[Q]\CLmstr\TrMstr.h[cno],Version=2,KFName=[Q]\CLmstr\TrIdx1.h[cno],Use,RecL=78,KPs=1,KLn=11,Shr',internal,outIn,keyed
-  open #open_file_count+=1: 'Name=[Q]\CLmstr\TrMstr.h[cno],Version=2,KFName=[Q]\CLmstr\TrIdx2.h[cno],Use,RecL=78,KPs=28/1,KLn=8/11,Shr',internal,outIn,keyed
-  open #open_file_count+=1: 'Name=[Q]\CLmstr\TrMstr.h[cno],Version=2,KFName=[Q]\CLmstr\TrIdx3.h[cno],Use,RecL=78,KPs=16/12/4,KLn=2/4/8,Shr',internal,outIn,keyed
+  open #open_file_count+=1: 'Name=[Q]\CLmstr\TrMstr.h[cno],Version=2,KFName=[Q]\CLmstr\TrIdx1.h[cno],Use,RecL=78,KPs=1,KLn=11,Shr',i,outIn,k
+  open #open_file_count+=1: 'Name=[Q]\CLmstr\TrMstr.h[cno],Version=2,KFName=[Q]\CLmstr\TrIdx2.h[cno],Use,RecL=78,KPs=28/1,KLn=8/11,Shr',i,outIn,k
+  open #open_file_count+=1: 'Name=[Q]\CLmstr\TrMstr.h[cno],Version=2,KFName=[Q]\CLmstr\TrIdx3.h[cno],Use,RecL=78,KPs=16/12/4,KLn=2/4/8,Shr',i,outIn,k
   return
 !
 CLOSE_FILE: for j=1 to open_file_count : close #j: : next j : return

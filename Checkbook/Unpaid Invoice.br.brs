@@ -31,12 +31,12 @@
 	open #bankmstr=fnH: "Name=[Q]\CLmstr\BankMstr.h[cno],KFName=[Q]\CLmstr\BankIdx1.h[cno],Shr",internal, outin, keyed
 	read #bankmstr,using 'form pos 45,PD 6.2,PD 6.2',key=bc$,release: bal,upi nokey ignore
 	close #bankmstr:
-	open #glmstr=fnH: "Name=[Q]\CLmstr\GLmstr.h[cno],KFName=[Q]\CLmstr\GLIndex.h[cno],Shr",internal,outIn,keyed
-	open #paymstr1=13: "Name=[Q]\CLmstr\PayMstr.h[cno],KFName=[Q]\CLmstr\PayIdx1.h[cno],Shr",internal,outIn,keyed
-	open #paymstr2=14: "Name=[Q]\CLmstr\PayMstr.h[cno],KFName=[Q]\CLmstr\PayIdx2.h[cno],Shr",internal,outIn,keyed
-	open #payeegl=17: "Name=[Q]\CLmstr\payeeGLBreakdown.h[cno],KFName=[Q]\CLmstr\Payeeglbkdidx.h[cno],Shr",internal,outIn,keyed
-	open #paytrans=4: "Name=[Q]\CLmstr\PayTrans.h[cno],KFName=[Q]\CLmstr\UnPdIdx1.h[cno],Shr",internal,outIn,keyed
-	open #unpdaloc=5: "Name=[Q]\CLmstr\UnPdAloc.h[cno],KFName=[Q]\CLmstr\Uaidx2.h[cno],Shr",internal,outIn,keyed
+	open #glmstr=fnH: "Name=[Q]\CLmstr\GLmstr.h[cno],KFName=[Q]\CLmstr\GLIndex.h[cno],Shr",i,outIn,k
+	open #paymstr1=13: "Name=[Q]\CLmstr\PayMstr.h[cno],KFName=[Q]\CLmstr\PayIdx1.h[cno],Shr",i,outIn,k
+	open #paymstr2=14: "Name=[Q]\CLmstr\PayMstr.h[cno],KFName=[Q]\CLmstr\PayIdx2.h[cno],Shr",i,outIn,k
+	open #payeegl=17: "Name=[Q]\CLmstr\payeeGLBreakdown.h[cno],KFName=[Q]\CLmstr\Payeeglbkdidx.h[cno],Shr",i,outIn,k
+	open #paytrans=4: "Name=[Q]\CLmstr\PayTrans.h[cno],KFName=[Q]\CLmstr\UnPdIdx1.h[cno],Shr",i,outIn,k
+	open #unpdaloc=5: "Name=[Q]\CLmstr\UnPdAloc.h[cno],KFName=[Q]\CLmstr\Uaidx2.h[cno],Shr",i,outIn,k
 	t1(1)=bal : upi=t1(5) : t1(3)=t1(1)-t1(2)
 	if fnClientHas('P4') then havejc=1 : gosub JCBLD ! fn_clientHas('P4') means the cleint is registered for Job Cost Payroll
 goto MENU1 ! /r
@@ -172,12 +172,12 @@ JCBLD: ! r: Open JC Files
 	chdr3$(5)='Amount'
 	chdr3$(6)='Description'
 	cmask3$(5)='10' : cmask3$(1)=cmask3$(2)=cmask3$(3)=cmask3$(4)=cmask3$(6)=''
-	open #41: "Name=[Q]\PRmstr\JCMSTR.h[cno],KFName=[Q]\PRmstr\JCIndx.h[cno],Shr",internal,outIn,keyed ioerr JCBLD_FINIS
-	open #category:=2: "Name=[Q]\PRmstr\JCCAT.h[cno], KFName=[Q]\PRmstr\CATIndx.h[cno],Shr", internal,outIn,keyed
-	open #43: "Name=[Q]\PRmstr\SCMSTR.h[cno],KFName=[Q]\PRmstr\SCIndex.h[cno],Shr",internal,outIn,keyed
+	open #41: "Name=[Q]\PRmstr\JCMSTR.h[cno],KFName=[Q]\PRmstr\JCIndx.h[cno],Shr",i,outIn,k ioerr JCBLD_FINIS
+	open #category:=2: "Name=[Q]\PRmstr\JCCAT.h[cno], KFName=[Q]\PRmstr\CATIndx.h[cno],Shr", i,outIn,k
+	open #43: "Name=[Q]\PRmstr\SCMSTR.h[cno],KFName=[Q]\PRmstr\SCIndex.h[cno],Shr",i,outIn,k
 	open #45: "Name=[Q]\PRmstr\JCTrans.h[cno],Shr",i,outi,r
 	if not exists("[Q]\CLmstr\JCBreakdownS"&wsid$&".h[cno]") then gosub MAKE_JCB
-	open #jcbreakdown=46: "Name=[Q]\CLmstr\JCBreakdownS"&wsid$&".h[cno],KFName=[Q]\CLmstr\JcBrkidx"&wsid$&".h[cno],Version=1,Shr",internal,outIn,keyed ioerr MAKE_JCB
+	open #jcbreakdown=46: "Name=[Q]\CLmstr\JCBreakdownS"&wsid$&".h[cno],KFName=[Q]\CLmstr\JcBrkidx"&wsid$&".h[cno],Version=1,Shr",i,outIn,k ioerr MAKE_JCB
 JCBLD_FINIS: !
 	return  ! /r
 !
@@ -194,7 +194,7 @@ CODE_FOR_PAYMENT: ! r:
 		type$="Not Approved for Payment"
 	end if
 	close #paytrans: ioerr ignore
-	open #paytrans=4: "Name=[Q]\CLmstr\PayTrans.h[cno],KFName=[Q]\CLmstr\UnPdIdx1.h[cno],Shr",internal,outIn,keyed
+	open #paytrans=4: "Name=[Q]\CLmstr\PayTrans.h[cno],KFName=[Q]\CLmstr\UnPdIdx1.h[cno],Shr",i,outIn,k
 L4700: read #paytrans,using 'form pos 1,C 8,C 12,2*G 6,C 12,C 18,G 10.2,n 1,n 2,G 8,G 6,N 1,n 6,n 10.2,n 8': vn$,iv$,mat up$,upa,pcde,bcde,ckn,dp,gde,pdte,disamt,ddate eof DISPLAY_GRID
 	if displayunpaid=1 and pcde=1 then goto L4760 ! if only choose selected, don't allow others to list
 	if displayall=1 then goto L4760
@@ -542,14 +542,14 @@ def fn_test_key(holdkey$*20,vn$,iv$)
 	! TEST1: !
 	! pass goes to test2 - fail goes to test_key_fail_on_iv
 		close #ivpaid: ioerr ignore
-		open #ivpaid=fnH: "Name=[Q]\CLmstr\IvPaid.h[cno],KFName=[Q]\CLmstr\IvIndex.h[cno]",internal,outIn,keyed
+		open #ivpaid=fnH: "Name=[Q]\CLmstr\IvPaid.h[cno],KFName=[Q]\CLmstr\IvIndex.h[cno]",i,outIn,k
 		unpaidkey$=rpad$(ltrm$(vn$),8)&rpad$(ltrm$(iv$),12)
 		read #ivpaid,using 'form pos 1,C 8',key=unpaidkey$,release: x$ nokey TEST2
 	goto TEST_KEY_FAIL_ON_IV
 
 	TEST2: !
 		! pass goes to test_key_pass - fail goes to test_key_fail_on_paytrans
-		open #testpaytrans=fnH: "Name=[Q]\CLmstr\PayTrans.h[cno],KFName=[Q]\CLmstr\UnPdIdx1.h[cno],SHR",internal,outIn,keyed
+		open #testpaytrans=fnH: "Name=[Q]\CLmstr\PayTrans.h[cno],KFName=[Q]\CLmstr\UnPdIdx1.h[cno],SHR",i,outIn,k
 		read #testpaytrans,using 'form pos 1,C 8',key=newkey$,release: x$ nokey TEST_KEY_OK
 	goto TEST_KEY_FAIL_ON_PAYTRANS
 

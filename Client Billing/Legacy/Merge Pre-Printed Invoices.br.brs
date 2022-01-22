@@ -9,7 +9,7 @@ open #3: "Name=S:\Core\Data\acsllc\TMWk2[acsUserId].h[cno],NoShr",internal,input
 open #12: "Name=S:\Core\Data\acsllc\Transactions.h[cno],Shr",i,outi,r
 open #2: "Name=S:\Core\Data\acsllc\TMTRANS.h[cno],Shr",i,outi,r
 L130: form pos 54,pd 3
-open #1: "Name=S:\Core\Data\acsllc\Client.h[cno],KFName=S:\Core\Data\acsllc\Client-Idx.h[cno],Shr",internal,outIn,keyed
+open #1: "Name=S:\Core\Data\acsllc\Client.h[cno],KFName=S:\Core\Data\acsllc\Client-Idx.h[cno],Shr",i,outIn,k
 open #4: "Name=S:\Core\Data\acsllc\TMTRAddr.h[cno],Shr",i,outi,r
 ! open #h_armotran:=5: "Name=S:\Core\Data\acsllc\ARMoTran.h[cno],Shr",internal,output
 open #6: "Name=S:\Core\Data\acsllc\Company.h[cno],Shr",internal,input

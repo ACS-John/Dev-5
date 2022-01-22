@@ -4,7 +4,7 @@ fnTop(program$)
 d1=fnPayPeriodEndingDate
 if days(d1,'ccyymmdd')=>days(date)-5 then prd=d1
  
-open #h_rpwork=fnH: "Name=[Q]\PRmstr\rpwork[unique_computer_id].h[cno],KFName=[Q]\PRmstr\prwork[unique_computer_id]idx.h[cno]",internal,outIn,keyed ioerr ignore
+open #h_rpwork=fnH: "Name=[Q]\PRmstr\rpwork[unique_computer_id].h[cno],KFName=[Q]\PRmstr\prwork[unique_computer_id]idx.h[cno]",i,outIn,k ioerr ignore
 F_rpwork: form pos 1,n 8,n 3,5*pd 4.2,25*pd 5.2,2*pd 4.2
  
 SCREEN_1: !
@@ -432,7 +432,7 @@ EMP_PREV_ENTERED_WARN: ! r:
 	if resp$(1:1)="N" then goto TheNextOne ! in1=1
 ! /r
 L4180: !
-	open #4: "Name="&pathtotimecard$&"timecard\simplesummary,KFName="&pathtotimecard$&"timecard\ssindex,Shr",internal,outIn,keyed ioerr L4200 ! timecard
+	open #4: "Name="&pathtotimecard$&"timecard\simplesummary,KFName="&pathtotimecard$&"timecard\ssindex,Shr",i,outIn,k ioerr L4200 ! timecard
 	timecard=1 ! timecard files exist
 L4200: !
 	read #hEmployee,using F_employee_3: en$,em$,em4,em8,em9,lpd,tgp eof FINISH
@@ -514,18 +514,18 @@ L4840: !
 	goto ASK_TIME
 ! /r
 OpenFiles: ! r:
-	open #hEmployee=fnH: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr",internal,outIn,keyed
+	open #hEmployee=fnH: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr",i,outIn,k
 	F_employee_1: form pos 9,c 30,pos 118,n 2,pos 126,2*pd 3.3,pos 162,n 6,pd 5.2
 	F_employee_2: form pos 162,n 6,pd 5.2
 	F_employee_3: form pos 1,c 8,c 30,pos 118,n 2,pos 126,2*pd 3.3,pos 162,n 6,pd 5.2
 	close #11: ioerr ignore
-	open #11: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-name.h[cno],Shr",internal,outIn,keyed
+	open #11: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-name.h[cno],Shr",i,outIn,k
 	close #2: ioerr ignore
-	open #2: "Name=[Q]\PRmstr\Department.h[cno],KFName=[Q]\PRmstr\DeptIdx.h[cno],Shr",internal,outIn,keyed
+	open #2: "Name=[Q]\PRmstr\Department.h[cno],KFName=[Q]\PRmstr\DeptIdx.h[cno],Shr",i,outIn,k
 	close #h_rpwork:=3: ioerr ignore
-	open #h_rpwork:=3: "Name=[Q]\PRmstr\rpwork[unique_computer_id].h[cno],KFName=[Q]\PRmstr\rpwork[unique_computer_id]Idx.h[cno]"&',shr',internal,outIn,keyed
+	open #h_rpwork:=3: "Name=[Q]\PRmstr\rpwork[unique_computer_id].h[cno],KFName=[Q]\PRmstr\rpwork[unique_computer_id]Idx.h[cno]"&',shr',i,outIn,k
 	close #4: ioerr ignore
-	open #4: "Name="&pathtotimecard$&"timecard\simplesummary,KFName="&pathtotimecard$&"timecard\ssindex,Shr",internal,outIn,keyed ioerr L4630 ! timecard
+	open #4: "Name="&pathtotimecard$&"timecard\simplesummary,KFName="&pathtotimecard$&"timecard\ssindex,Shr",i,outIn,k ioerr L4630 ! timecard
 	timecard=1 ! timecard files exist
 	L4630: !
 return  ! /r
@@ -566,7 +566,7 @@ PullFromJobCost: ! r:
 	open #h_rpwork:=3: "Name=[Q]\PRmstr\rpwork[unique_computer_id].h[cno],RecL=167,Replace",internal,output
 	close #h_rpwork:
 	execute "Index [Q]\PRmstr\rpwork[unique_computer_id].h[cno]"&' '&"[Q]\PRmstr\rpwork[unique_computer_id]Idx.h[cno] 1,11 replace,DupKeys -N"
-	open #h_rpwork:=3: "Name=[Q]\PRmstr\rpwork[unique_computer_id].h[cno],KFName=[Q]\PRmstr\rpwork[unique_computer_id]Idx.h[cno]",internal,outIn,keyed
+	open #h_rpwork:=3: "Name=[Q]\PRmstr\rpwork[unique_computer_id].h[cno],KFName=[Q]\PRmstr\rpwork[unique_computer_id]Idx.h[cno]",i,outIn,k
 ! Restore #hEmployee:
 ! Read #hEmployee,Using 5480: EN$ Eof 5520
 ! form pos 1,C 8

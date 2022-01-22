@@ -26,7 +26,7 @@ goto Report ! /r
 Report: ! r: start report
 	if bd1=20000000 then bd1=0
 	if ed1=20000000 then ed1=0
-	open #hDeposit2=fnH: 'Name=[Q]\UBmstr\Deposit2.h[cno],KFName=[Q]\UBmstr\Deposit2Index.h[cno],Shr,Use,RecL=73,KPs=1,KLn=10',internal,outIn,keyed ! "Name=[Q]\UBmstr\Deposit2.h[cno],Shr",i,outi,r
+	open #hDeposit2=fnH: 'Name=[Q]\UBmstr\Deposit2.h[cno],KFName=[Q]\UBmstr\Deposit2Index.h[cno],Shr,Use,RecL=73,KPs=1,KLn=10',i,outIn,k ! "Name=[Q]\UBmstr\Deposit2.h[cno],Shr",i,outi,r
 	fDeposit2: form pos 1,c 10,n 8,c 32,2*n 10.2,pd 3
 	fnopenprn
 	gosub PrHeader

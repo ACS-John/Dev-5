@@ -12,7 +12,7 @@
 	fndat(dat$,1)
  
 	if exists("[Q]\PRmstr\Category.h[cno]")=0 then goto SETUP_FILES
-L170: open #1: "Name=[Q]\PRmstr\Category.h[cno],KFName=[Q]\PRmstr\categoryIDX.h[cno],Shr",internal,outIn,keyed
+L170: open #1: "Name=[Q]\PRmstr\Category.h[cno],KFName=[Q]\PRmstr\categoryIDX.h[cno],Shr",i,outIn,k
 L180: form pos 1,n 5,c 30
 ASKCATEGORY: !
 	mat resp$=("")

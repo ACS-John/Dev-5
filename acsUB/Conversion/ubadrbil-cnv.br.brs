@@ -12,11 +12,11 @@ def library fnub_cnv_adrbil
 		fnCopy("[Q]\UBmstr\UBAdrBil.h[cno]",env$('temp')&"\temp."&session$)
 	end if
 	if exists("[Q]\UBmstr\UBAdrBil.h[cno]")=0 then goto BUILD_FILES
-	open #3: "Name=[Q]\UBmstr\ubMaster.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,outIn,keyed ioerr OPN_CUST
+	open #3: "Name=[Q]\UBmstr\ubMaster.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",i,outIn,k ioerr OPN_CUST
 	goto L160
 	
 	OPN_CUST: !
-		open #3: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",internal,outIn,keyed
+		open #3: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",i,outIn,k
 	goto L160
 	
 	L160: !

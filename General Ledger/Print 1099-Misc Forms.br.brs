@@ -2,8 +2,8 @@ autoLibrary
 fnTop(program$)
 on error goto Ertn
 if fn1099MiscAsk(seltp,unused_type,minamt,beg_date,end_date) then
-	open #hPayee=fnH: 'Name=[Q]\GLmstr\PayMstr.h[cno],KFName=[Q]\GLmstr\PayIdx2.h[cno],Shr',internal,outIn,keyed
-	open #hTrans=fnH: 'Name=[Q]\GLmstr\GLTR1099.h[cno],KFName=[Q]\GLmstr\gltridx1.h[cno],Shr',internal,outIn,keyed
+	open #hPayee=fnH: 'Name=[Q]\GLmstr\PayMstr.h[cno],KFName=[Q]\GLmstr\PayIdx2.h[cno],Shr',i,outIn,k
+	open #hTrans=fnH: 'Name=[Q]\GLmstr\GLTR1099.h[cno],KFName=[Q]\GLmstr\gltridx1.h[cno],Shr',i,outIn,k
 	do
 		dim vn$*8
 		dim nam$*30

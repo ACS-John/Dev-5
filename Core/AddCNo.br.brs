@@ -66,7 +66,7 @@ else if env$('cursys')='GL' then ! r:
 	if cno<1 or cno=fro_cno then goto GlMenu1
 
 	fnCopy('[Q]\GLmstr\*.h'&str$(fro_cno),'[Q]\GLmstr\*.h[cno]')
-	open #20: 'Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLIndex.h[cno],NoShr',internal,outIn,keyed
+	open #20: 'Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLIndex.h[cno],NoShr',i,outIn,k
 	do
 		read #20,using 'form pos 87,PD 6.2': cb eof EO_GLMSTR
 		dim zer(57)

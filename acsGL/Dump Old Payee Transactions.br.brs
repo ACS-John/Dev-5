@@ -3,7 +3,7 @@
 fn_setup
 
 fnTop(program$)
-open #hPayeeTran=fnH: "Name=[Q]\GLmstr\GLTR1099.h[cno],KFName=[Q]\GLmstr\gltridx1.h[cno],Shr",internal,outIn,keyed
+open #hPayeeTran=fnH: "Name=[Q]\GLmstr\GLTR1099.h[cno],KFName=[Q]\GLmstr\gltridx1.h[cno],Shr",i,outIn,k
 
 fnTos
 fnLbl(1,1,"Oldest Transaction Date to Retain:",35,right)

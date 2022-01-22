@@ -229,7 +229,7 @@ L1930: if cmdkey=5 then goto Xit
 	fnDedNames(mat fullname$,mat abrevname$,mat newdedcode,mat newcalcode,mat newdedfed,mat dedfica,mat dedst,mat deduc)
 	open #1: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr",i,i,k
 ! Open #2: "Name=[Q]\PRmstr\RPTRAIL.h[cno],Shr",i,i,r
-	open #4: "Name=[Q]\PRmstr\payrollchecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno]",internal,outIn,keyed
+	open #4: "Name=[Q]\PRmstr\payrollchecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno]",i,outIn,k
 L2070: open #22: "Name=W2REPORT,RecL=1024,eol=crlf,replace",d,o
 	goto L2140
 	pr newpage

@@ -77,10 +77,10 @@
 	read #1,using 'form pos 150,2*N 1,pos 298,15*PD 4,pos 382,N 2,pos 418,10*C 20,10*N 1,pos 668,10*C 12': mat xd,mat pgl,jccode,mat miscname$,mat dedcode,mat miscgl$
 	close #1:
 ! /r
-	open #h_glmstr=fnH: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLIndex.h[cno],Shr",internal,outIn,keyed
+	open #h_glmstr=fnH: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLIndex.h[cno],Shr",i,outIn,k
 
 	if gltyp<>1 then
-		open #1: "Name=[Q]\GLmstr\PRmstr.h[cno],KFName=[Q]\GLmstr\PRIndex.h[cno],Shr",internal,outIn,keyed ioerr ignore ! 00340   open #1: fil$(1),internal,outIn,keyed ioerr ignore
+		open #1: "Name=[Q]\GLmstr\PRmstr.h[cno],KFName=[Q]\GLmstr\PRIndex.h[cno],Shr",i,outIn,k ioerr ignore ! 00340   open #1: fil$(1),i,outIn,k ioerr ignore
 		open #3: "Name=[Q]\GLmstr\GLWK2[acsUserId].h[cno]",i,outi,r ioerr ignore ! PR Work File
 	end if
 	open #h_gl_work:=2: "Name=[Q]\GLmstr\GL_Work_"&env$('acsUserId')&".h[cno]",i,outi,r ioerr ignore ! GL Work File
@@ -182,9 +182,9 @@ F_5: form pos 1,pd 6.2,80*pd 6.2,pd 6.2,pd 6.2,20*n 2
 	goto L1140 ! /r
 L1140: ! r:
 	close #6: ioerr ignore
-	open #6: "Name=[Q]\GLmstr\GLBRec.h[cno],KFName=[Q]\GLmstr\GLRecIdx.h[cno],Shr",internal,outIn,keyed
-	open #paymstr=fnH: "Name=[Q]\GLmstr\PayMstr.h[cno],Version=1,KFName=[Q]\GLmstr\PayIdx1.h[cno],Shr",internal,outIn,keyed
-	open #payeegl=fnH: "Name=[Q]\GLmstr\PayeeGLBreakdown.h[cno],Version=1,KFName=[Q]\GLmstr\Payeeglbkdidx.h[cno],Use,RecL=56,KPs=1,KLn=8,Shr",internal,outIn,keyed
+	open #6: "Name=[Q]\GLmstr\GLBRec.h[cno],KFName=[Q]\GLmstr\GLRecIdx.h[cno],Shr",i,outIn,k
+	open #paymstr=fnH: "Name=[Q]\GLmstr\PayMstr.h[cno],Version=1,KFName=[Q]\GLmstr\PayIdx1.h[cno],Shr",i,outIn,k
+	open #payeegl=fnH: "Name=[Q]\GLmstr\PayeeGLBreakdown.h[cno],Version=1,KFName=[Q]\GLmstr\Payeeglbkdidx.h[cno],Use,RecL=56,KPs=1,KLn=8,Shr",i,outIn,k
 	close #glallocations: ioerr ignore
 	open #glallocations=12: "Name=[Q]\GLmstr\GLALLOCATIONS"&wsid$&env$('cno')&",Version=1,replace,RecL=59",i,outi,r
 	if jccode then

@@ -10,7 +10,7 @@ fnH2AddText("Beginning Balance" 	,11,"PD", 6,mask_pointtwo	, 81)
 fnH2AddText("Current Balance"   	,11,"PD", 6,mask_pointtwo	, 87)
 fnH2AddText("2-Yr Beginning"    	,11,"PD", 6,mask_pointtwo	,327)
 
-open #1: "Name=[Q]\GLmstr\GLmstr.h[cno],Version=0,KFName=[Q]\GLmstr\glIndx2.h[cno],Use,RecL=416,KPs=13,KLn=30,Shr",internal,outIn,keyed
+open #1: "Name=[Q]\GLmstr\GLmstr.h[cno],Version=0,KFName=[Q]\GLmstr\glIndx2.h[cno],Use,RecL=416,KPs=13,KLn=30,Shr",i,outIn,k
 fnHamster2("GLmstr")
 close #1:
 goto Xit

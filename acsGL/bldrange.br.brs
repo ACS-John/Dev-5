@@ -12,7 +12,7 @@
 	open #company=1: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,input
 	read #company,using 'form pos 150,2*N 1': use_dept,use_sub ! read fund and sub codes from general
 	close #company:
-	open #1: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLIndex.h[cno],Shr",internal,outIn,keyed
+	open #1: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLIndex.h[cno],Shr",i,outIn,k
 	fil$(1)="ACGLFNSB" : idx$(1)="agfsidx4"
 	fil$(2)="ACGLFNSI" : idx$(2)="agfsidx3"
  
@@ -93,7 +93,7 @@ L830: read #1,using L1030: dno,ano,sno,d$,mat rf eof MAIN
 	if rf(1)>0 then fln=1: goto L890
 	if rf(3)>0 then fln=2: goto L890
 	goto L830
-L890: open #2: "Name=[Q]\GLmstr\"&fil$(fln)&".h[cno],KFName=[Q]\GLmstr\"&idx$(fln)&".h[cno],Shr",internal,outIn,keyed
+L890: open #2: "Name=[Q]\GLmstr\"&fil$(fln)&".h[cno],KFName=[Q]\GLmstr\"&idx$(fln)&".h[cno],Shr",i,outIn,k
 	restore #2,key=lpad$(str$(fin(1)),5): nokey L970
 L910: read #2,using L920: rno,d$,te$,mat ac eof L980
 L920: form pos 1,n 5,c 50,c 1,2*n 2,15*n 1,n 3

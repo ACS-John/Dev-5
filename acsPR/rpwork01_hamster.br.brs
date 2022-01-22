@@ -45,7 +45,7 @@ goto Xit
  
 def fn_open_file
 	open_file_count=0 ! this value is used in the close_file sub routine
-	open #open_file_count+=1: 'Name=[Q]\PRmstr\rpwork01.h[cno],Version=0,KFName=[Q]\PRmstr\rpwork01Idx.h[cno],Use,RecL=167,KPs=1,KLn=11,Shr',internal,outIn,keyed
+	open #open_file_count+=1: 'Name=[Q]\PRmstr\rpwork01.h[cno],Version=0,KFName=[Q]\PRmstr\rpwork01Idx.h[cno],Use,RecL=167,KPs=1,KLn=11,Shr',i,outIn,k
 fnend
 def fn_close_file
 	for j=1 to open_file_count : close #j: : next j

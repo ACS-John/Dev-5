@@ -13,7 +13,7 @@ L110: open #101: "SROW=9,SCOL=4,EROW=11,ECOL=65,BORDER=DR,CAPTION=CONVERT PAYEE 
 	input fields "10,51,N 2,UE,N": cno
 	if cno=0 then goto Xit ! CHAIN "RABLDSCR/CCRA1"
  
-	open #1: "Name=[Q]\CLmstr\PayMstr.h[cno],KFName=[Q]\CLmstr\PayIdx1.h[cno]",internal,outIn,keyed
+	open #1: "Name=[Q]\CLmstr\PayMstr.h[cno],KFName=[Q]\CLmstr\PayIdx1.h[cno]",i,outIn,k
 	open #2: "Name=[Q]\CLmstr\PayAlloc.h[cno],SIZE=0,RecL=56,Replace",i,outi,r
 L180: read #1,using L190: p$,mat gl eof L290
 L190: form pos 1,c 8,pos 147,n 3,n 6,n 3

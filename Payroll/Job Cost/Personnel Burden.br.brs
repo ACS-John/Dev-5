@@ -13,7 +13,7 @@
 	fndat(dat$,1)
  
 	if exists("[Q]\PRmstr\Burden.h[cno]")=0 then goto SETUP_FILES
-L180: open #1: "Name=[Q]\PRmstr\Burden.h[cno],KFName=[Q]\PRmstr\BurdenIdx.h[cno],Shr",internal,outIn,keyed
+L180: open #1: "Name=[Q]\PRmstr\Burden.h[cno],KFName=[Q]\PRmstr\BurdenIdx.h[cno],Shr",i,outIn,k
 L190: form pos 1,n 8,c 30,3*n 6.3
 ASKEMPLOYEE: !
 	mat resp$=("")

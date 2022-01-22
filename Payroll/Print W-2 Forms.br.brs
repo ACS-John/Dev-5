@@ -139,8 +139,8 @@
 ! lyne=topmargin ! starting of 1st line
 	goproc=0
 	open #hEmployee:=1: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr",i,i,k
-	open #hDepartment:=2: "Name=[Q]\PRmstr\department.h[cno],KFName=[Q]\PRmstr\deptidx.h[cno]",internal,outIn,keyed
-	open #hChecks=fnH: "Name=[Q]\PRmstr\payrollchecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno]",internal,outIn,keyed
+	open #hDepartment:=2: "Name=[Q]\PRmstr\department.h[cno],KFName=[Q]\PRmstr\deptidx.h[cno]",i,outIn,k
+	open #hChecks=fnH: "Name=[Q]\PRmstr\payrollchecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno]",i,outIn,k
 	! if env$('acsDeveloper')<>'' then pr 'hChecks=';hChecks : pause
 	open #hAddr=fnH: "Name=[Temp]\Addr.[Session],Replace,RecL=33,NoShr",internal,output
 	write #hAddr,using 'form pos 1,n 10.2,n 1': ssmax,w1

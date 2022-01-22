@@ -3,7 +3,7 @@ on error goto Ertn
 
 fnTop(program$)
 open #hEmployee=fnH: 'Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr',i,i,k
-open #hDd=fnH: 'Name=[Q]\PRmstr\DD.h[cno],RecL=72,KFName=[Q]\PRmstr\DDidx1.h[cno],Shr,kps=1,kln=10,Use',internal,outIn,keyed
+open #hDd=fnH: 'Name=[Q]\PRmstr\DD.h[cno],RecL=72,KFName=[Q]\PRmstr\DDidx1.h[cno],Shr,kps=1,kln=10,Use',i,outIn,k
  
 fnTos
 fnLbl(1,35,'',1,1) ! bigger screen

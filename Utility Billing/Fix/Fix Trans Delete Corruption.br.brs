@@ -1,5 +1,5 @@
 autoLibrary
-open #h_trans=fnH: "Name=[Q]\UBmstr\ubtransvb.h[cno],KFName=[Q]\UBmstr\ubtrindx.h[cno],Shr",internal,outIn,keyed 
+open #h_trans=fnH: "Name=[Q]\UBmstr\ubtransvb.h[cno],KFName=[Q]\UBmstr\ubtrindx.h[cno],Shr",i,outIn,k 
 err_count=0
 do 
 	dim a$*10,tg(10)

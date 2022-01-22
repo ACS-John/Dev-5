@@ -26,7 +26,7 @@ if ckey=5 then goto Xit
 date_bad=val(resp$(1))
 date_good=val(resp$(2))
 
-open #h_prmstr=fnH: "Name=[Q]\GLmstr\PRmstr.h[cno],KFName=[Q]\GLmstr\PRIndex.h[cno],Shr",internal,outIn,keyed
+open #h_prmstr=fnH: "Name=[Q]\GLmstr\PRmstr.h[cno],KFName=[Q]\GLmstr\PRIndex.h[cno],Shr",i,outIn,k
 open #h_acprcks=fnH: "Name=[Q]\GLmstr\ACPRCKS.h[cno],Shr",i,outi,r
 fnopenprn
 fn_hdr1
