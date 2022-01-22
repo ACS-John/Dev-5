@@ -1,12 +1,12 @@
 [Q]\PRmstr\dd.h[cno]     ,   dd_   , 0
-[Q]\PRmstr\DDidx1.h[cno] ,  eno$
+[Q]\PRmstr\DDidx1.h[cno] ,  eno
 recl=72
 ===================================================
-eno$       ,  Employee Number                      ,  C   10   , !     aka=key$ 
-enable$    ,  Direct Deposit enabled (Y/N)         ,  c    1   , !     aka=dd$  
-routing    ,  Routing Number                       ,  N    9   , !     aka=rtn  
-accType    ,  Bank Account Type 27/37              ,  N    2   , !     aka=acc  
-account$   ,  Bank Account Number                  ,  C   17   , !     aka=acn,acn$ 
+eno       	,  Employee Number                      	,  c   10   , !     aka=key$  comboFio(PR Employee)
+enable    	,  Direct Deposit enabled (Y/N)       	,  c    1   , !     aka=dd$   comboA(ignore,Y,N)
+routing   	,  Routing Number                       	,  n    9   , !     aka=rtn
+accType   	,  Bank Account Type 27/37             	,  n    2   , !     aka=acc
+account   	,  Bank Account Number                 	,  c   17   , !     aka=acn,acn$
 
 
 
