@@ -47,10 +47,10 @@ fnreg_read('Post to Checkbook - Populate Checkbook Payee from Payroll Employee',
 	opt_check_format$(5)='Stub, Stub, Check' 	: scc$(5)='SSC'
 	opt_check_format$(6)='Stub, Check, Check'	: scc$(6)='SCC'
 
-	dim opt_check_type$(3)*14
-	opt_check_type$(1)='Regular Check'
-	opt_check_type$(2)='Direct Deposit'
-	opt_check_type$(3)='All'
+	dim opt_checkMedia$(3)*14
+	opt_checkMedia$(1)='Regular Check'
+	opt_checkMedia$(2)='Direct Deposit'
+	opt_checkMedia$(3)='All'
 	! r: set mat wording$
 		wc=0 ! Wording$ counter
 		wording$(wc+=1)='One'
@@ -117,34 +117,23 @@ fnreg_read('Post to Checkbook - Populate Checkbook Payee from Payroll Employee',
 	if env$('client')='Divernon' or env$('client')='Thomasboro' or env$('client')='Edinburg' or env$('client')='Hope Welty' then
 		ficam1$='Y'
 	end if
-	ddcode$='R'
+	ddcode$=fnPcRegRead$('Check Media','R') ! ddcode$='R'
 	fnreg_read('PR.Check print.skip alignment',skip_alignment$) : if skip_alignment$='' then skip_alignment$='No'
 goto ScrMainQestions ! /r
 ScrMainQestions: ! r:
 	fnTos
 	respc=0
-	fnLbl(1,1,'Payroll Date:',38,1)
-	fnTxt(1,41,10,0,1,'3',0,'')
-	resp$(resp_payroll_date:=1)=str$(d1)
-	fnLbl(2,1,'Are Checks Prenumbered?',38,1)
-	fncomboa('prckprt-2',2,41,mat opt_yn$,'The system needs to know if the checks are already numbered.',3)
-	if pre$='Y' then resp$(2)=opt_yn$(1) else resp$(2)=opt_yn$(2)
-	fnLbl(3,1,'Beginning Check Number:',38,1)
-	fnTxt(3,41,7,0,1,'30',0,'')
-	resp$(3)=str$(check_number)
-	fnLbl(4,1,'Date of Checks:',38,1)
-	fnTxt(4,41,10,0,1,'3',0,'')
-	resp$(resp_date_of_checks:=4)=date$('ccYYMMDD')
-	fnLbl(5,1,'Beginning Employee Number:',38,1)
-	fnTxt(5,41,8,0,1,'30',0,'')
-	resp$(5)=str$(beginningEmployeeNumber)
+	fnLbl(1,1,'Payroll Date:',38,1)                    	: fnTxt(1,41,10,0,1,'3',0,'')    	: resp$(resp_payroll_date:=1)=str$(d1)
+	fnLbl(2,1,'Are Checks Prenumbered?',38,1)        	: fncomboa('prckprt-2',2,41,mat opt_yn$,'The system needs to know if the checks are already numbered.',3)
+																																															resp$(2)=opt_yn$(2) : if pre$='Y' then resp$(2)=opt_yn$(1)
+	fnLbl(3,1,'Beginning Check Number:',38,1)        	: fnTxt(3,41,7,0,1,'30',0,'')    	: resp$(3)=str$(check_number)
+	fnLbl(4,1,'Date of Checks:',38,1)                 	: fnTxt(4,41,10,0,1,'3',0,'')    	: resp$(resp_date_of_checks:=4)=date$('ccYYMMDD')
+	fnLbl(5,1,'Beginning Employee Number:',38,1)     	: fnTxt(5,41,8,0,1,'30',0,'')    	: resp$(5)=str$(beginningEmployeeNumber)
 	fnLbl(6,1,'Post to ACS Checkbook',38,1)
 	if fnClientHas('CL') then
-		fncomboa('prckprt-3',6,41,mat opt_yn$)
-		if posttocl$='Y' then resp$(6)=opt_yn$(1) else resp$(6)=opt_yn$(2)
+																								fncomboa('prckprt-3',6,41,mat opt_yn$)  	: resp$(6)=opt_yn$(2) : if posttocl$='Y' then resp$(6)=opt_yn$(1)
 	else
-		fnTxt(6,41,3, 0,0,'',1,'ACS Checkbook license not detected.')
-		resp$(6)=opt_yn$(2) : posttocl$='N'
+		fnTxt(6,41,3, 0,0,'',1,'ACS Checkbook license not detected.')                     	: resp$(6)=opt_yn$(2) : posttocl$='N'
 	end if
 	fnLbl(7,1,'Post Employer''s Portion of FiCA?',38,1)
 	fncomboa('prckprt-4',7,41,mat opt_yn$,'The system can generate and post the employer''s portion of FICA at the time the check is being written.',3)
@@ -154,10 +143,10 @@ ScrMainQestions: ! r:
 	whichScc=srch(mat scc$,sc1$)
 	if whichScc>0 then resp$(8)=opt_check_format$(whichScc) else resp$(8)=opt_check_format$(4)
 	fnLbl(9,1,'Check Type (Regular or Direct Deposit):',38,1)
-	fncomboa('ckprt-5',9,41,mat opt_check_type$,'If you have direct deposits, you can use this option to pr check on plain paper to give the employees.',15)
-	if ddcode$='R' then resp$(9)=opt_check_type$(1)
-	if ddcode$='D' then resp$(9)=opt_check_type$(2)
-	if ddcode$='A' then resp$(9)=opt_check_type$(3)
+	fncomboa('ckprt-5',9,41,mat opt_checkMedia$,'If you have direct deposits, you can use this option to pr check on plain paper to give the employees.',15)
+	if ddcode$='R' then resp$(9)=opt_checkMedia$(1)
+	if ddcode$='D' then resp$(9)=opt_checkMedia$(2)
+	if ddcode$='A' then resp$(9)=opt_checkMedia$(3)
 	fnLbl(10,1,'Print Vacation and Sick Leave?',38,1)
 	fncomboa('prckprt-6',10,41,mat opt_yn$)
 	if accr$='Y' then resp$(10)=opt_yn$(1) else resp$(10)=opt_yn$(2)
@@ -198,7 +187,7 @@ ScrMainQestions: ! r:
 	posttocl$                	=uprc$(resp$(6)(1:1))                     ! post Checkbook system
 	ficam1$                 	=uprc$(resp$(7)(1:1))                     ! post fica match
 	sc1$                    	=scc$(srch(mat opt_check_format$,resp$(8)))
-	ddcode$                 	=uprc$(resp$(9)(1:1))                     ! regular check or direct deposit
+	ddcode$                 	=uprc$(resp$(9)(1:1))                     ! [R]egular check or [D]irect deposit
 	accr$                   	=uprc$(resp$(10)(1:1))                    ! pr vac and sick
 	if resp_cl_bankcode then
 		bankcode              	=val(resp$(resp_cl_bankcode)(1:3))        ! bank code
@@ -250,6 +239,7 @@ ScrMainQestions: ! r:
 	fncreg_write('Post to CL',posttocl$)
 	fncreg_write('Post Employer Portion of FiCA',ficam1$)
 	fncreg_write('Check Format',sc1$)
+	fnPcReg_write('Check Media',ddcode$)
 	fncreg_write('Print Vacation and Sick Leave on Check',accr$)
 	fncreg_write('CL Bank Code',str$(bankcode))
 	fncreg_write('Comp Time Code',compcode$)
@@ -608,6 +598,7 @@ def fn_build_check_record
 			gl$=cnvrt$('N 3',tdep(j1,2))&cnvrt$('N 6',tdep(j1,3))&cnvrt$('N 3',tdep(j1,4))
 			sd5$='Gross Pay'
 			goto L4990
+			
 			L4910: !
 			if j=2 then sd5$='Federal WH' : gl$=gln$(1)
 			if j=3 then sd5$='FICA WH' : gl$=gln$(2) : fica0=val(ded$(j))
@@ -617,6 +608,7 @@ def fn_build_check_record
 			if j=26 then gl$=gln$(1): sd5$='eic' : goto L4990 ! use federal
 			if j=27 then goto L4990 ! skip tips i think
 			! If J=28 Then gL$=GLN$(1): sD5$='Meals' : Goto 4890 ! use wages
+			
 			L4990: !
 			cd1=1
 				! pr 'gl$="'&gl$&'"'

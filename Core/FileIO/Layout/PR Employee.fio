@@ -8,7 +8,7 @@ recl=244
 no             ,  Employee Number                      	,  n    8                 , ! Pos=  1       eno     
 name           ,  Name                                 	,  c   30                 , ! Pos=  9       em$(1)  
 addr           ,  Address                              	,  c   30                 , ! Pos= 39       em$(2)  
-csz            ,  City State Zip Code                 	,  c   30                 , ! Pos= 69       em$(3)  
+csz            ,  City State Zip Code                 	,  c   30                 , ! Pos= 69       em$(3)  comboFio(CO City State Zip)
 ss             ,  Social Security Number              	,  c   11                 , ! Pos= 99       ss$     
 rs1            ,  Race                                  	,  n    1                 , ! Pos=110       rs(1) 
 !                 0 - Unknown                                                               

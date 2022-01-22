@@ -1,6 +1,4 @@
-! formerly S:\acsPR\newprReg1
-! Payroll Register
- 
+
 ! r: general setup: libraries, dims, fnTop,fncno,read defaults, open files, etc
 	autoLibrary
 	on error goto Ertn
@@ -23,25 +21,25 @@
 	newdedcode_Deduct =1
 	newdedcode_Add    =2
 	newdedcode_Benefit=3
-	open #12: "Name=[Q]\CLmstr\BankMstr.h[cno],KFName=[Q]\CLmstr\BankIdx1.h[cno],Shr",i,i,k ioerr BankReadFinis
+	open #12: 'Name=[Q]\CLmstr\BankMstr.h[cno],KFName=[Q]\CLmstr\BankIdx1.h[cno],Shr',i,i,k ioerr BankReadFinis
 	read #12,using 'form pos 57,G 8',key=lpad$(str$(bankcode),2),release: cl_bank_last_check$ nokey ignore
 	close #12: ioerr ignore
 	BankReadFinis: !
 	
-	open #1: "Name=[Q]\PRmstr\prCode.h[cno],Shr",internal,input ioerr CkNoReadFinis
+	open #1: 'Name=[Q]\PRmstr\prCode.h[cno],Shr',internal,input ioerr CkNoReadFinis
 	read #1,using 'form pos 5,N 8': ckno
 	close #1:
 	CkNoReadFinis: !
 	
 	ckno+=1
-	d1$=cnvrt$("pic(zzzzzzzz)",fnPayPeriodEndingDate)
+	d1$=cnvrt$('pic(zzzzzzzz)',fnPayPeriodEndingDate)
 	ppd=val(d1$(5:6))*10000+val(d1$(7:8))*100+val(d1$(3:4))
  
-	if trim$(cl_bank_last_check$)<>"" then ckno=val(cl_bank_last_check$)+1 conv ignore
+	if trim$(cl_bank_last_check$)<>'' then ckno=val(cl_bank_last_check$)+1 conv ignore
  
  
-	open #hEmployee=fnH: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr",i,i,k
-	open #h_dd=fnH: "Name=[Q]\PRmstr\DD.h[cno],KFName=[Q]\PRmstr\DDidx1.h[cno],Shr",i,i,k
+	open #hEmployee=fnH: 'Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr',i,i,k
+	open #hDd=fnH: 'Name=[Q]\PRmstr\DD.h[cno],KFName=[Q]\PRmstr\DDidx1.h[cno],Shr',i,i,k
 	open #hCheck1=fnH: 'Name=[Q]\PRmstr\payrollchecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno],Shr',i,i,k
 	open #hCheck3=fnH: 'Name=[Q]\PRmstr\payrollchecks.h[cno],KFName=[Q]\PRmstr\checkidx3.h[cno],Shr',i,i,k
 ! /r
@@ -51,12 +49,12 @@ if fnprocess=1 then goto StartReport else goto AskCheckNo
 AskCheckNo: ! r:
 	fnTos
 	respc=0
-	fnLbl(1,1,"Beginning Check Number:",20,1)
-	fnTxt(1,23,8,0,1,'30',0," ")
+	fnLbl(1,1,'Beginning Check Number:',20,1)
+	fnTxt(1,23,8,0,1,'30',0,' ')
 	resp$(respc+=1)=str$(ckno)
-	fnLbl(1,1,"",34,1) ! bigger screen
-	fnLbl(2,1,"Payroll Date:",20,1)
-	fnTxt(2,23,10,0,1,"1",0,"For current payroll, always use the calculation date.  You can reprint older payroll registers by using that date.")
+	fnLbl(1,1,'',34,1) ! bigger screen
+	fnLbl(2,1,'Payroll Date:',20,1)
+	fnTxt(2,23,10,0,1,'1',0,'For current payroll, always use the calculation date.  You can reprint older payroll registers by using that date.')
 	resp$(respc+=1)=str$(ppd)
 	fnChk(4,2,'Combine both registers into one multi-page report',50)
 	resp$(resp_append_reg1:=respc+=1)=append_reg1$
@@ -66,8 +64,8 @@ AskCheckNo: ! r:
 	else
 		resp$(resp_include_tips_in_other_wh:=respc+=1)='False'
 	end if
-	fnCmdKey("&Next",1,1,0,"Proceed with pr the payroll register." )
-	fnCmdKey("E&xit",5,0,1,"Returns to menu")
+	fnCmdKey('&Next',1,1,0,'Proceed with pr the payroll register.' )
+	fnCmdKey('E&xit',5,0,1,'Returns to menu')
 	ckey=fnAcs(mat resp$)
 	if ckey=5 then goto Xit
 	ckno=val(resp$(1))
@@ -109,19 +107,19 @@ LoopTop: ! r: main loop
 	dim ttdc(10)
 	dim tcp(32)
 	mat thc=(0) : mat tcp=(0) : mat ttdc=(0) : holdrealckno=realckno=0
-	checkkey$=cnvrt$("pic(ZZZZZZZ#)",eno)&"         "
+	checkkey$=cnvrt$('pic(ZZZZZZZ#)',eno)&'         '
 	dirdep$=rpad$(str$(eno),10)
-	dd$=""
-	read #h_dd,using "form pos 1,C 10,C 1,N 9,N 2,N 17",key=dirdep$: key$,dd$,rtn,acc,acn nokey ignore
-	! if env$('client')="West Rest Haven" then goto L690
-	a=pos(rtrm$(em$)," ",1) : b=pos(rtrm$(em$)," ",a+1)
-	em$=rtrm$(em$(max(a,b):30))&" "&em$(1:a) error ignore
+	dd$=''
+	read #hDd,using 'form pos 1,C 10,C 1,N 9,N 2,N 17',key=dirdep$: key$,dd$,rtn,acc,acn nokey ignore
+	! if env$('client')='West Rest Haven' then goto L690
+	a=pos(rtrm$(em$),' ',1) : b=pos(rtrm$(em$),' ',a+1)
+	em$=rtrm$(em$(max(a,b):30))&' '&em$(1:a) error ignore
 	! L690: !
 	restore #hCheck1,key>=checkkey$: nokey LoopTop
 	do
 		dim tdc(10)
 		dim cp(32)
-		read #hCheck1,using "form pos 1,N 8,n 3,PD 6,N 7,5*PD 3.2,37*PD 5.2": heno,tdn,prd,realckno,mat tdc,mat cp eof EoCheck1
+		read #hCheck1,using 'form pos 1,N 8,n 3,PD 6,N 7,5*PD 3.2,37*PD 5.2': heno,tdn,prd,realckno,mat tdc,mat cp eof EoCheck1
 		if heno=eno and prd=fndate_mmddyy_to_ccyymmdd(ppd) then 
 			if prd=fndate_mmddyy_to_ccyymmdd(ppd) then holdrealckno=realckno
 			mat tcp=tcp+cp : mat ttdc=ttdc+tdc
@@ -153,12 +151,12 @@ LoopTop: ! r: main loop
 		thc(j)=ttdc(j)
 	next j
 	if holdrealckno=0 then ckn2=ckno : ckno+=1 else ckn2=holdrealckno
-	if uprc$(dd$)<>"Y" then
+	if uprc$(dd$)<>'Y' then
 		pr #255,using L900: ckn2,eno,em$(1:11),mat thc,tothrs,tcp(31),tcp(3),tcp(2),tcp(1),tcp(4),other_wh,tcp(32) pageoflow PgOf
 		L900: form pos 1,n 5,n 8,x 1,c 12,6*n 7.2,7*n 9.2,skip 1
 	else
 		if tcp(22)=0 then tcp(22)=tcp(32)
-		pr #255,using L930: "DD",eno,em$(1:11),mat thc,tothrs,tcp(31),tcp(3),tcp(2),tcp(1),tcp(4),other_wh,tcp(22) pageoflow PgOf
+		pr #255,using L930: 'DD',eno,em$(1:11),mat thc,tothrs,tcp(31),tcp(3),tcp(2),tcp(1),tcp(4),other_wh,tcp(22) pageoflow PgOf
 		L930: form pos 1,c 5,n 8,x 1,c 12,6*n 7.2,7*n 9.2,skip 1
 	end if
 	total_hours+=sum(mat thc)
@@ -178,18 +176,18 @@ PgOf: ! r:
 	gosub PrHeader
 continue  ! /r
 PrHeader: ! r:
-	pr #255,using "form pos 1,c 25": "Page "&str$(pgno+=1)&" "&date$
-	pr #255: "\qc  {\f221 \fs22 \b "&env$('cnam')&"}"
-	pr #255: "\qc  {\f201 \fs20 \b Payroll Check Register}" ! pr #255: "\qc  {\f201 \fs20 \b "&env$('program_caption')&"}"
-	pr #255: "\qc  {\f181 \fs16 \b Payroll Date: "&cnvrt$("pic(zz/zz/zz)",ppd)&"}"
-	pr #255: "\ql   "
-	pr #255: tab(29);"<----------------Hours----------------->";
-	pr #255: tab(71);"<-Pay->";
-	pr #255: tab(79);"<-----------------Deductions---------------->";
-	pr #255: tab(129);"Net"
-	pr #255: "CkNo   EmpNo  Name";
-	pr #255: tab(29);"  Reg    O/T   Sick    Vac    Hol  Total";
-	pr #255: tab(71);"  Total   Med WH     FICA  Federal    State    Other      Pay"
+	pr #255,using 'form pos 1,c 25': 'Page '&str$(pgno+=1)&' '&date$
+	pr #255: '\qc  {\f221 \fs22 \b '&env$('cnam')&'}'
+	pr #255: '\qc  {\f201 \fs20 \b Payroll Check Register}' ! pr #255: '\qc  {\f201 \fs20 \b '&env$('program_caption')&'}'
+	pr #255: '\qc  {\f181 \fs16 \b Payroll Date: '&cnvrt$('pic(zz/zz/zz)',ppd)&'}'
+	pr #255: '\ql   '
+	pr #255: tab(29);'<----------------Hours----------------->';
+	pr #255: tab(71);'<-Pay->';
+	pr #255: tab(79);'<-----------------Deductions---------------->';
+	pr #255: tab(129);'Net'
+	pr #255: 'CkNo   EmpNo  Name';
+	pr #255: tab(29);'  Reg    O/T   Sick    Vac    Hol  Total';
+	pr #255: tab(71);'  Total   Med WH     FICA  Federal    State    Other      Pay'
 return  ! /r
 Finis: ! r:
 	gosub PrTotals
@@ -197,7 +195,7 @@ Finis: ! r:
 	! close #2: ioerr ignore
 	close #hCheck1: ioerr ignore
 	close #hCheck3: ioerr ignore
-	close #h_dd: ioerr ignore
+	close #hDd: ioerr ignore
 	if append_reg1 then
 		if env$('ACSDeveloper')<>'' then
 			pr #255: ''
@@ -210,6 +208,6 @@ Finis: ! r:
 		fncloseprn
 	end if
 	fnpayroll_register_2(0,include_tips_in_other_wh,append_reg1,ppd)
-goto Xit ! /r let fnchain("S:\acsPR\newprReg2")
+goto Xit ! /r let fnchain('S:\acsPR\newprReg2')
 Xit: fnXit
 include: ertn

@@ -190,11 +190,15 @@ def fn_hfLayoutRead(hfLayoutFilename$*256,mat hfDataAll$,mat hfLabel$,mat hfFiel
 								! [Q]\UBmstr
 								if fn_amc('UB Customer'        	,'[Q]\UBmstr\Customer.h[cno]          ,1,10,41,30,[Q]\UBmstr\ubIndex.h[cno]') then goto CfGotIt
 								if fn_amc('U4 Meter Type'      	,'[Q]\UBmstr\MeterType.h[cno]         ,1, 5, 6,40,[Q]\UBmstr\MeterTypeIdx.h[cno]') then goto CfGotIt
+								! [Q]\PRmstr
+								if fn_amc('PR Employee'        	,'[Q]\PRmstr\Employee.h[cno]          ,1, 8, 9,30,[Q]\PRmstr\EmployeeIdx-no.h[cno]') then goto CfGotIt
 								
 							! /r
 							pr 'unrecognized table passed to ComboFio'
 							pr 'unrecognized table='&cfTable$
 							pr 'more code suggested'
+							pr 'somewhere around line 200 in '
+							pr 'C:\ACS\Dev-5\Core\HamsterFio.br.brs'
 							pause
 							CfGotIt: !
 							
