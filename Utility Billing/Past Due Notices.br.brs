@@ -244,7 +244,7 @@ def fn_bldR1 ! BUILD RECORD IN pr ARRAY
 	r1$(73)=ltrm$(cnvrt$('n 10.2',bal+(g(12)-g(11)))) ! balance plus penalty trimmed
 	if env$('client')='White Hall' then 
 		! r1$(73)=ltrm$(cnvrt$('n 10.2',bal+10)) ! balance plus $10 penalty trimmed
-		r1$(73)=ltrm$(cnvrt$('n 10.2',bal+25+round(bal*.05,2))) ! new balance will be old balance + $25 + 5% of balance
+		r1$(73)=ltrm$(cnvrt$('n 10.2',bal+25)) ! +round(bal*.05,2))) ! new balance will be old balance + $25 + 5% of balance 5% already charged 
 	end if
 	r1$(74)=cnvrt$('n 10.2',bal-g(11)) ! past due balance
 	r1$(75)=ltrm$(cnvrt$('n 10.2',bal-g(11))) ! past due balance trimed
