@@ -1,10 +1,7 @@
-! Replace S:\Core\Print\1099-Misc.br
-! library for all 1099 forms
-dim a$(3)*40,box(11),ph$*12
+! Very similar to S:\Core\Print\1099-NEC.br
 
 ! r: testing zone
 	fn_setup
-
 	if fn1099MiscAsk (seltpN,typeN,minAmt,beg_date,end_date) then
 		debug=1
 		fn_1099testPrint
@@ -12,25 +9,34 @@ dim a$(3)*40,box(11),ph$*12
 	end
 ! /r
 
-
 def fn_1099testPrint
 	! r: test values
 	dim testAddr$(3)*60
 	testAddr$(1)='Recipient Addr part 1'
 	testAddr$(2)='Recipient Addr part 2'
 	testAddr$(3)='Recipient City State and Zip'
-	dim testBox(10)
+	dim testBox(20)
 	!            zzzzzzzzzz
-	testBox(1 )=9000000100
-	testBox(2 )=9000000200
-	testBox(3 )=9000000300
-	testBox(4 )=9000000400
-	testBox(5 )=9000000500
-	testBox(6 )=9000000600
-	testBox(7 )=9000000700
-	testBox(8 )=9000000800
+	testBox(1 )=1000000100
+	testBox(2 )=2000000200
+	testBox(3 )=3000000300
+	testBox(4 )=4000000400
+	testBox(5 )=5000000500
+	testBox(6 )=6000000600
+	testBox(7 )=7000000700
+	testBox(8 )=8000000800
 	testBox(9 )=9000000900
-	testBox(10)=9000001000
+	testBox(10)=1001001000
+	testBox(11)=1101101100
+	testBox(12)=1201201200
+	testBox(13)=1301301300
+	testBox(14)=1401401400
+	testBox(15)=1501501500
+	testBox(16)=1601601600
+	testBox(17)=1701701700
+	testBox(18)=1801801800
+	testBox(19)=1901901900
+	testBox(20)=2002002000
 	! /r
 	disableCopyAWarning=1
 	fn_1099print('account1','Recipient One'  ,mat testAddr$,'111-11-1111',mat testBox)
@@ -39,31 +45,28 @@ def fn_1099testPrint
 	disableCopyAWarning=0
 	fn_1099print_close
 fnend
-! dim companyNameAddr$(3)*40,ss$*11
-dim empAddr$(3)*30,box(11)
+
+! dim empAddr$(3)*30,box(17)
 def fn_setup
 	if ~setup then
 		setup=1
 		autoLibrary
 		on error goto Ertn
 		! r: constants
-		dim ml$(0)*128
 		dim resp$(128)*256
 		dim optCopy$(5)*72
 		optCopy$(1)='A - For Internal Revenue Service Center'
 		optCopy$(2)='1 - For State Tax Department'
 		optCopy$(3)='B - For Recipient'
 		optCopy$(4)='C - For Payer'
-		optCopy$(5)='2 - To be filed with recipient;;s state income tax return, when required'
-	dim copyCurrent$*72
-
-	dim copyFile$(5)*128,ssnMask(5)
-	taxYear$=date$(days(date$)-120,'CCYY')
-	copyFile$(1)='S:\Core\pdf\'&taxYear$&'\1099-Misc\Copy A.pdf' : ssnMask(1)=0
-	copyFile$(2)='S:\Core\pdf\'&taxYear$&'\1099-Misc\Copy 1.pdf' : ssnMask(2)=0
-	copyFile$(3)='S:\Core\pdf\'&taxYear$&'\1099-Misc\Copy B.pdf' : ssnMask(3)=0
-	copyFile$(4)='S:\Core\pdf\'&taxYear$&'\1099-Misc\Copy C.pdf' : ssnMask(4)=1
-	copyFile$(5)='S:\Core\pdf\'&taxYear$&'\1099-Misc\Copy 2.pdf' : ssnMask(5)=1
+		optCopy$(5)='2 - To be filed with recipient''s state income tax return, when required'
+		dim copyFile$(5)*128,ssnMask(5)
+		taxYear$=date$(days(date$)-120,'CCYY')
+		copyFile$(1)='S:\Core\pdf\'&taxYear$&'\1099-Misc\Copy A.pdf' : ssnMask(1)=0
+		copyFile$(2)='S:\Core\pdf\'&taxYear$&'\1099-Misc\Copy 1.pdf' : ssnMask(2)=0
+		copyFile$(3)='S:\Core\pdf\'&taxYear$&'\1099-Misc\Copy B.pdf' : ssnMask(3)=0
+		copyFile$(4)='S:\Core\pdf\'&taxYear$&'\1099-Misc\Copy C.pdf' : ssnMask(4)=1
+		copyFile$(5)='S:\Core\pdf\'&taxYear$&'\1099-Misc\Copy 2.pdf' : ssnMask(5)=1
 		! /r
 	end if
 fnend
@@ -74,7 +77,7 @@ def library fn1099MiscAsk(&seltpN,&typeN,&minAmt,&beg_date,&end_date)
 fnend
 def fn_ask(&seltpN,&typeN,&minAmt,&beg_date,&end_date; ___, _
 	returnN,rc,lc,mylen,mypos,mylen,resc_taxYear,respc_deduction,respc_minAmt,respc_phone, _
-	respc_Print1099,respc_perPage,respc_export_ams,resp_export_file, _ 
+	respc_Print1099,respc_perPage,respc_export_ams,resp_export_file, _
 	ckey_defaultFilename,ckey_margins,ckey_test)
 	! local retained values: awi_setup$, taxYear$, mat deductionFullName$, mat deductionOption$,deductionOptionCount, and many many more
 	if awi_setup$<>env$('cursys')&env$('cno') then ! r: read or set values for ASK_INFO screen
@@ -221,7 +224,7 @@ def fn_ask(&seltpN,&typeN,&minAmt,&beg_date,&end_date; ___, _
 		fnpcreg_write('Copy Current',str$(copyCurrentN))
 		fnpcreg_write('Print 1099',destinationOpt$(1))
 		fnpcreg_write('Enable Background',enableBackground$)
-		fnpcreg_write('2 Per Page',twoPerPage$)
+		fnpcreg_write('2 Per Page',perPage$)
 		fnpcreg_write('Export 1',destinationOpt$(2))
 		fnureg_write('1099 - Export Filename',output_filename$)
 		fncreg_write('Phone Number',ph$)
@@ -259,7 +262,7 @@ fnend
 			left=      val(amResp$(3))
 		end if
 	fnend
-	SetDefaultMargins: ! r: 
+	SetDefaultMargins: ! r:
 		defaultMargin$(1)=           '5'  	! form 1 top margin
 		defaultMargin$(2)=         '144'  	! form 2 top margin
 		defaultMargin$(3)=           '5'  	! left
@@ -290,19 +293,19 @@ def fn_1099print(vn$*8,nam$*30,mat empAddr$,ss$*11,mat box; ___, _
 		form1y 	=fnPcRegReadN('form 1 Y'	,val(defaultMargin$(1)))
 		form2y 	=fnPcRegReadN('form 2 Y'	,val(defaultMargin$(2)))
 		left   	=fnPcRegReadN('X'        	,val(defaultMargin$(3)))
-		
-		! pr 'printing with form1y =';form1y 
-		! pr 'printing with  form2y=';form2y  
-		! pr 'printing with form3y =';form3y 
-		! pr 'printing with  left  =';left    
+
+		! pr 'printing with form1y =';form1y
+		! pr 'printing with  form2y=';form2y
+		! pr 'printing with form3y =';form3y
+		! pr 'printing with  left  =';left
 		! pause
-		
+
 		fnPcReg_read('2 Per Page',perPage$,'True' )
 		fnPcReg_read('Enable Background',enableBackground$,'True' )
 		fnureg_read('1099 - Export Filename',output_filename$,os_filename$(env$('Desktop')&'\ACS [TaxYear] 1099 Export (Company [CompanyNumber]).txt'))
-		fncreg_read('1099 - Your Phone Number',ph$)
-		fncreg_read('1099 - Copy Current'    ,copyCurrent$,optCopy$(1)) : copyCurrent=max(1,srch(mat optCopy$,copyCurrent$))
-
+		dim ph$*12
+		fnCreg_read('Phone Number',ph$)
+		copyCurrentN=fnPcRegReadN('Copy Current',2)
 		if ten99Export$='True' then
 			dim output_filename$*256
 			output_filename$=srep$(output_filename$,'[CompanyNumber]',env$('cno'))
@@ -311,9 +314,9 @@ def fn_1099print(vn$*8,nam$*30,mat empAddr$,ss$*11,mat box; ___, _
 			output_filename$=srep$(output_filename$,'[TaxYear]',taxYear$)
 			output_filename$=srep$(output_filename$,'[taxyear]',taxYear$)
 			output_filename$=srep$(output_filename$,'[TAXYEAR]',taxYear$)
-			open #hExport=fnH: 'Name='&br_filename$(output_filename$)&',REPLACE',display,output ioerr ASK_INFO
+			open #hExport=fnH: 'Name='&br_filename$(output_filename$)&',REPLACE',d,o ioerr ASK_INFO
 		else
-			fnpa_open('',copyCurrent$,'PDF')
+			fnpa_open('',optCopy$(copyCurrentN),'PDF')
 		end if
 	end if ! /r
 
@@ -321,12 +324,12 @@ def fn_1099print(vn$*8,nam$*30,mat empAddr$,ss$*11,mat box; ___, _
 		! r: export one
 		pr #hExport: '01 ';' '
 		pr #hExport: '02 ';ph$
-		pr #hExport: '03 ';a$(1)
+		pr #hExport: '03 ';companyNameAddr$(1)
 		pr #hExport: '04 ';box(1)
 		pr #hExport: '05 ';' '
-		pr #hExport: '06 ';a$(2)
+		pr #hExport: '06 ';companyNameAddr$(2)
 		pr #hExport: '07 ';box(2)
-		pr #hExport: '08 ';a$(3)
+		pr #hExport: '08 ';companyNameAddr$(3)
 		pr #hExport: '09 ';box(3)
 		pr #hExport: '10 ';box(4)
 		pr #hExport: '11 ';fed$
@@ -355,46 +358,73 @@ def fn_1099print(vn$*8,nam$*30,mat empAddr$,ss$*11,mat box; ___, _
 		! /r
 	else
 		! r: pr one
-		column1=15 +left
-		column2=85+left+17
-		column3=119 +left+18
+		column1 	= left +  15
+		column2 	= left + 102
+		column3 	= left + 137
+		column4 	= left + 168
 		ten99Count+=1
 		if ten99Count=1 then yOffset=topmargin
 		if ten99Count=2 then yOffset=bottom
 		if enableBackground$='True' and ten99Count=1 then
-			fnpa_background(CopyFile$(copyCurrent))
-		end if
-		if debug then
-			for tmp=1 to 10
-				fnpa_txt('line '&str$(tmp),1,fn_line(tmp))
-			nex tmp
+			fnpa_background(CopyFile$(copyCurrentN))
 		end if
 		fnpa_FontSize
-		fnpa_txt(a$(1)(1:30),column1,fn_line(1))
-		fnpa_txt(a$(2)(1:30),column1,fn_line(1)+5)
-		fnpa_txt(a$(3)(1:30),column1,fn_line(1)+10)
-		fnpa_txt(ph$,column1,fn_line(1)+20)
-		fnpa_txt(cnvrt$('pic(zzzzzzzzzz.zz',box(1)),column2,fn_line(1))
-		fnpa_txt(cnvrt$('pic(zzzzzzzzzz.zz',box(2)),column2,fn_line(2))
-		fnpa_txt(cnvrt$('pic(zzzzzzzzzz.zz',box(3)),column2,fn_line(3))
-		fnpa_txt(cnvrt$('pic(zzzzzzzzzz.zz',box(4)),column2,fn_line(5)+5) ! fed withheld 
-		fnpa_txt(fed$,column1,fn_line(4))
-		fnpa_txt(ss$,column1+45,fn_line(4))
-		fnpa_txt(cnvrt$('pic(zzzzzzzzzz.zz',box(5)),column2,fn_line(4))
-		fnpa_txt(cnvrt$('pic(zzzzzzzzzz.zz',box(6)),column3,fn_line(4))
-		fnpa_txt(nam$(1:30),column1,fn_line(5)-8)
-		fnpa_txt(empAddr$(1),column1,fn_line(5)+5) ! address line 1
-		if udim(mat empAddr$)=2 then
-			fnpa_txt(empAddr$(2),column1,fn_line(5)+18) !  CSZ
-		else if udim(mat empAddr$)=3 then
-			fnpa_txt(empAddr$(2),column1,fn_line(5)+8) ! address line 2
-			fnpa_txt(empAddr$(3),column1,fn_line(5)+18) !  CSZ
-		else
-			pr 'udim(mat empAddr$)=';udim(mat empAddr$);' this is unexpected by '&program$ : pause
-		end if
-		fnpa_txt(cnvrt$('pic(zzzzzzzzzz.zz',box(7)),column2,fn_line(1)+21) ! net income
-		fnpa_txt(cnvrt$('pic(zzzzzzzzzz.zz',box(8)),column3,fn_line(5))
-		fnpa_txt(vn$,column1,fn_line(9))
+		! ! r: draw developer lines
+		! if env$('acsDeveloper')<>'' then
+		! 	for lineN=1 to udim(mat lineXy)
+		! 		fnpa_txt(str$(lineN)  ,left+1,fn_line(lineN))
+		! 		fnpa_txt('('&str$(lineXy(lineN))&')' ,left+10,fn_line(lineN))
+		! 		fnpa_txt(rpt$('_ ',50),left+1,fn_line(lineN))
+		! 	nex lineN
+		! end if
+		! ! /r
+		! r: print the text in the boxes
+			! r: left side
+				! PAYER'S name, street address, city, etc
+				fnpa_txt(companyNameAddr$(1),column1,fn_line(1))
+				fnpa_txt(companyNameAddr$(2),column1,fn_line(2))
+				fnpa_txt(companyNameAddr$(3),column1,fn_line(3))
+				fnpa_txt(ph$,column1,fn_line(5))
+				fnpa_txt(fed$,column1,fn_line(7))   ! PAYER'S TIN
+				fnpa_txt(ss$,column1+45,fn_line(7)) ! RECIPIENT'S TIN
+				fnpa_txt(nam$,column1,fn_line(9))  ! RECIPIENT'S name
+				if udim(mat empAddr$)=2 then
+					fnpa_txt(empAddr$(1),column1,fn_line(10)) ! address line 1
+					fnpa_txt(empAddr$(2),column1,fn_line(12)) !  CSZ
+				else if udim(mat empAddr$)=3 then
+					fnpa_txt(rtrm$(empAddr$(1))&'  '&trim$(empAddr$(2)),column1,fn_line(10)) ! address line 2
+					fnpa_txt(empAddr$(3),column1,fn_line(12)) !  CSZ
+				else
+					pr 'udim(mat empAddr$)=';udim(mat empAddr$);' this is unexpected by '&program$ : pause
+				end if
+			!/r
+			! r: right side (column2 and column3)
+				fnpa_txt(cnvrt$('pic(zzzzzzzzzz.zz',box(1) ),column2   		,fn_line(1) )
+				fnpa_txt(cnvrt$('pic(zzzzzzzzzz.zz',box(2) ),column2   		,fn_line(4) )
+				fnpa_txt(cnvrt$('pic(zzzzzzzzzz.zz',box(3) ),column2   		,fn_line(6) )
+				fnpa_txt(cnvrt$('pic(zzzzzzzzzz.zz',box(6) ),column3   		,fn_line(6) ) ! fed withheld
+				fnpa_txt(cnvrt$('pic(zzzzzzzzzz.zz',box(5) ),column2   		,fn_line(7) )
+				fnpa_txt(cnvrt$('pic(zzzzzzzzzz.zz',box(6) ),column3   		,fn_line(7) )
+				if box(7)>5000 then
+					fnpa_txt('X'                                ,column2+21 	,fn_line(9))
+				end if
+				fnpa_txt(cnvrt$('pic(zzzzzzzzzz.zz',box(8) ),column3    	,fn_line(9) )
+				fnpa_txt(cnvrt$('pic(zzzzzzzzzz.zz',box(9) ),column2    	,fn_line(11))
+				fnpa_txt(cnvrt$('pic(zzzzzzzzzz.zz',box(10)),column3    	,fn_line(11))
+				fnpa_txt(cnvrt$('pic(zzzzzzzzzz.zz',box(11)),column2    	,fn_line(12))
+				fnpa_txt(cnvrt$('pic(zzzzzzzzzz.zz',box(12)),column3    	,fn_line(12))
+				fnpa_txt(vn$                                   ,column1    	,fn_line(13))
+				fnpa_txt(cnvrt$('pic(zzzzzzzzzz.zz',box(13)),column2    	,fn_line(13))
+				fnpa_txt(cnvrt$('pic(zzzzzzzzzz.zz',box(14)),column3    	,fn_line(13))
+				fnpa_txt(cnvrt$('pic(zzzzzzzzzz.zz',box(15)),column2    	,fn_line(14))
+				fnpa_txt(cnvrt$('pic(zzzzzzzzzz.zz',box(16)),column3    	,fn_line(14))
+				fnpa_txt(cnvrt$('pic(zzzzzzzzzz.zz',box(17)),column4    	,fn_line(14))
+				fnpa_txt(cnvrt$('pic(zzzzzzzzzz.zz',box(18)),column2    	,fn_line(15))
+				fnpa_txt(cnvrt$('pic(zzzzzzzzzz.zz',box(19)),column3    	,fn_line(15))
+				fnpa_txt(cnvrt$('pic(zzzzzzzzzz.zz',box(20)),column4    	,fn_line(15))
+			! /r
+		! /r
+
 		if perPage$='False' or ten99Count=2 then
 			fnpa_newpage
 			ten99Count=0
@@ -404,22 +434,28 @@ def fn_1099print(vn$*8,nam$*30,mat empAddr$,ss$*11,mat box; ___, _
 	Xit: !
 fnend
 	def fn_line(lineNumber)
-		if lineNumber=1  then
-			lineReturn=yOffset+10
-		else if lineNumber=2  then
-			lineReturn=yOffset+23
-		else if lineNumber=3 then
-			lineReturn=yOffset+32
-		else if lineNumber=4 then
-			lineReturn=yOffset+43+2+4
-		else if lineNumber=5 then
-			lineReturn=yOffset+56+2+8
-		else if lineNumber>5 then
-			lineReturn=yOffset+56+2+((lineNumber-5)*13)
-		else
-			pr 'i dunno' : pause
+		! inherrits local yOffset
+		! retains setup_line,mat lineXy
+		if ~setup_line then
+			setup_line=1
+			dim lineXy(15)
+			lineXy( 1)=15 ! PAYER'S name and Box 1 Rents
+			lineXy( 2)=19 ! PAYER's addr
+			lineXy( 3)=23 ! PAYER's csz
+			lineXy( 4)= 28 ! Box 2 Royalties
+			lineXy( 5)= 32 !
+			lineXy( 6)= 36 ! box 2
+			lineXy( 7)= 50 ! PAYER's TIN
+			lineXy( 8)= 54 ! box 5b,6b
+			lineXy( 9)= 66 ! RECIPIENT'S name  street address
+			lineXy(10)= 75 ! box 7,8
+			lineXy(11)= 79 ! recipient's CSZ
+			lineXy(12)= 90 ! City or town, box 11,12
+			lineXy(13)=103 ! Account number, FATCA filing, box 13,14
+			lineXy(14)=113 ! box 15a,16a,17a
+			lineXy(15)=117 ! box 15b,16b,17b (box(18-20))
 		end if
-		fn_line=lineReturn
+		fn_line=lineXy(lineNumber)+yOffset
 	fnend
 def library fn1099MiscPrintClose
 	if ~setup then fn_setup

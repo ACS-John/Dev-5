@@ -5,9 +5,6 @@ on error goto Ertn
 dim tab$*1
 tab$=chr$(9)
 
-
-
-
 dim serviceName$(10)*20,srv$(10)
 fnGetServices(mat serviceName$,mat srv$)
 
@@ -78,7 +75,7 @@ Screen1: ! r:
 dim c$(0)*200
 dim cN(0)
 if exportNow then
-	open #hOut=fnH: 'Name=SAVE:'&fnsave_as_path$&'\*.tab,RecL=2048,replace',display,output ioerr Screen1
+	open #hOut=fnH: 'Name=SAVE:'&fnsave_as_path$&'\*.tab,RecL=2048,replace',d,o ioerr Screen1
 else
 	hOut=fnopenprn
 end if

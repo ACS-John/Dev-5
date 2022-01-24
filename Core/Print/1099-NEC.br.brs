@@ -1,17 +1,13 @@
-! Replace S:\Core\Print\1099-NEC.br
-! library for all 1099 forms
-
+! Very similar to S:\Core\Print\1099-Misc.br
 
 ! r: testing zone
 	fn_setup
-
 	if fn1099NecAsk (seltpN,typeN,minAmt,beg_date,end_date) then
 		debug=1
 		fn_1099testPrint
 	end if
 	end
 ! /r
-
 
 def fn_1099testPrint
 	! r: test values
@@ -39,7 +35,7 @@ def fn_1099testPrint
 	disableCopyAWarning=0
 	fn_1099print_close
 fnend
-! dim companyNameAddr$(3)*40,ss$*11
+
 dim empAddr$(3)*30,box(11)
 def fn_setup
 	if ~setup then
@@ -53,23 +49,23 @@ def fn_setup
 		optCopy$(2)='1 - For State Tax Department'
 		optCopy$(3)='B - For Recipient'
 		optCopy$(4)='C - For Payer'
-		optCopy$(5)='2 - To be filed with recipient;;s state income tax return, when required'
-	dim copyFile$(5)*128,ssnMask(5)
-	taxYear$=date$(days(date$)-120,'CCYY')
-	copyFile$(1)='S:\Core\pdf\'&taxYear$&'\1099-Nec\Copy A.pdf' : ssnMask(1)=0
-	copyFile$(2)='S:\Core\pdf\'&taxYear$&'\1099-Nec\Copy 1.pdf' : ssnMask(2)=0
-	copyFile$(3)='S:\Core\pdf\'&taxYear$&'\1099-Nec\Copy B.pdf' : ssnMask(3)=0
-	copyFile$(4)='S:\Core\pdf\'&taxYear$&'\1099-Nec\Copy C.pdf' : ssnMask(4)=1
-	copyFile$(5)='S:\Core\pdf\'&taxYear$&'\1099-Nec\Copy 2.pdf' : ssnMask(5)=1
+		optCopy$(5)='2 - To be filed with recipient''s state income tax return, when required'
+		dim copyFile$(5)*128,ssnMask(5)
+		taxYear$=date$(days(date$)-120,'CCYY')
+		copyFile$(1)='S:\Core\pdf\'&taxYear$&'\1099-Nec\Copy A.pdf' : ssnMask(1)=0
+		copyFile$(2)='S:\Core\pdf\'&taxYear$&'\1099-Nec\Copy 1.pdf' : ssnMask(2)=0
+		copyFile$(3)='S:\Core\pdf\'&taxYear$&'\1099-Nec\Copy B.pdf' : ssnMask(3)=0
+		copyFile$(4)='S:\Core\pdf\'&taxYear$&'\1099-Nec\Copy C.pdf' : ssnMask(4)=1
+		copyFile$(5)='S:\Core\pdf\'&taxYear$&'\1099-Nec\Copy 2.pdf' : ssnMask(5)=1
 		! /r
 	end if
 fnend
 
 def library fn1099NecAsk(&seltpN,&typeN,&minAmt,&beg_date,&end_date)
 	if ~setup then fn_setup
-	fn1099NecAsk=fn_ask1099Info(seltpN,typeN,minAmt,beg_date,end_date)
+	fn1099NecAsk=fn_ask(seltpN,typeN,minAmt,beg_date,end_date)
 fnend
-def fn_ask1099Info(&seltpN,&typeN,&minAmt,&beg_date,&end_date; ___, _
+def fn_ask(&seltpN,&typeN,&minAmt,&beg_date,&end_date; ___, _
 	returnN,rc,lc,mylen,mypos,mylen,resc_taxYear,respc_deduction,respc_minAmt,respc_phone, _
 	respc_Print1099,respc_perPage,respc_export_ams,resp_export_file, _ 
 	ckey_defaultFilename,ckey_margins,ckey_test)
@@ -174,7 +170,6 @@ def fn_ask1099Info(&seltpN,&typeN,&minAmt,&beg_date,&end_date; ___, _
 		beg_date=val(taxYear$&'0101')
 		end_date=val(taxYear$&'1231')
 		copyCurrentN=srch(mat optCopy$,resp$(respc_copyCurrent))
-		if copyCurrentN<=0 then pause
 		enableBackground$=resp$(respc_enableBackground)
 		perPage$=resp$(respc_perPage)
 		destinationOpt$(1)=resp$(respc_Print1099)
@@ -230,7 +225,7 @@ def fn_ask1099Info(&seltpN,&typeN,&minAmt,&beg_date,&end_date; ___, _
 		end if
 		returnN=1
 	end if
-	fn_ask1099Info=returnN
+	fn_ask=returnN
 fnend
 	def fn_ask_margins(; ___,lc,mypos,mylen)
 		! sets local form1y,form2y,left
