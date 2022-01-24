@@ -23,7 +23,7 @@ do ! r: main loop
 		if prd=>beg_date and prd<=end_date then
 			amt1=tcp(seltp+4)
 
-			box(type)+=amt1 ! shouldn't the type here be a replaced with a 1  ?  - 
+			box(1)+=amt1 ! replaced type here with a 1 because box 1 is NonEmpCompensation
 
 		end if
 	loop
