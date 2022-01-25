@@ -45,7 +45,7 @@ def fn_1099testPrint
 	disableCopyAWarning=0
 	fn_1099print_close
 fnend
-
+dim box(20)
 ! dim empAddr$(3)*30,box(17)
 def fn_setup
 	if ~setup then
@@ -363,8 +363,8 @@ def fn_1099print(vn$*8,nam$*30,mat empAddr$,ss$*11,mat box; ___, _
 		column3 	= left + 137
 		column4 	= left + 168
 		ten99Count+=1
-		if ten99Count=1 then yOffset=topmargin
-		if ten99Count=2 then yOffset=bottom
+		if ten99Count=1 then yOffset=form1y
+		if ten99Count=2 then yOffset=form2y ! print bottom : pause 
 		if enableBackground$='True' and ten99Count=1 then
 			fnpa_background(CopyFile$(copyCurrentN))
 		end if
