@@ -47,7 +47,7 @@ fnconsole(1)
  
 on fkey 5 goto Xit
  
-open #1: "Name=[Q]\PRmstr\Company.h[cno],Shr",internal,input
+open #1: "Name=[Q]\PRmstr\Company.h[cno],Shr",i,i
 read #1,using L270: mat a$,b$,mat d$,loccode,mat e$,mat dedfed,oldmax,mat m,mat r,mat e$,mat dedcode
 L270: form pos 1,3*c 40,c 12,pos 150,10*c 8,n 2,pos 317,10*c 12,pos 638,10*n 1,pos 239,pd 4.2,pos 247,10*pd 4.2,10*pd 3.3,10*c 12,pos 618,10*n 1
 close #1:

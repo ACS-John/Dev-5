@@ -12,7 +12,7 @@
 	ti$(2)='Deposits'
 	ti$(3)='Adjustments'
 
-	open #20: 'Name=[Q]\CLmstr\Company.h[cno],Shr',internal,input
+	open #20: 'Name=[Q]\CLmstr\Company.h[cno],Shr',i,i
 	read #20,using 'form pos 152,N 2': wbc
 	close #20:
 
@@ -28,7 +28,7 @@ MAIN: !
 	fnLbl(4,1,'Information to Print:',38,1)
 	item2$(1)='Details'
 	item2$(2)='Totals Only'
-	fncomboa('claims-act',4,40,mat item2$)
+	fnComboA('claims-act',4,40,mat item2$)
 	resp$(respc+=1)=item2$(1)
 	fnChk(7,40,'Print Disbursments Journal:',1)
 	resp$(respc+=1)='True'
@@ -37,7 +37,7 @@ MAIN: !
 	fnChk(9,40,'Print Adjustments Journal:',1)
 	resp$(respc+=1)='False'
 	fnLbl(11,1,'Bank Account:',38,1)
-	fncombof('Bankmstr',11,40,20,'[Q]\CLmstr\bankmstr.h[cno]',1,2,3,15,'[Q]\CLmstr\Bankidx1.h[cno]',1,0, 'Select bank account for printing') : _
+	fnComboF('Bankmstr',11,40,20,'[Q]\CLmstr\bankmstr.h[cno]',1,2,3,15,'[Q]\CLmstr\Bankidx1.h[cno]',1,0, 'Select bank account for printing') : _
 	resp$(respc+=1)=str$(wbc)
 	fnCmdSet(2)
 	ckey=fnAcs(mat resp$)

@@ -21,7 +21,7 @@ open #payeegl=3: 'Name=[Q]\CLmstr\payeeGLBreakdown.h[cno],KFName=[Q]\CLmstr\Paye
 	fnLbl(2,1,'Print Order:',25,1)
 	item1$(1)='Payee Number'
 	item1$(2)='Alphabetic by Name'
-	fncomboa('paylist-srt',2,27,mat item1$,tt$)
+	fnComboA('paylist-srt',2,27,mat item1$,tt$)
 	resp$(respc+=1)=item1$(1)
 	fnChk(4,29,'Print G/L Breakdowns:',1)
 	resp$(respc+=1)='False'

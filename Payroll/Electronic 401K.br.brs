@@ -11,11 +11,11 @@
 	fnTop(program$)
 	fncreg_read('calculation date',tmp$) : ppd=val(tmp$)
 	fncreg_read('calculation date text',d$)
-	open #1: "Name=[Q]\PRmstr\Company.h[cno],Shr",internal,input
+	open #1: "Name=[Q]\PRmstr\Company.h[cno],Shr",i,i
 	read #1,using 'form pos 1,C 40,pos 618,30*N 1': a$,mat dedcode,mat calcode,mat dedfed : close #1:
 	open #1: "Name=[Q]\PRmstr\Employee.h[cno],Shr",i,i,r
 	open #2: "Name=[Q]\PRmstr\RPTRAIL.h[cno],Shr",i,i,r
-	open #hpraddr=fnH: "Name=[Q]\PRmstr\praddr1.h[cno]",internal,input
+	open #hpraddr=fnH: "Name=[Q]\PRmstr\praddr1.h[cno]",i,i
 	open #4: "Name=[Q]\PRmstr\PR401K.DAT,RecL=235,Replace",d,o
 	ReadPrAddr1: !
 	read #hpraddr,using 'form pos 1,PD 3': address eof END1

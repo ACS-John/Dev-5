@@ -9,7 +9,7 @@
 	dim gb(10),pe$(4)*30,ba$(4)*30,at$(3)*40
 
 	fnLastBillingDate(d1)
-	open #21: "Name=[Q]\UBmstr\Company.h[cno],Shr",internal,input
+	open #21: "Name=[Q]\UBmstr\Company.h[cno],Shr",i,i
 	read #21,using "form pos 41,2*C 40": at$(2),at$(3)
 	close #21:
 	at$(1)=env$('cnam')

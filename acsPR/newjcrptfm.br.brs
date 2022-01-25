@@ -26,7 +26,7 @@ ASKREPORT: !
 	respc=0
 	fnLbl(1,1,"Report #:",11,right)
 	df$="S:\acsPR\Jcreport.mst" : if$="S:\acsPR\jcreport.idx" : _
-	fncombof("CRjcreport",1,1,80,df$,1,2,3,74,if$,1,0,"Select from the list of reports. To add a report, click the Add button.")
+	fnComboF("CRjcreport",1,1,80,df$,1,2,3,74,if$,1,0,"Select from the list of reports. To add a report, click the Add button.")
 	resp$(1)=str$(rn)
 	fnCmdKey("&Add",1,0,0,"Add a new report" ) : _
 	fnCmdKey("E&dit",2,1,0,"Access the highlited record") : _
@@ -75,7 +75,7 @@ SCR2: ! add/edit first screen of report
 	mylen=50
 	fnLbl(12,1,"Item for pr Selection (blank for all):",mylen,1)
 	if ips>0 and ips=<udim(ty2$) then resp$(respc+=1)=ty2$(ips+1) else resp$(respc+=1)=""
-	fncomboa("DataNames2",12,mylen+3,mat ty2$,"If you want limit the report to a value in a particular field in the report record, Indicate which field it is by locating the ID number.",25,0)
+	fnComboA("DataNames2",12,mylen+3,mat ty2$,"If you want limit the report to a value in a particular field in the report record, Indicate which field it is by locating the ID number.",25,0)
 	resp$(respc+=1)=str$(psc)
 	fnChk(13,mylen+3,"Summarize Category Records:",1)
 	if sd= 1 then resp$(respc+=1)='True' else resp$(respc+=1)='False'
@@ -87,7 +87,7 @@ SCR2: ! add/edit first screen of report
 	respc+=1: for j=1 to udim(code1$) : _
 		if sc=val(code1$(j)(1:1)) then resp$(respc)=code1$(j)(1:1) : _
 		next j
-	fncomboa("selCode",14,mylen+3,mat code1$,"",30)
+	fnComboA("selCode",14,mylen+3,mat code1$,"",30)
 	fnCmdKey("&Next",1,1,0,"Save changes and move to next questions" ) : _
 	fnCmdKey("&Delete",4,0,0,"Deletes this report from your system.") : _
 	fnCmdKey("&Cancel",5,0,1,"Return to selection screen.")
@@ -203,8 +203,8 @@ MAIN_SCREEN: !
 	fnTos(sn$="user1") : _
 	mylen=25 : mypos=mylen+2: respc=0: left=1
 	df$="S:\acsPR\Jcreport.mst" : if$="S:\acsPR\jcreport.idx" : _
-	fncombof("CRjcreport",1,1,80,df$,1,2,3,74,if$,1) : _
-	fncombof("CRjcreportALL",1,1,80,df$,1,2,3,74,if$,2)
+	fnComboF("CRjcreport",1,1,80,df$,1,2,3,74,if$,1) : _
+	fnComboF("CRjcreportALL",1,1,80,df$,1,2,3,74,if$,2)
 	resp$(1)=str$(rno)
 	fnCmdKey("&Add",1,0,0,"Add a new customer" ) : _
 	fnCmdKey("E&dit",2,1,0,"Review or change the record.") : _
@@ -373,7 +373,7 @@ return
 REVIEW_VARIABLES: !
 	fnTos(sn$="ask-column") : _
 	respc=0: mylen=15: mypos=mylen+3
-	fncomboa("Variables",1,mylen+3,mat ty$,"Listing of variables that can be used in a formula.",60,0)
+	fnComboA("Variables",1,mylen+3,mat ty$,"Listing of variables that can be used in a formula.",60,0)
 	fnCmdSet(2)
 	ckey=fnAcs(mat resp$) ! variables
 	goto SCR4

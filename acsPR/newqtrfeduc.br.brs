@@ -18,7 +18,7 @@
 	fncreg_read('calculation date text',m$)
 	fnDedNames(mat fullname$,mat abbrevname$,mat dedcode,mat calcode,mat dedfed,mat dedfica,mat dedst,mat deduc)
 	fnGetPayrollDates(beg_date,end_date,qtr1,qtr2,qtr3,qtr4)
-	open #20: "Name=[Q]\PRmstr\Company.h[cno],Shr",internal,input
+	open #20: "Name=[Q]\PRmstr\Company.h[cno],Shr",i,i
 	read #20,using L250: mat a$,b$(1),mcr,mcm,feducrat,mat d$,loccode,feducmax,ficarate,ficamaxw,ficawh,mat m,mat r,mat e$
 	ficamaxw=ficamaxw*10
 	L250: form pos 1,3*c 40,c 12,pd 6.3,pd 6.2,pd 5.2,10*c 8,n 2,pd 4.2,pd 3.3,pd 4.2,pd 4.2,10*pd 4.2,10*pd 3.3,10*c 12
@@ -37,7 +37,7 @@ MENU1: ! r:
 	option1$(3)="September 30"
 	option1$(4)="December 31"
 	fnLbl(2,1,"Quarter Ending Date:",26,1)
-	fncomboa("pr941-yr",2,30,mat option1$,"Enter the quarter ending date")
+	fnComboA("pr941-yr",2,30,mat option1$,"Enter the quarter ending date")
 	if val(date$(4:5))=3 or val(date$(4:5))=4 or val(date$(4:5))=5 then resp$(respc+=1)=option1$(1) ! march filing
 	if val(date$(4:5))=6 or val(date$(4:5))=7 or val(date$(4:5))=8 then resp$(respc+=1)=option1$(2) ! June  filing
 	if val(date$(4:5))=9 or val(date$(4:5))=10 or val(date$(4:5))=11 then resp$(respc+=1)=option1$(3) ! September filing

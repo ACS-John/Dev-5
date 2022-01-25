@@ -17,7 +17,7 @@ fnTop(program$)
  
 cd1=val(date$(4:5)&date$(7:8)&date$(1:2))
 fnDedNames(mat fullname$,mat abrevname$,mat dedcode,mat newcalcode,mat newdedfed,mat dedfica,mat dedst,mat deduc,mat gl$)
-open #1: "Name=[Q]\PRmstr\Company.h[cno],Shr",internal,input
+open #1: "Name=[Q]\PRmstr\Company.h[cno],Shr",i,i
 read #1,using 'form pos 605,C 12,N 1': bankgl$,gli
 close #1:
 if gli=1 then
@@ -54,7 +54,7 @@ ASK_EMPLOYEE_NO: !
 	fnTos
 	respc=0
 	fnLbl(1,1,"Employee to Reverse:",25,1)
-	fncombof("Employee",1,28,0,"[Q]\PRmstr\Employee.h[cno]",1,8,9,20,"[Q]\PRmstr\EmployeeIdx-no.h[cno]",2,0, "Select the employee to reverse.")
+	fnComboF("Employee",1,28,0,"[Q]\PRmstr\Employee.h[cno]",1,8,9,20,"[Q]\PRmstr\EmployeeIdx-no.h[cno]",2,0, "Select the employee to reverse.")
 	resp$(respc+=1)="[All]"
 	fnLbl(2,1,"Payroll Date:",25,1)
 	fnTxt(2,28,12,0,1,"3",0,"You can reverse a check from any pay period.  Be sure the payroll date is correct.")
@@ -64,7 +64,7 @@ ASK_EMPLOYEE_NO: !
 	resp$(respc+=1)= ""
 	if exists('[Q]\CLmstr\BankMstr.h[cno]') then
 		fnLbl(4,1,"Bank Code for Checkbook:",25,1)
-		fncombof('Bank',4,28,0,"[Q]\CLmstr\BankMstr.h[cno]",1,2,3,30,"[Q]\CLmstr\BankIdx1.h[cno]",limit_to_list,0,'',frame)
+		fnComboF('Bank',4,28,0,"[Q]\CLmstr\BankMstr.h[cno]",1,2,3,30,"[Q]\CLmstr\BankIdx1.h[cno]",limit_to_list,0,'',frame)
 		resp$(resp_cl_bank_code=respc+=1)=str$(bcde)
 	end if
 	if success=1 then
@@ -94,7 +94,7 @@ ASK_EMPLOYEE_NO: !
 	if reverse_all=1 then gosub CREATE_LIST
 
 	L730: ! r: main loop
-	if reverse_all=1 then read #13,using "form pos 1,n 8,n 7": eno,w1 eof FINIS
+	if reverse_all=1 then read #13,using "form pos 1,n 8,n 7": eno,w1 eof Finis
 	gosub REVERSE_BANK_REC
 	if cli=1 then gosub UPDATE_CHECKBOOK ! update checkbook
 	x$=lpad$(str$(eno),8)
@@ -128,7 +128,7 @@ UPDATE_MASTER: !
 	loop while teno=eno
 	L1040: !
 goto ASK_EMPLOYEE_NO
-FINIS: !
+Finis: !
 	if pgl1=1 then goto POSTGL4
 	close #1: ioerr ignore
 	close #2: ioerr ignore
@@ -232,7 +232,7 @@ POSTGL1: ! r:
 		if glb=2 and uprc$(rtrm$(accrue$))="Y" then
 			open #11: "Name=[Q]\GLmstr\GL"&cnvrt$("PIC(######)",d2)&".h[cno],RecL=104,USE",internal,output
 		end if
-		open #1: "Name=[Q]\PRmstr\Company.h[cno],Shr",internal,input
+		open #1: "Name=[Q]\PRmstr\Company.h[cno],Shr",i,i
 		read #1,using 'form pos 1,c 40,pos 437,15*c 12': a$,mat prgl$
 		close #1:
 		for j=1 to 15

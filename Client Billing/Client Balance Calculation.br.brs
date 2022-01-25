@@ -6,7 +6,7 @@ do
 	dim resp$(10)*128
 	fnLbl(1,1,'Client:',lenCol1,1)
 	fnLbl(2,1,'(Use blank to summarize all without details)')
-	fncombof('',1,12,37,'S:\Core\Data\acsllc\Client.h[cno]',1,5,6,30, 'S:\Core\Data\acsllc\Client-Idx.h[cno]',0)
+	fnComboF('',1,12,37,'S:\Core\Data\acsllc\Client.h[cno]',1,5,6,30, 'S:\Core\Data\acsllc\Client-Idx.h[cno]',0)
 	fnCmdSet(11)
 	ckey=fnAcs(mat resp$)
 	if ckey<>5 then

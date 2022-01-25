@@ -182,7 +182,7 @@ Xit: fnXit
 		fn_company_already_exists=returnN
 	fnend
 	def fn_companyName$*40(cno; ___,return$*40,hTmp)
-		open #hTmp=fnH: 'Name='&fn_dataFolder$&'\Company.h'&str$(cno),internal,input ioerr COC_FINIS
+		open #hTmp=fnH: 'Name='&fn_dataFolder$&'\Company.h'&str$(cno),i,i ioerr COC_FINIS
 		read #hTmp,using 'form pos 1,c 40': return$
 		close #hTmp:
 		COC_FINIS: !

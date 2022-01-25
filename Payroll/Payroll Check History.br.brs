@@ -371,7 +371,7 @@ def fn_checkfile(hact$*8,hCheckIdx3,hCheckIdx1,hEmployee)
 			resp$(rc)="[All]"
 		end if
 		fnLbl(15,20,"Column format to use:",40,1)
-		fncombof("payrollrpt",15,62,30,"[Q]\PRmstr\payrollreports.h[cno]",1,30,0,0,"[Q]\PRmstr\reportidx.h[cno]",0,pas, "",frame)
+		fnComboF("payrollrpt",15,62,30,"[Q]\PRmstr\payrollreports.h[cno]",1,30,0,0,"[Q]\PRmstr\reportidx.h[cno]",0,pas, "",frame)
 		resp$(rc+=1)=gridname$
 		fnCmdKey("&Display Grid",1,1,0,"Displays a list of checks on the scree using the format you have selected.")
 		fnCmdKey("&Print Report",2,0,0,"Prints a check listing using the columns selected.")
@@ -468,7 +468,7 @@ def fn_checkfile(hact$*8,hCheckIdx3,hCheckIdx1,hEmployee)
 		fnTos(sn$="Checkprint")
 		rc=cf=0 : linecnt=2
 		fnLbl(1,1,"Grid or Report Name:",20,1)
-		fncombof("payrollrpt",1,22,30,"[Q]\PRmstr\payrollreports.h[cno]",1,30,0,0,"[Q]\PRmstr\reportidx.h[cno]",0,pas, "",frame)
+		fnComboF("payrollrpt",1,22,30,"[Q]\PRmstr\payrollreports.h[cno]",1,30,0,0,"[Q]\PRmstr\reportidx.h[cno]",0,pas, "",frame)
 		resp$(rc+=1)=resp$(1)
 		for j=1 to 23
 			fnChk(linecnt+=1,16,name$(j),1,rratype)

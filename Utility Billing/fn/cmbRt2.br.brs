@@ -17,5 +17,5 @@ def library fncmbrt2(myline,mypos; disableAll)
 		x+=1
 	next j
 	mat option$(x-1)
-	fncomboa("cmbRt2",myline,mypos,mat option$,"If the Route Number you want is not listed you can change your route number range in Company>Configure.",5)
+	fnComboA("cmbRt2",myline,mypos,mat option$,"If the Route Number you want is not listed you can change your route number range in Company>Configure.",5)
 fnend 

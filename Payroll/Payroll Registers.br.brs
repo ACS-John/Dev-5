@@ -26,7 +26,7 @@
 	close #12: ioerr ignore
 	BankReadFinis: !
 	
-	open #1: 'Name=[Q]\PRmstr\prCode.h[cno],Shr',internal,input ioerr CkNoReadFinis
+	open #1: 'Name=[Q]\PRmstr\prCode.h[cno],Shr',i,i ioerr CkNoReadFinis
 	read #1,using 'form pos 5,N 8': ckno
 	close #1:
 	CkNoReadFinis: !

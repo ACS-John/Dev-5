@@ -18,7 +18,7 @@ fnTop(program$)
 	dim tlcn$*6,contact$*27,contactph$*15,phoneext$*5,email$*40
 	dim w2(9),i1(9),t1(9),ct$*20,st$*2
 	dim terminat$*1,first$*15,mid$*15,last$*20,resp$(40)*256,path$*256
-	open #hCompany=fnH: "Name=[Q]\PRmstr\Company.h[cno],Shr",internal,input
+	open #hCompany=fnH: "Name=[Q]\PRmstr\Company.h[cno],Shr",i,i
 	read #hCompany,using fCompany: mat a$,federal_id$,loccode
 	fCompany: form pos 1,3*c 40,c 12,pos 150,x 80,n 2
 	close #hCompany:
@@ -146,7 +146,7 @@ SCREEN1_NEW: ! r:
 	lyne+=1
 	mylen=31 : mypos=mylen+2
 	fnLbl(lyne+=1,1,"Employee Name Format:",mylen,1)
-	fncomboa('nameFormat',lyne,mypos,mat optNameFormat$, '',20)
+	fnComboA('nameFormat',lyne,mypos,mat optNameFormat$, '',20)
 	resp$(resp_nameFormat:=rc+=1)=optNameFormat$(nameFormat)
 	lyne+=1
 	fnLbl(lyne+=1,1,"Personal ID Number:",mylen,1)
@@ -275,7 +275,7 @@ SCREEN1_NEW: ! r:
 	gosub RecRE ! kj 22610  was commented
 NEXT_EMPLOYEE: ! r: main loop
 ! pr f "12,32,N 3,UT,N": readCount+=1/LREC(1)*100
-	read #hEmployee,using F_employee: eno,mat em$,ss$,em6 eof FINIS
+	read #hEmployee,using F_employee: eno,mat em$,ss$,em6 eof Finis
 	F_employee: form pos 1,n 8,3*c 30,c 11,pos 122,n 2
 	gosub NameParse
 	p1=pos(em$(3),",",1) : comma=1
@@ -416,7 +416,7 @@ RecRF: ! r:
 	pr #hOut,using L3130: "RF"," ",tw1,""
 	L3130: form pos 1,c 2,c 5,pic(#########),c 496
 return ! /r
-FINIS: ! r:
+Finis: ! r:
 	gosub RecRT ! kj 22610
 	gosub RecRF
 	gosub FILE_SHUFFLE

@@ -262,8 +262,8 @@ Screen1: ! r:
 	end if
 	lc+=1
 	fnLbl(lc+=1,1,"Starting Route/Sequence:",25,1)
-	fncombof("ubm-act-nam",lc,pf,40,"[Q]\UBmstr\Customer.h[cno]",1741,9,1,30,"[Q]\UBmstr\ubindx5.h[cno]",2)
-	! fncombof("ubm-act-nam",lc,pf,40,"[Q]\UBmstr\Customer.h[cno]",1741,9,41,30,"[Q]\UBmstr\ubindx5.h[cno]",2)
+	fnComboF("ubm-act-nam",lc,pf,40,"[Q]\UBmstr\Customer.h[cno]",1741,9,1,30,"[Q]\UBmstr\ubindx5.h[cno]",2)
+	! fnComboF("ubm-act-nam",lc,pf,40,"[Q]\UBmstr\Customer.h[cno]",1741,9,41,30,"[Q]\UBmstr\ubindx5.h[cno]",2)
 	resp$(respc_start_place:=respc+=1)="[All]"
 	lc+=1
 	fnLbl(lc+=1,1,"Route Number:",25,1)
@@ -639,7 +639,7 @@ Bud2: ! r: the heart of it...
 	EoBud2: !
 return  ! /r
 def fn_getCompanyAddr(mat at$)
-	open #h_company=fnH: "Name=[Q]\UBmstr\Company.h[cno],Shr",internal,input
+	open #h_company=fnH: "Name=[Q]\UBmstr\Company.h[cno],Shr",i,i
 	read #h_company,using "form pos 41,2*C 40": at$(2),at$(3)
 	close #h_company:
 	h_company=0

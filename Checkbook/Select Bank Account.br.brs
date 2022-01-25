@@ -10,7 +10,7 @@ ASK1: !
 	fnTos
 	lc=0 : mylen=20 : mypos=mylen+2
 	fnLbl(lc+=1,1,"Working Bank:",mylen,1)
-	fncombof('bank',lc,mypos,33,"[Q]\CLmstr\BankMstr.h[cno]",1,2,3,30,"[Q]\CLmstr\BankIdx1.h[cno]",1)
+	fnComboF('bank',lc,mypos,33,"[Q]\CLmstr\BankMstr.h[cno]",1,2,3,30,"[Q]\CLmstr\BankIdx1.h[cno]",1)
 	resp$(1)=str$(wbc)
 	fnCmdKey('&Save',2,1,0)
 	fnCmdKey('&Add',1,0,0,'This takes you to the Bank File')

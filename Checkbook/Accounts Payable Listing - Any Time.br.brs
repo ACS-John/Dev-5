@@ -12,7 +12,7 @@ fnTos
 	fnLbl(2,1,'Print Order:',23,1)
 	item1$(1)='General Ledger'
 	item1$(2)='Vendor'
-	fncomboa('ubnamlst-srt',2,25,mat item1$,tt$)
+	fnComboA('ubnamlst-srt',2,25,mat item1$,tt$)
 	resp$(respc+=1)=item1$(1)
 	fnLbl(3,1,'Fund Number to Print:',23,1)
 	fnTxt(3,25,3,0,1,'30')
@@ -77,7 +77,7 @@ END2: close #1:
 	close #tmp:
 	fnFree(env$('Temp')&'\ADDR')
 	execute 'Sort [Temp]\Control'
-	open #addr=1: 'Name=[Temp]\ADDR',internal,input ioerr Xit
+	open #addr=1: 'Name=[Temp]\ADDR',i,i ioerr Xit
 	open #work=5: 'Name=[Temp]\WORK',i,i,r
 	fnopenprn
 	gosub HDR

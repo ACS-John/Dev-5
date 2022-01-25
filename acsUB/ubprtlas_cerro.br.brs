@@ -52,7 +52,7 @@ SCREEN1: !
 	datafile$="[Q]\UBmstr\Customer.h[cno]"
 	indexfile$="[Q]\UBmstr\ubindx5.h[cno]"
 	kp=1741: kl=9 : dp=41 : dl=30
-	fncombof(fe$,8,pf,40,datafile$,kp,kl,dp,dl,indexfile$,2)
+	fnComboF(fe$,8,pf,40,datafile$,kp,kl,dp,dl,indexfile$,2)
 	resp$(respc+=1)="[All]"
 	fnLbl(9,1,"Route Number:",ll,1)
 	fncmbrt2(9,pf)

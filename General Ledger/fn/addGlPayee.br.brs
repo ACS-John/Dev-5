@@ -132,10 +132,10 @@ def library fnAddGlPayee
 		fnTxt(4,mypos,30,0,0,"",0,"",1)
 		resp$(respc+=1)=ad2$
 		fnLbl(5,1,"City, St. Zip:",mylen,1,0,1)
-		fncombof("CityStZip",5,mypos,30,"[Q]\Data\CityStZip.dat",1,30,0,0,"[Q]\Data\CityStZip.idx",0,0, " ",1,0)
+		fnComboF("CityStZip",5,mypos,30,"[Q]\Data\CityStZip.dat",1,30,0,0,"[Q]\Data\CityStZip.idx",0,0, " ",1,0)
 		resp$(respc+=1)=csz$
 		fnLbl(6,1,"Type:",mylen,1,0,1)
-		fncombof("Payeetype",6,mypos,27,"[Q]\GLmstr\PayeeType.dat",1,2,3,25,"",0,0, "The payee type is a code used to detemine which box should be used on a 1099 misc form.  Only enter a type code if the payee should get a 1099",1)
+		fnComboF("Payeetype",6,mypos,27,"[Q]\GLmstr\PayeeType.dat",1,2,3,25,"",0,0, "The payee type is a code used to detemine which box should be used on a 1099 misc form.  Only enter a type code if the payee should get a 1099",1)
 		resp$(respc+=1)=str$(typ)
 		fnLbl(7,1,"Federal ID or SS No.",mylen,1,0,1)
 		fnTxt(7,mypos,11,0,0,"",0,"",1)

@@ -4,7 +4,7 @@ fnTop(program$)
 
 fnStatus("Processing: Enter Time and Charges Merge...")
 scNotFoundCount=0
-open #3: "Name=S:\Core\Data\acsllc\TMWK[acsUserId].h[cno],NoShr",internal,input
+open #3: "Name=S:\Core\Data\acsllc\TMWK[acsUserId].h[cno],NoShr",i,i
 open #2: "Name=S:\Core\Data\acsllc\TMTRANS.h[cno],Shr",i,outi,r
 F2lta: form pos 54,pd 3
 open #1: "Name=S:\Core\Data\acsllc\Client.h[cno],KFName=S:\Core\Data\acsllc\Client-Idx.h[cno],Shr",i,outIn,k

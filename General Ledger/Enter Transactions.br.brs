@@ -28,7 +28,7 @@ enableblankLineAfterNet=1
 	sx_purchase=8
 	selx=fnPcReg_read('TransactionType',selx$,str$(sx_adjustment))
 
-	open #hCompany=fnH: 'Name=[Q]\GLmstr\Company.h[cno],Shr',internal,input
+	open #hCompany=fnH: 'Name=[Q]\GLmstr\Company.h[cno],Shr',i,i
 	dim miscname$(10)*20
 	dim dedcode(10)
 	dim pgl(5,3)
@@ -276,7 +276,7 @@ def fn_scrMain(hMerge; editRecord,heading$*64,glBank$*12,transDate,bankAcctName$
 		resp$(respc_desc=4)=td$
 	else if selx=sx_payrollCheck then
 		fnLbl(lc+=1,1,'Employee:',mylen,1)
-		fncombof('PRmstr',lc,mypos,35,'[Q]\GLmstr\PRmstr.h[cno]',1,4,5,30,'[Q]\GLmstr\PRIndex.h[cno]',1,0, 'Choose from the list of employees.  Click Add Employee to add a new employee not shown on list.',0)
+		fnComboF('PRmstr',lc,mypos,35,'[Q]\GLmstr\PRmstr.h[cno]',1,4,5,30,'[Q]\GLmstr\PRIndex.h[cno]',1,0, 'Choose from the list of employees.  Click Add Employee to add a new employee not shown on list.',0)
 		resp$(respc_payee=4)=vn$
 	else
 		fnLbl(6,1,'Payee:',mylen,1)
@@ -284,7 +284,7 @@ def fn_scrMain(hMerge; editRecord,heading$*64,glBank$*12,transDate,bankAcctName$
 			fnTxt(6,mypos,8,0,1,'',1,'Payee field disabled. Click "Enable Payee" again to enable.',0 )
 			resp$(respc_payee=4)=''
 		else
-			fncombof('payee',6,mypos,35,'[Q]\GLmstr\PayMstr.h[cno]',1,8,9,30,'[Q]\GLmstr\PayIdx1.h[cno]',0,0, 'If the payee is known, the general ledger information can be extracted from that payee record.',0)
+			fnComboF('payee',6,mypos,35,'[Q]\GLmstr\PayMstr.h[cno]',1,8,9,30,'[Q]\GLmstr\PayIdx1.h[cno]',0,0, 'If the payee is known, the general ledger information can be extracted from that payee record.',0)
 			resp$(respc_payee=4)=vn$
 		end if
 	end if
@@ -513,7 +513,7 @@ def fn_scrPayrollAdd(; ___,lendeditRecordc,lc)
 	fnTxt(lc,mypos,12,0,0,'',0,'Enter check number.',0)
 	resp$(3)=tr$
 	fnLbl(lc+=1,1,'Employee:',mylen,1)
-	fncombof('PRmstr',lc,mypos,35,'[Q]\GLmstr\PRmstr.h[cno]',1,4,5,25,'[Q]\GLmstr\PRIndex.h[cno]',1,0, 'Choose from the list of employees.  Click Add Employee to add a new employee not shown on list.',0)
+	fnComboF('PRmstr',lc,mypos,35,'[Q]\GLmstr\PRmstr.h[cno]',1,4,5,25,'[Q]\GLmstr\PRIndex.h[cno]',1,0, 'Choose from the list of employees.  Click Add Employee to add a new employee not shown on list.',0)
 	if prx(1) then resp$(4)=str$(prx(1)) else resp$(4)=''
 	lc+=1
 	fnLbl(lc+=1,1,'General Ledger:',mylen,1)

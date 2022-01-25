@@ -37,7 +37,7 @@ def library fnRetrieveHandHeldFile(; automationBookNumber)
 		lc+=1
 		fnLbl(lc+=1,1,"Hand Held model:",30,1)
 		if lwrc$(devicePreference$)='[ask]' then
-			fncomboa("HH-FroCBox",lc,32,mat deviceOption$)
+			fnComboA("HH-FroCBox",lc,32,mat deviceOption$)
 			resp$(rc_Device:=respc+=1)=deviceSelected$
 		else
 			fnLbl(lc,32,devicePreference$)

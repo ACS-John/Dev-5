@@ -56,7 +56,7 @@ ASK_SORT: !
 	close #tmp:
 	execute "Free [Temp]\Addr -n" ioerr ignore
 	execute "Sort [Temp]\Control -n"
-	open #addr:=9: "Name=[Temp]\Addr",internal,input
+	open #addr:=9: "Name=[Temp]\Addr",i,i
 	open #paymstr:=13: "Name=[Q]\CLmstr\PayMstr.h[cno],KFName=[Q]\CLmstr\PayIdx1.h[cno],Shr",i,outIn,k
 	open #rpmstr:=23: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr",i,i,k ioerr L550
 	prcode=1
@@ -260,7 +260,7 @@ ASK_TI1: ! r:
 	fnLbl(2,1,"Type of Report:",38,1)
 	item1$(1)="Claims"
 	item1$(2)="Purchases"
-	fncomboa("claims-srt",2,40,mat item1$,tt$)
+	fnComboA("claims-srt",2,40,mat item1$,tt$)
 	resp$(respc+=1)=item1$(1)
 	fnChk(3,41,"Include previously paid Invoices:",1)
 	resp$(respc+=1)='False'
@@ -273,12 +273,12 @@ ASK_TI1: ! r:
 	fnLbl(8,1,"Sort by:",38,1)
 	item2$(1)="Fund Number"
 	item2$(2)="Vendor Number"
-	fncomboa("claims-act",8,40,mat item2$)
+	fnComboA("claims-act",8,40,mat item2$)
 	resp$(respc+=1)=item2$(1)
 	fnLbl(10,1,"Show Invoices:",38,1)
 	item2$(1)="All Invoices"
 	item2$(2)="Coded for Payment"
-	fncomboa("claims-3",10,40,mat item2$,"You have a choice of listing all unpaid invoices on the report, or just those that have been selected for payment")
+	fnComboA("claims-3",10,40,mat item2$,"You have a choice of listing all unpaid invoices on the report, or just those that have been selected for payment")
 	resp$(respc+=1)=item2$(1)
 	fnChk(11,41,"Include payroll checks:",1)
 	resp$(respc+=1)='False'

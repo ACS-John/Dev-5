@@ -75,7 +75,7 @@ ASK1: !
 	if f<>reqf then goto ASK1 ! must have current billing date
 goto L550
 CUSTOMER_READ: !
-	read #1,using L770: z$,mat e$,f$(1),mat a,mat b,mat c,mat d,bal,f,mat g,alp$,f$(2),f$(3),bra,mat gb,route,extra3,extra4 eof FINIS
+	read #1,using L770: z$,mat e$,f$(1),mat a,mat b,mat c,mat d,bal,f,mat g,alp$,f$(2),f$(3),bra,mat gb,route,extra3,extra4 eof Finis
 	if trim$(reqz12$)<>"" and route<>val(reqz12$) then goto CUSTOMER_READ
 	! If TRIM$(Z$)="210008.02" Then Pause
 	if reqf<>0 and f<>reqf then goto CUSTOMER_READ
@@ -121,7 +121,7 @@ CUSTOMER_READ: !
 		goto L480
 	end if
 
-FINIS: ! r:
+Finis: ! r:
 	if sr$="Y" then
 		fncloseprn
 	end if

@@ -123,15 +123,15 @@ def fn_ask(&seltpN,&typeN,&minAmt,&beg_date,&end_date; ___, _
 	if env$('cursys')='PR' then
 		lc+=1
 		fnLbl(lc+=1,1,'Miscellaneous Deduction to Print:',mylen,1)
-		fncomboa('deductions',lc,mypos,mat deductionOption$,'Select the deduction you want printed.')
+		fnComboA('deductions',lc,mypos,mat deductionOption$,'Select the deduction you want printed.')
 		resp$(respc_deduction:=rc+=1)=seltp$
 		fnLbl(lc+=1,1,'1099 Box to Print:',mylen,1)
-		fncomboa('type',lc,mypos,mat typeOption$,'Select the code for the 1099 vendor type.')
+		fnComboA('type',lc,mypos,mat typeOption$,'Select the code for the 1099 vendor type.')
 		resp$(respc_type:=rc+=1)=type$
 	else if env$('cursys')='GL' or env$('cursys')='CL' then
 		fnLbl(lc+=1,1,'Payee Type to Print:',mylen,1)
 		resp$(respc_deduction:=rc+=1)=seltp$
-		fncombof('Payeetype',lc,mypos,27,'[Q]\[CurSys]mstr\PayeeType.dat',1,2,3,25,'',0,0, 'The payee type is a code used to detemine which box should be used on a 1099 misc form.  Enter the code for the payee type to print.')
+		fnComboF('Payeetype',lc,mypos,27,'[Q]\[CurSys]mstr\PayeeType.dat',1,2,3,25,'',0,0, 'The payee type is a code used to detemine which box should be used on a 1099 misc form.  Enter the code for the payee type to print.')
 	end if
 	lc+=1
 	fnLbl(lc+=1,1,'Minimum Amount to Print:',mylen,1)
@@ -144,7 +144,7 @@ def fn_ask(&seltpN,&typeN,&minAmt,&beg_date,&end_date; ___, _
 	fnOpt(lc+=1,3,'Print 1099-Misc')
 	resp$(respc_Print1099:=rc+=1)=destinationOpt$(1)
 	fnLbl(lc+=1,5,'Copy:',12,1,0)
-	fncomboa('Copy',lc,19,mat optCopy$, '',20)
+	fnComboA('Copy',lc,19,mat optCopy$, '',20)
 	resp$(respc_copyCurrent:=rc+=1)=optCopy$(copyCurrentN)
 	! fnLbl(lc+=1,20,'(2 per page is not yet available with Backgrounds)',50,0)
 	fnChk(lc+=1,20,'Enable Background',1)

@@ -220,7 +220,7 @@ return ! /r
  
 GETPRC: ! r:
 	pri1=0
-	open #7: 'Name=[Q]\PRmstr\Company.h[cno],Shr',internal,input ioerr GetPrcFinis
+	open #7: 'Name=[Q]\PRmstr\Company.h[cno],Shr',i,i ioerr GetPrcFinis
 	read #7,using 'form pos 437,15*C 12': mat prgln$
 	close #7:
 	pri1=1
@@ -270,7 +270,7 @@ CKALLOC: ! r:
 return ! /r
  
 BUCKET: ! r: MOVE TO GLBUCKET
-	open #glwk101=3: 'Name=[Q]\CLmstr\GLWK101.h[cno]',internal,input
+	open #glwk101=3: 'Name=[Q]\CLmstr\GLWK101.h[cno]',i,i
 	open #9: 'Name='&glwk$&',RecL=104,USE',internal,output
 	do
 		read #glwk101,using 'form pos 1,C 12,N 6,PD 6.2,2*N 2,C 12,C 30,C 8,C 6,C 5,C 3,C 12': gl$, tr4,tr5,tr6,tr7, tr$,td$,ven$,j$,j$,j$,bgl$ eof L2160

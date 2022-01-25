@@ -8,7 +8,7 @@ def library fnacglblds
  
 		fncno(cno)
 		fnTop(program$)
-		open #20: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,input  : _
+		open #20: "Name=[Q]\GLmstr\Company.h[cno],Shr",i,i  : _
 		read #20,using 'form pos 150,2*N 1': mat d : _
 		close #20:
  

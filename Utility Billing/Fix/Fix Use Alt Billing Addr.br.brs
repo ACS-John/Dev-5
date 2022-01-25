@@ -25,7 +25,7 @@ fnTop(program$,'Fix Use Alternate Billing Address')
 	open #hAltBillAddr=fnH: "Name=[Q]\UBmstr\UBAdrBil.h[cno],KFName=[Q]\UBmstr\adrIndex.h[cno],Shr",i,i,k 
 	changeCount=0
 	do
-		read #hCustomer,using 'form pos 1,c 10,4*c 30,pos 1854,pd 5.2': z$,mat e$,extra22 eof FINIS
+		read #hCustomer,using 'form pos 1,c 10,4*c 30,pos 1854,pd 5.2': z$,mat e$,extra22 eof Finis
 		if ~f or f=d1 and extra22<=0 then
 			read #hAltBillAddr,using 'form pos 11,4*c 30',key=z$: mat ba$ nokey abNokey
 			if rtrm$(ba$(1)&ba$(2)&ba$(3)&ba$(4))<>"" then 
@@ -37,7 +37,7 @@ fnTop(program$,'Fix Use Alternate Billing Address')
 	abNokey: !
 	loop
 ! /r
-FINIS: ! r: pr totals screen
+Finis: ! r: pr totals screen
 	close #hCustomer: ioerr ignore
 	close #hAltBillAddr: ioerr ignore
 	fnTos(sn$="Bills-Total") 

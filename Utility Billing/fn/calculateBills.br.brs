@@ -63,13 +63,13 @@ def fn_calculateBills(goal$*11)
 
 TOP: ! r:
 	if goal$='calculate' then
-		if r3=>lrec(h_work) then goto FINIS
-		read #h_work,using F_WORK,rec=r3+=1: x$,mat x eof FINIS,noRec TOP
+		if r3=>lrec(h_work) then goto Finis
+		read #h_work,using F_WORK,rec=r3+=1: x$,mat x eof Finis,noRec TOP
 		if x$(1:2)="00" or uprc$(x$)=uprc$("   DELETED") then goto TOP
 		read #hCustomer,using F_CUSTOMER,key=x$: meteradr$,custname$,mat a,mat b,mat c,mat d, bal,f,mat g,mat gb,mat extra nokey NKT9
 
 	else if goal$='recalculate' then
-		read #hCustomer,using F_CUSTOMER_W_ACCT: x$,meteradr$,custname$,mat a,mat b,mat c,mat d, bal,f,mat g,mat gb,mat extra eof FINIS
+		read #hCustomer,using F_CUSTOMER_W_ACCT: x$,meteradr$,custname$,mat a,mat b,mat c,mat d, bal,f,mat g,mat gb,mat extra eof Finis
 		if f<>d1 then goto TOP
 		mat x=(0)
 		x(1)=d(1) ! current water reading
@@ -188,7 +188,7 @@ CONV_CUSTOMER_REWRITE: ! r:
 	txt$(3)='You must determine what is wrong and re-enter the reading."'
 	fnmsgbox(mat txt$,resp$(1),'',48)
 goto TOP ! /r
-FINIS: ! r:
+Finis: ! r:
 	fn_t9notification
 	close #hCustomer: ioerr ignore
 	if goal$='calculate' then
@@ -417,7 +417,7 @@ fnend
 def fn_cuuMain(serviceNumber,usagePrior,reading,&usageCurrent,&r9_usage_is_zero; ___,returnN,usageLow,usageHigh)
 	if ~setup_cuuMain then
 		setup_cuuMain=1
-		open #hCompany=fnH: "Name=[Q]\UBmstr\Company.h[cno]",internal,input 
+		open #hCompany=fnH: "Name=[Q]\UBmstr\Company.h[cno]",i,i 
 		read #hCompany,using "form pos 1,x 129,n 4": pcent
 		close #hCompany: 
 		! pr pcent : pause
@@ -515,7 +515,7 @@ def fn_askBillingDate
 	unusual_usage_report_opt$(2)="Skipped Accounts Only"
 	! unusual_usage_report_opt$(3)="Unusual, Skipped and Show Calculations"
 	fnLbl(linec+=1,1,"Unusual Usage Report:",mylen,1)
-	fncomboa('ubcalk-unusal_usage_report',linec,mypos,mat unusual_usage_report_opt$, 'Select the unusual usage report style you prefer') ! ,width,contain,tabcon)
+	fnComboA('ubcalk-unusal_usage_report',linec,mypos,mat unusual_usage_report_opt$, 'Select the unusual usage report style you prefer') ! ,width,contain,tabcon)
 	fncreg_read('ubcalk-unusal_usage_report',unusual_usage_report$,unusual_usage_report_opt$(2))
 	unusual_usage_report=srch(mat unusual_usage_report_opt$,unusual_usage_report$)
 	if unusual_usage_report=0 then unusual_usage_report=1 : unusual_usage_report$=unusual_usage_report_opt$(unusual_usage_report)

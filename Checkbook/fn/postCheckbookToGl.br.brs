@@ -45,7 +45,7 @@ def library fnPostCheckbookToGl(; enablePost,___,pg)
 	fnChk(4,47,"Include previously posted transactions:",1)
 	resp$(3)='False'
 	fnLbl(5,1,"Basis for Accounting:",44,1)
-	fncomboa("CashOrAccrual",5,46,mat optCashOrAccrual$,"If you record expenses as they are paid, you are on a cash basis.  If you wish to record unpaid invoices (accounts payable) as well as paid expenses, you are on an accrual basis.")
+	fnComboA("CashOrAccrual",5,46,mat optCashOrAccrual$,"If you record expenses as they are paid, you are on a cash basis.  If you wish to record unpaid invoices (accounts payable) as well as paid expenses, you are on an accrual basis.")
 	resp$(4)=optCashOrAccrual$(1)
 	fnChk(6,47,"Combine Payroll Entries:",1)
 	resp$(5)='True'
@@ -217,7 +217,7 @@ def library fnPostCheckbookToGl(; enablePost,___,pg)
 		close #hControl:
 		fnFree('[Temp]\Addr.[session]')
 		execute 'Sort [Temp]\Control.[wsid] -n'
-		open #hAddr=fnH: 'Name=[Temp]\Addr.[session]',internal,input ioerr EndAll
+		open #hAddr=fnH: 'Name=[Temp]\Addr.[session]',i,i ioerr EndAll
 		open #hWork=fnH: 'Name=[Temp]\WORK.[session]',i,i,r
 		if pr1$<>"N" then
 			if ~pg then gosub Hdr ! f1

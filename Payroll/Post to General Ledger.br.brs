@@ -60,7 +60,7 @@ ASK_DATE: !
 		open #11: 'Name=[Q]\GLmstr\GL'&date$(days(d2,'ccyymmdd'),'mmddyy')&'.h[cno],RecL=104,Use',internal,output
 	end if
 
-	open #1: 'Name=[Q]\PRmstr\Company.h[cno],Shr',internal,input
+	open #1: 'Name=[Q]\PRmstr\Company.h[cno],Shr',i,i
 	read #1,using 'form pos 1,C 40,pos 437,15*C 12,N 1,pos 618,10*N 1': a$,mat prgl$,glinstal ! need to get from other file
 	for j=1 to 4 ! 1=fed 2=fica/med 3=med 4=state
 		if j=3 then

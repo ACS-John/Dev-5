@@ -90,7 +90,7 @@ def fn_index(data_file$*256,index_statement_or_file$*512; indexParameters$*256,_
 	fnStatus('Encountered error '&str$(err)&' executing index:')
 	fnStatus('     ('&indexStatement$&')') ! pause
 	if err=7600 then
-		open #h_tmp=fnH: 'name='&data_file$,internal,input error EIE_7600_XIT
+		open #h_tmp=fnH: 'name='&data_file$,i,i error EIE_7600_XIT
 		fnStatus('     (Record Length is '&str$(rln(h_tmp))&')')
 		close #h_tmp:
 		EIE_7600_XIT: !

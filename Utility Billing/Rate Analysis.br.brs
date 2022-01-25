@@ -17,7 +17,7 @@ SCR1: ! r:
 	fnTxt(1,mypos,8,0,0,"1")
 	resp$(rc+=1)=str$(bdate)
 	fnLbl(2,1,"Rate for Analysis:",mylen,1)
-	fncombof("nerd",2,mypos,55,"[Q]\UBmstr\ubData\RateMst.h[cno]",1,4,5,50,"[Q]\UBmstr\ubData\RateIdx1.h[cno]",1,usa)
+	fnComboF("nerd",2,mypos,55,"[Q]\UBmstr\ubData\RateMst.h[cno]",1,4,5,50,"[Q]\UBmstr\ubData\RateIdx1.h[cno]",1,usa)
 	usa+=1
 	resp$(rc+=1)="" ! just default to the first one
 	fnCmdSet(2)

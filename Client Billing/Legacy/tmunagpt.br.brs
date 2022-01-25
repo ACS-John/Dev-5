@@ -10,7 +10,7 @@
  
 	fnRead30Categories(mat cat$)
  
-	open #1: "Name=S:\Core\Data\acsllc\Work2.H"&wsid$&",NoShr",internal,input ioerr ERTN
+	open #1: "Name=S:\Core\Data\acsllc\Work2.H"&wsid$&",NoShr",i,i ioerr ERTN
 	! open #2: "Name=S:\Core\Data\acsllc\Client.h[cno],KFName=S:\Core\Data\acsllc\Client-Idx.h[cno],Shr",i,i,k ioerr ERTN
 	pr newpage
 	pr f "10,10,Cc 60,n": "Printing Unbilled Aging by Partner..."

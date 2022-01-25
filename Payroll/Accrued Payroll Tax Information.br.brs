@@ -31,7 +31,7 @@ Menu1: ! r:
 	fnTos
 	respc=0
 	fnLbl(1,1,'Department:',15,1)
-	fncombof('Dept',1,18,3,'[Q]\PRmstr\mglmstr.h[cno]',1,3,0,0,'[Q]\PRmstr\mglidx1.h[cno]',0,0, 'Set the matching g/l numbers for accruing payroll taxes by department. Choose a department.',0,0)
+	fnComboF('Dept',1,18,3,'[Q]\PRmstr\mglmstr.h[cno]',1,3,0,0,'[Q]\PRmstr\mglidx1.h[cno]',0,0, 'Set the matching g/l numbers for accruing payroll taxes by department. Choose a department.',0,0)
 	resp$(respc+=1)=''
 	fnCmdKey('&Add',1,0,0,'Enter accrual information on a new department.' )
 	fnCmdKey('E&dit',2,1,0,'Change or review then highlighted record')

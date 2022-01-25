@@ -75,8 +75,8 @@ L580: if ckey=1 then goto ASKCATEGORY
 RECREATE_GRID: !
 	fncategory_srch(x$,99) : _
 	df$="[Q]\PRmstr\category.h[cno]" : if$="[Q]\PRmstr\categoryidx.h[cno]" : _
-	fncombof("Ccategory",lyne,mypos,43,df$,1,5,6,30,if$,1) : _
-	fncombof("CcategoryaLL",lyne,mypos,43,df$,1,5,6,30,if$,2)
+	fnComboF("Ccategory",lyne,mypos,43,df$,1,5,6,30,if$,1) : _
+	fnComboF("CcategoryaLL",lyne,mypos,43,df$,1,5,6,30,if$,2)
 	ad1=0 ! set add code back before returning to main screen
 return
 ADD_RECORD: !

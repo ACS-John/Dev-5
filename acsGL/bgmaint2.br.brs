@@ -33,7 +33,7 @@
 	for j=2 to 7 : an2(j)=12 : next j ! defaults for column widths
 	mat maxan2=an2
 	an2(8)=40 : an2(9)=12 : an2(10)=12: an2(11)=12
-	open #company=1: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,input
+	open #company=1: "Name=[Q]\GLmstr\Company.h[cno],Shr",i,i
 	read #company,using 'form pos 150,2*N 1': use_dept,use_sub
 	close #1:
 	open #1: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLIndex.h[cno],Shr",i,outIn,k
@@ -79,7 +79,7 @@ L680: ! r:
 L690: if j<=0 then j=1
 	mat options$(j)
 	fen$="CBud.h[cno]"
-	fncomboa(fen$,1,16,mat options$,"Select from the list of budget files. To add a new budget file, take the Add option.",40,container)
+	fnComboA(fen$,1,16,mat options$,"Select from the list of budget files. To add a new budget file, take the Add option.",40,container)
 ! fnCMBBUD(INDEXFILE$)
 	if hact$="" then
 		resp$(respc+=1)=""
@@ -171,7 +171,7 @@ ln$=uprc$(ln$)
 if ln$(1:2)><"GL" then goto L1350
 d1=val(ln$(3:8)) conv L1350
 if fndate_mmddyy_to_ccyymmdd(d1)<fd1 or fndate_mmddyy_to_ccyymmdd(d1)>fd2 then goto L1350
-open #4: "Name=[Q]\GLmstr\"&ln$(1:8)&".h[cno]",internal,input
+open #4: "Name=[Q]\GLmstr\"&ln$(1:8)&".h[cno]",i,i
 L1410: read #4,using L1420: g1$,d1,amt,tcde eof L1500
 L1420: form pos 1,c 12,n 6,pd 6.2,n 2
 if g1$(3:3)=" " then g1$(3:3)="0"
@@ -391,7 +391,7 @@ option2$(1)="A "&type$(1)
 option2$(2)="B "&type$(2)
 option2$(3)="S "&type$(3) : option2$(4)="T "&type$(4)
 option2$(5)="X "&type$(5) : option2$(6)="Z "&type$(6)
-fncomboa("Types",4,mypos,mat option2$,"Select the type of entry.",20,container)
+fnComboA("Types",4,mypos,mat option2$,"Select the type of entry.",20,container)
 resp$(rc+=1)=cd$
 fnCmdSet(2)
 ckey=fnAcs(mat resp$)
@@ -494,7 +494,7 @@ if cd$="Z" then
 	option2$(5)="T "&type$(4) : option2$(6)="X "&type$(5)
 end if
 resp$(respc+=1)=option2$(1)
-fncomboa("Types",12,mypos,mat option2$,"Select the type of entry.",20,container)
+fnComboA("Types",12,mypos,mat option2$,"Select the type of entry.",20,container)
 fnCmdKey("&Save",1,1,0,"Save any changes." )
 fnCmdKey("E&xit",5,0,1,"Exit without saving any changes.")
 ckey=fnAcs(mat resp$) ! EDIT SCREEN

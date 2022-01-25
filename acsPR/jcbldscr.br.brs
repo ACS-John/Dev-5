@@ -58,7 +58,7 @@ L340: next j
 	next j
 	io3$(11)="14,34,N 10.2,UT,N"
 	io3$(12)="15,34,C 30,UT,N"
-	open #1: "Name=[Q]\PRmstr\JCSCRN.h[cno]",internal,input ioerr L630
+	open #1: "Name=[Q]\PRmstr\JCSCRN.h[cno]",i,i ioerr L630
 	close #1,free:
 L630: open #1: "Name=[Q]\PRmstr\JCSCRN.h[cno],Size=0,RecL=1530",internal,output
 	write #1,using L650: mat fl1$,mat io1$,mat fl2$,mat io2$,mat sc3$,mat fl3$,mat io3$

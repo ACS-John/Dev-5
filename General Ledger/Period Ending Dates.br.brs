@@ -16,7 +16,7 @@ dim dat$*20
 fndat(dat$,1) 
 resp$(respc+=1)=dat$
 fnLbl(3,1,"Current Accounting Period:",40,1)
-fncomboa("ped1",3,42,mat periodOption$,"If you are reporting on a calander year, use the month code.  For fiscal years, this will be the number of months into the year.") 
+fnComboA("ped1",3,42,mat periodOption$,"If you are reporting on a calander year, use the month code.  For fiscal years, this will be the number of months into the year.") 
 resp$(respc+=1)=str$(fnactpd)
 fnLbl(4,1,"Income Statement Current Column Heading:",40,1)
 fnTxt(4,42,20,0,2,"",0,"This will be the column heading for the current period column. Use something simple as 'Current', or change it each month to be the name of the month") 

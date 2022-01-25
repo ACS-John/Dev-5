@@ -25,7 +25,7 @@ SCREEN_1: !
 	fnOpt(3,3,"Pull time from time card system",0,franum)      : resp$(rc+=1)='False'
 	fnOpt(4,3,"Pull time from job cost system",0,franum)       : resp$(rc+=1)='False'
 	fnLbl(6,1,"Employment Status:",mylen,1,0,franum)
-	fncombof("EmpStatus",6,mypos,25,"[Q]\PRmstr\EmpStatus.dat",1,2,3,25,"[Q]\PRmstr\EmpStatus.idx",0,0, "Only necessary if automatically paying salaried people. ",franum,0)
+	fnComboF("EmpStatus",6,mypos,25,"[Q]\PRmstr\EmpStatus.dat",1,2,3,25,"[Q]\PRmstr\EmpStatus.idx",0,0, "Only necessary if automatically paying salaried people. ",franum,0)
 	resp$(rc+=1)=""
 	if ~fnArrayEmpty(mat dednames$) then
 		
@@ -561,7 +561,7 @@ PullFromJobCost: ! r:
 ! h(1)=emp#,h(2)=method,h(3)=dept#,h(4)=reghrs,h(5)=ot hrs,h(6)=salary,h(7)=ded #
 	gosub SORTIT
 	open #5: "Name=[Q]\PRmstr\JCPRH1.h[cno]",i,i,r
-	open #6: "Name=[Temp]\Addr."&session$,internal,input
+	open #6: "Name=[Temp]\Addr."&session$,i,i
 	close #h_rpwork:=3: ioerr ignore
 	open #h_rpwork:=3: "Name=[Q]\PRmstr\rpwork[unique_computer_id].h[cno],RecL=167,Replace",internal,output
 	close #h_rpwork:
@@ -855,7 +855,7 @@ def fn_setup
 		f2$=rtrm$(f2$)&",PIC(---------.--)"
 	next j
 	pathtotimecard$="C:\progra~1\acs\"
-	open #1: "Name=[Q]\PRmstr\Company.h[cno],Shr",internal,input
+	open #1: "Name=[Q]\PRmstr\Company.h[cno],Shr",i,i
 	read #1,using 'form pos 726,pd 3.2': mhw
 	close #1:
 fnend

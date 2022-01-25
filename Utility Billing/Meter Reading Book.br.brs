@@ -45,7 +45,7 @@ MENU1: ! r:
 	fncmbrt2(lc,mypos)
 	resp$(1)=fn_reg_try$('ubMetrRt.route',"1")
 	fnLbl(lc+=1,1,"Service Type:",mylen,1)
-	fncomboa("ubrate3",lc,mypos,mat option$)
+	fnComboA("ubrate3",lc,mypos,mat option$)
 	resp$(2)=fn_reg_try$('ubMetrRt.service type',option$(1))
 	lc+=1
 	fnChk(lc+=1,mylen+2,"Print Footnotes:",1)
@@ -290,7 +290,7 @@ def fn_campbell_meter_book ! Campbell Special Routine (printed once a year, one 
 	! fnLbl(lc+=1,1,"Service Type:",mylen,1)
 	! fnTxt(lc,mypos,2, 0,0,'',1)
 	! resp$(2)='WA'
-	! fncomboa("ubrate3",lc,mypos,mat option$)
+	! fnComboA("ubrate3",lc,mypos,mat option$)
 	fnCmdSet(3)
 	ckey=fnAcs(mat resp$)
 	if ckey=5 then goto CAMPBELL_XIT

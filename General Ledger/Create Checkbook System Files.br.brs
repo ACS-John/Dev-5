@@ -16,7 +16,7 @@ MENU1: !
 	dim option$(2)*25
 	option$(1)="Build G/L Master File"
 	option$(2)="Build Payee File"
-	fncomboa("TypeOfFile",3,25,mat option$,"You must indicate the type of entry you will be entering.",25)
+	fnComboA("TypeOfFile",3,25,mat option$,"You must indicate the type of entry you will be entering.",25)
 	resp$(2)=str$(sel)
 	fnCmdKey("&Next",1,1,0,"Allows you to enter transactions.")
 	fnCmdKey("&Cancel",5,0,1,"Returns to menu without transferring files.")

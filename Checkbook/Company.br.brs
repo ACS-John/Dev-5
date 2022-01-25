@@ -164,7 +164,7 @@ PAGE1: ! r:
 	fnTxt(lc,mypos,30,0,left,number$)
 	resp$(7)=str$(nap)
 	fnLbl(lc+=1,1,'Working Bank:',mylen,right)
-	fncombof('bank',lc,mypos,0,"[Q]\CLmstr\BankMstr.h[cno]",1,2,3,30,"[Q]\CLmstr\BankIdx1.h[cno]",1)
+	fnComboF('bank',lc,mypos,0,"[Q]\CLmstr\BankMstr.h[cno]",1,2,3,30,"[Q]\CLmstr\BankIdx1.h[cno]",1)
 	resp$(8)=str$(wbc)
 	fnChk(lc+=1,mypos,'My Checks are Pre-Numbered',right)
 	if prenum=1 then resp$(9)='True' else resp$(9)='False'
@@ -265,7 +265,7 @@ PAGE4: ! r:
 		fnTxt(j+lc,1,20)
 		resp$(rc+=1)=miscname$(j)
 		item$(1)='Deduction' : item$(2)='Addition' : mat item$(2)
-		fncomboa('ded_or_add',j+lc,24,mat item$)
+		fnComboA('ded_or_add',j+lc,24,mat item$)
 		resp$(rc+=1)=item$(dedcode(j))
 		fnChk(j+lc,40,'',right)
 		rc+=1 : if dedfed(j)=1 then resp$(rc)='True' else resp$(rc)='False'

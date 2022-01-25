@@ -88,8 +88,8 @@ L650: if ckey=1 then goto ASKEMPLOYEE
 RECREATE_GRID: !
 	fnburden_srch(x$,99)
 	df$="[Q]\PRmstr\Burden.h[cno]" : if$="[Q]\PRmstr\Burdenidx.h[cno]"
-	fncombof("CBurden",lyne,mypos,43,df$,1,8,9,30,if$,1)
-	fncombof("CBurdenaLL",lyne,mypos,43,df$,1,8,9,30,if$,2)
+	fnComboF("CBurden",lyne,mypos,43,df$,1,8,9,30,if$,1)
+	fnComboF("CBurdenaLL",lyne,mypos,43,df$,1,8,9,30,if$,2)
 	ad1=0 ! set add code back before returning to main screen
 	return
 ADD_RECORD: !

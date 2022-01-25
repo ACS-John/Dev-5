@@ -233,7 +233,7 @@ def fn_setup
 	
 	on error goto Ertn
  
-	open #1: "Name=[Q]\PRmstr\Company.h[cno],Shr",internal,input
+	open #1: "Name=[Q]\PRmstr\Company.h[cno],Shr",i,i
 	read #1,using 'form pos 239,PD 4.2': ficaMaxW
 	close #1:
 	

@@ -226,7 +226,7 @@
 				gudsSetupTimeN=val(gudsSetup$(4:inf))
 				if gudsSetup$(1:2)<>guSys$ or fn_stime>gudsSetupTimeN+3 then
 					gudsSetup$=guSys$&'-'&str$(fn_stime)
-					open #hCompany=fnH: 'Name=[Q]\'&guSys$&'mstr\Company.h[cno],Shr',internal,input ioerr GudsDefault
+					open #hCompany=fnH: 'Name=[Q]\'&guSys$&'mstr\Company.h[cno],Shr',i,i ioerr GudsDefault
 					read #hCompany,using 'form pos 150,2*N 1': useDept,useSub
 					close #hCompany: ioerr ignore
 					useDeptCache=useDept

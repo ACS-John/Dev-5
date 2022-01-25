@@ -99,7 +99,7 @@ do ! r: main report loop
 	gosub PRINT_DETAILS
 	NextCustomer: !
 loop ! /r
-FINIS: ! r:
+Finis: ! r:
 	close #hCustomerForReport: ioerr ignore
 	fncloseprn
 goto Xit ! /r
@@ -170,7 +170,7 @@ PRINT_DETAILS: ! r:
 return  ! /r
 TOTAL_AND_FINISH: ! r:
 	fn_printTotals(0)
-goto FINIS ! /r
+goto Finis ! /r
 def fn_printTotals(totalRoute)
 	dim totalGrand(3,2)
 	mat totalGrand=totalGrand+totalRoute

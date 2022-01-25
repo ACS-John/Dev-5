@@ -16,7 +16,7 @@ dim ytdtotal(32),ss$*11,em$(3)*30
 fnTop(program$)
 fnDedNames(mat fullname$,mat abbrevname$,mat dedcode,mat calcode,mat dedfed,mat dedfica,mat dedst,mat deduc)
 fnGetPayrollDates(beg_date,end_date)
-open #20: "Name=[Q]\PRmstr\Company.h[cno],Shr",internal,input
+open #20: "Name=[Q]\PRmstr\Company.h[cno],Shr",i,i
 read #20,using L230: mat a$,b$(1),mcr,mcm,feducrat,feducmax
 L230: form pos 1,3*c 40,c 12,pd 6.3,pd 6.2,pd 5.2,x 80,x 2,pd 4.2
 close #20:

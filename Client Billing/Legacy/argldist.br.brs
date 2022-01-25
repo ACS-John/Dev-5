@@ -16,7 +16,7 @@ L170: input fields "12,53,n 6,ue": tr4 conv L170
 	if tr4<10100 or tr4>123199 then goto L170
 	rewrite #8,using "form pos 1,n 6",rec=1: d1
 	pa=43-int(len(rtrm$(a$))/2)
-	open #1: "Name=[Temp]\Addr."&session$,internal,input 
+	open #1: "Name=[Temp]\Addr."&session$,i,i 
 	open #2: "Name=[Temp]\Work."&session$,i,i,r 
 	pr newpage
 	pr f "10,15,c 50,h,n": "PRINT A/R GENERAL LEDGER DISTRIBUTION IN PROCESS"

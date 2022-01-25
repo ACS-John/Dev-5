@@ -32,7 +32,7 @@ Main: ! r:
 	next j
 	resp$(1)=opt$(1) ! default to 1st in none found
 	L340: !
-	fncomboa('CmbAuto',2,13,mat opt$,'Select the companies that should be included in this automatic processing run. Highlite and press enter or Next to register your selection.',55) ! fnCMBCNO(1, 13)
+	fnComboA('CmbAuto',2,13,mat opt$,'Select the companies that should be included in this automatic processing run. Highlite and press enter or Next to register your selection.',55) ! fnCMBCNO(1, 13)
 	fnLbl(4,30,"Selected Companies:")
 	mat chdr$(2) : mat cmask$(2) : mat item$(2)
 	chdr$(1)='Company #'
@@ -76,7 +76,7 @@ BLD_ACNO: ! r:
 		acno(cav+=1)=val(filename$(fx)(10:14)) conv L650
 		end=len(filename$(fx))
 		x=115
-		open #x: "Name="&sys$&"\Company.h"&filename$(fx)(10:14),internal,input ioerr L650
+		open #x: "Name="&sys$&"\Company.h"&filename$(fx)(10:14),i,i ioerr L650
 		dim cnam$*40
 		read #x,using "form pos 1,c 40": cnam$
 		close #x:

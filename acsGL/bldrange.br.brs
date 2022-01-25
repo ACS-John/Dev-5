@@ -9,7 +9,7 @@
  
 	! fnconsole(off=0)
 	fnTop(program$,"Duplicate Range of Accounts")
-	open #company=1: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,input
+	open #company=1: "Name=[Q]\GLmstr\Company.h[cno],Shr",i,i
 	read #company,using 'form pos 150,2*N 1': use_dept,use_sub ! read fund and sub codes from general
 	close #company:
 	open #1: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLIndex.h[cno],Shr",i,outIn,k
@@ -39,15 +39,15 @@ MAIN: !
  
 	fnLbl(1,1,"Beginning                         Ending",90,right,0,2)
 	fnLbl(2,1,"Balance Sheet Refernece Number:",mylen,right,0,2)
-	fncombof("fs-bal",2,43,25,"[Q]\GLmstr\acglfnsb.h[cno]",1,5,6,30,"[Q]\GLmstr\agfsidx4.h[cno]",0,pas, "If the accounts you are duplicating are balance sheet accounts, select the beginning balance sheet reference number to match the first new balance sheet account.",2)
+	fnComboF("fs-bal",2,43,25,"[Q]\GLmstr\acglfnsb.h[cno]",1,5,6,30,"[Q]\GLmstr\agfsidx4.h[cno]",0,pas, "If the accounts you are duplicating are balance sheet accounts, select the beginning balance sheet reference number to match the first new balance sheet account.",2)
 	resp$(rc+=1)="" ! first balance sheet ref # to be duplicated
-	fncombof("fs-bal2",2,85,25,"[Q]\GLmstr\acglfnsb.h[cno]",1,5,6,30,"[Q]\GLmstr\agfsidx4.h[cno]",0,pas, "Select the last balance sheet reference number to be duplicated.",2)
+	fnComboF("fs-bal2",2,85,25,"[Q]\GLmstr\acglfnsb.h[cno]",1,5,6,30,"[Q]\GLmstr\agfsidx4.h[cno]",0,pas, "Select the last balance sheet reference number to be duplicated.",2)
 	resp$(5)="" ! ending balance sheet ref # to be duplicated
 	fnLbl(4,1,"Beginning                         Ending",90,right,0,2)
 	fnLbl(5,1,"Income Statement Refernece Number:",mylen,right,0,2)
-	fncombof("fs-inc",5,43,25,"[Q]\GLmstr\acglfnsi.h[cno]",1,5,6,30,"[Q]\GLmstr\agfsidx3.h[cno]",0,pas, "If you are duplicating income statement accounts, enter the first income statement reference to be duplicated.",2)
+	fnComboF("fs-inc",5,43,25,"[Q]\GLmstr\acglfnsi.h[cno]",1,5,6,30,"[Q]\GLmstr\agfsidx3.h[cno]",0,pas, "If you are duplicating income statement accounts, enter the first income statement reference to be duplicated.",2)
 	resp$(rc+=1)="" ! 1st income statement ref # to be duplicated
-	fncombof("fs-inc-2",5,85,25,"[Q]\GLmstr\acglfnsi.h[cno]",1,5,6,30,"[Q]\GLmstr\agfsidx3.h[cno]",0,pas, "If you are duplicating income statement accounts, enter the last income statement reference to be duplicated.",2)
+	fnComboF("fs-inc-2",5,85,25,"[Q]\GLmstr\acglfnsi.h[cno]",1,5,6,30,"[Q]\GLmstr\agfsidx3.h[cno]",0,pas, "If you are duplicating income statement accounts, enter the last income statement reference to be duplicated.",2)
 	resp$(rc+=1)="" ! last income statement ref # to be duplicated
 	fnLbl(7,1,"First new reference # to be used:",mylen,right,0,2)
 	fnTxt(7,mylen+3,5,0,right,'30',0,"Enter the first new financial statement reference number to be matched with the new general ledger numbers.",2 )

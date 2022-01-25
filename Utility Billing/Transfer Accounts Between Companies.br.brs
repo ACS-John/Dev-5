@@ -113,7 +113,7 @@ goto MENU2
 	close #hUbTranVb:
 	close #hUbTranVb2:
 	close #23:
-FINIS: ! r:
+Finis: ! r:
 	! close #31:
 	! close #61:
 	! close #32:

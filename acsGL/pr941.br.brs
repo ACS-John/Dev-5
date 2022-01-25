@@ -33,7 +33,7 @@ MENU1: !
 	option1$(3)="September 30"
 	option1$(4)="December 31"
 	fnLbl(2,1,"Quarter Ending Date:",26,1)
-	fncomboa("pr941-yr",2,30,mat option1$,"Enter the quarter ending date")
+	fnComboA("pr941-yr",2,30,mat option1$,"Enter the quarter ending date")
 	if val(date$(4:5))=3 or val(date$(4:5))=4 or val(date$(4:5))=5 then resp$(respc+=1)=option1$(1) ! march filing
 	if val(date$(4:5))=6 or val(date$(4:5))=7 or val(date$(4:5))=8 then resp$(respc+=1)=option1$(2) ! June  filing
 	if val(date$(4:5))=9 or val(date$(4:5))=10 or val(date$(4:5))=11 then resp$(respc+=1)=option1$(3) ! September filing

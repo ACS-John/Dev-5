@@ -57,7 +57,7 @@ BANK_STMT_INFO: !
 	item1$(4)="Calculate Bank Totals"
 	item1$(5)="Print Reconciliation Listing"
 	item1$(6)="Make Corrections"
-	fncomboa("bankrec-1",8,30,mat item1$,"Select the funtion you would like to perform.  Normally you would clear the checks, deposits, adjustments and then calculate the bank totals")
+	fnComboA("bankrec-1",8,30,mat item1$,"Select the funtion you would like to perform.  Normally you would clear the checks, deposits, adjustments and then calculate the bank totals")
 	if selection=0 then selection=1 : resp$(respc+=1)=item1$(selection)
 	fnCmdKey("&Display Balances",3,0,0,"Displays previous balances for this bank account.")
 	fnCmdKey("&Next",1,1,0,"Proceed to next options")
@@ -421,7 +421,7 @@ DPAMENU: !
 	if sel_code=7 then resp$(respc+=1)='True' else resp$(respc+=1)='False'
 	fnOpt(8,3,"Make Corrections",0,frame)
 	if sel_code=8 then resp$(respc+=1)='True' else resp$(respc+=1)='False'
-! fnCOMBOA("bankrec-3",3,30,MAT ITEM3$,"Select the funtion you would like to perform.  Normally you would Erase Previous, Enter Amounts, Clear Matches and check your totals")!: _
+! fnComboA("bankrec-3",3,30,MAT ITEM3$,"Select the funtion you would like to perform.  Normally you would Erase Previous, Enter Amounts, Clear Matches and check your totals")!: _
 	resp$(respc+=1)=item3$(1)
 	resp$(2)='True'
 	if t1 =0 and t2=0 then goto L3660

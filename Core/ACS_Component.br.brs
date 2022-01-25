@@ -202,7 +202,7 @@ def fn_comboF(sfn$*100,lyne,ps,width,df$*200,psk,lnk,psd,lnd; if$*200,limlis,ure
 	!				goto EODF
 	!			else
 	if if$='' then
-		open #df=fnH: 'Name='&df$&',Shr',internal,input
+		open #df=fnH: 'Name='&df$&',Shr',i,i
 	else
 		open #df=fnH: 'Name='&df$&',KFName='&if$&',Shr',i,i,k ioerr COMBOF_OPEN_IOERR
 	end if
@@ -2117,7 +2117,7 @@ def library fnQgl(myline,mypos; qglcontainer,add_all_or_blank,forceGLsysIfPossib
 	! /r
 	if setupqgl$<>qgl_cursys$ then ! r:
 		setupqgl$=qgl_cursys$
-		open #company=fnH: 'Name=[Q]\'&qgl_cursys$&'mstr\Company.h[cno],Shr',internal,input ioerr Qgl_closeCompany
+		open #company=fnH: 'Name=[Q]\'&qgl_cursys$&'mstr\Company.h[cno],Shr',i,i ioerr Qgl_closeCompany
 		if qgl_cursys$='CL' then
 			read #company,using 'form pos 150,2*N 1': use_dept,use_sub ! read it from checkbook
 		else if qgl_cursys$='GL' then
@@ -2223,7 +2223,7 @@ def library fnRgl$*60(acctIn$; returnMaxLength,leaveDescFileOpen,forceGLsysIfPos
 	! /r
 	if setupRgl$<>qgl_cursys$&env$('cno') then ! r:
 		setupRgl$=qgl_cursys$&env$('cno')
-		open #hCompany=fnH: 'Name=[Q]\'&qgl_cursys$&'mstr\Company.h[cno],Shr',internal,input ioerr Rgl_closeCompany
+		open #hCompany=fnH: 'Name=[Q]\'&qgl_cursys$&'mstr\Company.h[cno],Shr',i,i ioerr Rgl_closeCompany
 		if qgl_cursys$='CL' then
 			read #hCompany,using 'form pos 150,2*N 1': useDept,useSub ! read it from checkbook
 		else if qgl_cursys$='GL' then

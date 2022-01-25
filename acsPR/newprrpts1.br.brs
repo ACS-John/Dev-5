@@ -13,7 +13,7 @@ MENU1: !
 	fnTos
 	respc=0
 	fnLbl(1,1,"Report:",11,1)
-	fncombof("Report",1,14,43,"[Q]\PRmstr\prreport.h[cno]",1,2,3,30,"[Q]\PRmstr\prrptidx.h[cno]",1+addall,1,"Select from the list of reports. You can only select one report at a time.",0)
+	fnComboF("Report",1,14,43,"[Q]\PRmstr\prreport.h[cno]",1,2,3,30,"[Q]\PRmstr\prrptidx.h[cno]",1+addall,1,"Select from the list of reports. You can only select one report at a time.",0)
 	resp$(respc+=1)=""
 	fnCmdKey("&Next",1,1,0,"Prints the highlighted report." )
 	fnCmdKey("&Complete",5,0,1,"Returns to menu")

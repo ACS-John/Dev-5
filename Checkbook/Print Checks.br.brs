@@ -214,7 +214,7 @@ MENU3: ! r: (reprint or transfer to history)
 	fnLbl(1,1,"Reprint Options:",38)
 	item5$(1)="Reprint Checks"
 	item5$(2)="Transfer to Check History"
-	fncomboa("ckprt-cmb1",1,40,mat item5$,tt$)
+	fnComboA("ckprt-cmb1",1,40,mat item5$,tt$)
 	resp$(respc+=1)=item5$(2)
 	fnCmdSet(41): ckey=fnAcs(mat resp$)
 	if resp$(1)=item5$(1) then ti2=1 else ti2=2
@@ -227,10 +227,10 @@ MENU4: ! r: (Reprint Options)
 	fnLbl(1,1,"Reprint Options:",38)
 	item4$(1)="Reprint all checks"
 	item4$(2)="Begin with specific Payee"
-	fncomboa("ckprt-cmb2",1,40,mat item4$,tt$)
+	fnComboA("ckprt-cmb2",1,40,mat item4$,tt$)
 	resp$(respc+=1)=item4$(1)
 	fnLbl(3,1,"Beginning payee number:",38)
-	fncombof("Paymstr",3,10,30,"[Q]\CLmstr\PayMstr.h[cno]",1,8,9,30,"[Q]\CLmstr\Payidx1.h[cno]",0,pas, "Enter the beginning payee number if you wish to only reprint part of the checks")
+	fnComboF("Paymstr",3,10,30,"[Q]\CLmstr\PayMstr.h[cno]",1,8,9,30,"[Q]\CLmstr\Payidx1.h[cno]",0,pas, "Enter the beginning payee number if you wish to only reprint part of the checks")
 	resp$(respc+=1)=holdpayee$
 	fnCmdSet(2)
 	ckey=fnAcs(mat resp$)
@@ -249,8 +249,8 @@ L3470: ! reprint beginning with specific payee
 ! /r
 TRANS_TO_CK_HIST: ! r: TRANSFER TO CHECK HISTORY
 	fn_write_history
-	goto FINIS ! /r
-FINIS: ! r: COMPLETE
+	goto Finis ! /r
+Finis: ! r: COMPLETE
 	fn_close(1)
 	fn_close(trmstr2)
 	fn_close(tralloc)
@@ -442,7 +442,7 @@ def fn_scr_check_entry
 	fnTxt(3,67,12,0,1,'10',0,"",1)
 	resp$(respc+=1)=tr$(3)
 	fnLbl(5,1,"Payee:",8,1,0,1)
-	fncombof("Paymstr",5,10,30,"[Q]\CLmstr\PayMstr.h[cno]",1,8,9,30,"[Q]\CLmstr\Payidx1.h[cno]",0,pas, "Enter the payee number or simply enter the payee name if no vendor record exits",1)
+	fnComboF("Paymstr",5,10,30,"[Q]\CLmstr\PayMstr.h[cno]",1,8,9,30,"[Q]\CLmstr\Payidx1.h[cno]",0,pas, "Enter the payee number or simply enter the payee name if no vendor record exits",1)
 	resp$(respc+=1)=holdpayee$
 	fnFra(9,1,12,96,"Breakdown Information"," ")
 	fnLbl(1,1,"General Ledger",30,0,0,2)
@@ -1297,10 +1297,10 @@ def fn_scr_main_questions(;___,ckey)
 	fnTxt(6,40,8,0,1,'30',0,"Next available check #. If reprinting checks from history, this check # is not applicable.")
 	resp$(respc+=1)=str$(ckn)
 	fnLbl(7,1,"Bank Account:",38,1)
-	fncombof("Bankmstr",7,40,20,"[Q]\CLmstr\bankmstr.h[cno]",1,2,3,15,"[Q]\CLmstr\Bankidx1.h[cno]",1,0, "Select bank account for printing")
+	fnComboF("Bankmstr",7,40,20,"[Q]\CLmstr\bankmstr.h[cno]",1,2,3,15,"[Q]\CLmstr\Bankidx1.h[cno]",1,0, "Select bank account for printing")
 	resp$(respc+=1)=str$(bankcode)
 	fnLbl(8,1,"Check Format:",38,1)
-	fncomboa("ckprt-2",8,40,mat layoutOption$)
+	fnComboA("ckprt-2",8,40,mat layoutOption$)
 	resp$(respc+=1)=layoutOptionSelected$
 	!   if env$('client')="Washington Parrish" then resp$(respc)=layoutOption$(4)
 	if env$('client')="Billings" or (env$('client')="ACS"and bankcode=2) then resp$(respc)=layoutOption$(2)

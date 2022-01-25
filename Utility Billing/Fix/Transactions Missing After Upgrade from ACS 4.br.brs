@@ -9,7 +9,7 @@ fn_setup
 if env$('acsDeveloper')<>'' then
 	open #hOld=fnH: 'Name=C:\ACS\(Client_Files)\GreeneCo\Old ACS 4 - Program Files (x86)-ACS\UBmstr\UBTransVB.h1,Shr',i,i,r
 else
-	open #hOld=fnH: 'Name=@:C:\Program Files (x86)\ACS\UBmstr\UBTransVB.h1,Shr',internal,input
+	open #hOld=fnH: 'Name=@:C:\Program Files (x86)\ACS\UBmstr\UBTransVB.h1,Shr',i,i
 end if
 dim tg(11)
 hTrans=fn_openFio('UB Transaction',mat t$,mat tN)

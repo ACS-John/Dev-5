@@ -61,7 +61,7 @@ goto Xit ! /r
 def fn_currentToAccumlatedTrans(; ___,hTransAccumulated,hTransCurrent,tr$*12,td$*30)
 	fnStatus("Transferring Current Transactions to Accumulated Trans...")
 	open #hTransAccumulated=fnH: "Name=[Q]\GLmstr\AcTrans.h[cno],RecL=72,use",internal,outin
-	open #hTransCurrent=fnH: "Name=[Q]\GLmstr\GLTrans.h[cno]",internal,input
+	open #hTransCurrent=fnH: "Name=[Q]\GLmstr\GLTrans.h[cno]",i,i
 	do
 		dim tr(7)
 		read #hTransCurrent,using 'form pos 1,N 3,N 6,N 3,N 6,PD 6.2,2*N 2,C 12,C 30,N 2': mat tr,tr$,td$ eof CTAT_EoTransCurrent

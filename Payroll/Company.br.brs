@@ -151,10 +151,10 @@ Screen2: ! r:
 		resp$(resp+=1)=fullname$(j)
 		fnTxt(j+5,pos_col(3),8,0,left,'',0,'Enter an abbreviated name that will be used in report headings.',0 )
 		resp$(resp+=1)=abrevname$(j)
-		fncomboa('MiscDeduct',j+5,pos_col(4),mat opt_ded_or_add$,'Indicate whether the amont should be deducted from the check or added to the check.',6)
+		fnComboA('MiscDeduct',j+5,pos_col(4),mat opt_ded_or_add$,'Indicate whether the amont should be deducted from the check or added to the check.',6)
 		if newdedcode(j)=0 then newdedcode(j)=1
 		resp$(resp+=1)=opt_ded_or_add$(newdedcode(j))
-		fncomboa('std_or_percent',j+5,pos_col(5),mat opt_std_or_percent$,'Standard would a fixed amount each pay period.  Percent would indicate the deduction is a percent of gross pay.',8)
+		fnComboA('std_or_percent',j+5,pos_col(5),mat opt_std_or_percent$,'Standard would a fixed amount each pay period.  Percent would indicate the deduction is a percent of gross pay.',8)
 		if newcalcode(j)=0 then newcalcode(j)=1 ! stop subscript error
 		resp$(resp+=1)=opt_std_or_percent$(newcalcode(j))
 		fnChk(j+5,pos_col(6),'',1) : if newdedfed(j)>0 then resp$(resp+=1)='True' else resp$(resp+=1)='False'

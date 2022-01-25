@@ -441,7 +441,7 @@ def fn_customer(; &editOne$,___,editOne,ckey)
 		for j=1 to udim(code$)
 			if extra(17)=val(code$(j)(1:1)) then custInfo$(respc)=code$(j)
 		next j
-		fncomboa("final_bill",18,27,mat code$,"",25)
+		fnComboA("final_bill",18,27,mat code$,"",25)
 		fnLbl(19,1,"Bulk Sort Code:",mylen,1)
 		fnTxt(19,27,12)
 		custInfo$(respc+=1)=extra$(6)
@@ -712,7 +712,7 @@ def fn_customer(; &editOne$,___,editOne,ckey)
 		fnLbl(6,1,"Account Code:",18,1,0)
 		opt$(1)="27 = Checking"
 		opt$(2)= "37 = Savings"
-		fncomboa("bankdraft",6,20,mat opt$,empty$,13)
+		fnComboA("bankdraft",6,20,mat opt$,empty$,13)
 		if dc$="37" then
 			dri$(5)="37 = Savings"
 		else
@@ -915,7 +915,7 @@ ServiceScreen: ! r:
 		srvLine+=1
 		fnLbl(srvLine+=1,1,"Rate Code:",srvCol1len,1)
 		fn_getRateCodeOptions(service_code,ratecode,mat rates$)
-		fncomboa("ubfm-rates",srvLine,srvCol2pos,mat rates$,"",30)
+		fnComboA("ubfm-rates",srvLine,srvCol2pos,mat rates$,"",30)
 		respc+=1                                                                                 ! 3
 		if service_code=1 then
 			fnLbl(srvLine+=1,1,"MeterNo:"        ,srvCol1len,1) : fnTxt(srvLine,srvCol2pos,12          ) : rateInfo$(respc+=1)=f$(1)       ! 4
@@ -1116,7 +1116,7 @@ def fn_ScrAddServiceMeterInfo(&srvLine,&respc1,mat rateInfo$,serviceCode$*2,serv
 		fnlbl(srvLine+=1,1,'Latitude:'          ,srvCol1len,1) : fntxt(srvLine,srvCol2pos,17, 0,0,''  ) : rateInfo$(respc1+=1)=location$(loc_latitude       )
 		fnlbl(srvLine+=1,1,'Meter Number:'      ,srvCol1len,1) : fntxt(srvLine,srvCol2pos,12, 0,0,''  ) : rateInfo$(respc1+=1)=location$(loc_meterNumber   )
 		fnlbl(srvLine+=1,1,'Transmitter Number:',srvCol1len,1) : fntxt(srvLine,srvCol2pos,20, 0,0,''  ) : rateInfo$(respc1+=1)=location$(loc_transmitter    )
-		fnlbl(srvLine+=1,1,'Meter Type:'        ,srvCol1len,1) : fncombof('',srvLine,srvCol2pos,0,'[Q]\UBmstr\MeterType.h[cno]',1,5,6,40,'[Q]\UBmstr\MeterTypeIdx.h[cno]',1) : rateInfo$(respc1+=1)=location$(loc_meterType     )
+		fnlbl(srvLine+=1,1,'Meter Type:'        ,srvCol1len,1) : fnComboF('',srvLine,srvCol2pos,0,'[Q]\UBmstr\MeterType.h[cno]',1,5,6,40,'[Q]\UBmstr\MeterTypeIdx.h[cno]',1) : rateInfo$(respc1+=1)=location$(loc_meterType     )
 		goto SasFinis
 	end if
 	SasNoLocation: !

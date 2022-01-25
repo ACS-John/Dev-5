@@ -156,12 +156,12 @@ do
 loop
 EoAcct: !
 	if fnUseDeptNo=0 or closeDeptToRetainedEarnings=1 then
-		goto FINIS
+		goto Finis
 	end if
 	dno=ano=sno=0
 goto SCR2
 
-FINIS: ! r:
+Finis: ! r:
 	close #hGlMstr1:
 	close #hGlMstr2:
 	close #hBudgetInfo:

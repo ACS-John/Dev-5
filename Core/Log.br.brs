@@ -28,7 +28,7 @@ def library fnlog(log$*512;log_type)
 	pr #h_log: date$("mm/dd/ccyy")&delim$;
 	pr #h_log: time$&delim$;
 	pr #h_log: log$ 
-	FINIS: ! 
+	Finis: ! 
 	close #h_log: ioerr ignore
 	Xit: ! 
 fnend 

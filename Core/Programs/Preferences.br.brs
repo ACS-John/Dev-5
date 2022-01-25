@@ -299,7 +299,7 @@ DO_SCREEN_PRINTER: ! r:
 		resp$(resp_pa_max_pages:=dsp_rc+=1)=pa_max_pages$
 		lc+=1
 		fnLbl(lc+=1,1,"Forms Format:",col1_width,1)
-		fncomboa('formsFormat',lc,col2_pos,mat pdf_or_printace$,'Select a format for special forms',10) ! 42,80,0,'70',0,'Select a printer to be used when printing receipts.')
+		fnComboA('formsFormat',lc,col2_pos,mat pdf_or_printace$,'Select a format for special forms',10) ! 42,80,0,'70',0,'Select a printer to be used when printing receipts.')
 		resp$(resp_formsFormat:=dsp_rc+=1)=formsFormat$
 		lc+=1
 		fnLbl(lc+=1,1,"** User Settings **",win_width,2)
@@ -327,7 +327,7 @@ DO_SCREEN_PRINTER: ! r:
 		lc+=1
 
 		fnLbl(lc+=1,1,"Receipt Printer:",col1_width,1)
-		fncomboa('printer',lc,col2_pos,mat printer_list$,'Select a printer to be used to pr receipts.',42) ! 42,80,0,'70',0,'Select a printer to be used when printing receipts.')
+		fnComboA('printer',lc,col2_pos,mat printer_list$,'Select a printer to be used to pr receipts.',42) ! 42,80,0,'70',0,'Select a printer to be used when printing receipts.')
 		resp$(resp_receipt_printer:=dsp_rc+=1)=receipt_printer$
 		fnButton(lc,col2_pos+42+5,'Test',14)
 		fnCmdKey("&Save",1,1)
@@ -383,7 +383,7 @@ do
 	fnLbl(lc+=1,1,"** System Settings **",win_width,2)
 	lc+=1 ! fnLbl(myline,mypos,txt$*200; mylen,myalign,font_mod,container,tabcon,lbl_tooltip$*256)
 	fnLbl(lc+=1,1,"Device Type:",col1_width,1,0,0,0,'Select device type - leave blank to reset to default')
-	fncomboa('u4Device',lc,col2_pos,mat u4_deviceOption$,'Select device type - leave blank to reset to default')
+	fnComboA('u4Device',lc,col2_pos,mat u4_deviceOption$,'Select device type - leave blank to reset to default')
 	resp$(resp_u4_device:=dsh_rc+=1)=u4_device$
 	lc+=1
 	fnChk(lc+=1,col2_pos,'Meter Location Id Sequential',1)

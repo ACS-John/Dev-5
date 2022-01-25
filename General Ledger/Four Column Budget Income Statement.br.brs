@@ -12,7 +12,7 @@
 	fnTop(program$)
 	report$="Statement of Income and Expenses"
 	if fnGlAskFormatPriorCdPeriod=5 then goto Xit ! ! sets fnps,fnpriorcd,fnfscode (primary/secondary,current year/Prior,period to print)
-	on fkey 5 goto FINIS
+	on fkey 5 goto Finis
 ! r: setup files, etc
 	cch$=fncch$
 	actpd$=fnactpd$
@@ -33,7 +33,7 @@
 	fHlMstr: form pos mp1,pd 3,pos 81,41*pd 6.2
 	! /r
 ReadFinStmtLayout: ! r:
-	read #hAcGlFnsX,using L400: r$,d$,te$,sp,ls,ds,ul,rs,bc,ap,mat ac,ic,fc eof FINIS
+	read #hAcGlFnsX,using L400: r$,d$,te$,sp,ls,ds,ul,rs,bc,ap,mat ac,ic,fc eof Finis
 	if ltrm$(r$)="" or ltrm$(r$)="0" then goto ReadFinStmtLayout
 	if costcntr=0 then goto L400
 	if fc=0 and te$="F" then goto L410
@@ -197,7 +197,7 @@ PrHeaderPrimary: ! r:
 	pr #255: tab(29);"Budget";tab(41);"Balance";tab(56);"  Balance";tab(72);"Over/Under"
 	pr #255:
 return ! /r
-FINIS: ! r:
+Finis: ! r:
 	eofcode=1
 	gosub PrHeaderSecondary
 	fnfscode(actpd)

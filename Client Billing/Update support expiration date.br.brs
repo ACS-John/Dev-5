@@ -22,7 +22,7 @@ def fn_updateSupportExpirationDate(; clientKey$*5)
 			posCol2=lenCol1+2
 			! (sfn$*100,lbuttonYNe,ps,width,df$*200,psk,lnk,psd,lnd; if$*200,limlis,urep,ttt$*200,contain,tabcon)
 			fnLbl(1,1,'Client:',lenCol1,alignRight)
-			fncombof('',1,posCol2,37,'S:\Core\Data\acsllc\Client.h[cno]',1,5,6,30,'S:\Core\Data\acsllc\Client-Idx.h[cno]',1)
+			fnComboF('',1,posCol2,37,'S:\Core\Data\acsllc\Client.h[cno]',1,5,6,30,'S:\Core\Data\acsllc\Client-Idx.h[cno]',1)
 			fnCmdSet( 2)
 			fk=fnAcs(mat resp$)
 			if fk<>5 then

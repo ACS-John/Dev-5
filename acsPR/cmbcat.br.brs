@@ -13,7 +13,7 @@ def library fncmbcat(myline,mypos; addall,container,indexfile$*200)
 			fen$="CcatALL.h[cno]"
 		if indexfile$="" then if$="[Q]\PRmstr\catindx.h[cno]" else : _
 			if$=indexfile$
-		fncombof(fen$,myline,mypos,43,"[Q]\PRmstr\jccat.h[cno]",1,11,12,25,if$,1+addall,1,"Select from the list of categories. To add a category record, go to the Category File.",container)
+		fnComboF(fen$,myline,mypos,43,"[Q]\PRmstr\jccat.h[cno]",1,11,12,25,if$,1+addall,1,"Select from the list of categories. To add a category record, go to the Category File.",container)
 		indexfile$=""
 		goto Xit
  

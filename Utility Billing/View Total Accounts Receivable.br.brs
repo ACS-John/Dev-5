@@ -35,7 +35,7 @@ def fn_total_ar
 fnend
 def fn_scanCustomerFile(&totalBal,&activeCount)
 	totalBal=activeCount=0
-	open #hCustomer=fnH: "Name=[Q]\UBmstr\Customer.h[cno],Shr",internal,input
+	open #hCustomer=fnH: "Name=[Q]\UBmstr\Customer.h[cno],Shr",i,i
 	do 
 		read #hCustomer,using "form pos 292,PD 4.2,PD 4,pos 1821,N 1": bal,customerBillingDate,finalBillingCode eof TA_FINIS
 		if excludeFinalBilled$='False' or finalBillingCode=0 then 

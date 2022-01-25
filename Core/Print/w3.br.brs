@@ -40,36 +40,36 @@ def library fnw3(taxyear$,ein$*12,mat a$,mat w,dcb,state$,stcode$;___,specialfor
 	fnpa_open('','W-3','PDF')
 	if enableBackground$='True' then fnpa_background('S:\Core\pdf\'&taxyear$&'\W-3.pdf')
 	fnpa_fontsize(12)
-	fnpa_txt("X",38,fn_line(2))
+	fnpa_txt('X',38,fn_line(2))
 	col1=  8
-	if env$('client')="Kincaid" then col1+=2
+	if env$('client')='Kincaid' then col1+=2
 	col2=113
 	col3=169
 	 ! if env$('acsdeveloper')<>'' then  pause ! specialform2018=1
-	if env$('client')='Thomasboro' or env$('client')="Cerro Gordo V" or env$('client')="Cerro Gordo T" or env$('client')="Kincaid" or env$('client')="Hope Welty" or env$('client')="Bethany" then specialform2018=1
+	! removed 1/21/2022        ! if env$('client')='Thomasboro' or env$('client')='Cerro Gordo V' or env$('client')='Cerro Gordo T' or env$('client')='Kincaid' or env$('client')='Hope Welty' or env$('client')='Bethany' then specialform2018=1
 	fnpa_txt(ein$,col1,fn_line(5)) ! Employer Identification Number (EIN)
 	fnpa_txt(a$(1),col1,fn_line(6))
 	fnpa_txt(a$(2),col1,fn_line(7)-2)
 	fnpa_txt(a$(3),col1,fn_line(7)+2)
-	fnpa_txt(cnvrt$("pic(--,---,---.##",w(2) ),col2,fn_line(4)) ! taxable wages
-	fnpa_txt(cnvrt$("pic(--,---,---.##",w(1) ),col3,fn_line(4)) ! fed wh
-	fnpa_txt(cnvrt$("pic(--,---,---.##",w(5) ),col2,fn_line(5)) ! ss wages
-	fnpa_txt(cnvrt$("pic(--,---,---.##",w(3) ),col3,fn_line(5)) ! ss wh
-	fnpa_txt(cnvrt$("pic(--,---,---.##",w(11)),col2,fn_line(6)) ! mc wages
-	fnpa_txt(cnvrt$("pic(--,---,---.##",w(12)),col3,fn_line(6)) ! medicare wh
-	fnpa_txt(cnvrt$("pic(--,---,---.##",w(6) ),col2,fn_line(7)) ! ss-tips
-	fnpa_txt(cnvrt$("pic(--,---,---.##",w(4) ),col3,fn_line(8)) ! eic
-	fnpa_txt(cnvrt$("pic(--,---,---.##",dcb  ),col3,fn_line(9)) ! deferred comp
+	fnpa_txt(cnvrt$('pic(zzzzzzzzzz.zz',w(2) ),col2,fn_line(4)) ! taxable wages
+	fnpa_txt(cnvrt$('pic(zzzzzzzzzz.zz',w(1) ),col3,fn_line(4)) ! fed wh
+	fnpa_txt(cnvrt$('pic(zzzzzzzzzz.zz',w(5) ),col2,fn_line(5)) ! ss wages
+	fnpa_txt(cnvrt$('pic(zzzzzzzzzz.zz',w(3) ),col3,fn_line(5)) ! ss wh
+	fnpa_txt(cnvrt$('pic(zzzzzzzzzz.zz',w(11)),col2,fn_line(6)) ! mc wages
+	fnpa_txt(cnvrt$('pic(zzzzzzzzzz.zz',w(12)),col3,fn_line(6)) ! medicare wh
+	fnpa_txt(cnvrt$('pic(zzzzzzzzzz.zz',w(6) ),col2,fn_line(7)) ! ss-tips
+	fnpa_txt(cnvrt$('pic(zzzzzzzzzz.zz',w(4) ),col3,fn_line(8)) ! eic
+	fnpa_txt(cnvrt$('pic(zzzzzzzzzz.zz',dcb  ),col3,fn_line(9)) ! deferred comp
 	fnpa_txt(state$,12,fn_line(11))
 	fnpa_txt(stcode$,22,fn_line(11))
 	col1=  8
 	col2= 51
 	col3=110
 	col4=169 
-	fnpa_txt(cnvrt$("pic(--,---,---,zzz.##",w(9)),col1,fn_line(12)) ! state wages
-	fnpa_txt(cnvrt$("pic(--,---,---,zzz.##",w(7)),col2,fn_line(12)) ! state wh
-	fnpa_txt(cnvrt$("pic(--,---,---.##",w(10)),col3,fn_line(12)) ! local wages
-	fnpa_txt(cnvrt$("pic(--,---,---.##",w(8)),col4,fn_line(12)) ! local wh
+	fnpa_txt(cnvrt$('pic(zzzzzzzzzzzzzz.zz',w(9)),col1,fn_line(12)) ! state wages
+	fnpa_txt(cnvrt$('pic(zzzzzzzzzzzzzz.zz',w(7)),col2,fn_line(12)) ! state wh
+	fnpa_txt(cnvrt$('pic(zzzzzzzzzz.zz',w(10)),col3,fn_line(12)) ! local wages
+	fnpa_txt(cnvrt$('pic(zzzzzzzzzz.zz',w(8)),col4,fn_line(12)) ! local wh
 	fnpa_finis
 fnend
 def fn_line(lineNumber; ___,returnN)

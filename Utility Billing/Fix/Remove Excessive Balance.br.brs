@@ -31,7 +31,7 @@ if cont then
 	dim acct$*10,custname$*30,trcust$(3)*10,trdate(3)
 	Fcustomer: form c 10,x 30,c 30,pos 1741,n 2,pos 217,12*pd 5,pos 292,pd 4.2,pd 4,12*pd 4.2,pos 388,10*pd 5.2,pos 1750,2*n 6
 	fn_openfiles ! open data files
-	open #h_iphold=fnH: "Name=[Q]\UBmstr\IpHold7.h[cno]",internal,input
+	open #h_iphold=fnH: "Name=[Q]\UBmstr\IpHold7.h[cno]",i,i
 	fnopenprn : fn_printheader
 	do
 		NEXT_CUSTOMER: !

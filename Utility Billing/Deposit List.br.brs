@@ -48,7 +48,7 @@
 	fnChk(6,mylen+4,"Subtotal By Route:",1)
 	if subtotal$='True' then resp$(resp_subtotal:=4)='True' else resp$(resp_subtotal:=4)='False'
 	fnLbl(8,1,"Final Billing Code:",mylen,1)
-	fncomboa("final_bill",8,mypos,mat filter_option$,"",25)
+	fnComboA("final_bill",8,mypos,mat filter_option$,"",25)
 	resp$(resp_filter:=5)=filter_default$
 	fnCmdSet(3)
 	ckey=fnAcs(mat resp$)

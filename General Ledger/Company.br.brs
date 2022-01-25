@@ -99,7 +99,7 @@ SCREEN_1: ! r:
 	resp_AllocExpToJc:=respc+=1
 	if jcc$="Y" or jccode=1 then resp$(resp_AllocExpToJc)='True' else resp$(resp_AllocExpToJc)='False'
 	fnLbl(18,1,"Posting Method:",mylen,right)
-	fncomboa("PostMethod",18,mypos,mat postingOption$,"Normally you would post immediately. You would only consider posting to holding files if the general ledger is months behind.",mylen)
+	fnComboA("PostMethod",18,mypos,mat postingOption$,"Normally you would post immediately. You would only consider posting to holding files if the general ledger is months behind.",mylen)
 	resp_glb=respc+=1
 	if glb=1 or glb=0 then resp$(resp_glb)=postingOption$(1) else resp$(resp_glb)=postingOption$(2)
 	fnCmdKey("&Next",1,1,0,"Moves to 2nd screen of company information.")
@@ -238,7 +238,7 @@ SCREEN_4: ! r:
 	for j=1 to 10
 		fnTxt(j+8,1,20,0,left,"",0,"Enter you deduction name.",0 )
 		resp$(resp+=1)=miscname$(j)
-		fncomboa("MIscdeduct",j+8,26,mat dedOrAddOption$,"Indicate whether the deduction should be deducted from the check or added to the check.",10)
+		fnComboA("MIscdeduct",j+8,26,mat dedOrAddOption$,"Indicate whether the deduction should be deducted from the check or added to the check.",10)
 		if dedcode(j)=0 then dedcode(j)=1
 		resp$(resp+=1)=dedOrAddOption$(dedcode(j))
 		fnChk(j+8,41,"",1)

@@ -15,7 +15,7 @@ do
 	dim item1$(1)*45
 	item1$(1)='ACS G/L system'
 	! item1$(2)='Accountant's Diskette'
-	fncomboa('claims-srt',lc,mypos,mat item1$,tt$)
+	fnComboA('claims-srt',lc,mypos,mat item1$,tt$)
 	resp$(1)=item1$(1)
 	fnLbl(lc+=1,1,'General Ledger Company Number:',mylen,1)
 	fnTxt(lc,mypos,5,0,0,'30')
