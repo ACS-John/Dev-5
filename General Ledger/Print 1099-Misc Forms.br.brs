@@ -8,7 +8,7 @@ if fn1099MiscAsk(seltp,unused_type,minamt,beg_date,end_date) then
 		dim vn$*8
 		dim nam$*30
 		dim ss$*11
-		dim box(11)
+		dim box(20)
 		dim ad$(3)*30
 		read #hPayee,using 'form pos 1,C 8,4*c 30,x 5,n 2,c 11',release: vn$,nam$,mat ad$,typ,ss$ eof EoPayee
 		ytdp=fn_YearToDapPay(hTrans,vn$, beg_date,end_date)
@@ -44,6 +44,6 @@ def fn_YearToDapPay(hTrans,key$; beg_date,end_date,___,returnN)
 	loop while trim$(key$)=trim$(trvn$)
 	ytdpFinis: !
 	fn_YearToDapPay=returnN
-	pr key$,beg_date,end_date,returnN : pause
+	! pr key$,beg_date,end_date,returnN : pause
 fnend
 include: ertn
