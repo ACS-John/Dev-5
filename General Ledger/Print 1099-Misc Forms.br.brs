@@ -44,5 +44,6 @@ def fn_YearToDapPay(hTrans,key$; beg_date,end_date,___,returnN)
 	loop while trim$(key$)=trim$(trvn$)
 	ytdpFinis: !
 	fn_YearToDapPay=returnN
+	pr key$,beg_date,end_date,returnN : pause
 fnend
 include: ertn
