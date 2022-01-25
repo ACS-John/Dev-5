@@ -10,7 +10,7 @@
  
 	fnTop(program$,cap$="Print State UC Report")
 	fncno(cno,cnam$)
-	open #1: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,input
+	open #1: "Name=[Q]\GLmstr\Company.h[cno],Shr",i,i
 	read #1,using 'form pos 1,3*C 40,2*C 12,C 5,pos 188,PD 7.2,pos 658,10*N 1': mat a$,mat b$,c$,ucm,mat deduc
 	close #1:
 	if fnprocess=1 then goto L240

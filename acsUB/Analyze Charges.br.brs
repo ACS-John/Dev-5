@@ -22,7 +22,7 @@ MAIN: !
 	code$(2)="Sewer"
 	code$(3)="Electric"
 	code$(4)="Gas"
-	fncomboa("Service",2,mylen+3,mat code$,"",16)
+	fnComboA("Service",2,mylen+3,mat code$,"",16)
 	fnLbl(2,1,"Rate Code",mylen,1)
 	fnTxt(3,mypos,3,3,0,'30')
 	resp$(3)=""

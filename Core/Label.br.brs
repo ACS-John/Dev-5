@@ -63,7 +63,7 @@ def library fnLabel(mat linestyle$)
 		opt$(1)="Avery 8160 (30/Page Ink Jet)"
 		opt$(2)="Avery 5160 (30/Page Laser)"
 		opt$(3)="Universal Data Processing (1-Up Dot-Matrix)"
-		fncomboa("labellib1",1,17,mat opt$,"Choose either dot-matrix or laser type labels",32)
+		fnComboA("labellib1",1,17,mat opt$,"Choose either dot-matrix or laser type labels",32)
 		fnreg_read('label format',resp$(1),opt$(1))
 		! resp$(1)=opt$(1)
 		fnCmdSet(2)

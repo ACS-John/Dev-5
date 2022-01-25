@@ -2,7 +2,7 @@
 ! creates a screen ace combobox for personnel burden
 	def library fncmbburden(myline,mypos; addall,container,indexfile$*200)
 !
-		library 'S:\Core\Library': fncno,fncombof,fnerror
+		library 'S:\Core\Library': fncno,fnComboF,fnerror
 		on error goto Ertn
 !
 		dim df$*200,if$*200
@@ -19,7 +19,7 @@
 		else 
 			if$=indexfile$
 		end if
-		fncombof(fen$,myline,mypos,43,"[Q]\PRmstr\burden.h[cno]",1,8,9,30,if$,1+addall,0,"Select from the list of personnel burden records. To add a personnel burden record, take the Add option.",container)
+		fnComboF(fen$,myline,mypos,43,"[Q]\PRmstr\burden.h[cno]",1,8,9,30,if$,1+addall,0,"Select from the list of personnel burden records. To add a personnel burden record, take the Add option.",container)
 		indexfile$=""
 		goto Xit
 	Xit: !

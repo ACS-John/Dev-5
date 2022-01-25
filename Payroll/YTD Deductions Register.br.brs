@@ -33,7 +33,7 @@ MENU1: !
  
 	fnDedNames(mat fullname$,mat abbrevname$,mat dedcode,mat calcode,mat dedfed,mat dedfica,mat dedst,mat deduc)
 	for j=1 to 20: abbrevname$(j)=lpad$(rtrm$(abbrevname$(j)),6) : next j
-	open #20: "Name=[Q]\PRmstr\Company.h[cno],Shr",internal,input
+	open #20: "Name=[Q]\PRmstr\Company.h[cno],Shr",i,i
 	read #20,using L360: mat a$,b$(1),mcr,mcm,feducrat,mat d$,loccode,feducmax,ficarate,ficamaxw,ficawh,mat m,mat r,mat e$
 	ficamaxw=ficamaxw*10
 	L360: form pos 1,3*c 40,c 12,pd 6.3,pd 6.2,pd 5.2,10*c 8,n 2,pd 4.2,pd 3.3,pd 4.2,pd 4.2,10*pd 4.2,10*pd 3.3,10*c 12

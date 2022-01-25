@@ -5,14 +5,14 @@ dim ta(25,2),fb(25),iv$*12,k$*5,e$*9,b(8),sc$*4,ivr(6),arta(2),ga(10),pgl$*12
 dim cde$(10)*6,gl$*12,des$*20
 pr newpage
 pr f "10,20,c 60,h,n": "T/M MERGE INVOICES IN PROCESS"
-open #3: "Name=S:\Core\Data\acsllc\TMWk2[acsUserId].h[cno],NoShr",internal,input
+open #3: "Name=S:\Core\Data\acsllc\TMWk2[acsUserId].h[cno],NoShr",i,i
 open #12: "Name=S:\Core\Data\acsllc\Transactions.h[cno],Shr",i,outi,r
 open #2: "Name=S:\Core\Data\acsllc\TMTRANS.h[cno],Shr",i,outi,r
 L130: form pos 54,pd 3
 open #1: "Name=S:\Core\Data\acsllc\Client.h[cno],KFName=S:\Core\Data\acsllc\Client-Idx.h[cno],Shr",i,outIn,k
 open #4: "Name=S:\Core\Data\acsllc\TMTRAddr.h[cno],Shr",i,outi,r
 ! open #h_armotran:=5: "Name=S:\Core\Data\acsllc\ARMoTran.h[cno],Shr",internal,output
-open #6: "Name=S:\Core\Data\acsllc\Company.h[cno],Shr",internal,input
+open #6: "Name=S:\Core\Data\acsllc\Company.h[cno],Shr",i,i
 read #6,using L190: pgl$
 L190: form pos 190,c 12
 close #6:

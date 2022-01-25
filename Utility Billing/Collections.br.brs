@@ -151,7 +151,7 @@ ScreenAdd: ! r:
 	
 	fnLbl(1,1,"Entry Type:",25,1)
 	if ~do_not_blank_rcpt then resp$(respc:=3)=""
-	fncomboa("coll_type_rdc",1,27,mat coll_type_option$)
+	fnComboA("coll_type_rdc",1,27,mat coll_type_option$)
 	if ~do_not_blank_rcpt then
 		for ax=1 to 3
 			if hresp1$=coll_type_option$(ax) then resp$(respc:=4)=coll_type_option$(ax): verify=1
@@ -294,7 +294,7 @@ EDIT_REC: ! r:
 	respc=0
 
 	fnLbl(1,1,"Entry Type:",25,1)
-	fncomboa("rdc",1,27,mat coll_type_option$)
+	fnComboA("rdc",1,27,mat coll_type_option$)
 	resp$(resp_CollType:=respc+=1)=fn_collType$(transType)
 	fnLbl(2,1,"Account:",25,1)
 	fncmbact(2,27)
@@ -670,7 +670,7 @@ def fn_setup
 
 		collections_filename$="[Q]\UBmstr\Collections-"&env$('acsUserId')&".h[cno]"
 
-		open #20: "Name=[Q]\UBmstr\Company.h[cno],NoShr",internal,input
+		open #20: "Name=[Q]\UBmstr\Company.h[cno],NoShr",i,i
 		read #20,using "form pos 128,C 1,c 1": receipt$,escrow$
 		close #20:
 

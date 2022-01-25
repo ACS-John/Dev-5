@@ -24,7 +24,7 @@ MAINSCREEN: ! r:
 	L105: !
 	a=max(1,a)
 	mat comboa$(a)
-	fncomboa("DocNames",1,18,mat comboa$,'',25)
+	fnComboA("DocNames",1,18,mat comboa$,'',25)
 	fnLbl(2,1,"Number of Copies:",mylen,myalign)
 	fnTxt(2,18,2)
 	response$(2)=str$(1)

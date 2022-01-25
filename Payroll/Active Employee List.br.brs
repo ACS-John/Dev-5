@@ -79,10 +79,10 @@ ASKFORMAT: ! r:
 	fnLbl(1,1,"Order for Printing Name:",28,1)
 	fi$="Emplist1"
 	item1$(1)="First Name First"
-	item1$(2)="Last Name First": fncomboa(fi$,1,31,mat item1$,"How is the employee name entered in the employee record?).")
+	item1$(2)="Last Name First": fnComboA(fi$,1,31,mat item1$,"How is the employee name entered in the employee record?).")
 	resp$(respc+=1)=item1$(1)
 	fnLbl(2,1,"Status Code:",28,1)
-	fncombof("EmpStatus",2,30,25,"[Q]\PRmstr\EmpStatus.dat",1,2,3,25,"[Q]\PRmstr\EmpStatus.idx",0,0, "Indicate the code used for terminated employees",fracustinfo,0)
+	fnComboF("EmpStatus",2,30,25,"[Q]\PRmstr\EmpStatus.dat",1,2,3,25,"[Q]\PRmstr\EmpStatus.idx",0,0, "Indicate the code used for terminated employees",fracustinfo,0)
 	resp$(respc+=1)=str$(status)
 	fnCmdKey("&Next",1,1,0,"Proceed with printing." )
 	fnCmdKey("E&xit",5,0,1,"Returns to menu")

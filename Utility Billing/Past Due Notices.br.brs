@@ -22,7 +22,7 @@ on error goto Ertn
 	fnLastBillingDate(d1)
 	fndat(d$(4))
 	dim at$(3)*40
-	open #21: 'Name=[Q]\UBmstr\Company.h[cno],Shr',internal,input
+	open #21: 'Name=[Q]\UBmstr\Company.h[cno],Shr',i,i
 	read #21,using 'form pos 1,3*C 40': at$(1),at$(2),at$(3)
 	close #21:
 	z=21
@@ -590,7 +590,7 @@ ScreenSelect: ! r:
 		fnTxt(1,30,10,0,0,'',1,'',0)
 		resp$(respc+=1)='hard coded'
 	else
-		fncomboa('pdnotrtf',1,30,mat fileRtf$)
+		fnComboA('pdnotrtf',1,30,mat fileRtf$)
 		! resp$(respc+=1)=fileRtf$(1)
 		if env$('client')='White Hall' then
 			resp$(respc+=1)='White_Ha'

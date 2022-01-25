@@ -257,14 +257,14 @@ def fn_hamster(uw$*128,mat lbl$,mat fln,hIn,mat p$; mat flTyp$,mat sln,mat mask$
 					else
 						mat option$(cj-1)
 					end if
-					fnComboa(uw$&'A'&str$(j),lc,mypos,mat option$) ! p$(j)
+					fnComboA(uw$&'A'&str$(j),lc,mypos,mat option$) ! p$(j)
 				else if lwrc$(control$(j,1))='combof' then
 					if mask2$(j)='glaccount' then
 						fnQgl(lc,mypos)	!  fnQgl(myline,mypos; container,x,forceGLsysIfPossible,qgllength)
 						p2$(j)=fnrgl$(p2$(j))
 					else 
 						! fnComboF(sfn$*100       ,lyne,ps,  width                                   ,df$*200        ,psk               ,lnk                 ,psd                ,lnd                ;if$*200       ,limlis              ,unused_userOrReplace,ttt$*200,contain,tabcon,keyFormat$)
-						fnCombof(uw$&'F'&str$(j),lc,mypos,val(control$(j,4))+val(control$(j,6))+3,control$(j,2),val(control$(j,3)),val(control$(j,4)),val(control$(j,5)),val(control$(j,6)),control$(j,7),val(control$(j,8)))
+						fnComboF(uw$&'F'&str$(j),lc,mypos,val(control$(j,4))+val(control$(j,6))+3,control$(j,2),val(control$(j,3)),val(control$(j,4)),val(control$(j,5)),val(control$(j,6)),control$(j,7),val(control$(j,8)))
 					end if
 				end if
 				! done adding control and label

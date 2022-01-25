@@ -276,7 +276,7 @@ def fn_opMain(omFileOpen$*256)
 	fnTxt(lc,col2_pos,30,256,0,'',1,'select any data file from the data set to be imported.  i.e. Z:\vol002\CLmstr\BankIdx.h2')
 	resp$(rc+=1)=omFileOpen$
 	fnLbl(lc+=2,1,'Company to Load:',col1_width,1)
-	fncomboa('compList',lc,col2_pos,mat archiveList$)
+	fnComboA('compList',lc,col2_pos,mat archiveList$)
 	resp$(resp_fileSource:=rc+=1)=archiveList$(1)
 	! fnLbl(lc+=1,1,'Destination Company Number:',col1_width,1)
 	! fnTxt(lc,col2_pos,5,5,0,'1030',0,'')

@@ -307,7 +307,7 @@ MaintainGlInfo: ! r:
 	right=1: mylen=25: mypos=mylen+3
 	fnTos
 	fnLbl(1,1,'Service:',mylen,right)
-	fncomboa('GLCmbSrv',1,mypos,mat option2$,'Set up records for every service and all rate codes within that service',20)
+	fnComboA('GLCmbSrv',1,mypos,mat option2$,'Set up records for every service and all rate codes within that service',20)
 	for j=1 to udim(optio2$)
 		if option2$(j)=service$ then resp$(1)=option2$(j)
 	next j

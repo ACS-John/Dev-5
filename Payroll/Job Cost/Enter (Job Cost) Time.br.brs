@@ -61,7 +61,7 @@ L420: fnTos
 	fnLbl(2,1,"Method of Payment:",mylen,1)
 	opt$(1)="1 = Salary" : opt$(2)= "2 = Hourly"
 	opt$(3)= "3 = Both"
-	fncomboa("Methods",2,mypos,mat opt$,empty$,13)
+	fnComboA("Methods",2,mypos,mat opt$,empty$,13)
 	if ji1(2)=1 then resp$(respc+=1)=opt$(1)
 	if ji1(2)=2 then resp$(respc+=1)=opt$(2)
 	if ji1(2)=3 then resp$(respc+=1)=opt$(3)
@@ -69,7 +69,7 @@ L420: fnTos
 	fnTxt(3,mypos,8,8,0,"1",0,"Date of transaction")
 	resp$(respc+=1)=str$(ji1(3))
 	fnLbl(4,1,"Payroll Department:",mylen,1)
-	fncombof("Deptname",4,mypos,25,"[Q]\PRmstr\DeptName.h[cno]",1,3,4,25,"[Q]\PRmstr\DeptNameIdx.h[cno]",0,0, " ",0,0)
+	fnComboF("Deptname",4,mypos,25,"[Q]\PRmstr\DeptName.h[cno]",1,3,4,25,"[Q]\PRmstr\DeptNameIdx.h[cno]",0,0, " ",0,0)
 	resp$(respc+=1)=str$(ji1(4))
 	fnLbl(5,1,"Regular Hours:",mylen,1)
 	fnTxt(5,mypos,8,8,0,"32",0,"")
@@ -90,7 +90,7 @@ L420: fnTos
 	fnTxt(10,mypos,10,10,0,'10',0,"Amount to be charged to job. Payroll will be extended as it is posted.")
 	resp$(respc+=1)=str$(ji2(3))
 	fnLbl(11,1,"Deduction/Addition Code:",mylen,1)
-	fncomboa("Deductions",11,mypos,mat comboname$,empty$,23)
+	fnComboA("Deductions",11,mypos,mat comboname$,empty$,23)
 	if ji2(4)=0 then resp$(respc+=1)=comboname$(1): goto L700
 	if ji2(4)>0 and ji2(4)<=20 then resp$(respc+=1)=comboname$(ji2(4)) else resp$(respc+=1)=""
 L700: fnLbl(12,1,"Units:",mylen,1)

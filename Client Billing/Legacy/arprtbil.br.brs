@@ -12,7 +12,7 @@ open #8: "Name=S:\Core\Data\acsllc\pedate.h[cno],RecL=20,use,Shr",i,outi,r
 if lrec(8)=0 then write #8,using "form pos 1,n 6": d1 else read #8,using "form pos 1,n 6",rec=1,release: d1
 close #8:
 form c 9,skip 0
-open #1: "Name=S:\Core\Data\acsllc\Company.h[cno],Shr",internal,input 
+open #1: "Name=S:\Core\Data\acsllc\Company.h[cno],Shr",i,i 
 read #1,using L210: mat name$,mat age,all 
 L210: form pos 1,4*c 40,pos 170,4*pd 2,pos 164,n 1
 close #1:

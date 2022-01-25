@@ -4,7 +4,7 @@ fn_setup
 fnTop(program$)
 dim ml$(0)*128
 ! fixgrid=99
-open #hCompany=fnH: 'Name=[Q]\GLmstr\Company.h[cno],Shr',internal,input
+open #hCompany=fnH: 'Name=[Q]\GLmstr\Company.h[cno],Shr',i,i
 read #hCompany,using 'form pos 150,2*N 1': use_dept,use_sub ! read fund and sub codes from general
 close #hCompany:
 open #hClAcct=fnH: 'Name=[Q]\CLmstr\GLmstr.h[cno],KFName=[Q]\CLmstr\GLIndex.h[cno],Shr',i,outIn,k ioerr OpenClAcctFinis
@@ -45,23 +45,23 @@ Main: ! r:
 		f1Col4=f1Col3+f1Col3len+2 : f1Col4Len=36
 		fnFra(4,1,4,f1Col4+f1Col4Len+2,'Financial Statement Information',' ',0)
 		fnLbl(1,1,'Balance Sheet Ref:',f1Col1Len,1,0,1)
-		fncombof('fs-bal',1,f1Col2,f1Col2Len,'[Q]\GLmstr\acglfnsb.h[cno]',1,5,6,30,'[Q]\GLmstr\agfsidx4.h[cno]',0,0, 'Select the balance sheet reference number where this account should appear on the balance sheet.',1)
+		fnComboF('fs-bal',1,f1Col2,f1Col2Len,'[Q]\GLmstr\acglfnsb.h[cno]',1,5,6,30,'[Q]\GLmstr\agfsidx4.h[cno]',0,0, 'Select the balance sheet reference number where this account should appear on the balance sheet.',1)
 		dim rf(6)
 		resp$(4)=str$(rf(1)) ! balance sheet ref #
 		fnLbl(1,f1Col3,'2nd Balance Sheet:',f1Col3len,1,0,1)
-		fncombof('fs-bal2',1,f1Col4,f1Col4Len,'[Q]\GLmstr\acglfnsc.h[cno]',1,5,6,30,'[Q]\GLmstr\agfsidx1.h[cno]',0,0, 'Select the balance sheet reference number where this account should appear on the secondary balance sheet.',1)
+		fnComboF('fs-bal2',1,f1Col4,f1Col4Len,'[Q]\GLmstr\acglfnsc.h[cno]',1,5,6,30,'[Q]\GLmstr\agfsidx1.h[cno]',0,0, 'Select the balance sheet reference number where this account should appear on the secondary balance sheet.',1)
 		resp$(5)=str$(rf(2)) ! balance sheet ref #
 		fnLbl(2,1,'Income Statement Ref:',f1Col1len,1,0,1)
-		fncombof('fs-inc',2,f1Col2,f1Col2Len,'[Q]\GLmstr\acglfnsi.h[cno]',1,5,6,30,'[Q]\GLmstr\agfsidx3.h[cno]',0,0, 'Select the income statement reference number where this account should appear on the income statement.',1)
+		fnComboF('fs-inc',2,f1Col2,f1Col2Len,'[Q]\GLmstr\acglfnsi.h[cno]',1,5,6,30,'[Q]\GLmstr\agfsidx3.h[cno]',0,0, 'Select the income statement reference number where this account should appear on the income statement.',1)
 		resp$(6)=str$(rf(3)) ! income statement ref #
 		fnLbl(2,f1Col3,'2nd Income Statement:',f1Col3len,1,0,1)
-		fncombof('fs-inc2',2,f1Col4,f1Col4Len,'[Q]\GLmstr\acglfnsj.h[cno]',1,5,6,30,'[Q]\GLmstr\agfsidx2.h[cno]',0,0, 'Select the income statement reference number where this account should appear on the secondary income statement.',1)
+		fnComboF('fs-inc2',2,f1Col4,f1Col4Len,'[Q]\GLmstr\acglfnsj.h[cno]',1,5,6,30,'[Q]\GLmstr\agfsidx2.h[cno]',0,0, 'Select the income statement reference number where this account should appear on the secondary income statement.',1)
 		resp$(7)=str$(rf(4)) ! 2nd income statement
 		fnLbl(3,1,'Cash Flow/Fund Ref:',f1Col1len,1,0,1)
-		fncombof('fs-cash',3,f1Col2,f1Col2Len,'[Q]\GLmstr\acglfnsf.h[cno]',1,5,6,30,'[Q]\GLmstr\agfsidx5.h[cno]',0,0, 'Select the cash flow reference number where this account should appear on the cash flow statement.',1)
+		fnComboF('fs-cash',3,f1Col2,f1Col2Len,'[Q]\GLmstr\acglfnsf.h[cno]',1,5,6,30,'[Q]\GLmstr\agfsidx5.h[cno]',0,0, 'Select the cash flow reference number where this account should appear on the cash flow statement.',1)
 		resp$(8)=str$(rf(5)) ! income statement ref #
 		fnLbl(3,f1Col3,'2nd Cash Flow/Fund:',f1Col3len,1,0,1)
-		fncombof('fs-cash2',3,f1Col4,f1Col4Len,'[Q]\GLmstr\acglfnsg.h[cno]',1,5,6,30,'[Q]\GLmstr\agfsidx6.h[cno]',0,0, 'Select the cash flow reference number where this account should appear on the cash flow statement.',1)
+		fnComboF('fs-cash2',3,f1Col4,f1Col4Len,'[Q]\GLmstr\acglfnsg.h[cno]',1,5,6,30,'[Q]\GLmstr\agfsidx6.h[cno]',0,0, 'Select the cash flow reference number where this account should appear on the cash flow statement.',1)
 		resp$(9)=str$(rf(6)) ! 2nd cash flow
 
 		fnLbl(10,1,'EOY Balance - 2 Years Ago:',30,1,0,0)

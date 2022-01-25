@@ -115,7 +115,7 @@ def fn_min_rln(mr_filename$*512,mr_rln_minimum)
 	end if  !
 fnend  ! fn_min_rln
 def fn_recl(filename$*512; ___,hTmp,returnN)
-	open #hTmp=fnH: 'Name='&filename$&',Shr',internal,input
+	open #hTmp=fnH: 'Name='&filename$&',Shr',i,i
 	returnN=rln(hTmp)
 	close #hTmp:
 	fn_recl=returnN
@@ -907,7 +907,7 @@ def fn_cfv_payroll
 	end if
 fnend
 	def fn_version(filename$*256; ___,returnN,hTmp)
-		open #hTmp=fnH: 'Name='&filename$&',Shr',internal,input
+		open #hTmp=fnH: 'Name='&filename$&',Shr',i,i
 		returnN=version(hTmp)
 		close #hTmp:
 		fn_version=returnN

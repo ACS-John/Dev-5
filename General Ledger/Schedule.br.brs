@@ -83,7 +83,7 @@ ADD_EDIT_SCHEDULES: ! r:
 	fnTos(sn$="Schedule1")
 	mylen=20: mypos=mylen+3 : right=1
 	fnLbl(1,1,"Schedule Number:",mylen,right)
-	fncombof('glschedule',1,mypos,0,"[Q]\GLmstr\acglschs.h[cno]",1,3,4,30,"[Q]\GLmstr\schindex.h[cno]",add_all)
+	fnComboF('glschedule',1,mypos,0,"[Q]\GLmstr\acglschs.h[cno]",1,3,4,30,"[Q]\GLmstr\schindex.h[cno]",add_all)
 	if edit=1 then resp$(1)=str$(sn)
 	if add=1 then resp$(1)=""
 	fnLbl(2,1,"Schedule Nane::",mylen,right)
@@ -101,7 +101,7 @@ ADD_EDIT_SCHEDULES: ! r:
 	option$(2)="Print Current Month and Year to Date"
 	option$(3)="Print Comparison (Income and Expense Accounts"
 	option$(4)="Print Comparison (Balance Sheet Accounts"
-	fncomboa("TypeOfPrint",6,mypos,mat option$,"You can choose any of the four types of schedules.",60)
+	fnComboA("TypeOfPrint",6,mypos,mat option$,"You can choose any of the four types of schedules.",60)
 	if cm=0 then cm=1
 	resp$(6)=option$(cm)
 	fnCmdKey("&Display G/L #'s",1,1,0,"Allows you to review, add, or change the G/L accounts that are contained in this schedule.")

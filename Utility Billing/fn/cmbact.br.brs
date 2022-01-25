@@ -14,5 +14,5 @@ def library fncmbact(myline,mypos; addall,container,indexfile$*256)
 	else 
 		if$=indexfile$
 	end if 
-	fncmbact=fncombof(fen$,myline,mypos,43,"[Q]\UBmstr\Customer.h[cno]",1,10,41,30,if$,1+addall,1,"Select from the list of accounts, to add an account go to the Customer File.",container)
+	fncmbact=fnComboF(fen$,myline,mypos,43,"[Q]\UBmstr\Customer.h[cno]",1,10,41,30,if$,1+addall,1,"Select from the list of accounts, to add an account go to the Customer File.",container)
 fnend 

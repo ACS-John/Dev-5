@@ -16,7 +16,7 @@ dim emppin$*17,tlcn$*6,contact$*27,contactph$*15,phoneext$*5,email$*40
 dim w2(9),i1(9),t1(9),ct$*20,st$*2,ibm$*8,namcde$*1,typemp$*1,io1$(15)
 dim terminat$*1,first$*15,mid$*15,last$*20,m(10),r(10),e$(10)*12
 
-open #1: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,input
+open #1: "Name=[Q]\GLmstr\Company.h[cno],Shr",i,i
 read #1,using FORM_COMPANY: mat a$,b$,mat d$,loccode,mat e$,mat dedfed,oldmax,mat m,mat r,mat e$,mat dedcode
 FORM_COMPANY: form pos 1,3*c 40,c 12,pos 150,10*c 8,n 2,pos 317,10*c 12,pos 638,10*n 1,pos 239,pd 4.2,pos 247,10*pd 4.2,10*pd 3.3,10*c 12,pos 618,10*n 1
 ! read #1,using FORM_PRCOINFO: mat a$,b$,c$,oldmax,mat dedfed

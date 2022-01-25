@@ -145,7 +145,7 @@ CHANGE_EMPLOYEE_NUMBER: !
 	fnTos
 	mylen=18: mypos=mylen+3 : right=1: rc=0
 	fnLbl(1,1,"Employee Number:",mylen,right)
-	fncombof("PRmstr",1,mypos,27,"[Q]\GLmstr\PRmstr.h[cno]",1,4,5,30,'',0,pas, "Choose from the list of employees.",0) : _
+	fnComboF("PRmstr",1,mypos,27,"[Q]\GLmstr\PRmstr.h[cno]",1,4,5,30,'',0,pas, "Choose from the list of employees.",0) : _
 	resp$(1)=""
 	fnCmdSet(2)
 	ckey=fnAcs(mat resp$)

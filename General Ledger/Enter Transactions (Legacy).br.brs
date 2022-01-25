@@ -73,7 +73,7 @@
 	cmask2$(6)='10'
 	cmask2$(7)=""
 
-	open #1: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,input
+	open #1: "Name=[Q]\GLmstr\Company.h[cno],Shr",i,i
 	read #1,using 'form pos 150,2*N 1,pos 298,15*PD 4,pos 382,N 2,pos 418,10*C 20,10*N 1,pos 668,10*C 12': mat xd,mat pgl,jccode,mat miscname$,mat dedcode,mat miscgl$
 	close #1:
 ! /r
@@ -113,7 +113,7 @@ SCREEN_1: ! r:
 ! fnOpt(4,2,"Input from Client A/R  Diskette",0,1) ! this option has errors and seems to be no longer used, so i removed it 12/29/2015
 ! resp$(4)='False'
 	fnLbl(7,1,"Type Of Entry:",mylen,right)
-	fncomboa("TypeOfEntry1",7,mypos,mat typeofentry_option$,"You must indicate the type of entry you will be entering.",18)
+	fnComboA("TypeOfEntry1",7,mypos,mat typeofentry_option$,"You must indicate the type of entry you will be entering.",18)
 	if sel=0 then sel=3
 	resp$(respc_entryType:=rc+=1)=typeofentry_option$(sel)
 	! resp$(4)=typeofentry_option$(max(1,sel)) !  for j=1 to 6
@@ -294,7 +294,7 @@ MAIN: ! r:
 			fnTxt(6,mypos,8,0,right,"",1,"Payee field disabled. Click 'Enable Payee' again to enable.",0 )
 			resp$(4)=""
 		else
-			fncombof("Paymstrcomb",6,mypos,35,"[Q]\GLmstr\PayMstr.h[cno]",1,8,9,39,"[Q]\GLmstr\payidx1.h[cno]",0,0, "If the payee # is known, the general ledger information can be extracted from that record.",0)
+			fnComboF("Paymstrcomb",6,mypos,35,"[Q]\GLmstr\PayMstr.h[cno]",1,8,9,39,"[Q]\GLmstr\payidx1.h[cno]",0,0, "If the payee # is known, the general ledger information can be extracted from that record.",0)
 			resp$(4)=vn$
 		end if
 	end if
@@ -587,7 +587,7 @@ return  ! /r
 COPY_AR_IN: ! r:
 	close #h_gl_work:
 	execute "COPY "&dv$&"GLWK101.h[cno],"&"Name=[Q]\GLmstr\GL_Work_"&env$('acsUserId')&".h[cno] -n"
-	open #10: "Name="&dv$&"ARTOGL.DAT",internal,input ioerr L5670
+	open #10: "Name="&dv$&"ARTOGL.DAT",i,i ioerr L5670
 	read #10,using L5650: cgl$(1),camt(1),cgl$(2),camt(2),cgl$(3),camt(3),cgl$(4),camt(4),cgl$(5),camt(5)
 L5650: form pos 1,c 12,n 10.2,c 12,n 10.2,c 12,n 10.2,c 12,n 10.2,c 12,n 10.2
 	close #10:
@@ -751,7 +751,7 @@ PAYROLL: ! r:
 	fnTxt(5,mypos,12,0,0,"",0,"Enter check number.",0)
 	resp$(3)=tr$
 	fnLbl(6,1,"Employee #:",mylen,right)
-	fncombof("PRmstr",6,mypos,35,"[Q]\GLmstr\PRmstr.h[cno]",1,4,5,30,"[Q]\GLmstr\PRIndex.h[cno]",1,0, "Choose from the list of employees.  Click Add Employee to add a new employee not shown on list.",0)
+	fnComboF("PRmstr",6,mypos,35,"[Q]\GLmstr\PRmstr.h[cno]",1,4,5,30,"[Q]\GLmstr\PRIndex.h[cno]",1,0, "Choose from the list of employees.  Click Add Employee to add a new employee not shown on list.",0)
 	resp$(4)=str$(xpr(1))
 	fnLbl(7,1,"General Ledger #:",mylen,right)
 	fnQgl(7,mypos,0,2,1)

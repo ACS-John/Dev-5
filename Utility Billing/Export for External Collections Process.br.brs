@@ -51,7 +51,7 @@ MENU1: !
 ! r: main loop
 	gosub HEADER ! work in progress
 	do
-		read #hCustomer,using F_CUSTOMER: z$,mat e$,f$(1),mat a,mat b,mat c,mat d,bal,f,mat g,mat adr,alp$,f$(2),f$(3),bra,mat gb,mat rw4,mat extra$ eof FINIS
+		read #hCustomer,using F_CUSTOMER: z$,mat e$,f$(1),mat a,mat b,mat c,mat d,bal,f,mat g,mat adr,alp$,f$(2),f$(3),bra,mat gb,mat rw4,mat extra$ eof Finis
 		F_CUSTOMER: form pos 1,c 10,4*c 30,c 12,7*pd 2,11*pd 4.2,4*pd 4,15*pd 5,pd 4.2,pd 4,12*pd 4.2,2*pd 3,c 7,2*c 12,pd 3,10*pd 5.2,78*pd 5,13*pd 4.2,13*n 6,156*pd 4.2,13*n 6,13*pd 4.2,pos 1864,c 30,7*c 12,3*c 30
 		gosub ALT_BILL_ADR
 		pr #h_ecp: z$&delim$; !    1
@@ -212,7 +212,7 @@ HEADER: ! r:
 	pr #h_ecp: 'CSZ - Alternate Billing'&delim$ ! ab$(3)
 	return  ! /r
 
-FINIS: ! r: Transfer to or from Hand Held Computer
+Finis: ! r: Transfer to or from Hand Held Computer
 	close #hCustomer: ioerr ignore
 	close #h_alt_bill: ioerr ignore
 	close #h_ecp: ioerr ignore

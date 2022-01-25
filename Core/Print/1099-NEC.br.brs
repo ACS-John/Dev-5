@@ -113,15 +113,15 @@ def fn_ask(&seltpN,&typeN,&minAmt,&beg_date,&end_date; ___, _
 	if env$('cursys')='PR' then
 		lc+=1
 		fnLbl(lc+=1,1,'Miscellaneous Deduction to Print:',mylen,1)
-		fncomboa('deductions',lc,mypos,mat deductionOption$,'Select the deduction you want printed.')
+		fnComboA('deductions',lc,mypos,mat deductionOption$,'Select the deduction you want printed.')
 		resp$(respc_deduction:=rc+=1)=seltp$
 		fnLbl(lc+=1,1,'1099 Box to Print:',mylen,1)
-		fncomboa('type',lc,mypos,mat typeOption$,'Select the code for the 1099 vendor type.')
+		fnComboA('type',lc,mypos,mat typeOption$,'Select the code for the 1099 vendor type.')
 		resp$(respc_type:=rc+=1)=type$
 	else if env$('cursys')='GL' or env$('cursys')='CL' then
 		fnLbl(lc+=1,1,'Payee Type to Print:',mylen,1)
 		resp$(respc_deduction:=rc+=1)=seltp$
-		fncombof('Payeetype',lc,mypos,27,'[Q]\[CurSys]mstr\PayeeType.dat',1,2,3,25,'',0,0, 'The payee type is a code used to detemine which box should be used on a 1099 misc form.  Enter the code for the payee type to print.')
+		fnComboF('Payeetype',lc,mypos,27,'[Q]\[CurSys]mstr\PayeeType.dat',1,2,3,25,'',0,0, 'The payee type is a code used to detemine which box should be used on a 1099 misc form.  Enter the code for the payee type to print.')
 	end if
 	lc+=1
 	fnLbl(lc+=1,1,'Minimum Amount to Print:',mylen,1)
@@ -134,7 +134,7 @@ def fn_ask(&seltpN,&typeN,&minAmt,&beg_date,&end_date; ___, _
 	fnOpt(lc+=1,3,'Print 1099-NEC')
 	resp$(respc_Print1099:=rc+=1)=destinationOpt$(1)
 	fnLbl(lc+=1,5,'Copy:',12,1,0)
-	fncomboa('Copy',lc,19,mat optCopy$, '',20)
+	fnComboA('Copy',lc,19,mat optCopy$, '',20)
 	resp$(respc_copyCurrent:=rc+=1)=optCopy$(copyCurrentN)
 	fnChk(lc+=1,20,'Enable Background',1)
 	resp$(respc_enableBackground:=rc+=1)=enableBackground$
@@ -227,7 +227,7 @@ def fn_ask(&seltpN,&typeN,&minAmt,&beg_date,&end_date; ___, _
 	end if
 	fn_ask=returnN
 fnend
-	def fn_ask_margins(; ___,lc,mypos,mylen)
+	def fn_ask_margins(; ___,lc,mypos,mylen,ckey_defaultMargins,x)
 		! sets local form1y,form2y,left
 		dim amResp$(10)*64
 		gosub SetDefaultMargins
@@ -235,6 +235,7 @@ fnend
 		amResp$(2)=fnPcRegRead$('form 2 Y'	,defaultMargin$(2))
 		amResp$(3)=fnPcRegRead$('form 3 Y'	,defaultMargin$(3))
 		amResp$(4)=fnPcRegRead$('X'        	,defaultMargin$(4))
+		AskMargins: !
 		fnTos
 		lc=0 : mylen=30 : mypos=mylen+2
 		fnLbl(lc+=1,1,'form 1 Distance from Top (mm):',mylen,1) 	: fnTxt(lc,mypos,3,0,1,'30')
@@ -242,24 +243,30 @@ fnend
 		fnLbl(lc+=1,1,'form 3 Distance from Top (mm):',mylen,1) 	: fnTxt(lc,mypos,3,0,1,'30')
 		lc+=1
 		fnLbl(lc+=1,1,'Left Margin Size (mm):',mylen,1)          	: fnTxt(lc,mypos,3,0,1,'30')
-		fnCmdSet(4)
+		fnCmdKey('&Save',1,1,0)
+		fnCmdKey('&Defaults',ckey_defaultMargins:=1022)
+		fnCmdKey('&Cancel',5,0,1)
 		fnAcs(mat amResp$,ckey)
-		if ckey<>5 then
+		if ckey=ckey_defaultMargins then
+			for x=1 to udim(mat defaultMargin$) : amResp$(x)=defaultMargin$(x) : nex x
+			goto AskMargins
+		else if ckey<>5 then
 			fnPcReg_write('form 1 Y' 	,amResp$(1))
 			fnPcReg_write('form 2 Y' 	,amResp$(2))
 			fnPcReg_write('form 3 Y' 	,amResp$(3))
 			fnPcReg_write('X'         	,amResp$(4))
-			form1y 	=val(amResp$(1))
+			form1y    	=val(amResp$(1))
 			form2y    	=val(amResp$(2))
 			left      	=val(amResp$(3))
 		end if
 	fnend
 	SetDefaultMargins: ! r:
-		! default Margin  =  2021/Zaleski   	! 2020 ! form 1 top margin
-		defaultMargin$(1)=          '3'    	!   '0' ! form 1 top margin
-		defaultMargin$(2)=         '97'    	!  '90' ! form 2 top margin
-		defaultMargin$(3)=        '180'    	! '180' ! form 3 top margin
-		defaultMargin$(4)=          '5'    	!   '5' ! left
+		dim defaultMargin$(4)
+		! default Margin  =  2021/John       	!2021/Zaleski   	! 2020 ! form 1 top margin
+		defaultMargin$(1)=           '1'    	!          '3'    	!   '0' ! form 1 top margin
+		defaultMargin$(2)=          '90'    	!         '97'    	!  '90' ! form 2 top margin
+		defaultMargin$(3)=         '180'    	!        '180'    	! '180' ! form 3 top margin
+		defaultMargin$(4)=           '5'    	!          '5'    	!   '5' ! left
 	return ! /r
 def library fn1099NecPrint(vn$*8,nam$*30,mat empAddr$,ss$*11,mat box)
 	if ~setup then fn_setup

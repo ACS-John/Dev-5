@@ -12,7 +12,7 @@ Screen1: ! r:
 	fnTos : respc=0
 	fnLbl(2,1,"Hand Held model:",16,1)
 	if lwrc$(devicePreference$)='[ask]' then
-		fncomboa("HH-FroCBox",2,18,mat deviceName$)
+		fnComboA("HH-FroCBox",2,18,mat deviceName$)
 		resp$(rc_Device:=respc+=1)=deviceSelected$
 	else
 		fnLbl(2,18,deviceSelected$)
@@ -160,7 +160,7 @@ AskMeterType: ! r:
 		myline=1
 	end if
 	fnLbl(myline,1,"Meter Type:")
-	fncombof('cmbMeterType',myline,13,width,'[Q]\UBmstr\MeterType.h[cno]',1,5,6,40, '[Q]\UBmstr\MeterTypeIdx.h[cno]',1)
+	fnComboF('cmbMeterType',myline,13,width,'[Q]\UBmstr\MeterType.h[cno]',1,5,6,40, '[Q]\UBmstr\MeterTypeIdx.h[cno]',1)
 	resp$(1)=""
 	fnCmdKey("&Next",1,1,0,"Add the selected route" )
 	fnCmdKey("&Finish",2,0,1,"Completed with all routes")
@@ -1462,7 +1462,7 @@ def fn_transfer
 		fnTos
 		mat resp$=("")
 		fnLbl(1,1,"Android Drive:",20,1)
-		fncomboa("USB-Drive",1,23,mat drive$,"Drive letter of the destination android device.")
+		fnComboA("USB-Drive",1,23,mat drive$,"Drive letter of the destination android device.")
 		fnCmdSet(2)
 		ckey=fnAcs(mat resp$)
 		if ckey<>5 then
@@ -1529,7 +1529,7 @@ fnend
 def fn_pcent
 	if ~pcent_setup then
 		pcent_setup=1
-		open #h_company=fnH: "Name=[Q]\UBmstr\Company.h[cno]",internal,input
+		open #h_company=fnH: "Name=[Q]\UBmstr\Company.h[cno]",i,i
 		read #h_company,using "form pos 130,n 4": pcent_return
 		close #h_company:
 		if pcent_return=0 then pcent_return=100

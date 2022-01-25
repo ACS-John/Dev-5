@@ -9,7 +9,7 @@
 		dim gb(10),pe$(4)*30,ba$(4)*30,at$(3)*40,datafile$*256,indexfile$*256
 !
 	fnLastBillingDate(d1)
-	open #21: "Name=[Q]\UBmstr\Company.h[cno],Shr",internal,input
+	open #21: "Name=[Q]\UBmstr\Company.h[cno],Shr",i,i
 	read #21,using "form pos 41,2*C 40": at$(2),at$(3)
 	close #21:
 	penalty_rate=.1 ! if env$('client')='Findlay' then penalty_rate=.1 else penalty_rate=.05
@@ -53,7 +53,7 @@
 		datafile$="[Q]\UBmstr\Customer.h[cno]"
 		indexfile$="[Q]\UBmstr\ubindx5.h[cno]"
 		kp=1741: kl=9 : dp=41 : dl=30
-		fncombof(fe$,8,pf,40,datafile$,kp,kl,dp,dl,indexfile$,2)
+		fnComboF(fe$,8,pf,40,datafile$,kp,kl,dp,dl,indexfile$,2)
 		resp$(respc+=1)="[All]"
 		fnLbl(9,1,"Route Number:",ll,1)
 		fncmbrt2(9,pf)

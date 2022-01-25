@@ -8,5 +8,5 @@ def library fncmbemp(myline,mypos; addall,container)
 	else 
 		fen$="CEmpALL.h[cno]"
 	end if
-	fncombof(fen$,myline,mypos,43,"[Q]\PRmstr\Employee.h[cno]",1,8,9,30,'[Q]\PRmstr\EmployeeIdx-no.h[cno]',1+addall,0,"Select from the list of employees. To add an employee, go to the Employee File.",container)
+	fnComboF(fen$,myline,mypos,43,"[Q]\PRmstr\Employee.h[cno]",1,8,9,30,'[Q]\PRmstr\EmployeeIdx-no.h[cno]',1+addall,0,"Select from the list of employees. To add an employee, go to the Employee File.",container)
 fnend

@@ -40,7 +40,7 @@ Initialize: ! r:
 goto READ_UBTRANS ! /r
 READ_UBTRANS: ! r: main loop
 	dim tg(11)
-	read #hTrans1,using F_UBTRANS: p$,tdate,tcode,tamount,mat tg,wr,wu,er,eu,gr,gu,tbal,pcode eof FINIS
+	read #hTrans1,using F_UBTRANS: p$,tdate,tcode,tamount,mat tg,wr,wu,er,eu,gr,gu,tbal,pcode eof Finis
 	if z_start$<>'' and p$<z_start$ then goto READ_UBTRANS
 	if z_end$<>'' and p$>z_end$ then goto READ_UBTRANS
 	if tdate=d1 and tcode=1 then
@@ -53,7 +53,7 @@ READ_UBTRANS: ! r: main loop
 	end if
 	goto READ_UBTRANS
 ! /r
-FINIS: ! r:
+Finis: ! r:
 	close #1: ioerr ignore
 	close #hTrans1: ioerr ignore
 	close #hTrans2: ioerr ignore

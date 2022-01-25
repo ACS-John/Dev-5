@@ -26,7 +26,7 @@ if tempx=12 then actpd$="twelve"
 if tempx=13 then actpd$="thirteen"
 if tempx=14 then actpd$="fourteen"
 L170: !
-	open #1: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,input
+	open #1: "Name=[Q]\GLmstr\Company.h[cno],Shr",i,i
 	read #1,using 'form pos 195,C 30': tb$
 	close #1:
 	tb$="("&trim$(tb$)&")"
@@ -36,7 +36,7 @@ MENU1: pr newpage
 	mylen=20: mypos=mylen+3 : right=1
 	option$(1)="1 = Edit Notes to Financial Statements" : _
 	option$(2)="2 = pr Notes"
-	fncomboa("NoteOption",1,mypos,mat option$,"You can edit or pr notes to the financial statements ",40)
+	fnComboA("NoteOption",1,mypos,mat option$,"You can edit or pr notes to the financial statements ",40)
 	fnCmdKey("&Next",1,1,0,"Allows you to enter information.")
 	fnCmdKey("&Cancel",5,0,1,"Return to menu.")
 	ckey=fnAcs(mat resp$)

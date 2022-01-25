@@ -74,7 +74,7 @@ ADD_EDIT_RATIOMST: !
 	fnTos
 	mylen=20: mypos=mylen+3 : right=1
 	fnLbl(1,1,"Ratio Number:",mylen,right)
-	fncombof('glRatiomst',1,mypos,0,"[Q]\GLmstr\ratiomst.h[cno]",1,3,4,40,"[Q]\GLmstr\ratioidx.h[cno]",add_all)
+	fnComboF('glRatiomst',1,mypos,0,"[Q]\GLmstr\ratiomst.h[cno]",1,3,4,40,"[Q]\GLmstr\ratioidx.h[cno]",add_all)
 	if edit=1 then resp$(1)=hac$
 	if add=1 then resp$(1)=""
 	fnLbl(2,1,"Ratio Nane::",mylen,right)

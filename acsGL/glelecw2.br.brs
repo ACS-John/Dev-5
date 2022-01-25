@@ -14,7 +14,7 @@
  
 	fnTop(program$,cap$="Create Electronic W-2s")
 	pr newpage
-	open #1: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,input  : _
+	open #1: "Name=[Q]\GLmstr\Company.h[cno],Shr",i,i  : _
 	read #1,using 'form pos 1,3*C 40,C 12,pos 618,50*N 1': mat a$,b$,mat dedcode,mat dedfed,mat dedfica,mat dedst,mat deduc : _
 	close #1:
 	on fkey 5 goto Xit

@@ -1,7 +1,7 @@
 def library fnGetFundList(mat fund_list)
   ! returns an array of all unique gl number funds
   autoLibrary
-  open #company=fnH: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,input 
+  open #company=fnH: "Name=[Q]\GLmstr\Company.h[cno],Shr",i,i 
   read #company,using 'form pos 150,N 1': use_dept
   close #company: 
   if use_dept then 

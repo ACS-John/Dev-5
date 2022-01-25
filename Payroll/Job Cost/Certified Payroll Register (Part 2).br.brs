@@ -35,7 +35,7 @@ next j
 open #1: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr",i,i,k
 open #2: "Name=[Q]\PRmstr\JCMSTR.h[cno],KFName=[Q]\PRmstr\JCIndx.h[cno],Shr",i,i,k
 open #3: "Name=[Temp]\Work."&session$,i,i,r
-open #4: "Name=[Temp]\Addr."&session$,internal,input ioerr Xit
+open #4: "Name=[Temp]\Addr."&session$,i,i ioerr Xit
 open #8: "Name=[Q]\PRmstr\Department.h[cno],KFName=[Q]\PRmstr\DeptIdx.h[cno]",i,outIn,k
 open #7: "Name=[Q]\PRmstr\PayrollChecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno]",i,outIn,k
 dim dr(7)

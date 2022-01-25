@@ -22,7 +22,7 @@ SCR1: !
 	wrd2$(1)="Account" : _
 	wrd2$(2)="Customer Name" : _
 	wrd2$(3)="Street" : _
-	fncomboa("bs",1,mypos,mat wrd2$) : _
+	fnComboA("bs",1,mypos,mat wrd2$) : _
 	resp$(respc+=1)=wrd2$(1)
 	fnLbl(2,1,"Report Heading Date:",mylen,1)
 	fnTxt(2,mypos,20) : _
@@ -31,7 +31,7 @@ SCR1: !
 	sel$(1)="Active customers" : _
 	sel$(2)="Inactive customers" : _
 	sel$(3)="[All]" : _
-	fncomboa("bs2",3,mypos,mat sel$) : _
+	fnComboA("bs2",3,mypos,mat sel$) : _
 	resp$(respc+=1)=sel$(1)
 	fnCmdSet(2)
 	ckey=fnAcs(mat resp$)

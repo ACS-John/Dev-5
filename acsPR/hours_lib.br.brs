@@ -20,7 +20,7 @@ def library fnHours(eno)
 		respc=0 : lc=0 : mat resp$=('') 
 		mylen=20 : mypos=mylen+2
 		fnLbl(lc+=1,1,'Employee Number:',mylen,1,0,0)
-		fncombof("PRmstr",lc,mypos,0,"[Q]\PRmstr\Employee.h[cno]",1,8,9,30,"[Q]\PRmstr\EmployeeIdx-no.h[cno]",2,pas, "Enter the employee number you wish to work with.",0)
+		fnComboF("PRmstr",lc,mypos,0,"[Q]\PRmstr\Employee.h[cno]",1,8,9,30,"[Q]\PRmstr\EmployeeIdx-no.h[cno]",2,pas, "Enter the employee number you wish to work with.",0)
 		if hact$="[All]" then resp$(1)="[All]" else resp$(1)=str$(eno)
 		fnButton(lc+=2,32,"&Refresh",46,"",0,0,0,0,1) 
 		!   fnButton(lc,41,"&Add",43) 
@@ -114,10 +114,10 @@ def library fnHours(eno)
 		respc=0 : lc=0 : mylen=21 : mypos=mylen+2: mat resp$=(""): right=1
 		fnFra(1,9,8,70,"Hourly Information - "&empname$,"",0) : frame1=1
 		fnLbl(lc+=1,1,'Employee Number:',mylen,right,0,frame1)
-		fncombof("PRmstr",lc,mypos,0,"[Q]\PRmstr\Employee.h[cno]",1,8,9,30,"[Q]\PRmstr\EmployeeIdx-no.h[cno]",0,pas, "Enter the employee number to whom the time should be recorded",frame1) 
+		fnComboF("PRmstr",lc,mypos,0,"[Q]\PRmstr\Employee.h[cno]",1,8,9,30,"[Q]\PRmstr\EmployeeIdx-no.h[cno]",0,pas, "Enter the employee number to whom the time should be recorded",frame1) 
 		resp$(1)=str$(empno)
 		fnLbl(lc+=1,1,'Classification:',mylen,right,0,frame1)
-		fncombof("Hours",lc,mypos,0,"[Q]\PRmstr\Hourclass.h[cno]",1,5,6,30,"[Q]\PRmstr\Hourclass-idx.h[cno]",0,pas, "Enter the proper classification of hours. If you need a new classification, you must add it under a different menu option",frame1) 
+		fnComboF("Hours",lc,mypos,0,"[Q]\PRmstr\Hourclass.h[cno]",1,5,6,30,"[Q]\PRmstr\Hourclass-idx.h[cno]",0,pas, "Enter the proper classification of hours. If you need a new classification, you must add it under a different menu option",frame1) 
 		resp$(2)=class$
 		fnLbl(lc+=1,1,'Date:',mylen,right,0,frame1)
 		if addhours=1 then tdate=0

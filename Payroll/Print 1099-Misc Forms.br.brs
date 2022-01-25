@@ -10,7 +10,7 @@ do ! r: main loop
 	dim empAddr$(3)*30
 	mat empAddr$=('')
 	dim vn$*8,nam$*30,ss$*11
-	read #hEmployee,using 'form pos 1,c 8,3*c 30,c 11': vn$,nam$,empAddr$(1),empAddr$(2),ss$ eof FINIS
+	read #hEmployee,using 'form pos 1,c 8,3*c 30,c 11': vn$,nam$,empAddr$(1),empAddr$(2),ss$ eof Finis
 	eno=val(vn$) ioerr START
 	dim box(11)
 	mat box=(0)
@@ -33,7 +33,7 @@ do ! r: main loop
 	end if
 loop
 ! /r
-FINIS: ! r:
+Finis: ! r:
 	close #hEmployee: ioerr ignore
 	close #hChecks: ioerr ignore
 	seltp=type=min1=0

@@ -10,7 +10,7 @@ dim z$*10,e$(4)*30,f$*12,g(12),d(15),w$*31,y$*39,x$*70,b(11)
 dim gb(10),pe$(4)*30,ba$(4)*30,at$(3)*40,billstart$*5,billend$*5
 
 fnLastBillingDate(d1)
-open #21: "Name=[Q]\UBmstr\Company.h[cno],Shr",internal,input 
+open #21: "Name=[Q]\UBmstr\Company.h[cno],Shr",i,i 
 read #21,using "form pos 41,2*C 40": at$(2),at$(3)
 close #21: 
 at$(1)=env$('cnam')
@@ -58,7 +58,7 @@ SCREEN1: !
 	fnTxt(7,pf,8,8,1,"1")
 	resp$(respc+=1)=cnvrt$("pic(zzzzzz)",d1)
 	fnLbl(8,1,"Starting Route/Sequence:",ll,1)
-	fncombof("ubm-act-nam",8,pf,40,"[Q]\UBmstr\Customer.h[cno]",1741,9,41,30,"[Q]\UBmstr\ubindx5.h[cno]",2)
+	fnComboF("ubm-act-nam",8,pf,40,"[Q]\UBmstr\Customer.h[cno]",1741,9,41,30,"[Q]\UBmstr\ubindx5.h[cno]",2)
 	resp$(respc+=1)="[All]"
 	fnLbl(9,1,"Route Number:",ll,1)
 	fncmbrt2(9,pf)

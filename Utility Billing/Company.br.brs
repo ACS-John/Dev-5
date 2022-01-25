@@ -219,7 +219,7 @@ DoLoad: ! r:
 	fncreg_read('Route High',bkno2$, '99') : bkno2=val(bkno2$) ! Route Number Range High
 	
 	
-	open #hCompany=fnH: "Name=[Q]\UBmstr\Company.h[cno]",internal,input 
+	open #hCompany=fnH: "Name=[Q]\UBmstr\Company.h[cno]",i,i 
 	read #hCompany,using "form pos 1,3*C 40,X 6,N 1,C 1,c 1,n 4": mat CompanyNameAndAddr$,maintac,rcpt$,escrow$,pcent ioerr DoLoadCompanyReadErr
 	close #hCompany: 
 	fnLastBillingDate(lastBillingDate)
@@ -327,7 +327,7 @@ def fn_cmb_rate(searchcode$,cr_lyne,cr_pos,ttt$*300,fra)
 	! 
 	close #hRate: 
 	! /r
-	fncomboa("ubfm-rates",cr_lyne,cr_pos,mat rates$,ttt$,30,fra)
+	fnComboA("ubfm-rates",cr_lyne,cr_pos,mat rates$,ttt$,30,fra)
 fnend
 def library fnEnableCostOfGas(; setIt$)
 	if ~setup then fn_setup

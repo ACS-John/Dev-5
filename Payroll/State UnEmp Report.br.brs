@@ -53,7 +53,7 @@
 	fnTop(program$,cap$="State UnEmp Report")
 	fncreg_read('calculation date text',quarter_ending_date$)
 	fnGetPayrollDates(beg_date,end_date,qtr1,qtr2,qtr3,qtr4)
-	open #1: "Name=[Q]\PRmstr\Company.h[cno],Shr",internal,input
+	open #1: "Name=[Q]\PRmstr\Company.h[cno],Shr",i,i
 	read #1,using 'form pos 1,3*C 40,2*C 12,PD 5.2,10*C 8,N 2,PD 4.2,PD 3.3,PD 4.2,PD 4.2,10*PD 4.2,10*PD 3.3,10*C 12,pos 618,30*N 1': mat a$,mat b$,feducrat,mat d$,loccode,feducmax,ficarate,ficamaxw,ficawh,mat m,mat r,mat e$
 	close #1:
 	ficamaxw=ficamaxw*10
@@ -78,10 +78,10 @@
 	fnTxt(1,30,20,0,0,"",0,"Use alpha format (eg. March 31, 20xx)")
 	if trim$(quarter_ending_date$)='' then resp$(respc+=1)=date$("Month DD, CCYY") else resp$(respc+=1)=quarter_ending_date$
 	fnLbl(2,1,"State Code:",26,1)
-	fncomboa("pruc1-2",2,30,mat option1$,"Enter the state code from the company information file for the state being processed.")
+	fnComboA("pruc1-2",2,30,mat option1$,"Enter the state code from the company information file for the state being processed.")
 	resp$(respc+=1)=option1$(1)
 	fnLbl(3,1,"Quarter Code:",26,1)
-	fncomboa("pruc1-3",3,30,mat qtr_option$,"Enter the quarter you are processing.")
+	fnComboA("pruc1-3",3,30,mat qtr_option$,"Enter the quarter you are processing.")
 	resp$(respc+=1)=quarter$
 	fnChk(5,40,"Round to Whole Dollars:",1)
 	resp$(respc+=1)='False'
@@ -94,7 +94,7 @@
 	fnChk(8,40,"Show State Tax Withheld:",1)
 	resp$(respc+=1)=column$(4)
 	fnLbl(10,1,"Payroll Department:",26,1)
-	fncombof("DeptName",10,30,29,"[Q]\PRmstr\DeptName.h[cno]",1,3,4,25,"[Q]\PRmstr\DeptNameIdx.h[cno]",2,0, " ",0,0)
+	fnComboF("DeptName",10,30,29,"[Q]\PRmstr\DeptName.h[cno]",1,3,4,25,"[Q]\PRmstr\DeptNameIdx.h[cno]",2,0, " ",0,0)
 	resp$(respc+=1)='[All]'
 	fnCmdSet(2)
 	ckey=fnAcs(mat resp$)
@@ -120,7 +120,7 @@
 	if quarter_code=3 then ending_date=qtr4
 	if quarter_code=4 then ending_date=end_date
 ! /r
-	on fkey 5 goto FINIS
+	on fkey 5 goto Finis
 	fnopenprn
 	if file$(255)(1:3)="PRN" then redir=0 else redir=1
  
@@ -187,7 +187,7 @@ DONE: ! r:
 L1460: form pos 5,c 15,pos 42,pic(--,---,---.zz),pos 57,pic(--,---,---.zz),pos 70,pic(----,---.zz),skip redir
 	pr #255,using L1480: "U/C Tax Due:",round(grand_total(3)*r(stcode)*.01,2)
 L1480: form pos 5,c 15,pic(--,---,---.zz)
-FINIS: close #2: ioerr ignore
+Finis: close #2: ioerr ignore
 	close #h_department: ioerr ignore
 	fncloseprn
 	fnXit ! /r

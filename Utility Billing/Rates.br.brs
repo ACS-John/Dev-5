@@ -66,7 +66,7 @@ AddNewRecord: ! r:
 	mat resp$=("")
 	fnLbl(1,1,"Service Type:",20,1)
 	fnLbl(1,29,"Rate Code:",10,1)
-	fncomboa("rate_type",1,22,mat option$,"All codes must be between 1 and 99",2)
+	fnComboA("rate_type",1,22,mat option$,"All codes must be between 1 and 99",2)
 	resp$(1)=""
 	fnTxt(1,40,2,0,0,"",0,"All codes must be between 1 and 99")
 	fnCmdSet(2)
@@ -112,7 +112,7 @@ RateEdit: ! r: maintain rate file
 	fnTos
 	c1=20 : c2=32 : c3=44
 	fnLbl(1,1,"Service Type:",20,1)
-	! fncomboa("ubrate3",1,22,mat option$,"All codes must be between 1 and 99",2)
+	! fnComboA("ubrate3",1,22,mat option$,"All codes must be between 1 and 99",2)
 	fnTxt(1,22,2,0,0,"",1)
 	fnLbl(1,29,"Rate Code:",10,1)
 	fnTxt(1,40,2,0,0,'30',1)

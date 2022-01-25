@@ -314,7 +314,7 @@ fnend
 
 def fn_combineIntoTmSht(file_from$*256; ___,tce_key$,wo_desc$*30,h_from,h_to,toInp3,toInp5)
 
-	open #h_from=fnH: 'Name='&file_from$,internal,input
+	open #h_from=fnH: 'Name='&file_from$,i,i
 	open #h_to=fnH: 'Name=[Temp]\TmSht[session],KFName=[Temp]\TmSht-idx[session],Replace,RecL='&str$(rln(h_from))&',KPs=1/36/25,KLn=5/2/6',i,outIn,k
 	do
 		read #h_from,using F_time: inp1$,inp2,inp3,inp4,inp5,inp6,inp7,b6,b7,b8$,sc,o_o,wo_desc$ eof TCE_EOF
@@ -431,7 +431,7 @@ def fn_mergeInvoices
 	! clmstr dims
 	dim ca(10),sCa(10)
 	fnStatus('Merging Invoices...')
-	open #h_tmwk2=fnH: 'Name=S:\Core\Data\acsllc\tmpInvoice.h[cno],NoShr',internal,input
+	open #h_tmwk2=fnH: 'Name=S:\Core\Data\acsllc\tmpInvoice.h[cno],NoShr',i,i
 	
 
 	dim k$*5

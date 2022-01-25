@@ -5,7 +5,7 @@
 	on error goto Ertn
 	dim bp(13)
 	dim resp$(128)*256
-	open #company=fnH: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,input
+	open #company=fnH: "Name=[Q]\GLmstr\Company.h[cno],Shr",i,i
 	read #company,using 'form pos 150,2*N 1,pos 384,n 2': use_dept,use_sub,nap
 	close #company:
 	fnGetFundList(mat fund_list)

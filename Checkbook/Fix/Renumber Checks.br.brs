@@ -5,7 +5,7 @@ on error goto Ertn
 
 dim de$*30,tr$(5)*35
 
-open #20: 'Name=[Q]\CLmstr\Company.h[cno],Shr',internal,input
+open #20: 'Name=[Q]\CLmstr\Company.h[cno],Shr',i,i
 read #20,using 'form pos 417,N 1': rcn
 close #20:
 open #trmstr:=1: 'Name=[Q]\CLmstr\TrMstr.h[cno],KFName=[Q]\CLmstr\TrIdx1.h[cno]',i,outIn,k

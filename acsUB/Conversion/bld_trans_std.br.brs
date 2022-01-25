@@ -78,7 +78,7 @@ PHASE2: !
  
  
 	pr 'moving trans from ubTrans to ubTranVB'
-	open #trans=2: "Name=[Q]\UBmstr\ubTrans.h[cno]",internal,input
+	open #trans=2: "Name=[Q]\UBmstr\ubTrans.h[cno]",i,i
 READ_TRANS: !
 L680: read #trans,using 'form pos 1,C 10,pd 4.2,pd 4,n 1,n 1,pd 3': p$,tamt,tdate,transcode,postcode,nta eof PHASE3
 	if postcode=5 then goto L680 ! don't get trans from current file that also been transferred to history

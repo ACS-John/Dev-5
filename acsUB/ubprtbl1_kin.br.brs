@@ -10,7 +10,7 @@
 
 	fncno(cno,cnam$) : _
 	fnLastBillingDate(d1)
-	open #21: "Name=[Q]\UBmstr\Company.h[cno],Shr",internal,input  : _
+	open #21: "Name=[Q]\UBmstr\Company.h[cno],Shr",i,i  : _
 	read #21,using "form pos 41,2*C 40": at$(2),at$(3) : _
 	close #21:
 	at$(1)=cnam$ : _
@@ -55,7 +55,7 @@ SCREEN1: !
 	datafile$="[Q]\UBmstr\Customer.h[cno]" : _
 	indexfile$="[Q]\UBmstr\ubindx5.h[cno]" : _
 	kp=1741: kl=9 : dp=41 : dl=30 : _
-	fncombof(fe$,8,pf,40,datafile$,kp,kl,dp,dl,indexfile$,2) : _
+	fnComboF(fe$,8,pf,40,datafile$,kp,kl,dp,dl,indexfile$,2) : _
 	resp$(respc+=1)="[All]"
 	fnLbl(9,1,"Route Number:",ll,1)
 	fncmbrt2(9,pf) : _

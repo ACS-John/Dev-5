@@ -38,7 +38,7 @@ fnLbl(2,1,"Billing Date:" ,mylen,1) ! fnLbl(2,36,"(most recent billing date only
 fnTxt(2,mypos,8,0,1,"1")
 resp$(respc+=1)=str$(d1)
 fnLbl(3,1,"Service for Analysis:",mylen,1)
-fncomboa('servicCodessMetered',3,mypos,mat serviceCodeMetered$)
+fnComboA('servicCodessMetered',3,mypos,mat serviceCodeMetered$)
 resp$(respc+=1)=serviceCodeMetered$(1)
 fnLbl(4,1,"Rate Code (blank for all):",mylen,1)
 fnTxt(4,mypos,2,0,1,'30')

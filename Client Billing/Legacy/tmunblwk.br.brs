@@ -45,7 +45,7 @@ L490: form pos 5,c 30
 	goto L520
 L510: scdesc$=" "
 L520: return
-L530: open #6: "Name=S:\Core\Data\acsllc\Work2.H"&wsid$,internal,input ioerr L550
+L530: open #6: "Name=S:\Core\Data\acsllc\Work2.H"&wsid$,i,i ioerr L550
 	close #6,free:
 L550: open #6: "Name=S:\Core\Data\acsllc\Work2.H"&wsid$&",SIZE=0,RecL=76",internal,output ioerr Ertn
 L560: pr newpage
@@ -79,7 +79,7 @@ L820: pr newpage
 L840: input fields "10,55,n 1,ue,n": prtcli conv L840
 	if prtcli=1 then goto L990
 	if prtcli><2 then goto L820
-	open #7: "Name=S:\Core\Data\acsllc\Work1.h"&wsid$,internal,input ioerr L890
+	open #7: "Name=S:\Core\Data\acsllc\Work1.h"&wsid$,i,i ioerr L890
 	close #7,free:
 L890: open #7: "Name=S:\Core\Data\acsllc\Work1.h"&wsid$&",SIZE=0,RecL=5",internal,output ioerr Ertn
 L900: pr newpage
@@ -96,7 +96,7 @@ L990: pr newpage
 	pr f "23,2,c 30,n": "Press F5 to stop"
 	gosub L2600
 	if prtcli=1 then goto L1090
-	open #7: "Name=S:\Core\Data\acsllc\Work1.h"&wsid$&",NoShr",internal,input ioerr Ertn
+	open #7: "Name=S:\Core\Data\acsllc\Work1.h"&wsid$&",NoShr",i,i ioerr Ertn
 L1050: if prtcli=1 then goto L1090
 L1060: read #7,using L960: cliprt$ eof L1480 ioerr Ertn
 	read #1,using L1100,key=cliprt$: z$,cliname$,pno,mat ca nokey L1060 ioerr Ertn ! READ CLIENT RECORDS

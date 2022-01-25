@@ -49,10 +49,10 @@ MENU1: !
 	fncmbrt2(lc,mypos) 
 	resp$(1)="1"
 	fnLbl(lc+=1,1,"Service Type - 1st Service:",mylen,1)
-	fncomboa("ubrate3",lc,mypos,mat option$) 
+	fnComboA("ubrate3",lc,mypos,mat option$) 
 	resp$(2)=option$(1)
 	fnLbl(lc+=1,1,"Service Type - 2nd Service:",mylen,1)
-	fncomboa("ubrate3",lc,mypos,mat option$) 
+	fnComboA("ubrate3",lc,mypos,mat option$) 
 	resp$(3)=option$(1)
 	fnFra(5,1,4,45,"Single Wide or Double Wide","Allow one or two customers per page.",0)
 	fnOpt(1,2,"Singe Wide",0,1) 

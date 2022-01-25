@@ -6,7 +6,7 @@ fnopenprn
 namtab=int(66-(len(rtrm$(env$('Program_Caption')))/2))
 dim scr1$(8),fl1$(11),in1$(10),ot1$(10),scrid$(3)*80,inp(9),iv$*12,a1$*30
 dim m$*11,fm$*54,fp$*80,pt(4),fl2$(7),scr2$(4),ot2$(4)
-open #1: "Name=S:\Core\Data\acsllc\Company.h[cno],Shr",internal,input
+open #1: "Name=S:\Core\Data\acsllc\Company.h[cno],Shr",i,i
 read #1,using L140: dept,subac
 L140: form pos 162,2*n 1
 close #1:

@@ -24,7 +24,7 @@ def library fncmbcno(myline,mypos; mysys$,___,dataPath$*256)
 		if filename$(a)<>'' then 
 			end=len(filename$(a))
 			opt$(a)=filename$(a)(10:end)
-			open #x=fnH: 'Name='&dataPath$&'\Company.h'&opt$(a),internal,input 
+			open #x=fnH: 'Name='&dataPath$&'\Company.h'&opt$(a),i,i 
 			dim cnam$*40
 			read #x,using 'form pos 1,c 40': cnam$
 			close #x: 
@@ -44,7 +44,7 @@ def library fncmbcno(myline,mypos; mysys$,___,dataPath$*256)
 		end if 
 	next a
 	EXITFOR: ! 
-	fncomboa('CmbCNo-'&env$('cursys'),myline,mypos,mat opt$,'Select from currently installed companies for '&env$('cursystem'),55)
+	fnComboA('CmbCNo-'&env$('cursys'),myline,mypos,mat opt$,'Select from currently installed companies for '&env$('cursystem'),55)
 	goto Xit
 	Xit: !
 fnend 

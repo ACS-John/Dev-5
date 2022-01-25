@@ -213,7 +213,7 @@ dim tr$(13)*12
 	tr$(11)="L 5498"
 	tr$(12)="W W-2G"
 
-	open #20: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,input
+	open #20: "Name=[Q]\GLmstr\Company.h[cno],Shr",i,i
 	read #20,using 'form pos 1,3*C 40,C 12': mat a$,b$
 	close #20:
 

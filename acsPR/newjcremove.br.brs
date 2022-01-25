@@ -94,7 +94,7 @@ EOF1: close #1,free:
 	execute "Index [Q]\PRmstr\JCMSTR.h[cno],[Q]\PRmstr\JCIndx.h[cno],1,6,Replace,DupKeys -n"
 	execute "Index [Q]\PRmstr\JCCAT.h[cno],[Q]\PRmstr\CatIndx.h[cno],1,11,Replace,DupKeys -n"
 	df$="[Q]\PRmstr\jcmstr.h[cno]" : if$="[Q]\PRmstr\jcindx.h[cno]" : _
-	fncombof("CJob.h[cno]",lyne,mypos,43,df$,1,6,7,25,if$,1)
+	fnComboF("CJob.h[cno]",lyne,mypos,43,df$,1,6,7,25,if$,1)
 	goto Xit
  
 Xit: fnXit

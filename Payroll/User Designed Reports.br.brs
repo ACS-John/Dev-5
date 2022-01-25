@@ -25,7 +25,7 @@ do
 	fnTos
 	respc=0
 	fnLbl(1,1,"Report:",11,1)
-	fncombof("Report",1,14,43,"[Q]\PRmstr\prreport.h[cno]",1,2,3,30,"[Q]\PRmstr\prrptidx.h[cno]",1+addall,0,"Select from the list of reports. To add a report, click the Add button.",container)
+	fnComboF("Report",1,14,43,"[Q]\PRmstr\prreport.h[cno]",1,2,3,30,"[Q]\PRmstr\prrptidx.h[cno]",1+addall,0,"Select from the list of reports. To add a report, click the Add button.",container)
 	resp$(respc+=1)=reportSelected$
 	fnCmdKey("&Add",1,0,0,"Add a new employee" )
 	fnCmdKey("E&dit",2,0,0,"Modify the selected report")
@@ -97,7 +97,7 @@ SCR2: ! r:
 	mylen=50
 	fnLbl(12,1,"Item for pr Selection (blank for all):",mylen,1)
 	if ips>0 and ips=<udim(code$) then resp$(respc+=1)=code$(ips+1) else resp$(respc+=1)=""
-	fncomboa("DataNames2",12,mylen+3,mat code$,"If you want limit the report to a value in a particular field in the employee record, Indicate which field it is by locatiing the ID number of the field using Help button.",25,0)
+	fnComboA("DataNames2",12,mylen+3,mat code$,"If you want limit the report to a value in a particular field in the employee record, Indicate which field it is by locatiing the ID number of the field using Help button.",25,0)
 	fnChk(13,mylen+3,"Summarize Departmental Records:",1)
 	if sd= 1 then resp$(respc+=1)='True' else resp$(respc+=1)='False'
 	fnCmdKey("&Next",1,1,0,"Save changes and move to next questions" )
@@ -185,7 +185,7 @@ SCR4: ! r:
 	for j=1 to 20
 		if inp(j)>0 and inp(j)=<udim(code$) then resp$(respc+=1)=code$(inp(j)+1) else resp$(respc+=1)=" "
 	! if inp(j)>0 and inp(j)=<udim(code$) then resp$(respc+=1)=code$(inp(j)  ) else resp$(respc+=1)=" "
-		fncomboa("DataNames",j+2,1,mat code$,"",25,1)
+		fnComboA("DataNames",j+2,1,mat code$,"",25,1)
 		fnTxt(j+2,37,3,0,0,'30',0,"The position is the starting position acress the page where this column should print.",1)
 		resp$(respc+=1)=str$(pp(j))
 		if ti(j)=1 then resp$(respc+=1)='True' else resp$(respc+=1)='False'

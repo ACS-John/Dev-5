@@ -4,31 +4,31 @@ fnTop(program$)
 Screen1: ! r:
 	fnTos
 	fnLbl(1,1,'Sort by:',20,1)
-	fncomboa('ublabels-ord',1,22,mat optSequence$,'The labels can be printed in customer # order,customer name order, or in bar code sequence')
+	fnComboA('ublabels-ord',1,22,mat optSequence$,'The labels can be printed in customer # order,customer name order, or in bar code sequence')
 	fnreg_read('ublabel.sequence',resp$(1),optSequence$(sequence_account),1)
 
 	fnLbl(3,1,'Print Address:',20,1)
-	fncomboa('ubnamlst-act',3,22,mat optAddress$)
+	fnComboA('ubnamlst-act',3,22,mat optAddress$)
 	fnreg_read('ublabel.address',resp$(2), optAddress$(ao_billing),1)
 
 	fnLbl(5,1,'Line 1:',20,1)
-	fncomboa('ublabel_tl1',5,22,mat optLineX$,'',70)
+	fnComboA('ublabel_tl1',5,22,mat optLineX$,'',70)
 	fnreg_read('ublabel.line 1',resp$(3), optLineX$(1),1)
 
 	fnLbl(6,1,'Line 2:',20,1)
-	fncomboa('ublabel_tl2',6,22,mat optLineX$,'',70)
+	fnComboA('ublabel_tl2',6,22,mat optLineX$,'',70)
 	fnreg_read('ublabel.line 2',resp$(4), optLineX$(2),1)
 
 	fnLbl(7,1,'Line 3:',20,1)
-	fncomboa('ublabel_tl3',7,22,mat optLineX$,'',70)
+	fnComboA('ublabel_tl3',7,22,mat optLineX$,'',70)
 	fnreg_read('ublabel.line 3',resp$(5), optLineX$(3),1)
 
 	fnLbl(8,1,'Line 4:',20,1)
-	fncomboa('ublabel_tl4',8,22,mat optLineX$,'',70)
+	fnComboA('ublabel_tl4',8,22,mat optLineX$,'',70)
 	fnreg_read('ublabel.line 4',resp$(6), optLineX$(4),1)
 
 	fnLbl(9,1,'Line 5:',20,1)
-	fncomboa('ublabel_tl5',9,22,mat optLineX$,'',70)
+	fnComboA('ublabel_tl5',9,22,mat optLineX$,'',70)
 	fnreg_read('ublabel.line 5',resp$(7), optLineX$(5),1)
 
 	fnCmdSet(2)
@@ -118,7 +118,7 @@ Screen2: !
 		optFilterEnabled$(4)=optFilter$(6)
 		mat optFilterEnabled$(4)
 	end if
-	fncomboa('ublabels-ord',1,14,mat optFilterEnabled$,'',30)
+	fnComboA('ublabels-ord',1,14,mat optFilterEnabled$,'',30)
 	resp$(1)=optFilterEnabled$(1)
 	gosub OpenFiles
 	fnCmdSet(6)

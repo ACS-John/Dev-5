@@ -32,7 +32,7 @@ fnopenprn
 fn_hdr1
 L350: if d(1)>0 then goto L360 else goto L390
 L360: !
-L390: read #h_prmstr,using 'form pos 1,N 4,3*C 25,pos 271,2*N 5': eno,mat k$,mat adr eof FINIS
+L390: read #h_prmstr,using 'form pos 1,N 4,3*C 25,pos 271,2*N 5': eno,mat k$,mat adr eof Finis
 if adr(1)=0 then goto L390
 ca=adr(1)
 do
@@ -45,7 +45,7 @@ do
 	if nca=0 then goto L350
 	ca=nca
 loop
-goto FINIS
+goto Finis
 
 def fn_header
 	nametab=66-int(len(rtrm$(env$('cnam')))/2)
@@ -68,7 +68,7 @@ PGOF1: !
 	pr #255: newpage
 	fn_hdr1
 continue
-FINIS: !
+Finis: !
 	close #h_acprcks: ioerr ignore
 	fncloseprn
 goto Xit

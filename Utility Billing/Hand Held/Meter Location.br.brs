@@ -548,7 +548,7 @@ CmlsAdd: ! r: returns ckey, optionally accepts cmlsAddForceServiceId$, requires 
 	fnlbl(lc+=1,1,'Meter Number      ', 20,1) : fntxt(lc,22,12, 0,0,'',0,'') : resp$(respc+=1)=location$(loc_meterNumber   )
 	fnlbl(lc+=1,1,'Transmitter Number', 20,1) : fntxt(lc,22,20, 0,0,'',0,'') : resp$(respc+=1)=location$(loc_transmitter   )
 	fnlbl(lc+=1,1,'Meter Type        ', 20,1)
-	fncombof('',lc,22,46,'[Q]\UBmstr\MeterType.h[cno]',1,5,6,40,'[Q]\UBmstr\MeterTypeIdx.h[cno]',1)
+	fnComboF('',lc,22,46,'[Q]\UBmstr\MeterType.h[cno]',1,5,6,40,'[Q]\UBmstr\MeterTypeIdx.h[cno]',1)
 	resp$(respc+=1)=location$(loc_meterType     )
 	fncmdset(4)
 	ckey=fnAcs(mat resp$)

@@ -37,13 +37,13 @@
 	fnTos
 	respc=0
 	fnLbl(1,1,"Sequence:",23,1)
-	fncomboa("ubnamlst-srt",1,25,mat item1$,"The auto-reversed option can turn all addresses around so the streets are sorted by name rather than number (ie Adams Streets together instead of 101s")
+	fnComboA("ubnamlst-srt",1,25,mat item1$,"The auto-reversed option can turn all addresses around so the streets are sorted by name rather than number (ie Adams Streets together instead of 101s")
 	resp$(respc+=1)=item1$(1)
 	fnLbl(2,1,"Report Heading Date:",23,1)
 	fnTxt(2,25,20)
 	resp$(respc+=1)=dat$
 	fnLbl(3,1,"Limit by:",23,1)
-	fncomboa("ubnamlst-act",3,25,mat item2$)
+	fnComboA("ubnamlst-act",3,25,mat item2$)
 	resp$(respc+=1)=item2$(3)
 	fnChk(5,29,"Print Rate Codes")
 	resp$(respc+=1)='False'

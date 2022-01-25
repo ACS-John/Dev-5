@@ -9,8 +9,8 @@ MAIN_SCREEN: !
 	dim resp$(5)*90
 	fnTos
 	mylen=25 : mypos=mylen+2: resp=0: left=1
-	fncombof("CRjcreport"   ,1,1,80,"S:\acsPR\Jcreport.mst",1,2,3,74,"S:\acsPR\jcreport.idx" ,1) 
-	fncombof("CRjcreportALL",1,1,80,"S:\acsPR\Jcreport.mst",1,2,3,74,"S:\acsPR\jcreport.idx" ,2)
+	fnComboF("CRjcreport"   ,1,1,80,"S:\acsPR\Jcreport.mst",1,2,3,74,"S:\acsPR\jcreport.idx" ,1) 
+	fnComboF("CRjcreportALL",1,1,80,"S:\acsPR\Jcreport.mst",1,2,3,74,"S:\acsPR\jcreport.idx" ,2)
 	resp$(1)=""
 	fnCmdSet(2)
 	ckey=fnAcs(mat resp$)

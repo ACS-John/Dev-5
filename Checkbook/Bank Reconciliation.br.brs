@@ -44,7 +44,7 @@ BANK_STMT_INFO: !
 	respc=0
 	mylen=30 : mypos=mylen+2
 	fnLbl(1,1,'Bank Code:',mylen,1)
-	fncombof('Bankmstr',1,mypos,35,'[Q]\CLmstr\bankmstr.h[cno]',1,2,3,30,'[Q]\CLmstr\BankIdx1.h[cno]',0,0, '',0)
+	fnComboF('Bankmstr',1,mypos,35,'[Q]\CLmstr\bankmstr.h[cno]',1,2,3,30,'[Q]\CLmstr\BankIdx1.h[cno]',0,0, '',0)
 	resp$(respc+=1)=str$(wbc)
 	fnLbl(3,1,'Statement Date:',mylen,1)
 	fnTxt(3,mypos,10,0,1,'3',0,'We suggest you always use the month end date.')
@@ -65,7 +65,7 @@ BANK_STMT_INFO: !
 	item1$(4)='Calculate Bank Totals'
 	item1$(5)='Print Reconciliation Listing'
 	item1$(6)='Make Corrections'
-	fncomboa('bankrec-1',8,30,mat item1$,'Select the funtion you would like to perform.  Normally you would clear the checks, deposits, adjustments and then calculate the bank totals')
+	fnComboA('bankrec-1',8,30,mat item1$,'Select the funtion you would like to perform.  Normally you would clear the checks, deposits, adjustments and then calculate the bank totals')
 	resp$(respc+=1)=item1$(1)
 	fnCmdKey('&Display Balances',3,0,0,'Displays previous balances for this bank account.')
 	fnCmdKey('&Next',1,1,0,'Proceed to next options')
@@ -490,7 +490,7 @@ DPAMENU: ! r:
 	if sel_code=7 then resp$(respc+=1)='True' else resp$(respc+=1)='False'
 	fnOpt(8,3,'Make Corrections',0,frame)
 	if sel_code=8 then resp$(respc+=1)='True' else resp$(respc+=1)='False'
-! fnCOMBOA('bankrec-3',3,30,MAT ITEM3$,'Select the funtion you would like to perform.  Normally you would Erase Previous, Enter Amounts, Clear Matches and check your totals')!
+! fnComboA('bankrec-3',3,30,MAT ITEM3$,'Select the funtion you would like to perform.  Normally you would Erase Previous, Enter Amounts, Clear Matches and check your totals')!
 	resp$(respc+=1)=item3$(1)
 	resp$(2)='True'
 	if t1 =0 and t2=0 then goto L3890

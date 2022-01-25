@@ -337,7 +337,7 @@ def fn_setup
 
 		fnLastBillingDate(d1)
 		if days(d1,'mmddyy')<days(date$('mmddyy'),'mmddyy')-23 then d1=0
-		open #1: "Name=[Q]\UBmstr\Company.h[cno]",internal,input
+		open #1: "Name=[Q]\UBmstr\Company.h[cno]",i,i
 		read #1,using "form pos 130,n 4": pcent ioerr ignore ! percent for unusual usage
 		close #1:
 		if pcent=0 then
@@ -1384,7 +1384,7 @@ goto MENU1 ! /r
 
 def fn_holdingFileLoad(; ___,hld9)
 	holdingFile$="[Q]\UBmstr\IpHold"&ip1$&".h[cno]"
-	open #hld9=fnH: "Name="&holdingFile$,internal,input ioerr L7460 ! was =9
+	open #hld9=fnH: "Name="&holdingFile$,i,i ioerr L7460 ! was =9
 	do
 		read #hld9,using Fwork: x$,mat x eof IPHOLD_EO_HLD9
 		fn_writeWork(hWork,x$,mat x, 1)
@@ -1748,7 +1748,7 @@ EnterReadings: ! r:
 
 	lc=lc+2
 	fnLbl(lc,1,"Final Billing Code:",mylen+8,1,0,2)
-	fncomboa("finalbill",lc,24,mat opt_final_billing$,"Used to record final billing code in customer record",28,fraro) ! final billing code
+	fnComboA("finalbill",lc,24,mat opt_final_billing$,"Used to record final billing code in customer record",28,fraro) ! final billing code
 	resp_fianl_billing_code=(rc+=1)
 	if editmode=1 then
 		resp$(resp_fianl_billing_code)=str$(x(15)) ! Final Billing Code
@@ -1992,7 +1992,7 @@ def fn_meter_change_out
 		fnOpt(2,1,"All Customers",0,1)
 		resp$(2)='False'
 		fnLbl(5,1,"Service Type:",18,1)
-		fncomboa("ServiceType",5,20,mat serviceoption$)
+		fnComboA("ServiceType",5,20,mat serviceoption$)
 		resp$(3)=serviceoption$(1)
 		fnLbl(6,1,"Beginning Customer:",18,1)
 		fncmbact(6,20,1)

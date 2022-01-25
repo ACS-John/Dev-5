@@ -39,13 +39,13 @@ Screen1: ! r:
 	fnLbl(lc+=1,1,'Transaction Grid Selection Criteria',width,center)
 	lc+=1
 	fnLbl(lc+=1,1,'Working Bank:',mylen,right)
-	fncombof('BankAll',lc,mypos,0,'[Q]\CLmstr\BankMstr.h[cno]',1,2,3,30,'[Q]\CLmstr\BankIdx1.h[cno]',add_all)
+	fnComboF('BankAll',lc,mypos,0,'[Q]\CLmstr\BankMstr.h[cno]',1,2,3,30,'[Q]\CLmstr\BankIdx1.h[cno]',add_all)
 	if wbc=0 then resp$(1)='[All]' else resp$(1)=str$(wbc)
 	fnLbl(lc+=1,1,'Working Transaction Type:',mylen,right)
-	fncombof('TransactionTypeall',lc,mypos,0,'S:\Core\Data\TransactionType.dat',1,1,2,25,'S:\Core\Data\TransactionType.idx',add_all)
+	fnComboF('TransactionTypeall',lc,mypos,0,'S:\Core\Data\TransactionType.dat',1,1,2,25,'S:\Core\Data\TransactionType.idx',add_all)
 	if wtt=0 then resp$(2)='[All]' else resp$(2)=str$(wtt)
 	fnLbl(lc+=1,1,'Payee:',mylen,right)
-	fncombof('Payeeall',lc,mypos,0,'[Q]\CLmstr\PayMstr.h[cno]',1,8,9,30,'[Q]\CLmstr\PayIdx1.h[cno]',add_all)
+	fnComboF('Payeeall',lc,mypos,0,'[Q]\CLmstr\PayMstr.h[cno]',1,8,9,30,'[Q]\CLmstr\PayIdx1.h[cno]',add_all)
 	if wpayee$='' then resp$(3)='[All]' else resp$(3)=wpayee$
 	lc+=1
 	fnLbl(lc+=1,1,'Transaction Starting Date:',mylen,right)
@@ -59,10 +59,10 @@ Screen1: ! r:
 	resp$(6)=''
 	lc+=1
 	fnLbl(lc+=1,1,'Posting Status:',mylen,right)
-	fncombof('PostCodeall',lc,mypos,0,'S:\Core\Data\Checkbook\PostingCode.dat',1,1,2,25,'S:\Core\Data\Checkbook\PostingCode.idx',add_all)
+	fnComboF('PostCodeall',lc,mypos,0,'S:\Core\Data\Checkbook\PostingCode.dat',1,1,2,25,'S:\Core\Data\Checkbook\PostingCode.idx',add_all)
 	resp$(7)='[All]'
 	fnLbl(lc+=1,1,'Source:',mylen,right)
-	fncombof('SourceAll',lc,mypos,0,'S:\Core\Data\Checkbook\SourceCode.dat',1,1,2,25,'S:\Core\Data\Checkbook\SourceCode.idx',add_all)
+	fnComboF('SourceAll',lc,mypos,0,'S:\Core\Data\Checkbook\SourceCode.dat',1,1,2,25,'S:\Core\Data\Checkbook\SourceCode.idx',add_all)
 	resp$(8)='[All]'
 	fnLbl(lc+=1,1,'Check/Reference #:',mylen,right)
 	fnTxt(lc,mypos,8,0,left,'',0,'Enter the check or reference # to access a specific transactin, else blank for all')
@@ -118,7 +118,7 @@ Menu1: ! r:
 	fnLbl(lc+=1,1,'Transaction Type:',mylen,right,0,frame)
 	fnTxt(lc,mypos,1,0,left,'',disable,'',frame)
 	resp$(4)=str$(wtt)
-	! fncombof('TransactionTypeall',lc,mypos,0,'S:\Core\Data\TransactionType.dat',1,1,2,25,'S:\Core\Data\TransactionType.idx',add_all)
+	! fnComboF('TransactionTypeall',lc,mypos,0,'S:\Core\Data\TransactionType.dat',1,1,2,25,'S:\Core\Data\TransactionType.idx',add_all)
 	fnTxt(lc,mypos+4,25,0,left,'',disable,'',frame)
 	resp$(5)=tcde$
 	lc+=1
@@ -591,10 +591,10 @@ TransactionFm: ! r: requires typeofentry, scd, and many more
 	frame=fc+=1
 	lc=0 : mylen=23 : mypos=mylen+2
 	fnLbl(lc+=1,1,'Bank:',mylen,right,0,frame)
-	fncombof('Bank',lc,mypos,0,'[Q]\CLmstr\BankMstr.h[cno]',1,2,3,30,'[Q]\CLmstr\BankIdx1.h[cno]',limit_to_list,0,'',frame)
+	fnComboF('Bank',lc,mypos,0,'[Q]\CLmstr\BankMstr.h[cno]',1,2,3,30,'[Q]\CLmstr\BankIdx1.h[cno]',limit_to_list,0,'',frame)
 	resp$(1)=str$(bank_code)
 	fnLbl(lc+=1,1,'Transaction Type:',mylen,right,0,frame)
-! fncombof('TransactionType',lc,mypos,0,'S:\Core\Data\TransactionType.dat',1,1,2,25,'S:\Core\Data\TransactionType.idx',limit_to_list,0,'',frame)
+! fnComboF('TransactionType',lc,mypos,0,'S:\Core\Data\TransactionType.dat',1,1,2,25,'S:\Core\Data\TransactionType.idx',limit_to_list,0,'',frame)
 ! resp$(2)=str$(tcde)
 	fnTxt(lc,mypos,28,0,left,'',disable,'',frame)
 	resp$(2)=str$(tcde)
@@ -613,7 +613,7 @@ TransactionFm: ! r: requires typeofentry, scd, and many more
 	resp$(5)=cnvrt$('N 10.2',val(tr$(3)))
 	if tcde=2 then ! typeofentry=2 then
 		fnLbl(lc+=1,1,'Receipt Type:',mylen,right,0,frame)
-		fncombof('ReceiptType',lc,mypos,0,'[Q]\CLmstr\RecMstr.h[cno]',1,8,9,30,'[Q]\CLmstr\RecIdx1.h[cno]',limit_to_list,0,'',frame)
+		fnComboF('ReceiptType',lc,mypos,0,'[Q]\CLmstr\RecMstr.h[cno]',1,8,9,30,'[Q]\CLmstr\RecIdx1.h[cno]',limit_to_list,0,'',frame)
 		resp$(6)=tr$(4)
 		fnLbl(lc+=1,1,'Name/Description:',mylen,right,0,frame)
 	else if scd=4 then
@@ -623,14 +623,14 @@ TransactionFm: ! r: requires typeofentry, scd, and many more
 		fnLbl(lc+=1,1,'Payroll Employee Name:',mylen,right,0,frame)
 	else
 		fnLbl(lc+=1,1,'Payee:',mylen,right,0,frame)
-		fncombof('Payee',lc,mypos,0,'[Q]\CLmstr\PayMstr.h[cno]',1,8,9,30,'[Q]\CLmstr\PayIdx1.h[cno]',limit_to_list,0,'',frame)
+		fnComboF('Payee',lc,mypos,0,'[Q]\CLmstr\PayMstr.h[cno]',1,8,9,30,'[Q]\CLmstr\PayIdx1.h[cno]',limit_to_list,0,'',frame)
 		resp$(6)=tr$(4)
 		fnLbl(lc+=1,1,'Name/Description:',mylen,right,0,frame)
 	end if
 	fnTxt(lc,mypos,35,0,left,'',0,'',frame)
 	resp$(7)=tr$(5)
 	fnLbl(lc+=1,1,'Posting Status:',mylen,right,0,frame)
-	fncombof('PostCode',lc,mypos,0,'S:\Core\Data\Checkbook\PostingCode.dat',1,1,2,25,'S:\Core\Data\Checkbook\PostingCode.idx',limit_to_list,0,'',frame)
+	fnComboF('PostCode',lc,mypos,0,'S:\Core\Data\Checkbook\PostingCode.dat',1,1,2,25,'S:\Core\Data\Checkbook\PostingCode.idx',limit_to_list,0,'',frame)
 	resp$(8)=str$(posting_code)
 	fnLbl(lc+=1,1,'Statement Date Cleared:',mylen,right,0,frame)
 	fnTxt(lc,mypos,8,0,left,mmddyy$,0,'',frame)

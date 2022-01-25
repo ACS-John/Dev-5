@@ -10,13 +10,13 @@ for a = 1 to 9999
 next a
 filename$="ComboA-tst"
 test$ = "I'm a test of tool tip text.  Does it work?"
-! fncomboa(filename$,1,1,mat option$,test$)
+! fnComboA(filename$,1,1,mat option$,test$)
 
 mat opt$(3)
 opt$(1)="Regular Collection"
 opt$(2)="Credit Memo"
 opt$(3)="Debit Memo"
-fncomboa("coll_type_rdc",1,27,mat opt$,opt$(1))
+fnComboA("coll_type_rdc",1,27,mat opt$,opt$(1))
 
 fnCmdKey("Okay",1,1,1)
 

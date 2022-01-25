@@ -17,7 +17,7 @@
 	dim s(10),t(10),u(10),v(10),w(20),x(20),y(20),z(20),e(4,30)
 	dim eno$*9,e$*25,d(2),r(11),tcat$*20
 	dim hlp$(20)*78,flh$(22)*18,hhd$*60,a$*5
-	open #1: "Name=S:\Client Billing\Legacy\TMSCRN.EM,Shr",internal,input
+	open #1: "Name=S:\Client Billing\Legacy\TMSCRN.EM,Shr",i,i
 L180: form pos 1,103*c 18
 	read #1,using L180: mat fl3$,mat ot3$,mat in3$
 	read #1,using L180: mat fl4$,mat ot4$,mat in4$

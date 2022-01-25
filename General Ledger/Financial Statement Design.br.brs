@@ -117,7 +117,7 @@ AddEdit: ! r:
 		if te$=option2$(x)(1:1) then choice$=option2$(x)
 	nex x
 	fnLbl(3,1,"Type of Entry:",mylen,right)
-	fncomboa("TypeOfEntry",3,mypos,mat option2$,"Each entry must have a type of transaction.",60)
+	fnComboA("TypeOfEntry",3,mypos,mat option2$,"Each entry must have a type of transaction.",60)
 	resp$(3)=choice$
 	fnLbl(4,1,"Starting pr Position:",mylen,right)
 	fnTxt(4,mypos,3,0,0,'30',0,"Number of spaces to indent.",0 )

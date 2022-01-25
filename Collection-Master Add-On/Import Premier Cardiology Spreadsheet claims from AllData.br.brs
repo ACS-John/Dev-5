@@ -289,12 +289,12 @@ def fn_askScreen1(&sourceFile$,&sFileNo$,&forwNo$,&enableImport,&enableImport$,&
 	resp$(resp_sFileNo:=rc+=1)=sFileNo$
 
 	fnLbl (lc+=1,col1pos,'Forwarder Number:', col1len,1)
-	fncombof('masforw',lc,col2pos,width,'MASFORW//8',1,3,4,10, '',1,1,'Select the Forwarder to assign to imported claims.',0,0,'BH')
+	fnComboF('masforw',lc,col2pos,width,'MASFORW//8',1,3,4,10, '',1,1,'Select the Forwarder to assign to imported claims.',0,0,'BH')
 	resp$(resp_forwNo:=rc+=1)=forwNo$
 
 	lc+=1
 	fnLbl (lc+=1,col1pos,'Priority Diary Code:', col1len,1)
-	fncombof('DiaryCd',lc,col2pos,width,'SHARE\DIARYCD.INT',151,3,1,50, 'SHARE\DIARYCD.IDX',1,0,'Diary Code to be added if Priority Text found in Priority Column.',0,0,'BH')
+	fnComboF('DiaryCd',lc,col2pos,width,'SHARE\DIARYCD.INT',151,3,1,50, 'SHARE\DIARYCD.IDX',1,0,'Diary Code to be added if Priority Text found in Priority Column.',0,0,'BH')
 	! fnTxt(lc,col2pos,8,0,0,'',0,'Diary Code to be added if Priority Text found in Priority Column.')
 	resp$(resp_priDiaryCode:=rc+=1)=priorityDiaryCode$
 
@@ -308,7 +308,7 @@ def fn_askScreen1(&sourceFile$,&sFileNo$,&forwNo$,&enableImport,&enableImport$,&
 
 	lc+=1
 	fnLbl (lc+=1,col1pos,'Origional Claim Amount Changed Diary Code:', col1len,1)
-	fncombof('DiaryCd',lc,col2pos,width,'SHARE\DIARYCD.INT',151,3,1,50, 'SHARE\DIARYCD.IDX',1,0,'Diary Code to be added if Priority Text found in Priority Column.',0,0,'BH')
+	fnComboF('DiaryCd',lc,col2pos,width,'SHARE\DIARYCD.INT',151,3,1,50, 'SHARE\DIARYCD.IDX',1,0,'Diary Code to be added if Priority Text found in Priority Column.',0,0,'BH')
 	resp$(resp_ocacDiaryCode:=rc+=1)=ocacDiaryCode$
 
 	lc+=1
@@ -1485,7 +1485,7 @@ def fn_setup
 		library 'S:\Core\Library.br': fnCsz
 		library 'S:\Core\Library.br': fnTos,fnLbl,fnTxt,fnCmdSet
 		library 'S:\Core\Library.br': fnChk
-		library 'S:\Core\Library.br': fnCombof
+		library 'S:\Core\Library.br': fnComboF
 		library 'S:\Core\Library.br': fnAcs
 		library 'S:\Core\Library.br': fnPosOfAny
 		library 'S:\Core\Library.br': fnReg_read

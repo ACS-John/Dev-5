@@ -88,7 +88,7 @@ EO_INVOICE_GRID: ! /r
 	fnCmdKey("E&xit",5,0,1,"Exits to main menu") ! 320
 	ckey=fnAcs(mat resp$)
 	displayalljobs=0
-	if ckey=5 then goto FINIS
+	if ckey=5 then goto Finis
 	! screen=0
 	if ckey=2 then edit=1 : RecordNumberToEdit=val(resp$(1)) else edit=0 : RecordNumberToEdit=0
 	if (ckey=1 or ckey=2) then let fn_addInvoice(vn$,iv$,RecordNumberToEdit) : goto menu1
@@ -151,7 +151,7 @@ HDR: ! r:
 	pr #255: "____  ________  ____________  ______  ______  ____________  __________________  __________  ____  ____  ________  ______"
 	return  ! /r
 !
-FINIS: ! r:
+Finis: ! r:
 	if havejc=1 and lrec(jcbreakdown)>0 then
 		mat ml$(3)=("")
 		ml$(1)="It appears you have "&str$(lrec(jcbreakdown))&"job cost entries"
@@ -628,7 +628,7 @@ ai_ADD_UNPAID_INVOICES_TOS: ! r:
 	lc=0 : mylen=18 : mypos=mylen+2
 	frame=1
 	fnLbl(lc+=1,1,"Payee:",mylen,1,0,frame)
-	fncombof("Paymstr",lc,mypos,0,"[Q]\CLmstr\PayMstr.h[cno]",1,8,9,30,"[Q]\CLmstr\Payidx1.h[cno]",1,0, "Enter the payee number (Use the 'Add Payee' option to add a new vendor record",frame)
+	fnComboF("Paymstr",lc,mypos,0,"[Q]\CLmstr\PayMstr.h[cno]",1,8,9,30,"[Q]\CLmstr\Payidx1.h[cno]",1,0, "Enter the payee number (Use the 'Add Payee' option to add a new vendor record",frame)
 	resp$(1)=vn$
 	fnLbl(lc+=1,1,"Invoice Number:",mylen,1,0,frame)
 	fnTxt(lc,mypos,12,0,0,"",0,"",frame)
@@ -659,12 +659,12 @@ ai_ADD_UNPAID_INVOICES_TOS: ! r:
 	item1$(1)="Pay Later"
 	item1$(2)="Pay Now"
 	item1$(3)="Paid"
-	fncomboa("unpaid-2",lc,mypos,mat item1$,"If you choose pay now, the invoice will be coded for payment and will paid next time checks are printed.",0,1)
+	fnComboA("unpaid-2",lc,mypos,mat item1$,"If you choose pay now, the invoice will be coded for payment and will paid next time checks are printed.",0,1)
 	if pcde=0 then resp$(10)=item1$(1) ! Pay Later
 	if pcde=1 then resp$(10)=item1$(2) ! Pay Now
 	if pcde=2 then resp$(10)=item1$(3) ! Paid
 	fnLbl(lc+=1,1,"Bank Code:",mylen,1,0,frame)
-	fncombof("bankmstr",lc,mypos,23,"[Q]\CLmstr\bankmstr.h[cno]",1,2,3,20,"[Q]\CLmstr\bankidx1.h[cno]",0,0, "",frame)
+	fnComboF("bankmstr",lc,mypos,23,"[Q]\CLmstr\bankmstr.h[cno]",1,2,3,20,"[Q]\CLmstr\bankidx1.h[cno]",0,0, "",frame)
 	resp$(11)=str$(bcde) ! RESP$(RESPC)
 	fnButton(1,80,"Payee",50,"Add or edit a payee",0,0,frame)
 	fnLbl(lc=15,3,"Breakdown Information",mylen,center)

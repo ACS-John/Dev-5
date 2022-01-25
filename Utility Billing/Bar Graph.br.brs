@@ -66,7 +66,7 @@ SCREEN1: !
 	opt$(1)="Water"
 	if srv$(3)="EL" then opt$(2)= serviceName$(3)
 	if srv$(4)="GA" then opt$(3)= serviceName$(4)
-	fncomboa("ubbargraph",10,26,mat opt$,"",13)
+	fnComboA("ubbargraph",10,26,mat opt$,"",13)
 	resp$(rc+=1)=opt$(1)
 	fnFra(12,1,2,45,"Base graph on usage or dollars","You can either analyze dollars or usage.",0)
 	fnOpt(1,2,"Use Usage",0,1)

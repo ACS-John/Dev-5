@@ -17,7 +17,7 @@ MAIN: ! r:
 	fnTxt(1,mypos,8,8,0,"1")
 	resp$(1)=str$(bdate)
 	fnLbl(2,1,"Type of Service:",mylen,1)
-	fncomboa("Service",2,mylen+3,mat code$,"",16)
+	fnComboA("Service",2,mylen+3,mat code$,"",16)
 	fnLbl(3,1,"Rate Code",mylen,1)
 	fnTxt(3,mypos,3,3,0,"1030")
 	resp$(3)=""

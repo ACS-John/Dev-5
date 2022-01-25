@@ -15,7 +15,7 @@
  
 	fnTop(program$,cap$="Payroll")
 	fncno(cno,cnam$)
-	open #1: "Name=[Q]\GLmstr\Company.h[cno],Shr",internal,input  : _
+	open #1: "Name=[Q]\GLmstr\Company.h[cno],Shr",i,i  : _
 	read #1,using 'form pos 418,10*C 20,10*N 1': mat miscname$,mat dedcode : _
 	close #1:
  
@@ -55,7 +55,7 @@ MAIN: !
 	mylen=20: mypos=mylen+3 : right=1
 	fnemployee_search(x$,99)
 ! fnLbl(1,1,"Employee Number:",MYLEN,RIGHT)
-! fnCOMBOF("PRmstr",1,MYPOS,27,"[Q]\GLmstr\PRmstr.h[cno]",1,4,5,30,'',0,PAS, "Choose from the list of employees.  Click Add Employee to add a new employee not shown on list.",0) : _
+! fnComboF("PRmstr",1,MYPOS,27,"[Q]\GLmstr\PRmstr.h[cno]",1,4,5,30,'',0,PAS, "Choose from the list of employees.  Click Add Employee to add a new employee not shown on list.",0) : _
 	resp$(1)=str$(eno)
 	fnCmdKey("&Next",1,1,0,"")
 	fnCmdKey("&Add",2,0,0,"")

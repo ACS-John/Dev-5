@@ -9,7 +9,7 @@ def fn_adjustaccounts
 	GLMSTR: form n 3,n 6,n 3,pos 81,28*pd 6.2
 	open #h_actrans=fnH: 'Name=[Q]\GLmstr\actrans.h[cno],KFName=[Q]\GLmstr\ACTRIDX.h[cno],Shr',i,i,k
 	ACTRANS: form n 3,n 6,n 3,n 6,pd 6.2,pos 71,n 2
-	open #h_gltrans=fnH: 'Name=[Q]\GLmstr\gltrans.h[cno],Shr',internal,input
+	open #h_gltrans=fnH: 'Name=[Q]\GLmstr\gltrans.h[cno],Shr',i,i
 	GLTRANS: form n 3,n 6,n 3,n 6,pd 6.2
 	do
 		fn_getadjustment

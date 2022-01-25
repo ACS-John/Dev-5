@@ -44,7 +44,7 @@
 	fnTxt(6,mypos,8,8,1,"1")
 	resp$(4)=str$(lbill)
 	fnLbl(7,1,"Final Billing Code:" ,mylen,1)
-	fncomboa("aai",7,mypos,mat opt_aai$)
+	fnComboA("aai",7,mypos,mat opt_aai$)
 	resp$(5)=aai$
 	fnChk(9,40,"Print Meter Address:",1)
 	resp$(6)=printadr$

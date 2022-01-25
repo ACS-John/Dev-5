@@ -18,7 +18,7 @@ dim dedyn$(20)*1
 dim miscded(20),box12(20),txt$*80,totalbox12(20)
 dim fm4$*255
 fm4$="form  pos 1,C 8"&rpt$(",C 12,G 10.2,3*G 1",6)
-open #1: "Name=[Q]\PRmstr\Company.h[cno],Shr",internal,input
+open #1: "Name=[Q]\PRmstr\Company.h[cno],Shr",i,i
 read #1,using 'form pos 1,3*c 40,c 12,pos 150,10*c 8,n 2,pos 317,10*c 12,pos 618,10*n 1,pos 638,10*n 1': mat a$,b$,mat d$,loccode,mat e$,mat dedcode,mat dedfed
 for j=1 to 3: a$(j)=a$(j)(1:30): next j
 close #1:
@@ -122,7 +122,7 @@ ASK_INFO: !
 	open #1: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr",i,i,k
 	open #2: "Name=[Q]\PRmstr\department.h[cno],KFName=[Q]\PRmstr\deptidx.h[cno]",i,outIn,k
 	open #4: "Name=[Q]\PRmstr\payrollchecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno]",i,outIn,k
-	open #3: "Name=[Temp]\Addr."&session$,internal,input ioerr L960
+	open #3: "Name=[Temp]\Addr."&session$,i,i ioerr L960
 	close #3,free:
 L960: open #3: "Name=[Temp]\Addr.[Session],size=0,RecL=33,NoShr",internal,output
 	if w1=3 then gosub L4430

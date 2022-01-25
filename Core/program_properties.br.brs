@@ -30,7 +30,7 @@ def fn_localPropertiesEdit
 	fn_readProgramPrintProperty('RightMargin' ,resp$(sio_txtMarginRight :=respc+=1))
 	fntos(sn$:='properties')
 	lc=0
-	fnlbl(lc+=1,1,'Orientation:'      ,18,1) : fncomboa('orientation',lc,33,mat orient$)
+	fnlbl(lc+=1,1,'Orientation:'      ,18,1) : fnComboA('orientation',lc,33,mat orient$)
 	lc+=1
 	fnlbl(lc+=1,1,'Height:'           ,18,1) : fntxt(lc,33,10,0,0,'')
 	fnlbl(lc+=1,1,'Width:'            ,18,1) : fntxt(lc,33,10,0,0,'')

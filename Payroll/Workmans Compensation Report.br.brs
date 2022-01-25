@@ -77,7 +77,7 @@ EO_DEPARTMENT: !
   fn_print_accumulated
   if sum(subtot)>(0) then let fn_sub_total
   pr #255,using F_TOTAL: "Total",tottot(1),tottot(2)
-FINIS: !
+Finis: !
   close #hEmployee: ioerr ignore
 	close #h_department: ioerr ignore
 	close #3: ioerr ignore

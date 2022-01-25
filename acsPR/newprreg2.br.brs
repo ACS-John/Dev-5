@@ -22,7 +22,7 @@ def fn_payroll_register_2(; det,include_tips_in_other_wh,append_reg1,ppdOverride
 
 	fnTop(program$,"Payroll Registers")
 	! r: read ckno
-	open #hPrCode=fnH: "Name=[Q]\PRmstr\prCode.h[cno],Shr",internal,input ioerr GetCkNoEnd
+	open #hPrCode=fnH: "Name=[Q]\PRmstr\prCode.h[cno],Shr",i,i ioerr GetCkNoEnd
 	read #hPrCode,using 'form pos 5,N 5': ckno
 	close #hPrCode:
 	GetCkNoEnd: ! /r
@@ -42,7 +42,7 @@ def fn_payroll_register_2(; det,include_tips_in_other_wh,append_reg1,ppdOverride
 
 	ssr1=fnss_employee*.01
 	ssr2=fnss_employer*.01
-	open #hCompany=fnH: "Name=[Q]\PRmstr\Company.h[cno],Shr",internal,input
+	open #hCompany=fnH: "Name=[Q]\PRmstr\Company.h[cno],Shr",i,i
 	dim sucrat(10)
 	dim statname$(10)*8
 	read #hCompany,using F_company: a$,ficar2,feducrat,mat statname$,ficar1,mat sucrat

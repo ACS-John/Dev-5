@@ -174,12 +174,12 @@ fnend
 def fn_rename_xxcoinfo_to_company
 	if ~exists('[Q]\ubmstr\company.h[cno]') then
 		if cursys$='UB' then
-			open #h_tmp=fnH: 'Name=[Q]\ubmstr\ubcoinfo.h[cno]',internal,input
+			open #h_tmp=fnH: 'Name=[Q]\ubmstr\ubcoinfo.h[cno]',i,i
 			read #h_tmp,using 'form pos 121,N 6': d1
 			close #h_tmp:
 		! else if cursys$='PR' then
 		!
-		!   open #h_tmp=fnH: "Name=[Q]\PRmstr\PRCOINFO.h[cno]",internal,input IOERR PRCoInfoOldVersionFinis
+		!   open #h_tmp=fnH: "Name=[Q]\PRmstr\PRCOINFO.h[cno]",i,i IOERR PRCoInfoOldVersionFinis
 		!   dim prcoinfo_a$(3)*40
 		!   dim prcoinfo_fid$*12
 		!   dim prcoinfo_mcr
@@ -294,7 +294,7 @@ def fn_translateRateAbbreviations(from$*2,to$*2)
 fnend
 def fn_ubmaster2customer_frenchset(file_source$*256,file_destination$*256)
 	fnStatus('UBMaster Conversion for French Settlement processing...')
-	open #h_old=fnH: "Name="&file_source$,internal,input
+	open #h_old=fnH: "Name="&file_source$,i,i
 	F_UBMASTER_OLD: form pos 1,c 10,4*c 30,c 12,7*pd 2,11*pd 4.2,4*pd 4,15*pd 5,pd 4.2,pd 4,12*pd 4.2,2*pd 3,c 7,2*c 12,pd 3,10*pd 5.2,78*pd 5,13*pd 4.2,13*n 6,156*pd 4.2,13*n 6,13*pd 4.2,c 1,c 9,c 2,c 17
 	open #h_new=fnH: "Name="&file_destination$&',RecL=2067,Replace',i,outi,r
 	dim rw4(22,13),gb(10),adr(2),f$(3)*12,g(12),a(7),b(11),c(4),d(15),e$(4)*30,extra(23),extra$(11)*30

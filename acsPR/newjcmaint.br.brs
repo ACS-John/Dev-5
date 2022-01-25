@@ -667,7 +667,7 @@ L1640: ! r:
 	open #1: "Name=[Q]\PRmstr\JCMSTR.h[cno],SIZE=0,RecL=300",internal,output
 	cont=1
 	close #2: ioerr ignore
-	open #2: "Name=[Q]\PRmstr\JCCAT.h[cno]",internal,input ioerr L1690
+	open #2: "Name=[Q]\PRmstr\JCCAT.h[cno]",i,i ioerr L1690
 	close #2,free:
 	L1690: !
 	open #2: "Name=[Q]\PRmstr\JCCAT.h[cno],SIZE=0,RecL=123",internal,output
@@ -697,8 +697,8 @@ RECREATE_GRID: ! r:
 	close #1: ioerr ignore
 	close #4: ioerr ignore
 	fnjob_srch(x$,99)
-	fncombof("CJob.h[cno]",lyne,mypos,43,"[Q]\PRmstr\jcmstr.h[cno]",1,6,7,25,"[Q]\PRmstr\jcindx.h[cno]" ,1)
-	fncombof("CJobALL.h[cno]",lyne,mypos,43,"[Q]\PRmstr\jcmstr.h[cno]",1,6,7,25,"[Q]\PRmstr\jcindx.h[cno]" ,2)
+	fnComboF("CJob.h[cno]",lyne,mypos,43,"[Q]\PRmstr\jcmstr.h[cno]",1,6,7,25,"[Q]\PRmstr\jcindx.h[cno]" ,1)
+	fnComboF("CJobALL.h[cno]",lyne,mypos,43,"[Q]\PRmstr\jcmstr.h[cno]",1,6,7,25,"[Q]\PRmstr\jcindx.h[cno]" ,2)
 	execute "Index [Q]\PRmstr\JCMSTR.h[cno],[Q]\PRmstr\JCIndx.h[cno],1,6,Replace,DupKeys -N" ioerr ignore
 	execute "Index [Q]\PRmstr\JCMSTR.h[cno],[Q]\PRmstr\JCINDX2.h[cno],7,25,Replace,DupKeys -N" ioerr ignore
 	open #1: "Name=[Q]\PRmstr\JCMSTR.h[cno],KFName=[Q]\PRmstr\JCIndx.h[cno],Shr",i,outIn,k ioerr Xit
@@ -708,8 +708,8 @@ RECREATE_CAT_GRID: ! r:
 	close #2: ioerr ignore
 	L5190: !
 	fncategory_srch(x$,99)
-	fncombof("CCat.h[cno]",lyne,mypos,43,"[Q]\PRmstr\jccat.h[cno]",1,11,12,25,"[Q]\PRmstr\catindx.h[cno]" ,1)
-	fncombof("CCatALL.h[cno]",lyne,mypos,43,"[Q]\PRmstr\jccat.h[cno]",1,11,12,25,"[Q]\PRmstr\catindx.h[cno]" ,2)
+	fnComboF("CCat.h[cno]",lyne,mypos,43,"[Q]\PRmstr\jccat.h[cno]",1,11,12,25,"[Q]\PRmstr\catindx.h[cno]" ,1)
+	fnComboF("CCatALL.h[cno]",lyne,mypos,43,"[Q]\PRmstr\jccat.h[cno]",1,11,12,25,"[Q]\PRmstr\catindx.h[cno]" ,2)
 	execute "Index [Q]\PRmstr\JCCAT.h[cno],[Q]\PRmstr\CatIndx.h[cno],1,11,Replace,DupKeys -N" ioerr L5220
 	L5220: !
 	open #2: "Name=[Q]\PRmstr\JCCAT.h[cno],KFName=[Q]\PRmstr\CatIndx.h[cno],Shr",i,outIn,k ioerr Xit

@@ -67,7 +67,7 @@ def fn_ub_build_transactions
 ! /r
 ! r: convert transactions from ubTrans
 		fnStatus('converting transactions from Current Transactions (ubTrans.h[cno])')
-		open #h_ubtrans=fnH: "Name=[Q]\UBmstr\ubTrans.h[cno]",internal,input
+		open #h_ubtrans=fnH: "Name=[Q]\UBmstr\ubTrans.h[cno]",i,i
 		fn_transaction_conv(h_ubtrans)
 ! /r
 ! r: convert transactions 13 month history

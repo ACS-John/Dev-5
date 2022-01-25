@@ -32,7 +32,7 @@ dim p$*5
 dim iv$*12
 dim tr(6)
 
-open #h_company=fnH: "Name=S:\Core\Data\acsllc\Company.h[cno],Shr",internal,input
+open #h_company=fnH: "Name=S:\Core\Data\acsllc\Company.h[cno],Shr",i,i
 dim gln1(3)
 dim gln2(3)
 read #h_company,using 'form pos 161,3*n 1,pos 178,n 3,n 6,n 3,n 3,n 6,n 3': i3,i4,i5,mat gln1,mat gln2

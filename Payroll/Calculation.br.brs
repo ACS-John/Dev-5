@@ -2078,17 +2078,17 @@ def library fnCheckPayrollCalculation(; ___, _
 		lc+=1
 
 		fnLbl(             lc+=1,col1_pos,'Marital Status:',col1_len,1)
-		fncomboa('Marital',lc   ,col2_pos,mat marriedOption$,'',col2_len)
+		fnComboA('Marital',lc   ,col2_pos,mat marriedOption$,'',col2_len)
 		fnPcReg_read('Marital Status',resp$(resp_married=respc+=1)=fnSetForCombo$(mat marriedOption$,str$(marital)), marriedOption$(4))
 
 		fnLbl(              lc+=1,col1_pos,'Pay Code:',col1_len,1)
-		fncomboa('payCode', lc    ,col2_pos,mat payPeriodOption$,'',16)
+		fnComboA('payCode', lc    ,col2_pos,mat payPeriodOption$,'',16)
 		payCode=fnPcReg_read('Pay Code',resp$(resp_payCode=respc+=1)=fnSetForCombo$(mat payPeriodOption$,str$(payCode)), payPeriodOption$(5))
 
 		lc+=1
 
 		fnLbl(             lc+=1,col1_pos,'State Exemptions:',col1_len,1)
-		fncomboa('StateEx',lc   ,col2_pos,mat fed_exemption_option$,'',3)
+		fnComboA('StateEx',lc   ,col2_pos,mat fed_exemption_option$,'',3)
 		fnPcReg_read('State Exemptions',resp$(resp_stExeptions=respc+=1)=fnSetForCombo$(mat fed_exemption_option$,str$(allowances)), fed_exemption_option$(1))
 
 		fnLbl(lc+=1,col1_pos,'State Tax Add-On:',col1_len,1)
@@ -2097,7 +2097,7 @@ def library fnCheckPayrollCalculation(; ___, _
 		lc+=1
 
 		fnLbl(             lc+=1,col1_pos,'W-4 Year:',col1_len,1)
-		fncomboa('w4Year', lc   ,col2_pos,mat w4yearOption$,'Only used if W-4 Year is set to 2020 or later.',5)
+		fnComboA('w4Year', lc   ,col2_pos,mat w4yearOption$,'Only used if W-4 Year is set to 2020 or later.',5)
 		fnPcReg_read('W-4 Year',resp$(resp_w4year=respc+=1), w4yearOption$(1))
 		! pr 'resp$(resp_w4year)=';resp$(resp_w4year),resp_w4year : pause
 		fnLbl(lc+=1,col1_pos,'Tax Year:',col1_len,1)
@@ -2108,7 +2108,7 @@ def library fnCheckPayrollCalculation(; ___, _
 		lc+=1
 
 		fnLbl(              lc+=1,col1_pos,'EIC Code:',col1_len,1)
-		fncomboa('EICCode', lc   ,col2_pos,mat eicOption$,'',25)
+		fnComboA('EICCode', lc   ,col2_pos,mat eicOption$,'',25)
 		fnPcReg_read('EIC Code',resp$(resp_EicCode=respc+=1), eicOption$(1))
 		fnChk(lc+=1,46,'W-4 Step 2',1)
 		fnPcReg_read('W-4 Step 2',resp$(resp_w4step2=respc+=1), w4step2$)
@@ -2237,7 +2237,7 @@ def fn_setup
 	motab(mtc+=1)=181 : motab(mtc+=1)=212 : motab(mtc+=1)=243
 	motab(mtc+=1)=273 : motab(mtc+=1)=304 : motab(mtc+=1)=334
 
-	open #20: 'Name=[Q]\PRmstr\Company.h[cno],Shr',internal,input
+	open #20: 'Name=[Q]\PRmstr\Company.h[cno],Shr',i,i
 	dim wcm(4) ! mat wcm is workman's comp maximum
 	dim sck(4)
 	dim sucw(10)

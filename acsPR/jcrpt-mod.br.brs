@@ -35,7 +35,7 @@ L90: pr newpage : _
 	fnopenprn : _
 	if file$(255)(1:3)<>"PRN" then jbskip=1
  
-	open #1: "Name=[Q]\PRmstr\Company.h[cno],Shr",internal,input  : _
+	open #1: "Name=[Q]\PRmstr\Company.h[cno],Shr",i,i  : _
 	read #1,using 'form pos 1,C 40': aa$ : _
 	close #1:
  

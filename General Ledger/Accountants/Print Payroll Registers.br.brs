@@ -59,7 +59,7 @@ L650: ! pr TOTALS
 	pr #255: newpage
 	fn_941_summary
 	fn_report3
-	goto FINIS
+	goto Finis
  
 def fn_header
 	nametab=66-int(len(env$('cnam'))/2)
@@ -123,7 +123,7 @@ def fn_report3
 	t9=0
 	fn_hdr3
 	restore #h_prmstr:
-	! restore #h_PRmstr,key>="    ": nokey L1140 eof L1140 ! nokey FINIS eof L1090
+	! restore #h_PRmstr,key>="    ": nokey L1140 eof L1140 ! nokey Finis eof L1090
 	do
 		! L1090: !
 		read #h_prmstr,using fPrmstr: eno,mat k$,mat l$,mat m,mat adr eof L1140
@@ -139,7 +139,7 @@ def fn_hdr3
 L1180: form skip 1,pos 23,c 105,skip 1
 		pr #255: "EMP #  EMPLOYEE NAME    GROSS   FED W/H FICA W/H   ST W/H  LOC W/H    TIPS     EIC      GROSS  FED W/H FICA W/H  ST W/H  LOC W/H"
 fnend
-FINIS: !
+Finis: !
 	close #h_acprcks: ioerr L1230
 L1230: !
 	fn_totals_3

@@ -31,7 +31,7 @@ L360: if sey$="Y" then gosub ASK_EMP : goto JUST_AFTER_READ else goto READ_SEQUE
 ! /r
 READ_SEQUENTIAL: ! r:
 	foundone=0
-L400: read #1,using L270: eno,mat em$,ss$,mat rs,mat em eof FINIS
+L400: read #1,using L270: eno,mat em$,ss$,mat rs,mat em eof Finis
 	if prtall=2 and fndate_mmddyy_to_ccyymmdd(em(17))=d1 then goto JUST_AFTER_READ
 	if prtall=2 and fndate_mmddyy_to_ccyymmdd(em(17))<>d1 then goto READ_SEQUENTIAL
 	if date_to_select>0 and date_to_select<>d1 then gosub CHECK_FOR_OLD_DATE
@@ -64,7 +64,7 @@ L650: read #4,using "form pos 1,N 8,n 3,PD 6,N 7,5*PD 3.2,37*PD 5.2": heno,tdn,p
 	if prd=date_to_select then foundone=1 : goto L690 ! FOUND A MATCHING OLD PAYROLL DATE
 	goto L650
 L690: return ! /r
-FINIS: ! r:
+Finis: ! r:
 	close #1: ioerr ignore
 	if lb1>0 then gosub PRINT_LABEL
 	close #2: ioerr ignore
@@ -75,14 +75,14 @@ ASK_EMP: ! r:
 	respc=0
 	fnTos(sn$="prlabel-2")
 	fnLbl(1,1,"Employee Number to Print:",25,1)
-	fncombof("Employee",1,28,20,"[Q]\PRmstr\Employee.h[cno]",1,8,9,20,"[Q]\PRmstr\EmployeeIdx-no.h[cno]",1,0, "Select any employee number you wish printed")
+	fnComboF("Employee",1,28,20,"[Q]\PRmstr\Employee.h[cno]",1,8,9,20,"[Q]\PRmstr\EmployeeIdx-no.h[cno]",1,0, "Select any employee number you wish printed")
 	resp$(respc+=1)=""
 	fnCmdKey("&Next",1,1,0,"Add this employee to list of labels to be printed.")
 	fnCmdKey("&Complete",2,0,0,"Print selected labels.")
 	ckey=fnAcs(mat resp$)
-	if ckey=2 then goto FINIS
+	if ckey=2 then goto Finis
 	eno=val(resp$(1)(1:8))
-	if eno=0 then goto FINIS
+	if eno=0 then goto Finis
 	read #1,using L270,key=lpad$(str$(eno),8): eno,mat em$,ss$,mat rs,mat em nokey ASK_EMP
 	return ! /r
 SCR1: ! r:
@@ -94,7 +94,7 @@ SCR1: ! r:
 	item1$(2)="Employees from last payroll only": last_payroll=2
 	item1$(3)="Select employees to print": select_employee=3
 	item1$(4)="Select employment status to print": emp_status=4
-	fncomboa(fi$,1,mypos,mat item1$,"Print labels based on certain employment status code. (Eg. all full time).")
+	fnComboA(fi$,1,mypos,mat item1$,"Print labels based on certain employment status code. (Eg. all full time).")
 	resp$(respc+=1)=item1$(1)
 	fnChk(5,mypos+2,'Print Employee Number on Label:',right)
 	resp$(respc+=1)='False'
@@ -112,7 +112,7 @@ SCR1: ! r:
 	fnTxt(11,mypos,2,0,1,'30',0,'Used for selectiing a specific employment status code. Leave blank if not applilcable."') !
 	resp$(respc+=1)=""
 	fnLbl(13,1,"Starting Employee Number (if applicable):",mylen,1)
-	fncombof("Employee",13,mypos,20,"[Q]\PRmstr\Employee.h[cno]",1,8,9,20,"[Q]\PRmstr\EmployeeIdx-no.h[cno]",1,0, "Select starting employee record for printing. Only applicable if not starting with first employee.")
+	fnComboF("Employee",13,mypos,20,"[Q]\PRmstr\Employee.h[cno]",1,8,9,20,"[Q]\PRmstr\EmployeeIdx-no.h[cno]",1,0, "Select starting employee record for printing. Only applicable if not starting with first employee.")
 	resp$(respc+=1)=""
 	fnCmdSet(2)
 	ckey=fnAcs(mat resp$)

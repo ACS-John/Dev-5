@@ -151,15 +151,15 @@ def fn_employeeEdit(ent; employeeAdding)
 		resp$(resp_phone=respc+=1)=ph$
 	
 		fnLbl(          lc(2)+=1,col3_pos,"Race:",col3_len,1)
-		fncomboa("Race",lc(2)   ,col4_pos,mat race_option$,"",16)
+		fnComboA("Race",lc(2)   ,col4_pos,mat race_option$,"",16)
 		resp$(resp_race=respc+=1)=fnSetForCombo$(mat race_option$,str$(rs(1)))
 	
 		fnLbl(         lc(2)+=1,col3_pos,'Sex:',col3_len,1)
-		fncomboa('Sex',lc(2)   ,col4_pos,mat gender_option$,'',10)
+		fnComboA('Sex',lc(2)   ,col4_pos,mat gender_option$,'',10)
 		resp$(resp_sex=respc+=1)=fnSetForCombo$(mat gender_option$,str$(rs(2)))
 	
 		fnLbl(             lc(2)+=1,col3_pos,'Marital Status:',col3_len,1)
-		fncomboa('Marital',lc(2)   ,col4_pos,mat marriedOption$,'',25) ! ,'',11)
+		fnComboA('Marital',lc(2)   ,col4_pos,mat marriedOption$,'',25) ! ,'',11)
 		resp$(resp_married=respc+=1)=fnSetForCombo$(mat marriedOption$,str$(em(1)))
 	
 		! lc(2)+=1
@@ -178,7 +178,7 @@ def fn_employeeEdit(ent; employeeAdding)
 		resp_disableFedTax=respc+=1 : if em(12)=-1 then resp$(resp_disableFedTax)='True' else resp$(resp_disableFedTax)='False'
 	
 		fnLbl(             lc(2)+=1,col3_pos,"Federal Exemptions:",col3_len,1)
-		fncomboa("FedEx",  lc(2)   ,col4_pos,mat fed_exemption_option$,"",3)
+		fnComboA("FedEx",  lc(2)   ,col4_pos,mat fed_exemption_option$,"",3)
 		resp$(resp_fedExepmtions=respc+=1)=fnSetForCombo$(mat fed_exemption_option$,str$(em(2)),1,2)
 		fnLbl(lc(2)+=1,col3_pos,"Federal Tax Add-On:",col3_len,1)
 		fnTxt(lc(2)   ,col4_pos,10,10,0,"32",0,"If you wish for the system to add additional Federal withholdings, enter that amount here.")
@@ -190,7 +190,7 @@ def fn_employeeEdit(ent; employeeAdding)
 		fnChk(lc(2)+=1,col4_pos+1,'Disable State Taxes',1) ! , align,contain,tabcon,chk_disable)
 		resp_disableStTax=respc+=1 : if em(14)=-1 then resp$(resp_disableStTax)='True' else resp$(resp_disableStTax)='False'
 		fnLbl(             lc(2)+=1,col3_pos,"State Exemptions:",col3_len,1)
-		fncomboa("StateEx",lc(2)   ,col4_pos,mat fed_exemption_option$,"",3)
+		fnComboA("StateEx",lc(2)   ,col4_pos,mat fed_exemption_option$,"",3)
 		resp$(resp_stExeptions=respc+=1)=fnSetForCombo$(mat fed_exemption_option$,str$(em(3)),1,2)
 		fnLbl(lc(2)+=1,col3_pos,"State Tax Add-On:",col3_len,1)
 		fnTxt(lc(2)   ,col4_pos,10,10,0,"32",0,"If you wish for the system to add additional state withholdings, enter that amount here.")
@@ -209,10 +209,10 @@ def fn_employeeEdit(ent; employeeAdding)
 		resp$(resp_lastPayrollDate=respc+=1)=str$(lpd)
 	
 		fnLbl(               lc(1)+=1,1,"Employment Status:",mylen,1)
-		fncombof("EmpStatus",lc(1)   ,col2_pos,20,"[Q]\PRmstr\EmpStatus.dat",1,2,3,15,"[Q]\PRmstr\EmpStatus.idx",0,0, " ",fracustinfo,0)
+		fnComboF("EmpStatus",lc(1)   ,col2_pos,20,"[Q]\PRmstr\EmpStatus.dat",1,2,3,15,"[Q]\PRmstr\EmpStatus.idx",0,0, " ",fracustinfo,0)
 		resp$(resp_empStatus=respc+=1)=str$(em(4))
 		fnLbl(              lc(1)+=1,col1_pos,"Pay Code:",col1_len,1)
-		fncomboa("PayCode", lc(1)    ,col2_pos,mat payPeriodOption$,"",16)
+		fnComboA("PayCode", lc(1)    ,col2_pos,mat payPeriodOption$,"",16)
 		resp$(resp_payCode=respc+=1)=fnSetForCombo$(mat payPeriodOption$,str$(em(5)))
 		lc(1)+=1
 		fnLbl(lc(1)+=1,col1_pos,"Vacation Pay Code:",col1_len,1)
@@ -234,17 +234,17 @@ def fn_employeeEdit(ent; employeeAdding)
 		! lc(2)-=2   !  go back up two lines and do the right side
 	
 		fnLbl(              lc(2)+=1,col3_pos,"FICA Code:",col3_len,1)
-		fncomboa("FICACode",lc(2)    ,col4_pos,mat code6$,"",25)
+		fnComboA("FICACode",lc(2)    ,col4_pos,mat code6$,"",25)
 		resp$(resp_ficaCode=respc+=1)=fnSetForCombo$(mat code6$,str$(em(6)))
 		fnLbl(              lc(2)+=1,col3_pos,"EIC Code:",col3_len,1)
-		fncomboa("EICCode", lc(2)    ,col4_pos,mat eicOption$,"",25)
+		fnComboA("EICCode", lc(2)    ,col4_pos,mat eicOption$,"",25)
 		resp$(resp_EicCode=respc+=1)=eicOption$(em(7)+1)
 	
 	
 		lc(1)+=1
 	
 		fnLbl(             lc(1)+=1,col1_pos,"W-4 Year:",col1_len,1)
-		fncomboa("w4Year", lc(1)   ,col2_pos,mat w4yearOption$,'Only used if W-4 Year is set to 2020 or later.',5)
+		fnComboA("w4Year", lc(1)   ,col2_pos,mat w4yearOption$,'Only used if W-4 Year is set to 2020 or later.',5)
 		resp$(resp_w4year=respc+=1)=w4Year$
 	
 		fnChk(lc(1)+=1,col2_pos+1,'2020 W-4 Step 2',1) ! , align,contain,tabcon,chk_disable)
@@ -391,7 +391,7 @@ ScrDepartment: ! r:
 	resp$(respc+=1)=str$(tdt(4))
 	fnLbl(5,35,"State Code:",mylen,1,0,fram1)
 	! fnTxt(5,58,2,2,1,'30',0,"You must enter a state code, even if you have no state withholdings.",FRAM1)
-	fncomboa("StateCode",5,58,mat state_option$,"",11,fram1)
+	fnComboA("StateCode",5,58,mat state_option$,"",11,fram1)
 	if tcd(1)=0 or tcd(1)>10 then tcd(1)=1 ! default state code to 1
 	resp$(respc+=1)=state_option$(tcd(1))
 	fnLbl(6,1,"Workmans Code:",mylen,1,0,fram1)
@@ -879,7 +879,7 @@ AskDd: !
 	fnTxt(1,mylen+3,8,8,1,"",1,"")
 	resp$(respc+=1)=str$(eno)
 	fnLbl(2,1,"Direct Deposit:",mylen,right)
-	fncomboa("Directd",2,mylen+3,mat optEnableDirectDeposit$,"",35)
+	fnComboA("Directd",2,mylen+3,mat optEnableDirectDeposit$,"",35)
 	respc+=1
 	for j=1 to udim(optEnableDirectDeposit$)
 		if dd$=optEnableDirectDeposit$(j)(1:1) then resp$(respc)=optEnableDirectDeposit$(j)
@@ -888,7 +888,7 @@ AskDd: !
 	fnTxt(3,mylen+3,9,9,1,"",0,"Employee's bank's routing #. The bank account and the routing # can be found at the bottom of the employees personal check.")
 	resp$(respc+=1)=str$(rtn)
 	fnLbl(4,1,"Account Type:",mylen,right)
-	fncomboa("AccType",4,mylen+3,mat optDirectDepositAccountType$,"",35)
+	fnComboA("AccType",4,mylen+3,mat optDirectDepositAccountType$,"",35)
 	respc+=1
 	resp$(respc)=''
 	for j=1 to udim(mat optDirectDepositAccountType$)

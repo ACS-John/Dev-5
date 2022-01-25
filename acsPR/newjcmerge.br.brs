@@ -12,7 +12,7 @@
  
  
 	open #2: "Name=[Q]\PRmstr\JCCAT.h[cno],KFName=[Q]\PRmstr\CatIndx.h[cno],Shr",i,outIn,k
-	open #3: "Name=jcWork."&session$,internal,input
+	open #3: "Name=jcWork."&session$,i,i
 	open #4: "Name=[Q]\PRmstr\JCPRH1.h[cno],RecL=128,use",internal,output
 	open #5: "Name=[Q]\PRmstr\JCTRANS.h[cno],Shr",i,outi,r
 	open #9: "Name=[Q]\PRmstr\Category.h[cno],KFName=[Q]\PRmstr\categoryIDX.h[cno],Shr",i,outIn,k

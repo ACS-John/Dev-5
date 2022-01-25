@@ -42,7 +42,7 @@ trans1_rec=rec_start-1
 do
 	NEXT_REC: !
 	trans1_rec+=1
-	if trans1_rec>trans1_lrec or (rec_end>0 and rec_end<trans1_rec) then goto FINIS
+	if trans1_rec>trans1_lrec or (rec_end>0 and rec_end<trans1_rec) then goto Finis
 	read #h_trans1,using Ftrans,rec=trans1_rec: p$,tdate,tcode,tamount,mat tg,wr,wu,er,eu,gr,gu,tbal,pcode noRec NEXT_REC
 	pr trans1_rec
 	if fn_has_dupe then
@@ -51,7 +51,7 @@ do
 	end if  ! fn_has_dupe(z$)
 loop
 
-FINIS: !
+Finis: !
 	fncloseprn
 	close #h_trans1:
 Xit: !

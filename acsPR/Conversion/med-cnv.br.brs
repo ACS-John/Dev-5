@@ -9,7 +9,7 @@ dim w(13)
 dim a$(3)*40,b$*12,g$*12,d$(10)*8,tty(10),e$(10)*12
 dim dedfed(10),dedcode(10)
 
-open #1: "Name=[Q]\PRmstr\Company.h[cno],Shr",internal,input 
+open #1: "Name=[Q]\PRmstr\Company.h[cno],Shr",i,i 
 read #1,using 'form pos 1,3*C 40,C 12,pos 150,10*C 8,N 2,pos 317,10*C 12,pos 618,10*N 1,pos 638,10*N 1,pos 133,PD 6.3,PD 6.2,pos 236,PD 3.3,PD 4.2': mat a$,b$,mat d$,loccode,mat e$,mat dedcode,mat dedfed,mcrate,mcmax,ssrate,ssmax 
 close #1: ! company was prcoinfo before conversion
 mcmax=9999999

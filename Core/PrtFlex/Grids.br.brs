@@ -60,7 +60,7 @@ fnTos
 mat resp$=('')
 fnLbl(1,1,'Data Base Name:',16,1)
 fnLbl(2,1,'Current System: '&env$('cursys'))
-fncomboa('OTHER',1,18,mat database_list$,empty$,20)
+fnComboA('OTHER',1,18,mat database_list$,empty$,20)
 resp$(1)=database_list$(1)
 fnCmdSet(2)
 ckey=fnAcs(mat resp$)
@@ -80,7 +80,7 @@ GridSelection: ! r:
 	next gridName_list_item
 	fnTos
 	fnLbl(1,1,'Flexgrid name:',16,1)
-	fncomboa('GridNames',1,18,mat gridName_list$,'Choose a grid or click add to add a new grid',20)
+	fnComboA('GridNames',1,18,mat gridName_list$,'Choose a grid or click add to add a new grid',20)
 	resp$(1)=gridName_list$(1)
 	fnCmdKey('&Select',1,1)
 ! fnCmdKey('&Back',2)
@@ -185,7 +185,7 @@ DisplayGrid: !
 	mat gridName_list$(x)
 	close #16: ioerr ignore
 	tt$='Highlite any column heading you wish to add to your grid'
-	fncomboa('Grrr',5,16,mat gridName_list$,tt$,80)
+	fnComboA('Grrr',5,16,mat gridName_list$,tt$,80)
 	mat gridinfo$(respc+=1)
 	if udim(mat gridName_list$)=>1 then gridinfo$(respc)=gridName_list$(1) else gridinfo$(respc)=''
 	fnCmdKey('&Add Column',1,1)

@@ -32,7 +32,7 @@ SCR1: !
 		end if
 		fnCopy(resp$(1)&'\*.h'&str$(apcno),'[Q]\tmpAP\*.*')
 		if exists('[Q]\tmpAP\apcoinfo.h'&str$(apcno))=0 then goto SCR1
-		open #apmstr=fnH: 'Name=[Q]\tmpAP\APmstr.h'&str$(apcno),internal,input  ! &',KFName=[Q]\tmpAP\apIndex.h'&str$(apcno) ,keyed
+		open #apmstr=fnH: 'Name=[Q]\tmpAP\APmstr.h'&str$(apcno),i,i  ! &',KFName=[Q]\tmpAP\apIndex.h'&str$(apcno) ,keyed
 		open #aptrans=10: 'Name=[Q]\tmpAP\apTrans.H'&str$(apcno),i,outi,r
 		open #paymstr=fnH: 'Name=[Q]\CLmstr\PayMstr.h[cno],Version=1,size=0,RecL=276,Replace',i,outi,r
 		open #payalloc=fnH: 'Name=[Q]\CLmstr\PayAlloc.h[cno],Size=0,RecL=56,Replace',i,outi,r

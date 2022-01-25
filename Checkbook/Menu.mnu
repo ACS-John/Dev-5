@@ -34,6 +34,7 @@ Print
 >Accounts Payable Listing (Aged)          ^ [cursystem]\*
 >Claims or Purchases Report               ^ [cursystem]\*
 >GL Distribution Report                   ^ [cursystem]\*                    ^ GL
+>Print 1099-Misc Forms                    ^ [cursystem]\*
 >Print 1099-NEC Forms                     ^ [cursystem]\*
 Import/Export                                    
 >Transfer to Accountant                   ^ [cursystem]\*

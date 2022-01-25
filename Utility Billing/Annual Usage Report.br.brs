@@ -110,11 +110,11 @@ SCREEN1: ! r:
 	fnTxt(4,71,10,10,0,"3")
 	rc+=1 : scr1_resp$(rc)=scr1_resp$(rc)
 	fnLbl(6,1,"Service to Analyze:",24,1,0)
-	fncomboa("ubusage21",6,26,mat opt_service_to_analyze$,"",13)
+	fnComboA("ubusage21",6,26,mat opt_service_to_analyze$,"",13)
 	rc+=1
 	if trim$(scr1_resp$(rc))='' then scr1_resp$(rc)=opt_service_to_analyze$(1)
 	fnLbl(8,1,"Accumulation Type:",24,1,0)
-	fncomboa("ubusage21",8,26,mat opt_accum_type$)
+	fnComboA("ubusage21",8,26,mat opt_accum_type$)
 	rc+=1
 	if trim$(scr1_resp$(rc))='' then scr1_resp$(rc)=opt_accum_type$(1)
 	fnCmdSet(2)

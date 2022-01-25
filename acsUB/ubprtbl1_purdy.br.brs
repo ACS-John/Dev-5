@@ -11,7 +11,7 @@
  
 	fncno(cno,cnam$)
 	fnLastBillingDate(d1)
-	open #21: "Name=[Q]\UBmstr\Company.h[cno],Shr",internal,input
+	open #21: "Name=[Q]\UBmstr\Company.h[cno],Shr",i,i
 	read #21,using "form pos 41,2*C 40": at$(2),at$(3)
 	close #21:
 	at$(1)=cnam$
@@ -50,7 +50,7 @@ SCREEN1: !
 	fnTxt(4,pf,8,8,1,"1")
 	resp$(respc+=1)=cnvrt$("pic(zzzzzz)",d1)
 	fnLbl(5,1,"Starting Route/Sequence:",ll,1)
-	fncombof("ubm-act-nam",5,pf,40,"[Q]\UBmstr\Customer.h[cno]",1741,9,41,30,"[Q]\UBmstr\ubindx5.h[cno]",2)
+	fnComboF("ubm-act-nam",5,pf,40,"[Q]\UBmstr\Customer.h[cno]",1741,9,41,30,"[Q]\UBmstr\ubindx5.h[cno]",2)
 	resp$(respc+=1)="[All]"
 	fnLbl(6,1,"Route Number:",ll,1)
 	fncmbrt2(6,pf)

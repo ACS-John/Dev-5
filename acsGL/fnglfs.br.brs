@@ -39,15 +39,15 @@ def library fnGlAskFormatPriorCdPeriod(; defaultFormatOption$,___,returnN)
 		lc=rc=0 : mylen=23 : mypos=mylen+3
 		
 		fnLbl(lc+=1,1,"Statement Format:",mylen,1)
-		fncomboa("ps",lc,mypos,mat formatOption$) 
+		fnComboA("ps",lc,mypos,mat formatOption$) 
 		resp$(resp_format:=rc+=1)=formatOption$(format)
 		
 		fnLbl(lc+=1,1,"Year:",mylen,1)
-		fncomboa("PriorCD",lc,mypos,mat priorOrCurrentOption$) 
+		fnComboA("PriorCD",lc,mypos,mat priorOrCurrentOption$) 
 		resp$(resp_priorOrCurrent:=rc+=1)=priorOrCurrentOption$(1)
 		
 		fnLbl(lc+=1,1,"Period to Print:",mylen,1)
-		fncomboa("actPd",lc,mypos,mat periodOption$) 
+		fnComboA("actPd",lc,mypos,mat periodOption$) 
 		resp$(resp_actpd:=rc+=1)=str$(actpd) ! periodOption$(1)
 		
 		fnCmdSet(3)

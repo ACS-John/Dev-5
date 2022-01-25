@@ -12,9 +12,9 @@ def library fnCno(&cno; &cnam$)
 	dim cnam_read$*40
 	cnam_read$=''
 	if env$('ACSDeveloper')<>'' and env$('cursystem')='Client Billing' then
-		open #tf1=fnH: 'Name=S:\Core\Data\acsllc\Company.h[cno],Shr',internal,input ioerr CNAM_XIT
+		open #tf1=fnH: 'Name=S:\Core\Data\acsllc\Company.h[cno],Shr',i,i ioerr CNAM_XIT
 	else
-		open #tf1=fnH: 'Name=[Q]\[cursys]mstr\Company.h[cno],Shr',internal,input ioerr CNAM_XIT
+		open #tf1=fnH: 'Name=[Q]\[cursys]mstr\Company.h[cno],Shr',i,i ioerr CNAM_XIT
 	end if
 	read #tf1,using 'form pos 1,C 40': cnam_read$ ioerr ignore
 	close #tf1:

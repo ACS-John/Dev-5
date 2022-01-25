@@ -14,7 +14,7 @@
 	fnLbl(1,1,'Order for Printing:',20,1)
 	item1$(1)='Payee'
 	item1$(2)='Fund Number'
-	fncomboa('unpdinv',1,22,mat item1$,tt$)
+	fnComboA('unpdinv',1,22,mat item1$,tt$)
 	resp$(respc+=1)=item1$(1)
 	fnCmdSet(2)
 	ckey=fnAcs(mat resp$)
@@ -46,7 +46,7 @@ L350: close #paytrans: : close #unpdaloc: : close #clwork:
 	close #9:
 	fnFree('[temp]\ADDR')
 	execute 'SORT [temp]\CONTROL'
-	open #9: 'Name=[temp]\ADDR',internal,input
+	open #9: 'Name=[temp]\ADDR',i,i
 	open #paymstr=13: 'Name=[Q]\CLmstr\PayMstr.h[cno],KFName=[Q]\CLmstr\PayIdx1.h[cno],Shr',i,i,k
 	open #clwork=10: 'Name=[Q]\CLmstr\CLWORK'&wsid$&'.h[cno],Shr',i,i,r
 	open #glmstr=5: 'Name=[Q]\CLmstr\GLmstr.h[cno],KFName=[Q]\CLmstr\GLIndex.h[cno],Shr',i,i,k

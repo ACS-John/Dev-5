@@ -19,7 +19,7 @@
 	fnopenprn !
 	gosub HDR
 	READ_EMPLOYEE: !
-	read #1,using 'form pos 1,n 8,c 30,pos 99,c 11': eno,em$,ss$ eof FINIS
+	read #1,using 'form pos 1,n 8,c 30,pos 99,c 11': eno,em$,ss$ eof Finis
 	a=pos (rtrm$(em$)," ",1)
 	b=pos (rtrm$(em$)," ",a+1)
 	em$=rtrm$(em$(max(a+1,b+1):30))&" "&em$(1:a)
@@ -49,7 +49,7 @@ PRINT_ONE: ! r:
 		total_pension+=pension_amount
 	end if
 goto READ_EMPLOYEE ! /r
-FINIS: ! r:
+Finis: ! r:
 	close #1: ioerr ignore
 	close #2: ioerr ignore
 	pr #255: "                                      ----------  ----------  ----------  ---------- "

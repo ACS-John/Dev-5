@@ -19,7 +19,7 @@ L170: close #13:
 		if j<=0 then j=1
 		mat options$(j)
 		fen$="CBud.h[cno]"
-		fncomboa(fen$,1,1,mat option$,"Select from the list of budget files. To add a new budget file, take the Add option.",20,container)
+		fnComboA(fen$,1,1,mat option$,"Select from the list of budget files. To add a new budget file, take the Add option.",20,container)
 		goto Xit
  
 include: ertn

@@ -150,8 +150,8 @@ def library fnpdf_lineh(mmX,mmY,length)
 	fn_debug('fnpdf_lineH('&str$(mmX)&'mm,'&str$(mmy)&'mm,'&str$(length)&')')
 	fn_pdf_push
 	fn_pdf_mmpos(mmX,mmY)
-	fn_phe("begin_boxtop"&rpt$(" ",length))
-	fn_phe("end_box")
+	fn_phe('begin_boxtop'&rpt$(' ',length))
+	fn_phe('end_box')
 	fn_pdf_pop
 fnend
 def library fnpdf_linev(mmX,mmY,height) 
@@ -171,8 +171,8 @@ def library fnpdf_linev(mmX,mmY,height)
 	! pr 'height after=';height
 	for ynow=mmY to (mmY+height), step 1
 		fn_pdf_mmpos(mmX,ynow)
-		fn_phe("begin_verticals|")
-		fn_phe("end_box")
+		fn_phe('begin_verticals|')
+		fn_phe('end_box')
 	nex ynow
 	fn_pdf_font(plvFontNamePrior$)
 	fn_pdf_fontsize(plvFontSizePrior)
@@ -231,9 +231,9 @@ def library fnpdf_fontbold(; off_or_on)
 fnend
 def fn_pdf_fontbold(; off_or_on)
 	if off_or_on then
-		fn_phe("(s1B") ! [ITALICS]
+		fn_phe('(s1B') ! [ITALICS]
 	else
-		fn_phe("(s0B") ! [/ITALICS]
+		fn_phe('(s0B') ! [/ITALICS]
 	end if
 	gFontBold=off_or_on
 fnend
@@ -243,9 +243,9 @@ def library fnpdf_fontitalic(; off_or_on)
 fnend
 def fn_pdf_fontitalic(; off_or_on)
 	if off_or_on then
-		fn_phe("(s1S") ! [ITALICS]
+		fn_phe('(s1S') ! [ITALICS]
 	else
-		fn_phe("(s0S") ! [/ITALICS]
+		fn_phe('(s0S') ! [/ITALICS]
 	end if
 	gFontItalic=off_or_on
 fnend

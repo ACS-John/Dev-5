@@ -84,7 +84,7 @@ fnreg_read('Post to Checkbook - Populate Checkbook Payee from Payroll Employee',
 ! r: set default answers and semi-consants and open some files
 	ssr1=fnss_employee*.01
 	ssr2=fnss_employer*.01
-	open #20: 'Name=[Q]\PRmstr\prCode.h[cno],Shr',internal,input
+	open #20: 'Name=[Q]\PRmstr\prCode.h[cno],Shr',i,i
 	read #20,using 'form pos 2,pos 5,N 5': ckno
 	close #20:
 	d1=fnPayPeriodEndingDate
@@ -99,7 +99,7 @@ fnreg_read('Post to Checkbook - Populate Checkbook Payee from Payroll Employee',
 	fnDedNames(mat fullname$,mat abrevName$,mat dedcode,mat calcode,mat dedfed,mat dedfica,mat dedSt,mat dedUc,mat dedGl$)
 	! dim d$(10)*8  ! removed mat d$ as it was unused.
 	dim gln$(15)*12
-	open #hCompany=fnH: 'Name=[Q]\PRmstr\Company.h[cno],Shr',internal,input
+	open #hCompany=fnH: 'Name=[Q]\PRmstr\Company.h[cno],Shr',i,i
 	! read #hCompany,using 'form pos 1,x 120,pos 150,10*C 8,pos 437,15*C 12,N 1': mat d$,mat gln$,gl_installed
 	read #hCompany,using 'form pos 437,15*C 12,N 1': mat gln$,gl_installed
 	close #hCompany:
@@ -137,47 +137,47 @@ ScrMainQestions: ! r:
 	fnTos
 	respc=0
 	fnLbl(1,1,'Payroll Date:',38,1)                    	: fnTxt(1,41,10,0,1,'3',0,'')    	: resp$(resp_payroll_date:=1)=str$(d1)
-	fnLbl(2,1,'Are Checks Prenumbered?',38,1)        	: fncomboa('prckprt-2',2,41,mat opt_yn$,'The system needs to know if the checks are already numbered.',3)
+	fnLbl(2,1,'Are Checks Prenumbered?',38,1)        	: fnComboA('prckprt-2',2,41,mat opt_yn$,'The system needs to know if the checks are already numbered.',3)
 																																															resp$(2)=opt_yn$(2) : if pre$='Y' then resp$(2)=opt_yn$(1)
 	fnLbl(3,1,'Beginning Check Number:',38,1)        	: fnTxt(3,41,7,0,1,'30',0,'')    	: resp$(3)=str$(check_number)
 	fnLbl(4,1,'Date of Checks:',38,1)                 	: fnTxt(4,41,10,0,1,'3',0,'')    	: resp$(resp_date_of_checks:=4)=date$('ccYYMMDD')
 	fnLbl(5,1,'Beginning Employee Number:',38,1)     	: fnTxt(5,41,8,0,1,'30',0,'')    	: resp$(5)=str$(beginningEmployeeNumber)
 	fnLbl(6,1,'Post to ACS Checkbook',38,1)
 	if fnClientHas('CL') then
-																								fncomboa('prckprt-3',6,41,mat opt_yn$)  	: resp$(6)=opt_yn$(2) : if posttocl$='Y' then resp$(6)=opt_yn$(1)
+																								fnComboA('prckprt-3',6,41,mat opt_yn$)  	: resp$(6)=opt_yn$(2) : if posttocl$='Y' then resp$(6)=opt_yn$(1)
 	else
 		fnTxt(6,41,3, 0,0,'',1,'ACS Checkbook license not detected.')                     	: resp$(6)=opt_yn$(2) : posttocl$='N'
 	end if
 	fnLbl(7,1,'Post Employer''s Portion of FiCA?',38,1)
-	fncomboa('yn',7,41,mat opt_yn$,'The system can generate and post the employer''s portion of FICA at the time the check is being written.',3)
+	fnComboA('yn',7,41,mat opt_yn$,'The system can generate and post the employer''s portion of FICA at the time the check is being written.',3)
 	if ficam1$='Y' then resp$(7)=opt_yn$(1) else resp$(7)=opt_yn$(2)
 	fnLbl(8,1,'Check Format:',38,1)
-	fncomboa('sc1',8,41,mat opt_check_format$)
+	fnComboA('sc1',8,41,mat opt_check_format$)
 	whichScc=srch(mat scc$,sc1$)
 	if whichScc>0 then resp$(8)=opt_check_format$(whichScc) else resp$(8)=opt_check_format$(4)
 	fnLbl(9,1,'Check Type (Regular or Direct Deposit):',38,1)
-	fncomboa('checkMedia',9,41,mat opt_checkMedia$,'If you have direct deposits, you can use this option to pr check on plain paper to give the employees.',15)
+	fnComboA('checkMedia',9,41,mat opt_checkMedia$,'If you have direct deposits, you can use this option to pr check on plain paper to give the employees.',15)
 	if checkMedia$='R' then resp$(9)=opt_checkMedia$(1)
 	if checkMedia$='D' then resp$(9)=opt_checkMedia$(2)
 	if checkMedia$='A' then resp$(9)=opt_checkMedia$(3)
 	fnLbl(10,1,'Print Vacation and Sick Leave?',38,1)
-	fncomboa('prckprt-6',10,41,mat opt_yn$)
+	fnComboA('prckprt-6',10,41,mat opt_yn$)
 	if accr$='Y' then resp$(10)=opt_yn$(1) else resp$(10)=opt_yn$(2)
 
 	respc=10
 
 	if ~cl_installed and exists('[Q]\CLmstr\bankmstr.h[cno]') then
 		fnLbl(11,1,'Bank Account:',38,1)
-		fncombof('Bankmstr',11,41,20,'[Q]\CLmstr\bankmstr.h[cno]',1,2,3,15,'[Q]\CLmstr\Bankidx1.h[cno]',1,0, 'Select bank account for printing')
+		fnComboF('Bankmstr',11,41,20,'[Q]\CLmstr\bankmstr.h[cno]',1,2,3,15,'[Q]\CLmstr\Bankidx1.h[cno]',1,0, 'Select bank account for printing')
 		resp$(resp_cl_bankcode:=respc+=1)=str$(bankcode)
 	end if
 	if exists('[Q]\PRmstr\hourclass.h[cno]') then
 		fnLbl(12,1,'Comp Time Code:',38,1)
-		fncombof('timeclass',12,41,20,'[Q]\PRmstr\hourclass.h[cno]',1,5,6,25,'[Q]\PRmstr\hourclass-idx.h[cno]',1,0, 'Select time classification code for comp time, if applicable.')
+		fnComboF('timeclass',12,41,20,'[Q]\PRmstr\hourclass.h[cno]',1,5,6,25,'[Q]\PRmstr\hourclass-idx.h[cno]',1,0, 'Select time classification code for comp time, if applicable.')
 		resp$(resp_combcode:=respc+=1)=compcode$
 	end if
 	fnLbl(14,1,'Print All Checks (or ask after first):',38,1)
-	fncomboa('prckprt-prall',14,41,mat opt_yn$)
+	fnComboA('prckprt-prall',14,41,mat opt_yn$)
 	resp$(resp_skip_align=respc+=1)=skip_alignment$
 	if gl_installed then
 		fnLbl(16,1,'General Ledger detected.',38,1)
@@ -270,7 +270,7 @@ ScrMainQestions: ! r:
 		if cl_installed then
 			open #hMgl=fnH: 'Name=[Q]\PRmstr\MGLMSTR.h[cno],KFName=[Q]\PRmstr\MGLIDX1.h[cno],Shr',i,i,k ! 7
 		end if
-		! unused removed 12/22/2020     open #praddr=1: 'Name=[Q]\PRmstr\prAddr1.h[cno],Shr',internal,input
+		! unused removed 12/22/2020     open #praddr=1: 'Name=[Q]\PRmstr\prAddr1.h[cno],Shr',i,i
 		open #hEmployee=fnH: 'Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr',i,i,k
 		open #hDepartment=fnH: 'Name=[Q]\PRmstr\Department.h[cno],KFName=[Q]\PRmstr\DeptIdx.h[cno]',i,outIn,k
 		open #hCheck=fnH: 'Name=[Q]\PRmstr\PayrollChecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno]',i,outIn,k
