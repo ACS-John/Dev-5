@@ -16,7 +16,7 @@
 			gosub ReadTransactions
 			if typ<>0 and ytdp>minamt then
 				if seltp=0 or seltp=typ then
-					dim box(11)
+					dim box(20)
 					mat box=(0)
 					if typ<1 or typ>8 then typ=1
 					box(typ)=ytdp

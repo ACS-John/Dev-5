@@ -45,8 +45,7 @@ def fn_1099testPrint
 	disableCopyAWarning=0
 	fn_1099print_close
 fnend
-dim box(20)
-! dim empAddr$(3)*30,box(17)
+
 def fn_setup
 	if ~setup then
 		setup=1
@@ -238,22 +237,28 @@ def fn_ask(&seltpN,&typeN,&minAmt,&beg_date,&end_date; ___, _
 	end if
 	fn_ask=returnN
 fnend
-	def fn_ask_margins(; ___,lc,mypos,mylen)
+	def fn_ask_margins(; ___,lc,mypos,mylen,ckey_defaultMargins,x)
 		! sets local form1y,form2y,left
 		dim amResp$(10)*64
 		gosub SetDefaultMargins
 		amResp$(1)=fnPcRegRead$('form 1 Y'	,defaultMargin$(1))
 		amResp$(2)=fnPcRegRead$('form 2 Y'	,defaultMargin$(2))
 		amResp$(3)=fnPcRegRead$('X'        	,defaultMargin$(4))
+		AskMargins: !
 		fnTos
 		lc=0 : mylen=30 : mypos=mylen+2
 		fnLbl(lc+=1,1,'form 1 Distance from Top (mm):',mylen,1) 	: fnTxt(lc,mypos,3,0,1,'30')
 		fnLbl(lc+=1,1,'form 2 Distance from Top (mm):',mylen,1) 	: fnTxt(lc,mypos,3,0,1,'30')
 		lc+=1
 		fnLbl(lc+=1,1,'Left Margin Size (mm):',mylen,1)          	: fnTxt(lc,mypos,3,0,1,'30')
-		fnCmdSet(4)
+		fnCmdKey('&Save',1,1,0)
+		fnCmdKey('&Defaults',ckey_defaultMargins:=1022)
+		fnCmdKey('&Cancel',5,0,1)
 		fnAcs(mat amResp$,ckey)
-		if ckey<>5 then
+		if ckey=ckey_defaultMargins then
+			for x=1 to udim(mat defaultMargin$) : amResp$(x)=defaultMargin$(x) : nex x
+			goto AskMargins
+		else if ckey<>5 then
 			fnPcReg_write('form 1 Y' 	,amResp$(1))
 			fnPcReg_write('form 2 Y' 	,amResp$(2))
 			fnPcReg_write('X'         	,amResp$(3))
@@ -263,10 +268,13 @@ fnend
 		end if
 	fnend
 	SetDefaultMargins: ! r:
-		defaultMargin$(1)=           '5'  	! form 1 top margin
-		defaultMargin$(2)=         '144'  	! form 2 top margin
+		defaultMargin$(1)=           '2'  	! form 1 top margin
+		defaultMargin$(2)=         '134'  	! form 2 top margin
 		defaultMargin$(3)=           '5'  	! left
 	return ! /r
+
+! dim box(20)
+! dim empAddr$(3)*30
 def library fn1099MiscPrint(vn$*8,nam$*30,mat empAddr$,ss$*11,mat box)
 	if ~setup then fn_setup
 	fn1099MiscPrint=fn_1099print(vn$,nam$,mat empAddr$,ss$,mat box)
@@ -381,19 +389,20 @@ def fn_1099print(vn$*8,nam$*30,mat empAddr$,ss$*11,mat box; ___, _
 		! r: print the text in the boxes
 			! r: left side
 				! PAYER'S name, street address, city, etc
-				fnpa_txt(companyNameAddr$(1),column1,fn_line(1))
-				fnpa_txt(companyNameAddr$(2),column1,fn_line(2))
-				fnpa_txt(companyNameAddr$(3),column1,fn_line(3))
-				fnpa_txt(ph$,column1,fn_line(5))
-				fnpa_txt(fed$,column1,fn_line(8))   ! PAYER'S TIN
-				fnpa_txt(ss$,column1+45,fn_line(8)) ! RECIPIENT'S TIN
-				fnpa_txt(nam$,column1,fn_line(9))  ! RECIPIENT'S name
+				fnpa_txt(companyNameAddr$(1)	,column1    	,fn_line(1))
+				fnpa_txt(companyNameAddr$(2)	,column1    	,fn_line(2))
+				fnpa_txt(companyNameAddr$(3)	,column1    	,fn_line(3))
+				fnpa_txt(ph$                 	,column1    	,fn_line(5))
+				fnpa_txt(fed$                	,column1    	,fn_line(7))   ! PAYER'S TIN
+				fnpa_txt(ss$                 	,column1+45	 	,fn_line(7)) ! RECIPIENT'S TIN
+				fnpa_txt(nam$                	,column1    	,fn_line(9))  ! RECIPIENT'S name
 				if udim(mat empAddr$)=2 then
-					fnpa_txt(empAddr$(1),column1,fn_line(10)) ! address line 1
-					fnpa_txt(empAddr$(2),column1,fn_line(12)) !  CSZ
+					fnpa_txt(empAddr$(1)       	,column1    	,fn_line(10)) ! address line 1
+					fnpa_txt(empAddr$(2)       	,column1    	,fn_line(12)) !  CSZ
 				else if udim(mat empAddr$)=3 then
-					fnpa_txt(rtrm$(empAddr$(1))&'  '&trim$(empAddr$(2)),column1,fn_line(10)) ! address line 2
-					fnpa_txt(empAddr$(3),column1,fn_line(12)) !  CSZ
+					fnpa_txt(rtrm$(empAddr$(1))&'  ' _
+					&trim$(empAddr$(2))        	,column1    	,fn_line(11)) ! address line 2
+					fnpa_txt(empAddr$(3)       	,column1    	,fn_line(12)) !  CSZ
 				else
 					pr 'udim(mat empAddr$)=';udim(mat empAddr$);' this is unexpected by '&program$ : pause
 				end if
@@ -439,21 +448,21 @@ fnend
 		if ~setup_line then
 			setup_line=1
 			dim lineXy(15)
-			lineXy( 1)=15 ! PAYER'S name and Box 1 Rents
-			lineXy( 2)=19 ! PAYER's addr
-			lineXy( 3)=23 ! PAYER's csz
-			lineXy( 4)= 28 ! Box 2 Royalties
-			lineXy( 5)= 32 !
-			lineXy( 6)= 36 ! box 2
-			lineXy( 7)= 50 ! PAYER's TIN
-			lineXy( 8)= 54 ! box 5b,6b
+			lineXy( 1)= 13 ! PAYER'S name and Box 1 Rents
+			lineXy( 2)= 17 ! PAYER's addr
+			lineXy( 3)= 21 ! PAYER's csz
+			lineXy( 4)= 26 ! Box 2 Royalties
+			lineXy( 5)= 30 !
+			lineXy( 6)= 35 ! box 2
+			lineXy( 7)= 48 ! PAYER's TIN
+			lineXy( 8)= 52 ! box 5b,6b
 			lineXy( 9)= 66 ! RECIPIENT'S name  street address
-			lineXy(10)= 75 ! box 7,8
-			lineXy(11)= 79 ! recipient's CSZ
-			lineXy(12)= 90 ! City or town, box 11,12
-			lineXy(13)=103 ! Account number, FATCA filing, box 13,14
-			lineXy(14)=113 ! box 15a,16a,17a
-			lineXy(15)=117 ! box 15b,16b,17b (box(18-20))
+			lineXy(10)= 73 ! box 7,8
+			lineXy(11)= 77 ! recipient's CSZ
+			lineXy(12)= 88 ! City or town, box 11,12
+			lineXy(13)=101 ! Account number, FATCA filing, box 13,14
+			lineXy(14)=112 ! box 15a,16a,17a
+			lineXy(15)=116 ! box 15b,16b,17b (box(18-20))
 		end if
 		fn_line=lineXy(lineNumber)+yOffset
 	fnend
