@@ -351,10 +351,10 @@ def library fnFileioEnums(filename$*255; mat subs$)
 	library 'S:\Core\FileIO\fileio.br': fnMakeSubProc
 	fnFileioEnums=fnMakeSubProc(filename$, mat subs$)
 fnend
-def library fnOpenFile(filename$*64,mat d$,mat dn,mat form$; inputonly,keynum,dont_sort_subs,&path$,mat description$,mat fieldwidths,mat fileiosubs$,supressprompt,ignoreerrors,callingprogram$*255,suppresslog)
+def library fnFioOpenFile(filename$*64,mat d$,mat dn,mat form$; inputonly,keynum,dont_sort_subs,&path$,mat description$,mat fieldwidths,mat fileiosubs$,supressprompt,ignoreerrors,callingprogram$*255,suppresslog)
 	! fnOpenFile(&filename$,mat f$,mat fn,mat form$;inputonly,keynum,dont_sort_subs,&path$,mat description$,mat fieldwidths,mat fileiosubs$,supressprompt,ignoreerrors,callingprogram$*255,suppresslog)
 	library 'S:\Core\FileIO\fileio.br': fnOpenFile
-	fnOpenFile=fnOpenFile(filename$,mat d$,mat dn,mat form$, inputonly,keynum,dont_sort_subs,path$,mat description$,mat fieldwidths,mat fileiosubs$,supressprompt,ignoreerrors,callingprogram$,suppresslog)
+	fnFioOpenFile=fnOpenFile(filename$,mat d$,mat dn,mat form$, inputonly,keynum,dont_sort_subs,path$,mat description$,mat fieldwidths,mat fileiosubs$,supressprompt,ignoreerrors,callingprogram$,suppresslog)
 fnend
 def library fnMakeSurePathExists(Filename$*255; Path$*255) ! mkdir funciton from fileio.brs - except fileio version is not a library 2/7/2017
 	library 'S:\Core\fn\makeSurePathExists.br':fnMakeSurePathExists
