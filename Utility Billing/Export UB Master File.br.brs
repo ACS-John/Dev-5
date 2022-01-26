@@ -266,9 +266,10 @@ fnend
 		pr #hOut: 'Billing Address 4'&delim$;
 		pr #hOut: 'Email'&delim$
 	fnend
-def fn_exportFio(fioId$*64,dest$*300; ___,IncludeRecNums,KeyNumber,StartKey$,KeyMatch$,Startrec,mat Records,SearchMatch$,Launch)
+def fn_exportFio(fioId$*64,dest$*300; ___,dialogType,includeRecNums,KeyNumber,StartKey$,KeyMatch$,Startrec,mat Records,SearchMatch$,Launch)
 	! pr 'write '&fioId$&' export' : pause
-	IncludeRecNums 	=1
+	dialogType=1
+	includeRecNums 	=1
 	KeyNumber       	=0
 	StartKey$       	=''
 	KeyMatch$       	=''
@@ -276,7 +277,6 @@ def fn_exportFio(fioId$*64,dest$*300; ___,IncludeRecNums,KeyNumber,StartKey$,Key
 	! mat Records    	=
 	SearchMatch$    	=''
 	Launch           	=0
-	
-	fnFileIoExport(fioId$, DialogType,dest$,IncludeRecNums,KeyNumber,StartKey$,KeyMatch$,Startrec,mat Records,SearchMatch$,Launch)
+	fnFileIoExport(fioId$, dialogType,dest$,includeRecNums,KeyNumber,StartKey$,KeyMatch$,Startrec,mat Records,SearchMatch$,Launch)
 fnend
 include: fn_setup

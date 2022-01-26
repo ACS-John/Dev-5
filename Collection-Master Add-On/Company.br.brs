@@ -20,7 +20,7 @@ Xit: fnXit
  
 CompanyLoad: ! r:
 	dim comp$(0)*128,compN(0),form$(0)*256
-	hCompany=fnOpenFile(env$('cursys')&' Company',mat comp$,mat compN,mat form$, 0,0,0,unused$,mat unused$,mat unused,mat unused$,supressprompt:=2)
+	hCompany=fnFioOpenFile(env$('cursys')&' Company',mat comp$,mat compN,mat form$, 0,0,0,unused$,mat unused$,mat unused,mat unused$,supressprompt:=2)
 	read #hCompany,using form$(hCompany): mat comp$,mat compN ioerr ignore
 	close #hCompany: ioerr ignore
 return  ! /r

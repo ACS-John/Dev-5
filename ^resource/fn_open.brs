@@ -13,11 +13,11 @@ def fn_openFio(table$*255,mat openData$, mat openDataN; inputOnly,indexNumber)
 fnend
 
 def fn_open(openTableName$*255, mat openData$, mat openDataN, mat openForm$; openInputOnly,openKeyNumber,openDisableEnumSort,openPath$*255,mat openDescription$,mat openFieldWidth, ___,openLetEnumItem,openReturn,openSupressPrompt)
-	library 'S:\Core\Library': fnOpenFile
+	library 'S:\Core\Library': fnFioOpenFile
 	dim openLetEnum$(0)*800
 	dim openEnumLoaded$(0)*32
 	openSupressPrompt=2
-	openReturn=fnOpenFile(openTableName$,mat openData$,mat openDataN,mat openForm$, openInputOnly,openKeyNumber,openDisableEnumSort,openPath$,mat openDescription$,mat openFieldWidth,mat openLetEnum$,openSupressPrompt)
+	openReturn=fnFioOpenFile(openTableName$,mat openData$,mat openDataN,mat openForm$, openInputOnly,openKeyNumber,openDisableEnumSort,openPath$,mat openDescription$,mat openFieldWidth,mat openLetEnum$,openSupressPrompt)
 	openTableName$=lwrc$(openTableName$)
 	if srch(mat openEnumLoaded$,openTableName$)<=0 then
 		mat openEnumLoaded$(udim(mat openEnumLoaded$)+1)
