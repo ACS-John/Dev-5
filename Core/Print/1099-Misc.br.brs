@@ -393,8 +393,8 @@ def fn_1099print(vn$*8,nam$*30,mat empAddr$,ss$*11,mat box; ___, _
 				fnpa_txt(companyNameAddr$(2)	,column1    	,fn_line(2))
 				fnpa_txt(companyNameAddr$(3)	,column1    	,fn_line(3))
 				fnpa_txt(ph$                 	,column1    	,fn_line(5))
-				fnpa_txt(fed$                	,column1    	,fn_line(7))   ! PAYER'S TIN
-				fnpa_txt(ss$                 	,column1+45	 	,fn_line(7)) ! RECIPIENT'S TIN
+				fnpa_txt(fed$                	,column1    	,fn_line(8))  ! PAYER'S TIN
+				fnpa_txt(ss$                 	,column1+45	 	,fn_line(8))  ! RECIPIENT'S TIN
 				fnpa_txt(nam$                	,column1    	,fn_line(9))  ! RECIPIENT'S name
 				if udim(mat empAddr$)=2 then
 					fnpa_txt(empAddr$(1)       	,column1    	,fn_line(10)) ! address line 1

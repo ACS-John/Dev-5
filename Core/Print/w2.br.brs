@@ -358,15 +358,15 @@ def fn_ask_margins
 	fnreg_read('W-2 - form 2 Y',amResp$(2),'151')
 	fnreg_read('W-2 - X'       ,amResp$(3),'12' )
 	fnreg_read('W-3 - Margin Top'              ,enableBackground$   ,'5' )
-	fnreg_read('W-3 - Margin Left'             ,enableBackground$   ,'True' )
+	fnreg_read('W-3 - Margin Left'             ,enableBackground$   ,'7' )
 	fnTos
 	mylen=30 : mypos=mylen+2
-	fnLbl(lc+=1,1,'form 1 Distance from Top (mm):',mylen,1)
-	fnTxt(lc,mypos,3,0,1,'30')
-	fnLbl(lc+=1,1,'form 2 Distance from Top (mm):',mylen,1)
-	fnTxt(lc,mypos,3,0,1,'30')
-	fnLbl(lc+=1,1,'Left Margin Size (mm):',mylen,1)
-	fnTxt(lc,mypos,3,0,1,'30')
+	fnLbl(lc+=1,1,'form 1 Distance from Top (mm):',mylen,1) 	: fnTxt(lc,mypos,3,0,1,'30')
+	fnLbl(lc+=1,1,'form 2 Distance from Top (mm):',mylen,1) 	: fnTxt(lc,mypos,3,0,1,'30')
+	fnLbl(lc+=1,1,'Left Margin (mm):',mylen,1)               	: fnTxt(lc,mypos,3,0,1,'30')
+	lc+=1
+	fnLbl(lc+=1,1,'W-3 Top (mm):',mylen,1)                   	: fnTxt(lc,mypos,3,0,1,'30')
+	fnLbl(lc+=1,1,'W-3 Left Margin (mm):',mylen,1)          	: fnTxt(lc,mypos,3,0,1,'30')
 	fnCmdSet(4)
 	fnAcs(mat amResp$,ckey)
 	if ckey<>5 then
@@ -376,9 +376,9 @@ def fn_ask_margins
 		fnreg_write('W-3 - Margin Top'  	,amResp$(4))
 		fnreg_write('W-3 - Margin Left' 	,amResp$(5))
 		
-		topmargin= val(amResp$(1))
-		bottom=    val(amResp$(2))
-		left=      val(amResp$(3))
+		topmargin  	=val(amResp$(1))
+		bottom      	=val(amResp$(2))
+		left        	=val(amResp$(3))
 	end if
 fnend
 def library fnNameParse(fullname$*128,&nameFirst$,&nameMiddle$,&nameLast$,&nameSuffix$)
