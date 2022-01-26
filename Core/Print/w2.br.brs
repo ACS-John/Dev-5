@@ -357,6 +357,8 @@ def fn_ask_margins
 	fnreg_read('W-2 - form 1 Y',amResp$(1),'10' )
 	fnreg_read('W-2 - form 2 Y',amResp$(2),'151')
 	fnreg_read('W-2 - X'       ,amResp$(3),'12' )
+	fnreg_read('W-3 - Margin Top'              ,enableBackground$   ,'5' )
+	fnreg_read('W-3 - Margin Left'             ,enableBackground$   ,'True' )
 	fnTos
 	mylen=30 : mypos=mylen+2
 	fnLbl(lc+=1,1,'form 1 Distance from Top (mm):',mylen,1)
@@ -368,9 +370,12 @@ def fn_ask_margins
 	fnCmdSet(4)
 	fnAcs(mat amResp$,ckey)
 	if ckey<>5 then
-		fnreg_write('W-2 - form 1 Y' ,amResp$(1))
-		fnreg_write('W-2 - form 2 Y' ,amResp$(2))
-		fnreg_write('W-2 - X'        ,amResp$(3))
+		fnreg_write('W-2 - form 1 Y'    	,amResp$(1))
+		fnreg_write('W-2 - form 2 Y'    	,amResp$(2))
+		fnreg_write('W-2 - X'            	,amResp$(3))
+		fnreg_write('W-3 - Margin Top'  	,amResp$(4))
+		fnreg_write('W-3 - Margin Left' 	,amResp$(5))
+		
 		topmargin= val(amResp$(1))
 		bottom=    val(amResp$(2))
 		left=      val(amResp$(3))

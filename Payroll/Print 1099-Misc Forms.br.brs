@@ -12,7 +12,7 @@ do ! r: main loop
 	dim vn$*8,nam$*30,ss$*11
 	read #hEmployee,using 'form pos 1,c 8,3*c 30,c 11': vn$,nam$,empAddr$(1),empAddr$(2),ss$ eof Finis
 	eno=val(vn$) ioerr START
-	dim box(11)
+	dim box(20)
 	mat box=(0)
 	checkkey$=cnvrt$('pic(zzzzzzz#)',eno)&cnvrt$('pic(zz#)',0)&cnvrt$('pd 6',0) ! index employee#,department# and payroll date
 	restore #hChecks,key>=checkkey$: nokey START

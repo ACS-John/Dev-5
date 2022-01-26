@@ -13,7 +13,9 @@ def fn_setup
 	if ~setup then
 		setup=1
 		autoLibrary
-		fnreg_read('W-3 - Enable Background'              ,enableBackground$   ,'True' )
+		fnreg_read('W-3 - Enable Background' 	,enableBackground$ 	,'True' )
+		MarginTopN =fnReg_read('W-3 - Margin Top'        	,MarginTop$        	,'5' )
+		MarginLeftN=fnReg_read('W-3 - Margin Left'       	,MarginLeft$       	,'7' )
 	end if
 fnend
 def library fnw3(taxyear$,ein$*12,mat a$,mat w,dcb,state$,stcode$;___,specialform2018)
@@ -41,10 +43,10 @@ def library fnw3(taxyear$,ein$*12,mat a$,mat w,dcb,state$,stcode$;___,specialfor
 	if enableBackground$='True' then fnpa_background('S:\Core\pdf\'&taxyear$&'\W-3.pdf')
 	fnpa_fontsize(12)
 	fnpa_txt('X',38,fn_line(2))
-	col1=  8
-	if env$('client')='Kincaid' then col1+=2
-	col2=113
-	col3=169
+	col1=  1+MarginLeftN
+	! if env$('client')='Kincaid' then col1+=2
+	col2=113-7+MarginLeftN
+	col3=169-7+MarginLeftN
 	 ! if env$('acsdeveloper')<>'' then  pause ! specialform2018=1
 	! removed 1/21/2022        ! if env$('client')='Thomasboro' or env$('client')='Cerro Gordo V' or env$('client')='Cerro Gordo T' or env$('client')='Kincaid' or env$('client')='Hope Welty' or env$('client')='Bethany' then specialform2018=1
 	fnpa_txt(ein$,col1,fn_line(5)) ! Employer Identification Number (EIN)
@@ -84,7 +86,8 @@ def fn_line(lineNumber; ___,returnN)
 			returnN-=2
 		end if 
 	end if 
-	fn_line=returnN
+	returnN-=5
+	fn_line=returnN+MarginTopN
 fnend
 
 
