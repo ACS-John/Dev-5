@@ -441,8 +441,13 @@ def fn_nameParse(fullname$*128,&nameFirst$,&nameMiddle$,&nameLast$,&nameSuffix$)
 		! /r
 	end if
 	nameFirst$=rtrm$(nameFirst$,',')
-	! r: nameSuffix$ process
+	! r: nameSuffix$ process ! JR
 	nameSuffix$='' err npNsFinis
+	if namefirst$='II' or namefirst$='III' then
+		namesuffix$=namefirst$
+		namefirst$=namemiddle$
+		namemiddle$=''
+	end if
 	if uprc$(nameFirst$&'*')<>uprc$(srep$(nameFirst$&'*',',JR*','')) then
 		nameSuffix$='JR'
 		nameFirst$=rtrm$(nameFirst$)
@@ -457,6 +462,52 @@ def fn_nameParse(fullname$*128,&nameFirst$,&nameMiddle$,&nameLast$,&nameSuffix$)
 		nameSuffix$='JR'
 		nameLast$=rtrm$(nameLast$)
 		nameLast$=nameLast$(1:len(nameLast$)-4)
+	end if
+	! SR and II and III
+	if uprc$(nameFirst$&'*')<>uprc$(srep$(nameFirst$&'*',',SR*','')) then
+		nameSuffix$='SR'
+		nameFirst$=rtrm$(nameFirst$)
+		nameFirst$=nameFirst$(1:len(nameFirst$)-3)
+	end if
+	if uprc$(nameLast$&'*')<>uprc$(srep$(nameLast$&'*',',SR*','')) then
+		nameSuffix$='SR'
+		nameLast$=rtrm$(nameLast$)
+		nameLast$=nameLast$(1:len(nameLast$)-3)
+	end if
+	if uprc$(nameLast$&'*')<>uprc$(srep$(nameLast$&'*',',SR.*','')) then
+		nameSuffix$='SR'
+		nameLast$=rtrm$(nameLast$)
+		nameLast$=nameLast$(1:len(nameLast$)-4)
+	end if
+	if uprc$(nameFirst$&'*')<>uprc$(srep$(nameFirst$&'*',',II*','')) then
+		nameSuffix$='II'
+		nameFirst$=rtrm$(nameFirst$)
+		nameFirst$=nameFirst$(1:len(nameFirst$)-3)
+	end if
+	if uprc$(nameLast$&'*')<>uprc$(srep$(nameLast$&'*',',II*','')) then
+		nameSuffix$='II'
+		nameLast$=rtrm$(nameLast$)
+		nameLast$=nameLast$(1:len(nameLast$)-3)
+	end if
+	if uprc$(nameLast$&'*')<>uprc$(srep$(nameLast$&'*',',II.*','')) then
+		nameSuffix$='II'
+		nameLast$=rtrm$(nameLast$)
+		nameLast$=nameLast$(1:len(nameLast$)-4)
+	end if
+	if uprc$(nameFirst$&'*')<>uprc$(srep$(nameFirst$&'*',',III*','')) then
+		nameSuffix$='III'
+		nameFirst$=rtrm$(nameFirst$)
+		nameFirst$=nameFirst$(1:len(nameFirst$)-4)
+	end if
+	if uprc$(nameLast$&'*')<>uprc$(srep$(nameLast$&'*',' III*','')) then
+		nameSuffix$='III'
+		nameLast$=rtrm$(nameLast$)
+		nameLast$=nameLast$(1:len(nameLast$)-4)
+	end if
+	if uprc$(nameLast$&'*')<>uprc$(srep$(nameLast$&'*',',III.*','')) then
+		nameSuffix$='III'
+		nameLast$=rtrm$(nameLast$)
+		nameLast$=nameLast$(1:len(nameLast$)-5)
 	end if
 	npNsFinis: !
 	! /r
