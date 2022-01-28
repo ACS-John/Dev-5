@@ -17,17 +17,17 @@ do
 	fnLbl(lc+=1,1,'NOTE: If Destination exists it will be overwritten.',76,2)
 	fnCmdSet(2)
 	ckey=fnAcs(mat resp$)
-	if ckey<>5 then 
+	if ckey<>5 then
 		for tableItem=1 to udim(mat tableOption$)
 			fnureg_write('Export '&tableOption$(tableItem)&' Path'      	,resp$(tableRc(tableItem)))
 			fnureg_write('Export '&tableOption$(tableItem)&' Enabled'   	,resp$(tableRcEnable(tableItem)))
 		nex tableItem
-		
+
 		dim delim$*1
 		delim$=tab$  	! delim$=chr$(val(resp$(rc_delim)))
-		
+
 		for tableItem=1 to udim(mat tableOption$)
-			if resp$(tableRcEnable(tableItem))='True' then 
+			if resp$(tableRcEnable(tableItem))='True' then
 				if tableItem=table_Customer then fn_exportCustomer(resp$(rc_cust),delim$) : goto NexTable !   rc_cust==tableRc(tableItem)   could use either here
 				fn_exportFio('UB '&tableOption$(tableItem),resp$(tableRc(tableItem)))
 			end if
@@ -35,9 +35,9 @@ do
 		nex tableItem
 
 	end if
-	
-	
-loop until ckey=5 
+
+
+loop until ckey=5
 goto Xit! /r
 	def fn_addExportOption(tableName$,&rc_table,&rc_tableEnable) ! extremely local
 		fnLbl(lc+=1, 1,tableName$&' Export File:',22,1)
@@ -180,7 +180,7 @@ fnend
 			fnGetServices(mat serviceName$)
 			for sNitem=1 to udim(mat serviceName$) : serviceName$(sNitem)=trim$(serviceName$(sNitem)) : nex sNitem
 		end if
-	
+
 		pr #hOut: 'Account Key'&delim$;                           	! z$
 		pr #hOut: 'Meter Address'&delim$;                         	! e$(1)
 		pr #hOut: 'Name'&delim$;                                   	! e$(2)
