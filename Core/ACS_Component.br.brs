@@ -2247,7 +2247,7 @@ def library fnRgl$*60(acctIn$; returnMaxLength,leaveDescFileOpen,forceGLsysIfPos
 	! if env$('acsDeveloper')<>'' then desc$='(Desc Read Failed)'
 	read #hAcct,using 'form pos 13,C 50',key=acctIn$: desc$ ioerr ignore ! AcctNoKey
 	if ~leaveDescFileOpen then
-		close #hAcct:
+		close #hAcct: ioerr ignore
 		hAcct=0
 	end if
 	RglReadDescFinis: !

@@ -1,7 +1,7 @@
 fn_setup
 fnTop(program$)
 
-! r: Main Screen
+! r: Main Screen and loop
 do
 	dim resp$(10)*256
 	fnTos : lc=rc=0
