@@ -105,7 +105,15 @@ ScreenOne: ! r:
 		fnButton(lc,84,'Edit',ck_Edit=63,'Modify selected transaction',1,8,0,0,defaultEdit,0)
 		fnButton(lc,93,'Delete',ck_deleteOne=67,'Delete selected allocation and all other allocations in the same transaction',1,8)
 	end if
-	fn_addOneGrid
+	! r: add a grid
+		if gridSelected=gridTransactions then
+			fn_transactionGrid(hMerge,lc+=1,2,10,90,previouslySelected)
+		else if gridSelected=gridTransactionsNet then
+			fn_transactionGrid(hMerge,lc+=1,2,10,90,previouslySelected, 1)
+		else if gridSelected=gridProofTotals then
+			fn_totalGrid(hAccount,mat kList$,mat kReceipts,mat kDisbursements,mat kAdjustments,lc+=1,2)
+		end if
+	! /r
 	fnCmdKey('Print Proof Totals',ck_printProofTotals=58)
 	fnCmdKey('Print Proof List',ck_printProofList=54)
 	fnCmdKey('Import Client File',ck_importFile=51,0,0,"Import a Client's ACS Checkbook file.")
@@ -185,6 +193,113 @@ goto ScreenOne ! /r
 		ml$(2)='Number for disbursements or receipts.'
 		fnmsgbox(mat ml$,resp$,'',49)
 	goto ScreenOne ! /r
+	def fn_transactionGrid(hMerge,row,col,twenty,ninety,previouslySelected; _
+		enableNet,___,net,tDate,tAmt,tType,desc$*30,colCount,postCode,lineCount, _
+		gl$*12,tDate,tAmt,tType,postCode,tr$,desc$*30,vn$,jv2$,key$*12)
+		! r: setup
+		colCount=10
+		dim cmask2$(0)
+		mat cmask2$(colCount)
+		mat cmask2$=('')
+
+		dim chdr2$(0)*25
+		mat chdr2$(colCount)
+		chdr2$(1)='rec'                      : cmask2$(1)='30'
+		chdr2$(2)='Date'
+		chdr2$(3)='Ref'                      : if ~enableNet then cmask2$(2)='3'
+		chdr2$(4)='Payee/Description'
+		chdr2$(5)='GL Account'
+		chdr2$(6)='Amount'                   : cmask2$(6)='10'
+		chdr2$(7)='Allocation Description'
+		chdr2$(8)='Type'
+		chdr2$(9)='PC'
+		chdr2$(10)='Bank'
+		dim glitem2$(0)*128
+		mat glitem2$(colCount)
+		! /r
+		fnflexinit1('GlTrans',row,col,twenty,ninety,mat chdr2$,mat cmask2$,1,0,0)
+		restore #hMerge:
+		do
+			if fn_readMerge(0,gl$,tDate,tAmt,tType,postCode,tr$,desc$,vn$,jv2$,key$)=-4270 then goto TgEoF
+			if enableNet then
+				if trim$(tr$)<>'' and tr$<>oldtr$ and lineCount then
+					mat glitem2$=('')
+					glitem2$(6)=str$(net)
+					glitem2$(7)='Net'
+					fnflexadd1(mat glitem2$)
+
+					if enableblankLineAfterNet then
+						mat glitem2$=('')
+						fnflexadd1(mat glitem2$)
+					end if
+
+					net=0 ! add net subtotals any time reference number changes     ( AND NET<>0)was in there
+				end if
+			end if
+
+			glitem2$(1)=str$(rec(hMerge))
+			if enableNet then
+				glitem2$(2)=date$(days(tDate,'mmddyy'),'ccyy/mm/dd')
+			else
+				glitem2$(2)=str$(tDate) ! str$(date(days(tr4,'mmddyy'),'ccyymmdd'))
+			end if
+			glitem2$(3)=tr$
+			glitem2$(4)=vn$
+			glitem2$(5)=trim$(fnrgl$(gl$))
+			glitem2$(6)=str$(tAmt)
+			glitem2$(7)=desc$
+			glitem2$(8)=fn_transType$(tType)&' ('&str$(tType)&')'
+			if postCode then
+				glitem2$(9)='POSTED'
+			else
+				glitem2$(9)=''
+			end if
+			glitem2$(10)=trim$(fnrgl$(key$))
+			lineCount+=1
+			if glitem2$(1)=str$(previouslySelected) then setenv('current_grid_row',str$(lineCount))
+			fnflexadd1(mat glitem2$)
+			net+=tAmt ! add net check
+			oldtr$=tr$ ! hold reference numbers
+		loop
+		TgEoF: !
+		if enableNet and lineCount then
+			mat glitem2$=('')
+			glitem2$(6)=str$(net)
+			glitem2$(7)='Net'
+			lineCount+=1
+			fnflexadd1(mat glitem2$)
+		end if
+	fnend
+	def fn_totalGrid(hAccount,mat kList$,mat kReceipts,mat kDisbursements,mat kAdjustments,lc,ps)
+		if ~setup_cHdr then gosub Setup_cHdr
+
+		dim kBegBalance(0)
+		mat kBegBalance(udim(mat kList$))
+		dim kEndBalance(0)
+		mat kEndBalance(udim(mat kList$))
+		for j=1 to udim(mat kList$)
+
+			read #hAccount,using 'form pos 87,pd 6.2',key=kList$(j),release: kBegBalance(j) nokey L6240 ! get last balance
+			kEndBalance(j)=kBegBalance(j)-kReceipts(j)-kDisbursements(j)+kAdjustments(j) ! new balance when posted
+			L6240: !
+		next j
+
+		fnflexinit1('Prooftotals',lc,ps,15,90,mat chdr_proof_total$,mat cmask3$,1,0,0)
+		mat glitem3$=('')
+		for j=1 to udim(mat kList$)
+			! if trim$(kList$(j))<>'' then ! skip blanks
+			glitem3$(1)=trim$(fnrgl$(kList$(j)))
+			glitem3$(2)=str$(kBegBalance(j))
+			glitem3$(3)=str$(-kReceipts(j))
+			glitem3$(4)=str$(kDisbursements(j))
+			glitem3$(5)=str$(kAdjustments(j))
+			glitem3$(6)=str$(kEndBalance(j))
+			fnflexadd1(mat glitem3$)
+			! end if
+		next j
+	fnend
+
+
 ScrPost: ! r:
 	fn_createContras(hMerge,mat kList$,mat kReceipts,mat kDisbursements,contraEntryDateN)
 	contraTotal=fn_contraTotal(hMerge,contraDisb,contraRcpt,contraOthr)
@@ -823,120 +938,6 @@ def fn_editAllocation(editrecord; editall,___,ckey,mylen,mypos)
 	fn_editAllocation=ckey
 fnend
 
-def fn_addOneGrid
-	if gridSelected=gridTransactions then
-		fn_transactionGrid(hMerge,lc+=1,2,10,90,previouslySelected)
-	else if gridSelected=gridTransactionsNet then
-		fn_transactionGrid(hMerge,lc+=1,2,10,90,previouslySelected, 1)
-	else if gridSelected=gridProofTotals then
-		fn_totalGrid(hAccount,mat kList$,mat kReceipts,mat kDisbursements,mat kAdjustments,lc+=1,2)
-	end if
-fnend
-	def fn_transactionGrid(hMerge,row,col,twenty,ninety,previouslySelected; _
-		enableNet,___,net,tDate,tAmt,tType,desc$*30,colCount,postCode,lineCount, _
-		gl$*12,tDate,tAmt,tType,postCode,tr$,desc$*30,vn$,jv2$,key$*12)
-		! r: setup
-		colCount=10
-		dim cmask2$(0)
-		mat cmask2$(colCount)
-		mat cmask2$=('')
-
-		dim chdr2$(0)*25
-		mat chdr2$(colCount)
-		chdr2$(1)='rec'                      : cmask2$(1)='30'
-		chdr2$(2)='Date'
-		chdr2$(3)='Ref'                      : if ~enableNet then cmask2$(2)='3'
-		chdr2$(4)='Payee/Description'
-		chdr2$(5)='GL Account'
-		chdr2$(6)='Amount'                   : cmask2$(6)='10'
-		chdr2$(7)='Allocation Description'
-		chdr2$(8)='Type'
-		chdr2$(9)='PC'
-		chdr2$(10)='Bank'
-		dim glitem2$(0)*128
-		mat glitem2$(colCount)
-		! /r
-		fnflexinit1('GlTrans',row,col,twenty,ninety,mat chdr2$,mat cmask2$,1,0,0)
-		restore #hMerge:
-		do
-			if fn_readMerge(0,gl$,tDate,tAmt,tType,postCode,tr$,desc$,vn$,jv2$,key$)=-4270 then goto TgEoF
-			if enableNet then
-				if trim$(tr$)<>'' and tr$<>oldtr$ and lineCount then
-					mat glitem2$=('')
-					glitem2$(6)=str$(net)
-					glitem2$(7)='Net'
-					fnflexadd1(mat glitem2$)
-
-					if enableblankLineAfterNet then
-						mat glitem2$=('')
-						fnflexadd1(mat glitem2$)
-					end if
-
-					net=0 ! add net subtotals any time reference number changes     ( AND NET<>0)was in there
-				end if
-			end if
-
-			glitem2$(1)=str$(rec(hMerge))
-			if enableNet then
-				glitem2$(2)=date$(days(tDate,'mmddyy'),'ccyy/mm/dd')
-			else
-				glitem2$(2)=str$(tDate) ! str$(date(days(tr4,'mmddyy'),'ccyymmdd'))
-			end if
-			glitem2$(3)=tr$
-			glitem2$(4)=vn$
-			glitem2$(5)=trim$(fnrgl$(gl$))
-			glitem2$(6)=str$(tAmt)
-			glitem2$(7)=desc$
-			glitem2$(8)=fn_transType$(tType)&' ('&str$(tType)&')'
-			if postCode then
-				glitem2$(9)='POSTED'
-			else
-				glitem2$(9)=''
-			end if
-			glitem2$(10)=trim$(fnrgl$(key$))
-			lineCount+=1
-			if glitem2$(1)=str$(previouslySelected) then setenv('current_grid_row',str$(lineCount))
-			fnflexadd1(mat glitem2$)
-			net+=tAmt ! add net check
-			oldtr$=tr$ ! hold reference numbers
-		loop
-		TgEoF: !
-		if enableNet and lineCount then
-			mat glitem2$=('')
-			glitem2$(6)=str$(net)
-			glitem2$(7)='Net'
-			lineCount+=1
-			fnflexadd1(mat glitem2$)
-		end if
-	fnend
-	def fn_totalGrid(hAccount,mat kList$,mat kReceipts,mat kDisbursements,mat kAdjustments,lc,ps)
-		if ~setup_cHdr then gosub Setup_cHdr
-
-		dim kBegBalance(0)
-		mat kBegBalance(udim(mat kList$))
-		dim kEndBalance(0)
-		mat kEndBalance(udim(mat kList$))
-		for j=1 to udim(mat kList$)
-
-			read #hAccount,using 'form pos 87,pd 6.2',key=kList$(j),release: kBegBalance(j) nokey L6240 ! get last balance
-			kEndBalance(j)=kBegBalance(j)-kReceipts(j)-kDisbursements(j)+kAdjustments(j) ! new balance when posted
-			L6240: !
-		next j
-
-		fnflexinit1('Prooftotals',lc,ps,15,90,mat chdr_proof_total$,mat cmask3$,1,0,0)
-		mat glitem3$=('')
-		for j=1 to udim(mat kList$)
-			! if trim$(kList$(j))<>'' then ! skip blanks
-			glitem3$(1)=trim$(fnrgl$(kList$(j)))
-			glitem3$(2)=str$(kBegBalance(j))
-			glitem3$(3)=str$(-kReceipts(j))
-			glitem3$(4)=str$(kDisbursements(j))
-			glitem3$(5)=str$(kAdjustments(j))
-			glitem3$(6)=str$(kEndBalance(j))
-			fnflexadd1(mat glitem3$)
-			! end if
-		next j
-	fnend
 Setup_cHdr: ! r:  ( for fn_totalGrid and for fn_prProofTotals )
 	if ~setup_cHdr then
 		setup_cHdr=1
@@ -1064,10 +1065,10 @@ def fn_transactionDelete(hMerge,delRec; ___, _
 
 	end if
 fnend
-def fn_transactionSave(hMerge,transAdr,gl$,tr4,tr5,tType,postingCode,tr$,td$*30,vn$*8,jv2$*5,glBank$*12)
+def fn_transactionSave(hMerge,editRec,gl$,tr4,tr5,tType,postingCode,tr$,td$*30,vn$*8,jv2$*5,glBank$*12)
 	if tType=sx_receipt or tType=sx_sale then tr5=-tr5 ! reverse signs on receipts and sales
-	if transAdr>0 then
-		rewrite #hMerge,using F_merge,rec=transAdr: gl$,tr4,tr5,tType,postingCode,tr$,td$,vn$,jv2$,glBank$ ! noRec L3280
+	if editRec then
+		rewrite #hMerge,using F_merge,rec=editRec: gl$,tr4,tr5,tType,postingCode,tr$,td$,vn$,jv2$,glBank$ ! noRec L3280
 	else
 		! L3280: !
 		write #hMerge,using F_merge: gl$,tr4,tr5,tType,postingCode,tr$,td$,vn$,jv2$,glBank$
