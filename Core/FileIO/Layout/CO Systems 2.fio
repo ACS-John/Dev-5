@@ -1,5 +1,5 @@
-S:\Core\Data\acsllc\acsSystems.dat, sys_, 0
-S:\Core\Data\acsllc\acsSystems.idx,  id
+[CurSysData]\acsSystems.dat, sys_, 0
+[CurSysData]\acsSystems.idx,  id
 ===================================================
 id       ,Id                	,C  16   , ! sPos= 1
 name     ,Name              	,C  64   , ! sPos=17 

@@ -1,5 +1,5 @@
-S:\Core\Data\acsllc\Rates.h[cno], rate_, 0
-S:\Core\Data\acsllc\Rates-Idx.h[cno] ,  provider/system/client/timeFrame
+[CurSysData]\Rates.h[cno], rate_, 0
+[CurSysData]\Rates-Idx.h[cno] ,  provider/system/client/timeFrame
 ===================================================
 provider  	,Provider           	,C   11   	, , ! ComboFio(CO Provider,1)
 system    	,System              	,C    2   	, , ! ComboFio(CO Systems,2)

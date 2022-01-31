@@ -1,6 +1,6 @@
-S:\Core\Data\acsllc\Client.h[cno], client_, 0
-S:\Core\Data\acsllc\Client-Idx.h[cno] ,  id
-S:\Core\Data\acsllc\CLIndx2.h[cno] ,  name
+[CurSysData]\Client.h[cno], client_, 0
+[CurSysData]\Client-Idx.h[cno] ,  id
+[CurSysData]\CLIndx2.h[cno] ,  name
 recl=534
 ===================================================
 id       	,Client ID                                               		, C   5   ,   , ! z$

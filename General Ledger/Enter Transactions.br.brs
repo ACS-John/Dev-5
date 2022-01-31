@@ -777,6 +777,7 @@ fnend
 		vn$=''
 
 	fnend
+! fn_scrAdjustment is only used if enableOneToOneAdjustments
 def fn_scrAdjustment	(hMerge,editRecord,bankAcctName$*40, _
 	message$*50, _
 	&tr$,gl$,tDate; _
@@ -786,7 +787,7 @@ def fn_scrAdjustment	(hMerge,editRecord,bankAcctName$*40, _
 	___, _
 	mylen,mypos,transactionAmt, _
 	lc,rc,resp_tDate,resp_amt,resp_ref,respc_payee,respc_glFrom,respc_glTo, _
-	heading$*60)
+	heading$*60) ! only used if enableOneToOneAdjustments
 
 	if editRecord then ! r: get transAdrFrom and transAdrTo
 		read #hMerge,using F_merge,rec=editRecord  : gl$,tDate,tAmt,tType,postCode,tr$,desc$,vn$,unused$

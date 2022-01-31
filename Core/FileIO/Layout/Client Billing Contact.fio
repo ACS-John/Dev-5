@@ -1,5 +1,5 @@
-S:\Core\Data\acsllc\Contact.h[cno],  con_  , 2
-S:\Core\Data\acsllc\Contact-Idx.h[cno] ,  clientId
+[CurSysData]\Contact.h[cno],  con_  , 2
+[CurSysData]\Contact-Idx.h[cno] ,  clientId
 ===================================================
 
 clientId      	,Client Key     	,  C     5 	,  	, ! ComboFio(CO Client)

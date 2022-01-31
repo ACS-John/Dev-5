@@ -1,12 +1,12 @@
-S:\Core\Data\acsllc\Provider.h[cno], provider_, 0
-S:\Core\Data\acsllc\Provider-Idx.h[cno] ,  id
+[CurSysData]\Provider.h[cno], provider_, 0
+[CurSysData]\Provider-Idx.h[cno] ,  id
 ===================================================
-id       	,Id                 	,C   11  , ! 
-name     	,Name               	,C   64  , ! 
-addr1    	,Address 1          	,C   64  , ! 
-addr2    	,Address 2           	,C   64  , ! 
-addr3    	,Address 3           	,C   64  , ! 
-phone    	,Phone Number 1    	,C   12  , ! 
-email    	,Email               	,C  128  , ! 
-logo    	,Invoice Logo File   ,C  256  , ! 
+id       	,Id                 	,C   11  , !
+name     	,Name               	,C   64  , !
+addr1    	,Address 1          	,C   64  , !
+addr2    	,Address 2          	,C   64  , !
+addr3    	,Address 3          	,C   64  , !
+phone    	,Phone Number 1    	,C   12  , !
+email    	,Email              	,C  128  , !
+logo    	,Invoice Logo File 	,C  256  , !
 

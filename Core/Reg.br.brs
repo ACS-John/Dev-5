@@ -217,20 +217,18 @@ retry ! /r
 def fn_creg_setup
 	dim creg_setup$*256
 	if creg_setup$<>env$('CNo')&env$('CurSys')&env$('client') then
-		if creg_setup$<>'' then let fn_creg_close
-
+		if creg_setup$<>'' then fn_creg_close
 		autoLibrary
-		dim cregFileData$*256
-		dim cregFileIndex$*256
-
-		if env$('acsDeveloper')<>'' and env$('cursystem')='Client Billing' then
-			dim dataFolder$*256
+		dim dataFolder$*256
+		if lwrc$(env$('cursystem'))=lwrc$('Client Billing') then
+			if env$('acsDeveloper')='' then pr 'error invalid developer for client billing';bell
 			dataFolder$='S:\Core\Data\acsllc'
 		else
 			dataFolder$='[Q]\[cursys]mstr'
 		end if
 
-
+		dim cregFileData$*256
+		dim cregFileIndex$*256
 		cregFileData$ =datafolder$&'\reg-[CurSys].h[cno]'
 		cregFileIndex$=datafolder$&'\reg-[CurSys]-idx.h[cno]'
 		fnmakesurepathexists(cregFileData$)
