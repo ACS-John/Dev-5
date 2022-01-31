@@ -48,7 +48,7 @@ Print
 >Direct Deposit List                        ^ [cursystem]\*
 ! removed 5/3/19 - i dont think anyone uses it anyway           	Automatic Processing
 ! removed 5/3/19 - i dont think anyone uses it anyway           	>Select Automatic Processing Programs       ^ acsPR\newSelAuto
-! removed 5/3/19 - i dont think anyone uses it anyway           	>Begin Automatic Processing                 ^ acsPR\newAutoProc
+! removed 5/3/19 - i dont think anyone uses it anyway           	>Begin Automatic Processing                 ^ acsPR\Begin Automatic Processing
 Utilities
 >Change Payroll Dates                            ^ [cursystem]\*
 >Remove Old Payroll Checks                       ^ acspr\removechecks
@@ -61,22 +61,22 @@ Utilities
 Payroll Job Cost Add-On                    ^                                            ^ P2
 >File                                      ^                                            ^ P2
 >>Job Cost                                 ^ acsPR\NewJCMaint                           ^ P2
->>Category                                 ^ [cursystem]\Job Cost\*                         ^ P2
->>Sub-Category Description                 ^ [cursystem]\Job Cost\*                         ^ P2
+>>Category                                 ^ [cursystem]\Job Cost\*                     ^ P2
+>>Sub-Category Description                 ^ [cursystem]\Job Cost\*                     ^ P2
 >>User Designed Reports - JC               ^ acsPR\NewJCRPTFM                           ^ P2
->>Personnel Burden                         ^ [cursystem]\Job Cost\*                         ^ P2
+>>Personnel Burden                         ^ [cursystem]\Job Cost\*                     ^ P2
 >Daily                                     ^                                            ^ P2
->>Enter (Job Cost) Time                    ^ [cursystem]\Job Cost\*                         ^ P2
->>Enter Charges                            ^ [cursystem]\Job Cost\*                         ^ P2
+>>Enter (Job Cost) Time                    ^ [cursystem]\Job Cost\*                     ^ P2
+>>Enter Charges                            ^ [cursystem]\Job Cost\*                     ^ P2
 >>Enter Billings                           ^ acsPR\NewJCIPBIL                           ^ P2
 >>Enter Percent Complete                   ^ acsPR\NewJCPCTCMP                          ^ P2
 >Print                                     ^                                            ^ P2
->>Certified Payroll Register               ^ [cursystem]\Job Cost\*                         ^ P2
+>>Certified Payroll Register               ^ [cursystem]\Job Cost\*                     ^ P2
 >>Job Status Worksheet                     ^ acsPR\NewJCStWksh                          ^ P2
->>Job Cost Report                          ^ acsPR\NewJCPrtDET                          ^ P2
+>>Job Cost Report                          ^ [cursystem]\Job Cost\*                     ^ P2
 >>User Designed Reports (2)                ^ acsPR\NewPrUsrDR                           ^ P2
 >>Name and Number List                     ^ acsPR\NewJCNamLst                          ^ P2
 >Current Period                            ^                                            ^ P2
->>Transfer Job Cost To Payroll             ^ [cursystem]\Enter Time Sheets                  ^ P2
+>>Transfer Job Cost To Payroll             ^ [cursystem]\Enter Time Sheets              ^ P2
 >>Zero Current Period Info                 ^ acsPR\NewJCZCur                            ^ P2
 >>Remove Completed Jobs                    ^ acsPR\NewJCRemove                          ^ P2
