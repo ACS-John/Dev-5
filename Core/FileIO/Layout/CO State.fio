@@ -2,6 +2,6 @@ S:\Core\Data\State.dat, state, 0
 S:\Core\Data\State.idx, abr
 RecL=29
 ===================================================
-abr$,       Abreviation ,             C  2 , Pos=1   Mask=2000
-name$,      Name        ,             C 25 , Pos=3   Mask=
-code,       Code        ,             N  2 , Pos=28  Mask=30
+abr 	,Abreviation 	, C  2 	, Pos=1   Mask=2000
+name	,Name         	, C 25 	, Pos=3   Mask=
+code	,Code         	, N  2 	, Pos=28  Mask=30

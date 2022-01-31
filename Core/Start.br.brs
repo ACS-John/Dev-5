@@ -382,19 +382,19 @@ def fn_tempDirValidate(; ___,returnN)
 	end if
 	fn_tempDirValidate=returnN
 fnend
-def fn_changeTemp
-	ct_return=1
+def fn_changeTemp(; returnN)
+	returnN=1
 	if ~exists(env$('USERPROFILE')&'\AppData') then exe 'sy -m mkdir "'&env$('USERPROFILE')&'\AppData"'
 	if ~exists(env$('USERPROFILE')&'\AppData\Local') then exe 'sy -m mkdir "'&env$('USERPROFILE')&'\AppData\Local"'
 	if ~exists(env$('USERPROFILE')&'\AppData\Local\Temp') then exe 'sy -m mkdir "'&env$('USERPROFILE')&'\AppData\Local\Temp"'
 	if ~exists(env$('USERPROFILE')&'\AppData\Local\Temp') then
-		msgbox('Startup Error: Tried to create a new Temp directory ('&env$('USERPROFILE')&'\AppData\Local\Temp) but failed.')
-		ct_return=0
+		msgbox('Startup Error: Could not find nor create Temp directory ('&env$('USERPROFILE')&'\AppData\Local\Temp) but failed.')
+		returnN=0
 	else
 		fnSetEnv('Tmp',env$('USERPROFILE')&'\AppData\Local\Temp')
 		fnSetEnv('Temp',env$('USERPROFILE')&'\AppData\Local\Temp')
 	end if
-	fn_changeTemp=ct_return
+	fn_changeTemp=returnN
 fnend
 ! def fn_udf_resolve ! r: migration tool no longer used
 !   dim udf$*1024

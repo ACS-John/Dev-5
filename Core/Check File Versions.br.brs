@@ -164,13 +164,9 @@ def fn_cfv_client_billing
 	! fn_check_version(tmpversion,version_proper,'')
 fnend
 def fn_cfv_utility_billing
-	if exists('[Q]\UBmstr')=0 then execute 'MkDir "[Q]\UBmstr"'
-	if exists('[Q]\UBmstr\UBdata')=0 then execute 'MkDir "[Q]\UBmstr\UBdata"'
-	if exists('[Q]\WorkOrder')=0 then execute 'MkDir "[Q]\WorkOrder"'
-	! if ~exists('[Q]\INI\Utility Billing') then execute 'mkdir "[Q]\INI\Utility Billing"'
-	! if ~exists('[Q]\INI\acsUB\UBdata') then execute 'mkdir [Q]\INI\acsUB\UBdata'
-	! fn_ini_move(env$('cursys'))
-	! fnIniToReg
+	if ~exists('[Q]\UBmstr') then execute 'MkDir "[Q]\UBmstr"'
+	if ~exists('[Q]\UBmstr\UBdata') then execute 'MkDir "[Q]\UBmstr\UBdata"'
+	if ~exists('[Q]\WorkOrder') then execute 'MkDir "[Q]\WorkOrder"'
 	fn_reg_rename(env$('cursys'))
 	! r: move ubBkNo.h into CReg and delete ubBkNo.h
 	if exists('[Q]\UBmstr\ubBkNo.h[cno]') then
@@ -322,10 +318,7 @@ def fn_cfv_utility_billing
 fnend
 def fn_cfv_checkbook
 	! Checkbook Only
-	if exists('[Q]\CLmstr')=0 then execute 'MkDir [Q]\CLmstr'
-	! if ~exists('[Q]\INI\Checkbook') then execute 'mkdir "[Q]\INI\Checkbook"'
-	! fn_ini_move(env$('cursys'))
-	! fnIniToReg
+	if ~exists('[Q]\CLmstr') then execute 'MkDir [Q]\CLmstr'
 	fn_reg_rename(env$('cursys'))
 
 	CL_TRMSTR1: ! Primary Non-Split Index
@@ -745,10 +738,7 @@ fnend
 		fnIndex('[Q]\CLmstr\TrMstr.h[cno]','[Q]\CLmstr\TrIdx2.h[cno]','28/1 8/11')
 	fnend
 def fn_cfv_payroll
-	if exists('[Q]\PRmstr')=0 then execute 'MkDir [Q]\PRmstr'
-	! if ~exists('[Q]\INI\Payroll') then execute 'mkdir '[Q]\INI\Payroll''
-	! fn_ini_move(env$('cursys'))
-	! fnIniToReg
+	if ~exists('[Q]\PRmstr') then execute 'MkDir [Q]\PRmstr'
 	fn_reg_rename(env$('cursys'))
 	! r: move DDInfo.h into CReg and delete DDInfo.h
 	if exists('[Q]\PRmstr\DDInfo.h[cno]') then
@@ -925,8 +915,6 @@ fnend
 	 end if
 	 goto ERTN ! /r
 def fn_cfv_job_cost_payroll
-	! if ~exists('[Q]\INI\Payroll\Job Cost') then execute 'mkdir '[Q]\INI\Payroll\Job Cost''
-	! fn_ini_move('JC')
 	! r: JCMSTR.h
 	fn_file_setup_data('[Q]\PRmstr\JCMSTR.h[cno]',300,0)
 	fn_file_setup_index('[Q]\PRmstr\JCINDX.h[cno]','1','6')
@@ -941,11 +929,7 @@ def fn_cfv_general_ledger
 	fn_file_setup_data('[Q]\GLmstr\GLTrans.h[cno]',73,0)
 	fn_file_setup_index('[Q]\GLmstr\glTrans-IdxAcct.h[cno]','1','12')
 
-	if exists('[Q]\GLmstr')=0 then execute 'MkDir [Q]\GLmstr'
-	! if ~exists('[Q]\INI\General Ledger') then execute 'mkdir '[Q]\INI\General Ledger''
-	! if ~exists('[Q]\INI\General Ledger\Accountants') then execute 'mkdir '[Q]\INI\General Ledger\Accountants''
-	! fn_ini_move(env$('cursys'))
-	! fnIniToReg
+	if ~exists('[Q]\GLmstr') then execute 'MkDir [Q]\GLmstr'
 	fn_reg_rename(env$('cursys'))
 
 	if ~exists('[Q]\GLmstr\PayeeType.dat') then

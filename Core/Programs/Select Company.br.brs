@@ -336,7 +336,7 @@ def fn_setupOnCursysChange(&cno,&cnam$)
 		fncno(cno,cnam$)
 	end if
 
-	if ~exists('[Q]\[cursys]mstr') and curSys$<>'CO' and curSys$<>'Client Billing' then execute 'mkdir "[Q]\[cursys]mstr"'
+	if ~exists('[Q]\[cursys]mstr') and curSys$<>'CO' and lwrc$(curSys$)<>lwrc$('Client Billing') then execute 'mkdir "[Q]\[cursys]mstr"'
 
 fnend
 
