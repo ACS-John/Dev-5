@@ -1,5 +1,6 @@
 ! formerly S:\acsGL\GLInput
 enableblankLineAfterNet=1
+enableOneToOneAdjustments=0
 ! enter GL transactions
 ! r: setup library, dims, constants, fnTop
 	autoLibrary
@@ -61,51 +62,52 @@ ScreenOne: ! r:
 	dim kAdjustments(0)
 	fn_buildMatK(hMerge,mat kList$,mat kReceipts,mat kDisbursements,mat kAdjustments,totalCredits,totalDebits,count)
 
-	fnTos ! r:
-	colPos=48 : mylen=20 : mypos=colPos+mylen+3 : rc=lc=0
-	fnLbl(lc+=1,colPos,'Type Of Entry:',mylen,1)
-	fnComboF('TransactionType',lc,mypos,20,'S:\Core\Data\GL TransactionType.dat',1,1,2,18,'S:\Core\Data\GL TransactionType.idx',1,0,'You must indicate the type of entry you will be entering.')
-
-	resp$(respc_entryType=rc+=1)=str$(selx)
-	fnLbl(lc+=1,colPos,'Bank Account:',mylen,1)
-	fnQgl(lc,mypos,0,2,1)
-	resp$(respc_bankGl=rc+=1)=fnrgl$(glBank$)
-	fnLbl(lc+=1,colPos,'Process Ending Date:',mylen,1)
-	fnTxt(lc,mypos,8,0,1,'1001',0,'Process endings date must always be answered and will be the last day of the month or the last day of the period beding processed.',0 )
-	resp$(respc_contraDate=rc+=1)=contraEntryDate$
-	! lc+=1
+	fnTos
+	rc=0
+	! r: Add Options
 	lc=0
-	colPos=1 : mylen=20 : mypos=colPos+mylen+3
-	! prior input   totals here
-
-	fnLbl(lc+=1,1,'Total Debits:',mylen,1)
-	fnTxt(lc,mypos,15,0,1,'10',1,'This is total debits including adjustments',0 )
-	resp$(rc+=1)=str$(totalDebits)
-	fnLbl(lc+=1,1,'Total Credits:',mylen,1)
-	fnTxt(lc,mypos,15,0,1,'10',1,'This is total credits including adjustments',0 )
-	resp$(rc+=1)=str$(totalCredits)
-	fnLbl(lc+=1,1,'Entry Count:',mylen,1)
-	fnTxt(lc,mypos,15,0,1,'number',1,'',0 )
-	resp$(rc+=1)=str$(count)
-	respc_grid=rc+=1
-	lc+=1
-	lc+=1
-	fnLbl(lc+=1,1,'Display:',8,1)
+	colPos= 1 : mylen=20 : mypos=colPos+mylen+1
+	fnLbl(lc+=1,colPos,'Type Of Entry:',mylen,1) : 	fnComboF('TransactionType',lc,mypos,20,'S:\Core\Data\GL TransactionType.dat',1,1,2,18,'S:\Core\Data\GL TransactionType.idx',1,0,'You must indicate the type of entry you will be entering.') : 	resp$(respc_entryType=rc+=1)=str$(selx)
+	addbuttonPos=colPos+45
+	addbuttonLine=lc
+	fnLbl(lc+=1,colPos,'Bank Account:',mylen,1)         : 	fnQgl(lc,mypos,0,2,1) : 	resp$(respc_bankGl=rc+=1)=fnrgl$(glBank$)
+	fnLbl(lc+=1,colPos,'Process Ending Date:',mylen,1) : 	fnTxt(lc,mypos,8,0,1,'1001',0,'Last day of the month or period beding processed',0 ) : 	resp$(respc_contraDate=rc+=1)=contraEntryDate$
+	! /r
+	! r: Totals
+	lc=0
+	colPos=63 : mylen=14 : mypos=colPos+mylen+1
+	fnLbl(lc+=1,colPos,'Total Debits:',mylen,1)  : 	fnTxt(lc,mypos,15,0,1,'10',1,'This is total debits including adjustments',0 )  : 	resp$(rc+=1)=str$(totalDebits)
+	fnLbl(lc+=1,colPos,'Total Credits:',mylen,1) : 	fnTxt(lc,mypos,15,0,1,'10',1,'This is total credits including adjustments',0 ) : 	resp$(rc+=1)=str$(totalCredits)
+	fnLbl(lc+=1,colPos,'Entry Count:',mylen,1)   : 	fnTxt(lc,mypos,15,0,1,'number',1,'',0 ) : 	resp$(rc+=1)=str$(count)
+	! /r
+	! r: Add buttons
+	lc=4
+	colPos=1
+	fnLbl(lc,colPos,'Add:',5,1)
+	fnButton(lc,colPos+ 6     	,'Disbursement'  	,ck_disbursement	=32,' Add a new Disbursement' 	,1,12)
+	fnButton(lc,colPos+ 6+12+1	,'Receipt'       	,ck_receipt     	=19,' Add a new Receipt'      	,1, 7)
+	fnButton(lc,colPos+18+ 7+2	,'Adjustment'    	,ck_adjustment  	=30,' Add a new Adjustment'   	,1,10)
+	fnButton(lc,colPos+25+10+3	,'Payroll Check' 	,ck_payrollCheck	=46,' Add a new Payroll Check'	,1,13)
+	fnButton(lc,colPos+35+13+4	,'Sale'           	,ck_sale         	=31,' Add a new Sale'         	,1, 4)
+	fnButton(lc,colPos+48+ 4+5	,'Purchase'      	,ck_purchase    	=25,' Add a new Purchase'     	,1, 8)
+	! /r
+	! r: Display buttons over grid
+	lc=6
+	fnLbl(lc,1,'Display:',8,1)
 	fnButtonOrDisabled(gridSelected<>gridTransactionsNet	,lc,10,'Transactions'	,ck_gridTransNet 	=57,'Allocations and Net',13)
 	fnButtonOrDisabled(gridSelected<>gridTransactions   	,lc,25,'Allocations' 	,ck_gridTrans    	=55,'Allocations Only',13)
 	fnButtonOrDisabled(gridSelected<>gridProofTotals    	,lc,40,'Proof Totals'	,ck_gridTotals   	=56,'Totals by Bank GL with Balances before and after posting',13)
-	! fnLbl(lc+=1,1,'Previous Input:',mylen,1)
-
-
 	fnButton(lc,65,'Clear All',ck_clearAll=52,'Erase entire batch of previously entered transactions',1,10)
+	! /r
 	defaultEdit=defaultAdd=0
 	if count=0 then defaultAdd=1 else defaultEdit=1
-	fnButton(lc-2,84,'Add',ck_Add=30,'(Alt+A)  Add a new transaction',1,8,0,0,defaultAdd,0)
+	fnButton(addbuttonLine,addbuttonPos,'Add',ck_Add=44,' Add a new transaction',1,8,0,0,defaultAdd,0)
 	if gridSelected<>gridProofTotals and count then
 		fnButton(lc,84,'Edit',ck_Edit=63,'Modify selected transaction',1,8,0,0,defaultEdit,0)
 		fnButton(lc,93,'Delete',ck_deleteOne=67,'Delete selected allocation and all other allocations in the same transaction',1,8)
 	end if
 	! r: add a grid
+		respc_grid=rc+=1
 		if gridSelected=gridTransactions then
 			fn_transactionGrid(hMerge,lc+=1,2,10,90,previouslySelected)
 		else if gridSelected=gridTransactionsNet then
@@ -119,7 +121,6 @@ ScreenOne: ! r:
 	fnCmdKey('Import Client File',ck_importFile=51,0,0,"Import a Client's ACS Checkbook file.")
 	fnCmdKey('&Post',ck_post=62,0,0,'Will post this group of entries to the general ledger.')
 	fnCmdKey('E&xit',ck_exit=5,0,1,'Exit without Posting - you can always come back and finish later')
-	! /r
 	ckey=fnAcs(mat resp$) ! ScreenOne
 	if ckey=ck_exit then goto Xit
 
@@ -174,7 +175,19 @@ ScreenOne: ! r:
 	else if ckey=ck_printProofTotals then
 		fn_prProofTotals(hAccount,totalDebits,totalCredits,glBank$,contraEntryDateN,mat kList$,mat kReceipts,mat kDisbursements,mat kAdjustments,mat chdr_proof_total$,mat glitem3$)
 	else if ckey=ck_Add then
-		previouslySelected=fn_transactionAdd(hMerge,selx,glBank$,contraEntryDateN)
+		previouslySelected=fn_transactionAdd(hMerge,selx                 ,glBank$,contraEntryDateN)
+	else if ckey=ck_disbursement then
+		previouslySelected=fn_transactionAdd(hMerge,selx=sx_disbursement,glBank$,contraEntryDateN)
+	else if ckey=ck_receipt then
+		previouslySelected=fn_transactionAdd(hMerge,selx=sx_receipt      ,glBank$,contraEntryDateN)
+	else if ckey=ck_adjustment then
+		previouslySelected=fn_transactionAdd(hMerge,selx=sx_adjustment  ,glBank$,contraEntryDateN)
+	else if ckey=ck_payrollCheck then
+		previouslySelected=fn_transactionAdd(hMerge,selx=sx_payrollCheck,glBank$,contraEntryDateN)
+	else if ckey=ck_sale then
+		previouslySelected=fn_transactionAdd(hMerge,selx=sx_sale         ,glBank$,contraEntryDateN)
+	else if ckey=ck_purchase then
+		previouslySelected=fn_transactionAdd(hMerge,selx=sx_purchase     ,glBank$,contraEntryDateN)
 	else if ckey=ck_post then
 		if totalDebits<>-totalCredits then
 			mat ml$(3)
@@ -969,7 +982,7 @@ def fn_transactionAdd(hMerge,typeOfEntryN,glBank$,transDate; ___, _
 		! pr 'before trPrior$='&trPrior$
 		tr$=fn_nextTr$(trPrior$,selx,gl_retainFieldsDuringAdd$)
 		! pr 'after       tr$='&tr$ : pause
-		if selx=sx_adjustment then
+		if selx=sx_adjustment and enableOneToOneAdjustments then
 			smResponse=fn_scrAdjustment(hMerge,0,bankAcctName$,message$,tr$,glBank$,transDate)
 		else if selx=sx_payrollCheck then
 			smResponse=fn_scrPayrollAdd
@@ -994,7 +1007,7 @@ def fn_transactionEdit(hMerge,recordNumber,glBank$*12; ___,returnN,gl$*12,tr4,tr
 		fn_readMerge(recordNumber,gl$,tr4,tr5,tType,postingCode,tr$,td$,vn$,jv2$,key$)  ! get basic information from record clicked to find the complete transaction
 		if trim$(key$)='' then key$=glBank$
 		! pr '  fn_transactionEdit   passing Key$='&key$ : pause
-		if tType=sx_adjustment then
+		if tType=sx_adjustment and enableOneToOneAdjustments then
 			returnN=fn_scrAdjustment(hMerge,recordNumber,bankAcctName$,message$,tr$,key$,transDate)
 		else
 			hMtemp=fn_makeMergeTemp(hMerge,recordNumber,transactionAmt,totalalloc,selx)
