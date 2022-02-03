@@ -17,9 +17,9 @@ Enter Standard Adjustments                          ^ HamsterFio:Std Adjustments
 >Post Standard Adjustments                          ^ [cursystem]\*
 >Prior Period Adjustments                           ^ [cursystem]\*
 Print
->Trial Balance Worksheet                            ^ acsGL\ACGLWkSh
+>Trial Balance Worksheet                            ^ [cursystem]\*
 >Trial Balance                                      ^ [cursystem]\*
->Budget Worksheet                                   ^ acsGL\BudWkSh
+>Budget Worksheet                                   ^ [cursystem]\*
 >Transactions Journal                               ^ [cursystem]\*
 >Chart of Accounts                                  ^ acsGL\acGLCHRT
 Financial Statements
