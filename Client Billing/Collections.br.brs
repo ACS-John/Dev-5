@@ -217,7 +217,7 @@ ScreenAddMore: ! r:
 		if ckey=21 then tr5=tr5_invoice    	! Invoices
 		if ckey=22 then tr5=tr5_debit      	! Debit Memos
 		if ckey=23 then tr5=tr5_collection 	! Collections
-		if ckey=24 then tr5=tr4_credit     	! Credit Memos
+		if ckey=24 then tr5=tr5_credit     	! Credit Memos
 
 		hd$(1)="Add "&entryType$(tr5)
 		hd$(2)="Client Number as 0 to stop"
