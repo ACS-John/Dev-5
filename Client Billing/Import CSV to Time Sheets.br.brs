@@ -6,7 +6,7 @@ client_id_brc$='90'
 client_id_framemasters$='1864'
 
 ! r: Screens
- 
+
 dim filter_date(2)
 filter_date(1)=val(date$(days(date$('ccyymm')&'01','ccyymmdd')-1,'ccyymm')&'01') ! low (beginning of last month)
 filter_date(2)=date(days(date$('ccyymm')&'01','ccyymmdd')-1,'ccyymmdd') ! high (end of last month)
@@ -37,11 +37,11 @@ for fileItem=1 to fileNameCount
 	pr #255: empName$(fileItem)&' - '&filename$(fileItem)
 	pr #255: ''
 	pr #255,using Form_PrnHead: 'Date','Client','Time','Cat','Month','Desc','Rate','Expenses'
-	Form_PrnHead: form pos 1,cc 8,x 1,c 18,x 1,5*cr 10,x 1,c 30,x 1,cr 7,c 8
+	Form_PrnHead: form pos 1,cc 8,x 1,c 18,x 1,5*cr 10,x 1,c 30,x 3,cr 7,c 8
 	Form_PrnLine: form pos 1,C 5,n 9,2*pd 3.2,pd 4.2,n 6,n 2,pd 2,pd 1,C 2,n 4,c 12,pd 3,c 30
 	F_support: form pos 1,g 6,n 2,c 2,x 8,x 2,n 8
 	dim line$*1024
- 
+
 	fn_get_next_line(h_in,line$) : line_count+=1 ! consume headings
 	! if fileItem=2 then pr 'header:',line_count,line$ : pause
 	if pos(line$,chr$(9))>0 then let delim$=chr$(9) else delim$=','
@@ -53,27 +53,34 @@ for fileItem=1 to fileNameCount
 			dim item$(0)*1024
 			str2mat(line$,mat item$,delim$,'QUOTES:TRIM')
 			if item$(1)<>'' then the_date=fn_get_the_date(item$(1))
+
+
+			theDateDays=days(the_date,'ccyymmdd')
+			theDatePriorDays=days(the_date_prior,'ccyymmdd')
 			
-			if the_date<the_date_prior and the_date_prior>20151218 then
+			if theDateDays+31<the_date_prior and theDatePriorDays>20151218 then
 				pr '________________________ exception ________________________'
 				pr 'File: '&file$(h_in)
 				pr 'Line: '&str$(line_count)
-				pr 'the_date('&str$(the_date)&')<the_date_prior('&str$(the_date_prior)&') - that indicates a problem'
-				pause
-			end if
-			
-						
-			if days(the_date,'ccyymmdd')-180>days(the_date_prior,'ccyymmdd') and the_date_prior then
-				pr '________________________ exception ________________________'
-				pr 'File: '&file$(h_in)
-				pr 'Line: '&str$(line_count)
-				pr 'Date: '&date$(days(the_date,'ccyymmdd'),'mm/dd/ccyy')
-				pr 'Date (prior line): '&date$(days(the_date_prior,'ccyymmdd'),'mm/dd/ccyy')
-				pr 'the_date-180('&date$(days(the_date,'ccyymmdd')-180,'mm/dd/ccyy')&') )>the_date_prior('&date$(days(the_date_prior,'ccyymmdd'),'mm/dd/ccyy')&') - that indicates a potential problem - a jump of more than 90 days forward.  Check the month and year are correct.'
+				pr 'Date: '&date$(theDateDays,'mm/dd/ccyy')
+				pr 'Date (prior line): '&date$(theDatePriorDays,'mm/dd/ccyy')
+				pr 'The date ('&str$(the_date)&') on line '&str$(line_count)&' is more than 31 days less than the date on the previous line''s date ('&str$(the_date_prior)&').  This may indicates a problem.'
+				pr 'the_date+31('&date$(theDateDays+31,'mm/dd/yy')&')<the_date_prior('&date$(theDatePriorDays,'mm/dd/ccyy')&') - that indicates a problem'
 				pause
 			end if
 
-			
+
+			if theDateDays-180>theDatePriorDays and the_date_prior then
+				pr '________________________ exception ________________________'
+				pr 'File: '&file$(h_in)
+				pr 'Line: '&str$(line_count)
+				pr 'Date: '&date$(theDateDays,'mm/dd/ccyy')
+				pr 'Date (prior line): '&date$(theDatePriorDays,'mm/dd/ccyy')
+				pr 'the_date-180('&date$(theDateDays-180,'mm/dd/ccyy')&') )>the_date_prior('&date$(theDatePriorDays,'mm/dd/ccyy')&') - that indicates a potential problem - a jump of more than 90 days forward.  Check the month and year are correct.'
+				pause
+			end if
+
+
 			if the_date=>filter_date(1) and the_date<=filter_date(2) then
 				! if fileItem=2 then pr 'body:',line_count,line$ : pause
 				if udim(mat item$)>9 and item$(4)<>'#N/A' and val(item$(7))>0 then ! entry
@@ -244,7 +251,7 @@ def fn_writeOutSage(wo_date,wo_time,wo_sage_code$*128,wo_desc$*1024)
 	sawo_line$&=wo_desc$
 	pr #sawo_h_out: sawo_line$
 fnend  ! fn_writeOutAcs
- 
+
 def fn_get_next_line(h_in,&line$)
 	dim gnl_block$*512
 	dim gnl_buffer$*32767
@@ -473,15 +480,15 @@ def fn_onSupport(wo_client$,wo_month$,the_date; ___,returnN)
 	spk$=lpad$(wo_client$,kln(h_support,1))&lpad$(wo_month$,2)
 	read #h_support,using F_support,key=spk$: cln$,scode,scode$,sdt2 nokey OS_TRY_RPAD
 	goto OS_FOUND_REC
- 
+
 	OS_TRY_RPAD: !
 	spk$=rpad$(wo_client$,kln(h_support,1))&lpad$(wo_month$,2)
 	read #h_support,using F_support,key=spk$: cln$,scode,scode$,sdt2 nokey OS_FINIS
 	goto OS_FOUND_REC
- 
+
 	OS_FOUND_REC: !
 	if the_date<=sdt2 then returnN=1
- 
+
 	OS_FINIS: !
 	fn_onSupport=returnN
 fnend
@@ -492,7 +499,7 @@ def fn_houryRateAcs(wo_client$,the_date,wo_month$; hr_category,wo_sage_code$*128
 		hr_return=125
 	else if lwrc$(wo_month$)='ww' then
 		hr_return=75
-	else if wo_client$='ajj' then
+	else if wo_client$='ajj' or  wo_client$='ped' then ! AJJ or Peter Engler - both get $25/hour from John
 		hr_return=25
 	else if wo_client$=client_id_brc$ then
 		hr_return=60
