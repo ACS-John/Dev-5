@@ -439,12 +439,12 @@ fnend
 			! open #hCustomer=fnH: 'Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr',i,i,k
 			! read #hCustomer,using 'form pos 11,c 30,C 28,pos 292,PD 4.2',key=lpad$(rtrm$(z$),10),release: metraddr$,nam$,account_balance nokey PT_NO_CUSTOMER
 			! close #hCustomer: ioerr ignore
-			restore #trans,key>=lpad$(rtrm$(z$),10)&'         ': nokey PT_FINIS
+			restore #hPtTrans1,key>=lpad$(rtrm$(z$),10)&'         ': nokey PT_FINIS
 		end if
 		gosub HDR
 		do
 			PtNextTrans: !
-			read #trans,using 'form pos 1,C 10,N 8,N 1,12*PD 4.2,6*PD 5,PD 4.2,N 1': transAcct$,tDate,tcode,tamount,mat tg,wr,wu,er,eu,gr,gu,tbal,pcode eof PT_FINIS
+			read #hPtTrans1,using 'form pos 1,C 10,N 8,N 1,12*PD 4.2,6*PD 5,PD 4.2,N 1': transAcct$,tDate,tcode,tamount,mat tg,wr,wu,er,eu,gr,gu,tbal,pcode eof PT_FINIS
 			if trim$(z$)<>'[All]' and transAcct$<>lpad$(rtrm$(z$),10) then goto PT_FINIS
 			if beg_date<>0 and tDate<beg_date then goto PtNextTrans
 			if end_date<>0 and tDate>end_date then goto PtNextTrans
