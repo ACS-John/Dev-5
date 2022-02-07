@@ -55,10 +55,10 @@ def library fnget_company_number_list(mat cno_list; sysid$*256)
 	fnget_company_number_list=company_count
 fnend
 def fn_CnoLegacyNtoCReg(legacyFilename$*256,legacyForm$*64,registryKey$*128; valuePassedIn,___,fscode$)
-	! Get_or_Put=1 then GET
-	! Get_or_Put=2 then PUT
-	if valuePassedIn>0 then get_or_put=2 else get_or_put=1
-	if get_or_put=1 then
+	! getOrPut=1 then GET
+	! getOrPut=2 then PUT
+	if valuePassedIn>0 then getOrPut=2 else getOrPut=1
+	if getOrPut=1 then
 		fncreg_read(registryKey$,fscode$) : valuePassedIn=val(fscode$)
 		if valuePassedIn=0 then
 			open #tmp=fnH: 'Name='&legacyFilename$,i,outi,r ioerr LegacyOpenFail
@@ -67,17 +67,17 @@ def fn_CnoLegacyNtoCReg(legacyFilename$*256,legacyForm$*64,registryKey$*128; val
 			fncreg_write(registryKey$,str$(valuePassedIn))
 			LegacyOpenFail: !
 		end if
-	else if get_or_put=2 then
+	else if getOrPut=2 then
 		fncreg_write(registryKey$,str$(valuePassedIn))
 	end if
 	fn_CnoLegacyNtoCReg=valuePassedIn
 fnend
 def library fnPeDat$*20(;pedat$*20)
 	if ~setup then fn_setup
-	! Get_or_Put=1 then GET
-	! Get_or_Put=2 then PUT
-	if trim$(pedat$)='' then get_or_put=1 else get_or_put=2
-	if get_or_put=1 then
+	! getOrPut=1 then GET
+	! getOrPut=2 then PUT
+	if trim$(pedat$)='' then getOrPut=1 else getOrPut=2
+	if getOrPut=1 then
 		fncreg_read('Pay Period Ending Date',pedat$)
 		if pedat$='' then
 			dim pedatLegacyFile$*256
@@ -94,7 +94,7 @@ def library fnPeDat$*20(;pedat$*20)
 			fncreg_write('Pay Period Ending Date',pedat$)
 			xLegacyOpenFail: !
 		end if
-	else if get_or_put=2 then
+	else if getOrPut=2 then
 		fncreg_write('Pay Period Ending Date',pedat$)
 	end if
 	fnpedat$=pedat$
@@ -139,25 +139,25 @@ def library fnUseDeptNo
 	end if
 	fnUseDeptNo=gld1
 fnend
-def library fnDat(&dat$;get_or_put)
+def library fnDat(&dat$; getOrPut)
 	if ~setup then fn_setup
-	! Get_or_Put=0 then READ Dat$ (default to Read)
-	! Get_or_Put=0or1 then READ Dat$
-	! Get_or_Put=2 then REWRITE Dat$
-	if get_or_put=0 or get_or_put=1 then
+	! getOrPut=0 then READ Dat$ (default to Read)
+	! getOrPut=0or1 then READ Dat$
+	! getOrPut=2 then REWRITE Dat$
+	if getOrPut=2 then
+		fnreg_write('Report Heading Date',dat$)
+	else ! if getOrPut=0 or getOrPut=1 then
 		fnreg_read('Report Heading Date',dat$)
 		dat$=trim$(dat$)
 		if dat$='' then
 			dat$=date$('Month DD, CCYY')
 			fnreg_write('Report Heading Date',dat$)
 		end if
-	else if get_or_put=2 then
-		fnreg_write('Report Heading Date',dat$)
 	end if
 fnend
-def library fnPrg(&curprg$; g_p,___,curprg_tmp$*1024)
+def library fnSetCoreProgramCurrent(&curprg$; getOrPut,___,curprg_tmp$*1024)
 	if ~setup then fn_setup
-	if g_p=2 then ! Put
+	if getOrPut=2 then ! Put
 		!     r: remove leading  S:\
 		curprg_tmp$=curprg$
 		if uprc$(curprg_tmp$(1:3))='S:\' then
@@ -290,14 +290,14 @@ fnend
 def library fnStandardizeSysId$(return$*256)
 	fnStandardizeSysId$=fn_standardizeSysId$(return$)
 fnend
-def fn_standardizeSysId$(return$*256)
-	if uprc$(return$)='P1' then return$='PR' ! Payroll
-	if uprc$(return$)='P2' then return$='PR' ! Job Cost Payroll
-	if uprc$(return$)='P4' then return$='PR' ! version 4 Payroll
-	if uprc$(return$)='G1' then return$='GL' ! General Ledger
-	if uprc$(return$)='G2' then return$='GL' ! Accountant's GL
-	if uprc$(return$)='G3' then return$='GL' ! Budget Management
-	fn_standardizeSysId$=return$
-fnend
+	def fn_standardizeSysId$(return$*256)
+		if uprc$(return$)='P1' then return$='PR' ! Payroll
+		if uprc$(return$)='P2' then return$='PR' ! Job Cost Payroll
+		if uprc$(return$)='P4' then return$='PR' ! version 4 Payroll
+		if uprc$(return$)='G1' then return$='GL' ! General Ledger
+		if uprc$(return$)='G2' then return$='GL' ! Accountant's GL
+		if uprc$(return$)='G3' then return$='GL' ! Budget Management
+		fn_standardizeSysId$=return$
+	fnend
 include: fn_open
 include: fn_setup

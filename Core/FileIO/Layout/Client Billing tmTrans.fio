@@ -1,17 +1,18 @@
 [CurSysData]\tmTrans.h[cno], tmtrans_, 0
 recl=2484
+! Unbilled Transactions
 ===================================================
-k$,             Client Number,                  C    5,   ! k$
-unused1$,       " ",                            C    9,   ! b(7)
-b1,             b(1),                           PD   3.2, ! b(1)
-b2,             b(2),                           PD   3.2, ! b(2)
-b3,             b(3),                           PD   4.2, ! b(3)
-b4,             b(4),                           N    6,   ! b(4)
-b5,             Category,                       N    2,   ! b(5)
-b6,             b(6),                           PD   2,   ! b(6)
-b7,             b(7),                           PD   1,   ! b(7)
-sysCode,        System Code,                    N    2,   ! b(8)
-sc$,            sc$,                            C    4,   ! 201, 601, 2300, etc
-iv$,            Invoice Number,                 C   12,   ! 
-lta,            last transaction address,       PD   3,   !
-idj$,           Description,                    C   30,   ! 
+k              	,Client Number                   	,C    5   	, ! k$
+unused1       	,unused1                          	,C    9   	, ! b(7)
+b1             	,b(1)                             	,PD   3.2 	, ! b(1)
+b2             	,b(2)                             	,PD   3.2 	, ! b(2)
+b3             	,b(3)                             	,PD   4.2 	, ! b(3)
+b4             	,b(4)                             	,N    6   	, ! b(4)
+b5             	,Category                        	,N    2   	, ! b(5)
+b6             	,b(6)                             	,PD   2   	, ! b(6)
+b7             	,b(7)                             	,PD   1   	, ! b(7)
+sysCode       	,System Code                     	,N    2   	, ! b(8)
+sc             	,sc                               	,C    4   	, ! 201, 601, 2300, etc
+iv             	,Invoice Number                  	,C   12   	, ! 
+lta            	,last transaction address       	,PD   3   	, !
+idj            	,Description                     	,C   30   	, ! 

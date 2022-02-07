@@ -17,7 +17,7 @@ def library fnTop(; prg$*256,cap$*128,force80x24)
 		prg$="(unknown)"
 		if env$('acsDeveloper')<>'' then pr 'fnTop called but program was not set.' : pause
 	end if
-	fnprg(prg$,put=2)
+	fnSetCoreProgramCurrent(prg$,put=2)
 	if cap$=uprc$(cap$) then
 		setenv('Program_Caption',fnBookTitle$(cap$))
 	else

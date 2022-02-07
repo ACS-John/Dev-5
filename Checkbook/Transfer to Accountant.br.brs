@@ -192,7 +192,7 @@ TRY_TO_SEND_TO_GL: ! r:
 	fnCopy('[Q]\CLmstr\GLWK201.h[cno]','[Q]\GLmstr\GLWK2[acsUserId].h[cno]')
 	if lr4=0 then goto L1550
 	open #1: 'Name=[Q]\GLmstr\PRmstr.h[cno],KFName=[Q]\GLmstr\PRIndex.h[cno],Shr',i,outIn,k ioerr L1550
-	fnprg('S:\acsGL\PRMerge',2)
+	fnSetCoreProgramCurrent('S:\General Ledger\Post Payroll Checks',2)
 	fnstyp(99)
 	L1550: !
 fnchain('S:\General Ledger\Merge') ! /r
@@ -278,7 +278,7 @@ BUCKET: ! r: MOVE TO GLBUCKET
 	loop
 	L2160: !
 	open #1: 'Name=[Q]\GLmstr\PRmstr.h[cno],KFName=[Q]\GLmstr\PRIndex.h[cno],Shr',i,outIn,k ioerr Xit
-fnchain('S:\acsGL\PRMerge') ! /r
+fnchain('S:\General Ledger\Post Payroll Checks') ! /r
  
 MSGBOX1: ! r:
 	mat ml$(2)

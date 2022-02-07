@@ -14,7 +14,7 @@ L100: if fnprocess=0 then goto Xit
 	read #20,using 'form pos 1,C 35,pos 71,N 3,x 1,2*N 1',rec=pgnum+=1: prg$,pn,ps,srq eof Xit,noRec Xit : _
 	close #20:
 	if rtrm$(prg$)="" then goto L220
-	fnprg(prg$,put=2)
+	fnSetCoreProgramCurrent(prg$,put=2)
 	fnpgnum(pgnum) : fnps(ps)
 	goto CHAIN_PRG
 MSGBOX1: !

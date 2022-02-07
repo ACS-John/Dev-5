@@ -239,17 +239,17 @@ POSTING_OPTIONS: ! r:
 	fnfscode(0)
 	gosub CREATE_CONTRA_ENTRIES
 	if resp$(5)='True' or ckey=5 then goto Xit ! return w/o posting
-	if resp$(2)='True' then let fnprocess(1) else let fnprocess(0)
-	if resp$(4)='True' then let fnprocess(4) ! post both
+	if resp$(2)='True' then fnprocess(1) else fnprocess(0)
+	if resp$(4)='True' then fnprocess(4) ! post both
 	if resp$(1)='True' then goto ACGLMRGE
-	if resp$(3)='True' then let fnchain("S:\acsGL\PRMerge")
+	if resp$(3)='True' then fnchain("S:\General Ledger\Post Payroll Checks")
 	open #h_process=fnH: "Name=[Q]\GLmstr\Process.h[cno],RecL=128,Use",i,outi,r
 	if lrec(h_process)=0 then write #h_process,using "form pos 1,n 1": 0
 	if resp$(2)='True' then rewrite #h_process,using "form pos 1,n 1",rec=1: 1 else rewrite #h_process,using "form pos 1,n 1",rec=1: 0 ! code for post payroll and gl both
 	if resp$(4)='True' then rewrite #h_process,using "form pos 1,n 1",rec=1: 4 ! code for posting pr and gl both
 	close #h_process:
 	if resp$(4)='True' then goto ACGLMRGE ! post both
-	if resp$(2)='True' then let fnchain("S:\acsGL\autoproc")
+	if resp$(2)='True' then fnchain("S:\acsGL\autoproc")
 	goto Xit ! /r
 Xit: fnXit
 
@@ -346,7 +346,7 @@ EO_FLEX1: ! /r
 	fnButton(9,92,"Edit Al&l",19,"Edit all allocations without returning to this screen.",1,8)
 ! fnLbl(17,73,"",1,right)
 ! fnLbl(16,1," ")
-! If EDIT=1 Then Let fnCmdKey("C&hange Acct #",9,0,0,"")
+! If EDIT=1 Then fnCmdKey("C&hange Acct #",9,0,0,"")
 	if editmode=1 then
 		fnCmdKey("&Complete",30,1,0,"Completed making corrections to this transaction.")
 	else
@@ -356,7 +356,7 @@ EO_FLEX1: ! /r
 	fnCmdKey("&Review Transactions",3,0,0,"Prints a list of all transactions entered during the setting and also provides for edit options.")
 	fnCmdKey("&Delete",7,0,0,"Deletes the entire transaction as shown on screen.")
 	fnCmdKey("&Back",6,0,0,"Return to first screen to change transaction types or bank accounts.")
-	if ~edit then let fnCmdKey("&Finish",9,0,1,"")
+	if ~edit then fnCmdKey("&Finish",9,0,1,"")
 	ckey=fnAcs(mat resp$)
 	allocamt=0
 	message$=""
@@ -565,7 +565,7 @@ L5310: !
 	if ckey=2 then edit=1 else edit=0 ! set edit mode
 	if ckey=2 and trim$(resp$(1))="" then gosub REVIEW_TRANS : goto EO_FLEX3
 	if ckey=2 then gosub PREPARE_EDIT_SCREEN : goto EO_FLEX3
-	if ckey=4 then let fn_pr_proof_list
+	if ckey=4 then fn_pr_proof_list
 	goto SCREEN_1 ! (on ckey=1 or anything else)
 ! General Ledger Breakdown Grid
 	fnflexinit1('PayeeGl',16,1,5,70,mat chdr$,mat cmask$,1,0,0)
@@ -681,8 +681,8 @@ L6240: !
 	fnCmdKey("&Post",2,0,0,"Will post this group of entries to the general ledger files.")
 	ckey=fnAcs(mat resp$)
 	if ckey=5 then goto Xit
-	if ckey=4 then let fn_pr_proof_list : goto SCREEN_PROOF_TOTALS
-	if ckey=10 then let fn_pr_proof_totals : goto SCREEN_PROOF_TOTALS
+	if ckey=4 then fn_pr_proof_list : goto SCREEN_PROOF_TOTALS
+	if ckey=10 then fn_pr_proof_totals : goto SCREEN_PROOF_TOTALS
 	if ckey=1 then gosub REVIEW_TRANS : goto MAIN
 	if ckey=2 and td<>-tc then
 		mat ml$(3)
@@ -742,7 +742,7 @@ PAYROLL: ! r:
 	fnLbl(3,1,"Date:",mylen,right)
 	fnTxt(3,mypos,8,0,right,"1",0,"Transaction date must always be answered.",0 )
 	resp$(1)=str$(tr(4))
-	if sel=3 then let fnLbl(4,1,"Amount:",mylen,right) else let fnLbl(4,1,"Net Amount:",mylen,right)
+	if sel=3 then fnLbl(4,1,"Amount:",mylen,right) else fnLbl(4,1,"Net Amount:",mylen,right)
 	fnLbl(4,36,message$,50,left)
 
 	fnTxt(4,mypos,12,0,right,'10',0,"Enter the net transaction amount. If correcting a transaction, change the allocations and net will be adjusted accordingly.",0 )
@@ -756,7 +756,7 @@ PAYROLL: ! r:
 	fnLbl(7,1,"General Ledger #:",mylen,right)
 	fnQgl(7,mypos,0,2,1)
 	resp$(5)=fnrgl$(gl$)
-	if sel=3 then let fnLbl(7,60,"Net Adj:",mylen,right) else let fnLbl(7,60,"Amount:",mylen,right)
+	if sel=3 then fnLbl(7,60,"Net Adj:",mylen,right) else fnLbl(7,60,"Amount:",mylen,right)
 	if sel=3 or sel=4 then disable=1 else disable=0
 	fnTxt(7,70,13,0,right,'10',disable,"Amount to allocated to this general ledger number. Not applicable to adjustments.",0 )
 	if sel=3 then resp$(6)=str$(totalalloc) else resp$(6)=""
@@ -797,13 +797,13 @@ PAYROLL: ! r:
 	fnLbl(8,30,"Eic:",mylen,right,0,1)
 	fnTxt(8,51,12,0,right,'10',0,"Total Earned Income Credit applied.",1)
 	resp$(24)=str$(xpr(19))
-	if sel=1 or sel=6 then let fnButton(6,53,"E&xtract",15,"Extracts general ledger numbers from payee records",1,8)
+	if sel=1 or sel=6 then fnButton(6,53,"E&xtract",15,"Extracts general ledger numbers from payee records",1,8)
 	if disable_payee=1 and (sel=1 or sel=6) then payee_button$ ="Enable &Payee" else payee_button$ ="Disable &Payee"
-	if sel=1 or sel=6 then let fnButton(6,64,payee_button$,16,"Allows you to disable or enable the payee field.",1,12)
-	if sel=1 or sel=6 then let fnButton(6,79,"&Add Payee",17,"Allows you to add a payee record.",1,10)
+	if sel=1 or sel=6 then fnButton(6,64,payee_button$,16,"Allows you to disable or enable the payee field.",1,12)
+	if sel=1 or sel=6 then fnButton(6,79,"&Add Payee",17,"Allows you to add a payee record.",1,10)
 ! fnLbl(17,73,"",1,right)
 ! fnLbl(16,1," ")
-! If EDIT=1 Then Let fnCmdKey("C&hange Acct #",9,0,0,"")
+! If EDIT=1 Then fnCmdKey("C&hange Acct #",9,0,0,"")
 	if editmode=1 then
 		fnCmdKey("&Complete",30,1,0,"Completed making corrections to this transaction.")
 	else

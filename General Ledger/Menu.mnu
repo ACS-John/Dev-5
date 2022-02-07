@@ -31,9 +31,9 @@ Financial Statements
 >>Period Comparison Balance Sheet                   ^ [cursystem]\*
 >>Fund Comparison Balance Sheet                     ^ [cursystem]\*
 >Income Statement                                   ^ [cursystem]\*
->>Quarterly Income Statement                        ^ acsGL\ACGLINCQ
->>Income Statement with Percents                    ^ acsGL\ACGLINCP
->>Comparative Income Statement                      ^ acsGL\ACGLINCC
+>>Quarterly Income Statement                        ^ [cursystem]\*
+>>Income Statement with Percents                    ^ [cursystem]\*
+>>Comparative Income Statement                      ^ [cursystem]\*
 >>Income Statement with Budget                      ^ [cursystem]\*
 >>Income Statement with Varience                    ^ acsGL\ACGLINCV
 >>Income Statement showing YTD Only                 ^ acsGL\ACGLINC1
@@ -65,12 +65,12 @@ Annually
 >Close Books at Year End                            ^ [cursystem]\*
 >Clear Accumulated Transactions                     ^ acsGL\acGLClr
 >Enter Budget Amounts                               ^ acsGL\BudInpt
->Print 1099-Misc Forms                              ^ [cursystem]\*   
->Print 1099-NEC Forms                               ^ [cursystem]\*   
+>Print 1099-Misc Forms                              ^ [cursystem]\*
+>Print 1099-NEC Forms                               ^ [cursystem]\*
 >Create Electronic 1099s                            ^ [cursystem]\*
 ! no longer necessary, unless files get too large >Dump Old Payee Transactions                ^ acsGL\*
 Error Recovery
->Generate Reversing Entries                       ^ acsGL\Reverse 
+>Generate Reversing Entries                       ^ acsGL\Reverse
 >Remove Entries Posted by Mistake                 ^ acsGL\Unpost
 >Reassign Transaction Addresses                   ^ [cursystem]\*
 >Fix Current Period Transaction Dates             ^ [cursystem]\*
@@ -94,7 +94,7 @@ General Ledger Accountants Add-On                 ^                             
 >>Print Payroll Registers                         ^ [cursystem]\Accountants\*                             ^ G2
 >>Print Deductions Register                       ^ acsGL\OtherDeductions                                 ^ G2
 >>Print Deductions Register-YTD QTD               ^ acsGL\OtherDeductionsYTD                              ^ G2
->>Post Payroll Checks                             ^ acsGL\PRMerge                                         ^ G2
+>>Post Payroll Checks                             ^ [cursystem]\*                                         ^ G2
 >Quarterly                                        ^                                                       ^ G2
 >>Print State Unemployment Compensation Report    ^ acsGL\PRStatUC                                        ^ G2
 >>Print Texas Unemployment Report                 ^ acsgl\prtexasuc                                       ^ G2
