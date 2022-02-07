@@ -1404,9 +1404,9 @@ fnend
 		library 'S:\Core\CNo.br': fncursys$
 		fncursys$=fncursys$( cursys_set$,resetCache)
 	fnend
-	def library fnprg(&prg$; g_p)
-		library 'S:\Core\CNo.br': fnprg
-		fnprg=fnprg(prg$,g_p)
+	def library fnSetCoreProgramCurrent(&prg$; g_p)
+		library 'S:\Core\CNo.br': fnSetCoreProgramCurrent
+		fnSetCoreProgramCurrent=fnSetCoreProgramCurrent(prg$,g_p)
 	fnend
 ! /r
 ! r: UB   utility billing

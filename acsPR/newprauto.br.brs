@@ -20,7 +20,7 @@ L140: open #20: "Name=[Q]\PRmstr\newPrPGMN.h[cno],Shr",i,i,r ioerr MSGBOX1 : _
 	if m=1 and mo<>1 then goto L140 ! MONTHY PERIOD NOT SELECTED
 	if q=1 and qt<>1 then goto L140 ! QUARTER PERIOD NOT SELECTED
 	if rtrm$(prg$)="" then goto L260
-	fnprg(prg$,put=2)
+	fnSetCoreProgramCurrent(prg$,put=2)
 	fnpgnum(pgnum) : fnps(ps)
 	goto CHAIN_PRG
 MSGBOX1: !

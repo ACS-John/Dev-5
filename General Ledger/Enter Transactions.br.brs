@@ -1412,7 +1412,7 @@ DoMerge: ! r:
 fnchain('S:\General Ledger\Merge') ! /r
 DoPrMerge: ! r:
 	setenv('current_grid_row',gridRowHold$)
-fnchain('S:\acsGL\PRMerge') ! /r
+fnchain('S:\General Ledger\Post Payroll Checks') ! /r
 DoAutoProc: ! r:
 	setenv('current_grid_row',gridRowHold$)
 fnchain('S:\acsGL\autoproc') ! /r

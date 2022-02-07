@@ -24,26 +24,22 @@ def library fnHamster(uw$*128,mat lbl$,mat fln,hIn,mat p$; mat flTyp$,mat sln,ma
 fnend
 
 def fn_hamster(uw$*128,mat lbl$,mat fln,hIn,mat p$; mat flTyp$,mat sln,mat mask$,mat startPos,mat incontrol$,mat mxl,___,enableGlAccount)
-	! r: setup
+	! r: setup:  prepare arrays, etc
+		dim keyorder(199) ! contains a 0 if not a key, else contains it's sequence in the order of fields used to make the key
+		dim cmask$(199) ! Flexgrid Column Mask
+		dim key$*512 ! dynamically built key
+		dim resp$(256)*1024
+		dim flxItem$(199)*2048
+		mat flxItem$(199)
+		dim flxhdr$(199)*80 ! flexgrid item and header
+		mat flxhdr$(199)
 
-
-	dim sln2(199)
-	dim fltyp2$(199)*2
-	dim mask2$(199)
-	dim mask2N(199)
-	dim startPos2(199)
-	dim option$(199)*256
-	dim control$(60,26)*256
-	dim p2$(100)*1024 ! used to hold mat P$ + 1 more response for Add Loop
-	dim keyorder(199) ! contains a 0 if not a key, else contains it's sequence in the order of fields used to make the key
-	dim cmask$(199) ! Flexgrid Column Mask
-	dim flxItem$(199)*2048,flxhdr$(199)*80 ! flexgrid item and header
-	dim key$*512 ! dynamically built key
-	dim resp$(256)*1024
-	! /r
-	! r: prepare arrays
-		mat flxItem$(199) : mat flxhdr$(199) : mat sln2(199) : mat fltyp2$(199)
-		mat mask2$(199) : mat mask2N(199) : mat startPos2(199) : mat option$(199) : mat control$(60,26)
+		dim mask2N(199)
+		mat mask2N(199)
+		dim option$(199)*256
+		mat option$(199)
+		dim control$(60,26)*256
+		mat control$(60,26)
 		row_select=1 : opt_cancel=5 : opt_add=4 : opt_edit=3
 		opt_delete=7 : right=1
 		itemCount=udim(mat p$)
@@ -53,11 +49,21 @@ def fn_hamster(uw$*128,mat lbl$,mat fln,hIn,mat p$; mat flTyp$,mat sln,mat mask$
 			mat control$(udim(mat incontrol$,1),udim(mat incontrol$,2))
 			mat control$=incontrol$
 		end if
+		
+		dim startPos2(199)
+		mat startPos2(199)
 		if udim(mat startPos)<>itemCount then
 			startPos2(1)=1
 		else
 			startPos2(1)=startPos(1)
 		end if
+		
+		dim fltyp2$(199)*2
+		mat fltyp2$(199)
+		dim sln2(199)
+		mat sln2(199)
+		dim mask2$(199)
+		mat mask2$(199)
 		for j=1 to itemCount
 			if udim(mat control$,1)=>j and lwrc$(control$(j,1))='combof' and control$(j,7)<>'' then ! it is a combof that has an index
 				fltyp2$(j)='c'
@@ -71,6 +77,7 @@ def fn_hamster(uw$*128,mat lbl$,mat fln,hIn,mat p$; mat flTyp$,mat sln,mat mask$
 			else
 				fltyp2$(j)=lwrc$(flTyp$(j))
 			end if
+			
 			if udim(mat sln)<>itemCount then
 				sln2(j)=fln(j)
 			else if sln(j)=0 then
@@ -78,6 +85,7 @@ def fn_hamster(uw$*128,mat lbl$,mat fln,hIn,mat p$; mat flTyp$,mat sln,mat mask$
 			else
 				sln2(j)=sln(j)
 			end if
+			
 			if udim(mat mask$)<>itemCount then
 				mask2$(j)=''
 				mask2N(j)=0
@@ -86,26 +94,33 @@ def fn_hamster(uw$*128,mat lbl$,mat fln,hIn,mat p$; mat flTyp$,mat sln,mat mask$
 				mask2N(j)=val(mask$(j)) conv ignore
 			end if
 			if mask2N(j)=1 then fln(j)=8
-			if j=1 then goto SKIP_startPos
-			if udim(mat startPos)=itemCount then
-				startPos2(j)=startPos(j)
-			else if udim(mat startPos)<>itemCount and udim(mat startPos)<>0 then
-				startPos2(j)=startPos2(j-1)+int(sln2(j-1))
-			else if udim(mat startPos)<>itemCount and udim(mat startPos)<>0 then
-				startPos2(j)=startPos2(j-1)+int(sln2(j-1))
-			else if udim(mat startPos)=itemCount then
-				startPos2(j)=startPos2(j-1)+int(sln2(j-1))
-			else if udim(mat startPos)=0 then
-				startPos2(j)=startPos2(j-1)+int(sln2(j-1))
-			else if startPos(j)=0 then
-				startPos2(j)=startPos2(j-1)+int(sln2(j-1))
+			
+			if j>1 then
+				if udim(mat startPos)=itemCount then
+					startPos2(j)=startPos(j)
+				else if udim(mat startPos)<>itemCount and udim(mat startPos)<>0 then
+					startPos2(j)=startPos2(j-1)+int(sln2(j-1))
+				else if udim(mat startPos)<>itemCount and udim(mat startPos)<>0 then
+					startPos2(j)=startPos2(j-1)+int(sln2(j-1))
+				else if udim(mat startPos)=itemCount then
+					startPos2(j)=startPos2(j-1)+int(sln2(j-1))
+				else if udim(mat startPos)=0 then
+					startPos2(j)=startPos2(j-1)+int(sln2(j-1))
+				else if startPos(j)=0 then
+					startPos2(j)=startPos2(j-1)+int(sln2(j-1))
+				end if
+				if udim(mat startPos)=>j and startPos(j)<>0 then
+					startPos2(j)=startPos(j)
+				end if
 			end if
-			if udim(mat startPos)=>j and startPos(j)<>0 then
-				startPos2(j)=startPos(j)
-			end if
-			SKIP_startPos: !
+			
 		next j
-		mat mask2$(itemCount) : mat mask2N(itemCount) : mat sln2(itemCount) : mat fltyp2$(itemCount) : mat startPos2(itemCount) : mat keyorder(itemCount)
+		mat mask2$(itemCount)
+		mat mask2N(itemCount)
+		mat sln2(itemCount)
+		mat fltyp2$(itemCount)
+		mat startPos2(itemCount)
+		mat keyorder(itemCount)
 	! /r
 	! Gosub KEYORDER_BUILD
 	! r: Build Flex Headers and Flex Mask
@@ -134,25 +149,25 @@ def fn_hamster(uw$*128,mat lbl$,mat fln,hIn,mat p$; mat flTyp$,mat sln,mat mask$
 			else
 				cmask$(fhc)='80'
 			end if
-			!
+			
 		next j
 		mat flxhdr$(fhc) : mat flxItem$(fhc) : mat cmask$(fhc)
 		! /r
 	goto Menu1
 
-	! KEYORDER_BUILD: ! r: unused
-	! uses: hIn, mat startPos2
-	! returns: mat keyorder
-	! this section is not used currently
-	! if later we want to add an option to force keys to be unique,
-	! than I'll probably want to resurect and test this section
-			j=0 : mat keyorder=(0) : bowman=0
-			do while kps(hIn,j+=1)>0
-				for j=1 to udim(mat startPos2)
-					if startPos2=kps(hIn,j) then keyorder(j)=bowman+=1
-				next j
-			loop
-	return ! /r
+! 	! KEYORDER_BUILD: ! r: unused
+! 	! uses: hIn, mat startPos2
+! 	! returns: mat keyorder
+! 	! this section is not used currently
+! 	! if later we want to add an option to force keys to be unique,
+! 	! than I'll probably want to resurect and test this section
+! 			j=0 : mat keyorder=(0) : bowman=0
+! 			do while kps(hIn,j+=1)>0
+! 				for j=1 to udim(mat startPos2)
+! 					if startPos2=kps(hIn,j) then keyorder(j)=bowman+=1
+! 				next j
+! 			loop
+! 	return ! /r
 	Menu1: ! r:
 		fnTos
 		fnflexinit1(uw$&'2b',1,1,20,108,mat flxhdr$,mat cmask$,row_select)
@@ -224,6 +239,7 @@ def fn_hamster(uw$*128,mat lbl$,mat fln,hIn,mat p$; mat flTyp$,mat sln,mat mask$
 			for j=1 to itemCount
 				mylen=max(mylen,len(lbl$(j)))
 			next j
+			dim p2$(100)*1024 ! used to hold mat P$ + 1 more response for Add Loop
 			mat p2$(alana=udim(mat p$)+1) : mat p2$(1:udim(mat p$))=p$(1:udim(mat p$))
 			fnTos
 			mypos=mylen+3 : lc=ic=0 : col=1 : colpos=1
@@ -303,8 +319,8 @@ def fn_hamster(uw$*128,mat lbl$,mat fln,hIn,mat p$; mat flTyp$,mat sln,mat mask$
 			read #hIn,using tmp$,rec=pRec,reserve: p$(j) noRec PNOREC eof PEOF
 		else if fltyp2$(j)='n' or fltyp2$(j)='pd' then
 			tmp$='form pos '&str$(startPos2(j))&','&fltyp2$(j)&' '&str$(sln2(j))
-			read #hIn,using tmp$,rec=pRec,reserve: t noRec PNOREC eof PEOF
-			p$(j)=str$(t)
+			read #hIn,using tmp$,rec=pRec,reserve: xt noRec PNOREC eof PEOF
+			p$(j)=str$(xt)
 		else if fltyp2$(j)='pd' and ord(p$(j))=15 then
 			p$(j)=''
 		end if
@@ -318,8 +334,8 @@ def fn_hamster(uw$*128,mat lbl$,mat fln,hIn,mat p$; mat flTyp$,mat sln,mat mask$
 				reread #hIn,using tmp$,reserve: p$(j) noRec PNOREC eof PEOF
 			else if fltyp2$(j)='n' or fltyp2$(j)='pd' then
 				tmp$='form pos '&str$(startPos2(j))&','&fltyp2$(j)&' '&str$(sln2(j))
-				reread #hIn,using tmp$,reserve: t noRec PNOREC eof PEOF
-				p$(j)=str$(t)
+				reread #hIn,using tmp$,reserve: xt noRec PNOREC eof PEOF
+				p$(j)=str$(xt)
 			else if fltyp2$(j)='pd' and ord(p$(j))=15 then
 				p$(j)=''
 			end if
@@ -334,8 +350,8 @@ def fn_hamster(uw$*128,mat lbl$,mat fln,hIn,mat p$; mat flTyp$,mat sln,mat mask$
 			reread #hIn,using tmp$,release: p$(j) noRec PNOREC eof PEOF
 		else if fltyp2$(j)='n' or fltyp2$(j)='pd' then
 			tmp$='form pos '&str$(startPos2(j))&','&fltyp2$(j)&' '&str$(sln2(j))
-			reread #hIn,using tmp$,release: t noRec PNOREC eof PEOF
-			p$(j)=str$(t)
+			reread #hIn,using tmp$,release: xt noRec PNOREC eof PEOF
+			p$(j)=str$(xt)
 		else if fltyp2$(j)='pd' and ord(p$(j))=15 then
 			p$(j)=''
 		end if
@@ -348,11 +364,7 @@ def fn_hamster(uw$*128,mat lbl$,mat fln,hIn,mat p$; mat flTyp$,mat sln,mat mask$
 		goto ReadP_XIT
 		ReadP_XIT: !
 	return ! /r
-	RightKeyWrongRecord: ! r:
-		do
-			read #hIn:
-		loop until rec(hIn)=pRec
-	return ! /r
+
 
 	RewriteP: ! r:
 		! spos=1
@@ -372,10 +384,9 @@ def fn_hamster(uw$*128,mat lbl$,mat fln,hIn,mat p$; mat flTyp$,mat sln,mat mask$
 				key$=key$&blank$(j)
 			loop
 			read #hIn,key=key$: nokey SpecialNoKey
-			if rec(hIn)<>pRec then
-				gosub RightKeyWrongRecord
-			end if
+			fn_rightKeyWrongRecord(hIn,pRec)
 		end if
+		
 		for j=1 to itemCount
 			if j<=udim(mat control$,1) and lwrc$(control$(j,1))='combof' then
 				p$(j)=p$(j)(1:val(control$(j,4)))
@@ -404,10 +415,11 @@ def fn_hamster(uw$*128,mat lbl$,mat fln,hIn,mat p$; mat flTyp$,mat sln,mat mask$
 			end if
 			if fltyp2$(j)='n' or fltyp2$(j)='pd' then
 				tmp$='form pos '&str$(startPos2(j))&','&fltyp2$(j)&' '
-				tmp$=tmp$&str$(sln2(j)) : t=val(p$(j))
-				rewrite #hIn,using tmp$,same,reserve: t
+				tmp$=tmp$&str$(sln2(j)) : xt=val(p$(j))
+				rewrite #hIn,using tmp$,same,reserve: xt
 			end if
 		next j
+		
 		release #hIn:
 		! RewriteP_XIT: !
 	return ! /r
@@ -421,7 +433,13 @@ def fn_hamster(uw$*128,mat lbl$,mat fln,hIn,mat p$; mat flTyp$,mat sln,mat mask$
 	continue  ! not Return  ! not Retry ! /r
 	Xit: !
 fnend
-
+def fn_rightKeyWrongRecord(hIn,pRec)
+	if rec(hIn)<>pRec then
+		do
+			read #hIn:
+		loop until rec(hIn)=pRec
+	end if
+fnend
 def fn_keyForm$*1024(mat blank$,&key$,hIn; ___,return$*1024)
 	return$='form ' : key$='' : j=0
 	do while kps(hIn,j+=1)>0

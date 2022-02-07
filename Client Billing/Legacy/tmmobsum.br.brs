@@ -1,25 +1,31 @@
-	on error goto Ertn
-	autoLibrary
-	fnTop(program$,cap$="Monthly Billing Summary")
-	fnconsole(1)
-	fndat(dat$)
-	def fn_cd(x)=(x-int(x*.01)*100)*10000+int(x*.01) ! /r
-	dim cat$(30)*30,dat$*20,cliname$*30,enam$*25
-	dim z$*5,ca(10),ta(25,2),fb(25),dat$*20,cap$*128
-	dim k$*5,e$*9,b(8),sc$*4,iv$*12,tempiv$*12
-	dim x$(10)*30,c$(50)*25,d(50),e(50),f(50),g(10),h(10),i(10)
-	io1$(1)="10,44,C 20,U,N"
-	io1$(2)="12,58,N 6,U,N"
-	pr newpage
-	pr f "10,5,c 35,n": "ENTER MONTHLY BILLING SUMMARY DATE:"
-	pr f "12,5,C 60": "ENTER THE OLDEST BILLING DATE TO pr OR 0 FOR ALL:"
-	pr f io1$(1): dat$
-	pr f "23,2,c 30,n": "Press F5 to stop"
-L200: input fields mat io1$: dat$,od conv L200
+on error goto Ertn
+autoLibrary
+fnTop(program$,"Monthly Billing Summary")
+fnconsole(1)
+fndat(dat$)
+def fn_cd(x)=(x-int(x*.01)*100)*10000+int(x*.01) ! /r
+dim cat$(30)*30,dat$*20,cliname$*30,enam$*25
+dim z$*5,ca(10),ta(25,2),fb(25),dat$*20
+dim k$*5,e$*9,b(8),sc$*4,iv$*12,tempiv$*12
+dim x$(10)*30,c$(50)*25,d(50),e(50),f(50),g(10),h(10),i(10)
+io1$(1)="10,44,C 20,U,N"
+io1$(2)="12,58,N 6,U,N"
+pr newpage
+pr f "10,5,c 35,n": "ENTER MONTHLY BILLING SUMMARY DATE:"
+pr f "12,5,C 60": "ENTER THE OLDEST BILLING DATE TO pr OR 0 FOR ALL:"
+pr f io1$(1): dat$
+pr f "23,2,c 30,n": "Press F5 to stop"
+L200: !
+	input fields mat io1$: dat$,od conv L200
 	if cmdkey=5 then goto Xit
 	fndat(dat$,put=2)
-	if od=0 or (od>10111 and od<123200) then goto L240 else goto L200
-L240: fnopenprn
+	if od=0 or (od>10111 and od<123200) then 
+		goto L240 
+	else 
+		goto L200
+	end if
+L240: !
+	fnopenprn
 	pr newpage
 	dattab=66-int(len(rtrm$(dat$))/2)
 	pr f "10,20,c 60,n": "MONTHLY BILLING SUMMARY IN PROCESS"
@@ -34,12 +40,14 @@ L240: fnopenprn
 	open #2: "Name=S:\Core\Data\acsllc\TMTRAddr.h[cno],Shr",i,i,r
 	open #3: "Name=S:\Core\Data\acsllc\TMTRANS.h[cno],Shr",i,i,r
 	open #4: "Name=S:\Core\Data\acsllc\EMmstr.h[cno],KFName=S:\Core\Data\acsllc\EMIndex.h[cno],Shr",i,i,k
-	goto L480
-L430: read #4,using L440,key=lpad$(str$(pno),9): enam$ nokey L460
+goto L480
+L430: !
+read #4,using L440,key=lpad$(str$(pno),9): enam$ nokey L460
 L440: form pos 10,c 25
-	goto L470
+goto L470
 L460: enam$=" "
-L470: return
+L470: !
+return
 L480: read #1,using L490: z$,cliname$,pno,mat ca eof L870
 L490: form pos 1,c 5,c 30,pos 179,n 9,pos 230,10*pd 3
 	for j1=1 to 10

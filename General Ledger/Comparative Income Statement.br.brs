@@ -2,77 +2,74 @@
 ! -- ! COMPARATIVE INCOME STATEMENT FOR 14 7/8*11 PAPER WITH PERCENTAGES
  
 	autoLibrary
-	fnTop(program$,cap$="Comparative Income Statement")
+	fnTop(program$)
  
 	on error goto Ertn
  
-	dim fl1$*256,p$(20)*50,cap$*128
+	dim fl1$*256,p$(20)*50
 	dim r$*5,d$*50,te$*1,ac(9),report$*50,secondr$*50,foot$*132,underlin$*22
-	dim cnam$*40,b$*3,a$(8)*30,oldtrans$*16,g(8),accum(9,4),udf$*256
+	dim b$*3,a$(8)*30,oldtrans$*16,g(8),accum(9,4)
 	dim bp(13),by(13),tp1(4)
  
-	fncno(cno,cnam$)
-	udf$=env$('temp')&'\'
-	actpd$=fnactpd$ : _
-	actpd=fnactpd : _
-	fnfscode : _
+	actpd$=fnactpd$
+	actpd=fnactpd
+	fnfscode
 	fnpriorcd
-	if fnGlAskFormatPriorCdPeriod=5 then goto Xit : _
+	if fnGlAskFormatPriorCdPeriod=5 then goto Xit
 		! sets fnps,fnpriorcd,fnfscode (primary/secondary,current year/Prior,period to print)
-	fscode=fnfscode : _
+	fscode=fnfscode
 	priorcd=fnpriorcd
  
 	pr newpage
 	pors=1
 	mp1=69
 	if fnps=2 then mp1=mp1+3
-	fl1$="Name=[Q]\GLmstr\ACGLFNSI.h[cno],KFName=[Q]\GLmstr\agfsidx3.h[cno],Shr"
-	if fnps=2 then fl1$="Name=[Q]\GLmstr\ACGLFNSJ.h[cno],KFName=[Q]\GLmstr\agfsidx2.h[cno],Shr"
+	fl1$='Name=[Q]\GLmstr\ACGLFNSI.h[cno],KFName=[Q]\GLmstr\agfsidx3.h[cno],Shr'
+	if fnps=2 then fl1$='Name=[Q]\GLmstr\ACGLFNSJ.h[cno],KFName=[Q]\GLmstr\agfsidx2.h[cno],Shr'
 	form c 9,skip 0
 L280: form pos mp1,pd 3,pos 81,41*pd 6.2
 	form c 7,skip 0
-	nametab=int(44-len(rtrm$(cnam$))/2)
-	pas=1 : open #4: "Name=[Temp]\Work.[Session],KFName=[Temp]\IDX."&wsid$&",Replace,RecL=33,KPS=1,KLN=5",i,outIn,k
+	nametab=int(44-len(rtrm$(env$('cnam')))/2)
+	pas=1 : open #4: 'Name=[Temp]\Work.[Session],KFName=[Temp]\IDX.'&wsid$&',Replace,RecL=33,KPS=1,KLN=5',i,outIn,k
 	if actpd>0 and actpd<14 then goto L380
 	pr newpage
-	pr f "10,2,C 78": "THIS PROGRAM CANNOT PROCESS WITHOUT THE NUMBER OF THE ACCOUNTING PERIOD END"
-	pr f "12,2,C 70,N": "USE THE SELECT DATE ROUTINE TO ENTER THIS INFORMATION"
-	input fields "23,2,C 1,E,N": pause$
+	pr f '10,2,C 78': 'THIS PROGRAM CANNOT PROCESS WITHOUT THE NUMBER OF THE ACCOUNTING PERIOD END'
+	pr f '12,2,C 70,N': 'USE THE SELECT DATE ROUTINE TO ENTER THIS INFORMATION'
+	input fields '23,2,C 1,E,N': pause$
 	goto Xit
 L380: open #1: fl1$,i,i,k
 	if fnprocess=1 or fnUseDeptNo=0 then goto L510
 	if percent=1 then goto L510
-	fnTos(sn$="Acglincc") : _
+	fnTos
 	mylen=30: mypos=mylen+3 : right=1
-	fnLbl(1,1,"Cost Center or Department #:",mylen,right)
-	fnTxt(1,mypos,3,0,right,'30',0,"Enter the cost center or department number if you wish to pr only one department, else leave blank for all.",0 ) : _
-	resp$(1)=""
-	fnLbl(2,1,"(Blank for all Departments)",mylen,right)
-	fnCmdKey("&Next",1,1,0,"Prints the financial statement.")
-	fnCmdKey("&Cancel",5,0,1,"Returns to menu without posting.")
+	fnLbl(1,1,'Cost Center or Department #:',mylen,right)
+	fnTxt(1,mypos,3,0,right,'30',0,'Enter the cost center or department number if you wish to pr only one department, else leave blank for all.',0 ) : _
+	resp$(1)=''
+	fnLbl(2,1,'(Blank for all Departments)',mylen,right)
+	fnCmdKey('&Next',1,1,0,'Prints the financial statement.')
+	fnCmdKey('&Cancel',5,0,1,'Returns to menu without posting.')
 	ckey=fnAcs(mat resp$)
 	if ckey=5 then goto Xit
 	costcntr=val(resp$(1))
-	cnam$=rtrm$(cnam$)
-L510: pf1=len(cnam$)+int((43-len(cnam$))/2)
+L510: pf1=len(env$('cnam'))+int((43-len(env$('cnam')))/2)
 	fnopenprn
-	redir=0: if file$(255)(1:4)<>"PRN:" then redir=1
-	report$="STATEMENT OF INCOME AND EXPENSES"
+	redir=0: if file$(255)(1:4)<>'PRN:' then redir=1
+	report$='STATEMENT OF INCOME AND EXPENSES'
 	if fnps=2 then goto L580 ! secondary
-	execute "Index [Q]\GLmstr\GLmstr.h[cno] "&udf$&"fsindex.h[cno] 69 3 Replace DupKeys -N"
+	execute 'Index [Q]\GLmstr\GLmstr.h[cno] [temp]\fsindex.h[cno] 69 3 Replace DupKeys -N'
 	goto L590
-L580: execute "Index [Q]\GLmstr\GLmstr.h[cno] "&udf$&"fsindex.h[cno] 72 3 Replace DupKeys -N"
-L590: open #3: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName="&udf$&"fsindex.h[cno],Shr",i,i,k
+L580: execute 'Index [Q]\GLmstr\GLmstr.h[cno] [temp]\fsindex.h[cno] 72 3 Replace DupKeys -N'
+L590: open #3: 'Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[temp]\fsindex.h[cno],Shr',i,i,k
 L600: !
 L610: read #1,using L660: r$,d$,te$,sp,ls,ds,ul,rs,bc,ap,mat ac,ic,fc,rnp eof L2330
-	if ltrm$(r$)="" or ltrm$(r$)="0" then goto L600
+	if ltrm$(r$)='' or ltrm$(r$)='0' then goto L600
 	if costcntr=0 then goto L660
-	if fc=0 and te$="F" then goto L670 ! 5/08/1989
+	if fc=0 and te$='F' then goto L670 ! 5/08/1989
 	if costcntr><fc then goto L600
 L660: form pos 1,c 5,c 50,c 1,2*n 2,5*n 1,9*n 1,n 1,n 3,n 5
-L670: if te$="S" or te$="F" then goto L690
-	if heading=0 and te$><"R" then gosub L2180
-L690: on pos ("RFHDTS",te$,1) goto L1690,L1730,L700,L760,L1410,L1690 none L600
+L670: if te$='S' or te$='F' then goto L690
+	if heading=0 and te$><'R' then gosub L2180
+L690: on pos ('RFHDTS',te$,1) goto L1690,L1730,L700,L760,L1410,L1690 none L600
 L700: if percent=0 then goto L740
 	pr #255,using L720: d$(1:40)
 L720: form pos sp,c 40,skip 1
@@ -114,8 +111,8 @@ L1050: next j
 	total2=-total2
 	total3=-total3
 	total4=-total4
-L1100: if ds=1 then dollar$="$" else dollar$=" "
-	if ds=1 then percent$="%" else percent$=" "
+L1100: if ds=1 then dollar$='$' else dollar$=' '
+	if ds=1 then percent$='%' else percent$=' '
 	if total2><0 or total4><0 then goto L1150
 	if total><0 or total3><0 then goto L1150
 	if ls+ds+ul>0 then goto L1150 else goto L610
@@ -134,7 +131,7 @@ L1150: if percent=0 then goto L1320
 	if ppyear>999.99 then ppyear=999.99
 	if pppd<-999.99 then pppd=-999.99
 	if pppd>999.99 then pppd=999.99
-	if ul=1 then pr #255,using L1311: d$(1:sp2),dollar$,"{\ul ",total,"}",pdpct,percent$,dollar$,"{\ul ",total2,"}",ytdpct,percent$,dollar$,"{\ul ",total3,"}",pppd,percent$,dollar$,"{\ul ",total4,"}",ppyear,percent$ pageoflow L2040 : goto L1320
+	if ul=1 then pr #255,using L1311: d$(1:sp2),dollar$,'{\ul ',total,'}',pdpct,percent$,dollar$,'{\ul ',total2,'}',ytdpct,percent$,dollar$,'{\ul ',total3,'}',pppd,percent$,dollar$,'{\ul ',total4,'}',ppyear,percent$ pageoflow L2040 : goto L1320
 	pr #255,using L1310: d$(1:sp2),dollar$,total,pdpct,percent$,dollar$,total2,ytdpct,percent$,dollar$,total3,pppd,percent$,dollar$,total4,ppyear,percent$ pageoflow L2040
 L1310: form pos sp,c sp2,pos 31,c 1,pic(---,---,---.##),pic(----.##),c 2,c 1,pic(---,---,---.##),pic(----.##),c 2,c 1,pic(---,---,---.##),pic(----.##),c 2,c 1,pic(---,---,---.##),pic(----.##),c 1,skip redir
 L1311: form pos sp,c sp2,pos 31,c 1,c 5,pic(---,---,---.##),c 1,pic(----.##),c 2,c 1,c 5,pic(---,---,---.##),c 1,pic(----.##),c 2,c 1,c 5,pic(---,---,---.##),c 1,pic(----.##),c 2,c 1,c 5,pic(---,---,---.##),c 1,pic(----.##),c 1,skip redir
@@ -153,8 +150,8 @@ L1410: if ap=0 then ap=1
 	if rs=1 then accum2=-accum(ap,2) else accum2=accum(ap,2)
 	if rs=1 then accum3=-accum(ap,3) else accum3=accum(ap,3)
 	if rs=1 then accum4=-accum(ap,4) else accum4=accum(ap,4)
-	if ds=1 then dollar$="$" else dollar$=" "
-	if ds=1 then percent$="%" else percent$=" "
+	if ds=1 then dollar$='$' else dollar$=' '
+	if ds=1 then percent$='%' else percent$=' '
 	if pas=2 then gosub PAS2
 	if percent=0 then goto L1640
 	if percent1=0 then pdpct=0 else pdpct=accum1/percent1*100
@@ -170,7 +167,7 @@ L1410: if ap=0 then ap=1
 	if ppyear<-999.99 then ppyear=-999.99
 	if ppyear>999.99 then ppyear=999.99
 	sp2=31-sp-1
-	if ul=1 then pr #255,using L1311: d$(1:sp2),dollar$,"{\ul ",accum1,"}",pdpct,percent$,dollar$,"{\ul ",accum2,"}",ytdpct,percent$,dollar$,"{\ul ",accum3,"}",pppd,percent$,dollar$,"{\ul ",accum4,"}",ppyear,percent$ pageoflow L2040 : goto L1640
+	if ul=1 then pr #255,using L1311: d$(1:sp2),dollar$,'{\ul ',accum1,'}',pdpct,percent$,dollar$,'{\ul ',accum2,'}',ytdpct,percent$,dollar$,'{\ul ',accum3,'}',pppd,percent$,dollar$,'{\ul ',accum4,'}',ppyear,percent$ pageoflow L2040 : goto L1640
 	pr #255,using L1310: d$(1:sp2),dollar$,accum1,pdpct,percent$,dollar$,accum2,ytdpct,percent$,dollar$,accum3,pppd,percent$,dollar$,accum4,ppyear,percent$ pageoflow L2040
 L1640: if pas=1 then tp1=accum1: tp2=accum2 : tp3=accum3 : tp4=accum4 : gosub PAS1
 	gosub L1800
@@ -178,8 +175,8 @@ L1640: if pas=1 then tp1=accum1: tp2=accum2 : tp3=accum3 : tp4=accum4 : gosub PA
 	gosub L2050
 	gosub L1880
 	goto L600
-L1690: if te$="R" then report$=d$
-	if te$="S" then secondr$=d$
+L1690: if te$='R' then report$=d$
+	if te$='S' then secondr$=d$
 	gosub L1880
 	goto L600
 L1730: if foot1=1 then goto L1780
@@ -200,14 +197,14 @@ return
 L1880: if percent=0 then goto L2030
 	if ls=0 then goto L2030
 	if ls=99 then goto L1940
-	pr #255,using L1920: " "
+	pr #255,using L1920: ' '
 L1920: form pos 1,c 1,skip ls
 	goto L2030
 L1940: fnpglen(pglen)
 ! If PGLEN<>42 Then pGLEN=58
 	sk=pglen-krec(255): fl=len(rtrm$(foot$))
 ! If PGLEN=42 Then sK=SK+1
-	pr #255,using L1990: rtrm$(foot$),"Page "&str$(pt1)
+	pr #255,using L1990: rtrm$(foot$),'Page '&str$(pt1)
 L1990: form skip sk,pos tabnote,c fl,pos 120,c 8,skip 1
 	if eofcode=1 then goto L2030
 	pr #255: newpage
@@ -217,29 +214,29 @@ L2040: gosub L1940: continue
 L2050: if percent=0 then goto L2170
 	if ul=0 then goto L2150
 	if ul=1 then goto L2120
-	underlin$="============== ======"
+	underlin$='============== ======'
 	pr #255,using L2100: underlin$,underlin$,underlin$,underlin$
 L2100: form pos 32,c 22,pos 56,c 22,pos 80,c 22,pos 104,c 22,skip redir
 	goto L2150
-L2120: underlin$="______________ _______"
+L2120: underlin$='______________ _______'
 	pr #255,using L2140: underlin$,underlin$,underlin$,underlin$
 L2140: form skip redir,pos 31,c 22,pos 55,c 22,pos 79,c 22,pos 103,c 22,skip redir
-L2150: if redir=0 then pr #255,using L2160: " "
+L2150: if redir=0 then pr #255,using L2160: ' '
 L2160: form skip 1,c 1,skip 0
 L2170: return
 L2180: heading=1
 	pt1+=1
-	pr #255: "\qc  {\f181 \fs24 \b "&env$('cnam')&"}"
-	pr #255: "\qc  {\f181 \fs24 \b "&trim$(report$)&"}"
-	if trim$(secondr$)<>"" then pr #255: "\qc  {\f181 \fs18 \b "&trim$(secondr$)&"}"
-	pr #255: "\qc  {\f181 \fs16 \b For the "&rtrm$(actpd$)&" month period ended "&rtrm$(fnpedat$)&"}"
-	pr #255: "\ql "
+	pr #255: '\qc  {\f181 \fs24 \b '&env$('cnam')&'}'
+	pr #255: '\qc  {\f181 \fs24 \b '&trim$(report$)&'}'
+	if trim$(secondr$)<>'' then pr #255: '\qc  {\f181 \fs18 \b '&trim$(secondr$)&'}'
+	pr #255: '\qc  {\f181 \fs16 \b For the '&rtrm$(actpd$)&' month period ended '&rtrm$(fnpedat$)&'}'
+	pr #255: '\ql '
 	pr #255:
-	pr #255: tab(48);"CURRENT YEAR";tab(97);"PRIOR YEAR"
-	pr #255,using L2280: fncch$,"     YEAR TO DATE",fncch$,"     YEAR TO DATE"
+	pr #255: tab(48);'CURRENT YEAR';tab(97);'PRIOR YEAR'
+	pr #255,using L2280: fncch$,'     YEAR TO DATE',fncch$,'     YEAR TO DATE'
 L2280: form pos 32,c 20,pos 55,c 22,pos 79,c 22,pos 103,c 22,skip redir
 L2290: form pos 31,c 22,pos 55,c 22,pos 79,c 22,pos 103,c 22,skip 1
-	pr #255,using L2290: "______________________","______________________","_____________________","______________________"
+	pr #255,using L2290: '______________________','______________________','_____________________','______________________'
 	pr #255:
 return
 L2330: if pas=2 then goto L2410
@@ -267,7 +264,7 @@ L2510: total=0
 	total4=0
 	mat accum=(0)
 	foot1=0
-	foot$=" "
+	foot$=' '
 	notrans=ir=0
 	goto L380
 PAS1: if rnp=0 then goto L2710
