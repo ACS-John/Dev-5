@@ -143,6 +143,8 @@ def fn_exportCustomer(dest$*256,delim$*1; ___, _
 		pr #hOut: alp$                     	&delim$;
 		pr #hOut: f$(2)                     	&delim$;
 		pr #hOut: f$(3)                     	&delim$;
+		pr #hOut: extra$(2)                	&delim$;
+		pr #hOut: extra$(8)                	&delim$;
 		pr #hOut: extra$(3)                	&delim$;
 		pr #hOut: extra$(4)                	&delim$;
 		pr #hOut: extra$(5)                	&delim$;
@@ -242,6 +244,8 @@ fnend
 		pr #hOut: 'Alpha Sort Field'&delim$;                      	! alp$
 		pr #hOut: serviceName$(3)&' Meter Number'&delim$;        	! f$(2)
 		pr #hOut: serviceName$(4)&' Meter Number'&delim$;        	! f$(3)
+		pr #hOut: 'Phone - Main'&delim$;                          	! extra$(2)
+		pr #hOut: 'Phone - Cell'&delim$;                          	! extra$(8)
 		pr #hOut: serviceName$(1)&' Serial Number'&delim$;       	! extra$(3)
 		pr #hOut: serviceName$(3)&' Serial Number'&delim$;       	! extra$(4)
 		pr #hOut: serviceName$(4)&' Serial Number'&delim$;       	! extra$(5)
