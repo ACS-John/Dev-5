@@ -7,7 +7,7 @@
 autoLibrary
 fnTop(program$)
 on error goto Ertn
-dim resp$(40)*256
+
 
 fnAutomatedSavePoint('before Merge')
 
@@ -75,6 +75,7 @@ do ! r:  main loop - cycle through Merge file
 	ReadAccount: !
 	dim ta(2)
 	! pr 'Z. glAcct$=''&glAcct$&''' : pause
+	scrMissingGl_source$='glAcct$ from ReadAccount'
 	read #hAccount,using F_Glmstr1,key=glAcct$: cb,mat ta nokey ScrMissingGl
 	WriteTrans: !
 	! pr 'writting trans';glAcct$;xs;tranAmt : pause
@@ -133,7 +134,17 @@ do ! r:  main loop - cycle through Merge file
 	NextMergeRecord: !
 loop ! /r
 
+dim resp$(40)*256
 ScrMissingGl: ! r:
+
+	dim scrMissingGl_source$*128
+	pr 'GL\Merge\ScrMissingGl _source$='&scrMissingGl_source$
+	pr '            __3_____6__3'
+	pr 'glAcct$ _ ="'&srep$(glAcct$,' ','_')&'"'
+	pr 'cleaned   ="'&fncleangl$(glAcct$)
+	! pause
+
+	MissingGlTos: !
 	do
 		fnTos : rc=0
 		mylen=40: mypos=mylen+3
@@ -195,7 +206,7 @@ ScrMissingGl: ! r:
 		fnCmdSet(2)
 		ckey=fnAcs(mat resp$)
 		if ckey=5 then 
-			goto ScrMissingGl  		! todo:  XXX new cancel logic   should probably be tested
+			goto MissingGlTos  		! todo:  XXX new cancel logic   should probably be tested
 		else 
 			pas=0
 			dno=ano=sno=0

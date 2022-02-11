@@ -11,7 +11,7 @@ fnTop(program$)
 	lbl$(ic+=1)='Description'                              	: tln(ic)=30 : fltyp$(ic)='C' : sln(ic)=30 : mask(ic)=0
 	lbl$(ic+=1)='General Ledger Number Due To'           	: tln(ic)=9  : fltyp$(ic)='C' : sln(ic)= 9 : mask(ic)=0
 	lbl$(ic+=1)='General Ledger Number Due From'         	: tln(ic)=9  : fltyp$(ic)='C' : sln(ic)= 9 : mask(ic)=0
-	lbl$(ic+=1)='General Ledger Number Accounts Payable' 	: tln(ic)=12 : fltyp$(ic)='C' : sln(ic)=12 : mask(ic)=0
+	lbl$(ic+=1)='General Ledger Number Accounts Payable'	: tln(ic)=12 : fltyp$(ic)='C' : sln(ic)=12 : mask(ic)=0
 	lbl$(ic+=1)='General Ledger Number for Discounts'    	: tln(ic)=12 : fltyp$(ic)='C' : sln(ic)=12 : mask(ic)=0
 
 ! ** Combo Boxes **
@@ -51,9 +51,14 @@ fnHamster('GLControl',mat lbl$,mat tln,hGc,mat p$,mat fltyp$,mat sln,mat mask,ma
 	! left pad general ledger number and reference number
 	restore #hGc:
 	do
-		read #hGc, using 'form pos 43,c 12': gl$ eof FgaEoF
-		gl$=lpad$(rtrm$(gl$),12)
-		rewrite #hGc, using 'form pos 43,c 12,': gl$
+		read #hGc, using 'form pos 1,n 3,pos 34,2*c 9,2*c 12': fund,glf$,glT$,gl1$,gl2$ eof FgaEoF
+		glF$=lpad$(str$(fund),3)&glF$
+		glT$=lpad$(str$(fund),3)&glT$
+		glF$=fncleangl$(glF$)(4:12)
+		glT$=fncleangl$(glT$)(4:12)
+		gl1$=fncleangl$(gl1$)
+		gl2$=fncleangl$(gl2$)
+		rewrite #hGc, using 'form pos 1,n 3,pos 34,2*c 9,2*c 12': fund,glf$,glT$,gl1$,gl2$
 	loop
 	FgaEoF: !
 ! /r
