@@ -2,8 +2,13 @@
 ! r: functions that do not redirect
 
 	def library fnCleanGl$(gl$; ___,dash1pos,dash2pos,gl1,gl2,gl3)
+		! pr gl$ : pause
+		if len(rtrm$(gl$))=9 then gl$(10:12)='  0' ! add missing trailing zeros  if well formed except missing sub account 0, just add it in first
+		! pr gl$ : pause
+
 		gl$=trim$(gl$)
 		gl$=srep$(gl$,' ','-')
+		! pr gl$ : pause
 		do
 			gl$=srep$(gl$,'--','-')
 		loop until pos(gl$,'--')<=0
@@ -12,6 +17,7 @@
 		gl3=0
 		dash1pos=pos(gl$,'-')
 		dash2pos=pos(gl$,'-',dash1pos+1)
+		! pr 'z';gl$ : pause
 		if dash1pos<=0 and dash2pos<=0 then
 			gl1=0
 			gl2=val(gl$)
@@ -19,12 +25,12 @@
 		else if dash1pos>0 and dash2pos<=0  then 
 			! ie '1-101', but never '101-1' - would need to add logic to make that work
 			gl1=val(gl$(1:dash1pos-1))
-			gl2=val(gl$(dash1pos+1  ))
+			gl2=val(gl$(dash1pos+1:inf))
 			gl3=0
 		else if dash1pos>0 and dash2pos>0  then 
-			gl1=val(gl$(1:dash1pos-1          	))
+			gl1=val(gl$(1:dash1pos-1          ))
 			gl2=val(gl$(dash1pos+1:dash2pos-1	))
-			gl3=val(gl$(dash2pos+1:inf       	))
+			gl3=val(gl$(dash2pos+1:inf        ))
 		end if 
 
 		fnCleanGl$=lpad$(str$(gl1),3)&lpad$(str$(gl2),6)&lpad$(str$(gl3),3)
@@ -195,10 +201,10 @@
 		fnFixPd=fpReturn
 	fnend
 	def library fnCd(x)
-		fncd=(x-int(x*.01)*100)*10000+int(x*.01)
+		fnCd=(x-int(x*.01)*100)*10000+int(x*.01)
 	fnend
 	def library fnFormNumb$(numb,decimals,size)
-		fnformnumb$=lpad$(cnvrt$('N 10.'&str$(decimals),numb),size)
+		fnFormNumb$=lpad$(cnvrt$('N 10.'&str$(decimals),numb),size)
 	fnend
 	def library fnpause(;unused)
 		if env$('ACSDeveloper')<>'' then pr 'fnpause enacted.' : exe 'go XITPAUSE step'
