@@ -142,23 +142,36 @@ ScrMissingGl: ! r:
 	pr '            __3_____6__3'
 	pr 'glAcct$ _ ="'&srep$(glAcct$,' ','_')&'"'
 	pr 'cleaned   ="'&fncleangl$(glAcct$)
+	pr 'cleaned rgl   ="'&fnRgl$(fncleangl$(glAcct$))
 	! pause
 
 	MissingGlTos: !
 	do
-		fnTos : rc=0
-		mylen=40: mypos=mylen+3
-		fnLbl(1,10,'  Account Number: '&glAcct$,mylen,left)
-		fnLbl(2,10,'            Date: '&str$(xs),mylen,left)
-		fnLbl(3,10, '          Amount: '&str$(tranAmt),mylen,left)
-		fnLbl(4,10, 'Reference Number: '&l$ ,mylen,left)
-		fnLbl(5,10, '     Description: '&p$ ,mylen,left)
-		fnLbl(7,5, 'This general ledger account does not exist!' ,60,0)
-		fnOpt(8,10,'Add this Account',0,0)
-		resp$(respc_accountAdd=rc+=1)='True'
-		fnOpt(9,10,'Change Account Number',0,0)
+		fnTos : rc=lc=0
+		col1len=17
+		col2pos=col1len+2
+		col2len=12
+		col3pos=col2pos+col2len+2
+		
+		fnLbl(lc+=1,5, 'General Ledger Account could not be found!' ,60,0)
+		lc+=1
+		fnLbl(lc+=1,1,'Account Number:',col1len,1) 
+		fnTxt(lc,col2pos,12, 0,0,'',1,'GL Account number as read') : 	resp$(respc_acct1=rc+=1)=glAcct$
+		fnTxt(lc,col3pos,30, 0,0,'',1,'Descriptive version of GL') : 	resp$(respc_acctR=rc+=1)=fnRgl$(glAcct$)
+		lc+=1
+		fnLbl(lc+=1,1,           'Date:',col1len,1) 
+		fnTxt(lc,col2pos,10, 0,0,'',1,''                            ) : resp$(respc_date =rc+=1)=date$(days(xs,'mmddyy'),'mm/dd/ccyy')
+		fnLbl(lc+=1,1,           'Amount:',col1len,1) 
+		fnTxt(lc,col2pos,10, 0,0,'32',1,''                          ) : resp$(respc_amt  =rc+=1)=str$(tranAmt)
+		fnLbl(lc+=1,1,'Reference Number:',col1len,1) 
+		fnTxt(lc,col2pos,12, 0,0,'',1,''                            ) : resp$(respc_ref  =rc+=1)=l$
+		fnLbl(lc+=1,1,      'Description:',col1len,1) 
+		fnTxt(lc,col2pos,30, 0,0,'',1,''                            ) : resp$(respc_desc =rc+=1)=p$
+		lc+=1
+		fnOpt(lc+=1,10,'Add this Account',0,0)
+		resp$(respc_accountAdd=rc+=1)='False'
+		fnOpt(lc+=1,10,'Change Account Number',0,0)
 		resp$(respc_AccountChg=rc+=1)='True'
-		resp$(1)='False'
 		fnCmdKey('&Next',1,1,0,'Allows you to either add the account or change the account number.')
 		ckey=fnAcs(mat resp$)
 		if resp$(respc_accountAdd)='True' then
