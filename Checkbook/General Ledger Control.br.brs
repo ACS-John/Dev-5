@@ -56,7 +56,8 @@ fnHamster('GLControl',mat lbl$,mat tln,hGc,mat p$,mat fltyp$,mat sln,mat mask,ma
 		! pause
 		glF$=lpad$(str$(fund),3)&lpad$(rtrm$(glF$),9)
 		! pr 'glF$+fund:'&glf$
-		glT$=lpad$(str$(fund),3)&glT$
+		glT$=lpad$(str$(fund),3)&lpad$(rtrm$(glT$),9)
+		! glT$=lpad$(str$(fund),3)&glT$
 		glF$=fncleangl$(glF$)(4:12)
 		! pr 'glF$cln 4+:'&glf$
 		! pause
