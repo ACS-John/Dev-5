@@ -138,11 +138,11 @@ dim resp$(40)*256
 ScrMissingGl: ! r:
 
 	dim scrMissingGl_source$*128
-	pr 'GL\Merge\ScrMissingGl _source$='&scrMissingGl_source$
-	pr '            __3_____6__3'
-	pr 'glAcct$ _ ="'&srep$(glAcct$,' ','_')&'"'
-	pr 'cleaned   ="'&fncleangl$(glAcct$)
-	pr 'cleaned rgl   ="'&fnRgl$(fncleangl$(glAcct$))
+	! pr 'GL\Merge\ScrMissingGl _source$='&scrMissingGl_source$
+	! pr '            __3_____6__3'
+	! pr 'glAcct$ _ ="'&srep$(glAcct$,' ','_')&'"'
+	! pr 'cleaned   ="'&fncleangl$(glAcct$)
+	! pr 'cleaned rgl   ="'&fnRgl$(fncleangl$(glAcct$))
 	! pause
 
 	MissingGlTos: !
