@@ -167,16 +167,18 @@ ScrMissingGl: ! r:
 		fnTxt(lc,col2pos,12, 0,0,'',1,''                            ) : resp$(respc_ref  =rc+=1)=l$
 		fnLbl(lc+=1,1,      'Description:',col1len,1) 
 		fnTxt(lc,col2pos,30, 0,0,'',1,''                            ) : resp$(respc_desc =rc+=1)=p$
-		lc+=1
-		fnOpt(lc+=1,10,'Add this Account',0,0)
-		resp$(respc_accountAdd=rc+=1)='False'
-		fnOpt(lc+=1,10,'Change Account Number',0,0)
-		resp$(respc_AccountChg=rc+=1)='True'
-		fnCmdKey('&Next',1,1,0,'Allows you to either add the account or change the account number.')
+		! lc+=1
+		! fnOpt(lc+=1,10,'Add this Account',0,0)
+		! resp$(respc_accountAdd=rc+=1)='False'
+		! fnOpt(lc+=1,10,'Change Account Number',0,0)
+		! resp$(respc_AccountChg=rc+=1)='True'
+		fnCmdKey('Search',ck_search=3,1,0,'Manually search through all account numbers for the one this should be.')
+		fnCmdKey('Add',ck_add=2,1,0,'Allows you to either add the account or change the account number.')
+		! fnCmdKey('&Next',1,1,0,'Allows you to either add the account or change the account number.')
 		ckey=fnAcs(mat resp$)
-		if resp$(respc_accountAdd)='True' then
+		if ckey=ck_add then ! or resp$(respc_accountAdd)='True' then
 			goto ADD
-		else if resp$(respc_AccountChg)='True' then
+		else if ckey=ck_search  then ! if resp$(respc_AccountChg)='True' then
 			! r: Change Account
 			fnTos
 			mylen=23: mypos=mylen+3
