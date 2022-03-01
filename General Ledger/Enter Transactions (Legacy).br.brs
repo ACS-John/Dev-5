@@ -594,7 +594,7 @@ L5650: form pos 1,c 12,n 10.2,c 12,n 10.2,c 12,n 10.2,c 12,n 10.2,c 12,n 10.2
 L5670: !
 	fnstyp(92)
 	goto ACGLMRGE ! /r
-ACGLMRGE: fnchain("S:\acsGL\acglMrge")
+ACGLMRGE: fnchain("S:\General Ledger\Merge")
 SCREEN_INSERT_DISKETTE: ! r:
 	close #101: ioerr ignore
 	open #101: "SROW=10,SCOL=19,EROW=12,ECOL=62,BORDeR=DR,CaPTION=<Choose Input Drive",display,outIn
