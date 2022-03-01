@@ -1,6 +1,6 @@
 ! formerly S:\acsGL\ACGLMrge
-! GL Merge program, chained to from GL>Enter Transactions and Other ACS systems too,
-! i.e. Checkbook>Post to GL
+! GL Merge program, chained to from GL>Enter Transactions and MANY OTHER ACS systems too,
+! 	i.e. Checkbook>Post to GL
 
 ! pr 'welcome to GL Merge' : pause
 
