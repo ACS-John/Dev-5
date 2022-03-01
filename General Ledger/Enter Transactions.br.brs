@@ -13,6 +13,7 @@ enableOneToOneAdjustments=0
 	fnTop(program$)
 	gltyp=7
 	fnreg_read('Enter Transactions - retain some fields between additions',gl_retainFieldsDuringAdd$,'False')
+	if gl_retainFieldsDuringAdd$='False' then enableSaveAnswers=0 else enableSaveAnswers=1
 	contraEntryDateN=fncreg_read('Enter Transaction - Process Ending Date',contraEntryDate$)
 	fncreg_read('Enter Transaction - Bank Account',glBank$)
 
@@ -371,9 +372,9 @@ ScrPost: ! r:
 	if resp$(4)='True' then goto DoMerge ! post both
 	if resp$(2)='True' then goto DoAutoProc
 goto Xit ! /r
-def fn_scrMain(hMerge; editRecord,heading$*64,glBank$*12,transDate,bankAcctName$*40,message$*50, _
+def fn_scrMain(hMerge; editRecord,heading$*64,glBank$*12,transDate,bankAcctName$*40, _
 	&tr$,transactionAmt, _
-	___,rc,lc,mylen,mypos,x$*8,ckeySave,ckey) ! mostly local stuff still
+	___,rc,lc,mylen,mypos,x$*8,ckeySave,ckey,message$*50) ! mostly local stuff still
 
 	ScrMainTop: !
 	fnTos ! r: draw Main add/edit screen
@@ -389,11 +390,10 @@ def fn_scrMain(hMerge; editRecord,heading$*64,glBank$*12,transDate,bankAcctName$
 	else
 		fnLbl(4,1,'Net Amount:',mylen,1)
 	end if
-	dim message$*100
 	fnLbl(4,36,message$,50,left)
 
 	fnTxt(4,mypos,13,0,1,'10',0,'Enter the net transaction amount. If correcting a transaction, change the allocations and net will be adjusted accordingly.',0 )
-	if selx=sx_adjustment then resp$(2)='' else resp$(2)=str$(transactionAmt)
+	resp$(2)=str$(transactionAmt) ! if selx=sx_adjustment then resp$(2)='' else resp$(2)=str$(transactionAmt)
 	fnLbl(5,1,'Reference Number:',mylen,1)
 	fnTxt(5,mypos,12,0,0,'',0,'Enter check number, receipt number or adjusting entry number',0)
 	resp$(3)=tr$
@@ -448,7 +448,7 @@ def fn_scrMain(hMerge; editRecord,heading$*64,glBank$*12,transDate,bankAcctName$
 			fnLbl(lc+=1,1,'Amount:',mylen,1)
 		end if
 		fnTxt(lc,mypos,13,0,1,'10',0,'Amount to allocated to this general ledger number. Not applicable to adjustments.',0 )
-		resp$(respc_AllocAmt=6)='' : if selx=sx_adjustment then resp$(respc_AllocAmt)=str$(totalalloc)
+		resp$(respc_AllocAmt=6)='' : if selx=sx_adjustment then resp$(respc_AllocAmt)='' ! str$(totalalloc)   leave it blank or SAVE does not work very well
 		fnButton(lc,59,'Add Allocation',ck_allocationAdd,'Enter the GL Account and Amount then click this button to add a new allocation to the breakdown.\nThis option is not available during Edits, only Adds.')
 	end if
 
@@ -496,12 +496,12 @@ def fn_scrMain(hMerge; editRecord,heading$*64,glBank$*12,transDate,bankAcctName$
 		tr$=resp$(3)                     	  	! ref #
 
 
-	if selx=sx_disbursement or selx=sx_sale then
-		fnButtonOrDisabled(~editRecord,6,63,'Extract',ck_extract,'Extracts general ledger numbers from payee records')
-		if disable_payee=1 then payeeButton$='Enable Payee' else payeeButton$='Disable Payee'
-		fnButton(6,73+3,payeeButton$,ck_payeeTogle,'Allows you to disable or enable the payee field.',1,12)
-		fnButton(6,87+3,'Payee File',ck_payeeAdd,'Allows you to add a payee record.',1,10)
-	end if
+	! if selx=sx_disbursement or selx=sx_sale then
+	! 	fnButtonOrDisabled(~editRecord,6,63,'Extract',ck_extract,'Extracts general ledger numbers from payee records')
+	! 	if disable_payee=1 then payeeButton$='Enable Payee' else payeeButton$='Disable Payee'
+	! 	fnButton(6,73+3,payeeButton$,ck_payeeTogle,'Allows you to disable or enable the payee field.',1,12)
+	! 	fnButton(6,87+3,'Payee File',ck_payeeAdd,'Allows you to add a payee record.',1,10)
+	! end if
 
 
 		if selx=sx_receipt or selx=sx_adjustment or selx=sx_sale then
@@ -591,15 +591,16 @@ def fn_scrMain(hMerge; editRecord,heading$*64,glBank$*12,transDate,bankAcctName$
 
 	if ckeySave then ! ckey=ck_save1 or ckey=ck_saveAndAddAnother
 
-		if selx=sx_adjustment then allocAmt=transactionAmt ! create an allocation amount automatically on adjustments
+		! nevermore      if selx=sx_adjustment then allocAmt=transactionAmt ! create an allocation amount automatically on adjustments
 		if allocAmt=0 and lrec(hMtemp)=0 then allocAmt=transactionAmt ! allows them to press enter if only allocation without haveing to key the amount a second time
-		if selx<>sx_adjustment and transactionAmt<>totalalloc then
+		if transactionAmt<>totalalloc then ! selx<>sx_adjustment and 
 			message$='Allocations do not add up!'
 			pr bell;
 			goto ScrMainTop
 		end if
+
 		fn_mTempToMerge(hMtemp,hMerge,tr4,selx,postingCode,tr$,vn$,jv2$,glBank$)
-		fn_clearVar(hMtemp,transactionAmt,td$,vn$,gl$,totalalloc,gl_retainFieldsDuringAdd$)
+		fn_resetMtemp(hMtemp,transactionAmt,td$,vn$,gl$,totalalloc,enableSaveAnswers)
 		goto SmFinis
 	else
 		goto ScrMainTop
@@ -634,7 +635,7 @@ def fn_scrPayrollAdd(; ___,lendeditRecordc,lc)
 	fnTxt(lc,mypos,8,0,1,'1001',0,'Transaction date is required.',0 )
 	resp$(1)=str$(tr4)
 	fnLbl(lc+=1,1,'Net Amount:',mylen,1)
-	fnLbl(lc,36,message$,50,left)
+	!  fnLbl(lc,36,message$,50,left)
 	fnTxt(lc,mypos,12,0,1,'10',0,'Enter the net transaction amount. If correcting a transaction, change the allocations and net will be adjusted accordingly.',0 )
 	resp$(2)=str$(transactionAmt) ! if selx=sx_adjustment then resp$(2)='' else resp$(2)=str$(transactionAmt)
 	fnLbl(lc+=1,1,'Reference:',mylen,1)
@@ -737,7 +738,7 @@ def fn_scrPayrollAdd(; ___,lendeditRecordc,lc)
 	ScrPayrollXit: !
 	fn_scrPayrollAdd=ckey
 fnend
-	def fn_payrollSave  ! &tr$,gl$,...; ___,j,allocgl$,td$*30
+	def fn_payrollSave  ! &tr$,gl$,tr4,...; ___,j,allocgl$,td$*30
 		! WritePayrollTrans:
 		! only routine that uses mat pgl (read from company.h[cno])
 
@@ -777,130 +778,128 @@ fnend
 		vn$=''
 
 	fnend
+! r: def fn_scrAdjustment	(hMerge,editRecord,bankAcctName$*40, _
 ! fn_scrAdjustment is only used if enableOneToOneAdjustments
-def fn_scrAdjustment	(hMerge,editRecord,bankAcctName$*40, _
-	message$*50, _
-	&tr$,gl$,tDate; _
-	tAmt,tType,postCode,desc$*30,vn$,unused$, _
-	gl2$,tDate2,tAmt2,tType2,postCode2,tr2$,desc2$*30,vn2$,jv22$, _
-	foundMatch,transAdrFrom,transAdrTo, _
-	___, _
-	mylen,mypos,transactionAmt, _
-	lc,rc,resp_tDate,resp_amt,resp_ref,respc_payee,respc_glFrom,respc_glTo, _
-	heading$*60) ! only used if enableOneToOneAdjustments
-
-	if editRecord then ! r: get transAdrFrom and transAdrTo
-		read #hMerge,using F_merge,rec=editRecord  : gl$,tDate,tAmt,tType,postCode,tr$,desc$,vn$,unused$
-		read #hMerge,using F_merge,rec=editRecord+1: gl2$,tDate2,tAmt2,tType2,postCode2,tr2$,desc2$,vn2$,jv22$ norec TryPrior
-
-		if tDate=tDate2 and abs(tAmt)=abs(tAmt2) and tType2=sx_adjustment and tr$=tr2$ then
-			foundMatch=1
-			if tAmt2<tAmt then
-				transAdrFrom=editRecord+1
-				transAdrTo  =editRecord
-				glFrom$=gl2$
-				glTo$  =gl$
-			else
-				transAdrFrom=editRecord
-				transAdrTo  =editRecord+1
-				glFrom$=gl$
-				glTo$  =gl2$
-			end if
-		end if
-
-		TryPrior: !
-		if ~foundMatch then
-			read #hMerge,using F_merge,rec=editRecord-1: gl2$,tDate2,tAmt2,tType2,postCode2,tr2$,desc2$,vn2$,jv22$,key2$
-			if tDate=tDate2 and abs(tAmt)=abs(tAmt2) and tType2=sx_adjustment and tr$=tr2$ then
-				foundMatch=1
-				if tAmt2<tAmt then
-					transAdrFrom=editRecord
-					transAdrTo  =editRecord-1
-					glFrom$=gl$
-					glTo$  =gl2$
-				else
-					transAdrFrom=editRecord-1
-					transAdrTo  =editRecord
-					glFrom$=gl2$
-					glTo$  =gl$
-				end if
-			end if
-		end if
-		if foundMatch then
-			transactionAmt=abs(tAmt)
-		else ! ~foundMatch
-			pr ' could not find matching adjustment record'
-			pause
-		end if
-		! pr 'transAdrFrom=';transAdrFrom
-		! pr 'transAdrTo  =';transAdrTo
-		! pause
-	end if ! /r
-
-	! if tDate=0 then tDate=date('mmddyy')
-
-	fnTos
-	mylen=18 : mypos=mylen+3
-	transAdrFrom
-	if editRecord then
-		heading$='Editing Adjustment'
-	else
-		heading$='Adding Adjustment'
-	end if
-	fnLbl(lc+=1,1,'______________________________ '&heading$&' ______________________________')
-	! fnLbl(1,38,'Bank Account: '&bankAcctName$,50,1)
-	fnLbl(lc+=1,1,'Bank Account:',mylen,1)
-	fnLbl(lc,mypos,bankAcctName$)
-
-	fnLbl(lc+=1,1,'Date:',mylen,1)
-	fnTxt(lc,mypos,8,0,1,'1001',0,'Transaction date is required.',0 )
-	resp$(resp_tDate=rc+=1)=str$(tDate)
-	fnLbl(lc+=1,1,'Net Amount:',mylen,1)
-	fnLbl(lc,36,message$,50,left)
-	fnTxt(lc,mypos,12,0,1,'1010',0,'Enter the net transaction amount. If correcting a transaction, change the allocations and net will be adjusted accordingly.',0 )
-	resp$(resp_amt=rc+=1)=str$(transactionAmt) ! if selx=sx_adjustment then resp$(2)='' else resp$(2)=str$(transactionAmt)
-	fnLbl(lc+=1,1,'Reference:',mylen,1)
-	fnTxt(lc,mypos,12,0,0,'',0,'Enter check number.',0)
-	resp$(resp_ref=rc+=1)=tr$
-	fnLbl(lc+=1,1,'Description:',mylen,1) ! for receipts
-	fnTxt(lc,mypos,30,0,left,'',0,'Brief description of transaction.',0 )
-	resp$(resp_desc=rc+=1)=td$
-
-	lc+=1
-	fnLbl(lc+=1,1,'General Ledger From:',mylen,1)
-	fnQgl(lc,mypos,0,2,1)
-	resp$(resp_glFrom=5)=fnrgl$(glFrom$)
-	fnLbl(lc+=1,1,'General Ledger To:',mylen,1)
-	fnQgl(lc,mypos,0,2,1)
-	resp$(resp_glTo=6)=fnrgl$(glTo$)
-
-	fnCmdKey('Save',ck_save1,~editRecord,0,'Completed making corrections to this transaction.')
-	if editRecord then
-		fnCmdKey('Save and Add Another',ck_saveAndAddAnother,1,0,'Save this Transaction and go directly to adding another of the same type')
-	end if
-	fnCmdKey('Cancel',ck_cancel,0,1,'Allows you to return to screen 1 and change transaction types or bank accounts.')
-	! fnCmdKey('&Finish',ck_finish,0,1,'')
-	ckey=fnAcs(mat resp$)
-
-	if ckey=ck_cancel then
-		transactionAmt=0
-		tr$=''
-	else
-		tDate=val(resp$(resp_tDate)) ! date
-		transactionAmt=val(resp$(resp_amt)) ! amount
-		tr$=resp$(resp_ref) ! ref #
-		td$=resp$(resp_desc) ! transaction description
-		glFrom$=fnagl$(resp$(resp_glFrom))
-		glTo$=fnagl$(resp$(resp_glTo))
-
-		fn_transactionSave(hMerge,transAdrFrom,glFrom$,tDate,-transactionAmt,sx_adjustment,0,tr$,td$,'','','')
-		fn_transactionSave(hMerge,transAdrTo  ,glTo$  ,tDate, transactionAmt,sx_adjustment,0,tr$,td$,'','','')
-
-	end if
-
-	ScrAdjustmentXit: !
-	fn_scrAdjustment=ckey
-fnend
+! 	&tr$,gl$,tDate; _
+! 	tAmt,tType,postCode,desc$*30,vn$,unused$, _
+! 	gl2$,tDate2,tAmt2,tType2,postCode2,tr2$,desc2$*30,vn2$,jv22$, _
+! 	foundMatch,transAdrFrom,transAdrTo, _
+! 	___, _
+! 	mylen,mypos,transactionAmt, _
+! 	lc,rc,resp_tDate,resp_amt,resp_ref,respc_payee,respc_glFrom,respc_glTo, _
+! 	heading$*60) ! only used if enableOneToOneAdjustments
+! 
+! 	if editRecord then ! r: get transAdrFrom and transAdrTo
+! 		read #hMerge,using F_merge,rec=editRecord  : gl$,tDate,tAmt,tType,postCode,tr$,desc$,vn$,unused$
+! 		read #hMerge,using F_merge,rec=editRecord+1: gl2$,tDate2,tAmt2,tType2,postCode2,tr2$,desc2$,vn2$,jv22$ norec TryPrior
+! 
+! 		if tDate=tDate2 and abs(tAmt)=abs(tAmt2) and tType2=sx_adjustment and tr$=tr2$ then
+! 			foundMatch=1
+! 			if tAmt2<tAmt then
+! 				transAdrFrom=editRecord+1
+! 				transAdrTo  =editRecord
+! 				glFrom$=gl2$
+! 				glTo$  =gl$
+! 			else
+! 				transAdrFrom=editRecord
+! 				transAdrTo  =editRecord+1
+! 				glFrom$=gl$
+! 				glTo$  =gl2$
+! 			end if
+! 		end if
+! 
+! 		TryPrior: !
+! 		if ~foundMatch then
+! 			read #hMerge,using F_merge,rec=editRecord-1: gl2$,tDate2,tAmt2,tType2,postCode2,tr2$,desc2$,vn2$,jv22$,key2$
+! 			if tDate=tDate2 and abs(tAmt)=abs(tAmt2) and tType2=sx_adjustment and tr$=tr2$ then
+! 				foundMatch=1
+! 				if tAmt2<tAmt then
+! 					transAdrFrom=editRecord
+! 					transAdrTo  =editRecord-1
+! 					glFrom$=gl$
+! 					glTo$  =gl2$
+! 				else
+! 					transAdrFrom=editRecord-1
+! 					transAdrTo  =editRecord
+! 					glFrom$=gl2$
+! 					glTo$  =gl$
+! 				end if
+! 			end if
+! 		end if
+! 		if foundMatch then
+! 			transactionAmt=abs(tAmt)
+! 		else ! ~foundMatch
+! 			pr ' could not find matching adjustment record'
+! 			pause
+! 		end if
+! 		! pr 'transAdrFrom=';transAdrFrom
+! 		! pr 'transAdrTo  =';transAdrTo
+! 		! pause
+! 	end if ! /r
+! 
+! 	! if tDate=0 then tDate=date('mmddyy')
+! 
+! 	fnTos
+! 	mylen=18 : mypos=mylen+3
+! 	transAdrFrom
+! 	if editRecord then
+! 		heading$='Editing Adjustment'
+! 	else
+! 		heading$='Adding Adjustment'
+! 	end if
+! 	fnLbl(lc+=1,1,'______________________________ '&heading$&' ______________________________')
+! 	! fnLbl(1,38,'Bank Account: '&bankAcctName$,50,1)
+! 	fnLbl(lc+=1,1,'Bank Account:',mylen,1)
+! 	fnLbl(lc,mypos,bankAcctName$)
+! 
+! 	fnLbl(lc+=1,1,'Date:',mylen,1)
+! 	fnTxt(lc,mypos,8,0,1,'1001',0,'Transaction date is required.',0 )
+! 	resp$(resp_tDate=rc+=1)=str$(tDate)
+! 	fnLbl(lc+=1,1,'Net Amount:',mylen,1)
+! 	fnTxt(lc,mypos,12,0,1,'1010',0,'Enter the net transaction amount. If correcting a transaction, change the allocations and net will be adjusted accordingly.',0 )
+! 	resp$(resp_amt=rc+=1)=str$(transactionAmt) ! if selx=sx_adjustment then resp$(2)='' else resp$(2)=str$(transactionAmt)
+! 	fnLbl(lc+=1,1,'Reference:',mylen,1)
+! 	fnTxt(lc,mypos,12,0,0,'',0,'Enter check number.',0)
+! 	resp$(resp_ref=rc+=1)=tr$
+! 	fnLbl(lc+=1,1,'Description:',mylen,1) ! for receipts
+! 	fnTxt(lc,mypos,30,0,left,'',0,'Brief description of transaction.',0 )
+! 	resp$(resp_desc=rc+=1)=td$
+! 
+! 	lc+=1
+! 	fnLbl(lc+=1,1,'General Ledger From:',mylen,1)
+! 	fnQgl(lc,mypos,0,2,1)
+! 	resp$(resp_glFrom=5)=fnrgl$(glFrom$)
+! 	fnLbl(lc+=1,1,'General Ledger To:',mylen,1)
+! 	fnQgl(lc,mypos,0,2,1)
+! 	resp$(resp_glTo=6)=fnrgl$(glTo$)
+! 
+! 	fnCmdKey('Save',ck_save1,~editRecord,0,'Completed making corrections to this transaction.')
+! 	if editRecord then
+! 		fnCmdKey('Save and Add Another',ck_saveAndAddAnother,1,0,'Save this Transaction and go directly to adding another of the same type')
+! 	end if
+! 	fnCmdKey('Cancel',ck_cancel,0,1,'Allows you to return to screen 1 and change transaction types or bank accounts.')
+! 	! fnCmdKey('&Finish',ck_finish,0,1,'')
+! 	ckey=fnAcs(mat resp$)
+! 
+! 	if ckey=ck_cancel then
+! 		transactionAmt=0
+! 		tr$=''
+! 	else
+! 		tDate=val(resp$(resp_tDate)) ! date
+! 		transactionAmt=val(resp$(resp_amt)) ! amount
+! 		tr$=resp$(resp_ref) ! ref #
+! 		td$=resp$(resp_desc) ! transaction description
+! 		glFrom$=fnagl$(resp$(resp_glFrom))
+! 		glTo$=fnagl$(resp$(resp_glTo))
+! 
+! 		fn_transactionSave(hMerge,transAdrFrom,glFrom$,tDate,-transactionAmt,sx_adjustment,0,tr$,td$,'','','')
+! 		fn_transactionSave(hMerge,transAdrTo  ,glTo$  ,tDate, transactionAmt,sx_adjustment,0,tr$,td$,'','','')
+! 
+! 	end if
+! 
+! 	ScrAdjustmentXit: !
+! 	fn_scrAdjustment=ckey
+! /r fnend
 def fn_editAllocation(editrecord; editall,___,ckey,mylen,mypos)
 	! editing glallocation while still being entered into allocation grid
 	! editrecord=val(resp$(7))
@@ -974,21 +973,22 @@ def fn_transactionAdd(hMerge,typeOfEntryN,glBank$,transDate; ___, _
 				! pr 'tr$ i read and ignored just before the do loop='&tr$
 	do
 		gl$=jv2$=tr$=td$=vn$=key$=''
-		tr5=tType=postingCode=0
+		tr5=postingCode=0
 		tr4=transDate
 		tType=typeOfEntryN
-		fn_clearVar(hMtemp,transactionAmt,td$,vn$,gl$,totalalloc,gl_retainFieldsDuringAdd$)
+		fn_resetMtemp(hMtemp,transactionAmt,td$,vn$,gl$,totalalloc,enableSaveAnswers)
 		lrPrior=lrec(hMerge)
 		dim trPrior$*12
 		! pr 'before trPrior$='&trPrior$
-		tr$=fn_nextTr$(trPrior$,selx,gl_retainFieldsDuringAdd$)
+		tr$=fn_nextTr$(trPrior$,selx)
 		! pr 'after       tr$='&tr$ : pause
-		if selx=sx_adjustment and enableOneToOneAdjustments then
-			smResponse=fn_scrAdjustment(hMerge,0,bankAcctName$,message$,tr$,glBank$,transDate)
-		else if selx=sx_payrollCheck then
+		! if selx=sx_adjustment and enableOneToOneAdjustments then
+		! 	smResponse=fn_scrAdjustment(hMerge,0,bankAcctName$,tr$,glBank$,transDate)
+		! else 
+		if selx=sx_payrollCheck then
 			smResponse=fn_scrPayrollAdd
 		else
-			smResponse=fn_scrMain(hMerge, 0,'Adding '&fn_transType$(typeOfEntryN),glBank$,transDate,bankAcctName$,message$,tr$)
+			smResponse=fn_scrMain(hMerge, 0,'Adding '&fn_transType$(typeOfEntryN),glBank$,transDate,bankAcctName$,tr$)
 		end if
 		if lrPrior<>lrec(hMerge) then returnN=0 else returnN=lrec(hMerge)
 		trPrior$=tr$
@@ -1008,12 +1008,12 @@ def fn_transactionEdit(hMerge,recordNumber,glBank$*12; ___,returnN,gl$*12,tr4,tr
 		fn_readMerge(recordNumber,gl$,tr4,tr5,tType,postingCode,tr$,td$,vn$,jv2$,key$)  ! get basic information from record clicked to find the complete transaction
 		if trim$(key$)='' then key$=glBank$
 		! pr '  fn_transactionEdit   passing Key$='&key$ : pause
-		if tType=sx_adjustment and enableOneToOneAdjustments then
-			returnN=fn_scrAdjustment(hMerge,recordNumber,bankAcctName$,message$,tr$,key$,transDate)
-		else
+		! if tType=sx_adjustment and enableOneToOneAdjustments then
+		! 	returnN=fn_scrAdjustment(hMerge,recordNumber,bankAcctName$,tr$,key$,transDate)
+		! else
 			hMtemp=fn_makeMergeTemp(hMerge,recordNumber,transactionAmt,totalalloc,selx)
-			returnN=fn_scrMain(hMerge, recordNumber,'Editing '&fn_transType$(selx),key$,tr4,bankAcctName$,message$,tr$,transactionAmt)
-		end if
+			returnN=fn_scrMain(hMerge, recordNumber,'Editing '&fn_transType$(selx),key$,tr4,bankAcctName$,tr$,transactionAmt)
+		! end if
 	end if
 	TeFinis: !
 	close #hMtemp,free: ioerr ignore
@@ -1080,8 +1080,10 @@ def fn_transactionDelete(hMerge,delRec; ___, _
 	end if
 fnend
 def fn_transactionSave(hMerge,editRec,gl$,tr4,tr5,tType,postingCode,tr$,td$*30,vn$*8,jv2$*5,glBank$*12)
+
 	if tType=sx_receipt or tType=sx_sale then tr5=-tr5 ! reverse signs on receipts and sales
-	if editRec then
+
+	if editRec>0 then ! editRec and editRec<>-202020202
 		rewrite #hMerge,using F_merge,rec=editRec: gl$,tr4,tr5,tType,postingCode,tr$,td$,vn$,jv2$,glBank$ ! noRec L3280
 	else
 		! L3280: !
@@ -1089,13 +1091,12 @@ def fn_transactionSave(hMerge,editRec,gl$,tr4,tr5,tType,postingCode,tr$,td$*30,v
 	end if
 fnend
 
-def fn_clearVar(&hMtemp,&transactionAmt,&td$,&vn$,&gl$,&totalalloc, _
-	&gl_retainFieldsDuringAdd$)
+def fn_resetMtemp(&hMtemp,&transactionAmt,&td$,&vn$,&gl$,&totalalloc,&enableSaveAnswers)
 	!  clear entry screen
 	close #hMtemp: ioerr ignore
 	open #hMtemp=fnH: 'Name=[Q]\GLmstr\Allocations[acsUserId].h[cno],Version=1,replace,RecL=59',i,outi,r
 	transactionAmt=0
-	if gl_retainFieldsDuringAdd$='False' then
+	if ~enableSaveAnswers then
 		td$=''
 	end if
 	vn$=gl$=''
@@ -1137,7 +1138,7 @@ def fn_extract(&hMtemp,vn$,transactionAmt; ___, _
 
 	end if
 fnend
-def fn_nextTr$(tr$,selx,gl_retainFieldsDuringAdd$; ___,trVal,pS,pE,disablePrefix)
+def fn_nextTr$(tr$,selx; ___,trVal,pS,pE,disablePrefix)
 	if ~setupNextTr then
 		setupNextTr=1
 		str2mat('1234567890',mat digit$,'')
