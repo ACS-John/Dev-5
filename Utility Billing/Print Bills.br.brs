@@ -2205,7 +2205,7 @@ def fn_print_bill_GreeneCo(serviceTo)
 	if billOnPageCount=3 then checkx=1.375 : checky=7.9375
 	if billOnPageCount=0 then checkx=6.75  : checky=7.9375
 	! bc$=""
-	! if trim$(bc$)<>"" then print #20: 'Call Print.DisplayBarCode('&str$(checkx)&','&str$(checky)&',"'&bc$&'")'
+	! if trim$(bc$)<>"" then fnpa_barcode(checkx,checky,bc$)
 	if billOnPageCount=0 then
 		fnpa_newpage
 	end if

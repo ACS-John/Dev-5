@@ -401,7 +401,7 @@ VBPRINT: ! r:
 	pr #20: 'Call Print.AddText("'&c$&'",'&str$(171)&','&str$(231)&')'
 	txt$="After "&cnvrt$("pic(##/##/##)",d4)&" Pay: "&cnvrt$("pic(-------.##)",bal+g(10))
 	pr #20: 'Call Print.AddText("'&txt$&'",'&str$(130)&','&str$(235)&')'
-	if trim$(bc$)<>"" then pr #20: 'Call Print.DisplayBarCode('&str$(.82)&','&str$(2.75)&',"'&bc$&'")'
+	if trim$(bc$)<>"" then fnpa_barcode(.82,2.75,bc$)
 	pr #20: 'Call Print.AddText("'&"City of Ash Grove"&'",'&str$(30)&','&str$(246)&')'
 	pr #20: 'Call Print.AddText("'&"P O Box 235"&'",'&str$(30)&','&str$(250)&')'
 	pr #20: 'Call Print.AddText("'&"Ash Grove, Mo 65604"&'",'&str$(30)&','&str$(254)&')'

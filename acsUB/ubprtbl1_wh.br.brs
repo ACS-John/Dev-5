@@ -406,9 +406,8 @@ PRINTGRID: !
 	if checkcounter=3 then checkx=1.375 : checky=7.9375
 	if checkcounter=0 then checkx=6.75 : checky=7.9375
 	bc$=""
-	if trim$(bc$)<>"" then pr #20: 'Call Print.DisplayBarCode('&str$(checkx)&','&str$(checky)&',"'&bc$&'")'
-	if checkcounter=0 then : _
-		fnpa_newpage
+	if trim$(bc$)<>"" then fnpa_barcode(checkx,checky,bc$)
+	if ~checkcounter then fnpa_newpage
 return  ! /r
 
 BULKSORT: ! r: bulk sort order
