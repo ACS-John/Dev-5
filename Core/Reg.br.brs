@@ -143,6 +143,8 @@ def fn_regRead(rr_fieldName$*128,&rr_fieldValue$; rr_defaultIfNotRead$*128,alsoU
 
 	if alsoUseDefaultIfReadBlank and trim$(rr_fieldValue$)='' then
 		rr_fieldValue$=rr_defaultIfNotRead$
+	else if alsoUseDefaultIfReadBlank>1 and trim$(rr_fieldValue$)='0' then
+		rr_fieldValue$=rr_defaultIfNotRead$
 	end if
 	fn_regRead=val(rr_fieldValue$) conv ignore
 fnend
