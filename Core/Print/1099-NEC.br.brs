@@ -16,22 +16,22 @@ def fn_1099testPrint
 	testAddr$(2)='Recipient Addr part 2'
 	testAddr$(3)='Recipient City State and Zip'
 	dim testBox(10)
-	!            zzzzzzzzzz
-	testBox(1 )=9000000100
-	testBox(2 )=9000000200
-	testBox(3 )=9000000300
-	testBox(4 )=9000000400
-	testBox(5 )=9000000500
-	testBox(6 )=9000000600
-	testBox(7 )=9000000700
-	testBox(8 )=9000000800
-	testBox(9 )=9000000900
-	testBox(10)=9000001000
+	!                  	!             zzzzzzzzzz
+	testBox(1 )=  0   	! testBox(1 )=9000000100
+	testBox(2 )=  0   	! testBox(2 )=9000000200
+	testBox(3 )=  0   	! testBox(3 )=9000000300
+	testBox(4 )=  0   	! testBox(4 )=9000000400
+	testBox(5 )=  0   	! testBox(5 )=9000000500
+	testBox(6 )=  0   	! testBox(6 )=9000000600
+	testBox(7 )=  0   	! testBox(7 )=9000000700
+	testBox(8 )=  0   	! testBox(8 )=9000000800
+	testBox(9 )=  0   	! testBox(9 )=9000000900
+	testBox(10)=  0   	! testBox(10)=9000001000
 	! /r
 	disableCopyAWarning=1
-	fn_1099print('account1','Recipient One'  ,mat testAddr$,'111-11-1111',mat testBox)
-	fn_1099print('Account2','Recipient Two'  ,mat testAddr$,'222-22-2222',mat testBox)
-	fn_1099print('Account3','Recipient Three',mat testAddr$,'333-33-3333',mat testBox)
+	fn_1099print('account1','Laura Smith'  ,mat testAddr$,'111-11-1111',mat testBox)
+	! fn_1099print('Account2','Recipient Two'  ,mat testAddr$,'222-22-2222',mat testBox)
+	! fn_1099print('Account3','Recipient Three',mat testAddr$,'333-33-3333',mat testBox)
 	disableCopyAWarning=0
 	fn_1099print_close
 fnend
