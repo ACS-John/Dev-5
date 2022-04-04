@@ -142,7 +142,7 @@ def fn_billForMaint(client_id$,&invTotal)
 				if supCost=0 then supCost=fn_price(scode$,stm$)
 				if supCost=0 then pr 'zero support price???' : pause
 
-				if supCost>0 then
+				if supCost<>0 then
 					returnN=supCost
 					invLine+=1
 
