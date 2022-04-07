@@ -31,7 +31,7 @@ if exists(dir$)=0 then
 	goto Xit
 end if
 dim filename$(999)*60
-fngetdir(dir$,mat filename$)
+fnGetDir2(dir$,mat filename$)
 for tmp=1 to udim(mat filename$)
 	if rtrm$(filename$(tmp))='' then goto L280
 next tmp
