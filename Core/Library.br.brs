@@ -780,7 +780,7 @@ fnend
 		fnconsole(on_off)
 	fnend
 	def library fncmbcno(myline,mypos; mysys$)
-		library 'S:\Core\CmbCNo.br': fncmbcno
+		library 'S:\Core\fn\cmbCNo.br': fncmbcno
 		fncmbcno(myline,mypos,mysys$)
 	fnend
 	def library fnprocess(; chgpro)

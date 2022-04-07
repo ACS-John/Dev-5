@@ -185,7 +185,7 @@ def fn_lauraStyleInvoiceBody(out,cnam$*128,cLogo$*256,invNum$*12,actNum$,mat bil
 
 	for j1=1 to udim(mat desc$)
 		if amt(j1) then
-			pr #out: '[pos(+0,+7)][PUSH][LEFT]'&desc$(j1)&'[POP][RIGHT][pos(+0,+55)]'&cnvrt$('pic(ZZZ,ZZ#.##)',amt(j1))
+			pr #out: '[pos(+0,+7)][PUSH][LEFT]'&desc$(j1)&'[POP][RIGHT][pos(+0,+55)]'&cnvrt$('pic(---,--#.##)',amt(j1))
 			totalAmt+=amt(j1)
 		else if staticSize then
 			pr #out: ''
