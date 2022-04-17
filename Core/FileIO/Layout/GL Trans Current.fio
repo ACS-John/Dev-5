@@ -5,10 +5,10 @@ recl=73
 ! GL Transactions Current
 gl          	,GL Account         	, C 	12    	,               , !  glaccount                        	pos 1   TR(1),TR(2),TR(3) 
 tDate       	,Date               	, N 	 6    	, date(mmddyy) , !                                    	pos 13  TR(4)
-Amt         	,Amount             	, PD	 6.2  	,               , !  mask=32                           	pos 19  TR(5)
-TranCode    	,Transaction Type  	, C 	 2    	,               , !  ComboFio(GL TransactionType,1) 	pos 25  TR(6)
-PostingCode 	,Posting Code      	, C 	 2    	,               , !                                    	pos 27  TR(7)
-Ref          	,Reference          	, C 	12    	,               , !                                    	pos 29  TR$  
-Desc         	,Description       	, C 	30    	,               , !                                    	pos 41  TD$  
-Nta          	,Next Trans Addr   	, PD	 3    	,               , !                                    	pos 71  nta
+amt         	,Amount             	, PD	 6.2  	,               , !  mask=32                           	pos 19  TR(5)
+tranCode    	,Transaction Type  	, C 	 2    	,               , !  ComboFio(GL TransactionType,1) 	pos 25  TR(6)
+postingCode 	,Posting Code      	, C 	 2    	,               , !                                    	pos 27  TR(7)
+ref          	,Reference          	, C 	12    	,               , !                                    	pos 29  TR$  
+desc         	,Description       	, C 	30    	,               , !                                    	pos 41  TD$  
+nta          	,Next Trans Addr   	, PD	 3    	,               , !                                    	pos 71  nta
 #eof#

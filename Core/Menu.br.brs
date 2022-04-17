@@ -211,6 +211,7 @@ def fn_main
 				fnLbl(program_grid_line+5,1,env$('Decimal_Assumed'),info_colWidth,2)
 			end if
 			fnButtonOrDisabled(env$('enableClientSelection')=='Yes',program_grid_line+6,1,env$('client')(1:info_colWidth),fkey_client:=5201, 'You are amazing.',info_colWidth)
+			fnButtonOrDisabled(1,program_grid_line+7,1,env$('cno')(1:info_colWidth),fkey_company:=5202, 'Company Name: '&env$('cnam'),info_colWidth)
 			if env$('ACSDeveloper')<>'' then
 				fnLbl(program_grid_line+8 ,1,"ACS Developer"(1:info_colWidth),info_colWidth,2)
 				fnLbl(program_grid_line+9 ,1,env$('ACSDeveloper')(1:info_colWidth),info_colWidth,2)
@@ -461,6 +462,8 @@ def fn_main
 			if fkey_client<>0 and fkey_value=fkey_client then
 					fnClientSelect
 					fnchain(program$)
+			else if fkey_company<>0 and fkey_value=fkey_company then
+					fnchain('S:\Core\Programs\Select Company.br')
 			else if (curfld_value=1 and fkey_value=201) or fkey_value=4 then
 				! if program_plus$(program_selection_id)='+' then
 				!   program_plus$(program_selection_id)='-'
