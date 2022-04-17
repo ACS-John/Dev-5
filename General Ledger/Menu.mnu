@@ -12,7 +12,7 @@ Period Ending Dates                                 ^ [cursystem]\*
 Enter Transactions                                  ^ [cursystem]\*
 Enter Transactions (Legacy)                         ^ [cursystem]\*
 ! >Post Transactions                                ^ acsGL\GLJCMrge <-- removed 4-9-21 Laura and John agreed   (  GENERAL LEDGER JOB COST MERGE  )
->Remove Entries Posted by Mistake                   ^ acsGL\UNPost
+>Remove Entries Posted by Mistake                   ^ [cursystem]\*
 Enter Standard Adjustments                          ^ HamsterFio:Std Adjustments
 >Post Standard Adjustments                          ^ [cursystem]\*
 >Prior Period Adjustments                           ^ [cursystem]\*
@@ -21,7 +21,8 @@ Print
 >Trial Balance                                      ^ [cursystem]\*
 >Budget Worksheet                                   ^ [cursystem]\*
 >Transactions Journal                               ^ [cursystem]\*
->Chart of Accounts                                  ^ acsGL\acGLCHRT
+>Chart of Accounts                                  ^ [cursystem]\*
+>Chart of Accounts with Financial Statement Reference Numbers ^ [cursystem]\*
 Financial Statements
 >Financial Statement Design                         ^ [cursystem]\*
 >Print Cover Letter                                 ^ acsGL\CoverLetterPrint
@@ -35,11 +36,11 @@ Financial Statements
 >>Income Statement with Percents                    ^ [cursystem]\*
 >>Comparative Income Statement                      ^ [cursystem]\*
 >>Income Statement with Budget                      ^ [cursystem]\*
->>Income Statement with Varience                    ^ acsGL\ACGLINCV
->>Income Statement showing YTD Only                 ^ acsGL\ACGLINC1
+>>Income Statement with Varience                    ^ [cursystem]\*
+! removed 4/17/22 - was found missing obv no one uses >>Income Statement showing YTD Only                 ^ acsGL\ACGLINC1
 >>Four Column Budget Income Statement               ^ [cursystem]\*
 >>Four Column Budget With Percent                   ^ acsGL\ACGLINC4p
->>Six Column Budget Income Statement                ^ acsGL\ACGLINCb6
+>>Six Column Income Statement                       ^ [cursystem]\*
 >>Income Statement with GASB Budget                 ^ acsGL\ACGLINCo
 >>Income Statement with Year Comparison             ^ acsGL\ACGLINYY
 >>Income Statement-Month & Year Budgets             ^ acsGL\ACGLINc6b
@@ -71,7 +72,7 @@ Annually
 ! no longer necessary, unless files get too large >Dump Old Payee Transactions                ^ acsGL\*
 Error Recovery
 >Generate Reversing Entries                       ^ acsGL\Reverse
->Remove Entries Posted by Mistake                 ^ acsGL\Unpost
+>Remove Entries Posted by Mistake                 ^ [cursystem]\*
 >Reassign Transaction Addresses                   ^ [cursystem]\*
 >Fix Current Period Transaction Dates             ^ [cursystem]\*
 >Fix Current Balance                              ^ [cursystem]\*
