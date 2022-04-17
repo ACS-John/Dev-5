@@ -6,7 +6,6 @@ autoLibrary
 on error goto Ertn
 fnTop(program$)
 
-dim enableJournal(8)
 ! r: set mat journalTitle$ journal options
 	dim journalTitle$(8)*21 ! *30
 	journalTitle$(1)='Disbursements Journal'   	! 'Disbursements Journal'
@@ -18,6 +17,7 @@ dim enableJournal(8)
 	journalTitle$(7)='Sales Journal'            	! 'Sales Journal'
 	journalTitle$(8)='Purchases Journal'       	! 'Purchases Journal'
 ! /r
+dim enableJournal(8)
 if fnprocess=1 then
 	currentOrPrior=1
 	filterPeriod=0
@@ -60,13 +60,7 @@ end if
 	fnopenprn
 	isFirstTransaction=1
 	do ! r: main loop 
-		dim transGl$*12
-		dim transDate
-		dim transAmt
-		dim transType
-		dim transRef$*12
-		dim transDesc$*30
-		dim transPeriod
+		dim transGl$*12,transDate,transAmt,transType,transRef$*12,transDesc$*30,transPeriod
 		if fn_readTrans(currentOrPrior,transGl$,transDate,transAmt,transType,transRef$,transDesc$,transPeriod)=-4270 then goto EoJounrals
 		if isFirstTransaction then
 			isFirstTransaction=0

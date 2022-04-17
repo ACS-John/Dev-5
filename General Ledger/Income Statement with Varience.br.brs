@@ -1,22 +1,19 @@
-! Replace S:\acsGL\AcGlIncV
+! formerly S:\acsGL\AcGlIncV
 ! COMPARATIVE INCOME STATEMENT WITH PERCENTAGES & VARIANCES
- 
+ ! Income Statement with Varience
 	autoLibrary
 	on error goto Ertn
  
 	dim fl1$*256,actpd$*6,cogl$(3)*12,pedat$*20,cch$*20
 	dim r$*5,d$*50,te$*1,ac(9),report$*50,secondr$*50,foot$*132,underlin$*22
-	dim cnam$*40,b$*3,a$(8)*30,oldtrans$*16,g(8),accum(9,6)
-	dim bp(13),by(13),cap$*128,udf$*256
+	dim b$*3,a$(8)*30,oldtrans$*16,g(8),accum(9,6)
+	dim bp(13),by(13)
  
-	fnTop(program$,cap$="Income Statement with Varience")
+	fnTop(program$)
 	on fkey 5 goto L2500
-	fncno(cno,cnam$)
-	udf$=env$('temp')&'\'
 	fnfscode
 	fnpriorcd
-	if fnGlAskFormatPriorCdPeriod=5 then goto Xit : _
-		! sets fnps,fnpriorcd,fnfscode (primary/secondary,current year/Prior,period to print)
+	if fnGlAskFormatPriorCdPeriod=5 then goto Xit ! sets fnps,fnpriorcd,fnfscode (primary/secondary,current year/Prior,period to print)
 	fscode=fnfscode
 	fnpriorcd
 	cch$=fncch$
@@ -25,21 +22,22 @@
 	actpd=fnactpd
 	priorcd=fnpriorcd
  
-	fnopenprn : _
+	fnopenprn
 	if file$(255)(1:4)<>"PRN:" then redir=1 else redir=0
 	mp1=69
 	if fnps=2 then mp1=mp1+3
 	if fnps=2 then fl1$="Name=[Q]\GLmstr\ACGLFNSJ.h[cno],KFName=[Q]\GLmstr\agfsidx2.h[cno],Shr" else : _
 		fl1$="Name=[Q]\GLmstr\ACGLFNSI.h[cno],KFName=[Q]\GLmstr\agfsidx3.h[cno],Shr"
-L270: form pos mp1,pd 3,pos 81,41*pd 6.2
+	L270: form pos mp1,pd 3,pos 81,41*pd 6.2
 	if actpd>0 and actpd<14 then goto L330
 	pr f "10,2,C 78": "THIS PROGRAM CANNOT PROCESS WITHOUT THE NUMBER OF THE ACCOUNTING PERIOD END"
 	pr f "12,2,C 60,N": "USE OPTION 1 ON THE MENU TO ENTER THIS INFORMATION"
 	input fields "23,2,C 1,E,N": pause$
 	goto L2530
-L330: open #1: fl1$,i,i,k
+	L330: !
+	open #1: fl1$,i,i,k
 	if fnprocess=1 or fnUseDeptNo=0 or percent=1 then goto L440
-	fnTos(sn$="ACglincv") : _
+	fnTos
 	mylen=30: mypos=mylen+3 : right=1
 	fnLbl(1,1,"Cost Center or Department #:",mylen,right)
 	fnTxt(1,mypos,3,0,right,'30',0,"Enter the cost center or department number if you wish to pr only one department, else leave blank for all.",0 ) : _
@@ -50,13 +48,16 @@ L330: open #1: fl1$,i,i,k
 	ckey=fnAcs(mat resp$)
 	if ckey=5 then goto Xit
 	costcntr=val(resp$(1))
-L440: report$="Statement of Income and Expenses"
+	L440: !
+	report$="Statement of Income and Expenses"
 	if fnps=2 then goto L480 ! secondary
-	execute "Index [Q]\GLmstr\GLmstr.h[cno] "&udf$&"fsindex.h[cno] 69 3 Replace DupKeys -N"
+	execute "Index [Q]\GLmstr\GLmstr.h[cno] "&env$('temp')&'\'&"fsindex.h[cno] 69 3 Replace DupKeys -N"
 	goto L490
-L480: execute "Index [Q]\GLmstr\GLmstr.h[cno] "&udf$&"fsindex.h[cno] 72 3 Replace DupKeys -N"
-L490: open #3: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName="&udf$&"fsindex.h[cno],Shr",i,i,k
-	goto TOP_OF_LOOP
+	L480: !
+	execute "Index [Q]\GLmstr\GLmstr.h[cno] "&env$('temp')&'\'&"fsindex.h[cno] 72 3 Replace DupKeys -N"
+	L490: !
+	open #3: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName="&env$('temp')&'\'&"fsindex.h[cno],Shr",i,i,k
+goto TOP_OF_LOOP
  
 TOP_OF_LOOP: !
 	if ic><2 then goto L550

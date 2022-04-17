@@ -1,13 +1,8 @@
-! Replace S:\acsGL\Unpost
+! formerly S:\acsGL\Unpost
 ! Remove Transactions (for a date range)
-! r: setup library and dims
 autoLibrary
 on error goto Ertn
- 
-dim k(10,8),p$*30,ta(2),cap$*128,t$*12
-dim n(2),l$*12
-! /r
-fnTop(program$,cap$="Remove Entries")
+fnTop(program$)
 MENU1: ! r:
 	fnTos
 	lc=0 : mylen=47 : mypos=mylen+2
@@ -57,15 +52,21 @@ MENU1: ! r:
 	end if
 ! /r
 READ_H_TRANS: ! r: main loop
-	read #h_trans,using 'form pos 1,C 12,N 6,PD 6.2,N 2,N 2,C 12,C 30': t$,s,k,mat n,l$,p$ eof EO_H_TRANS
+	dim t$*12
+	dim xs
+	dim xn(2)
+	dim p$*30
+	dim l$*12
+	! dim xk(10,8)
+	read #h_trans,using 'form pos 1,C 12,N 6,PD 6.2,N 2,N 2,C 12,C 30': t$,xs,xk,mat xn,l$,p$ eof EO_H_TRANS
 	reread #h_trans,using 'form pos 1,C 70': hd_key_one$
-	if fndate_mmddyy_to_ccyymmdd(s)<begdat or fndate_mmddyy_to_ccyymmdd(s)>enddat then goto READ_H_TRANS
+	if fndate_mmddyy_to_ccyymmdd(xs)<begdat or fndate_mmddyy_to_ccyymmdd(xs)>enddat then goto READ_H_TRANS
 ! if val(t$(1:3))=0 and val(t$(4:9))=0 and val(t$(10:12))=0 then goto READ_H_TRANS
 	if t$(3:3)=" " then t$(3:3)="0"
 	if t$(12:12)=" " then t$(12:12)="0"
 	read #1,using 'form pos 81,2*PD 6.2',key=t$: bb,cb nokey DEL_H_TRANS ! delete any transactions without a matching master record.
-	cb=cb-k
-	if uprc$(code$)="H" then bb=bb-k
+	cb=cb-xk
+	if uprc$(code$)="H" then bb=bb-xk
 	rewrite #1,using 'form pos 81,2*PD 6.2',key=t$: bb,cb
 DEL_H_TRANS: !
 ! rec_to_delete=rec(h_trans)
@@ -80,6 +81,7 @@ EO_H_TRANS: ! /r
 	fnStatus('Reassigning Transaction Addresses...') ! r:
 	restore #1,key>="            ": eof ignore
 	do
+		dim ta(2)
 		read #1,using 'form pos 333,2*PD 3': mat ta eof L470
 		rewrite #1,using 'form pos 333,2*PD 3': 0,0
 	loop

@@ -2387,7 +2387,7 @@ def fn_companyName(window,win_cols)
 	! pr #window, fields '2,08,40/CC 40,[screenheader]': date$('Month dd, ccyy') ! (1:18)
 	! pause
 	pr #window, f '1,27, 5/CC  5,[screenheader]': env$('cno')
-	pr #window, f '1,33,51/CC 40,[screenheader]': env$('Program_Caption')(1:51)
+	pr #window, f '1,33,64/CC 40,[screenheader]': env$('Program_Caption')(1:64) ! soflow ignore
 	pr #window, f '1,86,22/CC 40,[screenheader]': env$('cnam')(1:40)
 	if env$('tmp_acs_back_arrow')='' then ! it is not the main menu.
 		! pr #window, fields '1,'&str$(win_cols-05)&',P 1/2,[buttons],1505': 'S:\Core\Icon\Properties.png' ioerr ignore

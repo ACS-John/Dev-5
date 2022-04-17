@@ -4,15 +4,11 @@
 	autoLibrary
 	on error goto Ertn
  
-	dim fl1$*256,p$(20)*50
-	dim r$*5,d$*50,te$*1,ac(9),report$*50,secondr$*50,foot$*132,underlin$*14
+	dim r$*5,d$*50,te$*1,ac(9),secondr$*50,foot$*132,underlin$*14
 	dim b$*3,a$(8)*30,oldtrans$*16,g(8),accum(9,7)
-	dim pedat$*20,actpd$*6,bm(13),bp(13),by(13),cap$*128,udf$*256
- 
-	fnTop(program$,cap$="Six Column Income Statement with Budget")
+	dim pedat$*20,actpd$*6,bm(13),bp(13),by(13)
+	fnTop(program$)
 	on fkey 5 goto L2350
-	fncno(cno)
-	udf$=env$('temp')&'\'
 	actpd=fnactpd
 	actpd$=fnactpd$
 	pedat$=rtrm$(fnpedat$)
@@ -27,11 +23,12 @@ L230: prioryr=curyear-1
 	pors=1
 	mp1=69
 	if fnps=2 then mp1=mp1+3
+	dim fl1$*256
 	fl1$="Name=[Q]\GLmstr\ACGLFNSI.h[cno],KFName=[Q]\GLmstr\agfsidx3.h[cno],Shr"
 	if fnps=2 then fl1$="Name=[Q]\GLmstr\ACGLFNSJ.h[cno],KFName=[Q]\GLmstr\agfsidx2.h[cno],Shr"
 	open #1: fl1$,i,i,k
 	if fnprocess=1 or fnUseDeptNo=0 then goto L450
-	fnTos(sn$="ACglincb") : _
+	fnTos
 	mylen=30: mypos=mylen+3 : right=1
 	fnLbl(1,1,"Cost Center or Department #:",mylen,right)
 	fnTxt(1,mypos,3,0,right,'30',0,"Enter the cost center or department number if you wish to pr only one department, else leave blank for all.",0 ) : _
@@ -42,14 +39,15 @@ L230: prioryr=curyear-1
 	ckey=fnAcs(mat resp$)
 	if ckey=5 then goto Xit
 L450: costcntr=val(resp$(1))
+	dim report$*50
 	report$="STATEMENT OF INCOME AND EXPENSES"
 	fnopenprn
 	redir=0: if file$(255)(1:4)<>"PRN:" then redir=1
 	if fnps=2 then goto L540 ! secondary
-	execute "Index [Q]\GLmstr\GLmstr.h[cno] "&udf$&"fsindex.h[cno] 69 3 Replace DupKeys -N"
+	execute "Index [Q]\GLmstr\GLmstr.h[cno] [temp]\fsindex.h[cno] 69 3 Replace DupKeys -N"
 	goto L550
-L540: execute "Index [Q]\GLmstr\GLmstr.h[cno] "&udf$&"fsindex.h[cno] 72 3 Replace DupKeys -N"
-L550: open #3: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName="&udf$&"fsindex.h[cno],Shr",i,i,k
+L540: execute "Index [Q]\GLmstr\GLmstr.h[cno] [temp]\fsindex.h[cno] 72 3 Replace DupKeys -N"
+L550: open #3: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[temp]\fsindex.h[cno],Shr",i,i,k
 L560: read #1,using L610: r$,d$,te$,sp,ls,ds,ul,rs,bc,ap,mat ac,ic,fc eof L2350
 	if ltrm$(r$)="" or ltrm$(r$)="0" then goto L560
 	if costcntr=0 then goto L610
@@ -179,23 +177,26 @@ L1750: for j=1 to 9
 		accum(j,7)=0
 L1840: next j
 return
-L1860: if ls=0 then goto L2020
+L1860: !
+	if ls=0 then goto L2020
 	if ls=99 then goto L1910
 	pr #255,using L1890: " "
-L1890: form pos 1,c 1,skip ls
-	goto L2020
-L1910: ! If FT1=1 Then Goto 1870
+	L1890: form pos 1,c 1,skip ls
+goto L2020
+L1910: !
+	! If FT1=1 Then Goto 1870
 	fnpglen(pglen)
-! If PGLEN<>42 Then pGLEN=58
+	! If PGLEN<>42 Then pGLEN=58
 	sk=pglen-krec(255): fl=len(rtrm$(foot$))
-! If PGLEN=42 Then sK=SK+1
+	! If PGLEN=42 Then sK=SK+1
 	pr #255,using L1970: rtrm$(foot$),"Page "&str$(pt1)
-L1970: form skip sk,pos tabnote,c fl,pos 115,c 8,skip 1
-! ft1=1
+	L1970: form skip sk,pos tabnote,c fl,pos 115,c 8,skip 1
+	! ft1=1
 	if eofcode=1 then goto L2020
 	pr #255: newpage
 	gosub L2190
-L2020: return
+	L2020: !
+return
  
 L2040: gosub L1910: continue
 L2050: if ul=0 then goto L2150
@@ -206,10 +207,11 @@ L2050: if ul=0 then goto L2150
 L2100: underlin$="______________"
 L2110: ! pr #255,Using 1980: UNDERLIN$,UNDERLIN$(1:12),UNDERLIN$(1:12),UNDERLIN$,UNDERLIN$,UNDERLIN$,UNDERLIN$
 	pr #255,using L2130: underlin$,underlin$(1:12),underlin$(1:12),underlin$,underlin$,underlin$
-L2130: form pos 30,c 15,2*c 13,4*c 15,skip 0
+	L2130: form pos 30,c 15,2*c 13,4*c 15,skip 0
 	form skip redir,pos 26,c 15,2*c 13,4*c 15,skip redir
-L2150: if redir=0 then pr #255,using L2160: " " pageoflow L2040
-L2160: form skip 1,c 1,skip 0
+	L2150: !
+	if redir=0 then pr #255,using L2160: " " pageoflow L2040
+	L2160: form skip 1,c 1,skip 0
 return
  
 L2190: heading=1
