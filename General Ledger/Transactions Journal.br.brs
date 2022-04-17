@@ -4,217 +4,252 @@
 
 autoLibrary
 on error goto Ertn
-
-dim flo$(8),fli$(8),tr(7),tr$*12,td$*30,oldtr$*12,oldtd$*30,p$(20)*50
-dim sc1$(2)*20,wrd1$(2)*30,resp$(50)*50
-dim b$*3,a$(8)*30,oldtrans$*21
-dim journal_to_print(8)
-dim tgl(200,4)
-
 fnTop(program$)
-a$(1)='Disbursements Journal'
-a$(2)='Receipts Journal'
-a$(3)='General Journal      (Adj)'
-a$(4)='General Journal      (A/P)'
-a$(5)='General Journal      (Payroll)'
-a$(6)='General Journal      (A/R)'
-a$(7)='Sales Journal'
-a$(8)='Purchases Journal'
-mat journal_to_print=(1)
 
-if fnprocess=1 then 
-	cur_prior=1
-	mat journal_to_print=(1)
-else
-	gosub ASK_PERIOD
-end if
-goto PR_JOURNAL
-PR_JOURNAL: ! r:
-	fnopenprn
-	if cur_prior=1 then 
-		fnIndex('[Q]\GLmstr\GLTrans.h[cno]','[Temp]\fsindex.h[cno]','25/29/1 2/12/12')
-		open #3: 'Name=[Q]\GLmstr\GLtrans.h[cno],KFName=[Temp]\fsindex.h[cno],Shr',i,i,k 
-	else if cur_prior=2 then ! index current file
-		fnIndex('[Q]\GLmstr\AcTrans.h[cno]','[Temp]\fsindex.h[cno]','25/29/1 2/12/12')
-		open #3: 'Name=[Q]\GLmstr\ACtrans.h[cno],KFName=[Temp]\fsindex.h[cno],Shr',i,i,k 
-	end if 
-	PJ_READ_1: ! 
-	if cur_prior=2 then 
-		read #3,using L390: mat tr,tr$,td$,pcode eof EO_JOURNAL
-	else 
-		read #3,using L390: mat tr,tr$,td$ eof EO_JOURNAL ! read period code if from history
-	end if 
-	if cur_prior=2 and prior_period>0 and prior_period<>pcode then goto PJ_READ_1
-	if tr(6)=0 and tr(5)=0 then goto PJ_READ_1
-	if tr(6)>1 and tr(6)<9 then goto L390 else tr(6)=1
-	L390: form pos 1,n 3,n 6,n 3,n 6,pd 6.2,2*n 2,c 12,c 30,n 2
-	if journal_to_print(tr(6))><1 then goto PJ_READ_1 ! JOURNAL NOT SELECTED
-	oldtrans$=a$(tr(6))(1:21)
-	gosub HDR
-	goto PJ_PRINT_REC
-	PJ_READ_2: ! 
-	if cur_prior=2 then 
-		read #3,using L390: mat tr,tr$,td$,pcode eof EO_JOURNAL
-		if prior_period>0 and prior_period<>pcode then goto PJ_READ_2
-	else ! read period code if from history
-		read #3,using L390: mat tr,tr$,td$ eof EO_JOURNAL
-		goto L490 ! don't check period code if current files
-	end if 
-	if tr(6)>1 and tr(6)<9 then goto L490 else tr(6)=1
-	L490: ! 
-	if journal_to_print(tr(6))><1 then goto PJ_READ_2
-	if a$(tr(6))(1:21)><oldtrans$ then gosub JOURNAL_TOTALS
-	tr6=tr(6)
-	if tr$=oldtr$ and tr$><'999999999999' then 
-		goto PJ_PRINT_REC
-	else 
-		gosub PJ_SOME_TOTAL
-	end if 
-	PJ_PRINT_REC: ! 
-	if tr$='999999999999' then tr$=' '
-	if tr(5)>0 then 
-		pr #255,using L550: ltrm$(tr$),tr(4),td$,tr(1),tr(2),tr(3),tr(5) pageoflow PgOf
-	else 
-		pr #255,using L560: ltrm$(tr$),tr(4),td$,tr(1),tr(2),tr(3),tr(5) pageoflow PgOf
-	end if 
-	L550: form pos 3,cc 12,pos 16,pic(zz/zz/zz),pos 26,c 30,pos 57,pic(zzz),pic(zzzzzz),pic(zzz),pos 69,pic(------,---,---.##)
-	L560: form pos 3,cc 12,pos 16,pic(zz/zz/zz),pos 26,c 30,pos 57,pic(zzz),pic(zzzzzz),pic(zzz),pos 82,pic(------,---,---.##)
-	goto L620
-	! pr #255: ''
-	if tr(5)>=0 then 
-		pr #255,using L600: tr(1),tr(2),tr(3),tr(5) pageoflow PgOf
-	else 
-		pr #255,using L610: tr(1),tr(2),tr(3),tr(5) pageoflow PgOf
-	end if 
-	L600: form pos 57,pic(zzz),pic(zzzzzz),pic(zzz),pos 69,pic(------,---,---.##)
-	L610: form pos 57,pic(zzz),pic(zzzzzz),pic(zzz),pos 85,pic(--,---,---.##)
-	L620: ! 
-goto L690 ! /r skip ACCUMULATING ARRAY TOTALS
-! r:  ACCUMULATING ARRAY TOTALS
-	if tg1=0 then goto L670
-	for j=1 to tg1
-		if tr(1)=tgl(j,1) and tr(2)=tgl(j,2) and tr(3)=tgl(j,3) then goto L680
-	next j
-	L670: ! 
-	j=tg1=tg1+1
-	L680: ! 
-	tgl(j,1)=tr(1): tgl(j,2)=tr(2): tgl(j,3)=tr(3)
-	tgl(j,4)=tgl(j,4)+tr(5)
+dim enableJournal(8)
+! r: set mat journalTitle$ journal options
+	dim journalTitle$(8)*21 ! *30
+	journalTitle$(1)='Disbursements Journal'   	! 'Disbursements Journal'
+	journalTitle$(2)='Receipts Journal'         	! 'Receipts Journal'
+	journalTitle$(3)='General Journal'          	! 'General Journal      (Adj)'
+	journalTitle$(4)='General Journal'          	! 'General Journal      (A/P)'
+	journalTitle$(5)='General Journal'          	! 'General Journal      (Payroll)'
+	journalTitle$(6)='General Journal'          	! 'General Journal      (A/R)'
+	journalTitle$(7)='Sales Journal'            	! 'Sales Journal'
+	journalTitle$(8)='Purchases Journal'       	! 'Purchases Journal'
 ! /r
-L690: ! r:
-	if tr(5)<0 then goto L720 ! CREDITS
-	total1+=tr(5)
-	goto L740
-	L720: ! 
-	total2+=tr(5)
-	L740: ! 
-	if uprc$(td$(1:6))='CONTRA' then goto L760 ! NO CONTRA ENTRIES IN NET
-	net+=tr(5)
-	L760: ! 
-	oldtr$=tr$ : oldtd$=td$
-goto PJ_READ_2 ! /r
-PJ_SOME_TOTAL: ! r:
-	if tr(6)><1 and uprc$(oldtrans$(1:21))><'DISBURSEMENTS JOURNAL' then 
-		goto L810
-	end if 
-	pr #255,using L800: net pageoflow PgOf
-	L800: form pos 100,pic(---,---,---.##)
-	L810: ! 
-	if uprc$(a$(tr(6))(1:21))><uprc$(oldtrans$) or t9=9 then goto L830
-	pr #255: pageoflow PgOf
-	L830: ! 
-	net=0
-return  ! /r
-HDR: ! r:
-	pr #255,using L890: '',env$('cnam')
-	pr #255,using L890: date$('mm/dd/yy'),env$('program_caption')
-	if tr(6)<>0 then 
-		pr #255,using L890: time$,rtrm$(a$(tr(6))(1:21))
-	end if 
-	L890: form pos 1,c 8,pos 15,cc 50
-	pr #255,using L890: '',fnpedat$
-	pr #255: tab(115);'Page '&str$(p1+=1)
-	pr #255: ' Reference               Transaction';tab(79);'Debit';tab(92);'Credit'
-	pr #255: '  Number         Date    Description';tab(61);'Account';
-	if tr(6)=1 then b$='NET' else b$=' '
-	pr #255,using L960: 'Amount       Amount',b$
-	L960: form pos 79,c 19,pos 111,c 3
-	pr #255: ' ________      ________  ____________________';tab(59);'___________';tab(79);'______       ______';
-	if tr(6)=1 then 
-		pr #255,using L990: '___'
-	else 
-		pr #255,using L990: '   '
-	end if 
-	L990: form pos 111,c 3
-return  ! /r
-JOURNAL_TOTALS: ! r:
-	gosub PJ_SOME_TOTAL
-	pr #255: tab(72);'_____________';tab(86);'______________'
-	pr #255,using L1060: 'Journal Totals',total1,total2
-	L1060: form pos 55,c 14,pos 70,pic(----,---,---.##),pic(----,---,---.##)
-	pr #255: tab(72);'=============';tab(86);'=============='
-	! IF TR6=1 THEN GOSUB 1230
-	total1=total2=net=0
-	if t9=9 then goto L1150
-	pr #255: newpage
-	gosub HDR
-	if tr(6)=0 then oldtrans$=' ' else oldtrans$=a$(tr(6))(1:21)
-	oldtr$=' '
-	L1150: !
-return  ! /r
-EO_JOURNAL: ! r:
-	if tr(5)=0 and tr(6)=0 then goto L1210
-	t9=9
-	gosub PJ_SOME_TOTAL
-	gosub JOURNAL_TOTALS
-	L1210: !
+if fnprocess=1 then
+	currentOrPrior=1
+	filterPeriod=0
+	mat enableJournal=(1)
+else
+	if fn_askPeriod(currentOrPrior,filterPeriod,mat enableJournal)=5 then goto Xit
+end if
+
+! r: Print Journals
+
+
+	! r: Index and Open hTrans (current or prior)
+	dim tempSourceFile$*256
+	tempSourceFile$='[Temp]\acsGLtrans[acsUserId]_data.h[cno]'
+	dim tempSourceIndx$*256
+	tempSourceIndx$='[Temp]\acsGLtrans[acsUserId]_indx.h[cno]'
+	if currentOrPrior=1 then ! Current Period
+		fnCopy('[Q]\GLmstr\GLtrans.h[cno]',tempSourceFile$)
+		! fnIndex('[Q]\GLmstr\GLTrans.h[cno]','[Temp]\fsindex.h[cno]','25/29/1 2/12/12') ! transType+transRef$+transGl$
+		! open #hTrans=fnH: 'Name=[Q]\GLmstr\GLtrans.h[cno],KFName=[Temp]\fsindex.h[cno],Shr',i,i,k ! formerly #3
+	else if currentOrPrior=2 then ! Prior Period (Accumulated Transactions)
+		fnCopy('[Q]\GLmstr\AcTrans.h[cno]',tempSourceFile$)
+		! fnIndex('[Q]\GLmstr\AcTrans.h[cno]','[Temp]\fsindex.h[cno]','25/29/1 2/12/12') ! transType+transRef$+transGl$
+		! open #hTrans=fnH: 'Name=[Q]\GLmstr\ACtrans.h[cno],KFName=[Temp]\fsindex.h[cno],Shr',i,i,k ! formerly #3
+	end if
+	! r: right align the reference numbers
+		open #hTrans=fnH: 'Name='&tempSourceFile$&',Shr',i,outi
+		do
+			read #hTrans,using 'form pos 29,c 12': transRef$ eof EoTransRegFix
+			transRef$=lpad$(trim$(transRef$),12)
+			rewrite #hTrans,using 'form pos 29,cr 12': transRef$
+		loop
+		EoTransRegFix:!
+		close #hTrans:
+	! /r
+	fnIndex(tempSourceFile$,tempSourceIndx$,'25/29/1 2/12/12') ! transType+transRef$+transGl$
+	open #hTrans=fnH: 'Name='&tempSourceFile$&',KFName='&tempSourceIndx$&',Shr',i,i,k ! formerly #3
+	! /r
+
+	fnopenprn
+	isFirstTransaction=1
+	do ! r: main loop 
+		dim transGl$*12
+		dim transDate
+		dim transAmt
+		dim transType
+		dim transRef$*12
+		dim transDesc$*30
+		dim transPeriod
+		if fn_readTrans(currentOrPrior,transGl$,transDate,transAmt,transType,transRef$,transDesc$,transPeriod)=-4270 then goto EoJounrals
+		if isFirstTransaction then
+			isFirstTransaction=0
+			dim transJournal$*21
+			transJournal$=journalTitle$(transType)
+			fn_prHeader(transType)
+		else
+			if journalTitle$(transType)><transJournal$ then
+				fn_prNetAndBlankLine(net,transType)
+				fn_journalTotals(net,totalDebits,totalCredits)
+				fn_prNewpageAndHeader
+				transJournal$=journalTitle$(transType)
+				dim priorRef$*12
+				priorRef$=''
+			end if
+			if transRef$<>priorRef$ or transRef$='999999999999' then
+				fn_prNetAndBlankLine(net,transType)
+				net=0
+			end if
+		end if
+
+		priorRef$=transRef$
+		! r: print report line
+			if transRef$='999999999999' then transRef$=''
+			if transAmt>0 then
+				pr #255,using FlineDebit: transRef$,transDate,transDesc$,transGl$,transAmt pageoflow PgOf
+				FlineDebit: form pos 3,c 12,pos 16,pic(zz/zz/zz),pos 26,c 30,pos 57,c 12,pos 69,pic(------,---,---.##)
+			else
+				pr #255,using FlineCredit: transRef$,transDate,transDesc$,transGl$,transAmt pageoflow PgOf
+				FlineCredit: form pos 3,c 12,pos 16,pic(zz/zz/zz),pos 26,c 30,pos 57,c 12,pos 82,pic(------,---,---.##)
+			end if
+		! /r
+		! r: accumulate totals
+			if transAmt<0 then  ! credits
+				totalCredits+=transAmt
+			else
+				totalDebits+=transAmt
+			end if
+			if uprc$(transDesc$(1:6))<>'CONTRA' then ! no contra entries in net
+				net+=transAmt
+			end if
+		! /r
+
+	loop ! /r main loop
+! /r
+
+EoJounrals: ! r:
+	if totalDebits or totalCredits then
+		net=0
+		fn_prNetAndBlankLine(net,transType,1)
+		fn_journalTotals(net,totalDebits,totalCredits)
+	end if
 	fncloseprn
 goto Xit ! /r
 PgOf: ! r:
 	pr #255: newpage
-	gosub HDR
+	fn_prHeader(transType)
 continue  ! /r
+def fn_readTrans(currentOrPrior, _
+		&transGl$,&transDate,&transAmt,&transType,&transRef$,&transDesc$,&transPeriod; _
+		___,returnN)
+	ReadTrans: !
+	if currentOrPrior=2 then
+		! read period code if from history
+		read #hTrans,using Ftrans: transGl$,transDate,transAmt,transType,transRef$,transDesc$,transPeriod eof ReadTransEoF
+	else
+		read #hTrans,using Ftrans: transGl$,transDate,transAmt,transType,transRef$,transDesc$ eof ReadTransEoF
+	end if
+	Ftrans: form pos 1,c 12,n 6,pd 6.2,n 2,x 2,c 12,c 30,n 2
+	if currentOrPrior=2 and filterPeriod and filterPeriod<>transPeriod then goto ReadTrans
+	if ~transType and ~transAmt then goto ReadTrans
+	if ~enableJournal(transType) then goto ReadTrans
+	if transType<1 or transType>9 then transType=1
+	goto ReadTransFinis
+	
+	ReadTransEoF: !
+		returnN=-4270
+	goto ReadTransFinis
+	
+	ReadTransFinis: !
+	fn_readTrans=returnN
+fnend
+def fn_prHeader(transType; ___,title$*21,b$*3)
+	! uses global: mat journalTitle$
+	pr #255,using Fhdr1: '',env$('cnam')
+	pr #255,using Fhdr1: date$('mm/dd/yy'),env$('program_caption')
+	if transType then
+		title$=journalTitle$(transType)
+		pr #255,using Fhdr1: time$,title$
+	end if
+	Fhdr1: form pos 1,c 8,pos 15,cc 50
+	pr #255,using Fhdr1: '',fnpedat$
+	pr #255: tab(115);'Page '&str$(pageNumber+=1)
+	pr #255: '   Reference             Transaction';tab(79);'Debit';tab(92);'Credit'
+	pr #255: '     Number      Date    Description';tab(61);'Account';
+	if transType=1 then b$='Net'
+	pr #255,using FHdrAmt: 'Amount       Amount',b$
+	FHdrAmt: form pos 79,c 19,pos 111,c 3
+	pr #255: ' _____________ ________  ____________________';tab(59);'___________';tab(79);'______       ______';
+	if transType=1 then
+		pr #255,using FHdrU1: '___'
+	else
+		pr #255,using FHdrU1: '   '
+	end if
+	FHdrU1: form pos 111,c 3
+fnend
 
-Xit: fnXit
+def fn_prNetAndBlankLine(net,transType; theEndisnow)
+	! uses global: mat journalTitle$
+	! pr #255: 'debug aaa PjPrNetAndNewPage ___________________'
+	if transType=1 then ! Disbursements Journal
+		pr #255,using Fnet: net pageoflow PgOf
+		Fnet: form pos 100,pic(---,---,---.##)
+	end if
 
-ASK_PERIOD: ! r:
-! pr newpage
+	if ~theEndisnow then  ! if journalTitle$(transType)=transJournal$ and ~theEndisnow then
+		pr #255: '' pageoflow PgOf
+	end if
+
+fnend
+def fn_journalTotals(&net,&totalDebits,&totalCredits)
+
+	pr #255: tab(72);'_____________';tab(86);'______________'
+	pr #255,using FjournalTotal1: 'Journal Totals',totalDebits,totalCredits
+	FjournalTotal1: form pos 55,c 14,pos 70,pic(----,---,---.##),pic(----,---,---.##)
+	pr #255: tab(72);'=============';tab(86);'=============='
+
+	net=totalDebits=totalCredits=0
+fnend
+def fn_prNewpageAndHeader
+		pr #255: newpage
+		fn_prHeader(transType)
+fnend
+
+def fn_askPeriod(&currentOrPrior,&filterPeriod,mat enableJournal; ___, _
+	rc_enable1,rc_enable2,rc_enable3,rc_enable4,rc_enable5,rc_enable6,rc_enable7,rc_enable8, _
+	rc_priorPeriod,rc_cp1,rc_cp2, _
+	returnN,respc,ckey,fraWidth,frame)
+
 	fnTos
-	respc=0
-	fnFra(1,1,2,50,'Print from current month files or history',' ')
-	fnOpt(1,3,'Current Period Transactions',0,1)
-	resp$(respc+=1)='True'
-	fnOpt(2,3,'Prior Period Transactions',0,1)
-	resp$(respc+=1)='False'
-	fnFra(5,1,8,50,'Select Journals to Print',' ')
-	fnChk(1,3,'Disbursements Journal',0,2)
-	resp$(respc+=1)='True'
-	fnChk(2,3,'Receipts Journal',0,2)
-	resp$(respc+=1)='True'
-	fnChk(3,3,'General Journal (Adj)',0,2)
-	resp$(respc+=1)='True'
-	fnChk(4,3,'General Journal (A/P)',0,2)
-	resp$(respc+=1)='False'
-	fnChk(5,3,'General Journal (Payroll)',0,2)
-	resp$(respc+=1)='False'
-	fnChk(6,3,'General Journal (A/R)',0,2)
-	resp$(respc+=1)='False'
-	fnChk(7,3,'Sales Journal',0,2)
-	resp$(respc+=1)='False'
-	fnChk(8,3,'Purchases Journal',0,2)
-	resp$(respc+=1)='False'
-	fnLbl(16,1,'Prior period code (blank for all):',35,0)
-	fnTxt(16,37,2,0,1,'30',0,'Prior period code is only applicable if printing from history.  Enter the period code for the month you want printed. Use blank for all and also if you chose current period transactions.')
-	resp$(respc+=1)=' '
+	dim resp$(50)*50
+	fraWidth=34 ! 48
+	fnFra(1,1,3,fraWidth,'Print from current month files or history',' ') : frame=1
+	fnOpt(1,3,'Current Period Transactions'  	, 0,frame)	: resp$(rc_cp1=respc+=1)=fnPcRegRead$('cp1','True' )
+	fnOpt(2,3,'Prior Period Transactions'    	, 0,frame)	: resp$(rc_cp2=respc+=1)=fnPcRegRead$('cp2','False')
+	! fnLbl(myline,mypos,t$*200; mylen,myalign,font_mod,container,tabcon,lbl_tooltip$*256)
+	fnLbl(3,6,'Prior Period:'	,13,1,0,frame)
+	fnTxt(3,20,2,0,1,'30',0,'Prior Period is only applicable if printing from history.  Select the closed period to print. Leave blank to print all periods.',frame)
+	! fnLbl(2,6+26,'Prior Period:'	,13,1,0,frame)
+	! fnTxt(2,20+26,2,0,1,'30',0,'Prior Period is only applicable if printing from history.  Select the closed period to print. Leave blank to print all periods.',frame)
+
+	resp$(rc_priorPeriod=respc+=1)=fnPcRegRead$('filterPeriod')
+
+	fnFra(6,1,8,fraWidth,'Select Journals to Print',' ') : frame=2
+	fnChk(1,30,'Disbursements Journal'    	,1,frame) 	: resp$(rc_enable1=respc+=1)=fnPcRegRead$('enableJournal 1', 'True' )
+	fnChk(2,30,'Receipts Journal'          	,1,frame) 	: resp$(rc_enable2=respc+=1)=fnPcRegRead$('enableJournal 2', 'True' )
+	fnChk(3,30,'General Journal (Adj)'    	,1,frame) 	: resp$(rc_enable3=respc+=1)=fnPcRegRead$('enableJournal 3', 'True' )
+	fnChk(4,30,'General Journal (A/P)'    	,1,frame) 	: resp$(rc_enable4=respc+=1)=fnPcRegRead$('enableJournal 4', 'False')
+	fnChk(5,30,'General Journal (Payroll)'	,1,frame) 	: resp$(rc_enable5=respc+=1)=fnPcRegRead$('enableJournal 5', 'False')
+	fnChk(6,30,'General Journal (A/R)'    	,1,frame) 	: resp$(rc_enable6=respc+=1)=fnPcRegRead$('enableJournal 6', 'False')
+	fnChk(7,30,'Sales Journal'             	,1,frame) 	: resp$(rc_enable7=respc+=1)=fnPcRegRead$('enableJournal 7', 'False')
+	fnChk(8,30,'Purchases Journal'         	,1,frame) 	: resp$(rc_enable8=respc+=1)=fnPcRegRead$('enableJournal 8', 'False')
 	fnCmdSet(2)
 	ckey=fnAcs(mat resp$)
-	if ckey=5 then goto Xit
-	if resp$(1)='True' then cur_prior=1 else cur_prior=2
-	mat journal_to_print=(0)
-	for j=1 to 8
-		if resp$(j+2)='True' then journal_to_print(j)=1
-	next j
-	prior_period=val(resp$(11)) ! prior period code
-	if prior_period<0 or prior_period>13 then prior_period=0
-return  ! /r
+	if ckey<>5 then
+		fnPcReg_write('cp1',resp$(rc_cp1))
+		fnPcReg_write('cp2',resp$(rc_cp2))
+		currentOrPrior=1 : if resp$(rc_cp2)='True' then currentOrPrior=2
+		filterPeriod=val(resp$(rc_priorPeriod))
+		if filterPeriod<0 or filterPeriod>13 then filterPeriod=0
+		fnPcReg_write('filterPeriod',str$(filterPeriod))
+		mat enableJournal=(0)
+		fnPcReg_write('enableJournal 1',resp$(rc_enable1)) : if resp$(rc_enable1)='True' then enableJournal(1)=1
+		fnPcReg_write('enableJournal 2',resp$(rc_enable2)) : if resp$(rc_enable2)='True' then enableJournal(2)=1
+		fnPcReg_write('enableJournal 3',resp$(rc_enable3)) : if resp$(rc_enable3)='True' then enableJournal(3)=1
+		fnPcReg_write('enableJournal 4',resp$(rc_enable4)) : if resp$(rc_enable4)='True' then enableJournal(4)=1
+		fnPcReg_write('enableJournal 5',resp$(rc_enable5)) : if resp$(rc_enable5)='True' then enableJournal(5)=1
+		fnPcReg_write('enableJournal 6',resp$(rc_enable6)) : if resp$(rc_enable6)='True' then enableJournal(6)=1
+		fnPcReg_write('enableJournal 7',resp$(rc_enable7)) : if resp$(rc_enable7)='True' then enableJournal(7)=1
+		fnPcReg_write('enableJournal 8',resp$(rc_enable8)) : if resp$(rc_enable8)='True' then enableJournal(8)=1
+	end if
+	returnN=ckey
+	fn_askPeriod=returnN
+fnend
+Xit: fnXit
 include: ertn

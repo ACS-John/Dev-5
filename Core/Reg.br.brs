@@ -241,6 +241,7 @@ def fn_creg_setup
 fnend
 
 ! Program and Company Registry - great for saving default answers on screens
+! NOTE: fnPcRegRead$ and fnPcRegReadN reside in Core\Library.br
 def library fnPcReg_Read(fieldName$*128,&fieldValue$; defaultIfNotRead$*128,alsoApplyDefaultIfReadBlank,___,pcId$*128)
 	fn_creg_setup
 	pcId$=env$('program_caption')&'.'&rtrm$(fieldName$)
@@ -252,6 +253,7 @@ def library fnPcReg_write(fieldName$*128,fieldValue$*256; ___,pcId$*128)
 	pcId$=env$('program_caption')&'.'&rtrm$(fieldName$)
 	fnPcReg_write=fn_cReg_write(pcId$,fieldValue$)
 fnend
+
 
 
 ! User Registry - tied to Unique_Computer_Id (stored in regurlar registry with key prepended)

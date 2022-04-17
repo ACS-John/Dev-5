@@ -11,6 +11,4 @@ posted  	, Posted            	, N  2    	,                 	, !                 
 ref     	, Reference Number 	, C 12    	,                 	, !                                    	pos 29  TR$  
 desc    	, Description       	, C 30    	,                 	, !                                    	pos 41  TD$  
 period  	, Period            	, N  2    	,                 	, ! ComboFio(GL Period Names,1)      	pos 71  PCDE    
-
-
 #eof#
