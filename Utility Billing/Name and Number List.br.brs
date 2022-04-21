@@ -171,7 +171,7 @@ LOOP_TOP: ! r:
 	if print_address=1 then
 		pr #255,using "form pos 21,c 31": e$(3)
 		pr #255,using "form pos 21,c 31": extra$(1)
-		pr #255,using "form pos 21,c 30": e$(4)
+		if len(trim$(e$(4))) then pr #255,using "form pos 21,c 30": e$(4)
 	end if
 	if print_phone=1 and trim$(extra$(2))<>'' then
 		pr #255,using "form pos 21,c 31": '  Phone: '&extra$(2)
@@ -180,8 +180,12 @@ LOOP_TOP: ! r:
 		pr #255,using "form pos 21,c 31": '   Cell: '&extra$(8)
 	end if
 	if print_email=1 and trim$(email$)<>'' then
-		pr #255,using "form pos 21,c 40": '   Email: '&email$
+		pr #255,using "form pos 21,c 40": '  Email: '&email$
 	end if
+	if print_phone=1 or print_email=1 or print_cell=1 then 
+		! add a space if printing more than just address
+		pr #255,using "form pos 21,c 40": ''
+	end if 
 goto LOOP_TOP ! /r
  
 PgOf: ! r:
