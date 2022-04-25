@@ -1841,6 +1841,10 @@ fnend
 	! /r
 ! /r
 ! r: Client Billing
+	def library fnClientBillingMergeTrans(h,form$*128,nformat$*20,&sel$,klength)
+		library 'S:\Client Billing\Merge Transactions.br': fnSearch
+		fnClientBillingMergeTrans=fnClientBillingMergeTrans(h,form$,nformat$,sel$,klength)
+	fnend
 	def library fnSearch(h,form$*128,nformat$*20,&sel$,klength)
 		library 'S:\Client Billing\fn\search.br': fnSearch
 		fnSearch=fnSearch(h,form$,nformat$,sel$,klength)
