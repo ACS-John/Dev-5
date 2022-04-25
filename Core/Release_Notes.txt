@@ -1,7 +1,6 @@
 Time and Date 		Sys	Program(s) and Change(s) Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
 ______________________	___	____________________________________________________________________________________________________________________________________________________________________________________________________________________________________                                                                                                                                                                                      
-13:56 04/22/2022	CO	5.75240  
-1:47 PM 4/21/2022	UB	Name and Number List - adjust line spacing when phone or email is printed  
+12:39 04/22/2022	CO	5.75240  
 3:02 PM 4/17/2022	GL	Seperated Chart of Accounts with Financial Statement Reference Numbers into its own menu option so it can have different page settings than Chart of Accounts 
 13:17 04/22/2022	CO	5.75239   
 11:17 AM 4/17/2022	GL	Transaction Journals improved with new Reference Number sorting and screen selection memory  
