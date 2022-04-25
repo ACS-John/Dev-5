@@ -1,6 +1,16 @@
 on error goto Ertn
 autoLibrary
 fnTop(program$)
+fn_mergeTrans
+
+goto Xit
+
+def library fnClientBillingMergeTrans
+	on error goto Ertn
+	autoLibrary
+	fnClientBillingMergeTrans=fn_mergeTrans
+fnend
+def fn_mergeTrans
 fnStatus('Merging transactions...')
 ! pr ' entered '&program$ : pause
 dim c$(0)*256
@@ -79,7 +89,9 @@ Finis: ! r:
 		fnStatusPause
 	end if
 	fnStatusClose
-goto Xit ! /r
+	! /r
+fnend
+
 
 Xit: fnXit
 include: fn_open
