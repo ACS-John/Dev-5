@@ -20,21 +20,22 @@ do
 		fn_getLastTransaction(account$,mat t$,mat tN)
 		if tN(trans_tbal)<>cN(c_balance) then
 			lastBillDate$=date$(days(cN(c_lastBillingDate),'mmddyy'),'mm/dd/yy')
-			diff=cN(c_balance)-tN(trans_tbal)
+			! diff=cN(c_balance)-tN(trans_tbal)
 			! Penalties are Services 5,6,7,10 for findlay
 			! penSum=cN(c_s05bill)+cN(c_s06bill)+cN(c_s07bill)+cN(c_s10bill)
-			penSum=cN(c_s05breakdown)+cN(c_s06breakdown)+cN(c_s07breakdown)+cN(c_s10breakdown)
-			if diff<>penSum then 
-				txt$=' DIFF.' 
-			else 
-				txt$=''
-				cN(c_s05breakdown)=0
-				cN(c_s06breakdown)=0
-				cN(c_s07breakdown)=0
-				cN(c_s10breakdown)=0
-				cN(c_balance)=tN(trans_tbal)
-			end if
+			! penSum=cN(c_s05breakdown)+cN(c_s06breakdown)+cN(c_s07breakdown)+cN(c_s10breakdown)
+			! if diff<>penSum then 
+			! 	txt$=' DIFF.' 
+			! else 
+			! 	txt$=''
+			! 	cN(c_s05breakdown)=0
+			! 	cN(c_s06breakdown)=0
+			! 	cN(c_s07breakdown)=0
+			! 	cN(c_s10breakdown)=0
+			! 	cN(c_balance)=tN(trans_tbal)
+			! end if
 			pr #255,us 'form pos 1,c 10,4*N 10.2,3*C 10': account$,cN(c_balance),tN(trans_tbal),diff,penSum,txt$,lastBillDate$,fn_transType$(tN(trans_tcode))
+			cN(c_balance)=tN(trans_tbal)
 			rewrite #hCust,us form$(hCust): mat c$,mat cN
 		end if
 	end if
