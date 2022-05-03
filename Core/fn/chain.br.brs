@@ -23,7 +23,7 @@ def library fnChain(prg$*255; no_fnprg_setting,noLog)
 		fnmsgbox(mat mss$,resp$,'',21)
 	end if
 	if resp$='Cancel' then goto Xit else if resp$='Retry' then goto Test
-	if ~noLog then fnlog('fnChain to '&prg$,1)
+	if ~noLog then fnLog('fnChain to '&prg$,1)
 	chain prg$
 	Xit: !
 	chain 'S:\Core\Menu.br' ! fnXit
