@@ -742,9 +742,9 @@ fnend
 		library 'S:\Core\fn\error.br': fnError
 		fnError=fnError(callingProgram$,errornumber,linenumber,ertnAct$,stopable$)
 	fnend
-	def library fnlog(log$*512; x)
-		library 'S:\Core\Log.br': fnlog
-		fnlog=fnlog(log$, x)
+	def library fnLog(log$*512; type)
+		library 'S:\Core\fn\Log.br': fnLog
+		fnLog=fnLog(log$, type)
 	fnend
 	def library fngetdir(&dir$,mat filename$; option$,filter$*40)
 		library 'S:\Core\fn\getDir.br': fngetdir
