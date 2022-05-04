@@ -35,7 +35,7 @@ def fn_updateSupportExpirationDate(; clientKey$*5)
 				fnaddonec(mat msgConfirm$,'')
 				fn_addSupportMsgLines$(mat msgConfirm$)
 				fnaddonec(mat msgConfirm$,'')
-				fnaddonec(mat msgConfirm$,'Total Cost:'&tab$&tab$&cnvrt$('pic($$$,$$#.##)',sum(mat cost)))
+				fnaddonec(mat msgConfirm$,'Total Cost:'&tab$&tab$&cnvrt$('pic(-$$,$$#.##)',sum(mat cost)))
 				fnaddonec(mat msgConfirm$,'')
 				fnaddonec(mat msgConfirm$,'Update Expiration Dates? (adds one [timeframe] to each)')
 				fnmsgbox(mat msgConfirm$, resp$,'',buttonYN+iconQuestion+buttonDefaultTwo)
@@ -66,7 +66,7 @@ fnend
 def fn_addSupportMsgLines$(mat msgText$)
 	fn_getSupportArrayByClient(clientKey$,mat sysid$,mat dateStart,mat timeFrame$,mat dateExpire,mat cost)
 	for supItem=1 to udim(mat sysid$)
-		fnaddonec(mat msgText$,sysid$(supItem)&tab$&timeFrame$(supItem)&' '&date$(days(dateExpire(supItem),'ccyymmdd'),'mm/dd/ccyy')&tab$&cnvrt$('pic(zzz,zzz.zz)',cost(supItem)))
+		fnaddonec(mat msgText$,sysid$(supItem)&tab$&timeFrame$(supItem)&' '&date$(days(dateExpire(supItem),'ccyymmdd'),'mm/dd/ccyy')&tab$&cnvrt$('pic(---,---.zz)',cost(supItem)))
 	nex supItem
 fnend
 def fn_getSupportArrayByClient(client$,mat sysid$,mat dateStart,mat timeFrame$,mat dateExpire,mat cost)
