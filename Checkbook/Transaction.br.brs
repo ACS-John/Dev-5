@@ -507,60 +507,40 @@ AllocationFm: ! r:
 	allocations_messed_with=1
 	fnTos
 	lc=0 : mylen=22 : mypos=mylen+2
-	fnLbl(lc+=1,1,'Bank:',mylen,right)
-	fnTxt(lc,mypos,2,0,left,number$,disable)
-	resp$(1)=str$(trabank_code)
-	fnLbl(lc+=1,1,'Transaction Type:',mylen,right)
-	fnTxt(lc,mypos,1,0,left,number$,disable)
-	resp$(2)=str$(tratcde)
-	fnLbl(lc+=1,1,'Check/Reference:',mylen,right)
-	fnTxt(lc,mypos,8,0,right,'',disable)
-	resp$(3)=track$
-	fnLbl(lc+=1,1,'General Ledger Number:',mylen,right)
-	fnQgl(lc,mypos)
-	resp$(4)=fnrgl$(tragl$)
-	fnLbl(lc+=1,1,'Amount:',mylen,right)
-	fnTxt(lc,mypos,9,0,right,pointtwo$)
-	resp$(5)=str$(traamt)
-	fnLbl(lc+=1,1,'Description:',mylen,right)
-	fnTxt(lc,mypos,30,0,left)
-	resp$(6)=tradesc$
-	fnLbl(lc+=1,1,'Reference:',mylen,right)
-	fnTxt(lc,mypos,6,0,left,'',0)
-	resp$(7)=traivd$ ! the last zero above was disabled, why kj
-	fnLbl(lc+=1,1,'Purchase Order:',mylen,right)
-	fnTxt(lc,mypos,12,0,left)
-	resp$(8)=trapo$
-	fnLbl(lc+=1,1,'Posting Status:',mylen,right)
-	fnTxt(lc,mypos,1,0,left,number$,disable)
-	resp$(9)=str$(tragde)
+	fnLbl(lc+=1,1,'Bank:',mylen,right)                   	: fnTxt(lc,mypos,2,0,left,number$,disable)	: resp$(1)=str$(trabank_code)
+	fnLbl(lc+=1,1,'Transaction Type:',mylen,right)      	: fnTxt(lc,mypos,1,0,left,number$,disable)	: resp$(2)=str$(tratcde)
+	fnLbl(lc+=1,1,'Check/Reference:',mylen,right)       	: fnTxt(lc,mypos,8,0,right,'',disable)    	: resp$(3)=track$
+	fnLbl(lc+=1,1,'General Ledger Number:',mylen,right)	: fnQgl(lc,mypos)                          	: resp$(4)=fnrgl$(tragl$)
+	fnLbl(lc+=1,1,'Amount:',mylen,right)                	: fnTxt(lc,mypos,9,0,right,pointtwo$)     	: resp$(5)=str$(traamt)
+	fnLbl(lc+=1,1,'Description:',mylen,right)           	: fnTxt(lc,mypos,30,0,left)                	: resp$(6)=tradesc$
+	fnLbl(lc+=1,1,'Reference:',mylen,right)             	: fnTxt(lc,mypos,6,0,left,'',0)            	: resp$(7)=traivd$ ! the last zero above was disabled, why kj
+	fnLbl(lc+=1,1,'Purchase Order:',mylen,right)       	: fnTxt(lc,mypos,12,0,left)                	: resp$(8)=trapo$
+	fnLbl(lc+=1,1,'Posting Status:',mylen,right)       	: fnTxt(lc,mypos,1,0,left,number$,disable)	: resp$(9)=str$(tragde)
 	fnCmdSet(4)
 	ckey=fnAcs(mat resp$)
-	if ckey=5 then goto CANCEL_ALLOC
-	trabank_code=val(resp$(1))
-	tratcde=val(resp$(2))
-	track$=resp$(3)
-	tragl$=fnagl$(resp$(4))
-	traamt=val(resp$(5))
-	tradesc$=resp$(6)
-	traivd$=resp$(7)
-	trapo$=resp$(8)
-	tragde=val(resp$(9))
-	if ckey=1 then gosub AllocationSave
-	if ckey=1 and adding_allocation=1 then
-		tragl$=''
-		traamt=0
-		goto AllocationFm
-! add loop
-	end if
-	CANCEL_ALLOC: ! r:
-		if adding_allocation=1 then
-		! delete #h_tralloc,same:
-		else
-			release #h_tralloc:
+	if ckey<>5 then 
+		trabank_code=val(resp$(1))
+		tratcde=val(resp$(2))
+		track$=resp$(3)
+		tragl$=fnagl$(resp$(4))
+		traamt=val(resp$(5))
+		tradesc$=resp$(6)
+		traivd$=resp$(7)
+		trapo$=resp$(8)
+		tragde=val(resp$(9))
+		if ckey=1 then gosub AllocationSave
+		if ckey=1 and adding_allocation=1 then
+			tragl$=''
+			traamt=0
+			goto AllocationFm
+			! add loop
 		end if
-	goto EO_ALLOC ! /r
-	EO_ALLOC: !
+	end if
+	if adding_allocation=1 then
+	! delete #h_tralloc,same:
+	else
+		release #h_tralloc:
+	end if
 	adding_allocation=0
 return  ! /r
 AllocationSave: ! r:
@@ -669,7 +649,7 @@ EO_FLEX2: ! /r
 	fnButton(lc,(61+4+2),'&Edit',7,'Edit Allocation')
 	fnButton(lc,(61+4+2+5+2),'&Delete',6,'Delete Allocation')
 	fnButton(lc,(61+4+2+5+2+7+2),'&Get Standard G/L Breakdowns',9,'Reset Allocations to those associated with the Payee.')
-	if typeofentry=2 then
+	if tcde=2 then ! was    typeofentry=2      changed to tcde in attempt to fix it being wrong during some edits 5/6/22 -jb
 		fnButton(6,72,'&Receipt Type File',11,'Add or Edit different types or classifications of receipts ',0,0,1)
 	else if scd<>4 then
 		fnButton(6,72,'&Payee File',10,'Add or Edit Payees',0,0,1)
