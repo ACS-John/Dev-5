@@ -299,7 +299,7 @@ VBPRINT: ! r:
 		pr #20: 'Call Print.AddText("'&fnformnumb$(g(7),2,9)&'",'&str$(xmargin+45)&','&str$(lyne*meter+ymargin)&')'
 	end if
 	if g(8) then
-		pr #20: 'Call Print.AddText("Recycle",'&str$(xmargin+1)&','&str$(lyne*(meter+=1)+ymargin)&')'
+		pr #20: 'Call Print.AddText("WATER IMPROVEMENT",'&str$(xmargin+1)&','&str$(lyne*(meter+=1)+ymargin)&')'
 		pr #20: 'Call Print.AddText("'&fnformnumb$(g(8),2,9)&'",'&str$(xmargin+45)&','&str$(lyne*meter+ymargin)&')'
 	end if
 	if g(9) then
