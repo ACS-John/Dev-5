@@ -1603,7 +1603,7 @@ fnend
 		fnReassignTransactionAddresses=fnReassignTransactionAddresses(cno)
 	fnend
 	def library fnLastAccountingPeriodClosed(; setit)
-		library 'S:\acsGL\company.br': fnLastAccountingPeriodClosed
+		library 'S:\General Ledger\company.br': fnLastAccountingPeriodClosed
 		fnLastAccountingPeriodClosed=fnLastAccountingPeriodClosed( setit)
 	fnend
 	def library fnAddGlPayee
