@@ -1,5 +1,4 @@
 ! Very similar to S:\Core\Print\1099-Misc.br
-
 ! r: testing zone
 	fn_setup
 	if fn1099NecAsk (seltpN,typeN,minAmt,beg_date,end_date) then
@@ -30,8 +29,8 @@ def fn_1099testPrint
 	! /r
 	disableCopyAWarning=1
 	fn_1099print('account1','Laura Smith'  ,mat testAddr$,'111-11-1111',mat testBox)
-	! fn_1099print('Account2','Recipient Two'  ,mat testAddr$,'222-22-2222',mat testBox)
-	! fn_1099print('Account3','Recipient Three',mat testAddr$,'333-33-3333',mat testBox)
+	fn_1099print('Account2','Recipient Two'  ,mat testAddr$,'222-22-2222',mat testBox)
+	fn_1099print('Account3','Recipient Three',mat testAddr$,'333-33-3333',mat testBox)
 	disableCopyAWarning=0
 	fn_1099print_close
 fnend
@@ -72,7 +71,7 @@ def fn_ask(&seltpN,&typeN,&minAmt,&beg_date,&end_date; ___, _
 	! local retained values: awi_setup$, taxYear$, mat deductionFullName$, mat deductionOption$,deductionOptionCount, and many many more
 	if awi_setup$<>env$('cursys')&env$('cno') then ! r: read or set values for ASK_INFO screen
 		awi_setup$=env$('cursys')&env$('cno')
-		taxYear$=date$(days(date$)-180,'CCYY')
+		taxYear$=date$(days(date$)-120,'CCYY')
 		if env$('CurSys')='PR' then
 			dim deductionFullName$(20)*20,deductionOption$(20)*20
 			fnDedNames(mat deductionFullName$)
@@ -364,6 +363,7 @@ def fn_1099print(vn$*8,nam$*30,mat empAddr$,ss$*11,mat box; ___, _
 		column1b	= left +  65
 		column2 	= left +  97
 		column3 	= left + 137
+		column3b 	= left + 141  ! year for 2022 and following
 		column4 	= left + 168
 		ten99Count+=1
 		if ten99Count=1 then yOffset=form1y
@@ -388,6 +388,7 @@ def fn_1099print(vn$*8,nam$*30,mat empAddr$,ss$*11,mat box; ___, _
 				fnpa_txt(companyNameAddr$(2),column1,fn_line(2))
 				fnpa_txt(companyNameAddr$(3),column1,fn_line(3))
 				fnpa_txt(ph$,column1,fn_line(4))
+				fnpa_txt(taxyear$(3:4),column3b,fn_line(15))
 				fnpa_txt(fed$,column1,fn_line(5)) ! PAYER'S TIN
 				fnpa_txt(ss$,column1b,fn_line(5)) ! RECIPIENT'S TIN
 				fnpa_txt(nam$,column1,fn_line(7)) ! RECIPIENT'S name
@@ -434,7 +435,7 @@ fnend
 		! retains setup_line,mat lineXy
 		if ~setup_line then
 			setup_line=1
-			mat lineXy(14)
+			mat lineXy(15)
 			lineXy( 1)=16
 			lineXy( 2)=19
 			lineXy( 3)=22
@@ -449,6 +450,7 @@ fnend
 			lineXy(12)=70 ! box 5,6,7
 			lineXy(13)=74 ! Account number
 			lineXy(14)=75 ! box 5b,6b,7b
+			lineXy(15)=27 ! year 2022 and beyond prints year
 		end if
 		fn_line=lineXy(lineNumber)+yOffset
 	fnend
