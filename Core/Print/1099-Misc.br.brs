@@ -81,7 +81,7 @@ def fn_ask(&seltpN,&typeN,&minAmt,&beg_date,&end_date; ___, _
 	! local retained values: awi_setup$, taxYear$, mat deductionFullName$, mat deductionOption$,deductionOptionCount, and many many more
 	if awi_setup$<>env$('cursys')&env$('cno') then ! r: read or set values for ASK_INFO screen
 		awi_setup$=env$('cursys')&env$('cno')
-		taxYear$=date$(days(date$)-180,'CCYY')
+		taxYear$=date$(days(date$)-120,'CCYY')
 		if env$('CurSys')='PR' then
 			dim deductionFullName$(20)*20,deductionOption$(20)*20
 			fnDedNames(mat deductionFullName$)
@@ -370,6 +370,7 @@ def fn_1099print(vn$*8,nam$*30,mat empAddr$,ss$*11,mat box; ___, _
 		column2 	= left + 102
 		column3 	= left + 137
 		column4 	= left + 168
+		column5 	= left + 141 ! year in 2022 and following
 		ten99Count+=1
 		if ten99Count=1 then yOffset=form1y
 		if ten99Count=2 then yOffset=form2y ! print bottom : pause 
@@ -410,10 +411,11 @@ def fn_1099print(vn$*8,nam$*30,mat empAddr$,ss$*11,mat box; ___, _
 			! r: right side (column2 and column3)
 				fnpa_txt(cnvrt$('pic(zzzzzzzzzz.zz',box(1) ),column2   		,fn_line(1) )
 				fnpa_txt(cnvrt$('pic(zzzzzzzzzz.zz',box(2) ),column2   		,fn_line(4) )
+				fnpa_txt(taxyear$(3:4)                       ,column5   		,fn_line(4) )
 				fnpa_txt(cnvrt$('pic(zzzzzzzzzz.zz',box(3) ),column2   		,fn_line(6) )
 				fnpa_txt(cnvrt$('pic(zzzzzzzzzz.zz',box(6) ),column3   		,fn_line(6) ) ! fed withheld
-				fnpa_txt(cnvrt$('pic(zzzzzzzzzz.zz',box(5) ),column2   		,fn_line(7) )
-				fnpa_txt(cnvrt$('pic(zzzzzzzzzz.zz',box(6) ),column3   		,fn_line(7) )
+				fnpa_txt(cnvrt$('pic(zzzzzzzzzz.zz',box(5) ),column2   		,fn_line(8) )
+				fnpa_txt(cnvrt$('pic(zzzzzzzzzz.zz',box(6) ),column3   		,fn_line(8) )
 				if box(7)>5000 then
 					fnpa_txt('X'                                ,column2+21 	,fn_line(9))
 				end if
@@ -422,7 +424,7 @@ def fn_1099print(vn$*8,nam$*30,mat empAddr$,ss$*11,mat box; ___, _
 				fnpa_txt(cnvrt$('pic(zzzzzzzzzz.zz',box(10)),column3    	,fn_line(11))
 				fnpa_txt(cnvrt$('pic(zzzzzzzzzz.zz',box(11)),column2    	,fn_line(12))
 				fnpa_txt(cnvrt$('pic(zzzzzzzzzz.zz',box(12)),column3    	,fn_line(12))
-				fnpa_txt(vn$                                   ,column1    	,fn_line(13))
+				fnpa_txt(vn$                                   ,column1    	,fn_line(14))
 				fnpa_txt(cnvrt$('pic(zzzzzzzzzz.zz',box(13)),column2    	,fn_line(13))
 				fnpa_txt(cnvrt$('pic(zzzzzzzzzz.zz',box(14)),column3    	,fn_line(13))
 				fnpa_txt(cnvrt$('pic(zzzzzzzzzz.zz',box(15)),column2    	,fn_line(14))
@@ -456,12 +458,12 @@ fnend
 			lineXy( 6)= 35 ! box 2
 			lineXy( 7)= 48 ! PAYER's TIN
 			lineXy( 8)= 52 ! box 5b,6b
-			lineXy( 9)= 66 ! RECIPIENT'S name  street address
-			lineXy(10)= 73 ! box 7,8
+			lineXy( 9)= 65 ! RECIPIENT'S name  street address
+			lineXy(10)= 72 ! box 7,8
 			lineXy(11)= 77 ! recipient's CSZ
 			lineXy(12)= 88 ! City or town, box 11,12
 			lineXy(13)=101 ! Account number, FATCA filing, box 13,14
-			lineXy(14)=112 ! box 15a,16a,17a
+			lineXy(14)=111 ! box 15a,16a,17a
 			lineXy(15)=116 ! box 15b,16b,17b (box(18-20))
 		end if
 		fn_line=lineXy(lineNumber)+yOffset
