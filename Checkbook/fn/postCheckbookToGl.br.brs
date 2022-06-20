@@ -382,11 +382,6 @@ def library fnPostCheckbookToGl(; enablePost,___,pg)
 		! pr 'at the end' : pause
 
 		if ~enablePost then goto Xit
-		close #20: ioerr ignore
-		! removed 5/20/20 - jb - nothing ever read this in anyway.  a better way would be to write it with fncreg_write
-		! open #20: 'Name=[Q]\CLmstr\PostDat.h[cno],Replace,RecL=12',i,outi,r
-		! write #20,using 'form pos 1,2*N 6',rec=1: d1,d2
-		! close #20:
 		if glb=2 then
 			goto Xit
 		else
@@ -527,7 +522,7 @@ def library fnPostCheckbookToGl(; enablePost,___,pg)
 	return  !
 	Xit: !
 fnend
-	def fn_gLBucketStuff(enablePost,glb,pr2$,&glwk2wsid; ___,hGlBucket,glwk$*256,returnN)
+	def fn_gLBucketStuff(enablePost,&glb,pr2$,&glwk2wsid; ___,hGlBucket,glwk$*256,returnN)
 		if enablePost then
 			open #hGlBucket=fnH: 'Name=[Q]\GLmstr\GLBucket.h[cno]',i,i,r ioerr ignore
 			read #hGlBucket,using 'form pos 1,N 1',rec=1: glb ioerr ignore 

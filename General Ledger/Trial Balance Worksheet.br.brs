@@ -1,4 +1,3 @@
-! formerly S:\acsGL\acglWkSh
 autoLibrary
 on error goto Ertn
 fnTop(program$)
