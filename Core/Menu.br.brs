@@ -1,5 +1,5 @@
 enableFavorites=1
-if env$('client')<>'White Hall' then enableUbCustomers=1 else enableUbCustomers=0 ! White Hall has 1043 active customers - it takes too long to load over and over.
+enableUbCustomers=1 : if env$('client')='White Hall' then enableUbCustomers=0 ! White Hall has 1043 active customers - it takes too long to load over and over.
 fn_setup
 
 ! r: setup once (additional setup stuff that just needs to be run once)
@@ -104,86 +104,6 @@ if menu$='Exit and Logout' then
 	execute 'System Logoff'
 end if
 goto Xit
-def fn_addIfLicensed(sysCode$)
-	if fnClientHas(sysCode$) and exists('S:\'&fnSystemName$(sysCode$)&'\Menu.mnu') then
-		fnAddOneC(mat system_abbr_list$,sysCode$)
-		fnAddOneC(mat system_name$,fnSystemName$(sysCode$))
-	end if
-fnend
-def fn_checkFileVersionIfNecessary
-	! if necessary detect if this company needs any automatic conversions
-	fncreg_read('last version used',company_last_version$) ! reads the last version of ACS used to access this particular company
-	version_current$=env$('acsVersion')
-	if company_last_version$<version_current$ then
-		fnCheckFileVersion
-		fncreg_write('last version used',version_current$)
-	end if
-fnend
-def fn_gridSetup
-	screen_height=35 : grid_height=screen_height-5-dashboard_height
-	if dashboard_height>0 then grid_height=grid_height-1
-	! filter_line=2
-	! grid_height$=str$(grid_height)
-	screen_width=115
-	! dim program_grid_spec$*128
-	info_colWidth=18 ! minimum of 15!!!
-	program_grid_line=2+dashboard_height
-	if enableFavorites and env$('FavoritesOpen')='True' then
-		favorite_width=35
-		program_grid_col=info_colWidth+favorite_width+2+2+1
-		favorite_height=grid_height-1
-	else
-		program_grid_col=info_colWidth+2
-	end if
-	favorite_left=info_colWidth+2
-	if dashboard_height>0 then program_grid_line=program_grid_line+1
-	! program_grid_spec$=str$(program_grid_line)&','&str$(program_grid_col)&',List '&grid_height$&'/63'
-	mat headings$(5)
-	headings$(1)='Selection'
-	headings$(2)='+'
-	headings$(3)='Program'
-	headings$(4)='File'
-	headings$(5)='ss_text$'
-	grid_width=80-favorite_width
-
-	mat column_mask$(5)
-	! if env$('ACSDeveloper')<>'' then
-	! 	mat column_mask$=('80')
-	! else
-		mat column_mask$=('1080')
-	! end if
-	!   column_mask$(2)='81'
-	column_mask$(1)='1080'
-	column_mask$(2)='81'
-	column_mask$(3)='80'
-	if env$('ACSDeveloper')<>'' then column_mask$(4)='80'
-fnend
-def fn_setupOnCursysChange
-	dim program_plus$(1)*128,program_name$(1)*80,program_file$(1)*256,program_name_trim$(1)*80,ss_text$(1)*256
-	fn_getProgramList(mat program_plus$,mat program_name$,mat program_name_trim$,mat program_file$,mat ss_text$)
-	fncno(cno)
-	if cno=0 then
-		cno=1
-		fnputcno(cno)
-		fncno(cno)
-	end if
-
-	if env$('cursys')='UB' then
-		fnureg_read('ub_total_ar_on_dashboard',ub_total_ar_on_dashboard$)
-		fnureg_read('ub_showCustomers',ub_showCustomers$,'True')
-	end if
-
-	dashboard_height=fn_dashboardHeight
-	fn_gridSetup !
-	if ~exists(dataFolder$&'\Company.h[cno]') then
-
-		chain "S:\Core\Programs\Select Company.br"
-	end if
-fnend
-def fn_captionUpdate
-	setenv('Program_Caption',fnSystemName$)
-	fnCompanyName(0,screen_width)
-fnend
 def fn_main
 	dim program_selection$*256,menu_option$*128
 	do
@@ -487,6 +407,87 @@ def fn_main
 	loop
 	Xit_MAIN: !
 fnend
+def fn_addIfLicensed(sysCode$)
+	if fnClientHas(sysCode$) and exists('S:\'&fnSystemName$(sysCode$)&'\Menu.mnu') then
+		fnAddOneC(mat system_abbr_list$,sysCode$)
+		fnAddOneC(mat system_name$,fnSystemName$(sysCode$))
+	end if
+fnend
+def fn_checkFileVersionIfNecessary
+	! if necessary detect if this company needs any automatic conversions
+	fncreg_read('last version used',company_last_version$) ! reads the last version of ACS used to access this particular company
+	version_current$=env$('acsVersion')
+	if company_last_version$<version_current$ then
+		fnCheckFileVersion
+		fncreg_write('last version used',version_current$)
+	end if
+fnend
+def fn_gridSetup
+	screen_height=35 : grid_height=screen_height-5-dashboard_height
+	if dashboard_height>0 then grid_height=grid_height-1
+	! filter_line=2
+	! grid_height$=str$(grid_height)
+	screen_width=115
+	! dim program_grid_spec$*128
+	info_colWidth=18 ! minimum of 15!!!
+	program_grid_line=2+dashboard_height
+	if enableFavorites and env$('FavoritesOpen')='True' then
+		favorite_width=35
+		program_grid_col=info_colWidth+favorite_width+2+2+1
+		favorite_height=grid_height-1
+	else
+		program_grid_col=info_colWidth+2
+	end if
+	favorite_left=info_colWidth+2
+	if dashboard_height>0 then program_grid_line=program_grid_line+1
+	! program_grid_spec$=str$(program_grid_line)&','&str$(program_grid_col)&',List '&grid_height$&'/63'
+	mat headings$(5)
+	headings$(1)='Selection'
+	headings$(2)='+'
+	headings$(3)='Program'
+	headings$(4)='File'
+	headings$(5)='ss_text$'
+	grid_width=80-favorite_width
+
+	mat column_mask$(5)
+	! if env$('ACSDeveloper')<>'' then
+	! 	mat column_mask$=('80')
+	! else
+		mat column_mask$=('1080')
+	! end if
+	!   column_mask$(2)='81'
+	column_mask$(1)='1080'
+	column_mask$(2)='81'
+	column_mask$(3)='80'
+	if env$('ACSDeveloper')<>'' then column_mask$(4)='80'
+fnend
+def fn_setupOnCursysChange
+	dim program_plus$(1)*128,program_name$(1)*80,program_file$(1)*256,program_name_trim$(1)*80,ss_text$(1)*256
+	fn_getProgramList(mat program_plus$,mat program_name$,mat program_name_trim$,mat program_file$,mat ss_text$)
+	fncno(cno)
+	if cno=0 then
+		cno=1
+		fnputcno(cno)
+		fncno(cno)
+	end if
+
+	if env$('cursys')='UB' then
+		fnureg_read('ub_total_ar_on_dashboard',ub_total_ar_on_dashboard$)
+		fnureg_read('ub_showCustomers',ub_showCustomers$,'True')
+	end if
+
+	dashboard_height=fn_dashboardHeight
+	fn_gridSetup !
+	if ~exists(dataFolder$&'\Company.h[cno]') then
+
+		chain "S:\Core\Programs\Select Company.br"
+	end if
+fnend
+def fn_captionUpdate
+	setenv('Program_Caption',fnSystemName$)
+	fnCompanyName(0,screen_width)
+fnend
+
 def fn_callHamsterFio(tmpCap$*128)
 	tmpCap$=trim$(tmpCap$)
 	if lwrc$(tmpCap$(1:11))=lwrc$('HamsterFio:') then
@@ -792,7 +793,7 @@ fnend
 ! goto UbNextCustomer
 def fn_getProgramList_add(gpla_file$*256;___,sign$,lineCount,h)
 
-	open #h=1: 'Name='&gpla_file$,display,input ioerr GPLA_Xit
+	open #h=1: 'Name='&gpla_file$,d,i ioerr GPLA_Xit
 	linput #h: temp$ eof GPLA_EOF ! just consume first line
 	lineCount=1
 	do
