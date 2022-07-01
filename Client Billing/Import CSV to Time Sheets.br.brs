@@ -511,8 +511,8 @@ def fn_houryRateAcs(wo_client$,the_date,wo_month$; hr_category,wo_sage_code$*128
 		else
 			hr_return=75
 		end if
-	else if hr_category=6  and wo_month$='31' then  ! support for Collection-Master is currently 100/hour without support
-		hr_return=100
+	else if hr_category=6  and wo_month$='31' then  ! support for Collection-Master is currently 150/hour without support
+		hr_return=150
 	else
 		hr_return=150
 	end if
