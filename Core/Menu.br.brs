@@ -13,7 +13,7 @@ fn_setup
 		ml$(3)='Perform an Update now?'
 		fnmsgbox(mat ml$,resp$,'',16+4)
 		if env$('acsDeveloper')<>'' then pr 'Developer Pause' : pause
-		if uprc$(resp$)=uprc$("Yes") then
+		if uprc$(resp$)=uprc$('Yes') then
 			chain 'S:\Core\Programs\Update'
 		else
 			goto Xit
@@ -39,10 +39,10 @@ fn_setup
 		ml$(3)='still receiving this message contact ACS at 1-800-643-6318'
 		ml$(4)='Perform an Update now?'
 		fnmsgbox(mat ml$,resp$,'',16+4)
-		
+
 		! add option for manual update
-		
-		if uprc$(resp$)=uprc$("Yes") then
+
+		if uprc$(resp$)=uprc$('Yes') then
 			chain 'S:\Core\Programs\Update'
 		else
 			if env$('acsDebug')<>'' then
@@ -58,21 +58,14 @@ fn_setup
 
 	dim cursys$*64
 	cursys$=fncursys$(cursys$)
-	dim cnam$*128
-	fncno(cno,cnam$) ! this call triggers the setting of the environment variable (env$('cnam')) i.e. setenv('cnam',[cursys]\company.h, pos 1, c 40 etc  )
-	if env$('acsDeveloper')<>'' and env$('cursys')='CLIENT BILLING' then
-		dim dataFolder$*256
-		dataFolder$='S:\Core\Data\acsllc'
-	else
-		dataFolder$='[Q]\[cursys]mstr'
-	end if
+	fn_setupOnCursysChange
+
 
 	!   h_plus=fn_open_plus_initial
 	fndecimal_assumed
 	fnreg_read('Enable Save Company As',enableSaveCompanyAs$, 'False')
 	! fnreg_read('Enable Open Partial',enableOpenPartial$, 'False')
 	! fnreg_read('Enable Backup Report Cache',enableBackupReportCache$, 'False')
-	fn_setupOnCursysChange
 
 	dim temp$*2048
 	temp$=''
@@ -104,6 +97,12 @@ if menu$='Exit and Logout' then
 	execute 'System Logoff'
 end if
 goto Xit
+	def fn_addIfLicensed(sysCode$)
+		if fnClientHas(sysCode$) and exists('S:\'&fnSystemName$(sysCode$)&'\Menu.mnu') then
+			fnAddOneC(mat system_abbr_list$,sysCode$)
+			fnAddOneC(mat system_name$,fnSystemName$(sysCode$))
+		end if
+	fnend
 def fn_main
 	dim program_selection$*256,menu_option$*128
 	do
@@ -133,7 +132,7 @@ def fn_main
 			fnButtonOrDisabled(env$('enableClientSelection')=='Yes',program_grid_line+6,1,env$('client')(1:info_colWidth),fkey_client:=5201, 'You are amazing.',info_colWidth)
 			fnButtonOrDisabled(1,program_grid_line+7,1,env$('cno')(1:info_colWidth),fkey_company:=5202, 'Company Name: '&env$('cnam'),info_colWidth)
 			if env$('ACSDeveloper')<>'' then
-				fnLbl(program_grid_line+8 ,1,"ACS Developer"(1:info_colWidth),info_colWidth,2)
+				fnLbl(program_grid_line+8 ,1,'ACS Developer'(1:info_colWidth),info_colWidth,2)
 				fnLbl(program_grid_line+9 ,1,env$('ACSDeveloper')(1:info_colWidth),info_colWidth,2)
 				fnLbl(program_grid_line+10,1,env$('acsUserId')(1:info_colWidth),info_colWidth,2)
 			end if
@@ -143,7 +142,7 @@ def fn_main
 			if env$('BR_XP_Mode')='True' then
 				fnLbl(program_grid_line+13,1,'XP Compatibility'(1:info_colWidth),info_colWidth,2)
 			end if
-			tmp_tooltip$="ACS was last updated on "&last_update$&'\n to version '&version_current$&'.'
+			tmp_tooltip$='ACS was last updated on '&last_update$&'\n to version '&version_current$&'.'
 			fnLbl(screen_height-8,1,'ACS '&rtrm$(version_current$,'0'),info_colWidth,2,0,0,0,tmp_tooltip$)
 			if env$('acsProduct')<>'ACS Online' then
 				fnLbl(screen_height-7,1,last_update$(1:info_colWidth),info_colWidth,2,0,0,0,tmp_tooltip$)
@@ -152,11 +151,6 @@ def fn_main
 			fn_dashboardDraw
 			if enableFavorites then fn_favoritesDraw
 			fn_dropDownMenus
-			! if env$('cursys')="PR" then
-			!   fnchk(1,65,'Enable 2018 Federal Withholdings (for testing)', 1,fraDashboard)
-			!   if env$('taxYear')='2018' then resp$(2)='^' else resp$(2)='False'
-			! end if
-
 			setenv('tmp_acs_back_arrow','S:\Core\Icon\Red_X.png')
 			fnreg_close ! allow backups to happen while this screen is open.
 			dim resp$(32)*255
@@ -166,9 +160,6 @@ def fn_main
 			program_selection_id=val(program_selection$(2:pos(program_selection$,']')-1))
 			program_selection$(1:pos(program_selection$,']'))=''
 			curfld_value=curfld
-			! if env$('cursys')="PR" then
-			!   if resp$(2)='True' or resp$(2)='^' then setenv('taxYear','2018') else setenv('taxYear','')
-			! end if
 			if fkey_value=1449 then ! fkey_facebook then ! =1449
 				execute 'sy -M -C Start https://www.facebook.com/advancedcomputerservices/'
 				goto Tos
@@ -242,9 +233,9 @@ def fn_main
 				fnClearLayoutCache
 				setenv('ForceScreenIOUpdate','yes')
 				open #h_tmp=fnH: 'Name='&env$('temp')&'\acs_Restart_[session].prc,replace',d,o
-				pr #h_tmp: "Stop"
-				pr #h_tmp: "clear resident"
-				pr #h_tmp: "chain 'S:\Core\Start'"
+				pr #h_tmp: 'Stop'
+				pr #h_tmp: 'clear resident'
+				pr #h_tmp: 'chain "S:\Core\Start"'
 				close #h_tmp:
 				execute 'proc [temp]\acs_Restart_[session].prc'
 			else if menu_option$='Index System' then
@@ -407,12 +398,7 @@ def fn_main
 	loop
 	Xit_MAIN: !
 fnend
-def fn_addIfLicensed(sysCode$)
-	if fnClientHas(sysCode$) and exists('S:\'&fnSystemName$(sysCode$)&'\Menu.mnu') then
-		fnAddOneC(mat system_abbr_list$,sysCode$)
-		fnAddOneC(mat system_name$,fnSystemName$(sysCode$))
-	end if
-fnend
+
 def fn_checkFileVersionIfNecessary
 	! if necessary detect if this company needs any automatic conversions
 	fncreg_read('last version used',company_last_version$) ! reads the last version of ACS used to access this particular company
@@ -447,7 +433,7 @@ def fn_gridSetup
 	headings$(3)='Program'
 	headings$(4)='File'
 	headings$(5)='ss_text$'
-	grid_width=80-favorite_width
+	grid_width=75-favorite_width
 
 	mat column_mask$(5)
 	! if env$('ACSDeveloper')<>'' then
@@ -459,29 +445,38 @@ def fn_gridSetup
 	column_mask$(1)='1080'
 	column_mask$(2)='81'
 	column_mask$(3)='80'
-	if env$('ACSDeveloper')<>'' then column_mask$(4)='80'
+	! if env$('ACSDeveloper')<>'' then column_mask$(4)='80'
+	if env$('ACSDeveloper')<>'' then column_mask$(5)='80'
+	! column_mask$(5)='80'
 fnend
-def fn_setupOnCursysChange
+def fn_setupOnCursysChange(; ___,cno,cnam$*128,dataFolder$*256)
 	dim program_plus$(1)*128,program_name$(1)*80,program_file$(1)*256,program_name_trim$(1)*80,ss_text$(1)*256
 	fn_getProgramList(mat program_plus$,mat program_name$,mat program_name_trim$,mat program_file$,mat ss_text$)
-	fncno(cno)
+	fncno(cno,cnam$)  ! this call triggers the setting of the environment variable (env$('cnam')) i.e. setenv('cnam',[cursys]\company.h, pos 1, c 40 etc  )
 	if cno=0 then
 		cno=1
 		fnputcno(cno)
 		fncno(cno)
+	end if
+	! r: set dataFolder$
+		if env$('acsDeveloper')<>'' and env$('cursys')='CLIENT BILLING' then
+			dataFolder$='S:\Core\Data\acsllc'
+		else
+			dataFolder$='[Q]\[cursys]mstr'
+		end if
+	! /r
+	if ~exists(dataFolder$&'\Company.h[cno]') then
+		! pr dataFolder$&'\Company.h[cno] does not exist.'
+		! pause
+		chain 'S:\Core\Programs\Select Company.br'
 	end if
 
 	if env$('cursys')='UB' then
 		fnureg_read('ub_total_ar_on_dashboard',ub_total_ar_on_dashboard$)
 		fnureg_read('ub_showCustomers',ub_showCustomers$,'True')
 	end if
-
 	dashboard_height=fn_dashboardHeight
-	fn_gridSetup !
-	if ~exists(dataFolder$&'\Company.h[cno]') then
-
-		chain "S:\Core\Programs\Select Company.br"
-	end if
+	fn_gridSetup
 fnend
 def fn_captionUpdate
 	setenv('Program_Caption',fnSystemName$)
@@ -544,21 +539,21 @@ def fn_callPrEmployee(line$*64; ___,spos,eno)
 fnend
 
 def fn_dashboardHeight
-	if env$('cursys')="OE" then
+	if env$('cursys')='OE' then
 		dhReturn=1
-	else if env$('cursys')="CM" then
+	else if env$('cursys')='CM' then
 		dhReturn=1
-	else if env$('cursys')="CL" then
+	else if env$('cursys')='CL' then
 		dhReturn=1
-	else if env$('cursys')="PR" then
+	else if env$('cursys')='PR' then
 		dhReturn=1
-	else if env$('cursys')="GL" then
+	else if env$('cursys')='GL' then
 		if fnClientHas('G2') then
 			dhReturn=2
 		else
 			dhReturn=1
 		end if
-	else if env$('cursys')="UB" then
+	else if env$('cursys')='UB' then
 		dhReturn=1
 	else if env$('cursystem')='Client Billing' then
 		dhReturn=3
@@ -591,7 +586,7 @@ def fn_favoritesDraw
 		fnFavoriteList(mat favorite$)
 		fnButton(1,1,'Close',fkey_favorite_close:=1452,'Close Favorites',0,6,fraFavorites)
 		fnButtonOrDisabled(favoriteDeleteMode$<>'True',1,15,'Delete',fkey_favorite_del:=1455,'To remove a favorite, click this "Delete" button and then click the favorite.',6,fraFavorites)
-		fnButtonOrDisabled(1,1,favorite_width-6,'Add',fkey_favorite_add:=1450,'To add a favorite, highlite a menu option and click this "add" button.',6,fraFavorites)
+		fnButtonOrDisabled(1,1,favorite_width-6,'Add',fkey_favorite_add:=1450,'To add a favorite, highlite a menu option and click this "Add" button.',6,fraFavorites)
 		if favoriteDeleteMode$='True' then
 			fnLbl(2,1,'Select Favorite to Delete',favorite_width,2,0,fraFavorites)
 		end if
@@ -608,12 +603,12 @@ def fn_dashboardDraw
 		if enableFavorites then
 			fnButtonOrDisabled(env$('FavoritesOpen')<>'True',2,favorite_left,'Favorites',fkey_favorite_open:=1451,'',20,fraDashboard)
 		end if
-		if env$('cursys')="CL" then
+		if env$('cursys')='CL' then
 			tmp_btn_width=14 : tmpBtnItem=0
 			fn_ddAddButton('Unpaid Invoice',fkey_cl_unpaid_invoice:=5001,tmpBtnItem+=1,tmp_btn_width)
 			fn_ddAddButton('Payee',fkey_cl_payee:=5003,tmpBtnItem+=1,tmp_btn_width)
 			fn_ddAddButton('Print Checks',fkey_cl_print_checks:=5002,tmpBtnItem+=1,tmp_btn_width)
-		else if env$('cursys')="PR" then
+		else if env$('cursys')='PR' then
 			fnLbl(1,1,'Payroll State:',15,1,0,fraDashboard)
 			fnLbl(1,17,fnpayroll_client_state$,4,0,0,fraDashboard)
 			tmp_btn_width=10 : tmpBtnItem=0
@@ -621,7 +616,7 @@ def fn_dashboardDraw
 			fn_ddAddButton('Registers',fkey_pr_payroll_registers:=5003,tmpBtnItem+=1,tmp_btn_width)
 			fn_ddAddButton('Enter Time',fkey_pr_enter_time:=5002,tmpBtnItem+=1,tmp_btn_width)
 			fn_ddAddButton('Employee',fkey_pr_employee:=5001,tmpBtnItem+=1,tmp_btn_width)
-		else if env$('cursys')="GL" then
+		else if env$('cursys')='GL' then
 			fnLbl(1,1,'Current Period:',19,1,0,fraDashboard)
 			fnLbl(1,21,str$(fnActPd),4,0,0,fraDashboard)
 
@@ -638,12 +633,12 @@ def fn_dashboardDraw
 				tmpBtnItem=0
 				fn_ddAddButton('Employee',fkey_g2_employee:=5011,tmpBtnItem+=1,tmp_btn_width, 2)
 			end if
-		else if env$('cursys')="UB" then
+		else if env$('cursys')='UB' then
 			d1$=date$(days(fnLastBillingDate,'mmddyy'),'mm/dd/ccyy')
 
 			fnLbl(1,1,'Last Billing Date:',18,1,0,1)
 			fnLbl(1,20,d1$,4,0,0,1)
-			if env$("ACSDeveloper")<>"" then
+			if env$('ACSDeveloper')<>'' then
 				fkey_change_billing_date=5001
 				fnButton(1,32,'Change',fkey_change_billing_date,'Select a new current Billing Date',1,6,fraDashboard)
 			end if
@@ -686,13 +681,13 @@ def library fnGetProgramList(mat program_plus$,mat program_name$,mat program_nam
 	if ~setup then fn_setup
 	fnGetProgramList=fn_getProgramList(mat program_plus$,mat program_name$,mat program_name_trim$,mat program_file$,mat ss_text$)
 fnend
-def fn_getProgramList(mat program_plus$,mat program_name$,mat program_name_trim$,mat program_file$,mat ss_text$; ___,glpa_program_count)
+def fn_getProgramList(mat program_plus$,mat program_name$,mat program_name_trim$,mat program_file$,mat ss_text$; ___,gridLine)
 
 	mat program_plus$(0) : mat program_name$(0) : mat program_name_trim$(0) : mat program_file$(0) : mat ss_text$(0)
 
-	fn_getProgramList_add('S:\[cursystem]\Menu.mnu')
-	if env$("ACSDeveloper")<>"" then
-		fn_getProgramList_add('S:\[cursystem]\Programmer.mnu')
+	fn_getProgramListAdd('S:\[cursystem]\Menu.mnu',gridLine)
+	if env$('ACSDeveloper')<>'' then
+		fn_getProgramListAdd('S:\[cursystem]\Programmer.mnu',gridLine)
 	end if  ! serial=env$('ACSDeveloper')<>''
 	if env$('cursys')='PR' then
 		dim employee$(0)*256
@@ -751,7 +746,7 @@ def fn_getProgramList(mat program_plus$,mat program_name$,mat program_name_trim$
 			mat program_file$(program_item_count)
 			mat ss_text$(program_item_count)
 			mat program_level(program_item_count)
-	
+
 			program_plus$(program_item_count)='**'
 			program_name$(program_item_count)='Active Customers'
 			program_name_trim$(program_item_count)=trim$(program_name$(program_item_count))
@@ -770,7 +765,7 @@ def fn_getProgramList(mat program_plus$,mat program_name$,mat program_name_trim$
 					mat program_file$(program_item_count)
 					mat ss_text$(program_item_count)
 					mat program_level(program_item_count)
-	
+
 					program_plus$(program_item_count)=''
 					program_name$(program_item_count)=customer$(c_account)&' '&rtrm$(customer$(c_name))
 					program_name_trim$(program_item_count)=trim$(program_name$(program_item_count))
@@ -791,94 +786,97 @@ fnend
 ! 	pause
 ! 	read #hUbCustomer,next:
 ! goto UbNextCustomer
-def fn_getProgramList_add(gpla_file$*256;___,sign$,lineCount,h)
+	def fn_getProgramListAdd(gpla_file$*256,&gridLine;___, _
+		sign$,lineCount,h,requirment$*128,gt_count,gt_item,ss_cat_item)
 
-	open #h=1: 'Name='&gpla_file$,d,i ioerr GPLA_Xit
-	linput #h: temp$ eof GPLA_EOF ! just consume first line
-	lineCount=1
-	do
-		linput #h: temp$ eof GPLA_EOF
-		lineCount+=1
-		if trim$(temp$)<>'' and trim$(temp$)(1:1)<>'!' then
-			dim program_item$(0)*512
-			str2mat(temp$,mat program_item$,'^')
-			if udim(program_item$)=>2 and pos(program_item$(2),'*')>0 then
-				program_item$(2)=srep$(program_item$(2),'*',trim$(trim$(program_item$(1)),'>'))
-
-				program_item$(2)=srep$(program_item$(2),'[cursystem]',env$('cursystem'))
-
-				! if pos(program_item$(2),'[cursystem]')>0 then pr 'AAA [cursystem] still in there. linecount=';linecount;bell : pause
-
-			end if
-
-			if udim(mat program_item$)>=3 then
-				requirment$=trim$(program_item$(3))
-			else
-				requirment$=''
-			end if
-			if requirment$='' or fnClientHas(requirment$) then
-				glpa_program_count+=1
-				program_item_count=udim(mat program_item$)
-				mat program_plus$(glpa_program_count)
-				mat program_name$(glpa_program_count)
-				mat program_name_trim$(glpa_program_count)
-				mat program_file$(glpa_program_count)
-				mat ss_text$(glpa_program_count)
-				mat program_level(glpa_program_count)
-				program_level(glpa_program_count)=fn_programLevel(program_item$(1))
-
-				program_name$(glpa_program_count)=srep$(rtrm$(program_item$(1)),'>','         ')
-				program_name_trim$(glpa_program_count)=trim$(program_name$(glpa_program_count))
-
-				if program_item_count=>2 then
-					program_item$(2)=srep$(program_item$(2),'[cursystem]',env$('cursystem')) ! do it again, because without this the test below sometimes fails - not sure why the first srep is not enough
-					! if pos(program_item$(2),'[cursystem]')>0 then pr 'CCC [cursystem] still in there. linecount=';linecount;bell : pause
-
-					program_file$(glpa_program_count)=trim$(program_item$(2))
-
-				end if
-
-				if trim$(program_file$(glpa_program_count))='' then
-					program_plus$(glpa_program_count)='**' ! fn_get_one_plus$(h_plus,env$('cursys'),program_file$(glpa_program_count))
-				end if
-
-				ss_text$(glpa_program_count)='' ! ss_text$(glpa_program_count)&cnvrt$('Pic(#####)',glpa_program_count)
-				gt_count=len(program_item$(1)(1:10))-len(srep$(program_item$(1)(1:10),'>',''))
-
-				for gt_item=1 to 10
-					if gt_count=gt_item-1 then
-						dim ss_category$(1)*80
-						mat ss_category$(gt_item)
-						ss_category$(gt_item)=program_name$(glpa_program_count)
-					end if
-				next gt_item
-				for ss_cat_item=1 to udim(mat ss_category$)
-					ss_text$(glpa_program_count)=ss_text$(glpa_program_count)&' - '&ltrm$(ss_category$(ss_cat_item))
-				next ss_cat_item
-				ss_text$(glpa_program_count)=ss_text$(glpa_program_count)&ltrm$(program_plus$(glpa_program_count))
-
-				if program_item_count>1 then ss_text$(glpa_program_count)=ss_text$(glpa_program_count)&' ~ '&program_item$(2)
-			end if
-		end if
-	loop
-	GPLA_EOF: !
-	close #h: ioerr ignore
-	linecount=0
-	GPLA_Xit: !
-fnend
-	def fn_programLevel(tmp$*512; ___,returnN) ! returns count of leading > in tmp$
+		open #h=1: 'Name='&gpla_file$,d,i ioerr GPLA_Xit
+		linput #h: temp$ eof GPLA_EOF ! just consume first line
+		lineCount=1
 		do
-			returnN+=1
-		loop while tmp$(returnN:returnN)='>'
-		fn_programLevel=returnN
+			linput #h: temp$ eof GPLA_EOF
+			lineCount+=1
+			if trim$(temp$)<>'' and trim$(temp$)(1:1)<>'!' then
+				dim program_item$(0)*512
+				str2mat(temp$,mat program_item$,'^')
+				if udim(program_item$)=>2 and pos(program_item$(2),'*')>0 then
+					program_item$(2)=srep$(program_item$(2),'*',trim$(trim$(program_item$(1)),'>'))
+
+					program_item$(2)=srep$(program_item$(2),'[cursystem]',env$('cursystem'))
+
+					! if pos(program_item$(2),'[cursystem]')>0 then pr 'AAA [cursystem] still in there. linecount=';linecount;bell : pause
+
+				end if
+
+				if udim(mat program_item$)>=3 then requirment$=trim$(program_item$(3))
+				if requirment$='' or fnClientHas(requirment$) then
+					gridLine+=1
+					program_item_count=udim(mat program_item$)
+					mat program_plus$(gridLine)
+					mat program_name$(gridLine)
+					mat program_name_trim$(gridLine)
+					mat program_file$(gridLine)
+					mat ss_text$(gridLine)
+					mat program_level(gridLine)
+					program_level(gridLine)=fn_programLevel(program_item$(1))
+
+					program_name$(gridLine)=srep$(rtrm$(program_item$(1)),'>','         ')
+					program_name_trim$(gridLine)=trim$(program_name$(gridLine))
+
+					if program_item_count=>2 then
+						program_item$(2)=srep$(program_item$(2),'[cursystem]',env$('cursystem')) ! do it again, because without this the test below sometimes fails - not sure why the first srep is not enough
+						! if pos(program_item$(2),'[cursystem]')>0 then pr 'CCC [cursystem] still in there. linecount=';linecount;bell : pause
+
+						program_file$(gridLine)=trim$(program_item$(2))
+
+					end if
+
+					if trim$(program_file$(gridLine))='' then
+						program_plus$(gridLine)='**'
+					! else if udim(program_item$)=>4 then
+					! 	program_plus$(gridLine)=program_item$(4)
+					end if
+
+					ss_text$(gridLine)='' ! ss_text$(gridLine)&cnvrt$('Pic(#####)',gridLine)
+					gt_count=len(program_item$(1)(1:10))-len(srep$(program_item$(1)(1:10),'>',''))
+
+					for gt_item=1 to 10
+						if gt_count=gt_item-1 then
+							dim ss_category$(1)*80
+							mat ss_category$(gt_item)
+							ss_category$(gt_item)=program_name$(gridLine)
+						end if
+					next gt_item
+					for ss_cat_item=1 to udim(mat ss_category$)
+						ss_text$(gridLine)&=','&ltrm$(ss_category$(ss_cat_item))
+					next ss_cat_item
+					! ss_text$(gridLine)&=ltrm$(program_plus$(gridLine))
+
+					if program_item_count=1 then
+						ss_text$(gridLine)&=',[Category Header]'
+					else if program_item_count>1 then
+						
+						! ss_text$(gridLine)=ss_text$(gridLine)&', '&program_item$(2)
+						
+						if udim(program_item$)=>4 then
+							ss_text$(gridLine)=rtrm$(ss_text$(gridLine))&', '&trim$(program_item$(4))
+						end if
+						! ss_text$(gridLine)=srep$(ss_text$(gridLine),'**','[Category]')
+					end if
+				end if ! requirment$='' or fnClientHas(requirment$) ...
+				if ss_text$(gridLine)(1:1)=',' then ss_text$(gridLine)(1:1)=''
+			end if
+		loop
+		GPLA_EOF: !
+		close #h: ioerr ignore
+		GPLA_Xit: !
 	fnend
+		def fn_programLevel(tmp$*512; ___,returnN) ! returns count of leading > in tmp$
+			do
+				returnN+=1
+			loop while tmp$(returnN:returnN)='>'
+			fn_programLevel=returnN
+		fnend
 def fn_updateProgramGrid
-	col_return=1
-	col_plus=2
-	col_name=3
-	col_file=4
-	col_ss_text=5
-	dim program_grid_row$(5)*255
 	dim program_selection_id$*256
 	setenv('current_grid_row',str$(1))
 	program_selection_id=0
@@ -906,17 +904,27 @@ def fn_updateProgramGrid
 		next upg_item
 	end if
 fnend
-def fn_upgShowIt(upg_item)
-	program_grid_row$(col_return)='['&str$(upg_item)&']'&program_file$(upg_item)
-	program_grid_row$(col_plus)=program_plus$(upg_item)
-	program_grid_row$(col_name)=program_name$(upg_item)
-	program_grid_row$(col_file)=program_file$(upg_item)
-	if program_selection_id=upg_item then
-		setenv('current_grid_row',str$(upg_item))
-	end if
-	program_grid_row$(col_ss_text)=ss_text$(upg_item)
-	fnflexadd1(mat program_grid_row$)
-fnend
+	def fn_upgShowIt(upg_item) ! lots of locals ;)
+		! col_return  = 1
+		! col_plus    = 2
+		! col_name    = 3
+		! col_file    = 4
+		! col_ss_text = 5
+
+		dim gridRow$(5)*255
+		gridRow$(1)='['&str$(upg_item)&']'&program_file$(upg_item)
+		gridRow$(2)=program_plus$(upg_item)
+		gridRow$(3)=program_name$(upg_item)
+		gridRow$(4)=program_file$(upg_item)
+		gridRow$(5)=ss_text$(upg_item)
+
+		if program_selection_id=upg_item then
+			setenv('current_grid_row',str$(upg_item))
+		end if
+
+		fnflexadd1(mat gridRow$)
+
+	fnend
 def fn_dropDownMenus
 	if ~dm_setup then
 		dm_setup=1
