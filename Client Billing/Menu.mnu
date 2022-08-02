@@ -40,7 +40,7 @@ Daily
 ! >Print Messages                                 ^ [cursystem]\Legacy\armessag          ^  ^Daily,Legacy
 >Email Queued Invoices                            ^ [cursystem]\*                        ^EM^Daily,Email
 Monthly
->Import CSV to Time Sheets                        ^ [cursystem]\*                        ^  ^Monthly,
+>Import CSV to Time Sheets                        ^ [cursystem]\*                        ^  ^Monthly,csv2tm
 >Print Monthly Billing Summary                    ^ [cursystem]\Legacy\tmmobsum          ^  ^Monthly,
 ! >Post to General Ledger                         ^ [cursystem]\Legacy\arpostgl          ^GL^Monthly,
 ! >Month End Closing                              ^ [cursystem]\Legacy\tmpytd            ^  ^Monthly,
