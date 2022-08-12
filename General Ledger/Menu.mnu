@@ -3,7 +3,7 @@ File
 >Accounts                                           ^ [cursystem]\*
 >Payee                                              ^ [cursystem]\*
 >>Payee Transaction List                            ^ [cursystem]\*
->>Payee Type                                         ^ HamsterFio:*
+>>Payee Type                                        ^ HamsterFio:*
 >Schedule                                           ^ [cursystem]\*
 >Bank Reconciliation                                ^ [cursystem]\*
 >>Access Bank Rec File                              ^ [cursystem]\*
@@ -87,7 +87,7 @@ Utilities
 >Test Balance Sheet Design                        ^ [cursystem]\*
 >Test Income Statement Design                     ^ acsGL\acglinct
 >Reprint Year End Trial Balance                   ^ acsGL\yearendtb
-Budget Management                                 ^ acsGL\bgmaint2                                        ^ GB
+Budget Management                                 ^ [cursystem]\*                                         ^ GB
 
 General Ledger Accountants Add-On                 ^                                                       ^ G2
 >Employee                                         ^ [cursystem]\Accountants\*                             ^ G2

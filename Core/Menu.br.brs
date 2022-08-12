@@ -781,63 +781,65 @@ def fn_getProgramList(mat program_plus$,mat program_name$,mat program_name_trim$
 		end if ! enableUbCustomers
 	end if
 fnend
-! UbCustomerReadErr: !
+! UbCustomerReadErr: ! r:
 ! 	pr 'locked customer'
 ! 	pause
 ! 	read #hUbCustomer,next:
-! goto UbNextCustomer
-	def fn_getProgramListAdd(gpla_file$*256,&gridLine;___, _
-		sign$,lineCount,h,requirment$*128,gt_count,gt_item,ss_cat_item)
+! goto UbNextCustomer ! /r
+	def fn_getProgramListAdd(fileIn$*256,&gridLine;___, _
+		sign$,lineCount,h,requirment$*128,gt_count,gt_item,ss_cat_item,temp$*2048)
 
-		open #h=1: 'Name='&gpla_file$,d,i ioerr GPLA_Xit
-		linput #h: temp$ eof GPLA_EOF ! just consume first line
+		open #h=1: 'Name='&fileIn$,d,i ioerr GPLA_Xit
+		linput #h: temp$ eof GplaEof ! just consume first line
 		lineCount=1
 		do
-			linput #h: temp$ eof GPLA_EOF
+			linput #h: temp$ eof GplaEof
 			lineCount+=1
 			if trim$(temp$)<>'' and trim$(temp$)(1:1)<>'!' then
-				dim program_item$(0)*512
-				str2mat(temp$,mat program_item$,'^')
-				if udim(program_item$)=>2 and pos(program_item$(2),'*')>0 then
-					program_item$(2)=srep$(program_item$(2),'*',trim$(trim$(program_item$(1)),'>'))
+				! r: process the line
+				dim programItem$(0)*512
+				str2mat(temp$,mat programItem$,'^')
+				
+				if udim(programItem$)=>2 and pos(programItem$(2),'*')>0 then
+					programItem$(2)=srep$(programItem$(2),'*',trim$(trim$(programItem$(1)),'>'))
 
-					program_item$(2)=srep$(program_item$(2),'[cursystem]',env$('cursystem'))
+					programItem$(2)=srep$(programItem$(2),'[cursystem]',env$('cursystem'))
 
-					! if pos(program_item$(2),'[cursystem]')>0 then pr 'AAA [cursystem] still in there. linecount=';linecount;bell : pause
+					! if pos(programItem$(2),'[cursystem]')>0 then pr 'AAA [cursystem] still in there. linecount=';linecount;bell : pause
 
 				end if
-
-				if udim(mat program_item$)>=3 then requirment$=trim$(program_item$(3))
+				requirment$=''
+				if udim(mat programItem$)>=3 then requirment$=trim$(programItem$(3))
 				if requirment$='' or fnClientHas(requirment$) then
 					gridLine+=1
-					program_item_count=udim(mat program_item$)
+					program_item_count=udim(mat programItem$)
 					mat program_plus$(gridLine)
 					mat program_name$(gridLine)
 					mat program_name_trim$(gridLine)
 					mat program_file$(gridLine)
 					mat ss_text$(gridLine)
 					mat program_level(gridLine)
-					program_level(gridLine)=fn_programLevel(program_item$(1))
+					program_level(gridLine)=fn_programLevel(programItem$(1))
 
-					program_name$(gridLine)=srep$(rtrm$(program_item$(1)),'>','         ')
+					program_name$(gridLine)=srep$(rtrm$(programItem$(1)),'>','         ')
 					program_name_trim$(gridLine)=trim$(program_name$(gridLine))
 
 					if program_item_count=>2 then
-						program_item$(2)=srep$(program_item$(2),'[cursystem]',env$('cursystem')) ! do it again, because without this the test below sometimes fails - not sure why the first srep is not enough
-						! if pos(program_item$(2),'[cursystem]')>0 then pr 'CCC [cursystem] still in there. linecount=';linecount;bell : pause
+						programItem$(2)=srep$(programItem$(2),'[cursystem]',env$('cursystem')) ! do it again, because without this the test below sometimes fails - not sure why the first srep is not enough
+						! if pos(programItem$(2),'[cursystem]')>0 then pr 'CCC [cursystem] still in there. linecount=';linecount;bell : pause
 
-						program_file$(gridLine)=trim$(program_item$(2))
+						program_file$(gridLine)=trim$(programItem$(2))
 
 					end if
 
 					if trim$(program_file$(gridLine))='' then
 						program_plus$(gridLine)='**'
-					! else if udim(program_item$)=>4 then
-					! 	program_plus$(gridLine)=program_item$(4)
+					! else if udim(programItem$)=>4 then
+					! 	program_plus$(gridLine)=programItem$(4)
 					end if
 
 					ss_text$(gridLine)='' ! ss_text$(gridLine)&cnvrt$('Pic(#####)',gridLine)
-					gt_count=len(program_item$(1)(1:10))-len(srep$(program_item$(1)(1:10),'>',''))
+					gt_count=len(programItem$(1)(1:10))-len(srep$(programItem$(1)(1:10),'>',''))
 
 					for gt_item=1 to 10
 						if gt_count=gt_item-1 then
@@ -855,18 +857,19 @@ fnend
 						ss_text$(gridLine)&=',[Category Header]'
 					else if program_item_count>1 then
 						
-						! ss_text$(gridLine)=ss_text$(gridLine)&', '&program_item$(2)
+						! ss_text$(gridLine)=ss_text$(gridLine)&', '&programItem$(2)
 						
-						if udim(program_item$)=>4 then
-							ss_text$(gridLine)=rtrm$(ss_text$(gridLine))&', '&trim$(program_item$(4))
+						if udim(programItem$)=>4 then
+							ss_text$(gridLine)=rtrm$(ss_text$(gridLine))&', '&trim$(programItem$(4))
 						end if
 						! ss_text$(gridLine)=srep$(ss_text$(gridLine),'**','[Category]')
 					end if
 				end if ! requirment$='' or fnClientHas(requirment$) ...
 				if ss_text$(gridLine)(1:1)=',' then ss_text$(gridLine)(1:1)=''
+				! /r
 			end if
 		loop
-		GPLA_EOF: !
+		GplaEof: !
 		close #h: ioerr ignore
 		GPLA_Xit: !
 	fnend

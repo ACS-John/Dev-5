@@ -48,7 +48,7 @@ if fn_scrMain then !
 		dim gb(10)
 		dim extra(23) ! only (1),(11),(12),(13) used
 		dim xd(15)    ! only (11) used
-		read #hCustomer,using Fcustomer: z$,mat e$,mat xa,bal,lastBillingDate,mat g,mat gb,mat extra,mat 	xd eof EoCustomer
+		read #hCustomer,using Fcustomer: z$,mat e$,mat xa,bal,lastBillingDate,mat g,mat gb,mat extra,mat xd eof EoCustomer
 		
 		! if env$('acsDeveloper')<>'' and trim$(z$)='100004.11' then debugThisAccount=1 else debugThisAccount=0
 		if debugThisAccount then showMath=1 else showMath=0
