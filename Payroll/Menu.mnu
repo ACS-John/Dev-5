@@ -1,7 +1,7 @@
 ! *** PR - Payroll ***
 File
 >Employee                                   ^ [cursystem]\*
->Payroll Check History                      ^ [cursystem]\*
+>Payroll Check History                      ^ [cursystem]\*          ^     ^Transactions,credit,debit
 >User Designed Reports                      ^ [cursystem]\*
 ! >W-2 Supplemental Information             ^ acsPR\W2Box16
 >Accrued Payroll Tax Information            ^ [cursystem]\*          ^CL

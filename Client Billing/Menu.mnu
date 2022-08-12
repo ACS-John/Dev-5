@@ -4,22 +4,22 @@ File
 >Prices                                           ^ HamsterFio:CO *                      ^  ^File,HamsterFio
 >Rates                                            ^ HamsterFio:CO *                      ^  ^File,HamsterFio
 >Provider                                         ^ HamsterFio:CO *                      ^  ^File,HamsterFio
->Support                                          ^ HamsterFio:CO *                      ^  ^File,HamsterFio
+>Support                                          ^ HamsterFio:CO *                      ^  ^File,HamsterFio,Contracts
 >Transactions                                     ^ [cursystem]\Legacy\*                 ^  ^File,Transactions,Legacy,HamsterFio
 >>Transaction Explorer                            ^ [cursystem]\*                        ^  ^File,Transactions
 >>Transaction Hamster                             ^ HamsterFio:Transaction               ^  ^File,Transactions,HamsterFio
 >>Delete Transaction                              ^ [cursystem]\*                        ^  ^File,Transactions
 >>Transaction Type                                ^ HamsterFio:*                         ^  ^File,Transactions,HamsterFio
-! >>Import Transactions from Mint CSV to Checkbook  ^ [cursystem]\Legacy\arinput_import_csv^  ^File,Transactions
+! >>Import Transactions from Mint CSV to Checkbook  ^ [cursystem]\Legacy\arinput_import_csv^  ^File,Transactions,Import,CSV
 >Unbilled Transactions (TMTrans Hamster)          ^ [cursystem]\Legacy\TMTrans           ^  ^File,Transactions,Legacy
 >Support (Legacy)                                 ^ [cursystem]\Legacy\*                 ^  ^File,Legacy
->>Update Support Expiration Date                  ^ [cursystem]\*                        ^  ^File
+>>Update Support Expiration Date                  ^ [cursystem]\*                        ^  ^File,Renew
 >Support2                                         ^ [cursystem]\Legacy\*                 ^  ^File,Legacy
->Category                                         ^ [cursystem]\*                        ^  ^File
+>Category                                         ^ [cursystem]\*                        ^  ^File,Month Code
 >Service Code                                     ^ [cursystem]\Legacy\*                 ^  ^File,Legacy
->Invoice Description                              ^ [cursystem]\Legacy\ivdmaint          ^  ^File,Legacy
-! >Monthly Transactions                           ^ [cursystem]\Legacy\arfmmoth          ^  ^File,Legacy
-! >Employee                                       ^ [cursystem]\Legacy\emaint            ^  ^File,Legacy
+>Invoice Description                              ^ [cursystem]\Legacy\ivdmaint          ^  ^File,Legacy,ivdmaint
+! >Monthly Transactions                           ^ [cursystem]\Legacy\arfmmoth          ^  ^File,Legacy,arfmmoth
+! >Employee                                       ^ [cursystem]\Legacy\emaint            ^  ^File,Legacy,emaint  
 >Systems 2                                        ^ HamsterFio:CO *                      ^  ^File,HamsterFio
 >Systems                                          ^ HamsterFio:CO *                      ^  ^File,HamsterFio
 >Time Frame                                       ^ HamsterFio:*                         ^  ^File
@@ -42,7 +42,7 @@ Daily
 Monthly
 >Import CSV to Time Sheets                        ^ [cursystem]\*                        ^  ^Monthly,csv2tm
 >Print Monthly Billing Summary                    ^ [cursystem]\Legacy\tmmobsum          ^  ^Monthly,
-! >Post to General Ledger                         ^ [cursystem]\Legacy\arpostgl          ^GL^Monthly,
+! >Post to General Ledger                         ^ [cursystem]\Legacy\arpostgl          ^GL^Monthly,GL
 ! >Month End Closing                              ^ [cursystem]\Legacy\tmpytd            ^  ^Monthly,
 ! Generate                                                                               ^  ^Monthly,
 ! >Finance Charges                                ^ [cursystem]\Legacy\arfinchg          ^  ^Monthly,

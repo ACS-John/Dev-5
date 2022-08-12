@@ -1,72 +1,72 @@
 ! *** UB - Utility Billing ***
 File
->Customer                                             ^ [cursystem]\*
->Work Order Add                                       ^ [cursystem]\*
->Rates                                                ^ [cursystem]\*
->Transactions                                         ^ [cursystem]\*
+>Customer                                             ^ [cursystem]\*                                       ^        ^
+>Work Order Add                                       ^ [cursystem]\*                                       ^        ^
+>Rates                                                ^ [cursystem]\*                                       ^        ^
+>Transactions                                         ^ [cursystem]\*                                       ^        ^
 Billing
->Enter Readings and Charges                           ^ [cursystem]\*
->Add An Other Charge                                  ^ [cursystem]\*
+>Enter Readings and Charges                           ^ [cursystem]\*                                       ^        ^
+>Add An Other Charge                                  ^ [cursystem]\*                                       ^        ^
 >Print Reports
->>Unbilled Customer Listing                           ^ [cursystem]\*
->>Billing Journal                                     ^ [cursystem]\*
->>Usage Report                                        ^ [cursystem]\*
->>Zero Usage Report                                   ^ [cursystem]\*
->>Per 1000 Usage                                      ^ [cursystem]\*
->>Consumption List                                    ^ [cursystem]\*
->Print Bills                                          ^ [cursystem]\*
->Create Bank Draft File                               ^ [cursystem]\*                                       ^ UB-EFT
-Collections                                           ^ [cursystem]\*
+>>Unbilled Customer Listing                           ^ [cursystem]\*                                       ^        ^
+>>Billing Journal                                     ^ [cursystem]\*                                       ^        ^
+>>Usage Report                                        ^ [cursystem]\*                                       ^        ^
+>>Zero Usage Report                                   ^ [cursystem]\*                                       ^        ^
+>>Per 1000 Usage                                      ^ [cursystem]\*                                       ^        ^
+>>Consumption List                                    ^ [cursystem]\*                                       ^        ^
+>Print Bills                                          ^ [cursystem]\*                                       ^        ^
+>Create Bank Draft File                               ^ [cursystem]\*                                       ^ UB-EFT ^
+Collections                                           ^ [cursystem]\*                                       ^        ^
 Mid-Month
 >Print
->>Past Due and Turn Off List                          ^ [cursystem]\*
->>Past Due Notices                                    ^ [cursystem]\*
->Penalty Calculation                                  ^ [cursystem]\*
->Additional Penalty Calculation                       ^ [cursystem]\*
+>>Past Due and Turn Off List                          ^ [cursystem]\*                                       ^        ^
+>>Past Due Notices                                    ^ [cursystem]\*                                       ^        ^
+>Penalty Calculation                                  ^ [cursystem]\*                                       ^        ^
+>Additional Penalty Calculation                       ^ [cursystem]\*                                       ^        ^
 Month-End
->Transaction Listing                                  ^ [cursystem]\*
->Cash Receipts Journal                                ^ [cursystem]\*
->Balance Breakdown (Aged by Month)                    ^ [cursystem]\*
->Post to General Ledger                               ^ [cursystem]\*                                      ^ GL
+>Transaction Listing                                  ^ [cursystem]\*                                       ^        ^
+>Cash Receipts Journal                                ^ [cursystem]\*                                       ^        ^
+>Balance Breakdown (Aged by Month)                    ^ [cursystem]\*                                       ^        ^
+>Post to General Ledger                               ^ [cursystem]\*                                       ^ GL     ^
 Annual
 >Print
->>Accumulated Transaction List                        ^ [cursystem]\*
->>Annual Usage Report                                 ^ [cursystem]\*
+>>Accumulated Transaction List                        ^ [cursystem]\*                                       ^        ^
+>>Annual Usage Report                                 ^ [cursystem]\*                                       ^        ^
 ! >Remove Old Transactions                            ^ acsUB\ubRemove ! removed 2017/1/18 because it is just a bad idea
->Zero Year To Date Usage                              ^ [cursystem]\*
+>Zero Year To Date Usage                              ^ [cursystem]\*                                       ^        ^
 Print
 >Customer Listings
->>Name and Number List                                ^ [cursystem]\*
->>Labels                                              ^ [cursystem]\*
->>Print Customer Notes                                ^ [cursystem]\*
->>Deposit List                                        ^ [cursystem]\*
->>Deposit Change List                                 ^ [cursystem]\*
->>Export Billing Addresses by Rate Code               ^ [cursystem]\*
->Rate Analysis                                        ^ [cursystem]\*
->Final Billing Report                                 ^ [cursystem]\*
->Past Due Balance Breakdown                           ^ [cursystem]\*
->Meter Reading Book                                   ^ [cursystem]\*
->Route Book Pages                                     ^ [cursystem]\*
->Median Sewer Charge                                  ^ [cursystem]\*
->Average Sewer Usage Report                           ^ [cursystem]\*
->Secondary Water Usage Report                         ^ [cursystem]\*
-! >Print Postal Permit                                ^ acsUB\permitbox
->Bar Graph                                            ^ [cursystem]\*
->Work Order List                                      ^ [cursystem]\*
+>>Name and Number List                                ^ [cursystem]\*                                       ^        ^
+>>Labels                                              ^ [cursystem]\*                                       ^        ^
+>>Print Customer Notes                                ^ [cursystem]\*                                       ^        ^
+>>Deposit List                                        ^ [cursystem]\*                                       ^        ^
+>>Deposit Change List                                 ^ [cursystem]\*                                       ^        ^
+>>Export Billing Addresses by Rate Code               ^ [cursystem]\*                                       ^        ^
+>Rate Analysis                                        ^ [cursystem]\*                                       ^        ^
+>Final Billing Report                                 ^ [cursystem]\*                                       ^        ^
+>Past Due Balance Breakdown                           ^ [cursystem]\*                                       ^        ^
+>Meter Reading Book                                   ^ [cursystem]\*                                       ^        ^
+>Route Book Pages                                     ^ [cursystem]\*                                       ^        ^
+>Median Sewer Charge                                  ^ [cursystem]\*                                       ^        ^
+>Average Sewer Usage Report                           ^ [cursystem]\*                                       ^        ^
+>Secondary Water Usage Report                         ^ [cursystem]\*                                       ^        ^
+! >Print Postal Permit                                ^ acsUB\permitbox                                     ^        ^
+>Bar Graph                                            ^ [cursystem]\*                                       ^        ^
+>Work Order List                                      ^ [cursystem]\*                                       ^        ^
 Utilities
->Calculate Sewer Average                              ^ [cursystem]\*
->View Total Accounts Receivable                       ^ [cursystem]\*
->Enter Beginning Balances and Readings                ^ [cursystem]\*
->Transfer Accounts Between Companies                  ^ [cursystem]\*
->Display Last Date Customer File Accessed             ^ [cursystem]\*
-Hand Held                                             ^                                                     ^ U4
->Create Hand Held File                                ^ [cursystem]\Hand Held\*                             ^ U4
->Import from Hand Held to Book                        ^ [cursystem]\Hand Held\*                             ^ U4
->Meter Type                                           ^ [cursystem]\Hand Held\*                             ^ U4
-! >Meter Information                                    ^ [cursystem]\Hand Held\*                           ^ U4
+>Calculate Sewer Average                              ^ [cursystem]\*                                       ^        ^
+>View Total Accounts Receivable                       ^ [cursystem]\*                                       ^        ^
+>Enter Beginning Balances and Readings                ^ [cursystem]\*                                       ^        ^
+>Transfer Accounts Between Companies                  ^ [cursystem]\*                                       ^        ^
+>Display Last Date Customer File Accessed             ^ [cursystem]\*                                       ^        ^
+Hand Held                                             ^                                                     ^ U4     ^
+>Create Hand Held File                                ^ [cursystem]\Hand Held\*                             ^ U4     ^
+>Import from Hand Held to Book                        ^ [cursystem]\Hand Held\*                             ^ U4     ^
+>Meter Type                                           ^ [cursystem]\Hand Held\*                             ^ U4     ^
+! >Meter Information                                    ^ [cursystem]\Hand Held\*                           ^ U4     ^
 
-External Collections Processing                       ^                                                     ^ U5
->Export for External Collections Process              ^ [cursystem]\*                                       ^ U5
+External Collections Processing                       ^                                                     ^ U5     ^
+>Export for External Collections Process              ^ [cursystem]\*                                       ^ U5     ^
 Extras
 ! >Intelligent Mail for Small Business Mailers (IMSB)                        ! removed 2021/10/12 by John - "fairly certain no one is useing this - import program doesn't exist" 
 ! >>Export File for IMSB                                ^ acsUB\Export_IMSB  ! removed 2021/10/12 by John - "fairly certain no one is useing this - import program doesn't exist" 
@@ -76,20 +76,20 @@ Extras
 ! >>Place Certified File Back on PC                     ^ acsUB\ubCass2      ! removed 2021/10/12 by John - "doubt anyone is useing this either"   
 >Budget
 >>Print
->>>Budget Worksheet                                   ^ [cursystem]\*
->>>Budget Customer List                               ^ [cursystem]\*
->>Remove Old Budget Transactions                      ^ [cursystem]\*
+>>>Budget Worksheet                                   ^ [cursystem]\*                                       ^        ^
+>>>Budget Customer List                               ^ [cursystem]\*                                       ^        ^
+>>Remove Old Budget Transactions                      ^ [cursystem]\*                                       ^        ^
 ! >>Calculate Average Charges for Date Range            ^ acsUB\AvgChg        ! removed on 2020/4/1 one has an error and both were getting confused with Calculate Sewer Averages
 ! >>Set Sewer Standard Charges from Average Water Usage ^ acsUB\AvgSewChg     ! removed on 2020/4/1 one has an error and both were getting confused with Calculate Sewer Averages
 >Error Recovery
->>Undo Penalty Calculation                            ^ [cursystem]\*
->>Change Wrong Billing Date                           ^ [cursystem]\*
->>Recalculate All Current Bills                       ^ [cursystem]\*
->>Forgot to Zero Year To Date Usage                   ^ [cursystem]\*
->>Reassign Deposit Change Addresses                   ^ [cursystem]\*
->>Change Wrong Transaction Dates                      ^ [cursystem]\*
->>Reverse Billing Cycle                               ^ [cursystem]\*
->>Export and Import Route and Sequence                ^ [cursystem]\*
->Export UB Master File                                ^ [cursystem]\*
->Pull Service Names for Grids                         ^ [cursystem]\*
->Check Balance Breakdowns                             ^ [cursystem]\*
+>>Undo Penalty Calculation                            ^ [cursystem]\*                                       ^        ^
+>>Change Wrong Billing Date                           ^ [cursystem]\*                                       ^        ^
+>>Recalculate All Current Bills                       ^ [cursystem]\*                                       ^        ^
+>>Forgot to Zero Year To Date Usage                   ^ [cursystem]\*                                       ^        ^
+>>Reassign Deposit Change Addresses                   ^ [cursystem]\*                                       ^        ^
+>>Change Wrong Transaction Dates                      ^ [cursystem]\*                                       ^        ^
+>>Reverse Billing Cycle                               ^ [cursystem]\*                                       ^        ^
+>>Export and Import Route and Sequence                ^ [cursystem]\*                                       ^        ^
+>Export UB Master File                                ^ [cursystem]\*                                       ^        ^
+>Pull Service Names for Grids                         ^ [cursystem]\*                                       ^        ^
+>Check Balance Breakdowns                             ^ [cursystem]\*                                       ^        ^
