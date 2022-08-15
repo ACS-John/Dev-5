@@ -80,8 +80,7 @@ ScrMenu1: ! r:
 	L690: !
 	if j<=0 then j=1
 	mat options$(j)
-	fen$='CBud.h[cno]'
-	fnComboA(fen$,1,16,mat options$,'Select from the list of budget files. To add a new budget file, take the Add option.',40,container)
+	fnComboA('CBud.h[cno]',1,16,mat options$,'Select from the list of budget files. To add a new budget file, take the Add option.',40,container)
 ! fnCMBBUD(INDEXFILE$)
 	if hact$='' then
 		resp$(respc+=1)=''
