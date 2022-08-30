@@ -96,9 +96,9 @@ fnend
 			mat client_brserial(client_count)
 			!  fn_setupClient_add('ACS',1,0) ! TEMP
 
-			fn_setupClient_add('ACS'										,   '420',    34660) ! 58650
-			fn_setupClient_add('AJJMaplewood'					,   'ajj',        0)
-			fn_setupClient_add('Alien Electric'				, 'alien',        0)
+			fn_setupClient_add('ACS'											,   '420',    34660) ! 58650
+			fn_setupClient_add('AJJMaplewood'						,   'ajj',        0)
+			fn_setupClient_add('Alien Electric'					, 'alien',        0)
 			fn_setupClient_add('Ash Grove'							,   '286',    19016)
 			fn_setupClient_add('Bethany' 								,   '380',    34326)
 			fn_setupClient_add('Billings'								,   '440',    33534)
@@ -119,15 +119,15 @@ fnend
 			fn_setupClient_add('Evelyn Pareya'					,  '3385',    34366)
 			fn_setupClient_add('Exeter'									,  '1615',    31210)
 			fn_setupClient_add('Findlay'								,  '1700',    34132)
-			fn_setupClient_add('Framemasters'					,  '1864',        0)
-			fn_setupClient_add('Franklin Co Hosp'			,  '1876',    33668)
+			fn_setupClient_add('Framemasters'						,  '1864',        0)
+			fn_setupClient_add('Franklin Co Hosp'				,  '1876',    33668)
 			fn_setupClient_add('French Settlement'			,  '1880',    33380)
 			fn_setupClient_add('Galena'									,  '1945',    34566)
 			fn_setupClient_add('Grandview'							,  '2050',    34040)
 			fn_setupClient_add('GreeneCo'								,  '2070',    33910)
 			fn_setupClient_add('Hope Welty'							,   '851',    34152)
 			fn_setupClient_add('Payroll Done Right'		,  '3393',        0)
-			fn_setupClient_add('Peter Engler'					,   'ped',        0)
+			fn_setupClient_add('Peter Engler'						,   'ped',        0)
 			fn_setupClient_add('Kathys Bookkeeping'		,  '3979',    33672)
 			fn_setupClient_add('Kincaid'								,  '2532',    33652)
 			fn_setupClient_add('Millry'									,  '3025',    33968)
@@ -138,9 +138,9 @@ fnend
 			fn_setupClient_add('Purdy'									,  '3610',    34570)
 			fn_setupClient_add('Raymond'								,  '3660',    32798)
 			fn_setupClient_add('RecoverysUnlimited'		,  '3670',        0)
-			fn_setupClient_add('R R Crawford'					,   '760',    12466) ! owns a system, but is stalling support until their old stuff breaks.
+			fn_setupClient_add('R R Crawford'						,   '760',    12466) ! owns a system, but is stalling support until their old stuff breaks.
 			fn_setupClient_add('Thomas Richardson'			,  '3720',     7718)
-			fn_setupClient_add('Scottville Rural'			,  '3840',    33390)
+			fn_setupClient_add('Scottville Rural'				,  '3840',    33390)
 			fn_setupClient_add('Stern and Stern'				,  '4132',200014280)
 			fn_setupClient_add('Thayer'									,  '4245',    32800)
 			fn_setupClient_add('Thomasboro'							,  '4260',    34068)
@@ -988,8 +988,8 @@ fnend
 def fn_client_is_converting(; ___,returnN)
 	if env$('ACSDeveloper')<>'' then
 		returnN=1
-	! else if env$('client')='R R Crawford'       and days(date$)<=days('3/31/2021','mm/dd/ccyy') then
-	! 	returnN=1
+	else if env$('client')='R R Crawford'       and days(date$)<=days('12/31/2022','mm/dd/ccyy') then
+		returnN=1
 	! else if env$('client')='Peter Engler'       and days(date$)<=days('12/31/2022','mm/dd/ccyy') then
 	! 	returnN=1
 	! else if env$('client')='Kathys Bookkeeping' and days(date$)<=days('3/31/2021','mm/dd/ccyy')  then
