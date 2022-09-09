@@ -451,7 +451,7 @@ fnend
 TMSRCH: ! r: search for customer #
 	! uses hCl2
 	dim selection$*70
-	fnSearch(hCl2,"form pos 1,c 5,pos 6,c 30,pos 66,c 15,pos 283,pd 5.2",'pic($$$,$$$.##)',selection$,5)
+	fnTmSearch(hCl2,"form pos 1,c 5,pos 6,c 30,pos 66,c 15,pos 283,pd 5.2",'pic($$$,$$$.##)',selection$,5)
 	p$=selection$ ! pull key from first field in search line
 	ano=0
 	ano=val(selection$) conv ignore

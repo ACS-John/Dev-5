@@ -123,7 +123,7 @@ L830: !
 	if chg=2 then goto L1280
 L930: xinp(4)=75
 	sno=1: rinput fields mat io1$,attr "R": mat xinp,b8,sc,des$ conv CONV1
-	if cmdkey=4 then goto TMSRCH
+	if cmdkey=4 then gosub TMSRCH : goto L840
 	if cmdkey=5 then xinp(1)=-1
 	if ce>0 then io1$(ce)(ce1:ce2)="U": ce=0
 	if cmdkey>0 or curfld=2 then goto L1020 else ce=curfld
@@ -437,6 +437,6 @@ TMSRCH: ! r: search for customer #
 	k$=z$=selection$ ! pull key from first field in search line
 	xinp(1)=0
 	xinp(1)=val(selection$) conv ignore
-goto L840 ! /r
+return ! /r
 Xit: fnXit
 include: Ertn

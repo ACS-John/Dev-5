@@ -46,7 +46,7 @@ ScrGrid: ! r:
 		dim te$*1
 		read #hFSDesign,using F_FSDesign: rno$,d$,te$,sp,ls,ds,ul,rs,bc,ap,mat ac,ic,fc,rnp noRec READ_FIN_STMT,eof EO_FIN_STMT_GRID,conv DeleteCorruptRecord
 		dim item$(24)*50
-		item$(1)=str$(rec(hFSDesign))
+		item$(1)=lpad$(str$(rec(hFSDesign)),12)
 		item$(2)=rno$
 		item$(3)=d$
 		item$(4)=te$

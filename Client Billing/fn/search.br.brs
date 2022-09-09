@@ -1,5 +1,5 @@
 !  Replace S:\Core\Search.br
-def library fnSearch(file_num,form$*128,numeric_format$*20,selection$,key_length)
+def library fnTmSearch(file_num,form$*128,numeric_format$*20,selection$,key_length)
 
 	! file_num   	- use the file # of the file in your main program which is to          be searched
 	! heading$   	- define as x characters - this is the heading on the search co      columns  - use format simular to: HEADING$=" Account #횼ame컴컴컴컴컴컴컴컴컴컴컴Meter Address컴컴횭alance"
