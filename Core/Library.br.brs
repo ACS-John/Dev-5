@@ -1842,12 +1842,12 @@ fnend
 ! /r
 ! r: Client Billing
 	def library fnClientBillingMergeTrans(h,form$*128,nformat$*20,&sel$,klength)
-		library 'S:\Client Billing\Merge Transactions.br': fnSearch
+		library 'S:\Client Billing\Merge Transactions.br': fnTmSearch
 		fnClientBillingMergeTrans=fnClientBillingMergeTrans(h,form$,nformat$,sel$,klength)
 	fnend
-	def library fnSearch(h,form$*128,nformat$*20,&sel$,klength)
-		library 'S:\Client Billing\fn\search.br': fnSearch
-		fnSearch=fnSearch(h,form$,nformat$,sel$,klength)
+	def library fnTmSearch(h,form$*128,nformat$*20,&sel$,klength)
+		library 'S:\Client Billing\fn\search.br': fnTmSearch
+		fnTmSearch=fnTmSearch(h,form$,nformat$,sel$,klength)
 	fnend
 	def library fnReassignNTA(filename$*256,keyForm$,ntaForm$)
 		library 'S:\Client Billing\fn\reassignNTA.br': fnReassignNTA

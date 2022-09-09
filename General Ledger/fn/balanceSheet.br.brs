@@ -3,6 +3,7 @@ def library fnBalanceSheet(; defaultFormat$)
 	on error goto Ertn
 	fnBalanceSheet=fn_balanceSheet( defaultFormat$)
 	Xit: !
+	! pr 'the end' : pause
 fnend
 def fn_balanceSheet(; defaultFormat$)
 	dim foot$*132
@@ -47,20 +48,22 @@ def fn_balanceSheet(; defaultFormat$)
 		hFsD=fn_openFio('GL FSDesign',mat fs$,mat fsN,1) ! requires [FinancialStatementCode]
 		open #hGl=fnH: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\fsindex.h[cno],Shr",i,i,k
 		fnopenprn
+		dim reportHeading1$*50
+		if env$('client')='Billings' then reportHeading1$='Income and Expense Statement'
 		do
 			read #hFsD,using form$(hFsD): mat fs$,mat fsN eof Finis
 			! if pos(trim$(fs$(2)),"CURRENT ASSETS") then pause
 			if ltrm$(fs$(fsd_number))<>"" and ltrm$(fs$(fsd_number))<>"0" then
 				if costcntr=0 or costcntr=fsN(fsd_costCenterCode) then
 					if fs$(fsd_entryType)<>"S" and fs$(fsd_entryType)<>"F" and fs$(fsd_entryType)<>"R" and heading=0 then
-						fn_tePrnHeader(reportHeading2$)
+						fn_tePrnHeader(reportHeading1$,reportHeading2$)
 					end if
 					if fs$(fsd_entryType)='R' then      ! R = Report Heading (Places name of report in heading)
-						dim reportHeading1$*50
-						reportHeading1$=env$('program_caption')
+						pr 'r1='&fs$(fsd_description)
 						fn_teSetHeaderOrSubHead(mat fs$,mat fsN,reportHeading1$,foot$,tabnote)
 					else if fs$(fsd_entryType)='S' then ! S = Sub Heading (Places sub heading at top of F/S)
 						dim reportHeading2$*50
+						pr 'r2='&fs$(fsd_description)
 						fn_teSetHeaderOrSubHead(mat fs$,mat fsN,reportHeading2$,foot$,tabnote)
 					else if fs$(fsd_entryType)='F' then ! F = Footnote (Used to place footnotes at bottom of F/S)
 						fn_teSetFootnote(mat fs$,mat fsN,foot$,tabnote)
@@ -120,7 +123,7 @@ def fn_teSetFootnote(mat fs$,mat fsN,&foot$,&tabnote)
 fnend
 def fn_tePrnSectionHeading(mat fs$,mat fsN,foot$*132,tabnote,mat accum; ___,tmpStartPos)
 	tmpStartPos=fsN(fsd_startPos)
-	pr #255,using L470: fs$(fsd_description)
+	pr #255,using L470: rtrm$(fs$(fsd_description))
 	! if env$('acsDeveloper')="Laura" then print tmpStartPos,dollar : pause
 	L470: form pos tmpStartPos,c 50,skip 1
 	fn_footer(foot$,tabnote,mat fsN)
@@ -264,7 +267,7 @@ def fn_footerPrint(foot$*132,tabnote; eofcode,___,sk,fl) ! FooterPrint
 	F_footer: form skip sk,pos tabnote,c fl,skip 1
 	if eofcode<>1 then
 		pr #255: newpage
-		fn_tePrnHeader(reportHeading2$)
+		fn_tePrnHeader(reportHeading1$,reportHeading2$)
 	end if
 fnend
 PgOf: ! r: foot$,tabnote
@@ -284,7 +287,7 @@ def fn_underline(mat fsN; ___,underlin$*14)
 	else
 	end if
 fnend
-def fn_tePrnHeader(reportHeading2$*50)
+def fn_tePrnHeader(reportHeading1$*50,reportHeading2$*50)
 	heading=1
 	pr #255: "\qc  {\f181 \fs24 \b "&env$('cnam')&"}"
 	! if reportHeading1$<>env$('program_caption') then

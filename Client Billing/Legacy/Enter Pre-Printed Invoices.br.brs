@@ -74,7 +74,7 @@ iv$=""
 L720: !
 inp(4)=inp4
 inp(2)=inp2
-L740: !
+Screen1: !
 pr newpage
 pr f mat fl1$: mat scr1$,mat scrid$
 pr f mat ot1$: mat inp," " ! IV$
@@ -83,7 +83,7 @@ pr f "23,30,c 25": "F4 Search  F5 Stop"
 if chg=2 then goto L870
 L790: !
 if cmdkey=1 then goto L800 else input fields "5,25,N 5,UE,N": inp(1) conv L790
-if cmdkey=4 then goto TMSRCH
+if cmdkey=4 then gosub TmSrch : goto Screen1
 L800: !
 if inp(1)=0 or cmdkey=5 then goto L1360
 k$=rpad$(str$(inp(1)),5)
@@ -133,7 +133,7 @@ inp(6)=0
 inp(6+subac)=0
 inp(6+subac+dept)=0
 inp(7+subac+dept)=0
-goto L740
+goto Screen1
 L1240: !
 rewrite #2,using fm$,rec=rr: mat inp,iv$
 L1250: !
@@ -148,7 +148,7 @@ pt(1)=pt(1)-inp(1)
 pt(2)=pt(2)-inp(3)
 pt(3)=pt(3)-inp(5)
 pt(4)=pt(4)-inp(x8-1)
-goto L740
+goto Screen1
 L1360: !
 pr newpage
 scrid$(1)="INPUT PROOF TOTALS"
@@ -207,10 +207,9 @@ goto L870
 
 TMSRCH: ! search for customer #
 	dim selection$*70
-	fnsearch(11,"form pos 1,c 5,pos 6,c 30,pos 66,c 15,pos 283,pd 5.2",'pic($$$,$$$.##)',selection$,5)
+	fnTmSearch(11,"form pos 1,c 5,pos 6,c 30,pos 66,c 15,pos 283,pd 5.2",'pic($$$,$$$.##)',selection$,5)
 	k$=z$=selection$ ! pull key from first field in search line
 	inp(1)=0
 	inp(1)=val(selection$) conv L4910
-L4910: goto L740
-
+L4910: goto Screen1
 include: Ertn

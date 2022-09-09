@@ -8,6 +8,7 @@ fnTop(program$)
 		tr5_debit     	=5 ! 2 Debit Memos
 		tr5_collection	=4 ! 3 Collections
 		tr5_credit    	=6 ! 4 Credit Memos
+		tr5_credit    	=6 ! 4 Credit Memos
 	
 		! TO CO TransactionCode
 		! 1 Invoice
@@ -24,11 +25,11 @@ fnTop(program$)
 	entryType$(4)='Collections'
 	entryType$(5)='Debit Memos'
 	entryType$(6)='Credit Memos'
-	dim hd$(2)*50
 
 
-dim name$*25
-dim p$*5
+
+
+dim clientId$*5
 dim iv$*12
 dim tr(6)
 
@@ -70,17 +71,7 @@ close #h_company:
 		dim f3$*255
 		f3$='form pos 1,C 5,C 12,N 6,2*PD 5.2,PD 2,2*N 1,C 20,x 3,n 6,x 3,x 3,n 6,x 3,pd 5.2,x 3,n 6,x 3,pd 5.2,x 3,n 6,x 3,pd 5.2,x 3,n 6,x 3,pd 5.2,x 3,n 6,x 3,pd 5.2,x 3,n 6,x 3,pd 5.2,x 3,n 6,x 3,pd 5.2,x 3,n 6,x 3,pd 5.2,x 3,n 6,x 3,pd 5.2,x 3,n 6,x 3,pd 5.2'
 
-		dim sc2$(9)
 
-		sc2$(1)='Client'
-		sc2$(2)='Invoice'
-		sc2$(3)='Date'
-		sc2$(4)='Amount'
-		sc2$(5)='Description'
-		sc2$(6)='Cost of Goods'
-		sc2$(7)=''
-		sc2$(8)='G/L Account'
-		sc2$(9)='Amount'
 
 		dim fli1$(49)
 		fli1$(1 )='3,30,C 5,ut,n'
@@ -139,18 +130,6 @@ close #h_company:
 		ot1$(25)='20,40,n 11.2,ut,n'
 		ot1$(26)='21,24,n 6,ut,n'
 		ot1$(27)='21,40,n 11.2,ut,n'
-		dim flo1$(11)
-		flo1$(1 )='3,5,c 20'
-		flo1$(2 )='4,5,c 20'
-		flo1$(3 )='5,5,c 20'
-		flo1$(4 )='6,5,c 20'
-		flo1$(5 )='7,5,c 20'
-		flo1$(6 )='8,5,c 20'
-		flo1$(7 )='9,5,c 20'
-		flo1$(8 )='11,20,c 20'
-		flo1$(9 )='11,40,c 20'
-		flo1$(10)='1,15,c 40'
-		flo1$(11)='2,5,c 45'
 
 		! open #1: 'Name=S:\Client Billing\Legacy\TMSCRN.CL,Shr',i,i,r
 		! read #1,using L560,rec=sz: ...
@@ -218,9 +197,8 @@ ScreenAddMore: ! r:
 		if ckey=22 then tr5=tr5_debit      	! Debit Memos
 		if ckey=23 then tr5=tr5_collection 	! Collections
 		if ckey=24 then tr5=tr5_credit     	! Credit Memos
+		
 
-		hd$(1)='Add '&entryType$(tr5)
-		hd$(2)='Client Number as 0 to stop'
 		goto ScreenSomething1
 		! tr5=srch(mat resp$,'True')
 	end if
@@ -229,28 +207,55 @@ ScreenAddMore: ! r:
 goto ScreenSomething1 ! /r
 
 ScreenSomething1: ! r:
-	if tr5=tr5_credit or tr5=tr5_collection then 
-		sc2$(7)='G/L # to Credit' 
-	else 
-		sc2$(7)='G/L # to Debit'
-	end if
-	if tr5=tr5_collection then 
-		sc2$(6)='Discount Amount' 
-	else 
-		sc2$(6)=''
-	end if
-	if gx=0 then sc2$(7)=' '
-	L710: !
-	pr newpage
+	dim hd$(2)*50
+	hd$(1)='Add '&entryType$(tr5)
+	hd$(2)='Client Number as 0 to stop'
+	if ~setupScr1 then ! r:
+		setupScr1=1
+		dim sc2$(9)
+		sc2$(1)='Client'
+		sc2$(2)='Invoice'
+		sc2$(3)='Date'
+		sc2$(4)='Amount'
+		sc2$(5)='Description'
+		sc2$(6)='Cost of Goods'
+		sc2$(7)=''
+		sc2$(8)='G/L Account'
+		sc2$(9)='Amount'
+		if tr5=tr5_credit or tr5=tr5_collection then 
+			sc2$(7)='G/L # to Credit' 
+		else 
+			sc2$(7)='G/L # to Debit'
+		end if
+		if tr5=tr5_collection then 
+			sc2$(6)='Discount Amount' 
+		else 
+			sc2$(6)=''
+		end if
+		if gx=0 then sc2$(7)=' '
+		pr newpage
+		dim flo1$(11)
+		flo1$(1 )='3,5,c 20'
+		flo1$(2 )='4,5,c 20'
+		flo1$(3 )='5,5,c 20'
+		flo1$(4 )='6,5,c 20'
+		flo1$(5 )='7,5,c 20'
+		flo1$(6 )='8,5,c 20'
+		flo1$(7 )='9,5,c 20'
+		flo1$(8 )='11,20,c 20'
+		flo1$(9 )='11,40,c 20'
+		flo1$(10)='1,15,c 40'
+		flo1$(11)='2,5,c 45'
+	end if ! /r
 	pr f mat flo1$: mat sc2$,mat hd$
 	ps1=0
 	if vf then
 		dim id$*20
 		if gx><0 then
-			pr f mat ot1$: p$,iv$,tr(1),tr(3),id$,tr(2),mat pgl,mat gl
+			pr f mat ot1$: clientId$,iv$,tr(1),tr(3),id$,tr(2),mat pgl,mat gl
 		else
 			ScreenSomething1b: !
-			pr f mat ot1$: p$,iv$,tr(1),tr(3),id$,tr(2)
+			pr f mat ot1$: clientId$,iv$,tr(1),tr(3),id$,tr(2)
 		end if
 	end if
 goto ScreenSomething2 ! /r
@@ -260,9 +265,9 @@ ScreenSomething2: ! r:
 	pr f '24,20,C 50,N': 'F1 Continue   F2 verify name    F4 Search'
 	if gx><0 then goto L910
 	L820: !
-	input fields mat fli1$: p$,iv$,tr(1),tr(3),id$,tr(2) conv L870
+	input fields mat fli1$: clientId$,iv$,tr(1),tr(3),id$,tr(2) conv L870
 	if cmdkey=4 then gosub TMSRCH : goto ScreenSomething1b
-	p$=rpad$(trim$(p$),5)
+	clientId$=rpad$(trim$(clientId$),5)
 	if ce>0 then fli1$(ce)=srep$(fli1$(ce),1,'RC','U')
 	ce=0
 	goto L1280
@@ -274,23 +279,24 @@ ScreenSomething2: ! r:
 	L910: !
 	if ps1=1 or vf=1 then goto L1060
 	Ss2rInput: !
-	rinput fields '3,30,C 5,EU,n': p$ conv Ss2rInput
+	rinput fields '3,30,C 5,EU,n': clientId$ conv Ss2rInput
 	if cmdkey=4 then gosub TMSRCH : goto Ss2rInput
-	p$=rpad$(trim$(p$),5)
-	if ltrm$(p$)='-1' then pr f mat otgl$: mat gln1 else pr f mat otgl$: mat gln2
-	if ltrm$(p$)='0' or ltrm$(p$)='' and vf=0 then goto ScreenAddMore
-	if ltrm$(p$)='0' or ltrm$(p$)='' and vf=1 then goto RewrTransBlank
-	if ltrm$(p$)='-1' then 
+	clientId$=rpad$(trim$(clientId$),5)
+	if ltrm$(clientId$)='-1' then pr f mat otgl$: mat gln1 else pr f mat otgl$: mat gln2
+	if ltrm$(clientId$)='0' or ltrm$(clientId$)='' and vf=0 then goto ScreenAddMore
+	if ltrm$(clientId$)='0' or ltrm$(clientId$)='' and vf=1 then goto RewrTransBlank
+	if ltrm$(clientId$)='-1' then 
+		dim name$*25
 		name$='CASH SALE' 
 	else 
-		read #hCl1,using FclientName,key=rpad$(trim$(p$),kln(hCl1)),release: name$ nokey ClientNokey
+		read #hCl1,using FclientName,key=rpad$(trim$(clientId$),kln(hCl1)),release: name$ nokey ClientNokey
 	end if
 	pr f '3,40,C 25,N': name$
 	L1060: !
 	fli1$(4)='6,30,n 11.2,ut,n'
 	if r1>0 then goto L1170
 	if tr5=tr5_collection then fli1$(4)='6,30,n 11.2,ue,n'
-	input fields mat fli1$: p$,iv$,tr(1),tr(3),id$,tr(2),mat pgl,mat gl conv L1240
+	input fields mat fli1$: clientId$,iv$,tr(1),tr(3),id$,tr(2),mat pgl,mat gl conv L1240
 	if cmdkey=2 then goto Ss2rInput
 	if tr5<>tr5_collection then goto L1200
 	fli1$(4)='6,30,n 11.2,ut,n'
@@ -299,12 +305,12 @@ ScreenSomething2: ! r:
 	! if sz=2 then gl(1,2)=gln1(2): gl(1,1)=gln1(1): gl(1,3)=gln1(3): gl(1,4)=tr(3)
 	if sz=5 then gl(1,1)=gln1(2): gl(1,2)=tr(3)
 	L1170: !
-	pr f mat ot1$: p$,iv$,tr(1),tr(3),id$,tr(2),mat pgl,mat gl
+	pr f mat ot1$: clientId$,iv$,tr(1),tr(3),id$,tr(2),mat pgl,mat gl
 	L1180: !
-	input fields mat fli1$: p$,iv$,tr(1),tr(3),id$,tr(2),mat pgl,mat gl conv L1240
+	input fields mat fli1$: clientId$,iv$,tr(1),tr(3),id$,tr(2),mat pgl,mat gl conv L1240
 	if cmdkey=2 then goto Ss2rInput
 	L1200: !
-	p$=rpad$(trim$(p$),5)
+	clientId$=rpad$(trim$(clientId$),5)
 	if ce>0 then fli1$(ce)=srep$(fli1$(ce),1,'RC','U')
 	ce=0
 goto L1280
@@ -314,8 +320,8 @@ L1240: !
 	fli1$(ce)=srep$(uprc$(rtrm$(fli1$(ce))),1,'U','RC')
 if cnt<=4 then goto L1060 else goto L1180
 L1280: !
-	if ltrm$(p$)='0' or ltrm$(p$)='' and vf=0 then goto ScreenAddMore
-	if ltrm$(p$)='0' or ltrm$(p$)='' and vf=1 then goto RewrTransBlank
+	if ltrm$(clientId$)='0' or ltrm$(clientId$)='' and vf=0 then goto ScreenAddMore
+	if ltrm$(clientId$)='0' or ltrm$(clientId$)='' and vf=1 then goto RewrTransBlank
 	ps1=1
 	if tr(1)<10100 or tr(1)>123199 then
 		pr f '5,48,c 20': 'Invalid Date'
@@ -323,8 +329,11 @@ L1280: !
 	end if
 
 	if tr(3) then
-		if gx=0 then goto L1520
-		if pgl(gpx)>0 then goto L1410
+		if gx=0 then 
+			goto L1520
+		else if pgl(gpx)>0 then 
+			goto L1410
+		end if
 		pr f '9,45,c 30': 'G/L # REQUIRED'
 	else
 		pr f '6,48,c 20': 'NO AMOUNT ENTERED'
@@ -352,52 +361,73 @@ L1410: ! r:
 	end if
 	
 	L1520: !
-	if ltrm$(p$)<>'-1' then
-		totalAccount+=val(p$) conv ignore
+	if ltrm$(clientId$)<>'-1' then
+		totalAccount+=val(clientId$) conv ignore
 	end if
 	pt(tr5)+=tr(3)
 	if tr5=tr5_collection then tdt+=tr(2)
-	if ltrm$(p$)='-1' then totalCashSales+=tr(3)
+	if ltrm$(clientId$)='-1' then totalCashSales+=tr(3)
 	if vf=1 then goto RewrTransNow
 	r3=r3+1
 	tr(5)=tr5
-	write #hTransBatch,using f3$,rec=r3: p$,iv$,mat tr,id$,mat pgl,mat gl
-	p$=''
+	write #hTransBatch,using f3$,rec=r3: clientId$,iv$,mat tr,id$,mat pgl,mat gl
+	clientId$=''
 	q2=0
-goto L710 ! /r
+goto ScreenSomething1 ! /r
 
 RewrTransBlank: ! r:  rewrite hTransBatch
 	iv$=id$=' '
 	mat tr=(0)
 	mat gl=(0)
 	RewrTransNow: !
-	rewrite #hTransBatch,using f3$,rec=r1: p$,iv$,mat tr,id$,mat pgl,mat gl
-	p$=''
+	rewrite #hTransBatch,using f3$,rec=r1: clientId$,iv$,mat tr,id$,mat pgl,mat gl
+	clientId$=''
 goto AskMakeCorrection ! /r
 ScreenTotals: ! r:
 	do
-		pr newpage
-		pr f ' 3,10,cc 50':'A/R Input Proof Totals'
-		pr f ' 6,5,cr 20': 'Total Account #s:'
-		pr f ' 6,26,n 11.2': totalAccounttotalAccount
-		pr f ' 7,5,cr 20': 'Total Invoices:'
-		pr f ' 7,26,n 11.2': pt(tr5_invoice)
-		pr f ' 8,5,cr 20': 'Total Debit Memos:'
-		pr f ' 8,26,n 11.2': pt(tr5_debit)
-		pr f ' 9,5,cr 20': 'Total Collections:'
-		pr f ' 9,26,n 11.2': pt(tr5_collection)
-		pr f '10,5,cr 20': 'Total Credit Memos:'
-		pr f '10,26,n 11.2': pt(tr5_credit)
+		! r: old
+		! pr newpage
+		! pr f ' 3,10,cc 50':'A/R Input Proof Totals'
+		! pr f ' 6,5,cr 20': 'Total Account IDs:'
+		! pr f ' 6,26,n 11.2': totalAccountIds
+		! pr f ' 7,5,cr 20': 'Total Invoices:'
+		! pr f ' 7,26,n 11.2': pt(tr5_invoice)
+		! pr f ' 8,5,cr 20': 'Total Debit Memos:'
+		! pr f ' 8,26,n 11.2': pt(tr5_debit)
+		! pr f ' 9,5,cr 20': 'Total Collections:'
+		! pr f ' 9,26,n 11.2': pt(tr5_collection)
+		! pr f '10,5,cr 20': 'Total Credit Memos:'
+		! pr f '10,26,n 11.2': pt(tr5_credit)
+		! 
+		! pr f '11,5,C 20': 'Total Cash Sales'
+		! pr f '11,26,n 11.2': totalCashSales
+		! pr f '12,5,C 22': 'Total Discounts Taken'
+		! pr f '12,26,n 11.2': tdt
+		! pr f '13,10,cc 50':''
+		! pr f '18,1,C 70': '1 to Merge; 2 for Corrections: 5 Stop Without Posting'
+		! pr f '19,25,30/Cc 30,,B3': '[F3] Print Entry Listing'
+		! L1790: !
+		! input fields '18,61,n 1,eu,n': j conv L1790
+		! /r
+		! r: new
+		fntos : rc=0
+		! fnTxt(lyne,ps,width; maxlen,ali,mask$,disable,tooltip$*300,contain,tabcon,addtomask$*40)
+		fnlbl( 3,10,'A/R Input Proof Totals',50,2)
+		fnlbl( 6,5,'Total Account IDs:'   	,20,1) : fnTxt( 6,26,11,0,'currency'	,1,'') : resp$(rc+=1)=str$( totalAccountIds )
+		fnlbl( 7,5,'Total Invoices:'       	,20,1) : fnTxt( 7,26,11,0,'number'  	,1,'') : resp$(rc+=1)=str$( pt(tr5_invoice) )
+		fnlbl( 8,5,'Total Debit Memos:'   	,20,1) : fnTxt( 8,26,11,0,'currency'	,1,'') : resp$(rc+=1)=str$( pt(tr5_debit) )
+		fnlbl( 9,5,'Total Collections:'   	,20,1) : fnTxt( 9,26,11,0,'currency'	,1,'') : resp$(rc+=1)=str$( pt(tr5_collection) )
+		fnlbl(10,5,'Total Credit Memos:'  	,20,1) : fnTxt(10,26,11,0,'currency'	,1,'') : resp$(rc+=1)=str$( pt(tr5_credit) )
+		fnlbl(11,5,'Total Cash Sales'      	,20,1) : fnTxt('11,26',1,'currency'	,1,'') : resp$(rc+=1)=str$( totalCashSales )
+		fnlbl(12,5,'Total Discounts Taken'	,20,1) : fnTxt('12,26',1,'currency'	,1,'') : resp$(rc+=1)=str$( tdt )
+		! fnCmdKey(caption$*200,returnkey; default,isCancel,tt$*200)
+		fnCmdKey('Merge'                     	,1)
+		fnCmdKey('Corrections'               	,2,1)
+		fnCmdKey('Stop Without Posting'     	,5,0,1)
+		fnCmdKey('Print Entry Listing [F3]' 	,3)
 
-		pr f '11,5,C 20': 'Total Cash Sales'
-		pr f '11,26,n 11.2': totalCashSales
-		pr f '12,5,C 22': 'Total Discounts Taken'
-		pr f '12,26,n 11.2': tdt
-		pr f '13,10,cc 50':''
-		pr f '18,1,C 70': '1 to Merge; 2 for Corrections: 5 Stop Without Posting'
-		pr f '19,25,30/Cc 30,,B3': '[F3] Print Entry Listing'
-		L1790: !
-		input fields '18,61,n 1,eu,n': j conv L1790
+		ckey=fnacs(mat resp$)
+		! /r
 		
 		if fkey=5 or fkey=99 or j=5 then
 			goto Xit
@@ -413,7 +443,7 @@ ScreenTotals: ! r:
 	loop
 ! /r
 
-PrintEntryList: ! r: requires:hTransBatch, localOnly: r,p$,iv$,tr(1),tr(3),tr(4),name$(1:22),tr(2),tr(5)
+PrintEntryList: ! r: requires:hTransBatch, localOnly: r,clientId$,iv$,tr(1),tr(3),tr(4),name$(1:22),tr(2),tr(5)
 	r=0
 	! pr newpage
 	! pr f '10,20,c 40,n': 'Input Edit Listing In Process'
@@ -426,11 +456,11 @@ PrintEntryList: ! r: requires:hTransBatch, localOnly: r,p$,iv$,tr(1),tr(3),tr(4)
 	pr #255: tab(34);'Date     Amount             Description           Discount          Tr Code'
 	do
 		r+=1
-		read #hTransBatch,using Faddr,rec=r: p$,iv$,mat tr,id$ eof Pel_finis,noRec Pel_finis
-		if ltrm$(p$)<>'0' and ltrm$(p$)<>'' then
+		read #hTransBatch,using Faddr,rec=r: clientId$,iv$,mat tr,id$ eof Pel_finis,noRec Pel_finis
+		if ltrm$(clientId$)<>'0' and ltrm$(clientId$)<>'' then
 			name$=''
-			read #hCl1,using FclientName,key=rpad$(trim$(p$),kln(hCl1)),release: name$ nokey ignore
-			pr #255,using FprEntryLine: r,p$,iv$,tr(1),tr(3),tr(4),name$(1:22),tr(2),tr(5)
+			read #hCl1,using FclientName,key=rpad$(trim$(clientId$),kln(hCl1)),release: name$ nokey ignore
+			pr #255,using FprEntryLine: r,clientId$,iv$,tr(1),tr(3),tr(4),name$(1:22),tr(2),tr(5)
 			FprEntryLine: form pos 1,n 4,x 2,c 5,x 2,c 18,n 6,n 11.2,pic(zzzzzz),x 7,c 22,n 12.2,n 12
 		end if
 
@@ -451,13 +481,13 @@ AskMakeCorrection: ! r:
 	if r1=0 then
 		goto AskAddMore
 	else
-		read #hTransBatch,using f3$,rec=r1: p$,iv$,mat tr,id$,mat pgl,mat gl noRec AskMakeCorrection
+		read #hTransBatch,using f3$,rec=r1: clientId$,iv$,mat tr,id$,mat pgl,mat gl noRec AskMakeCorrection
 		Faddr: form pos 1,c 5,c 12,n 6,2*pd 5.2,pd 2,2*n 1,c 20
-		if ltrm$(p$)='0' or ltrm$(p$)='' then goto AskMakeCorrection
+		if ltrm$(clientId$)='0' or ltrm$(clientId$)='' then goto AskMakeCorrection
 		tr5=tr(5)
-		if p><-1 then totalAccount-=val(p$) conv ignore
+		if p><-1 then totalAccount-=val(clientId$) conv ignore
 		pt(tr5)-=tr(3)
-		if ltrm$(p$)='-1' then totalCashSales-=tr(3)
+		if ltrm$(clientId$)='-1' then totalCashSales-=tr(3)
 		if tr5=tr5_collection then tdt-=tr(2)
 		hd$(1)='Edit '&entryType$(tr5)
 		hd$(2)='Enter Client as 0 to Delete this entry'
@@ -478,12 +508,10 @@ ChainArMerge: !
 fnChain('S:\Client Billing\Merge Transactions')
 Xit: pr newpage: fnXit
 
-TMSRCH: ! r: search for customer #
+TmSrch: ! r: search for customer #
 	! uses hCl2
 	dim selection$*70
-	fnSearch(hCl2,'form pos 1,c 5,pos 6,c 30,pos 66,c 15,pos 283,pd 5.2','pic($$$,$$$.##)',selection$,5)
-	p$=selection$ ! pull key from first field in search line
-	ano=0
-	ano=val(selection$) conv ignore
+	fnTmSearch(hCl2,'form pos 1,c 5,pos 6,c 30,pos 66,c 15,pos 283,pd 5.2','pic($$$,$$$.##)',selection$,5)
+	clientId$=selection$ ! pull key from first field in search line
 return ! /r
 include: ertn
