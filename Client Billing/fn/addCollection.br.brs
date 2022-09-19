@@ -1,5 +1,4 @@
 
-
 def library fnAddCollection
 	autoLibrary
 
@@ -408,8 +407,6 @@ ScreenTotals: ! r:
 	loop
 ! /r
 
-
-
 AskMakeCorrection: ! r:
 	pr newpage
 	pr f "10,10,c 60": "Enter Ref # to Correct; Enter 0 when Completed"
@@ -446,7 +443,6 @@ goto ScreenTotals ! /r
 
 Xit: !
 fnend
-
 
 TMSRCH: ! r: search for customer #
 	! uses hCl2

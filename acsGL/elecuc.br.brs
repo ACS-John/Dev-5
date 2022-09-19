@@ -1,4 +1,5 @@
 ! REPLACE S:\acsGL\Elecuc
+! State UnEmp.-Electronic Submission
 ! never could get it work with an RO record if all zeroes; without 
 	! RO record i had to put an RE record in front of every RW record and 
 	! had to follow with an RT record - Right now this program will not 
@@ -6,7 +7,7 @@
 	autoLibrary
 	on error goto Ertn
 
-	dim em$(3)*30,ss$*11,d(14),ty(21),tqm(17),s(9),t(9),z$*8,message$*40
+	dim em$(3)*30,ss$*11,d(14),ty(21),tqm(17),s(9),t(9)
 	dim a$(3)*40,b$*12,g$*12,d$(10)*8,e$(10)*12,s2(2)
 	dim fa$(1),fb$(1),fc$(1),fd$(1),l$(10),dedfed(10),w3(2),i2(2),t2(2)
 	dim emppin$*17,tlcn$*6,contact$*27,contactph$*15,phoneext$*5,email$*40
@@ -15,17 +16,19 @@
 
 	fnTop(program$,"Electronic U/C")
 	on fkey 5 goto Xit
- 
+! r: setup
 	open #1: "Name=[Q]\GLmstr\Company.h[cno],SHR",i,i 
 	read #1,using L270: mat a$,b$,mat d$,loccode,mat e$,mat dedfed,oldmax,mat m,mat r,mat e$,mat dedcode
-L270: form pos 1,3*c 40,c 12,pos 150,10*c 8,n 2,pos 317,10*c 12,pos 638,10*n 1,pos 239,pd 4.2,pos 247,10*pd 4.2,10*pd 3.3,10*c 12,pos 618,10*n 1
+	L270: form pos 1,3*c 40,c 12,pos 150,10*c 8,n 2,pos 317,10*c 12,pos 638,10*n 1,pos 239,pd 4.2,pos 247,10*pd 4.2,10*pd 3.3,10*c 12,pos 618,10*n 1
 	close #1: 
-!
-L300: p1=pos(b$,"-",1)
+
+	L300: !
+	p1=pos(b$,"-",1)
 	if p1=0 then goto L340
 	b$(p1:p1)=""
 	goto L300
-L340: b1=val(b$)
+	L340: !
+	b1=val(b$)
 	p1=pos(a$(3),",",1): comma=1
 	if p1=0 then p1=pos(a$(3)," ",1): comma=0
 	ct$=a$(3)(1:p1-1)
@@ -51,8 +54,8 @@ L340: b1=val(b$)
 	io1$(15)="20,49,c 1,UT,N"
 	namcde$="F"
 	typemp$="R"
-!
-SCR1: ! 
+goto Scr1 ! /r
+SCR1: ! r:
 	pr newpage
 	close #101: ioerr L640
 L640: open #101: "SROW=2,SCOL=3,EROW=23,ECOL=77,BORDER=DR,CAPTION=<Create Electronic U/C Diskette for state.",display,outIn 
@@ -104,10 +107,6 @@ L1080: monthyr$=cnvrt$("pic(######)",endingdate)(1:2)&"20"&cnvrt$("pic(######)",
 	yr=endingdate-(int(endingdate/100)*100)+2000
 
 	gosub SCR2
-	pr newpage
-	win=101
-	message$=""
-	stopable=1: gosub WaitX ! fnWAIT(MESSAGE$,1)
 
 	open #1: "Name=[Q]\GLmstr\RPMSTR.h[cno],KFName=[Q]\GLmstr\RPIndex.h[cno],SHR",i,i,k 
 	open #2: "Name=[Q]\GLmstr\RPTrail.h[cno],SHR",i,i,r 
@@ -117,7 +116,7 @@ L1190: open #22: "Name=[Q]\UCReport,RECL=512,eol=crlf,replace",d,o
 	pr newpage
 	msgline$(1)="Insert Diskette"
 	mtype=1
-	if err=4221 then gosub OldMsgBox
+	if err=4221 then fnOldMsgBox(mat RESPONSE$,mat MSGLINE$,MTYPE)
 	goto L1190
 
 BEGINNING_OF_FILE: gosub RECRA : gosub RECRE: fnopenprn
@@ -136,7 +135,8 @@ L1330: form pos 1,n 8,3*c 30,c 11,pos 122,n 2,pos 156,n 6,pos 173,pd 3
 	emzip$=em$(3)(p1:p2)
 L1420: p1=pos(ss$,"-",1)
 	if p1>0 then ss$(p1:p1)="": goto L1420 else ssn=val(ss$)
-READ_DEPARTMENT: read #2,using L1460,rec=ta: teno,tcd,mat ty,mat tqm,ta
+READ_DEPARTMENT: !
+	read #2,using L1460,rec=ta: teno,tcd,mat ty,mat tqm,ta
 ! If SS$="459499366" Then Pause
 L1460: form pos 1,n 8,pos 48,n 2,pos 168,38*pd 5.2,pos 468,pd 3
 	if tcd<1 or tcd>10 then tcd=1
@@ -145,22 +145,23 @@ L1460: form pos 1,n 8,pos 48,n 2,pos 168,38*pd 5.2,pos 468,pd 3
 ! Gosub RECRE
 	gosub RECRS
 	tw1=tw1+1 ! counter
-goto READ_EMPLOYEE
+goto READ_EMPLOYEE ! /r
 
-RECRA: pr #22,using L1580: "RA",b1,"","98",a$(1),"",a$(2)(1:22),ct$,st$,zip$,"","","","",country$(1:2),a$(1),"",a$(2)(1:22),ct$,st$,zip$,"","","","",country$(1:2),contact$,contactph$,phoneext$,"",email$,"","",""
+RECRA: ! r:
+	pr #22,using L1580: "RA",b1,"","98",a$(1),"",a$(2)(1:22),ct$,st$,zip$,"","","","",country$(1:2),a$(1),"",a$(2)(1:22),ct$,st$,zip$,"","","","",country$(1:2),contact$,contactph$,phoneext$,"",email$,"","",""
 L1580: form pos 1,c 2,pic(#########),c 24,c 2,c 57,c 22,c 22,c 22,c 2,c 5,c 4,c 5,c 23,c 15,c 2,c 57,c 22,c 22,c 22,c 2,c 5,c 4,c 5,c 23,c 15,c 2,c 27,c 15,c 5,c 3,c 40,c 3,c 10,c 14
-return 
+return ! /r
 
-RECRE: pr #22,using L1620: "RE",yr,"",b1,"","0","","",a$(1),"",a$(2)(1:22),ct$,st$,zip$,"","",e$(sr1)(1:9),monthyr$,"",r(sr1)*.01,"",naics$,""
+RECRE: ! r:
+	pr #22,using L1620: "RE",yr,"",b1,"","0","","",a$(1),"",a$(2)(1:22),ct$,st$,zip$,"","",e$(sr1)(1:9),monthyr$,"",r(sr1)*.01,"",naics$,""
 L1620: form pos 1,c 2,pic(####),c 1,pic(#########),c 9,c 1,c 4,c 9,c 57,c 22,c 22,c 22,c 2,c 5,c 4,c 126,c 9,c 6,c 1,n 5.4,c 1,c 6,c 185
-return 
-
+return ! /r
+! r: ???
 	form pos 1,c 2,pic(#########),c 15,c 15,c 20,c 4,c 22,c 22,c 22,c 2,c 5,c 4,c 5,c 23,c 15,c 2,18*pic(###########),c 22,2*pic(###########),c 56,n 1,c 1,c 1,n 1,c 23,
 	pr #22,using L1670: "2E",ct$,st$,"",zip$,namcde$,typemp$,"","","",""
 L1670: form pos 1,c 2,g 25,g 10,2*g 5,2*g 1,g 2,g 4,g 2,c 71
-return 
-
-RECRS: ! STATE RECORD
+return ! /r
+RECRS: ! r: STATE RECORD
 	if sr1=0 then goto L1790 ! NO STATE SELECTED
 	if m1=0 then goto L1790 ! NO quarterly wages
 	bd=fndate_mmddyy_to_ccyymmdd(em16): y=int(bd/10000): x=bd-y*10000: z=x*10000+y
@@ -181,17 +182,17 @@ L1790: t1=t1+1: mat t1=t1+w2
 	mat w2=(0)
 	mat w3=(0)
 	mat s2=(0)
-return 
-
-RECRF: pr #22,using L1940: "RF"," ",tw1,""
-L1940: form pos 1,c 2,c 5,pic(#########),c 496
-return 
-
-END1: ! 
+return ! /r
+RECRF: ! r: 
+	pr #22,using L1940: "RF"," ",tw1,""
+	L1940: form pos 1,c 2,c 5,pic(#########),c 496
+return ! /r
+END1: ! r:
 	pr #255,using "form skip 1,pos 1,c 14,pic(zz,zzz,zzz.##)": "Total wages:",totwage,"Total Taxable:",tottaxable
 	pr #255,using "form pos 1,c 16,pic(zz,zzz,zzz)": "Total employees:",totemployees
 	fncloseprn
 	gosub L2040
+goto Xit ! /r
 Xit: fnXit
 
 L2040: ! r:
@@ -320,79 +321,11 @@ L2900: if button_option=0 then goto L3010
 		fkey$(1)="Save"
 		fkey$(4)="Delete"
 	end if
-	scrline=er+1: gosub FkeyX
+	scrline=er+1
+	fnFkey(scrline,mat fkey$,mat disfk,em$,es)
 
 L3010: return  ! /r Fnend
-OldMsgBox: ! r: def library fnOldMsgBox(mat RESPONSE$,mat MSGLINE$,MTYPE)
-! mtype=0 means splash    - returns no response                                 ! mostly for "please WaitX..." and "printing..."                                 ! (anywhere no response is required - no buttons are displyed either)
-! mtype=1 means OK only   - returns no response
-! mtype=2 means Yes or No - returns "Y" or "N"
-! mtype=3 means Yes, No, Cancel - returns "Y" or "N" or ""
-! response$(1)= code you're looking for 2-5 are reserved for future use
-	close #104: ioerr L3090
-L3090: endrow=12
-	for j=2 to udim(msgline$)
-		if msgline$(j)<>"" then endrow=endrow+1
-	next j
-	open #104: "SRow=10,SCol=09,ERow="&str$(endrow)&",ECol=70,Border=SR,Caption=<"&env$('program_caption'),display,outIn 
-	pr #104: newpage
-	mglinerow=2
-	for j=1 to udim(msgline$)
-		pr #104,fields str$(mglinerow+j-1)&",2,Cc 60,N": msgline$(j)
-	next j
-	if mtype=1 then pr f str$(endrow+1)&",38,Cc 4,B,1": "Ok"
-	if mtype=1 then input fields str$(endrow)&",09,C 1,AE,N": pause$
-	if mtype=2 then pr f str$(endrow+1)&",35,Cc 4,B,21": "Yes"
-	if mtype=2 then pr f str$(endrow+1)&",40,Cc 4,B,22": "No"
-L3230: if mtype=2 then input fields str$(endrow)&",09,Cu 1,AE,N": response$(1)
-	if mtype=2 and cmdkey=22 then response$(1)="N"
-	if mtype=2 and cmdkey=21 then response$(1)="Y"
-	if mtype=2 and response$(1)<>"Y" and response$(1)<>"N" then pr f "24,1,C 7,N": bell$ : goto L3230
-	if mtype=3 then pr f str$(endrow+1)&",29,Cc 4,B,21": "Yes"
-	if mtype=3 then pr f str$(endrow+1)&",34,Cc 4,B,22": "No"
-	if mtype=3 then pr f str$(endrow+1)&",39,C 12,B,22": "Cancel (Esc)"
-	if mtype=3 then input fields str$(endrow)&",09,Cu 1,AE,N": response$(1)
-	if mtype=3 and cmdkey=22 then response$(1)="N"
-	if mtype=3 and cmdkey=21 then response$(1)="Y"
-	if mtype=3 and cmdkey=99 then response$(1)=""
-	if mtype=3 and response$(1)<>"Y" and response$(1)<>"N" and response$(1)<>"" then pr f "24,1,C 7,N": bell$ : goto L3230
-	close #104: ioerr ignore
-return  ! /r Fnend
-WaitX: ! r: def library fnWAIT(&MESSAGE$,STOPABLE)
-! if stopable=1 will display "Cancel (F5)" button
-! win = window number
-	close #win: ioerr ignore
-	open #win: "Srow=10,SCol=20,ERow=14,ECol=59,Border=Sr,Caption=<"&env$('program_caption'),display,outIn 
-	pr #win: newpage
-	pr #win,fields "1,1,Cc 40,R,N": env$('cnam')
-	pr #win,fields "2,1,Cc 40,R,N": "Company Number [cno]"
-	pr #win,fields "4,1,Cc 40,N": message$
-	if rtrm$(message$)="" then pr #win,fields "4,1,Cc 40,N": "Please WaitX..."
-	if stopable=0 then pr f "15,34,C 11,R,N": "Do Not Stop"
-	if stopable=1 then pr f "15,34,C 11,B,5": "Cancel (F5)"
-return  ! /r Fnend
-FkeyX: ! r: def library fnFKEY(SCRLINE,MAT FKEY$,MAT DISFK,&EM$,ES)
-	totallen=0 
-	startpos=0
-	for j=1 to udim(fkey$) ! add ' (Fx)' to each button
-		if fkey$(j)="" then goto L3720
-		fkey$(j)=fkey$(j)&" (F"&str$(j)&")"      ! add ' (Fx)' to each button
-		totallen=totallen+len(fkey$(j))+1
-L3720: next j
-	totallen=totallen+len(rtrm$(em$))+min(len(rtrm$(em$)),1)+es
-	totallen=totallen-1
-	startpos=int((80-totallen)/2)+1
-	pr f str$(scrline)&","&str$(startpos)&",C "&str$(totallen)&",N": rpt$("Ä",totallen)
-	for j=1 to udim(fkey$)
-		if fkey$(j)="" then goto L3830
-		if disfk(j)=1 then pr f str$(scrline)&","&str$(startpos)&",C "&str$(len(fkey$(j)))&",R,"&str$(j): fkey$(j)
-		if disfk(j)=1 then goto L3820
-		pr f str$(scrline)&","&str$(startpos)&",C "&str$(len(fkey$(j)))&",B,"&str$(j): fkey$(j)
-L3820: startpos=startpos+len(fkey$(j))+1
-L3830: next j
-	if rtrm$(em$)="" then goto L3860
-	pr f str$(scrline)&","&str$(startpos)&",C "&str$(len(rtrm$(em$))+es)&",R,N": rtrm$(em$)
-L3860: return  ! /r Fnend
+
 STATE_BREAKDOWN: ! r: extract state name
 	holdst$="          "
 	p3=oldp3=0
@@ -421,21 +354,32 @@ CalculateUC: ! r: determine quarterly wages
 	next j
 	m2=m2+ty(21)-dcy
 	m1=m1+tqm(16)-dcq
-	if ta=0 then goto L4200 else goto L4340 ! read_DEPARTMENT
-L4200: if m2=0 then goto L4340 ! skip if total wage =0
-	if m1=0 then goto L4340 ! skip IF QUARTERLY WAGE=0
+	if ta=0 then 
+		goto L4200 
+	else 
+		goto DqwFinis ! read_DEPARTMENT
+	end if
+L4200: !
+	if m2=0 then goto DqwFinis ! skip if total wage =0
+	if m1=0 then goto DqwFinis ! skip IF QUARTERLY WAGE=0
 	p3=p3+1
-	if m2<m(sr1) then goto L4290
-	if m2-m1>m(sr1) then goto L4270
+	if m2<m(sr1) then 
+		goto L4290
+	else if m2-m1>m(sr1) then 
+		goto L4270
+	end if
 	h2=m(sr1)-(m2-m1)
-	goto L4300
-L4270: h2=0
-	goto L4300
-L4290: h2=m1
-L4300: h3=m1-h2
+goto L4300
+L4270: !
+	h2=0
+goto L4300
+L4290: !
+	h2=m1
+L4300: !
+	h3=m1-h2
 	t1=t1+m1
 	t2=t2+h3
 	t3=t3+h2
-	L4340: !
+	DqwFinis: !
 return ! /r
 include: ertn
