@@ -19,7 +19,7 @@ def library fnTos(; sn$*100)
 	if len(sn$)>100 then : pr 'INVALID FILE NAME: Too Long' : input fields '1,1,C 1,N': pause$ : goto Xit
 	! close #119: ioerr ignore
 	! open #119: 'Name='&'[temp]\acs\'&sn$&',RecL=1024,Replace',i,outi,r	! recl was 500
-	fn_clear_env(tmp_combo_count_for_read,tmp_combo_count_for_set)
+	fn_clearEnv(tmp_combo_count_for_read,tmp_combo_count_for_set)
 	if env$('GUIMode')='OFF' then execute 'config GUI On'
 fnend ! /r  (extra slash r because fnt-p is also a folder)
 def library fnLbl(myline,mypos,txt$*200; mylen,myalign,font_mod,container,tabcon,lbl_tooltip$*256)
@@ -112,12 +112,12 @@ def fn_comboA(sfn$*256,lyne,ps,mat opt$; ttt$*200,width,contain,tabcon,comboa_co
 				width=max(width,len(opt$(j)))
 			next j
 		end if
-		fn_add_combo_option_list('','',1)
+		fn_addComboOptionList('','',1)
 		for rec_count=1 to udim(mat opt$)
-			fn_add_combo_option_list(opt$(rec_count)(1:81),opt$(rec_count)(1:81))
+			fn_addComboOptionList(opt$(rec_count)(1:81),opt$(rec_count)(1:81))
 		next rec_count
 		setenv('control'&str$(fn_controlCount),'COMBOA|'&str$(lyne)&'|'&str$(ps)&'|'&str$(width)&'|0|'&sfn$&'[SESSION].tmp|1|'&ttt$&'|'&str$(contain)&'|'&str$(tabcon)&'|'&comboa_combooptionset$&'|')
-		fn_comboOptionSetList_add(comboa_combooptionset$)
+		fn_comboOptionSetListAdd(comboa_combooptionset$)
 		width=contain=0
 	end if
 fnend
@@ -206,9 +206,9 @@ def fn_comboF(sfn$*100,lyne,ps,width,df$*200,psk,lnk,psd,lnd; if$*200,limlis,ure
 	else
 		open #df=fnH: 'Name='&df$&',KFName='&if$&',Shr',i,i,k ioerr COMBOF_OPEN_IOERR
 	end if
-	fn_add_combo_option_list('','',1)
+	fn_addComboOptionList('','',1)
 	if limlis=2 then
-		fn_add_combo_option_list('[All]','[All]')
+		fn_addComboOptionList('[All]','[All]')
 	end if
 	do	! READ_DF: !
 		if nodesc=0 then
@@ -221,11 +221,11 @@ def fn_comboF(sfn$*100,lyne,ps,width,df$*200,psk,lnk,psd,lnd; if$*200,limlis,ure
 				read #df,using form$: key$,desc$ eof EODF ioerr ERR_READ
 			end if
 			! pr key$,desc$
-			fn_add_combo_option_list(rpad$(trim$(key$),lnk),rpad$(trim$(key$),lnk)&' '&desc$)
+			fn_addComboOptionList(rpad$(trim$(key$),lnk),rpad$(trim$(key$),lnk)&' '&desc$)
 		else
 			desc$=''
 			read #df,using form$: key$ eof EODF ioerr ERR_READ
-			fn_add_combo_option_list(rpad$(trim$(key$),lnk),rpad$(trim$(key$),lnk))
+			fn_addComboOptionList(rpad$(trim$(key$),lnk),rpad$(trim$(key$),lnk))
 		end if
 	loop
 
@@ -259,16 +259,16 @@ def fn_comboF(sfn$*100,lyne,ps,width,df$*200,psk,lnk,psd,lnd; if$*200,limlis,ure
 	goto WRITE_IT ! /r
 	WRITE_IT: !
 	setenv('control'&str$(fn_controlCount),'COMBOF|'&str$(lyne)&'|'&str$(ps)&'|'&str$(width)&'|'&str$(lnk)&'|'&becky$&'|'&str$(limlis)&'|'&ttt$&'|'&str$(contain)&'|'&str$(tabcon)&'|'&combokeycurrent$&'|')
-	fn_comboOptionSetList_add(combokeycurrent$)
+	fn_comboOptionSetListAdd(combokeycurrent$)
 	COMBOF_COMPLETE: !
 fnend
-def fn_comboOptionSetList_add(cosladd$*256)
+def fn_comboOptionSetListAdd(cosladd$*256)
 	mat combooptionsetlist$(combooptionsetlistcount+=1)
 	!		mat comboOptionItemList(comboOptionSetListCount)
 	combooptionsetlist$(combooptionsetlistcount)=cosladd$
 	!		comboOptionItemList(comboOptionSetListCount)=tmp_combo_count_for_set ! control_count
 fnend
-def fn_add_combo_option_list(key$*81,txt$*81; reset_only)
+def fn_addComboOptionList(key$*81,txt$*81; reset_only)
 	key$=rtrm$(key$)
 	txt$=rtrm$(txt$)
 	if reset_only then
@@ -313,8 +313,8 @@ def library fnFlexInit1(sfn$*100,lyne,ps,height,width,mat ch$; mat colMask$,selt
 	end if
 	if ~setup then fn_setup
 	all_hdr$=all_mask$=''
-	! fn_get_flexhandle
-	filenumber=fn_get_flexhandle(1)
+	! fn_getFlexHandle
+	filenumber=fn_getFlexHandle(1)
 	sfn$=trim$(sfn$)&'[cno]'
 	optfile$=sfn$&'[SESSION].tmp'
 	hdr_count=udim(ch$) : hdrfile$=sfn$&'.hdr'
@@ -365,7 +365,7 @@ def library fnFlexAdd1(mat item$; ___,all_item$*6491) ! this function may need t
 	if env$('exitnow')<>'yes' then ! special processing to increase speed for exitnow
 		if ~setup then fn_setup
 		mat2str(mat item$,all_item$,hex$('09'))
-		flexhandle=fn_get_flexhandle
+		flexhandle=fn_getFlexHandle
 		grid_populated+=1
 		pr #flexhandle,using 'form pos 1,C '&str$(len(all_item$)): all_item$ ioerr ignore
 	end if
@@ -514,7 +514,7 @@ def library fnAcs(mat resp$; &ckey, startfield,close_on_exit,parent_none,disable
 
 	for j=1 to udim(mat resp$) : resp$(j)=rtrm$(resp$(j)) : next j
 	cap$=env$('Program_Caption')
-	fn_get_flexhandle(1)
+	fn_getFlexHandle(1)
 	! do we even need this line - it screws up other things.  Does removing it screw anything up?
 	! yeah it screws things up to take it out - repetative flex grids
 	fn_ace(sn$,unused,mat resp$,ckey,startfield,close_on_exit,parent_none,disabled_background)
@@ -528,14 +528,14 @@ Xit: fnend
 			goto AceFinis
 		end if
 		dim ace_io$(1)*255
-		fn_ace_init
+		fn_aceInit
 		fn_windowSize
-		fn_draw_windows
+		fn_winDraw
 		fn_errorRedirection
-		fn_set_controls
-		fn_default_cmb_options
-		fn_clear_env(tmp_combo_count_for_read,tmp_combo_count_for_set)
-		fn_equalize_resp_arrays
+		fn_setControls
+		fn_cmbDefaultOptions
+		fn_clearEnv(tmp_combo_count_for_read,tmp_combo_count_for_set)
+		fn_equalizeRespArrays
 		if not dropdown_menu_present then fn_clearMenu
 		MAIN_INPUT: !
 		fn_mainInput
@@ -558,10 +558,10 @@ Xit: fnend
 		end if
 		AceFinis: !
 		fkey(-1)
-		fn_close_windows ! :display menu:
+		fn_closeWindows ! :display menu:
 		if disabled_background then fn_backgroundDisable(0)
 	fnend
-		def fn_ace_init
+		def fn_aceInit
 			ace_io_count=ace_lyne_max=ace_column_max=grid_present=tmp_combo_count_for_read=0
 			grid_index=date_boxes=respc=dropdown_menu_present=0 ! response counter
 			date_fkey_base=2600 : file_select_fkey_base=2700 : txtbox_fkey=300
@@ -702,7 +702,7 @@ Xit: fnend
 				next index_
 				fn_allFieldsProtected=returnN
 			fnend
-		def fn_draw_windows
+		def fn_winDraw
 			Session_Rows=max(Session_Rows,ace_lyne_max+4)   : setenv('Session_Rows',str$(Session_Rows)) ! in case 35 rows is not enough
 
 			Session_Cols=max(Session_Cols,ace_column_max+4) : setenv('Session_Cols',str$(Session_Cols)) ! in case 115 columns is not enough
@@ -761,7 +761,7 @@ Xit: fnend
 																									! -3 caused issues on PR Enter time sheets (actual time entry screen editmode=0,semp=1)
 																									! so max(1,...) was added on 8/31/18 to resolve that issue
 		fnend
-		def fn_default_cmb_options
+		def fn_cmbDefaultOptions
 			dim tmp_combo_key$(1)*81,tmp_combo_item$(1)*81
 			for tmp_combo_key_item=1 to tmp_combo_count_for_set
 				str2mat( env$('tmp_combo'&str$(tmp_combo_key_item)&'_key'),mat tmp_combo_key$,'|')
@@ -774,45 +774,45 @@ Xit: fnend
 				end if
 			next tmp_combo_key_item
 		fnend
-		def fn_set_controls
+		def fn_setControls
 			dim control$(1)*5095
 			for index_=1 to control_count
 				str2mat(env$('control'&str$(index_)),mat control$,'|')
 				ace_typ$(index_)=typ$=uprc$(control$(1))
 				if typ$='LABEL' then
-					fn_ace_rd_label
+					fn_aceRdlabel
 				else if typ$='TEXT' then
-					fn_ace_rd_text
+					fn_aceRdText
 				else if typ$='COMBOA' then
-					fn_ace_rd_combo('A')
+					fn_aceRdCombo('A')
 				else if typ$='COMBOF' then
-					fn_ace_rd_combo('F')
+					fn_aceRdCombo('F')
 				else if typ$='CHECK' then
-					fn_ace_rd_check
+					fn_aceRdCheck
 				else if typ$='OPTION' then
-					fn_ace_rd_option
+					fn_aceRdOption
 				else if typ$='FLEX' then
-					fn_ace_rd_flex
+					fn_aceRdFlex
 				else if typ$='BUTTON' then
-					fn_ace_rd_button
+					fn_aceRdButton
 				else if typ$='PICTURE' then
-					fn_ace_rd_pic
+					fn_aceRdPic
 				else if typ$='CMDKEY' then
-					fn_ace_rd_cmdkey
+					fn_aceRdCmdkey
 				else if typ$='PICBUT' then
-					fn_ace_rd_picbut
+					fn_aceRdPicBut
 				else if typ$='MULTILINE' then
-					fn_ace_rd_multiline
+					fn_aceRdMultiline
 				else if typ$='FRAME' then
-					fn_ace_rd_frame
+					fn_aceRdFrame
 				else if typ$='TAB' then
-					fn_ace_rd_tab
+					fn_aceRdTab
 				else if typ$='MENU' then
-					fn_ace_rd_menu
+					fn_aceRdMenu
 				end if
 			next index_
 		fnend
-		def fn_equalize_resp_arrays
+		def fn_equalizeRespArrays
 			respc=0
 			dim ace_resp$(1)*1024, grid_filter$*1024
 			if ace_io_count>udim(mat resp$) then mat resp$(ace_io_count)
@@ -868,7 +868,7 @@ Xit: fnend
 				fn_exportGrid
 				fkey(-1) : returnN=1
 			else if fkey=2502 then
-				fn_print_grid
+				fn_printGrid
 				fkey(-1) : returnN=1
 				!		else if fkey=2503 then
 				!			pr f gridspec$&',sort': 1
@@ -924,7 +924,7 @@ Xit: fnend
 				mat ace_resp$(udim(temp_ace_resp$))=temp_ace_resp$
 				ace_io_count=temp_io_count
 			fnend
-			def fn_print_grid
+			def fn_printGrid
 				! library 'S:\Core\fnsnap\rtflib_dll.br': fnlistprint
 				! fnLISTPRINT(LISTWIN,LISTSPEC$,'Selected Clients','','Selected clients	 for '&CLNR$,MAT DUMMY,0,0,'11111',0) : GOTO 5290
 				fnlistprint(0,gridspec$,'','','Grid Print',mat dummy,0,0,'000000',0)
@@ -1029,7 +1029,7 @@ include: filenamesPopUpperCase
 				on soflow ignore
 			end if
 		fnend
-		def fn_close_windows
+		def fn_closeWindows
 			if file(acs_win)<>-1 then close #acs_win:
 			if file(button_win)<>-1 then close #button_win:
 			if file(disable_win)<>-1 then close #disable_win:
@@ -1053,7 +1053,7 @@ include: filenamesPopUpperCase
 			for _idx=1 to udim(text_masks)
 				if text_masks(_idx)>=1 and text_masks(_idx)<=5 then
 					if ace_resp$(_idx)<>'0' then
-						if not fn_validate_mdy(ace_resp$(_idx)) then
+						if not fn_validateMdy(ace_resp$(_idx)) then
 							if val(resp$(_idx)) then
 								msgbox('Date '&ace_resp$(_idx)&' at field #'&str$(curfld)&' is invalid. Previous value of '&resp$(_idx)&' will be restored')
 								ace_resp$(_idx)=resp$(_idx)
@@ -1072,13 +1072,13 @@ include: filenamesPopUpperCase
 			next _idx
 			fn_validateFields=~ found_invalid
 		fnend
-			def fn_validate_mdy(_date$;separator$,___,month,day,year)
-				fn_validate_mdy=1
+			def fn_validateMdy(_date$;separator$,___,month,day,year)
+				fn_validateMdy=1
 				_date$=lpad$(_date$,6,'0')
 				month=val(_date$(1:2))
 				day=val(_date$(3:4))
 				year=val(_date$(5:6))
-				if not (fn_validateMonth(month) and fn_validate_day(day,month,year) and fn_validate_year(year)) then fn_validate_mdy=0
+				if not (fn_validateMonth(month) and fn_validateDay(day,month,year) and fn_validateYear(year)) then fn_validateMdy=0
 			! FINISHEDVALIDATE_MDY: !
 			fnend
 				def fn_validateMonth(month; ___,returnN)
@@ -1086,25 +1086,25 @@ include: filenamesPopUpperCase
 					if month < 1 or month > 12 then returnN=0
 					fn_validateMonth=returnN
 				fnend
-				def fn_validate_day(day,month,year; ___,returnN)
+				def fn_validateDay(day,month,year; ___,returnN)
 					returnN=1
-					if day<1 or day>fn_days_in_month(month,year) then returnN=0
-					fn_validate_day=returnN
+					if day<1 or day>fn_daysInMonth(month,year) then returnN=0
+					fn_validateDay=returnN
 				fnend
-					def fn_days_in_month (month,year;___,returnN)
+					def fn_daysInMonth (month,year;___,returnN)
 						returnN=date(days(date$(days(date$(str$(year)&lpad$(str$(month),2,'0')&'01'),'CCYYMMDD')+32,'CCYYMM01'),'CCYYMMDD')-1,'DD')
-						fn_days_in_month=returnN
+						fn_daysInMonth=returnN
 					fnend
-				def fn_validate_year(year; ___,returnN)
+				def fn_validateYear(year; ___,returnN)
 					returnN=1
 					if year < 0 or year > 99 then returnN=0
-					fn_validate_year=returnN
+					fn_validateYear=returnN
 				fnend
 
 ! /r
 
 
-def fn_clear_env(&tmp_combo_count_for_read,&tmp_combo_count_for_set; ___,index_,tmp_combo_item)
+def fn_clearEnv(&tmp_combo_count_for_read,&tmp_combo_count_for_set; ___,index_,tmp_combo_item)
 	for index_=1 to control_count
 		setenv('control'&str$(index_),'')
 		!			setenv('combo'&str$(index_),'')
@@ -1120,7 +1120,7 @@ fnend
 
 
 ! r: fn_ ace_rd_*
-def fn_ace_rd_menu (;___,index_,item_count)
+def fn_aceRdMenu (;___,index_,item_count)
 	dim menu_items$(1)*1023,menu_sub_items$(1)*255,gMenu$(1)*255,gProgram$(1)*255,gStatus$(1)*255
 	str2mat(control$(2),mat menu_items$,'###')
 	item_count=udim(mat menu_items$)
@@ -1133,7 +1133,7 @@ def fn_ace_rd_menu (;___,index_,item_count)
 	next index_
 	display menu: mat gMenu$,mat gProgram$,mat gStatus$
 fnend
-def fn_ace_rd_multiline
+def fn_aceRdMultiline
 	respc+=1
 	lyne=val(control$(2))
 	ps=val(control$(3))
@@ -1142,10 +1142,10 @@ def fn_ace_rd_multiline
 	tt$=control$(6)
 	container=val(control$(7))
 	tabcon=val(control$(8))
-	fn_remove_crlf(resp$(respc))
+	fn_removeCrLf(resp$(respc))
 	 !	 resp$(respc)=srep$(resp$(respc),'"','""') ! fn2quote(resp$(respc))
 fnend
-def fn_ace_rd_picbut(; ___,lyne$,pos$,comkey$,height$,width$,container,tabcon,default,xCancel,txt$*256,path1$*300,tt$*400,tmpWin)
+def fn_aceRdPicBut(; ___,lyne$,pos$,comkey$,height$,width$,container,tabcon,default,xCancel,txt$*256,path1$*300,tt$*400,tmpWin)
 	lyne$    =    control$(2)
 	pos$     =    control$(3)
 	txt$     =    control$(4) !  not used
@@ -1183,7 +1183,7 @@ def fn_ace_rd_picbut(; ___,lyne$,pos$,comkey$,height$,width$,container,tabcon,de
 
 fnend
 Fc80: form pos 1,C 80
-def fn_ace_rd_tab
+def fn_aceRdTab
 	lyne=val(control$(2))
 	ps=val(control$(3))
 	height=val(control$(4))
@@ -1203,7 +1203,7 @@ def fn_ace_rd_tab
 	next j
 	close #tab_file:
 fnend
-def fn_ace_rd_frame
+def fn_aceRdFrame
 	lyne=val(control$(2))
 	ps=val(control$(3))
 	height=val(control$(4))
@@ -1226,7 +1226,7 @@ def fn_ace_rd_frame
 	frames(udim(frames),2)=lyne+1
 	frames(udim(frames),3)=ps+1
 fnend
-def fn_ace_rd_flex(;___,index_,masknumber)
+def fn_aceRdFlex(;___,index_,masknumber)
 	lyne         	= val(control$(2))
 	ps           	= val(control$(3))
 	height      	= rows - lyne       ! val(control$(4))
@@ -1249,7 +1249,7 @@ def fn_ace_rd_flex(;___,index_,masknumber)
 	str2mat(_line$,mat _mask$,tab$)
 	mat _mask$(udim(_headings$))
 	close #grid_headers:
-	file_nonempty=fn_gridform(mat _widths,mat _forms$,mat _mask$,mat _headings$)
+	file_nonempty=fn_gridForm(mat _widths,mat _forms$,mat _mask$,mat _headings$)
 	if not file_nonempty then
 		for col_index_=2 to udim(mat _headings$)
 			_widths (col_index_)=len(_headings$(col_index_))
@@ -1294,7 +1294,7 @@ def fn_ace_rd_flex(;___,index_,masknumber)
 
 	scr_thaw
 
-	fn_alpha_mask_indices(mat _mask$,mat alpha_mask_indices)
+	fn_alphaMaskIndices(mat _mask$,mat alpha_mask_indices)
 	do while file_nonempty
 		linput #grid_data: _line$ eof ignore
 		! remove this line after you figure out how to addtomask$ negative numbers to the #pic spec
@@ -1398,7 +1398,7 @@ def fn_ace_rd_flex(;___,index_,masknumber)
 	! pr f window_prefix$&srow$&','&str$(ps+08)&',CC 7,,B2502': 'Print' ! if env$('ACSDeveloper')<>'' then
 	!		pr f window_prefix$&srow$&','&str$(ps+16)&',CC 7,,B2503': 'Reset'
 fnend
-	def fn_alpha_mask_indices(mat _mask$,mat alpha_mask_indices; ___,index_,mask)
+	def fn_alphaMaskIndices(mat _mask$,mat alpha_mask_indices; ___,index_,mask)
 		mat alpha_mask_indices(0)
 		for index_=1 to udim(mat _mask$)
 			mask=val(_mask$(index_)) conv ignore
@@ -1409,7 +1409,7 @@ fnend
 			end if
 		next index_
 	fnend
-	def fn_gridform(mat _widths,mat _forms$,mat _mask$,mat _headings$; ___,index_)
+	def fn_gridForm(mat _widths,mat _forms$,mat _mask$,mat _headings$; ___,index_)
 		data_file_nonempty=0
 		mat _headings$(udim(_headings$)+1)
 		mat _headings$(2:udim(_headings$))=_headings$(1:udim(_headings$)-1)
@@ -1435,7 +1435,7 @@ fnend
 		next count
 		GRIDFORM_COMPLETE: !
 		for index_=2 to udim(mat _mask$)+1
-			fn_column_mask(_forms$(index_),_widths(index_),_mask$(index_-1))
+			fn_columnMask(_forms$(index_),_widths(index_),_mask$(index_-1))
 		next index_
 		! _forms$(1)='0/C 500' works... old, small
 		_forms$(1)='0/C 999'
@@ -1443,9 +1443,9 @@ fnend
 		! _forms$(1)='0/C 1024' fails (unable to select things from grids)
 		_widths(1)=0
 		close #grid_data:
-		fn_gridform=data_file_nonempty
+		fn_gridForm=data_file_nonempty
 	fnend
-	def fn_column_mask(&form$,&width,mask$; ___,maskN,invisible)
+	def fn_columnMask(&form$,&width,mask$; ___,maskN,invisible)
 		maxlen=width + 10 ! to deal with bad data
 		maskN=val(mask$) conv ignore
 		mask$=lwrc$(mask$)
@@ -1546,14 +1546,14 @@ fnend
 		end if
 		if invisible then width=0
 	fnend
-def fn_ace_rd_pic
+def fn_aceRdPic
 	lyne=val(control$(2))
 	ps=val(control$(3))
 	width=val(control$(4))
 	height=val(control$(5))
 	path1$=control$(6)
 fnend
-def fn_ace_rd_cmdkey(; ___,_help$*255,spec$*255)
+def fn_aceRdCmdkey(; ___,_help$*255,spec$*255)
 	txt$=control$(2)
 	mat return_keys(udim(return_keys)+1)
 	returnkey=return_keys(udim(return_keys))=val(control$(3))
@@ -1586,7 +1586,7 @@ def fn_ace_rd_cmdkey(; ___,_help$*255,spec$*255)
 	pr #button_win, fields spec$, help _help$: txt$
 	ace_cmdkey_ps+=(width+2)
 fnend
-def fn_ace_rd_button(; ___,_help$*255,spec$*255)
+def fn_aceRdButton(; ___,_help$*255,spec$*255)
 	lyne=val(control$(2))
 	ps=val(control$(3))
 	height=val(control$(4))
@@ -1678,7 +1678,7 @@ fnend
 			if comkey=comkeyTest then tooltip$&='\nKeyboard Shortcut: '&text$ : returnN=1
 			fn_ifCh=returnN
 		fnend
-def fn_ace_rd_option
+def fn_aceRdOption
 	respc+=1
 	lyne=val(control$(2))
 	ps=val(control$(3))
@@ -1698,7 +1698,7 @@ def fn_ace_rd_option
 		fn_ace_io_add('#'&str$(acs_win)&','&str$(lyne)&','&str$(ps)&',radio '&str$(len(trim$(txt$))+4)&',T') ! tab order
 	end if
 fnend
-def fn_ace_rd_check(; ___,lyne,ps,align,txt$*256,container,tabcon,chk_disable,spec$*255,align$,chk_protected$*2)
+def fn_aceRdCheck(; ___,lyne,ps,align,txt$*256,container,tabcon,chk_disable,spec$*255,align$,chk_protected$*2)
 	! local: acs_win, respc,mat tabs, mat frames
 	respc+=1
 	lyne=val(control$(2))
@@ -1730,7 +1730,7 @@ def fn_ace_rd_check(; ___,lyne,ps,align,txt$*256,container,tabcon,chk_disable,sp
 		pr #acs_win, fields str$(lyne)&','&str$(ps)&','&align$&str$(len(txt$)): trim$(txt$)
 	end if
 fnend
-def fn_ace_rd_label(; ___,lbl_win)
+def fn_aceRdlabel(; ___,lbl_win)
 	lyne      	=val(control$(2))
 	ps        	=val(control$(3))
 	mylen     	=val(control$(4))
@@ -1763,7 +1763,7 @@ def fn_ace_rd_label(; ___,lbl_win)
 		end if
 	end if
 fnend
-def fn_ace_rd_text(; ___,spec$*255)
+def fn_aceRdText(; ___,spec$*255)
 	respc+=1
 	lyne=val(control$(2))
 	ps=val(control$(3)) ! -.6
@@ -1967,7 +1967,7 @@ fnend
 		pr f fs_buttonIo$: '.'
 		! pr 'drawing the . with io of '&fs_buttonIo$
 	fnend
-def fn_ace_rd_combo(combo$*1; ___,spec$*255)
+def fn_aceRdCombo(combo$*1; ___,spec$*255)
 	dim ace_combo_io$*255
 	ace_combo_io$=''
 	! combo_count=0
@@ -2071,11 +2071,11 @@ def fn_ace_io_add(aia_in$*255)
 fnend
 
 ! /r
-def fn_get_flexhandle(; forceclose)
+def fn_getFlexHandle(; forceclose)
 	if forceclose then
 		close #118: ioerr ignore
 	end if
-	fn_get_flexhandle=118
+	fn_getFlexHandle=118
 fnend
 
 def library fnQgl(myline,mypos; qglcontainer,add_all_or_blank,forceGLsysIfPossible,qgllength,qgltabcon,hAccts,___,qgl_cursys$)
@@ -2304,7 +2304,7 @@ def library fnAgl$*12(&x$; ___,return$*12,dash1,dash2,useDept,useSub)
 	fnAgl$=return$
 fnend
 
-def fn_remove_crlf(&txt$)
+def fn_removeCrLf(&txt$)
 	lastx=x=0
 	do
 		x=pos(txt$,hex$('0D0A'),lastx)

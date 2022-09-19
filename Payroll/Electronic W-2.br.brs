@@ -22,11 +22,11 @@ fnTop(program$)
 	read #hCompany,using fCompany: mat a$,federal_id$,loccode
 	fCompany: form pos 1,3*c 40,c 12,pos 150,x 80,n 2
 	close #hCompany:
-	!
+
 	dim optNameFormat$(2)*20,nameFormat_sf$(2)*1
 	optNameFormat$(1)='First Name First' : nameFormat_sf$(1)='F'
 	optNameFormat$(2)='Last Name First'  : nameFormat_sf$(2)='S'
-	!
+
 	disable=1 !
 	med$="Y"
 ! /r
@@ -73,11 +73,10 @@ fnTop(program$)
 	fncreg_read('W-2 Contact Phone Extension',phoneext$)
 	fncreg_read('W-2 Contact E-Mail',email$)
 	fncreg_read('W-2 Terminating Business Indicator',terminat$,"0")
-!
+
 	fncreg_read('W-2 State Code',tmp$) : sr1=val(tmp$)
 	fncreg_read('W-2 FIPS',tmp$) : sr2=val(tmp$)
-!
-!
+
 ! /r
 SCREEN1_NEW: ! r:
 	fnTos(sn$="W2-1")
@@ -129,7 +128,7 @@ SCREEN1_NEW: ! r:
 	fnLbl(lyne+=1,col3,"Medicare Rate:",mylen,1,0,0)
 	fnTxt(lyne,mypos,6,0,0,'30',disable,"Enter the medicare rate for the year just completed.",0)
 	resp$(resp_mcrate:=rc+=1)=str$(mcrate)
-	!
+
 	lyne=10 : mylen=69 : mypos=mylen+2
 	fnLbl(lyne+=1,1,"Miscellaneous Deduction Containing Employer Cost Group-Term Life Ins:",mylen,1,0,0)
 	fnTxt(lyne,mypos,2,0,0,'30',0,"",0)
@@ -184,7 +183,7 @@ SCREEN1_NEW: ! r:
 	fnTxt(lyne,mypos,2,0,0,'30',0,"",0)
 	resp$(resp_fips:=rc+=1)=str$(sr2)
 	fnLbl(lyne+=1,1,'(See an appendix in your electronic booklet for the postal code!)',80,2)
-	!
+
 	fnCmdKey("Next",1,1,0,"Creates the export")
 	fnCmdKey("Cancel",5,0,1,"Returns to menu")
 	ckey=fnAcs(mat resp$) ! /r
@@ -193,27 +192,27 @@ SCREEN1_NEW: ! r:
 	beg_date=val(resp$(respc_dateStart))
 	end_date=val(resp$(respc_dateEnd))
 	path$=resp$(respc_path)
-	!
+	
 	a$(1)=resp$(resp_cnam)
 	a$(2)=resp$(resp_cstreet)
 	ct$=resp$(resp_ccity)
 	st$=resp$(resp_cstate)
 	zip$=resp$(resp_czip)
-	!
+	
 	federal_id$=resp$(resp_fid) : federal_id_val=val(srep$(federal_id$,'-',''))
 	yr=val(resp$(resp_paymentYear))
 	ssmax=val(resp$(resp_ssmax))
 	ssrate=val(resp$(resp_ssrate))
 	mcmax=val(resp$(resp_mcmax))
 	mcrate=val(resp$(resp_mcrate))
-	!
+	
 	nameFormat=srch(mat optNameFormat$,resp$(resp_nameFormat))
-	!
+	
 	ins=val(resp$(resp_ins))
 	pen=val(resp$(resp_pen))
 	dfc=val(resp$(resp_dfc))
 	dcan=val(resp$(resp_dcan))
-	!
+	
 	emppin$=resp$(resp_emppin)
 	resub$=resp$(resp_resub)
 	tlcn$=resp$(resp_tlcn)
@@ -222,10 +221,10 @@ SCREEN1_NEW: ! r:
 	phoneext$=resp$(resp_phoneext)
 	email$=resp$(resp_email)
 	terminat$=resp$(resp_terminat)
-	!
+	
 	sr1=val(resp$(resp_state_code))
 	sr2=val(resp$(resp_fips))
-	!
+	
 ! /r
 ! r: validate screen1 values
 	if beg_date=0 then goto SCREEN1_NEW
@@ -255,7 +254,7 @@ SCREEN1_NEW: ! r:
 	fncreg_write('Miscellaneous Deduction Used For Pension',str$(pen))
 	fncreg_write('Miscellaneous Deduction Used For Deferred Compensation',str$(dfc))
 	fncreg_write('Miscellaneous Deduction Used For Dependent Care Assistance',str$(dcan))
-	!
+	
 	fncreg_write('W-2 Personal ID Number',emppin$)
 	fncreg_write('W-2 Resub Indicator',resub$)
 	fncreg_write('W-2 Resub TLCN',tlcn$)
@@ -264,13 +263,13 @@ SCREEN1_NEW: ! r:
 	fncreg_write('W-2 Contact Phone Extension',phoneext$)
 	fncreg_write('W-2 Contact E-Mail',email$)
 	fncreg_write('W-2 Terminating Business Indicator',terminat$)
-	!
+	
 	fncreg_write('W-2 State Code',str$(sr1))
 	fncreg_write('W-2 FIPS',str$(sr2))
-	!
+	
 ! /r
 	open #hOut=fnH: "Name=W2REPORT,RecL=512,eol=crlf,replace",d,o
-!
+
 	gosub RecRA
 	gosub RecRE ! kj 22610  was commented
 NEXT_EMPLOYEE: ! r: main loop
