@@ -52,7 +52,7 @@ EditReadNokey: ! r:
 	mat ml$(2)
 	ml$(1)="A record with this number does not exist!"
 	ml$(2)="Select a different numbe if you wish to add a new report."
-	fnmsgbox(mat ml$,resp$,'',48)
+	fnMsgBox(mat ml$,resp$,'',48)
 goto AskReport ! /r
 ContinueForAddAndEdit: ! r:
 	rptn$=lpad$(str$(rptn),2)
@@ -113,7 +113,7 @@ SCR2: ! r:
 		ml$(1)="You are attempting to change report number"
 		ml$(2)="from "&str$(holdrn)& " to "&str$(rn)&"."
 		ml$(3)="Take OK to continue, else Cancel."
-		fnmsgbox(mat ml$,resp$,'',49)
+		fnMsgBox(mat ml$,resp$,'',49)
 		if resp$="OK" then
 			holdrn=rn
 		else
@@ -133,7 +133,7 @@ SCR2: ! r:
 		mat ml$(2)
 		ml$(1)="You can not use "&code$(ips+1)&" as selection criteria!"
 		ml$(2)=" Take OK to select a different item."
-		fnmsgbox(mat ml$,resp$,'',48)
+		fnMsgBox(mat ml$,resp$,'',48)
 		goto SCR2
 	end if
 	if sd$="Y" then sd=1 else sd=0
@@ -144,7 +144,7 @@ SCR2: ! r:
 		mat ml$(2)
 		ml$(1)="You have chosen to delete report # "&rptn$
 		ml$(2)="Take Ok to continue, else Cancel to keep the report."
-		fnmsgbox(mat ml$,resp$,'',49)
+		fnMsgBox(mat ml$,resp$,'',49)
 		if resp$="OK" then
 			delete #h_prreport,key=rptn$:
 		else

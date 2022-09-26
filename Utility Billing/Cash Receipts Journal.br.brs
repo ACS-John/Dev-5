@@ -154,7 +154,7 @@ do
 				ml$(1)='The breakdown on a collection transaction dated '&str$(tDate)& ' for customer '&c$(c_account)
 				ml$(2)='does not balance.  Your totals will be off by '& trim$(cnvrt$('pic($$$,$$$.## cr)',tAmount-sum(alloc)))&'.'
 				ml$(3)='(transaction record number: '&str$(rec(hTrans))&')'
-				fnmsgbox(mat ml$,resp$,'',49)
+				fnMsgBox(mat ml$,resp$,'',49)
 				if resp$='Cancel' then goto Xit
 			end if ! /r
 			if enableRouteTotals or exportNow then ! r:

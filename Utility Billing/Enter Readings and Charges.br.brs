@@ -569,7 +569,7 @@ def fn_meter_roll
 	txt$(2)="Account: "&x$&" - "&aname$
 	txt$(3)="Negative Usage on "&sn$
 	txt$(4)="Is this a Meter Roll?"
-	fnmsgbox(mat txt$,resp$,'',35)
+	fnMsgBox(mat txt$,resp$,'',35)
 	if resp$="No" then
 		passcheck=ckfail
 		goto METER_ROLL_XIT
@@ -817,7 +817,7 @@ def fn_checkend
 		txt$(6)="Yes = Continue, the usage is correct."
 		txt$(7)="No = Go Back, so I can re-enter the reading;"
 		txt$(8)="Cancel = Do not enter a reading for that Customer."
-		fnmsgbox(mat txt$,resp$,'',51)
+		fnMsgBox(mat txt$,resp$,'',51)
 		if resp$="Yes" then
 			passcheck=ckpass
 		else if resp$="No" then
@@ -1079,7 +1079,7 @@ EstimateRoute: ! r: ESTIMATEING ROUTINE
 		dim message$(1)*128
 		mat message$(1)
 		message$(1)="You must select at least one service to estimate"
-		fnmsgbox(mat message$,resp$,'',0)
+		fnMsgBox(mat message$,resp$,'',0)
 		goto ASK_EST
 
 	else
@@ -1092,7 +1092,7 @@ EstimateRoute: ! r: ESTIMATEING ROUTINE
 			if est1(j,2)<50 or est1(j,2)>150 then
 				mat message$(1)
 				message$(1)="You percent must be between 50% and 150%"
-				fnmsgbox(mat message$)
+				fnMsgBox(mat message$)
 				goto ASK_EST
 			end if
 		end if
@@ -1268,7 +1268,7 @@ def fn_est_dates
 	if cd1(1)=0 then
 		mat message$(1)
 		message$(1)="You must enter at least one date!"
-		fnmsgbox(mat message$)
+		fnMsgBox(mat message$)
 		goto EST_DATES
 	end if
 fnend
@@ -2061,7 +2061,7 @@ def fn_meter_change_out
 		txt$(1)="The readings you entered create a negative uuage."
 		txt$(2)="Correct one of the readings or choose Cancel to"
 		txt$(3)="skip this record!"
-		fnmsgbox(mat txt$,resp$,'',1)
+		fnMsgBox(mat txt$,resp$,'',1)
 		if resp$="OK" then goto MCO_RECORD_READINGS
 	end if
 	if method$="File" then fn_rewrite_usage : goto MCO_WORK_READ ! read new record from readings file
@@ -2295,7 +2295,7 @@ def fn_hot_writeWork(hWork,hwwAccount$,mat x,&hotDataImportAsked,&hotDataImportE
 			fnAddOneC(mat message$,'')
 			fnAddOneC(mat message$,'Yes'&chr$(9)&'Updates customer and/or meter records with the new data')
 			fnAddOneC(mat message$,'No'&chr$(9)&'Only load the readings from this file, ommits import data')
-			fnmsgbox(mat message$, resp$,'',32+4)
+			fnMsgBox(mat message$, resp$,'',32+4)
 			hotDataImportAsked=1
 			if resp$='Yes' then
 				hotDataImportEnabled=1
@@ -2350,7 +2350,7 @@ def fn_hot_writeWork(hWork,hwwAccount$,mat x,&hotDataImportAsked,&hotDataImportE
 		mat message$(0)
 		fnAddOneC(mat message$,'This book contains accounts that are final billed.')
 		fnAddOneC(mat message$,'skip loading their readings?')
-		fnmsgbox(mat message$, resp$,'',32+4)
+		fnMsgBox(mat message$, resp$,'',32+4)
 		hotFinaledImportAsked=1
 		if resp$='Yes' then
 			hotFinaledImportEnabled=0

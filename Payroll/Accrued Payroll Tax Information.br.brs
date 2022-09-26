@@ -92,7 +92,7 @@ RecordDelete: ! r:
 	mat ml$(2)
 	ml$(1)='You have chosen to delete department '&dp$ ! '
 	ml$(2)='Take OK to delete; else Cancel to retain the record.'
-	fnmsgbox(mat ml$,resp$,'',1)
+	fnMsgBox(mat ml$,resp$,'',1)
 	if resp$='OK' then
 		delete #hMgl,key=dp$: nokey Menu1
 	end if

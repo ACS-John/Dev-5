@@ -52,7 +52,7 @@ ADDREC: ! r:
 	mat ml$(2)
 	ml$(1)="A record with this number already exists!"
 	ml$(2)="Select a different subcategory number."
-	fnmsgbox(mat ml$,resp$,'',48)
+	fnMsgBox(mat ml$,resp$,'',48)
 goto ADDREC ! /r
  
 EDITREC: ! r:
@@ -80,7 +80,7 @@ EDITREC: ! r:
 	mat ml$(2)
 	ml$(1)="You are attempting to change the sub-category # from "&holdcde$
 	ml$(2)="to "&cde$&".  Take OK to continue, else cancel."
-	fnmsgbox(mat ml$,resp$,'',48)
+	fnMsgBox(mat ml$,resp$,'',48)
 	if resp$="OK" then
 		goto Save1
 	end if

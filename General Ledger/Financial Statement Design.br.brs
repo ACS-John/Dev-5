@@ -177,7 +177,7 @@ AddEdit: ! r:
 			ml$(1)="You are changing reference # "&holdrno$&" to "
 			ml$(2)="reference # "&rno$&".  Click OK to continue, else"
 			ml$(3)="Cancel to prevent changing the #."
-			fnmsgbox(mat ml$,resp$,'',49)
+			fnMsgBox(mat ml$,resp$,'',49)
 			if resp$<>"OK" then goto AddEdit
 		end if
 		rewrite #hFSDesign,using F_FSDesign,rec=editRec: rno$,d$,te$,sp,ls,ds,ul,rs,bc,ap,mat ac,ic,fc,rnp
@@ -192,7 +192,7 @@ DeleteRef: ! r: delete a reference #
 	ml$(1)="You are attempting to delete reference # "&rno$&"."
 	ml$(2)="Click OK to continue, "
 	ml$(3)="else Cancel to prevent deleting the reference #."
-	fnmsgbox(mat ml$,resp$,'',49)
+	fnMsgBox(mat ml$,resp$,'',49)
 	if uprc$(resp$)="OK" then goto L1530 else goto AddEdit
 	L1530: !
 	delete #hFSDesign,rec=editRec:
@@ -205,7 +205,7 @@ AddEditValidation: ! r:
 		mat ml$(2)
 		ml$(1)="You must have a valid reference number in order to add a new line."
 		ml$(2)="Click OK to fix."
-		fnmsgbox(mat ml$,resp$,'',49)
+		fnMsgBox(mat ml$,resp$,'',49)
 		goto AddEdit
 	else if pos("DTRHSFPEBC",te$,1)<=0 then
 		mat ml$(4)
@@ -213,14 +213,14 @@ AddEditValidation: ! r:
 		ml$(2)="H=Heading; S=Secondary Heading; F=Footnote; P=Profit or Loss"
 		ml$(3)="E=Something; B=Bank Account; C=Something"
 		ml$(4)="Click OK to fix."
-		fnmsgbox(mat ml$,resp$,'',49)
+		fnMsgBox(mat ml$,resp$,'',49)
 		goto AddEdit
 	else if ds<0 or ds>1 then
 		mat ml$(3)
 		ml$(1)="The Dollar Sign codes must be 0 or 1.  0 is no dollar"
 		ml$(2)="sign.  1 will pr a dollar sign beside the entry."
 		ml$(3)="Click OK to fix."
-		fnmsgbox(mat ml$,resp$,'',49)
+		fnMsgBox(mat ml$,resp$,'',49)
 		goto AddEdit
 	else if ul<0 or ul>2 then
 		mat ml$(0)
@@ -229,21 +229,21 @@ AddEditValidation: ! r:
 		fnAddOneC(mat ml$,'  1 will print one underline.'  )
 		fnAddOneC(mat ml$,'  2 will print two underlines.' )
 		fnAddOneC(mat ml$,'Click OK to fix.'               )
-		fnmsgbox(mat ml$,resp$,'',49)
+		fnMsgBox(mat ml$,resp$,'',49)
 		goto AddEdit
 	else if rs<0 or rs>1 then ! reverse sign
 		mat ml$(3)
 		ml$(1)="The Reverse Sign code is simply 1 to reverse the sign."
 		ml$(2)="0 will default to no action. All other codes are invalid."
 		ml$(3)="Click OK to fix."
-		fnmsgbox(mat ml$,resp$,'',49)
+		fnMsgBox(mat ml$,resp$,'',49)
 		goto AddEdit !
 	else if bc<0 or bc>3 then
 		mat ml$(3)
 		ml$(1)="The Balance Sheet Column is only applicable in a balance"
 		ml$(2)="sheet design.  The codes are 0,1,2,3. 0 will default to 1."
 		ml$(3)="Click OK to fix."
-		fnmsgbox(mat ml$,resp$,'',49)
+		fnMsgBox(mat ml$,resp$,'',49)
 		goto AddEdit
 	end if
 	if te$="E" and (ap<1 or ap>9) then
@@ -251,14 +251,14 @@ AddEditValidation: ! r:
 		ml$(1)="If the transaction type is an 'E' then you must"
 		ml$(2)="enter a valid accumulator to pr of 1 thru 9. "
 		ml$(3)="Click OK to fix."
-		fnmsgbox(mat ml$,resp$,'',49)
+		fnMsgBox(mat ml$,resp$,'',49)
 		goto AddEdit
 	else if ap<0 or ap>9 then
 		mat ml$(3)
 		ml$(1)="The Accumulator to pr must be no less than 0 or "
 		ml$(2)="or no greater than 9. All other codes are invalid, "
 		ml$(3)="Click OK to fix."
-		fnmsgbox(mat ml$,resp$,'',49)
+		fnMsgBox(mat ml$,resp$,'',49)
 		goto AddEdit
 	else
 		for j=1 to 9
@@ -267,7 +267,7 @@ AddEditValidation: ! r:
 				ml$(1)="Accumulator to clear must be a 0,1, or 9."
 				ml$(2)="All other codes are invalid, "
 				ml$(3)="Click OK to fix."
-				fnmsgbox(mat ml$,resp$,'',49)
+				fnMsgBox(mat ml$,resp$,'',49)
 				goto AddEdit
 			end if
 		next j

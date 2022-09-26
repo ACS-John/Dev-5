@@ -38,7 +38,7 @@ def fn_print_designed_report(rn)
 		mat ml$(2)
 		ml$(1)="The report you have selected has no fields selected to print."
 		ml$(2)="Click OK to contine."
-		fnmsgbox(mat ml$,resp$,'',48)
+		fnMsgBox(mat ml$,resp$,'',48)
 		goto PDR_XIT
 	end if
  
@@ -164,7 +164,7 @@ NORECORDSONFILE: ! r: no records on file
 	mat ml$(2)
 	ml$(1)="It appears this report is not in the report file!"
 	ml$(2)="Click OK to contine."
-	fnmsgbox(mat ml$,resp$,'',48)
+	fnMsgBox(mat ml$,resp$,'',48)
 	goto PDR_XIT ! /r
  
 ! XIT_PRAUTO: fnXit
@@ -177,7 +177,7 @@ NO_PRREPORT: ! r:
 	mat ml$(2)
 	ml$(1)="No reports have been designed in the User Designed"
 	ml$(2)="Reports file.  Click OK to go there now."
-	fnmsgbox(mat ml$,resp$,'',48)
+	fnMsgBox(mat ml$,resp$,'',48)
 fnchain("S:\Payroll\User Designed Reports") ! /r
 def fn_setup
 		autoLibrary

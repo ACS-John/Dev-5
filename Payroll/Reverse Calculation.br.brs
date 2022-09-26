@@ -85,7 +85,7 @@ ASK_EMPLOYEE_NO: !
 	if d1=0 then
 		mat ml$(2)
 		ml$(1)="You must enter the payroll date!"
-		fnmsgbox(mat ml$,resp$,'',0)
+		fnMsgBox(mat ml$,resp$,'',0)
 		goto ASK_EMPLOYEE_NO
 	end if
 	w1=val(resp$(3))
@@ -147,14 +147,14 @@ L1190: !
 	mat ml$(2)
 	ml$(1)="Employee Number "&ltrm$(x$)&" does not exist!"
 	ml$(2)="Please select a different Employee Number."
-	fnmsgbox(mat ml$,resp$,'',0)
+	fnMsgBox(mat ml$,resp$,'',0)
 goto ASK_EMPLOYEE_NO
  
 L1220: !
 	mat ml$(2)
 	ml$(1)="No information found for Employee Number "&ltrm$(x$)
 	ml$(2)="Please select a different Employee Number."
-	fnmsgbox(mat ml$,resp$,'',0)
+	fnMsgBox(mat ml$,resp$,'',0)
 goto ASK_EMPLOYEE_NO
  
 UPDATE_CHECKBOOK: ! r:
@@ -166,7 +166,7 @@ UPDATE_CHECKBOOK: ! r:
 	mat ml$(2)
 	ml$(1)="Did not find check # "&str$(w1)&" in the Check "
 	ml$(2)="Book system. Will proceed without voiding."
-	fnmsgbox(mat ml$,resp$,'',0)
+	fnMsgBox(mat ml$,resp$,'',0)
 	goto L1510
 	L1320: form pos 1,n 2,n 1,c 8,g 6,pd 10.2,c 8,c 35,n 1,n 6,n 1
 	adr=tr(1)
@@ -200,7 +200,7 @@ POSTGL0: ! r:
 	mat ml$(2)
 	ml$(1)="Do you wish to create reversing"
 	ml$(2)="General Ledger entries? (Y/N)?"
-	fnmsgbox(mat ml$,resp$,'',292)
+	fnMsgBox(mat ml$,resp$,'',292)
 	if resp$(1:1)="Y" then pgl1=1 else pgl1=0
 	if pgl1=1 then gosub POSTGL1
 return  ! /r
@@ -368,7 +368,7 @@ OPNWORK_DUESTUFF: ! r: OPEN G/L WORK FILES AND CREATE DUE TO AND DUE FROM ENTRIE
 	mat ml$(2)
 	ml$(1)="The G/L accounts you are using indicate you have seperate funds or"
 	ml$(2)="cost centers on the system.  Enter yes if you have more than one fund."
-	fnmsgbox(mat ml$,resp$,'',4)
+	fnMsgBox(mat ml$,resp$,'',4)
 	if resp$(1:1)="T" then multigl=1
 	if multigl><1 then goto L3160
 	L3160: if multigl=2 then goto L3330
@@ -424,7 +424,7 @@ L3690: ! r:
 	mat ml$(2)
 	ml$(1)="Did you accrue part of this payroll"
 	ml$(2)="in the previous month? (Y/N)"
-	fnmsgbox(mat ml$,resp$,'',36)
+	fnMsgBox(mat ml$,resp$,'',36)
 	accrue$=resp$(1)(1:1)
 return  ! /r
 ! ACCRUAL: ! r:

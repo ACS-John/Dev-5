@@ -72,7 +72,7 @@ MAIN: ! r:
 			fnAddOneC(mat message$,'To utilize Check Range you must specify')
 			fnAddOneC(mat message$,'a bank account and a ')
 			fnAddOneC(mat message$,'a starting check number')
-			fnmsgbox(mat message$)
+			fnMsgBox(mat message$)
 			goto MAIN ! if failed to set bank account information
 		end if
 		gosub ProcessCheckRange

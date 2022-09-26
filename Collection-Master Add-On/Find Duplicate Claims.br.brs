@@ -166,7 +166,7 @@ SAVE_AS_OPEN_ERR: ! r: there was a problem opening the file.
   mat ml$(2)
   ml$(1)='Select a different file name.'
   ml$(2)='Error: '&str$(err)
-  fnmsgbox(mat ml$)
+  fnMsgBox(mat ml$)
   pr "Err:";err;" Line:";line
   if choice=1 then 
    goto Fffn_AskFile

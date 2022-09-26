@@ -11,7 +11,7 @@ fn_setup
 		ml$(1)='Client '&env$('client')&' has nothing licensed.'
 		ml$(2)='If an update does not solve the issue please contact ACS at 1-800-643-6318'
 		ml$(3)='Perform an Update now?'
-		fnmsgbox(mat ml$,resp$,'',16+4)
+		fnMsgBox(mat ml$,resp$,'',16+4)
 		if env$('acsDeveloper')<>'' then pr 'Developer Pause' : pause
 		if uprc$(resp$)=uprc$('Yes') then
 			chain 'S:\Core\Programs\Update'
@@ -38,7 +38,7 @@ fn_setup
 		ml$(2)='If you have already performed an update and are'
 		ml$(3)='still receiving this message contact ACS at 1-800-643-6318'
 		ml$(4)='Perform an Update now?'
-		fnmsgbox(mat ml$,resp$,'',16+4)
+		fnMsgBox(mat ml$,resp$,'',16+4)
 
 		! add option for manual update
 

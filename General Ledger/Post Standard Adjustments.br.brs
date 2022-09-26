@@ -43,7 +43,7 @@ MsgDoesNotFoot: ! r: entries don't balance
 	ml$(1)="Journal entry "&trim$(ref$)&" does not foot."
 	ml$(2)="Credits  = "&trim$(cnvrt$("pic(---,---,---.##)",totalCr))& "     Debits = "&trim$(cnvrt$("pic(---,---,---.##)",totalDb))
 	ml$(3)="The entry will be posted, but it may need to be corrected!"
-	fnmsgbox(mat ml$,resp$)
+	fnMsgBox(mat ml$,resp$)
 return ! /r
  
 ChainToAcGlMrge: !

@@ -126,7 +126,7 @@ def library fnhours(eno)
 		ml$(1)="You have chosen to delete the "&classification$&" for " 
 		ml$(2)="employee "&str$(empnum)&". Click on Yes to delete the entry, else" 
 		ml$(3)="No to return to the display screen" 
-		fnmsgbox(mat ml$,resp$,'',52)
+		fnMsgBox(mat ml$,resp$,'',52)
 		if resp$="Yes" then goto L750 else goto MAIN
 		L750: delete #1,rec=editrec: 
 	goto MAIN ! /r
@@ -135,7 +135,7 @@ def library fnhours(eno)
 		ml$(1)="You are attempting to enter hours on a different employee." 
 		ml$(2)="You were assigned to employee "&str$(holdeno)&"." 
 		ml$(3)="Do you wish to change to employee "&str$(empno)&"?" 
-		fnmsgbox(mat ml$,resp$,'',52)
+		fnMsgBox(mat ml$,resp$,'',52)
 	if resp$="Yes" then eno=empno: goto L670 else empno=holdeno: goto ADDFM ! /r
 Xit: fnend 
 SETUP: ! r:

@@ -220,7 +220,7 @@ def library fnAddGlPayee
 			ml$(1)="Your percentage breakdowns total "&str$(tac)&"."
 			ml$(2)="The percentage breakdown must add to 100%."
 			ml$(3)="Correct the percentages."
-			fnmsgbox(mat ml$,resp$,cap$,16)
+			fnMsgBox(mat ml$,resp$,cap$,16)
 			goto EDIT_PAYEE ! /r
 		else
 			goto SAVE_PAYEE
@@ -261,7 +261,7 @@ def library fnAddGlPayee
 		mat ml$(2)
 		ml$(1)="A record for payee number "&vn$&" already exists"
 		ml$(2)="You must select a different payee number."
-		fnmsgbox(mat ml$,resp$,cap$,16)
+		fnMsgBox(mat ml$,resp$,cap$,16)
 	goto EDIT_PAYEE ! /r
 	XitFn: ! r:
 	close #trmstr2: ioerr ignore
@@ -413,7 +413,7 @@ ADD_TRANSACTIONS: !  r: sub routnie - allows you to manually add a transaction
 		mat ml$(2)
 		ml$(1)="You have chosen to delete this transaction."
 		ml$(2)="Click OK to delete or Cancel to retain the transaction."
-		fnmsgbox(mat ml$,resp$,cap$,49)
+		fnMsgBox(mat ml$,resp$,cap$,49)
 		if resp$="OK" then
 			delete #hTran,rec=editrec:
 			goto XitTransactionAdd

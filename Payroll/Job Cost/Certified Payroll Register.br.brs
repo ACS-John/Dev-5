@@ -72,7 +72,7 @@ L640: !
 	mat ml$(2)
 	ml$(1)="No Transactions exist for Job Number "&ltrm$(jn$)
 	ml$(2)="within the specified date range."
-	fnmsgbox(mat ml$,resp$,'',0)
+	fnMsgBox(mat ml$,resp$,'',0)
 	goto ASKJOB
 	L660: !
 	read #2,using L620: cn$,mat ta eof L640

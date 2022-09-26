@@ -236,7 +236,7 @@ def fn_comboF(sfn$*100,lyne,ps,width,df$*200,psk,lnk,psd,lnd; if$*200,limlis,ure
 		mat ml$(2)
 		ml$(1)='Combo Box creation has encountered a locked record'
 		ml$(2)='The locked record ('&str$(rec(df))&'will be skipped.'
-		fnmsgbox(mat ml$, resp$, 'ComboBox Record Lock Error',0)
+		fnMsgBox(mat ml$, resp$, 'ComboBox Record Lock Error',0)
 	else
 		goto Ertn
 	end if
@@ -1042,7 +1042,7 @@ include: filenamesPopUpperCase
 		bad_field=cnt+1
 		message$(1)='You have entered an incorrect value at field number '&str$(bad_field)
 		mat temp_io$(udim(ace_io$))=ace_io$
-		fnmsgbox(mat message$, response$, 'Error!',0)
+		fnMsgBox(mat message$, response$, 'Error!',0)
 		fnpause
 		mat ace_resp$(udim(resp$))=resp$
 		mat ace_io$(udim(temp_io$))=temp_io$
@@ -2360,7 +2360,7 @@ def fn_exportGrid(;___,index_)
 	mat ml$(2)
 	ml$(1)='Grid successfully exported to:'
 	ml$(2)=os_filename$(filename$)
-	fnmsgbox(mat ml$,resp$,'ACS',0)
+	fnMsgBox(mat ml$,resp$,'ACS',0)
 GRID_EXPORT_XIT: !
 fnend
 

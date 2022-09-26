@@ -13,7 +13,7 @@ do
 	cont=fn_options(route,billingdate$) ! collect user options
 	if trim$(billingdate$)="0" then valid=0 else valid=1
 	mat msgtext$(1:1)=("You must enter a billing date")
-	if valid=0 then let fnmsgbox(mat msgtext$,answer$,"Invalid Entry",0)
+	if valid=0 then let fnMsgBox(mat msgtext$,answer$,"Invalid Entry",0)
 loop while not valid
 
 mat msgtext$(5)
@@ -23,7 +23,7 @@ if route <>0 then msgtext$(1)=msgtext$(1)&" (within route "&str$(route)&")"
 msgtext$(3) = "by "&str$(remove_total)&"x the amount of the billing on "&billingdate$&'.'
 msgtext$(4) = "This action is irreversible and should only be performed by an ACS Technician."
 msgtext$(5) = "Do you want to continue?"
-fnmsgbox(mat msgtext$,answer$,"Confirm Action",4)
+fnMsgBox(mat msgtext$,answer$,"Confirm Action",4)
 if (answer$<>"Yes") then cont=0
 
 undocount=0
@@ -64,7 +64,7 @@ PRINTPAGEOVERFLOW: !
 continue
 CUSTDONE: !
 	mat msgtext$(1)=("Customers reversed: "&str$(undocount))
-	fnmsgbox(mat msgtext$,answer$,"Report",0)
+	fnMsgBox(mat msgtext$,answer$,"Report",0)
 	fncloseprn
 end if
 Xit: fnXit

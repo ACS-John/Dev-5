@@ -92,7 +92,7 @@ def fn_addpayee
 			mat ml$(2)
 			ml$(1)='A Unpaid Invoice for this payee exists'
 			ml$(2)='You may not delete it.'
-			fnmsgbox(mat ml$,resp$,cap$,0)
+			fnMsgBox(mat ml$,resp$,cap$,0)
 			goto EO_DELETE
 		end if
 		L490: !
@@ -210,20 +210,20 @@ def fn_addpayee
 			mat ml$(2)
 			ml$(1)='You already have a payee number '&vn$
 			ml$(2)='Click ok to Cancel.'
-			fnmsgbox(mat ml$,resp$,cap$,16)
+			fnMsgBox(mat ml$,resp$,cap$,16)
 		goto MENU1
 		L1205: ! r:
 			mat ml$(2)
 			ml$(1)='You already have a payee number '&vn$
 			ml$(2)='Click ok to Change the number.'
-			fnmsgbox(mat ml$,resp$,cap$,16)
+			fnMsgBox(mat ml$,resp$,cap$,16)
 		goto EDIT_PAYEE ! /r
 		L1210: if trim$(vn$)='' then goto L1220 else goto L1230
 		L1220: ! r:
 			mat ml$(2)
 			ml$(1)='You must have a unique payee number for .'
 			ml$(2)='each vendor.  Click ok to assign a payee number'
-			fnmsgbox(mat ml$,resp$,cap$,16)
+			fnMsgBox(mat ml$,resp$,cap$,16)
 		goto EDIT_PAYEE ! /r
 		L1230: !
 			read #citystzip,using 'form pos 1,C 30',key=rpad$(ltrm$(csz$),30),release: citystzip$ nokey L1240
@@ -264,7 +264,7 @@ def fn_addpayee
 		ml$(1)='Your percentage breakdowns total '&str$(tac)&'.'
 		ml$(2)='The percentage breakdown must add to 100%.'
 		ml$(3)='Correct the percentages.'
-		fnmsgbox(mat ml$,resp$,cap$,16)
+		fnMsgBox(mat ml$,resp$,cap$,16)
 	goto EDIT_PAYEE ! /r
 	SAVE_PAYEE: ! r:
 	if xedit=1 and vn$<>holdvn$ then gosub KEY_CHANGE
@@ -328,7 +328,7 @@ MSGBOX3: ! r: dupkey
 	mat ml$(2)
 	ml$(1)='A record for payee number '&vn$&' already exists'
 	ml$(2)='You must select a different payee number.'
-	fnmsgbox(mat ml$,resp$,cap$,16)
+	fnMsgBox(mat ml$,resp$,cap$,16)
 	goto EDIT_PAYEE ! /r
 CHECK_HISTORY: ! r:
 	open #trans=fnH: 'Name=[Q]\CLmstr\TrMstr.h[cno],KFName=[Q]\CLmstr\TrIdx2.h[cno],Shr',i,i,k

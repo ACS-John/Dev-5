@@ -6,7 +6,7 @@ fnTop(program$)
 		mat ml$(2)
 		ml$(1)="You must purchase the ACS Utility Billing EFT"
 		ml$(2)="module to access these features"
-		fnmsgbox(mat ml$, response$, '',64)
+		fnMsgBox(mat ml$, response$, '',64)
 		goto Xit
 	end if
  
@@ -184,7 +184,7 @@ Finis: ! r:
 		ml$(1)="Unable to create file: "
 		ml$(2)=pth$
 		ml$(3)='Select OK to retry.'
-		fnmsgbox(mat ml$,resp$,'',65)
+		fnMsgBox(mat ml$,resp$,'',65)
 		if resp$="OK" then goto COPY_TO_DESTINATION
 		goto Xit
 	end if
@@ -196,7 +196,7 @@ if postub=1 then
 	ml$(1)="You have indicated you want to post the drafts"
 	ml$(2)="as collections to each customers account."
 	ml$(3)="Click OK to continue else Cancel to skip posting."
-	fnmsgbox(mat ml$,resp$,'',1)
+	fnMsgBox(mat ml$,resp$,'',1)
 	if resp$="OK" then gosub Merge
 end if
 goto Xit ! /r

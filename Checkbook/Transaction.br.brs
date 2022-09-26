@@ -289,7 +289,7 @@ READ_PAYEEGL: !
 	mat ml$(3)
 	ml$(1)='You must enter the transaction amount before'
 	ml$(2)='you can pull the standard general ledger breakdowns.'
-	fnmsgbox(mat ml$,ok$,'',48)
+	fnMsgBox(mat ml$,ok$,'',48)
 	goto EO_READSTGL
 GET_TOTAL: !
 	do until totalamt>=val(tr$(3))
@@ -330,26 +330,26 @@ Save: ! r:
 	read #h_trmstr(1),using 'form pos 1,C 11',key=check_key$: newkey$ nokey EMPTY_BANK_MSG
 	mat ml$(1)
 	ml$(1)='You already have a transaction with reference # '&trim$(tr$(1))&'.'
-	fnmsgbox(mat ml$,resp$,'',0)
+	fnMsgBox(mat ml$,resp$,'',0)
 	tr$(1)=''
 	goto TransactionFm
 	EMPTY_BANK_MSG: !
 	if bank_code=0 then
 		mat ml$(1)
 		ml$(1)='You must first select a Bank.'
-		fnmsgbox(mat ml$,resp$,'',0)
+		fnMsgBox(mat ml$,resp$,'',0)
 		goto EoSave
 	end if
 	! if trim$(tr$(4))='' and tcde=1 and trim$(uprc$(tr$(5)))<>'VOID' then mat ml$(1)
 	! ml$(1)='You must first select a Payee.'
-	! fnmsgbox(mat ml$,resp$,'',0)
+	! fnMsgBox(mat ml$,resp$,'',0)
 	! goto EoSave
 	! end if
 	if allocationstotal=val(tr$(3)) then goto RELEASE_TRMSTR1 ! allow zero checks to go thru as long as the allocations = 0 also
 	if trim$(tr$(3))='0.00' and trim$(uprc$(tr$(5)))<>'VOID' then
 		mat ml$(1)
 		ml$(1)='You must first enter an amount.'
-		fnmsgbox(mat ml$,resp$,'',0)
+		fnMsgBox(mat ml$,resp$,'',0)
 		goto EoSave
 	end if
 RELEASE_TRMSTR1: release #h_trmstr(1):
@@ -362,7 +362,7 @@ RELEASE_TRMSTR1: release #h_trmstr(1):
 		mat ml$(2)
 		ml$(1)='Your allocations have changed on a posted transaction.'
 		ml$(2)='You will need to update your General Ledger!'
-		fnmsgbox(mat ml$,resp$,'',0)
+		fnMsgBox(mat ml$,resp$,'',0)
 		allocations_messed_with=false
 	end if
 
@@ -414,7 +414,7 @@ RELEASE_TRMSTR1: release #h_trmstr(1):
 	read #h_trmstr(1),using 'form pos 1,C 11',key=check_key$: newkey$ nokey L2250
 	mat ml$(1)
 	ml$(1)='You already have a transaction with reference # '&trim$(tr$(1))&'.'
-	fnmsgbox(mat ml$,resp$,'',0)
+	fnMsgBox(mat ml$,resp$,'',0)
 	tr$(1)=''
 	goto TransactionFm
 	L2250: !
@@ -427,7 +427,7 @@ RELEASE_TRMSTR1: release #h_trmstr(1):
 		ml$(2)='Please correct the Check Amount or '
 		ml$(3)='the Allocations'
 		ml$(4)='You are off by '&str$(val(tr$(3))-allocationstotal)
-		fnmsgbox(mat ml$,yn$,'',48)
+		fnMsgBox(mat ml$,yn$,'',48)
 		goto EoSave
 	end if
 	save_good=1
@@ -560,7 +560,7 @@ return  ! /r
 		ml$(1)='Delete Allocation Error'
 		ml$(2)='You must select an Allocation Record to delete'
 		ml$(3)='before clicking the Delete Allocation button.'
-		fnmsgbox(mat ml$,ok$,'',48)
+		fnMsgBox(mat ml$,ok$,'',48)
 	continue  ! /r
 TransactionFm: ! r: requires typeofentry, scd, and many more
 	fnTos
@@ -684,13 +684,13 @@ EO_FLEX2: ! /r
 		ml$(1)='Allocations ('&cnvrt$('pic(---,---,--#.##)',allocationstotal)&') do not equal the Check Amount ('&cnvrt$('pic(---,---,--#.##)',val(tr$(3)))&')'
 		ml$(2)='Please correct the Check Amount or the Allocations'
 		ml$(3)='You are off by '&str$(val(tr$(3))-allocationstotal)
-		fnmsgbox(mat ml$,yn$,'',48)
+		fnMsgBox(mat ml$,yn$,'',48)
 		goto TransactionFm
 	end if
 	if (ckey=1 or ckey=8) and trim$(tr$(1))='' then
 		mat ml$(1)
 		ml$(1)='You must first enter a Reference Number.'
-		fnmsgbox(mat ml$,resp$,'',0)
+		fnMsgBox(mat ml$,resp$,'',0)
 		goto TransactionFm
 	end if
 	if ckey=6 then
@@ -703,7 +703,7 @@ EO_FLEX2: ! /r
 	read #h_trmstr(1),using 'form pos 1,C 11',key=check_key$: newkey$ nokey L3780
 	mat ml$(1)
 	ml$(1)='You already have a transaction with reference # '&trim$(tr$(1))&'.'
-	fnmsgbox(mat ml$,resp$,'',0)
+	fnMsgBox(mat ml$,resp$,'',0)
 	tr$(1)=''
 	goto TransactionFm
 L3780: ! /r

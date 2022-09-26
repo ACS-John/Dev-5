@@ -16,7 +16,7 @@ Billing
 >>Consumption List                                    ^ [cursystem]\*                                       ^        ^
 >Print Bills                                          ^ [cursystem]\*                                       ^        ^
 >Create Bank Draft File                               ^ [cursystem]\*                                       ^ UB-EFT ^
-Collections                                           ^ [cursystem]\*                                       ^        ^
+Collections                                           ^ [cursystem]\*                                       ^        ^ Enter Collections,credit memo,debit memo,batch transaction entry
 Mid-Month
 >Print
 >>Past Due and Turn Off List                          ^ [cursystem]\*                                       ^        ^
@@ -82,13 +82,13 @@ Extras
 ! >>Calculate Average Charges for Date Range            ^ acsUB\AvgChg        ! removed on 2020/4/1 one has an error and both were getting confused with Calculate Sewer Averages
 ! >>Set Sewer Standard Charges from Average Water Usage ^ acsUB\AvgSewChg     ! removed on 2020/4/1 one has an error and both were getting confused with Calculate Sewer Averages
 >Error Recovery
->>Undo Penalty Calculation                            ^ [cursystem]\*                                       ^        ^
+>>Undo Penalty Calculation                            ^ [cursystem]\*                                       ^        ^Reverse
 >>Change Wrong Billing Date                           ^ [cursystem]\*                                       ^        ^
 >>Recalculate All Current Bills                       ^ [cursystem]\*                                       ^        ^
 >>Forgot to Zero Year To Date Usage                   ^ [cursystem]\*                                       ^        ^
 >>Reassign Deposit Change Addresses                   ^ [cursystem]\*                                       ^        ^
 >>Change Wrong Transaction Dates                      ^ [cursystem]\*                                       ^        ^
->>Reverse Billing Cycle                               ^ [cursystem]\*                                       ^        ^
+>>Reverse Billing Cycle                               ^ [cursystem]\*                                       ^        ^Undo
 >>Export and Import Route and Sequence                ^ [cursystem]\*                                       ^        ^
 >Export UB Master File                                ^ [cursystem]\*                                       ^        ^
 >Pull Service Names for Grids                         ^ [cursystem]\*                                       ^        ^

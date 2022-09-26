@@ -1081,7 +1081,7 @@ fnend
 	
 
 	def library fnMsgBox(mat message$; &response$,cap$*128,mtype)
-		library 'S:\Core\fnMsgBox.br': fnmsgbox
+		library 'S:\Core\fnMsgBox.br': fnMsgBox
 		fnMsgBox=fnMsgBox(mat message$, response$,cap$,mtype)
 	fnend
 	def library fnMb(mat mb$; mtype,___,returnN,resp$) ! an alias for fnMsgBox with optimized parameters

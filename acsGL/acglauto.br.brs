@@ -22,7 +22,7 @@ MSGBOX1: !
 	ml$(1)="The order for automatic processing has" : _
 	ml$(2)="never been set for company # [cno]." : _
 	ml$(3)="Click OK to skip this company." : _
-	fnmsgbox(mat ml$,resp$,cap$,49)
+	fnMsgBox(mat ml$,resp$,cap$,49)
 	goto L220
  
 L220: fnkillauto : fnpgnum(-1) : _

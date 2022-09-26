@@ -38,7 +38,7 @@ def fn_askFileName(&opFileOpen$,purpose$; filter$,filterDescription$*64,path$*25
 		mat ml$(2)
 		ml$(1)='Select a different file name.'
 		ml$(2)='Error: '&str$(err)
-		fnmsgbox(mat ml$,resp$)
+		fnMsgBox(mat ml$,resp$)
 		!     if err=4150 then pr "Could not create file:";file$(1) : fnpause ! file$(1) is blank!
 		pr "Err:";err;" Line:";line
 	end if 

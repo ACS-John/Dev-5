@@ -13,7 +13,7 @@ MAIN: !
 	msgline$(1)="No other users may be using the Deposit file"
 	msgline$(2)="while this option is running.  Do you want to run"
 	msgline$(3)="Reassign Deposit Change Addresses now?"
-	fnmsgbox(mat msgline$,resp$,'',49)
+	fnMsgBox(mat msgline$,resp$,'',49)
 	if uprc$(resp$)=uprc$("CANCEL") then goto Xit
  
 	open #1: "Name=[Q]\UBmstr\Deposit1.h[cno],KFName=[Q]\UBmstr\DepIdx1.h[cno]",i,outIn,k ioerr MAIN

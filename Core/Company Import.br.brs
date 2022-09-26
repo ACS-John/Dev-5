@@ -47,13 +47,13 @@ if ~exists(env$('at')&company_file$) then
 	mat message$(2)
 	message$(1)='the company_file$ ('&company_file$&') does not exist'
 	message$(2)="Please correct the selected path"
-	fnmsgbox(mat message$, response$, cap$)
+	fnMsgBox(mat message$, response$, cap$)
 	goto SCREEN1
 else if pos_point_h<=0 then
 	mat message$(2)
 	message$(1)="The source company_file ("&company_file$&") does not contain a .h"
 	message$(2)="It must be a zip or rar file type archive, please enhance code to handle such things."
-	fnmsgbox(mat message$, response$, cap$)
+	fnMsgBox(mat message$, response$, cap$)
 	goto SCREEN1
 else
 	if ~import_only then fn_is_converison_detection

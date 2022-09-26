@@ -51,7 +51,7 @@ def fn_swithMail(mat toEmail$,emailMessage$*10000; subject$*256,mat attachFile$,
 			if trim$(smtpServer$        	)='' then fnAddOneC(mat txt$,'SMTP Server is blank.')
 			if trim$(emailFrom$         	)='' then fnAddOneC(mat txt$,'From Email Address is blank.')
 			if trim$(emailFromPassword$	)='' then fnAddOneC(mat txt$,'From Email Password is blank.')
-			fnmsgbox(mat txt$, respUnused$,'',mb_stop+mb_okonly)
+			fnMsgBox(mat txt$, respUnused$,'',mb_stop+mb_okonly)
 			setup_swithMail=0
 			goto Xit
 			! msgbox('Email account not configured. Please enter the appropriate information in Preferences.')

@@ -100,7 +100,7 @@ def fn_confirmadjustment
 		dim mg$(2)*255
 		mg$(1) = 'Warning: your balance adjustments for account '&gl$&' were NOT saved!'
 		mg$(2) = 'You can retry on the next screen, or modify another account.'
-		fnmsgbox(mat mg$,resp$,'Balance Adjustment Canceled',0)
+		fnMsgBox(mat mg$,resp$,'Balance Adjustment Canceled',0)
 		fn_confirmadjustment=0
 	end if
 fnend

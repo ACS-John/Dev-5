@@ -15,7 +15,7 @@
 	mat ml$(2) : _
 	ml$(1)="Are you sure you want to zero all" : _
 	ml$(2)="current period information?." : _
-	fnmsgbox(mat ml$,resp$,cap$,36)
+	fnMsgBox(mat ml$,resp$,cap$,36)
  
 	open #1: "Name=[Q]\PRmstr\Company.h[cno],Shr",i,i,r
 	read #1,using L190,rec=1: kt

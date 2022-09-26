@@ -91,7 +91,7 @@ ADDREC: ! r:
 	mat ml$(2)
 	ml$(1)="A record with this number already exists!"
 	ml$(2)="Select a different job number."
-	fnmsgbox(mat ml$,resp$,cap$,48)
+	fnMsgBox(mat ml$,resp$,cap$,48)
 goto ADDREC ! /r
 L570: ! r:
 	k$=resp$(1)(7:36)
@@ -109,7 +109,7 @@ EDITREC: ! r:
 		mat ml$(2)
 		ml$(1)="A record with this number does not exist!"
 		ml$(2)="Select a differentjob number."
-		fnmsgbox(mat ml$,resp$,cap$,48)
+		fnMsgBox(mat ml$,resp$,cap$,48)
 goto ASKJOB ! /r
 L670: ! r:
 	fnTos
@@ -209,7 +209,7 @@ DELETE_ENTIRE_JOB: !
 	mat ml$(2)
 	ml$(1)="You chosen to Delete job number "&jn$
 	ml$(2)="Did you wish to continue?"
-	fnmsgbox(mat ml$,resp$,cap$,35)
+	fnMsgBox(mat ml$,resp$,cap$,35)
 if resp$="Yes" then goto L1440 else goto ASKJOB
 L1440: ! r:
 	delete #1,key=hjn$: nokey L1580
@@ -435,7 +435,7 @@ ADDCAT: !
 	mat ml$(2)
 	ml$(1)="A category record with this number already exists!"
 	ml$(2)="Select a different category number."
-	fnmsgbox(mat ml$,resp$,cap$,48)
+	fnMsgBox(mat ml$,resp$,cap$,48)
 	goto ADDCAT
 	L3380: !
 	mat l=(0): mat ta=(0)
@@ -505,7 +505,7 @@ EDITCATEGORY: ! r:
 	mat ml$(2)
 	ml$(1)="You have chosen to change the category number from "&holdcn$
 	ml$(2)="to "&cn$&". Take OK to change, else Cancel."
-	fnmsgbox(mat ml$,resp$,cap$,49)
+	fnMsgBox(mat ml$,resp$,cap$,49)
 	if resp$="OK" then goto L3870 else goto EDITCAT
 L3870: l(1)=val(resp$(3)) ! labor estimate
 	l(2)=val(resp$(4)) ! hours estimate
@@ -550,7 +550,7 @@ REVIEW_DETAILS: ! r:
 		mat ml$(2)
 		ml$(1)="There no transactions for this category!"
 		ml$(2)="Select a different category."
-		fnmsgbox(mat ml$,resp$,cap$,48)
+		fnMsgBox(mat ml$,resp$,cap$,48)
 	goto GET_CATEGORY_LISTING
 	L4170: !
 	nta=ta(1)
@@ -720,7 +720,7 @@ DELETE_CATEGORY: ! r:
 	mat ml$(2)
 	ml$(1)="This category contains detail transactions about the job!"
 	ml$(2)="Are you sure you wish to delete it?"
-	fnmsgbox(mat ml$,resp$,cap$,33)
+	fnMsgBox(mat ml$,resp$,cap$,33)
 	if resp$="OK" then goto L5290 else goto GET_CATEGORY_LISTING
 	L5290: !
 	delete #2,key=cn$: ioerr GET_CATEGORY_LISTING

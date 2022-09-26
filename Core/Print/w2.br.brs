@@ -675,7 +675,7 @@ def fn_FormCopyAwithBackgroundWarn
 	end if
 	if ~fcawbwToldAlready then
 		fcawbwToldAlready=1
-		fnmsgbox(mat fcawbwText$,response$,'Notification')
+		fnMsgBox(mat fcawbwText$,response$,'Notification')
 	end if
 fnend
 include: ertn

@@ -18,7 +18,7 @@
 		mat ml$(2)
 		ml$(1)="An unposted file appears to exist! "
 		ml$(2)="Enter Yes to work with this file, else No to create a new batch of entries."
-		fnmsgbox(mat ml$,resp$,'',52)
+		fnMsgBox(mat ml$,resp$,'',52)
 		if resp$="Yes" then goto L260
 	end if
 	L240: !
@@ -72,7 +72,7 @@ L360: !
 L590: mat ml$(2)
 	ml$(1)="You have chosen to cancel without postng these entries!  "
 	ml$(2)="Take Yes to Exit, else take No to return to the entry screens."
-	fnmsgbox(mat ml$,resp$,'',52)
+	fnMsgBox(mat ml$,resp$,'',52)
 	if resp$="Yes" then goto Xit else goto TRANSACTION_ENTRY
 L610: if ckey=7 then goto CORRECTIONS
 	if ckey=8 then goto POSTTOJOBS
@@ -84,14 +84,14 @@ L610: if ckey=7 then goto CORRECTIONS
 L690: mat ml$(2)
 	ml$(1)="You failed to enter a job number. Take Yes to continue;"
 	ml$(2)="else take No to return to previous screen and enter the job number."
-	fnmsgbox(mat ml$,resp$,'',52)
+	fnMsgBox(mat ml$,resp$,'',52)
 	if resp$="Yes" then goto L710 else goto L740
 L710: ji2(1)=val(resp$(4)(1:5)) ! category
 	if ji2(1)=0 and dontwarnsubcat=0 then goto L730 else goto L750
 L730: mat ml$(2)
 	ml$(1)="You failed to enter a category number. Take Yes to continue;"
 	ml$(2)="else take No to return to previous screen and enter the category number."
-	fnmsgbox(mat ml$,resp$,'',52)
+	fnMsgBox(mat ml$,resp$,'',52)
 L740: if resp$="Yes" then dontwarnsubcat=1: goto L750 else goto L360
 L750: ji2(2)=val(resp$(5)(1:3)) ! sub-category
 	if ji2(2)=0 and dontwarnsubcat=0 then
@@ -103,7 +103,7 @@ L750: ji2(2)=val(resp$(5)(1:3)) ! sub-category
 	mat ml$(2)
 	ml$(1)="You failed to enter a sub-category number. Take Yes to continue;"
 	ml$(2)="else take No to return to previous screen and enter the sub-category number."
-	fnmsgbox(mat ml$,resp$,'',52)
+	fnMsgBox(mat ml$,resp$,'',52)
 	if resp$="Yes" then dontwarnsubcat=1 : goto L790 else goto L360
 	L790: !
 	ji2(3)=val(resp$(6)) ! amount

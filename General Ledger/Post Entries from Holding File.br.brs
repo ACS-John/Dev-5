@@ -112,7 +112,7 @@ PRINT_POST: !
 			ml$(2)="Transaction information: Date "&str$(s)&"; Amount "&str$(k) 
 			ml$(3)="Description "&trim$(p$)&". Yes to setup this account" 
 			ml$(4)="or No to change account #" 
-			fnmsgbox(mat ml$,resp$,'',52)
+			fnMsgBox(mat ml$,resp$,'',52)
 			if resp$="Yes" then in1=1 else in1=0 ! one is to set up the account
 			if resp$="Yes" then gosub ADD
 			if resp$="No" then gosub CHANGE_ACCOUNT
@@ -231,7 +231,7 @@ ADD: ! r:
 	ml$(1)="General ledger account # "&key$&" already " 
 	ml$(2)="exists. Take OK to change the account." 
 	ml$(3)="Take Cancel to set the account up." 
-	fnmsgbox(mat ml$,resp$,'',49)
+	fnMsgBox(mat ml$,resp$,'',49)
 	if resp$="Cancel" then goto ADD
 	if resp$="Ok" then gosub CHANGE_ACCOUNT
 L2310: return  ! /r

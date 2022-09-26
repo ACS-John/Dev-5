@@ -76,7 +76,7 @@ MESSAGE1: ! r: bad data
 	ml$(2)="file or in the wrong format.  You must export"
 	ml$(3)="the time from your time clock system before"
 	ml$(4)="attempting to run this menu option."
-	fnmsgbox(mat ml$,resp$,'',48)
+	fnMsgBox(mat ml$,resp$,'',48)
 goto Xit ! /r
 MESSAGE2: ! r: bad employee number
 	mat ml$(4)
@@ -84,7 +84,7 @@ MESSAGE2: ! r: bad employee number
 	ml$(2)="from the time clock, but does not have a matching"
 	ml$(3)="employee number in the payroll system.  This"
 	ml$(4)="person will be skipped.   "&name$
-	fnmsgbox(mat ml$,resp$,'',48)
+	fnMsgBox(mat ml$,resp$,'',48)
 goto L410 ! /r
 HDR: ! r:
 	pr #255,using L790: time$,env$('cnam'),date$,"Time Card Summary",cnvrt$("pic(zzzz/zz/zz)",endingdate)

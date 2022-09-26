@@ -48,7 +48,7 @@
 	mat ml$(2)
 	ml$(1)='Budget Management is a separately licensed product. '
 	ml$(2)='Contact your representative or ACS to license the product. '
-	fnmsgbox(mat ml$,resp$,'',0)
+	fnMsgBox(mat ml$,resp$,'',0)
 goto Xit ! /r
 
 ScrMenu1: ! r:
@@ -130,7 +130,7 @@ goto L1020
 L1000: mat ml$(2)
 ml$(1)='You already have a budget file # '&str$(bud)
 ml$(2)='Take YES to continue, else NO to retain the old file.'
-fnmsgbox(mat ml$,resp$,'',52)
+fnMsgBox(mat ml$,resp$,'',52)
 if resp$='Yes' then goto L1020 else goto ScrMenu1
 L1020: open #2: 'Name=[Q]\GLmstr\Budget'&str$(bud)&'.h[cno],Replace,KFName=[Q]\GLmstr\BgIndx'&str$(bud)&'.h[cno],RecL=149,KPS=1/149,KLN=12/1',i,outIn,k
 close #2: ioerr L1040
@@ -359,7 +359,7 @@ if ckey=7 then goto L2860 else goto L2890
 L2860: mat ml$(2)
 ml$(1)='You have chosen to delete the highlighted budget item.'
 ml$(2)='Take YES to continue, else NO to retain the record.'
-fnmsgbox(mat ml$,resp$,'',52)
+fnMsgBox(mat ml$,resp$,'',52)
 if resp$='Yes' then goto L2880 else goto DISPLAY_GRID
 L2880: delete #2,rec=val(resp$(1)):
 restore #2:
@@ -413,7 +413,7 @@ mat ml$(3)
 ml$(1)='General ledger account # '&key$&' already '
 ml$(2)='exists. Take OK to add a different account.'
 ml$(3)='Take Cancel to return to main screen.'
-fnmsgbox(mat ml$,resp$,'',49)
+fnMsgBox(mat ml$,resp$,'',49)
 if resp$='OK' then goto MAINTAIN_NONB_RECORDS else goto ScrMenu1
 L3240: if add=1 then goto WRITE_NEW_RECORD else goto REWRITE_EXISTING_RECORD
 WRITE_NEW_RECORD: !
@@ -518,7 +518,7 @@ goto L3850
 mat ml$(2)
 ml$(1)='You are attempting to change the record number to  an existing'
 ml$(2)='record number.  Take OK to change to a different number. '
-fnmsgbox(mat ml$,resp$,'',0)
+fnMsgBox(mat ml$,resp$,'',0)
 goto MAINTAIN_LINE_ITEM
 L3850: if add=1 then goto L3880
 rewrite #2,using 'form pos 1,C 12,6*PD 6.2,2*C 50,C 1',rec=rec2: g1$,mat bg,gd$,ex$,cd$
@@ -603,7 +603,7 @@ for j=1 to 11
 		mat ml$(2)
 		ml$(1)='You have selected a column width longer than the maximum allowed.'
 		ml$(2)='Select a smaller width.'
-		fnmsgbox(mat ml$,resp$,'',0)
+		fnMsgBox(mat ml$,resp$,'',0)
 		goto PRNT1
 	end if
 next j
@@ -725,7 +725,7 @@ if ckey=6 then goto L5410 else goto L5450
 L5410: mat ml$(2)
 ml$(1)='You have chosen to delete the budget file. Click Yes '
 ml$(2)='to continue, else No to retain the file.'
-fnmsgbox(mat ml$,resp$,'',52)
+fnMsgBox(mat ml$,resp$,'',52)
 if resp$='Yes' then goto L5430 else goto L5510
 L5430: delete #5,key=lpad$(str$(bud),2):
 goto L5510

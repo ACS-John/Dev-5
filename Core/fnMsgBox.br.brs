@@ -1,7 +1,7 @@
-def library fnmsgbox(&mat mg$; &response$,cap$*128,mt)
+def library fnMsgBox(&mat mg$; &response$,cap$*128,mt)
 	fn_setup
 	on error goto Ertn
-	if env$('exitnow')='yes' then setenv('exitnow','cancelled by fnmsgbox')
+	if env$('exitnow')='yes' then setenv('exitnow','cancelled by fnMsgBox')
 	if cap$='' then cap$=env$('Program_Caption')
 	!   if env$('ACSDeveloper')<>'' then
 	fn_br_messagebox(mat mg$,response$, cap$,mt)

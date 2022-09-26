@@ -192,14 +192,14 @@ def fn_ask(&seltpN,&typeN,&minAmt,&beg_date,&end_date; ___, _
 			mat ml$(2)
 			ml$(1)='You must indicate which deduction you want printed.'
 			ml$(2)='        Click OK to correct.'
-			fnmsgbox(mat ml$,resp$,cap$,0)
+			fnMsgBox(mat ml$,resp$,cap$,0)
 			goto ASK_INFO
 		end if
 		if env$('cursys')='PR' and (typeN=0 or typeN>8) then
 			mat ml$(2)
 			ml$(1)='You must enter a valid 1099 Box to Print.'
 			ml$(2)='        Click OK to correct.'
-			fnmsgbox(mat ml$,resp$,cap$,0)
+			fnMsgBox(mat ml$,resp$,cap$,0)
 			goto ASK_INFO
 		end if
 		if ckey=ckey_defaultFilename then

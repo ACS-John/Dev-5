@@ -663,7 +663,7 @@ fnend  !
 			ml$(1)='The allocations ('&trim$(cnvrt$('pic(---,---.##)',invalloc))&') does not match the total'
 			ml$(2)='transaction amount ('&trim$(cnvrt$('pic(---,---.##)',upa))&').  You must fix this unpaid '
 			ml$(3)='invoice # '&trim$(x$)&' in the unpaid invoice file before you can continue. '
-			fnmsgbox(mat ml$,ok$,'',48)
+			fnMsgBox(mat ml$,ok$,'',48)
 			cb_cu_return=0
 			goto EoPaytransTest
 		else
@@ -702,7 +702,7 @@ fnend  !
 				ml$(1)='The allocations ('&cnvrt$('pic(---,---.##)',totalloc)&' does not match the total'
 				ml$(2)='transaction amount ('&cnvrt$('pic(---,---.##)',ca1)&'.  You must fix this '
 				ml$(3)='transaction ('&checkNumber$&') (bank '&str$(trbank_code)&') check history before you can continue. '
-				fnmsgbox(mat ml$,ok$,'',48)
+				fnMsgBox(mat ml$,ok$,'',48)
 				cb_tt_return=0
 				goto EO_TRMSTR_TEST
 			end if

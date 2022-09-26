@@ -78,7 +78,7 @@ SCREEN_1: ! maintain personnel burdern screen
 	mat ml$(2)
 	ml$(1)="You have chosen to delete employee "&trim$(eno$)&" from the burden file!"
 	ml$(2)="Select OK to delete; else Cancel to retain the record."
-	fnmsgbox(mat ml$,resp$,'',49)
+	fnMsgBox(mat ml$,resp$,'',49)
 	if resp$="OK" then goto L600 else goto ASKEMPLOYEE
 L600: if ckey=4 then delete #1,key=eno$: : gosub RECREATE_GRID: goto ASKEMPLOYEE
 L640: rewrite #1,using L190,key=eno$: eno,name$,burden,burden2,burden3 nokey L650
@@ -110,7 +110,7 @@ ADD_RECORD: !
 	mat ml$(2)
 	ml$(1)="A record # "&eno$&" already exists!"
 	ml$(2)="Choose to review the record."
-	fnmsgbox(mat ml$,resp$,'',48)
+	fnMsgBox(mat ml$,resp$,'',48)
 	goto ADD_RECORD
 L870: burden=burden2=burden3=0
 	write #1,using L190: eno,name$,burden,burden2,burden3

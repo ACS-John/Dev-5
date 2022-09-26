@@ -38,7 +38,7 @@ def fn_updateSupportExpirationDate(; clientKey$*5)
 				fnaddonec(mat msgConfirm$,'Total Cost:'&tab$&tab$&cnvrt$('pic(-$$,$$#.##)',sum(mat cost)))
 				fnaddonec(mat msgConfirm$,'')
 				fnaddonec(mat msgConfirm$,'Update Expiration Dates? (adds one [timeframe] to each)')
-				fnmsgbox(mat msgConfirm$, resp$,'',buttonYN+iconQuestion+buttonDefaultTwo)
+				fnMsgBox(mat msgConfirm$, resp$,'',buttonYN+iconQuestion+buttonDefaultTwo)
 				if resp$='Yes' then
 					fn_updateOneSupportExpDate(selectedClient$(1:5))
 					mat msgConfirm$(0)
@@ -49,7 +49,7 @@ def fn_updateSupportExpirationDate(; clientKey$*5)
 					fnaddonec(mat msgConfirm$,'Total Cost:'&tab$&tab$&cnvrt$('pic($$$,$$#.##)',sum(mat cost)))
 					fnaddonec(mat msgConfirm$,'')
 					fnaddonec(mat msgConfirm$,'UPDATE COMPLETED')
-					fnmsgbox(mat msgConfirm$,resp$,'',0+iconInformation)
+					fnMsgBox(mat msgConfirm$,resp$,'',0+iconInformation)
 				end if
 			end if
 		loop until fk=5

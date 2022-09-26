@@ -48,7 +48,7 @@ READ_1: !
 L440: mat ml$(2)
 	ml$(1)='There are no transactions for'
 	ml$(2)='the date entered.  Check the date.'
-	fnmsgbox(mat ml$)
+	fnMsgBox(mat ml$)
 goto MAIN
 READ_2: !
 	read #trmstr,using 'form pos 1,N 2,N 1,C 8,g 6,PD 10.2,pos 36,C 35': tbank_code,tcde,checkNumber$,d2,amt,de$ eof ENDALL

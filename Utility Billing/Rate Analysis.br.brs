@@ -36,7 +36,7 @@ SCR1: ! r:
 		if trim$(srvnam$(1))<>'' then let fnAddoneC(mat ml$,tab$&trim$(srvnam$(1)))
 		if trim$(srvnam$(3))<>'' then let fnAddoneC(mat ml$,tab$&trim$(srvnam$(3)))
 		if trim$(srvnam$(4))<>'' then let fnAddoneC(mat ml$,tab$&trim$(srvnam$(4)))
-		fnmsgbox(mat ml$)
+		fnMsgBox(mat ml$)
 		goto SCR1
 	end if
 goto SCR2 ! /r

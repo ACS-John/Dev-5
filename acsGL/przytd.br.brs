@@ -28,7 +28,7 @@ MSGBOX1: !
 	mat ml$(2)
 	ml$(1)="          Incorrect password! "
 	ml$(2)="Click OK to try again; else Cancel to stop."
-	fnmsgbox(mat ml$,resp$,'',49)
+	fnMsgBox(mat ml$,resp$,'',49)
 if resp$="OK" then goto ScrOne else goto Xit
 
 L300: !

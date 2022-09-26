@@ -8,7 +8,7 @@ mesg$(3)=""
 mesg$(4)="Yes:  Allows you to edit previous unposted input and make new entries" 
 mesg$(5)="No:  Erases previous unposted entries and allows you to make new entries" 
 mesg$(6)="Cancel:  Exits this program without any changes" 
-fnmsgbox(mat mesg$, resp$, cap$, 3)
+fnMsgBox(mat mesg$, resp$, cap$, 3)
 
 mat mesg$(6)
 mesg$(1)="This is your last chance!" 
@@ -17,4 +17,4 @@ mesg$(3)="Do you want to pr a"
 mesg$(4)="Cash Receipts Journal" 
 mesg$(5)="or a " 
 mesg$(6)="Deposit List?" 
-fnmsgbox(mat mesg$,resp$,cap$,52)
+fnMsgBox(mat mesg$,resp$,cap$,52)

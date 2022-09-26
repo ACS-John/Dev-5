@@ -84,7 +84,7 @@ def fn_importRouteAndSequence(source$*256,delim$*1; ___,hIn,line$*2048,z$*10,pas
 	mat mg$(0)
 	fnAddOneC(mat mg$,'Succesfully completed import from:')
 	fnAddOneC(mat mg$,source$)
-	fnmsgbox(mat mg$,mgResp$,'',mb_information+mb_okonly)
+	fnMsgBox(mat mg$,mgResp$,'',mb_information+mb_okonly)
 
 	goto ImportFinis
 
@@ -94,12 +94,12 @@ def fn_importRouteAndSequence(source$*256,delim$*1; ___,hIn,line$*2048,z$*10,pas
 		fnAddOneC(mat mg$,'File failed to import due to a issue on')
 		fnAddOneC(mat mg$,'line '&str$(lineCount)&'.')
 		fnAddOneC(mat mg$,'Error: '&str$(failErrorNumber)&'.')
-		fnmsgbox(mat mg$,mgResp$,'',mb_stop+mb_okonly)
+		fnMsgBox(mat mg$,mgResp$,'',mb_stop+mb_okonly)
 	goto ImportFinis ! /r
 	ImportFailAccountKey: ! r:
 		mat mg$(0)
 		fnAddOneC(mat mg$,'File failed to import due to an invalid Account Key ('&z$&') on line '&str$(lineCount)&'.')
-		fnmsgbox(mat mg$,mgResp$,'',mb_stop+mb_okonly)
+		fnMsgBox(mat mg$,mgResp$,'',mb_stop+mb_okonly)
 	goto ImportFinis ! /r
 	ImportFailHeadings: ! r:
 		mat mg$(0)
@@ -109,7 +109,7 @@ def fn_importRouteAndSequence(source$*256,delim$*1; ___,hIn,line$*2048,z$*10,pas
 		fnAddOneC(mat mg$,tab$&'Account Key')
 		fnAddOneC(mat mg$,tab$&'Route')
 		fnAddOneC(mat mg$,tab$&'Sequence')
-		fnmsgbox(mat mg$,mgResp$,'',mb_stop+mb_okonly)
+		fnMsgBox(mat mg$,mgResp$,'',mb_stop+mb_okonly)
 	goto ImportFinis ! /r
 	ImportFailInvalidRoute: ! r:
 		mat mg$(0)
@@ -117,7 +117,7 @@ def fn_importRouteAndSequence(source$*256,delim$*1; ___,hIn,line$*2048,z$*10,pas
 		fnAddOneC(mat mg$,'an invalid route number on line '&str$(lineCount)&'.')
 		fnAddOneC(mat mg$,'Valid route numbers must be from '&bkno1$&' to '&bkno2$&')')
 		fnAddOneC(mat mg$,'This range can be changed in Company>Configuration.')
-		fnmsgbox(mat mg$,mgResp$,'',mb_stop+mb_okonly)
+		fnMsgBox(mat mg$,mgResp$,'',mb_stop+mb_okonly)
 	goto ImportFinis ! /r
 
 	ImportFinis: !
@@ -186,7 +186,7 @@ def fn_exportRouteAndSequence(outFile$*256,delim$*1; ___,hCustomer)
 	mat mg$(0)
 	fnAddOneC(mat mg$,'Succesfully completed export to:')
 	fnAddOneC(mat mg$,outFile$)
-	fnmsgbox(mat mg$,mgResp$,'',mb_information+mb_okonly)
+	fnMsgBox(mat mg$,mgResp$,'',mb_information+mb_okonly)
 fnEnd
 include: fn_setup
 include: fn_open

@@ -157,7 +157,7 @@ Finis: ! r:
 		ml$(1)="It appears you have "&str$(lrec(jcbreakdown))&"job cost entries"
 		ml$(2)="that have not been posted.  Do you wish to post these"
 		ml$(3)="entries before you exit?"
-		fnmsgbox(mat ml$,resp$,'',4)
+		fnMsgBox(mat ml$,resp$,'',4)
 		if resp$="Yes" then gosub POST_TO_JOB
 	end if
 goto Xit ! /r
@@ -336,13 +336,13 @@ MSGBOX3: ! r: need range of reference numbers
 mat ml$(2)
 ml$(1)="You must enter the 'Range From' and 'Range To'"
 ml$(2)="reference numbers to choose this option."
-fnmsgbox(mat ml$,resp$,'',16)
+fnMsgBox(mat ml$,resp$,'',16)
 goto CODE_FOR_PAYMENT ! /r
 MSGBOX4: ! r: need due date for selecting by due date
 mat ml$(2)
 ml$(1)="You must enter the 'Due Date' if you choose to'"
 ml$(2)="approve by due date."
-fnmsgbox(mat ml$,resp$,'',16)
+fnMsgBox(mat ml$,resp$,'',16)
 goto CODE_FOR_PAYMENT ! /r
 PAY_ALL: ! r: pay all unpaid invoices
 restore #paytrans:
@@ -463,7 +463,7 @@ mat ml$(3)=("")
 ml$(1)="Job # "&jn$&" does not exist."
 ml$(2)="                                        "
 ml$(3)="Take OK to select a different job #."
-fnmsgbox(mat ml$,resp$,'',0)
+fnMsgBox(mat ml$,resp$,'',0)
 goto ENTRY_SCREEN
 L6600: if ckey=69 then goto L6610 else goto L6620
 L6610: cn$="": fncategory_srch(cn$,1) : cat=val(cn$): goto ENTRY_SCREEN
@@ -558,7 +558,7 @@ def fn_test_key(holdkey$*20,vn$,iv$)
 		ml$(1)="The invoice number "&trim$(iv$)&" for Payee "&trim$(vn$)
 		ml$(2)="already exists in the Unpaid Invoice file."
 		ml$(3)="Please change the Invoice Number or the Payee."
-		fnmsgbox(mat ml$,resp$,'',0)
+		fnMsgBox(mat ml$,resp$,'',0)
 	goto TEST_KEY_FAIL
 
 	TEST_KEY_FAIL_ON_IV: !
@@ -566,7 +566,7 @@ def fn_test_key(holdkey$*20,vn$,iv$)
 		ml$(1)="The invoice number "&trim$(iv$)&" for Payee "&trim$(vn$)
 		ml$(2)="already exists in the Paid Invoice file."
 		ml$(3)="Please change the Invoice Number or the Payee."
-		fnmsgbox(mat ml$,resp$,'',0)
+		fnMsgBox(mat ml$,resp$,'',0)
 	goto TEST_KEY_FAIL
 
 	TEST_KEY_OK: !
@@ -778,14 +778,14 @@ def fn_InvoiceValid ! very local
 		ml$(1)="You must enter an invoice number on each unpaid "
 		ml$(2)="record.  If you must make up an invoice number,"
 		ml$(3)="be careful to use a different number each time!"
-		fnmsgbox(mat ml$,resp$,'',16)
+		fnMsgBox(mat ml$,resp$,'',16)
 		ivReturn=0
 	else if tac<>upa then ! allocations don't match total invoice
 		mat ml$(3)
 		ml$(1)="The allocations of "&trim$(cnvrt$("pic($$$$,$$$.##)",abs(tac)))&" do not agree with"
 		ml$(2)="the total invoice of "&trim$(cnvrt$("pic($$$$,$$$.##)",abs(upa)))&"."
 		ml$(3)="You must correct the problem before you can continue!"
-		fnmsgbox(mat ml$,resp$,'',16)
+		fnMsgBox(mat ml$,resp$,'',16)
 		ivReturn=0
 	end if
 	fn_InvoiceValid=ivReturn

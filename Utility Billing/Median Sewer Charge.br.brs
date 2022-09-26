@@ -43,7 +43,7 @@ L320: x=pos(resp$(j),"/",1)
 	if cd1(1)=0 then 
 		mat message$(1): mytype=0 
 		message$(1)="You must enter at least one date!" 
-		fnmsgbox(mat message$,resp$,'',mytype) 
+		fnMsgBox(mat message$,resp$,'',mytype) 
 		goto SCR1
 	end if
 
@@ -60,7 +60,7 @@ SCR2: !
 	if sewcode=0 then 
 		mat message$(1): mytype=0 
 		message$(1)="You must enter at least one date!" 
-		fnmsgbox(mat message$,resp$,'',mytype) 
+		fnMsgBox(mat message$,resp$,'',mytype) 
 		goto SCR2
 	end if
 	fnopenprn

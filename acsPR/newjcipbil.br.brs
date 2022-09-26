@@ -17,7 +17,7 @@
 	mat ml$(2)
 	ml$(1)="An unposted file appears to exist! "
 	ml$(2)="Enter Yes to work with this file, else No to create a new batch of entries."
-	fnmsgbox(mat ml$,resp$,cap$,52)
+	fnMsgBox(mat ml$,resp$,cap$,52)
 	if resp$="Yes" then goto L220 else goto L200
 	L200: !
 	open #3: "Name=jcbillings."&wsid$&",SIZE=0,RecL=84,Replace",i,outi,r
@@ -60,7 +60,7 @@ TRANSACTION_ENTRY: !
 L490: mat ml$(2)
 	ml$(1)="You have chosen to cancel without postng these entries!  "
 	ml$(2)="Take Yes to Exit, else take No to return to the entry screens."
-	fnmsgbox(mat ml$,resp$,cap$,52)
+	fnMsgBox(mat ml$,resp$,cap$,52)
 	if resp$="Yes" then goto Xit else goto TRANSACTION_ENTRY
 L510: if ckey=7 then goto CORRECTIONS
 	if ckey=8 then goto POSTTOJOBS
@@ -73,7 +73,7 @@ L510: if ckey=7 then goto CORRECTIONS
 L590: mat ml$(2)
 	ml$(1)="You failed to enter a job number. Take Yes to continue;"
 	ml$(2)="else take No to return to previous screen and enter the job number."
-	fnmsgbox(mat ml$,resp$,cap$,52)
+	fnMsgBox(mat ml$,resp$,cap$,52)
 	if resp$="Yes" then goto L610 else goto TRANSACTION_ENTRY
 L610: if addone=1 then goto L620 else goto L650
 L620: write #3,using L640: jn$,mat inp
