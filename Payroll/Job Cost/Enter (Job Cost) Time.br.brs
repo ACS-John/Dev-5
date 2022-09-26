@@ -38,7 +38,7 @@
 L280: mat ml$(2)
 	ml$(1)="An unposted file appears to exist! "
 	ml$(2)="Enter Yes to work with this file, else No to create a new batch of entries."
-	fnmsgbox(mat ml$,resp$,'',52)
+	fnMsgBox(mat ml$,resp$,'',52)
 	if resp$="Yes" then goto L320 else goto L300
 L300: open #3: "Name=jcWork.[Session],SIZE=0,RecL=84,Replace",i,outi,r
 	goto L330
@@ -111,7 +111,7 @@ L700: fnLbl(12,1,"Units:",mylen,1)
 L830: mat ml$(2)
 	ml$(1)="You have chosen to cancel without postng these entries!  "
 	ml$(2)="Take Yes to Exit, else take No to return to the entry screens."
-	fnmsgbox(mat ml$,resp$,'',52)
+	fnMsgBox(mat ml$,resp$,'',52)
 	if resp$="Yes" then goto Xit else goto TRANSACTION_ENTRY
 L850: if ckey=7 then goto CORRECTIONS
 	if ckey=8 then goto POSTTOJOBS
@@ -127,21 +127,21 @@ L850: if ckey=7 then goto CORRECTIONS
 L960: mat ml$(2)
 	ml$(1)="You failed to enter a job number. Take Yes to continue;"
 	ml$(2)="else take No to return to previous screen and enter the job number."
-	fnmsgbox(mat ml$,resp$,'',52)
+	fnMsgBox(mat ml$,resp$,'',52)
 	if resp$="Yes" then goto L980 else goto L420
 L980: ji2(1)=val(resp$(8)(1:3)) ! category
 	if ji2(1)=0 and dontwarnsubcat=0 then goto L1000 else goto L1020
 L1000: mat ml$(2)
 	ml$(1)="You failed to enter a category number. Take Yes to continue;"
 	ml$(2)="else take No to return to previous screen and enter the category number."
-	fnmsgbox(mat ml$,resp$,'',52)
+	fnMsgBox(mat ml$,resp$,'',52)
 	if resp$="Yes" then dontwarnsubcat=1: goto L1020 else goto L420
 L1020: ji2(2)=val(resp$(9)(1:3)) ! sub-category
 	if ji2(2)=0 and dontwarnsubcat=0 then goto L1040 else goto L1060
 L1040: mat ml$(2)
 	ml$(1)="You failed to enter a sub-category number. Take Yes to continue;"
 	ml$(2)="else take No to return to previous screen and enter the sub-category number."
-	fnmsgbox(mat ml$,resp$,'',52)
+	fnMsgBox(mat ml$,resp$,'',52)
 	if resp$="Yes" then dontwarnsubcat=1 : goto L1060 else goto L420
 L1060: ji2(3)=val(resp$(10)) ! amount
 	ji2(4)=val(resp$(11)(1:2)) ! deduction code
@@ -272,7 +272,7 @@ L2270: !
 	mat ml$(2)
 	ml$(1)="There is no department number "&str$(ji1(4))&" on employee number "&str$(ji1(1))&"!"
 	ml$(2)="Take OK to correct."
-	fnmsgbox(mat ml$,resp$,'',0)
+	fnMsgBox(mat ml$,resp$,'',0)
 goto L420
 L2280: !
 	if ji2(3)=0 then ji2(3)=tdet(2)*ji1(5)+tdet(3)*ji1(6)
@@ -284,7 +284,7 @@ L2330: !
 	mat ml$(2)
 	ml$(1)="The job # number appears to be an incorrect number!  "
 	ml$(2)="Take OK to correct."
-	fnmsgbox(mat ml$,resp$,'',0)
+	fnMsgBox(mat ml$,resp$,'',0)
 goto L420
 L2340: !
 	cn$=lpad$(rtrm$(jn$),6)&lpad$(str$(ji2(1)),5)
@@ -294,7 +294,7 @@ L2340: !
 	mat ml$(2)
 	ml$(1)="Category # "&str$(ji2(1))&" has never been used on this job before!  "
 	ml$(2)="Do you wish to use this number or select a different one?"
-	fnmsgbox(mat ml$,resp$,'',36)
+	fnMsgBox(mat ml$,resp$,'',36)
 if resp$="Yes" then goto L2390 else goto L420
 L2390: !
 	if ji2(2)=0 then goto L2450
@@ -305,7 +305,7 @@ L2440: !
 	mat ml$(2)
 	ml$(1)="The subcategory # number appears to be an incorrect number!  "
 	ml$(2)="Take OK to correct."
-	fnmsgbox(mat ml$,resp$,'',0)
+	fnMsgBox(mat ml$,resp$,'',0)
 goto L420
 L2450: !
 	if lrec(13)=0 then goto L2480 ! if they are not using subcategory, skip warning
@@ -315,7 +315,7 @@ L2470: !
 	mat ml$(2)
 	ml$(1)="The subcategory # number cannot be zero.!  "
 	ml$(2)="Take OK to correct."
-	fnmsgbox(mat ml$,resp$,'',0)
+	fnMsgBox(mat ml$,resp$,'',0)
 goto L420
 L2480: !
 if ji2(4)<1 or ji2(4)>20 then pt=ptp/100*ji2(3) else pt=0

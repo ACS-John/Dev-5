@@ -281,7 +281,7 @@ SelectRangeOfAccounts: ! r: select range of accounts
 	if h1$<l1$ then
 		mat msgline$(1)
 		msgline$(1)='You have entered invalid accounts!'
-		fnmsgbox(mat msgline$,resp$,'',48)
+		fnMsgBox(mat msgline$,resp$,'',48)
 		goto SelectRangeOfAccounts
 	end if
 	restore #hCustomer,key=l1$: nokey SelectRangeOfAccounts

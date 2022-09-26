@@ -618,7 +618,7 @@ def fn_csEnv
 	XIT_FNCS_OS_PATH: !
 fnend
 def fn_showReleaseNotes(version_prior$,version_current$; ___,didOpen)
-	dim srnLine$*1024,srnItem$(0)*1024
+	dim srnLine$*2048,srnItem$(0)*1024
 	open #hSrnOut=fn_h: 'name=ACS_tmp_Release_Note_Report.txt,recl=1024,replace',d,o
 	open #hReleaseNotes=fn_h: 'name=S:\Core\Release_Notes.txt',d,i ioerr SrnReleaseNotesEof
 	didOpen=1

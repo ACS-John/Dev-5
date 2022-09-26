@@ -48,7 +48,7 @@ filter_sewer_code=val(resp$(9)) conv SCR1
 if filter_sewer_code=0 and ~clear_averages then
 	mat message$(1)
 	message$(1)="You must enter at least one date!"
-	fnmsgbox(mat message$,resp$,'',0)
+	fnMsgBox(mat message$,resp$,'',0)
 	goto SCR1
 end if
 dim cd1(8)
@@ -60,7 +60,7 @@ fncreg_write(sn$&'.sewer code to average',resp$(9))
 if cd1(1)=0 and ~clear_averages then
 	mat message$(1)
 	message$(1)="You must enter at least one date!"
-	fnmsgbox(mat message$,resp$,'',0)
+	fnMsgBox(mat message$,resp$,'',0)
 	goto SCR1
 end if
  

@@ -109,7 +109,7 @@ def fn_FileSaveAs(save_what$*128; fsa_automatedSaveFileName$*256,suppressErrorLo
 		ml$(1)='Automated save failed'
 		ml$(2)='Error: '&str$(err)
 		ml$(3)='File: '&fsa_automatedSaveFileName$
-		fnmsgbox(mat ml$)
+		fnMsgBox(mat ml$)
 		! goto SAVE_AS_XIT
 	! else if err=622 then ! it was just cancelled
 	!   goto SAVE_AS_XIT
@@ -117,7 +117,7 @@ def fn_FileSaveAs(save_what$*128; fsa_automatedSaveFileName$*256,suppressErrorLo
 		mat ml$(2)
 		ml$(1)='Select a different file name.'
 		ml$(2)='Error: '&str$(err)
-		fnmsgbox(mat ml$)
+		fnMsgBox(mat ml$)
 		pr 'Err:';err;' Line:';line
 	end if
 	SAVE_AS_XIT: !
@@ -147,7 +147,7 @@ def fn_analyze_7zip_compresslog(arc_filename$*256,success_text_line1$*256,save_n
 			ml$(3)=arc_filename$
 			ml$(4)='Display the log now?'
 
-			fnmsgbox(mat ml$,resp$,'ACS',4+64)
+			fnMsgBox(mat ml$,resp$,'ACS',4+64)
 			if resp$='Yes' then
 				! if env$('acsDeveloper')<>'' then pr 'just before fnEditFile('text',"'&arc_filename$&'")' : pause
 				fnEditFile('text',arc_filename$)
@@ -162,7 +162,7 @@ def fn_analyze_7zip_compresslog(arc_filename$*256,success_text_line1$*256,save_n
 			mat ml$(2)
 			ml$(1)=success_text_line1$
 			ml$(2)=save_name$
-			fnmsgbox(mat ml$,resp$,'ACS',0)
+			fnMsgBox(mat ml$,resp$,'ACS',0)
 		end if
 	end if
 	goto ARC_XIT
@@ -170,7 +170,7 @@ def fn_analyze_7zip_compresslog(arc_filename$*256,success_text_line1$*256,save_n
 	mat ml$(2)
 	ml$(1)='FAILURE: The log file could not be opened.'
 	ml$(2)=arc_filename$
-	fnmsgbox(mat ml$,resp$,'ACS',0)
+	fnMsgBox(mat ml$,resp$,'ACS',0)
 	if env$('acsDeveloper')<>'' then pause
 	ARC_XIT: !
 	fn_analyze_7zip_compresslog=~failure
@@ -259,7 +259,7 @@ def fn_openPartial
 		mat ml$(2)
 		ml$(1)='Select a different file name.'
 		ml$(2)='Error: '&str$(err)
-		fnmsgbox(mat ml$,resp$)
+		fnMsgBox(mat ml$,resp$)
 		!     if err=4150 then pr 'Could not create file:';file$(1) : fnpause ! file$(1) is blank!
 		pr 'Err:';err;' Line:';line
 	end if
@@ -337,7 +337,7 @@ def fn_opMain(omFileOpen$*256)
 				fnaddonec(mat msgTmp$,'Completed.')
 				fnaddonec(mat msgTmp$,'Company '&str$(destination_company_number)&' loaded from')
 				fnaddonec(mat msgTmp$,omFileOpen$)
-				fnmsgbox(mat msgTmp$)
+				fnMsgBox(mat msgTmp$)
 			end if
 			if selectedSource$<>'(All Companies)' then goto OpmAskWhichToOpen
 		end if

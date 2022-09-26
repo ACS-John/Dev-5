@@ -140,14 +140,14 @@ MSGBOX1: !
 	ml$(1)="You have chosen to delete employee " : _
 	ml$(2)="number "&str$(eno)&".  Click OK to delete" : _
 	ml$(3)="this record or Cancel to retain the record." : _
-	fnmsgbox(mat ml$,resp$,cap$,49)
+	fnMsgBox(mat ml$,resp$,cap$,49)
 	if resp$="OK" then goto L1150 else goto MAIN
 MSGBOX2: !
 	mat ml$(3) : _
 	ml$(1)="You are attempting to change the employee" : _
 	ml$(2)="number from "&str$(holden1)&" to "&str$(eno)&".  Click OK to change" : _
 	ml$(3)="the number or Cancel to retain the old number." : _
-	fnmsgbox(mat ml$,resp$,cap$,49)
+	fnMsgBox(mat ml$,resp$,cap$,49)
 	if resp$="OK" then goto L1170 else goto MAIN
 L1150: delete #1,key=lpad$(str$(en1),4): nokey MAIN
 ! delete or change numbers
@@ -265,7 +265,7 @@ MSGBOX5: !
 	mat ml$(3) : _
 	ml$(1)="There are no checks on employee # "&str$(eno)&"." : _
 	ml$(2)="Do you wish to add checks?" : _
-	fnmsgbox(mat ml$,resp$,cap$,35)
+	fnMsgBox(mat ml$,resp$,cap$,35)
 	if resp$="Yes" then add=1: goto L2340 else goto MAIN
 L2290: adr=ta(1)
 L2300: if adr=0 then goto MAIN
@@ -315,7 +315,7 @@ MSGBOX4: !
 	ml$(2)="("&trim$(cnvrt$("pic(zzzz,zzz.##)",wh))&") does not equal" : _
 	ml$(3)="the net check ("&trim$(cnvrt$("pic(zzzz,zzz.##)",prd(21)))&")" : _
 	ml$(4)="Click OK to fix the check." : _
-	fnmsgbox(mat ml$,resp$,cap$,49)
+	fnMsgBox(mat ml$,resp$,cap$,49)
 	if resp$="OK" then goto L2340 else goto MAIN
 L2700: lr2=lrec(2)+1
 	if add=1 then write #2,using L2320,rec=lr2: eno,mat prd,0 duprec L2700 else rewrite #2,using L2320,rec=adr: eno,mat prd,nca

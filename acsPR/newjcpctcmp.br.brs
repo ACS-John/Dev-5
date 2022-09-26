@@ -40,13 +40,13 @@ TRANSACTION_ENTRY: !
 L340: mat ml$(2)
 	ml$(1)="You failed to enter a job number. You can not continue"
 	ml$(2)="without a job number."
-	fnmsgbox(mat ml$,resp$,cap$,0): goto TRANSACTION_ENTRY
+	fnMsgBox(mat ml$,resp$,cap$,0): goto TRANSACTION_ENTRY
 L350: cn=val(resp$(2)(1:5)) ! category
 	if cn=0 then goto L370 else goto L380
 L370: mat ml$(2)
 	ml$(1)="You failed to enter a category number. You cannot continue"
 	ml$(2)="without a category number."
-	fnmsgbox(mat ml$,resp$,cap$,0)
+	fnMsgBox(mat ml$,resp$,cap$,0)
 	goto TRANSACTION_ENTRY
 L380: cn$=lpad$(rtrm$(jn$),6)&lpad$(str$(cn),5)
 	read #2,using L540,key=cn$: k$,rl10,rl12,rl13 nokey L410
@@ -54,7 +54,7 @@ L380: cn$=lpad$(rtrm$(jn$),6)&lpad$(str$(cn),5)
 L410: mat ml$(2)
 	ml$(1)="There is no job # "&trim$(jn$)&" with a category # "&str$(cn)&"."
 	ml$(2)="You must enter a valid job or category number."
-	fnmsgbox(mat ml$,resp$,cap$,0)
+	fnMsgBox(mat ml$,resp$,cap$,0)
 	goto TRANSACTION_ENTRY
 L420: l12=val(resp$(3)) ! labor %
 	l13=val(resp$(4)) ! other %

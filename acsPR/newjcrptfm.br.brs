@@ -51,7 +51,7 @@ ADD_EDIT: !
 L460: mat ml$(2) : _
 	ml$(1)="A record with this number does not exist!" : _
 	ml$(2)="Select a different numbe if you wish to add a new report." : _
-	fnmsgbox(mat ml$,resp$,cap$,48) : _
+	fnMsgBox(mat ml$,resp$,cap$,48) : _
 	goto ASKREPORT
 L470: holdrn=rn
  
@@ -101,7 +101,7 @@ L770: mat ml$(3) : _
 	ml$(1)="You are attempting to change report " : _
 	ml$(2)="# "&str$(holdrn)& " to report # "&str$(rn)&"." : _
 	ml$(3)="Take OK to continue, else Cancel." : _
-	fnmsgbox(mat ml$,resp$,cap$,49)
+	fnMsgBox(mat ml$,resp$,cap$,49)
 	if resp$="OK" then holdrn=rn: goto L790 else goto SCR2
 L790: rt40$=resp$(2)
 	ch$(1)=resp$(3)
@@ -115,7 +115,7 @@ L860: if resp$(6)(1:1)="T" then sd$="Y": sd=1 else sd$="N": sd=0
 L880: mat ml$(2) : _
 	ml$(1)="You can not use "&trim$(ty2$(ips+1))&" as selection criteria!" : _
 	ml$(2)=" Take OK to select a different item." : _
-	fnmsgbox(mat ml$,resp$,cap$,48) : _
+	fnMsgBox(mat ml$,resp$,cap$,48) : _
 	goto SCR2
 L890: if sd$="Y" then sd=1 else sd=0
 	rt$=rt40$
@@ -127,7 +127,7 @@ DELETEIT: !
 	mat ml$(2) : _
 	ml$(1)="You have chosen to delete report # "&rptn$ : _
 	ml$(2)="Take Ok to continue, else Cancel to keep the report." : _
-	fnmsgbox(mat ml$,resp$,cap$,49)
+	fnMsgBox(mat ml$,resp$,cap$,49)
 	if resp$="OK" then goto L980 else goto L990
 L980: delete #1,key=rptn$:
 L990: goto SCR1

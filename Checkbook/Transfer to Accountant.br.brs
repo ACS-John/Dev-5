@@ -231,7 +231,7 @@ GETPRC: ! r:
 	ml$(1)='This program can combine all like General Ledger Numbers for'
 	ml$(2)='Payroll Withholding Accounts as they are transferred to GL.'
 	ml$(4)='Do you wish to combine these accounts?'
-	fnmsgbox(mat ml$,resp$,'',3)
+	fnMsgBox(mat ml$,resp$,'',3)
 	if resp$='Cancel' then goto Xit else prc$=resp$(1:1)
 	GetPrcFinis: !
 return ! /r
@@ -284,7 +284,7 @@ MSGBOX1: ! r:
 	mat ml$(2)
 	ml$(1)='Make sure the diskette is properly inserted '
 	ml$(2)='and the proper device has been selected.'
-	fnmsgbox(mat ml$,resp$,'',16)
+	fnMsgBox(mat ml$,resp$,'',16)
 goto MAIN ! /r
  
 include: ertn

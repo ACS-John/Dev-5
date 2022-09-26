@@ -65,9 +65,9 @@ SCREEN_1: ! maintain category screen
 	mat ml$(2) : _
 	ml$(1)="You have chosen to delete category "&trim$(category$)&" from the Category file!" : _
 	ml$(2)="Select OK to delete; else Cancel to retain the record." : _
-	fnmsgbox(mat ml$,resp$,'',49)
+	fnMsgBox(mat ml$,resp$,'',49)
 	if resp$="OK" then goto L560 else goto ASKCATEGORY
-L560: if ckey=4 then delete #1,key=catergory$: : gosub RECREATE_GRID: goto ASKCATEGORY: fnmsgbox(mat ml$,resp$,'',49)
+L560: if ckey=4 then delete #1,key=catergory$: : gosub RECREATE_GRID: goto ASKCATEGORY: fnMsgBox(mat ml$,resp$,'',49)
 L570: rewrite #1,using L180,key=category$: category,name$ nokey L580
 L580: if ckey=1 then goto ASKCATEGORY
 	goto ASKCATEGORY
@@ -98,7 +98,7 @@ ADD_RECORD: !
 	mat ml$(2) : _
 	ml$(1)="A record # "&category$&" already exists!" : _
 	ml$(2)="Choose to review the record." : _
-	fnmsgbox(mat ml$,resp$,'',48) : _
+	fnMsgBox(mat ml$,resp$,'',48) : _
 	goto ADD_RECORD
 L800: write #1,using L180: category,name$
 	holdcategory=category

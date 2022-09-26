@@ -98,7 +98,7 @@ MSGBOX1: !
 	ml$(1)="You are changing Ratio # "&holdhac$&" to "
 	ml$(2)="Ratio # "&hac$&".  Click OK to continue, "
 	ml$(3)="else Cancel to prevent changing the #."
-	fnmsgbox(mat ml$,resp$,'',49)
+	fnMsgBox(mat ml$,resp$,'',49)
 	if resp$="OK" then goto L780 else goto ADD_EDIT_RATIOMST
 L780: rewrite #ratiomst,using 'form pos 1,G 3,C 40,80*c 12',rec=editrec: hac$,na$,mat gl$
 	goto L830

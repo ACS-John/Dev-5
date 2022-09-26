@@ -20,7 +20,7 @@ def library fnChain(prg$*255; no_fnprg_setting,noLog)
 		mss$(2)=''
 		mss$(3)='Retry will look again.'
 		mss$(4)='Cancel will return you to the Menu.'
-		fnmsgbox(mat mss$,resp$,'',21)
+		fnMsgBox(mat mss$,resp$,'',21)
 	end if
 	if resp$='Cancel' then goto Xit else if resp$='Retry' then goto Test
 	if ~noLog then fnLog('fnChain to '&prg$,1)

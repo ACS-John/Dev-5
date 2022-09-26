@@ -120,7 +120,7 @@ MainLoop: ! r: main loop
 			mat ml$(2)
 			ml$(1)='Unable to create file at location:'
 			ml$(2)=path$
-			fnmsgbox(mat ml$)
+			fnMsgBox(mat ml$)
 			goto Screen1
 		end if
 	end if
@@ -195,7 +195,7 @@ BatchControlRecord: ! r: (8) Company/Batch Control Record
 		ml$(1)="It appears you do not have anyone with"
 		ml$(2)="direct deposit this pay period."
 		ml$(3)="Click OK to continue."
-		fnmsgbox(mat ml$,resp$)
+		fnMsgBox(mat ml$,resp$)
 		goto Xit
 	end if
 
@@ -215,7 +215,7 @@ BatchControlRecord: ! r: (8) Company/Batch Control Record
 		ml$(1)="It appears you do not have anyone with"
 		ml$(2)="direct deposit this pay period."
 		ml$(3)="Click OK to continue."
-		fnmsgbox(mat ml$,resp$)
+		fnMsgBox(mat ml$,resp$)
 		goto Xit
 	end if
 	! write #hDdout,using F_ddout_6b: 6,27,int(bnkrtn/10),str$(bnkrtn)(len(str$(bnkrtn)):len(str$(bnkrtn))),bankaccount$,totalDebit,"","","",ari,lpad$(trim$(bankaccount$),8),tn$,crlf$        ! changed dr$ to str(ddN(dd_routing)) ; also da$ to dd$(dd_account)  ! total entry for  debiting customer account

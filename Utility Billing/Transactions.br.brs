@@ -216,7 +216,7 @@ fnend
 			mat msgbox$(0)
 			fnAddOneC(mat msgBox$,'You may not delete a customer''s most recent Charge.')
 			fnAddOneC(mat msgBox$,'To accomplish this use Reverse Billing Cycle for the Individual.')
-			fnmsgbox(mat msgbox$,resp$,'',mb_exclamation+mb_okonly)
+			fnMsgBox(mat msgbox$,resp$,'',mb_exclamation+mb_okonly)
 			goto TdEoTran
 		end if
 	
@@ -373,7 +373,7 @@ fnend
 		msgbox$(1)='Include balance column?'
 		msgbox$(2)='The balances listed were the account balance at the time the transaction completed'
 		msgbox$(3)='and will be misleading if transactions were processed out of date sequence.'
-		fnmsgbox(mat msgbox$,resp$,'',32+3+msgbox_default)
+		fnMsgBox(mat msgbox$,resp$,'',32+3+msgbox_default)
 		if resp$='Cancel' then goto PT_XIT
 		if resp$='Yes' then
 			printBalance=1

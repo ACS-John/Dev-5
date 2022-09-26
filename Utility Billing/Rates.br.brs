@@ -55,7 +55,7 @@ DeleteRec: ! r:
 	mat msgline$(2)
 	msgline$(1)="Delete this rate record?"
 	msgline$(2)=k$ ! rt$(1)&rt$(2)
-	fnmsgbox(mat msgline$,resp$,'',36)
+	fnMsgBox(mat msgline$,resp$,'',36)
 	if uprc$(resp$)(1:1)="Y" then
 		delete #hRate1,key=k$: ! rt$(1)&rt$(2):
 	end if
@@ -76,7 +76,7 @@ AddNewRecord: ! r:
 	if rtrm$(rt$)="" then
 		mat msgline$(1)
 		msgline$(1)="Invalid Service Type"
-		fnmsgbox(mat msgline$,resp$,'',16)
+		fnMsgBox(mat msgline$,resp$,'',16)
 		goto AddNewRecord
 	end if
 
@@ -84,7 +84,7 @@ AddNewRecord: ! r:
 	if g1=0 then
 		mat msgline$(1)
 		msgline$(1)="Rate codes must be from 1 to 99!"
-		fnmsgbox(mat msgline$,resp$,'',16)
+		fnMsgBox(mat msgline$,resp$,'',16)
 		goto AddNewRecord
 	end if
 
@@ -96,7 +96,7 @@ AddNewRecord: ! r:
 	next j
 	mat msgline$(1)
 	msgline$(1)="Invalid Service Type"
-	fnmsgbox(mat msgline$,resp$,'',16)
+	fnMsgBox(mat msgline$,resp$,'',16)
 	goto AddNewRecord
 	ANR_SERVICE_TYPE_IS_VALID: !
 
@@ -149,14 +149,14 @@ RateEdit: ! r: maintain rate file
 	if rtrm$(rt$(1))="" then
 		mat msgline$(1)
 		msgline$(1)="Invalid Service Type: "&rt$(1)
-		fnmsgbox(mat msgline$,resp$,'',16)
+		fnMsgBox(mat msgline$,resp$,'',16)
 		goto RateEdit
 	end if
 	g1=0 : g1=val(rt$(2)) conv ignore ! rate code
 	if g1=0 then
 		mat msgline$(1)
 		msgline$(1)="Rate codes must be from 1 to 99!"
-		fnmsgbox(mat msgline$,resp$,'',48)
+		fnMsgBox(mat msgline$,resp$,'',48)
 		goto RateEdit
 	end if
 	for j=1 to udim(option$)
@@ -164,7 +164,7 @@ RateEdit: ! r: maintain rate file
 	next j
 	mat msgline$(1)
 	msgline$(1)="Invalid Service Type: "&rt$(1)
-	fnmsgbox(mat msgline$,resp$,'',16)
+	fnMsgBox(mat msgline$,resp$,'',16)
 	RM_SERVICE_TYPE_VALID: !
 	rt$(2)=lpad$(str$(g1),2)
 	k$=rt$(1)&rt$(2)

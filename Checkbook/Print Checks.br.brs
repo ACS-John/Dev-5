@@ -369,13 +369,13 @@ L7780: !
 	ml$(1)='Could not locate check number '&str$(reprintckn)&' for bank number '&str$(bankcode)&'.'
 	ml$(2)='This check will be skipped.'
 	reprintckn+=1
-	fnmsgbox(mat ml$,resp$)
+	fnMsgBox(mat ml$,resp$)
 	goto REPRINT_CHECK_LOOP_TOP
 L7785: !
 	mat ml$(2)
 	ml$(1)='Cannot locate the first check (number '&str$(reprintckn)&' for bank number '&str$(bankcode)&'.)'
 	ml$(2)='You must choose another check number.'
-	fnmsgbox(mat ml$,resp$)
+	fnMsgBox(mat ml$,resp$)
 	goto REPRINT_CHECKS
 L7790: !
 	key$=cnvrt$('pic(ZZ)',bankcode)&str$(1)&cnvrt$('n 8',reprintckn)
@@ -688,7 +688,7 @@ def fn_msg_allocations_off
 	ml$(1)='The net check ('&tr$(3)&') must agree with the total'
 	ml$(2)='allocations ('&str$(tac)&').  Correct the allocation'
 	ml$(3)='amounts or the net check to proceed.'
-	fnmsgbox(mat ml$,resp$,'',16)
+	fnMsgBox(mat ml$,resp$,'',16)
 fnend
 def fn_checkDiscount ! check for any discounts
 	if disamt and ddate=>prd then
@@ -715,7 +715,7 @@ def fn_checkDiscount ! check for any discounts
 		ml$(3)='The discount will be taken, but the entry in check history will not'
 		ml$(4)='contain a G/L number.  Fix the GL # in the transaction file and place the '
 		ml$(5)='discount G/L #s in the G/L control file.'
-		fnmsgbox(mat ml$,resp$,'',16)
+		fnMsgBox(mat ml$,resp$,'',16)
 	goto DiscountWrite
 	DiscountFinis: !
 fnend
@@ -781,7 +781,7 @@ def fn_cknum ! CHECK FOR DUPLICATE CHECK NUMBERS
 		mat ml$(2)
 		ml$(1)='You must supply the new check number any time'
 		ml$(2)='you choose not to delete the old check.'
-		fnmsgbox(mat ml$,resp$,'',16)
+		fnMsgBox(mat ml$,resp$,'',16)
 		goto SCR_CKPRT6
 	end if
 	ckn=ckn2
@@ -808,7 +808,7 @@ def fn_index
 	mat ml$(2)
 	ml$(1)='You must get everyone out of the Unpaid Invoice File'
 	ml$(2)='before you can continue!  Press OK when ready.'
-	fnmsgbox(mat ml$,resp$,'',16)
+	fnMsgBox(mat ml$,resp$,'',16)
 	goto L4050
 	L4080: !
 	fn_close(hUnPdAlloc)

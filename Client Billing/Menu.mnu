@@ -58,4 +58,4 @@ Print
 ! >YTD Billing Summary                            ^ [cursystem]\*                        ^  ^Print,
 ! >Zero YTD Information                           ^ [cursystem]\Legacy\tmzytd            ^  ^Print,
 Error Checking
->Client Balance Calculation ^ [cursystem]\*
+>Client Balance Calculation                       ^ [cursystem]\*                        ^  ^Error,help,shit

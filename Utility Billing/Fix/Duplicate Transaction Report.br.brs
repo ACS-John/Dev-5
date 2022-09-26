@@ -122,7 +122,7 @@ def fn_trans_delete(td_rec)
 		fnAddOneC(mat td_msg$,'The General Ledger must also be manually corrected.'                                             	)
 		fnAddOneC(mat td_msg$,'You may instead consider a credit or debit memo.'                                                	)
 		fnAddOneC(mat td_msg$,'Are you sure you want to delete it?'                                                              	)
-		fnmsgbox(mat td_msg$,resp$,'',52)
+		fnMsgBox(mat td_msg$,resp$,'',52)
 		if resp$<>'Yes' then
 			goto TD_XIT
 		end if
@@ -141,7 +141,7 @@ def fn_trans_delete(td_rec)
 		mat td_msg$(2)
 		td_msg$(1)='Unknown transaction type ('&str$(td_trans_code)&')'
 		td_msg$(2)='Transaction may not be deleted'
-		fnmsgbox(mat td_msg$,resp$,'',16)
+		fnMsgBox(mat td_msg$,resp$,'',16)
 		goto TD_XIT
 	end if
 	read #h_td_customer,using F_TB_CUSTOMER,key=td_customer_key$: tb_bal,mat tb_gb

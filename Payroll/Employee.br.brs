@@ -55,7 +55,7 @@ EmployeeAdd: ! r:
 		mat ml$(2)
 		ml$(1)='A record with this number already exists!'
 		ml$(2)='Select a different employee number.'
-		fnmsgbox(mat ml$,resp$,'',48)
+		fnMsgBox(mat ml$,resp$,'',48)
 	goto Menu1 ! /r
 	DoEmployeeAdd: !
 	dim em$(3)*30
@@ -115,7 +115,7 @@ def fn_employeeEdit(ent; employeeAdding)
 		mat ml$(2)
 		ml$(1)='A record with this number does not exist!'
 		ml$(2)='Select a different employee number.'
-		fnmsgbox(mat ml$,resp$,'',48)
+		fnMsgBox(mat ml$,resp$,'',48)
 	goto EmployeeEditXit ! /r
 	ScrEmployee: ! r:
 		fnTos : screen=scrEmployee ! r: build the screen
@@ -339,7 +339,7 @@ def fn_employeeEdit(ent; employeeAdding)
 		else if ckey=1 then ! or ckey=2
 			if em(5)=0 then ! pay code not selected
 				mat ml$(1) : ml$(1)='Pay Code is required.'
-				fnmsgbox(mat ml$,resp$)
+				fnMsgBox(mat ml$,resp$)
 				goto ScrEmployee
 			end if
 			gosub EmployeeSave
@@ -471,7 +471,7 @@ ScrDepartment: ! r:
 		mat ml$(2)
 		ml$(1)='The department number can not be 0 (zero).'
 		ml$(2)='Enter a valid department number!'
-		fnmsgbox(mat ml$,resp$)
+		fnMsgBox(mat ml$,resp$)
 		goto ScrDepartment
 	end if
 	if eno<>ent then goto EmployeeChangeKey
@@ -507,7 +507,7 @@ def fn_departmentAdd(eno,&deptNew; ___,returnN)
 			mat ml$(2)
 			ml$(1)='This department number is already attached to this employee.'
 			ml$(2)='Select a different department number.'
-			fnmsgbox(mat ml$,resp$,'',48)
+			fnMsgBox(mat ml$,resp$,'',48)
 			goto ScrDepartmentAdd
 		DoDepartmentAdd: ! /r
 		departmentAddMode=1
@@ -655,7 +655,7 @@ EmployeeDelete: ! r:
 	mat ml$(2)
 	ml$(1)='Employee Number '&ltrm$(ent$)&' will be Deleted.'
 	ml$(2)='Do you wish to continue?'
-	fnmsgbox(mat ml$,resp$,'',52)
+	fnMsgBox(mat ml$,resp$,'',52)
 	if resp$='Yes' then ! delete direct deposit
 		fn_dDdelete(eno)
 		delete #hEmployee,key=ent$:
@@ -678,7 +678,7 @@ EmployeeChangeKey: ! r:
 	ml$(1)='You have chosen to change the employee number'
 	ml$(2)='from '&str$(holdeno)&' to '&str$(eno)&'.'
 	ml$(3)='Do you wish to continue?'
-	fnmsgbox(mat ml$,resp$,'',52)
+	fnMsgBox(mat ml$,resp$,'',52)
 	if resp$<>'Yes' then
 		goto CHGENO_XIT
 	end if
@@ -686,7 +686,7 @@ EmployeeChangeKey: ! r:
 	mat ml$(2)
 	ml$(1)='Employee Number '&ltrm$(ent$)&' already exists.'
 	ml$(2)='You cannot change to this number.'
-	fnmsgbox(mat ml$,resp$)
+	fnMsgBox(mat ml$,resp$)
 	goto CHGENO_XIT
 	ChangeEmpNo: !
 	fn_DirectDepositKeyChange(rpad$(trim$(ent$),10),key$:=fn_dDkey$(eno))
@@ -921,7 +921,7 @@ AskDd: !
 		mat ml$(2)
 		ml$(1)='You must have valid answers in the routing #, account'
 		ml$(2)='type, and bank account before you can answer yes.'
-		fnmsgbox(mat ml$,resp$)
+		fnMsgBox(mat ml$,resp$)
 		goto AskDd
 	else if ckey=1 or ckey=4 then
 		key$=rpad$(str$(eno),10)

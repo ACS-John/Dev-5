@@ -43,7 +43,7 @@ mat txt$(txt_item+=1) : txt$(txt_item)=''
 mat txt$(txt_item+=1) : txt$(txt_item)=chr$(9)&'Advanced Computer Services LLC'
 mat txt$(txt_item+=1) : txt$(txt_item)=chr$(9)&'4 Syme Ave'
 mat txt$(txt_item+=1) : txt$(txt_item)=chr$(9)&'West Orange, NJ 07052'
-fnmsgbox(mat txt$, response$, cap$)
+fnMsgBox(mat txt$, response$, cap$)
 goto Xit
 Xit: fnXit
 include: ertn

@@ -12,7 +12,7 @@
 		message$(3)="This is " : _
 		message$(4)="This is j  - this is a very long line - much longer than previous lines it's a real whopper - i mean it man - big"
 ! mt=0+256 : _
-		fnmsgbox(mat message$, response$, cap$, mt)
+		fnMsgBox(mat message$, response$, cap$, mt)
 		pr "The answer is "&response$
 	next mt
 Xit: stop

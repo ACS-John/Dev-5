@@ -228,7 +228,7 @@ ScrMainQestions: ! r:
 		mat ml$(2)
 		ml$(1)='You must enter a valid check number!'
 		ml$(2)='Click OK to return to previous screen. '
-		fnmsgbox(mat ml$,resp$)
+		fnMsgBox(mat ml$,resp$)
 		goto ScrMainQestions
 	end if
 	! /r
@@ -253,14 +253,14 @@ ScrMainQestions: ! r:
 		mat ml$(2)
 		ml$(1)='You must enter a valid bank code!'
 		ml$(2)='Click OK to return to previous screen. '
-		fnmsgbox(mat ml$,resp$)
+		fnMsgBox(mat ml$,resp$)
 		goto ScrMainQestions
 		L1290: !
 		mat ml$(3)
 		ml$(1)='You have indicated that you want to post checkbook, '
 		ml$(2)='but no checkbook files can be found! '
 		ml$(3)='Click OK to return to previous screen. '
-		fnmsgbox(mat ml$,resp$)
+		fnMsgBox(mat ml$,resp$)
 		goto ScrMainQestions
 	end if
 	L1300: ! /r

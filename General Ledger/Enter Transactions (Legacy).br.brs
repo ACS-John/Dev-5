@@ -156,7 +156,7 @@ BANK_GL_FAIL: ! r:
 	mat ml$(2)
 	ml$(1)="You must have a Bank Account General Ledger"
 	ml$(2)="Number for disbursements or receipts."
-	fnmsgbox(mat ml$,resp$,'',49)
+	fnMsgBox(mat ml$,resp$,'',49)
 	goto SCREEN_1 ! /r
 ERASE_PREVIOUS_INPUT: ! r:
 	post=1
@@ -415,7 +415,7 @@ AFP_BAD_GL: ! r:
 	ml$(1)="You must have a General Ledger Number"
 	ml$(2)="on each allocation."
 	ml$(3)="Click OK to enter the general ledger number."
-	fnmsgbox(mat ml$,resp$,'',49)
+	fnMsgBox(mat ml$,resp$,'',49)
 goto MAIN ! /r
 AFP_XIT: ! r:
 	if ~edit=1 then ! DON'T CHANGE CODE IF MAKEING CORRECTIONS
@@ -515,7 +515,7 @@ DELETE_TRANS: ! r: deletes entire transaction
 	ml$(1)="You have chosen to delete this entire entry."
 	ml$(2)="Click Ok to delete this entry."
 	ml$(3)="Click Cancel to return to main entry screen."
-	fnmsgbox(mat ml$,resp$,'',49)
+	fnMsgBox(mat ml$,resp$,'',49)
 	if resp$="OK" then goto L5120 else goto MAIN
 L5120: restore #glallocations:
 L5130: read #glallocations,using "form pos 1,c 12,pd 10.2,c 30,pd 5": gl$,allocation,td$,transadr eof L5170
@@ -689,7 +689,7 @@ L6240: !
 		ml$(1)="Total Debits of "&trim$(cnvrt$("pic(-----,---,---.##)",td))&" to not equal"
 		ml$(2)="the total Credits of "&trim$(cnvrt$("Pic(----,---,---.##",tc))
 		ml$(3)="Click OK to continue or Cancel to go back."
-		fnmsgbox(mat ml$,resp$,'',49)
+		fnMsgBox(mat ml$,resp$,'',49)
 		if resp$="Cancel" then goto SCREEN_PROOF_TOTALS
 	end if
 	if ckey=2 then goto POSTING_OPTIONS
@@ -848,7 +848,7 @@ L7300: if j=17 then wh=wh+xpr(j)
 	ml$(1)="Total wages less deductions do not equal the net check!"
 	ml$(2)=" Net entered:" &ltrm$(cnvrt$("PIC($$$$,$$$.##CR)",transactionamt))&"   Calculated net: "&ltrm$(cnvrt$("PIC($$$$,$$$.##CR)",xpr(2)-wh))
 	ml$(3)="Click ok to return to the entry screen."
-	fnmsgbox(mat ml$,resp$,'',49)
+	fnMsgBox(mat ml$,resp$,'',49)
 	goto PAYROLL ! /r
 WRITE_PAYROLL_TRANS: ! r:
 	tr(6)=4 ! payroll transaction type  (was converted back to 1 in old system)
@@ -937,7 +937,7 @@ EditAllocations: ! r:  editing glallocation while still being entered into alloc
 		ml$(1)="You have chosen to delete this allocation."
 		ml$(2)="Click OK to delete this entry."
 		ml$(3)="Click Cancel to return to previous screen."
-		fnmsgbox(mat ml$,resp$,'',49)
+		fnMsgBox(mat ml$,resp$,'',49)
 		if resp$<>"OK" then
 			goto EditAllocations
 		end if

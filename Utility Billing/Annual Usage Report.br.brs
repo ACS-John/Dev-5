@@ -260,5 +260,5 @@ include: ertn
 INVALID_DATES_MSGBOX: ! r:
 	msgline$(1)="You have entered dates in an"
 	msgline$(2)="invalid format.  Use mmddyy format."
-	fnmsgbox(mat msgline$,resp$,'',1)
+	fnMsgBox(mat msgline$,resp$,'',1)
 goto SCREEN1 ! /r

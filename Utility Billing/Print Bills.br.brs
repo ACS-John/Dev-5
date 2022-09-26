@@ -608,8 +608,8 @@ Xit: fnXit
 Bud1: ! r: Open #81 BudMstr and #82 BudTrans bud1=1
 	bud1=0
 	dim ba(13),badr(2),bt1(14,2)
-	open #81: "Name=[Q]\UBmstr\BudMstr.h[cno],KFName=[Q]\UBmstr\BudIdx1.h[cno],Shr",i,i,k ioerr EoBud1
-	open #82: "Name=[Q]\UBmstr\BudTrans.h[cno],Shr",i,i,r
+	open #81: 'Name=[Q]\UBmstr\BudMstr.h[cno],KFName=[Q]\UBmstr\BudIdx1.h[cno],Shr',i,i,k ioerr EoBud1
+	open #82: 'Name=[Q]\UBmstr\BudTrans.h[cno],Shr',i,i,r
 	bud1=1
 	EoBud1: !
 return  ! /r
@@ -639,21 +639,21 @@ Bud2: ! r: the heart of it...
 	EoBud2: !
 return  ! /r
 def fn_getCompanyAddr(mat at$)
-	open #h_company=fnH: "Name=[Q]\UBmstr\Company.h[cno],Shr",i,i
-	read #h_company,using "form pos 41,2*C 40": at$(2),at$(3)
+	open #h_company=fnH: 'Name=[Q]\UBmstr\Company.h[cno],Shr',i,i
+	read #h_company,using 'form pos 41,2*C 40': at$(2),at$(3)
 	close #h_company:
 	h_company=0
 	at$(1)=env$('cnam')
 	z=21
 	at$(1)=trim$(at$(1))(1:z)
 	x=len(at$(1)) : y=z-x
-	at$(1)=rpt$(" ",int(y/2))&at$(1)
+	at$(1)=rpt$(' ',int(y/2))&at$(1)
 	z=26
 	for j=2 to udim(at$)
 		at$(j)=trim$(at$(j))(1:z)
 		x=len(at$(j))
 		y=z-x
-		at$(j)=rpt$(" ",int(y/2))&at$(j)
+		at$(j)=rpt$(' ',int(y/2))&at$(j)
 	next j
 fnend
 def fn_override_service_date(&serviceFrom,&serviceTo,serviceFromOverride,serviceToOverride)
@@ -699,7 +699,7 @@ def fn_print_bill_standard_pdf_a(z$,mat mg$; mat mg2$,enableIsDueNowAndPayable,e
 	fnpa_fontsize(12)
 	fnpa_font
 	fnpa_txt(at$(1),xmargin+8,lyne*1-1+ymargin)
-	fnpa_font("Lucida Console")
+	fnpa_font('Lucida Console')
 	fnpa_fontsize
 	fnpa_fontbold
 	fnpa_txt(at$(2),xmargin+6,lyne*2+1+ymargin-.2)
@@ -714,15 +714,15 @@ def fn_print_bill_standard_pdf_a(z$,mat mg$; mat mg2$,enableIsDueNowAndPayable,e
 	end if
 
 	fnpa_txt(e$(1),xmargin+4,lyne*6+ymargin)
-	fnpa_txt('From: '&cnvrt$("PIC(ZZ/ZZ/ZZ)",serviceFromOverride)&'  To: '&cnvrt$("PIC(ZZ/ZZ/ZZ)",serviceToOverride),xmargin+2,lyne*7+ymargin)
+	fnpa_txt('From: '&cnvrt$('PIC(ZZ/ZZ/ZZ)',serviceFromOverride)&'  To: '&cnvrt$('PIC(ZZ/ZZ/ZZ)',serviceToOverride),xmargin+2,lyne*7+ymargin)
 	if enableIsDueNowAndPayable>0 then
-		fnpa_txt("Is due now and payable.",xmargin+2,lyne*8+ymargin)
+		fnpa_txt('Is due now and payable.',xmargin+2,lyne*8+ymargin)
 	end if
-	fnpa_txt('Billing Date: '&cnvrt$("PIC(ZZ/ZZ/ZZ)",d1),xmargin+2,lyne*11+ymargin)
+	fnpa_txt('Billing Date: '&cnvrt$('PIC(ZZ/ZZ/ZZ)',d1),xmargin+2,lyne*11+ymargin)
 	fnpa_line(xmargin+1,lyne*12+1+ymargin,62,0)
-	fnpa_txt("Reading",xmargin+10,lyne*13+ymargin)
-	fnpa_txt("Usage",xmargin+33,lyne*13+ymargin)
-	fnpa_txt("Charge",xmargin+50,lyne*13+ymargin)
+	fnpa_txt('Reading',xmargin+10,lyne*13+ymargin)
+	fnpa_txt('Usage',xmargin+33,lyne*13+ymargin)
+	fnpa_txt('Charge',xmargin+50,lyne*13+ymargin)
 
 	! PRINTGRID: !
 	meter=14
@@ -777,20 +777,20 @@ def fn_print_bill_standard_pdf_a(z$,mat mg$; mat mg2$,enableIsDueNowAndPayable,e
 	if pb><0 then
 		! if trim$(z$)='1900003.10' then pause
 		fnpa_line(xmargin+46,lyne*(meter+=1)+ymargin,15,0)
-		fnpa_txt("   Subtotal",xmargin+1,lyne*(meter+=.25)+ymargin)
+		fnpa_txt('   Subtotal',xmargin+1,lyne*(meter+=.25)+ymargin)
 		fnpa_txt(fnformnumb$(subtotalAmt,2,9),xmargin+45,lyne*meter+ymargin)
-		fnpa_txt("Previous Balance",xmargin+1,lyne*(meter+=1)+ymargin)
+		fnpa_txt('Previous Balance',xmargin+1,lyne*(meter+=1)+ymargin)
 		fnpa_txt(fnformnumb$(pb,2,9),xmargin+45,lyne*meter+ymargin)
 	end if
 	fnpa_fontsize
 
-	if estimatedate=d1 then fnpa_txt("Bill estimated!",xmargin+1,lyne*21+ymargin)
+	if estimatedate=d1 then fnpa_txt('Bill estimated!',xmargin+1,lyne*21+ymargin)
 	fnpa_line(xmargin+1,lyne*23+1+ymargin,63,0)
-	fnpa_txt('   Pay By  '&cnvrt$("PIC(ZZ/ZZ/ZZ)",d4)&':',xmargin+1,lyne*24+ymargin)
-	! fnpa_txt("Pay By "&cnvrt$("PIC(ZZ/ZZ/ZZ)",d4)&':',xmargin+1,lyne*24+ymargin)
+	fnpa_txt('   Pay By  '&cnvrt$('PIC(ZZ/ZZ/ZZ)',d4)&':',xmargin+1,lyne*24+ymargin)
+	! fnpa_txt("Pay By "&cnvrt$('PIC(ZZ/ZZ/ZZ)',d4)&':',xmargin+1,lyne*24+ymargin)
 	fnpa_txt(fnformnumb$(bal,2,9),xmargin+42,lyne*24+ymargin)
 	if payLateAmount>0 then
-		fnpa_txt('Pay After  '&cnvrt$("PIC(ZZ/ZZ/ZZ)",d4)&':',xmargin+1,lyne*25+ymargin)
+		fnpa_txt('Pay After  '&cnvrt$('PIC(ZZ/ZZ/ZZ)',d4)&':',xmargin+1,lyne*25+ymargin)
 		! if basePenaltyOnCurrentBillOnly then
 			fnpa_txt(fnformnumb$(payLateAmount,2,9),xmargin+42,lyne*25+ymargin)
 		! end if
@@ -822,10 +822,10 @@ def fn_print_bill_standard_pdf_a(z$,mat mg$; mat mg2$,enableIsDueNowAndPayable,e
 	fnpa_txt("side with payment to:",xmargin+68,lyne*8+ymargin)
 	fnpa_txt(env$('cnam'),xmargin+68,lyne*9+ymargin)
 	fnpa_fontsize
-	fnpa_txt('Pay By '&cnvrt$("PIC(ZZ/ZZ/ZZ)",d4)&':',xmargin+68,lyne*11+ymargin)
+	fnpa_txt('Pay By '&cnvrt$('PIC(ZZ/ZZ/ZZ)',d4)&':',xmargin+68,lyne*11+ymargin)
 	fnpa_txt(fnformnumb$(bal,2,9),xmargin+106,lyne*11+ymargin)
 	if payLateAmount>0 then
-		fnpa_txt('After '&cnvrt$("PIC(ZZ/ZZ/ZZ)",d4)&':',xmargin+68,lyne*12+ymargin)
+		fnpa_txt('After '&cnvrt$('PIC(ZZ/ZZ/ZZ)',d4)&':',xmargin+68,lyne*12+ymargin)
 		fnpa_txt(fnformnumb$(payLateAmount,2,9),xmargin+106,lyne*12+ymargin)
 	end if
 	fnpa_fontsize(9)
@@ -1031,9 +1031,9 @@ def fn_print_bill_raymond(z$,mat mg$; raymondAdditionalText$*128) ! inherrits al
 	fnpa_txt(at$(3),xmargin+6,lyne*3+1+ymargin)
 	fnpa_txt('#'&trim$(z$)&'  '&bulk$,xmargin+4,lyne*5+ymargin)
 	fnpa_txt(e$(1),xmargin+4,lyne*6+ymargin)
-	fnpa_txt('From: '&cnvrt$("PIC(ZZ/ZZ/ZZ)",serviceFromOverride)&'  To: '&cnvrt$("PIC(ZZ/ZZ/ZZ)",serviceToOverride),xmargin+2,lyne*7+ymargin)
+	fnpa_txt('From: '&cnvrt$('PIC(ZZ/ZZ/ZZ)',serviceFromOverride)&'  To: '&cnvrt$('PIC(ZZ/ZZ/ZZ)',serviceToOverride),xmargin+2,lyne*7+ymargin)
 	fnpa_txt("Is due now and payable.",xmargin+2,lyne*8+ymargin)
-	fnpa_txt('Billing Date: '&cnvrt$("PIC(ZZ/ZZ/ZZ)",d1),xmargin+2,lyne*11+ymargin)
+	fnpa_txt('Billing Date: '&cnvrt$('PIC(ZZ/ZZ/ZZ)',d1),xmargin+2,lyne*11+ymargin)
 	fnpa_line(xmargin+1,lyne*12+1+ymargin,62,0)
 	fnpa_txt("Reading",xmargin+10,lyne*13+ymargin)
 	fnpa_txt("Usage",xmargin+33,lyne*13+ymargin)
@@ -1077,9 +1077,9 @@ def fn_print_bill_raymond(z$,mat mg$; raymondAdditionalText$*128) ! inherrits al
 	!
 	if estimatedate=d1 then fnpa_txt("Bill estimated!",xmargin+1,lyne*21+ymargin)
 	fnpa_line(xmargin+1,lyne*23+1+ymargin,63,0)
-	fnpa_txt("Pay By "&cnvrt$("PIC(ZZ/ZZ/ZZ)",d4)&':',xmargin+1,lyne*24+ymargin)
+	fnpa_txt("Pay By "&cnvrt$('PIC(ZZ/ZZ/ZZ)',d4)&':',xmargin+1,lyne*24+ymargin)
 	fnpa_txt(fnformnumb$(bal,2,9),xmargin+42,lyne*24+ymargin)
-	fnpa_txt("Pay After "&cnvrt$("PIC(ZZ/ZZ/ZZ)",d4)&':',xmargin+1,lyne*25+ymargin)
+	fnpa_txt("Pay After "&cnvrt$('PIC(ZZ/ZZ/ZZ)',d4)&':',xmargin+1,lyne*25+ymargin)
 	fnpa_txt(fnformnumb$(bal+round(bal*.10,2),2,9),xmargin+42,lyne*25+ymargin)
 	fnpa_line(xmargin+1,lyne*26+1+ymargin,63,0)
 	fnpa_txt(raymondAdditionalText$,xmargin+1,lyne*27+ymargin)
@@ -1104,9 +1104,9 @@ def fn_print_bill_raymond(z$,mat mg$; raymondAdditionalText$*128) ! inherrits al
 	fnpa_txt("side with payment to:",xmargin+68,lyne*8+ymargin)
 	fnpa_txt(env$('cnam'),xmargin+68,lyne*9+ymargin)
 	fnpa_fontsize
-	fnpa_txt('Pay By '&cnvrt$("PIC(ZZ/ZZ/ZZ)",d4)&':',xmargin+68,lyne*11+ymargin)
+	fnpa_txt('Pay By '&cnvrt$('PIC(ZZ/ZZ/ZZ)',d4)&':',xmargin+68,lyne*11+ymargin)
 	fnpa_txt(fnformnumb$(bal,2,9),xmargin+106,lyne*11+ymargin)
-	fnpa_txt('After '&cnvrt$("PIC(ZZ/ZZ/ZZ)",d4)&':',xmargin+68,lyne*12+ymargin)
+	fnpa_txt('After '&cnvrt$('PIC(ZZ/ZZ/ZZ)',d4)&':',xmargin+68,lyne*12+ymargin)
 	fnpa_txt(fnformnumb$(bal+round(bal*.10,2),2,9),xmargin+106,lyne*12+ymargin)
 	fnpa_fontsize(9)
 	addy=14
@@ -1259,10 +1259,10 @@ fnend
 ! 	fnpa_txt(at$(3),xmargin+6,lyne*3+1+ymargin)
 ! 	fnpa_txt(trim$(z$)&'  '&bulk$,xmargin+4,lyne*5+ymargin)
 ! 	fnpa_txt(e$(1),xmargin+4,lyne*6+ymargin)
-! 	fnpa_txt('From: '&cnvrt$("PIC(ZZ/ZZ/ZZ)",serviceFrom)&'  To: '&cnvrt$("PIC(ZZ/ZZ/ZZ)",serviceTo),xmargin+2,lyne*7+ymargin)
+! 	fnpa_txt('From: '&cnvrt$('PIC(ZZ/ZZ/ZZ)',serviceFrom)&'  To: '&cnvrt$('PIC(ZZ/ZZ/ZZ)',serviceTo),xmargin+2,lyne*7+ymargin)
 ! 	fnpa_txt("Due upon receipt",xmargin+2,lyne*8+ymargin)
 ! 	fnpa_txt(e$(2),xmargin+2,lyne*9+ymargin)
-! 	fnpa_txt('Billing Date: '&cnvrt$("PIC(ZZ/ZZ/ZZ)",d1),xmargin+2,lyne*11+ymargin)
+! 	fnpa_txt('Billing Date: '&cnvrt$('PIC(ZZ/ZZ/ZZ)',d1),xmargin+2,lyne*11+ymargin)
 ! 	pr #20: 'Call Print.AddLine('&str$(xmargin+1)&','&str$(lyne*12+1+ymargin)&',62,0)'
 ! 	fnpa_fontsize(7)
 ! 	pr #20: 'Call Print.AddText("Current",'&str$(xmargin+12+5)&','&str$(lyne*13+ymargin)&')'
@@ -1355,9 +1355,9 @@ fnend
 ! 		pr #20: 'Call Print.AddText("Budget Amount",'&str$(xmargin+1)&','&str$(lyne*25+ymargin+10)&')'
 ! 		pr #20: 'Call Print.AddText("'&fnformnumb$(budget+pbud,2,9)&'",'&str$(xmargin+37)&','&str$(lyne*25+ymargin+10)&')' ! 37 was 42
 ! 	else
-! 		pr #20: 'Call Print.AddText("Pay By '&cnvrt$("PIC(ZZ/ZZ/ZZ)",d4)&':",'&str$(xmargin+1)&','&str$(lyne*24+ymargin+10)&')'
+! 		pr #20: 'Call Print.AddText("Pay By '&cnvrt$('PIC(ZZ/ZZ/ZZ)',d4)&':",'&str$(xmargin+1)&','&str$(lyne*24+ymargin+10)&')'
 ! 		pr #20: 'Call Print.AddText("'&fnformnumb$(bal,2,9)&'",'&str$(xmargin+37)&','&str$(lyne*24+ymargin+10)&')' ! 37 was 42
-! 		pr #20: 'Call Print.AddText("Pay After '&cnvrt$("PIC(ZZ/ZZ/ZZ)",d4)&':",'&str$(xmargin+1)&','&str$(lyne*25+ymargin+10)&')'
+! 		pr #20: 'Call Print.AddText("Pay After '&cnvrt$('PIC(ZZ/ZZ/ZZ)',d4)&':",'&str$(xmargin+1)&','&str$(lyne*25+ymargin+10)&')'
 ! 		pr #20: 'Call Print.AddText("'&fnformnumb$(fn_pay_after_amt,2,9)&'",'&str$(xmargin+37)&','&str$(lyne*25+ymargin+10)&')' ! 37 was 42
 ! 	end if
 ! 	fnpa_line(xmargin+1,lyne*26+1+ymargin+10,63,0)
@@ -1384,12 +1384,12 @@ fnend
 ! 	pr #20: 'Call Print.AddText("side with payment to:",'&str$(xmargin+68+8)&','&str$(lyne*8+ymargin)&')'
 ! 	pr #20: 'Call Print.AddText("'&env$('cnam')(1:27)&'",'&str$(xmargin+68+8)&','&str$(lyne*9+ymargin)&')'
 ! 	fnpa_fontsize
-! 	pr #20: 'Call Print.AddText("Pay By '&cnvrt$("PIC(ZZ/ZZ/ZZ)",d4)&':",'&str$(xmargin+68+8)&','&str$(lyne*11+ymargin)&')'
+! 	pr #20: 'Call Print.AddText("Pay By '&cnvrt$('PIC(ZZ/ZZ/ZZ)',d4)&':",'&str$(xmargin+68+8)&','&str$(lyne*11+ymargin)&')'
 ! 	if budget>0 then
 ! 		pr #20: 'Call Print.AddText("'&fnformnumb$(budget+pbud,2,9)&'",'&str$(xmargin+100+8)&','&str$(lyne*11+ymargin)&')'
 ! 	else
 ! 		pr #20: 'Call Print.AddText("'&fnformnumb$(bal,2,9)&'",'&str$(xmargin+100+8)&','&str$(lyne*11+ymargin)&')'
-! 		pr #20: 'Call Print.AddText("After  '&cnvrt$("PIC(ZZ/ZZ/ZZ)",d4)&':",'&str$(xmargin+68+8)&','&str$(lyne*12+ymargin)&')'
+! 		pr #20: 'Call Print.AddText("After  '&cnvrt$('PIC(ZZ/ZZ/ZZ)',d4)&':",'&str$(xmargin+68+8)&','&str$(lyne*12+ymargin)&')'
 ! 		pr #20: 'Call Print.AddText("'&fnformnumb$(fn_pay_after_amt,2,9)&'",'&str$(xmargin+100+8)&','&str$(lyne*12+ymargin)&')'
 ! 	end if
 ! 	fnpa_fontsize(9)
@@ -1494,13 +1494,13 @@ def fn_print_bill_blucksberg(z$,mat mg$,billing_date_prior,serviceFrom,serviceTo
 	fnpa_fontsize(9)
 	tmp_box_top=55
 	fnpa_line(tmp_box_left_pos=115,tmp_box_top,70,24, 1)
-	fnpa_txt('Billing Date:            '&cnvrt$("PIC(ZZ/ZZ/ZZ)",d1),tmp_box_left_pos+5,tmp_box_top+4)
+	fnpa_txt('Billing Date:            '&cnvrt$('PIC(ZZ/ZZ/ZZ)',d1),tmp_box_left_pos+5,tmp_box_top+4)
 	fnpa_txt("Account:      "&lpad$(trim$(z$),19),tmp_box_left_pos+5,tmp_box_top+8)
-	fnpa_txt('Due Date:                '&cnvrt$("PIC(ZZ/ZZ/ZZ)",d4),tmp_box_left_pos+5,tmp_box_top+12)
+	fnpa_txt('Due Date:                '&cnvrt$('PIC(ZZ/ZZ/ZZ)',d4),tmp_box_left_pos+5,tmp_box_top+12)
 	fnpa_txt("Billing Questions:   605-720-5013",tmp_box_left_pos+5,tmp_box_top+16)
 	lyne=65 : adder=4
 	fnpa_txt("Meter Location: "&trim$(e$(1)) ,23,lyne+=adder)
-	fnpa_txt("Service From: "&cnvrt$("pic(zz/zz/zz)",serviceFrom)&" To: "&cnvrt$("pic(zz/zz/zz)",serviceTo) ,23,lyne+=adder)
+	fnpa_txt("Service From: "&cnvrt$('PIC(ZZ/ZZ/ZZ)',serviceFrom)&" To: "&cnvrt$('PIC(ZZ/ZZ/ZZ)',serviceTo) ,23,lyne+=adder)
 
 	if final>0 then
 		fnpa_fontBold(1)
@@ -1632,7 +1632,7 @@ def fn_print_bill_blucksberg(z$,mat mg$,billing_date_prior,serviceFrom,serviceTo
 	fnpa_txt("Please detach here and return with payment.  Mail to 8077 Blucksberg Dr or deposit in black box at bus stop.",18,236)
 	fnpa_fontsize
 	fnpa_txt("Account: "&lpad$(trim$(z$),16),40,243)
-	fnpa_txt('Due Date:        '&cnvrt$("PIC(ZZ/ZZ/ZZ)",d4),40,247)
+	fnpa_txt('Due Date:        '&cnvrt$('PIC(ZZ/ZZ/ZZ)',d4),40,247)
 	fnpa_txt("Total Due:",40,251)
 	fnpa_txt(cnvrt$("pic(--------.##)",bal),70,251)
 	if bal>0 then
@@ -1855,9 +1855,9 @@ def fn_print_bill_edinburg(z$,mat mg$,d1,serviceFrom,serviceToOverride,penaltyDu
 	fnpa_txt("  Edinburg, IL 62531    ",xmargin+6,lyne*3+1+ymargin)
 	fnpa_txt('#'&trim$(z$)&'  '&bulk$,xmargin+4,lyne*5+ymargin)
 	fnpa_txt(e$(1),xmargin+4,lyne*6+ymargin)
-	fnpa_txt('From: '&cnvrt$("PIC(ZZ/ZZ/ZZ)",serviceTo)&'  To: '&cnvrt$("PIC(ZZ/ZZ/ZZ)",serviceFrom),xmargin+2,lyne*7+ymargin)
+	fnpa_txt('From: '&cnvrt$('PIC(ZZ/ZZ/ZZ)',serviceTo)&'  To: '&cnvrt$('PIC(ZZ/ZZ/ZZ)',serviceFrom),xmargin+2,lyne*7+ymargin)
 	fnpa_txt("Is due now and payable.",xmargin+2,lyne*8+ymargin)
-	fnpa_txt('Billing Date: '&cnvrt$("PIC(ZZ/ZZ/ZZ)",d1),xmargin+2,lyne*11+ymargin)
+	fnpa_txt('Billing Date: '&cnvrt$('PIC(ZZ/ZZ/ZZ)',d1),xmargin+2,lyne*11+ymargin)
 	fnpa_line(xmargin+1,lyne*12+1+ymargin,62,0)
 	fnpa_txt("Reading",xmargin+10,lyne*13+ymargin)
 	fnpa_txt("Usage",xmargin+33,lyne*13+ymargin)
@@ -1914,9 +1914,9 @@ def fn_print_bill_edinburg(z$,mat mg$,d1,serviceFrom,serviceToOverride,penaltyDu
 	fnpa_fontsize
 
 	pr #20: 'Call Print.AddLine('&str$(xmargin+1)&','&str$(lyne*23+1+ymargin)&',63,0)'
-	pr #20: 'Call Print.AddText("Pay By '&cnvrt$("PIC(ZZ/ZZ/ZZ)",penaltyDueDate)&':",'&str$(xmargin+1)&','&str$(lyne*24+ymargin)&')'
+	pr #20: 'Call Print.AddText("Pay By '&cnvrt$('PIC(ZZ/ZZ/ZZ)',penaltyDueDate)&':",'&str$(xmargin+1)&','&str$(lyne*24+ymargin)&')'
 	pr #20: 'Call Print.AddText("'&fnformnumb$(bal,2,9)&'",'&str$(xmargin+42)&','&str$(lyne*24+ymargin)&')'
-	pr #20: 'Call Print.AddText("Pay After '&cnvrt$("PIC(ZZ/ZZ/ZZ)",penaltyDueDate)&':",'&str$(xmargin+1)&','&str$(lyne*25+ymargin)&')'
+	pr #20: 'Call Print.AddText("Pay After '&cnvrt$('PIC(ZZ/ZZ/ZZ)',penaltyDueDate)&':",'&str$(xmargin+1)&','&str$(lyne*25+ymargin)&')'
 	if bal>0 and g(5)+g(6)+g(7)>0 then penalty=round(bal*.1,2) else penalty =0
 	pr #20: 'Call Print.AddText("'&fnformnumb$(bal+penalty,2,9)&'",'&str$(xmargin+42)&','&str$(lyne*25+ymargin)&')'
 	pr #20: 'Call Print.AddLine('&str$(xmargin+1)&','&str$(lyne*26+1+ymargin)&',63,0)'
@@ -1944,9 +1944,9 @@ def fn_print_bill_edinburg(z$,mat mg$,d1,serviceFrom,serviceToOverride,penaltyDu
 	pr #20: 'Call Print.AddText("side with payment to:",'&str$(xmargin+68)&','&str$(lyne*8+ymargin)&')'
 	pr #20: 'Call Print.AddText("Village of Edinburg",'&str$(xmargin+68)&','&str$(lyne*9+ymargin)&')'
 	fnpa_fontsize
-	pr #20: 'Call Print.AddText("Pay By '&cnvrt$("PIC(ZZ/ZZ/ZZ)",penaltyDueDate)&':",'&str$(xmargin+68)&','&str$(lyne*11+ymargin)&')'
+	pr #20: 'Call Print.AddText("Pay By '&cnvrt$('PIC(ZZ/ZZ/ZZ)',penaltyDueDate)&':",'&str$(xmargin+68)&','&str$(lyne*11+ymargin)&')'
 	pr #20: 'Call Print.AddText("'&fnformnumb$(bal,2,9)&'",'&str$(xmargin+106)&','&str$(lyne*11+ymargin)&')'
-	pr #20: 'Call Print.AddText("After '&cnvrt$("PIC(ZZ/ZZ/ZZ)",penaltyDueDate)&':",'&str$(xmargin+68)&','&str$(lyne*12+ymargin)&')'
+	pr #20: 'Call Print.AddText("After '&cnvrt$('PIC(ZZ/ZZ/ZZ)',penaltyDueDate)&':",'&str$(xmargin+68)&','&str$(lyne*12+ymargin)&')'
 	pr #20: 'Call Print.AddText("'&fnformnumb$(bal+penalty,2,9)&'",'&str$(xmargin+106)&','&str$(lyne*12+ymargin)&')'
 	fnpa_fontsize(9)
 	addy=14
@@ -2081,16 +2081,16 @@ def fn_print_bill_choctaw(z$,mat g,mat b,mat penalty$,d1,serviceFrom,serviceTo,d
 	pr #255: ''
 	if g(1)>0 then
 		cde=1
-		d4$=cnvrt$("pic(zz/zz/zz)",d4)
+		d4$=cnvrt$('PIC(ZZ/ZZ/ZZ)',d4)
 	else
 		cde=0
 		d4$=""
 	end if
 	pr #255,using ce_L1690: "Water",g(1),d4$,e$(2)
 	ce_L1690: form pos 1,c 5,pic(-----.--),pos 18,pic(zz/zz/zz),pos 32,c 30,skip 1
-	if g(9)>0 then cde=2: d4$=cnvrt$("pic(zz/zz/zz)",d4) else cde=0 : d4$=""
+	if g(9)>0 then cde=2: d4$=cnvrt$('PIC(ZZ/ZZ/ZZ)',d4) else cde=0 : d4$=""
 	pr #255,using ce_L1690: "Tax",g(9),d4$,e$(3)
-	if g(8)>0 then cde=3: d4$=cnvrt$("pic(zz/zz/zz)",d4) else cde = 0 : d4$=""
+	if g(8)>0 then cde=3: d4$=cnvrt$('PIC(ZZ/ZZ/ZZ)',d4) else cde = 0 : d4$=""
 	if g(8)<>0 then mis$="Misc" else mis$=""
 	pr #255,using ce_L1690: mis$,g(8),d4$,e$(4)
 	pr #255,using 'form pos 3,c 30': e$(2)
@@ -2322,7 +2322,7 @@ def fn_print_bill_galena(serviceTo)
 
 	fnpa_txt(str$(route)                   ,rightSide+5   ,ymargin+lyne*21  )
 	fnpa_txt(z$                             ,rightSide+15  ,ymargin+lyne*21  )
-	fnpa_txt(cnvrt$("PIC(ZZ/ZZ/ZZ)",d4)   ,rightSide+57  ,ymargin+lyne*21   )
+	fnpa_txt(cnvrt$('PIC(ZZ/ZZ/ZZ)',d4)   ,rightSide+57  ,ymargin+lyne*21   )
 	if bal>0 then
 		fnpa_txt(fnformnumb$(bal+g(10),2,9)  ,rightSide+60  ,ymargin+lyne*25) !  xmargin+106
 	else

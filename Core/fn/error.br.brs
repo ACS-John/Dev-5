@@ -309,7 +309,7 @@ def library fnError(callingprogram$*256, errornumber, linenumber, &ertnAct$, sto
 	!     mat msgline$(2)
 	!     msgline$(1)='Sorry, No Workstation Basic Help '
 	!     msgline$(2)='is available for this Error Number.'
-	!     fnmsgbox(mat msgline$,response$(1),env$('program_caption'),0)
+	!     fnMsgBox(mat msgline$,response$(1),env$('program_caption'),0)
 	!     response$(1)=response$(1)(1:1)
 	! ERR_WBHELP_RETURN: !
 	!     return  ! /r
@@ -328,7 +328,7 @@ def library fnError(callingprogram$*256, errornumber, linenumber, &ertnAct$, sto
 			mat msgline$(2)
 			msgline$(1)='Do not stop the processing of this program.'
 			msgline$(2)='Please contact ACS Technical Support.'
-			fnmsgbox(mat msgline$,response$(1),env$('program_caption'),0)
+			fnMsgBox(mat msgline$,response$(1),env$('program_caption'),0)
 			response$(1)=response$(1)(1:1)
 			goto MENU1
 		end if

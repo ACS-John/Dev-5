@@ -171,7 +171,7 @@ ReadRpWork: ! r:  read rpwork, read employee, call calc deduction etc  basically
 	if totalGrossPay=0 then
 		mat ml$(1)
 		ml$(1)='Employee Number '&trim$(x$)&' skipped Total Gross Pay = 0, Must be Re-entered'
-		fnmsgbox(mat ml$,resp$,'',0)
+		fnMsgBox(mat ml$,resp$,'',0)
 		goto ReadRpWork
 	end if
 	pog=gpd/totalGrossPay
@@ -235,7 +235,7 @@ EmployeeNotFound: ! r:
 	n$=' '
 	mat ml$(1)
 	ml$(1)='Employee Number '&x$&' is not on file. No check calculated.'
-	fnmsgbox(mat ml$,resp$,'',0)
+	fnMsgBox(mat ml$,resp$,'',0)
 goto ReadRpWork ! /r
 FedWh_Dept: ! r: Fed WH for Dept ! Federal Withholding for Department
 	if showDetails then fnStatus('federal  withholding for department calculating')
@@ -2022,7 +2022,7 @@ def fn_payPeriodsPerYear(payCode; ___,returnN)
 	else
 		mat ml$(1)
 		ml$(1)='Incorrect Pay Code '&str$(payCode)&' on Employee Number '&trim$(x$)&'. Did not calculate pay on this Employee'
-		fnmsgbox(mat ml$,resp$,'',0)
+		fnMsgBox(mat ml$,resp$,'',0)
 		returnN=-1
 	end if
 	fn_payPeriodsPerYear=returnN

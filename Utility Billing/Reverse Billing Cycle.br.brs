@@ -25,7 +25,7 @@ def fn_undobilling
 	if trim$(billingdate$)="0" then
 		mat msgtext$(1)
 		msgtext$(1)=("You must enter a billing date")
-		fnmsgbox(mat msgtext$,answer$,"Invalid Entry",0)
+		fnMsgBox(mat msgtext$,answer$,"Invalid Entry",0)
 		goto ASK_OPTIONS
 	end if
 
@@ -129,7 +129,7 @@ def fn_undobilling
 			fnLastBillingDate(lastbilling,1)
 		end if
 		mat msgtext$(1)=("Customers reversed: "&str$(undoCount))
-		fnmsgbox(mat msgtext$,answer$,"Report",0)
+		fnMsgBox(mat msgtext$,answer$,"Report",0)
 		fncloseprn
 		close #hCustomer: ioerr ignore
 		close #hTrans: ioerr ignore

@@ -86,7 +86,7 @@ if resp$(resp_no_activity)='True' then include_no_activity_accounts=1 else inclu
 if filter_date_start>filter_date_end and filter_date_start>0 and filter_date_end>0 then
 	mat msgline$(1)
 	msgline$(1)="Ending Date Before Starting Date!"
-	fnmsgbox(mat msgline$,resp$,'',48)
+	fnMsgBox(mat msgline$,resp$,'',48)
 	goto SCREEN1
 end if
 !

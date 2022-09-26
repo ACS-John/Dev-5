@@ -7,7 +7,7 @@ if device$<>'Itron FC300' and device$(1:6)<>'[Ask]' and device$(1:6)<>'Aclara'  
 	dim msg_text$(2)*256
 	msg_text$(1)='The '&env$('Program Caption')&' file is not necessary'
 	msg_text$(2)="for your hand held device type."
-	fnmsgbox(mat msg_text$, response$,'',64)
+	fnMsgBox(mat msg_text$, response$,'',64)
 end if 
 fnHamsterFio("U4 Meter Type")
 goto Xit

@@ -502,7 +502,7 @@ def library fnCustomerMeterLocationSelect(account$*10,serviceCode$*2) ! cmls
 				mat mg$(0)
 				fnAddOneC(mat mg$,'Location ID '&str$(cmlsSelectedLocationId)&' currently belongs to customer '&trim$(location$(loc_activeCustomer)))
 				fnAddOneC(mat mg$,'Are you sure you want to change the active customer to '&trim$(account$)&'?')
-				fnmsgbox(mat mg$,resp$,'',32+4)
+				fnMsgBox(mat mg$,resp$,'',32+4)
 				if resp$='Yes' then
 					fn_purgeSrvAccountFromLocation(serviceCode$,account$)
 					location$(loc_activeCustomer)=trim$(account$)
@@ -576,7 +576,7 @@ CmlsAdd: ! r: returns ckey, optionally accepts cmlsAddForceServiceId$, requires 
 			mat mg$(0)
 			fnAddOneC(mat mg$,' The Key '&tmpKey$&' already exists.')
 			fnAddOneC(mat mg$,' Please select a different Location ID or Service')
-			fnmsgbox(mat mg$)
+			fnMsgBox(mat mg$)
 			goto CmlsAddReEdit
 		end if
 		fn_purgeSrvAccountFromLocation(serviceCode$,account$)

@@ -11,9 +11,9 @@
 	fnLastBillingDate(lbill)
 	fndat(dat$)
 	dim opt_aai$(3)
-	opt_aai$(1)="[All]"
-	opt_aai$(2)="Active"
-	opt_aai$(3)="Inactive"
+	opt_aai$(1)='[All]'
+	opt_aai$(2)='Active'
+	opt_aai$(3)='Inactive'
 	fncreg_read('ubpdtnof.aai',aai$,opt_aai$(1))
 	fncreg_read('ubpdtnof.printadr',printadr$,'False')
 	fncreg_read('ubpdtnof.excludecurrent',excludecurrent$,'False')
@@ -27,45 +27,45 @@
 	fnGetServices(mat srvnam$,mat srv$)
 ! /r
 ! r: SCREEN1
-	fnTos(sn$="UBPdTnOf")
+	fnTos
 	mylen=21 : mypos=mylen+2
-	fnFra(1,1,3,40,"Aging Dates","Use the last day of each month for your aging dates (Use ccyymmdd format).")
+	fnFra(1,1,3,40,'Aging Dates','Use the last day of each month for your aging dates (Use ccyymmdd format).')
  
-	fnLbl(1,1,"Current Month:",mylen,1,0,1)
-	fnTxt(1,mypos,10,10,1,"3",0,"Use the last day of your current mongh for the best aging results.",1)
-	resp$(1)=""
-	fnLbl(2,1,"Last Month:",mylen,1,0,1)
-	fnTxt(2,mypos,10,10,1,"3",0,"Use the last day of last month.",1)
-	resp$(2)=""
-	fnLbl(3,1,"Month Before That:",mylen,1,0,1)
-	fnTxt(3,mypos,10,10,1,"3",0,"Equivalent date from two months ago.",1)
-	resp$(3)=""
-	fnLbl(6,1,"Billing Date:",mylen,1)
-	fnTxt(6,mypos,8,8,1,"1")
+	fnLbl(1,1,'Current Month:',mylen,1,0,1)
+	fnTxt(1,mypos,10,10,1,'3',0,'Use the last day of your current mongh for the best aging results.',1)
+	resp$(1)=''
+	fnLbl(2,1,'Last Month:',mylen,1,0,1)
+	fnTxt(2,mypos,10,10,1,'3',0,'Use the last day of last month.',1)
+	resp$(2)=''
+	fnLbl(3,1,'Month Before That:',mylen,1,0,1)
+	fnTxt(3,mypos,10,10,1,'3',0,'Equivalent date from two months ago.',1)
+	resp$(3)=''
+	fnLbl(6,1,'Billing Date:',mylen,1)
+	fnTxt(6,mypos,8,8,1,'1')
 	resp$(4)=str$(lbill)
-	fnLbl(7,1,"Final Billing Code:" ,mylen,1)
-	fnComboA("aai",7,mypos,mat opt_aai$)
+	fnLbl(7,1,'Final Billing Code:' ,mylen,1)
+	fnComboA('aai',7,mypos,mat opt_aai$)
 	resp$(5)=aai$
-	fnChk(9,40,"Print Meter Address:",1)
+	fnChk(9,40,'Print Meter Address:',1)
 	resp$(6)=printadr$
-	fnChk(10,40,"Exclude Current Month:",1)
+	fnChk(10,40,'Exclude Current Month:',1)
 	resp$(7)=excludecurrent$
-	fnChk(11,40,"Exclude Last Month:",1)
+	fnChk(11,40,'Exclude Last Month:',1)
 	resp$(8)=excludelast$
-	fnChk(12,40,"Print Past Due Balance:",1)
+	fnChk(12,40,'Print Past Due Balance:',1)
 	resp$(9)=pastduebalance$
-	fnChk(13,40,"Print "&trim$(srvnam$(4))&" Meter Number:",1)
+	fnChk(13,40,'Print '&trim$(srvnam$(4))&' Meter Number:',1)
 	resp$(10)=pr_s4_meter_number$
-	fnChk(15,40,"Print blank lines for notes:",1)
+	fnChk(15,40,'Print blank lines for notes:',1)
 	resp$(11)=pr_blank_lines_for_notes$
-	fnChk(17,40,"Account Sequence",1)
+	fnChk(17,40,'Account Sequence',1)
 	resp$(rc_accountSequence:=12)=accountSequence$
 	fnCmdSet(3)
 	ckey=fnAcs(mat resp$)
 	if ckey=5 then goto Xit
 	for j=1 to 3
-L400: x=pos(resp$(j),"/",1)
-		if x>0 then resp$(j)(x:x)="" : goto L400
+L400: x=pos(resp$(j),'/',1)
+		if x>0 then resp$(j)(x:x)='' : goto L400
 	next j
 	lastday(1)=val(resp$(1))
 	firstday(1)=(val(resp$(1)(1:6))*100)+1
@@ -97,12 +97,12 @@ L400: x=pos(resp$(j),"/",1)
 	fnopenprn
 	gosub HDR1
 	if accountSequence$='True' then
-		open #hCustomer=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",i,i,k
+		open #hCustomer=fnH: 'Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr',i,i,k
 	else
-		open #hCustomer=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx5.h[cno],Shr",i,i,k
+		open #hCustomer=fnH: 'Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx5.h[cno],Shr',i,i,k
 	end if
-	open #hTrans=fnH: "Name=[Q]\UBmstr\UBTransVB.h[cno],KFName=[Q]\UBmstr\UBTrIndx.h[cno],Shr",i,i,k
-	! open #ratemst:=8: "Name=[Q]\UBmstr\ubData\RateMst.h[cno],KFName=[Q]\UBmstr\ubData\RateIdx1.h[cno],Shr",i,i,k
+	open #hTrans=fnH: 'Name=[Q]\UBmstr\UBTransVB.h[cno],KFName=[Q]\UBmstr\UBTrIndx.h[cno],Shr',i,i,k
+	! open #ratemst:=8: 'Name=[Q]\UBmstr\ubData\RateMst.h[cno],KFName=[Q]\UBmstr\ubData\RateIdx1.h[cno],Shr',i,i,k
 	gosub BUD1
 ! /r
 MAIN_LOOP_TOP: !
@@ -124,16 +124,16 @@ L690: !
 	gosub TRANS_ACCUMULATE
 !
 ! if trim$(z$)='100780.00' then pause
-	az$=""
+	az$=''
 	if month(4)>0 or bd1=3 then
-		az$="****"
+		az$='****'
 	else if month(3)>0 or bd1=2 then
-		az$="***"
+		az$='***'
 	else if month(2)>0 or bd1=1 then
-		az$="**"
+		az$='**'
 	end if
 !
-	if totba>0 then lev$="L" else lev$=""
+	if totba>0 then lev$='L' else lev$=''
 	if excludecurrent=1 and len(az$)<2 then goto L880 ! exclude those oweing only current month
 	if excludelast=1 and len(az$)<3 then goto L880 ! exclude those oweing only current month  or previous month
 	if pastduebalance=1 and excludecurrent=1 then bal=bal-month(1) ! don't show current in past due balance column
@@ -168,34 +168,34 @@ L880: !
 ! /r
 HDR1: ! r:
 	p2=p2+1
-	pr #255: "\qc "&env$('cnam')
-	pr #255: "\qc  {\f181 \fs28 \b "&env$('program_caption')&"}"
-! pr #255: "As of "&CNVRT$("pic(zzzz/zz/zz)",LASTDAY(1))
-	pr #255: "As of "&dat$
-	pr #255,using L970: "\ql "&date$,"Page "&str$(p2)
+	pr #255: '\qc '&env$('cnam')
+	pr #255: '\qc  {\f181 \fs28 \b '&env$('program_caption')&'}'
+! pr #255: 'As of '&CNVRT$('pic(zzzz/zz/zz)',LASTDAY(1))
+	pr #255: 'As of '&dat$
+	pr #255,using L970: '\ql '&date$,'Page '&str$(p2)
 L970: form pos 1,c 70,cr 14
 	if pastduebalance=1 then
-		pr #255: "                                         Past Due  Last Bill   Turn"
+		pr #255: '                                         Past Due  Last Bill   Turn'
 	else
-		pr #255: "                                         Current   Last Bill   Turn"
+		pr #255: '                                         Current   Last Bill   Turn'
 	end if
 	if printadr and pr_s4_meter_number then
-		pr #255: "{\ul Account No}  {\ul Customer Name            }  {\ul   Balance } {\ul    Date   }  {\ul  Off}      {\ul Meter Address            }  {\ul Meter Number}"
+		pr #255: '{\ul Account No}  {\ul Customer Name            }  {\ul   Balance } {\ul    Date   }  {\ul  Off}      {\ul Meter Address            }  {\ul Meter Number}'
 	else if pr_s4_meter_number then
-		pr #255: "{\ul Account No}  {\ul Customer Name            }  {\ul   Balance } {\ul    Date   }  {\ul  Off}      {\ul Meter Number}"
+		pr #255: '{\ul Account No}  {\ul Customer Name            }  {\ul   Balance } {\ul    Date   }  {\ul  Off}      {\ul Meter Number}'
 	else if printadr then
-		pr #255: "{\ul Account No}  {\ul Customer Name            }  {\ul   Balance } {\ul    Date   }  {\ul  Off}      {\ul Meter Address            }"
+		pr #255: '{\ul Account No}  {\ul Customer Name            }  {\ul   Balance } {\ul    Date   }  {\ul  Off}      {\ul Meter Address            }'
 	else
-		pr #255: "{\ul Account No}  {\ul Customer Name            }  {\ul   Balance }  {\ul    Date   }  {\ul  Off}"
+		pr #255: '{\ul Account No}  {\ul Customer Name            }  {\ul   Balance }  {\ul    Date   }  {\ul  Off}'
 	end if
 	return  ! /r
 TOTAL_BOOK: ! r:
-	pr #255: "" pageoflow PgOf
-	pr #255: "" pageoflow PgOf
-	pr #255: "Totals For Route Number ";holdrt;
+	pr #255: '' pageoflow PgOf
+	pr #255: '' pageoflow PgOf
+	pr #255: 'Totals For Route Number ';holdrt;
 	pr #255,using F_PR_TOTAL: s2 pageoflow PgOf
 F_PR_TOTAL: form pos 38,pic(-,---,---.##)
-	pr #255: "" pageoflow PgOf
+	pr #255: '' pageoflow PgOf
 	s1=0
 	s2=0
 	holdrt=route
@@ -204,9 +204,9 @@ TOTAL_FINAL: ! r:
 	gosub TOTAL_BOOK
 ! TOTAL_GRAND: !
 	s1=t1 : s2=t2
-	pr #255: ""
-	pr #255: ""
-	pr #255: "               Grand Totals";
+	pr #255: ''
+	pr #255: ''
+	pr #255: '               Grand Totals';
 	pr #255,using F_PR_TOTAL: s2
 	goto DONE ! /r
 DONE: ! r:
@@ -222,27 +222,30 @@ Xit: fnXit
 
 BUD1: ! r:
 	bud1=0
-	open #81: "Name=[Q]\UBmstr\BudMstr.h[cno],KFName=[Q]\UBmstr\BudIdx1.h[cno],Shr",i,outIn,k ioerr L1390
-	open #82: "Name=[Q]\UBmstr\BudTrans.h[cno],Shr",i,outi,r
+	open #81: 'Name=[Q]\UBmstr\BudMstr.h[cno],KFName=[Q]\UBmstr\BudIdx1.h[cno],Shr',i,outIn,k ioerr Xbud1
+	open #82: 'Name=[Q]\UBmstr\BudTrans.h[cno],Shr',i,i,r
 	bud1=1
-L1390: return  ! /r
+	Xbud1: !
+return  ! /r
 BUD2: ! r:
 	bd1=totba=0
 	mat bd1(5) : mat bd1=(0) : mat bd2=(0)
 	if bud1=0 then goto L1580
 	read #81,using L1470,key=z$: z$,mat ba,mat badr nokey L1580
 	for j=2 to 12: totba=totba+ba(j): next j
-L1470: form pos 1,c 10,pd 4,12*pd 5.2,2*pd 3
+	L1470: form pos 1,c 10,pd 4,12*pd 5.2,2*pd 3
 	ta1=badr(1)
-L1490: if ta1=0 then goto L1580
+	L1490: !
+	if ta1=0 then goto L1580
 	read #82,using L1510,rec=ta1: z$,mat bt1,nba noRec L1580
-L1510: form pos 1,c 10,2*pd 4,24*pd 5.2,2*pd 4,pd 3
+	L1510: form pos 1,c 10,2*pd 4,24*pd 5.2,2*pd 4,pd 3
 	if bt1(14,1)>0 then goto L1570
-	bd1=bd1+1
+	bd1+=1
 	if bd1>5 then goto L1580
 	bd1(bd1)=bt1(1,2)
 	bd2(bd1)=ta1
-	L1570: ta1=nba : goto L1490
+	L1570: !
+	ta1=nba : goto L1490
 	L1580: !
 return  ! /r
 PR_TRAN_DEBUG_DATA: ! r:
@@ -253,7 +256,7 @@ TRANS_ACCUMULATE: ! r:
 	dim trans_accumulate_execption$*24
 	trans_accumulate_execption$=''
 ! if trim$(z$)='100093.57' then pause
-	restore #hTrans,key>=z$&"         ": nokey TA_NO_TRANS
+	restore #hTrans,key>=z$&'         ': nokey TA_NO_TRANS
 	ta_p1_read_count=0
 TA_TRANS_READ: !
 	read #hTrans,using 'form pos 1,c 10,n 8,n 1,pd 4.2': p$,tdate,tcode,tamount eof TA_PHASE_2
@@ -284,7 +287,7 @@ TA_PHASE_2: !
 		if holdbal<=0 then
 !     if debug_this_account then pr '  AA  changing month(';j;') from ';month(j);' to 0 because holdbal<=0'
 			month(j)=0
-!   else if env$('client')="Albany" and holdbal<10.50 then ! don't any balance less than a minimum bill cause a month to show delinquent
+!   else if env$('client')='Albany' and holdbal<10.50 then ! don't any balance less than a minimum bill cause a month to show delinquent
 !     month(j)=0
 		else if holdbal>0 then
 !     if debug_this_account then pr '  CC  changing holdbal from (';holdbal;') to ';holdbal-month(j)

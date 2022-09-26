@@ -174,6 +174,6 @@ L510: ! r:
 	mat ml$(2)
 	ml$(1)="You must enter a valid tax year such as 2007."
 	ml$(2)="Take OK to enter the year."
-	fnmsgbox(mat ml$,resp$,cap$,0)
+	fnMsgBox(mat ml$,resp$,cap$,0)
 goto MENU1 ! /r
 include: ertn

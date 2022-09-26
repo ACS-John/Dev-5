@@ -40,7 +40,7 @@ MAIN_SCREEN: !
  
 	mat ml$(1) : _
 	ml$(1)="Do you wish to skip all completed jobs?" : _
-	fnmsgbox(mat ml$,resp$,cap$,4)
+	fnMsgBox(mat ml$,resp$,cap$,4)
 	if resp$="Yes" then skpcom$="Y" else skpcom$="N"
 	goto L510
 ASKJOB: !

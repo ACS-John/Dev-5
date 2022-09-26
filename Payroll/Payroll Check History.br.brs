@@ -122,7 +122,7 @@ def fn_checkfile(hact$*8,hCheckIdx3,hCheckIdx1,hEmployee)
 			mg$(1)="You cannot edit a record when you have selected to display "
 			mg$(2)="by Departmental Details.  You must select Check only"
 			mg$(3)="before you can make changes."
-			fnmsgbox(mat mg$,resp$,cap$,0)
+			fnMsgBox(mat mg$,resp$,cap$,0)
 			goto SCREEN1
 		else if ckey=ckEdit then
 			editrec=val(resp$(1)) conv SCREEN2
@@ -243,7 +243,7 @@ def fn_checkfile(hact$*8,hCheckIdx3,hCheckIdx1,hEmployee)
 			mg$(1)="You are deleting a check.  This will change the "
 			mg$(2)="earnings. It will change the quarterly and annual reports."
 			mg$(3)="Click OK to delete; else Cancel to retain the record."
-			fnmsgbox(mat mg$,resp$,cap$,49)
+			fnMsgBox(mat mg$,resp$,cap$,49)
 			if resp$="OK" then delete #hCheckIdx3,rec=editrec: : eno=holdeno
 			goto SCREEN2
 		end if
@@ -296,7 +296,7 @@ def fn_checkfile(hact$*8,hCheckIdx3,hCheckIdx1,hEmployee)
 				fnAddOneC(mat mg$,'The calculated Net Amount of the check is '&str$(testNetCalculated)&',')
 				fnAddOneC(mat mg$,'but the Net Amount entered is '&str$(testNet)&'.')
 				fnAddOneC(mat mg$,'Please correct to continue.')
-				fnmsgbox(mat mg$,resp$,cap$,0+48) ! ok + excl
+				fnMsgBox(mat mg$,resp$,cap$,0+48) ! ok + excl
 				goto SCREEN3_ADD
 			else
 				write #hCheckIdx3,using "form pos 1,N 8,n 3,PD 6,N 7,5*PD 3.2,37*PD 5.2": heno,tdn,prd,ckno,mat tdc,mat tcp
@@ -309,7 +309,7 @@ def fn_checkfile(hact$*8,hCheckIdx3,hCheckIdx1,hEmployee)
 			mg$(1)="You have changed dollar amounts on a real check! "
 			mg$(2)="This will change the quarterly and annual reports.."
 			mg$(3)="Click OK to continue; else Cancel to exit without saving the changes."
-			fnmsgbox(mat mg$,resp$,cap$,49)
+			fnMsgBox(mat mg$,resp$,cap$,49)
 			if resp$="OK" then
 				gosub Screen3Save
 			end if
@@ -403,7 +403,7 @@ def fn_checkfile(hact$*8,hCheckIdx3,hCheckIdx1,hEmployee)
 		! if ckey<>3 and checkonly+details+grand+quarterly+annual+employee=0 then
 		! 	mg$(1)="You must select at least one type of information to be shown. "
 		! 	mg$(2)="                Click OK to correct."
-		! 	fnmsgbox(mat mg$,resp$,cap$,0)
+		! 	fnMsgBox(mat mg$,resp$,cap$,0)
 		! 	goto SCREEN1
 		! end if
 

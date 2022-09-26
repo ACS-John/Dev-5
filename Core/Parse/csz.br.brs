@@ -3,7 +3,7 @@
  
 FNCSZ: ! extract  CITY$,STATE$,ZIP$ from CSZ$
 def library fncsz(&csz$,&city$,&state$,&zip$)
-		library 'S:\Core\Library': fnerror,fnmsgbox
+		library 'S:\Core\Library': fnerror,fnMsgBox
 		csz$=rtrm$(csz$)
 		do
 		csz$=srep$(csz$,'  ',' ')
@@ -40,7 +40,7 @@ MESSAGEBOX: !
 		mat ml$(2) : _
 		ml$(1)="You have a bad address: "&csz$ : _
 		ml$(2)="You should fix the address and run this option again." : _
-		fnmsgbox(mat ml$,resp$,cap$,48)
+		fnMsgBox(mat ml$,resp$,cap$,48)
 		goto Xit
 L180: ! pr STATE$ ! XXX
 		goto Xit

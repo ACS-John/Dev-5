@@ -56,7 +56,7 @@ def fn_addAnOtherCharge(; z$*10,hCustomer1)
 			dim mesg$(1)*128
 			mat mesg$(1)
 			mesg$(1)='Amount ('&str$(amt)&') is invalid.'
-			fnmsgbox(mat mesg$)
+			fnMsgBox(mat mesg$)
 			goto SCR1
 		end if
 		fn_addNote(z$,amt,note$)
@@ -94,7 +94,7 @@ fnend
 CustomerNokey: ! r:
 	mat mesg$(1)
 	mesg$(1)='Account ('&z$&') is invalid.'
-	fnmsgbox(mat mesg$)
+	fnMsgBox(mat mesg$)
 goto SCR1 ! /r
 
 def fn_addTransaction(z$,serviceCode,tDate,amt,newBalance)
@@ -198,7 +198,7 @@ def fn_fixBadOnes(askFirst; ___,z$*10,whichDid,tranRec,justFixedIt,service_other
 				fnaddonec(mat mg$,'Transaction Date: '&chr$(9)&str$(tranN(trans_tdate)))
 				fnaddonec(mat mg$,'')
 				fnaddonec(mat mg$,'Fix this one?')
-				fnmsgbox(mat mg$, resp$,'',32+4)
+				fnMsgBox(mat mg$, resp$,'',32+4)
 			else
 				pr 'Faulty Transaction Encountered ('&str$(ftCount+=1)&')'
 				pr '            Record: '&str$(tranRec)

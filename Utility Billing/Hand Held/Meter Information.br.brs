@@ -6,7 +6,7 @@ if fnhand_held_device$<>'Itron FC300' and fnhand_held_device$(1:6)<>'[Ask]' and 
 	dim msg_text$(2)*256
 	msg_text$(1)='The '&env$('program_caption')&' file is not necessary'
 	msg_text$(2)="for your hand held device type."
-	fnmsgbox(mat msg_text$, response$,'',64)
+	fnMsgBox(mat msg_text$, response$,'',64)
 end if 
 fnHamsterFio("UB Meter Info")
 goto Xit

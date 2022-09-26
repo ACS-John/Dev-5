@@ -20,7 +20,7 @@
 		mat m$(2)
 		m$(1)="You must purchase the ACS Utility Billing External Collections Processing"
 		m$(2)="module to access these features"
-		fnmsgbox(mat m$, response$, '',64)
+		fnMsgBox(mat m$, response$, '',64)
 		goto Xit
 	end if
 
@@ -226,7 +226,7 @@ Xit: fnXit
 			mat m$(2)
 			m$(1)="External Collections File created:"
 			m$(2)=os_filename$(exp_filename_report$)
-			fnmsgbox(mat m$, response$, '',64)
+			fnMsgBox(mat m$, response$, '',64)
 		end if
 	fnend
 include: ertn

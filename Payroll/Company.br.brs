@@ -96,7 +96,7 @@ Screen1: ! r:
 		mat ml$(2)
 		ml$(1)='The Federal Unemployment Rate appears to be wrong!'
 		ml$(2)='Do you wish to continue anyway?'
-		fnmsgbox(mat ml$,resp$,'',52)
+		fnMsgBox(mat ml$,resp$,'',52)
 		if resp$<>'Yes' then goto Screen1
 	end if
 	if ckey=4 then goto Finis
@@ -357,7 +357,7 @@ DoCancel: ! r:
 ! 	mat ml$(2)
 ! 	ml$(1)='You have chosen to exit without saving any changes.'
 ! 	ml$(2)='Save changes now?'
-! 	fnmsgbox(mat ml$,resp$,'',52)
+! 	fnMsgBox(mat ml$,resp$,'',52)
 ! if resp$='Yes' then goto Finis else goto Xit
 goto Xit
 ! /r

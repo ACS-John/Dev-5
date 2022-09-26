@@ -36,7 +36,7 @@ ASKJOB: !
 	jn$=lpad$(trim$(resp$(1)(1:6)),6)
 	mat ml$(1) : _
 	ml$(1)="Do you really want to delete job # "&jn$ : _
-	fnmsgbox(mat ml$,resp$,cap$,36)
+	fnMsgBox(mat ml$,resp$,cap$,36)
 	if resp$="Yes" then goto L350 else goto ASKJOB
 L350: rewrite #1,using 'form pos 157,N 2',key=jn$: 9 nokey ASKJOB
 	goto ASKJOB

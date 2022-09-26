@@ -31,7 +31,7 @@
 		ml$(1)='Normally you would not take this menu option to post'
 		ml$(2)='General Ledger if you have the Checkbook system.'
 		ml$(3)='Click OK to continue or Cancel to stop.'
-		fnmsgbox(mat ml$,resp$,'',1)
+		fnMsgBox(mat ml$,resp$,'',1)
 		if resp$='OK' then goto ASK_DATE else goto Xit
 	end if
 goto ASK_DATE ! /r
@@ -217,7 +217,7 @@ def fn_l1800 ! OPEN G/L WORK FILES AND CREATE DUE TO AND DUE FROM ENTRIES
 	ml$(2)='cost centers on the system.  Click Yes if you do have more than.'
 	ml$(3)='one set of books that are self balancing in your system.'
 	ml$(4)='Click NO if you are using the cost center code for other purposes.'
-	fnmsgbox(mat ml$,resp$,'',52)
+	fnMsgBox(mat ml$,resp$,'',52)
 	if resp$='Yes' then multigl=1 else multigl=2
 	if multigl><1 then goto L1870
 	mulitidsk=1
@@ -300,7 +300,7 @@ def fn_askaccrue
 	L2500: !
 	msgline$(1)='Do you wish to accrue part of this Payroll'
 	msgline$(2)='in the previous month?'
-	fnmsgbox(mat msgline$,resp$,'',4)
+	fnMsgBox(mat msgline$,resp$,'',4)
 	accrue$=resp$
 	if accrue$<>'Yes' then goto ASKACCRUE_XIT
 
@@ -336,21 +336,21 @@ def fn_askaccrue
 		mat ml$(2)
 		ml$(1)='Invalid number of days in pay period!'
 		ml$(2)='Click OK to fix.'
-		fnmsgbox(mat ml$,resp$,'',0)
+		fnMsgBox(mat ml$,resp$,'',0)
 		goto ACCRUAL
 	end if
 	if d2<10100 or d2>123199 then
 		mat ml$(2)
 		ml$(1)='Invalid date for last day of month!'
 		ml$(2)='Click OK to fix.'
-		fnmsgbox(mat ml$,resp$,'',0)
+		fnMsgBox(mat ml$,resp$,'',0)
 		goto ACCRUAL
 	end if
 	if dayslm<1 or dayslm>31 then
 		mat ml$(2)
 		ml$(1)='Invalid number of days for last month!'
 		ml$(2)='Click OK to fix.'
-		fnmsgbox(mat ml$,resp$,'',0)
+		fnMsgBox(mat ml$,resp$,'',0)
 		goto ACCRUAL
 	end if
 	if dayslm>day then goto ACCRUAL

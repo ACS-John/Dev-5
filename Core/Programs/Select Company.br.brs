@@ -147,7 +147,7 @@ CompanyAdd: ! r:
 			ml$(1)='Would you like to import data from an old'
 			ml$(2)='ACS Accounts Payable system?'
 			ml$(3)='This is only chance.'
-			fnmsgbox(mat ml$,resp$,'',36)
+			fnMsgBox(mat ml$,resp$,'',36)
 			if resp$='Yes' then
 				fnImportCLfromAP
 				goto Xit
@@ -174,7 +174,7 @@ Xit: fnXit
 			mat mg$(2)
 			mg$(1)='Company number '&str$(cae_cno)&'. '&rtrm$(fn_companyName$(cae_cno))&' already exist!'
 			mg$(2)='Would you like to erase it first?'
-			fnmsgbox(mat mg$,response$,'',32+4+256) ! (i)+(yn)+(secondButtonDefault)
+			fnMsgBox(mat mg$,response$,'',32+4+256) ! (i)+(yn)+(secondButtonDefault)
 			if response$='Yes' then
 				if fn_companyDelete(cae_cno) then returnN=0
 			end if
@@ -203,13 +203,13 @@ Xit: fnXit
 			if exists(fileToDelete$&'\company.h'&str$(cnoToDelete)) then
 				mat mg$(1)
 				mg$(1)='Company Number '&str$(cnoToDelete)&' failed to delete.'
-				fnmsgbox(mat mg$,resp$,'',0)
+				fnMsgBox(mat mg$,resp$,'',0)
 				returnN=0
 				fnpause
 			else
 				mat mg$(1)
 				mg$(1)='Company Number '&str$(cnoToDelete)&' has been Deleted!'
-				fnmsgbox(mat mg$,resp$,'',0)
+				fnMsgBox(mat mg$,resp$,'',0)
 				returnN=1
 			end if
 		end if
@@ -302,7 +302,7 @@ def fn_systemSetup
 		ml$(2)='If you have already performed an update and are'
 		ml$(3)='still receiving this message contact ACS at 1-800-643-6318'
 		ml$(4)='Perform an Update now?'
-		fnmsgbox(mat ml$,resp$,'',16+4)
+		fnMsgBox(mat ml$,resp$,'',16+4)
 		if uprc$(resp$)=uprc$('Yes') then
 			chain 'S:\Core\Programs\Update'
 		else

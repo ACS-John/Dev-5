@@ -195,7 +195,7 @@ ScreenOne: ! r:
 			ml$(1)='Total Debits of '&trim$(cnvrt$('pic(-----,---,---.##)',totalDebits))&' to not equal'
 			ml$(2)='the total Credits of '&trim$(cnvrt$('Pic(----,---,---.##)',totalCredits))
 			ml$(3)='Click OK to continue or Cancel to go back.'
-			fnmsgbox(mat ml$,resp$,'',49)
+			fnMsgBox(mat ml$,resp$,'',49)
 			if resp$='Cancel' then goto ScreenOne
 		end if
 		goto ScrPost
@@ -205,7 +205,7 @@ goto ScreenOne ! /r
 		mat ml$(2)
 		ml$(1)='You must have a Bank Account General Ledger'
 		ml$(2)='Number for disbursements or receipts.'
-		fnmsgbox(mat ml$,resp$,'',49)
+		fnMsgBox(mat ml$,resp$,'',49)
 	goto ScreenOne ! /r
 	def fn_transactionGrid(hMerge,row,col,twenty,ninety,previouslySelected; _
 		enableNet,___,net,tDate,tAmt,tType,desc$*30,colCount,postCode,lineCount, _
@@ -569,7 +569,7 @@ def fn_scrMain(hMerge; editRecord,heading$*64,glBank$*12,transDate,bankAcctName$
 	! 	ml$(1)='You must have a General Ledger Number'
 	! 	ml$(2)='on each allocation.'
 	! 	ml$(3)='Click OK to enter the general ledger number.'
-	! 	fnmsgbox(mat ml$,resp$,'',49)
+	! 	fnMsgBox(mat ml$,resp$,'',49)
 	! 	goto ScrMainTop
 	! end if
 	! goto SmGlNoTestFinis
@@ -730,7 +730,7 @@ def fn_scrPayrollAdd(; ___,lendeditRecordc,lc)
 			ml$(2)=' Net Entered:' &ltrm$(cnvrt$('PIC($$$$,$$$.##CR)',transactionAmt))
 			ml$(2)=' Calculated Net: '&ltrm$(cnvrt$('PIC($$$$,$$$.##CR)',prx(2)-wh))
 			ml$(3)='Click Ok to correct.'
-			fnmsgbox(mat ml$,resp$,'',49)
+			fnMsgBox(mat ml$,resp$,'',49)
 			goto ScrPayrollTos
 		end if
 		fn_payrollSave
@@ -929,7 +929,7 @@ def fn_editAllocation(editrecord; editall,___,ckey,mylen,mypos)
 			ml$(1)='You have chosen to delete this allocation.'
 			ml$(2)='Click OK to delete this entry.'
 			ml$(3)='Click Cancel to return to previous screen.'
-			fnmsgbox(mat ml$,resp$,'',49)
+			fnMsgBox(mat ml$,resp$,'',49)
 			if resp$<>'OK' then
 				goto TosEditAllocation
 			end if

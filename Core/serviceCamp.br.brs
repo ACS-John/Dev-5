@@ -9,7 +9,7 @@ else
 	dim message$(0)*256
 	mat message$(1)
 	message$(1)='Only users currently on support may open service tickets.'
-	fnmsgbox(mat message$)
+	fnMsgBox(mat message$)
 end if
 fnXit
 def fn_setup

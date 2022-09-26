@@ -161,11 +161,11 @@ def fn_scrMain(; returnN)
 		dim msgline$(1)*80
 		if pendat=0 then
 			msgline$(1)='You must enter a valid Penalty Date'
-			fnmsgbox(mat msgline$,pause$,'',48)
+			fnMsgBox(mat msgline$,pause$,'',48)
 			goto SM_ASK
 		else if bildat=0 then
 			msgline$(1)='You must enter a valid Last Billing Date.'
-			fnmsgbox(mat msgline$,pause$,'',48)
+			fnMsgBox(mat msgline$,pause$,'',48)
 			goto SM_ASK
 		end if
 		pendat=fndate_mmddyy_to_ccyymmdd(pendat)
@@ -446,8 +446,8 @@ fnend
 	fnend
 	def fn_bud1
 		bud1=0
-		open #81: 'Name=[Q]\UBmstr\BudMstr.h[cno],KFName=[Q]\UBmstr\BudIdx1.h[cno],Shr',i,outIn,k ioerr EO_BUD1
-		open #82: 'Name=[Q]\UBmstr\BudTrans.h[cno],Shr',i,outi,r
+		open #hBudMstr=fnH: 'Name=[Q]\UBmstr\BudMstr.h[cno],KFName=[Q]\UBmstr\BudIdx1.h[cno],Shr',i,outIn,k ioerr EO_BUD1
+		open #hBudTran=fnH: 'Name=[Q]\UBmstr\BudTrans.h[cno],Shr',i,outi,r
 		bud1=1
 		EO_BUD1: !
 	fnend
@@ -461,7 +461,7 @@ fnend
 		if bud1=0 then goto EO_BUD2
 		dim ba(13)
 		dim badr(2)
-		read #81,using F_BUD_2A,key=z$: z$,mat ba,mat badr nokey EO_BUD2
+		read #hBudMstr,using F_BUD_2A,key=z$: z$,mat ba,mat badr nokey EO_BUD2
 		F_BUD_2A: form pos 1,c 10,pd 4,12*pd 5.2,2*pd 3
 		for j=2 to 12
 			totba+=ba(j)
@@ -470,7 +470,7 @@ fnend
 		do
 			if ta1=0 then goto EO_BUD2
 			dim bt1(14,2)
-			read #82,using 'form pos 1,c 10,2*pd 4,24*pd 5.2,2*pd 4,pd 3',rec=ta1: z$,mat bt1,nba noRec EO_BUD2
+			read #hBudTran,using 'form pos 1,c 10,2*pd 4,24*pd 5.2,2*pd 4,pd 3',rec=ta1: z$,mat bt1,nba noRec EO_BUD2
 			if bt1(14,1)<=0 then
 				if bt1(12,1)<>0 then ! don't allow blank records to go thru routine
 					bd1+=1

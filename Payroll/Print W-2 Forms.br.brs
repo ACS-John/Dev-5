@@ -332,7 +332,7 @@ Finis: ! r:
 			tmpMsgLine$(1)='Export file created:'
 			tmpMsgLine$(2)=os_filename$(file$(hExport))
 			close #hExport:
-			fnmsgbox(mat tmpMsgLine$,resp$) ! ,16+4)
+			fnMsgBox(mat tmpMsgLine$,resp$) ! ,16+4)
 		goto Xit
 	else
 		if goproc=1 then

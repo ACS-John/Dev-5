@@ -128,7 +128,7 @@ SCREEN1: !
 	mat ml$(2)
 	ml$(1)="You must answer the last two questions!"
 	ml$(2)="Click OK to enter this informatio."
-	fnmsgbox(mat ml$,resp$,'',0)
+	fnMsgBox(mat ml$,resp$,'',0)
 goto SCREEN1
 L640: !
 if trim$(a$)<>"" then

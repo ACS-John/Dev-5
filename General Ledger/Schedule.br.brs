@@ -132,7 +132,7 @@ REWRITE_EXISTING_SCHEDULE: ! r:
 	ml$(1)="You are changing schedule # "&str$(holdsn)&" to "
 	ml$(2)="schedule # "&str$(sn)&".  Click OK to continue, "
 	ml$(3)="else Cancel to prevent changing the #."
-	fnmsgbox(mat ml$,resp$,'',49)
+	fnMsgBox(mat ml$,resp$,'',49)
 	if resp$="OK" then
 		execute "Copy [Q]\GLmstr\schedule"&str$(holdsn)&".h[cno]"&' '&"[Q]\GLmstr\schedule"&str$(sn)&".h[cno] -n" ioerr ignore ! move breakdowns to new schedule #
 		L950: !
@@ -282,7 +282,7 @@ DELETEIT: !  r: delete a schedule
 	ml$(1)="You are attempting to delete schedule # "&str$(sn)&"."
 	ml$(2)="Click OK to continue, "
 	ml$(3)="else Cancel to prevent deleting the schedule."
-	fnmsgbox(mat ml$,resp$,'',49)
+	fnMsgBox(mat ml$,resp$,'',49)
 	if uprc$(resp$)="OK" then goto L2310 else goto ADD_EDIT_SCHEDULES
 	L2310: delete #10,rec=editrec:
 	fnFree("[Q]\GLmstr\schedule"&str$(sn)&".h[cno]")

@@ -100,12 +100,12 @@ if resp$(8)='True' then basis=accrual=2
 dim msgline$(3)*80
 if ld1>hd1 and ld1>0 and hd1>0 then
 	mat msgline$(1): msgline$(1)='Ending Date Before Starting Date!'
-	fnmsgbox(mat msgline$,resp$,'',48)
+	fnMsgBox(mat msgline$,resp$,'',48)
 	goto SCREEN1
 end if
 if basis=0 then
 	mat msgline$(1): msgline$(1)='You must enter the basis for accounting!'
-	fnmsgbox(mat msgline$,resp$,'',48)
+	fnMsgBox(mat msgline$,resp$,'',48)
 	goto SCREEN1
 end if
 if ckey=2 then goto ScreenGlInfo
@@ -134,7 +134,7 @@ do
 	L1030: !
 	mat msgline$(2): msgline$(1)='You have tranactions on customer # '&p$
 	msgline$(2)='but the customer record no longer exists. '&p$
-	fnmsgbox(mat msgline$,resp$,'',48)
+	fnMsgBox(mat msgline$,resp$,'',48)
 	L1040: !
 	dim amount(10,3)
 	! 1=charge,2=penalty,3=collection,4=credit memo, 5=debit memo
@@ -295,7 +295,7 @@ if ckey=3 then gosub DeleteGlInfo : goto ScreenGlInfo
 DeleteGlInfo: ! r:
 	mat msgline$(2): msgline$(1)='You have chosen to delete a record.'
 	msgline$(2)='Take OK to delete, Cancel to retain.'
-	fnmsgbox(mat msgline$,resp$,'',49)
+	fnMsgBox(mat msgline$,resp$,'',49)
 	if resp$='OK' then
 		delete #15,rec=editrec:
 	end if

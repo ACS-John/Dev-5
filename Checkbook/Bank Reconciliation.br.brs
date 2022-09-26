@@ -153,13 +153,13 @@ ClearingOptions: ! r:
 	ml$(1)='Cleared amount does not agree with your check history!'
 	ml$(2)='Any corrections to your data must be done through'
 	ml$(3)='the check history option. OK to clear; Cancel to skip'
-	fnmsgbox(mat ml$,resp$,'',49)
+	fnMsgBox(mat ml$,resp$,'',49)
 	if resp$='OK' then goto L1210
 	if resp$='Cancel' then goto ClearingOptions
 	L1190: !
 	mat ml$(1)
 	ml$(1)='Reference # '&k$(4:11)&' could not be found.  Retry!'
-	fnmsgbox(mat ml$,resp$,'',48)
+	fnMsgBox(mat ml$,resp$,'',48)
 	goto ClearingOptions
 L1210: if clr>0 then goto ALREADY_CLEARED
 	rewrite #trmstr1,using 'form pos 72,N 6',key=k$: stmtdt
@@ -394,7 +394,7 @@ goto L3060 ! /r
 NOTHING_IN_RANGE: ! r:
 	mat ml$(1)
 	ml$(1)='Nothing found in this range.'
-	fnmsgbox(mat ml$,resp$,'',48)
+	fnMsgBox(mat ml$,resp$,'',48)
 goto SCR_CLEAR_BY_RANGE ! /r
 L3060: ! pr f '1,2,C 8,R,N': ' Check #'   ! do I want some kind of grid here???? kj
 ! pr f '1,11,C 10,R,N': '  Amount'

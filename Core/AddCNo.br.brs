@@ -20,16 +20,16 @@ if env$('cursys')='CL' then ! r:
 	ml$(1)='Would you like to import data from an old'
 	ml$(2)='ACS Accounts Payable system?'
 	ml$(3)='This is only chance.'
-	fnmsgbox(mat ml$,resp$,'',36)
+	fnMsgBox(mat ml$,resp$,'',36)
 	if resp$='Yes' then fnImportCLfromAP
 	! /r
 else if env$('cursys')='UB' then ! r:
 	open #hTmp=fnH: 'Name=[Q]\UBmstr\Company.h[cno],Replace,RecL=129',i,outIn,r
 	write #hTmp,using 'form pos 1,C 40',rec=1: empty$
 	close #hTmp:
-	open #hTmp=fnH: 'Name=[Q]\UBmstr\Customer.h[cno],Replace,RecL=2067',internal,outIn,r
+	open #hTmp=fnH: 'Name=[Q]\UBmstr\Customer.h[cno],Replace,RecL=2067',i,outIn,r
 	close #hTmp:
-	open #hTmp=fnH: 'Name=[Q]\UBmstr\ubTransVB.h[cno],Replace,RecL=102',internal,outIn,r
+	open #hTmp=fnH: 'Name=[Q]\UBmstr\ubTransVB.h[cno],Replace,RecL=102',i,outIn,r
 	close #hTmp:
 	open #hTmp=fnH: 'Name=[Q]\UBmstr\ubAdrBil.h[cno],Replace,RecL=130',i,outIn,r
 	close #hTmp:

@@ -219,7 +219,7 @@ SendRecordToOutFile: ! r:
 					fn_itron
 				else if deviceSelected$="LapTop" then
 					fn_laptop
-				else if deviceSelected$="Master Meter" then
+				else if deviceSelected$='Master Meter' then
 					fn_masterMeter
 				else if deviceSelected$="Neptune (Equinox v4)" then
 					fn_neptuneEquinoxV4(h_out)
@@ -659,8 +659,7 @@ def fn_laptop
 		write #h_out,using "form pos 1,c 10,c 30,c 30,c 1,4*n 9,c 12,c 20,n 3,n 7":  z$,e$(2),e$(1),"G",gasread ,gasusage ,d(9),d(12),f$(3),ft$,route,sequence
 	end if
 fnend
-def fn_masterMeter ! z$,mat e$,extra$(1-2),route
-	dim tmpCity$*64,tmpState$*64,tmpZip$*64
+def fn_masterMeter(; ___,tmpCity$*64,tmpState$*64,tmpZip$*64) ! z$,mat e$,extra$(1-2),route
 	fncsz(e$(4),tmpCity$,tmpState$,tmpZip$)
 	usage_current=d(3) ! Water usage - current
 	reading_current=d(1)
@@ -1504,7 +1503,7 @@ def fn_reportCreatedFile(out_filename_report$*512)
 		mat m$(2)
 		m$(1)="Hand Held File created:"
 		m$(2)=os_filename$(out_filename_report$)
-		fnmsgbox(mat m$, response$, '',mb_information+mb_okonly)
+		fnMsgBox(mat m$, response$, '',mb_information+mb_okonly)
 	end if
 fnend
 

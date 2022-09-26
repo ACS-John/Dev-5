@@ -154,7 +154,7 @@ def library fnHours(eno)
 		ml$(1)="You have chosen to delete the "&classification$&" for " 
 		ml$(2)="employee "&str$(empno)&". Click on Yes to delete the entry, else" 
 		ml$(3)="No to return to the display screen" 
-		fnmsgbox(mat ml$,resp$,'',52)
+		fnMsgBox(mat ml$,resp$,'',52)
 		if resp$="Yes" then goto L810 else goto MAIN
 		L810: !
 		delete #hBreakdown,rec=editrec: 
@@ -164,14 +164,14 @@ def library fnHours(eno)
 		ml$(1)="You are attempting to enter hours on a different employee." 
 		ml$(2)="You were assigned to employee "&str$(holdeno)&"." 
 		ml$(3)="Do you wish to change to employee "&str$(empno)&"?" 
-		fnmsgbox(mat ml$,resp$,'',52)
+		fnMsgBox(mat ml$,resp$,'',52)
 		if resp$="Yes" then eno=empno: goto L740 else empno=holdeno: goto ADDFM
 	MSGBOX3: ! set up classifications of time
 		mat ml$(3) 
 		ml$(1)="You must set up the classification file before you can use" 
 		ml$(2)="this feature.  Go to Files on the main menu and then " 
 		ml$(3)="take Time Classifications." 
-		fnmsgbox(mat ml$,resp$,'',65)
+		fnMsgBox(mat ml$,resp$,'',65)
 		goto Xit
 	Xit: ! 
 	close #hBreakdown: ioerr ignore

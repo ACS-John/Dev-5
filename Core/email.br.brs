@@ -61,7 +61,7 @@ def fn_sendEmail(mat toEmail$,emailMessage$*10000; _
 			if trim$(em_emailFromPassword$)='' then
 				fnAddOneC(mat txt$,'From Email Password is blank.')
 			end if
-			fnmsgbox(mat txt$, respUnused$,'',mb_stop+mb_okonly)
+			fnMsgBox(mat txt$, respUnused$,'',mb_stop+mb_okonly)
 			setup_sendEmail=0
 			goto Xit
 			! msgbox('Email account not configured. Please enter the appropriate information in Preferences.')
@@ -138,7 +138,7 @@ def fn_sendEmail(mat toEmail$,emailMessage$*10000; _
 	else
 		mat txt$(0)
 		fnAddOneC(mat txt$,'Email Send failed.  No log file to parse.')
-		fnmsgbox(mat txt$, respUnused$,'',mb_stop+mb_okonly)
+		fnMsgBox(mat txt$, respUnused$,'',mb_stop+mb_okonly)
 	end if
 	fn_sendEmail=returnN
 	Xit: !

@@ -35,7 +35,7 @@ do
 	! 	if fnCopy('A:GLmstr.H'&str$(glcno),'[Q]\CLmstr\*.*')<0 then 
 	! 		mat ml$(1)
 	! 		ml$(1)='Be sure the diskette is properly inserted and try again' 
-	! 		fnmsgbox(mat ml$,resp$,'',16) 
+	! 		fnMsgBox(mat ml$,resp$,'',16) 
 	! 		goto MENU1
 	! 	end if
 	! 	goto Xit
@@ -62,6 +62,6 @@ MSGBOX1: ! r:
 	mat ml$(2)
 	ml$(1)='A General Ledger Chart of Accounts has not been set up'
 	ml$(2)='for this company.  You must choose a different option'
-	fnmsgbox(mat ml$,resp$,'',16)
+	fnMsgBox(mat ml$,resp$,'',16)
 goto MENU1 ! /r
 include: Ertn

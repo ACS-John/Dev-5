@@ -77,7 +77,7 @@ EDITSCREEN: ! r:
 	if cddrive$<"A" or cddrive$>"Z" then
 		mat msgline$(2): msgline$(1)="The drive designation you used is invalid!"
 		msgline$(2) =" Normal designations would be D or E, but can be other letters"
-		fnmsgbox(mat msgline$,response$,"Bad CD Drive designation",48)
+		fnMsgBox(mat msgline$,response$,"Bad CD Drive designation",48)
 		goto EDITSCREEN
 	end if
 	rewrite #1,using L60,key=rpad$(docname$,30): docname$,docline,docposition,docsigchoice,cddrive$ nokey L415
@@ -88,17 +88,17 @@ goto MAINSCREEN ! /r
 BADLINE: ! r:
 	mat msgline$(1)
 	msgline$(1)="You have entered an invalid line #. Must be a number from 1 to 200!"
-	fnmsgbox(mat msgline$,response$,"Bad line number",48)
+	fnMsgBox(mat msgline$,response$,"Bad line number",48)
 goto EDITSCREEN ! /r
 BADPOSITION: ! r:
 	mat msgline$(1)
 	msgline$(1)="You have entered an invalid position. Your answer must be from 1 to 200!"
-	fnmsgbox(mat msgline$,response$,"Bad position",48)
+	fnMsgBox(mat msgline$,response$,"Bad position",48)
 goto EDITSCREEN ! /r
 BADSIGCHOICE: ! r:
 	mat msgline$(1)
 	msgline$(1)="You can have up to 10 different signatures.  You may just one.  Choose an answer from 1 to 10"
-	fnmsgbox(mat msgline$,response$,"Bad position",48)
+	fnMsgBox(mat msgline$,response$,"Bad position",48)
 goto EDITSCREEN ! /r
 PRINTSIGNATURE: ! r:
 	fnopenprn

@@ -6,7 +6,7 @@ if ~fnClientHas('U4') then ! r:
 	mat ml$(2) 
 	ml$(1)="You must purchase the ACS Utility Billing Hand Held"
 	ml$(2)="module to access these features"
-	fnmsgbox(mat ml$, response$, '',64)
+	fnMsgBox(mat ml$, response$, '',64)
 	goto Xit
 end if  ! /r
 fnRetrieveHandHeldFile
@@ -71,7 +71,7 @@ def library fnRetrieveHandHeldFile(; automationBookNumber)
 				if askPath$='' or ~exists(env$('at')&askPath$) then
 					mat ml$(1)
 					ml$(1)="File not found: "&askPath$
-					fnmsgbox(mat ml$, response$)
+					fnMsgBox(mat ml$, response$)
 					goto SCREEN1
 				end if
 			end if
@@ -146,12 +146,12 @@ def fn_transfer(bookNumberToStoreReadings$,enableMerge$,askPath$*128)
 		UnrecognizedDeviceNotice: !
 		mat ml$(1)
 		ml$(1)='Unrecognized device: '&deviceSelected$
-		fnmsgbox(mat ml$)
+		fnMsgBox(mat ml$)
 	end if
 	if transferReturn>0 then
 		mat ml$(1)
 		ml$(1)=str$(transferReturn)&' records imported to book '&bookNumberToStoreReadings$&'.'
-		fnmsgbox(mat ml$)
+		fnMsgBox(mat ml$)
 	end if
 	fn_transfer=transferReturn
 fnend
@@ -452,7 +452,7 @@ fnend
 		AMR_NOTHING_TO_READ: !
 		mat ml$(1)
 		ml$(1)="The File ("&fn_hh_input_filename$&") is empty."
-		fnmsgbox(mat ml$,resp$,'',0)
+		fnMsgBox(mat ml$,resp$,'',0)
 		goto AMR_XIT !  AMR_NOTHING_TO_READ
 		AMR_XIT: !
 		close #2: ioerr ignore
@@ -464,7 +464,7 @@ fnend
 			mat ml$(2)
 			ml$(1)='The import file ('&os_filename$(fn_hh_input_filename$)&') could not be found.'
 			ml$(2)='You may need to perform the Hot Sync and try again.'
-			fnmsgbox(mat ml$, response$, '',0)
+			fnMsgBox(mat ml$, response$, '',0)
 		else
 			fnCopy(fn_hh_input_filename$,bookFile$)
 			fnRename(fn_hh_input_filename$,"[Q]\UBmstr\outofpalm."&ltrm$(bookNumberToStoreReadings$)&"."&date$("YYMMDD")&srep$(time$("HHMMSS"),":","")&".txt")
@@ -1024,7 +1024,7 @@ def fn_okToMerge(bookFile$*512,requiredFormat$*128)
 		mat ml$(2)
 		ml$(1)='The existing book (number '&bookNumberToStoreReadings$&') is not in a format that permits'
 		ml$(2)='merging with the '&deviceSelected$&' format.'
-		fnmsgbox(mat ml$)
+		fnMsgBox(mat ml$)
 		okayToMergeReturn=0
 	else
 		okayToMergeReturn=1

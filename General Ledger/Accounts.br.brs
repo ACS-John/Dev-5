@@ -115,7 +115,7 @@ Main: ! r:
 		ml$(2)='Take the "Change #" option to change either the'
 		ml$(3)='account or the description.'
 		ml$(4)='Click OK to access the new account; else Cancel to quit.'
-		fnmsgbox(mat ml$,resp$,'',49)
+		fnMsgBox(mat ml$,resp$,'',49)
 		if resp$='OK' then 
 			gosub AccountEditRead
 		else if resp$='Cancel' then 
@@ -234,7 +234,7 @@ Save: ! r:
 		ml$(1)='You are attempting to change account '&holdgl$&'!'
 		ml$(2)='to '&gl$&'.  Take OK to change the account.'
 		ml$(3)='Take Cancel to return to Main screen.'
-		fnmsgbox(mat ml$,resp$,'',49)
+		fnMsgBox(mat ml$,resp$,'',49)
 		if resp$<>'OK' then
 			goto SaveFinis
 		end if
@@ -262,13 +262,13 @@ AcctDelete: ! r:
 		ml$(1)='Account '&gl$&' has a balance. You may not '
 		ml$(2)='delete an account with a balance.'
 		ml$(3)='Take OK to return to Main screen.'
-		fnmsgbox(mat ml$,resp$,'',mb_exclamation+mb_okonly)
+		fnMsgBox(mat ml$,resp$,'',mb_exclamation+mb_okonly)
 	else
 		mat ml$(3)
 		ml$(1)='You have chosen to delete account '&gl$&'!'
 		ml$(2)='Take OK to delete the account.'
 		ml$(3)='Take Cancel to return to Main screen.'
-		fnmsgbox(mat ml$,resp$,'',mb_exclamation+mb_okcancel)
+		fnMsgBox(mat ml$,resp$,'',mb_exclamation+mb_okcancel)
 		if resp$='OK' then 
 			delete_it=1
 			delete #hAccount,key=gl$: ioerr AcctDeleteFinis
@@ -443,7 +443,7 @@ ChangeAccountNumber: ! r:
 		ml$(1)="General ledger account # "&key$&" already "
 		ml$(2)="exists. Take OK to review the account."
 		ml$(3)="Take Cancel to return to Main screen."
-		fnmsgbox(mat ml$,resp$,'',49)
+		fnMsgBox(mat ml$,resp$,'',49)
 		if resp$="OK" then gosub AccountEditRead 
 		goto Main
 		

@@ -9,7 +9,7 @@ txt$(1)='Transaction addresses have successfully been reassigned'
 txt$(2)='to their correct General Ledger accounts.'
 txt$(3)=''
 txt$(4)='(This process is also completed when indexes are recreated.)'
-fnmsgbox(mat txt$,resp$,'',64)
+fnMsgBox(mat txt$,resp$,'',64)
 goto Xit
 
 Xit: fnXit

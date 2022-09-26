@@ -67,7 +67,7 @@ def library fnaddreceipt
 			mat ml$(2) 
 			ml$(1)='A Unpaid Invoice for this Receipt exists' 
 			ml$(2)='You may not delete it.' 
-			fnmsgbox(mat ml$,resp$,'',0) 
+			fnMsgBox(mat ml$,resp$,'',0) 
 			goto EO_DELETE
 		end if
 		L490: ! 
@@ -167,7 +167,7 @@ def library fnaddreceipt
 		ml$(1)='Your percentage breakdowns total '&str$(tac)&'.'
 		ml$(2)='The percentage breakdown must add to 100%.'
 		ml$(3)='Correct the percentages.'
-		fnmsgbox(mat ml$,resp$,'',16)
+		fnMsgBox(mat ml$,resp$,'',16)
 		goto EDIT_RECEIPT
 		SAVE_RECEIPT: ! 
 		if xedit=1 and rec$<>holdrec$ then gosub KEY_CHANGE
@@ -230,7 +230,7 @@ def library fnaddreceipt
 		mat ml$(2)
 		ml$(1)='A record for receipt type '&rec$&' already exists'
 		ml$(2)='You must select a different receipt type.'
-		fnmsgbox(mat ml$,resp$,'',16)
+		fnMsgBox(mat ml$,resp$,'',16)
 	goto EDIT_RECEIPT ! /r
 	GL_BREAKDOWNS: ! r:
 		fnTos

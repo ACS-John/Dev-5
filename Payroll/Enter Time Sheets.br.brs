@@ -77,14 +77,14 @@ SCREEN_1: !
 		mat ml$(0)
 		fnAddOneC(mat ml$,"You must enter a valid payroll date!"   )
 		fnAddOneC(mat ml$,"Click OK to return to previous screen. ")
-		fnmsgbox(mat ml$,resp$)
+		fnMsgBox(mat ml$,resp$)
 		goto SCREEN_1
 	else if days(prd,'mmddyy')<=days(date)-45 then
 		mat ml$(0)
 		fnAddOneC(mat ml$,'You have choosen a Pay Period Ending Date that is')
 		fnAddOneC(mat ml$,'more than 45 days prior to today.')
 		fnAddOneC(mat ml$,'Do you wish to continue?')
-		fnmsgbox(mat ml$,resp$,'',mb_question+mb_yesno+mb_button2_default)
+		fnMsgBox(mat ml$,resp$,'',mb_question+mb_yesno+mb_button2_default)
 		if resp$='No' then goto SCREEN_1
 	end if
  
@@ -156,7 +156,7 @@ ENTER_TIME: !
 			fnAddOneC(mat ml$,"You have previously calculated pay using this same payroll date on employee # "&x$)
 			fnAddOneC(mat ml$,"You must either use a different date or reverse the previous calculation. "       )
 			fnAddOneC(mat ml$,"Click OK to return to previous screen. "                                          )
-			fnmsgbox(mat ml$,resp$)
+			fnMsgBox(mat ml$,resp$)
 			goto TheNextOne
 		end if
 	loop
@@ -291,7 +291,7 @@ ENTER_TIME: !
 	mat ml$(0)
 	fnAddOneC(mat ml$,"This employee is not eligible for Sick Leave!")
 	fnAddOneC(mat ml$,"Click OK to return to previous screen. "      )
-	fnmsgbox(mat ml$,resp$)
+	fnMsgBox(mat ml$,resp$)
 	goto ASK_TIME
 	L2260: !
 	if em9><-2 then goto L2290
@@ -299,7 +299,7 @@ ENTER_TIME: !
 	mat ml$(0)
 	fnAddOneC(mat ml$,"This employee is not eligible for Vacation!")
 	fnAddOneC(mat ml$,"Click OK to return to previous screen. "    )
-	fnmsgbox(mat ml$,resp$)
+	fnMsgBox(mat ml$,resp$)
 	goto ASK_TIME
 L2290: !
 	for j=1 to 5
@@ -427,7 +427,7 @@ EMP_PREV_ENTERED_WARN: ! r:
 	mat ml$(2)
 	ml$(1)="Employee number "&str$(eno)&" has been previously entered."
 	ml$(2)="Do you wish to continue anyway? "
-	fnmsgbox(mat ml$,resp$,'',52)
+	fnMsgBox(mat ml$,resp$,'',52)
 	if resp$(1:1)="Y" then goto L1290 ! IN1=2
 	if resp$(1:1)="N" then goto TheNextOne ! in1=1
 ! /r
@@ -494,7 +494,7 @@ L4790: !
 	mat ml$(2)
 	ml$(1)="No time has been entered on employee number "&str$(eno)&'.'
 	ml$(2)="Do you wish to enter new time on this employee? "
-	fnmsgbox(mat ml$,resp$,'',52)
+	fnMsgBox(mat ml$,resp$,'',52)
 	if resp$(1:1)="Y" then
 		goto ENTER_TIME ! ASK_EMPLOYEE
 	else
@@ -535,7 +535,7 @@ XITWOCAL: ! r:
 	mat ml$(2)
 	ml$(1)="To save your changes, next time you choose to 'Enter Time Sheets'"
 	ml$(2)="you must select 'Additions to Previous Input'"
-	fnmsgbox(mat ml$,resp$)
+	fnMsgBox(mat ml$,resp$)
 	goto Xit
 ! /r
 ! DUPLICATE_DEPARTMENTS: ! r:
@@ -548,7 +548,7 @@ XITWOCAL: ! r:
 !  ml$(2)="on the same employee. Choose a different department "
 !  ml$(3)="or choose to make corrections to fix the previous entry. "
 !  ml$(4)="Click OK to return to previous screen. "
-!  fnmsgbox(mat ml$,resp$)
+!  fnMsgBox(mat ml$,resp$)
 ! /r goto TheNextOne
 ! WRH_SIMPLE_OFFSET_HOLIDAY: ! r: offset holiday hours for West Rest Haven
 !   if sickhrs>0 then
@@ -602,7 +602,7 @@ L5710: !
 	ml$(1)="Can't find an employee record for employee # "&trim$(em$)&"!"
 	ml$(2)="Time was entered on "&cnvrt$("pic(zz/zz/zz",dte)
 	ml$(3)="Time for this employee will be skipped."
-	fnmsgbox(mat ml$,resp$)
+	fnMsgBox(mat ml$,resp$)
 	goto L5520
 L5720: !
 	if eno=holdeno then goto L5750
@@ -730,7 +730,7 @@ PRINT_LISTING: !
 			ml$(2)="You must delete this person's time for now and either reverse the previous calculation "
 			ml$(3)="or enter the time using a differen payroll date. "
 			ml$(4)="                         Click OK to continue. "
-			fnmsgbox(mat ml$,resp$)
+			fnMsgBox(mat ml$,resp$)
 			if additional=2 then
 				delete #h_rpwork,rec=rec(h_rpwork): noRec L3270
 				goto PL_READ

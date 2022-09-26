@@ -135,7 +135,7 @@ T1_NOT_EQUAL_BAL: ! r:
 	txt$(4)=cnvrt$("pic(--------#.##)",t1)&"  Total Allocations"
 	txt$(5)="------------"
 	txt$(6)=cnvrt$("pic(--------#.##)",bal-t1)&"  Difference"
-	fnmsgbox(mat txt$,resp$,'',48)
+	fnMsgBox(mat txt$,resp$,'',48)
 return ! /r
 WRITE_TRANS: ! r:
 	gosub DEL_HIST

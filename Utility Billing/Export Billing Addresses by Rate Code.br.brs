@@ -75,7 +75,7 @@ Finis: ! r:
 	mat ml$(2)
 	ml$(1)=env$('program_caption')&' successfully completed.'
 	ml$(2)=fileOut$
-	fnmsgbox(mat ml$,resp$,"ACS",0)
+	fnMsgBox(mat ml$,resp$,"ACS",0)
 goto Xit ! /r
 Xit: fnXit
 include: ertn

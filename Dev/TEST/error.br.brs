@@ -14,7 +14,7 @@
 ! message$(3)="This is "
 ! message$(4)="This is j"
 ! mt=4
-! fnmsgbox(mat message$, response$, cap$, mt)
+! fnMsgBox(mat message$, response$, cap$, mt)
 ! pr "The answer is "&response$
 Xit: !
 	pr "Exit Successful"
