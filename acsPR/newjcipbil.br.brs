@@ -144,14 +144,14 @@ CORRECTIONS: !
 	cm2$(4)="1"
 	cm2$(5)='30'
 	cm2$(5): ch2$(5): item2$(5)
-	fnflexinit1('Cat',1,1,10,70,mat ch2$,mat cm2$,1,usefile)
+	fnFlexInit1('Cat',1,1,10,70,mat ch2$,mat cm2$,1,usefile)
 	restore #3:
 READ_FILE: !
 	read #3,using L640: jn$,mat inp eof L1400
 	item2$(1)=str$(rec(3)): item2$(2)=jn$
 	item2$(3)=str$(inp(1)): item2$(4)=str$(inp(2))
 	item2$(5)=str$(inp(3))
-	fnflexadd1(mat item2$)
+	fnFlexAdd1(mat item2$)
 	goto READ_FILE
 L1400: fnCmdKey("&Add",1,0,0,"Add a new transaction." )
 	fnCmdKey("E&dit",2,1,0,"Edit the highlited record")

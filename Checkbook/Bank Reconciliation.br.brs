@@ -773,7 +773,7 @@ L6240: !
 	fnChk(3,49,'Display at Top:',1)
 	resp$(respc+=1)=displayattop$ : respc_display_top=respc : pr 'set respc_display_top to ';respc_display_top
 !
-	fnflexinit1('Deposit-1',5,3,15,55,mat chdr$,mat cmask$,1) : pr '__________init___________ displayattop$='&displayattop$&', nextrec='&str$(nextrec)
+	fnFlexInit1('Deposit-1',5,3,15,55,mat chdr$,mat cmask$,1) : pr '__________init___________ displayattop$='&displayattop$&', nextrec='&str$(nextrec)
 	restore #clearing:
 	if nextrec>0 and displayattop$='True' then
 		fn_ctfl_add_grid_items(1)
@@ -828,7 +828,7 @@ def fn_ctfl_add_grid_items(; cagi_type)
 		flxitm$(1)=str$(rec(clearing))
 		flxitm$(4)=str$(amount)
 		if val(flxitm$(5))=stmtdt then total+=amount
-		fnflexadd1(mat flxitm$) ! pr 'CAGI TYPE '&str$(cagi_type)&'  '&flxitm$(1)&'-'&flxitm$(4)&'-'&flxitm$(5)
+		fnFlexAdd1(mat flxitm$) ! pr 'CAGI TYPE '&str$(cagi_type)&'  '&flxitm$(1)&'-'&flxitm$(4)&'-'&flxitm$(5)
 		CAGI_NEXT: !
 	loop
 	EO_CAGI_CLEARING: !

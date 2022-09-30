@@ -239,7 +239,7 @@ CORRECTIONS: !
 	cm2$(5)='30': cm2$(6)="32": cm2$(7)="32"
 	cm2$(8)="": cm2$(9)='30': cm2$(10)='30'
 	cm2$(11)='10': cm2$(12)='30': cm2$(13)='30': cm2$(14)='10'
-	fnflexinit1('Cat',1,1,10,70,mat ch2$,mat cm2$,1,usefile)
+	fnFlexInit1('Cat',1,1,10,70,mat ch2$,mat cm2$,1,usefile)
 	restore #3:
 	do
 		read #3,using L1140: mat ji1, jn$, mat ji2, pt, empnam$, sal eof L2160
@@ -250,7 +250,7 @@ CORRECTIONS: !
 		item2$(9)=str$(ji2(1)): item2$(10)=str$(ji2(2))
 		item2$(11)=str$(ji2(3)) : item2$(12)=str$(ji2(4))
 		item2$(13)=str$(ji2(5)): item2$(14)=str$(pt)
-		fnflexadd1(mat item2$)
+		fnFlexAdd1(mat item2$)
 	loop
 	L2160: !
 	fnCmdKey("&Add",1,0,0,"Add a new transaction." )

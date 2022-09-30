@@ -40,7 +40,7 @@ MAIN: ! r:
 ! DATE_LIST: !
 	fnTos
 	mylen=10: mypos=mylen+3 : right=1
-	fnflexinit1('acglpost2',lc=1,1,15,30,mat chdr$,mat cmask$,1)
+	fnFlexInit1('acglpost2',lc=1,1,15,30,mat chdr$,mat cmask$,1)
 	fngetdir2('[Q]\GLmstr\',mat filename$,'','GL*.h[cno]',mat filedate$,mat filetime$)
 	dircount=0
 	for filenameItem=1 to udim(mat filename$)
@@ -51,7 +51,7 @@ MAIN: ! r:
 			item$(1)=filename$(filenameItem)(3:8) 
 			item$(2)=filedate$(filenameItem)
 			item$(3)=filetime$(filenameItem)
-			fnflexadd1(mat item$)
+			fnFlexAdd1(mat item$)
 		end if
 		L420: !
 	nex filenameItem

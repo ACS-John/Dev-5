@@ -26,7 +26,7 @@ goto ScreenOne
 ScreenOne: ! r:
 	do
 		fnTos : rc=0
-		fnflexinit1('Collections',6,1,10,80,mat chdr$,mat cm$,1) ! r: add the grid to the screen
+		fnFlexInit1('Collections',6,1,10,80,mat chdr$,mat cm$,1) ! r: add the grid to the screen
 		restore #hTransBatch:
 		totalacct=0 : totalCollections=totalDebitMemos=totalCreditMemos=0
 		do  ! for j=1 to lrec(hTransBatch)
@@ -55,7 +55,7 @@ ScreenOne: ! r:
 			next j2
 			if uprc$(escrow$)='Y' then m1_item$(cHdrItem+=1)=str$(escrow)
 			mat m1_item$(cHdrItem)
-			fnflexadd1(mat m1_item$)
+			fnFlexAdd1(mat m1_item$)
 			L1070: !
 		loop
 		L1080: !
@@ -424,17 +424,18 @@ def fn_updateBudget(x1$*10; ___,bd1Count) ! very local.
 	read #hBudget,using 'form pos 1,C 10,PD 4,12*PD 5.2,2*PD 3',key=x1$: z$,mat ba,mat badr nokey Bud2Finis
 	ta1=badr(1)
 		
-		pr '       z$=';z$
-		pr '      ta1=';ta1
-		pr 'bt1(14,1)=';bt1(14,1)
-		pr 'transDate=';transDate
-		pause
+		! pr '       z$=';z$
+		! pr '      ta1=';ta1
+		! pr 'bt1(14,1)=';bt1(14,1)
+		! pr 'transDate=';transDate
+		! pause
 		
 	do until ta1=0
 		read #hBudgetTrans,using FbudgetTrans,rec=ta1: z$,mat bt1,nba noRec Bud2LoopEnd
 		if bt1(14,1)>0 and bt1(14,1)<>transDate then 
 			! do nothing
 		else if bt1(14,1)=transDate then 
+			! if cleint then bt(14)=transdate instead
 			bt1(14,1)=bt1(14,2)=0
 			
 			rewrite #hBudgetTrans,using FbudgetTransBt1,rec=ta1: mat bt1

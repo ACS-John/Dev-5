@@ -23,11 +23,11 @@ def library fnemployee_srch(&x$; fixgrid)
 	usefile=0 ! if fixgrid=99 then usefile=0 else usefile=1 
 	! set to rebuild grid file only as you exit prfm and the 
 	! fixgrid code has been changed to necessary
-	usefile=fnflexinit1('Employee',1,1,10,70,mat ch$,mat cm$,1,usefile)
+	usefile=fnFlexInit1('Employee',1,1,10,70,mat ch$,mat cm$,1,usefile)
 	if usefile>0 then goto L280 ! file already exists, do not recreate
 	READ_FILE: ! 
 		read #hEmployee,using 'form pos 1,c 8,3*c 30,pos 99,c 11,pos 179,c 12': mat item$ eof L280 ioerr ERR_READ
-		fnflexadd1(mat item$)
+		fnFlexAdd1(mat item$)
 	goto READ_FILE
 
 	ERR_READ: ! 

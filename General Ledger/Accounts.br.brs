@@ -313,7 +313,7 @@ def fn_transactionGrid(isCurrent,gl$,h; ___,nta,recordnum,pc2,trgl$*12)
 	chdr$(7)='Chk/Ref '    	: cmask$(7)=''
 	chdr$(8)='Description' 	: cmask$(8)=''
 	chdr$(9)='Period'      	: cmask$(9)='30'
-	fnflexinit1('Currentfile',1,1,20,85,mat chdr$,mat cmask$,1,0)
+	fnFlexInit1('Currentfile',1,1,20,85,mat chdr$,mat cmask$,1,0)
 	restore #h,search>=gl$: nokey EoTransGrid
 	do
 		if isCurrent=1 then 
@@ -331,7 +331,7 @@ def fn_transactionGrid(isCurrent,gl$,h; ___,nta,recordnum,pc2,trgl$*12)
 			item$(7)=tr$
 			item$(8)=td$
 			item$(9)=str$(pc2)
-			fnflexadd1(mat item$)
+			fnFlexAdd1(mat item$)
 		end if
 	loop while gl$=trgl$
 	EoTransGrid: !

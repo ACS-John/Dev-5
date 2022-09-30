@@ -39,11 +39,11 @@ Main: ! r:
 	chdr$(2)='Company Name'
 	cmask$(1)='30'
 	cmask$(2)=''
-	fnflexinit1('autoproc',5,25,15,35,mat chdr$,mat cmask$,1,0,frame)
+	fnFlexInit1('autoproc',5,25,15,35,mat chdr$,mat cmask$,1,0,frame)
 	for j=1 to max(count,1)
 		item$(1)=str$(clnum(j))
 		item$(2)=clnam$(j)
-		fnflexadd1(mat item$)
+		fnFlexAdd1(mat item$)
 	next j
 	fnFra(22,1,4,30,'Period to Print','Select the type of processing.')
 	fnOpt(1,3,'Weekly',0,1)

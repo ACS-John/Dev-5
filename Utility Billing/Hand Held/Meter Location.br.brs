@@ -12,6 +12,8 @@ fnTop(program$)
 !   !   fncreg_write('u4 meter location account numbers left justified','False')
 !      end if
 !  if forceKeepLeft then  pr 'forceKeepLeftCount=';forceKeepLeftCount : pause : end ! /r
+
+
 fnHamsterFio(table$)
 Xit: !
 fnXit
@@ -458,7 +460,7 @@ def library fnCustomerMeterLocationSelect(account$*10,serviceCode$*2) ! cmls
 	cmlsFlexItem$(6)='Meter Number      '
 	cmlsFlexItem$(7)='Transmitter Number'
 	cmlsFlexItem$(8)='Meter Type        '
-	fnflexinit1('locationSelect',4,1,20,20,mat cmlsFlexItem$) : cmlsFlexCount=0
+	fnFlexInit1('locationSelect',4,1,20,20,mat cmlsFlexItem$) : cmlsFlexCount=0
 	do
 		read #hCmlsLocation(5),using form$(hCmlsLocation(1)): mat location$,mat locationN eof CmlsEoLocation
 		if location$(loc_serviceId)=serviceCode$ then
@@ -470,7 +472,7 @@ def library fnCustomerMeterLocationSelect(account$*10,serviceCode$*2) ! cmls
 			cmlsFlexItem$(6)=location$(loc_meterNumber    )
 			cmlsFlexItem$(7)=location$(loc_transmitter    )
 			cmlsFlexItem$(8)=location$(loc_meterType      )
-			fnflexadd1(mat cmlsFlexItem$) : cmlsFlexCount+=1
+			fnFlexAdd1(mat cmlsFlexItem$) : cmlsFlexCount+=1
 		end if
 	loop
 	CmlsEoLocation: !

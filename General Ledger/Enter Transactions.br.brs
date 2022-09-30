@@ -231,7 +231,7 @@ goto ScreenOne ! /r
 		dim glitem2$(0)*128
 		mat glitem2$(colCount)
 		! /r
-		fnflexinit1('GlTrans',row,col,twenty,ninety,mat chdr2$,mat cmask2$,1,0,0)
+		fnFlexInit1('GlTrans',row,col,twenty,ninety,mat chdr2$,mat cmask2$,1,0,0)
 		restore #hMerge:
 		do
 			if fn_readMerge(0,gl$,tDate,tAmt,tType,postCode,tr$,desc$,vn$,jv2$,key$)=-4270 then goto TgEoF
@@ -240,11 +240,11 @@ goto ScreenOne ! /r
 					mat glitem2$=('')
 					glitem2$(6)=str$(net)
 					glitem2$(7)='Net'
-					fnflexadd1(mat glitem2$)
+					fnFlexAdd1(mat glitem2$)
 
 					if enableblankLineAfterNet then
 						mat glitem2$=('')
-						fnflexadd1(mat glitem2$)
+						fnFlexAdd1(mat glitem2$)
 					end if
 
 					net=0 ! add net subtotals any time reference number changes     ( AND NET<>0)was in there
@@ -271,7 +271,7 @@ goto ScreenOne ! /r
 			glitem2$(10)=trim$(fnrgl$(key$))
 			lineCount+=1
 			if glitem2$(1)=str$(previouslySelected) then setenv('current_grid_row',str$(lineCount))
-			fnflexadd1(mat glitem2$)
+			fnFlexAdd1(mat glitem2$)
 			net+=tAmt ! add net check
 			oldtr$=tr$ ! hold reference numbers
 		loop
@@ -281,7 +281,7 @@ goto ScreenOne ! /r
 			glitem2$(6)=str$(net)
 			glitem2$(7)='Net'
 			lineCount+=1
-			fnflexadd1(mat glitem2$)
+			fnFlexAdd1(mat glitem2$)
 		end if
 	fnend
 	def fn_totalGrid(hAccount,mat kList$,mat kReceipts,mat kDisbursements,mat kAdjustments,lc,ps)
@@ -298,7 +298,7 @@ goto ScreenOne ! /r
 			L6240: !
 		next j
 
-		fnflexinit1('Prooftotals',lc,ps,15,90,mat chdr_proof_total$,mat cmask3$,1,0,0)
+		fnFlexInit1('Prooftotals',lc,ps,15,90,mat chdr_proof_total$,mat cmask3$,1,0,0)
 		mat glitem3$=('')
 		for j=1 to udim(mat kList$)
 			! if trim$(kList$(j))<>'' then ! skip blanks
@@ -308,7 +308,7 @@ goto ScreenOne ! /r
 			glitem3$(4)=str$(kDisbursements(j))
 			glitem3$(5)=str$(kAdjustments(j))
 			glitem3$(6)=str$(kEndBalance(j))
-			fnflexadd1(mat glitem3$)
+			fnFlexAdd1(mat glitem3$)
 			! end if
 		next j
 	fnend
@@ -463,7 +463,7 @@ def fn_scrMain(hMerge; editRecord,heading$*64,glBank$*12,transDate,bankAcctName$
 	mat cmask$(4)
 	mat cmask$=('')
 	cmask$(3)='10'
-	fnflexinit1('Glalloc',lc+=1,1,6,60,mat chdr$,mat cmask$,1,0,0)
+	fnFlexInit1('Glalloc',lc+=1,1,6,60,mat chdr$,mat cmask$,1,0,0)
 	restore #hMtemp:
 	dim allocItem$(4)*128
 	mat allocItem$(4)
@@ -473,7 +473,7 @@ def fn_scrMain(hMerge; editRecord,heading$*64,glBank$*12,transDate,bankAcctName$
 		allocItem$(2)=fnrgl$(allocgl$)
 		allocItem$(3)=str$(allocAmt)
 		allocItem$(4)=td$
-		fnflexadd1(mat allocItem$)
+		fnFlexAdd1(mat allocItem$)
 	loop
 	EO_FLEX1: ! /r
 	fnCmdKey('Save',ck_save1,editRecord,0,'Save this transaction and return to the transaction selection') ! formerly complete

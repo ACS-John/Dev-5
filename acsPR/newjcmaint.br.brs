@@ -540,7 +540,7 @@ REVIEW_DETAILS: ! r:
 	cm2$(5)='30': cm2$(6)='30': cm2$(7)="3"
 	cm2$(8)="32": cm2$(9)="32": cm2$(10)='10'
 	cm2$(11)='10': cm2$(12)='10': cm2$(13)=""
-	fnflexinit1('Cat',1,1,10,70,mat ch2$,mat cm2$,1,usefile)
+	fnFlexInit1('Cat',1,1,10,70,mat ch2$,mat cm2$,1,usefile)
 	! Restore #2,Key>=JN$&CN$: Nokey 4200
 	catkey$=cn$ ! $(TRIM$(JN$),6)&LPAD$(TRIM$(CN$),5)
 	READ_FILE: !
@@ -564,7 +564,7 @@ REVIEW_DETAILS: ! r:
 		item2$(9)=str$(tr(6)): item2$(10)=str$(tr(7))
 		item2$(11)=str$(tr(8)) : item2$(12)=str$(tr(9))
 		item2$(13)=pd$
-		fnflexadd1(mat item2$)
+		fnFlexAdd1(mat item2$)
 		goto L4180
 	end if
 	fnCmdKey("&Add",1,0,0,"Add a new category record." )

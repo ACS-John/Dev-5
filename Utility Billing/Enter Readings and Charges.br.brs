@@ -159,7 +159,7 @@ MENU1: ! r:
 ! /r
 	mat colhdr$(chc) : mat cm$(chc)
 
-	fnflexinit1("Work",2,frame_bd_witdh+3,28,74,mat colhdr$,mat cm$,1)
+	fnFlexInit1("Work",2,frame_bd_witdh+3,28,74,mat colhdr$,mat cm$,1)
 	 entryCount=0
 	ic=0
 	restore #hWork:
@@ -210,7 +210,7 @@ MENU1: ! r:
 		end if
 		item$(ic+=1)=str$(x(15)) ! final billing code
 		entryCount+=1
-		fnflexadd1(mat item$) ! pr mat item$ : pause
+		fnFlexAdd1(mat item$) ! pr mat item$ : pause
 	loop
 MENU1READWORKEOF: ! /r
 	fnLbl(1,frame_bd_witdh+4,'Entry Count: '&str$(entryCount))
@@ -1464,7 +1464,7 @@ def fn_loadBookOrHoldingFile(&addmethod; ___,book_or_holding_file$,ihDirFileMask
 	mat bookItem$(4)
 	mat colhdr$(4)
 	ihFileCount=fngetdir2('[Q]\UBmstr\',mat ihFilename$, '',ihDirFileMask$,mat ihFileDate$,mat ihFileTime$,0,mat ihFileSize)
-	fnflexinit1("book_"&book_or_holding_file$(1:1),1,mypos,10,32,mat colhdr$,mat cm2$,1)
+	fnFlexInit1("book_"&book_or_holding_file$(1:1),1,mypos,10,32,mat colhdr$,mat cm2$,1)
 
 	for ihFileItem=1 to ihFileCount
 		if book_or_holding_file$='Book' then
@@ -1476,7 +1476,7 @@ def fn_loadBookOrHoldingFile(&addmethod; ___,book_or_holding_file$,ihDirFileMask
 			dim bookComment$*128
 			fncreg_read('book comment '&str$(tmpBookNumber),bookComment$)
 			bookItem$(4)=bookComment$
-			fnflexadd1(mat bookItem$)
+			fnFlexAdd1(mat bookItem$)
 		else ! if book_or_holding_file$='Holding File' then
 			ihTmpHoldingFileNumber$=ihFilename$(ihFileItem)(7:pos(ihFilename$(ihFileItem),'.',-1)-1) conv ihInvalidFile
 			if ihTmpHoldingFileNumber$='-index' then goto ihInvalidFile
@@ -1484,7 +1484,7 @@ def fn_loadBookOrHoldingFile(&addmethod; ___,book_or_holding_file$,ihDirFileMask
 			bookItem$(2)=cnvrt$('pic(zzz,zzz,zzz,zzz)',ihFileSize(ihFileItem))
 			bookItem$(3)=ihFileDate$(ihFileItem)
 			bookItem$(4)=ihFileTime$(ihFileItem)
-			fnflexadd1(mat bookItem$)
+			fnFlexAdd1(mat bookItem$)
 		end if
 		ihInvalidFile: !
 	next ihFileItem
@@ -1930,7 +1930,7 @@ def fn_flexRead(myline,mypos,filnum,z$,begdate,enddate,selcode) ! library ready
 	end if
 	mat frColHdr$(headers)
 	mat colmask$(headers)
-	fnflexinit1("ubread",myline,mypos,13,30,mat frColHdr$,mat colmask$,1)
+	fnFlexInit1("ubread",myline,mypos,13,30,mat frColHdr$,mat colmask$,1)
 	items=0
 	mat item$=('')
 	restore #filnum,key>=rpad$(z$,kln(filnum)): nokey NO_RECORDS_FOUND
@@ -1958,12 +1958,12 @@ def fn_flexRead(myline,mypos,filnum,z$,begdate,enddate,selcode) ! library ready
 			item$(items+=1)=str$(gr)
 			item$(items+=1)=str$(gu)
 		end if
-		fnflexadd1(mat item$)
+		fnFlexAdd1(mat item$)
 	loop
 
 	NO_RECORDS_FOUND: !
 		if items=0 then mat item$=("")
-		fnflexadd1(mat item$)
+		fnFlexAdd1(mat item$)
 	FlexReadXit: !
 fnend
 def fn_writeWork(hWork,x$,mat x; overwriteDupeAccount) ! write to hWork file

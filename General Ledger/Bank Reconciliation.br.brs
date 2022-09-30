@@ -622,28 +622,28 @@ DISPLAY_GRID: !
 L5530: fnTos
 	respc=0 : mat resp$=('')
 	fnLbl(1,1,trim$(bn$(1:30))&"-"&type$,65,2)
-	fnflexinit1('Deposit-1',2,3,15,55,mat chdr$,mat cmask$,1)
+	fnFlexInit1('Deposit-1',2,3,15,55,mat chdr$,mat cmask$,1)
 	restore #clearing:
 	x=lrec(89): if nextrec>0 and x>1 and displayattop$='True' then goto L5580 else goto L5670
 L5580: for j=nextrec to lrec(clearing) ! read starting with next record
 		read #clearing,using 'form pos 1,C 21,G 6,pd 10.2,c 6',rec=j: flxitm$(2),flxitm$(3),amount,flxitm$(5) noRec L5610
 		flxitm$(1)=str$(rec(clearing))
 		flxitm$(4)=str$(amount)
-		fnflexadd1(mat flxitm$)
+		fnFlexAdd1(mat flxitm$)
 L5610: next j
 	for j=1 to max(nextrec-1,1) ! read records previously cleared or skipped
 		read #clearing,using 'form pos 1,C 21,G 6,pd 10.2,c 6',rec=j: flxitm$(2),flxitm$(3),amount,flxitm$(5) noRec L5650
 		flxitm$(1)=str$(rec(clearing))
 		flxitm$(4)=str$(amount)
 		if val(flxitm$(5))=stmtdt then total+=amount
-		fnflexadd1(mat flxitm$)
+		fnFlexAdd1(mat flxitm$)
 L5650: next j
 	goto L5690
 L5670: read #clearing,using 'form pos 1,C 21,G 6,pd 10.2,c 6': flxitm$(2),flxitm$(3),amount,flxitm$(5) eof L5690
 	flxitm$(1)=str$(rec(clearing))
 	flxitm$(4)=str$(amount)
 	if val(flxitm$(5))=stmtdt then total+=amount
-	fnflexadd1(mat flxitm$) : goto L5670
+	fnFlexAdd1(mat flxitm$) : goto L5670
 L5690: fnLbl(17,30,"Total Cleared:",16,1)
 	fnTxt(17,49,12,0,1,'10',0," ")
 	resp$(respc+=1)=str$(total)

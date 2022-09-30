@@ -324,7 +324,7 @@ MAIN: ! r:
 	mat cmask$(4)
 	mat cmask$=('')
 	cmask$(3)='10'
-	fnflexinit1('Glalloc',10,40,6,60,mat chdr$,mat cmask$,1,0,0)
+	fnFlexInit1('Glalloc',10,40,6,60,mat chdr$,mat cmask$,1,0,0)
 	restore #glallocations:
 	mat glitem$(4)
 	do  ! READ_GL_ALLOCATIONS: !
@@ -333,7 +333,7 @@ MAIN: ! r:
 		glitem$(2)=allocgl$
 		glitem$(3)=str$(allocamt)
 		glitem$(4)=td$
-		fnflexadd1(mat glitem$)
+		fnFlexAdd1(mat glitem$)
 	loop  !  goto READ_GL_ALLOCATIONS
 EO_FLEX1: ! /r
 	if sel=1 or sel=6 then
@@ -528,14 +528,14 @@ L5170: !
 	goto MAIN ! /r
 REVIEW_TRANS: ! r:
 	fnTos(sn$="GLInput4")
-	fnflexinit1('GlTrans',1,1,20,90,mat chdr2$,mat cmask2$,1,0,0)
+	fnFlexInit1('GlTrans',1,1,20,90,mat chdr2$,mat cmask2$,1,0,0)
 	restore #h_gl_work:
 L5230: read #h_gl_work,using F_2B: gl$,tr(4),tr(5),tr(6),tr(7),tr$,td$,vn$,mat jv$,key$ eof L5310
 	if trim$(tr$)<>"" and tr$<>oldtr$ then
 		mat glitem2$=("")
 		glitem2$(6)=str$(net)
 		glitem2$(7)="Net"
-		fnflexadd1(mat glitem2$)
+		fnFlexAdd1(mat glitem2$)
 		net=0 ! add net subtotals any time reference number changes     ( AND NET<>0)was in there
 	end if
 ! gL$=CNVRT$("pic(zz#)",TR(1))&CNVRT$("pic(zzzzz#)",TR(2))&CNVRT$("pic(zz#)",TR(3))
@@ -546,14 +546,14 @@ L5230: read #h_gl_work,using F_2B: gl$,tr(4),tr(5),tr(6),tr(7),tr$,td$,vn$,mat j
 	glitem2$(5)=gl$
 	glitem2$(6)=str$(tr(5))
 	glitem2$(7)=td$
-	fnflexadd1(mat glitem2$)
+	fnFlexAdd1(mat glitem2$)
 	net+=tr(5) ! add net check
 	oldtr$=tr$ ! hold reference numbers
 	goto L5230
 L5310: !
 	mat glitem2$=("")
 	glitem2$(6)=str$(net): glitem2$(7)="Net"
-	fnflexadd1(mat glitem2$)
+	fnFlexAdd1(mat glitem2$)
 	net=0 ! add net subtotals at end of listing
 	fnCmdKey("&Add",1,0,0,"Add additional transactions or allocations.")
 	fnCmdKey("&Edit",2,1,0,"Highlight any allocation and click Edit to change any part of the entire transaction")
@@ -568,7 +568,7 @@ L5310: !
 	if ckey=4 then fn_pr_proof_list
 	goto SCREEN_1 ! (on ckey=1 or anything else)
 ! General Ledger Breakdown Grid
-	fnflexinit1('PayeeGl',16,1,5,70,mat chdr$,mat cmask$,1,0,0)
+	fnFlexInit1('PayeeGl',16,1,5,70,mat chdr$,mat cmask$,1,0,0)
 ! r: populate grid from PayeeGL
 	if trim$(vn$)="" then goto EO_FLEX3
 	restore #payeegl,key>=vn$: nokey EO_FLEX3
@@ -580,7 +580,7 @@ L5310: !
 		glitem$(3)=payeegl$
 		glitem$(4)=str$(percent)
 		glitem$(5)=td$
-		fnflexadd1(mat glitem$)
+		fnFlexAdd1(mat glitem$)
 	loop
 	EO_FLEX3: ! /r
 return  ! /r
@@ -661,7 +661,7 @@ SCREEN_PROOF_TOTALS: !
 L6240: !
 	next j
 
-	fnflexinit1('Prooftotals',8,1,15,90,mat chdr_proof_total$,mat cmask3$,1,0,0)
+	fnFlexInit1('Prooftotals',8,1,15,90,mat chdr_proof_total$,mat cmask3$,1,0,0)
 	mat glitem3$=("")
 	for j=1 to 30
 		if trim$(k_list$(j))<>"" then ! skip blanks
@@ -671,7 +671,7 @@ L6240: !
 			glitem3$(4)=str$(k(j,6))
 			glitem3$(5)=str$(k(j,7))
 			glitem3$(6)=str$(k(j,8))
-			fnflexadd1(mat glitem3$)
+			fnFlexAdd1(mat glitem3$)
 		end if
 	next j
 	fnCmdKey("Print Proof Totals",10)

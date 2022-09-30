@@ -15,11 +15,11 @@ def library fncategory_srch(&cn$;fixgrid)
 		fnTos(sn$="CategorySrch")
 		ch$(1)="Category" : ch$(2)="Name"
 		mat ch$(2) : mat cm$(2) : cm$(1)='30'
-		fnflexinit1('CategorySrch',1,1,10,70,mat ch$,mat cm$,1,usefile)
+		fnFlexInit1('CategorySrch',1,1,10,70,mat ch$,mat cm$,1,usefile)
 		if usefile>0 then goto L300 ! file already exists, do not recreate
 		READ_FILE: !
 		read #file_num,using 'form pos 1,c 5,c 30': item$(1),item$(2) eof L300 ioerr ERR_READ
-		fnflexadd1(mat item$)
+		fnFlexAdd1(mat item$)
 		goto READ_FILE
  
 ERR_READ: ! r:

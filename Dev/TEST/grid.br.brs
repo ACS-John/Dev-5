@@ -16,7 +16,7 @@
 	colmask$(5)="5"
 	colmask$(6)=""
 	fnTos(sn$="testflex")
-	fnflexinit1("ubrate",1,1,10,50,mat colhdr$,mat colmask$,1)
+	fnFlexInit1("ubrate",1,1,10,50,mat colhdr$,mat colmask$,1)
 	dim source_format$(6)
 	source_format$(1)='ccyymmdd'
 	source_format$(2)='mmddccyy'
@@ -32,7 +32,7 @@
 		item$(4)=date$(days(test_date,'ccyymmdd'),source_format$(x)) ! )date$("dd/mm/yy")
 		item$(5)=date$(days(test_date,'ccyymmdd'),source_format$(x)) ! )date$("dd/mm/yy")
 		item$(6)=source_format$(x) ! )date$("dd/mm/yy")
-		fnflexadd1(mat item$)
+		fnFlexAdd1(mat item$)
 	next x
 EO_GRID: !
 	fnCmdKey("End",5,0,0)

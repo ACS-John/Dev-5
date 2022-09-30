@@ -109,7 +109,7 @@ def fn_main
 		if env$('ExitNow')<>'yes' then
 			Tos: !
 			fnTos : frameCount=0
-			fnflexinit1('menu',program_grid_line,program_grid_col,grid_height,grid_width,mat headings$,mat column_mask$)
+			fnFlexInit1('menu',program_grid_line,program_grid_col,grid_height,grid_width,mat headings$,mat column_mask$)
 
 			fn_captionUpdate
 			fn_updateProgramGrid
@@ -925,7 +925,7 @@ fnend
 			setenv('current_grid_row',str$(upg_item))
 		end if
 
-		fnflexadd1(mat gridRow$)
+		fnFlexAdd1(mat gridRow$)
 
 	fnend
 def fn_dropDownMenus

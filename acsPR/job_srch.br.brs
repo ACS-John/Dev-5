@@ -20,11 +20,11 @@ def library fnjob_srch(&jn$;fixgrid)
 	ch$(4)="City, ST Zip" 
 	mat ch$(4) : mat cm$(4) : mat cm$=("4")
 	if fixgrid=99 then usefile=0 else usefile=1 ! set to rebuild grid file only as you exit program and the   fixgrid code has been changed to necessary
-	usefile=fnflexinit1('Job',1,1,10,70,mat ch$,mat cm$,1,usefile)
+	usefile=fnFlexInit1('Job',1,1,10,70,mat ch$,mat cm$,1,usefile)
 	if usefile>0 then goto L280 ! file already exists, do not recreate
 	READ_FILE: ! 
 		read #h,using 'form pos 1,c 6,c 40,c 30,x 30,c 30': mat item$ eof L280 ioerr ERR_READ
-		fnflexadd1(mat item$)
+		fnFlexAdd1(mat item$)
 	goto READ_FILE
 
 	ERR_READ: ! 

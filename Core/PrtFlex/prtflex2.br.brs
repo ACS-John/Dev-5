@@ -35,7 +35,7 @@ PRINTGRID: ! r: Prints the grid
 	fnTos
 	fnLbl(1,1,uprc$(gridname$),20,2,3)
 	gosub GRIDHEADING ! reads the headings that were created above
-	fnflexinit1("flexprint",3,1,10,70,mat colhdr$,mat colmask$,1)
+	fnFlexInit1("flexprint",3,1,10,70,mat colhdr$,mat colmask$,1)
 ! Restore #1:
 READ_NEXT: gosub READDATAFILES ! reads the database for the grid information                                     These read statements and form statements must
 !                     be in a dispaly file in the data base folder with                               a "_read" on the end of the file name.  The file                                name must be the same as the database name + _read
@@ -44,7 +44,7 @@ READ_NEXT: gosub READDATAFILES ! reads the database for the grid information    
 	if end_date<>0 and end_date<tdate then goto READ_NEXT
 	if sel_code=2 and tcode<>1 then goto READ_NEXT
 	gosub GRIDDETAILS ! Assign the variable names to                                each column
-	fnflexadd1(mat item$)
+	fnFlexAdd1(mat item$)
 	goto READ_NEXT
 	EOFONREAD: ! Complete the grid once all data has been read
 	! fnLbl(15,1,"Export the grid to a fixed width file, for later use.")

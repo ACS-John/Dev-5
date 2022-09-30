@@ -24,11 +24,11 @@ def library fnCustomerSearch(&x$;fixgrid)
 	ch$(11)='Meter'
 	ch$(12)='Alpha'
 	mat cm$=('80') : cm$(2)='61' : cm$(8)='61': cm$(9)='61'
-	fnflexinit1('Cust2',1,1,10,72,mat ch$,mat cm$,1)
+	fnFlexInit1('Cust2',1,1,10,72,mat ch$,mat cm$,1)
 	do 
 		ReadCustomer: ! 
 		read #hCustomer,using Fcustomer: mat item$ eof EoCustomer ioerr ErrRead
-		fnflexadd1(mat item$)
+		fnFlexAdd1(mat item$)
 	loop 
 
 	ErrRead: ! 

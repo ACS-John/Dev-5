@@ -29,12 +29,12 @@ RATIOMSTGRID: !
 	cmask$(1)='30' : cmask$(2)='': cmask$(3)=''
 	frame=0
 	restore #ratiomst:
-	fnflexinit1('Ratiomst1',lc=1,1,10,50,mat chdr$,mat cmask$,1)
+	fnFlexInit1('Ratiomst1',lc=1,1,10,50,mat chdr$,mat cmask$,1)
 READ_RATIOMST: ! read Ratiomst file
 	read #ratiomst,using 'form pos 1,G 3,C 40,80*c 12': hac$,na$,mat gl$ eof EO_RATIOMST_GRID
 	item$(1)=str$(rec(ratiomst))
 	item$(2)=hac$: item$(3)=na$
-	fnflexadd1(mat item$)
+	fnFlexAdd1(mat item$)
 	goto READ_RATIOMST
 EO_RATIOMST_GRID: !
 	fnLbl(11,1,"")

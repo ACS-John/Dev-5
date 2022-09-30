@@ -293,7 +293,7 @@ L2430: fnTos
 respc=0
 fnLbl(1,1,bud$,50,right) ! move cmdkeys down
 frame=0
-fnflexinit1('bgmaintgrid',2,1,20,95,mat chdr$,mat cmask$,1,0)
+fnFlexInit1('bgmaintgrid',2,1,20,95,mat chdr$,mat cmask$,1,0)
 READ_BUDGET_GRID: ! read budget items
 read #2,using 'form pos 1,C 12,6*PD 6.2,2*C 50,C 1': g1$,mat bg,gd$,ex$,cd$ eof EO_BUDGET_GRID noRec L2650
 if needactual=0 and needbudget=0 then goto L2610
@@ -318,7 +318,7 @@ item$(8)=str$(bg(5))
 item$(9)=str$(bg(6)) : item$(2)=gd$(1:30) : item$(11)=ex$
 item$(12)=cd$
 item$(13)=str$(prioryear)
-L2640: fnflexadd1(mat item$)
+L2640: fnFlexAdd1(mat item$)
 L2650: goto READ_BUDGET_GRID
 EO_BUDGET_GRID: ! /r
 fnLbl(22,40,' ',mylen,right) ! move cmdkeys down

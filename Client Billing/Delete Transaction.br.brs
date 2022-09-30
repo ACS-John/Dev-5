@@ -18,7 +18,7 @@ do ! main loop
 		heading$(10)='Inv Description   ' : mask$(10)=''
 		heading$(11)='Next Trans Address' : mask$(11)='30'
 	end if ! /r
-	fnflexinit1('tmTran',3,1,10,10,mat heading$,mat mask$) ! r: draw the flexgrid
+	fnFlexInit1('tmTran',3,1,10,10,mat heading$,mat mask$) ! r: draw the flexgrid
 	dim trans$(0)*80,transN(0)
 	hTrans=fn_openFio('Client Billing Transaction',mat trans$,mat transN, 1)
  
@@ -39,7 +39,7 @@ do ! main loop
 		item$(9 )=str$(transN(tr_postCode     ))
 		item$(10)=     trans$(tr_desc         )
 		item$(11)=str$(transN(tr_nta          ))
-		fnflexAdd1(mat item$)
+		fnFlexAdd1(mat item$)
 	loop
 	EoFlexDraw: ! /r
 	fnCloseFile(hTrans,'Client Billing Transaction')
@@ -90,7 +90,7 @@ def library fnClientName$*30(clientId$)
 	fnClientName$=fn_clientName$(clientId$)
 fnend
 def fn_clientName$*30(clientId$; ___,return$*30,x)
-	if ~clientName_setup then
+	if ~clientName_setup then ! r:
 		clientName_setup=1
 		dim client$(0)*256
 		dim clientN(0)
@@ -106,7 +106,7 @@ def fn_clientName$*30(clientId$; ___,return$*30,x)
 		loop
 		EoClientName: !
 		fnCloseFile(hClient,'CO Client')
-	end if
+	end if ! /r
 	x=srch(mat clientIds$,trim$(clientId$))
 	if x<=0 then
 		return$=''

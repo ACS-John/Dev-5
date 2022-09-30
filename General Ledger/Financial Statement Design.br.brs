@@ -37,7 +37,7 @@ goto ScrGrid ! /r
 ScrGrid: ! r:
 	fnTos
 	fnlbl(1,1,id$(selection))
-	fnflexinit1('fin_stmtgl',lc=3,1,10,70,mat chdr$,mat cmask$,1)
+	fnFlexInit1('fin_stmtgl',lc=3,1,10,70,mat chdr$,mat cmask$,1)
 	restore #hFSDesign:
 	do
 		READ_FIN_STMT: ! r: read hFSDesign file and populate grid
@@ -74,7 +74,7 @@ ScrGrid: ! r:
 		item$(21)=str$(rnp)
 		item$(22)=str$(fc)
 		item$(23)=d$(1:10)
-		fnflexadd1(mat item$)
+		fnFlexAdd1(mat item$)
 	loop
 	EO_FIN_STMT_GRID: ! /r
 	fnCmdKey("&Edit"  ,2,1,0,"Highlight any record and press Enter or click Edit to change any existing financial statement reference number.")
