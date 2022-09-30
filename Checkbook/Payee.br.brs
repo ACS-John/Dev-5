@@ -41,7 +41,7 @@ def fn_addpayee
 		chdr$(12)='Fax'
 		cmask$(1)=cmask$(2)=''
 		cmask$(3)=cmask$(4)=cmask$(5)=cmask$(6)='80'
-		fnflexinit1('Payee',2,1,20,100,mat chdr$,mat cmask$,1,0,frame)
+		fnFlexInit1('Payee',2,1,20,100,mat chdr$,mat cmask$,1,0,frame)
 		editrec=0
 		restore #paymstr:
 		READ_PAYMSTR_1: !
@@ -58,7 +58,7 @@ def fn_addpayee
 		item$(10)=contact$
 		item$(11)=email$
 		item$(12)=fax$
-		fnflexadd1(mat item$)
+		fnFlexAdd1(mat item$)
 		goto READ_PAYMSTR_1
 		EO_FLEX1: !
 		fnCmdKey('&Add',1,0,0,'Add new payee records')
@@ -174,7 +174,7 @@ def fn_addpayee
 		chdr$(5)='Description'
 		cmask$(1)=cmask$(2)=cmask$(3)=cmask$(5)=''
 		cmask$(4)='32'
-		fnflexinit1('PayeeGl',17,1,5,70,mat chdr$,mat cmask$,1,0,0)
+		fnFlexInit1('PayeeGl',17,1,5,70,mat chdr$,mat cmask$,1,0,0)
 		if trim$(vn$)='' then goto EO_FLEX3
 		restore #payeegl,key>=vn$: nokey EO_FLEX3
 		do
@@ -185,7 +185,7 @@ def fn_addpayee
 			glitem$(3)=payeegl$
 			glitem$(4)=str$(percent)
 			glitem$(5)=gldesc$
-			fnflexadd1(mat glitem$)
+			fnFlexAdd1(mat glitem$)
 		loop
 		EO_FLEX3: !
 		fnLbl(21,1,'',1,0,0,0) ! add space before buttons
@@ -360,7 +360,7 @@ CHECK_HISTORY: ! r:
 	cmask$(3)='1'
 	cmask$(4)='10'
 	cmask$(8)='1'
-	fnflexinit1('Gayee-'&str$(wbc)&'-'&str$(wtt),7,1,10,85,mat chdr$,mat cmask$,1,0,frame)
+	fnFlexInit1('Gayee-'&str$(wbc)&'-'&str$(wtt),7,1,10,85,mat chdr$,mat cmask$,1,0,frame)
 	key$=vn$&cnvrt$('pic(Z#)',wbc)&cnvrt$('pic(#)',wtt)&rpt$(chr$(0),8)
 	restore #trans,key>=key$: nokey EO_FLEX2
 	transactionstotal=0
@@ -375,7 +375,7 @@ CHECK_HISTORY: ! r:
 	item6$(7)=str$(pcde) : item6$(8)=str$(clr)
 	item6$(9)=str$(scd) : item6$(10)=str$(bank_code)
 	item6$(11)=str$(tcde)
-	fnflexadd1(mat item6$)
+	fnFlexAdd1(mat item6$)
 	transactionstotal+=tr3
 	goto READ_TRANS
 	EO_FLEX2: !

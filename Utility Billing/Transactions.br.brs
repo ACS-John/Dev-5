@@ -621,7 +621,7 @@ fnend
 		dim colHdr_enabled$(0)*20
 		dim colMask_enabled$(0)
 		enavledHeaderCount=fn_getEnabledHeader(mat colHdr_enabled$,mat colMask_enabled$,mat colEnabled)
-		fnflexinit1('ubtrans_b',myline,mypos,25,100,mat colHdr_enabled$,mat colMask_enabled$,1)
+		fnFlexInit1('ubtrans_b',myline,mypos,25,100,mat colHdr_enabled$,mat colMask_enabled$,1)
 	
 		if trim$(z$)='' then
 			restore #hTrans:
@@ -671,7 +671,7 @@ fnend
 			end if
 			fn_itemAddN(					tbal	)
 			if enavledHeaderCount<>items then pr 'something is off' : pause
-			fnflexadd1(mat item$)
+			fnFlexAdd1(mat item$)
 		loop
 		FlexTranFinis: !
 		if hTransOpened then close #hTrans: ioerr ignore

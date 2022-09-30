@@ -32,7 +32,7 @@ do ! r: main loop
 	if trim$(clientId$)='-1' then
 		fnStatus('client=-1 trans detected and skipped')
 	else if toN(tr_postCode)=9 then
-		fnStauts('Already processed transaction (toN(tr_postCode)=9) detected and skipped')
+		fnStatus('Already processed transaction (toN(tr_postCode)=9) detected and skipped')
 	else
 		read #hClient,using form$(hClient),key=rpad$(trim$(clientId$),5): mat c$,mat cN ! nokey NokeyClient 9/5/21 - i want to get errors if they happen here
 		to$(tr_inv)=lpad$(rtrm$(to$(tr_inv)),12)

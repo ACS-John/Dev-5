@@ -24,7 +24,7 @@ def library fnaddreceipt
 	chdr$(3)='Description'
 	cmask$(1)=cmask$(2)='' 
 	cmask$(3)='80' 
-	fnflexinit1('Receipt1',1,1,10,35,mat chdr$,mat cmask$,1,0,frame) 
+	fnFlexInit1('Receipt1',1,1,10,35,mat chdr$,mat cmask$,1,0,frame) 
 	editrec=0
 	restore #receipt: 
 	READ_RECEIPT_1: ! 
@@ -33,7 +33,7 @@ def library fnaddreceipt
 	read #receipt,using 'form pos 1,C 8,c 30,',release: rec$,nam$ eof EO_FLEX1
 	item$(1)=str$(rec(receipt)) 
 	item$(2)=rec$ : item$(3)=nam$ 
-	fnflexadd1(mat item$)
+	fnFlexAdd1(mat item$)
 	goto READ_RECEIPT_1
 	EO_FLEX1: ! 
 	fnCmdKey('&Add',1,0,0,'Add new receipt records') 
@@ -120,7 +120,7 @@ def library fnaddreceipt
 		cmask$(4)='32'
 		dim glitem$(5)*30
 		mat glitem$(5)
-		fnflexinit1('ReceiptGl',17,1,5,70,mat chdr$,mat cmask$,1,0,0)
+		fnFlexInit1('ReceiptGl',17,1,5,70,mat chdr$,mat cmask$,1,0,0)
 		if trim$(rec$)='' then goto EO_FLEX3
 		restore #receiptgl,search>=rec$: nokey EO_FLEX3
 		READ_RECEIPT_GL: ! 
@@ -131,7 +131,7 @@ def library fnaddreceipt
 			glitem$(1)=str$(rec(receiptgl)) : glitem$(2)=receiptkey$
 			glitem$(3)=receiptgl$ : glitem$(4)=str$(percent)
 			glitem$(5)=gldesc$
-			fnflexadd1(mat glitem$)
+			fnFlexAdd1(mat glitem$)
 		goto READ_RECEIPT_GL
 		EO_FLEX3: ! 
 		pas=1 ! don't redo combo boxes on gl

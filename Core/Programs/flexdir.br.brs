@@ -5,8 +5,13 @@ autoLibrary
 on error goto Ertn
 
 dim resp$(10)*255
-dim path$(2,1000)*255,prog$(2,1000)*100,ext$(2,1000)*100
-dim brfn$(1000)*255,brsfn$(1000)*255,dur$*200,item$(1000)*255
+dim path$(2,1000)*255
+dim prog$(2,1000)*100
+dim ext$(2,1000)*100
+dim brfn$(1000)*255
+dim brsfn$(1000)*255
+dim dur$*200
+dim item$(1000)*255
 
 fnTop('S:\Core\FlexDir','Flex Dir')
 fngetcd(dur$)
@@ -34,15 +39,16 @@ OUT_THE_LOOP: !
 	resp$(2)=dur$
 	ch$(1)='File Name' : ch$(2)='Ext' : ch$(3)='Path'
 	mat item$(3) : mat ch$(3) : mat cm$(3)
-	fnflexinit1('loc-br',3,1,15,90,mat ch$,mat cm$,1)
+	fnFlexInit1('loc-br',3,1,15,90,mat ch$,mat cm$,1)
 	for j=1 to udim(brfn$)
 		item$(1) = prog$(1,j)
 		item$(2) = ext$(1,j)
 		item$(3) = path$(1,j)
-		fnflexadd1(mat item$)
+		fnFlexAdd1(mat item$)
 	next j
 	fnCmdSet(102)
-L350: ckey=fnAcs(mat resp$)
+	L350: !
+	ckey=fnAcs(mat resp$)
 	if ckey=5 then goto DONE
 	filter$=resp$(1)
 	dur$=resp$(2)

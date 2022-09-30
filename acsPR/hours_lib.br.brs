@@ -40,7 +40,7 @@ def library fnHours(eno)
 		cmask$(6)='10'
 		cmask$(7)='10' 
 		cmask$(8)='10' 
-		fnflexinit1('Hours',lc+2,1,15,66,mat chdr$,mat cmask$,1) 
+		fnFlexInit1('Hours',lc+2,1,15,66,mat chdr$,mat cmask$,1) 
 		lc+=18
 		if hact$="[All]" then 
 			restore #hBreakdown: nokey EOBREAKDOWN 
@@ -63,9 +63,9 @@ def library fnHours(eno)
 		if trim$(oldclass$)<>"" and oldclass$<>class$ then 
 			mat flxitm$=("")
 			balance=0
-			fnflexadd1(mat flxitm$)
+			fnFlexAdd1(mat flxitm$)
 		end if
-		if hact$="[All]" and holdempno<>empno then mat flxitm$=(""): balance=0: fnflexadd1(mat flxitm$)
+		if hact$="[All]" and holdempno<>empno then mat flxitm$=(""): balance=0: fnFlexAdd1(mat flxitm$)
 		balance+=increase-decrease
 		classification$=""
 		read #hClassification,using "form pos 6,c 30",key=class$,release: classification$ nokey ignore
@@ -75,7 +75,7 @@ def library fnHours(eno)
 		flxitm$(5)=str$(tdate) 
 		flxitm$(6)=str$(increase): flxitm$(7)=str$(decrease) 
 		flxitm$(8)=str$(balance)
-		fnflexadd1(mat flxitm$)
+		fnFlexAdd1(mat flxitm$)
 	goto READHOURBREAKDOWN
 	EOBREAKDOWN: ! 
 		if hact$="[All]" then hact$=""

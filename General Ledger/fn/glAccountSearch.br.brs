@@ -15,8 +15,8 @@ def library fnGlAccountSearch(&account$ ) ! ; fixgrid)
 	cm$(1)=cm$(2)="80": cm$(3)='10'
 	cm$(4)=cm$(5)=cm$(6)=cm$(7)=cm$(8)=cm$(9)='30'
 	! if fixgrid=99 then usefile=0 else usefile=1 ! set to rebuild grid file only as you exit ubfm and the    fixgrid code has been changed to necessary
-	! usefile=fnflexinit1('Acct',1,1,10,70,mat ch$,mat cm$,1,usefile)
-	fnflexinit1('Acct',1,1,10,70,mat ch$,mat cm$,1)
+	! usefile=fnFlexInit1('Acct',1,1,10,70,mat ch$,mat cm$,1,usefile)
+	fnFlexInit1('Acct',1,1,10,70,mat ch$,mat cm$,1)
 	! if usefile>0 then goto EoAccount ! file already exists, do not recreate
 	do
 		dim item$(10)*50
@@ -27,7 +27,7 @@ def library fnGlAccountSearch(&account$ ) ! ; fixgrid)
 		for j=1 to 6
 			item$(j+3)=str$(rf(j))
 		next j
-		fnflexadd1(mat item$)
+		fnFlexAdd1(mat item$)
 	loop
 	EoAccount: ! If FIXGRID=99 Then goto Xit ! FIXING NEW GRID FILE without displaying it
 	fnCmdSet(2)

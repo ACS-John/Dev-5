@@ -170,10 +170,10 @@ def fn_hamster(uw$*128,mat lbl$,mat fln,hIn,mat p$; mat flTyp$,mat sln,mat mask$
 ! 	return ! /r
 	Menu1: ! r:
 		fnTos
-		fnflexinit1(uw$&'2b',1,1,20,108,mat flxhdr$,mat cmask$,row_select)
+		fnFlexInit1(uw$&'2b',1,1,20,108,mat flxhdr$,mat cmask$,row_select)
 		for j1=1 to lrec(hIn)
 			pRec=j1
-			gosub ReadP ! Read #hIn,Using FRM$,Rec=J1: MAT P$ noRec (just past fnflexadd1)
+			gosub ReadP ! Read #hIn,Using FRM$,Rec=J1: MAT P$ noRec (just past fnFlexAdd1)
 			if pnorec<>1 then
 				fic=0 : flxItem$(fic+=1)=str$(rec(hIn))
 				for j2=2 to itemCount+1
@@ -197,7 +197,7 @@ def fn_hamster(uw$*128,mat lbl$,mat fln,hIn,mat p$; mat flTyp$,mat sln,mat mask$
 					end if
 							fnrgl$('', 0,0) ! close the left open gl desc file
 				next j2
-				fnflexadd1(mat flxItem$)
+				fnFlexAdd1(mat flxItem$)
 			end if
 		next j1
 		for hComboFitem=1 to hComboFcount

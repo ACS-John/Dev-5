@@ -137,7 +137,7 @@ def library fnError(callingprogram$*256, errornumber, linenumber, &ertnAct$, sto
 			clientSelectMask$(1)='20'  ! 0 decimals, commas
 			clientSelectMask$(2)='20'
 			clientSelectMask$(3)='81' ! cr
-			fnflexinit1('stacks',2,1,10,10,mat stackColumn$,mat clientSelectMask$)
+			fnFlexInit1('stacks',2,1,10,10,mat stackColumn$,mat clientSelectMask$)
 
 			! r: read stacks into array
 
@@ -199,7 +199,7 @@ def library fnError(callingprogram$*256, errornumber, linenumber, &ertnAct$, sto
 					mat col5$(stackCount) : col5$(stackCount)=stackColumn$(5)
 					! mat col6$(stackCount) : col6$(stackCount)=stackColumn$(6)
 
-					fnflexadd1(mat stackColumn$)
+					fnFlexAdd1(mat stackColumn$)
 				end if
 			loop
 			EO_hStacks: !

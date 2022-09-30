@@ -62,7 +62,7 @@ MENU1: ! r:
 DISPLAY_INVOICE_GRID: !
 	fnTos
 	respc=frame=0
-	fnflexinit1('UnpaidFile',1,1,20,85,mat chdr$,mat cmask$,1,0)
+	fnFlexInit1('UnpaidFile',1,1,20,85,mat chdr$,mat cmask$,1,0)
 	restore #paytrans:
 READ_INVOICE_GRID: ! r: read unpaid invoice file and populate the grid
 	read #paytrans,using 'form pos 1,C 8,c 12,2*G 6,C 12,C 18,G 10.2,n 1,n 2,G 8,G 6,N 1,n 6,n 10.2,n 8': vn$,iv$,mat up$,upa,pcde,bcde,ckn,dp,gde,pdte,disamt,ddate eof EO_INVOICE_GRID noRec L970
@@ -73,7 +73,7 @@ READ_INVOICE_GRID: ! r: read unpaid invoice file and populate the grid
 	item$(11)=str$(pcde) : item$(12)=str$(bcde)
 	item$(13)=str$(ckn) : item$(14)=str$(dp)
 	item$(15)=str$(gde) : item$(16)=str$(pdte)
-	fnflexadd1(mat item$)
+	fnFlexAdd1(mat item$)
 ! transactionstotal+=upa
 L970: !
 	goto READ_INVOICE_GRID
@@ -252,7 +252,7 @@ resp$(respc_total:=respc+=1)=str$(total)
 fnChk(3,47,"Display at Top:",1)
 resp$(respc+=1)=displayattop$
 	fnLbl(1,1,trim$(env$('cnam')(1:30))&"-"&type$,65,2)
-	fnflexinit1('unpaidinv',5,27,15,55,mat chdr$,mat cmask$,1)
+	fnFlexInit1('unpaidinv',5,27,15,55,mat chdr$,mat cmask$,1)
 	respc_selectedrec=respc+=1
 	restore #clearing:
 	if nextrec>0 and displayattop$='True' then goto L4890 else goto L5030
@@ -265,7 +265,7 @@ L4890: for j=nextrec to lrec(clearing) ! read starting with next record
 		flxitm$(16)=str$(pdte)
 		flxitm$(1)=str$(rec(clearing))
 		if pcde=1 then flxitm$(3)="Yes" else if pcde=0 then flxitm$(3)="No" else if pcde=1 and dp>0 then flxitm$(3)="Paid"
-fnflexadd1(mat flxitm$)
+fnFlexAdd1(mat flxitm$)
 L4940: next j
 if nextrec=1 then goto L5020 ! thinks it rereads the 1st record twice
 for j=1 to max(nextrec-1,1) ! read records previously coded or skipped
@@ -276,7 +276,7 @@ for j=1 to max(nextrec-1,1) ! read records previously coded or skipped
 	flxitm$(14)=str$(dp) : flxitm$(15)=str$(gde)
 	flxitm$(1)=str$(rec(clearing))
 	if pcde=1 then flxitm$(3)="Yes" else if pcde=0 then flxitm$(3)="No" else if pcde=1 and dp>0 then flxitm$(3)="Paid"
-fnflexadd1(mat flxitm$)
+fnFlexAdd1(mat flxitm$)
 next j
 L5020: goto L5070
 L5030: !
@@ -288,7 +288,7 @@ flxitm$(14)=str$(dp) : flxitm$(15)=str$(gde)
 flxitm$(16)=str$(pdte)
 flxitm$(1)=str$(rec(clearing)) ! assign flxitm$(1) with new record #
 if pcde=1 then flxitm$(3)="Yes" else if pcde=0 then flxitm$(3)="No" else if pcde=1 and dp>0 then flxitm$(3)="Paid"
-fnflexadd1(mat flxitm$) : goto L5030
+fnFlexAdd1(mat flxitm$) : goto L5030
 L5070: !
 fnCmdKey("&Approve Highlighted",1,1,0,"Approves or cancels the invoice that is highlighted.")
 fnCmdKey("&Display All",9,0,0,"Displays all remaining records in the unpaid file.")
@@ -415,7 +415,7 @@ fnLbl(lc+=1,1,"Description:",mylen,1)
 fnTxt(lc,mypos,25,0,0,"",0,"Enter the descritpion for the allocation.")
 resp$(respc+=1)=jobdesc$
 ! Job Cost Invoice Breakdown Grid
-fnflexinit1('JobAlloc',11,1,6,60,mat chdr3$,mat cmask3$,1,0,0)
+fnFlexInit1('JobAlloc',11,1,6,60,mat chdr3$,mat cmask3$,1,0,0)
 if displayalljobs=1 then restore #jcbreakdown: : goto L6270
 restore #jcbreakdown,key>=lpad$(rtrm$(vn$),8)&lpad$(rtrm$(iv$),12): nokey EO_FLEX1
 L6270: totalcost=0: mat jobitem$=("")
@@ -428,7 +428,7 @@ totalcost+=amt
 jobitem$(1)=str$(rec(jcbreakdown)) : jobitem$(2)=jn$
 jobitem$(3)=str$(cat) : jobitem$(4)=str$(subcat)
 jobitem$(5)=str$(amt) : jobitem$(6)=jobdesc$
-fnflexadd1(mat jobitem$)
+fnFlexAdd1(mat jobitem$)
 goto READ_JOB_ALLOCATIONS
 EO_FLEX1: !
 fnButton(3,70,"&Search",68,"Will search for job numbers",1,9)
@@ -674,7 +674,7 @@ ai_ADD_UNPAID_INVOICES_TOS: ! r:
 	fnButton(lc,76,"Add",52,"Add a new allocation")
 	fnButton(lc,81,"Edit",53,"Modify an existing allocation")
 	fnButton(lc,87,"Delete",54,"Remove selected allocation")
-	fnflexinit1('unpdaloc',lc+=1,2,10,88,mat aiUaColHead$, mat aiUaColMask$,1)
+	fnFlexInit1('unpdaloc',lc+=1,2,10,88,mat aiUaColHead$, mat aiUaColMask$,1)
 	dim alloc2d$(0,3)*30
 	dim alloc2d_setup$*20
 	if alloc2d_setup$<>lpad$(rtrm$(vn$),8)&lpad$(rtrm$(iv$),12) then
@@ -689,7 +689,7 @@ ai_ADD_UNPAID_INVOICES_TOS: ! r:
 		tmpItem$(1)=fnrgl$(alloc2d$(aiAllocItem,1))
 		tmpItem$(2)=alloc2d$(aiAllocItem,2)
 		tmpItem$(3)=alloc2d$(aiAllocItem,3)
-		fnflexadd1(mat tmpItem$)
+		fnFlexAdd1(mat tmpItem$)
 	nex aiAllocItem
 	fnCmdKey("Save",1,1)
 	! fnCmdKey("&Allocate",2,0,0,"Automatically allocates the general ledger breakdown if payee record contains the breakdown information")

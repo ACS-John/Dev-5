@@ -37,7 +37,7 @@ Menu1: ! r:
 		colmask$(2)=''
 	end if
 
-	fnflexinit1(sn$&'_flex',3,42,10,60,mat colhdr$,mat colmask$,1)
+	fnFlexInit1(sn$&'_flex',3,42,10,60,mat colhdr$,mat colmask$,1)
 
 
 	fngetdir2(fn_dataFolder$,mat filename$,'/od /ta','Company.*') ! fngetdir(temp$,mat filename$,empty$,'Company.*') ! /oe
@@ -51,7 +51,7 @@ Menu1: ! r:
 			if env$('cursys')='PR' then
 				item$(3)=date$(days(fnCompanyPayPeriodEndingDate(tmp_cno),'ccyymmdd'),'ccyy/mm/dd')
 			end if
-			fnflexadd1(mat item$)
+			fnFlexAdd1(mat item$)
 			if tmp_cno=cno then
 				setenv('current_grid_row',str$(company_count))
 			end if

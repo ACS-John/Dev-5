@@ -688,7 +688,7 @@ def fn_checkfile(hact$*8,hCheckIdx3,hCheckIdx1,hEmployee)
 			if hf(j)=1 then colhdr$(x+=1)=name$(j) : colmask$(x)='10'
 		next j
 		mat colhdr$(x) : mat colmask$(x) : mat printitem$(x)
-		fnflexinit1("prchecks",1,1,20,100,mat colhdr$,mat colmask$,1)
+		fnFlexInit1("prchecks",1,1,20,100,mat colhdr$,mat colmask$,1)
 	PastFlexInit: !
 		if trim$(hact$)="[All]" then restore #hCheckIdx3: : goto READ_BREAKDOWNS
 		restore #hCheckIdx3,key>=lpad$(hact$,8)&cnvrt$("pd 6",beg_date)&"   ": nokey FlexGridXit ioerr FlexGridXit
@@ -806,7 +806,7 @@ def fn_checkfile(hact$*8,hCheckIdx3,hCheckIdx1,hEmployee)
 			if hf(j)=1 then printitem$(x+=1)=item$(j+2)
 		next j
 		L4820: !
-		fnflexadd1(mat printitem$)
+		fnFlexAdd1(mat printitem$)
 		holdeno=eno
 		holdckno=ckno
 		holdtdn=tdn
@@ -822,7 +822,7 @@ def fn_checkfile(hact$*8,hCheckIdx3,hCheckIdx1,hEmployee)
 			end if
 		end if
 		if trim$(printitem$(2))="Employee Total" then
-			mat printitem$=(""): fnflexadd1(mat printitem$)
+			mat printitem$=(""): fnFlexAdd1(mat printitem$)
 		end if
 		mat totaltdc=(0): mat totaltcp=(0)
 		desc$=""

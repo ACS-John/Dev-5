@@ -16,10 +16,10 @@ def library fnsubcat_srch(&cde$,&ckey;fixgrid)
 		ch$(1)="Sub-Category #" : : _
 		ch$(2)="Description" : : _
 		mat ch$(2) : mat cm$(2) : mat cm$=("2")
-		usefile=fnflexinit1('SubCat',1,1,20,40,mat ch$,mat cm$,1,usefile)
+		usefile=fnFlexInit1('SubCat',1,1,20,40,mat ch$,mat cm$,1,usefile)
 READ_FILE: !
 		read #subcat,using 'form pos 1,c 3,c 25': mat item$ eof L280 ioerr ERR_READ
-		fnflexadd1(mat item$)
+		fnFlexAdd1(mat item$)
 		goto READ_FILE
  
 ERR_READ: !

@@ -256,7 +256,7 @@ ScreenGlInfo: ! r: screen
 	chdr$(6)='GL-Revenue'
 	cmask$(1)=cmask$(2)=''
 	cmask$(3)=cmask$(4)=cmask$(5)=cmask$(6)=''
-	fnflexinit1('GlBreak',1,1,20,100,mat chdr$,mat cmask$,1,0,frame)
+	fnFlexInit1('GlBreak',1,1,20,100,mat chdr$,mat cmask$,1,0,frame)
 	editrec=0
 	restore #15:
 READ_GLINFO_1: !
@@ -267,7 +267,7 @@ READ_GLINFO_1: !
 	item$(4)=gl$(1)
 	item$(5)=gl$(2)
 	item$(6)=gl$(3)
-	fnflexadd1(mat item$)
+	fnFlexAdd1(mat item$)
 	goto READ_GLINFO_1
 EO_FLEX1: !
 	fnCmdKey('&Add',1,0,0,'Add new records')

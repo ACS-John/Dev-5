@@ -751,13 +751,13 @@ def fn_customer(; &editOne$,___,editOne,ckey)
 		dim dh_cm$(4)
 		mat dh_cm$(4)
 		dh_cm$(1)=('3') : dh_cm$(2)='' : dh_cm$(3)='10' : dh_cm$(4)='10'
-		fnflexinit1('deposit',5,1,10,70,mat dh_ch$,mat dh_cm$,1)
+		fnFlexInit1('deposit',5,1,10,70,mat dh_ch$,mat dh_cm$,1)
 		do while k32$=z$
 			item$(1)=str$(dt1)
 			item$(2)=dp$
 			item$(3)=str$(dp1)
 			item$(4)=str$(dp2)
-			fnflexadd1(mat item$)
+			fnFlexAdd1(mat item$)
 			read #h_deposit2,using 'form pos 1,C 10,G 8,C 32,2*N 10.2,PD 3': k32$,dt1,dp$,dp1,dp2 eof L7160
 		loop
 		L7160: !
@@ -1253,11 +1253,11 @@ def fn_customer_grid(cg_line,cg_pos)
 	cg_ch$(11)='Meter'
 	cg_ch$(12)='Alpha'
 	mat cg_cm$=('80') : cg_cm$(2)='61' : cg_cm$(8)='61': cg_cm$(9)='61'
-	fnflexinit1('Cust2',cg_line,cg_pos,10,72,mat cg_ch$,mat cg_cm$,1)
+	fnFlexInit1('Cust2',cg_line,cg_pos,10,72,mat cg_ch$,mat cg_cm$,1)
 	do
 		CG_READ_FILE: !
 		read #cg_file_num,using 'form pos 1,C 10,pos 1821,c 1,pos 41,C 30,C 30,pos 1864,C 30,pos 101,C 30,pos 11,C 30,pos 1741,C 2,C 7,pos 1894,C 12,pos 131,C 12,pos 354, c 7': mat cg_item$ eof CG_EO_CUSTOMER ioerr CG_ERR_READ
-		fnflexadd1(mat cg_item$)
+		fnFlexAdd1(mat cg_item$)
 	loop
 	!
 	CG_ERR_READ: !

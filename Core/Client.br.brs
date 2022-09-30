@@ -41,7 +41,7 @@ def fn_clientSelect
 	csMask$(4)=''
 	csMask$(5)=''
 	csMask$(6)=''
-	fnflexinit1('clientSelect1',2,1,10,10,mat csCol$,mat csMask$)
+	fnFlexInit1('clientSelect1',2,1,10,10,mat csCol$,mat csMask$)
 	for clientItem=1 to udim(mat client_name$)
 		mat csCol$(6)=('')
 		csCol$(1)=client_name$(clientItem)
@@ -50,7 +50,7 @@ def fn_clientSelect
 		csCol$(4)=client_name$(clientItem)
 		fnmcreg_read('lastSelection for '&client_name$(clientItem),csCol$(5),'')
 		csCol$(6)=fn_payroll_client_state$(client_name$(clientItem))
-		fnflexadd1(mat csCol$)
+		fnFlexAdd1(mat csCol$)
 	nex clientItem
 	fnCmdSet(2)
 	ckey=fnAcs(mat resp$)

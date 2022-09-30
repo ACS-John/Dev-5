@@ -18,7 +18,7 @@ ScreenGrid: ! r:
 	colmask$(3)='10'
 	colmask$(4)="36"
 	mat colmask(4)
-	fnflexinit1("ubrate",myline,mypos,height,width,mat colhdr$,mat colmask$,1)
+	fnFlexInit1("ubrate",myline,mypos,height,width,mat colhdr$,mat colmask$,1)
 	restore #hRate1:
 	do
 		read #hRate1,using 'form pos 1,C 2,G 2,C 50,32*G 10': mat rt$ eof L1010
@@ -26,7 +26,7 @@ ScreenGrid: ! r:
 		item$(2)=rt$(3)(1:30)
 		item$(3)=rt$(4)
 		item$(4)=rt$(8)
-		fnflexadd1(mat item$)
+		fnFlexAdd1(mat item$)
 	loop
 L1010: !
 	fnLbl(11,50,"",0,0)

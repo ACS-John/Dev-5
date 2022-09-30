@@ -13,11 +13,11 @@ def library fncat_srch2(&cn$,&ckey;fixgrid)
 		fnTos(sn$="CatSrch")
 		ch$(1)="Job & Category": ch$(2)="Category Name" : : _
 		mat ch$(2) : mat cm$(2) : mat cm$=("2")
-		fnflexinit1('Cat',1,1,10,70,mat ch$,mat cm$,1,usefile)
+		fnFlexInit1('Cat',1,1,10,70,mat ch$,mat cm$,1,usefile)
 		restore #category:
 READ_FILE: !
 		read #category,using 'form pos 1,c 5,c 25': mat item$ eof L270 ioerr ERR_READ
-		fnflexadd1(mat item$)
+		fnFlexAdd1(mat item$)
 		goto READ_FILE
  
 ERR_READ: !

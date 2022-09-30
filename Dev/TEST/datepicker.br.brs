@@ -9,7 +9,7 @@ open #clearing=89: 'Name=[Q]\CLmstr\clearing.H'&wsid$&',replace,RecL=114',i,outi
 fnTos
 respc=0 : mat resp$=('')
 fnLbl(1,1,trim$(env$('cnam')(1:30))&'-'&'',65,2)
-					fnflexinit1('unpaidinv',5,27,15,55,mat chdr$,mat cmask$,1)
+					fnFlexInit1('unpaidinv',5,27,15,55,mat chdr$,mat cmask$,1)
 					restore #clearing:
 					if nextrec>0 and displayattop$='True' then goto L4890 else goto L5030
 				L4890: for j=nextrec to lrec(clearing) ! read starting with next record
@@ -21,7 +21,7 @@ fnLbl(1,1,trim$(env$('cnam')(1:30))&'-'&'',65,2)
 						flxitm$(16)=str$(pdte)
 						flxitm$(1)=str$(rec(clearing))
 						if pcde=1 then flxitm$(3)='Yes' else if pcde=0 then flxitm$(3)='No' else if pcde=1 and dp>0 then flxitm$(3)='Paid'
-				fnflexadd1(mat flxitm$)
+				fnFlexAdd1(mat flxitm$)
 				L4940: next j
 				if nextrec=1 then goto L5020 ! thinks it rereads the 1st record twice
 				for j=1 to max(nextrec-1,1) ! read records previously coded or skipped
@@ -32,7 +32,7 @@ fnLbl(1,1,trim$(env$('cnam')(1:30))&'-'&'',65,2)
 					flxitm$(14)=str$(dp) : flxitm$(15)=str$(gde)
 					flxitm$(1)=str$(rec(clearing))
 					if pcde=1 then flxitm$(3)='Yes' else if pcde=0 then flxitm$(3)='No' else if pcde=1 and dp>0 then flxitm$(3)='Paid'
-				fnflexadd1(mat flxitm$)
+				fnFlexAdd1(mat flxitm$)
 				next j
 				L5020: goto L5070
 				L5030: !
@@ -44,7 +44,7 @@ fnLbl(1,1,trim$(env$('cnam')(1:30))&'-'&'',65,2)
 				flxitm$(16)=str$(pdte)
 				flxitm$(1)=str$(rec(clearing)) ! assign flxitm$(1) with new record #
 				if pcde=1 then flxitm$(3)='Yes' else if pcde=0 then flxitm$(3)='No' else if pcde=1 and dp>0 then flxitm$(3)='Paid'
-				fnflexadd1(mat flxitm$) : goto L5030
+				fnFlexAdd1(mat flxitm$) : goto L5030
 L5070: !
 fnFra(2,1,13,23,'Approval Options',' ')
 fnButton(1,2,'&Approve All',62,'Will select to pay all unpaid invoices',1,18,1)

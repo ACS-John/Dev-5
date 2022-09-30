@@ -1421,18 +1421,18 @@ def fn_record_init(; setDelimiter$)
 	rec_line$=''
 	gRecordDelimiter$=setDelimiter$
 fnend
-def fn_record_addc(rac_field_length,rac_field_text$*256)
-	rec_line$=rec_line$&rpad$(rac_field_text$(1:rac_field_length),rac_field_length)&gRecordDelimiter$
+def fn_record_addc(fieldLength,fieldText$*256)
+	rec_line$&=rpad$(fieldText$(1:fieldLength),fieldLength)&gRecordDelimiter$
 fnend
-def fn_record_addn(ran_field_length,ran_field_value; padCharacter$)
+def fn_record_addn(fieldLength,fieldValue; padCharacter$)
 	if padCharacter$<>'' then
-		rec_line$=rec_line$&lpad$(str$(ran_field_value)(1:ran_field_length),ran_field_length,padCharacter$)&gRecordDelimiter$
+		rec_line$&=lpad$(str$(fieldValue)(1:fieldLength),fieldLength,padCharacter$)&gRecordDelimiter$
 	else
-		rec_line$=rec_line$&lpad$(str$(ran_field_value)(1:ran_field_length),ran_field_length              )&gRecordDelimiter$
+		rec_line$&=lpad$(str$(fieldValue)(1:fieldLength),fieldLength              )&gRecordDelimiter$
 	end if
 fnend
-def fn_record_addx(ran_field_length)
-	rec_line$=rec_line$&rpt$(' ',ran_field_length)&gRecordDelimiter$
+def fn_record_addx(fieldLength)
+	rec_line$=rec_line$&rpt$(' ',fieldLength)&gRecordDelimiter$
 fnend
 def fn_record_write(h_out; enableTrailingDelimiterOnLine)
 	if ~enableTrailingDelimiterOnLine and gRecordDelimiter$<>'' then ! remove trailing delimiter

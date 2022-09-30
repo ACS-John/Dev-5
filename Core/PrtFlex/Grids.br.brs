@@ -122,14 +122,14 @@ GridColumns: !  r: Displays all vaiables in the data base and allows you to     
 	colMask$(1)='30'
 	colMask$(2)=''
 	fileName$='flexreview'
-	fnflexinit1(fileName$,2,1,10,72,mat colHdr$,mat colMask$,1)
+	fnFlexInit1(fileName$,2,1,10,72,mat colHdr$,mat colMask$,1)
 	if lrec(hgridfile)=0 then goto DisplayGrid
 	do
 		read #hgridfile,using fGridFile: columnnum,name$,vname$,fieldlen,colMask$,abbrev$ eof L1050
 		item$(1)=str$(columnnum)
 		item$(2)=name$
 		fGridFile: form pos 1,n 3,c 30,c 20,n 4,c 3,c 20
-		fnflexadd1(mat item$)
+		fnFlexAdd1(mat item$)
 	loop
 	L1050: !
 	fnCmdKey('&Add Column',1,1)

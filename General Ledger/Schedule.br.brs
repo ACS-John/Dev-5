@@ -41,14 +41,14 @@ SCHEDULEGRID: ! r:
 	cmask$(2)='30' : cmask$(3)=cmask$(4)=''
 	cmask$(5)='30' : cmask$(6)='30'
 	cmask$(6)='30'
-	fnflexinit1('schedulegl',lc=1,1,10,70,mat chdr$,mat cmask$,1)
+	fnFlexInit1('schedulegl',lc=1,1,10,70,mat chdr$,mat cmask$,1)
 	restore #10:
 READ_SCHEDULE: ! read schedule file
 	read #schedule,using 'form pos 1,N 3,2*C 78,3*N 1': sn,schnam$,ft$,dp,rs,cm eof EO_SCHEDULE_GRID noRec L350
 	item$(1)=str$(rec(schedule))
 	item$(2)=str$(sn): item$(3)=schnam$: item$(4)=ft$
 	item$(5)=str$(dp) : item$(6)=str$(rs) : item$(7)=str$(cm)
-	fnflexadd1(mat item$)
+	fnFlexAdd1(mat item$)
 L350: goto READ_SCHEDULE
 EO_SCHEDULE_GRID: !
 	fnCmdKey("&Add",1,0,0,"Allows you to add new schedules.")

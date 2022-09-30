@@ -164,7 +164,7 @@ Menu1: ! r:
 	cmask$(4)='10'
 	cmask$(8)='1'
  
-	fnflexinit1('ApTrans',14,1,10,100,mat chdr$,mat cmask$,1,pas)
+	fnFlexInit1('ApTrans',14,1,10,100,mat chdr$,mat cmask$,1,pas)
 	! if pas=1 then goto 1140  ! for pas to work properly, totals need to be adjusted for adds,corrections, and deletions
 	restore #h_trmstr(1):
 	transactionsTotal=0
@@ -189,7 +189,7 @@ Menu1: ! r:
 	item$(9)=str$(scd)
 	item$(10)=newkey$(1:2)
 	item$(11)=newkey$(3:3)
-	fnflexadd1(mat item$)
+	fnFlexAdd1(mat item$)
 	transactionsTotal+=tr3
 	goto READ_TRMSTR1_1
 	EO_FLEX1: ! /r
@@ -629,9 +629,9 @@ TransactionFm: ! r: requires typeofentry, scd, and many more
 	cmask$(2)=''
 	cmask$(3)='10'
 	cmask$(5)=''
-	fnflexinit1('TrAlloc-tran2',16,1,4,90,mat chdr$,mat cmask$,1)
+	fnFlexInit1('TrAlloc-tran2',16,1,4,90,mat chdr$,mat cmask$,1)
 	allocationstotal=0
-! fnflexinit1('TrAlloc-'&str$(bank_code)&'-'&str$(tcde)&'-'&trim$(tr$(1)),13,1,7,80,mat chdr$,mat cmask$,1)
+! fnFlexInit1('TrAlloc-'&str$(bank_code)&'-'&str$(tcde)&'-'&trim$(tr$(1)),13,1,7,80,mat chdr$,mat cmask$,1)
 ! allocationstotal=0
 	key$=cnvrt$('pic(ZZ)',bank_code)&str$(tcde)&lpad$(trim$(tr$(1)),8)
 	restore #h_tralloc,key>=key$: nokey EO_FLEX2
@@ -641,7 +641,7 @@ READ_TRALLOC_1: !
 	allocationstotal+=tmp
 	item$(1)=str$(rec(h_tralloc))
 	item$(3)=str$(tmp)
-	fnflexadd1(mat item$)
+	fnFlexAdd1(mat item$)
 	goto READ_TRALLOC_1
 EO_FLEX2: ! /r
 	fnLbl(lc=15,1,'Allocation Total: $'&trim$(cnvrt$('N 15.2',allocationstotal)),40,right)

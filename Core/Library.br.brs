@@ -999,9 +999,9 @@ fnend
 		library 'S:\Core\ACS_Component.br': fnCmdKey
 		fnCmdKey=fnCmdKey(caption$,returnkey, default,cancel,tt$)
 	fnend
-	def library fnflexAdd1(mat item$)
-		library 'S:\Core\ACS_Component.br': fnflexadd1
-		fnflexadd1=fnflexadd1(mat item$)
+	def library fnFlexAdd1(mat item$)
+		library 'S:\Core\ACS_Component.br': fnFlexAdd1
+		fnFlexAdd1=fnFlexAdd1(mat item$)
 	fnend
 	def library fnTos(; sn$*100)
 		library 'S:\Core\ACS_Component.br': fnTos
@@ -1023,9 +1023,9 @@ fnend
 		library 'S:\Core\ACS_Component.br': fnChk
 		fnChk=fnChk(lyne,ps,txt$, align,contain,tabcon,chk_disable)
 	fnend
-	def library fnflexInit1(sfn$*256,lyne,ps,height,width,mat ch$;mat cm$,seltype,usr,container,tabcon)
-		library 'S:\Core\ACS_Component.br': fnflexinit1
-		fnflexinit1=fnflexinit1(sfn$,lyne,ps,height,width,mat ch$,mat cm$,seltype,usr,container,tabcon)
+	def library fnFlexInit1(sfn$*256,lyne,ps,height,width,mat ch$;mat cm$,seltype,usr,container,tabcon)
+		library 'S:\Core\ACS_Component.br': fnFlexInit1
+		fnFlexInit1=fnFlexInit1(sfn$,lyne,ps,height,width,mat ch$,mat cm$,seltype,usr,container,tabcon)
 	fnend
 	def library fnComboA(sfn$*256,lyne,ps,mat opt$; ttt$*200,width,contain,tabcon)
 		library 'S:\Core\ACS_Component.br': fnComboA
@@ -1840,10 +1840,11 @@ fnend
 		fnend
 	! /r
 ! /r
+
 ! r: Client Billing
-	def library fnClientBillingMergeTrans(h,form$*128,nformat$*20,&sel$,klength)
-		library 'S:\Client Billing\Merge Transactions.br': fnTmSearch
-		fnClientBillingMergeTrans=fnClientBillingMergeTrans(h,form$,nformat$,sel$,klength)
+	def library fnClientBillingMergeTrans
+		library 'S:\Client Billing\Merge Transactions.br': fnClientBillingMergeTrans
+		fnClientBillingMergeTrans=fnClientBillingMergeTrans
 	fnend
 	def library fnTmSearch(h,form$*128,nformat$*20,&sel$,klength)
 		library 'S:\Client Billing\fn\search.br': fnTmSearch
@@ -1885,6 +1886,9 @@ fnend
 		library 'S:\Client Billing\Delete Transaction.br': fnTransactionTypeDescription$
 		fnTransactionTypeDescription$=fnTransactionTypeDescription$(typeCode)
 	fnend
+! /r
+! r: CO 
+
 	def library fnClientName$*30(clientId$)
 		library 'S:\Client Billing\Delete Transaction.br': fnClientName$
 		fnClientName$=fnClientName$(clientId$)
