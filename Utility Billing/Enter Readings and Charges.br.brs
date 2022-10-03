@@ -751,7 +751,7 @@ def fn_checkElec
 	if er1=0 then fn_us1(x$,d1)
 	if a(3)=0 then goto CHECKELEC_FINIS ! if no electric code skip
 	if trim$(sn$)="Electric" and x(13)>0 then passcheck=ckpass : goto CHECKELEC_FINIS ! don't give warning if usage entered
-	if (service_type(3)=3 or (service_type(3)=3.1 and env$('client')<>"Thomasboro")) then
+	if (service_type(3)=3 or service_type(3)=3.1) then ! (service_type(3)=3.1 and env$('client')<>"Thomasboro"))
 		goto L4350
 	else
 		passcheck=ckpass
