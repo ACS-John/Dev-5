@@ -385,40 +385,6 @@ RewrTransNow: ! r:
 	clientId$=''
 goto FinisAddEdit ! /r
 
-! ScreenTotals: ! r:
-! 	do
-! 		fntos : rc=0
-! 		! fnTxt(lyne,ps,width; maxlen,ali,mask$,disable,tooltip$*300,contain,tabcon,addtomask$*40)
-! 		fnlbl( 3,10,'A/R Input Proof Totals'	,50,2)
-! 		fnlbl( 6, 5,'Total Account IDs:'    	,20,1) : fnTxt( 6,26,11,0,0,'currency'	,1,'') : resp$(rc+=1)=str$( totalAccountIds )
-! 		fnlbl( 7, 5,'Total Invoices:'       	,20,1) : fnTxt( 7,26,11,0,0,'number'  	,1,'') : resp$(rc+=1)=str$( proofTotal(transType_invoice) )
-! 		fnlbl( 8, 5,'Total Debit Memos:'    	,20,1) : fnTxt( 8,26,11,0,0,'currency'	,1,'') : resp$(rc+=1)=str$( proofTotal(transType_debit) )
-! 		fnlbl( 9, 5,'Total Collections:'    	,20,1) : fnTxt( 9,26,11,0,0,'currency'	,1,'') : resp$(rc+=1)=str$( proofTotal(transType_collection) )
-! 		fnlbl(10, 5,'Total Credit Memos:'   	,20,1) : fnTxt(10,26,11,0,0,'currency'	,1,'') : resp$(rc+=1)=str$( proofTotal(transType_credit) )
-! 		fnlbl(11, 5,'Total Cash Sales'      	,20,1) : fnTxt(11,26,11,0,0,'currency'	,1,'') : resp$(rc+=1)=str$( totalCashSales )
-! 		fnlbl(12, 5,'Total Discounts Taken'	,20,1) : fnTxt(12,26,11,0,0,'currency'	,1,'') : resp$(rc+=1)=str$( tdt )
-! 		! fnCmdKey(caption$*200,returnkey; default,isCancel,tt$*200)
-! 		fnCmdKey('Merge'                     	,1)
-! 		fnCmdKey('Corrections'               	,2,1)
-! 		fnCmdKey('Stop Without Posting'     	,5,0,1)
-! 		fnCmdKey('Print Entry Listing [F3]' 	,3)
-! 
-! 		ckey=fnacs(mat resp$)
-! 
-! 		if ckey=5 or ckey=99 or j=5 then
-! 			goto Xit
-! 		end if
-! 
-! 		if ckey=3 then
-! 			gosub PrintEntryList
-! 		else if j=1 then
-! 			goto ChainArMerge
-! 		else if j=2 then
-! 			goto ScreenBatch
-! 		end if
-! 	loop
-! ! /r
-
 PrintEntryList: ! r: requires:hTransBatch, localOnly: r,clientId$,iv$,transDate,transDiscount,transAmt,unusedtr4,transType,unusedtr6
 	r=0
 	fnopenprn
