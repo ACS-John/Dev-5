@@ -169,10 +169,10 @@ LOOP_TOP: ! r: main loop
 	next j
 	L940: ! If env$('client')="Thomasboro" AND FBC<>0 Then Goto 500
 	if fbc><0 then e$(2)="Disconnect"
-	if env$('client')="Thomasboro" then 
-		pr #255,using 'form pos 1,C 10,X 1,C 18,X 1,C 20,X 1,X_service*c 43': z$,e$(2)(1:18),e$(1)(1:20),mat x_service$
-		goto L1050
-	end if
+	! if env$('client')="Thomasboro" then 
+	! 	pr #255,using 'form pos 1,C 10,X 1,C 18,X 1,C 20,X 1,X_service*c 43': z$,e$(2)(1:18),e$(1)(1:20),mat x_service$
+	! 	goto L1050
+	! end if
 	
 	if enableMeterNo then 
 		if resp$(2)(1:2)='WA' then 
@@ -199,7 +199,7 @@ LOOP_TOP: ! r: main loop
 	else if usedcolumn=1 then 
 		pr #255,using 'form pos 1,C 10,X 1,C 18,X 1,C 20,X 1,X_service*c 43,x 3': z$,e$(2)(1:18),e$(1)(1:20),mat x_service$
 	end if 
-	L1050: ! 
+	! L1050: ! 
 	if remark=1 then 
 		gosub REMARK
 		pr #255,using "form pos 1,c 60": ft$
@@ -223,14 +223,14 @@ def fn_reg_try$*256(field_name$*128,default_value$*256)
 	fn_reg_try$=rt_return$
 fnend  ! fn_reg_try$
 PrHeader: ! r:
-	if env$('client')="Thomasboro" then 
-		pr #255: "\qc  {\f181 \fs22 \b "&env$('cnam')&"}"
-		pr #255: "\qc  {\f181 \fs18 \b "&trim$(dat$)&"}"
-		pr #255: ""
-		pr #255: "\ql {\ul Account No} {\ul Name              } ";
-		pr #255: "{\ul Meter Address          } ";
-		goto L1190
-	end if 
+	! if env$('client')="Thomasboro" then 
+	! 	pr #255: "\qc  {\f181 \fs22 \b "&env$('cnam')&"}"
+	! 	pr #255: "\qc  {\f181 \fs18 \b "&trim$(dat$)&"}"
+	! 	pr #255: ""
+	! 	pr #255: "\ql {\ul Account No} {\ul Name              } ";
+	! 	pr #255: "{\ul Meter Address          } ";
+	! 	goto L1190
+	! end if 
 	pr #255: "\qc  {\f181 \fs22 \b "&env$('cnam')&"}"
 	pr #255: "\qc  {\f181 \fs18 \b "&trim$(dat$)&"}"
 	pr #255: "\qc  {\f181 \fs18 \b Page "&str$(page_count+=1)&"}"
@@ -245,7 +245,7 @@ PrHeader: ! r:
 	else 
 		pr #255: "{\ul Meter Address          } ";
 	end if 
-	L1190: ! 
+	! L1190: ! 
 	for j=1 to x_service
 		if enablePrior=1 then 
 			pr #255: " {\ul Prior}    {\ul Current}    {\ul Usage}   ";
