@@ -4,13 +4,13 @@ fn_setup ! r: top,open, initialize
 	open #hCustomer2=fnH: 'Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\UBIndx2.h[cno],Shr',i,outIn,k
 	open #hTrans=fnH: 'Name=[Q]\UBmstr\UBTransVB.h[cno],KFName=[Q]\UBmstr\UBTrIndx.h[cno],Shr',i,outIn,k
 	open #hTrans2=fnH: 'Name=[Q]\UBmstr\UBTransVB.h[cno],KFName=[Q]\UBmstr\UBTrdt.h[cno],Shr',i,outIn,k
-	! r: open BudMstr and BudTrans, also set bud1setup (1=budget files opened, 0=not)
-	bud1setup=0
+	! r: open BudMstr and BudTrans, also set budgetOpen (1=budget files opened, 0=not)
+	budgetOpen=0
 	open #hBudget=fnH: 'Name=[Q]\UBmstr\BudMstr.h[cno],KFName=[Q]\UBmstr\BudIdx1.h[cno],Shr',i,outIn,k ioerr BudMstrOpenFail
-	open #hBudgetTrans=fnH: 'Name=[Q]\UBmstr\BudTrans.h[cno],Shr',i,outi,r
+	hBudgetTrans=fnOpenBudTrans
 	FbudgetTrans: form pos 1,c 10,2*pd 4,24*pd 5.2,2*pd 4,pd 3
-	FbudgetTransBt1:form pos 11,2*pd 4,24*pd 5.2,2*pd 4
-	bud1setup=1
+	FbudgetTransBt1: form pos 11,2*pd 4,24*pd 5.2,2*pd 4
+	budgetOpen=1
 	BudMstrOpenFail: !
 	! /r
 
@@ -35,7 +35,7 @@ ScreenOne: ! r:
 				postingCodeUnused,rcpt$,mat alloc,mat bd3,escrow eof L1080 noRec L1070
 			totalacct+=val(x$) conv ignore
 			dim m1_item$(20)*80
-			m1_item$(1)=str$(rec(hTransBatch)) 	! Record
+			m1_item$(1)=str$(rec(hTransBatch))    	! Record
 			m1_item$(2)=x$                          	! Account
 			m1_item$(3)=str$(transAmount)          	! Amount
 			m1_item$(4)=str$(transDate)            	! Date
@@ -277,7 +277,7 @@ ScrAdd: ! r:
 	postingCodeUnused=0
 	L2060: !
 	if sum(mat tgb)=x(2) then fn_updateBudget(x1$) ! kj 10/14/09
-	if sum(mat tgb)=x(2) and bud1setup then gosub Bud1 ! was commented out; changed to if sum= on 101409 to keep from skipping ubdget update if exact amount paid.
+	if sum(mat tgb)=x(2) and budgetOpen then gosub Bud1 ! was commented out; changed to if sum= on 101409 to keep from skipping ubdget update if exact amount paid.
 	r6=lrec(hTransBatch)+1
 	if escrow>90000 then escrow=0 ! PREVENT 726 ERROR
 	dim bd2(5)
@@ -330,7 +330,7 @@ ScrEdit: ! r:
 			end if
 			if uprc$(escrow$)='Y' then transAmount=transAmount-escrow !     !      ! subtract escrow amount from  payment amount before rewriting
 			rewrite #hTransBatch,using FtransBatch,rec=edrec: x$,transAmount,transDate,transType,postingCodeUnused,rcpt$,mat alloc,mat bd3,escrow
-			! if bud1setup then fn_updateBudget(x1$) : gosub Bud1
+			if budgetOpen then fn_updateBudget(x1$) : gosub Bud1
 			! fn_totalAdd(transType,transAmount,totalCollections,totalDebitMemos,totalCreditMemos)
 			fn_printReceipt(x$,nam$,rcpt$,bal,x(2),x(3),hresp1$)
 		end if
@@ -410,15 +410,10 @@ Bud1: ! r:
 	if sum(mat tgb)>0 then haveBudget=1 else haveBudget=0
 return  ! /r
 
-def fn_updateBudget(x1$*10; ___,bd1Count) ! very local.
+def fn_updateBudget(x1$*10; ___,bd1Count,ck1,j) ! very local.
 	! haveBudget=0   !   this seems really wrong - should not be turing it off constantly
-	dim bd1(5)
 	Bud2: !
-	mat bd1(5)
-	mat bd1=(0)
-	mat bd2=(0)
-	mat bd3=(0)
-	if ~bud1setup then goto Bud2Finis
+	if ~budgetOpen then goto Bud2Finis
 	dim badr(2)
 	mat badr=(0)
 	read #hBudget,using 'form pos 1,C 10,PD 4,12*PD 5.2,2*PD 3',key=x1$: z$,mat ba,mat badr nokey Bud2Finis
@@ -427,8 +422,15 @@ def fn_updateBudget(x1$*10; ___,bd1Count) ! very local.
 		! pr '       z$=';z$
 		! pr '      ta1=';ta1
 		! pr 'bt1(14,1)=';bt1(14,1)
+		! pr 'bt1(14,2)=';bt1(14,2)
 		! pr 'transDate=';transDate
 		! pause
+
+	dim bd1(5)
+	mat bd1(5)
+	mat bd1=(0)
+	mat bd2=(0)
+	mat bd3=(0)
 		
 	do until ta1=0
 		read #hBudgetTrans,using FbudgetTrans,rec=ta1: z$,mat bt1,nba noRec Bud2LoopEnd
@@ -437,6 +439,7 @@ def fn_updateBudget(x1$*10; ___,bd1Count) ! very local.
 		else if bt1(14,1)=transDate then 
 			! if cleint then bt(14)=transdate instead
 			bt1(14,1)=bt1(14,2)=0
+			if env$('client')='Bethany' then bt1(14,1)=bt1(14,2)=transDate 
 			
 			rewrite #hBudgetTrans,using FbudgetTransBt1,rec=ta1: mat bt1
 		else
@@ -1268,7 +1271,7 @@ def fn_addTransToUnposted(at_customer$*10,at_date_mmddyy,at_trans_type,at_amount
 			transAmount=x(2) : transDate=x(3) : b7=transType
 			postingCodeUnused=0
 			if sum(mat tgb)=x(2) then fn_updateBudget(x1$)
-			if sum(mat tgb)=x(2) and bud1setup then gosub Bud1 ! was commented out; changed to if sum= on 101409 to keep from skipping ubdget update if exact amount paid.
+			if sum(mat tgb)=x(2) and budgetOpen then gosub Bud1 ! was commented out; changed to if sum= on 101409 to keep from skipping ubdget update if exact amount paid.
 			r6=lrec(hTransBatch)+1
 			if escrow>90000 then escrow=0 ! PREVENT 726 ERROR
 			write #hTransBatch,using FtransBatch,rec=r6: at_customer$,transAmount,transDate,transType,postingCodeUnused,rcpt$,mat alloc,mat bd2,escrow duprec L2060

@@ -21,7 +21,7 @@ def fn_customer(; &editOne$,___,editOne,ckey)
 	bud1=0
 	open #h_budmstr=fnH: 'Name=[Q]\UBmstr\BudMstr.h[cno],KFName=[Q]\UBmstr\BudIdx1.h[cno],Shr,Use,RecL=80,KPs=1,KLn=10',i,outIn,k  ! was 81
 	F_BUDMSTR: form pos 1,c 10,pd 4,12*pd 5.2,2*pd 3
-	open #h_budtrans=fnH: 'Name=[Q]\UBmstr\BudTrans.h[cno],Shr,Use,RecL=149',i,outi,r
+	h_budtrans=fnOpenBudTrans
 	F_BUDTRANS: form pos 1,c 10,2*pd 4,24*pd 5.2,2*pd 4,pd 3
 	bud1=1
 	! /r

@@ -331,7 +331,7 @@ fnend
 def fn_bud_open
 	bud1=0
 	open #budmstr=fnH: 'Name=[Q]\UBmstr\BudMstr.h[cno],KFName=[Q]\UBmstr\BudIdx1.h[cno],Shr',i,outIn,k ioerr BUD1_XIT
-	open #budtrans=fnH: 'Name=[Q]\UBmstr\BudTrans.h[cno],Shr',i,outi,r
+	budtrans=fnOpenBudTrans
 	bud1=1
 	BUD1_XIT: !
 fnend

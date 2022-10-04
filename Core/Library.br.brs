@@ -1416,6 +1416,22 @@ fnend
 	fnend
 ! /r
 ! r: UB   utility billing
+def library fnOpenBudTrans(;forceH,inputOnly, ___,returnN)
+	library 'S:\Core\Start.br': fnH
+	if forceH then returnN=forceH else returnN=fnH
+	if ~exists('[Q]\UBmstr\BudTransIdx1.h[cno]') then
+		fnIndex('[Q]\UBmstr\BudTrans.h[cno]','[Q]\UBmstr\BudTransIdx1.h[cno]','1 10')
+	end if
+	if inputOnly then
+		open #returnN: 'Name=[Q]\UBmstr\BudTrans.h[cno],Shr,Use,RecL=149',i,i,r
+	else 
+		open #returnN: 'Name=[Q]\UBmstr\BudTrans.h[cno],Shr,Use,RecL=149',i,outi,r
+		
+		! not YET - soon - finish month end billing first ! open #returnN: 'Name=[Q]\UBmstr\BudTrans.h[cno],kfName=[Q]\UBmstr\BudTransIdx1.h[cno],Shr,Use,RecL=149',i,outi,k
+	end if
+	fnOpenBudTrans=returnN
+fnend
+
 	def library fnEnableCostOfGas(; setIt$)
 		library 'S:\Utility Billing\Company.br': fnEnableCostOfGas
 		fnEnableCostOfGas=fnEnableCostOfGas( setIt$)

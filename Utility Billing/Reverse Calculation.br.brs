@@ -162,7 +162,8 @@ continue ! /r
 def fn_bud1
 	bud1=0
 	open #hBudMstr=fnH: 'Name=[Q]\UBmstr\BudMstr.h[cno],KFName=[Q]\UBmstr\BudIdx1.h[cno],Shr',i,outIn,k ioerr L1120
-	open #hBudTran=fnH: 'Name=[Q]\UBmstr\BudTrans.h[cno],Shr',i,outi,r
+	hBudTran=fnOpenBudTrans
+	
 	bud1=1
 	L1120: !
 fnend

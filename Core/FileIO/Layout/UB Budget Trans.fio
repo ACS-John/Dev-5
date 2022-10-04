@@ -1,5 +1,5 @@
 [Q]\UBmstr\BudTrans.h[cno]  ,  btrans_  , 0
-
+[Q]\UBmstr\BudTransIdx1.h[cno], acct
 recl=149
 ===================================================
 acct      	,Customer Number   	, C  10   	,               	, !  SPos=  1  
