@@ -609,7 +609,7 @@ Bud1: ! r: Open #81 BudMstr and #82 BudTrans bud1=1
 	bud1=0
 	dim ba(13),badr(2),bt1(14,2)
 	open #81: 'Name=[Q]\UBmstr\BudMstr.h[cno],KFName=[Q]\UBmstr\BudIdx1.h[cno],Shr',i,i,k ioerr EoBud1
-	open #82: 'Name=[Q]\UBmstr\BudTrans.h[cno],Shr',i,i,r
+	fnOpenBudTrans(82,1)
 	bud1=1
 	EoBud1: !
 return  ! /r

@@ -71,7 +71,7 @@ BUD1: ! r:
 	FbudM: form pos 1,c 10,pd 4,12*pd 5.2,2*pd 3
 	dim ba(13)
 	dim badr(2)
-	open #hBudT=fnH: 'Name=[Q]\UBmstr\BudTrans.h[cno],Shr',i,outi,r
+	hBudT=fnOpenBudTrans
 	FbudT: form pos 11,2*pd 4,24*pd 5.2,2*pd 4
 	dim bt1(14,2)
 	bud1=1

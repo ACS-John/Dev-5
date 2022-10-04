@@ -28,7 +28,7 @@ BUD1: ! INITILIZE BUDGET FILE
 	open #hCustomer=fnH: 'Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr',i,outIn,k
 	open #81: 'Name=[Q]\UBmstr\BudMstr.h[cno],KFName=[Q]\UBmstr\BudIdx1.h[cno],Shr',i,outIn,k
 	FbudMstr: form pos 1,c 10,pd 4,12*pd 5.2,2*pd 3
-	open #82: 'Name=[Q]\UBmstr\BudTrans.h[cno],Shr',i,outi,r
+	fnOpenBudTrans(82)
 	bud1=1
 	fnTos
 	mylen=32 : mypos=mylen+2

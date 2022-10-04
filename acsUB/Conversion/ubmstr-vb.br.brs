@@ -20,7 +20,7 @@ def library fnub_cnv_ubmstr_vb
 	F_CUSTOMER: form pos 1,c 10,4*c 30,c 12,7*pd 2,11*pd 4.2,4*pd 4,15*pd 5,pd 4.2,pd 4,12*pd 4.2,2*pd 3,c 7,2*c 12,pd 3,10*pd 5.2,78*pd 5,13*pd 4.2,13*n 6,156*pd 4.2,13*n 6,13*pd 4.2,c 1,c 9,c 2,c 17,n 2,n 7,2*n 6,n 9,pd 5.2,n 3,3*n 9,3*n 2,3*n 3,n 1,3*n 9,3*pd 5.2,c 30,7*c 12,3*c 30
 	if version(1)=1 then goto Xit
 	open #h81=fnH: 'Name=[Q]\UBmstr\BudMstr.h[cno],KFName=[Q]\UBmstr\BudIdx1.h[cno],Shr,Use,RecL=80,KPs=1,KLn=10',i,outIn,k
-	open #h82=fnH: 'Name=[Q]\UBmstr\BudTrans.h[cno],Shr,Use,RecL=149',i,outi,r
+	h82=fnOpenBudTrans
 	do
 		ReadCustomer: !
 		dim extra(23),extra$(11)*30

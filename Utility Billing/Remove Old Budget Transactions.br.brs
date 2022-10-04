@@ -10,7 +10,7 @@ fnTop(program$)
 	open #hBudgetMstr=fnH: 'Name=[Q]\UBmstr\BudMstr.h[cno],KFName=[Q]\UBmstr\BudIdx1.h[cno],Shr',i,outIn,k ioerr Xbud1
 	FbudgetMstr:  form pos 1,c 10,pd 4,12*pd 5.2,2*pd 3
 	FbudMTrAddr: form pos 75,2*pd 3
-	open #hBudgetTrans=fnH: 'Name=[Q]\UBmstr\BudTrans.h[cno],Shr',i,outi,r
+	hBudgetTrans=fnOpenBudTrans
 	FbudgetTrans: form pos 1,c 10,2*pd 4,24*pd 5.2,2*pd 4,pd 3
 	bud1=1
 Xbud1: ! /r

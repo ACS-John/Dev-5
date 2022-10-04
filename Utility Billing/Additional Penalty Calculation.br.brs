@@ -222,7 +222,7 @@ Xit: fnXit
 BUD1: ! r:
 	bud1=0
 	open #81: 'Name=[Q]\UBmstr\BudMstr.h[cno],KFName=[Q]\UBmstr\BudIdx1.h[cno],Shr',i,outIn,k ioerr EO_BUD1
-	open #82: 'Name=[Q]\UBmstr\BudTrans.h[cno],Shr',i,outi,r
+	fnOpenBudTrans(82)
 	bud1=1
 	EO_BUD1: !
 return  ! /r
