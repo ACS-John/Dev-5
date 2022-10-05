@@ -196,7 +196,7 @@ def fn_vbprint
 		fnpa_txt(fnformnumb$(g(2),2,9),xmargin+45,lyne*meter+ymargin)
 	end if
 	if g(3) then
-		fnpa_txt("Water Plant Improvements",xmargin+1,lyne*(meter+=1)+ymargin)
+		fnpa_txt("Water Plant Maintenance",xmargin+1,lyne*(meter+=1)+ymargin)
 		fnpa_txt(fnformnumb$(g(3),2,9),xmargin+45,lyne*meter+ymargin)
 	end if
  
