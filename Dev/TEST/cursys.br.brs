@@ -1,3 +1,3 @@
 autoLibrary
-pr "Cursys$="&fncursys$
+pr "Cursys$="&fnCurSys$
 stop

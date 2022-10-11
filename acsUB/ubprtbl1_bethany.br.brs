@@ -422,8 +422,9 @@ return ! /r
 BUD1: ! r:
 	bud1=0
 	dim ba(13),badr(2),bt1(14,2),bd1(5),bd2(5),bd3(5),bd$(5)*30
-	open #81: "Name=[Q]\UBmstr\BudMstr.h[cno],KFName=[Q]\UBmstr\BudIdx1.h[cno],Shr",i,outIn,k ioerr L3200
-	fnOpenBudTrans(82)
+	hBudMstr=fnOpenBudMstrInput
+	if ~hBudMstr then goto L3200
+	hBudTrans=fnOpenBudTransInput
 	bud1=1
 	for j=1 to 5
 		bd$(j)=str$(j+10)&",20,PIC(##/##/##),U,N"
@@ -436,12 +437,12 @@ BUD2: ! r:
 	mat bd1=(0)
 	mat bd2=(0)
 	if bud1=0 then goto L3360
-	read #81,using L3280,key=z$: z$,mat ba,mat badr nokey L3360
+	read #hBudMstr,using L3280,key=z$: z$,mat ba,mat badr nokey L3360
 	L3280: form pos 1,c 10,pd 4,12*pd 5.2,2*pd 3
 	ta1=badr(1)
 	L3300: !
 	if ta1=0 then goto L3360
-	read #82,using L3320,rec=ta1: z$,mat bt1,nba noRec L3360
+	read #hBudTrans,using L3320,rec=ta1: z$,mat bt1,nba noRec L3360
 	L3320: form pos 1,c 10,2*pd 4,24*pd 5.2,2*pd 4,pd 3
 	if bt1(1,1)=d1 then budget=budget+bt1(12,1): goto L3350 ! budget for current month
 	if bt1(14,1)=0 then pbud=pbud+bt1(12,1): goto L3350 ! budget for any previous months not paid

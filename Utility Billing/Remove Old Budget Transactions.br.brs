@@ -1,21 +1,10 @@
 ! formerly S:\acsUB\RmBudget
-! -- Remove Old Budget Transactions
-
 autoLibrary
 on error goto Ertn
 fnTop(program$)
-
-! r: BUD1: !
-	bud1=0
-	open #hBudgetMstr=fnH: 'Name=[Q]\UBmstr\BudMstr.h[cno],KFName=[Q]\UBmstr\BudIdx1.h[cno],Shr',i,outIn,k ioerr Xbud1
-	FbudgetMstr:  form pos 1,c 10,pd 4,12*pd 5.2,2*pd 3
-	FbudMTrAddr: form pos 75,2*pd 3
-	hBudgetTrans=fnOpenBudTrans
-	FbudgetTrans: form pos 1,c 10,2*pd 4,24*pd 5.2,2*pd 4,pd 3
-	bud1=1
-Xbud1: ! /r
-if bud1=0 then goto Xit
-
+hBudMstr=fnOpenBudMstrInput
+if ~hBudMstr then goto Xit
+hBudgetTrans=fnOpenBudTransInput ! overwrites entire file with new built file upon completion
 fnTos
 fnLbl(1,1,'All paid budget records with a date prior' ,44,2)
 fnLbl(2,1,'to this date will be removed.' ,44,2)
@@ -28,15 +17,17 @@ rd1=val(resp$(1))
 if ckey=5 then goto Xit
 open #hTemp=fnH: 'Name=[temp]\Work1.dat,RecL=149,Replace',i,outi,r
 
-do
+do ! r:
 	dim ba(13)
 	dim tr(2)
-	read #hBudgetMstr,using FbudgetMstr: z$,mat ba,mat tr eof Finis
+	read #hBudMstr,using FbudgetMstr: z$,mat ba,mat tr eof Finis
+	FbudgetMstr:  form pos 1,c 10,pd 4,12*pd 5.2,2*pd 3
 	adr=tr(1)
 	mat tr=(0)
 	do while adr
 		dim bt1(14,2)
 		read #hBudgetTrans,using FbudgetTrans,rec=adr,release: z$,mat bt1,nba noRec L450
+		FbudgetTrans: form pos 1,c 10,2*pd 4,24*pd 5.2,2*pd 4,pd 3
 		d1=bt1(1,1) ! transaction date
 		d2=rd1      ! cutoff date
 		if sum(bt1)=0 then goto L440
@@ -54,16 +45,18 @@ do
 		adr=nba
 	loop
 	L450: !
-	rewrite #hBudgetMstr,using FbudMTrAddr: mat tr
-loop
+	rewrite #hBudMstr,using FbudMTrAddr: mat tr
+	FbudMTrAddr: form pos 75,2*pd 3
+loop ! /r
 
-Finis: !
-close #hTemp:
-close #hBudgetMstr:
-close #hBudgetTrans:
-fnCopy('[temp]\Work1.dat','[Q]\UBmstr\BudTrans.h[cno]')
-fnIndex('[Q]\UBmstr\BudMstr.h[cno]','[Q]\UBmstr\BudIdx1.h[cno]','1 10')
-fnFree('[temp]\Work1.dat')
-goto Xit
+Finis: ! r:
+	close #hTemp:
+	fnCloseBudMstr
+	fnCloseBudTrans
+	fnCopy('[temp]\Work1.dat','[Q]\UBmstr\BudTrans.h[cno]')
+	fnBudgetReIndex
+	fnFree('[temp]\Work1.dat')
+goto Xit ! /r
+
 Xit: fnXit
 include: ertn

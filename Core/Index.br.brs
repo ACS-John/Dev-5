@@ -201,8 +201,7 @@ def fn_index_sys_do_one(cno,system_id$*128)
 		fn_index('[Q]\UBmstr\ubData\RateMst.h'&str$(cno), '[Q]\UBmstr\ubData\RateIdx2.h'&str$(cno),'5 25')
 		fn_index('[Q]\UBmstr\Cass1.h'&str$(cno), '[Q]\UBmstr\Cass1Idx.h'&str$(cno),'1 10')
 		fn_index('[Q]\UBmstr\workorder.h'&str$(cno), '[Q]\UBmstr\wkindex.h'&str$(cno),'1/11 10/8')
-		fn_index('[Q]\UBmstr\BudMstr.h'&str$(cno), '[Q]\UBmstr\BudIdx1.h'&str$(cno),'1 10')
-		fn_index('[Q]\UBmstr\BudTrans.h'&str$(cno), '[Q]\UBmstr\BudTransIdx1.h'&str$(cno),'1 10')
+		fnBudgetReIndex( cno)
 	! /r
 	else if 	system_id$='PR' then ! r:
 		fn_index('[Q]\PRmstr\EmpStatus.dat','[Q]\PRmstr\EmpStatus.Idx','1 2')

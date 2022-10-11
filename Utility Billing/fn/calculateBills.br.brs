@@ -57,9 +57,10 @@ def fn_calculateBills(goal$*11)
 		open #h_work=fnH: 'Name='&work$,i,outi,r
 	end if
 	F_WORK: form pos 1,c 10,pos 11,4*pd 5,pos 31,7*pd 4.2,pos 59,3*pd 5,n 1
-	fn_deposit_open
-	fn_bud_open
+	open #hDeposit1=fnH: 'Name=[Q]\UBmstr\Deposit1.h[cno],KFName=[Q]\UBmstr\DepIdx1.h[cno],Shr,Use,RecL=16,KPs=1,KLn=10',i,outIn,k
+	open #hDeposit2=fnH: 'Name=[Q]\UBmstr\Deposit2.h[cno],KFName=[Q]\UBmstr\Deposit2Index.h[cno]'&',Shr,Use,RecL=73,KPs=1,KLn=10',i,outIn,k
 
+	hBudMstr=fnOpenBudMstr : if hBudMstr then hBudgetTrans=fnOpenBudTrans
 
 TOP: ! r:
 	if goal$='calculate' then
@@ -328,63 +329,61 @@ def fn_demand
 	d(15)=x(4)
 	DEMAND_XIT: !
 fnend
-def fn_bud_open
-	bud1=0
-	open #budmstr=fnH: 'Name=[Q]\UBmstr\BudMstr.h[cno],KFName=[Q]\UBmstr\BudIdx1.h[cno],Shr',i,outIn,k ioerr BUD1_XIT
-	budtrans=fnOpenBudTrans
-	bud1=1
-	BUD1_XIT: !
-fnend
-def fn_deposit_open !
-	open #hDeposit1=fnH: 'Name=[Q]\UBmstr\Deposit1.h[cno],KFName=[Q]\UBmstr\DepIdx1.h[cno],Shr,Use,RecL=16,KPs=1,KLn=10',i,outIn,k
-	open #hDeposit2=fnH: 'Name=[Q]\UBmstr\Deposit2.h[cno],KFName=[Q]\UBmstr\Deposit2Index.h[cno]'&',Shr,Use,RecL=73,KPs=1,KLn=10',i,outIn,k
-fnend
-def fn_bud2
-	bud2=0
-	if bud1=0 then goto L7110
-	mat bt2=(0)
-	read #budmstr,using FbudMstr,key=x$: z$,mat ba,mat badr nokey L7110
-	if sum(ba)=0 then goto L7110 ! if first screen of budget is blank, then skip budget information  kj 10/20/09
-	FbudMstr: form pos 1,c 10,pd 4,12*pd 5.2,2*pd 3
-	! TRANS ROUTINE
-	ta1=badr(1)
-	L6840: if ta1=0 then goto UPDATE_BUDGET_FILE
-	read #budtrans,using L6860,rec=ta1: z$,mat bt1,nba noRec UPDATE_BUDGET_FILE
-	L6860: form pos 1,c 10,2*pd 4,24*pd 5.2,2*pd 4,pd 3
-	if bt1(1,2)=d1 then bud2=1 : goto UPDATE_BUDGET_FILE
-	ta1=nba : goto L6840
 
-	UPDATE_BUDGET_FILE: !
-	! IF BUD2=1 THEN RE-CALCULATION
+def fn_bud2(; ___,foundBudTransRecordToUpdate)
+	if ~hBudMstr then goto Bud2Finis
+	mat bt2=(0)
+	dim ba(13)
+	read #hBudMstr,using FbudMstr,key=x$: z$,mat ba,mat badr nokey Bud2Finis
+	FbudMstr: form pos 1,c 10,pd 4,12*pd 5.2,2*pd 3
+	if sum(mat ba)=0 then goto Bud2Finis ! if budget master is blank, then budget is disabled for this person
+
+	ta1=badr(1)
+	do while ta1
+		read #hBudgetTrans,using FbudgetTrans,rec=ta1: z$,mat bt1,nba noRec FoundBudgetTrans
+		FbudgetTrans: form pos 1,c 10,2*pd 4,24*pd 5.2,2*pd 4,pd 3
+		if bt1(1,2)=d1 then 
+			foundBudTransRecordToUpdate=1
+			goto FoundBudgetTrans
+		end if
+		ta1=nba
+	loop
+	FoundBudgetTrans: !
+
+	! IF foundBudTransRecordToUpdate=1 THEN RE-CALCULATION
 	bt2(1,1)=bt2(1,2)=d1
 	bn1=totpen=0
 	for j=2 to 13
 		bt2(j,2)=g(j-1)
 		if ba(j)=0 then bt2(j,1)=ba(j)
-		if ba(12)>0 then bn1=ba(12) : goto L7020 ! TOTAL BILL BUDGETED
-		if ba(j)=0 then bt2(j,1)=bt2(j,2) else bt2(j,1)=ba(j)
-		if j>11 then goto L7010 ! only 1st 10 can be charges
-		if penalty$(j-1)='Y' then
-			totpen+=bt2(j,1)
+		if ba(12)>0 then  ! TOTAL BILL BUDGETED
+			bn1=ba(12)
 			goto L7020
+		else
+			if ba(j)=0 then bt2(j,1)=bt2(j,2) else bt2(j,1)=ba(j)
+			if j>11 then goto L7010 ! only 1st 10 can be charges
+			if penalty$(j-1)='Y' then
+				totpen+=bt2(j,1)
+				goto L7020
+			end if
+			L7010: !
+			if j<11 then bn1=bn1+bt2(j,1)
 		end if
-		L7010: !
-		if j<11 then bn1=bn1+bt2(j,1)
 		L7020: !
 	next j
 	bt2(12,1)=bn1
 	bt2(13,1)=bt2(12,1)+totpen
-	if bud2=1 then
-		rewrite #budtrans,using L6860,rec=ta1: x$,mat bt2
+	if foundBudTransRecordToUpdate=1 then
+		rewrite #hBudgetTrans,using FbudgetTrans,rec=ta1: x$,mat bt2
 		goto L7100
 	end if
-	write #budtrans,using L6860: x$,mat bt2,badr(1)
-	r82=lrec(budtrans)
+	write #hBudgetTrans,using FbudgetTrans: x$,mat bt2,badr(1)
+	r82=lrec(hBudgetTrans)
 	badr(1)=r82
 	if badr(2)=0 then badr(2)=r82
 	L7100: !
-	rewrite #budmstr,using FbudMstr,key=x$: x$,mat ba,mat badr
-	L7110: !
+	rewrite #hBudMstr,using FbudMstr,key=x$: x$,mat ba,mat badr
+	Bud2Finis: !
 fnend
 
 def fn_usage(serviceNumber)
@@ -554,7 +553,7 @@ def fn_setup
 		dim x(15)
 		dim gb(10)
 		dim rt(10,3)
-		dim ba(13)
+
 		dim da(2)
 		dim txt$(3)*128
 		dim a(7)

@@ -12,7 +12,7 @@ fnTop(program$)
 dim company_file$*256,company_import_path$*256
 dim resp$(5)*256
 ! defaults
-cursys$=fncursys$ : cursys_origional$=cursys$
+cursys$=fnCurSys$ : cursys_origional$=cursys$
 fncreg_read(cap$&'.company_file',company_file$)
 fncreg_read(cap$&'.destination_company_number',destination_company_number$) : destination_company_number=val(destination_company_number$) conv ignore
 ! /r

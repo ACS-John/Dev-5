@@ -13,18 +13,13 @@ def fn_customer(; &editOne$,___,editOne,ckey)
 		editOne=1
 	end if
 	! r: open files
-	open #h_ubadrbil=fnH: 'Name=[Q]\UBmstr\ubAdrBil.h[cno],KFName=[Q]\UBmstr\AdrIndex.h[cno],Shr,Use,RecL=130,KPs=1,KLn=10',i,outIn,k  ! was :=3
+	open #hAdrBil=fnH: 'Name=[Q]\UBmstr\ubAdrBil.h[cno],KFName=[Q]\UBmstr\AdrIndex.h[cno],Shr,Use,RecL=130,KPs=1,KLn=10',i,outIn,k  ! was :=3
 	FadrBil: form pos 1,c 10,4*c 30
 	gosub Cass1Open
 	fn_setup_depositChange ! INITIALIZE DEPOSIT TRACKING FILES
-	! r: BUD1: ! INITILIZE BUDGET FILE
-	bud1=0
-	open #h_budmstr=fnH: 'Name=[Q]\UBmstr\BudMstr.h[cno],KFName=[Q]\UBmstr\BudIdx1.h[cno],Shr,Use,RecL=80,KPs=1,KLn=10',i,outIn,k  ! was 81
-	F_BUDMSTR: form pos 1,c 10,pd 4,12*pd 5.2,2*pd 3
-	h_budtrans=fnOpenBudTrans
-	F_BUDTRANS: form pos 1,c 10,2*pd 4,24*pd 5.2,2*pd 4,pd 3
-	bud1=1
-	! /r
+	hBudMstr=fnOpenBudMstr : if hBudMstr then hBudgetTrans=fnOpenBudTrans
+	FbudMstr: form pos 1,c 10,pd 4,12*pd 5.2,2*pd 3
+	FbudTrans: form pos 1,c 10,2*pd 4,24*pd 5.2,2*pd 4,pd 3
 	dim customer$(0)*256
 	dim customerN(0)
 	hCustomer1=fn_openFio('UB Customer',mat customer$,mat customerN)
@@ -67,10 +62,10 @@ def fn_customer(; &editOne$,___,editOne,ckey)
 		oldService4DepositAmount=xb(11)
 		!   old_gas_deposit=xb(11)
 		mat ab$=('')
-		read #h_ubadrbil,using 'form pos 11,4*C 30',key=z$: mat ab$ nokey ignore
+		read #hAdrBil,using 'form pos 11,4*C 30',key=z$: mat ab$ nokey ignore
 		! pb=bal
 		odp=xb(8)+xb(9)+xb(11)
-	goto NameScreen ! /r
+	goto ScreenCustomer1 ! /r
 
 	CHECK_BALANCE_BREAKDOWN: ! r:
 		gosub TGB_SET
@@ -102,8 +97,8 @@ def fn_customer(; &editOne$,___,editOne,ckey)
 		end if
 		if olde3$=e$(3) then goto PAST_CASS_DELETE ! delete bar code if address changes
 		if cassopen=0 then goto PAST_CASS_DELETE
-		read #h_cass1,using 'form pos 1,C 10,pos 96,C 12',key=z$: z2$,bc$ nokey PAST_CASS_DELETE
-		delete #h_cass1,key=z$: ioerr ignore
+		read #hCass1,using 'form pos 1,C 10,pos 96,C 12',key=z$: z2$,bc$ nokey PAST_CASS_DELETE
+		delete #hCass1,key=z$: ioerr ignore
 	PAST_CASS_DELETE: !
 	! probably change customer in ubtrans-vb here !Gosub 5130
 
@@ -118,7 +113,7 @@ def fn_customer(; &editOne$,___,editOne,ckey)
 			goto ACC_KEY_CHANGE_TEST_EXIST
 		else if uprc$(resp$(1:1))='N' then
 			z$=x$
-			goto NameScreen
+			goto ScreenCustomer1
 		else
 			goto ASK_CONFIRM_KEY_CHANGE
 		end if  ! /r
@@ -128,14 +123,14 @@ def fn_customer(; &editOne$,___,editOne,ckey)
 		ml$(1)='Account '&trim$(z$)&' already exists.'
 		ml$(2)='You must use a different account.'
 		fnMsgBox(mat ml$,resp$,'',16)
-		goto NameScreen ! /r
+		goto ScreenCustomer1 ! /r
 	ACC_KC_VALID_ROUTE_TEST: ! r:
 		if extra(1)<bkno1 or extra(1)>bkno2 then
 			mat ml$(2)
 			ml$(1)='You must have a valid route number!'
 			ml$(2)='(from '&bkno1$&' to '&bkno2$&')'
 			fnMsgBox(mat ml$,resp$,'',48)
-			goto NameScreen
+			goto ScreenCustomer1
 		end if
 
 		fn_legacy2customer(mat customer$,mat customerN,z$,mat e$,f$(1),mat a,mat xb,mat c,mat xd,bal,lastBillingDate,mat g,mat adr,alp$,f$(2),f$(3),bra_legacy,mat gb,df$,dr$,dc$,da$,mat extra,mat extra$)
@@ -154,7 +149,10 @@ def fn_customer(; &editOne$,___,editOne,ckey)
 		fn_accountKeyChange_meter(holdz$,z$)
 
 		fnKeyChange(h_deposit2,'form pos 1,c 10',x$,z$)
-		gosub BUD3
+		! fn_budgetKeyChange(x$,z$)
+		fnKeyChange(hBudMstr,'form pos 1,c 10',x$,z$)
+		fnKeyChange(hBudgetTrans,'form pos 1,c 10',x$,z$)
+		
 		noteFile$=fn_notedir$&'\'&trim$(holdz$)&'.txt' ! old notes
 		noteFileNew$=fn_notedir$&'\'&trim$(z$)&'.txt' ! new notes
 		if exists(noteFile$)<>0 then
@@ -170,30 +168,35 @@ def fn_customer(; &editOne$,___,editOne,ckey)
 			ml$(2)='You must first issue a debit memo or credit memo'
 			ml$(3)='to bring the balance to zero.'
 			fnMsgBox(mat ml$,resp$,'',16)
-			goto NameScreen
+			goto ScreenCustomer1
 		end if
 		if fnConfirmDeleteHard('customer','Account '&trim$(x$)) then
-			gosub BUD4 ! delete budget info
+			if hBudMstr then 
+				fnKeyDelete(hBudMstr,'form pos 1,c 10',x$)
+				fnKeyDelete(hBudgetTrans,'form pos 1,c 10',x$)
+			end if
 			delete #hCustomer1,key=x$:
-			gosub DEL_CASS
-			delete #h_ubadrbil,key=x$: nokey ignore
+			if cassopen then
+				delete #hCass1,key=x$: nokey ignore
+			end if
+			delete #hAdrBil,key=x$: nokey ignore
 			gosub DEL_HIST
 			hact$=''
 		end if
 	goto AskAcct ! /r
 
 	ALT_ADDRESS_SAVE: ! r: write or rewrite alternate billing address
-		rewrite #h_ubadrbil,using FadrBil,key=z$: z$,mat ab$ nokey AAS_WRITE
+		rewrite #hAdrBil,using FadrBil,key=z$: z$,mat ab$ nokey AAS_WRITE
 		if trim$(ab$(1)&ab$(2)&ab$(3)&ab$(4))='' then
 			do
-				delete #h_ubadrbil,key=z$: ioerr AAS_DEL_ALL_END ! some how on conversion there can be several alternate addresses wtih same customer key (if delete any, delete them all)
+				delete #hAdrBil,key=z$: ioerr AAS_DEL_ALL_END ! some how on conversion there can be several alternate addresses wtih same customer key (if delete any, delete them all)
 			loop
 			AAS_DEL_ALL_END: !
 		end if
 		goto AAS_FINIS
 		AAS_WRITE: ! r:
 		if trim$(ab$(1)&ab$(2)&ab$(3)&ab$(4))<>'' then
-			write #h_ubadrbil,using FadrBil: z$,mat ab$
+			write #hAdrBil,using FadrBil: z$,mat ab$
 		end if
 		goto AAS_FINIS ! /r
 		AAS_FINIS: !
@@ -206,176 +209,80 @@ def fn_customer(; &editOne$,___,editOne,ckey)
 		ml$(3)='Breakdown Balance = '&ltrm$(cnvrt$('pic($$$,$$$.## cr)',tgb))
 		ml$(4)='Difference = '&ltrm$(cnvrt$('pic($$$,$$$.## cr)',bal-tgb))
 		fnMsgBox(mat ml$,resp$,'',48)
-	goto BILLING_INFO ! /r
-	BUD2: ! r:
-		if bud1=0 then goto NameScreen
-		framelen=0
-		for j=1 to 10
-			if trim$(srvnam$(j))<>'' then framelen=framelen+1
+	goto ScreenBillingInfo ! /r
+	ScreenBudgetBilling: ! r:    (z$*10; ___,framelen,x,br1
+		if ~hBudMstr then goto ScreenCustomer1
+		
+		framelen=5
+		for j=1 to udim(mat srvnam$)
+			if trim$(srvnam$(j))<>'' then framelen+=1
 		next j
-		framelen=framelen+5
+		
 		mat ba=(0)
 		mat badr=(0)
 		br1=0 ! NO BUDGET RECORD
-		read #h_budmstr,using F_BUDMSTR,key=z$: z$,mat ba,mat badr nokey L3040
+		read #hBudMstr,using FbudMstr,key=z$: z$,mat ba,mat badr nokey L3040
 		br1=1
 		L3040: !
 		fnTos
-		fnFra(1,1,framelen-1,45,'Budget Billing Information','Enter budget amounts to activate budget billing',0)
+		fnFra(1,1,framelen-1,45,'Budget Billing','Enter budget amounts to activate budget billing',0)
 		fnLbl(2,16,'Budget Amounts',20,2,3,1)
-		fnLbl(3,1,'Date:',20,1,0,1)
-		fnTxt(3,22,8,8,1,'1',0,'Date budget billing approved (mmddyy format)',1)
-		budgetinfo$(1)=str$(ba(1))
+		dim budResp$(28)*64
+		fnLbl(3,1,'Date:',20,1,0,1) : fnTxt(3,22,8,8,1,'1',0,'Date budget billing approved (mmddyy format)',1) : budResp$(1)=str$(ba(1))
 		x=1 : lyne =3
 		for j=1 to 10
 			if trim$(srvnam$(j))<>'' then  ! have this service
-				x+=1 : lyne+=1
-				fnLbl(lyne,1,trim$(srvnam$(j))&':',20,1,0,1)
+				fnLbl(lyne+=1,1,trim$(srvnam$(j))&':',20,1,0,1)
 				fnTxt(lyne,22,10,0,1,'10',0,'Enter budget amounts where applicable.  All other services will be calculated as normal.',1)
-				budgetinfo$(x)=str$(ba(j+1))
+				budResp$(x+=1)=str$(ba(j+1))
 			end if
 		next j
-		lyne+=1 : fnLbl(lyne,1,'Net Bill:',20,1,0,1)
-		fnTxt(lyne,22,10,10,1,'10',0,'Net would never have a value unless all items above were budgeted',1)
-		budgetinfo$(x+=1)=str$(ba(12))
-		fnCmdKey('&Next',1,1)
-		fnCmdKey('Access &Transactions',8,0)
-		fnCmdKey('&Delete',3,0)
-		fnCmdKey('&Cancel',5,0,1)
-		fnAcs(mat budgetinfo$,ckey) ! budget billing master record
-		if ckey=5 then goto NameScreen
-		if ckey=8 then goto TRANS_ROUTINE
-		x=1 : ba(1)=val(budgetinfo$(1)) conv ignore
-		for j=2 to 11
-			if trim$(srvnam$(j-1))<>'' then
-				x+=1 : ba(j)=val(budgetinfo$(x))
-			end if
-		next j
-		x+=1: ba(12)=val(budgetinfo$(x))
-		if br1=1 and ckey=3 then goto DEL_BUDGET_HISTORY ! if they choose to delete exiting record
-		if br1=0 and ckey=3 then goto NameScreen ! if press delete without writing a record
-		if br1=0 then goto L3330 ! create record if none exists
-		rewrite #h_budmstr,using F_BUDMSTR: z$,mat ba,mat badr
-		if ckey=2 then goto L3350
-	goto NameScreen
-
-	L3330: !
-	if sum(ba)=0 then goto TRANS_ROUTINE
-	write #h_budmstr,using F_BUDMSTR: z$,mat ba,mat badr
-	L3350: !
-	goto TRANS_ROUTINE
-	! /r
-	DEL_BUDGET_HISTORY: ! r:
-		mat ml$(3)
-		ml$(1)='You have chosen to delete all budget history'
-		ml$(2)='for this customer.'
-		ml$(3)='Do you wish to continue?'
-		fnMsgBox(mat ml$,resp$,'',35)
-		if uprc$(resp$)='YES' then goto DBH_DEL else goto DBH_XIT
-		DBH_DEL: !
-		if br1=1 then delete #h_budmstr,key=z$: nokey ignore
-		DBH_XIT: !
-	goto NameScreen ! /r
-	TRANS_ROUTINE: ! r:
-		ta1=badr(1)
-		if ta1=0 and sum(ba)>0 then
-			ta1=lrec(h_budtrans)+1
-			mat bt1=(0)
-			nba=0
-			write #h_budtrans,using F_BUDTRANS,rec=ta1: x$,mat bt1,nba
-			badr(1)=ta1
-			badr(2)=ta1
-			rewrite #h_budmstr,using F_BUDMSTR,key=z$: z$,mat ba,mat badr
+		fnLbl(lyne+=1,1,'Net Bill:',20,1,0,1) : fnTxt(lyne,22,10,10,1,'10',0,'Net would never have a value unless all items above were budgeted',1) : budResp$(x+=1)=str$(ba(12))
+		fnCmdKey('&Save',1,1)
+		fnCmdKey('&Transactions',8,0)
+		if br1 then
+			fnCmdKey('&Delete',3,0)
 		end if
-		do while ta1<>0
-			read #h_budtrans,using F_BUDTRANS,rec=ta1: x$,mat bt1,nba noRec BUDTR_XIT
-			! BUDTRANS: ! budget transactions
-			mat budgetinfo$(28)
-			fnTos
-			fnFra(1,1,framelen+1,50,'Budget Billing Transactions','Actual billing compared to budget billing for any month billed',0)
-			fnLbl(2,22,'Budget     Actual',20,2,2,1)
-			fnLbl(3,1,'Date:',20,1,0,1)
-			budgetinfo$(1)=str$(bt1(1,1))
-			fnTxt(3,22,8,8,1,'1',0,'',1)
-			budgetinfo$(2)=str$(bt1(1,2))
-			fnTxt(3,34,8,8,1,'1',0,empty$,1)
-			x=2 : lyne=3
-			for j=1 to 10
-				if trim$(srvnam$(j))<>'' then ! they have this service
-					x+=2
-					fnLbl(lyne+=1,1,trim$(srvnam$(j))&':',20,1,0,1)
-					fnTxt(lyne,22,10,10,1,'10',0,empty$,1)
-					budgetinfo$(x-1)=str$(bt1(j+1,1))
-					budgetinfo$(x)=str$(bt1(j+1,2))
-					fnTxt(lyne,34,10,10,1,'10',0,empty$,1)
+		fnCmdKey('&Cancel',5,0,1)
+		fnAcs(mat budResp$,ckey) ! budget billing master record
+		if ckey<>5 then
+			if ckey=8 then 
+				goto L3350
+			end if
+			x=1 : ba(1)=val(budResp$(1)) conv ignore
+			for j=2 to 11
+				if trim$(srvnam$(j-1))<>'' then
+					ba(j)=val(budResp$(x+=1))
 				end if
 			next j
-			lyne+=1 : fnLbl(lyne,1,'Net Bill:',20,1,0,1)
-			budgetinfo$(x+=1)=str$(bt1(12,1))
-			fnTxt(lyne,22,10,10,1,'10',0,empty$,1)
-			budgetinfo$(x+=1)=str$(bt1(12,2))
-			fnTxt(lyne,34,10,10,1,'10',0,empty$,1)
-			lyne+=1 : fnLbl(lyne,1,'Gross Bill:',20,1,0,1)
-			budgetinfo$(x+=1)=str$(bt1(13,1))
-			fnTxt(lyne,22,10,10,1,'10',0,empty$,1)
-			budgetinfo$(x+=1)=str$(bt1(13,2))
-			fnTxt(lyne,34,10,10,1,'10',0,empty$,1)
-			lyne+=1 : fnLbl(lyne,1,'Date paid:',20,1,0,1)
-			budgetinfo$(x+=1)=str$(bt1(14,1))
-			fnTxt(lyne,22,8,8,1,'1',0,'',1)
-			budgetinfo$(x+=1)=str$(bt1(14,2))
-			fnTxt(lyne,34,8,8,1,'1',0,'',1)
-			fnCmdSet(2)
-			fnAcs(mat budgetinfo$,ckey) ! budget billing transactions
-			if ckey=5 then goto NameScreen
-			x=0
-			for j=1 to 14
-				if j<2 or j>11 or trim$(srvnam$(j-1))<>'' then
-					x+=1
-					bt1(j,1)=val(budgetinfo$(x*2-1))
-					bt1(j,2)=val(budgetinfo$(x*2))
+			ba(12)=val(budResp$(x+=1))
+			if ckey=3 and fnConfirmDeleteHard('Budget History','All Budget History for '&trim$(z$)) then
+					fnKeyDelete(hBudMstr,'form pos 1,c 10',z$)
+					fnKeyDelete(hBudgetTrans,'form pos 1,c 10',z$)
+			else if ~br1 then
+				! create record if none exists
+				if sum(mat ba) then 
+					write #hBudMstr,using FbudMstr: z$,mat ba,mat badr
 				end if
-			next j
-			rewrite #h_budtrans,using F_BUDTRANS,rec=ta1: x$,mat bt1,nba
-			ta1=nba
-		loop ! goto L3450
-		BUDTR_XIT: !
-	goto BUD2 ! /r
-	BUD3: ! r:
-		if bud1=0 then goto L3980 ! Account CHANGED
-		read #h_budmstr,using 'form pos 1,c 10,pos 75,2*pd 3',key=x$: x$,mat badr nokey L3980
-		rewrite #h_budmstr,using 'form pos 1,c 10,pos 75,2*pd 3': z$
-		tadr=badr(1)
-		do
-			if tadr=0 then goto L3980
-			read #h_budtrans,using 'form pos 1,c 10,pos 147,pd 3',rec=tadr: x$,nba
-			rewrite #h_budtrans,using 'form pos 1,c 10,pos 147,pd 3',rec=tadr: z$ ! 11/15/00  ADDED USING
-			tadr=nba
-		loop
-		L3980: !
-	return ! /r
-	BUD4: ! r:
-	if bud1=0 then goto L4100 ! Account DELETED
-	 read #h_budmstr,using 'form pos 1,c 10,pos 75,2*pd 3',key=x$: x$,mat badr nokey L4100
-	 delete #h_budmstr:
-	 tadr=badr(1)
-	 do until tadr=0
-		 read #h_budtrans,using 'form pos 1,c 10,pos 147,pd 3',rec=tadr: x$,nba
-		 delete #h_budtrans,rec=tadr:
-		 tadr=nba
-	 loop
-	 L4100: !
-	return ! /r
+				goto L3350
+			else
+				rewrite #hBudMstr,using FbudMstr: z$,mat ba,mat badr
+				if ckey=2 then goto L3350
+			end if
+		end if
+		goto ScreenCustomer1
+		
+	L3350: fn_budgetTransScreens(z$,hBudgetTrans) : goto ScreenBudgetBilling
+
+
+
+
 	Cass1Open: ! r:
-		open #h_cass1=fnH: 'Name=[Q]\UBmstr\Cass1.h[cno],KFName=[Q]\UBmstr\CASS1IDX.h[cno],Shr',i,outIn,k ioerr Cass1OpenFinis
+		open #hCass1=fnH: 'Name=[Q]\UBmstr\Cass1.h[cno],KFName=[Q]\UBmstr\CASS1IDX.h[cno],Shr',i,outIn,k ioerr Cass1OpenFinis
 		cassopen=1
 		Cass1OpenFinis: !
 	return  ! /r
-	DEL_CASS: ! r:
-		if cassopen then
-			delete #h_cass1,key=x$: nokey ignore
-		end if
-	return  ! /r
+
 	DEL_HIST: ! r: Delete History with old account
 		open #h_ubtransvb=fnH: 'Name=[Q]\UBmstr\ubTransVB.h[cno],KFName=[Q]\UBmstr\ubTrIndx.h[cno],Shr',i,outIn,k
 		open #hTrans2=fnH: 'Name=[Q]\UBmstr\ubTransVB.h[cno],KFName=[Q]\UBmstr\UBTrdt.h[cno],Shr',i,outIn,k
@@ -389,7 +296,7 @@ def fn_customer(; &editOne$,___,editOne,ckey)
 		close #h_ubtransvb:
 		close #hTrans2:
 	return  ! /r
-	NameScreen: ! r: the main customer screen
+	ScreenCustomer1: ! r: the main customer screen
 		fnTos
 		respc=0 : frac=0
 		mylen=25 : mylen+2
@@ -465,14 +372,14 @@ def fn_customer(; &editOne$,___,editOne,ckey)
 		fnTxt(1,15,20,30,0,'',do_not_use_alt_addr,'Mailing information is only necessary if different than the customer information',2)
 		custInfo$(respc+=1)=ab$(1)
 		fnLbl(2,1,'Address:',13,1,0,2)
-		fnTxt(2,15,20,30,0,'',do_not_use_alt_addr,empty$,2)
+		fnTxt(2,15,20,30,0,'',do_not_use_alt_addr,'',2)
 		custInfo$(respc+=1)=ab$(2)
 		fnLbl(3,1,'Address:',13,1,0,2)
-		fnTxt(3,15,20,30,0,'',do_not_use_alt_addr,empty$,2)
+		fnTxt(3,15,20,30,0,'',do_not_use_alt_addr,'',2)
 		custInfo$(respc+=1)=ab$(3)
 		fnLbl(4,1,'City, St Zip:',13,1,0,2)
 		if do_not_use_alt_addr then
-			fnTxt(4,15,20,30,0,'',do_not_use_alt_addr,empty$,2)
+			fnTxt(4,15,20,30,0,'',do_not_use_alt_addr,'',2)
 		else
 			fnComboF('CityStZip',4,15,30,'[Q]\Data\CityStZip.dat',1,30,0,0,'[Q]\Data\CityStZip.idx',0,0, '',2,0)
 		end if
@@ -497,13 +404,24 @@ def fn_customer(; &editOne$,___,editOne,ckey)
 		fnLbl(9,nav_button_pos,'Additional Information',nav_button_width,2) !,3)
 		fnButton(10,nav_button_pos,'Servi&ces',20,'Service Code Information: Including rates codes, meter numbers, deposits, readings, usages, etc',0,nav_button_width)
 		fnButton(11,nav_button_pos,'Current &Bill and Breakdown',21,'Charges, balance, balance breakdown, net and gross bill',0,nav_button_width)
-		fnButton(12,nav_button_pos,'Bank &Draft Information',22,'Bank draft codes, routing numbers, bank numbers, etc',0,nav_button_width)
-		fnButton(13,nav_button_pos,'&Notes',23,'Add notes or footnotes pertaining to this customer',0,nav_button_width)
-		fnButton(14,nav_button_pos,'Deposit &History',25,'A record of all changes to customer deposit amounts',0,nav_button_width)
-		fnButton(15,nav_button_pos,'&Transaction History',26,'Transactions for all charges, collections, penalties, memos, etc. that have been processed on the customer.',0,nav_button_width)
-		fnButton(16,nav_button_pos,'Budget Billing In&formation',27,'Budget amounts and variances between budget and actual',0,nav_button_width)
-		fnButton(17,nav_button_pos,'Work &Orders',28,'Print a work order on this customer',0,nav_button_width/2)
-		fnButton(17,nav_button_pos+nav_button_width/2+1,'Print History',29,'Review descriptions of past work orders.',0,nav_button_width/2-1)
+		lc=12
+		fnButton(lc+=1,nav_button_pos,'&Transaction History',26,'Transactions for all charges, collections, penalties, memos, etc. that have been processed on the customer.',0,nav_button_width)
+		fnButton(lc+=1,nav_button_pos,'Deposit &History',25,'A record of all changes to customer deposit amounts',0,nav_button_width)
+		lc+=1
+		fnButton(lc+=1,nav_button_pos,'&Notes',23,'Add notes or footnotes pertaining to this customer',0,nav_button_width)
+		fnButton(lc+=1,nav_button_pos,'Bank &Draft',22,'Bank draft codes, routing numbers, bank numbers, etc',0,nav_button_width)
+		lc+=1
+		if hBudMstr then
+			if env$('acsDeveloper')<>'' then
+				fnButton(lc+=1,nav_button_pos,'Budget Billi&ng',27,'Budget amounts and variances between budget and actual',0,nav_button_width/2) ! Budget Billing Information
+				fnButton(lc   ,nav_button_pos+nav_button_width/2+1,'Transactions',30,'Budget amounts and variances between budget and actual',0,nav_button_width/2-1)
+			else
+				fnButton(lc+=1,nav_button_pos,'Budget Billi&ng',27,'Budget amounts and variances between budget and actual',0,nav_button_width) ! Budget Billing Information
+			end if
+		end if
+		
+		fnButton(lc+=1,nav_button_pos,'Work &Orders',28,'Create a Work Order for '&trim$(z$),0,nav_button_width/2)
+		fnButton(lc,nav_button_pos+nav_button_width/2+1,'Print History',29,'Review descriptions of past Work Orders.',0,nav_button_width/2-1)
 		fnCmdKey('&Save',1,1,0,'Saves all changes or new information')
 		if ad1=0 then
 			fnCmdKey('Delete',4,0,0,'Deletes this record')
@@ -512,7 +430,7 @@ def fn_customer(; &editOne$,___,editOne,ckey)
 		fnAcs(mat custInfo$,ckey) ! CALL main screen
 		if ckey=5 then
 			release #hCustomer1: ioerr ignore
-			release #h_ubadrbil: ioerr ignore
+			release #hAdrBil: ioerr ignore
 			if ad1=1 then
 				goto ADD_CANCEL
 			else
@@ -568,13 +486,13 @@ def fn_customer(; &editOne$,___,editOne,ckey)
 			mat ml$(1)
 			ml$(1)='Sequence number is required!'
 			fnMsgBox(mat ml$,resp$,'',48)
-			goto NameScreen
+			goto ScreenCustomer1
 		else if extra(1)<bkno1 or extra(1)>bkno2  then
 			mat ml$(2)
 			ml$(1)='You must have a valid route number within the range of '&bkno1$&' and '&bkno2$&'!'
 			ml$(2)='You can use Company > Configure to set the route number range..'
 			fnMsgBox(mat ml$,resp$,'',48)
-			goto NameScreen
+			goto ScreenCustomer1
 		end if
 		if sum(mat gb)<>bal then goto CHECK_BALANCE_BREAKDOWN
 		if ckey=1 then
@@ -601,49 +519,45 @@ def fn_customer(; &editOne$,___,editOne,ckey)
 			else if trim$(srvnam$(10))<>'' then
 				ckey=30 : goto ServiceScreen
 			else
-				pr 'no services';bell : goto NameScreen
+				pr 'no services';bell : goto ScreenCustomer1
 			end if
 		else if ckey=21 then
-			goto BILLING_INFO
+			goto ScreenBillingInfo
 		else if ckey=22 then
-			goto BANK_DRAFT
+			goto ScreenBankDraft
 		else if ckey=23 then
 			fn_customerNotes(z$)
-			goto NameScreen
+			goto ScreenCustomer1
 		else if ckey=25 then
-			goto DEPOSIT_HIST
+			goto ScreenDepositHistory
 		else if ckey=26 then
-			goto TRANS_HIST
+			goto ScreenTransactionHistory
 		else if ckey=27 then
-			goto BUD2
+			goto ScreenBudgetBilling
 		else if ckey=28 then
 			fnWorkOrderAdd(holdz$)
-			goto NameScreen
+			goto ScreenCustomer1
 		else if ckey=29 then
 			fnWorkOrderList(z$)
-			goto NameScreen
+			goto ScreenCustomer1
+		else if ckey=30 and hBudMstr then
+			read #hBudMstr,using FbudMstr,key=z$: z$,mat ba,mat badr nokey ScreenCustomer1
+			fn_budgetTransScreens(z$,hBudgetTrans)
+			goto ScreenCustomer1
 		else if ckey=50 then
-			extra(22)=2 : goto NameScreen
+			extra(22)=2 : goto ScreenCustomer1
 		else if ckey=51 then
-			extra(22)=1 : goto NameScreen
+			extra(22)=1 : goto ScreenCustomer1
 		end if
-	! /r (NameScreen)
-	BILLING_INFO: ! r:
+	! /r (ScreenCustomer1)
+	ScreenBillingInfo: ! r:
 		fnTos
 		fnLbl(1,14,'Billing Information',30,2,4)
-		fnLbl(2,1,'Account:',10,1)
-		fnTxt(2,12,10,0,1,'',1)
-		bxnf$(1)=z$
-		fnLbl(2,24,'Name:',5,1)
-		fnTxt(2,31,25,30,0,'',1)
-		bxnf$(2)=e$(2)
+		fnLbl(2,1,'Account:',10,1) 	: fnTxt(2,12,10, 0,1,'',1) : bxnf$(1)=z$
+		fnLbl(2,24,'Name:',5,1)    	: fnTxt(2,31,25,30,0,'',1) : bxnf$(2)=e$(2)
 		fnFra(3,1,16,49,'')
-		fnLbl(1,1,'Date of Charge:',14,1,0,1)
-		fnTxt(1,16,8,0,0,'1',0,'',1)
-		bxnf$(3)=str$(lastBillingDate)
-		fnLbl(2,1,'Balance:',8,0,0,1)
-		fnTxt(2,10,10, 0,1,'10',disableBalanceEdit,'',1)
-		bxnf$(4)=str$(bal)
+		fnLbl(1,1,'Date of Charge:',14,1,0,1) : fnTxt(1,16,8,0,0,'1',0,'',1) : bxnf$(3)=str$(lastBillingDate)
+		fnLbl(2,1,'Balance:',8,0,0,1) : 		fnTxt(2,10,10, 0,1,'10',disableBalanceEdit,'',1) : bxnf$(4)=str$(bal)
 		if uprc$(escrow$)='Y' then
 			fnLbl(2,21,'Escrow Balance:',15,1,0,1)
 			fnTxt(2,38,9,0,1,'10',0,'',1)
@@ -656,22 +570,15 @@ def fn_customer(; &editOne$,___,editOne,ckey)
 		for j=1 to 10
 			if rtrm$(srvnam$(j))<>'' then
 				lyne+=1
-				fnLbl(lyne,1,trim$(srvnam$(j))&':',16,1,0,1)
-				fnTxt(lyne,19,10,0,1,'10',0,'',1)
-				bxnf$(billinfo+=1)=str$(g(j))
-				fnTxt(lyne,33,10,0,1,'10',0,'',1)
-				bxnf$(billinfo+=1)=str$(gb(j))
+				fnLbl(lyne,1,trim$(srvnam$(j))&':',16,1,0,1) : fnTxt(lyne,19,10,0,1,'10',0,'',1) 	: bxnf$(billinfo+=1)=str$(g(j))
+				                                                 fnTxt(lyne,33,10,0,1,'10',0,'',1) 	: bxnf$(billinfo+=1)=str$(gb(j))
 			end if
 		next j
-		lyne+=1 : fnLbl(lyne,1,'Net Bill:',16,1,0,1)
-		fnTxt(lyne,19,10,0,1,'10',0,'',1)
-		bxnf$(billinfo+=1)=str$(g(11))
-		lyne+=1 : fnLbl(lyne,1,'Gross Bill:',16,1,0,1)
-		fnTxt(lyne,19,10,0,1,'10',0,'',1)
-		bxnf$(billinfo+=1)=str$(g(12))
+		fnLbl(lyne+=1,1,'Net Bill:',16,1,0,1)   	: fnTxt(lyne,19,10,0,1,'10',0,'',1) : bxnf$(billinfo+=1)=str$(g(11))
+		fnLbl(lyne+=1,1,'Gross Bill:',16,1,0,1) 	: fnTxt(lyne,19,10,0,1,'10',0,'',1) : bxnf$(billinfo+=1)=str$(g(12))
 		fnCmdSet(2)
 		fnAcs(mat bxnf$,ckey) ! billing information
-		if ckey=5 then goto NameScreen
+		if ckey=5 then goto ScreenCustomer1
 		lastBillingDate=val(bxnf$(3))
 		bal=val(bxnf$(4))
 		if uprc$(escrow$)='Y' then
@@ -682,14 +589,14 @@ def fn_customer(; &editOne$,___,editOne,ckey)
 		end if
 		for j=1 to 10
 			if rtrm$(srvnam$(j))<>'' then
-				billinfo=billinfo+1 : g(j)=val(bxnf$(billinfo))
-				billinfo=billinfo+1 : gb(j)=val(bxnf$(billinfo))
+				g(j)=val(bxnf$(billinfo+=1))
+				gb(j)=val(bxnf$(billinfo+=1))
 			end if
 		next j
-		billinfo=billinfo+1 : g(11)=val(bxnf$(billinfo))
-		billinfo=billinfo+1 : g(12)=val(bxnf$(billinfo))
-	goto NameScreen ! /r
-	BANK_DRAFT: ! r:
+		g(11)=val(bxnf$(billinfo+=1))
+		g(12)=val(bxnf$(billinfo+=1))
+	goto ScreenCustomer1 ! /r
+	ScreenBankDraft: ! r:
 		fnTos
 		fnLbl(1,9,'Bank Draft Information',40,2,4)
 		fnLbl(2,1,'Account:',10,1)
@@ -698,7 +605,7 @@ def fn_customer(; &editOne$,___,editOne,ckey)
 		fnLbl(2,24,'Name:',5,1)
 		fnTxt(2,31,25,30,0,'',1)
 		dri$(2)=e$(2)
-		!
+		
 		fnLbl(4,3,'Bank Draft (Y/N):',18)
 		fnTxt(4,20,1,0,0,'',0,'Use Y to specify the customer has requested a bank draft')
 		if uprc$(df$)='1' or uprc$(df$)='Y' then
@@ -712,7 +619,7 @@ def fn_customer(; &editOne$,___,editOne,ckey)
 		fnLbl(6,1,'Account Code:',18,1,0)
 		opt$(1)='27 = Checking'
 		opt$(2)= '37 = Savings'
-		fnComboA('bankdraft',6,20,mat opt$,empty$,13)
+		fnComboA('bankdraft',6,20,mat opt$,'',13)
 		if dc$='37' then
 			dri$(5)='37 = Savings'
 		else
@@ -723,14 +630,14 @@ def fn_customer(; &editOne$,___,editOne,ckey)
 		dri$(6)=da$
 		fnCmdSet(2)
 		fnAcs(mat dri$,ckey) ! bank draft information
-		if ckey=5 then goto NameScreen ! dont update information
+		if ckey=5 then goto ScreenCustomer1 ! dont update information
 		df$=dri$(3)
 		dr$=dri$(4)
 		dc$=dri$(5)(1:2)
 		da$=dri$(6)
-	goto NameScreen ! /r
-	DEPOSIT_HIST: ! r:
-		read #h_deposit2,using 'form pos 1,c 10,g 8,c 32,2*n 10.2',key=z$: k32$,dt1,dp$,dp1,dp2 nokey DEPOSIT_HIST_NONE
+	goto ScreenCustomer1 ! /r
+	ScreenDepositHistory: ! r:
+		read #h_deposit2,using 'form pos 1,c 10,g 8,c 32,2*n 10.2',key=z$: k32$,dt1,dp$,dp1,dp2 nokey ScreenNoDepositHistory
 		fnTos
 		fnLbl(1,16,'Deposit Change Information',40,2,4)
 		fnLbl(2,1,'Account:',16,1)
@@ -764,17 +671,17 @@ def fn_customer(; &editOne$,___,editOne,ckey)
 		fnCmdSet(2)
 		ckey=fnAcs(mat resp$) ! CALL deposit change grd
 		DEPOSIT_HIST_XIT: !
-	goto NameScreen ! /r
-	DEPOSIT_HIST_NONE: ! r:
+	goto ScreenCustomer1 ! /r
+	ScreenNoDepositHistory: ! r:
 		mat ml$(1)
 		ml$(1)='There is no deposit history to display!'
 		fnMsgBox(mat ml$,resp$,'',48)
 	goto DEPOSIT_HIST_XIT ! /r
-	TRANS_HIST: ! r:
+	ScreenTransactionHistory: ! r:
 		release #hCustomer1:
 		fntransfile(jbact$,bal,mat gb)
 		read #hCustomer1,key=jbact$:
-	goto NameScreen ! /r
+	goto ScreenCustomer1 ! /r
 	AskAcct: ! r:
 		release #hCustomer1: ioerr ignore
 		ad1=0 ! add code - used to tell other parts of the program, that I am currently adding a customer record.
@@ -843,20 +750,131 @@ def fn_customer(; &editOne$,___,editOne,ckey)
 	fnCloseFile(hLocation,'U4 Meter Location')
 	fnCloseFile(hCustomer1,'UB Customer')
 	setup_MeterLocation=0
-	fn_close_file(h_ubadrbil)
+	fn_close_file(hAdrBil)
 	fn_close_file(h_citystzip)
 	! fn_close_file(h_deposit1)
 	fn_close_file(h_deposit2)
-	fn_close_file(h_cass1)
-	fn_close_file(h_budtrans)
-	fn_close_file(h_budmstr)
-	fn_close_file(h_budtrans)
+	fn_close_file(hCass1)
+	hBudMstr=fnCloseBudMstr
+	hBudgetTrans=fnCloseBudTrans
 	! fn_close_file(hCustomer1)
 	! fn_close_file(hCustomer2)
 	! fn_close_file(hCustomer3)
 	! fn_close_file(hCustomer4)
 	! fn_close_file(hCustomer5) ! /r
 fnend
+	def fn_budgetTransScreens(z$*10,hBudgetTrans; ___,ckey,ta1,lyne,x,lyne,x$*10,recordItem) 
+
+		! r: new way
+			fnBudgetTransMatchingRecords(z$,mat btRec)
+			if udim(mat btRec) then
+				do
+					recordItem+=1
+					if recordItem>udim(mat btRec) then recordItem=1
+					if recordItem<=0 then recordItem=udim(mat btRec)
+					read #hBudgetTrans,using FbudTrans,rec=btRec(recordItem): x$,mat bt1
+					if x$=z$ then
+						mat budResp$(28)
+						fnTos
+						fnFra(1,1,18,50,'Budget Billing Transactions','Actual billing compared to budget billing for any month billed',0)
+						fnLbl(2,22,'Budget',8,2,2,1)
+						fnLbl(2,34,'Actual',8,2,2,1)
+						fnLbl(3,1,'Date:',20,1,0,1) 	: fnTxt(3,22,8,8,1,'1',0,'',1) 	: budResp$(1)=str$(bt1(1,1))
+																						fnTxt(3,34,8,8,1,'1',0,'',1) 	: budResp$(2)=str$(bt1(1,2))
+						x=2 : lyne=3
+						for j=1 to 10
+							if trim$(srvnam$(j))<>'' then ! they have this service
+								x+=2
+								fnLbl(lyne+=1,1,trim$(srvnam$(j))&':',20,1,0,1) 	: fnTxt(lyne,22,10,10,1,'10',0,'',1) 	: budResp$(x-1)=str$(bt1(j+1,1))
+																																			fnTxt(lyne,34,10,10,1,'10',0,'',1) 	: budResp$(x)=str$(bt1(j+1,2))
+							end if
+						next j
+						fnLbl(lyne+=1,1,'Net Bill:',20,1,0,1)   	: fnTxt(lyne,22,10,10,1,'10',0,'',1) 	: budResp$(x+=1)=str$(bt1(12,1))
+																													fnTxt(lyne,34,10,10,1,'10',0,'',1) 	: budResp$(x+=1)=str$(bt1(12,2))
+						fnLbl(lyne+=1,1,'Gross Bill:',20,1,0,1) 	: fnTxt(lyne,22,10,10,1,'10',0,'',1) 	: budResp$(x+=1)=str$(bt1(13,1))
+																													fnTxt(lyne,34,10,10,1,'10',0,'',1) 	: budResp$(x+=1)=str$(bt1(13,2))
+						fnLbl(lyne+=1,1,'Date paid:',20,1,0,1)  	: fnTxt(lyne,22,8,8,1,'1',0,'',1)    	: budResp$(x+=1)=str$(bt1(14,1))
+																													fnTxt(lyne,34,8,8,1,'1',0,'',1)    	: budResp$(x+=1)=str$(bt1(14,2))
+						fnLbl(18,1,str$(recordItem)&' of '&str$(udim(mat btRec)),50,2,0,1)
+						fnCmdKey('< Previous' 	,9,0,0,'[F9] Save any changes and move to prior record')
+						fnCmdKey('Next >'  	,11,1,0,'[F11] Save any changes and move to next record')
+						fnCmdKey('Cancel'	,5,0,1,'Abandon any changes to this record and leave Budget Billing Transactions')
+
+						fnAcs(mat budResp$,ckey) ! budget billing transactions
+						if ckey<>5 then
+							x=0
+							for j=1 to 14
+								if j<2 or j>11 or trim$(srvnam$(j-1))<>'' then
+									x+=1
+									bt1(j,1)=val(budResp$(x*2-1))
+									bt1(j,2)=val(budResp$(x*2))
+								end if
+							next j
+							rewrite #hBudgetTrans,using FbudTrans,rec=btRec(recordItem): x$,mat bt1
+							if ckey=9 then recordItem-=2
+						end if
+					end if
+				loop until ckey=5
+			end if
+		! /r
+
+		! ! r: old way
+		
+		! ! uses local: hBudMstr,hBudgetTrans,mat ba
+		! ! ta1=badr(1)
+		
+		! if ~ta1 and sum(mat ba)>0 then
+		! 	ta1=lrec(hBudgetTrans)+1
+		! 	mat bt1=(0)
+		! 	nba=0
+		! 	write #hBudgetTrans,using FbudTrans,rec=ta1: x$,mat bt1,nba
+		! 	badr(1)=ta1
+		! 	badr(2)=ta1
+		! 	rewrite #hBudMstr,using FbudMstr,key=z$: z$,mat ba,mat badr
+		! end if
+		! 
+		! do while ta1
+		! 	read #hBudgetTrans,using FbudTrans,rec=ta1: x$,mat bt1,nba noRec ScrBudTrFinis
+		! 	! BUDTRANS: ! budget transactions
+		! 	mat budResp$(28)
+		! 	fnTos
+		! 	fnFra(1,1,framelen+1,50,'Budget Billing Transactions','Actual billing compared to budget billing for any month billed',0)
+		! 	fnLbl(2,22,'Budget',8,2,2,1)
+		! 	fnLbl(2,34,'Actual',8,2,2,1)
+		! 	fnLbl(3,1,'Date:',20,1,0,1) 	: fnTxt(3,22,8,8,1,'1',0,'',1) 	: budResp$(1)=str$(bt1(1,1))
+		! 	                                fnTxt(3,34,8,8,1,'1',0,'',1) 	: budResp$(2)=str$(bt1(1,2))
+		! 	x=2 : lyne=3
+		! 	for j=1 to 10
+		! 		if trim$(srvnam$(j))<>'' then ! they have this service
+		! 			x+=2
+		! 			fnLbl(lyne+=1,1,trim$(srvnam$(j))&':',20,1,0,1) 	: fnTxt(lyne,22,10,10,1,'10',0,'',1) 	: budResp$(x-1)=str$(bt1(j+1,1))
+		! 																													  fnTxt(lyne,34,10,10,1,'10',0,'',1) 	: budResp$(x)=str$(bt1(j+1,2))
+		! 		end if
+		! 	next j
+		! 	fnLbl(lyne+=1,1,'Net Bill:',20,1,0,1)   	: fnTxt(lyne,22,10,10,1,'10',0,'',1) 	: budResp$(x+=1)=str$(bt1(12,1))
+		! 	                                              fnTxt(lyne,34,10,10,1,'10',0,'',1) 	: budResp$(x+=1)=str$(bt1(12,2))
+		! 	fnLbl(lyne+=1,1,'Gross Bill:',20,1,0,1) 	: fnTxt(lyne,22,10,10,1,'10',0,'',1) 	: budResp$(x+=1)=str$(bt1(13,1))
+		! 	                                              fnTxt(lyne,34,10,10,1,'10',0,'',1) 	: budResp$(x+=1)=str$(bt1(13,2))
+		! 	fnLbl(lyne+=1,1,'Date paid:',20,1,0,1)  	: fnTxt(lyne,22,8,8,1,'1',0,'',1)    	: budResp$(x+=1)=str$(bt1(14,1))
+		! 	                                              fnTxt(lyne,34,8,8,1,'1',0,'',1)    	: budResp$(x+=1)=str$(bt1(14,2))
+		! 	fnCmdSet(2)
+		! 	fnAcs(mat budResp$,ckey) ! budget billing transactions
+		! 	if ckey<>5 then
+		! 		x=0
+		! 		for j=1 to 14
+		! 			if j<2 or j>11 or trim$(srvnam$(j-1))<>'' then
+		! 				x+=1
+		! 				bt1(j,1)=val(budResp$(x*2-1))
+		! 				bt1(j,2)=val(budResp$(x*2))
+		! 			end if
+		! 		next j
+		! 		rewrite #hBudgetTrans,using FbudTrans,rec=ta1: x$,mat bt1,nba
+		! 		ta1=nba
+		! 	end if
+		! loop until ckey=5
+		! ! /r
+		ScrBudTrFinis: ! 
+	fnend
 def library fnDepositChangeLog(z$*10,odp,ndp,chgDateMmDdYy,comment$*32)
 	if ~setup then fn_setup
 	if ~setup_depositChange then let fn_setup_depositChange
@@ -877,7 +895,7 @@ def fn_close_file(cf_handle)
 	close #cf_handle: ioerr ignore
 fnend
 ServiceScreen: ! r:
-	! if ckey=5 then goto NameScreen
+	! if ckey=5 then goto ScreenCustomer1
 	mat rateInfo$=('')
 	if ckey>20 and ckey<=30 then
 		! on ckey-20 goto SERVICE1,SERVICE2,SERVICE3,SERVICE4,SERVICE5,SERVICE6,SERVICE7,SERVICE8,SERVICE9,SERVICE10
@@ -1090,7 +1108,7 @@ ServiceScreen: ! r:
 		end if
 		! /r
 	end if
-goto NameScreen ! /r
+goto ScreenCustomer1 ! /r
  dim gLocationKey$*128
  dim gLocationFirstRespc
 def fn_ScrAddServiceMeterInfo(&srvLine,&respc1,mat rateInfo$,serviceCode$*2,service_code)
@@ -1181,18 +1199,6 @@ def fn_record_previous_update(rp_account$*10)
 	rp_prev$(1)=rp_account$ ! &' '&fn_customer_name$(rp_account$)
 	!   pr 'after' : for x=1 to 10 : pr x;'.';rp_prev$(x) : next x
 fnend
-def library fnCustomerNotes(z$)
-	if ~setup then fn_setup
-	fnCustomerNotes=fn_customerNotes(z$)
-fnend
-def fn_customerNotes(z$)
-		noteFile$=fn_notedir$&'\'&trim$(z$)&'.txt'
-		if exists(noteFile$)=0 then
-			open #hTmp=fnH: 'Name='&noteFile$&',Replace',d,o
-			close #hTmp:
-		end if  ! exists(noteFile$)=0
-		fnEditFile('text',noteFile$) ! execute 'SY -w '&atlantis$&' "'&os_filename$(noteFile$)&'" -n' ! ioerr [itself]
-fnend
 def fn_record_previous_save
 	for rp_item=1 to udim(mat rp_prev$)
 		fncreg_write(prev_list_id$&'.previous.'&str$(rp_item),rp_prev$(rp_item))
@@ -1224,6 +1230,20 @@ def fn_notedir$*256
 	end if
 	fn_notedir$=notedir$
 fnend
+
+def library fnCustomerNotes(z$)
+	if ~setup then fn_setup
+	fnCustomerNotes=fn_customerNotes(z$)
+fnend
+def fn_customerNotes(z$)
+		noteFile$=fn_notedir$&'\'&trim$(z$)&'.txt'
+		if exists(noteFile$)=0 then
+			open #hTmp=fnH: 'Name='&noteFile$&',Replace',d,o
+			close #hTmp:
+		end if  ! exists(noteFile$)=0
+		fnEditFile('text',noteFile$) ! execute 'SY -w '&atlantis$&' "'&os_filename$(noteFile$)&'" -n' ! ioerr [itself]
+fnend
+
 def fn_customer_name$*30(cn_account$*10)
 	dim customer_name_return$*30
 	customer_name_return$=''
@@ -1539,7 +1559,6 @@ def fn_setup
 		dim dp$*70
 		dim bt1(14,2)
 		dim badr(2)
-		dim budgetinfo$(28)
 		dim bxnf$(30)*30      ! Billing Information Responses
 		dim dri$(8)*30        ! Draft Information Responses
 		dim df$*1             ! Bank Draft (Y)

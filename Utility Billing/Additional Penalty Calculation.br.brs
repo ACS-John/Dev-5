@@ -8,7 +8,6 @@ dim oldtg(11)  ! read but otherwise unused
 dim z$*10
 dim g(12)
 dim e$(4)*30,transkey$*19
-dim ba(13),badr(2),bt1(14,2)
 dim bd1(5),bd2(5)
 dim tg(11)
 dim route(99)
@@ -116,10 +115,10 @@ SCREEN1: !
 			!   pause
 			goto READ_CUSTOMER
 		end if
-		if bud1=1 then gosub BUD2
-		if totba>0 and bd1>0 and f=bildat and g(10)>0 then goto EO_READ ! Penalize if Budget Bill and Havent Paid Last Bill, Even If BAL <0
+		if hBudTrans then gosub BUD2
+		if totba and bd1>0 and f=bildat and g(10)>0 then goto EO_READ ! Penalize if Budget Bill and Havent Paid Last Bill, Even If BAL <0
 		if bal=0 or bal<minimumbal then goto READ_CUSTOMER
-		if totba>0 and bd1=0 then goto READ_CUSTOMER ! have budget billing and have paid last bill
+		if totba and bd1=0 then goto READ_CUSTOMER ! have budget billing and have paid last bill
 		! If G(10)=0 Then Goto 430
 		if f<>bildat then goto READ_CUSTOMER
 		EO_READ: !
@@ -220,24 +219,23 @@ HDR: ! r:
 return  ! /r
 Xit: fnXit
 BUD1: ! r:
-	bud1=0
-	open #81: 'Name=[Q]\UBmstr\BudMstr.h[cno],KFName=[Q]\UBmstr\BudIdx1.h[cno],Shr',i,outIn,k ioerr EO_BUD1
-	fnOpenBudTrans(82)
-	bud1=1
-	EO_BUD1: !
+	hBudMstr=fnOpenBudMstrInput
+	if hBudMstr then hBudTrans=fnOpenBudTransInput
 return  ! /r
 BUD2: ! r:
 	totba=bd1=bd2=0
 	mat bd1(5) : mat bd1=(0) : mat bd2=(0)
-	if bud1=0 then goto EO_BUD2
-	read #81,using L1520,key=z$: z$,mat ba,mat badr nokey EO_BUD2
-	for j=2 to 12: totba=totba+ba(j): next j
-	L1520: form pos 1,c 10,pd 4,12*pd 5.2,2*pd 3
+	if ~hBudTrans then goto EO_BUD2
+	dim ba(13),badr(2)
+	read #hBudMstr,using FbudMstr,key=z$: z$,mat ba,mat badr nokey EO_BUD2
+	totba=sum(mat ba(2:11))
+	FbudMstr: form pos 1,c 10,pd 4,12*pd 5.2,2*pd 3
 	ta1=badr(1)
 	L1540: !
 	if ta1=0 then goto EO_BUD2
-	read #82,using L1560,rec=ta1: z$,mat bt1,nba noRec EO_BUD2
-	L1560: form pos 1,c 10,2*pd 4,24*pd 5.2,2*pd 4,pd 3
+	dim bt1(14,2)
+	read #hBudTrans,using FbudTrans,rec=ta1: z$,mat bt1,nba noRec EO_BUD2
+	FbudTrans: form pos 1,c 10,2*pd 4,24*pd 5.2,2*pd 4,pd 3
 	if bt1(14,1)>0 then goto L1610
 	if bt1(12,1)=0 then goto L1600 ! don't allow blank records to go thru routine
 	bd1+=1

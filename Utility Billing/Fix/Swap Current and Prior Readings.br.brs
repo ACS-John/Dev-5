@@ -4,7 +4,7 @@
 	on error goto Ertn
 
 	dim x$*10,x(15),w(5),r(4),gb(10),rt(10,3),ba(13),da(2),txt$(3)*80,txt$*50
-	dim a(7),b(11),c(4),d(15),g(12),rw(22,13),d$*6,dat$*20,bt1(14,2)
+	dim a(7),b(11),c(4),d(15),g(12)
 	dim p$*10,o(2),bt2(14,2),badr(2),dp$*60,tg(11),transkey$*19,meteradr$*30,custname$*30
 	dim watuse(12),watdat(12),elecuse(12),elecdat(12),gasuse(12),gasdat(12)
 	dim serviceName$(10)*20,serviceCode$(10)*2,tax_code$(10)*1,work$*80
