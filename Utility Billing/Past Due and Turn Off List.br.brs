@@ -103,12 +103,12 @@ L400: x=pos(resp$(j),'/',1)
 	end if
 	open #hTrans=fnH: 'Name=[Q]\UBmstr\UBTransVB.h[cno],KFName=[Q]\UBmstr\UBTrIndx.h[cno],Shr',i,i,k
 	! open #ratemst:=8: 'Name=[Q]\UBmstr\ubData\RateMst.h[cno],KFName=[Q]\UBmstr\ubData\RateIdx1.h[cno],Shr',i,i,k
-	gosub BUD1
+	hBudMstr=fnOpenBudMstrInput : if hBudMstr then hBudgetTrans=fnOpenBudTransInput
 ! /r
 MAIN_LOOP_TOP: !
 	read #hCustomer,using F_CUSTOMER: z$,metradr$,e$,a7,final,bal,f,mat g,s4_meter_number$,route eof TOTAL_FINAL
 F_CUSTOMER: form pos 1,c 10,c 30,pos 41,c 30,pos 155,pd 2,pos 1821,n 1,pos 292,pd 4.2,pos 296,pd 4,pos 300,12*pd 4.2,pos 373,c 12,pos 1741,n 2
-	if bud1=1 then gosub BUD2
+	if hBudMstr then gosub BUD2
 	if bd1>0 then goto L650 ! IF BUDGET BILLING AND HAVE NOT PAID LAST BILL, LIST ANYWAY   ( BD1=# OF BUDGET BILLS NOT PAID)
 	if totba>0 and bd1=0 then goto MAIN_LOOP_TOP ! DON'T LIST IF BUDGET BILL AND HAVE PAID LAST BILL (NO MATTER WHAT BALANCE)
 	if bal<=1 then goto MAIN_LOOP_TOP
@@ -220,24 +220,17 @@ PgOf: ! r:
 	continue  ! /r
 Xit: fnXit
 
-BUD1: ! r:
-	bud1=0
-	open #81: 'Name=[Q]\UBmstr\BudMstr.h[cno],KFName=[Q]\UBmstr\BudIdx1.h[cno],Shr',i,outIn,k ioerr Xbud1
-	fnOpenBudTrans(82,1)
-	bud1=1
-	Xbud1: !
-return  ! /r
 BUD2: ! r:
 	bd1=totba=0
 	mat bd1(5) : mat bd1=(0) : mat bd2=(0)
-	if bud1=0 then goto L1580
-	read #81,using L1470,key=z$: z$,mat ba,mat badr nokey L1580
+	if ~hBudMstr then goto L1580
+	read #hBudMstr,using L1470,key=z$: z$,mat ba,mat badr nokey L1580
 	for j=2 to 12: totba=totba+ba(j): next j
 	L1470: form pos 1,c 10,pd 4,12*pd 5.2,2*pd 3
 	ta1=badr(1)
 	L1490: !
 	if ta1=0 then goto L1580
-	read #82,using L1510,rec=ta1: z$,mat bt1,nba noRec L1580
+	read #hBudgetTrans,using L1510,rec=ta1: z$,mat bt1,nba noRec L1580
 	L1510: form pos 1,c 10,2*pd 4,24*pd 5.2,2*pd 4,pd 3
 	if bt1(14,1)>0 then goto L1570
 	bd1+=1

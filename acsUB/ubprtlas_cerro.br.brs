@@ -17,8 +17,8 @@
 	linelength=62
 	open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",i,i,k  ! open in Account order
 	open #2: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx5.h[cno],Shr",i,i,k  ! open in route-sequence #
-	open #81: "Name=[Q]\UBmstr\BudMstr.h[cno],KFName=[Q]\UBmstr\BudIdx1.h[cno],Shr",i,outIn,k
- 
+	hBudMstr=fnOpenBudMstrInput
+
 SCREEN1: !
 	a$="" : prtbkno=0
 	fnTos(sn$="UBPrtBl1-1")
@@ -104,7 +104,7 @@ L740: form pos 1,c 10,4*c 30,c 12,pos 147,pd 2,pos 157,11*pd 4.2,pos 1821,n 1,po
 	if d2=0 and d2x>0 then d2=d2x ! set date to screen if no date in record
 	if d3=0 and d3x>0 then d3=d3x ! set date to screen if no date in record
 	mat ba=(0): budget=0
-	read #81,using L790,key=z$: x$,mat ba nokey L810
+	read #hBudMstr,using L790,key=z$: x$,mat ba nokey L810
 L790: form pos 1,c 10,pd 4,12*pd 5.2
 	for j=2 to 12: budget=budget+ba(j): next j ! get total budget amount
 L810: if prtbkno=0 then goto L830

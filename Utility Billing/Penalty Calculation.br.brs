@@ -34,7 +34,7 @@ if fn_scrMain then !
 	mat pencolumn(pencount)
 	mat columnhead$(pencount)
 	mat coltot(pencount)
-	fn_bud1
+	hBudMstr=fnOpenBudMstr : if hBudMstr then hBudgetTrans=fnOpenBudTrans
 	open #hRate:=fnH: 'Name=[Q]\UBmstr\ubData\RateMst.h[cno],KFName=[Q]\UBmstr\ubData\RateIdx1.h[cno],Shr',i,i,k
 	fnopenprn
 	fn_print_header
@@ -54,7 +54,7 @@ if fn_scrMain then !
 		if debugThisAccount then showMath=1 else showMath=0
 		route_number=extra(1)
 		! if env$('client')='Divernon' and bal<0 then goto CustomerRead
-		if bud1=1 then
+		if hBudMstr then
 			fn_bud2
 			if env$('client')='White Hall' and bd1>0 then goto CustomerRead ! Never penalize if Budget Billing
 			if env$('client')='Bethany' and bd1>0 then goto CustomerRead ! Never penalize if Budget Billing
@@ -444,13 +444,6 @@ fnend
 		balpos=51+(pencount*12)
 		pr #255,using 'form pos 15,c 30,pos balpos,pic($-,---,---.##)': 'Total Due from all Customers',totalbal
 	fnend
-	def fn_bud1
-		bud1=0
-		open #hBudMstr=fnH: 'Name=[Q]\UBmstr\BudMstr.h[cno],KFName=[Q]\UBmstr\BudIdx1.h[cno],Shr',i,outIn,k ioerr EO_BUD1
-		hBudTran=fnOpenBudTrans
-		bud1=1
-		EO_BUD1: !
-	fnend
 	def fn_bud2
 		totba=bd1=0 ! bd2=0
 		! dim bd1(5)
@@ -458,7 +451,7 @@ fnend
 		! mat bd1=(0)
 		! dim bd2(5)
 		! mat bd2=(0)
-		if bud1=0 then goto EO_BUD2
+		if ~hBudMstr then goto EO_BUD2
 		dim ba(13)
 		dim badr(2)
 		read #hBudMstr,using F_BUD_2A,key=z$: z$,mat ba,mat badr nokey EO_BUD2
@@ -470,7 +463,7 @@ fnend
 		do
 			if ta1=0 then goto EO_BUD2
 			dim bt1(14,2)
-			read #hBudTran,using 'form pos 1,c 10,2*pd 4,24*pd 5.2,2*pd 4,pd 3',rec=ta1: z$,mat bt1,nba noRec EO_BUD2
+			read #hBudgetTrans,using 'form pos 1,c 10,2*pd 4,24*pd 5.2,2*pd 4,pd 3',rec=ta1: z$,mat bt1,nba noRec EO_BUD2
 			if bt1(14,1)<=0 then
 				if bt1(12,1)<>0 then ! don't allow blank records to go thru routine
 					bd1+=1

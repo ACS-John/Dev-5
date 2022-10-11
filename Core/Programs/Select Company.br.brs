@@ -313,7 +313,7 @@ def fn_systemSetup
 	gosub IfCoTryAgain
 
 	dim curSys$*40
-	!  curSys$=fncurSys$
+	!  curSys$=fnCurSys$
 	fnreg_read(session$&'.CurSys',curSys$)
 	curSys$=fncurSys$(curSys$)
 	fn_setupOnCursysChange(cno,cnam$)

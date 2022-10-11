@@ -417,8 +417,10 @@
 	
 	BUD1: bud1=0
 		dim ba(13),badr(2),bt1(14,2),bd1(5),bd2(5),bd3(5)
-		open #81: "Name=[Q]\UBmstr\BudMstr.h[cno],KFName=[Q]\UBmstr\BudIdx1.h[cno],Shr",i,outIn,k ioerr EO_BUD1
-		fnOpenBudTrans(82)
+		hBudMstr=fnOpenBudMstrInput
+		if ~hBudMstr then goto EO_BUD1
+		hBudTrans=fnOpenBudTransInput
+
 		bud1=1
 	EO_BUD1: return
 	!
@@ -426,14 +428,14 @@
 		totba=bd1=bd2=budgetpb=havebudget=00
 		mat bd1(5) : mat bd1=(0) : mat bd2=(0)
 		if bud1=0 then goto EO_BUD2
-		read #81,using L3230,key=z$: z$,mat ba,mat badr nokey EO_BUD2
+		read #hBudMstr,using L3230,key=z$: z$,mat ba,mat badr nokey EO_BUD2
 		havebudget=1
 		for j=2 to 12: totba=totba+ba(j): next j
 		L3230: form pos 1,c 10,pd 4,12*pd 5.2,2*pd 3
 		if totba=0 then havebudget=0: goto EO_BUD2
 		ta1=badr(1)
 		L3260: if ta1=0 then goto EO_BUD2
-		read #82,using L3280,rec=ta1: z$,mat bt1,nba noRec EO_BUD2
+		read #hBudTrans,using L3280,rec=ta1: z$,mat bt1,nba noRec EO_BUD2
 		L3280: form pos 1,c 10,2*pd 4,24*pd 5.2,2*pd 4,pd 3
 		if bt1(14,1)>0 then goto L3340
 		! IF BT1(1,2)=F THEN GOTO 3350 ! ignore current budget billing record

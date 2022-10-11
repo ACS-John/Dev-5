@@ -390,7 +390,7 @@ Screen1: ! r:
 
 
 
-	gosub BUD1
+	hBudMstr=fnOpenBudMstrInput : if hBudMstr then hBudgetTrans=fnOpenBudTransInput
 	if pa_enabled=1 then
 		fnpa_open(pa_orientation$)
 	else if pa_enabled=2 then
@@ -605,17 +605,18 @@ Finis: ! r:
 	end if
 goto Xit ! /r
 Xit: fnXit
-Bud1: ! r: Open #81 BudMstr and #82 BudTrans bud1=1
+Bud1: ! r: Open #hBudMstr BudMstr and #hBudgetTrans BudTrans bud1=1
 	bud1=0
-	dim ba(13),badr(2),bt1(14,2)
-	open #81: 'Name=[Q]\UBmstr\BudMstr.h[cno],KFName=[Q]\UBmstr\BudIdx1.h[cno],Shr',i,i,k ioerr EoBud1
-	fnOpenBudTrans(82,1)
+	
+
+	open #hBudMstr: 'Name=[Q]\UBmstr\BudMstr.h[cno],KFName=[Q]\UBmstr\BudIdx1.h[cno],Shr',i,i,k ioerr EoBud1
+	hBudgetTrans=fnOpenBudTransInput
 	bud1=1
 	EoBud1: !
 return  ! /r
 Bud2: ! r: the heart of it...
 	totba=bd1=budgetpb=havebudget=0
-	if bud1=0 then goto EoBud2
+	if ~hBudMstr then goto EoBud2
 	read #81,using 'form pos 1,c 10,pd 4,12*pd 5.2,2*pd 3',key=z$: z$,mat ba,mat badr nokey EoBud2
 	havebudget=1
 	for j=2 to 12
@@ -625,7 +626,7 @@ Bud2: ! r: the heart of it...
 	ta1=badr(1)
 	do
 		if ta1=0 then goto EoBud2
-		read #82,using 'form pos 1,c 10,2*pd 4,24*pd 5.2,2*pd 4,pd 3',rec=ta1: z$,mat bt1,nba noRec EoBud2
+		read #hBudgetTrans,using 'form pos 1,c 10,2*pd 4,24*pd 5.2,2*pd 4,pd 3',rec=ta1: z$,mat bt1,nba noRec EoBud2
 		if bt1(14,1)<=0 then
 			! if bt1(1,2)=f then goto 3350 ! ignore current budget billing record
 			budgetpb+=bt1(5,1) ! add up prior balance for budget billing customers (any unpaid not including current bill)

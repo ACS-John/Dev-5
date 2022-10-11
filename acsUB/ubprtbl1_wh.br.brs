@@ -136,7 +136,7 @@ RELEASE_PRINT: ! r:
 	goto ENDSCR ! /r
 
 L1000: !
-	if bud1=1 then gosub BUD2
+	if hBudMstr then gosub BUD2
 	pb=bal-g(11)
 ! If BAL<=0 Then g(10)=0 ! don't show penalty if balance 0 or less
 ! print bill routine
@@ -424,27 +424,26 @@ BULKSORT: ! r: bulk sort order
 	BsFinis: !
 return  ! /r
 BUD1: ! r:
-	bud1=0
 	dim ba(13),badr(2),bt1(14,2),bd1(5),bd2(5),bd3(5),bd$(5)*30
-	open #81: "Name=[Q]\UBmstr\BudMstr.h[cno],KFName=[Q]\UBmstr\BudIdx1.h[cno],Shr",i,outIn,k ioerr Bud1Finis
-	fnOpenBudTrans(82)
-	bud1=1
-	for j=1 to 5
-		bd$(j)=str$(j+10)&",20,PIC(##/##/##),U,N"
-	next j
-	Bud1Finis: !
+	hBudMstr=fnOpenBudMstrInput
+	if hBudMstr then
+		hBudTrans=fnOpenBudTransInput
+		for j=1 to 5
+			bd$(j)=str$(j+10)&",20,PIC(##/##/##),U,N"
+		next j
+	end if
 return  ! /r
 BUD2: ! r:
 	budget=pbud=bd1=0
 	mat bd1(5)
 	mat bd1=(0)
 	mat bd2=(0)
-	if bud1=0 then goto Bud2Finis
-	read #81,using F82,key=z$: z$,mat ba,mat badr nokey Bud2Finis
-	F82: form pos 1,c 10,pd 4,12*pd 5.2,2*pd 3
+	if ~hBudMstr then goto Bud2Finis
+	read #hBudMstr,using Fbudmstr,key=z$: z$,mat ba,mat badr nokey Bud2Finis
+	Fbudmstr: form pos 1,c 10,pd 4,12*pd 5.2,2*pd 3
 	ta1=badr(1)
 	do while ta1
-		read #82,using L3320,rec=ta1: z$,mat bt1,nba noRec Bud2Finis
+		read #hBudTrans,using L3320,rec=ta1: z$,mat bt1,nba noRec Bud2Finis
 		L3320: form pos 1,c 10,2*pd 4,24*pd 5.2,2*pd 4,pd 3
 		if bt1(1,1)=d1 then ! budget for current month
 			budget=budget+bt1(12,1)

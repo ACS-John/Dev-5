@@ -6,7 +6,7 @@ on error goto Ertn
 dim ml$(10)*80
 dim resp$(40)*128
 
-fnTop(program$,'Add New '&env$('cursys')&' Company [cno]')
+fnTop(program$,'Add New '&env$('cursys')&' Company '&env$('cno'))
 ! r: copy h99999 into place
 if exists('S:\[cursystem]\mstr\*.h99999') then
 	fnCopy('S:\[cursystem]\mstr\*.h99999','[Q]\[cursys]mstr\*.h[cno]')
@@ -37,10 +37,8 @@ else if env$('cursys')='UB' then ! r:
 	close #hTmp:
 	open #hTmp=fnH: 'Name=[Q]\UBmstr\Deposit2.h[cno],Replace,RecL=73',i,outIn,r
 	close #hTmp:
-	open #hTmp=fnH: 'Name=[Q]\UBmstr\BudMstr.h[cno],Replace,RecL=80',i,outIn,r
-	close #hTmp:
-	open #hTmp=fnH: 'Name=[Q]\UBmstr\BudTrans.h[cno],Replace,RecL=149',i,outIn,r
-	close #hTmp:
+	fnFree('[Q]\UBmstr\BudMstr.h[cno]')  ! do not enable budget by default.  instead delete any existing old files in this company 10/6/22 John
+	fnFree('[Q]\UBmstr\BudTrans.h[cno]')
 	open #hTmp=fnH: 'Name=[Q]\UBmstr\UBAdrBil.h[cno],Replace,RecL=130',i,outIn,r
 	close #hTmp:
 	bkno1=1 : bkno2=9
@@ -66,14 +64,14 @@ else if env$('cursys')='GL' then ! r:
 	if cno<1 or cno=fro_cno then goto GlMenu1
 
 	fnCopy('[Q]\GLmstr\*.h'&str$(fro_cno),'[Q]\GLmstr\*.h[cno]')
-	open #20: 'Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLIndex.h[cno],NoShr',i,outIn,k
+	open #hGlm=fnH: 'Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLIndex.h[cno],NoShr',i,outIn,k
 	do
-		read #20,using 'form pos 87,PD 6.2': cb eof EO_GLMSTR
+		read #hGlm,using 'form pos 87,PD 6.2': cb eof EO_GLMSTR
 		dim zer(57)
-		rewrite #20,using 'form pos 81,42*PD 6.2,pos 333,2*PD 3,13*pd 6.2': mat zer
+		rewrite #hGlm,using 'form pos 81,42*PD 6.2,pos 333,2*PD 3,13*pd 6.2': mat zer
 	loop
 	EO_GLMSTR: !
-	close #20:
+	close #hGlm:
 
 	execute 'drop [Q]\GLmstr\GLTrans.h[cno]'
 	! fnDel('[Q]\GLmstr\glTrans-IdxAcct.h[cno]')    maybe a good idea??

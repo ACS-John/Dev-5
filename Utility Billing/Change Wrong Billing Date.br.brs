@@ -46,7 +46,7 @@ READ_UBTRANS: ! r: main loop
 			rewrite #hTrans1,using 'form pos 11,n 8': d2
 			rewrite #hCustomer,using 'form pos 296,PD 4': hd2
 			recordUpdateCount+=1
-			if bud1 then gosub BUD2
+			if hBudMstr then gosub BUD2
 		end if
 	end if
 goto READ_UBTRANS ! /r
@@ -60,34 +60,33 @@ Finis: ! r:
 	fnMsgBox(mat mg$)
 goto Xit ! /r
 Xit: ! r:
-	if bud1 then 
-		close #hBudM: ioerr ignore
-		close #hBudT: ioerr ignore
+	if hBudMstr then 
+		fnCloseBudMstr
+		fnCloseBudTrans
 	end if
 fnXit ! /r
 BUD1: ! r:
-	bud1=0
-	open #hBudM=fnH: 'Name=[Q]\UBmstr\BudMstr.h[cno],KFName=[Q]\UBmstr\BudIdx1.h[cno],Shr',i,outIn,k ioerr EoBud1
-	FbudM: form pos 1,c 10,pd 4,12*pd 5.2,2*pd 3
-	dim ba(13)
-	dim badr(2)
-	hBudT=fnOpenBudTrans
-	FbudT: form pos 11,2*pd 4,24*pd 5.2,2*pd 4
-	dim bt1(14,2)
-	bud1=1
-	EoBud1:  !
+	hBudMstr=fnOpenBudMstrInput
+	if hBudMstr then
+		FbudM: form pos 1,c 10,pd 4,12*pd 5.2,2*pd 3
+		dim ba(13)
+		dim badr(2)
+		hBudTrans=fnOpenBudTrans
+		FbudT: form pos 11,2*pd 4,24*pd 5.2,2*pd 4
+		dim bt1(14,2)
+	end if
 return ! /r
 BUD2: ! r:
 	bd1=0 : mat bd1(5) : mat bd1=(0) : mat bd2=(0) : mat bd3=(0)
-	if bud1 then
-		read #hBudM,using FbudM,key=p$: x$,mat ba,mat badr nokey EoBud2
+	if hBudMstr then
+		read #hBudMstr,using FbudM,key=p$: x$,mat ba,mat badr nokey EoBud2
 		ta1=badr(1)
 		do until ta1=0
-			read #hBudT,using L590,rec=ta1: x$,mat bt1,nba noRec EoBud2
+			read #hBudTrans,using L590,rec=ta1: x$,mat bt1,nba noRec EoBud2
 			L590: form pos 1,c 10,2*pd 4,24*pd 5.2,2*pd 4,pd 3
 			if bt1(1,1)=d1 then
 				bt1(1,1)=bt1(1,2)=d2
-				rewrite #hBudT,using FbudT,rec=ta1: mat bt1
+				rewrite #hBudTrans,using FbudT,rec=ta1: mat bt1
 				goto EoBud2
 			end if
 			ta1=nba

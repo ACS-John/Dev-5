@@ -23,13 +23,11 @@ underline$=underline$&'{\ul         }  '
 totserv1=totserv+2
 mat t1(totserv1) : mat t2(totserv1) : mat t3(totserv1)
 
-BUD1: ! INITILIZE BUDGET FILE
-	bud1=0
 	open #hCustomer=fnH: 'Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr',i,outIn,k
-	open #81: 'Name=[Q]\UBmstr\BudMstr.h[cno],KFName=[Q]\UBmstr\BudIdx1.h[cno],Shr',i,outIn,k
+	hBudMstr=fnOpenBudMstrInput
+	if ~hBudMstr then goto Xit
 	FbudMstr: form pos 1,c 10,pd 4,12*pd 5.2,2*pd 3
-	fnOpenBudTrans(82)
-	bud1=1
+	hBudTrans=fnOpenBudTransInput
 	fnTos
 	mylen=32 : mypos=mylen+2
 	fnLbl(1,1,'Starting Date (blank for all):',mylen,1)
@@ -52,7 +50,7 @@ goto READ_BUDMSTR
 
 READ_BUDMSTR: !
 	dim ba(13)
-	read #81,using FbudMstr: z$,mat ba,mat badr eof DONE
+	read #hBudMstr,using FbudMstr: z$,mat ba,mat badr eof Finis
 	if env$('client')='Findlay' then ba(8)=0 ! don't show the penalty budget on form
 	totba=totalbudget=totactual=0
 	if ba(12)>0 then ! if net bill in budget, use it
@@ -73,7 +71,7 @@ READ_BUDMSTR: !
 L570: !
 	if ta1=0 then goto L810
 	dim bt1(14,2)
-	read #82,using L600,rec=ta1: x$,mat bt1,nba noRec L810
+	read #hBudTrans,using L600,rec=ta1: x$,mat bt1,nba noRec L810
 	if sum(mat bt1)=0 then goto L800 ! skip any blank records
 	L600: form pos 1,c 10,2*pd 4,24*pd 5.2,2*pd 4,pd 3
 	y=bt1(1,2) : y=fndate_mmddyy_to_ccyymmdd(y)

@@ -1,6 +1,10 @@
 ! test changes
 ! r: functions that do not redirect
 
+	def library fndate_mmddyy_to_ccyymmdd(x_mmddyy)
+		fndate_mmddyy_to_ccyymmdd=date(days(x_mmddyy,'mmddyy'),'ccyymmdd')
+	fnend
+
 	def library fnCleanGl$(gl$; ___,dash1pos,dash2pos,gl1,gl2,gl3)
 		! pr gl$ : pause
 		if len(rtrm$(gl$))=9 then gl$(10:12)='  0' ! add missing trailing zeros  if well formed except missing sub account 0, just add it in first
@@ -22,16 +26,16 @@
 			gl1=0
 			gl2=val(gl$)
 			gl3=0
-		else if dash1pos>0 and dash2pos<=0  then 
+		else if dash1pos>0 and dash2pos<=0  then
 			! ie '1-101', but never '101-1' - would need to add logic to make that work
 			gl1=val(gl$(1:dash1pos-1))
 			gl2=val(gl$(dash1pos+1:inf))
 			gl3=0
-		else if dash1pos>0 and dash2pos>0  then 
+		else if dash1pos>0 and dash2pos>0  then
 			gl1=val(gl$(1:dash1pos-1          ))
 			gl2=val(gl$(dash1pos+1:dash2pos-1	))
 			gl3=val(gl$(dash2pos+1:inf        ))
-		end if 
+		end if
 
 		fnCleanGl$=lpad$(str$(gl1),3)&lpad$(str$(gl2),6)&lpad$(str$(gl3),3)
 	fnend
@@ -44,7 +48,7 @@
 		!	defaultFileLayoutExtension$='.fio'
 		!	defaultFileLayoutPath$='S:\Core\FileIO\Layout\'
 		! end if
-	
+
 		! fnFileIoLayoutPath$=defaultFileLayoutPath$&fileio$&defaultFileLayoutExtension$
 		fnFileIoLayoutPath$='S:\Core\FileIO\Layout\'&fileio$&'.fio'
 	fnend
@@ -1078,7 +1082,7 @@ fnend
 		library 'S:\Core\ACS_Component.br': fnCmdSet
 		fnCmdSet=fnCmdSet(a)
 	fnend
-	
+
 
 	def library fnMsgBox(mat message$; &response$,cap$*128,mtype)
 		library 'S:\Core\fnMsgBox.br': fnMsgBox
@@ -1133,9 +1137,9 @@ fnend
 			returnN=fnPcReg_read(fieldName$,return$, default$,1) ! ,alsoApplyDefaultIfReadBlank)
 			if ~returnN then returnN=defaultN ! fixes when it's been read as '0' and thus default was not applied
 			fnPcRegReadN=returnN
-			! pr 'fnPcRegReadN should be returning the value of '&return$ 
+			! pr 'fnPcRegReadN should be returning the value of '&return$
 		fnend
-	
+
 	def library fnPcReg_write(reg_field_name$*128,reg_field_value$*256)
 		library 'S:\Core\Reg.br': fnPcReg_write
 		fnPcReg_write=fnPcReg_write(reg_field_name$,reg_field_value$)
@@ -1312,10 +1316,6 @@ def library fnEndOfMonth(day)
 	library 'S:\Core\Date.br': fnEndOfMonth
 	fnEndOfMonth=fnEndOfMonth(day)
 fnend
-def library fndate_mmddyy_to_ccyymmdd(x_mmddyy)
-	library 'S:\Core\Date.br': fndate_mmddyy_to_ccyymmdd
-	fndate_mmddyy_to_ccyymmdd=fndate_mmddyy_to_ccyymmdd(x_mmddyy)
-fnend
 	def library fnSetMonth(mat mo$)
 		library 'S:\Core\Date.br': fnSetMonth
 		fnSetMonth=fnSetMonth(mat mo$)
@@ -1406,9 +1406,9 @@ fnend
 		library 'S:\Core\CNo.br': fndat
 		fndat=fndat(dat$,get_or_put)
 	fnend
-	def library fncursys$(; cursys_set$*256,resetCache)
-		library 'S:\Core\CNo.br': fncursys$
-		fncursys$=fncursys$( cursys_set$,resetCache)
+	def library fnCurSys$(; cursys_set$*256,resetCache)
+		library 'S:\Core\CNo.br': fnCurSys$
+		fnCurSys$=fnCurSys$( cursys_set$,resetCache)
 	fnend
 	def library fnSetCoreProgramCurrent(&prg$; g_p)
 		library 'S:\Core\CNo.br': fnSetCoreProgramCurrent
@@ -1416,21 +1416,48 @@ fnend
 	fnend
 ! /r
 ! r: UB   utility billing
-def library fnOpenBudTrans(;forceH,inputOnly, ___,returnN)
-	library 'S:\Core\Start.br': fnH
-	if forceH then returnN=forceH else returnN=fnH
-	if ~exists('[Q]\UBmstr\BudTransIdx1.h[cno]') then
-		fnIndex('[Q]\UBmstr\BudTrans.h[cno]','[Q]\UBmstr\BudTransIdx1.h[cno]','1 10')
-	end if
-	if inputOnly then
-		open #returnN: 'Name=[Q]\UBmstr\BudTrans.h[cno],Shr,Use,RecL=149',i,i,r
-	else 
-		open #returnN: 'Name=[Q]\UBmstr\BudTrans.h[cno],Shr,Use,RecL=149',i,outi,r
-		
-		! not YET - soon - finish month end billing first ! open #returnN: 'Name=[Q]\UBmstr\BudTrans.h[cno],kfName=[Q]\UBmstr\BudTransIdx1.h[cno],Shr,Use,RecL=149',i,outi,k
-	end if
-	fnOpenBudTrans=returnN
-fnend
+	! r: Utility Billing Budget
+		def library fnOpenBudMstr
+			library 'S:\Utility Billing\fn\Budget.br': fnOpenBudMstr
+			fnOpenBudMstr=fnOpenBudMstr
+		fnend
+		def library fnOpenBudMstrInput
+			library 'S:\Utility Billing\fn\Budget.br': fnOpenBudMstrInput
+			fnOpenBudMstrInput=fnOpenBudMstrInput
+		fnend
+		def library fnCloseBudMstr
+			library 'S:\Utility Billing\fn\Budget.br': fnCloseBudMstr
+			fnCloseBudMstr=fnCloseBudMstr
+		fnend
+		def library fnCloseBudTrans
+			library 'S:\Utility Billing\fn\Budget.br': fnCloseBudTrans
+			fnCloseBudTrans=fnCloseBudTrans
+		fnend
+		def library fnOpenBudTrans
+			library 'S:\Utility Billing\fn\Budget.br': fnOpenBudTrans
+			fnOpenBudTrans=fnOpenBudTrans
+		fnend
+		def library fnHbudgetTrans2
+			library 'S:\Utility Billing\fn\Budget.br': fnHbudgetTrans2
+			fnHbudgetTrans2=fnHbudgetTrans2
+		fnend
+		def library fnOpenBudTransInput
+			library 'S:\Utility Billing\fn\Budget.br': fnOpenBudTransInput
+			fnOpenBudTransInput=fnOpenBudTransInput
+		fnend
+		def library fnBudgetReIndex(; cno)
+			library 'S:\Utility Billing\fn\Budget.br': fnBudgetReIndex
+			fnBudgetReIndex=fnBudgetReIndex( cno)
+		fnend
+		def library fnBudgetTransMatchingRecords(z$*10,mat btRec; option$*128)
+			library 'S:\Utility Billing\fn\Budget.br': fnBudgetTransMatchingRecords
+			fnBudgetTransMatchingRecords=fnBudgetTransMatchingRecords(z$,mat btRec, option$)
+		fnend
+		def library fnCustomerBudgetEnable(x1$*10)
+			library 'S:\Utility Billing\fn\Budget.br': fnCustomerBudgetEnable
+			fnCustomerBudgetEnable=fnCustomerBudgetEnable(x1$)
+		fnend
+	! /r
 
 	def library fnEnableCostOfGas(; setIt$)
 		library 'S:\Utility Billing\Company.br': fnEnableCostOfGas
@@ -1708,7 +1735,7 @@ fnend
 		library 'S:\Checkbook\fn\updateBankBal.br': fnUpdateBankBal
 		fnUpdateBankBal=fnUpdateBankBal(bankCode,modification)
 	fnend
-	
+
 ! /r
 ! r: PR   payroll
 	def library fnEmployeeEdit(eno)
@@ -1903,7 +1930,7 @@ fnend
 		fnTransactionTypeDescription$=fnTransactionTypeDescription$(typeCode)
 	fnend
 ! /r
-! r: CO 
+! r: CO
 
 	def library fnClientName$*30(clientId$)
 		library 'S:\Client Billing\Delete Transaction.br': fnClientName$

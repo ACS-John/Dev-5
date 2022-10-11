@@ -66,7 +66,7 @@ ASK1: !
 	open #12: 'Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\UBIndx3.h[cno],Shr',i,outIn,k
 	open #2: 'Name=[Q]\UBmstr\ubtransvb.h[cno],KFName=[Q]\UBmstr\UBTrIndx.h[cno],Shr',i,outIn,k
 	open #htrans2=fnH: 'Name=[Q]\UBmstr\ubtransvb.h[cno],KFName=[Q]\UBmstr\UBTrdt.h[cno],Shr',i,outIn,k
-	fn_bud1
+	hBudMstr=fnOpenBudMstrInput : if hBudMstr then hBudgetTrans=fnOpenBudTrans
 
 	dim reqz$*10
 	if trim$(reqz$)='' and trim$(holdreqz$)<>'' then goto Xit ! if they ever select a customer and then accidently take f1 to continue, it will stop instead of reversing everyone else in file
@@ -128,7 +128,7 @@ CUSTOMER_READ: !
 	L810: form pos 1,c 10,n 8,n 1,12*pd 4.2,6*pd 5,pd 4.2,n 1
 	delete #2:
 	goto L480
-	if bud1=1 then let fn_bud2
+	if hBudMstr then fn_bud2
 	if rtrm$(reqz$)<>'' then
 		holdreqz$=reqz$
 		reqz$=''
@@ -159,27 +159,20 @@ SRPGOF: ! r:
 	pr #255: newpage
 	fn_srhdr
 continue ! /r
-def fn_bud1
-	bud1=0
-	open #hBudMstr=fnH: 'Name=[Q]\UBmstr\BudMstr.h[cno],KFName=[Q]\UBmstr\BudIdx1.h[cno],Shr',i,outIn,k ioerr L1120
-	hBudTran=fnOpenBudTrans
-	
-	bud1=1
-	L1120: !
-fnend
+
 def fn_bud2
 	bd1=0 : mat bd1(5) : mat bd1=(0) : mat bd2=(0) : mat bd3=(0)
-	if bud1=0 then goto L1260
+	if ~hBudMstr then goto L1260
 	read #hBudMstr,using L1180,key=z$: x$,mat ba,mat badr nokey L1260
 	L1180: form pos 1,c 10,pd 4,12*pd 5.2,2*pd 3
 	ta1=badr(1)
 	L1200: !
 	if ta1=0 then goto L1260
-	read #hBudTran,using L1220,rec=ta1: x$,mat bt1,nba noRec L1260
+	read #hBudgetTrans,using L1220,rec=ta1: x$,mat bt1,nba noRec L1260
 	L1220: form pos 1,c 10,2*pd 4,24*pd 5.2,2*pd 4,pd 3
 	if bt1(1,1)=n then
 		mat bt1=(0)
-		rewrite #hBudTran,using L1240,rec=ta1: mat bt1
+		rewrite #hBudgetTrans,using L1240,rec=ta1: mat bt1
 		L1240: form pos 11,2*pd 4,24*pd 5.2,2*pd 4
 	end if
 	ta1=nba: goto L1200

@@ -4,22 +4,16 @@ fn_setup ! r: top,open, initialize
 	open #hCustomer2=fnH: 'Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\UBIndx2.h[cno],Shr',i,outIn,k
 	open #hTrans=fnH: 'Name=[Q]\UBmstr\UBTransVB.h[cno],KFName=[Q]\UBmstr\UBTrIndx.h[cno],Shr',i,outIn,k
 	open #hTrans2=fnH: 'Name=[Q]\UBmstr\UBTransVB.h[cno],KFName=[Q]\UBmstr\UBTrdt.h[cno],Shr',i,outIn,k
-	! r: open BudMstr and BudTrans, also set budgetOpen (1=budget files opened, 0=not)
-	budgetOpen=0
-	open #hBudget=fnH: 'Name=[Q]\UBmstr\BudMstr.h[cno],KFName=[Q]\UBmstr\BudIdx1.h[cno],Shr',i,outIn,k ioerr BudMstrOpenFail
-	hBudgetTrans=fnOpenBudTrans
+	hBudMstr=fnOpenBudMstrInput : if hBudMstr then hBudgetTrans=fnOpenBudTrans
 	FbudgetTrans: form pos 1,c 10,2*pd 4,24*pd 5.2,2*pd 4,pd 3
 	FbudgetTransBt1: form pos 11,2*pd 4,24*pd 5.2,2*pd 4
-	budgetOpen=1
-	BudMstrOpenFail: !
-	! /r
 
 	open #hTransBatch=fnH: 'Name='&transactionBatchFile$&',RecL=91,Use',i,outi,r
 	dim alloc(10)
-	dim bd3(5)
+	dim billToPay(5)
 	FtransBatch: form pos 1,c 10,pd 4.2,pd 4,2*n 1,pos 24,c 9,validSrvCount*pd 4.2,5*pd 3,pd 4.2
 	
-	mat x=(0)
+	mat xs=(0)
 	transType=postingCodeUnused=0
 goto ScreenOne
 ! /r
@@ -31,8 +25,7 @@ ScreenOne: ! r:
 		totalacct=0 : totalCollections=totalDebitMemos=totalCreditMemos=0
 		do  ! for j=1 to lrec(hTransBatch)
 			
-			read #hTransBatch,using FtransBatch: x$,transAmount,transDate, transType, _
-				postingCodeUnused,rcpt$,mat alloc,mat bd3,escrow eof L1080 noRec L1070
+			read #hTransBatch,using FtransBatch: x$,transAmount,transDate,transType,postingCodeUnused,rcpt$,mat alloc,mat billToPay,escrow eof L1080 noRec L1070
 			totalacct+=val(x$) conv ignore
 			dim m1_item$(20)*80
 			m1_item$(1)=str$(rec(hTransBatch))    	! Record
@@ -61,7 +54,7 @@ ScreenOne: ! r:
 		L1080: !
 		x$=rcpt$=''
 		transAmount=transDate=transType=postingCodeUnused=escrow=0
-		mat alloc=(0) : mat bd3=(0)
+		mat alloc=(0) : mat billToPay=(0)
 		mat tgb=(0)   : mat hgb=(0) ! this line does not seem to matter in the least.  added to try to fix weird allocation issue, but it had no effect.
 		! /r
 		resp_selectedRecordNumber=rc+=1 ! resp$(1) returns the record number of the selected entry
@@ -126,7 +119,7 @@ ScrSelectAccount: ! r:
 goto ScrAdd ! /r
 def fn_getMatTgb(mat tgb,&escrow,mat gb,mat srvName$,escrow$,transType,escrowbal,&oldescrowbal)
 	mat tgb=(0)
-	j2=0: escrow=0
+	j2=escrow=0
 	for j=1 to possibleServiceCount
 		if fn_serviceValidForCollAlloc(j) then tgb(j2+=1)=gb(j)
 	next j
@@ -134,56 +127,49 @@ def fn_getMatTgb(mat tgb,&escrow,mat gb,mat srvName$,escrow$,transType,escrowbal
 fnend
 ScrAdd: ! r:
 
-	if x(3)=0 then x(3)=date('mmddyy') ! date should default to today
-	x(2)=max(0,bal) ! amount collected should default to balance (or 0 if they have a credit)
+	if xs(3)=0 then xs(3)=date('mmddyy') ! date should default to today
+	xs(2)=max(0,bal) ! amount collected should default to balance (or 0 if they have a credit)
 
 	fnTos
 	respc=0
 
-	fnLbl(3,1,'Amount:',25,1)
-	fnTxt(3,27,8,0,0,'32')
-	if ~do_not_blank_rcpt then resp$(respc+=1)=str$(x(2))
+	fnLbl(3,1,'Amount:',25,1) : fnTxt(3,27,8,0,0,'32')
+	if ~doNotBlankRcpt then resp$(respc+=1)=str$(xs(2))
 	
-	fnLbl(4,1,'Date (mmddyy):',25,1)
-	fnTxt(4,27,8,0,0,'1001')
-	if ~do_not_blank_rcpt then resp$(respc+=1)=str$(x(3))
+	fnLbl(4,1,'Date (mmddyy):',25,1) : fnTxt(4,27,8,0,0,'1001')
+	if ~doNotBlankRcpt then resp$(respc+=1)=str$(xs(3))
 	
 	fnLbl(5,1,'Receipt Number (CA=Cash):',25,1)
 	fnButton(5,40,'Cash',7,'(F7) Set Receipt Number to CA (for Cash)')
 	fnTxt(5,27,9)
+	if ~doNotBlankRcpt then resp$(respc:=3)=''
 	
 	fnLbl(1,1,'Entry Type:',25,1)
-	if ~do_not_blank_rcpt then resp$(respc:=3)=''
 	fnComboA('coll_type_rdc',1,27,mat coll_type_option$)
-	if ~do_not_blank_rcpt then
+	if ~doNotBlankRcpt then
 		for ax=1 to 3
 			if hresp1$=coll_type_option$(ax) then resp$(respc:=4)=coll_type_option$(ax): verify=1
 		next ax
 		if verify=0 then resp$(respc:=4)=coll_type_option$(1)
 	end if
 	
-	fnLbl(2,1,'Account:',25,1)
-	fnTxt(2,27,10,10,1,'',1,'Account (Press Cancel to Re-Select)')
-	if ~do_not_blank_rcpt then resp$(respc:=5)=z$
+	fnLbl(2,1,'Account:',25,1)         	: fnTxt(2,27,10,10,1,'',1,'Account (Press Cancel to Re-Select)')
+	if ~doNotBlankRcpt then resp$(respc:=5)=z$
 	
 	col3_pos=50 : col4_pos=76
 	
-	fnLbl(1,col3_pos,'Name:',25,1)
-	fnTxt(1,col4_pos,30,30,0,'',1,'Account Name (Press Cancel to Re-Select)')
-	if ~do_not_blank_rcpt then resp$(respc:=6)=trim$(nam$)
+	fnLbl(1,col3_pos,'Name:',25,1)    	: fnTxt(1,col4_pos,30,30,0,'',1,'Account Name (Press Cancel to Re-Select)')
+	if ~doNotBlankRcpt then resp$(respc:=6)=trim$(nam$)
 	
-	fnLbl(2,col3_pos,'Balance:',25,1)
-	fnTxt(2,col4_pos,10,10,1,'',1,'Account Balance (Press Cancel to Re-Select)')
-	if ~do_not_blank_rcpt then resp$(respc:=7)=cnvrt$('N 10.2',bal)
+	fnLbl(2,col3_pos,'Balance:',25,1) 	: fnTxt(2,col4_pos,10,10,1,'',1,'Account Balance (Press Cancel to Re-Select)')
+	if ~doNotBlankRcpt then resp$(respc:=7)=cnvrt$('N 10.2',bal)
 	
-	fnLbl(3,col3_pos,'Billed:',25,1)
-	fnTxt(3,col4_pos,8,8,1,'1',1)
-	resp$(respc:=8)=str$(db1)
+	fnLbl(3,col3_pos,'Billed:',25,1)  	: fnTxt(3,col4_pos,8,8,1,'1',1) : resp$(respc:=8)=str$(db1)
 	
 	if uprc$(escrow$)='Y' then
 		fnLbl(4,col3_pos,'Escrow Balance:',25,1)
 		fnTxt(4,col4_pos,10,10,1,'10',1)
-		if ~do_not_blank_rcpt then resp$(respc:=9)=str$(escrowbal)
+		if ~doNotBlankRcpt then resp$(respc:=9)=str$(escrowbal)
 	end if
 	fnCmdKey('&Save',1,1,0,'Save with this entry and move to next one.')
 	fnCmdKey('&Review Customer',8,0,0,'Allows you to review any customer.')
@@ -192,15 +178,15 @@ ScrAdd: ! r:
 	fnCmdKey('&Cancel',5,0,1,'Return to proof total screen.')
 	fnAcs(mat resp$,ckey,1)
 
-	do_not_blank_rcpt=0
+	doNotBlankRcpt=0
 
 	if ckey=2 then ! 2=back
 		goto ScrSelectAccount
 	else if ckey=5 then ! 5=cancel
 		goto ScreenOne
 	end if
-	x(2)=val(resp$(1))
-	x(3)=val(resp$(2))
+	xs(2)=val(resp$(1))
+	xs(3)=val(resp$(2))
 	rcpt$=trim$(resp$(3))(1:9)
 	if ckey=8 then
 		fnCustomer( x$)
@@ -215,25 +201,25 @@ ScrAdd: ! r:
 
 	if ckey=7 then
 		resp$(3)=rcpt$='CA'
-		do_not_blank_rcpt=1
+		doNotBlankRcpt=1
 		goto ScrAdd
 	end if
 	! r: validation
 		! r: transaction date is within the last 7 days else ask confirmation
-		if days(x(3),'mmddyy')>days(date) or days(x(3),'mmddyy')<days(date)-7 then ! warning if collection date greater than to today's date of less that one week ago
-			if holdbaddate<>x(3) then ! had warning on same date, don't ask again
+		if days(xs(3),'mmddyy')>days(date) or days(xs(3),'mmddyy')<days(date)-7 then ! warning if collection date greater than to today's date of less that one week ago
+			if holdbaddate<>xs(3) then ! had warning on same date, don't ask again
 				mat ml$(3)
 				ml$(1)='The collection date of '&resp$(2)&' appears '
 				ml$(2)='to be wrong!  It is perhaps too old or too new.'
 				ml$(3)='Enter Yes to correct, else No to proceed.'
 				fnMsgBox(mat ml$,resp$,'',52)
-				holdbaddate=x(3)
+				holdbaddate=xs(3)
 				if resp$='Yes' then goto ScrAdd
 			end if
 		end if
 		! /r
 		! r: negative numbers
-		if x(2)<=0 then
+		if xs(2)<=0 then
 			mat ml$(1)
 			ml$(1)='Negative amounts are not allowed.'
 			fnMsgBox(mat ml$)
@@ -255,38 +241,36 @@ ScrAdd: ! r:
 		! /r
 	! /r
 	if ckey=1 then
-		fn_printReceipt(z$,nam$,rcpt$,bal,x(2),x(3),hresp1$)
+		fn_printReceipt(z$,nam$,rcpt$,bal,xs(2),xs(3),hresp1$)
 	end if
 ! /r
 ! r: after ScrAdd - adding
-	if sum(mat tgb)=x(2) then
+	if sum(mat tgb)=xs(2) then
 		for j=1 to validSrvCount : alloc(j)=tgb(j) : next j
 	else
-		if uprc$(escrow$)='Y' then escrow=fn_checkEscrow(escrowbal,mat gb,x(2),possibleServiceCount) ! check escrow balance
+		if uprc$(escrow$)='Y' then escrow=fn_checkEscrow(escrowbal,mat gb,xs(2),possibleServiceCount) ! check escrow balance
 		mat hgb=tgb
-		fn_updateBudget(x1$)
-		gosub Bud1
-		if ~fn_breakdown(hCustomer1,hBudget,x1$,haveBudget, mat tgb, mat alloc,mat baOrder,ckey) then 
+		fn_chooseBudgetUpdates(x1$,xs(3),mat billToPay)
+		! gosub Bud1
+		if ~fn_breakdown(hCustomer1,hBudMstr,x1$,haveBudget, mat tgb, mat alloc,mat baOrder,ckey) then 
 			goto ScrSelectAccount
 		else if ckey=2 then
 			goto ScrAdd
 		end if
 	end if
 
-	transAmount=x(2) : transDate=x(3) : b7=transType
+	transAmount=xs(2) : transDate=xs(3) : b7=transType
 	postingCodeUnused=0
-	L2060: !
-	if sum(mat tgb)=x(2) then fn_updateBudget(x1$) ! kj 10/14/09
-	if sum(mat tgb)=x(2) and budgetOpen then gosub Bud1 ! was commented out; changed to if sum= on 101409 to keep from skipping ubdget update if exact amount paid.
-	r6=lrec(hTransBatch)+1
+	if sum(mat tgb)=xs(2) then fn_chooseBudgetUpdates(x1$,transDate,mat billToPay)
+	! if sum(mat tgb)=xs(2) and hBudMstr then gosub Bud1 ! was commented out; changed to if sum= on 101409 to keep from skipping ubdget update if exact amount paid.
 	if escrow>90000 then escrow=0 ! PREVENT 726 ERROR
-	dim bd2(5)
-	write #hTransBatch,using FtransBatch,rec=r6: z$,transAmount,transDate,transType,postingCodeUnused,rcpt$,mat alloc,mat bd2,escrow duprec L2060
+	dim billToPay(5)
+	write #hTransBatch,using FtransBatch: z$,transAmount,transDate,transType,postingCodeUnused,rcpt$,mat alloc,mat billToPay,escrow
 	transType=b7
  ! /r
 goto ScrSelectAccount
 ScrEdit: ! r:
-	read #hTransBatch,using FtransBatch,rec=edrec: x$,transAmount,transDate,transType,postingCodeUnused,rcpt$,mat alloc,mat bd3,escrow noRec SeFinis
+	read #hTransBatch,using FtransBatch,rec=edrec: x$,transAmount,transDate,transType,postingCodeUnused,rcpt$,mat alloc,mat billToPay,escrow noRec SeFinis
 	nam$=''
 	read #hCustomer1,using 'form pos 41,C 28,pos 292,PD 4.2,PD 4,pos 388,10*PD 5.2,pos 1859,pd 5.2',key=x$,release: nam$,bal,db1,mat gb,escrowbal nokey ignore
 	fnTos
@@ -321,157 +305,142 @@ ScrEdit: ! r:
 			transType  =fn_oSub1(resp$(resp_CollType))
 			hresp1$             =resp$(resp_CollType)
 			x$=x1$=lpad$(trim$(resp$(resp_account)(1:10)),10)
-			transAmount=x(2)=val(resp$(resp_amount))
+			transAmount=xs(2)=val(resp$(resp_amount))
 			transDate       =val(resp$(resp_transDate))
 			rcpt$         =trim$(resp$(resp_receiptNumber))
-			if uprc$(escrow$)='Y' then escrow=fn_checkEscrow(escrowbal,mat gb,x(2),possibleServiceCount) ! check escrow balance
-			if ~fn_breakdown(hCustomer1,hBudget,x1$,haveBudget, mat tgb, mat alloc,mat baOrder,ckey) then 
+			if uprc$(escrow$)='Y' then escrow=fn_checkEscrow(escrowbal,mat gb,xs(2),possibleServiceCount) ! check escrow balance
+			if ~fn_breakdown(hCustomer1,hBudMstr,x1$,haveBudget, mat tgb, mat alloc,mat baOrder,ckey) then 
 				goto ScrSelectAccount
 			end if
 			if uprc$(escrow$)='Y' then transAmount=transAmount-escrow !     !      ! subtract escrow amount from  payment amount before rewriting
-			rewrite #hTransBatch,using FtransBatch,rec=edrec: x$,transAmount,transDate,transType,postingCodeUnused,rcpt$,mat alloc,mat bd3,escrow
-			if budgetOpen then fn_updateBudget(x1$) : gosub Bud1
+			if hBudMstr then fn_chooseBudgetUpdates(x1$,transDate,mat billToPay) ! gosub Bud1
+			pr 'mat billToPay before rewrite' : pr mat billToPay : pause
+			rewrite #hTransBatch,using FtransBatch,rec=edrec: x$,transAmount,transDate,transType,postingCodeUnused,rcpt$,mat alloc,mat billToPay,escrow
 			! fn_totalAdd(transType,transAmount,totalCollections,totalDebitMemos,totalCreditMemos)
-			fn_printReceipt(x$,nam$,rcpt$,bal,x(2),x(3),hresp1$)
+			fn_printReceipt(x$,nam$,rcpt$,bal,xs(2),xs(3),hresp1$)
 		end if
 	end if
 	SeFinis: !
 goto ScreenOne ! /r
-Merge: ! r:
-	r6=0
-	do until r6+=1<=lrec(hTransBatch) ! prevent stopping to deleted record and quit when finished
-		read #hTransBatch,using FtransBatch,rec=r6: p$,transAmount,transDate,transType,postingCodeUnused,rcpt$,mat alloc,mat bd3,escrow noRec MergeNext
-		if p$(1:2)<>'  ' or transAmount or escrow then
+Merge: ! r: ( ; ___,transDateCcyymmdd
+	restore #hTransBatch:
+	do
+		read #hTransBatch,using FtransBatch: p$,transAmount,transDate,transType,postingCodeUnused,rcpt$,mat alloc,mat billToPay,escrow eof MergeEoBatch
+		pr 'after read' : pr mat billToPay : pause
+		if trim$(p$)<>'' or transAmount or escrow then
 			read #hCustomer1,using 'form pos 292,PD 4.2,pos 388,10*PD 5.2,pos 1859,pd 5.2',key=p$: bal,mat gb,escrowbal nokey MergeNext
 			if transType=3 then tcode=3 ! collection
 			if transType=4 then tcode=4 ! credit memo
 			if transType=5 then tcode=5 ! debit memo
 			if transType=5 then bal+=transAmount else bal-=transAmount
-			tmp=fndate_mmddyy_to_ccyymmdd(transDate)
-			mat tg=(0) : x=0
-			for j=1 to possibleServiceCount
-				if fn_serviceValidForCollAlloc(j) then tg(j)=alloc(x+=1)
-			next j
-			write #hTrans,using 'form pos 1,C 10,N 8,N 1,12*PD 4.2,6*PD 5,PD 4.2,N 1': p$,tmp,tcode,transAmount,mat tg,0,0,0,0,0,0,bal,pcode
-			if uprc$(escrow$)='Y' and escrow<>0 then
-				transAmount=escrow
-				mat tg=(0)
-				write #hTrans,using 'form pos 1,C 10,N 8,N 1,12*PD 4.2,6*PD 5,PD 4.2,N 1': p$,tmp,tcode,transAmount,mat tg,0,0,0,0,0,0,bal,pcode ! write a history record for escrow amount
-			end if
-			j2=0
-			for j=1 to possibleServiceCount
-				if srvName$(j)='' or srvName$(j)(1:5)='Reduc' then goto L4470
-				j2=j2+1
-				if transType=5 then gb(j)=gb(j)+alloc(j2) else gb(j)=gb(j)-alloc(j2)
-				L4470: !
-			next j
-			rewrite #hCustomer1,using 'form pos 292,PD 4.2,pos 388,10*PD 5.2,pos 1859,pd 5.2',key=p$: bal,mat gb,escrowbal+escrow
-			! postingCodeUnused=9
-			delete #hTransBatch,rec=r6: ! rewrite #hTransBatch,using 'form pos 19,2*N 1',rec=r6: transType,postingCodeUnused
+			! r: most transaction writing logic
+				transDateCcyymmdd=date(days(transDate,'mmddyy'),'ccyymmdd')
+				mat tg=(0) : x=0
+				for j=1 to possibleServiceCount
+					if fn_serviceValidForCollAlloc(j) then tg(j)=alloc(x+=1)
+				next j
+				write #hTrans,using 'form pos 1,C 10,N 8,N 1,12*PD 4.2,6*PD 5,PD 4.2,N 1': p$,transDateCcyymmdd,tcode,transAmount,mat tg,0,0,0,0,0,0,bal,pcode
+				if uprc$(escrow$)='Y' and escrow<>0 then
+					transAmount=escrow
+					mat tg=(0)
+					write #hTrans,using 'form pos 1,C 10,N 8,N 1,12*PD 4.2,6*PD 5,PD 4.2,N 1': p$,transDateCcyymmdd,tcode,transAmount,mat tg,0,0,0,0,0,0,bal,pcode ! write a history record for escrow amount
+				end if
+				j2=0
+				for j=1 to possibleServiceCount
+					if srvName$(j)<>'' and srvName$(j)(1:5)<>'Reduc' then 
+						j2+=1
+						if transType=5 then gb(j)+=alloc(j2) else gb(j)-=alloc(j2)
+					end if
+				next j
+				rewrite #hCustomer1,using 'form pos 292,PD 4.2,pos 388,10*PD 5.2,pos 1859,pd 5.2',key=p$: bal,mat gb,escrowbal+escrow
+				! postingCodeUnused=9
+			! /r
+			! r: update Budget Billing files
+				pr 'found budget billing processing in merge ' : pause
+				if hBudMstr and sum(mat billToPay)>0 then
+					for j=1 to udim(mat billToPay)
+						if billToPay(j)>0 then
+							read #hBudgetTrans,using FbudgetTrans,rec=billToPay(j): z$,mat bt1
+							bt1(14,1)=transDate ! DatePaidCur
+							rewrite #hBudgetTrans,using FbudgetTrans,rec=billToPay(j): z$,mat bt1
+						end if
+					nex j
+				end if
+			! /r
+			
+			delete #hTransBatch:
+			
 		end if
+		
 		MergeNext: !
 	loop
-	MergeFinis: !
+	MergeEoBatch: !
 	close #hTransBatch,free:
+goto Finis: ! /r
+Finis: ! r:
 	close #hCustomer1:
 	close #hCustomer2:
 	close #hTrans:
 	close #hTrans2: 
 	close #hTransBatch: ioerr ignore
-	goto Xit ! /r
+	hBudgetTrans=hBudgetTrans2=fnCloseBudTrans
+	hBudMstr=fnCloseBudMstr
+goto Xit ! /r
 Xit: fnXit
-Bud1: ! r:
-	mat tgb=(0) : mat pgb=(0) : mat bt1=(0)
-	for j=1 to 5
-		if bd3(j)<>0 then 
-			read #hBudgetTrans,using FbudgetTrans,rec=bd2(j): z$,mat bt1,nba
-			
-		end if
-		x2=0
-		for j3=1 to possibleServiceCount
-			if srvName$(j3)<>'' then
-				if penalty$(j3)='Y' then  ! add penalties up seperat
-					pgb(x2+=1)=bt1(j3+1,1)
-				else
-					if bt1(j3+1,1)>0 then tgb(x2+=1)=bt1(j3+1,1)
-				end if
-			end if
-		next j3
-		if sum(mat tgb)=x(2) then
-			goto Bud1Finis
-		else if sum(mat tgb)+sum(mat pgb)=x(2) then
-			for x=1 to udim(mat tgb)
-				tgb(x)+=pgb(x)
-			next x
-		end if
-	next j
-	mat tgb=(0) ! no matches found
-	Bud1Finis: !
-	if sum(mat tgb)>0 then haveBudget=1 else haveBudget=0
-return  ! /r
+! Bud1: ! r:
+	! seems unnecessary in new world   mat tgb=(0) : mat pgb=(0) : mat bt1=(0)
+	! seems unnecessary in new world   for j=1 to 5
+	! seems unnecessary in new world   	if billToPay(j) then 
+	! seems unnecessary in new world   		read #hBudgetTrans,using FbudgetTrans,rec=billToPay(j): z$,mat bt1,nba
+	! seems unnecessary in new world   	end if
+	! seems unnecessary in new world   	x2=0
+	! seems unnecessary in new world   	for j3=1 to possibleServiceCount
+	! seems unnecessary in new world   		if srvName$(j3)<>'' then
+	! seems unnecessary in new world   			if penalty$(j3)='Y' then  ! add penalties up seperate
+	! seems unnecessary in new world   				pgb(x2+=1)=bt1(j3+1,1)
+	! seems unnecessary in new world   			else
+	! seems unnecessary in new world   				if bt1(j3+1,1)>0 then tgb(x2+=1)=bt1(j3+1,1)
+	! seems unnecessary in new world   			end if
+	! seems unnecessary in new world   		end if
+	! seems unnecessary in new world   	next j3
+	! seems unnecessary in new world   	if sum(mat tgb)=xs(2) then
+	! seems unnecessary in new world   		goto Bud1Finis
+	! seems unnecessary in new world   	else if sum(mat tgb)+sum(mat pgb)=xs(2) then
+	! seems unnecessary in new world   		for x=1 to udim(mat tgb)
+	! seems unnecessary in new world   			tgb(x)+=pgb(x)
+	! seems unnecessary in new world   		next x
+	! seems unnecessary in new world   	end if
+	! seems unnecessary in new world   next j
+	! seems unnecessary in new world   mat tgb=(0) ! no matches found
+	! seems unnecessary in new world   Bud1Finis: !
+	! seems unnecessary in new world   if sum(mat tgb)>0 then haveBudget=1 else haveBudget=0
+! return  ! /r
 
-def fn_updateBudget(x1$*10; ___,bd1Count,ck1,j) ! very local.
+def fn_chooseBudgetUpdates(x1$*10,transDate,mat billToPay; ___,bd1Count,ck1,j,key$*14,billingDate,btRecCount,btpCount) ! very local.
 	! haveBudget=0   !   this seems really wrong - should not be turing it off constantly
-	Bud2: !
-	if ~budgetOpen then goto Bud2Finis
-	dim badr(2)
-	mat badr=(0)
-	read #hBudget,using 'form pos 1,C 10,PD 4,12*PD 5.2,2*PD 3',key=x1$: z$,mat ba,mat badr nokey Bud2Finis
-	ta1=badr(1)
-		
-		! pr '       z$=';z$
-		! pr '      ta1=';ta1
-		! pr 'bt1(14,1)=';bt1(14,1)
-		! pr 'bt1(14,2)=';bt1(14,2)
-		! pr 'transDate=';transDate
-		! pause
-
-	dim bd1(5)
-	mat bd1(5)
-	mat bd1=(0)
-	mat bd2=(0)
-	mat bd3=(0)
-		
-	do until ta1=0
-		read #hBudgetTrans,using FbudgetTrans,rec=ta1: z$,mat bt1,nba noRec Bud2LoopEnd
-		if bt1(14,1)>0 and bt1(14,1)<>transDate then 
-			! do nothing
-		else if bt1(14,1)=transDate then 
-			! if cleint then bt(14)=transdate instead
-			bt1(14,1)=bt1(14,2)=0
-			if env$('client')='Bethany' then bt1(14,1)=bt1(14,2)=transDate 
-			
-			rewrite #hBudgetTrans,using FbudgetTransBt1,rec=ta1: mat bt1
-		else
-			bd1Count+=1 ! 7/06/05  KJ
-			if bd1Count=>5 then goto Bud2LoopEnd ! 7/06/05 kj
-			bd1(bd1Count)=bt1(1,2)
-			bd2(bd1Count)=ta1
+	if hBudMstr then
+		btRecCount=fnBudgetTransMatchingRecords(x1$,mat btRec,'unpaidonly')
+		fnTos
+		fnLbl(2,1,'Check the bills to be paid:',30,0)
+		for j=1 to min(25,btRecCount)
+			read #hBudgetTrans,using FbudgetTrans,rec=btRec(j): z$,mat bt1
+			billingDate=bt1(1,1)
+			fnChk(j+2,10,cnvrt$('pic(zz/zz/zz)',billingDate))
+			resp$(j)='False' : if srch(mat billToPay,btRec(j)) then resp$(j)='True'
+		next j
+		if btRecCount>5 then
+			fnLbl(j+2,1,'Select up to 5 bills to pay',30,2)
 		end if
-		ta1=nba
-	loop
-	Bud2LoopEnd: !
-	if bd1Count=0 then goto Bud2Finis
-	if bd1(1)>0 and bd1(2)=0 then bd3(1)=bd1(1) : goto Bud2AfterScreen
-	mat bd1(bd1Count)
-	! MATCH_BUDGET_BILLING: !
-	fnTos
-	fnLbl(2,1,'Check the bills to be paid:',30,0)
-	for j=1 to udim(mat bd1)
-		if bd1(j) then 
-			fnChk(j+2,10,cnvrt$('pic(zz/zz/zz)',bd1(j)),0)
+		fnCmdSet(2)
+		ck1=fnAcs(mat resp$)
+		if ck1<>5 then
+			btpCount=0
+			mat billToPay=(0)
+			for j=1 to min(udim(mat billToPay),btRecCount)
+				if resp$(j)='True' then billToPay(btpCount+=1)=btRec(j) ! pr 'ding';bell
+			nex j
 		end if
-	next j
-	fnCmdSet(2)
-	ck1=fnAcs(mat resp$)
-	if ck1=5 then goto Bud2Finis ! 7/06/05  KJ
-	
-	Bud2AfterScreen: !
-	for j=1 to 5
-		if uprc$(resp$(j))=uprc$('True') then bd3(j)=1
-		if bd3(j)=0 then bd2(j)=0
-	next j
-	if sum(mat bd2)=0 then goto Bud2
+	end if ! hBudMstr
 	Bud2Finis: !
 fnend
 
@@ -538,7 +507,7 @@ def fn_printListings
 				r5+=1
 			end if
 			if r5>lrec(hTransBatch) then goto PS_TOTALS
-			read #hTransBatch,using FtransBatch,rec=r5: x$,transAmount,transDate,transType,postingCodeUnused,rcpt$,mat alloc,mat bd3,escrow conv PS_TOTALS noRec PS_LOOP_TOP
+			read #hTransBatch,using FtransBatch,rec=r5: x$,transAmount,transDate,transType,postingCodeUnused,rcpt$,mat alloc,mat billToPay,escrow conv PS_TOTALS noRec PS_LOOP_TOP
 			nam$=''
 			read #hCustomer1,using 'form pos 41,C 28,pos 143,pd 2',key=x$,release: nam$,wcode nokey ignore
 			if trim$(x$)='' or (transAmount=0 and escrow=0) then goto PS_LOOP_TOP
@@ -652,7 +621,7 @@ def fn_setup
 		dim pgb(10)
 
 		dim tg(11)
-		dim x(3)
+		dim xs(3)
 		dim x$*10
 		dim resp$(30)*128
 		dim ml$(0)*256
@@ -781,20 +750,11 @@ def fn_setup
 	fnreg_read('Collections Disable Deposit List',ub_collDisableDepositList$,'False')
 fnend
 
-def fn_haveMainBudget(hBudget,x1$*10; ___,returnN)
-	dim ba(13)
-	mat ba=(0)
-	mat badr=(0)
-	read #hBudget,using 'form pos 1,C 10,PD 4,12*PD 5.2,2*PD 3',key=x1$: z$,mat ba,mat badr nokey HmbFinis ! get mat ba again
-	if ba(2)+ba(3)+ba(4)+ba(5)+ba(6)+ba(7)+ba(8)+ba(9)+ba(10)+ba(11)>0 then returnN=1
-	HmbFinis: !
-	fn_haveMainBudget=returnN
-fnend
-def library fnBreakdown(hCustomer1,hBudget,x1$*10,haveBudget, mat tgb, mat alloc,mat baOrder,&ckey)
+def library fnBreakdown(hCustomer1,hBudMstr,x1$*10,haveBudget, mat tgb, mat alloc,mat baOrder,&ckey)
 	fn_setup
-	fnBreakdown=fn_breakdown(hCustomer1,hBudget,x1$,haveBudget, mat tgb, mat alloc,mat baOrder,ckey)
+	fnBreakdown=fn_breakdown(hCustomer1,hBudMstr,x1$,haveBudget, mat tgb, mat alloc,mat baOrder,ckey)
 fnend
-def fn_breakdown(hCustomer1,hBudget,x1$*10,haveBudget, mat tgb, mat alloc,mat baOrder,&ckey)
+def fn_breakdown(hCustomer1,hBudMstr,x1$*10,haveBudget, mat tgb, mat alloc,mat baOrder,&ckey)
 	! returns 0 if canceled, else 1  (back returns 2)
 	! hCustomer1 - customer file handle with account number key
 	! x1$ - customer account number key
@@ -802,7 +762,7 @@ def fn_breakdown(hCustomer1,hBudget,x1$*10,haveBudget, mat tgb, mat alloc,mat ba
 	! mat tgb -
 	! mat alloc -
 	! mat baOrder -
-	! x(2) is transaction amount
+	! xs(2) is transaction amount
 	! if env$('acsDeveloper')<>'' then pause
 
 
@@ -837,14 +797,14 @@ def fn_breakdown(hCustomer1,hBudget,x1$*10,haveBudget, mat tgb, mat alloc,mat ba
 
 	NextAfterBreakdown: !
 	tal=sum(mat alloc) ! for j=1 to udim(mat alloc) : tal+=alloc(j) : next j
-	if tal<>x(2) then
+	if tal<>xs(2) then
 		mat ml$(6)
 		ml$(1)='Total Allocations must equal Transaction Amount!'
 		ml$(2)=''
-		ml$(3)=cnvrt$('pic(-----------#.##)',x(2))&' (Transaction Amount)'
+		ml$(3)=cnvrt$('pic(-----------#.##)',xs(2))&' (Transaction Amount)'
 		ml$(4)=cnvrt$('pic(-----------#.##)',tal)&' (Total Allocations) '
 		ml$(5)='___________'
-		ml$(6)=cnvrt$('pic(-----------#.##)',x(2)-tal)&' (Difference)'
+		ml$(6)=cnvrt$('pic(-----------#.##)',xs(2)-tal)&' (Difference)'
 		fnMsgBox(mat ml$, resp$,'',48)
 		goto BD_TOS ! (skip re-reading of record) ! goto BREAKDOWN
 	end if
@@ -862,7 +822,7 @@ def fn_askAllocations(x1$*10,mat srvName$,mat gb,mat alloc,mat validServiceLabel
 	resp$(aaRespC+=1)=trim$(nam$)
 	fnLbl(3,1,'Transaction Amount:',30,1)
 	fnTxt(3,32,10,12,1,'10',1)
-	resp$(aaRespC+=1)=str$(x(2))
+	resp$(aaRespC+=1)=str$(xs(2))
 	fnLbl(5,1,'Enter Allocation Breakdown amounts.',54,2)
 	fnLbl(6,31,'Allocation',10,2)
 	fnLbl(6,44,'Balance',10,2)
@@ -948,22 +908,22 @@ BuildAllocations: ! r: returns mat alloc, mat tgb,transType,escrow$,oldescrowbal
 	for j=1 to udim(mat alloc)
 		if tgb(j)<0 then tn-=tgb(j) ! Total Negative Breakdowns
 	next j
-
-	havemainbudget=fn_haveMainBudget(hBudget,x1$)
+	
+	havemainbudget=fnCustomerBudgetEnable(x1$)
 	validServiceItem=0
 	for j=1 to udiM(allocorder) ! to udim(mat alloc)
 		! r: allocation logic
 			validServiceItem=allocorder(j)
-			alloc(allocOrder(validServiceItem))=max(0,min(x(2)-bd_tgbj+tn,tgb(allocOrder(validServiceItem))))
+			alloc(allocOrder(validServiceItem))=max(0,min(xs(2)-bd_tgbj+tn,tgb(allocOrder(validServiceItem))))
 			bd_tgbj+=alloc(allocOrder(validServiceItem))
 			if tgb(allocOrder(validServiceItem))<0 then tn+=tgb(allocOrder(validServiceItem))
 		! /r
 	next j
 
-	if havemainbudget=1 and sum(mat alloc)<x(2) then
+	if havemainbudget and sum(mat alloc)<xs(2) then
 		for j=1 to udim(mat alloc) ! if have budget and pay more than budget, how to allocate remainder
 			if alloc(allocOrder(j))=0 then
-				alloc(allocOrder(j))=max(0,min(x(2)-bd_tgbj+tn,tgb(allocOrder(j))))
+				alloc(allocOrder(j))=max(0,min(xs(2)-bd_tgbj+tn,tgb(allocOrder(j))))
 				bd_tgbj+=alloc(allocOrder(j))
 				if tgb(allocOrder(j))<0 then tn+=tgb(allocOrder(j))
 			end if
@@ -972,32 +932,32 @@ BuildAllocations: ! r: returns mat alloc, mat tgb,transType,escrow$,oldescrowbal
 
 	! r: allocate overpament amount
 	if (env$('client')='Billings' or env$('client')='Diamond') and s02rate>0 then !  put excess in service 2 - sewer
-		alloc(2)=alloc(2)+x(2)-bd_tgbj
+		alloc(2)=alloc(2)+xs(2)-bd_tgbj
 		goto BuildAllocations_FINIS
 	else if env$('client')='Findlay' and  s04rate>0 then ! excess in gas
-		alloc(3)=alloc(3)+x(2)-bd_tgbj
+		alloc(3)=alloc(3)+xs(2)-bd_tgbj
 		goto BuildAllocations_FINIS
 	else if (1)>0 then ! if no gas, put excess in water
-		alloc(1)+=x(2)-bd_tgbj
+		alloc(1)+=xs(2)-bd_tgbj
 		goto BuildAllocations_FINIS
 	end if
 
 	if alloc(1)>0 or (havewater=1 and s01rate>0) then ! excess in water if it is an active service for this customer
-		alloc(1)=alloc(1)+x(2)-bd_tgbj
+		alloc(1)=alloc(1)+xs(2)-bd_tgbj
 		goto BuildAllocations_FINIS
 	else if alloc(2)>0 or (havesewer=1 and s02rate>0) then ! excess in sewer if it is an active service for this customer
-		alloc(2)+=x(2)-bd_tgbj
+		alloc(2)+=xs(2)-bd_tgbj
 		goto BuildAllocations_FINIS
 	else if udim(mat alloc)>=3 then
 		if alloc(3)>0 then ! excess in electric if it is an active service for this customer
-			alloc(3)+=x(2)-bd_tgbj
+			alloc(3)+=xs(2)-bd_tgbj
 			goto BuildAllocations_FINIS
 		else if udim(mat alloc)>=4 then
 			if alloc(4)>0 then ! excess in gas if it is an active service for this customer
-				alloc(4)+=+x(2)-bd_tgbj
+				alloc(4)+=+xs(2)-bd_tgbj
 				goto BuildAllocations_FINIS
 			end if
-			alloc(1)+=x(2)-bd_tgbj ! if excess not allocated to any other service, allocate it to water
+			alloc(1)+=xs(2)-bd_tgbj ! if excess not allocated to any other service, allocate it to water
 		end if
 	end if
 	! /r
@@ -1238,25 +1198,25 @@ def fn_addTransToUnposted(at_customer$*10,at_date_mmddyy,at_trans_type,at_amount
 			fn_getMatTgb(mat tgb,escrow,mat gb,mat srvName$,escrow$,transType,escrowbal,oldescrowbal)
 			! /r
 			! ScrAdd: !
-			x(3)=at_date_mmddyy
-			x(2)=at_amount
+			xs(3)=at_date_mmddyy
+			xs(2)=at_amount
 			transType=at_trans_type
 			!
-			do_not_blank_rcpt=0
+			doNotBlankRcpt=0
 			! rcpt$=trim$(resp$(3))(1:9)
 			at_customer$=lpad$(trim$(at_customer$),10)
 			! r: after ScrAdd - actually do the adding stuff
-				if sum(mat tgb)=x(2) then
+				if sum(mat tgb)=xs(2) then
 					for j=1 to validSrvCount : alloc(j)=tgb(j) : next j
 					goto AT_L2040
 				end if
-				if uprc$(escrow$)='Y' then escrow=fn_checkEscrow(escrowbal,mat gb,x(2),possibleServiceCount) ! check escrow balance
+				if uprc$(escrow$)='Y' then escrow=fn_checkEscrow(escrowbal,mat gb,xs(2),possibleServiceCount) ! check escrow balance
 				mat hgb=tgb
 				! gosub SeemsWrong2
 
-			fn_updateBudget(x1$)
-			gosub Bud1
-			if ~fn_breakdown(hCustomer1,hBudget,at_customer$,haveBudget, mat tgb, mat alloc,mat baOrder,ckey) then
+			fn_chooseBudgetUpdates(x1$,transDate,mat billToPay)
+			! gosub Bud1
+			if ~fn_breakdown(hCustomer1,hBudMstr,at_customer$,haveBudget, mat tgb, mat alloc,mat baOrder,ckey) then
 				if csv_import_in_process then
 					goto AT_FINIS
 				else
@@ -1268,13 +1228,12 @@ def fn_addTransToUnposted(at_customer$*10,at_date_mmddyy,at_trans_type,at_amount
 
 			end if
 			AT_L2040: ! r:
-			transAmount=x(2) : transDate=x(3) : b7=transType
+			transAmount=xs(2) : transDate=xs(3) : b7=transType
 			postingCodeUnused=0
-			if sum(mat tgb)=x(2) then fn_updateBudget(x1$)
-			if sum(mat tgb)=x(2) and budgetOpen then gosub Bud1 ! was commented out; changed to if sum= on 101409 to keep from skipping ubdget update if exact amount paid.
-			r6=lrec(hTransBatch)+1
+			if sum(mat tgb)=xs(2) then fn_chooseBudgetUpdates(x1$,transDate,mat billToPay)
+			! if sum(mat tgb)=xs(2) and hBudMstr then gosub Bud1 ! was commented out; changed to if sum= on 101409 to keep from skipping ubdget update if exact amount paid.
 			if escrow>90000 then escrow=0 ! PREVENT 726 ERROR
-			write #hTransBatch,using FtransBatch,rec=r6: at_customer$,transAmount,transDate,transType,postingCodeUnused,rcpt$,mat alloc,mat bd2,escrow duprec L2060
+			write #hTransBatch,using FtransBatch: at_customer$,transAmount,transDate,transType,postingCodeUnused,rcpt$,mat alloc,mat billToPay,escrow
 			transType=b7
 		end if
 	else ! the account does not exist.
@@ -1403,7 +1362,7 @@ fnend
 ! READD: ! r: RE-ADD PROOF TOTALS
 !   for j=1 to lrec(hTransBatch)
 !     r5=j
-!     read #hTransBatch,using FtransBatch,rec=r5: x$,transAmount,transDate,transType,postingCodeUnused,rcpt$,mat alloc,mat bd3,escrow noRec L4690 eof L4700
+!     read #hTransBatch,using FtransBatch,rec=r5: x$,transAmount,transDate,transType,postingCodeUnused,rcpt$,mat alloc,mat billToPay,escrow noRec L4690 eof L4700
 !     fn_totalAdd(transType,transAmount,totalCollections,totalDebitMemos,totalCreditMemos)
 ! L4690: next j
 ! L4700: return  ! /r
