@@ -314,7 +314,7 @@ ScrEdit: ! r:
 			end if
 			if uprc$(escrow$)='Y' then transAmount=transAmount-escrow !     !      ! subtract escrow amount from  payment amount before rewriting
 			if hBudMstr then fn_chooseBudgetUpdates(x1$,transDate,mat billToPay) ! gosub Bud1
-			pr 'mat billToPay before rewrite' : pr mat billToPay : pause
+			! pr 'mat billToPay before rewrite' : pr mat billToPay : pause
 			rewrite #hTransBatch,using FtransBatch,rec=edrec: x$,transAmount,transDate,transType,postingCodeUnused,rcpt$,mat alloc,mat billToPay,escrow
 			! fn_totalAdd(transType,transAmount,totalCollections,totalDebitMemos,totalCreditMemos)
 			fn_printReceipt(x$,nam$,rcpt$,bal,xs(2),xs(3),hresp1$)
@@ -543,7 +543,6 @@ def fn_printListings
 			end if
 		loop ! goto PS_LOOP_TOP ! /r
 	PS_TOTALS: ! r:
-	! print 'got to totals',xti1 : pause
 	if xti1=2 then
 		! r: DEPOSIT_LIST_TOTAL
 		pr #255,using F_PR_TOTALS: '__________','Total Checks',totcheck
@@ -763,8 +762,6 @@ def fn_breakdown(hCustomer1,hBudMstr,x1$*10,haveBudget, mat tgb, mat alloc,mat b
 	! mat alloc -
 	! mat baOrder -
 	! xs(2) is transaction amount
-	! if env$('acsDeveloper')<>'' then pause
-
 
 	dim nam$*30
 	read #hCustomer1,using 'form pos 41,C 28,pos 292,PD 4.2,PD 4,pos 388,10*PD 5.2,pos 1859,pd 5.2,pos 143,7*pd 2',key=x1$,release: nam$,bal,db1,mat gb,escrowbal,mat ay ! nokey BD_TOS   ! removed nokey trap on 12/9/2018 - if we can't find the customer than allocation is going to fail anyway.
@@ -871,10 +868,6 @@ def fn_askAllocations(x1$*10,mat srvName$,mat gb,mat alloc,mat validServiceLabel
 			alloc(j)=0
 		end if
 	next j
-	! if debug then
-	! 	pr 'dev-pause CC'
-	! 	pause
-	! end if
 	if uprc$(escrow$)='Y' then escrow=val(resp$(bd_real(j)))
 	fn_askAllocations=ckey
 fnend
@@ -1205,7 +1198,7 @@ def fn_addTransToUnposted(at_customer$*10,at_date_mmddyy,at_trans_type,at_amount
 			doNotBlankRcpt=0
 			! rcpt$=trim$(resp$(3))(1:9)
 			at_customer$=lpad$(trim$(at_customer$),10)
-			! r: after ScrAdd - actually do the adding stuff
+			! after ScrAdd - actually do the adding stuff
 				if sum(mat tgb)=xs(2) then
 					for j=1 to validSrvCount : alloc(j)=tgb(j) : next j
 					goto AT_L2040
@@ -1262,9 +1255,7 @@ def fn_addTransToUnposted(at_customer$*10,at_date_mmddyy,at_trans_type,at_amount
 	end if
 
 	goto AT_FINIS ! /r
-		! pr 'completed add' : pause ! goto ScrSelectAccount ! /r
-	AT_NO_CUSTOMER: ! r:
-	goto AT_FINIS ! /r
+	 
 	AT_FINIS: !
 fnend
 	def fn_transAlreadyInUnposted(p$,tdate,tcode,tamount; ___,returnN,tauX$*10,tauAmount,tauDate,tauCode)
@@ -1357,7 +1348,7 @@ def fn_collType$(transType) ! returns appropriate coll_type_option$ based on 0(1
 	else if transType=5 then
 		collTypeReturn$=coll_type_option$(3)
 	end if
-	fn_collType$=collTypeReturn$ ! &' ('&str$(transType)&')' ! pr collTypeReturn$ : pause
+	fn_collType$=collTypeReturn$
 fnend
 ! READD: ! r: RE-ADD PROOF TOTALS
 !   for j=1 to lrec(hTransBatch)
