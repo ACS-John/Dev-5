@@ -30,7 +30,7 @@ NetCur            	,Net  Cur               	, PD  5.2 	,               	, !  SPo
 NetPrior          	,Net  Prior            	, PD  5.2 	,               	, !  SPos=     bt1(12,2)
 GrossCur         	,Gross  Current        	, PD  5.2 	,               	, !  SPos=     bt1(13,1)
 GrossPrior       	,Gross  Prior          	, PD  5.2 	,               	, !  SPos=     bt1(13,2)
-DatePaidCur      	,Date Paid Current     	, PD  4   	, date(mmddyy) 	, !  SPos=     bt1(14,1)
+DatePaidCur      	,Date Paid Current     	, PD  4   	, date(mmddyy) 	, !  SPos=     bt1(14,1)   >0 means this month was paid
 DatePaidPrior    	,Date Paid Prior       	, PD  4   	, date(mmddyy) 	, !  SPos=     bt1(14,2)
 nta               	,Next Trans Address    	, PD  3   	,                 , ! 
 

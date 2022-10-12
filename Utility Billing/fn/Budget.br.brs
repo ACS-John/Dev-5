@@ -82,9 +82,6 @@ def library fnBudgetTransMatchingRecords(z$*10,mat btRec; option$*128,___,return
 	restore #hBudTrans1,key=>z$: 
 	mat btRec(0)
 	if pos(lwrc$(' '&option$&' '),' unpaidonly ')>0 then unpaidOnly=1
-	! pr 'top of fnBudgetTransMatchingRecords'
-	! pr 'unpaidOnly=';unpaidOnly
-	! pause
 	do
 		dim bt1(14,2)
 		read #hBudTrans1,using FbudgetTrans: x$,mat bt1 eof QuickCountFinis

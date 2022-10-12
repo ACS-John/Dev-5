@@ -2,13 +2,13 @@
 ! r: initial stuff
 	autoLibrary
 	on error goto Ertn
-!
-	dim resp$(20)*80
-	dim z$*10,e$*30,g(12),metradr$*30
-	dim ba(13),badr(2),bt1(14,2),bd1(5),bd2(5),month(4),dat$*20
-!
 	fnTop(program$)
+
+	dim resp$(20)*80
+	dim month(4)
+
 	fnLastBillingDate(lbill)
+	dim dat$*20
 	fndat(dat$)
 	dim opt_aai$(3)
 	opt_aai$(1)='[All]'
@@ -64,8 +64,12 @@
 	ckey=fnAcs(mat resp$)
 	if ckey=5 then goto Xit
 	for j=1 to 3
-L400: x=pos(resp$(j),'/',1)
-		if x>0 then resp$(j)(x:x)='' : goto L400
+		L400: !
+		x=pos(resp$(j),'/',1)
+		if x>0 then 
+			resp$(j)(x:x)=''
+			goto L400
+		end if
 	next j
 	lastday(1)=val(resp$(1))
 	firstday(1)=(val(resp$(1)(1:6))*100)+1
@@ -74,11 +78,11 @@ L400: x=pos(resp$(j),'/',1)
 	lastday(3)=val(resp$(3))
 	firstday(3)=(val(resp$(3)(1:6))*100)+1
 	lbill=val(resp$(4))
-	aai$=printal$=resp$(5)
-	printadr$=resp$(6) : if printadr$='True' then printadr=1 ! wants meter address printed
-	excludecurrent$=resp$(7) : if excludecurrent$='True' then excludecurrent=1 ! do not list those owing just the current month
-	excludelast$=resp$(8) : if excludelast$='True' then excludelast=1 ! do not list those owing just the current month and last month
-	pastduebalance$=resp$(9) : if pastduebalance$='True' then pastduebalance=1 ! only show past due amount in balance column
+	aai$=printal$  	=resp$(5)
+	printadr$      	=resp$(6) : if printadr$='True' then printadr=1 ! wants meter address printed
+	excludecurrent$	=resp$(7) : if excludecurrent$='True' then excludecurrent=1 ! do not list those owing just the current month
+	excludelast$   	=resp$(8) : if excludelast$='True' then excludelast=1 ! do not list those owing just the current month and last month
+	pastduebalance$	=resp$(9) : if pastduebalance$='True' then pastduebalance=1 ! only show past due amount in balance column
 	pr_s4_meter_number$=resp$(10) : if pr_s4_meter_number$='True' then pr_s4_meter_number=1 ! only show past due amount in balance column
 	pr_blank_lines_for_notes$=resp$(11)
 	accountSequence$=resp$(rc_accountSequence)
@@ -91,8 +95,8 @@ L400: x=pos(resp$(j),'/',1)
 	fncreg_write('ubpdtnof.pr_blank_lines_for_notes',pr_blank_lines_for_notes$)
 	fncreg_write('ubpdtnof.accountSequence',accountSequence$)
 ! /r
-	on fkey 5 goto DONE
-! r: the report
+	on fkey 5 goto Finis
+
 ! r: report setup
 	fnopenprn
 	gosub HDR1
@@ -105,25 +109,30 @@ L400: x=pos(resp$(j),'/',1)
 	! open #ratemst:=8: 'Name=[Q]\UBmstr\ubData\RateMst.h[cno],KFName=[Q]\UBmstr\ubData\RateIdx1.h[cno],Shr',i,i,k
 	hBudMstr=fnOpenBudMstrInput : if hBudMstr then hBudgetTrans=fnOpenBudTransInput
 ! /r
-MAIN_LOOP_TOP: !
-	read #hCustomer,using F_CUSTOMER: z$,metradr$,e$,a7,final,bal,f,mat g,s4_meter_number$,route eof TOTAL_FINAL
-F_CUSTOMER: form pos 1,c 10,c 30,pos 41,c 30,pos 155,pd 2,pos 1821,n 1,pos 292,pd 4.2,pos 296,pd 4,pos 300,12*pd 4.2,pos 373,c 12,pos 1741,n 2
+goto MainLoopTop
+MainLoopTop: ! r:
+	dim z$*10
+	dim metradr$*30
+	dim e$*30
+	dim g(12)
+	read #hCustomer,using F_CUSTOMER: z$,metradr$,e$,a7,final,bal,billingDate,mat g,s4_meter_number$,route eof PrTotalGrand
+	F_CUSTOMER: form pos 1,c 10,c 30,pos 41,c 30,pos 155,pd 2,pos 1821,n 1,pos 292,pd 4.2,pos 296,pd 4,pos 300,12*pd 4.2,pos 373,c 12,pos 1741,n 2
 	if hBudMstr then gosub BUD2
 	if bd1>0 then goto L650 ! IF BUDGET BILLING AND HAVE NOT PAID LAST BILL, LIST ANYWAY   ( BD1=# OF BUDGET BILLS NOT PAID)
-	if totba>0 and bd1=0 then goto MAIN_LOOP_TOP ! DON'T LIST IF BUDGET BILL AND HAVE PAID LAST BILL (NO MATTER WHAT BALANCE)
-	if bal<=1 then goto MAIN_LOOP_TOP
+	if totba>0 and bd1=0 then goto MainLoopTop ! DON'T LIST IF BUDGET BILL AND HAVE PAID LAST BILL (NO MATTER WHAT BALANCE)
+	if bal<=1 then goto MainLoopTop
 	if final=3 then final=0 ! consider active customer who are not be billed the same as regular active customers.
-	if printal$=opt_aai$(2) and final>0 then goto MAIN_LOOP_TOP
-	if printal$=opt_aai$(3) and final=0 then goto MAIN_LOOP_TOP
-L650: !
+	if printal$=opt_aai$(2) and final>0 then goto MainLoopTop
+	if printal$=opt_aai$(3) and final=0 then goto MainLoopTop
+	L650: !
 	if holdrt=0 or route=0 or holdrt=route then goto L690
-	gosub TOTAL_BOOK
+	gosub PrTotalBook
 	pr #255: newpage
 	gosub HDR1
-L690: !
-	gosub TRANS_ACCUMULATE
-!
-! if trim$(z$)='100780.00' then pause
+	L690: !
+	gosub TransAccumulate
+
+	! if trim$(z$)='100780.00' then pause
 	az$=''
 	if month(4)>0 or bd1=3 then
 		az$='****'
@@ -132,21 +141,21 @@ L690: !
 	else if month(2)>0 or bd1=1 then
 		az$='**'
 	end if
-!
+
 	if totba>0 then lev$='L' else lev$=''
 	if excludecurrent=1 and len(az$)<2 then goto L880 ! exclude those oweing only current month
 	if excludelast=1 and len(az$)<3 then goto L880 ! exclude those oweing only current month  or previous month
 	if pastduebalance=1 and excludecurrent=1 then bal=bal-month(1) ! don't show current in past due balance column
 	if pastduebalance=1 and excludelast=1 then bal=bal-month(2) ! don't show last month in past due balance column
-!
+
 	if printadr and pr_s4_meter_number then
-		pr #255,using F_REPORT_LINE: z$,e$(1:25),bal,f,az$,lev$,metradr$(1:25),fn_s4_meter_number$ pageoflow PgOf
+		pr #255,using F_REPORT_LINE: z$,e$(1:25),bal,billingDate,az$,lev$,metradr$(1:25),fn_s4_meter_number$ pageoflow PgOf
 	else if pr_s4_meter_number then
-		pr #255,using F_REPORT_LINE: z$,e$(1:25),bal,f,az$,lev$,fn_s4_meter_number$ pageoflow PgOf
+		pr #255,using F_REPORT_LINE: z$,e$(1:25),bal,billingDate,az$,lev$,fn_s4_meter_number$ pageoflow PgOf
 	else if printadr then
-		pr #255,using F_REPORT_LINE: z$,e$(1:25),bal,f,az$,lev$,metradr$(1:25) pageoflow PgOf
+		pr #255,using F_REPORT_LINE: z$,e$(1:25),bal,billingDate,az$,lev$,metradr$(1:25) pageoflow PgOf
 	else
-		pr #255,using F_REPORT_LINE: z$,e$(1:25),bal,f,az$,lev$ pageoflow PgOf
+		pr #255,using F_REPORT_LINE: z$,e$(1:25),bal,billingDate,az$,lev$ pageoflow PgOf
 	end if
 	if trans_accumulate_execption$<>'' then
 		pr #255,using 'form pos 64,C 24': trans_accumulate_execption$ pageoflow PgOf
@@ -156,16 +165,15 @@ L690: !
 		pr #255: rpt$('_',71) pageoflow PgOf
 		pr #255: '' pageoflow PgOf
 	end if
-F_REPORT_LINE: form pos 1,c 12,c 25,n 12.2,pic(bbzz/zz/zzbb),x 3,c 4,x 1,c 1,x 2,c 25,x 2,c 25
-!
+	F_REPORT_LINE: form pos 1,c 12,c 25,n 12.2,pic(bbzz/zz/zzbb),x 3,c 4,x 1,c 1,x 2,c 25,x 2,c 25
+
 	s2=s2+bal
 	t2=t2+bal
 	t1=t1+g(10)
 	s1=s1+g(10)
 	holdrt=route
-L880: !
-	goto MAIN_LOOP_TOP
-! /r
+	L880: !
+goto MainLoopTop ! /r
 HDR1: ! r:
 	p2=p2+1
 	pr #255: '\qc '&env$('cnam')
@@ -173,7 +181,7 @@ HDR1: ! r:
 ! pr #255: 'As of '&CNVRT$('pic(zzzz/zz/zz)',LASTDAY(1))
 	pr #255: 'As of '&dat$
 	pr #255,using L970: '\ql '&date$,'Page '&str$(p2)
-L970: form pos 1,c 70,cr 14
+	L970: form pos 1,c 70,cr 14
 	if pastduebalance=1 then
 		pr #255: '                                         Past Due  Last Bill   Turn'
 	else
@@ -188,32 +196,32 @@ L970: form pos 1,c 70,cr 14
 	else
 		pr #255: '{\ul Account No}  {\ul Customer Name            }  {\ul   Balance }  {\ul    Date   }  {\ul  Off}'
 	end if
-	return  ! /r
-TOTAL_BOOK: ! r:
+return  ! /r
+PrTotalBook: ! r:
 	pr #255: '' pageoflow PgOf
 	pr #255: '' pageoflow PgOf
 	pr #255: 'Totals For Route Number ';holdrt;
 	pr #255,using F_PR_TOTAL: s2 pageoflow PgOf
-F_PR_TOTAL: form pos 38,pic(-,---,---.##)
+	F_PR_TOTAL: form pos 38,pic(-,---,---.##)
 	pr #255: '' pageoflow PgOf
 	s1=0
 	s2=0
 	holdrt=route
-	return  ! /r
-TOTAL_FINAL: ! r:
-	gosub TOTAL_BOOK
+return  ! /r
+PrTotalGrand: ! r:
+	gosub PrTotalBook
 ! TOTAL_GRAND: !
 	s1=t1 : s2=t2
 	pr #255: ''
 	pr #255: ''
 	pr #255: '               Grand Totals';
 	pr #255,using F_PR_TOTAL: s2
-	goto DONE ! /r
-DONE: ! r:
+goto Finis ! /r
+Finis: ! r:
 	close #hCustomer: ioerr ignore
 	close #hTrans: ioerr ignore
 	fncloseprn
-	goto Xit ! /r
+goto Xit ! /r
 PgOf: ! r:
 	pr #255: newpage
 	gosub HDR1
@@ -222,29 +230,34 @@ Xit: fnXit
 
 BUD2: ! r:
 	bd1=totba=0
+	dim bd1(5)
+	dim bd2(5)
 	mat bd1(5) : mat bd1=(0) : mat bd2=(0)
-	if ~hBudMstr then goto L1580
-	read #hBudMstr,using L1470,key=z$: z$,mat ba,mat badr nokey L1580
+	if ~hBudMstr then goto EoBud2
+	dim ba(13),badr(2)
+	read #hBudMstr,using FbudMstr,key=z$: z$,mat ba,mat badr nokey EoBud2
 	for j=2 to 12: totba=totba+ba(j): next j
-	L1470: form pos 1,c 10,pd 4,12*pd 5.2,2*pd 3
+	FbudMstr: form pos 1,c 10,pd 4,12*pd 5.2,2*pd 3
 	ta1=badr(1)
-	L1490: !
-	if ta1=0 then goto L1580
-	read #hBudgetTrans,using L1510,rec=ta1: z$,mat bt1,nba noRec L1580
-	L1510: form pos 1,c 10,2*pd 4,24*pd 5.2,2*pd 4,pd 3
-	if bt1(14,1)>0 then goto L1570
-	bd1+=1
-	if bd1>5 then goto L1580
-	bd1(bd1)=bt1(1,2)
-	bd2(bd1)=ta1
-	L1570: !
-	ta1=nba : goto L1490
-	L1580: !
+	do while ta1
+		dim bt1(14,2)
+		read #hBudgetTrans,using FbudTrans,rec=ta1: z$,mat bt1,nba noRec EoBud2
+		FbudTrans: form pos 1,c 10,2*pd 4,24*pd 5.2,2*pd 4,pd 3
+		if bt1(14,1)<=0 then ! bt1(14,1) is DatePaidCur
+			bd1+=1
+			if bd1>5 then goto EoBud2
+			bd1(bd1)=bt1(1,2)
+			bd2(bd1)=ta1
+			L1570: !
+		end if
+		ta1=nba
+	loop
+	EoBud2: !
 return  ! /r
-PR_TRAN_DEBUG_DATA: ! r:
+DebugPrTranData: ! r:
 	if debug_this_tran then pr '                            tdate=';tdate;' tcode=';tcode;' tamount=';tamount : debug_this_tran=1 else debug_this_tran=0 ! pause
-	return  ! /r
-TRANS_ACCUMULATE: ! r:
+return  ! /r
+TransAccumulate: ! r:
 	mat month=(0)
 	dim trans_accumulate_execption$*24
 	trans_accumulate_execption$=''
@@ -264,11 +277,11 @@ TA_TRANS_READ: !
 			goto TA_TRANS_READ
 		else if tdate>=firstday(j) and tdate<=lastday(j) and (tcode = 1 or tcode=2 or tcode=5) then
 			month(j)=month(j)+tamount
-!      if debug_this_tran then gosub PR_TRAN_DEBUG_DATA : pr '  B  month(';j;')=';month(j);'    because ';tdate;' =/between >';firstday(j);' - ';lastday(j);' and tcode=';tcode
+!      if debug_this_tran then gosub DebugPrTranData : pr '  B  month(';j;')=';month(j);'    because ';tdate;' =/between >';firstday(j);' - ';lastday(j);' and tcode=';tcode
 			goto TA_TRANS_READ
 		else if tdate>lastday(j) and (tcode = 1 or tcode=2 or tcode=5) then ! accumulate all collections in month 4
 			month(j)=month(j)+tamount
-!      if debug_this_tran then gosub PR_TRAN_DEBUG_DATA : pr '  C  month(';j;')=';month(j);'    because ';tdate;'>';lastday(j);' and tcode=';tcode
+!      if debug_this_tran then gosub DebugPrTranData : pr '  C  month(';j;')=';month(j);'    because ';tdate;'>';lastday(j);' and tcode=';tcode
 			goto TA_TRANS_READ
 		end if
 	next j
