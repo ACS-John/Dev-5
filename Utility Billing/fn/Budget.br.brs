@@ -79,8 +79,8 @@ fnend
 
 def library fnBudgetTransMatchingRecords(z$*10,mat btRec; option$*128,___,returnN,x$*10,unpaidOnly,DatePaidCur)
 	!  returnN = matching Records Count and collect all matching record numbers into mat btRec
-	restore #hBudTrans1,key=>z$: 
 	mat btRec(0)
+	restore #hBudTrans1,key=>z$: nokey QuickCountFinis
 	if pos(lwrc$(' '&option$&' '),' unpaidonly ')>0 then unpaidOnly=1
 	do
 		dim bt1(14,2)
