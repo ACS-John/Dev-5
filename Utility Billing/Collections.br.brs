@@ -313,7 +313,7 @@ ScrEdit: ! r:
 				goto ScrSelectAccount
 			end if
 			if uprc$(escrow$)='Y' then transAmount=transAmount-escrow !     !      ! subtract escrow amount from  payment amount before rewriting
-			if hBudMstr then fn_chooseBudgetUpdates(x1$,transDate,mat billToPay) ! gosub Bud1
+			fn_chooseBudgetUpdates(x1$,transDate,mat billToPay) ! gosub Bud1
 			! pr 'mat billToPay before rewrite' : pr mat billToPay : pause
 			rewrite #hTransBatch,using FtransBatch,rec=edrec: x$,transAmount,transDate,transType,postingCodeUnused,rcpt$,mat alloc,mat billToPay,escrow
 			! fn_totalAdd(transType,transAmount,totalCollections,totalDebitMemos,totalCreditMemos)
@@ -418,7 +418,7 @@ Xit: fnXit
 
 def fn_chooseBudgetUpdates(x1$*10,transDate,mat billToPay; ___,bd1Count,ck1,j,key$*14,billingDate,btRecCount,btpCount) ! very local.
 	! haveBudget=0   !   this seems really wrong - should not be turing it off constantly
-	if hBudMstr then
+	if hBudMstr and fnCustomerBudgetEnable(x1$)  then
 		btRecCount=fnBudgetTransMatchingRecords(x1$,mat btRec,'unpaidonly')
 		fnTos
 		fnLbl(2,1,'Check the bills to be paid:',30,0)
@@ -1255,7 +1255,7 @@ def fn_addTransToUnposted(at_customer$*10,at_date_mmddyy,at_trans_type,at_amount
 	end if
 
 	goto AT_FINIS ! /r
-	 
+
 	AT_FINIS: !
 fnend
 	def fn_transAlreadyInUnposted(p$,tdate,tcode,tamount; ___,returnN,tauX$*10,tauAmount,tauDate,tauCode)
