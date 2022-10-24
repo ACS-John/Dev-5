@@ -608,7 +608,7 @@ Xit: fnXit
 Bud1: ! r: Open #hBudMstr BudMstr and #hBudgetTrans BudTrans bud1=1
 	bud1=0
 	
-
+726
 	open #hBudMstr: 'Name=[Q]\UBmstr\BudMstr.h[cno],KFName=[Q]\UBmstr\BudIdx1.h[cno],Shr',i,i,k ioerr EoBud1
 	hBudgetTrans=fnOpenBudTransInput
 	bud1=1
@@ -617,10 +617,11 @@ return  ! /r
 Bud2: ! r: the heart of it...
 	totba=bd1=budgetpb=havebudget=0
 	if ~hBudMstr then goto EoBud2
-	read #81,using 'form pos 1,c 10,pd 4,12*pd 5.2,2*pd 3',key=z$: z$,mat ba,mat badr nokey EoBud2
+	dim ba(12),badr(2)
+	read #hBudMstr,using 'form pos 1,c 10,pd 4,12*pd 5.2,2*pd 3',key=z$: z$,mat ba,mat badr nokey EoBud2
 	havebudget=1
 	for j=2 to 12
-		totba=totba+ba(j)
+		totba+=ba(j)
 	next j
 	if totba=0 then havebudget=0: goto EoBud2
 	ta1=badr(1)
