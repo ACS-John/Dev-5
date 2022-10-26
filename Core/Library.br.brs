@@ -1682,7 +1682,7 @@ fnend
 		fnCch$=fnCch$(a$)
 	fnend
 	def library fnGlAskFormatPriorCdPeriod(; defaultFormatOption$)
-		library 'S:\acsGL\fnglfs.br': fnGlAskFormatPriorCdPeriod
+		library 'S:\General Ledger\fn\askFormatPriorCdPeriod.br': fnGlAskFormatPriorCdPeriod
 		fnGlAskFormatPriorCdPeriod=fnGlAskFormatPriorCdPeriod( defaultFormatOption$)
 	fnend
 	def library fnGlAccountSearch(&account$)

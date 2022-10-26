@@ -15,8 +15,7 @@
 	udf$=env$('temp')&'\'
 	actpd=fnactpd
 	actpd$=fnactpd$
-	if fnGlAskFormatPriorCdPeriod=5 then goto Xit : _
-		! sets fnps,fnpriorcd,fnfscode (primary/secondary,current year/Prior,period to print)
+	if fnGlAskFormatPriorCdPeriod=5 then goto Xit 		! sets fnps,fnpriorcd,fnfscode (primary/secondary,current year/Prior,period to print)
  
 	pr newpage
 	pors=1

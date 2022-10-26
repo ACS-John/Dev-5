@@ -4,26 +4,23 @@
 	autoLibrary
 	on error goto Ertn
  
-	dim fl1$*256,actpd$*6,cogl$(3)*12,pedat$*20,cch$*20 ,in3$(4),cap$*128,udf$*256
+	dim fl1$*256,actpd$*6,cogl$(3)*12,pedat$*20,cch$*20 ,in3$(4)
 	dim r$*5,d$*50,te$*1,ac(9),report$*50,secondr$*50,foot$*132,underlin$*14
-	dim cnam$*40,b$*3,a$(8)*30,oldtrans$*16,g(8),accum(9,7)
+	dim b$*3,a$(8)*30,oldtrans$*16,g(8),accum(9,7)
 	dim pedat$*20,actpd$*6,bm(13),d(2),bp(13),by(13)
  
-	fnTop(program$,cap$="Cash Flow with Budget")
-	fncno(cno,cnam$)
-	udf$=env$('temp')&'\'
-	if fnGlAskFormatPriorCdPeriod=5 then goto Xit : _
-		! sets fnps,fnpriorcd,fnfscode (primary/secondary,current year/Prior,period to print)
+	fnTop(program$,"Cash Flow with Budget")
+	if fnGlAskFormatPriorCdPeriod=5 then goto Xit 	! sets fnps,fnpriorcd,fnfscode (primary/secondary,current year/Prior,period to print)
 	actpd$=fnactpd$
 	pedat$=fnpedat$
 	actpd$=fnactpd$
 	actpd=fnactpd
 	fscode=fnfscode
 	priorcd=fnpriorcd
-	open #20: "Name=[Q]\GLmstr\Company.h[cno],Shr",i,i,r  : _
+	open #20: "Name=[Q]\GLmstr\Company.h[cno],Shr",i,i,r  
 	read #20,using 'form pos 384,n 2',rec=1: nap : close #20:
 	if nap<12 or nap> 13 then nap=12
-	in3$(1)="8,5,N 12.2,UT,N" : in3$(2)="8,25,N 12.2,UT,N" : _
+	in3$(1)="8,5,N 12.2,UT,N" : in3$(2)="8,25,N 12.2,UT,N"
 	in3$(3)="8,45,N 12.2,UT,N" : in3$(4)="8,65,N 12.2,UT,N"
 	mp1=75
 	if ps=2 then mp1=mp1+3
@@ -43,10 +40,10 @@ L390: pr newpage
 	pr f "10,1,Cc 80,N": "Printing: please wait..."
 	pr f "12,2,c 30,B,5": "Press F5 to stop"
 	if fnps=2 then goto L450 ! secondary
-	execute "Index [Q]\GLmstr\GLmstr.h[cno] "&udf$&"fsindex.h[cno] 75 3 Replace DupKeys -N"
+	execute "Index [Q]\GLmstr\GLmstr.h[cno] [temp]\fsindex.h[cno] 75 3 Replace DupKeys -N"
 	goto L460
-L450: execute "Index [Q]\GLmstr\GLmstr.h[cno] "&udf$&"fsindex.h[cno] 78 3 Replace DupKeys -N"
-L460: open #3: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName="&udf$&"fsindex.h[cno],Shr",i,i,k
+L450: execute "Index [Q]\GLmstr\GLmstr.h[cno] [temp]\fsindex.h[cno] 78 3 Replace DupKeys -N"
+L460: open #3: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[temp]\fsindex.h[cno],Shr",i,i,k
 L470: read #1,using L510: r$,d$,te$,sp,ls,ds,ul,rs,bc,ap,mat ac,ic,fc eof L2130
 	if ltrm$(r$)="" or ltrm$(r$)="0" then goto L470
 	if costcntr=0 then goto L510
@@ -172,12 +169,14 @@ L1660: for j=1 to 9
 L1690: next j
 return
  
-L1720: if ls=0 then goto L1830
+L1720: !
+	if ls=0 then goto L1830
 	if ls=99 then goto L1770
 	pr #255,using L1750: " "
 L1750: form pos 1,c 1,skip ls
 	goto L1830
-L1770: sk=62-krec(255) : _
+L1770: !
+	sk=62-krec(255)
 	fl=len(rtrm$(foot$))
 	pr #255,using L1790: rtrm$(foot$)
 L1790: form skip sk,pos tabnote,c fl
@@ -186,7 +185,8 @@ L1790: form skip sk,pos tabnote,c fl
 	gosub L1980
 L1830: return
  
-L1850: if ul=0 then goto L1940
+L1850: !
+	if ul=0 then goto L1940
 	if ul=1 then goto L1910
 	underlin$="=============="
 	pr #255:
@@ -201,7 +201,7 @@ return
  
 L1980: heading=1
 	pr #255: ""
-	pr #255,using L2020: cnam$
+	pr #255,using L2020: env$('cnam')
 	pr #255,using L2020: rtrm$(report$)
 L2020: form pos 1,cc 80
 	if rtrm$(secondr$)="" then goto L2050
@@ -217,7 +217,7 @@ return
 L2130: eofcode=1
 	gosub L1770
 	fncloseprn
-	goto Xit
+goto Xit
  
 L2180: pr newpage
 	pr f "2,5,C 75,N": "Enter the Following Information for "& rtrm$(d$)
@@ -225,8 +225,8 @@ L2180: pr newpage
 	pr f "7,5,C 70,N": "Budget               Month                Date              Budget"
 L2220: input fields mat in3$: monthb,total,total2,annualb conv L2220
 	pr newpage
-	goto L960
- 
+goto L960
+
 Xit: fnXit
  
 include: ertn
