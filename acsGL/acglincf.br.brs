@@ -16,8 +16,7 @@
 	on fkey 5 goto L2170
 	fncno(cno,cnam$)
 	udf$=env$('temp')&'\'
-	if fnGlAskFormatPriorCdPeriod=5 then goto Xit : _
-		! sets fnps,fnpriorcd,fnfscode (primary/secondary,current year/Prior,period to print)
+	if fnGlAskFormatPriorCdPeriod=5 then goto Xit 		! sets fnps,fnpriorcd,fnfscode (primary/secondary,current year/Prior,period to print)
 	actpd$=fnactpd$
 	pedat$=fnpedat$
 	actpd$=fnactpd$

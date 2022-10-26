@@ -14,8 +14,7 @@
 	udf$=env$('temp')&'\'
 	fscode=fnfscode
 	priorcd=fnpriorcd
-	if fnGlAskFormatPriorCdPeriod=5 then goto Xit : _
-		! sets fnps,fnpriorcd,fnfscode (primary/secondary,current year/Prior,period to print)
+	if fnGlAskFormatPriorCdPeriod=5 then goto Xit 		! sets fnps,fnpriorcd,fnfscode (primary/secondary,current year/Prior,period to print)
 	cch$=fncch$
 	pedat$=fnpedat$
 	actpd$=fnactpd$

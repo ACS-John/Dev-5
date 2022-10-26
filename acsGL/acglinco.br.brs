@@ -12,8 +12,7 @@
 	fnTop(program$,cap$="Income Statement with GASB Budget")
 	fncno(cno,cnam$)
 	udf$=env$('temp')&'\'
-	if fnGlAskFormatPriorCdPeriod=5 then goto Xit : _
-		! sets fnps,fnpriorcd,fnfscode (primary/secondary,current year/Prior,period to print)
+	if fnGlAskFormatPriorCdPeriod=5 then goto Xit 		! sets fnps,fnpriorcd,fnfscode (primary/secondary,current year/Prior,period to print)
 	cch$=fncch$
 	pedat$=fnpedat$
 	actpd=fnactpd

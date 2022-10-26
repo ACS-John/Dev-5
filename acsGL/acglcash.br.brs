@@ -14,13 +14,12 @@
 	fncno(cno,cnam$)
 	actpd$=fnactpd$
 	pedat=val(actpd$)
-	open #20: "Name=[Q]\GLmstr\Company.h[cno],Shr",i,i,r  : _
+	open #20: "Name=[Q]\GLmstr\Company.h[cno],Shr",i,i,r  
 	read #20,using 'form pos 384,n 2',rec=1: nap : close #20:
 	fscode=fnfscode
 	fnfscode
 	fnpriorcd
-	if fnGlAskFormatPriorCdPeriod=5 then goto Xit : _
-		! sets fnps,fnpriorcd,fnfscode (primary/secondary,current year/Prior,period to print)
+	if fnGlAskFormatPriorCdPeriod=5 then goto Xit 		! sets fnps,fnpriorcd,fnfscode (primary/secondary,current year/Prior,period to print)
 	fscode=fnfscode
 	priorcd=fnpriorcd
  
