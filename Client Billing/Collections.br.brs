@@ -4,11 +4,11 @@ on error goto Ertn
 ! r: setup
 
 		! from Current COLLECTIONS program
-		transType_invoice   	=1 ! 1 Invoices
-		transType_debit     	=5 ! 2 Debit Memos
+		transType_invoice    	=1 ! 1 Invoices
+		transType_debit      	=5 ! 2 Debit Memos
 		transType_collection	=4 ! 3 Collections
-		transType_credit    	=6 ! 4 Credit Memos
-		transType_credit    	=6 ! 4 Credit Memos
+		transType_credit     	=6 ! 4 Credit Memos
+		transType_credit     	=6 ! 4 Credit Memos
 
 		! TO CO TransactionCode
 		! 1 Invoice
@@ -66,8 +66,8 @@ on error goto Ertn
 gosub OpenFiles
 goto ScreenBatch
 OpenFiles: ! r:
-! open #hTransBatch:=fnH: 'Name=[Temp]\transBatch.[session],Replace,RecL=239',i,outi,r
-open #hTransBatch:=fnH: 'Name=[Temp]\transBatch.[session],Use,RecL=239',i,outi,r
+! open #hTransBatch:=fnH: 'Name=[Temp]\transBatch[acsUserId].h[cno],Replace,RecL=239',i,outi,r
+open #hTransBatch:=fnH: 'Name=[Temp]\transBatch[acsUserId].h[cno],Use,RecL=239',i,outi,r
 FtransBatch: form pos 1,C 5,C 12,N 6,2*PD 5.2,PD 2,2*N 1,C 20,x 3,n 6,x 3,x 3,n 6,x 3,pd 5.2,x 3,n 6,x 3,pd 5.2,x 3,n 6,x 3,pd 5.2,x 3,n 6,x 3,pd 5.2,x 3,n 6,x 3,pd 5.2,x 3,n 6,x 3,pd 5.2,x 3,n 6,x 3,pd 5.2,x 3,n 6,x 3,pd 5.2,x 3,n 6,x 3,pd 5.2,x 3,n 6,x 3,pd 5.2
        FtransBatchSimple: form pos 1,c 5,c 12,n 6,2*pd 5.2,pd 2,2*n 1,c 20
 open #hCl1=fnH: 'Name=S:\Core\Data\acsllc\Client.h[cno],KFName=S:\Core\Data\acsllc\Client-Idx.h[cno],Shr',i,i,k
@@ -79,33 +79,19 @@ ScreenBatch: ! r:
 	dim proofTotal(10)
 do
 	fntos : rc=0 : lc=0
-	! fnLbl( 1,10,'A/R Input Proof Totals')
-	fnLbl( 2, 5,'Total Account #s:',20,1)     	: !
-	fnLbl( 3, 5,'Total Invoices:',20,1)        	: !
-	fnLbl( 4, 5,'Total Debit Memos:',20,1)    	: !
-	fnLbl( 5, 5,'Total Collections:',20,1)    	: !
-	fnLbl( 6, 5,'Total Credit Memos:',20,1)   	: !
-	fnLbl( 7, 5,'Total Cash Sales:',20,1)     	: !
-	fnLbl( 8, 5,'Total Discounts Taken:',20,1)	: !
 
 	fnButton(13, 1,'Add Invoice'     	,21) ! , 0,0)
 	fnButton(13, 16,'Add Debit Memo' 	,22) ! , 0,0)
 	fnButton(13, 32,'Add Collection' 	,23) ! , 1,0)
 	fnButton(13, 48,'Add Credit Memo'	,24) ! , 0,0)
 	fn_gridDraw(15,1,hTransBatch,hCl1,totalAccount,tdt,totalCashSales,mat proofTotal)
-	
-
-
-fnTxt( 2,26,0,11,0,'pointtwo',1) : resp$(rc+=1)=str$(totalAccount)
-fnTxt( 3,26,0,11,0,'pointtwo',1) : resp$(rc+=1)=str$(proofTotal(transType_invoice))
-fnTxt( 4,26,0,11,0,'pointtwo',1) : resp$(rc+=1)=str$(proofTotal(transType_debit))
-fnTxt( 5,26,0,11,0,'pointtwo',1) : resp$(rc+=1)=str$(proofTotal(transType_collection))
-fnTxt( 6,26,0,11,0,'pointtwo',1) : resp$(rc+=1)=str$(proofTotal(transType_credit))
-fnTxt( 7,26,0,11,0,'pointtwo',1) : resp$(rc+=1)=str$(totalCashSales)
-fnTxt( 8,26,0,11,0,'pointtwo',1) : resp$(rc+=1)=str$(tdt)
-	
-	
-	
+	fnLbl( 2, 5,'Total Account #s:',20,1)     	: fnTxt( 2,26,0,11,0,'pointtwo',1) : resp$(rc+=1)=str$(totalAccount)
+	fnLbl( 3, 5,'Total Invoices:',20,1)        	: fnTxt( 3,26,0,11,0,'pointtwo',1) : resp$(rc+=1)=str$(proofTotal(transType_invoice))
+	fnLbl( 4, 5,'Total Debit Memos:',20,1)    	: fnTxt( 4,26,0,11,0,'pointtwo',1) : resp$(rc+=1)=str$(proofTotal(transType_debit))
+	fnLbl( 5, 5,'Total Collections:',20,1)    	: fnTxt( 5,26,0,11,0,'pointtwo',1) : resp$(rc+=1)=str$(proofTotal(transType_collection))
+	fnLbl( 6, 5,'Total Credit Memos:',20,1)   	: fnTxt( 6,26,0,11,0,'pointtwo',1) : resp$(rc+=1)=str$(proofTotal(transType_credit))
+	fnLbl( 7, 5,'Total Cash Sales:',20,1)     	: fnTxt( 7,26,0,11,0,'pointtwo',1) : resp$(rc+=1)=str$(totalCashSales)
+	fnLbl( 8, 5,'Total Discounts Taken:',20,1)	: fnTxt( 8,26,0,11,0,'pointtwo',1) : resp$(rc+=1)=str$(tdt)
 	resp_recSelected=rc+=1
 	fnCmdKey('Post Batch'            	,8, 0,0)
 	fnCmdKey('Edit'            	,2, 1,0)
@@ -123,12 +109,12 @@ fnTxt( 8,26,0,11,0,'pointtwo',1) : resp$(rc+=1)=str$(tdt)
 		close #hCl1:
 		close #hCl2:
 		fnClientBillingMergeTrans
-		! exe 'dir "[Temp]\transBatch.[session]"'
-		fnFree('[Temp]\transBatch.[session]')
+		! exe 'dir "[Temp]\transBatch[acsUserId].h[cno]"'
+		fnFree('[Temp]\transBatch[acsUserId].h[cno]')
 		gosub OpenFiles
 		
 	else if ckey=3 then
-		gosub PrintEntryList
+		fn_printListing(hTransBatch)
 	else if ckey=2 then
 		fn_edit(val(resp$(resp_recSelected)))
 	else if ckey=>21 and ckey<=24 then ! add one
@@ -142,9 +128,7 @@ fnTxt( 8,26,0,11,0,'pointtwo',1) : resp$(rc+=1)=str$(tdt)
 loop ! /r
 
 ScreenAddEdit: ! r:
-	dim hd$(2)*50
-	hd$(1)='Add '&fn_entryType$(transType)
-	hd$(2)='Client Number as 0 to stop'
+
 	if ~setupScr1 then ! r:
 		setupScr1=1
 		dim sc2$(9)
@@ -182,6 +166,11 @@ ScreenAddEdit: ! r:
 		flo1$(10)=' 1,15,c 40'
 		flo1$(11)=' 2, 5,c 45'
 	end if ! /r
+
+	dim hd$(2)*50
+	hd$(1)='Add '&fn_entryType$(transType)
+	hd$(2)='Client Number as 0 to stop'
+
 	pr f mat flo1$: mat sc2$,mat hd$
 	ps1=0
 	if vf then
@@ -195,7 +184,7 @@ ScreenAddEdit: ! r:
 			pr f mat ot1$: clientId$,iv$,transDate,transAmt,id$,transDiscount
 		end if
 	end if
-goto ScreenSomething2 
+goto ScreenSomething2 ! /r
 ScreenSomething2: !
 	! r: set mat fli1$
 		dim fli1$(49)
@@ -260,7 +249,7 @@ ScreenSomething2: !
 	end if
 
 	if ltrm$(clientId$)='0' or ltrm$(clientId$)='' then
-		if vf=1 then gosub RewriteTransBlank
+		if vf=1 then goto RewriteTransBlank
 		goto FinisAddEdit
 	end if
 	
@@ -272,14 +261,14 @@ ScreenSomething2: !
 		read #hCl1,using FclientName,key=rpad$(trim$(clientId$),kln(hCl1)),release: clientName$ nokey ClientNokey
 	end if
 	pr f '3,40,C 30,N': clientName$
-	goto L1060
-	ClientNokey: ! r:
-		clientName$='***INVALID CLIENT NUMBER***'
-		pr f '3,40,C 30,R,N': clientName$
-	goto Ss2rInput 
-	! /r
+goto L1060 ! /r
 	
-	L1060: !
+ClientNokey: ! r:
+	clientName$='***INVALID CLIENT NUMBER***'
+	pr f '3,40,C 30,R,N': clientName$
+goto Ss2rInput ! /r
+	
+L1060: ! r:
 	fli1$(4)='6,30,n 11.2,ut,n'
 	if r1>0 then goto L1170
 	if transType=transType_collection then fli1$(4)='6,30,n 11.2,ue,n'
@@ -296,7 +285,7 @@ ScreenSomething2: !
 	L1180: !
 	input fields mat fli1$: clientId$,iv$,transDate,transAmt,id$,transDiscount,mat pgl,mat gl conv L1240
 	if cmdkey=2 then goto Ss2rInput
-	L1200: ! r:
+	L1200: ! 
 	clientId$=rpad$(trim$(clientId$),5)
 	if ce>0 then fli1$(ce)=srep$(fli1$(ce),1,'RC','U')
 	ce=0
@@ -306,12 +295,12 @@ ScreenSomething2: !
 	ce=cnt+1
 	fli1$(ce)=srep$(uprc$(rtrm$(fli1$(ce))),1,'U','RC')
 	if cnt<=4 then goto L1060
-	goto L1180
+goto L1180
 ! end if ! /r
 
-L1280: !
+L1280: ! r:
 	if ltrm$(clientId$)='0' or ltrm$(clientId$)='' then
-		if vf=1 then gosub RewriteTransBlank
+		if vf=1 then goto RewriteTransBlank
 		goto FinisAddEdit
 	end if
 	ps1=1
@@ -322,38 +311,34 @@ L1280: !
 
 	if transAmt then ! r: 
 		if gx=0 then
-			goto L1520
+			goto AccumAndSave
 		else if pgl(gpx)>0 then
 			gla=0
 			for j=1 to 10
-				if ~gl(j,gx) then goto L1460
+				if ~gl(j,gx) then goto Lx321
 				gla+=gl(j,gx)
 			next j
+			Lx321: !
 			
-			! gla=j=0
-			! do while (j+=1)<=10 and ~gl(j,gx) 
-			! 	gla+=gl(j,gx)
-			! loop
-			
-			goto L1460
+			if transType=transType_collection then gla-=transDiscount
+			if gla<>transAmt then
+				pr f '11,2,c 75': ' G/L allocations do not agree with total amount.  Press enter to continue.'
+				input fields '11,78,c 1,EU,n': pause$
+				pr f '11,2,c 75,n,n': ' '
+				goto ScreenSomething2
+			end if
+			goto AccumAndSave
 			
 		end if
 		pr f '9,45,c 30': 'G/L # REQUIRED'
 	else
 		pr f '6,48,c 20': 'NO AMOUNT ENTERED'
 	end if ! /r
-	goto ScreenSomething2 !
+goto ScreenSomething2 ! /r
 
-	L1460: !
-	if transType=transType_collection then gla-=transDiscount
-	if gla<>transAmt then
-		pr f '11,2,c 75': ' G/L allocations do not agree with total amount.  Press enter to continue.'
-		input fields '11,78,c 1,EU,n': pause$
-		pr f '11,2,c 75,n,n': ' '
-		goto ScreenSomething2
-	end if
 
-	L1520: !
+
+AccumAndSave: ! r:
 	if ltrm$(clientId$)<>'-1' then
 		totalAccount+=val(clientId$) conv ignore
 		proofTotal(transType)+=transAmt
@@ -364,9 +349,9 @@ L1280: !
 	write #hTransBatch,using FtransBatch: clientId$,iv$,transDate,transDiscount,transAmt,unusedtr4,transType,unusedtr6,id$,mat pgl,mat gl
 	clientId$=''
 	q2=0
+goto FinisAddEdit ! r
 
-
-FinisAddEdit: !
+FinisAddEdit: ! r:
 	if doingFnEdit then 
 		goto FinisFnEdit
 	end if
@@ -385,7 +370,7 @@ RewrTransNow: ! r:
 	clientId$=''
 goto FinisAddEdit ! /r
 
-PrintEntryList: ! r: requires:hTransBatch, localOnly: r,clientId$,iv$,transDate,transDiscount,transAmt,unusedtr4,transType,unusedtr6
+def fn_printListing(hTransBatch; ___,r,clientId$,iv$,transDate,transDiscount,transAmt,unusedtr4,transType,unusedtr6)
 	r=0
 	fnopenprn
 	FprH: form pos 1,c 8,pos 21,Cc 50
@@ -393,6 +378,7 @@ PrintEntryList: ! r: requires:hTransBatch, localOnly: r,clientId$,iv$,transDate,
 	pr #255,using FprH: time$,'Input Edit List'
 	pr #255: 'RefNo  Clnt  InvoiceNo';
 	pr #255: tab(34);'Date     Amount             Description           Discount          Tr Code'
+	restore #hTransBatch: ioerr Pel_finis
 	do
 		read #hTransBatch,using FtransBatchSimple: clientId$,iv$,transDate,transDiscount,transAmt,unusedtr4,transType,unusedtr6,id$ eof Pel_finis
 		if ltrm$(clientId$)<>'0' and ltrm$(clientId$)<>'' then
@@ -402,7 +388,7 @@ PrintEntryList: ! r: requires:hTransBatch, localOnly: r,clientId$,iv$,transDate,
 	loop
 	Pel_finis: !
 	fncloseprn
-return ! /r
+fnend
 
 def fn_edit(record) ! uses mostly locals
 	doingFnEdit=1
@@ -425,14 +411,6 @@ goto ScreenAddEdit ! /r
 	FinisFnEdit: ! returns here from FinisAddEdit
 fnend
 
-! ScreenAskAddMore: ! r:
-! 	pr newpage
-! 	vf=0
-! 	pr f '10,10,c 50': 'Enter 1 to make additional entries; else enter 0'
-! 	L2250: !
-! 	input fields '10,61,N 1,EU,N': j conv L2250
-! 	if j=1 then goto FinisAddEdit
-! goto ScreenTotals ! /r
 def fn_entryType$(transType)
 	if ~setupEntryType then
 		setupEntryType=1

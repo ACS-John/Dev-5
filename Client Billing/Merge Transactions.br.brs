@@ -22,7 +22,7 @@ hClient=fn_openFio('CO Client',mat c$,mat cN)
 dim to$(0)*64
 dim toN(0)
 hTrans=fn_openFio('Client Billing Transaction',mat to$,mat toN)
-open #hTransBatch=fnH: 'Name=[Temp]\transBatch.[session]',i,outi,r
+open #hTransBatch=fnH: 'Name=[Temp]\transBatch[acsUserId].h[cno]',i,outi,r
 FtransBatch: form pos 1,c 5,c 12,n 6,2*pd 5.2,pd 2,2*n 1,c 20
 do ! r: main loop
 	ReadNext: !
