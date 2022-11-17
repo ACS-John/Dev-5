@@ -1,17 +1,17 @@
-Master Meter format
+',RecL=512,replace' format
 Tab and Space Delimited
 Each field is padded to it's length and a tab is placed between each
 
-Length   Name              
-10       Account Number
-30       Customer Name
-30       Meter Address
-3        Route          
-7        Sequence                 
-8        Meter Location - Meter Number      
-20       Meter Location - Transmitter Number
-9        Previous Reading
-17       Longitude
-17       Latitude
-9        Current Reading (for bringing data back in)
+Length 	Name                                        	sPos
+    10 	Account Number                              	   1
+    30 	Customer Name                               	  11
+    30 	Meter Address                               	  41
+     3 	Route                                       	  71
+     7 	Sequence                                    	  74
+     8 	Meter Location - Meter Number               	  81
+    20 	Meter Location - Transmitter Number         	  89
+     9 	Previous Reading                            	 109
+    17 	Longitude                                   	 118
+    17 	Latitude                                    	 135
+     9 	Current Reading (for bringing data back in) 	 152
 

@@ -972,55 +972,56 @@ def fn_hh_readings(ip1$; listonly) ! HH_READINGS: ! hand held routines
 	return ! if listonly=1 then fn_lo_pr_rec(x$,mat x) : goto HH_W_NXT
 	! goto HH_CONTINUE ! /r
 	HH_OTHER: ! r:
-	if device$='AMR' then goto HH_OTHER_TYPE1
-	if device$='EZReader' then goto HH_OTHER_TYPE1
-	if device$='Green Tree' then goto HH_OTHER_TYPE1
-	if device$='Hersey' then goto HH_OTHER_TYPE1
-	if device$='Master Meter' then goto HH_OTHER_TYPE1
-	if device$='READy Water' then goto HH_OTHER_TYPE1
-	! if device$='Sensus' then goto HH_OTHER_TYPE1
-	fn_hh_other_type2(ip1$,listonly)
+		if device$='AMR' then goto HH_OTHER_TYPE1
+		if device$='EZReader' then goto HH_OTHER_TYPE1
+		if device$='Green Tree' then goto HH_OTHER_TYPE1
+		if device$='Hersey' then goto HH_OTHER_TYPE1
+		if device$='Master Meter' then goto HH_OTHER_TYPE1
+		if device$='READy Water' then goto HH_OTHER_TYPE1
+		! if device$='Sensus' then goto HH_OTHER_TYPE1
+		fn_hh_other_type2(ip1$,listonly)
 	goto HH_W_END ! /r
+	
 	HH_OTHER_TYPE1: ! r:
-	if listonly=1 then fnopenprn
-	close #h_readings: ioerr ignore
-	open #h_readings=fnH: "Name=[Q]\UBmstr\Readings."&ip1$&",RecL=30",display,input
-	HH_OTHER_TYPE1_READ: !
-	linput #h_readings: ln$ eof HH_W_END
-	mat x=(0)
-	x$=lpad$(rtrm$(ln$(1:10)),10) conv HH_OTHER_TYPE1_READ ! Account Key
-	ti1=1 ! water
-	x(ti1)=0
-	if device$='READy Water' then
-		x(ti1)=val(ln$(11:len(ln$))) conv ignore
-	! else if env$('client')="Lovington" then
-	! 	x(ti1)=val(ln$(11:19)) conv ignore
-	else
-		x(ti1)=val(ln$(11:20)) conv ignore
-	end if
-	read #hCustomer1,using F_CUSTOMER_C,key=x$,release: x$,aname$,mat a nokey ignore
-	if listonly=1 then fn_lo_pr_rec(x$,mat x) : goto HH_W_NXT
+		if listonly=1 then fnopenprn
+		close #h_readings: ioerr ignore
+		open #h_readings=fnH: "Name=[Q]\UBmstr\Readings."&ip1$&",RecL=30",display,input
+		HH_OTHER_TYPE1_READ: !
+		linput #h_readings: ln$ eof HH_W_END
+		mat x=(0)
+		x$=lpad$(rtrm$(ln$(1:10)),10) conv HH_OTHER_TYPE1_READ ! Account Key
+		ti1=1 ! water
+		x(ti1)=0
+		if device$='READy Water' then
+			x(ti1)=val(ln$(11:len(ln$))) conv ignore
+		! else if env$('client')="Lovington" then
+		! 	x(ti1)=val(ln$(11:19)) conv ignore
+		else
+			x(ti1)=val(ln$(11:20)) conv ignore
+		end if
+		read #hCustomer1,using F_CUSTOMER_C,key=x$,release: x$,aname$,mat a nokey ignore
+		if listonly=1 then fn_lo_pr_rec(x$,mat x) : goto HH_W_NXT
 	goto HH_CONTINUE ! /r
 
 	HH_CONTINUE: ! Continue with standard Hand Held routine
-	read #hCustomer1,using F_CUSTOMER_C,key=x$,release: x$,aname$,mat a,final,mat xd,alp$,mat extra nokey HH_W_NXT ! ,extra$(3)
-	fn_us1(x$,d1)
-	mat est1=(0)
-	if x(1)=999999 then est1(1,1)=1 : est1(1,2)=100
-	if x(2)=999999 then est1(3,1)=1 : est1(3,2)=100
-	if x(3)=999999 then est1(2,1)=1 : est1(2,2)=100
-	if sum(est1) then
-		read #hCustomer1,using F_CUSTOMER_A,key=x$,release: x$,e2$,mat a,f,final,mat xd,mat extra nokey HH_W_NXT ! ,extra$(3)
-		gosub EST2B
-	end if
-	gosub CheckUnusual
-	if skiprec=1 then ! skip record
-		skiprec=0 : goto HH_W_NXT
-	else
-		fn_writeWork(hWork,x$,mat x)
-		fn_accumulateProofTotals
-		fn_rmk1
-	end if
+		read #hCustomer1,using F_CUSTOMER_C,key=x$,release: x$,aname$,mat a,final,mat xd,alp$,mat extra nokey HH_W_NXT ! ,extra$(3)
+		fn_us1(x$,d1)
+		mat est1=(0)
+		if x(1)=999999 then est1(1,1)=1 : est1(1,2)=100
+		if x(2)=999999 then est1(3,1)=1 : est1(3,2)=100
+		if x(3)=999999 then est1(2,1)=1 : est1(2,2)=100
+		if sum(est1) then
+			read #hCustomer1,using F_CUSTOMER_A,key=x$,release: x$,e2$,mat a,f,final,mat xd,mat extra nokey HH_W_NXT ! ,extra$(3)
+			gosub EST2B
+		end if
+		gosub CheckUnusual
+		if skiprec=1 then ! skip record
+			skiprec=0 : goto HH_W_NXT
+		else
+			fn_writeWork(hWork,x$,mat x)
+			fn_accumulateProofTotals
+			fn_rmk1
+		end if
 	HH_W_NXT: !
 	if device$="Badger" or device$="Badger Connect C" then
 		goto HH_BADGER_READ
@@ -1490,11 +1491,11 @@ def fn_loadBookOrHoldingFile(&addmethod; ___,book_or_holding_file$,ihDirFileMask
 	next ihFileItem
 	fnLbl(11,1,' ',15,1)
 	! /r
-	fnCmdKey('&Load'                 ,1                   ,1)
-	fnCmdKey('I&mport from Hand Held',ck_importHHtoBook=3)
-	fnCmdKey('&Delete'               ,ck_delete=4)
-	fnCmdKey('&Print'                ,ck_print=6)
-	fnCmdKey('&Cancel'               ,cancel              ,0,1)
+	fnCmdKey('&Load Book'                       	,1                   ,1)
+	fnCmdKey('I&mport from Hand Held to Book' 	,ck_importHHtoBook=3)
+	fnCmdKey('&Delete'                           	,ck_delete=4)
+	fnCmdKey('&Print'                            	,ck_print=6)
+	fnCmdKey('&Cancel'                           	,cancel              ,0,1)
 	ckey=fnAcs(mat resp$)
 	holdingFile$=''
 	ip1$=resp$(1)

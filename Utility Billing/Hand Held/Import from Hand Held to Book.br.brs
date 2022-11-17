@@ -4,8 +4,8 @@ library program$: fnRetrieveHandHeldFile
 fn_setup
 if ~fnClientHas('U4') then ! r:
 	mat ml$(2) 
-	ml$(1)="You must purchase the ACS Utility Billing Hand Held"
-	ml$(2)="module to access these features"
+	ml$(1)='You must purchase the ACS Utility Billing Hand Held'
+	ml$(2)='module to access these features'
 	fnMsgBox(mat ml$, response$, '',64)
 	goto Xit
 end if  ! /r
@@ -27,17 +27,17 @@ def library fnRetrieveHandHeldFile(; automationBookNumber)
 		fnUreg_read('bookNumberToStoreReadings',bookNumberToStoreReadings$)
 		fnTos
 		lc+=1
-		fnLbl(lc+=1,1,"Book Number to store readings:",30,1)
-		fnTxt(lc,32,2,0,1,"20",0,"Be careful not to use the same route # twice in the same billing cycle.  The first route will be lost if it has not been calculated.")
+		fnLbl(lc+=1,1,'Book Number to store readings:',30,1)
+		fnTxt(lc,32,2,0,1,'20',0,'Be careful not to use the same route # twice in the same billing cycle.  The first route will be lost if it has not been calculated.')
 		resp$(rc_book:=respc+=1)=bookNumberToStoreReadings$
 		lc+=1
 		fnChk(lc+=1,33,'Merge into book', 1,0,0,0) ! requires a format that utilizes [ACS Hand Held File Generic Version 2]
 		fnLbl(lc,35,'(only supported by some devices)') ! requires a format that utilizes [ACS Hand Held File Generic Version 2]
 		resp$(rc_merge:=respc+=1)='False'
 		lc+=1
-		fnLbl(lc+=1,1,"Hand Held model:",30,1)
+		fnLbl(lc+=1,1,'Hand Held model:',30,1)
 		if lwrc$(devicePreference$)='[ask]' then
-			fnComboA("HH-FroCBox",lc,32,mat deviceOption$)
+			fnComboA('HH-FroCBox',lc,32,mat deviceOption$)
 			resp$(rc_Device:=respc+=1)=deviceSelected$
 		else
 			fnLbl(lc,32,devicePreference$)
@@ -45,11 +45,11 @@ def library fnRetrieveHandHeldFile(; automationBookNumber)
 		lc+=1
 		if lwrc$(preferenceHandHeldFromFile$)='[ask]' then
 			lc+=1
-			fnLbl(lc+=1,1,"Source File:",30,1)
-			fnTxt(lc,32,20,256,0,"70",0,'Source file should be drive designation and file name of the file returned from the Hand Held.')
-			rc_path:=respc+=1 : if resp$(rc_path)="" then resp$(rc_path)=askPath$
+			fnLbl(lc+=1,1,'Source File:',30,1)
+			fnTxt(lc,32,20,256,0,'70',0,'Source file should be drive designation and file name of the file returned from the Hand Held.')
+			rc_path:=respc+=1 : if resp$(rc_path)='' then resp$(rc_path)=askPath$
 		else
-			fnLbl(lc+=1,1,"Importing from "&fn_hh_input_filename$,len("Importing from "&fn_hh_input_filename$),1)
+			fnLbl(lc+=1,1,'Importing from '&fn_hh_input_filename$,len('Importing from '&fn_hh_input_filename$),1)
 		end if
 		fnCmdSet(2)
 		ckey=fnAcs(mat resp$)
@@ -70,7 +70,7 @@ def library fnRetrieveHandHeldFile(; automationBookNumber)
 				fnureg_write('Hand Held From File Asked',askPath$)
 				if askPath$='' or ~exists(env$('at')&askPath$) then
 					mat ml$(1)
-					ml$(1)="File not found: "&askPath$
+					ml$(1)='File not found: '&askPath$
 					fnMsgBox(mat ml$, response$)
 					goto SCREEN1
 				end if
@@ -83,7 +83,7 @@ fnend
 def fn_transfer(bookNumberToStoreReadings$,enableMerge$,askPath$*128)
 	transferReturn=0
 	dim bookFile$*512
-	bookFile$="[Q]\UBmstr\Readings."&ltrm$(bookNumberToStoreReadings$)
+	bookFile$='[Q]\UBmstr\Readings.'&ltrm$(bookNumberToStoreReadings$)
 	if enableMerge$='True' and exists(bookFile$) then
 		dim mergeFileOrigional$*512
 		mergeFileOrigional$=env$('temp')&'\acs\mergeFileOrigional-book'&bookNumberToStoreReadings$&'-session'&session$&'.txt'
@@ -94,53 +94,53 @@ def fn_transfer(bookNumberToStoreReadings$,enableMerge$,askPath$*128)
 	end if
 	if deviceSelected$='Aclara' then
 		transferReturn=fn_aclara(bookFile$,enableMerge$)
-	! else if deviceSelected$="Aclara Work Order" then
+	! else if deviceSelected$='Aclara Work Order' then
 	! 	transferReturn=fn_aclaraWorkOrder(bookFile$,enableMerge$)
-	else if deviceSelected$="ACS Meter Reader" then
+	else if deviceSelected$='ACS Meter Reader' then
 		fn_acsmr(bookFile$)
-	else if deviceSelected$="AMR" then
+	else if deviceSelected$='AMR' then
 		fn_amr(bookFile$)
-	else if deviceSelected$="Badger Beacon" then
+	else if deviceSelected$='Badger Beacon' then
 	  transferReturn=fn_badgerBeacon(fn_hh_input_filename$,bookFile$)
-	else if deviceSelected$="Badger" or deviceSelected$="Badger Connect C" then
+	else if deviceSelected$='Badger' or deviceSelected$='Badger Connect C' then
 		fnCopy(fn_hh_input_filename$,bookFile$)
-	else if deviceSelected$="Boson" then
+	else if deviceSelected$='Boson' then
 		fn_boson(bookFile$)
 	else if deviceSelected$='CSV by LocationID' then
 		transferReturn=fn_CsvByLocationId(bookFile$,enableMerge$)
-	else if deviceSelected$="DriveBy" then
+	else if deviceSelected$='DriveBy' then
 		fnCopy(fn_hh_input_filename$,bookFile$)
-	else if deviceSelected$="EZReader" then
+	else if deviceSelected$='EZReader' then
 		fn_ezreader(bookFile$)
-	else if deviceSelected$="Green Tree" then
+	else if deviceSelected$='Green Tree' then
 		fnCopy(fn_hh_input_filename$,bookFile$)
-	else if deviceSelected$="Hersey" then
+	else if deviceSelected$='Hersey' then
 		fn_hersey(bookFile$)
-	else if deviceSelected$="Itron FC300" then
+	else if deviceSelected$='Itron FC300' then
 		fn_itron(bookFile$)
-	else if deviceSelected$="LapTop" then
+	else if deviceSelected$='LapTop' then
 		fn_laptop(bookFile$)
-	else if deviceSelected$="Master Meter" then
+	else if deviceSelected$='Master Meter' then
 		fn_import_l_readings_txt(bookFile$, 358)
-	else if deviceSelected$="Neptune (Equinox v4)" then
+	else if deviceSelected$='Neptune (Equinox v4)' then
 		fn_neptuneEquinoxV4(fn_hh_input_filename$,bookFile$)
-	else if deviceSelected$="Other" and env$('client')="Brier Lake" then
+	else if deviceSelected$='Other' and env$('client')='Brier Lake' then
 		fn_import_l_readings_txt(bookFile$)
-	else if deviceSelected$="Psion Workabout" then
+	else if deviceSelected$='Psion Workabout' then
 		fn_psion_workabout(bookFile$)
-	else if deviceSelected$(1:14)="READy Kamstrup" then
-		if deviceSelected$="READy Kamstrup Swap" then
+	else if deviceSelected$(1:14)='READy Kamstrup' then
+		if deviceSelected$='READy Kamstrup Swap' then
 			fn_readyKamstrupSwap(bookFile$,enableMerge$)
-		else if deviceSelected$="READy Kamstrup (Geo)" then
+		else if deviceSelected$='READy Kamstrup (Geo)' then
 			fn_readyKamstrupGeo(bookFile$,enableMerge$)
 		else
 			goto UnrecognizedDeviceNotice
 		end if
-	else if deviceSelected$="READy Water" then
+	else if deviceSelected$='READy Water' then
 		fn_import_l_readings_txt(bookFile$)
-	! else if deviceSelected$="Sensus" then
+	! else if deviceSelected$='Sensus' then
 	! 	fn_sensus_in(bookFile$)
-	else if deviceSelected$="Unisys" then
+	else if deviceSelected$='Unisys' then
 		fnCopy(fn_hh_input_filename$,bookFile$)
 	else
 		UnrecognizedDeviceNotice: !
@@ -162,39 +162,39 @@ def fn_hh_input_filename$*256
 	if lwrc$(hif_return$)='[ask]' then
 		hif_return$=askPath$
 	else if trim$(hif_return$)='' then
-		if deviceSelected$="EZReader" then
+		if deviceSelected$='EZReader' then
 			hif_return$=askPath$
-		! else if deviceSelected$="Sensus" then
+		! else if deviceSelected$='Sensus' then
 		! 	hif_return$='c:\vol002\amrs\READ.DAT'
-		else if deviceSelected$="ACS Meter Reader" then
+		else if deviceSelected$='ACS Meter Reader' then
 			hif_return$=askPath$
-		else if deviceSelected$="AMR" then
+		else if deviceSelected$='AMR' then
 			hif_return$=askPath$
-		else if deviceSelected$="Itron FC300" then
+		else if deviceSelected$='Itron FC300' then
 			! if env$('client')='Findlay' then
-			!   hif_return$='\\vof-pc\itronshared\FCS\Export\Output\UPLOAD.DAT' ! "C:\Itron\FCSShare\Export\Output\upload.dat"
+			!   hif_return$='\\vof-pc\itronshared\FCS\Export\Output\UPLOAD.DAT' ! 'C:\Itron\FCSShare\Export\Output\upload.dat'
 			! else
-				hif_return$="C:\mvrs\xfer\upload\UPLOAD.DAT"
+				hif_return$='C:\mvrs\xfer\upload\UPLOAD.DAT'
 			! end if
-		else if deviceSelected$="Psion Workabout" then
-			hif_return$="[Q]\UBmstr\Readings.out"
-		else if deviceSelected$="Badger" or deviceSelected$="Badger Connect C" or deviceSelected$="DriveBy" then
-			hif_return$="c:\connect\connect.ot3"
-		else if deviceSelected$="Unisys" then
-			hif_return$="[Q]\UBmstr\ReadOut.dat"
-		else if deviceSelected$="Boson" then
-			hif_return$="[Q]\UBmstr\outofpalm.txt"
-		else if deviceSelected$="Other" and env$('client')="Brier Lake" then
-			hif_return$="L:\readings.txt"
+		else if deviceSelected$='Psion Workabout' then
+			hif_return$='[Q]\UBmstr\Readings.out'
+		else if deviceSelected$='Badger' or deviceSelected$='Badger Connect C' or deviceSelected$='DriveBy' then
+			hif_return$='c:\connect\connect.ot3'
+		else if deviceSelected$='Unisys' then
+			hif_return$='[Q]\UBmstr\ReadOut.dat'
+		else if deviceSelected$='Boson' then
+			hif_return$='[Q]\UBmstr\outofpalm.txt'
+		else if deviceSelected$='Other' and env$('client')='Brier Lake' then
+			hif_return$='L:\readings.txt'
 		end if
 	end if
-	if hif_return$(1:2)='@:' then let hif_return$(1:2)='' ! take it off if it is already there before putting it back on.
+	if hif_return$(1:2)='@:' then hif_return$(1:2)='' ! take it off if it is already there before putting it back on.
 	fn_hh_input_filename$=env$('at')&hif_return$
 fnend
 
 def fn_readingsFileVersion$*128(bookFile$*512)
 	dim rfvLine$*512,rfvReturn$*128
-	open #hRfv=fnH: "Name="&bookFile$,display,input
+	open #hRfv=fnH: 'Name='&bookFile$,display,input
 	linput #hRfv: rfvLine$
 	close #hRfv:
 	if rtrm$(rfvLine$)='[ACS Hand Held File Generic Version 2]' then
@@ -207,14 +207,14 @@ def fn_readingsFileVersion$*128(bookFile$*512)
 fnend
 def fn_acsmr(bookFile$*256) ! ACS Meter Reader
 	source$=resp$(1)
-	open #2: "Name="&fn_hh_input_filename$&",RecL=256",display,input ! acs_meter_data.txt
+	open #2: 'Name='&fn_hh_input_filename$&',RecL=256',display,input ! acs_meter_data.txt
 	fn_readings_backup(bookFile$)
-	open #3: "Name="&bookFile$&",RecL=30,replace",d,o
+	open #3: 'Name='&bookFile$&',RecL=30,replace',d,o
 	do
 		linput #2: amr$ eof ACSMR_XIT
 		z$=amr$(1:10)
 		reading=val(amr$(133:142))
-		pr #3,using "form pos 1,c 10,n 10": z$,reading
+		pr #3,using 'form pos 1,c 10,n 10': z$,reading
 	loop
 	ACSMR_XIT: !
 fnend
@@ -222,8 +222,8 @@ def fn_CsvByLocationId(bookFile$*512,enableMerge$)
 	if enableMerge$='True' and ~fn_okToMerge(bookFile$,'[ACS Hand Held File Generic Version 2]') then 
 		! returnN=-1
 	else
-		open #hIn=fnH: "Name="&fn_hh_input_filename$,display,input
-		open #hOut=fnH: "Name="&bookFile$&",RecL=512,replace",d,o
+		open #hIn=fnH: 'Name='&fn_hh_input_filename$,display,input
+		open #hOut=fnH: 'Name='&bookFile$&',RecL=512,replace',d,o
 		pr #hOut: '[ACS Hand Held File Generic Version 2]'
 		pr #hOut: 'Source File='&fn_hh_input_filename$
 		linput #hIn: line$ eof CblEoF
@@ -270,8 +270,8 @@ fnend
 			returnN=-1
 		else
 			returnN=0
-			open #hIn=fnH: "Name="&fileIn$&',eol=lf',display,input
-			open #hOut=fnH: "Name="&bookFile$&",RecL=512,replace",d,o
+			open #hIn=fnH: 'Name='&fileIn$&',eol=lf',display,input
+			open #hOut=fnH: 'Name='&bookFile$&',RecL=512,replace',d,o
 			pr #hOut: '[ACS Hand Held File Generic Version 2]'
 			pr #hOut: 'Source File='&fn_hh_input_filename$
 			do
@@ -298,7 +298,7 @@ fnend
 			bbplHeaderProcessed=1
 			! if env$('client')='Campbell' then ! 11/19/2018 = seemed to have changed from [Tab]
 			! 	delim$=','
-			! 	quotesTrim$="QUOTES:TRIM"
+			! 	quotesTrim$='QUOTES:TRIM'
 			! 	readingColumnName$='Read'
 			! else
 				quotesTrim$=''
@@ -351,8 +351,8 @@ fnend
 			returnN=-1
 			goto CblEoF
 		end if
-		open #hIn=fnH: "Name="&fn_hh_input_filename$,display,input
-		open #hOut=fnH: "Name="&bookFile$&",RecL=512,replace",d,o
+		open #hIn=fnH: 'Name='&fn_hh_input_filename$,display,input
+		open #hOut=fnH: 'Name='&bookFile$&',RecL=512,replace',d,o
 		pr #hOut: '[ACS Hand Held File Generic Version 2]'
 		pr #hOut: 'Source File='&fn_hh_input_filename$
 		if dataIncludesHeaders then
@@ -395,8 +395,8 @@ fnend
 	! def fn_aclaraWorkOrder(bookFile$*512,enableMerge$; ___,returnN)
 	! 	dataIncludesHeaders=1
 	! 	if enableMerge$='True' and ~fn_okToMerge(bookFile$,'[ACS Hand Held File Generic Version 2]') then returnN=-1 : goto EO_AW
-	! 	open #hIn=fnH: "Name="&fn_hh_input_filename$,display,input
-	! 	open #hOut=fnH: "Name="&bookFile$&",RecL=512,replace",d,o
+	! 	open #hIn=fnH: 'Name='&fn_hh_input_filename$,display,input
+	! 	open #hOut=fnH: 'Name='&bookFile$&',RecL=512,replace',d,o
 	! 	pr #hOut: '[ACS Hand Held File Generic Version 2]'
 	! 	pr #hOut: 'Source File='&fn_hh_input_filename$
 	! 	if dataIncludesHeaders then
@@ -439,19 +439,19 @@ fnend
 	! /r
 	def fn_amr(bookFile$*512)
 		fn_readings_backup(bookFile$)
-		open #3: "Name="&bookFile$&",RecL=30,replace",d,o
-		open #2: "Name="&fn_hh_input_filename$&",RecL=620",display,input
+		open #3: 'Name='&bookFile$&',RecL=30,replace',d,o
+		open #2: 'Name='&fn_hh_input_filename$&',RecL=620',display,input
 		linput #2: amr$ ioerr AMR_NOTHING_TO_READ ! read header
 		do
 			linput #2: amr$ eof AMR_XIT
 			z$=lpad$(trim$(amr$(3:22)),10)
 			reading=val(amr$(47:56))
-			pr #3,using "form pos 1,c 10,n 10": z$,reading
+			pr #3,using 'form pos 1,c 10,n 10': z$,reading
 		loop
 		goto AMR_XIT !  AMR_NOTHING_TO_READ
 		AMR_NOTHING_TO_READ: !
 		mat ml$(1)
-		ml$(1)="The File ("&fn_hh_input_filename$&") is empty."
+		ml$(1)='The File ('&fn_hh_input_filename$&') is empty.'
 		fnMsgBox(mat ml$,resp$,'',0)
 		goto AMR_XIT !  AMR_NOTHING_TO_READ
 		AMR_XIT: !
@@ -467,13 +467,13 @@ fnend
 			fnMsgBox(mat ml$, response$, '',0)
 		else
 			fnCopy(fn_hh_input_filename$,bookFile$)
-			fnRename(fn_hh_input_filename$,"[Q]\UBmstr\outofpalm."&ltrm$(bookNumberToStoreReadings$)&"."&date$("YYMMDD")&srep$(time$("HHMMSS"),":","")&".txt")
+			fnRename(fn_hh_input_filename$,'[Q]\UBmstr\outofpalm.'&ltrm$(bookNumberToStoreReadings$)&'.'&date$('YYMMDD')&srep$(time$('HHMMSS'),':','')&'.txt')
 		end if
 	fnend
 	def fn_ezreader(bookFile$*512)
 		fn_readings_backup(bookFile$,bookNumberToStoreReadings$)
-		open #h_out:=3: "Name="&bookFile$&",RecL=30,replace",d,o
-		open #2: "Name="&fn_hh_input_filename$&",RecL=578",display,input
+		open #h_out:=3: 'Name='&bookFile$&',RecL=30,replace',d,o
+		open #2: 'Name='&fn_hh_input_filename$&',RecL=578',display,input
 		do
 			linput #2: line$ eof EXREADER_XIT
 			z$=lpad$(trim$(line$(209:228)),10)
@@ -481,7 +481,7 @@ fnend
 			! if env$('client')='GreeneCo' then reading=reading*10
 			! if env$('client')='Morrisonville' then reading=reading*100
 			if env$('client')='Billings' then reading=reading*100
-			pr #h_out,using "form pos 1,c 10,n 10": z$,reading
+			pr #h_out,using 'form pos 1,c 10,n 10': z$,reading
 			! if fncustomerdata$('meter multiplier')
 		loop
 		EXREADER_XIT: !
@@ -490,13 +490,13 @@ fnend
 	fnend
 	def fn_hersey(bookFile$*512)
 		fn_readings_backup(bookFile$,bookNumberToStoreReadings$)
-		open #h_out:=3: "Name="&bookFile$&",RecL=30,replace",d,o
-		open #2: "Name=" &fn_hh_input_filename$&",RecL=282",display,input
+		open #h_out:=3: 'Name='&bookFile$&',RecL=30,replace',d,o
+		open #2: 'Name=' &fn_hh_input_filename$&',RecL=282',display,input
 		do
 			linput #2: hersey$ eof HERSEY_EOF
 			z$=lpad$(trim$(hersey$(1:10)),10)
 			reading=val(hersey$(229:238))
-			pr #h_out,using "form pos 1,c 10,n 10": z$,reading
+			pr #h_out,using 'form pos 1,c 10,n 10': z$,reading
 		loop
 		HERSEY_EOF: !
 		close #2: ioerr ignore
@@ -504,37 +504,37 @@ fnend
 		!
 	fnend
 	def fn_itron(bookFile$*512)
-		open #h_itron=fnH: "Name="&fn_hh_input_filename$,display,input
-		open #h_itron_out=fnH: "Name="&bookFile$&",RecL=512,replace",d,o
+		open #h_itron=fnH: 'Name='&fn_hh_input_filename$,display,input
+		open #h_itron_out=fnH: 'Name='&bookFile$&',RecL=512,replace',d,o
 		pr #h_itron_out: '[ACS Hand Held File Generic Version 2]'
 		z$=''
 		do
 			linput #h_itron: line$ eof EO_ITRON
 			line_type$=line$(1:3)
-			if line_type$="CUS" then
-				if z$<>'' then let fn_itron_write ! write the previous one
+			if line_type$='CUS' then
+				if z$<>'' then fn_itron_write ! write the previous one
 				reading_water=meterroll_water=reading_electric=meterroll_electric=reading_gas=meterroll_gas=0
 				z$=trim$(line$(15:34))(1:10)
-			else if line_type$="MTR" then
+			else if line_type$='MTR' then
 				itron_meter_category$=line$(94:94)
-			else if line_type$="RDG" then
+			else if line_type$='RDG' then
 				itron_reading=val(line$(34:43))
 								!    itron_read_date$=line$(48:55)
 				itron_meter_chenge_out$=line$(92:92)
-				if itron_meter_chenge_out$="Y" then meterroll=1 else meterroll=0
-				if itron_meter_category$="E" then ! Electric
+				if itron_meter_chenge_out$='Y' then meterroll=1 else meterroll=0
+				if itron_meter_category$='E' then ! Electric
 					reading_electric=itron_reading
 					meterroll_electric=meterroll
-				else if itron_meter_category$="G" then ! Gas
+				else if itron_meter_category$='G' then ! Gas
 					reading_gas=itron_reading
 					meterroll_gas=meterroll
-				!    else if itron_meter_category$="I" then ! Irrigation
-				!    else if itron_meter_category$="S" then ! Steam/sewer
-				else if itron_meter_category$="W" then ! Water
+				!    else if itron_meter_category$='I' then ! Irrigation
+				!    else if itron_meter_category$='S' then ! Steam/sewer
+				else if itron_meter_category$='W' then ! Water
 					if env$('client')='Millry' then reading_water=itron_reading*10 else reading_water=itron_reading
 					meterroll_water=meterroll
 				end if
-			else if line_type$="RFF" or line_type$="WRR" then
+			else if line_type$='RFF' or line_type$='WRR' then
 				tmpr$=line$(55:56)
 				if val(tmpr$)=0 then tmpr$=line$(57:58)
 			end if
@@ -545,7 +545,7 @@ fnend
 		close #h_itron_out:
 	fnend
 	def fn_itron_write
-		! pr #h_itron_out,using "form pos 1,c 10,3*n 10,3*n 1": z$,reading_water,reading_electric,reading_gas,meterroll_water,meterroll_electric,meterroll_gas
+		! pr #h_itron_out,using 'form pos 1,c 10,3*n 10,3*n 1': z$,reading_water,reading_electric,reading_gas,meterroll_water,meterroll_electric,meterroll_gas
 		if reading_water+reading_electric+reading_gas+meterroll_water+meterroll_electric+meterroll_gas=0 then
 			pr #h_itron_out: '! customer number '&z$&' has zero reading.'
 		else
@@ -564,37 +564,37 @@ fnend
 		route=val(bookNumberToStoreReadings$)
 		L1420: !
 		fnTos
-		mat resp$=("")
-		fnLbl(1,1,"Source Drive:",20,1)
-		fnTxt(1,23,20,100,0,"",0,"Source drive should be drive designation for the usb drive, including a : and a \ ")
-		if resp$(1)="" then resp$(1)="F:\"
+		mat resp$=('')
+		fnLbl(1,1,'Source Drive:',20,1)
+		fnTxt(1,23,20,100,0,'',0,'Source drive should be drive designation for the usb drive, including a : and a \ ')
+		if resp$(1)='' then resp$(1)='F:\'
 		fnCmdSet(2)
 		ckey=fnAcs(mat resp$)
 		if ckey=5 then goto Xit
 		source$=resp$(1)
 		if len(source$)=0 then goto L1420
-		if len(source$)=1 then source$(2:2)=":"
-		if source$(3:3)=" " then source$(3:3)="\"
-		fnCopy(source$&"readings."&str$(route),"[Q]\UBmstr\readings."&str$(route))
+		if len(source$)=1 then source$(2:2)=':'
+		if source$(3:3)=' ' then source$(3:3)='\'
+		fnCopy(source$&'readings.'&str$(route),'[Q]\UBmstr\readings.'&str$(route))
 	fnend
 	def fn_psion_workabout(bookFile$*512)
-		if env$('client')="Ash Grove" then
-			execute 'Sy "'&os_filename$("S:\RCom\RCom.exe")&'" /w'
-		else if exists("RCom\RComW.exe")<>0 then
-			execute 'Sy "'&os_filename$("S:\RCom\RComW.exe")&'" /w'
+		if env$('client')='Ash Grove' then
+			execute 'Sy "'&os_filename$('S:\RCom\RCom.exe')&'" /w'
+		else if exists('RCom\RComW.exe')<>0 then
+			execute 'Sy "'&os_filename$('S:\RCom\RComW.exe')&'" /w'
 		else
-			execute 'Sy "'&os_filename$("S:\acsUB\PreRoute.bat")&'"'
+			execute 'Sy "'&os_filename$('S:\acsUB\PreRoute.bat')&'"'
 		end if
 		! in august 2006 meters.opo changed to send back route as meters.out; before that it came back with the route # on the file name  (readings.1, etc)
 		fnCopy(fn_hh_input_filename$,bookFile$)
 	fnend
 	! def fn_sensus_in(bookFile$*512) r: old and unused
-	! 	open #h_sensus=fnH: "Name="&fn_hh_input_filename$&",RecL=22",external,input
+	! 	open #h_sensus=fnH: 'Name='&fn_hh_input_filename$&',RecL=22',external,input
 	! 	fn_readings_backup(bookFile$)
-	! 	open #h_readings=fnH: "Name="&bookFile$&",RecL=30,replace",d,o
+	! 	open #h_readings=fnH: 'Name='&bookFile$&',RecL=30,replace',d,o
 	! 	do
-	! 		read #h_sensus,using "form pos 1,c 22": line$ eof SENSUS_IN_XIT ioerr SENSUS_IN_XIT
-	! 		pr #h_readings,using "form pos 1,c 132": line$
+	! 		read #h_sensus,using 'form pos 1,c 22': line$ eof SENSUS_IN_XIT ioerr SENSUS_IN_XIT
+	! 		pr #h_readings,using 'form pos 1,c 132': line$
 	! 	loop
 	! 	SENSUS_IN_XIT: !
 	! 	close #h_sensus: ioerr ignore
@@ -603,24 +603,26 @@ fnend
 	! r: legacy multi-device hand held type
 		def fn_import_l_readings_txt(bookFile$*512; inFileRecordLen)
 			fn_readings_backup(bookFile$)
-			open #hReadingsOut=fnH: "Name="&bookFile$&",RecL=30,replace",d,o
+			open #hReadingsOut=fnH: 'Name='&bookFile$&',RecL=30,replace',d,o
 			! if inFileRecordLen=0 then inFileRecordLen=129
-			open #hHandHeld=fnH: "Name="&fn_hh_input_filename$,display,input
+			open #hHandHeld=fnH: 'Name='&fn_hh_input_filename$,display,input
 			do
 				linput #hHandHeld: line$ eof ilrt_EO_L_READINGS_TXT
-				if deviceSelected$="Other" and env$('client')="Brier Lake" then
+				if deviceSelected$='Other' and env$('client')='Brier Lake' then
 					parseResponse=fn_ilrt_lineParse_BrierLake(line$,z$,reading$)
 				else if deviceSelected$='READy Water' then
 					! parseResponse=fn_ilrt_lineParse_READy_Water(line$,z$,reading$)
 					parseResponse=fn_ilrt_lineParseDelimited(line$,z$,1,reading$,3)
 				else if deviceSelected$='Master Meter' then
-					parseResponse=fn_ilrt_lineParseFixedWidth(line$,z$,1,10,reading$,14,14, readingDate$,35,8)
+					!      parseResponse=fn_ilrt_lineParseFixedWidth(line$,z$,1,10,reading$,14,14, readingDate$,35,8) ! pre-Edison - no one seemed to be using it.
+					! commented that out when adding Edison, seems no one else is currently using Master Meter 11/17/2022 -john
+					parseResponse=fn_ilrt_lineParseFixedWidth(line$,z$,1,10,reading$,248,9) ! Set for Edison's implementation
 				else
 					pr 'deviceSelected$ ('&deviceSelected$&') is not recognized in the parse import routines.'
 					pause
 				end if
 				if parseResponse then
-					pr #hReadingsOut,using "form pos 1,c 10,c 9": z$,trim$(reading$)
+					pr #hReadingsOut,using 'form pos 1,c 10,c 9': z$,trim$(reading$)
 				end if
 			loop
 			ilrt_EO_L_READINGS_TXT: !
@@ -630,15 +632,15 @@ fnend
 		def fn_ilrt_lineParse_BrierLake(line$*150,&z$,&reading$)
 			ilpblReturn=0
 			x=val(line$(1:3)) conv ilpbl_finis
-			z$=""
+			z$=''
 			for j=1 to 8
 				x=val(line$(j:j)) conv ilrt_L1060
 				z$=z$&line$(j:j)
 			next j
 			ilrt_L1060: !
 			z=val(z$)
-			z$=cnvrt$("pic(zzzzzzz.##",z)
-			reading$=""
+			z$=cnvrt$('pic(zzzzzzz.##',z)
+			reading$=''
 			for j1=1 to 20
 				x=val(line$(j1+j:j1+j)) conv ilrt_L1120
 				reading$=reading$&line$(j1+j:j1+j)
@@ -650,7 +652,7 @@ fnend
 		fnend
 		def fn_ilrt_lineParse_READy_Water(line$*150,&z$,&reading$)
 			ilprwReturn=0
-			z$=reading$=""
+			z$=reading$=''
 			str2mat(line$,mat ilprwItem$, tab$)
 			! ilprwItem$(1)=account number
 			! ilprwItem$(2)=meter serial number (from 'U4 Meter Location' table     formerly from meter information file)
@@ -664,7 +666,7 @@ fnend
 		def fn_ilrt_lineParseDelimited(line$*512,&key$,item_key,&reading$,item_reading; &readingDate$,item_readingDate)
 			dim ilpdItem$(0)*512
 			ilprwReturn=0
-			z$=reading$=""
+			z$=reading$=''
 			str2mat(line$,mat ilpdItem$, tab$)
 			key$=lpad$(ilpdItem$(item_key),10)
 			reading$=ilpdItem$(item_reading)
@@ -694,15 +696,15 @@ fnend
 		pr what$ !  print to console also :)
 	fnend
 	def fn_neptuneEquinoxV4(inputFile$*2048,bookFile$*512; ___,returnN,line_type$,tmpr$,line$*2048,itron_meter_category$*1,itron_meter_chenge_out$*1,itron_reading,meterroll,z$*10,reading_water,reading_electric,reading_gas,meterroll_wate,meterroll_electric,meterroll_gas,hIn,hOut)
-		open #hIn=fnH: "Name="&inputFile$,display,input
-		open #hOut=fnH: "Name="&bookFile$&",RecL=512,replace",d,o
+		open #hIn=fnH: 'Name='&inputFile$,display,input
+		open #hOut=fnH: 'Name='&bookFile$&',RecL=512,replace',d,o
 		fn_prHout('[ACS Hand Held File Generic Version 2]')
 		z$=''
 		do
 			linput #hIn: line$ eof Eo_nev4
-			if env$('client')="Millry" then let line$=srep$(line$,":"," ")
+			if env$('client')='Millry' then line$=srep$(line$,':',' ')
 			line_type$=lwrc$(line$(1:5))
-			if line_type$="prmdt" then ! r: Premises Detail
+			if line_type$='prmdt' then ! r: Premises Detail
 				if z$<>'' then 
 					! write the previous one
 					fn_nev4_write(hOut,z$,reading_water,customer_sequence) 
@@ -715,8 +717,8 @@ fnend
 				! pr '*TODO: complete this account number code' : pr line$ : fnPause
 				! z$=trim$(z$)(1:10)
 				! /r
-			else if line_type$="" then 
-			else if line_type$="rdgdt" then ! r: Reading Detail
+			else if line_type$='' then 
+			else if line_type$='rdgdt' then ! r: Reading Detail
 				! pr 'line '&line_type$&' detected.' : pause
 				! Record ID                    Req UB  1 - 5 5 A / N RDGDT.
 				! Read Type                    Req UB  6 - 9 4 A / N Details of a particular register. For Example: HIGH,LOW,GAL,CFT,WTR,GAS
@@ -782,13 +784,13 @@ fnend
 				! pr '*TODO: complete this Reading Detail code' : pr line$ : fnPause
 				
 				! /r
-			else if line_type$="ordst" then ! r: Order Status  
+			else if line_type$='ordst' then ! r: Order Status  
 				! pr """Unfortunately, the .exp doesn't have readings but you'll see where the Order Status Record"
 				! pr "is created & this is where the readings will be placed."" -Kieth"
 				! pr line_type$ 
 				! pr '*TODO: complete this code Order Status' : pr line$ : fnPause
 				! /r
-			else if line_type$="mtrdt" then ! r: Meter Detail
+			else if line_type$='mtrdt' then ! r: Meter Detail
 				                                    ! Record ID             Req UB 1 - 5 5 A / N MTRDT.
 				                                    ! Read Sequence         Req UB 6 - 11 6 NUM Right-justify, zero-fill.
 				customer_sequence=val(line$(12:17)) ! Changed Read Sequence Opt HH 12 - 17 6 NUM Changed value coming back from field.
@@ -818,7 +820,7 @@ fnend
 		pause
 	continue ! /r
 	def fn_nev4_write(hOut,z$,reading_water,customer_sequence; ___,meterMultiplier)
-		! pr #hOut,using "form pos 1,c 10,3*n 10,3*n 1": z$,reading_water,reading_electric,reading_gas,meterroll_water,meterroll_electric,meterroll_gas
+		! pr #hOut,using 'form pos 1,c 10,3*n 10,3*n 1': z$,reading_water,reading_electric,reading_gas,meterroll_water,meterroll_electric,meterroll_gas
 		if reading_water+reading_electric+reading_gas+meterroll_wate+meterroll_electric+meterroll_gas<>0 then
 			fn_prHout('Customer.Number='&z$)
 			if reading_water then
@@ -845,8 +847,8 @@ fnend
 		colReadingDate=4
 		
 		if enableMerge$='True' and ~fn_okToMerge(bookFile$,'[ACS Hand Held File Generic Version 2]') then returnN=-1 : goto RkgEoIn
-		open #hIn=fnH: "Name="&fn_hh_input_filename$,display,input
-		open #hOut=fnH: "Name="&bookFile$&",RecL=512,replace",d,o
+		open #hIn=fnH: 'Name='&fn_hh_input_filename$,display,input
+		open #hOut=fnH: 'Name='&bookFile$&',RecL=512,replace',d,o
 		open #hCustomer=fnH: 'Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr',i,i,k 
 		pr #hOut: '[ACS Hand Held File Generic Version 2]'
 		pr #hOut: 'Source File='&fn_hh_input_filename$
@@ -900,8 +902,8 @@ fnend
 	def fn_readyKamstrupSwap(bookFile$*512,enableMerge$; ___,returnN,z$*10,delim$*1,line$*512,lineCount)
 		! headers required ! dataIncludesHeaders=1
 		if enableMerge$='True' and ~fn_okToMerge(bookFile$,'[ACS Hand Held File Generic Version 2]') then returnN=-1 : goto RksEoIn
-		open #hIn=fnH: "Name="&fn_hh_input_filename$,display,input
-		open #hOut=fnH: "Name="&bookFile$&",RecL=512,replace",d,o
+		open #hIn=fnH: 'Name='&fn_hh_input_filename$,display,input
+		open #hOut=fnH: 'Name='&bookFile$&',RecL=512,replace',d,o
 		open #hCustomer=fnH: 'Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr',i,i,k 
 		pr #hOut: '[ACS Hand Held File Generic Version 2]'
 		pr #hOut: 'Source File='&fn_hh_input_filename$
@@ -989,7 +991,7 @@ fnend
 		pr #h_notefile: '** Other Charge added '&date$('mm/dd/ccyy')&' at '&time$&' **'
 		pr #h_notefile:   '  Account: '&z$&'  '&customer_name$
 		if fn_not_blank(note$) then
-			pr #h_notefile: "     Note: "&note$
+			pr #h_notefile: '     Note: '&note$
 		end if
 		pr #h_notefile: '**'
 		close #h_notefile: 
@@ -1008,7 +1010,7 @@ fnend
 ! /r
 def fn_readings_backup(bookFile$*512;bookNumberToStoreReadings$)
 	if exists(bookFile$) then
-		fnCopy(bookFile$,"[Q]\UBmstr\readings_"&bookNumberToStoreReadings$&'.bak')
+		fnCopy(bookFile$,'[Q]\UBmstr\readings_'&bookNumberToStoreReadings$&'.bak')
 	end if
 fnend
 
@@ -1043,7 +1045,7 @@ def fn_mergeBooks(mbFile1$*512,mbFile2$*512)
 	dim mbTmpNewFile$*512
 	mbTmpNewFile$=env$('temp')&'\acs\mergeTmpNew-session'&session$&'.txt'
 	fnMakesurePathExists(mbTmpNewFile$)
-	open #hMergeNew=fnH: 'name='&mbTmpNewFile$&",RecL=512,Replace",d,o
+	open #hMergeNew=fnH: 'name='&mbTmpNewFile$&',RecL=512,Replace',d,o
 	pr #hMergeNew: '[ACS Hand Held File Generic Version 2]'
 	fn_getCustomerNumbers(mat mbF1Label$,mat mbF1Value$,mat mbF1CustomerNumbers$)
 	fn_getCustomerNumbers(mat mbF2Label$,mat mbF2Value$,mat mbF2CustomerNumbers$)
@@ -1150,7 +1152,7 @@ def fn_setup
 	on error goto Ertn
 	dim preferenceHandHeldFromFile$*128
 	fnureg_read('Hand Held From File',preferenceHandHeldFromFile$, '[ask]')
-	if deviceSelected$="EZReader" then preferenceHandHeldFromFile$='[ask]'
+	if deviceSelected$='EZReader' then preferenceHandHeldFromFile$='[ask]'
 	dim ml$(2)*256
 	dim resp$(32)*256
 	dim amr$*619
