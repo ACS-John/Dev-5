@@ -1,15 +1,14 @@
 ! Replace S:\acsPR\prRpt2
 ! Payroll Report File - Add Records
- 
+
 	autoLibrary
-	fnTop("S:\acsPR\prRpt2",cap$="Design Reports")
+	fnTop(program$,"Design Reports")
 	on error goto Ertn
- 
+
 	dim rt$*78,ch$(2)*132,psc(100),inp(20),pp(20),ti(20)
 	dim io1$(9),fb$(20),io2$(60),rptemp(20),tempch$(4)*256
-	dim temp(20,3),cnam$*40,cap$*128,response$(5)*1,cap$*128,msgline$(2)*60
- 
-	fncno(cno,cnam$)
+	dim temp(20,3),response$(5)*1,msgline$(2)*60
+
 	for z=1 to 20
 		z$=str$(z+1)
 		c$=str$(z+1)
@@ -19,10 +18,10 @@
 		io2$((z-1)*3+3)=c$&",62,N 1,UT,N"
 	next z
 	open #1: "Name=[Q]\PRmstr\PRReport.h[cno],KFName=[Q]\PRmstr\prrptidx.h[cno],Shr",i,outIn,k
- 
+
 SCR1: pr newpage
 	close #101: ioerr L250
-L250: open #101: "SRow=4,SCol=6,ERow=22,ECol=74,Border=Dr,Caption=<"&cap$,display,outIn
+L250: open #101: "SRow=4,SCol=6,ERow=22,ECol=74,Border=Dr,Caption=<"&env$('program_caption'),display,outIn
 	pr #101,fields "02,2,Cr 14,N": "Report Number:"
 	pr #101,fields "03,2,Cr 14,N": "Report Title:"
 	pr #101,fields "05,2,Cc 66,R,N": "Column Headings"
@@ -59,7 +58,7 @@ L580: form pos 1,n 2
 ! pr f "2,40,C 35,N": "This Report Number Already Exists"
 	msgline$(1)="Report Number "&str$(rn)&" already exists"
 	msgline$(2)="Please use a different Report Number."
-	fnoldmsgbox(mat resonse$,cap$,mat msgline$,1)
+	fnoldmsgbox(mat resonse$,'',mat msgline$,1)
 	ce=1 : goto ERR1
 L640: if ips<0 or ips>126 then goto L470
 	if ips>1 and ips<6 then goto L470
@@ -92,7 +91,7 @@ L860: for q=1 to 20
 	next w
 L930: pr newpage
 	close #102: ioerr L950
-L950: open #102: "SRow=2,SCol=9,ERow=23,ECol=72,Border=Sr,Caption=<"&cap$,display,outIn
+L950: open #102: "SRow=2,SCol=9,ERow=23,ECol=72,Border=Sr,Caption=<"&env$('program_caption'),display,outIn
 	pr #102: newpage
 	for j=1 to 20
 		pr #102,fields str$(j+1)&",2,C 12,N": "Item Number:"
@@ -133,8 +132,8 @@ L1290: form pos 1,c 70
 	pr #99,using L1290: "PROC S:\acsPR\PRMENU"
 	close #99:
 	chain "proc=PROC."&wsid$&""
- 
+
 Xit: fnXit
- 
+
 include: ertn
- 
+

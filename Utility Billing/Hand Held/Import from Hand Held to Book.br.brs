@@ -87,7 +87,7 @@ def fn_transfer(bookNumberToStoreReadings$,enableMerge$,askPath$*128)
 	if enableMerge$='True' and exists(bookFile$) then
 		dim mergeFileOrigional$*512
 		mergeFileOrigional$=env$('temp')&'\acs\mergeFileOrigional-book'&bookNumberToStoreReadings$&'-session'&session$&'.txt'
-		fnMakesurePathExists(mergeFileOrigional$)
+		fnMakeSurePathExists(mergeFileOrigional$)
 		fnCopy(bookFile$,mergeFileOrigional$)
 	else
 		enableMerge$='False'
@@ -1044,7 +1044,7 @@ def fn_mergeBooks(mbFile1$*512,mbFile2$*512)
 	fnFileTo2Arrays(mbFile2$,mat mbF2Label$,mat mbF2Value$, 1)
 	dim mbTmpNewFile$*512
 	mbTmpNewFile$=env$('temp')&'\acs\mergeTmpNew-session'&session$&'.txt'
-	fnMakesurePathExists(mbTmpNewFile$)
+	fnMakeSurePathExists(mbTmpNewFile$)
 	open #hMergeNew=fnH: 'name='&mbTmpNewFile$&',RecL=512,Replace',d,o
 	pr #hMergeNew: '[ACS Hand Held File Generic Version 2]'
 	fn_getCustomerNumbers(mat mbF1Label$,mat mbF1Value$,mat mbF1CustomerNumbers$)

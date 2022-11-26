@@ -9,11 +9,9 @@
 	dim jtot$(100)*30,jobtot(100),tottot$(100)*30,tottot(100),totjob(7)
 	dim dcode$(100)*3,desc$(100)*30,cdesc$(100)*30,cattot(100)
 	dim cn$*11,holdcn$*11,cnt$*5,k$*25,l(13),ta(2),eno$*12,jno$*6,tr(9)
-	dim io1$(6)*21,pd$*30,message$*40,cap$*128
+	dim io1$(6)*21,pd$*30,message$*40
  
-	fnTop(program$,cap$="Job Cost Report")
-	fncno(cno)
-	fnconsole(1)
+	fnTop(program$,"Job Cost Report")
 	dat1=date("mmddyy")
  
 	prtjob$="N" : prtdet$="N" : sumcat$="N" : sumjob$="N" : _
@@ -36,7 +34,7 @@ L250: close #1:
  
 	pr newpage
 	if fnprocess=1 then goto L640
-	fnopenwin(win=102,7,15,16,65,cap$)
+	fnopenwin(win=102,7,15,16,65,'')
 	pr #win,fields "4,2,Cr 42,N": "Date for Job Cost Detail Listing (mmddyy):"
 	pr #win,fields "5,2,Cr 42,N": "Print all Jobs (Y/N):"
 	pr #win,fields "6,2,Cr 42,N": "Print Details (Y/N):"
@@ -70,7 +68,7 @@ L640: if prtdet$="N" and sumcat$="N" and sumjob$="N" then goto L650 else noread=
 L650: if prtjob$="Y" then goto L810
 	for k=1 to 100
 		pr newpage
-		fnopenwin(win=102,10,20,15,59,cap$)
+		fnopenwin(win=102,10,20,15,59,'')
 		if k=1 then goto L710
 		if k>1 then pr #win,fields "6,1,Cc 40,R,N": "Last Job Number entered was "&prtj$(k-1)
 L710: pr #win,fields "4,2,C 20,N": "Job Number to print:"

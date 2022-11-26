@@ -8,7 +8,6 @@
 	dim z$*10,e$(4)*30,f$*12,g(12),d(15),b(11),extra1$*30
 	dim gb(10),pe$(4)*30,ba$(4)*30,at$(3)*40,datafile$*256,indexfile$*256
 
-	fncno(cno)
 	fnLastBillingDate(d1)
 	addr_indent=8 : addr_down=3
 	open #21: "Name=[Q]\UBmstr\Company.h[cno],Shr",i,i

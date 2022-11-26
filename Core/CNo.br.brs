@@ -1,42 +1,47 @@
-def library fnCno(&cno; &cnam$)
+def library fnCno
 	if ~setup then fn_setup
-
-	! r: Read CNo (normal method - tied to session and env$('cursys')
-	fnreg_read(session$&'.'&env$('cursys')&'.cno',cno$)
-	cno=val(cno$)
-	! /r
-
-	if ~cno then 	cno=1
-
-	! r: read cnam
-	dim cnam_read$*40
-	cnam_read$=''
-	if env$('ACSDeveloper')<>'' and env$('cursystem')='Client Billing' then
-		open #tf1=fnH: 'Name=S:\Core\Data\acsllc\Company.h[cno],Shr',i,i ioerr CNAM_XIT
-	else
-		open #tf1=fnH: 'Name=[Q]\[cursys]mstr\Company.h[cno],Shr',i,i ioerr CNAM_XIT
-	end if
-	read #tf1,using 'form pos 1,C 40': cnam_read$ ioerr ignore
-	close #tf1:
-	CNAM_XIT: !
-	! /r
-	cnam$=cnam_read$ soflow ignore
-	fnSetEnv('cnam',rtrm$(cnam_read$))
-	if env$('cno')<>str$(cno) then
-		fnSetEnv('cno',str$(cno))
-		execute 'config substitute [cno] '&str$(cno)
-	end if
-	fncno=cno
+	fnCno=fn_cno
 fnend
+def fn_cno(; ___,returnN,hCompany,cnamRead$*40,cno$)
+	! this function initializes env$('cno') and env$('cnam') and stuff like that
+	returnN=fnReg_read(session$&'.'&env$('cursys')&'.cno',cno$, '1',1)
+
+	hCompany=fn_openCompanyInput
+	if hCompany>0 then
+		read #hCompany,using 'form pos 1,C 40': cnamRead$ ioerr ignore
+		close #hCompany:
+	end if
+
+	fnSetEnv('cnam',rtrm$(cnamRead$))
+	if env$('cno')<>str$(returnN) then
+		fnSetEnv('cno',str$(returnN))
+		execute 'config substitute [cno] '&str$(returnN)
+	end if
+	fn_cno=returnN
+fnend
+	def fn_openCompanyInput(; ___,returnN)
+		if env$('ACSDeveloper')<>'' and env$('cursystem')='Client Billing' then
+			open #returnN=fnH: 'Name=S:\Core\Data\acsllc\Company.h[cno],Shr',i,i ioerr OciError
+		else
+			open #returnN=fnH: 'Name=[Q]\[cursys]mstr\Company.h[cno],Shr',i,i ioerr OciError
+		end if
+		goto OciFinis
+		OciError: !
+		returnN=-err
+		OciFinis: !
+		fn_openCompanyInput=returnN
+	fnend
 def library fnPutCno(cno)
 	if ~setup then fn_setup
 	fnPutCno=fn_putCno(cno)
 fnend
 def fn_putCno(cno)
 	fnreg_write(session$&'.'&env$('CurSys')&'.cno',str$(cno))
-	fnSetEnv('cno',str$(cno))
-	execute 'config substitute [cno] '&str$(cno)
+	! fnSetEnv('cno',str$(cno))
+	! execute 'config substitute [cno] '&str$(cno)
+	fn_putCno=fn_cno
 fnend
+
 def library fnget_company_number_list(mat cno_list; sysid$*256)
 	if ~setup then fn_setup
 	if sysid$='' then sysid$=env$('cursys')
@@ -54,7 +59,7 @@ def library fnget_company_number_list(mat cno_list; sysid$*256)
 	mat cno_list(company_count)
 	fnget_company_number_list=company_count
 fnend
-def fn_CnoLegacyNtoCReg(legacyFilename$*256,legacyForm$*64,registryKey$*128; valuePassedIn,___,fscode$)
+def fn_CnoLegacyNtoCReg(legacyFilename$*256,legacyForm$*64,registryKey$*128; valuePassedIn,___,fscode$,tmp)
 	! getOrPut=1 then GET
 	! getOrPut=2 then PUT
 	if valuePassedIn>0 then getOrPut=2 else getOrPut=1
@@ -62,7 +67,7 @@ def fn_CnoLegacyNtoCReg(legacyFilename$*256,legacyForm$*64,registryKey$*128; val
 		fncreg_read(registryKey$,fscode$) : valuePassedIn=val(fscode$)
 		if valuePassedIn=0 then
 			open #tmp=fnH: 'Name='&legacyFilename$,i,outi,r ioerr LegacyOpenFail
-			read #tmp,using legacyForm$,rec=1: valuePassedIn noRec ignore
+			read #tmp,using 'form '&legacyForm$,rec=1: valuePassedIn noRec ignore
 			close #tmp: ioerr ignore
 			fncreg_write(registryKey$,str$(valuePassedIn))
 			LegacyOpenFail: !
@@ -101,27 +106,27 @@ def library fnPeDat$*20(;pedat$*20)
 fnend
 def library fnFsCode(;fscode)
 	if ~setup then fn_setup
-	fnfscode=fn_CnoLegacyNtoCReg('[temp]\fscode-[session].dat','form pos 1,N 9','Financial Statement Code', fscode)
+	fnfscode=fn_CnoLegacyNtoCReg('[temp]\fscode-[session].dat','pos 1,N 9','Financial Statement Code', fscode)
 fnend
 def library fnPriorcd(;PriorCD)
 	if ~setup then fn_setup
-	fnpriorcd=fn_CnoLegacyNtoCReg('[temp]\priorcd-[session].dat','form pos 1,N 9','PriorCD', PriorCD)
+	fnpriorcd=fn_CnoLegacyNtoCReg('[temp]\priorcd-[session].dat','pos 1,N 9','PriorCD', PriorCD)
 fnend
 def library fnPgNum(;pgnum)
 	if ~setup then fn_setup
-	fnpgnum=fn_CnoLegacyNtoCReg('[temp]\PgNum-[session].dat','form pos 1,N 9','PgNum', pgnum)
+	fnpgnum=fn_CnoLegacyNtoCReg('[temp]\PgNum-[session].dat','pos 1,N 9','PgNum', pgnum)
 fnend
 def library fnRx(;rx)
 	if ~setup then fn_setup
-	fnrx=fn_CnoLegacyNtoCReg('[temp]\rx-[session].dat','form pos 1,N 9','rx', rx)
+	fnrx=fn_CnoLegacyNtoCReg('[temp]\rx-[session].dat','pos 1,N 9','rx', rx)
 fnend
 def library fnStyp(;STyp)
 	if ~setup then fn_setup
-	fnstyp=fn_CnoLegacyNtoCReg('[temp]\STyp-[session].dat','form pos 1,N 9','STyp', STyp)
+	fnstyp=fn_CnoLegacyNtoCReg('[temp]\STyp-[session].dat','pos 1,N 9','STyp', STyp)
 fnend
 def library fnPs(;ps)
 	if ~setup then fn_setup
-	fnps=fn_CnoLegacyNtoCReg('[temp]\ps-[session].dat','form pos 1,N 9','ps', ps)
+	fnps=fn_CnoLegacyNtoCReg('[temp]\ps-[session].dat','pos 1,N 9','ps', ps)
 fnend
 def library fnUseDeptNo
 	if ~setup then fn_setup
@@ -299,5 +304,6 @@ fnend
 		if uprc$(return$)='G3' then return$='GL' ! Budget Management
 		fn_standardizeSysId$=return$
 	fnend
+
 include: fn_open
 include: fn_setup

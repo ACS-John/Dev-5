@@ -10,8 +10,7 @@
 	dim ln$*255,pf$*255,af$*255,gpf$*255,gaf$*255,jpf$*255,jaf$*255,upf$*255
 	dim uaf$*255
  
-	fnTop("S:\acsPR\jcRptS1",cap$="User Designed Reports (1)")
-	fncno(cno)
+	fnTop(program$,cap$="User Designed Reports (1)")
  
 	data "JN"
 	data "n$"

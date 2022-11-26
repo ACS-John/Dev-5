@@ -1,18 +1,17 @@
  
 	on error goto L990
 	autoLibrary
-	dim cde$*6,des$*55,gl(3),cnam$*40,a$*5,cap$*128
-	fnTop(program$,cap$="Invoice Description")
-	fncno(cno,cnam$)
+	dim cde$*6,des$*55,gl(3),a$*5
+	fnTop(program$,"Invoice Description")
 	fnconsole(1)
-	hp1=43-int(len(rtrm$(cnam$))/2)
+	hp1=43-int(len(rtrm$(env$('cnam')))/2)
  
 	io1$(1)="14,5,C 55,U,N": io1$(2)="16,40,N 10.2,U,N"
 	io1$(3)="18,33,N 3,U,N": io1$(4)="18,38,N 6,U,N": io1$(5)="18,46,N 3,U,N"
 	open #1: "Name=S:\Core\Data\acsllc\IVDesc.h[cno],KFName=S:\Core\Data\acsllc\IVDIndex.h[cno],Shr",i,outIn,k ioerr L980
 L130: pr newpage
 	pr f "3,9,C 50,N": "INVOICE DESCRIPTION FILE MENU"
-	pr f "4,6,C 72,N": "COMPANY NUMBER [cno]  "&ltrm$(cnam$)
+	pr f "4,6,C 72,N": "COMPANY NUMBER [cno]  "&ltrm$(env$('cnam'))
 	pr f "6,9,C 60": "1 = INITIAL FILE PREPARATION"
 	pr f "7,9,C 60": "2 = ADD OR FILE MAINTENANCE / INQUIRY"
 	pr f "8,9,C 60": "3 = pr PROOF LIST"
@@ -22,8 +21,8 @@ L210: input fields "12,28,N 1,UE,N": ti conv L210
 	if ti=0 then goto L390
 	on ti goto L240,L510,L740 none L210
 L240: pr newpage
-	ctab=40-int(len(ltrm$(rtrm$(cnam$)))/2)
-	pr f "7,"&str$(ctab)&",C 40,N": cnam$
+	ctab=40-int(len(ltrm$(rtrm$(env$('cnam'))))/2)
+	pr f "7,"&str$(ctab)&",C 40,N": env$('cnam')
 	pr f "10,31,C 19,RB,N": "  *** WARNING ***"
 	pr f "12,4,C 70": "YOU HAVE CHOSEN TO INITIALLY PREPARE THE INVOICE DESCRIPTION FILE."
 	pr f "13,1,C 78": "IF YOU CONTINUE ALL EXISTING INVOICE DESCRIPTION RECORDS WILL BE ERASED."
@@ -82,7 +81,7 @@ L850: pr #255: newpage
 L880: fncloseprn
 	on fkey 5 ignore
 	goto L130
-L910: pr #255,using L920: date$,cnam$
+L910: pr #255,using L920: date$,env$('cnam')
 L920: form skip 2,pos 1,c 8,pos hp1,c 40,skip 1
 	pr #255,using L940: time$,"INVOICE DESCRIPTION PROOF LISTING"
 L940: form pos 1,c 8,pos 26,c 33,skip 2

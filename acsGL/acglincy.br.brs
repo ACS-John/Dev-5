@@ -7,12 +7,11 @@
 	dim p$(20)*50
 	dim fl1$*256,actpd$*6,pedat$*20,m1$(13)*9,m2$(13)*8,total(13)
 	dim r$*5,d$*50,te$*1,ac(9),report$*50,secondr$*50,foot$*132,underlin$*12
-	dim cnam$*40,b$*3,a$(8)*30,oldtrans$*16,g(8),accum(9,13)
+	dim b$*3,a$(8)*30,oldtrans$*16,g(8),accum(9,13)
 	dim by(13),bp(13)
  
 	fnTop(program$,"Income Statement with Period Comparison")
 	on fkey 5 goto L2360
-	fncno(cno,cnam$)
 	data "     ONE","     TWO","   THREE","    FOUR","    FIVE","     SIX","   SEVEN","   EIGHT","    NINE","     TEN","  ELEVEN","  TWELVE",""
 	read mat m1$
 	data "     ONE","     TWO","   THREE","    FOUR","    FIVE","     SIX","   SEVEN","   EIGHT","    NINE","     TEN","  ELEVEN","  TWELVE","THIRTEEN"
@@ -33,7 +32,7 @@
 	form c 9,skip 0
 L350: form pos mp1,pd 3,pos 81,41*pd 6.2
 	form c 7,skip 0
-	nametab=int(95-len(rtrm$(cnam$))/2)
+	nametab=int(95-len(rtrm$(env$('cnam')))/2)
 	open #1: fl1$,i,i,k
 	if fnprocess=1 or fnUseDeptNo=0 then goto L490
 	fnTos(sn$="Acglincy") : _
@@ -47,11 +46,10 @@ L350: form pos mp1,pd 3,pos 81,41*pd 6.2
 	ckey=fnAcs(mat resp$)
 	if ckey=5 then goto Xit
 	costcntr=val(resp$(1))
-L490: cnam$=rtrm$(cnam$)
-	pf1=len(cnam$)+int((43-len(cnam$))/2)
+L490: !
 	close #101: ioerr ignore
 	open #101: "SROW=08,SCOL=18,EROW=12,ECOL=58,BORDER=DR,CAPTION= INCOME STATEMENT WITH MONTHLY COMPARISONS ",display,outIn
-	pr f "08,18,C 41,H,N": lpad$(cnam$,pf1)
+	pr f "08,18,Cc 41,H,N": env$('cnam')
 	pr f "09,18,C 41,H,N": "            COMPANY NUMBER [cno]"
 	pr f "11,18,C 41,R,N": "              IN PROCESS"
 	pr f "13,30,C 16,R,N": "PRESS F5 TO STOP"
@@ -215,7 +213,7 @@ L2130: form skip 1,c 1,skip 0
 return
  
 L2160: heading=1
-	pr #255,using L2180: cnam$
+	pr #255,using L2180: env$('cnam')
 L2180: form skip 2,pos 10,cc 70,skip 1
 	p1=95-len(rtrm$(report$))/2
 	pr #255,using L2210: rtrm$(report$)

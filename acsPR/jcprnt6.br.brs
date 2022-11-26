@@ -7,11 +7,10 @@
  
 	dim jn$*6,n$*40,a$(3)*30,b(4),cn$*11,k$*25,l(13),ta(2),t(20),s(20),c(20)
 	dim rn$*2,rt$*78,ch$(2)*132,psc(100),f$(20)*50,pp(20),ppr(20),dp(20)
-	dim fc(20),tcj(20),tcs(20),dt(125),gt(125),dh$*20,cnam$*40,jn1$*6
-	dim cap$*128,message$*40
+	dim fc(20),tcj(20),tcs(20),dt(125),gt(125),dh$*20,jn1$*6
+	dim message$*40
  
-	fnTop("S:\acsPR\newPrUsrDR",cap$="Print User Designed Reports (2)")
-	fncno(cno,cnam$) : _
+	fnTop("S:\acsPR\newPrUsrDR","Print User Designed Reports (2)")
 	fndat(dh$)
  
  
@@ -19,7 +18,7 @@
 	if fnprocess=1 then goto L103
  
 MAIN_SCREEN: !
-	fnTos(sn$="namlst1") : _
+	fnTos
 	mylen=25 : mypos=mylen+2: resp=0: left=1
 	fnLbl(1,1,"Report Heading Date:",23,left)
 	fnTxt(1,mypos,20,0,0,"",0,"Recommended to use full alpha date format.") : _

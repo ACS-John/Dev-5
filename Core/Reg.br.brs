@@ -106,7 +106,7 @@ def fn_mcregSetup
 		dim mcregFileIndex$*256
 		mcregFileData$=env$('QBase')&'\Data\Multi-Client Registry.dat'
 		mcregFileIndex$=env$('QBase')&'\Data\Multi-Client Registry.idx'
-		if ~exists(mcregFileData$) then fnmakesurepathexists(mcregFileData$)
+		if ~exists(mcregFileData$) then fnMakeSurePathExists(mcregFileData$)
 		open #mcreg_h=fnH: 'Name='&mcregFileData$&',Version=1,KFName='&mcregFileIndex$&',Use,RecL=384,KPs=1,KLn=128,Shr',i,outIn,k
 	end if
 	on error goto Ertn
@@ -165,7 +165,7 @@ def fn_regRename(fieldName_old$*128,fieldNameNew$*128)
 fnend
 def fn_regSetup
 	autoLibrary
-	fnmakesurepathexists('[Q]\Data\')
+	fnMakeSurePathExists('[Q]\Data\')
 	open #hReg=fnH: 'Name=[Q]\Data\reg.dat,Version=1,KFName=[Q]\Data\reg.idx,Use,RecL=384,KPs=1,KLn=128,Shr',i,outIn,k
 	fn_regSetup=1
 	on error goto Ertn
@@ -233,7 +233,7 @@ def fn_creg_setup
 		dim cregFileIndex$*256
 		cregFileData$ =datafolder$&'\reg-[CurSys].h[cno]'
 		cregFileIndex$=datafolder$&'\reg-[CurSys]-idx.h[cno]'
-		fnmakesurepathexists(cregFileData$)
+		fnMakeSurePathExists(cregFileData$)
 		open #hCreg=fnH: 'Name='&cregFileData$&',Version=1,KFName='&cregFileIndex$&',Use,RecL=384,KPs=1,KLn=128,Shr',i,outIn,k
 		creg_setup$=env$('CNo')&env$('CurSys')&env$('client')
 	end if
@@ -282,8 +282,7 @@ def fn_cReg_close
 fnend
 
 
-
-! def library fnIniToReg
+! def library fnIniToReg r:
 ! 	if ~setup then fn_setup
 ! 	if ~reg_setup then reg_setup=fn_regSetup
 ! 	if env$('ACSDeveloper')<>'' and ~sreg_setup then sreg_setup=fn_sreg_setup
@@ -323,8 +322,8 @@ fnend
 ! 			execute 'free "S:\Core\Data\ini_default\'&trim$(program_file$(programItem))&'.ini"' err ignore
 ! 		end if
 ! 	nex programItem
-! fnend
-
+! fnend /r
+!
 ! ! r: Create SReg from INI (for ACS Developer only) - should never need to be run again (6/13/2017)
 ! 	if ~setup then fn_setup
 ! 	autoLibrary

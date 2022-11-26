@@ -1,21 +1,20 @@
 ! Replace S:\acsPR\newjcStWkSh
 ! pr Job Status Worksheet
- 
+
 	autoLibrary
 	on error goto Ertn
- 
-	dim jn$*6,n$*40,next$*5,cn$*11,cnt$*5,k$*25,cap$*128,resp$(3)*40,cnam$*40
+
+	dim jn$*6,n$*40,next$*5,cn$*11,cnt$*5,k$*25,resp$(3)*40
 	dim sc1$(3),sd1$(3),se1$(3)*50,prtj$(100)*6,dat$*20
 	dim ml$(1)*80
- 
-	fnTop(program$,cap$="Job Status Worksheet")
-	fncno(cno,cnam$) : _
+
+	fnTop(program$,"Job Status Worksheet")
 	fndat(dat$)
- 
+
 	prtjob$="N" : perpag$="N"
 	open #1: "Name=[Q]\PRmstr\JCMSTR.h[cno],KFName=[Q]\PRmstr\JCIndx.h[cno],Shr",i,i,k
 	open #2: "Name=[Q]\PRmstr\JCCAT.h[cno],KFName=[Q]\PRmstr\CatIndx.h[cno],Shr",i,i,k
- 
+
 	if fnprocess=1 then goto ASKJOB
 MAIN_SCREEN: !
 	fnTos(sn$="namlst1") : _
@@ -33,14 +32,14 @@ MAIN_SCREEN: !
 	dat$=resp$(1) ! heading date
 	if resp$(2)='True' then prtjob$="Y" else prtjob$="N"
 	if resp$(3)='True' then perpag$="Y" else perpad$="N"
- 
+
 	fndat(dat$,2)
 	if prtjob$="N" then goto ASKJOB
 	if fnprocess=1 then goto L510
- 
+
 	mat ml$(1) : _
 	ml$(1)="Do you wish to skip all completed jobs?" : _
-	fnMsgBox(mat ml$,resp$,cap$,4)
+	fnMsgBox(mat ml$,resp$,'',4)
 	if resp$="Yes" then skpcom$="Y" else skpcom$="N"
 	goto L510
 ASKJOB: !
@@ -59,7 +58,7 @@ ASKJOB: !
 	next j
 	goto L510
 L490: j=j-1
- 
+
 L510: on fkey 5 goto DONE
 	fnopenprn : _
 	if file$(255)(1:3)<>"PRN" then jbskip=1
@@ -79,12 +78,12 @@ L640: form pos 1,c 11,c 25,pos 114,2*pd 2
 	gosub L960
 	cnt$=lpad$(rtrm$(str$(val(cn$(7:11))+1)),5)
 	goto L630
- 
+
 DONE: close #1:
 	close #2:
 	fncloseprn
 	goto Xit
- 
+
 HDR: !
 	pr #255,using "form pos 1,c 25": "Page "&str$(pgno+=1)&" "&date$
 	pr #255: "\qc  {\f221 \fs22 \b "&env$('cnam')&"}"
@@ -96,7 +95,7 @@ HDR: !
 	pr #255: "{\b Number                                         Number                               Complete Complete  Complete}"
 	pr #255: "\ql   "
 return
- 
+
 L870: if fst=1 then goto L880 else goto L910
 L880: if perpag$="N" then goto L920
 	pr #255: newpage
@@ -105,7 +104,7 @@ L910: fst=1
 L920: pr #255,using L930: jn$,n$
 L930: form pos 1,c 6,pos 8,c 40,skip jbskip
 return
- 
+
 L960: pr #255,using L1000: cn$(7:11),k$,"LABOR",l12,"%","___%","_____.__" pageoflow L980
 	goto L1010
 L980: pr #255: newpage
@@ -117,8 +116,8 @@ L1010: pr #255,using L1000: " "," ","OTHER",l13,"%","___%","        " pageoflow 
 L1040: pr #255: newpage
 	gosub HDR
 L1060: return
- 
+
 Xit: fnXit
- 
+
 include: ertn
- 
+

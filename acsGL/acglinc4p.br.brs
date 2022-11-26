@@ -6,12 +6,10 @@
  
 	dim fl1$*256,actpd$*6,cogl$(3)*12,pedat$*20,cch$*20,p$(20)*50
 	dim r$*5,d$*50,te$*1,ac(9),report$*50,secondr$*50,foot$*132,underlin$*14
-	dim cnam$*40,b$*3,a$(8)*30,oldtrans$*16,g(8),accum(9,7)
-	dim pedat$*20,actpd$*6,bm(13),d(2),bp(13),by(13),cap$*128,udf$*256
+	dim b$*3,a$(8)*30,oldtrans$*16,g(8),accum(9,7)
+	dim pedat$*20,actpd$*6,bm(13),d(2),bp(13),by(13)
  
-	fnTop(program$,cap$="Four Column Budget With Percent")
-	fncno(cno,cnam$)
-	udf$=env$('temp')&'\'
+	fnTop(program$,"Four Column Budget With Percent")
 	fscode=fnfscode
 	priorcd=fnpriorcd
 	if fnGlAskFormatPriorCdPeriod=5 then goto Xit 		! sets fnps,fnpriorcd,fnfscode (primary/secondary,current year/Prior,period to print)
@@ -33,11 +31,11 @@
 	on fkey 5 goto L1670
 	report$="Statement of Income and Expenses"
 	if fnps=2 then goto L320 ! secondary
-	execute "Index [Q]\GLmstr\GLmstr.h[cno] "&udf$&"fsindex.h[cno] 69 3 Replace DupKeys -N"
+	execute "Index [Q]\GLmstr\GLmstr.h[cno] "&env$('temp')&'\'&"fsindex.h[cno] 69 3 Replace DupKeys -N"
 	goto L340
-L320: execute "Index [Q]\GLmstr\GLmstr.h[cno] "&udf$&"fsindex.h[cno] 72 3 Replace DupKeys -N"
+L320: execute "Index [Q]\GLmstr\GLmstr.h[cno] "&env$('temp')&'\'&"fsindex.h[cno] 72 3 Replace DupKeys -N"
 	fnconsole(off=0)
-L340: open #3: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName="&udf$&"fsindex.h[cno],Shr",i,i,k
+L340: open #3: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName="&env$('temp')&'\'&"fsindex.h[cno],Shr",i,i,k
 L350: read #1,using L400: r$,d$,te$,sp,ls,ds,ul,rs,bc,ap,mat ac,ic,fc eof L1670
 	if ltrm$(r$)="" or ltrm$(r$)="0" then goto L350
 	if costcntr=0 then goto L400

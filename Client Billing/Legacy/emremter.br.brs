@@ -1,10 +1,8 @@
- 
+
 	on error goto L320
 	autoLibrary
-	fnTop(program$,cap$="Employee")
-	fncno(cno,cnam$)
- 
- 
+	fnTop(program$,"Employee")
+
 	fnconsole(1)
 	dim eno$*9,prg$*20
 L110: pr newpage

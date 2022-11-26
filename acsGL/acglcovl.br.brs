@@ -2,13 +2,12 @@
 ! -- Edit/Print Cover Letter
  
 	autoLibrary
-	fnTop(program$,cap$="Cover Leter")
+	fnTop(program$,"Cover Leter")
 	on error goto Ertn
  
-	dim tb$*32,cap$*128,p$(20)*50
-	dim ln1$*78,ln$*78,shd$*60,fli$(20),cnam$*40,dat$*20,fl2$(2),sc2$(2)*46
+	dim tb$*32,p$(20)*50
+	dim ln1$*78,ln$*78,shd$*60,fli$(20),dat$*20,fl2$(2),sc2$(2)*46
  
-	fncno(cno,cnam$)
 	fndat(dat$)
 	open #1: "Name=[Q]\GLmstr\Company.h[cno],Shr",i,i,r  : _
 	read #1,using 'form pos 195,C 30',rec=1: tb$ : _
@@ -36,7 +35,7 @@ L190: sh$="1,10,C 60,H,N"
 MENU1: pr newpage
 	close #101: ioerr L250
 L250: open #101: "SROW=3,SCOL=13,EROW=9,ECOL=63,BORDER=DR,CAPTION=<Cover Letter",display,outIn
-	pr f "3,13,Cc 51,R,N": cnam$ : _
+	pr f "3,13,Cc 51,R,N": env$('cnam') : _
 	pr f "4,13,Cc 51,R,N": "Company Number [cno]"
 	sc2$(1)=" 1. Edit Cover Letter" : _
 	sc2$(2)=" 2. pr Cover Letter"
@@ -49,7 +48,7 @@ L320: on t goto L370,L390 none L300
 
 	close #101: ioerr L350
 L350: open #101: "SROW=5,SCOL=13,EROW=15,ECOL=64,BORDER=SR,CAPTION=<Initial Build Cover Letter",display,outIn
-	pr #101,fields "1,1,Cc 52,R,N": cnam$
+	pr #101,fields "1,1,Cc 52,R,N": env$('cnam')
 L370: execute "SY -s NotePad "&os_filename$("[Q]\GLmstr\ACGLCovF.h[cno]")
 	goto MENU1
 L390: open #1: "Name=[Q]\GLmstr\ACGLCovF.h[cno],Shr",display,input ioerr MENU1

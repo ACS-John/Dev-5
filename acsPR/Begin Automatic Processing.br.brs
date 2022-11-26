@@ -96,7 +96,7 @@ BEGIN_AUTO: ! r:
 	close #prclnt:
 	execute 'Load S:\Core\Process.br,RESIDENT'
 	fnprocess(1)
-	fnputcno(clnum(1))
+	clnum(1)=fnPutCno(clnum(1))
 	fnpgnum(-1) ! resets the last program processed back to 0 befor going to NEWPRauto
 goto Xit !  /r
 Xit: fnXit

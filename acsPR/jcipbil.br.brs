@@ -1,18 +1,16 @@
 ! Replace S:\acsPR\jcIpBil
 ! Enter Billings
- 
+
 	autoLibrary
 	on error goto Ertn
- 
+
 	dim msgline$(2)*60,response$(5)*1,wrd2$(4)*38,wrds$(2)*20,n$*40
 	dim io1$(4),jn$*6,inp(3),n$*40,a$(3)*30,b(4),message$*40
- 
-	fnTop("S:\acsPR\jcIpBil","Enter Billings")
-	fncno(cno)
- 
+
+	fnTop(program$,"Enter Billings")
+
 	c1=3
-	fnconsole(1)
- 
+
 	open #1: "Name=[Q]\PRmstr\JCMSTR.h[cno],KFName=[Q]\PRmstr\JCIndx.h[cno],Shr",i,outIn,k
 	open #2: "Name=[Temp]\Work."&session$,internal,output ioerr L180
 	close #2,free:
@@ -61,20 +59,20 @@ L510: if cmdkey=5 then goto L730
 	jn$=lpad$(rtrm$(jn$),6)
 	read #1,using 'form pos 150,PD 7.2,N 2',key=jn$: b3 nokey L600
 goto L660
- 
+
 L600: msgline$(1)="Job Number not found."
 	msgline$(2)="Please reselect."
 	fnoldmsgbox(mat response$,env$('program_caption'),mat msgline$,1)
 	ce=1
 goto ERR1
- 
+
 L660: ta=ta+inp(1)
 	if c1=2 then goto L1120
 L680: rw=lrec(2)+1
 	write #2,using L700,rec=rw: jn$,mat inp duprec L680
 L700: form pos 1,c 6,pd 5.2,pd 4,n 2
 goto L200
- 
+
 L730: pr newpage
 	win=102
 	fnopenwin(win,07,20,15,59,env$('program_caption'))
@@ -92,7 +90,7 @@ L860: rinput #win,select mat io2$,attr "H": mat wrd2$
 	c1=curfld
 	if cmdkey=5 then goto Xit
 on c1 goto PROOFLIST,L1160,L190,L1300 none L860
- 
+
 PROOFLIST: !
 	pr newpage
 	message$="Printing Proof List..."
@@ -113,10 +111,10 @@ L1070: next j
 L1080: fncloseprn
 	on fkey 5 ignore
 L1100: goto L730
- 
+
 L1120: rewrite #2,using L700,rec=rr: jn$,mat inp
 goto L1160
- 
+
 L1150: rewrite #2,using L700,rec=rr: "",0,0,0
 L1160: pr newpage
 	win=103
@@ -131,7 +129,7 @@ L1210: input #win,fields "4,31,Nz 5,UT,N": rr conv L1210
 	ta=ta-inp(1)
 	shoption=2
 goto L200
- 
+
 L1300: for j=1 to rw
 		read #2,using L700,rec=j: jn$,mat inp noRec Xit
 		if ltrm$(jn$)="" or ltrm$(rtrm$(jn$))="0" then goto L1370
@@ -141,9 +139,9 @@ L1300: for j=1 to rw
 		rewrite #1,using 'form pos 150,PD 7.2,N 2',key=jn$: b3,b4
 L1370: next j
 goto Xit
- 
+
 Xit: fnXit
- 
+
 SRCH: !
 	bk=0
 	hce=ce
@@ -201,13 +199,13 @@ SREND: if j>1 then j=j-1
 	bk=bk-1
 L1970: selclp=1
 goto L1590
- 
+
 L2000: selclp=0
 goto L1480
- 
+
 SEARCHEND: !
 	close #103: ioerr ignore
 return
- 
+
 include: ertn
- 
+

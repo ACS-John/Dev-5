@@ -75,13 +75,13 @@ def fn_FileSaveAs(save_what$*128; fsa_automatedSaveFileName$*256,suppressErrorLo
 	close #h_tmp:
 	if fn_isClientServer and ~disableCopyToLocal then
 		execute 'sy -s '&env$('temp')&'\save_as_'&session$&'.cmd'
-		fnmakesurepathexists(env$('at')&save_name$)
+		fnMakeSurePathExists(env$('at')&save_name$)
 		fnCopyFile(serverTempSaveFile$,env$('at')&save_name$)
 	else if fn_isClientServer and disableCopyToLocal then ! fnAutomatedSavePoint on client/server
 		execute 'sy -s '&env$('temp')&'\save_as_'&session$&'.cmd'
 		dim save_path$*1024,save_filename$*256,save_ext$
 		fnGetPp(save_name$,save_path$,save_filename$,save_ext$)
-		fnmakesurepathexists(fnProgramDataDir$&'\Temp\'&env$('client')&'\Automated Saves\'&save_filename$&save_ext$)
+		fnMakeSurePathExists(fnProgramDataDir$&'\Temp\'&env$('client')&'\Automated Saves\'&save_filename$&save_ext$)
 		fnRename(serverTempSaveFile$,fnProgramDataDir$&'\Temp\'&env$('client')&'\Automated Saves\'&save_filename$&save_ext$)
 	else
 		execute 'sy '&env$('temp')&'\save_as_'&session$&'.cmd'
@@ -237,7 +237,7 @@ def fn_openPartial
 	dim tmpFileOpen$*256
 	if fn_isClientServer then
 		tmpFileOpen$=env$('temp')&'\acs\OpenPartial_tmpFileOpen'&session$&'.zip'
-		fnmakesurepathexists(tmpFileOpen$)
+		fnMakeSurePathExists(tmpFileOpen$)
 		! if env$('acsDeveloper')<>'' and exists(tmpFileOpen$) then goto SKIPFORDEV! XXX DELETE ME
 			fnCopyFile(env$('at')&opFileOpen$,tmpFileOpen$)
 			if env$('acsDeveloper')<>'' then pr bell; : sleep(.2) : pr bell; : sleep(.1) : pr bell;
@@ -309,7 +309,7 @@ def fn_opMain(omFileOpen$*256)
 			fnStatus('**')
 			fnStatus('Set current system to: '&cursys$&' from '&cursys_origional$)
 			cursys$=fncursys$(cursys$)
-			fnputcno(destination_company_number) : cno=destination_company_number
+			cno=fnPutCno(destination_company_number)
 			fnStatus('Set active Company Number to: '&str$(destination_company_number))
 			!
 			dim omSourceFilter$*64
@@ -351,7 +351,7 @@ def fn_fileOpenEverything(foeSource$*256)
 	dim foeFileOpen$*256
 	if fn_isClientServer then
 		foeFileOpen$=env$('temp')&'\acs\OpenPartialTmpFileOpenEverything'&session$&'.zip'
-		fnmakesurepathexists(foeFileOpen$)
+		fnMakeSurePathExists(foeFileOpen$)
 		fnCopyFile(foeSource$,foeFileOpen$)
 	else
 		foeFileOpen$=foeSource$
@@ -473,7 +473,7 @@ def fn_automatedSavePoint(fileNameAddition$*128)
 		asp_saveFilter$='[cursys]mstr\*.h[cno]'
 		asp_path$='[temp]\acs\Automated Saves'
 		asp_filename$='[cursys] Company [cno] '&date$('CCYY-MM-DD')&' '&srep$(time$,':','-')&' '&env$('Program_Caption')&' - '&fileNameAddition$&'.zip'
-		fnmakesurepathexists(asp_path$&'\')
+		fnMakeSurePathExists(asp_path$&'\')
 		fn_FileSaveAs(asp_saveFilter$, asp_path$&'\'&asp_filename$,1,1)
 	end if
 fnend

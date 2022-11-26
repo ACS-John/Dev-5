@@ -801,7 +801,7 @@ def fn_editFile(efEditorType$,efFileToEdit$*256)
 		dim efFilePath$*256,efFileName$*128,efFileExt$*128
 		fnGetPp(efFileToEdit$,efFilePath$,efFileName$,efFileExt$)
 		efEditOnClientCopyOfFile$=env$('at')&fnProgramDataDir$&'Temp\Session'&session$&'\'&efFileName$&efFileExt$
-		fnmakesurepathexists(efEditOnClientCopyOfFile$)
+		fnMakeSurePathExists(efEditOnClientCopyOfFile$)
 		if exists(efFileToEdit$) then
 			fncopyfile(efFileToEdit$,efEditOnClientCopyOfFile$)
 		end if

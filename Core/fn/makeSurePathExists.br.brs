@@ -1,17 +1,17 @@
 !  ! r: testing zone
-!  library program$: fnMakeSurepathExists
-!  fnMakeSurepathExists('[Q]\INI\Core\PrtFlex')
-!  fnMakeSurepathExists('C:\Program Files (x86)\ACS 5')
-!  fnMakeSurepathExists('C:\Program Files (x86)\ACS 5\')
-!  fnMakeSurepathExists('C:\Program Files (x86)\ACS 5\acs.ini')
+!  library program$: fnMakeSurePathExists
+!  fnMakeSurePathExists('[Q]\INI\Core\PrtFlex')
+!  fnMakeSurePathExists('C:\Program Files (x86)\ACS 5')
+!  fnMakeSurePathExists('C:\Program Files (x86)\ACS 5\')
+!  fnMakeSurePathExists('C:\Program Files (x86)\ACS 5\acs.ini')
 !  end
 !  ! /r
 ! from fileio.brs - md/mkdir function fileio version is not a library 2/7/2017 except this version is a library and quote encapsulates the path$ it is making
 ! 8/24/2017 - more modifications to better work with UNC paths
-def library fnMakeSurepathExists(fileName$*255; path$*255,___,returnN,wasFilenamesUpperCase)
+def library fnMakeSurePathExists(fileName$*255; path$*255,___,returnN,wasFilenamesUpperCase)
 	autoLibrary
 	! if env$('acsDeveloper')<>'' and fileName$='[Q]\Data\' then
-	! 	pr 'call to fnMakeSurepathExists("'&fileName$&'"; "'&path$&'")'
+	! 	pr 'call to fnMakeSurePathExists("'&fileName$&'"; "'&path$&'")'
 	! 	debug=1
 	! 	pause
 	! else
@@ -44,13 +44,13 @@ include: filenamesPopUpperCase
 		
 	MspeErr: !
 	returnN=-err
-		pr 'fnMakeSurepathExists got an error '&str$(err)&' and continued passing back its failure to the calling program to handle.'
+		pr 'fnMakeSurePathExists got an error '&str$(err)&' and continued passing back its failure to the calling program to handle.'
 		pr '  path$='&path$
 		pr '  filename$='&filename$
 		pause ! if env$('debug')='Yes' then pause
 	goto MspeFinis
 	MspeFinis: !
-	fnMakeSurepathExists=returnN
+	fnMakeSurePathExists=returnN
 fnend
 def fn_backslashCount(bscText$*128)
 	bscCount=0

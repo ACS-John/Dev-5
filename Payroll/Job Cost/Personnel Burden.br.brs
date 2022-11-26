@@ -1,28 +1,28 @@
 ! formerly  S:\acsPR\burden
 ! Service Code File
-!
-	autoLibrary
-	fnTop(program$)
-	on error goto Ertn
-	dim dat$*20,gl(3),sf1$*28,sn$*30,search$(22),resp$(10)*256
-	dim name$*30
-	dim holdeno$*8,vcode$*6,de$*30,eno$*8,search$(22),ic$*2,pc$*1
-	dim df$*256,if$*256
-	dim code$(2),item2$(4)*30,breakdownde$*30,ml$(3)*80,code2$(3)
-!
-	fndat(dat$,1)
- 
-	if exists("[Q]\PRmstr\Burden.h[cno]")=0 then goto SETUP_FILES
+
+autoLibrary
+fnTop(program$)
+on error goto Ertn
+dim dat$*20,gl(3),sf1$*28,sn$*30,search$(22),resp$(10)*256
+dim name$*30
+dim holdeno$*8,vcode$*6,de$*30,eno$*8,search$(22),ic$*2,pc$*1
+dim df$*256,if$*256
+dim code$(2),item2$(4)*30,breakdownde$*30,ml$(3)*80,code2$(3)
+
+fndat(dat$,1)
+
+if exists("[Q]\PRmstr\Burden.h[cno]")=0 then goto SETUP_FILES
 L180: open #1: "Name=[Q]\PRmstr\Burden.h[cno],KFName=[Q]\PRmstr\BurdenIdx.h[cno],Shr",i,outIn,k
 L190: form pos 1,n 8,c 30,3*n 6.3
 ASKEMPLOYEE: !
 	mat resp$=("")
 	ad1=0 ! add code - used to tell other parts of the program,
 	! that I am currently adding a service code record.
-	fnTos(sn$="Pr-askemployee")
+	fnTos
 	respc=0
 	fnLbl(1,1,"Employee Number:",20,right)
-	fncmbburden(1,23)
+	fnCmbBurden(1,23)
 	if hact$="" then
 		resp$(respc+=1)=""
 	else
@@ -48,7 +48,7 @@ ASKEMPLOYEE: !
 	if trim$(eno$)="" then goto ASKEMPLOYEE else read #1,using L190,key=eno$: eno,name$,burden,burden2,burden3 nokey ASKEMPLOYEE : goto SCREEN_1
 	if ckey=7 then gosub RECREATE_GRID: goto ASKEMPLOYEE
 SCREEN_1: ! maintain personnel burdern screen
-	fnTos(sn$="Pr-burden")
+	fnTos
 	respc=0
 	mylen=12: mypos=mylen+3 : right=1
 	fnLbl(1,1,"Employee #:",mylen,right)
@@ -94,7 +94,7 @@ RECREATE_GRID: !
 	return
 ADD_RECORD: !
 	if reindex>3 then goto ERTN
-	fnTos(sn$="Burden2")
+	fnTos
 	fnLbl(1,5,"New Personnel Burden Information",45,1)
 	fnLbl(3,1,"Employee Number:",15,0)
 	fncmbemp(3,18)
@@ -116,51 +116,54 @@ L870: burden=burden2=burden3=0
 	write #1,using L190: eno,name$,burden,burden2,burden3
 	holdeno=eno
 	gosub RECREATE_GRID
-	goto SCREEN_1
+goto SCREEN_1
 SETUP_FILES: !
 	open #1: "Name=[Q]\PRmstr\Burden.h[cno],RecL=128,replace",internal,outIn
 	close #1:
-	goto REINDEX
+goto REINDEX
 REINDEX: ! indexes if needed
 	reindex+=1
-	close #1: ioerr L990
-L990: execute "Index [Q]\PRmstr\Burden.h[cno]"&' '&"[Q]\PRmstr\BurdenIdx.h[cno] 1 8 Replace DupKeys -n"
-	goto L180
+	close #1: ioerr ignore
+	execute "Index [Q]\PRmstr\Burden.h[cno]"&' '&"[Q]\PRmstr\BurdenIdx.h[cno] 1 8 Replace DupKeys -n"
+goto L180
 PRINT_PROOF: !
 	fnopenprn
 	gosub L1140
 	restore #1:
-L1050: read #1,using L190,release: eno,name$,burden,burden2,burden3 eof L1090
+L1050: !
+	read #1,using L190,release: eno,name$,burden,burden2,burden3 eof L1090
 	pr #255,using L1070: eno,name$,burden pageoflow L1130
-L1070: form pos 1,n 8,x 6,c 30,n 6.3 ,skip 1
-	goto L1050
-L1090: if nw=0 then pr #255: newpage
+	L1070: form pos 1,n 8,x 6,c 30,n 6.3 ,skip 1
+goto L1050
+L1090: !r:
+	if nw=0 then pr #255: newpage
 	fncloseprn
 	on fkey 5 ignore
-	goto ASKEMPLOYEE
+goto ASKEMPLOYEE
 L1130: pr #255: newpage : gosub L1140 : continue
-L1140: pr #255,using L1150: date$,env$('cnam')
-L1150: form pos 1,c 10,pos 20,cc 40,skip 1
+L1140: ! r:
+	pr #255,using L1150: date$,env$('cnam')
+	L1150: form pos 1,c 10,pos 20,cc 40,skip 1
 	pr #255,using L1150: time$,"Personnel Burden "
 	pr #255:
 	pr #255: " Employee #  Name                         Burden %"
 	pr #255: " __________  ____________________         ________"
-	return
-	form pos 1,c 6,c 12,c 30,pd 3
-!
-POF1: pr #255: newpage
+return ! /r
+
+POF1: ! r:
+	pr #255: newpage
 	pr #255,using L1300: date$('mm/dd/yy'),env$('cnam'),time$,"SERVICE CODE PROOF LIST",dat$
 	pcnt=4
-	continue
-!
-POF2: !
+continue ! /r
+
+POF2: ! r:
 	pr #255: newpage
 	pr #255,using L1300: date$('mm/dd/yy'),env$('cnam'),time$,"SERVICE CODE PROOF LIST",dat$
 	L1300: form skip 3,pos 1,c 8,pos namtab,c 40,skip 1,pos 1,c 8,pos 53,c 30,skip 1,pos dattab,c 20,skip 2
 	pr #255,using L1320: pl$(9,1),pl$(9,2)
 	L1320: form pos 20,2*c 50,skip 1
 	pcnt=5
-continue
-!
+continue ! /r
+
 Xit: fnXit
 include: ertn

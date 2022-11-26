@@ -333,7 +333,7 @@ def library fnFlexInit1(sfn$*100,lyne,ps,height,width,mat ch$; mat colMask$,selt
 	!
 	! ***	 test validity of some stuff **********
 	fnFlexInit1=555
-	fnmakesurepathexists('[temp]\acs\'&hdrfile$)
+	fnMakeSurePathExists('[temp]\acs\'&hdrfile$)
 	open #filenumber: 'Name=[temp]\acs\'&hdrfile$&',Size=0,Replace,EoL=CRLF,RecL=8000',d,o
 	for j=1 to udim(mat colMask$)
 		if trim$(colMask$(j))='' then colMask$(j)='80'

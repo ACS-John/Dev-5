@@ -1226,7 +1226,7 @@ def fn_notedir$*256
 	if notedir_setup<>val(env$('cno')) then
 		dim notedir$*256
 		notedir$='[Q]\UBmstr\notes.h[cno]'
-		fnmakesurepathexists(notedir$&'\')
+		fnMakeSurePathExists(notedir$&'\')
 	end if
 	fn_notedir$=notedir$
 fnend

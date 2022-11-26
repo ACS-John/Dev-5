@@ -3,11 +3,10 @@
 	autoLibrary
 	on error goto Ertn
  
-	dim rt$*78,ch$(2)*132,psc(100),inp(20),pp(20),ti(20),cnam$*40
-	dim message$*40,cap$*128
+	dim rt$*78,ch$(2)*132,psc(100),inp(20),pp(20),ti(20)
+	dim message$*40
  
-	fnTop(program$,cap$="User Designed Reports Proof List")
-	fncno(cno,cnam$)
+	fnTop(program$,"User Designed Reports Proof List")
 	open #1: "Name=[Q]\PRmstr\PRReport.h[cno],KFName=[Q]\PRmstr\prrptidx.h[cno],Shr",i,i,k
 	fnopenprn
  

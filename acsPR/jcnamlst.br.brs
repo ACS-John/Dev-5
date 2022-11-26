@@ -4,11 +4,10 @@
 	autoLibrary
 	on error goto Ertn
  
-	dim dat$*20,jn$*6,n$*40,cn$*11,cnt$*5,k$*25,cap$*128,p$(20)*50,io1$(2)
-	dim cnam$*40,message$*40
+	dim dat$*20,jn$*6,n$*40,cn$*11,cnt$*5,k$*25,p$(20)*50,io1$(2)
+	dim message$*40
  
-	fnTop(program$,cap$="Name and Number List")
-	fncno(cno,cnam$) : _
+	fnTop(program$,"Name and Number List")
 	fndat(dat$)
  
 	fnconsole(1)
@@ -21,9 +20,9 @@
  
 	pr newpage
 	close #101: ioerr L220
-L220: open #101: "SRow=9,SCol=14,ERow=14,ECol=66,Border=DR,Caption=<"&cap$,display,outIn
+L220: open #101: "SRow=9,SCol=14,ERow=14,ECol=66,Border=DR,Caption=<"&env$('program_caption'),display,outIn
 	pr #101: newpage
-	pr #101,fields "1,1,Cc 53,R,N": cnam$
+	pr #101,fields "1,1,Cc 53,R,N": env$('cnam')
 	pr #101,fields "2,1,Cc 53,R,N": "Company Number [cno]"
 	pr #101,fields "4,2,Cr 30,N": "Report Heading Date:"
 	pr #101,fields "5,2,Cr 30,n": "Print Category Names (Y/N):"

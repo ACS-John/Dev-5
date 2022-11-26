@@ -5,13 +5,10 @@
 	on error goto Ertn
  
 	dim jn$*6,n$*40,a$(3)*30,b(4),cn$*11,k$*25,l(13),ta(2),eno$*12,jno$*6
-	dim tr(9),pd$*30,tn$*6,n$*40,cap$*128,message$*40,msgline$(2)*60
+	dim tr(9),pd$*30,tn$*6,n$*40,message$*40,msgline$(2)*60
 	dim response$(5)*1
  
-	fnTop("S:\acsPR\jcRemove",cap$="Remove Completed Jobs")
-	fncno(cno)
- 
-	fnconsole(1)
+	fnTop(program$,"Remove Completed Jobs")
 	open #1: "Name=[Q]\PRmstr\JCMSTR.h[cno]",internal,outIn: close #1:
  
 	execute "Copy [Q]\PRmstr\JCMSTR.h[cno] JCMSTR.X -n"
@@ -21,7 +18,7 @@
 	open #1: "Name=JCMSTR.X,KFName=[Q]\PRmstr\JCIndx.h[cno]",i,outIn,k
  
 L220: pr newpage
-	fnopenwin(win=101,10,20,14,59,cap$)
+	fnopenwin(win=101,10,20,14,59,'')
 	pr #101,fields "4,2,C 21,N": "Job Number to Remove:"
 	pr f "15,35,C 09,B,5": "Done (F5)"
 L260: input #101,fields "4,24,C 6,UT,N": jn$
@@ -32,7 +29,7 @@ L260: input #101,fields "4,24,C 6,UT,N": jn$
 L310: form pos 7,c 40
 	msgline$(1)="Are you sure you wish to delete Job Number "&ltrm$(jn$)
 	msgline$(2)=n$
-	fnoldmsgbox(mat response$,cap$, mat msgline$,2)
+	fnoldmsgbox(mat response$,'', mat msgline$,2)
 	if response$(1)="Y" then goto L360 else goto L220
 L360: rewrite #1,using 'form pos 157,N 2',key=jn$: 9 nokey L220
 	goto L220

@@ -1,18 +1,17 @@
 ! Replace S:\acsPR\newjcRptS1
 ! Create Job Cost Report Program
- 
+
 	autoLibrary
 	on error goto Ertn
- 
+
 	dim rn$*2,rt$*51,ch$(2)*132,psc(100),cap$*128,message$*40
 	dim f$(20)*50,pp(20),ppr(20),dp(20),fc(20),tcj(20),tcs(20),ty$(24)*8
 	dim a$(20)*32,a(20),underlin$*30
 	dim ln$*255,pf$*255,af$*255,gpf$*255,gaf$*255,jpf$*255,jaf$*255,upf$*255
 	dim uaf$*255
- 
-	fnTop("S:\acsPR\newjcRptS1",cap$="User Designed Reports (1)")
-	fncno(cno)
- 
+
+	fnTop(program$,cap$="User Designed Reports (1)")
+
 	data "JN"
 	data "n$"
 	data "A$(1)"
@@ -38,17 +37,17 @@
 	data "X23"
 	data "X24"
 	read mat ty$
-! 
+
 	rn=fnrx
 	underlin$="______________________________"
 	cap$="Create Job Cost Report Program"
 	rn$=lpad$(str$(rn),2)
- 
+
 	open #1: "Name=S:\acsPR\JCREPORT.MST,KFName=S:\acsPR\JCREPORT.idx",i,i,k
 	read #1,using L490,key=rn$: rn,rt$,mat ch$,ips,sd,cp,sc,mat psc,mat f$,mat pp,mat ppr,mat dp,mat fc,mat tcj,mat tcs nokey Xit
 L490: form pos 1,n 2,c 51,x 27,2*c 132,n 3,3*n 1,100*pd 6.3,20*c 50,40*pd 2,80*n 1
 	close #1:
- 
+
 	open #11: "Name=PROC."&session$,d,o ioerr L570
 	close #11,free:
 L570: open #11: "Name=PROC.[Session],SIZE=0,RecL=255",d,o
@@ -167,7 +166,8 @@ L1350: next j
 	gaf$=rtrm$(gaf$)&",skip 1"
 	pr #11: gpf$
 	pr #11: gaf$
-	goto L1570
+goto L1570
+
 L1560: pr #11: "20105 goto 390"
 L1570: if rtrm$(jpf$(31:255))="" then goto L1700
 	jpf$(31:31)=" "
@@ -181,7 +181,8 @@ L1570: if rtrm$(jpf$(31:255))="" then goto L1700
 	pr #11: uaf$
 	pr #11: "20030 mat s=(0)"
 	pr #11: "20040 goto 19800"
-	goto L1710
+goto L1710
+
 L1700: pr #11: "20000 goto 19800"
 L1710: pr #11: "20100 snd: !"
 	pr #11: "20110 pr #255: newpage"
@@ -189,49 +190,49 @@ L1710: pr #11: "20100 snd: !"
 	pr #11: "20160 goto 390"
 	if ips=0 then goto L2130
 	if ips>9 then goto L1950
-	on sc goto L1880,L1790,L1820,L1850 none L1880
- 
+on sc goto L1880,L1790,L1820,L1850 none L1880
+
 L1790: pr #11: "19814 if ";ty$(ips);">=psc(1) then 19820 else 19800"
-	goto L2130
- 
+goto L2130
+
 L1820: pr #11: "19814 if ";ty$(ips);"<=psc(1) then 19820 else 19800"
-	goto L2130
- 
+goto L2130
+
 L1850: pr #11: "19814 if ";ty$(ips);">=psc(1) and ";ty$(ips);"<=psc(2) then 19820 else 19800"
-	goto L2130
- 
+goto L2130
+
 L1880: pr #11: "19811 for j=1 to 100"
 	pr #11: "19814   IF "&ty$(ips)&"= PSC(J) then 19820"
 	pr #11: "19813   IF PSC(J)=0 then 19800"
 	pr #11: "19815 next j"
 	pr #11: "19816 goto 19800"
-	goto L2130
- 
+goto L2130
+
 L1950: on sc goto L2060,L1970,L2000,L2030 none L2060
- 
+
 L1970: pr #11: "19837 if ";ty$(ips);">=psc(1) then 19850 else 19833"
-	goto L2130
- 
+goto L2130
+
 L2000: pr #11: "19837 if ";ty$(ips);"<=psc(1) then 19850 else 19833"
-	goto L2130
- 
+goto L2130
+
 L2030: pr #11: "19837 if ";ty$(ips);">=psc(1) and ";ty$(ips);"<=psc(2) then 19850 else 19833"
-	goto L2130
- 
+goto L2130
+
 L2060: pr #11: "19837 for j=1 to 100"
 	pr #11: "19839   IF ";ty$(ips);"= PSC(J) then 19850"
 	pr #11: "19838   IF PSC(J)=0 then 19833"
 	pr #11: "19840 next j"
 	pr #11: "19841 goto 19833"
-	goto L2130
- 
+goto L2130
+
 L2130: pr #11: "Free S:\acsPR\jcPrnt"&str$(rn)&".br -n"
 	pr #11: "Save S:\acsPR\jcPrnt"&str$(rn)
 	pr #11: "run S:\acsPR\newjcrptfm"
 	close #11:
-	chain "Proc=Proc."&session$
- 
+chain "Proc=Proc."&session$
+
 include: ertn
- 
+
 Xit: fnXit
- 
+

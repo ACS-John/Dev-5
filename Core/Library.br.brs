@@ -1362,9 +1362,9 @@ fnend
 		fnSystemName$=fnSystemName$(sysId$)
 	fnend
 ! r: cno   S:\Core\CNo.br - COMPANY NUMBER (and misc)
-	def library fncno(&cno;&cnam$)
-		library 'S:\Core\CNo.br': fncno
-		fncno=fncno(cno,cnam$)
+	def library fnCno
+		library 'S:\Core\CNo.br': fnCno
+		fnCno=fnCno
 	fnend
 	def library fnget_company_number_list(mat cno_list; sysid$*256)
 		library 'S:\Core\CNo.br': fnget_company_number_list
@@ -1398,9 +1398,9 @@ fnend
 		library 'S:\Core\CNo.br': fnpriorcd
 		fnpriorcd=fnpriorcd(a)
 	fnend
-	def library fnputcno(cno)
-		library 'S:\Core\CNo.br': fnputcno
-		fnputcno=fnputcno(cno)
+	def library fnPutCno(cno)
+		library 'S:\Core\CNo.br': fnPutCno
+		fnPutCno=fnPutCno(cno)
 	fnend
 	def library fndat(&dat$; get_or_put)
 		library 'S:\Core\CNo.br': fndat
@@ -1793,7 +1793,7 @@ fnend
 	fnend
 	def library fnss_employee
 		library 'S:\acsPR\ss_emp.br': fnss_employee
-		fnss_employee=fnss_employee
+		fnss_employee=fnss_employee=fnss_employee
 	fnend
 	def library fnss_employer
 		library 'S:\acsPR\ss_emp.br': fnss_employer
@@ -1801,19 +1801,19 @@ fnend
 	fnend
 	def library fnemployee_srch(&x$;fixgrid)
 		library 'S:\acsPR\Employee_srch.br': fnemployee_srch
-		fnemployee_srch(x$,fixgrid)
+		fnemployee_srch=fnemployee_srch(x$,fixgrid)
 	fnend
 	def library fncat_srch2(&x$,&ckey;fixgrid)
 		library 'S:\acsPR\CAT_srch2.br': fncat_srch2
-		fncat_srch2(x$,ckey,fixgrid)
+		fncat_srch2=fncat_srch2(x$,ckey,fixgrid)
 	fnend
 	def library fncategory_srch(&cn$;fixgrid)
 		library 'S:\acsPR\CATegory_srch.br': fncategory_srch
-		fncategory_srch(x$,fixgrid)
+		fncategory_srch=fncategory_srch(x$,fixgrid)
 	fnend
 	def library fnsubcat_srch(&cde$,&ckey;fixgrid)
 		library 'S:\acsPR\SubCat_srch.br': fnsubcat_srch
-		fnsubcat_srch(cde$,ckey,fixgrid)
+		fnsubcat_srch=fnsubcat_srch(cde$,ckey,fixgrid)
 	fnend
 	def library fncmbemp(lyne,mypos; addall,container)
 		library 'S:\acsPR\CmbEmp.br': fncmbemp
@@ -1821,7 +1821,7 @@ fnend
 	fnend
 	def library fncmbcategory(lyne,mypos;addall,c,a$*30)
 		library 'S:\acsPR\CmbCategory.br': fncmbcategory
-		fncmbcategory(lyne,mypos,addall,c,a$)
+		fncmbcategory=fncmbcategory(lyne,mypos,addall,c,a$)
 	fnend
 	def library fnCheckFile(hact$,filnum,hCheckHistory,hEmployee)
 		library 'S:\Payroll\Payroll Check History.br': fnCheckFile
@@ -1829,19 +1829,19 @@ fnend
 	fnend
 	def library fnhours(eno)
 		library 'S:\acsPR\hours_lib.br': fnhours
-		fnhours(eno)
+		fnhours=fnhours(eno)
 	fnend
 	def library fncmbjob(lyne,mypos;addall,c,a$*30)
 		library 'S:\acsPR\Cmbjob.br': fncmbjob
-		fncmbjob(lyne,mypos,addall,c,a$)
+		fncmbjob=fncmbjob(lyne,mypos,addall,c,a$)
 	fnend
 	def library fncmbcat(lyne,mypos;addall,c,a$*30)
 		library 'S:\acsPR\CmbCat.br': fncmbcat
-		fncmbcat(lyne,mypos,addall,c,a$)
+		fncmbcat=fncmbcat(lyne,mypos,addall,c,a$)
 	fnend
 	def library fncmbsubcat(lyne,mypos;addall,c)
 		library 'S:\acsPR\CmbSubCat.br': fncmbsubcat
-		fncmbsubcat(lyne,mypos,addall,c)
+		fncmbsubcat=fncmbsubcat(lyne,mypos,addall,c)
 	fnend
 	def library fnpr_conversion_department(cno; medicare_is_seperated)
 		library 'S:\acsPR\Conversion\v4_cnv.br': fnpr_conversion_department
@@ -1873,13 +1873,13 @@ fnend
 		fnCompanyPayPeriodEndingDate=fnCompanyPayPeriodEndingDate(cno)
 	fnend
 	! r: Job Cost Payroll
-		def library fncmbburden(lyne,mypos;addall,c,a$*30)
-			library 'S:\Payroll\Job Cost\fnCmbBurden.br': fncmbburden
-			fncmbburden(lyne,mypos,addall,c,a$)
+		def library fnCmbBurden(lyne,mypos;addall,c,a$*30)
+			library 'S:\Payroll\Job Cost\fnCmbBurden.br': fnCmbBurden
+			fnCmbBurden=fnCmbBurden(lyne,mypos,addall,c,a$)
 		fnend
 		def library fnburden_srch(&x$;fixgrid)
 			library 'S:\Payroll\Job Cost\fnBurden_srch.br': fnburden_srch
-			fnburden_srch(x$,fixgrid)
+			fnburden_srch=fnburden_srch(x$,fixgrid)
 		fnend
 	! /r
 ! /r

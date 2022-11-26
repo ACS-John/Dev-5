@@ -1,7 +1,7 @@
 fn_setup
 fnTop(program$)
 gosub IfCoTryAgain
-fncno(cno)
+cno=fnCno
 Menu1: ! r:
 	fnTos
 	! r: add the system buttons to the screen
@@ -88,15 +88,15 @@ Menu1: ! r:
 		fnchain('S:\Core\Company Import.br')
 	end if
 
-	cno_selected=val(resp$(1))
+	cnoSelected=val(resp$(1))
 
 	if ckey=3 then ! Copy
-		fn_companyCopy(cno_selected)
+		fn_companyCopy(cnoSelected)
 	else if ckey=14 then ! Delete Company
 		gosub CompanySelect
 		fn_companyConfigure(scno)
 	else if ckey=4 and company_count=>2 then ! Delete Company
-		fn_companyDelete(cno_selected)
+		fn_companyDelete(cnoSelected)
 	else if ckey=10 then ! Select that Company
 		gosub CompanySelect
 		chain program$
@@ -104,14 +104,14 @@ Menu1: ! r:
 		curSys$=client_has$(ckey-1000)
 		fnreg_write(session$&'.CurSys',curSys$)
 		fncurSys$(curSys$)
-		fn_setupOnCursysChange(cno,cnam$)
+		fn_setupOnCursysChange(cno)
 		chain program$
 	else if fkey_client>0 and ckey=fkey_client then
 		fnClientSelect
 		fn_systemSetup
 		if udim(mat client_has$)=>2 and srch(mat client_has$,env$('cursys'))<=0 then ! change it to the second available system (1st is CO) if they don't have the currently selected system
 			fncurSys$(client_has$(2))
-			fn_setupOnCursysChange(cno,cnam$)
+			fn_setupOnCursysChange(cno)
 		end if
 	else if ckey=15 then ! SAVE
 		gosub CompanySelect
@@ -119,7 +119,7 @@ Menu1: ! r:
 	end if
 goto Menu1 ! /r
 CompanySelect: ! r:
-	fnputcno(cno_selected)
+	cnoSelected=fnPutCno(cnoSelected)
 return  ! /r
 
 CompanyAdd: ! r:
@@ -132,9 +132,9 @@ CompanyAdd: ! r:
 	fnCmdSet(2)
 	ckey=fnAcs(mat resp$)
 	if ckey=5 then goto Menu1
-	cno_selected=val(resp$(1))
-	if fn_company_already_exists(cno_selected)=1 then goto Menu1
-	fnputcno(cno_selected)
+	cnoSelected=val(resp$(1))
+	if fn_company_already_exists(cnoSelected)=1 then goto Menu1
+	cnoSelected=fnPutCno(cnoSelected)
 	fnCheckFileVersion
 	if env$('cursys')='PR' or env$('cursys')='SU' or env$('cursystem')='Client Billing' or env$('cursys')='CL' then ! no AddCNo necessary - just copy in from *.h99999 and go straight to Company Information
 		if exists('S:\[cursystem]\mstr\*.h99999') then
@@ -316,28 +316,23 @@ def fn_systemSetup
 	!  curSys$=fnCurSys$
 	fnreg_read(session$&'.CurSys',curSys$)
 	curSys$=fncurSys$(curSys$)
-	fn_setupOnCursysChange(cno,cnam$)
+	fn_setupOnCursysChange(cno)
 fnend
 IfCoTryAgain: ! r: if cursys=CO than just pick the first thing they are licensed for
 	if ( env$('cursys')='CO' or srch(mat client_has$,env$('cursys'))<=0 ) and udim(mat client_has$)=>2 then
 		curSys$=client_has$(2)
 		fnreg_write(session$&'.CurSys',curSys$)
 		fncurSys$(curSys$)
-		fn_setupOnCursysChange(cno,cnam$)
+		fn_setupOnCursysChange(cno)
 		! fnchain(program$)
 	end if
 return ! /r
 dim cnam$*80
-def fn_setupOnCursysChange(&cno,&cnam$)
-	fnCno(cno,cnam$)
-	if ~cno then
-		cno=1
-		fnputcno(cno)
-		fncno(cno,cnam$)
-	end if
-
-	if ~exists('[Q]\[cursys]mstr') and curSys$<>'CO' and lwrc$(curSys$)<>lwrc$('Client Billing') then execute 'mkdir "[Q]\[cursys]mstr"'
-
+def fn_setupOnCursysChange(&cno)
+	cno=fnCno
+	if ~cno then cno=fnPutCno(1)
+	env$('cursys')
+	if ~exists('[Q]\[cursys]mstr') and env$('cursys')<>'CO' and lwrc$(env$('cursys'))<>lwrc$('Client Billing') then execute 'mkdir "[Q]\[cursys]mstr"'
 fnend
 
 include: ertn

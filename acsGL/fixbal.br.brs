@@ -8,7 +8,6 @@
 	dim io1$(12),gln(3,3),fin(3),ta(2),ac(18),te$*1
 	dim d$*50,bc(13),bp(13),bm(13),rf(6),dn$*3,an$*6,sn$*3,glk$*12,fsk$*5
  
-	fncno(cno)
  
 	open #glmstr=1: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLIndex.h[cno],Shr",i,outIn,k
 READ_GLMSTR: !

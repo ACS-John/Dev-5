@@ -1,22 +1,21 @@
 ! Replace S:\acsPR\jcPctCmp
 ! Enter Percent Complete
- 
+
 	autoLibrary
 	on error goto Ertn
- 
-	dim cap$*128,msgline$(2)*60,response$(5)*1
+
+	dim msgline$(2)*60,response$(5)*1
 	dim jn$*6,jno$*6,n$*40,cn$*11,cnt$*5,k$*25
- 
-	fnTop("S:\acsPR\jcPctCmp",cap$="Enter Percent Complete")
-	fncno(cno)
- 
+
+	fnTop("S:\acsPR\jcPctCmp","Enter Percent Complete")
+
 	fnconsole(1)
- 
+
 	open #2: "Name=[Q]\PRmstr\JCCAT.h[cno],KFName=[Q]\PRmstr\CatIndx.h[cno],Shr",i,outIn,k
 	open #1: "Name=[Q]\PRmstr\JCMSTR.h[cno],KFName=[Q]\PRmstr\JCIndx.h[cno],Shr",i,outIn,k
- 
+
 L170: pr newpage
-	fnopenwin(win=101,08,07,16,72,cap$)
+	fnopenwin(win=101,08,07,16,72,env$('program_caption'))
 	pr #win,fields "4,2,Cr 25,N": "Job Number:"
 	pr #win,fields "5,2,Cr 25,N": "Cost Category:"
 	pr #win,fields "6,2,Cr 25,N": "Percent Complete (Labor):"
@@ -60,21 +59,21 @@ L570: if l13=0 then goto L580 else goto L590
 L580: l13=rl13
 L590: rewrite #2,using L600,key=cn$: k$,l10,l12,l13 nokey L630
 L600: form pos 12,c 25,pos 100,pd 7.2,pos 114,2*pd 2
-	goto L170
- 
+goto L170
+
 L630: msgline$(1)="Invalid Job Number or Category Number"
 	msgline$(2)="Please reselect."
-	fnoldmsgbox(mat response$,cap$,mat msgline$,1)
+	fnoldmsgbox(mat response$,env$('program_caption'),mat msgline$,1)
 	ce=1
-	goto ERR1
- 
-	goto L310
- 
+goto ERR1
+
+goto L310
+
 DONE: !
 	close #2:
-	goto Xit
- 
+goto Xit
+
 include: ertn
- 
+
 Xit: fnXit
- 
+

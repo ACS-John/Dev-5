@@ -33,7 +33,7 @@ L210: a=pos(x$,".",olda) : _
 		fn_booktitle$=x$
 fnend
  
-	fncno(cno)
+	cno=val(env$('cno'))
 	pr newpage
 L270: pr f "8,20,C 30,R,N": "Book Title Capital"
 	pr f "10,1,Cr 38": "Company Number to Convert (0 to Stop):"

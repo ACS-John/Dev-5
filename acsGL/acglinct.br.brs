@@ -1,17 +1,16 @@
 ! Replace S:\acsGL\acglinct
 ! -- pr Income Statement : _
 	! FOR 8 1/2 * 11 PAPER WITHOUT PERCENTAGES
- 
+
 	autoLibrary
 	on error goto Ertn
- 
-	dim fl1$*256,cch$*20,by(13),bp(13),cap$*128,udf$*256
+
+	dim fl1$*256,cch$*20,by(13),bp(13)
 	dim r$*5,d$*50,te$*1,ac(9),report$*50,secondr$*50,foot$*132,underlin$*14
-	dim cnam$*40,b$*3,a$(8)*30,oldtrans$*16,g(8),accum(9,2),sc1$(2)*20
- 
-	fnTop(program$,cap$="Income Statement")
-	fncno(cno,cnam$)
-	udf$=env$('temp')&'\'
+	dim b$*3,a$(8)*30,oldtrans$*16,g(8),accum(9,2),sc1$(2)*20
+
+	fnTop(program$,"Income Statement")
+
 	actpd$=fnactpd$
 	if fnGlAskFormatPriorCdPeriod=5 then goto Xit 		! sets fnps,fnpriorcd,fnfscode (primary/secondary,current year/Prior,period to print)
 	pors=1
@@ -22,7 +21,7 @@
 		fl1$="Name=[Q]\GLmstr\ACGLFNSI.h[cno],KFName=[Q]\GLmstr\agfsidx3.h[cno],Shr"
 	open #1: fl1$,i,i,k
 	if fnprocess=1 or fnUseDeptNo=0 then goto L320
-	fnTos(sn$="GLInput") : _
+	fnTos
 	mylen=30: mypos=mylen+3 : right=1
 	fnLbl(1,1,"Cost Center or Department #:",mylen,right)
 	fnTxt(1,mypos,3,0,right,'30',0,"Enter the cost center or department number if you wish to pr only one department, else leave blank for all.",0 ) : _
@@ -33,13 +32,13 @@
 	ckey=fnAcs(mat resp$)
 	if ckey=5 then goto Xit
 	costcntr=val(resp$(1))
-L320: fnopenprn : _
+L320: fnopenprn
 	if file$(255)(1:4)<>"PRN:" then redir=1 else redir=0
 	if fnps=2 then goto L360 ! secondary
-	execute "Index [Q]\GLmstr\GLmstr.h[cno] "&udf$&"fsindex.h[cno] 69 3 Replace DupKeys -N"
+	execute "Index [Q]\GLmstr\GLmstr.h[cno] "&env$('temp')&'\'&"fsindex.h[cno] 69 3 Replace DupKeys -N"
 	goto L370
-L360: execute "Index [Q]\GLmstr\GLmstr.h[cno] "&udf$&"fsindex.h[cno] 72 3 Replace DupKeys -N"
-L370: open #3: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName="&udf$&"fsindex.h[cno],Shr",i,i,k
+L360: execute "Index [Q]\GLmstr\GLmstr.h[cno] "&env$('temp')&'\'&"fsindex.h[cno] 72 3 Replace DupKeys -N"
+L370: open #3: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName="&env$('temp')&'\'&"fsindex.h[cno],Shr",i,i,k
 	report$="Statement of Income and Expenses"
 ! GOSUB BLDPCT1 ! BUILD % BASED ON REF # IN PRIMARY FUND # IN G/L ACCOUNT
 L400: read #1,using L450: r$,d$,te$,sp,ls,ds,ul,rs,bc,ap,mat ac,ic,fc eof L1650
@@ -167,13 +166,13 @@ L1530: heading=1
 	pr #255,using L1620: lpad$(rtrm$(fncch$),20),"Year To Date"
 L1620: form pos 45,c 20,pos 73,c 12,skip 2
 return
- 
+
 L1650: eofcode=1
 	gosub L1290
- 
+
 	fncloseprn
 	goto Xit
- 
+
 BLDPCT1: open #10: "Name=[Temp]\Work.[Session],KFName=[Temp]\Addr.[Session],Replace,RecL=17,KPS=1,KLN=5",i,outIn,k
 	for j=1 to lrec(3)
 		read #3,using L1740,rec=j: pc1,bb,cb noRec L1830
@@ -190,7 +189,7 @@ L1820: write #10,using L1770: pc1,cb-bb,cb
 L1830: next j
 	pc0=1
 return
- 
+
 BLDPCT2: !
 	pc3=pc4=0
 	if val(k$)=0 then goto L1970
@@ -202,7 +201,7 @@ L1940: if total2=0 then goto L1970
 	pc4=round(((total2-yt2)/total2)*100,0)
 	if pc4<-999 or pc4>9999 then pc4=0
 L1970: return
- 
+
 Xit: fnXit
- 
+
 include: ertn

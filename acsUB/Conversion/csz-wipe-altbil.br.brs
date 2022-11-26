@@ -1,12 +1,12 @@
 ! Replace S:\acsUB\conversion\csz-wipe-altbil
 ! this program wipes CSZs from the UB customer file and replaces them with whatever you tell it to
- 
+
 	autoLibrary
 	on error goto Ertn
- 
+
 	dim csz$*30
- 
-	fncno(cno)
+
+	cno=val(env$('cno'))
 	pr newpage
 L110: pr f "8,20,C 30,R,N": "Mask Cisty State Zip"
 	pr f "10,1,Cr 38": "Company Number to Convert (0 to Stop):"
@@ -21,11 +21,11 @@ L160: rinput fields mat io1$: cno,csz$ conv L160
 		pr f "1,1,N 10,R,N": j
 L220: next j
 	goto DONE
- 
+
 DONE: close #1:
 	pr "company number [cno] completed successfully"
 	goto L110
 Xit: stop
- 
+
 include: ertn
- 
+

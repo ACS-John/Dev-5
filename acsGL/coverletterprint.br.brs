@@ -1,18 +1,16 @@
 ! Replace S:\acsGL\CoverLetterPrint
 ! -- pr Cover Letter
- 
+
 	autoLibrary
 	on error goto Ertn
- 
-	dim tb$*32,cap$*128,ln1$*8800,ln$*8800,dat$*20
- 
-	fnTop("S:\acsGL\CoverLetterPrint",cap$="Print Cover Leter")
-	fnconsole(off=0)
-	fncno(cno)
+
+	dim tb$*32,ln1$*8800,ln$*8800,dat$*20
+
+	fnTop("S:\acsGL\CoverLetterPrint","Print Cover Leter")
 	fndat(dat$)
-	open #1: "Name=[Q]\GLmstr\Company.h[cno],Shr",i,i,r  : _
-	read #1,using 'form pos 195,C 30',rec=1: tb$ : _
-	close #1: : _
+	open #1: "Name=[Q]\GLmstr\Company.h[cno],Shr",i,i,r
+	read #1,using 'form pos 195,C 30',rec=1: tb$
+	close #1:
 	tb$="("&trim$(tb$)&")"
 	tempx=val(fnactpd$) conv L180
 	if tempx=1 then actpd$="one" else : _
@@ -39,23 +37,25 @@ READ_ACGLCOVF: !
 		if ln$(j2+1:j2+1)="1" then : _
 			ln$(j2:j2+1)=fnpedat$&ln$(j2+2:132-len(fnpedat$)) : _
 		else goto L280
-		goto L310
-L280: if ln$(j2+1:j2+1)="2" then : _
+goto L310
+L280: !
+	if ln$(j2+1:j2+1)="2" then : _
 			ln$(j2:j2+1)=rtrm$(dat$)&ln$(j2+2:132-len(rtrm$(dat$))) : _
 		else goto L300
-		goto L310
+goto L310
 L300: if ln$(j2+1:j2+1)="3" then : _
 			ln$(j2:j2+1)=rtrm$(actpd$)&ln$(j2+2:132-len(rtrm$(actpd$))) else goto L320
-L310: ! lN$=LN1$
-L320: next j2
+		L310: ! lN$=LN1$
+		L320: !
+	next j2
 	pr #255: tab(10);ln$
-	goto READ_ACGLCOVF
- 
+goto READ_ACGLCOVF
+
 DONE: close #1:
 	fncloseprn
-	goto Xit
- 
+goto Xit
+
 Xit: fnXit
- 
+
 include: ertn
- 
+

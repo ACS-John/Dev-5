@@ -14,10 +14,10 @@
 	autoLibrary
 	on error goto Ertn
  
-	dim cap$*128,resp$(10)*80,g(11),acctrn_form$*80,rw4(22,13),key$*19,ru(6)
+	dim cap$*128,resp$(10)*80,g(11),acctrn_form$*80,rw4(22,13),key$*19,rux(6)
  
 	fnTop("S:\acsUB\Conversion\Bld_Trans",cap$="Build Transactions")
-	fncno(cno)
+	cno=val(env$('cno'))
 	pr newpage
 LOOP_STEP_1: !
 	gosub MENU1
@@ -106,17 +106,17 @@ READ_MASTER: !
 		g(07)=rw4(15,month) : g(08)=rw4(16,month) : _
 		g(09)=rw4(17,month) : g(10)=rw4(18,month) : _
 		g(11)=rw4(19,month)
-		ru(1)=rw4(1,month) : ru(2)=rw4(2,month) : _
-		ru(3)=rw4(3,month) : ru(4)=rw4(4,month) : _
-		ru(5)=rw4(5,month) : ru(6)=rw4(6,month) : _
+		rux(1)=rw4(1,month) : rux(2)=rw4(2,month) : _
+		rux(3)=rw4(3,month) : rux(4)=rw4(4,month) : _
+		rux(5)=rw4(5,month) : rux(6)=rw4(6,month) : _
 		bal=rw4(7,month) : postcode=9 : _
 		transcode=1 : tamt=rw4(19,month)
 		key$=p$&lpad$(str$(tdate),8)&str$(transcode) : _
 		read #transvb,using 'form pos 1,C 10',key=key$: p$ nokey WRITE_A_RECORD
-		rewrite #transvb,using 'form pos 24,11*pd 4.2,6*pd 5,pd 4.2,n 1',key=key$: mat g,mat ru,bal,postcode
+		rewrite #transvb,using 'form pos 24,11*pd 4.2,6*pd 5,pd 4.2,n 1',key=key$: mat g,mat rux,bal,postcode
 		goto NEXT_MONTH
 WRITE_A_RECORD: !
-		write #transvb,using 'form pos 1,c 10,n 8,n 1,12*pd 4.2,6*pd 5,pd 4.2,n 1': p$,tdate,transcode,tamt,mat g,mat ru,bal,postcode
+		write #transvb,using 'form pos 1,c 10,n 8,n 1,12*pd 4.2,6*pd 5,pd 4.2,n 1': p$,tdate,transcode,tamt,mat g,mat rux,bal,postcode
 NEXT_MONTH: next month
 	goto READ_MASTER
 PHASE4: !

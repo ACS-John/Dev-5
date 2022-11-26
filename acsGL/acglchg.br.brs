@@ -5,14 +5,13 @@
 	autoLibrary
 	on error goto Ertn
  
-	dim fl1$*256,actpd$*6,cogl$(3)*12,pedat$*20,p$(20)*50,cap$*128
+	dim fl1$*256,actpd$*6,cogl$(3)*12,pedat$*20,p$(20)*50
 	dim r$*5,d$*50,te$*1,ac(9),report$*50,secondr$*50,foot$*132,underlin$*14
-	dim cnam$*40,accum(9,2),acct$*12,bp(13),by(13),udf$*256
+	dim accum(9,2),acct$*12,bp(13),by(13)
  
-	fnTop(program$,cap$="Comparative (FP)")
+	fnTop(program$,"Comparative (FP)")
 	if fnGlAskFormatPriorCdPeriod=5 then goto Xit
-	fncno(cno,cnam$)
-	udf$=env$('temp')&'\'
+
 	open #20: "Name=[Q]\GLmstr\Company.h[cno],Shr",i,i,r: read #20,using 'form pos 152,3*C 12',rec=1: mat cogl$ : close #20:
 	actpd=fnactpd : fscode=fnfscode
 	pors=1
@@ -54,10 +53,10 @@ L460: fnopenprn : _
 	redir=0: if file$(255)(1:4)<>"PRN:" then redir=1
 	report$="STATEMENT OF CHANGES IN FINANCIAL POSITION"
 	if fnps=2 then goto L510 ! secondary
-	execute "Index [Q]\GLmstr\GLmstr.h[cno] "&udf$&"fsindex.h[cno] 75 3 Replace DupKeys -N"
+	execute "Index [Q]\GLmstr\GLmstr.h[cno] "&env$('temp')&'\'&"fsindex.h[cno] 75 3 Replace DupKeys -N"
 	goto L520
-L510: execute "Index [Q]\GLmstr\GLmstr.h[cno] "&udf$&"fsindex.h[cno] 78 3 Replace DupKeys -N"
-L520: open #3: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName="&udf$&"fsindex.h[cno],Shr",i,i,k
+L510: execute "Index [Q]\GLmstr\GLmstr.h[cno] "&env$('temp')&'\'&"fsindex.h[cno] 78 3 Replace DupKeys -N"
+L520: open #3: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName="&env$('temp')&'\'&"fsindex.h[cno],Shr",i,i,k
 L530: read #1,using L570: r$,d$,te$,sp,ls,ds,ul,rs,bc,ap,mat ac,ic,fc eof L1830
 	if ltrm$(r$)="" or ltrm$(r$)="0" then goto L530
 	if costcntr=0 then goto L570

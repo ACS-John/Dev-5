@@ -7,18 +7,17 @@
 	dim choices$(2)*21,io5$(2),bigul$*140,heading$*140
 	dim fundnum(10),funddesc$(10)*20,io1$(20),dolcol$*140,accumcol$*140
 	dim bm(13),bp(13),by(13),cap$*128,fl1$*256,in3$(4),sc1$(2)*20,udf$*256
-	dim cnam$*40,b$*3,a$(8)*30,oldtrans$*16,g(8),accum(10,9,7),resp$(30)*50
+	dim b$*3,a$(8)*30,oldtrans$*16,g(8),accum(10,9,7),resp$(30)*50
 	dim r$*5,d$*50,te$*1,ac(9),report$*50,secondr$*50,foot$*132,underlin$*14
  
 	fnTop(program$,cap$="Cash Flow with Fund Comparison")
 	report$=cap$
-	actpd$=fnactpd$ : _
-	actpd=fnactpd : _
-	fnfscode : _
+	actpd$=fnactpd$
+	actpd=fnactpd
+	fnfscode
 	fnpriorcd
 	if fnGlAskFormatPriorCdPeriod=5 then goto Xit
-	fncno(cno,cnam$)
-	fscode=fnfscode : _
+	fscode=fnfscode
 	priorcd=fnpriorcd
 	udf$=env$('temp')&'\'
 	monthly=1 ! default to monthly information
@@ -37,7 +36,7 @@
 	fnTos
 	mylen=30: mypos=mylen+3 : right=1
 	fnLbl(1,1,"Cost Center or Department #:",mylen,right)
-	fnTxt(1,mypos,3,0,right,'30',0,"Enter the cost center or department number if you wish to pr only one department, else leave blank for all.",0 ) : _
+	fnTxt(1,mypos,3,0,right,'30',0,"Enter the cost center or department number if you wish to pr only one department, else leave blank for all.",0 )
 	resp$(1)=""
 	fnLbl(2,1,"(Blank for all Departments)",mylen,right)
 	fnCmdKey("&Next",1,1,0,"Prints the financial statement.")
@@ -53,7 +52,7 @@ L430: execute "Index [Q]\GLmstr\GLmstr.h[cno] "&udf$&"fsindex.h[cno] 75 3 Replac
 	goto L460
 L450: execute "Index [Q]\GLmstr\GLmstr.h[cno] "&udf$&"fsindex.h[cno] 78 3 Replace DupKeys -N"
 L460: open #3: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName="&udf$&"fsindex.h[cno],Shr",i,i,k
-	fnopenprn : _
+	fnopenprn
 	if file$(255)(1:4)<>"PRN:" then redir=1 else redir=0
 L480: read #1,using L520: r$,d$,te$,sp,ls,ds,ul,rs,bc,ap,mat ac,ic,fc eof L2250
 	if ltrm$(r$)="" or ltrm$(r$)="0" then goto L480
@@ -97,8 +96,7 @@ L840: if ir=val(r$) then total(fund)=total(fund)+(cb-bb) else goto L1010
 L870: for z=1 to 13
 		annualb=annualb+bm(z)
 	next z
-	if fscode=0 then monthb=monthb+bm(fnactpd) else : _
-		monthb=monthb+bm(fscode)
+	if fscode=0 then monthb=monthb+bm(fnactpd) else monthb=monthb+bm(fscode)
 	if fscode=0 then goto L920 else goto L960
 L920: for j=1 to fnactpd
 		ytdb=ytdb+bm(j)
@@ -254,9 +252,9 @@ L2400: fnTos
 	mylen=1: mypos=mylen+3
 	fnLbl(1,4,"Fund                 Description ")
 	for j=1 to 10
-		fnTxt(j+1,mypos,3,0,right,'30',0,"Enter the fund number.") : _
+		fnTxt(j+1,mypos,3,0,right,'30',0,"Enter the fund number.")
 		resp$(j*2-1)=str$(fundnum(j))
-		fnTxt(j+1,mypos+10,40,0,0,"",0,"Enter the fund description.") : _
+		fnTxt(j+1,mypos+10,40,0,0,"",0,"Enter the fund description.")
 		resp$(j*2)=funddesc$(j)
 	next j
 	fnCmdKey("&Next",1,1,0,"Continues with financial statement.")
@@ -283,9 +281,9 @@ return
 ASK_MONTHLY: ! ask monthly info or ytd info
 	fnTos
 	mylen=30: mypos=mylen+3 : right=1
-	fnOpt(1,2,"Print Monthly Figures" ,0,0) : _
+	fnOpt(1,2,"Print Monthly Figures" ,0,0)
 	resp$(2)='False'
-	fnOpt(2,2,"Print Year to Date Figures" ,0,0) : _
+	fnOpt(2,2,"Print Year to Date Figures" ,0,0)
 	resp$(2)='True'
 	fnCmdKey("&Next",1,1,0,"Prints the financial statement.")
 	fnCmdKey("&Cancel",5,0,1,"Returns to menu without posting.")

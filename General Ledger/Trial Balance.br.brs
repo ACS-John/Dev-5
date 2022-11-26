@@ -131,7 +131,7 @@ Finis: ! r:
 	close #hTran: ioerr ignore
 	fncloseprn
 	if enableExport then
-		fnmakesurepathexists(env$('at')&exportFile$)
+		fnMakeSurePathExists(env$('at')&exportFile$)
 		close #hExp:
 		fnCopyFile(serverTempSaveFile$,env$('at')&exportFile$)
 		exe 'Sy -@ -m -C start "Trial Balance Export" "C:\Program Files\Microsoft Office\root\Office16\excel.exe""'&exportFile$&'"'

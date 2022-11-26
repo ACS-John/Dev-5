@@ -5,10 +5,9 @@
 	on error goto Ertn
  
 	dim h(7),ji1(6),jn$*6,ji2(6),cn$*11,l(13),ta(2),tr(9),empnum$*12
-	dim empnam$*30,cap$*128,message$*40,k$*25
+	dim empnam$*30,message$*40,k$*25
  
-	fnTop("S:\acsPR\jcMerge",cap$="Job Cost Merge")
-	fncno(cno)
+	fnTop(program$,"Job Cost Merge")
  
  
 	open #2: "Name=[Q]\PRmstr\JCCAT.h[cno],KFName=[Q]\PRmstr\CatIndx.h[cno],Shr",i,outIn,k

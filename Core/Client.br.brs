@@ -70,12 +70,12 @@ def fn_setClient(scClient$*128)
 	fnmcreg_write('lastSelection for '&env$('clientSelected'),date$('mm/dd/ccyy')&' - '&time$)
 	if env$('enableDataFolderByClient')='Yes' then
 		dataNew$=rtrm$(env$('QBase'),'\')&'\'&env$('client') ! &'\'
-		fnmakesurepathexists(dataNew$)
+		fnMakeSurePathExists(dataNew$)
 		fnSetEnv('data',dataNew$) ! pr 'env$ client set to '&env$('client') : pause
 		fnreg_close
 		fnSetQ(dataNew$)
 		fncursys$( '',1)
-		fncno(unused)
+		fnCno
 		fnapply_theme
 	end if
 fnend

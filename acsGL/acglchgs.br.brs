@@ -7,12 +7,11 @@
  
 	dim fl1$*256,cogl$(3)*12,cap$*128,udf$*256
 	dim r$*5,d$*50,te$*1,ac(9),report$*50,secondr$*50,foot$*132,underlin$*14
-	dim cnam$*40,b$*3,a$(8)*30,oldtrans$*16,g(8),accum(9,2)
+	dim b$*3,a$(8)*30,oldtrans$*16,g(8),accum(9,2)
 	dim acct$*12,bp(13),fli$(2),flo$(2),by(13)
 	dim p$(20)*50
  
 	fnTop(program$,cap$="Change Amount")
-	fncno(cno,cnam$)
 	if fnGlAskFormatPriorCdPeriod=5 then goto Xit
 	udf$=env$('temp')&'\'
 	open #20: "Name=[Q]\GLmstr\Company.h[cno],Shr",i,i,r: read #20,using 'form pos 152,3*C 12',rec=1: mat cogl$ : close #20:

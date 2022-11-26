@@ -1,14 +1,11 @@
 ! Replace S:\acsPR\newjcMrgC
 ! JOB COST MERGE CHARGES
- 
+
 	autoLibrary
 	on error goto Ertn
- 
+
 	dim rn$*12,jn$*6,ji2(3),cn$*11,l(13),ta(2),tr(9),empnum$*12,empnam$*30
- 
-	fncno(cno)
- 
- 
+
 	open #2: "Name=[Q]\PRmstr\JCCAT.h[cno],KFName=[Q]\PRmstr\CatIndx.h[cno],Shr",i,outIn,k
 	open #3: "Name=jccharges."&wsid$,i,i
 	open #5: "Name=[Q]\PRmstr\JCTRANS.h[cno],Shr",i,outi,r
@@ -39,10 +36,10 @@ L400: close #2:
 	close #3:
 	close #5:
 Xit: fnXit
- 
+
 ERTN: fnerror(program$,err,line,act$,"NO")
 	if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 	execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 	pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 ERTN_EXEC_ACT: execute act$ : goto ERTN
- 
+
