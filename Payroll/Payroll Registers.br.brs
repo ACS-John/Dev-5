@@ -1,5 +1,5 @@
 
-! r: general setup: libraries, dims, fnTop,fncno,read defaults, open files, etc
+! r: general setup: libraries, dims, fnTop,read defaults, open files, etc
 	autoLibrary
 	on error goto Ertn
  

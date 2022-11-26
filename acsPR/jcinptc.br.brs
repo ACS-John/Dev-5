@@ -1,20 +1,18 @@
 ! Replace S:\acsPR\jcInptC
 ! Input (Job Cost) Charges
- 
+
 	autoLibrary
 	on error goto Ertn
- 
+
 	dim cn$*11,k$*11,n$*40,en$*8,hr(2),empnam$*30,ds$*30,a$(3)*30,b(4)
 	dim rn$*12,jn$*6,ji2(3),d$*30,label1$(7)*24,iolabel1$(7),io1$(7)
-	dim bk$(20)*28,nam$*28,ios$(2),wrds$(2)*30,cnt$*25,cap$*128
+	dim bk$(20)*28,nam$*28,ios$(2),wrds$(2)*30,cnt$*25
 	dim msgline$(2)*60,response$(5)*1,wrd2$(4)*38
- 
-	fncno(cno)
- 
-	cap$="Input (Job Cost) Charges"
+
+
 	fnTop("S:\acsPR\jcInptC", "Enter Charges")
 	fnconsole(1)
- 
+
 	data "Reference Number:"
 	data "Date (mmddyy):"
 	data "Job Number:"
@@ -23,7 +21,7 @@
 	data "Amount:"
 	data "Description:"
 	read mat label1$
- 
+
 	io1$(1)="4,20,C 12,UT,N"
 	io1$(2)="5,20,Nz 6,UT,N"
 	io1$(3)="6,20,c 6,UT,N"
@@ -31,22 +29,22 @@
 	io1$(5)="08,20,N 2,UT,N"
 	io1$(6)="09,20,n 10.2,UT,N"
 	io1$(7)="10,20,C 30,UT,N"
- 
+
 	for j=1 to 7
 		iolabel1$(j)=str$(j+3)&",2,Cr 17,N"
 	next j
- 
+
 	open #3: "Name=[Temp]\Work.[Session],SIZE=0,RecL=63,Replace",i,outi,r
 	open #11: "Name=[Q]\PRmstr\JCMSTR.h[cno],KFName=[Q]\PRmstr\JCIndx.h[cno],Shr",i,i,k
 	open #12: "Name=[Q]\PRmstr\JCCAT.h[cno],KFName=[Q]\PRmstr\CatIndx.h[cno],Shr",i,i,k
 	open #13: "Name=[Q]\PRmstr\SCMSTR.h[cno],KFName=[Q]\PRmstr\SCIndex.h[cno],Shr",i,i,k
- 
+
 INPUTSCREEN1: !
 	shoption=1
 INPUTSCREEN2: !
 	pr newpage
 	win=102
-	fnopenwin(win,08,08,18,72,cap$)
+	fnopenwin(win,08,08,18,72,'')
 	pr #win,fields mat iolabel1$: mat label1$
 	pr #win,fields io1$(2): dat
 	if shoption=1 then pr f "19,24,C 09,B,1": "Next (F1)"
@@ -66,7 +64,7 @@ L620: read #11,using L900,key=lpad$(rtrm$(jn$),6): n$ nokey L630 : _
 	goto L640
 L630: msgline$(1)="Job Number not on file." : _
 	msgline$(2)="Please select a different Job Number" : _
-	fnoldmsgbox(mat response$,cap$,mat msgline$,1) : _
+	fnoldmsgbox(mat response$,'',mat msgline$,1) : _
 	ce=3 : _
 	goto ERR1
 L640: if ce<>4 then goto L690
@@ -77,7 +75,7 @@ L640: if ce<>4 then goto L690
 	goto L690
 L680: msgline$(1)="Invalid Category Number" : _
 	msgline$(2)="Please select a different Category Number" : _
-	fnoldmsgbox(mat response$,cap$,mat msgline$,1) : _
+	fnoldmsgbox(mat response$,'',mat msgline$,1) : _
 	ce=4 : _
 	goto ERR1
 L690: if ce<>5 then goto L720
@@ -86,7 +84,7 @@ L690: if ce<>5 then goto L720
 	goto L720
 L710: msgline$(1)="Invalid Sub-Category Number" : _
 	msgline$(2)="Please select a different Sub-Category Number" : _
-	fnoldmsgbox(mat response$,cap$,mat msgline$,1) : _
+	fnoldmsgbox(mat response$,'',mat msgline$,1) : _
 	ce=5 : _
 	goto ERR1
 L720: ce=ce+1: if ce>udim(io1$) then ce=1
@@ -103,7 +101,7 @@ L780: if cmdkey=5 then goto WHATNEXT
 	on ce-2 gosub SRCH,CATEGORY_SEARCH,SRCH3 none L620
 	if ce=3 then pr #win,fields io1$(3): jn$
 	goto L620
- 
+
 L850: if cmdkey=4 and c1=2 then goto DEL
 	if ltrm$(rtrm$(rn$))="-1" then ce=1 : goto ERR1
 	if dat<10100 or dat>123199 then ce=2: goto ERR1
@@ -133,15 +131,15 @@ L1100: form pos 1,c 12,pd 4,c 6,2*pd 3,pd 5.2,c 30
 	goto INPUTSCREEN2
 L1120: rewrite #3,using L1100,rec=rr: rn$,dat,jn$,mat ji2,d$
 	goto L1210
- 
+
 DEL: !
 	rewrite #3,using L1100,rec=rr: "-1",0,"",0,0,0,""
 	goto L1210
- 
+
 ADDITIONALENTRIES: !
 	shoption=2
 L1210: pr newpage
-	fnopenwin(win=103,10,20,14,59,cap$)
+	fnopenwin(win=103,10,20,14,59,'')
 	pr #win,fields "4,2,C 28,N": "Reference Number to correct:"
 	pr f "15,35,C 09,B,5": "Done (F5)"
 L1250: input #win,fields "4,31,N 5,UT,N": rr conv L1250
@@ -150,10 +148,10 @@ L1250: input #win,fields "4,31,N 5,UT,N": rr conv L1250
 	close #win: ioerr L1290
 L1290: read #3,using L1100,rec=rr: rn$,dat,jn$,mat ji2,d$
 	goto INPUTSCREEN2
- 
+
 WHATNEXT: !
 	pr newpage
-	fnopenwin(win=102,09,20,16,59,cap$)
+	fnopenwin(win=102,09,20,16,59,'')
 	wrd2$(1)="1. pr Input Proof List"
 	wrd2$(2)="2. Corrections"
 	wrd2$(3)="3. Additional Entries"
@@ -166,7 +164,7 @@ L1430: rinput #win,select mat io2$,attr "H": mat wrd2$
 	c1=curfld
 	if cmdkey=5 then goto Xit
 	on c1 goto PRINTPROOFLIST,ADDITIONALENTRIES,INPUTSCREEN1,POSTTOJOB none L1430
- 
+
 PRINTPROOFLIST: !
 	pr newpage
 	fnwait(message$,1)
@@ -186,16 +184,16 @@ L1630: form pos 63,c 13,skip 1,pos 63,n 13.2
 	ta=0
 	fncloseprn
 	goto WHATNEXT
- 
+
 POSTTOJOB: !
 	close #3:
 	close #11:
 	close #12:
 	close #13:
 	chain "S:\acsPR\JCMRGC"
- 
+
 Xit: fnXit
- 
+
 L1770: if ce>0 then io1$(ce)(ce1:ce2)="U"
 	ce=cnt+1
 L1790: pr f "24,1,C 7,N": bell
@@ -204,7 +202,7 @@ L1790: pr f "24,1,C 7,N": bell
 	ce2=ce1+1
 	io1$(ce)(ce1:ce1)="UC"
 	goto L580
- 
+
 SRCH: bk=0 : hce=ce
 	close #103: ioerr L1880
 L1880: open #103: "SROW=1,SCOL=1,EROW=24,ECOL=80",d,o
@@ -269,13 +267,13 @@ SREND: if j>1 then j=j-1
 	bk=bk-1
 L2470: selclp=1
 	goto L2120
- 
+
 L2500: selclp=0
 	goto L2020
- 
+
 SRCHEND: close #103: ioerr L2540
 L2540: return
- 
+
 CATEGORY_SEARCH: !
 	bk=0
 	close #103: ioerr L2590
@@ -304,7 +302,7 @@ L2750: pr f "23,47,Cc 33,B,1": "Next (Enter)"
 L2810: if rtrm$(k$)><"" then goto SRCHEND
 	if ln<20 then goto SRCHEND
 	goto L2650
- 
+
 SRCH3: bk=0
 	close #103: ioerr L2870
 L2870: open #103: "SROW=2,SCOL=47,EROW=23,ECOL=79,BORDER=DR",d,o
@@ -326,6 +324,6 @@ L2980: pr f "23,47,C 33,R,N": " PRESS ENTER TO CONTINUE"
 L3030: if rtrm$(k$)><"" then goto SRCHEND
 	if ln<20 then goto SRCHEND
 	goto L2880
- 
+
 include: ertn
- 
+

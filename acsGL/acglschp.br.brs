@@ -7,12 +7,11 @@
 	dim fl1$*256,dollar$*1,k$*2,by(13),bp(13)
 	dim gl2$*12,d2$*50,by2(13),bp2(13)
 	dim sn$*78,ft$*78,gl$(80)*12,prtsch(99),d$*50
-	dim cnam$*40,d(2),actpd$*6,pedat$*20,cch$*20,d(2),cap$*128
+	dim xd(2),actpd$*6,pedat$*20,cch$*20
  
-	fnTop(program$,cap$="Print Schedules")
-	fncno(cno,cnam$)
+	fnTop(program$,"Print Schedules")
 	open #20: "Name=CNO.H"&wsid$,i,i,r  : _
-	read #20,using 'form pos 141,6*N 1,3*N 2,C 6,pos 195,2*C 20',rec=1: process,ps,filno,priorcd,mat d,fscode,lmu,actpd,actpd$,pedat$,cch$ : _
+	read #20,using 'form pos 141,6*N 1,3*N 2,C 6,pos 195,2*C 20',rec=1: process,ps,filno,priorcd,mat xd,fscode,lmu,actpd,actpd$,pedat$,cch$ : _
 	close #20:
 	if process=1 then prtall=1 : goto L320
 L160: pr newpage
@@ -53,7 +52,7 @@ L460: if dp=1 then dollar$="$" else dollar$=" "
 		gosub L1060
 		gosub L1130
 L530: read #3,using L600,key=gl$(j): d$,bb,cb,mat by,mat bp nokey L830
-		if cno<>99 then goto L600
+		if val(env$('cno'))<>99 then goto L600
 L550: read #3,using L560: gl2$,d2$,bb2,cb2,mat by2,mat bp2 eof L600
 L560: form pos 1,c 12,pos 13,c 50,pos 81,41*pd 6.2
 		if gl2$=gl$(j) then goto L580 else goto L600
@@ -113,7 +112,7 @@ L1090: form skip sk,pos fttab,c fl,skip 1
 return
  
 L1130: ! PAGE HEADING
-	pr #255,using L1150: cnam$,"SCHEDULE ",sn
+	pr #255,using L1150: env$('cnam'),"SCHEDULE ",sn
 L1150: form pos 11,cc 58,c 9,pic(zz)
 	sntab=int(43-len(rtrm$(sn$))/2)
 	pr #255,using L1180: sn$

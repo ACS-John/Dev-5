@@ -3,18 +3,16 @@
 	on error goto Ertn
 	dim cap$*128
 	dim line$*512,item$(1)*512
-	dim cnam$*40
 	dim sage_code$*128
 ! constants
 	cr$=chr$(13) : lf$=chr$(10) : tab$=chr$(9)
 	crlf$=cr$&lf$
-	fncno(cno,cnam$)
-!
+
 	fnTop(program$,cap$="Import CSV to Time Sheets")
 	if wbversion$(1:4)<"4.30" then pr "WBVersion is "&wbversion$&" and it must be 4.30 or higher for this program to run" : fnpause
 	client_id_sage_ax=3811
 	client_id_brc=90
-!
+
 	filter_date(1)=val(date$(days(date$('ccyymm')&'01','ccyymmdd')-1,'ccyymm')&'01') ! low (beginning of last month)
 	filter_date(2)=date(days(date$('ccyymm')&'01','ccyymmdd')-1,'ccyymmdd') ! high (end of last month)
 ! /r

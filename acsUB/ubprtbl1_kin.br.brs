@@ -6,14 +6,13 @@
 
 	dim resp$(10)*40,txt$*45,mg$(3)*30,rw(22,13),cap$*128
 	dim z$*10,e$(4)*30,f$*12,g(12),d(15),w$*31,y$*39,x$*70,b(11),extra1$*30
-	dim gb(10),pe$(4)*30,ba$(4)*30,at$(3)*40,cnam$*40,datafile$*256,indexfile$*256
+	dim gb(10),pe$(4)*30,ba$(4)*30,at$(3)*40,datafile$*256,indexfile$*256
 
-	fncno(cno,cnam$) : _
 	fnLastBillingDate(d1)
-	open #21: "Name=[Q]\UBmstr\Company.h[cno],Shr",i,i  : _
-	read #21,using "form pos 41,2*C 40": at$(2),at$(3) : _
+	open #21: "Name=[Q]\UBmstr\Company.h[cno],Shr",i,i
+	read #21,using "form pos 41,2*C 40": at$(2),at$(3)
 	close #21:
-	at$(1)=cnam$ : _
+	at$(1)=env$('cnam') : _
 	z=21 : _
 	at$(1)=trim$(at$(1))(1:z) : _
 	x=len(at$(1)) : y=z-x : _
@@ -328,7 +327,7 @@ L2180: pr #20: 'Call Print.MyFontSize(10)'
 ! pr #20: 'Call Print.AddText("Address Service Requested",'&STR$(XMARGIN+68)&','&STR$(LYNE*7+YMARGIN-6)&')'
 	pr #20: 'Call Print.AddText("Please return this",'&str$(xmargin+68)&','&str$(lyne*7+ymargin)&')'
 	pr #20: 'Call Print.AddText("side with payment to:",'&str$(xmargin+68)&','&str$(lyne*8+ymargin)&')'
-	pr #20: 'Call Print.AddText("'&cnam$&'",'&str$(xmargin+68)&','&str$(lyne*9+ymargin)&')'
+	pr #20: 'Call Print.AddText("'&env$('cnam')&'",'&str$(xmargin+68)&','&str$(lyne*9+ymargin)&')'
 	pr #20: 'Call Print.MyFontSize(10)'
 	pr #20: 'Call Print.AddText("Pay By '&cnvrt$("PIC(ZZ/ZZ/ZZ)",d4)&':",'&str$(xmargin+68)&','&str$(lyne*11+ymargin)&')'
 	pr #20: 'Call Print.AddText("'&fnformnumb$(bal,2,9)&'",'&str$(xmargin+106)&','&str$(lyne*11+ymargin)&')'

@@ -32,7 +32,7 @@ def library fnshortpath$*256(longpath$*256)
 		else
 			optHide$='-M '
 		end if
-		fnmakesurepathexists(csTempPath$&'\')
+		fnMakeSurePathExists(csTempPath$&'\')
 		fn_make_shortpath_cmd(csTempPath$)
 		execute 'sy '&csOption$&optHide$&csTempPath$&"\ShortPath.cmd"&' "'&longpath$&'" '&csTempPath$&"\sp_"&session$&'.txt'
 		open #tmp=fnH: 'Name='&csTempPath$&'\sp_'&session$&'.txt',display,input 

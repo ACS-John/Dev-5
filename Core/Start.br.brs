@@ -39,7 +39,7 @@ def fn_acsSystemInitialize(; syInitMode)
 			fn_envDataDefault(1)
 			fnSetEnv('data',os_filename$('//6')&'\ACS')
 			! fnSetEnv('data',os_filename$(env$('Status.Files.Drives.[I]')&'ACS')
-			fnMakeSurepathExists(env$('data')&'\')
+			fnMakeSurePathExists(env$('data')&'\')
 			! pause
 		else
 			fn_envDataDefault(0)
@@ -100,7 +100,7 @@ def fn_acsSystemInitialize(; syInitMode)
 			dim tmpFolder$*256
 			tmpFolder$='C:\ACS_Data\Temp\'&srep$(srep$(srep$(login_name$,' ','_'),',',''),'.','')&'-Session'&session$
 			fnSetEnv('Temp',tmpFolder$)
-			fnmakesurepathexists(env$('Temp')&'\')
+			fnMakeSurePathExists(env$('Temp')&'\')
 		end if
 		if ~fn_tempDirValidate then goto Xit ! if env$('BR_MODEL')<>'CLIENT/SERVER' and ~fn_tempDirValidate then goto Xit
 
@@ -132,8 +132,8 @@ def fn_acsSystemInitialize(; syInitMode)
 				! this isn't even necessary because the dll and exe have updated icons.
 				setenv('Icon','S:\Core\Icon\ACS BR.ico') ! setenv('Icon','S:\Core\Icon\ACS-v5-32b.ico') ! 'S:\Core\Icon\ACS-v5-32x32-32bit.ico'
 			end if
-			fnMakeSurepathExists('[Q]\Data\')
-			fnMakeSurepathExists('[Q]\Report Cache\')
+			fnMakeSurePathExists('[Q]\Data\')
+			fnMakeSurePathExists('[Q]\Report Cache\')
 			if fn_moveCoreData('CityStZip.dat') then fn_moveCoreData('CityStZip.idx',1)
 			if fn_moveCoreData('1099Box.dat') then fn_moveCoreData('1099Box.idx',1)
 			! fn_udf_resolve
@@ -148,7 +148,7 @@ def fn_acsSystemInitialize(; syInitMode)
 				workingDir$=env$('LocalAppData')&'\ACS'
 			end if
 			if workingDir$(2:2)=':' then
-				fnmakesurepathexists(workingDir$&'\')
+				fnMakeSurePathExists(workingDir$&'\')
 				exe 'CD '&workingDir$(1:2)
 				exe 'CD "'&workingDir$(3:len(workingDir$))&'"'
 				if exists('S:\ScreenIO.ini') then
@@ -326,7 +326,7 @@ def fn_setup
 fnend
 def fn_spoolPath$*256(; initialize)
 	if initialize then
-		fnmakesurepathexists(env$('temp')&'\acs\Spool\')
+		fnMakeSurePathExists(env$('temp')&'\acs\Spool\')
 		exe 'config spoolpath '&env$('temp')&'\acs\Spool'
 	end if
 	fn_spoolPath$=env$('temp')&'\acs\Spool'
@@ -446,7 +446,7 @@ fnend
 ! fnend /r
 def fn_envDataDefault(; colletionMasterMode,___,edd_base$*256)
 	if colletionMasterMode then
-		fnmakesurepathexists(env$('status.files.drives.[i]')&'ACS\')
+		fnMakeSurePathExists(env$('status.files.drives.[i]')&'ACS\')
 		fnSetEnv('data',env$('status.files.drives.[i]')&'ACS\')
 	else
 		if env$('data')='' then ! if env$('data') is blank than set it here.
@@ -457,7 +457,7 @@ def fn_envDataDefault(; colletionMasterMode,___,edd_base$*256)
 				edd_base$=env$('ProgramData')
 			end if
 			fnSetEnv('data',edd_base$&'\ACS\')
-			fnmakesurepathexists(env$('data')&'\Data\')
+			fnMakeSurePathExists(env$('data')&'\Data\')
 			if env$('data')(len(env$('data')):len(env$('data')))<>'\' then ! if env$('data') does not end with a backslash nor forward slash than add one.
 				fnSetEnv('data',env$('data')&'\')
 			end if
@@ -481,8 +481,8 @@ def fn_setQ(setQ$*256)
 		! if env$('acsDeveloper')<>'' then pr 'dev pause' : pause
 		goto Xit
 	end if
-	fnmakesurepathexists('[Q]\Data\')
-	! fnmakesurepathexists('[Q]\[CurSys]mstr\')  ! removed 3/30/21 - was making mstr folder as cursys is not set yet
+	fnMakeSurePathExists('[Q]\Data\')
+	! fnMakeSurePathExists('[Q]\[CurSys]mstr\')  ! removed 3/30/21 - was making mstr folder as cursys is not set yet
 	! if env$('acsDebug')<>'' then
 	!   pr 'SetQ to '&env$('Q')
 	!   pause
@@ -560,7 +560,7 @@ def fn_csEnv
 	end if
 	ce_retry_4152_count=0
 	CE_MAKE_TEMP_FILE: !
-	fnmakesurepathexists(ce_br_temp_file$)
+	fnMakeSurePathExists(ce_br_temp_file$)
 	exe '*sys -M set > "'&ce_os_temp_file$&'"'
 	open #hOsSet=fn_h: 'Name='&ce_br_temp_file$,display,input error CE_DEBUG_OPEN_ERR ! error XIT_fn_csEnv
 	do
@@ -595,7 +595,7 @@ def fn_csEnv
 
 			ce_os_temp_file$='C:\Session'&session$&'\cs.txt'
 			ce_br_temp_file$='@::'&ce_os_temp_file$
-			fnmakesurepathexists(ce_br_temp_file$)
+			fnMakeSurePathExists(ce_br_temp_file$)
 			goto CE_MAKE_TEMP_FILE
 		end if
 	end if
@@ -671,8 +671,8 @@ def fn_freeVirtualStore ! does not work.
 fnend
 def fn_UpdateQFileIO
 	if env$('cursys')<>'CM' then !    env$('acsDeveloper')='' and    removed because I removed the symbolic link and went NAS for D drive instead
-		fnMakeSurepathExists(env$('QBase')&'\Core\FileIO\Layout\')
-		fnMakeSurepathExists(env$('QBase')&'\Core\FileIO\Layout\version\')
+		fnMakeSurePathExists(env$('QBase')&'\Core\FileIO\Layout\')
+		fnMakeSurePathExists(env$('QBase')&'\Core\FileIO\Layout\version\')
 		fnCopy('S:\Core\FileIO\Layout\*.*'        ,env$('QBase')&'\Core\FileIO\Layout\*.*'        )
 		! fnFree(env$('QBase')&'\Core\FileIO\Layout\version\*.*')
 		if exists('S:\Core\FileIO\Layout\version\*.*') then
@@ -716,7 +716,7 @@ fnend
 
 def fn_UpdateQScreenIO
 	if env$('acsDeveloper')='' then ! because I used: mklink /J 'C:\Users\John\OneDrive\ACS\Dev-5 Data\Core\ScreenIO\Screen' 'C:\ACS\Dev-5\Core\ScreenIO\Screen'
-		fnMakeSurepathExists(env$('QBase')&'\Core\ScreenIO\screen\')
+		fnMakeSurePathExists(env$('QBase')&'\Core\ScreenIO\screen\')
 		fnCopy('S:\Core\ScreenIO\screen\*.*'      ,env$('QBase')&'\Core\ScreenIO\screen\*.*'      )
 	end if
 fnend
@@ -767,17 +767,17 @@ def fn_acsVersion$
 	 fnSetEnv('acsVersion','5.'&rtrm$(build$))
 	fn_acsVersion$=env$('acsVersion')
 fnend
-def library fnWriteProc(procName$*64,procLine$*256)
+def library fnWriteProc(procFilename$*64,procLine$*256)
 	if ~setup then fn_setup
-	fnWriteProc=fn_writeProc(procName$,procLine$)
+	fnWriteProc=fn_writeProc(procFilename$,procLine$)
 fnend
-def fn_writeProc(procName$*64,procLine$*256)
+def fn_writeProc(procFilename$*64,procLine$*256)
 	dim procNameHold$*64
-	if procName$='' then ! append last one
+	if procFilename$='' then ! append last one
 		open #hEd=fn_h: 'name='&procNameHold$&',use',d,o
 	else
-		procNameHold$=procName$
-		open #hEd=fn_h: 'name='&procName$&',replace',d,o
+		procNameHold$=procFilename$
+		open #hEd=fn_h: 'name='&procFilename$&',replace',d,o
 	end if
 	pr #hEd: procLine$
 	close #hEd:
@@ -802,7 +802,7 @@ def fn_programDataDir$*256(;___,return$*256,pddTryItem)
 		do until pddTryItem=>udim(mat pddTry$) or return$<>''
 			pddTryItem+=1
 			! fn_rightsTest(folder$*256,rt_how_to_fix$*256,folderName$; additional_text_for_failure$*2048,skipmsg)
-			fnmakesurepathexists(pddTry$(pddTryItem))
+			fnMakeSurePathExists(pddTry$(pddTryItem))
 			if fn_rightsTest(pddTry$(pddTryItem),'','','', 1) then
 				return$=pddTry$(pddTryItem)
 			end if

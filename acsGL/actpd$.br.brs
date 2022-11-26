@@ -1,16 +1,15 @@
 ! Replace S:\acsGL\actpd$.br
- 
-def library fnactpd$(;actpd$)
-		autoLibrary
-		get=1 : put=2
-		if trim$(actpd$)="" then get_or_put=1 else get_or_put=2
-		fncno(cno)
-		open #tmp=fnH: "Name=[Q]\GLmstr\Company.h[cno],Shr",i,outi,r
-		if get_or_put=get then : _
-			read #tmp,using "form pos 270,C 6",rec=1: actpd$ noRec CLOSE_TMP
-		if get_or_put=put then : _
-			rewrite #tmp,using "form pos 270,C 6",rec=1: actpd$
-CLOSE_TMP: close #tmp:
-		fnactpd$=actpd$
-Xit: !
+
+def library fnactpd$(; actpd$,___,getting,tmp)
+	autoLibrary
+	if trim$(actpd$)='' then getting=1
+	open #tmp=fnH: 'Name=[Q]\GLmstr\Company.h[cno],Shr',i,outi,r
+	if getting then
+		read #tmp,using 'form pos 270,C 6',rec=1: actpd$ noRec CLOSE_TMP
+	else
+		rewrite #tmp,using 'form pos 270,C 6',rec=1: actpd$
+	end if
+	CLOSE_TMP: !
+	close #tmp:
+	fnactpd$=actpd$
 fnend

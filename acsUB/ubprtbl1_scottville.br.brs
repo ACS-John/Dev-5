@@ -7,14 +7,13 @@
 
 	dim resp$(11)*40,txt$*40,mg$(3)*30,rw(22,13),cap$*128
 	dim z$*10,e$(4)*30,f$*12,g(12),d(15),w$*31,y$*39,x$*70,b(11)
-	dim gb(10),pe$(4)*30,ba$(4)*30,at$(3)*40,cnam$*40
+	dim gb(10),pe$(4)*30,ba$(4)*30,at$(3)*40
 
-	fncno(cno,cnam$)
 	fnLastBillingDate(d1)
 	open #21: "Name=[Q]\UBmstr\Company.h[cno],Shr",i,i
 	read #21,using "form pos 41,2*C 40": at$(2),at$(3)
 	close #21:
-	at$(1)=cnam$
+	at$(1)=env$('cnam')
 	z=21
 	at$(1)=trim$(at$(1))(1:z)
 	x=len(at$(1)) : y=z-x

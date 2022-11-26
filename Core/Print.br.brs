@@ -35,7 +35,7 @@ def fn_printFileName$*1024(; pfn_sendto_base_name_addition$*128,pfn_extension$,p
 	pfnReturn$&='.'&pfn_extension$
 	pfnReturn$=fnSrepEnv$(pfnReturn$)
 	! pfnReturn$='[at]'&pfnReturn$    <--- we don't do this because the workstation's report cache is only copied to and opened from, the files are actually made on the server's report cache
-	if pos(programCaptionOverride$,'\')>0 then fnmakesurepathexists(pfnReturn$)
+	if pos(programCaptionOverride$,'\')>0 then fnMakeSurePathExists(pfnReturn$)
 	fn_printFileName$=pfnReturn$
 fnend
 
@@ -56,9 +56,9 @@ def fn_reportCacheFolderCurrent$*512(; ___,return$*512)
 	return$=rtrm$(return$,'\')&'\'&fn_safeFilename$(env$('cnam'))&' ([cno])'
 	return$=fnSrepEnv$(return$)
 	if env$('BR_MODEL')='CLIENT/SERVER' then ! client gets a parallel report cache with only thir own stuff in it
-		fnmakesurepathexists('[at]'&return$&'\')
+		fnMakeSurePathExists('[at]'&return$&'\')
 	end if
-	fnmakesurepathexists(return$&'\')
+	fnMakeSurePathExists(return$&'\')
 	fn_reportCacheFolderCurrent$=return$
 fnend
 

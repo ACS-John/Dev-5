@@ -74,7 +74,7 @@ def library fnPostCheckbookToGl(; enablePost,___,pg)
 	! gl2=val(resp$(8)) ! GL company to post
 	if pr2$='Y' then fnprocess(4)
 	if ~enablePost then enableDistributionListing=1
-	! fnputcno(gl2)
+	! gl2=fnPutCno(gl2)
 	!   pr f '13,34,C 12,B,99': 'Cancel (Esc)'
 	!   on fkey 99 goto Xit
 	fnopenprn
@@ -385,7 +385,7 @@ def library fnPostCheckbookToGl(; enablePost,___,pg)
 		if glb=2 then
 			goto Xit
 		else
-			! fnputcno(gl2)
+			! gl2=fnPutCno(gl2)
 			fnChain('S:\General Ledger\Merge')
 		end if
 	! /r

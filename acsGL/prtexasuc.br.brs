@@ -1,28 +1,27 @@
 ! Replace S:\acsGL\PRTexasUC
 ! Quarterly UC Report (From the after-the-fact payroll files in gl) for Texas
- 
+
 	autoLibrary
 	on error goto Ertn
- 
+
 	dim k(1),k$(3)*25,l$(1)*11,d(14),m(36),n(2),cap$*128
-	dim fa$(3),sa$(3)*40,cnam$*40
+	dim fa$(3),sa$(3)*40
 	dim a$(3)*40,b$(2)*12,c$*5,e(2),e$(2)*11,pedat$*5
 	dim resp$(3)*255,csvpath$*255
- 
+
 	fnTop(program$,cap$="Print Texas Unemployment Report")
-	fncno(cno,cnam$)
-	open #1: "Name=[Q]\GLmstr\Company.h[cno],Shr",i,i  : _
-	read #1,using 'form pos 1,3*C 40,2*C 12,C 5,pos 188,PD 7.2,pos 658,10*N 1': mat a$,mat b$,c$,ucm,mat deduc : _
+	open #1: "Name=[Q]\GLmstr\Company.h[cno],Shr",i,i
+	read #1,using 'form pos 1,3*C 40,2*C 12,C 5,pos 188,PD 7.2,pos 658,10*N 1': mat a$,mat b$,c$,ucm,mat deduc
 	close #1:
 	if fnprocess=1 then goto L280
- 
+
 L170: fnTos
 	mylen=60: mypos=mylen+3 : right=1
 	fnLbl(1,1,"Quarter Ending Date(mm-yy):",mylen,right)
-	fnTxt(1,mypos,5,0,left,"",0,"Enter the date as two numeric digits for the month, then a dash, and two digits for the year." ,0 ) : _
+	fnTxt(1,mypos,5,0,left,"",0,"Enter the date as two numeric digits for the month, then a dash, and two digits for the year." ,0 )
 	resp$(1)=""
 	fnLbl(2,1,"Name Format (F=first name first; L=Last name first):",mylen,right)
-	fnTxt(2,mypos,1,0,left,"",0,"Enter 'F' if first name first; else 'L' if last name shown first." ,0 ) : _
+	fnTxt(2,mypos,1,0,left,"",0,"Enter 'F' if first name first; else 'L' if last name shown first." ,0 )
 	resp$(2)=""
 	fnLbl(3,1,"Enter the location to save employees to CSV for QuickFile",mylen,right)
 	fnTxt(3,mypos,60,0,left,"",0,"Enter a CSV file path.",0)
@@ -60,7 +59,7 @@ L450: gosub L670
 	t3=t3+h2
 	t4=t4+m(34)
 L500: goto L310
- 
+
 HDR: !
 	pr #255,using L540: b$(2),b$(1),pedat$
 L540: form skip 5,pos 2,c 12,pos 52,c 12,pos 67,c 6,skip 3
@@ -68,16 +67,16 @@ L540: form skip 5,pos 2,c 12,pos 52,c 12,pos 67,c 6,skip 3
 L560: form pos 22,c 40,skip 1,pos 22,c 40,skip 1,pos 22,c 40,skip 6
 	p1=16
 return
- 
+
 L600: gosub L820
 	close #2:
 	fncloseprn
 	fnreg_write("TexasUCFile",csvpath$)
 	close #h_csv:
 	goto Xit
- 
+
 Xit: fnXit
- 
+
 L670: p3=p3+1
 	if m(1)<ucm then goto L740
 	if m(1)-m(2)>ucm then goto L720
@@ -103,9 +102,9 @@ L840: form skip j1,pos 47,pic(zzz,zzz,zzz.##)
 	t3=0
 	t4=0
 return
- 
+
 include: ertn
- 
+
 L1000: dim first$*15,mid$*15,last$*20,em$(3)*30
 	k$(1)=uprc$(rtrm$(k$(1))): ! nAMCDE$="s"
 	x1=pos(k$(1)," ",1)

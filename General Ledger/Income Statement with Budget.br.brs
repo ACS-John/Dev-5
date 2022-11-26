@@ -18,13 +18,11 @@
 
 	fnTop(program$)
 	on fkey 5 goto Finis
-	fncno(cno)
 	actpd=fnactpd
 	actpd$=fnactpd$
 	fnfscode
 	fnpriorcd
-	if fnGlAskFormatPriorCdPeriod=5 then goto Xit : _
-		! sets fnps,fnpriorcd,fnfscode (primary/secondary,current year/Prior,period to print)
+	if fnGlAskFormatPriorCdPeriod=5 then goto Xit ! sets fnps,fnpriorcd,fnfscode (primary/secondary,current year/Prior,period to print)
 	fnfscode
 	fnpriorcd
 

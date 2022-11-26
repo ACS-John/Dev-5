@@ -1,16 +1,14 @@
 ! Replace S:\acsPR\jcMerge
 ! Posting to Jobs...
- 
+
 	autoLibrary
 	on error goto Ertn
- 
+
 	dim h(7),ji1(6),jn$*6,ji2(6),cn$*11,l(13),ta(2),tr(9),empnum$*12
-	dim empnam$*30,cap$*128,message$*40
- 
-	fnTop("S:\acsPR\jcMerge",cap$="Job Cost Merge")
-	fncno(cno)
- 
- 
+	dim empnam$*30,message$*40
+
+	fnTop("S:\acsPR\jcMerge","Job Cost Merge")
+
 	open #2: "Name=[Q]\PRmstr\JCCAT.h[cno],KFName=[Q]\PRmstr\CatIndx.h[cno],Shr",i,outIn,k
 	open #3: "Name=[Temp]\Work."&session$,i,i
 	open #4: "Name=[Q]\PRmstr\JCPRH1.h[cno],Shr",internal,output
@@ -42,19 +40,21 @@ L400: h(4)=h(4)+ji1(5)
 	read #2,using L470,key=cn$: mat l,mat ta nokey L600
 L470: form pos 37,11*pd 7.2,2*pd 2,2*pd 3
 	if ji1(5)+ji1(6)=0 then goto L560
-	l(4)=l(4)+ji2(3)
-	l(7)=l(7)+ji2(3)
-	l(5)=l(5)+ji1(5)+ji1(6)
-	l(8)=l(8)+ji1(5)+ji1(6)
-	l(6)=l(6)+ji2(6)
-	l(9)=l(9)+ji2(6)
+	l(4)+=ji2(3)
+	l(7)+=ji2(3)
+	l(5)+=ji1(5)+ji1(6)
+	l(8)+=ji1(5)+ji1(6)
+	l(6)+=ji2(6)
+	l(9)+=ji2(6)
 	goto L580
-L560: l(6)=l(6)+ji2(3)+ji2(6)
+L560: !
+	l(6)=l(6)+ji2(3)+ji2(6)
 	l(9)=l(9)+ji2(3)+ji2(6)
-L580: l(10)=l(10)+ji2(5)
-	goto L600
+L580: !
+	l(10)=l(10)+ji2(5)
+goto L600
 L600: read #5,using L610,rec=1,reserve: ot5
-L610: form pos 86,pd 3
+	L610: form pos 86,pd 3
 	empnum$=lpad$(rtrm$(str$(ji1(1))),12)
 L630: ot5=lrec(5)+1
 	write #5,using L650,rec=ot5,reserve: empnum$,jn$,ji2(1),ji2(2),ji1(4),ji1(3),ji1(5),ji1(6),ji2(5),ji2(6),ji2(3),empnam$,0 duprec L630
@@ -63,15 +63,15 @@ L650: form pos 1,c 12,c 6,n 5,pd 3,pd 2,n 6,4*pd 4.2,pd 5.2,c 30,pd 3
 	rewrite #5,using L610,rec=1,release: ot5
 	ta(2)=ot5
 	rewrite #2,using L470,key=cn$: mat l,mat ta
-	goto L220
- 
+goto L220
+
 L720: dt2=fndate_mmddyy_to_ccyymmdd(ji1(3))
 	if h(1)><0 then write #4,using L350: mat h,dt2,jn$
-	goto Xit
- 
+goto Xit
+
 include: ertn
- 
+
 Xit: ! fnXit
 	close #3,free:
 	fnXit
- 
+

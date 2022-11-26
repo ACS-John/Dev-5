@@ -33,7 +33,7 @@ fnend
 def fn_emailQueuedInvoices(email_date$; ___,pdfname$*255,pdfline$*1000,ppos,ppos2,testday$)
 	! this sends the emails that were printed as PDF's earlier
 	! read log 
-	fnmakesurepathexists(fnReportCacheFolderCurrent$&'\Ebilling\Sent\')
+	fnMakeSurePathExists(fnReportCacheFolderCurrent$&'\Ebilling\Sent\')
 	dim contact$(0)*255
 	dim contactN(0)
 	hContact=fn_openFio('Client Billing Contact',mat contact$,mat contactN, 1,1)

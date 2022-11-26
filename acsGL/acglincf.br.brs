@@ -6,7 +6,7 @@
  
 	dim fl1$*256,actpd$*6,cogl$(3)*12,pedat$*20,cch$*20
 	dim r$*5,d$*50,te$*1,ac(9),report$*50,secondr$*50,foot$*132,underlin$*14
-	dim cnam$*40,b$*3,a$(8)*30,oldtrans$*16,g(8),accum(10,9,2)
+	dim b$*3,a$(8)*30,oldtrans$*16,g(8),accum(10,9,2)
 	dim by(13),bp(13),resp$(30)*50
 	dim sendto$*80,bigul$*140,heading$*140,cap$*128,udf$*256
 	dim fundnum(10),funddesc$(10)*20,io1$(20),dolcol$*140,accumcol$*140
@@ -14,7 +14,6 @@
  
 	fnTop(program$,cap$="Income Statemet - Fund Comparison")
 	on fkey 5 goto L2170
-	fncno(cno,cnam$)
 	udf$=env$('temp')&'\'
 	if fnGlAskFormatPriorCdPeriod=5 then goto Xit 		! sets fnps,fnpriorcd,fnfscode (primary/secondary,current year/Prior,period to print)
 	actpd$=fnactpd$
@@ -33,7 +32,7 @@
 	form c 9,skip 0
 L340: form pos 1,n 3,n 6,n 3,pos mp1,pd 3,pos mp2,pd 3,pos 81,41*pd 6.2
 	form c 7,skip 0
-	nametab=int(44-len(rtrm$(cnam$))/2)
+	nametab=int(44-len(rtrm$(env$('cnam')))/2)
 	open #1: fl1$,i,i,k
 	if fnprocess=1 or fnUseDeptNo=0 then goto L480
 	fnTos(sn$="ACglincf") : _
@@ -198,7 +197,7 @@ L1950: form skip 1,c 1,skip redir
 return
 L1970: heading=1
 	if pt1=0 then pt1=1 else pt1=pt1+1
-	pr #255,using L2000: cnam$,"PAGE "&str$(pt1)
+	pr #255,using L2000: env$('cnam'),"PAGE "&str$(pt1)
 L2000: form skip 2,pos 15,cc 60,pos 73,c 7
 	p1=44-len(rtrm$(report$))/2
 	pr #255,using L2030: rtrm$(report$)

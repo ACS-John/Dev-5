@@ -4,13 +4,12 @@
 	autoLibrary
 	on error goto Ertn
  
-	dim cnam$*40,d$*50,tr(7),tr$*12,td$*30,n$*12,t$*12,x$*3
+	dim d$*50,tr(7),tr$*12,td$*30,n$*12,t$*12,x$*3
 	dim a$(9)*3,cogl$(2)*12,u$*12,c$*5,d(2),ta(2)
-	dim wrddetail$(2),p$(20)*50,resp$(10)*80,bp(13),cap$*128
+	dim wrddetail$(2),p$(20)*50,resp$(10)*80,bp(13)
  
 	right=1
-	fnTop(program$,cap$="Reprint Year End Trial Balance")
-	fncno(cno,cnam$)
+	fnTop(program$,"Reprint Year End Trial Balance")
 	open #20: "Name=[Q]\GLmstr\Company.h[cno]",i,i,r  : _
 	read #20,using 'form pos 150,2*N 1',rec=1: d(1),d(2) : _
 	read #20,using 'form pos 152,2*C 12',rec=1: mat cogl$ : _
@@ -81,8 +80,8 @@ L660: fncloseprn
 	goto Xit
  
 HDR2: !
-	pr #255,using L730: date$('mm/dd/yy'),cnam$
-	pr #255,using L730: time$,cap$
+	pr #255,using L730: date$('mm/dd/yy'),env$('cnam')
+	pr #255,using L730: time$,env$('program_caption')
 L730: form pos 1,c 8,pos 15,cc 50
 	pr #255,using L750: fnpedat$,"Page ",p1+=1
 L750: form pos 15,cc 50,pos 80,c 5,n 4,skip 2

@@ -365,7 +365,7 @@ def fn_ifMatchOpenDo(deviceTest$*40,defaultOut_filename$*256,recordLength; extra
 	! returns open file handle
 	if deviceTest$='' or deviceSelected$=deviceTest$ then
 		if out_filename$='' then out_filename$=defaultOut_filename$
-		fnmakesurepathexists(env$('at')&out_filename$)
+		fnMakeSurePathExists(env$('at')&out_filename$)
 		open #hImodoReturn=fnH: 'Name=[at]'&out_filename$&',RecL='&str$(recordLength)&extraParameter$&',Replace',d,o
 		if extraParameter$=',eol=none' then
 			gRecLenRequired=1
@@ -987,7 +987,7 @@ def fn_itron_close
 	IC_EOF_2: !
 	close #h_out2:
 	close #h_out,free:
-	fnmakesurepathexists(env$('at')&out_filename$)
+	fnMakeSurePathExists(env$('at')&out_filename$)
 	fnCopy('[Q]\Download.dat',env$('at')&out_filename$)
 	fn_reportCreatedFile(out_filename$)
 	!   if exists ('C:\MVRS\MVRSWin5.exe') then

@@ -1,25 +1,24 @@
 ! Replace S:\acsPR\newjcRemove
 ! Remove Job Cost Payroll Jobs
- 
+
 	autoLibrary
 	on error goto Ertn
- 
+
 	dim jn$*6,n$*40,a$(3)*30,b(4),cn$*11,k$*25,l(13),ta(2),eno$*12,jno$*6
 	dim contact$*30,ph$*12,email$*60
-	dim tr(9),pd$*30,tn$*6,n$*40,cap$*128,ml$(1)*70
+	dim tr(9),pd$*30,tn$*6,n$*40,ml$(1)*70
 	dim resp$(1)*60
- 
-	fnTop("S:\acsPR\newjcRemove",cap$="Remove Completed Jobs")
-	fncno(cno)
- 
+
+	fnTop(program$,"Remove Completed Jobs")
+
 	open #1: "Name=[Q]\PRmstr\JCMSTR.h[cno]",internal,outIn: close #1:
- 
+
 	execute "Copy [Q]\PRmstr\JCMSTR.h[cno] JCMSTR.X -n"
 	execute "Copy [Q]\PRmstr\JCTRANS.h[cno] JCTRANS.X -n"
 	execute "Copy [Q]\PRmstr\JCCAT.h[cno] JCCAT.X -n"
- 
+
 	open #1: "Name=JCMSTR.X,KFName=[Q]\PRmstr\JCIndx.h[cno]",i,outIn,k
- 
+
 ASKJOB: !
 	fnTos(sn$="jccpr1J") : _
 	respc=0
@@ -36,11 +35,11 @@ ASKJOB: !
 	jn$=lpad$(trim$(resp$(1)(1:6)),6)
 	mat ml$(1) : _
 	ml$(1)="Do you really want to delete job # "&jn$ : _
-	fnMsgBox(mat ml$,resp$,cap$,36)
+	fnMsgBox(mat ml$,resp$,'',36)
 	if resp$="Yes" then goto L350 else goto ASKJOB
 L350: rewrite #1,using 'form pos 157,N 2',key=jn$: 9 nokey ASKJOB
 	goto ASKJOB
- 
+
 DELETE_THEM: !
 	restore #1:
 	open #2: "Name=JCCAT.X,KFName=[Q]\PRmstr\CatIndx.h[cno]",i,i,k
@@ -84,7 +83,7 @@ L770: write #12,using L590: cn$,k$,mat l,mat ta
 	goto L610
 L790: write #11,using "form pos 1,C 6,C 40,3*C 30,N 6,2*PD 7.2,N 2,C 30,C 12,C 60": jn$,n$,mat a$,mat b,contact$,ph$,email$
 	goto L540
- 
+
 EOF1: close #1,free:
 	close #2,free:
 	close #3,free:
@@ -96,8 +95,8 @@ EOF1: close #1,free:
 	df$="[Q]\PRmstr\jcmstr.h[cno]" : if$="[Q]\PRmstr\jcindx.h[cno]" : _
 	fnComboF("CJob.h[cno]",lyne,mypos,43,df$,1,6,7,25,if$,1)
 	goto Xit
- 
+
 Xit: fnXit
- 
+
 include: ertn
- 
+

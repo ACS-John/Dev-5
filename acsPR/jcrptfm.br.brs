@@ -4,21 +4,19 @@
 	autoLibrary
 	on error goto Ertn
  
-	dim cap$*128,message$*40,msgline$(2)*60,response$(5)*1
+	dim message$*40,msgline$(2)*60,response$(5)*1
 	dim bk$(20)*28,nam$*28,ios$(2),wrds$(2)*30,iom$(3),scm$(3)*40
 	dim io1$(10),io2$(7),fd$(20),rptemp(20),tempch$(4)*256,rptn$*6,rnew$*6
 	dim rt$*51,ch$(2)*132,psc(100),f$(20)*50,pp(20),ppr(20),dp(20),fc(20)
 	dim tcj(20),tcs(20),rno$(50)*2,em$*40,wrd3$(2)*23,io3$(2)
  
-	fnTop("S:\acsPR\JCRptFM",cap$="User Designed Reports")
-	fncno(cno)
-	fnconsole(1)
+	fnTop(program$,"User Designed Reports")
 	pg=3
  
 	open #1: "Name=S:\acsPR\JCREPORT.MST,KFName=S:\acsPR\JCREPORT.idx,Shr",i,outIn,k
  
 MENU1: pr newpage
-	fnopenwin(win=101,09,20,15,59,cap$)
+	fnopenwin(win=101,09,20,15,59,'')
 	scm$(1)="1. Add or Edit" 
 	scm$(2)="2. pr Proof List" 
 	scm$(3)="3. Search"
@@ -32,7 +30,7 @@ L240: rinput #win,select mat iom$,attr "H": mat scm$
  
 L290: pr newpage
 	win=102
-	fnopenwin(win,10,20,14,59,cap$)
+	fnopenwin(win,10,20,14,59,'')
 	pr #win,fields "4,02,C 23,N": "Job Cost Report Number:"
 	pr f "15,35,C 09,B,5": "Done (F5)"
 L340: input #win,fields "4,26,Nz 2,UT,N": rptn conv L340
@@ -47,7 +45,7 @@ L410: form pos 1,n 2,c 51,x 27,2*c 132,n 3,3*n 1,100*pd 6.3,20*c 50,40*pd 2,80*n
  
 L440: msgline$(1)="Report Number "&ltrm$(rptn$)&" was not found."
 	msgline$(2)="Do you wish to add it now? (Y/N)"
-	fnoldmsgbox(mat response$,cap$,mat msgline$,2)
+	fnoldmsgbox(mat response$,'',mat msgline$,2)
 	if response$(1)="Y" then goto L500
 	if response$(1)="N" then goto L290
  
@@ -60,7 +58,7 @@ L520: tempch$(1)=ch$(1)(1:66)
 	tempch$(3)=ch$(2)(1:66)
 	tempch$(4)=ch$(2)(67:132)
 L560: pr newpage
-	fnopenwin(win=103,2,6,22,73,cap$)
+	fnopenwin(win=103,2,6,22,73,'')
 	pr #win: newpage
 	pr #win,fields "02,02,Cr 14,N": "Report Number:"
 	pr #win,fields "03,02,Cr 14,N": "Report Title:"
@@ -169,7 +167,7 @@ L1530: mat rptemp=(0)
 L1570: for j=1 to 20
 L1580: pr newpage
 		win=105
-		fnopenwin(win,07,04,19,77,cap$)
+		fnopenwin(win,07,04,19,77,'')
 		pr #win,fields "4,2,Cr 21,N": "Report Number:" 
 		pr #win,fields "4,24,C 2,N": str$(rptn)
 		pr #win,fields "5,2,Cr 21,N": "Column Number:" 
@@ -239,7 +237,7 @@ L2130: close #1:
  
 L2180: pr newpage
 	restore #1,key>="  ": nokey L2850
-	fnopenwin(win=102,10,28,15,52,cap$)
+	fnopenwin(win=102,10,28,15,52,'')
 	wrd3$(1)="Print All Report Files"
 	wrd3$(2)="Select Reports to Print"
 	io3$(1)="4,2,C 23,N"
@@ -251,7 +249,7 @@ L2180: pr newpage
 L2290: if cmdkey=5 then goto MENU1
 	if prtall=0 then goto L2400
 	for j=1 to 20
-		fnopenwin(win=103,10,20,15,59,cap$)
+		fnopenwin(win=103,10,20,15,59,'')
 		if j>1 then pr #win,fields "6,1,Cc 40,R,N": "Last Report Number Entered was "&rno$(j-1)
 		pr #win,fields "4,2,C 23,N": "Report Number to Print:"
 		pr f "16,35,C 09,B,5": "Done (F5)"
@@ -329,7 +327,7 @@ L3000: pr f "24,80,C 1,N": bell
 SRCH: !
 	bk=0
 L3090: pr newpage
-	fnopenwin(win=102,10,15,14,65,cap$)
+	fnopenwin(win=102,10,15,14,65,'')
 	prtall=0
 	pr #win,fields "4,2,C 39,N": "Starting Report Number (blank for all):"
 	pr f "15,34,C 11,B,5": "Cancel (F5)"

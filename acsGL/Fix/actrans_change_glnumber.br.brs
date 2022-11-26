@@ -3,16 +3,15 @@
 	autoLibrary
 	on error goto Ertn
  
-	dim cnam$*40,cap$*128,resp$(100)*60
+	dim resp$(100)*60
 	dim balance_current_year_month(13),balance_prior_year_month(13),rf(6)
 	dim actrans_key$*20
  
-	fncno(cno,cnam$)
-	fnTop(program$, cap$="Change GL Numbers in ACTrans")
+	fnTop(program$, "Change GL Numbers in ACTrans")
  
 	gln_from$=' 12   101  0' : gln_to$='  1   101  0'
 	if fn_screen_1(gln_from$,gln_to$)=5 then goto Xit
-	fn_report(cap$)
+	fn_report(env$('program_caption'))
 	fn_report(date$('mm/dd/ccyy'))
 	fn_report('')
 	open #h_actrans=fnH: "Name=[Q]\GLmstr\AcTrans.h[cno],KFName=[Q]\GLmstr\AcTrIdx.h[cno],Shr",i,outIn,k

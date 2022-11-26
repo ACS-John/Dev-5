@@ -127,7 +127,7 @@ def fn_clientTimesheet(; ___,ctFile$*1024,ctNew,ctWhich)
 	ctFile$=env$('at')&fnReportCacheFolderCurrent$&'\Client TimeSheets\'
 	ctFile$&=fnClientNameShort$(client_id$)&'\'
 	ctFile$&=str$(filter_date(1))&'-'&str$(filter_date(2))&'.txt'
-	fnmakesurepathexists(ctFile$)
+	fnMakeSurePathExists(ctFile$)
 	ctWhich=srch(mat ctFiles$,ctFile$)
 	if ctWhich>0 then
 		hCt=ctHandles(ctWhich)

@@ -5,10 +5,9 @@
 	on error goto Ertn
  
 	dim dat$*20,jn$*6,n$*40,cn$*11,cnt$*5,k$*25,cap$*128,p$(20)*50,io1$(2)
-	dim cnam$*40,message$*40
+	dim message$*40
  
 	fnTop("S:\acsPR\NEWjcNamLst",cap$="Name and Number List")
-	fncno(cno,cnam$) : _
 	fndat(dat$)
  
  

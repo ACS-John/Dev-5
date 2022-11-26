@@ -6,11 +6,10 @@
  
 	dim fl1$*256,actpd$*6,cogl$(3)*12,pedat$*20,cch$*20,p$(20)*50
 	dim r$*5,d$*50,te$*1,ac(9),report$*50,secondr$*50,foot$*132,underlin$*14
-	dim cnam$*40,b$*3,a$(8)*30,oldtrans$*16,g(8),accum(9,7)
-	dim pedat$*20,actpd$*6,bm(13),d(2),bp(13),by(13),revb(13),cap$*128,udf$*256
+	dim b$*3,a$(8)*30,oldtrans$*16,g(8),accum(9,7)
+	dim pedat$*20,actpd$*6,bm(13),d(2),bp(13),by(13),revb(13),udf$*256
  
-	fnTop(program$,cap$="Income Statement with GASB Budget")
-	fncno(cno,cnam$)
+	fnTop(program$,"Income Statement with GASB Budget")
 	udf$=env$('temp')&'\'
 	if fnGlAskFormatPriorCdPeriod=5 then goto Xit 		! sets fnps,fnpriorcd,fnfscode (primary/secondary,current year/Prior,period to print)
 	cch$=fncch$

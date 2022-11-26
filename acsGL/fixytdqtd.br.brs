@@ -4,15 +4,14 @@
 	autoLibrary
 	on error goto Ertn
  
-	dim cnam$*40,miscname$(10)*20,dedcode(10),cap$*128,empd(22)
+	dim miscname$(10)*20,dedcode(10),cap$*128,empd(22)
 	dim k(1),k$(3)*25,l$(1)*11,d(22),m(36),r$*10,n$*5,n(2),dat$*20
 	dim fa$(2),sa$(2)*40,fb$(2),ext(2),adr(2),report$*35,deposit(31,2)
  
 	fnTop(program$,cap$="Fix YTD - QTD Earnings")
-	fncno(cno,cnam$) : _
 	fndat(dat$)
  
-	fnTos(sn$="FixYTDQTD") : _
+	fnTos
 	rc=cf=0: mylen=28: mypos=mylen+3: frameno=1
 	fnFra(1,1,3,45,"Date Range to Fix Quarter To Date Earnings","Enter the date range for the payrolls to be included in this quarter. Leave blank to skip quarter.")
 	fnLbl(1,1,"Beginning Date of Quarter:",mylen,1,0,frameno)
@@ -41,7 +40,7 @@
 	open #1: "Name=[Q]\GLmstr\Company.h[cno],Shr",i,outi,r: read #1,using 'form pos 386,PD 5.3,PD 5.2,PD 5.3,PD 5.2,pos 407,PD 5.3,PD 5.2,pos 418,10*C 20,10*N 1',rec=1: ficarate,ficawage,feducrat,feducwag,mcr,mcm,mat miscname$,mat dedcode : _
 	close #1:
 	ficarate=ficarate/100 : feducrat=feducrat/100 : mcr=mcr/100
-	nametab=66-int(len(rtrm$(cnam$))/2)
+	nametab=66-int(len(rtrm$(env$('cnam')))/2)
 	open #1: "Name=[Q]\GLmstr\PRmstr.h[cno],KFName=[Q]\GLmstr\PRIndex.h[cno],Shr",i,outIn,k
 	open #2: "Name=[Q]\GLmstr\ACPRCKS.h[cno],Shr",i,outi,r
 L380: read #1,using 'form pos 1,N 4,3*C 25,C 11,36*PD 5.2,2*N 5': eno,mat k$,ss$,mat m,mat adr eof Xit

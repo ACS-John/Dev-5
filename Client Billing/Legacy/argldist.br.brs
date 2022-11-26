@@ -1,9 +1,7 @@
 on error goto Ertn
 autoLibrary
-fnTop(program$,cap$="Post General Ledger")
-fncno(cno,cnam$)
-fndat(dat$)
-dim p$*5,iv$*12,gl(3),gh(3),td$*30,tr$*12,a$*40,cap$*128,dat$*20
+fnTop(program$,"Post General Ledger")
+dim p$*5,iv$*12,gl(3),gh(3),td$*30,tr$*12,a$*40
 td$="AR SUMMARY"
 tr6=5
 open #8: "Name=S:\Core\Data\acsllc\pedate.h[cno],RecL=20,use,Shr",i,outi,r 

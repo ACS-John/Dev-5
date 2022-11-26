@@ -449,14 +449,13 @@ def fn_gridSetup
 	if env$('ACSDeveloper')<>'' then column_mask$(5)='80'
 	! column_mask$(5)='80'
 fnend
-def fn_setupOnCursysChange(; ___,cno,cnam$*128,dataFolder$*256)
+def fn_setupOnCursysChange(; ___,cno,dataFolder$*256)
 	dim program_plus$(1)*128,program_name$(1)*80,program_file$(1)*256,program_name_trim$(1)*80,ss_text$(1)*256
 	fn_getProgramList(mat program_plus$,mat program_name$,mat program_name_trim$,mat program_file$,mat ss_text$)
-	fncno(cno,cnam$)  ! this call triggers the setting of the environment variable (env$('cnam')) i.e. setenv('cnam',[cursys]\company.h, pos 1, c 40 etc  )
-	if cno=0 then
-		cno=1
-		fnputcno(cno)
-		fncno(cno)
+	cno=fnCno  ! this call triggers the setting of the environment variable (env$('cnam')) i.e. setenv('cnam',[cursys]\company.h, pos 1, c 40 etc  )
+	if ~cno then
+		if env$('acsDeveloper')<>'' then pr 'CNO ZERO encountered by MENU - pause' : pause
+		cno=fnPutCno(1)
 	end if
 	! r: set dataFolder$
 		if env$('acsDeveloper')<>'' and env$('cursys')='CLIENT BILLING' then
