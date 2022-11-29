@@ -1,6 +1,7 @@
 ! transactions explorer
 fn_setup
 fnTop(program$)
+! r: main loop
 dim tr$(0)*128
 dim trN(0)
 hTrans=fn_openFio('Client Billing Transaction',mat tr$,mat trN) ! , 1)
@@ -37,7 +38,7 @@ do
 		dim ch$(0)                 	, colMask$(0)
 		mat ch$(0)
 		mat colMask$(0)
-		fnAddOneC(mat ch$,'Rec'              	) : fnAddOneC(mat colMask$,'10')
+		fnAddOneC(mat ch$,'Rec'              	) : fnAddOneC(mat colMask$,'20')
 		fnAddOneC(mat ch$,'Invoice'          	) : fnAddOneC(mat colMask$,''  )
 		fnAddOneC(mat ch$,'Date'             	) : fnAddOneC(mat colMask$,'1' )
 		fnAddOneC(mat ch$,'Amount'           	) : fnAddOneC(mat colMask$,'10')
@@ -63,23 +64,15 @@ do
 			if coClient$='[All]' or coClient$=trim$(tr$(tr_clientId)) then
 				dim provider$*128
 				provider$=trim$(fn_clientProvider$(tr$(tr_clientId)))
-				! pr 'coProvider$="'&coProvider$&'"'
-				! pr 'provider$="'&provider$&'"'
-				! pause
 				if coProvider$='[All]' or coProvider$=provider$ then
 					dim tranDayN
 					tranDayN=days(trN(tr_date),'mmddyy')
-					! pr 'coDayStartN=';coDayStartN,date$(coDayStartN,'ccyymmdd')
-					! pr 'tranDayN=';tranDayN,date$(tranDayN,'mm/dd/ccyy')
-					! if coDayStartN then pause
 					if (~coDayStartN or coDayStartN=<tranDayN) and (~coDayEndN or coDayEndN=>tranDayN) then
 						if coType$='[All]' or val(coType$(1:1))=trN(tr_transCode) then
-							! pr tranDayN;' passed.'
 							! r: add record to grid
 							dim item$(0)*128
 							mat item$(0)
 							mat item$=('')
-							
 							fnAddOneC(mat item$,str$(rec(hTrans)        	) 	)
 							fnAddOneC(mat item$,     tr$(tr_inv          	) 	)
 							fnAddOneC(mat item$,str$(trN(tr_date         	))	)
@@ -96,12 +89,13 @@ do
 			end if
 		loop
 		TransGridAddEoF: !
+		resp_rec=rc+=1
 	! /r
 	! fncmdset(14)
-	fnCmdKey("Add"   	,ck_add   =1)
-	fnCmdKey("Edit"  	,ck_edit  =2,1)
-	fnCmdKey("Delete"	,ck_delete=4)
-	fnCmdKey("Exit"  	,ck_cancel=5,0,1)
+	fnCmdKey('Add'   	,ck_add   =1)
+	fnCmdKey('Edit'  	,ck_edit  =2,1)
+	fnCmdKey('Delete'	,ck_delete=4)
+	fnCmdKey('Exit'  	,ck_cancel=5,0,1)
 	ckey=fnacs(mat resp$)
 	if ckey<>ck_cancel then
 		coProvider$ 	=trim$(resp$(resp_provider 	)(1:11)) : fnPcReg_write('filter provider'   	,coProvider$ 	)
@@ -112,12 +106,12 @@ do
 		coDayEnd$   	= resp$(resp_dateEnd  	) : coDayEndN  =days(coDayEnd$  ,'ccyymmdd') : fnPcReg_write('filter day end'  	,str$(coDayEndN)  	)
 		coType$     	= resp$(resp_type     	) : fnPcReg_write('filter type' ,coType$)
 		if ckey=ck_add then
-			fn_transactionAdd(hTrans)
+			fn_transactionAdd(hTrans, coType$)
 		else if ckey=ck_edit then
-			 
-			pr resp$(1) 
-			pause
-			transRec=val(resp$(1))
+
+
+
+			transRec=val(resp$(resp_rec))
 			fn_transactionEdit(hTrans,transRec)
 		else if ckey=ck_delete then
 			pr 'ck_delete' : pause
@@ -127,16 +121,16 @@ do
 	end if
 loop until ckey=ck_cancel
 close #hTrans: ioerr ignore
-goto Xit
+goto Xit ! /r
 
-
-def fn_transactionAdd(hTrans; ___,col1pos,col1len,col2pos,rc,ln, _
+def fn_transactionAdd(hTrans; defaultTransType$,___,col1pos,col1len,col2pos,rc,ln, _
 	resp_client,resp_type,resp_amt,resp_inv,resp_desc, _
 	ck_cancel,ck_save, _
 	hClient)
 	! inherrits local mat form$,mat c$,mat cN, mat tr$,mat tN,mat resp$
 	mat tr$=('')
 	mat trN=(0)
+	trN(tr_transCode)=fnVal(defaultTransType$(1:2))
 	if fn_transactionFm(mat tr$,mat trN) then
 		hClient=fn_openFio('CO Client',mat c$,mat cN)
 		read #hClient,using form$(hClient),key=tr$(tr_clientId): mat c$,mat cN
@@ -164,25 +158,40 @@ def fn_transactionEdit(hTrans,transRec; ___,col1pos,col1len,col2pos,rc,ln, _
 	ck_cancel,ck_save, _
 	hClient)
 	! inherrits local mat form$,mat c$,mat cN, mat tr$,mat tN,mat resp$
-	read #hTrans,using form$(hTrans),rec=transRec: mat tr$,mat trN norec TeNoRec
-	if fn_transactionFm(mat tr$,mat trN) then
-		
+	read #hTrans,using form$(hTrans),rec=transRec: mat tr$,mat trN
+	if fn_transactionFm(mat tr$,mat trN, 1) then
+		rewrite #hTrans,using form$(hTrans),rec=transRec: mat tr$,mat trN
 	end if
 	TeNoRec: !
 fnend
-	def fn_transactionFm(mat tr$,mat trN; ___,returnN)
+	def fn_transactionFm(mat tr$,mat trN; protect,___,returnN)
 		fnToS
 		col1pos= 2
 		col1len=20
-		col2pos=col1len+col1pos+2
-		fnLbl(ln+=1,1,'Client:'       , col1len,1) : fnComboFio(ln,col2pos,'CO Client'  , 1) : resp$(resp_client=rc+=1)=tr$(tr_clientId)
+		col2pos=col1pos+col1len+2
+		ln+=1
+		fnLbl(ln+=1,1,'Client:'       , col1len,1)
+		if protect then
+			fnTxt(ln,col2pos,60, 0,1,'',0,'',1)
+		else
+			fnComboFio(ln,col2pos,'CO Client'  , 1)
+		end if
+		resp$(resp_client=rc+=1)=tr$(tr_clientId)
+		ln+=1
+		fnLbl(ln+=1,1,'Invoice:', col1len,1) : fnTxt(ln,col2pos,12, 0,1,'',0,'') : resp$(resp_inv=rc+=1)=tr$(tr_inv)
 		ln+=1
 		fnLbl(ln+=1,1,'Transaction Date:', col1len,1) : 	fnTxt(ln,col2pos,10, 0,1,'3',0,'') : resp$(resp_date=rc+=1) 	=str$(trN(tr_date))
 		ln+=1
-		fnLbl(ln+=1,1,'Trans Type:'   , col1len,1) : fnComboFio(ln,col2pos,'Client Billing Transaction Type', 1) : resp$(resp_type=rc+=1)=str$(trN(tr_transCode))
+		fnLbl(ln+=1,1,'Amount:', col1len,1) : fnTxt(ln,col2pos,10, 0,1,'32',0,'',protect) : resp$(resp_amt=rc+=1)=str$(trN(tr_amt))
 		ln+=1
-		fnLbl(ln+=1,1,'Amount:', col1len,1) : fnTxt(ln,col2pos,10, 0,1,'32',0,'') : resp$(resp_amt=rc+=1)=str$(trN(tr_amt))
-		fnLbl(ln+=1,1,'Invoice:', col1len,1) : fnTxt(ln,col2pos,12, 0,1,'',0,'') : resp$(resp_inv=rc+=1)=tr$(tr_inv)
+		fnLbl(ln+=1,1,'Trans Type:'   , col1len,1)
+		if protect then
+			fnTxt(ln,col2pos,40, 0,0,'',1)
+		else
+			fnComboFio(ln,col2pos,'Client Billing Transaction Type', 1)
+		end if
+		resp$(resp_type=rc+=1)=str$(trN(tr_transCode))
+		ln+=1
 		fnLbl(ln+=1,1,'Description:', col1len,1) : fnTxt(ln,col2pos,20) : resp$(resp_desc=rc+=1)=tr$(tr_desc)
 		ln+=1
 		fnLbl(ln,1,'', 105) ! 100 is too small
@@ -190,10 +199,8 @@ fnend
 		fnCmdKey('Cancel',ck_cancel=5,0,1)
 		ckey=fnAcs(mat resp$)
 		if ckey=ck_save then
-			! pause
 			mat tr$=('')
 			mat trN=(0)
-	
 			tr$(tr_clientId    	)=resp$(resp_client)(1:5)
 			tr$(tr_inv         	 	)=lpad$(resp$(resp_inv),11)
 			trN(tr_date        	)=date(days(resp$(resp_date),'ccyymmdd'),'mmddyy')
