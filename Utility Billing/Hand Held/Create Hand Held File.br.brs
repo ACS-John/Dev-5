@@ -191,7 +191,7 @@ goto NextReadForAll ! /r
 SendRecordToOutFile: ! r:
 	! if trim$(z$)='100100.99' then pause
 	if udim(mat filterAccount$) or ~final or u4_includeFinalBilled$='True' then ! skip IF FINAL BILLED
-pr z$ : pause
+
 		if ~(selection_method=sm_meterTypes) or deviceSelected$=fn_meterInfo$('Device',z$,serviceCodeMetered$(1)) then
 			if ~filterNoLocationId or val(fn_meterInfo$('Location_ID',z$,'WA'))>0 then
 				dim ft$*20
