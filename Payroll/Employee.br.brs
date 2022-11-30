@@ -42,11 +42,11 @@ EmployeeAdd: ! r:
 	mylen=25 : mypos=mylen+2
 	fnLbl(1,1,'Employee Number:',mylen,1)
 	fnTxt(1,mylen+3,8,8,1,'30',0,'Employee numbers must be numeric.')
-	resp$(respc+=1)=str$(eno)
+	resp$(respc+=1)='' ! str$(eno)
 	fnCmdKey('&Next',1,1,0,'Process employee information.')
 	fnCmdKey('&Cancel',5,0,1,'Returns to maintenance screen.')
 	ckey=fnAcs(mat resp$)
-	if ckey=5 then goto EmployeeEditXit
+	if ckey=5 then goto EmployeeAddXit
 	add1=1
 	ent=val(resp$(1))
 	ent$=lpad$(str$(ent),8)
@@ -94,6 +94,7 @@ EmployeeAdd: ! r:
 	dim w4Year$*4
 	w4Year$='none'
 	fn_employeeEdit(ent, 1)
+	EmployeeAddXit: !
 goto Menu1 ! /r
 
 def library fnEmployeeEdit(eno)
@@ -104,6 +105,7 @@ def library fnEmployeeEdit(eno)
 fnend
 def fn_employeeEdit(ent; employeeAdding)
 	if employeeAdding then goto ScrEmployee
+
 	EmployeeEdit: ! r:
 		if ent=0 then goto EmployeeEditXit
 		teno=eno=ent ! hdar=0
@@ -117,13 +119,14 @@ def fn_employeeEdit(ent; employeeAdding)
 		ml$(2)='Select a different employee number.'
 		fnMsgBox(mat ml$,resp$,'',48)
 	goto EmployeeEditXit ! /r
+
 	ScrEmployee: ! r:
 		fnTos : screen=scrEmployee ! r: build the screen
 		respc=0 : frac=0 : mat lc=(0)
 		mylen=28 : mypos=mylen+2
 		col1_pos=1 : col1_len=mylen
 		col2_pos=col1_pos+col1_len+2
-	
+
 		col3_pos=58 : col3_len=21 ! 20
 		col4_pos=col3_pos+col3_len+2 ! 73
 		fn_navButtons(lc(1),deptCount)
@@ -136,7 +139,7 @@ def fn_employeeEdit(ent; employeeAdding)
 		fnLbl(lc(1)+=1,1,'Name:',mylen,1)
 		fnTxt(lc(1)   ,mylen+3,col2_len,30,0,'',0,'Name can be entered first name first or last name first.')
 		resp$(resp_name=respc+=1)=em$(1)
-	
+
 		fnLbl(lc(1)+=1,1,'Address:',mylen,1)
 		fnTxt(lc(1)   ,mylen+3,col2_len,30,0,'',0,'')
 		resp$(resp_addr=respc+=1)=em$(2)
@@ -144,34 +147,34 @@ def fn_employeeEdit(ent; employeeAdding)
 		fnTxt(lc(1)   ,mylen+3,col2_len,30,0,'',0,'')
 		resp$(resp_csz=respc+=1)=em$(3)
 		lc(1)+=1
-	
+
 		fnLbl(lc(1)+=1,1,'Social Security Number:',mylen,1)
 		fnTxt(lc(1)   ,mylen+3,11,11,0,'',0,'')
 		resp$(resp_ssn=respc+=1)=ss$
 		! /r
 		! r: col 2 top section
 		lc(2)=4
-	
+
 		fnLbl(lc(2)+=1,col3_pos,'Birth Date:',col3_len,1)
 		fnTxt(lc(2)   ,col4_pos,10,10,0,'1',0,'The birth date is not required.')
 		resp$(resp_birthDate=respc+=1)=str$(bd)
-	
+
 		fnLbl(lc(2)+=1,col3_pos,'Phone Number:',col3_len,1)
 		fnTxt(lc(2)   ,col4_pos,12)
 		resp$(resp_phone=respc+=1)=ph$
-	
+
 		fnLbl(          lc(2)+=1,col3_pos,'Race:',col3_len,1)
 		fnComboA('Race',lc(2)   ,col4_pos,mat race_option$,'',16)
 		resp$(resp_race=respc+=1)=fnSetForCombo$(mat race_option$,str$(rs(1)))
-	
+
 		fnLbl(         lc(2)+=1,col3_pos,'Sex:',col3_len,1)
 		fnComboA('Sex',lc(2)   ,col4_pos,mat gender_option$,'',10)
 		resp$(resp_sex=respc+=1)=fnSetForCombo$(mat gender_option$,str$(rs(2)))
-	
+
 		fnLbl(             lc(2)+=1,col3_pos,'Marital Status:',col3_len,1)
 		fnComboA('Marital',lc(2)   ,col4_pos,mat marriedOption$,'',25) ! ,'',11)
 		resp$(resp_married=respc+=1)=fnSetForCombo$(mat marriedOption$,str$(em(1)))
-	
+
 		! lc(2)+=1
 		! fnLbl(             lc(2)+=1,col3_pos,'Dependants - Under 17:',col3_len,1)
 		! fnTxt(             lc(2)   ,col4_pos,2,0,1,'30',0,'Employee numbers must be numeric.')
@@ -179,14 +182,14 @@ def fn_employeeEdit(ent; employeeAdding)
 		! fnLbl(             lc(2)+=1,col3_pos,'Dependants - Other:',col3_len,1)
 		! fnTxt(             lc(2)   ,col4_pos,2,0,1,'30',0,'Employee numbers must be numeric.')
 		! resp$(resp_dependentsOther=respc+=1)=str$(dependentsOther)
-	
+
 		! /r
 		! r: col 2 - state and federal section
 		lcTmp=lc(2)+=2
-	
+
 		fnChk(lc(2)+=1,col4_pos+1,'Disable Federal Taxes',1) ! , align,contain,tabcon,chk_disable)
 		resp_disableFedTax=respc+=1 : if em(12)=-1 then resp$(resp_disableFedTax)='True' else resp$(resp_disableFedTax)='False'
-	
+
 		fnLbl(             lc(2)+=1,col3_pos,'Federal Exemptions:',col3_len,1)
 		fnComboA('FedEx',  lc(2)   ,col4_pos,mat fed_exemption_option$,'',3)
 		resp$(resp_fedExepmtions=respc+=1)=fnSetForCombo$(mat fed_exemption_option$,str$(em(2)),1,2)
@@ -209,7 +212,7 @@ def fn_employeeEdit(ent; employeeAdding)
 		fnTxt(lc(2)   ,col4_pos,10,10,0,'32',0,'If you wish for the system to withhold a fixed amount of State withholdings, enter that amount here. You can use a negative one dollar (-1.00) to skip state withholdings on this employee.')
 		resp$(resp_stdState=respc+=1)=str$(em(14))
 		! /r
-	
+
 		! lc(1)=lcTmp
 		fnLbl(lc(1)+=1,col1_pos,'Date Hired:',col1_len,1)
 		fnTxt(lc(1)   ,col2_pos,10,10,0,'1',0,'The date hired is only used for information purposes only.')
@@ -217,7 +220,7 @@ def fn_employeeEdit(ent; employeeAdding)
 		fnLbl(lc(1)+=1,col1_pos,'Last Payroll Date:',col1_len,1)
 		fnTxt(lc(1)   ,col2_pos,10,10,0,'1',0,'This will always be the last time pay was calculated on this employee.')
 		resp$(resp_lastPayrollDate=respc+=1)=str$(lpd)
-	
+
 		fnLbl(               lc(1)+=1,1,'Employment Status:',mylen,1)
 		fnComboF('EmpStatus',lc(1)   ,col2_pos,20,'[Q]\PRmstr\EmpStatus.dat',1,2,3,15,'[Q]\PRmstr\EmpStatus.idx',0,0, ' ',fracustinfo,0)
 		resp$(resp_empStatus=respc+=1)=str$(em(4))
@@ -231,8 +234,8 @@ def fn_employeeEdit(ent; employeeAdding)
 		fnLbl(lc(1)+=1,col1_pos,'Vacation Hours Accrued:',col1_len,1)
 		fnTxt(lc(1)   ,col2_pos,10,10,0,'32',0,'This should be the balance of vacation hours available at this time.')
 		resp$(resp_vacationAccrued=respc+=1)=str$(em(11))
-	
-	
+
+
 		lc(1)+=2
 		fnLbl(lc(1)+=1,1,'Sick Pay Code:',col1_len,1)
 		fnTxt(lc(1)   ,col2_pos,6,6,0,'33',0,'Normally is number of sick hours you want accrued each pay period.')
@@ -240,26 +243,26 @@ def fn_employeeEdit(ent; employeeAdding)
 		fnLbl(lc(1)+=1,1,'Sick Hours Accrued:',col1_len,1)
 		fnTxt(lc(1)   ,col2_pos,10,10,0,'32',0,'This should be the balance of sick hours available at this time.')
 		resp$(resp_sickAccrued=respc+=1)=str$(em(10))
-	
+
 		! lc(2)-=2   !  go back up two lines and do the right side
-	
+
 		fnLbl(              lc(2)+=1,col3_pos,'FICA Code:',col3_len,1)
 		fnComboA('FICACode',lc(2)    ,col4_pos,mat code6$,'',25)
 		resp$(resp_ficaCode=respc+=1)=fnSetForCombo$(mat code6$,str$(em(6)))
 		fnLbl(              lc(2)+=1,col3_pos,'EIC Code:',col3_len,1)
 		fnComboA('EICCode', lc(2)    ,col4_pos,mat eicOption$,'',25)
 		resp$(resp_EicCode=respc+=1)=eicOption$(em(7)+1)
-	
-	
+
+
 		lc(1)+=1
-	
+
 		fnLbl(             lc(1)+=1,col1_pos,'W-4 Year:',col1_len,1)
 		fnComboA('w4Year', lc(1)   ,col2_pos,mat w4yearOption$,'Only used if W-4 Year is set to 2020 or later.',5)
 		resp$(resp_w4year=respc+=1)=w4Year$
-	
+
 		fnChk(lc(1)+=1,col2_pos+1,'2020 W-4 Step 2',1) ! , align,contain,tabcon,chk_disable)
 		resp_w4Step2=respc+=1 : if w4Step2 then resp$(resp_w4Step2)='True' else resp$(resp_w4Step2)='False'
-	
+
 		fnLbl(             lc(1)+=1,col1_pos,'2020 W-4 Step 3:',col1_len,1)
 		fnTxt(             lc(1)   ,col2_pos,10,10,0,'32',0,'Only used if W-4 Year is set to 2020 or later.')
 		resp$(resp_w4Step3=respc+=1)=str$(w4Step3)
@@ -272,9 +275,9 @@ def fn_employeeEdit(ent; employeeAdding)
 		fnLbl(             lc(1)+=1,col1_pos,'2020 W-4 Step 4c:',col1_len,1)
 		fnTxt(             lc(1)   ,col2_pos,10,10,0,'32',0,'Only used if W-4 Year is set to 2020 or later.')
 		resp$(resp_w4Step4c=respc+=1)=str$(w4Step4c)
-	
-	
-	
+
+
+
 		! picture=0
 		! fnCmdKey('&Departments ('&str$(deptCount)&')',2,0,0,'Review this employee''s departmental information.')
 		fnCmdKey('Direct D&eposit',7,0,0,'Review direct deposit information.')
@@ -541,7 +544,7 @@ ScrState: ! r:
 		fnAddOneC(mat ids$,'Exepmtions')
 		fnAddOneC(mat ids$,'Dependents')
 		ckey=fn_askMat(eno,mat ids$)
-	else 
+	else
 		pr 'state not yet setup yet'
 		pause
 	end if
@@ -615,7 +618,7 @@ def fn_navButtons(&lc,&deptCount; ___,deptItem)
 		dptPos+=(len(deptTxt$)+2)
 	nex deptItem
 	fnbutton(lc,dptPos,'Add Department',ckey_DepartmentAdd, 'Add a new department')
-	
+
 	! fnlbl(36,10
 	fnlbl(28,105,' ') ! invisible space to keep a minimum size, otherwise tab buttons jump while you're using them
 fnend
