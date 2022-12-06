@@ -8,7 +8,7 @@ sTime     	,Time Spent    	,pd  3.2  	,                 , ! pos=15    aka=inp(3)
 hourlyRate	,Hourly Rate    	,pd  3.2  	,                 , ! pos=18    aka=inp(4)
 charge    	,Charge         	,pd  4.2  	,                 , ! pos=21    aka=inp(5)  (usually rate*time)
 woDate    	,Date           	,n   6    	,  date(mmddyy)  , ! pos=25    aka=inp(6)  mmddyy format
-category 		,Category     	,C   2    	,                 , ! pos=31    aka=inp(7)   ComboF(ignore,[CurSysData]\Category.h[cno],1,3,4,30,[CurSysData]\Category_Name_Idx.h[cno])
+category 		,Category       	,C   2    	,                 , ! pos=31    aka=inp(7)   ComboF(ignore,[CurSysData]\Category.h[cno],1,3,4,30,[CurSysData]\Category_Name_Idx.h[cno])
 zero      	,Zero 1         	,pd  2    	,                 , ! pos=33    aka=b6
 one       	,1              	,pd  1    	,                 , ! pos=35    aka=b7
 code      	,Code           	,c   2    	,                 , ! pos=36    aka=wo_month,b8
