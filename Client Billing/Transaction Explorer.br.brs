@@ -202,10 +202,10 @@ fnend
 			mat tr$=('')
 			mat trN=(0)
 			tr$(tr_clientId    	)=resp$(resp_client)(1:5)
-			tr$(tr_inv         	 	)=lpad$(resp$(resp_inv),11)
+			tr$(tr_inv         	)=lpad$(resp$(resp_inv),11)
 			trN(tr_date        	)=date(days(resp$(resp_date),'ccyymmdd'),'mmddyy')
 			trN(tr_amtOrigional	)=val(resp$(resp_amt) )
-			trN(tr_amt         	 	)=val(resp$(resp_amt) )
+			trN(tr_amt         	)=val(resp$(resp_amt) )
 			trN(tr_salesmanId  	)=0
 			trN(tr_transCode   	)=val(resp$(resp_type)(1:1))
 			trN(tr_postCode    	)=0

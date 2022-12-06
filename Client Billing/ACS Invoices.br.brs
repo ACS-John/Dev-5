@@ -32,7 +32,7 @@ execute 'sy "C:\ACS\Util\Dev-5 Commit.cmd"'
 
 	open #h_tmwk2=fnH: 'Name=S:\Core\Data\acsllc\tmpInvoice.h[cno],Replace,RecL=4675,Shr',internal,outIn
 	dim cde$(30)*6
-	dim inv_item$(30)*128
+	dim invItem$(30)*128
 	dim inv_amt(30)
 	dim inv_category(30)
 	dim inv_service_code$(30)
@@ -147,19 +147,19 @@ def fn_billForMaint(client_id$,&invTotal)
 					invLine+=1
 
 					if stm$='An' then
-						inv_item$(invLine)='Annual'
+						invItem$(invLine)='Annual'
 					else if stm$='Qt' then
-						inv_item$(invLine)='Quarterly'
+						invItem$(invLine)='Quarterly'
 					else if stm$='Mo' then
-						inv_item$(invLine)='Monthly'
+						invItem$(invLine)='Monthly'
 					else
-						inv_item$(invLine)='(unexpected timeframe)'
-						pr inv_item$(invLine) : pause
+						invItem$(invLine)='(unexpected timeframe)'
+						pr invItem$(invLine) : pause
 					end if
 					if scode$='U4' then
-						inv_item$(invLine)=inv_item$(invLine)&' Maintenance for (UB) Hand Held Add-On'
+						invItem$(invLine)=invItem$(invLine)&' Maintenance for (UB) Hand Held Add-On'
 					else
-						inv_item$(invLine)=inv_item$(invLine)&' Maintenance for '&trim$(fnSystemName$(scode$))
+						invItem$(invLine)=invItem$(invLine)&' Maintenance for '&trim$(fnSystemName$(scode$))
 						if trim$(fnSystemName$(scode$))='' then
 							pr ' sending blank system name  scode$='&scode$
 							pr '   client_id=';client_id$
@@ -219,12 +219,12 @@ def fn_billForNonMaint(client_id$,&invTotal; ___,wo_desc$*30,hTimeSheet) ! add c
 			invLine+=1
 			! if val(client_id$)=3828 then pr 'schachtner encountered invLine=';invLine : pause
 			if client_id$=client_id_sageAx$ or client_id$=client_id_brc$ then
-				!     pause  ! inv_item$(invLine)=str$(inp3)&' hours at a rate of '&&' on '&cnvrt$('pic(##/##/##)',inp6)
-				inv_item$(invLine)=str$(inp3)&' hours at a rate of '&cnvrt$('pic($$#.##)',inp4)&' on '&cnvrt$('pic(##/##/##)',inp6)
+				!     pause  ! invItem$(invLine)=str$(inp3)&' hours at a rate of '&&' on '&cnvrt$('pic(##/##/##)',inp6)
+				invItem$(invLine)=str$(inp3)&' hours at a rate of '&cnvrt$('pic($$#.##)',inp4)&' on '&cnvrt$('pic(##/##/##)',inp6)
 			else if inp7=2 then
-				inv_item$(invLine)=str$(inp3)&' hours of '&trim$(fnSystemName$(b8$))&' programming on '&cnvrt$('pic(##/##/##)',inp6)
+				invItem$(invLine)=str$(inp3)&' hours of '&trim$(fnSystemName$(b8$))&' programming on '&cnvrt$('pic(##/##/##)',inp6)
 			else
-				inv_item$(invLine)=str$(inp3)&' hours of '&trim$(fnSystemName$(b8$))&' support on '&cnvrt$('pic(##/##/##)',inp6)
+				invItem$(invLine)=str$(inp3)&' hours of '&trim$(fnSystemName$(b8$))&' support on '&cnvrt$('pic(##/##/##)',inp6)
 			end if
 
 			inv_amt(invLine)=inp5
@@ -245,7 +245,7 @@ def fn_print_inv
 	if enableMinimumMonthlyBill and invTotal>0 and invTotal<enableMinimumMonthlyBill then
 		invLine+=1
 		if invLine<30 then
-			inv_item$(invLine)='Minimum Monthly Billing of '&trim$(cnvrt$('pic($$$$$$#.##)',enableMinimumMonthlyBill))
+			invItem$(invLine)='Minimum Monthly Billing of '&trim$(cnvrt$('pic($$$$$$#.##)',enableMinimumMonthlyBill))
 			inv_amt(invLine)=enableMinimumMonthlyBill-sum(mat inv_amt)
 			invTotal+=inv_amt(invLine)
 			inv_service_code$(invLine)='19'
@@ -253,17 +253,17 @@ def fn_print_inv
 		end if
 	end if
 	if invTotal=>1 then
-		write #h_tmwk2,using F_TMWK2a: client_id$,2,invDateMmDdYy,iv$,mat cde$,mat inv_item$,mat inv_amt,mat inv_category,mat inv_service_code$,mat inv_gl$
+		write #h_tmwk2,using F_TMWK2a: client_id$,2,invDateMmDdYy,iv$,mat cde$,mat invItem$,mat inv_amt,mat inv_category,mat inv_service_code$,mat inv_gl$
 		F_TMWK2a: form pos 1,c 5,n 1,n 6,c 12,30*c 6,30*c 128,30*pd 5.2,30*n 2,30*c 2,30*c 12
 	end if
 	if invTotal=>1 or pbal=>1 then
 		fn_summaryAdd
 		fnStatus('adding an $'&str$(sum(mat inv_amt))&' invoice for '&client_id$&' - '&client_addr$(1))
 		! pr '  adding invoice '&iv$&' for '&client_id$
-		fnInvoiceAdd(client_id$, mat client_addr$,iv$,invDateMmDdYy,mat inv_item$,mat inv_amt,pbal)
+		fnInvoiceAdd(client_id$, mat client_addr$,iv$,invDateMmDdYy,mat invItem$,mat inv_amt,pbal)
 		invoice_number+=1
 	end if
-	mat inv_item$=(' ')
+	mat invItem$=(' ')
 	mat inv_category=(0)
 	mat inv_service_code$=('')
 	mat inv_gl$=('')

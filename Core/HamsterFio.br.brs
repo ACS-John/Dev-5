@@ -170,11 +170,11 @@ def fn_hfLayoutRead(hfLayoutFilename$*256,mat hfDataAll$,mat hfLabel$,mat hfFiel
 							! /r
 							! r: S:\Core\Data
 								! S:\Core\Data
-								if fn_amc('CO TransactionCode'	,'S:\Core\Data\TransactionCode.dat    ,1, 1, 2,18,S:\Core\Data\TimTransactionCode.idx ') then goto CfGotIt
-								if fn_amc('GL TransactionType'	,'S:\Core\Data\GL TransactionType.dat ,1, 1, 2,18,S:\Core\Data\GL TransactionType.idx ') then goto CfGotIt
-								if fn_amc('CO Billing Method' 	,'S:\Core\Data\Billing Method.dat     ,1, 1, 2,40,S:\Core\Data\Billing Method.idx     ') then goto CfGotIt
+								if fn_amc('CO TransactionCode'              	,'S:\Core\Data\TransactionCode.dat    ,1, 1, 2,18,S:\Core\Data\TimTransactionCode.idx ') then goto CfGotIt
+								if fn_amc('GL TransactionType'              	,'S:\Core\Data\GL TransactionType.dat ,1, 1, 2,18,S:\Core\Data\GL TransactionType.idx ') then goto CfGotIt
+								if fn_amc('CO Billing Method'               	,'S:\Core\Data\Billing Method.dat     ,1, 1, 2,40,S:\Core\Data\Billing Method.idx     ') then goto CfGotIt
 								! s:\Core\Data\acsllc
-								if fn_amc('CO Client'                       	,'S:\Core\Data\acsllc\Client.h[cno]   ,1, 5, 6,30,S:\Core\Data\acsllc\Client-Idx.h[cno]') then goto CfGotIt
+								if fn_amc('CO Client'                        	,'S:\Core\Data\acsllc\Client.h[cno]   ,1, 5, 6,30,S:\Core\Data\acsllc\Client-Idx.h[cno]') then goto CfGotIt
 								if fn_amc('CO Provider'                     	,'S:\Core\Data\acsllc\Provider.h[cno] ,1,11,12,64,S:\Core\Data\acsllc\Provider-Idx.h[cno]') then goto CfGotIt
 								if fn_amc('CO Systems'                      	,'S:\Core\Data\acsllc\Systems.h420    ,1, 2, 3,50,S:\Core\Data\acsllc\Systems-Idx.h420') then goto CfGotIt
 								if fn_amc('CO Systems 2'                    	,'S:\Core\Data\acsllc\acsSystems.dat  ,1,16,17,64,S:\Core\Data\acsllc\acsSystems.idx') then goto CfGotIt
