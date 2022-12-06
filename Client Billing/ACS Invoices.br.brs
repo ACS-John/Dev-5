@@ -188,7 +188,7 @@ def fn_billForNonMaint(client_id$,&invTotal; ___,wo_desc$*30,hTimeSheet) ! add c
 	! hTimeSheet=fn_open('Client Billing TimeSheet',mat timesheet$, mat timesheetN, mat form$)
 	open #hTimeSheet=fnH: 'Name=[Temp]\TmSht[session],KFName=[Temp]\TmSht-idx[session]',i,outIn,k
 	dim inp7
-	read #hTimeSheet,using F_time,key=>rpad$(client_id$,kln(hTimeSheet)): inp1$,inp2,inp3,inp4,inp5  ,inp6	,inp7,b6  	,b7  ,	b8$,sc,       o_o 	,wo_desc$ nokey TM_XIT2
+	read #hTimeSheet,using F_time,key=>rpad$(client_id$,kln(hTimeSheet)): inp1$,inp2,inp3,inp4,charge  ,inp6	,inp7,b6  	,b7  ,	b8$,sc,       o_o 	,wo_desc$ nokey TM_XIT2
 	F_time: form pos 1,                                                        v 5 ,n 9  ,2*pd 3.2 ,pd 4.2,n 6 	,n 2 ,pd 2	,pd 1,	c 2,n 4,x 12, pd 3	,c 30
 	F_timeTc: form pos 1,x 14,pd 3.2,x 3,pd 4.2
 	! inp1$=trim$(inp1$)
@@ -197,7 +197,7 @@ def fn_billForNonMaint(client_id$,&invTotal; ___,wo_desc$*30,hTimeSheet) ! add c
 			if b8$='0' or b8$='' then b8$='19'
 			delete #hTimeSheet: ioerr ignore ! delete current record so it is not processed twice
 			! fn_billForHours(client_id$)
-			! def fn_billForHours(client_id$) ! ,inp1$,inp2,inp3,inp4,inp5,inp6,inp7,etc...
+			! def fn_billForHours(client_id$) ! ,inp1$,inp2,inp3,inp4,charge,inp6,inp7,etc...
 			if invLine=30 then fn_print_inv ! pr invoice if more than 20 entries
 			if invLine>29 then pause
 			spk$=' '&lpad$(client_id$,5)&lpad$(b8$,2)
@@ -213,7 +213,7 @@ def fn_billForNonMaint(client_id$,&invTotal; ___,wo_desc$*30,hTimeSheet) ! add c
 			end if
 
 			BfhGo: !
-			supCost=inp5
+			supCost=charge
 
 			invTotal+=supCost
 			invLine+=1
@@ -227,14 +227,14 @@ def fn_billForNonMaint(client_id$,&invTotal; ___,wo_desc$*30,hTimeSheet) ! add c
 				invItem$(invLine)=str$(inp3)&' hours of '&trim$(fnSystemName$(b8$))&' support on '&cnvrt$('pic(##/##/##)',inp6)
 			end if
 
-			inv_amt(invLine)=inp5
+			inv_amt(invLine)=charge
 			inv_category(invLine)=6
 			inv_service_code$(invLine)=b8$
 			inv_gl$(invLine)='  0  1160  0'
 			BfhXit: !
 			! fnend
 
-			read #hTimeSheet,using F_time: inp1$,inp2,inp3,inp4,inp5,inp6,inp7,b6,b7,b8$,sc,o_o,wo_desc$ eof TM_XIT2
+			read #hTimeSheet,using F_time: inp1$,inp2,inp3,inp4,charge,inp6,inp7,b6,b7,b8$,sc,o_o,wo_desc$ eof TM_XIT2
 		loop while inp1$=client_id$
 	end if
 	TM_XIT2: !
@@ -317,14 +317,14 @@ def fn_combineIntoTmSht(file_from$*256; ___,tce_key$,wo_desc$*30,h_from,h_to,toI
 	open #h_from=fnH: 'Name='&file_from$,i,i
 	open #h_to=fnH: 'Name=[Temp]\TmSht[session],KFName=[Temp]\TmSht-idx[session],Replace,RecL='&str$(rln(h_from))&',KPs=1/36/25,KLn=5/2/6',i,outIn,k
 	do
-		read #h_from,using F_time: inp1$,inp2,inp3,inp4,inp5,inp6,inp7,b6,b7,b8$,sc,o_o,wo_desc$ eof TCE_EOF
+		read #h_from,using F_time: inp1$,inp2,inp3,inp4,charge,inp6,inp7,b6,b7,b8$,sc,o_o,wo_desc$ eof TCE_EOF
 		
 		! pr '_______________________________' ! r: pr debug info and pause
 		! pr 'inp1$   =';inp1$
 		! pr 'inp2    =';inp2
 		! pr 'inp3    =';inp3
 		! pr 'inp4    =';inp4
-		! pr 'inp5    =';inp5
+		! pr 'charge    =';charge
 		! pr 'inp6    =';inp6
 		! pr 'inp7    =';inp7
 		! pr 'b6      =';b6
@@ -340,11 +340,11 @@ def fn_combineIntoTmSht(file_from$*256; ___,tce_key$,wo_desc$*30,h_from,h_to,toI
 		tce_key$=rpad$(inp1$,5)&lpad$(b8$,2)&cnvrt$('N 6',inp6) !  ..=cnvrt$('N 5',inp1$)&...
 		read #h_to,using F_timeTc,key=tce_key$: toInp3,toInp5 nokey CitAdd
 		inp3+=toInp3 ! time
-		inp5+=toInp5 ! charge
-		rewrite #h_to,using F_time,key=tce_key$: inp1$,inp2,inp3,inp4,inp5,inp6,inp7,b6,b7,b8$,sc,o_o,wo_desc$
+		charge+=toInp5 ! charge
+		rewrite #h_to,using F_time,key=tce_key$: inp1$,inp2,inp3,inp4,charge,inp6,inp7,b6,b7,b8$,sc,o_o,wo_desc$
 		goto CitNext
 		CitAdd: !
-		write #h_to,using F_time: inp1$,inp2,inp3,inp4,inp5,inp6,inp7,b6,b7,b8$,sc,o_o,wo_desc$
+		write #h_to,using F_time: inp1$,inp2,inp3,inp4,charge,inp6,inp7,b6,b7,b8$,sc,o_o,wo_desc$
 		CitNext: !
 	loop
 	TCE_EOF: !

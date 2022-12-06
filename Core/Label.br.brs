@@ -65,7 +65,7 @@ def library fnLabel(mat linestyle$; ___,returnN)
 		if labelFormat=1 then
 			gosub Label_1UpDotMatrix
 		else if labelFormat=2 then
-			if fn_askL3x10(lStart,labX,labY)=5 then
+			if fn_askL3x10(labX,labY)=5 then
 				goto Screen1
 			end if
 			! fn_AskL3x10margins
@@ -197,7 +197,7 @@ def library fnLabel(mat linestyle$; ___,returnN)
 		fnLabel=returnN
 	! /r
 fnend
-	def fn_askL3x10(&lStart,&labX,&labY; ___,returnN,ckey,j,myline,mypos)
+	def fn_askL3x10(&labX,&labY; ___,returnN,ckey,j,myline,mypos,lStart)
 		! re-uses locally dimmed mat resp$ but does not need to share
 		AskLabelFormat2LstartToS: !
 		fnTos
@@ -221,10 +221,14 @@ fnend
 			returnN=21
 		end if
 		if returnN<>5 then
-			lStart=ckey-21 ! because the other routine starts out adding one.
+			lStart=returnN-20 ! user selection
+			lStart-=1 ! because the other routine starts out incrementing by one.
 			labX=int((lStart+2)/3)
 			labY=lStart-((labX-1)*3)
-		end if
+			! pr 'labX='&str$(labX)
+			! pr 'labY='&str$(labY) 
+			! pause
+			end if
 		fn_askL3x10=returnN
 	fnend
 		def fn_AskL3x10margins
