@@ -7,105 +7,103 @@ client_id_framemasters$='1864'
 
 ! r: Screens
 
-dim filter_date(2)
-filter_date(1)=val(date$(days(date$('ccyymm')&'01','ccyymmdd')-1,'ccyymm')&'01') ! low (beginning of last month)
-filter_date(2)=date(days(date$('ccyymm')&'01','ccyymmdd')-1,'ccyymmdd') ! high (end of last month)
+dim filterDate(2)
+filterDate(1)=val(date$(days(date$('ccyymm')&'01','ccyymmdd')-1,'ccyymm')&'01') ! low (beginning of last month)
+filterDate(2)=date(days(date$('ccyymm')&'01','ccyymmdd')-1,'ccyymmdd') ! high (end of last month)
 dim label$(2)*25
 label$(1)='Starting Date'
 label$(2)='Ending Date'
 dim empName$(5)*64
-dim filename$(5)*1024
-if fn_askDatesAndFile(mat label$,mat filter_date,mat empName$,mat filename$)=5 then goto Xit
+dim fileName$(5)*1024
+if fn_askDatesAndFile(mat label$,mat filterDate,mat empName$,mat fileName$)=5 then goto Xit
 goto MainBody ! /r
 MainBody: ! r:
 mat ctHandles(0)
 mat ctFiles$(0)
-fileNameCount=srch(mat filename$,'')-1
+fileNameCount=srch(mat fileName$,'')-1
 for fileItem=1 to fileNameCount
-	fnStatus('Processing for '&empname$(fileItem)&' ('&str$(fileItem)&' of '&str$(fileNameCount)&')')
-	open #h_in=fnH: 'Name=[at]'&filename$(fileItem)&',RecL=100,Shr',external,input
-	line_count=0
-	the_date_prior=the_date=0
+	fnStatus('Processing for '&empName$(fileItem)&' ('&str$(fileItem)&' of '&str$(fileNameCount)&')')
+	open #h_in=fnH: 'Name=[at]'&fileName$(fileItem)&',RecL=100,Shr',external,input
+	lineCount=0
+	theDatePrior=theDate=0
 	if fileItem=1 then
-		open #h_out=fnH: 'Name=S:\Core\Data\acsllc\TimeSheet.h[cno],RecL=86,KFName=S:\Core\Data\acsllc\TimeSheet-Idx.h[cno],Replace,KPs=1,KLn=5',i,outIn,k
-		open #h_support=fnH: 'Name=S:\Core\Data\acsllc\SUPPORT.h[cno],KFName=S:\Core\Data\acsllc\support-idx.h[cno],Shr',i,i,k
+		open #hOut=fnH: 'Name=S:\Core\Data\acsllc\TimeSheet.h[cno],RecL=86,KFName=S:\Core\Data\acsllc\TimeSheet-Idx.h[cno],Replace,KPs=1,KLn=5',i,outIn,k
+		Fout: form pos 1,C 5,n 9,2*pd 3.2,pd 4.2,n 6,n 2,pd 2,pd 1,C 2,n 4,c 12,pd 3,c 30
+		open #hSupport=fnH: 'Name=S:\Core\Data\acsllc\SUPPORT.h[cno],KFName=S:\Core\Data\acsllc\support-idx.h[cno],Shr',i,i,k
+		Fsupport: form pos 1,g 6,n 2,c 2,x 8,x 2,n 8
+	end if
+	! r: pr header
+	if fileItem=1 then
 		fnopenprn
 	else
 		pr #255: ''
 	end if
 	pr #255: '_________________________________________________________________________________________'
-	pr #255: empName$(fileItem)&' - '&filename$(fileItem)
+	pr #255: empName$(fileItem)&' - '&fileName$(fileItem)
 	pr #255: ''
-	pr #255,using Form_PrnHead: 'Date','Client','Time','Cat','Month','Desc','Rate','Expenses'
-	Form_PrnHead: form pos 1,cc 8,x 1,c 18,x 1,5*cr 10,x 1,c 30,x 3,cr 7,c 8
-	Form_PrnLine: form pos 1,C 5,n 9,2*pd 3.2,pd 4.2,n 6,n 2,pd 2,pd 1,C 2,n 4,c 12,pd 3,c 30
-	F_support: form pos 1,g 6,n 2,c 2,x 8,x 2,n 8
+	pr #255,using FprnHead: 'Date','Client','Time','Cat','Month','Desc','Rate','Expenses'
+	FprnHead: form pos 1,cc 8,x 1,c 18,x 1,5*cr 10,x 1,c 30,x 3,cr 7,c 8
+	! /r
 	dim line$*1024
-
-	fn_get_next_line(h_in,line$) : line_count+=1 ! consume headings
-	! if fileItem=2 then pr 'header:',line_count,line$ : pause
+	fn_get_next_line(h_in,line$) : lineCount+=1 ! consume headings
+	! if fileItem=2 then pr 'header:',lineCount,line$ : pause
 	if pos(line$,chr$(9))>0 then let delim$=chr$(9) else delim$=','
 	do
-		fn_get_next_line(h_in,line$) : line_count+=1
-		the_date_prior=the_date
+		fn_get_next_line(h_in,line$) : lineCount+=1
+		theDatePrior=theDate
 		isEmptyLine=fn_lineIsEmpty(line$)
 		if ~isEmptyLine then
 			dim item$(0)*1024
 			str2mat(line$,mat item$,delim$,'QUOTES:TRIM')
-			if item$(1)<>'' then the_date=fn_get_the_date(item$(1))
-
-
-			theDateDays=days(the_date,'ccyymmdd')
-			theDatePriorDays=days(the_date_prior,'ccyymmdd')
+			if item$(1)<>'' then theDate=fn_getTheDate(item$(1))
+			theDateDays=days(theDate,'ccyymmdd')
+			theDatePriorDays=days(theDatePrior,'ccyymmdd')
 			
-			if theDateDays+31<the_date_prior and theDatePriorDays>20151218 then
+			if theDateDays+31<theDatePrior and theDatePriorDays>20151218 then ! r: err trap
 				pr '________________________ exception ________________________'
 				pr 'File: '&file$(h_in)
-				pr 'Line: '&str$(line_count)
+				pr 'Line: '&str$(lineCount)
 				pr 'Date: '&date$(theDateDays,'mm/dd/ccyy')
 				pr 'Date (prior line): '&date$(theDatePriorDays,'mm/dd/ccyy')
-				pr 'The date ('&str$(the_date)&') on line '&str$(line_count)&' is more than 31 days less than the date on the previous line''s date ('&str$(the_date_prior)&').  This may indicates a problem.'
-				pr 'the_date+31('&date$(theDateDays+31,'mm/dd/yy')&')<the_date_prior('&date$(theDatePriorDays,'mm/dd/ccyy')&') - that indicates a problem'
+				pr 'The date ('&str$(theDate)&') on line '&str$(lineCount)&' is more than 31 days less than the date on the previous line''s date ('&str$(theDatePrior)&').  This may indicates a problem.'
+				pr 'theDate+31('&date$(theDateDays+31,'mm/dd/yy')&')<theDatePrior('&date$(theDatePriorDays,'mm/dd/ccyy')&') - that indicates a problem'
 				pause
-			end if
-
-
-			if theDateDays-180>theDatePriorDays and the_date_prior then
+			end if ! /r
+			if theDateDays-180>theDatePriorDays and theDatePrior then ! r: err trap
 				pr '________________________ exception ________________________'
 				pr 'File: '&file$(h_in)
-				pr 'Line: '&str$(line_count)
+				pr 'Line: '&str$(lineCount)
 				pr 'Date: '&date$(theDateDays,'mm/dd/ccyy')
 				pr 'Date (prior line): '&date$(theDatePriorDays,'mm/dd/ccyy')
-				pr 'the_date-180('&date$(theDateDays-180,'mm/dd/ccyy')&') )>the_date_prior('&date$(theDatePriorDays,'mm/dd/ccyy')&') - that indicates a potential problem - a jump of more than 90 days forward.  Check the month and year are correct.'
+				pr 'theDate-180('&date$(theDateDays-180,'mm/dd/ccyy')&') )>theDatePrior('&date$(theDatePriorDays,'mm/dd/ccyy')&') - that indicates a potential problem - a jump of more than 90 days forward.  Check the month and year are correct.'
 				pause
-			end if
+			end if ! /r
 
-
-			if the_date=>filter_date(1) and the_date<=filter_date(2) then
-				! if fileItem=2 then pr 'body:',line_count,line$ : pause
+			if theDate=>filterDate(1) and theDate<=filterDate(2) then ! r: if within filterDate range
+				! if fileItem=2 then pr 'body:',lineCount,line$ : pause
 				if udim(mat item$)>9 and item$(4)<>'#N/A' and val(item$(7))>0 then ! entry
-					!       pr the_date;item$(4);' ';item$(7);' ';item$(9);' ';item$(10)
+					!       pr theDate;item$(4);' ';item$(7);' ';item$(9);' ';item$(10)
 					client_id$=trim$(item$(4))
 					! if client_id$='970' then pause
 					hours=val(item$(7))
-					! expense=val(item$(8))
+					expense=val(item$(8))
 					dim sage_code$*128
 					if rtrm$(item$(13),cr$)<>'' then sage_code$=rtrm$(item$(13),cr$)
 					dim description$*1024
 					description$=item$(12)
-					!         if client_id$=client_id_sage_ax$ and the_date=20160716 then pr 'sage_code$='&sage_code$&' date:';the_date : pause
-					fn_writeOutAcs(the_date,client_id$,hours,val(item$(9)),item$(10),item$(11)(1:30),sage_code$)
+					!         if client_id$=client_id_sage_ax$ and theDate=20160716 then pr 'sage_code$='&sage_code$&' date:';theDate : pause
+					fn_writeOutAcs(theDate,client_id$,hours,val(item$(9)),item$(10),item$(11)(1:30),sage_code$,expense)
 					! pr 'write ';writeCount+=1 : pause
 					if client_id$=client_id_sage_ax$ then
-						fn_writeOutSage(the_date,hours,sage_code$,description$)
-						!           pr the_date,hours,description$ : pause
+						fn_writeOutSage(theDate,hours,sage_code$,description$)
+						!           pr theDate,hours,description$ : pause
 					end if
 					! pr client_id$,fnClientNameShort$(client_id$) : pause
-					pr #255,using FORM_PRN: date$(days(the_date,'ccyymmdd'),'mm/dd/yy'),fnClientNameShort$(client_id$),hours,val(item$(9)),item$(10),item$(11)(1:15),inp4,expense
+					pr #255,using FORM_PRN: date$(days(theDate,'ccyymmdd'),'mm/dd/yy'),fnClientNameShort$(client_id$),hours,val(item$(9)),item$(10),item$(11)(1:15),inp4,expense
 					FORM_PRN: form        pos 1,c 8,x 1,                                    c 18,x 1,                       n 10.2,   n 10,x 2   ,C 8,x 1,  c 15,          n 7.2,n 8.2
 					fn_clientTimesheet
 				end if  ! item$(4)<>'#N/A' and  val(item$(7))>0
-			end if  ! the_date=>filter_date(1) and <=filter_date(2)
+			end if  ! /r ! theDate=>filterDate(1) and <=filterDate(2)
 		end if  ! line$<>''
 	loop until isEmptyLine
 	close #h_in:
@@ -113,7 +111,7 @@ for fileItem=1 to fileNameCount
 nex fileItem
 fnStatusClose
 fncloseprn
-close #h_out:
+close #hOut:
 for ctItem=1 to udim(mat ctHandles)
 	close #ctHandles(ctItem): ioerr ignore
 nex ctItem
@@ -126,7 +124,7 @@ dim ctHandles(0)
 def fn_clientTimesheet(; ___,ctFile$*1024,ctNew,ctWhich)
 	ctFile$=env$('at')&fnReportCacheFolderCurrent$&'\Client TimeSheets\'
 	ctFile$&=fnClientNameShort$(client_id$)&'\'
-	ctFile$&=str$(filter_date(1))&'-'&str$(filter_date(2))&'.txt'
+	ctFile$&=str$(filterDate(1))&'-'&str$(filterDate(2))&'.txt'
 	fnMakeSurePathExists(ctFile$)
 	ctWhich=srch(mat ctFiles$,ctFile$)
 	if ctWhich>0 then
@@ -156,8 +154,8 @@ def fn_clientTimesheet(; ___,ctFile$*1024,ctNew,ctWhich)
 		pr #hCt: 'System Name'&tab$;
 		pr #hCt: 'Notes'
 	end if
-  pr #hCt: empname$(fileitem)&tab$;
-  pr #hCt: str$(the_date)&tab$;
+  pr #hCt: empName$(fileitem)&tab$;
+  pr #hCt: str$(theDate)&tab$;
 	! pr #hCt: str$(hours)&tab$;
 	! pr #hCt: item$(9)&tab$;
 	! pr #hCt: item$(10)&tab$;
@@ -181,14 +179,14 @@ def fn_lineIsEmpty(line$*1024; ___,returnN)
 	end if
 	fn_lineIsEmpty=returnN
 fnend
-def fn_writeOutAcs(wo_date,wo_client$,wo_time,wo_cat,wo_month$,wo_desc$*30; wo_sage_code$*128)
+def fn_writeOutAcs(wo_date,wo_client$,wo_time,wo_cat,wo_month$,wo_desc$*30; wo_sage_code$*128,expense)
 	! dim inp(7)
 	inp1$=wo_client$
 	inp2=1 ! employee number
 	inp3=wo_time
 	!         if wo_client$=client_id_sage_ax$ and wo_date=20160716 then pr 'wo_sage_code$=';wo_sage_code$ : pause
-	inp4=fn_houryRateAcs(wo_client$,the_date,wo_month$, wo_cat,wo_sage_code$) ! hourly rate
-	inp5=wo_time*inp4
+	inp4=fn_houryRateAcs(wo_client$,theDate,wo_month$, wo_cat,wo_sage_code$) ! hourly rate
+	charge=wo_time*inp4
 	inp6=date(days(wo_date,'ccyymmdd'),'mmddyy') ! mmddyy
 	inp7=wo_cat
 	if wo_cat=6 then
@@ -203,20 +201,21 @@ def fn_writeOutAcs(wo_date,wo_client$,wo_time,wo_cat,wo_month$,wo_desc$*30; wo_s
 		pr #255: '!!! wo_cat ('&str$(wo_cat)&') is unrecognized - enhance code'
 		!   pr 'wo_cat (';wo_cat;') is unrecognized - enhance code' : pause
 	end if
-	write #h_out,using Form_PrnLine: inp1$,inp2,inp3,inp4,inp5,inp6,inp7,0,1,wo_month$,sc,'',0,wo_desc$
-	! if expense<>0 then
+	write #hOut,using Fout: inp1$,inp2,inp3,inp4,charge,inp6,inp7,0,1,wo_month$,sc,'',0,wo_desc$
+	if expense<>0 then
 	! 	inp3=1
 	! 	inp4=expense
 	! 	sc=601
 	! 	wo_month$='19'
-	! 	write #h_out,using Form_PrnLine: mat inp,0,1,wo_month$,sc,'',0,'Expenses'
-	! end if
+			write #hOut,using Fout: mat inp,0,1,wo_month$,sc,'',0,'Expenses'
+	pause
+	end if
 fnend  ! fn_writeOutAcs
 def fn_writeOutSage(wo_date,wo_time,wo_sage_code$*128,wo_desc$*1024)
 	dim wo_sage_code_prior$*128
 	if ~setup_sawo then
 		setup_sawo=1
-		open #sawo_h_out=fnH: 'Name=[Q]\Sage_AX_'&str$(filter_date(1))&'-'&str$(filter_date(2))&'.csv,RecL=512,eol=crlf,Replace',d,o
+		open #sawo_h_out=fnH: 'Name=[Q]\Sage_AX_'&str$(filterDate(1))&'-'&str$(filterDate(2))&'.csv,RecL=512,eol=crlf,Replace',d,o
 	end if
 	if wo_sage_code_prior$='' and wo_sage_code$='' then
 		pr #255: '!!! Sage Code is blank !!!'
@@ -276,14 +275,14 @@ def fn_getNextLine_reset
 	gnl_buffer$=''
 	gnl_eof=0
 fnend
-def fn_get_the_date(gtd_source$*256)
+def fn_getTheDate(gtd_source$*256)
 	gtd_return=0
 	! if pos(gtd_source$,'Thu, Jan 10, 19')>0 then
 	! 	pr gtd_source$
 	! 	pause
 	! end if
 	if gtd_source$<>'' then
-	!   pr 'set the_date from '&gtd_source$
+	!   pr 'set theDate from '&gtd_source$
 		gtd_source$=srep$(gtd_source$,'Mon, ','')
 		gtd_source$=srep$(gtd_source$,'Tue, ','')
 		gtd_source$=srep$(gtd_source$,'Tues, ','')
@@ -377,7 +376,7 @@ def fn_get_the_date(gtd_source$*256)
 			gtd_date_ccyy=2025
 		else
 			pr file$(h_in)
-			pr 'line '&str$(line_count)
+			pr 'line '&str$(lineCount)
 			pr 'unrecognized year - enhance code ('&gtd_source$&')' : pause
 		end if  !
 		if pos(gtd_source$,'Jan ')>0 then
@@ -425,16 +424,16 @@ def fn_get_the_date(gtd_source$*256)
 		gtd_date_dd=val(gtd_source$)
 		gtd_return=val(str$(gtd_date_ccyy)&cnvrt$('pic(##)',gtd_date_mm)&cnvrt$('pic(##)',gtd_date_dd))
 	end if  ! gtd_source$<>''
-	fn_get_the_date=gtd_return
+	fn_getTheDate=gtd_return
 fnend
-def fn_askDatesAndFile(mat label$,mat filter_date,mat empName$,mat filename$; ___,x)
+def fn_askDatesAndFile(mat label$,mat filterDate,mat empName$,mat fileName$; ___,x)
 	dim resp$(20)*1048
 	fnTos(sn$='ask_'&str$(udim(mat label$))&'_dates')
 	respc=0
 	for ad_line=1 to udim(mat label$)
 		fnLbl(ad_line+1,1,label$(ad_line),25,1)
 		fnTxt(ad_line+1,27,8,0,1,'3')
-		resp$(respc+=1)=str$(filter_date(ad_line))
+		resp$(respc+=1)=str$(filterDate(ad_line))
 	next ad_line
 	ad_line+=1
 	fnLbl(ad_line+=1,1,'Employee 1:',25,1) : fnTxt(ad_line,27,8,64) : fnTxt(ad_line,37,40,256,0,'70')
@@ -453,14 +452,14 @@ def fn_askDatesAndFile(mat label$,mat filter_date,mat empName$,mat filename$; __
 		fkey(99)
 	else
 		for ad_line=1 to udim(mat label$)
-			filter_date(ad_line)=val(srep$(resp$(ad_line),'/',''))
+			filterDate(ad_line)=val(srep$(resp$(ad_line),'/',''))
 		next ad_line
-		mat filename$=('')
-		filename$(1)=resp$(resp_e1_file)
-		filename$(2)=resp$(resp_e2_file)
-		filename$(3)=resp$(resp_e3_file)
-		filename$(4)=resp$(resp_e4_file)
-		filename$(5)=resp$(resp_e5_file)
+		mat fileName$=('')
+		fileName$(1)=resp$(resp_e1_file)
+		fileName$(2)=resp$(resp_e2_file)
+		fileName$(3)=resp$(resp_e3_file)
+		fileName$(4)=resp$(resp_e4_file)
+		fileName$(5)=resp$(resp_e5_file)
 		mat empName$=('')
 		empName$(1)=resp$(resp_e1name)
 		empName$(2)=resp$(resp_e2name)
@@ -468,31 +467,31 @@ def fn_askDatesAndFile(mat label$,mat filter_date,mat empName$,mat filename$; __
 		empName$(4)=resp$(resp_e4name)
 		empName$(5)=resp$(resp_e5name)
 		for x=1 to 5
-			fnureg_write('TM Employee '&str$(x)&' Name',empName$(x)) : fnureg_write('TM Employee '&str$(x)&' TimeSheet CSV',filename$(x))
+			fnureg_write('TM Employee '&str$(x)&' Name',empName$(x)) : fnureg_write('TM Employee '&str$(x)&' TimeSheet CSV',fileName$(x))
 		nex x
 	end if
 	fn_askDatesAndFile=ckey
 fnend
-def fn_onSupport(wo_client$,wo_month$,the_date; ___,returnN)
+def fn_onSupport(wo_client$,wo_month$,theDate; ___,returnN)
 	returnN=0
 	wo_client$=trim$(wo_client$)
 	! try lpad first
-	spk$=lpad$(wo_client$,kln(h_support,1))&lpad$(wo_month$,2)
-	read #h_support,using F_support,key=spk$: cln$,scode,scode$,sdt2 nokey OS_TRY_RPAD
+	spk$=lpad$(wo_client$,kln(hSupport,1))&lpad$(wo_month$,2)
+	read #hSupport,using Fsupport,key=spk$: cln$,scode,scode$,sdt2 nokey OS_TRY_RPAD
 	goto OS_FOUND_REC
 
 	OS_TRY_RPAD: !
-	spk$=rpad$(wo_client$,kln(h_support,1))&lpad$(wo_month$,2)
-	read #h_support,using F_support,key=spk$: cln$,scode,scode$,sdt2 nokey OS_FINIS
+	spk$=rpad$(wo_client$,kln(hSupport,1))&lpad$(wo_month$,2)
+	read #hSupport,using Fsupport,key=spk$: cln$,scode,scode$,sdt2 nokey OS_FINIS
 	goto OS_FOUND_REC
 
 	OS_FOUND_REC: !
-	if the_date<=sdt2 then returnN=1
+	if theDate<=sdt2 then returnN=1
 
 	OS_FINIS: !
 	fn_onSupport=returnN
 fnend
-def fn_houryRateAcs(wo_client$,the_date,wo_month$; hr_category,wo_sage_code$*128) ! inherrits client_id_sage_ax$ and client_id_brc$
+def fn_houryRateAcs(wo_client$,theDate,wo_month$; hr_category,wo_sage_code$*128) ! inherrits client_id_sage_ax$ and client_id_brc$
 	if hr_category=23 or hr_category=11 then
 		hr_return=0
 	else if wo_client$=client_id_framemasters$ then
@@ -504,8 +503,8 @@ def fn_houryRateAcs(wo_client$,the_date,wo_month$; hr_category,wo_sage_code$*128
 	else if wo_client$=client_id_brc$ then
 		hr_return=60
 	else if wo_client$=client_id_sage_ax$ then
-		hr_return=fn_houryRateSage(wo_sage_code$, the_date)
-	else if fn_onSupport(wo_client$,wo_month$,the_date) then
+		hr_return=fn_houryRateSage(wo_sage_code$, theDate)
+	else if fn_onSupport(wo_client$,wo_month$,theDate) then
 		if hr_category=6 then
 			hr_return=0
 		else
@@ -518,13 +517,13 @@ def fn_houryRateAcs(wo_client$,the_date,wo_month$; hr_category,wo_sage_code$*128
 	end if
 	fn_houryRateAcs=hr_return
 fnend
-def fn_houryRateSage(wo_sage_code$; the_date)
+def fn_houryRateSage(wo_sage_code$; theDate)
 	if lwrc$(wo_sage_code$)='glover' then
-		if the_date<20180101 then shr_return=40
+		if theDate<20180101 then shr_return=40
 	else if lwrc$(wo_sage_code$)='pbj offsite' or lwrc$(wo_sage_code$)='acc offsite' or lwrc$(wo_sage_code$)='offsite' then
-		if the_date<20180101 then shr_return=40 else shr_return=45
+		if theDate<20180101 then shr_return=40 else shr_return=45
 	else
-		if the_date<20180101 then shr_return=48.5 else shr_return=53.5
+		if theDate<20180101 then shr_return=48.5 else shr_return=53.5
 	end if
 	fn_houryRateSage=shr_return
 fnend

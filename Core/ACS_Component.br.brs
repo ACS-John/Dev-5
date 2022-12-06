@@ -339,7 +339,7 @@ def library fnFlexInit1(sfn$*100,lyne,ps,height,width,mat ch$; mat colMask$,selt
 		if trim$(colMask$(j))='' then colMask$(j)='80'
 	next j
 	for j=1 to udim(ch$) : all_hdr$=all_hdr$&ch$(j)&chr$(9) : next j
-	for j=1 to udim(mat colMask$) : all_mask$=all_mask$&colMask$(j)&chr$(9) : next j
+	for j=1 to udim(mat colMask$) : all_mask$&=colMask$(j)&chr$(9) : next j
 	pr #filenumber,using 'form pos 1,C '&str$(len(all_hdr$)): all_hdr$
 	pr #filenumber,using 'form pos 1,C '&str$(len(all_mask$)): all_mask$
 	close #filenumber:

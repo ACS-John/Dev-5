@@ -184,8 +184,8 @@ ScreenAddEdit: ! r:
 			pr f mat ot1$: clientId$,iv$,transDate,transAmt,id$,transDiscount
 		end if
 	end if
-goto ScreenSomething2 ! /r
-ScreenSomething2: !
+	goto ScreenSomething2 ! 
+	ScreenSomething2: !
 	! r: set mat fli1$
 		dim fli1$(49)
 		fli1$(1 )='3,30,C 5,ut,n'
@@ -280,25 +280,29 @@ L1060: ! r:
 	! if sz=3 then gl(1,1)=gln1(2): gl(1,2)=gln1(3): gl(1,3)=transAmt
 	! if sz=2 then gl(1,2)=gln1(2): gl(1,1)=gln1(1): gl(1,3)=gln1(3): gl(1,4)=transAmt
 	if sz=5 then gl(1,1)=gln1(2): gl(1,2)=transAmt
+	
 	L1170: !
 	pr f mat ot1$: clientId$,iv$,transDate,transAmt,id$,transDiscount,mat pgl,mat gl
+	
 	L1180: !
 	input fields mat fli1$: clientId$,iv$,transDate,transAmt,id$,transDiscount,mat pgl,mat gl conv L1240
 	if cmdkey=2 then goto Ss2rInput
+	
 	L1200: ! 
 	clientId$=rpad$(trim$(clientId$),5)
 	if ce>0 then fli1$(ce)=srep$(fli1$(ce),1,'RC','U')
 	ce=0
 	goto L1280
+	
 	L1240: !
 	if ce>0 then fli1$(ce)=srep$(fli1$(ce),1,'RC','U')
 	ce=cnt+1
 	fli1$(ce)=srep$(uprc$(rtrm$(fli1$(ce))),1,'U','RC')
 	if cnt<=4 then goto L1060
-goto L1180
-! end if ! /r
+		goto L1180
+	! end if 
 
-L1280: ! r:
+	L1280: !
 	if ltrm$(clientId$)='0' or ltrm$(clientId$)='' then
 		if vf=1 then goto RewriteTransBlank
 		goto FinisAddEdit
@@ -311,7 +315,7 @@ L1280: ! r:
 
 	if transAmt then ! r: 
 		if gx=0 then
-			goto AccumAndSave
+			gosub AccumAndSave : goto FinisAddEdit
 		else if pgl(gpx)>0 then
 			gla=0
 			for j=1 to 10
@@ -327,7 +331,7 @@ L1280: ! r:
 				pr f '11,2,c 75,n,n': ' '
 				goto ScreenSomething2
 			end if
-			goto AccumAndSave
+			gosub AccumAndSave : goto FinisAddEdit
 			
 		end if
 		pr f '9,45,c 30': 'G/L # REQUIRED'
@@ -336,26 +340,23 @@ L1280: ! r:
 	end if ! /r
 goto ScreenSomething2 ! /r
 
-
-
-AccumAndSave: ! r:
-	if ltrm$(clientId$)<>'-1' then
-		totalAccount+=val(clientId$) conv ignore
-		proofTotal(transType)+=transAmt
-		if transType=transType_collection then tdt+=transDiscount
-		if ltrm$(clientId$)='-1' then totalCashSales+=transAmt
-	end if
-	if vf=1 then goto RewrTransNow
-	write #hTransBatch,using FtransBatch: clientId$,iv$,transDate,transDiscount,transAmt,unusedtr4,transType,unusedtr6,id$,mat pgl,mat gl
-	clientId$=''
-	q2=0
-goto FinisAddEdit ! r
-
-FinisAddEdit: ! r:
+FinisAddEdit: ! 
 	if doingFnEdit then 
 		goto FinisFnEdit
 	end if
-goto ScreenBatch ! goto ScreenAddEdit ! /r
+goto ScreenBatch ! /r
+	AccumAndSave: ! r:
+		if ltrm$(clientId$)<>'-1' then
+			totalAccount+=val(clientId$) conv ignore
+			proofTotal(transType)+=transAmt
+			if transType=transType_collection then tdt+=transDiscount
+			if ltrm$(clientId$)='-1' then totalCashSales+=transAmt
+		end if
+		if vf=1 then goto RewrTransNow
+		write #hTransBatch,using FtransBatch: clientId$,iv$,transDate,transDiscount,transAmt,unusedtr4,transType,unusedtr6,id$,mat pgl,mat gl
+		clientId$=''
+		q2=0
+	return ! r
 
 
 ! /r   (is this where this goes?)
@@ -406,8 +407,7 @@ def fn_edit(record) ! uses mostly locals
 	vf=1
 goto ScreenAddEdit ! /r
 	
-	
-	
+
 	FinisFnEdit: ! returns here from FinisAddEdit
 fnend
 
