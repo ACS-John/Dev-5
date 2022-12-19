@@ -101,7 +101,7 @@ BADSIGCHOICE: ! r:
 	fnMsgBox(mat msgline$,response$,"Bad position",48)
 goto EDITSCREEN ! /r
 PRINTSIGNATURE: ! r:
-	fnopenprn
+	fnOpenPrn
 	if docline = 0 then docline = 1
 	if docposition = 0 then docposition = 1
 	for j=1 to copies
@@ -110,7 +110,7 @@ PRINTSIGNATURE: ! r:
 		pr #255: "*Insert File:Z:\Signature1.acs"
 		pr #255: newpage
 	next j
-	fncloseprn
+	fnClosePrn
 	pr newpage
 goto MAINSCREEN ! /r
 Xit: ! chain "menu"

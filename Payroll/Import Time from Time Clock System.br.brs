@@ -30,7 +30,7 @@ ASK_PAYROLL_DATE: !
 	if ckey=5 then goto Xit
 endingdate=val(resp$(1))
  
-fnopenprn
+fnOpenPrn
 ! dim filename$*128
 ! filename$="Payroll"&cnvrt$("Pic(zzzzzzzz)",endingdate)(5:6) &"-"&cnvrt$("Pic(zzzzzzzz)",endingdate)(7:8)&"-" &cnvrt$("Pic(zzzzzzzz)",endingdate)(3:4) &".txt"
 ! if env$('client')="West Rest Haven" then filename$=cnvrt$("Pic(zzzzzzzz)",endingdate)(5:6) &"-"&cnvrt$("Pic(zzzzzzzz)",endingdate)(7:8)&"-" &cnvrt$("Pic(zzzzzzzz)",endingdate)(3:4) &".txt"
@@ -68,7 +68,7 @@ L580: !
 goto Xit
  
 Xit: !
-fncloseprn
+fnClosePrn
 fnXit
 MESSAGE1: ! r: bad data
 	mat ml$(4)

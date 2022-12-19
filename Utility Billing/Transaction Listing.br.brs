@@ -100,7 +100,7 @@ fnreg_write('ubtrlist.include_zero_balance_accounts',str$(include_zero_balance_a
 fnreg_write('ubtrlist.include_no_activity_accounts',str$(include_no_activity_accounts))
 ! /r
 ! on fkey 5 goto DONE
-fnopenprn
+fnOpenPrn
 if seq=1 then
 	open #hCustomer=1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",i,i,k
 else
@@ -320,7 +320,7 @@ return  ! /r
 !   goto DONE ! /r
 DONE: !
 close #ubtransvb: ioerr ignore
-fncloseprn
+fnClosePrn
 Xit: fnXit
  
  

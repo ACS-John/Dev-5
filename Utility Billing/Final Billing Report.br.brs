@@ -26,7 +26,7 @@ ReportInit: ! r:
 	! fnwait("Printing: please wait...",1)
 	! on fkey 5 goto Finis
 	open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",i,i,k
-	fnopenprn
+	fnOpenPrn
 	gosub PrHeader
 goto PrReport ! /r
 PrReport: ! r:
@@ -61,7 +61,7 @@ PgOf: ! r:
 	gosub PrHeader
 continue ! /r
 Finis: ! r:
-	fncloseprn
+	fnClosePrn
 goto Xit ! /r
 Xit: fnXit
 include: ertn

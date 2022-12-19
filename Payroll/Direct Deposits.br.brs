@@ -73,7 +73,7 @@ Screen1: ! r:
 ! (logic just falls through here)
 MainLoop: ! r: main loop
 	open #hDdout=fnH: "Name=DDout[wsid].txt,RecL=96,EOL=CRLF,Replace",external,output
-	fnopenprn
+	fnOpenPrn
 	gosub ReportHdr ! pr header
 	gosub FileHeaderRecord
 	gosub BatchHeaderRecord
@@ -128,7 +128,7 @@ MainLoop: ! r: main loop
 	pr #255,using L1770: "Total",totalCredit/100
 	L1770: form pos 22,c 15,n 12.2
 	! if env$('client')="West Rest Haven" then pr #255,using L1770: "Total In House",totalin
-	fncloseprn
+	fnClosePrn
 goto Xit ! /r
 Xit: fnXit
 FileHeaderRecord: ! r: (1) File Header Record

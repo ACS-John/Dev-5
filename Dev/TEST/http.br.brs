@@ -1,5 +1,5 @@
 fn_setup
-fntop(program$)
+fnTop(program$)
 print newpage
 ! exe 'con gui off'
 ! for repeat=1 to 5

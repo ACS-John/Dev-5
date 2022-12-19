@@ -8,7 +8,7 @@
 	fnTop(program$)
 	fndat(dat$,1)
 	on fkey 5 goto DONE
-	fnopenprn
+	fnOpenPrn
 	open #1: "Name=[Q]\UBmstr\Customer.h[cno],Shr",i,i,r
 	open #2: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",i,i,k
 	fn_header
@@ -21,7 +21,7 @@ FORM_OUT: form n 4,x 1,c 10,x 5,c 30,x 7,c 30,n 11.2,x 1,10*nz 3
 		end if  ! fn_has_dupe(z$)
 	loop
 DONE: !
-	fncloseprn
+	fnClosePrn
 Xit: !
 	fnXit
 

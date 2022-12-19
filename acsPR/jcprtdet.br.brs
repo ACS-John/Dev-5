@@ -15,7 +15,7 @@
 	dat1=date("mmddyy")
  
 	prtjob$="N" : prtdet$="N" : sumcat$="N" : sumjob$="N" : _
-	prtpag$="N" ! setup defaults to answers (also used by fnprocess=1)
+	prtpag$="N" ! setup defaults to answers (also used by fnProcess=1)
  
 	open #1: "Name=[Q]\PRmstr\SCMSTR.h[cno],KFName=[Q]\PRmstr\SCIndex.h[cno],Shr",i,i,k
 	for j=1 to 100
@@ -33,7 +33,7 @@ L250: close #1:
 	open #3: "Name=[Q]\PRmstr\JCTRANS.h[cno],Shr",i,i,r
  
 	pr newpage
-	if fnprocess=1 then goto L640
+	if fnProcess=1 then goto L640
 	fnopenwin(win=102,7,15,16,65,'')
 	pr #win,fields "4,2,Cr 42,N": "Date for Job Cost Detail Listing (mmddyy):"
 	pr #win,fields "5,2,Cr 42,N": "Print all Jobs (Y/N):"
@@ -84,7 +84,7 @@ L800: k=k-1
 L810: pr newpage
 	fnwait(message$="Printing: please wait...",1)
 	on fkey 5 goto DONE
-	fnopenprn
+	fnOpenPrn
 L850: if prtjob$="Y" then goto L940
 L860: j1=j1+1
 	if j1<=k then goto L910
@@ -201,7 +201,7 @@ L1970: close #1:
 	close #2:
 	close #3:
 DONE: !
-	fncloseprn
+	fnClosePrn
 	goto Xit
  
 HDR: !

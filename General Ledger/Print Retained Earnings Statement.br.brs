@@ -40,7 +40,7 @@
 	end if
 	L180: !
 	open #1: "Name=[Q]\GLmstr\acglstmt.h[cno],Shr",display,input ioerr Xit
-	fnopenprn
+	fnOpenPrn
 	READ_ACGLREST: ! 
 	linput #1: ln$ eof DONE ioerr DONE
 	for j2=1 to len(rtrm$(ln$))
@@ -72,7 +72,7 @@ goto READ_ACGLREST
 
 DONE: !
 	close #1: 
-	fncloseprn
+	fnClosePrn
 goto Xit
 
 Xit: fnXit

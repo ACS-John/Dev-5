@@ -154,7 +154,7 @@ if enableExport then
 	open #hExp=fnH: 'Name='&br_filename$(save_name$)&',RecL=2500,Replace,EOL=CRLF',d,o
 	pr #hExp: expHdr$
 else
-	fnopenprn
+	fnOpenPrn
 	gosub PrHeader
 end if
 if prtbkno<>0 and seq=1 then
@@ -297,7 +297,7 @@ EoCustomer: ! r:
 	if enableExport then
 		close #hExp:
 	else
-		fncloseprn
+		fnClosePrn
 	end if
 goto Xit ! /r
 Xit: fnXit

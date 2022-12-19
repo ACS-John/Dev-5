@@ -233,7 +233,7 @@ L2120: rewrite #1,using L410,key=rptn$: rn,rt$,mat ch$,ips,sd,cp,sc,mat psc,mat 
 L2130: close #1:
 	fnrx(rn)
 	execute "INDEX S:\acsPR\JCREPORT.MST,S:\acsPR\JCREPORT.idx,1,2,Replace,DupKeys -n"
-	fnchain('S:\acsPR\jcRptS1')
+	fnChain('S:\acsPR\jcRptS1')
  
 L2180: pr newpage
 	restore #1,key>="  ": nokey L2850
@@ -260,7 +260,7 @@ L2360: input #win,fields "4,26,N 2,UET,N": rno(j) conv L2360
 L2400: pr newpage
 	fnwait(message$="Printing Proof List...",1)
 	on fkey 5 goto L2850
-	fnopenprn
+	fnOpenPrn
 	k=0
 L2450: if prtall=0 then goto L2500
 L2460: k=k+1
@@ -302,7 +302,7 @@ L2800: form pos 1,c 50,pos 52,n 3,pos 56,n 3,pos 76,n 1,pos 93,n 1,pos 110,n 1,p
 	pr #255: newpage
 	goto L2450
  
-L2850: fncloseprn
+L2850: fnClosePrn
 	on fkey 5 ignore
 	goto MENU1
  

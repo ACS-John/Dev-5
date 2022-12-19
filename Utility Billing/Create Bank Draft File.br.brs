@@ -51,7 +51,7 @@ initialization: ! r: initialization
 	end if
 	open #7: "Name=[Q]\UBmstr\ubTransVB.h[cno],KFName=[Q]\UBmstr\ubTrIndx.h[cno],Shr",i,outIn,k
 	open #hTrans2=fnH: "Name=[Q]\UBmstr\ubTransVB.h[cno],KFName=[Q]\UBmstr\UBTrdt.h[cno],Shr",i,outIn,k
-	fnopenprn
+	fnOpenPrn
 	gosub HdrP1
 	gosub HDR1
 goto READ_CUSTOMER ! /r
@@ -163,7 +163,7 @@ Finis: ! r:
 	gosub CTRL1
 	pr #255: "                                                    {\ul            }"
 	pr #255,using L900: "  Total","",0,t1
-	fncloseprn
+	fnClosePrn
 	close #hOut:
 	
 	! r:

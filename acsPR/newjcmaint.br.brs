@@ -237,7 +237,7 @@ return ! /r
  
 JOB_LISTING: ! r:
 	fst=0
-	fnopenprn
+	fnOpenPrn
 	L1900: !
 	read #1,using L1350,release: jn$,n$,mat a$,mat b,contact$,ph$,email$ eof L2620
 	if fst=1 then goto L1940
@@ -326,8 +326,8 @@ goto JOB_LISTING ! /r
 L2620: ! r:
 	if x1>0 then gosub L2110
 	on fkey 5 ignore
-	fncloseprn
-	if fnprocess=1 then goto Xit
+	fnClosePrn
+	if fnProcess=1 then goto Xit
 goto MENU1 ! /r
 HDR: ! r:
 	pr #255,using "form pos 1,c 25": "Page "&str$(pgno+=1)&" "&date$

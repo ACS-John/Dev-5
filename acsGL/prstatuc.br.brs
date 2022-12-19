@@ -12,7 +12,7 @@
 	open #1: "Name=[Q]\GLmstr\Company.h[cno],Shr",i,i
 	read #1,using 'form pos 1,3*C 40,2*C 12,C 5,pos 188,PD 7.2,pos 658,10*N 1': mat a$,mat b$,c$,ucm,mat deduc
 	close #1:
-	if fnprocess=1 then goto L240
+	if fnProcess=1 then goto L240
 
 	fnTos
 	mylen=35: mypos=mylen+3 : right=1
@@ -25,7 +25,7 @@
 	dim pedat$*20
 	pedat$=resp$(1)
 L240: open #2: "Name=[Q]\GLmstr\PRmstr.h[cno],KFName=[Q]\GLmstr\PRIndex.h[cno],Shr",i,i,k
-	fnopenprn
+	fnOpenPrn
 	gosub HDR
 L340: read #2,using L350: mat k,mat k$,mat l$,mat xm eof L720
 L350: form pos 1,n 4,3*c 25,c 11,36*pd 5.2,2*n 5
@@ -67,7 +67,7 @@ return
 
 L720: gosub L920
 	close #2:
-	fncloseprn
+	fnClosePrn
 	goto Xit
 
 Xit: fnXit

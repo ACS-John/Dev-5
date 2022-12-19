@@ -20,7 +20,7 @@
 	open #1: "Name=[Q]\GLmstr\PRmstr.h[cno],KFName=[Q]\GLmstr\PRIndex.h[cno],Shr",i,outIn,k
 	open #2: "Name=[Q]\GLmstr\ACPRCKS.h[cno],Shr",i,outi,r
 	report$="Other Deductions Register-YTD QTD"
-	fnopenprn
+	fnOpenPrn
 	gosub L390
 L240: read #1,using 'form pos 1,N 4,3*C 25,C 11,36*PD 5.2,2*N 5': eno,mat k$,ss$,mat m eof L490
 	gosub L440
@@ -54,7 +54,7 @@ L510: form pos 28,10 *c 10
 	pr #255,using L550: "","Totals-QTD",mat totalqtd
 	form pos 1,c 6,c 20,10*n 10.2
 L550: form pos 1,c 6,c 20,10*n 10.2
-	fncloseprn : goto Xit
+	fnClosePrn : goto Xit
 L570: ! ACCUMULATE TOTALS
 	for j=1 to 10
 		totalytd(j)+=m(j*2+9)

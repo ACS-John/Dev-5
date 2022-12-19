@@ -15,7 +15,7 @@
 	open #1: "Name=[Q]\PRmstr\JCMSTR.h[cno],KFName=[Q]\PRmstr\JCIndx.h[cno],Shr",i,i,k
 	open #2: "Name=[Q]\PRmstr\JCCAT.h[cno],KFName=[Q]\PRmstr\CatIndx.h[cno],Shr",i,i,k
 	prtcat$="N"
-	if fnprocess=1 then goto L330
+	if fnProcess=1 then goto L330
  
 MAIN_SCREEN: !
 	fnTos(sn$="namlst1") : _
@@ -34,7 +34,7 @@ MAIN_SCREEN: !
 	fndat(dat$,2)
  
 L330: on fkey 5 goto L540
-	fnopenprn
+	fnOpenPrn
 	gosub HDR
 L360: read #1,using L370: jn$,n$ eof L510
 L370: form pos 1,c 6,c 40
@@ -54,7 +54,7 @@ L480: if cn$(1:6)><jn$ then goto L360
 L510: exit eof L520,nokey L520
 L520: close #1:
 	close #2:
-L540: fncloseprn
+L540: fnClosePrn
 	fnXit
  
 HDR: !

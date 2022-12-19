@@ -23,7 +23,7 @@ fnLbl(1,46,'',1,1)
 fnCmdSet(2)
 ckey=fnAcs(mat resp$)
 if ckey=5 then goto Xit else olddate=val(resp$(1))
-fnopenprn
+fnOpenPrn
 gosub HDR
 
 READ_PAYMSTR1: !
@@ -57,7 +57,7 @@ OUTTA_PGB_LOOP: !
 return
 
 DONE: !
-	fncloseprn
+	fnClosePrn
 	goto Xit
 
 Xit: fnXit

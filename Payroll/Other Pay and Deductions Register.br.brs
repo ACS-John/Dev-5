@@ -34,7 +34,7 @@ autoLibrary
   numberded1=max(round(numberded/2,0),1) ! # of deductions listed on line 1
   numberded2=max(int(numberded/2),1) ! # of deductions listed on line 2
 ! /r
-  if fnprocess=1 then goto START_REPORT else goto ASK_PAYROLL_DATE
+  if fnProcess=1 then goto START_REPORT else goto ASK_PAYROLL_DATE
 ! /r
 ASK_PAYROLL_DATE: ! r:
   fnTos(sn$="OtherPayded")
@@ -52,7 +52,7 @@ goto START_REPORT ! /r
 START_REPORT: !  r: main report loop
 !
   on fkey 5 goto DONE
-  fnopenprn
+  fnOpenPrn
   gosub HDR
   open #1: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr",i,outIn,k
   do
@@ -168,7 +168,7 @@ goto DONE ! /r
 DONE: ! r:
   close #1: ioerr ignore
   close #2: ioerr ignore
-  fncloseprn
+  fnClosePrn
 Xit: fnXit ! /r
 
 HDR: ! r:

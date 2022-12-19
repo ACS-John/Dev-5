@@ -26,7 +26,7 @@ def library fnWorkOrderList(; z$*10)
 	beg_date=val(resp$(1)) ! beginning of year
 	end_date=val(resp$(2)) ! ending day of year
 	askz$=lpad$(trim$(resp$(3)(1:10)),10)
-	fnopenprn
+	fnOpenPrn
 	open #h_workorder=fnH: "Name=[Q]\UBmstr\WorkOrder.h[cno],KFName=[Q]\UBmstr\wkIndex.h[cno],Shr",i,outIn,k
 	gosub PWL_HDR
 	if trim$(askz$)="[All]" or trim$(askz$)="" then 
@@ -51,7 +51,7 @@ def library fnWorkOrderList(; z$*10)
 		end if
 	loop while trim$(askz$)=trim$(wkz$) or trim$(askz$)="[All]" or trim$(askz$)=""
 	PWL_FINIS: ! 
-	fncloseprn
+	fnClosePrn
 	PWL_XIT: ! 
 	pgno=0
 	close #h_workorder: 

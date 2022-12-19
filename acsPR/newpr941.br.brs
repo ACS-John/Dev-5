@@ -113,7 +113,7 @@ MENU1: ! r:
 	box7f=val(resp$(12)) ! special add
 	box7g=val(resp$(13)) ! special add - ss
 	box11=val(resp$(14))
-	fnopenprn
+	fnOpenPrn
 	fn_start_print
 	fn_build_941
 	fn_print941_info
@@ -199,7 +199,7 @@ def fn_start_print
 	on pageoflow ignore
 fnend
 Finis: !
-	fncloseprn
+	fnClosePrn
 Xit: fnXit
 def fn_print_details ! detailed listing
 	if m1=0 then goto L2130

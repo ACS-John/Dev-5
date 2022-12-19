@@ -27,7 +27,7 @@ F_ACTRANS: form pos 1,c 12,n 6,pd 6.2,n 2,pos 71,n 2
 		end if  ! gln_period_did_change>0
 	loop
 EO_ACTRANS: !
-	fncloseprn : report_open=0
+	fnClosePrn : report_open=0
 Xit: fnXit
  
 def fn_screen_1(&gln_from$,&gln_to$)
@@ -52,7 +52,7 @@ fnend  ! fn_screen_1
 def fn_report(line$*256)
 		if ~report_open then
 			report_open=1
-			fnopenprn
+			fnOpenPrn
 		end if  ! ~report_open
 		pr #255: line$ ! if gl$='  6   101  0' then pr #255: line$
 fnend

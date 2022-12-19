@@ -14,7 +14,7 @@
 	
 	fscode=fnfscode
 	priorcd=fnpriorcd
-	if fnGlAskFormatPriorCdPeriod=5 then goto Xit ! sets fnps,fnpriorcd,fnfscode (primary/secondary,current year/Prior,period to print)
+	if fnGlAskFormatPriorCdPeriod=5 then goto Xit ! sets fnPs,fnpriorcd,fnfscode (primary/secondary,current year/Prior,period to print)
 	cch$=fncch$
 	pedat$=fnpedat$
 	actpd=fnactpd
@@ -23,12 +23,12 @@
 	priorcd=fnpriorcd
 !
 	pors=1
-	fnopenprn
+	fnOpenPrn
 	redir=0: if file$(255)(1:4)<>"PRN:" then redir=1
 	mp1=69
-	if fnps=2 then mp1=mp1+3
+	if fnPs=2 then mp1=mp1+3
 	fl1$="Name=[Q]\GLmstr\ACGLFNSI.h[cno],KFName=[Q]\GLmstr\agfsidx3.h[cno],Shr"
-	if fnps=2 then fl1$="Name=[Q]\GLmstr\ACGLFNSJ.h[cno],KFName=[Q]\GLmstr\agfsidx2.h[cno],Shr"
+	if fnPs=2 then fl1$="Name=[Q]\GLmstr\ACGLFNSJ.h[cno],KFName=[Q]\GLmstr\agfsidx2.h[cno],Shr"
 	form c 9,skip 0
 L330: form pos mp1,pd 3,pos 81,41*pd 6.2
 	form c 7,skip 0
@@ -40,7 +40,7 @@ L330: form pos mp1,pd 3,pos 81,41*pd 6.2
 	input fields "23,2,C 1,E,N": pause$
 	goto Xit
 L430: open #1: fl1$,i,i,k
-	if fnprocess=1 or fnUseDeptNo=0 then goto L550
+	if fnProcess=1 or fnUseDeptNo=0 then goto L550
 	if percent=1 then goto L550
 	fnTos(sn$="ACGlinyy")
 	mylen=30: mypos=mylen+3 : right=1
@@ -63,9 +63,9 @@ L580: open #101: "SROW=08,SCOL=18,EROW=12,ECOL=58,BORDER=DR,CAPTION= COMPARATIVE
 	pr f "13,30,C 16,R,N": "PRESS F5 TO STOP"
 	if cmdkey=5 then goto L2610
 	report$="STATEMENT OF INCOME AND EXPENSES"
-	fnopenprn
+	fnOpenPrn
 	redir=0: if file$(255)(1:4)<>"PRN:" then redir=1
-	if fnps=2 then goto L700 ! secondary
+	if fnPs=2 then goto L700 ! secondary
 	execute "Index [Q]\GLmstr\GLmstr.h[cno] "&env$('temp')&'\'&"fsindex.h[cno] 69 3 Replace DupKeys -N"
 	goto L710
 L700: execute "Index [Q]\GLmstr\GLmstr.h[cno] "&env$('temp')&'\'&"fsindex.h[cno] 72 3 Replace DupKeys -N"
@@ -210,7 +210,7 @@ L2010: if percent=0 then goto L2160
 	pr #255,using L2050: " "
 L2050: form pos 1,c 1,skip ls
 	goto L2160
-L2070: fnpglen(pglen)
+L2070: fnPgLen(pglen)
 ! If PGLEN<>42 Then pGLEN=58
 	sk=pglen-krec(255): fl=len(rtrm$(foot$))
 ! If PGLEN=42 Then sK=SK+1
@@ -264,7 +264,7 @@ L2610: !
 !
 	fnfscode(actpd)
 	fnpriorcd(1)
-	fncloseprn
+	fnClosePrn
 !
 	goto Xit
 !

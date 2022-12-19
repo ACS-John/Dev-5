@@ -3,7 +3,7 @@
 autoLibrary
 on error goto Ertn
 fnTop(program$)
-if fnprocess=1 then goto MainLoop
+if fnProcess=1 then goto MainLoop
 Screen1: ! r:
 	fnTos
 	fnLbl(1,1,"Closing Period Number:",22,right)

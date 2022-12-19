@@ -47,7 +47,7 @@
 	on fkey 5 goto DONE
 	open #glbrec=1: "Name=[Q]\GLmstr\glbrec.h[cno],KFName=[Q]\GLmstr\glrecidx.h[cno],Shr",i,i,k ioerr Xit
 	read #glbrec,using 'form pos 1,C 12,C 12,C 30,C 2,N 6,PD 5.2,N 1',key>=currgl$&"            ": gl$,c$,p$,s$,mat a nokey DONE
-	fnopenprn
+	fnOpenPrn
 	if currgl$<>gl$ then goto DONE
 	gosub HDR
 	pr #255,using 'form pos 20,C 35,N 16.2': "* Balance Per Bank Statement *",bankbal
@@ -85,7 +85,7 @@ HDR: !
 	pr #255: ""
 return
  
-DONE: fncloseprn
+DONE: fnClosePrn
 	close #glbrec:
 Xit: fnXit
  

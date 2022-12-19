@@ -253,7 +253,7 @@ MENU1READWORKEOF: ! /r
 			ok_click=msgbox('The billing date entered is over three weeks old. Please enter the correct date or contact ACS support.','Old Billing Date',"OK","EXCL")
 			goto MENU1
 		end if
-		! fnchain("S:\Utility Billing\Calculate Bills") ! goto CALCULATE
+		! fnChain("S:\Utility Billing\Calculate Bills") ! goto CALCULATE
 		close #hWork: ioerr ignore
 		fnCalculateBills('calculate')
 		goto Xit
@@ -609,7 +609,7 @@ def fn_meter_roll
 fnend
 def fn_print_readings(hWork; printReadings_altHeading$*40) ! pr proof of readings file
 	totwat=totele=totgas=0
-	fnopenprn
+	fnOpenPrn
 	fn_printReadings_Heading( printReadings_altHeading$)
 	restore #hWork: ! ,search>="": nokey PR_TOTALS    <-- needs to work with or without an index
 	do
@@ -664,7 +664,7 @@ def fn_print_readings(hWork; printReadings_altHeading$*40) ! pr proof of reading
 	PR_TOTALS: !
 	pr #255,using "form skip 2,c 30": "Batch Totals for Readings"
 	pr #255,using "form pos 1,c 10,nz 20,skip 1,pos 1,c 10,nz 20,skip 1,pos 1,c 10,nz 20,skip 1": srvnam$(1)(1:10),totwat,srvnam$(3)(1:10),totele,srvnam$(4)(1:10),totgas
-	fncloseprn
+	fnClosePrn
 fnend
 def fn_printReadings_Heading(;altHeading$*40)
 	if altHeading$='' then altHeading$="Readings Proof List"
@@ -831,7 +831,7 @@ def fn_checkend
 	CHECKEND_XIT: !
 fnend
 def fn_print_unusual
-	fnopenprn
+	fnOpenPrn
 	if ~setup_printunusual<=0 then
 		setup_printunusual=1
 		dim fmun$*80
@@ -863,7 +863,7 @@ def fn_hh_readings(ip1$; listonly) ! HH_READINGS: ! hand held routines
 	L4990: !
 	restore #h_readings:
 	L5000: !
-	if listonly=1 then fnopenprn( 'Book '&ip1$)
+	if listonly=1 then fnOpenPrn( 'Book '&ip1$)
 	j1=29 : j2=97
 	HH_W_READ: !
 	dim ln$*256
@@ -881,14 +881,14 @@ def fn_hh_readings(ip1$; listonly) ! HH_READINGS: ! hand held routines
 	if listonly=1 then fn_lo_pr_rec(x$,mat x) : goto HH_W_NXT
 	if x$(1:1)="0" then x$(1:1)=" " ! drop leading zero
 	if file(255)=-1 and rtrm$(ft$)<>"" then
-		fnopenprn
+		fnOpenPrn
 	end if
 	if trim$(ft$)<>"" then
 		pr #255: "NEW NOTE! "&x$&" - "&ft$
 	end if
 	goto HH_CONTINUE ! /r
 	HH_BADGER: ! r: Hand Held routines for Badger (badger file is copied from                        \connect\connect\x to readings.x in the transfer from                           Hand Held routine)
-	if listonly=1 then fnopenprn
+	if listonly=1 then fnOpenPrn
 	close #h_readings: ioerr ignore
 	open #h_readings=fnH: "Name=[Q]\UBmstr\Readings."&ip1$,d,i ! &",RecL=256",display,input
 	HH_BADGER_READ: !
@@ -906,7 +906,7 @@ def fn_hh_readings(ip1$; listonly) ! HH_READINGS: ! hand held routines
 	HH_BOSON: ! r: Hand Held routines for Boson (boson file is copied from                        [Q]\UBmstr\outofpalm.txt in hhfro to readings.(route# (which is asked))
 	dim last_ln$*256
 	last_ln$=""
-	if listonly=1 then fnopenprn
+	if listonly=1 then fnOpenPrn
 	close #h_readings: ioerr ignore
 	open #h_readings=fnH: "Name=[Q]\UBmstr\Readings."&ip1$&",RecL=204",display,input
 	HH_BOSON_READ: !
@@ -956,7 +956,7 @@ def fn_hh_readings(ip1$; listonly) ! HH_READINGS: ! hand held routines
 	L5440: !
 	goto HH_CONTINUE ! /r
 	LAPTOP: ! r: readings from a laptop using acs meter reading software
-		if listonly=1 then fnopenprn
+		if listonly=1 then fnOpenPrn
 		close #h_readings: ioerr ignore
 		open #h_readings=fnH: "Name=[Q]\UBmstr\Readings."&ip1$&",RecL=50",display,input
 		HH_LAPTOP_READ: linput #h_readings: ln$ eof HH_W_END
@@ -983,7 +983,7 @@ def fn_hh_readings(ip1$; listonly) ! HH_READINGS: ! hand held routines
 	goto HH_W_END ! /r
 	
 	HH_OTHER_TYPE1: ! r:
-		if listonly=1 then fnopenprn
+		if listonly=1 then fnOpenPrn
 		close #h_readings: ioerr ignore
 		open #h_readings=fnH: "Name=[Q]\UBmstr\Readings."&ip1$&",RecL=30",display,input
 		HH_OTHER_TYPE1_READ: !
@@ -1038,7 +1038,7 @@ def fn_hh_readings(ip1$; listonly) ! HH_READINGS: ! hand held routines
 	end if
 
 	HH_W_END: !
-	fncloseprn
+	fnClosePrn
 	addmethod=am_askAndEnterIndviduals ! set back to regular readings
 	close #h_readings:
 fnend
@@ -1375,7 +1375,7 @@ ImportTabDelimited: ! r:
 	loop
 	! /r
 	IT_FINIS: !
-	fncloseprn
+	fnClosePrn
 	addmethod=am_askAndEnterIndviduals ! set back to regular readings
 	close #h_readings,free:
 	fnFree(workFileIndex$)
@@ -2107,7 +2107,7 @@ def fn_hh_other_type2(ip1$,listonly; ___,lineCount)
 	hot_ver$=trim$(hot_ver$)
 	hot_z_prior$=hot_z$=''
 	if hot_ver$='[ACS Hand Held File Generic Version 2]' then
-		if listonly=1 then fnopenprn
+		if listonly=1 then fnOpenPrn
 		do
 			hotWaterMeterChangeBefore=hotWaterMeterChangeAfter=0
 			mat hotImportDataField$(0)
@@ -2154,7 +2154,7 @@ def fn_hh_other_type2(ip1$,listonly; ___,lineCount)
 		else
 			fn_hot_writeWork(hWork,hot_z$,mat x,hotDataImportAsked,hotDataImportEnabled,mat hotImportDataField$,mat hotImportDataValue$)
 		end if
-		if listonly=1 then fncloseprn
+		if listonly=1 then fnClosePrn
 	end if  ! hot_ver$='[ACS Hand Held File Generic Version 2]'
 fnend
 def fn_hot_parseLine(line$*512,&hot_z$,mat x,mat importDataField$,mat importDataValue$,&hotWaterMeterChangeBefore,&hotWaterMeterChangeAfter)

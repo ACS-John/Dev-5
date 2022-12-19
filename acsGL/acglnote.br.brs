@@ -30,7 +30,7 @@ L170: !
 	read #1,using 'form pos 195,C 30': tb$
 	close #1:
 	tb$="("&trim$(tb$)&")"
-	if fnprocess=1 then t=2 : goto L290
+	if fnProcess=1 then t=2 : goto L290
 MENU1: pr newpage
 	fnTos(sn$="acglnote") : _
 	mylen=20: mypos=mylen+3 : right=1
@@ -53,7 +53,7 @@ pr newpage
 pr f "10,20,Cc 25,N": "Foot Notes Printing..." : _
 pr f "12,2,C 11,B,5": "Cancel (F5)" : _
 on fkey 5 goto L460 : _
-fnopenprn
+fnOpenPrn
 
 do
 	linput #1: ln$ eof L460
@@ -73,9 +73,9 @@ do
 loop
 L460: !
 	close #1:
-	fncloseprn
+	fnClosePrn
 	on fkey 5 ignore
-	if fnprocess=1 then goto Xit else goto MENU1
+	if fnProcess=1 then goto Xit else goto MENU1
 goto Xit
 Xit: fnXit
 include: ertn

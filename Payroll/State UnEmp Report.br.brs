@@ -121,7 +121,7 @@
 	if quarter_code=4 then ending_date=end_date
 ! /r
 	on fkey 5 goto Finis
-	fnopenprn
+	fnOpenPrn
 	if file$(255)(1:3)="PRN" then redir=0 else redir=1
  
 	open #2: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr",i,i,k
@@ -189,7 +189,7 @@ L1460: form pos 5,c 15,pos 42,pic(--,---,---.zz),pos 57,pic(--,---,---.zz),pos 7
 L1480: form pos 5,c 15,pic(--,---,---.zz)
 Finis: close #2: ioerr ignore
 	close #h_department: ioerr ignore
-	fncloseprn
+	fnClosePrn
 	fnXit ! /r
 SUBTOTALS: ! r:
 	if m1=0 then goto L1780 ! skip IF QUARTERLY WAGE=0

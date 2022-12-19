@@ -102,7 +102,7 @@ if seq=2 then
 else 
 	open #hCustomer=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx5.h[cno],Shr",i,i,k 
 end if 
-fnopenprn
+fnOpenPrn
 on pageoflow goto PgOf
 gosub PrHeader
 LOOP_TOP: ! r: main loop
@@ -214,7 +214,7 @@ goto LOOP_TOP ! /r
 PgOf: pr #255: newpage : gosub PrHeader : continue 
 Finis: ! r:
 	close #hCustomer: ioerr ignore
-	fncloseprn 
+	fnClosePrn 
 goto Xit ! /r
 Xit: fnXit
 def fn_reg_try$*256(field_name$*128,default_value$*256)
@@ -298,7 +298,7 @@ def fn_campbell_meter_book ! Campbell Special Routine (printed once a year, one 
 	service$="W"
 	fnreg_write('ubMetrRt.route',resp$(1))
 	open #hCustomer=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",i,i,k 
-	fnopenprn
+	fnOpenPrn
 	do
 	CAMPBELL_LOOP_TOP: ! 
 		dim g(12)
@@ -332,7 +332,7 @@ def fn_campbell_meter_book ! Campbell Special Routine (printed once a year, one 
 	goto CAMPBELL_LOOP_TOP
 	CAMPBELL_Finis: ! 
 	close #hCustomer: Ioerr ignore
-	fncloseprn
+	fnClosePrn
 	CAMPBELL_XIT: !
 	close #hCustomer:
 fnend

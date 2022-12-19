@@ -13,7 +13,7 @@ close #hCompany:
 open #hAcct=fnH: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLIndex.h[cno],Shr",i,i,k ! formerly #1
 open #hTran=fnH: "Name=[Q]\GLmstr\GLTrans.h[cno],Shr",i,i,r
 
-if fnprocess=1 then goto DoReport
+if fnProcess=1 then goto DoReport
 goto Screen1
 
 Screen1: ! r:
@@ -68,7 +68,7 @@ retry
 
 DoReport: ! r:
 ! on fkey 5 goto Finis
-fnopenprn
+fnOpenPrn
 if enableExport then 
 		open #h_tmp=fnH: "Name=SAVE:"&fnsave_as_path$&"\*.csv,RecL=1,replace",external,output ioerr SAVE_AS_OPEN_ERR
 		dim exportFile$*256
@@ -129,7 +129,7 @@ Finis: ! r:
 	L990: form pos 80,pic(zz,zzz,zzz.## cr),pic(z,zzz,zzz.## cr),pic(zz,zzz,zzz.## cr)
 	close #hAcct: ioerr ignore
 	close #hTran: ioerr ignore
-	fncloseprn
+	fnClosePrn
 	if enableExport then
 		fnMakeSurePathExists(env$('at')&exportFile$)
 		close #hExp:

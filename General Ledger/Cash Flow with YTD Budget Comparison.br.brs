@@ -16,7 +16,7 @@
 	if fnGlAskFormatPriorCdPeriod=5 then goto Xit
 	fscode=fnfscode
 	priorcd=fnpriorcd
-	fnopenprn
+	fnOpenPrn
 	open #20: "Name=[Q]\GLmstr\Company.h[cno],Shr",i,i,r
 	read #20,using 'form pos 384,n 2',rec=1: nap
 	close #20:
@@ -24,11 +24,11 @@
 	if nap<12 or nap>13 then nap=12
 	in3$(1)="8,05,N 12.2,UT,N" : in3$(2)="8,25,N 12.2,UT,N"
 	in3$(3)="8,45,N 12.2,UT,N" : in3$(4)="8,65,N 12.2,UT,N"
-	if fnps=2 then mp1=78 else mp1=75
+	if fnPs=2 then mp1=78 else mp1=75
 	fl1$="Name=[Q]\GLmstr\ACGLFNSF.h[cno],KFName=[Q]\GLmstr\agfsidx5.h[cno],Shr"
-	if fnps=2 then fl1$="Name=[Q]\GLmstr\ACGLFNSG.h[cno],KFName=[Q]\GLmstr\agfsidx6.h[cno],Shr"
+	if fnPs=2 then fl1$="Name=[Q]\GLmstr\ACGLFNSG.h[cno],KFName=[Q]\GLmstr\agfsidx6.h[cno],Shr"
 	open #1: fl1$,i,i,k
-	if fnprocess=1 or fnUseDeptNo=0 then goto L340
+	if fnProcess=1 or fnUseDeptNo=0 then goto L340
 	fnTos
 	mylen=30: mypos=mylen+3 : right=1
 	fnLbl(1,1,"Cost Center or Department #:",mylen,right)
@@ -197,7 +197,7 @@ SubL1590: ! r:
 	L1620: form pos 1,c 1,skip ls
 goto L1740
 PrPageHeader: !
-	fnpglen(pglen)
+	fnPgLen(pglen)
 	sk=pglen-krec(255): fl=len(rtrm$(foot$))
 	pr #255,using L1700: rtrm$(foot$),"Page "&str$(pt1)
 	L1700: form skip sk,pos tabnote,c fl,pos 75,c 8
@@ -240,7 +240,7 @@ Done: ! r:
 	gosub PrPageHeader
 	fnfscode(actpd)
 	fnpriorcd(1)
-	fncloseprn
+	fnClosePrn
 goto Xit ! /r
 
 TeC: ! r:

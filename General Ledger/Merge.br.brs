@@ -15,7 +15,7 @@ fnAutomatedSavePoint('before Merge')
 	dim prg$*256
 	fnSetCoreProgramCurrent(prg$)
 	if fnstyp<>99 then
-		if fnstyp=9 then prg$='S:\Client Billing\Legacy\tmMenu' else prg$='S:\acsGL\acGLAuto'
+		if fnstyp=9 then prg$='S:\Core\Menu' else prg$='S:\acsGL\acGLAuto'
 		fnSetCoreProgramCurrent(prg$,2)
 		open #hCompany=fnH: 'Name=[Q]\GLmstr\Company.h[cno],Shr',i,i
 		read #hCompany,using 'form pos 150,2*N 1': use_dept,use_sub ! read fund and sub codes from general
@@ -264,7 +264,7 @@ Finis: ! r:
 	L1760: !
 	close #30: ioerr ignore
 
-	if process=1 or process=4 then fnchain('S:\General Ledger\Post Payroll Checks')
+	if process=1 or process=4 then fnChain('S:\General Ledger\Post Payroll Checks')
 
 goto Xit ! /r
 

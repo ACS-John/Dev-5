@@ -16,7 +16,7 @@
 	! fnfscode
 	! fnpriorcd
 	! if fnGlAskFormatPriorCdPeriod=5 then goto Xit : _
-		! sets fnps,fnpriorcd,fnfscode (primary/secondary,current year/Prior,             period to print)
+		! sets fnPs,fnpriorcd,fnfscode (primary/secondary,current year/Prior,             period to print)
 	! fnfscode
 	! fnpriorcd
 	open #1: "Name=[Q]\GLmstr\Company.h[cno],Shr",i,i,r: read #1,using "form pos 384,N 2",rec=1: nap : close #1:
@@ -34,11 +34,11 @@
 	m2$(10)="     Ten": m2$(11)="  Eleven": m2$(12)="  Twelve" : _
 	m2$(13)="Thirteen"
 	mp1=63
-	if fnps=2 then mp1=mp1+3
+	if fnPs=2 then mp1=mp1+3
 	fl1$="Name=[Q]\GLmstr\ACGLFNSB.h[cno],KFName=[Q]\GLmstr\agfsidx4.h[cno],Shr"
-	if fnps=2 then fl1$="Name=[Q]\GLmstr\AcGLFnSc.h[cno],KFName=[Q]\GLmstr\agfsidx1.h[cno],Shr"
+	if fnPs=2 then fl1$="Name=[Q]\GLmstr\AcGLFnSc.h[cno],KFName=[Q]\GLmstr\agfsidx1.h[cno],Shr"
 	open #1: fl1$,i,i,k
-	if fnprocess=1 or fnUseDeptNo=0 then goto L330
+	if fnProcess=1 or fnUseDeptNo=0 then goto L330
 	goto L370 ! pr NEWPAGE
 	close #101: ioerr L280
 L280: open #101: "SROW=9,SCOL=4,EROW=12,ECOL=75,BORDER=DR,CAPTION=PRINT BALANCE SHEET",display,outIn
@@ -50,9 +50,9 @@ L330: ! pr NEWPAGE
 	pr f "10,10,Cc 60,n": " BALANCE SHEET IN PROCESS"
 	pr f "12,34,C 11,B,5": "Cancel (F5)"
 	on fkey 5 goto L2120
-L370: fnopenprn : _
+L370: fnOpenPrn : _
 	if file$(255)(1:4)<>"PRN:" then redir=1 else redir=0
-	if fnps=2 then goto L410 ! secondary
+	if fnPs=2 then goto L410 ! secondary
 	execute "Index [Q]\GLmstr\GLmstr.h[cno] "&env$('temp')&'\'&"fsindex.h[cno] 63 3 Replace DupKeys -N"
 	goto L420
 L410: execute "Index [Q]\GLmstr\GLmstr.h[cno] "&env$('temp')&'\'&"fsindex.h[cno] 66 3 Replace DupKeys -N"
@@ -186,7 +186,7 @@ L1600: if ls=0 then goto L1740
 	pr #255,using L1630: " "
 L1630: form pos 1,c 1,skip ls
 	goto L1740
-L1650: fnpglen(pglen)
+L1650: fnPgLen(pglen)
 	if pglen<>42 then pglen=58
 	sk=pglen-krec(255): fl=len(rtrm$(foot$))
 	if pglen=42 then sk=sk+1
@@ -237,7 +237,7 @@ L2120: eofcode=1
 	gosub L1650
 	fnfscode(actpd)
 	fnpriorcd(1)
-	fncloseprn
+	fnClosePrn
 	goto Xit
  
 Xit: fnXit

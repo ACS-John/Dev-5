@@ -44,7 +44,7 @@ mat t1(totserv1) : mat t2(totserv1) : mat t3(totserv1)
 
 	on fkey 5 goto Xit
 ! On Pageoflow Goto NEWPGE
-	fnopenprn
+	fnOpenPrn
 	gosub HEADING
 goto READ_BUDMSTR
 
@@ -144,6 +144,6 @@ HEADING: ! r:
 return ! /r
  
 Finis: !
-	fncloseprn
+	fnClosePrn
 Xit: fnXit
 include: ertn

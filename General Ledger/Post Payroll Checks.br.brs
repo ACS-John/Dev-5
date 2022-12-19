@@ -87,12 +87,12 @@ L500: ! r: EOJ
 	close #1:
 	close #2:
 	close #3:
-	if print1=1 then fncloseprn
+	if print1=1 then fnClosePrn
 goto Xit ! /r
 ! r: unused, unreferenced code
 pause
 pause
-	if fnprocess=1 then goto L800
+	if fnProcess=1 then goto L800
 	pr newpage
 	pr f '4,10,c 60': 'The Following Employee is not on File.'
 	pr f '7,2,c 60': '    Emp Number    Check Number    Date   Gross-Pay'
@@ -126,7 +126,7 @@ L730: ! r:
 goto L220 ! /r
 
 L800: ! r:
-	fnopenprn
+	fnOpenPrn
 	if print1=0 then
 		pr #255: 'The Employees listed here were not previously on file.'
 		pr #255: 'Use Payroll Employee File maintenance to enter'

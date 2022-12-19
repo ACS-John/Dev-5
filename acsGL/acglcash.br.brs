@@ -18,18 +18,18 @@
 	fscode=fnfscode
 	fnfscode
 	fnpriorcd
-	if fnGlAskFormatPriorCdPeriod=5 then goto Xit 		! sets fnps,fnpriorcd,fnfscode (primary/secondary,current year/Prior,period to print)
+	if fnGlAskFormatPriorCdPeriod=5 then goto Xit 		! sets fnPs,fnpriorcd,fnfscode (primary/secondary,current year/Prior,period to print)
 	fscode=fnfscode
 	priorcd=fnpriorcd
 
 	pors=1
 	in3$(1)="8,25,N 12.2,UT,N" : in3$(2)="8,45,N 12.2,UT,N"
 	mp1=75
-	if fnps=2 then mp1=mp1+3
+	if fnPs=2 then mp1=mp1+3
 	fl1$="Name=[Q]\GLmstr\ACGLFNSF.h[cno],KFName=[Q]\GLmstr\agfsidx5.h[cno],Shr"
-	if fnps=2 then fl1$="Name=[Q]\GLmstr\ACGLFNSG.h[cno],KFName=[Q]\GLmstr\agfsidx6.h[cno],Shr"
+	if fnPs=2 then fl1$="Name=[Q]\GLmstr\ACGLFNSG.h[cno],KFName=[Q]\GLmstr\agfsidx6.h[cno],Shr"
 	open #1: fl1$,i,i,k
-	if fnprocess=1 or fnUseDeptNo=0 then goto L360
+	if fnProcess=1 or fnUseDeptNo=0 then goto L360
 	fnTos
 	mylen=30: mypos=mylen+3 : right=1
 	fnLbl(1,1,"Cost Center or Department #:",mylen,right)
@@ -41,13 +41,13 @@
 	ckey=fnAcs(mat resp$)
 	if ckey=5 then goto Xit
 	costcntr=val(resp$(1))
-L360: if fnps=2 then goto L390 ! secondary
+L360: if fnPs=2 then goto L390 ! secondary
 	close #3: ioerr L370
 L370: execute "Index [Q]\GLmstr\GLmstr.h[cno] [Temp]\fsindex.h[cno] 75 3 Replace DupKeys -N"
 	goto L400
 L390: execute "Index [Q]\GLmstr\GLmstr.h[cno] [Temp]\fsindex.h[cno] 78 3 Replace DupKeys -N"
 L400: open #3: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Temp]\fsindex.h[cno],Shr",i,i,k
-	fnopenprn
+	fnOpenPrn
 	if file$(255)(1:4)<>"PRN:" then redir=1 else redir=0
 L420: read #1,using L460: r$,d$,te$,sp,ls,ds,ul,rs,bc,ap,mat ac,ic,fc eof L1820
 	if ltrm$(r$)="" or ltrm$(r$)="0" then goto L420
@@ -157,7 +157,7 @@ L1390: if ls=0 then goto L1530
 	pr #255,using L1420: " "
 L1420: form pos 1,c 1,skip ls
 	goto L1530
-L1440: fnpglen(pglen)
+L1440: fnPgLen(pglen)
 ! If PGLEN<>42 Then pGLEN=58
 	sk=pglen-krec(255): fl=len(rtrm$(foot$))
 ! If PGLEN=42 Then sK=SK+1
@@ -206,7 +206,7 @@ L1820: !
 	gosub L1440
 	fnfscode(pedat)
 	fnpriorcd(1)
-	fncloseprn
+	fnClosePrn
 goto Xit
 
 L1880: !

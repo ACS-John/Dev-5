@@ -24,7 +24,7 @@ if resp$(2)=opt$(1) then
 else if resp$(2)=opt$(2) then
 	open #customer: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\UBIndx2.h[cno],Shr",i,i,k
 end if
-fnopenprn
+fnOpenPrn
 on pageoflow goto PgOf
 gosub HDR
 READ_CUSTOMER: !
@@ -48,7 +48,7 @@ return
 DONE: !
 	pr #255: tab(43);"  __________"
 	pr #255,using 'form pos 43,N 12.2': total_escrow
-	fncloseprn
+	fnClosePrn
 	goto Xit
  
 Xit: fnXit

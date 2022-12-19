@@ -25,7 +25,7 @@ read #bankmstr,using 'form pos 45,PD 6.2,PD 6.2,G 8',key=bc$,release: bal,upi,lc
 L250: !
 sc3$(1)=' Bank Code '&bc$&' Current Bank Balance:'
 t1(1)=bal
-fnopenprn
+fnOpenPrn
 restore #paytrans,key>='                    ': nokey EO_PAYTRANS
 hvn$='' : t1=pg1=0
 gosub HEADER
@@ -75,7 +75,7 @@ EO_PAYTRANS: ! r:
 	for j=1 to 5
 		pr #255,using 'form pos 5,C 55,PIC($$$$,$$$,$$$,$$$.##CR)': sc3$(j),t1(j)
 	next j
-	fncloseprn
+	fnClosePrn
 	on fkey 99 ignore
 goto Xit ! /r
 BREAKDOWN: ! r:

@@ -174,7 +174,7 @@ NO_PRREPORT: ! r:
 	ml$(1)='No reports have been designed in the User Designed'
 	ml$(2)='Reports file.  Click OK to go there now.'
 	fnMsgBox(mat ml$,resp$,'',48)
-fnchain('S:\Payroll\User Designed Reports') ! /r
+fnChain('S:\Payroll\User Designed Reports') ! /r
 def fn_setup
 		autoLibrary
 		on error goto Ertn

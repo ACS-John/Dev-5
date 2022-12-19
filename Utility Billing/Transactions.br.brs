@@ -381,7 +381,7 @@ fnend
 			printBalance=0
 		end if
 		! /r
-		fnopenprn('','Transactions')
+		fnOpenPrn('','Transactions')
 		if serviceName$(3)<>'Electric' and srv$(3)='EL' then ptShowElecUsed=1 ! electric readings are being used for a reduction meter
 		if serviceName$(4)<>'Gas' and srv$(4)='GA' then ptShowGasUsed=1 ! gas readings are being used for a reduction meter
 		if trim$(z$)='[All]' then hd1$='{\ul  Account }     {\ul     Date   }' else hd1$='    {\ul    Date   }'
@@ -588,7 +588,7 @@ fnend
 		PT_NO_CUSTOMER: !
 		close #hPtTrans1: ioerr ignore
 		close #hPtTrans2: ioerr ignore
-		fncloseprn
+		fnClosePrn
 		PT_XIT: !
 	fnend
 	def fn_getPenaltyIndex(mat serviceName$;___,pindex,moveone)

@@ -106,7 +106,7 @@ PRINT_REPORT: !
 	close #1:
 	execute "FREE [Temp]\Addr.[Session] -n"
 	execute "Sort [Temp]\Control.[Session] -n"
-fnchain ("S:\Payroll\Job Cost\Certified Payroll Register (Part 2)")
+fnChain ("S:\Payroll\Job Cost\Certified Payroll Register (Part 2)")
  
 Xit: fnXit
 include: ertn

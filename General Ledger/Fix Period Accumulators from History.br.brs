@@ -100,9 +100,9 @@ if gln_period_did_change>0 then
 end if  ! gln_period_did_change>0
 loop
 EO_GLMSTR: !
-! fncloseprn : report_open=0
+! fnClosePrn : report_open=0
 if openDebugReport then
-	fncloseprn
+	fnClosePrn
 	openDebugReport=0
 end if
 Xit: fnXit ! if env$('acsdeveloper')<>'' then stop else fnXit ! XXX
@@ -266,7 +266,7 @@ fnend
 def fn_report(line$*256)
 	!   if ~report_open then
 	!     report_open=1
-	!     fnopenprn
+	!     fnOpenPrn
 	!   end if  ! ~report_open
 	!   pr #255: line$
 	! fnStatus(line$) ! pr line$ ! XXX
@@ -310,7 +310,7 @@ fnend
 def fn_debugReport(text$*256)
 	if ~openDebugReport then
 		openDebugReport=1
-		fnopenprn
+		fnOpenPrn
 		pr #255: env$('program_caption')
 		pr #255: date$&' '&time$
 	end if

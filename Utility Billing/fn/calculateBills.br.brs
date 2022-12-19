@@ -44,7 +44,7 @@ def fn_calculateBills(goal$*11)
 		serviceName$(j)=trim$(serviceName$(j))
 	next j
 
-	fnopenprn
+	fnOpenPrn
 
 	open #h_ratemst=fnH: 'Name=[Q]\UBmstr\ubData\RateMst.h[cno],KFName=[Q]\UBmstr\ubData\RateIdx1.h[cno],Shr',i,i,k
 	open #hCustomer=fnH: 'Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr',i,outIn,k
@@ -198,7 +198,7 @@ Finis: ! r:
 	end if
 	close #hTrans: ioerr ignore
 	close #hTrans2: ioerr ignore
-	if print_count_unusual or print_count_skip then let fncloseprn
+	if print_count_unusual or print_count_skip then let fnClosePrn
 ! /r
 XIT_CALCULATE: !
 fnend

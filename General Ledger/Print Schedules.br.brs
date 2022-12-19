@@ -19,12 +19,12 @@
 	open #20: "Name=[Q]\GLmstr\Company.h[cno],Shr",i,i,r: read #20,using "form pos 296,N 2",rec=1: lmu : close #20:
 	open #hAcGlSchs1:=1: "Name=[Q]\GLmstr\ACGLSCHS.h[cno],KFName=[Q]\GLmstr\schindex.h[cno],Shr",i,i,k ioerr DONE
 	open #3: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLIndex.h[cno],Shr",i,i,k
-	if fnprocess=1 then
+	if fnProcess=1 then
 		prtall=1
 	else
 		if ~fn_selectSchedules(mat prtsch) then goto Xit
 	end if
-	fnopenprn
+	fnOpenPrn
 	for prtSchItem=1 to udim(mat prtsch)
 		if prtall=1 or prtsch(prtSchItem)<>0 then
 			if prtall=1 then
@@ -146,7 +146,7 @@ PrintTotals: ! r:
 	mat byt=(0)
 return ! /r
 PrintPageFooter: ! r:
-	fnpglen(pglen)
+	fnPgLen(pglen)
 	sk=pglen-krec(255): fl=len(rtrm$(ft$))
 	pr #255,using L1190: rtrm$(ft$)
 	L1190: form skip sk,pos tabnote,c fl,skip 1
@@ -178,7 +178,7 @@ return ! /r
 DONE: ! r:
 	fnfscode(pedat)
 	fnpriorcd(1)
-	fncloseprn
+	fnClosePrn
 goto Xit ! /r
 AccumulateTotals: ! r:
 	ytdtot=ytdtot+cb

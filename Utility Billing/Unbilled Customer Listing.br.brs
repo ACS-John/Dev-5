@@ -29,7 +29,7 @@ Initialize: ! r:
 	if resp$(2)="[All]" then prtbkno=0 else prtbkno = val(resp$(2))
 	if resp$(3)='True' then printadr=1 ! wants meter address printed
 	if d1<10100 or d1>123199 then goto MAIN
-	fnopenprn
+	fnOpenPrn
 	open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx5.h[cno],Shr",i,i,k
 	gosub HDR
 	if prtbkno=0 then goto READ_CUSTOMER
@@ -74,7 +74,7 @@ PgOf: ! r:
 continue ! /r
 DONE: ! r:
 	close #1: ioerr ignore
-	fncloseprn
+	fnClosePrn
 goto Xit ! /r
 Xit: fnXit
 include: ertn

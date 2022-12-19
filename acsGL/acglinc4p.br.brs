@@ -12,7 +12,7 @@
 	fnTop(program$,"Four Column Budget With Percent")
 	fscode=fnfscode
 	priorcd=fnpriorcd
-	if fnGlAskFormatPriorCdPeriod=5 then goto Xit 		! sets fnps,fnpriorcd,fnfscode (primary/secondary,current year/Prior,period to print)
+	if fnGlAskFormatPriorCdPeriod=5 then goto Xit 		! sets fnPs,fnpriorcd,fnfscode (primary/secondary,current year/Prior,period to print)
 	cch$=fncch$
 	pedat$=fnpedat$
 	actpd$=fnactpd$
@@ -21,16 +21,16 @@
 	priorcd=fnpriorcd
  
 	pors=1
-	if fnps=2 then mp1=72 : _
+	if fnPs=2 then mp1=72 : _
 		fl1$="Name=[Q]\GLmstr\ACGLFNSJ.h[cno],KFName=[Q]\GLmstr\agfsidx2.h[cno],Shr" else : _
 		mp1=69 : _
 		fl1$="Name=[Q]\GLmstr\ACGLFNSI.h[cno],KFName=[Q]\GLmstr\agfsidx3.h[cno],Shr"
 	open #1: fl1$,i,i,k
-	fnopenprn : _
+	fnOpenPrn : _
 	if file$(255)(1:4)<>"PRN:" then redir=1 else redir=0
 	on fkey 5 goto L1670
 	report$="Statement of Income and Expenses"
-	if fnps=2 then goto L320 ! secondary
+	if fnPs=2 then goto L320 ! secondary
 	execute "Index [Q]\GLmstr\GLmstr.h[cno] "&env$('temp')&'\'&"fsindex.h[cno] 69 3 Replace DupKeys -N"
 	goto L340
 L320: execute "Index [Q]\GLmstr\GLmstr.h[cno] "&env$('temp')&'\'&"fsindex.h[cno] 72 3 Replace DupKeys -N"
@@ -141,7 +141,7 @@ L1230: if ls=0 then goto L1380
 L1260: form pos 1,c 1,skip ls
 	goto L1380
  
-L1290: fnpglen(pglen)
+L1290: fnPgLen(pglen)
 ! If PGLEN<>42 Then pGLEN=58
 	sk=pglen-krec(255): fl=len(rtrm$(foot$))
 ! If PGLEN=42 Then sK=SK+1
@@ -182,7 +182,7 @@ return
 L1670: eofcode=1
 	gosub L1290
  
-	fncloseprn
+	fnClosePrn
 	fnfscode(actpd)
 	fnpriorcd(1)
 	goto Xit

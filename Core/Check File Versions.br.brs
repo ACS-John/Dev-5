@@ -1188,10 +1188,10 @@ def fn_cfv_general_ledger
 	fnfscode
 	fnpedat$
 	fnpriorcd
-	fnpgnum
+	fnPgNum
 	fnrx
 	fnstyp
-	fnps
+	fnPs
 	! /r
 
 	if ~exists('[Q]\GLmstr\Period.h[cno]') then

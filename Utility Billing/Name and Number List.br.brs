@@ -112,7 +112,7 @@ ReportInit: ! r:
 	dim email$*30
 	F_CUSTOMER: form pos 1,c 10,pos 11,4*c 30,pos 143,5*pd 2,pos 1806,3*n 2,pos 153,2*pd 2,pos 1821,n 1,pos 292,pd 4.2,pos 1741,n 2,n 7,pos 1864,c 30,c 12,pos 1966,c 12,c 30
  
-	fnopenprn
+	fnOpenPrn
 	gosub HEADER
 goto LOOP_TOP ! /r
 LOOP_TOP: ! r:
@@ -210,7 +210,7 @@ HEADER: ! r:
 return  ! /r
 DONE: ! r:
 	close #1: ioerr ignore
-	fncloseprn
+	fnClosePrn
 goto Xit ! /r
 Xit: fnXit
 

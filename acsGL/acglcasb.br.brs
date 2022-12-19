@@ -13,7 +13,7 @@
 	actpd=fnactpd
 	fnfscode
 	fnpriorcd
-	if fnGlAskFormatPriorCdPeriod=5 then goto Xit ! sets fnps,fnpriorcd,fnfscode (primary/secondary,current year/Prior,period to print)
+	if fnGlAskFormatPriorCdPeriod=5 then goto Xit ! sets fnPs,fnpriorcd,fnfscode (primary/secondary,current year/Prior,period to print)
 	fscode=fnfscode
 	priorcd=fnpriorcd
 	open #20: "Name=[Q]\GLmstr\Company.h[cno],Shr",i,i,r
@@ -23,7 +23,7 @@
 	fscode=fnfscode
 	if nap<12 or nap> 13 then nap=12
 	pors=1
-	fnopenprn
+	fnOpenPrn
 	if file$(255)(1:4)<>"PRN:" then redir=1 else redir=0
 	on fkey 5 goto L2170
 	in3$(1)="8,5,N 12.2,UT,N"
@@ -31,12 +31,12 @@
 	in3$(3)="8,45,N 12.2,UT,N"
 	in3$(4)="8,65,N 12.2,UT,N"
 	mp1=75
-	if fnps=2 then mp1=mp1+3
+	if fnPs=2 then mp1=mp1+3
 	fl1$="Name=[Q]\GLmstr\ACGLFNSF.h[cno],KFName=[Q]\GLmstr\agfsidx5.h[cno],Shr"
-	if fnps=2 then fl1$="Name=[Q]\GLmstr\ACGLFNSG.h[cno],KFName=[Q]\GLmstr\agfsidx6.h[cno],Shr"
+	if fnPs=2 then fl1$="Name=[Q]\GLmstr\ACGLFNSG.h[cno],KFName=[Q]\GLmstr\agfsidx6.h[cno],Shr"
 	form c 7,skip 0
 	open #1: fl1$,i,i,k
-	if fnprocess=1 or fnUseDeptNo=0 then goto L410
+	if fnProcess=1 or fnUseDeptNo=0 then goto L410
 	fnTos
 	mylen=30 : mypos=mylen+3 : right=1
 	fnLbl(1,1,"Cost Center or Department #:",mylen,right)
@@ -68,7 +68,7 @@ L550: !
 	if notrans=1 then goto L940
 	if ir>=val(r$) and val(r$)><0 then goto L740
 	close #3: ioerr ignore
-	if fnps=2 then
+	if fnPs=2 then
 		fnIndex('[Q]\GLmstr\GLmstr.h[cno]','[temp]\fsindex.h[cno]','78 3')
 	else
 		fnIndex('[Q]\GLmstr\GLmstr.h[cno]','[temp]\fsindex.h[cno]','75 3')
@@ -196,7 +196,7 @@ L1730: if ls=0 then goto L1880
 L1760: form pos 1,c 1,skip ls
 	goto L1880
 
-L1790: fnpglen(pglen)
+L1790: fnPgLen(pglen)
 ! If PGLEN<>42 Then pGLEN=58
 	sk=pglen-krec(255): fl=len(rtrm$(foot$))
 ! If PGLEN=42 Then sK=SK+1
@@ -238,7 +238,7 @@ L2170: eofcode=1
 	gosub L1790
 	fnfscode(actpd)
 	fnpriorcd(1)
-	fncloseprn
+	fnClosePrn
 	goto Xit
 
 L2240: !

@@ -54,7 +54,7 @@ Screen2: ! r:
 	fnCmdKey('&Cancel',5,0,1,'Returns to menu without saving any changes on the screen.')
 	ckey=fnAcs(mat resp$)
 	if ckey<>5 then
-		if ckey=3 then fnHamsterFio('UB GL Accounts') : fnchain(program$)
+		if ckey=3 then fnHamsterFio('UB GL Accounts') : fnChain(program$)
 		for j=1 to 30
 			gln$(j)=fnagl$(resp$(j))
 		next j
@@ -109,7 +109,7 @@ if basis=0 then
 	goto SCREEN1
 end if
 if ckey=2 then goto ScreenGlInfo
-fnopenprn
+fnOpenPrn
 gosub PrHdr
 goto ACCUMULATE_TOTALS ! /r
 
@@ -218,8 +218,8 @@ CREATE_ENTRIES: !
 	next j
 
 	pr #255,using 'form pos 20,n 13.2,n 13.2': totalDebits,totalCredits
-	fncloseprn
-	if gli=1 then fnchain('S:\General Ledger\Merge')
+	fnClosePrn
+	if gli=1 then fnChain('S:\General Ledger\Merge')
 goto Xit ! /r
 Xit: fnXit
 PrHdr: ! r:
@@ -328,7 +328,7 @@ MaintainGlInfo: ! r:
 	fnCmdKey('&Cancel',5,0,1,'Return to main screen without saving any changes.')
 	ckey=fnAcs(mat resp$)
 	if ckey=5 then goto ScreenGlInfo
-	if ckey=3 then fnHamsterFio('UB GL Accounts') : fnchain(program$)
+	if ckey=3 then fnHamsterFio('UB GL Accounts') : fnChain(program$)
 	service$=resp$(1)
 	ratecode=val(resp$(2))
 	gl$(1)=fnagl$(resp$(3))

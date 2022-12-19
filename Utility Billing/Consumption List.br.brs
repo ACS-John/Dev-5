@@ -39,12 +39,12 @@ MAIN: ! r:
 	end if
 	rcode=val(resp$(3))
 	open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",i,i,k
-	fnopenprn
+	fnOpenPrn
 	gosub PRINTIT
 goto DONE ! /r
 DONE: ! r:
 	close #1: ioerr ignore
-	fncloseprn
+	fnClosePrn
 goto Xit ! /r
 Xit: fnXit
  

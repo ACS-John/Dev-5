@@ -4,7 +4,7 @@ on error goto Ertn
 autoLibrary
 fnTop(program$,"Client Listing")
 form pos 1,n 2,c 40,c 20,pos 83,n 6,pos 89,2*n 1
-fnopenprn
+fnOpenPrn
 dim z$*5,a$*30,prg$*20,app(20),ma(20),a3$*30
 namtab=42-int(len(rtrm$(env$('cnam')))/2)
 pr newpage
@@ -56,9 +56,9 @@ L450: form pos 2,c 6,skip 1
 L470: form pos 2,c 6,pos 14,c 26,c 60,skip 2
 	return 
 L490: close #1: ioerr L500
-L500: fncloseprn
+L500: fnClosePrn
 	if uprc$(rtrm$(prg$))="S:\Client Billing\Legacy\client" then chain prg$
 	goto XIT
 
-XIT: fnxit
+XIT: fnXit
 include: ertn

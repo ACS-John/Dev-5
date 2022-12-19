@@ -8,15 +8,15 @@ autoLibrary
   dim r$*5,d$*50,te$*1,ac(9),report$*50,secondr$*50,foot$*132,underlin$*14
 !
   fnTop(program$)
-  if fnGlAskFormatPriorCdPeriod=5 then goto Xit           ! sets fnps,fnpriorcd,fnfscode (primary/secondary,current year/Prior,period to print)
-  if fnps=2 then
+  if fnGlAskFormatPriorCdPeriod=5 then goto Xit           ! sets fnPs,fnpriorcd,fnfscode (primary/secondary,current year/Prior,period to print)
+  if fnPs=2 then
     mp1=66
     open #1:"Name=[Q]\GLmstr\acglFnSC.h[cno],KFName=[Q]\GLmstr\agfsidx1.h[cno],Shr",i,i,k
   else
     mp1=63
     open #1:"Name=[Q]\GLmstr\ACGLFNSB.h[cno],KFName=[Q]\GLmstr\agfsidx4.h[cno],Shr",i,i,k
   end if
-  if fnprocess=1 or fnUseDeptNo=0 then goto GetStarted else goto Screen1
+  if fnProcess=1 or fnUseDeptNo=0 then goto GetStarted else goto Screen1
 !
 Screen1: ! r:
   fnTos(sn$="GLInput")
@@ -31,12 +31,12 @@ Screen1: ! r:
   if ckey=5 then goto Xit
   costcntr=val(resp$(1))
 goto GetStarted ! /r
-GetStarted: if fnps=2 then goto L310 ! secondary
+GetStarted: if fnPs=2 then goto L310 ! secondary
   execute "Index [Q]\GLmstr\GLmstr.h[cno]"&' '&"[Q]\GLmstr\fsindex.h[cno] 63 3 Replace DupKeys -N"
   goto L320
 L310: execute "Index [Q]\GLmstr\GLmstr.h[cno]"&' '&"[Q]\GLmstr\fsindex.h[cno] 66 3 Replace DupKeys -N"
 L320: open #3: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\fsindex.h[cno],Shr",i,i,k
-  fnopenprn
+  fnOpenPrn
   if file$(255)(1:4)<>"PRN:" then redir=1 else redir=0
   report$="Balance Sheet"
 READ_TOP: !
@@ -175,7 +175,7 @@ HEADER: ! r:
 DONE: !
   eofcode=1
   gosub L1220
-  if pors<>2 then let fncloseprn
+  if pors<>2 then let fnClosePrn
   goto Xit
 !
 Xit: fnXit

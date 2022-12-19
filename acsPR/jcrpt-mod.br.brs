@@ -16,7 +16,7 @@
 
 
 	pr newpage
-	if fnprocess=1 then goto L90
+	if fnProcess=1 then goto L90
 
 	fnopenwin(win=101,10,18,14,61,cap$)
 	pr #win,fields "4,2,C 20,N": "Report Heading Date:"
@@ -32,7 +32,7 @@ L90: pr newpage : _
 	fnwait(message$="Printing: please wait...",1) : _
 	pr f "15,34,C 09,B,5": "Exit (F5)" : _
 	on fkey 5 goto EOF1
-	fnopenprn : _
+	fnOpenPrn : _
 	if file$(255)(1:3)<>"PRN" then jbskip=1
 
 	open #1: "Name=[Q]\PRmstr\Company.h[cno],Shr",i,i  : _
@@ -61,7 +61,7 @@ L350: form pos h1,c 40,skip 1,pos h2,c i2,skip 1,pos h3,c 20,skip 2
 return
 
 EOF1: !
-	fncloseprn
+	fnClosePrn
 	close #1:
 	close #2:
 	goto Xit

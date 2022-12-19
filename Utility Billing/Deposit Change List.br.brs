@@ -28,7 +28,7 @@ Report: ! r: start report
 	if ed1=20000000 then ed1=0
 	open #hDeposit2=fnH: 'Name=[Q]\UBmstr\Deposit2.h[cno],KFName=[Q]\UBmstr\Deposit2Index.h[cno],Shr,Use,RecL=73,KPs=1,KLn=10',i,outIn,k ! "Name=[Q]\UBmstr\Deposit2.h[cno],Shr",i,outi,r
 	fDeposit2: form pos 1,c 10,n 8,c 32,2*n 10.2,pd 3
-	fnopenprn
+	fnOpenPrn
 	gosub PrHeader
 	dim da(2)
 	! ! r: new way whcich uses indexes
@@ -58,7 +58,7 @@ return ! /r
 Finis: ! r:
 	pr #255: ""
 	pr #255,using "form pos 16,C 21,N 12.2": "Net Amount of Change:",t1
-	fncloseprn
+	fnClosePrn
 goto Xit ! /r
 
 Xit: fnXit

@@ -352,8 +352,8 @@ ScrPost: ! r:
 	ckey=fnAcs(mat resp$)
 	fnfscode(0)
 	if resp$(5)='True' or ckey=5 then goto Xit ! return w/o posting
-	if resp$(2)='True' then fnprocess(1) else fnprocess(0)
-	if resp$(4)='True' then fnprocess(4) ! post both
+	if resp$(2)='True' then fnProcess(1) else fnProcess(0)
+	if resp$(4)='True' then fnProcess(4) ! post both
 	if resp$(1)='True' then goto DoMerge
 	if resp$(3)='True' then goto DoPrMerge
 
@@ -1243,7 +1243,7 @@ def fn_prProofTotals(hAccount,totalDebits,totalCredits, _
 		kEndBalance(j)=kBegBalance(j)-kReceipts(j)-kDisbursements(j)+kAdjustments(j) ! new balance when posted
 		PPT_L6240: !
 	next j
-	fnopenprn
+	fnOpenPrn
 	mylen=20
 	pr #255: lpad$('Total Debits:',mylen)&' '&cnvrt$('pic(-------,---,---.##)',totalDebits)
 	pr #255: lpad$('Total Credits:',mylen)&' '&cnvrt$('Pic(-------,---,---.##',totalCredits)
@@ -1265,12 +1265,12 @@ def fn_prProofTotals(hAccount,totalDebits,totalCredits, _
 			pr #255,using F_PPT_LINE: mat glitem3$
 		end if
 	next j
-	fncloseprn
+	fnClosePrn
 fnend
 def fn_prProofList(hMerge; _
 	___,holdtr$,tr$,tr4,allocAmt,tType,postingCode,td$*30,vn$,jv2$,key$,printkey$, _
 	netamount)
-	fnopenprn
+	fnOpenPrn
 	gosub PrProofListHeader
 	holdtr$=tr$=''
 	restore #hMerge:
@@ -1288,7 +1288,7 @@ def fn_prProofList(hMerge; _
 	loop
 	PE_FINIS: !
 	pr #255,using 'form pos 10,c 10,n 14.2,skip 1': 'Net',netamount : netamount=0
-	fncloseprn
+	fnClosePrn
 fnend
 PrProofListPgOf: ! r:
 	pr #255: newpage
@@ -1410,13 +1410,13 @@ Xit: ! r:
 fnXit ! /r
 DoMerge: ! r:
 	setenv('current_grid_row',gridRowHold$)
-fnchain('S:\General Ledger\Merge') ! /r
+fnChain('S:\General Ledger\Merge') ! /r
 DoPrMerge: ! r:
 	setenv('current_grid_row',gridRowHold$)
-fnchain('S:\General Ledger\Post Payroll Checks') ! /r
+fnChain('S:\General Ledger\Post Payroll Checks') ! /r
 DoAutoProc: ! r:
 	setenv('current_grid_row',gridRowHold$)
-fnchain('S:\acsGL\autoproc') ! /r
+fnChain('S:\acsGL\autoproc') ! /r
 def fn_readMerge(record,&gl$,&tDate,&tAmt,&tType,&postCode,&tr$,&desc$,&vn$,&jv2$,&key$; ___,returnN)
 		gl$=tr$=desc$=vn$=jv2$=key$=''
 		tDate=tAmt=tType=postCode=0

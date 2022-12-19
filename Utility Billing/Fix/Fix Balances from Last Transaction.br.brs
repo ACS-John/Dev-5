@@ -1,6 +1,6 @@
 fn_setup
 
-fntop(program$)
+fnTop(program$)
 
 dim c$(0)*256
 dim cN(0)
@@ -9,7 +9,7 @@ dim t$(0)*256
 dim tN(0)
 hTran=fn_open('UB Transaction',mat t$,mat tN,mat form$)
 hTran2=hTran+1 ! acct/tdate/tcode
-fnopenprn
+fnOpenPrn
 pr #255,us 'form pos 1,8*cr 10': 'account  ','C Balance','T Balance','Diff','Pen Sum','Note     ','LastBill  ','T Type  '
 do
 	read #hCust,us form$(hCust): mat c$,mat cN eof EoCust
@@ -43,7 +43,7 @@ loop
 EoCust: !
 
 pr #255: 'test count=';customerCount
-fncloseprn
+fnClosePrn
 end
 def fn_transType$*12(tcode; ___,return$*12)
 	if tcode=1 then

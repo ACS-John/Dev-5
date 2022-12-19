@@ -88,7 +88,7 @@ MENU1: !
 	next j
 
 	on fkey 5 goto DONE
-	if formoption=2 then fnpa_open else fnopenprn
+	if formoption=2 then fnpa_open else fnOpenPrn
 	if selectone=1 then goto SELECTONE
 	LOOP_TOP: ! 
 	x=0
@@ -203,7 +203,7 @@ SELECTONE: !
 DONE: ! 
 	close #1: ioerr L1910
 	if formoption=2 then gosub RELEASE_PRINT: goto Xit
-L1910: fncloseprn
+L1910: fnClosePrn
 Xit: fnXit
 RELEASE_PRINT: ! r:
 	close #1: ioerr ignore

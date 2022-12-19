@@ -110,7 +110,7 @@ START_PRINT: !
 	message$="Printing: please wait..."
 	fnwait(message$,1)
 	on fkey 5 goto DONE
-	fnopenprn
+	fnOpenPrn
 	on pageoflow goto PgOf
 L1070: open #2: "Name=[Q]\GLmstr\PRmstr.h[cno],Kfn_ame=[Q]\GLmstr\PRIndex.h[cno],Shr",i,i,k
 	if frm=2 then gosub WK_HEADER
@@ -178,7 +178,7 @@ L1670: return
 WK_END: !
 	gosub TOTALS
 	if frm=1 then goto L1730
-	fncloseprn
+	fnClosePrn
 L1730: return
 DONE: !
 Xit: fnXit
@@ -218,7 +218,7 @@ L2080: form pos 41,c 41,skip 1
 	pr #255: "       Total Employees:";p3;"     Totals";
 	pr #255,using L2110: t1,t2,t3
 L2110: form pos 41,pic(----,---.##),pos 56,pic(----,---.##),pos 67,pic(---,---,---.##),skip 1
-	fncloseprn
+	fnClosePrn
 L2130: p3=0
 	gt1=gt1+t5-dwq
 	gt2=gt2+t2
@@ -233,7 +233,7 @@ PgOf: !
 	continue
 
 SUMMARY: !
-	fnopenprn
+	fnOpenPrn
 	eof=1: gosub WK_HEADER
 	wagefica=fn_a((gt2-m(32))*(ficarate+ficarate+.02)) ! FICARATE*2) ! pull tips out  2011
 	taxfica=fn_a(m(32)*(ficarate+ficarate+.02)) ! FICARATE*2)  2011

@@ -183,14 +183,14 @@ PrintProof: ! r:
 	if uprc$(resp$(1))=uprc$('True') then ti2=hRate1: k$="    " ! code sequence
 	if uprc$(resp$(2))=uprc$('True') then ti2=hRate2: k$=rpt$(chr$(0),25) ! name sequence
 	restore #ti2,key>=k$: ! Nokey ScreenGrid
-	fnopenprn
+	fnOpenPrn
 	pg=0
 	do
 		read #ti2,using 'form pos 1,C 2,G 2,C 50,32*G 10',release: mat rt$ eof PRINT_PROOF_FINIS
 		gosub PrintOneRate
 	loop
 	PRINT_PROOF_FINIS: !
-	fncloseprn
+	fnClosePrn
 return  ! /r
 PrintOneRate: ! r:
 	pr #255: "Service Code: ";rt$(1);"   Rate Code: ";rt$(2)

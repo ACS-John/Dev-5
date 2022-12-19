@@ -315,7 +315,7 @@ def fn_main
 							else if env$('cursys')='UB' and lwrc$(ltrm$(program_file$(which))(1:9))='employee:' then
 								fn_callPrEmployee(program_file$(which))
 							else
-								fnchain('S:\'&program_file$(which))
+								fnChain('S:\'&program_file$(which))
 							end if
 						end if
 					end if
@@ -326,45 +326,45 @@ def fn_main
 
 			else if env$('cursys')='GL' and fkey_value<>0 then
 				if fnClientHas('G2') and fkey_value=fkey_g2_employee then
-						fnchain('S:\General Ledger\Accountants\Employee')
+						fnChain('S:\General Ledger\Accountants\Employee')
 				else if fkey_value=fkey_gl_Transactions  then
-					fnchain('S:\General Ledger\Enter Transactions')
+					fnChain('S:\General Ledger\Enter Transactions')
 				else if fkey_value=fkey_gl_accounts  then
-					fnchain('S:\General Ledger\Accounts')
+					fnChain('S:\General Ledger\Accounts')
 				else if fkey_value=fkey_gl_periodEndingDate  then
-					fnchain('S:\General Ledger\Period Ending Dates')
+					fnChain('S:\General Ledger\Period Ending Dates')
 				end if
 			else if env$('cursys')='CL' and fkey_value<>0 then
 				if fkey_value=fkey_cl_unpaid_invoice  then
-					fnchain('S:\Checkbook\Unpaid Invoice')
+					fnChain('S:\Checkbook\Unpaid Invoice')
 				else if fkey_value=fkey_cl_print_checks  then
-					fnchain('S:\Checkbook\Print Checks')
+					fnChain('S:\Checkbook\Print Checks')
 				else if fkey_value=fkey_cl_payee  then
-					fnchain('S:\Checkbook\Payee')
+					fnChain('S:\Checkbook\Payee')
 				end if
 			else if env$('cursys')='PR' and fkey_value<>0 then
 				if fkey_value=fkey_pr_employee  then
-					fnchain('S:\Payroll\Employee')
+					fnChain('S:\Payroll\Employee')
 				else if fkey_value=fkey_pr_enter_time  then
-					fnchain('S:\Payroll\Enter Time Sheets')
+					fnChain('S:\Payroll\Enter Time Sheets')
 				else if fkey_value=fkey_pr_payroll_registers  then
-					fnchain('S:\Payroll\Payroll Registers')
+					fnChain('S:\Payroll\Payroll Registers')
 				else if fkey_value=fkey_pr_print_checks  then
-					fnchain('S:\Payroll\Print Payroll Checks')
+					fnChain('S:\Payroll\Print Payroll Checks')
 				end if
 			else if env$('cursys')='UB' and fkey_value<>0 then
 				if fkey_value=fkey_ub_collection then
-					fnchain('S:\Utility Billing\Collections')
+					fnChain('S:\Utility Billing\Collections')
 				else if fkey_value=fkey_ub_customer then
-					fnchain('S:\Utility Billing\Customer')
+					fnChain('S:\Utility Billing\Customer')
 				else if fkey_value=fkey_change_billing_date then
-					fnchain('S:\Utility Billing\Company')
+					fnChain('S:\Utility Billing\Company')
 				end if
 			else if env$('cursystem')='Client Billing' and fkey_value<>0 then
 				if fkey_value=fkey_tm_collections then
-					fnchain('S:\Client Billing\Collections')
+					fnChain('S:\Client Billing\Collections')
 				else if fkey_value=fkey_tm_updateSupportExpir then
-					fnchain('S:\Client Billing\Update support expiration date')
+					fnChain('S:\Client Billing\Update support expiration date')
 				else if fkey_value=fkey_tm_contact then
 					fn_callHamsterFio('Contact')
 				end if
@@ -372,9 +372,9 @@ def fn_main
 			! /r
 			if fkey_client<>0 and fkey_value=fkey_client then
 					fnClientSelect
-					fnchain(program$)
+					fnChain(program$)
 			else if fkey_company<>0 and fkey_value=fkey_company then
-					fnchain('S:\Core\Programs\Select Company.br')
+					fnChain('S:\Core\Programs\Select Company.br')
 			else if (curfld_value=1 and fkey_value=201) or fkey_value=4 then
 				! if program_plus$(program_selection_id)='+' then
 				!   program_plus$(program_selection_id)='-'
@@ -1045,7 +1045,7 @@ fnend
 	fnend
 def fn_chain(c_program$*128)
 	pr newpage
-	fnchain(c_program$)
+	fnChain(c_program$)
 fnend
 Xit: execute 'System'
 include: fn_open

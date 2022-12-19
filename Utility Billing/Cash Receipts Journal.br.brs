@@ -77,7 +77,7 @@ dim cN(0)
 if exportNow then
 	open #hOut=fnH: 'Name=SAVE:'&fnsave_as_path$&'\*.tab,RecL=2048,replace',d,o ioerr Screen1
 else
-	hOut=fnopenprn
+	hOut=fnOpenPrn
 end if
 hCustomer=fn_openFio('UB Customer',mat c$, mat cN, 1)
 open #hTrans:=fnH: 'Name=[Q]\UBmstr\UBTransVB.h[cno],KFName=[Q]\UBmstr\UBTrIndx.h[cno],Shr',i,i,k
@@ -335,7 +335,7 @@ PrTotals: ! r:
 		exe 'sy -c "'&saveName$&'"'
 		! /r
 	else
-		fncloseprn
+		fnClosePrn
 	end if
 goto Xit ! /r
 def fn_prRateTotal(mat r0,serviceId$,serviceName$*128,mat count;___,x)

@@ -36,7 +36,7 @@ if fn_scrMain then !
 	mat coltot(pencount)
 	hBudMstr=fnOpenBudMstr : if hBudMstr then hBudgetTrans=fnOpenBudTrans
 	open #hRate:=fnH: 'Name=[Q]\UBmstr\ubData\RateMst.h[cno],KFName=[Q]\UBmstr\ubData\RateIdx1.h[cno],Shr',i,i,k
-	fnopenprn
+	fnOpenPrn
 	fn_print_header
 	! /r
 	do ! r: main loop
@@ -74,7 +74,7 @@ if fn_scrMain then !
 	close #hTrans2: ioerr ignore
 	close #hRate: ioerr ignore
 	
-	fncloseprn
+	fnClosePrn
 	! /r
 end if
 goto Xit

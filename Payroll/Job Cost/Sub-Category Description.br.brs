@@ -111,7 +111,7 @@ goto Xit ! /r
  
 SUBCAT_LISTING: ! r:
 	on fkey 5 goto L910
-	fnopenprn
+	fnOpenPrn
 	restore #1,key>="   ": nokey ASKSUBCAT
 	gosub Header
 	do
@@ -128,7 +128,7 @@ SRCHEND: ! r:
 goto ASKSUBCAT ! /r
 L910: ! r:
 	on fkey 5 ignore
-	fncloseprn
+	fnClosePrn
 goto ASKSUBCAT ! /r
  
 Header: ! r:

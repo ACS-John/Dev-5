@@ -39,7 +39,7 @@
 	if method=2 then gosub L790
 	if method=2 then gosub BUDGET_FILE_NUM
 	open #1: 'Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLIndex.h[cno],Shr',i,outIn,k
-	fnopenprn
+	fnOpenPrn
 !
 	pr #255: '   GL Number    New Budget  Old Budget'
 	pr #255: '--------------  ----------  ----------'
@@ -80,7 +80,7 @@ L690: form pos 339,13*pd 6.2
 L710: goto ENTER_BUDGET
 
 EOF2: !
-	fncloseprn
+	fnClosePrn
 
 Xit: fnXit
 

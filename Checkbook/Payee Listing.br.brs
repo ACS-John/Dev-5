@@ -44,7 +44,7 @@ open #payeegl=3: 'Name=[Q]\CLmstr\payeeGLBreakdown.h[cno],KFName=[Q]\CLmstr\Paye
 	enddate=val(resp$(6)) ! ending date for adding purchases for period of time
 	namtab=66-int(len(rtrm$(env$('cnam')))/2)
 	dattab=66-int(len(rtrm$(dat$))/2)
-	fnopenprn
+	fnOpenPrn
 	gosub PrHeader
 L450: if seq$='A' then read #2,using L460,release: vn$,nam$,ad1$,ad2$,csz$,ph$ eof L790 else read #1,using L460,release: vn$,nam$,ad1$,ad2$,csz$,ph$,contact$,email$,fax$,myact$ eof L790
 L460: form pos 1,c 8,4*c 30,pos 153,c 12,c 30,c 50,c 12,c 20
@@ -86,7 +86,7 @@ PrHeader: ! r:
 	pr #255: '________  __________________________    __________________________    _____________________    ___________________________  ____________'
 	form pos 1,c 132,skip 1
 return ! /r
-L790: fncloseprn
+L790: fnClosePrn
 	goto Xit
 
 Xit: fnXit

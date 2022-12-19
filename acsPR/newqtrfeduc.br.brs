@@ -13,7 +13,7 @@
 	dim ytdtotal(32),ss$*11,em$(3)*30,m$*20
  
 	fnTop(program$,cap$="Quarterly Federal Unemployment Worksheet")
-	fnopenprn
+	fnOpenPrn
  
 	fncreg_read('calculation date text',m$)
 	fnDedNames(mat fullname$,mat abbrevname$,mat dedcode,mat calcode,mat dedfed,mat dedfica,mat dedst,mat deduc)
@@ -24,7 +24,7 @@
 	L250: form pos 1,3*c 40,c 12,pd 6.3,pd 6.2,pd 5.2,10*c 8,n 2,pd 4.2,pd 3.3,pd 4.2,pd 4.2,10*pd 4.2,10*pd 3.3,10*c 12
 	close #20:
  
-! If FNPROCESS=1 Then Goto 230
+! If fnProcess=1 Then Goto 230
 MENU1: ! r:
 	fnTos(sn$="prqtrfeduc")
 	respc=0
@@ -129,7 +129,7 @@ DONE: ! r:
 	gosub PAGETOTALS
 	close #2: ioerr ignore
 	close #3: ioerr ignore
-	fncloseprn
+	fnClosePrn
 goto Xit ! /r
 Xit: fnXit
 L1360: ! r:

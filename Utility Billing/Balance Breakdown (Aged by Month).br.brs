@@ -39,7 +39,7 @@ fndat(dat$,2)
 if resp$(5)='True' then skipcr=1
 
 
-fnopenprn
+fnOpenPrn
 gosub PrHeader
 open #2: "Name=[Q]\UBmstr\UBTransVB.h[cno],KFName=[Q]\UBmstr\UBTrIndx.h[cno],Shr",i,i,k
 open #hCustomer=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",i,i,k
@@ -78,7 +78,7 @@ Finis: ! r:
 	pr #255: "                                 {\ul \strike           } {\ul \strike           } {\ul \strike           } {\ul \strike           } {\ul \strike           }"
 	close #hCustomer: ioerr ignore
 	close #2: ioerr ignore
-	fncloseprn
+	fnClosePrn
 goto Xit ! /r
 Xit: fnXit
 TransLoop: ! r:

@@ -7,7 +7,7 @@ dim gl$*12,tdt(4),tcd(3),tdet(23)
 fnTop(program$)
 open #1: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr",i,i,k
 open #2: "Name=[Q]\PRmstr\Department.h[cno], KFName=[Q]\PRmstr\DeptIdx.h[cno]",i,outIn,k
-fnopenprn
+fnOpenPrn
 gosub HDR
 READ_EMPLOYEE: ! r: main loop
 	read #1,using L220: eno,em$,em4,mat em eof DONE
@@ -36,7 +36,7 @@ DONE: ! r:
 	close #2: ioerr ignore
 	pr #255,using L420: "Totals",rpt$("  ==========",3)
 	L420: form pos 11,c 33,skip 1,pos 57,c 36,skip 1
-	fncloseprn
+	fnClosePrn
 goto Xit ! /r
 Xit: fnXit
  

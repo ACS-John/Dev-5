@@ -49,10 +49,10 @@
 RegularEntry: ! r:
 	open #hTmpInvoice=fnH: 'Name=S:\Core\Data\acsllc\tmpInvoice.h[cno],RecL=4675,Replace',i,outi,r
 	F_TMWK2: form pos 1,n 5,n 1,n 6,c 12,30*c 6,30*c 128,30*pd 5.2,30*n 2,30*n 2,30*c 12
-	open #3: 'Name=S:\Core\Data\acsllc\IVDesc.h[cno],KFName=S:\Core\Data\acsllc\IVDIndex.h[cno],Shr',i,i,k
-	fnopenprn
+	open #hIvDesc=fnH: 'Name=S:\Core\Data\acsllc\IVDesc.h[cno],KFName=S:\Core\Data\acsllc\IVDIndex.h[cno],Shr',i,i,k
+	fnOpenPrn
+	
 	ScreenEntry: !
-	L950: !
 	dim xinp(3)
 	inp3=xinp(3)
 	mat xinp=(0)
@@ -68,7 +68,8 @@ RegularEntry: ! r:
 	mat ct=(0)
 	dim sc(30)
 	mat sc=(0)
-	L1080: !
+	
+	TopOfRegularEntryScreen: !
 	pr newpage
 	dim scrid$(4)*80
 	scrid$(1)='Client Billing Input of Invoices'
@@ -170,7 +171,7 @@ RegularEntry: ! r:
 	dim cdk$*6
 	cdk$=lpad$(rtrm$(cde$(de)),6)
 	dim des$*60
-	read #3,using 'form pos 1,c 6,c 55,pd 5.2,c 12',key=cdk$: cdk$,des$,da,gl$(de) nokey ERR1
+	read #hIvDesc,using 'form pos 1,c 6,c 55,pd 5.2,c 12',key=cdk$: cdk$,des$,da,gl$(de) nokey ERR1
 	pr f io1$(ce+10): des$
 	pr f io1$(ce+20): da
 	if cmdkey<>6 then ce+=20
@@ -196,19 +197,19 @@ RegularEntry: ! r:
 	write #hTmpInvoice,using F_TMWK2: mat xinp,invoiceNumber$,mat cde$,mat id$,mat da,mat ct,mat sc,mat gl$
 	fncreg_write('Last Invoice Number',invoiceNumber$)
 	L1850: !
-	if x9=0 then goto L950
+	if x9=0 then goto ScreenEntry
 	xinp(3)=0
 	xinp(5)=0
 	xinp(6)=0
-	goto L1080
+	goto TopOfRegularEntryScreen
 
 	L1900: !
 	rewrite #hTmpInvoice,using F_TMWK2,rec=rr: mat xinp,invoiceNumber$,mat cde$,mat id$,mat da,mat ct,mat sc,mat gl$
+	
 	SCR_ADDEDIT: !
 	pr newpage
 	pr f '10,10,c 60': 'Enter ref # to correct; enter 0 when completed'
-	L1930: !
-	input f '10,60,N 5,UE,N': rr conv L1930
+	input f '10,60,N 5,UE,N': rr
 	if rr=0 then goto ScreenFinal
 	read #hTmpInvoice,using F_TMWK2,rec=rr: mat xinp,invoiceNumber$,mat cde$,mat id$,mat da,mat ct,mat sc,mat gl$ noRec SCR_ADDEDIT
 	pt(1)=pt(1)-xinp(1)
@@ -217,7 +218,7 @@ RegularEntry: ! r:
 		pt(3)=pt(3)-ct(j)
 		pt(4)=pt(4)-sc(j)
 	next j
-goto L1080 ! /r
+goto TopOfRegularEntryScreen ! /r
 
 ScreenFinal: ! r:
 	pr newpage
@@ -254,7 +255,7 @@ ScreenFinal: ! r:
 	loop
 ! /r
 PrProof: ! r:
-	fnopenprn
+	fnOpenPrn
 	gosub PrProofHead
 	for j=1 to lrec(hTmpInvoice)
 		read #hTmpInvoice,using F_TMWK2,rec=j: mat xinp,invoiceNumber$,mat cde$,mat id$,mat da,mat ct,mat sc,mat gl$
@@ -272,7 +273,7 @@ PrProof: ! r:
 			pr #255:
 		end if
 	next j
-	fncloseprn
+	fnClosePrn
 return
 	PrProofHead: ! r:
 		pr #255: ''

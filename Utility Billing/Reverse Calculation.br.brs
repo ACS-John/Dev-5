@@ -78,7 +78,7 @@ ASK1: !
 	reqz12$=resp$(4)
 	if reqz12$='[All]' then reqz12$=''
 	if uprc$(resp$(5))=uprc$('True') then sr$='Y' else sr$='N'
-	if sr$='Y' then let fnopenprn
+	if sr$='Y' then let fnOpenPrn
 	if sr$='Y' and secondpass<>1 then let fn_srhdr
 	secondpass=1
 	L480: !
@@ -139,7 +139,7 @@ CUSTOMER_READ: !
 
 Finis: ! r:
 	if sr$='Y' then
-		fncloseprn
+		fnClosePrn
 	end if
 goto Xit ! /r
 Xit: fnXit

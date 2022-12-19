@@ -64,7 +64,7 @@ NokeyClient: ! r:
 		fnStatusPause
 	else
 		clientNokeyCount+=1
-		fnopenprn
+		fnOpenPrn
 		pr #255: 'Cannot locate account '&clientId$
 		fnStatus('Cannot locate account '&clientId$)
 	end if
@@ -81,7 +81,7 @@ Finis: ! r:
 		pr #255: 'Set up the '&str$(clientNokeyCount)&' A/R accounts as'
 		pr #255: 'indicated on the print-out.  then reenter any '
 		pr #255: 'transactions that were rejected.'
-		fncloseprn
+		fnClosePrn
 
 		fnStatus('Set up the '&str$(clientNokeyCount)&' A/R accounts as' 	)
 		fnStatus('indicated on the print-out.  then reenter any '        	)

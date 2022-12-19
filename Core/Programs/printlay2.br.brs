@@ -28,7 +28,7 @@ L210: !
 	if source_path$="" then goto L210
 	fn_printlay3(source_path$) : goto L210
 def fn_old
-		fnopenprn
+		fnOpenPrn
 		execute "DROP DirFile" ioerr ignore
 		execute "DIR "&source_path$&" >DirFile"
 		open #2: "Name=DirFile",display,input
@@ -120,7 +120,7 @@ L1330: next j
 		close #1:
 		if f2<f1 then goto L330
 L1380: close #2,free:
-		fncloseprn
+		fnClosePrn
 		goto Xit
  
 Xit: fnXit
@@ -173,7 +173,7 @@ def fn_printlay3(source_path$*256)
 			source_path$=''
 		end if  !
 		dim p3_line$(1)*256
-		fnopenprn
+		fnOpenPrn
 P3_FORM_PRINT: form pos 1,g 4,x 1,c 5,x 1,c 5,x 1,c 30,x 1,c 80
 		for p3_file_item=1 to udim(mat p3_filename$)
 !  if trim$(p3_filename$(p3_file_item))=trim$(source_path$) then source_path$=''
@@ -214,5 +214,5 @@ P3_FORM_PRINT: form pos 1,g 4,x 1,c 5,x 1,c 5,x 1,c 30,x 1,c 80
 				end if  ! lwrc$(p3_tmp$(1:5))='data '   /   else
 			next p3_line_item
 		next p3_file_item
-		fncloseprn
+		fnClosePrn
 fnend  ! fn_printlay3

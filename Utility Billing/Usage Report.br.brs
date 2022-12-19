@@ -66,7 +66,7 @@ SCREEN1: ! r:
 		! routePrior=filterRoute
 	end if
 ! /r
-fnopenprn
+fnOpenPrn
 gosub HDR
 do ! r: main report loop
 	read #hCustomerForReport,using F_Customer: z$,name$,mat dx,CustomerLastBillingDate,route eof TOTAL_AND_FINISH
@@ -101,7 +101,7 @@ do ! r: main report loop
 loop ! /r
 Finis: ! r:
 	close #hCustomerForReport: ioerr ignore
-	fncloseprn
+	fnClosePrn
 goto Xit ! /r
 
 NEWPGE: ! r:

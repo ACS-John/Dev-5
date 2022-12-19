@@ -21,7 +21,7 @@ read #20,using L230: mat a$,b$(1),mcr,mcm,feducrat,feducmax
 L230: form pos 1,3*c 40,c 12,pd 6.3,pd 6.2,pd 5.2,x 80,x 2,pd 4.2
 close #20:
  
-! If FNPROCESS=1 Then Goto 230
+! If fnProcess=1 Then Goto 230
 ! MENU1: !
 fnTos
 respc=0 : lc=0
@@ -80,7 +80,7 @@ futaqtr4=val(resp$(resp_qtr4))
 if resp$(resp_OptComplete)='True' then fullform=1 ! pr full form
 if resp$(resp_OptFillIn)='True' then fullform=2 ! fill in blanks
  
-fnopenprn
+fnOpenPrn
 on pageoflow goto PgOf
 open #hEmployee=fnH: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr",i,i,k ! was #2
 gosub HDR
@@ -125,7 +125,7 @@ return ! /r
  
 EOF2: !
 	gosub TOTALS
-	fncloseprn
+	fnClosePrn
 	close #hEmployee: ioerr ignore
 	close #3: ioerr ignore
 	gosub PRINT_940
@@ -148,7 +148,7 @@ TOTALS: ! r:
 	pr #255: ""
 	pr #255,using L1310: "Total Futa Tax",t3*feducrat/100
 	L1310: form pos 26,c 14,pos 42,pic(--,---,---.##)
-	fncloseprn
+	fnClosePrn
 return ! /r
  
 PgOf: pr #255: newpage : gosub HDR : continue

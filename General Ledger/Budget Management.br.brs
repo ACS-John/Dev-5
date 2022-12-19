@@ -607,7 +607,7 @@ for j=1 to 11
 		goto PRNT1
 	end if
 next j
-fnopenprn
+fnOpenPrn
 restore #2,search>='': nokey ScrMenu1 ioerr L4420
 goto L4430 ! /r
 L4420: !
@@ -670,7 +670,7 @@ if cd$='X' then pr #255,using L5120: '' pageoflow PgOf
 if cd$='Z' then pr #255: newpage : gosub PrHeader
 goto L4700 ! /r
 L4970: ! r:
-fncloseprn
+fnClosePrn
 goto DISPLAY_GRID ! /r
 
 PgOf: ! r:

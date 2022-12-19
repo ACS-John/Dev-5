@@ -27,7 +27,7 @@ def fn_payroll_register_2(; det,include_tips_in_other_wh,append_reg1,ppdOverride
 	close #hPrCode:
 	GetCkNoEnd: ! /r
 
-	if ~append_reg1 then fnopenprn(' (Departmental Register)')
+	if ~append_reg1 then fnOpenPrn(' (Departmental Register)')
 
 	open #hDeptName=fnH: "Name=[Q]\PRmstr\DeptName.h[cno],KFName=[Q]\PRmstr\DeptNameIdx.h[cno],Shr",i,i,k ioerr P2DeptOpened
 	founddept=1
@@ -322,7 +322,7 @@ EoPayrollChecks: !
 		close #hDepartment: ioerr ignore
 		close #hTrans: ioerr ignore
 		! fnStatusClose
-		fncloseprn
+		fnClosePrn
 		fnIndex("[Q]\PRmstr\prTot.h[cno]","[Q]\PRmstr\PRTotIdx.h[cno]","1 9")
 		! fnStatusClose
 fnend

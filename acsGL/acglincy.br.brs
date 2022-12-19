@@ -20,21 +20,21 @@
 	actpd=fnactpd
 	actpd$=fnactpd$
  
-	if fnGlAskFormatPriorCdPeriod=5 then goto Xit ! sets fnps,fnpriorcd,fnfscode (primary/secondary,current year/Prior,period to print)
+	if fnGlAskFormatPriorCdPeriod=5 then goto Xit ! sets fnPs,fnpriorcd,fnfscode (primary/secondary,current year/Prior,period to print)
 	open #20: "Name=[Q]\GLmstr\Company.h[cno],Shr",i,i,r
 	read #20,using 'form pos 384,n 2,pos 296,N 2',rec=1: nap,lmu
  
 	pors=1
 	mp1=69
-	if fnps=2 then mp1=mp1+3
+	if fnPs=2 then mp1=mp1+3
 	fl1$="Name=[Q]\GLmstr\ACGLFNSI.h[cno],KFName=[Q]\GLmstr\agfsidx3.h[cno],Shr"
-	if fnps=2 then fl1$="Name=[Q]\GLmstr\ACGLFNSJ.h[cno],KFName=[Q]\GLmstr\agfsidx2.h[cno],Shr"
+	if fnPs=2 then fl1$="Name=[Q]\GLmstr\ACGLFNSJ.h[cno],KFName=[Q]\GLmstr\agfsidx2.h[cno],Shr"
 	form c 9,skip 0
 L350: form pos mp1,pd 3,pos 81,41*pd 6.2
 	form c 7,skip 0
 	nametab=int(95-len(rtrm$(env$('cnam')))/2)
 	open #1: fl1$,i,i,k
-	if fnprocess=1 or fnUseDeptNo=0 then goto L490
+	if fnProcess=1 or fnUseDeptNo=0 then goto L490
 	fnTos(sn$="Acglincy") : _
 	mylen=30: mypos=mylen+3 : right=1
 	fnLbl(1,1,"Cost Center or Department #:",mylen,right)
@@ -55,8 +55,8 @@ L490: !
 	pr f "13,30,C 16,R,N": "PRESS F5 TO STOP"
 	if cmdkey=5 then goto L2380 ! jb
 	report$="STATEMENT OF INCOME AND EXPENSES"
-	fnopenprn
-	if fnps=2 then goto L630 ! secondary
+	fnOpenPrn
+	if fnPs=2 then goto L630 ! secondary
 	execute "Index [Q]\GLmstr\GLmstr.h[cno] [temp]\fsindex.h[cno] 69 3 Replace DupKeys -N"
 	goto L640
 L630: execute "Index [Q]\GLmstr\GLmstr.h[cno] [temp]\fsindex.h[cno] 72 3 Replace DupKeys -N"
@@ -182,7 +182,7 @@ L1810: if ls=0 then goto L1950
 	pr #255,using L1840: " "
 L1840: form pos 1,c 1,skip ls
 	goto L1950
-L1860: fnpglen(pglen)
+L1860: fnPgLen(pglen)
 ! If PGLEN<>42 Then pGLEN=58
 	sk=pglen-krec(255): fl=len(rtrm$(foot$))
 ! If PGLEN=42 Then sK=SK+1
@@ -236,7 +236,7 @@ L2360: eofcode=1
 	gosub L1860
 L2380: !
  
-	fncloseprn
+	fnClosePrn
  
 goto Xit
  

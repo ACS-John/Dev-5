@@ -18,7 +18,7 @@ fnTop(program$)
 	journalTitle$(8)='Purchases Journal'       	! 'Purchases Journal'
 ! /r
 dim enableJournal(8)
-if fnprocess=1 then
+if fnProcess=1 then
 	currentOrPrior=1
 	filterPeriod=0
 	mat enableJournal=(1)
@@ -57,7 +57,7 @@ end if
 	open #hTrans=fnH: 'Name='&tempSourceFile$&',KFName='&tempSourceIndx$&',Shr',i,i,k ! formerly #3
 	! /r
 
-	fnopenprn
+	fnOpenPrn
 	isFirstTransaction=1
 	do ! r: main loop 
 		dim transGl$*12,transDate,transAmt,transType,transRef$*12,transDesc$*30,transPeriod
@@ -113,7 +113,7 @@ EoJounrals: ! r:
 		fn_prNetAndBlankLine(net,transType,1)
 		fn_journalTotals(net,totalDebits,totalCredits)
 	end if
-	fncloseprn
+	fnClosePrn
 goto Xit ! /r
 PgOf: ! r:
 	pr #255: newpage

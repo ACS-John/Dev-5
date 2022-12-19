@@ -13,7 +13,7 @@
 	open #1: "Name=[Q]\GLmstr\Company.h[cno],Shr",i,i
 	read #1,using 'form pos 1,3*C 40,2*C 12,C 5,pos 188,PD 7.2,pos 658,10*N 1': mat a$,mat b$,c$,ucm,mat deduc
 	close #1:
-	if fnprocess=1 then goto L280
+	if fnProcess=1 then goto L280
 
 L170: fnTos
 	mylen=60: mypos=mylen+3 : right=1
@@ -37,7 +37,7 @@ L170: fnTos
 	if trim$(namcde$)="" then goto L170
 L280: open #2: "Name=[Q]\GLmstr\PRmstr.h[cno],KFName=[Q]\GLmstr\PRIndex.h[cno],Shr",i,i,k
 	open #(h_csv:=fnH): "Name="&csvpath$&",REPLACE",d,o
-	fnopenprn
+	fnOpenPrn
 	gosub HDR
 L310: read #2,using L320: mat k,mat k$,mat l$,mat m eof L600
 L320: form pos 1,n 4,3*c 25,c 11,36*pd 5.2,2*n 5
@@ -70,7 +70,7 @@ return
 
 L600: gosub L820
 	close #2:
-	fncloseprn
+	fnClosePrn
 	fnreg_write("TexasUCFile",csvpath$)
 	close #h_csv:
 	goto Xit

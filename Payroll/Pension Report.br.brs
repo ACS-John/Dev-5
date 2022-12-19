@@ -16,7 +16,7 @@
 	open #2: "Name=[Q]\PRmstr\RPTRAIL.h[cno],Shr",i,i,r
 ! /r
 	gosub SCREEN_PENSION1
-	fnopenprn !
+	fnOpenPrn !
 	gosub HDR
 	READ_EMPLOYEE: !
 	read #1,using 'form pos 1,n 8,c 30,pos 99,c 11': eno,em$,ss$ eof Finis
@@ -55,7 +55,7 @@ Finis: ! r:
 	pr #255: "                                      ----------  ----------  ----------  ---------- "
 	pr #255,using F_LINE_OUT: " "," ",total_salary,total_ded,total_pension,total_salary+total_ded
 	pr #255: "                                      =========-  ==========  ==========  ========== "
-	fncloseprn
+	fnClosePrn
 	close #25: ioerr ignore
 goto Xit ! /r
 Xit: fnXit

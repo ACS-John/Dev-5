@@ -202,7 +202,7 @@ goto MAIN ! /r
 
 PROOF_LIST: ! r:
 	restore #1,key>='    ': eof ignore, nokey ignore
-	fnopenprn
+	fnOpenPrn
 	gosub HDR
 do
 	read #1,using 'form pos 1,N 4,3*C 25,C 11,36*PD 5.2,2*N 5': eno,mat k$,ss$,mat m eof L1610
@@ -220,8 +220,8 @@ loop
 L1610: !
 	if pl>0 then gosub L1660
 	on fkey 5 ignore
-	fncloseprn
-	if fnprocess=1 then goto Xit else goto MAIN
+	fnClosePrn
+	if fnProcess=1 then goto Xit else goto MAIN
 
 L1660: !
 	pr #255,using L1670: sc1$(4),mat l1

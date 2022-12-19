@@ -8,7 +8,7 @@ def library fnWorkOrderPrint(z$,mat e$,mat i$,mat line$,mat a,mat b,mat d,mat f$
 	end if
 
 	fnsavetoasstart("[Q]\WorkOrder\"&trim$(z$)&date$("ccyymmdd")&".rtf")
-	fnopenprn( z$,'Work Order Add','Work Order')
+	fnOpenPrn( z$,'Work Order Add','Work Order')
 
 	pr #255: "\qc {\f181 {\fs32 {\b Utility Work Order}"
 	pr #255: "{\fs24 "&env$('cnam')&"}}}"
@@ -85,7 +85,7 @@ def library fnWorkOrderPrint(z$,mat e$,mat i$,mat line$,mat a,mat b,mat d,mat f$
 	pr #255,using 'form pos 32,c 51': "{\b Date Order Completed: _____________________}"
 	pr #255: ""
 	pr #255,using 'form pos 32,c 51': "{\b By: _______________________________________}"
-	fncloseprn
+	fnClosePrn
 fnend
 def fn_pwo_service_data(service_name$*80,reading_prior,meter_number$,serial_number$; deposit_amt,rate_code,is_not_metered)
 	if trim$(service_name$)<>"" and trim$(service_name$)<>"Capital Surcharge" then

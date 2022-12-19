@@ -75,7 +75,7 @@ BANK_STMT_INFO: !
 	for j=1 to 6
 		if resp$(6)=item1$(j) then ti3=j: selection=j: goto L620
 	next j
-L620: if ti3=6 then fnchain("S:\General Ledger\Access Bank Rec File")
+L620: if ti3=6 then fnChain("S:\General Ledger\Access Bank Rec File")
 	close #81: ioerr L640
 L640: open #81: "Name=[Q]\GLmstr\Bank"&wbc$&".h[cno],Use,RecL=32",i,outi,r
 	if lrec(81)=0 then write #81,using "form pos 1,N 6,2*PD 5.2,N 6",rec=1: stmtdt,bgbal,stmtbal,codt : goto L670
@@ -195,7 +195,7 @@ L1560: if amt>0 then goto L1550
 L1580: if ti3=5 then gosub L2570
 	goto L1380
 L1600: if ti3><5 then goto BANKTOTALSCREEN
-	fnopenprn
+	fnOpenPrn
 	for j=1 to 4
 		wp=j+50
 		if w(j)=0 then goto WPNEXTJ
@@ -212,7 +212,7 @@ EO_WP: !
 		close #wp:
 ! If SENDTO$(1:3)<>"PRN" Then 	! Execute "Sy Copy "&SENDTO$&"+RPT"&STR$(J)&"."&WSID$&" "&SENDTO$
 WPNEXTJ: next j
-	fncloseprn
+	fnClosePrn
 	goto MENU1
 BANKTOTALSCREEN: !
 	pr newpage
@@ -230,7 +230,7 @@ BANKTOTALSCREEN: !
 	fnLbl(9,1, "Uncleared Deposit(s):"&cnvrt$("pic(----,---,---.##)",t1(7)),45,1)
 	fnLbl(10,1, cnvrt$("N 5",t1(8))&" Uncleared Withdrawal(s):"&cnvrt$("pic(----,---,---.##)",t1(9)) ,45,1)
 	fnLbl(10,1,"Calculated Book Balance:"&cnvrt$("pic(----,---,---.##)",t1(10)) ,45,1)
-	fncloseprn
+	fnClosePrn
 	t1(10)=bgbal+t1(7)+t1(4)-t1(9)-t1(2)
 	cutoffbal=bal
 	restore #bankrec1,key>=wbc$&"         ": nokey EO_ADDING_BALANCE
@@ -250,7 +250,7 @@ EO_ADDING_BALANCE: !
 	if ckey=1 then gosub L2140 : goto BANKTOTALSCREEN
 	goto BANKTOTALSCREEN
 
-L2140: fnopenprn
+L2140: fnOpenPrn
 	pr #255,using L2160: bn$(1:30)
 L2160: form pos 20,cc 40
 	pr #255,using L2160: "Bank Reconciliation"
@@ -290,7 +290,7 @@ PRINT_LISTINGS: !
 	if resp$(2)(1:1)="T" then w(2)=1 else w(2)=0
 	if resp$(3)(1:1)="T" then w(3)=1 else w(3)=0
 	if resp$(4)(1:1)="T" then w(4)=1 else w(4)=0
-	fnopenprn
+	fnOpenPrn
 	for j=1 to 4
 		if w(j)=0 then goto L2540
 		wp=j+50
@@ -454,8 +454,8 @@ ENTER_DEPOSITS_CLEARED: !
 L3880: form pos 1,c 8,pd 10.2,c 2
 	goto ENTER_DEPOSITS_CLEARED
 PRINT_EDITS: t1=t2=0
-	fnopenprn
-	fncloseprn
+	fnOpenPrn
+	fnClosePrn
 	if ti1=6 then pr #255,using "form pos 10,cc 60": "Uncleared Entries"
 	if ti1=7 then pr #255,using "form pos 10,cc 60": "Listing of All Entries Entered For Clearing"
 	for j=1 to lrec(91)
@@ -471,7 +471,7 @@ L4040: next j
 	if ti1<6 then goto DPAMENU
 	pr #255,using L4070: "__________",t1,"=========="
 L4070: form pos 17,c 10,skip 1,pos 17,n 10.2,skip 1,pos 17,c 10,skip 1
-	fncloseprn
+	fnClosePrn
 	goto DPAMENU
 DPTYPES: ! ENTER TYPES TO TOTAL   ! fix  KJ
 	for j=1 to 3

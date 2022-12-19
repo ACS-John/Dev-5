@@ -239,7 +239,7 @@ L1780: form pos 1,n 2,c 51,x 27,2*c 132,n 3,3*n 1,100*pd 6.3,20*c 50,40*pd 2,80*
 L1790: close #1:
 	fnrx(rn)
 	execute "INDEX S:\acsPR\JCREPORT.MST,S:\acsPR\JCREPORT.idx,1,2,Replace,DupKeys -n"
-	fnchain('S:\acsPR\newjcRptS1')
+	fnChain('S:\acsPR\newjcRptS1')
  
 	restore #1,key>="  ": nokey L2490
 	fnopenwin(win=102,10,28,15,52,cap$)
@@ -263,7 +263,7 @@ L2020: input #win,fields "4,26,N 2,UET,N": rno(j) conv L2020
 		if cmdkey=5 or rno(j)=0 then goto L2060
 	next j
 L2060: on fkey 5 goto L2490
-	fnopenprn
+	fnOpenPrn
 	k=0
 L2090: if prtall=0 then goto L2140
 L2100: k=k+1
@@ -305,7 +305,7 @@ L2440: form pos 1,c 50,pos 52,n 3,pos 56,n 3,pos 76,n 1,pos 93,n 1,pos 110,n 1,p
 	pr #255: newpage
 	goto L2090
  
-L2490: fncloseprn
+L2490: fnClosePrn
 	on fkey 5 ignore
 	goto SCR1
  

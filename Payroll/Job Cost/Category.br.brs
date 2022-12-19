@@ -114,7 +114,7 @@ REINDEX: ! indexes if needed
 L910: execute "Index [Q]\PRmstr\Category.h[cno]"&' '&"[Q]\PRmstr\categoryIDX.h[cno] 1 5 Replace DupKeys -n"
 	goto L170
 PRINT_PROOF: !
-	fnopenprn
+	fnOpenPrn
 	gosub L1060
 	restore #1:
 L970: read #1,using L180,release: category,name$ eof L1010
@@ -122,7 +122,7 @@ L970: read #1,using L180,release: category,name$ eof L1010
 L990: form pos 1,n 5,x 8,c 30,skip 1
 	goto L970
 L1010: if nw=0 then pr #255: newpage
-	fncloseprn
+	fnClosePrn
 	on fkey 5 ignore
 	goto ASKCATEGORY
 L1050: pr #255: newpage : gosub L1060 : continue

@@ -6,7 +6,7 @@ on error goto Ertn
 dim n(2),k$(3)*25,ss$*11,m(36),adr(2),ml$(3)*80
 
 fnTop(program$,"Zero QTD Payroll Information")
-if fnprocess=1 then goto ZeroIt
+if fnProcess=1 then goto ZeroIt
 Screen1: !
 	fnTos
 	mylen=40: mypos=mylen+3 : right=2

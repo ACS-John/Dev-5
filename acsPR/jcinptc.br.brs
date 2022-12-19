@@ -168,7 +168,7 @@ L1430: rinput #win,select mat io2$,attr "H": mat wrd2$
 PRINTPROOFLIST: !
 	pr newpage
 	fnwait(message$,1)
-	fnopenprn
+	fnOpenPrn
 	pr #255,using L1530: "Job Cost Input Proof List"
 L1530: form pos 1,cc 80,skip 1
 	pr #255,using L1530: "Date: "&date$&"     Time: "&time$
@@ -182,7 +182,7 @@ L1590: form pos 1,n 5,x 3,c 12,n 8,x 3,c 8,n 7,n 14,n 15.2,x 3,c 30,skip 1
 	pr #255,using L1630: " ____________",ta
 L1630: form pos 63,c 13,skip 1,pos 63,n 13.2
 	ta=0
-	fncloseprn
+	fnClosePrn
 	goto WHATNEXT
 
 POSTTOJOB: !

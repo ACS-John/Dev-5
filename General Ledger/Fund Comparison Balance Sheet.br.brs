@@ -8,20 +8,20 @@ actpd=fnactpd
 fnfscode
 fnpriorcd
 if fnGlAskFormatPriorCdPeriod=5 then goto Xit
-	! sets fnps,fnpriorcd,fnfscode (primary/secondary,current year/Prior,period to print)
+	! sets fnPs,fnpriorcd,fnfscode (primary/secondary,current year/Prior,period to print)
 fnfscode
 fnpriorcd
-if fnprocess=0 then gosub AskFund
-mp1=63 : if fnps=2 then mp1+=3
-if fnps=2 then
+if fnProcess=0 then gosub AskFund
+mp1=63 : if fnPs=2 then mp1+=3
+if fnPs=2 then
 	open #hReport=fnH: "Name=[Q]\GLmstr\AcGLFnSc.h[cno],KFName=[Q]\GLmstr\agfsidx1.h[cno],Shr",i,i,k
 else
 	open #hReport=fnH: "Name=[Q]\GLmstr\ACGLFNSB.h[cno],KFName=[Q]\GLmstr\agfsidx4.h[cno],Shr",i,i,k
 end if
 Freport: form pos 1,n 3,n 6,n 3,pos mp1,pd 3,pos 87,27*pd 6.2
 
-fnopenprn
-if fnps=2 then ! secondary
+fnOpenPrn
+if fnPs=2 then ! secondary
 	fnIndex('[Q]\GLmstr\GLmstr.h[cno]','[temp]\fsindex.h[cno]','66 3')
 else
 	fnIndex('[Q]\GLmstr\GLmstr.h[cno]','[temp]\fsindex.h[cno]','63 3')
@@ -182,7 +182,7 @@ PrFooterAndHeader1: ! r:
 	L1510: form pos 1,c 1,skip ls
 goto L1630
 PrFooterAndHeader2: !
-	fnpglen(pglen)
+	fnPgLen(pglen)
 	! If PGLEN<>42 Then pGLEN=58
 	sk=pglen-krec(255): fl=len(rtrm$(foot$))
 	! If PGLEN=42 Then sK=SK+1
@@ -233,7 +233,7 @@ Finis: ! r:
 	gosub PrFooterAndHeader2
 	fnfscode(actpd)
 	fnpriorcd(1)
-	fncloseprn
+	fnClosePrn
 goto Xit ! /r
 Xit: fnXit
 

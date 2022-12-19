@@ -26,7 +26,7 @@
 	open #h_out=fnH: "Name=S:\Core\Data\acsllc\TimeSheet.h[cno],RecL=86,KFName=S:\Core\Data\acsllc\TimeSheet-Idx.h[cno],Replace,KPs=1,KLn=5",i,outIn,k
 	open #h_support=fnH: "Name=S:\Core\Data\acsllc\SUPPORT.h[cno],KFName=S:\Core\Data\acsllc\support-idx.h[cno],Shr",i,i,k
 	F_support: form pos 1,c 6,n 2,c 2,x 8,x 2,n 8
-	fnopenprn
+	fnOpenPrn
 	pr #255,using FORM_PRN_HEAD: 'date','client','time','cat','month','desc','rate'
 	FORM_OUT: form pos 1,n 5,n 9,2*pd 3.2,pd 4.2,n 6,n 2,pd 2,pd 1,n 2,n 4,c 12,pd 3,c 30
 	FORM_PRN: form pos 1,c 8,x 1,n 6,n 10.2,n 10,n 10,x 1,c 15,n 7.2
@@ -61,7 +61,7 @@
 	loop until line$=''
 	! THE_END: !
 	close #h_in:
-	fncloseprn
+	fnClosePrn
 Xit: fnXit
 def fn_acs_write_out(wo_date,wo_client,wo_time,wo_cat,wo_month,wo_desc$*30; wo_sage_code$*128)
 	dim inp(7)

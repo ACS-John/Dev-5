@@ -36,7 +36,7 @@
 	nametab=66-int(len(env$('program_caption'))/2)
 	open #1: "Name=[Q]\GLmstr\PRmstr.h[cno],KFName=[Q]\GLmstr\PRIndex.h[cno],Shr",i,outIn,k
 	open #2: "Name=[Q]\GLmstr\ACPRCKS.h[cno],Shr",i,outi,r
-	fnopenprn
+	fnOpenPrn
 	gosub L620
 	L350: !
 	if d(1)>0 and sum(empd)<>0 then
@@ -79,7 +79,7 @@ L740: form pos 28,10 *c 10
 	pr #255,using L770: "","Totals",mat totalded
 	form pos 1,c 6,c 20,10*n 10.2
 L770: form pos 1,c 6,c 20,10*n 10.2
-	fncloseprn : goto Xit
+	fnClosePrn : goto Xit
 L790: ! ACCUMULATE TOTALS
 	for j=1 to 10
 		totalded(j)+=d(j+8)

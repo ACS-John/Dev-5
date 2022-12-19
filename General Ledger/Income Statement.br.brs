@@ -14,12 +14,12 @@
 	actpd=fnactpd
 	! fscode=fnfscode
 	! priorcd=fnpriorcd
-	if fnGlAskFormatPriorCdPeriod=5 then goto Xit ! sets fnps,fnpriorcd,fnfscode (primary/secondary,current year/Prior,period to print)
+	if fnGlAskFormatPriorCdPeriod=5 then goto Xit ! sets fnPs,fnpriorcd,fnfscode (primary/secondary,current year/Prior,period to print)
 	fscode=fnfscode
 	priorcd=fnpriorcd
 	pors=1
 	mp1=69
-	if fnps=2 then
+	if fnPs=2 then
 		mp1=mp1+3
 		mp2=78
 		fl1$="Name=[Q]\GLmstr\ACGLFNSJ.h[cno],KFName=[Q]\GLmstr\agfsidx2.h[cno],Shr"
@@ -28,7 +28,7 @@
 		fl1$="Name=[Q]\GLmstr\ACGLFNSI.h[cno],KFName=[Q]\GLmstr\agfsidx3.h[cno],Shr"
 	end if
 	open #h_acglfnx:=1: fl1$,i,i,k
-	if fnprocess=1 or fnUseDeptNo=0 then goto L320
+	if fnProcess=1 or fnUseDeptNo=0 then goto L320
 	fnTos(sn$="GLInput")
 	mylen=30: mypos=mylen+3 : right=1
 	fnLbl(1,1,"Cost Center or Department #:",mylen,right)
@@ -41,8 +41,8 @@
 	if ckey=5 then goto Xit
 	costcntr=val(resp$(1))
 L320: !
-	fnopenprn
-	if fnps=2 then ! secondary
+	fnOpenPrn
+	if fnPs=2 then ! secondary
 		execute "Index [Q]\GLmstr\GLmstr.h[cno] [Temp]\fsindex.h[cno] 72 3 Replace DupKeys -N"
 	else
 		execute "Index [Q]\GLmstr\GLmstr.h[cno] [Temp]\fsindex.h[cno] 69 3 Replace DupKeys -N"
@@ -191,7 +191,7 @@ HDR_COLUMN_A: ! r:
 L1270: form pos 1,c 1,skip ls
 	goto HDR_COLUMN_XIT
 HDR_COLUMN_B: !
-	fnpglen(pglen)
+	fnPgLen(pglen)
 ! If PGLEN<>42 Then pGLEN=58
 	sk=pglen-krec(255): fl=len(rtrm$(foot$))
 ! If PGLEN=42 Then sK=SK+1
@@ -233,7 +233,7 @@ L1650: ! r:
 	gosub HDR_COLUMN_B
 	fnfscode(actpd)
 	fnpriorcd(1)
-	fncloseprn
+	fnClosePrn
 	goto Xit ! /r
  
 BLDPCT1: ! r:

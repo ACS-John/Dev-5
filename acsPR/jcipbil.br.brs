@@ -96,7 +96,7 @@ PROOFLIST: !
 	message$="Printing Proof List..."
 	fnwait(message$,1)
 	on fkey 5 goto L1080
-	fnopenprn
+	fnOpenPrn
 	pr #255,using L980: "Job Cost Input Billings Proof List"
 L980: form skip 2,pos 10,c 60,skip 1
 	pr #255: tab(10);"Date:  ";date$;"   Time:  ";time$
@@ -108,7 +108,7 @@ L980: form skip 2,pos 10,c 60,skip 1
 		pr #255,using L1060: j,jn$,mat inp
 L1060: form pos 1,n 5,x 2,c 8,n 10.2,2*n 10,skip 1
 L1070: next j
-L1080: fncloseprn
+L1080: fnClosePrn
 	on fkey 5 ignore
 L1100: goto L730
 

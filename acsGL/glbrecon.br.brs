@@ -171,7 +171,7 @@ L1720: form pos 68,n 1
 	goto L1480
 L1740: pr f '16,10,C 69,R,N': hex$('07')&' Check Number '&rtrm$(c$)&' in Bank Number '&ltrm$(currgl$)&' is not on file'
 	goto L1550
-L1760: fnchain('S:\acsGL\glCkRec')
+L1760: fnChain('S:\acsGL\glCkRec')
 L1770: pr newpage
 	sb$(1)='2,23,C 20,UT,N'
 	sb$(2)='3,37,Nz 6,UT,N'
@@ -207,7 +207,7 @@ L2040: open #101: 'SROW=08,SCOL=18,EROW=12,ECOL=58,BORDeR=SR,CAPTION=<Print List
 	pr f '13,34,C 11,B,5': 'Cancel (F5)'
 	on fkey 5 goto L2250
 	restore #1,key>=currgl$&'            ': nokey L2370
-	fnopenprn
+	fnOpenPrn
 	gosub L2290
 L2140: read #1,using L980: gl$,c$,p$,s$,mat a eof L2250
 	if currgl$=gl$ then goto L2160 else goto L2250
@@ -230,7 +230,7 @@ L2300: form pos namtab,c 40,skip 1,pos 54,c 24,skip 1,pos 59,c 3,x 1,c 6,x 1,c 3
 L2320: form pos 1,c 12,pos 15,c 5,pos 53,c 6,pos 67,c 4,pos 73,c 6,pos 81,c 7,skip 2
 return
 
-L2350: fncloseprn
+L2350: fnClosePrn
 	on fkey 5 ignore
 L2370: tot=0
 goto L480

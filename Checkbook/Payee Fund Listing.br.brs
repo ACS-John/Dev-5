@@ -28,7 +28,7 @@ open #paymstr=13: 'Name=[Q]\CLmstr\PayMstr.h[cno],KFName=[Q]\CLmstr\PayIdx1.h[cn
 open #trmstr1=1: 'Name=[Q]\CLmstr\TrMstr.h[cno],KFName=[Q]\CLmstr\TrIdx1.h[cno],Shr',i,outIn,k
 open #trmstr2=2: 'Name=[Q]\CLmstr\TrMstr.h[cno],KFName=[Q]\CLmstr\TrIdx2.h[cno],Shr',i,outIn,k
 open #tralloc=3: 'Name=[Q]\CLmstr\TrAlloc.h[cno],Version=2,KFName=[Q]\CLmstr\TrAlloc-Idx.h[cno],Shr',i,outIn,k
-fnopenprn
+fnOpenPrn
 gosub HDR
 READ_TRMSTR2: !
 	read #trmstr2,using 'form pos 1,N 2,N 1,C 8,G 6,pd 10.2,C 8,C 35,N 1,N 6,N 1': bank_code,tcde,tr$(1),tr$(2),tr3,tr$(4),tr$(5),pcde,clr,scd eof Finis
@@ -91,7 +91,7 @@ Finis: !
 	pr #255,using 'form pos 1,C 10,C 30': '  Grand','Total'
 	mat f1=f2
 	gosub PRINTARRAY_2
-	fncloseprn
+	fnClosePrn
 goto Xit
 
 Xit: fnXit

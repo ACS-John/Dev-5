@@ -18,9 +18,9 @@
 	fscode=fnfscode
 	pors=1
 	mp1=75
-	if fnps=2 then mp1=mp1+3
+	if fnPs=2 then mp1=mp1+3
 	fl1$="Name=[Q]\GLmstr\ACGLFNSF.h[cno],KFName=[Q]\GLmstr\agfsidx5.h[cno],Shr"
-	if fnps=2 then fl1$="Name=[Q]\GLmstr\ACGLFNSG.h[cno],KFName=[Q]\GLmstr\agfsidx6.h[cno],Shr"
+	if fnPs=2 then fl1$="Name=[Q]\GLmstr\ACGLFNSG.h[cno],KFName=[Q]\GLmstr\agfsidx6.h[cno],Shr"
 L240: form pos 1,c 12,pos 87,27*pd 6.2
 	flo$(1)="8,5,C 50,N"
 	flo$(2)="8,58,N 10.2,N"
@@ -35,7 +35,7 @@ L340: if fnpriorcd=2 then income-=bp(fscode) else income-=by(fscode)
 L350: goto L300
 L360: close #1:
 	open #1: fl1$,i,i,k
-	if fnprocess=1 or fnUseDeptNo=0 then goto L480
+	if fnProcess=1 or fnUseDeptNo=0 then goto L480
 	fnTos
 	mylen=30: mypos=mylen+3 : right=1
 	fnLbl(1,1,"Cost Center or Department #:",mylen,right)
@@ -48,11 +48,11 @@ L360: close #1:
 	if ckey=5 then goto Xit
 	costcntr=val(resp$(1))
 L480: on fkey 5 goto L1970 : _
-	fnopenprn : _
+	fnOpenPrn : _
 	if file$(255)(1:4)<>"PRN:" then redir=1 else redir=0
  
 	report$="Statement of Changes in Financial Position"
-	if fnps=2 then goto L540 ! secondary
+	if fnPs=2 then goto L540 ! secondary
 	execute "Index [Q]\GLmstr\GLmstr.h[cno] "&udf$&"fsindex.h[cno] 75 3 Replace DupKeys -N"
 	goto L550
 L540: execute "Index [Q]\GLmstr\GLmstr.h[cno] "&udf$&"fsindex.h[cno] 78 3 Replace DupKeys -N"
@@ -153,7 +153,7 @@ L1430: if ls=0 then goto L1580
 L1460: form pos 1,c 1,skip ls
 	goto L1580
  
-L1490: fnpglen(pglen)
+L1490: fnPgLen(pglen)
 ! If PGLEN<>42 Then pGLEN=58
 	sk=pglen-krec(255): fl=len(rtrm$(foot$))
 ! If PGLEN=42 Then sK=SK+1
@@ -205,7 +205,7 @@ L1970: eofcode=1
 	gosub L1490
  
  
-	fncloseprn
+	fnClosePrn
 	goto Xit
  
 L2040: total=income

@@ -32,7 +32,7 @@ OldWorkFromFixedWidthList: ! r: change route and sequence numbers from a text fi
 	dim ln$*128
 	open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",i,outIn,k
 	open #2: "Name=chg\newrouteseq.txt",display,input
-	fnopenprn
+	fnOpenPrn
 	READ_CUSTOMER: !
 	linput #2: ln$ eof OWFFL_Finis
 	! z$=LPAD$(RTRM$(LN$(17:26)),10)
@@ -49,7 +49,7 @@ OldWorkFromFixedWidthList: ! r: change route and sequence numbers from a text fi
 	pr #255,using "form pos 1,c 50": "Account "&z$&" not found"
 	goto READ_CUSTOMER
 	OWFFL_Finis: !
-	fncloseprn
+	fnClosePrn
 	close #1:
 	fnub_index_customer ! execute "Index [Q]\UBmstr\Customer.h[cno]"&' '&"[Q]\UBmstr\UBIndx5.h[cno] 1741/1743 2/7 Replace DupKeys -n"
 return ! /r

@@ -3,17 +3,17 @@ def library fnXit(;cursys$)
 	fnXit=fn_xit( cursys$)
 fnend
 def fn_xit(;cursys$)
-	library 'S:\Core\Library': fnchain,fnprocess
+	library 'S:\Core\Library': fnChain,fnProcess
 
-	if env$('CurSys')="GL" and fnprocess=1 then 
-		fnchain("S:\acsGL\acglAuto")
-	else if env$('CurSys')="PR" and fnprocess=1 then 
-		fnchain("S:\acsPR\newprAuto")
+	if env$('CurSys')="GL" and fnProcess=1 then 
+		fnChain("S:\acsGL\acglAuto")
+	else if env$('CurSys')="PR" and fnProcess=1 then 
+		fnChain("S:\acsPR\newprAuto")
 	else if env$("xit_override")<>'' then 
 		dim tmp$*1024
 		tmp$=env$("xit_override")
 		setenv("xit_override","")
-		fnchain(tmp$)
+		fnChain(tmp$)
 	else if env$('CurSys')='CM' then 
 		setenv('Session_Rows',24)
 		setenv('Session_Cols',80)
@@ -28,5 +28,5 @@ def fn_xit(;cursys$)
 		open #0: 'SRow=1,SCol=1,Rows=24,Cols=80,buttonrows=2,Font=MEDIUM:Width+',display,outIn
 		execute 'Proc RUN'
 	end if 
-	fnchain('S:\Core\Menu.br',0,1)
+	fnChain('S:\Core\Menu.br',0,1)
 fnend 

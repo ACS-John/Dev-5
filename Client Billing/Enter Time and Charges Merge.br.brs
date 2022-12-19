@@ -109,5 +109,5 @@ Finis: ! r:
 	close #hService: 
 	if scNotFoundCount then fnStatusPause
 goto Xit ! /r
-Xit: fnxit
+Xit: fnXit
 include: ertn

@@ -349,7 +349,7 @@ PrintSecondStateW2: ! r:
 	close #1:
 	fnFree('[Q]\PRmstr\PRW2ADDR.h[cno]')
 	execute 'Sort [Temp]\Control.[session] -n'
-fnchain('S:\acsPR\PrintSecondStateW2') ! /r
+fnChain('S:\acsPR\PrintSecondStateW2') ! /r
 AskEmpLocality: ! r:
 	fnTos
 	rc=cf=0

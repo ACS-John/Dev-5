@@ -19,7 +19,7 @@ ASK1: !
 	if ckey=5 or ckey=99 then
 		goto Xit
 	else if ckey=1 then
-		fnchain("S:\Checkbook\Bank")
+		fnChain("S:\Checkbook\Bank")
 	else if ckey=2 then
 		wbc=val(resp$(1)(1:2))
 	end if

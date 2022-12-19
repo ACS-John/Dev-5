@@ -3,7 +3,7 @@ on error goto Ertn
 
 autoLibrary
 fnTop(program$,"Employee")
-fnopenprn
+fnOpenPrn
 dim eno$*9,e$*25,r(11),prg$*20
 namtab=66-int(len(rtrm$(env$('cnam')))/2)
 open #1: "Name=S:\Core\Data\acsllc\EMmstr.h[cno],KFName=S:\Core\Data\acsllc\EMIndex.h[cno],Shr",i,i,k
@@ -39,9 +39,9 @@ L380: form pos 4,c 6,pos 24,c 4,pos 38,c 4,pos 44,c 88,skip 2
 return 
 L400: !
 close #1: ioerr ignore
-fncloseprn
+fnClosePrn
 if uprc$(rtrm$(prg$))="S:\Client Billing\Legacy\EMAINT" then chain prg$
 goto XIT
 L440: !
-XIT: fnxit
+XIT: fnXit
 include: ertn

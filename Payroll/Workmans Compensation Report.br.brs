@@ -30,7 +30,7 @@ MENU1: !
   execute "Index [Q]\PRmstr\Department.h[cno]"&' '&"[Q]\PRmstr\DeptIdx4.h[cno] 50/1/9 2/8/3,Replace,DupKeys,Shr -n" ! index in workmans comp code,department #,employee # sequence
   open #h_department:=2: "Name=[Q]\PRmstr\Department.h[cno],KFName=[Q]\PRmstr\DeptIdx4.h[cno],Shr",i,i,k  ! open in workmans comp code sequence
   open #h_payrollchecks:=4: "Name=[Q]\PRmstr\PayrollChecks.h[cno],KFName=[Q]\PRmstr\CheckIdx.h[cno],Shr",i,i,k
-  fnopenprn
+  fnOpenPrn
   fn_hdr
   do
     read #h_department,using 'form pos 1,n 8,n 3,pos 50,n 2': teno,tdept,workman_comp eof EO_DEPARTMENT
@@ -83,7 +83,7 @@ Finis: !
 	close #3: ioerr ignore
 	pr #255: newpage
   close #h_payrollchecks:
-  fncloseprn
+  fnClosePrn
 Xit: !
   fnXit
 PGOFLOW: !

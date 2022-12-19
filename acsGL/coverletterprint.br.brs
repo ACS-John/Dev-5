@@ -29,7 +29,7 @@
 				if tempx=14 then actpd$="fourteen"
 L180: open #1: "Name=[Q]\GLmstr\ACGLCovF.h[cno],Shr",display,input ioerr Xit
 	on fkey 5 goto DONE
-	fnopenprn
+	fnOpenPrn
 READ_ACGLCOVF: !
 	linput #1: ln$ eof DONE ioerr DONE
 	for j2=1 to len(rtrm$(ln$))
@@ -52,7 +52,7 @@ L300: if ln$(j2+1:j2+1)="3" then : _
 goto READ_ACGLCOVF
 
 DONE: close #1:
-	fncloseprn
+	fnClosePrn
 goto Xit
 
 Xit: fnXit

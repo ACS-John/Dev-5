@@ -25,7 +25,7 @@ L200: !
 		goto L200
 	end if
 L240: !
-	fnopenprn
+	fnOpenPrn
 	pr newpage
 	dattab=66-int(len(rtrm$(dat$))/2)
 	pr f "10,20,c 60,n": "MONTHLY BILLING SUMMARY IN PROCESS"
@@ -100,7 +100,7 @@ L870: close #1:
 L970: close #2: ioerr L980
 L980: close #3: ioerr L990
 L990: close #4: ioerr L1000
-L1000: fncloseprn
+L1000: fnClosePrn
 Xit: fnXit
 L1020: pr #255,using L1030: date$,env$('cnam'),time$,"MONTHLY BILLING SUMMARY"
 L1030: form skip 3,pos 1,c 8,pos namtab,c 40,skip 1,pos 1,c 8,pos 55,c 23,skip 1

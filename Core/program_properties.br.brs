@@ -74,11 +74,11 @@ def fn_localPropertiesEdit
 	end if
 
 fnend
-def library fnpglen(&pglen)
+def library fnPgLen(&pglen)
 	autoLibrary
 	on error goto Ertn
 	fn_readProgramPrintProperty('Lines',lpp$) : pglen=val(lpp$)
-	fnpglen=pglen
+	fnPgLen=pglen
 fnend
 def library fnReadProgramPrintProperty(key$*80,&value$; prgCapForSettingsOverride$*256)
 	autoLibrary

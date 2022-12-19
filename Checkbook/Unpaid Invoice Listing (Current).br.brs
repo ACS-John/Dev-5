@@ -64,7 +64,7 @@ L510: !
 	execute 'INDEX [temp]\WORK,[temp]\INDX[session],1,12,Replace'
 	open #hWork=6: 'Name=[temp]\WORK,KFName=[temp]\INDX[session]',i,outIn,k
 	open #hFund=fnH: 'Name=[Q]\CLmstr\FundMstr.h[cno],KFName=[Q]\CLmstr\FundIdx1.h[cno],Shr',i,i,k
-	fnopenprn
+	fnOpenPrn
 	vn$='': iv$=''
 L560: ! r:
 	read #9,using 'form pos 1,PD 3': r4 eof END1
@@ -176,7 +176,7 @@ return ! /r
  
 EO_WORK: ! r:
 	gosub TOTF1
-	fncloseprn
+	fnClosePrn
 	close #hWork,free: ioerr Xit ! /r
 Xit: fnXit
  

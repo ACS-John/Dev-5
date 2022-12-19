@@ -84,7 +84,7 @@ L660: if addone=1 then goto TRANSACTION_ENTRY else goto CORRECTIONS
  
 PRINTPROOFLIST: !
 	on fkey 5 goto PROOF_LIST_DONE
-	fnopenprn
+	fnOpenPrn
 	goto L810
  
 PROOF_LIST_HDR: !
@@ -108,7 +108,7 @@ L870: form pos 1,c 6,x 1,pic(----,---.##),x 2,pic(zz/zz/zz),x 2,n 2,skip 1
 L910: form pos 8,c 11,skip 1,pos 7,pic(-----,---.##),skip 1
 PROOF_LIST_DONE: !
 	gt1=0
-	fncloseprn
+	fnClosePrn
 goto TRANSACTION_ENTRY
  
 POSTTOJOBS: !

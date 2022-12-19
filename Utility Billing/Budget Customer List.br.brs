@@ -40,7 +40,7 @@ SCR1: ! r:
 	fndat(dat$,2)
 	if resp$(3)=sel$(1) then ti2=1 else if resp$(3)=sel$(2) then ti2=2 else if resp$(3)=sel$(3) then ti2=3 ! active, inactive, etc...
 	on fkey 5 goto DONE
-	fnopenprn
+	fnOpenPrn
 	open #1: 'Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\'&idx$(q0)&'.h[cno],Shr',i,i,k
 	gosub BUD1
 	gosub HEADER
@@ -74,7 +74,7 @@ HEADER: ! r:
 return ! /r
 DONE: !
 	close #1: ioerr ignore
-	fncloseprn
+	fnClosePrn
 Xit: fnXit
 
 BUD1: ! r:

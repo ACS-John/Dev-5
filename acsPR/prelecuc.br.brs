@@ -153,7 +153,7 @@ goto BEGINNING_OF_FILE
 BEGINNING_OF_FILE: ! r:
 	gosub RECRA
 	gosub RECRE
-	fnopenprn
+	fnOpenPrn
 	pr #255,using "form pos 20,cc 40,skip 1,pos 20,cc 40": "Electronic Edit List",cnvrt$("pic(zz/zz/zzzz",endingdate)
 goto READ_EMPLOYEE ! /r
 READ_EMPLOYEE: ! r:
@@ -222,7 +222,7 @@ return ! /r
 END1: ! r:
 	pr #255,using "form skip 1,pos 1,c 14,pic(zz,zzz,zzz.##)": "Total wages:",totwage,"Total Taxable:",tottaxable
 	pr #255,using "form pos 1,c 16,pic(zz,zzz,zzz)": "Total employees:",totemployees
-	fncloseprn
+	fnClosePrn
 	gosub L2040
 goto Xit ! /r
 Xit: fnXit

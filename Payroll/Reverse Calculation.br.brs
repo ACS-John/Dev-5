@@ -241,7 +241,7 @@ POSTGL1: ! r:
 			prgl(j,3)=val(prgl$(j)(10:12))
 		next j
 		nametab=36-len(rtrm$(a$))/2
-		fnopenprn
+		fnOpenPrn
 		gosub GlDistHeaders
 	end if
 return  ! /r
@@ -316,10 +316,10 @@ POSTGL4: ! r:
 	end if
 	gosub POST_WH_AND_NET
 	gosub PRINT_TOTALS
-	fncloseprn
+	fnClosePrn
 	if glinstal=0 then goto Xit
 	if glb=2 then goto Xit
-fnchain("S:\General Ledger\Merge") ! /r
+fnChain("S:\General Ledger\Merge") ! /r
 Xit: fnXit
 PgOf: ! r:
 	pr #255: newpage

@@ -16,7 +16,7 @@
 ! 	pr newpage
 ! 	pr f "10,25,c 48,n": "SERVICE CODE LISTING IN PROCESS"
 	! pr f "23,2,c 20,n": "Press F5 to stop"
-	fnopenprn
+	fnOpenPrn
 	gosub L410
 L260: read #1,using L270: sc$,ds$ eof L520
 L270: form pos 1,c 4,c 30
@@ -44,9 +44,9 @@ L470: form pos 38,pic(zz/zz/zz),skip 3
 L490: form pos 2,c 4,pos 14,c 11,skip 2
 return
 L510: close #1: ioerr L520
-L520: fncloseprn
+L520: fnClosePrn
 	if uprc$(rtrm$(prg$))="S:\Client Billing\Legacy\Service Code" then chain prg$
 goto XIT
  
-XIT: fnxit
+XIT: fnXit
 include: ertn

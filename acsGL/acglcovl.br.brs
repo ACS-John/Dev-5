@@ -30,7 +30,7 @@
 				if tempx=14 then actpd$="fourteen"
 L190: sh$="1,10,C 60,H,N"
 	for j=1 to 20 : fli$(j)=str$(j+2)&",2,C 78,UT,N" : next j
-	if fnprocess=1 then t=2 : goto L320 else goto MENU1
+	if fnProcess=1 then t=2 : goto L320 else goto MENU1
 
 MENU1: pr newpage
 	close #101: ioerr L250
@@ -56,7 +56,7 @@ L390: open #1: "Name=[Q]\GLmstr\ACGLCovF.h[cno],Shr",display,input ioerr MENU1
 	pr f "10,20,Cc 25,H,N": "Cover Letter Printing..." : _
 	pr f "12,2,C 18,B,5": " Press F5 to stop"
 	on fkey 5 goto L550
-	fnopenprn
+	fnOpenPrn
 L430: linput #1: ln$ eof L550
 	for j2=1 to len(rtrm$(ln$))
 		if ln$(j2:j2)><"@" then goto L520
@@ -76,7 +76,7 @@ L520: next j2
 	goto L430
 L550: close #1:
 	pr newpage
-	fncloseprn
-Xit: fnchain("S:\acsGL\acglAuto")
+	fnClosePrn
+Xit: fnChain("S:\acsGL\acglAuto")
  
 include: ertn

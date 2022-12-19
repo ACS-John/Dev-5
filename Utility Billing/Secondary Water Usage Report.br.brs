@@ -29,13 +29,13 @@ autoLibrary
 goto STARTREPORT
  
 DONE: !
-	fncloseprn
+	fnClosePrn
 Xit: fnXit
  
 STARTREPORT: !
 	open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",i,i,k
 	L380: form pos 1,c 10,pos 41,c 30,pos 227,pd 5,pos 296,pd 4
-	fnopenprn
+	fnOpenPrn
 	! sort prep !!!
 	open #6: "Name=[Temp]\Work.[Session],REPLACE,RecL=50",internal,output
 	if fan$>"" then restore #1,search>=fan$:

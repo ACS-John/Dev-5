@@ -324,7 +324,7 @@ ScrMainQestions: ! r:
 		tty(1)=tty(1)-tty(25)
 		RePrintLandsHere: !
 		if cl_installed and ~fn_cknum then goto Xit
-		fnopenprn
+		fnOpenPrn
 		if sc1$='SCS' then fn_print_stub  	: fn_print_check 	: fn_print_stub
 		if sc1$='CSS' then fn_print_check 	: fn_print_stub  	: fn_print_stub
 		if sc1$='SSC' then fn_print_stub  	: fn_print_stub  	: fn_print_check
@@ -335,7 +335,7 @@ ScrMainQestions: ! r:
 			pr #255: chr$(12) ! NEWPAGE
 			goto PrintNextCheck
 		end if
-		fncloseprn
+		fnClosePrn
 		if testCheckFormat then fnChain(program$)
 		goto ScrAlign
 		ScrAlign: ! r:
@@ -470,7 +470,7 @@ Finis: ! r:
 	if gl_installed=1 then
 		close #h_gl_glbrec: ioerr ignore
 	end if
-	fncloseprn
+	fnClosePrn
 	if cl_installed then
 		close #h_clBank: ioerr ignore
 		close #h_clPayee: ioerr ignore

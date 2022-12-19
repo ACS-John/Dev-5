@@ -83,7 +83,7 @@ BANK_STMT_INFO: !
 		if resp$(6)=item1$(j) then ti3=j: goto L610
 	next j
 	L610: !
-	if ti3=6 then fnchain('S:\Checkbook\Transaction')
+	if ti3=6 then fnChain('S:\Checkbook\Transaction')
 	close #81: ioerr ignore
 	open #81: 'Name=[Q]\CLmstr\Bank'&str$(wbc)&'.h[cno],Use,RecL=32',i,outi,r
 	if lrec(81)=0 then write #81,using 'form pos 1,N 6,2*PD 7.2,N 6',rec=1: stmtdt,bgbal,stmtbal,codt : goto L660
@@ -229,7 +229,7 @@ CalculateTotals: ! r:
 goto L1380
 	L1600: !
 	if ti3><5 then goto BankTotalScreen
-	fnopenprn
+	fnOpenPrn
 	for j=1 to 4
 		wp=j+50
 		if w(j)=0 then goto WPNEXTJ
@@ -247,7 +247,7 @@ goto L1380
 		close #wp:
 		WPNEXTJ: !
 	next j
-	fncloseprn
+	fnClosePrn
 goto Menu1 ! /r
 BankTotalScreen: ! r:
 	fnTos
@@ -265,7 +265,7 @@ BankTotalScreen: ! r:
 	fnLbl(11,1, cnvrt$('N 5',t1(8))&' Uncleared Withdrawal(s):'&cnvrt$('pic(----,---,---.##)',t1(9)) ,45,1)
 	t1(10)=bgbal+t1(7)+t1(4)-t1(9)-t1(2)
 	fnLbl(12,1,'Calculated Book Balance:'&cnvrt$('pic(----,---,---.##)',t1(10)) ,45,1)
-	fncloseprn
+	fnClosePrn
 	cutoffbal=bal
 	restore #trmstr1,key>=cnvrt$('N 2',wbc)&'         ': nokey EO_ADDING_BALANCE
 L1970: read #trmstr1,using 'form pos 1,N 2,N 1,C 8,G 6,pd 10.2,C 8,C 35,N 1,N 6,N 1': bank_code,tcde,tr$(1),tr$(2),tx3,tr$(4),tr$(5),pcde,clr,scd eof EO_ADDING_BALANCE
@@ -285,7 +285,7 @@ EO_ADDING_BALANCE: !
 goto BankTotalScreen ! /r
  
 L2120: ! r:
-	fnopenprn
+	fnOpenPrn
 	pr #255,using L2140: env$('cnam')
 	pr #255,using L2140: bn$(1:30)
 	L2140: form pos 20,cc 40
@@ -326,7 +326,7 @@ PrintListings: ! r:
 	if resp$(2)(1:1)='T' then w(2)=1 else w(2)=0
 	if resp$(3)(1:1)='T' then w(3)=1 else w(3)=0
 	if resp$(4)(1:1)='T' then w(4)=1 else w(4)=0
-	fncloseprn
+	fnClosePrn
 	for j=1 to 4
 		if w(j)=0 then goto L2520
 		wp=j+50
@@ -527,7 +527,7 @@ ENTER_DEPOSITS_CLEARED: !
 L4120: form pos 1,c 8,pd 10.2,c 2
 	goto ENTER_DEPOSITS_CLEARED
 PRINT_EDITS: t1=t2=0
-	fnopenprn
+	fnOpenPrn
 	if ti1=6 then pr #255,using 'form pos 10,cc 60': 'Uncleared Entries'
 	if ti1=7 then pr #255,using 'form pos 10,cc 60': 'Listing of All Entries Entered For Clearing'
 	for j=1 to lrec(hDpAmnts)
@@ -543,7 +543,7 @@ L4270: next j
 	if ti1<6 then goto DPAMENU
 	pr #255,using L4300: '__________',t1,'=========='
 L4300: form pos 17,c 10,skip 1,pos 17,n 10.2,skip 1,pos 17,c 10,skip 1
-	fncloseprn
+	fnClosePrn
 goto DPAMENU ! /r
 DPTYPES: ! r: ENTER TYPES TO TOTAL   ! fix  KJ
 	for j=1 to 3

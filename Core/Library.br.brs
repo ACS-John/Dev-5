@@ -787,9 +787,9 @@ fnend
 		library 'S:\Core\fn\cmbCNo.br': fncmbcno
 		fncmbcno(myline,mypos,mysys$)
 	fnend
-	def library fnprocess(; chgpro)
-		library 'S:\Core\process.br': fnprocess
-		fnprocess=fnprocess(chgpro)
+	def library fnProcess(; chgpro)
+		library 'S:\Core\process.br': fnProcess
+		fnProcess=fnProcess(chgpro)
 	fnend
 	def library fnkillauto
 		library 'S:\Core\process.br': fnkillauto
@@ -912,29 +912,29 @@ fnend
 		library 'S:\Core\Print.br': fnReportCacheFolderCurrent$
 		fnReportCacheFolderCurrent$=fnReportCacheFolderCurrent$
 	fnend
-	def library fnopenprn(; sendto_base_name_addition$*128,programNameOverride$*256,programCaptionOverride$*256)
-		library 'S:\Core\Print.br': fnopenprn
-		fnopenprn=fnopenprn( sendto_base_name_addition$,programNameOverride$,programCaptionOverride$)
+	def library fnOpenPrn(; sendto_base_name_addition$*128,programNameOverride$*256,programCaptionOverride$*256)
+		library 'S:\Core\Print.br': fnOpenPrn
+		fnOpenPrn=fnOpenPrn( sendto_base_name_addition$,programNameOverride$,programCaptionOverride$)
 	fnend
-	def library fncloseprn(;forceWordProcessor$)
-		library 'S:\Core\Print.br': fncloseprn
-		fncloseprn=fncloseprn(forceWordProcessor$)
+	def library fnClosePrn(;forceWordProcessor$)
+		library 'S:\Core\Print.br': fnClosePrn
+		fnClosePrn=fnClosePrn(forceWordProcessor$)
 	fnend
-	def library fnpglen(&pglen)
-		library 'S:\Core\program_properties.br': fnpglen
-		fnpglen=fnpglen(pglen)
+	def library fnPgLen(&pglen)
+		library 'S:\Core\program_properties.br': fnPgLen
+		fnPgLen=fnPgLen(pglen)
 	fnend
-	def library fnopen_receipt_printer(; orp_only_if_it_is_assigned)
-		library 'S:\Core\Print.br': fnopen_receipt_printer
-		fnopen_receipt_printer=fnopen_receipt_printer( orp_only_if_it_is_assigned)
+	def library fnOpenReceiptPrinter(; orp_only_if_it_is_assigned)
+		library 'S:\Core\Print.br': fnOpenReceiptPrinter
+		fnOpenReceiptPrinter=fnOpenReceiptPrinter( orp_only_if_it_is_assigned)
 	fnend
-	def library fnclose_receipt_printer
-		library 'S:\Core\Print.br': fnclose_receipt_printer
-		fnclose_receipt_printer=fnclose_receipt_printer
+	def library fnCloseReceiptPrinter
+		library 'S:\Core\Print.br': fnCloseReceiptPrinter
+		fnCloseReceiptPrinter=fnCloseReceiptPrinter
 	fnend
-	def library fnopen_cash_drawer
-		library 'S:\Core\Print.br': fnopen_cash_drawer
-		fnopen_cash_drawer=fnopen_cash_drawer
+	def library fnOpenCashDrawer
+		library 'S:\Core\Print.br': fnOpenCashDrawer
+		fnOpenCashDrawer=fnOpenCashDrawer
 	fnend
 ! /r
 ! r: hamster
@@ -1370,9 +1370,9 @@ fnend
 		library 'S:\Core\CNo.br': fnget_company_number_list
 		fnget_company_number_list=fnget_company_number_list(mat cno_list, sysid$)
 	fnend
-	def library fnpgnum(;pgnum)
-		library 'S:\Core\CNo.br': fnpgnum
-		fnpgnum=fnpgnum(pgnum)
+	def library fnPgNum(;pgnum)
+		library 'S:\Core\CNo.br': fnPgNum
+		fnPgNum=fnPgNum(pgnum)
 	fnend
 	def library fnrx(;rx)
 		library 'S:\Core\CNo.br': fnrx
@@ -1382,9 +1382,9 @@ fnend
 		library 'S:\Core\CNo.br': fnstyp
 		fnstyp=fnstyp(styp)
 	fnend
-	def library fnps(;ps)
-		library 'S:\Core\CNo.br': fnps
-		fnps=fnps(ps)
+	def library fnPs(;ps)
+		library 'S:\Core\CNo.br': fnPs
+		fnPs=fnPs(ps)
 	fnend
 	def library fnfscode(;a)
 		library 'S:\Core\CNo.br': fnfscode

@@ -107,7 +107,7 @@ L910: open #101: "SROW=9,SCOL=9,EROW=13,ECOL=71,BORDER=SR,CAPTION=<Print Amortiz
 	pr f "12,30,C 15,N": "Printing Page: "
 	pr f "14,34,Cc 11,B,5": "Cancel (F5)"
 	pge=0
-	fnopenprn
+	fnOpenPrn
 	gosub PR_HDR
 	goto L1200
  
@@ -193,7 +193,7 @@ L1790: form skip 2,c 24,pic(---,---,---.##)
 	pr #255,using L1790: "Total Interest Paid: ",i2
 	pr #255,using L1790: "Total Principal Paid: ",p2
 	pr #255,using L1790: "Balance Remaining: ",s
-L1830: fncloseprn
+L1830: fnClosePrn
 	on fkey 5 ignore
 	x9=0
 goto MENU1

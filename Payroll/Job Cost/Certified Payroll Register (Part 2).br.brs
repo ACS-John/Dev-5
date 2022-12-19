@@ -19,7 +19,7 @@ dim quartertotals(32)
  
 fnTop(program$)
  
-fnopenprn
+fnOpenPrn
 if file$(255)(1:3)<>"PRN" then jbskip=1
 dim dedcode(20)
 open #1: "Name=[Q]\PRmstr\Company.h[cno],Shr",i,i,r
@@ -206,7 +206,7 @@ return ! /r
 Finis: ! r:
 	gosub L1610
 	gosub TOTALS
-	fncloseprn
+	fnClosePrn
 goto Xit ! /r
 Xit: fnXit
 DETERMINE_EARNINGS: ! r:

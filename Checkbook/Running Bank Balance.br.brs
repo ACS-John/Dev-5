@@ -36,7 +36,7 @@ MAIN: !
 	execute 'Index [Q]\CLmstr\TrMstr.h[cno]'&' '&'[Q]\CLmstr\Tridx3.h[cno] 16/12/4 2/4/8 Replace DupKeys -n' ! index in year,monthday,reference
  
 	open #trmstr=5: 'Name=[Q]\CLmstr\TrMstr.h[cno], KFName=[Q]\CLmstr\Tridx3.h[cno],Shr', internal, outin, keyed ioerr ignore
-	fnopenprn
+	fnOpenPrn
 	gosub HDR
 	goto READ_1
  
@@ -77,7 +77,7 @@ HDR: ! r:
 	end if
 return ! /r
 ENDALL: ! r:
-	fncloseprn
+	fnClosePrn
 	close #trmstr:
 goto Xit ! /r
 Xit: fnXit

@@ -175,7 +175,7 @@ def fn_fixBadOnes(askFirst; ___,z$*10,whichDid,tranRec,justFixedIt,service_other
 	tranType$(3)='Collection'
 	tranType$(4)='Credit Memo'
 	tranType$(5)='Debit Memo'
-	fnopenprn
+	fnOpenPrn
 	pr #255: 'Record    Account    Date    Type                 Amount        Balance'
 	tranRec=102505
 	do
@@ -250,7 +250,7 @@ def fn_fixBadOnes(askFirst; ___,z$*10,whichDid,tranRec,justFixedIt,service_other
 		! if debug then pause
 	loop while tranRec<lrec(hTranRelative)
 	FboEoTran: !
-	fncloseprn
+	fnClosePrn
 	fnclosefile(hTran,'UB Transaction')
 	close #hTranRelative:
 	fnCloseFile(hCustomer1,'UB Customer')

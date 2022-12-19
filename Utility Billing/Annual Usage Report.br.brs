@@ -138,7 +138,7 @@ L560: !
 		fnreg_write('Company.[cno].ubusage2.answer.'&str$(resp_item),scr1_resp$(resp_item))
 	next resp_item
 ! /r
-	fnopenprn
+	fnOpenPrn
 F_OUT: form pos 1,c 12,c 25,13*pic(----,---,---)
 	gosub HDR
 	do
@@ -253,7 +253,7 @@ DONE: ! r:
 	if file(255)=-1 then goto Xit ! printer never opened
 	fn_print_total("Route "&str$(route_prior)&" Totals",mat total_usage_route,mat total_usage_route_code_date,mat total_count_route,mat total_count_route_code_date)
 	fn_print_total("Grand Totals",mat total_usage_grand,mat total_usage_grand_code_date,mat total_count_grand,mat total_count_grand_code_date)
-	fncloseprn
+	fnClosePrn
 	goto Xit ! /r
 Xit: fnXit
 include: ertn

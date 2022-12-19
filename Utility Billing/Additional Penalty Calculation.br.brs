@@ -104,7 +104,7 @@ SCREEN1: !
 	open #hTrans2=fnH: 'Name=[Q]\UBmstr\ubTransVB.h[cno],KFName=[Q]\UBmstr\UBTrdt.h[cno],Shr',i,outIn,k
 	gosub BUD1
 	open #ratemst:=8: 'Name=[Q]\UBmstr\ubData\RateMst.h[cno],KFName=[Q]\UBmstr\ubData\RateIdx1.h[cno],Shr',i,i,k
-	fnopenprn
+	fnOpenPrn
 	gosub HDR
 	do
 		READ_CUSTOMER: ! r:
@@ -194,7 +194,7 @@ EO_CUSTOMER: !
 	close #customer: ioerr ignore
 	close #h_trans: ioerr ignore
 	close #hTrans2: ioerr ignore
-	fncloseprn
+	fnClosePrn
 goto Xit ! /r
 PgOf: ! r:
 	pr #255: newpage

@@ -373,7 +373,7 @@ goto FinisAddEdit ! /r
 
 def fn_printListing(hTransBatch; ___,r,clientId$,iv$,transDate,transDiscount,transAmt,unusedtr4,transType,unusedtr6)
 	r=0
-	fnopenprn
+	fnOpenPrn
 	FprH: form pos 1,c 8,pos 21,Cc 50
 	pr #255,using FprH: date$,env$('cnam')
 	pr #255,using FprH: time$,'Input Edit List'
@@ -388,7 +388,7 @@ def fn_printListing(hTransBatch; ___,r,clientId$,iv$,transDate,transDiscount,tra
 		end if
 	loop
 	Pel_finis: !
-	fncloseprn
+	fnClosePrn
 fnend
 
 def fn_edit(record) ! uses mostly locals

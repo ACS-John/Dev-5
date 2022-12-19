@@ -180,7 +180,7 @@ L1420: execute 'Index [Q]\GLmstr\PRmstr.h[cno]'&' '&'[Q]\GLmstr\PRIndex.h[cno] 1
 
 PROOF_LIST: !
 	restore #1,key>='    ': eof L1470, nokey L1470
-L1470: fnopenprn
+L1470: fnOpenPrn
 	gosub HDR
 L1490: read #1,using 'form pos 1,N 4,3*C 25,C 11,36*PD 5.2,2*N 5': eno,mat k$,ss$,mat m eof L1610
 	pl=pl+1
@@ -196,8 +196,8 @@ L1490: read #1,using 'form pos 1,N 4,3*C 25,C 11,36*PD 5.2,2*N 5': eno,mat k$,ss
 	goto L1490
 L1610: if pl>0 then gosub L1660
 	on fkey 5 ignore
-	fncloseprn
-	if fnprocess=1 then goto Xit else goto MAIN
+	fnClosePrn
+	if fnProcess=1 then goto Xit else goto MAIN
 
 L1660: pr #255,using L1670: sc1$(4),mat l1
 L1670: form pos 1,c 21,x 7,pic(zzzz),x 24,pic(zzzz),x 24,pic(zzzz),x 24,pic(zzzz),skip 1

@@ -1,6 +1,6 @@
 ! r: testing
 autoLibrary
-fntop(program$)
+fnTop(program$)
 dim tmp$*128
 fnWin3b(101,tmp$=env$('program_captopn'),10,70, 1,43)
 pause

@@ -11,7 +11,7 @@ gosub L710
 open #1: "Name=[Q]\PRmstr\Employee.h[cno],Shr",i,i,r
 open #4: "Name=[Q]\PRmstr\payrollchecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno]",i,outIn,k
 open #2: "Name=[Q]\PRmstr\RPTRAIL.h[cno],Shr",i,i,r
-fnopenprn
+fnOpenPrn
 gosub HDR
 L250: !
 	read #1,using L260: eno,em$,ss$ eof END1
@@ -38,7 +38,7 @@ END1: !
 	L410: form pos 1,c 24,c 12,4*n 12.2
 	pr #255: "                                      =========-  ==========  ========== "
 	form pos 1,c 1,c 32,n 6,3*n 9,c 14,c 2
-	fncloseprn
+	fnClosePrn
 	close #25: ioerr Xit
 Xit: fnXit
 !

@@ -12,15 +12,15 @@
 	fnTop(program$,"Income Statement")
 
 	actpd$=fnactpd$
-	if fnGlAskFormatPriorCdPeriod=5 then goto Xit 		! sets fnps,fnpriorcd,fnfscode (primary/secondary,current year/Prior,period to print)
+	if fnGlAskFormatPriorCdPeriod=5 then goto Xit 		! sets fnPs,fnpriorcd,fnfscode (primary/secondary,current year/Prior,period to print)
 	pors=1
 	mp1=69
-	if fnps=2 then mp1=mp1+3
-	if fnps=2 then mp2=78 else mp2=75
-	if fnps=2 then fl1$="Name=[Q]\GLmstr\ACGLFNSJ.h[cno],KFName=[Q]\GLmstr\agfsidx2.h[cno],Shr" else : _
+	if fnPs=2 then mp1=mp1+3
+	if fnPs=2 then mp2=78 else mp2=75
+	if fnPs=2 then fl1$="Name=[Q]\GLmstr\ACGLFNSJ.h[cno],KFName=[Q]\GLmstr\agfsidx2.h[cno],Shr" else : _
 		fl1$="Name=[Q]\GLmstr\ACGLFNSI.h[cno],KFName=[Q]\GLmstr\agfsidx3.h[cno],Shr"
 	open #1: fl1$,i,i,k
-	if fnprocess=1 or fnUseDeptNo=0 then goto L320
+	if fnProcess=1 or fnUseDeptNo=0 then goto L320
 	fnTos
 	mylen=30: mypos=mylen+3 : right=1
 	fnLbl(1,1,"Cost Center or Department #:",mylen,right)
@@ -32,9 +32,9 @@
 	ckey=fnAcs(mat resp$)
 	if ckey=5 then goto Xit
 	costcntr=val(resp$(1))
-L320: fnopenprn
+L320: fnOpenPrn
 	if file$(255)(1:4)<>"PRN:" then redir=1 else redir=0
-	if fnps=2 then goto L360 ! secondary
+	if fnPs=2 then goto L360 ! secondary
 	execute "Index [Q]\GLmstr\GLmstr.h[cno] "&env$('temp')&'\'&"fsindex.h[cno] 69 3 Replace DupKeys -N"
 	goto L370
 L360: execute "Index [Q]\GLmstr\GLmstr.h[cno] "&env$('temp')&'\'&"fsindex.h[cno] 72 3 Replace DupKeys -N"
@@ -131,7 +131,7 @@ L1240: if ls=0 then goto L1380
 	pr #255,using L1270: " "
 L1270: form pos 1,c 1,skip ls
 	goto L1380
-L1290: fnpglen(pglen)
+L1290: fnPgLen(pglen)
 ! If PGLEN<>42 Then pGLEN=58
 	sk=pglen-krec(255): fl=len(rtrm$(foot$))
 ! If PGLEN=42 Then sK=SK+1
@@ -170,7 +170,7 @@ return
 L1650: eofcode=1
 	gosub L1290
 
-	fncloseprn
+	fnClosePrn
 	goto Xit
 
 BLDPCT1: open #10: "Name=[Temp]\Work.[Session],KFName=[Temp]\Addr.[Session],Replace,RecL=17,KPS=1,KLN=5",i,outIn,k

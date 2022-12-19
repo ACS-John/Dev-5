@@ -69,7 +69,7 @@ Screen1: ! r:
 	fnLbl(5,1,'State W/H:',mylen,right,0,fram2)                  	: fnQgl(5,32,fram2,2,1) : resp$(15)=fnRgl$(gln$( 3),0,1)
 	fnLbl(6,1,'EIC:',mylen,right,0,fram2)                         	: fnQgl(6,32,fram2,2,1) : resp$(16)=fnRgl$(gln$(14),0,1)
 	fnCmdKey('&Next',1,1,0,'Moves to 2nd screen of company information.')
-	fnCmdKey('&Save and Exit',4,0,0,'Saves any changes and returns to menu without reviewing remainter of screens.')
+	fnCmdKey('&Save and Exit',4,0,0,'Saves any changes and returns to menu without reviewing remainder of screens.')
 	fnCmdKey('&Cancel',5,0,1,'Returns to menu without saving any changes on any screen.')
 	ckey=fnAcs(mat resp$)
 	if ckey=5 then goto DoCancel

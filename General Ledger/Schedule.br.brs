@@ -156,7 +156,7 @@ return ! /r
 !   restore #10,key>="  ": eof ignore ioerr ADD_EDIT_SCHEDULES
 !   ! fnwait("Printing: Please wait...",1)
 !   ! on fkey 5 goto L1530
-!   fnopenprn
+!   fnOpenPrn
 !   do
 !     read #10,using L1010: sn,schnam$,ft$,dp,rs,cm eof L1530
 !     pr #255,using L1250: date$('mm/dd/yy'),time$,"Print Schedules File Proof List"
@@ -191,9 +191,9 @@ return ! /r
 !   loop
 ! !
 !   L1530: !
-!   fncloseprn
+!   fnClosePrn
 !   on fkey 5 ignore
-!   if fnprocess=1 then goto Xit
+!   if fnProcess=1 then goto Xit
 ! goto ADD_EDIT_SCHEDULES ! /r
 Xit: fnXit
 L1580: if err=4152 then goto CreateAcGlSchs else goto ERTN

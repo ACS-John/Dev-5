@@ -9,5 +9,5 @@ do
 	rewrite #hLocation,using form$(hLocation): mat location$,mat locationN eof EoHlocation
 loop
 EoHlocation: !
-fnchain('S:\Utility Billing\Hand Held\Meter Location')
+fnChain('S:\Utility Billing\Hand Held\Meter Location')
 include: fn_open
