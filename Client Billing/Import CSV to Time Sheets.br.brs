@@ -34,7 +34,7 @@ for fileItem=1 to fileNameCount
 	end if
 	! r: pr header
 	if fileItem=1 then
-		fnopenprn
+		fnOpenPrn
 	else
 		pr #255: ''
 	end if
@@ -110,7 +110,7 @@ for fileItem=1 to fileNameCount
 	fn_getNextLine_reset
 nex fileItem
 fnStatusClose
-fncloseprn
+fnClosePrn
 close #hOut:
 for ctItem=1 to udim(mat ctHandles)
 	close #ctHandles(ctItem): ioerr ignore

@@ -18,7 +18,7 @@ L120: open #101: "SROW=9,SCOL=4,EROW=13,ECOL=79,BORDER=DR,CAPTION=PRINT LAYOUTS"
 	pr f "10,5,C 60": "Enter 0 for Printer only, 1 for Screen only, or 2 for Both:"
 	pr f "12,5,C 60": "Enter Ext/VolId to pr all or blank to select:"
 L160: input fields mat io1$: pp,ev$ conv L160
-	if pp=0 then let fnopenprn
+	if pp=0 then let fnOpenPrn
 	if pp<0 or pp>2 then goto L160
 	ev$=rtrm$(ev$)
 	if ev$="" then goto L260
@@ -139,7 +139,7 @@ L1330: form pos 5,n 5,x 3,c 43,c 11,n 7,n 10,x 5,c 11,n 7,2*n 9,skip 2
 L1340: next j
 	pr #255: newpage
 	pr #255,using L970: hex$("1B40")
-	fncloseprn
+	fnClosePrn
 L1370: close #1:
 	if f2<f1 then goto L360
 L1390: close #2: ioerr L1400

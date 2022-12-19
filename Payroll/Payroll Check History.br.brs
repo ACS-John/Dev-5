@@ -100,7 +100,7 @@ def fn_checkfile(hact$*8,hCheckIdx3,hCheckIdx1,hEmployee)
 		else if ckey=2 then 
 			printit=1
 			! if trim$(z$)="" or trim$(z$)="[All]" then goto SCREEN1 ! don't allow pr to work if no customer selected
-			fnopenprn
+			fnOpenPrn
 			goto PastFlexInit ! read headings for reports then start reading thru the checks same as a grid
 		else if ckey=cancel then 
 			goto CheckFileXit
@@ -890,7 +890,7 @@ def fn_checkfile(hact$*8,hCheckIdx3,hCheckIdx1,hEmployee)
 		end if
 		if trim$(hact$)="[All]" then goto L4380
 		L5120: !
-		if printit=1 then fncloseprn : goto SCREEN1
+		if printit=1 then fnClosePrn : goto SCREEN1
 		FlexGridXit: !
 	return ! /r
 	AddGrid: ! r:

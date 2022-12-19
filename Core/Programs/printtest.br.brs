@@ -17,10 +17,10 @@ resp$(rc+=1)='54'
 fnCmdSet(2)
 ckey=fnAcs(mat resp$)
 if ckey=cancel then goto Xit
-fnopenprn
+fnOpenPrn
 ln$=rpt$("X",val(resp$(1)))
 for j=1 to val(resp$(2)) : pr #255: ln$ : next j
-fncloseprn
+fnClosePrn
 goto Xit
  
 Xit: fnXit

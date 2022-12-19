@@ -83,7 +83,7 @@ end if
  
 ! r: main loop
 on pageoflow goto PgOf
-fnopenprn
+fnOpenPrn
 dayFilter=days(d1,'mmddyy')
 dim over(0)
 mat over(0)
@@ -114,7 +114,7 @@ Finis: ! r:
 	fn_usageChartPrint(dayFilter,rateFilter,serviceWhich,mat range,mat cust)
 	fn_overageListPrint(mat over,range(udim(mat range)))
 	close #hTran2: ioerr ignore
-	fncloseprn
+	fnClosePrn
 goto Xit ! /r
 Xit: fnXit
 def fn_usageChartAccum(usage,mat range,mat cust,mat over)

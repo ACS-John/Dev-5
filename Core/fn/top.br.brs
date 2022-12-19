@@ -11,10 +11,10 @@ def library fnTop(; prg$*256,cap$*128,force80x24)
 	if cap$='' and prg$<>'' then
 		cap$=prg$(pos(prg$,'\',-1)+1:pos(prg$,'.',-1)-1)
 	else if cap$='' then
-		cap$="(untitled)"
+		cap$='(untitled)'
 	end if
 	if prg$='' then
-		prg$="(unknown)"
+		prg$='(unknown)'
 		if env$('acsDeveloper')<>'' then pr 'fnTop called but program was not set.' : pause
 	end if
 	fnSetCoreProgramCurrent(prg$,put=2)

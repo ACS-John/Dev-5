@@ -16,7 +16,7 @@
 	open #1: "Name=[Q]\PRmstr\JCMSTR.h[cno],KFName=[Q]\PRmstr\JCIndx.h[cno],Shr",i,i,k
 	open #2: "Name=[Q]\PRmstr\JCCAT.h[cno],KFName=[Q]\PRmstr\CatIndx.h[cno],Shr",i,i,k
  
-	if fnprocess=1 then goto L590 ! goto "asdf"
+	if fnProcess=1 then goto L590 ! goto "asdf"
 	pr newpage
 	fnopenwin(win=101,09,14,15,65,'')
 	pr #win,fields "4,2,Cr 29,N": "Report Heading Date:"
@@ -49,7 +49,7 @@ L450: ce=3
 L480: fndat(dat$,2)
 	form pos 63,c 20
 	if prtjob$="N" then goto L590 ! "asdf"
-	if fnprocess=1 then goto L580
+	if fnProcess=1 then goto L580
  
 	pr newpage
 	msgline$(1)="Do you wish to skip all"
@@ -74,7 +74,7 @@ L710: j=j-1
 L730: pr newpage
 	on fkey 5 goto DONE
 	fnwait(message$,1)
-	fnopenprn : _
+	fnOpenPrn : _
 	if file$(255)(1:3)<>"PRN" then jbskip=1
 	gosub HDR
 L780: if prtjob$="Y" then goto L830
@@ -95,7 +95,7 @@ L880: form pos 1,c 11,c 25,pos 114,2*pd 2
  
 DONE: close #1:
 	close #2:
-	fncloseprn
+	fnClosePrn
 	goto Xit
  
 HDR: !

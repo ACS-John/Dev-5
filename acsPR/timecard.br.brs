@@ -84,7 +84,7 @@ L650: ln=currow
 	pr f "2,55,N 6.2,R,N": sum(hrs)
 	goto L460
  
-L860: fnopenprn
+L860: fnOpenPrn
 	fnwait(message$,0)
 	pr #255,using L890: mat sc1$
 L890: form pos 1,4*c 14,skip 1,pos 29,3*c 14
@@ -105,11 +105,11 @@ L1030: next j
 	pr #255,using L1050: "__________",t2,"=========="
 L1050: form pos 53,c 10,skip 1,pos 53,n 10.2,skip 1,pos 53,c 10,skip 2
 	pr #255: newpage
-	fncloseprn
+	fnClosePrn
 L1080: mat hrs=(0)
 	mat inp=(0)
 	goto L400
  
-END1: fncloseprn
+END1: fnClosePrn
 Xit: fnXit
 include: ertn

@@ -65,11 +65,11 @@ Finis: ! r:
 	close #1:
 	close #2:
 	close #hAddr:
-	fncloseprn
+	fnClosePrn
 goto Xit ! /r
 Xit: fnXit
 PRINTW2: ! r: pr W2 form
-	fnopenprn
+	fnOpenPrn
 	! if rtrm$(file$(255))='PRN:/SELECT' then pr #255,using ' form pos 1,c 9': hex$('2B0205000A1021')
 	pr #255,using L740: ss$
 	pr #255,using L770: b$,w(2),w(1)

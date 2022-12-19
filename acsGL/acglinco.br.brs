@@ -11,7 +11,7 @@
  
 	fnTop(program$,"Income Statement with GASB Budget")
 	udf$=env$('temp')&'\'
-	if fnGlAskFormatPriorCdPeriod=5 then goto Xit 		! sets fnps,fnpriorcd,fnfscode (primary/secondary,current year/Prior,period to print)
+	if fnGlAskFormatPriorCdPeriod=5 then goto Xit 		! sets fnPs,fnpriorcd,fnfscode (primary/secondary,current year/Prior,period to print)
 	cch$=fncch$
 	pedat$=fnpedat$
 	actpd=fnactpd
@@ -20,10 +20,10 @@
 	priorcd=fnpriorcd
  
 	pors=1
-	if fnps=2 then fl1$="Name=[Q]\GLmstr\ACGLFNSJ.h[cno],KFName=[Q]\GLmstr\agfsidx2.h[cno],Shr" : mp1=72 else : _
+	if fnPs=2 then fl1$="Name=[Q]\GLmstr\ACGLFNSJ.h[cno],KFName=[Q]\GLmstr\agfsidx2.h[cno],Shr" : mp1=72 else : _
 		fl1$="Name=[Q]\GLmstr\ACGLFNSI.h[cno],KFName=[Q]\GLmstr\agfsidx3.h[cno],Shr" : mp1=69
 	open #1: fl1$,i,i,k
-	if fnprocess=1 or fnUseDeptNo=0 then goto L360
+	if fnProcess=1 or fnUseDeptNo=0 then goto L360
 	fnTos(sn$="ACglinco") : _
 	mylen=30: mypos=mylen+3 : right=1
 	fnLbl(1,1,"Cost Center or Department #:",mylen,right)
@@ -35,10 +35,10 @@
 	ckey=fnAcs(mat resp$)
 	if ckey=5 then goto Xit
 	costcntr=val(resp$(1))
-L360: fnopenprn : _
+L360: fnOpenPrn : _
 	if file$(255)(1:4)<>"PRN:" then redir=1 else redir=0
 	report$="Budgetary Comparison Schedule"
-	if fnps=2 then goto L410 ! secondary
+	if fnPs=2 then goto L410 ! secondary
 	execute "Index [Q]\GLmstr\GLmstr.h[cno] "&udf$&"fsindex.h[cno] 69 3 Replace DupKeys -N"
 	goto L420
 L410: execute "Index [Q]\GLmstr\GLmstr.h[cno] "&udf$&"fsindex.h[cno] 72 3 Replace DupKeys -N"
@@ -157,7 +157,7 @@ L1470: if ls=0 then goto L1610
 	pr #255,using L1500: " "
 L1500: form pos 1,c 1,skip ls
 	goto L1610
-L1520: fnpglen(pglen)
+L1520: fnPgLen(pglen)
 ! If PGLEN<>42 Then pGLEN=58
 	sk=pglen-krec(255): fl=len(rtrm$(foot$))
 ! If PGLEN=42 Then sK=SK+1
@@ -202,7 +202,7 @@ L1920: eofcode=1
  
 	fnfscode(actpd)
 	fnpriorcd(1)
-	fncloseprn
+	fnClosePrn
 	goto Xit
  
 Xit: fnXit

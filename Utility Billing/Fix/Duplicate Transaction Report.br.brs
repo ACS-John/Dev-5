@@ -35,7 +35,7 @@ dupe(3)=fn_filter_get_chk('Amount',resp$(respc+=1))
 dupe(4)=fn_filter_get_chk('Transaction Type',resp$(respc+=1))
 rec_start=val(resp$(respc+=1))
 rec_end=val(resp$(respc+=1))
-fnopenprn
+fnOpenPrn
 fn_header
 ! restore #h_trans1,rec=rec_start: noRec NEXT_REC
 trans1_rec=rec_start-1
@@ -52,7 +52,7 @@ do
 loop
 
 Finis: !
-	fncloseprn
+	fnClosePrn
 	close #h_trans1:
 Xit: !
 fnXit

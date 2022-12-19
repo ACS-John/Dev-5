@@ -17,11 +17,11 @@
 	actpd=fnactpd
 	fnfscode(actpd)
 	fnpriorcd
-	if fnGlAskFormatPriorCdPeriod=5 then goto Xit           ! sets fnps,fnpriorcd,fnfscode (primary/secondary,current year/Prior,period to print)
+	if fnGlAskFormatPriorCdPeriod=5 then goto Xit           ! sets fnPs,fnpriorcd,fnfscode (primary/secondary,current year/Prior,period to print)
 	fnfscode
 	fnpriorcd
  
-	if fnprocess=1 or fnUseDeptNo=0 then goto GetStarted else goto Screen1
+	if fnProcess=1 or fnUseDeptNo=0 then goto GetStarted else goto Screen1
 ! /r
 Screen1: ! r:
 	fnTos(sn$="GLInput")
@@ -37,7 +37,7 @@ Screen1: ! r:
 	costcntr=val(resp$(1))
 goto GetStarted ! /r
 GetStarted: ! r:
-	if fnps=2 then
+	if fnPs=2 then
 		mp1=66
 		exe 'con sub [FinancialStatementCode] C'
 		! open #hFsD=fnH:"Name=[Q]\GLmstr\acglFnSC.h[cno],KFName=[Q]\GLmstr\agfsidx1.h[cno],Shr",i,i,k
@@ -51,7 +51,7 @@ GetStarted: ! r:
 	dim fsN(0),fs$(0)*128
 	hFsD=fn_openFio('GL FSDesign',mat fs$,mat fsN,1)
 	open #hGl=fnH: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\fsindex.h[cno],Shr",i,i,k
-	fnopenprn
+	fnOpenPrn
 	dim reportHeading1$*50
 	reportHeading1$=env$('program_caption')
 	do
@@ -240,7 +240,7 @@ def fn_footer(foot$*132,tabnote,mat fsN; ___,tmpLineSkip)
 fnend
 def fn_footerPrint(foot$*132,tabnote; eofcode,___,sk,fl) ! FooterPrint
 	if ~pglen then
-		fnpglen(pglen)
+		fnPgLen(pglen)
 		if pglen=0 and env$('acsDeveloper')<>'' then pr 'pglen=0' : pause
 		! If PGLEN<>42 Then pGLEN=58
 	end if
@@ -288,7 +288,7 @@ Finis: ! r:
 	fn_footerPrint(foot$,tabnote,1)
 	fnfscode(actpd)
 	fnpriorcd(1)
-	fncloseprn
+	fnClosePrn
 	close #hGl: ioerr ignore
 	close #hFsD: ioerr ignore
 goto Xit ! /r

@@ -117,7 +117,7 @@ L860: if addone=1 then goto TRANSACTION_ENTRY else goto CORRECTIONS
  
 PRINTPROOFLIST: !
 	on fkey 5 goto PROOF_LIST_DONE
-	fnopenprn
+	fnOpenPrn
 goto L1010
  
 PROOF_LIST_HDR: ! r:
@@ -156,7 +156,7 @@ L1010: ! r:
 L1230: form pos 38,2*c 9,x 29,c 13,skip 1,pos 8,"Grand Totals",pos 38,2*n 9.2,x 29,n 13.2,skip 2
 PROOF_LIST_DONE: !
 	gt5=gt6=gt10=0
-	fncloseprn
+	fnClosePrn
 goto TRANSACTION_ENTRY ! /r
  
 POSTTOJOBS: ! r:
@@ -166,7 +166,7 @@ POSTTOJOBS: ! r:
 	close #11:
 	close #12:
 	close #13:
-fnchain("S:\acsPR\NEWJCMRGC") ! /r
+fnChain("S:\acsPR\NEWJCMRGC") ! /r
  
 PROOF_LIST_NWPG: ! r:
 	pr #255: newpage

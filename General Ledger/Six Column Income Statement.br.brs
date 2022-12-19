@@ -17,17 +17,17 @@
 	curyear$=pedat$(len(rtrm$(pedat$))-4:len(rtrm$(pedat$)))
 	curyear=val(curyear$) conv L230
 L230: prioryr=curyear-1
-	if fnGlAskFormatPriorCdPeriod=5 then goto Xit ! sets fnps,fnpriorcd,fnfscode (primary/secondary,current year/Prior,period to print)
+	if fnGlAskFormatPriorCdPeriod=5 then goto Xit ! sets fnPs,fnpriorcd,fnfscode (primary/secondary,current year/Prior,period to print)
  
 	pr newpage
 	pors=1
 	mp1=69
-	if fnps=2 then mp1=mp1+3
+	if fnPs=2 then mp1=mp1+3
 	dim fl1$*256
 	fl1$="Name=[Q]\GLmstr\ACGLFNSI.h[cno],KFName=[Q]\GLmstr\agfsidx3.h[cno],Shr"
-	if fnps=2 then fl1$="Name=[Q]\GLmstr\ACGLFNSJ.h[cno],KFName=[Q]\GLmstr\agfsidx2.h[cno],Shr"
+	if fnPs=2 then fl1$="Name=[Q]\GLmstr\ACGLFNSJ.h[cno],KFName=[Q]\GLmstr\agfsidx2.h[cno],Shr"
 	open #1: fl1$,i,i,k
-	if fnprocess=1 or fnUseDeptNo=0 then goto L450
+	if fnProcess=1 or fnUseDeptNo=0 then goto L450
 	fnTos
 	mylen=30: mypos=mylen+3 : right=1
 	fnLbl(1,1,"Cost Center or Department #:",mylen,right)
@@ -41,9 +41,9 @@ L230: prioryr=curyear-1
 L450: costcntr=val(resp$(1))
 	dim report$*50
 	report$="STATEMENT OF INCOME AND EXPENSES"
-	fnopenprn
+	fnOpenPrn
 	redir=0: if file$(255)(1:4)<>"PRN:" then redir=1
-	if fnps=2 then goto L540 ! secondary
+	if fnPs=2 then goto L540 ! secondary
 	execute "Index [Q]\GLmstr\GLmstr.h[cno] [temp]\fsindex.h[cno] 69 3 Replace DupKeys -N"
 	goto L550
 L540: execute "Index [Q]\GLmstr\GLmstr.h[cno] [temp]\fsindex.h[cno] 72 3 Replace DupKeys -N"
@@ -185,7 +185,7 @@ L1860: !
 goto L2020
 L1910: !
 	! If FT1=1 Then Goto 1870
-	fnpglen(pglen)
+	fnPgLen(pglen)
 	! If PGLEN<>42 Then pGLEN=58
 	sk=pglen-krec(255): fl=len(rtrm$(foot$))
 	! If PGLEN=42 Then sK=SK+1
@@ -236,7 +236,7 @@ L2350: eofcode=1
 	fnpriorcd(1)
 	fnfscode(actpd)
 	fnpriorcd(1)
-	fncloseprn
+	fnClosePrn
  
 Xit: fnXit
  

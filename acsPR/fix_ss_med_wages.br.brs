@@ -17,5 +17,5 @@ do
 	rewrite #4,using F_HIST: heno,tdn,prdate,ckno,mat tdc,mat tcp
 loop
 Finis: ! 
-Xit: fnxit
+Xit: fnXit
 include: ertn

@@ -96,7 +96,7 @@ SCR2: ! r: requires svce$, returns mat use_to, mat use_from, probably more
 	use_from(11)=val(resp$(31)) : use_to(11)=val(resp$(32)) : rate(11)=val(resp$(33))
 goto Initialize ! /r
 Initialize: ! r: Initialize
-	fnopenprn
+	fnOpenPrn
 	dim tr$(0)*256
 	dim trN(0)
 	hTrans=fn_openFio('UB Transaction',mat tr$,mat trN, 1,2)  ! input only, index 2 (tdate/acct)
@@ -166,7 +166,7 @@ MainLoop: ! r:
 
 	fnclosefile(hTrans,'UB Transaction')
 	fnCustomerData$('','',0)
-	fncloseprn
+	fnClosePrn
 goto Xit ! /r
 def fn_whichTier(value,mat fromN,mat toN; ___,returnN,x)
 	for x=1 to udim(mat fromN)

@@ -22,20 +22,20 @@
 	actpd$=fnactpd$
 	fnfscode
 	fnpriorcd
-	if fnGlAskFormatPriorCdPeriod=5 then goto Xit ! sets fnps,fnpriorcd,fnfscode (primary/secondary,current year/Prior,period to print)
+	if fnGlAskFormatPriorCdPeriod=5 then goto Xit ! sets fnPs,fnpriorcd,fnfscode (primary/secondary,current year/Prior,period to print)
 	fnfscode
 	fnpriorcd
 
 	pr newpage
 	pors=1
 	mp1=69
-	if fnps=2 then mp1=mp1+3
+	if fnPs=2 then mp1=mp1+3
 	dim fl1$*256
 	fl1$="Name=[Q]\GLmstr\ACGLFNSI.h[cno],KFName=[Q]\GLmstr\agfsidx3.h[cno],Shr"
-	if fnps=2 then fl1$="Name=[Q]\GLmstr\ACGLFNSJ.h[cno],KFName=[Q]\GLmstr\agfsidx2.h[cno],Shr"
+	if fnPs=2 then fl1$="Name=[Q]\GLmstr\ACGLFNSJ.h[cno],KFName=[Q]\GLmstr\agfsidx2.h[cno],Shr"
 
 	open #1: fl1$,i,i,k
-	if fnprocess=1 or fnUseDeptNo=0 then goto L390
+	if fnProcess=1 or fnUseDeptNo=0 then goto L390
 	fnTos
 	mylen=30: mypos=mylen+3 : right=1
 	fnLbl(1,1,"Cost Center or Department #:",mylen,right)
@@ -49,9 +49,9 @@
 L390: !
 costcntr=val(resp$(1))
 report$="STATEMENT OF INCOME AND EXPENSES"
-fnopenprn
+fnOpenPrn
 redir=0: if file$(255)(1:4)<>"PRN:" then redir=1
-if fnps=2 then 
+if fnPs=2 then 
 	fnIndex('[Q]\GLmstr\GLmstr.h[cno]','[temp]\fsindex.h[cno]','72 3') ! secondary
 else 
 	fnIndex('[Q]\GLmstr\GLmstr.h[cno]','[temp]\fsindex.h[cno]','69 3')
@@ -230,7 +230,7 @@ PrMain: ! r:
 	L1740: form pos 1,c 1,skip ls
 	goto L1870
 	L1760: ! If FT1=1 Then Goto L1870
-	fnpglen(pglen)
+	fnPgLen(pglen)
 	! If PGLEN<>42 Then pGLEN=58
 	sk=pglen-krec(255): fl=len(rtrm$(foot$))
 	! If PGLEN=42 Then sK=SK+1
@@ -277,7 +277,7 @@ Finis: ! r:
 	fnfscode(actpd)
 	fnpriorcd(1)
 	close #hGl:
-	fncloseprn
+	fnClosePrn
 goto Xit ! /r
 Xit: fnXit
 include: ertn

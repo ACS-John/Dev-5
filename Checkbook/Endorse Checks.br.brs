@@ -15,13 +15,13 @@ ckey=fnAcs(mat resp$) ! endorse check
 if ckey=5 then goto Xit
 endorsements=val(resp$(1))
 bank=val(resp$(2))
-fnopenprn
+fnOpenPrn
 for j=1 to endorsements
 	pr #255,using 'form pos 1,cc 30,skip 1,cc 30': 'For Deposit Only',env$('cnam')(1:30)
 	if bank>0 then pr #255,using 'form pos 1,cc 30': 'Account: '&str$(bank)
 	pr #255: newpage
 next j
-fncloseprn
+fnClosePrn
 goto Xit
 Xit: fnXit
 include: ertn

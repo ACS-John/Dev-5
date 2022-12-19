@@ -98,7 +98,7 @@
 	on fkey 5 goto Finis
 
 ! r: report setup
-	fnopenprn
+	fnOpenPrn
 	gosub HDR1
 	if accountSequence$='True' then
 		open #hCustomer=fnH: 'Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr',i,i,k
@@ -220,7 +220,7 @@ goto Finis ! /r
 Finis: ! r:
 	close #hCustomer: ioerr ignore
 	close #hTrans: ioerr ignore
-	fncloseprn
+	fnClosePrn
 goto Xit ! /r
 PgOf: ! r:
 	pr #255: newpage

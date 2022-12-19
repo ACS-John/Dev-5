@@ -13,17 +13,17 @@
 	actpd$=fnactpd$
 	fscode=fnfscode
 	priorcd=fnpriorcd
-	if fnGlAskFormatPriorCdPeriod=5 then goto Xit 	! sets fnps,priorcd,fnfscode (primary/secondary,current year/Prior,period to print)
+	if fnGlAskFormatPriorCdPeriod=5 then goto Xit 	! sets fnPs,priorcd,fnfscode (primary/secondary,current year/Prior,period to print)
 	priorcd=fnpriorcd
 	fscode=fnfscode
-	if fnps=2 then mp1=72 else mp1=69
-	if fnps=2 then fl1$='Name=[Q]\GLmstr\ACGLFNSJ.h[cno],KFName=[Q]\GLmstr\agfsidx2.h[cno],Shr' else : _
+	if fnPs=2 then mp1=72 else mp1=69
+	if fnPs=2 then fl1$='Name=[Q]\GLmstr\ACGLFNSJ.h[cno],KFName=[Q]\GLmstr\agfsidx2.h[cno],Shr' else : _
 		fl1$='Name=[Q]\GLmstr\ACGLFNSI.h[cno],KFName=[Q]\GLmstr\agfsidx3.h[cno],Shr'
 L190: form pos mp1,pd 3,pos 81,41*pd 6.2
 	pas=1 : open #hwork:=4: 'Name=[Temp]\Work.[Session],KFName=IDX.'&wsid$&',Replace,RecL=33,KPS=1,KLN=5',i,outIn,k
 L210: acglfnsi=1 : _
 	open #acglfnsi: fl1$,i,outIn,k
-	if fnprocess=1 or fnUseDeptNo=0 then goto L330
+	if fnProcess=1 or fnUseDeptNo=0 then goto L330
 	if percent=1 then goto L330
 	fnTos
 	mylen=30: mypos=mylen+3 : right=1
@@ -37,9 +37,9 @@ L210: acglfnsi=1 : _
 	if ckey=5 then goto Xit
 	costcntr=val(resp$(1))
 L330: on fkey 5 goto L1910
-	fnopenprn : _
+	fnOpenPrn : _
 	if file$(255)(1:4)<>'PRN:' then redir=1 else redir=0
-	if fnps=2 then goto L380 ! secondary
+	if fnPs=2 then goto L380 ! secondary
 	execute 'Index [Q]\GLmstr\GLmstr.h[cno] [temp]\fsindex.h[cno] 69 3 Replace DupKeys -N'
 	goto L390
 L380: execute 'Index [Q]\GLmstr\GLmstr.h[cno] [temp]\fsindex.h[cno] 72 3 Replace DupKeys -N'
@@ -164,7 +164,7 @@ L1420: !
 	pr #255,using L1460: ' '
 L1460: form pos 1,c 1,skip ls
 	goto L1570
-L1480: fnpglen(pglen)
+L1480: fnPgLen(pglen)
 ! If PGLEN<>42 Then pGLEN=58
 	sk=pglen-krec(255): fl=len(rtrm$(foot$))
 ! If PGLEN=42 Then sK+=1
@@ -211,7 +211,7 @@ L1880: if pas=2 then goto L1910
 L1910: eofcode=1
 	gosub L1480
  
-	fncloseprn
+	fnClosePrn
 	fnfscode(actpd)
 	fnpriorcd(1)
 	goto Xit

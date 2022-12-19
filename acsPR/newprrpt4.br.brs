@@ -8,7 +8,7 @@
  
 	fnTop(program$,"User Designed Reports Proof List")
 	open #1: "Name=[Q]\PRmstr\PRReport.h[cno],KFName=[Q]\PRmstr\prrptidx.h[cno],Shr",i,i,k
-	fnopenprn
+	fnOpenPrn
  
 	do
 		read #1,using 'form pos 1,n 2,c 78,2*c 132,n 3,2*n 1,100*pd 6.3,40*pd 2,20*n 1': rn,rt$,mat ch$,ips,sd,cp,mat psc,mat inp,mat pp,mat ti eof L560
@@ -51,7 +51,7 @@ L540: !
 L560: !
 	close #1: ioerr ignore
 L570: !
-	fncloseprn
+	fnClosePrn
 Xit: fnXit
 
 include: ertn

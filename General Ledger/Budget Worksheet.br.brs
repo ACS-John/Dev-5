@@ -25,7 +25,7 @@ on error goto Ertn
 on fkey 5 goto Finis
 open #hAccount=fnH: 'Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLINDEX.h[cno],Shr',i,i,k
 open #hBudget=fnH: 'Name=[Q]\GLmstr\BudgetInfo.h[cno],KFName=[Q]\GLmstr\BudIndx.h[cno],Use,RecL=28,KPs=1,KLn=14,Shr',i,outIn,k
-if fnprocess=1 then goto StartReport
+if fnProcess=1 then goto StartReport
 pba$='False' : bud$='False'	! defaults
 Screen1: ! r:
 	fnTos
@@ -78,7 +78,7 @@ Screen1: ! r:
 goto StartReport ! /r
 StartReport: ! r: main loop
 	namtab=66-int(len(rtrm$(name$))/2)
-	fnopenprn
+	fnOpenPrn
 	gosub Heading
 	goto L540
 	do
@@ -128,7 +128,7 @@ Finis: ! r: EOF OR EOJ ON MASTER FILE
 	tcyb=0
 	tbud=0
 	tpriorcb=tpriorcb=toldcb=toldbud=0
-	fncloseprn
+	fnClosePrn
 	close #hAccount: ioerr ignore
 	close #hBudget: ioerr ignore
 goto Screen1 ! /r

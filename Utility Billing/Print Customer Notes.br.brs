@@ -20,7 +20,7 @@ SCR1: !
 	d1=val(resp$(2))
 
 	open #hCustomer=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx5.h[cno],Shr",i,i,k 
-	fnopenprn
+	fnOpenPrn
 	gosub HEADER
 
 	if rt1 then
@@ -43,7 +43,7 @@ READ_CUSTOMER: !
 	loop
 
 DONE: ! 
-	fncloseprn
+	fnClosePrn
 Xit: fnXit
 HEADER: ! r:
 	p2=p2+1

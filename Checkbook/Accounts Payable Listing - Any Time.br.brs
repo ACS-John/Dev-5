@@ -79,7 +79,7 @@ END2: close #1:
 	execute 'Sort [Temp]\Control'
 	open #addr=1: 'Name=[Temp]\ADDR',i,i ioerr Xit
 	open #work=5: 'Name=[Temp]\WORK',i,i,r
-	fnopenprn
+	fnOpenPrn
 	gosub HDR
 READ_ADDR: !
 	read #addr,using 'form pos 1,PD 3': r5 eof ENDALL
@@ -125,6 +125,6 @@ ENDALL: !
 	pr #255: '                                  ______________________________  __________' pageoflow NEWPGE
 	pr #255,using 'form pos 35,CR 30,N 12.2': 'Final Total',t2
 	pr #255: '                                  =========================================='
-	fncloseprn
+	fnClosePrn
 Xit: fnXit
 include: ertn

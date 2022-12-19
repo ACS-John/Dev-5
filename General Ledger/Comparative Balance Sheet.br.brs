@@ -4,14 +4,14 @@
 	on error goto Ertn
 	fnTop(program$)
 
-	if fnGlAskFormatPriorCdPeriod=5 then goto Xit ! sets fnps,fnpriorcd,fnfscode (primary/secondary,current year/Pprior,period to print)
+	if fnGlAskFormatPriorCdPeriod=5 then goto Xit ! sets fnPs,fnpriorcd,fnfscode (primary/secondary,current year/Pprior,period to print)
 	actpd$=fnactpd$
 	actpd=fnactpd
 
 	! /r
 ! r: ask cost center
 	costCntr=0
-	if fnprocess=1 or ~fnUseDeptNo then goto L320
+	if fnProcess=1 or ~fnUseDeptNo then goto L320
 	fnTos
 	mylen=26 : mypos=mylen+3
 	fnLbl(1,1,'Cost Center or Department:',mylen,1)
@@ -27,7 +27,7 @@
 ! /r
 ! r: open glmstr
 		dim fl1$*256
-		if fnps=2 then
+		if fnPs=2 then
 			mp1=66
 			fl1$='Name=[Q]\GLmstr\AcGLFnSc.h[cno],KFName=[Q]\GLmstr\agfsidx1.h[cno],Shr'
 		else
@@ -183,7 +183,7 @@ PrSkipLines: ! r: maybe skip some lines if ls>0 - if ls=99 then do the newpage t
 	end if
 return ! /r
 PrNewPageThing: ! ! r: newpage thing.  pr footer on page and if eofcode<>1 then pr newpage and heading
-	fnpglen(pglen)
+	fnPgLen(pglen)
 	sk=pglen-krec(255)
 	fl=len(rtrm$(foot$))
 	if trim$(foot$)<>'' then 
@@ -232,7 +232,7 @@ Finis: ! r:
 	gosub PrNewPageThing
 	fnfscode(actpd)
 	fnpriorcd(1)
-	fncloseprn
+	fnClosePrn
 	fnStatusClose
 	close #hFsDesign: ioerr ignore
 	close #hGlm2: ioerr ignore

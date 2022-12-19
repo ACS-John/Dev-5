@@ -12,7 +12,7 @@ fndat(dat$)
 sh$="2,10,C 60,H,N"
 for j=1 to 10 : fli$(j)=str$(j+2)&",2,C 78,UT,N" : next j
 fli1$(1)="5,2,C 78,UT,N" : fli1$(2)="8,2,C 78,UT,N"
-if fnprocess=1 then tx=2 : goto L240
+if fnProcess=1 then tx=2 : goto L240
 
 MENU1: ! r:
 	fnwin3(win=101,env$('program_caption'),6,40,1,1,5)
@@ -31,7 +31,7 @@ EDITX: ! r:
 goto MENU1 ! /r
 L300: ! r:
 if fnGlAskFormatPriorCdPeriod=5 then goto MENU1
-fnopenprn
+fnOpenPrn
 pr newpage
 open #1: "Name=[Q]\GLmstr\AcGLStmt.h[cno],Shr",display,input ioerr EDITX
 pr newpage
@@ -61,9 +61,9 @@ goto L360
 
 L480: !
 	close #1:
-	fncloseprn
+	fnClosePrn
 	on fkey 5 ignore
-if fnprocess=1 then goto Xit else goto MENU1 ! /r
+if fnProcess=1 then goto Xit else goto MENU1 ! /r
 
 include: ertn
 Xit: fnXit

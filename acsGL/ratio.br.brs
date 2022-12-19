@@ -124,7 +124,7 @@ return
 
 PROOF: restore #ratiomst,key>="   ": eof L1010 ioerr RATIOMSTGRID
 L1010: on fkey 5 goto L1330
-	fnopenprn
+	fnOpenPrn
 L1030: read #ratiomst,using 'form pos 1,G 3,C 40,80*c 12',key=ac$: hac$,na$,mat gl$ eof L1330
 	pr #255,using L1050: date$('mm/dd/yy'),time$,"Print Ratio File Proof List"
 L1050: form skip 1,pos 1,c 8,skip 1,pos 1,c 8,pos 51,c 31,skip 1
@@ -155,9 +155,9 @@ L1270: j1=j1+1
 	pr #255: newpage
 goto L1030
 
-L1330: fncloseprn
+L1330: fnClosePrn
 	on fkey 5 ignore
-	if fnprocess=1 then goto Xit
+	if fnProcess=1 then goto Xit
 goto ADD_EDIT_RATIOMST
 
 L1380: if err=4152 then goto L930 else goto ERTN

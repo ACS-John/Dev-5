@@ -41,7 +41,7 @@ goto READ_UNPDALOC
 
 NEWPGE: pr #255: newpage: gosub HDR : continue
 HDR: ! r:
-	fnopenprn
+	fnOpenPrn
 	pr #255,using 'form pos 1,C 8,CC 86': date$,env$('cnam')
 	pr #255,using 'form pos 1,C 8,pos 40,C 40': time$,'Unpaid Invoice Summary'
 	pr #255,using 'form pos 1,C 4,N 4,CC 86': 'Page',pg+=1,dat$
@@ -60,7 +60,7 @@ READ_WORK: !
 	read #work,using 'form pos 1,C 12,C 50,PD 6.2': gl$,gd$,ga eof L600
 	pr #255,using 'form pos 1,C 14,C 50,N 12.2': gl$,gd$,ga
 	goto READ_WORK
-L600: fncloseprn
+L600: fnClosePrn
 	goto Xit
  
 Xit: fnXit

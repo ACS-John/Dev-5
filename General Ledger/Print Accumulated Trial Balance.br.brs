@@ -33,7 +33,7 @@ autoLibrary
   ! last=val(lastCapitalAccount$(4:9))
   open #h_glmstr:=1: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLIndex.h[cno],Shr",i,i,k
   open #h_actrans=fnH: "Name=[Q]\GLmstr\AcTrans.h[cno],KFName=[Q]\GLmstr\AcTrIdx.h[cno],Shr",i,i,k
-  if fnprocess=1 then s1=1 : goto mainLoopInit
+  if fnProcess=1 then s1=1 : goto mainLoopInit
 goto SCREEN1
 SCREEN1: ! r:
   fnTos(sn$="Acglactb")
@@ -98,14 +98,14 @@ L640: if s1=3 and n2$<n1$ then goto SCREEN1
 ! Read #h_GLmstr,Using 880,Key=N1$: N$,D$,BB,CB Nokey 670
   if f1=1 then goto AfterReadGlmstr
   f1=1
-  ! if fnUseDeptNo=0 or fnprocess=1 then goto READ_GLMSTR ! L840
+  ! if fnUseDeptNo=0 or fnProcess=1 then goto READ_GLMSTR ! L840
   n$=cnvrt$("N 3",costCenterFilter)&"         "
   restore #h_glmstr,key>=n$: nokey SCREEN1
   on pageoflow goto PgOf
   on fkey 5 goto TOTALS
 goto mainLoopInit ! /r (costCenterFilter)
 mainLoopInit: ! r: main loop setup (costCenterFilter)
-  fnopenprn
+  fnOpenPrn
   gosub HDR
   goto READ_GLMSTR ! /r main loop setup
 READ_GLMSTR: ! r: main loop
@@ -157,7 +157,7 @@ TOTALS: ! r: EOF ON MASTER FILE
   L1100: form pos 1,cr 78,pos 80,pic(zz,zzz,zzz.## cr),pic(z,zzz,zzz.## cr),pic(z,zzz,zzz.## cr)
   close #h_glmstr:
   close #h_actrans:
-  fncloseprn
+  fnClosePrn
   goto Xit ! /r
 Xit: fnXit
 PgOf: ! r:

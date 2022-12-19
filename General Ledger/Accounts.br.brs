@@ -162,7 +162,7 @@ Main: ! r:
 	end if
 goto Main ! /r
 
-! BLDRANGE: fnchain('S:\acsGL\BldRange')
+! BLDRANGE: fnChain('S:\acsGL\BldRange')
 Xit: fnXit
 
 Add: ! r:

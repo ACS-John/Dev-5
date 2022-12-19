@@ -29,7 +29,7 @@ MENU1: !
 	end_date=val(resp$(2)) ! ending day of year
  
 	on fkey 5 goto DONE
-	fnopenprn
+	fnOpenPrn
  
 	gosub HDR
 	open #1: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr",i,i,k
@@ -81,7 +81,7 @@ L780: return
 DONE: !
 	close #1: ioerr ignore
 	close #2: ioerr ignore
-	fncloseprn
+	fnClosePrn
 goto Xit
  
 HDR: ! r:

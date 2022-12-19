@@ -14,7 +14,7 @@
 	open #hEmployee=fnH: "Name=[Q]\PRmstr\Employee.h[cno],Shr",i,i,r
 	F_employee: form pos 1,n 8,c 30,pos 162,n 6,pos 118,n 2
 	open #5: "Name=[Temp]\Temp1.[Session],RecL=66,Replace",internal,output
-	fnopenprn
+	fnOpenPrn
  
 TOPOFLOOP: !
 	read #hEmployee,using F_employee: eno,em$(1),lpd,em4 eof L340
@@ -51,7 +51,7 @@ HDR: ! r:
 return ! /r
 DONE: !
 	close #5: ioerr ignore
-	fncloseprn
+	fnClosePrn
 goto Xit
  
 Xit: fnXit

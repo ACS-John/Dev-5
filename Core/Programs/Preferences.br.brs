@@ -354,12 +354,12 @@ DO_SCREEN_PRINTER: ! r:
 			goto SCREEN_CK_GOTO
 		else if ckey=14 then
 			fnureg_write('Printer.Receipt',receipt_printer$)
-			fnopen_receipt_printer
+			fnOpenReceiptPrinter
 			pr #255: 'ACS Receipt Printer Test'
 			pr #255: ''
 			pr #255: ''
 			pr #255: ''
-			fnclose_receipt_printer
+			fnCloseReceiptPrinter
 		else if ckey=13 then
 			fnureg_write('Atlantis Path','')
 			fn_get_atlantis(atlantis_exe$) : atlantis_exe$=trim$(atlantis_exe$,'"')

@@ -44,7 +44,7 @@
 	open #hCheck3=fnH: 'Name=[Q]\PRmstr\payrollchecks.h[cno],KFName=[Q]\PRmstr\checkidx3.h[cno],Shr',i,i,k
 ! /r
  
-if fnprocess=1 then goto StartReport else goto AskCheckNo
+if fnProcess=1 then goto StartReport else goto AskCheckNo
  
 AskCheckNo: ! r:
 	fnTos
@@ -77,9 +77,9 @@ AskCheckNo: ! r:
 goto StartReport ! /r
 StartReport: ! r:
 	if append_reg1 then
-		fnopenprn(' (Check and Departmental Registers)')
+		fnOpenPrn(' (Check and Departmental Registers)')
 	else
-		fnopenprn(' (Check Register)')
+		fnOpenPrn(' (Check Register)')
 	end if
 	gosub PrHeader
 goto LoopTop ! /r
@@ -205,9 +205,9 @@ Finis: ! r:
 			pr #255: newpage
 		end if
 	else
-		fncloseprn
+		fnClosePrn
 	end if
 	fnpayroll_register_2(0,include_tips_in_other_wh,append_reg1,ppd)
-goto Xit ! /r let fnchain('S:\acsPR\newprReg2')
+goto Xit ! /r let fnChain('S:\acsPR\newprReg2')
 Xit: fnXit
 include: ertn

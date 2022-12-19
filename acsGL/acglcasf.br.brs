@@ -28,11 +28,11 @@
 	form pos 1,n 2,c 40,pos 89,2*n 1,pos 141,6*n 1,3*n 2,c 6,3*c 12,2*c 20,pos 237,n 2
 	in3$(1)="8,25,N 12.2,UT,N" : in3$(2)="8,45,N 12.2,UT,N"
 	mp1=75
-	if fnps=2 then mp1=mp1+3
+	if fnPs=2 then mp1=mp1+3
 	fl1$="Name=[Q]\GLmstr\ACGLFNSF.h[cno],KFName=[Q]\GLmstr\agfsidx5.h[cno],Shr"
-	if fnps=2 then fl1$="Name=[Q]\GLmstr\ACGLFNSG.h[cno],KFName=[Q]\GLmstr\agfsidx6.h[cno],Shr"
+	if fnPs=2 then fl1$="Name=[Q]\GLmstr\ACGLFNSG.h[cno],KFName=[Q]\GLmstr\agfsidx6.h[cno],Shr"
 	open #1: fl1$,i,i,k
-	if fnprocess=1 or fnUseDeptNo=0 then goto L410
+	if fnProcess=1 or fnUseDeptNo=0 then goto L410
 	fnTos
 	mylen=30: mypos=mylen+3 : right=1
 	fnLbl(1,1,"Cost Center or Department #:",mylen,right)
@@ -46,13 +46,13 @@
 	costcntr=val(resp$(1))
 	gosub ASK_MONTHLY
 L410: on fkey 5 goto L2250
-	if fnps=2 then goto L450 ! secondary
+	if fnPs=2 then goto L450 ! secondary
 	close #3: ioerr L430
 L430: execute "Index [Q]\GLmstr\GLmstr.h[cno] "&udf$&"fsindex.h[cno] 75 3 Replace DupKeys -N"
 	goto L460
 L450: execute "Index [Q]\GLmstr\GLmstr.h[cno] "&udf$&"fsindex.h[cno] 78 3 Replace DupKeys -N"
 L460: open #3: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName="&udf$&"fsindex.h[cno],Shr",i,i,k
-	fnopenprn
+	fnOpenPrn
 	if file$(255)(1:4)<>"PRN:" then redir=1 else redir=0
 L480: read #1,using L520: r$,d$,te$,sp,ls,ds,ul,rs,bc,ap,mat ac,ic,fc eof L2250
 	if ltrm$(r$)="" or ltrm$(r$)="0" then goto L480
@@ -189,7 +189,7 @@ L1780: if ls=0 then goto L1920
 	pr #255,using L1810: " "
 L1810: form pos 1,c 1,skip ls
 	goto L1920
-L1830: fnpglen(pglen)
+L1830: fnPgLen(pglen)
 ! If PGLEN<>42 Then pGLEN=58
 	sk=pglen-krec(255): fl=len(rtrm$(foot$))
 ! If PGLEN=42 Then sK=SK+1
@@ -234,7 +234,7 @@ return
 L2250: eofcode=1
 	gosub L1830
 	fnfscode(actpd)
-	fncloseprn
+	fnClosePrn
 	goto Xit
 L2300: !
  

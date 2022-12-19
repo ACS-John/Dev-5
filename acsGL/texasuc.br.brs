@@ -11,7 +11,7 @@
 	open #1: "Name=[Q]\GLmstr\Company.h[cno],Shr",i,i
 	read #1,using 'form pos 1,3*C 40,2*C 12,C 5,pos 188,PD 7.2': mat a$,mat b$,c$,ucm
 	close #1:
-	if fnprocess=1 then goto L220
+	if fnProcess=1 then goto L220
 SCR1: !
 	fnwin3b(win=101,env$('program_caption'),5,44,1,3,5)
 	pr #win,fields "4,2,C 36,N": "Quarterly Period Ending Date (q-yy):"
@@ -24,7 +24,7 @@ L220: open #2: "Name=[Q]\GLmstr\PRmstr.h[cno],KFName=[Q]\GLmstr\PRIndex.h[cno],S
 	! message$="Printing: please wait..." : _
 	! fnwait(message$,1)
 	on fkey 5 goto Xit
-	fnopenprn
+	fnOpenPrn
 	gosub L400
 L270: !
 	read #2,using L280: mat k,mat k$,mat l$,mat m eof L480
@@ -54,8 +54,8 @@ return
 L480: !
 	gosub L620
 	close #2:
-	fncloseprn
-fnchain("S:\acsGL\PRSTATUC")
+	fnClosePrn
+fnChain("S:\acsGL\PRSTATUC")
 
 L530: !
 	p3=p3+1

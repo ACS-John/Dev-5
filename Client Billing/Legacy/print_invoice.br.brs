@@ -2,7 +2,7 @@
 ! PROGRAMS THAT USE THIS LIBRARY:   C:\ACS\Dev-5\Client Billing\ACS Invoices.br.brs   S:\Client Billing\Enter and Print Invoices
 def library fnprint_invoice(out,align, &actnum$, mat billto$, inv_num$, inv_date, mat desc$, mat amt,pbal,ebilling;pdfline$*255)
 	autoLibrary
-	if file(255)=0 then let fnopenprn
+	if file(255)=0 then let fnOpenPrn
 	if align<>0 and align<>1 then 
 		pr #out: newpage
 	end if 

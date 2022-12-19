@@ -63,7 +63,7 @@ ASK_SORT: ! r:
 	open #hFund=fnH: 'Name=[Q]\CLmstr\FundMstr.h[cno],KFName=[Q]\CLmstr\FundIdx1.h[cno],Shr',i,i,k
 	notused=1: open #11: 'Name=[Q]\CLmstr\DptMstr.h[cno],KFName=[Q]\CLmstr\dptidx1.h[cno]',i,i,k ioerr L640 : notused=0
 	L640: !
-	fnopenprn
+	fnOpenPrn
 	vn$='': iv$=''
 	do
 		read #addr,using 'form pos 1,PD 3': r4 eof END1
@@ -182,7 +182,7 @@ return ! /r
 Finis: ! r:
 	gosub TOTNOFX
 	if fund=2 then gosub SUB_FT2
-	fncloseprn
+	fnClosePrn
 	close #work,free: ioerr ignore
 goto Xit ! /r
 Xit: fnXit

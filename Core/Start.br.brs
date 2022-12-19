@@ -209,7 +209,7 @@ def fn_acsSystemInitialize(; syInitMode)
 		fnSetEnv('acsVersion',version_current$)
 		if fn_updateNeeded(version_prior$,version_current$) then
 			fnclient$ ! this needs to be called to set client environment variables
-			fnchain('S:\Core\Programs\Update.br')
+			fnChain('S:\Core\Programs\Update.br')
 		end if
 
 		fnSetEnv('Desktop',fnSpecialFolderPath$('Desktop'))

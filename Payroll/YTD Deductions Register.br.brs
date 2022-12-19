@@ -43,7 +43,7 @@ MENU1: !
  
 	open #3: "Name=[Q]\PRmstr\Department.h[cno],Shr, KFName=[Q]\PRmstr\DeptIdx.h[cno],Shr",i,outIn,k
  
-	fnopenprn
+	fnOpenPrn
 	gosub HDR
 	do
 	ReadEmp: !
@@ -88,7 +88,7 @@ EOJ: ! r:
 L800: !
 pr #255,using L680: t2(11),t2(12),t2(13),t2(14),t2(15),t2(16),t2(17),t2(18),t2(19),t2(20)
 L810: !
-fncloseprn
+fnClosePrn
 close #1: ioerr ignore
 close #2: ioerr ignore
 goto Xit ! /r

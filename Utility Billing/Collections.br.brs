@@ -470,11 +470,11 @@ def fn_printListings
 	end if
 
 	if xti1=1 then
-		fnopenprn('Receipt Listing') : ti1_start=1 : ti1_end=1
+		fnOpenPrn('Receipt Listing') : ti1_start=1 : ti1_end=1
 	else if xti1=2 then
-		fnopenprn('Deposit Listing') : ti1_start=2 : ti1_end=2
+		fnOpenPrn('Deposit Listing') : ti1_start=2 : ti1_end=2
 	else ! if ub_collDisableDepositList$='False' then
-		fnopenprn('Receipt and Deposit Listing') : ti1_start=1 : ti1_end=2
+		fnOpenPrn('Receipt and Deposit Listing') : ti1_start=1 : ti1_end=2
 	end if
 	dim brk(5,10)
 	mat ct=(0)
@@ -581,7 +581,7 @@ def fn_printListings
 	 ! /r
 	 if xti1<>ti1_end then pr #255: newpage ! and env$('acsDeveloper')=''
 	next xti1
-	fncloseprn
+	fnClosePrn
 	close #h_addr: ioerr ignore
 	h_addr=0
 fnend  ! if l3=1 then goto Merge else goto ScreenOne
@@ -959,12 +959,12 @@ BuildAllocations: ! r: returns mat alloc, mat tgb,transType,escrow$,oldescrowbal
 return  ! /r
 
 def fn_openCashDrawer
-	fnopen_receipt_printer
+	fnOpenReceiptPrinter
 	pr #255,using 'form pos 1,c 9,skip 0': hex$('1B70302828') ioerr ignore ! apg cash drawer hooked to epson t 88 thermal receipt printer
-	fnclose_receipt_printer
+	fnCloseReceiptPrinter
 fnend
 def fn_printReceipt(pr_acct_key$,pr_acct_name$*30,rcpt$,bal,pr_trans_amt,pr_trans_date,coll_type$*30)
-	if fnopen_receipt_printer(1) then
+	if fnOpenReceiptPrinter(1) then
 		receipt_width=32
 		pr #255,using 'form pos 1,C 2,Cc '&str$(receipt_width-4)&',C 2': '**',env$('cnam')(1:28),'**'
 		pr #255,using 'form pos 1,Cc '&str$(receipt_width): date$('mm/dd/ccyy')
@@ -984,7 +984,7 @@ def fn_printReceipt(pr_acct_key$,pr_acct_name$*30,rcpt$,bal,pr_trans_amt,pr_tran
 		pr #255: ''
 		pr #255: '________________________________' ! 32 characters - perfect max width fit for my pos-58 usb receipt printer
 		pr #255: ''
-		fnclose_receipt_printer
+		fnCloseReceiptPrinter
 	end if
 fnend
 def fn_csv_import
@@ -1305,7 +1305,7 @@ fnend
 	def fn_taeReportAdd(p$*10,tdate,tcode,tamount)
 		if ~taeReportSetup then
 			taeReportSetup=1
-			fnopenprn('Import Transactions - Skipped Duplicates')
+			fnOpenPrn('Import Transactions - Skipped Duplicates')
 			pr #255: '             Import Transactions - Skipped Duplicates             '
 			pr #255: 'Account      Date       Type                                Amount'
 			pr #255: '__________  __________  ____________________  ____________________'
@@ -1320,7 +1320,7 @@ fnend
 		close #hTauTrans: ioerr ignore
 		hTauTrans=0
 		taeReportSetup=0
-		fncloseprn
+		fnClosePrn
 	fnend
 def fn_oSub1(coll_type_option$) ! returns appropriate transType based on coll_type_option$
 	oSub1Return=0

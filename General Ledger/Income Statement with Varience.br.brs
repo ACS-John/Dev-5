@@ -13,7 +13,7 @@
 	on fkey 5 goto L2500
 	fnfscode
 	fnpriorcd
-	if fnGlAskFormatPriorCdPeriod=5 then goto Xit ! sets fnps,fnpriorcd,fnfscode (primary/secondary,current year/Prior,period to print)
+	if fnGlAskFormatPriorCdPeriod=5 then goto Xit ! sets fnPs,fnpriorcd,fnfscode (primary/secondary,current year/Prior,period to print)
 	fscode=fnfscode
 	fnpriorcd
 	cch$=fncch$
@@ -22,11 +22,11 @@
 	actpd=fnactpd
 	priorcd=fnpriorcd
  
-	fnopenprn
+	fnOpenPrn
 	if file$(255)(1:4)<>"PRN:" then redir=1 else redir=0
 	mp1=69
-	if fnps=2 then mp1=mp1+3
-	if fnps=2 then fl1$="Name=[Q]\GLmstr\ACGLFNSJ.h[cno],KFName=[Q]\GLmstr\agfsidx2.h[cno],Shr" else : _
+	if fnPs=2 then mp1=mp1+3
+	if fnPs=2 then fl1$="Name=[Q]\GLmstr\ACGLFNSJ.h[cno],KFName=[Q]\GLmstr\agfsidx2.h[cno],Shr" else : _
 		fl1$="Name=[Q]\GLmstr\ACGLFNSI.h[cno],KFName=[Q]\GLmstr\agfsidx3.h[cno],Shr"
 	L270: form pos mp1,pd 3,pos 81,41*pd 6.2
 	if actpd>0 and actpd<14 then goto L330
@@ -36,7 +36,7 @@
 	goto L2530
 	L330: !
 	open #1: fl1$,i,i,k
-	if fnprocess=1 or fnUseDeptNo=0 or percent=1 then goto L440
+	if fnProcess=1 or fnUseDeptNo=0 or percent=1 then goto L440
 	fnTos
 	mylen=30: mypos=mylen+3 : right=1
 	fnLbl(1,1,"Cost Center or Department #:",mylen,right)
@@ -50,7 +50,7 @@
 	costcntr=val(resp$(1))
 	L440: !
 	report$="Statement of Income and Expenses"
-	if fnps=2 then goto L480 ! secondary
+	if fnPs=2 then goto L480 ! secondary
 	execute "Index [Q]\GLmstr\GLmstr.h[cno] "&env$('temp')&'\'&"fsindex.h[cno] 69 3 Replace DupKeys -N"
 	goto L490
 	L480: !
@@ -266,7 +266,7 @@ L2450: if percent><0 then goto L2500
  
 L2500: eofcode=1
 	gosub FOOTER
-	fncloseprn
+	fnClosePrn
 	fnfscode(actpd)
 	fnpriorcd(1)
 L2530: goto Xit

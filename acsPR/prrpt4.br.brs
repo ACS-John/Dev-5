@@ -7,7 +7,7 @@ fnTop(program$,'Report File - Proof List')
 dim rt$*78,ch$(2)*132,psc(100),inp(20),pp(20),ti(20)
 
 open #1: 'Name=[Q]\PRmstr\PRReport.h[cno],KFName=[Q]\PRmstr\prrptidx.h[cno],Shr',i,i,k
-fnopenprn
+fnOpenPrn
 nametab=66-len(rtrm$(env$('cnam')))/2
 
 ! pr newpage
@@ -58,7 +58,7 @@ do
 loop
 L560: !
 	close #1: ioerr ignore
-fncloseprn
+fnClosePrn
 
 Xit: fnXit
 

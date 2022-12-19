@@ -253,7 +253,7 @@ Finis: ! r:
 	close #hCustomer: ioerr ignore
 	close #hAddr: ioerr ignore
 	
-	if ~fnLabel(mat pt$) then fnchain(program$) ! just restart if it failed to produce labels (ie they canceled out)
+	if ~fnLabel(mat pt$) then fnChain(program$) ! just restart if it failed to produce labels (ie they canceled out)
 	
 goto Xit ! /r
 Xit: fnXit

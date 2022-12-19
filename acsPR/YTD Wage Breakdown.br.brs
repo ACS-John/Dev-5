@@ -12,7 +12,7 @@ dim tdet(17),tdy(6),tdc(6),ty(21)
 fndat(dat$)
 open #1: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr",i,i,k
 open #2: "Name=[Q]\PRmstr\RPTRAIL.h[cno],Shr",i,i,r
-fnopenprn
+fnOpenPrn
 gosub HDR
 goto LYNES
  
@@ -77,6 +77,6 @@ SUMMARY: ! r:
 	pr #255,using L710: "      Total Wages:",tc9
 	L710: form pos 10,c 25,pos 37,n 19.2
 ! /r
-	fncloseprn
+	fnClosePrn
 Xit: fnXit
 include: ertn

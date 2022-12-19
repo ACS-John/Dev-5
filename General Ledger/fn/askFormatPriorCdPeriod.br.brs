@@ -30,8 +30,8 @@ def library fnGlAskFormatPriorCdPeriod(; defaultFormatOption$,___,returnN,x,lc,r
 	actpd=fnactpd
 	format=srch(mat formatOption$,defaultFormatOption$)
 	if format<=0 or format>(udim(mat formatOption$)) then format=1
-	if fnprocess=1 then
-		fnps(1)
+	if fnProcess=1 then
+		fnPs(1)
 		fnpriorcd(1)
 	else
 
@@ -67,7 +67,7 @@ def library fnGlAskFormatPriorCdPeriod(; defaultFormatOption$,___,returnN,x,lc,r
 		! 	priorOrCurrent=srch(mat priorOrCurrentOption$,resp$(resp_priorOrCurrent))
 		! 	actpd=srch(mat periodOption$,resp$(resp_actpd))
 		! 	actpd$=resp$(resp_actpd)
-		! 	fnps(format)
+		! 	fnPs(format)
 		! 	fnpriorcd(priorOrCurrent)
 		! 	fnfscode(actpd)
 		! 	! fnactpd$(actpd$)
@@ -96,7 +96,7 @@ def library fnGlAskFormatPriorCdPeriod(; defaultFormatOption$,___,returnN,x,lc,r
 			! priorOrCurrent=srch(mat priorOrCurrentOption$,resp$(resp_priorOrCurrent))
 			! actpd=srch(mat periodOption$,resp$(resp_actpd))
 			! actpd$=resp$(resp_actpd)
-			fnps(format)
+			fnPs(format)
 			fnpriorcd(priorOrCurrent)
 			fnfscode(actpd)
 		!  /r

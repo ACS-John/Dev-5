@@ -929,7 +929,7 @@ Xit: fnend
 				! fnLISTPRINT(LISTWIN,LISTSPEC$,'Selected Clients','','Selected clients	 for '&CLNR$,MAT DUMMY,0,0,'11111',0) : GOTO 5290
 				fnlistprint(0,gridspec$,'','','Grid Print',mat dummy,0,0,'000000',0)
 				!		goto PRINT_GRID_XIT
-				!		fnopenprn
+				!		fnOpenPrn
 				!		mat2str(mat _headings$(2:udim(_headings$)),_line$,tab$)
 				!		pr #255: _line$
 				!		input fields gridspec$&',rowcnt,all,nowait': grid_rows
@@ -940,7 +940,7 @@ Xit: fnend
 				!			mat2str(mat _chunks$,_line$,' ')
 				!			pr #255: _line$
 				!		next rowindex_
-				!		fncloseprn
+				!		fnClosePrn
 				! PRINT_GRID_XIT: !
 			fnend
 		def fn_selectFile(&filename$,mask; ___,openOrSave$,newOrShare$,wasFilenamesUpperCase)

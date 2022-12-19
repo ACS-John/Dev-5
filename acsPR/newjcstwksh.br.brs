@@ -15,7 +15,7 @@
 	open #1: "Name=[Q]\PRmstr\JCMSTR.h[cno],KFName=[Q]\PRmstr\JCIndx.h[cno],Shr",i,i,k
 	open #2: "Name=[Q]\PRmstr\JCCAT.h[cno],KFName=[Q]\PRmstr\CatIndx.h[cno],Shr",i,i,k
 
-	if fnprocess=1 then goto ASKJOB
+	if fnProcess=1 then goto ASKJOB
 MAIN_SCREEN: !
 	fnTos(sn$="namlst1") : _
 	mylen=25 : mypos=mylen+2: resp=0: left=1
@@ -35,7 +35,7 @@ MAIN_SCREEN: !
 
 	fndat(dat$,2)
 	if prtjob$="N" then goto ASKJOB
-	if fnprocess=1 then goto L510
+	if fnProcess=1 then goto L510
 
 	mat ml$(1) : _
 	ml$(1)="Do you wish to skip all completed jobs?" : _
@@ -60,7 +60,7 @@ ASKJOB: !
 L490: j=j-1
 
 L510: on fkey 5 goto DONE
-	fnopenprn : _
+	fnOpenPrn : _
 	if file$(255)(1:3)<>"PRN" then jbskip=1
 	gosub HDR
 L540: if prtjob$="Y" then goto L590
@@ -81,7 +81,7 @@ L640: form pos 1,c 11,c 25,pos 114,2*pd 2
 
 DONE: close #1:
 	close #2:
-	fncloseprn
+	fnClosePrn
 	goto Xit
 
 HDR: !

@@ -7,7 +7,7 @@ on error goto Ertn
 
 dim k$(3)*25,ss$*11,m(36),adr(2),n(2),d(14),ml$(3)*80
 
-if fnprocess=1 then goto L300
+if fnProcess=1 then goto L300
 ScrOne: fnTos
 	mylen=42: mypos=mylen+3 : right=2
 	fnLbl(1,1,"* * * * *   WARNING   * * * * *",mylen,right)

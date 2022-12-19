@@ -7,7 +7,7 @@ fnTop(program$)
 	if alternate_printbill_program$='(basic)' then
 		goto PrintBill_Basic
 	else
-		fnchain(fnub_printbill_program$,1)
+		fnChain(fnub_printbill_program$,1)
 	end if
 ! /r
 
@@ -396,7 +396,7 @@ Screen1: ! r:
 	else if pa_enabled=2 then
 		fnpa_open(pa_orientation$,'','PDF')
 	else
-		fnopenprn
+		fnOpenPrn
 	end if
 	! IF filter_selected_only=0 THEN GOSUB Sort1
 ! /r
@@ -573,7 +573,7 @@ def fn_closeBillPrinter
 	if pa_enabled then
 		fnpa_finis
 	else if sum(billsPrintedCount)>0 then
-		fncloseprn( forceWordProcessor$)
+		fnClosePrn( forceWordProcessor$)
 	end if
 fnend
 Finis: ! r:

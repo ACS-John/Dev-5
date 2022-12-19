@@ -85,7 +85,7 @@ Menu1: ! r:
 		fnOpenPartial
 		chain program$
 	else if ckey=13 and (fnclient_is_converting or company_count=0) then ! import
-		fnchain('S:\Core\Company Import.br')
+		fnChain('S:\Core\Company Import.br')
 	end if
 
 	cnoSelected=val(resp$(1))
@@ -154,16 +154,16 @@ CompanyAdd: ! r:
 			end if
 		end if  ! /r
 		if exists ('S:\[cursystem]\Company.br') then
-			fnchain('S:\[cursystem]\Company.br')
+			fnChain('S:\[cursystem]\Company.br')
 		else
-			fnchain('S:\acs[cursys]\Company')
+			fnChain('S:\acs[cursys]\Company')
 		end if
 	else if env$('cursys')='UB' then
-		fnchain('S:\Core\AddCNo')
+		fnChain('S:\Core\AddCNo')
 	else if exists('S:\[cursystem]\Company.br') then
-		fnchain('S:\[cursystem]\Company.br')
+		fnChain('S:\[cursystem]\Company.br')
 	else
-		fnchain('S:\acs[cursys]\AddCNo')
+		fnChain('S:\acs[cursys]\AddCNo')
 	end if
 ! /r
 Xit: fnXit
@@ -219,9 +219,9 @@ Xit: fnXit
 		setenv('xit_override','')
 		setenv('xit_override','S:\Core\Programs\Select Company')
 		if exists('S:\[cursystem]\Company.br') then
-			fnchain('S:\[cursystem]\Company.br')
+			fnChain('S:\[cursystem]\Company.br')
 		else
-			fnchain('S:\acs[cursys]\Company.br')
+			fnChain('S:\acs[cursys]\Company.br')
 		end if
 	fnend
 	def fn_companyCopy(scno)
@@ -324,7 +324,7 @@ IfCoTryAgain: ! r: if cursys=CO than just pick the first thing they are licensed
 		fnreg_write(session$&'.CurSys',curSys$)
 		fncurSys$(curSys$)
 		fn_setupOnCursysChange(cno)
-		! fnchain(program$)
+		! fnChain(program$)
 	end if
 return ! /r
 dim cnam$*80

@@ -35,7 +35,7 @@ L320: open #1: "Name=[Q]\GLmstr\ACGLSCHS.h[cno],KFName=[Q]\GLmstr\schindex.h[cno
 	pr newpage
 	pr f "10,20,C 60,N": "PRINT SCHEDULES IN PROCESS"
 	pr f "12,2,C 30,B,5": "Press F5 to stop"
-	fnopenprn
+	fnOpenPrn
 L380: if prtall=1 then goto L440
 L390: g=g+1
 	if prtsch(g)=0 then goto DONE
@@ -126,7 +126,7 @@ L1240: form pos 48,c 20,pos 69,c 12,skip 2
 L1250: return
  
 DONE: !
-	fncloseprn
+	fnClosePrn
 	goto Xit
  
 Xit: fnXit

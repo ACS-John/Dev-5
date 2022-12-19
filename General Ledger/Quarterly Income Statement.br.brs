@@ -14,19 +14,19 @@ on fkey 5 goto L1720
 
 actpd$=fnactpd$
 if fnGlAskFormatPriorCdPeriod=5 then goto Xit
-	! sets fnps,fnpriorcd,fnfscode (primary/secondary,current year/Prior,period to print)
+	! sets fnPs,fnpriorcd,fnfscode (primary/secondary,current year/Prior,period to print)
  
 ! pr NEWPAGE
 	redir=0: if file$(255)(1:4)<>'PRN:' then redir=1: goto L210
-L210: if fnps=2 then mp1=72 else mp1=69
+L210: if fnPs=2 then mp1=72 else mp1=69
 	fl1$='Name=[Q]\GLmstr\ACGLFNSI.h[cno],KFName=[Q]\GLmstr\agfsidx3.h[cno],Shr'
-	if fnps=2 then fl1$='Name=[Q]\GLmstr\ACGLFNSJ.h[cno],KFName=[Q]\GLmstr\agfsidx2.h[cno],Shr'
+	if fnPs=2 then fl1$='Name=[Q]\GLmstr\ACGLFNSJ.h[cno],KFName=[Q]\GLmstr\agfsidx2.h[cno],Shr'
 	form c 9,skip 0
 L250: form pos mp1,pd 3,pos mp2,pd 3,pos 81,41*pd 6.2
 	form c 7,skip 0
 	nametab=int(44-len(rtrm$(env$('program_name')))/2)
 	open #1: fl1$,i,i,k
-	if fnprocess=1 or fnUseDeptNo=0 then goto L390
+	if fnProcess=1 or fnUseDeptNo=0 then goto L390
 	fnTos
 	mylen=30: mypos=mylen+3 : right=1
 	fnLbl(1,1,'Cost Center or Department #:',mylen,right)
@@ -38,8 +38,8 @@ L250: form pos mp1,pd 3,pos mp2,pd 3,pos 81,41*pd 6.2
 	ckey=fnAcs(mat resp$)
 	if ckey=5 then goto Xit
 	costcntr=val(resp$(1))
-L390: fnopenprn
-	if fnps=2 then goto L430 ! secondary
+L390: fnOpenPrn
+	if fnPs=2 then goto L430 ! secondary
 	execute 'Index [Q]\GLmstr\GLmstr.h[cno] [temp]\fsindex.h[cno] 69 3 Replace DupKeys -N'
 	goto L440
 L430: execute 'Index [Q]\GLmstr\GLmstr.h[cno] [temp]\fsindex.h[cno] 72 3 Replace DupKeys -N'
@@ -143,7 +143,7 @@ L1300: ! r:
 	L1330: form pos 1,c 1,skip ls
 goto L1440 ! /r
 L1350: ! r:
-	fnpglen(pglen)
+	fnPgLen(pglen)
 	! If PGLEN<>42 Then pGLEN=58
 	sk=pglen-krec(255): fl=len(rtrm$(foot$))
 	! If PGLEN=42 Then sK=SK+1
@@ -189,7 +189,7 @@ return ! /r
 L1720: ! r:
 	eofcode=1
 	gosub L1350
-	fncloseprn
+	fnClosePrn
 	fnfscode(actpd)
 	fnpriorcd(1)
 goto Xit ! /r

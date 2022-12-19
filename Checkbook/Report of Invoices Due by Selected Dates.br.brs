@@ -14,7 +14,7 @@ gosub Ask
 fnIndex('[Q]\CLmstr\PayTrans.h[cno]','[Q]\CLmstr\Unpdidx2.h[cno]','31/27/1 2/4/26') ! index in year,monthday,reference
 open #paymstr=fnH: "Name=[Q]\CLmstr\PayMstr.h[cno],KFName=[Q]\CLmstr\PayIdx1.h[cno],Shr",i,i,k 
 open #paytrans=fnH: "Name=[Q]\CLmstr\PayTrans.h[cno],KFName=[Q]\CLmstr\Unpdidx2.h[cno],Shr",i,i,k 
-fnopenprn
+fnOpenPrn
 gosub Hdr
 vn$=iv$=""
 do
@@ -38,7 +38,7 @@ Finis: ! r:
 	next j
 	pr #255: tab(37);"______________"
 	pr #255,using L650: "Total Due by "&cnvrt$("PIC(####/##/##)",d2(d2)),t2
-	fncloseprn
+	fnClosePrn
 goto Xit ! /r
 Xit: fnXit
 NEWPGE: pr #255: newpage: gosub HDR : continue 

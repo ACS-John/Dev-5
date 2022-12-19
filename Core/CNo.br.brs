@@ -114,7 +114,7 @@ def library fnPriorcd(;PriorCD)
 fnend
 def library fnPgNum(;pgnum)
 	if ~setup then fn_setup
-	fnpgnum=fn_CnoLegacyNtoCReg('[temp]\PgNum-[session].dat','pos 1,N 9','PgNum', pgnum)
+	fnPgNum=fn_CnoLegacyNtoCReg('[temp]\PgNum-[session].dat','pos 1,N 9','PgNum', pgnum)
 fnend
 def library fnRx(;rx)
 	if ~setup then fn_setup
@@ -126,7 +126,7 @@ def library fnStyp(;STyp)
 fnend
 def library fnPs(;ps)
 	if ~setup then fn_setup
-	fnps=fn_CnoLegacyNtoCReg('[temp]\ps-[session].dat','pos 1,N 9','ps', ps)
+	fnPs=fn_CnoLegacyNtoCReg('[temp]\ps-[session].dat','pos 1,N 9','ps', ps)
 fnend
 def library fnUseDeptNo
 	if ~setup then fn_setup

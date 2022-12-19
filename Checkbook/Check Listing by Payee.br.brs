@@ -19,7 +19,7 @@ ckey=fnAcs(mat resp$)
 if ckey=5 then goto Xit
 date1=val(resp$(1))
 date2=val(resp$(2))
-fnopenprn
+fnOpenPrn
 gosub HDR
 goto BODY
 HDR: ! r: Page Heading
@@ -63,7 +63,7 @@ TOTALS: ! r:
 return ! /r
 LAS: ! r:
 	gosub TOTALS
-	fncloseprn
+	fnClosePrn
 goto Xit ! /r
 Xit: fnXit
 include: ertn

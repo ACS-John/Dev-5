@@ -1,6 +1,6 @@
 ! replace S:\Core\chain.br
 
-def library fnChain(prg$*255; no_fnprg_setting,noLog)
+def library fnChain(prg$*255; disableCoreProgramSetting,noLog)
 	autoLibrary
 	on error goto Ertn
 
@@ -11,7 +11,7 @@ def library fnChain(prg$*255; no_fnprg_setting,noLog)
 	! display menu : '','',''
 	! pr 'fnChain to '&PATH$&PROG$
 	prg$=path$&prog$
-	if ~no_fnprg_setting then fnSetCoreProgramCurrent(prg$,put=2)
+	if ~disableCoreProgramSetting then fnSetCoreProgramCurrent(prg$,put=2)
 	Test: !
 	resp$=''
 	if exists(path$&prog$&ext$)=0 then

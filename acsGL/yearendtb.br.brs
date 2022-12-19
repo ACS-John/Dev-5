@@ -45,7 +45,7 @@ SCREEN1: !
 	sl1$=fnagl$(resp$(4)) : _
 	sl2$=fnagl$(resp$(5))
 START_REPORT: !
-	fnopenprn
+	fnOpenPrn
 	gosub HDR2
 READ_1: !
 	read #1,using L410: n$,d$,bb,cb,mat bp eof L580
@@ -75,7 +75,7 @@ L590: pr #255:
 L630: form pos 80,pic(zz,zzz,zzz.## cr)
 	close #1: ioerr L650
 L650: close #2: ioerr L660
-L660: fncloseprn
+L660: fnClosePrn
  
 	goto Xit
  

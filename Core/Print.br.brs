@@ -62,9 +62,9 @@ def fn_reportCacheFolderCurrent$*512(; ___,return$*512)
 	fn_reportCacheFolderCurrent$=return$
 fnend
 
-def library fnopen_receipt_printer(; orp_only_if_it_is_assigned)
+def library fnOpenReceiptPrinter(; orp_only_if_it_is_assigned)
 	fn_setup
-	fnopen_receipt_printer=fn_openReceiptPrinter( orp_only_if_it_is_assigned)
+	fnOpenReceiptPrinter=fn_openReceiptPrinter( orp_only_if_it_is_assigned)
 fnend
 def fn_openReceiptPrinter(; orp_only_if_it_is_assigned)
 	dim orp_receipt_printer$*256
@@ -82,14 +82,14 @@ def fn_openReceiptPrinter(; orp_only_if_it_is_assigned)
 	ORP_FINIS: !
 	fn_openReceiptPrinter=orp_did_open
 fnend
-def library fnclose_receipt_printer
+def library fnCloseReceiptPrinter
 	fn_setup
-	fnclose_receipt_printer=fn_closeReceiptPrinter
+	fnCloseReceiptPrinter=fn_closeReceiptPrinter
 fnend
 def fn_closeReceiptPrinter
 	close #255: ioerr ignore
 fnend
-def library fnopen_cash_drawer
+def library fnOpenCashDrawer
 	fn_setup
 	if fn_openReceiptPrinter(1) then
 		pr #255,using 'form pos 1,c 9,skip 0': hex$("1B70302828") ioerr ignore
@@ -330,9 +330,9 @@ def fn_startRtf(startRtf_destinationFileName$*1024; forceWordProcessor$,saveToAs
 	if saveToAsStart$<>'' then
 		fnCopy(startRtf_destinationFileName$,env$('at')&saveToAsStart$)
 	end if
-	if fnprocess=1 and pos(lwrc$(wordprocessor_exe$),'atlantis')>0 then
+	if fnProcess=1 and pos(lwrc$(wordprocessor_exe$),'atlantis')>0 then
 		execute 'Sy -w "'&wordprocessor_exe$&'" -st /p /npd "'&os_filename$(startRtf_destinationFileName$)&'"' ! automatic processing  ! kj 53107
-	else ! if print_report_nowait or fnprocess=1 then
+	else ! if print_report_nowait or fnProcess=1 then
 		execute 'Sy -w -C "'&wordprocessor_exe$&'" "'&os_filename$(fnSrepEnv$(startRtf_destinationFileName$))&'"'
 	! else
 	!   fn_waitForWpToCloseStart('Word Processor')

@@ -1,7 +1,7 @@
 ! Replace S:\Core\Hamster
 def library fnhamster_print(a$*20,mat lbl$,mat tln,c,mat p$; mat fltyp$,mat sln,mat mask,mat sp,mat c$,mat _k)
-		library 'S:\Core\Library': fnopenprn,fncloseprn
-		fnopenprn
+		library 'S:\Core\Library': fnOpenPrn,fnClosePrn
+		fnOpenPrn
 		pr #255: "Field Name                     From   To  Format   "
 		pr #255: "______________________________ ____ ____  _________"
 		p1=1
@@ -12,5 +12,5 @@ def library fnhamster_print(a$*20,mat lbl$,mat tln,c,mat p$; mat fltyp$,mat sln,
 			pr #255,using 'form pos 1,c 30,2*n 5,"  ",cr 4," ",g 6': lbl$(j),p1,p2-1,fltyp$(j),str$(sln(j))
 			p1=p2
 		next j
-		fncloseprn
+		fnClosePrn
 fnend

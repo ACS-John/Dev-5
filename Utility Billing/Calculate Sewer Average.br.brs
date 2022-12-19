@@ -64,7 +64,7 @@ if cd1(1)=0 and ~clear_averages then
 	goto SCR1
 end if
  
-fnopenprn
+fnOpenPrn
 message$="Calculating: please wait..."
 fnwait(message$,1)
 gosub HDR
@@ -109,7 +109,7 @@ goto L480 ! /r
  
 DONE: !
 	close #hCustomer:
-	fncloseprn
+	fnClosePrn
 Xit: fnXit
  
 PAGE: ! r:

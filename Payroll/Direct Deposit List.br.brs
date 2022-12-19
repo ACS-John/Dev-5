@@ -15,7 +15,7 @@ fnCmdKey('E&xit',5,0,1,'Returns to menu')
 ckey=fnAcs(mat resp$)
 if ckey=5 then goto Xit
 asOfDate=val(resp$(1))
-fnopenprn
+fnOpenPrn
 gosub PrHdr ! pr header
 do
 	ReadDD: !
@@ -31,7 +31,7 @@ loop
 Finis: ! r:
 	close #hDd: ioerr ignore
 	close #hEmployee: ioerr ignore
-	fncloseprn
+	fnClosePrn
 goto Xit ! /r
 PrNewPg: ! r:
 	pr #255: newpage

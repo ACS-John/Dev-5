@@ -119,7 +119,7 @@ L1190: open #22: "Name=[Q]\UCReport,RECL=512,eol=crlf,replace",d,o
 	if err=4221 then fnOldMsgBox(mat RESPONSE$,mat MSGLINE$,MTYPE)
 	goto L1190
 
-BEGINNING_OF_FILE: gosub RECRA : gosub RECRE: fnopenprn
+BEGINNING_OF_FILE: gosub RECRA : gosub RECRE: fnOpenPrn
 	pr #255,using "form pos 20,cc 40,skip 1,pos 20,cc 40": "Electronic Edit List",cnvrt$("pic(zz/zz/zzzz",endingdate)
 READ_EMPLOYEE: read #1,using L1330: eno,mat em$,ss$,em6,em16,ta eof END1
 	m1=m2=m3=m4=0
@@ -190,7 +190,7 @@ return ! /r
 END1: ! r:
 	pr #255,using "form skip 1,pos 1,c 14,pic(zz,zzz,zzz.##)": "Total wages:",totwage,"Total Taxable:",tottaxable
 	pr #255,using "form pos 1,c 16,pic(zz,zzz,zzz)": "Total employees:",totemployees
-	fncloseprn
+	fnClosePrn
 	gosub L2040
 goto Xit ! /r
 Xit: fnXit

@@ -133,7 +133,7 @@ PRINT_POST: !
 	close #2: ioerr ignore
 	close #3: ioerr ignore
 	if listing=1 then pr #255,using L1070: "            ","            ","GRAND TOTALS",gtdr,gtcr,"============","============" else goto L1170
-	fncloseprn
+	fnClosePrn
 	if listing=1 then goto MAIN
 L1170: !
 	for j=1 to dircount
@@ -144,7 +144,7 @@ L1170: !
 Xit: fnXit
 
 L1230: ! r:
-	fnopenprn
+	fnOpenPrn
 	pr #255,using L1250: env$('cnam'),"General Ledger Posting","From: "&from$&"   To: "&to$
 	L1250: form pos 1,cc 80,skip 1,pos 30,c 30,skip 1,pos 28,c 40,skip 1
 	pr #255,using L1270: "  ACCOUNT #       DATE          DEBITS        CREDITS   REFERENCE #   DESCRIPTION                   SOURCE"

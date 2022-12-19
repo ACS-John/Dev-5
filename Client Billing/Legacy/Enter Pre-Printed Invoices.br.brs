@@ -2,7 +2,7 @@ autoLibrary
 on error goto Ertn
 on fkey 5 goto L1530
 fnTop(program$,'Preprinted Invoices')
-fnopenprn
+fnOpenPrn
 namtab=int(66-(len(rtrm$(env$('Program_Caption')))/2))
 dim scr1$(8),fl1$(11),in1$(10),ot1$(10),scrid$(3)*80,inp(9),iv$*12,a1$*30
 dim m$*11,fm$*54,fp$*80,pt(4),fl2$(7),scr2$(4),ot2$(4)
@@ -171,7 +171,7 @@ for j=1 to rw
 	L1520: !
 next j
 L1530: !
-fncloseprn
+fnClosePrn
 goto L1360
 PrHeader: ! r:
 	pr #255,using L1560: date$,env$('Program_Caption'),time$

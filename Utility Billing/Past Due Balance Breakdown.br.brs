@@ -67,7 +67,7 @@ Scr1: ! r:
 goto DoReport ! /r
 DoReport: ! r: do the report
 ! on fkey 5 goto Finis
-fnopenprn
+fnOpenPrn
 gosub PrHeader
 v=bkno1
 open #hCustomer=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",i,i,k
@@ -121,7 +121,7 @@ return ! /r
 Finis: ! r:
 	close #hCustomer: ioerr ignore
 	gosub PrTotals
-	fncloseprn
+	fnClosePrn
 goto Xit ! /r
 Xit: fnXit
 PgOf: ! r:

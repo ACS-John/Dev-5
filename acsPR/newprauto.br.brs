@@ -8,9 +8,9 @@ cno=val(env$('cno'))
 goto ProcessCompany
 
 ProcessCompany: !
-	if fnprocess=0 then goto Xit
+	if fnProcess=0 then goto Xit
 
-	pgnum=fnpgnum
+	pgnum=fnPgNum
 	if ~pgnum then open #prclnt=1: "Name=[Q]\PRmstr\PrClnt.dat,NoShr",i,outi,r
 		read #prclnt,using 'form pos 46,3*N 1',rec=1: w,m,q
 		close #prclnt:
@@ -24,7 +24,7 @@ ProcessCompany: !
 	if q=1 and qt<>1 then goto L140 ! QUARTER PERIOD NOT SELECTED
 	if rtrm$(prg$)="" then goto L260
 	fnSetCoreProgramCurrent(prg$,put=2)
-	fnpgnum(pgnum) : fnps(ps)
+	fnPgNum(pgnum) : fnPs(ps)
 fnChain(prg$)
 
 MSGBOX1: ! r:
@@ -37,13 +37,13 @@ MSGBOX1: ! r:
 goto L260 ! /r
 
 L260: ! r:
-	fnkillauto : fnpgnum(-1)
+	fnkillauto : fnPgNum(-1)
 	! ! CHECK FOR ADDITIONAL COMPANIES
 	open #prclnt=1: "Name=[Q]\PRmstr\PrClnt.dat,NoShr",i,outi,r ioerr Xit
 	for j=2 to 20
 		read #prclnt,using 'form pos 1,N 5,pos 46,3*N 1',rec=j: cno,w,m,q
 		if cno then 
-			cno=fnPutCno(cno) : fnprocess(process=1)
+			cno=fnPutCno(cno) : fnProcess(process=1)
 			rewrite #prclnt,using 'form pos 1,N 5,C 40,3*N 1',rec=j: 0," ",0,0,0
 			close #prclnt:
 			goto ProcessCompany

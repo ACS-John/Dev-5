@@ -2,11 +2,11 @@
 ! Year-To-Date Quarter-To-Date Register
 fn_setup
 fnTop(program$)
-if ~fnprocess=1 then
+if ~fnProcess=1 then
 	gosub Screen1
 end if
 open #hTrans=fnH: "Name=[Q]\PRmstr\PayrollChecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno]",i,i,k
-fnopenprn
+fnOpenPrn
 ! r: main loop
 	gosub PrHdr
 	dim emp$(0)*256
@@ -136,7 +136,7 @@ Finis: ! r:
 	pr #255,using L1040: "Total Medicare Wages",totalMedicareWagesYear,totalMedicareWagesQtr
 	pr #255,using L1040: "Total Tips-YTD",ttips
 	form pos 1,c 33,2* n 10.2,skip 1
-	fncloseprn
+	fnClosePrn
 	close #hTrans: ioerr ignore
 	close #hEmployee: ioerr ignore
 goto Xit ! /r

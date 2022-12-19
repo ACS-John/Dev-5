@@ -15,7 +15,7 @@
 	fnTop(program$)
 	fnIndex('[Q]\PRmstr\Department.h[cno]','[Q]\PRmstr\DeptId4.h[cno]','12/1/9 12/8/3') ! sort department file in general ledger sequence
 	fnStatusClose
-	fnopenprn
+	fnOpenPrn
 
 	open #20: 'Name=[Q]\GLmstr\GLBucket.h[cno],Shr',i,i,r ioerr L260
 	read #20,using 'form pos 1,N 1',rec=1: glb noRec ignore
@@ -151,9 +151,9 @@ L1400: ! r:
 	close #2: ioerr ignore
 	close #4: ioerr ignore
 
-	fncloseprn
+	fnClosePrn
 	if ~skipposting=1 and glinstal and glb<>2 then
-		fnchain('S:\General Ledger\Merge')
+		fnChain('S:\General Ledger\Merge')
 	end if
 goto Xit ! /r
 PgOf: !  r:

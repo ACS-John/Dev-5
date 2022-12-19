@@ -106,7 +106,7 @@ EO_INVOICE_GRID: ! /r
 PRINTLISTING: ! r: pr listings
 ! need screen here asking paid/unpaid/all,starting inv #,1st inv to print,show breakdowns(y/n),display last ref in file, 1st ref # used this time
 ! need ref # to begin pr (blank for all)   rf2    show last ref  lrec(4)
-	fnopenprn
+	fnOpenPrn
 	pg=0
 	if rf2=0 then rf2=1
 	gosub HDR
@@ -133,7 +133,7 @@ NEXTRECORD: !
 	next j
 	pr #255,using 'form pos 81,C 10,skip 1,pos 81,N 10.2,skip 1,pos 81,C 10,skip 1': "__________",t1,"=========="
 !
-	fncloseprn
+	fnClosePrn
 	on fkey 99 ignore
 	return ! /r
 NEWPGE: ! r:
@@ -142,7 +142,7 @@ NEWPGE: ! r:
 continue ! /r
 HDR: ! r:
 	pg+=1
-	fnopenprn
+	fnOpenPrn
 	pr #255,using 'form pos 1,C 8,Cc 82': date$,env$('cnam')
 	pr #255,using 'form pos 1,C 4,N 4,pos 36,C 40': "Page",pg,"Unpaid Invoice File Listing"
 	pr #255: ""
@@ -507,7 +507,7 @@ close #jcbreakdown:
 execute "Index [Q]\CLmstr\JCBreakdownS"&wsid$&".h[cno],[Q]\CLmstr\jcbrkidx"&wsid$&".h[cno],48,20,Replace,DupKeys -n"
 return ! /r
 HDR2: ! r: header for jub cost listing
-fnopenprn
+fnOpenPrn
 pr #255,using 'form pos 1,C 8,Cc 82': date$,env$('cnam')
 pr #255,using 'form pos 1,C 4,N 4,pos 36,C 40': "Page",pg,"Job Cost Entry Listing"
 pr #255: ""
@@ -526,7 +526,7 @@ PRINT_JOB_COST_ENTRIES: ! r:
 	loop
 	L7140: !
 	pr #255,using "form pos 48,c 10,skip 1,pos 48,pic(zzz,zzz.zzcr),skip 1,pos 48,c 10": "__________",total_allocations,"=========="
-	fncloseprn
+	fnClosePrn
 	jn$=jobdesc$="" : cat=subcat=amt=0
 return ! /r
 PGOF2: ! r:

@@ -9,7 +9,7 @@ fnTop(program$)
 	hCompany=0
 ! /r
 open #hAccount=1: 'Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\glIndex.h[cno],Shr',i,i,k
-if fnprocess=1 or xd1=0 then goto StartReport		! skip Cost Center Question if not applicable or in Automatic Processing
+if fnProcess=1 or xd1=0 then goto StartReport		! skip Cost Center Question if not applicable or in Automatic Processing
 
 ScrAskCostCenter: ! r: returns n$,d$,bb,cb, sets rec in hAccount
 	fnTos
@@ -38,10 +38,10 @@ StartReport: ! r:
 	! pr f '10,25,C 30,R,N': 'G/L WORKSHEET IN PROCESS'
 	! pr f '12,20,Cc 30,B,5': 'Cancel (F5)'
 	on fkey 5 goto Finis
-	fnopenprn
+	fnOpenPrn
 	isFirst=1
 	gosub Header
-	if fnprocess=1 or xd1=0 then
+	if fnProcess=1 or xd1=0 then
 		goto ReadAccount
 	else
 		goto AfterAccountRead
@@ -90,7 +90,7 @@ Finis: ! r:
 	Finis=1
 	gosub Totals
 	close #hAccount:
-	fncloseprn
+	fnClosePrn
 goto Xit ! /r
 Totals: ! r:
 	pr #255:

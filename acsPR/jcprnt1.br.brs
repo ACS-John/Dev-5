@@ -15,7 +15,7 @@ fndat(dh$)
 
 
 rn$=" 1"
-if fnprocess=1 then goto L103
+if fnProcess=1 then goto L103
  
 MAIN_SCREEN: !
 	fnTos
@@ -30,7 +30,7 @@ MAIN_SCREEN: !
 	fndat(dh$,2)
 
 L103: !
-	fnopenprn
+	fnOpenPrn
 	open #1: "Name=S:\acsPR\JCReport.MST,KFName=S:\acsPR\jcReport.Idx,Shr",i,i,k
 	read #1,using L170,key=rn$: rn,rt$,mat ch$,ips,sd,cp,sc,mat psc,mat f$,mat pp,mat ppr,mat dp,mat fc,mat tcj,mat tcs
 	L170: form pos 1,n 2,c 78,2*c 132,n 3,3*n 1,100*pd 6.3,20*c 50,40*pd 2,80*n 1
@@ -55,7 +55,7 @@ HDR: !
 return
  
 EOF1: !
-	fncloseprn
+	fnClosePrn
 	close #1:
 	close #2:
 fnXit

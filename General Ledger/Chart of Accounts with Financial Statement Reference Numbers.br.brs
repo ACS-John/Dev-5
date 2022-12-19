@@ -2,7 +2,7 @@ autoLibrary
 on error goto Ertn
 fnTop(program$)
 open #hAcct=fnH: 'Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLIndex.h[cno],Shr',i,i,k
-fnopenprn
+fnOpenPrn
 pr #255,using 'form pos 1,C 20,Cc 90': date$('mm/dd/yy'),env$('cnam')
 pr #255,using 'form pos 1,C 20,Cc 90': time$,'Chart of Accounts'
 pr #255,using 'form pos 1,Cc 130': date$('Month DD, CCYY')
@@ -20,7 +20,7 @@ MainLoopTop: ! r:
 goto MainLoopTop ! /r
 Finis: ! r:
 	close #hAcct:
-	fncloseprn
+	fnClosePrn
 goto Xit ! /r
 PgOf: ! r:
 	pr #255: newpage

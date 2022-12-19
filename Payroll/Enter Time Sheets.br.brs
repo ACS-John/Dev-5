@@ -421,7 +421,7 @@ L4000: !
 GOCALK: ! r:
 	fnPayPeriodEndingDate(fndate_mmddyy_to_ccyymmdd(prd))
 	if jobcost=1 then close #5,free:
-fnchain("S:\Payroll\Calculation") ! /r
+fnChain("S:\Payroll\Calculation") ! /r
  
 EMP_PREV_ENTERED_WARN: ! r:
 	mat ml$(2)
@@ -710,7 +710,7 @@ PRINT_LISTING: !
 	if resp$(1)='False' and resp$(2)='False' then goto PrList_Screen
 	if resp$(1)='True' then printorder=1 else printorder=2
 	fncreg_write('enter time sheets proof sequence',str$(printorder))
-	fnopenprn
+	fnOpenPrn
 	L3160: !
 	restore #h_rpwork: : record=0
 	pc2=0
@@ -803,7 +803,7 @@ PL_FINIS: ! r:
 		close #h_rpwork:
 	else
 		gosub PL_PRINT_EMP_BLOCK
-		fncloseprn
+		fnClosePrn
 	end if
 goto PROOF_TOTALS ! /r
 def fn_setup

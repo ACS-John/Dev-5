@@ -62,7 +62,7 @@ do ! r: main loop
 	if fm(4)=1 then fm4$='C' else fm4$='P'
 	
 	if ~prnOpen then
-		fnopenprn
+		fnOpenPrn
 		prnOpen=1
 	end if
 	gosub HDR
@@ -100,7 +100,7 @@ Finis: ! r:
 	pr #255,using 'form pos 5,c 18,n 12.2': '   Total Debits: ',am1
 	pr #255,using 'form pos 5,c 18,n 12.2': '  Total Credits: ',am2
 	pr #255,using 'form pos 5,c 18,n 12.2': 'Net Adjustments: ',am1+am2
-	fncloseprn : prnOpen=0
+	fnClosePrn : prnOpen=0
 	fnIndex('[Q]\GLmstr\AcTrans.h[cno]','[Q]\GLmstr\AcTrIdx.h[cno]','1/71/17/13 12/2/2/4')
 goto Xit ! /r
 HDR: ! r:

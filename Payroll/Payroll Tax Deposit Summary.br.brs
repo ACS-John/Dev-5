@@ -17,7 +17,7 @@ fnTop(program$)
 fnGetPayrollDates(beg_date,end_date)
 ssr1=fnss_employee
 ssr2=fnss_employer
-! If FNPROCESS=1 Then Goto 410
+! If fnProcess=1 Then Goto 410
 fnTos
 rc=0: mylen=22: mypos=mylen+3: frameno=1
 fnFra(1,1,3,40,"Date Range of Deposit","Enter the date range for the payrolls to be included.")
@@ -34,7 +34,7 @@ if ckey=5 then goto Xit
 beg_date=val(resp$(1))
 end_date=val(resp$(2))
 
-fnopenprn
+fnOpenPrn
 
 dim fullname$(20)*20
 dim ab$(20)*8
@@ -101,7 +101,7 @@ PrFinalTotals: ! r: EoF target
 	pr #255,using L940: "Total",gtotal
 	L940: form pos 25,"__________",skip 1,pos 10,c 6,pos 23,n 12.2,skip 1,pos 25,"=========="
 	pr #255,using "form skip 2,pos 1,c 40": "Total Employees: "&str$(tx(36))
-	fncloseprn
+	fnClosePrn
 	close #1: ioerr ignore
 goto Xit ! /r
 PrHeader: ! r:

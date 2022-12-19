@@ -21,7 +21,7 @@
 	gosub ASK_PERIOD
 	if ckey=5 then goto Xit
 
-	fnopenprn
+	fnOpenPrn
 	open #h_gltrans:=fnH: 'Name=[Q]\GLmstr\GLTrans.h[cno],kfname=[Q]\GLmstr\glTrans-IdxAcct.h[cno],Shr',i,outIn,k
 	F_GLTRANS: form pos 1,n 3,n 6,n 3,n 6,pd 6.2,2*n 2,c 12,c 30,n 2
 	gosub HDR
@@ -124,7 +124,7 @@ EO_JOURNAL: ! r:
 	gosub PJ_SOME_TOTAL
 	gosub JOURNAL_TOTALS
 	L1210: !
-	fncloseprn
+	fnClosePrn
 goto Xit ! /r
 PgOf: ! r:
 	pr #255: newpage

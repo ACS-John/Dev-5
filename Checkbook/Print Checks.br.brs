@@ -97,8 +97,8 @@ goto READ_4
 
 SUB_PRINT_CHECK: ! r:
 	fn_cknum
-	! if env$('client')='Washington Parrish' then fnprocess(1) ! skip Atlantis screen
-	fnopenprn
+	! if env$('client')='Washington Parrish' then fnProcess(1) ! skip Atlantis screen
+	fnOpenPrn
 	ckn1=ckn
 	!   on ckoption goto L1360,L1360 none L1360 ! L1390
 	! L1360: !
@@ -118,8 +118,8 @@ UpdateInvoice: ! r:
 	idx=1
 	if allign=3 then pr #255: newpage : goto ALIGN_COMPLETED
 	pr #255: newpage
-	fncloseprn
-	! if env$('client')='Washington Parrish' then fnprocess(0)
+	fnClosePrn
+	! if env$('client')='Washington Parrish' then fnProcess(0)
 	holdpayee$=''
 	if ti1=1 then ckoption=1 : allign=2 : goto L2300 ! skip the continue routine when entering and printing checks
 	if ~allign then
@@ -202,8 +202,8 @@ SCR_CKPRT7: !
 return ! /r
 EOF_ROUTINE: ! r:
 	if st1=1 then gosub SUB_PRINT_CHECK
-	fncloseprn
-! if env$('client')='Washington Parrish' then fnprocess(0)
+	fnClosePrn
+! if env$('client')='Washington Parrish' then fnProcess(0)
 	mat amt=(0) : mat de$=('') : mat iv$=('') : mat de$=('') : x=y=1
 	st1=0 : holdvn$=''
 	goto MENU3
@@ -399,7 +399,7 @@ L7820: !
 		disamt(x,y)=0 ! already out of net check
 	loop
 L7910: !
-	fnopenprn
+	fnOpenPrn
 	ckn1=reprintckn: amt=tr3
 	if scc$='CSS' then fn_portion_check   : fn_portion_stub(1) : fn_portion_stub(2)
 	! if scc$='CSS' then fn_portion_check   : fn_portion_stub(1) : fn_portion_stub(2) ! reprint checks does it double for no reason!?
@@ -408,7 +408,7 @@ L7910: !
 	if scc$='SCC' then fn_portion_stub(1) : fn_portion_check    : fn_portion_check
 	if lastckn>0 and reprintckn<lastckn then reprintckn+=1 : pr #255: newpage : goto REPRINT_CHECK_LOOP_TOP
 L7970: !
-	fncloseprn
+	fnClosePrn
 	if firstckn<>lastckn then goto Xit
 	goto REPRINT_CHECKS ! /r
 def fn_get_coinfo

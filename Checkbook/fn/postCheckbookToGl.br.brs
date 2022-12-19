@@ -72,12 +72,12 @@ def library fnPostCheckbookToGl(; enablePost,___,pg)
 	if resp$(6)(1:1)='T' then enableDistributionListing=1 else enableDistributionListing=0 ! pr distribution listing
 	if resp$(7)(1:1)='T' then pr2$='Y' else pr2$='N' ! update after fact payroll
 	! gl2=val(resp$(8)) ! GL company to post
-	if pr2$='Y' then fnprocess(4)
+	if pr2$='Y' then fnProcess(4)
 	if ~enablePost then enableDistributionListing=1
 	! gl2=fnPutCno(gl2)
 	!   pr f '13,34,C 12,B,99': 'Cancel (Esc)'
 	!   on fkey 99 goto Xit
-	fnopenprn
+	fnOpenPrn
 	open #hTran=fnH: 'Name=[Q]\CLmstr\TrMstr.h[cno],KFName=[Q]\CLmstr\TrIdx1.h[cno],Shr',i,outIn,k
 	open #hAloc=fnH: 'Name=[Q]\CLmstr\TrAlloc.h[cno],KFName=[Q]\CLmstr\tralloc-idx.h[cno],Shr',i,outIn,k
 	open #hBank=fnH: 'Name=[Q]\CLmstr\BankMstr.h[cno],KFName=[Q]\CLmstr\BankIdx1.h[cno],Shr',i,outIn,k
@@ -376,7 +376,7 @@ def library fnPostCheckbookToGl(; enablePost,___,pg)
 		pr #255: '                                            ______________________________  __________  __________' pageoflow NewPge
 		pr #255,using 'form pos 45,C 30,2*N 12.2': 'Final Total',gc1,gc2 pageoflow NewPge
 		pr #255: '                                            ======================================================' pageoflow NewPge
-		fncloseprn
+		fnClosePrn
 		L2300: !
 
 		! pr 'at the end' : pause

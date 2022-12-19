@@ -32,7 +32,7 @@ if cont then
 	Fcustomer: form c 10,x 30,c 30,pos 1741,n 2,pos 217,12*pd 5,pos 292,pd 4.2,pd 4,12*pd 4.2,pos 388,10*pd 5.2,pos 1750,2*n 6
 	fn_openfiles ! open data files
 	open #h_iphold=fnH: "Name=[Q]\UBmstr\IpHold7.h[cno]",i,i
-	fnopenprn : fn_printheader
+	fnOpenPrn : fn_printheader
 	do
 		NEXT_CUSTOMER: !
 		read #h_iphold,using 'form pos 1,C 10': z$ eof CUSTDONE
@@ -65,7 +65,7 @@ continue
 CUSTDONE: !
 	mat msgtext$(1)=("Customers reversed: "&str$(undocount))
 	fnMsgBox(mat msgtext$,answer$,"Report",0)
-	fncloseprn
+	fnClosePrn
 end if
 Xit: fnXit
 def fn_options(&route,&billingdate$) ! show options dialog to user and return selections

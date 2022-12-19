@@ -10,7 +10,7 @@
 	dim pedat$*20,actpd$*6,bm(13),d(2),bp(13),by(13)
  
 	fnTop(program$,"Cash Flow with Budget")
-	if fnGlAskFormatPriorCdPeriod=5 then goto Xit 	! sets fnps,fnpriorcd,fnfscode (primary/secondary,current year/Prior,period to print)
+	if fnGlAskFormatPriorCdPeriod=5 then goto Xit 	! sets fnPs,fnpriorcd,fnfscode (primary/secondary,current year/Prior,period to print)
 	actpd$=fnactpd$
 	pedat$=fnpedat$
 	actpd$=fnactpd$
@@ -29,7 +29,7 @@
 	pr newpage
 	pr f "10,20,C 30,h,n": "CASH FLOW STATEMENT IN PROCESS"
 	on fkey 5 goto L2130
-	fnopenprn
+	fnOpenPrn
 	open #1: fl1$,i,i,k
 	if process=1 or d(1)=0 then goto L390
 	pr newpage
@@ -39,7 +39,7 @@ L370: pr f "11,5,C 65": "ON ONE DEPARTMENT; ELSE ENTER 0 TO pr ALL DEPARTMENTS"
 L390: pr newpage
 	pr f "10,1,Cc 80,N": "Printing: please wait..."
 	pr f "12,2,c 30,B,5": "Press F5 to stop"
-	if fnps=2 then goto L450 ! secondary
+	if fnPs=2 then goto L450 ! secondary
 	execute "Index [Q]\GLmstr\GLmstr.h[cno] [temp]\fsindex.h[cno] 75 3 Replace DupKeys -N"
 	goto L460
 L450: execute "Index [Q]\GLmstr\GLmstr.h[cno] [temp]\fsindex.h[cno] 78 3 Replace DupKeys -N"
@@ -216,7 +216,7 @@ return
  
 L2130: eofcode=1
 	gosub L1770
-	fncloseprn
+	fnClosePrn
 goto Xit
  
 L2180: pr newpage

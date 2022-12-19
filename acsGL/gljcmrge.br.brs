@@ -45,7 +45,7 @@ L360: form pos 1,c 12,c 6,n 5,pd 3,pd 2,n 6,4*pd 4.2,pd 5.2,c 30,pd 3
 L430: close #2:
 	close #3:
 	close #5:
-L460: fnchain("S:\General Ledger\Merge")
+L460: fnChain("S:\General Ledger\Merge")
  
 Xit: fnXit
  

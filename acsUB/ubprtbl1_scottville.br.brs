@@ -93,7 +93,7 @@ L480: form pos 1,c 10,pos 1741,n 2,n 7
 	if trim$(a$)="" and prtbkno>0 then restore #2,key>=cnvrt$("pic(zz)",prtbkno)&"       ": ! selected a route and no beginning Account
 
 	open #3: "Name=[Q]\UBmstr\ubAdrBil.h[cno],KFName=[Q]\UBmstr\AdrIndex.h[cno],Shr",i,i,k
-! fnOPENPRN
+! fnOpenPrn
 
 ! IF SL1=0 THEN GOSUB SORT1
 L570: if sl1=1 then goto SCREEN3

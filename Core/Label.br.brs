@@ -74,7 +74,7 @@ def library fnLabel(mat linestyle$; ___,returnN)
 		end if
 	goto LabelXit ! /r
 	Label_1UpDotMatrix: ! r: 1-Up Dot-Matrix
-		fnopenprn
+		fnOpenPrn
 		! fnwait('Printing: Please wait...',1)
 		hLabelTemp=fn_openLabelFile
 		do
@@ -118,7 +118,7 @@ def library fnLabel(mat linestyle$; ___,returnN)
 			if uprc$(linestyle$(5))='BAR' then
 				goto BarCodePrint
 			end if
-			fnopenprn
+			fnOpenPrn
 			! fnwait('Printing: Please wait...',1)
 			if top_marg>0 then
 				pr #255,using 'form pos 1,c 1,skip '&str$(top_marg): ''
@@ -185,7 +185,7 @@ def library fnLabel(mat linestyle$; ___,returnN)
 			fnpa_finis
 			goto Xit
 		end if
-		fncloseprn
+		fnClosePrn
 		close #hLabelTemp: ioerr ignore
 		hLabelTemp=0
 	return  ! /r

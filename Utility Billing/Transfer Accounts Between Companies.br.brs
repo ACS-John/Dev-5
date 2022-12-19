@@ -55,7 +55,7 @@ MENU1: !
 	open #51: 'Name=[Q]\UBmstr\Deposit1.h'&str$(co2)&',Shr,KFName=[Q]\UBmstr\DepIdx1.h'&str$(co2)&',Shr,Use,RecL=16,KPs=1,KLn=10',i,outIn,k ioerr MENU1
 	close #52: ioerr ignore
 	open #52: 'Name=[Q]\UBmstr\Deposit2.h'&str$(co2)&',Shr,USE,RecL=73',i,outi,r
-	fnopenprn
+	fnOpenPrn
 	gosub HDR
 ScrSelectCustomer: !
 	hcno=cno
@@ -129,7 +129,7 @@ Finis: ! r:
 	! close #31:
 	! close #61:
 	! close #32:
-	fncloseprn
+	fnClosePrn
 goto DONE ! /r
 AltBillAddr: ! r: alternate billing address   co1
 	open #3: 'Name=[Q]\UBmstr\UBADRBIL.h'&str$(co1)&',Shr,KFName=[Q]\UBmstr\AdrIndex.h'&str$(co1)&',Shr',i,outIn,k

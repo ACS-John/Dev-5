@@ -34,7 +34,7 @@
 	fPrmstr: form pos 1,n 4,3*c 25,c 11,36*pd 5.2,2*n 5
 	open #h_acprcks=fnH: "Name=[Q]\GLmstr\ACPRCKS.h[cno],Shr",i,outi,r
 	report$="Payroll Check Register"
-	fnopenprn
+	fnOpenPrn
 	fn_hdr1
 L350: if d(1)>0 then goto L360 else goto L390
 L360: if sum(empd)=0 then goto L390
@@ -144,7 +144,7 @@ Finis: !
 L1230: !
 	fn_totals_3
 ! pr #255,USING 40: HEX$("2B0205000A1042")
-	fncloseprn
+	fnClosePrn
 	goto Xit
 def fn_calk_3b
 		t1=t1+m(1)

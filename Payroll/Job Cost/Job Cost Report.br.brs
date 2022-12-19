@@ -13,7 +13,7 @@ dim io1$(6)*21,pd$*30,message$*40,resp$(6)*50
 fnTop(program$)
 dat1=date('mmddyy')
  
-prtjob$=prtdet$=sumcat$=sumjob$=prtpag$='N' ! setup defaults to answers (also used by fnprocess=1)
+prtjob$=prtdet$=sumcat$=sumjob$=prtpag$='N' ! setup defaults to answers (also used by fnProcess=1)
  
 open #1: 'Name=[Q]\PRmstr\SCMSTR.h[cno],KFName=[Q]\PRmstr\SCIndex.h[cno],Shr',i,i,k
 for j=1 to 100
@@ -82,7 +82,7 @@ L690: !
 	k=k-1
 L700: !
 	on fkey 5 goto DONE
-	fnopenprn
+	fnOpenPrn
 L720: !
 	if prtjob$='Y' then goto L810
 L730: !
@@ -208,7 +208,7 @@ L1840: close #1:
 	close #2:
 	close #3:
 DONE: !
-	fncloseprn
+	fnClosePrn
 	goto Xit
 !
 HDR: !

@@ -11,7 +11,7 @@
 ! /r
 	fnTop(program$)
 	report$="Statement of Income and Expenses"
-	if fnGlAskFormatPriorCdPeriod=5 then goto Xit ! ! sets fnps,fnpriorcd,fnfscode (primary/secondary,current year/Prior,period to print)
+	if fnGlAskFormatPriorCdPeriod=5 then goto Xit ! ! sets fnPs,fnpriorcd,fnfscode (primary/secondary,current year/Prior,period to print)
 	on fkey 5 goto Finis
 ! r: setup files, etc
 	cch$=fncch$
@@ -20,7 +20,7 @@
 	fscode=fnfscode
 	priorcd=fnpriorcd
 !
-	if fnps=2 then
+	if fnPs=2 then
 		mp1=72
 		open #hAcGlFnsX=fnH:"Name=[Q]\GLmstr\ACGLFNSJ.h[cno],KFName=[Q]\GLmstr\agfsidx2.h[cno],Shr" ,i,i,k
 	else
@@ -28,7 +28,7 @@
 		open #hAcGlFnsX=fnH:"Name=[Q]\GLmstr\ACGLFNSI.h[cno],KFName=[Q]\GLmstr\agfsidx3.h[cno],Shr",i,i,k
 	end if
 	fnIndex("[Q]\GLmstr\GLmstr.h[cno]",env$('temp')&"\fsindex.h[cno]",str$(mp1)&" 3")
-	fnopenprn
+	fnOpenPrn
 	open #hGlMstr=fnH: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Temp]\fsindex.h[cno],Shr",i,i,k
 	fHlMstr: form pos mp1,pd 3,pos 81,41*pd 6.2
 	! /r
@@ -162,7 +162,7 @@ PrFootnotesA: ! r: footnotes
 	end if
 return ! /r
 PrHeaderSecondary: ! r:
-	fnpglen(pglen)
+	fnPgLen(pglen)
 	sk=pglen-krec(255): fl=len(rtrm$(foot$))
 	pr #255,using L1340: rtrm$(foot$),"Page "&str$(pt1)
 	L1340: form skip sk,pos tabnote,c fl,pos 74,c 8,skip 1
@@ -202,7 +202,7 @@ Finis: ! r:
 	gosub PrHeaderSecondary
 	fnfscode(actpd)
 	fnpriorcd(1)
-	fncloseprn
+	fnClosePrn
 goto Xit ! /r
 Xit: fnXit
 include: ertn

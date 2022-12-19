@@ -15,7 +15,7 @@
  
  
 	rn$=" 1"
-	if fnprocess=1 then goto L300
+	if fnProcess=1 then goto L300
  
 MAIN_SCREEN: !
 	fnTos(sn$="jcprnt1") : _
@@ -29,7 +29,7 @@ MAIN_SCREEN: !
 	dh$=resp$(1) ! heading date
 	fndat(dh$,put=2)
  
-L300: fnopenprn
+L300: fnOpenPrn
  
  
 	open #1: "Name=S:\acsPR\JCReport.MST,KFName=S:\acsPR\jcReport.Idx,Shr",i,i,k
@@ -55,7 +55,7 @@ HDR: ! r:
 return ! /r
  
 EOF1: !
-	fncloseprn
+	fnClosePrn
 	close #1:
 	close #2:
 	fnXit

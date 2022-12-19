@@ -63,7 +63,7 @@
 	fncreg_write('ubcustdp.subtotal by route',subtotal$)
 	fncreg_write('ubcustdp.filter choice',resp$(resp_filter))
 ! /r
-fnopenprn
+fnOpenPrn
 gosub Header
 if seq=1 then
 	open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\UBIndx2.h[cno],Shr",i,i,k  ! name sequence
@@ -105,7 +105,7 @@ PrintGrandTotals: ! r:
 		F_TOTALS: form pos 7,c 30,n 10.2
 	next j
 	close #1: ioerr ignore
-	fncloseprn
+	fnClosePrn
 goto Xit ! /r
 Xit: fnXit
 Header: ! r:

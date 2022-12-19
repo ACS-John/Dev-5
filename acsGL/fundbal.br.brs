@@ -24,7 +24,7 @@
 	data " "
 	data " "
 	read mat desc$
-	fnopenprn
+	fnOpenPrn
 	open #1: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLIndex.h[cno],Shr",i,i,k
 	open #2: "Name=[Q]\GLmstr\GLTrans.h[cno],Shr",i,i,r
 	pr newpage
@@ -96,7 +96,7 @@ L910: next j
 	pr #255,using L700: "------------","------------","------------","------------"
 	pr #255,using L780: "TOTAL",sum(begb),sum(bankdr),-sum(bankcr),sum(endb)
 	pr #255,using L700: "============","============","============","============"
-	fncloseprn
+	fnClosePrn
 return
  
 	pr #255: newpage

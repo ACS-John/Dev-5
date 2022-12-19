@@ -58,7 +58,7 @@ def fn_report_it(z$,mat report_g,bal_breakdown; heading$*80,col_2_heading$*12,co
 	if do_report then 
 		if ~setup_report_it then 
 			setup_report_it=1
-			fnopenprn
+			fnOpenPrn
 			pr #255,using F_HDR1: heading$
 			if col_4_heading$<>'' then 
 				pr #255,using F_HDR2c: 'Account',col_2_heading$,serviceName$(1)(1:12),serviceName$(2)(1:12),serviceName$(3)(1:12),serviceName$(4)(1:12),serviceName$(5)(1:12),serviceName$(6)(1:12),serviceName$(7)(1:12),serviceName$(8)(1:12),serviceName$(9)(1:12),serviceName$(10)(1:12),'*Calculated*',col_3_heading$,col_4_heading$
@@ -105,7 +105,7 @@ def fn_balanceBreakdowns(do_fix,do_report) ! assumes balance is right, puts the 
 	dim service_rate_code(7)
 	dim gb(10)
 	gb_other=fnservice_other
-	fnopenprn
+	fnOpenPrn
 	open #hCustomer=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",i,outIn,k 
 	do 
 		read #hCustomer,using F_CUSTOMER: z$,mat service_rate_code,bal,mat customer_g,mat gb eof CUSTOMER_EOF
@@ -185,7 +185,7 @@ def fn_transBreakdowns(do_fix,do_report; ___,needsFixed)
 fnend  ! fn_balanceBreakdowns
 def fn_reportItClose(&print_count)
 	if print_count>0 then 
-		let fncloseprn
+		let fnClosePrn
 		pr 'print_count=';print_count
 	end if
 	setup_report_it=0

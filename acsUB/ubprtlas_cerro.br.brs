@@ -90,7 +90,7 @@ L580: form pos 1,c 10,pos 1741,n 2,n 7
 	if trim$(a$)="" and prtbkno>0 then restore #2,key>=cnvrt$("pic(zz)",prtbkno)&"       ": ! selected a route and no beginning Account
  
 	open #3: "Name=[Q]\UBmstr\UBAdrBil.h[cno],KFName=[Q]\UBmstr\adrIndex.h[cno],Shr",i,i,k
-	fnopenprn
+	fnOpenPrn
  
 	on fkey 5 goto RELEASE_PRINT
 	gosub BULKSORT
@@ -135,7 +135,7 @@ L960: e1=0 : mat pe$=("")
 RELEASE_PRINT: !
 	close #1: ioerr L1040
 L1040: close #3: ioerr L1050
-L1050: fncloseprn
+L1050: fnClosePrn
 	goto ENDSCR
  
 L1080: !

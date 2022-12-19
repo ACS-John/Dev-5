@@ -59,7 +59,7 @@ MAIN: !
 	read #bankmstr,using 'form pos 3,C 30,C 12,PD 6.2',key=cnvrt$('N 2',wbc),release: bn$ nokey MAIN
 	close #bankmstr:
 	bn$=rtrm$(bn$)
-	fnopenprn
+	fnOpenPrn
 END1: !
 	if wcd=0 or td1yn$='T' then goto HERE
 	pr #255,using 'form pos 52,G 12.2': '  __________'
@@ -147,7 +147,7 @@ L1080: for j=1 to 3 : _
 		pr #255,using 'form pos 1,C 60': '______________________________________' : _
 		pr #255: ''
 	gosub RESTORE_WORK
-	fncloseprn
+	fnClosePrn
 	goto Xit
 
 Xit: fnXit

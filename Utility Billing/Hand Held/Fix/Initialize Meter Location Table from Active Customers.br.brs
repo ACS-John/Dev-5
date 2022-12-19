@@ -4,7 +4,7 @@
 ! currently configured best for Thomasboro and Omaha
 
 fn_setup
-fntop(program$)
+fnTop(program$)
 ! MeterId - either Customer.S1MeterNumber or Customer.s01serialNumber
 disableReportBlank=1
 fixDuplicateMeterIds=1  ! these fixes happen by inventing new data replacing the conversion's souce and destination datasets
@@ -98,12 +98,12 @@ EoCustomer: !
 		pr #255: '     Meter Type N: '&str$(countTypeN)
 		pr #255: '     Meter Type C: '&str$(countTypeC)
 		pr #255: '____________________________________'
-		fncloseprn : setupReportError=0
+		fnClosePrn : setupReportError=0
 		if dupCount then pause
 		countBlankS1MeterNumber=dupCount=countDuplicateMeterIds=countWrite=0
 	end if ! /r
 	pause
-fnchain('S:\Utility Billing\Hand Held\Meter Location')
+fnChain('S:\Utility Billing\Hand Held\Meter Location')
 
 
 def fn_endPointType$(meterId$; ___,return$,mLen)
@@ -182,7 +182,7 @@ CreateNewMeterId: ! r:
 return ! /r
 def fn_reportError(z$*10,text$*256)
 	if ~setupReportError then
-		fnopenprn : setupReportError=1
+		fnOpenPrn : setupReportError=1
 		pr #255: 'Duplicate or missing Meter ID Report'
 		pr #255: 'Account    Outstanding Error'
 		pr #255: '__________ __________________________'

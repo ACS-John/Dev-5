@@ -34,7 +34,7 @@ MAIN: !
 	if resp$(2)="Sewer" then          svce=2
 	if resp$(3)="Sewer" then          svce=3
 	if resp$(4)="Sewer" then          svce=4
-	fnopenprn
+	fnOpenPrn
 	open #1: "Name=[Q]\UBmstr\ubMaster.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",i,i,k
 	L510: !
 	for k9=1 to 20
@@ -80,7 +80,7 @@ L870: for k8=1 to 18
 	next k9
 L930: message$="Printing: Please wait..." :         fnwait(message$,1)
 	on fkey 5 goto DONE
-	fnopenprn
+	fnOpenPrn
 L960: read #1,using L970: mat a,mat d,f eof L1250
 L970: form pos 143,4*pd 2,pos 217,12*pd 5,pos 296,pd 4
 	if f<>bdate then goto L960
@@ -143,6 +143,6 @@ L1550: form skip 1,c 20,pos 45,pic(zzz,zzz,zzz),skip 1
 	pr #255,using L1570: "Number of Customers under Minumum Usage",mincust
 L1570: form skip 1,c 40,pos 45,pic(zzz,zzz,zzz),skip 1
 DONE: close #1: ioerr ignore
-fncloseprn
+fnClosePrn
 Xit: fnXit
 include: ertn

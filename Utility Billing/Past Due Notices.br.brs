@@ -332,14 +332,14 @@ def fn_report_close
 		dim ra_line$*256
 		close #h_ra:
 		open #h_ra: 'Name=[temp]\ubpdnot_summary_s[session].txt,RecL=256',display,input
-		fnopenprn( 'Summary')
+		fnOpenPrn( 'Summary')
 		gosub RC_HDR
 		do
 			linput #h_ra: ra_line$ eof RC_DONE
 			pr #255: rtrm$(ra_line$) pageoflow RC_PGOF ! ,using 'form pos 1,c 256'
 		loop
 		RC_DONE: !
-		fncloseprn
+		fnClosePrn
 		close #h_ra,free:
 		h_ra=0
 	end if  ! h_ra
@@ -374,7 +374,7 @@ fnend
 def fn_print_standard_form ! used by (not) Blucksberg Mtn Water, possibly others
 	if a(1)=0 then water$='     ' else water$='Water'
 	if a(4)=0 then gas$='   ' else gas$='Gas'
-	fnopenprn
+	fnOpenPrn
 	pr #255: ''
 	pr #255: ''
 	pr #255: ''
@@ -409,7 +409,7 @@ def fn_print_standard_form ! used by (not) Blucksberg Mtn Water, possibly others
 fnend
 ! Blucksberg uses both   fn_print_blucksberg   and   fn_reminder 12/29/2020
 def fn_print_blucksberg(mat a,mat at$,mat mis$,mat f$,meter_address$*30,z$,mat addr$,bal,d1; ___,water$*5,gas$*3) ! 9/10/2018
-	fnopenprn
+	fnOpenPrn
 	pr #255: ''
 	pr #255: ''
 	pr #255: ''
@@ -445,7 +445,7 @@ def fn_print_blucksberg(mat a,mat at$,mat mis$,mat f$,meter_address$*30,z$,mat a
 	pr #255: newpage
 fnend
 def fn_print_granby
-	fnopenprn
+	fnOpenPrn
 	pr #255,using 'form pos 4,c 47,skip 4': e$(1)
 	if gb(1)=0 then
 		pr #255,using Fgranby1: 'Your Utility Account is Past Due.'
@@ -492,7 +492,7 @@ def fn_print_granby
 	end if
 fnend
 def fn_french_settlement_gas
-	fnopenprn
+	fnOpenPrn
 	! pre-print calculations__________________________________
 	if pb<>0 then pb$='Prior Balance' else pb$=''
 	if g(1)=0 then t1$='' else t1$='WTR'
@@ -729,7 +729,7 @@ EoCustomer: ! r:
 			close #h_prnt1: : h_prnt1=0
 			fnEditFile('atlantis',tmp_rtf_filename$)
 		else
-			fncloseprn
+			fnClosePrn
 		end if
 		goto ScreenSelect ! Xit
 	end if
@@ -741,7 +741,7 @@ EoCustomer: ! r:
 		close #h_prnt1: : h_prnt1=0
 		fnEditFile('atlantis',tmp_rtf_filename$)
 	else
-		fncloseprn
+		fnClosePrn
 	end if  ! /r
 Xit: fnXit
 include: ertn

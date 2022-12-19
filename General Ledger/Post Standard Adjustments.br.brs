@@ -50,6 +50,6 @@ ChainToAcGlMrge: !
 	if totalDb+totalCr<>0 then gosub MsgDoesNotFoot
 	close #hMerge:
 	close #hStdAdj:
-fnchain("S:\General Ledger\Merge")
+fnChain("S:\General Ledger\Merge")
 Xit: fnXit
 include: ertn

@@ -1,5 +1,5 @@
 autoLibrary
-fntop(program$)
+fnTop(program$)
 ! fnOpenPrn
 dim clientId$(2)*5
 clientId$(1)='2070'

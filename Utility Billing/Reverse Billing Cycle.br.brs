@@ -49,7 +49,7 @@ def fn_undobilling
 		open #hCustomer=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno]",i,outIn,k
 		open #hTrans=fnH: "Name=[Q]\UBmstr\ubtransvb.h[cno],KFName=[Q]\UBmstr\ubtrindx.h[cno]",i,outIn,k
 		open #hTrans2=fnH: "Name=[Q]\UBmstr\ubtransvb.h[cno],KFName=[Q]\UBmstr\UBTrdt.h[cno]",i,outIn,k
-		fnopenprn
+		fnOpenPrn
 		fn_printHeader
 		do
 			if filter=do_individual then
@@ -130,7 +130,7 @@ def fn_undobilling
 		end if
 		mat msgtext$(1)=("Customers reversed: "&str$(undoCount))
 		fnMsgBox(mat msgtext$,answer$,"Report",0)
-		fncloseprn
+		fnClosePrn
 		close #hCustomer: ioerr ignore
 		close #hTrans: ioerr ignore
 		close #hTrans2: ioerr ignore

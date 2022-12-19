@@ -16,7 +16,7 @@
 	open #1: "Name=[Q]\PRmstr\JCMSTR.h[cno],KFName=[Q]\PRmstr\JCIndx.h[cno],Shr",i,i,k
 	open #2: "Name=[Q]\PRmstr\JCCAT.h[cno],KFName=[Q]\PRmstr\CatIndx.h[cno],Shr",i,i,k
 	prtcat$="N"
-	if fnprocess=1 then goto L460
+	if fnProcess=1 then goto L460
  
 	pr newpage
 	close #101: ioerr L220
@@ -49,7 +49,7 @@ L460: pr newpage
 	message$="Printing: please wait"
 	fnwait(message$,1)
 	on fkey 5 goto L710
-	fnopenprn
+	fnOpenPrn
 	gosub HDR
 L520: read #1,using L530: jn$,n$ eof L680
 L530: form pos 1,c 6,c 40
@@ -70,7 +70,7 @@ L650: if cn$(1:6)><jn$ then goto L520
 L680: exit eof L690,nokey L690
 L690: close #1:
 	close #2:
-L710: fncloseprn
+L710: fnClosePrn
 	goto Xit
  
 HDR: !

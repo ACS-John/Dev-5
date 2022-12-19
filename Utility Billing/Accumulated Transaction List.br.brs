@@ -36,7 +36,7 @@ Fcustomer: form pos 1,c 10,pos 41,c 30,pos 292,pd 4.2
 open #hTrans=fnH: "Name=[Q]\UBmstr\UBTransVB.h[cno],KFName=[Q]\UBmstr\UBTrIndx.h[cno],Shr",i,i,k
 Ftran: form pos 1,c 10,n 8,n 1,pd 4.2,pd 4.2
 ! on fkey 5 goto Finis
-fnopenprn
+fnOpenPrn
 gosub PrHeader
 READ_CUSTOMER: !
 dim e2$*30
@@ -58,7 +58,7 @@ loop ! /r
 Finis: ! r:
 	close #hCustomer: ioerr ignore
 	close #hTrans: ioerr ignore
-	fncloseprn
+	fnClosePrn
 goto Xit ! /r
 
 PrHeader: ! r:

@@ -11,16 +11,16 @@
 	eofcode=0
 
 	fnTop(program$,"Change in Financial Position")
-	if fnGlAskFormatPriorCdPeriod=5 then goto Xit ! sets fnps,fnpriorcd,fnfscode (primary/secondary,current year/Prior,period to print)
+	if fnGlAskFormatPriorCdPeriod=5 then goto Xit ! sets fnPs,fnpriorcd,fnfscode (primary/secondary,current year/Prior,period to print)
 	pedat$=fnpedat$
 	actpd=fnactpd
 	fscode=fnfscode
 	priorcd=fnpriorcd
 
 	mp1=75
-	if fnps=2 then mp1=mp1+3
+	if fnPs=2 then mp1=mp1+3
 	fl1$="Name=[Q]\GLmstr\ACGLFNSF.h[cno],KFName=[Q]\GLmstr\agfsidx5.h[cno],Shr"
-	if fnps=2 then fl1$="Name=[Q]\GLmstr\ACGLFNSG.h[cno],KFName=[Q]\GLmstr\agfsidx6.h[cno],Shr"
+	if fnPs=2 then fl1$="Name=[Q]\GLmstr\ACGLFNSG.h[cno],KFName=[Q]\GLmstr\agfsidx6.h[cno],Shr"
 
 	open #1: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLIndex.h[cno],Shr",i,i,k
 	L280: !
@@ -35,7 +35,7 @@ L340: !
 goto L280
 L350: close #1:
 	open #1: fl1$,i,i,k
-	if fnprocess=1 or fnUseDeptNo=0 then goto BEGIN_PRINTING
+	if fnProcess=1 or fnUseDeptNo=0 then goto BEGIN_PRINTING
 	fnTos
 	mylen=30: mypos=mylen+3 : right=1
 	fnLbl(1,1,"Cost Center or Department #:",mylen,right)
@@ -48,12 +48,12 @@ L350: close #1:
 	if ckey=5 then goto Xit
 	costcntr=val(resp$(1))
 BEGIN_PRINTING: !
-	fnopenprn
+	fnOpenPrn
 	if file$(255)(1:4)<>"PRN:" then redir=1 else redir=0
 	report$="STATEMENT OF CHANGES IN FINANCIAL POSITION"
-	fnopenprn
+	fnOpenPrn
 	if file$(255)(1:4)<>"PRN:" then redir=1 else redir=0
-	if fnps=2 then goto L550 ! secondary
+	if fnPs=2 then goto L550 ! secondary
 	execute "Index [Q]\GLmstr\GLmstr.h[cno] [temp]\fsindex.h[cno] 75 3 Replace DupKeys -N"
 goto L560
 L550: !
@@ -158,7 +158,7 @@ L1310: ! r:
 			goto L1450
 		end if
 		L1360: !
-		fnpglen(pglen)
+		fnPgLen(pglen)
 		! If PGLEN<>42 Then pGLEN=58
 		sk=pglen-krec(255): fl=len(rtrm$(foot$))
 		! If PGLEN=42 Then sK=SK+1
@@ -216,7 +216,7 @@ return ! /r
 DONE: !
 	eofcode=1
 	gosub L1360
-	fncloseprn
+	fnClosePrn
 goto Xit
 
 L1870: !

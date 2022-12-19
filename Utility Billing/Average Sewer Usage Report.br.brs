@@ -18,13 +18,13 @@ maxu=val(resp$(2))
 goto StartReport
  
 Finis: !
-	fncloseprn
+	fnClosePrn
 Xit: fnXit
  
 StartReport: !
 	! maybe a printing please wait screen here would be nice.
 	open #1: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",i,i,k
-	fnopenprn
+	fnOpenPrn
 	gosub Header
 goto Report
  

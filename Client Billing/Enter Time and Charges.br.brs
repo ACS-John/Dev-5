@@ -317,7 +317,7 @@ goto L830
 L2230: ! r: correction listing
 	pr newpage
 	pr f "10,10,c 60,h,n": "CORRECTION LISTING IN PROCESS"
-	fnopenprn
+	fnOpenPrn
 	if rtrm$(file$(255))(1:4)<>"PRN:" then goto L2280
 	if cp=1 then pr #255,using L2280: hex$("2B0205000F1042") else pr #255,using L2280: hex$("2B0205000F1042")
 	L2280: form pos 1,c 9,skip 0
@@ -357,12 +357,12 @@ L2230: ! r: correction listing
 	next j
 	pr #255,using L2430: tinp3,tottime,totexp
 	dim sendto$*80
-	fncloseprn ! sENDTO$=FILE$(255): pr #255: NEWPAGE : Close #255: : If SENDTO$(1:4)<>"PRN:" Then Execute "SY START /W "&SENDTO$ : Execute "DROP "&SENDTO$&" -N"
+	fnClosePrn ! sENDTO$=FILE$(255): pr #255: NEWPAGE : Close #255: : If SENDTO$(1:4)<>"PRN:" Then Execute "SY START /W "&SENDTO$ : Execute "DROP "&SENDTO$&" -N"
 goto L600 ! /r
 L2620: !
 	close #1:
 	close #2:
-fnchain("S:\Client Billing\Enter Time and Charges Merge")
+fnChain("S:\Client Billing\Enter Time and Charges Merge")
 
 SRCH1: ! r:
 	s1=1 ! NAME SEARCH

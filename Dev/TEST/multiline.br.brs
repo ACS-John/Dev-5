@@ -1,6 +1,6 @@
 ! Replace Test\MultiLine
 autoLibrary
-fntop(program$)
+fnTop(program$)
 fnTos
 dim resp$(5)*400
 fnmultiline(2,5,10,30)

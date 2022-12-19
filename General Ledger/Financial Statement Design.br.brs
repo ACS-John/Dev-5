@@ -275,7 +275,7 @@ AddEditValidation: ! r:
 return ! /r
 def fn_print_proof
 	restore #hFSDesign,key>="     ": eof ScrGrid nokey PRINT_PROOF_XIT
-	fnopenprn
+	fnOpenPrn
 	fn_print_proof_hdr
 	do
 		read #hFSDesign,using F_FSDesign: rno$,d$,te$,sp,ls,ds,ul,rs,bc,ap,mat ac,ic,fc,rnp eof PRINT_PROOF_FINIS
@@ -283,7 +283,7 @@ def fn_print_proof
 	L2030: form pos 1,c 5,x 1,c 50,c 1,x 2,pic(zzzzz),x 1,pic(zzzzz),x 1,pic(zzzz),x 1,pic(zzzzz),x 1,pic(zzzz),x 1,pic(zzz),x 1,pic(zzzzz),x 1,pic(zzz),pic(zzz),pic(zzz),pic(zzz),pic(zzz),pic(zzz),pic(zzz),pic(zzz),pic(zzz),pic(zzzz),x 1,pic(zzzz),skip 1
 	loop
 	PRINT_PROOF_FINIS: !
-	fncloseprn
+	fnClosePrn
 	PRINT_PROOF_XIT: !
 fnend
 PgOf: ! r:

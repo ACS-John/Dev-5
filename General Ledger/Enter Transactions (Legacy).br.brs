@@ -239,17 +239,17 @@ POSTING_OPTIONS: ! r:
 	fnfscode(0)
 	gosub CREATE_CONTRA_ENTRIES
 	if resp$(5)='True' or ckey=5 then goto Xit ! return w/o posting
-	if resp$(2)='True' then fnprocess(1) else fnprocess(0)
-	if resp$(4)='True' then fnprocess(4) ! post both
+	if resp$(2)='True' then fnProcess(1) else fnProcess(0)
+	if resp$(4)='True' then fnProcess(4) ! post both
 	if resp$(1)='True' then goto ACGLMRGE
-	if resp$(3)='True' then fnchain("S:\General Ledger\Post Payroll Checks")
+	if resp$(3)='True' then fnChain("S:\General Ledger\Post Payroll Checks")
 	open #h_process=fnH: "Name=[Q]\GLmstr\Process.h[cno],RecL=128,Use",i,outi,r
 	if lrec(h_process)=0 then write #h_process,using "form pos 1,n 1": 0
 	if resp$(2)='True' then rewrite #h_process,using "form pos 1,n 1",rec=1: 1 else rewrite #h_process,using "form pos 1,n 1",rec=1: 0 ! code for post payroll and gl both
 	if resp$(4)='True' then rewrite #h_process,using "form pos 1,n 1",rec=1: 4 ! code for posting pr and gl both
 	close #h_process:
 	if resp$(4)='True' then goto ACGLMRGE ! post both
-	if resp$(2)='True' then fnchain("S:\acsGL\autoproc")
+	if resp$(2)='True' then fnChain("S:\acsGL\autoproc")
 	goto Xit ! /r
 Xit: fnXit
 
@@ -594,7 +594,7 @@ L5650: form pos 1,c 12,n 10.2,c 12,n 10.2,c 12,n 10.2,c 12,n 10.2,c 12,n 10.2
 L5670: !
 	fnstyp(92)
 	goto ACGLMRGE ! /r
-ACGLMRGE: fnchain("S:\General Ledger\Merge")
+ACGLMRGE: fnChain("S:\General Ledger\Merge")
 SCREEN_INSERT_DISKETTE: ! r:
 	close #101: ioerr ignore
 	open #101: "SROW=10,SCOL=19,EROW=12,ECOL=62,BORDeR=DR,CaPTION=<Choose Input Drive",display,outIn
@@ -702,7 +702,7 @@ F_PPT_LINE: form pos 1,c 12,5*cr 19
 PPT_L6240: !
 		next j
 
-		fnopenprn
+		fnOpenPrn
 		pr #255: lpad$("Total Debits:",mylen)&' '&cnvrt$("pic(-------,---,---.##)",td)
 		pr #255: lpad$("Total Credits:",mylen)&' '&cnvrt$("Pic(-------,---,---.##",tc)
 		pr #255: ""
@@ -723,7 +723,7 @@ PPT_L6240: !
 				pr #255,using F_PPT_LINE: mat glitem3$
 			end if
 		next j
-		fncloseprn
+		fnClosePrn
 	fnend
 CREATE_CONTRA_ENTRIES: ! r:
 	restore #h_gl_work:
@@ -960,7 +960,7 @@ EA_FINIS: !
 	editall=0
 return  ! /r
 def fn_pr_proof_list(; ___,tr$*12,td$*30)
-	fnopenprn
+	fnOpenPrn
 	gosub PROOF_LIST_HDR
 	holdtr$="" : tr$=""
 	restore #h_gl_work:
@@ -978,7 +978,7 @@ def fn_pr_proof_list(; ___,tr$*12,td$*30)
 	loop
 	PE_FINIS: !
 	pr #255,using "form pos 10,c 10,n 14.2,skip 1": "Net",netamount : netamount=0
-	fncloseprn
+	fnClosePrn
 fnend
 PROOF_LIST_PGOF: ! r:
 	pr #255: newpage

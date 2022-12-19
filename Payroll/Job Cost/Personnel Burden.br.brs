@@ -127,7 +127,7 @@ REINDEX: ! indexes if needed
 	execute "Index [Q]\PRmstr\Burden.h[cno]"&' '&"[Q]\PRmstr\BurdenIdx.h[cno] 1 8 Replace DupKeys -n"
 goto L180
 PRINT_PROOF: !
-	fnopenprn
+	fnOpenPrn
 	gosub L1140
 	restore #1:
 L1050: !
@@ -137,7 +137,7 @@ L1050: !
 goto L1050
 L1090: !r:
 	if nw=0 then pr #255: newpage
-	fncloseprn
+	fnClosePrn
 	on fkey 5 ignore
 goto ASKEMPLOYEE
 L1130: pr #255: newpage : gosub L1140 : continue

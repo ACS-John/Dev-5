@@ -63,7 +63,7 @@ SCR2: !
 		fnMsgBox(mat message$,resp$,'',mytype) 
 		goto SCR2
 	end if
-	fnopenprn
+	fnOpenPrn
 L470: read #1,using L490: x$,a2 eof DONE
 	if a2<>sewcode then goto L470 ! only average certain rate codes
 L490: form pos 1,c 10,pos 145,pd 2,pos 1822,n 9
@@ -91,7 +91,7 @@ L620: if t1>0 then t3=int(t2/t1) else t3=0
 
 DONE: ! 
 	gosub PRINT_REPORT
-	fncloseprn
+	fnClosePrn
 Xit: fnXit
 
 
