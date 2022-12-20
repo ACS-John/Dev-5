@@ -137,8 +137,8 @@ AskRoute: ! r:
 	fnCmdKey('&Cancel',5,0,0,'Don''t sent to Hand Held')
 	fnAcs(mat resp$, ckey)
 	if resp$(1)='[All]' and ckey=1 then selection_method=sm_allExceptFinal : goto StartForSelectAll ! if they select all on the route screen, handle same as pr all option from 1st menu
-	resp$(1)=''
 	bk1=val(resp$(1)) conv ignore
+	resp$(1)=''
 	if ckey=1 then
 		goto StartForSelectAll
 	else if ckey=2 then
