@@ -567,16 +567,7 @@ def fn_dashboardHeight
 	if env$('ACSDeveloper')<>'' then dhReturn=5
 	fn_dashboardHeight=dhReturn
 fnend
-def fn_ddAddButton(buttonText$*64,btnFkey,btnItem,tmp_btn_width; buttonLine,tooltip$*150) ! buttons are added and counted (btnItem) from right to left
-	if buttonLine=0 then buttonLine=1
-	if btnItem=1 then
-		fnButton(buttonLine,dashboard_width-tmp_btn_width,buttonText$,btnFkey,tooltip$,1,tmp_btn_width,fraDashboard)
-	else if btnItem>1 then
-		fnButton(buttonLine,dashboard_width-(tmp_btn_width*btnItem+(btnItem-1)),buttonText$,btnFkey,tooltip$,1,tmp_btn_width,fraDashboard)
-	else
-		pr 'btnItem=';btnItem;' and it is currently required by fn_ddAddButton'
-	end if
-fnend
+
 def fn_favoritesDraw
 	if env$('FavoritesOpen')='True' then
 		! fnFra(program_grid_line,favorite_left,grid_height-1,favorite_width,'Favorites')
@@ -597,24 +588,24 @@ def fn_favoritesDraw
 fnend
 def fn_dashboardDraw
 	if dashboard_height>0 then
-		dashboard_width=screen_width-4
-		fnFra(1,1,dashboard_height,dashboard_width,'Dashboard') : frameCount+=1 : fraDashboard=frameCount
+		dashboardWidth=screen_width-4
+		fnFra(1,1,dashboard_height,dashboardWidth,'Dashboard') : frameCount+=1 : fraDashboard=frameCount
 		if enableFavorites then
 			fnButtonOrDisabled(env$('FavoritesOpen')<>'True',2,favorite_left,'Favorites',fkey_favorite_open:=1451,'',20,fraDashboard)
 		end if
 		if env$('cursys')='CL' then
-			tmp_btn_width=14 : tmpBtnItem=0
-			fn_ddAddButton('Unpaid Invoice',fkey_cl_unpaid_invoice:=5001,tmpBtnItem+=1,tmp_btn_width)
-			fn_ddAddButton('Payee',fkey_cl_payee:=5003,tmpBtnItem+=1,tmp_btn_width)
-			fn_ddAddButton('Print Checks',fkey_cl_print_checks:=5002,tmpBtnItem+=1,tmp_btn_width)
+			tmpBtnWidth=14 : buttonLinePrior=0
+			fn_ddAddButton('Unpaid Invoice',fkey_cl_unpaid_invoice:=5001,tmpBtnWidth)
+			fn_ddAddButton('Payee',fkey_cl_payee:=5003,tmpBtnWidth)
+			fn_ddAddButton('Print Checks',fkey_cl_print_checks:=5002,tmpBtnWidth)
 		else if env$('cursys')='PR' then
 			fnLbl(1,1,'Payroll State:',15,1,0,fraDashboard)
 			fnLbl(1,17,fnpayroll_client_state$,4,0,0,fraDashboard)
-			tmp_btn_width=10 : tmpBtnItem=0
-			fn_ddAddButton('Checks',fkey_pr_print_checks:=5004,tmpBtnItem+=1,tmp_btn_width)
-			fn_ddAddButton('Registers',fkey_pr_payroll_registers:=5003,tmpBtnItem+=1,tmp_btn_width)
-			fn_ddAddButton('Enter Time',fkey_pr_enter_time:=5002,tmpBtnItem+=1,tmp_btn_width)
-			fn_ddAddButton('Employee',fkey_pr_employee:=5001,tmpBtnItem+=1,tmp_btn_width)
+			tmpBtnWidth=10 : buttonLinePrior=0
+			fn_ddAddButton('Checks'   	,fkey_pr_print_checks:=5004      	,tmpBtnWidth)
+			fn_ddAddButton('Registers'	,fkey_pr_payroll_registers:=5003	,tmpBtnWidth)
+			fn_ddAddButton('Enter Time'	,fkey_pr_enter_time:=5002        	,tmpBtnWidth)
+			fn_ddAddButton('Employee'  	,fkey_pr_employee:=5001          	,tmpBtnWidth)
 		else if env$('cursys')='GL' then
 			fnLbl(1,1,'Current Period:',19,1,0,fraDashboard)
 			fnLbl(1,21,str$(fnActPd),4,0,0,fraDashboard)
@@ -625,12 +616,11 @@ def fn_dashboardDraw
 			if pedat$='' then pedat$='(not set)'
 			fnButton(1,44,pedat$,fkey_gl_periodEndingDate:=5003,'',1,20,fraDashboard) ! fnLbl(1,47,fnpedat$,4,0,0,1)
 		DD_GL_Xit: !
-			tmp_btn_width=10 : tmpBtnItem=0
-			fn_ddAddButton('Accounts',fkey_gl_accounts:=5001,tmpBtnItem+=1,tmp_btn_width,1,'General Ledger Master')
-			fn_ddAddButton('Transactions',fkey_gl_Transactions:=5002,tmpBtnItem+=1,tmp_btn_width,1,'Enter Transactions')
+			tmpBtnWidth=10 : buttonLinePrior=0
+			fn_ddAddButton('Accounts'    	,fkey_gl_accounts:=5001    	,tmpBtnWidth,1,'General Ledger Master')
+			fn_ddAddButton('Transactions'	,fkey_gl_Transactions:=5002	,tmpBtnWidth,1,'Enter Transactions')
 			if fnClientHas('G2') then
-				tmpBtnItem=0
-				fn_ddAddButton('Employee',fkey_g2_employee:=5011,tmpBtnItem+=1,tmp_btn_width, 2)
+				fn_ddAddButton('Employee'  	,fkey_g2_employee:=5011    	,tmpBtnWidth, 2)
 			end if
 		else if env$('cursys')='UB' then
 			d1$=date$(days(fnLastBillingDate,'mmddyy'),'mm/dd/ccyy')
@@ -641,28 +631,48 @@ def fn_dashboardDraw
 				fkey_change_billing_date=5001
 				fnButton(1,32,'Change',fkey_change_billing_date,'Select a new current Billing Date',1,6,fraDashboard)
 			end if
-			tmp_btn_width=11 : tmpBtnItem=0
-			fn_ddAddButton('Collections',fkey_ub_collection:=5002,tmpBtnItem+=1,tmp_btn_width)
-			fn_ddAddButton('Customer',fkey_ub_customer:=5003,tmpBtnItem+=1,tmp_btn_width)
+			tmpBtnWidth=11 : buttonLinePrior=0
+			fn_ddAddButton('Collections'	,fkey_ub_collection:=5002,tmpBtnWidth)
+			fn_ddAddButton('Customer'   	,fkey_ub_customer:=5003,tmpBtnWidth)
 			if ub_total_ar_on_dashboard$='True' then
 				fnLbl(1,40,'Accounts Receivable:'	,26,1,0,1) : fnLbl(1,68,str$(fnTotal_ar)            	,4,0,0,1)
 				fnLbl(2,40,'Active Customers:'   	,26,1,0,1) : fnLbl(2,68,str$(fnActiveCustomerCount)	,4,0,0,1)
 			end if
 		else if env$('cursystem')='Client Billing' then
-			tmp_btn_width=30 : tmpBtnItem=0
-			fn_ddAddButton('Update Support Expiration Date',fkey_tm_updateSupportExpir:=5002,tmpBtnItem+=1,tmp_btn_width,1)
-			fn_ddAddButton('Collections',fkey_tm_collections:=5001,tmpBtnItem+=1,tmp_btn_width,1)
-			fn_ddAddButton('Contact',fkey_tm_contact:=5003,tmpBtnItem+=1,tmp_btn_width,2)
+			tmpBtnWidth=23 : buttonLinePrior=0
+			fn_ddAddButton('Update Sup Exp'	,fkey_tm_updateSupportExpir:=5002	,tmpBtnWidth,1,'Update Support Expiration Dates for Clients')
+			fn_ddAddButton('Collections'  	,fkey_tm_collections:=5001       	,tmpBtnWidth,1)
+			fn_ddAddButton('Client'       	,fkey_tm_client:=5004             	,tmpBtnWidth,1)
+			fn_ddAddButton('Contact'      	,fkey_tm_contact:=5003            	,tmpBtnWidth,2)
 			fnLbl(5,1,'Advanced Computer Services LLC Management Menu.',0,0,0,fraDashboard)
 		end if
 		! if env$('acsDeveloper')<>'' then
 		!   fnLbl(3,1,'---Developer---',0,0,0,fraDashboard)
-		!   fnLbl(4,1,'QBase: "'&env$('QBase')&'"',(dashboard_width/2)-1,0,0,fraDashboard)
-		!   fnLbl(4,int(dashboard_width/2)+1,'env$(Q): "[Q]"',int(dashboard_width/2)-1,0,0,fraDashboard)
+		!   fnLbl(4,1,'QBase: "'&env$('QBase')&'"',(dashboardWidth/2)-1,0,0,fraDashboard)
+		!   fnLbl(4,int(dashboardWidth/2)+1,'env$(Q): "[Q]"',int(dashboardWidth/2)-1,0,0,fraDashboard)
 		!   fnLbl(5,1,' Data: "'&env$('Data')&'"',0,0,0,fraDashboard)
 		! end if
 	end if
+	! pause
 fnend
+	def fn_ddAddButton(buttonText$*64,btnFkey,tmpBtnWidth; buttonLine,tooltip$*150,___,btnLr) ! buttons are added and counted (btnItem) from right to left
+		if buttonLine=0 then buttonLine=1
+		if buttonLine<>buttonLinePrior then ! is the first button on that line
+			buttonLinePrior=buttonLine
+			buttonPos=dashboardWidth-tmpBtnWidth
+		else
+			buttonPos=buttonPos-tmpBtnWidth-1
+		end if
+		! pr 'line=';buttonLine;' pos=';buttonPos;'len=';tmpBtnWidth;' text='&buttonText$
+		fnButton(buttonLine,buttonPos,buttonText$,btnFkey,tooltip$,1,tmpBtnWidth,fraDashboard)
+		! if btnItem=1 then
+		! 	fnButton(buttonLine,buttonPos,buttonText$,btnFkey,tooltip$,1,tmpBtnWidth,fraDashboard)
+		! else if btnItem>1 then
+		! 	fnButton(buttonLine,buttonPos,buttonText$,btnFkey,tooltip$,1,tmpBtnWidth,fraDashboard)
+		! else
+		! 	pr 'btnItem=';btnItem;' and it is currently required by fn_ddAddButton'
+		! end if
+	fnend
 def fn_displayButtons
 	fnCmdKey('OK' ,4,1,0,'Press "OK" to launch the selected program')
 	fnCmdKey('Help' ,1,0,0,'Press "Help" to launch the help page about this program')

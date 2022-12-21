@@ -3,7 +3,6 @@ File
 >Invoice Description                              ^ HamsterFio:Invoice Descrip           ^  ^File,HamsterFio,description,ivdesc,ivdindex
 >Client                                           ^ HamsterFio:CO *                      ^  ^File,HamsterFio
 >Prices                                           ^ HamsterFio:CO *                      ^  ^File,HamsterFio
->Rates                                            ^ HamsterFio:CO *                      ^  ^File,HamsterFio
 >Provider                                         ^ HamsterFio:CO *                      ^  ^File,HamsterFio
 >Support                                          ^ HamsterFio:CO *                      ^  ^File,HamsterFio,Contracts
 >Transactions                                     ^ [cursystem]\Legacy\*                 ^  ^File,Transactions,Legacy,HamsterFio
