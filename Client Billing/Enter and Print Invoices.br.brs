@@ -34,64 +34,66 @@
 	open #hClient=fnH: 'Name=S:\Core\Data\acsllc\Client.h[cno],KFName=S:\Core\Data\acsllc\Client-Idx.h[cno],Shr',i,i,k ! 1
 	! open #hClient2=fnH: 'Name=S:\Core\Data\acsllc\Client.h[cno],KFName=S:\Core\Data\acsllc\CLIndx2.h[cno],Shr',i,i,k ! 32
 ! /r
-RegularEntry: ! r:
+! r: Regular Entry (setup stage 2)
 	if ~setupRegularEntry then ! r:
 		setupRegularEntry=1
 		dim fl1$(8)
 		for j=1 to 4
-			fl1$(j)=str$(j+3)&',8,c 20,N'
+			fl1$(j)=str$(j+3)&',8,Cr 19'
 		next j
-		fl1$(5)='1,10,c 60,h,n'
-		fl1$(6)='2,10,c 60,h,n'
-		fl1$(7)='9,1,c 80,h,n'
-		fl1$(8)='24,2,c 60,h,n'
+		fl1$(5)='1,10,c 60'
+		fl1$(6)='2,10,c 60'
+		fl1$(7)='9,1,c 80'
+		fl1$(8)='24,2,c 60'
 		dim scr1$(4)
-		scr1$(1)='Client'
-		scr1$(2)='Billing Code'
-		scr1$(3)='Date'
-		scr1$(4)='Invoice'
+		scr1$(1)='Client:'
+		scr1$(2)='Billing Code:'
+		scr1$(3)='Date:'
+		scr1$(4)='Invoice:'
 		dim scrid$(4)*80
 		scrid$(1)='Client Billing Input of Invoices'
 		scrid$(2)='Enter CLIENT # as 0 when completed.'
-		scrid$(3)='-Code- ---------Invoice Descriptions-------------------------  --Amount-- CT SC'
-		scrid$(4)='  Press F1 when completed with this screen'
+		scrid$(3)='-Code- ---------Invoice Descriptions-------------------------  --Amount-- Cat SC'
+		scrid$(4)='  [F1] Complete'
 	end if ! /r
 	open #hTmpInvoice=fnH: 'Name=S:\Core\Data\acsllc\tmpInvoice.h[cno],RecL=4675,Replace',i,outi,r
+	! write #hTmpInvoice,using FtmpInv: mat xInp,invoiceNumber$,mat invDataCde$,
+	!														mat invDataId$,mat invDataAmount,
+	!														mat invDataCategory,mat invDataSystemCode,mat gl$
 	FtmpInv: form pos 1,n 5,n 1,n 6,c 12,30*c 6,30*c 128,30*pd 5.2,30*n 2,30*n 2,30*c 12
 	dim xInp(3)
-	dim id$(30)*128
-	dim da(30)
-	dim ct(30)
-	dim cde$(30)*6
-	dim sc(30)
+	dim invDataId$(30)*128
+	dim invDataAmount(30)
+	dim invDataCategory(30)
+	dim invDataCde$(30)*6
+	dim invDataSystemCode(30)
 	open #hIvDesc=fnH: 'Name=S:\Core\Data\acsllc\IVDesc.h[cno],KFName=S:\Core\Data\acsllc\IVDIndex.h[cno],Shr',i,i,k
 	fnOpenPrn
-
-ClearVarGotoScrFm: !
+	gosub ClearVar
+goto ScrFm ! /r
+ClearVar: ! r:
 	inp3=xInp(3)
 	mat xInp=(0)
 	xInp(3)=inp3
 	invoiceNumber$=str$(val(invoiceNumber$)+1)
-	mat id$=(' ')
-	mat da=(0)
-	mat cde$=('')
-	mat ct=(0)
-	mat sc=(0)
-goto ScrFm
-
-
+	mat invDataId$=(' ')
+	mat invDataAmount=(0)
+	mat invDataCde$=('')
+	mat invDataCategory=(0)
+	mat invDataSystemCode=(0)
+return ! /r
 ScrFm: ! r: (mat fl1$: mat scr1$,mat scrid$
 	pr newpage
 
 	pr f mat fl1$: mat scr1$,mat scrid$
 	pr f '24,2,Cc 70,R,N': '[F1] Continue   [F5] Stop'
-	pr f mat io1$: mat xInp,invoiceNumber$,mat cde$(1:10),mat id$(1:10),mat da(1:10),mat ct(1:10),mat sc(1:10)
+	pr f mat io1$: mat xInp,invoiceNumber$,mat invDataCde$(1:10),mat invDataId$(1:10),mat invDataAmount(1:10),mat invDataCategory(1:10),mat invDataSystemCode(1:10)
 	pr f '1,72,C 8,R,N': date$
 	pr f '2,72,C 8,R,N': time$
 	pr f io1$(2): 2
 	do
-		input fields mat io1$,attr 'R': mat xInp,invoiceNumber$,mat cde$(1:10),mat id$(1:10),mat da(1:10),mat ct(1:10),mat sc(1:10) conv CONV1
-		! r: process input 
+		input fields mat io1$,attr 'R': mat xInp,invoiceNumber$,mat invDataCde$(1:10),mat invDataId$(1:10),mat invDataAmount(1:10),mat invDataCategory(1:10),mat invDataSystemCode(1:10) conv CONV1
+
 		currentPosition=currow ! r: basic U/UC io1$ processing
 		if ce>0 then io1$(ce)(ce1:ce2)='U': ce=0
 		if cmdkey>0 then goto L1260 else ce=curfld
@@ -132,22 +134,22 @@ ScrFm: ! r: (mat fl1$: mat scr1$,mat scrid$
 	if ce<5 then goto L1200
 	if ce>4 and ce<15 then goto L1610
 	if ce<15 or ce>24 then goto L1450
-	if rtrm$(id$(relativePosition))='' then goto ERR1
+	if rtrm$(invDataId$(relativePosition))='' then goto ERR1
 	ce=ce+10 : goto CT1
 
 	L1450: !
 	if ce<25 or ce>34 then goto L1480
-	if da(relativePosition)=0 then goto ERR1
+	if invDataAmount(relativePosition)=0 then goto ERR1
 	ce+=10 : goto CT1
 
 	L1480: !
 	if ce<35 or ce>44 then goto L1510
-	if ct(relativePosition)<1 or ct(relativePosition)>30 then goto ERR1
+	if invDataCategory(relativePosition)<1 or invDataCategory(relativePosition)>30 then goto ERR1
 	ce=ce+10 : goto CT1
 
 	L1510: !
 	if ce<45 or ce>55 then goto L1540
-	if sc(relativePosition)<0 or sc(relativePosition)>25 then goto ERR1
+	if invDataSystemCode(relativePosition)<0 or invDataSystemCode(relativePosition)>25 then goto ERR1
 	ce=ce-39
 	L1540: !
 
@@ -167,22 +169,22 @@ ScrFm: ! r: (mat fl1$: mat scr1$,mat scrid$
 	goto CT1
 
 	L1610: !
-	if rtrm$(cde$(relativePosition))='' then goto L1700
-	cde$(relativePosition)=uprc$(cde$(relativePosition))
+	if rtrm$(invDataCde$(relativePosition))='' then goto L1700
+	invDataCde$(relativePosition)=uprc$(invDataCde$(relativePosition))
 	dim cdk$*6
-	cdk$=lpad$(rtrm$(cde$(relativePosition)),6)
+	cdk$=lpad$(rtrm$(invDataCde$(relativePosition)),6)
 	dim des$*60
-	read #hIvDesc,using 'form pos 1,c 6,c 55,pd 5.2,c 12',key=cdk$: cdk$,des$,da,gl$(relativePosition) nokey ERR1
+	read #hIvDesc,using 'form pos 1,c 6,c 55,pd 5.2,c 12',key=cdk$: cdk$,des$,invDataAmount,gl$(relativePosition) nokey ERR1
 	pr f io1$(ce+10): des$
-	pr f io1$(ce+20): da
+	pr f io1$(ce+20): invDataAmount
 	if cmdkey<>6 then ce+=20
 	goto CT1
 
 	L1700: !
-	ce=ce+10 : goto CT1
+	ce+=10 : goto CT1
 
 	L1710: !
-	if xInp(1)=0 and chg><2 then goto ScreenFinal
+	if xInp(1)=0 and chg><2 then goto ScrProofTotals
 	L1720: !
 	if xInp(1)=0 then mat xInp=(0)
 	if xInp(1)=0 then goto DoRewriteInvoice
@@ -190,39 +192,40 @@ ScrFm: ! r: (mat fl1$: mat scr1$,mat scrid$
 	dim pt(4)
 	pt(1)=pt(1)+xInp(1)
 	for j=1 to 10
-		pt(2)+=da(j)
-		pt(3)+=ct(j)
-		pt(4)+=sc(j)
+		pt(2)+=invDataAmount(j)
+		pt(3)+=invDataCategory(j)
+		pt(4)+=invDataSystemCode(j)
 	next j
 	if chg=2 then goto DoRewriteInvoice
 	! rw=lrec(hTmpInvoice)+1
-	write #hTmpInvoice,using FtmpInv: mat xInp,invoiceNumber$,mat cde$,mat id$,mat da,mat ct,mat sc,mat gl$
+	write #hTmpInvoice,using FtmpInv: mat xInp,invoiceNumber$,mat invDataCde$,mat invDataId$,mat invDataAmount,mat invDataCategory,mat invDataSystemCode,mat gl$
 	fncreg_write('Last Invoice Number',invoiceNumber$)
 	L1850: !
-	if x9=0 then goto ClearVarGotoScrFm
+	if x9=0 then gosub ClearVar : goto ScrFm
 	xInp(3)=0
 	xInp(5)=0
 	xInp(6)=0
 goto ScrFm ! /r
 
 	DoRewriteInvoice: ! r:
-		rewrite #hTmpInvoice,using FtmpInv,rec=rr: mat xInp,invoiceNumber$,mat cde$,mat id$,mat da,mat ct,mat sc,mat gl$
-	goto SCR_ADDEDIT ! /r
-	SCR_ADDEDIT: ! r:
+		rewrite #hTmpInvoice,using FtmpInv,rec=rr: mat xInp,invoiceNumber$,mat invDataCde$,mat invDataId$,mat invDataAmount,mat invDataCategory,mat invDataSystemCode,mat gl$
+	goto ScrEditSelectRef ! /r
+	
+	ScrEditSelectRef: ! r:
 		pr newpage
 		pr f '10,10,c 60': 'Enter ref # to correct; enter 0 when completed'
 		input f '10,60,N 5,UE,N': rr
-		if rr=0 then goto ScreenFinal
-		read #hTmpInvoice,using FtmpInv,rec=rr: mat xInp,invoiceNumber$,mat cde$,mat id$,mat da,mat ct,mat sc,mat gl$ noRec SCR_ADDEDIT
+		if rr=0 then goto ScrProofTotals
+		read #hTmpInvoice,using FtmpInv,rec=rr: mat xInp,invoiceNumber$,mat invDataCde$,mat invDataId$,mat invDataAmount,mat invDataCategory,mat invDataSystemCode,mat gl$ noRec ScrEditSelectRef
 		pt(1)=pt(1)-xInp(1)
 		for j=1 to 10
-			pt(2)=pt(2)-da(j)
-			pt(3)=pt(3)-ct(j)
-			pt(4)=pt(4)-sc(j)
+			pt(2)=pt(2)-invDataAmount(j)
+			pt(3)=pt(3)-invDataCategory(j)
+			pt(4)=pt(4)-invDataSystemCode(j)
 		next j
 	goto ScrFm ! /r
 
-ScreenFinal: ! r:
+ScrProofTotals: ! r:
 	pr newpage
 	pr f '2,10,c 60,h,n' :'INPUT PROOF TOTALS'
 	pr f '14,10,c 60,h,n':'1 for listing, 2 for corrections, 3 for additional entries,'
@@ -232,19 +235,20 @@ ScreenFinal: ! r:
 	do
 		input fields '16,30,N 1,UE,N': chg conv ignore
 		if chg=1 then
-			gosub PrProof
-			goto ScreenFinal
+			gosub PrProofList
+			goto ScrProofTotals
 		else if chg=2 then
 			scrid$(1)='Input Correction Screen'
 			scrid$(2)='Enter client number as 0 to delete this entry'
 			scrid$(3)='  Desc/Code   Invoice Descriptions'
 			scrid$(4)='  Press F1 when completed with this screen'
-			goto SCR_ADDEDIT
+			goto ScrEditSelectRef
 		else if chg=3 then
-			goto ClearVarGotoScrFm
+			gosub ClearVar
+			goto ScrFm
 		else if chg=4 then
 			gosub ScreenPrintInvoices
-			goto ScreenFinal
+			goto ScrProofTotals
 		else if chg=5 then
 			! fnEmailQueuedInvoices(email_date$)  this seems like a good idea to add here, perhaps a question like int S:\Client Billing\ACS Invoices.br.brs
 			close #hClient:
@@ -255,19 +259,19 @@ ScreenFinal: ! r:
 		end if
 	loop
 ! /r
-PrProof: ! r:
+PrProofList: ! r:
 	fnOpenPrn
-	gosub PrProofHead
+	gosub PrProofListHead
 	for j=1 to lrec(hTmpInvoice)
-		read #hTmpInvoice,using FtmpInv,rec=j: mat xInp,invoiceNumber$,mat cde$,mat id$,mat da,mat ct,mat sc,mat gl$
+		read #hTmpInvoice,using FtmpInv,rec=j: mat xInp,invoiceNumber$,mat invDataCde$,mat invDataId$,mat invDataAmount,mat invDataCategory,mat invDataSystemCode,mat gl$
 		if xInp(1)<>0 then
 			pr #255: 'Ref    Client    Billing-Code     Date      Invoice  '
-			pr #255,using 'form pos 1,n 4,n 8,n 10,n 12,x 2,c 12': j,mat xInp,invoiceNumber$ pageoflow PrProofPgOf
+			pr #255,using 'form pos 1,n 4,n 8,n 10,n 12,x 2,c 12': j,mat xInp,invoiceNumber$ pageoflow PrProofListPgOf
 			pr #255: ''
 			pr #255: '-Code-  -------Description-------------------------------------  --Amount--      Cat     Sub  -GL--Number-'
 			for j1=1 to 30
-				if rtrm$(id$(j1))<>'' then
-					pr #255,using 'form pos 1,c 8,c 56,n 11.2,2*n 8,x 3,c 12': cde$(j1),rtrm$(id$(j1))(1:56),da(j1),ct(j1),sc(j1),gl$(j1) pageoflow PrProofPgOf
+				if rtrm$(invDataId$(j1))<>'' then
+					pr #255,using 'form pos 1,c 8,c 56,n 11.2,2*n 8,x 3,c 12': invDataCde$(j1),rtrm$(invDataId$(j1))(1:56),invDataAmount(j1),invDataCategory(j1),invDataSystemCode(j1),gl$(j1) pageoflow PrProofListPgOf
 				end if
 			next j1
 			pr #255: rpt$('_',106)
@@ -276,15 +280,15 @@ PrProof: ! r:
 	next j
 	fnClosePrn
 return
-	PrProofHead: ! r:
+	PrProofListHead: ! r:
 		pr #255: ''
 		pr #255,using 'form pos 1,c 8,pos 44,cc 44,': date$,env$('cnam')
 		pr #255,using 'form pos 1,c 8,pos 44,c 44': time$,env$('program_caption')&' - Proof Listing'
 		pr #255: ''
 	return ! /r
-	PrProofPgOf: ! r:
+	PrProofListPgOf: ! r:
 		pr #255: newpage
-		gosub PrProofHead
+		gosub PrProofListHead
 	continue ! /r
 
 ! /r
@@ -294,7 +298,7 @@ ScreenPrintInvoices: ! r:
 	fnInvoiceOpen
 	restore #hTmpInvoice:
 	do
-		read #hTmpInvoice,using FtmpInv: mat xInp,invoiceNumber$,mat cde$,mat id$,mat da,mat ct,mat sc,mat gl$ eof PRI_EOF
+		read #hTmpInvoice,using FtmpInv: mat xInp,invoiceNumber$,mat invDataCde$,mat invDataId$,mat invDataAmount,mat invDataCategory,mat invDataSystemCode,mat gl$ eof PRI_EOF
 		! xInp(1) = client id
 		! xInp(3) = invoice date
 		if xInp(1) then
@@ -302,11 +306,14 @@ ScreenPrintInvoices: ! r:
 			dim billingAddress$(3)*30
 			read #hClient,using 'form pos 6,3*c 30',key=clientBilled$: mat billingAddress$
 			pr ' adding invoice ' : pause
-			fnInvoiceAdd(clientBilled$,mat billingAddress$,invoiceNumber$,xInp(3),mat id$,mat da,0)
+			fnInvoiceAdd(clientBilled$,mat billingAddress$,invoiceNumber$,xInp(3),mat invDataId$,mat invDataAmount,0)
 		end if
 	loop
 	PRI_EOF: !
 	fnInvoiceClose(xInp(3), 'Enter and Print')
+	execute 'sy -c -w explorer "'&fnReportCacheFolderCurrent$&'\Ebilling"'
+	execute 'sy -c -w explorer "'&fnReportCacheFolderCurrent$&'\Invoice\Archive"'
+	execute 'sy -c -w explorer "'&fnReportCacheFolderCurrent$&'\Invoice\Print"'
 return ! /r
 
 Xit: fnXit
