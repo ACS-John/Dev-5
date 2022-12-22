@@ -38,23 +38,16 @@
 	if ~setupRegularEntry then ! r:
 		setupRegularEntry=1
 		dim fl1$(8)
-		for j=1 to 4
-			fl1$(j)=str$(j+3)&',8,Cr 19'
-		next j
-		fl1$(5)='1,10,c 60'
-		fl1$(6)='2,10,c 60'
-		fl1$(7)='9,1,c 80'
-		fl1$(8)='24,2,c 60'
 		dim scr1$(4)
-		scr1$(1)='Client:'
-		scr1$(2)='Billing Code:'
-		scr1$(3)='Date:'
-		scr1$(4)='Invoice:'
+		fl1$(1)=' 4, 8,Cr 15' : scr1$(1)='Client:'
+		fl1$(2)=' 5, 8,Cr 15' : scr1$(2)='Billing Code:'
+		fl1$(3)=' 6, 8,Cr 15' : scr1$(3)='Date:'
+		fl1$(4)=' 7, 8,Cr 15' : scr1$(4)='Invoice:'
 		dim scrid$(4)*80
-		scrid$(1)='Client Billing Input of Invoices'
-		scrid$(2)='Enter CLIENT # as 0 when completed.'
-		scrid$(3)='-Code- ---------Invoice Descriptions-------------------------  --Amount-- Cat SC'
-		scrid$(4)='  [F1] Complete'
+		fl1$(5)=' 1,10,C  60' : scrid$(1)='Client Billing Input of Invoices'
+		fl1$(6)=' 2,10,C  60' : scrid$(2)='Enter CLIENT # as 0 when completed.'
+		fl1$(7)=' 9, 1,C  80' : scrid$(3)='-Code- ---------Invoice Descriptions-------------------------  --Amount-- Cat SC'
+		fl1$(8)='24, 2,Cc 60' : scrid$(4)='[F1] Complete'
 	end if ! /r
 	open #hTmpInvoice=fnH: 'Name=S:\Core\Data\acsllc\tmpInvoice.h[cno],RecL=4675,Replace',i,outi,r
 	! write #hTmpInvoice,using FtmpInv: mat xInp,invoiceNumber$,mat invDataCde$,
@@ -241,7 +234,7 @@ ScrProofTotals: ! r:
 			scrid$(1)='Input Correction Screen'
 			scrid$(2)='Enter client number as 0 to delete this entry'
 			scrid$(3)='  Desc/Code   Invoice Descriptions'
-			scrid$(4)='  Press F1 when completed with this screen'
+			scrid$(4)='[F1] Complete'
 			goto ScrEditSelectRef
 		else if chg=3 then
 			gosub ClearVar

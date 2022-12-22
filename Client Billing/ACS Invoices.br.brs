@@ -30,7 +30,7 @@ execute 'sy "C:\ACS\Util\Dev-5 Commit.cmd"'
 	! fnStatus('Printing Invoices...')
 	fnInvoiceOpen
 
-	open #h_tmwk2=fnH: 'Name=S:\Core\Data\acsllc\tmpInvoice.h[cno],Replace,RecL=4675,Shr',internal,outIn
+	open #hTmpInv=fnH: 'Name=S:\Core\Data\acsllc\tmpInvoice.h[cno],Replace,RecL=4675,Shr',internal,outIn
 	dim cde$(30)*6
 	dim invItem$(30)*128
 	dim inv_amt(30)
@@ -68,7 +68,7 @@ execute 'sy "C:\ACS\Util\Dev-5 Commit.cmd"'
 	! pause
 	close #h_ivnum:
 	close #hClient:
-	close #h_tmwk2:
+	close #hTmpInv:
 	fnInvoiceClose(invDateMmDdYy, 'ACS Invoices')
 ! /r
 
@@ -253,7 +253,7 @@ def fn_print_inv
 		end if
 	end if
 	if invTotal=>1 then
-		write #h_tmwk2,using F_TMWK2a: client_id$,2,invDateMmDdYy,iv$,mat cde$,mat invItem$,mat inv_amt,mat inv_category,mat inv_service_code$,mat inv_gl$
+		write #hTmpInv,using F_TMWK2a: client_id$,2,invDateMmDdYy,iv$,mat cde$,mat invItem$,mat inv_amt,mat inv_category,mat inv_service_code$,mat inv_gl$
 		F_TMWK2a: form pos 1,c 5,n 1,n 6,c 12,30*c 6,30*c 128,30*pd 5.2,30*n 2,30*c 2,30*c 12
 	end if
 	if invTotal=>1 or pbal=>1 then
@@ -429,10 +429,10 @@ def fn_mergeInvoices
 	! fnTop(program$,cap$='Merge Invoices written to temp file S:\Core\Data\acsllc\tmpInvoice.h[cno]')
 	dim ta(25,2),fb(25),e$*9,xb(8),sc$*4
 	! clmstr dims
-	dim ca(10),sCa(10)
+	dim ca(10)
+	dim sCa(10)
 	fnStatus('Merging Invoices...')
-	open #h_tmwk2=fnH: 'Name=S:\Core\Data\acsllc\tmpInvoice.h[cno],NoShr',i,i
-	
+	open #hTmpInv=fnH: 'Name=S:\Core\Data\acsllc\tmpInvoice.h[cno],NoShr',i,i
 
 	dim k$*5
 	dim iv$*12
@@ -441,18 +441,18 @@ def fn_mergeInvoices
 	dim inv_amt(30)
 	dim ct(30)
 	dim tmwk2_sc$(30)
-	open #h_artrans=fnH:  'Name=S:\Core\Data\acsllc\Transactions.h[cno],Shr',i,outi,r
-	open #h_tmtrans=fnH:  'Name=S:\Core\Data\acsllc\TMTRANS.h[cno],Shr',i,outi,r
-	open #h_clmstr=fnH:   'Name=S:\Core\Data\acsllc\Client.h[cno],KFName=S:\Core\Data\acsllc\Client-Idx.h[cno],Shr',i,outIn,k
+	open #hTrans=fnH: 'Name=S:\Core\Data\acsllc\Transactions.h[cno],Shr',i,outi,r
+	open #hUnbilledTrans=fnH: 'Name=S:\Core\Data\acsllc\TMTRANS.h[cno],Shr',i,outi,r
+	open #hClient=fnH: 'Name=S:\Core\Data\acsllc\Client.h[cno],KFName=S:\Core\Data\acsllc\Client-Idx.h[cno],Shr',i,outIn,k
+	Fclient1: form pos 179,c 9,pos 220,10*n 1,10*pd 3,pos 283,pd 5.2
 	open #h_tmtraddr=fnH: 'Name=S:\Core\Data\acsllc\TMTRAddr.h[cno],Shr',i,outi,r
 	do  ! r: main loop
-		READ_TMWK: !
-		read #h_tmwk2,using F_TMWK2b: k$,xb(7),xb(4),iv$,mat cde$,mat id$,mat inv_amt,mat ct,mat tmwk2_sc$ eof MiFinis
-		F_TMWK2b: form pos 1         ,c 5,n 1,n 6,c 12,30*c 6,30*c 128,30*pd 5.2,30*n 2,30*c 2
+		ReadTmpInv: !
+		read #hTmpInv,using FtmpInv: k$,xb(7),xb(4),iv$,mat cde$,mat id$,mat inv_amt,mat ct,mat tmwk2_sc$ eof MiFinis
+		FtmpInv: form pos 1         ,c 5,n 1,n 6,c 12,30*c 6,30*c 128,30*pd 5.2,30*n 2,30*c 2
 		! pr k$ : pause
-		if rtrm$(k$)='' or rtrm$(k$)='0' then goto READ_TMWK
-		read #h_clmstr,using F_CLMSTR,key=k$: e$,mat sCa,mat ca,ar1 nokey READ_TMWK
-		F_CLMSTR: form pos 179,c 9,pos 220,10*n 1,10*pd 3,pos 283,pd 5.2
+		if rtrm$(k$)='' or rtrm$(k$)='0' then goto ReadTmpInv
+		read #hClient,using Fclient1,key=k$: e$,mat sCa,mat ca,bal nokey ReadTmpInv
 		if xb(7)=3 and rtrm$(iv$)='' then iv$='WRITE OFF'
 		iv$=lpad$(rtrm$(iv$),12)
 		xb(7)=-xb(7)
@@ -464,10 +464,9 @@ def fn_mergeInvoices
 			xb(8)=fnval(tmwk2_sc$(j)) ! System Code
 
 			if xb(8)=0 then b8N=25 else b8N=xb(8)
-			L390: !
-			lta=lrec(h_tmtrans)+1
-			write #h_tmtrans,using 'form pos 1,c 5,c 9,2*pd 3.2,pd 4.2,n 6,n 2,pd 2,pd 1,n 2,c 4,c 12,pd 3,c 30',rec=lta,reserve: k$,' ',mat xb,sc$,iv$,0,id$(j)(1:30) duprec L390
-			rewrite #h_tmtrans,using 'form pos 54,pd 3',rec=1,release: lta
+			write #hUnbilledTrans,using 'form pos 1,c 5,c 9,2*pd 3.2,pd 4.2,n 6,n 2,pd 2,pd 1,n 2,c 4,c 12,pd 3,c 30': k$,' ',mat xb,sc$,iv$,0,id$(j)(1:30)
+			lta=lrec(hUnbilledTrans)
+			rewrite #hUnbilledTrans,using 'form pos 54,pd 3',rec=1: lta
 			if xb(5)=0 or ca(xb(5))=0 then goto THAT_STEP ! added xb(5)=0 on 2/1/2012
 				! if b8N>25 then b8N=25 ! goto NEXT_ONE
 				p1=1+(b8N-1)*6
@@ -475,7 +474,7 @@ def fn_mergeInvoices
 
 				read #h_tmtraddr,using F_TMTRADDR,rec=ca(xb(5)),reserve: ta1,ta2,fb1 noRec NEXT_ONE
 				F_TMTRADDR: form pos p1,2*pd 3,pos p2,n 1
-				if ta2><0 then rewrite #h_tmtrans,using 'form pos 54,pd 3',rec=ta2: lta else ta1=lta
+				if ta2><0 then rewrite #hUnbilledTrans,using 'form pos 54,pd 3',rec=ta2: lta else ta1=lta
 				if fb1<2 then fb1=abs(xb(7))
 				if ta1=0 then ta1=lta
 				rewrite #h_tmtraddr,using F_TMTRADDR,rec=ca(xb(5)),release: ta1,lta,fb1
@@ -491,23 +490,23 @@ def fn_mergeInvoices
 			if xb(7)=-1 then fb(b8N)=1
 			L630: !
 			write #h_tmtraddr,using 'form pos 1,50*pd 3,25*n 1',reserve: mat ta,mat fb
-			lta4=lrec(4)
+			lta4=lrec(h_tmtraddr)
 			rewrite #h_tmtraddr,using 'form pos 1,pd 3',rec=1,release: lta4
 			NEXT_ONE: !
 		next j
 		if abs(xb(7))<>3 then  ! skip AR IF WRITE OFF
-			write #h_artrans,using 'form pos 1,c 5,c 12,n 6,2*pd 5.2,pd 2,2*n 1,c 20,pd 3',reserve: k$,iv$,xb(4),amt,amt,0,1,0,'CHARGE',0
-			ar1+=amt
+			write #hTrans,using 'form pos 1,c 5,c 12,n 6,2*pd 5.2,pd 2,2*n 1,c 20,pd 3',reserve: k$,iv$,xb(4),amt,amt,0,1,0,'CHARGE',0
+			bal+=amt
 		end if
 		if xb(7)=-2 and xb(5)>0 then sCa(xb(5))=2 ! added xb(5)>0 on 2/1/2012
-		rewrite #h_clmstr,using 'form pos 220,10*n 1,10*pd 3,pos 283,pd 5.2',key=k$: mat sCa,mat ca,ar1
+		rewrite #hClient,using 'form pos 220,10*n 1,10*pd 3,pos 283,pd 5.2',key=k$: mat sCa,mat ca,bal
 		amt=0
 	loop  ! /r
 
 	MiFinis: !
-	close #h_clmstr:
-	close #h_tmtrans:
-	close #h_tmwk2:
+	close #hClient:
+	close #hUnbilledTrans:
+	close #hTmpInv:
 	close #h_tmtraddr:
 	fnStatusClose
 
