@@ -8,7 +8,7 @@
 	dim ln$*132
 	dim fullGridName$*60,fullGridIndx$*60
 	dim gridinfo$(5)*87,item$(80)*30
-	dim name$*30,vname$*20,colMask$*3,tt$*200
+	dim name$*30,vname$*20,colMask$*3
 	dim colHdr$(80)*30,colMask$(80)*3
 	dim openRead$*80,abbrev$*20,fileName$(10)*40
 ! /r
@@ -168,8 +168,7 @@ DisplayGrid: !
 	fnTxt(2,22,20,20,0,'',1)
 	gridinfo$(respc+=1)=gridName$
 	fnLbl(3,1,'Column Number:',20,1)
-	tt$='Change column # if default not acceptable'
-	fnTxt(3,22,2,2,0,'30',0,tt$)
+	fnTxt(3,22,2,2,0,'30',0,'Change column # if default not acceptable')
 	gridinfo$(respc+=1)=str$(lastcolumn+1)
 	fnLbl(5,1,'Grid Options:',14,1)
 	x=0
@@ -184,8 +183,7 @@ DisplayGrid: !
 	L1420: !
 	mat gridName_list$(x)
 	close #16: ioerr ignore
-	tt$='Highlite any column heading you wish to add to your grid'
-	fnComboA('Grrr',5,16,mat gridName_list$,tt$,80)
+	fnComboA('Grrr',5,16,mat gridName_list$,'Highlite any column heading you wish to add to your grid',80)
 	mat gridinfo$(respc+=1)
 	if udim(mat gridName_list$)=>1 then gridinfo$(respc)=gridName_list$(1) else gridinfo$(respc)=''
 	fnCmdKey('&Add Column',1,1)

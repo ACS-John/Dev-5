@@ -1005,7 +1005,7 @@ def fn_dropDownMenus
 		fn_dm_add(' Restart','Restart')
 		fn_dm_add('&Help')
 		fn_dm_add(' Help','http://planetacs.net/help/')
-		fn_dm_add(' Service Camp','S:\Core\serviceCamp.br')
+		! fn_dm_add(' Service Camp','S:\Core\serviceCamp.br')
 		fn_dm_add(' ACS Website','http://planetacs.net')
 		if env$('BR_MODEL')<>'CLIENT/SERVER' then
 			fn_dm_add(' Update','S:\Core\Programs\Update.br')

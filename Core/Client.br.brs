@@ -533,7 +533,7 @@ def fn_getClientLicense(mat clientHas$)
 		else if env$('client')='Pennington' then
 			fn_userLimit(1)
 			fn_getClientLicense_add('UB') : fn_setUbLimit(500) ! U3 Utility Billing (<500 Customers)
-			if days(date$)<=days('12/31/2022','mm/dd/ccyy') then fn_getClientLicense_add('U5') ! UB External Collections Processing
+			fn_getClientLicense_add('U5') ! UB External Collections Processing (purchased 12/2022)
 		else if env$('client')='Peter Engler' then
 			fn_getClientLicense_add('CL')
 			fn_getClientLicense_add('PR')

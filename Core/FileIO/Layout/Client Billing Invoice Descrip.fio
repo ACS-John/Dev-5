@@ -5,4 +5,4 @@ recl=84
 code      	,Code           	,c   6    	, 	, ! pos=  
 desc      	,Description    	,c  55    	, 	, ! pos=  
 amt       	,Standard Charge	,pd  5.2  	, 	, ! pos=               da
-gl        	,GL              	, c  12    	, 	, ! glREMOVEDaccount  mat gl
+gl        	,GL              	,c  12    	, 	, ! glREMOVEDaccount  mat gl
