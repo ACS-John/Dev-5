@@ -445,6 +445,7 @@ def fn_mergeInvoices
 	open #hUnbilledTrans=fnH: 'Name=S:\Core\Data\acsllc\TMTRANS.h[cno],Shr',i,outi,r
 	open #hClient=fnH: 'Name=S:\Core\Data\acsllc\Client.h[cno],KFName=S:\Core\Data\acsllc\Client-Idx.h[cno],Shr',i,outIn,k
 	Fclient1: form pos 179,c 9,pos 220,10*n 1,10*pd 3,pos 283,pd 5.2
+	Fclient2: form pos 220,10*n 1,10*pd 3,pos 283,pd 5.2
 	open #h_tmtraddr=fnH: 'Name=S:\Core\Data\acsllc\TMTRAddr.h[cno],Shr',i,outi,r
 	do  ! r: main loop
 		ReadTmpInv: !
@@ -499,7 +500,7 @@ def fn_mergeInvoices
 			bal+=amt
 		end if
 		if xb(7)=-2 and xb(5)>0 then sCa(xb(5))=2 ! added xb(5)>0 on 2/1/2012
-		rewrite #hClient,using 'form pos 220,10*n 1,10*pd 3,pos 283,pd 5.2',key=k$: mat sCa,mat ca,bal
+		rewrite #hClient,using Fclient2,key=k$: mat sCa,mat ca,bal
 		amt=0
 	loop  ! /r
 

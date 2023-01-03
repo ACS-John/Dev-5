@@ -41,7 +41,7 @@ Daily
 >Email Queued Invoices                            ^ [cursystem]\*                        ^EM^Daily,Email
 Monthly
 >Import CSV to Time Sheets                        ^ [cursystem]\*                        ^  ^Monthly,csv2tm
->Billing Summary                                  ^ [cursystem]\Legacy\*          ^  ^Monthly,Print, Monthly, Print Monthly Billing Summary
+>Billing Summary                                  ^ [cursystem]\Legacy\*                 ^  ^Print Monthly Billing Summary
 ! >Post to General Ledger                         ^ [cursystem]\Legacy\arpostgl          ^GL^Monthly,GL
 ! >Month End Closing                              ^ [cursystem]\Legacy\tmpytd            ^  ^Monthly,
 ! Generate                                                                               ^  ^Monthly,
