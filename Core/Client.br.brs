@@ -292,16 +292,12 @@ def fn_getClientLicense(mat clientHas$)
 			! fn_getClientLicense_add('CL')
 			! fn_getClientLicense_add('PR')
 			! fn_getClientLicense_add('GL')
-			! fn_getClientLicense_add('OE')
 			fn_getClientLicense_add('Client Billing')	! fn_getClientLicense_add('TM')
 			fn_getClientLicense_add('EM')
 		! else if env$('client')='Albany' then ! demo undelivered - not on support but needed to debug Past Due Trun Off List from ACS 4 - test in ACS 5 locally
 		!   fn_userLimit(1)
 		!   if days(date)<=days(20151231,'ccyymmdd') then  fn_getClientLicense_add('UB') : fn_setUbLimit(500)
 		!   if days(date)<=days(20151231,'ccyymmdd') then fn_getClientLicense_add('U4')
-		! else if env$('client')='BRCorp' then
-		! 	fn_userLimit(99)
-		! 	fn_getClientLicense_add('OE')
 		else if env$('client')='Ed Horton' then
 			fn_userLimit(1)
 			fn_getClientLicense_add('CL')
@@ -322,12 +318,6 @@ def fn_getClientLicense(mat clientHas$)
 			! canceled 2/7/2018 as per Debbie  -   fn_getClientLicense_add('PR')
 			! canceled 2/7/2018 as per Debbie  -   fn_getClientLicense_add('GL')
 			! canceled 2/7/2018 as per Debbie  -   fn_getClientLicense_add('CL')
-		! else if env$('client')='Allendale' then
-		! 	if days(date$)<=days('02/28/2020','mm/dd/ccyy') then
-		! 		fn_userLimit(1)
-		! 		fn_getClientLicense_add('UB') : fn_setUbLimit(500) ! U3 Utility Billing (<500 Customers)
-		! 		fn_getClientLicense_add('U4') ! U4 Utility Billing Hand Held Add-On
-		! 	end if
 
 		else if env$('client')='Bethany' then
 			fn_userLimit(2) ! second user added 9/22/2021
@@ -344,7 +334,6 @@ def fn_getClientLicense(mat clientHas$)
 			fn_getClientLicense_add('UB') : fn_setUbLimit(500) ! U3 Utility Billing (<500 Customers)
 			fn_getClientLicense_add('U4') : u4_device$='Boson' ! U4 Utility Billing Hand Held Add-On
 			fn_getClientLicense_add('UB-EFT')
-			!     fn_getClientLicense_add('CR')
 		else if env$('client')='Billings' and env$('Unique_Computer_Id')='BD04113D-C102-BA29-78AC-D23201FDC70C' then ! Limit to NOT UB stuff for Chris Hopkins
 			fn_userLimit(1) ! actually licensed for 3 users, but has two separate installations
 			fn_getClientLicense_add('GL')
@@ -358,15 +347,10 @@ def fn_getClientLicense(mat clientHas$)
 			fn_getClientLicense_add('PR')
 			fn_getClientLicense_add('CL')
 			fn_getClientLicense_add('UB-EFT')
-			! if days(date$)<=days('09/15/2019','mm/dd/ccyy') then fn_getClientLicense_add('EM')  ! Alpha testing
-			!     fn_getClientLicense_add('CR')
 		else if env$('client')='Blucksberg' then
 			fn_userLimit(1)
 			fn_getClientLicense_add('UB') : fn_setUbLimit(9999) ! U1 Utility Billing (no discount)
 			fn_getClientLicense_add('U4') : u4_device$='Itron FC300' ! U4 Utility Billing Hand Held Add-On
-		! else if env$('client')='Brumbaugh' then
-		! 	fn_userLimit(64)
-		! 	fn_getClientLicense_add('CM')
 		else if env$('client')='Campbell' then
 			fn_userLimit(4)
 			fn_getClientLicense_add('CL')
@@ -543,7 +527,6 @@ def fn_getClientLicense(mat clientHas$)
 			fn_getClientLicense_add('UB') : fn_setUbLimit(500) ! U3 Utility Billing (<500 Customers)
 			fn_getClientLicense_add('U4') : u4_device$='Aclara' ! U4 Utility Billing Hand Held Add-On
 		else if env$('client')='Omaha' then
-			! if days(date$)<=days('03/03/2018','mm/dd/ccyy') then fn_userLimit(3) else fn_userLimit(1) ! 2 user bonus for 60 days
 			fn_getClientLicense_add('UB') : fn_setUbLimit(9999) ! U1 Utility Billing (no discount)
 			fn_getClientLicense_add('U4') : u4_device$='READy Water'
 		else if env$('client')='Raymond' then
@@ -561,13 +544,6 @@ def fn_getClientLicense(mat clientHas$)
 		! else if env$('client')='Starr County Gas' then
 		! 	fn_userLimit(1)
 		! 	if days(date$)<=days('04/15/2018','mm/dd/ccyy') then fn_getClientLicense_add('UB') : fn_setUbLimit(9999)
-		! else if env$('client')='Sheila' then
-		! 	fn_userLimit(1)
-		! 	fn_getClientLicense_add('UB') : fn_setUbLimit(500) ! U3 Utility Billing (<500 Customers)
-		! 	fn_getClientLicense_add('U4') : u4_device$='Aclara' ! U4 Utility Billing Hand Held Add-On
-		! 	fn_getClientLicense_add('CL')
-		! 	fn_getClientLicense_add('GL')
-		! 	fn_getClientLicense_add('PR')
 		else if env$('client')='Stern and Stern' then
 			fn_userLimit(99) ! unknown
 			fn_getClientLicense_add('CM')

@@ -248,6 +248,7 @@ ScrProofTotals: ! r:
 			! close #hClient2:
 			close #hTmpInvoice:
 			fnMergeInvoices
+			pr ' last time i checked the invoices did not update the balances.  better check now as i did not fix it then i just updated them manually' : pause
 			goto Xit
 		end if
 	loop

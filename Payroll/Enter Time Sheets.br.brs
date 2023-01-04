@@ -676,15 +676,15 @@ ASK_EMPLOYEE: ! r:
 		goto FINISH
 	end if
 ! /r
-	def fn_add_proof_totals(&apt_total_employee_numbers,&apt_count_employees_entered,mat tinp)
-		open #apt_h_rpwork=fnH: "Name=[Q]\PRmstr\rpwork[unique_computer_id].h[cno],KFName=[Q]\PRmstr\rpwork[unique_computer_id]Idx.h[cno]",i,i,k ioerr APT_FINIS
+	def fn_add_proof_totals(&apt_total_employee_numbers,&apt_count_employees_entered,mat tinp; ___,hTimesheet)
+		open #hTimesheet=fnH: "Name=[Q]\PRmstr\rpwork[unique_computer_id].h[cno],KFName=[Q]\PRmstr\rpwork[unique_computer_id]Idx.h[cno]",i,i,k ioerr APT_FINIS
 		apt_heno=0 ! temp variable for internal comparison
 		apt_total_employee_numbers=0 ! total of all (unique) employee numbers entered
 		apt_count_employees_entered=0 ! total unique employees entered
 		mat tinp=(0)
-! restore #apt_h_rpwork:
+! restore #hTimesheet:
 		do
-			read #apt_h_rpwork,using F_rpwork: eno,dep,mat inpX,gpd,mat hr eof APT_FINIS
+			read #hTimesheet,using F_rpwork: eno,dep,mat inpX,gpd,mat hr eof APT_FINIS
 			if apt_heno<>eno then
 				apt_total_employee_numbers=apt_total_employee_numbers+eno
 				apt_count_employees_entered+=1
@@ -693,7 +693,7 @@ ASK_EMPLOYEE: ! r:
 			apt_heno=eno
 		loop
 APT_FINIS: !
-		close #apt_h_rpwork: ioerr ignore
+		close #hTimesheet: ioerr ignore
 	fnend
 PRINT_LISTING: !
 	heno=r=pc=teno=ent1=0
