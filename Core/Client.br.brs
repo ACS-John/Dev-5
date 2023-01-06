@@ -175,7 +175,7 @@ fnend
 			! fn_setupClient_add('Franklin and Son' ,1870,32454)
 			! fn_setupClient_add('Franklinton' ,1876,0) ! Town of
 			! fn_setupClient_add('Gilbertown',1985,0)
-			! fn_setupClient_add('Granby',2040,34098) ! no longer using as of 6/13/2016
+			! fn_setupClient_add('Granby',2040,34098) ! not using ACS as of 6/13/2016
 			! fn_setupClient_add('Schachtner Portnoy' ,3828,200008100)
 			! fn_setupClient_add('Illiopolis',2340,0)
 			! fn_setupClient_add('Kimberling',2530,19212)
