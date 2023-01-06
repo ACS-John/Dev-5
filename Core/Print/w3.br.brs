@@ -42,7 +42,8 @@ def library fnw3(taxyear$,ein$*12,mat a$,mat w,dcb,state$,stcode$;___,specialfor
 	fnpa_open('','W-3','PDF')
 	if enableBackground$='True' then fnpa_background('S:\Core\pdf\'&taxyear$&'\W-3.pdf')
 	fnpa_fontsize(12)
-	fnpa_txt('X',38,fn_line(2))
+	fnpa_txt('X',37,fn_line(2))
+	fnpa_txt(' ',37,fn_line(2))
 	col1=  1+MarginLeftN
 	! if env$('client')='Kincaid' then col1+=2
 	col2=113-7+MarginLeftN
