@@ -130,6 +130,7 @@ fnend
 			fn_setupClient_add('Peter Engler'						,   'ped',        0)
 			fn_setupClient_add('Kathys Bookkeeping'		,  '3979',    33672)
 			fn_setupClient_add('Kincaid'								,  '2532',    33652)
+			fn_setupClient_add('Laco Vinyl'							,  '2222',        0)
 			fn_setupClient_add('Millry'									,  '3025',    33968)
 			fn_setupClient_add('Moweaqua'								,  '3045',    34594) ! 200032790) ! 33986 <--??  I don't know where that came from - 200032790 was their 4.13 version
 			fn_setupClient_add('Morrisonville'					,  '3050',    34408) ! 32242  <-- that's white hall's but there was a mistake in license file for a while
