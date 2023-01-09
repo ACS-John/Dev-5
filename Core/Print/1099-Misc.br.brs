@@ -327,7 +327,6 @@ def fn_1099print(vn$*8,nam$*30,mat empAddr$,ss$*11,mat box; ___, _
 			fnpa_open('',optCopy$(copyCurrentN),'PDF')
 		end if
 	end if ! /r
-
 	if ten99Export$='True' then
 		! r: export one
 		pr #hExport: '01 ';' '
@@ -401,8 +400,8 @@ def fn_1099print(vn$*8,nam$*30,mat empAddr$,ss$*11,mat box; ___, _
 					fnpa_txt(empAddr$(1)       	,column1    	,fn_line(10)) ! address line 1
 					fnpa_txt(empAddr$(2)       	,column1    	,fn_line(12)) !  CSZ
 				else if udim(mat empAddr$)=3 then
-					fnpa_txt(rtrm$(empAddr$(1))&'  ' _
-					&trim$(empAddr$(2))        	,column1    	,fn_line(11)) ! address line 2
+					fnpa_txt(rtrm$(empAddr$(1)),column1    	,fn_line(10))
+					fnpa_txt(trim$(empAddr$(2))        	,column1    	,fn_line(11)) ! address line 2
 					fnpa_txt(empAddr$(3)       	,column1    	,fn_line(12)) !  CSZ
 				else
 					pr 'udim(mat empAddr$)=';udim(mat empAddr$);' this is unexpected by '&program$ : pause
@@ -416,7 +415,7 @@ def fn_1099print(vn$*8,nam$*30,mat empAddr$,ss$*11,mat box; ___, _
 				fnpa_txt(cnvrt$('pic(zzzzzzzzzz.zz',box(6) ),column3   		,fn_line(6) ) ! fed withheld
 				fnpa_txt(cnvrt$('pic(zzzzzzzzzz.zz',box(5) ),column2   		,fn_line(8) )
 				fnpa_txt(cnvrt$('pic(zzzzzzzzzz.zz',box(6) ),column3   		,fn_line(8) )
-				if box(7)>5000 then
+				if sum(mat box)>5000 then
 					fnpa_txt('X'                                ,column2+21 	,fn_line(9))
 				end if
 				fnpa_txt(cnvrt$('pic(zzzzzzzzzz.zz',box(8) ),column3    	,fn_line(9) )
