@@ -844,6 +844,17 @@ def fn_getFederalTable(taxYear,marital,w4Year$,w4step2,mat fedTable,&fed_annual_
 				f2s(8,1)=583375 : f2s(8,2)=174238.25  : f2s(8,3)=0.37
 				! /r
 			else ! w4year$='2020'
+				! r: fss=federal  joint             standard             Top Left
+				dim fjs(8,3)
+				fjs(1,1)=12*     0 : fjs(1,2)=12*     0    : fjs(1,3)=0
+				fjs(2,1)=12*  2308 : fjs(2,2)=12*     0    : fjs(2,3)=0.10
+				fjs(3,1)=12*  4142 : fjs(3,2)=12*   183.4  : fjs(3,3)=0.12
+				fjs(4,1)=12*  9763 : fjs(4,2)=12*   857.92 : fjs(4,3)=0.22
+				fjs(5,1)=12* 18204 : fjs(5,2)=12*  2714.94 : fjs(5,3)=0.24
+				fjs(6,1)=12* 32658 : fjs(6,2)=12*  6183.9  : fjs(6,3)=0.32
+				fjs(7,1)=12* 40850 : fjs(7,2)=12*  8805.34 : fjs(7,3)=0.35
+				fjs(8,1)=12* 60121 : fjs(8,2)=12* 15550.19 : fjs(8,3)=0.37
+				! /r
 				! r: fjc=federal  joint              W-4 Step 2 checked   Top Right (Married Filing Jointly)
 				dim fjc(8,3)
 				fjc(1,1)=12*     0 : fjc(1,2)=12*    0      : fjc(1,3)=0
@@ -2194,7 +2205,6 @@ def library fnCheckPayrollCalculation(; ___, _
 		dim w4yearOption$(0)*4
 		dim payPeriodOption$(0)*16
 		fnGetEmpOptions(mat marriedOption$,mat eicOption$,mat w4yearOption$,mat payPeriodOption$)
-
 		dim fed_exemption_option$(22)
 		for j=1 to 21
 			fed_exemption_option$(j)=str$(j-1)
@@ -2231,8 +2241,8 @@ def library fnCheckPayrollCalculation(; ___, _
 		fnLbl(             lc+=1,col1_pos,'W-4 Year:',col1_len,1)
 		fnComboA('w4Year', lc   ,col2_pos,mat w4yearOption$,'Only used if W-4 Year is set to 2020 or later.',5)
 		fnPcReg_read('W-4 Year',resp$(resp_w4year=respc+=1), w4yearOption$(1))
-		fnLbl(             lc,col1_pos+30,'Federal Exemptions:',col1_len,1)
-		fnComboA('StateEx',lc   ,col2_pos+30,mat fed_exemption_option$,'',3)
+		fnLbl(             lc,col1_pos+35,'Federal Exemptions:',col1_len,1)
+		fnComboA('StateEx',lc   ,col2_pos+35,mat fed_exemption_option$,'',3)
 		fnPcReg_read('Federal Exemptions',resp$(resp_fedExeptions=respc+=1)=fnSetForCombo$(mat fed_exemption_option$,str$(allowances)), fed_exemption_option$(1))
 		lc+=1
 		fnChk(lc+=1,46,'W-4 Step 2',1)
