@@ -29,8 +29,8 @@
 	fw2box16$='form  pos 1,C 8'&rpt$(',C 12,G 10.2,3*G 1',6)
  
 	open #hCompany=fnH: 'Name=[Q]\PRmstr\Company.h[cno],Shr',i,i
-	read #hCompany,using Fcompany: mat a$,empId$,mat d$,loccode,NOTssmax,mat e$
-	NOTssmax=NOTssmax*10
+	read #hCompany,using Fcompany: mat a$,empId$,mat d$,loccode,ssmax,mat e$
+	ssmax=ssmax*10
 	Fcompany: form pos 1,3*c 40,c 12,pos 150,10*c 8,n 2,pos 239,pd 4.2,pos 317,10*c 12
 	for j=1 to 3: a$(j)=a$(j)(1:30): next j
 	close #hCompany:

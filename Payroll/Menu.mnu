@@ -4,7 +4,7 @@ File
 >Payroll Check History                      ^ [cursystem]\*          ^     ^Transactions,credit,debit
 >User Designed Reports                      ^ [cursystem]\*
 ! >W-2 Supplemental Information             ^ acsPR\W2Box16
->Accrued Payroll Tax Information            ^ [cursystem]\*          ^CL
+>Accrued Payroll Tax Information            ^ [cursystem]\*          ^CL   ^W2
 >Time Classifications                       ^ acspr\hourclassification
 >Breakdown of Hours                         ^ acspr\hours
 >Employment Status                          ^ HamsterFio:*
@@ -30,10 +30,10 @@ Quarterly
 Annual
 >Annual Federal Unemployment Worksheet      ^ [cursystem]\*
 >YTD Deductions Register                    ^ [cursystem]\*
->Print W-2 Forms                            ^ [cursystem]\*
->Corrected W-2                              ^ [cursystem]\Job Cost\*
->Electronic W-2                             ^ [cursystem]\*
->Corrected Electronic W-2                   ^ [cursystem]\*
+>Print W-2 Forms                            ^ [cursystem]\*          ^   ^W2
+>Corrected W-2                              ^ [cursystem]\Job Cost\* ^   ^W2
+>Electronic W-2                             ^ [cursystem]\*          ^   ^W2
+>Corrected Electronic W-2                   ^ [cursystem]\*          ^   ^W2
 >Print 1099-Misc Forms                      ^ [cursystem]\*
 >Print 1099-NEC Forms                       ^ [cursystem]\*
 >Electronic 401K                            ^ [cursystem]\*
