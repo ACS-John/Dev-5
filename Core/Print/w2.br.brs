@@ -604,6 +604,16 @@ def fn_w2_text(w2Yoffset,maskSsn,mat a$,empId$*12,ss$,controlNumber$,mat w,dcb$,
 		! 	fnpa_txt(cnvrt$('pic(zzzzzzzzzzzzz.zz',w(8)),left+137,fn_line(12))
 		! 	fnpa_txt(printLocality$(1:6),left+164,fn_line(12))
 		! else
+		if env$('client')='Kathys Bookkeeping' then 
+		let speciallastline=w2Yoffset+10+(8.5*10)+5
+			fnpa_txt(state$,left-3,speciallastline)
+			fnpa_txt(stcode$,left+10,speciallastline)
+			fnpa_txt(cnvrt$('pic(zzzzzzzzzzzzz.zz',w(9)),left+51,speciallastline)
+			fnpa_txt(cnvrt$('pic(zzzzzzzzzzzzz.zz',w(7)),left+79,speciallastline)
+			fnpa_txt(cnvrt$('pic(zzzzzzzzzzzzz.zz',w(10)),left+109,speciallastline)
+			fnpa_txt(cnvrt$('pic(zzzzzzzzzzzzz.zz',w(8)),left+137,speciallastline)
+			fnpa_txt(printLocality$(1:6),left+164,speciallastline)
+		else 
 			fnpa_txt(state$,left-3,fn_line(11))
 			fnpa_txt(stcode$,left+10,fn_line(11))
 			fnpa_txt(cnvrt$('pic(zzzzzzzzzzzzz.zz',w(9)),left+51,fn_line(11))
@@ -611,7 +621,7 @@ def fn_w2_text(w2Yoffset,maskSsn,mat a$,empId$*12,ss$,controlNumber$,mat w,dcb$,
 			fnpa_txt(cnvrt$('pic(zzzzzzzzzzzzz.zz',w(10)),left+109,fn_line(11))
 			fnpa_txt(cnvrt$('pic(zzzzzzzzzzzzz.zz',w(8)),left+137,fn_line(11))
 			fnpa_txt(printLocality$(1:6),left+164,fn_line(11))
-		! end if
+		end if
 	end if
 fnend
 def fn_line(lineNumber; ___,returnN)
