@@ -604,7 +604,7 @@ def fn_w2_text(w2Yoffset,maskSsn,mat a$,empId$*12,ss$,controlNumber$,mat w,dcb$,
 		! 	fnpa_txt(cnvrt$('pic(zzzzzzzzzzzzz.zz',w(8)),left+137,fn_line(12))
 		! 	fnpa_txt(printLocality$(1:6),left+164,fn_line(12))
 		! else
-		if env$('client')='Kathys Bookkeeping' then 
+		if env$('client')='Kathys Bookkeeping' or env$('client')='Thomasboro' then 
 		let speciallastline=w2Yoffset+10+(8.5*10)+5
 			fnpa_txt(state$,left-3,speciallastline)
 			fnpa_txt(stcode$,left+10,speciallastline)
