@@ -418,28 +418,30 @@ Xit: fnXit
 
 def fn_chooseBudgetUpdates(x1$*10,transDate,mat billToPay; ___,bd1Count,ck1,j,key$*14,billingDate,btRecCount,btpCount) ! very local.
 	! haveBudget=0   !   this seems really wrong - should not be turing it off constantly
-	if hBudMstr and fnCustomerBudgetEnable(x1$)  then
-		btRecCount=fnBudgetTransMatchingRecords(x1$,mat btRec,'unpaidonly')
-		fnTos
-		fnLbl(2,1,'Check the bills to be paid:',30,0)
-		for j=1 to min(25,btRecCount)
-			read #hBudgetTrans,using FbudgetTrans,rec=btRec(j): z$,mat bt1
-			billingDate=bt1(1,1)
-			fnChk(j+2,10,cnvrt$('pic(zz/zz/zz)',billingDate))
-			resp$(j)='False' : if srch(mat billToPay,btRec(j)) then resp$(j)='True'
-		next j
-		if btRecCount>5 then
-			fnLbl(j+2,1,'Select up to 5 bills to pay',30,2)
-		end if
-		fnCmdSet(2)
-		ck1=fnAcs(mat resp$)
-		if ck1<>5 then
-			btpCount=0
-			mat billToPay=(0)
-			for j=1 to min(udim(mat billToPay),btRecCount)
-				if resp$(j)='True' then billToPay(btpCount+=1)=btRec(j) ! pr 'ding';bell
-			nex j
-		end if
+	if hBudMstr then 
+	   if fnCustomerBudgetEnable(x1$)  then
+			btRecCount=fnBudgetTransMatchingRecords(x1$,mat btRec,'unpaidonly')
+			fnTos
+			fnLbl(2,1,'Check the bills to be paid:',30,0)
+			for j=1 to min(25,btRecCount)
+				read #hBudgetTrans,using FbudgetTrans,rec=btRec(j): z$,mat bt1
+				billingDate=bt1(1,1)
+				fnChk(j+2,10,cnvrt$('pic(zz/zz/zz)',billingDate))
+				resp$(j)='False' : if srch(mat billToPay,btRec(j)) then resp$(j)='True'
+			next j
+			if btRecCount>5 then
+				fnLbl(j+2,1,'Select up to 5 bills to pay',30,2)
+			end if
+			fnCmdSet(2)
+			ck1=fnAcs(mat resp$)
+			if ck1<>5 then
+				btpCount=0
+				mat billToPay=(0)
+				for j=1 to min(udim(mat billToPay),btRecCount)
+					if resp$(j)='True' then billToPay(btpCount+=1)=btRec(j) ! pr 'ding';bell
+				nex j
+			end if
+		end if 
 	end if ! hBudMstr
 	Bud2Finis: !
 fnend
