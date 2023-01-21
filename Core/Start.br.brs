@@ -263,7 +263,11 @@ def fn_uniqueComputerId_initialize
 			if tmp_pos_uuid>0 then
 				tmp_line$(1:tmp_pos_uuid)=''
 			else
-				pr 'problem in fn_uniqueComputerId_initialize$ - expected to say UUID' : pause
+				if env$('client_computerName')<>'' then
+					setEnv('Unique_Computer_ID',env$('client_computerName'))
+				else
+					pr 'problem in fn_uniqueComputerId_initialize$ - expected to say UUID' : pause
+				end if
 			end if
 		end if
 		!   if tmp_line$(1:4)<>'UUID' then pr 'problem in fn_uniqueComputerId_initialize$ - expected to say UUID' : pause

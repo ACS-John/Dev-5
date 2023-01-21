@@ -354,11 +354,11 @@ def fn_setup
 fnend
 def fn_ask_margins
 ! if env$('acsdeveloper')='' then pr bell; : goto am_xit
-	fnreg_read('W-2 - form 1 Y',amResp$(1),'10' )
-	fnreg_read('W-2 - form 2 Y',amResp$(2),'151')
-	fnreg_read('W-2 - X'       ,amResp$(3),'12' )
-	fnreg_read('W-3 - Margin Top'              ,enableBackground$   ,'5' )
-	fnreg_read('W-3 - Margin Left'             ,enableBackground$   ,'7' )
+	fnreg_read('W-2 - form 1 Y'   	,amResp$(1), '10')
+	fnreg_read('W-2 - form 2 Y'   	,amResp$(2),'151')
+	fnreg_read('W-2 - X'           	,amResp$(3), '12')
+	fnreg_read('W-3 - Margin Top' 	,amResp$(4),  '5')
+	fnreg_read('W-3 - Margin Left'	,amResp$(5),  '7')
 	fnTos
 	mylen=30 : mypos=mylen+2
 	fnLbl(lc+=1,1,'form 1 Distance from Top (mm):',mylen,1) 	: fnTxt(lc,mypos,3,0,1,'30')
