@@ -230,7 +230,6 @@ do ! r: main loop
 		first=0
 	loop ! /r read next check record
 	EoChecksForEmp: !
-	 ! if eno=5 then pr w(5) : pause
 	gosub Box16process
 	for dedItem=1 to 20 ! r:
 		if trim$(fullname$(dedItem))<>'' then

@@ -57,7 +57,7 @@ Screen1: ! r:
 	fnLbl(4,1,'Federal ID #:',mylen,right,0,fram1)              	: fnTxt(4,mypos,12,0,left,'',0,'',fram1)                                                                          	: resp$(4)=fid$
 	fnLbl(5,1,'Federal U/C Rate:',mylen,right,0,fram1)          	: fnTxt(5,mypos,10,0,left,'33',0,'In 2007 the rate was .8% and should be entered as .8 and not .008',fram1)	: resp$(5)=str$(feducrat)
 	fnLbl(6,1,'Federal U/C Maximum Wage:',mylen,right,0,fram1) 	: fnTxt(6,mypos,12,0,left,'10',0,'',fram1)                                                                        	: resp$(6)=str$(feducmax)
-	fnLbl(7,1,'Social Security Rate:',mylen,right,0,fram1)      	: fnTxt(7,mypos,10,0,left,'33',0,'Sample format 6.2',fram1 )                                                    	: resp$(7)=str$(ficarate)
+	fnLbl(7,1,'Social Security Rate:',mylen,right,0,fram1)     	: fnTxt(7,mypos,10,0,left,'33',0,'Sample format 6.2',fram1 )                                                    	: resp$(7)=str$(ficarate)
 	fnLbl(8,1,'SS Maximum Wage:',mylen,right,0,fram1)           	: fnTxt(8,mypos,12,0,left,'10',0,'The maximum was 97500 for the year 2007.  See a 941 form.',fram1)        	: resp$(8)=str$(ssmax)
 	fnLbl(9,1,'Medicare Rate:',mylen,right,0,fram1)             	: fnTxt(9,mypos,10,0,left,'33',0,'Format would be 1.450',fram1)                                                	: resp$(9)=str$(mcr)
 	fnLbl(10,1,'Medicare Maximum Wage:',mylen,right,0,fram1)   	: fnTxt(10,mypos,12,0,left,'10',0,'Use 999999.99 since there no maximum wage at this time.',fram1)         	: resp$(10)=str$(mcm)
@@ -100,6 +100,7 @@ Screen1: ! r:
 		if resp$<>'Yes' then goto Screen1
 	end if
 	if ckey=4 then goto Finis
+goto Screen2 ! /r
 goto Screen2 ! /r
 
 Screen2: ! r:
