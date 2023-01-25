@@ -887,9 +887,9 @@ def fn_getFederalTable(taxYear,marital,w4Year$,w4step2,mat fedTable,&fed_annual_
 				fss(8,1)=12* 49331 : fss(8,2)=12* 14519.82 : fss(8,3)=0.37
 				! /r
 				! r: fsc=federal  single             W-4 Step 2 checked   Middle Right (single or Married Filing Seperately)
-				dim fsc(8,3) 
-				fsc(1,1)=12*     0 : fsc(1,2)=12*    0    : fsc(1,3)=0   
-				fsc(2,1)=12*   577 : fsc(2,2)=12*    0    : fsc(2,3)=0.1 
+				dim fsc(8,3)
+				fsc(1,1)=12*     0 : fsc(1,2)=12*    0    : fsc(1,3)=0
+				fsc(2,1)=12*   577 : fsc(2,2)=12*    0    : fsc(2,3)=0.1
 				fsc(3,1)=12*  1035 : fsc(3,2)=12*   45.8  : fsc(3,3)=0.12
 				fsc(5,1)=12*  2441 : fsc(5,2)=12*  214.52 : fsc(5,3)=0.24
 				fsc(4,1)=12*  4551 : fsc(4,2)=12*  678.72 : fsc(4,3)=0.22
@@ -984,7 +984,7 @@ def fn_getFederalTable(taxYear,marital,w4Year$,w4step2,mat fedTable,&fed_annual_
 			end if
 			if w4year$='2020' then
 				if w4step2 then fn_detail('Federal Table: W-4 Step 2 Enabled') else fn_detail('Federal Table: STANDARD')
-			end if 
+			end if
 		end if ! /r
 	! /r
 ! pause
@@ -1083,18 +1083,18 @@ def fn_determineEarnings(hPrChecks,eno,dep,begDate,endDate,mat ytdTotal,&ytdFICA
 	DePrCkFinis:!
 fnend
 
-def fn_tableLine(mat tl_table,tl_seek_amount; tl_second_dimension)
-	! this function finds where [tl_seek_amount] falls within a range in a singe row (1st element) of a 2 dimensional array)
-	! this function identifies which column (2nd element) of the 2d array to search with [tl_second_dimension] which defaults to the first
-	if tl_second_dimension=0 then tl_second_dimension=1
-	for tl_item=1 to udim(mat tl_table,1)-1
-		if tl_seek_amount>tl_table(tl_item,tl_second_dimension) and tl_seek_amount<=tl_table(tl_item+1,tl_second_dimension) then
-			goto TL_XIT
+def fn_tableLine(mat tl_table,tl_seekAmount; tl_secondDimension,___,returnN)
+	! this function finds where [tl_seekAmount] falls within a range in a singe row (1st element) of a 2 dimensional array)
+	! this function identifies which column (2nd element) of the 2d array to search with [tl_secondDimension] which defaults to the first
+	if tl_secondDimension=0 then tl_secondDimension=1
+	for returnN=1 to udim(mat tl_table,1)-1
+		if tl_seekAmount>tl_table(returnN,tl_secondDimension) and tl_seekAmount<=tl_table(returnN+1,tl_secondDimension) then
+			goto Tl_finis
 		end if
-	next tl_item
-	tl_item=udim(mat tl_table,1)
-	TL_XIT: !
-	fn_tableLine=tl_item
+	next returnN
+	returnN=udim(mat tl_table,1)
+	Tl_finis: !
+	fn_tableLine=returnN
 fnend
 
 def fn_stateTax(eno,wages,pppy,allowances,marital,fedWh,addOnSt,w4year$,taxYear; clientState$*2)
@@ -1210,7 +1210,7 @@ fnend
 				arStandardDeduction=2200
 				arPerExemption=20
 				! /r
-			else if taxYear=>2021 then ! r:
+			else if taxYear=2021 then ! r:
 				mat ar(12,3)
 				! Page 2 of https://www.dfa.arkansas.gov/images/uploads/incomeTaxOffice/whformula.pdf
 				! Over         : Minus Adjustment :    Percentage
@@ -1228,6 +1228,67 @@ fnend
 				ar(12,1)=87501 : ar(12,2)= 241.7  :  ar(12,3)=0.059
 				arStandardDeduction=2200
 				arPerExemption=29
+				! /r
+			else if taxYear=>2022 then ! r:
+				mat ar(52,3)
+				! Page 2-3 of https://www.dfa.arkansas.gov/images/uploads/incomeTaxOffice/whformula.pdf
+				! "Effective 10/01/2022"
+				! Over         : Minus Adjustment :    Percentage
+				arStandardDeduction=2270
+				arPerExemption=29
+				!						Over 	       Percentage  	  Minus Adjustment
+				ar( 1,1)=      0 	: ar( 1,3)= 0.000 	: ar( 1,2)=   0
+				ar( 2,1)=   5100 	: ar( 2,3)= 0.020 	: ar( 2,2)= 101.98
+				ar( 3,1)=  10300 	: ar( 3,3)= 0.030 	: ar( 3,2)= 204.97
+				ar( 4,1)=  14700 	: ar( 4,3)= 0.034 	: ar( 4,2)= 263.77
+				ar( 5,1)=  24300 	: ar( 5,3)= 0.049 	: ar( 5,2)= 628.25
+				ar( 6,1)=  87001 	: ar( 6,3)= 0.049 	: ar( 6,2)= 627.20
+				ar( 7,1)=  87101 	: ar( 7,3)= 0.049 	: ar( 7,2)= 617.20
+				ar( 8,1)=  87201 	: ar( 8,3)= 0.049 	: ar( 8,2)= 607.20
+				ar( 9,1)=  87301 	: ar( 9,3)= 0.049 	: ar( 9,2)= 597.20
+				ar(10,1)=  87401 	: ar(10,3)= 0.049 	: ar(10,2)= 587.20
+				ar(11,1)=  87601 	: ar(11,3)= 0.049 	: ar(11,2)= 577.20
+				ar(12,1)=  87701 	: ar(12,3)= 0.049 	: ar(12,2)= 567.20
+				ar(13,1)=  87801 	: ar(13,3)= 0.049 	: ar(13,2)= 557.20
+				ar(14,1)=  87901 	: ar(14,3)= 0.049 	: ar(14,2)= 547.20
+				ar(15,1)=  88001 	: ar(15,3)= 0.049 	: ar(15,2)= 537.20
+				ar(16,1)=  88101 	: ar(16,3)= 0.049 	: ar(16,2)= 527.20
+				ar(17,1)=  88201 	: ar(17,3)= 0.049 	: ar(17,2)= 517.20
+				ar(18,1)=  88301 	: ar(18,3)= 0.049 	: ar(18,2)= 507.20
+				ar(19,1)=  88401 	: ar(19,3)= 0.049 	: ar(19,2)= 497.20
+				ar(20,1)=  88501 	: ar(20,3)= 0.049 	: ar(20,2)= 487.20
+				ar(21,1)=  88601 	: ar(21,3)= 0.049 	: ar(21,2)= 477.20
+				ar(22,1)=  88701 	: ar(22,3)= 0.049 	: ar(22,2)= 467.20
+				ar(23,1)=  88801 	: ar(23,3)= 0.049 	: ar(23,2)= 457.20
+				ar(24,1)=  88901 	: ar(24,3)= 0.049 	: ar(24,2)= 447.20
+				ar(25,1)=  89001 	: ar(25,3)= 0.049 	: ar(25,2)= 437.20
+				ar(26,1)=  89101 	: ar(26,3)= 0.049 	: ar(26,2)= 427.20
+				ar(27,1)=  89201 	: ar(27,3)= 0.049 	: ar(27,2)= 417.20
+				ar(28,1)=  89301 	: ar(28,3)= 0.049 	: ar(28,2)= 407.20
+				ar(29,1)=  89401 	: ar(29,3)= 0.049 	: ar(29,2)= 397.20
+				ar(30,1)=  89501 	: ar(30,3)= 0.049 	: ar(30,2)= 387.20
+				ar(31,1)=  89601 	: ar(31,3)= 0.049 	: ar(31,2)= 377.20
+				ar(32,1)=  89701 	: ar(32,3)= 0.049 	: ar(32,2)= 367.20
+				ar(33,1)=  89801 	: ar(33,3)= 0.049 	: ar(33,2)= 357.20
+				ar(34,1)=  89901 	: ar(34,3)= 0.049 	: ar(34,2)= 347.20
+				ar(35,1)=  90001 	: ar(35,3)= 0.049 	: ar(35,2)= 337.20
+				ar(36,1)=  90101 	: ar(36,3)= 0.049 	: ar(36,2)= 327.20
+				ar(37,1)=  90201 	: ar(37,3)= 0.049 	: ar(37,2)= 317.20
+				ar(38,1)=  90301 	: ar(38,3)= 0.049 	: ar(38,2)= 307.20
+				ar(39,1)=  90401 	: ar(39,3)= 0.049 	: ar(39,2)= 297.20
+				ar(40,1)=  90501 	: ar(40,3)= 0.049 	: ar(40,2)= 287.20
+				ar(41,1)=  90601 	: ar(41,3)= 0.049 	: ar(41,2)= 277.20
+				ar(42,1)=  90701 	: ar(42,3)= 0.049 	: ar(42,2)= 267.20
+				ar(43,1)=  90801 	: ar(43,3)= 0.049 	: ar(43,2)= 257.20
+				ar(44,1)=  90901 	: ar(44,3)= 0.049 	: ar(44,2)= 247.20
+				ar(45,1)=  91101 	: ar(45,3)= 0.049 	: ar(45,2)= 237.20
+				ar(46,1)=  91201 	: ar(46,3)= 0.049 	: ar(46,2)= 227.20
+				ar(47,1)=  91301 	: ar(47,3)= 0.049 	: ar(47,2)= 217.20
+				ar(48,1)=  91401 	: ar(48,3)= 0.049 	: ar(48,2)= 207.20
+				ar(49,1)=  91501 	: ar(49,3)= 0.049 	: ar(49,2)= 197.20
+				ar(50,1)=  91601 	: ar(50,3)= 0.049 	: ar(50,2)= 187.20
+				ar(51,1)=  91701 	: ar(51,3)= 0.049 	: ar(51,2)= 177.20
+				ar(52,1)=  91801  : ar(52,3)= 0.049 	: ar(52,2)= 167.20
 				! /r
 			end if ! /r
 		end if
@@ -2168,7 +2229,7 @@ def fn_detailStep(text$*64; number,extra$*64,extraNumber)
 			fnStatus('Step '&text$)
 		end if
 	end if
-	
+
 fnend
 
 
@@ -2294,8 +2355,12 @@ def library fnCheckPayrollCalculation(; ___, _
 			resp$(rc_stDependents=respc+=1)=fnEmployeeData$(0,'Dependents')
 		end if ! /r
 
-		fnCmdKey('Federal Table',ck_federalTable=7,0,0,'Print Federal Table for selected Pay Code')
-		fnCmdSet(2)
+		fnCmdKey('Test Federal' 	,ck_federal=3,0,0,'Print Federal Table for selected Pay Code')
+		fnCmdKey('Test State'   	,ck_state=2,0,0,'Print Federal Table for selected Pay Code')
+		fnCmdKey('Test Both'    	,1,1,0,'')
+		fnCmdKey('Federal Table'	,ck_federalTable=7,0,0,'Print Federal Table for selected Pay Code')
+		fnCmdKey('Cancel'        	,5,0,1,'')
+		! fnCmdSet(2)
 		ckey=fnAcs(mat resp$) ! /r
 		if ckey=5 then
 			goto XitCheckStateCalculation
@@ -2377,12 +2442,18 @@ def library fnCheckPayrollCalculation(; ___, _
 				! fnStatus('              fedExempt: '&str$(fedExempt            	))
 				fnStatus('               w4year: '&w4year$                  	 )
 				if w4step2 then fnStatus('              w4step2: '&str$(w4step2            	))
-
-				! testStateTax=fn_stateTax(0,wages,pppy,allowances,marital,fedWh,stateAddOn,w4year$,taxYear)
-				testFederalTax=fn_federalTax(taxYear,fedpct,wages,ded,stdWhFed,fedExempt,pppy,marital,w4Year$,w4step2,w4Step3,w4step4a,w4step4b,w4step4c)
-
-				! fnStatus('Calculated '&fnpayroll_client_state$&' State WithHolding: '&str$( testStateTax ))
-				fnStatus('Calculated Federal WithHolding: '&str$( testFederalTax ))
+				if ckey=ck_state or ckey=1 then
+					testStateTax=fn_stateTax(0,wages,pppy,allowances,marital,fedWh,stateAddOn,w4year$,taxYear)
+				end if
+				if ckey=ck_federal or ckey=1 then
+					testFederalTax=fn_federalTax(taxYear,fedpct,wages,ded,stdWhFed,fedExempt,pppy,marital,w4Year$,w4step2,w4Step3,w4step4a,w4step4b,w4step4c)
+				end if
+				if ckey=ck_state or ckey=1 then
+					fnStatus('Calculated '&fnpayroll_client_state$&' State WithHolding: '&str$( testStateTax ))
+				end if
+				if ckey=ck_federal or ckey=1 then
+					fnStatus('Calculated Federal WithHolding: '&str$( testFederalTax ))
+				end if
 				! fnStatus('_____________________________')
 				! fnStatus('_____________________________')
 				! fnStatus('Federal: '&str$(testFederalTax))
