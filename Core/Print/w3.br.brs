@@ -18,7 +18,7 @@ def fn_setup
 		MarginLeftN=fnReg_read('W-3 - Margin Left'       	,MarginLeft$       	,'7' )
 	end if
 fnend
-def library fnw3(taxyear$,ein$*12,mat a$,mat w,dcb,state$,stcode$;___,specialform2018)
+def library fnW3(taxyear$,ein$*12,w2printCount,mat a$,mat w,dcb,state$,stcode$;___,specialform2018)
 	! ein$      Employer Identification Number (EIN)
 	! a$(1)     Employer Name
 	! a$(2)     Employer Address
@@ -41,18 +41,19 @@ def library fnw3(taxyear$,ein$*12,mat a$,mat w,dcb,state$,stcode$;___,specialfor
 	if ~setup then fn_setup
 	fnpa_open('','W-3','PDF')
 	if enableBackground$='True' then fnpa_background('S:\Core\pdf\'&taxyear$&'\W-3.pdf')
-	fnpa_fontsize(12)
+	fnpa_fontsize(12) ! box b 941 check
 	fnpa_txt('X',37,fn_line(2))
 	fnpa_txt(' ',37,fn_line(2))
+	fnpa_txt(cnvrt$('pic(zzz)',w2printCount),37,fn_line(4)) ! box c Total number of Forms W-2
 	col1=  1+MarginLeftN
 	! if env$('client')='Kincaid' then col1+=2
 	col2=113-7+MarginLeftN
 	col3=169-7+MarginLeftN
 	 ! if env$('acsdeveloper')<>'' then  pause ! specialform2018=1
 	! removed 1/21/2022        ! if env$('client')='Thomasboro' or env$('client')='Cerro Gordo V' or env$('client')='Cerro Gordo T' or env$('client')='Kincaid' or env$('client')='Hope Welty' or env$('client')='Bethany' then specialform2018=1
-	fnpa_txt(ein$,col1,fn_line(5)) ! Employer Identification Number (EIN)
-	fnpa_txt(a$(1),col1,fn_line(6))
-	fnpa_txt(a$(2),col1,fn_line(7)-2)
+	fnpa_txt(ein$,col1,fn_line(5)) ! box e - Employer Identification Number (EIN)
+	fnpa_txt(a$(1),col1,fn_line(6)) ! box f
+	fnpa_txt(a$(2),col1,fn_line(7)-2) ! box g
 	fnpa_txt(a$(3),col1,fn_line(7)+2)
 	fnpa_txt(cnvrt$('pic(zzzzzzzzzz.zz',w(2) ),col2,fn_line(4)) ! taxable wages
 	fnpa_txt(cnvrt$('pic(zzzzzzzzzz.zz',w(1) ),col3,fn_line(4)) ! fed wh

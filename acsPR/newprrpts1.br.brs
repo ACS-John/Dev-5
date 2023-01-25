@@ -1,15 +1,10 @@
 ! Replace S:\acsPR\newprRptS1
 ! pr User Designed Reports
-	fn_setup
-	fnTop(program$,'Print Designed Reports')
-OPEN3: !
-	close #3: ioerr ignore
-	open #3: 'Name=[Q]\PRmstr\PRReport.h[cno],KFName=[Q]\PRmstr\PRRptIdx.h[cno],Shr',i,i,k ioerr NO_PRREPORT
-	if lrec(3)=0 then goto NO_PRREPORT
-	close #3:
-	goto MENU1
-
-MENU1: !
+execute 'clear proc only'
+fn_setup
+fnTop(program$,'Print Designed Reports')
+gosub OpenReportLayout
+do ! r: menu1
 	fnTos
 	respc=0
 	fnLbl(1,1,'Report:',11,1)
@@ -20,36 +15,59 @@ MENU1: !
 	ckey=fnAcs(mat resp$) ! ask report #
 	if ckey=5 then goto Xit
 	rn=val(resp$(1)(1:2))
-	fn_print_designed_report(rn,3)
-	goto OPEN3
-
+	fn_printUserDesignedReport(rn,3)
+	gosub OpenReportLayout
+loop ! /r
+Xit: fnXit
+OpenReportLayout: ! r:
+	close #3: ioerr ignore
+	open #3: 'Name=[Q]\PRmstr\PRReport.h[cno],KFName=[Q]\PRmstr\PRRptIdx.h[cno],Shr',i,i,k ioerr NoPrReport
+	if lrec(3)=0 then goto NoPrReport
+	close #3:
+return
+	NoPrReport: ! r:
+		mat ml$(2)
+		ml$(1)='No reports have been designed in the User Designed'
+		ml$(2)='Reports file.  Click OK to go there now.'
+		fnMsgBox(mat ml$,resp$,'',48)
+	fnChain('S:\Payroll\User Designed Reports') ! /r
+ ! /r
 def library fnprint_designed_report(rn)
 		fn_setup
-		fnprint_designed_report=fn_print_designed_report(rn)
+		fnprint_designed_report=fn_printUserDesignedReport(rn)
 fnend
-def fn_print_designed_report(rn)
+def fn_printUserDesignedReport(rn; ___,rn$*2,rt$*78)
 	rn$=lpad$(str$(rn),2)
-
-	open #h_prreport=fnH: 'Name=[Q]\PRmstr\PRReport.h[cno],KFName=[Q]\PRmstr\PRRptIdx.h[cno],Shr',i,i,k ioerr PDR_XIT
-	read #h_prreport,using 'form pos 3,c 78',key=rn$: rt$ nokey NORECORDSONFILE
-	read #h_prreport,using 'form pos 3,c 78,2*c 132,n 3,2*n 1,100*pd 6.3,40*pd 2,20*n 1',key=rn$: rt$,mat ch$,ips,tdep,cp,mat psc,mat a,mat pp,mat ti ioerr NORECORDSONFILE ! nokey NORECORDSONFILE
+	open #h_prreport=fnH: 'Name=[Q]\PRmstr\PRReport.h[cno],KFName=[Q]\PRmstr\PRRptIdx.h[cno],Shr',i,i,k ioerr PdrXit
+	read #h_prreport,using 'form pos 3,c 78',key=rn$: rt$ nokey PdrNoRecordsOnFile
+	dim ch$(2)*132
+	dim psc(100)
+	dim a(20)
+	dim pp(20)
+	dim ti(20)
+	read #h_prreport,using 'form pos 3,c 78,2*c 132,n 3,2*n 1,100*pd 6.3,40*pd 2,20*n 1',key=rn$: rt$,mat ch$,ips,tdep,cp,mat psc,mat a,mat pp,mat ti ioerr PdrNoRecordsOnFile ! nokey PdrNoRecordsOnFile
 	close #h_prreport:
 	if sum(a)=0 then
 		mat ml$(2)
 		ml$(1)='The report you have selected has no fields selected to print.'
 		ml$(2)='Click OK to contine.'
 		fnMsgBox(mat ml$,resp$,'',48)
-		goto PDR_XIT
+		goto PdrXit
 	end if
 
 	fnCopy('S:\acsPR\newPRRpt_s1.brs','[Q]\PRmstr\Tmp_Designed_Report-[Session]-brs.h[cno]')
 
 	open #h_tmp_dr=fnH: 'Name=[Q]\PRmstr\Tmp_Designed_Report-[Session]-brs.h[cno],RecL=255',d,o
 	pr #h_tmp_dr,using F_C255: '00081 RN$="'&rn$&'"'
+	dim pf$*255
 	pf$='19900 pr #255, USING F_PR_OUT: '
+	dim pfd$*255
 	pfd$='20010 pr #255, USING F_PR_OUT: '
+	dim af$*255
 	af$='19910 F_PR_OUT: form'
+	dim gpf$*255
 	gpf$='21000 pr #255, using 21010: '
+	dim gaf$*255
 	gaf$='21010 form skip 2,"Totals"'
 	for j=1 to 20
 		if a(j)=0 then goto L1770
@@ -105,6 +123,7 @@ def fn_print_designed_report(rn)
 	lf1=len(rtrm$(gpf$))
 	gpf$(lf1:lf1)=' '
 	gpf$=rtrm$(gpf$)&' pageoflow PgOf'
+	dim rf1$*255
 	pr #h_tmp_dr,using F_C255: rf1$
 	F_C255: form pos 1,c 255
 	! pr #h_tmp_dr,Using 2050: AF1$
@@ -152,145 +171,129 @@ def fn_print_designed_report(rn)
 		pr #h_tmp_proc,using F_C255: 'RUN'
 		close #h_tmp_proc:
 	chain 'PROC=[Temp]\PROC.'&session$
-	PDR_XIT: !
+	PdrXit: !
 fnend
+	PdrNoRecordsOnFile: ! r: no records on file
+	! if rn=0 then goto Xit
+		mat ml$(2)
+		ml$(1)='It appears this report is not in the report file!'
+		ml$(2)='Click OK to contine.'
+		fnMsgBox(mat ml$,resp$,'',48)
+	goto PdrXit ! /r
 
-NORECORDSONFILE: ! r: no records on file
-! if rn=0 then goto Xit_PRAUTO
-	mat ml$(2)
-	ml$(1)='It appears this report is not in the report file!'
-	ml$(2)='Click OK to contine.'
-	fnMsgBox(mat ml$,resp$,'',48)
-	goto PDR_XIT ! /r
-
-! XIT_PRAUTO: fnXit
-
-Xit: fnXit
-
-include: ertn
-
-NO_PRREPORT: ! r:
-	mat ml$(2)
-	ml$(1)='No reports have been designed in the User Designed'
-	ml$(2)='Reports file.  Click OK to go there now.'
-	fnMsgBox(mat ml$,resp$,'',48)
-fnChain('S:\Payroll\User Designed Reports') ! /r
 def fn_setup
-		autoLibrary
-		on error goto Ertn
+	autoLibrary
+	on error goto Ertn
+	dim ml$(0)*128
+	dim resp$(40)*200 
+	! a$*255,a$(20)*32,iom$(20),af1$*255,af2$*255,af1$*255,af2$*255,msgline$(2)*60,t(104),tt(104),e$(7)*30,e(17),ansm(20),wrdm$(20)*65,rf2$*255,message$*40,
 
-		dim rn$*2,rt$*78,ch$(2)*132,psc(100),ti(20),ty$(104,5)*20,a$*255
-		dim a$(20)*32,a(20),pp(20)
-		dim rf1$*255,pf$*255,af$*255,gpf$*255,pfd$*255
-		dim gaf$*255,ml$(3)*70
-		dim resp$(10)*132 ! iom$(20),af1$*255,af2$*255,af1$*255,af2$*255,msgline$(2)*60,t(104),tt(104),e$(7)*30,e(17),ansm(20),wrdm$(20)*65,rf2$*255,message$*40,
-
-		execute 'clear proc only'
 ! r: set mat ty$
-		data 'ENO,'       ,'pos 1,n 8,'     ,',pic(zzzzzzzz)','DT(2)','GT(2)'
-		data 'EM$(1),'    ,'pos 9,C 30,'    ,',c 30','DT(3)','GT(3)'
-		data 'EM$(2),'    ,'pos 39,C 30,'   ,',c 30','DT(4)','GT(4)'
-		data 'EM$(3),'    ,'pos 69,C 30,'   ,',c 30','DT(5)','GT(5)'
-		data 'SS$,'       ,'pos 99,C 11,'   ,',c 11','DT(6)','GT(6)'
-		data 'RS(1),'     ,'pos 110,n 1,'   ,',N 1','DT(7)','GT(7)'
-		data 'RS(2),'     ,'pos 111,n 1,'   ,',N 1','DT(8)','GT(8)'
-		data 'EM(1),'     ,'pos 112,N 2,'   ,',pic(zz)','DT(9)','GT(9)'
-		data 'EM(2),'     ,'pos 114,N 2,'   ,',pic(zz)','DT(10)','GT(10)'
-		data 'EM(3),'     ,'pos 116,N 2,'   ,',pic(zz)','DT(11)','GT(11)'
-		data 'EM(4),'     ,'pos 118,N 2,'   ,',pic(zz)','DT(12)','GT(12)'
-		data 'EM(5),'     ,'pos 120,N 2,'   ,',pic(zz)','DT(13)','GT(13)'
-		data 'EM(6),'     ,'pos 122,N 2,'   ,',pic(zz)','DT(14)','GT(14)'
-		data 'EM(7),'     ,'pos 124,N 2,'   ,',pic(zz)','DT(15)','GT(15)'
-		data 'EM(8),'     ,'pos 126,PD 3.3,',',pic(---.###)','DT(16)','GT(16)'
-		data 'EM(9),'     ,'pos 129,PD 3.3,',',pic(---.###)','DT(17)','GT(17)'
-		data 'EM(10),'    ,'pos 132,PD 4.2,',',pic(--,---.##)','DT(18)','GT(18)'
-		data 'EM(11),'    ,'pos 136,PD 4.2,',',pic(--,---.##)','DT(19)','GT(19)'
-		data 'EM(12),'    ,'pos 140,PD 4.2,',',pic(--,---.##)','DT(20)','GT(20)'
-		data 'EM(13),'    ,'pos 144,PD 4.2,',',pic(--,---.##)','DT(21)','GT(21)'
-		data 'EM(14),'    ,'pos 148,PD 4.2,',',PIC(--,---.##)','DT(22)','GT(22)'
-		data 'EM(15),'    ,'pos 152,PD 4.2,',',PIC(--,---.##)','DT(23)','GT(23)'
-		data 'EM(16),'    ,'pos 156,N 6,'   ,',pic(zz/zz/zz)','DT(24)','GT(24)'
-		data 'LPD,'       ,'pos 162,N 6,'   ,',pic(zz/zz/zz)','DT(25)','GT(25)'
-		data 'PH$,'       ,'pos 168,C 12,'  ,',C 12','DT(26)','GT(26)'
-		data 'BD,'        ,'pos 180,N 6,'   ,',pic(zz/zz/zz)','dt(27)','GT(27)'
-		data 'TDN,'       ,'pos 9,N 3,'     ,',n 3','DT(28)','GT(28)'
-		data 'TGL2,'      ,'pos 15,n 6,'    ,',n 6','DT(29)','GT(29)'
-		data 'TDT(1),'    ,'pos 24,N 6,'    ,',pic(zz/zz/zz)','DT(30)','GT(30)'
-		data 'TDT(2),'    ,'pos 30,N 6,'    ,',pic(zz/zz/zz)','DT(31)','GT(31)'
-		data 'TDT(3),'    ,'pos 36,N 6,'    ,',pic(zz/zz/zz)','DT(32)','GT(32)'
-		data 'TDT(4),'    ,'pos 42,N 6,'    ,',pic(zz/zz/zz)','DT(33)','GT(33)'
-		data 'TCD(1),'    ,'pos 48,N 2,'    ,',pic(zz)','DT(34)','GT(34)'
-		data 'TCD(2),'    ,'pos 50,N 2,'    ,',pic(zz)','DT(35)','GT(35)'
-		data 'TCD(3),'    ,'pos 52,N 2,'    ,',pic(zz)','DT(36)','GT(36)'
-		data 'TLI,'       ,'pos 54,PD 4.2,' ,',pic(---,---.##)','DT(37)','GT(37)'
-		data 'TDET(1),'   ,'pos 58,PD 4.2,' ,',pic(zz,zzz.##)','DT(38)','GT(38)'
-		data 'TDET(2),'   ,'pos 62,PD 4.2,' ,',pic(zz,zzz.##)','DT(39)','GT(39)'
-		data 'TDET(3),'   ,'pos 66,PD 4.2,' ,',pic(zz,zzz.##)','DT(40)','GT(40)'
-		data 'TDET(4),'   ,'pos 70,PD 4.2,' ,',pic(---,---.##)','DT(41)','GT(41)'
-		data 'TDET(5),'   ,'pos 74,PD 4.2,' ,',pic(---,---.##)','DT(42)','GT(42)'
-		data 'TDET(6),'   ,'pos 78,PD 4.2,' ,',pic(---,---.##)','DT(43)','GT(43)'
-		data 'TDET(7),'   ,'pos 82,PD 4.2,' ,',pic(---,---.##)','DT(44)','GT(44)'
-		data 'TDET(8),'   ,'pos 86,PD 4.2,' ,',pic(---,---.##)','DT(45)','GT(45)'
-		data 'TDET(9),'   ,'pos 90,PD 4.2,' ,',pic(---,---.##)','DT(46)','GT(46)'
-		data 'TDET(10),'  ,'pos 94,PD 4.2,' ,',pic(---,---.##)','DT(47)','GT(47)'
-		data 'TDET(11),'  ,'pos 98,PD 4.2,' ,',pic(---,---.##)','DT(48)','GT(48)'
-		data 'TDET(12),'  ,'pos 102,PD 4.2,',',pic(---,---.##)','DT(49)','GT(49)'
-		data 'TDET(13),'  ,'pos 106,PD 4.2,',',pic(---,---.##)','DT(50)','GT(50)'
-		data 'TDET(14),'  ,'pos 110,PD 4.2,',',pic(---,---.##)','DT(51)','GT(51)'
-		data 'TDET(15),'  ,'pos 114,PD 4.2,',',pic(---,---.##)','DT(52)','GT(52)'
-		data 'TDET(16),'  ,'pos 118,PD 4.2,',',pic(---,---.##)','DT(53)','GT(53)'
-		data 'TDET(17),'  ,'pos 122,PD 4.2,',',pic(---,---.##)','DT(54)','GT(54)'
-		data 'TDET(18),'  ,'pos 126,PD 4.2,',',pic(---,---.##)','DT(55)','GT(55)'
-		data 'TDET(19),'  ,'pos 130,PD 4.2,',',pic(---,---.##)','DT(56)','GT(56)'
-		data 'TDET(20),'  ,'pos 134,PD 4.2,',',pic(---,---.##)','DT(57)','GT(57)'
-		data 'TDET(21),'  ,'pos 138,PD 4.2,',',pic(---,---.##)','DT(58)','GT(58)'
-		data 'TDET(22),'  ,'pos 142,PD 4.2,',',pic(---,---.##)','DT(59)','GT(59)'
-		data 'TDET(23),'  ,'pos 146,PD 4.2,',',pic(---,---.##)','DT(60)','GT(60)'
-		data 'tdn,'       ,'pos 9,n 3,'     ,',pic(-###)','DT(61)','GT(61)'
-		data 'prd,'       ,'pos 12,PD 6,'   ,',pic(ZZZZ/zz/zz)','DT(62)','GT(62)'
-		data 'ckno,'      ,'pos 18,n 7,'    ,',pic(ZZZZzzz)','DT(63)','GT(63)'
-		data 'TDc(1),'    ,'pos 25,PD 3.2,' ,',pic(---,---.##)','DT(64)','GT(64)'
-		data 'TDc(2),'    ,'pos 28,PD 3.2,' ,',pic(---,---.##)','DT(65)','GT(65)'
-		data 'TDc(3),'    ,'pos 31,PD 3.2,' ,',pic(---,---.##)','DT(66)','GT(66)'
-		data 'TDc(4),'    ,'pos 34,PD 3.2,' ,',pic(---,---.##)','DT(67)','GT(67)'
-		data 'TDc(5),'    ,'pos 37,PD 3.2,' ,',pic(---,---.##)','DT(68)','GT(68)'
-		data 'TDC(6),'    ,'pos 40,PD 3.2,' ,',pic(-,---.##)','DT(69)','GT(69)'
-		data 'TDC(7),'    ,'pos 45,PD 5.2,' ,',pic(----,---.##)','DT(70)','GT(70)'
-		data 'TDC(8),'    ,'pos 50,PD 5.2,' ,',pic(----,---.##)','DT(71)','GT(71)'
-		data 'TDC(9),'    ,'pos 55,PD 5.2,' ,',pic(----,---.##)','DT(72)','GT(72)'
-		data 'TDC(10),'   ,'pos 60,PD 5.2,' ,',pic(----,---.##)','DT(73)','GT(73)'
-		data 'Tcp(1),'    ,'pos 65,PD 5.2,' ,',pic(--,---,---.##)','DT(74)','GT(74)'
-		data 'Tcp(2),'    ,'pos 70,PD 5.2,' ,',pic(--,---,---.##)','DT(75)','GT(75)'
-		data 'Tcp(3),'    ,'pos 75,PD 5.2,' ,',pic(--,---,---.##)','DT(76)','GT(76)'
-		data 'Tcp(4),'    ,'pos 80,PD 5.2,' ,',pic(--,---,---.##)','DT(77)','GT(77)'
-		data 'Tcp(5),'    ,'pos 85,PD 5.2,' ,',pic(--,---,---.##)','DT(78)','GT(78)'
-		data 'Tcp(6),'    ,'pos 90,PD 5.2,' ,',pic(--,---,---.##)','DT(79)','GT(79)'
-		data 'Tcp(7),'    ,'pos 95,PD 5.2,' ,',pic(--,---,---.##)','DT(80)','GT(80)'
-		data 'Tcp(8),'    ,'pos 100,PD 5.2,',',pic(--,---,---.##)','DT(81)','GT(81)'
-		data 'tcp(9),'    ,'pos 105,PD 5.2,',',pic(--,---,---.##)','DT(82)','GT(82)'
-		data 'tcp(10),'   ,'pos 110,PD 5.2,',',pic(--,---,---.##)','DT(83)','GT(83)'
-		data 'tcp(11),'   ,'pos 115,PD 5.2,',',pic(--,---,---.##)','DT(84)','GT(84)'
-		data 'tcp(12),'   ,'pos 120,PD 5.2,',',pic(--,---,---.##)','DT(85)','GT(85)'
-		data 'tcp(13),'   ,'pos 125,PD 5.2,',',pic(--,---,---.##)','DT(86)','GT(86)'
-		data 'tcp(14),'   ,'pos 130,PD 5.2,',',pic(--,---,---.##)','DT(87)','GT(87)'
-		data 'tcp(15),'   ,'pos 135,PD 5.2,',',pic(--,---,---.##)','DT(88)','GT(88)'
-		data 'tcp(16),'   ,'pos 140,PD 5.2,',',pic(--,---,---.##)','DT(89)','GT(89)'
-		data 'tcp(17),'   ,'pos 145,PD 5.2,',',pic(--,---,---.##)','DT(90)','GT(90)'
-		data 'tcp(18),'   ,'pos 150,PD 5.2,',',pic(--,---,---.##)','DT(91)','GT(91)'
-		data 'tcp(19),'   ,'pos 155,PD 5.2,',',pic(--,---,---.##)','DT(92)','GT(92)'
-		data 'tcp(20),'   ,'pos 160,PD 5.2,',',pic(--,---,---.##)','DT(93)','GT(93)'
-		data 'tcp(21),'   ,'pos 165,PD 5.2,',',pic(--,---,---.##)','DT(94)','GT(94)'
-		data 'Tcp(22),'   ,'pos 170,PD 5.2,',',pic(--,---,---.##)','DT(95)','GT(95)'
-		data 'Tcp(23),'   ,'pos 175,PD 5.2,',',pic(--,---,---.##)','DT(96)','GT(96)'
-		data 'tcp(24),'   ,'pos 175,PD 5.2,',',pic(--,---,---.##)','DT(97)','GT(97)'
-		data 'Tcp(25),'   ,'pos 180,PD 5.2,',',pic(--,---,---.##)','DT(98)','GT(98)'
-		data 'tcp(26),'   ,'pos 185,PD 5.2,',',pic(--,---,---.##)','DT(99)','GT(99)'
-		data 'Tcp(27),'   ,'pos 190,PD 5.2,',',pic(--,---,---.##)','DT(100)','GT(100)'
-		data 'tcp(28),'   ,'pos 195,PD 5.2,',',pic(--,---,---.##)','DT(101)','GT(101)'
-		data 'Tcp(29),'   ,'pos 200,PD 5.2,',',pic(--,---,---.##)','DT(102)','GT(102)'
-		data 'tcp(30),'   ,'pos 205,PD 5.2,',',pic(--,---,---.##)','DT(103)','GT(103)'
-		data 'Tcp(31),'   ,'pos 210,PD 5.2,',',pic(--,---,---.##)','DT(104)','GT(104)'
-		data 'tcp(32),'   ,'pos 215,PD 5.2,',',pic(--,---,---.##)','DT(105)','GT(105)'
-		read mat ty$
-! /r
+		ty$(  1,1)='ENO,'       	: ty$(1  ,2)='pos 1,n 8,'      	: ty$(1  ,3)=',pic(zzzzzzzz)'      	: ty$(1  ,4)=  'DT(2)'	: ty$(1  ,5)=  'GT(2)'
+		ty$(  1,1)='EM$(1),'    	: ty$(2  ,2)='pos 9,C 30,'     	: ty$(2  ,3)=',c 30'               	: ty$(2  ,4)=  'DT(3)'	: ty$(2  ,5)=  'GT(3)'
+		ty$(  1,1)='EM$(2),'    	: ty$(3  ,2)='pos 39,C 30,'    	: ty$(3  ,3)=',c 30'               	: ty$(3  ,4)=  'DT(4)'	: ty$(3  ,5)=  'GT(4)'
+		ty$(  1,1)='EM$(3),'    	: ty$(4  ,2)='pos 69,C 30,'    	: ty$(4  ,3)=',c 30'               	: ty$(4  ,4)=  'DT(5)'	: ty$(4  ,5)=  'GT(5)'
+		ty$(  1,1)='SS$,'       	: ty$(5  ,2)='pos 99,C 11,'    	: ty$(5  ,3)=',c 11'               	: ty$(5  ,4)=  'DT(6)'	: ty$(5  ,5)=  'GT(6)'
+		ty$(  1,1)='RS(1),'     	: ty$(6  ,2)='pos 110,n 1,'    	: ty$(6  ,3)=',N 1'                	: ty$(6  ,4)=  'DT(7)'	: ty$(6  ,5)=  'GT(7)'
+		ty$(  1,1)='RS(2),'    	: ty$(7  ,2)='pos 111,n 1,'    	: ty$(7  ,3)=',N 1'                	: ty$(7  ,4)=  'DT(8)'	: ty$(7  ,5)=  'GT(8)'
+		ty$(  1,1)='EM(1),'    	: ty$(8  ,2)='pos 112,N 2,'    	: ty$(8  ,3)=',pic(zz)'            	: ty$(8  ,4)=  'DT(9)'	: ty$(8  ,5)=  'GT(9)'
+		ty$(  1,1)='EM(2),'    	: ty$(9  ,2)='pos 114,N 2,'    	: ty$(9  ,3)=',pic(zz)'            	: ty$(9  ,4)= 'DT(10)'	: ty$(9  ,5)= 'GT(10)'
+		ty$(  1,1)='EM(3),'    	: ty$(10 ,2)='pos 116,N 2,'    	: ty$(10 ,3)=',pic(zz)'            	: ty$(10 ,4)= 'DT(11)'	: ty$(10 ,5)= 'GT(11)'
+		ty$(  1,1)='EM(4),'    	: ty$(11 ,2)='pos 118,N 2,'    	: ty$(11 ,3)=',pic(zz)'            	: ty$(11 ,4)= 'DT(12)'	: ty$(11 ,5)= 'GT(12)'
+		ty$(  1,1)='EM(5),'    	: ty$(12 ,2)='pos 120,N 2,'    	: ty$(12 ,3)=',pic(zz)'            	: ty$(12 ,4)= 'DT(13)'	: ty$(12 ,5)= 'GT(13)'
+		ty$(  1,1)='EM(6),'    	: ty$(13 ,2)='pos 122,N 2,'    	: ty$(13 ,3)=',pic(zz)'            	: ty$(13 ,4)= 'DT(14)'	: ty$(13 ,5)= 'GT(14)'
+		ty$(  1,1)='EM(7),'    	: ty$(14 ,2)='pos 124,N 2,'    	: ty$(14 ,3)=',pic(zz)'            	: ty$(14 ,4)= 'DT(15)'	: ty$(14 ,5)= 'GT(15)'
+		ty$(  1,1)='EM(8),'    	: ty$(15 ,2)='pos 126,PD 3.3,'	: ty$(15 ,3)=',pic(---.###)'       	: ty$(15 ,4)= 'DT(16)'	: ty$(15 ,5)= 'GT(16)'
+		ty$(  1,1)='EM(9),'    	: ty$(16 ,2)='pos 129,PD 3.3,'	: ty$(16 ,3)=',pic(---.###)'       	: ty$(16 ,4)= 'DT(17)'	: ty$(16 ,5)= 'GT(17)'
+		ty$(  1,1)='EM(10),'   	: ty$(17 ,2)='pos 132,PD 4.2,'	: ty$(17 ,3)=',pic(--,---.##)'    	: ty$(17 ,4)= 'DT(18)'	: ty$(17 ,5)= 'GT(18)'
+		ty$(  1,1)='EM(11),'   	: ty$(18 ,2)='pos 136,PD 4.2,'	: ty$(18 ,3)=',pic(--,---.##)'    	: ty$(18 ,4)= 'DT(19)'	: ty$(18 ,5)= 'GT(19)'
+		ty$(  1,1)='EM(12),'   	: ty$(19 ,2)='pos 140,PD 4.2,'	: ty$(19 ,3)=',pic(--,---.##)'    	: ty$(19 ,4)= 'DT(20)'	: ty$(19 ,5)= 'GT(20)'
+		ty$(  1,1)='EM(13),'   	: ty$(20 ,2)='pos 144,PD 4.2,'	: ty$(20 ,3)=',pic(--,---.##)'    	: ty$(20 ,4)= 'DT(21)'	: ty$(20 ,5)= 'GT(21)'
+		ty$(  1,1)='EM(14),'   	: ty$(21 ,2)='pos 148,PD 4.2,'	: ty$(21 ,3)=',PIC(--,---.##)'    	: ty$(21 ,4)= 'DT(22)'	: ty$(21 ,5)= 'GT(22)'
+		ty$(  1,1)='EM(15),'   	: ty$(22 ,2)='pos 152,PD 4.2,'	: ty$(22 ,3)=',PIC(--,---.##)'    	: ty$(22 ,4)= 'DT(23)'	: ty$(22 ,5)= 'GT(23)'
+		ty$(  1,1)='EM(16),'   	: ty$(23 ,2)='pos 156,N 6,'    	: ty$(23 ,3)=',pic(zz/zz/zz)'      	: ty$(23 ,4)= 'DT(24)'	: ty$(23 ,5)= 'GT(24)'
+		ty$(  1,1)='LPD,'      	: ty$(24 ,2)='pos 162,N 6,'    	: ty$(24 ,3)=',pic(zz/zz/zz)'      	: ty$(24 ,4)= 'DT(25)'	: ty$(24 ,5)= 'GT(25)'
+		ty$(  1,1)='PH$,'      	: ty$(25 ,2)='pos 168,C 12,'   	: ty$(25 ,3)=',C 12'               	: ty$(25 ,4)= 'DT(26)'	: ty$(25 ,5)= 'GT(26)'
+		ty$(  1,1)='BD,'        	: ty$(26 ,2)='pos 180,N 6,'    	: ty$(26 ,3)=',pic(zz/zz/zz)'      	: ty$(26 ,4)= 'dt(27)'	: ty$(26 ,5)= 'GT(27)'
+		ty$(  1,1)='TDN,'      	: ty$(27 ,2)='pos 9,N 3,'      	: ty$(27 ,3)=',n 3'                	: ty$(27 ,4)= 'DT(28)'	: ty$(27 ,5)= 'GT(28)'
+		ty$(  1,1)='TGL2,'     	: ty$(28 ,2)='pos 15,n 6,'     	: ty$(28 ,3)=',n 6'                	: ty$(28 ,4)= 'DT(29)'	: ty$(28 ,5)= 'GT(29)'
+		ty$(  1,1)='TDT(1),'   	: ty$(29 ,2)='pos 24,N 6,'     	: ty$(29 ,3)=',pic(zz/zz/zz)'      	: ty$(29 ,4)= 'DT(30)'	: ty$(29 ,5)= 'GT(30)'
+		ty$(  1,1)='TDT(2),'   	: ty$(30 ,2)='pos 30,N 6,'     	: ty$(30 ,3)=',pic(zz/zz/zz)'      	: ty$(30 ,4)= 'DT(31)'	: ty$(30 ,5)= 'GT(31)'
+		ty$(  1,1)='TDT(3),'   	: ty$(31 ,2)='pos 36,N 6,'     	: ty$(31 ,3)=',pic(zz/zz/zz)'      	: ty$(31 ,4)= 'DT(32)'	: ty$(31 ,5)= 'GT(32)'
+		ty$(  1,1)='TDT(4),'   	: ty$(32 ,2)='pos 42,N 6,'     	: ty$(32 ,3)=',pic(zz/zz/zz)'      	: ty$(32 ,4)= 'DT(33)'	: ty$(32 ,5)= 'GT(33)'
+		ty$(  1,1)='TCD(1),'   	: ty$(33 ,2)='pos 48,N 2,'     	: ty$(33 ,3)=',pic(zz)'            	: ty$(33 ,4)= 'DT(34)'	: ty$(33 ,5)= 'GT(34)'
+		ty$(  1,1)='TCD(2),'   	: ty$(34 ,2)='pos 50,N 2,'     	: ty$(34 ,3)=',pic(zz)'            	: ty$(34 ,4)= 'DT(35)'	: ty$(34 ,5)= 'GT(35)'
+		ty$(  1,1)='TCD(3),'   	: ty$(35 ,2)='pos 52,N 2,'     	: ty$(35 ,3)=',pic(zz)'            	: ty$(35 ,4)= 'DT(36)'	: ty$(35 ,5)= 'GT(36)'
+		ty$(  1,1)='TLI,'      	: ty$(36 ,2)='pos 54,PD 4.2,'  	: ty$(36 ,3)=',pic(---,---.##)'   	: ty$(36 ,4)= 'DT(37)'	: ty$(36 ,5)= 'GT(37)'
+		ty$(  1,1)='TDET(1),'  	: ty$(37 ,2)='pos 58,PD 4.2,'  	: ty$(37 ,3)=',pic(zz,zzz.##)'    	: ty$(37 ,4)= 'DT(38)'	: ty$(37 ,5)= 'GT(38)'
+		ty$(  1,1)='TDET(2),'  	: ty$(38 ,2)='pos 62,PD 4.2,'  	: ty$(38 ,3)=',pic(zz,zzz.##)'    	: ty$(38 ,4)= 'DT(39)'	: ty$(38 ,5)= 'GT(39)'
+		ty$(  1,1)='TDET(3),'  	: ty$(39 ,2)='pos 66,PD 4.2,'  	: ty$(39 ,3)=',pic(zz,zzz.##)'    	: ty$(39 ,4)= 'DT(40)'	: ty$(39 ,5)= 'GT(40)'
+		ty$(  1,1)='TDET(4),'  	: ty$(40 ,2)='pos 70,PD 4.2,'  	: ty$(40 ,3)=',pic(---,---.##)'   	: ty$(40 ,4)= 'DT(41)'	: ty$(40 ,5)= 'GT(41)'
+		ty$(  1,1)='TDET(5),'  	: ty$(41 ,2)='pos 74,PD 4.2,'  	: ty$(41 ,3)=',pic(---,---.##)'   	: ty$(41 ,4)= 'DT(42)'	: ty$(41 ,5)= 'GT(42)'
+		ty$(  1,1)='TDET(6),'  	: ty$(42 ,2)='pos 78,PD 4.2,'  	: ty$(42 ,3)=',pic(---,---.##)'   	: ty$(42 ,4)= 'DT(43)'	: ty$(42 ,5)= 'GT(43)'
+		ty$(  1,1)='TDET(7),'  	: ty$(43 ,2)='pos 82,PD 4.2,'  	: ty$(43 ,3)=',pic(---,---.##)'   	: ty$(43 ,4)= 'DT(44)'	: ty$(43 ,5)= 'GT(44)'
+		ty$(  1,1)='TDET(8),'  	: ty$(44 ,2)='pos 86,PD 4.2,'  	: ty$(44 ,3)=',pic(---,---.##)'   	: ty$(44 ,4)= 'DT(45)'	: ty$(44 ,5)= 'GT(45)'
+		ty$(  1,1)='TDET(9),'  	: ty$(45 ,2)='pos 90,PD 4.2,'  	: ty$(45 ,3)=',pic(---,---.##)'   	: ty$(45 ,4)= 'DT(46)'	: ty$(45 ,5)= 'GT(46)'
+		ty$(  1,1)='TDET(10),' 	: ty$(46 ,2)='pos 94,PD 4.2,'  	: ty$(46 ,3)=',pic(---,---.##)'   	: ty$(46 ,4)= 'DT(47)'	: ty$(46 ,5)= 'GT(47)'
+		ty$(  1,1)='TDET(11),' 	: ty$(47 ,2)='pos 98,PD 4.2,'  	: ty$(47 ,3)=',pic(---,---.##)'   	: ty$(47 ,4)= 'DT(48)'	: ty$(47 ,5)= 'GT(48)'
+		ty$(  1,1)='TDET(12),' 	: ty$(48 ,2)='pos 102,PD 4.2,'	: ty$(48 ,3)=',pic(---,---.##)'   	: ty$(48 ,4)= 'DT(49)'	: ty$(48 ,5)= 'GT(49)'
+		ty$(  1,1)='TDET(13),' 	: ty$(49 ,2)='pos 106,PD 4.2,'	: ty$(49 ,3)=',pic(---,---.##)'   	: ty$(49 ,4)= 'DT(50)'	: ty$(49 ,5)= 'GT(50)'
+		ty$(  1,1)='TDET(14),' 	: ty$(50 ,2)='pos 110,PD 4.2,'	: ty$(50 ,3)=',pic(---,---.##)'   	: ty$(50 ,4)= 'DT(51)'	: ty$(50 ,5)= 'GT(51)'
+		ty$(  1,1)='TDET(15),' 	: ty$(51 ,2)='pos 114,PD 4.2,'	: ty$(51 ,3)=',pic(---,---.##)'   	: ty$(51 ,4)= 'DT(52)'	: ty$(51 ,5)= 'GT(52)'
+		ty$(  1,1)='TDET(16),' 	: ty$(52 ,2)='pos 118,PD 4.2,'	: ty$(52 ,3)=',pic(---,---.##)'   	: ty$(52 ,4)= 'DT(53)'	: ty$(52 ,5)= 'GT(53)'
+		ty$(  1,1)='TDET(17),' 	: ty$(53 ,2)='pos 122,PD 4.2,'	: ty$(53 ,3)=',pic(---,---.##)'   	: ty$(53 ,4)= 'DT(54)'	: ty$(53 ,5)= 'GT(54)'
+		ty$(  1,1)='TDET(18),' 	: ty$(54 ,2)='pos 126,PD 4.2,'	: ty$(54 ,3)=',pic(---,---.##)'   	: ty$(54 ,4)= 'DT(55)'	: ty$(54 ,5)= 'GT(55)'
+		ty$(  1,1)='TDET(19),' 	: ty$(55 ,2)='pos 130,PD 4.2,'	: ty$(55 ,3)=',pic(---,---.##)'   	: ty$(55 ,4)= 'DT(56)'	: ty$(55 ,5)= 'GT(56)'
+		ty$(  1,1)='TDET(20),' 	: ty$(56 ,2)='pos 134,PD 4.2,'	: ty$(56 ,3)=',pic(---,---.##)'   	: ty$(56 ,4)= 'DT(57)'	: ty$(56 ,5)= 'GT(57)'
+		ty$(  1,1)='TDET(21),' 	: ty$(57 ,2)='pos 138,PD 4.2,'	: ty$(57 ,3)=',pic(---,---.##)'   	: ty$(57 ,4)= 'DT(58)'	: ty$(57 ,5)= 'GT(58)'
+		ty$(  1,1)='TDET(22),' 	: ty$(58 ,2)='pos 142,PD 4.2,'	: ty$(58 ,3)=',pic(---,---.##)'   	: ty$(58 ,4)= 'DT(59)'	: ty$(58 ,5)= 'GT(59)'
+		ty$(  1,1)='TDET(23),' 	: ty$(59 ,2)='pos 146,PD 4.2,'	: ty$(59 ,3)=',pic(---,---.##)'   	: ty$(59 ,4)= 'DT(60)'	: ty$(59 ,5)= 'GT(60)'
+		ty$(  1,1)='tdn,'      	: ty$(60 ,2)='pos 9,n 3,'      	: ty$(60 ,3)=',pic(-###)'          	: ty$(60 ,4)= 'DT(61)'	: ty$(60 ,5)= 'GT(61)'
+		ty$(  1,1)='prd,'      	: ty$(61 ,2)='pos 12,PD 6,'    	: ty$(61 ,3)=',pic(ZZZZ/zz/zz)'   	: ty$(61 ,4)= 'DT(62)'	: ty$(61 ,5)= 'GT(62)'
+		ty$(  1,1)='ckno,'     	: ty$(62 ,2)='pos 18,n 7,'     	: ty$(62 ,3)=',pic(ZZZZzzz)'       	: ty$(62 ,4)= 'DT(63)'	: ty$(62 ,5)= 'GT(63)'
+		ty$(  1,1)='TDc(1),'   	: ty$(63 ,2)='pos 25,PD 3.2,'  	: ty$(63 ,3)=',pic(---,---.##)'   	: ty$(63 ,4)= 'DT(64)'	: ty$(63 ,5)= 'GT(64)'
+		ty$(  1,1)='TDc(2),'   	: ty$(64 ,2)='pos 28,PD 3.2,'  	: ty$(64 ,3)=',pic(---,---.##)'   	: ty$(64 ,4)= 'DT(65)'	: ty$(64 ,5)= 'GT(65)'
+		ty$(  1,1)='TDc(3),'   	: ty$(65 ,2)='pos 31,PD 3.2,'  	: ty$(65 ,3)=',pic(---,---.##)'   	: ty$(65 ,4)= 'DT(66)'	: ty$(65 ,5)= 'GT(66)'
+		ty$(  1,1)='TDc(4),'   	: ty$(66 ,2)='pos 34,PD 3.2,'  	: ty$(66 ,3)=',pic(---,---.##)'   	: ty$(66 ,4)= 'DT(67)'	: ty$(66 ,5)= 'GT(67)'
+		ty$(  1,1)='TDc(5),'   	: ty$(67 ,2)='pos 37,PD 3.2,'  	: ty$(67 ,3)=',pic(---,---.##)'   	: ty$(67 ,4)= 'DT(68)'	: ty$(67 ,5)= 'GT(68)'
+		ty$(  1,1)='TDC(6),'   	: ty$(68 ,2)='pos 40,PD 3.2,'  	: ty$(68 ,3)=',pic(-,---.##)'      	: ty$(68 ,4)= 'DT(69)'	: ty$(68 ,5)= 'GT(69)'
+		ty$(  1,1)='TDC(7),'   	: ty$(69 ,2)='pos 45,PD 5.2,'  	: ty$(69 ,3)=',pic(----,---.##)'  	: ty$(69 ,4)= 'DT(70)'	: ty$(69 ,5)= 'GT(70)'
+		ty$(  1,1)='TDC(8),'   	: ty$(70 ,2)='pos 50,PD 5.2,'  	: ty$(70 ,3)=',pic(----,---.##)'  	: ty$(70 ,4)= 'DT(71)'	: ty$(70 ,5)= 'GT(71)'
+		ty$(  1,1)='TDC(9),'   	: ty$(71 ,2)='pos 55,PD 5.2,'  	: ty$(71 ,3)=',pic(----,---.##)'  	: ty$(71 ,4)= 'DT(72)'	: ty$(71 ,5)= 'GT(72)'
+		ty$(  1,1)='TDC(10),'  	: ty$(72 ,2)='pos 60,PD 5.2,'  	: ty$(72 ,3)=',pic(----,---.##)'  	: ty$(72 ,4)= 'DT(73)'	: ty$(72 ,5)= 'GT(73)'
+		ty$(  1,1)='Tcp(1),'   	: ty$(73 ,2)='pos 65,PD 5.2,'  	: ty$(73 ,3)=',pic(--,---,---.##)'	: ty$(73 ,4)= 'DT(74)'	: ty$(73 ,5)= 'GT(74)'
+		ty$(  1,1)='Tcp(2),'   	: ty$(74 ,2)='pos 70,PD 5.2,'  	: ty$(74 ,3)=',pic(--,---,---.##)'	: ty$(74 ,4)= 'DT(75)'	: ty$(74 ,5)= 'GT(75)'
+		ty$(  1,1)='Tcp(3),'   	: ty$(75 ,2)='pos 75,PD 5.2,'  	: ty$(75 ,3)=',pic(--,---,---.##)'	: ty$(75 ,4)= 'DT(76)'	: ty$(75 ,5)= 'GT(76)'
+		ty$(  1,1)='Tcp(4),'   	: ty$(76 ,2)='pos 80,PD 5.2,'  	: ty$(76 ,3)=',pic(--,---,---.##)'	: ty$(76 ,4)= 'DT(77)'	: ty$(76 ,5)= 'GT(77)'
+		ty$(  1,1)='Tcp(5),'   	: ty$(77 ,2)='pos 85,PD 5.2,'  	: ty$(77 ,3)=',pic(--,---,---.##)'	: ty$(77 ,4)= 'DT(78)'	: ty$(77 ,5)= 'GT(78)'
+		ty$(  1,1)='Tcp(6),'   	: ty$(78 ,2)='pos 90,PD 5.2,'  	: ty$(78 ,3)=',pic(--,---,---.##)'	: ty$(78 ,4)= 'DT(79)'	: ty$(78 ,5)= 'GT(79)'
+		ty$(  1,1)='Tcp(7),'   	: ty$(79 ,2)='pos 95,PD 5.2,'  	: ty$(79 ,3)=',pic(--,---,---.##)'	: ty$(79 ,4)= 'DT(80)'	: ty$(79 ,5)= 'GT(80)'
+		ty$(  1,1)='Tcp(8),'   	: ty$(80 ,2)='pos 100,PD 5.2,'	: ty$(80 ,3)=',pic(--,---,---.##)'	: ty$(80 ,4)= 'DT(81)'	: ty$(80 ,5)= 'GT(81)'
+		ty$(  1,1)='tcp(9),'   	: ty$(81 ,2)='pos 105,PD 5.2,'	: ty$(81 ,3)=',pic(--,---,---.##)'	: ty$(81 ,4)= 'DT(82)'	: ty$(81 ,5)= 'GT(82)'
+		ty$(  1,1)='tcp(10),'  	: ty$(82 ,2)='pos 110,PD 5.2,'	: ty$(82 ,3)=',pic(--,---,---.##)'	: ty$(82 ,4)= 'DT(83)'	: ty$(82 ,5)= 'GT(83)'
+		ty$(  1,1)='tcp(11),'  	: ty$(83 ,2)='pos 115,PD 5.2,'	: ty$(83 ,3)=',pic(--,---,---.##)'	: ty$(83 ,4)= 'DT(84)'	: ty$(83 ,5)= 'GT(84)'
+		ty$(  1,1)='tcp(12),'  	: ty$(84 ,2)='pos 120,PD 5.2,'	: ty$(84 ,3)=',pic(--,---,---.##)'	: ty$(84 ,4)= 'DT(85)'	: ty$(84 ,5)= 'GT(85)'
+		ty$(  1,1)='tcp(13),'  	: ty$(85 ,2)='pos 125,PD 5.2,'	: ty$(85 ,3)=',pic(--,---,---.##)'	: ty$(85 ,4)= 'DT(86)'	: ty$(85 ,5)= 'GT(86)'
+		ty$(  1,1)='tcp(14),'  	: ty$(86 ,2)='pos 130,PD 5.2,'	: ty$(86 ,3)=',pic(--,---,---.##)'	: ty$(86 ,4)= 'DT(87)'	: ty$(86 ,5)= 'GT(87)'
+		ty$(  1,1)='tcp(15),'  	: ty$(87 ,2)='pos 135,PD 5.2,'	: ty$(87 ,3)=',pic(--,---,---.##)'	: ty$(87 ,4)= 'DT(88)'	: ty$(87 ,5)= 'GT(88)'
+		ty$(  1,1)='tcp(16),'  	: ty$(88 ,2)='pos 140,PD 5.2,'	: ty$(88 ,3)=',pic(--,---,---.##)'	: ty$(88 ,4)= 'DT(89)'	: ty$(88 ,5)= 'GT(89)'
+		ty$(  1,1)='tcp(17),'  	: ty$(89 ,2)='pos 145,PD 5.2,'	: ty$(89 ,3)=',pic(--,---,---.##)'	: ty$(89 ,4)= 'DT(90)'	: ty$(89 ,5)= 'GT(90)'
+		ty$(  1,1)='tcp(18),'  	: ty$(90 ,2)='pos 150,PD 5.2,'	: ty$(90 ,3)=',pic(--,---,---.##)'	: ty$(90 ,4)= 'DT(91)'	: ty$(90 ,5)= 'GT(91)'
+		ty$(  1,1)='tcp(19),'  	: ty$(91 ,2)='pos 155,PD 5.2,'	: ty$(91 ,3)=',pic(--,---,---.##)'	: ty$(91 ,4)= 'DT(92)'	: ty$(91 ,5)= 'GT(92)'
+		ty$(  1,1)='tcp(20),'  	: ty$(92 ,2)='pos 160,PD 5.2,'	: ty$(92 ,3)=',pic(--,---,---.##)'	: ty$(92 ,4)= 'DT(93)'	: ty$(92 ,5)= 'GT(93)'
+		ty$(  1,1)='tcp(21),'  	: ty$(93 ,2)='pos 165,PD 5.2,'	: ty$(93 ,3)=',pic(--,---,---.##)'	: ty$(93 ,4)= 'DT(94)'	: ty$(93 ,5)= 'GT(94)'
+		ty$(  1,1)='Tcp(22),'  	: ty$(94 ,2)='pos 170,PD 5.2,'	: ty$(94 ,3)=',pic(--,---,---.##)'	: ty$(94 ,4)= 'DT(95)'	: ty$(94 ,5)= 'GT(95)'
+		ty$(  1,1)='Tcp(23),'  	: ty$(95 ,2)='pos 175,PD 5.2,'	: ty$(95 ,3)=',pic(--,---,---.##)'	: ty$(95 ,4)= 'DT(96)'	: ty$(95 ,5)= 'GT(96)'
+		ty$(  1,1)='tcp(24),'  	: ty$(96 ,2)='pos 175,PD 5.2,'	: ty$(96 ,3)=',pic(--,---,---.##)'	: ty$(96 ,4)= 'DT(97)'	: ty$(96 ,5)= 'GT(97)'
+		ty$(  1,1)='Tcp(25),'  	: ty$(97 ,2)='pos 180,PD 5.2,'	: ty$(97 ,3)=',pic(--,---,---.##)'	: ty$(97 ,4)= 'DT(98)'	: ty$(97 ,5)= 'GT(98)'
+		ty$(  1,1)='tcp(26),'  	: ty$(98 ,2)='pos 185,PD 5.2,'	: ty$(98 ,3)=',pic(--,---,---.##)'	: ty$(98 ,4)= 'DT(99)'	: ty$(98 ,5)= 'GT(99)'
+		ty$(  1,1)='Tcp(27),'  	: ty$(99 ,2)='pos 190,PD 5.2,'	: ty$(99 ,3)=',pic(--,---,---.##)'	: ty$(99 ,4)='DT(100)'	: ty$(99 ,5)='GT(100)'
+		ty$(  1,1)='tcp(28),'  	: ty$(100,2)='pos 195,PD 5.2,'	: ty$(100,3)=',pic(--,---,---.##)'	: ty$(100,4)='DT(101)'	: ty$(100,5)='GT(101)'
+		ty$(  1,1)='Tcp(29),'  	: ty$(101,2)='pos 200,PD 5.2,'	: ty$(101,3)=',pic(--,---,---.##)'	: ty$(101,4)='DT(102)'	: ty$(101,5)='GT(102)'
+		ty$(  1,1)='tcp(30),'  	: ty$(102,2)='pos 205,PD 5.2,'	: ty$(102,3)=',pic(--,---,---.##)'	: ty$(102,4)='DT(103)'	: ty$(102,5)='GT(103)'
+		ty$(  1,1)='Tcp(31),'  	: ty$(103,2)='pos 210,PD 5.2,'	: ty$(103,3)=',pic(--,---,---.##)'	: ty$(103,4)='DT(104)'	: ty$(103,5)='GT(104)'
+		ty$(  1,1)='tcp(32),'  	: ty$(104,2)='pos 215,PD 5.2,'	: ty$(104,3)=',pic(--,---,---.##)'	: ty$(104,4)='DT(105)'	: ty$(104,5)='GT(105)'
+		dim ty$(104,5)*20
+	! /r
 fnend
+include: ertn

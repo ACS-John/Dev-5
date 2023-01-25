@@ -553,9 +553,9 @@ fnend
 		library 'S:\Core\Print\w2.br': fnw2_text
 		fnw2_text=fnw2_text(w2Yoffset,maskSsn,mat a$,empId$,ss$,controlNumber$,mat w,dcb$,nameFirst$,nameMiddle$,nameLast$,nameSuffix$,retirementPlanX$,mat k$,box12aCode$,box12aAmt$,box12bCode$,box12bAmt$,box12cCode$,box12cAmt$,box12dCode$,box12dAmt$,state$,stcode$,printLocality$, box14Amt)
 	fnend
-	def library fnw3(taxYear$,empId$,mat a$,mat w,dcb,state$,stcode$)
-		library 'S:\Core\Print\w3.br': fnw3
-		fnw3=fnw3(taxYear$,empId$,mat a$,mat w,dcb,state$,stcode$)
+	def library fnW3(taxYear$,empId$,w2printCount,mat a$,mat w,dcb,state$,stcode$)
+		library 'S:\Core\Print\w3.br': fnW3
+		fnW3=fnW3(taxYear$,empId$,w2printCount,mat a$,mat w,dcb,state$,stcode$)
 	fnend
 	def library fnNameParse(fullname$*128,&nameFirst$,&nameMiddle$,&nameLast$,&nameSuffix$)
 		library 'S:\Core\Print\w2.br': fnNameParse
@@ -1756,13 +1756,12 @@ fnend
 		library 'S:\Payroll\Calculation.br': fnCheckPayrollCalculation
 		fnCheckPayrollCalculation=fnCheckPayrollCalculation
 	fnend
-	def library fnGetEmpOptions(mat marriedOption$,mat eicOption$,mat w4yearOption$,mat payPeriodOption$)
+	def library fnGetEmpOptions(mat marriedOption$,mat w4yearOption$,mat payPeriodOption$)
 		! dim marriedOption$(0)*58
-		! dim eicOption$(0)*29
 		! dim w4yearOption$(0)*4
 		! dim payPeriodOption$(0)*16
 		library 'S:\Payroll\Employee.br': fnGetEmpOptions
-		fnGetEmpOptions=fnGetEmpOptions(mat marriedOption$,mat eicOption$,mat w4yearOption$,mat payPeriodOption$)
+		fnGetEmpOptions=fnGetEmpOptions(mat marriedOption$,mat w4yearOption$,mat payPeriodOption$)
 	fnend
 
 
