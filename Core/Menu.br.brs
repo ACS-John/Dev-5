@@ -103,7 +103,7 @@ goto Xit
 			fnAddOneC(mat system_name$,fnSystemName$(sysCode$))
 		end if
 	fnend
-def fn_main
+def fn_main(; ___,menuOpt$*128)
 	dim program_selection$*256,menu_option$*128
 	do
 		if env$('ExitNow')<>'yes' then
@@ -164,9 +164,6 @@ def fn_main
 				execute 'sy -M -C Start https://www.facebook.com/advancedcomputerservices/'
 				goto Tos
 			end if
-
-
-
 		end if
 
 		if fkey_value=93 or fkey_value=99 or (fkey_value=98 and lwrc$(menu$)='exit') or env$('ExitNow')='yes' or menu$='Exit and Logout' then
@@ -181,14 +178,16 @@ def fn_main
 
 		if fkey_value=98 then ! r: drop down menu
 			menu_option$=menu$
-			if lwrc$(menu_option$(len(menu_option$)-3:len(menu_option$)))='.prc' then
+			menuOpt$=lwrc$(ltrm$(menu_option$))
+			! pr 'menuOpt$="'&menuOpt$&'"' : pause
+			if menuOpt$(len(menu_option$)-3:len(menu_option$))='.prc' then
 				fnClearMenu
 				execute 'proc '&menu_option$
-			else if lwrc$(menu_option$(len(menu_option$)-2:len(menu_option$)))='.br' then
+			else if menuOpt$(len(menu_option$)-2:len(menu_option$))='.br' then
 				menu_option$=srep$(menu_option$,'[cursys]',env$('cursys'))
 				fnClearMenu
 				fn_chain(menu_option$)
-			else if lwrc$(menu_option$(len(menu_option$)-3:len(menu_option$)))='.cmd' then
+			else if menuOpt$(len(menu_option$)-3:len(menu_option$))='.cmd' then
 				execute 'Sy -c "'&trim$(menu_option$)&'"'
 			else if menu_option$(1:8)='Notepad:' then
 				execute 'Sy -c c:\Windows\notepad.exe "'&trim$(menu_option$(9:inf))&'"'
@@ -202,9 +201,9 @@ def fn_main
 					pr 'unrecognized syntax: '&menu_option$ : pause
 				end if
 
-			else if lwrc$(menu_option$(1:4))='http' then
+			else if menuOpt$(1:4)='http' then
 				execute 'Sy -M -c start '&menu_option$
-			else if lwrc$(menu_option$(1:5))='file:' then
+			else if menuOpt$(1:5)='file:' then
 				menu_option$(1:5)=''
 				if menu_option$='Open' then
 					fnOpenPartial
@@ -215,13 +214,13 @@ def fn_main
 					fnClearMenu
 					fnFileSaveAs('*h[cno]')
 				end if
-			else if lwrc$(ltrm$(menu_option$)(1:20))='editinwordprocessor:' then
+			else if menuOpt$(1:20)='editinwordprocessor:' then
 				fn_callEditInWordProcessor(menu_option$)
-			else if lwrc$(ltrm$(menu_option$)(1:11))='hamsterfio:' then
+			else if menuOpt$(1:11)='hamsterfio:' then
 				fn_callHamsterFio(menu_option$)
-			else if lwrc$(ltrm$(menu_option$)(1:9))='customer:' then
+			else if menuOpt$(1:9)='customer:' then
 				fn_callUbCustomer(menu_option$)
-			else if lwrc$(ltrm$(menu_option$)(1:9))='employee:' then
+			else if menuOpt$(1:9)='employee:' then
 				fn_callPrEmployee(menu_option$)
 			! else if menu_option$(1:5)='fnFM(' then
 			!   fnFM(menu_option$(6:len(menu_option$)-1))
@@ -240,14 +239,14 @@ def fn_main
 				execute 'proc [temp]\acs_Restart_[session].prc'
 			else if menu_option$='Index System' then
 				fnindex_sys
-			else if lwrc$(menu_option$(1:8))='[cursys=' then
+			else if menuOpt$(1:8)='[cursys=' then
 				cursys$=menu_option$(9:10)
 				fncursys$(cursys$)
 				fn_setupOnCursysChange
 				fn_checkFileVersionIfNecessary
 				fn_updateProgramGrid
 				fn_captionUpdate
-			else if lwrc$(menu_option$(len(menu_option$):len(menu_option$)))='\' then ! it is a Folder - just open it
+			else if menuOpt$(len(menu_option$):len(menu_option$))='\' then ! it is a Folder - just open it
 				menu_option$=srep$(menu_option$,'%report_cache_folder_current%',fnReportCacheFolderCurrent$)
 				execute 'sy -c -w explorer "'&os_filename$(menu_option$(1:len(menu_option$)-1))&'"'
 			! else if trim$(menu_option$)='*UpdateFileIO*' then
@@ -380,13 +379,15 @@ def fn_main
 				!   program_plus$(program_selection_id)='-'
 				! else if program_plus$(program_selection_id)='-' then
 				!   program_plus$(program_selection_id)='+'
-				if lwrc$(ltrm$(program_selection$)(1:11))='hamsterfio:' then
+				dim progSel$*256
+				progSel$=lwrc$(ltrm$(program_selection$))
+				if progSel$(1:11)='hamsterfio:' then
 					fn_callHamsterFio(program_selection$)
-				else if lwrc$(ltrm$(program_selection$)(1:20))='editinwordprocessor:' then
+				else if progSel$(1:20)='editinwordprocessor:' then
 					fn_callEditInWordProcessor(program_selection$)
-				else if lwrc$(ltrm$(program_selection$)(1:9))='customer:' and env$('cursys')='UB' then
+				else if progSel$(1:9)='customer:' and env$('cursys')='UB' then
 					fn_callUbCustomer(program_selection$)
-				else if lwrc$(ltrm$(program_selection$)(1:9))='employee:' and env$('cursys')='PR' then
+				else if progSel$(1:9)='employee:' and env$('cursys')='PR' then
 					fn_callPrEmployee(program_selection$)
 
 				else if program_selection$<>'' then
