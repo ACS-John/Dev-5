@@ -194,8 +194,8 @@ PrintBill_Basic: ! r: set prefrences for clients
 	! 	poundBeforeAccount$='#' ! only for diff - making sure things match - then take it back out. it's lame
 	! 	usPostagePermitNumber=1
 	! 	enable_BulkSort=1
-	else if env$('client')='Alien Electric' then
-		usPostagePermitNumber=555
+	! else if env$('client')='Alien Electric' then
+	! 	usPostagePermitNumber=555
 	end if
 	! /r
 !   enable_cassSort=1

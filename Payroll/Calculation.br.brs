@@ -215,7 +215,7 @@ ReadTimesheet: ! r:  read rpwork, read employee, call calc deduction etc  basica
 		read #hDepartment,using 'form pos 48,n 2',key=deptKey$: tcd(1) ! get state code
 		dim ytdTotal(32)
 		dim caf(20)
-		fn_determineEarnings(hPrChecks,eno, dep,begDate,endDate,mat ytdTotal,ytdFICA,ytdMedicare,ytdEic,ytdWages,mat caf)
+		fn_determineEarnings(hPrChecks,eno, dep,begDate,endDate,mat ytdTotal,ytdFICA,ytdMedicare,ytdWages,mat caf)
 		for j=1 to 20
 			if newdedfed(j)=2 and newdedcode(j)=newdedcode_Deduct then
 				cafy+=caf(j)
@@ -1057,7 +1057,7 @@ withholdingPercentage,atLeast,baseAmt,estPayPeriodNetPay,estPayPeriodNetPay,adju
 fnend
 
 
-def fn_determineEarnings(hPrChecks,eno,dep,begDate,endDate,mat ytdTotal,&ytdFICA,&ytdMedicare,&ytdEic,&ytdWages,mat caf; ___,heno,checkkey$)
+def fn_determineEarnings(hPrChecks,eno,dep,begDate,endDate,mat ytdTotal,&ytdFICA,&ytdMedicare,&ytdWages,mat caf; ___,heno,checkkey$)
 	ytdFICA=ytdMedicare=0 ! ytdEic=0
 	mat caf=(0)
 	mat ytdTotal=(0)
@@ -2201,10 +2201,9 @@ def library fnCheckPayrollCalculation(; ___, _
 		setup_checkCalculation=1
 		if ~setup then fn_setup
 		dim marriedOption$(0)*58
-		dim eicOption$(0)*29
 		dim w4yearOption$(0)*4
 		dim payPeriodOption$(0)*16
-		fnGetEmpOptions(mat marriedOption$,mat eicOption$,mat w4yearOption$,mat payPeriodOption$)
+		fnGetEmpOptions(mat marriedOption$,mat w4yearOption$,mat payPeriodOption$)
 		dim fed_exemption_option$(22)
 		for j=1 to 21
 			fed_exemption_option$(j)=str$(j-1)

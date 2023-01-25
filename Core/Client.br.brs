@@ -98,7 +98,7 @@ fnend
 
 			fn_setupClient_add('ACS'										,   '420',    34660) ! 58650
 			fn_setupClient_add('AJJMaplewood'						,   'ajj',        0)
-			fn_setupClient_add('Alien Electric'				, 'alien',        0)
+			! fn_setupClient_add('Alien Electric'				, 'alien',        0)
 			fn_setupClient_add('Ash Grove'							,   '286',    19016)
 			fn_setupClient_add('Bethany' 								,   '380',    34326)
 			fn_setupClient_add('Billings'								,   '440',    33534)
@@ -307,11 +307,11 @@ def fn_getClientLicense(mat clientHas$)
 			fn_getClientLicense_add('PR')
 			fn_getClientLicense_add('UB') : fn_setUbLimit(500) ! U3 Utility Billing (<500 Customers)
 			fn_getClientLicense_add('U4') ! U4 Utility Billing Hand Held Add-On
-		else if env$('client')='Alien Electric' then
-			if days(date$)<=days('02/28/2022','mm/dd/ccyy') then
-				fn_userLimit(1)
-				fn_getClientLicense_add('UB') : fn_setUbLimit(500) ! U3 Utility Billing (<500 Customers)
-			end if
+		! else if env$('client')='Alien Electric' then
+		! 	if days(date$)<=days('02/28/2022','mm/dd/ccyy') then
+		! 		fn_userLimit(1)
+		! 		fn_getClientLicense_add('UB') : fn_setUbLimit(500) ! U3 Utility Billing (<500 Customers)
+		! 	end if
 		else if env$('client')='Ash Grove' then
 			fn_userLimit(1)
 			fn_getClientLicense_add('UB') : fn_setUbLimit(1000) ! U2 Utility Billing (500-1000 customers)
@@ -408,10 +408,10 @@ def fn_getClientLicense(mat clientHas$)
 			fn_getClientLicense_add('GL')
 			fn_getClientLicense_add('PR')
 			fn_getClientLicense_add('CL')
-			if days(date$)<=days('12/31/2022','mm/dd/ccyy') then
-				fn_getClientLicense_add('U4') : u4_device$='Master Meter' ! ! U4 Utility Billing Hand Held Add-On
-				! implement a trial until they've paid.
-			end if
+			! if days(date$)<=days('12/31/2022','mm/dd/ccyy') then
+			fn_getClientLicense_add('U4') : u4_device$='Master Meter' ! ! U4 Utility Billing Hand Held Add-On
+			! implement a trial until they've paid.
+			! end if
 		else if env$('client')='Exeter' then
 			fn_userLimit(2)
 			fn_getClientLicense_add('UB') : fn_setUbLimit(500) ! U3 Utility Billing (<500 Customers)

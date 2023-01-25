@@ -249,9 +249,9 @@ def fn_employeeEdit(ent; employeeAdding)
 		fnLbl(              lc(2)+=1,col3_pos,'FICA Code:',col3_len,1)
 		fnComboA('FICACode',lc(2)    ,col4_pos,mat code6$,'',25)
 		resp$(resp_ficaCode=respc+=1)=fnSetForCombo$(mat code6$,str$(em(6)))
-		fnLbl(              lc(2)+=1,col3_pos,'EIC Code:',col3_len,1)
-		fnComboA('EICCode', lc(2)    ,col4_pos,mat eicOption$,'',25)
-		resp$(resp_EicCode=respc+=1)=eicOption$(em(7)+1)
+		! fnLbl(              lc(2)+=1,col3_pos,'EIC Code:',col3_len,1)
+		! fnComboA('EICCode', lc(2)    ,col4_pos,mat eicOption$,'',25)
+		! resp$(resp_EicCode=respc+=1)=eicOption$(em(7)+1)
 
 
 		lc(1)+=1
@@ -306,7 +306,7 @@ def fn_employeeEdit(ent; employeeAdding)
 		em(4)           =val(resp$(resp_empStatus      )(1:2)) ! emp status
 		em(5)           =val(resp$(resp_payCode        )(1:2)) ! pay code
 		em(6)           =val(resp$(resp_ficaCode       )(1:2)) ! fica code
-		em(7)           =val(resp$(resp_EicCode        )(1:2)) ! eic code
+		! em(7)           =val(resp$(resp_EicCode        )(1:2)) ! eic code
 		em(8)           =val(resp$(resp_sickPay        )(1:5)) ! sick pay
 		em(9)           =val(resp$(resp_vacationPay    )     ) ! vacation Pay code
 		em(10)          =val(resp$(resp_sickAccrued    )     ) ! sick accrued
@@ -818,17 +818,16 @@ def fn_setup
 	scrDeptAdd=3      	: ckey_DepartmentAdd=5301
 	ckey_high=ckey_DepartmentAdd ! should be the highest of these universal ckeys
 	dim marriedOption$(0)*58
-	dim eicOption$(0)*29
 	dim w4yearOption$(0)*4
 	dim payPeriodOption$(0)*16
-	fn_getEmpOptions(mat marriedOption$,mat eicOption$,mat w4yearOption$,mat payPeriodOption$)
+	fn_getEmpOptions(mat marriedOption$,mat w4yearOption$,mat payPeriodOption$)
 
 fnend
-def library fnGetEmpOptions(mat marriedOption$,mat eicOption$,mat w4yearOption$,mat payPeriodOption$)
+def library fnGetEmpOptions(mat marriedOption$,mat w4yearOption$,mat payPeriodOption$)
 	if ~setup then fn_setup
-	fnGetEmpOptions=fn_getEmpOptions(mat marriedOption$,mat eicOption$,mat w4yearOption$,mat payPeriodOption$)
+	fnGetEmpOptions=fn_getEmpOptions(mat marriedOption$,mat w4yearOption$,mat payPeriodOption$)
 fnend
-def fn_getEmpOptions(mat marriedOption$,mat eicOption$,mat w4yearOption$,mat payPeriodOption$)
+def fn_getEmpOptions(mat marriedOption$,mat w4yearOption$,mat payPeriodOption$)
 	mat marriedOption$(0)
 	fnAddOneC(mat marriedOption$,'0 - Single')
 	fnAddOneC(mat marriedOption$,'1 - Married - filing jointly')
@@ -837,10 +836,10 @@ def fn_getEmpOptions(mat marriedOption$,mat eicOption$,mat w4yearOption$,mat pay
 	fnAddOneC(mat marriedOption$,'4 - Married - filing joint - both working')
 	fnAddOneC(mat marriedOption$,'5 - Married - filing seperate - both working')
 
-	mat eicOption$(0)
-	fnAddOneC(mat eicOption$,'0 - Not qualified for EIC'    )  !  em(7)=1
-	fnAddOneC(mat eicOption$,'1 - Single or Spouse not file')  !  em(7)=2
-	fnAddOneC(mat eicOption$,'2 - Married both filing'      )  !  em(7)=3
+	! mat eicOption$(0)
+	! fnAddOneC(mat eicOption$,'0 - Not qualified for EIC'    )  !  em(7)=1
+	! fnAddOneC(mat eicOption$,'1 - Single or Spouse not file')  !  em(7)=2
+	! fnAddOneC(mat eicOption$,'2 - Married both filing'      )  !  em(7)=3
 
 	mat w4yearOption$(0)
 	fnAddOneC(mat w4yearOption$,'2019')

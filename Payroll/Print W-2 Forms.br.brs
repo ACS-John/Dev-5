@@ -325,7 +325,7 @@ Finis: ! r:
 		gosub PrintW2
 		fnpa_finis
 	end if
-	if enableW3$='True' then let fnw3(taxYear$,empId$,mat a$,mat w,dcb,state$,stcode$)
+	if enableW3$='True' then fnW3(taxYear$,empId$,w2printCount,mat a$,mat w,dcb,state$,stcode$)
 	if exportFormatID then
 			mat tmpMsgLine$(2)
 			tmpMsgLine$(1)='Export file created:'
