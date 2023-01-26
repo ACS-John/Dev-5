@@ -105,6 +105,7 @@ ReadTimesheet: ! r:  read rpwork, read employee, call calc deduction etc  basica
 		dim em(16)
 		dim hr(2)
 		read #hEmployee,using F_employee,key=empNo$: mat em,lpd,totalGrossPay,w4step2,w4Year$,w4Step3,w4step4a,w4step4b,w4step4c nokey EmployeeNoKey
+		if trim$(empNo$)='23' then pr 'wolfe' : pause
 		F_employee: form pos 112,7*n 2,2*pd 3.3,6*pd 4.2,2*n 6,pd 5.2,n 1,C 4,pos 197,4*n 12.2
 		! gosub EmployeeRecordToLocal
 		! EmployeeRecordToLocal: ! r:
@@ -494,6 +495,13 @@ Finis: ! r:
 	fn_setupCloseFiles
 	close #hTimesheet:
 	fnFree('[Q]\PRmstr\jcprh1.h[cno]') ! get rid of jobcost time entry file if exists
+
+	if showDetails then
+		fnStatusPause
+		fnStatusClose
+		showDetails=0
+	end if
+
 goto Xit ! /r
 Xit: fnXit
 
@@ -996,6 +1004,7 @@ withholdingPercentage,atLeast,baseAmt,estPayPeriodNetPay,estPayPeriodNetPay,adju
 	! ded = federal deduction addition for all departments (deduct before calculating federal taxes)
 
 	! adjustedWageAmount is local for estAnnualNetPay
+
 	fn_getFederalTable(taxYear,marital,w4Year$,w4step2,mat fedTable,fed_annual_wh_allowance)
 
 	estPayPeriodNetPay=totalGrossPay-ded-(w4step4b/payPeriodsPerYear)
@@ -1624,7 +1633,7 @@ fnend
 				ee=0
 			end if
 			returnN=max(0,((a+bb+cc)-(dd+ee))) ! /r
-		else if taxYear=>2021 then
+		else if taxYear=>2021 then ! r:
 			if (marital=0 or marital=2) and val(fnEmployeeData$(eno,'R-1300 Exepmtions'))<2 then
 				! they are single and claiming less than 2 exemptions
 				fn_detail('1. Single Taxpayer Withholding Formulas') ! r:
@@ -1705,6 +1714,7 @@ fnend
 			fn_detail('B='&str$(vB))
 			fn_detail('estStTaxableAnnualWages='&str$(estStTaxableAnnualWages))
 			returnN=vW
+			! /r
 		end if
 		returnN=round(returnN,2)
 		if returnN<.1 then returnN=0
@@ -2408,28 +2418,32 @@ def library fnCheckPayrollCalculation(; ___, _
 				! checkedOption$(1)='NOT checked'
 				! checkedOption$(2)='Checked'
 				fnOpenPrn
-				pr #255,using 'form pos 1,cc 67': 'Tax Year '&str$(taxYear)
-				pr #255,using 'form pos 1,cc 67': payPeriodOption$(payCode)(5:inf)&' Payroll Period'
-				pr #255: ''
-				for pass=1 to 3
-					if pass=1 then marital=1
-					if pass=2 then marital=0
-					if pass=3 then marital=2
-					dim ft1(8,3)
-					dim ft2(8,3)
-					fn_getFederalTable(taxYear,marital,w4Year$,0,mat ft1,fed_annual_wh_allowance)
-					fn_getFederalTable(taxYear,marital,w4Year$,1,mat ft2,fed_annual_wh_allowance)
-					pr #255:'___________________________________________________________________'
-					pr #255,using 'form pos 1,cc 33,x 1,cc 33': marriedOption$(marital+1)(5:inf),marriedOption$(marital+1)(5:inf)
-					pr #255: '      W-4 Step 2 NOT Checked             W-4 Step 2 Checked        '
-					pr #255: '     A            C           D         A            C           D '
-					for x=1 to udim(mat fedTable,1)
-						pr #255: cnvrt$('pic(zzz,zzz,zz#)',round(ft1(x,1)/pppy,0))&' '&cnvrt$('pic(zzz,zzz,zz#.##)',round(ft1(x,2)/pppy,2))&'   '&cnvrt$('pic(z#)',ft1(x,3)*100)&'%   ';
-						pr #255: cnvrt$('pic(zzz,zzz,zz#)',round(ft2(x,1)/pppy,0))&' '&cnvrt$('pic(zzz,zzz,zz#.##)',round(ft2(x,2)/pppy,2))&'   '&cnvrt$('pic(z#)',ft2(x,3)*100)&'%'
-					nex x
+				for payCodeItem=1 to udim(mat payPeriodOption$)
+					pr #255,using 'form pos 1,cc 67': 'Tax Year '&str$(taxYear)
+					pr #255,using 'form pos 1,cc 67': payPeriodOption$(payCodeItem)(5:inf)&' Payroll Period'
 					pr #255: ''
-					pr #255: ''
-				next pass
+					for pass=1 to 3
+						if pass=1 then marital=1
+						if pass=2 then marital=0
+						if pass=3 then marital=2
+						dim ft1(8,3)
+						dim ft2(8,3)
+						fn_getFederalTable(taxYear,marital,w4Year$,0,mat ft1,fed_annual_wh_allowance)
+						fn_getFederalTable(taxYear,marital,w4Year$,1,mat ft2,fed_annual_wh_allowance)
+						pr #255:'___________________________________________________________________'
+						pr #255,using 'form pos 1,cc 33,x 1,cc 33': marriedOption$(marital+1)(5:inf),marriedOption$(marital+1)(5:inf)
+						pr #255: '      W-4 Step 2 NOT Checked             W-4 Step 2 Checked        '
+						pr #255: '     A            C           D         A            C           D '
+						for x=1 to udim(mat fedTable,1)
+							pr #255: cnvrt$('pic(zzz,zzz,zz#)',round(ft1(x,1)/pppy,0))&' '&cnvrt$('pic(zzz,zzz,zz#.##)',round(ft1(x,2)/pppy,2))&'   '&cnvrt$('pic(z#)',ft1(x,3)*100)&'%   ';
+							pr #255: cnvrt$('pic(zzz,zzz,zz#)',round(ft2(x,1)/pppy,0))&' '&cnvrt$('pic(zzz,zzz,zz#.##)',round(ft2(x,2)/pppy,2))&'   '&cnvrt$('pic(z#)',ft2(x,3)*100)&'%'
+						nex x
+						pr #255: ''
+						pr #255: ''
+					next pass
+					! pr #255:'___________________________________________________________________'
+					if payCodeItem<>udim(mat payPeriodOption$) the pr #255: newpage
+				next payCodeItem
 				fnClosePrn
 				! /r
 			else ! if ckey=1 then r: test the calcualtion
@@ -2478,7 +2492,7 @@ fnend
 def fn_setup
 	autoLibrary
 	on error goto Ertn
-
+	! showDetails=1
 	dim stwh(10,2)
 	dim resp$(64)*256
 	dim ml$(0)*256
