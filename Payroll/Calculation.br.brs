@@ -1760,7 +1760,7 @@ fnend
 				stStdDed_spouseDoesNotWork  	=25100
 				stStdDed_headOfHousehold    	=18800
 				! /r
-			else if taxYear=>2022 then ! r:
+			else if taxYear=2022 then ! r:
 				dim mo(9,3)
 				mo( 1,1)=   0 : mo( 1,2)=fn_n2(mat mo,1)  : mo( 1,3)=0.015
 				mo( 2,1)=1121 : mo( 2,2)=fn_n2(mat mo,2)  : mo( 2,3)=0.02
@@ -1776,6 +1776,22 @@ fnend
 				stStdDed_filingSeperate      	=12950
 				stStdDed_spouseDoesNotWork  	=25900
 				stStdDed_headOfHousehold    	=19400
+				! /r
+			else if taxYear=>2023 then ! r:
+				dim mo(8,3)
+				mo( 1,1)=   0 : mo( 1,2)=fn_n2(mat mo,1)  : mo( 1,3)=0
+				mo( 2,1)=1207 : mo( 2,2)=fn_n2(mat mo,2)  : mo( 2,3)=0.02
+				mo( 3,1)=2414 : mo( 3,2)=fn_n2(mat mo,3)  : mo( 3,3)=0.025
+				mo( 4,1)=3621 : mo( 4,2)=fn_n2(mat mo,4)  : mo( 4,3)=0.03
+				mo( 5,1)=4828 : mo( 5,2)=fn_n2(mat mo,5)  : mo( 5,3)=0.035
+				mo( 6,1)=6035 : mo( 6,2)=fn_n2(mat mo,6)  : mo( 6,3)=0.04
+				mo( 7,1)=7242 : mo( 7,2)=fn_n2(mat mo,7)  : mo( 7,3)=0.045
+				mo( 8,1)=8449 : mo( 8,2)=fn_n2(mat mo,8)  : mo( 8,3)=0.0495
+				stStdDed_single              	=13850
+				stStdDed_spouseWorks         	=13850
+				stStdDed_filingSeperate      	=13850
+				stStdDed_spouseDoesNotWork  	=27700
+				stStdDed_headOfHousehold    	=20800
 				! /r
 			end if
 			! fn_debugPrzint2d(mat mo)
@@ -2368,7 +2384,7 @@ def library fnCheckPayrollCalculation(; ___, _
 		fnCmdKey('Test Federal' 	,ck_federal=3,0,0,'Print Federal Table for selected Pay Code')
 		fnCmdKey('Test State'   	,ck_state=2,0,0,'Print Federal Table for selected Pay Code')
 		fnCmdKey('Test Both'    	,1,1,0,'')
-		fnCmdKey('Federal Table'	,ck_federalTable=7,0,0,'Print Federal Table for selected Pay Code')
+		fnCmdKey('Federal Table'	,ck_federalTable=7,0,0,'Print Federal Tables')
 		fnCmdKey('Cancel'        	,5,0,1,'')
 		! fnCmdSet(2)
 		ckey=fnAcs(mat resp$) ! /r
