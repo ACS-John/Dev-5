@@ -419,6 +419,9 @@ ReadTimesheet: ! r:  read rpwork, read employee, call calc deduction etc  basica
 				! do nothing
 			else if newdedcode(j-4)=newdedcode_Add then
 				tcp(32)+=tcp(j)
+			else if newdedcode(j-4)=newdedcode_AddGross then
+				tcp(31)+=tcp(j)
+				tcp(32)+=tcp(j)
 			else if newdedcode(j-4)=newdedcode_Deduct then
 				tcp(32)-=tcp(j)
 			end if
@@ -1633,7 +1636,90 @@ fnend
 				ee=0
 			end if
 			returnN=max(0,((a+bb+cc)-(dd+ee))) ! /r
-		else if taxYear=>2021 then ! r:
+		else if taxYear=2021 or taxYear=2022 then ! r:
+			if (marital=0 or marital=2) and val(fnEmployeeData$(eno,'R-1300 Exepmtions'))<2 then
+				! they are single and claiming less than 2 exemptions
+				fn_detail('1. Single Taxpayer Withholding Formulas') ! r:
+				fn_detail('   vW is the withholding tax per pay period.')
+				fn_detail('   vS is employee’s salary per pay period for each bracket.')
+				vS=taxableWagesCurrent
+				fn_detail('   vX is the number of personal exemptions; X must be 0 or 1.')
+				vX=val(fnEmployeeData$(eno,'R-1300 Exepmtions'))
+				fn_detail('   vY is the number of dependency credits; Y must be a whole number that is 0 or greater.')
+				vY=val(fnEmployeeData$(eno,'R-1300 Dependencies'))
+				fn_detail('   vN is the number of pay periods.')
+				vN=payPeriodsPerYear
+				fn_detail('   vA is the effect of the personal exemptions and dependency credits equal to or less than $12,500;')
+				fn_detail('   vA=.021(((vX*4,500)+(vY*1,000))÷vN).')
+						vA=.021*(((vX*4500)+(vY*1000))/vN)
+						vA=max(0,round(vA,2))
+				fn_detail('   vB is the effect of the personal exemptions and dependency credits in excess of $12,500;')
+				fn_detail('   vB=.016((((vX*4,500)+(vY*1,000))-12,500)÷vN).')
+						vB=.016*((((vX*4500)+(vY*1000))-12500 )/vN)
+						vB=max(0,round(vB,2))
+				estStTaxableAnnualWages=taxableWagesCurrent*payPeriodsPerYear
+				if estStTaxableAnnualWages<=12500 then
+					fn_detail('   If annual wages are less than or equal to $12,500, then')
+					fn_detail('   vW=.021(vS)-(vA+vB).')
+						vW=.021*(vS)-(vA+vB)
+				else if estStTaxableAnnualWages>12500 and estStTaxableAnnualWages<=50000 then
+				fn_detail('   If annual wages are greater $12,500 but less than or equal to $50,000, then')
+				fn_detail('   vW=.021(S)+.0160(S-(12,500÷vN))-(vA+vB).')
+						vW=.021*(vS)+.0160*(vS-(12500/vN))-(vA+vB)
+				else if estStTaxableAnnualWages>50000 then
+				fn_detail('   If annual wages are greater than $50,000, then')
+				fn_detail('   vW=.021(S)+.0160(vS-(12,500÷vN))+.0135(vS-(50,000÷vN))-(vA + vB)')
+						vW=.021*(vS)+.0160*(vS-(12500/vN))+.0135*(vS-(50000/vN))-(vA + vB)
+				end if
+				! /r
+			else
+				fn_detail('2. Married Taxpayer Withholding Formulas') ! r:
+				fn_detail('   vW is the withholding tax per pay period.')
+				fn_detail('   vS is the employee’s salary per pay period for each bracket.')
+				vS=taxableWagesCurrent
+				fn_detail('   vX is the number of personal exemptions. vX must 2.')
+				vX=val(fnEmployeeData$(eno,'R-1300 Exepmtions'))
+				fn_detail('   vY is the number of dependency credits. vY must be 0 or greater.')
+				vY=val(fnEmployeeData$(eno,'R-1300 Dependencies'))
+				fn_detail('   vN is the number of pay periods.')
+				vN=payPeriodsPerYear
+				fn_detail('   vA is the effect of the personal exemptions and dependency credits equal to or less than $25,000;')
+				fn_detail('   vA=.021(((vX*4,500)+(vY*1,000))÷vN)')
+						vA=.021*(((vX*4500)+(vY*1000))/vN)
+						vA=max(0,round(vA,2))
+				fn_detail('   vB is the effect of the personal exemptions and dependency credits in excess of $25000;')
+				fn_detail('   vB=.0165((((X*4500)+(vY*1000))-25000)÷vN).')
+						vB=.0165*((((vX*4500)+(vY*1000))-25000)/vN)
+						vB=max(0,round(vB,2))
+				estStTaxableAnnualWages=taxableWagesCurrent*payPeriodsPerYear
+				if estStTaxableAnnualWages<=25000 then
+					fn_detail('   If annual wages are less than or equal to $25000, then')
+					fn_detail('   vW=.021(S)-(A+B).')
+							vW=.021*(vS)-(A+B)
+				else if estStTaxableAnnualWages>25000 and estStTaxableAnnualWages<=100000 then
+					fn_detail('   If annual wages are greater $25000 but less than or equal to $100000, then')
+					fn_detail('   vW=.021(S)+.0165(vS-(25000÷vN))-(vA+vB).')
+							vW=.021*(vS)+.0165*(vS-(25000/vN))-(vA+vB)
+				else if estStTaxableAnnualWages>100000 then
+					fn_detail('   If annual wages are greater than $100000, then')
+					fn_detail('   vW=.021(S)+.0165(vS-(25000÷vN))+.0135(vS-(100000÷vN))-(vA+vB).')
+							vW=.021*(vS)+.0165*(vS-(25000/vN))+.0135*(vS-(100000/vN))-(vA+vB)
+					! /r
+				end if
+			end if
+			vW=max(0,round(vW,2))
+			fn_detail('W='&str$(vW))
+			fn_detail('S='&str$(vS))
+			fn_detail('X='&str$(vX))
+			fn_detail('Y='&str$(vY))
+			fn_detail('N='&str$(vN))
+			fn_detail('A='&str$(vA))
+			fn_detail('B='&str$(vB))
+			fn_detail('estStTaxableAnnualWages='&str$(estStTaxableAnnualWages))
+			returnN=vW
+			! /r
+		else if taxYear=>2023 then ! r:
+			! https://revenue.louisiana.gov/TaxForms/1210(1_22).pdf
 			if (marital=0 or marital=2) and val(fnEmployeeData$(eno,'R-1300 Exepmtions'))<2 then
 				! they are single and claiming less than 2 exemptions
 				fn_detail('1. Single Taxpayer Withholding Formulas') ! r:
@@ -1722,7 +1808,7 @@ fnend
 	fnend
 	def fn_wh_missouri(taxYear,taxableWagesCurrent,marital,fed_wh,allowances,payPeriodsPerYear; _
 											___,returnN,tableRow,stStandardDeduction,stAnnualGrossTaxableIncome,h3)
-		! revised 1/4/2022
+		! revised 1/30/2023
 		if setup_mowh<>taxYear then  ! r: MO Missouri
 			setup_mowh=taxYear
 			if taxYear=2020 then ! r:
@@ -1778,6 +1864,7 @@ fnend
 				stStdDed_headOfHousehold    	=19400
 				! /r
 			else if taxYear=>2023 then ! r:
+				! https://dor.mo.gov/forms/4282_2023.pdf
 				dim mo(8,3)
 				mo( 1,1)=   0 : mo( 1,2)=fn_n2(mat mo,1)  : mo( 1,3)=0
 				mo( 2,1)=1207 : mo( 2,2)=fn_n2(mat mo,2)  : mo( 2,3)=0.02
@@ -2566,6 +2653,7 @@ def fn_setup
 	newdedcode_Deduct =1
 	newdedcode_Add    =2
 	newdedcode_Benefit=3
+	newdedcode_AddGross=4
 
 	esw_federal =1 ! enums for disableWithholdingN
 	esw_state   =2 ! enums for disableWithholdingN

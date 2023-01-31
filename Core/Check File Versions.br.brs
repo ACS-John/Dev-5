@@ -1314,7 +1314,8 @@ goto L3920 ! /r
 ! fnend /r
 def fn_reg_rename(cursys$*2)
 	if cursys$='PR' then
-		! nuffin yet
+		fn_rrOne('Payroll\User Designed Reports','Payroll\Custom Reports')
+		fn_rrOne('Payroll\User Designed Reports Proof List','Payroll\fn\Custom Reports Proof List')
 		if fnClientHas('P2') then
 			! nuffin yet
 		end if
