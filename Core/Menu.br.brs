@@ -974,8 +974,8 @@ def fn_dropDownMenus
 			next system_abbr_list_item
 		end if
 		fn_dm_add('&Company',str$(x+=1))
-		fn_dm_add(' &Select','S:\Core\Programs\Select Company.br')
 		fn_dm_add(' Configure','S:\[cursystem]\Company.br')
+		fn_dm_add(' &Select','S:\Core\Programs\Select Company.br')
 		if fnclient_is_converting then
 			fn_dm_add(' -')
 			fn_dm_add(' Import','S:\Core\Company Import.br')

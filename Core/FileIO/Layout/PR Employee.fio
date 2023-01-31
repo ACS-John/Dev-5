@@ -5,67 +5,67 @@ recl=244
 ! renamed from rpwork on 12/31/2019 which changed pos 173,2*PD 3 (ta1,ta2 First and Last Trailer Address) to pos 173,N 1,C 5 w4step2,unused174)
 ! increase actual br file version to 1 on 1/13/2020 - to add 2020 W4 stuff - also incread recl from 196
 ===================================================
-no             ,  Employee Number                      	,  n    8                 , ! Pos=  1       eno     
-name           ,  Name                                 	,  c   30                 , ! Pos=  9       em$(1)  
-addr           ,  Address                              	,  c   30                 , ! Pos= 39       em$(2)  
-csz            ,  City State Zip Code                 	,  c   30                 , ! Pos= 69       em$(3)  comboFio(CO City State Zip)
-ss             ,  Social Security Number              	,  c   11                 , ! Pos= 99       ss$     
-rs1            ,  Race                                  	,  n    1                 , ! Pos=110       rs(1) 
-!                 0 - Unknown                                                               
-!                 1 - Caucasian                                                             
-!                 2 - Hispanic                                                              
-!                 3 - Black                                                                 
-!                 4 - Oriental                                                              
-!                 5 - AmIndian                                                              
-!                 6 - Indochines                                                            
-gender          ,  Gender                                	,  n    1                 , ! Pos=111       rs(2)   
-!                  0 - Unknown                                                              
-!                  1 - Male                                                                 
-!                  2 - Female                                                               
-maritial        ,  Marital Status                       	,  n    2                 , ! Pos=112       em(01)  
-!                  0 - Single
-!                  1 - Married - filing jointly
-!                  2 - Single - Head of Household
-!                  3 - Married - filing joint - only one working
-!                  4 - Married - filing joint - both working
-!                  5 - Married - filing seperate - both working
-fedExempt       , Federal Exemptions                    	,  n    2                 , ! Pos=114       em(02)  
-stExempt        , State Exemptions                      	,  n    2                 , ! Pos=116       em(03)  
-empStatus       , Employment Status                     	,  n    2                 , ! Pos=118       em(04)  
-payCode         , Pay Code                               	,  n    2                 , ! Pos=120       em(05)  
-!                  1 - Monthly                                                           
-!                  2 - Semi-monthly                                                      
-!                  3 - Bi-weekly                                                         
-!                  4 - Weekly                                                            
-ficaCode        ,  FICA Code                             	,  n    2                 , ! Pos=122       em(06)  
-!                  0 - Subject to SS and Med WH                                          
-!                  1 - SS only                                                           
-!                  2 - Medicare Only                                                     
-!                  9 - Neither SS nor Medicare                                           
-eicCode         ,  EIC Code                              	,  n    2                 , ! Pos=124       em(07)  
-!                  0 - Not qualified for EIC                                              
-!                  1 - Single or Spouse not file                                          
-!                  2 - Married both filing                                                
-sick            ,  Sick Pay Code                         	,  pd   3.3 ,             , ! Pos=126       em(08)  
-vaca            ,  Vacation Pay Code                    	,  pd   3.3 ,             , ! Pos=129       em(09)  
-hrsSick         ,  Sick Hours Accrued                   	,  pd   4.2 ,             , ! Pos=132       em(10)  
-hrsVaca         ,  Vacation Hours Accrued               	,  pd   4.2 ,             , ! Pos=136       em(11)  
-stdWhFed        ,  Standard Federal Withholding        	,  pd   4.2 ,             , ! Pos=140       em(12)  
-addOnFed        ,  Federal Tax Add-On                   	,  pd   4.2 ,             , ! Pos=144       em(13)  
-stdWhSt         ,  Standard State Withholding          	,  pd   4.2 ,             , ! Pos=148       em(14)  
-addOnSt         ,  State Tax Add-On                     	,  pd   4.2 ,             , ! Pos=152       em(15)  
-hireDate        ,  Date Hired                           	,  n    6   , date(mmddyy), ! Pos=156       em(16)  
-lpd             ,  Last Payroll Date                    	,  n    6   , date(mmddyy), ! Pos=162       lpd,d1
-totalGrossPay   ,  Total Gross Pay                     	,  pd   5.2 ,             , ! Pos=168       tgp     
-w4step2         ,  W-4 Step 2 (1/0)                     	,  n    1   ,             , ! Pos=173       
-W4Year          ,  W-4 Year                              	,  C    4   ,             , ! Pos=174    "none", "2019" or "2020"
-unuse174        ,  unused                                	,  c    1   ,             , ! Pos=178
-ph              ,  Telephone Number                     	,  c   12   ,             , ! Pos=179       ph$     
-bd              ,  Birth Date                            	,  n    6   , date(mmddyy), ! Pos=191       bd      
-W4Step3         ,  W-4 Step 3                            	,  n   12.2 ,             , ! Pos=197
-W4Step4a        ,  W-4 Step 4a                          	,  n   12.2 ,             , ! Pos=209
-W4Step4b        ,  W-4 Step 4b                          	,  n   12.2 ,             , ! Pos=221
-W4Step4c        ,  W-4 Step 4c                          	,  n   12.2 ,             , ! Pos=233
+no              	,  Employee Number                      	,  n    8                 , ! Pos=  1       eno     
+name            	,  Name                                 	,  c   30                 , ! Pos=  9       em$(1)  
+addr            	,  Address                              	,  c   30                 , ! Pos= 39       em$(2)  
+csz             	,  City State Zip Code                 	,  c   30                 , ! Pos= 69       em$(3)  comboFio(CO City State Zip)
+ss              	,  Social Security Number              	,  c   11                 , ! Pos= 99       ss$     
+rs1             	,  Race                                  	,  n    1                 , ! Pos=110       rs(1) 
+!											0 - Unknown                                                               
+!											1 - Caucasian                                                             
+!											2 - Hispanic                                                              
+!											3 - Black                                                                 
+!											4 - Oriental                                                              
+!											5 - AmIndian                                                              
+!											6 - Indochines                                                            
+gender          	,  Gender                                	,  n    1                 , ! Pos=111       rs(2)   
+!											0 - Unknown                                                              
+!											1 - Male                                                                 
+!											2 - Female                                                               
+maritial        	,  Marital Status                       	,  n    2                 , ! Pos=112       em(01)  
+!											0 - Single
+!											1 - Married - filing jointly
+!											2 - Single - Head of Household
+!											3 - Married - filing joint - only one working
+!											4 - Married - filing joint - both working
+!											5 - Married - filing seperate - both working
+fedExempt       	, Federal Exemptions                    	,  n    2                 , ! Pos=114       em(02)  
+stExempt        	, State Exemptions                      	,  n    2                 , ! Pos=116       em(03)  
+empStatus       	, Employment Status                     	,  n    2                 , ! Pos=118       em(04)  
+payCode         	, Pay Code                               	,  n    2                 , ! Pos=120       em(05)  
+!											1 - Monthly                                                           
+!											2 - Semi-monthly                                                      
+!											3 - Bi-weekly                                                         
+!											4 - Weekly                                                            
+ficaCode        	,  FICA Code                             	,  n    2                 , ! Pos=122       em(06)  
+!											0 - Subject to SS and Med WH                                          
+!											1 - SS only                                                           
+!											2 - Medicare Only                                                     
+!											9 - Neither SS nor Medicare                                           
+eicCode         	,  EIC Code                              	,  n    2                 , ! Pos=124       em(07)  
+!											0 - Not qualified for EIC                                              
+!											1 - Single or Spouse not file                                          
+!											2 - Married both filing                                                
+sick            	,  Sick Pay Code                         	,  pd   3.3 ,             , ! Pos=126       em(08)  
+vaca            	,  Vacation Pay Code                    	,  pd   3.3 ,             , ! Pos=129       em(09)  
+hrsSick         	,  Sick Hours Accrued                   	,  pd   4.2 ,             , ! Pos=132       em(10)  
+hrsVaca         	,  Vacation Hours Accrued               	,  pd   4.2 ,             , ! Pos=136       em(11)  
+stdWhFed        	,  Standard Federal Withholding        	,  pd   4.2 ,             , ! Pos=140       em(12)  
+addOnFed        	,  Federal Tax Add-On                   	,  pd   4.2 ,             , ! Pos=144       em(13)  
+stdWhSt         	,  Standard State Withholding          	,  pd   4.2 ,             , ! Pos=148       em(14)  
+addOnSt         	,  State Tax Add-On                     	,  pd   4.2 ,             , ! Pos=152       em(15)  
+hireDate        	,  Date Hired                           	,  n    6   , date(mmddyy), ! Pos=156       em(16)  
+lpd             	,  Last Payroll Date                    	,  n    6   , date(mmddyy), ! Pos=162       lpd,d1
+totalGrossPay   	,  Total Gross Pay                      	,  pd   5.2 ,             , ! Pos=168       tgp     
+w4step2         	,  W-4 Step 2 (1/0)                     	,  n    1   ,             , ! Pos=173       
+W4Year          	,  W-4 Year                              	,  C    4   ,             , ! Pos=174    "none", "2019" or "2020"
+unuse174        	,  unused                                	,  c    1   ,             , ! Pos=178
+ph              	,  Telephone Number                     	,  c   12   ,             , ! Pos=179       ph$     
+bd              	,  Birth Date                            	,  n    6   , date(mmddyy), ! Pos=191       bd      
+W4Step3         	,  W-4 Step 3                            	,  n   12.2 ,             , ! Pos=197
+W4Step4a        	,  W-4 Step 4a                          	,  n   12.2 ,             , ! Pos=209
+W4Step4b        	,  W-4 Step 4b                          	,  n   12.2 ,             , ! Pos=221
+W4Step4c        	,  W-4 Step 4c                          	,  n   12.2 ,             , ! Pos=233
 
 
 #eof#

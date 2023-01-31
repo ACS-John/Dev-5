@@ -107,10 +107,11 @@ Screen2: ! r:
 	! r: screen2 setup
 	if ~setup_screen2 then ! r:
 		setup_screen2=1
-		dim opt_ded_or_add$(3)*7
-		opt_ded_or_add$(1)='Deduct'
-		opt_ded_or_add$(2)='Add'
-		opt_ded_or_add$(3)='Benefit'
+		dim optDedOrAddType$(4)*9
+		optDedOrAddType$(1)='Deduct'
+		optDedOrAddType$(2)='Add'
+		optDedOrAddType$(3)='Benefit'
+		optDedOrAddType$(4)='Add Gross'
 
 		dim opt_std_or_percent$(2)*8
 		opt_std_or_percent$(1)='Standard'
@@ -152,9 +153,9 @@ Screen2: ! r:
 		resp$(resp+=1)=fullname$(j)
 		fnTxt(j+5,pos_col(3),8,0,left,'',0,'Enter an abbreviated name that will be used in report headings.',0 )
 		resp$(resp+=1)=abrevname$(j)
-		fnComboA('MiscDeduct',j+5,pos_col(4),mat opt_ded_or_add$,'Indicate whether the amont should be deducted from the check or added to the check.',6)
+		fnComboA('MiscDeduct',j+5,pos_col(4),mat optDedOrAddType$,'Indicate whether the amont should be deducted from the check or added to the check.',6)
 		if newdedcode(j)=0 then newdedcode(j)=1
-		resp$(resp+=1)=opt_ded_or_add$(newdedcode(j))
+		resp$(resp+=1)=optDedOrAddType$(newdedcode(j))
 		fnComboA('std_or_percent',j+5,pos_col(5),mat opt_std_or_percent$,'Standard would a fixed amount each pay period.  Percent would indicate the deduction is a percent of gross pay.',8)
 		if newcalcode(j)=0 then newcalcode(j)=1 ! stop subscript error
 		resp$(resp+=1)=opt_std_or_percent$(newcalcode(j))
@@ -176,9 +177,10 @@ Screen2: ! r:
 	for j=1 to 20
 		fullname$(j)=resp$(resp+=1)
 		abrevname$(j)=resp$(resp+=1)
-		if resp$(resp+=1)=opt_ded_or_add$(1) then newdedcode(j)=1 ! deduction
-		if resp$(resp)=opt_ded_or_add$(2) then newdedcode(j)=2 ! addition
-		if resp$(resp)=opt_ded_or_add$(3) then newdedcode(j)=3 ! benefit
+		if resp$(resp+=1)=optDedOrAddType$(1) then newdedcode(j)=1 ! deduction
+		if resp$(resp)=optDedOrAddType$(2) then newdedcode(j)=2 ! addition
+		if resp$(resp)=optDedOrAddType$(3) then newdedcode(j)=3 ! benefit
+		if resp$(resp)=optDedOrAddType$(4) then newdedcode(j)=4 ! Add Gross
 		if resp$(resp+=1)=opt_std_or_percent$(1) then newcalcode(j)=1
 		if resp$(resp)=opt_std_or_percent$(2) then newcalcode(j)=2 ! percent method of calucalating
 		if resp$(resp+=1)='True' then newdedfed(j)=1 else newdedfed(j)=0

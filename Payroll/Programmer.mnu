@@ -10,6 +10,9 @@ Payroll - Programmer
 Pay Period
 >Import from Time Clock System        ^ Payroll\*
 
+Print
+>Custom Reports Proof List                  ^ [cursystem]\fn\*          ^     ^Print,User,Designed,Reports,Proof,List,Custom,Reports
+
 
 
 Lost Transactions Fix

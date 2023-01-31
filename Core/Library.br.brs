@@ -1106,7 +1106,7 @@ fnend
 	fnend
 ! /r
 ! r: registry stuff
-	def library fnsreg_read(reg_field_name$*128,&reg_field_value$; reg_field_default$*128)
+	def library fnsreg_read(reg_field_name$*128,&reg_field_value$; reg_field_default$*128) ! System
 		library 'S:\Core\Reg.br': fnsreg_read
 		fnsreg_read=fnsreg_read(reg_field_name$,reg_field_value$, reg_field_default$)
 	fnend
@@ -1114,7 +1114,7 @@ fnend
 		library 'S:\Core\Reg.br': fnsreg_write
 		fnsreg_write=fnsreg_write(reg_field_name$,reg_field_value$)
 	fnend
-	def library fncreg_read(reg_field_name$*128,&reg_field_value$; reg_field_default$*128,cr_alsoApplyDefaultIfReadBlank)
+	def library fncreg_read(reg_field_name$*128,&reg_field_value$; reg_field_default$*128,cr_alsoApplyDefaultIfReadBlank) ! Company
 		library 'S:\Core\Reg.br': fncreg_read
 		fncreg_read=fncreg_read(reg_field_name$,reg_field_value$, reg_field_default$,cr_alsoApplyDefaultIfReadBlank)
 	fnend
@@ -1122,7 +1122,7 @@ fnend
 		library 'S:\Core\Reg.br': fncreg_write
 		fncreg_write=fncreg_write(reg_field_name$,reg_field_value$)
 	fnend
-	def library fnPcReg_read(reg_field_name$*128,&reg_field_value$; reg_field_default$*128,cr_alsoApplyDefaultIfReadBlank)
+	def library fnPcReg_read(reg_field_name$*128,&reg_field_value$; reg_field_default$*128,cr_alsoApplyDefaultIfReadBlank) ! Program and Company
 		library 'S:\Core\Reg.br': fnPcReg_read
 		fnPcReg_read=fnPcReg_read(reg_field_name$,reg_field_value$, reg_field_default$,cr_alsoApplyDefaultIfReadBlank)
 	fnend
@@ -1156,7 +1156,7 @@ fnend
 		library 'S:\Core\Reg.br': fnureg_read
 		fnureg_read=fnureg_read(reg_field_name$,reg_field_value$, reg_field_default$,alsoUseDefaultIfReadBlank)
 	fnend
-	def library fnureg_write(reg_field_name$*128,reg_field_value$*256)
+	def library fnureg_write(reg_field_name$*128,reg_field_value$*256) ! user
 		library 'S:\Core\Reg.br': fnureg_write
 		fnureg_write=fnureg_write(reg_field_name$,reg_field_value$)
 	fnend
@@ -1180,7 +1180,7 @@ fnend
 		library 'S:\Core\program_properties.br': fnwriteProgramPrintProperty
 		fnwriteProgramPrintProperty=fnwriteProgramPrintProperty(key$,value$, programFileOverride$)
 	fnend
-	def library fnmcreg_read(reg_field_name$*128,&reg_field_value$; reg_field_default$*128)
+	def library fnmcreg_read(reg_field_name$*128,&reg_field_value$; reg_field_default$*128) ! multi client
 		library 'S:\Core\Reg.br': fnmcreg_read
 		fnmcreg_read=fnmcreg_read(reg_field_name$,reg_field_value$, reg_field_default$)
 	fnend
@@ -1738,6 +1738,7 @@ fnend
 
 ! /r
 ! r: PR   payroll
+
 	def library fnEmployeeEdit(eno)
 		library 'S:\Payroll\Employee.br': fnEmployeeEdit
 		fnEmployeeEdit=fnEmployeeEdit(eno)
@@ -1782,17 +1783,26 @@ fnend
 		library 'S:\Payroll\fn\dedNames.br': fnDedNames
 		fnDedNames=fnDedNames(mat fullname$, mat abrevname$,mat dedcode,mat calcode,mat dedfed,mat dedfica,mat dedst,mat deduc,mat gl$,doWrite)
 	fnend
-	def library fnprint_designed_report(rptn)
-		library 'S:\acsPR\newprRptS1.br': fnprint_designed_report
-		fnprint_designed_report=fnprint_designed_report(rptn)
+	def library fnPrintCustomReport(rptN)
+		! library 'S:\acsPR\newprRptS1.br': fnPrintCustomReport
+		library 'S:\Payroll\fn\printCustomReport.br': fnPrintCustomReport
+		fnPrintCustomReport=fnPrintCustomReport(rptN)
 	fnend
-	def library fnpayroll_register_2(; det,include_tips_in_other_wh,append_reg1,ppdOverride)
-		library 'S:\acsPR\newprreg2.br': fnpayroll_register_2
-		fnpayroll_register_2=fnpayroll_register_2( det,include_tips_in_other_wh,append_reg1,ppdOverride)
+	def library fnCustomReportProofList
+		library 'S:\Payroll\User Designed Reports Proof List.br': fnCustomReportProofList
+		fnCustomReportProofList=fnCustomReportProofList
+	fnend
+	def library fnPayrollRegister2(; det,include_tips_in_other_wh,append_reg1,ppdOverride)
+		library 'S:\acsPR\newprreg2.br': fnPayrollRegister2
+		fnPayrollRegister2=fnPayrollRegister2( det,include_tips_in_other_wh,append_reg1,ppdOverride)
+	fnend
+	def library fnSsRateEmployee
+		library 'S:\acsPR\ss_emp.br': fnss_employee
+		fnSsRateEmployee=fnss_employee*.01
 	fnend
 	def library fnss_employee
 		library 'S:\acsPR\ss_emp.br': fnss_employee
-		fnss_employee=fnss_employee=fnss_employee
+		fnss_employee=fnss_employee
 	fnend
 	def library fnss_employer
 		library 'S:\acsPR\ss_emp.br': fnss_employer

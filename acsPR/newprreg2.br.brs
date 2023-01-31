@@ -5,9 +5,9 @@ det=0
 fn_payroll_register_2(det)
 Xit: fnXit
 
-def library fnpayroll_register_2(; det,include_tips_in_other_wh,append_reg1,ppdOverride)
+def library fnPayrollRegister2(; det,include_tips_in_other_wh,append_reg1,ppdOverride)
 	fn_setup
-	fnpayroll_register_2=fn_payroll_register_2( det,include_tips_in_other_wh,append_reg1,ppdOverride)
+	fnPayrollRegister2=fn_payroll_register_2( det,include_tips_in_other_wh,append_reg1,ppdOverride)
 fnend
 def fn_payroll_register_2(; det,include_tips_in_other_wh,append_reg1,ppdOverride)
 	! DET=1 if you dont want details printed but you want department totals.
@@ -40,7 +40,7 @@ def fn_payroll_register_2(; det,include_tips_in_other_wh,append_reg1,ppdOverride
 	end if
 	fnDedNames(mat fullname$,mat abbrevname$,mat newdedcode,mat newcalcode,mat newdedfed,mat dedfica,mat dedst,mat deduc)
 
-	ssr1=fnss_employee*.01
+	ssr1=fnSsRateEmployee
 	ssr2=fnss_employer*.01
 	open #hCompany=fnH: "Name=[Q]\PRmstr\Company.h[cno],Shr",i,i
 	dim sucrat(10)
