@@ -241,13 +241,13 @@ def fn_setup
 	
 	dim fullname$(20)*20
 	dim abbrevname$(20)*20
-	dim newdedcode(20)  ! unused in this program
+	dim deductionCode(20)  ! unused in this program
 	dim newcalcode(20)  ! unused in this program
 	dim newdedfed(20)
 	dim dedfica(20)
 	dim dedst(20)
 	dim deduc(20)
-	fnDedNames(mat fullname$,mat abbrevname$,mat newdedcode,mat newcalcode,mat newdedfed,mat dedfica,mat dedst,mat deduc)
+	fnDedNames(mat fullname$,mat abbrevname$,mat deductionCode,mat newcalcode,mat newdedfed,mat dedfica,mat dedst,mat deduc)
 	
 fnend
 include: fn_open

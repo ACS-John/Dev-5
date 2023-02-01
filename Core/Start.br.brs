@@ -658,7 +658,7 @@ def fn_h(; ___,returnN,hMaybe)
 		end if
 		hMaybe-=1
 	loop until hMaybe=-1
-	pr 'fn_h found no available file handles, so it is returning -1' : pause
+	pr 'fnH found no available file handles, so it is returning -1' : pause
 	Hfinis: !
 	fn_h=returnN
 fnend

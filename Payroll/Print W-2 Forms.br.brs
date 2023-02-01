@@ -14,7 +14,7 @@
 	dim a$(3)*40
 	dim empId$*12,controlNumber$*12
 	dim d$(10)*8,e$(10)*12
-	dim newdedfed(20),newdedcode(20)
+	dim newdedfed(20),deductionCode(20)
 	dim newcalcode(20),dedfica(20),dedst(20),deduc(20),fullname$(20)*20
 	dim abrevname$(20)*8
 	dim dedcode$(20)*2,dedyn$(20)*5
@@ -35,7 +35,7 @@
 	for j=1 to 3: a$(j)=a$(j)(1:30): next j
 	close #hCompany:
 
-	fnDedNames(mat fullname$,mat abrevname$,mat newdedcode,mat newcalcode,mat newdedfed,mat dedfica,mat dedst,mat deduc)
+	fnDedNames(mat fullname$,mat abrevname$,mat deductionCode,mat newcalcode,mat newdedfed,mat dedfica,mat dedst,mat deduc)
 
 	dim w2box12Opt$(0)*3
 	mat w2box12Opt$(0)
@@ -193,8 +193,8 @@ do ! r: main loop
 		dedfica=0
 		dedret=0
 		for dedItem=1 to 20
-			if newdedfed(dedItem)>=1 and newdedcode(dedItem)=1 then dedret=dedret+tcp(dedItem+4)
-			if dedfica(dedItem)=1 and newdedcode(dedItem)=1 then dedfica=dedfica+tcp(dedItem+4)
+			if newdedfed(dedItem)>=1 and deductionCode(dedItem)=1 then dedret=dedret+tcp(dedItem+4)
+			if dedfica(dedItem)=1 and deductionCode(dedItem)=1 then dedfica=dedfica+tcp(dedItem+4)
 			miscded(dedItem)=miscded(dedItem)+tcp(dedItem+4)
 		next dedItem
 		w(1)+=tcp(1) ! FED W/H YTD

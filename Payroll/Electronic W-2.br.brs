@@ -10,7 +10,7 @@ on error goto Ertn
 fnTop(program$)
  
 	dim em$(3)*30,ss$*11,tcp(32),tmp$*128
-	dim tdc(10),newdedcode(20),newcalcode(20),newdedfed(20),dedfica(20)
+	dim tdc(10),deductionCode(20),newcalcode(20),newdedfed(20),dedfica(20)
 	dim dedst(20),deduc(20),abrevname$(20)*8,fullname$(20)*20
 	dim a$(3)*40,federal_id$*12,s2(2)
 	dim w3(2),i2(2),t2(2)
@@ -30,7 +30,7 @@ fnTop(program$)
 	disable=1 !
 	med$="Y"
 ! /r
-	fnDedNames(mat fullname$,mat abrevname$,mat newdedcode,mat newcalcode,mat newdedfed,mat dedfica,mat dedst,mat deduc)
+	fnDedNames(mat fullname$,mat abrevname$,mat deductionCode,mat newcalcode,mat newdedfed,mat dedfica,mat dedst,mat deduc)
 	open #hEmployee=fnH: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr",i,i,k
 	open #hChecks=fnH: "Name=[Q]\PRmstr\payrollchecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno]",i,outIn,k
 ! r: initialize variables

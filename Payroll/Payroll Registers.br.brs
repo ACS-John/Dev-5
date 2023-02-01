@@ -9,13 +9,13 @@
 	! pr 'before fndednames' : pause
 	dim fullname$(20)*20
 	dim abrevname$(20)
-	dim newdedcode(20)
+	dim deductionCode(20)
 	dim newcalcode(20)
 	dim newdedfed(20)
 	dim dedfica(20)
 	dim dedst(20)
 	dim deduc(20)
-	fnDedNames(mat fullname$,mat abrevname$,mat newdedcode,mat newcalcode,mat newdedfed,mat dedfica,mat dedst,mat deduc)
+	fnDedNames(mat fullname$,mat abrevname$,mat deductionCode,mat newcalcode,mat newdedfed,mat dedfica,mat dedst,mat deduc)
 	fncreg_read('CL Bank Code',bankcode$) : bankcode=val(bankcode$) : if bankcode=0 then bankcode=1
  
 	newdedcode_Deduct =1
@@ -128,15 +128,15 @@ LoopTop: ! r: main loop
 	EoCheck1: !
 	other_wh=-tcp(25)
 	for j=5 to 24
-		if newdedcode(j-4)=newdedcode_Benefit then
+		if deductionCode(j-4)=newdedcode_Benefit then
 			! do nothing
-		else if newdedcode(j-4)=newdedcode_Add then
+		else if deductionCode(j-4)=newdedcode_Add then
 			other_wh=other_wh-tcp(j) ! if break_is_on and tcp(j)<>0 then pr 'tcp('&str$(j)&') deducts '&str$(tcp(j))
-		else if newdedcode(j-4)=newdedcode_Deduct then
+		else if deductionCode(j-4)=newdedcode_Deduct then
 			other_wh=other_wh+tcp(j) ! if break_is_on and tcp(j)<>0 then pr 'tcp('&str$(j)&')    adds '&str$(tcp(j))
 		else ! default to behave like a deduction
 			other_wh=other_wh+tcp(j)
-			! pr 'newdedcode('&str$(j-4)&')='&str$(newdedcode(j-4))&' which is invalid.'
+			! pr 'deductionCode('&str$(j-4)&')='&str$(deductionCode(j-4))&' which is invalid.'
 			! pr bell
 			! pause
 		end if

@@ -74,7 +74,7 @@ def fn_printCustomReport(reportSelectedN; ___,reportSelected$*2,rt$*78)
 		! if a(j) then
 			if ~a(j) then goto NextJ
 
-			if a(j)<30 then 
+			if a(j)<30 then
 				l19900$=rtrm$(l19900$)&ty$(a(j),1)
 				l20010$=rtrm$(l20010$)&ty$(a(j),1)
 			else
@@ -156,11 +156,11 @@ def fn_printCustomReport(reportSelectedN; ___,reportSelected$*2,rt$*78)
 	pr #hBrs,using Fc: '21200 goto EOF1'
 	pr #hBrs,using Fc: '20100 ! Check for Totals to pr ______________'
 	pr #hBrs,using Fc: '19899 L19899: if tdep=1 then goto F_Pr_Out'
-	if ips=0 then goto L2210
+	if ips=0 then goto L20001
 	lf1=len(rtrm$(ty$(ips,1)))-1 : lf2=len(rtrm$(ty$(ips,4)))-1
 	! pr #hBrs,using Fc: '19801 ipsw=0'
 	if ips>24 and ips<104 then
-		goto L2140
+		goto L19832
 	else
 		pr #hBrs,using Fc: '19811 For j=1 to 100'
 		pr #hBrs,using Fc: '19812 if psc(1)=-1 and TY$(IPS,1)(1:LF1)<>'''' then goto L19817'
@@ -169,9 +169,9 @@ def fn_printCustomReport(reportSelectedN; ___,reportSelected$*2,rt$*78)
 		pr #hBrs,using Fc: '19815 next j'
 		pr #hBrs,using Fc: '19816 goto L19804'
 		pr #hBrs,using Fc: '19817 L19817: ipsw=1'
-		goto L2210
+		goto L20001
 	end if
-	L2140: !
+	L19832: !
 		pr #hBrs,using Fc: '19832 for j=1 to 100'
 		pr #hBrs,using Fc: '19833   if psc(j)=0  or (psc(1)=-1 and ty$(ips,1)(1:lf1)<>'''') then goto L19836'
 		pr #hBrs,using Fc: '19834   if '&ty$(ips,1)(1:lf1)&'= psc(j) then goto L19838'
@@ -179,17 +179,19 @@ def fn_printCustomReport(reportSelectedN; ___,reportSelected$*2,rt$*78)
 		pr #hBrs,using Fc: '19836 L19836: if ipsw=0 then ipsw=9'
 		pr #hBrs,using Fc: '19837 goto L19804'
 		pr #hBrs,using Fc: '19838 L19838: ipsw=1'
-	L2210: !
+	L20001: !
 		pr #hBrs,using Fc: '20001 if ips=0 or ipsw=1 then goto L20010 else goto L20020'
 		close #hBrs:
 		dim procName$*256
 		procName$='[Temp]\Launch Custom Report - [acsuserid].proc'
 		fnWriteProc(procName$	,'Load "[Q]\PRmstr\Tmp_Custom_Report-[Session]-brs.h[cno]",Source')
 		fnWriteProc(''       	,'Run')
-		pr 'just before proc='&procName$ : pause
+		! pr 'just before proc='&procName$ : pause
+
 	chain 'Proc='&procName$
+
 	PdrXit: !
-	pr 'encountered PdrXit' : pause
+	! pr 'encountered PdrXit' : pause
 fnend
 	PcrReportsNoKey: ! r: no records on file
 	! if reportSelectedN=0 then goto Xit

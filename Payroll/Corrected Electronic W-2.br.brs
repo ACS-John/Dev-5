@@ -8,7 +8,7 @@
 	on error goto Ertn
 !
 	dim em$(3)*30,ss$*11,d(14),tcp(32),s(9),t(9),z$*8,message$*40
-	dim tdc(10),newdedcode(20),newcalcode(20),newdedfed(20),dedfica(20)
+	dim tdc(10),deductionCode(20),newcalcode(20),newdedfed(20),dedfica(20)
 	dim dedst(20),deduc(20),abrevname$(20)*8,fullname$(20)*20
 	dim a$(3)*40
 	dim b$*12
@@ -226,7 +226,7 @@ L1930: if cmdkey=5 then goto Xit
 	win=101
 	message$=""
 !
-	fnDedNames(mat fullname$,mat abrevname$,mat newdedcode,mat newcalcode,mat newdedfed,mat dedfica,mat dedst,mat deduc)
+	fnDedNames(mat fullname$,mat abrevname$,mat deductionCode,mat newcalcode,mat newdedfed,mat dedfica,mat dedst,mat deduc)
 	open #1: "Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr",i,i,k
 ! Open #2: "Name=[Q]\PRmstr\RPTRAIL.h[cno],Shr",i,i,r
 	open #4: "Name=[Q]\PRmstr\payrollchecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno]",i,outIn,k

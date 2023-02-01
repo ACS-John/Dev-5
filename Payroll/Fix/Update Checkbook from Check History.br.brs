@@ -77,7 +77,7 @@ WRITE_TRALLOC: !
 		if j>4 and j<25 then tragl$=gl$(j-4): tradesc$=fullname$(j-4)
 		if j=25 then tragl$=gln$(14) : tradesc$='EIC'
 		traamt=-tcp(j)
-		if j>4 and j<25 and newdedcode(j-4)>1 then traamt=-traamt
+		if j>4 and j<25 and deductionCode(j-4)>1 then traamt=-traamt
 		if traamt=0 then goto NXTJ
 		write #tralloc,using FM_TRALLOC: clk$,tragl$,traamt,tradesc$,traivd$,'',trapos$,tragde
 		FM_TRALLOC: form pos 1,c 11,c 12,pd 5.2,c 30,g 6,c 3,c 12,n 1
@@ -96,13 +96,13 @@ WR_SSMATCH: write #tralloc,using FM_TRALLOC: clk$,tragl$,traamt,tradesc$,traivd$
 	rewrite #12,using FM_BANK,rec=1: bn$,bal
 END_CHECK_RECORD: return
 ReadCompany: ! r:
-	dim fullname$(20)*20,abrevname$(20)*8,newcalcode(20),newdedfed(20),dedfica(20),dedst(20),deduc(20),newdedcode(20),gl$(20)*12
+	dim fullname$(20)*20,abrevname$(20)*8,newcalcode(20),newdedfed(20),dedfica(20),dedst(20),deduc(20),deductionCode(20),gl$(20)*12
 	open #1: 'Name=[Q]\PRmstr\Company.h[cno]',i,outi,r
 	read #1,using F_company,rec=1: mat a$,fid$,mcr,mcm,feducrat,mat d$,loccode,feducmax,ficarate,ficamaxw,ficawh,mat m,mat r,mat e$,mat gln$,gli,mat dedcode,mat calcode,mat dedfed,mat rpnames2$
 	F_company: form pos 1,3*c 40,c 12,pd 6.3,pd 6.2,pd 5.2,10*c 8,n 2,pd 4.2,pd 3.3,12*pd 4.2,10*pd 3.3,25*c 12,31*n 1,10*c 6,3*pd 4.3,3*pd 3.2,4*pd 4.2,n 1,2*c 6,n 2
 	close #1:
 	READNAMES: !
-	fnDedNames(mat fullname$,mat abrevname$,mat newdedcode,mat newcalcode,mat newdedfed,mat dedfica,mat dedst,mat deduc,mat gl$)
+	fnDedNames(mat fullname$,mat abrevname$,mat deductionCode,mat newcalcode,mat newdedfed,mat dedfica,mat dedst,mat deduc,mat gl$)
 	FM_DNAM: form pos 1,20*c 20,20*c 8,120*n 1,20*c 12
 	close #2:
 return ! /r

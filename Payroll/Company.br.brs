@@ -36,14 +36,14 @@ close #1:
 
 dim fullname$(20)*20
 dim abrevname$(20)*8
-dim newdedcode(20)
+dim deductionCode(20)
 dim newcalcode(20)
 dim newdedfed(20)
 dim dedFica(20)
 dim dedSt(20)
 dim dedUc(20)
 dim dedGl$(20)*12
-fnDedNames(mat fullname$,mat abrevname$,mat newdedcode,mat newcalcode,mat newdedfed,mat dedFica,mat dedSt,mat dedUc,mat dedGl$)
+fnDedNames(mat fullname$,mat abrevname$,mat deductionCode,mat newcalcode,mat newdedfed,mat dedFica,mat dedSt,mat dedUc,mat dedGl$)
 goto Screen1 ! /r
 
 Screen1: ! r:
@@ -154,8 +154,8 @@ Screen2: ! r:
 		fnTxt(j+5,pos_col(3),8,0,left,'',0,'Enter an abbreviated name that will be used in report headings.',0 )
 		resp$(resp+=1)=abrevname$(j)
 		fnComboA('MiscDeduct',j+5,pos_col(4),mat optDedOrAddType$,'Indicate whether the amont should be deducted from the check or added to the check.',6)
-		if newdedcode(j)=0 then newdedcode(j)=1
-		resp$(resp+=1)=optDedOrAddType$(newdedcode(j))
+		if deductionCode(j)=0 then deductionCode(j)=1
+		resp$(resp+=1)=optDedOrAddType$(deductionCode(j))
 		fnComboA('std_or_percent',j+5,pos_col(5),mat opt_std_or_percent$,'Standard would a fixed amount each pay period.  Percent would indicate the deduction is a percent of gross pay.',8)
 		if newcalcode(j)=0 then newcalcode(j)=1 ! stop subscript error
 		resp$(resp+=1)=opt_std_or_percent$(newcalcode(j))
@@ -177,10 +177,10 @@ Screen2: ! r:
 	for j=1 to 20
 		fullname$(j)=resp$(resp+=1)
 		abrevname$(j)=resp$(resp+=1)
-		if resp$(resp+=1)=optDedOrAddType$(1) then newdedcode(j)=1 ! deduction
-		if resp$(resp)=optDedOrAddType$(2) then newdedcode(j)=2 ! addition
-		if resp$(resp)=optDedOrAddType$(3) then newdedcode(j)=3 ! benefit
-		if resp$(resp)=optDedOrAddType$(4) then newdedcode(j)=4 ! Add Gross
+		if resp$(resp+=1)=optDedOrAddType$(1) then deductionCode(j)=1 ! deduction
+		if resp$(resp)=optDedOrAddType$(2) then deductionCode(j)=2 ! addition
+		if resp$(resp)=optDedOrAddType$(3) then deductionCode(j)=3 ! benefit
+		if resp$(resp)=optDedOrAddType$(4) then deductionCode(j)=4 ! Add Gross
 		if resp$(resp+=1)=opt_std_or_percent$(1) then newcalcode(j)=1
 		if resp$(resp)=opt_std_or_percent$(2) then newcalcode(j)=2 ! percent method of calucalating
 		if resp$(resp+=1)='True' then newdedfed(j)=1 else newdedfed(j)=0
@@ -370,7 +370,7 @@ Finis: ! r:
 	ssmax=ssmax*.1
 	rewrite #hCompany,using fPrCompany$,rec=1: mat a$,fid$,mcr,mcm,feducrat,mat d$,loccode,feducmax,ficarate,ssmax,ficawh,mat xm,mat xr,mat e$,mat gln$,gli,mat dedcode,mat calcode,mat dedfed,mat rpnames2$,mat sck,vacm,mhw,mat wcm,tc,mat jn$,dc
 	close #hCompany:
-	fnDedNames(mat fullname$,mat abrevname$,mat newdedcode,mat newcalcode,mat newdedfed,mat dedFica,mat dedSt,mat dedUc,mat dedGl$,1)
+	fnDedNames(mat fullname$,mat abrevname$,mat deductionCode,mat newcalcode,mat newdedfed,mat dedFica,mat dedSt,mat dedUc,mat dedGl$,1)
 goto Xit ! /r
 
 Xit: fnXit

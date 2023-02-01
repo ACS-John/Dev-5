@@ -61,8 +61,6 @@ def library fnDedNames(mat fullName$; mat abrevName$,mat dedcode,mat calcode,mat
 		for abrevnameItem=1 to udim(mat abrevName$)
 			abrevName$(abrevnameItem)=cache_abrevName$(abrevnameItem) soflow ignore
 		nex abrevnameItem
-	! else
-	! 	pr 'not passed abrevName$'
 	end if
 	if fnArrayWasPassedN(mat dedcode	) then mat dedcode(udim(mat cache_dedcode))	: mat dedcode=cache_dedcode
 	if fnArrayWasPassedN(mat calcode	) then mat calcode(udim(mat cache_calcode))	: mat calcode=cache_calcode
