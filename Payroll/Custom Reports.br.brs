@@ -1,5 +1,3 @@
-! formerly S:\acsPR\newprRpt3
-
 autoLibrary
 fnTop(program$)
 on error goto Ertn
