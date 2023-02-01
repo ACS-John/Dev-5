@@ -181,7 +181,7 @@ fnend
 CREATENAMES: ! r:
 	dim a$(3)*40,d$(10)*8,r(10),e$(10)*12,gln$(15)*12,dedcode(10),calcode(10)
 	dim dedfed(10),rpnames2$(10)*6
-	dim fullname$(20)*20,abrevname$(20)*8,newdedcode(20),newcalcode(20)
+	dim fullname$(20)*20,abrevname$(20)*8,deductionCode(20),newcalcode(20)
 	dim newdedfed(20),dedfica(20),dedst(20),deduc(20),gl$(20)*12
 	if exists('[Q]\PRmstr\PRCOINFO.h[cno]') and ~exists('[Q]\PRmstr\Company.h[cno]') then 
 		execute 'Rename [Q]\PRmstr\PRCOINFO.h[cno]'&' '&'[Q]\PRmstr\Company.h[cno]'
@@ -190,7 +190,7 @@ CREATENAMES: ! r:
 	read #h_company,using 'form pos 1,3*C 40,C 12,PD 6.3,PD 6.2,PD 5.2,10*C 8,N 2,PD 4.2,PD 3.3,12*PD 4.2,10*PD 3.3,25*C 12,31*N 1,10*C 6,3*PD 4.3,3*PD 3.2,4*PD 4.2,N 1,2*C 6,N 2': mat a$,fid$,mcr,mcm,feducrat,mat d$,loccode,feducmax,ficarate,ficamaxw,ficawh,mat m,mat r,mat e$,mat gln$,gli,mat dedcode,mat calcode,mat dedfed,mat rpnames2$ ! eof L370 ioerr L330
 	close #h_company: 
 	for j=1 to 10
-		newdedcode(j)=dedcode(j)
+		deductionCode(j)=dedcode(j)
 		if dedfed(j)>0 then newdedfed(j)=1
 		newcalcode(j)=calcode(j)
 		fullname$(j)=rpnames2$(j)
@@ -200,7 +200,7 @@ CREATENAMES: ! r:
 		gl$(j)=gln$(j+3)
 	next j
 	close #h_rptrail: ioerr ignore
-	fnDedNames(mat fullname$,mat abrevname$,mat newdedcode,mat newcalcode,mat newdedfed,mat dedfica,mat dedst,mat deduc,mat gl$,1)
+	fnDedNames(mat fullname$,mat abrevname$,mat deductionCode,mat newcalcode,mat newdedfed,mat dedfica,mat dedst,mat deduc,mat gl$,1)
 return  ! /r
 CKHIST_READ_CONV: ! r:
 	reread #h_prckhist,using 'form pos 1,n 8,n 6,n 7,5*pd 3.2,pd 4.2,22*pd 5.2': heno,prd,ckno,mat tdc,mat tcp eof TOPOFLOOP conv L1820

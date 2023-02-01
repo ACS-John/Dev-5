@@ -2,8 +2,8 @@ fn_setup
 fnTop(program$)
 	dim dednames$(20)*20
 	dim abrevname$(20)*8
-	dim newdedcode(20)
-	fnDedNames(mat dednames$,mat abrevname$,mat newdedcode)
+	dim deductionCode(20)
+	fnDedNames(mat dednames$,mat abrevname$,mat deductionCode)
 	dim tran$(0)*128,tranN(0),csz$*30
 	hTran=fn_openFio('PR Transaction',mat tran$,mat tranN)
 		

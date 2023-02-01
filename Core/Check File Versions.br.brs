@@ -820,20 +820,20 @@ def fn_cfv_payroll
 
 	! r: DedNames.h setup
 	! if exists('[Q]\PRmstr\dednames.h[cno]')=0 then
-	dim pr_dednames_fullname$(20)*20
-	dim pr_dednames_abrevname$(20)*8
-	dim pr_dednames_newcalcode(20)
-	dim pr_dednames_newdedfed(20)
-	dim pr_dednames_newdedcode(20)
-	dim pr_dednames_dedfica(20)
-	dim pr_dednames_dedst(20)
-	dim pr_dednames_deduc(20)
-	dim pr_dednames_gl$(20)*12
-	open #h_dednames=fnH: 'Name=[Q]\PRmstr\dednames.h[cno],RecL=920,use',i,outi,r
-	if lrec(h_dednames)=0 then
-		write #h_dednames,using 'form pos 1,20*c 20,20*c 8,120*n 1,20*c 12': mat pr_dednames_fullname$,mat pr_dednames_abrevname$,mat pr_dednames_newdedcode,mat pr_dednames_newcalcode,mat pr_dednames_newdedfed,mat pr_dednames_dedfica,mat pr_dednames_dedst,mat pr_dednames_deduc,mat pr_dednames_gl$
+	open #hDedNames=fnH: 'Name=[Q]\PRmstr\dednames.h[cno],RecL=920,use',i,outi,r
+	if lrec(hDedNames)=0 then
+		dim pr_dednames_fullname$(20)*20
+		dim pr_dednames_abrevname$(20)*8
+		dim pr_dednames_newcalcode(20)
+		dim pr_dednames_newdedfed(20)
+		dim pr_dednames_newdedcode(20)
+		dim pr_dednames_dedfica(20)
+		dim pr_dednames_dedst(20)
+		dim pr_dednames_deduc(20)
+		dim pr_dednames_gl$(20)*12
+		write #hDedNames,using 'form pos 1,20*c 20,20*c 8,120*n 1,20*c 12': mat pr_dednames_fullname$,mat pr_dednames_abrevname$,mat pr_dednames_newdedcode,mat pr_dednames_newcalcode,mat pr_dednames_newdedfed,mat pr_dednames_dedfica,mat pr_dednames_dedst,mat pr_dednames_deduc,mat pr_dednames_gl$
 	end if
-	close #h_dednames: ioerr ignore
+	close #hDedNames: ioerr ignore
 	! end if
 	! /r
 	PrGlindex: !

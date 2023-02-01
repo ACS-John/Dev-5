@@ -10,7 +10,7 @@ dim tcp(32),tdc(10),resp$(70)*50
 dim w(13),a$(3)*40,b$*12,g$*12,d$(10)*8,tty(10),e$(10)*12
 dim oldw(13)
 dim heading$*50
-dim fa$(2),fb$(1),fc$(1),fd$(1),l$(10),newdedfed(20),newdedcode(20)
+dim fa$(2),fb$(1),fc$(1),fd$(1),l$(10),newdedfed(20),deductionCode(20)
 dim abrevname$(20)*8
 dim in4$(30)
 dim dedcode$(20)*2
@@ -24,7 +24,7 @@ for j=1 to 3: a$(j)=a$(j)(1:30): next j
 close #1:
 dim fullname$(20)*20,newcalcode(20)
 dim dedfica(20),dedst(20),deduc(20)
-fnDedNames(mat fullname$,mat abrevname$,mat newdedcode,mat newcalcode,mat newdedfed,mat dedfica,mat dedst,mat deduc)
+fnDedNames(mat fullname$,mat abrevname$,mat deductionCode,mat newcalcode,mat newdedfed,mat dedfica,mat dedst,mat deduc)
 DATE_SCREEN: !
 L290: fnTos
 	rc=cf=0: mylen=25 : mypos=mylen+3
@@ -160,8 +160,8 @@ L1270: state$=d$(tcd)(1:2)
 L1290: dedfica=0
 	dedret=0
 	for j=1 to 20
-		if newdedfed(j)>=1 and newdedcode(j)=1 then dedret=dedret+tcp(j+4)
-		if dedfica(j)=1 and newdedcode(j)=1 then dedfica=dedfica+tcp(j+4)
+		if newdedfed(j)>=1 and deductionCode(j)=1 then dedret=dedret+tcp(j+4)
+		if dedfica(j)=1 and deductionCode(j)=1 then dedfica=dedfica+tcp(j+4)
 		miscded(j)=miscded(j)+tcp(j+4)
 	next j
 ! tDEDRET=TDEDRET+DEDRET ! ACCUMULATE BOX 13 RETIREMENT; THIS LINE WILL ONLY WORK IF NO CAFETERIA; REMOVE ! OFF 861 AND 882 FOR RETIREMENT ONLY ! can change 882 only if know specific ded to show in box 13

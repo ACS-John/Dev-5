@@ -133,7 +133,7 @@ ReadTimesheet: ! r:  read rpwork, read employee, call calc deduction etc  basica
 			do
 				for j=1 to 20
 					if (j+9)=17 and (env$('client')='Payroll Done Right') then goto L3090 ! if processing xInp(17) skip IT do not process it.   ! env$('client')='West Accounting' or
-					if newdedfed(j)>=1 and newdedcode(j)=newdedcode_Deduct then
+					if newdedfed(j)>=1 and deductionCode(j)=newdedcode_Deduct then
 						! r:  department.tdc1  State Code
 							sc1=1
 							read #hDepartment,using 'form pos 48,n 2',key=deptKey$: sc1 nokey ignore
@@ -218,7 +218,7 @@ ReadTimesheet: ! r:  read rpwork, read employee, call calc deduction etc  basica
 		dim caf(20)
 		fn_determineEarnings(hPrChecks,eno, dep,begDate,endDate,mat ytdTotal,ytdFICA,ytdMedicare,ytdWages,mat caf)
 		for j=1 to 20
-			if newdedfed(j)=2 and newdedcode(j)=newdedcode_Deduct then
+			if newdedfed(j)=2 and deductionCode(j)=newdedcode_Deduct then
 				cafy+=caf(j)
 				cafd+=caf(j)
 			end if
@@ -302,7 +302,7 @@ ReadTimesheet: ! r:  read rpwork, read employee, call calc deduction etc  basica
 		deduc=ficat3=f3=0 ! FICA
 		sswg=sswh=mcwh=0
 		for j=1 to 20
-			if dedfica(j)=1 and newdedcode(j)=newdedcode_Deduct then
+			if dedfica(j)=1 and deductionCode(j)=newdedcode_Deduct then
 				ficat3+=xInp(j+9)
 			end if
 			if deduc(j)=1 then ! total deductions for unemployment for current period and year to date
@@ -415,14 +415,14 @@ ReadTimesheet: ! r:  read rpwork, read employee, call calc deduction etc  basica
 		tcp(31)=gpd
 		tcp(32)=gpd-tcp(1)-tcp(2)-tcp(3) ! -TCP(4)
 		for j=5 to 24
-			if newdedcode(j-4)=newdedcode_Benefit then
+			if deductionCode(j-4)=newdedcode_Benefit then
 				! do nothing
-			else if newdedcode(j-4)=newdedcode_Add then
+			else if deductionCode(j-4)=newdedcode_Add then
 				tcp(32)+=tcp(j)
-			else if newdedcode(j-4)=newdedcode_AddGross then
+			else if deductionCode(j-4)=newdedcode_AddGross then
 				tcp(31)+=tcp(j)
 				tcp(32)+=tcp(j)
-			else if newdedcode(j-4)=newdedcode_Deduct then
+			else if deductionCode(j-4)=newdedcode_Deduct then
 				tcp(32)-=tcp(j)
 			end if
 		next j
@@ -2633,13 +2633,13 @@ def fn_setup
 	ficamax=ficamax*10
 	dim fullname$(20)*20
 	dim abrevname$(20)*8
-	dim newdedcode(20)
+	dim deductionCode(20)
 	dim newcalcode(20)
 	dim newdedfed(20)
 	dim dedfica(20)
 	dim dedst(20)
 	dim deduc(20)
-	fnDedNames(mat fullname$,mat abrevname$,mat newdedcode,mat newcalcode,mat newdedfed,mat dedfica,mat dedst,mat deduc)
+	fnDedNames(mat fullname$,mat abrevname$,mat deductionCode,mat newcalcode,mat newdedfed,mat dedfica,mat dedst,mat deduc)
 	ssmax=ficamax : mcmax=ficamx2 : ficar1=ficarate*.01
 	ficar2=ficar2*.01 : ficarate=ficar1+ficar2
 	ficamxr=ficamax*ficarate : ficamx2=(ficamx2-ficamax)*ficar2
@@ -2650,10 +2650,10 @@ def fn_setup
 	!   saif(4)=40
 	! end if
 
-	newdedcode_Deduct =1
-	newdedcode_Add    =2
-	newdedcode_Benefit=3
-	newdedcode_AddGross=4
+	newdedcode_Deduct  	=1
+	newdedcode_Add     	=2
+	newdedcode_Benefit 	=3
+	newdedcode_AddGross	=4
 
 	esw_federal =1 ! enums for disableWithholdingN
 	esw_state   =2 ! enums for disableWithholdingN

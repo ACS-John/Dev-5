@@ -10,10 +10,10 @@ autoLibrary
 	dim cp(32)
 	dim printline1(20)
   dim printline1(20),printline2(20),dedname$(20)*8
-  dim fullname$(20)*20,abbrevname$(20)*8, newdedcode(20)
+  dim fullname$(20)*20,abbrevname$(20)*8, deductionCode(20)
 !
   fnTop(program$)
-  fnDedNames(mat fullname$,mat abbrevname$,mat newdedcode)
+  fnDedNames(mat fullname$,mat abbrevname$,mat deductionCode)
 	d1=fnPayPeriodEndingDate
   open #4: "Name=[Q]\PRmstr\payrollchecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno]",i,outIn,k
 ! r: setup mat name$, mat dedname$, numberded1, numberded2
@@ -94,8 +94,8 @@ START_REPORT: !  r: main report loop
   next j
   L830: totTemp=0
   for j=1 to 20
-    if newdedcode(j)=3 then goto L900
-    if newdedcode(j)=1 then goto L890
+    if deductionCode(j)=3 then goto L900
+    if deductionCode(j)=1 then goto L890
     totTemp=totTemp-rpTemp(j+4)
     goto L900
     L890: totTemp=totTemp+rpTemp(j+4)

@@ -57,8 +57,8 @@ def fn_checkfile(hact$*8,hCheckIdx3,hCheckIdx1,hEmployee)
 	end if
 	dim dednames$(20)*20
 	dim abrevname$(20)*8
-	dim newdedcode(20)
-	fnDedNames(mat dednames$,mat abrevname$,mat newdedcode)
+	dim deductionCode(20)
+	fnDedNames(mat dednames$,mat abrevname$,mat deductionCode)
 	mat hf=(1)
 	for j=1 to 20
 		if trim$(dednames$(j))="" then hf(j+25)=0 ! default the (All) to only those deductions that have names
@@ -283,11 +283,11 @@ def fn_checkfile(hact$*8,hCheckIdx3,hCheckIdx1,hEmployee)
 			testNetCalculated=testGross
 			testnetcalculated-=sum(mat tcp(1:4)) 
 			for testDeductionItem=1 to udim(mat dednames$)
-				if newdedcode(testDeductionItem)=1 then ! deduction
+				if deductionCode(testDeductionItem)=1 then ! deduction
 					testNetCalculated-=tcp(testDeductionItem+4)
-				else if newdedcode(testDeductionItem)=2 then ! addition
+				else if deductionCode(testDeductionItem)=2 then ! addition
 					testNetCalculated+=tcp(testDeductionItem+4)
-				else if newdedcode(testDeductionItem)=3 then ! benefit
+				else if deductionCode(testDeductionItem)=3 then ! benefit
 					! no change
 				end if
 			next testDeductionItem

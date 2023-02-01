@@ -16,7 +16,7 @@ def fn_payroll_register_2(; det,include_tips_in_other_wh,append_reg1,ppdOverride
 	dim a$*40,em$*30,cp(32),tcp(32),hc(5),thc(5),whc(10),gcp(32)
 	dim tdc(10),fullname$(20)*20,abbrevname$(20)*20
 	dim dedcode(10),calcode(10),dedfed(10)
-	dim newdedcode(20),newcalcode(20),newdedfed(20),dedfica(20),dedst(20),deduc(20)
+	dim deductionCode(20),newcalcode(20),newdedfed(20),dedfica(20),dedst(20),deduc(20)
 	dim statewh(10),totaltcp(32),totalthc(5),deptname$*20
 	dim stuc1(10),stuc2(10),err$(3)*65
 
@@ -38,7 +38,7 @@ def fn_payroll_register_2(; det,include_tips_in_other_wh,append_reg1,ppdOverride
 		d1$=cnvrt$("pic(zzzzzzzz)",fnPayPeriodEndingDate)
 		ppd=val(d1$(5:6))*10000+val(d1$(7:8))*100+val(d1$(3:4))
 	end if
-	fnDedNames(mat fullname$,mat abbrevname$,mat newdedcode,mat newcalcode,mat newdedfed,mat dedfica,mat dedst,mat deduc)
+	fnDedNames(mat fullname$,mat abbrevname$,mat deductionCode,mat newcalcode,mat newdedfed,mat dedfica,mat dedst,mat deduc)
 
 	ssr1=fnSsRateEmployee
 	ssr2=fnss_employer*.01
@@ -85,18 +85,18 @@ def fn_payroll_register_2(; det,include_tips_in_other_wh,append_reg1,ppdOverride
 	oi=cp(27)+cp(28)+cp(29)+cp(30)
 	t3=t4=0
 	for j=5 to 24
-		if newdedcode(j-4)<>3 then
+		if deductionCode(j-4)<>3 then
 
-			if newdedcode(j-4)=2 then
+			if deductionCode(j-4)=2 then
 				other_wh=other_wh-cp(j) ! if break_is_on and cp(j)<>0 then pr 'cp('&str$(j)&') deducts '&str$(cp(j))
 			else
 				other_wh=other_wh+cp(j) ! if break_is_on and cp(j)<>0 then pr 'cp('&str$(j)&')    adds '&str$(cp(j))
 			end if
 
-			if newdedcode(j-4)=1 and newdedfed(j-4)=2 then
+			if deductionCode(j-4)=1 and newdedfed(j-4)=2 then
 				t3=t3+cp(j) : tt3=tt3+cp(j): gtt3=gtt3+cp(j) ! cafiteria
 				!     if env$('client')="Washington Parrish" and j=5 then totaldef=totaldef+cp(5) ! add deferred comp match and to later add to medicare wages
-			else if newdedfed(j-4)=1 and newdedcode(j-4)=1 then
+			else if newdedfed(j-4)=1 and deductionCode(j-4)=1 then
 				t4=t4+cp(j) ! retirement only
 			end if
 
@@ -160,8 +160,8 @@ P2DeartmentTotals: ! r:
 	lp+=1
 	oi=tcp(17)+tcp(18)+tcp(20)+tcp(19)
 	for j=5 to 24
-		if newdedcode(j-4)=3 then goto L1030
-		if newdedcode(j-4)=2 then other_wh=other_wh-tcp(j) else other_wh=other_wh+tcp(j)
+		if deductionCode(j-4)=3 then goto L1030
+		if deductionCode(j-4)=2 then other_wh=other_wh-tcp(j) else other_wh=other_wh+tcp(j)
 		L1030: !
 	next j
 	other_wh=other_wh-tcp(25)
@@ -218,11 +218,11 @@ P2DeartmentTotals: ! r:
 	pr #255,using F_prDtotals3: "State",tcp(4)
 	for j=1 to 20
 
-		if tcp(j+4) and newdedcode(j)=1 then
+		if tcp(j+4) and deductionCode(j)=1 then
 			pr #255,using F_prDtotals3: abbrevname$(j),tcp(j+4)
 		end if
 		! if tcp(j+4)=0 then goto L1530
-		! if newdedcode(j)<>1 then goto L1530
+		! if deductionCode(j)<>1 then goto L1530
 		! pr #255,using F_prDtotals3: abbrevname$(j),tcp(j+4)
 		! L1530: !
 
@@ -230,10 +230,10 @@ P2DeartmentTotals: ! r:
 	pr #255,using 'form skip 1,pos 12,c 30': "Additions to Net"
 	for j=1 to 20
 
-		if tcp(j+4) and newdedcode(j)=2 then
+		if tcp(j+4) and deductionCode(j)=2 then
 			pr #255,using F_prDtotals3: abbrevname$(j),tcp(j+4)
 		end if
-		! if tcp(j+4)=0 or newdedcode(j)<>2 then goto L1580
+		! if tcp(j+4)=0 or deductionCode(j)<>2 then goto L1580
 		! pr #255,using F_prDtotals3: abbrevname$(j),tcp(j+4)
 		! L1580: !
 
