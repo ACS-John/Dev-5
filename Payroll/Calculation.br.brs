@@ -132,33 +132,20 @@ ReadTimesheet: ! r:  read rpwork, read employee, call calc deduction etc  basica
 			totalGrossPay=t3=ded=0
 			do
 				for j=1 to 20
-					if (j+9)=17 and (env$('client')='Payroll Done Right') then goto L3090 ! if processing xInp(17) skip IT do not process it.   ! env$('client')='West Accounting' or
-					if newdedfed(j)>=1 and deductionCode(j)=newdedcode_Deduct then
+					if (j+9)=17 and env$('client')='Payroll Done Right' then goto L3090 ! if processing xInp(17) skip IT do not process it.   ! env$('client')='West Accounting' or
+					if newdedfed(j)>=1 and deductionCode(j)=dc_deduct then
 						! r:  department.tdc1  State Code
 							sc1=1
 							read #hDepartment,using 'form pos 48,n 2',key=deptKey$: sc1 nokey ignore
 							if sc1=0 then sc1=1
 							! If env$('client')='Washington Parrish' AND J=3 Then sD3=xInp(J+9)*(GPD+DEFCOMPMATCH)/100 : Goto 3150 ! add deferred comp to gross for calculating pension deduction
-							if newcalcode(j)=1 then
-								sd3=xInp(j+9)
-							else
-								sd3=xInp(j+9)*gpd/100
-							end if
+							if newcalcode(j)=1 then sd3=xInp(j+9) 	else  sd3=xInp(j+9)*gpd/100
 							stwh(sc1,1)=stwh(sc1,1)-sd3
-							! returnN=sc1    !    THIS IS WRONG  returnN is not valid here.
 						! /r
-						if newcalcode(j)=1 then
-							ded+=xInp(j+9)
-						else
-							ded+=xInp(j+9)*gpd/100
-						end if
+						if newcalcode(j)=1 then  ded+=xInp(j+9) 	else  ded+=xInp(j+9)*gpd/100
 					end if
 					if newdedfed(j)=2 then
-						if newcalcode(j)=1 then
-							t3+=xInp(j+9)
-						else
-							t3+=xInp(j+9)*gpd/100
-						end if
+						if newcalcode(j)=1 then   t3+=xInp(j+9) 	else   t3+=xInp(j+9)*gpd/100
 					end if
 					L3090: !
 				next j
@@ -218,7 +205,7 @@ ReadTimesheet: ! r:  read rpwork, read employee, call calc deduction etc  basica
 		dim caf(20)
 		fn_determineEarnings(hPrChecks,eno, dep,begDate,endDate,mat ytdTotal,ytdFICA,ytdMedicare,ytdWages,mat caf)
 		for j=1 to 20
-			if newdedfed(j)=2 and deductionCode(j)=newdedcode_Deduct then
+			if newdedfed(j)=2 and deductionCode(j)=dc_deduct then
 				cafy+=caf(j)
 				cafd+=caf(j)
 			end if
@@ -302,7 +289,7 @@ ReadTimesheet: ! r:  read rpwork, read employee, call calc deduction etc  basica
 		deduc=ficat3=f3=0 ! FICA
 		sswg=sswh=mcwh=0
 		for j=1 to 20
-			if dedfica(j)=1 and deductionCode(j)=newdedcode_Deduct then
+			if dedfica(j)=1 and deductionCode(j)=dc_deduct then
 				ficat3+=xInp(j+9)
 			end if
 			if deduc(j)=1 then ! total deductions for unemployment for current period and year to date
@@ -398,7 +385,7 @@ ReadTimesheet: ! r:  read rpwork, read employee, call calc deduction etc  basica
 		FicaUnEmpFinis: !
 	! /r
 	! r: FedWh_Dept        Fed WH for Dept ! Federal Withholding for Department
-		if showDetails then fnStatus('federal  withholding for department calculating')
+		if showDetails then fn_detail('federal  withholding for department calculating')
 		f4=round(fed_wh*pog,2)
 		stwh(tcd(1),1)+=gpd
 		dim tcp(32)
@@ -415,14 +402,15 @@ ReadTimesheet: ! r:  read rpwork, read employee, call calc deduction etc  basica
 		tcp(31)=gpd
 		tcp(32)=gpd-tcp(1)-tcp(2)-tcp(3) ! -TCP(4)
 		for j=5 to 24
-			if deductionCode(j-4)=newdedcode_Benefit then
+			dc=deductionCode(j-4)
+			if deductionCode(j-4)=dc_benefit then
 				! do nothing
-			else if deductionCode(j-4)=newdedcode_Add then
+			else if deductionCode(j-4)=dc_add then
 				tcp(32)+=tcp(j)
-			else if deductionCode(j-4)=newdedcode_AddGross then
+			else if deductionCode(j-4)=dc_addGross then
 				tcp(31)+=tcp(j)
 				tcp(32)+=tcp(j)
-			else if deductionCode(j-4)=newdedcode_Deduct then
+			else if deductionCode(j-4)=dc_deduct then
 				tcp(32)-=tcp(j)
 			end if
 		next j
@@ -464,7 +452,7 @@ ReadTimesheet: ! r:  read rpwork, read employee, call calc deduction etc  basica
 		! tdc(6) is Workman's Comp Wages
 		! if env$('client')='West Accounting' then ! perhaps everyone should be doing it this way -prd 01/06/2016
 		!   tcp(14)=tdc(1)*xInp(19)*.01 ! base on regular hours times w/c rate
-		!   fnStatus('tcp(14) was set to '&str$(tcp(14))&' by tcp(14) = tdc(1)('&str$(tdc(1))&' * xInp(19)('&str$(xInp(19))&') * .01')
+		!   fn_detail('tcp(14) was set to '&str$(tcp(14))&' by tcp(14) = tdc(1)('&str$(tdc(1))&' * xInp(19)('&str$(xInp(19))&') * .01')
 		!   xInp(19)=0   ! <-- nice idea but it does not make a difference
 		!   fnStatusPause
 		! end if  ! else
@@ -480,19 +468,13 @@ ReadTimesheet: ! r:  read rpwork, read employee, call calc deduction etc  basica
 		rewrite #hDepartment,using 'form pos 42,n 6,pos 58,23*pd 4.2',key=deptKey$: d1,mat tdet
 		tcp(4)=0
 		write #hPrChecks,using 'form pos 1,N 8,n 3,PD 6,N 7,5*PD 3.2,37*PD 5.2': eno,empDept,prd,0,mat tdc,mat tcp
-		! fnStatus('WRITING payroll check with tcp(4)='&str$(tcp(4))&' and tcp(32)='&str$(tcp(32)))
+		! fn_detail('WRITING payroll check with tcp(4)='&str$(tcp(4))&' and tcp(32)='&str$(tcp(32)))
 		! fnStatusPause
 		totalWagesYtd+=gpd : cafy+=ficat3 ! eicytd+=ytdTotal(25)
 		if tdet(16)<>0 then stuc(tcd(1))+=tdet(16) ! ??? kj
 	! /r FedWh_Dept
 goto ReadTimesheet
 ! /r
-	EmployeeNoKey: ! r:
-		n$=''
-		mat ml$(1)
-		ml$(1)='Employee Number '&empNo$&' is not on file. No check calculated.'
-		fnMsgBox(mat ml$,resp$,'',0)
-	goto ReadTimesheet ! /r
 Finis: ! r:
 	if rtrm$(n$)<>'' then gosub ReallocateStateByDept
 	fn_setupCloseFiles
@@ -500,13 +482,47 @@ Finis: ! r:
 	fnFree('[Q]\PRmstr\jcprh1.h[cno]') ! get rid of jobcost time entry file if exists
 
 	if showDetails then
-		fnStatusPause
-		fnStatusClose
+		if detailReport then
+			fnClosePrn
+		else
+			fnStatusPause
+			fnStatusClose
+		end if
 		showDetails=0
 	end if
-
 goto Xit ! /r
-Xit: fnXit
+	EmployeeNoKey: ! r:
+		n$=''
+		mat ml$(1)
+		ml$(1)='Employee Number '&empNo$&' is not on file. No check calculated.'
+		fnMsgBox(mat ml$,resp$,'',0)
+	goto ReadTimesheet ! /r
+	def fn_determineEarnings(hPrChecks,eno,dep,begDate,endDate,mat ytdTotal,&ytdFICA,&ytdMedicare,&ytdWages,mat caf; ___,heno,checkkey$)
+		ytdFICA=ytdMedicare=0 ! ytdEic=0
+		mat caf=(0)
+		mat ytdTotal=(0)
+		! dim tcp(32)
+		mat tcp=(0)
+		! dim tdc(10)
+		mat tdc=(0)
+		checkkey$=cnvrt$('pic(zzzzzzz#)',eno)&cnvrt$('pic(zz#)',dep)&cnvrt$('pd 6',0) ! index employee#,department# and payroll date
+		restore #hPrChecks,key>=checkkey$: nokey DePrCkFinis
+		do
+			read #hPrChecks,using 'form pos 1,N 8,n 3,PD 6,N 7,5*PD 3.2,37*PD 5.2': heno,empDept,prDate,ckno,mat tdc,mat tcp eof DePrCkEof
+			if heno=eno and prDate=>begDate and prDate<=endDate then
+				mat ytdTotal=ytdTotal+tcp
+			end if
+		loop while heno=eno
+		DePrCkEof: !
+		ytdFICA     	=ytdTotal( 2) ! fica year to date
+		ytdMedicare	=ytdTotal( 3) ! medicare year to date
+		ytdWages    	=ytdTotal(31) ! total wages
+		for j=1 to 20
+			caf(j)=ytdTotal(j+4) ! total miscellaneous deductions for year
+		next j
+		DePrCkFinis:!
+	fnend
+
 
 def fn_getFederalTable(taxYear,marital,w4Year$,w4step2,mat fedTable,&fed_annual_wh_allowance)
 	! retains: setupFederalTables,mat fjs,mat fss,mat fhs,mat fjc,mat fsc,mat fhc,mat ft
@@ -1068,47 +1084,6 @@ withholdingPercentage,atLeast,baseAmt,estPayPeriodNetPay,estPayPeriodNetPay,adju
 	fn_federalTax=returnN
 fnend
 
-
-def fn_determineEarnings(hPrChecks,eno,dep,begDate,endDate,mat ytdTotal,&ytdFICA,&ytdMedicare,&ytdWages,mat caf; ___,heno,checkkey$)
-	ytdFICA=ytdMedicare=0 ! ytdEic=0
-	mat caf=(0)
-	mat ytdTotal=(0)
-	! dim tcp(32)
-	mat tcp=(0)
-	! dim tdc(10)
-	mat tdc=(0)
-	checkkey$=cnvrt$('pic(zzzzzzz#)',eno)&cnvrt$('pic(zz#)',dep)&cnvrt$('pd 6',0) ! index employee#,department# and payroll date
-	restore #hPrChecks,key>=checkkey$: nokey DePrCkFinis
-	do
-		read #hPrChecks,using 'form pos 1,N 8,n 3,PD 6,N 7,5*PD 3.2,37*PD 5.2': heno,empDept,prDate,ckno,mat tdc,mat tcp eof DePrCkEof
-		if heno=eno and prDate=>begDate and prDate<=endDate then
-			mat ytdTotal=ytdTotal+tcp
-		end if
-	loop while heno=eno
-	DePrCkEof: !
-	ytdFICA     	=ytdTotal( 2) ! fica year to date
-	ytdMedicare	=ytdTotal( 3) ! medicare year to date
-	ytdWages    	=ytdTotal(31) ! total wages
-	for j=1 to 20
-		caf(j)=ytdTotal(j+4) ! total miscellaneous deductions for year
-	next j
-	DePrCkFinis:!
-fnend
-
-def fn_tableLine(mat tl_table,tl_seekAmount; tl_secondDimension,___,returnN)
-	! this function finds where [tl_seekAmount] falls within a range in a singe row (1st element) of a 2 dimensional array)
-	! this function identifies which column (2nd element) of the 2d array to search with [tl_secondDimension] which defaults to the first
-	if tl_secondDimension=0 then tl_secondDimension=1
-	for returnN=1 to udim(mat tl_table,1)-1
-		if tl_seekAmount>tl_table(returnN,tl_secondDimension) and tl_seekAmount<=tl_table(returnN+1,tl_secondDimension) then
-			goto Tl_finis
-		end if
-	next returnN
-	returnN=udim(mat tl_table,1)
-	Tl_finis: !
-	fn_tableLine=returnN
-fnend
-
 def fn_stateTax(eno,wages,pppy,allowances,marital,fedWh,addOnSt,w4year$,taxYear; clientState$*2)
 	if clientState$='' th clientState$=fnpayroll_client_state$
 
@@ -1202,7 +1177,9 @@ fnend
 		pr 'fn_n2=(mat n2,'&str$(n2Index)&') returns '&str$(returnN) : pause
 		fn_n2b=returnN
 	fnend
-
+	! Tax Table resource(s):
+	! https://www.tax-tables.com   <---excellent place to find links to current tax tables for all states
+	!                                                                 (click tables in top right of page)
 	def fn_wh_arkansas(eno,war_wages_taxable_current,payPeriodsPerYear,allowances, _
 		married; ___, _
 		s1,annualPersonalCredit,returnN,stAllowances,adjEstAnnWages)
@@ -1608,7 +1585,7 @@ fnend
 	def fn_wh_louisiana(eno,marital,taxableWagesCurrent,payPeriodsPerYear,stAllowances; _
 			___,returnN,h1,h2,h3,stateEarnings,x,y,m1,m2,a,bb,cc,dd,ee, _
 			vW,vS,vX,vY,vN,vA,vB,estStTaxableAnnualWages)
-		! no table: revised 1/01/03
+		! last updated: 2/3/2023
 		if taxYear<=2020 then ! r:
 			stateEarnings=round(taxableWagesCurrent,2) ! stateEarnings
 			if marital=0 or marital=2 then
@@ -1721,83 +1698,96 @@ fnend
 		else if taxYear=>2023 then ! r:
 			! https://revenue.louisiana.gov/TaxForms/1210(1_22).pdf
 			if (marital=0 or marital=2) and val(fnEmployeeData$(eno,'R-1300 Exepmtions'))<2 then
-				! they are single and claiming less than 2 exemptions
-				fn_detail('1. Single Taxpayer Withholding Formulas') ! r:
-				fn_detail('   vW is the withholding tax per pay period.')
-				fn_detail('   vS is employee’s salary per pay period for each bracket.')
+				! they are single OR married claiming less than 2 (0 or 1) exemptions
+				fn_detail('A. Withholding Formulas for Single or Married Taxpayers Claiming 0 or 1 Personal Exemption:') ! r:
+				fn_detail('   W is the withholding tax per pay period.')
 				vS=taxableWagesCurrent
-				fn_detail('   vX is the number of personal exemptions; X must be 0 or 1.')
+				fn_detail('   S is employee’s salary per pay period for each bracket.', vS)
 				vX=val(fnEmployeeData$(eno,'R-1300 Exepmtions'))
-				fn_detail('   vY is the number of dependency credits; Y must be a whole number that is 0 or greater.')
+				fn_detail('   X is the number of personal exemptions; X must be 0 or 1.', vX)
 				vY=val(fnEmployeeData$(eno,'R-1300 Dependencies'))
-				fn_detail('   vN is the number of pay periods.')
+				fn_detail('   Y is the number of dependency credits; Y must be a whole number that is 0 or greater.', vY)
 				vN=payPeriodsPerYear
-				fn_detail('   vA is the effect of the personal exemptions and dependency credits equal to or less than $12,500;')
-				fn_detail('   vA=.021(((vX*4,500)+(vY*1,000))÷vN).')
-						vA=.021*(((vX*4500)+(vY*1000))/vN)
+				fn_detail('   N is the number of pay periods.', vN)
+
+				fn_detail('   A is the effect of the personal exemptions and dependency credits equal to or less than $12,500;', vA)
+						vA=.0185*(((vX*4500)+(vY*1000))/vN)
 						vA=max(0,round(vA,2))
-				fn_detail('   vB is the effect of the personal exemptions and dependency credits in excess of $12,500;')
-				fn_detail('   vB=.016((((vX*4,500)+(vY*1,000))-12,500)÷vN).')
-						vB=.016*((((vX*4500)+(vY*1000))-12500 )/vN)
+				fn_detail('   A = .0185(((X * 4500) + (Y * 1000)) ÷ N).', vA)
+
+				fn_detail('   B is the effect of the personal exemptions and dependency credits in excess of $12,500;')
+						vB=.0165*((((vX*4500)+(vY*1000))-12500)/vN)
+				fn_detail('   B = .0165((((X * 4500) + (Y * 1000)) - 12,500) ÷ N).', vB)
 						vB=max(0,round(vB,2))
+
 				estStTaxableAnnualWages=taxableWagesCurrent*payPeriodsPerYear
 				if estStTaxableAnnualWages<=12500 then
 					fn_detail('   If annual wages are less than or equal to $12,500, then')
-					fn_detail('   vW=.021(vS)-(vA+vB).')
-						vW=.021*(vS)-(vA+vB)
+						vW=.0185*(vS)-(vA+vB)
+					fn_detail('   W = .0185(S) - (A + B).', vW)
+
 				else if estStTaxableAnnualWages>12500 and estStTaxableAnnualWages<=50000 then
-				fn_detail('   If annual wages are greater $12,500 but less than or equal to $50,000, then')
-				fn_detail('   vW=.021(S)+.0160(S-(12,500÷vN))-(vA+vB).')
-						vW=.021*(vS)+.0160*(vS-(12500/vN))-(vA+vB)
+					fn_detail('   If annual wages are greater $12,500 but less than or equal to $50,000, then')
+						vW=.0185*(vS)+.0165*(vS-(12500/vN))-(vA+vB)
+					fn_detail('   W = .0185(S) + .0165( S - (12,500 ÷ N)) - (A + B).', vW)
+
 				else if estStTaxableAnnualWages>50000 then
-				fn_detail('   If annual wages are greater than $50,000, then')
-				fn_detail('   vW=.021(S)+.0160(vS-(12,500÷vN))+.0135(vS-(50,000÷vN))-(vA + vB)')
-						vW=.021*(vS)+.0160*(vS-(12500/vN))+.0135*(vS-(50000/vN))-(vA + vB)
+					fn_detail('   If annual wages are greater than $50,000, then')
+						vW=.0185*(vS)+.0165*(vS-(12500/vN))+.0075*(vS-(50000/vN))-(vA+vB)
+					fn_detail('   W = .0185(S) + .0165( S - (12,500 ÷ N)) + .0075( S - (50,000 ÷ N)) - (A + B).)', vW)
+
 				end if
 				! /r
 			else
-				fn_detail('2. Married Taxpayer Withholding Formulas') ! r:
+
+				fn_detail('B. Withholding Formulas for Married Taxpayers Claiming 2 Personal Exemptions:') ! r:
 				fn_detail('   vW is the withholding tax per pay period.')
-				fn_detail('   vS is the employee’s salary per pay period for each bracket.')
 				vS=taxableWagesCurrent
-				fn_detail('   vX is the number of personal exemptions. vX must 2.')
+				fn_detail('   S is the employee’s salary per pay period for each bracket.', vS)
 				vX=val(fnEmployeeData$(eno,'R-1300 Exepmtions'))
-				fn_detail('   vY is the number of dependency credits. vY must be 0 or greater.')
+				fn_detail('   X is the number of personal exemptions. vX must 2.', vX)
 				vY=val(fnEmployeeData$(eno,'R-1300 Dependencies'))
-				fn_detail('   vN is the number of pay periods.')
+				fn_detail('   Y is the number of dependency credits. vY must be 0 or greater.', vY)
 				vN=payPeriodsPerYear
-				fn_detail('   vA is the effect of the personal exemptions and dependency credits equal to or less than $25,000;')
-				fn_detail('   vA=.021(((vX*4,500)+(vY*1,000))÷vN)')
-						vA=.021*(((vX*4500)+(vY*1000))/vN)
+				fn_detail('   N is the number of pay periods.', vN)
+
+				fn_detail('   A is the effect of the personal exemptions and dependency credits equal to or less than $25,000;')
+						vA=.0185*(((vX*4500)+(vY*1000))/vN)
 						vA=max(0,round(vA,2))
-				fn_detail('   vB is the effect of the personal exemptions and dependency credits in excess of $25000;')
-				fn_detail('   vB=.0165((((X*4500)+(vY*1000))-25000)÷vN).')
+				fn_detail('   A = .0185(((X * 4500) + (Y * 1000)) ÷ N)', vA)
+
+				fn_detail('   B is the effect of the personal exemptions and dependency credits in excess of $25000;')
+				fn_detail('   B = .0165((((X * 4500) + (Y * 1000)) - 25,000) ÷ N)')
 						vB=.0165*((((vX*4500)+(vY*1000))-25000)/vN)
 						vB=max(0,round(vB,2))
+
 				estStTaxableAnnualWages=taxableWagesCurrent*payPeriodsPerYear
 				if estStTaxableAnnualWages<=25000 then
 					fn_detail('   If annual wages are less than or equal to $25000, then')
-					fn_detail('   vW=.021(S)-(A+B).')
-							vW=.021*(vS)-(A+B)
+					fn_detail('   W = .0185(S) - (A + B).')
+							vW=.0185*(vS)-(vA+vB)
+
 				else if estStTaxableAnnualWages>25000 and estStTaxableAnnualWages<=100000 then
 					fn_detail('   If annual wages are greater $25000 but less than or equal to $100000, then')
-					fn_detail('   vW=.021(S)+.0165(vS-(25000÷vN))-(vA+vB).')
-							vW=.021*(vS)+.0165*(vS-(25000/vN))-(vA+vB)
+					fn_detail('   W = .0185(S) + .0165(S - (25,000 ÷ N)) - (A + B).')
+							vW=.0185*(vS)+.0165*(vS-(25000/vN))-(vA+vB)
+
 				else if estStTaxableAnnualWages>100000 then
 					fn_detail('   If annual wages are greater than $100000, then')
-					fn_detail('   vW=.021(S)+.0165(vS-(25000÷vN))+.0135(vS-(100000÷vN))-(vA+vB).')
-							vW=.021*(vS)+.0165*(vS-(25000/vN))+.0135*(vS-(100000/vN))-(vA+vB)
+					fn_detail('   W = .0185(S) + .0165(S - (25,000 ÷ N)) + .0075(S - (100,000 ÷ N)) - (A + B)')
+							vW=.0185*(vS)+.0165*(vS-(25000/vN))+.0075*(vS-(100000/vN))-(vA+vB)
+
 					! /r
 				end if
 			end if
 			vW=max(0,round(vW,2))
 			fn_detail('W='&str$(vW))
-			fn_detail('S='&str$(vS))
-			fn_detail('X='&str$(vX))
-			fn_detail('Y='&str$(vY))
-			fn_detail('N='&str$(vN))
-			fn_detail('A='&str$(vA))
-			fn_detail('B='&str$(vB))
+			! fn_detail('S='&str$(vS))
+			! fn_detail('X='&str$(vX))
+			! fn_detail('Y='&str$(vY))
+			! fn_detail('N='&str$(vN))
+			! fn_detail('A='&str$(vA))
+			! fn_detail('B='&str$(vB))
 			fn_detail('estStTaxableAnnualWages='&str$(estStTaxableAnnualWages))
 			returnN=vW
 			! /r
@@ -2203,6 +2193,20 @@ fnend
 		fnend
 	! /r
 
+def fn_tableLine(mat tl_table,tl_seekAmount; tl_secondDimension,___,returnN)
+	! this function finds where [tl_seekAmount] falls within a range in a singe row (1st element) of a 2 dimensional array)
+	! this function identifies which column (2nd element) of the 2d array to search with [tl_secondDimension] which defaults to the first
+	if tl_secondDimension=0 then tl_secondDimension=1
+	for returnN=1 to udim(mat tl_table,1)-1
+		if tl_seekAmount>tl_table(returnN,tl_secondDimension) and tl_seekAmount<=tl_table(returnN+1,tl_secondDimension) then
+			goto Tl_finis
+		end if
+	next returnN
+	returnN=udim(mat tl_table,1)
+	Tl_finis: !
+	fn_tableLine=returnN
+fnend
+
 PrdrWorkmansComp: ! r:
 	! xInp(6) Other Compensation
 	! if other compensation > 0 then
@@ -2325,9 +2329,19 @@ def fn_report_stuff
 	! fnStatus('tcp(32)='&str$(tcp(32)))
 	! fnStatusPause
 fnend
-def fn_detail(text$*128)
+def fn_detail(text$*128; number)
 	if showDetails then
-		fnStatus(text$)
+		if number then text$&='      =      '&str$(number)
+		
+		if detailReport then
+			if file(255)=-1 then fnOpenPrn
+			pr #255: text$
+			! pr text$ : pause
+		else
+			fnStatus(text$)
+		end if
+		
+		
 	end if
 fnend
 def fn_detailStep(text$*64; number,extra$*64,extraNumber)
@@ -2550,15 +2564,15 @@ def library fnCheckPayrollCalculation(; ___, _
 				fnClosePrn
 				! /r
 			else ! if ckey=1 then r: test the calcualtion
-				fnStatus('              taxYear: '&str$(taxYear            	))
-				fnStatus('Wages Taxable Current: '&str$(wages              	))
-				fnStatus(' Pay Periods Per Year: '&str$(pppy               	))
-				if fedWh then fnStatus('  Federal WithHolding: '&str$(fedWh              	))
-				if allowances then fnStatus('           Allowances: '&str$(allowances         	))
-				fnStatus('              Married: '&marriedOption$(marital+1	))
+				fn_detail('              taxYear: '&str$(taxYear            	))
+				fn_detail('Wages Taxable Current: '&str$(wages              	))
+				fn_detail(' Pay Periods Per Year: '&str$(pppy               	))
+				if fedWh then fn_detail('  Federal WithHolding: '&str$(fedWh              	))
+				if allowances then fn_detail('           Allowances: '&str$(allowances         	))
+				fn_detail('              Married: '&marriedOption$(marital+1	))
 				! fnStatus('              fedExempt: '&str$(fedExempt            	))
-				fnStatus('               w4year: '&w4year$                  	 )
-				if w4step2 then fnStatus('              w4step2: '&str$(w4step2            	))
+				fn_detail('               w4year: '&w4year$                  	 )
+				if w4step2 then fn_detail('              w4step2: '&str$(w4step2            	))
 				if ckey=ck_state or ckey=1 then
 					testStateTax=fn_stateTax(0,wages,pppy,allowances,marital,fedWh,stateAddOn,w4year$,taxYear)
 				end if
@@ -2566,19 +2580,23 @@ def library fnCheckPayrollCalculation(; ___, _
 					testFederalTax=fn_federalTax(taxYear,fedpct,wages,ded,stdWhFed,fedExempt,pppy,marital,w4Year$,w4step2,w4Step3,w4step4a,w4step4b,w4step4c)
 				end if
 				if ckey=ck_state or ckey=1 then
-					fnStatus('Calculated '&fnpayroll_client_state$&' State WithHolding: '&str$( testStateTax ))
+					fn_detail('Calculated '&fnpayroll_client_state$&' State WithHolding: '&str$( testStateTax ))
 				end if
 				if ckey=ck_federal or ckey=1 then
-					fnStatus('Calculated Federal WithHolding: '&str$( testFederalTax ))
+					fn_detail('Calculated Federal WithHolding: '&str$( testFederalTax ))
 				end if
-				! fnStatus('_____________________________')
-				! fnStatus('_____________________________')
-				! fnStatus('Federal: '&str$(testFederalTax))
-				! fnStatus(fnpayroll_client_state$&': '&str$(testStateTax))
-				! fnStatus('_____________________________')
-				! fnStatus('_____________________________')
-				fnStatusPause
-				fnStatusClose
+				! fn_detail('_____________________________')
+				! fn_detail('_____________________________')
+				! fn_detail('Federal: '&str$(testFederalTax))
+				! fn_detail(fnpayroll_client_state$&': '&str$(testStateTax))
+				! fn_detail('_____________________________')
+				! fn_detail('_____________________________')
+				if detailReport then 
+					fnClosePrn
+				else
+					fnStatusPause
+					fnStatusClose
+				end if
 				showDetails=0
 				! /r
 			end if
@@ -2596,6 +2614,7 @@ def fn_setup
 	autoLibrary
 	on error goto Ertn
 	! showDetails=1
+	detailReport=1
 	dim stwh(10,2)
 	dim resp$(64)*256
 	dim ml$(0)*256
@@ -2650,15 +2669,15 @@ def fn_setup
 	!   saif(4)=40
 	! end if
 
-	newdedcode_Deduct  	=1
-	newdedcode_Add     	=2
-	newdedcode_Benefit 	=3
-	newdedcode_AddGross	=4
+	dc_deduct  	=1
+	dc_add      	=2
+	dc_benefit 	=3
+	dc_addGross	=4
 
-	esw_federal =1 ! enums for disableWithholdingN
-	esw_state   =2 ! enums for disableWithholdingN
-	esw_fica    =3 ! enums for disableWithholdingN
-	esw_standard=4 ! enums for disableWithholdingN
+	esw_federal	=1 ! enums for disableWithholdingN
+	esw_state  	=2 ! enums for disableWithholdingN
+	esw_fica   	=3 ! enums for disableWithholdingN
+	esw_standard	=4 ! enums for disableWithholdingN
 
 fnend
 def fn_setupOpenFiles
@@ -2676,5 +2695,5 @@ def fn_setupCloseFiles
 	close #hPayrollCheckIdx3_unused:
 	! close #hTimesheet:
 fnend
-
+Xit: fnXit
 include: ertn

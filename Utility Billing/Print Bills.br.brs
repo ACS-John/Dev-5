@@ -215,13 +215,13 @@ PrintBill_Basic: ! r: set prefrences for clients
 		end if
 	end if
 	! if env$('acsDeveloper')<>'' then pause
+	if enable_BulkSort then gosub BulkSort ! must be before customer open (open hCustomer causes 4148 in execute sort)
 	open #hCustomer1=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",i,outIn,k  ! open in account order
 	open #hCustomer2=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx5.h[cno],Shr",i,i,k  ! open in route-sequence
 	open #h_ubtransvb=fnH: "Name=[Q]\UBmstr\UBTransVB.h[cno],KFName=[Q]\UBmstr\UBTrIndx.h[cno],Shr",i,i,k
 	dim c$(0)*200
 	dim cN(0)
 	hCustomer=fn_openFio('UB Customer',mat c$,mat cN, 1)
-	if enable_BulkSort then gosub BulkSort
 	if enable_cassSort then gosub Sort1
 ! /r
 Screen1: ! r:
@@ -607,8 +607,6 @@ goto Xit ! /r
 Xit: fnXit
 Bud1: ! r: Open #hBudMstr BudMstr and #hBudgetTrans BudTrans bud1=1
 	bud1=0
-	
-726
 	open #hBudMstr: 'Name=[Q]\UBmstr\BudMstr.h[cno],KFName=[Q]\UBmstr\BudIdx1.h[cno],Shr',i,i,k ioerr EoBud1
 	hBudgetTrans=fnOpenBudTransInput
 	bud1=1
@@ -2341,7 +2339,7 @@ fnend
 BulkSort: ! r: sort in bulk sort code sequence
 	if enable_BulkSort=1 then !
 		open #h_control=fnH: "Name=[temp]\printBillsControl.[session],Size=0,RecL=128,Replace",internal,output
-		write #h_control,using 'form pos 1,c 128': "FILE [Q]\UBmstr\customer.h[cno],,,[temp]\Addr.[session],,,,,A,N"
+		write #h_control,using 'form pos 1,c 128': 'FILE [Q]\UBmstr\customer.h[cno],,,[temp]\Addr.[session],,,,,A,N'
 		if route_filter>0 then
 			write #h_control,using 'form pos 1,c 128': 'RECORD I,1,2,N,"'&str$(route_filter)&'","'&str$(route_filter)&'"'
 		end if
@@ -2409,15 +2407,15 @@ Sort1: ! r: Select & Sort - sorts Cass1 file    requires: (hCustomer2,&enable_ca
 	h_cass1=0
 	close #hSort1Sequence:
 	hSort1Sequence=0
-	open #h_Sort1_control=fnH: "Name=[temp]\Control.[session],Size=0,RecL=128,Replace",internal,output
-	write #h_Sort1_control,using 'form pos 1,c 128': "File [temp]\Temp.[session],,,[temp]\Addr.[session],,,,,A,N"
-	write #h_Sort1_control,using 'form pos 1,c 128': "Mask 1,19,C,A"
+	open #h_Sort1_control=fnH: 'Name=[temp]\Control.[session],Size=0,RecL=128,Replace',internal,output
+	write #h_Sort1_control,using 'form pos 1,c 128': 'File [temp]\Temp.[session],,,[temp]\Addr.[session],,,,,A,N'
+	write #h_Sort1_control,using 'form pos 1,c 128': 'Mask 1,19,C,A'
 	close #h_Sort1_control:
 	h_Sort1_control=0
-	execute "Free [temp]\Addr.[session]" ioerr ignore
-	execute "Sort [temp]\Control.[session]"
-	open #hSort1Sequence=fnH: "Name=[temp]\Temp.[session]",i,i,r
-	open #hAddr=fnH: "Name=[temp]\Addr.[session]",i,i,r ! was #7
+	execute 'Free [temp]\Addr.[session]' ioerr ignore
+	execute 'Sort [temp]\Control.[session]'
+	open #hSort1Sequence=fnH: 'Name=[temp]\Temp.[session]',i,i,r
+	open #hAddr=fnH: 'Name=[temp]\Addr.[session]',i,i,r ! was #7
 	Xit_Sort1: !
 return  ! /r
 
