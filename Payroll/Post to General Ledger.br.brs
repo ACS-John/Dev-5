@@ -5,7 +5,7 @@
 	on error goto Ertn
 
 	dim a$*40,em$*30,tgl(3),tcp(32),eno$*8,oldtgl(3)
-	dim tr(7),tr$*12,td$*30,dat$*20,a(100),i$*21,glwk$*30,desc$*50
+	dim tr(7),tr$*12,td$*30,dat$*20,a(100),i$*21,glwk$*50,desc$*50
 	dim tgl$*12
 	dim t(26),prgl(26,3),prgl$(15)*12,dedcode(20)
 	dim message$*40,msgline$(2)*60,ml$(4)*80,resp$(10)*60
