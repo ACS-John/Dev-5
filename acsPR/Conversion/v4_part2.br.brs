@@ -36,8 +36,6 @@ def fn_pr_conversion_add_missing(cno)
 	open #14: 'Name=[Q]\PRmstr\PayrollChecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno],RecL=224,kps=1,kln=17,replace',i,outIn,k
 	L2200: !
 	close #14:
-	open #breakdown=31: 'Name=[Q]\PRmstr\HourBreakdown.h[cno],RecL=39,KFName=[Q]\PRmstr\HourBreakdown-idx.h[cno],kps=1/9/14,kln=8/5/8,replace',i,outIn,k
-	close #breakdown:
 	open #30: 'Name=[Q]\PRmstr\dd.h[cno],RecL=72,KFName=[Q]\PRmstr\DDidx1.h[cno],kps=1,kln=10,Use',i,outIn,k
 	close #30:
 	fnindex_sys(cno,'PR')

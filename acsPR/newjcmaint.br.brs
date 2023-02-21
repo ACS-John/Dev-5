@@ -33,7 +33,7 @@ ASKJOB: ! r:
 	fnTos
 	respc=0
 	fnLbl(1,1,"Job #:",7,right)
-	fncmbjob(1,9)
+	fnCmbJob(1,9)
 	if hact$="" then           resp$(respc+=1)="" else      resp$(respc+=1)=hact$
 	fnCmdKey("&Add",1,0,0,"Add a new job" )
 	fnCmdKey("E&dit",2,1,0,"Access the highlited record")
@@ -58,7 +58,7 @@ ASKJOB: ! r:
 		holdjn$=jn$
 		goto L670
 	else if ckey=8 then
-		fnjob_srch(x$,fixgrid)
+		fnJobSearch(x$,fixgrid)
 		jn$=x$
 		goto EDITREC
 	else if ckey=6 then
@@ -312,7 +312,7 @@ L2510: ! r:
 	fnTos
 	respc=0
 	fnLbl(1,1,"Job # to Start:",16,right)
-	fncmbjob(1,19,1)
+	fnCmbJob(1,19,1)
 	if hact$="" then resp$(respc+=1)="" else    resp$(respc+=1)=hact$
 	fnCmdKey("&Next",1,1,0,"Duplicate this job")
 	fnCmdKey("&Search",8,0,0,"Search forjob record")
@@ -362,7 +362,7 @@ DUPLICATE_CATEGORIES: ! r:
 	fnTos
 	respc=0
 	fnLbl(1,1,"Job # to Duplicate:",20,right)
-	fncmbjob(1,23)
+	fnCmbJob(1,23)
 	if hact$="" then  resp$(respc+=1)="" else      resp$(respc+=1)=hact$
 	fnCmdKey("&Next",1,1,0,"Duplicate this job")
 	fnCmdKey("&Search",8,0,0,"Search forjob record")
@@ -422,7 +422,7 @@ ADDCAT: !
 	fnTos
 	respc=0
 	fnLbl(1,1,"Category # to Add:",17,right)
-	fncmbcategory(1,20)
+	fnCmbCategory(1,20)
 	!  fnTxt(1,20,5,5,1,'30',0,"Category number must be numeric between 1 and 99999.")
 	resp$(respc+=1)=""
 	fnCmdKey("&Next",1,1,0,"Adds the new category record." )
@@ -696,7 +696,7 @@ Xit: fnXit
 RECREATE_GRID: ! r:
 	close #1: ioerr ignore
 	close #4: ioerr ignore
-	fnjob_srch(x$,99)
+	fnJobSearch(x$,99)
 	fnComboF("CJob.h[cno]",lyne,mypos,43,"[Q]\PRmstr\jcmstr.h[cno]",1,6,7,25,"[Q]\PRmstr\jcindx.h[cno]" ,1)
 	fnComboF("CJobALL.h[cno]",lyne,mypos,43,"[Q]\PRmstr\jcmstr.h[cno]",1,6,7,25,"[Q]\PRmstr\jcindx.h[cno]" ,2)
 	execute "Index [Q]\PRmstr\JCMSTR.h[cno],[Q]\PRmstr\JCIndx.h[cno],1,6,Replace,DupKeys -N" ioerr ignore

@@ -47,7 +47,7 @@ ASKJOB: !
 		fnTos(sn$="prtdet2") : _
 		mylen=12 : mypos=mylen+3: resp=0: left=1 : _
 		fnLbl(1,1,"Job Number:",mylen,1) : _
-		fncmbjob(1,mypos) : _
+		fnCmbJob(1,mypos) : _
 		resp$(respc+=1)=jn$
 		prtj$(j)=lpad$(rtrm$(prtj$(j)),6)
 		fnCmdKey("&Next",1,1,0,"Print this job." ) : _

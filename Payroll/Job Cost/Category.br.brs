@@ -21,7 +21,7 @@ ASKCATEGORY: !
 	fnTos(sn$="Pr-askcategory") : _
 	respc=0
 	fnLbl(1,1,"Category Number:",20,right)
-	fncmbcategory(1,23)
+	fnCmbCategory(1,23)
 	if hact$="" then : _
 		resp$(respc+=1)="" else : _
 		resp$(respc+=1)=hact$

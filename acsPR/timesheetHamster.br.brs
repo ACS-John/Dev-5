@@ -39,8 +39,8 @@ fnH2AddText('GPD'                   ,7,'PD',5.2,mask_pointtwo,152)
 fnH2AddText('hr(1)'                 ,7,'PD',4.2,mask_pointtwo,157)
 fnH2AddText('hr(2)'                 ,7,'PD',4.2,mask_pointtwo,161)
 ! /r
-open #1: 'Name=[Q]\PRmstr\rpwork01.h[cno],Version=0,KFName=[Q]\PRmstr\rpwork01Idx.h[cno],Use,RecL=167,KPs=1,KLn=11,Shr',i,outIn,k
-fnHamster2('RPWork')
+open #1: 'Name=[Q]\PRmstr\timesheet[acsUserId].h[cno],Version=0,KFName=[Q]\PRmstr\timesheet[acsUserId]Idx.h[cno],Use,RecL=167,KPs=1,KLn=11,Shr',i,outIn,k
+fnHamster2('Timesheet')
 close #1:
 goto Xit
  

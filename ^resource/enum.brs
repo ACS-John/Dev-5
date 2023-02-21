@@ -10,8 +10,8 @@ Enum: ! r: Common Enumerations
 		cr$=chr$(13)
 		crlf$=cr$&lf$
 
-		if uprc$(env$("Developer"))="YES" then developer=1
-		if uprc$(env$("Debug"))="YES" then debug=1
+		if lwrc$(env$('Developer'))='yes' then developer=1
+		if lwrc$(env$('Debug'))='yes' then debug=1
 
 		if env$('BR_MODEL')='CLIENT/SERVER' then clientServer=1 else clientServer=0
 

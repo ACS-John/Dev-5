@@ -400,13 +400,13 @@ fnLbl(lc+=1,1,"Payee # "&trim$(vn$)&" Invoice # "&trim$(iv$),50,0)
 fnLbl(lc+=2,1,"Job #:",mylen,1)
 ! fnTxt(LC,MYPOS,6,0,1,"",0,"Choose from the sub-category list.")
 !    !  rESP$(RESPC+=1)=JN$
-fncmbjob(lc,mypos)
+fnCmbJob(lc,mypos)
 resp$(respc+=1)=jn$
 fnLbl(lc+=2,1,"Category #:",mylen,1)
-fncmbcategory(lc,mypos)
+fnCmbCategory(lc,mypos)
 resp$(respc+=1)=str$(cat)
 fnLbl(lc+=2,1,"Sub-category #:",mylen,1)
-fncmbsubcat(lc,mypos)
+fnCmbSubCat(lc,mypos)
 resp$(respc+=1)=str$(subcat)
 fnLbl(lc+=1,1,"Amount:",mylen,1)
 fnTxt(lc,mypos,12,0,1,'10',0,"Enter the amount allocated to this category.")
@@ -453,7 +453,7 @@ read #jcbreakdown,using "form pos 1,c 6,pd 3,pd 3,pd 5.2,c 30,c 8,c 12",rec=edit
 delete #jcbreakdown,rec=editrec: noRec ENTRY_SCREEN
 goto ENTRY_SCREEN
 L6530: if ckey=68 then goto L6540 else goto L6550
-L6540: jn$="": fnjob_srch(jn$,1) : goto ENTRY_SCREEN
+L6540: jn$="": fnJobSearch(jn$,1) : goto ENTRY_SCREEN
 L6550: jn$=resp$(1)(1:6)
 jn$=lpad$(rtrm$(jn$),6)
 read #41,using 'form pos 7,c 25',key=jn$: jobname$ nokey L6590

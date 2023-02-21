@@ -2944,7 +2944,7 @@
 38840   x=len(lookin$)
 38850   if not lookin$(x:x)="\" then lookin$=lookin$&"\"
 38855   if wbversion$<"4.20" then 
-38860     execute "sys -W "&os_filename$(progpath$&"filedialog.exe")&" -T1 -B"&env$('unique_computer_id')&" -P"&lookin$&" -X"&lookfor$
+38860     execute "sys -W "&os_filename$(progpath$&"filedialog.exe")&" -T1 -B"&env$('acsUserId')&" -P"&lookin$&" -X"&lookfor$
 38870     if exists(progpath$&"dbde"&env$('acsUserId')&".txt") then goto 38880 else goto 38960
 38880     getfile=50
 38890     if file(getfile)>-1 then getfile+=1 : goto 38890
@@ -2978,7 +2978,7 @@
         lookfor$=trim$(lookfor$)
 39040   x=len(lookin$)
 39050   if not lookin$(x:x)="\" then lookin$=lookin$&"\"
-39060   execute "sys -W "&os_filename$(progpath$&"filedialog.exe")&" -T2 -B"&env$('unique_computer_id')&" -P"&lookin$&" -X"&lookfor$
+39060   execute "sys -W "&os_filename$(progpath$&"filedialog.exe")&" -T2 -B"&env$('acsUserId')&" -P"&lookin$&" -X"&lookfor$
 39070   if exists(progpath$&"dbde"&env$('acsUserId')&".txt") then goto 39080 else goto 39160
 39080   putfile=50
 39090   if file(putfile)>-1 then putfile+=1 : goto 39090
@@ -6189,7 +6189,7 @@
         errfile$=file$(errfil) !:
         close #errfil: !:
         errfil=0
-78185   fnemailfile(env$("PD")&"emailq","client@client.com","Error "&cnvrt$("pic(####)",eerr)&" "&env$('unique_computer_id')&" "&eprog$,mat aic$,errfile$,mat dummy$)
+78185   fnemailfile(env$("PD")&"emailq","client@client.com","Error "&cnvrt$("pic(####)",eerr)&" "&env$('acsUserId')&" "&eprog$,mat aic$,errfile$,mat dummy$)
 78190   input #errwin,fields "17,68,c 1,ie,n": epause$
 78195   if cmdkey=0 then 
 78200     close #errwin: !:

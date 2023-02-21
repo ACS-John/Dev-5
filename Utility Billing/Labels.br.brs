@@ -480,7 +480,7 @@ fnend
 	def fn_customerAddress(z$*10,mat addr$; ca_address_type,ca_closeFiles,___,extra_22)
 		if ~ca_setup then
 			ca_setup=1
-			open #h_ca_customer=fnH: 'Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno]'&',Shr',i,i,k
+			open #h_ca_customer=fnH: 'Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr',i,i,k
 			open #hAdrBil=fnH: 'Name=[Q]\UBmstr\ubAdrBil.h[cno],KFName=[Q]\UBmstr\AdrIndex.h[cno],Shr',i,i,k
 		end if
 		if ca_address_type=0 then ca_address_type=ao_billing

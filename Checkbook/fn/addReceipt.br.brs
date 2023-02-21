@@ -269,7 +269,7 @@ fnend
 CREATERECEIPTFILE: ! r:
 	open #receipt=fnH: 'Name=[Q]\CLmstr\recmstr.h[cno],Version=1,KFName=[Q]\CLmstr\recidx1.h[cno],REPLACE,RecL=38,KPS=1,KLN=8',i,outIn,k 
 	close #receipt: 
-	execute 'Index [Q]\CLmstr\Recmstr.h[cno]'&' '&'[Q]\CLmstr\Recidx1.h[cno] 1 8 Replace DupKeys,Shr'
-	execute 'Index [Q]\CLmstr\Receiptglbreakdown.h[cno]'&' '&'[Q]\CLmstr\receiptglbkdidx.h[cno] 1 8 Replace DupKeys,Shr'
+	execute 'Index [Q]\CLmstr\Recmstr.h[cno] [Q]\CLmstr\Recidx1.h[cno] 1 8 Replace DupKeys,Shr'
+	execute 'Index [Q]\CLmstr\Receiptglbreakdown.h[cno] [Q]\CLmstr\receiptglbkdidx.h[cno] 1 8 Replace DupKeys,Shr'
 return  ! /r
 include: ertn

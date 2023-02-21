@@ -9,7 +9,7 @@ Menu1: ! r:
 	fnTos : screen=0
 	respc=0
 	fnLbl(1,1,'Employee Number:',16,right)
-	fncmbemp(1,18)
+	fnCmbEmp(1,18)
 	if hact$='' then
 		resp$(respc+=1)=''
 	else
@@ -28,7 +28,7 @@ Menu1: ! r:
 		fn_employeeEdit(ent)
 		goto Menu1
 	else if ckey=8 then
-		fnemployee_srch(x$,fixgrid)
+		fnEmployeeSrch(x$,fixgrid)
 		ent=val(x$)
 		fn_employeeEdit(ent)
 		goto Menu1
@@ -331,13 +331,13 @@ def fn_employeeEdit(ent; employeeAdding)
 		if disableStTax then em(14)=-1
 		! /r
 		if ckey=8 then
-			fnhours(eno)
+			fnHours(eno)
 			goto ScrEmployee
 		else if ckey=7 then
 			gosub DD
 			goto EmployeeEdit
 		else if ckey=10 then
-			fncheckfile(hact$:=str$(eno),hCheckIdx3,hCheckIdx1,hEmployee)
+			fnCheckHistory(hact$:=str$(eno),hCheckIdx3,hCheckIdx1,hEmployee)
 			goto EmployeeEdit
 		else if ckey=1 then ! or ckey=2
 			if em(5)=0 then ! pay code not selected
@@ -485,7 +485,7 @@ ScrDepartment: ! r:
 	if ckey=1 then
 		goto EmployeeEdit
 	else if ckey=10 then
-		fncheckfile(hact$:=str$(eno),hCheckIdx3,hCheckIdx1,hEmployee)
+		fnCheckHistory(hact$:=str$(eno),hCheckIdx3,hCheckIdx1,hEmployee)
 		goto EmployeeEdit
 	else if ckey=>5200 and ckey<=ckey_high then
 		goto Nav
@@ -702,18 +702,18 @@ EmployeeChangeKey: ! r:
 	fnCloseFile(hEmpData,'PR Employee Data')
 
 
-	! r: change employee number in any and all rpwork files.
+	! r: change employee number in any and all timesheet files.
 	dim filename$(0)*256
 	dim kfname$*256
-	fnGetDir2('[Q]\PRmstr\',mat filename$, '','rpwork*.h[cno]')
+	fnGetDir2('[Q]\PRmstr\',mat filename$, '','timesheet*.h[cno]')
 	for fileItem=1 to udim(mat filename$)
 		if pos(lwrc$(filename$(fileItem)),'idx.')<=0 and pos(lwrc$(filename$(fileItem)),'idx2.')<=0 then
 			kfname$=srep$(filename$(fileItem),'.','Idx.')
-			open #h_rpwork=fnH: 'Name=[Q]\PRmstr\'&filename$(fileItem)&',KFName=[Q]\PRmstr\'&kfname$&',shr',i,outIn,k ioerr RpworkOpenErr
-			fnKeyChange(h_rpwork,'form pos 1,n 8',heno$,lpad$(str$(eno),8))
-			close #h_rpwork:
+			open #h_timesheet=fnH: 'Name=[Q]\PRmstr\'&filename$(fileItem)&',KFName=[Q]\PRmstr\'&kfname$&',shr',i,outIn,k ioerr TimesheetOpenErr
+			fnKeyChange(h_timesheet,'form pos 1,n 8',heno$,lpad$(str$(eno),8))
+			close #h_timesheet:
 		end if
-		RpworkOpenErr: !
+		TimesheetOpenErr: !
 	nex fileItem
 	! /r
 	! change main employee record

@@ -41,7 +41,7 @@ def fn_payroll_register_2(; det,include_tips_in_other_wh,append_reg1,ppdOverride
 	fnDedNames(mat fullname$,mat abbrevname$,mat deductionCode,mat newcalcode,mat newdedfed,mat dedfica,mat dedst,mat deduc)
 
 	ssr1=fnSsRateEmployee
-	ssr2=fnss_employer*.01
+	ssr2=fnSsEmployer*.01
 	open #hCompany=fnH: "Name=[Q]\PRmstr\Company.h[cno],Shr",i,i
 	dim sucrat(10)
 	dim statname$(10)*8

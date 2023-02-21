@@ -1,6 +1,6 @@
 ! Replace S:\acsPR\SubCmbCat.br
 ! creates a screen ace combobox for sub-category records
-def library fncmbsubcat(myline,mypos; addall,container,indexfile$*200)
+def library fnCmbSubCat(myline,mypos; addall,container,indexfile$*200)
 	autoLibrary
 	dim df$*200,if$*200
 	if addall<>1 then addall=0

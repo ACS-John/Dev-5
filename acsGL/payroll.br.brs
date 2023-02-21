@@ -175,7 +175,7 @@ L1380: close #2,free: ioerr L1390
 L1390: open #2: 'Name=[Q]\GLmstr\ACPRCKS.h[cno],SIZE=0,RecL=110,Replace',internal,output,relative
 	close #2:
 L1410: close #1: ioerr L1420
-L1420: execute 'Index [Q]\GLmstr\PRmstr.h[cno]'&' '&'[Q]\GLmstr\PRIndex.h[cno] 1 4 Replace DupKeys -n'
+L1420: execute 'Index [Q]\GLmstr\PRmstr.h[cno] [Q]\GLmstr\PRIndex.h[cno] 1 4 Replace DupKeys -n'
 	goto MAIN
 
 PROOF_LIST: !

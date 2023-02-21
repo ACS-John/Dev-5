@@ -301,7 +301,7 @@ DeleteGlInfo: ! r:
 	end if
 return ! /r
 Reindex: ! r:
-	execute 'Index [Q]\UBmstr\Ubinfo.h[cno]'&' '&'[Q]\UBmstr\ubinfoidx.h[cno] 1 23 Replace DupKeys -n' ioerr ignore
+	execute 'Index [Q]\UBmstr\Ubinfo.h[cno] [Q]\UBmstr\ubinfoidx.h[cno] 1 23 Replace DupKeys -n' ioerr ignore
 return ! /r
 MaintainGlInfo: ! r:
 	right=1: mylen=25: mypos=mylen+3

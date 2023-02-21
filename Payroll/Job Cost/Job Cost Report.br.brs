@@ -65,7 +65,7 @@ ASK_JOB: ! r:
 		fnTos
 		mylen=12 : mypos=mylen+3: resp=0: left=1
 		fnLbl(1,1,'Job Number:',mylen,1)
-		fncmbjob(1,mypos)
+		fnCmbJob(1,mypos)
 		resp$(respc+=1)=jn$
 		if k=1 then goto L600
 		if k>1 then let fnLbl(3,1,'Last Job Number entered was '&prtj$(k-1),50,1)

@@ -38,7 +38,7 @@ TRANSACTION_ENTRY: !
 	respc=0 : frac=0
 	mylen=28 : mypos=mylen+3
 	fnLbl(1,1,"Job Number:",mylen,1)
-	fncmbjob(1,mypos)
+	fnCmbJob(1,mypos)
 	resp$(respc+=1)=jn$
 	fnLbl(2,1,"Amount:",mylen,1)
 	fnTxt(2,mypos,10,10,0,'10',0,"Amount to be charged to job.")

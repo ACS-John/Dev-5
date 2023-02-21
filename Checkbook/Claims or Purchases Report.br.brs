@@ -9,7 +9,7 @@ ASK_SORT: ! r:
 	if fund=1 then ty1$='Vendor Sequence' else ty1$='Fund Sequence'
 	if coded=1 then ty2$='All Invoices' else ty2$='Selected Invoices'
 	open #paytrans=4: 'Name=[Q]\CLmstr\PayTrans.h[cno],Shr',i,i,r
-	execute 'Index [Q]\CLmstr\unpdaloc.h[cno]'&' '&'[Q]\CLmstr\Uaidx2.h[cno] 1 20 Replace DupKeys -n' ! index in vendor, reference order
+	execute 'Index [Q]\CLmstr\unpdaloc.h[cno] [Q]\CLmstr\Uaidx2.h[cno] 1 20 Replace DupKeys -n' ! index in vendor, reference order
 	open #unpdaloc=8: 'Name=[Q]\CLmstr\UnPdAloc.h[cno],KFName=[Q]\CLmstr\Uaidx2.h[cno],Shr',i,i,k
 	ReadPayTrans: !
 	dim de$*50

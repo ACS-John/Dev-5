@@ -311,7 +311,7 @@ def fn_startRtf(startRtf_destinationFileName$*1024; forceWordProcessor$,saveToAs
 		fnCopy('[temp]\acs_print_tmp[session].rtf','[at]'&startRtf_destinationFileName$)
 	end if
 	fnCopy('[temp]\acs_print_tmp[session].rtf',startRtf_destinationFileName$)
-	! pr 'BR copied to: '&'[at]'&startRtf_destinationFileName$ !
+	! pr 'BR copied to: [at]'&startRtf_destinationFileName$ !
 	if env$('BR_MODEL')='CLIENT/SERVER' then
 		if ~setup_cs then
 			setup_cs=1

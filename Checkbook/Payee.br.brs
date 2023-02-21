@@ -421,7 +421,7 @@ GL_BREAKDOWNS: ! r:
 		rewrite #payeegl,using 'form pos 1,C 8,c 12,n 6.2,c 30',rec=gldistrec: payeekey$,payeegl$,percent,gldesc$
 	end if
 	goto EDIT_PAYEE ! /r
-	! execute 'Index [Q]\CLmstr\payeeglbreakdown.h[cno]'&' '&'[Q]\CLmstr\Payeeglbkdidx.h[cno] 1 8 Replace DupKeys -n'
+	! execute 'Index [Q]\CLmstr\payeeglbreakdown.h[cno] [Q]\CLmstr\Payeeglbkdidx.h[cno] 1 8 Replace DupKeys -n'
 
 	PayeeXIT: !
 	close #trmstr2: ioerr ignore

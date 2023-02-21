@@ -1,7 +1,7 @@
 ! replace S:\acsPR\Employee_Srch.br
 ! search for an employee
 
-def library fnemployee_srch(&x$; fixgrid)
+def library fnEmployeeSrch(&x$; fixgrid)
 	! x$=account #     
 	! to extract the flexgrid information (master file)
 	autoLibrary

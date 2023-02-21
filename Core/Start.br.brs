@@ -409,7 +409,7 @@ fnend
 !     dim filename$(1)*1024,tmp_dir$(1)*1024
 !     exe 'sy -m del "'&os_filename$(udf$)&'\*.scr"'
 !     exe 'sy -m del "'&os_filename$(udf$)&'\*.tmp"'
-!     exe 'sy -m xcopy "'&os_filename$(udf$)&'" "[Q]\'&'" /S /T'
+!     exe 'sy -m xcopy "'&os_filename$(udf$)&'" "[Q]\" /S /T'
 !     fngetdir2(udf$,mat filename$, '/s /b','*.*') ! fngetdir2(udf$&'ini',mat filename$, '/s /b','*.*')
 !     for f_i=1 to udim(mat filename$)
 !       if exists(filename$(f_i))=1 then ! it is a directory

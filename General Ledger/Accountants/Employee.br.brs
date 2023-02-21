@@ -197,7 +197,7 @@ INITIAL_BUILD: ! r:
 	open #2: 'Name=[Q]\GLmstr\ACPRCKS.h[cno],SIZE=0,RecL=110,Replace',internal,output,relative
 	close #2:
 	L1410: close #1: ioerr ignore
-	execute 'Index [Q]\GLmstr\PRmstr.h[cno]'&' '&'[Q]\GLmstr\PRIndex.h[cno] 1 4 Replace DupKeys -n'
+	execute 'Index [Q]\GLmstr\PRmstr.h[cno] [Q]\GLmstr\PRIndex.h[cno] 1 4 Replace DupKeys -n'
 goto MAIN ! /r
 
 PROOF_LIST: ! r:
