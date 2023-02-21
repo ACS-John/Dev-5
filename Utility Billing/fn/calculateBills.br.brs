@@ -58,7 +58,7 @@ def fn_calculateBills(goal$*11)
 	end if
 	F_WORK: form pos 1,c 10,pos 11,4*pd 5,pos 31,7*pd 4.2,pos 59,3*pd 5,n 1
 	open #hDeposit1=fnH: 'Name=[Q]\UBmstr\Deposit1.h[cno],KFName=[Q]\UBmstr\DepIdx1.h[cno],Shr,Use,RecL=16,KPs=1,KLn=10',i,outIn,k
-	open #hDeposit2=fnH: 'Name=[Q]\UBmstr\Deposit2.h[cno],KFName=[Q]\UBmstr\Deposit2Index.h[cno]'&',Shr,Use,RecL=73,KPs=1,KLn=10',i,outIn,k
+	open #hDeposit2=fnH: 'Name=[Q]\UBmstr\Deposit2.h[cno],KFName=[Q]\UBmstr\Deposit2Index.h[cno],Shr,Use,RecL=73,KPs=1,KLn=10',i,outIn,k
 
 	hBudMstr=fnOpenBudMstr : if hBudMstr then hBudgetTrans=fnOpenBudTrans
 

@@ -97,7 +97,7 @@ ADD_RECORD: !
 	fnTos
 	fnLbl(1,5,"New Personnel Burden Information",45,1)
 	fnLbl(3,1,"Employee Number:",15,0)
-	fncmbemp(3,18)
+	fnCmbEmp(3,18)
 	resp$(1)=""
 	fnCmdSet(11)
 	ckey=fnAcs(mat resp$)

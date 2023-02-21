@@ -54,7 +54,7 @@ ASKJOB: !
 	fnTos
 	respc=0
 	fnLbl(1,1,"Job #:",8,1)
-	fncmbjob(1,11)
+	fnCmbJob(1,11)
 	resp$(respc+=1)=jn$
 	if trim$(jn$)<>"" then let fnLbl(3,1,"Last job processed:"&trim$(jn$),35,1)
 	fnCmdKey("&Next",1,1,0,"Process the job" )

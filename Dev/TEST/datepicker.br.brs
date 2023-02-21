@@ -8,7 +8,7 @@ dim resp$(256)*50
 open #clearing=89: 'Name=[Q]\CLmstr\clearing.H'&wsid$&',replace,RecL=114',i,outi,r  ! kj wrong recl
 fnTos
 respc=0 : mat resp$=('')
-fnLbl(1,1,trim$(env$('cnam')(1:30))&'-'&'',65,2)
+fnLbl(1,1,trim$(env$('cnam')(1:30))&'-',65,2)
 					fnFlexInit1('unpaidinv',5,27,15,55,mat chdr$,mat cmask$,1)
 					restore #clearing:
 					if nextrec>0 and displayattop$='True' then goto L4890 else goto L5030

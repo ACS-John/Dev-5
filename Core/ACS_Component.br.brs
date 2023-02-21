@@ -1,4 +1,4 @@
-pr 'this program ('&program$&') is not intended to be run directly.'
+pr 'this program library ('&program$&') is not intended to be run directly.'
 end
 
 ! r: libraries - ScreenAce screen building tools
@@ -18,7 +18,7 @@ def library fnTos(; sn$*100)
 	combokeycurrent$=combokeyprior$=''
 	if len(sn$)>100 then : pr 'INVALID FILE NAME: Too Long' : input fields '1,1,C 1,N': pause$ : goto Xit
 	! close #119: ioerr ignore
-	! open #119: 'Name='&'[temp]\acs\'&sn$&',RecL=1024,Replace',i,outi,r	! recl was 500
+	! open #119: 'Name=[temp]\acs\'&sn$&',RecL=1024,Replace',i,outi,r	! recl was 500
 	fn_clearEnv(tmp_combo_count_for_read,tmp_combo_count_for_set)
 	if env$('GUIMode')='OFF' then execute 'config GUI On'
 fnend ! /r  (extra slash r because fnt-p is also a folder)
@@ -142,21 +142,26 @@ def library fnComboFio(lyne,ps,layoutName$*128; limlis,whichIndex,ttt$*200, ___,
 		psd= 6 ! description position         the name field
 		lnd=30 ! description length
 	else if layoutName$='CO Provider' then
-		psk= 1 
-		lnk=11 
-		psd=12 
-		lnd=64 
+		psk= 1
+		lnk=11
+		psd=12
+		lnd=64
 	else if layoutName$='Client Billing Transaction Type' then
-		psk= 1 
-		lnk= 1 
-		psd= 2 
-		lnd=18 
+		psk= 1
+		lnk= 1
+		psd= 2
+		lnd=18
+	! else if layoutName$='PR Check History' then    ! too complicated and too big for this function
+	! 	psk= ?
+	! 	lnk= ?
+	! 	psd= ?
+	! 	lnd= ?
 	else
 		pr ' currently fnComboFio does yet read position and key info for your layoutname - please add logic for it here'
 		pr '      layoutName$="'&layoutName$&'"'
 		pause
 	end if
-	
+
 	returnN=fn_comboF(sfn$,lyne,ps,width,df$,psk,lnk,psd,lnd, if$,limlis,0,ttt$,contain,tabcon,keyFormat$)
 	fnComboFio=returnN
 fnend
@@ -284,7 +289,7 @@ def fn_addComboOptionList(key$*81,txt$*81; reset_only)
 		setenv(acol_env_variable$,env$(acol_env_variable$)&'|'&txt$)
 	end if
 fnend
-def library fnFlexInit1(sfn$*100,lyne,ps,height,width,mat ch$; mat colMask$,seltype,usr,fraCon,tabcon)
+def library fnFlexInit1(sfn$*100,lyne,ps,height,width,mat ch$; mat colMask$,seltype,usr,fraCon,tabcon,___,hFlex,hdrfile$*192,all_hdr$*6491,all_mask$*6491,optfile$*199,j,returnN)
 	! mat ch$		(column headers)=no more than 80 headers with 100 chrs each
 	! mat colMask$		(column mask)=(see mask chart in screen ace manual)
 	! seltype		0=editable cells,	 1=row selection,	 2=column selection
@@ -294,13 +299,9 @@ def library fnFlexInit1(sfn$*100,lyne,ps,height,width,mat ch$; mat colMask$,selt
 	! sfn$			(simple file name) specific file you want flexgrid stored
 	!						do not use an extension on the file name
 	if ~setup then fn_setup
-	if env$('exitnow')='yes' then goto FLEXINIT1_COMPLETE ! special processing to increase speed for exitnow
-	dim hdrfile$*192
-	dim all_hdr$*6491
-	dim all_mask$*6491
-	dim optfile$*199
+	if env$('exitnow')='yes' then goto FlexInitFinis ! special processing to increase speed for exitnow
+
 	if usr=0 then grid_populated=0
-	!
 	! if usr=0 then pr 'USR=0-Replace'
 	! if usr>0 then pr 'USR>0-Use Previous USR='&str$(usr)
 	! if usr<0 then pr 'USR<0-append=-1		 USR='&str$(usr)
@@ -309,63 +310,60 @@ def library fnFlexInit1(sfn$*100,lyne,ps,height,width,mat ch$; mat colMask$,selt
 		pr 'SFN$ is required for Flex grids'
 		pr 'Press Enter to continue without the flex grid'
 		pause
-		goto FLEXINIT1_COMPLETE
+		goto FlexInitFinis
 	end if
 	if ~setup then fn_setup
 	all_hdr$=all_mask$=''
-	! fn_getFlexHandle
-	filenumber=fn_getFlexHandle(1)
+	! fn_hFlex
+	hFlex=fn_hFlex(1)
 	sfn$=trim$(sfn$)&'[cno]'
-	optfile$=sfn$&'[SESSION].tmp'
+	optfile$=sfn$&'[session].tmp'
 	hdr_count=udim(ch$) : hdrfile$=sfn$&'.hdr'
-	if usr<>0 then goto USEPREVIOUS
-	
-	XRETRY: ! !print 'Retrying delete here! (If you see this twice)'
-	fnFree('[temp]\acs\'&optfile$)
-
-	close #filenumber: ioerr ignore
-	fnFree('[temp]\acs\'&hdrfile$)
-	
-	USEPREVIOUS: !
-	if usr>0 and exists('[temp]\acs\'&optfile$) then
-		fnFlexInit1=1 : goto WRITE_TO_ACE
+	if ~usr then 
+		fnFree('[temp]\acs\'&optfile$)
+		close #hFlex: ioerr ignore
+		fnFree('[temp]\acs\'&hdrfile$)
+	else if usr>0 and exists('[temp]\acs\'&optfile$) then
+		returnN=1
+		goto FlexInitWriteToAce
 	end if
-	!
+
 	! ***	 test validity of some stuff **********
-	fnFlexInit1=555
+	returnN=555
 	fnMakeSurePathExists('[temp]\acs\'&hdrfile$)
-	open #filenumber: 'Name=[temp]\acs\'&hdrfile$&',Size=0,Replace,EoL=CRLF,RecL=8000',d,o
+	open #hFlex: 'Name=[temp]\acs\'&hdrfile$&',Size=0,Replace,EoL=CRLF,RecL=8000',d,o
 	for j=1 to udim(mat colMask$)
 		if trim$(colMask$(j))='' then colMask$(j)='80'
 	next j
 	for j=1 to udim(ch$) : all_hdr$=all_hdr$&ch$(j)&chr$(9) : next j
 	for j=1 to udim(mat colMask$) : all_mask$&=colMask$(j)&chr$(9) : next j
-	pr #filenumber,using 'form pos 1,C '&str$(len(all_hdr$)): all_hdr$
-	pr #filenumber,using 'form pos 1,C '&str$(len(all_mask$)): all_mask$
-	close #filenumber:
+	pr #hFlex,using 'form pos 1,C '&str$(len(all_hdr$)): all_hdr$
+	pr #hFlex,using 'form pos 1,C '&str$(len(all_mask$)): all_mask$
+	close #hFlex:
 	! hdrfile name is expected by screen ace to be the same name as
 	!  	 ! optfile$ only with the added .hdr extenstion
 	if usr>0 and exists('[temp]\acs\'&optfile$)<>0 then
-		fnFlexInit1=1 : goto WRITE_TO_ACE
+		returnN=1 : goto FlexInitWriteToAce
 	end if
-	!
-	fnFlexInit1=0
+
+	returnN=0
 	! if exists('[temp]\acs\'&optfile$) then
 	! 	fnFree('[temp]\acs\'&optfile$)
 	! end if
-	open #filenumber: 'Name='&'[temp]\acs\'&optfile$&',Size=0,Replace,EoL=CRLF,RecL=6491',d,o
-	WRITE_TO_ACE: !
+	open #hFlex: 'Name=[temp]\acs\'&optfile$&',Size=0,Replace,EoL=CRLF,RecL=6491',d,o
+	FlexInitWriteToAce: !
 	sorttype=0
 	setenv('control'&str$(fn_controlCount),'FLEX|'&str$(lyne)&'|'&str$(ps)&'|'&str$(height)&'|'&str$(width)&'|2|'&str$(seltype)&'|'&str$(sorttype)&'|'&sfn$&'|'&str$(hdr_count)&'|'&str$(fraCon)&'|'&str$(tabcon)&'|')
 	usr=0
-	FLEXINIT1_COMPLETE: !
+	FlexInitFinis: !
+	fnFlexInit1=returnN
 fnend
 def library fnFlexAdd1(mat item$; ___,all_item$*6491) ! this function may need to be updated to save data in a work file for re-adding later; this is due to error 980 when closing a list with all records filtered; Gordon should fix -- 5/12/14
 	! add a line to a flexgrid on a screen ace form
 	if env$('exitnow')<>'yes' then ! special processing to increase speed for exitnow
 		if ~setup then fn_setup
 		mat2str(mat item$,all_item$,hex$('09'))
-		flexhandle=fn_getFlexHandle
+		flexhandle=fn_hFlex
 		grid_populated+=1
 		pr #flexhandle,using 'form pos 1,C '&str$(len(all_item$)): all_item$ ioerr ignore
 	end if
@@ -514,7 +512,7 @@ def library fnAcs(mat resp$; &ckey, startfield,close_on_exit,parent_none,disable
 
 	for j=1 to udim(mat resp$) : resp$(j)=rtrm$(resp$(j)) : next j
 	cap$=env$('Program_Caption')
-	fn_getFlexHandle(1)
+	fn_hFlex(1)
 	! do we even need this line - it screws up other things.  Does removing it screw anything up?
 	! yeah it screws things up to take it out - repetative flex grids
 	fn_ace(sn$,unused,mat resp$,ckey,startfield,close_on_exit,parent_none,disabled_background)
@@ -1242,7 +1240,7 @@ def fn_aceRdFlex(;___,index_,masknumber)
 	dim gridspec$*255		 !
 	dim loading_spec$*50 ! where to print Loading: please wait...
 	! pr '[temp]\acs\'&trim$(path1$)&'.hdr' : pause
-	open #grid_headers=fnH: 'Name='&'[temp]\acs\'&trim$(path1$)&'.hdr',display,input
+	open #grid_headers=fnH: 'Name=[temp]\acs\'&trim$(path1$)&'.hdr',display,input
 	linput #grid_headers: _line$
 	str2mat(_line$,mat _headings$,tab$)
 	linput #grid_headers: _line$
@@ -1283,7 +1281,7 @@ def fn_aceRdFlex(;___,index_,masknumber)
 	loading_spec$(0:0)=window_prefix$
 	! if env$('acsDeveloper')<>'' then pr 'just before grid headers' : pause !
 	pr f gridspec$&',headers,[gridheaders]' : (mat _headings$,mat _widths,mat _forms$)
-	open #grid_data=fnH: 'Name='&'[temp]\acs\'&trim$(path1$)&'[SESSION].tmp',display,input
+	open #grid_data=fnH: 'Name=[temp]\acs\'&trim$(path1$)&'[SESSION].tmp',display,input
 	clearflag$='='
 
 	dim long_row$(1)*2100		 ! dim long_row$(1)*1024
@@ -1329,7 +1327,7 @@ def fn_aceRdFlex(;___,index_,masknumber)
 		! CHECK_JULIAN_DATES: ! Convert dates to julain format for BR internal date specs
 		dim datemask$
 		for index_=1 to udim(mat _mask$)
-			
+
 			masknumber=val(_mask$(index_)) conv NOT_JULIAN_DATE
 			if masknumber>=1000 then masknumber-=1000
 			if masknumber>=01 and masknumber<=05 then
@@ -1416,7 +1414,7 @@ fnend
 		_headings$(1)='Combined'
 		mat _widths(udim(_headings$))=(0): mat _forms$(udim(_headings$))=('')
 
-		open #grid_data=fnH: 'Name='&'[temp]\acs\'&trim$(path1$)&'[SESSION].tmp',display,input
+		open #grid_data=fnH: 'Name=[temp]\acs\'&trim$(path1$)&'[SESSION].tmp',display,input
 		for count=1 to 1500
 			linput #grid_data: _line$ eof ignore
 			if file(grid_data)<>0 then goto GRIDFORM_COMPLETE
@@ -2071,11 +2069,9 @@ def fn_ace_io_add(aia_in$*255)
 fnend
 
 ! /r
-def fn_getFlexHandle(; forceclose)
-	if forceclose then
-		close #118: ioerr ignore
-	end if
-	fn_getFlexHandle=118
+def fn_hFlex(; forceclose)
+	if forceclose then close #118: ioerr ignore
+	fn_hFlex=118
 fnend
 
 def library fnQgl(myline,mypos; qglcontainer,add_all_or_blank,forceGLsysIfPossible,qgllength,qgltabcon,hAccts,___,qgl_cursys$)
@@ -2087,7 +2083,7 @@ def library fnQgl(myline,mypos; qglcontainer,add_all_or_blank,forceGLsysIfPossib
 	! this function has an integrated fnComboA - similar to the one above
 
 	dim qglopt$*60
-	
+
 	dim qgloption$(1)*255
 
 	dim qglsetupkeycurrent$*128
@@ -2238,7 +2234,7 @@ def library fnRgl$*60(acctIn$; returnMaxLength,leaveDescFileOpen,forceGLsysIfPos
 	! 	hAcct=0
 	end if
 	! /r
-	
+
 	acctIn$=lpad$(rtrm$(acctIn$),12)
 
 	if ~hAcct then
@@ -2251,7 +2247,7 @@ def library fnRgl$*60(acctIn$; returnMaxLength,leaveDescFileOpen,forceGLsysIfPos
 		hAcct=0
 	end if
 	RglReadDescFinis: !
-	
+
 	! reformat it from a read key= ready format to an input ready format
 	if useSub then
 		acctIn$(10:12)='-'&trim$(acctIn$(10:12))
@@ -2265,9 +2261,9 @@ def library fnRgl$*60(acctIn$; returnMaxLength,leaveDescFileOpen,forceGLsysIfPos
 		acctIn$(1:3)=''
 	end if
 
-	
+
 	return$=rtrm$(rpad$(acctIn$,14)&desc$)(1:returnMaxLength)
-	
+
 	if trim$(return$)='0-0-0' or trim$(return$)='0-0' or trim$(return$)='0' or trim$(return$)='--' or trim$(return$)='-' then return$=''
 	fnRgl$=return$
 
@@ -2297,7 +2293,7 @@ def library fnAgl$*12(&x$; ___,return$*12,dash1,dash2,useDept,useSub)
 		else if useDept<>0 and useSub =0 then
 			x$=lpad$(trim$(x$(1:dash1-1)),3)&lpad$(trim$(x$(dash1+1:len(x$))),6)&'  0'
 		end if
-	
+
 			x$=lpad$(trim$(x$),12)
 			return$=x$(1:12)
 	end if

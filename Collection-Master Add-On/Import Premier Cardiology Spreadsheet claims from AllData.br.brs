@@ -120,7 +120,7 @@ def  fn_premierCardiologyImport(; sourceId$)
 		dim csvExt$*128
 		fnGetPp(csvFile$,csvPath$,csvProg$,csvExt$)
 		dim outFile$*256
-		outFile$=env$('at')&srep$(csvPath$&csvProg$&'-CM_EDI'&'.csv','@::','')
+		outFile$=env$('at')&srep$(csvPath$&csvProg$&'-CM_EDI.csv','@::','')
 include: filenamesPushMixedCase
 		open #hOut=fnH: 'name='&outFile$&',recl=1024,replace',d,o
 include: filenamesPopUpperCase

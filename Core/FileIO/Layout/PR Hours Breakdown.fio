@@ -1,0 +1,10 @@
+[Q]\PRmstr\HourBreakdown.h[cno]   , ts_  , 0
+[Q]\PRmstr\HourBreakdown-idx.h[cno]        , emp/dept
+recl=39
+===================================================
+! read #breakdown,using "form pos 1,n 8,c 5,n 8,2*n 9.2",release: empno,class$,tdate,increase,decrease
+emp           	,Emp            	, N  8  	,  	,! SPos=  1 aka=empno  comboFio(PR Employee)
+class         	,Class          	, c  5  	,  	,! SPos=  9 aka=class$  
+tDate         	,Date           	, n  8  	,  	,!
+increase     	,Increase      	, n  9.2	,  	,!
+decrease     	,Decrease      	, n  9.2	,  	,!

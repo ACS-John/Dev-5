@@ -36,8 +36,8 @@ goto L270
 
 END1: close #2:
 	close #1:
-	execute 'COPY [Temp]\Work.'&session$&' '&'[Q]\GLmstr\ACTRANS.h[cno] -n'
-	execute 'Index [Q]\GLmstr\ACTRANS.h[cno]'&' '&'[Q]\GLmstr\ACTRIDX.h[cno] 1/71/17/13 12/2/2/4 Replace DupKeys'
+	execute 'COPY [Temp]\Work.'&session$&' [Q]\GLmstr\ACTRANS.h[cno] -n'
+	execute 'Index [Q]\GLmstr\ACTRANS.h[cno] [Q]\GLmstr\ACTRIDX.h[cno] 1/71/17/13 12/2/2/4 Replace DupKeys'
 	execute 'free [Temp]\Work.'&session$
 goto Xit
 

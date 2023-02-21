@@ -418,7 +418,7 @@ Xit: fnXit
 
 def fn_chooseBudgetUpdates(x1$*10,transDate,mat billToPay; ___,bd1Count,ck1,j,key$*14,billingDate,btRecCount,btpCount) ! very local.
 	! haveBudget=0   !   this seems really wrong - should not be turing it off constantly
-	if hBudMstr then 
+	if hBudMstr then
 	   if fnCustomerBudgetEnable(x1$)  then
 			btRecCount=fnBudgetTransMatchingRecords(x1$,mat btRec,'unpaidonly')
 			fnTos
@@ -441,7 +441,7 @@ def fn_chooseBudgetUpdates(x1$*10,transDate,mat billToPay; ___,bd1Count,ck1,j,ke
 					if resp$(j)='True' then billToPay(btpCount+=1)=btRec(j) ! pr 'ding';bell
 				nex j
 			end if
-		end if 
+		end if
 	end if ! hBudMstr
 	Bud2Finis: !
 fnend
@@ -1081,44 +1081,25 @@ fnend
 				ct_item$(ct_item)=trim$(lwrc$(ct_item$(ct_item)))
 			next ct_item
 			csv_date=max(0,srch(mat ct_item$,'date'))
-
-
-
-			csv_account=fn_findColumn('acct #,acct,account,customer number',mat ct_item$)
-			! csv_account=max(0,srch(mat ct_item$,'acct #'))
-			! if csv_account<=0 then
-			! 	csv_account=max(0,srch(mat ct_item$,'acct'))
-			! 	if csv_account<=0 then
-			! 		csv_account=max(0,srch(mat ct_item$,'account'))
-			! 	end if
-			! end if
-			csv_type=fn_findColumn('pmt type,type',mat ct_item$)
-			! csv_type=max(0,srch(mat ct_item$,'pmt type'))
-			! if csv_type<=0 then
-			! 	csv_type=max(0,srch(mat ct_item$,'type'))
-			! end if
-			csv_amount=fn_findColumn('payment,amt,amount',mat ct_item$)
-			! csv_amount=max(0,srch(mat ct_item$,'payment'))
-			! if csv_amount<=0 then
-			! 	csv_amount=max(0,srch(mat ct_item$,'amt'))
-			! 	if csv_amount<=0 then
-			! 		csv_amount=max(0,srch(mat ct_item$,'amount'))
-			! 	end if
-			! end if
+			csv_account=fn_findColumn('acct #,acct,account,customer number',mat ct_item$, csv_delim$)
+			csv_type=fn_findColumn('pmt type,type',mat ct_item$, csv_delim$)
+			csv_amount=fn_findColumn('payment,amt,amount',mat ct_item$, csv_delim$)
 			if csv_account and csv_amount and csv_date and csv_type then
 				returnN=2
 			end if
 		end if
 		CT_FINIS: !
+		! if ~returnN then pr 'no type!' : pause
 		fn_csv_type=returnN
 	fnend
-		def fn_findColumn(columnHeaders$*512,mat columnToFind$; ___,returnN,colName)
-			dim columnHeader$(0)*128
-			mat columnHeader$(0)
-			str2mat(columnHeaders$,mat columnHeader$)
+		def fn_findColumn(headerToSearchForList$*512,mat columnToFind$, delim$; ___,returnN,colName)
+			dim headerToSearchFor$(0)*128
+			mat headerToSearchFor$(0)
+			str2mat(headerToSearchForList$,mat headerToSearchFor$, delim$)
 			do
-				colName+=1
-				returnN=max(0,srch(mat columnHeader$,columnToFind$(colName)))
+				! colName+=1
+				returnN=max(0,srch(mat columnToFind$,headerToSearchFor$(colName+=1)))
+				! returnN=max(0,srch(mat headerToSearchFor$,columnToFind$(colName)))
 			loop until returnN or colName=>udim(mat columnToFind$)
 			FcFinis: !
 			fn_findColumn=returnN

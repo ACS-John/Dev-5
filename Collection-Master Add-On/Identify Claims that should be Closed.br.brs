@@ -16,7 +16,7 @@ fnTop(program$,'',1)
 	fnAddOneC(mat closeCode$,'*CC:C104') ! Close – Deceased No Estate
 	fnAddOneC(mat closeCode$,'*CC:C109') ! Close – Paid in Full
 	fnAddOneC(mat closeCode$,'*CC:C113') ! Close – skip
-	fnAddOneC(mat closeCode$,'*CC:C115') ! Close – Debtor Out of Area (This one doesn’t necessarily mean it needs to be closed in our office. Usually we need to forward it to a CA for a different state because the consumer has moved).
+	fnAddOneC(mat closeCode$,'*CC:C115') ! Close – Debtor Out of Area (This one doesn''t necessarily mean it needs to be closed in our office. Usually we need to forward it to a CA for a different state because the consumer has moved).
 	fnAddOneC(mat closeCode$,'*CC:C118') ! Close – Settle in Full
 	fnAddOneC(mat closeCode$,'*CC:C140') ! Close – Soldiers & Sailors
 	fnAddOneC(mat closeCode$,'*CC:C141') ! Close – Debtor in Jail

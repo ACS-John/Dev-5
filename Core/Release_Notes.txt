@@ -1,7 +1,6 @@
 Time and Date 		Sys	Program(s) and Change(s) Description             
 ______________________	___	____________________________________________________________________________________________________________________________________________________________________________________________________________________________________             
-14:46 02/23/2023	CO	5.75292  
-2:46 PM 2/9/2023	PR	Increased variable name for filename for glwk$ in Post to GL 
+11:32 02/23/2023	CO	5.75292  
 10:51 02/23/2023	CO	5.75291   
 0:00 02/23/2023	CO	5.75290    
 11:58 PM 1/31/2023	PR	User Designed Reports is now renamed to Custom Reports and it's various options are now centrally available from the one program screen   

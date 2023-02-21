@@ -264,7 +264,7 @@ PrintGrid: ! r: Creates grid lines for prtflex2
 		read #hgridfile,using fGridFile: columnnum,name$,vname$,fieldlen,colMask$,abbrev$ eof L2160
 		if vname$(1:1)='(' then vname$(1:1)=''
 		columns=columns+1
-		pr #h_gridspecs1,using F_GRIDSPECS1: str$(specline)& ' colHdr$('&str$(columns)&')='&'"'&trim$(abbrev$)&'"'&' : ColMask$('&str$(columns)&')='&'"'&trim$(colMask$)&'"'
+		pr #h_gridspecs1,using F_GRIDSPECS1: str$(specline)& ' colHdr$('&str$(columns)&')="'&trim$(abbrev$)&'" : ColMask$('&str$(columns)&')="'&trim$(colMask$)&'"'
 		F_GRIDSPECS1: form pos 1,c 255
 		specline=specline+10
 		if pos(vname$,'$',1) then  ! determine if numeric or character

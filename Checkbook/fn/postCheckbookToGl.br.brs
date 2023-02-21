@@ -714,7 +714,7 @@ fnend  !
 ! def fn_checkGlnumber(source$*128,gln$*12) r:
 ! 	pr gln$
 ! 	if gln$(1:9)<>fnCleanGl$(gln$)(1:9) then 
-! 	 pr source$&' gln$='&gln$&' changed to '&'fnCleanGl$(gln$)='&fnCleanGl$(gln$)
+! 	 pr source$&' gln$='&gln$&' changed to fnCleanGl$(gln$)='&fnCleanGl$(gln$)
 ! 	! pause
 ! 	end if
 ! fnend /r

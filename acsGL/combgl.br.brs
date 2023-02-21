@@ -40,7 +40,7 @@ MAIN: !
 	ctr+=1
 	if ctr>1 then goto L390
 	cno1=cno
-	execute 'Copy [Q]\GLmstr\*.H'&str$(cno1)&' '&'[Q]\GLmstr\*.H'&str$(dcno)&' -n' ioerr MAIN
+	execute 'Copy [Q]\GLmstr\*.H'&str$(cno1)&' [Q]\GLmstr\*.H'&str$(dcno)&' -n' ioerr MAIN
 	open #1: 'Name=[Q]\GLmstr\Company.h'&str$(dcno)&'',internal,outIn
 	read #1,using ' form pos 1,C 40': n$
 	n$(25:40)=' (Consolidated)'
@@ -60,8 +60,8 @@ L390: !
 goto MAIN
 
 END1: close #1: ioerr ignore
-	execute 'Index [Q]\GLmstr\GLmstr.H'&str$(dcno)&' '&'[Q]\GLmstr\GLIndex.H'&str$(dcno)&' 1 12 Replace DupKeys' ioerr Xit
-	execute 'Index [Q]\GLmstr\GLmstr.H'&str$(dcno)&' '&'[Q]\GLmstr\glIndx2.H'&str$(dcno)&' 13 30 Replace DupKeys'
+	execute 'Index [Q]\GLmstr\GLmstr.H'&str$(dcno)&' [Q]\GLmstr\GLIndex.H'&str$(dcno)&' 1 12 Replace DupKeys' ioerr Xit
+	execute 'Index [Q]\GLmstr\GLmstr.H'&str$(dcno)&' [Q]\GLmstr\glIndx2.H'&str$(dcno)&' 13 30 Replace DupKeys'
 	cno=fnPutCno(dcno)
 Xit: fnXit
 

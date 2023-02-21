@@ -1,3 +1,4 @@
+! r: notes
 ! Payroll\Calculation   (formerly   S:\Payroll\Calc  S:\acsPR\newprCalk   )
 
 ! Each year list 'every year'
@@ -11,6 +12,7 @@
 ! totalGrossPay - total gross pay
 ! stdWhFed - Standard Federal Withholding
 ! stdWhFed - Standard Federal Withholding
+! /r
 fn_setup
 fnTop(program$)
 ! r: screen1
@@ -41,9 +43,12 @@ fnTop(program$)
 	fnLbl(lc+=1,1,'Standard Federal % Override:',mylen,1,0)
 	fnTxt(lc   ,mypos,4,0,1,'32',0,'Normally zero. The government allows you to use a standard percent on bonuses, etc. See Circular E for allowable %.')
 	resp$(resp_stdFedOverride=rc+=1)=''
-
-	fnCmdKey('Calculate',1,1,0,'Proceed with calculations.')
-	fnCmdKey('Cancel',5,0,1,'Returns to menu without calculating')
+	if fn_justTesting then
+		fnCmdKey('Test Calculation',1,1,0,'Proceed with testing the calculation.')
+	else
+		fnCmdKey('Calculate',1,1,0,'Proceed with calculations.')
+	end if
+		fnCmdKey('Cancel',5,0,1,'Returns to menu without calculating')
 	ckey=fnAcs(mat resp$)
 	if ckey=5 then
 		goto Xit
@@ -73,40 +78,51 @@ fnTop(program$)
 		d1=mo1*10000+da*100+yr
 	end if
 ! /r
-fnAutomatedSavePoint('before')
+if ~fn_justTesting then fnAutomatedSavePoint('before')
 fn_setupOpenFiles
-open #hTimesheet=fnH: 'Name=[Q]\PRmstr\rpwork[unique_computer_id].h[cno],KFName=[Q]\PRmstr\rpwork[unique_computer_id]Idx.h[cno]',i,outIn,k  ! was 3
-F_timesheet: form pos 1,c 8,n 3,5*pd 4.2,25*pd 5.2,2*pd 4.2
-goto ReadTimesheet
+open #hTimesheet=fnH: 'Name=[Q]\PRmstr\timesheet[acsUserId].h[cno],KFName=[Q]\PRmstr\timesheet[acsUserId]Idx.h[cno]',i,outIn,k  ! was 3
+goto MainLoop
 
-ReadTimesheet: ! r:  read rpwork, read employee, call calc deduction etc  basically beginning of main loop
-	dim xInp(29)
-	dim empNo$*8
-	read #hTimesheet,using F_timesheet: empNo$,dep,mat xInp,gpd,mat hr eof Finis
-	! r: force test or check an entry from rpWork
-	! fnpause
-	! empNo$    ='      27'
-	! dep   =  2
-	! gpd   =637.5
-	! hr(1) = 12.75
-	! hr(2) = 19.13
-	! xInp(1)=50 ! regular hours
-	! d1= 10120
-	! /r
-
+def fn_readTimesheet(&empNo$,&dep,mat xInp,&gpd,mat hr; ___,returnN)
+	! if triggerEOF=1 then returnN=-4270 : goto ReadtimesheetFinis
+	read #hTimesheet,using Ftimesheet: empNo$,dep,mat xInp,gpd,mat hr ioerr ReadTimesheetErr
+	Ftimesheet: form pos 1,c 8,n 3,5*pd 4.2,25*pd 5.2,2*pd 4.2
 	if env$('client')='Payroll Done Right' then gosub PrdrWorkmansComp ! env$('client')='West Accounting' or
+	goto ReadtimesheetFinis
+	ReadTimesheetErr: returnN=-err : goto ReadtimesheetFinis
+	ReadtimesheetFinis: fn_readTimesheet=returnN
+fnend
+	PrdrWorkmansComp: ! r:
+		! xInp(6) Other Compensation
+		! if other compensation > 0 then
+		!   if pay code is 1 hours = 173.33
+		!   if pay code is 2 hours = 86.66
+		!   if pay code is 3 hours = 80
+		!   if pay code is 4 hours = 40
+		! else
+		!   hours = regular hours + overtime hours
+		! end if
+		tmphrs=xInp(1)+xInp(2) ! if xInp(6)>0 then tmphrs=saif(payCode) else tmphrs=xInp(1)+xInp(2)
+		!     fnStatus('xInp(17) changed to '&str$(round(tmphrs*xInp(17)*.01,2))&' round('&str$(tmphrs)&' * xInp(17)('&str$(xInp(17))&' * .01)',2)
+		!     fnStatusPause
+		xInp(17)=round(tmphrs*xInp(17)*.01,2) ! inp(17)=round(tmphrs*xInp(17)*.01,2)
+	return  ! /r
+MainLoop: ! r:  read timesheet, read employee, call calc deduction etc  basically beginning of main loop
+	dim empNo$*8
+	dim xInp(29)
+	if fn_readTimesheet(empNo$,dep,mat xInp,gpd,mat hr)=-4270 then goto Finis ! else  : pr 'readPointA'
 	deptKey$=cnvrt$('pic(zzzzzzz#)',val(empNo$))&cnvrt$('pic(zz#)',dep)
 	eno=val(empNo$)
-	if eno=0 then goto ReadTimesheet
-	dim n$*8
-	if n$<>empNo$ then
+	if eno=0 then goto MainLoop
+	dim emp$*8
+	if emp$<>empNo$ then
 		twc=totalWagesYtd=tfy=cafy=deducy=0 ! eicytd=0
-		if rtrm$(n$)<>'' then gosub ReallocateStateByDept
+		if rtrm$(emp$)<>'' then gosub ReallocateStateByDept
 		dim em(16)
 		dim hr(2)
-		read #hEmployee,using F_employee,key=empNo$: mat em,lpd,totalGrossPay,w4step2,w4Year$,w4Step3,w4step4a,w4step4b,w4step4c nokey EmployeeNoKey
-		if trim$(empNo$)='23' then pr 'wolfe' : pause
-		F_employee: form pos 112,7*n 2,2*pd 3.3,6*pd 4.2,2*n 6,pd 5.2,n 1,C 4,pos 197,4*n 12.2
+		read #hEmployee,using Femployee,key=empNo$: mat em,lpd,totalGrossPay,w4step2,w4Year$,w4Step3,w4step4a,w4step4b,w4step4c nokey EmployeeNoKey
+		! if trim$(empNo$)='25' then pr 'wolfe' : pause
+		Femployee: form pos 112,7*n 2,2*pd 3.3,6*pd 4.2,2*n 6,pd 5.2,n 1,C 4,pos 197,4*n 12.2
 		! gosub EmployeeRecordToLocal
 		! EmployeeRecordToLocal: ! r:
 			marital       	=em(1)
@@ -115,7 +131,7 @@ ReadTimesheet: ! r:  read rpwork, read employee, call calc deduction etc  basica
 			empStatus     	=em(4)
 			payCode       	=em(5)
 			ficaCode      	=em(6)
-			! eicCode       	=em(7)
+			! eicCode      	=em(7)
 			sickCode      	=em(8)
 			vaca          	=em(9)
 			hrsSick       	=em(10)
@@ -130,39 +146,47 @@ ReadTimesheet: ! r:  read rpwork, read employee, call calc deduction etc  basica
 		! CalculateAllDeductionsAllDept: ! r:  returns totalGrossPay,ded,t3 (and probably other stuff, i.e. a % for each dept)
 			! Calculate all deduct for federal for all departments
 			totalGrossPay=t3=ded=0
+							fn_detail('___________________________________________________________________')
+							fn_detail('Employee   '&empNo$)
 			do
 				for j=1 to 20
 					if (j+9)=17 and env$('client')='Payroll Done Right' then goto L3090 ! if processing xInp(17) skip IT do not process it.   ! env$('client')='West Accounting' or
+
 					if newdedfed(j)>=1 and deductionCode(j)=dc_deduct then
 						! r:  department.tdc1  State Code
 							sc1=1
 							read #hDepartment,using 'form pos 48,n 2',key=deptKey$: sc1 nokey ignore
 							if sc1=0 then sc1=1
-							! If env$('client')='Washington Parrish' AND J=3 Then sD3=xInp(J+9)*(GPD+DEFCOMPMATCH)/100 : Goto 3150 ! add deferred comp to gross for calculating pension deduction
+							! If env$('client')='Washington Parrish' AND J=3 Then sD3=xInp(J+9)*(gpd+defcompmatch)/100 : Goto L3150 ! add deferred comp to gross for calculating pension deduction
 							if newcalcode(j)=1 then sd3=xInp(j+9) 	else  sd3=xInp(j+9)*gpd/100
+							fn_detail('sd3='&str$(sd3))
 							stwh(sc1,1)=stwh(sc1,1)-sd3
 						! /r
 						if newcalcode(j)=1 then  ded+=xInp(j+9) 	else  ded+=xInp(j+9)*gpd/100
+						fn_detail('ded='&str$(ded))
 					end if
 					if newdedfed(j)=2 then
 						if newcalcode(j)=1 then   t3+=xInp(j+9) 	else   t3+=xInp(j+9)*gpd/100
+						fn_detail('t3='&str$(t3))
 					end if
 					L3090: !
 				next j
 				totalGrossPay+=gpd
+				fn_detail('totalGrossPay',totalGrossPay,'(after deductions)')
+
 				dim newx$*8
-				read #hTimesheet,using F_timesheet: newx$,newdep,mat xInp,gpd,mat hr eof L3150
-				if env$('client')='Payroll Done Right' then gosub PrdrWorkmansComp ! env$('client')='West Accounting' or
+				! read #hTimesheet,using Ftimesheet: newx$,newdep,mat xInp,gpd,mat hr eof L3150
+				if fn_readTimesheet(newx$,newdep,mat xInp,gpd,mat hr)=-4270 then goto L3150 ! else  : pr 'readPointB'
 			loop while newx$=empNo$
 			L3150: !
+
+
 			workkey$=cnvrt$('pic(zzzzzzz#)',eno)&cnvrt$('pic(zz#)',dep)
 			restore #hTimesheet,key>=workkey$:
-			read #hTimesheet,using F_timesheet: empNo$,dep,mat xInp,gpd,mat hr eof Finis
-			if env$('client')='Payroll Done Right' then gosub PrdrWorkmansComp !  11/14/2017 - env$('client')='Payroll Done Right'  Does not want any special processing for deduction 8        ! env$('client')='West Accounting' or
-			! pr 'B right after read rpwork  xInp(6)=';xInp(6) : pause
+			if fn_readTimesheet(empNo$,dep,mat xInp,gpd,mat hr)=-4270 then goto Finis ! else  : pr 'readPointC'
 		! return  ! /r
 
-		n$=empNo$
+		emp$=empNo$
 		! r: Accrue Sick and Vacation
 		if accrueVacaAndSick=1 then
 			if sickCode=-1 then ! Check for elgibility
@@ -178,19 +202,27 @@ ReadTimesheet: ! r:  read rpwork, read employee, call calc deduction etc  basica
 					end if
 				end if
 			end if
-			if sickCode>0 then hrsSick+=sickCode ! Accrue Sick
 			if sickCode>0 then  ! and env$('client')<>'Battlefield'
-				write #hBreakdown,using 'form pos 1,n 8,c 5,n 8,2*n 9.2': eno,'Sick',prd,sickCode,0 ioerr ignore
+				hrsSick+=sickCode ! Accrue Sick
+				if fn_justTesting then
+					fn_detail('did not write breakdown for sick')
+				else
+					write #hBreakdown,using 'form pos 1,n 8,c 5,n 8,2*n 9.2': eno,'Sick',prd,sickCode,0 ioerr ignore
+				end if
 			end if
 			if vaca>0 then hrsVaca+=vaca ! Accrue Vacation
-			if vaca>0 then ! and env$('client')<>'Battlefield'
-				write #hBreakdown,using 'form pos 1,n 8,c 5,n 8,2*n 9.2': eno,'Vac',prd,vaca,0 ioerr ignore
+			if vaca>0  then ! and env$('client')<>'Battlefield'
+				if fn_justTesting then
+					fn_detail('did not write breakdown for vaca')
+				else
+					write #hBreakdown,using 'form pos 1,n 8,c 5,n 8,2*n 9.2': eno,'Vac',prd,vaca,0 ioerr ignore
+				end if
 			end if
 		end if
 		! /r
 		payPeriodsPerYear=fn_payPeriodsPerYear(payCode)
 		if payPeriodsPerYear<=0 then
-			goto ReadTimesheet
+			goto MainLoop
 		end if
 		if ~disableWithholdingN(esw_federal) then
 			fed_wh=fn_federalTax(taxYear,fedpct,totalGrossPay,ded,stdWhFed,fedExempt,payPeriodsPerYear,marital,w4Year$,w4step2,w4Step3,w4step4a,w4step4b,w4step4c)
@@ -203,7 +235,7 @@ ReadTimesheet: ! r:  read rpwork, read employee, call calc deduction etc  basica
 		read #hDepartment,using 'form pos 48,n 2',key=deptKey$: tcd(1) ! get state code
 		dim ytdTotal(32)
 		dim caf(20)
-		fn_determineEarnings(hPrChecks,eno, dep,begDate,endDate,mat ytdTotal,ytdFICA,ytdMedicare,ytdWages,mat caf)
+		fn_determineEarnings(hCheckHistory,eno, dep,begDate,endDate,mat ytdTotal,ytdFICA,ytdMedicare,ytdWages,mat caf)
 		for j=1 to 20
 			if newdedfed(j)=2 and deductionCode(j)=dc_deduct then
 				cafy+=caf(j)
@@ -222,7 +254,7 @@ ReadTimesheet: ! r:  read rpwork, read employee, call calc deduction etc  basica
 	! gpd = gross pay per department
 	! pog = percent of gross
 	dim tdt(4)
-	dim tdet(17)
+	dim tdet(23)
 	read #hDepartment,using 'form pos 1,N 8,n 3,c 12,4*N 6,3*N 2,pd 4.2,23*PD 4.2',key=deptKey$: teno,empDept,gl$,mat tdt,mat tcd,tli,mat tdet ! Nokey X
 	if totalGrossPay=0 then pog=1 : goto L1620 ! Allow checks to calculate with 0 gross pay
 	if totalGrossPay=gpd then pog=1 : goto L1620
@@ -230,9 +262,10 @@ ReadTimesheet: ! r:  read rpwork, read employee, call calc deduction etc  basica
 		mat ml$(1)
 		ml$(1)='Employee Number '&trim$(empNo$)&' skipped Total Gross Pay = 0, Must be Re-entered'
 		fnMsgBox(mat ml$,resp$,'',0)
-		goto ReadTimesheet
+		goto MainLoop
 	end if
 	pog=gpd/totalGrossPay
+
 	L1620: !
 	for j=1 to 20
 		if env$('client')='Franklinton' then
@@ -259,14 +292,18 @@ ReadTimesheet: ! r:  read rpwork, read employee, call calc deduction etc  basica
 		L1710: !
 	next j
 	hrsSick-=xInp(3) : hrsVaca-=xInp(4)
-	if xInp(3)>0 then ! write sick hours taken to breakdown file
-		write #hBreakdown,using 'form pos 1,n 8,c 5,n 8,2*n 9.2': eno,'Sick',prd,0,xInp(3) ioerr ignore
-	end if
-	if xInp(4)>0 then ! write vacation hours taken to breakdown file
-		write #hBreakdown,using 'form pos 1,n 8,c 5,n 8,2*n 9.2': eno,'Vac',prd,0,xInp(4) ioerr ignore
-	end if
-	if xInp(5)>0 then ! write holiday hours taken to breakdown file
-		write #hBreakdown,using 'form pos 1,n 8,c 5,n 8,2*n 9.2': eno,'Hol',prd,0,xInp(5) ioerr ignore
+	if fn_justTesting then
+		if xInp(3)+xInp(4)+xInp(5)>0 then fn_detail('did not write breakdown for sick, vac or hol')
+	else
+		if xInp(3)>0 then ! write sick hours taken to breakdown file
+			write #hBreakdown,using 'form pos 1,n 8,c 5,n 8,2*n 9.2': eno,'Sick',prd,0,xInp(3) ioerr ignore
+		end if
+		if xInp(4)>0 then ! write vacation hours taken to breakdown file
+			write #hBreakdown,using 'form pos 1,n 8,c 5,n 8,2*n 9.2': eno,'Vac',prd,0,xInp(4) ioerr ignore
+		end if
+		if xInp(5)>0 then ! write holiday hours taken to breakdown file
+			write #hBreakdown,using 'form pos 1,n 8,c 5,n 8,2*n 9.2': eno,'Hol',prd,0,xInp(5) ioerr ignore
+		end if
 	end if
 	if sck(4)=999 then sck(4)=1000 ! system will only hold 999 maximum accrued sick hours.  If maximum is set at 999, assume no maximum
 	if sck(4)<>0 and hrsSick>sck(4) then hrsSick=sck(4)
@@ -403,21 +440,27 @@ ReadTimesheet: ! r:  read rpwork, read employee, call calc deduction etc  basica
 		tcp(32)=gpd-tcp(1)-tcp(2)-tcp(3) ! -TCP(4)
 		for j=5 to 24
 			dc=deductionCode(j-4)
-			if deductionCode(j-4)=dc_benefit then
-				! do nothing
-			else if deductionCode(j-4)=dc_add then
-				tcp(32)+=tcp(j)
-			else if deductionCode(j-4)=dc_addGross then
-				tcp(31)+=tcp(j)
-				tcp(32)+=tcp(j)
-			else if deductionCode(j-4)=dc_deduct then
-				tcp(32)-=tcp(j)
+			if tcp(j) then
+				if deductionCode(j-4)=dc_benefit then
+					! do nothing
+				else if deductionCode(j-4)=dc_add then
+					tcp(32)+=tcp(j)
+					fn_detail('Net Pay increased by '&rtrm$(dedname$(j-4)),tcp(j),'to',tcp(32))
+				else if deductionCode(j-4)=dc_addGross then
+					tcp(31)+=tcp(j)
+					fn_detail('Gross Pay increased by '&rtrm$(dedname$(j-4)),tcp(j),'to',tcp(31))
+					tcp(32)+=tcp(j)
+					fn_detail('Net Pay increased by '&rtrm$(dedname$(j-4)),tcp(j),'to',tcp(32))
+				else if deductionCode(j-4)=dc_deduct then
+					tcp(32)-=tcp(j)
+					fn_detail('Net Pay decreased by '&rtrm$(dedname$(j-4)),tcp(j),'to',tcp(32))
+
+				end if
 			end if
 		next j
 		for j=1 to 31 : tcp(j)=round(tcp(j),2) : next j
 		tcp(32)+=tcp(25)-tcp(29)-tcp(30)
 		! if env$('client')='Washington Parrish' then tcp(32)=tcp(32)+tcp(30) ! add tips which is really an other compensation back to net
-		! the following commented lines may have to be put back in and the tdet array extended to hold them  ???  kj
 		! SS_WAGE: !
 		dim tdc(10)
 		if ficaCode=9 then
@@ -465,39 +508,59 @@ ReadTimesheet: ! r:  read rpwork, read employee, call calc deduction etc  basica
 			wc=wcm(payCode)-twc
 		end if
 		twc+=wc : tdc(6)=wc
-		rewrite #hDepartment,using 'form pos 42,n 6,pos 58,23*pd 4.2',key=deptKey$: d1,mat tdet
+		if fn_justTesting then
+			fn_detail('did not write Department')
+		else
+			rewrite #hDepartment,using 'form pos 42,n 6,pos 58,23*pd 4.2',key=deptKey$: d1,mat tdet
+		end if
 		tcp(4)=0
-		write #hPrChecks,using 'form pos 1,N 8,n 3,PD 6,N 7,5*PD 3.2,37*PD 5.2': eno,empDept,prd,0,mat tdc,mat tcp
+		if fn_justTesting then
+			fn_detail('***** CHECK RESULTS *****')
+			for deductionX=1 to 20
+				if dedName$(deductionX)<>'' and tcp(deductionX+4) then
+					fn_detail(rtrm$(dedName$(deductionX))&':'&str$(tcp(deductionX+4)))
+				end if
+			next deductionX
+			fn_detail('WH -  Federal ='&str$(tcp( 1)))
+			fn_detail('WH -       SS ='&str$(tcp( 2)))
+			fn_detail('WH - Medicare ='&str$(tcp( 3)))
+			fn_detail('WH -    State ='&str$(tcp( 4)))
+			fn_detail('Pay -     Net ='&str$(tcp(32)))
+			fn_detail('Pay -   Total ='&str$(tcp(31)))
+		else
+			write #hCheckHistory,using 'form pos 1,N 8,n 3,PD 6,N 7,5*PD 3.2,37*PD 5.2': eno,empDept,prd,0,mat tdc,mat tcp
+		end if
 		! fn_detail('WRITING payroll check with tcp(4)='&str$(tcp(4))&' and tcp(32)='&str$(tcp(32)))
 		! fnStatusPause
 		totalWagesYtd+=gpd : cafy+=ficat3 ! eicytd+=ytdTotal(25)
 		if tdet(16)<>0 then stuc(tcd(1))+=tdet(16) ! ??? kj
 	! /r FedWh_Dept
-goto ReadTimesheet
+	if fn_justTesting then triggerEOF=1
+goto MainLoop
 ! /r
 Finis: ! r:
-	if rtrm$(n$)<>'' then gosub ReallocateStateByDept
+	if rtrm$(emp$)<>'' then gosub ReallocateStateByDept
 	fn_setupCloseFiles
 	close #hTimesheet:
 	fnFree('[Q]\PRmstr\jcprh1.h[cno]') ! get rid of jobcost time entry file if exists
-
+	if fn_justTesting then pr 'just tested' : pause
 	if showDetails then
-		if detailReport then
+		! if detailReport then
 			fnClosePrn
-		else
-			fnStatusPause
-			fnStatusClose
-		end if
+		! else
+		! 	fnStatusPause
+		! 	fnStatusClose
+		! end if
 		showDetails=0
 	end if
 goto Xit ! /r
 	EmployeeNoKey: ! r:
-		n$=''
+		emp$=''
 		mat ml$(1)
 		ml$(1)='Employee Number '&empNo$&' is not on file. No check calculated.'
 		fnMsgBox(mat ml$,resp$,'',0)
-	goto ReadTimesheet ! /r
-	def fn_determineEarnings(hPrChecks,eno,dep,begDate,endDate,mat ytdTotal,&ytdFICA,&ytdMedicare,&ytdWages,mat caf; ___,heno,checkkey$)
+	goto MainLoop ! /r
+	def fn_determineEarnings(hCheckHistory,eno,dep,begDate,endDate,mat ytdTotal,&ytdFICA,&ytdMedicare,&ytdWages,mat caf; ___,heno,checkkey$)
 		ytdFICA=ytdMedicare=0 ! ytdEic=0
 		mat caf=(0)
 		mat ytdTotal=(0)
@@ -506,9 +569,9 @@ goto Xit ! /r
 		! dim tdc(10)
 		mat tdc=(0)
 		checkkey$=cnvrt$('pic(zzzzzzz#)',eno)&cnvrt$('pic(zz#)',dep)&cnvrt$('pd 6',0) ! index employee#,department# and payroll date
-		restore #hPrChecks,key>=checkkey$: nokey DePrCkFinis
+		restore #hCheckHistory,key>=checkkey$: nokey DePrCkFinis
 		do
-			read #hPrChecks,using 'form pos 1,N 8,n 3,PD 6,N 7,5*PD 3.2,37*PD 5.2': heno,empDept,prDate,ckno,mat tdc,mat tcp eof DePrCkEof
+			read #hCheckHistory,using 'form pos 1,N 8,n 3,PD 6,N 7,5*PD 3.2,37*PD 5.2': heno,empDept,prDate,ckno,mat tdc,mat tcp eof DePrCkEof
 			if heno=eno and prDate=>begDate and prDate<=endDate then
 				mat ytdTotal=ytdTotal+tcp
 			end if
@@ -521,8 +584,8 @@ goto Xit ! /r
 			caf(j)=ytdTotal(j+4) ! total miscellaneous deductions for year
 		next j
 		DePrCkFinis:!
+		fn_detail('YTD Earnings Determined:   FICA='&str$(ytdFICA)&'  Medicare='&str$(Medicare)&'  Wages='&str$(ytdWages)&' (from Check History)')
 	fnend
-
 
 def fn_getFederalTable(taxYear,marital,w4Year$,w4step2,mat fedTable,&fed_annual_wh_allowance)
 	! retains: setupFederalTables,mat fjs,mat fss,mat fhs,mat fjc,mat fsc,mat fhc,mat ft
@@ -1023,6 +1086,7 @@ withholdingPercentage,atLeast,baseAmt,estPayPeriodNetPay,estPayPeriodNetPay,adju
 	! ded = federal deduction addition for all departments (deduct before calculating federal taxes)
 
 	! adjustedWageAmount is local for estAnnualNetPay
+	fn_detail('_______federal tax calc__________')
 
 	fn_getFederalTable(taxYear,marital,w4Year$,w4step2,mat fedTable,fed_annual_wh_allowance)
 
@@ -1063,7 +1127,7 @@ withholdingPercentage,atLeast,baseAmt,estPayPeriodNetPay,estPayPeriodNetPay,adju
 		fn_detailStep('2d.',adjustedWageAmount-atLeast)
 		fn_detailStep('2e.',(adjustedWageAmount-atLeast)*withholdingPercentage)
 		returnN=baseAmt+(adjustedWageAmount-atLeast)*withholdingPercentage
-		fn_detail('returnN(&'&str$(returnN)&')=baseAmt('&str$(baseAmt)&')+(adjustedWageAmount('&str$(adjustedWageAmount)&')-atLeast('&str$(atLeast)&'))*withholdingPercentage('&str$(withholdingPercentage)&')')
+		fn_detail('return ('&str$(returnN)&')=baseAmt('&str$(baseAmt)&')+(adjustedWageAmount('&str$(adjustedWageAmount)&')-atLeast('&str$(atLeast)&'))*withholdingPercentage('&str$(withholdingPercentage)&')')
 		returnN=returnN/payPeriodsPerYear
 		returnN=round(returnN,2)
 		fn_detailStep('2f. Tentative Withholding Amount',returnN)
@@ -1080,6 +1144,7 @@ withholdingPercentage,atLeast,baseAmt,estPayPeriodNetPay,estPayPeriodNetPay,adju
 	end if
 	FtFinis: !
 	! pr 'federal withholding is ';returnN : pause
+	fn_detail('_________________________________')
 	if returnN<=0 then returnN=0 ! we should never have negative federal withholding.
 	fn_federalTax=returnN
 fnend
@@ -1336,7 +1401,6 @@ fnend
 		! OLD: wagesAnnual,
 		! updated 2/1/2021
 		! taxableWagesCurrent - formerly b8
-		! payPeriodsPerYear - formerly stwh(tcd1,1)
 		if ~wga_setup<>taxYear then
 			wga_setup=taxYear
 			if taxYear and taxYear<=2021 then ! r:
@@ -1618,7 +1682,7 @@ fnend
 				! they are single and claiming less than 2 exemptions
 				fn_detail('1. Single Taxpayer Withholding Formulas') ! r:
 				fn_detail('   vW is the withholding tax per pay period.')
-				fn_detail('   vS is employee’s salary per pay period for each bracket.')
+				fn_detail('   vS is employee''s salary per pay period for each bracket.')
 				vS=taxableWagesCurrent
 				fn_detail('   vX is the number of personal exemptions; X must be 0 or 1.')
 				vX=val(fnEmployeeData$(eno,'R-1300 Exepmtions'))
@@ -1652,7 +1716,7 @@ fnend
 			else
 				fn_detail('2. Married Taxpayer Withholding Formulas') ! r:
 				fn_detail('   vW is the withholding tax per pay period.')
-				fn_detail('   vS is the employee’s salary per pay period for each bracket.')
+				fn_detail('   vS is the employee''s salary per pay period for each bracket.')
 				vS=taxableWagesCurrent
 				fn_detail('   vX is the number of personal exemptions. vX must 2.')
 				vX=val(fnEmployeeData$(eno,'R-1300 Exepmtions'))
@@ -1702,7 +1766,7 @@ fnend
 				fn_detail('A. Withholding Formulas for Single or Married Taxpayers Claiming 0 or 1 Personal Exemption:') ! r:
 				fn_detail('   W is the withholding tax per pay period.')
 				vS=taxableWagesCurrent
-				fn_detail('   S is employee’s salary per pay period for each bracket.', vS)
+				fn_detail('   S is employee''s salary per pay period for each bracket.', vS)
 				vX=val(fnEmployeeData$(eno,'R-1300 Exepmtions'))
 				fn_detail('   X is the number of personal exemptions; X must be 0 or 1.', vX)
 				vY=val(fnEmployeeData$(eno,'R-1300 Dependencies'))
@@ -1743,7 +1807,7 @@ fnend
 				fn_detail('B. Withholding Formulas for Married Taxpayers Claiming 2 Personal Exemptions:') ! r:
 				fn_detail('   vW is the withholding tax per pay period.')
 				vS=taxableWagesCurrent
-				fn_detail('   S is the employee’s salary per pay period for each bracket.', vS)
+				fn_detail('   S is the employee''s salary per pay period for each bracket.', vS)
 				vX=val(fnEmployeeData$(eno,'R-1300 Exepmtions'))
 				fn_detail('   X is the number of personal exemptions. vX must 2.', vX)
 				vY=val(fnEmployeeData$(eno,'R-1300 Dependencies'))
@@ -2193,39 +2257,11 @@ fnend
 		fnend
 	! /r
 
-def fn_tableLine(mat tl_table,tl_seekAmount; tl_secondDimension,___,returnN)
-	! this function finds where [tl_seekAmount] falls within a range in a singe row (1st element) of a 2 dimensional array)
-	! this function identifies which column (2nd element) of the 2d array to search with [tl_secondDimension] which defaults to the first
-	if tl_secondDimension=0 then tl_secondDimension=1
-	for returnN=1 to udim(mat tl_table,1)-1
-		if tl_seekAmount>tl_table(returnN,tl_secondDimension) and tl_seekAmount<=tl_table(returnN+1,tl_secondDimension) then
-			goto Tl_finis
-		end if
-	next returnN
-	returnN=udim(mat tl_table,1)
-	Tl_finis: !
-	fn_tableLine=returnN
-fnend
 
-PrdrWorkmansComp: ! r:
-	! xInp(6) Other Compensation
-	! if other compensation > 0 then
-	!   if pay code is 1 hours = 173.33
-	!   if pay code is 2 hours = 86.66
-	!   if pay code is 3 hours = 80
-	!   if pay code is 4 hours = 40
-	! else
-	!   hours = regular hours + overtime hours
-	! end if
-	tmphrs=xInp(1)+xInp(2) ! if xInp(6)>0 then tmphrs=saif(payCode) else tmphrs=xInp(1)+xInp(2)
-	!     fnStatus('xInp(17) changed to '&str$(round(tmphrs*xInp(17)*.01,2))&' round('&str$(tmphrs)&' * xInp(17)('&str$(xInp(17))&' * .01)',2)
-	!     fnStatusPause
-	xInp(17)=round(tmphrs*xInp(17)*.01,2) ! inp(17)=round(tmphrs*xInp(17)*.01,2)
-return  ! /r
 ReallocateStateByDept: ! r:   (;___,s3,tcp4...) (reallocate state taxes based on earnings by dept and state
 	s3=tcp(4)=tcp4=0
 	! tcp4 - is the state withholding for the transaction record
-	oldeno=val(n$)
+	oldeno=val(emp$)
 	restore #hDepartment,key>=cnvrt$('pic(zzzzzzz#)',oldeno)&cnvrt$('pic(zz#)',0):
 	if stdWhSt=-1 then goto EoStDeptLoop
 	! Read #hDepartment,Using 610,Rec=TRA: tdt(4),TCD(1),ty4,tqm4,tcp4,tcp31,TCP22,NTA,MAT DST
@@ -2237,8 +2273,8 @@ ReallocateStateByDept: ! r:   (;___,s3,tcp4...) (reallocate state taxes based on
 			if d1><tdt(4) then goto TopStDeptLoop
 			holdEmpDept=empDept
 			olddeptkey$=cnvrt$('pic(zzzzzzz#)',oldeno)&cnvrt$('pic(zz#)',holdEmpDept)
-			read #hPrChecks,using 'form pos 1,N 8,n 3,PD 6,N 7,5*PD 3.2,37*PD 5.2',key=cnvrt$('pic(zzzzzzz#)',oldeno)&cnvrt$('pic(zz#)',empDept)&cnvrt$('pd 6',prd): heno,empDept,prDate,ckno,mat tdc,mat tcp nokey TopStDeptLoop
-			if showDetails then fnStatus('read check history: heno='&str$(heno)&',empDept='&str$(empDept)&',prDate='&str$(prDate)&',ckno='&str$(ckno)&'...')
+			read #hCheckHistory,using 'form pos 1,N 8,n 3,PD 6,N 7,5*PD 3.2,37*PD 5.2',key=cnvrt$('pic(zzzzzzz#)',oldeno)&cnvrt$('pic(zz#)',empDept)&cnvrt$('pd 6',prd): heno,empDept,prDate,ckno,mat tdc,mat tcp nokey TopStDeptLoop
+			if showDetails then fnStatus('read check history: emp$='&emp$&',empDept='&str$(empDept)&',prDate='&str$(prDate)&',ckno='&str$(ckno)&'...')
 			dst3=0
 			for j=1 to 20
 				if dedst(j)>0 then dst3=dst3+tcp(j+4)
@@ -2290,8 +2326,19 @@ ReallocateStateByDept: ! r:   (;___,s3,tcp4...) (reallocate state taxes based on
 			tcp(32)-=tcp4
 			tcp(4)=tcp4
 			rewritekey$=cnvrt$('pic(zzzzzzz#)',oldeno)&cnvrt$('pic(zz#)',holdEmpDept)&cnvrt$('pd 6',prd) ! index employee#,department# and payroll date
-			rewrite #hPrChecks,using 'form pos 80,pd 5.2,pos 220,pd 5.2',key=rewritekey$: tcp(4),tcp(32)
-			fn_report_stuff
+			rewrite #hCheckHistory,using 'form pos 80,pd 5.2,pos 220,pd 5.2',key=rewritekey$: tcp(4),tcp(32)
+			! fn_report_stuff
+			! def fn_report_stuff
+				! fnStatus('check completely calcualated for eno '&str$(eno))
+				! fnStatus('tcp(1)='&str$(tcp(1)))
+				! fnStatus('tcp(2)='&str$(tcp(2)))
+				! fnStatus('tcp(3)='&str$(tcp(3)))
+				! fnStatus('tcp(4)='&str$(tcp(4)))
+				! fnStatus('tcp(13)='&str$(tcp(13)))
+				! fnStatus('tcp(14)='&str$(tcp(14)))
+				! fnStatus('tcp(32)='&str$(tcp(32)))
+				! fnStatusPause
+			! fnend
 			rewrite #hDepartment,using 'form pos 42,n 6',key=olddeptkey$: tdt(4)
 		end if
 	loop while teno=oldeno
@@ -2314,71 +2361,11 @@ ReallocateStateByDept: ! r:   (;___,s3,tcp4...) (reallocate state taxes based on
 		em(14) = stdWhSt
 		em(15) = addOnSt
 	! return ! /r
-	rewrite #hEmployee,using F_employee,key=n$: mat em,d1,totalGrossPay
+	rewrite #hEmployee,using Femployee,key=emp$: mat em,d1,totalGrossPay
 	if fp(d1*.01)>.9 then hd1=19000000+fncd(d1) else hd1=20000000+fncd(d1)
 	mat stwh=(0)
 return ! /r
-def fn_report_stuff
-	! fnStatus('check completely calcualated for eno '&str$(eno))
-	! fnStatus('tcp(1)='&str$(tcp(1)))
-	! fnStatus('tcp(2)='&str$(tcp(2)))
-	! fnStatus('tcp(3)='&str$(tcp(3)))
-	! fnStatus('tcp(4)='&str$(tcp(4)))
-	! fnStatus('tcp(13)='&str$(tcp(13)))
-	! fnStatus('tcp(14)='&str$(tcp(14)))
-	! fnStatus('tcp(32)='&str$(tcp(32)))
-	! fnStatusPause
-fnend
-def fn_detail(text$*128; number)
-	if showDetails then
-		if number then text$&='      =      '&str$(number)
-		
-		if detailReport then
-			if file(255)=-1 then fnOpenPrn
-			pr #255: text$
-			! pr text$ : pause
-		else
-			fnStatus(text$)
-		end if
-		
-		
-	end if
-fnend
-def fn_detailStep(text$*64; number,extra$*64,extraNumber)
-	if showDetails and number then
-		if extraNumber then
-			fnStatus('Step '&text$&'   '&cnvrt$('n 10.2',number)&extra$&'   '&cnvrt$('n 10.2',extraNumber))
-		else if extra$<>'' then
-			fnStatus('Step '&text$&'   '&cnvrt$('n 10.2',number)&extra$)
-		else if number then
-			fnStatus('Step '&text$&'   '&cnvrt$('n 10.2',number))
-		else
-			fnStatus('Step '&text$)
-		end if
-	end if
 
-fnend
-
-
-def fn_payPeriodsPerYear(payCode; ___,returnN)
-	if payCode=1 then
-		returnN=12
-	else if payCode=2 then
-		returnN=24
-	else if payCode=3 then
-		returnN=26
-	else if payCode=4 then
-		returnN=52
-	else if payCode=5 then
-		returnN=1
-	else
-		mat ml$(1)
-		ml$(1)='Incorrect Pay Code '&str$(payCode)&' on Employee Number '&trim$(empNo$)&'. Did not calculate pay on this Employee'
-		fnMsgBox(mat ml$,resp$,'',0)
-		returnN=-1
-	end if
-	fn_payPeriodsPerYear=returnN
-fnend
 def library fnCheckPayrollCalculation(; ___, _
 	returnN, _
 	lc,respc,col1_len, _
@@ -2401,7 +2388,7 @@ def library fnCheckPayrollCalculation(; ___, _
 	end if ! /r
 	fn_setupOpenFiles
 	do
-
+		CpcTopOfScreen: !
 		fnTos ! r: Test State Calculation Ask Criteria Screen
 		lc=respc=0
 		col1_pos=1 : col1_len=25 : col2_pos=col1_pos+col1_len+1 : col2_len=25
@@ -2482,10 +2469,14 @@ def library fnCheckPayrollCalculation(; ___, _
 			resp$(rc_stDependents=respc+=1)=fnEmployeeData$(0,'Dependents')
 		end if ! /r
 
-		fnCmdKey('Test Federal' 	,ck_federal=3,0,0,'Print Federal Table for selected Pay Code')
-		fnCmdKey('Test State'   	,ck_state=2,0,0,'Print Federal Table for selected Pay Code')
-		fnCmdKey('Test Both'    	,1,1,0,'')
-		fnCmdKey('Federal Table'	,ck_federalTable=7,0,0,'Print Federal Tables')
+		if env$('acsDeveloper')<>'' then ! not ready for prime time yet
+			fnCmdKey('Test Check'    	,ck_check      	=4,1,0,'Rerun the calculation from a past check')
+		end if
+
+		fnCmdKey('Test Federal' 	,ck_federal    	=3,0,0,'Print Federal Table for selected Pay Code')
+		fnCmdKey('Test State'   	,ck_state      	=2,0,0,'Print Federal Table for selected Pay Code')
+		fnCmdKey('Test Both'    	,ck_both       	=1,0,0,'')
+		fnCmdKey('Federal Table'	,ck_federalTable	=7,0,0,'Print Federal Tables')
 		fnCmdKey('Cancel'        	,5,0,1,'')
 		! fnCmdSet(2)
 		ckey=fnAcs(mat resp$) ! /r
@@ -2497,12 +2488,12 @@ def library fnCheckPayrollCalculation(; ___, _
 			fnPcReg_write('Federal Withholding'    	,resp$(resp_fedWh))
 			fnPcReg_write('Marital Status'          	,resp$(resp_married))
 			fnPcReg_write('Pay Code'                	,resp$(resp_payCode))
-			fnPcReg_write('State Exemptions'        	,resp$(resp_stExeptions))
-			fnPcReg_write('Federal Exemptions'        	,resp$(resp_fedExeptions))
-			fnPcReg_write('State Tax Add-On'        	,resp$(resp_StateAddOn))
+			fnPcReg_write('State Exemptions'       	,resp$(resp_stExeptions))
+			fnPcReg_write('Federal Exemptions'     	,resp$(resp_fedExeptions))
+			fnPcReg_write('State Tax Add-On'       	,resp$(resp_StateAddOn))
 			fnPcReg_write('W-4 Year'                	,resp$(resp_w4year))
 			fnPcReg_write('Tax Year'                	,resp$(resp_taxYear))
-			fnPcReg_write('W-4 Step 2'               	,resp$(resp_w4step2))
+			fnPcReg_write('W-4 Step 2'             	,resp$(resp_w4step2))
 			if clientState$='IL' then
 				fnEmployeeData$(0,'IL W-4 Line 1 Allowances',resp$(rc_stateExemptions1))
 				fnEmployeeData$(0,'IL W-4 Line 2 Allowances',resp$(rc_ilw4line2))
@@ -2563,7 +2554,7 @@ def library fnCheckPayrollCalculation(; ___, _
 				next payCodeItem
 				fnClosePrn
 				! /r
-			else ! if ckey=1 then r: test the calcualtion
+			else ! if ckey=ck_both then r: test the calcualtion
 				fn_detail('              taxYear: '&str$(taxYear            	))
 				fn_detail('Wages Taxable Current: '&str$(wages              	))
 				fn_detail(' Pay Periods Per Year: '&str$(pppy               	))
@@ -2573,17 +2564,115 @@ def library fnCheckPayrollCalculation(; ___, _
 				! fnStatus('              fedExempt: '&str$(fedExempt            	))
 				fn_detail('               w4year: '&w4year$                  	 )
 				if w4step2 then fn_detail('              w4step2: '&str$(w4step2            	))
-				if ckey=ck_state or ckey=1 then
-					testStateTax=fn_stateTax(0,wages,pppy,allowances,marital,fedWh,stateAddOn,w4year$,taxYear)
-				end if
-				if ckey=ck_federal or ckey=1 then
-					testFederalTax=fn_federalTax(taxYear,fedpct,wages,ded,stdWhFed,fedExempt,pppy,marital,w4Year$,w4step2,w4Step3,w4step4a,w4step4b,w4step4c)
-				end if
-				if ckey=ck_state or ckey=1 then
-					fn_detail('Calculated '&fnpayroll_client_state$&' State WithHolding: '&str$( testStateTax ))
-				end if
-				if ckey=ck_federal or ckey=1 then
-					fn_detail('Calculated Federal WithHolding: '&str$( testFederalTax ))
+				fn_detail('__')
+
+				if ckey=ck_check then ! r: Test Check
+					if ~fnSelectCheck(eno$,checkRec) then goto CpcTopOfScreen
+					! pr 'selectCheckReply=';selectCheckReply
+					! pr '            eno$=';eno$
+					read #hCheckHistory,using 'form pos 1,N 8,n 3,PD 6,N 7,5*PD 3.2,37*PD 5.2',rec=checkRec,release: heno,empDept,prDate,ckno,mat tdc,mat tcp
+					read #hEmployee,using Femployee,key=eno$: mat em,lpd,totalGrossPay,w4step2,w4Year$,w4Step3,w4step4a,w4step4b,w4step4c
+					deptKey$=eno$&cnvrt$('pic(zz#)',empDept)
+					read #hDepartment,using 'form pos 1,N 8,n 3,c 12,4*N 6,3*N 2,pd 4.2,23*PD 4.2',key=deptKey$: teno,empDept,gl$,mat tdt,mat tcd,tli,mat tdet
+					! open #hTimesheet=fnH: 'Name=[Q]\PRmstr\timesheet[acsUserId].h[cno],KFName=[Q]\PRmstr\timesheet[acsUserId]idx.h[cno]',i,outIn,k
+					! open #hTimesheet=fnH: 'Name=[Q]\PRmstr\timesheet[acsUserId].h[cno],RecL=167,Replace',internal,output
+					if exists('[Q]\PRmstr\timesheet[acsUserId].h[cno]') then
+						fnCopy('[Q]\PRmstr\timesheet[acsUserId].h[cno]','[Q]\PRmstr\timesheet[acsUserId]backup.h[cno]')
+					end if
+					open #hTimesheet=fnH: 'Name=[Q]\PRmstr\timesheet[acsUserId].h[cno],Version=0,KFName=[Q]\PRmstr\timesheet[acsUserId]Idx.h[cno],Replace,RecL=167,KPs=1,KLn=11,Shr',i,outIn,k
+					!  r: make timesheet record from read stuff
+						empNo$=eno$ ! heno
+						dep=empDept
+						xInp(1 )=tdc(1)  	! Regular Hours
+						xInp(2 )=tdc(2)  	! Overtime Hours
+						xInp(3 )=tdc(3)  	! Sick Hours
+						xInp(4 )=tdc(4)  	! Vacation Hours
+						xInp(5 )=tdc(5)  	! Holiday Hours
+						xInp(6 )=tdet(1) 	! Salary
+						xInp(7 )=tcp(28) 	! other compensation
+						xInp(8 )=tcp(29) 	! meals
+						xInp(9 )=tcp(30) 	! tips
+						xInp(10)=tdet(4 ) ! tcp(5)  	! standard deduction 1
+						xInp(11)=tdet(5 ) ! tcp(6)  	! standard deduction 2
+						xInp(12)=tdet(6 ) ! tcp(7)  	! standard deduction 3
+						xInp(13)=tdet(7 ) ! tcp(8)  	! standard deduction 4
+						xInp(14)=tdet(8 ) ! tcp(9)  	! standard deduction 5
+						xInp(15)=tdet(9 ) ! tcp(10) 	! standard deduction 6
+						xInp(16)=tdet(10) ! tcp(11) 	! standard deduction 7
+						xInp(17)=tdet(11) ! tcp(12) 	! standard deduction 8
+						xInp(18)=tdet(12) ! tcp(13) 	! standard deduction 9
+						xInp(19)=tdet(13) ! tcp(14) 	! standard deduction 10
+						xInp(20)=tdet(14) ! tcp(15) 	! standard deduction 11
+						xInp(21)=tdet(15) ! tcp(16) 	! standard deduction 12
+						xInp(22)=tdet(16) ! tcp(17) 	! standard deduction 13
+						xInp(23)=tdet(17) ! tcp(18) 	! standard deduction 14
+						xInp(24)=tdet(18) ! tcp(19) 	! standard deduction 15
+						xInp(25)=tdet(19) ! tcp(20) 	! standard deduction 16
+						xInp(26)=tdet(20) ! tcp(21) 	! standard deduction 17
+						xInp(27)=tdet(21) ! tcp(22) 	! standard deduction 18
+						xInp(28)=tdet(22) ! tcp(23) 	! standard deduction 19
+						xInp(29)=tdet(23) ! tcp(24) 	! standard deduction 20
+						gdp     =tcp(31)  	! Pay - Net
+						hr(1)   =tdet(2)  	! hourly rate - regular
+						hr(2)   =tdet(3)  	! hourly rate - overtime
+					! /r
+					! r: fn_detail the timesheet
+					showDetails=1
+					fnopenprn
+					fn_detail('***** Generated Timesheet Entry *****')
+					fn_detail('Regular Hours        :',xInp(1 ))
+					fn_detail('Overtime Hours       :',xInp(2 ))
+					fn_detail('Sick Hours           :',xInp(3 ))
+					fn_detail('Vacation Hours       :',xInp(4 ))
+					fn_detail('Holiday Hours        :',xInp(5 ))
+					fn_detail('Salary               :',xInp(6 ))
+					fn_detail('Other compensation   :',xInp(7 ))
+					fn_detail('Meals                :',xInp(8 ))
+					fn_detail('Tips                 :',xInp(9 ))
+					fn_detail('Standard Deduction 1 :',xInp(10))
+					fn_detail('Standard Deduction 2 :',xInp(11))
+					fn_detail('Standard Deduction 3 :',xInp(12))
+					fn_detail('Standard Deduction 4 :',xInp(13))
+					fn_detail('Standard Deduction 5 :',xInp(14))
+					fn_detail('Standard Deduction 6 :',xInp(15))
+					fn_detail('Standard Deduction 7 :',xInp(16))
+					fn_detail('Standard Deduction 8 :',xInp(17))
+					fn_detail('Standard Deduction 9 :',xInp(18))
+					fn_detail('Standard Deduction 10:',xInp(19))
+					fn_detail('Standard Deduction 11:',xInp(20))
+					fn_detail('Standard Deduction 12:',xInp(21))
+					fn_detail('Standard Deduction 13:',xInp(22))
+					fn_detail('Standard Deduction 14:',xInp(23))
+					fn_detail('Standard Deduction 15:',xInp(24))
+					fn_detail('Standard Deduction 16:',xInp(25))
+					fn_detail('Standard Deduction 17:',xInp(26))
+					fn_detail('Standard Deduction 18:',xInp(27))
+					fn_detail('Standard Deduction 19:',xInp(28))
+					fn_detail('Standard Deduction 20:',xInp(29))
+					fn_detail('Pay - Net            :',gdp     )
+					fn_detail('Hourly Rate Regular  :',hr(1)   )
+					fn_detail('Hourly Rate Overtime :',hr(2)   )
+					fncloseprn
+					! /r
+					write #hTimesheet,using Ftimesheet: empNo$,dep,mat xInp,gpd,mat hr
+					close #hTimesheet:
+					fn_setupCloseFiles
+					setenv('PR-justTesting','Yes')
+					fnChain('S:\Payroll\Calculation')
+					! /r
+				else
+					if ckey=ck_state or ckey=ck_both then
+						testStateTax=fn_stateTax(0,wages,pppy,allowances,marital,fedWh,stateAddOn,w4year$,taxYear)
+					end if
+					if ckey=ck_federal or ckey=ck_both then
+						testFederalTax=fn_federalTax(taxYear,fedpct,wages,ded,stdWhFed,fedExempt,pppy,marital,w4Year$,w4step2,w4Step3,w4step4a,w4step4b,w4step4c)
+					end if
+					if ckey=ck_state or ckey=ck_both then
+						fn_detail('Calculated '&fnpayroll_client_state$&' State WithHolding: '&str$( testStateTax ))
+					end if
+					if ckey=ck_federal or ckey=ck_both then
+						fn_detail('Calculated Federal WithHolding: '&str$( testFederalTax ))
+					end if
 				end if
 				! fn_detail('_____________________________')
 				! fn_detail('_____________________________')
@@ -2591,12 +2680,12 @@ def library fnCheckPayrollCalculation(; ___, _
 				! fn_detail(fnpayroll_client_state$&': '&str$(testStateTax))
 				! fn_detail('_____________________________')
 				! fn_detail('_____________________________')
-				if detailReport then 
+				! if detailReport then
 					fnClosePrn
-				else
-					fnStatusPause
-					fnStatusClose
-				end if
+				! else
+				! 	fnStatusPause
+				! 	fnStatusClose
+				! end if
 				showDetails=0
 				! /r
 			end if
@@ -2609,20 +2698,82 @@ def library fnCheckPayrollCalculation(; ___, _
 	returnN=0
 	fnCheckPayrollCalculation=returnN
 fnend
+def fn_justTesting(; ___,returnN)
+	if lwrc$(env$('PR-justTesting'))='yes' then returnN=1
+	fn_justTesting=returnN
+fnend
 
-def fn_setup
+def fn_tableLine(mat tl_table,tl_seekAmount; tl_secondDimension,___,returnN)
+	! this function finds where [tl_seekAmount] falls within a range in a singe row (1st element) of a 2 dimensional array)
+	! this function identifies which column (2nd element) of the 2d array to search with [tl_secondDimension] which defaults to the first
+	if tl_secondDimension=0 then tl_secondDimension=1
+	for returnN=1 to udim(mat tl_table,1)-1
+		if tl_seekAmount>tl_table(returnN,tl_secondDimension) and tl_seekAmount<=tl_table(returnN+1,tl_secondDimension) then
+			goto Tl_finis
+		end if
+	next returnN
+	returnN=udim(mat tl_table,1)
+	Tl_finis: !
+	fn_tableLine=returnN
+fnend
+def fn_payPeriodsPerYear(payCode; ___,returnN)
+	if payCode=1 then
+		returnN=12
+	else if payCode=2 then
+		returnN=24
+	else if payCode=3 then
+		returnN=26
+	else if payCode=4 then
+		returnN=52
+	else if payCode=5 then
+		returnN=1
+	else
+		mat ml$(1)
+		ml$(1)='Incorrect Pay Code '&str$(payCode)&' on Employee Number '&trim$(empNo$)&'. Did not calculate pay on this Employee'
+		fnMsgBox(mat ml$,resp$,'',0)
+		returnN=-1
+	end if
+	fn_payPeriodsPerYear=returnN
+fnend
+def fn_detail(c1$*128; n1,c2$*128,n2)
+	if showDetails then ! and (n1 or n2) then
+		if file(255)=-1 then fnOpenPrn
+		if n2 then
+			pr #255: c1$&'   '&cnvrt$('n 10.2',n1)&'   '&c2$&'   '&cnvrt$('n 10.2',n2)
+		else if c2$<>'' then
+			pr #255: c1$&'   '&cnvrt$('n 10.2',n1)&'   '&c2$
+		else if n1 then
+			pr #255: c1$&'   '&cnvrt$('n 10.2',n1)
+		else
+			pr #255: c1$
+		end if
+	end if
+
+fnend
+
+
+def fn_detailStep(text$*64; number,extra$*64,extraNumber)
+	fn_detailStep=fn_detail('Step '&text$,number,extra$,extraNumber)
+fnend
+
+def fn_setup(; ___,mtc)
 	autoLibrary
 	on error goto Ertn
+
 	! showDetails=1
+	if env$('acsDeveloper')<>''  or  env$('showDetails')<>'' then showDetails=1
+	if fn_justTesting then showDetails=1
+
 	detailReport=1
+
 	dim stwh(10,2)
 	dim resp$(64)*256
 	dim ml$(0)*256
 
 	dim motab(12)
 	mtc=0 ! motab counter
-	motab(mtc+=1)=0   : motab(mtc+=1)=31  : motab(mtc+=1)=59
-	motab(mtc+=1)=90  : motab(mtc+=1)=120 : motab(mtc+=1)=151
+	motab(mtc+=1)=  0 : motab(mtc+=1)= 31 : motab(mtc+=1)= 59
+	motab(mtc+=1)= 90 : motab(mtc+=1)=120 : motab(mtc+=1)=151
 	motab(mtc+=1)=181 : motab(mtc+=1)=212 : motab(mtc+=1)=243
 	motab(mtc+=1)=273 : motab(mtc+=1)=304 : motab(mtc+=1)=334
 
@@ -2650,7 +2801,7 @@ def fn_setup
 	mat wcm(5)
 	wcm(5)=wcm(1)*12 ! make an annual wcm and set it equal to monthly*12
 	ficamax=ficamax*10
-	dim fullname$(20)*20
+	dim dedName$(20)*20
 	dim abrevname$(20)*8
 	dim deductionCode(20)
 	dim newcalcode(20)
@@ -2658,7 +2809,7 @@ def fn_setup
 	dim dedfica(20)
 	dim dedst(20)
 	dim deduc(20)
-	fnDedNames(mat fullname$,mat abrevname$,mat deductionCode,mat newcalcode,mat newdedfed,mat dedfica,mat dedst,mat deduc)
+	fnDedNames(mat dedName$,mat abrevname$,mat deductionCode,mat newcalcode,mat newdedfed,mat dedfica,mat dedst,mat deduc)
 	ssmax=ficamax : mcmax=ficamx2 : ficar1=ficarate*.01
 	ficar2=ficar2*.01 : ficarate=ficar1+ficar2
 	ficamxr=ficamax*ficarate : ficamx2=(ficamx2-ficamax)*ficar2
@@ -2681,19 +2832,23 @@ def fn_setup
 
 fnend
 def fn_setupOpenFiles
-	open #hBreakdown=fnH: 'Name=[Q]\PRmstr\HourBreakdown.h[cno],KFName=[Q]\PRmstr\HourBreakdown-idx.h[cno],Shr',i,outIn,k ioerr ignore ! formerly file #31
-	open #hEmployee=fnH: 'Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno]',i,outIn,k  ! formerly file #1
-	open #hDepartment=fnH: 'Name=[Q]\PRmstr\Department.h[cno],KFName=[Q]\PRmstr\DeptIdx.h[cno],Shr',i,outIn,k  ! was #2
-	open #hPrChecks=fnH: 'Name=[Q]\PRmstr\PayrollChecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno],Shr,Use,RecL=224,KPs=1,KLn=17',i,outIn,k  ! was 4
-	open #hPayrollCheckIdx3_unused=fnH: 'Name=[Q]\PRmstr\PayrollChecks.h[cno],KFName=[Q]\PRmstr\checkidx3.h[cno],Shr',i,outIn,k ! was 44
+	open #hBreakdown=fnH: 'Name=[Q]\PRmstr\HourBreakdown.h[cno],KFName=[Q]\PRmstr\HourBreakdown-idx.h[cno],Shr',i,outIn,k ioerr ignore
+	open #hEmployee=fnH: 'Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr',i,outIn,k
+	open #hDepartment=fnH: 'Name=[Q]\PRmstr\Department.h[cno],KFName=[Q]\PRmstr\DeptIdx.h[cno],Shr',i,outIn,k
+	open #hCheckHistory=fnH: 'Name=[Q]\PRmstr\PayrollChecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno],Shr,Use,RecL=224,KPs=1,KLn=17',i,outIn,k
+	open #hPayrollCheckIdx2_unused=fnH: 'Name=[Q]\PRmstr\PayrollChecks.h[cno],KFName=[Q]\PRmstr\checkidx2.h[cno],Shr',i,outIn,k
+	open #hPayrollCheckIdx3_unused=fnH: 'Name=[Q]\PRmstr\PayrollChecks.h[cno],KFName=[Q]\PRmstr\checkidx3.h[cno],Shr',i,outIn,k
 fnend
 def fn_setupCloseFiles
 	close #hBreakdown:
 	close #hEmployee:
 	close #hDepartment:
-	close #hPrChecks:
+	close #hCheckHistory:
+	close #hPayrollCheckIdx2_unused:
 	close #hPayrollCheckIdx3_unused:
 	! close #hTimesheet:
 fnend
-Xit: fnXit
+
+Xit: setenv('PR-justTesting','') : fnXit
+include: fn_open
 include: ertn

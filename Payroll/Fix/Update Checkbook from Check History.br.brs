@@ -10,7 +10,7 @@ fnTop(program$)
 gosub ReadCompany
 mcr=mcr*.01
 ssrate1=fnSsRateEmployee
-ssrate2=fnss_employer*.01
+ssrate2=fnSsEmployer*.01
 open #1: 'Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr',i,outIn,k
 open #3: 'Name=[Q]\PRmstr\Department.h[cno],KFName=[Q]\PRmstr\DeptIdx.h[cno],Shr',i,i,k
 open #4: 'Name=[Q]\PRmstr\PayrollChecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno],Shr',i,outIn,k

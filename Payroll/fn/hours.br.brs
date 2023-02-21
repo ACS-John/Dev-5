@@ -1,7 +1,6 @@
-! Replace S:\acsPR\hours.br
 ! enter and track houly breakdowns of time for comp time, etc
-! fnTop("S:\acsPR\hourclassification2","Time Classification")
-def library fnHours(eno)
+
+def library fnHours(; eno)
 
 	autoLibrary
 	on error goto Ertn

@@ -56,7 +56,7 @@ L420: fnTos
 	respc=0 : frac=0
 	mylen=28 : mypos=mylen+3
 	fnLbl(1,1,"Employee #:",mylen,1)
-	fncmbemp(1,mypos)
+	fnCmbEmp(1,mypos)
 	resp$(respc+=1)=str$(ji1(1))
 	fnLbl(2,1,"Method of Payment:",mylen,1)
 	opt$(1)="1 = Salary" : opt$(2)= "2 = Hourly"
@@ -78,13 +78,13 @@ L420: fnTos
 	fnTxt(6,mypos,8,8,0,"32",0,"")
 	resp$(respc+=1)=str$(ji1(6))
 	fnLbl(7,1,"Job Number:",mylen,1)
-	fncmbjob(7,mypos)
+	fnCmbJob(7,mypos)
 	resp$(respc+=1)=jn$
 	fnLbl(8,1,"Category:",mylen,1)
-	fncmbcategory(8,mypos)
+	fnCmbCategory(8,mypos)
 	resp$(respc+=1)=str$(ji2(1))
 	fnLbl(9,1,"Sub-Category:",mylen,1)
-	fncmbsubcat(9,mypos)
+	fnCmbSubCat(9,mypos)
 	resp$(respc+=1)=str$(ji2(2))
 	fnLbl(10,1,"Amount:",mylen,1)
 	fnTxt(10,mypos,10,10,0,'10',0,"Amount to be charged to job. Payroll will be extended as it is posted.")

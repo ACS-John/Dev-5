@@ -33,7 +33,7 @@ MAIN: !
 	close #20:
  
 	close #trmstr: ioerr ignore
-	execute 'Index [Q]\CLmstr\TrMstr.h[cno]'&' '&'[Q]\CLmstr\Tridx3.h[cno] 16/12/4 2/4/8 Replace DupKeys -n' ! index in year,monthday,reference
+	execute 'Index [Q]\CLmstr\TrMstr.h[cno] [Q]\CLmstr\Tridx3.h[cno] 16/12/4 2/4/8 Replace DupKeys -n' ! index in year,monthday,reference
  
 	open #trmstr=5: 'Name=[Q]\CLmstr\TrMstr.h[cno], KFName=[Q]\CLmstr\Tridx3.h[cno],Shr', internal, outin, keyed ioerr ignore
 	fnOpenPrn

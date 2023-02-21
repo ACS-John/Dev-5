@@ -297,6 +297,19 @@
 		fnAddOneN=size
 	fnend
 
+def library fnopenwin(win,sr,sc,er,ec,cap$*128; ___,winWidth)
+	if sr<1 then sr=10
+	if sc<1 then sc=20
+	if er<1 then er=14
+	if ec<1 then ec=59
+	winWidth=ec-sc+1
+	close #win: ioerr ignore
+	open #win: 'SRow='&str$(sr)&',SCol='&str$(sc)&',ERow='&str$(er)&',ECol='&str$(ec)&',Border=Sr,Caption=<'&cap$,display,outIn 
+	pr #win: newpage
+	pr #win,fields '1,1,Cc '&str$(winWidth)&',R,N': env$('cnam')(1:min(40,winWidth))
+	pr #win,fields '2,1,Cc '&str$(winWidth)&',R,N': 'Company Number [cno]'(1:min(40,winWidth))
+fnend
+
 ! /r
 ! r: S:\Core\Start.br
 	def library fnWriteProc(procName$*64,procLine$*256)
@@ -444,9 +457,7 @@ def library fnWin3(win,&cap$,wh,ww,dc,bo,win_align)
 	library 'S:\Core\ace\Win3b.br': fnwin3b
 	fnwin3b(win, cap$,wh,ww,dc,bo,win_align,0)
 fnend
-def library fnOpenWin(win,sr,sc,er,ec,&cap$)
-	library 'S:\Core\OpenWin.br': fnopenwin
-	fnopenwin=fnopenwin(win,sr,sc,er,ec, cap$)
+
 fnend
 def library fnCopy(from$*256,to$*256; new_record_length,options$*256)
 	library 'S:\Core\copy.br': fnCopy
@@ -718,9 +729,9 @@ fnend
 		library 'S:\Core\fn\hex2dec.br': fnHex2dec
 		fnHex2dec=fnHex2dec(input_hex$)
 	fnend
-	def library fnwin3b(win,&cap$,win_height,win_width; display_cnam,button_option,win_align,pr_newpg)
+	def library fnwin3b(win,&cap$,win_height,winWidth; display_cnam,button_option,win_align,pr_newpg)
 		library 'S:\Core\Ace\Win3B.br': fnwin3b
-		fnwin3b=fnwin3b(win,cap$,win_height,win_width, display_cnam,button_option,win_align,pr_newpg)
+		fnwin3b=fnwin3b(win,cap$,win_height,winWidth, display_cnam,button_option,win_align,pr_newpg)
 	fnend
 	def library fngetcd(&mcd$)
 		library 'S:\Core\Ace\GetCD.br': fngetcd
@@ -1739,6 +1750,10 @@ fnend
 ! /r
 ! r: PR   payroll
 
+	def library fnSelectCheck(&eno$,&checkRec; hEmployee)
+		library 'S:\Payroll\fn\selectCheck.br': fnSelectCheck
+		fnSelectCheck=fnSelectCheck(eno$,checkRec, hEmployee)
+	fnend
 	def library fnEmployeeEdit(eno)
 		library 'S:\Payroll\Employee.br': fnEmployeeEdit
 		fnEmployeeEdit=fnEmployeeEdit(eno)
@@ -1752,7 +1767,46 @@ fnend
 		fnEmployeeDataClose=fnEmployeeDataClose
 	fnend
 
-
+	! r: Payroll ComboBoxes
+		def library fnCmbEmp(lyne,mypos; addall,container)
+			library 'S:\Payroll\fn\Cmb.br': fnCmbEmp
+			fnCmbEmp=fnCmbEmp(lyne,mypos, addall,container)
+		fnend
+		def library fnCmbCategory(lyne,mypos;addall,c,a$*30)
+			library 'S:\Payroll\fn\Cmb.br': fnCmbCategory
+			fnCmbCategory=fnCmbCategory(lyne,mypos,addall,c,a$)
+		fnend
+		def library fnCmbJob(lyne,mypos;addall,c,a$*30)
+			library 'S:\Payroll\fn\Cmb.br': fnCmbJob
+			fnCmbJob=fnCmbJob(lyne,mypos,addall,c,a$)
+		fnend
+		def library fncmbcat(lyne,mypos;addall,c,a$*30)
+			library 'S:\Payroll\fn\Cmb.br': fncmbcat
+			fncmbcat=fncmbcat(lyne,mypos,addall,c,a$)
+		fnend
+		def library fnCmbSubCat(lyne,mypos;addall,c)
+			library 'S:\Payroll\fn\Cmb.br': fnCmbSubCat
+			fnCmbSubCat=fnCmbSubCat(lyne,mypos,addall,c)
+		fnend
+	! /r
+	! r: Payroll Searches
+		def library fnEmployeeSrch(&x$;fixgrid)
+			library 'S:\acsPR\Employee_srch.br': fnEmployeeSrch
+			fnEmployeeSrch=fnEmployeeSrch(x$,fixgrid)
+		fnend
+		def library fncat_srch2(&x$,&ckey;fixgrid)
+			library 'S:\acsPR\CAT_srch2.br': fncat_srch2
+			fncat_srch2=fncat_srch2(x$,ckey,fixgrid)
+		fnend
+		def library fncategory_srch(&cn$;fixgrid)
+			library 'S:\acsPR\CATegory_srch.br': fncategory_srch
+			fncategory_srch=fncategory_srch(x$,fixgrid)
+		fnend
+		def library fnsubcat_srch(&cde$,&ckey;fixgrid)
+			library 'S:\acsPR\SubCat_srch.br': fnsubcat_srch
+			fnsubcat_srch=fnsubcat_srch(cde$,ckey,fixgrid)
+		fnend
+	! /r
 	def library fnCheckPayrollCalculation
 		library 'S:\Payroll\Calculation.br': fnCheckPayrollCalculation
 		fnCheckPayrollCalculation=fnCheckPayrollCalculation
@@ -1764,13 +1818,10 @@ fnend
 		library 'S:\Payroll\Employee.br': fnGetEmpOptions
 		fnGetEmpOptions=fnGetEmpOptions(mat marriedOption$,mat w4yearOption$,mat payPeriodOption$)
 	fnend
-
-
 	def library fnDeptName$*25(departmentCode)
 		library 'S:\Payroll\fn\deptName.br': fnDeptName$
 		fnDeptName$=fnDeptName$(departmentCode)
 	fnend
-
 	def library fnPrPrintNetZeroDefault$(; ___,return$)
 		if env$('client')='Divernon' or env$('client')='Payroll Done Right' then
 			return$='True'
@@ -1797,72 +1848,35 @@ fnend
 		fnPayrollRegister2=fnPayrollRegister2( det,include_tips_in_other_wh,append_reg1,ppdOverride)
 	fnend
 	def library fnSsRateEmployee
-		library 'S:\acsPR\ss_emp.br': fnss_employee
-		fnSsRateEmployee=fnss_employee*.01
+		library 'S:\Payroll\fn\ssEmp.br': fnSsEmployee
+		fnSsRateEmployee=fnSsEmployee*.01
 	fnend
-	def library fnss_employee
-		library 'S:\acsPR\ss_emp.br': fnss_employee
-		fnss_employee=fnss_employee
+	def library fnSsEmployee
+		library 'S:\Payroll\fn\ssEmp.br': fnSsEmployee
+		fnSsEmployee=fnSsEmployee
 	fnend
-	def library fnss_employer
-		library 'S:\acsPR\ss_emp.br': fnss_employer
-		fnss_employer=fnss_employer
+	def library fnSsEmployer
+		library 'S:\Payroll\fn\ssEmp.br': fnSsEmployer
+		fnSsEmployer=fnSsEmployer
 	fnend
-	def library fnemployee_srch(&x$;fixgrid)
-		library 'S:\acsPR\Employee_srch.br': fnemployee_srch
-		fnemployee_srch=fnemployee_srch(x$,fixgrid)
+
+
+
+	def library fnCheckHistory(hact$,filnum,hCheckHistory,hEmployee)
+		library 'S:\Payroll\Payroll Check History.br': fnCheckHistory
+		fnCheckHistory=fnCheckHistory(hact$,filnum,hCheckHistory,hEmployee)
 	fnend
-	def library fncat_srch2(&x$,&ckey;fixgrid)
-		library 'S:\acsPR\CAT_srch2.br': fncat_srch2
-		fncat_srch2=fncat_srch2(x$,ckey,fixgrid)
+	def library fnOpenPrReport
+		library 'S:\Payroll\Payroll Check History.br': fnOpenPrReport
+		fnOpenPrReport=fnOpenPrReport
 	fnend
-	def library fncategory_srch(&cn$;fixgrid)
-		library 'S:\acsPR\CATegory_srch.br': fncategory_srch
-		fncategory_srch=fncategory_srch(x$,fixgrid)
+	def library fnHours(; eno)
+		library 'S:\Payroll\fn\hours.br': fnHours
+		fnHours=fnHours( eno)
 	fnend
-	def library fnsubcat_srch(&cde$,&ckey;fixgrid)
-		library 'S:\acsPR\SubCat_srch.br': fnsubcat_srch
-		fnsubcat_srch=fnsubcat_srch(cde$,ckey,fixgrid)
-	fnend
-	def library fncmbemp(lyne,mypos; addall,container)
-		library 'S:\acsPR\CmbEmp.br': fncmbemp
-		fncmbemp=fncmbemp(lyne,mypos, addall,container)
-	fnend
-	def library fncmbcategory(lyne,mypos;addall,c,a$*30)
-		library 'S:\acsPR\CmbCategory.br': fncmbcategory
-		fncmbcategory=fncmbcategory(lyne,mypos,addall,c,a$)
-	fnend
-	def library fnCheckFile(hact$,filnum,hCheckHistory,hEmployee)
-		library 'S:\Payroll\Payroll Check History.br': fnCheckFile
-		fnCheckFile=fnCheckFile(hact$,filnum,hCheckHistory,hEmployee)
-	fnend
-	def library fnhours(eno)
-		library 'S:\acsPR\hours_lib.br': fnhours
-		fnhours=fnhours(eno)
-	fnend
-	def library fncmbjob(lyne,mypos;addall,c,a$*30)
-		library 'S:\acsPR\Cmbjob.br': fncmbjob
-		fncmbjob=fncmbjob(lyne,mypos,addall,c,a$)
-	fnend
-	def library fncmbcat(lyne,mypos;addall,c,a$*30)
-		library 'S:\acsPR\CmbCat.br': fncmbcat
-		fncmbcat=fncmbcat(lyne,mypos,addall,c,a$)
-	fnend
-	def library fncmbsubcat(lyne,mypos;addall,c)
-		library 'S:\acsPR\CmbSubCat.br': fncmbsubcat
-		fncmbsubcat=fncmbsubcat(lyne,mypos,addall,c)
-	fnend
-	def library fnpr_conversion_department(cno; medicare_is_seperated)
-		library 'S:\acsPR\Conversion\v4_cnv.br': fnpr_conversion_department
-		fnpr_conversion_department=fnpr_conversion_department(cno, medicare_is_seperated)
-	fnend
-	def library fnpr_conversion_add_missing(cno)
-		library 'S:\acsPR\Conversion\v4_part2.br': fnpr_conversion_add_missing
-		fnpr_conversion_add_missing=fnpr_conversion_add_missing(cno)
-	fnend
-	def library fnjob_srch(&x$; fixgrid)
-		library 'S:\acsPR\Job_srch.br': fnjob_srch
-		fnjob_srch=fnjob_srch(x$,fixgrid)
+	def library fnJobSearch(&x$; fixgrid)
+		library 'S:\Payroll\fn\jobSearch.br': fnJobSearch
+		fnJobSearch=fnJobSearch(x$,fixgrid)
 	fnend
 	def library fnGetPayrollDates(&beg_date,&end_date; &qtr1,&qtr2,&qtr3,&qtr4)
 		library 'S:\Payroll\Change Payroll Dates.br': fnGetPayrollDates
@@ -1875,6 +1889,15 @@ fnend
 	def library fnSetPayrollDatesForYear(; year)
 		library 'S:\Payroll\Change Payroll Dates.br': fnSetPayrollDatesForYear
 		fnSetPayrollDatesForYear=fnSetPayrollDatesForYear( year)
+	fnend
+
+	def library fnpr_conversion_department(cno; medicare_is_seperated)
+		library 'S:\acsPR\Conversion\v4_cnv.br': fnpr_conversion_department
+		fnpr_conversion_department=fnpr_conversion_department(cno, medicare_is_seperated)
+	fnend
+	def library fnpr_conversion_add_missing(cno)
+		library 'S:\acsPR\Conversion\v4_part2.br': fnpr_conversion_add_missing
+		fnpr_conversion_add_missing=fnpr_conversion_add_missing(cno)
 	fnend
 
 	def library fnCompanyPayPeriodEndingDate(cno)

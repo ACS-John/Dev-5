@@ -57,12 +57,12 @@ END1: !
 	close #work2:
 	close #trmstr,free:
 	close #tralloc,free:
-	execute 'Rename [Q]\CLmstr\Work1.[wsid] '&'[Q]\CLmstr\TRmstr.h[cno] -n'
-	execute 'Rename [Q]\CLmstr\Work2.[wsid] '&'[Q]\CLmstr\TrAlloc.h[cno] -n'
-	execute 'Index [Q]\CLmstr\TrMstr.h[cno]'&' '&'[Q]\CLmstr\TrIdx1.h[cno] 1 11 Replace DupKeys -n'
-	execute 'Index [Q]\CLmstr\TrMstr.h[cno]'&' '&'[Q]\CLmstr\TrIdx2.h[cno] 28/1 8/11 Replace DupKeys -n'
-	execute 'Index [Q]\CLmstr\TrMstr.h[cno]'&' '&'[Q]\CLmstr\TrIdx3.h[cno] 16/12/4 2/4/8 Replace DupKeys -n'
-	execute 'Index [Q]\CLmstr\TrAlloc.h[cno]'&' '&'[Q]\CLmstr\TrAlloc-idx.h[cno] 1 11 Replace DupKeys -n'
+	execute 'Rename [Q]\CLmstr\Work1.[wsid] [Q]\CLmstr\TRmstr.h[cno] -n'
+	execute 'Rename [Q]\CLmstr\Work2.[wsid] [Q]\CLmstr\TrAlloc.h[cno] -n'
+	execute 'Index [Q]\CLmstr\TrMstr.h[cno] [Q]\CLmstr\TrIdx1.h[cno] 1 11 Replace DupKeys -n'
+	execute 'Index [Q]\CLmstr\TrMstr.h[cno] [Q]\CLmstr\TrIdx2.h[cno] 28/1 8/11 Replace DupKeys -n'
+	execute 'Index [Q]\CLmstr\TrMstr.h[cno] [Q]\CLmstr\TrIdx3.h[cno] 16/12/4 2/4/8 Replace DupKeys -n'
+	execute 'Index [Q]\CLmstr\TrAlloc.h[cno] [Q]\CLmstr\TrAlloc-idx.h[cno] 1 11 Replace DupKeys -n'
 goto Xit
  
 Xit: fnXit

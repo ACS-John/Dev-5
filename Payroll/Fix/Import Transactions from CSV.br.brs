@@ -5,13 +5,13 @@ fnTop(program$)
 	dim deductionCode(20)
 	fnDedNames(mat dednames$,mat abrevname$,mat deductionCode)
 	dim tran$(0)*128,tranN(0),csz$*30
-	hTran=fn_openFio('PR Transaction',mat tran$,mat tranN)
-		
+	hTran=fn_openFio('PR Check History',mat tran$,mat tranN)
+
 dim deptRegisterFile$*1024
 dim emplRegisterFile$*1024
 dim delim$*1
 delim$=','
-		
+
 SCREEN1: ! r:
 fncreg_read(cap$&'.deptRegisterFile$',deptRegisterFile$, 'D:\ACS\(Client_Files)\Payroll Done Right\Excape 2019 Transaction Rebuild with deductions v2 - Department.csv')
 fncreg_read(cap$&'.emplRegisterFile$',emplRegisterFile$, 'D:\ACS\(Client_Files)\Payroll Done Right\Excape 2019 Transaction Rebuild with deductions v2 - Employee.csv')
@@ -85,7 +85,7 @@ fncreg_write(cap$&'.emplRegisterFile$',emplRegisterFile$)
 	emplRecordCount=fn_readEmplIntoArrays(hInEmpl,mat emplList_Date,mat emplList_Check_No,mat emplList_Emp_No,mat emplList_Emp_Name$,mat emplList_Reg,mat emplList_OT,mat emplList_Sick,mat emplList_Vac,mat emplList_Hol,mat emplList_Total_Hours,mat emplList_Total_Pay,mat emplList_Med_WH,mat emplList_FICA,mat emplList_Federal,mat emplList_State,mat emplList_Other,mat emplList_Net_Pay)
 	close #hInEmpl:
 ! /r
-for empItem=1 to emplRecordCount
+for empItem=1 to emplRecordCount ! r: main loop
 	deptMatchCount=fn_getMatchingDeptIndexes(emplList_Date(empItem),emplList_Emp_No(empItem),mat deptMatch)
 	if deptMatchCount<0 then
 		pr '***deptMatchCount=';deptMatchCount;'***';bell
@@ -147,7 +147,7 @@ for empItem=1 to emplRecordCount
 			write #hTran,using form$(hTran): mat tran$,mat tranN
 		nex deptItem
 	end if
-nex empItem
+nex empItem ! /r
 goto Xit
 def fn_buildTran1(empNo,dept,prDate,ckno,hoursReg,hoursOt,hoursSick,hoursVac,hoursHoli,wagesWorkmansComp,wagesSS,wagesMedicare,fedUc,StateUc)
 	tranN(check_emp          )=empNo              	! ,Employee
@@ -276,9 +276,9 @@ def fn_mat_deptList(newArraySize)
 	mat deptList_WC_and_TrimetTax     		(newArraySize)
 	mat deptList_TrimetTax             		(newArraySize)
 	mat deptList_WC                     		(newArraySize)
- 
+
 fnend
- 
+
 def fn_readEmplIntoArrays(hInempl,mat emplList_Date,mat emplList_Check_No,mat emplList_Emp_No,mat emplList_Emp_Name$,mat emplList_Reg,mat emplList_OT,mat emplList_Sick,mat emplList_Vac,mat emplList_Hol,mat emplList_Total_Hours,mat emplList_Total_Pay,mat emplList_Med_WH,mat emplList_FICA,mat emplList_Federal,mat emplList_State,mat emplList_Other,mat emplList_Net_Pay)
 	linput #hInempl: line$ ! simply skip the headers for now
 	emplRecordCount=0
@@ -287,69 +287,65 @@ def fn_readEmplIntoArrays(hInempl,mat emplList_Date,mat emplList_Check_No,mat em
 		str2mat(line$,mat item$, delim$)
 		fn_mat_emplList(emplRecordCount+=1)
 		if trim$(item$(empl_Date))='' then ! use the last date
-			emplList_Date           (emplRecordCount)	=emplList_Date(emplRecordCount-1)
+			emplList_Date         (emplRecordCount)	=emplList_Date(emplRecordCount-1)
 		else
 			emplList_Date         (emplRecordCount)	=date(days(item$(empl_Date),'mm/dd/ccyy'),'ccyymmdd')
 		end if
-		
-		
-		emplList_Check_No       (emplRecordCount)	=val(item$(empl_Check_No       ))
-		emplList_Emp_No         (emplRecordCount)	=val(item$(empl_Emp_No         ))
-		emplList_Emp_Name$      (emplRecordCount)	=item$(empl_Emp_Name       )
-		emplList_Reg            (emplRecordCount)		=val(item$(empl_Reg            ))
-		emplList_OT             (emplRecordCount)		=val(item$(empl_OT              ))
-		emplList_Sick           (emplRecordCount)	=val(item$(empl_Sick           ))
-		emplList_Vac            (emplRecordCount)		=val(item$(empl_Vac            ))
-		emplList_Hol            (emplRecordCount)		=val(item$(empl_Hol            ))
-		emplList_Total_Hours   (emplRecordCount)		=val(item$(empl_Total_Hours    ))
-		emplList_Total_Pay      (emplRecordCount)	=val(item$(empl_Total_Pay      ))
-		emplList_Med_WH         (emplRecordCount)	=val(item$(empl_Med_WH         ))
-		emplList_FICA           (emplRecordCount)	=val(item$(empl_FICA           ))
-		emplList_Federal        (emplRecordCount)	=val(item$(empl_Federal        ))
-		emplList_State          (emplRecordCount)	=val(item$(empl_State          ))
-		emplList_Other          (emplRecordCount)	=val(item$(empl_Other          ))
-		emplList_Net_Pay        (emplRecordCount)	=val(item$(empl_Net_Pay        ))
+
+		emplList_Check_No      	(emplRecordCount)	=val(item$(empl_Check_No       ))
+		emplList_Emp_No        	(emplRecordCount)	=val(item$(empl_Emp_No         ))
+		emplList_Emp_Name$     	(emplRecordCount)	=    item$(empl_Emp_Name       )
+		emplList_Reg           	(emplRecordCount)	=val(item$(empl_Reg            ))
+		emplList_OT            	(emplRecordCount)	=val(item$(empl_OT              ))
+		emplList_Sick          	(emplRecordCount)	=val(item$(empl_Sick           ))
+		emplList_Vac           	(emplRecordCount)	=val(item$(empl_Vac            ))
+		emplList_Hol           	(emplRecordCount)	=val(item$(empl_Hol            ))
+		emplList_Total_Hours  	(emplRecordCount)	=val(item$(empl_Total_Hours    ))
+		emplList_Total_Pay     	(emplRecordCount)	=val(item$(empl_Total_Pay      ))
+		emplList_Med_WH        	(emplRecordCount)	=val(item$(empl_Med_WH         ))
+		emplList_FICA          	(emplRecordCount)	=val(item$(empl_FICA           ))
+		emplList_Federal       	(emplRecordCount)	=val(item$(empl_Federal        ))
+		emplList_State         	(emplRecordCount)	=val(item$(empl_State          ))
+		emplList_Other         	(emplRecordCount)	=val(item$(empl_Other          ))
+		emplList_Net_Pay       	(emplRecordCount)	=val(item$(empl_Net_Pay        ))
 	loop
 	ReadEmplEof: !
 	fn_readEmplIntoArrays=emplRecordCount
 fnend
 def fn_mat_emplList(newArraySize)
-	mat emplList_Date           (newArraySize)
-	mat emplList_Check_No       (newArraySize)
-	mat emplList_Emp_No         (newArraySize)
-	mat emplList_Emp_Name$      (newArraySize)
-	mat emplList_Reg            (newArraySize)
-	mat emplList_OT             (newArraySize)
-	mat emplList_Sick           (newArraySize)
-	mat emplList_Vac            (newArraySize)
-	mat emplList_Hol            (newArraySize)
-	mat emplList_Total_Hours   (newArraySize)
-	mat emplList_Total_Pay      (newArraySize)
-	mat emplList_Med_WH         (newArraySize)
-	mat emplList_FICA           (newArraySize)
-	mat emplList_Federal        (newArraySize)
-	mat emplList_State          (newArraySize)
-	mat emplList_Other          (newArraySize)
-	mat emplList_Net_Pay        (newArraySize)
+	mat emplList_Date           	(newArraySize)
+	mat emplList_Check_No       	(newArraySize)
+	mat emplList_Emp_No         	(newArraySize)
+	mat emplList_Emp_Name$      	(newArraySize)
+	mat emplList_Reg             	(newArraySize)
+	mat emplList_OT              	(newArraySize)
+	mat emplList_Sick           	(newArraySize)
+	mat emplList_Vac             	(newArraySize)
+	mat emplList_Hol             	(newArraySize)
+	mat emplList_Total_Hours    	(newArraySize)
+	mat emplList_Total_Pay      	(newArraySize)
+	mat emplList_Med_WH         	(newArraySize)
+	mat emplList_FICA           	(newArraySize)
+	mat emplList_Federal        	(newArraySize)
+	mat emplList_State          	(newArraySize)
+	mat emplList_Other          	(newArraySize)
+	mat emplList_Net_Pay        	(newArraySize)
 fnend
- 
- 
- 
- 
- 
+
+
 def fn_setup
 	if ~setup then
 		setup=1
 		on error goto Ertn
- 
+
 		dim line$*1024
 		dim item$(0)*256
- 
- 
+
+
 		autoLibrary
- 
+
 		dim resp$(64)*1024
- 
+
 	end if
 fnend
 Xit: fnXit

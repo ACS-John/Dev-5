@@ -87,7 +87,7 @@ def fn_server_install
 	else
 		windowsSystem32bitFolder$=os_filename$(env$('SystemRoot')&'\System32')
 	end if
-	pr #h_copy_cmd: 'copy "'&os_filename$('S:\brlistener'&env$('BRListener_Version')&'-'&env$('BR_Architecture')&'-'&env$('BRListener_Date')&'.exe')&'" "'&windowsSystem32bitFolder$&'\brListener.exe'&'"'
+	pr #h_copy_cmd: 'copy "'&os_filename$('S:\brlistener'&env$('BRListener_Version')&'-'&env$('BR_Architecture')&'-'&env$('BRListener_Date')&'.exe')&'" "'&windowsSystem32bitFolder$&'\brListener.exe"'
 	pr #h_copy_cmd: '"'&os_filename$('S:\brListenerInstaller-'&env$('BR_Architecture')&'.exe')&'" /release'
 	pr #h_copy_cmd: '"'&os_filename$('S:\brListenerInstaller-'&env$('BR_Architecture')&'.exe')&'"'
     pr #h_copy_cmd:     'pause'

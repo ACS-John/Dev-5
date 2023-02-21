@@ -291,10 +291,10 @@ ASK_STARTING: ! r:
 	fnTos
 	respc=cf=0: mylen=40: mypos=mylen+3 : mylen2=62: mypos2=20
 	fnLbl(1,1,"Starting Employee Number:",mylen,1,0,0)
-	fncmbemp(1,mypos)
+	fnCmbEmp(1,mypos)
 	resp$(respc+=1)=""
 	fnLbl(2,1,"Ending Employee Number (blank for all):",mylen,1,0,0)
-	fncmbemp(2,mypos)
+	fnCmbEmp(2,mypos)
 	resp$(respc+=1)=""
 	fnLbl(4,mypos2,"To pr a single W2, use the same starting and ending number.",mylen2,0,0,0)
 	fnLbl(9,mypos2," ",mylen2,0,0,0)

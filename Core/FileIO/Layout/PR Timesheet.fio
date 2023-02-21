@@ -1,0 +1,42 @@
+[Q]\PRmstr\timesheet[acsUserId].h[cno]   , ts_  , 0
+[Q]\PRmstr\timesheet[acsUserId]Idx.h[cno]        , emp/dept
+recl=167
+===================================================
+! Ftimesheet: form pos 1,n 8,n 3,5*pd 4.2,25*pd 5.2,2*pd 4.2
+! write #hTimesheet,using Ftimesheet: eno,dep,mat inpX,gpd,mat hr
+! dim hr(2)
+! dim inpX(29)
+emp           	,Employee            	, N  8  	,  	,! SPos=  1 aka=eno  comboFio(PR Employee)
+dept          	,Department          	, N  3  	,  	,! SPos=  9 aka=tdn  
+inp1          	,Regular Hours       	, pd 4.2	,  	,! inpX( 1)   reghrs
+inp2          	,Overtime Hours      	, pd 4.2	,  	,! inpX( 2)   othrs
+inp3          	,Sick Hours          	, pd 4.2	,  	,! inpX( 3)   vachrs
+sickhrs      	,Vacation Hours      	, pd 4.2	,  	,! inpX( 4)   sickhrs
+holhrs        	,Holiday Hours       	, pd 4.2	,  	,! inpX( 5)   holhrs
+inp6          	,Salary               	, pd 5.2	,  	,! inpX( 6)   tdet(1)
+othercomp    	,Other Compensation 	, pd 5.2	,  	,! inpX( 7)   othercomp    Other Compensation
+meals         	,Meals                	, pd 5.2	,  	,! inpX( 8)    Meals
+tips          	,Tips                 	, pd 5.2	,  	,! inpX( 9)    Tips
+db1           	,Ded/Ben 1           	, pd 5.2	,  	,! inpX(10)    deduction 1 
+db2           	,Ded/Ben 2           	, pd 5.2	,  	,! inpX(11)    deduction 2 
+db3           	,Ded/Ben 3           	, pd 5.2	,  	,! inpX(12)    deduction 3 
+db4           	,Ded/Ben 4           	, pd 5.2	,  	,! inpX(13)    deduction 4 
+db5           	,Ded/Ben 5           	, pd 5.2	,  	,! inpX(14)    deduction 5 
+db6           	,Ded/Ben 6           	, pd 5.2	,  	,! inpX(15)    deduction 6 
+db7           	,Ded/Ben 7           	, pd 5.2	,  	,! inpX(16)    deduction 7 
+db8           	,Ded/Ben 8           	, pd 5.2	,  	,! inpX(17)    deduction 8    for j=1 to 20
+db9           	,Ded/Ben 9           	, pd 5.2	,  	,! inpX(18)    deduction 9    	inpX(j+9)=tdet(j+3)
+db10          	,Ded/Ben 10          	, pd 5.2	,  	,! inpX(19)    deduction 10   	if skipit(j)=1 then inpX(j+9)=0
+db11          	,Ded/Ben 11          	, pd 5.2	,  	,! inpX(20)    deduction 11   next j
+db12          	,Ded/Ben 12          	, pd 5.2	,  	,! inpX(21)    deduction 12
+db13          	,Ded/Ben 13          	, pd 5.2	,  	,! inpX(22)    deduction 13
+db14          	,Ded/Ben 14          	, pd 5.2	,  	,! inpX(23)    deduction 14
+db15          	,Ded/Ben 15          	, pd 5.2	,  	,! inpX(24)    deduction 15
+db16          	,Ded/Ben 16          	, pd 5.2	,  	,! inpX(25)    deduction 16
+db17          	,Ded/Ben 17          	, pd 5.2	,  	,! inpX(26)    deduction 17
+db18          	,Ded/Ben 18          	, pd 5.2	,  	,! inpX(27)    deduction 18
+db19          	,Ded/Ben 19          	, pd 5.2	,  	,! inpX(28)    deduction 19
+db20          	,Ded/Ben 20          	, pd 5.2	,  	,! inpX(29)    deduction 20
+gpd           	,gpd                  	, pd 5.2	,  	,! gpd
+hr1           	,hourly rate         	, pd 4.2	,  	,! hr(1)      Reg Hourly Rate
+hr2           	,overtime hourly rate	, pd 4.2	,  	,! hr(2)      O/T Hourly Rate

@@ -83,7 +83,7 @@ fnreg_read('Post to Checkbook - Populate Checkbook Payee from Payroll Employee',
 ! /r
 ! r: set default answers and semi-consants and open some files
 	ssr1=fnSsRateEmployee
-	ssr2=fnss_employer*.01
+	ssr2=fnSsEmployer*.01
 	open #20: 'Name=[Q]\PRmstr\prCode.h[cno],Shr',i,i
 	read #20,using 'form pos 2,pos 5,N 5': ckno
 	close #20:

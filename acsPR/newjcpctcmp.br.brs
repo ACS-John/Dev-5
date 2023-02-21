@@ -17,10 +17,10 @@ TRANSACTION_ENTRY: !
 	respc=0 : frac=0
 	mylen=28 : mypos=mylen+3
 	fnLbl(1,1,"Job Number:",mylen,1)
-	fncmbjob(1,mypos)
+	fnCmbJob(1,mypos)
 	resp$(respc+=1)=jn$
 	fnLbl(2,1,"Category:",mylen,1)
-	fncmbcategory(2,mypos)
+	fnCmbCategory(2,mypos)
 	resp$(respc+=1)=str$(cn)
 	fnLbl(3,1,"Percent Complete - Labor:",mylen,1)
 	fnTxt(3,mypos,3,3,0,'30',0,"Enter whole numbers. For example:  10% would be entered as 10")

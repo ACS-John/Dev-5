@@ -350,6 +350,9 @@ def fn_main(; ___,menuOpt$*128)
 					fnChain('S:\Payroll\Payroll Registers')
 				else if fkey_value=fkey_pr_print_checks  then
 					fnChain('S:\Payroll\Print Payroll Checks')
+				else if fkey_value=fkey_pr_check_history  then
+					fnChain('S:\Payroll\Payroll Check History')
+
 				end if
 			else if env$('cursys')='UB' and fkey_value<>0 then
 				if fkey_value=fkey_ub_collection then
@@ -603,10 +606,11 @@ def fn_dashboardDraw
 			fnLbl(1,1,'Payroll State:',15,1,0,fraDashboard)
 			fnLbl(1,17,fnpayroll_client_state$,4,0,0,fraDashboard)
 			tmpBtnWidth=10 : buttonLinePrior=0
-			fn_ddAddButton('Checks'   	,fkey_pr_print_checks:=5004      	,tmpBtnWidth)
-			fn_ddAddButton('Registers'	,fkey_pr_payroll_registers:=5003	,tmpBtnWidth)
-			fn_ddAddButton('Enter Time'	,fkey_pr_enter_time:=5002        	,tmpBtnWidth)
-			fn_ddAddButton('Employee'  	,fkey_pr_employee:=5001          	,tmpBtnWidth)
+			fn_ddAddButton('Checks'     	,fkey_pr_print_checks:=5004     	,tmpBtnWidth, 1,'Print Checks')
+			fn_ddAddButton('Registers' 	,fkey_pr_payroll_registers:=5003	,tmpBtnWidth, 1)
+			fn_ddAddButton('Enter Time'	,fkey_pr_enter_time:=5002       	,tmpBtnWidth, 1)
+			fn_ddAddButton('Employee'   	,fkey_pr_employee:=5001         	,tmpBtnWidth, 1)
+			fn_ddAddButton('History'    	,fkey_pr_check_history:=5005    	,tmpBtnWidth, 2,'Check History')
 		else if env$('cursys')='GL' then
 			fnLbl(1,1,'Current Period:',19,1,0,fraDashboard)
 			fnLbl(1,21,str$(fnActPd),4,0,0,fraDashboard)
@@ -618,10 +622,10 @@ def fn_dashboardDraw
 			fnButton(1,44,pedat$,fkey_gl_periodEndingDate:=5003,'',1,20,fraDashboard) ! fnLbl(1,47,fnpedat$,4,0,0,1)
 		DD_GL_Xit: !
 			tmpBtnWidth=10 : buttonLinePrior=0
-			fn_ddAddButton('Accounts'    	,fkey_gl_accounts:=5001    	,tmpBtnWidth,1,'General Ledger Master')
+			fn_ddAddButton('Accounts'     	,fkey_gl_accounts:=5001    	,tmpBtnWidth,1,'General Ledger Master')
 			fn_ddAddButton('Transactions'	,fkey_gl_Transactions:=5002	,tmpBtnWidth,1,'Enter Transactions')
 			if fnClientHas('G2') then
-				fn_ddAddButton('Employee'  	,fkey_g2_employee:=5011    	,tmpBtnWidth, 2)
+				fn_ddAddButton('Employee'   	,fkey_g2_employee:=5011    	,tmpBtnWidth, 2)
 			end if
 		else if env$('cursys')='UB' then
 			d1$=date$(days(fnLastBillingDate,'mmddyy'),'mm/dd/ccyy')
@@ -633,18 +637,18 @@ def fn_dashboardDraw
 				fnButton(1,32,'Change',fkey_change_billing_date,'Select a new current Billing Date',1,6,fraDashboard)
 			end if
 			tmpBtnWidth=11 : buttonLinePrior=0
-			fn_ddAddButton('Collections'	,fkey_ub_collection:=5002,tmpBtnWidth)
-			fn_ddAddButton('Customer'   	,fkey_ub_customer:=5003,tmpBtnWidth)
+			fn_ddAddButton('Collections' 	,fkey_ub_collection:=5002,tmpBtnWidth)
+			fn_ddAddButton('Customer'     	,  fkey_ub_customer:=5003,tmpBtnWidth)
 			if ub_total_ar_on_dashboard$='True' then
 				fnLbl(1,40,'Accounts Receivable:'	,26,1,0,1) : fnLbl(1,68,str$(fnTotal_ar)            	,4,0,0,1)
-				fnLbl(2,40,'Active Customers:'   	,26,1,0,1) : fnLbl(2,68,str$(fnActiveCustomerCount)	,4,0,0,1)
+				fnLbl(2,40,'Active Customers:'    	,26,1,0,1) : fnLbl(2,68,str$(fnActiveCustomerCount)	,4,0,0,1)
 			end if
 		else if env$('cursystem')='Client Billing' then
 			tmpBtnWidth=23 : buttonLinePrior=0
 			fn_ddAddButton('Update Sup Exp'	,fkey_tm_updateSupportExpir:=5002	,tmpBtnWidth,1,'Update Support Expiration Dates for Clients')
-			fn_ddAddButton('Collections'  	,fkey_tm_collections:=5001       	,tmpBtnWidth,1)
-			fn_ddAddButton('Client'       	,fkey_tm_client:=5004             	,tmpBtnWidth,1)
-			fn_ddAddButton('Contact'      	,fkey_tm_contact:=5003            	,tmpBtnWidth,2)
+			fn_ddAddButton('Collections'   	,fkey_tm_collections:=5001       	,tmpBtnWidth,1)
+			fn_ddAddButton('Client'         	,fkey_tm_client:=5004             	,tmpBtnWidth,1)
+			fn_ddAddButton('Contact'        	,fkey_tm_contact:=5003            	,tmpBtnWidth,2)
 			fnLbl(5,1,'Advanced Computer Services LLC Management Menu.',0,0,0,fraDashboard)
 		end if
 		! if env$('acsDeveloper')<>'' then

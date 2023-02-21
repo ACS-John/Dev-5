@@ -1,0 +1,6 @@
+[Q]\PRmstr\HourClass.h[cno]      , hc_  , 0
+[Q]\PRmstr\HourClass-idx.h[cno]  , code
+recl=35
+===================================================
+code  	,Code  	, C  5  	,  	,! SPos=  1
+name  	,Name  	, C 30  	,  	,! SPos=  6

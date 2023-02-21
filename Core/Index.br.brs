@@ -229,8 +229,8 @@ def fn_index_sys_do_one(cno,system_id$*128)
 		fn_index('[Q]\PRmstr\PRReport.h'&str$(cno), '[Q]\PRmstr\prrptidx.h'&str$(cno),'1 2')
 		fn_index('[Q]\PRmstr\prTot.h'&str$(cno), '[Q]\PRmstr\PRTotIdx.h'&str$(cno),'1 9')
 
-		! fn_index('[Q]\PRmstr\rpwork[unique_computer_id].h'&str$(cno), '[Q]\PRmstr\rpwork[unique_computer_id]Idx.h'&str$(cno),'1 11')
-		! fn_index('[Q]\PRmstr\rpwork[unique_computer_id].h'&str$(cno), '[Q]\PRmstr\rpwork[unique_computer_id]Idx2.h'&str$(cno),'1/27 8/14')
+		! fn_index('[Q]\PRmstr\timesheet[acsUserId].h'&str$(cno), '[Q]\PRmstr\rpwork[acsUserId]Idx.h'&str$(cno),'1 11')
+		! fn_index('[Q]\PRmstr\rpwork[acsUserId].h'&str$(cno), '[Q]\PRmstr\rpwork[acsUserId]Idx2.h'&str$(cno),'1/27 8/14')
 		dim filename$(0)*256
 		dim kfname$(2)*256
 		fnGetDir2('[Q]\PRmstr\',mat filename$, '','rpwork*.h'&str$(cno))

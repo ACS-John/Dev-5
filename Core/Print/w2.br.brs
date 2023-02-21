@@ -178,10 +178,10 @@ def library fnask_w2_info(&taxYear$,&beg_date,&end_date,&empStart$, _
 	end if
 	if enableEmpRange then
 		fnLbl(lc+=1,1,'Starting Employee:',mylen,1,0,franum)
-		fncmbemp(lc,mypos,1,franum)
+		fnCmbEmp(lc,mypos,1,franum)
 		resp$(respc_empStart:=rc+=1)=''
 		fnLbl(lc+=1,1,'Ending Employee:',mylen,1,0,franum)
-		fncmbemp(lc,mypos,1,franum)
+		fnCmbEmp(lc,mypos,1,franum)
 		resp$(respc_empEnd:=rc+=1)=''
 		lc+=1
 	end if
@@ -676,7 +676,7 @@ def fn_FormCopyAwithBackgroundWarn
 		fnAddOneC(mat fcawbwText$,'in red, similar to the official IRS form. The official printed version')
 		fnAddOneC(mat fcawbwText$,'of this IRS form is scannable, but the online version of it, printed')
 		fnAddOneC(mat fcawbwText$,'from this website, is not. Do not pr and file this Copy A.')
-		fnAddOneC(mat fcawbwText$,'A penalty may be imposed for filing forms that can’t be scanned.')
+		fnAddOneC(mat fcawbwText$,'A penalty may be imposed for filing forms that can''t be scanned.')
 		fnAddOneC(mat fcawbwText$,'')
 		fnAddOneC(mat fcawbwText$,'To order official IRS information returns such as Forms W-2 and W-3,')
 		fnAddOneC(mat fcawbwText$,'which include a scannable Copy A for filing, visit www.irs.gov/orderforms')

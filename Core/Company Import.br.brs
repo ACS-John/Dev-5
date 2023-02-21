@@ -109,7 +109,7 @@ def fn_deleteExistingFiles
 	company_import_path$=company_file$(1:pos(company_file$,'\',-1))
 	fnFree('[Q]\[CurSys]mstr\*.h[cno]')
 	if cursys$='UB' then
-		fnFree('[Q]\[CurSys]mstr\Notes.h[cno]'&'\*.*')
+		fnFree('[Q]\[CurSys]mstr\Notes.h[cno]\*.*')
 		! fnFree('[Q]\[CurSys]mstr\ubData\*.h[cno]')  <-- this is done in fn_ub_copy_extras
 	end if
 	fnStatus('Existing files ('&os_filename$('[Q]\'&cursys$&'mstr\*.h[cno]')&') have been removed.')
@@ -263,7 +263,7 @@ def fn_ub_copy_extras
 	! r: import notes folder
 	if exists(company_import_path$&'UBmstr\notes'&company_import_extension$) then
 		fnFree('[Q]\'&cursys$&'mstr\notes.h[cno]')
-		! this would not get subdirs ! fnCopy(env$('at')&company_import_path$&'UBmstr\notes'&company_import_extension$&'\*.*','[Q]\UBmstr\notes.h[cno]'&'\*.*')
+		! this would not get subdirs ! fnCopy(env$('at')&company_import_path$&'UBmstr\notes'&company_import_extension$&'\*.*','[Q]\UBmstr\notes.h[cno]\*.*')
 		execute 'sy xcopy "'&company_import_path$&'UBmstr\notes'&company_import_extension$&'\*.*" "'&os_filename$('[Q]\UBmstr\notes.h[cno]')&'\*.*" /t /y'
 		fnStatus('UB Notes imported.')
 	end if  ! exists [import path][Q]\UBmstr\notes.h[company_import_extension]

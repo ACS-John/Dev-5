@@ -5,7 +5,7 @@ fnend
 def fn_replaceLFwithSpace$*256(csvFile$*256; ___,line$*1024,outFile$*300, _
 			line2$*1, _
 			line500$*500)
-	outFile$=csvFile$&env$('unique_computer_id')&'.tmp'
+	outFile$=csvFile$&env$('acsUserId')&'.tmp'
 	open #hIn=fnH:  'name='&csvFile$&',RecL=500,EoL=None',external,input
 	open #hOut=fnH:  'name='&outFile$&',RecL=2048,EoL=None,Replace',external,output
 	do
@@ -123,7 +123,7 @@ include: filenamesPopUpperCase
 		if (re_item$(itemsOnLine)(1:1)='"' and fn_lastChr$(re_item$(itemsOnLine))<>'"') _
 		or fn_haventMetMinColCountYet then
 			print #hOut: line$&'    ';
-			fn_sendToOutput(line$&'    '&'^')
+			fn_sendToOutput(line$&'    ^')
 		else
 			fn_sendToOutput(line$)
 			lineCountOut+=1

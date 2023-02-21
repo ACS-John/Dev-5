@@ -184,7 +184,7 @@ CREATENAMES: ! r:
 	dim fullname$(20)*20,abrevname$(20)*8,deductionCode(20),newcalcode(20)
 	dim newdedfed(20),dedfica(20),dedst(20),deduc(20),gl$(20)*12
 	if exists('[Q]\PRmstr\PRCOINFO.h[cno]') and ~exists('[Q]\PRmstr\Company.h[cno]') then 
-		execute 'Rename [Q]\PRmstr\PRCOINFO.h[cno]'&' '&'[Q]\PRmstr\Company.h[cno]'
+		execute 'Rename [Q]\PRmstr\PRCOINFO.h[cno] [Q]\PRmstr\Company.h[cno]'
 	end if 
 	open #h_company=fnH: 'Name=[Q]\PRmstr\Company.h[cno]',i,i 
 	read #h_company,using 'form pos 1,3*C 40,C 12,PD 6.3,PD 6.2,PD 5.2,10*C 8,N 2,PD 4.2,PD 3.3,12*PD 4.2,10*PD 3.3,25*C 12,31*N 1,10*C 6,3*PD 4.3,3*PD 3.2,4*PD 4.2,N 1,2*C 6,N 2': mat a$,fid$,mcr,mcm,feducrat,mat d$,loccode,feducmax,ficarate,ficamaxw,ficawh,mat m,mat r,mat e$,mat gln$,gli,mat dedcode,mat calcode,mat dedfed,mat rpnames2$ ! eof L370 ioerr L330
