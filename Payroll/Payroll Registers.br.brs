@@ -2,7 +2,7 @@
 ! r: general setup: libraries, dims, fnTop,read defaults, open files, etc
 	autoLibrary
 	on error goto Ertn
- 
+
 	fnTop(program$)
 	fncreg_read('prreg2.include_tips_in_other_wh',include_tips_in_other_wh$,'True')
 	fnreg_read('prreg2.append_reg1',append_reg1$,'True')
@@ -17,35 +17,37 @@
 	dim deduc(20)
 	fnDedNames(mat fullname$,mat abrevname$,mat deductionCode,mat newcalcode,mat newdedfed,mat dedfica,mat dedst,mat deduc)
 	fncreg_read('CL Bank Code',bankcode$) : bankcode=val(bankcode$) : if bankcode=0 then bankcode=1
- 
-	newdedcode_Deduct =1
-	newdedcode_Add    =2
-	newdedcode_Benefit=3
+
+	dc_deduct  	=1
+	dc_add      	=2
+	dc_benefit 	=3
+	dc_addGross	=4
+
 	open #12: 'Name=[Q]\CLmstr\BankMstr.h[cno],KFName=[Q]\CLmstr\BankIdx1.h[cno],Shr',i,i,k ioerr BankReadFinis
 	read #12,using 'form pos 57,G 8',key=lpad$(str$(bankcode),2),release: cl_bank_last_check$ nokey ignore
 	close #12: ioerr ignore
 	BankReadFinis: !
-	
-	open #1: 'Name=[Q]\PRmstr\prCode.h[cno],Shr',i,i ioerr CkNoReadFinis
-	read #1,using 'form pos 5,N 8': ckno
-	close #1:
-	CkNoReadFinis: !
-	
-	ckno+=1
-	d1$=cnvrt$('pic(zzzzzzzz)',fnPayPeriodEndingDate)
-	ppd=val(d1$(5:6))*10000+val(d1$(7:8))*100+val(d1$(3:4))
- 
-	if trim$(cl_bank_last_check$)<>'' then ckno=val(cl_bank_last_check$)+1 conv ignore
- 
- 
+
 	open #hEmployee=fnH: 'Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr',i,i,k
 	open #hDd=fnH: 'Name=[Q]\PRmstr\DD.h[cno],KFName=[Q]\PRmstr\DDidx1.h[cno],Shr',i,i,k
 	open #hCheck1=fnH: 'Name=[Q]\PRmstr\payrollchecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno],Shr',i,i,k
 	open #hCheck3=fnH: 'Name=[Q]\PRmstr\payrollchecks.h[cno],KFName=[Q]\PRmstr\checkidx3.h[cno],Shr',i,i,k
+
+	open #1: 'Name=[Q]\PRmstr\prCode.h[cno],Shr',i,i ioerr CkNoReadFinis
+	read #1,using 'form pos 5,N 8': ckno
+	close #1:
+	CkNoReadFinis: !
+	ckno+=1
+
+	d1$=cnvrt$('pic(zzzzzzzz)',fnPayPeriodEndingDate)
+	ppd=val(d1$(5:6))*10000+val(d1$(7:8))*100+val(d1$(3:4))
+
+	if trim$(cl_bank_last_check$)<>'' then ckno=val(cl_bank_last_check$)+1 conv ignore
 ! /r
- 
+
+
 if fnProcess=1 then goto StartReport else goto AskCheckNo
- 
+
 AskCheckNo: ! r:
 	fnTos
 	respc=0
@@ -83,7 +85,7 @@ StartReport: ! r:
 	end if
 	gosub PrHeader
 goto LoopTop ! /r
- 
+
 def fn_employeeHasCheckOnDate(eno,theDate; ___,ehcKey$*17,returnN)
 	theDate=date(days(theDate,'mmddyy'),'ccyymmdd')
 	ehcKey$=cnvrt$('N 8',eno)
@@ -95,7 +97,7 @@ def fn_employeeHasCheckOnDate(eno,theDate; ___,ehcKey$*17,returnN)
 	EhcFinis: !
 	fn_employeeHasCheckOnDate=returnN
 fnend
- 
+
 LoopTop: ! r: main loop
 	dim em$*30
 	read #hEmployee,using 'form pos 1,n 8,c 30,pos 162,n 6': eno,em$,lpd eof Finis
@@ -120,7 +122,7 @@ LoopTop: ! r: main loop
 		dim tdc(10)
 		dim cp(32)
 		read #hCheck1,using 'form pos 1,N 8,n 3,PD 6,N 7,5*PD 3.2,37*PD 5.2': heno,tdn,prd,realckno,mat tdc,mat cp eof EoCheck1
-		if heno=eno and prd=fndate_mmddyy_to_ccyymmdd(ppd) then 
+		if heno=eno and prd=fndate_mmddyy_to_ccyymmdd(ppd) then
 			if prd=fndate_mmddyy_to_ccyymmdd(ppd) then holdrealckno=realckno
 			mat tcp=tcp+cp : mat ttdc=ttdc+tdc
 		end if
@@ -128,11 +130,11 @@ LoopTop: ! r: main loop
 	EoCheck1: !
 	other_wh=-tcp(25)
 	for j=5 to 24
-		if deductionCode(j-4)=newdedcode_Benefit then
+		if deductionCode(j-4)=dc_benefit then
 			! do nothing
-		else if deductionCode(j-4)=newdedcode_Add then
+		else if deductionCode(j-4)=dc_add then
 			other_wh=other_wh-tcp(j) ! if break_is_on and tcp(j)<>0 then pr 'tcp('&str$(j)&') deducts '&str$(tcp(j))
-		else if deductionCode(j-4)=newdedcode_Deduct then
+		else if deductionCode(j-4)=dc_deduct then
 			other_wh=other_wh+tcp(j) ! if break_is_on and tcp(j)<>0 then pr 'tcp('&str$(j)&')    adds '&str$(tcp(j))
 		else ! default to behave like a deduction
 			other_wh=other_wh+tcp(j)
@@ -141,7 +143,7 @@ LoopTop: ! r: main loop
 			! pause
 		end if
 	next j
- 
+
 	if include_tips_in_other_wh then ! include tips in Other Withholdings added for West Accounting on 1/18/2016
 		other_wh+=tcp(30) ! if break_is_on and tcp(30)<>0 then pr 'tcp('&str$(30)&') TIPS    adds '&str$(tcp(30))
 	end if
@@ -164,7 +166,7 @@ LoopTop: ! r: main loop
 	total_gross_pay+=tcp(31)
 	other_wh=0
 goto LoopTop ! /r
- 
+
 PrTotals: ! r:
 	pr #255: ''
 	pr #255: '    Total Hours: '&lpad$(str$(total_hours),26)
