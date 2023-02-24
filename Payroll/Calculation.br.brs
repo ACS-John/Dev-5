@@ -83,11 +83,22 @@ fn_setupOpenFiles
 open #hTimesheet=fnH: 'Name=[Q]\PRmstr\timesheet[acsUserId].h[cno],KFName=[Q]\PRmstr\timesheet[acsUserId]Idx.h[cno]',i,outIn,k  ! was 3
 goto MainLoop
 
-def fn_readTimesheet(&empNo$,&dep,mat xInp,&gpd,mat hr; ___,returnN)
+def fn_readTimesheet(&empNo$,&dep,mat xInp,&gpd,mat hr; ___,returnN,x)
 	! if triggerEOF=1 then returnN=-4270 : goto ReadtimesheetFinis
 	read #hTimesheet,using Ftimesheet: empNo$,dep,mat xInp,gpd,mat hr ioerr ReadTimesheetErr
 	Ftimesheet: form pos 1,c 8,n 3,5*pd 4.2,25*pd 5.2,2*pd 4.2
 	if env$('client')='Payroll Done Right' then gosub PrdrWorkmansComp ! env$('client')='West Accounting' or
+
+	fn_detail('___timsheet read___') ! r:
+	fn_detail('employee='&empNo$,val(empNo$),'department',dep)
+	fn_detail('gpd (gross)',gpd)
+	fn_detail('hourly Regular',hr(1))
+	fn_detail('hourly Overtime',hr(2))
+	for x=1 to udim(mat inpX)
+		if inpx(x) then fn_detail('inpX('&str$(x)&')',inpx(x))
+	nex x
+	fn_detail('___________________') ! /r
+
 	goto ReadtimesheetFinis
 	ReadTimesheetErr: returnN=-err : goto ReadtimesheetFinis
 	ReadtimesheetFinis: fn_readTimesheet=returnN
@@ -111,6 +122,7 @@ MainLoop: ! r:  read timesheet, read employee, call calc deduction etc  basicall
 	dim empNo$*8
 	dim xInp(29)
 	if fn_readTimesheet(empNo$,dep,mat xInp,gpd,mat hr)=-4270 then goto Finis ! else  : pr 'readPointA'
+
 	deptKey$=cnvrt$('pic(zzzzzzz#)',val(empNo$))&cnvrt$('pic(zz#)',dep)
 	eno=val(empNo$)
 	if eno=0 then goto MainLoop
@@ -159,20 +171,24 @@ MainLoop: ! r:  read timesheet, read employee, call calc deduction etc  basicall
 							if sc1=0 then sc1=1
 							! If env$('client')='Washington Parrish' AND J=3 Then sD3=xInp(J+9)*(gpd+defcompmatch)/100 : Goto L3150 ! add deferred comp to gross for calculating pension deduction
 							if newcalcode(j)=1 then sd3=xInp(j+9) 	else  sd3=xInp(j+9)*gpd/100
-							fn_detail('sd3='&str$(sd3))
 							stwh(sc1,1)=stwh(sc1,1)-sd3
+							if sd3 then fn_detail('reducing stateWh by',sd3,'to',stwh(sc1,1))
 						! /r
 						if newcalcode(j)=1 then  ded+=xInp(j+9) 	else  ded+=xInp(j+9)*gpd/100
-						fn_detail('ded='&str$(ded))
+						if ded then fn_detail('ded adjusted ',ded,'newcalcode('&str$(j)&')',newcalcode(j))
 					end if
 					if newdedfed(j)=2 then
 						if newcalcode(j)=1 then   t3+=xInp(j+9) 	else   t3+=xInp(j+9)*gpd/100
-						fn_detail('t3='&str$(t3))
+						if t3 then fn_detail('t3',t3)
 					end if
 					L3090: !
 				next j
-				totalGrossPay+=gpd
-				fn_detail('totalGrossPay',totalGrossPay,'(after deductions)')
+
+
+				fn_detail('totalGrossPay+=gpd',totalGrossPay,'before')
+				totalGrossPay+=gpd ! hmmm...   doesnt seem to be necessary - maybe it is for multi department paychecks or something i dunno.  not changing
+				fn_detail('totalGrossPay+=gpd',totalGrossPay,'after ')
+
 
 				dim newx$*8
 				! read #hTimesheet,using Ftimesheet: newx$,newdep,mat xInp,gpd,mat hr eof L3150
@@ -423,114 +439,133 @@ MainLoop: ! r:  read timesheet, read employee, call calc deduction etc  basicall
 	! /r
 	! r: FedWh_Dept        Fed WH for Dept ! Federal Withholding for Department
 		if showDetails then fn_detail('federal  withholding for department calculating')
-		f4=round(fed_wh*pog,2)
 		stwh(tcd(1),1)+=gpd
-		dim tcp(32)
-		tcp(1)=f4 : tcp(2)=sswh : tcp(3)=mcwh : tcp(4)=tcp4
+		tcp(tcp_fedWh)       	=round(fed_wh*pog,2)
+		tcp(tcp_ssWh)        	=sswh
+		tcp(tcp_medicareWh)  	=mcwh
+		tcp(tcp_stateWh)     	=tcp4
 		for j=5 to 24
 			tcp(j)=xInp(j+5)
 		next j
-		tcp(25)=min(0,tcp(1))
-		tcp(27)=round(xInp(2)*hr(2),2)
-		tcp(28)=xInp(7)
-		tcp(29)=xInp(8)
-		tcp(30)=xInp(9)
-		tcp(26)=gpd-tcp(27)-tcp(28)-tcp(29)-tcp(30)
-		tcp(31)=gpd
-		tcp(32)=gpd-tcp(1)-tcp(2)-tcp(3) ! -TCP(4)
+		! tcp(tcp_earnedIncomeCredit)=min(0,tcp(tcp_fedWh))
+		tcp(tcp_payOvertime)	=round(xInp(2)*hr(2),2)
+		tcp(tcp_otherCompensation)=xInp(7)
+		tcp(tcp_meals)       	=xInp(8)
+		tcp(tcp_tips)        	=xInp(9)
+		tcp(tcp_payRegular) 	=gpd-tcp(tcp_payOvertime)-tcp(tcp_otherCompensation)-tcp(tcp_meals)-tcp(tcp_tips)
+		tcp(tcp_gross)       	=gpd
+		fn_detail('gross is initialized as GDP',tcp(tcp_gross))
+		tcp(tcp_net)         	=gpd-tcp(tcp_fedWh)-tcp(tcp_ssWh)-tcp(tcp_medicareWh) ! -tcp(tcp_stateWh)
+		fn_detail('net is initialized as GDP-fedWh-ssWh-medicareWh',tcp(tcp_net))
 		for j=5 to 24
 			dc=deductionCode(j-4)
 			if tcp(j) then
 				if deductionCode(j-4)=dc_benefit then
 					! do nothing
 				else if deductionCode(j-4)=dc_add then
-					tcp(32)+=tcp(j)
-					fn_detail('Net Pay increased by '&rtrm$(dedname$(j-4)),tcp(j),'to',tcp(32))
-				else if deductionCode(j-4)=dc_addGross then
-					tcp(31)+=tcp(j)
-					fn_detail('Gross Pay increased by '&rtrm$(dedname$(j-4)),tcp(j),'to',tcp(31))
-					tcp(32)+=tcp(j)
-					fn_detail('Net Pay increased by '&rtrm$(dedname$(j-4)),tcp(j),'to',tcp(32))
+					tcp(tcp_net)+=tcp(j)
+					fn_detail('Net Pay increased by '&rtrm$(dedname$(j-4)),tcp(j),'to',tcp(tcp_net))
 				else if deductionCode(j-4)=dc_deduct then
-					tcp(32)-=tcp(j)
-					fn_detail('Net Pay decreased by '&rtrm$(dedname$(j-4)),tcp(j),'to',tcp(32))
-
+					tcp(tcp_net)-=tcp(j)
+					fn_detail('Net Pay decreased by '&rtrm$(dedname$(j-4)),tcp(j),'to',tcp(tcp_net))
+				else if deductionCode(j-4)=dc_addGross then
+					tcp(tcp_gross)+=tcp(j)
+					fn_detail('Gross Pay increased by '&rtrm$(dedname$(j-4)),tcp(j),'to',tcp(tcp_gross))
+					tcp(tcp_net)+=tcp(j)
+					fn_detail('Net Pay increased by '&rtrm$(dedname$(j-4)),tcp(j),'to',tcp(tcp_net))
 				end if
 			end if
 		next j
 		for j=1 to 31 : tcp(j)=round(tcp(j),2) : next j
-		tcp(32)+=tcp(25)-tcp(29)-tcp(30)
-		! if env$('client')='Washington Parrish' then tcp(32)=tcp(32)+tcp(30) ! add tips which is really an other compensation back to net
+
+		tcp(tcp_net)=tcp(tcp_net)-tcp(tcp_meals)-tcp(tcp_tips) ! tcp(tcp_net)+=tcp(tcp_earnedIncomeCredit)-tcp(tcp_meals)-tcp(tcp_tips)
+		if tcp(tcp_meals) or tcp(tcp_tips) then
+			fn_detail('net is reduced by meals and tips to',tcp(tcp_net))
+		end if
+		! if env$('client')='Washington Parrish' then tcp(tcp_net)+=tcp(tcp_tips) ! add tips which is really an other compensation back to net
+
 		! SS_WAGE: !
-		dim tdc(10)
+
 		if ficaCode=9 then
-			tdc(7)=0
+			tdc(tdc_wagesSs)=0
 		else
-			tdc(7)=round(sswg*ficapog,2)
+			tdc(tdc_wagesSs)=round(sswg*ficapog,2)
 		end if
 		! MEDICARE_WAGE: !
-		tdc(8)=round((totalGrossPay-t3)*ficapog,2)
-		tdc(10)=0 ! State U/C Wage
+		tdc(tdc_wagesMedicare)=round((totalGrossPay-t3)*ficapog,2)
+		tdc(tdc_wagesUcState)=0 ! State U/C Wage
 		! if stuc(tcd(1))>=sucw(tcd(1)) then goto L2300
 		! L2300: !
 		if stuc(tcd(1))+(gpd-ext-deduc)>sucw(tcd(1)) then
-			tdc(10)=sucw(tcd(1))-stuc(tcd(1))
+			tdc(tdc_wagesUcState)=sucw(tcd(1))-stuc(tcd(1))
 		else
-			tdc(10)=gpd-ext-deduc
+			tdc(tdc_wagesUcState)=gpd-ext-deduc
 		end if
-		if tdc(10)<0 then tdc(10)=0 ! if don't have maximum uc wage in company it will come up with negatives
-		tdc(9)=0 ! Fed U/C Wage
+		if tdc(tdc_wagesUcState)<0 then tdc(tdc_wagesUcState)=0 ! if don't have maximum uc wage in company it will come up with negatives
+		tdc(tdc_wagesUcFed)=0 ! Fed U/C Wage
 		if feducmax and totalWagesYtd-deducy>=feducmax then
-			tdc(9)=min(max(feducmax-(totalWagesYtd-deducy),0),gpd-ext-deduc)
+			tdc(tdc_wagesUcFed)=min(max(feducmax-(totalWagesYtd-deducy),0),gpd-ext-deduc)
 		else
-			tdc(9)=gpd-ext-deduc
+			tdc(tdc_wagesUcFed)=gpd-ext-deduc
 		end if
-		for j=1 to 5 : tdc(j)=xInp(j) : next j ! Hours
+		tdc(tdc_hoursRegular  	)=xInp(1) ! Hours
+		tdc(tdc_hoursOvertime 	)=xInp(2) ! Hours
+		tdc(tdc_hoursSick      	)=xInp(3) ! Hours
+		tdc(tdc_hoursVacation  	)=xInp(4) ! Hours
+		tdc(tdc_hoursHoliday   	)=xInp(5) ! Hours
 		! pause ! WORKMANS_COMP: !
 		! mat wcm is workman's comp maximum
 		! trp is (temp variable only used here)
-		! tcp(26) is Regular Earnings
-		! tcp(27) is OT Earnings
+		! tcp(tcp_payRegular) is Regular Earnings
+		! tcp(tcp_payOvertime) is OT Earnings
 		! wc is (temp variable only used here)
-		! tdc(6) is Workman's Comp Wages
+		! tdc(tdc_wagsWorkmansCompensation) is Workman's Comp Wages
+
 		! if env$('client')='West Accounting' then ! perhaps everyone should be doing it this way -prd 01/06/2016
-		!   tcp(14)=tdc(1)*xInp(19)*.01 ! base on regular hours times w/c rate
-		!   fn_detail('tcp(14) was set to '&str$(tcp(14))&' by tcp(14) = tdc(1)('&str$(tdc(1))&' * xInp(19)('&str$(xInp(19))&') * .01')
+		!   tcp(14)=tdc(tdc_hoursRegular)*xInp(19)*.01 ! base on regular hours times w/c rate
+		!   fn_detail('tcp(14) was set to '&str$(tcp(14))&' by tcp(14) = tdc(tdc_hoursRegular)('&str$(tdc(tdc_hoursRegular))&' * xInp(19)('&str$(xInp(19))&') * .01')
 		!   xInp(19)=0   ! <-- nice idea but it does not make a difference
 		!   fnStatusPause
 		! end if  ! else
-		trp=tcp(26)+tcp(27) ! base on wages
+		trp=tcp(tcp_payRegular)+tcp(tcp_payOvertime) ! base on wages
 		! end if
+
 		wc=0
 		if wcm(payCode)=0 or twc+trp<wcm(payCode) then
 			wc=trp
 		else
 			wc=wcm(payCode)-twc
 		end if
-		twc+=wc : tdc(6)=wc
+		twc+=wc : tdc(tdc_wagsWorkmansCompensation)=wc
+
 		if fn_justTesting then
 			fn_detail('did not write Department')
 		else
 			rewrite #hDepartment,using 'form pos 42,n 6,pos 58,23*pd 4.2',key=deptKey$: d1,mat tdet
 		end if
-		tcp(4)=0
-		if fn_justTesting then
+
+		tcp(tcp_stateWh)=0
+
+		! if fn_justTesting then
 			fn_detail('***** CHECK RESULTS *****')
 			for deductionX=1 to 20
 				if dedName$(deductionX)<>'' and tcp(deductionX+4) then
 					fn_detail(rtrm$(dedName$(deductionX))&':'&str$(tcp(deductionX+4)))
 				end if
 			next deductionX
-			fn_detail('WH -  Federal ='&str$(tcp( 1)))
-			fn_detail('WH -       SS ='&str$(tcp( 2)))
-			fn_detail('WH - Medicare ='&str$(tcp( 3)))
-			fn_detail('WH -    State ='&str$(tcp( 4)))
-			fn_detail('Pay -     Net ='&str$(tcp(32)))
-			fn_detail('Pay -   Total ='&str$(tcp(31)))
-		else
+			fn_detail('WH -  Federal',tcp(tcp_fedWh))
+			fn_detail('WH -       SS',tcp(tcp_ssWh))
+			fn_detail('WH - Medicare',tcp(tcp_medicareWh))
+			fn_detail('WH -    State',tcp(tcp_stateWh))
+			fn_detail('Pay -     Net',tcp(tcp_net))
+			fn_detail('Pay -   Total',tcp(tcp_gross))
+		! else
 			write #hCheckHistory,using 'form pos 1,N 8,n 3,PD 6,N 7,5*PD 3.2,37*PD 5.2': eno,empDept,prd,0,mat tdc,mat tcp
-		end if
-		! fn_detail('WRITING payroll check with tcp(4)='&str$(tcp(4))&' and tcp(32)='&str$(tcp(32)))
+			fn_detail('***writing check history eno',eno,'dept',empDept)
+			fn_detail('***                      net',tcp(tcp_net),'gross',tcp(tcp_gross))
+			fn_detail('***                 state WH',tcp(tcp_stateWh),'fed wh',tcp(tcp_fedWh))
+		! end if
+		! fn_detail('WRITING payroll check with tcp(tcp_stateWh)='&str$(tcp(tcp_stateWh))&' and tcp(tcp_net)='&str$(tcp(tcp_net)))
 		! fnStatusPause
 		totalWagesYtd+=gpd : cafy+=ficat3 ! eicytd+=ytdTotal(25)
 		if tdet(16)<>0 then stuc(tcd(1))+=tdet(16) ! ??? kj
@@ -543,14 +578,8 @@ Finis: ! r:
 	fn_setupCloseFiles
 	close #hTimesheet:
 	fnFree('[Q]\PRmstr\jcprh1.h[cno]') ! get rid of jobcost time entry file if exists
-	if fn_justTesting then pr 'just tested' : pause
 	if showDetails then
-		! if detailReport then
 			fnClosePrn
-		! else
-		! 	fnStatusPause
-		! 	fnStatusClose
-		! end if
 		showDetails=0
 	end if
 goto Xit ! /r
@@ -564,9 +593,7 @@ goto Xit ! /r
 		ytdFICA=ytdMedicare=0 ! ytdEic=0
 		mat caf=(0)
 		mat ytdTotal=(0)
-		! dim tcp(32)
 		mat tcp=(0)
-		! dim tdc(10)
 		mat tdc=(0)
 		checkkey$=cnvrt$('pic(zzzzzzz#)',eno)&cnvrt$('pic(zz#)',dep)&cnvrt$('pd 6',0) ! index employee#,department# and payroll date
 		restore #hCheckHistory,key>=checkkey$: nokey DePrCkFinis
@@ -1090,7 +1117,12 @@ withholdingPercentage,atLeast,baseAmt,estPayPeriodNetPay,estPayPeriodNetPay,adju
 
 	fn_getFederalTable(taxYear,marital,w4Year$,w4step2,mat fedTable,fed_annual_wh_allowance)
 
+	fn_detail('       totalGrossPay',totalGrossPay)
+	fn_detail('                 ded',ded)
+	fn_detail('            w4step4b',w4step4b)
+	fn_detail('   payPeriodsPerYear',payPeriodsPerYear)
 	estPayPeriodNetPay=totalGrossPay-ded-(w4step4b/payPeriodsPerYear)
+	fn_detail('   estPayPeriodNetPay=totalGrossPay-ded-(w4step4b/payPeriodsPerYear)',estPayPeriodNetPay)
 	if fedpct>0 then
 		returnN=round((totalGrossPay-ded)*fedpct,2)
 	else if stdWhFed=-1 or disableWithholdingN(esw_federal) then ! disable federal withholding
@@ -1103,14 +1135,17 @@ withholdingPercentage,atLeast,baseAmt,estPayPeriodNetPay,estPayPeriodNetPay,adju
 		fn_detailStep('1.')
 		fn_detailStep('1a.',estPayPeriodNetPay)
 		adjustedWageAmount=round(estPayPeriodNetPay*payPeriodsPerYear,2)+w4step4a ! adjustedWageAmount (previously g2) - estimated annual net pay
-		fn_detail('estimated annual net pay: '&str$(adjustedWageAmount))
+		fn_detail('   adjustedWageAmount=round(estPayPeriodNetPay*payPeriodsPerYear,2)+w4step4a',adjustedWageAmount)
+		fn_detail('   estimated annual net pay: '&str$(adjustedWageAmount))
 		fn_detailStep('2.')
 		if w4Year$='2019' then
 			adjustedWageAmount-=fedExempt*fed_annual_wh_allowance
+			fn_detail('   (2019) adjustedWageAmount-=fedExempt*fed_annual_wh_allowance',adjustedWageAmount)
 			! pr 'fedExempt=';fedExempt
 			! pr 'fed_annual_wh_allowance=';fed_annual_wh_allowance
 			! pr 'didit ' : pause
 		else ! w4Year$='2020' or w4Year$='none' then
+			fn_detail('   (2020+) adjustedWageAmount-=w4step3',adjustedWageAmount)
 			adjustedWageAmount-=w4step3
 		end if
 		fn_detail('1h. Adjusted Wage Amount: '&str$(adjustedWageAmount))
@@ -1127,7 +1162,7 @@ withholdingPercentage,atLeast,baseAmt,estPayPeriodNetPay,estPayPeriodNetPay,adju
 		fn_detailStep('2d.',adjustedWageAmount-atLeast)
 		fn_detailStep('2e.',(adjustedWageAmount-atLeast)*withholdingPercentage)
 		returnN=baseAmt+(adjustedWageAmount-atLeast)*withholdingPercentage
-		fn_detail('return ('&str$(returnN)&')=baseAmt('&str$(baseAmt)&')+(adjustedWageAmount('&str$(adjustedWageAmount)&')-atLeast('&str$(atLeast)&'))*withholdingPercentage('&str$(withholdingPercentage)&')')
+		fn_detail('   return('&str$(returnN)&')=base('&str$(baseAmt)&')+(adjWage('&str$(adjustedWageAmount)&')-atLeast('&str$(atLeast)&'))*whPercent('&str$(withholdingPercentage)&')')
 		returnN=returnN/payPeriodsPerYear
 		returnN=round(returnN,2)
 		fn_detailStep('2f. Tentative Withholding Amount',returnN)
@@ -1136,9 +1171,10 @@ withholdingPercentage,atLeast,baseAmt,estPayPeriodNetPay,estPayPeriodNetPay,adju
 		fn_detailStep('3b.',w4Step3=w4Step3/payPeriodsPerYear)
 		fn_detailStep('3c.',returnN-=w4Step3)
 		fn_detailStep('4.')
-		fn_detail(' addOnFed='&str$(addOnFed))
-		fn_detailStep('4a.',w4step4c+addOnFed)
-		fn_detailStep('4b.',returnN+=w4step4c+addOnFed)
+		fn_detail('   W-4 Step 4C',w4step4c)
+		fn_detail('   Federal Tax Add-On',addOnFed)
+		fn_detailStep('4a. W-4 Step 4C AND Federal Tax Add-On',w4step4c+addOnFed)
+		fn_detailStep('4b. 4a+3d',returnN+=w4step4c+addOnFed)
 
 		fn_detail(' Fed WH Tax Returning '&str$(returnN))
 	end if
@@ -1194,6 +1230,7 @@ def fn_stateTax(eno,wages,pppy,allowances,marital,fedWh,addOnSt,w4year$,taxYear;
 
 	returnN+=addOnSt
 	returnN=max(0,returnN)
+	fn_detail('stateTax (including addOn)',returnN)
 	fn_stateTax=returnN
 	! pr 'statetax is returning ';returnN : pause
 fnend
@@ -1600,19 +1637,19 @@ fnend
 		estAnnualNetPay=taxableWagesCurrent*payPeriodsPerYear
 		returnN=incomeTaxRate*(estAnnualNetPay-((line1allowances*exemptionAllowance)+(line2allowances*1000)/payPeriodsPerYear))
 
-		fn_detail('Employee Number: '&str$(eno)                          	)
-		fn_detail('Income Tax Rate: '&str$(incomeTaxRate)               	)
-		fn_detail('Exemption Allowance: '&str$(exemptionAllowance)     	)
-		fn_detail('IL W-4 Line 1 Allowances: '&str$(line1allowances)   	)
-		fn_detail('IL W-4 Line 2 Allowances: '&str$(line2allowances)   	)
-		fn_detail('taxable Wages Current: '&str$(taxableWagesCurrent)  	)
-		fn_detail('Pay Periods Per Year: '&str$(payPeriodsPerYear)     	)
-		fn_detail('Calculated Annual Tax: '&str$(returnN)               	)
+		fn_detail('Employee Number',eno                          	)
+		fn_detail('Income Tax Rate',incomeTaxRate               	)
+		fn_detail('Exemption Allowance',exemptionAllowance     	)
+		fn_detail('IL W-4 Line 1 Allowances',line1allowances   	)
+		fn_detail('IL W-4 Line 2 Allowances',line2allowances   	)
+		fn_detail('taxable Wages Current',taxableWagesCurrent  	)
+		fn_detail('Pay Periods Per Year',payPeriodsPerYear     	)
+		fn_detail('Calculated Annual Tax',returnN               	)
 
 
 		returnN=round(returnN/payPeriodsPerYear,2)
 		if returnN<.1 then returnN=0 ! do not withhold less than 10 cents.
-		fn_detail('Calculated Current Tax: '&str$(returnN)                             )
+		fn_detail('Calculated Current Tax',returnN                             )
 		fn_wh_illinois=returnN
 	fnend
 	def fn_wh_indiana(taxableWagesCurrent,payPeriodsPerYear,stAllowances; ___,returnN,h3)
@@ -1749,13 +1786,13 @@ fnend
 				end if
 			end if
 			vW=max(0,round(vW,2))
-			fn_detail('W='&str$(vW))
-			fn_detail('S='&str$(vS))
-			fn_detail('X='&str$(vX))
-			fn_detail('Y='&str$(vY))
-			fn_detail('N='&str$(vN))
-			fn_detail('A='&str$(vA))
-			fn_detail('B='&str$(vB))
+			fn_detail('W',vW)
+			fn_detail('S',vS)
+			fn_detail('X',vX)
+			fn_detail('Y',vY)
+			fn_detail('N',vN)
+			fn_detail('A',vA)
+			fn_detail('B',vB)
 			fn_detail('estStTaxableAnnualWages='&str$(estStTaxableAnnualWages))
 			returnN=vW
 			! /r
@@ -1833,19 +1870,19 @@ fnend
 
 				else if estStTaxableAnnualWages>25000 and estStTaxableAnnualWages<=100000 then
 					fn_detail('   If annual wages are greater $25000 but less than or equal to $100000, then')
-					fn_detail('   W = .0185(S) + .0165(S - (25,000 ÷ N)) - (A + B).')
 							vW=.0185*(vS)+.0165*(vS-(25000/vN))-(vA+vB)
+					fn_detail('   W = .0185(S) + .0165(S - (25,000 ÷ N)) - (A + B).',vW)
 
 				else if estStTaxableAnnualWages>100000 then
 					fn_detail('   If annual wages are greater than $100000, then')
-					fn_detail('   W = .0185(S) + .0165(S - (25,000 ÷ N)) + .0075(S - (100,000 ÷ N)) - (A + B)')
 							vW=.0185*(vS)+.0165*(vS-(25000/vN))+.0075*(vS-(100000/vN))-(vA+vB)
+					fn_detail('   W = .0185(S) + .0165(S - (25,000 ÷ N)) + .0075(S - (100,000 ÷ N)) - (A + B)',vW)
 
 					! /r
 				end if
 			end if
 			vW=max(0,round(vW,2))
-			fn_detail('W='&str$(vW))
+			fn_detail('W',vW)
 			! fn_detail('S='&str$(vS))
 			! fn_detail('X='&str$(vX))
 			! fn_detail('Y='&str$(vY))
@@ -2258,8 +2295,9 @@ fnend
 	! /r
 
 
-ReallocateStateByDept: ! r:   (;___,s3,tcp4...) (reallocate state taxes based on earnings by dept and state
-	s3=tcp(4)=tcp4=0
+ReallocateStateByDept: ! r:   (...;___,s3,tcp4,oldeno...) (reallocate state taxes based on earnings by dept and state
+	fn_detail('*ReallocateStateByDept*')
+	s3=tcp(tcp_stateWh)=tcp4=0
 	! tcp4 - is the state withholding for the transaction record
 	oldeno=val(emp$)
 	restore #hDepartment,key>=cnvrt$('pic(zzzzzzz#)',oldeno)&cnvrt$('pic(zz#)',0):
@@ -2320,23 +2358,25 @@ ReallocateStateByDept: ! r:   (;___,s3,tcp4...) (reallocate state taxes based on
 			L860: !
 			stwh(tcd(1),2)=s3
 			L870: !
-			tcp4=(stwh(tcd(1),2))*((tcp(31)-dst3)/stwh(tcd(1),1))
+			tcp4=(stwh(tcd(1),2))*((tcp(tcp_gross)-dst3)/stwh(tcd(1),1))
 			tcp4=round(tcp4,2)
 			if disableWithholdingN(esw_state) then tcp4=0
-			tcp(32)-=tcp4
-			tcp(4)=tcp4
+			tcp(tcp_net)-=tcp4
+			fn_detail('net adjusted in ReallocateStateByDept',tcp(tcp_net))
+			tcp(tcp_stateWh)=tcp4
 			rewritekey$=cnvrt$('pic(zzzzzzz#)',oldeno)&cnvrt$('pic(zz#)',holdEmpDept)&cnvrt$('pd 6',prd) ! index employee#,department# and payroll date
-			rewrite #hCheckHistory,using 'form pos 80,pd 5.2,pos 220,pd 5.2',key=rewritekey$: tcp(4),tcp(32)
+			rewrite #hCheckHistory,using 'form pos 80,pd 5.2,pos 220,pd 5.2',key=rewritekey$: tcp(tcp_stateWh),tcp(tcp_net)
+			fn_detail('rewriting check history stateWh',tcp(tcp_stateWh),'net',tcp(tcp_net))
 			! fn_report_stuff
 			! def fn_report_stuff
 				! fnStatus('check completely calcualated for eno '&str$(eno))
-				! fnStatus('tcp(1)='&str$(tcp(1)))
-				! fnStatus('tcp(2)='&str$(tcp(2)))
-				! fnStatus('tcp(3)='&str$(tcp(3)))
-				! fnStatus('tcp(4)='&str$(tcp(4)))
+				! fnStatus('tcp(tcp_fedWh)='&str$(tcp(tcp_fedWh)))
+				! fnStatus('tcp(tcp_ssWh)='&str$(tcp(tcp_ssWh)))
+				! fnStatus('tcp(tcp_medicareWh)='&str$(tcp(tcp_medicareWh)))
+				! fnStatus('tcp(tcp_stateWh)='&str$(tcp(tcp_stateWh)))
 				! fnStatus('tcp(13)='&str$(tcp(13)))
 				! fnStatus('tcp(14)='&str$(tcp(14)))
-				! fnStatus('tcp(32)='&str$(tcp(32)))
+				! fnStatus('tcp(tcp_net)='&str$(tcp(tcp_net)))
 				! fnStatusPause
 			! fnend
 			rewrite #hDepartment,using 'form pos 42,n 6',key=olddeptkey$: tdt(4)
@@ -2509,7 +2549,7 @@ def library fnCheckPayrollCalculation(; ___, _
 			marital       	=val(resp$(resp_married      	)(1:1)) ! marital status
 			payCode       	=val(resp$(resp_payCode      	)(1:2)) ! pay code
 			allowances   	=val(resp$(resp_stExeptions 	)(1:2)) ! state ex
-			fedExempt    	=val(resp$(resp_fedExeptions 	)(1:2)) ! fed ex
+			fedExempt    	=val(resp$(resp_fedExeptions	)(1:2)) ! fed ex
 			stateAddOn   	=val(resp$(resp_StateAddOn  	)     ) ! state addon
 			w4year$       	=    resp$(resp_w4year       	)       ! W-4 Year
 			wages         	=val(resp$(resp_wages        	)     ) ! Current Wages Taxable
@@ -2583,15 +2623,15 @@ def library fnCheckPayrollCalculation(; ___, _
 					!  r: make timesheet record from read stuff
 						empNo$=eno$ ! heno
 						dep=empDept
-						xInp(1 )=tdc(1)  	! Regular Hours
-						xInp(2 )=tdc(2)  	! Overtime Hours
-						xInp(3 )=tdc(3)  	! Sick Hours
-						xInp(4 )=tdc(4)  	! Vacation Hours
-						xInp(5 )=tdc(5)  	! Holiday Hours
+						xInp(1 )=tdc(tdc_hoursRegular)  	! Regular Hours
+						xInp(2 )=tdc(tdc_hoursOvertime)  	! Overtime Hours
+						xInp(3 )=tdc(tdc_hoursSick)  	! Sick Hours
+						xInp(4 )=tdc(tdc_hoursVacation)  	! Vacation Hours
+						xInp(5 )=tdc(tdc_hoursHoliday)  	! Holiday Hours
 						xInp(6 )=tdet(1) 	! Salary
-						xInp(7 )=tcp(28) 	! other compensation
-						xInp(8 )=tcp(29) 	! meals
-						xInp(9 )=tcp(30) 	! tips
+						xInp(7 )=tcp(tcp_otherCompensation) 	! other compensation
+						xInp(8 )=tcp(tcp_meals) 	! meals
+						xInp(9 )=tcp(tcp_tips) 	! tips
 						xInp(10)=tdet(4 ) ! tcp(5)  	! standard deduction 1
 						xInp(11)=tdet(5 ) ! tcp(6)  	! standard deduction 2
 						xInp(12)=tdet(6 ) ! tcp(7)  	! standard deduction 3
@@ -2612,7 +2652,7 @@ def library fnCheckPayrollCalculation(; ___, _
 						xInp(27)=tdet(21) ! tcp(22) 	! standard deduction 18
 						xInp(28)=tdet(22) ! tcp(23) 	! standard deduction 19
 						xInp(29)=tdet(23) ! tcp(24) 	! standard deduction 20
-						gdp     =tcp(31)  	! Pay - Net
+						gdp     =tcp(tcp_gross)  	! Pay - Net
 						hr(1)   =tdet(2)  	! hourly rate - regular
 						hr(2)   =tdet(3)  	! hourly rate - overtime
 					! /r
@@ -2739,11 +2779,11 @@ def fn_detail(c1$*128; n1,c2$*128,n2)
 	if showDetails then ! and (n1 or n2) then
 		if file(255)=-1 then fnOpenPrn
 		if n2 then
-			pr #255: c1$&'   '&cnvrt$('n 10.2',n1)&'   '&c2$&'   '&cnvrt$('n 10.2',n2)
+			pr #255: rpad$(c1$,45)&'   '&cnvrt$('n 10.2',n1)&'   '&c2$&'   '&cnvrt$('n 10.2',n2)
 		else if c2$<>'' then
-			pr #255: c1$&'   '&cnvrt$('n 10.2',n1)&'   '&c2$
+			pr #255: rpad$(c1$,45)&'   '&cnvrt$('n 10.2',n1)&'   '&c2$
 		else if n1 then
-			pr #255: c1$&'   '&cnvrt$('n 10.2',n1)
+			pr #255: rpad$(c1$,45)&'   '&cnvrt$('n 10.2',n1)
 		else
 			pr #255: c1$
 		end if
@@ -2829,6 +2869,36 @@ def fn_setup(; ___,mtc)
 	esw_state  	=2 ! enums for disableWithholdingN
 	esw_fica   	=3 ! enums for disableWithholdingN
 	esw_standard	=4 ! enums for disableWithholdingN
+
+
+	dim tcp(32)
+	tcp_fedWh=1
+	tcp_ssWh=2
+	tcp_medicareWh=3
+	tcp_stateWh=4
+	! ...
+	tcp_standarddeduction10=14
+	! tcp_earnedIncomeCredit=25
+	tcp_payRegular=26
+	tcp_payOvertime=27
+	tcp_otherCompensation=28
+	tcp_meals=29
+	tcp_tips=30
+	tcp_gross=31
+	tcp_net=32
+
+	dim tdc(10)
+	tdc_hoursRegular  	=1
+	tdc_hoursOvertime 	=2
+	tdc_hoursSick      	=3
+	tdc_hoursVacation  	=4
+	tdc_hoursHoliday   	=5
+	tdc_wagsWorkmansCompensation=6
+	tdc_wagesSs=7
+	tdc_wagesMedicare=8
+	tdc_wagesUcFed=9
+	tdc_wagesUcState=10
+
 
 fnend
 def fn_setupOpenFiles
