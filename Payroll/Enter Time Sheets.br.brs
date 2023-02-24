@@ -8,8 +8,8 @@ Scr1: ! r:
 	rc=franum=0
 	fnFra(1,1,3,50,'Payroll Time Sheet Entry','You would only add to previous entries if the last batch was not calculated.',0)
 	franum+=1
-	fnOpt(1,3,'Regular Time Sheet Entry',0,franum)     : resp$(rc+=1)='True'
-	fnOpt(2,3,'Additions to Previous Input',0,franum)  : resp$(rc+=1)='False'
+	fnOpt(1,3,'New Batch'                    	,0,franum) : resp$(rc+=1)='True'
+	fnOpt(2,3,'Additions to Previous Input'	,0,franum) : resp$(rc+=1)='False'
 	fnFra(6,1,2,50,'Pay Period Ending Date','You must enter the pay perod ending date.  You can not have more than one payroll with the same date.')
 	franum+=1 : mylen=23 : mypos=mylen+2
 	fnLbl(1,1,'Pay Period Ending Date:',mylen,1,0,franum)

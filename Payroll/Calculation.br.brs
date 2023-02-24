@@ -35,10 +35,10 @@ fnTop(program$)
 	fnChk(lc+=1,46,'Accrue Vacation and Sick Leave this period:',1)
 	resp$(rc+=1)='False'
 	lc+=1
-	fnChk(lc+=1,46,'skip Federal Withholdings:',1)  :	resp$(resp_skipWh1=rc+=1)='False'
-	fnChk(lc+=1,46,'skip State Withholdings:',1)    :	resp$(resp_skipWh2=rc+=1)='False'
-	fnChk(lc+=1,46,'skip Fica Withholdings:',1)     :	resp$(resp_skipWh3=rc+=1)='False'
-	fnChk(lc+=1,46,'skip Standard Withholdings:',1) :	resp$(resp_skipWh4=rc+=1)='False'
+	fnChk(lc+=1,46,'Skip Federal Withholdings:',1)  :	resp$(resp_skipWh1=rc+=1)='False'
+	fnChk(lc+=1,46,'Skip State Withholdings:',1)    :	resp$(resp_skipWh2=rc+=1)='False'
+	fnChk(lc+=1,46,'Skip Fica Withholdings:',1)     :	resp$(resp_skipWh3=rc+=1)='False'
+	fnChk(lc+=1,46,'Skip Standard Withholdings:',1) :	resp$(resp_skipWh4=rc+=1)='False'
 	lc+=1
 	fnLbl(lc+=1,1,'Standard Federal % Override:',mylen,1,0)
 	fnTxt(lc   ,mypos,4,0,1,'32',0,'Normally zero. The government allows you to use a standard percent on bonuses, etc. See Circular E for allowable %.')
