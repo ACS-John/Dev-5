@@ -1,5 +1,6 @@
 Time and Date 		Sys	Program(s) and Change(s) Description              
 ______________________	___	____________________________________________________________________________________________________________________________________________________________________________________________________________________________________              
+1:17 PM 2/24/2023	PR	Withholding Tables of LA updated
 10:57 AM 2/24/2023	PR	Calculate program - if user uses setenv('showDetails','yes') then payroll calculation will also generate a detailed report of how taxes, deductions, etc are calculated as they are being calculated. 
  9:51 02/23/2023	CO	5.75293  
 11:32 02/23/2023	CO	5.75292   
