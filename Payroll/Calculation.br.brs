@@ -1719,69 +1719,69 @@ fnend
 				! they are single and claiming less than 2 exemptions
 				fn_detail('1. Single Taxpayer Withholding Formulas') ! r:
 				fn_detail('   vW is the withholding tax per pay period.')
-				fn_detail('   vS is employee''s salary per pay period for each bracket.')
 				vS=taxableWagesCurrent
-				fn_detail('   vX is the number of personal exemptions; X must be 0 or 1.')
+				fn_detail('   vS is employee''s salary per pay period for each bracket.',vS)
 				vX=val(fnEmployeeData$(eno,'R-1300 Exepmtions'))
-				fn_detail('   vY is the number of dependency credits; Y must be a whole number that is 0 or greater.')
+				fn_detail('   vX is the number of personal exemptions; X must be 0 or 1.',vX)
 				vY=val(fnEmployeeData$(eno,'R-1300 Dependencies'))
-				fn_detail('   vN is the number of pay periods.')
+				fn_detail('   vY is the number of dependency credits; Y must be a whole number that is 0 or greater.',vY)
 				vN=payPeriodsPerYear
-				fn_detail('   vA is the effect of the personal exemptions and dependency credits equal to or less than $12,500;')
-				fn_detail('   vA=.021(((vX*4,500)+(vY*1,000))÷vN).')
+				fn_detail('   vN is the number of pay periods.',vN)
 						vA=.021*(((vX*4500)+(vY*1000))/vN)
 						vA=max(0,round(vA,2))
-				fn_detail('   vB is the effect of the personal exemptions and dependency credits in excess of $12,500;')
-				fn_detail('   vB=.016((((vX*4,500)+(vY*1,000))-12,500)÷vN).')
+				fn_detail('   vA is the effect of the personal exemptions and dependency credits equal to or less than $12,500;',vA)
+				fn_detail('   vA=.021(((vX*4,500)+(vY*1,000))÷vN).',vA)
 						vB=.016*((((vX*4500)+(vY*1000))-12500 )/vN)
 						vB=max(0,round(vB,2))
+				fn_detail('   vB is the effect of the personal exemptions and dependency credits in excess of $12,500;',vB)
+				fn_detail('   vB=.016((((vX*4,500)+(vY*1,000))-12,500)÷vN).',vB)
 				estStTaxableAnnualWages=taxableWagesCurrent*payPeriodsPerYear
 				if estStTaxableAnnualWages<=12500 then
-					fn_detail('   If annual wages are less than or equal to $12,500, then')
-					fn_detail('   vW=.021(vS)-(vA+vB).')
 						vW=.021*(vS)-(vA+vB)
+					fn_detail('   If annual wages are less than or equal to $12,500, then',vW)
+					fn_detail('   vW=.021(vS)-(vA+vB).',vW)
 				else if estStTaxableAnnualWages>12500 and estStTaxableAnnualWages<=50000 then
-				fn_detail('   If annual wages are greater $12,500 but less than or equal to $50,000, then')
-				fn_detail('   vW=.021(S)+.0160(S-(12,500÷vN))-(vA+vB).')
 						vW=.021*(vS)+.0160*(vS-(12500/vN))-(vA+vB)
+				fn_detail('   If annual wages are greater $12,500 but less than or equal to $50,000, then',vW)
+				fn_detail('   vW=.021(S)+.0160(S-(12,500÷vN))-(vA+vB).',vW)
 				else if estStTaxableAnnualWages>50000 then
-				fn_detail('   If annual wages are greater than $50,000, then')
-				fn_detail('   vW=.021(S)+.0160(vS-(12,500÷vN))+.0135(vS-(50,000÷vN))-(vA + vB)')
 						vW=.021*(vS)+.0160*(vS-(12500/vN))+.0135*(vS-(50000/vN))-(vA + vB)
+				fn_detail('   If annual wages are greater than $50,000, then',vW)
+				fn_detail('   vW=.021(S)+.0160(vS-(12,500÷vN))+.0135(vS-(50,000÷vN))-(vA + vB)',vW)
 				end if
 				! /r
 			else
 				fn_detail('2. Married Taxpayer Withholding Formulas') ! r:
 				fn_detail('   vW is the withholding tax per pay period.')
-				fn_detail('   vS is the employee''s salary per pay period for each bracket.')
 				vS=taxableWagesCurrent
-				fn_detail('   vX is the number of personal exemptions. vX must 2.')
+				fn_detail('   vS is the employee''s salary per pay period for each bracket.',vS)
 				vX=val(fnEmployeeData$(eno,'R-1300 Exepmtions'))
-				fn_detail('   vY is the number of dependency credits. vY must be 0 or greater.')
+				fn_detail('   vX is the number of personal exemptions. vX must 2.',vX)
 				vY=val(fnEmployeeData$(eno,'R-1300 Dependencies'))
-				fn_detail('   vN is the number of pay periods.')
+				fn_detail('   vY is the number of dependency credits. vY must be 0 or greater.',vY)
 				vN=payPeriodsPerYear
-				fn_detail('   vA is the effect of the personal exemptions and dependency credits equal to or less than $25,000;')
-				fn_detail('   vA=.021(((vX*4,500)+(vY*1,000))÷vN)')
+				fn_detail('   vN is the number of pay periods.',vN)
 						vA=.021*(((vX*4500)+(vY*1000))/vN)
 						vA=max(0,round(vA,2))
-				fn_detail('   vB is the effect of the personal exemptions and dependency credits in excess of $25000;')
-				fn_detail('   vB=.0165((((X*4500)+(vY*1000))-25000)÷vN).')
+				fn_detail('   vA is the effect of the personal exemptions and dependency credits equal to or less than $25,000;',vA)
+				fn_detail('   vA=.021(((vX*4,500)+(vY*1,000))÷vN)',vA)
 						vB=.0165*((((vX*4500)+(vY*1000))-25000)/vN)
 						vB=max(0,round(vB,2))
+				fn_detail('   vB is the effect of the personal exemptions and dependency credits in excess of $25000;',vB)
+				fn_detail('   vB=.0165((((X*4500)+(vY*1000))-25000)÷vN).',vB)
 				estStTaxableAnnualWages=taxableWagesCurrent*payPeriodsPerYear
 				if estStTaxableAnnualWages<=25000 then
 					fn_detail('   If annual wages are less than or equal to $25000, then')
-					fn_detail('   vW=.021(S)-(A+B).')
-							vW=.021*(vS)-(A+B)
+							vW=.021*(vS)-(vA+vB)
+					fn_detail('   vW=.021(S)-(A+B).',vW)
 				else if estStTaxableAnnualWages>25000 and estStTaxableAnnualWages<=100000 then
-					fn_detail('   If annual wages are greater $25000 but less than or equal to $100000, then')
-					fn_detail('   vW=.021(S)+.0165(vS-(25000÷vN))-(vA+vB).')
 							vW=.021*(vS)+.0165*(vS-(25000/vN))-(vA+vB)
+					fn_detail('   If annual wages are greater $25000 but less than or equal to $100000, then',vW)
+					fn_detail('   vW=.021(S)+.0165(vS-(25000÷vN))-(vA+vB).',vW)
 				else if estStTaxableAnnualWages>100000 then
-					fn_detail('   If annual wages are greater than $100000, then')
-					fn_detail('   vW=.021(S)+.0165(vS-(25000÷vN))+.0135(vS-(100000÷vN))-(vA+vB).')
 							vW=.021*(vS)+.0165*(vS-(25000/vN))+.0135*(vS-(100000/vN))-(vA+vB)
+					fn_detail('   If annual wages are greater than $100000, then',vW)
+					fn_detail('   vW=.021(S)+.0165(vS-(25000÷vN))+.0135(vS-(100000÷vN))-(vA+vB).',vW)
 					! /r
 				end if
 			end if
@@ -2419,11 +2419,11 @@ def library fnCheckPayrollCalculation(; ___, _
 		dim w4yearOption$(0)*4
 		dim payPeriodOption$(0)*16
 		fnGetEmpOptions(mat marriedOption$,mat w4yearOption$,mat payPeriodOption$)
-		dim fed_exemption_option$(22)
+		dim exemptionOption$(22)
 		for j=1 to 21
-			fed_exemption_option$(j)=str$(j-1)
+			exemptionOption$(j)=str$(j-1)
 		next j
-		fed_exemption_option$(22)='99'
+		exemptionOption$(22)='99'
 		clientState$=fnpayroll_client_state$
 	end if ! /r
 	fn_setupOpenFiles
@@ -2456,8 +2456,8 @@ def library fnCheckPayrollCalculation(; ___, _
 		fnComboA('w4Year', lc   ,col2_pos,mat w4yearOption$,'Only used if W-4 Year is set to 2020 or later.',5)
 		fnPcReg_read('W-4 Year',resp$(resp_w4year=respc+=1), w4yearOption$(1))
 		fnLbl(             lc,col1_pos+35,'Federal Exemptions:',col1_len,1)
-		fnComboA('StateEx',lc   ,col2_pos+35,mat fed_exemption_option$,'',3)
-		fnPcReg_read('Federal Exemptions',resp$(resp_fedExeptions=respc+=1)=fnSetForCombo$(mat fed_exemption_option$,str$(allowances)), fed_exemption_option$(1))
+		fnComboA('StateEx',lc   ,col2_pos+35,mat exemptionOption$,'',3)
+		fnPcReg_read('Federal Exemptions',resp$(resp_fedExeptions=respc+=1)=fnSetForCombo$(mat exemptionOption$,str$(allowances)), exemptionOption$(1))
 		lc+=1
 		fnChk(lc+=1,46,'W-4 Step 2',1)
 		fnPcReg_read('W-4 Step 2',resp$(resp_w4step2=respc+=1), w4step2$)
@@ -2470,9 +2470,9 @@ def library fnCheckPayrollCalculation(; ___, _
 		fnPcReg_read('Federal Withholding',resp$(resp_fedWh=respc+=1),'1530.71')
 
 		lc+=1
-		fnLbl(             lc+=1,col1_pos,'State Exemptions:',col1_len,1)
-		fnComboA('StateEx',lc   ,col2_pos,mat fed_exemption_option$,'',3)
-		fnPcReg_read('State Exemptions',resp$(resp_stExeptions=respc+=1)=fnSetForCombo$(mat fed_exemption_option$,str$(allowances)), fed_exemption_option$(1))
+		fnLbl(lc+=1,col1_pos,'State Exemptions:',col1_len,1)
+		fnComboA('StateEx',lc,col2_pos,mat exemptionOption$,'',3)
+		fnPcReg_read('State Exemptions',resp$(resp_stExeptions=respc+=1)=fnSetForCombo$(mat exemptionOption$,str$(allowances)), exemptionOption$(1))
 
 		fnLbl(lc+=1,col1_pos,'State Tax Add-On:',col1_len,1)
 		fnTxt(lc   ,col2_pos,10,10,0,'32',0,'If you wish for the system to add additional state withholdings, enter that amount here.')
@@ -2510,15 +2510,14 @@ def library fnCheckPayrollCalculation(; ___, _
 		end if ! /r
 
 		if env$('acsDeveloper')<>'' then ! not ready for prime time yet
-			fnCmdKey('Test Check'    	,ck_check      	=4,1,0,'Rerun the calculation from a past check')
+			fnCmdKey('Test Check' 	,ck_check      	=4,0,0,'Rerun the calculation from a past check')
 		end if
 
 		fnCmdKey('Test Federal' 	,ck_federal    	=3,0,0,'Print Federal Table for selected Pay Code')
 		fnCmdKey('Test State'   	,ck_state      	=2,0,0,'Print Federal Table for selected Pay Code')
-		fnCmdKey('Test Both'    	,ck_both       	=1,0,0,'')
+		fnCmdKey('Test Both'    	,ck_both       	=1,1,0,'')
 		fnCmdKey('Federal Table'	,ck_federalTable	=7,0,0,'Print Federal Tables')
 		fnCmdKey('Cancel'        	,5,0,1,'')
-		! fnCmdSet(2)
 		ckey=fnAcs(mat resp$) ! /r
 		if ckey=5 then
 			goto XitCheckStateCalculation
@@ -2658,7 +2657,6 @@ def library fnCheckPayrollCalculation(; ___, _
 					! /r
 					! r: fn_detail the timesheet
 					showDetails=1
-					fnopenprn
 					fn_detail('***** Generated Timesheet Entry *****')
 					fn_detail('Regular Hours        :',xInp(1 ))
 					fn_detail('Overtime Hours       :',xInp(2 ))
@@ -2779,11 +2777,11 @@ def fn_detail(c1$*128; n1,c2$*128,n2)
 	if showDetails then ! and (n1 or n2) then
 		if file(255)=-1 then fnOpenPrn
 		if n2 then
-			pr #255: rpad$(c1$,45)&'   '&cnvrt$('n 10.2',n1)&'   '&c2$&'   '&cnvrt$('n 10.2',n2)
+			pr #255: lpad$(c1$,45)&':  '&cnvrt$('n 10.2',n1)&'   '&c2$&':  '&cnvrt$('n 10.2',n2)
 		else if c2$<>'' then
-			pr #255: rpad$(c1$,45)&'   '&cnvrt$('n 10.2',n1)&'   '&c2$
+			pr #255: lpad$(c1$,45)&':  '&cnvrt$('n 10.2',n1)&'   '&c2$
 		else if n1 then
-			pr #255: rpad$(c1$,45)&'   '&cnvrt$('n 10.2',n1)
+			pr #255: lpad$(c1$,45)&':  '&cnvrt$('n 10.2',n1)
 		else
 			pr #255: c1$
 		end if
@@ -2800,7 +2798,7 @@ def fn_setup(; ___,mtc)
 	autoLibrary
 	on error goto Ertn
 
-	! showDetails=1
+	showDetails=0
 	if env$('acsDeveloper')<>''  or  env$('showDetails')<>'' then showDetails=1
 	if fn_justTesting then showDetails=1
 
