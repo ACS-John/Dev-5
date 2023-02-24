@@ -1,5 +1,6 @@
 Time and Date 		Sys	Program(s) and Change(s) Description               
-______________________	___	____________________________________________________________________________________________________________________________________________________________________________________________________________________________________               
+_________________	___	____________________________________________________________________________________________________________________________________________________________________________________________________________________________________               
+2:29 PM 2/24/2023	PR	federal withholding - fixed step 3c so as to be at lowest 0, this caused some withholding additional taxes to not have the whole add on withheld
 13:19 02/23/2023	CO	5.75294  
 1:17 PM 2/24/2023	PR	Withholding Tables of LA updated 
 10:57 AM 2/24/2023	PR	Calculate program - if user uses setenv('showDetails','yes') then payroll calculation will also generate a detailed report of how taxes, deductions, etc are calculated as they are being calculated.  
