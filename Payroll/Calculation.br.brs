@@ -1141,9 +1141,6 @@ withholdingPercentage,atLeast,baseAmt,estPayPeriodNetPay,estPayPeriodNetPay,adju
 		if w4Year$='2019' then
 			adjustedWageAmount-=fedExempt*fed_annual_wh_allowance
 			fn_detail('   (2019) adjustedWageAmount-=fedExempt*fed_annual_wh_allowance',adjustedWageAmount)
-			! pr 'fedExempt=';fedExempt
-			! pr 'fed_annual_wh_allowance=';fed_annual_wh_allowance
-			! pr 'didit ' : pause
 		else ! w4Year$='2020' or w4Year$='none' then
 			fn_detail('   (2020+) adjustedWageAmount-=w4step3',adjustedWageAmount)
 			adjustedWageAmount-=w4step3
@@ -1156,25 +1153,29 @@ withholdingPercentage,atLeast,baseAmt,estPayPeriodNetPay,estPayPeriodNetPay,adju
 		fn_detail('            atLeast='&str$(atLeast))
 		fn_detail('            baseAmt='&str$(baseAmt))
 		withholdingPercentage=fedTable(tableRow,3)
-		fn_detailStep('2a.',atLeast,'/ppy',atLeast/payPeriodsPerYear)
-		fn_detailStep('2b.',baseAmt,'/ppy',baseAmt/payPeriodsPerYear)
-		fn_detailStep('2c.',withholdingPercentage)
-		fn_detailStep('2d.',adjustedWageAmount-atLeast)
-		fn_detailStep('2e.',(adjustedWageAmount-atLeast)*withholdingPercentage)
+		fn_detailStep('2a. Find the row...',atLeast,'/ppy',atLeast/payPeriodsPerYear)
+		fn_detailStep('2b. column C of that row ',baseAmt,'/ppy',baseAmt/payPeriodsPerYear)
+		fn_detailStep('2c. % from that row',withholdingPercentage)
+		fn_detailStep('2d. Subtract line 2a from line 1h',adjustedWageAmount-atLeast)
+		fn_detailStep('2e.  Multiply 2d by 2c percentage', _
+			(adjustedWageAmount-atLeast)*withholdingPercentage)
 		returnN=baseAmt+(adjustedWageAmount-atLeast)*withholdingPercentage
 		fn_detail('   return('&str$(returnN)&')=base('&str$(baseAmt)&')+(adjWage('&str$(adjustedWageAmount)&')-atLeast('&str$(atLeast)&'))*whPercent('&str$(withholdingPercentage)&')')
 		returnN=returnN/payPeriodsPerYear
 		returnN=round(returnN,2)
 		fn_detailStep('2f. Tentative Withholding Amount',returnN)
 		fn_detailStep('3.')
-		fn_detailStep('3a.',w4Step3)
-		fn_detailStep('3b.',w4Step3=w4Step3/payPeriodsPerYear)
-		fn_detailStep('3c.',returnN-=w4Step3)
+		fn_detailStep('3a. Enter the amount from Step 3 of the employee’s Form W-4',w4Step3)
+		fn_detailStep('3b. Divide  3a by the number of pay periods on 1b', _
+			w4Step3=w4Step3/payPeriodsPerYear)
+		fn_detailStep('3c. Subtract 3b from 2f. If zero or less, enter -0- ', _
+			returnN=max(returnN-w4Step3,0))
 		fn_detailStep('4.')
 		fn_detail('   W-4 Step 4C',w4step4c)
 		fn_detail('   Federal Tax Add-On',addOnFed)
 		fn_detailStep('4a. W-4 Step 4C AND Federal Tax Add-On',w4step4c+addOnFed)
-		fn_detailStep('4b. 4a+3d',returnN+=w4step4c+addOnFed)
+		fn_detailStep('4b. 4a+3d', _
+			returnN+=w4step4c+addOnFed)
 
 		fn_detail(' Fed WH Tax Returning '&str$(returnN))
 	end if
@@ -1631,14 +1632,24 @@ fnend
 		line2allowances=val(fnEmployeeData$(eno,'IL W-4 Line 2 Allowances'))
 		if taxYear and taxYear<=2021 then
 			exemptionAllowance=2375
-		else ! if ~taxYear or taxYear=>2022 then
+		else if taxYear=2022 then
 			exemptionAllowance=2425
+		else if taxYear=>2023 then
+			exemptionAllowance=2625
 		end if
 		estAnnualNetPay=taxableWagesCurrent*payPeriodsPerYear
+fn_detail('Step 1 Determine the wages paid',taxableWagesCurrent,'anual',estAnnualNetPay)
 		returnN=incomeTaxRate*(estAnnualNetPay-((line1allowances*exemptionAllowance)+(line2allowances*1000)/payPeriodsPerYear))
+		fn_detail('Income Tax Rate' ,incomeTaxRate  	)
+		fn_detail('estAnnual NetPay',estAnnualNetPay	)
+		fn_detail('incomeTaxRate*(estAnnualNetPay-((line1allowances*exemptionAllowance)+(line2allowances*1000)/payPeriodsPerYear))',returnN)
+fn_detail('Step 2,3,4 ',returnN)
+
+
+
+
 
 		fn_detail('Employee Number',eno                          	)
-		fn_detail('Income Tax Rate',incomeTaxRate               	)
 		fn_detail('Exemption Allowance',exemptionAllowance     	)
 		fn_detail('IL W-4 Line 1 Allowances',line1allowances   	)
 		fn_detail('IL W-4 Line 2 Allowances',line2allowances   	)
