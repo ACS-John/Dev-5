@@ -1228,9 +1228,9 @@ def fn_stateTax(eno,wages,pppy,allowances,marital,fedWh,addOnSt,w4year$,taxYear;
 	else if clientState$='WY' then
 		returnN=0 ! no state income tax
 	end if
-
-	returnN+=addOnSt
 	returnN=max(0,returnN)
+	fn_detail('State Tax Add-On)',addOnSt)
+	returnN+=addOnSt
 	fn_detail('stateTax (including addOn)',returnN)
 	fn_stateTax=returnN
 	! pr 'statetax is returning ';returnN : pause
@@ -1625,11 +1625,17 @@ fnend
 			fn_gaPersonalAllowance=returnN
 		fnend
 	def fn_wh_illinois(taxYear,eno,taxableWagesCurrent,payPeriodsPerYear; ___,g2,returnN, _
-	line1allowances,line2allowances,estAnnualNetPay,exemptionAllowance,incomeTaxRate)
+		line1allowances,line2allowances,estAnnualNetPay,exemptionAllowance,incomeTaxRate, _
+		exemptions,taxableAmount)
 		! 			! no table - updated 1/4/2022 from  https://www2.illinois.gov/rev/forms/withholding/Documents/currentyear/IL-700-T.pdf (Effective January 1, 2022)
+		fn_detail('Employee Number',eno                          	)
+		fn_detail('Pay Periods Per Year',payPeriodsPerYear     	)
 		incomeTaxRate=.0495
+		fn_detail('Income Tax Rate' ,incomeTaxRate  	)
 		line1allowances=val(fnEmployeeData$(eno,'IL W-4 Line 1 Allowances'))
 		line2allowances=val(fnEmployeeData$(eno,'IL W-4 Line 2 Allowances'))
+		fn_detail('IL W-4 Line 1 Allowances',line1allowances   	)
+		fn_detail('IL W-4 Line 2 Allowances',line2allowances   	)
 		if taxYear and taxYear<=2021 then
 			exemptionAllowance=2375
 		else if taxYear=2022 then
@@ -1637,30 +1643,23 @@ fnend
 		else if taxYear=>2023 then
 			exemptionAllowance=2625
 		end if
+		fn_detail('Exemption Allowance',exemptionAllowance)
 		estAnnualNetPay=taxableWagesCurrent*payPeriodsPerYear
-fn_detail('Step 1 Determine the wages paid',taxableWagesCurrent,'anual',estAnnualNetPay)
-		returnN=incomeTaxRate*(estAnnualNetPay-((line1allowances*exemptionAllowance)+(line2allowances*1000)/payPeriodsPerYear))
-		fn_detail('Income Tax Rate' ,incomeTaxRate  	)
-		fn_detail('estAnnual NetPay',estAnnualNetPay	)
-		fn_detail('incomeTaxRate*(estAnnualNetPay-((line1allowances*exemptionAllowance)+(line2allowances*1000)/payPeriodsPerYear))',returnN)
-fn_detail('Step 2,3,4 ',returnN)
-
-
-
-
-
-		fn_detail('Employee Number',eno                          	)
-		fn_detail('Exemption Allowance',exemptionAllowance     	)
-		fn_detail('IL W-4 Line 1 Allowances',line1allowances   	)
-		fn_detail('IL W-4 Line 2 Allowances',line2allowances   	)
-		fn_detail('taxable Wages Current',taxableWagesCurrent  	)
-		fn_detail('Pay Periods Per Year',payPeriodsPerYear     	)
-		fn_detail('Calculated Annual Tax',returnN               	)
-
-
+		fn_detail('Step 1'  ,taxableWagesCurrent,'Annual',estAnnualNetPay)
+		fn_detail('Step 2 a',line1allowances*exemptionAllowance)
+		fn_detail('       b',line2allowances*1000)
+		fn_detail('       c',exemptions    =line1allowances*exemptionAllowance+line2allowances*1000)
+		fn_detail('       d',exemptions/payPeriodsPerYear)
+		fn_detail('Step 3'  ,-exemptions/payPeriodsPerYear)
+		fn_detail('     3'  ,taxableAmount=taxableWagesCurrent-exemptions/payPeriodsPerYear)
+		returnN=incomeTaxRate*(estAnnualNetPay-exemptions)
+		fn_detai4('Step 4'  ,incomeTaxRate)
+		fn_detail('     4'  ,incomeTaxRate*taxableAmount,'Annual',returnN)
+		! fn_detail('incomeTaxRate*(estAnnualNetPay-exemptions)',returnN)
+		! fn_detail('Annual Tax Estimate',returnN)
 		returnN=round(returnN/payPeriodsPerYear,2)
 		if returnN<.1 then returnN=0 ! do not withhold less than 10 cents.
-		fn_detail('Calculated Current Tax',returnN                             )
+		fn_detail('** Current IL State Tax',returnN)
 		fn_wh_illinois=returnN
 	fnend
 	def fn_wh_indiana(taxableWagesCurrent,payPeriodsPerYear,stAllowances; ___,returnN,h3)
@@ -2783,6 +2782,10 @@ def fn_payPeriodsPerYear(payCode; ___,returnN)
 		returnN=-1
 	end if
 	fn_payPeriodsPerYear=returnN
+fnend
+def fn_detai4(c1$*128,n1)
+		if file(255)=-1 then fnOpenPrn
+		pr #255: lpad$(c1$,45)&':  '&cnvrt$('n 10.4',n1)
 fnend
 def fn_detail(c1$*128; n1,c2$*128,n2)
 	if showDetails then ! and (n1 or n2) then
