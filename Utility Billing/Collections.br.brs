@@ -1066,7 +1066,7 @@ fnend
 		! returns 0 for unrecognized
 		dim ct_line$*512
 		dim ct_item$(0)*256
-		linput #h_csv: ct_line$
+		linput #h_csv: ct_line$ eof CT_FINIS ! eof for completely empty files
 		if pos(ct_line$,tab$)>0 then csv_delim$=tab$ else csv_delim$=','
 		str2mat(ct_line$,mat ct_item$,csv_delim$)
 		if udim(mat ct_item$)<4 then
