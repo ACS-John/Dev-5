@@ -1546,13 +1546,13 @@ def fn_print_bill_blucksberg(z$,mat mg$,billing_date_prior,serviceFrom,serviceTo
 	if g(1)<>0 then
 		if g(1)>=14 then
 			fnpa_txt("Base Water Service Fee",26,lyne+=adder)
-			fn_blucksAddChargeField(14)
+			fn_blucksAddChargeField(20)
 		end if
 		fnpa_txt("Water",26,lyne+=adder)
 		fnpa_txt(cnvrt$("pic(zzzzzzzz#)",d(1)), 79,lyne)
 		fnpa_txt(cnvrt$("pic(zzzzzzzz#)",d(2)),103,lyne)
 		fnpa_txt(cnvrt$("pic(zzzzzzzz#)",d(3)),123,lyne)
-		fn_blucksAddChargeField(g(1)-14)
+		fn_blucksAddChargeField(g(1)-20)
 	end if
 
 	if g(2)<>0 then
