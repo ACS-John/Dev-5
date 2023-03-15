@@ -529,6 +529,10 @@ ScrState: ! r:
 	screen=scrState
 	dim ids$(0)*64
 	mat ids$(0)
+	dim fieldLen(0)
+	mat fieldLen(0)   ! default is 5
+	dim fieldMask$(0)*64
+	mat fieldMask$(0) ! default is '30'
 	if fnpayroll_client_state$='AR' then
 		fnAddOneC(mat ids$,'AR4EC Exemptions')
 		ckey=fn_askMat(eno,mat ids$)
@@ -536,6 +540,21 @@ ScrState: ! r:
 		fnAddOneC(mat ids$,'IL W-4 Line 1 Allowances')
 		fnAddOneC(mat ids$,'IL W-4 Line 2 Allowances')
 		ckey=fn_askMat(eno,mat ids$)
+	else if fnpayroll_client_state$='OR' then
+		fnAddOneC(mat ids$,'OR W-4 Line 1 Select One')         	: fnAddOneN(mat fieldLen,52) : fnAddOneC(mat fieldMask$,'')
+			dim selectOneOption$(0)*64
+			str2mat(' _
+				0 Single^ _
+				1 Married^ _
+				2 Married, but withholding at the higher single rate _
+				',mat selectOneOption$,'^' _
+			)
+		! use State Exemptions instead    	fnAddOneC(mat ids$,'OR W-4 Line 2 Allowances')         	: fnAddOneN(mat fieldLen,14) : fnAddOneC(mat fieldMask$,'32')
+		! use State Tax Add-On instead    	fnAddOneC(mat ids$,'OR W-4 Line 3 Additional amount') 	: fnAddOneN(mat fieldLen,10) : fnAddOneC(mat fieldMask$,'32')
+		! use disable State Taxes instead 	fnAddOneC(mat ids$,'OR W-4 Line 4a Exemption Code')   	: fnAddOneN(mat fieldLen,30) : fnAddOneC(mat fieldMask$,'')
+		! use disable State Taxes instead 	fnAddOneC(mat ids$,'OR W-4 Line 4b Exempt')            	: fnAddOneN(mat fieldLen, 6) : fnAddOneC(mat fieldMask$,'')
+
+		ckey=fn_askMat(eno,mat ids$,mat fieldLen,mat fieldMask$,mat selectOneOption$)
 	else if fnpayroll_client_state$='LA' then !  R-1300 (L-4)
 		fnAddOneC(mat ids$,'R-1300 Exepmtions')
 		fnAddOneC(mat ids$,'R-1300 Dependencies')
@@ -550,9 +569,11 @@ ScrState: ! r:
 	end if
 	if ckey=>5200 and ckey<=ckey_high then goto Nav
 goto ScrEmployee ! /r
-def fn_askMat(eno,mat id$; ___,lc,respc,tmp)
+def fn_askMat(eno,mat id$; mat fieldLen,mat fieldMask$,mat askmat1option$, _
+	___,lc,respc,tmp,txtLen,col1_len,col2_pos,txtMask$*32) ! also references em(1)
 	fnTos
 	for tmp=1 to udim(mat id$) : col1_len=max(len(id$(tmp))+1,16) : next tmp
+	if fnpayroll_client_state$='OR' then col1_len+=9
 	col2_pos=1+col1_len+2
 	fn_navButtons(lc,deptCount)
 	lc+=1
@@ -562,11 +583,23 @@ def fn_askMat(eno,mat id$; ___,lc,respc,tmp)
 	lc+=1
 	for tmp=1 to udim(mat id$)
 		fnLbl(lc+=1,1,id$(tmp)&':',col1_len,1)
-		fnTxt(lc,col2_pos,5, 0,1,'30',0,'')
-		resp$(respc+=1)=fnEmployeeData$(eno,id$(tmp))
+		txtLen=5 : if tmp<=udim(mat fieldLen) and fieldLen(tmp)>0 then txtLen=fieldlen(tmp)
+		txtMask$='30' : if tmp<=udim(mat fieldMask$) and fieldMask$(tmp)<>'' then txtMask$=fieldMask$(tmp)
+		if tmp=1 and udim(mat askmat1option$) then
+			fnComboA('select one',lc,col2_pos,mat askmat1option$)
+			resp$(respc+=1)=fnEmployeeData$(eno,id$(tmp))
+			if resp$(respc)='' and em(1)=0 then resp$(respc)=askmat1option$(1)
+			if resp$(respc)='' and em(1)=1 then resp$(respc)=askmat1option$(2)
+			if resp$(respc)='' and em(1)=2 then resp$(respc)=askmat1option$(3)
+			if resp$(respc)='' and em(1)>2 then resp$(respc)=askmat1option$(2)
+		else
+			fnTxt(lc,col2_pos,txtLen, 0,1,txtMask$,0,'')
+			resp$(respc+=1)=fnEmployeeData$(eno,id$(tmp))
+		end if
+		lc+=1
 	next tmp
-	fnCmdKey('C&omplete',1,1,0,'Saves any changes and returns to Employee screen.')
-	fnCmdKey('&Cancel',5,0,1,'Exit record without saving changes.')
+	fnCmdKey('Complete',1,1,0,'Saves any changes and returns to Employee screen.')
+	fnCmdKey('Cancel'  ,5,0,1,'Exit record without saving changes.')
 	ckey=fnAcs(mat resp$)
 	if ckey<>5 then
 		respc=1
@@ -605,6 +638,8 @@ def fn_navButtons(&lc,&deptCount; ___,deptItem)
 		fnButtonOrDisabled(screen<>scrState,lc,11,'R-1300 (L-4)',ckey_ScrState,'',12)
 	else if fnpayroll_client_state$='GA' then
 		fnButtonOrDisabled(screen<>scrState,lc,11,'Withholding Exemptions',ckey_ScrState,'',22)
+	else if fnpayroll_client_state$='OR' then
+		fnButtonOrDisabled(screen<>scrState,lc,11,'OR W-4',ckey_ScrState,'',10)
 	end if
 	lc+=1
 	dptPos=1

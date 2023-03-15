@@ -458,8 +458,9 @@ def fn_setupOnCursysChange(; ___,cno,dataFolder$*256)
 	fn_getProgramList(mat program_plus$,mat program_name$,mat program_name_trim$,mat program_file$,mat ss_text$)
 	cno=fnCno  ! this call triggers the setting of the environment variable (env$('cnam')) i.e. setenv('cnam',[cursys]\company.h, pos 1, c 40 etc  )
 	if ~cno then
-		if env$('acsDeveloper')<>'' then pr 'CNO ZERO encountered by MENU - pause' : pause
-		cno=fnPutCno(1)
+		! if env$('acsDeveloper')<>'' then pr 'CNO ZERO encountered by MENU - pause' : pause
+		fnchain('S:\Core\Programs\Select Company')
+		! cno=fnPutCno(1)
 	end if
 	! r: set dataFolder$
 		if env$('acsDeveloper')<>'' and env$('cursys')='CLIENT BILLING' then
