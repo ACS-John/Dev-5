@@ -1081,14 +1081,13 @@ fnend
 		library 'S:\Core\ACS_Component.br': fnFra
 		fnFra=fnFra(lyne,ps,hi,wd, cap$,tooltip$,contain,tabcon)
 	fnend
-	def library fntab(lyne,mypos,height,width,mat cap$)
-		library 'S:\Core\ACS_Component.br': fntab
-		fntab=fntab(lyne,mypos,height,width,mat cap$)
-	fnend
-	def library fnmultiline(lyne,ps,height,width;contain,tabcon,tt$*200)
-		library 'S:\Core\ACS_Component.br': fnmultiline
-		fnmultiline=fnmultiline(lyne,ps,height,width, contain,tabcon,tt$)
-	fnend
+	! def library fntab(lyne,mypos,height,width,mat cap$)
+	! 	library 'S:\Core\ACS_Component.br': fntabs	fntab=fntab(lyne,mypos,height,width,mat cap$)
+	! fnend
+	! def library fnmultiline(lyne,ps,height,width;contain,tabcon,tt$*200)
+	! 	library 'S:\Core\ACS_Component.br': fnmultiline
+	! 	fnmultiline=fnmultiline(lyne,ps,height,width, contain,tabcon,tt$)
+	! fnend
 	def library fnCmdSet(a)
 		library 'S:\Core\ACS_Component.br': fnCmdSet
 		fnCmdSet=fnCmdSet(a)

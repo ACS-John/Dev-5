@@ -546,31 +546,31 @@ MainLoop: ! r:  read timesheet, read employee, call calc deduction etc  basicall
 
 		tcp(tcp_stateWh)=0
 
-		! if fn_justTesting then
-			fn_detail('***** CHECK RESULTS *****')
-			for deductionX=1 to 20
-				if dedName$(deductionX)<>'' and tcp(deductionX+4) then
-					fn_detail(rtrm$(dedName$(deductionX))&':'&str$(tcp(deductionX+4)))
-				end if
-			next deductionX
-			fn_detail('WH -  Federal',tcp(tcp_fedWh))
-			fn_detail('WH -       SS',tcp(tcp_ssWh))
-			fn_detail('WH - Medicare',tcp(tcp_medicareWh))
-			fn_detail('WH -    State',tcp(tcp_stateWh))
-			fn_detail('Pay -     Net',tcp(tcp_net))
-			fn_detail('Pay -   Total',tcp(tcp_gross))
-		! else
+		fn_detail('***** CHECK RESULTS *****')
+		for deductionX=1 to 20
+			if dedName$(deductionX)<>'' and tcp(deductionX+4) then
+				fn_detail(rtrm$(dedName$(deductionX))&':'&str$(tcp(deductionX+4)))
+			end if
+		next deductionX
+		fn_detail('WH -  Federal',tcp(tcp_fedWh))
+		fn_detail('WH -       SS',tcp(tcp_ssWh))
+		fn_detail('WH - Medicare',tcp(tcp_medicareWh))
+		fn_detail('WH -    State',tcp(tcp_stateWh))
+		fn_detail('Pay -     Net',tcp(tcp_net))
+		fn_detail('Pay -   Total',tcp(tcp_gross))
+		if fn_justTesting then
+			triggerEOF=1
+		else
 			write #hCheckHistory,using 'form pos 1,N 8,n 3,PD 6,N 7,5*PD 3.2,37*PD 5.2': eno,empDept,prd,0,mat tdc,mat tcp
-			fn_detail('***writing check history eno',eno,'dept',empDept)
-			fn_detail('***                      net',tcp(tcp_net),'gross',tcp(tcp_gross))
-			fn_detail('***                 state WH',tcp(tcp_stateWh),'fed wh',tcp(tcp_fedWh))
-		! end if
+		end if
+		fn_detail('***writing check history eno',eno,'dept',empDept)
+		fn_detail('***                      net',tcp(tcp_net),'gross',tcp(tcp_gross))
+		fn_detail('***                 state WH',tcp(tcp_stateWh),'fed wh',tcp(tcp_fedWh))
 		! fn_detail('WRITING payroll check with tcp(tcp_stateWh)='&str$(tcp(tcp_stateWh))&' and tcp(tcp_net)='&str$(tcp(tcp_net)))
 		! fnStatusPause
 		totalWagesYtd+=gpd : cafy+=ficat3 ! eicytd+=ytdTotal(25)
 		if tdet(16)<>0 then stuc(tcd(1))+=tdet(16) ! ??? kj
 	! /r FedWh_Dept
-	if fn_justTesting then triggerEOF=1
 goto MainLoop
 ! /r
 Finis: ! r:
@@ -1216,7 +1216,7 @@ def fn_stateTax(eno,wages,pppy,allowances,marital,fedWh,addOnSt,w4year$,taxYear;
 	else if clientState$='OK' then
 		returnN=fn_wh_oklahoma(wages,pppy,allowances,marital)
 	else if clientState$='OR' then
-		returnN=fn_wh_oregon(wages,fedWh,pppy,allowances,marital,w4year$,taxYear)
+		returnN=fn_wh_oregon(eno,wages,fedWh,pppy,allowances,marital,w4year$,taxYear)
 	else if clientState$='SD' then
 		returnN=0 ! no state income tax
 	else if clientState$='TN' then
@@ -1229,9 +1229,8 @@ def fn_stateTax(eno,wages,pppy,allowances,marital,fedWh,addOnSt,w4year$,taxYear;
 		returnN=0 ! no state income tax
 	end if
 	returnN=max(0,returnN)
-	fn_detail('State Tax Add-On)',addOnSt)
 	returnN+=addOnSt
-	fn_detail('stateTax (including addOn)',returnN)
+	fn_detail(clientState$&' State Tax',returnN,'Add-On Only',addOnSt)
 	fn_stateTax=returnN
 	! pr 'statetax is returning ';returnN : pause
 fnend
@@ -1653,7 +1652,7 @@ fnend
 		fn_detail('Step 3'  ,-exemptions/payPeriodsPerYear)
 		fn_detail('     3'  ,taxableAmount=taxableWagesCurrent-exemptions/payPeriodsPerYear)
 		returnN=incomeTaxRate*(estAnnualNetPay-exemptions)
-		fn_detai4('Step 4'  ,incomeTaxRate)
+		fn_detail('Step 4'  ,incomeTaxRate)
 		fn_detail('     4'  ,incomeTaxRate*taxableAmount,'Annual',returnN)
 		! fn_detail('incomeTaxRate*(estAnnualNetPay-exemptions)',returnN)
 		! fn_detail('Annual Tax Estimate',returnN)
@@ -2069,21 +2068,23 @@ fnend
 		returnN=round(returnN,0)
 		fn_wh_oklahoma=returnN
 	fnend
-	def fn_wh_oregon( taxableWagesCurrent,fedWhEstimate,payPeriodsPerYear, _
-										allowances,isMarried, _
-										w4year$,taxYear; ___, _
-										returnN,allowancesEffective,theyAreSingle,theyAreMarried, _
+
+	! fn_wh_oregon(wages,fedWh,pppy,allowances,marital,w4year$,taxYear)
+	def fn_wh_oregon(eno,taxableWagesCurrent,fedWhEstimate,payPeriodsPerYear, _
+										allowances,isMarried,w4year$,taxYear; ___, _
+										returnN,allowancesEffective,filingSingle,filingMarried, _
 										standardDeduction,whichTable, _
 										perAllowance,wagesAnnualEstimate,phaseOut,tableLine, _
 										fedWhAnnualEstimate, _
-										orBase,orDebug,preBase,removePrev,taxRate	)
+										orBase,orDebug,preBase,removePrev,taxRate, _
+										selectOne$*64,selectOneN)
 		! requires retaining variables: wor_setup, mat or1, mat or2
 
-		if ~wor_setup then ! r:
-			wor_setup=1
+		if wor_setup<>taxYear then ! r:
+			wor_setup=taxYear
 			! read #h_tables,using 'form pos 31,102*PD 6.4',rec=40: mat or1,mat or2
-			!  r: Withholding Table for Single with fewer than 3 allowances
-			dim or1(0,0)
+			dim or1(0,0) ! r: Withholding Table for Single with fewer than 3 allowances
+			dim or3(0,0)
 			if taxYear=2019 then ! r:
 				mat or1(5,3)
 				or1(1,1)=     0 : or1(1,2)=  206    : or1(1,3)=0.05
@@ -2097,22 +2098,33 @@ fnend
 				or1(2,1)=  3600 : or1(2,2)= 381   : or1(2,3)=0.0675
 				or1(3,1)=  9050 : or1(3,2)= 749   : or1(3,3)=0.0875
 				or1(4,1)= 50000 : or1(4,2)= 4332   : or1(4,3)=0.099 ! /r
-			else ! 2021
+			else if taxYear=2021 or taxYear=2022 then ! r:
 				mat or1(4,3)
-				or1(1,1)=     0 : or1(1,2)=213     : or1(1,3)=0.0475     !!
+				or1(1,1)=     0 : or1(1,2)=213     : or1(1,3)=0.0475
 													!         213												! 0+3650*.0475+213=386.375  (round to 386)
-				or1(2,1)=  3650 : or1(2,2)= 386   : or1(2,3)=0.0675     !!
-													! (9050-3600)*.0675+381= 748.875  (round to 749)     !!
-				! pr fn_n2(mat or1,2) : pause                            !!
-				or1(3,1)=  9200 : or1(3,2)= 761   : or1(3,3)=0.0875     !!
-													! (50000-9200)*.0875+761=  4331 (round to 4332)  !!
-				or1(4,1)= 50000 : or1(4,2)= 4331   : or1(4,3)=0.099     !!
+				or1(2,1)=  3650 : or1(2,2)= 386   : or1(2,3)=0.0675
+													! (9050-3600)*.0675+381= 748.875  (round to 749)
+				! pr fn_n2(mat or1,2) : pause
+				or1(3,1)=  9200 : or1(3,2)= 761   : or1(3,3)=0.0875
+													! (50000-9200)*.0875+761=  4331 (round to 4332)
+				or1(4,1)= 50000 : or1(4,2)= 4331   : or1(4,3)=0.099
+				! /r
+			else if taxYear=>2023 then ! r:
 
+				mat or1(3,3)
+				or1(1,1)=     0 : or1(1,2)=   236 : or1(1,3)=0.0475
+				or1(2,1)=  4050 : or1(2,2)=   428 : or1(2,3)=0.0675
+				or1(3,1)= 10200 : or1(3,2)=   844 : or1(3,3)=0.0875
+
+				dim or3(2,3)
+				or3(1,1)= 39595 : or3(1,2)=   608 : or3(1,3)=0.0875
+				or3(2,1)=125000 : or3(2,2)= 10653 : or3(2,3)=0.099
 				! fn_debugPrint2d(mat or1)
-
+				! /r
 			end if
 			! /r
 			dim or2(0,0) ! r: Single with 3 or more allowances, or married
+			dim or4(0,0)
 			if taxYear=2019 then ! r:
 				mat or2(5,3)
 				or2(1,1)=     0 : or2(1,2)=  206 : or2(1,3)=0.05
@@ -2127,55 +2139,94 @@ fnend
 				or2(3,1)= 18100 : or2(3,2)= 1310 : or2(3,3)=0.0875
 				or2(4,1)= 50000 : or2(4,2)= 1080 : or2(4,3)=0.09
 				! or2(5,1)=250000 : or2(5,2)=22014 : or2(5,3)=0.099 ! /r
-			else ! 2021
+			else if taxYear=2021 or taxYear=2022 then ! r:
 				mat or2(4,3)
 				or2(1,1)=     0 : or2(1,2)=  213 : or2(1,3)=0.0475 !!
 				or2(2,1)=  7300 : or2(2,2)=  560 : or2(2,3)=0.0675 !!
-
 				or2(3,1)= 18400 : or2(3,2)= 1309 : or2(3,3)=0.0875 !!
-
 				or2(4,1)= 50000 : or2(4,2)= 4074 : or2(4,3)=0.09   !!
+				! /r
+			else if taxYear=>2023 then ! r:
+				! Single with 3 or more allowances, or married
+				mat or2(3,3)
+				or2(1,1)=     0 : or2(1,2)=  236 : or2(1,3)=0.0475
+				or2(2,1)=  4050 : or2(2,2)=  621 : or2(2,3)=0.0675
+				or2(3,1)= 10200 : or2(3,2)= 1451 : or2(3,3)=0.0875
+				dim or4(2,3)
+				or4(1,1)= 39595 : or4(1,2)=  608 : or4(1,3)=0.0875
+				or4(2,1)=125000 : or4(2,2)=10653 : or4(2,3)=0.099
+				! /r
 			end if
 			! /r
 		end if ! /r
 		! returns Oregon State Withholding
-		theyAreSingle=theyAreMarried=0
-		if isMarried=0 or isMarried=2 then theyAreSingle=1
-		if isMarried=1 or isMarried=3 or isMarried=4 or isMarried=5 then theyAreMarried=1
 
 		if w4year$='none' then
 			returnN=round(taxableWagesCurrent*.08,2) ! flat 8% if no w-4
 			fnStatus('flat 8% tax override triggered by W-4 Year setting of "none".')
+			fnStatusPause
 		else
-			allowancesEffective=allowances
-			if taxableWagesCurrent>100000 and theyAreSingle then allowancesEffective=0  !!
-			if taxableWagesCurrent>200000 and theyAreMarried then allowancesEffective=0 !!
+			! r: determine: whichTable   provided alot
+				selectOne$=fnEmployeeData$(eno,'OR W-4 Line 1 Select One')
+				dim selectOneOption$(0)*64
+				if ~udim(mat selectOneOption$) then
+					str2mat(' _
+						0 Single^ _
+						1 Married^ _
+						2 Married, but withholding at the higher single rate _
+						',mat selectOneOption$,'^' _
+					)
+				end if
+				if selectOne$='' and isMarried=0 then selectOne$=selectOneOption$(1)
+				if selectOne$='' and isMarried=1 then selectOne$=selectOneOption$(2)
+				if selectOne$='' and isMarried=2 then selectOne$=selectOneOption$(3)
+				if selectOne$='' and isMarried>2 then selectOne$=selectOneOption$(2)
+				selectOneN=val(selectOne$(1:1))
 
-			if theyAreMarried or (theyAreSingle and allowancesEffective>=3) then ! (married or more than 3 allowances)
-				whichTable=2
-			else ! (single and less than 3 allowances)
-				whichTable=1
-			end if
+				filingSingle=filingMarried=0
+				! if isMarried=0 or isMarried=2 then filingSingle=1
+				! if isMarried=1 or isMarried=3 or isMarried=4 or isMarried=5 then filingMarried=1
+				if selectOneN=0 or selectOneN=2 then filingSingle=1
+				if selectOneN=1 then filingMarried=1
+				wagesAnnualEstimate=taxableWagesCurrent*payPeriodsPerYear
 
+				allowancesEffective=allowances
+				if filingSingle  and wagesAnnualEstimate>100000 then allowancesEffective=0
+				if filingMarried and wagesAnnualEstimate>200000 then allowancesEffective=0
+
+				if filingMarried or (filingSingle and allowancesEffective>=3) then ! (married or more than 3 allowances)
+					whichTable=2
+					if taxYear=>2023 and wagesAnnualEstimate=>50000 then whichTable=4
+				else ! (single and less than 3 allowances)
+					whichTable=1
+					if taxYear=>2023 and wagesAnnualEstimate=>50000 then whichTable=3
+				end if
+				! pr 'whichTable=';whichTable : pause
+			! /r
 			! r: determine:  standardDeduction,perAllowance  provided:  whichTable,taxYear
-			if whichTable=2 then ! theyAreMarried then
+			if whichTable=2 or whichTable=4 then ! filingMarried then
 				if taxYear=2019 then
 					standardDeduction=4545
 				else if taxYear=2020 then
 					standardDeduction=4630
-				else ! 2021
-					standardDeduction=4700 !!
+				else if taxYear=2021 or taxYear=2022 then
+					standardDeduction=4700
+				else ! if taxYear=>2023 then
+					standardDeduction=5210
 				end if
-			else ! if whichTable=1 then ! if theyAreSingle then
+			else ! if whichTable=1 or whichTable=3 then ! if filingSingle then
 				if taxYear=2019 then
 					standardDeduction=2270
 					perAllowance=206
 				else if taxYear=2020 then
 					standardDeduction=2315
 					perAllowance=210
-				else ! 2021
-					standardDeduction=2350 !!
-					perAllowance=213  !!
+				else if taxYear=2021 or taxYear=2022 then
+					standardDeduction=2350
+					perAllowance=213
+				else ! if taxYear=>2023 then
+					standardDeduction=2605
+					perAllowance=236
 				end if
 			end if
 			! /r
@@ -2191,17 +2242,9 @@ fnend
 			! 	pr '              taxYear=';taxYear
 			! en if ! /r
 
-			wagesAnnualEstimate=taxableWagesCurrent*payPeriodsPerYear
-
 			fedWhAnnualEstimate=fedWhEstimate*payPeriodsPerYear ! needed to be annual, not pay period LS 12/31/18
 
-			phaseOut=fn_oregonPhaseOut(wagesAnnualEstimate,fedWhAnnualEstimate,whichTable,theyAreSingle,theyAreMarried)
-
-			if orDebug then
-				pr '  fed Wh Estimate=';fedWhEstimate
-				pr '  fed Wh Annual Estimate=';fedWhAnnualEstimate
-				pr '  phaseOut=';phaseOut
-			end if
+			phaseOut=fn_oregonPhaseOut(wagesAnnualEstimate,fedWhAnnualEstimate,whichTable,filingSingle,filingMarried)
 
 
 			! orBase=taxableWagesCurrent*payPeriodsPerYear-min(fedWhAnnualEstimate,8550)-(allowancesEffective*2250)
@@ -2211,29 +2254,29 @@ fnend
 			! fnStatus('BASE='&str$(orBase))
 
 				!
-			if whichTable=2 then
-				tableLine=fn_tableLine(mat or2,orBase)
-				removePrev=or2(tableLine,1)
-				preBase=or2(tableLine,2)
-				taxRate=or2(tableLine,3)
-			else ! whichTable=1
+			if whichTable=1 then
 				tableLine=fn_tableLine(mat or1,orBase)
-				removePrev=or1(tableLine,1)
-				preBase=or1(tableLine,2)
-				taxRate=or1(tableLine,3)
+				removePrev	=or1(tableLine,1)
+				preBase   	=or1(tableLine,2)
+				taxRate   	=or1(tableLine,3)
+			else if whichTable=2 then
+				tableLine=fn_tableLine(mat or2,orBase)
+				removePrev	=or2(tableLine,1)
+				preBase   	=or2(tableLine,2)
+				taxRate   	=or2(tableLine,3)
+			else if whichTable=3 then
+				tableLine=fn_tableLine(mat or3,orBase)
+				removePrev	=or3(tableLine,1)
+				preBase   	=or3(tableLine,2)
+				taxRate   	=or3(tableLine,3)
+			else if whichTable=4 then
+				tableLine=fn_tableLine(mat or4,orBase)
+				removePrev	=or4(tableLine,1)
+				preBase   	=or4(tableLine,2)
+				taxRate   	=or4(tableLine,3)
 			end if
 
-
-			!      WH = 1,244 + [(BASE – 16,900        ) * 0.09] – (206 * allowances) ! 2019
-			!      WH = $749 + [(BASE – $9,050) x 0.0875] – ($210 x allowances) ! 2020
-
-
-			!      WH =  $761 + [(BASE ­ $9,200) x 0.0875] ­ ($213 x allowances) ! 2021
-
-			! returnN=or2(tableLine,2)+(orBase-or2(tableLine,1))*or2(tableLine,3)
 			returnN = preBase +(( orBase - removePrev) * taxRate) - (perAllowance * allowancesEffective)
-
-
 
 		end if
 		! fnStatus(' ** annual withholding estimate = '&str$(returnN))
@@ -2241,63 +2284,69 @@ fnend
 		returnN=round(returnN,2)
 		if returnN<.1 then returnN=0
 
-
-			if showDetails then ! r: display all the details
-				fnStatus('-------------------------------------------')
-				if theyAreSingle then
-					fnStatus('  Single with '&str$(allowancesEffective)&' allowances')
-				else if theyAreMarried then
-					fnStatus('  Married with '&str$(allowancesEffective)&' allowances')
+			! r: display all the details
+				fn_detail('-------------------------------------------')
+				if filingSingle then
+					fn_detail('  Single with '&str$(allowancesEffective)&' allowances')
+				else if filingMarried then
+					fn_detail('  Married with '&str$(allowancesEffective)&' allowances')
 				else
-					fnStatus('  Maridal Status is undetermined!!!  ')
+					fn_detail('  Maridal Status is undetermined!!!  ')
 				end if
-				fnStatus('    Current Wage (Gross)      = '&str$(taxableWagesCurrent))
-				fnStatus('    Pay Periods Per Year      = '&str$(payPeriodsPerYear))
-				fnStatus('    Annual wage (estimate)    = '&str$(wagesAnnualEstimate))
-				fnStatus('    standard deduction        = '&str$(standardDeduction))
-				fnStatus('    phase out                 = '&str$(phaseOut))
-				fnStatus('    fed WH Estimate PayPeriod = '&str$(fedWhEstimate))
-				fnStatus('    fed WH Estimate Annual    = '&str$(fedWhAnnualEstimate))
-				fnStatus('.')
-				fnStatus('    BASE = '&str$(wagesAnnualEstimate)&' (wagesAnnualEstimate) - '&str$(phaseOut)&' (phaseOut) - '&str$(standardDeduction)&' (standardDeduction)')
-				fnStatus('    BASE = '&str$(orBase))
-				fnStatus('.')
-				fnStatus('    table '&str$(whichTable)&' line '&str$(tableLine))
-				fnStatus('    removePrev            = '&str$(removePrev))
-				fnStatus('    preBase               = '&str$(preBase))
-				fnStatus('    taxRate               = '&str$(taxRate))
-				fnStatus('.')
-				fnStatus('         WH = '&str$(preBase)&' (preBase) + (('&str$(orBase)&' (Base) - '&str$(removePrev)&' (removePrev) )) x '&str$(taxRate)&' (taxRate) ) - ('&str$(perAllowance)&' x '&str$(allowancesEffective)&')')
-				fnStatus('         WH = '&str$(returnN))
-				fnStatus('-------------------------------------------')
-			end if ! /r
+
+
+				fn_detail('    Current Wage (Gross)',taxableWagesCurrent)
+				fn_detail('    Annual wage (estimate)',wagesAnnualEstimate)
+				fn_detail('    fed WH Estimate Annual',fedWhAnnualEstimate)
+				fn_detail('    phase out',phaseOut)
+				fn_detail('    standard deduction',standardDeduction)
+				fn_detail('    Pay Periods Per Year      = '&str$(payPeriodsPerYear))
+				fn_detail('    fed WH Estimate PayPeriod',fedWhEstimate)
+				fn_detail('')
+				fn_detail('    BASE = '&str$(wagesAnnualEstimate)&' (wagesAnnualEstimate) - '&str$(phaseOut)&' (phaseOut) - '&str$(standardDeduction)&' (standardDeduction)')
+				fn_detail('    BASE = '&str$(orBase))
+				fn_detail('')
+				fn_detail('    Table '&str$(whichTable)&' Line '&str$(tableLine))
+				fn_detail('    removePrev',removePrev)
+				fn_detail('    preBase   ',preBase)
+				fn_detail('                          taxRate: '&str$(taxRate))
+				fn_detail('')
+				fn_detail('         WH = '&str$(preBase)&' (preBase) + (('&str$(orBase)&' (Base) - '&str$(removePrev)&' (removePrev) )) x '&str$(taxRate)&' (taxRate) ) - ('&str$(perAllowance)&' x '&str$(allowancesEffective)&')')
+				fn_detail('         WH = '&str$(returnN))
+				fn_detail('-------------------------------------------')
+			! /r
 
 
 		! if showDetails then fnStatusPause ! pause
 		fn_wh_oregon=returnN
 	fnend
-		def fn_oregonPhaseOut(opo_wages,opo_fed_wh,opo_table,isSingle,isMarried; ___,returnN)
-			if opo_wages<50000 then
-				if taxYear=2020 then
-					returnN=min(opo_fed_wh,6800)
-				else ! taxYear=2021
-					returnN=min(opo_fed_wh,7050)
-				end if
-			else if opo_table=1 then
-				if opo_wages => 50000 and opo_wages<125000 th returnN= 6950 : goto Opo_Finis
-				if opo_wages =>125000 and opo_wages<130000 th returnN= 5550 : goto Opo_Finis
-				if opo_wages =>130000 and opo_wages<135000 th returnN= 4150 : goto Opo_Finis
-				if opo_wages =>135000 and opo_wages<140000 th returnN= 2750 : goto Opo_Finis
-				if opo_wages =>140000 and opo_wages<145000 th returnN= 1350 : goto Opo_Finis
-				if opo_wages =>145000 then returnN=0
+		def fn_oregonPhaseOut(opoWages,opoFedWh,opoTable,isSingle,isMarried; ___,returnN)
+			if opoWages<50000 then
 
-			else ! if opo_table=2 then
-				if opo_wages => 50000 and opo_wages<250000 then returnN= 6950 : goto Opo_Finis
-				if opo_wages =>250000 and opo_wages<260000 then returnN= 5550 : goto Opo_Finis
-				if opo_wages =>260000 and opo_wages<270000 then returnN= 4150 : goto Opo_Finis
-				if opo_wages =>270000 and opo_wages<280000 then returnN= 2750 : goto Opo_Finis
-				if opo_wages =>280000 and opo_wages<290000 then returnN= 1350 : goto Opo_Finis
-				if opo_wages =>290000 then returnN=0
+				! XXX what is this min opoFedWh business, does it still exist in 2023?
+				if taxYear=2020 then
+					returnN=min(opoFedWh,6800)
+				else if taxYear=2021 or taxYear=2022 then
+					returnN=min(opoFedWh,7050)
+				else ! taxYear=>2023 then
+					returnN=min(opoFedWh,7800)
+				end if
+
+			else if opoTable=3 or (opoTable=4 and isSingle) then
+				if opoWages => 50000 and opoWages<125000 th returnN= 7800 : goto Opo_Finis
+				if opoWages =>125000 and opoWages<130000 th returnN= 6250 : goto Opo_Finis
+				if opoWages =>130000 and opoWages<135000 th returnN= 4700 : goto Opo_Finis
+				if opoWages =>135000 and opoWages<140000 th returnN= 3100 : goto Opo_Finis
+				if opoWages =>140000 and opoWages<145000 th returnN= 1550 : goto Opo_Finis
+				if opoWages =>145000                      th returnN=    0
+
+			else if opoTable=4 then
+				if opoWages => 50000 and opoWages<250000 th returnN= 7800 : goto Opo_Finis
+				if opoWages =>250000 and opoWages<260000 th returnN= 6250 : goto Opo_Finis
+				if opoWages =>260000 and opoWages<270000 th returnN= 4700 : goto Opo_Finis
+				if opoWages =>270000 and opoWages<280000 th returnN= 3100 : goto Opo_Finis
+				if opoWages =>280000 and opoWages<290000 th returnN= 1550 : goto Opo_Finis
+				if opoWages =>290000                      th returnN=    0
 			end if
 			Opo_Finis: !
 			fn_oregonPhaseOut=returnN
@@ -2419,7 +2468,7 @@ return ! /r
 def library fnCheckPayrollCalculation(; ___, _
 	returnN, _
 	lc,respc,col1_len, _
-	marital,payCode,allowances,stateAddOn,w4Year$,wages,pppy,fedWh, _
+	marital,payCode,stExemptions,stateAddOn,w4Year$,wages,pppy,fedWh, _
 	col1_pos,col1_len,col2_pos,col2_len,testStateTax,testFederalTax,w4step2$,w4step2,x,pass)
 	! mat resp$,resp_*
 	if ~setup_checkCalculation then ! r:
@@ -2467,7 +2516,7 @@ def library fnCheckPayrollCalculation(; ___, _
 		fnPcReg_read('W-4 Year',resp$(resp_w4year=respc+=1), w4yearOption$(1))
 		fnLbl(             lc,col1_pos+35,'Federal Exemptions:',col1_len,1)
 		fnComboA('StateEx',lc   ,col2_pos+35,mat exemptionOption$,'',3)
-		fnPcReg_read('Federal Exemptions',resp$(resp_fedExeptions=respc+=1)=fnSetForCombo$(mat exemptionOption$,str$(allowances)), exemptionOption$(1))
+		fnPcReg_read('Federal Exemptions',resp$(resp_fedExeptions=respc+=1)=fnSetForCombo$(mat exemptionOption$,str$(stExemptions)), exemptionOption$(1))
 		lc+=1
 		fnChk(lc+=1,46,'W-4 Step 2',1)
 		fnPcReg_read('W-4 Step 2',resp$(resp_w4step2=respc+=1), w4step2$)
@@ -2482,7 +2531,7 @@ def library fnCheckPayrollCalculation(; ___, _
 		lc+=1
 		fnLbl(lc+=1,col1_pos,'State Exemptions:',col1_len,1)
 		fnComboA('StateEx',lc,col2_pos,mat exemptionOption$,'',3)
-		fnPcReg_read('State Exemptions',resp$(resp_stExeptions=respc+=1)=fnSetForCombo$(mat exemptionOption$,str$(allowances)), exemptionOption$(1))
+		fnPcReg_read('State Exemptions',resp$(resp_stExemptions=respc+=1)=fnSetForCombo$(mat exemptionOption$,str$(stExemptions)), exemptionOption$(1))
 
 		fnLbl(lc+=1,col1_pos,'State Tax Add-On:',col1_len,1)
 		fnTxt(lc   ,col2_pos,10,10,0,'32',0,'If you wish for the system to add additional state withholdings, enter that amount here.')
@@ -2517,6 +2566,25 @@ def library fnCheckPayrollCalculation(; ___, _
 			fnLbl(lc+=1,1,'Dependents:',col1_len,1)
 			fnTxt(lc,col2_pos,5, 0,1,'30',0,'')
 			resp$(rc_stDependents=respc+=1)=fnEmployeeData$(0,'Dependents')
+		else if clientState$='OR' then
+			lc+=1
+			fnLbl(lc+=1,1,'OR W-4 Line 1 Select One:',col1_len,1)
+			! fnTxt(lc,col2_pos,5, 0,1,'30',0,'')
+
+			! fnAddOneC(mat ids$,'OR W-4 Line 1 Select One')         	: fnAddOneN(mat fieldLen,52) : fnAddOneC(mat fieldMask$,'')
+			dim selectOneOption$(0)*64
+			str2mat(' _
+				0 Single^ _
+				1 Married^ _
+				2 Married, but withholding at the higher single rate _
+				',mat selectOneOption$,'^' _
+			)
+			fnComboA('select one',lc,col2_pos,mat selectOneOption$)
+			resp$(rc_stLine1=respc+=1)=fnEmployeeData$(0,'OR W-4 Line 1 Select One')
+			! fnAddOneC(mat ids$,'OR W-4 Line 2 Allowances')         	: fnAddOneN(mat fieldLen,14) : fnAddOneC(mat fieldMask$,'32')
+			! fnLbl(lc+=1,1,'OR W-4 Line 2 Allowances:',col1_len,1)
+			! fnTxt(lc,col2_pos,14, 0,1,'32',0,'')
+			! resp$(rc_stLine2=respc+=1)=fnEmployeeData$(0,'OR W-4 Line 2 Allowances')
 		end if ! /r
 
 		if env$('acsDeveloper')<>'' then ! not ready for prime time yet
@@ -2537,7 +2605,7 @@ def library fnCheckPayrollCalculation(; ___, _
 			fnPcReg_write('Federal Withholding'    	,resp$(resp_fedWh))
 			fnPcReg_write('Marital Status'          	,resp$(resp_married))
 			fnPcReg_write('Pay Code'                	,resp$(resp_payCode))
-			fnPcReg_write('State Exemptions'       	,resp$(resp_stExeptions))
+			fnPcReg_write('State Exemptions'       	,resp$(resp_stExemptions))
 			fnPcReg_write('Federal Exemptions'     	,resp$(resp_fedExeptions))
 			fnPcReg_write('State Tax Add-On'       	,resp$(resp_StateAddOn))
 			fnPcReg_write('W-4 Year'                	,resp$(resp_w4year))
@@ -2554,10 +2622,13 @@ def library fnCheckPayrollCalculation(; ___, _
 			else if clientState$='GA' then
 				fnEmployeeData$(0,'Exepmtions',resp$(rc_stExemptions))
 				fnEmployeeData$(0,'Dependents',resp$(rc_stDependents))
+			else if clientState$='OR' then
+				fnEmployeeData$(0,'OR W-4 Line 1 Select One',resp$(rc_stLine1))
+				! fnEmployeeData$(0,'OR W-4 Line 2 Allowances',resp$(rc_stLine2))
 			end if
 			marital       	=val(resp$(resp_married      	)(1:1)) ! marital status
 			payCode       	=val(resp$(resp_payCode      	)(1:2)) ! pay code
-			allowances   	=val(resp$(resp_stExeptions 	)(1:2)) ! state ex
+			stExemptions  	=val(resp$(resp_stExemptions	)(1:2)) ! state ex
 			fedExempt    	=val(resp$(resp_fedExeptions	)(1:2)) ! fed ex
 			stateAddOn   	=val(resp$(resp_StateAddOn  	)     ) ! state addon
 			w4year$       	=    resp$(resp_w4year       	)       ! W-4 Year
@@ -2608,7 +2679,7 @@ def library fnCheckPayrollCalculation(; ___, _
 				fn_detail('Wages Taxable Current: '&str$(wages              	))
 				fn_detail(' Pay Periods Per Year: '&str$(pppy               	))
 				if fedWh then fn_detail('  Federal WithHolding: '&str$(fedWh              	))
-				if allowances then fn_detail('           Allowances: '&str$(allowances         	))
+				if stExemptions then fn_detail('           stExemptions: '&str$(stExemptions         	))
 				fn_detail('              Married: '&marriedOption$(marital+1	))
 				! fnStatus('              fedExempt: '&str$(fedExempt            	))
 				fn_detail('               w4year: '&w4year$                  	 )
@@ -2709,11 +2780,17 @@ def library fnCheckPayrollCalculation(; ___, _
 					fnChain('S:\Payroll\Calculation')
 					! /r
 				else
-					if ckey=ck_state or ckey=ck_both then
-						testStateTax=fn_stateTax(0,wages,pppy,allowances,marital,fedWh,stateAddOn,w4year$,taxYear)
-					end if
+
 					if ckey=ck_federal or ckey=ck_both then
 						testFederalTax=fn_federalTax(taxYear,fedpct,wages,ded,stdWhFed,fedExempt,pppy,marital,w4Year$,w4step2,w4Step3,w4step4a,w4step4b,w4step4c)
+					end if
+					if ckey=ck_state or ckey=ck_both then
+						if fedWh then 
+							fn_detail('Federal Withholding Override used for State Tax Calc',fedWh)
+						else
+							fedWh=testFederalTax
+						end if
+						testStateTax=fn_stateTax(0,wages,pppy,stExemptions,marital,fedWh,stateAddOn,w4year$,taxYear)
 					end if
 					if ckey=ck_state or ckey=ck_both then
 						fn_detail('Calculated '&fnpayroll_client_state$&' State WithHolding: '&str$( testStateTax ))
@@ -2746,9 +2823,8 @@ def library fnCheckPayrollCalculation(; ___, _
 	returnN=0
 	fnCheckPayrollCalculation=returnN
 fnend
-def fn_justTesting(; ___,returnN)
-	if lwrc$(env$('PR-justTesting'))='yes' then returnN=1
-	fn_justTesting=returnN
+def fn_justTesting
+	if lwrc$(env$('PR-justTesting'))='yes' then fn_justTesting=1
 fnend
 
 def fn_tableLine(mat tl_table,tl_seekAmount; tl_secondDimension,___,returnN)
@@ -2783,10 +2859,7 @@ def fn_payPeriodsPerYear(payCode; ___,returnN)
 	end if
 	fn_payPeriodsPerYear=returnN
 fnend
-def fn_detai4(c1$*128,n1)
-		if file(255)=-1 then fnOpenPrn
-		pr #255: lpad$(c1$,45)&':  '&cnvrt$('n 10.4',n1)
-fnend
+
 def fn_detail(c1$*128; n1,c2$*128,n2)
 	if showDetails then ! and (n1 or n2) then
 		if file(255)=-1 then fnOpenPrn
@@ -2802,8 +2875,6 @@ def fn_detail(c1$*128; n1,c2$*128,n2)
 	end if
 
 fnend
-
-
 def fn_detailStep(text$*64; number,extra$*64,extraNumber)
 	fn_detailStep=fn_detail('Step '&text$,number,extra$,extraNumber)
 fnend

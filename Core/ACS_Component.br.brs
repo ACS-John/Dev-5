@@ -69,13 +69,13 @@ def library fnTxt(lyne,ps,width; maxlen,ali,mask$,disable,tooltip$*300,contain,t
 	if maxlen=0 then maxlen=width
 	setenv('control'&str$(fn_controlCount), 'TEXT|'&str$(lyne)&'|'&str$(ps)&'|'&str$(width)&'|'&str$(maxlen)&'|'&str$(ali)&'|'&str$(disable)&'|'&mask$&'|'&tooltip$&'|'&str$(contain)&'|'&str$(tabcon)&'|'&addtomask$&'|')
 fnend
-def library fnMultiLine(lyne,ps,height,width;contain,tabcon,tooltip$*200)
-	! add a multiline text box to a screen ace form
-	if ~setup then fn_setup
-	setenv('control'&str$(fn_controlCount), 'MULTILINE|'&str$(lyne)&'|'&str$(ps)&'|'&str$(height)&'|'&str$(width)&'|'&tooltip$&'|'&str$(contain)&'|'&str$(tabcon)&'|')
-	lyne=ps=height=width=contain=tabcon=0
-	tooltip$=''
-fnend
+! def library fnMultiLine(lyne,ps,height,width;contain,tabcon,tooltip$*200) r:
+! 	! add a multiline text box to a screen ace form
+! 	if ~setup then fn_setup
+! 	setenv('control'&str$(fn_controlCount), 'MULTILINE|'&str$(lyne)&'|'&str$(ps)&'|'&str$(height)&'|'&str$(width)&'|'&tooltip$&'|'&str$(contain)&'|'&str$(tabcon)&'|')
+! 	lyne=ps=height=width=contain=tabcon=0
+! 	tooltip$=''
+! fnend /r
 def library fnOpt(lyne,ps, txt$*196; align,contain,tabcon)
 	! lyne			vertical (that's up and down) Position of the Option.
 	! ps				horizontal (left and right) position of the option.
@@ -373,23 +373,23 @@ def library fnFra(lyne,ps,hi,wd; cap$*128,tooltip$*300,contain,tabcon)
 	if ~setup then fn_setup
 	setenv('control'&str$(fn_controlCount),'FRAME|'&str$(lyne)&'|'&str$(ps)&'|'&str$(hi)&'|'&str$(wd)&'|'&cap$&'|'&tooltip$&'|'&str$(contain)&'|'&str$(tabcon)&'|')
 fnend
-def library fnTab(myline,mypos,height,width,mat cap$)
-	! myline sets the vertical (up and down) position
-	! mypos sets the horizontal (left and right) position
-	! height/width	-	 duh
-	! tabsperline=(tpl)=how many tabs will fit on each row of tabstrip
-	! mat cap$=the captions on the tabs you want.
-	! udim(mat cap$) will set the number of tabs
-	! each tab caption should not be longer than 80 characters
-	! no more than 99 tabs
-	if ~setup then fn_setup
-	open #tf1=fnH: 'Name=[Temp]\tab.txt,size=0,RecL=80,replace',internal,output
-	for j=1 to udim(mat cap$)
-		write #tf1,using Fc80: cap$(j)(1:80)
-	next j
-	close #tf1:
-	setenv('control'&str$(fn_controlCount),'TAB|'&str$(myline)&'|'&str$(mypos)&'|'&str$(height)&'|'&str$(width)&'|[Temp]\|tab.txt|')
-fnend
+! def library fnTab(myline,mypos,height,width,mat cap$) r:
+! 	! myline sets the vertical (up and down) position
+! 	! mypos sets the horizontal (left and right) position
+! 	! height/width	-	 duh
+! 	! tabsperline=(tpl)=how many tabs will fit on each row of tabstrip
+! 	! mat cap$=the captions on the tabs you want.
+! 	! udim(mat cap$) will set the number of tabs
+! 	! each tab caption should not be longer than 80 characters
+! 	! no more than 99 tabs
+! 	if ~setup then fn_setup
+! 	open #tf1=fnH: 'Name=[Temp]\tab.txt,size=0,RecL=80,replace',internal,output
+! 	for j=1 to udim(mat cap$)
+! 		write #tf1,using Fc80: cap$(j)(1:80)
+! 	next j
+! 	close #tf1:
+! 	setenv('control'&str$(fn_controlCount),'TAB|'&str$(myline)&'|'&str$(mypos)&'|'&str$(height)&'|'&str$(width)&'|[Temp]\|tab.txt|')
+! fnend /r
 def library fnCmdKey(caption$*200,returnkey; default,isCancel,tt$*200)
 	! add a button to a screen ace form
 	if ~setup then fn_setup
@@ -800,11 +800,11 @@ Xit: fnend
 				else if typ$='PICBUT' then
 					fn_aceRdPicBut
 				else if typ$='MULTILINE' then
-					fn_aceRdMultiline
+						pr 'unused encounter'; bell : pause ! fn_aceRdMultiline
 				else if typ$='FRAME' then
 					fn_aceRdFrame
 				else if typ$='TAB' then
-					fn_aceRdTab
+					pr 'unused encounter'; bell : pause ! fn_aceRdTab(mat tabs)
 				else if typ$='MENU' then
 					fn_aceRdMenu
 				end if
@@ -1131,18 +1131,18 @@ def fn_aceRdMenu (;___,index_,item_count)
 	next index_
 	display menu: mat gMenu$,mat gProgram$,mat gStatus$
 fnend
-def fn_aceRdMultiline
-	respc+=1
-	lyne=val(control$(2))
-	ps=val(control$(3))
-	height=val(control$(4))
-	width=val(control$(5))
-	tt$=control$(6)
-	container=val(control$(7))
-	tabcon=val(control$(8))
-	fn_removeCrLf(resp$(respc))
-	 !	 resp$(respc)=srep$(resp$(respc),'"','""') ! fn2quote(resp$(respc))
-fnend
+! def fn_aceRdMultiline r:
+! 	respc+=1
+! 	lyne=val(control$(2))
+! 	ps=val(control$(3))
+! 	height=val(control$(4))
+! 	width=val(control$(5))
+! 	tt$=control$(6)
+! 	container=val(control$(7))
+! 	tabcon=val(control$(8))
+! 	fn_removeCrLf(resp$(respc))
+! 	 !	 resp$(respc)=srep$(resp$(respc),'"','""') ! fn2quote(resp$(respc))
+! fnend /r
 def fn_aceRdPicBut(; ___,lyne$,pos$,comkey$,height$,width$,container,tabcon,default,xCancel,txt$*256,path1$*300,tt$*400,tmpWin)
 	lyne$    =    control$(2)
 	pos$     =    control$(3)
@@ -1181,26 +1181,27 @@ def fn_aceRdPicBut(; ___,lyne$,pos$,comkey$,height$,width$,container,tabcon,defa
 
 fnend
 Fc80: form pos 1,C 80
-def fn_aceRdTab
-	lyne=val(control$(2))
-	ps=val(control$(3))
-	height=val(control$(4))
-	width=val(control$(5))
-	path1$=control$(6) & control$(7)
-	open #tab_file=fnH: 'Name='&path1$,internal,outIn
-	tabline$=''
-	for j=1 to min(lrec(tab_file),99)
-		read #tab_file,using Fc80: txt$
-
-		tabline$=tabline$&trim$(txt$)&tab$
-		open #tab=fnH: 'srow='&str$(lyne+1)&',scol='&str$(ps+1)&',rows='&str$(height+1)&',cols='&str$(width+1)&',tab='&trim$(txt$)&',parent='&str$(acs_win)&',border=S:[screen],N=[screen]',display,outIn
-		mat tabs(udim(tabs)+1,3)
-		tabs(udim(tabs),1)=tab
-		tabs(udim(tabs),2)=lyne+1
-		tabs(udim(tabs),3)=ps+1
-	next j
-	close #tab_file:
-fnend
+mat tabs
+! def fn_aceRdTab(mat tabs) ! ; ___lyne,ps,height,witdh,path1$*300,tab_file,tabline$*8019,j,txt$*256,hIoTab,hTabIn) r:
+! 	lyne=val(control$(2))
+! 	ps=val(control$(3))
+! 	height=val(control$(4))
+! 	width=val(control$(5))
+! 	path1$=control$(6) & control$(7)
+! 	open #hTabIn=fnH: 'Name='&path1$,internal,outIn
+! 	tabline$=''
+! 	for j=1 to min(lrec(hTabIn),99)
+! 		read #hTabIn,using Fc80: txt$
+! 
+! 		tabline$=tabline$&trim$(txt$)&tab$
+! 		open #hIoTab=fnH: 'srow='&str$(lyne+1)&',scol='&str$(ps+1)&',rows='&str$(height+1)&',cols='&str$(width+1)&',tab='&trim$(txt$)&',parent='&str$(acs_win)&',border=S:[screen],N=[screen]',display,outIn
+! 		mat tabs(udim(tabs)+1,3)
+! 		tabs(udim(tabs),1)=hIoTab
+! 		tabs(udim(tabs),2)=lyne+1
+! 		tabs(udim(tabs),3)=ps+1
+! 	next j
+! 	close #hTabIn:
+! fnend! /r
 def fn_aceRdFrame
 	lyne=val(control$(2))
 	ps=val(control$(3))
