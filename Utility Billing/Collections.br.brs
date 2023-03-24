@@ -1295,8 +1295,8 @@ fnend
 		end if
 		pr #255: p$&'  ';
 		pr #255: date$(days(tdate,'mmddyy'),'mm/dd/ccyy')&'  ';
-		pr #255: rpad$(fn_collType$(tcode),20)&'  ';
-		pr #255: cnvrt$('pic(-,---,---,---,--0.00)',tamount)
+		pr #255: rpad$(fn_collType$(tcode),20)&'  '; 
+		pr #255: cnvrt$('pic(-,---,---,---,--#.##)',tamount)
 	fnend
 	def fn_taeClose
 		taeSetup=0
