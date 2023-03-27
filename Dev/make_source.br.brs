@@ -4,7 +4,8 @@ autoLibrary
 dim filename$(1)*256,prg_list$(1)*256,dir_destination$*128,dir_source$*128,ext$*128
 fn_make_source_init
 ! fn_make_source(':C:\ACS\Dev-5')
-fn_make_source(':C:\WB')
+fn_make_source(':C:\ACS\Laco')
+! fn_make_source(':C:\WB')
 ! fn_make_source('c:\vol002')
 fn_make_source_run
 end
