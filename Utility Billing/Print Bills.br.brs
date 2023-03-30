@@ -2364,6 +2364,7 @@ BulkSort: ! r: sort in bulk sort code sequence
 		execute "Index [temp]\Temp.[session] [temp]\Tempidx.[session] 1,19,Replace,DupKeys -n"
 		open #hBulk2=fnH: "Name=[temp]\Temp.[session],KFName=[temp]\Tempidx.[session]",i,i,k
 	else if enable_BulkSort=3 then ! alphasort, route, sequence, account
+		hCustomer=fn_openFio('UB Customer',mat c$,mat cN, 1)
 		restore #hCustomer:
 		! open #hBs2Customer=fnH: 'Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr',i,i,k  ! open in Account order
 		open #hBs3Out=fnH: 'Name=[temp]\Temp.[session],Replace,RecL=64',internal,output
@@ -2379,6 +2380,7 @@ BulkSort: ! r: sort in bulk sort code sequence
 		BS_EO_CUSTOMER: !
 		restore #hCustomer:
 		close #hBs3Out: ioerr ignore
+		close #hCustomer: ioerr ignore
 		hBs3Out=0
 		fnIndex('[temp]\Temp.[session]','[temp]\Tempidx.[session]','1,26')
 		open #hBulk3=fnH: 'Name=[temp]\Temp.[session],KFName=[temp]\Tempidx.[session]',i,i,k
