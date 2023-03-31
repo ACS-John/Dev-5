@@ -1,7 +1,7 @@
 Time and Date 		Sys	Program(s) and Change(s) Description                    
 _________________	___	____________________________________________________________________________________________________________________________________________________________________________________________________________________________________                    
-12:57 03/23/2023	CO	5.75299  
-12:56 PM 3/30/2023	UB	Fix for Past Due Notices and Print Bills when using bulksort=3 
+11:21 AM 3/31/2023	PR	Fixed Error 61 in Enter Time Sheets when prointing proof listing multiple times
+ 9:21 03/23/2023	CO	5.75299  
 13:45 03/23/2023	CO	5.75298   
 1:43 PM 3/24/2023	UB	Fix to auto import skipped acounts printout  
 15:02 03/23/2023	CO	5.75297    

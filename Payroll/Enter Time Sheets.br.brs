@@ -338,7 +338,7 @@ ScrAskTime: ! r:
 	if ckey=5 and editMode then 
 		goto Accumulators ! just add proof totals back in
 	else if editMode then 
-		rewrite #hTimesheet,using Ftimesheet,rec=rec(hTimesheet): eno,dep,mat inpX,gpd,mat hr
+		rewrite #hTimesheet,using Ftimesheet,rec=rec(hTimesheet): eno,dep,mat inpX,gpd,mat hr norec WriteAndAccum
 		goto Accumulators 
 
 	end if
@@ -356,6 +356,9 @@ SkipDepartment: !
 	heno=eno
 goto L1340 ! If ADR>0 Then Goto 1050 Else Goto 820
 ! /r
+WriteAndAccum: !
+	write #hTimesheet,using Ftimesheet: eno,dep,mat inpX,gpd,mat hr
+goto Accumulators
 FinishAndConfirm: ! r: and then ScrProofTotals
 	close #hEmployee: ioerr ignore
 	hEmployee=0
@@ -720,7 +723,7 @@ PrintListing: ! r:
 			read #hTimesheet,using Ftimesheet,release: eno,dep,mat inpX,gpd,mat hr eof PL_Finis
 		end if
 		if heno<>eno then
-			read #hDept,using 'form pos 42,n 6',key=cnvrt$('pic(ZZZZZZZ#)',eno)&cnvrt$('pic(ZZ#)',dep): lastprdate
+			read #hDept,using 'form pos 42,n 6',key=cnvrt$('pic(ZZZZZZZ#)',eno)&cnvrt$('pic(ZZ#)',dep),release: lastprdate
 			if lastprdate=prd then ! make sure pay hasn't been calculated on this person on this date
 				mat ml$(4)
 				ml$(1)='You have previously calculated pay using this same payroll date on employee '&str$(eno)
