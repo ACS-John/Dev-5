@@ -81,7 +81,7 @@ PrintBill_Basic: ! r: set prefrences for clients
 		enable_service_to=1
 		include_zero_bal=include_credit_bal=1
 		message2_line_count=12
-		message2_max_len=24
+		message2_max_len=50
 	else if env$('client')='Blucksberg' then
 		pa_enabled=1 ! 2 (hopefully one day, but the line lengths do not work right) ! pa_enabled=2 is for ForceFormat=PDF
 		enable_BulkSort=2
