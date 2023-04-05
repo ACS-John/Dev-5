@@ -247,7 +247,7 @@ def fn_vbprint
 	fnpa_txt('Pay After '&cnvrt$("PIC(ZZ/ZZ/ZZ)",d4)&':',xmargin+1,lyne*25+ymargin)
 	fnpa_txt(fnformnumb$(bal+g(10),2,9),xmargin+42,lyne*25+ymargin)
 	fnpa_line(xmargin+1,lyne*26+1+ymargin,63,0)
-	fnpa_txt("Phone: 217-768-3435",xmargin+1,lyne*27+ymargin)
+	fnpa_txt("Phone: 217-768-3036 Ext 2",xmargin+1,lyne*27+ymargin)
  
 	fnpa_fontsize(7)
 	fnpa_line(xmargin+97,ymargin+0,29,lyne*5+2,1)
