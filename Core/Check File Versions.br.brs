@@ -1036,6 +1036,9 @@ def fn_cfv_general_ledger
 
 	fn_file_setup_data('[Q]\GLmstr\acglfnsg.h[cno]',83,1)
 	fn_file_setup_index('[Q]\GLmstr\agfsidx6.h[cno]','1','5')
+	
+	fn_file_setup_data('[Q]\GLmstr\acglfnsg.h[cno]',83,1)
+	fn_file_setup_index('[Q]\GLmstr\agfsidx6.h[cno]','1','5')
 
 	! /r
 	! PAYEEGLBREAKDOWN: !
@@ -1202,6 +1205,15 @@ def fn_cfv_general_ledger
 		write #hGlPeriod,using 'form pos 1,N 2,C 30': 13,'End of Year Adjustments'
 		close #hGlPeriod:
 	end if
+	if ~exists('[Q]\GLmstr\PRmstr.h[cno]') then
+		open #hGlPrmstr=fnH: 'Name=[Q]\GLmstr\PRmstr.h[cno],',i,outIn,k
+		
+		if rln(hGlPrmstr)<280 then
+			close #hGlPrmstr:
+			fnCopy('[Q]\GLmstr\PRmstr.h[cno]','', 280)
+		else
+			close #hGlPrmstr:
+		end if
 
 	fn_rename('[Q]\GLmstr\GLWK1[wsid].dat','[Q]\GLmstr\GL_Work_[acsUserId].dat')
 	fn_rename('[Q]\GLmstr\GLALLOCATIONS[wsid][cno]','[Q]\GLmstr\Allocations[acsUserId].h[cno]')

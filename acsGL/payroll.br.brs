@@ -3,7 +3,8 @@
 
 	autoLibrary
 	on error goto Ertn
-
+	fnTop(program$,'Payroll')
+! r: initialze
 	dim fl2$(5),sc2$(5)*38
 	dim sc1$(26),fl1$(26),io1$(41),hd$(2)*78,pr1(21),miscname$(10)*20
 	dim l1(4),l2$(4)*25,l3$(4)*25,sc3$(21)*13,fl3$(21),io3$(21),prd(21)
@@ -13,7 +14,6 @@
 	dim iocr$(3),wrdcr$(3)*23
 	dim p$(20)*50,dedcode(10)
 
-	fnTop(program$,'Payroll')
 	open #1: 'Name=[Q]\GLmstr\Company.h[cno],Shr',i,i
 	read #1,using 'form pos 418,10*C 20,10*N 1': mat miscname$,mat dedcode
 	close #1:
@@ -39,15 +39,10 @@
 	sc3$(2)='Check #:'
 	sc3$(21)='Net Pay:'
 	if exists ('[Q]\GLmstr\PRmstr.h[cno]') =0 then goto INITIAL_BUILD
-	open #1: 'Name=[Q]\GLmstr\PRmstr.h[cno],KFName=[Q]\GLmstr\PRIndex.h[cno],Shr',i,outIn,k ioerr L2900
+	open #1: 'Name=[Q]\GLmstr\PRmstr.h[cno],KFName=[Q]\GLmstr\PRIndex.h[cno],Shr',i,outIn,k ioerr ErrOpenGlPrmstr
 	open #2: 'Name=[Q]\GLmstr\ACPRCKS.h[cno],Shr',i,outi,r
-goto MAIN
+goto MAIN ! /r
 
-DONE: !
-	close #1:
-	close #2:
-	if new1=1 or cont=1 then goto L1410
-goto Xit
 
 MAIN: !
 	fnTos
@@ -61,7 +56,8 @@ MAIN: !
 	fnCmdKey('&Proof Llist',4,0,0,'')
 	fnCmdKey('&Cancel',5,0,1,'')
 	ckey=fnAcs(mat resp$)
-L480: if ckey=5 then goto Xit
+	L480: !
+	if ckey=5 then goto Xit
 	if ckey=2 then goto ASK_NEW_NUMBER
 	if ckey=4 then goto PROOF_LIST
 	holden1=en1=val(resp$(1)(1:4))
@@ -132,7 +128,8 @@ DISPLAY_EMPLOYEE: !
 		m(j)=val(resp$(j+5))
 	next j
 	if ckey=1 and holden1<>en1 then goto MSGBOX2
-	goto L1250
+goto L1250
+
 DELETEIT: !
 MSGBOX1: !
 	mat ml$(3)
@@ -148,61 +145,73 @@ MSGBOX2: !
 	ml$(3)='the number or Cancel to retain the old number.'
 	fnMsgBox(mat ml$,resp$,'',49)
 	if resp$='OK' then goto L1170 else goto MAIN
-L1150: delete #1,key=lpad$(str$(en1),4): nokey MAIN
-! delete or change numbers
-L1170: adr=ta(1)
-L1180: if adr=0 then goto L1240
+L1150: !
+	delete #1,key=lpad$(str$(en1),4): nokey MAIN
+	! delete or change numbers
+L1170: !
+	adr=ta(1)
+L1180: !
+	if adr=0 then goto L1240
 	read #2,using L1200,rec=adr: en1,nta
-L1200: form pos 1,n 4,pos 108,pd 3
+	L1200: form pos 1,n 4,pos 108,pd 3
 	if ckey=6 then delete #2,rec=adr: else rewrite #2,using L1200,rec=adr: eno,nta
 	adr=nta
-	goto L1180
-L1240: if ckey=6 then eno=0: mat k$=(''): ss$='': mat m=(0): mat ta=(0) : goto MAIN
-L1250: if ckey=1 and addemployee=1 then mat ta=(0): write #1,using 'form pos 1,N 4,3*C 25,C 11,36*PD 5.2,2*N 5': eno,mat k$,ss$,mat m,mat ta: addemployee=0 else goto L1280
+goto L1180
+L1240: !
+	if ckey=6 then eno=0: mat k$=(''): ss$='': mat m=(0): mat ta=(0) : goto MAIN
+L1250: !
+	if ckey=1 and addemployee=1 then mat ta=(0): write #1,using 'form pos 1,N 4,3*C 25,C 11,36*PD 5.2,2*N 5': eno,mat k$,ss$,mat m,mat ta: addemployee=0 else goto L1280
 	new1=1
 	eno=0: mat k$=(''): ss$='': mat m=(0): mat ta=(0): goto MAIN
-L1280: if ckey=1 then rewrite #1,using 'form pos 1,N 4,3*C 25,C 11,36*PD 5.2,2*N 5',key=en$: eno,mat k$,ss$,mat m,mat ta nokey L1290
-L1290: eno=0: mat k$=(''): ss$='': mat m=(0): mat ta=(0): goto MAIN
+L1280: !
+	if ckey=1 then rewrite #1,using 'form pos 1,N 4,3*C 25,C 11,36*PD 5.2,2*N 5',key=en$: eno,mat k$,ss$,mat m,mat ta nokey L1290
+L1290: !
+	eno=0: mat k$=(''): ss$='': mat m=(0): mat ta=(0): goto MAIN
 
 INITIAL_BUILD: !
-	open #1: 'Name=[Q]\GLmstr\PRmstr.h[cno]',internal,output ioerr L1330
-L1330: close #1,free: ioerr L1340
-L1340: open #1: 'Name=[Q]\GLmstr\PRmstr.h[cno],SIZE=0,RecL=280,Replace',internal,output
-	close #2: ioerr L1360
-L1360: fnFree('[Q]\GLmstr\PRIndex.h[cno]')
-L1370: open #2: 'Name=[Q]\GLmstr\ACPRCKS.h[cno]',internal,output ioerr L1380
-L1380: close #2,free: ioerr L1390
-L1390: open #2: 'Name=[Q]\GLmstr\ACPRCKS.h[cno],SIZE=0,RecL=110,Replace',internal,output,relative
+	open #1: 'Name=[Q]\GLmstr\PRmstr.h[cno]',internal,output ioerr ignore
+	close #1,free: ioerr ignore
+	open #1: 'Name=[Q]\GLmstr\PRmstr.h[cno],SIZE=0,RecL=280,Replace',internal,output
+	close #2: ioerr ignore
+	fnFree('[Q]\GLmstr\PRIndex.h[cno]')
+	open #2: 'Name=[Q]\GLmstr\ACPRCKS.h[cno]',internal,output ioerr ignore
+	close #2,free: ioerr ignore
+	open #2: 'Name=[Q]\GLmstr\ACPRCKS.h[cno],SIZE=0,RecL=110,Replace',internal,output,relative
 	close #2:
-L1410: close #1: ioerr L1420
-L1420: execute 'Index [Q]\GLmstr\PRmstr.h[cno] [Q]\GLmstr\PRIndex.h[cno] 1 4 Replace DupKeys -n'
-	goto MAIN
+L1410: !
+	close #1: ioerr ignore
+	fnIndex('[Q]\GLmstr\PRmstr.h[cno]','[Q]\GLmstr\PRIndex.h[cno]','1 4')
+goto MAIN
 
 PROOF_LIST: !
-	restore #1,key>='    ': eof L1470, nokey L1470
-L1470: fnOpenPrn
+	restore #1,key>='    ': eof ignore, nokey ignore
+	fnOpenPrn
 	gosub HDR
-L1490: read #1,using 'form pos 1,N 4,3*C 25,C 11,36*PD 5.2,2*N 5': eno,mat k$,ss$,mat m eof L1610
-	pl=pl+1
-	l1(pl)=eno
-	l2$(pl)=k$(1)
-	l3$(pl)=k$(2)
-	l4$(pl)=k$(3)
-	l5$(pl)=ss$
-	for j1=1 to 36
-		mp(pl,j1)=m(j1)
-	next j1
-	if pl=4 then gosub L1660
-	goto L1490
-L1610: if pl>0 then gosub L1660
+	do
+		read #1,using 'form pos 1,N 4,3*C 25,C 11,36*PD 5.2,2*N 5': eno,mat k$,ss$,mat m eof L1610
+		pl=pl+1
+		l1(pl)=eno
+		l2$(pl)=k$(1)
+		l3$(pl)=k$(2)
+		l4$(pl)=k$(3)
+		l5$(pl)=ss$
+		for j1=1 to 36
+			mp(pl,j1)=m(j1)
+		next j1
+		if pl=4 then gosub L1660
+	loop
+
+L1610: !
+	if pl>0 then gosub L1660
 	on fkey 5 ignore
 	fnClosePrn
-	if fnProcess=1 then goto Xit else goto MAIN
+if fnProcess=1 then goto Xit else goto MAIN
 
-L1660: pr #255,using L1670: sc1$(4),mat l1
-L1670: form pos 1,c 21,x 7,pic(zzzz),x 24,pic(zzzz),x 24,pic(zzzz),x 24,pic(zzzz),skip 1
+L1660: ! r:
+	pr #255,using L1670: sc1$(4),mat l1
+	L1670: form pos 1,c 21,x 7,pic(zzzz),x 24,pic(zzzz),x 24,pic(zzzz),x 24,pic(zzzz),skip 1
 	pr #255,using L1690: sc1$(5),mat l2$
-L1690: form pos 1,c 21,3*c 28,c 25,skip 1
+	L1690: form pos 1,c 21,3*c 28,c 25,skip 1
 	pr #255,using L1690: sc1$(6),mat l3$
 	pr #255,using L1690: sc1$(7),mat l4$
 	pr #255,using L1690: sc1$(8),mat l5$
@@ -210,7 +219,7 @@ L1690: form pos 1,c 21,3*c 28,c 25,skip 1
 		j2=int((j1-1)/2)+9
 		if fp(j1/2)=0 then sc1$=sc1$(j2)&'QTD' else sc1$=sc1$(j2)&'YTD'
 		pr #255,using L1770: sc1$,mp(1,j1),mp(2,j1),mp(3,j1),mp(4,j1)
-L1770: form pos 1,c 21,pic(---------.##),pic(-------------------------.##),pic(-------------------------.##),pic(------------------------.##),skip 1
+	L1770: form pos 1,c 21,pic(---------.##),pic(-------------------------.##),pic(-------------------------.##),pic(------------------------.##),skip 1
 	next j1
 	mat l1=(0)
 	mat l2$=('')
@@ -221,45 +230,50 @@ L1770: form pos 1,c 21,pic(---------.##),pic(-------------------------.##),pic(-
 	pl1=pl1+1
 	if pl1=2 then goto L1900
 	pr #255,using L1880: ' '
-L1880: form c 1,skip 4
-	goto L1940
-L1900: pl1=0
+	L1880: form c 1,skip 4
+goto L1940 ! /r
+
+L1900: ! r:
+	pl1=0
 	pr #255: newpage
 	if pl><4 then goto L1940
 	gosub HDR
-L1940: pl=0
-return
+	L1940: pl=0
+return ! /r
 
-HDR: !
+HDR: ! r:
 	pr #255,using L1990: date$('mm/dd/yy'),env$('cnam')
-L1990: form skip 2,pos 1,c 8,pos 1,cc 108,skip 1
+	L1990: form skip 2,pos 1,c 8,pos 1,cc 108,skip 1
 	pr #255,using L2010: time$,'Payroll Proof List',dat$
-L2010: form pos 1,c 8,pos 45,c 20,skip 1,pos 1,cc 108,skip 2
-return
+	L2010: form pos 1,c 8,pos 45,c 20,skip 1,pos 1,cc 108,skip 2
+return ! /r
 
-	pr newpage
-	pr f '10,15,Cc 43,N': 'Reassigning Transaction Addresses...'
-	restore #1,key>='    ': eof L2070
-L2070: read #1,using 'form pos 271,2*N 5': mat ta eof L2100
-	rewrite #1,using 'form pos 271,2*N 5': 0,0
-	goto L2070
-L2100: lr2=lrec(2)
-! REWRITE #2,USING 2360,REC=1: LR2
-	for j=1 to lr2
-		read #2,using 'form pos 1,C 4,pos 108,PD 3',rec=j: en$,nta noRec L2210
-		read #1,using 'form pos 271,2*N 5',key=en$: mat ta nokey L2210
-		if ta(1)=0 then ta(1)=j
-		if ta(2)>0 then rewrite #2,using L2200,rec=ta(2): j
-		ta(2)=j
-		rewrite #1,using 'form pos 271,2*N 5',key=en$: mat ta
-		rewrite #2,using L2200,rec=j: 0
-L2200: form pos 108,pd 3
-L2210: next j
-	goto MAIN
+	!          pr newpage            !     r:   unreferenced lines (reassign transaction addresses)
+	!          pr f '10,15,Cc 43,N': 'Reassigning Transaction Addresses...'
+	!          restore #1,key>='    ': eof ignore
+	!          do
+	!          	read #1,using 'form pos 271,2*N 5': mat ta eof L2100
+	!          	rewrite #1,using 'form pos 271,2*N 5': 0,0
+	!          loop
+	!          L2100: !
+	!          lr2=lrec(2)
+	!          ! REWRITE #2,USING 2360,REC=1: LR2
+	!          for j=1 to lr2
+	!          	read #2,using 'form pos 1,C 4,pos 108,PD 3',rec=j: en$,nta noRec L2210
+	!          	read #1,using 'form pos 271,2*N 5',key=en$: mat ta nokey L2210
+	!          	if ta(1)=0 then ta(1)=j
+	!          	if ta(2)>0 then rewrite #2,using L2200,rec=ta(2): j
+	!          	ta(2)=j
+	!          	rewrite #1,using 'form pos 271,2*N 5',key=en$: mat ta
+	!          	rewrite #2,using L2200,rec=j: 0
+	!          	L2200: form pos 108,pd 3
+	!          	L2210: !
+	!          next j
+	!          goto MAIN ! /r
 
 REVIEW_CHECKS: !
 	if ta(1)=0 then goto MSGBOX5 else goto L2290
-MSGBOX5: !
+MSGBOX5: ! 
 	mat ml$(3)
 	ml$(1)='There are no checks on employee # '&str$(eno)&'.'
 	ml$(2)='Do you wish to add checks?'
@@ -306,24 +320,29 @@ L2340: !
 		if j=18 then wh=wh+prd(18) ! tips
 		if j=19 then goto L2650 ! weeks worked
 		if j=20 then wh=wh-prd(j) ! eic
-L2650: next j
-	if prd(3)<>prd(21)+wh then goto MSGBOX4 else goto L2700
-MSGBOX4: !
+		L2650: !
+	next j
+if prd(3)<>prd(21)+wh then goto MSGBOX4 else goto L2700
+
+MSGBOX4: ! r:
 	mat ml$(4)
 	ml$(1)='Gross pay ('&trim$(cnvrt$('pic(zzzz,zzz.##)',prd(3)))&') less withholding '
 	ml$(2)='('&trim$(cnvrt$('pic(zzzz,zzz.##)',wh))&') does not equal'
 	ml$(3)='the net check ('&trim$(cnvrt$('pic(zzzz,zzz.##)',prd(21)))&')'
 	ml$(4)='Click OK to fix the check.'
 	fnMsgBox(mat ml$,resp$,'',49)
-	if resp$='OK' then goto L2340 else goto MAIN
-L2700: lr2=lrec(2)+1
+if resp$='OK' then goto L2340 else goto MAIN ! /r
+
+L2700: ! r:
+	lr2=lrec(2)+1
 	if add=1 then write #2,using L2320,rec=lr2: eno,mat prd,0 duprec L2700 else rewrite #2,using L2320,rec=adr: eno,mat prd,nca
 	if add=0 then goto L2770
 	if ta(2)>0 then rewrite #2,using L2740,rec=ta(2): lr2
-L2740: form pos 108,pd 3
+	L2740: form pos 108,pd 3
 	if ta(1)=0 then ta(1)=lr2
 	ta(2)=lr2
-L2770: if add=0 then mat prd=prd-pr1 ! file maintenance
+	L2770: !
+	if add=0 then mat prd=prd-pr1 ! file maintenance
 	for j=3 to 20
 		if j=3 then m1=1
 		if j=4 then m1=3
@@ -336,8 +355,18 @@ L2770: if add=0 then mat prd=prd-pr1 ! file maintenance
 	adr=nca
 	if add=1 then mat pr1=(0): mat prd=(0): goto L2330
 	if add=0 then goto L2300
+! /r
 
-L2900: if err=4152 then goto INITIAL_BUILD else goto ERTN
+ErrOpenGlPrmstr: !
+if err=4152 then goto INITIAL_BUILD else goto ERTN
+
+
+DONE: !
+	close #1:
+	close #2:
+	if new1=1 or cont=1 then goto L1410
+goto Xit
+
 Xit: fnXit
 
 include: ertn
