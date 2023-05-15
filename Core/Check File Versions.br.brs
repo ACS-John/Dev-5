@@ -1064,8 +1064,8 @@ def fn_cfv_general_ledger
 		goto L3510
 	end if
 	! GLPAYMSTR: ! Primary, Non-Split Index  (Vendor or payee files in g/l)
-	if exists('[Q]\GLmstr\gl1099.h[cno]')<>0 then fnglpayee_v0_to_v1
-	if exists('[Q]\GLmstr\gl1099.h[cno]')<>0 then fnFree('[Q]\GLmstr\gl1099.h[cno]')
+	if exists('[Q]\GLmstr\gl1099.h[cno]') then fnglpayee_v0_to_v1
+	if exists('[Q]\GLmstr\gl1099.h[cno]') then fnFree('[Q]\GLmstr\gl1099.h[cno]')
 	name$='[Q]\GLmstr\PayMstr.h[cno]'
 	kfname$='[Q]\GLmstr\Payidx1.h[cno]'
 	myrln=276

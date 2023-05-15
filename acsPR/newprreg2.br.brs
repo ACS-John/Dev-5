@@ -87,9 +87,9 @@ def fn_payroll_register_2(; det,include_tips_in_other_wh,append_reg1,ppdOverride
 		if deductionCode(j-4)<>3 then
 
 			if deductionCode(j-4)=2 then
-				other_wh=other_wh-cp(j) ! if break_is_on and cp(j)<>0 then pr 'cp('&str$(j)&') deducts '&str$(cp(j))
+				other_wh=other_wh-cp(j) ! if break_is_on and cp(j) then pr 'cp('&str$(j)&') deducts '&str$(cp(j))
 			else
-				other_wh=other_wh+cp(j) ! if break_is_on and cp(j)<>0 then pr 'cp('&str$(j)&')    adds '&str$(cp(j))
+				other_wh=other_wh+cp(j) ! if break_is_on and cp(j) then pr 'cp('&str$(j)&')    adds '&str$(cp(j))
 			end if
 
 			if deductionCode(j-4)=1 and newdedfed(j-4)=2 then

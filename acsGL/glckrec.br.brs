@@ -59,7 +59,7 @@ READ_GLBREC: !
 	if currgl$<>gl$ then goto TOTAL
 	if fndate_mmddyy_to_ccyymmdd(a(1))>lcd then goto READ_GLBREC
 RD_NXT: !
-	if a(3)<>0 then goto READ_GLBREC
+	if a(3) then goto READ_GLBREC
 	pr #255,using 'form pos 1,C 12,pos 15,C 30,pos 48,PIC(ZZ/ZZ/ZZ),pos 58,N 13.2': c$,p$,a(1),a(2) pageoflow PgOf
 	tot+=a(2)
 	goto READ_GLBREC

@@ -102,7 +102,7 @@ L870: for j=1 to 9
 	ytdb=-ytdb
 L930: if ds=1 then dollar$="$" else dollar$=" "
 	if total><0 or total2><0 then goto L970
-	if total<>0 then goto L970
+	if total then goto L970
 	if ls+ds+ul+ic>0 then goto L970 else goto L420
 L970: sp2=30-sp-1
 	if te$="B" then total=-total: total2=-total2 ! Reverse sign on beginning bank balance

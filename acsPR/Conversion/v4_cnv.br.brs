@@ -75,7 +75,7 @@ def fn_pr_conversion_department(cno; medicare_is_seperated)
 		do 
 			read #h_rptrail,using 'form pos 1,N 8,N 3,N 3,N 6,N 3,4*N 6,3*N 2,24*PD 4.2,5*PD 3.2,pos 471,PD 4.2,pos 165,PD 3.2,60*PD 5.2,PD 3',rec=adr: teno,tdn,gl1,gl2,gl3,mat tdt,mat tcd,tli,mat tdet,mat tdy,mat tdc,mcwh,mat ty,mat tqm,mat tcp,nta
 			gosub CONVERSION
-			if nta<>0 then adr=nta
+			if nta then adr=nta
 		loop until nta=0
 		if foundhistory=1 then goto PULLFROMHISTORY
 	goto TOPOFLOOP ! /r
@@ -171,7 +171,7 @@ def fn_pr_conversion_department(cno; medicare_is_seperated)
 		close #h_rpmstr: ioerr ignore
 		fnIndex('[Q]\PRmstr\RPMstr.h[cno]','[Q]\PRmstr\RPIndex.h[cno]','1,8')
 		fnIndex('[Q]\PRmstr\RPMstr.h[cno]','[Q]\PRmstr\RPIndx2.h[cno]','9 30')
-	!   end if  ! cno_current<>0
+	!   end if  ! cno_current
 	! next company_item
 	Xit: ! 
 		close #h_prckhist: ioerr ignore

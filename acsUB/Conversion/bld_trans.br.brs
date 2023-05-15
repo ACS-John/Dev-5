@@ -77,7 +77,7 @@ def fn_ub_build_transactions
 			read #master,using 'form pos 1,c 10,pos 438,78*pd 5,13*pd 4.2,13*n 6,156*pd 4.2,13*n 6,13*pd 4.2': p$,mat rw4 eof PHASE4
 			for month=1 to 13
 				tdate=fndate_mmddyy_to_ccyymmdd(rw4(8,month))
-				if tdate<>0 and tdate<>20000000 then
+				if tdate and tdate<>20000000 then
 					g(01)=rw4(09,month)
 					g(02)=rw4(10,month)
 					g(03)=rw4(11,month)
@@ -128,7 +128,7 @@ EO_DELETE_MATCHING_TRANS: !  /r
 !         if trim$(p$)='209740.00' and month=1 then pr 'tdate=';tdate; 'tamt=';tamt : for x=1 to udim(mat rw4,1) : pr rw4(x,1) : next x :  pause
 					write_count+=1
 !         end if
-				end if  ! tdate<>0 and tdate<>20000000
+				end if  ! tdate and tdate<>20000000
 ! NEXT_MONTH: !
 			next month
 		loop

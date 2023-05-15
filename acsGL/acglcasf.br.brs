@@ -124,7 +124,7 @@ L1120: for j=1 to 10
 	next j
 L1160: !
 	if ds=1 then dollar$="$" else dollar$=" "
-	if sum(total)<>0 or sum(total2)<>0 then goto L1200
+	if sum(total) or sum(total2) then goto L1200
 	if ls+ds+ul+ic>0 then goto L1200 else goto L480
 L1200: sp2=30-sp-1
 	for j=1 to 10

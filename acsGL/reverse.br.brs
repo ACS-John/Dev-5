@@ -109,11 +109,11 @@ SEARCH_FOR: !
 	if test_p$<>uprc$(rtrm$(ltrm$(my_p$))) then s_test_p=1
 	if test_p$=uprc$(rtrm$(ltrm$(my_p$))) then s_test_p=0
 	if s_ad=0 then s_test_ad=1
-	if s_ad<>0 and s_ad=s then s_test_ad=1
-	if s_ad<>0 and s_ad<>s then s_test_ad=0
+	if s_ad and s_ad=s then s_test_ad=1
+	if s_ad and s_ad<>s then s_test_ad=0
 	if s_tc=0 then s_test_tc=1
-	if s_tc<>0 and s_tc=nx(1) then s_test_tc=1
-	if s_tc<>0 and s_tc<>nx(1) then s_test_tc=0
+	if s_tc and s_tc=nx(1) then s_test_tc=1
+	if s_tc and s_tc<>nx(1) then s_test_tc=0
 	if s_rn$="" then s_test_rn=1
 	if s_rn$<>"" and s_rn$=test_l$ then s_test_rn=1
 	if s_rn$<>"" and s_rn$<>test_l$ then s_test_rn=0
@@ -126,7 +126,7 @@ return
 
 REVERSE_WITH: ! r:
 	if re$="Y" then k=-k
-	if r_ad<>0 then s=r_ad
+	if r_ad then s=r_ad
 	if r_rn$<>"" then l$=r_rn$
 	if t$(3:3)=" " then t$(3:3)="0"
 	if t$(12:12)=" " then t$(12:12)="0"

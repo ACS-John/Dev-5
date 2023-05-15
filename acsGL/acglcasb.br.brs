@@ -127,7 +127,7 @@ L1050: next j
 	unexpend=unexpend
 L1130: if ds=1 then dollar$="$" else dollar$=" "
 	if annualb><0 or total2><0 then goto L1170
-	if total<>0 then goto L1170
+	if total then goto L1170
 	if ls+ds+ul+ic>0 then goto L1170 else goto L420
 L1170: sp2=24-sp-1
 	if te$="B" then total=-total: total2=-total2 ! REVERSE SIGN ON BEGINNING BANK BALANCE

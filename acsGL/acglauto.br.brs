@@ -35,7 +35,7 @@ Finis: ! r:
 	open #glclnt=1: 'Name=[Q]\GLmstr\glClnt.dat,NoShr',i,outi,r ioerr Xit
 	for j=2 to 20
 		read #glclnt,using 'form pos 1,N 5',rec=j: cno
-		if cno<>0 then
+		if cno then
 			cno=fnPutCno(cno) : fnProcess(process=1)
 			rewrite #glclnt,using 'form pos 1,N 5,C 40',rec=j: 0,' '
 			close #glclnt:
