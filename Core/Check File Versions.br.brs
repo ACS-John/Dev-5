@@ -1214,6 +1214,7 @@ def fn_cfv_general_ledger
 		else
 			close #hGlPrmstr:
 		end if
+	end if
 
 	fn_rename('[Q]\GLmstr\GLWK1[wsid].dat','[Q]\GLmstr\GL_Work_[acsUserId].dat')
 	fn_rename('[Q]\GLmstr\GLALLOCATIONS[wsid][cno]','[Q]\GLmstr\Allocations[acsUserId].h[cno]')
