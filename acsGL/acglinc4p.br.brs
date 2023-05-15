@@ -87,7 +87,7 @@ L720: unexpend=annualb-total2
 	total2=-total2 : annualb=-annualb : unexpend=unexpend
 L780: if ds=1 then dollar$="$" else dollar$=" "
 	if annualb><0 or total2><0 then goto L820
-	if total<>0 then goto L820
+	if total then goto L820
 	if ls+ds+ul+ic>0 then goto L820 else goto L350
 L820: sp2=22-sp-1
 	if ul=1 then pr #255,using L841: d$(1:sp2),dollar$,"{\ul ",annualb,"}",dollar$,"{\ul ",total,"}",dollar$,"{\ul ",total2,"}",dollar$,"{\ul ",unexpend,"}",percnt pageoflow L1400 : goto L840

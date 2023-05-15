@@ -23,7 +23,7 @@ LOOP_STEP_1: !
 	gosub MENU1
 	gosub CONVERT_CNO 
 	goto Xit 
-	! If CNO<>0 Then Gosub CONVERT_CNO : Goto LOOP_STEP_1 Else goto Xit
+	! If CNO Then Gosub CONVERT_CNO : Goto LOOP_STEP_1 Else goto Xit
  
 include: ertn
  

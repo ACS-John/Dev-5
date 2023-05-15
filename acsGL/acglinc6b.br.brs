@@ -111,7 +111,7 @@ L1060: next j
 L1140: if ds=1 then dollar$="$" else dollar$=" "
 	goto L1190 ! pr all accounts even if zero balance  (if budget ever nets to zero, it messes the monthly budget column up
 	if annualb><0 or total2><0 then goto L1190
-	if total<>0 then goto L1190
+	if total then goto L1190
 	if ls+ds+ul+ic>0 then goto L1190 else goto L500
 L1190: sp2=26-sp-1
 	if ul=1 then pr #255,using L1211: d$(1:sp2),dollar$,"{\UL ",monthb,"}",dollar$,"{\UL ",total,"}",dollar$,"{\UL ",oumonth,"}",dollar$,"{\UL ",ytdb,"}",dollar$,"{\UL ",total2,"}",dollar$,"{\UL ",overundr,"}" pageoflow L1890 : goto L1210

@@ -103,7 +103,7 @@ L960: next j
 	unexpend=unexpend
 L1010: if ds=1 then dollar$="$" else dollar$=" "
 	if annualb><0 or total2><0 then goto L1050
-	if finalb<>0 then goto L1050
+	if finalb then goto L1050
 	if ls+ds+ul+ic>0 then goto L1050 else goto L430
 L1050: sp2=22-sp-1
 	if ul=1 then pr #255,using L1071: d$(1:sp2),dollar$,"{\ul ",annualb,"}",dollar$,"{\ul ",finalb,"}",dollar$,"{\ul ",total2,"}",dollar$,"{\ul ",unexpend,"}" pageoflow L1620 : goto L1070

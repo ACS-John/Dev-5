@@ -39,7 +39,7 @@
 	fnOpenPrn
 	gosub L620
 	L350: !
-	if d(1)>0 and sum(empd)<>0 then
+	if d(1)>0 and sum(empd) then
 		pr #255,using L700: eno,"Total",empd(9),empd(10),empd(11),empd(12),empd(13),empd(14),empd(15),empd(16),empd(17),empd(18) pageoflow L950
 		pr #255:
 		mat empd=(0)
