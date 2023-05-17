@@ -76,6 +76,8 @@ def fn_hfLayoutRead(hfLayoutFilename$*256,mat hfDataAll$,mat hfLabel$,mat hfFiel
 						! r: masked text box (except glaccount)
 						! pr hfItem$(hamsterColumn) : pause
 						posSpaceAfter=pos(hfItem$(hamsterColumn),' ',posMask+1)
+						! if posSpaceAfter<=0 then pr 'XYXY123' : pause
+						! pr 'posSpaceAfter=';posSpaceAfter : pause
 						mask$=lwrc$(hfItem$(hamsterColumn)(posMask+6:posSpaceAfter-1))
 						if mask$='currency' or mask$='pointtwo' then
 							tmp=32

@@ -191,7 +191,7 @@ def fn_comboF(sfn$*100,lyne,ps,width,df$*200,psk,lnk,psd,lnd; if$*200,limlis,ure
 	if$=trim$(if$)
 	dim form$*200
 	form$='form pos '&str$(psk)&','&keyFormat$&' '&str$(lnk) : nodesc=1
-	if psd<>0 and lnd<>0 then
+	if psd and lnd then
 		form$&=',pos '&str$(psd)&',C '&str$(lnd) : nodesc=0
 	end if
 	becky$=sfn$&'[cno][SESSION].tmp' ! combof_whr$='[temp]\acs\'&becky$
@@ -1370,7 +1370,7 @@ def fn_aceRdFlex(;___,index_,masknumber)
 		end if
 	loop
 	row_count-=1
-	if row_count<>0 then
+	if row_count then
 		if not printed then
 			pr f gridspec$&',=L': mat long_row$(1:(row_count)*udim(_chunks$))
 		else if row_count <> rows then
@@ -1402,7 +1402,7 @@ fnend
 		for index_=1 to udim(mat _mask$)
 			mask=val(_mask$(index_)) conv ignore
 			if mask >=1000 then mask-=1000
-			if mask<>0 and mask<>80 and mask<>81 then ! is numeric
+			if mask and mask<>80 and mask<>81 then ! is numeric
 				mat alpha_mask_indices(udim(mat alpha_mask_indices)+1)
 				alpha_mask_indices(udim(mat alpha_mask_indices))=index_
 			end if
@@ -2125,10 +2125,10 @@ def library fnQgl(myline,mypos; qglcontainer,add_all_or_blank,forceGLsysIfPossib
 		Qgl_closeCompany: !
 		close #company: ioerr ignore
 		dim glmstr_form$*128
-		if use_dept<>0 and use_sub<>0 then glmstr_form$='form pos 1,C 12'
-		if use_dept =0 and use_sub<>0 then glmstr_form$='form pos 4,C 09'
+		if use_dept and use_sub then glmstr_form$='form pos 1,C 12'
+		if use_dept =0 and use_sub then glmstr_form$='form pos 4,C 09'
 		if use_dept =0 and use_sub =0 then glmstr_form$='form pos 4,C 06'
-		if use_dept<>0 and use_sub =0 then glmstr_form$='form pos 1,C 09'
+		if use_dept and use_sub =0 then glmstr_form$='form pos 1,C 09'
 		! add description to the form
 		glmstr_form$&=',pos 13,C 50'
 	end if	! /r
@@ -2152,13 +2152,13 @@ def library fnQgl(myline,mypos; qglcontainer,add_all_or_blank,forceGLsysIfPossib
 		do
 			read #hAccts,using glmstr_form$: qglopt$,desc$ noRec QGL_LOOP_COMPLETE eof EO_QGL_GLMSTR ioerr QGL_ERROR
 			! reformat the options for typing
-			if use_dept<>0 and use_sub<>0 then
+			if use_dept and use_sub then
 				qglopt$=trim$(qglopt$(1:3))&'-'&trim$(qglopt$(4:9))&'-'&trim$(qglopt$(10:12))
-			else if use_dept=0 and use_sub<>0 then
+			else if use_dept=0 and use_sub then
 				qglopt$=trim$(qglopt$(1:6))&'-'&trim$(qglopt$(7:9))
 			else if use_dept=0 and use_sub=0 then
 				qglopt$=trim$(qglopt$(1:6))
-			else if use_dept<>0 and use_sub=0 then
+			else if use_dept and use_sub=0 then
 				qglopt$=trim$(qglopt$(1:3))&'-'&trim$(qglopt$(4:9))
 			end if
 			!	 add spaces to the end of it
@@ -2191,9 +2191,6 @@ def library fnRgl$*60(acctIn$; returnMaxLength,leaveDescFileOpen,forceGLsysIfPos
 	!    for a read Key=...   ie '  0   100  0'
 	! now also allowed '0   100  0  ')
 	if returnMaxLength=0 then returnMaxLength=35
-
-
-
 
 	! r: set qgl_cursys$ (for fnQgl purposes only)
 	if forceGLsysIfPossible and exists('[Q]\GLmstr\Company.h[cno]') then
@@ -2283,15 +2280,15 @@ def library fnAgl$*12(&x$; ___,return$*12,dash1,dash2,useDept,useSub)
 		dash1=pos(x$,'-')
 		dash2=pos(x$,'-',-1)
 		! reformat it into a read key= ready format
-		if dash1=0 and dash2=0 and len(x$)=12 then
+		if dash1=0 and dash2=0 and len(x$)=12 and trim$(x$(1:3))<>'' and trim$(x$(4:9))<>'' and trim$(x$(10:12))<>'' then
 		! do nothing - it is already formatted properly
-		else if useDept<>0 and useSub<>0 then
+		else if useDept and useSub then
 			x$=lpad$(trim$(x$(1:dash1-1)),3)&lpad$(trim$(x$(dash1+1:dash2-1)),6)&lpad$(trim$(x$(dash2+1:len(x$))),3)
-		else if useDept =0 and useSub<>0 then
+		else if ~useDept and useSub then
 			x$='  0'&lpad$(trim$(x$(1:dash2-1)),6)&lpad$(trim$(x$(dash2+1:len(x$))),3)
-		else if useDept =0 and useSub =0 then
+		else if ~useDept and ~useSub then
 			x$='  0'&lpad$(trim$(x$),6)&'  0'
-		else if useDept<>0 and useSub =0 then
+		else if useDept and ~useSub then
 			x$=lpad$(trim$(x$(1:dash1-1)),3)&lpad$(trim$(x$(dash1+1:len(x$))),6)&'  0'
 		end if
 

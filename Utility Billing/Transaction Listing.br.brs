@@ -112,7 +112,7 @@ do
 READ_CUSTOMER: ! r: report main loop
 	holdroute=route : tdate=0
 	read #hCustomer,using 'form pos 1,C 10,pos 41,C 30,pos 292,PD 4.2,pos 388,10*PD 5.2,pos 1741,N 2': z$,e$(2),bal,mat gb,route eof EO_CUSTOMER
-	if seq=2 and holdroute<>0 and holdroute<>route then gosub PRINT_SUB_TOTALS ! consider subtotals
+	if seq=2 and holdroute and holdroute<>route then gosub PRINT_SUB_TOTALS ! consider subtotals
 	noneprinted=0
 	foot$=""
 	if v=0 then v=route ! else If V<>ROUTE Then Gosub 1630  ! 001630 return      !  must change Index to indx5 to change to route seq
@@ -128,14 +128,14 @@ READ_CUSTOMER: ! r: report main loop
 READ_UBTRANSVB: !
 ! tdate=0
 	read #ubtransvb,using 'form pos 1,C 10,N 8,N 1,12*PD 4.2,6*PD 5,PD 4.2,N 1': p$,tdate,tcode,tamount,mat tg,wr,wu,er,eu,gr,gu,tbal,pcode eof READ_CUSTOMER
-	if p$=z$ and tbal<>0 then have_tbal=1 ! try to see if only transactions on customer were when converted and transaction balances were not set
+	if p$=z$ and tbal then have_tbal=1 ! try to see if only transactions on customer were when converted and transaction balances were not set
 	if p$<>z$ then tdate=0
 	if p$<>z$ and noneprinted=0 then tamount=0 ! no transactions found
 	if p$<>z$ and firstone=1 then lastone=1 : goto TRANS_EO_CUSTOMER ! no transactions
 	if p$<>z$ then firstone=2 : lastone=2 : goto TRANS_EO_CUSTOMER ! no transactions
 TEST_TRANS: !
-	if filter_date_end<>0 and tdate>filter_date_end then goto READ_UBTRANSVB
-	if filter_date_start<>0 and tdate<filter_date_start then goto READ_UBTRANSVB
+	if filter_date_end and tdate>filter_date_end then goto READ_UBTRANSVB
+	if filter_date_start and tdate<filter_date_start then goto READ_UBTRANSVB
 !                              if env$('ACSDeveloper')<>'' and trim$(z$)=debug_account_of_interest$ then pause
 	testp$=""
 	read #ubtransvb,using 'form pos 1,C 10,n 8': testp$,testtdate eof ignore
@@ -152,19 +152,19 @@ TEST_TRANS: !
 !   ----------      pr 'nothing hits this line!!!' : pause ! nothing hits this line!!!
 TRANS_NOKEY: ! r:
 	tdate=0 !                               if env$('ACSDeveloper')<>'' and trim$(z$)=debug_account_of_interest$ then pr 'trans_nokey' : pause
-	if include_no_activity_accounts and (bal<>0 or (bal=0 and include_zero_balance_accounts)) then
-		gosub PRINT_INFO ! gosub PRINT_INFO ! If BAL<>0 Then Gosub PRINT_INFO ! no transactions KJ
+	if include_no_activity_accounts and (bal or (bal=0 and include_zero_balance_accounts)) then
+		gosub PRINT_INFO ! gosub PRINT_INFO ! If BAL Then Gosub PRINT_INFO ! no transactions KJ
 	end if
 	goto READ_CUSTOMER
 ! /r
 TRANS_EO_CUSTOMER: !
 !                              if env$('ACSDeveloper')<>'' and trim$(z$)=debug_account_of_interest$ then pr 'trans_EO_customer' : pause
-	if bal<>0 or (bal=0 and include_zero_balance_accounts) then gosub PRINT_INFO ! gosub PRINT_INFO ! If BAL<>0 Then Gosub PRINT_INFO ! no transactions KJ
+	if bal or (bal=0 and include_zero_balance_accounts) then gosub PRINT_INFO ! gosub PRINT_INFO ! If BAL Then Gosub PRINT_INFO ! no transactions KJ
 loop
  
 EO_CUSTOMER: !
 q9=9
-if t9<>0 then gosub ACCUM_TOTALS
+if t9 then gosub ACCUM_TOTALS
 if seq=2 then gosub PRINT_SUB_TOTALS
 gosub PRINT_TOTALS
 close #hCustomer:
@@ -174,7 +174,7 @@ HDR: ! r:
 	pr #255: "\qc  {\f181 \fs18 \b "&env$('cnam')&"}"
 	pr #255: "\qc {\f181 \fs24 \b UB Transaction Listing}"
 	pr #255: "\qc {\f181 \fs24 \b "&dat$&"}"
-	if filter_date_start<>0 and filter_date_end<>0 then
+	if filter_date_start and filter_date_end then
 		pr #255: "\qc {\f181 \fs18 \b "&trim$("From "&cnvrt$("pic(zzzz/zz/zz)",filter_date_start)&" to "&cnvrt$("pic(zzzz/zz/zz)",filter_date_end))&"}"
 	end if
 	pr #255,using 'form pos 1,C 20,pos 107,C 12': "\ql","Page "&str$(p2+=1)
@@ -330,7 +330,7 @@ DETERMINE_CURRRENT_BALANCE: !  r: determine current balance by subtracting or ad
 	read #ubtransvb,using 'form pos 1,C 10,N 8,N 1,12*PD 4.2,6*PD 5,PD 4.2,N 1': p$,tdate,tcode,tamount,mat tg,wr,wu,er,eu,gr,gu,tbal,pcode eof L2140
 	! If TRIM$(Z$)="100018.00" Then Pause
 	if p$<>z$ then goto L2140
-	if filter_date_end<>0 and tdate>filter_date_end then goto L2080
+	if filter_date_end and tdate>filter_date_end then goto L2080
 	goto READ_UBTRANSVB2
 	L2080: if tcode=1 and print_tbal=2 then bal=bal-tamount : gosub FIX_BALANCE_BREAKDOWN ! subtract any changes out of current balance to get current balance to show on report
 	if tcode=2 and print_tbal=2 then bal=bal-tamount : gosub FIX_BALANCE_BREAKDOWN ! subtract any penalties out of current balance to get current balance to show on report

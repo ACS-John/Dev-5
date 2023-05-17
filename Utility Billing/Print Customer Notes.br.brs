@@ -31,7 +31,7 @@ READ_CUSTOMER: !
 	dim e$(4)*30
 	read #hCustomer,using 'form pos 1,c 10,4*c 30,pos 296,pd 4,pos 1741,n 2,n 7': z$,mat e$,f,route,sequence eof DONE
 	if rt1>0 and route<>rt1 then goto DONE
-	if d1<>0 and f><d1 then goto READ_CUSTOMER
+	if d1 and f><d1 then goto READ_CUSTOMER
 	close #31: ioerr ignore
 	open #31: "Name=[Q]\UBmstr\notes.h[cno]\"&trim$(z$)&".txt",display,input ioerr READ_CUSTOMER
 	pr #255: "" 

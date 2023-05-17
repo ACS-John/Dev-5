@@ -23,7 +23,7 @@ def library fnHamster(uw$*128,mat lbl$,mat fln,hIn,mat p$; mat flTyp$,mat sln,ma
 	fnHamster=fn_hamster(uw$,mat lbl$,mat fln,hIn,mat p$, mat flTyp$,mat sln,mat mask$,mat startPos,mat incontrol$,mat mxl)
 fnend
 
-def fn_hamster(uw$*128,mat lbl$,mat fln,hIn,mat p$; mat flTyp$,mat sln,mat mask$,mat startPos,mat incontrol$,mat mxl,___,enableGlAccount)
+def fn_hamster(uw$*128,mat lbl$,mat fln,hIn,mat p$; mat flTyp$,mat sln,mat mask$,mat startPos,mat incontrol$,mat mxl)
 	! r: setup:  prepare arrays, etc
 		dim keyorder(199) ! contains a 0 if not a key, else contains it's sequence in the order of fields used to make the key
 		dim cmask$(199) ! Flexgrid Column Mask
@@ -40,8 +40,8 @@ def fn_hamster(uw$*128,mat lbl$,mat fln,hIn,mat p$; mat flTyp$,mat sln,mat mask$
 		mat option$(199)
 		dim control$(60,26)*256
 		mat control$(60,26)
-		row_select=1 : opt_cancel=5 : opt_add=4 : opt_edit=3
-		opt_delete=7 : right=1
+		row_select=1 : ck_cancel=5 : ck_add=4 : ck_edit=3
+		ck_delete=7 : right=1
 		itemCount=udim(mat p$)
 		mat hComboF(itemCount)
 
@@ -186,7 +186,7 @@ def fn_hamster(uw$*128,mat lbl$,mat fln,hIn,mat p$; mat flTyp$,mat sln,mat mask$
 							read #hComboF(controlX),using 'form pos '&control$(controlX,5)&',c '&control$(controlX,6),key=hcfKey$: hcfDesc$ nokey ignore
 							hcfDesc$=rtrm$(hcfDesc$)
 							if mask2$(controlX)='glaccount' then
-								flxItem$(fic+=1)=fnrgl$(p$(controlX), 60,1)
+								flxItem$(fic+=1)=fnRgl$(p$(controlX), 60,1)
 							else 
 								flxItem$(fic+=1)=p$(controlX)&' '&hcfDesc$
 							end if
@@ -195,7 +195,7 @@ def fn_hamster(uw$*128,mat lbl$,mat fln,hIn,mat p$; mat flTyp$,mat sln,mat mask$
 						end if
 						!           if hcfDesc$<>'' then pr 'flxItem$('&str$(fic)&')="'&flxItem$(fic)&'" hcfDesc$="'&hcfDesc$&'"' : pause
 					end if
-							fnrgl$('', 0,0) ! close the left open gl desc file
+							fnRgl$('', 0,0) ! close the left open gl desc file
 				next j2
 				fnFlexAdd1(mat flxItem$)
 			end if
@@ -207,27 +207,27 @@ def fn_hamster(uw$*128,mat lbl$,mat fln,hIn,mat p$; mat flTyp$,mat sln,mat mask$
 			end if
 		next hComboFitem
 		fnLbl(21,20,' ') ! move command buttons down one line so search box ok
-		fnCmdKey('Edi&t',opt_edit,1)
-		fnCmdKey('&Add',opt_add)
-		fnCmdKey('&Delete',opt_delete)
-		fnCmdKey('E&xit',opt_cancel,0,1)
-		fnAcs(mat resp$,menu1_opt)
+		fnCmdKey('Edi&t',ck_edit,1)
+		fnCmdKey('&Add',ck_add)
+		fnCmdKey('&Delete',ck_delete)
+		fnCmdKey('E&xit',ck_cancel,0,1)
+		ckey=fnAcs(mat resp$,ckey)
 		pRec=val(resp$(1)) conv Menu1
-		if pRec=0 and menu1_opt=opt_edit then menu1_opt=opt_add
-		if menu1_opt=opt_cancel then
+		if pRec=0 and ckey=ck_edit then ckey=ck_add
+		if ckey=ck_cancel then
 			goto Xit
-		else if menu1_opt=opt_add then
+		else if ckey=ck_add then
 			goto ToAdd
-		else if menu1_opt=opt_edit then
+		else if ckey=ck_edit then
 			goto ToEdit
-		else if menu1_opt=opt_delete then
+		else if ckey=ck_delete then
 			delete #hIn,rec=pRec:
 		end if
 	goto Menu1 ! /r
 	ToEdit: ! r: ADD and EDIT routines
 			gosub ReadP
 	ToAdd: !
-			if menu1_opt=opt_add then mat p$=('')
+			if ckey=ck_add then mat p$=('')
 			if itemCount>30 then
 				j2=int(itemCount/2) : myflen=0
 				for j=1 to j2
@@ -243,12 +243,12 @@ def fn_hamster(uw$*128,mat lbl$,mat fln,hIn,mat p$; mat flTyp$,mat sln,mat mask$
 			mat p2$(alana=udim(mat p$)+1) : mat p2$(1:udim(mat p$))=p$(1:udim(mat p$))
 			fnTos
 			mypos=mylen+3 : lc=ic=0 : col=1 : colpos=1
-			for j=1 to itemCount
+			for j=1 to itemCount ! r:
 				if itemCount>30 and j>(itemCount/2) and col=1 then
 					lc=0 : colpos=mypos+myflen+4 : col+=1
 					mypos=colpos+mylen+2
 				end if
-				if mask2N(ic+1)=>20000 then ic+=1 : goto SKIP_LABEL_AND_CONTROL
+				if mask2N(ic+1)=>20000 then ic+=1 : goto SkipLabelAndControl
 				fnLbl(lc+=1,colpos,lbl$(ic+=1)&':',mylen,right)
 				if mask2N(ic)>10000 then
 					disable=1
@@ -277,7 +277,7 @@ def fn_hamster(uw$*128,mat lbl$,mat fln,hIn,mat p$; mat flTyp$,mat sln,mat mask$
 				else if lwrc$(control$(j,1))='combof' then
 					if mask2$(j)='glaccount' then
 						fnQgl(lc,mypos)	!  fnQgl(myline,mypos; container,x,forceGLsysIfPossible,qgllength)
-						p2$(j)=fnrgl$(p2$(j))
+						p2$(j)=fnRgl$(p2$(j))
 					else 
 						! fnComboF(sfn$*100       ,lyne,ps,  width                                   ,df$*200        ,psk               ,lnk                 ,psd                ,lnd                ;if$*200       ,limlis              ,unused_userOrReplace,ttt$*200,contain,tabcon,keyFormat$)
 						fnComboF(uw$&'F'&str$(j),lc,mypos,val(control$(j,4))+val(control$(j,6))+3,control$(j,2),val(control$(j,3)),val(control$(j,4)),val(control$(j,5)),val(control$(j,6)),control$(j,7),val(control$(j,8)))
@@ -285,20 +285,20 @@ def fn_hamster(uw$*128,mat lbl$,mat fln,hIn,mat p$; mat flTyp$,mat sln,mat mask$
 				end if
 				! done adding control and label
 				if disable=1 then mask2N(ic)+=10000
-				SKIP_LABEL_AND_CONTROL: !
-			next j
+				SkipLabelAndControl: !
+			next j ! /r
 			fnLbl(lc+1,20,' ') ! move command buttons down one line so search box ok
-			if menu1_opt=opt_add then
+			if ckey=ck_add then
 				fnChk(lc+=1,mypos,'Add Loop',right)
 				p2$(alana)='False'
 			end if
 			if addloop$='' then p2$(alana)='False' else p2$(alana)=addloop$
 			fnCmdKey('&Save',1,1)
-			fnCmdKey('&Cancel',opt_cancel,0,1)
+			fnCmdKey('&Cancel',ck_cancel,0,1)
 
-			fnAcs(mat p2$,ckey)
+			p2ckey=fnAcs(mat p2$)
 			mat p$(1:udim(mat p$))=p2$(1:udim(mat p$))
-			if ckey<>opt_cancel then gosub RewriteP
+			if p2ckey<>ck_cancel then fn_rewriteP(hIn,pRec,mat fltyp2$,mat control$,ckey)
 			addloop$=p2$(alana)
 			if lwrc$(addloop$)=lwrc$('True') then goto ToAdd else goto Menu1
 	! /r
@@ -365,13 +365,15 @@ def fn_hamster(uw$*128,mat lbl$,mat fln,hIn,mat p$; mat flTyp$,mat sln,mat mask$
 		ReadP_XIT: !
 	return ! /r
 
-
-	RewriteP: ! r:
+	Xit: !
+fnend
+	def fn_rewriteP(hIn,&pRec,mat fltyp2$,mat control$,ckey; ___,tmp$*512,crflag,keyForm$*1024)
+		! inherrits local: ck_add
+	! RewriteP: ! r:
 		! spos=1
-		if menu1_opt=opt_add then
+		if ckey=ck_add then
 			pRec=lrec(hIn)+1
 			dim blank$(20)*256
-			dim keyForm$*1024
 			keyForm$=fn_keyForm$(mat blank$,key$,hIn)
 			write #hIn,using keyForm$,reserve: mat blank$
 			! pr 'write using KeyFormS,Reserve: Mat Blank$   - keyForm$='&keyForm$
@@ -381,26 +383,27 @@ def fn_hamster(uw$*128,mat lbl$,mat fln,hIn,mat p$; mat flTyp$,mat sln,mat mask$
 			reread #hIn,using keyForm$: mat blank$
 			j=0 : key$=''
 			do while kps(hIn,j+=1)>0
-				key$=key$&blank$(j)
+				key$&=blank$(j)
 			loop
 			read #hIn,key=key$: nokey SpecialNoKey
 			fn_rightKeyWrongRecord(hIn,pRec)
 		end if
 		
-		for j=1 to itemCount
+		for j=1 to itemCount ! r:
 			if j<=udim(mat control$,1) and lwrc$(control$(j,1))='combof' then
 				p$(j)=p$(j)(1:val(control$(j,4)))
 				! pause
 				if mask$(j)='glaccount' then
-					p$(j)=fnagl$(p$(j))
+					! pr 'ere i am jh p$(j)='''&p$(j)&'''' : pause
+					p$(j)=fnAgl$(p$(j))
 				end if
 				
 			end if
 			crflag=0
 			if fltyp2$(j)='cr' then
+				crflag=1
 				p$(j)=lpad$(trim$(p$(j)),sln2(j))
 				fltyp2$(j)='c'
-				crflag=1
 			end if
 			if lwrc$(fltyp2$(j))<>'pd' then p$(j)=p$(j)(1:sln2(j))
 			if fltyp2$(j)='c' or fltyp2$(j)='g' or fltyp2$(j)='cr' then
@@ -409,30 +412,28 @@ def fn_hamster(uw$*128,mat lbl$,mat fln,hIn,mat p$; mat flTyp$,mat sln,mat mask$
 				rewrite #hIn,using tmp$,same,reserve: p$(j)
 				! pr 'Rewr$ - '&TMP$&'   P$('&STR$(J)&')='&P$(J)
 			end if
-			if crflag=1 then
-				crflag=0
-				fltyp2$(j)='cr'
-			end if
+			if crflag=1 then fltyp2$(j)='cr' : crflag=0
 			if fltyp2$(j)='n' or fltyp2$(j)='pd' then
 				tmp$='form pos '&str$(startPos2(j))&','&fltyp2$(j)&' '
 				tmp$=tmp$&str$(sln2(j)) : xt=val(p$(j))
 				rewrite #hIn,using tmp$,same,reserve: xt
 			end if
-		next j
+		next j ! /r
 		
 		release #hIn:
 		! RewriteP_XIT: !
-	return ! /r
-	SpecialNoKey: ! r:
-		! pr 'Special Nokey routine' ! XXX
-		key$=''
-		read #hIn,using keyForm$,rec=pRec: mat blank$
-		for j=1 to udim(mat blank$)
-			key$&=blank$(j)
-		next j
-	continue  ! not Return  ! not Retry ! /r
-	Xit: !
-fnend
+	! return ! /r
+	
+	fnend
+		SpecialNoKey: ! r: supporting clause for fn_rewriteP
+			! pr 'Special Nokey routine' ! XXX
+			key$=''
+			read #hIn,using keyForm$,rec=pRec: mat blank$
+			for j=1 to udim(mat blank$)
+				key$&=blank$(j)
+			next j
+		continue  ! not Return  ! not Retry ! /r
+
 def fn_rightKeyWrongRecord(hIn,pRec)
 	if rec(hIn)<>pRec then
 		do
@@ -440,16 +441,15 @@ def fn_rightKeyWrongRecord(hIn,pRec)
 		loop until rec(hIn)=pRec
 	end if
 fnend
-def fn_keyForm$*1024(mat blank$,&key$,hIn; ___,return$*1024)
-	return$='form ' : key$='' : j=0
+def fn_keyForm$*1024(mat kfBlank$,&key$,hIn; ___,return$*1024,j)
+	return$='form ' : key$=''
 	do while kps(hIn,j+=1)>0
-		return$&='pos '&str$(kps(hIn,j))&','
-		return$&='C '&str$(kln(hIn,j))&','
-		blank$(j)=rpt$(chr$(48),kln(hIn,j))
-		key$&=blank$(j)
+		return$&='pos '&str$(kps(hIn,j))&',C '&str$(kln(hIn,j))&','
+		kfBlank$(j)=rpt$(chr$(48),kln(hIn,j))
+		key$&=kfBlank$(j)
 	loop
 	return$=return$(1:len(return$)-1) ! remove the trailing comma
-	mat blank$(j-1)
+	mat kfBlank$(j-1)
 	! pr 'return$='&return$ ! XXX
 	fn_keyForm$=return$
 fnend
