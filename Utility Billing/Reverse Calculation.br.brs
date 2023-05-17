@@ -94,7 +94,7 @@ CUSTOMER_READ: !
 	read #1,using L770: z$,mat e$,f$(1),mat a,mat xb,mat c,mat xd,bal,xf,mat g,alp$,f$(2),f$(3),bra,mat gb,route,extra3,extra4 eof Finis
 	if trim$(reqz12$)<>'' and route<>val(reqz12$) then goto CUSTOMER_READ
 	! If TRIM$(Z$)='210008.02' Then Pause
-	if reqf<>0 and xf<>reqf then goto CUSTOMER_READ
+	if reqf and xf<>reqf then goto CUSTOMER_READ
 	L550: !
 	if sr$='Y' then
 		pr #255,using L470: z$,xf pageoflow SRPGOF

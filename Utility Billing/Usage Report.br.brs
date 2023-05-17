@@ -91,7 +91,7 @@ do ! r: main report loop
 			goto TOTAL_AND_FINISH
 	end if
 	if route<>routePrior then
-		if routePrior<>0 then
+		if routePrior then
 			fn_printTotals(1)
 		end if
 		routePrior=route
@@ -147,7 +147,7 @@ HDR: ! r:
 	pr #255: "{\ul  Account  } {\ul Name                } "&heading2$
 return  ! /r
 PRINT_DETAILS: ! r:
-	if sum(mat dx(3:12))<>0 and days(CustomerLastBillingDate,'mmddyy')=>days(filterBillingDate,'mmddyy') then
+	if sum(mat dx(3:12)) and days(CustomerLastBillingDate,'mmddyy')=>days(filterBillingDate,'mmddyy') then
 		line$=z$&' '&name$(1:21)
 		if service1enabled then
 			line$&=cnvrt$("n 10",dx(1))&cnvrt$("n 10",dx(3))&cnvrt$("n 10",dx(4))
@@ -222,7 +222,7 @@ def fn_hasSewer(acctno$)
 	dim hs_a(7)
 	read #hCustomer1,using F_CUSTOMER_1,key=acctno$: hs_z$,mat hs_a
 	F_CUSTOMER_1: form pos 1,c 10,x 132,7*pd 2
-	if hs_a(2)<>0 then let fn_hasSewer=1 else let fn_hasSewer=0
+	if hs_a(2) then let fn_hasSewer=1 else let fn_hasSewer=0
 fnend
 Xit: fnXit
 include: ertn

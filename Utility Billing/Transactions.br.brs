@@ -446,8 +446,8 @@ fnend
 			PtNextTrans: !
 			read #hPtTrans1,using 'form pos 1,C 10,N 8,N 1,12*PD 4.2,6*PD 5,PD 4.2,N 1': transAcct$,tDate,tcode,tamount,mat tg,wr,wu,er,eu,gr,gu,tbal,pcode eof PT_FINIS
 			if trim$(z$)<>'[All]' and transAcct$<>lpad$(rtrm$(z$),10) then goto PT_FINIS
-			if beg_date<>0 and tDate<beg_date then goto PtNextTrans
-			if end_date<>0 and tDate>end_date then goto PtNextTrans
+			if beg_date and tDate<beg_date then goto PtNextTrans
+			if end_date and tDate>end_date then goto PtNextTrans
 			if tamount=0 then goto PtNextTrans
 			if selectedType>1 and tcode<>selectedType-1 then goto PtNextTrans
 			if tcode=tcode_collection 	then ti2=1 ! REG.COLLECTION
@@ -498,7 +498,7 @@ fnend
 					alloc$(counter)=lpad$(alloc$(counter),8,' ')
 					next counter
 				penaltyindex=fn_getPenaltyIndex(mat serviceName$)
-				if penaltyindex<>0 then alloc$(penaltyindex)=''
+				if penaltyindex then alloc$(penaltyindex)=''
 			else
 				printlineform$='c 4,PIC(ZZZZ/ZZ/ZZ),SZ1*N 8.2,n 10.2,3*pic(--------.--),x 1'
 			end if
@@ -523,7 +523,7 @@ fnend
 				mat totalalloc=totalalloc+alloc: totaltamount+=tamount  ! charges
 				mat totalusage=totalusage+usage
 				! reverse penaltyindex charges
-				if penaltyindex<>0 then totalalloc(penaltyindex)-=alloc(penaltyindex)
+				if penaltyindex then totalalloc(penaltyindex)-=alloc(penaltyindex)
 			end if
 			if tcode=tcode_penalty    	then mat totalalloc=totalalloc+alloc : totaltamount+=tamount ! penalties
 			if tcode=tcode_collection 	then mat totalalloc=totalalloc-alloc : totaltamount-=tamount ! collections
@@ -552,9 +552,9 @@ fnend
 			end if
 			pr #255: '\qc  {\f181 \fs20 \b '&trim$(z$)&' }'
 			pr #255: '\qc  {\f181 \fs28 \b Transaction List }'
-			if beg_date<>0 and end_date<>0 then
+			if beg_date and end_date then
 				pr #255: '\qc  {\f181 \fs18 \b From '&cnvrt$('pic(zzzz/zz/zz)',beg_date)& '  To '&cnvrt$('pic(zzzz/zz/zz)',end_date)&'}'
-			end if  ! beg_date<>0 and end_date<>0
+			end if  ! beg_date and end_date
 			pr #255: ''
 			pr #255: '\ql '
 			pr #255: hd1$

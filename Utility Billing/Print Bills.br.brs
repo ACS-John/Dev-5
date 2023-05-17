@@ -206,7 +206,7 @@ PrintBill_Basic: ! r: set prefrences for clients
 	fnLastBillingDate(d1)
 	fncreg_read('Penalty Due Date',tmp$) : d4=val(tmp$)
 	if days(d4,'mmddyy')<days(d1,'mmddyy') then
-		if d4<>0 then
+		if d4 then
 			d4$=''
 			d4$&=date$(days(d1,'mmddyy'),'mm') ! get MM date from d1
 			d4$&=date$(days(d4,'mmddyy'),'dd') ! get DD date from d4
@@ -727,17 +727,17 @@ def fn_print_bill_standard_pdf_a(z$,mat mg$; mat mg2$,enableIsDueNowAndPayable,e
 	! PRINTGRID: !
 	meter=14
 	fnpa_fontsize(8)
-	if g(1)<>0 then
+	if g(1) then
 		fnpa_txt(serviceCode$(1),xmargin+1,lyne*(meter+=1)+ymargin)
 		fnpa_txt(fnformnumb$(d(1),0,9),xmargin+6 ,lyne*meter+ymargin)
 		fnpa_txt(fnformnumb$(d(3),0,9),xmargin+25,lyne*meter+ymargin)
 		fnpa_txt(fnformnumb$(g(1),2,9),xmargin+45,lyne*meter+ymargin)
 	end if
-	if g(2)<>0 then
+	if g(2) then
 		fnpa_txt(serviceCode$(2),xmargin+1,lyne*(meter+=1)+ymargin)
 		fnpa_txt(fnformnumb$(g(2),2,9),xmargin+45,lyne*meter+ymargin)
 	end if
-	if g(3)<>0 or d(7)<>0 then
+	if g(3) or d(7) then
 		if d(5)=0 and d(7)=0 then ! there are no readings nor usage - pr the name instead of the code
 			fnpa_txt(serviceName$(3),xmargin+1,lyne*(meter+=1)+ymargin)
 		else
@@ -746,31 +746,31 @@ def fn_print_bill_standard_pdf_a(z$,mat mg$; mat mg2$,enableIsDueNowAndPayable,e
 			fnpa_txt(fnformnumb$(d(7),0,9),xmargin+25,lyne*meter+ymargin)
 		end if
 		fnpa_txt(fnformnumb$(g(3),2,9),xmargin+45,lyne*meter+ymargin)
-	end if  ! g(3)<>0 or d(7)<>0
-	if g(4)<>0 then
+	end if  ! g(3) or d(7)
+	if g(4) then
 		fnpa_txt(serviceCode$(4),xmargin+1,lyne*(meter+=1)+ymargin)
 		fnpa_txt(fnformnumb$(d(9),0,9),xmargin+6,lyne*meter+ymargin)
 		fnpa_txt(fnformnumb$(d(11),0,9),xmargin+25,lyne*meter+ymargin)
 		fnpa_txt(fnformnumb$(g(4),2,9),xmargin+45,lyne*meter+ymargin)
 	end if
-	if g(5)<>0 then
+	if g(5) then
 		fnpa_txt(serviceName$(5),xmargin+1,lyne*(meter+=1)+ymargin)
 		fnpa_txt(fnformnumb$(g(5),2,9),xmargin+45,lyne*meter+ymargin)
 		! fnpa_txt(fnformnumb$(g(5),2,9),xmargin+91+8,lyne*meter+ymargin)
-	end if  ! g(5)<>0
-	if g(6)<>0 then
+	end if  ! g(5)
+	if g(6) then
 		fnpa_txt(serviceName$(6),xmargin+1,lyne*(meter+=1)+ymargin)
 		fnpa_txt(fnformnumb$(g(6),2,9),xmargin+43,lyne*meter+ymargin)
-	end if  ! g(6)<>0
-	if g(7)<>0 then
+	end if  ! g(6)
+	if g(7) then
 		fnpa_txt(serviceName$(7),xmargin+1,lyne*(meter+=1)+ymargin)
 		fnpa_txt(fnformnumb$(g(7),2,9),xmargin+43,lyne*meter+ymargin)
 	end if  ! g(7)=0
-	if g(8)<>0 then
+	if g(8) then
 		fnpa_txt(serviceName$(8),xmargin+1,lyne*(meter+=1)+ymargin)
 		fnpa_txt(fnformnumb$(g(8),2,9),xmargin+45,lyne*meter+ymargin)
 	end if
-	if g(9)<>0 then
+	if g(9) then
 		fnpa_txt(serviceName$(9),xmargin+1,lyne*(meter+=1)+ymargin)
 		fnpa_txt(fnformnumb$(g(9),2,9),xmargin+45,lyne*meter+ymargin)
 	end if
@@ -867,7 +867,7 @@ fnend
 
 def fn_print_bill_fsg(pb,mat g,mat d,bal,final,mat pe$,d4,mat e$,z$,mat mg$,budget,serviceFromDate,serviceToDate) ! french settlement gas
 	! pre-print calculations
-	if pb<>0 then pb$="Prior Balance" else pb$=""
+	if pb then pb$="Prior Balance" else pb$=""
 	!   if g(1)=0 then t1$="" else t1$="WTR"
 	!   if g(2)=0 then t2$="" else t2$="SWR"
 	if g(3)=0 then t3$="" else t3$="Capital Surcharge"
@@ -944,7 +944,7 @@ def fn_print_bill_campbell(z$,mat mg$,serviceFrom,serviceTo)
 	fncustomer_address(z$,mat pbcampbel_addr$)
 	! /r
 	! r: pr that bill
-	if blankbefore<>0 then
+	if blankbefore then
 		for j=1 to blankbefore
 			pr #255: ""
 		next j
@@ -993,7 +993,7 @@ def fn_print_bill_campbell(z$,mat mg$,serviceFrom,serviceTo)
 	!if count=3 then pr #255: "" ! skip down a line on the third one only
 	pr #255,using 'form pos 1,pic(zz/zz/zz),pos 9,N 8.2,N 8.2,X 2,PIC(ZZ/ZZ/ZZ),pos 42,3*N 12.2,N 12.2': serviceTo,g(12),g(11),serviceTo,g(12),g(11),g(12),g(11) ! line 19
 	if (count+1)/3=int((count+1)/3) then goto PBCAMPBEL_L1250
-	if blankafter<>0 then
+	if blankafter then
 		for j=1 to blankafter
 			pr #255: " "
 		next j
@@ -1042,27 +1042,27 @@ def fn_print_bill_raymond(z$,mat mg$; raymondAdditionalText$*128) ! inherrits al
 	! PRINTGRID: !
 	meter=14
 	fnpa_fontsize(8)
-	if g(1)<>0 then
+	if g(1) then
 		fnpa_txt("WTR",xmargin+1,lyne*(meter+=1)+ymargin)
 		fnpa_txt(fnformnumb$(d(1),0,9),xmargin+6 ,lyne*meter+ymargin)
 		fnpa_txt(fnformnumb$(d(3),0,9),xmargin+25,lyne*meter+ymargin)
 		fnpa_txt(fnformnumb$(g(1),2,9),xmargin+45,lyne*meter+ymargin)
 	end if
-	if g(2)<>0 then
+	if g(2) then
 		fnpa_txt("SWR",xmargin+1,lyne*(meter+=1)+ymargin)
 		fnpa_txt(fnformnumb$(g(2),2,9),xmargin+45,lyne*meter+ymargin)
 	end if
-	if g(4)<>0 then
+	if g(4) then
 		fnpa_txt(s4code$,xmargin+1,lyne*(meter+=1)+ymargin)
 		fnpa_txt(fnformnumb$(d(9),0,9),xmargin+6,lyne*meter+ymargin)
 		fnpa_txt(fnformnumb$(d(11),0,9),xmargin+25,lyne*meter+ymargin)
 		fnpa_txt(fnformnumb$(g(4),2,9),xmargin+45,lyne*meter+ymargin)
 	end if
-	if g(5)<>0 then
+	if g(5) then
 		fnpa_txt("Trash",xmargin+1,lyne*(meter+=1)+ymargin)
 		fnpa_txt(fnformnumb$(g(5),2,9),xmargin+45,lyne*meter+ymargin)
 	end if
-	if g(8)<>0 then
+	if g(8) then
 		fnpa_txt("MISC",xmargin+1,lyne*(meter+=1)+ymargin)
 		fnpa_txt(fnformnumb$(g(8),2,9),xmargin+45,lyne*meter+ymargin)
 	end if
@@ -1173,7 +1173,7 @@ def fn_print_bill_cerro(z$,mat mg$,mat penalty$,serviceFrom,serviceTo)
 	pr #255: ""
 	pr #255,using L1550: "FROM",int(serviceFrom*.01),"TO",int(serviceTo*.01),d1
 	L1550: form pos 1,c 5,pic(##/##),x 2,c 3,pic(##/##),pos 22,pic(##/##/##),skip 4
-	if pb<>0 then pb$="   PRIOR BALANCE" else pb$=""
+	if pb then pb$="   PRIOR BALANCE" else pb$=""
 	pr #255: ""
 	L1580: form pos 3,c 17,nz 10.2,pos 38,c 10
 	if g(1)=0 then t$="" else t$=service$(1)
@@ -1272,67 +1272,67 @@ fnend
 ! 	! PRINTGRID: !
 ! 	meter=14 ! 02114   meter=20 ! lyne=2 ! 3 ! 2.15 !  started at 20 and 2.1
 ! 	fnpa_fontsize ! line_top(1)
-! 	if g(1)<>0 then
+! 	if g(1) then
 ! 		pr #20: 'Call Print.AddText("WTR",'&str$(xmargin+1)&','&str$(lyne*(meter+=1)+ymargin)&')'
 ! 		pr #20: 'Call Print.AddText("'&fnformnumb$(d(1),0,9)&'",'&str$(xmargin+6)&','&str$(lyne*meter+ymargin)&')'
 ! 		pr #20: 'Call Print.AddText("'&fnformnumb$(d(3),0,7)&'",'&str$(xmargin+24)&','&str$(lyne*meter+ymargin)&')'
 ! 		pr #20: 'Call Print.AddText("'&fnformnumb$(g(1),2,9)&'",'&str$(xmargin+43)&','&str$(lyne*meter+ymargin)&')'
 ! 		pr #20: 'Call Print.AddText("WTR",'&str$(xmargin+91)&','&str$(lyne*(meter)+ymargin)&')'
 ! 		pr #20: 'Call Print.AddText("'&fnformnumb$(g(1),2,9)&'",'&str$(xmargin+91+8)&','&str$(lyne*meter+ymargin)&')'
-! 	end if  ! g(1)<>0
-! 	if g(2)<>0 then
+! 	end if  ! g(1)
+! 	if g(2) then
 ! 		pr #20: 'Call Print.AddText("SWR",'&str$(xmargin+1)&','&str$(lyne*(meter+=1)+ymargin)&')'
 ! 		pr #20: 'Call Print.AddText("'&fnformnumb$(g(2),2,9)&'",'&str$(xmargin+43)&','&str$(lyne*meter+ymargin)&')'
 ! 		pr #20: 'Call Print.AddText("SWR",'&str$(xmargin+91)&','&str$(lyne*(meter)+ymargin)&')'
 ! 		pr #20: 'Call Print.AddText("'&fnformnumb$(g(2),2,9)&'",'&str$(xmargin+91+8)&','&str$(lyne*meter+ymargin)&')'
-! 	end if  ! g(2)<>0
-! 	if g(3)<>0 or d(7)<>0 then
+! 	end if  ! g(2)
+! 	if g(3) or d(7) then
 ! 		pr #20: 'Call Print.AddText("EL",'&str$(xmargin+1)&','&str$(lyne*(meter+=1)+ymargin)&')'
 ! 		pr #20: 'Call Print.AddText("'&fnformnumb$(d(5),0,9)&'",'&str$(xmargin+6)&','&str$(lyne*meter+ymargin)&')'
 ! 		pr #20: 'Call Print.AddText("'&fnformnumb$(d(7),0,9)&'",'&str$(xmargin+25)&','&str$(lyne*meter+ymargin)&')'
 ! 		pr #20: 'Call Print.AddText("'&fnformnumb$(g(3),2,9)&'",'&str$(xmargin+43)&','&str$(lyne*meter+ymargin)&')'
 ! 		pr #20: 'Call Print.AddText("EL",'&str$(xmargin+91)&','&str$(lyne*(meter)+ymargin)&')'
 ! 		pr #20: 'Call Print.AddText("'&fnformnumb$(g(3),2,9)&'",'&str$(xmargin+91+8)&','&str$(lyne*meter+ymargin)&')'
-! 	end if  ! g(3)<>0 or d(7)<>0
+! 	end if  ! g(3) or d(7)
 ! 	s4code$="GAS"
-! 	if g(4)<>0 then
+! 	if g(4) then
 ! 		pr #20: 'Call Print.AddText("'&s4code$&'",'&str$(xmargin+1)&','&str$(lyne*(meter+=1)+ymargin)&')'
 ! 		fnpa_txt(fnformnumb$(d(9),0,9),xmargin+6,lyne*meter+ymargin)
 ! 		pr #20: 'Call Print.AddText("'&fnformnumb$(d(11),0,9)&'",'&str$(xmargin+25)&','&str$(lyne*meter+ymargin)&')'
 ! 		pr #20: 'Call Print.AddText("'&fnformnumb$(g(4),2,9)&'",'&str$(xmargin+43)&','&str$(lyne*meter+ymargin)&')'
 ! 		pr #20: 'Call Print.AddText("'&s4code$&'",'&str$(xmargin+91)&','&str$(lyne*(meter)+ymargin)&')'
 ! 		pr #20: 'Call Print.AddText("'&fnformnumb$(g(4),2,9)&'",'&str$(xmargin+91+8)&','&str$(lyne*meter+ymargin)&')'
-! 	end if  ! g(4)<>0
-! 	if g(5)<>0 then
+! 	end if  ! g(4)
+! 	if g(5) then
 ! 		pr #20: 'Call Print.AddText("Trash",'&str$(xmargin+1)&','&str$(lyne*(meter+=1)+ymargin)&')' ! "Trash was "SL"
 ! 		pr #20: 'Call Print.AddText("'&fnformnumb$(g(5),2,9)&'",'&str$(xmargin+43)&','&str$(lyne*meter+ymargin)&')'
 ! 		pr #20: 'Call Print.AddText("Trash",'&str$(xmargin+91)&','&str$(lyne*(meter)+ymargin)&')' ! "Trash was "SL"
 ! 		pr #20: 'Call Print.AddText("'&fnformnumb$(g(5),2,9)&'",'&str$(xmargin+91+8)&','&str$(lyne*meter+ymargin)&')'
-! 	end if  ! g(5)<>0
-! 	if g(6)<>0 then
+! 	end if  ! g(5)
+! 	if g(6) then
 ! 		pr #20: 'Call Print.AddText("DEM",'&str$(xmargin+1)&','&str$(lyne*(meter+=1)+ymargin)&')'
 ! 		pr #20: 'Call Print.AddText("'&fnformnumb$(g(6),2,9)&'",'&str$(xmargin+43)&','&str$(lyne*meter+ymargin)&')'
 ! 		pr #20: 'Call Print.AddText("DEM",'&str$(xmargin+91)&','&str$(lyne*(meter)+ymargin)&')'
 ! 		pr #20: 'Call Print.AddText("'&fnformnumb$(g(6),2,9)&'",'&str$(xmargin+91+8)&','&str$(lyne*meter+ymargin)&')'
-! 	end if  ! g(6)<>0
-! 	if g(7)<>0 then
+! 	end if  ! g(6)
+! 	if g(7) then
 ! 		pr #20: 'Call Print.AddText("EL TAX",'&str$(xmargin+1)&','&str$(lyne*(meter+=1)+ymargin)&')'
 ! 		pr #20: 'Call Print.AddText("'&fnformnumb$(g(7),2,9)&'",'&str$(xmargin+43)&','&str$(lyne*meter+ymargin)&')'
 ! 		pr #20: 'Call Print.AddText("EL TAX",'&str$(xmargin+91)&','&str$(lyne*(meter)+ymargin)&')'
 ! 		pr #20: 'Call Print.AddText("'&fnformnumb$(g(7),2,9)&'",'&str$(xmargin+91+8)&','&str$(lyne*meter+ymargin)&')'
 ! 	end if  ! g(7)=0
-! 	if g(8)<>0 then
+! 	if g(8) then
 ! 		pr #20: 'Call Print.AddText("Other",'&str$(xmargin+1)&','&str$(lyne*(meter+=1)+ymargin)&')'
 ! 		pr #20: 'Call Print.AddText("'&fnformnumb$(g(8),2,9)&'",'&str$(xmargin+43)&','&str$(lyne*meter+ymargin)&')'
 ! 		pr #20: 'Call Print.AddText("Other",'&str$(xmargin+01)&','&str$(lyne*(meter)+ymargin)&')'
 ! 		pr #20: 'Call Print.AddText("'&fnformnumb$(g(8),2,9)&'",'&str$(xmargin+91+8)&','&str$(lyne*meter+ymargin)&')'
-! 	end if  ! g(8)<>0
-! 	if g(9)<>0 then
+! 	end if  ! g(8)
+! 	if g(9) then
 ! 		pr #20: 'Call Print.AddText("TAX",'&str$(xmargin+1)&','&str$(lyne*(meter+=1)+ymargin)&')'
 ! 		pr #20: 'Call Print.AddText("'&fnformnumb$(g(9),2,9)&'",'&str$(xmargin+43)&','&str$(lyne*meter+ymargin)&')'
 ! 		pr #20: 'Call Print.AddText("TAX",'&str$(xmargin+92)&','&str$(lyne*(meter)+ymargin)&')'
 ! 		pr #20: 'Call Print.AddText("'&fnformnumb$(g(9),2,9)&'",'&str$(xmargin+91+8)&','&str$(lyne*meter+ymargin)&')'
-! 	end if  ! g(9)<>0
+! 	end if  ! g(9)
 ! 	pr #20: 'Call Print.AddLine('&str$(xmargin+49)&','&str$(lyne*(meter+=1)+ymargin+2)&',15,0)'
 ! 	pr #20: 'Call Print.AddLine('&str$(xmargin+91+14)&','&str$(lyne*(meter)+ymargin+2)&',15,0)'
 ! 	pr #20: 'Call Print.AddText("   Net Bill",'&str$(xmargin+1)&','&str$(lyne*(meter+=.25)+ymargin+2)&')'
@@ -1543,7 +1543,7 @@ def fn_print_bill_blucksberg(z$,mat mg$,billing_date_prior,serviceFrom,serviceTo
 	fnpa_txt("Charge",170,lyne+adder)
 	adder=4 ! maybe it should be 4.5
 	lyne+=adder ! lyne=105
-	if g(1)<>0 then
+	if g(1) then
 		if g(1)>=14 then
 			fnpa_txt("Base Water Service Fee",26,lyne+=adder)
 			fn_blucksAddChargeField(20)
@@ -1555,7 +1555,7 @@ def fn_print_bill_blucksberg(z$,mat mg$,billing_date_prior,serviceFrom,serviceTo
 		fn_blucksAddChargeField(g(1)-20)
 	end if
 
-	if g(2)<>0 then
+	if g(2) then
 		fnpa_txt("Sewer",26,lyne+=adder)
 		if seweravg>0 then ! if have sewer average, use it for usage
 			fnpa_txt(cnvrt$("pic(zzzzzzzz#)",seweravg),121,lyne)
@@ -1565,12 +1565,12 @@ def fn_print_bill_blucksberg(z$,mat mg$,billing_date_prior,serviceFrom,serviceTo
 		fn_blucksAddChargeField(g(2))
 	end if
 
-	if g(3)<>0 then
+	if g(3) then
 		fnpa_txt("Association Fee *",26,lyne+=adder)
 		fn_blucksAddChargeField(g(3))
 	end if
 
-	if g(4)<>0 then
+	if g(4) then
 		fnpa_txt("Ambulance Fund",26,lyne+=adder)
 		! fnpa_txt(cnvrt$("pic(zzzzzzzz#)",d(9)) ,078,lyne) ! left over from gas
 		! fnpa_txt(cnvrt$("pic(zzzzzzzz#)",d(11)) ,121,lyne)
@@ -1580,14 +1580,14 @@ def fn_print_bill_blucksberg(z$,mat mg$,billing_date_prior,serviceFrom,serviceTo
 	! g(5)
 	! g(6)
 
-	if g(7)<>0 then
+	if g(7) then
 		fnpa_txt(serviceName$(7),26,lyne+=adder)
 		fn_blucksAddChargeField(g(7))
 	end if
 
 	! g(8)
 
-	if g(9)<>0 then
+	if g(9) then
 		fnpa_txt("Tax",26,lyne+=adder)
 		fn_blucksAddChargeField(g(9))
 	end if
@@ -1649,7 +1649,7 @@ def fn_print_bill_blucksberg(z$,mat mg$,billing_date_prior,serviceFrom,serviceTo
 fnend
 def fn_blucksAddActivityLine(aal_text$*80,aal_amt; aal_always_show,aal_desc_left_override)
 	if aal_desc_left_override=0 then aal_desc_left_override=30
-	if aal_always_show or aal_amt<>0 then
+	if aal_always_show or aal_amt then
 		fnpa_txt(aal_text$,aal_desc_left_override,lyne+=adder)
 		fnpa_txt(cnvrt$("pic($-------.## CR)",aal_amt),162,lyne)
 	end if
@@ -1712,7 +1712,7 @@ def fn_print_bill_omaha(z$,mat mg$,mat mg2$,serviceFrom,pbo_service_to,mat penal
 	pr #255,using 'form pos 25,pic(##/##/##),pos pboPosRightCol,c message2_max_len': d1,fn_mg2$(1)
 	pr #255,using 'form pos 4,c 5,pic(##/##),x 2,c 3,pic(##/##),pos 22,pic(##/##/##)': "From",int(serviceFrom*.01),"To",int(pbo_service_to*.01)
 	pr #255: ""
-	if pb<>0 then pb$="   Prior Balance" else pb$=""
+	if pb then pb$="   Prior Balance" else pb$=""
 	pr #255: ""
 	if g(1)=0 then t$="" else t$="Wtr"
 	pr #255: ""
@@ -1866,17 +1866,17 @@ def fn_print_bill_edinburg(z$,mat mg$,d1,serviceFrom,serviceToOverride,penaltyDu
 ! PRINTGRID: !
 	meter=14
 	fnpa_fontsize(8)
-	if g(1)<>0 then
+	if g(1) then
 		fnpa_txt("WTR",xmargin+1,lyne*(meter+=1)+ymargin)
 		pr #20: 'Call Print.AddText("'&fnformnumb$(d(1),0,9)&'",'&str$(xmargin+6)&','&str$(lyne*meter+ymargin)&')'
 		pr #20: 'Call Print.AddText("'&fnformnumb$(d(3),0,9)&'",'&str$(xmargin+25)&','&str$(lyne*meter+ymargin)&')'
 		pr #20: 'Call Print.AddText("'&fnformnumb$(g(1),2,9)&'",'&str$(xmargin+45)&','&str$(lyne*meter+ymargin)&')'
 	end if
-	if g(2)<>0 then
+	if g(2) then
 		fnpa_txt("SWR",xmargin+1,lyne*(meter+=1)+ymargin)
 		pr #20: 'Call Print.AddText("'&fnformnumb$(g(2),2,9)&'",'&str$(xmargin+45)&','&str$(lyne*meter+ymargin)&')'
 	end if
-	if g(4)<>0 then
+	if g(4) then
 		if a4=1 then
 			s4code$="RSGS"
 		else if a4=2 then
@@ -1891,23 +1891,23 @@ def fn_print_bill_edinburg(z$,mat mg$,d1,serviceFrom,serviceToOverride,penaltyDu
 		pr #20: 'Call Print.AddText("'&fnformnumb$(d(11),0,9)&'",'&str$(xmargin+25)&','&str$(lyne*meter+ymargin)&')'
 		pr #20: 'Call Print.AddText("'&fnformnumb$(g(4),2,9)&'",'&str$(xmargin+45)&','&str$(lyne*meter+ymargin)&')'
 	end if
-	if g(3)<>0 then
+	if g(3) then
 		fnpa_txt('WF',xmargin+1,lyne*(meter+=1)+ymargin)
 		pr #20: 'Call Print.AddText("'&fnformnumb$(g(3),2,9)&'",'&str$(xmargin+45)&','&str$(lyne*meter+ymargin)&')'
 	end if
-	if g(8)<>0 then
+	if g(8) then
 		fnpa_txt("MISC",xmargin+1,lyne*(meter+=1)+ymargin)
 		pr #20: 'Call Print.AddText("'&fnformnumb$(g(8),2,9)&'",'&str$(xmargin+45)&','&str$(lyne*meter+ymargin)&')'
 	end if
-	if g(9)<>0 then
+	if g(9) then
 		fnpa_txt("TAX",xmargin+1,lyne*(meter+=1)+ymargin)
 		pr #20: 'Call Print.AddText("'&fnformnumb$(g(9),2,9)&'",'&str$(xmargin+45)&','&str$(lyne*meter+ymargin)&')'
 	end if
-	if g(10)<>0 then
+	if g(10) then
 		fnpa_txt("SF",xmargin+1,lyne*(meter+=1)+ymargin)
 		pr #20: 'Call Print.AddText("'&fnformnumb$(g(10),2,9)&'",'&str$(xmargin+45)&','&str$(lyne*meter+ymargin)&')'
 	end if
-	if pb<>0 then
+	if pb then
 		fnpa_txt("Previous Balance",xmargin+1,lyne*(meter+=1)+ymargin)
 		pr #20: 'Call Print.AddText("'&fnformnumb$(pb,2,9)&'",'&str$(xmargin+45)&','&str$(lyne*meter+ymargin)&')'
 	end if
@@ -1997,7 +1997,7 @@ def fn_print_bill_billings(mat mg$,mat g,mat b,bal,mat penalty$,d1,serviceFrom,s
 	pr #255,using 'form pos 1,c 10,pos 13,c 18': trim$(z$),e$(1)(1:18)
 	pr #255: ''
 	pr #255: ''
-	if pb<>0 then pb$="   PRIOR BALANCE" else pb$=""
+	if pb then pb$="   PRIOR BALANCE" else pb$=""
 	if g(1)=0 then t$="" else t$="WTR"
 	pr #255,using billings_fL1620: t$,0,d(1),d(3),g(1)
 	billings_fL1620: form pos 1,c 3,nz 1,nz 8,nz 8,nz 9.2,skip 1
@@ -2091,7 +2091,7 @@ def fn_print_bill_choctaw(z$,mat g,mat b,mat penalty$,d1,serviceFrom,serviceTo,d
 	if g(9)>0 then cde=2: d4$=cnvrt$('PIC(ZZ/ZZ/ZZ)',d4) else cde=0 : d4$=""
 	pr #255,using ce_L1690: "Tax",g(9),d4$,e$(3)
 	if g(8)>0 then cde=3: d4$=cnvrt$('PIC(ZZ/ZZ/ZZ)',d4) else cde = 0 : d4$=""
-	if g(8)<>0 then mis$="Misc" else mis$=""
+	if g(8) then mis$="Misc" else mis$=""
 	pr #255,using ce_L1690: mis$,g(8),d4$,e$(4)
 	pr #255,using 'form pos 3,c 30': e$(2)
 	pr #255: ""
@@ -2300,7 +2300,7 @@ def fn_print_bill_galena(serviceTo)
 		fnpa_txt(fnformnumb$(bal,2,9)           ,lsColPrevious ,ymargin+lyne*23)
 		fnpa_txt(fnformnumb$(bal,2,9)           ,lsColCharges  ,ymargin+lyne*23)
 	end if
-	if bal<>0 then
+	if bal then
 		if g(9)>0 then
 			fnpa_txt(fnformnumb$(g(9),2,9)        ,lsColPrevious ,ymargin+lyne*25) ! *xx   was *25.4
 			fnpa_txt(fnformnumb$(g(9),2,9)        ,lsColCharges  ,ymargin+lyne*25) ! *xx   was *25.4
