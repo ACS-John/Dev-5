@@ -117,7 +117,7 @@ def fn_ask(&seltpN,&typeN,&minAmt,&beg_date,&end_date; ___, _
 	fnTos
 	rc=lc=0 : mylen=40 : mypos=mylen+3
 	fnLbl(lc+=1,1,'Tax Year:',mylen,1)
-	fnTxt(lc,mypos,4,0,1,'',1,'Year to pr 1099s for')
+	fnTxt(lc,mypos,4,0,1,'',1,'Year to pr 1099s for') ! expirament here
 	resp$(resc_taxYear:=rc+=1)=taxYear$
 	if env$('cursys')='PR' then
 		lc+=1

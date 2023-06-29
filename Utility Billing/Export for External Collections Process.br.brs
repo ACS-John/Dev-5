@@ -55,6 +55,13 @@ MENU1: !
 		read #hCustomer,using F_CUSTOMER: z$,mat e$,f$(1),mat a,mat b,mat c,mat d,bal,f,mat g,mat adr,alp$,f$(2),f$(3),bra,mat gb,mat rw4,mat extra$ eof Finis
 		F_CUSTOMER: form pos 1,c 10,4*c 30,c 12,7*pd 2,11*pd 4.2,4*pd 4,15*pd 5,pd 4.2,pd 4,12*pd 4.2,2*pd 3,c 7,2*c 12,pd 3,10*pd 5.2,78*pd 5,13*pd 4.2,13*n 6,156*pd 4.2,13*n 6,13*pd 4.2,pos 1864,c 30,7*c 12,3*c 30
 		gosub ALT_BILL_ADR
+		e$(1) =srep$(e$(1) ,',','')
+		e$(2) =srep$(e$(2) ,',','')
+		e$(3) =srep$(e$(3) ,',','')
+		e$(4) =srep$(e$(4) ,',','')
+		ab$(1)=srep$(ab$(1),',','')
+		ab$(2)=srep$(ab$(2),',','')
+		ab$(3)=srep$(ab$(3),',','')
 		pr #h_ecp: z$&delim$; !    1
 		pr #h_ecp: e$(1)&delim$; !    1.5         Meter Address
 		pr #h_ecp: e$(2)&delim$; !    2         Name
