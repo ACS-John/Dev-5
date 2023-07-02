@@ -67,39 +67,39 @@ TOP: ! r:
 		if r3=>lrec(h_work) then goto Finis
 		read #h_work,using F_WORK,rec=r3+=1: x$,mat x eof Finis,noRec TOP
 		if x$(1:2)='00' or uprc$(x$)=uprc$('   DELETED') then goto TOP
-		read #hCustomer,using F_CUSTOMER,key=x$: meteradr$,custname$,mat a,mat b,mat c,mat d, bal,f,mat g,mat gb,mat extra nokey NKT9
+		read #hCustomer,using F_CUSTOMER,key=x$: meteradr$,custname$,mat xa,mat xb,mat c,mat xd, bal,xf,mat g,mat gb,mat extra nokey NKT9
 
 	else if goal$='recalculate' then
-		read #hCustomer,using F_CUSTOMER_W_ACCT: x$,meteradr$,custname$,mat a,mat b,mat c,mat d, bal,f,mat g,mat gb,mat extra eof Finis
-		if f<>d1 then goto TOP
+		read #hCustomer,using F_CUSTOMER_W_ACCT: x$,meteradr$,custname$,mat xa,mat xb,mat c,mat xd, bal,xf,mat g,mat gb,mat extra eof Finis
+		if xf<>d1 then goto TOP
 		mat x=(0)
-		x(1)=d(1) ! current water reading
-		x(2)=d(9) ! current gas reading
-		x(3)=d(5) !  current electric reading
-		if d(3)>0 and d(1)-d(2)<> d(3) then x(12)=d(3) ! if usage was override then use
-		if d(7)>0 and d(5)-d(6)<> d(7) then x(13)=d(7) ! if usage was override then use
-		if d(11)>0 and d(9)-d(10)<> d(11) then x(14)=d(11) ! if usage was override then use for gas
+		x(1)=xd(1) ! current water reading
+		x(2)=xd(9) ! current gas reading
+		x(3)=xd(5) !  current electric reading
+		if xd(3)>0 and xd(1)-xd(2)<> xd(3) then x(12)=xd(3) ! if usage was override then use
+		if xd(7)>0 and xd(5)-xd(6)<> xd(7) then x(13)=xd(7) ! if usage was override then use
+		if xd(11)>0 and xd(9)-xd(10)<> xd(11) then x(14)=xd(11) ! if usage was override then use for gas
 	end if
 
-	! if env$('client')='Millry' and date$('mm/dd/ccyy')='04/28/2021'  then d(2)=int(d(2)/10) ! prior readings were 10x too high.
+	! if env$('client')='Millry' and date$('mm/dd/ccyy')='04/28/2021'  then xd(2)=int(xd(2)/10) ! prior readings were 10x too high.
 
 	! r: set default rate codes
 	! if env$('client')='Pennington' then extra(12)=1 ! default to 1
-	! if env$('client')='Albany' and (a(1)=1 or a(1)=3 or a(1)=4 or a(1)=6) then a(6)=0 ! set residential sales tax code to zero
-	if env$('client')='Raymond' and (a(1)<>0 and a(6)=0) then a(6)=1 ! if any water rate code and no water penalty than default to water penalty of 1.
-	if env$('client')='Raymond' and (a(2)<>0 and a(7)=0) then a(7)=1 ! if any sewer rate code and no sewer penalty than default to sewer penalty of 1.
-	fnapply_default_rates(mat extra, mat a)
+	! if env$('client')='Albany' and (xa(1)=1 or xa(1)=3 or xa(1)=4 or xa(1)=6) then xa(6)=0 ! set residential sales tax code to zero
+	if env$('client')='Raymond' and (xa(1)<>0 and xa(6)=0) then xa(6)=1 ! if any water rate code and no water penalty than default to water penalty of 1.
+	if env$('client')='Raymond' and (xa(2)<>0 and xa(7)=0) then xa(7)=1 ! if any sewer rate code and no sewer penalty than default to sewer penalty of 1.
+	fnapply_default_rates(mat extra, mat xa)
 	! /r
 
-	if goal$='calculate' and date(days(f,'mmddyy'),'ccyymmdd')>date(days(d1,'mmddyy'),'ccyymmdd') then
+	if goal$='calculate' and date(days(xf,'mmddyy'),'ccyymmdd')>date(days(d1,'mmddyy'),'ccyymmdd') then
 		pr #255: ''
 		pr #255: 'The Calculation date is less than the last billing date on Account: ';x$
-		pr #255: '   Billing Date: '&date$(days(f,'mmddyy'),'ccyy/mm/dd')&'  Calculation Date: '&date$(days(d1,'mmddyy'),'ccyy/mm/dd')
+		pr #255: '   Billing Date: '&date$(days(xf,'mmddyy'),'ccyy/mm/dd')&'  Calculation Date: '&date$(days(d1,'mmddyy'),'ccyy/mm/dd')
 		pr #255: '   Action: RECORD SKIPPED.'
 		print_count_skip+=1
 		fn_cuu_report_usage
 		goto TOP
-	else if f=d1 then ! else recalculation reduce balances
+	else if xf=d1 then ! else recalculation reduce balances
 		for j=1 to 10
 			if env$('client')='Divernon' then goto LX760 ! Divernon's penalties are added into gb
 			if uprc$(penalty$(j))='Y' then goto LX770 ! don't subtract penalties out on recalculation
@@ -112,7 +112,7 @@ TOP: ! r:
 				gb(j)=gb(j)-g(j) !  if j><6 then gb(j)=gb(j)-g(j)
 			LX770: !
 		next j
-	end if  ! f=d1
+	end if  ! xf=d1
 	w7=g(11)
 	mat g=(0)
 	
@@ -123,13 +123,13 @@ TOP: ! r:
 		usage_srv3=0 ! ELECTRIC USAGE / lawn meter usage
 		usage_srv4=0 ! GAS USAGE
 		unusual_service$=''
-		if fn_cuuMain(1,d(3),x(12),usage_srv1,r9_usage_is_zero) then ! water
+		if fn_cuuMain(1,xd(3),x(12),usage_srv1,r9_usage_is_zero) then ! water
 			fn_cuu_report_main(unusual_service$&'/'&serviceName$(1))
 		end if
-		if fn_cuuMain(3,d(7),x(13),usage_srv3,r9_usage_is_zero) then
+		if fn_cuuMain(3,xd(7),x(13),usage_srv3,r9_usage_is_zero) then
 			fn_cuu_report_main(unusual_service$&'/'&serviceName$(3))
 		end if
-		if fn_cuuMain(4,d(11),x(14),usage_srv4,r9_usage_is_zero) then
+		if fn_cuuMain(4,xd(11),x(14),usage_srv4,r9_usage_is_zero) then
 			fn_cuu_report_main(unusual_service$&'/'&serviceName$(4))
 		end if
 		unusual_service$=trim$(unusual_service$,'/')
@@ -139,7 +139,7 @@ TOP: ! r:
 			pr #255: 'Negative usage on Account: '&x$
 			pr #255: '   Action: RECORD SKIPPED.'
 			print_count_skip+=1
-			if d1<>f then
+			if d1<>xf then
 				fn_cuu_report_usage
 			end if
 		end if
@@ -148,9 +148,9 @@ TOP: ! r:
 
 	mat w=(0) ! mat w appears to never be set - never be used, but is passed to fncalk
 	if env$('client')='Chatom' then
-		fncalkChatom(x$,d1,f,usage_srv1,usage_srv3,usage_srv4,mc1,mu1,mat rt,mat a,mat b,mat c,mat d,mat g,mat w,mat x,mat extra,mat gb,h_ratemst,hDeposit2,btu, calc_interest_on_deposit,charge_inspection_fee,interest_credit_rate)
+		fncalkChatom(x$,d1,xf,usage_srv1,usage_srv3,usage_srv4,mc1,mu1,mat rt,mat xa,mat xb,mat c,mat xd,mat g,mat w,mat x,mat extra,mat gb,h_ratemst,hDeposit2,btu, calc_interest_on_deposit,charge_inspection_fee,interest_credit_rate)
 	else
-		fncalk(x$,d1,f,usage_srv1,usage_srv3,usage_srv4,mc1,mu1,mat rt,mat a,mat b,mat c,mat d,mat g,mat w,mat x,mat extra,mat gb,h_ratemst,hDeposit2,btu, calc_interest_on_deposit,charge_inspection_fee,interest_credit_rate)
+		fncalk(x$,d1,xf,usage_srv1,usage_srv3,usage_srv4,mc1,mu1,mat rt,mat xa,mat xb,mat c,mat xd,mat g,mat w,mat x,mat extra,mat gb,h_ratemst,hDeposit2,btu, calc_interest_on_deposit,charge_inspection_fee,interest_credit_rate)
 	end if
 	fn_date_meter_read ! update meter reading date
 	if g(11)>99999 or g(12)>99999 then
@@ -170,7 +170,7 @@ TOP: ! r:
 			end if
 		next j
 		! if env$('acsDeveloper')<>'' and trim$(x$)='100260.00' then pr ' just before write #customer' : pause
-		rewrite #hCustomer,using F_CUSTOMER,key=x$: meteradr$,custname$,mat a,mat b,mat c,mat d,bal,f,mat g,mat gb,mat extra conv CONV_CUSTOMER_REWRITE
+		rewrite #hCustomer,using F_CUSTOMER,key=x$: meteradr$,custname$,mat xa,mat xb,mat c,mat xd,bal,xf,mat g,mat gb,mat extra conv CONV_CUSTOMER_REWRITE
 		fn_write_new_trans
 	end if
 goto TOP ! /r
@@ -208,8 +208,8 @@ def fn_write_new_trans
 	tdate=d1
 	tdate=fndate_mmddyy_to_ccyymmdd(tdate)
 	tcode=1
-	wr=d(1): wu=d(3): er=d(5): eu=d(7): gr=d(9)
-	gu=d(11)
+	wr=xd(1): wu=xd(3): er=xd(5): eu=xd(7): gr=xd(9)
+	gu=xd(11)
 	for j=1 to 11 : tg(j)=g(j) : next j
 	transkey$=x$&cnvrt$('pic(########)',tdate)&cnvrt$('pic(#)',tcode)
 	read #hTrans,using FORM_UBTRANS,key=transkey$: y$ nokey UBTRANS_NOKEY ! check for recalk
@@ -230,7 +230,7 @@ def fn_t9notification
 	end if
 fnend
 def fn_cuu_report_main(unusual_service$*128)
-	if d1<>f then
+	if d1<>xf then
 		if unusual_usage_report=1 or unusual_usage_report=3 then
 			pr #255: ''
 			pr #255: 'Unusual '&unusual_service$&' Usage on Customer '&trim$(x$)&'.  Bill was calculated.'
@@ -280,27 +280,27 @@ def fn_cuu_report_usage
 	F_PR_SERVICE: form c 22,pic(---------),x 9,pic(---------),x 11,pic(----------),x 2,c 30,x 2,c 30
 	F_PR_PRIOR_USAGES: form pos 1,c 13,12*(pic(zzzz/zz/zz),nz 9,x 1)
 	if serviceName$(1)<>'' then ! test vs. water
-		pr #255,using F_PR_SERVICE: 'Water',d(1),x(1),usage_srv1
+		pr #255,using F_PR_SERVICE: 'Water',xd(1),x(1),usage_srv1
 		pr #255,using F_PR_PRIOR_USAGES: ' Prior Usages',watdat(1),watuse(1),watdat(2),watuse(2),watdat(3),watuse(3),watdat(4),watuse(4),watdat(5),watuse(5),watdat(6),watuse(6),watdat(7),watuse(7),watdat(8),watuse(8),watdat(9),watuse(9),watdat(10),watuse(10),watdat(11),watuse(11),watdat(12),watuse(12)
 	end if
 	if serviceName$(3)='Electric' or serviceName$(3)='Lawn Meter' then ! test vs. Electric/lawn meter
-		pr #255,using F_PR_SERVICE: 'Electric',d(5),x(3),usage_srv3
+		pr #255,using F_PR_SERVICE: 'Electric',xd(5),x(3),usage_srv3
 		pr #255,using F_PR_PRIOR_USAGES: ' Prior Usages',elecdat(1),elecuse(1),elecdat(2),elecuse(2),elecdat(3),elecuse(3),elecdat(4),elecuse(4),elecdat(5),elecuse(5),elecdat(6),elecuse(6),elecdat(7),elecuse(7),elecdat(8),elecuse(8),elecdat(9),elecuse(9),elecdat(10),elecuse(10),elecdat(11),elecuse(11),elecdat(12),elecuse(12)
 	end if
 	if serviceName$(4)='Gas' then ! test vs. Gas
-		pr #255,using F_PR_SERVICE: 'Gas',d(9),x(2),usage_srv4
+		pr #255,using F_PR_SERVICE: 'Gas',xd(9),x(2),usage_srv4
 		pr #255,using F_PR_PRIOR_USAGES: ' Prior Usages',elecdat(1),gasuse(1),elecdat(2),gasuse(2),elecdat(3),gasuse(3),elecdat(4),gasuse(4),elecdat(5),gasuse(5),elecdat(6),gasuse(6),elecdat(7),gasuse(7),elecdat(8),gasuse(8),elecdat(9),gasuse(9),elecdat(10),gasuse(10),elecdat(11),gasuse(11),elecdat(12),gasuse(12)
 	end if
 	pr #255: ''
 fnend
 def fn_date_meter_read ! update meter reading dates
-	! f =  billing date (from customer record)
+	! xf =  billing date (from customer record)
 	! d1 = billing date being processed
 	! extra(3) prior reading date (from customer record)
 	! extra(4) current reading date (from customer record)
 	! if trim$(x$)='101385.00' then pause
 	if dateread<>0 then
-		if f=d1 then
+		if xf=d1 then
 			extra(3)=dateread
 		else
 			extra(4)=extra(3)
@@ -309,7 +309,7 @@ def fn_date_meter_read ! update meter reading dates
 	end if  ! dateread<>0
 fnend
 def fn_updtbal
-	d2=f : f=d1
+	d2=xf : xf=d1
 	if d1=d2 then bal=bal+g(11)-w7 else bal=bal+g(11)
 fnend
 def fn_demand
@@ -317,16 +317,16 @@ def fn_demand
 		read #h_ratemst,using 'form pos 55,32*g 10',key='DM'&lpad$(str$(extra(11)),2): mc1,mu1,mat rt nokey DEMAND_XIT
 		goto L6360
 	end if
-	!  Read #h_ratemst,Using 540,Key='DM'&LPAD$(STR$(B(2)),2): MC1,MU1,MAT RT Nokey 6070  ! don't have a demand code any where in record.  wlll have to customize for each client  on Bethany we used service 6 to hold demand
+	!  Read #h_ratemst,Using 540,Key='DM'&LPAD$(STR$(xb(2)),2): MC1,MU1,MAT RT Nokey 6070  ! don't have demand code any where in record.  wlll have to customize for each client  on Bethany we used service 6 to hold demand
 	L6360: !
 	if env$('client')='Bethany' then
 		g(6)=mc1
 		goto DEMAND_FINIS
 	end if
 	! if env$('client')='Lovington' then goto DEMAND_FINIS
-	g(6)=round(x(4)*d(14)*.001*rt(1,3),2)
+	g(6)=round(x(4)*xd(14)*.001*rt(1,3),2)
 	DEMAND_FINIS: !
-	d(15)=x(4)
+	xd(15)=x(4)
 	DEMAND_XIT: !
 fnend
 
@@ -387,25 +387,25 @@ def fn_bud2(; ___,foundBudTransRecordToUpdate)
 fnend
 
 def fn_usage(serviceNumber)
-	! requires local variables: d1, f, mat x, mat d
+	! requires local variables: d1, xf, mat x, mat xd
 	usage_return=0
 	if serviceNumber=1 then
-		if x(1)=0 or d1=f then
-			usage_return=x(1)-d(2)
+		if x(1)=0 or d1=xf then
+			usage_return=x(1)-xd(2)
 		else
-			usage_return=x(1)-d(1)
+			usage_return=x(1)-xd(1)
 		end if
 	else if serviceNumber=3 then
-		if d1=f then
-			usage_return=x(3)-d(6)
+		if d1=xf then
+			usage_return=x(3)-xd(6)
 		else
-			usage_return=x(3)-d(5)
+			usage_return=x(3)-xd(5)
 		end if
 	else if serviceNumber=4 then
-		if d1=f then
-			usage_return=x(2)-d(10)
+		if d1=xf then
+			usage_return=x(2)-xd(10)
 		else
-			usage_return=x(2)-d(9)
+			usage_return=x(2)-xd(9)
 		end if
 	else
 		pr 'serviceNumber not recognized.' : pause
@@ -426,7 +426,7 @@ def fn_cuuMain(serviceNumber,usagePrior,reading,&usageCurrent,&r9_usage_is_zero;
 
 	if serviceNumber=1 then
 		if ~serviceName$(serviceNumber)='Water' then goto CuuMainXit
-		if (a(1)=9 or a(1)=0) and (a(2)=9 or a(2)=0) then goto CuuMainXit ! skip if no water code and no sewer code
+		if (xa(1)=9 or xa(1)=0) and (xa(2)=9 or xa(2)=0) then goto CuuMainXit ! skip if no water code and no sewer code
 	else if serviceNumber=3 then
 		if ~(serviceName$(serviceNumber)='Electric' or serviceName$(serviceNumber)='Lawn Meter' or service$(serviceNumber)='EL') then goto CuuMainXit
 		if x(3)=0 then goto CuuMainXit
@@ -524,7 +524,7 @@ def fn_askBillingDate
 	ckey=fnAcs(mat resp$)
 	if ckey<>5 then
 		d1=val(resp$(respc_billing_date))
-		if enableCostOfGas then btu=val(resp$(resp_btu_factor)) ! Edinburg requires a monthly BTU factor for calculating taxes
+		if enableCostOfGas then btu=val(resp$(resp_btu_factor)) ! Edinburg requires monthly BTU factor for calculating taxes
 		if resp_calc_interest_on_deposit and resp$(resp_calc_interest_on_deposit)='True' then calc_interest_on_deposit=1 else calc_interest_on_deposit=0
 		if resp_charge_inspection_fee and resp$(resp_charge_inspection_fee)='True' then charge_inspection_fee=1 else charge_inspection_fee=0
 		if resp_interest_credit_rate then interest_credit_rate=val(resp$(resp_interest_credit_rate))
@@ -556,10 +556,10 @@ def fn_setup
 
 		dim da(2)
 		dim txt$(3)*128
-		dim a(7)
-		dim b(11)
+		dim xa(7)
+		dim xb(11)
 		dim c(4)
-		dim d(15)
+		dim xd(15)
 		dim g(12)
 		dim bt1(14,2)
 		dim p$*10
