@@ -92,7 +92,7 @@ do
 	fnLbl( 6, 5,'Total Credit Memos:',20,1)   	: fnTxt( 6,26,0,11,0,'pointtwo',1) : resp$(rc+=1)=str$(proofTotal(transType_credit))
 	fnLbl( 7, 5,'Total Cash Sales:',20,1)     	: fnTxt( 7,26,0,11,0,'pointtwo',1) : resp$(rc+=1)=str$(totalCashSales)
 	fnLbl( 8, 5,'Total Discounts Taken:',20,1)	: fnTxt( 8,26,0,11,0,'pointtwo',1) : resp$(rc+=1)=str$(tdt)
-	resp_recSelected=rc+=1
+	resp_recSelected=1 ! rc+=1
 	fnCmdKey('Post Batch'            	,8, 0,0)
 	fnCmdKey('Edit'            	,2, 1,0)
 	fnCmdKey('Print Listing'  	,3, 0,0)
@@ -116,7 +116,10 @@ do
 	else if ckey=3 then
 		fn_printListing(hTransBatch)
 	else if ckey=2 then
-		fn_edit(val(resp$(resp_recSelected)))
+	
+	pause
+		r1=val(resp$(resp_recSelected))
+		fn_edit(r1)
 	else if ckey=>21 and ckey<=24 then ! add one
 		! transType=0
 		if ckey=21 then transType=transType_invoice    
@@ -391,9 +394,8 @@ def fn_printListing(hTransBatch; ___,r,clientId$,iv$,transDate,transDiscount,tra
 	fnClosePrn
 fnend
 
-def fn_edit(record) ! uses mostly locals
+def fn_edit(r1) ! uses mostly locals
 	doingFnEdit=1
-	r1=record
 	! r:
 	read #hTransBatch,using FtransBatch,rec=r1: clientId$,iv$,transDate,transDiscount,transAmt,unusedtr4,transType,unusedtr6,id$,mat pgl,mat gl noRec FinisAddEdit
 	if ltrm$(clientId$)='0' or ltrm$(clientId$)='' then goto FinisAddEdit
