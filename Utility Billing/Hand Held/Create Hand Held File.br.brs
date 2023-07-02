@@ -798,8 +798,8 @@ def fn_neptuneEquinoxV4(h_out)
 			fn_record_init
 			fn_record_addC( 5,'RDGDT'                                          ) !  Record ID
 			fn_record_addC( 4,fn_meterInfo$('read type',z$,sc$)                ) !  Read Type
-			! fn_record_addC(13,''                                               ) !  Collection ID
-			! fn_record_addC( 7,''                                               ) !  For future use
+			! removed for Millry 6/29/2023    ! fn_record_addC(13,''                                               ) !  Collection ID
+			! removed for Millry 6/29/2023    ! fn_record_addC( 7,''                                               ) !  For future use
 			fn_record_addC(20,fn_meterInfo$('meter number',z$,sc$)             ) !  Changed Collection ID
 			fn_record_addN( 2,val(fn_meterInfo$('number of dials',z$,sc$)),'0' ) ! Dials                         Req  UB 50-51     2 NUM
 			fn_record_addN( 2,0                                                ) ! Changed Dials                 Opt  HH 52-453    2 NUM
