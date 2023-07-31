@@ -21,11 +21,7 @@ end if
 Freport: form pos 1,n 3,n 6,n 3,pos mp1,pd 3,pos 87,27*pd 6.2
 
 fnOpenPrn
-if fnPs=2 then ! secondary
-	fnIndex('[Q]\GLmstr\GLmstr.h[cno]','[temp]\fsindex.h[cno]','66 3')
-else
-	fnIndex('[Q]\GLmstr\GLmstr.h[cno]','[temp]\fsindex.h[cno]','63 3')
-end if
+fnFsIndexBalSht
 open #hAcct=fnH: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[temp]\fsindex.h[cno],Shr",i,i,k
 if file$(255)(1:4)<>"PRN:" then redir=1 else redir=0
 ! on fkey 5 goto Finis

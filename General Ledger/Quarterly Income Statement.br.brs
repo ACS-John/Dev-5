@@ -39,11 +39,8 @@ L250: form pos mp1,pd 3,pos mp2,pd 3,pos 81,41*pd 6.2
 	if ckey=5 then goto Xit
 	costcntr=val(resp$(1))
 L390: fnOpenPrn
-	if fnPs=2 then goto L430 ! secondary
-	execute 'Index [Q]\GLmstr\GLmstr.h[cno] [temp]\fsindex.h[cno] 69 3 Replace DupKeys -N'
-	goto L440
-L430: execute 'Index [Q]\GLmstr\GLmstr.h[cno] [temp]\fsindex.h[cno] 72 3 Replace DupKeys -N'
-L440: open #3: 'Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[temp]\fsindex.h[cno],Shr',i,i,k
+	fnFsIndexIncStmt
+	open #3: 'Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[temp]\fsindex.h[cno],Shr',i,i,k
 	report$='STATEMENT OF INCOME AND EXPENSES'
 ! GOSUB BLDPCT1 ! BUILD % BASED ON REF # IN PRIMARY FUND # IN G/L ACCOUNT
 L470: read #1,using L520: r$,d$,te$,sp,ls,ds,ul,rs,bc,ap,mat ac,ic,fc eof L1720

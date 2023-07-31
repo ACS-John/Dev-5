@@ -39,10 +39,7 @@ L370: pr f "11,5,C 65": "ON ONE DEPARTMENT; ELSE ENTER 0 TO pr ALL DEPARTMENTS"
 L390: pr newpage
 	pr f "10,1,Cc 80,N": "Printing: please wait..."
 	pr f "12,2,c 30,B,5": "Press F5 to stop"
-	if fnPs=2 then goto L450 ! secondary
-	execute "Index [Q]\GLmstr\GLmstr.h[cno] [temp]\fsindex.h[cno] 75 3 Replace DupKeys -N"
-	goto L460
-L450: execute "Index [Q]\GLmstr\GLmstr.h[cno] [temp]\fsindex.h[cno] 78 3 Replace DupKeys -N"
+	fnFsIndexFundStmt
 L460: open #3: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[temp]\fsindex.h[cno],Shr",i,i,k
 L470: read #1,using L510: r$,d$,te$,sp,ls,ds,ul,rs,bc,ap,mat ac,ic,fc eof L2130
 	if ltrm$(r$)="" or ltrm$(r$)="0" then goto L470

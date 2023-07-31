@@ -60,17 +60,12 @@ Screen1: ! r:
 
 goto DoReport ! /r
 
-SAVE_AS_OPEN_ERR: !
-pr err
-pause
-retry
-
 
 DoReport: ! r:
 ! on fkey 5 goto Finis
 fnOpenPrn
 if enableExport then 
-		open #h_tmp=fnH: 'Name=SAVE:'&fnsave_as_path$&'\*.csv,RecL=1,replace',external,output ioerr SAVE_AS_OPEN_ERR
+		open #h_tmp=fnH: 'Name=SAVE:'&fnsave_as_path$&'\*.csv,RecL=1,replace',external,output ioerr SaveAsOpenErr
 		dim exportFile$*256
 		exportFile$=os_filename$(file$(h_tmp))
 		close #h_tmp,free:
@@ -119,6 +114,120 @@ loop
 EoAcct: !
 olddno=dno
 goto Finis ! /r
+	SaveAsOpenErr: ! r:
+		pr err
+		pause
+	retry !/r
+	PrHdr: ! r:
+		pr #255,using Fh1: date$('mm/dd/yy'),env$('cnam')
+		pr #255,using Fh1: time$,env$('program_caption')
+		Fh1: form pos 1,c 8,pos 15,cc 50
+		pr #255,using Fh2: fnpedat$,'Page ',p1+=1
+		Fh2: form pos 15,cc 50,pos 115,c 5,n 4,skip 2
+		pr #255,using Fh3: 'Account','Reference','Beginning','Current','Ending'
+		Fh3: form pos 6,c 7,pos 70,c 9,pos 84,c 9,pos 99,c 7,pos 116,c 6,skip 1
+		pr #255,using Fh4: 'Number','Account Name/Transaction Description','Date  Source','Number','Balance','Activity','Balance'
+		Fh4: form pos 6,c 6,pos 17,c 36,pos 54,c 13,pos 71,c 6,pos 85,c 7,pos 99,c 8,pos 116,c 7
+		pr #255,using Fh5: '__________','____________________________________','____','______','___________','_________','__________','_________'
+		Fh5: form pos 4,c 10,pos 17,c 36,pos 54,c 4,pos 60,c 6,pos 69,c 11,pos 84,c 9,pos 98,c 10,pos 115,c 10,skip 2
+		if enableExport then
+			pr #hExp: 'Acct Id'&delim$&'Acct Name or Trans Desc'&delim$&'Date'&delim$&'Source'&delim$&'Reference Number'&delim$&'Beginning Balance'&delim$&'Current Activity'&delim$&'Ending Balance'
+		end if
+	return ! /r
+	PrLine: ! r:
+		if ta(1)=0 then
+			if enableDetails then
+				pr #255,using Fl1: dno,ano,sno,d$,bb,cb pageoflow PgOf
+				Fl1: form pos 1,pic(---),x 1,pic(------),x 1,pic(---),x 2,c 50,pos 80,pic(zz,zzz,zzz.## cr),pos 111,pic(zz,zzz,zzz.## cr),skip 2
+				if enableExport then 
+					pr #hExp,using Fl1: dno,ano,sno,d$,bb,cb pageoflow PgOfNoHeader
+				end if
+			end if
+		else
+			if enableDetails then
+				pr #255,using Fl2: dno,ano,sno,d$,bb pageoflow PgOf
+				Fl2: form pos 1,pic(---),x 1,pic(------),x 1,pic(---),x 2,c 50,pos 80,pic(zz,zzz,zzz.## cr)
+				if enableExport then
+					pr #hExp,using Fl2: dno,ano,sno,d$,bb pageoflow PgOfNoHeader
+				end if
+			end if
+		end if
+	return ! /r
+	AccumAndPrint: ! r:
+		dim a$(9)*3
+		a$(1)='C/D'
+		a$(2)='C/R'
+		a$(3)='ADJ'
+		a$(4)='A/P'
+		a$(5)='PR'
+		a$(6)='A/R'
+		a$(7)='S/J'
+		a$(8)='P/J'
+		a$(9)=' '
+		dim x$*3
+		if tr(6)<1 or tr(6)>9 then x$='' else x$=a$(tr(6))
+		if val(cogl$(1)(4:9))=0 or val(cogl$(2)(4:9))=0 then
+			goto AapNext
+		end if
+		if t$>=cogl$(1) and t$<=cogl$(2) then
+			if tr(5)>0 then goto AapNext
+			u0+=tr(5)
+			trtotal+=tr(5)
+			fundT2+=tr(5)
+			dim u$*12
+			u$=t$
+			goto AapXit
+		end if
+		AapNext: !
+	
+		if tr$='999999999999' then tr$=' '
+		rn=73-int(len(ltrm$(tr$))/2)
+		if tr(5)<0 then tcr1+=tr(5) else tdr1+=tr(5)
+		if adr=0 and u0=0 then
+			if enableDetails then
+				pr #255,using Faap1: td$,tr(4),x$,ltrm$(tr$),tr(5),cb pageoflow PgOf
+				Faap1: form pos 21,c 30,pos 52,pic(zz/zz/zz),pos 62,c 3,pos rn,c 12,pos 95,pic(zz,zzz,zzz.## cr),pos 111,pic(zz,zzz,zzz.## cr),skip 2
+				if enableExport then
+					pr #hExp,using Faap1: td$,tr(4),x$,ltrm$(tr$),tr(5),cb pageoflow PgOfNoHeader
+				end if
+			end if
+			! pr #255,Using 'form pos 40,2*c 35,skip 2': 'Total Debits: '&LTRM$(CNVRT$('PIC(ZZZZ,ZZZ,ZZZ,ZZ#.##)',TDR1)),'Total Credits: '&LTRM$(CNVRT$('PIC(ZZZZ,ZZZ,ZZZ,ZZ#.##)',ABS(TCR1)))
+			tdr1=tcr1=0
+		else
+			if enableDetails then
+				pr #255,using Faap2: td$,tr(4),x$,ltrm$(tr$),tr(5) pageoflow PgOf
+				Faap2: form pos 21,c 30,pos 52,pic(zz/zz/zz),pos 62,c 3,pos rn,c 12,pos 95,pic(zz,zzz,zzz.## cr)
+				if enableExport then
+					pr #hExp,using Faap2: td$,tr(4),x$,ltrm$(tr$),tr(5) pageoflow PgOfNoHeader
+				end if
+			end if
+		end if
+		trtotal+=tr(5)
+		fundT2+=tr(5)
+		u$=t$
+		AapXit: !
+	return ! /r
+	PrSummary: ! r:
+		if u0 then
+			if u$>=cogl$(1) and u$<=cogl$(2) then
+				if enableDetails then
+					pr #255,using L1550: 'Summary Transaction',u0,cb pageoflow PgOf
+					L1550: form pos 21,c 30,pos 95,pic(zz,zzz,zzz.## cr),pos 111,pic(zz,zzz,zzz.## cr),skip 2
+					if enableExport then
+						pr #hExp,using L1550: 'Summary Transaction',u0,cb pageoflow PgOfNoHeader
+					end if
+				end if
+				u0=0
+			end if
+		end if
+	return ! /r
+	PgOf: ! r:
+		pr #255: newpage
+		gosub PrHdr
+	continue ! /r
+	PgOfNoHeader: ! r:
+		pr #hExp: newpage
+	continue ! /r
 Finis: ! r:
 	pr #255:
 	if subt=1 then
@@ -139,115 +248,6 @@ Finis: ! r:
 
 goto Xit ! /r
 
-PrHdr: ! r:
-	pr #255,using Fh1: date$('mm/dd/yy'),env$('cnam')
-	pr #255,using Fh1: time$,env$('program_caption')
-	Fh1: form pos 1,c 8,pos 15,cc 50
-	pr #255,using Fh2: fnpedat$,'Page ',p1+=1
-	Fh2: form pos 15,cc 50,pos 115,c 5,n 4,skip 2
-	pr #255,using Fh3: 'Account','Reference','Beginning','Current','Ending'
-	Fh3: form pos 6,c 7,pos 70,c 9,pos 84,c 9,pos 99,c 7,pos 116,c 6,skip 1
-	pr #255,using Fh4: 'Number','Account Name/Transaction Description','Date  Source','Number','Balance','Activity','Balance'
-	Fh4: form pos 6,c 6,pos 17,c 36,pos 54,c 13,pos 71,c 6,pos 85,c 7,pos 99,c 8,pos 116,c 7
-	pr #255,using Fh5: '__________','____________________________________','____','______','___________','_________','__________','_________'
-	Fh5: form pos 4,c 10,pos 17,c 36,pos 54,c 4,pos 60,c 6,pos 69,c 11,pos 84,c 9,pos 98,c 10,pos 115,c 10,skip 2
-	if enableExport then
-		pr #hExp: 'Acct Id'&delim$&'Acct Name or Trans Desc'&delim$&'Date'&delim$&'Source'&delim$&'Reference Number'&delim$&'Beginning Balance'&delim$&'Current Activity'&delim$&'Ending Balance'
-	end if
-return ! /r
-PrLine: ! r:
-	if ta(1)=0 then
-		if enableDetails then
-			pr #255,using Fl1: dno,ano,sno,d$,bb,cb pageoflow PgOf
-			Fl1: form pos 1,pic(---),x 1,pic(------),x 1,pic(---),x 2,c 50,pos 80,pic(zz,zzz,zzz.## cr),pos 111,pic(zz,zzz,zzz.## cr),skip 2
-			if enableExport then 
-				pr #hExp,using Fl1: dno,ano,sno,d$,bb,cb pageoflow ExpPgOf
-			end if
-		end if
-	else
-		if enableDetails then
-			pr #255,using Fl2: dno,ano,sno,d$,bb pageoflow PgOf
-			Fl2: form pos 1,pic(---),x 1,pic(------),x 1,pic(---),x 2,c 50,pos 80,pic(zz,zzz,zzz.## cr)
-			if enableExport then
-				pr #hExp,using Fl2: dno,ano,sno,d$,bb pageoflow ExpPgOf
-			end if
-		end if
-	end if
-return ! /r
-AccumAndPrint: ! r:
-	dim a$(9)*3
-	a$(1)='C/D'
-	a$(2)='C/R'
-	a$(3)='ADJ'
-	a$(4)='A/P'
-	a$(5)='PR'
-	a$(6)='A/R'
-	a$(7)='S/J'
-	a$(8)='P/J'
-	a$(9)=' '
-	dim x$*3
-	if tr(6)<1 or tr(6)>9 then x$='' else x$=a$(tr(6))
-	if val(cogl$(1)(4:9))=0 or val(cogl$(2)(4:9))=0 then
-		goto AapNext
-	end if
-	if t$>=cogl$(1) and t$<=cogl$(2) then
-		if tr(5)>0 then goto AapNext
-		u0+=tr(5)
-		trtotal+=tr(5)
-		fundT2+=tr(5)
-		dim u$*12
-		u$=t$
-		goto AapXit
-	end if
-	AapNext: !
 
-	if tr$='999999999999' then tr$=' '
-	rn=73-int(len(ltrm$(tr$))/2)
-	if tr(5)<0 then tcr1+=tr(5) else tdr1+=tr(5)
-	if adr=0 and u0=0 then
-		if enableDetails then
-			pr #255,using Faap1: td$,tr(4),x$,ltrm$(tr$),tr(5),cb pageoflow PgOf
-			Faap1: form pos 21,c 30,pos 52,pic(zz/zz/zz),pos 62,c 3,pos rn,c 12,pos 95,pic(zz,zzz,zzz.## cr),pos 111,pic(zz,zzz,zzz.## cr),skip 2
-			if enableExport then
-				pr #hExp,using Faap1: td$,tr(4),x$,ltrm$(tr$),tr(5),cb pageoflow ExpPgOf
-			end if
-		end if
-		! pr #255,Using 'form pos 40,2*c 35,skip 2': 'Total Debits: '&LTRM$(CNVRT$('PIC(ZZZZ,ZZZ,ZZZ,ZZ#.##)',TDR1)),'Total Credits: '&LTRM$(CNVRT$('PIC(ZZZZ,ZZZ,ZZZ,ZZ#.##)',ABS(TCR1)))
-		tdr1=tcr1=0
-	else
-		if enableDetails then
-			pr #255,using Faap2: td$,tr(4),x$,ltrm$(tr$),tr(5) pageoflow PgOf
-			Faap2: form pos 21,c 30,pos 52,pic(zz/zz/zz),pos 62,c 3,pos rn,c 12,pos 95,pic(zz,zzz,zzz.## cr)
-			if enableExport then
-				pr #hExp,using Faap2: td$,tr(4),x$,ltrm$(tr$),tr(5) pageoflow ExpPgOf
-			end if
-		end if
-	end if
-	trtotal+=tr(5)
-	fundT2+=tr(5)
-	u$=t$
-	AapXit: !
-return ! /r
-PrSummary: ! r:
-	if u0 then
-		if u$>=cogl$(1) and u$<=cogl$(2) then
-			if enableDetails then
-				pr #255,using L1550: 'Summary Transaction',u0,cb pageoflow PgOf
-				L1550: form pos 21,c 30,pos 95,pic(zz,zzz,zzz.## cr),pos 111,pic(zz,zzz,zzz.## cr),skip 2
-				if enableExport then
-					pr #hExp,using L1550: 'Summary Transaction',u0,cb pageoflow ExpPgOf
-				end if
-			end if
-			u0=0
-		end if
-	end if
-return ! /r
-PgOf: ! r:
-	pr #255: newpage
-	gosub PrHdr
-continue ! /r
-ExpPgOf: ! r:
-	pr #hExp: newpage
-continue ! /r
 Xit: fnXit
 include: ertn

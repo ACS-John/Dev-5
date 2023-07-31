@@ -49,15 +49,14 @@ L340: close #1:
 	ckey=fnAcs(mat resp$)
 	if ckey=5 then goto Xit
 	costcntr=val(resp$(1))
-L460: fnOpenPrn : _
+L460: !
+	fnOpenPrn 
 	redir=0: if file$(255)(1:4)<>"PRN:" then redir=1
 	report$="STATEMENT OF CHANGES IN FINANCIAL POSITION"
-	if fnPs=2 then goto L510 ! secondary
-	execute "Index [Q]\GLmstr\GLmstr.h[cno] "&env$('temp')&'\'&"fsindex.h[cno] 75 3 Replace DupKeys -N"
-	goto L520
-L510: execute "Index [Q]\GLmstr\GLmstr.h[cno] "&env$('temp')&'\'&"fsindex.h[cno] 78 3 Replace DupKeys -N"
-L520: open #3: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName="&env$('temp')&'\'&"fsindex.h[cno],Shr",i,i,k
-L530: read #1,using L570: r$,d$,te$,sp,ls,ds,ul,rs,bc,ap,mat ac,ic,fc eof L1830
+	fnFsIndexFundStmt
+	open #3: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[temp]\fsindex.h[cno],Shr",i,i,k
+L530: !
+	read #1,using L570: r$,d$,te$,sp,ls,ds,ul,rs,bc,ap,mat ac,ic,fc eof L1830
 	if ltrm$(r$)="" or ltrm$(r$)="0" then goto L530
 	if costcntr=0 then goto L570
 	if costcntr><fc then goto L530

@@ -8,13 +8,12 @@
 	dim r$*5,d$*50,te$*1,ac(9),report$*50,secondr$*50,foot$*132,underlin$*14
 	dim b$*3,a$(8)*30,oldtrans$*16,g(8),accum(10,9,2)
 	dim by(13),bp(13),resp$(30)*50
-	dim sendto$*80,bigul$*140,heading$*140,cap$*128,udf$*256
+	dim sendto$*80,bigul$*140,heading$*140,cap$*128
 	dim fundnum(10),funddesc$(10)*20,io1$(20),dolcol$*140,accumcol$*140
 	dim choices$(2)*21,io5$(2)
  
 	fnTop(program$,cap$="Income Statemet - Fund Comparison")
 	on fkey 5 goto L2170
-	udf$=env$('temp')&'\'
 	if fnGlAskFormatPriorCdPeriod=5 then goto Xit 		! sets fnPs,fnpriorcd,fnfscode (primary/secondary,current year/Prior,period to print)
 	actpd$=fnactpd$
 	pedat$=fnpedat$
@@ -49,11 +48,8 @@ L340: form pos 1,n 3,n 6,n 3,pos mp1,pd 3,pos mp2,pd 3,pos 81,41*pd 6.2
 L480: report$="STATEMENT OF INCOME AND EXPENSES - FUND COMPARISON"
 	fnOpenPrn
 	redir=0: if file$(255)(1:4)<>"PRN:" then redir=1
-	if fnPs=2 then goto L540 ! secondary
-	execute "Index [Q]\GLmstr\GLmstr.h[cno] "&udf$&"fsindex.h[cno] 69 3 Replace DupKeys -N"
-	goto L550
-L540: execute "Index [Q]\GLmstr\GLmstr.h[cno] "&udf$&"fsindex.h[cno] 72 3 Replace DupKeys -N"
-L550: open #3: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName="&udf$&"fsindex.h[cno],Shr",i,i,k
+	fnFsIndexIncStmt
+	open #3: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[temp]\fsindex.h[cno],Shr",i,i,k
 L560: read #1,using L610: r$,d$,te$,sp,ls,ds,ul,rs,bc,ap,mat ac,ic,fc eof L2170
 	if ltrm$(r$)="" or ltrm$(r$)="0" then goto L560
 	if costcntr=0 then goto L610

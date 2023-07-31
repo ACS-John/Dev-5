@@ -55,7 +55,13 @@ for period=1 to nap
 		prior_period_date_end=date(days(prior_period_date_start(period+1),'mmddyy')-1,'mmddyy')
 	end if  ! period=nap   /   else
 	! if gl$='  1   405  0' and period=3 then pr 'before fn_processTrans   period_accumulator_current(';period;')=';period_accumulator_current(period) : pause
-	fn_processTrans(hTransHistory, 1)
+	
+	
+	
+	fn_processTrans(hTransHistory, 1)   ! ,1 enables pt_fixTransPeriodCode
+	! fn_processTrans(hTransHistory, 0)  ! ,0 disables period code fixing and just uses whatever is on the record.  may not even need to enter any dates
+	
+	
 	! if gl$='  1   405  0' then pr 'after fn_processTrans' : pause
 	if process_gltrans then fn_processTrans(hTransCurrent)
 	if period>1 and period<=current_accounting_period then
@@ -139,17 +145,17 @@ def fn_screen_1(nap,mat period_date_start,mat prior_period_date_start)
 		col4_pos=col3_pos+10
 		fnLbl(1,col3_pos,'Last Retained Earnings Account(s)')
 		for fund_item=1 to udim(mat fund_list)
-			fnLbl(myline+=1,col3_pos,"Fund "&str$(fund_list(fund_item))&":",9,1)
+			fnLbl(myline+=1,col3_pos,'Fund '&str$(fund_list(fund_item))&':',9,1)
 			fnQgl(myline,col4_pos)
 			respc+=1
-			fncreg_read("last retained earnings account - fund "&str$(fund_list(fund_item)),resp$(respc)) : resp$(respc)=fnrgl$(resp$(respc))
+			fncreg_read('last retained earnings account - fund '&str$(fund_list(fund_item)),resp$(respc)) : resp$(respc)=fnrgl$(resp$(respc))
 		next fund_item
 	else
 		col4_pos=col3_pos+32
 		fnLbl(1,col3_pos,'Last Retained Earnings Account:',31,1)
 		fnQgl(myline,col4_pos)
 		respc+=1
-		fncreg_read("last retained earnings account - no fund ",resp$(respc)) : resp$(respc)=fnrgl$(resp$(respc))
+		fncreg_read('last retained earnings account - no fund ',resp$(respc)) : resp$(respc)=fnrgl$(resp$(respc))
 	end if
 	
 	if debug then
@@ -159,14 +165,14 @@ def fn_screen_1(nap,mat period_date_start,mat prior_period_date_start)
 		fnQgl(myline,col4_pos)
 		resp_debugAcct=respc+=1
 		dim debugAcct$*128
-		fncreg_read("debug account",debugAcct$)
+		fncreg_read('debug account',debugAcct$)
 		resp$(resp_debugAcct)=fnrgl$(debugAcct$)
 		
 
-		fnLbl(myline+=1,col3_pos,"Debug Period:",31,1)
+		fnLbl(myline+=1,col3_pos,'Debug Period:',31,1)
 		fnTxt(myline,col4_pos,2,0,1,'number')
 		dim debugPeriod$*128
-		fncreg_read("debug period",debugPeriod$)
+		fncreg_read('debug period',debugPeriod$)
 		resp$(resp_debugPeriod=respc+=1)=debugPeriod$
 
 		
@@ -179,7 +185,7 @@ def fn_screen_1(nap,mat period_date_start,mat prior_period_date_start)
 		for period=1 to nap
 			period_date_start(period)=val(resp$(period))
 			prior_period_date_start(period)=period_date_start(period)-1
-			fncreg_write("Period "&str$(period)&" Start Date",resp$(period))
+			fncreg_write('Period '&str$(period)&" Start Date",resp$(period))
 		next period
 		if resp$(nap+1)='True' then include_prior_periods=1 else include_prior_periods=0
 		fncreg_write("correct prior year",resp$(nap+1))
@@ -213,13 +219,13 @@ def fn_date_mmddyy_is_within_range(dmi_test_date,dmi_date_start,dmi_date_end)
 	if dmi_test_date=>dmi_date_start and dmi_test_date<=dmi_date_end then dmi_return=1
 	fn_date_mmddyy_is_within_range=dmi_return
 fnend  ! fn_date_mmddyy_is_within_range
-def fn_processTrans(h_trans; pt_fix_trans_period_code,___,trgl$,tr_date,tr_amt,tr_6,pc2,actrans_key$*20)
+def fn_processTrans(h_trans; pt_fixTransPeriodCode,___,trgl$,tr_date,tr_amt,tr_6,pc2,actrans_key$*20)
 	! uses inherriteed local:  gl$, period, mat period_accumulator_prior    
 	!          probably others,
 	actrans_key$=rpad$(gl$,kln(h_trans))
 	restore #h_trans,key>=actrans_key$: nokey EoTrans
 	do
-		if pt_fix_trans_period_code then
+		if pt_fixTransPeriodCode then
 			read #h_trans,using FtransHistory: trgl$,tr_date,tr_amt,tr_6,pc2 eof EoTrans
 		else
 			read #h_trans,using FtransCurrent: trgl$,tr_date,tr_amt,tr_6 eof EoTrans
@@ -229,10 +235,10 @@ def fn_processTrans(h_trans; pt_fix_trans_period_code,___,trgl$,tr_date,tr_amt,t
 		if fn_date_mmddyy_is_within_range(tr_date,prior_period_date_start(period),prior_period_date_end) then
 			period_accumulator_prior(period)+=tr_amt
 			!         fn_report(rpt$(' ',40)&str$(tr_date)&' prior period '&str$(period)&'  + '&cnvrt$('pic(----------.--)',tr_amt))
-			if pt_fix_trans_period_code and period<>pc2 then ! the period on the transaction is incorrect - correct it.
-			!         fn_report('changing actrans '&trgl$&'/'&str$(tr_date)&" from "&str$(pc2)&' to '&str$(period))
-			pc2=period
-			rewrite #h_trans,using FtransHistory: trgl$,tr_date,tr_amt,tr_6,pc2
+			if pt_fixTransPeriodCode and period<>pc2 then ! the period on the transaction is incorrect - correct it.
+				!         fn_report('changing actrans '&trgl$&'/'&str$(tr_date)&" from "&str$(pc2)&' to '&str$(period))
+				pc2=period
+				rewrite #h_trans,using FtransHistory: trgl$,tr_date,tr_amt,tr_6,pc2
 			end if
 		end if
 		! /r
@@ -245,7 +251,7 @@ def fn_processTrans(h_trans; pt_fix_trans_period_code,___,trgl$,tr_date,tr_amt,t
 				en if
 			end if
 			!         fn_report(str$(tr_date)&' period '&str$(period)&'  + '&cnvrt$('pic(----------.--)',tr_amt)&' type '&str$(tr_6))
-			if pt_fix_trans_period_code and period<>pc2 then ! the period on the transaction is incorrect - correct it.
+			if pt_fixTransPeriodCode and period<>pc2 then ! the period on the transaction is incorrect - correct it.
 				!         fn_report('changing actrans '&trgl$&'/'&str$(tr_date)&" from "&str$(pc2)&' to '&str$(period))
 				pc2=period
 				rewrite #h_trans,using FtransHistory: trgl$,tr_date,tr_amt,tr_6,pc2

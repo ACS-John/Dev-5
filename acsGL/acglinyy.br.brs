@@ -65,11 +65,8 @@ L580: open #101: "SROW=08,SCOL=18,EROW=12,ECOL=58,BORDER=DR,CAPTION= COMPARATIVE
 	report$="STATEMENT OF INCOME AND EXPENSES"
 	fnOpenPrn
 	redir=0: if file$(255)(1:4)<>"PRN:" then redir=1
-	if fnPs=2 then goto L700 ! secondary
-	execute "Index [Q]\GLmstr\GLmstr.h[cno] "&env$('temp')&'\'&"fsindex.h[cno] 69 3 Replace DupKeys -N"
-	goto L710
-L700: execute "Index [Q]\GLmstr\GLmstr.h[cno] "&env$('temp')&'\'&"fsindex.h[cno] 72 3 Replace DupKeys -N"
-L710: open #3: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName="&env$('temp')&'\'&"fsindex.h[cno],Shr",i,i,k
+	fnFsIndexIncStmt
+	open #3: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[temp]\fsindex.h[cno],Shr",i,i,k
 L720: !
 L730: read #1,using L780: r$,d$,te$,sp,ls,ds,ul,rs,bc,ap,mat ac,ic,fc,rnp eof L2510
 	if ltrm$(r$)="" or ltrm$(r$)="0" then goto L720

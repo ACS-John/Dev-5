@@ -125,9 +125,9 @@ SCR2: !
 	end if
 	read #hGlMstr1,using 'form pos 1,c 3,c 6,c 3',key=glnumber$: dno$,ano$,sno$ nokey SCR2
 	acno$=glnumber$(1:3)&'         '
-
-read #hGlMstr1,using fGlMstr1,key>=acno$: acno$,bb,cb,mat bc,mat bp,mat bud nokey SCR2
+	read #hGlMstr1,using fGlMstr1,key>=acno$: acno$,bb,cb,mat bc,mat bp,mat bud nokey SCR2
 goto L770
+
 do
 	read #hGlMstr1,using fGlMstr1: acno$,bb,cb,mat bc,mat bp, mat bud eof EoAcct
 	L770: !

@@ -56,11 +56,8 @@ L490: !
 	if cmdkey=5 then goto L2380 ! jb
 	report$="STATEMENT OF INCOME AND EXPENSES"
 	fnOpenPrn
-	if fnPs=2 then goto L630 ! secondary
-	execute "Index [Q]\GLmstr\GLmstr.h[cno] [temp]\fsindex.h[cno] 69 3 Replace DupKeys -N"
-	goto L640
-L630: execute "Index [Q]\GLmstr\GLmstr.h[cno] [temp]\fsindex.h[cno] 72 3 Replace DupKeys -N"
-L640: open #3: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[temp]\fsindex.h[cno],Shr",i,i,k
+	fnFsIndexIncStmt
+	open #3: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[temp]\fsindex.h[cno],Shr",i,i,k
 	redir=0: if file$(255)(1:4)<>"PRN:" then redir=1
 L660: read #1,using L710: r$,d$,te$,sp,ls,ds,ul,rs,bc,ap,mat ac,ic,fc eof L2360
 	if ltrm$(r$)="" or ltrm$(r$)="0" then goto L660

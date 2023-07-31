@@ -11,34 +11,34 @@ RefIncome1          	,    Income Statement Ref Number             	,  PD  3     
 RefIncome2          	,    Secondary Income Statement Ref Number  	,  PD  3      , !  Pos=72        RF(4)     ^IncStmtRf2    combof(ignore,[Q]\GLmstr\acglfnsj.h[cno],1,5,6,30,[Q]\GLmstr\agfsidx2.h[cno])
 RefFund1            	,    Fund Statement Ref Number               	,  PD  3      , !  Pos=75        RF(5)     ^FundStmtRf1   combof(ignore,[Q]\GLmstr\acglfnsf.h[cno],1,5,6,30,[Q]\GLmstr\agfsidx5.h[cno])
 RefFund2            	,    Secondary Fund Statement Ref Number    	,  PD  3      , !  Pos=78        RF(6)     ^FundStmtRf2   combof(ignore,[Q]\GLmstr\acglfnsg.h[cno],1,5,6,30,[Q]\GLmstr\agfsidx6.h[cno])
-BalanceBeginning    	,    Beginning Account Balance               	,  PD  6.2    , !  Pos=81        BB        ^AccBal-Begin   mask=10
+BalanceBeginning   	,    Beginning Account Balance               	,  PD  6.2    , !  Pos=81        BB        ^AccBal-Begin   mask=10
 BalanceCurrent     	,    Current Account Balance                 	,  PD  6.2    , !  Pos=87        CB        ^Bal            mask=10
-BalMthEndCrYrPer01 	,    Balance Current Year-Period 1           	,  PD  6.2    , !  Pos=93        BC(01)    ^Bal-CY-M1     mask=10
-BalMthEndCrYrPer02 	,    Balance Current Year-Period 2           	,  PD  6.2    , !  Pos=99        BC(02)    ^Bal-CY-M2     mask=10
-BalMthEndCrYrPer03 	,    Balance Current Year-Period 3           	,  PD  6.2    , !  Pos=105       BC(03)    ^Bal-CY-M3     mask=10
-BalMthEndCrYrPer04 	,    Balance Current Year-Period 4           	,  PD  6.2    , !  Pos=111       BC(04)    ^Bal-CY-M4     mask=10
-BalMthEndCrYrPer05 	,    Balance Current Year-Period 5           	,  PD  6.2    , !  Pos=117       BC(05)    ^Bal-CY-M5     mask=10
-BalMthEndCrYrPer06 	,    Balance Current Year-Period 6           	,  PD  6.2    , !  Pos=123       BC(06)    ^Bal-CY-M6     mask=10
-BalMthEndCrYrPer07 	,    Balance Current Year-Period 7           	,  PD  6.2    , !  Pos=129       BC(07)    ^Bal-CY-M7     mask=10
-BalMthEndCrYrPer08 	,    Balance Current Year-Period 8           	,  PD  6.2    , !  Pos=135       BC(08)    ^Bal-CY-M8     mask=10
-BalMthEndCrYrPer09 	,    Balance Current Year-Period 9           	,  PD  6.2    , !  Pos=141       BC(09)    ^Bal-CY-M9     mask=10
-BalMthEndCrYrPer10 	,    Balance Current Year-Period 10          	,  PD  6.2    , !  Pos=147       BC(10)    ^Bal-CY-M10    mask=10
-BalMthEndCrYrPer11 	,    Balance Current Year-Period 11          	,  PD  6.2    , !  Pos=153       BC(11)    ^Bal-CY-M11    mask=10
-BalMthEndCrYrPer12 	,    Balance Current Year-Period 12          	,  PD  6.2    , !  Pos=159       BC(12)    ^Bal-CY-M12    mask=10
-BalMthEndCrYrPer13 	,    Balance Current Year-Period 13          	,  PD  6.2    , !  Pos=165       BC(13)    ^Bal-CY-M13    mask=10
-BalMthEndPrYrPer01 	,    Balance Prior Year-Period 1             	,  PD  6.2    , !  Pos=171       BP(01)    ^Bal-PY-M1     mask=10
-BalMthEndPrYrPer02 	,    Balance Prior Year-Period 2             	,  PD  6.2    , !  Pos=177       BP(02)    ^Bal-PY-M2     mask=10
-BalMthEndPrYrPer03 	,    Balance Prior Year-Period 3             	,  PD  6.2    , !  Pos=183       BP(03)    ^Bal-PY-M3     mask=10
-BalMthEndPrYrPer04 	,    Balance Prior Year-Period 4             	,  PD  6.2    , !  Pos=189       BP(04)    ^Bal-PY-M4
-BalMthEndPrYrPer05 	,    Balance Prior Year-Period 5             	,  PD  6.2    , !  Pos=195       BP(05)    ^Bal-PY-M5
-BalMthEndPrYrPer06 	,    Balance Prior Year-Period 6             	,  PD  6.2    , !  Pos=201       BP(06)    ^Bal-PY-M6
-BalMthEndPrYrPer07 	,    Balance Prior Year-Period 7             	,  PD  6.2    , !  Pos=207       BP(07)    ^Bal-PY-M7
-BalMthEndPrYrPer08 	,    Balance Prior Year-Period 8             	,  PD  6.2    , !  Pos=213       BP(08)    ^Bal-PY-M8
-BalMthEndPrYrPer09 	,    Balance Prior Year-Period 9             	,  PD  6.2    , !  Pos=219       BP(09)    ^Bal-PY-M9
-BalMthEndPrYrPer10 	,    Balance Prior Year-Period 10            	,  PD  6.2    , !  Pos=225       BP(10)    ^Bal-PY-M10
-BalMthEndPrYrPer11 	,    Balance Prior Year-Period 11            	,  PD  6.2    , !  Pos=231       BP(11)    ^Bal-PY-M11
-BalMthEndPrYrPer12 	,    Balance Prior Year-Period 12            	,  PD  6.2    , !  Pos=237       BP(12)    ^Bal-PY-M12
-BalMthEndPrYrPer13 	,    Balance Prior Year-Period 13            	,  PD  6.2    , !  Pos=243       BP(13)    ^Bal-PY-M13
+BalMthEndCrYrPer01 	,    Balance Current Year-Period 1          	,  PD  6.2    , !  Pos=93        BC(01)    ^Bal-CY-M1     mask=10
+BalMthEndCrYrPer02 	,    Balance Current Year-Period 2          	,  PD  6.2    , !  Pos=99        BC(02)    ^Bal-CY-M2     mask=10
+BalMthEndCrYrPer03 	,    Balance Current Year-Period 3          	,  PD  6.2    , !  Pos=105       BC(03)    ^Bal-CY-M3     mask=10
+BalMthEndCrYrPer04 	,    Balance Current Year-Period 4          	,  PD  6.2    , !  Pos=111       BC(04)    ^Bal-CY-M4     mask=10
+BalMthEndCrYrPer05 	,    Balance Current Year-Period 5          	,  PD  6.2    , !  Pos=117       BC(05)    ^Bal-CY-M5     mask=10
+BalMthEndCrYrPer06 	,    Balance Current Year-Period 6          	,  PD  6.2    , !  Pos=123       BC(06)    ^Bal-CY-M6     mask=10
+BalMthEndCrYrPer07 	,    Balance Current Year-Period 7          	,  PD  6.2    , !  Pos=129       BC(07)    ^Bal-CY-M7     mask=10
+BalMthEndCrYrPer08 	,    Balance Current Year-Period 8          	,  PD  6.2    , !  Pos=135       BC(08)    ^Bal-CY-M8     mask=10
+BalMthEndCrYrPer09 	,    Balance Current Year-Period 9          	,  PD  6.2    , !  Pos=141       BC(09)    ^Bal-CY-M9     mask=10
+BalMthEndCrYrPer10 	,    Balance Current Year-Period 10         	,  PD  6.2    , !  Pos=147       BC(10)    ^Bal-CY-M10    mask=10
+BalMthEndCrYrPer11 	,    Balance Current Year-Period 11         	,  PD  6.2    , !  Pos=153       BC(11)    ^Bal-CY-M11    mask=10
+BalMthEndCrYrPer12 	,    Balance Current Year-Period 12         	,  PD  6.2    , !  Pos=159       BC(12)    ^Bal-CY-M12    mask=10
+BalMthEndCrYrPer13 	,    Balance Current Year-Period 13         	,  PD  6.2    , !  Pos=165       BC(13)    ^Bal-CY-M13    mask=10
+BalMthEndPrYrPer01 	,    Balance Prior Year-Period 1            	,  PD  6.2    , !  Pos=171       BP(01)    ^Bal-PY-M1     mask=10
+BalMthEndPrYrPer02 	,    Balance Prior Year-Period 2            	,  PD  6.2    , !  Pos=177       BP(02)    ^Bal-PY-M2     mask=10
+BalMthEndPrYrPer03 	,    Balance Prior Year-Period 3            	,  PD  6.2    , !  Pos=183       BP(03)    ^Bal-PY-M3     mask=10
+BalMthEndPrYrPer04 	,    Balance Prior Year-Period 4            	,  PD  6.2    , !  Pos=189       BP(04)    ^Bal-PY-M4
+BalMthEndPrYrPer05 	,    Balance Prior Year-Period 5            	,  PD  6.2    , !  Pos=195       BP(05)    ^Bal-PY-M5
+BalMthEndPrYrPer06 	,    Balance Prior Year-Period 6            	,  PD  6.2    , !  Pos=201       BP(06)    ^Bal-PY-M6
+BalMthEndPrYrPer07 	,    Balance Prior Year-Period 7            	,  PD  6.2    , !  Pos=207       BP(07)    ^Bal-PY-M7
+BalMthEndPrYrPer08 	,    Balance Prior Year-Period 8            	,  PD  6.2    , !  Pos=213       BP(08)    ^Bal-PY-M8
+BalMthEndPrYrPer09 	,    Balance Prior Year-Period 9            	,  PD  6.2    , !  Pos=219       BP(09)    ^Bal-PY-M9
+BalMthEndPrYrPer10 	,    Balance Prior Year-Period 10           	,  PD  6.2    , !  Pos=225       BP(10)    ^Bal-PY-M10
+BalMthEndPrYrPer11 	,    Balance Prior Year-Period 11           	,  PD  6.2    , !  Pos=231       BP(11)    ^Bal-PY-M11
+BalMthEndPrYrPer12 	,    Balance Prior Year-Period 12           	,  PD  6.2    , !  Pos=237       BP(12)    ^Bal-PY-M12
+BalMthEndPrYrPer13 	,    Balance Prior Year-Period 13           	,  PD  6.2    , !  Pos=243       BP(13)    ^Bal-PY-M13
 BudgetPeriod01     	,    Budget - Month 1                        	,  PD  6.2    , !  Pos=249       BM(01)    ^Budget-M1
 BudgetPeriod02     	,    Budget - Month 2                        	,  PD  6.2    , !  Pos=255       BM(02)    ^Budget-M2
 BudgetPeriod03     	,    Budget - Month 3                        	,  PD  6.2    , !  Pos=261       BM(03)    ^Budget-M3

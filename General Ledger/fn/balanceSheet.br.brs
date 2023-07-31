@@ -34,19 +34,10 @@ def fn_balanceSheet(; defaultFormat$)
 	goto GetStarted ! /r
 	
 	GetStarted: ! r:
-		if fnPs=2 then
-			mp1=66
-			exe 'con sub [FinancialStatementCode] C' ! used by fn_open('GL FSDesign'...)
-			! open #hFsD=fnH:"Name=[Q]\GLmstr\acglFnSC.h[cno],KFName=[Q]\GLmstr\agfsidx1.h[cno],Shr",i,i,k
-		else
-			exe 'con sub [FinancialStatementCode] B' ! used by fn_open('GL FSDesign'...)
-			mp1=63
-			! open #hFsD=fnH:"Name=[Q]\GLmstr\ACGLFNSB.h[cno],KFName=[Q]\GLmstr\agfsidx4.h[cno],Shr",i,i,k
-		end if
-		fnIndex("[Q]\GLmstr\GLmstr.h[cno]","[Q]\GLmstr\fsindex.h[cno]",str$(mp1)&" 3")
+		fnFsIndexBalSht
 		dim fsN(0),fs$(0)*128
 		hFsD=fn_openFio('GL FSDesign',mat fs$,mat fsN,1) ! requires [FinancialStatementCode]
-		open #hGl=fnH: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\fsindex.h[cno],Shr",i,i,k
+		open #hGl=fnH: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Temp]\fsindex.h[cno],Shr",i,i,k
 		fnOpenPrn
 		dim reportHeading1$*50
 		if env$('client')='Billings' then reportHeading1$='Income and Expense Statement'

@@ -56,7 +56,7 @@ for item=1 to fileCount
 			
 			! pr ln$ : pause
 			
-			if ln$(1:11)='autolibrary' then
+			if ln$(1:11)='autoLibrary' then
 				! existing autoLibrary encountered
 				encounteredAutoLibrary=1
 				pr #hOut: line$

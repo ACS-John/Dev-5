@@ -137,9 +137,9 @@ def fn_acsSystemInitialize(; syInitMode)
 			if fn_moveCoreData('CityStZip.dat') then fn_moveCoreData('CityStZip.idx',1)
 			if fn_moveCoreData('1099Box.dat') then fn_moveCoreData('1099Box.idx',1)
 			! fn_udf_resolve
-			! if exists(udf$&'Reads_and_Chgs.h1') then
-			!   fn_moveData(udf$&'Reads_and_Chgs.h*','[Q]\UBmstr\Reads_and_Chgs.h*',1)
-			!   fn_moveData(udf$&'Reads_and_Chgs-Key.h*','[Q]\UBmstr\Reads_and_Chgs-Key.h*',1)
+			! if exists('[temp]\Reads_and_Chgs.h1') then
+			!   fn_moveData('[temp]\Reads_and_Chgs.h*','[Q]\UBmstr\Reads_and_Chgs.h*',1)
+			!   fn_moveData('[temp]\Reads_and_Chgs-Key.h*','[Q]\UBmstr\Reads_and_Chgs-Key.h*',1)
 			!  end if
 			dim workingDir$*512
 			if env$('br_model')='CLIENT/SERVER' then
@@ -400,54 +400,7 @@ def fn_changeTemp(; returnN)
 	end if
 	fn_changeTemp=returnN
 fnend
-! def fn_udf_resolve ! r: migration tool no longer used
-!   dim udf$*1024
-!   fn_get_udf(udf$)
-!   if udf$<>'' and exists(udf$)=1 then ! then it is a directory that exists
-!     tmp_dir_count=1
-!     tmp_dir$(1)=rtrm$(udf$,'\')
-!     dim filename$(1)*1024,tmp_dir$(1)*1024
-!     exe 'sy -m del "'&os_filename$(udf$)&'\*.scr"'
-!     exe 'sy -m del "'&os_filename$(udf$)&'\*.tmp"'
-!     exe 'sy -m xcopy "'&os_filename$(udf$)&'" "[Q]\" /S /T'
-!     fngetdir2(udf$,mat filename$, '/s /b','*.*') ! fngetdir2(udf$&'ini',mat filename$, '/s /b','*.*')
-!     for f_i=1 to udim(mat filename$)
-!       if exists(filename$(f_i))=1 then ! it is a directory
-!         tmp_dir_count+=1
-!         mat tmp_dir$(tmp_dir_count)
-!         tmp_dir$(tmp_dir_count)=filename$(f_i)
-!       else ! it is a file.
-!         dim tmp_to$*1024,tmp_from$*1024
-!         tmp_to$='[Q]\'&filename$(f_i)(len(udf$)+1:len(filename$(f_i)))
-!         tmp_from$=lwrc$(filename$(f_i))
-!         if pos(tmp_from$,lwrc$('Reads_and_Chgs'))>0 then
-!           fnCopy(tmp_from$,'[Q]\UBmstr\*.*')
-!           exe 'free "'&tmp_from$&'"' ioerr ignore
-!         else if ~exists(tmp_to$) then
-!           if fnCopy(tmp_from$,tmp_to$) then
-!             exe 'free "'&tmp_from$&'"' ioerr ignore
-!           end if
-!         else if exists(tmp_to$) then
-!           exe 'free "'&tmp_from$&'"' ioerr ignore
-!         end if
-!       end if
-!     next f_i
-!     for d_i=tmp_dir_count to 1, step -1
-!       exe 'rmdir '&tmp_dir$(d_i) ioerr ignore
-!     next d_i
-!   end if
-! fnend /r
-! def fn_get_udf(&udf$) r:
-!   dim oldudf$*256
-!   if oldudf$<>'' then
-!     udf$=oldudf$
-!   else if env$('ScreenAceTemp')='' then !    NEW - just return blank - we do not need to make anything
-!     udf$=oldudf$='' ! app_data$&'\ACS\Temp\'
-!   else
-!     oldudf$=udf$=fnshortpath$(env$('ScreenAceTemp'))&'\'
-!   end if
-!   udf$(3:len(udf$))=srep$(udf$(3:len(udf$)),'\\','\')
-! fnend /r
+
 def fn_envDataDefault(; colletionMasterMode,___,edd_base$*256)
 	if colletionMasterMode then
 		fnMakeSurePathExists(env$('status.files.drives.[i]')&'ACS\')

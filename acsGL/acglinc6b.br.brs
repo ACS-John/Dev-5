@@ -8,11 +8,9 @@
 	dim r$*5,d$*50,te$*1,ac(9),report$*50,secondr$*50,foot$*132,underlin$*14
 	dim b$*3,a$(8)*30,oldtrans$*16,g(8),accum(9,6)
 	dim pedat$*20,actpd$*6,bm(13),bp(13),by(13),cap$*128
-	dim udf$*256
  
 	fnTop(program$,cap$="Income Statement-Monthly & Year Budgets")
 	on fkey 5 goto L2160
-	udf$=env$('temp')&'\'
 	actpd=fnactpd
 	actpd$=fnactpd$
 	if fnGlAskFormatPriorCdPeriod=5 then goto Xit 		! sets fnPs,fnpriorcd,fnfscode (primary/secondary,current year/Prior,period to print)
@@ -39,11 +37,8 @@ L390: costcntr=val(resp$(1))
 	report$="STATEMENT OF INCOME AND EXPENSES"
 	fnOpenPrn
 	redir=0: if file$(255)(1:4)<>"PRN:" then redir=1
-	if fnPs=2 then goto L480 ! secondary
-	execute "Index [Q]\GLmstr\GLmstr.h[cno] "&udf$&"fsindex.h[cno] 69 3 Replace DupKeys -N"
-	goto L490
-L480: execute "Index [Q]\GLmstr\GLmstr.h[cno] "&udf$&"fsindex.h[cno] 72 3 Replace DupKeys -N"
-L490: open #3: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName="&udf$&"fsindex.h[cno],Shr",i,i,k
+	fnFsIndexIncStmt
+	open #3: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[temp]\fsindex.h[cno],Shr",i,i,k
 L500: read #1,using L550: r$,d$,te$,sp,ls,ds,ul,rs,bc,ap,mat ac,ic,fc eof L2160
 	if ltrm$(r$)="" or ltrm$(r$)="0" then goto L500
 	if costcntr=0 then goto L550

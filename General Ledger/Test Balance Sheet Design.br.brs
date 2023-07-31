@@ -31,11 +31,9 @@ Screen1: ! r:
   if ckey=5 then goto Xit
   costcntr=val(resp$(1))
 goto GetStarted ! /r
-GetStarted: if fnPs=2 then goto L310 ! secondary
-  execute "Index [Q]\GLmstr\GLmstr.h[cno]"&' '&"[Q]\GLmstr\fsindex.h[cno] 63 3 Replace DupKeys -N"
-  goto L320
-L310: execute "Index [Q]\GLmstr\GLmstr.h[cno]"&' '&"[Q]\GLmstr\fsindex.h[cno] 66 3 Replace DupKeys -N"
-L320: open #3: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\fsindex.h[cno],Shr",i,i,k
+GetStarted: !
+	fnFsIndexBalSht
+	open #3: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\fsindex.h[cno],Shr",i,i,k
   fnOpenPrn
   if file$(255)(1:4)<>"PRN:" then redir=1 else redir=0
   report$="Balance Sheet"

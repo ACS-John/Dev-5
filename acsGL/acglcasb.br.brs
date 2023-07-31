@@ -68,11 +68,7 @@ L550: !
 	if notrans=1 then goto L940
 	if ir>=val(r$) and val(r$)><0 then goto L740
 	close #3: ioerr ignore
-	if fnPs=2 then
-		fnIndex('[Q]\GLmstr\GLmstr.h[cno]','[temp]\fsindex.h[cno]','78 3')
-	else
-		fnIndex('[Q]\GLmstr\GLmstr.h[cno]','[temp]\fsindex.h[cno]','75 3')
-	end if
+	fnFsIndexFundStmt
 	open #3: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Temp]\fsindex.h[cno],Shr",i,i,k
 	L630: ! read amounts from gl master file
 	L640: !

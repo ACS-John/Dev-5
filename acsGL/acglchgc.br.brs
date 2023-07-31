@@ -4,13 +4,12 @@
 	autoLibrary
 	on error goto Ertn
  
-	dim fl1$*256,cogl$(3)*12,acct$*12,bp(13),by(13),udf$*256
+	dim fl1$*256,cogl$(3)*12,acct$*12,bp(13),by(13)
 	dim r$*5,d$*50,te$*1,ac(9),report$*50,secondr$*50,foot$*132,underlin$*14
 	dim b$*3,a$(8)*30,oldtrans$*16,g(8),accum(9,2),by(13),cap$*128
  
 	fnTop(program$,cap$="Comparative Change Amount")
 	if fnGlAskFormatPriorCdPeriod=5 then goto Xit
-	udf$=env$('temp')&'\'
 	open #20: "Name=[Q]\GLmstr\Company.h[cno],Shr",i,i,r: read #20,using 'form pos 152,3*C 12',rec=1: mat cogl$ : close #20:
 	actpd=fnactpd : fscode=fnfscode : priorcd=fnpriorcd
 	on fkey 5 goto L2060
@@ -55,11 +54,8 @@ L350: close #1:
 L480: fnOpenPrn : _
 	if file$(255)(1:4)<>"PRN:" then redir=1 else redir=0
 	report$="Statement of Changes in Financial Position"
-	if fnPs=2 then goto L530 ! secondary
-	execute "Index [Q]\GLmstr\GLmstr.h[cno] "&udf$&"fsindex.h[cno] 75 3 Replace DupKeys -N"
-	goto L540
-L530: execute "Index [Q]\GLmstr\GLmstr.h[cno] "&udf$&"fsindex.h[cno] 78 3 Replace DupKeys -N"
-L540: open #3: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName="&udf$&"fsindex.h[cno],Shr",i,i,k
+	fnFsIndexFundStmt
+	open #3: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[temp]\fsindex.h[cno],Shr",i,i,k
 L550: read #1,using L590: r$,d$,te$,sp,ls,ds,ul,rs,bc,ap,mat ac,ic,fc eof L2060
 	if ltrm$(r$)="" or ltrm$(r$)="0" then goto L550
 	if costcntr=0 then goto L590

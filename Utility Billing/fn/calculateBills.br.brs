@@ -1,7 +1,4 @@
-if env$('acsDeveloper')='' then 
-	pr bell;'direct run is for developers only.'
-	end
-end if
+if env$('acsDeveloper')='' then pr bell;'direct run is for developers only.' : end
 
 fn_setup
 fnTop(program$)
@@ -208,14 +205,14 @@ def fn_write_new_trans
 	tdate=d1
 	tdate=fndate_mmddyy_to_ccyymmdd(tdate)
 	tcode=1
-	wr=xd(1): wu=xd(3): er=xd(5): eu=xd(7): gr=xd(9)
+	wr=xd(1) : wu=xd(3) : er=xd(5) : eu=xd(7) : gr=xd(9)
 	gu=xd(11)
 	for j=1 to 11 : tg(j)=g(j) : next j
 	transkey$=x$&cnvrt$('pic(########)',tdate)&cnvrt$('pic(#)',tcode)
-	read #hTrans,using FORM_UBTRANS,key=transkey$: y$ nokey UBTRANS_NOKEY ! check for recalk
+	read #hTrans,using FORM_UBTRANS,key=transkey$: y$ nokey WntTransNokey ! check for recalk
 	rewrite #hTrans,using FORM_UBTRANS,key=transkey$: x$,tdate,tcode,tamount,mat tg,wr,wu,er,eu,gr,gu,bal,pcode
 	goto WNT_XIT
-	UBTRANS_NOKEY: !
+	WntTransNokey: !
 		! need to update the balance on any transaction that may have been processed since the original charge transaction was created.
 		write #hTrans,using FORM_UBTRANS: x$,tdate,tcode,tamount,mat tg,wr,wu,er,eu,gr,gu,bal,pcode
 	WNT_XIT: !
