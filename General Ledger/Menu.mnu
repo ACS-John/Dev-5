@@ -25,21 +25,21 @@ Print
 >Chart of Accounts with Financial Statement Reference Numbers ^ [cursystem]\*
 Financial Statements
 >Financial Statement Design                         ^ [cursystem]\*
->Print Cover Letter                                 ^ acsGL\CoverLetterPrint
+>Print Cover Letter                                 ^ [cursystem]\*
 >>Edit Cover Letter                                 ^ EditInWordProcessor:[Q]\GLmstr\ACGLCovF.h[cno] forceAtlantis makeIfNecessary
 >Balance Sheet                                      ^ [cursystem]\*
 >>Comparative Balance Sheet                         ^ [cursystem]\*
 >>Period Comparison Balance Sheet                   ^ [cursystem]\*
 >>Fund Comparison Balance Sheet                     ^ [cursystem]\*
->Income Statement                                   ^ [cursystem]\*
->>Quarterly Income Statement                        ^ [cursystem]\*
->>Income Statement with Percents                    ^ [cursystem]\*
+>Income Statement                                   ^ [cursystem]\*             ^    ^ Statement of Income and Expenses
+>>Quarterly Income Statement                        ^ [cursystem]\*             ^    ^ Statement of Income and Expenses
+>>Income Statement with Percents                    ^ [cursystem]\*             ^    ^ Statement of Income and Expenses
 >>Comparative Income Statement                      ^ [cursystem]\*
 >>Income Statement with Budget                      ^ [cursystem]\*
 >>Income Statement with Varience                    ^ [cursystem]\*
 ! removed 4/17/22 - was found missing obv no one uses >>Income Statement showing YTD Only                 ^ acsGL\ACGLINC1
 >>Four Column Budget Income Statement               ^ [cursystem]\*
->>Four Column Budget With Percent                   ^ acsGL\ACGLINC4p
+>>Four Column Budget With Percent                   ^ acsGL\ACGLINC4p             ^    ^ Statement of Income and Expenses
 >>Six Column Income Statement                       ^ [cursystem]\*
 >>Income Statement with GASB Budget                 ^ acsGL\ACGLINCo
 >>Income Statement with Year Comparison             ^ acsGL\ACGLINYY
@@ -82,7 +82,7 @@ Utilities
 ! removed 7/12/2021 - does anyone really ever use this?? i really doubt it -john  >Consolidate Master Files                         ^ acsGL\COMBGL
 >Create ASCII File                                ^ acsGL\ASCIIGLM
 >Create Checkbook System Files                    ^ [cursystem]\*
->Reorganize Company                               ^ acsGL\GlReorganize
+! removed 7/13/23 - program file lost or retired  >Reorganize Company                               ^ acsGL\GlReorganize
 >Period Names                                     ^ HamsterFio:*
 >Test Balance Sheet Design                        ^ [cursystem]\*
 >Test Income Statement Design                     ^ acsGL\acglinct

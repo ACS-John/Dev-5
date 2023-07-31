@@ -50,15 +50,14 @@ L330: ! pr NEWPAGE
 	pr f "10,10,Cc 60,n": " BALANCE SHEET IN PROCESS"
 	pr f "12,34,C 11,B,5": "Cancel (F5)"
 	on fkey 5 goto L2120
-L370: fnOpenPrn : _
+L370: !
+	fnOpenPrn
 	if file$(255)(1:4)<>"PRN:" then redir=1 else redir=0
-	if fnPs=2 then goto L410 ! secondary
-	execute "Index [Q]\GLmstr\GLmstr.h[cno] "&env$('temp')&'\'&"fsindex.h[cno] 63 3 Replace DupKeys -N"
-	goto L420
-L410: execute "Index [Q]\GLmstr\GLmstr.h[cno] "&env$('temp')&'\'&"fsindex.h[cno] 66 3 Replace DupKeys -N"
-L420: open #3: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName="&env$('temp')&'\'&"fsindex.h[cno],Shr",i,i,k
+	fnFsIndex(63.66)
+	open #3: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[temp]\fsindex.h[cno],Shr",i,i,k
 	report$=env$('program_caption')
-L440: read #1,using L480: r$,d$,te$,sp,ls,ds,ul,rs,bc,ap,mat ac,ic,fc eof L2120
+L440: !
+	read #1,using L480: r$,d$,te$,sp,ls,ds,ul,rs,bc,ap,mat ac,ic,fc eof L2120
 	if ltrm$(r$)="" or ltrm$(r$)="0" then goto L440
 	if costcntr=0 then goto L480
 	if costcntr><fc then goto L440

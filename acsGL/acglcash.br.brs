@@ -41,12 +41,10 @@
 	ckey=fnAcs(mat resp$)
 	if ckey=5 then goto Xit
 	costcntr=val(resp$(1))
-L360: if fnPs=2 then goto L390 ! secondary
-	close #3: ioerr L370
-L370: execute "Index [Q]\GLmstr\GLmstr.h[cno] [Temp]\fsindex.h[cno] 75 3 Replace DupKeys -N"
-	goto L400
-L390: execute "Index [Q]\GLmstr\GLmstr.h[cno] [Temp]\fsindex.h[cno] 78 3 Replace DupKeys -N"
-L400: open #3: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Temp]\fsindex.h[cno],Shr",i,i,k
+L360: !
+	close #3: ioerr ignore
+	fnFsIndexFundStmt
+	open #3: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Temp]\fsindex.h[cno],Shr",i,i,k
 	fnOpenPrn
 	if file$(255)(1:4)<>"PRN:" then redir=1 else redir=0
 L420: read #1,using L460: r$,d$,te$,sp,ls,ds,ul,rs,bc,ap,mat ac,ic,fc eof L1820

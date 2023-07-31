@@ -55,11 +55,8 @@ L510: pf1=len(env$('cnam'))+int((43-len(env$('cnam')))/2)
 	fnOpenPrn
 	redir=0: if file$(255)(1:4)<>'PRN:' then redir=1
 	report$='STATEMENT OF INCOME AND EXPENSES'
-	if fnPs=2 then goto L580 ! secondary
-	execute 'Index [Q]\GLmstr\GLmstr.h[cno] [temp]\fsindex.h[cno] 69 3 Replace DupKeys -N'
-	goto L590
-L580: execute 'Index [Q]\GLmstr\GLmstr.h[cno] [temp]\fsindex.h[cno] 72 3 Replace DupKeys -N'
-L590: open #3: 'Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[temp]\fsindex.h[cno],Shr',i,i,k
+	fnFsIndexIncStmt
+	open #3: 'Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[temp]\fsindex.h[cno],Shr',i,i,k
 L600: !
 L610: read #1,using L660: r$,d$,te$,sp,ls,ds,ul,rs,bc,ap,mat ac,ic,fc,rnp eof L2330
 	if ltrm$(r$)='' or ltrm$(r$)='0' then goto L600

@@ -39,11 +39,8 @@ L210: acglfnsi=1 : _
 L330: on fkey 5 goto L1910
 	fnOpenPrn : _
 	if file$(255)(1:4)<>'PRN:' then redir=1 else redir=0
-	if fnPs=2 then goto L380 ! secondary
-	execute 'Index [Q]\GLmstr\GLmstr.h[cno] [temp]\fsindex.h[cno] 69 3 Replace DupKeys -N'
-	goto L390
-L380: execute 'Index [Q]\GLmstr\GLmstr.h[cno] [temp]\fsindex.h[cno] 72 3 Replace DupKeys -N'
-L390: open #3: 'Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[temp]\fsindex.h[cno],Shr',i,i,k
+	fnFsIndexIncStmt
+	open #3: 'Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[temp]\fsindex.h[cno],Shr',i,i,k
 	report$='Statement of Income and Expenses'
 READ_ACGLFNSI: !
 L420: read #acglfnsi,using L470: r$,d$,te$,sp,ls,ds,ul,rs,bc,ap,mat ac,ic,fc,rnp eof L1880,conv L2060

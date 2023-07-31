@@ -146,8 +146,8 @@ def fn_index_sys_do_one(cno,system_id$*128)
 
 		fn_index('[Q]\GLmstr\GLmstr.h'&str$(cno),'[Q]\GLmstr\GLIndex.h'&str$(cno),'1 12')
 		fn_index('[Q]\GLmstr\GLmstr.h'&str$(cno),'[Q]\GLmstr\glIndx2.h'&str$(cno),'13 30')
-	! fn_index('[Q]\GLmstr\GLmstr.h'&str$(cno),'[Q]\GLmstr\fsindex.H'&str$(cno),'63 3') ! Secondary
-	! fn_index('[Q]\GLmstr\GLmstr.h'&str$(cno),'[Q]\GLmstr\fsindex.H'&str$(cno),'66 3') ! Primary
+	!  fnFsIndex does this and fsIndex is temporary    fn_index('[Q]\GLmstr\GLmstr.h'&str$(cno),'[Temp]\fsindex.H'&str$(cno),'63 3') ! Secondary
+	!  fnFsIndex does this and fsIndex is temporary    fn_index('[Q]\GLmstr\GLmstr.h'&str$(cno),'[Temp]\fsindex.H'&str$(cno),'66 3') ! Primary
 		fn_index('[Q]\GLmstr\gl1099.h'&str$(cno),'[Q]\GLmstr\gl109Idx.h'&str$(cno),'1 8')
 		fn_index('[Q]\GLmstr\gltr1099.H'&str$(cno),'[Q]\GLmstr\gltridx1.H'&str$(cno),'1 8')
 		fn_index('[Q]\GLmstr\GLBRec.h'&str$(cno),'[Q]\GLmstr\GLRecIdx.h'&str$(cno),'1 24')

@@ -41,7 +41,7 @@
 	if ckey=5 then goto Xit
 	costcntr=val(resp$(1))
 	L340: !
-	open #3: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\fsindex.h[cno],Shr",i,i,k
+	open #3: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Temp]\fsindex.h[cno],Shr",i,i,k
 	NextGlRecord: !
 	read #1,using L390: r$,d$,te$,sp,ls,ds,ul,rs,bc,ap,mat ac,ic,fc eof Done
 	if ltrm$(r$)="" or ltrm$(r$)="0" then goto NextGlRecord

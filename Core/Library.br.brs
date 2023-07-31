@@ -1,4 +1,4 @@
-! test changes
+
 ! r: functions that do not redirect
 
 	def library fndate_mmddyy_to_ccyymmdd(x_mmddyy)
@@ -304,7 +304,7 @@ def library fnopenwin(win,sr,sc,er,ec,cap$*128; ___,winWidth)
 	if ec<1 then ec=59
 	winWidth=ec-sc+1
 	close #win: ioerr ignore
-	open #win: 'SRow='&str$(sr)&',SCol='&str$(sc)&',ERow='&str$(er)&',ECol='&str$(ec)&',Border=Sr,Caption=<'&cap$,display,outIn 
+	open #win: 'SRow='&str$(sr)&',SCol='&str$(sc)&',ERow='&str$(er)&',ECol='&str$(ec)&',Border=Sr,Caption=<'&cap$,display,outIn
 	pr #win: newpage
 	pr #win,fields '1,1,Cc '&str$(winWidth)&',R,N': env$('cnam')(1:min(40,winWidth))
 	pr #win,fields '2,1,Cc '&str$(winWidth)&',R,N': 'Company Number [cno]'(1:min(40,winWidth))
@@ -1651,6 +1651,27 @@ fnend
 	! /r
 ! /r
 ! r: GL   General Ledger
+	! r: Financial Statement
+		def library fnOpenFsdAcglfnsIJ(&mp1,&mp2)
+			library 'S:\General Ledger\fn\Financial Statement.br': fnOpenFsdAcglfnsIJ
+			fnOpenFsdAcglfnsIJ=fnOpenFsdAcglfnsIJ(mp1,mp2)
+		fnend
+
+		def library fnFsIndexFundStmt
+				library 'S:\General Ledger\fn\Financial Statement.br': fnFsIndex
+				fnFsIndexFundStmt=fnFsIndex(75,78)
+		fnend
+		def library fnFsIndexIncStmt
+				library 'S:\General Ledger\fn\Financial Statement.br': fnFsIndex
+				fnFsIndexIncStmt=fnFsIndex(69,72)
+		fnend
+		def library fnFsIndexBalSht
+				library 'S:\General Ledger\fn\Financial Statement.br': fnFsIndex
+				fnFsIndexBalSht=fnFsIndex(63,66)
+		fnend
+
+
+	! /r
 	def library fnReassignTransactionAddresses(cno)
 		library 'S:\General Ledger\Reassign Transaction Addresses.br': fnReassignTransactionAddresses
 		fnReassignTransactionAddresses=fnReassignTransactionAddresses(cno)
@@ -1969,4 +1990,5 @@ fnend
 	fnend
 
 ! /r
+
 

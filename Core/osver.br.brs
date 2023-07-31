@@ -1,7 +1,7 @@
 def library fnosver(&osver$; get_or_put)
 	! Get_OR_Put   =0=1.Read only      =2.Build and Read
 	autoLibrary
-	dim osv_temp$*500,osv_file$*500,udf$*256
+	dim osv_temp$*500,osv_file$*500
 	if get_or_put=0 then get_or_put=1
 	on error goto Ertn
 	if get_or_put<>2 then get_or_put=1

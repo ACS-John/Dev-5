@@ -6,7 +6,7 @@
  
 	dim choices$(2)*21,io5$(2),bigul$*140,heading$*140
 	dim fundnum(10),funddesc$(10)*20,io1$(20),dolcol$*140,accumcol$*140
-	dim bm(13),bp(13),by(13),cap$*128,fl1$*256,in3$(4),sc1$(2)*20,udf$*256
+	dim bm(13),bp(13),by(13),cap$*128,fl1$*256,in3$(4),sc1$(2)*20
 	dim b$*3,a$(8)*30,oldtrans$*16,g(8),accum(10,9,7),resp$(30)*50
 	dim r$*5,d$*50,te$*1,ac(9),report$*50,secondr$*50,foot$*132,underlin$*14
  
@@ -19,7 +19,6 @@
 	if fnGlAskFormatPriorCdPeriod=5 then goto Xit
 	fscode=fnfscode
 	priorcd=fnpriorcd
-	udf$=env$('temp')&'\'
 	monthly=1 ! default to monthly information
 	open #20: "Name=[Q]\GLmstr\Company.h[cno],Shr",i,i,r: read #20,using 'form pos 384,n 2',rec=1: nap : close #20:
 	fscode=fnfscode
@@ -46,12 +45,8 @@
 	costcntr=val(resp$(1))
 	gosub ASK_MONTHLY
 L410: on fkey 5 goto L2250
-	if fnPs=2 then goto L450 ! secondary
-	close #3: ioerr L430
-L430: execute "Index [Q]\GLmstr\GLmstr.h[cno] "&udf$&"fsindex.h[cno] 75 3 Replace DupKeys -N"
-	goto L460
-L450: execute "Index [Q]\GLmstr\GLmstr.h[cno] "&udf$&"fsindex.h[cno] 78 3 Replace DupKeys -N"
-L460: open #3: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName="&udf$&"fsindex.h[cno],Shr",i,i,k
+	fnFsIndexFundStmt
+L460: open #3: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[temp]\fsindex.h[cno],Shr",i,i,k
 	fnOpenPrn
 	if file$(255)(1:4)<>"PRN:" then redir=1 else redir=0
 L480: read #1,using L520: r$,d$,te$,sp,ls,ds,ul,rs,bc,ap,mat ac,ic,fc eof L2250

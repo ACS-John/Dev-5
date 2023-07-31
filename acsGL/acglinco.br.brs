@@ -7,10 +7,9 @@
 	dim fl1$*256,actpd$*6,cogl$(3)*12,pedat$*20,cch$*20,p$(20)*50
 	dim r$*5,d$*50,te$*1,ac(9),report$*50,secondr$*50,foot$*132,underlin$*14
 	dim b$*3,a$(8)*30,oldtrans$*16,g(8),accum(9,7)
-	dim pedat$*20,actpd$*6,bm(13),d(2),bp(13),by(13),revb(13),udf$*256
+	dim pedat$*20,actpd$*6,bm(13),d(2),bp(13),by(13),revb(13)
  
 	fnTop(program$,"Income Statement with GASB Budget")
-	udf$=env$('temp')&'\'
 	if fnGlAskFormatPriorCdPeriod=5 then goto Xit 		! sets fnPs,fnpriorcd,fnfscode (primary/secondary,current year/Prior,period to print)
 	cch$=fncch$
 	pedat$=fnpedat$
@@ -38,11 +37,8 @@
 L360: fnOpenPrn : _
 	if file$(255)(1:4)<>"PRN:" then redir=1 else redir=0
 	report$="Budgetary Comparison Schedule"
-	if fnPs=2 then goto L410 ! secondary
-	execute "Index [Q]\GLmstr\GLmstr.h[cno] "&udf$&"fsindex.h[cno] 69 3 Replace DupKeys -N"
-	goto L420
-L410: execute "Index [Q]\GLmstr\GLmstr.h[cno] "&udf$&"fsindex.h[cno] 72 3 Replace DupKeys -N"
-L420: open #3: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName="&udf$&"fsindex.h[cno],Shr",i,i,k
+	fnFsIndexIncStmt
+	open #3: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[temp]\fsindex.h[cno],Shr",i,i,k
 L430: read #1,using L480: r$,d$,te$,sp,ls,ds,ul,rs,bc,ap,mat ac,ic,fc eof L1920
 	if ltrm$(r$)="" or ltrm$(r$)="0" then goto L430
 	if costcntr=0 then goto L480

@@ -27,7 +27,7 @@ def fn_applyAutoLibrary(fileName$*256)
 		lin #hIn: line$ eof EoAiIn
 		if srep$(srep$(line$,chr$(9),''),' ','')(1:11)='autoLibrary' then ! is an autoLibrary trigger line
 			autoLibrariedFileCount+=1
-			line$='gosub AutoLibrary ! Sad Panda ('&trim$(line$)&')'
+			line$='gosub autoLibrary ! Sad Panda ('&trim$(line$)&')'
 			countAddGosub+=1
 		else
 			if fn_gatherFnCalls(line$,mat fmAll$) th
@@ -44,7 +44,7 @@ def fn_applyAutoLibrary(fileName$*256)
 		! pr 'count=';udim(mat fmAll$)
 		! pause
 
-		pr #hOut: 'AutoLibrary: ! r: region dynamically built in Sad Panda'
+		pr #hOut: 'autoLibrary: ! r: region dynamically built in Sad Panda'
 		for item=1 to udim(mat fmAll$)
 			pr #hOut: '  library "'&env$('path-autoLibrary')&'": '&fmAll$(item)
 		nex item
@@ -55,13 +55,7 @@ fn
 def fn_gatherFnCalls(line$*4000,mat fmAll$; ___,returnN)
 	dim item$(0)*256
 	line$=fnStripComments$(line$)
-	! if pos(line$,'_')>0 and pos(line$,'fn_')<=0 th
-	! 	pr '_ encountered: '&line$
-	! 	pause
-	! en if
-	
-	
-	
+
 	line$=xlate$(line$,rpt$(' ', 36)&'$           0123456789       abcdefghijklmnopqrstuvwxyz \  _ abcdefghijklmnopqrstuvwxyz'&rpt$(' ', 133))
 	! leave the backslash in to omit hits on things like "\fnfilenotafunction" 
 	do
@@ -72,13 +66,37 @@ def fn_gatherFnCalls(line$*4000,mat fmAll$; ___,returnN)
 	mat fmLibrary$(0)
 	for it=1 to udim(mat item$)
 		if item$(it)(1:2)='fn' and item$(it)(3:3)<>'_' and (item$(it)<>'fn' and item$(it)<>'fne' and item$(it)<>'fnen' and item$(it)<>'fnend') th
-			if it>1 and item$(it-1)='def' then goto Gfc_PastAdd
-			if it>2 and item$(it-1)='library' then
+
+			! if srch(mat item$,'fnfsindex')>0 then 
+			! 	pr '_______________'
+			! 	pr 'found fnfsindex'
+			! 	for x=1 to udim(mat item$)
+			! 		pr str$(x)&'. "'&item$(x)&'"'
+			! 	nex x
+			! 	pr '_______________'
+			! 	pause
+			! end if
+
+			if it>1 and item$(it-1)='def' then ! local function - ignore it
+				goto Gfc_PastAdd
+			else if it<udim(mat item$) and item$(it+1)(1:6)='return' then 
+				goto Gfc_PastAdd
+			else if it<udim(mat item$) and item$(it+1)='fn_'&item$(it)(3:inf) then ! fnX-fn_X - ignore it
+				! pr '_______________'
+				! pr 'found fnfsindex=fn_fsindex'
+				! for x=1 to udim(mat item$)
+				! 	pr str$(x)&'. "'&item$(x)&'"'
+				! nex x
+				! pr '_______________'
+				! pause
+				goto Gfc_PastAdd
+			else if it>2 and item$(it-1)='library' then
 				fnAddOneC(mat fmLibrary$,item$(it), 0,1)
 				goto Gfc_PastAdd
-			end if
+			else
 				fnAddOneC(mat fmAll$,item$(it), 0,1)
 				returnN+=1
+			end if
 			Gfc_PastAdd: !
 		en if
 	nex it
@@ -91,7 +109,7 @@ def fn_gatherFnCalls(line$*4000,mat fmAll$; ___,returnN)
 		end if
 	nex li
 	fn_gatherFnCalls=returnN
-fn
+fnend
 def fn_arrayItemRemoveC(mat array$,itemToRemove)
 	if itemToRemove=udim(mat array$) then
 		mat array$(itemToRemove-1)

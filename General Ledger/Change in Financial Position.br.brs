@@ -53,12 +53,7 @@ BEGIN_PRINTING: !
 	report$="STATEMENT OF CHANGES IN FINANCIAL POSITION"
 	fnOpenPrn
 	if file$(255)(1:4)<>"PRN:" then redir=1 else redir=0
-	if fnPs=2 then goto L550 ! secondary
-	execute "Index [Q]\GLmstr\GLmstr.h[cno] [temp]\fsindex.h[cno] 75 3 Replace DupKeys -N"
-goto L560
-L550: !
-	execute "Index [Q]\GLmstr\GLmstr.h[cno] [temp]\fsindex.h[cno] 78 3 Replace DupKeys -N"
-L560: !
+	fnFsIndexFundStmt
 	open #3: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[temp]\fsindex.h[cno],Shr",i,i,k
 L570: !
 	read #1,using L610: r$,d$,te$,sp,ls,ds,ul,rs,bc,ap,mat ac,ic,fc eof DONE

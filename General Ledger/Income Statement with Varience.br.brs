@@ -50,13 +50,8 @@
 	costcntr=val(resp$(1))
 	L440: !
 	report$="Statement of Income and Expenses"
-	if fnPs=2 then goto L480 ! secondary
-	execute "Index [Q]\GLmstr\GLmstr.h[cno] "&env$('temp')&'\'&"fsindex.h[cno] 69 3 Replace DupKeys -N"
-	goto L490
-	L480: !
-	execute "Index [Q]\GLmstr\GLmstr.h[cno] "&env$('temp')&'\'&"fsindex.h[cno] 72 3 Replace DupKeys -N"
-	L490: !
-	open #3: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName="&env$('temp')&'\'&"fsindex.h[cno],Shr",i,i,k
+	fnFsIndexIncStmt
+	open #3: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[temp]\fsindex.h[cno],Shr",i,i,k
 goto TOP_OF_LOOP
  
 TOP_OF_LOOP: !

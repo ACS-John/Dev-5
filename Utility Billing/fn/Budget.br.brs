@@ -1,12 +1,8 @@
 def library fnOpenBudTransInput
 	autoLibrary
-	fnOpenBudTransInput=fn_openBudTrans( 1)
+	fnOpenBudTransInput=fnOpenBudTrans( 1)
 fnend
-def library fnOpenBudTrans
-	autoLibrary
-	fnOpenBudTrans=fn_openBudTrans
-fnend
-def fn_openBudTrans(; inputOnly, ___,returnN)
+def library fnOpenBudTrans(; inputOnly, ___,returnN)
 	if ~exists('[Q]\UBmstr\BudTransIdx1.h[cno]') or ~exists('[Q]\UBmstr\BudTransIdx2.h[cno]') then
 		fn_budgetReIndex
 	end if
@@ -19,7 +15,7 @@ def fn_openBudTrans(; inputOnly, ___,returnN)
 		open #hBudTrans1=returnN=fnH: 'Name=[Q]\UBmstr\BudTrans.h[cno],kfName=[Q]\UBmstr\BudTransIdx1.h[cno],Use,RecL=149,KPs=1,KLn=10,Shr',i,outi,k
 		open #hBudTrans2=returnHbudgetTrans2=fnH: 'Name=[Q]\UBmstr\BudTrans.h[cno],kfName=[Q]\UBmstr\BudTransIdx2.h[cno],Use,RecL=149,KPs=1/11,KLn=10/4,Shr',i,outi,k
 	end if
-	fn_openBudTrans=returnN
+	fnOpenBudTrans=returnN
 fnend
 def library fnHbudgetTrans2
 	fnHbudgetTrans2=returnHbudgetTrans2
@@ -32,7 +28,6 @@ def library fnCloseBudTrans
 fnend
 
 def library fnOpenBudMstrInput
-	autoLibrary
 	fnOpenBudMstrInput=fn_openBudMstr( 1)
 fnend
 def library fnOpenBudMstr(; inputOnly)
