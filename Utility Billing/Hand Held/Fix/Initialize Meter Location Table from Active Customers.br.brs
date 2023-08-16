@@ -123,6 +123,7 @@ def fn_endPointType$(meterId$; ___,return$,mLen)
 			return$='N'
 		end if
 	end if
+	return$='J' ! hard set for Kincaid 
 	if return$='Z' then countTypeZ+=1
 	if return$='N' then countTypeN+=1
 	if return$='C' then countTypeC+=1

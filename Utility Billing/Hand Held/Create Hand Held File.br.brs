@@ -505,12 +505,21 @@ def fn_badgerBeacon(account$*10,srvCode$*2)
 			fn_record_addc(19,'Service_Point_Route')
 			fn_record_addc(23,'Service_Point_Latitude')
 			fn_record_addc(23,'Service_Point_Longitude')
-			fn_record_addc(12,'Meter_ID') ! (meter number)
-			fn_record_addc(12,'Meter_SN') ! (meter number)
+			if env$('client')='Kincaid' then 
+				fn_record_addc(12,'Endpoint_SN')  ! switched for kincaid
+				fn_record_addc(12,'Endpoint_SN')
+			else 
+				fn_record_addc(12,'Meter_ID') ! (meter number)
+				fn_record_addc(12,'Meter_SN') ! (meter number)
+			end if 
 			fn_record_addc(15,'Register_Number') ! (blank)
 			fn_record_addc(24,'Register_Unit_Of_Measure') ! (ask and add)
 			fn_record_addc(19,'Register_Resolution') ! meter type - reading multiplier   -   sorta - make sure logic is right
-			fn_record_addc(20,'Endpoint_SN') ! Meter Location - Transmitter Serial Number
+			if env$('client')='Kincaid' then 
+				fn_record_addc(12,'Meter_ID')  ! switched for kincaid
+			else 
+				fn_record_addc(20,'Endpoint_SN') ! Meter Location - Transmitter Serial Number
+			end if 
 			fn_record_addc(19,'Endpoint_Type') ! meter type - read type
 			fn_record_addc(13,'Read_Sequence') ! sequence
 			fn_record_addc(15,'High_Read_Limit')
@@ -798,9 +807,10 @@ def fn_neptuneEquinoxV4(h_out)
 			fn_record_init
 			fn_record_addC( 5,'RDGDT'                                          ) !  Record ID
 			fn_record_addC( 4,fn_meterInfo$('read type',z$,sc$)                ) !  Read Type
-			! removed for Millry 6/29/2023    ! fn_record_addC(13,''                                               ) !  Collection ID
-			! removed for Millry 6/29/2023    ! fn_record_addC( 7,''                                               ) !  For future use
 			fn_record_addC(20,fn_meterInfo$('meter number',z$,sc$)             ) !  Changed Collection ID
+			fn_record_addC(20,''                                                  ) !  Changed Collection ID
+			! fn_record_addC(13,''                                               ) !  Collection ID ! swapped spots 
+			! fn_record_addC( 7,''                                               ) !  For future use
 			fn_record_addN( 2,val(fn_meterInfo$('number of dials',z$,sc$)),'0' ) ! Dials                         Req  UB 50-51     2 NUM
 			fn_record_addN( 2,0                                                ) ! Changed Dials                 Opt  HH 52-453    2 NUM
 			fn_record_addN( 2,0                                                ) ! Decimals                      Req  UB 54-55     2 NUM
