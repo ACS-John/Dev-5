@@ -293,9 +293,7 @@ fnend
 	def fn_BadgerBeaconParseLine(line$*1024,mat tmpDataName$,mat tmpDataValue$; ___,returnN,delim$,quotesTrim$,readingColumnName$*64)
 		reading_water=meterroll_water=reading_electric=meterroll_electric=reading_gas=meterroll_gas=0
 		delim$=tab$
-		if ~bbplHeaderProcessed then 
-			! r: parse header and get enumerations
-			bbplHeaderProcessed=1
+		
 			! if env$('client')='Campbell' then ! 11/19/2018 = seemed to have changed from [Tab]
 			! 	delim$=','
 			! 	quotesTrim$='QUOTES:TRIM'
@@ -304,6 +302,16 @@ fnend
 				quotesTrim$=''
 				readingColumnName$='Current_Read'
 			! end if
+			if env$('client')='Kincaid' then
+				delim$=tab$
+				quotesTrim$='QUOTES:TRIM'
+				readingColumnName$='Read'
+			end if
+		
+		if ~bbplHeaderProcessed then 
+			! r: parse header and get enumerations
+			bbplHeaderProcessed=1
+
 			str2mat(line$,mat lineItem$,delim$,quotesTrim$)
 			bbpl_Account_ID      =srch(mat lineItem$,'Account_ID'        )
 			bbpl_Location_ID     =srch(mat lineItem$,'Location_ID'       )
@@ -324,7 +332,7 @@ fnend
 			end if
 			! /r
 		else
-			str2mat(line$,mat lineItem$,delim$)
+			str2mat(line$,mat lineItem$,delim$,quotesTrim$)
 			mat tmpDataName$(0)
 			mat tmpDataValue$(0)
 			! pr ' how do we parse this? ' :  pause
