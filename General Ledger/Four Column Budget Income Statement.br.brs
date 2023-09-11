@@ -193,7 +193,11 @@ PrHeaderPrimary: ! r:
 	pr #255:
 	pr #255,using L1620: "Annual",lpad$(rtrm$(cch$),20),"Year To Date"," Budget"
 	L1620: form pos 29,c 6,pos 35,cc 20,pos 55,c 15,pos 73,c 7,skip 1
-	pr #255: tab(29);"Budget";tab(41);"Balance";tab(56);"  Balance";tab(72);"Over/Under"
+	if env$('client')='Crockett County' then  
+		pr #255: tab(29);"Budget";tab(41);"Expenses";tab(56);"  Balance";tab(72);"Over/Under"
+	else 
+		pr #255: tab(29);"Budget";tab(41);"Balance";tab(56);"  Balance";tab(72);"Over/Under"
+	end if 
 	pr #255:
 return ! /r
 Finis: ! r:
