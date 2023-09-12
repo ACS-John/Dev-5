@@ -1205,17 +1205,20 @@ def fn_cfv_general_ledger
 		write #hGlPeriod,using 'form pos 1,N 2,C 30': 13,'End of Year Adjustments'
 		close #hGlPeriod:
 	end if
-	if ~exists('[Q]\GLmstr\PRmstr.h[cno]') then
-		open #hGlPrmstr=fnH: 'Name=[Q]\GLmstr\PRmstr.h[cno],',i,outIn,k
-		
+	
+	! r: [Q]\GLmstr\PRmstr.h[cno]
+		open #hGlPrmstr=fnH: 'Name=[Q]\GLmstr\PRmstr.h[cno]',i,outIn,r
 		if rln(hGlPrmstr)<280 then
 			close #hGlPrmstr:
 			fnCopy('[Q]\GLmstr\PRmstr.h[cno]','', 280)
 		else
 			close #hGlPrmstr:
 		end if
-	end if
-
+		! execute 'Index [Q]\GLmstr\PRmstr.h[cno] [Q]\GLmstr\PRIndex.h[cno] 1 4 Replace DupKeys -n'
+		! open #hGlPrmstr=fnH: 'Name=[Q]\GLmstr\PRmstr.h[cno],KFName=[Q]\GLmstr\PRIndex.h[cno],Use,RecL=280,KPs=1,KLn=4,Shr',i,outIn,k
+		
+		! open #hGlPrmstr=fnH: 'Name=[Q]\GLmstr\PRmstr.h[cno],recl=280,use',i,outIn,k
+	! /r
 	fn_rename('[Q]\GLmstr\GLWK1[wsid].dat','[Q]\GLmstr\GL_Work_[acsUserId].dat')
 	fn_rename('[Q]\GLmstr\GLALLOCATIONS[wsid][cno]','[Q]\GLmstr\Allocations[acsUserId].h[cno]')
 
