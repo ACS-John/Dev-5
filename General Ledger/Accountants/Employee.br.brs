@@ -189,7 +189,7 @@ goto MAIN
 INITIAL_BUILD: ! r:
 	open #1: 'Name=[Q]\GLmstr\PRmstr.h[cno]',internal,output ioerr ignore
 	close #1,free: ioerr ignore
-	open #1: 'Name=[Q]\GLmstr\PRmstr.h[cno],SIZE=0,RecL=280,Replace',internal,output
+	open #1: 'Name=[Q]\GLmstr\PRmstr.h[cno],RecL=280,Replace',internal,output
 	close #2: ioerr ignore
 	fnFree('[Q]\GLmstr\PRIndex.h[cno]')
 	open #2: 'Name=[Q]\GLmstr\ACPRCKS.h[cno]',internal,output ioerr ignore
