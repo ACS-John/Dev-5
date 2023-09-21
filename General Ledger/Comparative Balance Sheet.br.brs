@@ -26,9 +26,16 @@
 	L320: !
 ! /r
 ! r: open glmstr
-		dim fl1$*256
-		if fnPs=2 then mp1=66 else mp1=63
+		! if fnPs=2 then mp1=66 else mp1=63
 		fnFsIndexBalSht
+		dim fl1$*256
+		if fnps=2 then
+			mp1=66
+			fl1$='Name=[Q]\GLmstr\AcGLFnSc.h[cno],KFName=[Q]\GLmstr\agfsidx1.h[cno],Shr'
+		else
+			mp1=63
+			fl1$='Name=[Q]\GLmstr\ACGLFNSB.h[cno],KFName=[Q]\GLmstr\agfsidx4.h[cno],Shr'
+		end if
 		open #hFsDesign=fnH: fl1$,i,i,k ! formerly #1
 		fnIndex('[Q]\GLmstr\GLmstr.h[cno]','[Temp]\fsindex.h[cno]',str$(mp1)&' 3')
 		open #hglm2=fnH: 'Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[temp]\fsindex.h[cno],Shr',i,i,k ! formerly #3

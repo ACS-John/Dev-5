@@ -67,28 +67,12 @@ def fn_gatherFnCalls(line$*4000,mat fmAll$; ___,returnN)
 	for it=1 to udim(mat item$)
 		if item$(it)(1:2)='fn' and item$(it)(3:3)<>'_' and (item$(it)<>'fn' and item$(it)<>'fne' and item$(it)<>'fnen' and item$(it)<>'fnend') th
 
-			! if srch(mat item$,'fnfsindex')>0 then 
-			! 	pr '_______________'
-			! 	pr 'found fnfsindex'
-			! 	for x=1 to udim(mat item$)
-			! 		pr str$(x)&'. "'&item$(x)&'"'
-			! 	nex x
-			! 	pr '_______________'
-			! 	pause
-			! end if
-
 			if it>1 and item$(it-1)='def' then ! local function - ignore it
 				goto Gfc_PastAdd
 			else if it<udim(mat item$) and item$(it+1)(1:6)='return' then 
 				goto Gfc_PastAdd
 			else if it<udim(mat item$) and item$(it+1)='fn_'&item$(it)(3:inf) then ! fnX-fn_X - ignore it
-				! pr '_______________'
-				! pr 'found fnfsindex=fn_fsindex'
-				! for x=1 to udim(mat item$)
-				! 	pr str$(x)&'. "'&item$(x)&'"'
-				! nex x
-				! pr '_______________'
-				! pause
+
 				goto Gfc_PastAdd
 			else if it>2 and item$(it-1)='library' then
 				fnAddOneC(mat fmLibrary$,item$(it), 0,1)
