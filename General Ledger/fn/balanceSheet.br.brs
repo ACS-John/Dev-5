@@ -22,31 +22,32 @@ def fn_balanceSheet(; defaultFormat$)
 		fnTos
 		mylen=33
 		mypos=mylen+3 : right=1
-		fnLbl(1,1,"Cost Center or Department Number:",mylen,right)
-		fnTxt(1,mypos,3,0,right,'30',0,"Enter the cost center or department number if you wish to pr only one department, else leave blank for all.",0 )
-		resp$(1)=""
-		fnLbl(2,1,"(Blank for all Departments)",mylen,right)
-		fnCmdKey("&Next",1,1,0,"Prints the financial statement.")
-		fnCmdKey("&Cancel",5,0,1,"Returns to menu without posting.")
+		fnLbl(1,1,'Cost Center or Department Number:',mylen,right)
+		fnTxt(1,mypos,3,0,right,'30',0,'Enter the cost center or department number if you wish to pr only one department, else leave blank for all.',0 )
+		resp$(1)=''
+		fnLbl(2,1,'(Blank for all Departments)',mylen,right)
+		fnCmdKey('&Next',1,1,0,'Prints the financial statement.')
+		fnCmdKey('&Cancel',5,0,1,'Returns to menu without posting.')
 		ckey=fnAcs(mat resp$)
-		if ckey=5 then goto Finis
+		if ckey=5 then goto Finis2
 		costcntr=val(resp$(1)) conv Screen1
 	goto GetStarted ! /r
 	
 	GetStarted: ! r:
 		fnFsIndexBalSht
+		if fnps=2 then mp1=66 else mp1=63 ! hFsD=fnOpenFsDesignInput('balance sheet',mp1)
 		dim fsN(0),fs$(0)*128
 		hFsD=fn_openFio('GL FSDesign',mat fs$,mat fsN,1) ! requires [FinancialStatementCode]
-		open #hGl=fnH: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Temp]\fsindex.h[cno],Shr",i,i,k
+		open #hGl=fnH: 'Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Temp]\fsindex.h[cno],Shr',i,i,k
 		fnOpenPrn
 		dim reportHeading1$*50
 		if env$('client')='Billings' then reportHeading1$='Income and Expense Statement'
 		do
 			read #hFsD,using form$(hFsD): mat fs$,mat fsN eof Finis
-			! if pos(trim$(fs$(2)),"CURRENT ASSETS") then pause
-			if ltrm$(fs$(fsd_number))<>"" and ltrm$(fs$(fsd_number))<>"0" then
+			! if pos(trim$(fs$(2)),'CURRENT ASSETS') then pause
+			if ltrm$(fs$(fsd_number))<>'' and ltrm$(fs$(fsd_number))<>'0' then
 				if costcntr=0 or costcntr=fsN(fsd_costCenterCode) then
-					if fs$(fsd_entryType)<>"S" and fs$(fsd_entryType)<>"F" and fs$(fsd_entryType)<>"R" and heading=0 then
+					if fs$(fsd_entryType)<>'S' and fs$(fsd_entryType)<>'F' and fs$(fsd_entryType)<>'R' and heading=0 then
 						fn_tePrnHeader(reportHeading1$,reportHeading2$)
 					end if
 					if fs$(fsd_entryType)='R' then      ! R = Report Heading (Places name of report in heading)
@@ -61,12 +62,6 @@ def fn_balanceSheet(; defaultFormat$)
 					else if fs$(fsd_entryType)='H' then ! H = Header (Places headings within the F/S)
 						fn_tePrnSectionHeading(mat fs$,mat fsN,foot$,tabnote,mat accum)
 					else if fs$(fsd_entryType)='D' then ! D = Detail (Pulls amounts from G/L accounts)
-						! pr fs$(fsd_number) : pause
-						! if trim$(fs$(fsd_number))='372' then
-						! 	pr 'found 372'
-						! 	pause
-						! end if
-						
 						fn_tePrnDetailAndEquity(mat fs$,mat fsN,mp1,notrans,actpd,mat accum,foot$,tabnote,total,cb)
 					else if fs$(fsd_entryType)='E' then ! E = Equity (Used to combine P&L with equity
 						fn_tePrnDetailAndEquity(mat fs$,mat fsN,mp1,notrans,actpd,mat accum,foot$,tabnote,total,cb)
@@ -80,7 +75,7 @@ def fn_balanceSheet(; defaultFormat$)
 						pr bell;'unexpectedTe="'&fs$(fsd_entryType)&'"'
 						pause
 						goto Finis
-						!    pos ("RFHDTSPE",fs$(fsd_entryType),1) goto TeRS,TeF  ,TeH ,TeDE,TeTP,TeRS,TeTP,TeDE none READ_TOP
+						!    pos ('RFHDTSPE',fs$(fsd_entryType),1) goto TeRS,TeF  ,TeH ,TeDE,TeTP,TeRS,TeTP,TeDE none READ_TOP
 					end if
 				end if
 			end if
@@ -92,6 +87,8 @@ def fn_balanceSheet(; defaultFormat$)
 		fnfscode(actpd)
 		fnpriorcd(1)
 		fnClosePrn
+	goto Finis2 ! /r
+	Finis2: ! r:
 		close #hGl: ioerr ignore
 		hGl=0
 		close #hFsD: ioerr ignore
@@ -115,7 +112,7 @@ fnend
 def fn_tePrnSectionHeading(mat fs$,mat fsN,foot$*132,tabnote,mat accum; ___,tmpStartPos)
 	tmpStartPos=fsN(fsd_startPos)
 	pr #255,using L470: rtrm$(fs$(fsd_description))
-	! if env$('acsDeveloper')="Laura" then print tmpStartPos,dollar : pause
+	! if env$('acsDeveloper')='Laura' then print tmpStartPos,dollar : pause
 	L470: form pos tmpStartPos,c 50,skip 1
 	fn_footer(foot$,tabnote,mat fsN)
 	fn_setAccum(mat fsN,mat accum)
@@ -147,7 +144,7 @@ def fn_tePrnDetailAndEquity(mat fs$,mat fsN,mp1,&notrans,actpd,mat accum,foot$*1
 	notrans=1
 
 	De_L660: !
-	if fs$(fsd_entryType)="E" then total=-accum(fsN(fsd_accumulatorToPrint))
+	if fs$(fsd_entryType)='E' then total=-accum(fsN(fsd_accumulatorToPrint))
 
 	if fsN(fsd_clearAccumulator1)<>9 then accum(1)+=total
 	if fsN(fsd_clearAccumulator2)<>9 then accum(2)+=total
@@ -165,7 +162,7 @@ def fn_tePrnDetailAndEquity(mat fs$,mat fsN,mp1,&notrans,actpd,mat accum,foot$*1
 	if fsN(fsd_clearAccumulator9)<>9 then accum(9)+=total
 
 	if fsN(fsd_reverseSign)=1 then total=-total
-	if fsN(fsd_dollarSign)=1 then dollar$="$" else dollar$=" "
+	if fsN(fsd_dollarSign)=1 then dollar$='$' else dollar$=' '
 	dollar=24+14*fsN(fsd_column) ! If CP=1 Then dOLLAR=50+14*fsN(fsd_column) Else dOLLAR=24+14*fsN(fsd_column)
 	if total=0 and fsn(fsd_lineSkip)+fsN(fsd_underline)+fsN(fsd_dollarSign)+fsN(fsd_percentageBase)<=0 then
 		goto De_Finis
@@ -173,7 +170,7 @@ def fn_tePrnDetailAndEquity(mat fs$,mat fsN,mp1,&notrans,actpd,mat accum,foot$*1
 	sp2=dollar-fsN(fsd_startPos)-1
 	tmpStartPos=fsN(fsd_startPos)
 	if fsN(fsd_underline)=1 then
-		pr #255,using F_withoutUl: fs$(fsd_description)(1:sp2),dollar$,"{\ul ",total,"}" pageoflow PgOf  ! atlantis underline
+		pr #255,using F_withoutUl: fs$(fsd_description)(1:sp2),dollar$,'{\ul ',total,'}' pageoflow PgOf  ! atlantis underline
 		! F_withoutUl: form pos tmpStartPos,c sp2,pos dollar,c 1,c 5,pic(---,---,---.##),c 2,skip 0  ! ! atlantis underline
 		F_withoutUl: form pos tmpStartPos,c sp2,pos dollar,c 1,c 5,pic(---,---,---.##),c 2,skip 1
 	else
@@ -192,12 +189,12 @@ fnend
 def fn_tePrnProfitLossAndTotal(mat fs$,mat fsN,mat accum,foot$*132,tabnote; ___,dollar$,sp2,j,accum1,dollar,tmpStartPos)
 	if fsN(fsd_accumulatorToPrint)=0 then fsN(fsd_accumulatorToPrint)=1
 	if fsN(fsd_reverseSign)=1 then accum1=-accum(fsN(fsd_accumulatorToPrint)) else accum1=accum(fsN(fsd_accumulatorToPrint))
-	if fsN(fsd_dollarSign)=1 then dollar$="$" else dollar$=" "
+	if fsN(fsd_dollarSign)=1 then dollar$='$' else dollar$=' '
 	dollar=24+14*fsN(fsd_column) ! if  CP=1 Then dOLLAR=50+14*fsN(fsd_column) Else dOLLAR=24+14*fsN(fsd_column)
 	sp2=dollar-fsN(fsd_startPos)-1
-	tmpStartPos=fsN(fsd_startPos) !  if env$('acsDeveloper')="Laura" then print tmpStartPos,dollar : pause
+	tmpStartPos=fsN(fsd_startPos) !  if env$('acsDeveloper')='Laura' then print tmpStartPos,dollar : pause
 	if fsN(fsd_underline)=1 then
-		pr #255,using F_withoutUl: fs$(fsd_description)(1:sp2),dollar$,"{\ul ",accum1,"}" pageoflow PgOf
+		pr #255,using F_withoutUl: fs$(fsd_description)(1:sp2),dollar$,'{\ul ',accum1,'}' pageoflow PgOf
 	else
 		pr #255,using F_withUl:    fs$(fsd_description)(1:sp2),dollar$,accum1 pageoflow PgOf
 	end if
@@ -210,7 +207,7 @@ def fn_tePrnProfitLossAndTotal(mat fs$,mat fsN,mat accum,foot$*132,tabnote; ___,
 		fn_underline(mat fsN)
 	end if
 	fn_footer(foot$,tabnote,mat fsN)
-	if fs$(fsd_entryType)="P" then
+	if fs$(fsd_entryType)='P' then
 		for j=1 to 9
 			! if debug and j=5 and accum(fsN(fsd_accumulatorToPrint))<>0 then
 			! 	pr #255: '                                **accum5('&str$(accum(5))&')-accum(fsN(fsd_accumulatorToPrint))('&str$(accum(fsN(fsd_accumulatorToPrint)))&')='&str$(accum(j)-accum(fsN(fsd_accumulatorToPrint)))
@@ -240,7 +237,7 @@ def fn_footer(foot$*132,tabnote,mat fsN; ___,tmpLineSkip)
 		fn_footerPrint(foot$,tabnote)
 	else if fsn(fsd_lineSkip)<>0 then
 		tmpLineSkip=fsn(fsd_lineSkip)
-		pr #255,using F_skipLs: " " ! pr #255: "got here "&str$(tmplineskip) ! pause
+		pr #255,using F_skipLs: ' ' ! pr #255: 'got here '&str$(tmplineskip) ! pause
 		F_skipLs: form pos 1,c 1,skip tmpLineSkip
 	end if
 fnend
@@ -268,11 +265,11 @@ def fn_underline(mat fsN; ___,underlin$*14)
 	if fsN(fsd_underline) then
 		underlin=25+14*fsN(fsd_column) ! if CP=1 Then uNDERLIN=51+14*fsN(fsd_column) Else uNDERLIN=25+14*fsN(fsd_column)
 		if fsN(fsd_underline)<>1 then
-			underlin$="=============="
+			underlin$='=============='
 			pr #255,using F_underline: underlin$
 			F_underline: form pos underlin,c 14,skip 1
 		else
-			underlin$="______________"
+			underlin$='______________'
 			pr #255,using F_underline: underlin$
 		end if
 	else
@@ -280,16 +277,16 @@ def fn_underline(mat fsN; ___,underlin$*14)
 fnend
 def fn_tePrnHeader(reportHeading1$*50,reportHeading2$*50)
 	heading=1
-	pr #255: "\qc  {\f181 \fs24 \b "&env$('cnam')&"}"
+	pr #255: '\qc  {\f181 \fs24 \b '&env$('cnam')&'}'
 	! if reportHeading1$<>env$('program_caption') then
-		pr #255: "\qc  {\f181 \fs24 \b "&env$('program_caption')&"}"
+		pr #255: '\qc  {\f181 \fs24 \b '&env$('program_caption')&'}'
 	! end if
-	pr #255: "\qc  {\f181 \fs24 \b "&reportHeading1$&"}"
-	if trim$(reportHeading2$)<>"" then
-		pr #255: "\qc  {\f181 \fs18 \b "&trim$(reportHeading2$)&"}"
+	pr #255: '\qc  {\f181 \fs24 \b '&reportHeading1$&'}'
+	if trim$(reportHeading2$)<>'' then
+		pr #255: '\qc  {\f181 \fs18 \b '&trim$(reportHeading2$)&'}'
 	end if
-	pr #255: "\qc  {\f181 \fs16 \b "&trim$(fnpedat$)&"}"
-	pr #255: "\ql "
+	pr #255: '\qc  {\f181 \fs16 \b '&trim$(fnpedat$)&'}'
+	pr #255: '\ql '
 fnend
 
 include: ertn

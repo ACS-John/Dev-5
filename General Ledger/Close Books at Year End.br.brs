@@ -91,7 +91,7 @@ close #hAcPrCks: ioerr ignore
 ! r: reset some stuff in '[Q]\GLmstr\PRmstr.h[cno]'
 open #hPrMstr=fnH: 'Name=[Q]\GLmstr\PRmstr.h[cno],KFName=[Q]\GLmstr\PRIndex.h[cno]',i,outIn,k ioerr SCR2
 do
-	read #hPrMstr,using 'form pos 271,2*N 5': n1,n2 eof L500
+	read #hPrMstr,using 'form pos 271,2*N 5': n1,n2 eof L500 ! 714
 	rewrite #hPrMstr,using 'form pos 271,2*N 5': 0,0
 loop
 L500: !

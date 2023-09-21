@@ -1388,17 +1388,17 @@ fnend
 		library 'S:\Core\CNo.br': fnrx
 		fnrx=fnrx(rx)
 	fnend
-	def library fnstyp(;styp)
+	def library fnStyp(;styp)
 		library 'S:\Core\CNo.br': fnstyp
-		fnstyp=fnstyp(styp)
+		fnStyp=fnStyp(styp)
 	fnend
 	def library fnPs(;ps)
 		library 'S:\Core\CNo.br': fnPs
 		fnPs=fnPs(ps)
 	fnend
-	def library fnfscode(;a)
+	def library fnFsCode(;a)
 		library 'S:\Core\CNo.br': fnfscode
-		fnfscode=fnfscode(a)
+		fnFsCode=fnFsCode(a)
 	fnend
 	def library fnpedat$*20(;a$*20)
 		library 'S:\Core\CNo.br': fnpedat$
@@ -1656,18 +1656,22 @@ fnend
 			library 'S:\General Ledger\fn\Financial Statement.br': fnOpenFsdAcglfnsIJ
 			fnOpenFsdAcglfnsIJ=fnOpenFsdAcglfnsIJ(mp1,mp2)
 		fnend
+		def library fnOpenFsDesignInput(type$,&mp1; forceHandle)
+			library 'S:\General Ledger\fn\Financial Statement.br': fnOpenFsDesignInput
+			fnOpenFsDesignInput=fnOpenFsDesignInput(type$,mp1, forceHandle)
+		fnend
 
 		def library fnFsIndexFundStmt
-				library 'S:\General Ledger\fn\Financial Statement.br': fnFsIndex
-				fnFsIndexFundStmt=fnFsIndex(75,78)
+				library 'S:\General Ledger\fn\Financial Statement.br': fnFsIndexFundStmt
+				fnFsIndexFundStmt=fnFsIndexFundStmt
 		fnend
 		def library fnFsIndexIncStmt
-				library 'S:\General Ledger\fn\Financial Statement.br': fnFsIndex
-				fnFsIndexIncStmt=fnFsIndex(69,72)
+				library 'S:\General Ledger\fn\Financial Statement.br': fnFsIndexIncStmt
+				fnFsIndexIncStmt=fnFsIndexIncStmt
 		fnend
 		def library fnFsIndexBalSht
-				library 'S:\General Ledger\fn\Financial Statement.br': fnFsIndex
-				fnFsIndexBalSht=fnFsIndex(63,66)
+				library 'S:\General Ledger\fn\Financial Statement.br': fnFsIndexBalSht
+				fnFsIndexBalSht=fnFsIndexBalSht
 		fnend
 
 

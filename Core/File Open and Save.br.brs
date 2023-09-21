@@ -473,6 +473,7 @@ def fn_automatedSavePoint(fileNameAddition$*128)
 		asp_saveFilter$='[cursys]mstr\*.h[cno]'
 		asp_path$='[temp]\acs\Automated Saves'
 		asp_filename$='[cursys] Company [cno] '&date$('CCYY-MM-DD')&' '&srep$(time$,':','-')&' '&env$('Program_Caption')&' - '&fileNameAddition$&'.zip'
+		asp_path$=rtrm$(rtrm$(asp_path$),'\')
 		fnMakeSurePathExists(asp_path$&'\')
 		fn_FileSaveAs(asp_saveFilter$, asp_path$&'\'&asp_filename$,1,1)
 	end if

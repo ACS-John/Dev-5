@@ -65,13 +65,13 @@ def fn_CnoLegacyNtoCReg(legacyFilename$*256,legacyForm$*64,registryKey$*128; val
 	if valuePassedIn>0 then getOrPut=2 else getOrPut=1
 	if getOrPut=1 then
 		fncreg_read(registryKey$,fscode$) : valuePassedIn=val(fscode$)
-		if valuePassedIn=0 then
-			open #tmp=fnH: 'Name='&legacyFilename$,i,outi,r ioerr LegacyOpenFail
-			read #tmp,using 'form '&legacyForm$,rec=1: valuePassedIn noRec ignore
-			close #tmp: ioerr ignore
-			fncreg_write(registryKey$,str$(valuePassedIn))
-			LegacyOpenFail: !
-		end if
+		! no more legacy filenames, obsoluete  9/18/2023 - 			if valuePassedIn=0 then
+		! no more legacy filenames, obsoluete  9/18/2023 - 				open #tmp=fnH: 'Name='&legacyFilename$,i,outi,r ioerr LegacyOpenFail
+		! no more legacy filenames, obsoluete  9/18/2023 - 				read #tmp,using 'form '&legacyForm$,rec=1: valuePassedIn noRec ignore
+		! no more legacy filenames, obsoluete  9/18/2023 - 				close #tmp: ioerr ignore
+		! no more legacy filenames, obsoluete  9/18/2023 - 				fncreg_write(registryKey$,str$(valuePassedIn))
+		! no more legacy filenames, obsoluete  9/18/2023 - 				LegacyOpenFail: !
+		! no more legacy filenames, obsoluete  9/18/2023 - 			end if
 	else if getOrPut=2 then
 		fncreg_write(registryKey$,str$(valuePassedIn))
 	end if
