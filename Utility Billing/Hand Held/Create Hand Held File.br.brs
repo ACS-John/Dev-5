@@ -505,21 +505,12 @@ def fn_badgerBeacon(account$*10,srvCode$*2)
 			fn_record_addc(19,'Service_Point_Route')
 			fn_record_addc(23,'Service_Point_Latitude')
 			fn_record_addc(23,'Service_Point_Longitude')
-			if env$('client')='Kincaid' then 
-				fn_record_addc(12,'Endpoint_SN')  ! switched for kincaid
-				fn_record_addc(12,'Endpoint_SN')
-			else 
-				fn_record_addc(12,'Meter_ID') ! (meter number)
-				fn_record_addc(12,'Meter_SN') ! (meter number)
-			end if 
+			fn_record_addc(12,'Meter_ID') ! (meter number)
+			fn_record_addc(12,'Meter_SN') ! (meter number)
 			fn_record_addc(15,'Register_Number') ! (blank)
 			fn_record_addc(24,'Register_Unit_Of_Measure') ! (ask and add)
 			fn_record_addc(19,'Register_Resolution') ! meter type - reading multiplier   -   sorta - make sure logic is right
-			if env$('client')='Kincaid' then 
-				fn_record_addc(12,'Meter_ID')  ! switched for kincaid
-			else 
-				fn_record_addc(20,'Endpoint_SN') ! Meter Location - Transmitter Serial Number
-			end if 
+			fn_record_addc(20,'Endpoint_SN') ! Meter Location - Transmitter Serial Number
 			fn_record_addc(19,'Endpoint_Type') ! meter type - read type
 			fn_record_addc(13,'Read_Sequence') ! sequence
 			fn_record_addc(15,'High_Read_Limit')
@@ -544,13 +535,17 @@ def fn_badgerBeacon(account$*10,srvCode$*2)
 		fn_record_addC(23,fn_meterInfo$('Latitude' ,account$,srvCode$))          ! Service_Point_Latitude
 		fn_record_addC(23,fn_meterInfo$('Longitude',account$,srvCode$))          ! Service_Point_Longitude
 		fn_record_addC(12,fn_meterInfo$('Meter Number',account$,srvCode$))       ! Meter_ID                  (meter number)
-		fn_record_addC(12,fn_meterInfo$('Meter Number',account$,srvCode$))       ! Meter_SN                  (meter number)
+		if env$('client')='Kincaid' then 
+			fn_record_addC(12," ")                                                     ! removed for kincaid
+		else 
+			fn_record_addC(12,fn_meterInfo$('Meter Number',account$,srvCode$))       ! Meter_SN                  (meter number)
+		end if 
 		fn_record_addC(15,'')                                                    ! Register_Number           (blank)                  (meter number)
 		fn_record_addC(24,'GAL')                                                 ! Register_Unit_Of_Measure
 		fn_record_addC(19,fn_meterInfo$('reading multipler',account$,srvCode$))  ! Register_Resolution
 		fn_record_addC(20,fn_meterInfo$('Transmitter Number',account$,srvCode$)) ! Endpoint_SN'                 Meter Location - Transmitter Serial Number
 		
-		if env$('client')='Moweaqua' then 
+		if env$('client')='Moweaqua' or env$('client')='Kincaid' then 
 			fn_record_addC(19,fn_meterInfo$('Meter Type',account$,srvCode$)(1:1))   ! just the first letter of the type code for Moweaqua
 		else
 			fn_record_addC(19,fn_meterInfo$('Meter Type',account$,srvCode$))         ! Endpoint_Type                meter type - read type
