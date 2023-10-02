@@ -16,7 +16,7 @@ def library fnOpenFsdAcglfnsIJ(&mp1,&mp2; ___,returnN)
 	fnOpenFsdAcglfnsIJ=returnN
 fnend
 
-def library fnOpenFsDesignInput(type$; forceHandle, ___,returnN,fl1$*256)
+def library fnOpenFsDesignInput(type$, &mp1; forceHandle, ___,returnN,fl1$*256)
 	autoLibrary
 	if lwrc$(type$)='balance sheet' then
 		if fnps=2 then
