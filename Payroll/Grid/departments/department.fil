@@ -1,10 +1,12 @@
-AFLAC                         TDET(6)                7 2PD 4.2     AFLAC
 Amount Of Last Increase       tLI                    7 2PD 4.2     LastIncAmt
-CHSUPP                        TDET(5)                7 2PD 4.2     CHSUPP
+CH SPT                        TDET(4)                7 2PD 4.2     CH SPT
 Department Number             TDN                    3 0N 3        Dep#
 Employee Number               TENO                   8 0N 8        Emp#
 G/L Account Number            GL$                   12 0C 12       GL#
-GARNIS                        TDET(7)                7 2PD 4.2     GARNIS
+Health Insurance              TDET(5)                7 2PD 4.2     HEALTH
+IMRFEE                        TDET(9)                7 2PD 4.2     IMRFEE
+IMRFER                        TDET(13)               7 2PD 4.2     IMRFER
+IMRFVAC                       TDET(10)               7 2PD 4.2     IMRFVAC
 Last Increase Date            TDT(3)                 6 0N 6        LastIncr
 Last Payroll Date             TDT(4)                 6 0N 6        LastPrDate
 Last Review Date              TDT(1)                 6 0N 6        LastRev
@@ -13,6 +15,6 @@ Overtime Hourly Rate          TDET(3)                7 2PD 4.2     OTRate
 Regular Hourly Rate           TDET(2)                7 2PD 4.2     RegRate
 Salary                        TDET(1)                7 2PD 4.2     Salary
 State Code                    TCD(1)                 2 0N 2        StateCd
-TRUCK                         TDET(4)                7 2PD 4.2     TRUCK
+Union                         TDET(6)                7 2PD 4.2     Union
 Union Code                    TCD(3)                 2 0N 2        UnionCD
 Worknams Comp Code            TCD(2)                 2 0N 2        WC Code

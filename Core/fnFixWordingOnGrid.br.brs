@@ -65,11 +65,7 @@ def library fnFixWordingOnGrid(ev$*50,outputfile$*50)
 		a=b
 		rl=rl+int(val(a$(j3,3)(p1:p3)))*m1
 
-
-
-			if env$('cursys')='PR' then
-
-				! r: PAYROLL - PLACE CORRECT SERVICE NAME ON EACH SERVICE
+			if env$('cursys')='PR' then ! r: Payroll - place correct service name on each service
 				if uprc$(a$(j3,1)(1:4))<>'MISC' then goto L840
 				x=val(a$(j3,1)(8:9)) conv L840
 				if trim$(fullname$(x))='' then goto NextEv ! SERVICE NOT USED
@@ -80,8 +76,7 @@ def library fnFixWordingOnGrid(ev$*50,outputfile$*50)
 				abbrev$=''
 				abbrev$=trim$(abbrevname$(x))(1:9)
 				! /r
-			else if env$('cursys')='UB' then
-				! r: UTILITY BILLING - PLACE CORRECT SERVICE NAME ON EACH SERVICE
+			else if env$('cursys')='UB' then ! r: Utility Billing - place correct service name on each service
 				if uprc$(a$(j3,1)(1:7))<>'SERVICE' then goto Pr850
 				x=val(a$(j3,1)(9:10)) conv Pr850
 				if trim$(serviceName$(x))='' then goto NextEv ! SERVICE NOT USED
@@ -92,13 +87,16 @@ def library fnFixWordingOnGrid(ev$*50,outputfile$*50)
 				if x=3 and trim$(serviceName$(x))<>'Electric' and (a$(j3,1)(2:6)='Multi' or a$(j3,1)(2:6)='Elect' or a$(j3,1)(2:6)='Depos' or a$(j3,1)(2:6)='Readi' or a$(j3,1)(2:6)='Used-' or a$(j3,1)(2:6)='Kwh  ' or a$(j3,1)(2:6)='Deman' or a$(j3,1)(2:6)='Units' or a$(j3,1)(2:6)='Prior') then goto NextEv
 				if x=4 and trim$(serviceName$(x))<>'Gas' and (a$(j3,1)(2:6)='Multi' or a$(j3,1)(2:6)='Elect' or a$(j3,1)(2:6)='Depos' or a$(j3,1)(2:6)='Readi' or a$(j3,1)(2:6)='Used-' or a$(j3,1)(2:6)='Kwh  ' or a$(j3,1)(2:6)='Deman' or a$(j3,1)(2:6)='Units' or a$(j3,1)(2:6)='Meter') then goto NextEv
 				if x=4 and trim$(serviceName$(x))<>'Gas' and a$(j3,1)(2:6)='Prior' then goto NextEv
+				
 				Pr840: !
 				a$(j3,1)=trim$(serviceName$(x))&' '&trim$(a$(j3,1))
+				
 				Pr850: !
 				if uprc$(abbrev$)(1:7)<>'SERVICE' then goto Pr890
 				x=val(abbrev$(9:10)) conv Pr890
 				abbrev$(1:9)=''
 				abbrev$=trim$(serviceName$(x))&' '&trim$(abbrev$)
+				
 				Pr890: !
 				if rtrm$(a$(j3,1))='' or rtrm$(uprc$(a$(j3,1)))='UNUSED' or rtrm$(uprc$(a$(j3,1)))(2:6)='EXTRA' or trim$(abbrev$)='' then goto NextEv
 				! /r

@@ -1782,9 +1782,17 @@ fnend
 		library 'S:\Payroll\Employee.br': fnEmployeeEdit
 		fnEmployeeEdit=fnEmployeeEdit(eno)
 	fnend
+	def library fnDepartmentName$*25(eno)
+		library 'S:\Payroll\fn\departmentName.br': fnDepartmentName$
+		fnDepartmentName$=fnDepartmentName$(eno)
+	fnend
 	def library fnEmployeeData$(eno,field$*64; setIt$*64,defaultIfNokey$*64,defaultIfBlank$*64)
 		library 'S:\Payroll\fn\employeeData.br': fnEmployeeData$
 		fnEmployeeData$=fnEmployeeData$(eno,field$, setIt$,defaultIfNokey$,defaultIfBlank$)
+	fnend
+	def library fnEmployeeName$*30(eno)
+		library 'S:\Payroll\fn\employeeName.br': fnEmployeeName$
+		fnEmployeeName$=fnEmployeeName$(eno)
 	fnend
 	def library fnEmployeeDataClose
 		library 'S:\Payroll\fn\employeeData.br': fnEmployeeDataClose
