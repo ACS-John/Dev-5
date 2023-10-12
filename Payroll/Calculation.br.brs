@@ -620,6 +620,7 @@ def fn_getFederalTable(taxYear,marital,w4Year$,w4step2,mat fedTable,&fed_annual_
 	! https://www.irs.gov/pub/irs-pdf/p15t.pdf
 	! https://www.irs.gov/pub/irs-pdf/fw4.pdf
 	! https://www.irs.gov/pub/irs-pdf/p15.pdf
+	if w4Year$='none' then w4Year$=''
 	if setupFederalTables<>val(str$(taxYear)&w4Year$) then ! or taxYear<=2019 then
 		setupFederalTables=val(str$(taxYear)&w4Year$)
 		! if taxYear<=2017 then ! r:

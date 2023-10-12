@@ -1,39 +1,48 @@
 fn_setup
 fnTop(program$)
 
-d1=fnPayPeriodEndingDate : if days(d1,'ccyymmdd')=>days(date)-5 then prd=d1
+d1=fnPayPeriodEndingDate
+if days(d1,'ccyymmdd')=>days(date)-5 and exists('[Q]\PRmstr\timesheet[acsUserId].h[cno]') then
+	payrollDate=date(days(d1,'ccyymmdd'),'mmddyy')
+	addDefault$='True'
+	newDefault$='False'
+else
+	payrollDate=0
+	addDefault$='False'
+	newDefault$='True'
+end if
 
 Scr1: ! r:
 	fnTos
-	rc=franum=0
-	fnFra(1,1,3,50,'Payroll Time Sheet Entry','You would only add to previous entries if the last batch was not calculated.',0)
-	franum+=1
-	fnOpt(1,3,'New Batch'                    	,0,franum) : resp$(rc+=1)='True'
-	fnOpt(2,3,'Additions to Previous Input'	,0,franum) : resp$(rc+=1)='False'
-	fnFra(6,1,2,50,'Pay Period Ending Date','You must enter the pay perod ending date.  You can not have more than one payroll with the same date.')
-	franum+=1 : mylen=23 : mypos=mylen+2
-	fnLbl(1,1,'Pay Period Ending Date:',mylen,1,0,franum)
-	fnTxt(1,mypos,10,0,1,'1',0,'Use mmddyy.',franum)   : resp$(rc+=1)=str$(prd)
-	fnFra(10,1,6,50,'Method of Entry','You can select specific employees to pay; you can automatically calculate salaried persons; or you can pull from a another system.')
-	franum+=1 : mylen=18 : mypos=mylen+2
-	fnOpt(1,3,'Select employees to pay',0,franum)              : resp$(rc+=1)='True'
-	fnOpt(2,3,'Automatically pay salaried employees',0,franum) : resp$(rc+=1)='False'
-	fnOpt(3,3,'Pull time from time card system',0,franum)      : resp$(rc+=1)='False'
-	fnOpt(4,3,'Pull time from job cost system',0,franum)       : resp$(rc+=1)='False'
-	fnLbl(6,1,'Employment Status:',mylen,1,0,franum)
-	fnComboF('EmpStatus',6,mypos,25,'[Q]\PRmstr\EmpStatus.dat',1,2,3,25,'[Q]\PRmstr\EmpStatus.idx',0,0, 'Only necessary if automatically paying salaried people. ',franum,0)
-	resp$(rc+=1)=''
-	if ~fnArrayEmpty(mat dednames$) then
+	rc=fraNum=0
+	fnFra(1,1,4,50,'Pay Period Ending Date','You must enter the pay perod ending date.  You can not have more than one payroll with the same date.')
+	fraNum+=1 : mylen=23 : mypos=mylen+2
+	fnLbl(1,1,'Pay Period Ending Date:',mylen,1,0,fraNum)
+	fnTxt(1,mypos,10,0,1,'1',0,'Use mmddyy.',fraNum)   : resp$(resp_payrollDate=rc+=1)=str$(payrollDate)
+	! fnFra(4,1,3,50,'Payroll Time Sheet Entry','You would only add to previous entries if the last batch was not calculated.',0)
+	! fraNum+=1
+	fnOpt(3,20,'Additions to Previous Input'	,0,fraNum) : resp$(resp_addbatch=rc+=1)= addDefault$ ! 'False'
+	fnOpt(4,20,'New Batch'                    	,0,fraNum) : resp$(resp_newbatch=rc+=1)= newDefault$ ! 'True'
+	fnFra(10-3,1,6,50,'Method of Entry','You can select specific employees to pay; you can automatically calculate salaried persons; or you can pull from a another system.')
+	fraNum+=1 : mylen=18 : mypos=mylen+2
+	fnOpt(1,3,'Select employees to pay',0,fraNum)              	: resp$(resp_add1=rc+=1)='True'
+	fnOpt(2,3,'Automatically pay salaried employees',0,fraNum)	: resp$(resp_add2=rc+=1)='False'
+	fnOpt(3,3,'Pull time from time card system',0,fraNum)      	: resp$(resp_add3=rc+=1)='False'
+	fnOpt(4,3,'Pull time from job cost system',0,fraNum)       	: resp$(resp_add4=rc+=1)='False'
+	fnLbl(6,1,'Employment Status:',mylen,1,0,fraNum)
+	fnComboF('EmpStatus',6,mypos,25,'[Q]\PRmstr\EmpStatus.dat',1,2,3,25,'[Q]\PRmstr\EmpStatus.idx',0,0, 'Only necessary if automatically paying salaried people. ',fraNum,0)
+	resp$(resp_empStatus=rc+=1)=''
+	if ~fnArrayEmpty(mat dedName$) then
 
-		fnFra(18,1,10,50,'Skip Deductions This Pay Period','You can skip any deduction this pay period by checking the deduction below.')
-		franum+=1
+		fnFra(18-3,1,10,50,'Skip Deductions This Pay Period','You can skip any deduction this pay period by checking the deduction below.')
+		fraNum+=1
 		linecnt=0
 		resp_skipDedAdd=rc
 		for j=1 to 19 step 2
-			if trim$(dednames$(j))<>'' then x$=':' else x$=''
-			fnChk(linecnt+=1,20,trim$(dednames$(j))&x$,1,franum) : resp$(rc+=1)='False'
-			if trim$(dednames$(j+1))<>'' then x$=':' else x$=''
-			fnChk(linecnt,45,trim$(dednames$(j+1))&x$,1,franum)  : resp$(rc+=1)='False'
+			if trim$(dedName$(j))<>'' then x$=':' else x$=''
+			fnChk(linecnt+=1,20,trim$(dedName$(j))&x$,1,fraNum) : resp$(rc+=1)='False'
+			if trim$(dedName$(j+1))<>'' then x$=':' else x$=''
+			fnChk(linecnt,45,trim$(dedName$(j+1))&x$,1,fraNum)  : resp$(rc+=1)='False'
 		next j
 
 	end if
@@ -41,26 +50,26 @@ Scr1: ! r:
 	fnCmdKey('&Cancel',5,0,1,'Returns to customer record')
 	ckey=fnAcs(mat resp$)
 	if ckey=5 then goto Xit
-	if resp$(1)='True' then ! Regular Time Sheet Entry
+	if resp$(resp_newbatch)='True' then ! Regular Time Sheet Entry
 		noauto=ti1=1
 		additional=1
-	else if resp$(2)='True' then ! Additions to Previous Input
+	else if resp$(resp_addbatch)='True' then ! Additions to Previous Input
 		noauto=ti1=2
 		additional=2
 	end if
-	prd=val(resp$(3))
+	payrollDate=val(resp$(resp_payrollDate))
 
-	if resp$(4)='True' then
+	if resp$(resp_add1)='True' then
 		noauto=ti1=1
-	else if resp$(5)='True' then
+	else if resp$(resp_add2)='True' then
 		noauto=ti1=2
-	else if resp$(6)='True' then
+	else if resp$(resp_add3)='True' then
 		pullFromTimeCardSystem=99
-	else if resp$(7)='True' then
+	else if resp$(resp_add4)='True' then
 		jobcost=1
 	end if
-	em4=val(resp$(8)(1:2))
-	if fnArrayEmpty(mat dednames$) then
+	empStatus=val(resp$(resp_empStatus)(1:2))
+	if fnArrayEmpty(mat dedName$) then
 		mat resp$(1+resp_skipDedAdd:20+resp_skipDedAdd)=('False')
 		mat skipit$(1:20)=('N')
 	else
@@ -69,13 +78,13 @@ Scr1: ! r:
 		next j
 	end if
 
-	if prd=0 then
+	if payrollDate=0 then
 		mat ml$(0)
 		fnAddOneC(mat ml$,'You must enter a valid payroll date!'   )
 		fnAddOneC(mat ml$,'Click OK to return to previous screen. ')
 		fnMsgBox(mat ml$,resp$)
 		goto Scr1
-	else if days(prd,'mmddyy')<=days(date)-45 then
+	else if days(payrollDate,'mmddyy')<=days(date)-45 then
 		mat ml$(0)
 		fnAddOneC(mat ml$,'You have choosen a Pay Period Ending Date that is')
 		fnAddOneC(mat ml$,'more than 45 days prior to today.')
@@ -85,20 +94,20 @@ Scr1: ! r:
 	end if
 goto PastSkipDeductions ! /r
 	! SKIPDEDUCTIONS: ! r:
-	! if fnArrayEmpty(mat dednames$) then
+	! if fnArrayEmpty(mat dedName$) then
 	! 	mat resp$(1:20)=('False')
 	! 	mat skipit$(1:20)=('N')
 	! else
 	! 	fnTos
-	! 	rc=franum=linecnt=0
+	! 	rc=fraNum=linecnt=0
 	! 	fnFra(1,1,10,50,'skip Deductions This Pay Period','You can skip any deduction this pay period by checking the deduction below.')
-	! 	franum+=1
+	! 	fraNum+=1
 	! 	resp_skipDedAdd=rc
 	! 	for j=1 to 19 step 2
-	! 		if trim$(dednames$(j))<>'' then x$=':' else x$=''
-	! 		fnChk(linecnt+=1,20,trim$(dednames$(j))&x$,1,franum) : resp$(rc+=1)='False'
-	! 		if trim$(dednames$(j+1))<>'' then x$=':' else x$=''
-	! 		fnChk(linecnt,45,trim$(dednames$(j+1))&x$,1,franum)  : resp$(rc+=1)='False'
+	! 		if trim$(dedName$(j))<>'' then x$=':' else x$=''
+	! 		fnChk(linecnt+=1,20,trim$(dedName$(j))&x$,1,fraNum) : resp$(rc+=1)='False'
+	! 		if trim$(dedName$(j+1))<>'' then x$=':' else x$=''
+	! 		fnChk(linecnt,45,trim$(dedName$(j+1))&x$,1,fraNum)  : resp$(rc+=1)='False'
 	! 	next j
 	! 	fnCmdKey('&Next',1,1,0,'Proceed to next screen.')
 	! 	fnCmdKey('&Cancel',5,0,1,'Returns to customer record')
@@ -111,7 +120,7 @@ goto PastSkipDeductions ! /r
 	! end if
 	! /r
 PastSkipDeductions: ! r: fall into this logic
-	if noauto<>2 then em4=0 ! do not allow any employment status code if not selecting to automatically pay salaried
+	if noauto<>2 then empStatus=0 ! do not allow any employment status code if not selecting to automatically pay salaried
 	if (~exists('[Q]\PRmstr\timesheet[acsUserId].h[cno]') and additional=2) or additional<>2 then
 		open #hTimesheet=fnH: 'Name=[Q]\PRmstr\timesheet[acsUserId].h[cno],RecL=167,Replace',internal,output
 		close #hTimesheet:
@@ -142,7 +151,7 @@ OpenFiles: ! r:
 	! open #11: 'Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-name.h[cno],Shr',i,outIn,k
 	Femployee1: form pos 9,c 30,pos 118,n 2,pos 126,2*pd 3.3,pos 162,n 6,pd 5.2
 	Femployee2: form pos 162,n 6,pd 5.2
-	Femployee3: form pos 1,c 8,c 30,pos 118,n 2,pos 126,2*pd 3.3,pos 162,n 6,pd 5.2
+	Femployee3: form pos 1,n 8,c 30,pos 118,n 2,pos 126,2*pd 3.3,pos 162,n 6,pd 5.2
 
 	open #hDept=fnH: 'Name=[Q]\PRmstr\Department.h[cno],KFName=[Q]\PRmstr\DeptIdx.h[cno],Shr',i,outIn,k ! #2
 
@@ -153,10 +162,9 @@ OpenFiles: ! r:
 return  ! /r
 
 ScrEnterTime: ! r:
-	en$=lpad$(str$(eno),8)
-	read #hEmployee,using Femployee1,key=en$: em$,em4,em8,em9,lpd,tgp nokey TheNextOne
+	read #hEmployee,using Femployee1,key=lpad$(str$(eno),8): em$,empStatus,em8,em9,lpd,tgp nokey TheNextOne
 	if editMode then goto ReadDepartment
-	if prd=lpd then  ! r: EmpPrevEnteredWarn
+	if payrollDate=lpd then  ! r: EmpPrevEnteredWarn
 		mat ml$(2)
 		ml$(1)='Employee number '&str$(eno)&' has been previously entered.'
 		ml$(2)='Do you wish to continue anyway? '
@@ -172,7 +180,7 @@ ScrEnterTime: ! r:
 	do
 		read #hDept,using 'form pos 1,n 8,pos 42,n 6': depeno,tdt4 eof DUPLICATE_DATE_TEST_XIT
 		if depeno<>eno then goto DUPLICATE_DATE_TEST_XIT
-		if tdt4=prd then
+		if tdt4=payrollDate then
 			mat ml$(0)
 			fnAddOneC(mat ml$,'You have previously calculated pay using this same payroll date on employee # '&x$)
 			fnAddOneC(mat ml$,'You must either use a different date or reverse the previous calculation. '       )
@@ -199,13 +207,13 @@ ScrEnterTime: ! r:
 	if teno<>eno then semp=0
 	if teno<>eno then goto ScrAskEmployee
 	hr(1)=tdet(2) : hr(2)=tdet(3) ! set hourly rates from dept rec
-	reghrs=othrs=vachrs=sickhrs=holhrs=othercomp=0 ! timecard
+	regHrs=otHrs=vacHrs=sickHrs=holHrs=otherComp=0 ! timecard
 	if timecard=1 then
-		tcKey$=en$&cnvrt$('n 3',dep)&cnvrt$('n 5',cno) ! timecard
-		read #hTimeCard,using 'form pos 17,6*pd 5.2',key=tcKey$: reghrs,othrs,vachrs,sickhrs,holhrs,othercomp nokey ignore ! timecard
+		tcKey$=lpad$(str$(eno),8)&cnvrt$('n 3',dep)&cnvrt$('n 5',cno) ! timecard
+		read #hTimeCard,using 'form pos 17,6*pd 5.2',key=tcKey$: regHrs,otHrs,vacHrs,sickHrs,holHrs,otherComp nokey ignore ! timecard
 	end if
 	! dim shd$*78
-	! shd$='Employee # '&ltrm$(en$)&'   Name '&rtrm$(em$)&'    Department # '&str$(dep)
+	! shd$='Employee # '&str$(eno)&'   Name '&rtrm$(em$)&'    Department # '&str$(dep)
 	if editMode then goto L1450
 	goto L1490
 	L1450: !
@@ -215,63 +223,64 @@ ScrEnterTime: ! r:
 goto ScrAskTime ! /r
 L1490: ! r: build mat inpX and goto ScrAskTime
 	mat inpX=(0)
-	inpX(1)=reghrs
-	inpX(2)=othrs
-	inpX(3)=vachrs
-	inpX(4)=sickhrs
-	inpX(5)=holhrs
-	inpX(7)=othercomp ! timecard
+	inpX(1)=regHrs
+	inpX(2)=otHrs
+	inpX(3)=vacHrs
+	inpX(4)=sickHrs
+	inpX(5)=holHrs
+	inpX(7)=otherComp ! timecard
 	inpX(6)=tdet(1)
 	for j=1 to 20
 		inpX(j+9)=tdet(j+3)
-		if skipit(j)=1 then inpX(j+9)=0
+		if skipIt(j)=1 then inpX(j+9)=0
 	next j
 goto ScrAskTime ! /r
 ScrAskTime: ! r:
 	fnTos
-	respc=0: mylen=20: franum=0: rc=0
-	fnLbl(1,1,'Employee Number: '&str$(eno),60,2,0,franum)
-	fnLbl(2,1,'Employee Name: '&rtrm$(em$),60,2,0,franum)
-	fnLbl(3,1,'Department Number: '&str$(dep)&' '&fnDeptName$(dep),60,2,0,franum)
-	fnLbl(5,1,'Regular Hours:',mylen,1,0,franum)
-	fnTxt(5,mylen+2,12,0,1,'10',0,'.',franum)
+	respc=0: mylen=20: fraNum=0: rc=0
+	fnLbl(1,1,'Employee Number: '&str$(eno),60,2,0,fraNum)
+	fnLbl(2,1,'Employee Name: '&rtrm$(em$),60,2,0,fraNum)
+	fnLbl(3,1,'Department: '&str$(dep)&' '&fnDeptName$(dep),60,2,0,fraNum)
+	fnLbl(5,1,'Regular Hours:',mylen,1,0,fraNum)
+	fnTxt(5,mylen+2,12,0,1,'10',0,'.',fraNum)
 	resp$(rc+=1)=str$(inpX(1))
-	fnLbl(6,1,'Overtime Hours:',mylen,1,0,franum)
-	fnTxt(6,mylen+2,12,0,1,'10',0,'.',franum)
+	fnLbl(6,1,'Overtime Hours:',mylen,1,0,fraNum)
+	fnTxt(6,mylen+2,12,0,1,'10',0,'.',fraNum)
 	resp$(rc+=1)=str$(inpX(2))
-	fnLbl(7,1,'Sick Hours:',mylen,1,0,franum)
-	fnTxt(7,mylen+2,12,0,1,'10',0,'.',franum)
+	fnLbl(7,1,'Sick Hours:',mylen,1,0,fraNum)
+	fnTxt(7,mylen+2,12,0,1,'10',0,'.',fraNum)
 	resp$(rc+=1)=str$(inpX(3))
-	fnLbl(8,1,'Vacation Hours:',mylen,1,0,franum)
-	fnTxt(8,mylen+2,12,0,1,'10',0,'.',franum)
+	fnLbl(8,1,'Vacation Hours:',mylen,1,0,fraNum)
+	fnTxt(8,mylen+2,12,0,1,'10',0,'.',fraNum)
 	resp$(rc+=1)=str$(inpX(4))
-	fnLbl(9,1,'Holiday Hours:',mylen,1,0,franum)
-	fnTxt(9,mylen+2,12,0,1,'10',0,'.',franum)
+	fnLbl(9,1,'Holiday Hours:',mylen,1,0,fraNum)
+	fnTxt(9,mylen+2,12,0,1,'10',0,'.',fraNum)
 	resp$(rc+=1)=str$(inpX(5))
-	fnLbl(10,1,'Salary:',mylen,1,0,franum)
-	fnTxt(10,mylen+2,12,0,1,'10',0,'.',franum)
+	fnLbl(10,1,'Salary:',mylen,1,0,fraNum)
+	fnTxt(10,mylen+2,12,0,1,'10',0,'.',fraNum)
 	resp$(rc+=1)=str$(inpX(6))
-	fnLbl(11,1,'Other Compensation:',mylen,1,0,franum)
-	fnTxt(11,mylen+2,12,0,1,'10',0,'.',franum)
+	fnLbl(11,1,'Other Compensation:',mylen,1,0,fraNum)
+	fnTxt(11,mylen+2,12,0,1,'10',0,'.',fraNum)
 	resp$(rc+=1)=str$(inpX(7))
-	fnLbl(12,1,'Meals:',mylen,1,0,franum)
-	fnTxt(12,mylen+2,12,0,1,'10',0,'.',franum)
+	fnLbl(12,1,'Meals:',mylen,1,0,fraNum)
+	fnTxt(12,mylen+2,12,0,1,'10',0,'.',fraNum)
 	resp$(rc+=1)=str$(inpX(8))
-	fnLbl(13,1,'Tips:',mylen,1,0,franum)
-	fnTxt(13,mylen+2,12,0,1,'10',0,'.',franum)
+	fnLbl(13,1,'Tips:',mylen,1,0,fraNum)
+	fnTxt(13,mylen+2,12,0,1,'10',0,'.',fraNum)
 	resp$(rc+=1)=str$(inpX(9))
-	fnLbl(15,1,'Reg Hourly Rate:',mylen,1,0,franum)
-	fnTxt(15,mylen+2,12,0,1,'10',0,'.',franum)
+	fnLbl(15,1,'Reg Hourly Rate:',mylen,1,0,fraNum)
+	fnTxt(15,mylen+2,12,0,1,'10',0,'.',fraNum)
 	resp$(rc+=1)=str$(hr(1))
-	fnLbl(16,1,'O/T Hourly Rate:',mylen,1,0,franum)
-	fnTxt(16,mylen+2,12,0,1,'10',0,'.',franum)
+	fnLbl(16,1,'O/T Hourly Rate:',mylen,1,0,fraNum)
+	fnTxt(16,mylen+2,12,0,1,'10',0,'.',fraNum)
 	resp$(rc+=1)=str$(hr(2))
+	dim name$(20)*21
 	for j=1 to 20
-		if trim$(dednames$(j))='' then name$(j)='' else name$(j)=trim$(dednames$(j))&':'
+		if trim$(dedName$(j))='' then name$(j)='' else name$(j)=trim$(dedName$(j))&':'
 		if skipit$(j)='Y' then inpX(j+9)=0
 		disable_deduction=0 : if trim$(name$(j))='' then disable_deduction=1
-		fnLbl(j+4,25,trim$(name$(j)),mylen,1,0,franum)
-		fnTxt(j+4,47,12,0,1,'10',disable_deduction,'.',franum)
+		fnLbl(j+4,25,trim$(name$(j)),mylen,1,0,fraNum)
+		fnTxt(j+4,47,12,0,1,'10',disable_deduction,'.',fraNum)
 		resp$(rc+=1)=str$(inpX(j+9))
 	next j
 	fnCmdKey('&Next',1,1,0,'Record this time' )
@@ -322,7 +331,7 @@ ScrAskTime: ! r:
 	end if
 	L2290: !
 	for j=1 to 5
-		! if env$('client')='West Rest Haven' and sickhrs>0 then inpX(4)=0 ! if sickhrs come from time clock, set the sick hours in entry as 0
+		! if env$('client')='West Rest Haven' and sickHrs>0 then inpX(4)=0 ! if sickHrs come from time clock, set the sick hours in entry as 0
 		! if env$('client')='West Rest Haven' and j=5 then
 		!   gpd+=inpX(j)*(hr(1)*1.50) : goto L2330 ! pay time and 1/2 on holiday pay
 		! end if
@@ -330,26 +339,26 @@ ScrAskTime: ! r:
 		L2330: !
 	next j
 	! if env$('client')='West Rest Haven' then
-	!   inpX(7)=inpX(7)+round(sickhrs*(hr(1)*.50),2)
-	!   sickhrs=0 ! place  double time portion of holiday overtime hours in other compensation, then clear the sick hours
+	!   inpX(7)=inpX(7)+round(sickHrs*(hr(1)*.50),2)
+	!   sickHrs=0 ! place  double time portion of holiday overtime hours in other compensation, then clear the sick hours
 	! end if
 	if inpX(9)>0 and gpd+inpX(6)+inpX(7)+inpX(8)+inpX(9)<round((inpX(1)*mhw+inpX(2)*mhw*1.5),2) then inpX(7)=inpX(7)+round((inpX(1)*mhw+inpX(2)*mhw*1.5),2)-(gpd+inpX(6)+inpX(7)+inpX(8)+inpX(9))
 	gpd+=inpX(6)+inpX(7) +inpX(8)+inpX(9) ! inpX(8) (meals) and inpX(9) tips both need to be added in for taxing purposes  they will be taken back out in S:\Payroll\Calc
-	if ckey=5 and editMode then 
+	if ckey=5 and editMode then
 		goto Accumulators ! just add proof totals back in
-	else if editMode then 
+	else if editMode then
 		rewrite #hTimesheet,using Ftimesheet,rec=rec(hTimesheet): eno,dep,mat inpX,gpd,mat hr norec WriteAndAccum
-		goto Accumulators 
+		goto Accumulators
 
 	end if
 		write #hTimesheet,using Ftimesheet: eno,dep,mat inpX,gpd,mat hr
 		mat tinp=tinp+inpX
 		tgp+=gpd
-	
+
 SkipDepartment: !
 	if pullFromTimeCardSystem then goto L4300 ! pulling from time card system
-	if tgp=0 then ped=0 else ped=prd
-	rewrite #hEmployee,using Femployee2,key=en$: ped,tgp
+	if tgp=0 then employee_lastPayrollDate=0 else employee_lastPayrollDate=payrollDate
+	rewrite #hEmployee,using Femployee2,key=lpad$(str$(eno),8): employee_lastPayrollDate,tgp
 	if heno=eno then goto L2490
 	if tgp>0 then ent1=ent1+1
 	L2490: !
@@ -372,78 +381,158 @@ goto ScrProofTotals ! /r
 ScrProofTotals: ! r:
 	fn_addProofTotals(teno,count_employees_entered,mat tinp)
 	fnTos
-	respc=0 : mylen=20 : franum=0 : rc=0
-	fnLbl(1,1,'P R O O F  T O T A L S',60,2,0,franum)
-	fnLbl(2,1,'Total Employees/Departments Entered: '&str$(count_employees_entered),60,2,0,franum)
-	fnLbl(3,1,'Total Employee Numbers Entered: '&str$(teno),60,2,0,franum)
-	fnLbl(5,1,'Regular Hours:',mylen,1,0,franum)
-	fnTxt(5,mylen+2,12,0,1,'10',1,'.',franum)
+	respc=0 : mylen=20 : fraNum=0 : rc=0
+	fnLbl(1,1,'P R O O F  T O T A L S',val(env$('SESSION_COLS')),2)
+	! r: proof totals
+	fnLbl(2,1,'Total Employees/Departments Entered: '&str$(count_employees_entered),60,2,0,fraNum)
+	fnLbl(3,1,'Total Employee Numbers Entered: '&str$(teno),60,2,0,fraNum)
+	fnLbl(5,1,'Regular Hours:',mylen,1,0,fraNum)
+	fnTxt(5,mylen+2,12,0,1,'10',1,'.',fraNum)
 	resp$(rc+=1)=str$(tinp(1))
-	fnLbl(6,1,'Overtime Hours:',mylen,1,0,franum)
-	fnTxt(6,mylen+2,12,0,1,'10',1,'.',franum)
+	fnLbl(6,1,'Overtime Hours:',mylen,1,0,fraNum)
+	fnTxt(6,mylen+2,12,0,1,'10',1,'.',fraNum)
 	resp$(rc+=1)=str$(tinp(2))
-	fnLbl(7,1,'Sick Hours:',mylen,1,0,franum)
-	fnTxt(7,mylen+2,12,0,1,'10',1,'.',franum)
+	fnLbl(7,1,'Sick Hours:',mylen,1,0,fraNum)
+	fnTxt(7,mylen+2,12,0,1,'10',1,'.',fraNum)
 	resp$(rc+=1)=str$(tinp(3))
-	fnLbl(8,1,'Vacation Hours:',mylen,1,0,franum)
-	fnTxt(8,mylen+2,12,0,1,'10',1,'.',franum)
+	fnLbl(8,1,'Vacation Hours:',mylen,1,0,fraNum)
+	fnTxt(8,mylen+2,12,0,1,'10',1,'.',fraNum)
 	resp$(rc+=1)=str$(tinp(4))
-	fnLbl(9,1,'Holiday Hours:',mylen,1,0,franum)
-	fnTxt(9,mylen+2,12,0,1,'10',1,'.',franum)
+	fnLbl(9,1,'Holiday Hours:',mylen,1,0,fraNum)
+	fnTxt(9,mylen+2,12,0,1,'10',1,'.',fraNum)
 	resp$(rc+=1)=str$(tinp(5))
-	fnLbl(10,1,'Salary:',mylen,1,0,franum)
-	fnTxt(10,mylen+2,12,0,1,'10',1,'.',franum)
+	fnLbl(10,1,'Salary:',mylen,1,0,fraNum)
+	fnTxt(10,mylen+2,12,0,1,'10',1,'.',fraNum)
 	resp$(rc+=1)=str$(tinp(6))
-	fnLbl(11,1,'Other Compensation:',mylen,1,0,franum)
-	fnTxt(11,mylen+2,12,0,1,'10',1,'.',franum)
+	fnLbl(11,1,'Other Compensation:',mylen,1,0,fraNum)
+	fnTxt(11,mylen+2,12,0,1,'10',1,'.',fraNum)
 	resp$(rc+=1)=str$(tinp(7))
-	fnLbl(12,1,'Meals:',mylen,1,0,franum)
-	fnTxt(12,mylen+2,12,0,1,'10',1,'.',franum)
+	fnLbl(12,1,'Meals:',mylen,1,0,fraNum)
+	fnTxt(12,mylen+2,12,0,1,'10',1,'.',fraNum)
 	resp$(rc+=1)=str$(tinp(8))
-	fnLbl(13,1,'Tips:',mylen,1,0,franum)
-	fnTxt(13,mylen+2,12,0,1,'10',1,'.',franum)
+	fnLbl(13,1,'Tips:',mylen,1,0,fraNum)
+	fnTxt(13,mylen+2,12,0,1,'10',1,'.',fraNum)
 	resp$(rc+=1)=str$(tinp(9))
-	fnLbl(15,1,'Reg Hourly Rate:',mylen,1,0,franum)
-	fnTxt(15,mylen+2,12,0,1,'10',1,'.',franum)
+	fnLbl(15,1,'Reg Hourly Rate:',mylen,1,0,fraNum)
+	fnTxt(15,mylen+2,12,0,1,'10',1,'.',fraNum)
 	resp$(rc+=1)=str$(hr(1))
-	fnLbl(16,1,'O/T Hourly Rate:',mylen,1,0,franum)
-	fnTxt(16,mylen+2,12,0,1,'10',1,'.',franum)
+	fnLbl(16,1,'O/T Hourly Rate:',mylen,1,0,fraNum)
+	fnTxt(16,mylen+2,12,0,1,'10',1,'.',fraNum)
 	resp$(rc+=1)=str$(hr(2))
-	for j=1 to 20
-		if trim$(dednames$(j))='' then name$(j)='' else name$(j)=trim$(dednames$(j))&':'
-		fnLbl(j+4,25,trim$(name$(j)),mylen,1,0,franum)
-		fnTxt(j+4,47,12,0,1,'10',1,'.',franum)
+	for j=1 to 10
+		if trim$(dedName$(j))='' then name$(j)='' else name$(j)=trim$(dedName$(j))&':'
+		fnLbl(j+4,25,trim$(name$(j)),mylen,1,0,fraNum)
+		fnTxt(j+4,47,12,0,1,'10',1,'.',fraNum)
 		resp$(rc+=1)=str$(tinp(j+9))
 	next j
-	fnCmdKey('Co&rrections',1,0,0,'Correct any entries.')
-	fnCmdKey('&Listing',2,0,0,'Prints a listing of the entries you have made.')
-	fnCmdKey('&Calculate',3,1,0,'Calculates the pay.')
-	fnCmdKey('&Add',4,0,0,'Add additional time. (If you missed a department, you should delete the original entries on that employee and completely re-enter the employee time.')
+	for j=11 to 20
+		if trim$(dedName$(j))='' then name$(j)='' else name$(j)=trim$(dedName$(j))&':'
+		fnLbl(j-10+4,25+30,trim$(name$(j)),mylen,1,0,fraNum)
+		fnTxt(j-10+4,47+30,12,0,1,'10',1,'.',fraNum)
+		resp$(rc+=1)=str$(tinp(j+9))
+	next j
+	! /r
+	! r: add timesheet listview
+		dim dh_ch$(0)*18
+		dim dh_cm$(0)
+		mat dh_ch$(10)
+		mat dh_cm$(10)
+		dim item$(10)*64
+		dh_ch$(1 )='Rec'         	: dh_cm$(1 )='30'
+		dh_ch$(2 )='Emp'         	: dh_cm$(2 )=''
+		dh_ch$(3 )='Dept'        	: dh_cm$(3 )=''
+		dh_ch$(4 )='Hours'       	: dh_cm$(4 )='32'
+		dh_ch$(5 )='OT'          	: dh_cm$(5 )='32'
+		dh_ch$(6 )='Sick'        	: dh_cm$(6 )='32'
+		dh_ch$(7 )='Vac'         	: dh_cm$(7 )='32'
+		dh_ch$(8 )='Holiday'     	: dh_cm$(8 )='32'
+		dh_ch$(9 )='Salary'      	: dh_cm$(9 )='10'
+		dh_ch$(10)='Other Comp'  	: dh_cm$(10)='10'
+		fnFlexInit1('timesheet',18,1,5,70,mat dh_ch$,mat dh_cm$,1)
+		open #hSptTimesheet=fnH: 'Name=[Q]\PRmstr\timesheet[acsUserId].h[cno],shr',i,i
+		! restore #hTimesheet:
+		do
+			read #hSptTimesheet,using Ftimesheet: eno,dep,mat inpX,gpd,mat hr eof SaoeFlexFinis2
+			item$(1 )=lpad$(str$(rec(hSptTimesheet)),6)
+			item$(2 )=rtrm$(lpad$(str$(eno),6)&'  '&fnEmployeeName$(eno)     	)
+			item$(3 )=rtrm$(lpad$(str$(dep),3)&'  '&fnDepartmentName$(dep)   	)
+			item$(4 )=str$(inpX(1))
+			item$(5 )=str$(inpX(2))
+			item$(6 )=str$(inpX(3))
+			item$(7 )=str$(inpX(4))
+			item$(8 )=str$(inpX(5))
+			item$(9 )=str$(inpX(6))
+			item$(10)=str$(inpX(7))
+			fnFlexAdd1(mat item$)
+		loop
+		SaoeFlexFinis2: !
+		close #hSptTimesheet:
+		fnEmployeeDataClose
+		resp$(resp_flex=rc+=1)=''
+	! /r
+	! fnCmdKey('Co&rrections',ck_corrections=1,0,0,'Correct any entries.')
+	! fnCmdKey('Add or Edit',ck_addOrEdit=6,0,1,'Add or Edit Time Sheet records')
+	fnCmdKey('Add'       	,ck_addEmployee	=2,0,0,'Enter time for each department of an employee')
+	fnCmdKey('Edit'      	,ck_edit        	=1,1,0,'Enter time on this employee' )
+	fnCmdKey('Delete'    	,ck_delete     	=3,0,0,'Enter time on this employee' )
+	fnCmdKey('&Listing'  	,ck_prListing  	=6,0,0,'Prints a listing of the entries you have made.')
+	fnCmdKey('&Calculate'	,ck_calculate  	=8,0,0,'Calculates the pay.')
+	! fnCmdKey('&Add',ck_add=4,0,0,'Add additional time. (If you missed a department, you should delete the original entries on that employee and completely re-enter the employee time.')
 	fnCmdKey('E&xit',5,0,1,'Exit without calculating')
 	ckey=fnAcs(mat resp$) ! proof totals
 	pullFromTimeCardSystem=0
 	if ckey=5 then goto XitWOCAL
-	if ckey=1 or ckey=2 or ckey=4 then gosub OpenFiles
-on ckey goto ScrCorrections,PrintListing,GoCalculate,ScrAskEmployee none ScrProofTotals ! /r
+	tsRec=val(resp$(resp_flex))
+	if ckey=ck_edit then
+		gosub OpenFiles
+		read #hTimesheet,using Ftimesheet,rec=tsRec: eno,dep,mat inpX,gpd,mat hr
+		editMode=1
+		goto ScrAskTime ! ScrEnterTime ! from ScrAskEmployee [Next]
+	else if ckey=ck_addEmployee then
+		gosub OpenFiles
+		editMode=0
+		goto ScrAskEmployee
+	else if ckey=ck_delete then
+		if fnConfirmDelete('Record '&str$(tsRec), 'timeSheetRecDel'&date$('ccyymmdd')) then
+			open #hTimesheet=fnH: 'Name=[Q]\PRmstr\timesheet[acsUserId].h[cno],KFName=[Q]\PRmstr\timesheet[acsUserId]Idx.h[cno],shr',i,outIn,k
+			delete #hTimesheet,rec=tsRec:
+			close #hTimesheet:
+		end if
+		! goto ScrProofTotals
+	else if ckey and ckey=ck_prListing then
+		gosub OpenFiles
+		goto PrintListing
+	! else if ckey and ckey=ck_addOrEdit then
+	! 	gosub OpenFiles
+	! 	goto ScrAddOrEdit
+	! else if ckey=ck_corrections then
+	! 	goto ScrCorrections
+	else if ckey=ck_calculate then
+		goto GoCalculate
+	else if ckey=ck_add then
+		gosub OpenFiles
+		goto ScrAskEmployee
+	end if
+goto ScrProofTotals ! /r
 DeleteTimesheetEntry: ! r:
 	delete #hTimesheet,rec=rec(hTimesheet): noRec AfterAccumulators
 goto RewriteEmployeeTGP ! /r
 
 Accumulators: ! r:
 	tgp+=gpd
-	teno=teno+eno
+	teno+=eno
 	mat tinp=tinp+inpX
 goto AfterAccumulators ! /r
 AfterAccumulators: ! r:
-	if tgp then ped=prd else ped=0
+	if tgp then employee_lastPayrollDate=payrollDate else employee_lastPayrollDate=0
 goto RewriteEmployeeTGP: ! /r
 RewriteEmployeeTGP: ! r:
-	rewrite #hEmployee,using Femployee2,key=en$: ped,tgp
+	rewrite #hEmployee,using Femployee2,key=lpad$(str$(eno),8): employee_lastPayrollDate,tgp
 	editMode=0
 goto READ_NEXT_DEPARTMENT ! /r
 
 GoCalculate: ! r:
-	fnPayPeriodEndingDate(fndate_mmddyy_to_ccyymmdd(prd))
+	fnPayPeriodEndingDate(fndate_mmddyy_to_ccyymmdd(payrollDate))
 	if jobcost=1 then close #hJcPrh1,free:
 fnChain('S:\Payroll\Calculation') ! /r
 
@@ -451,43 +540,44 @@ ProcessTimeCard: ! r:
 	open #hTimeCard=4: 'Name='&pathToTimeCard$&'timecard\simplesummary,KFName='&pathToTimeCard$&'timecard\ssindex,Shr',i,outIn,k ioerr L4200 ! timecard
 	timecard=1 ! timecard files exist
 	L4200: !
-	read #hEmployee,using Femployee3: en$,em$,em4,em8,em9,lpd,tgp eof FinishAndConfirm
-	if em4=9 then goto L4200 ! must use employment status code = 9 for terminated
-	! if env$('client')='West Rest Haven' and em4=2 then goto L4200 ! wrh uses code 2 for terminated
+	dim en$*8
+	read #hEmployee,using Femployee3: eno,em$,empStatus,em8,em9,lpd,tgp eof FinishAndConfirm
+	if empStatus=9 then goto L4200 ! must use employment status code = 9 for terminated
+	! if env$('client')='West Rest Haven' and empStatus=2 then goto L4200 ! wrh uses code 2 for terminated
 	tgp=0
-! If pullFromTimeCardSystem AND EM4=1 Then Goto 3590 ! employment status on salaries people must be 1
-! If EM4><pullFromTimeCardSystem Then Goto 3552
-	eno=val(en$)
-	! pr f '16,20,C 60': en$&'  '&em$
+! If pullFromTimeCardSystem AND empStatus=1 Then Goto 3590 ! employment status on salaries people must be 1
+! If empStatus><pullFromTimeCardSystem Then Goto 3552
+	! pr f '16,20,C 60': str$(eno)&'  '&em$
 L4290: !
 	restore #hDept,key>=cnvrt$('pic(zzzzzzz#)',eno)&'   ':
 L4300: !
 	read #hDept,using 'form pos 1,n 8,n 3,pos 58,23*PD 4.2': depeno,dep,mat tdet
 	if depeno<>eno then goto TheNextOne
-	reghrs=othrs=vachrs=sickhrs=holhrs=othercomp=0 ! timecard
+	regHrs=otHrs=vacHrs=sickHrs=holHrs=otherComp=0 ! timecard
 	if timecard=1 then
-		tcKey$=en$&cnvrt$('n 3',dep)&cnvrt$('n 5',cno) ! timecard
-		read #hTimeCard,using 'form pos 17,6*pd 5.2',key=tcKey$: reghrs,othrs,vachrs,sickhrs,holhrs,othercomp nokey TimeCardNoKey ! timecard
+		tcKey$=lpad$(str$(eno),8)&cnvrt$('n 3',dep)&cnvrt$('n 5',cno) ! timecard
+		read #hTimeCard,using 'form pos 17,6*pd 5.2',key=tcKey$: regHrs,otHrs,vacHrs,sickHrs,holHrs,otherComp nokey TimeCardNoKey ! timecard
 	end if
 	! if env$('client')='West Rest Haven' then gosub WRH_SIMPLE_OFFSET_HOLIDAY
 goto L4400
 TimeCardNoKey: !
-	if em4=1 and tdet(1)>0 then goto L4400 ! calculate salaries even if no time in time card file; skip any hourly people who do not have any entries from the time card system
+	! tdet(1) Department Salary
+	if empStatus=1 and tdet(1)>0 then goto L4400 ! calculate salaries even if no time in time card file; skip any hourly people who do not have any entries from the time card system
 goto L4290 ! If NTA>0 Then aDR=NTA: Goto 3870 Else Goto 2010 ! circle if more than one department on hourly people; else skip if no time and no more departments
-L4400: ! r: create Timesheet record from 
+L4400: ! r: create Timesheet record from
 	hr(1)=tdet(2)
 	hr(2)=tdet(3)
 	mat inpX=(0)
-	inpX(1)=reghrs
-	inpX(2)=othrs
-	inpX(3)=vachrs
-	inpX(4)=sickhrs
-	inpX(5)=holhrs
-	inpX(7)=othercomp ! timecard
+	inpX(1)=regHrs
+	inpX(2)=otHrs
+	inpX(3)=vacHrs
+	inpX(4)=sickHrs
+	inpX(5)=holHrs
+	inpX(7)=otherComp ! timecard
 	inpX(6)=tdet(1)
 	for j=1 to 20
 		inpX(j+7)=tdet(j+3)
-		if skipit(j)=1 then inpX(j+7)=0
+		if skipIt(j)=1 then inpX(j+7)=0
 	next j
 goto PostDeptRewrite ! /r
 ScrCorrections: ! r:
@@ -512,7 +602,7 @@ L4790: !
 	ml$(2)='Do you wish to enter new time on this employee? '
 	fnMsgBox(mat ml$,resp$,'',52)
 	if resp$(1:1)='Y' then
-		goto ScrEnterTime ! ScrAskEmployee
+		goto ScrEnterTime ! from ScrCorrections
 	else
 		goto ScrCorrections
 	end if
@@ -521,8 +611,7 @@ READ_NEXT_DEPARTMENT: !
 L4840: !
 	if depeno<>eno then goto ScrCorrections
 	em$=''
-	en$=lpad$(str$(eno),8)
-	read #hEmployee,using Femployee1,key=en$: em$,em4,em8,em9,lpd,tgp nokey ignore
+	read #hEmployee,using Femployee1,key=lpad$(str$(eno),8): em$,empStatus,em8,em9,lpd,tgp nokey ignore
 	teno=teno-eno ! remove from proof totals
 	mat tinp=tinp-inpX
 	dep=dep2 ! fix dept # on correction screen
@@ -551,14 +640,14 @@ XITWOCAL: ! r:
 !  fnMsgBox(mat ml$,resp$)
 ! /r goto TheNextOne
 ! WRH_SIMPLE_OFFSET_HOLIDAY: ! r: offset holiday hours for West Rest Haven
-!   if sickhrs>0 then
-!     othrs=othrs-sickhrs
-!     reghrs=reghrs-(max(0,holhrs-sickhrs)) ! wrh places any holiday hours considered overtime in the sick hours column.  The holiday hours are duplicated either in the reg hours or the ot hours.  this is how we decide which
+!   if sickHrs>0 then
+!     otHrs=otHrs-sickHrs
+!     regHrs=regHrs-(max(0,holHrs-sickHrs)) ! wrh places any holiday hours considered overtime in the sick hours column.  The holiday hours are duplicated either in the reg hours or the ot hours.  this is how we decide which
 !   end if
-!   if sickhrs=0 then reghrs=reghrs-holhrs ! their timeclock puts holiday hours in reghrs column or othrs as well holiday column  (if no part belongs to othrs, then take all from the regular hrs
+!   if sickHrs=0 then regHrs=regHrs-holHrs ! their timeclock puts holiday hours in regHrs column or otHrs as well holiday column  (if no part belongs to otHrs, then take all from the regular hrs
 ! return  ! /r
 PullFromJobCost: ! r:
-	! h(1)=emp#,h(2)=method,h(3)=dept#,h(4)=reghrs,h(5)=ot hrs,h(6)=salary,h(7)=ded #
+	! h(1)=emp#,h(2)=method,h(3)=dept#,h(4)=regHrs,h(5)=ot hrs,h(6)=salary,h(7)=ded #
 	gosub SortIt
 	open #hJcPrh1=fnH: 'Name=[Q]\PRmstr\JCPRH1.h[cno]',i,i,r ! #5
 	open #hAddr=fnH: 'Name=[Temp]\Addr.'&session$,i,i ! #6
@@ -566,12 +655,6 @@ PullFromJobCost: ! r:
 	close #hTimesheet:
 	fnIndex('[Q]\PRmstr\timesheet[acsUserId].h[cno]','[Q]\PRmstr\timesheet[acsUserId]Idx.h[cno]','1,11')
 	open #hTimesheet=fnH: 'Name=[Q]\PRmstr\timesheet[acsUserId].h[cno],KFName=[Q]\PRmstr\timesheet[acsUserId]Idx.h[cno]',i,outIn,k
-! Restore #hEmployee:
-! Read #hEmployee,Using 5480: EN$ Eof 5520
-! form pos 1,C 8
-! Rewrite #hEmployee,Using 5500,Key=EN$: 0
-! form pos 168,PD 5.2
-! Goto 5470
 	holdeno=eno=holddep=dep=0
 	dim h(7)
 	mat h=(0)
@@ -594,8 +677,7 @@ L5590: !
 	if h2=1 or h2=3 then inpX(6)=inpX(6)+h(6)
 	if h(7)=21 and h(6)>0 then inpX(7)=inpX(7)+h(6)
 	if eno=0 then goto L5520
-	en$=lpad$(str$(eno),8)
-	read #hEmployee,using 'form pos 9,c 30,pos 126,2*pd 3.3,pos 168,pd 5.2',key=en$: em$,em8,em9,tgp nokey L5710
+	read #hEmployee,using 'form pos 9,c 30,pos 126,2*pd 3.3,pos 168,pd 5.2',key=lpad$(str$(eno),8): em$,em8,em9,tgp nokey L5710
 	goto L5720
 	L5710: ! r:
 		mat ml$(2)
@@ -628,14 +710,14 @@ L5590: !
 	mat tinp=tinp+inpX
 	tgp+=gpd
 	gpd=0
-	if tgp=0 then ped=0 else ped=prd
-	rewrite #hEmployee,using 'form pos 162,n 6,pd 5.2',key=en$: ped,tgp
+	if tgp=0 then employee_lastPayrollDate=0 else employee_lastPayrollDate=payrollDate
+	rewrite #hEmployee,using 'form pos 162,n 6,pd 5.2',key=lpad$(str$(eno),8): employee_lastPayrollDate,tgp
 	if holdeno=eno then goto L5960
 	if tgp>0 then ent1+=1
 	L5960: !
 	holdeno=h(1) : holddep=h(3) : mat inpX=(0)
 	if eofCode then eofCode=0 : goto L6000
-goto L5590 
+goto L5590
 EoAddr: eofCode=1 : goto L5820 ! allow last entry to post
 L6000: !
 goto ScrProofTotals
@@ -664,17 +746,84 @@ ScrAskEmployee: ! r:
 	ckey=fnAcs(mat resp$) ! ask employee #
 	eno=ent=val(resp$(1)(1:8))
 	if ckey=1 then
-		goto ScrEnterTime
+		goto ScrEnterTime ! from ScrAskEmployee [Next]
 	else if ckey=2 then
 		fnEmployeeSrch(x$,fixgrid)
 		eno=val(x$)
-		goto ScrEnterTime
+		goto ScrEnterTime ! from ScrAskEmployee [Search]
 	else if ckey=5 or ckey=6 then
 		goto FinishAndConfirm
 	else
 		goto FinishAndConfirm
 	end if
 ! /r
+! /r
+! ScrAddOrEdit: ! r:
+! 	editMode=0
+! 	fnTos
+! 	respc=0
+! 	fnLbl(1,1,'Select record to edit or add a new employee')
+! 	! r: add timesheet listview
+! 		dim dh_ch$(0)*18
+! 		dim dh_cm$(0)
+! 		mat dh_ch$(10)
+! 		mat dh_cm$(10)
+! 		dh_ch$(1 )='Rec'                 	: dh_cm$(1 )=''
+! 		dh_ch$(2 )='Employee'            	: dh_cm$(2 )=''
+! 		dh_ch$(3 )='Department'          	: dh_cm$(3 )=''
+! 		dh_ch$(4 )='Regular Hours'      	: dh_cm$(4 )='32'
+! 		dh_ch$(5 )='Overtime Hours'     	: dh_cm$(5 )='32'
+! 		dh_ch$(6 )='Sick Hours'          	: dh_cm$(6 )='32'
+! 		dh_ch$(7 )='Vacation Hours'     	: dh_cm$(7 )='32'
+! 		dh_ch$(8 )='Holiday Hours'      	: dh_cm$(8 )='32'
+! 		dh_ch$(9 )='Salary'              	: dh_cm$(9 )='10'
+! 		dh_ch$(10)='Other Compensation' 	: dh_cm$(10)='10'
+!
+! 		fnFlexInit1('timesheet',5,1,10,70,mat dh_ch$,mat dh_cm$,1)
+! 		restore #hTimesheet:
+! 		do
+! 			read #hTimesheet,using Ftimesheet: eno,dep,mat inpX,gpd,mat hr eof SaoeFlexFinis
+! 			item$(1 )=str$(rec(hTimesheet))
+! 			item$(2 )=str$(eno)
+! 			item$(3 )=str$(dep)
+! 			item$(4 )=str$(inpX(1))
+! 			item$(5 )=str$(inpX(2))
+! 			item$(6 )=str$(inpX(3))
+! 			item$(7 )=str$(inpX(4))
+! 			item$(8 )=str$(inpX(5))
+! 			item$(9 )=str$(inpX(6))
+! 			item$(10)=str$(inpX(7))
+! 			fnFlexAdd1(mat item$)
+! 		loop
+! 		SaoeFlexFinis: !
+! 		resp$(1)=''
+! 	! /r
+! 	! fnCmbEmp(1,13)
+! 	! resp$(respc+=1)=''
+! 	fnCmdKey('Add'    	,ck_addEmployee=2,0,0,'Enter time for each department of an employee')
+! 	fnCmdKey('Edit'   	,ck_edit=1,1,0,'Enter time on this employee' )
+! 	fnCmdKey('Delete' 	,ck_delete=3,0,0,'Enter time on this employee' )
+! 	fnCmdKey('&Finish'	,6,0,1,'Finished entering hours')
+! !                     fnCmdKey('E&xit',5,0,1,'Returns to menu') !   fix kj
+! 	ckey=fnAcs(mat resp$) ! ask employee #
+! 	tsRec=val(resp$(1))
+! 	if ckey=ck_edit then
+! 		read #hTimesheet,using Ftimesheet,rec=tsRec: eno,dep,mat inpX,gpd,mat hr
+! 		goto ScrAskTime ! ScrEnterTime ! from ScrAskEmployee [Next]
+! 	else if ckey=ck_addEmployee then
+! 		goto ScrAskEmployee
+! 	else if ckey=ck_delete then
+! 		pr 'delete chosen, no logic yet' : pause
+! 		if fnConfirmDelete('time sheet record', 'timeSheetRecordDelete'&date$) then
+! 			delete #hTimesheet,rec=tsRec:
+! 		end if
+! 		goto ScrAddOrEdit
+! 	else if ckey=5 or ckey=6 then
+! 		goto FinishAndConfirm
+! 	else
+! 		goto FinishAndConfirm
+! 	end if
+! ! /r
 	def fn_addProofTotals(&apt_total_employee_numbers,&apt_count_employees_entered,mat tinp; ___,hTimesheet)
 		open #hTimesheet=fnH: 'Name=[Q]\PRmstr\timesheet[acsUserId].h[cno],KFName=[Q]\PRmstr\timesheet[acsUserId]Idx.h[cno]',i,i,k ioerr APT_FINIS
 		apt_heno=0 ! temp variable for internal comparison
@@ -724,7 +873,7 @@ PrintListing: ! r:
 		end if
 		if heno<>eno then
 			read #hDept,using 'form pos 42,n 6',key=cnvrt$('pic(ZZZZZZZ#)',eno)&cnvrt$('pic(ZZ#)',dep),release: lastprdate
-			if lastprdate=prd then ! make sure pay hasn't been calculated on this person on this date
+			if lastprdate=payrollDate then ! make sure pay hasn't been calculated on this person on this date
 				mat ml$(4)
 				ml$(1)='You have previously calculated pay using this same payroll date on employee '&str$(eno)
 				ml$(2)='You must delete this person''s time for now and either reverse the previous calculation '
@@ -767,7 +916,7 @@ PrintListing: ! r:
 		next j
 	loop
 
-	PL_Finis: ! 
+	PL_Finis: !
 	if additional=2 then
 		additional=1
 		close #hTimesheet:
@@ -819,20 +968,19 @@ def fn_setup
 	dim hr(2)
 	dim n1$(9)
 	dim n2$(9)
-	dim en$*8
 	dim tdet(23)
 	dim tinp(29)
 
 	dim prX(9,35)
 	dim resp$(64)*128
 	dim ml$(0)*128
-	dim skipit$(20)*1,skipit(20)
-	dim name$(20)*21
+	dim skipit$(20)*1,skipIt(20)
+
 
 	dim tdt(4),tcd(3)
 
-	dim dednames$(20)*20
-	fnDedNames(mat dednames$)
+	dim dedName$(20)*20
+	fnDedNames(mat dedName$)
 
 	dim sc1$(31)*20
 	sc1$(1)='Regular Hours '
@@ -845,7 +993,7 @@ def fn_setup
 	sc1$(8)='Meals'
 	sc1$(9)='Tips '
 	for j=1 to 20
-		sc1$(j+9)=dednames$(j)
+		sc1$(j+9)=dedName$(j)
 	next j
 	sc1$(30)='Reg Hourly Rate'
 	sc1$(31)='O/T Hourly Rate'
@@ -857,9 +1005,9 @@ def fn_setup
 		f1$=rtrm$(f1$)&',PIC(------------)'
 		f2$=rtrm$(f2$)&',PIC(---------.--)'
 	next j
-	
+
 	pathToTimeCard$='C:\progra~1\acs\'
-	
+
 	open #hCompany=fnH: 'Name=[Q]\PRmstr\Company.h[cno],Shr',i,i
 	read #hCompany,using 'form pos 726,pd 3.2': mhw
 	close #hCompany:

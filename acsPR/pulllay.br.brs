@@ -1,4 +1,4 @@
 autoLibrary
-fnFixWordingOnGrid("S:\acsPR\Layouts\checkhistory.LAY","S:\acsPR\grid\checks\checkhistory.fil")
-fnFixWordingOnGrid("S:\acsPR\Layouts\department.LAY","S:\acsPR\grid\departments\department.fil")
+fnFixWordingOnGrid('S:\acsPR\Layouts\CheckHistory.lay','S:\Payroll\Grid\checks\checkhistory.fil')
+fnFixWordingOnGrid('S:\acsPR\Layouts\Department.lay','S:\Payroll\Grid\departments\department.fil')
 fnXit
