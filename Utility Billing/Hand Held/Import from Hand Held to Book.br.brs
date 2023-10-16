@@ -303,7 +303,7 @@ fnend
 				readingColumnName$='Current_Read'
 			! end if
 			if env$('client')='Kincaid' then
-				delim$=tab$
+				delim$=","
 				quotesTrim$='QUOTES:TRIM'
 				readingColumnName$='Read'
 			end if
