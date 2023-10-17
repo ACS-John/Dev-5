@@ -1,8 +1,10 @@
-def library fnOpenBudTransInput
-	autoLibrary
-	fnOpenBudTransInput=fnOpenBudTrans( 1)
-fnend
+autoLibrary
+pr 'not intended to be run directly.'
+pause
+end
+
 def library fnOpenBudTrans(; inputOnly, ___,returnN)
+	autoLibrary
 	if ~exists('[Q]\UBmstr\BudTransIdx1.h[cno]') or ~exists('[Q]\UBmstr\BudTransIdx2.h[cno]') then
 		fn_budgetReIndex
 	end if
@@ -18,9 +20,11 @@ def library fnOpenBudTrans(; inputOnly, ___,returnN)
 	fnOpenBudTrans=returnN
 fnend
 def library fnHbudgetTrans2
+	autoLibrary
 	fnHbudgetTrans2=returnHbudgetTrans2
 fnend
 def library fnCloseBudTrans
+	autoLibrary
 	close #hBudTrans1: ioerr ignore
 	close #hBudTrans2: ioerr ignore
 	hBudTrans1=hBudTrans2=0
@@ -28,6 +32,7 @@ def library fnCloseBudTrans
 fnend
 
 def library fnOpenBudMstrInput
+	autoLibrary
 	fnOpenBudMstrInput=fn_openBudMstr( 1)
 fnend
 def library fnOpenBudMstr(; inputOnly)
@@ -55,6 +60,7 @@ def fn_openBudMstr(; inputOnly, ___,returnN)
 	fn_openBudMstr=returnN
 fnend
 def library fnCloseBudMstr
+	autoLibrary
 	close #hBudMstr1: ioerr ignore
 	! close #hBudMstr2: ioerr ignore
 	hBudMstr1=hBudMstr2=0
@@ -73,6 +79,7 @@ def fn_budgetReIndex(; cno)
 fnend
 
 def library fnBudgetTransMatchingRecords(z$*10,mat btRec; option$*128,___,returnN,x$*10,unpaidOnly,DatePaidCur)
+	autoLibrary
 	!  returnN = matching Records Count and collect all matching record numbers into mat btRec
 	mat btRec(0)
 	restore #hBudTrans1,key=>z$: nokey QuickCountFinis
@@ -91,10 +98,14 @@ def library fnBudgetTransMatchingRecords(z$*10,mat btRec; option$*128,___,return
 	fnBudgetTransMatchingRecords=returnN
 fnend
 
-def library fnCustomerBudgetEnable(x1$*10; ___,returnN,z$*10)
+def library fnCustomerBudgetEnable(x1$*10; ___,returnN,z$*10,hBudMstr1)
+	autoLibrary
 	dim ba(13)
 	mat ba=(0)
+	! hBudMstr1=fn_openBudMstr( 1)
+	open #hBudMstr1=returnN=fnH: 'Name=[Q]\UBmstr\BudMstr.h[cno],KFName=[Q]\UBmstr\BudIdx1.h[cno],Shr',i,i,k
 	read #hBudMstr1,using 'form pos 1,C 10,PD 4,12*PD 5.2',key=x1$: z$,mat ba nokey ignore
+	close #hBudMstr1: ioerr ignore
 	if sum(mat ba(2:11))>0 then returnN=1
 	fnCustomerBudgetEnable=returnN
 fnend

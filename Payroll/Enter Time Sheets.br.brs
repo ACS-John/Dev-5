@@ -382,7 +382,7 @@ ScrProofTotals: ! r:
 	fn_addProofTotals(teno,count_employees_entered,mat tinp)
 	fnTos
 	respc=0 : mylen=20 : fraNum=0 : rc=0
-	fnLbl(1,1,'P R O O F  T O T A L S',val(env$('SESSION_COLS')),2)
+	fnLbl(1,1,'P R O O F  T O T A L S',val(env$('Session_Cols')),2)
 	! r: proof totals
 	fnLbl(2,1,'Total Employees/Departments Entered: '&str$(count_employees_entered),60,2,0,fraNum)
 	fnLbl(3,1,'Total Employee Numbers Entered: '&str$(teno),60,2,0,fraNum)

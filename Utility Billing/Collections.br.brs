@@ -904,7 +904,6 @@ BuildAllocations: ! r: returns mat alloc, mat tgb,transType,escrow$,oldescrowbal
 		if tgb(j)<0 then tn-=tgb(j) ! Total Negative Breakdowns
 	next j
 
-	havemainbudget=fnCustomerBudgetEnable(x1$)
 	validServiceItem=0
 	for j=1 to udiM(allocorder) ! to udim(mat alloc)
 		! r: allocation logic
@@ -915,6 +914,7 @@ BuildAllocations: ! r: returns mat alloc, mat tgb,transType,escrow$,oldescrowbal
 		! /r
 	next j
 
+	havemainbudget=fnCustomerBudgetEnable(x1$)
 	if havemainbudget and sum(mat alloc)<xs(2) then
 		for j=1 to udim(mat alloc) ! if have budget and pay more than budget, how to allocate remainder
 			if alloc(allocOrder(j))=0 then

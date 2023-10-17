@@ -1452,8 +1452,8 @@ fnend
 			fnHbudgetTrans2=fnHbudgetTrans2
 		fnend
 		def library fnOpenBudTransInput
-			library 'S:\Utility Billing\fn\Budget.br': fnOpenBudTransInput
-			fnOpenBudTransInput=fnOpenBudTransInput
+			library 'S:\Utility Billing\fn\Budget.br': fnOpenBudTrans
+			fnOpenBudTransInput=fnOpenBudTrans( 1)
 		fnend
 		def library fnBudgetReIndex(; cno)
 			library 'S:\Utility Billing\fn\Budget.br': fnBudgetReIndex
