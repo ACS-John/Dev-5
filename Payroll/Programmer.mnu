@@ -3,18 +3,12 @@ Payroll - Programmer
 >Direct Deposit (Hamster)             ^ HamsterFio:Direct Deposit
 >Timesheet             ^ HamsterFio:*
 >YTD Wage Breakdown                   ^ Payroll\*
-! >State Withholdings                 ^ acsPR\StWHFM  ! <-  no longer used since tables.wh is not longer used.
 >Employee Departments                 ^ Payroll\*
 >timesheetHamster                     ^ acsPR\*
 >Update Checkbook From Check History  ^ Payroll\Fix\*
 >Fix WH Wages in Check History        ^ acsPR\Fix_SS_Med_Wages
 Pay Period
 >Import from Time Clock System        ^ Payroll\*
-
-Print
->Custom Reports Proof List                  ^ [cursystem]\fn\*          ^     ^Print,User,Designed,Reports,Proof,List,Custom,Reports
-
-
 
 Lost Transactions Fix
 >Import Transactions from CSV                         ^ Payroll\Fix\*
