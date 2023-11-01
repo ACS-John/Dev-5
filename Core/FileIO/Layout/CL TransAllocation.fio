@@ -2,12 +2,12 @@
 [Q]\CLmstr\TrAlloc-Idx.h[cno]   ,  bank/type/check
 ! recl=80
 ===================================================
-bank         	,Bank Code                   	,N    2  	,                	, !  sPos= 1  mask=30
-type        	,Transaction Type           	,N    1  	,                	, !  sPos= 3  mask=30
-check       	,Check/Reference            	,C    8  	,                	, !  sPos= 4  
-gl          	,General Ledger Number     	,C   12  	,                	, !  sPos=12  glaccount
-amount      	,Amount                      	,PD  5.2	,                	, !  sPos=24  mask=32
-desc        	,Description                	,C   30 	,                	, !  sPos=29  
-invDate     	,Invoice Date               	,G    6 	, date(mmddyy)  	, !  sPos=59  mask=mmddyy
-po           	,Purchase Order Number    	,C   12 	,                	, !  sPos=68  
-Post        	,Posting Code              	,N    1 	,                	, !  sPos=80  mask=30
+bank         	,Bank Code                   	,N    2  	,                	, !  sPos=  1  mask=30
+type        	,Transaction Type           	,N    1  	,                	, !  sPos=  3  mask=30
+check       	,Check/Reference            	,C    8  	,                	, !  sPos=  4  
+gl          	,General Ledger Number     	,C   12  	,                	, !  sPos= 12  glaccount
+amount      	,Amount                      	,PD  5.2	,                	, !  sPos= 24  mask=32
+desc        	,Description                	,C   30 	,                	, !  sPos= 29  
+invDate     	,Invoice Date               	,G    6 	, date(mmddyy)  	, !  sPos= 59  mask=mmddyy
+po           	,Purchase Order Number     	,C   12 	,                	, !  sPos= 68  
+Post        	,Posting Code              	,N    1 	,                	, !  sPos= 80  mask=30

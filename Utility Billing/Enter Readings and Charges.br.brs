@@ -8,30 +8,30 @@ MENU1: ! r:
 	fnTos
 	mylen=28 : mypos=mylen+3
 	frame_bd_witdh=42
-	fnFra(1,1,5,frame_bd_witdh,"Batch Data")
+	fnFra(1,1,5,frame_bd_witdh,'Batch Data')
 	disable=0 ! If LREC(hWork)>1 Then dISABLE=1 Else dISABLE=0
-	fnLbl(2,2,"Billing Date:",mylen,1,0,1)
-	fnTxt(2,mypos,8,0,0,"1001",disable,empty$,1)
+	fnLbl(2,2,'Billing Date:',mylen,1,0,1)
+	fnTxt(2,mypos,8,0,0,'1001',disable,empty$,1)
 	resp$(1)=str$(d1)
-	fnLbl(4,2,"Meter Reading Date:",mylen,1,0,1)
-	fnTxt(4,mypos,8,0,0,"1",disable,empty$,1)
+	fnLbl(4,2,'Meter Reading Date:',mylen,1,0,1)
+	fnTxt(4,mypos,8,0,0,'1',disable,empty$,1)
 	resp$(2)=str$(d2)
 
 	moe_button_width=frame_bd_witdh-1
-	fnFra(8,1,20,moe_button_width+1,"Add Readings") : frame_current=2 : frame_line=0
-	fnLbl(frame_line+=2,2,"Individuals:",0,0,0,frame_current)
-	fnButton(frame_line+=1,1,"Display customers in route sequence",fky_askCustomersInSequence:=2001,'Display each customer in route sequence',0,moe_button_width,frame_current)
-	fnButton(frame_line+=1,1,"Ask Account, then enter Reading",fky_askAndEnterIndviduals:=2002,'Ask Account, then enter Reading',0,moe_button_width,frame_current)
+	fnFra(8,1,20,moe_button_width+1,'Add Readings') : frame_current=2 : frame_line=0
+	fnLbl(frame_line+=2,2,'Individuals:',0,0,0,frame_current)
+	fnButton(frame_line+=1,1,'Display customers in route sequence',fky_askCustomersInSequence:=2001,'Display each customer in route sequence',0,moe_button_width,frame_current)
+	fnButton(frame_line+=1,1,'Ask Account, then enter Reading',fky_askAndEnterIndviduals:=2002,'Ask Account, then enter Reading',0,moe_button_width,frame_current)
 
-	fnLbl(frame_line+=2,2,"Bulk:",0,0,0,frame_current)
-	fnButton(frame_line+=1,1,"Load Holding File",fky_loadHoldingFile:=2003 ,'Retrieve readings previously saved to a Holding File',0,moe_button_width,frame_current)
-	fnButton(frame_line+=1,1,"Estimate Readings",fky_estimateReadings:=2004,'',0,moe_button_width,frame_current)
-	fnButton(frame_line+=1,1,"Import from Tab Delimited Text File",fky_importTabDelimited:=2006,'',0,moe_button_width,frame_current)
+	fnLbl(frame_line+=2,2,'Bulk:',0,0,0,frame_current)
+	fnButton(frame_line+=1,1,'Load Holding File',fky_loadHoldingFile:=2003 ,'Retrieve readings previously saved to a Holding File',0,moe_button_width,frame_current)
+	fnButton(frame_line+=1,1,'Estimate Readings',fky_estimateReadings:=2004,'',0,moe_button_width,frame_current)
+	fnButton(frame_line+=1,1,'Import from Tab Delimited Text File',fky_importTabDelimited:=2006,'',0,moe_button_width,frame_current)
 
 	if fnClientHas('U4') then
-		! fnLbl(frame_line+=2,2,"Hand Held:",0,0,0,frame_current)
+		! fnLbl(frame_line+=2,2,'Hand Held:',0,0,0,frame_current)
 		! fnButton(frame_line+=1,1,'Import from Hand Held to Book'     ,fky_importHHtoBook:=2007,'Retrieve Hand Held File'                                                               ,0,moe_button_width,frame_current)
-		! fnButton(frame_line+=1,1,'Load Hand Held Book'               ,fky_loadBook:=2005      ,'Generally for use after "Retreive (Import) from Hand Held to Book"'                    ,0,moe_button_width,frame_current)
+		! fnButton(frame_line+=1,1,'Load Hand Held Book'               ,fky_loadBook:=2005      ,'Generally for use after 'Retreive (Import) from Hand Held to Book''                    ,0,moe_button_width,frame_current)
 		fnButton(frame_line+=2,1,'Hand Held Books'               ,fky_loadBook:=2005      ,'Generally for use after "Retreive (Import) from Hand Held to Book"'                    ,0,moe_button_width,frame_current)
 
 		! fnButton(frame_line+=1,1,'Import and Load Hand Held (Book 1)',fky_importAndLoad:=2009 ,'Completes "Import to Hand Held to Book" (using book 1) and then "Load Hand Held Book".',0,moe_button_width,frame_current)
@@ -42,124 +42,124 @@ MENU1: ! r:
 	mat colhdr$(30)
 	mat cm$(30)
 	mat item$(30)
-	colhdr$(chc+=1)="Account"
-	reporth$="   Account  Customer Name              Customer Address           "
-	form$="form pos 1,c 10,x 2,c 25,x 2,c 25"
+	colhdr$(chc+=1)='Account'
+	reporth$='   Account  Customer Name              Customer Address           '
+	form$='form pos 1,c 10,x 2,c 25,x 2,c 25'
 ! r: Service 1 - Water
 	if service_enabled(1) then
-		colhdr$(chc+=1)=srvnam$(1)&" Reading"
-		cm$(chc)="20"
-		colhdr$(chc+=1)=srvnam$(1)&" Charge"
+		colhdr$(chc+=1)=srvnam$(1)&' Reading'
+		cm$(chc)='20'
+		colhdr$(chc+=1)=srvnam$(1)&' Charge'
 		cm$(chc)='10'
-		colhdr$(chc+=1)=srvnam$(1)&" Usage"
-		cm$(chc)="20"
+		colhdr$(chc+=1)=srvnam$(1)&' Usage'
+		cm$(chc)='20'
 
-		reporth$=reporth$&srvnam$(1)(1:2)&" Read   "&srvnam$(1)(1:2)&" Chg  "&srvnam$(1)(1:2)&" Usage "
-		form$=form$&",n 9,n 9.2,n 9"
+		reporth$=reporth$&srvnam$(1)(1:2)&' Read   '&srvnam$(1)(1:2)&' Chg  '&srvnam$(1)(1:2)&' Usage '
+		form$=form$&',n 9,n 9.2,n 9'
 	end if
 ! /r
 ! r: Service 2 - Sewer
 	if service_enabled(2) then
-		colhdr$(chc+=1)=srvnam$(2)&" Charge"
+		colhdr$(chc+=1)=srvnam$(2)&' Charge'
 		cm$(chc)='10'
 
-		reporth$=reporth$&" "&srvnam$(2)(1:2)&" Chg  "
-		form$=form$&",n 9.2"
+		reporth$=reporth$&' '&srvnam$(2)(1:2)&' Chg  '
+		form$=form$&',n 9.2'
 	end if
 ! /r
 ! r: Service 3 - Electric
 	if service_type(3)=3 then
-		colhdr$(chc+=1)=srvnam$(3)&" Reading"
-		cm$(chc)="20"
-		colhdr$(chc+=1)=srvnam$(3)&" Charge"
+		colhdr$(chc+=1)=srvnam$(3)&' Reading'
+		cm$(chc)='20'
+		colhdr$(chc+=1)=srvnam$(3)&' Charge'
 		cm$(chc)='10'
-		colhdr$(chc+=1)=srvnam$(3)&" Usage"
-		cm$(chc)="20"
-		colhdr$(chc+=1)="Demand"
-		cm$(chc)="20"
+		colhdr$(chc+=1)=srvnam$(3)&' Usage'
+		cm$(chc)='20'
+		colhdr$(chc+=1)='Demand'
+		cm$(chc)='20'
 
-		reporth$=reporth$&srvnam$(3)(1:2)&" Read   "&srvnam$(3)(1:2)
-		reporth$=reporth$&" Chg  "&srvnam$(3)(1:2)&" Usage   Demand "
-		form$=form$&",n 9,n 9.2,n 9,n 9"
+		reporth$=reporth$&srvnam$(3)(1:2)&' Read   '&srvnam$(3)(1:2)
+		reporth$=reporth$&' Chg  '&srvnam$(3)(1:2)&' Usage   Demand '
+		form$=form$&',n 9,n 9.2,n 9,n 9'
 	else if service_type(3)=3.1 then
-		colhdr$(chc+=1)=srvnam$(3)&" Reading"
-		cm$(chc)="20"
-		colhdr$(chc+=1)=srvnam$(3)&" Charge"
+		colhdr$(chc+=1)=srvnam$(3)&' Reading'
+		cm$(chc)='20'
+		colhdr$(chc+=1)=srvnam$(3)&' Charge'
 		cm$(chc)='10'
-		colhdr$(chc+=1)=srvnam$(3)&" Usage"
-		cm$(chc)="20"
+		colhdr$(chc+=1)=srvnam$(3)&' Usage'
+		cm$(chc)='20'
 
-		reporth$=reporth$&srvnam$(3)(1:2)&" Read   "&srvnam$(3)(1:2)
-		reporth$=reporth$&" Chg  "&srvnam$(3)(1:2)&" Usage "
-		form$=form$&",n 9,n 9.2,n 9"
+		reporth$=reporth$&srvnam$(3)(1:2)&' Read   '&srvnam$(3)(1:2)
+		reporth$=reporth$&' Chg  '&srvnam$(3)(1:2)&' Usage '
+		form$=form$&',n 9,n 9.2,n 9'
 	else if service_type(3)=3.2 then
-		colhdr$(chc+=1)=srvnam$(3)&" Usage"
-		cm$(chc)="20"
+		colhdr$(chc+=1)=srvnam$(3)&' Usage'
+		cm$(chc)='20'
 
 		! LOOKS LIKE SOMETHING IS MiSSING HERE
 	end if
 ! /r
 ! r: Service 4 - Gas
 	if service_enabled(4) then ! if service_type(4)=4 then
-		colhdr$(chc+=1)=srvnam$(4)&" Reading"
-		cm$(chc)="20"
-		colhdr$(chc+=1)=srvnam$(4)&" Charge"
+		colhdr$(chc+=1)=srvnam$(4)&' Reading'
+		cm$(chc)='20'
+		colhdr$(chc+=1)=srvnam$(4)&' Charge'
 		cm$(chc)='10'
-		colhdr$(chc+=1)=srvnam$(4)&" Usage"
-		cm$(chc)="20"
+		colhdr$(chc+=1)=srvnam$(4)&' Usage'
+		cm$(chc)='20'
 
-		reporth$=reporth$&srvnam$(4)(1:2)&" Read   "&srvnam$(4)(1:2)
-		reporth$=reporth$&" Chg  "&srvnam$(4)(1:2)&" Usage "
-		form$=form$&",n 9,n 9.2,n 9"
+		reporth$=reporth$&srvnam$(4)(1:2)&' Read   '&srvnam$(4)(1:2)
+		reporth$=reporth$&' Chg  '&srvnam$(4)(1:2)&' Usage '
+		form$=form$&',n 9,n 9.2,n 9'
 	end if
 ! /r
 ! r: Service 5 - Oother
-	if service_enabled(5) then ! always show "Other Charge"
-		colhdr$(chc+=1)=srvnam$(5)&" Charge"
+	if service_enabled(5) then ! always show 'Other Charge'
+		colhdr$(chc+=1)=srvnam$(5)&' Charge'
 		cm$(chc)='10'
 
-		reporth$=reporth$&" "&srvnam$(5)(1:2)&" Chg  "
-		form$=form$&",n 9.2"
+		reporth$=reporth$&' '&srvnam$(5)(1:2)&' Chg  '
+		form$=form$&',n 9.2'
 	end if
 ! /r
 ! r: Service 6
-	if service_enabled(6) then ! always show "Other Charge"
-		colhdr$(chc+=1)=srvnam$(6)&" Charge"
+	if service_enabled(6) then ! always show 'Other Charge'
+		colhdr$(chc+=1)=srvnam$(6)&' Charge'
 		cm$(chc)='10'
 
-		reporth$=reporth$&" "&srvnam$(6)(1:2)&" Chg  "
-		form$=form$&",n 9.2"
+		reporth$=reporth$&' '&srvnam$(6)(1:2)&' Chg  '
+		form$=form$&',n 9.2'
 	end if
 ! /r
 ! r: Service 7
-	if service_enabled(7) then ! always show "Other Charge"
-		colhdr$(chc+=1)=srvnam$(7)&" Charge"
+	if service_enabled(7) then ! always show 'Other Charge'
+		colhdr$(chc+=1)=srvnam$(7)&' Charge'
 		cm$(chc)='10'
 
-		reporth$=reporth$&" "&srvnam$(7)(1:2)&" Chg  "
-		form$=form$&",n 9.2"
+		reporth$=reporth$&' '&srvnam$(7)(1:2)&' Chg  '
+		form$=form$&',n 9.2'
 	end if
 ! /r
 ! r: Service 8
-	if service_enabled(8) then ! always show "Other Charge"
-		colhdr$(chc+=1)=srvnam$(8)&" Charge"
+	if service_enabled(8) then ! always show 'Other Charge'
+		colhdr$(chc+=1)=srvnam$(8)&' Charge'
 		cm$(chc)='10'
 
-		reporth$=reporth$&" "& srvnam$(8)(1:2)&" Chg  "
-		form$=form$&",n 9.2"
+		reporth$=reporth$&' '& srvnam$(8)(1:2)&' Chg  '
+		form$=form$&',n 9.2'
 	end if
 ! /r
 ! r: final billing code
-	colhdr$(chc+=1)=" F/B"
+	colhdr$(chc+=1)=' F/B'
 	cm$(chc)='30'
 
-	reporth$=reporth$&" Final "
+	reporth$=reporth$&' Final '
 
-	form$=form$&",n 9"
+	form$=form$&',n 9'
 ! /r
 	mat colhdr$(chc) : mat cm$(chc)
 
-	fnFlexInit1("Work",2,frame_bd_witdh+3,28,74,mat colhdr$,mat cm$,1)
+	fnFlexInit1('Work',2,frame_bd_witdh+3,28,74,mat colhdr$,mat cm$,1)
 	 entryCount=0
 	ic=0
 	restore #hWork:
@@ -216,16 +216,16 @@ MENU1READWORKEOF: ! /r
 	fnLbl(1,frame_bd_witdh+4,'Entry Count: '&str$(entryCount))
 	fnButton(1,frame_bd_witdh+21,'Clear All',fky_clearAll:=2008)
 	if lrec(hWork)>0 then
-!   fnCmdKey("&Add",1)
-		fnCmdKey("E&dit",2,1,0,'Edit highlighted record by clicking this button, pressing enter or double clicking the record.')
-		fnCmdKey("&Print",4,0,0,'Print a proof listing of the entered records.')
-		fnCmdKey("Save to &Holding File",fkey_saveToHoldingFile:=6,0,0,'Save entered readings to a Holding File for later calculation.')
-		fnCmdKey("&Delete",8)
-		fnCmdKey("&Close",5,0,1)
-		fnCmdKey("&Meter Change",9,0,0,"Calculates usage on meter change out.")
-		fnCmdKey("&Finish and Calculate",10,0,0,'Calculate entered readings')
+!   fnCmdKey('&Add',1)
+		fnCmdKey('E&dit',2,1,0,'Edit highlighted record by clicking this button, pressing enter or double clicking the record.')
+		fnCmdKey('&Print',4,0,0,'Print a proof listing of the entered records.')
+		fnCmdKey('Save to &Holding File',fkey_saveToHoldingFile:=6,0,0,'Save entered readings to a Holding File for later calculation.')
+		fnCmdKey('&Delete',8)
+		fnCmdKey('&Close',5,0,1)
+		fnCmdKey('&Meter Change',9,0,0,'Calculates usage on meter change out.')
+		fnCmdKey('&Finish and Calculate',10,0,0,'Calculate entered readings')
 	else
-		fnCmdKey("&Close",5,0,1)
+		fnCmdKey('&Close',5,0,1)
 		! fnCmdSet(1)
 	end if
 	ckey=fnAcs(mat resp$)
@@ -249,11 +249,11 @@ MENU1READWORKEOF: ! /r
 	else if ckey=9 then
 		if fn_meter_change_out=3 then goto EnterReadings3
 	else if ckey=10 then
-		if days(d1,"mmddyy")<days(date$)-25 then
-			ok_click=msgbox('The billing date entered is over three weeks old. Please enter the correct date or contact ACS support.','Old Billing Date',"OK","EXCL")
+		if days(d1,'mmddyy')<days(date$)-25 then
+			ok_click=msgbox('The billing date entered is over three weeks old. Please enter the correct date or contact ACS support.','Old Billing Date','OK','EXCL')
 			goto MENU1
 		end if
-		! fnChain("S:\Utility Billing\Calculate Bills") ! goto CALCULATE
+		! fnChain('S:\Utility Billing\Calculate Bills') ! goto CALCULATE
 		close #hWork: ioerr ignore
 		fnCalculateBills('calculate')
 		goto Xit
@@ -284,7 +284,7 @@ MENU1READWORKEOF: ! /r
 		close #hWork:
 		fnFree(workFile$)
 		fnFree(workFileIndex$)
-		open #hWork=fnH: "Name="&workFile$&",KFName="&workFileIndex$&",Shr,Use,RecL=74,KPs=1,KLn=10",i,outIn,k
+		open #hWork=fnH: 'Name='&workFile$&',KFName='&workFileIndex$&',Shr,Use,RecL=74,KPs=1,KLn=10',i,outIn,k
 	else if fky_importAndLoad and ckey=fky_importAndLoad then
 		fnRetrieveHandHeldFile
 		fnTop(program$)
@@ -329,21 +329,21 @@ def fn_setup
 		dim srvnamc$(10)*21,srvnam$(10)*20,srv$(10)*2
 
 		dim opt_final_billing$(5)*33
-		opt_final_billing$(1)="0 = Not Finaled"
-		opt_final_billing$(2)="1 = Final Bill"
-		opt_final_billing$(3)="2 = Final & Refund Deposit"
-		opt_final_billing$(4)="3 = Active, but do not Bill"
-		opt_final_billing$(5)="4 = Finaled, but not billed"
+		opt_final_billing$(1)='0 = Not Finaled'
+		opt_final_billing$(2)='1 = Final Bill'
+		opt_final_billing$(3)='2 = Final & Refund Deposit'
+		opt_final_billing$(4)='3 = Active, but do not Bill'
+		opt_final_billing$(5)='4 = Finaled, but not billed'
 
 		fnLastBillingDate(d1)
 		if days(d1,'mmddyy')<days(date$('mmddyy'),'mmddyy')-23 then d1=0
-		open #1: "Name=[Q]\UBmstr\Company.h[cno]",i,i
-		read #1,using "form pos 130,n 4": pcent ioerr ignore ! percent for unusual usage
+		open #1: 'Name=[Q]\UBmstr\Company.h[cno]',i,i
+		read #1,using 'form pos 130,n 4': pcent ioerr ignore ! percent for unusual usage
 		close #1:
 		if pcent=0 then
 			pcent=100
-			open #1: "Name=[Q]\UBmstr\Company.h[cno]",internal,outIn
-			rewrite #1,using "form pos 130,n 4": pcent ioerr ignore ! percent for unusual usage
+			open #1: 'Name=[Q]\UBmstr\Company.h[cno]',internal,outIn
+			rewrite #1,using 'form pos 130,n 4': pcent ioerr ignore ! percent for unusual usage
 			close #1:
 		end if
 		fncreg_read('unusual usage minimum water',uum_water$) : uum_water=val(uum_water$)
@@ -352,8 +352,8 @@ def fn_setup
 
 		pcent=pcent*.01 ! convert unusual usage % to decimal
 		cancel=5
-		workFile$="[Q]\UBmstr\Reads_and_Chgs.h[cno]"
-		workFileIndex$="[Q]\UBmstr\Reads_and_Chgs-Key.h[cno]"
+		workFile$='[Q]\UBmstr\Reads_and_Chgs.h[cno]'
+		workFileIndex$='[Q]\UBmstr\Reads_and_Chgs-Key.h[cno]'
 	! r: addmethod enumerations
 		am_customersInSequence=1
 		am_askAndEnterIndviduals=2
@@ -364,8 +364,8 @@ def fn_setup
 	! /r
 	! Open_Stuff: !
 		fn_setup_service(mat service_enabled)
-		open #hTrans=fnH: "Name=[Q]\UBmstr\ubTransVB.h[cno],KFName=[Q]\UBmstr\ubTrIndx.h[cno],Shr",i,i,k
-		open #hCustomer1=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",i,outIn,k  ! was file #1, but it was getting closed incorrectly
+		open #hTrans=fnH: 'Name=[Q]\UBmstr\ubTransVB.h[cno],KFName=[Q]\UBmstr\ubTrIndx.h[cno],Shr',i,i,k
+		open #hCustomer1=fnH: 'Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr',i,outIn,k  ! was file #1, but it was getting closed incorrectly
 		dim x$*10
 		dim aname$*30
 		dim xd(15)
@@ -373,15 +373,15 @@ def fn_setup
 		dim extra(23)
 		! x$,aname$,mat a,final,mat xd,alp$,mat extra
 	F_CUSTOMER_C: form pos 1,c 10,pos 41,c 30,pos 143,7*pd 2,pos 1821,n 1,pos 217,15*pd 5,pos 354,c 1,pos 1741,n 2,n 7,2*n 6,n 9,pd 5.2,n 3,3*n 9,3*n 2,3*n 3,n 1,3*n 9,3*pd 5.2
-		open #hWork=fnH: "Name="&workFile$&",KFName="&workFileIndex$&",Shr,Use,RecL=74,KPs=1,KLn=10",i,outIn,k
-		open #hCustomer2=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx2.h[cno],Shr",i,outIn,k
-		open #hCustomer3=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx3.h[cno],Shr",i,outIn,k
-		open #hCustomer4=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx4.h[cno],Shr",i,outIn,k
-		open #hCustomer5=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx5.h[cno],Shr",i,outIn,k
+		open #hWork=fnH: 'Name='&workFile$&',KFName='&workFileIndex$&',Shr,Use,RecL=74,KPs=1,KLn=10',i,outIn,k
+		open #hCustomer2=fnH: 'Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx2.h[cno],Shr',i,outIn,k
+		open #hCustomer3=fnH: 'Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx3.h[cno],Shr',i,outIn,k
+		open #hCustomer4=fnH: 'Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx4.h[cno],Shr',i,outIn,k
+		open #hCustomer5=fnH: 'Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndx5.h[cno],Shr',i,outIn,k
 		dim c$(0)*200
 		dim cN(0)
 		hCustomer1In=fn_openFio('U4 Meter Location',mat c$,mat cN, 1,1)
-		fncreg_read('Meter Reading Date Current',tmp$,date$("MMDDYY")) : d2=val(tmp$)
+		fncreg_read('Meter Reading Date Current',tmp$,date$('MMDDYY')) : d2=val(tmp$)
 	end if
 fnend
 def fn_setup_service(mat service_enabled)
@@ -389,22 +389,22 @@ def fn_setup_service(mat service_enabled)
 	fnGetServices(mat srvnam$,mat srv$,mat tax_code$,mat penalty$)
 	for j=1 to udim(mat srvnam$)
 		srvnam$(j)=trim$(srvnam$(j))
-		srvnamc$(j)=srvnam$(j)&":"
+		srvnamc$(j)=srvnam$(j)&':'
 	next j
-	if srvnamc$(6)="Bad Check Charge:" then srvnamc$(6)="Check Charge:"
+	if srvnamc$(6)='Bad Check Charge:' then srvnamc$(6)='Check Charge:'
 	! /r
 	! return explaind
-	! +10    penalty$(   ) <>  "Y"
-	! +100   srvnam$(    ) <>  ""
+	! +10    penalty$(   ) <>  'Y'
+	! +100   srvnam$(    ) <>  ''
 	mat service_enabled=(0)
 	! r: set mat service_is_not_blank
 	for x=1 to udim(mat srvnam$)
-		if srvnam$(x)<>"" then service_is_not_blank(x)+=100
+		if srvnam$(x)<>'' then service_is_not_blank(x)+=100
 	next x
 	! /r
 	! r: set mat service_is_not_a_penalty
 	for x=1 to udim(mat srvnam$)
-		if penalty$(x) <>"Y" then service_is_not_a_penalty(x)+=100
+		if penalty$(x) <>'Y' then service_is_not_a_penalty(x)+=100
 	next x
 	! /r
 	! r: set mat service_type
@@ -421,21 +421,21 @@ def fn_setup_service(mat service_enabled)
 			service_type(x)=1
 		else if srvnam$(x)='Sewer' then
 			service_type(x)=2
-		else if srvnam$(x)="Electric" or srv$(x)="EL" then
+		else if srvnam$(x)='Electric' or srv$(x)='EL' then
 			service_type(x)=3
 		else if srvnam$(x)='Lawn Meter' then
 			service_type(x)=3.1
 		else if srvnam$(x)(1:5)='Reduc' then
 			service_type(x)=3.2
-		else if srvnam$(x)="Gas" or srv$(x)="GA" then
+		else if srvnam$(x)='Gas' or srv$(x)='GA' then
 			service_type(x)=4
-		else if uprc$(srvnam$(x)(1:5))="OTHER" then
+		else if uprc$(srvnam$(x)(1:5))='OTHER' then
 			service_type(x)=5
-		else if uprc$(srvnam$(x))="GAS CONNECT" then
+		else if uprc$(srvnam$(x))='GAS CONNECT' then
 			service_type(x)=6
-		else if uprc$(srvnam$(x))="WATER CONNECT" then
+		else if uprc$(srvnam$(x))='WATER CONNECT' then
 			service_type(x)=7
-		else if uprc$(srvnam$(x))="BAD CHECK CHARGE" then
+		else if uprc$(srvnam$(x))='BAD CHECK CHARGE' then
 			service_type(x)=8
 		end if
 	next x
@@ -456,9 +456,9 @@ def fn_setup_service(mat service_enabled)
 	!
 	if service_type(3)=3 then
 		service_enabled(3)=1
-	else if service_type(3)=3.1 then ! Lawn Meter" then
+	else if service_type(3)=3.1 then ! Lawn Meter' then
 		service_enabled(3)=2
-	else if service_type(3)=3.2 then ! Reduc" then
+	else if service_type(3)=3.2 then ! Reduc' then
 		service_enabled(3)=3
 	end if
 	!
@@ -492,16 +492,16 @@ def fn_setup_service(mat service_enabled)
 	! /r
 	! r: set mat serviceoption$, serviceoption_count and service  (for fn_meter_change_out)
 	serviceoption_count=0
-	if trim$(srvnam$(1))="Water" then
-		serviceoption$(serviceoption_count+=1)=srv$(1)&"-"&trim$(srvnam$(1)(1:20))
+	if trim$(srvnam$(1))='Water' then
+		serviceoption$(serviceoption_count+=1)=srv$(1)&'-'&trim$(srvnam$(1)(1:20))
 		service=service+1
 	end if
-	if trim$(srvnam$(3))="Electric" or trim$(srv$(3))="EL" then
-		serviceoption$(serviceoption_count+=1)=srv$(3)&"-"&srvnam$(3)(1:20)
+	if trim$(srvnam$(3))='Electric' or trim$(srv$(3))='EL' then
+		serviceoption$(serviceoption_count+=1)=srv$(3)&'-'&srvnam$(3)(1:20)
 		service=service+1
 	end if
-	if (trim$(srvnam$(4))="Gas" or trim$(srv$(4))="GA") then
-		serviceoption$(serviceoption_count+=1)=srv$(4)&"-"&srvnam$(4)(1:20)
+	if (trim$(srvnam$(4))='Gas' or trim$(srv$(4))='GA') then
+		serviceoption$(serviceoption_count+=1)=srv$(4)&'-'&srvnam$(4)(1:20)
 		service=service+1
 	end if
 	mat serviceoption$(serviceoption_count)
@@ -510,27 +510,27 @@ fnend
 AUTO_REC: ! r:
 	done_with_readings=0
 	fnTos
-	fnLbl(1,1,"Starting Account:" ,24,1)
+	fnLbl(1,1,'Starting Account:' ,24,1)
 	fncmbact(1,26,1)
-	resp$(1)="[All]"
+	resp$(1)='[All]'
 	fnCmdSet(2)
 	ckey=fnAcs(mat resp$)
 	if ckey=cancel then
 		done_with_readings=1
 		goto MENU1
 	end if
-	if uprc$(resp$(1))=uprc$("[All]") then resp$(1)=""
+	if uprc$(resp$(1))=uprc$('[All]') then resp$(1)=''
 	x$=lpad$(trim$(resp$(1)(1:10)),10)
 	px$=x$
-	if trim$(x$)="" then goto SEL_ACC
+	if trim$(x$)='' then goto SEL_ACC
 	read #hCustomer1,using F_CUSTOMER_C,key=x$,release: x$,aname$,mat a,final,mat xd,alp$,mat extra nokey AUTO_REC ! ,extra$(3)
-	if addmethod=am_customersInSequence and env$('client')<>"Choctaw" then
-		seq$=cnvrt$("pic(zz)",extra(1))&cnvrt$("pic(zzzzzzz)",extra(2))
+	if addmethod=am_customersInSequence and env$('client')<>'Choctaw' then
+		seq$=cnvrt$('pic(zz)',extra(1))&cnvrt$('pic(zzzzzzz)',extra(2))
 		read #hCustomer5,using F_CUSTOMER_C,key=seq$,release: x$,aname$,mat a,final,mat xd,alp$,mat extra nokey AUTO_REC ! ,extra$(7),extra$(3)
 	end if
 	fnapply_default_rates(mat extra, mat a)
-	if final=1 or final=2 or final=3 or (trim$(px$)<>"" and x$<>px$) then goto READ_ROUTE_SEQUENCE ! ken  ! john -- this is so users can select an account without being pushed to the incorrect account with the same rt/seq
-	px$=""
+	if final=1 or final=2 or final=3 or (trim$(px$)<>'' and x$<>px$) then goto READ_ROUTE_SEQUENCE ! ken  ! john -- this is so users can select an account without being pushed to the incorrect account with the same rt/seq
+	px$=''
 	goto EnterReadings
 ! /r
 SEL_ACC: ! r:
@@ -538,7 +538,7 @@ SEL_ACC: ! r:
 	if addmethod=am_customersInSequence then
 		goto READ_ROUTE_SEQUENCE
 	end if
-	x$=""
+	x$=''
 SEL_ACT_TOS: !
 	ckey=fnask_account('ubipchg',x$,hCustomer1)
 	if ckey=5 or ckey=cancel then
@@ -554,23 +554,23 @@ SEL_ACT_TOS: !
 	end if
 ! /r
 READ_ROUTE_SEQUENCE: ! r:
-	if env$('client')="Choctaw" then ! read in Account order
+	if env$('client')='Choctaw' then ! read in Account order
 		read #hCustomer1,using F_CUSTOMER_C: x$,aname$,mat a,final,mat xd,alp$,mat extra eof MENU1 ! ,extra$(7),extra$(3)
 	else
 		read #hCustomer5,using F_CUSTOMER_C,release: x$,aname$,mat a,final,mat xd,alp$,mat extra eof MENU1 ! ,extra$(7),extra$(3)
 	end if
 	fnapply_default_rates(mat extra, mat a)
-	if final=1 or final=2 or final=3 or (trim$(px$)<>"" and x$<>px$) then goto READ_ROUTE_SEQUENCE
-	px$=""
+	if final=1 or final=2 or final=3 or (trim$(px$)<>'' and x$<>px$) then goto READ_ROUTE_SEQUENCE
+	px$=''
 goto EnterReadings ! /r
 def fn_meter_roll
 	mat txt$(4)
-	txt$(1)="Reading: "&str$(cur_read)&"   Prior: "&str$(prior_read)&"   Usage: "&str$(x0)
-	txt$(2)="Account: "&x$&" - "&aname$
-	txt$(3)="Negative Usage on "&sn$
-	txt$(4)="Is this a Meter Roll?"
+	txt$(1)='Reading: '&str$(cur_read)&'   Prior: '&str$(prior_read)&'   Usage: '&str$(x0)
+	txt$(2)='Account: '&x$&' - '&aname$
+	txt$(3)='Negative Usage on '&sn$
+	txt$(4)='Is this a Meter Roll?'
 	fnMsgBox(mat txt$,resp$,'',35)
-	if resp$="No" then
+	if resp$='No' then
 		passcheck=ckfail
 		goto METER_ROLL_XIT
 	else if mroll(1)=1 then
@@ -611,12 +611,12 @@ def fn_print_readings(hWork; printReadings_altHeading$*40) ! pr proof of reading
 	totwat=totele=totgas=0
 	fnOpenPrn
 	fn_printReadings_Heading( printReadings_altHeading$)
-	restore #hWork: ! ,search>="": nokey PR_TOTALS    <-- needs to work with or without an index
+	restore #hWork: ! ,search>='': nokey PR_TOTALS    <-- needs to work with or without an index
 	do
 
 		read #hWork,using Fwork: x$,mat x eof PR_TOTALS
 		totwat+=x(1): totele+=x(3): totgas+=x(2)
-		e1$=e2$=""
+		e1$=e2$=''
 		read #hCustomer1,using F_CUSTOMER_B,key=x$,release: e1$,e2$,mat xd,f,mat a nokey PR_CUSTOMER_NOKEY
 		F_CUSTOMER_B: form pos 11,2*c 30,pos 217,15*pd 5,pos 296,pd 4,pos 143,7*pd 2
 		! place usage in usage column if not usage already there so it shows on proof list
@@ -662,14 +662,14 @@ def fn_print_readings(hWork; printReadings_altHeading$*40) ! pr proof of reading
 		pr #255,using form$: x$,e2$(1:25),e1$(1:25),mat pc_data pageoflow PrintReadings_PgOf
 	loop
 	PR_TOTALS: !
-	pr #255,using "form skip 2,c 30": "Batch Totals for Readings"
-	pr #255,using "form pos 1,c 10,nz 20,skip 1,pos 1,c 10,nz 20,skip 1,pos 1,c 10,nz 20,skip 1": srvnam$(1)(1:10),totwat,srvnam$(3)(1:10),totele,srvnam$(4)(1:10),totgas
+	pr #255,using 'form skip 2,c 30': 'Batch Totals for Readings'
+	pr #255,using 'form pos 1,c 10,nz 20,skip 1,pos 1,c 10,nz 20,skip 1,pos 1,c 10,nz 20,skip 1': srvnam$(1)(1:10),totwat,srvnam$(3)(1:10),totele,srvnam$(4)(1:10),totgas
 	fnClosePrn
 fnend
 def fn_printReadings_Heading(;altHeading$*40)
-	if altHeading$='' then altHeading$="Readings Proof List"
+	if altHeading$='' then altHeading$='Readings Proof List'
 	pr #255,using 'form pos 20,Cc 40': altHeading$
-	pr #255,using 'form pos 20,Cc 40': cnvrt$("pic(zz/zz/zz",d2)
+	pr #255,using 'form pos 20,Cc 40': cnvrt$('pic(zz/zz/zz',d2)
 	pr #255,using 'form pos 1,C 220': reporth$
 fnend
 PrintReadings_PgOf: ! r:
@@ -688,25 +688,25 @@ REWRITE_WORK: ! r:
 	rewrite #hWork,using Fwork,key=x$: trim$(x$),mat x nokey L3900
 	goto L3910
 	L3900: !
-	if trim$(uprc$(x$))<>trim$(uprc$("DELETED")) then fn_writeWork(hWork,x$,mat x)
+	if trim$(uprc$(x$))<>trim$(uprc$('DELETED')) then fn_writeWork(hWork,x$,mat x)
 	L3910: !
-	if trim$(uprc$(x$))=trim$(uprc$("DELETED")) then goto MAKE_CORRECTIONS
+	if trim$(uprc$(x$))=trim$(uprc$('DELETED')) then goto MAKE_CORRECTIONS
 	fn_accumulateProofTotals
 	if editmode=1 then return
 goto MENU1 ! /r MAKE_CORRECTIONS
 CHANGE_ACT_NUM: ! r:
 	fnTos
 	mylen=19 : mypos=mylen+2
-	fnLbl(1,1,"New Account:",mylen)
+	fnLbl(1,1,'New Account:',mylen)
 	fnTxt(1,mypos,10)
-	resp$(1)=""
+	resp$(1)=''
 	fnCmdSet(1)
 	ckey=fnAcs(mat resp$)
 	x$=trim$(resp$(1))
-	read #hCustomer1,using "form pos 36,C 25",key=x$,release: aname$ nokey CHANGE_ACT_NUM
+	read #hCustomer1,using 'form pos 36,C 25',key=x$,release: aname$ nokey CHANGE_ACT_NUM
 	goto REWRITE_WORK ! /r
 def fn_lo_pr_rec(x$,mat x)
-	pr #255,using "form pos 1,c 10,x 2,4*pic(----------)": x$,x(1),x(2),x(3),x(4)
+	pr #255,using 'form pos 1,c 10,x 2,4*pic(----------)': x$,x(1),x(2),x(3),x(4)
 fnend  ! fn_lo_pr_rec
 dim total(16)
 def fn_accumulateProofTotals
@@ -719,15 +719,15 @@ def fn_checkWater
 	if wr1=0 then fn_us1(x$,d1)
 	if a(1)<>0 then ! skip routine if no water code
 		sn$=srvnam$(1)
-		if trim$(srvnam$(1))="" or mroll(1)=1 or (xd(wr1)=0 and x(1)=0) then
+		if trim$(srvnam$(1))='' or mroll(1)=1 or (xd(wr1)=0 and x(1)=0) then
 			passcheck=ckpass
 			goto CheckWaterFinis
 		end if
-		if trim$(sn$)="Water" and x(12)>0 then
+		if trim$(sn$)='Water' and x(12)>0 then
 			passcheck=ckpass
 			goto CheckWaterFinis ! don't give warning if usage entered
 		end if
-		if env$('client')="Billings" and len(str$(x(1)))=6 and len(str$(xd(wr1)))=7 then x(1)=val(str$(xd(wr1))(1:1)&str$(x(1)))
+		if env$('client')='Billings' and len(str$(x(1)))=6 and len(str$(xd(wr1)))=7 then x(1)=val(str$(xd(wr1))(1:1)&str$(x(1)))
 		x4=x(1)-xd(wr1)
 		sn$=srvnam$(1) : x0=x4 : prior_read=xd(wr1) : cur_read=x(1)
 		if x4>=0 then goto CHECKWATER_L4260
@@ -750,8 +750,8 @@ fnend
 def fn_checkElec
 	if er1=0 then fn_us1(x$,d1)
 	if a(3)=0 then goto CHECKELEC_FINIS ! if no electric code skip
-	if trim$(sn$)="Electric" and x(13)>0 then passcheck=ckpass : goto CHECKELEC_FINIS ! don't give warning if usage entered
-	if (service_type(3)=3 or service_type(3)=3.1) then ! (service_type(3)=3.1 and env$('client')<>"Thomasboro"))
+	if trim$(sn$)='Electric' and x(13)>0 then passcheck=ckpass : goto CHECKELEC_FINIS ! don't give warning if usage entered
+	if (service_type(3)=3 or service_type(3)=3.1) then
 		goto L4350
 	else
 		passcheck=ckpass
@@ -780,11 +780,11 @@ fnend
 def fn_checkGas
 	if a(4)=0 then goto CHECKGAS_FINIS ! skip if no gas codes
 	sn$=srvnam$(4)
-	if trim$(srvnam$(4))<>"Gas" or mroll(2)=1 then
+	if trim$(srvnam$(4))<>'Gas' or mroll(2)=1 then
 		passcheck=ckpass
 		goto CHECKGAS_FINIS
 	end if
-	if trim$(sn$)="Gas" and x(14)>0 then passcheck=ckpass : goto CHECKGAS_FINIS ! don't give warning if usage entered
+	if trim$(sn$)='Gas' and x(14)>0 then passcheck=ckpass : goto CHECKGAS_FINIS ! don't give warning if usage entered
 	if x(2)=0 and xd(gr1)=0 then goto CHECKGAS_FINIS
 	x3=x(2)-xd(gr1)
 	sn$=srvnam$(4): x0=x3 : prior_read=xd(gr1): cur_read=x(2)
@@ -811,18 +811,18 @@ def fn_checkend
 	end if
 	if passcheck=ckpass then goto CHECKEND_XIT
 	if passcheck=ckfail and x0>=0 then
-		mat txt$(8) : txt$(1)=sn$&" - Unusual Usage Warning"
-		txt$(2)="Account: "&x$&" - "&aname$ : txt$(3)=""
-		txt$(4)="Reading: "&str$(cur_read)&"   Prior: "&str$(prior_read)&"   Calculated Usage: "&str$(x0) : txt$(5)=""
-		txt$(6)="Yes = Continue, the usage is correct."
-		txt$(7)="No = Go Back, so I can re-enter the reading;"
-		txt$(8)="Cancel = Do not enter a reading for that Customer."
+		mat txt$(8) : txt$(1)=sn$&' - Unusual Usage Warning'
+		txt$(2)='Account: '&x$&' - '&aname$ : txt$(3)=''
+		txt$(4)='Reading: '&str$(cur_read)&'   Prior: '&str$(prior_read)&'   Calculated Usage: '&str$(x0) : txt$(5)=''
+		txt$(6)='Yes = Continue, the usage is correct.'
+		txt$(7)='No = Go Back, so I can re-enter the reading;'
+		txt$(8)='Cancel = Do not enter a reading for that Customer.'
 		fnMsgBox(mat txt$,resp$,'',51)
-		if resp$="Yes" then
+		if resp$='Yes' then
 			passcheck=ckpass
-		else if resp$="No" then
+		else if resp$='No' then
 			passcheck=ckfail
-		else if resp$="Cancel" then
+		else if resp$='Cancel' then
 			passcheck=ckfail
 			editmode=0
 		end if
@@ -835,30 +835,30 @@ def fn_print_unusual
 	if ~setup_printunusual<=0 then
 		setup_printunusual=1
 		dim fmun$*80
-		pr #255: " Account    Name                    Old Reading  New Reading   Usage"
-		pr #255: "----------  ----------------------  -----------  -----------  -----------"
-		fmun$="form c 12,c 22,3*n 13,x 2,c 20,skip 1"
+		pr #255: ' Account    Name                    Old Reading  New Reading   Usage'
+		pr #255: '----------  ----------------------  -----------  -----------  -----------'
+		fmun$='form c 12,c 22,3*n 13,x 2,c 20,skip 1'
 	end if
 	pr #255,using fmun$: x$,e2$(1:20),prior_read,cur_read,x0,sn$
 fnend
 def fn_hh_readings(ip1$; listonly) ! HH_READINGS: ! hand held routines
 	dim device$*20
 	device$=fnhand_held_device$
-	if device$="Psion Workabout" then
+	if device$='Psion Workabout' then
 		goto HH_WORKABOUT
-	else if device$="Badger" or device$="Badger Connect C" then
+	else if device$='Badger' or device$='Badger Connect C' then
 		goto HH_BADGER
-	else if device$="Boson" then
+	else if device$='Boson' then
 		goto HH_BOSON
-	else if device$="Laptop" then
+	else if device$='Laptop' then
 		gosub LAPTOP
 		if listonly=1 then fn_lo_pr_rec(x$,mat x) : goto HH_W_NXT
 		goto HH_CONTINUE
-	else ! if device$='Master Meter' or device$='READy Water' or device$="AMR" or device$="Other" or device$="Sensus" or device$="Green Tree" or device$="Hersey" or device$="EZReader" or device$="Itron FC300" or device$="" then
+	else ! if device$='Master Meter' or device$='READy Water' or device$='AMR' or device$='Other' or device$='Sensus' or device$='Green Tree' or device$='Hersey' or device$='EZReader' or device$='Itron FC300' or device$='' then
 		goto HH_OTHER
 	end if
 	HH_WORKABOUT: ! r: hand held routines for workabout
-	open #h_readings=fnH: "Name=[Q]\UBmstr\Readings."&ip1$&",RecL=1",external,input,relative ioerr L4990
+	open #h_readings=fnH: 'Name=[Q]\UBmstr\Readings.'&ip1$&',RecL=1',external,input,relative ioerr L4990
 	goto L5000
 	L4990: !
 	restore #h_readings:
@@ -867,9 +867,9 @@ def fn_hh_readings(ip1$; listonly) ! HH_READINGS: ! hand held routines
 	j1=29 : j2=97
 	HH_W_READ: !
 	dim ln$*256
-	ln$="" : mat x=(0)
+	ln$='' : mat x=(0)
 	for j=j1 to j2
-		read #h_readings,using "form pos 1,C 1",rec=j: cx$ noRec HH_W_END
+		read #h_readings,using 'form pos 1,C 1',rec=j: cx$ noRec HH_W_END
 		ln$=ln$&cx$
 	next j
 	x$=lpad$(trim$(ln$(1:10)),10) : x(1)=val(ln$(11:19))
@@ -877,78 +877,78 @@ def fn_hh_readings(ip1$; listonly) ! HH_READINGS: ! hand held routines
 	mroll(3)=val(ln$(30:30)) : x(2)=val(ln$(31:39))
 	mroll(2)=val(ln$(40:40)) : x(4)=val(ln$(41:49))
 	ft$=rtrm$(ln$(50:69))
-	if ft$="00000000000000000000" then ft$=""
+	if ft$='00000000000000000000' then ft$=''
 	if listonly=1 then fn_lo_pr_rec(x$,mat x) : goto HH_W_NXT
-	if x$(1:1)="0" then x$(1:1)=" " ! drop leading zero
-	if file(255)=-1 and rtrm$(ft$)<>"" then
+	if x$(1:1)='0' then x$(1:1)=' ' ! drop leading zero
+	if file(255)=-1 and rtrm$(ft$)<>'' then
 		fnOpenPrn
 	end if
-	if trim$(ft$)<>"" then
-		pr #255: "NEW NOTE! "&x$&" - "&ft$
+	if trim$(ft$)<>'' then
+		pr #255: 'NEW NOTE! '&x$&' - '&ft$
 	end if
 	goto HH_CONTINUE ! /r
 	HH_BADGER: ! r: Hand Held routines for Badger (badger file is copied from                        \connect\connect\x to readings.x in the transfer from                           Hand Held routine)
 	if listonly=1 then fnOpenPrn
 	close #h_readings: ioerr ignore
-	open #h_readings=fnH: "Name=[Q]\UBmstr\Readings."&ip1$,d,i ! &",RecL=256",display,input
+	open #h_readings=fnH: 'Name=[Q]\UBmstr\Readings.'&ip1$,d,i ! &',RecL=256',display,input
 	HH_BADGER_READ: !
 	linput #h_readings: ln$ eof HH_W_END
 	! pr ln$ : pause
-	if ln$(1:1)="T" or ln$(1:1)="H" then goto HH_BADGER_READ
+	if ln$(1:1)='T' or ln$(1:1)='H' then goto HH_BADGER_READ
 	mat x=(0)
 	x$=lpad$(rtrm$(ln$(121:130)),10) conv HH_BADGER_READ ! Account Key
 	ti1=1: ti1=val(ln$(64:64))       conv HH_BADGER_READ
 	x(ti1)=val(ln$(96:104))          conv HH_BADGER_READ
-	! if env$('client')="Moweaqua" Then x(TI1)=X(TI1)
+	! if env$('client')='Moweaqua' Then x(TI1)=X(TI1)
 	if listonly=1 then fn_lo_pr_rec(x$,mat x) : goto HH_W_NXT
 	goto HH_CONTINUE ! /r
 
 	HH_BOSON: ! r: Hand Held routines for Boson (boson file is copied from                        [Q]\UBmstr\outofpalm.txt in hhfro to readings.(route# (which is asked))
 	dim last_ln$*256
-	last_ln$=""
+	last_ln$=''
 	if listonly=1 then fnOpenPrn
 	close #h_readings: ioerr ignore
-	open #h_readings=fnH: "Name=[Q]\UBmstr\Readings."&ip1$&",RecL=204",display,input
+	open #h_readings=fnH: 'Name=[Q]\UBmstr\Readings.'&ip1$&',RecL=204',display,input
 	HH_BOSON_READ: !
-	if last_ln$="" then
+	if last_ln$='' then
 		linput #h_readings: ln$ eof HH_W_END
 	else
 		ln$=last_ln$
 		last_ln$=''
 	end if
-	if ln$(1:1)="T" or ln$(1:1)="H" then goto HH_BOSON_READ
+	if ln$(1:1)='T' or ln$(1:1)='H' then goto HH_BOSON_READ
 	mat x=(0)
 	ti$=ln$(14:14)
-	if ti$="W" or ti$="G" or ti$="E" then
+	if ti$='W' or ti$='G' or ti$='E' then
 		x$=lpad$(rtrm$(ln$(4:13)),10) conv HH_BOSON_READ
 	else
 		x$=lpad$(rtrm$(ln$(5:14)),10) conv HH_BOSON_READ
-		ti$=""
+		ti$=''
 		ti1=1
 	end if
-	if uprc$(ti$)="W" then
+	if uprc$(ti$)='W' then
 		ti1=1
-	else if uprc$(ti$)="G" then
+	else if uprc$(ti$)='G' then
 		ti1=2
-	else if uprc$(ti$)="E" then
+	else if uprc$(ti$)='E' then
 		ti1=3
 	end if
 	L5420: x(ti1)=0: x(ti1)=val(ln$(89:97)) conv L5440 ! kj 120308 allow boson to place codes in field if cant read meter
-	! if env$('client')="Billings" and ln$(91:91)=" " then x(ti1)=val("1"&ln$(92:97))
-	if env$('client')="Moweaqua" and (a(1)=1 or a(1)=2) then
+	! if env$('client')='Billings' and ln$(91:91)=' ' then x(ti1)=val('1'&ln$(92:97))
+	if env$('client')='Moweaqua' and (a(1)=1 or a(1)=2) then
 		x(ti1)=round(x(ti1)*.1,0)
 	end if
-	if ti$="" or ti$="W" then
+	if ti$='' or ti$='W' then
 		linput #h_readings: ln$ eof L5440
-		if ti$="" then
+		if ti$='' then
 			x_g$=lpad$(rtrm$(ln$(5:14)),10) conv L5440
 		else
 			x_g$=lpad$(rtrm$(ln$(4:13)),10) conv L5440
 			ti$=ln$(14:14)
 		end if
-		if x_g$=x$ and ti$="" or ti$="G" then
+		if x_g$=x$ and ti$='' or ti$='G' then
 			x(2)=val(ln$(89:97))
-			last_ln$=""
+			last_ln$=''
 		else
 			last_ln$=ln$
 		end if
@@ -958,15 +958,15 @@ def fn_hh_readings(ip1$; listonly) ! HH_READINGS: ! hand held routines
 	LAPTOP: ! r: readings from a laptop using acs meter reading software
 		if listonly=1 then fnOpenPrn
 		close #h_readings: ioerr ignore
-		open #h_readings=fnH: "Name=[Q]\UBmstr\Readings."&ip1$&",RecL=50",display,input
+		open #h_readings=fnH: 'Name=[Q]\UBmstr\Readings.'&ip1$&',RecL=50',display,input
 		HH_LAPTOP_READ: linput #h_readings: ln$ eof HH_W_END
 		mat x=(0)
 		x$=lpad$(rtrm$(ln$(1:10)),10) conv HH_LAPTOP_READ ! Account Key
 		!
 		ti1=1: ti$=ln$(20:20) ! type of reading
-		if uprc$(ti$)="W" then ti1=1
-		if uprc$(ti$)="E" then ti1=2
-		if uprc$(ti$)="G" then ti1=3
+		if uprc$(ti$)='W' then ti1=1
+		if uprc$(ti$)='E' then ti1=2
+		if uprc$(ti$)='G' then ti1=3
 		x(ti1)=val(ln$(11:19)) conv HH_LAPTOP_READ
 		read #hCustomer1,using F_CUSTOMER_C,key=x$,release: x$,aname$,mat a nokey ignore
 	return ! if listonly=1 then fn_lo_pr_rec(x$,mat x) : goto HH_W_NXT
@@ -981,11 +981,11 @@ def fn_hh_readings(ip1$; listonly) ! HH_READINGS: ! hand held routines
 		! if device$='Sensus' then goto HH_OTHER_TYPE1
 		fn_hh_other_type2(ip1$,listonly)
 	goto HH_W_END ! /r
-	
+
 	HH_OTHER_TYPE1: ! r:
 		if listonly=1 then fnOpenPrn
 		close #h_readings: ioerr ignore
-		open #h_readings=fnH: "Name=[Q]\UBmstr\Readings."&ip1$&",RecL=30",display,input
+		open #h_readings=fnH: 'Name=[Q]\UBmstr\Readings.'&ip1$&',RecL=30',display,input
 		HH_OTHER_TYPE1_READ: !
 		linput #h_readings: ln$ eof HH_W_END
 		mat x=(0)
@@ -994,7 +994,7 @@ def fn_hh_readings(ip1$; listonly) ! HH_READINGS: ! hand held routines
 		x(ti1)=0
 		if device$='READy Water' then
 			x(ti1)=val(ln$(11:len(ln$))) conv ignore
-		! else if env$('client')="Lovington" then
+		! else if env$('client')='Lovington' then
 		! 	x(ti1)=val(ln$(11:19)) conv ignore
 		else
 			x(ti1)=val(ln$(11:20)) conv ignore
@@ -1023,17 +1023,17 @@ def fn_hh_readings(ip1$; listonly) ! HH_READINGS: ! hand held routines
 			fn_rmk1
 		end if
 	HH_W_NXT: !
-	if device$="Badger" or device$="Badger Connect C" then
+	if device$='Badger' or device$='Badger Connect C' then
 		goto HH_BADGER_READ
-	else if device$="Boson" then
+	else if device$='Boson' then
 		goto HH_BOSON_READ
-	else if device$="Laptop" then
+	else if device$='Laptop' then
 		goto HH_LAPTOP_READ
-	else if device$="Psion Workabout" then
+	else if device$='Psion Workabout' then
 		j1+=72
 		j2+=72
 		goto HH_W_READ
-	else ! if device$="Other" or device$="Sensus" or device$="AMR" or device$="Green Tree" or device$="Hersey" or device$="EZReader" then
+	else ! if device$='Other' or device$='Sensus' or device$='AMR' or device$='Green Tree' or device$='Hersey' or device$='EZReader' then
 		goto HH_OTHER_TYPE1_READ
 	end if
 
@@ -1045,29 +1045,29 @@ fnend
 EstimateRoute: ! r: ESTIMATEING ROUTINE
 	close #hWork:
 	execute 'Index '&workFile$&' '&workFileIndex$&' 1 10 Replace,DupKeys -n'
-	open #hWork=fnH: "Name="&workFile$&",KFName="&workFileIndex$,i,outIn,k
+	open #hWork=fnH: 'Name='&workFile$&',KFName='&workFileIndex$,i,outIn,k
 	ASK_EST: !
 	fnTos
 	! services=0
-	if srvnam$(1)="Water" then srvest$(1)=srvnam$(1) else srvest$(1)="Unused"
-	if service_enabled(3) then srvest$(2)=srvnam$(3) else srvest$(2)="Unused"
-	if service_enabled(4) then srvest$(3)=srvnam$(4) else srvest$(3)="Unused"
+	if srvnam$(1)='Water' then srvest$(1)=srvnam$(1) else srvest$(1)='Unused'
+	if service_enabled(3) then srvest$(2)=srvnam$(3) else srvest$(2)='Unused'
+	if service_enabled(4) then srvest$(3)=srvnam$(4) else srvest$(3)='Unused'
 	mylen=0
 	for j=1 to 3 : mylen=max(mylen,len(srvest$(j))) : next j
-	fnFra(1,1,8,mylen+50,"Select and Configure Services to Estimate")
-	fnLbl(2,mylen+12,"% of Average",15,0,0,1)
+	fnFra(1,1,8,mylen+50,'Select and Configure Services to Estimate')
+	fnLbl(2,mylen+12,'% of Average',15,0,0,1)
 	for j=1 to 3
-		resp$(j*2-1)='False' : resp$(j*2)=""
-		if srvest$(j)="" or srvest$(j)="Unused" then disable=1 else disable=0
+		resp$(j*2-1)='False' : resp$(j*2)=''
+		if srvest$(j)='' or srvest$(j)='Unused' then disable=1 else disable=0
 		fnChk(j+2,mylen,srvest$(j),0,1) ! add disable here
 		! fnTxt(J+2,MYLEN+4,2,0,0,'30',DISABLE,EMPTY$,1)
 		fnTxt(j+2,mylen+14,3,0,0,'30',disable,empty$,1)
 	next j
-	fnLbl(7,1,"% of average would normally be from 75 to 125 %",52,2,0,1)
-	fnFra(11,1,3,50,"Account Selection Method")
-	fnOpt(1,1,"Individual Accounts",0,2)
+	fnLbl(7,1,'% of average would normally be from 75 to 125 %',52,2,0,1)
+	fnFra(11,1,3,50,'Account Selection Method')
+	fnOpt(1,1,'Individual Accounts',0,2)
 	resp$(7)='False'
-	fnOpt(2,1,"Route",0,2)
+	fnOpt(2,1,'Route',0,2)
 	resp$(8)='True'
 	fnCmdSet(2)
 	ckey=fnAcs(mat resp$)
@@ -1079,7 +1079,7 @@ EstimateRoute: ! r: ESTIMATEING ROUTINE
 	if est1(1,1)=0 and est1(2,1)=0 and est1(3,1)=0 then
 		dim message$(1)*128
 		mat message$(1)
-		message$(1)="You must select at least one service to estimate"
+		message$(1)='You must select at least one service to estimate'
 		fnMsgBox(mat message$,resp$,'',0)
 		goto ASK_EST
 
@@ -1092,7 +1092,7 @@ EstimateRoute: ! r: ESTIMATEING ROUTINE
 		if est1(j,1) then
 			if est1(j,2)<50 or est1(j,2)>150 then
 				mat message$(1)
-				message$(1)="You percent must be between 50% and 150%"
+				message$(1)='You percent must be between 50% and 150%'
 				fnMsgBox(mat message$)
 				goto ASK_EST
 			end if
@@ -1108,18 +1108,18 @@ goto ASK_EST ! /r
 EST3: ! r:
 	fnTos
 	mylen=27 : mypos=mylen+2
-	fnLbl(1,1,"Account to Estimate:",mylen,1)
+	fnLbl(1,1,'Account to Estimate:',mylen,1)
 	fncmbact(1,mypos)
-	resp$(1)=""
-	if ex$<>"" then
-		fnLbl(3,1,"Last Account entered:",mylen,1)
+	resp$(1)=''
+	if ex$<>'' then
+		fnLbl(3,1,'Last Account entered:',mylen,1)
 		fnTxt(3,mypos,10,0,0,empty$,1)
 		resp$(2)=ex$
 	end if
 	fnCmdSet(11)
 	ckey=fnAcs(mat resp$)
 	x$=lpad$(trim$(resp$(1)(1:10)),10)
-	if ckey=cancel or trim$(x$)="" then goto MENU1
+	if ckey=cancel or trim$(x$)='' then goto MENU1
 	x$=lpad$(trim$(x$),10) conv EST3
 	read #hCustomer1,using F_CUSTOMER_A,key=x$,release: x$,e2$,mat a,f,final,mat xd,mat extra nokey EST3 ! ,extra$(3)
 	fnapply_default_rates(mat extra, mat a)
@@ -1130,17 +1130,17 @@ EST3: ! r:
 ASK_ROUTE: ! r:
 	fnTos
 	mylen=21 : mypos=mylen+2 : respc=0
-	fnLbl(1,1,"Route to Estimate:",mylen,1)
+	fnLbl(1,1,'Route to Estimate:',mylen,1)
 	fncmbrt2(1,mypos,0)
-	resp$(respc+=1)="1"
+	resp$(respc+=1)='1'
 	if eb2>0 then
-		fnLbl(3,1,"Last Route estimated:")
+		fnLbl(3,1,'Last Route estimated:')
 		fnTxt(3,mypos,4)
 		resp$(respc+=1)=str$(eb2)
 	end if
 	fnCmdSet(11)
 	ckey=fnAcs(mat resp$)
-	if resp$(1)="[All]" then eb1=0 : goto L6890
+	if resp$(1)='[All]' then eb1=0 : goto L6890
 	eb1=val(resp$(1))
 	L6890: !
 	if ckey=cancel then goto MENU1 ! finish
@@ -1199,7 +1199,7 @@ EstIndividual: ! r:
 		goto L7210
 	end if
 	fn_writeWork(hWork,x$,mat x)
-	rewrite #hCustomer1,using "form pos 1831,n 9",key=x$: d1 ! write billing date into bill estimated field  extra(19) any time bill estimated
+	rewrite #hCustomer1,using 'form pos 1831,n 9',key=x$: d1 ! write billing date into bill estimated field  extra(19) any time bill estimated
 	L7210: !
 	fn_accumulateProofTotals
 	L7220: !
@@ -1216,49 +1216,49 @@ Xit: fnXit
 def fn_us1(x$,d1)
 	! rc1=0 ! SET USAGE FIELDS
 	wr1=1 : er1=5 : gr1=9
-	read #hCustomer1,using "form pos 296,PD 4",key=x$,release: f nokey US1_XIT
+	read #hCustomer1,using 'form pos 296,PD 4',key=x$,release: f nokey US1_XIT
 	if f><d1 then goto US1_XIT
 	wr1=2 : er1=6 : gr1=10 ! rc1=1 ! Re-Calculation
 	US1_XIT: !
 fnend
 def fn_rmk1
 	! rk$=x$(1:10)
-	if ft$="" then goto RMK1_XIT
-	ft$="*"&ft$
-	! Read #note1,Using "form pos 1,C 10,2*PD 3",Key=RK$: RK$,MAT RA Nokey 6580
+	if ft$='' then goto RMK1_XIT
+	ft$='*'&ft$
+	! Read #note1,Using 'form pos 1,C 10,2*PD 3',Key=RK$: RK$,MAT RA Nokey 6580
 	r32=ra(1)
 	RMK1_L8110: !
 	if r32=0 then goto RMK1_L8190
-	! Read #note2,Using "form pos 1,C 10,C 60,PD 3",Rec=R32: K32$,RM$,N32
-	if rm$(1:1)><"*" then goto RMK1_L8160
-	! Rewrite #note2,Using "form pos 1,C 10,C 60,PD 3",Rec=R32: K32$,FT$
+	! Read #note2,Using 'form pos 1,C 10,C 60,PD 3',Rec=R32: K32$,RM$,N32
+	if rm$(1:1)><'*' then goto RMK1_L8160
+	! Rewrite #note2,Using 'form pos 1,C 10,C 60,PD 3',Rec=R32: K32$,FT$
 	goto RMK1_XIT
 	RMK1_L8160: !
 	r32=n32
 	goto RMK1_L8110
 	mat ra=(0)
-	! Write #note1,Using "form pos 1,C 10,2*PD 3": RK$,MAT RA
+	! Write #note1,Using 'form pos 1,C 10,2*PD 3': RK$,MAT RA
 	RMK1_L8190: !
 	r32=lrec(32)+1
-	! Write #note2,Using "form pos 1,C 10,C 60,PD 3",Rec=R32: RK$,FT$,0
+	! Write #note2,Using 'form pos 1,C 10,C 60,PD 3',Rec=R32: RK$,FT$,0
 	rn=rn+1
 	! If RA(2)>0 Then
-	! Rewrite #note2,Using "form pos 68,PD 3",Rec=RA(2): R32
+	! Rewrite #note2,Using 'form pos 68,PD 3',Rec=RA(2): R32
 	! end if
 	if ra(1)=0 then ra(1)=r32
 	ra(2)=r32
-	! Rewrite #note1,Using "form pos 11,2*PD 3",Key=RK$: MAT RA
+	! Rewrite #note1,Using 'form pos 11,2*PD 3',Key=RK$: MAT RA
 	RMK1_XIT: !
 fnend
 def fn_est_dates
 	EST_DATES: !
 	fnTos
 	mylen=51 : mypos=mylen+2
-	fnLbl(2,70,"",0,1)
-	fnLbl(1,1,"Billing Dates of Months to be Averaged:",mylen,1)
+	fnLbl(2,70,'',0,1)
+	fnLbl(1,1,'Billing Dates of Months to be Averaged:',mylen,1)
 	for j=1 to 8
-		fnTxt(j,mypos,10,0,0,"3")
-		resp$(j)=""
+		fnTxt(j,mypos,10,0,0,'3')
+		resp$(j)=''
 	next j
 	fnCmdSet(2)
 	ckey=fnAcs(mat resp$)
@@ -1268,14 +1268,14 @@ def fn_est_dates
 	next j
 	if cd1(1)=0 then
 		mat message$(1)
-		message$(1)="You must enter at least one date!"
+		message$(1)='You must enter at least one date!'
 		fnMsgBox(mat message$)
 		goto EST_DATES
 	end if
 fnend
 def fn_est5(;___,j) ! calculate averages
 	watermonths=elecmonths=gasmonths=watused=elecused=gasused=0
-	restore #hTrans,key>=x$&"         ": nokey EST5_XIT ! no average but active customer (use 0 usage)
+	restore #hTrans,key>=x$&'         ': nokey EST5_XIT ! no average but active customer (use 0 usage)
 	EST5_READ_TRANS: !
 	read #hTrans,using F_TRANS: p$,tdate,tcode,tamount,mat tg,wr,wu,er,eu,gr,gu,tbal,pcode eof EST5_FINIS
 	F_TRANS: form pos 1,c 10,n 8,n 1,12*pd 4.2,6*pd 5,pd 4.2,n 1
@@ -1296,9 +1296,9 @@ def fn_est5(;___,j) ! calculate averages
 	EST5_XIT: ! write enter readings entry
 fnend
 def fn_rewrite_usage
-	if servicetype$="WA" then x(12)=usage
-	if servicetype$="GA" then x(14)=usage
-	if servicetype$="EL" then x(13)=usage
+	if servicetype$='WA' then x(12)=usage
+	if servicetype$='GA' then x(14)=usage
+	if servicetype$='EL' then x(13)=usage
 	rewrite #hWork,using Fwork: trim$(x$),mat x
 fnend
 def fn_write_tamper(custno$*10,tval)
@@ -1309,29 +1309,29 @@ def fn_write_tamper(custno$*10,tval)
 fnend
 ImportTabDelimited: ! r:
 	! r: phase 1 - import from text file into readings.tmp file
-	open #h_tmp=fnH: "Name=OPEN:Tab Delimited Text (*.txt) |*.txt,RecL=129,Shr",display,input ioerr IT_XIT
-	!   open #h_tmp:=2: "Name=L:\readings.txt,RecL=129",display,input
-	open #h_readings_tmp=fnH: "Name=[Temp]\readings.tmp,RecL=30,replace",d,o
+	open #h_tmp=fnH: 'Name=OPEN:Tab Delimited Text (*.txt) |*.txt,RecL=129,Shr',display,input ioerr IT_XIT
+	!   open #h_tmp:=2: 'Name=L:\readings.txt,RecL=129',display,input
+	open #h_readings_tmp=fnH: 'Name=[Temp]\readings.tmp,RecL=30,replace',d,o
 	dim a$*256
 	do
 		IT_TEXT_READ: !
 		linput #h_tmp: a$ eof IT_TEXT_EOF
 		x=val(a$(1:3)) conv IT_TEXT_READ
-		z$=""
+		z$=''
 		for j=1 to 8
 			x=val(a$(j:j)) conv IT_L1060
 			z$=z$&a$(j:j)
 		next j
 		IT_L1060: !
 		z=val(z$)
-		z$=cnvrt$("pic(zzzzzzz.##",z)
-		reading$=""
+		z$=cnvrt$('pic(zzzzzzz.##',z)
+		reading$=''
 		for j1=1 to 20
 			x=val(a$(j1+j:j1+j)) conv IT_L1120
 			reading$=reading$&a$(j1+j:j1+j)
 			IT_L1120: !
 		next j1
-		pr #h_readings_tmp,using "form pos 1,c 10,c 9": z$,trim$(reading$)
+		pr #h_readings_tmp,using 'form pos 1,c 10,c 9': z$,trim$(reading$)
 	loop
 	IT_TEXT_EOF: !
 	close #h_tmp: ioerr ignore
@@ -1339,14 +1339,14 @@ ImportTabDelimited: ! r:
 	! /r
 	! r: phase 2 - from readings.tmp file
 	close #h_readings: ioerr ignore
-	open #h_readings:=13: "Name=[Temp]\Readings.tmp,RecL=30",display,input
+	open #h_readings:=13: 'Name=[Temp]\Readings.tmp,RecL=30',display,input
 	do
 		linput #h_readings: ln$ eof IT_FINIS
 		mat x=(0)
 		x$=lpad$(rtrm$(ln$(1:10)),10) conv IT_W_NEXT ! Account Key
 		ti1=1 ! water
 		x(ti1)=0
-		! if env$('client')="Lovington" then
+		! if env$('client')='Lovington' then
 		! 	x(ti1)=val(ln$(11:19)) conv ignore
 		! else
 			x(ti1)=val(ln$(11:20)) conv ignore
@@ -1384,8 +1384,8 @@ goto MENU1 ! /r
 
 
 def fn_holdingFileLoad(; ___,hld9)
-	holdingFile$="[Q]\UBmstr\IpHold"&ip1$&".h[cno]"
-	open #hld9=fnH: "Name="&holdingFile$,i,i ioerr L7460 ! was =9
+	holdingFile$='[Q]\UBmstr\IpHold'&ip1$&'.h[cno]'
+	open #hld9=fnH: 'Name='&holdingFile$,i,i ioerr L7460 ! was =9
 	do
 		read #hld9,using Fwork: x$,mat x eof IPHOLD_EO_HLD9
 		fn_writeWork(hWork,x$,mat x, 1)
@@ -1401,16 +1401,16 @@ def fn_holdingFileSave(hWork) ! probably requires more than just hWork
 	HoldingFileSave: !
 	fnTos
 	mylen=19 : mypos=mylen+2
-	fnLbl(1,1,"Holding File Number:",mylen)
+	fnLbl(1,1,'Holding File Number:',mylen)
 	fnTxt(1,mypos,3,0,0,'30')
-	resp$(1)=""
-	fnFra(4,1,3,94,"Create new file or append to existing file","If you have a different file for each route, you will always take the option to create a new file.  If you only use one file, clean it on the first batch of readings and append the rest.")
-	fnOpt(1,1,"Create new file (deletes all previous readings in holding file)",0,1)
+	resp$(1)=''
+	fnFra(4,1,3,94,'Create new file or append to existing file','If you have a different file for each route, you will always take the option to create a new file.  If you only use one file, clean it on the first batch of readings and append the rest.')
+	fnOpt(1,1,'Create new file (deletes all previous readings in holding file)',0,1)
 	resp$(respc_CreateNew:=2)='False'
-	fnOpt(2,1,"Append to existing file (retain previous readings, merge new ones in, overwrites duplicates)",0,1)
+	fnOpt(2,1,'Append to existing file (retain previous readings, merge new ones in, overwrites duplicates)',0,1)
 	resp$(3)='True'
-	fnCmdKey("&Save",1,1)
-	fnCmdKey("&Cancel",5,0,1)
+	fnCmdKey('&Save',1,1)
+	fnCmdKey('&Cancel',5,0,1)
 	ckey=fnAcs(mat resp$)
 	if ckey<>cancel then
 		holdingFileSaveReturn=1
@@ -1422,11 +1422,11 @@ def fn_holdingFileSave(hWork) ! probably requires more than just hWork
 		! Append to Existing Holding File
 		dim holdingFile$*256
 		dim holdingFileIndex$*256
-		holdingFile$="[Q]\UBmstr\IpHold"&str$(bk1)&".h[cno]"
-		holdingFileIndex$=env$('temp')&"\acs\IpHold"&str$(bk1)&"-Index.h[cno]"
+		holdingFile$='[Q]\UBmstr\IpHold'&str$(bk1)&'.h[cno]'
+		holdingFileIndex$=env$('temp')&'\acs\IpHold'&str$(bk1)&'-Index.h[cno]'
 		fnIndex(holdingFile$,holdingFileIndex$,'1 10')
-		open #hld8=fnH: "Name="&holdingFile$&",KFName="&holdingFileIndex$&',Shr,Use,RecL=74,KPs=1,KLn=10',i,outIn,k
-		restore #hWork: ! ,search>="": nokey AppendFinis
+		open #hld8=fnH: 'Name='&holdingFile$&',KFName='&holdingFileIndex$&',Shr,Use,RecL=74,KPs=1,KLn=10',i,outIn,k
+		restore #hWork: ! ,search>='': nokey AppendFinis
 		do
 			read #hWork,using Fwork: x$,mat x eof AppendFinis
 			fn_writeWork(hld8,x$,mat x, 1)
@@ -1452,27 +1452,27 @@ def fn_loadBookOrHoldingFile(&addmethod; ___,book_or_holding_file$,ihDirFileMask
 	end if
 	INPUT_HAND: !
 	fnTos
-	txt$="Select "&book_or_holding_file$&" for Input:"
+	txt$='Select '&book_or_holding_file$&' for Input:'
 	mylen=len(txt$)+1 : mypos=mylen+2
 	fnLbl(1,1,txt$,mylen,1)
 	! r: book or holding file grid
-	colhdr$(1)=book_or_holding_file$ ! "Book"
-	colhdr$(2)="Size"
-	colhdr$(3)="Date Time"
-	colhdr$(4)="Comment"
+	colhdr$(1)=book_or_holding_file$ ! 'Book'
+	colhdr$(2)='Size'
+	colhdr$(3)='Date Time'
+	colhdr$(4)='Comment'
 
 	dim bookItem$(0)*128
 	mat bookItem$(4)
 	mat colhdr$(4)
 	ihFileCount=fngetdir2('[Q]\UBmstr\',mat ihFilename$, '',ihDirFileMask$,mat ihFileDate$,mat ihFileTime$,0,mat ihFileSize)
-	fnFlexInit1("book_"&book_or_holding_file$(1:1),1,mypos,10,32,mat colhdr$,mat cm2$,1)
+	fnFlexInit1('book_'&book_or_holding_file$(1:1),1,mypos,10,32,mat colhdr$,mat cm2$,1)
 
 	for ihFileItem=1 to ihFileCount
 		if book_or_holding_file$='Book' then
 
 			tmpBookNumber=val(ihFilename$(ihFileItem)(10:len(ihFilename$(ihFileItem)))) conv ihInvalidFile
 			bookItem$(1)=str$(tmpBookNumber)
-			bookItem$(2)=cnvrt$("pic(zzz,zzz,zzz,zzz)",ihFileSize(ihFileItem))
+			bookItem$(2)=cnvrt$('pic(zzz,zzz,zzz,zzz)',ihFileSize(ihFileItem))
 			bookItem$(3)=ihFileDate$(ihFileItem)&' '&ihFileTime$(ihFileItem)
 			dim bookComment$*128
 			fncreg_read('book comment '&str$(tmpBookNumber),bookComment$)
@@ -1507,7 +1507,7 @@ def fn_loadBookOrHoldingFile(&addmethod; ___,book_or_holding_file$,ihDirFileMask
 		goto IH_XIT
 	else if ckey=ck_print then
 		if book_or_holding_file$='Holding File' then
-			open #hpHoldingFile=fnH: "Name=[Q]\UBmstr\IpHold"&ip1$&".h[cno]",i,outi,r
+			open #hpHoldingFile=fnH: 'Name=[Q]\UBmstr\IpHold'&ip1$&'.h[cno]',i,outi,r
 			fn_print_readings(hpHoldingFile, 'Holding File '&ip1$)
 			close #hpHoldingFile:
 		else
@@ -1516,11 +1516,11 @@ def fn_loadBookOrHoldingFile(&addmethod; ___,book_or_holding_file$,ihDirFileMask
 		goto INPUT_HAND
 
 	else if ckey=ck_delete then
-		if fnConfirmDelete(book_or_holding_file$&' '&ip1$,'confirmDeleteBook') then ! resp$="Yes" then
+		if fnConfirmDelete(book_or_holding_file$&' '&ip1$,'confirmDeleteBook') then ! resp$='Yes' then
 			if addmethod=am_fromHhFile then
-				fnFree("[Q]\UBmstr\Readings."&ip1$)
+				fnFree('[Q]\UBmstr\Readings.'&ip1$)
 			else if addmethod=am_loadHoldingFile then
-				fnFree("[Q]\UBmstr\IPHold"&ip1$&".h[cno]")
+				fnFree('[Q]\UBmstr\IPHold'&ip1$&'.h[cno]')
 			end if
 		end if
 		goto INPUT_HAND
@@ -1532,36 +1532,36 @@ def fn_loadBookOrHoldingFile(&addmethod; ___,book_or_holding_file$,ihDirFileMask
 	IH_XIT: !
 fnend
 EnterReadings: ! r:
-	if alp$="*" then goto READ_ROUTE_SEQUENCE
+	if alp$='*' then goto READ_ROUTE_SEQUENCE
 	EnterReadings2: !
 	fn_us1(x$,d1)
-	read #hCustomer1,using "form pos 296,PD 4",key=x$,release: f nokey US1_XIT
+	read #hCustomer1,using 'form pos 296,PD 4',key=x$,release: f nokey US1_XIT
 	EnterReadings3: !
 	fnTos
 	rc=0 : frac=0
 
-	fnFra(1,1,3,39,"Account Data")
+	fnFra(1,1,3,39,'Account Data')
 	mylen=15 : mypos=mylen+2 : fraad=frac+=1
-	fnLbl(1,1,"Account:",mylen,1,0,fraad)
+	fnLbl(1,1,'Account:',mylen,1,0,fraad)
 	fnTxt(1,mypos,10,0,0,empty$,1,empty$,1)
 	resp$(rc+=1)=x$
-	fnLbl(2,1,"Name:",mylen,1,0,fraad)
+	fnLbl(2,1,'Name:',mylen,1,0,fraad)
 	fnTxt(2,mypos,30,30,0,empty$,1,empty$,fraad)
 	resp$(rc+=1)=aname$
-	fnLbl(3,1,"Meter Address:",mylen,1,0,fraad)
+	fnLbl(3,1,'Meter Address:',mylen,1,0,fraad)
 	fnTxt(3,mypos,10,0,0,empty$,1,empty$,fraad)
 	resp$(rc+=1)=e2$
 
-	fnFra(7,1,12,60,"Readings & Overrides")
+	fnFra(7,1,12,60,'Readings & Overrides')
 	mylen=0 : for j=1 to 8 : mylen=max(mylen,len(srvnam$(j))) : next j
 	mypos1=mylen+2 : mypos2=mypos1+12
 	mypos3=mypos2+12 : mypos4=mypos3+12 : mypos5=mypos4+12+4
 	lc=0 : fraro=frac+=1
-	fnLbl(lc+=1,mypos1,"Reading",10,2,0,fraro)
-	fnLbl(lc,mypos2,"Charge",10,2,0,fraro)
-	fnLbl(lc,mypos3,"Usage",10,2,0,fraro)
-	if srvnam$(3)="Electric" then
-		fnLbl(lc,mypos4,"Demand",10,2,0,fraro)
+	fnLbl(lc+=1,mypos1,'Reading',10,2,0,fraro)
+	fnLbl(lc,mypos2,'Charge',10,2,0,fraro)
+	fnLbl(lc,mypos3,'Usage',10,2,0,fraro)
+	if srvnam$(3)='Electric' then
+		fnLbl(lc,mypos4,'Demand',10,2,0,fraro)
 	end if
 	! r: Service 1 - Water
 	tmpService=1
@@ -1573,9 +1573,9 @@ EnterReadings: ! r:
 	if service_enabled(tmpService) then
 		lc+=1
 		fnLbl(lc,1,srvnamc$(1),mylen,1,0,2)
-		fnTxt(lc,mypos1,10,11,1,"20",disa,empty$,fraro) ! reading
+		fnTxt(lc,mypos1,10,11,1,'20',disa,empty$,fraro) ! reading
 		fnTxt(lc,mypos2,10,10,1,'10',disa,empty$,fraro) ! charge
-		fnTxt(lc,mypos3,10,11,1,"20",disa,empty$,fraro) ! usage
+		fnTxt(lc,mypos3,10,11,1,'20',disa,empty$,fraro) ! usage
 		if editmode=1 then
 			resp$(rc+=1)=str$(x(tmpService)) ! water reading
 			resp$(rc+=1)=str$(x(09)) ! water charge
@@ -1606,26 +1606,26 @@ EnterReadings: ! r:
 
 	if service_type(tmpService)=3 then
 		fnLbl(lc+=1,1,srvnamc$(tmpService),mylen,1,0,2)
-		fnTxt(lc,mypos1,10,11,1,"20",disa,empty$,fraro) ! reading
+		fnTxt(lc,mypos1,10,11,1,'20',disa,empty$,fraro) ! reading
 		fnTxt(lc,mypos2,10,10,1,'10',disa,empty$,fraro) ! charge
-		fnTxt(lc,mypos3,10,11,1,"20",disa,empty$,fraro) ! usage
-		fnTxt(lc,mypos4,10,11,1,"20",disa,empty$,fraro) ! demand
+		fnTxt(lc,mypos3,10,11,1,'20',disa,empty$,fraro) ! usage
+		fnTxt(lc,mypos4,10,11,1,'20',disa,empty$,fraro) ! demand
 		if editmode=1 then
 			resp$(rc+=1)=str$(x(tmpService)) ! electric reading
 			resp$(rc+=1)=str$(x(10)) ! electric charge
 			resp$(rc+=1)=str$(x(13)) ! electric usage
 			resp$(rc+=1)=str$(x(04)) ! electric demand
 		else
-			resp$(rc+=1)=""
-			resp$(rc+=1)=""
-			resp$(rc+=1)=""
-			resp$(rc+=1)=""
+			resp$(rc+=1)=''
+			resp$(rc+=1)=''
+			resp$(rc+=1)=''
+			resp$(rc+=1)=''
 		end if
 	else if service_type(tmpService)=3.1 then
 		fnLbl(lc+=1,1,srvnamc$(tmpService),mylen,1,0,2)
-		fnTxt(lc,mypos1,10,11,1,"20",disa,empty$,fraro) ! reading
+		fnTxt(lc,mypos1,10,11,1,'20',disa,empty$,fraro) ! reading
 		fnTxt(lc,mypos2,10,10,1,'10',disa,empty$,fraro) ! charge
-		fnTxt(lc,mypos3,10,11,1,"20",disa,empty$,fraro) ! usage
+		fnTxt(lc,mypos3,10,11,1,'20',disa,empty$,fraro) ! usage
 		! pr 'point aaa'  : pause
 		if x(03)=0 then x(03)=xd(5) ! if lawn meter isn't entered, it should stay where it was last month
 		if editmode=1 then
@@ -1634,19 +1634,19 @@ EnterReadings: ! r:
 			resp$(rc+=1)=str$(x(13)) ! electric usage
 		else
 			resp$(rc+=1)=str$(x(03)) ! service 3 reading
-			resp$(rc+=1)=""
-			resp$(rc+=1)=""
+			resp$(rc+=1)=''
+			resp$(rc+=1)=''
 		end if
 	else if service_type(tmpService)=3.2 then
 		if (a(2)=0) then disa=1 else disa=0 ! water rate code
 		! rate 9 should still process ! if (a(1)=9 or a(1)=0) and (a(2)=9 or a(2)=0) then disa=1 else disa=0 ! water rate code
 		if onlyMonth(tmpService)>0 and onlyMonth(tmpService)<>date(days(d1,'mmddyy'),'mm') then disa=1
 		fnLbl(lc+=1,1,srvnamc$(tmpService),mylen,1,0,2)
-		fnTxt(lc,mypos3,10,11,1,"20",disa,empty$,fraro) ! usage
+		fnTxt(lc,mypos3,10,11,1,'20',disa,empty$,fraro) ! usage
 		if editmode=1 then
 			resp$(rc+=1)=str$(x(13)) ! Reduction Usage
 		else
-			resp$(rc+=1)=""
+			resp$(rc+=1)=''
 		end if
 	end if
 	! /r
@@ -1657,9 +1657,9 @@ EnterReadings: ! r:
 		if onlyMonth(tmpService)>0 and onlyMonth(tmpService)<>date(days(d1,'mmddyy'),'mm') then disa=1
 		lc+=1
 		fnLbl(lc,1,srvnamc$(tmpService),mylen,1,0,2)
-		fnTxt(lc,mypos1,10,11,1,"20",disa,empty$,fraro) ! reading
+		fnTxt(lc,mypos1,10,11,1,'20',disa,empty$,fraro) ! reading
 		fnTxt(lc,mypos2,10,10,1,'10',disa,empty$,fraro) ! charge
-		fnTxt(lc,mypos3,10,11,1,"20",disa,empty$,fraro) ! usage
+		fnTxt(lc,mypos3,10,11,1,'20',disa,empty$,fraro) ! usage
 		if editmode=1 then
 			resp$(rc+=1)=str$(x(02))
 			resp$(rc+=1)=str$(x(11))
@@ -1676,7 +1676,7 @@ EnterReadings: ! r:
 	if service_enabled(tmpService) then
 		if a(tmpService)=0 then disa=1 else disa=0 ! service 5 rate code
 		if onlyMonth(tmpService)>0 and onlyMonth(tmpService)<>date(days(d1,'mmddyy'),'mm') then disa=1
-		if trim$(srvnam$(tmpService))="Reconnect Fee" then disa=0
+		if trim$(srvnam$(tmpService))='Reconnect Fee' then disa=0
 		fnLbl(lc+=1,1,srvnamc$(tmpService),mylen,1,0,fraro)
 		fnTxt(lc,mypos2,10,0,1,'10',disa,empty$,fraro)
 		if editmode=1 then
@@ -1748,8 +1748,8 @@ EnterReadings: ! r:
 	! /r
 
 	lc=lc+2
-	fnLbl(lc,1,"Final Billing Code:",mylen+8,1,0,2)
-	fnComboA("finalbill",lc,24,mat opt_final_billing$,"Used to record final billing code in customer record",28,fraro) ! final billing code
+	fnLbl(lc,1,'Final Billing Code:',mylen+8,1,0,2)
+	fnComboA('finalbill',lc,24,mat opt_final_billing$,'Used to record final billing code in customer record',28,fraro) ! final billing code
 	resp_fianl_billing_code=(rc+=1)
 	if editmode=1 then
 		resp$(resp_fianl_billing_code)=str$(x(15)) ! Final Billing Code
@@ -1760,8 +1760,8 @@ EnterReadings: ! r:
 	if editmode=1 and x(15)=2 then resp$(resp_fianl_billing_code)=opt_final_billing$(3)
 	begdate=fndate_mmddyy_to_ccyymmdd(d1)-20000
 	fn_flexRead(1,mypos5+2,hTrans,x$,begdate,0,fraro) ! beginning date=billing date less one year
-	fnCmdKey("&Meter Change",9,0,0,"Calculates usage on meter change out.")
-	fnCmdKey("&Review Customer Record",8,0,0,"Allow you to review any customer while entering readings.")
+	fnCmdKey('&Meter Change',9,0,0,'Calculates usage on meter change out.')
+	fnCmdKey('&Review Customer Record',8,0,0,'Allow you to review any customer while entering readings.')
 	if addmethod=am_customersInSequence or addmethod=am_fromHhFile then fnCmdSet(17) else fnCmdSet(11) ! kj   3/24/06
 	ckey=fnAcs(mat resp$)
 	if ckey=8 then
@@ -1898,40 +1898,40 @@ def fn_flexRead(myline,mypos,filnum,z$,begdate,enddate,selcode) ! library ready
 		dim colmask$(30),frColHdr$(30)*20,serviceName$(10)*20,item$(25)*70
 		dim tg(11),a(7)
 		fnGetServices(mat serviceName$)
-		tcode$(1)="Charge"
-		tcode$(2)="Penalty"
-		tcode$(3)="Collect"
-		tcode$(4)="C/M"
-		tcode$(5)="D/M"
+		tcode$(1)='Charge'
+		tcode$(2)='Penalty'
+		tcode$(3)='Collect'
+		tcode$(4)='C/M'
+		tcode$(5)='D/M'
 	end if
 	z$=trim$(z$)
 	if z$<>'' then
-		open #tmp=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",i,i,k
+		open #tmp=fnH: 'Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr',i,i,k
 		z$=lpad$(trim$(z$),10)
-		read #tmp,using "form pos 143,7*pd 2",key=z$: mat a
+		read #tmp,using 'form pos 143,7*pd 2',key=z$: mat a
 		close #tmp:
 	end if
 	mat frColHdr$(30) : mat colmask$(30)
-	frColHdr$(headers=1)="Date" : colmask$(headers)="3"
-	if trim$(serviceName$(1))<>"" and (z$<>'' and a(1)>0) then
-		frColHdr$(headers+=1)="Water Reading" : colmask$(headers)="20"
-		frColHdr$(headers+=1)="Water Usage" : colmask$(headers)="20"
+	frColHdr$(headers=1)='Date' : colmask$(headers)='3'
+	if trim$(serviceName$(1))<>'' and (z$<>'' and a(1)>0) then
+		frColHdr$(headers+=1)='Water Reading' : colmask$(headers)='20'
+		frColHdr$(headers+=1)='Water Usage' : colmask$(headers)='20'
 	end if
-	if trim$(serviceName$(3))="Electric" and (z$<>'' and a(3)>0) then
-		frColHdr$(headers+=1)="Electric Reading" : colmask$(headers)="20"
-		frColHdr$(headers+=1)="Electric Usage" : colmask$(headers)="20"
+	if trim$(serviceName$(3))='Electric' and (z$<>'' and a(3)>0) then
+		frColHdr$(headers+=1)='Electric Reading' : colmask$(headers)='20'
+		frColHdr$(headers+=1)='Electric Usage' : colmask$(headers)='20'
 	end if
-	if trim$(serviceName$(3))="Lawn Meter" and (z$<>'' and a(3)>0) then
-		frColHdr$(headers+=1)="Lawn Meter Reading" : colmask$(headers)="20"
-		frColHdr$(headers+=1)="Lawn Meter Usage" : colmask$(headers)="20"
+	if trim$(serviceName$(3))='Lawn Meter' and (z$<>'' and a(3)>0) then
+		frColHdr$(headers+=1)='Lawn Meter Reading' : colmask$(headers)='20'
+		frColHdr$(headers+=1)='Lawn Meter Usage' : colmask$(headers)='20'
 	end if
-	if trim$(serviceName$(4))="Gas" and (z$<>'' and a(4)>0) then
-		frColHdr$(headers+=1)="Gas Reading" : colmask$(headers)="20"
-		frColHdr$(headers+=1)="Gas Usage" : colmask$(headers)="20"
+	if trim$(serviceName$(4))='Gas' and (z$<>'' and a(4)>0) then
+		frColHdr$(headers+=1)='Gas Reading' : colmask$(headers)='20'
+		frColHdr$(headers+=1)='Gas Usage' : colmask$(headers)='20'
 	end if
 	mat frColHdr$(headers)
 	mat colmask$(headers)
-	fnFlexInit1("ubread",myline,mypos,13,30,mat frColHdr$,mat colmask$,1)
+	fnFlexInit1('ubread',myline,mypos,13,30,mat frColHdr$,mat colmask$,1)
 	items=0
 	mat item$=('')
 	restore #filnum,key>=rpad$(z$,kln(filnum)): nokey NO_RECORDS_FOUND
@@ -1943,19 +1943,19 @@ def fn_flexRead(myline,mypos,filnum,z$,begdate,enddate,selcode) ! library ready
 		if tcode=0 then tcode=1 ! temporary to prevent bad transaction codes
 		item$(1)=str$(tdate)
 		items=1
-		if trim$(serviceName$(1))<>"" and (z$<>'' and a(1)>0) then
+		if trim$(serviceName$(1))<>'' and (z$<>'' and a(1)>0) then
 			item$(items+=1)=str$(wr)
 			item$(items+=1)=str$(wu)
 		end if
-		if trim$(serviceName$(3))="Electric" and (z$<>'' and a(3)>0) then
+		if trim$(serviceName$(3))='Electric' and (z$<>'' and a(3)>0) then
 			item$(items+=1)=str$(er)
 			item$(items+=1)=str$(eu)
 		end if
-		if trim$(serviceName$(3))="Lawn Meter" and (z$<>'' and a(3)>0) then
+		if trim$(serviceName$(3))='Lawn Meter' and (z$<>'' and a(3)>0) then
 			item$(items+=1)=str$(er)
 			item$(items+=1)=str$(eu)
 		end if
-		if trim$(serviceName$(4))<>"" and (z$<>'' and a(4)>0) then
+		if trim$(serviceName$(4))<>'' and (z$<>'' and a(4)>0) then
 			item$(items+=1)=str$(gr)
 			item$(items+=1)=str$(gu)
 		end if
@@ -1963,7 +1963,7 @@ def fn_flexRead(myline,mypos,filnum,z$,begdate,enddate,selcode) ! library ready
 	loop
 
 	NO_RECORDS_FOUND: !
-		if items=0 then mat item$=("")
+		if items=0 then mat item$=('')
 		fnFlexAdd1(mat item$)
 	FlexReadXit: !
 fnend
@@ -1987,68 +1987,68 @@ def fn_meter_change_out
 	do
 		fnTos
 		rc=0 : lc=0
-		fnFra(1,1,2,49,"Method of Change Out")
-		fnOpt(1,1,"Current customer only",0,1)
+		fnFra(1,1,2,49,'Method of Change Out')
+		fnOpt(1,1,'Current customer only',0,1)
 		resp$(1)='True'
-		fnOpt(2,1,"All Customers",0,1)
+		fnOpt(2,1,'All Customers',0,1)
 		resp$(2)='False'
-		fnLbl(5,1,"Service Type:",18,1)
-		fnComboA("ServiceType",5,20,mat serviceoption$)
+		fnLbl(5,1,'Service Type:',18,1)
+		fnComboA('ServiceType',5,20,mat serviceoption$)
 		resp$(3)=serviceoption$(1)
-		fnLbl(6,1,"Beginning Customer:",18,1)
+		fnLbl(6,1,'Beginning Customer:',18,1)
 		fncmbact(6,20,1)
-		resp$(4)="[All]"
-		fnCmdKey("&Next",1,1,0): fnCmdKey("&Cancel",5,0,1)
+		resp$(4)='[All]'
+		fnCmdKey('&Next',1,1,0): fnCmdKey('&Cancel',5,0,1)
 		ckey=fnAcs(mat resp$)
 		if ckey=5 then goto Mco_Xit
 		servicetype$=resp$(3)(1:2)
 		begx$=resp$(4)(1:10)
-		if resp$(2)='True' then method$="File" : goto MCO_UPDATE_FULL_FILE ! working from a file
-		if resp$(1)='True' then method$="Customer" : goto MCO_RECORD_READINGS
+		if resp$(2)='True' then method$='File' : goto MCO_UPDATE_FULL_FILE ! working from a file
+		if resp$(1)='True' then method$='Customer' : goto MCO_RECORD_READINGS
 	loop
 	MCO_RECORD_READINGS: !
 	fnTos
 	rc=0 : lc=0: resprc=0
-	fnLbl(lc+=1,1,x$&"  "&aname$,50,0)
-	fnLbl(lc+=2,32,"Old Meter",10,2)
-	fnLbl(lc,55,"New Meter",10,2)
-	fnLbl(lc+=1,25,"Prior",10,2)
-	fnLbl(lc,37,"Current",10,2)
-	fnLbl(lc,49,"Prior",10,2)
-	fnLbl(lc,61,"Current",10,2)
-	if trim$(servicetype$)="WA" then
+	fnLbl(lc+=1,1,x$&'  '&aname$,50,0)
+	fnLbl(lc+=2,32,'Old Meter',10,2)
+	fnLbl(lc,55,'New Meter',10,2)
+	fnLbl(lc+=1,25,'Prior',10,2)
+	fnLbl(lc,37,'Current',10,2)
+	fnLbl(lc,49,'Prior',10,2)
+	fnLbl(lc,61,'Current',10,2)
+	if trim$(servicetype$)='WA' then
 		fnLbl(lc+=1,1,srvnamc$(1),20,1)
-		fnTxt(lc,25,10,11,1,'30',0,"Enter the prior reading on the old meter")
+		fnTxt(lc,25,10,11,1,'30',0,'Enter the prior reading on the old meter')
 		resp$(resprc+=1)=str$(xd(1))
-		fnTxt(lc,37,10,10,1,'30',0,"Enter the current reading on the old meter.")
-		resp$(resprc+=1)=""
-		fnTxt(lc,49,10,11,1,'30',0,"Enter the beginning reading the new meter")
-		resp$(resprc+=1)=""
-		fnTxt(lc,61,10,11,1,'30',0,"Enter the ending reading on new meter")
+		fnTxt(lc,37,10,10,1,'30',0,'Enter the current reading on the old meter.')
+		resp$(resprc+=1)=''
+		fnTxt(lc,49,10,11,1,'30',0,'Enter the beginning reading the new meter')
+		resp$(resprc+=1)=''
+		fnTxt(lc,61,10,11,1,'30',0,'Enter the ending reading on new meter')
 		resp$(resprc+=1)=str$(x(1))
-	else if trim$(servicetype$)="EL" then
+	else if trim$(servicetype$)='EL' then
 		fnLbl(lc+=1,1,srvnamc$(3),20,1)
-		fnTxt(lc,25,10,11,1,'30',0,"Enter the prior reading on the old meter")
+		fnTxt(lc,25,10,11,1,'30',0,'Enter the prior reading on the old meter')
 		resp$(resprc+=1)=str$(xd(5))
-		fnTxt(lc,37,10,10,1,'30',0,"Enter the current reading on the old meter.")
-		resp$(resprc+=1)=""
-		fnTxt(lc,49,10,11,1,'30',0,"Enter the beginning reading the new meter")
-		resp$(resprc+=1)=""
-		fnTxt(lc,61,10,11,1,'30',0,"Enter the ending reading on new meter")
+		fnTxt(lc,37,10,10,1,'30',0,'Enter the current reading on the old meter.')
+		resp$(resprc+=1)=''
+		fnTxt(lc,49,10,11,1,'30',0,'Enter the beginning reading the new meter')
+		resp$(resprc+=1)=''
+		fnTxt(lc,61,10,11,1,'30',0,'Enter the ending reading on new meter')
 		resp$(resprc+=1)=str$(x(3))
-	else if trim$(servicetype$)="GA" then
+	else if trim$(servicetype$)='GA' then
 		fnLbl(lc+=1,1,srvnamc$(4),20,1)
-		fnTxt(lc,25,10,11,1,'30',0,"Enter the prior reading on the old meter")
+		fnTxt(lc,25,10,11,1,'30',0,'Enter the prior reading on the old meter')
 		resp$(resprc+=1)=str$(xd(9))
-		fnTxt(lc,37,10,10,1,'30',0,"Enter the current reading on the old meter.")
-		resp$(resprc+=1)=""
-		fnTxt(lc,49,10,11,1,'30',0,"Enter the beginning reading the new meter")
-		resp$(resprc+=1)=""
-		fnTxt(lc,61,10,11,1,'30',0,"Enter the ending reading on new meter")
+		fnTxt(lc,37,10,10,1,'30',0,'Enter the current reading on the old meter.')
+		resp$(resprc+=1)=''
+		fnTxt(lc,49,10,11,1,'30',0,'Enter the beginning reading the new meter')
+		resp$(resprc+=1)=''
+		fnTxt(lc,61,10,11,1,'30',0,'Enter the ending reading on new meter')
 		resp$(resprc+=1)=str$(x(2))
 	end if
-	fnCmdKey("&Next",1,1,0): fnCmdKey("&Cancel",5,0,1)
-	fnCmdKey("&Finish",10)
+	fnCmdKey('&Next',1,1,0): fnCmdKey('&Cancel',5,0,1)
+	fnCmdKey('&Finish',10)
 	ckey=fnAcs(mat resp$)
 	if ckey=5 then goto Mco_Xit
 	if ckey=10 then goto Mco_Xit
@@ -2059,35 +2059,35 @@ def fn_meter_change_out
 	usage=oldmetercurrent-oldmeterprior+newmetercurrent-newmeterprior
 	if usage<0 then
 		mat txt$(3)
-		txt$(1)="The readings you entered create a negative uuage."
-		txt$(2)="Correct one of the readings or choose Cancel to"
-		txt$(3)="skip this record!"
+		txt$(1)='The readings you entered create a negative uuage.'
+		txt$(2)='Correct one of the readings or choose Cancel to'
+		txt$(3)='skip this record!'
 		fnMsgBox(mat txt$,resp$,'',1)
-		if resp$="OK" then goto MCO_RECORD_READINGS
+		if resp$='OK' then goto MCO_RECORD_READINGS
 	end if
-	if method$="File" then fn_rewrite_usage : goto MCO_WORK_READ ! read new record from readings file
-	if method$="Customer" and servicetype$="WA" then x(1)=newmetercurrent: x(12)=usage
-	if method$="Customer" and servicetype$="GA" then x(2)=newmetercurrent: x(14)=usage
-	if method$="Customer" and servicetype$="EL" then x(3)=newmetercurrent: x(13)=usage
-	if method$="Customer" then passcheck=ckfail: editmode=1 : goto mco_EnterReadings3
+	if method$='File' then fn_rewrite_usage : goto MCO_WORK_READ ! read new record from readings file
+	if method$='Customer' and servicetype$='WA' then x(1)=newmetercurrent: x(12)=usage
+	if method$='Customer' and servicetype$='GA' then x(2)=newmetercurrent: x(14)=usage
+	if method$='Customer' and servicetype$='EL' then x(3)=newmetercurrent: x(13)=usage
+	if method$='Customer' then passcheck=ckfail: editmode=1 : goto mco_EnterReadings3
 	! goto somewhere
 	MCO_UPDATE_FULL_FILE: ! meter change over - update full file
 	close #hWork: ioerr ignore
-	open #hWork: "Name="&workFile$,i,outi,r
+	open #hWork: 'Name='&workFile$,i,outi,r
 	if lrec(hWork)=0 then goto MCO_L9290
 	MCO_WORK_READ: !
 	read #hWork,using Fwork: x$,mat x eof MCO_L9350
 	MCO_L9290: !
-	if trim$(begx$)="" or trim$(begx$)="[All]" then begx$="" : goto MCO_L9320
+	if trim$(begx$)='' or trim$(begx$)='[All]' then begx$='' : goto MCO_L9320
 	if trim$(begx$)<>trim$(x$) then goto MCO_WORK_READ
-	begx$=""
+	begx$=''
 	MCO_L9320: !
 	read #hCustomer1,using MCO_F_CUSTOMER,key=x$,release: aname$, mat xd nokey MCO_WORK_READ
 	MCO_F_CUSTOMER: form pos 41,c 20,pos 217,15*pd 5
 	goto MCO_RECORD_READINGS
 	MCO_L9350: !
 	close #hWork: ioerr ignore
-	open #hWork: "Name="&workFile$&",KFName="&workFileIndex$,i,outIn,k
+	open #hWork: 'Name='&workFile$&',KFName='&workFileIndex$,i,outIn,k
 	goto Mco_Xit
 	mco_EnterReadings3: !
 	mco_return=3
@@ -2100,7 +2100,7 @@ def fn_hh_other_type2(ip1$,listonly; ___,lineCount)
 	dim hotImportDataField$(0)*256
 	dim hotImportDataValue$(0)*256
 	hotDataImportAsked=0
-	open #h_readings=fnH: "Name=[Q]\UBmstr\Readings."&ip1$,display,input
+	open #h_readings=fnH: 'Name=[Q]\UBmstr\Readings.'&ip1$,display,input
 	lineCount=0
 	linput #h_readings: hot_ver$
 	lineCount+=1
@@ -2173,12 +2173,12 @@ def fn_hot_parseLine(line$*512,&hot_z$,mat x,mat importDataField$,mat importData
 	if lfItem$(1)='source file' or lfItem$(1)(1:1)='!' then
 		! do nothing     goto hpFinis
 	else
-		if lfItem$(2)='kwh' then lfItem$(2)="electric"
-		if lfItem$(1)="customer" then
-			if lfItem$(2)="number" then
+		if lfItem$(2)='kwh' then lfItem$(2)='electric'
+		if lfItem$(1)='customer' then
+			if lfItem$(2)='number' then
 				hot_z$=lpad$(trim$(hpValue$),10)
 			end if
-		else if lfItem$(1)="meterchangeout" then
+		else if lfItem$(1)='meterchangeout' then
 			if lfItem$(2)='readingbefore' then
 				if lfItem$(3)='water' then
 					hotWaterMeterChangeBefore=hpValueN
@@ -2192,46 +2192,46 @@ def fn_hot_parseLine(line$*512,&hot_z$,mat x,mat importDataField$,mat importData
 					pr 'encountered '&hpField$&' - add code to process it' : pause
 				end if
 			end if
-		else if lfItem$(1)="reading" and udim(mat lfItem$)=2 then
-			if lfItem$(2)="water" or lfItem$(2)="wa" then
+		else if lfItem$(1)='reading' and udim(mat lfItem$)=2 then
+			if lfItem$(2)='water' or lfItem$(2)='wa' then
 				x(1)=hpValueN
-			else if lfItem$(2)="gas" then
+			else if lfItem$(2)='gas' then
 				x(2)=hpValueN
-			else if lfItem$(2)="electric" then
+			else if lfItem$(2)='electric' then
 				x(3)=hpValueN
-			else if lfItem$(2)="demand" then
+			else if lfItem$(2)='demand' then
 				x(4)=hpValueN
 			end if
-		else if lfItem$(1)="charge" then
-			if lfItem$(2)="sewer" then
+		else if lfItem$(1)='charge' then
+			if lfItem$(2)='sewer' then
 				x(5)=hpValueN
-			else if lfItem$(2)="sanitation" then
+			else if lfItem$(2)='sanitation' then
 				x(6)=hpValueN
-			else if lfItem$(2)="fire protection" then
+			else if lfItem$(2)='fire protection' then
 				x(7)=hpValueN
-			else if lfItem$(2)="other" then
+			else if lfItem$(2)='other' then
 				x(8)=hpValueN
-			else if lfItem$(2)="water" then
+			else if lfItem$(2)='water' then
 				x(9)=hpValueN
-			else if lfItem$(2)="electric" then
+			else if lfItem$(2)='electric' then
 				x(10)=hpValueN
-			else if lfItem$(2)="gas" then
+			else if lfItem$(2)='gas' then
 				x(11)=hpValueN
 			end if
-		else if lfItem$(1)="used" or lfItem$(1)="usage" then
-			if lfItem$(2)="water" then
+		else if lfItem$(1)='used' or lfItem$(1)='usage' then
+			if lfItem$(2)='water' then
 				x(12)=hpValueN
-			else if lfItem$(2)="kwh" then
+			else if lfItem$(2)='kwh' then
 				x(13)=hpValueN
-			else if lfItem$(2)="gas" then
+			else if lfItem$(2)='gas' then
 				x(14)=hpValueN
 			end if
-		else if lfItem$(1)="final billing code" then
+		else if lfItem$(1)='final billing code' then
 			x(15)=hpValueN
-		else if lfItem$(1)="meter" then
-			if lfItem$(2)="tamper" then
+		else if lfItem$(1)='meter' then
+			if lfItem$(2)='tamper' then
 				fn_write_tamper(hot_z$,hpValueN)
-			else if lfItem$(2)="meter number" or lfItem$(2)="transmitter" or lfItem$(2)="longitude" or lfItem$(2)="latitude" then
+			else if lfItem$(2)='meter number' or lfItem$(2)='transmitter' or lfItem$(2)='longitude' or lfItem$(2)='latitude' then
 				if lfItem$(3)='water' then
 					fnAddOneC(mat hotImportDataField$,hpField$)
 					fnAddOneC(mat hotImportDataValue$,hpValue$)
@@ -2336,8 +2336,8 @@ def fn_hot_writeWork(hWork,hwwAccount$,mat x,&hotDataImportAsked,&hotDataImportE
 					location$(loc_latitude)=hotImportDataValue$(hotIdX)
 					rewrite #hLocation,using form$(hLocation),key=locationKey$: mat location$,mat locationN
 				else if hotImportDataField$(hotIdX)='customer.sequence' then
-					! *TODO: rewtite for customer.sequence "
-					pr "rewrite #hCustomer1,using 'form',key=x$: "
+					! *TODO: rewtite for customer.sequence '
+					pr 'rewrite #hCustomer1,using "form",key=x$: '
 					pause
 				else
 					pr ' add code to update '&hotImportDataField$(hotIdX)

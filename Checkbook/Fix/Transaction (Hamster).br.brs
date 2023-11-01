@@ -1,136 +1,71 @@
-! Checkbook Transaction File
-!
 autoLibrary
-  on error goto Ertn
-!
-  dim cap$*128,lbl$(11)*38,tln(11),p$(11)*160,fltyp$(11),mask(11),sln(11),c$(11,8)*256
-!
-  fnTop(program$,cap$='Transaction (Hamster)')
-  gosub BUILD_LAYOUT
-  gosub OPEN_FILE : gosub CLOSE_FILE : gosub OPEN_FILE
-  fnHamster('Transaction',mat lbl$,mat tln,1,mat p$,mat fltyp$,mat sln,mat mask,mat sp,mat c$)
-  goto Xit
-!
-OPEN_FILE: !
-  open_file_count=0 ! this value is used in the close_file sub routine
-  open #open_file_count+=1: 'Name=[Q]\CLmstr\TrMstr.h[cno],Version=2,KFName=[Q]\CLmstr\TrIdx1.h[cno],Use,RecL=78,KPs=1,KLn=11,Shr',i,outIn,k
-  open #open_file_count+=1: 'Name=[Q]\CLmstr\TrMstr.h[cno],Version=2,KFName=[Q]\CLmstr\TrIdx2.h[cno],Use,RecL=78,KPs=28/1,KLn=8/11,Shr',i,outIn,k
-  open #open_file_count+=1: 'Name=[Q]\CLmstr\TrMstr.h[cno],Version=2,KFName=[Q]\CLmstr\TrIdx3.h[cno],Use,RecL=78,KPs=16/12/4,KLn=2/4/8,Shr',i,outIn,k
-  return
-!
-CLOSE_FILE: for j=1 to open_file_count : close #j: : next j : return
-!
-BUILD_LAYOUT: !
-  lbl$(1)='Bank'
-  lbl$(2)='Transaction Type'
-  lbl$(3)='Check/Reference Number'
-  lbl$(4)='Check Date'
-  lbl$(5)='Amount'
-  lbl$(6)='Payee'
-  lbl$(7)='Name/Description (1 of 2)'
-  lbl$(8)='Name/Description (2 of 2)'
-  lbl$(9)='Posting Code'
-  lbl$(10)='Statement Date Cleared'
-  lbl$(11)='Source Code'
-! ** Text Box / Field Display   Lengths   **
-  ic=0 ! temporary Item Counter
-  mmddyy=8
-  ccyymmdd=10
-  tln(ic+=1)=2
-  tln(ic+=1)=1
-  tln(ic+=1)=8
-  tln(ic+=1)=mmddyy
-  tln(ic+=1)=19
-  tln(ic+=1)=8
-  tln(ic+=1)=34
-  tln(ic+=1)=1
-  tln(ic+=1)=1
-  tln(ic+=1)=mmddyy
-  tln(ic+=1)=1
-! ** Field Types **
-  ic=0
-  fltyp$(ic+=1)='N'
-  fltyp$(ic+=1)='N'
-  fltyp$(ic+=1)='Cr'
-  fltyp$(ic+=1)='G'
-  fltyp$(ic+=1)='PD'
-  fltyp$(ic+=1)='Cr'
-  fltyp$(ic+=1)='C'
-  fltyp$(ic+=1)='C'
-  fltyp$(ic+=1)='N'
-  fltyp$(ic+=1)='N'
-  fltyp$(ic+=1)='N'
-! ** Field Storage Lengths **
-  ic=0
-  mmddyy=6 : ccyymmdd=8
-  sln(ic+=1)=2
-  sln(ic+=1)=1
-  sln(ic+=1)=8
-  sln(ic+=1)=mmddyy
-  sln(ic+=1)=10.2
-  sln(ic+=1)=8
-  sln(ic+=1)=34
-  sln(ic+=1)=1
-  sln(ic+=1)=1
-  sln(ic+=1)=mmddyy
-  sln(ic+=1)=1
-! ** Field Masks **
-  ic=0
-  pointtwo=32 : number=30
-  ccyymmdd=3 : mmddyy=1
-  mask(ic+=1)=0
-  mask(ic+=1)=0
-  mask(ic+=1)=0
-  mask(ic+=1)=mmddyy
-  mask(ic+=1)=pointtwo
-  mask(ic+=1)=0
-  mask(ic+=1)=0
-  mask(ic+=1)=0
-  mask(ic+=1)=number
-  mask(ic+=1)=mmddyy
-  mask(ic+=1)=number
-! ** Storage Positions **
-  ! default to the same as order displayed
-  ic=0
-! ** Combo Boxes **
-  ! CL=Field Number  : C$(CL,1)='ComboF'
-  ! C$(CL,2)=Linked File Name
-  ! C$(CL,3)=Key Position         : C$(CL,4)=Key Length
-  ! C$(CL,5)=Description Position : C$(CL,6)=Description Length
-  ! C$(CL,7)=Index File
-  ! C$(CL,8)=limit to list option ('1'=Yes; '0'=No)
-  limit_to_list$='1'
-  cl=1 : c$(cl,1)='ComboF'
-  c$(cl,2)='[Q]\CLmstr\BankMstr.h[cno]'
-  c$(cl,3)='1' : c$(cl,4)='2'
-  c$(cl,5)='3' : c$(cl,6)='30'
-  c$(cl,7)='[Q]\CLmstr\BankIdx1.h[cno]'
-  c$(cl,8)=limit_to_list$
-  cl=2 : c$(cl,1)='ComboF'
-  c$(cl,2)='S:\Core\Data\TransactionType.dat'
-  c$(cl,3)='1' : c$(cl,4)='1'
-  c$(cl,5)='2' : c$(cl,6)='25'
-  c$(cl,7)='S:\Core\Data\TransactionType.idx'
-  c$(cl,8)=limit_to_list$
-  cl=6 : c$(cl,1)='ComboF'
-  c$(cl,2)='[Q]\CLmstr\PayMstr.h[cno]'
-  c$(cl,3)='1' : c$(cl,4)='8'
-  c$(cl,5)='9' : c$(cl,6)='30'
-  c$(cl,7)='[Q]\CLmstr\PayIdx1.h[cno]'
-  c$(cl,8)=limit_to_list$
-  cl=9 : c$(cl,1)='ComboF'
-  c$(cl,2)='S:\Core\Data\Checkbook\PostingCode.dat'
-  c$(cl,3)='1' : c$(cl,4)='1'
-  c$(cl,5)='2' : c$(cl,6)='25'
-  c$(cl,7)='S:\Core\Data\Checkbook\PostingCode.idx'
-  c$(cl,8)=limit_to_list$
-  cl=11 : c$(cl,1)='ComboF'
-  c$(cl,2)='S:\Core\Data\Checkbook\SourceCode.dat'
-  c$(cl,3)='1' : c$(cl,4)='1'
-  c$(cl,5)='2' : c$(cl,6)='25'
-  c$(cl,7)='S:\Core\Data\Checkbook\SourceCode.idx'
-  c$(cl,8)=limit_to_list$
-  return
+on error goto Ertn
+fnTop(program$,'Transaction (Hamster)')
+open #hPrimary=1: 'Name=[Q]\CLmstr\TrMstr.h[cno],Version=2,KFName=[Q]\CLmstr\TrIdx1.h[cno],Use,RecL=84,KPs=1,KLn=11,Shr',i,outIn,k
+open #2: 'Name=[Q]\CLmstr\TrMstr.h[cno],Version=2,KFName=[Q]\CLmstr\TrIdx2.h[cno],Use,RecL=84,KPs=28/1,KLn=8/11,Shr',i,outIn,k
+open #3: 'Name=[Q]\CLmstr\TrMstr.h[cno],Version=2,KFName=[Q]\CLmstr\TrIdx3.h[cno],Use,RecL=84,KPs=16/12/4,KLn=2/4/8,Shr',i,outIn,k
+! r: Layout
+	dim lbl$(11)*38,tln(11),p$(11)*160,fltyp$(11),mask(11),sln(11),c$(11,8)*256
+	pointtwo=32 : number=30 : mmddyy=1 ! for masks only
+	ic=0 ! temporary Item Counter
+	! fields:                                            length             typ      storage length    storage pos      mask
+	lbl$(ic+=1)='Bank'                         	: tln(ic)= 2 : fltyp$(ic)='C' 	: sln(ic)= 2  	: p$(ic)= '1'	: mask(ic)=0
+	lbl$(ic+=1)='Transaction Type'            	: tln(ic)= 1 : fltyp$(ic)='C' 	: sln(ic)= 1  	: p$(ic)= '3'	: mask(ic)=0
+	lbl$(ic+=1)='Check/Reference Number'     	: tln(ic)= 8 : fltyp$(ic)='Cr'	: sln(ic)= 8  	: p$(ic)= '4'	: mask(ic)=0
+	lbl$(ic+=1)='Check Date'                  	: tln(ic)= 8 : fltyp$(ic)='G' 	: sln(ic)= 6  	: p$(ic)='12'	: mask(ic)=mmddyy
+	lbl$(ic+=1)='Amount'                       	: tln(ic)=19 : fltyp$(ic)='PD'	: sln(ic)=10.2 	: p$(ic)='18' 	: mask(ic)=pointtwo
+	lbl$(ic+=1)='Payee'                        	: tln(ic)= 8 : fltyp$(ic)='Cr'	: sln(ic)= 8  	: p$(ic)='28'	: mask(ic)=0
+	lbl$(ic+=1)='Name/Description'            	: tln(ic)=35 : fltyp$(ic)='C' 	: sln(ic)=35  	: p$(ic)='36'	: mask(ic)=0
+	lbl$(icPost=ic+=1)='Posting Code'         	: tln(ic)= 1 : fltyp$(ic)='N' 	: sln(ic)= 1  	: p$(ic)='71'	: mask(ic)=number
+	lbl$(ic+=1)='Statement Date Cleared'     	: tln(ic)= 8 : fltyp$(ic)='N' 	: sln(ic)= 6  	: p$(ic)='72'	: mask(ic)=mmddyy
+	lbl$(icSource=ic+=1)='Source Code'       	: tln(ic)= 1 : fltyp$(ic)='N' 	: sln(ic)= 1  	: p$(ic)='78'	: mask(ic)=number
+	lbl$(ic+=1)='(unknown)'                    	: tln(ic)= 6 : fltyp$(ic)='C' 	: sln(ic)= 6  	: p$(ic)='79'	: mask(ic)=0
+
+	! ** Combo Boxes **
+		! xf=Field Number  : C$(xf,1)='ComboF'
+		! C$(xf,2)=Linked File Name
+		! C$(xf,3)=Key Position         : C$(xf,4)=Key Length
+		! C$(xf,5)=Description Position : C$(xf,6)=Description Length
+		! C$(xf,7)=Index File
+		! C$(xf,8)=limit to list option ('1'=Yes; '0'=No)
+	limit_to_list$='1'
+	xf=1 : c$(xf,1)='ComboF'
+	c$(xf,2)='[Q]\CLmstr\BankMstr.h[cno]'
+	c$(xf,3)='1' : c$(xf,4)='2'
+	c$(xf,5)='3' : c$(xf,6)='30'
+	c$(xf,7)='[Q]\CLmstr\BankIdx1.h[cno]'
+	c$(xf,8)=limit_to_list$
+	xf=2 : c$(xf,1)='ComboF'
+	c$(xf,2)='S:\Core\Data\TransactionType.dat'
+	c$(xf,3)='1' : c$(xf,4)='1'
+	c$(xf,5)='2' : c$(xf,6)='25'
+	c$(xf,7)='S:\Core\Data\TransactionType.idx'
+	c$(xf,8)=limit_to_list$
+	xf=6 : c$(xf,1)='ComboF'
+	c$(xf,2)='[Q]\CLmstr\PayMstr.h[cno]'
+	c$(xf,3)='1' : c$(xf,4)='8'
+	c$(xf,5)='9' : c$(xf,6)='30'
+	c$(xf,7)='[Q]\CLmstr\PayIdx1.h[cno]'
+	c$(xf,8)=limit_to_list$
+	xf=icPost ! 9-1
+		c$(xf,1)='ComboF'
+	c$(xf,2)='S:\Core\Data\Checkbook\PostingCode.dat'
+	c$(xf,3)='1' : c$(xf,4)='1'
+	c$(xf,5)='2' : c$(xf,6)='25'
+	c$(xf,7)='S:\Core\Data\Checkbook\PostingCode.idx'
+	c$(xf,8)=limit_to_list$
+	xf=icSource ! 11-1
+		c$(xf,1)='ComboF'
+	c$(xf,2)='S:\Core\Data\Checkbook\SourceCode.dat'
+	c$(xf,3)='1' : c$(xf,4)='1'
+	c$(xf,5)='2' : c$(xf,6)='25'
+	c$(xf,7)='S:\Core\Data\Checkbook\SourceCode.idx'
+	c$(xf,8)=limit_to_list$
+! /r
+
+fnHamster('Transaction',mat lbl$,mat tln,hPrimary,mat p$,mat fltyp$,mat sln,mat mask,mat sp,mat c$)
+goto Xit
+
 
 Xit: fnXit
 include: ertn

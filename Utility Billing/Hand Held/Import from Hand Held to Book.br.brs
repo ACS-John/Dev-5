@@ -874,10 +874,12 @@ fnend
 				fn_ilrt_lineParseDelimited(line$,z$,colAccount,reading$,colReading, readingDate$,colReadingDate)
 				keyExists=fnKeyExists(hCustomer,z$, 2) ! fixes the account number if possible
 				if keyExists<=0 then
-					pr 'could not locate an account for "'&lineItem$(colAccount)&'"'
-					pr 'keyExists=';keyExists
+					fnStatus('SKIPPING LINE '&str$(lineCount)&'- Could not locate customer account: "'&z$&'"')
+					! pr 'could not locate an account for "'&z$&'"'
+					! pr 'keyExists=';keyExists
 					pr bell
-					pause
+					fnStatusPause
+					! pause
 				else if trim$(fnCustomerData$(z$,'final billing code',1))<>'' then
 					fnStatus('SKIPPING LINE '&str$(lineCount)&'- INACTIVE "'&fnCustomerData$(z$,'final billing code',1)&'" CUSTOMER ACCOUNT '&z$)
 					pr bell;
