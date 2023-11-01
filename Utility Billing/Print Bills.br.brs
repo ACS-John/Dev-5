@@ -190,12 +190,6 @@ PrintBill_Basic: ! r: set prefrences for clients
 		usPostagePermitNumber=1
 		penaltyFlatAmount=5
 		relaceBulkSortCodeWithCustName=1
-	! else if env$('client')='Thomasboro' then ! added 7/25/2020 removed 10/3/22
-	! 	poundBeforeAccount$='#' ! only for diff - making sure things match - then take it back out. it's lame
-	! 	usPostagePermitNumber=1
-	! 	enable_BulkSort=1
-	! else if env$('client')='Alien Electric' then
-	! 	usPostagePermitNumber=555
 	end if
 	! /r
 !   enable_cassSort=1

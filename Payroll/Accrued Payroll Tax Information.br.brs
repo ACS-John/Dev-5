@@ -5,8 +5,8 @@ on error goto Ertn
 ! r: set/read constants and open files
 	dim resp$(40)*128
 
-	dim fullname$(20)*20,abbrevname$(20)*8,dedcode(20),calcode(20),dedfed(20),dedfica(20),dedst(20),deduc(20),gl$(20)*12
-	fnDedNames(mat fullname$,mat abbrevname$,mat dedcode,mat calcode,mat dedfed,mat dedfica,mat dedst,mat deduc,mat gl$)
+	dim fullname$(20)*20,abbrevname$(20)*8,dedcode(20) ! ,calcode(20),dedfed(20),dedfica(20),dedst(20),deduc(20),gl$(20)*12
+	fnDedNames(mat fullname$,mat abbrevname$,mat dedcode) ! ,mat calcode,mat dedfed,mat dedfica,mat dedst,mat deduc,mat gl$)
 	
 	dim label1$(22)*20
 	label1$(1)='Fica Match'

@@ -286,12 +286,13 @@ def library fnCurSys$(; cursys_set$*256,resetCache,___,curSystem$*256)
 		if curSystem$='Client Billing' then
 			fnSetEnv('CurSysData','S:\Core\Data\acsllc')
 		else
-			fnSetEnv('CurSysData','[Q]\[cursys]mstr')
+			fnSetEnv('CurSysData',env$('Q')&'\'&env$('cursys')&'mstr') ! '[Q]\[CurSys]mstr'
 		end if
 	! return ! /r
 	end if
 	fncursys$=cursys_cache$
 fnend
+
 def library fnStandardizeSysId$(return$*256)
 	fnStandardizeSysId$=fn_standardizeSysId$(return$)
 fnend

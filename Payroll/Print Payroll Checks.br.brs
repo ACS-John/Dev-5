@@ -317,7 +317,7 @@ ScrMainQestions: ! r:
 		if pr_prNetZeroChecks$='True' and ttc(32)=0 and fndate_mmddyy_to_ccyymmdd(lpd)=d1 then goto ReadEmployeeFinis ! pr zero checks
 		if ttc(32)=0 then goto ReadNextEmployee ! no earnings
 		ReadEmployeeFinis: ! /r
-	
+
 		ttc(26)=ttc(26)-tpd3-tpd4-tpd5
 		ttc(28)=ttc(28)+ttc(29)+ttc(30) ! OTHER COMP-CURRENT
 		ttc(1)=ttc(1)-ttc(25)
@@ -375,7 +375,7 @@ ScrMainQestions: ! r:
 		end if
 		rewrite #h_gl_glbrec,using F_GL_GLBREC: bankgl$,lpad$(rtrm$(str$(check_number)),12),em$(1),'PR',dat,ttc22,0
 		goto L3320
-	
+
 		L3300: !
 		write #h_gl_glbrec,using F_GL_GLBREC: bankgl$,lpad$(rtrm$(str$(check_number)),12),em$(1),'PR',dat,ttc22,0
 		F_GL_GLBREC: form pos 1,2*c 12,c 30,c 2,n 6,pd 5.2,n 1
@@ -543,11 +543,11 @@ def fn_buildCheckRecord
 	! tr$(4)(0:0)=trim$(pr_clPayeePrefix$)
 	write #h_clTrans1,using F_CL_TRANS_V1: bankcode,1,tr$(1),tr2,tx3,tr$(4),tr$(5),0,clr,4
 	read #h_clPayee,using 'form pos 129,pd 5.2',key=lpad$(rtrm$(tr$(4)),8): ytdp nokey L4690 ! UPDATE PAYEE FILE
-	ytdp=ytdp+val(tr$(3)) conv ignore
+	ytdp+=val(tr$(3)) conv ignore
 	L4690: !
 	read #h_clBank,using F_clBank,key=lpad$(str$(bankcode),2),release: bn$,bal,upi,lcn$ nokey NoKeyOnClBank
 	bn$=rtrm$(bn$)
-	bal=bal-val(tr$(3)) conv ignore
+	bal-=val(tr$(3)) conv ignore
 	rewrite #h_clBank,using F_clBank,key=lpad$(str$(bankcode),2): bn$,bal,upi,tr$(1) nokey NoKeyOnClBank
 	NoKeyOnClBank: !
 	F_CL_TRANS_V1: form pos 1,n 2,n 1,c 8,g 6,pd 10.2,c 8,c 35,n 1,n 6,n 1,2*pd 3
@@ -564,8 +564,27 @@ def fn_buildCheckRecord
 
 		if j=1 then
 			goto L4840
-		else if j=>2 and j<=26 then
-			goto L4910
+		else if j=2 then
+			sd5$='Federal WH' : gl$=gln$(1)
+			! pr 'gl$=gln$(1)'
+			goto L4990
+		else if j=3 then
+			sd5$='FICA WH' : gl$=gln$(2) : fica0=val(ded$(j))
+			! pr 'gl$=gln$(2)'
+			goto L4990
+		else if j=4 then
+			sd5$='Medicare' : gl$=gln$(2) : medi0=val(ded$(j))
+			! pr 'gl$=gln$(2)'
+			goto L4990
+		else if j=5 then
+			sd5$='State WH' : gl$=gln$(3)
+			! pr 'gl$=gln$(3)'
+			goto L4990
+		else if j>5 and j<26 then
+			sd5$=abrevName$(j-5) : gl$=dedGl$(j-5)
+			goto L4990
+		else if j=26 then
+			gl$=gln$(1): sd5$='eic' : goto L4990 ! use federal
 		else if j=>27 and j<=28 then
 			goto L5220_Next_J1
 		else if j=29 then
@@ -593,17 +612,17 @@ def fn_buildCheckRecord
 			sd5$='Gross Pay'
 			goto L4990
 
-			L4910: !
-			if j=2 then sd5$='Federal WH' 	: gl$=gln$(1)  : pr 'gl$=gln$(1)'
-			if j=3 then sd5$='FICA WH'    	: gl$=gln$(2)  : pr 'gl$=gln$(2)'    : fica0=val(ded$(j))
-			if j=4 then sd5$='Medicare'   	: gl$=gln$(2)  : pr 'gl$=gln$(2)'    : medi0=val(ded$(j)): goto L4990
-			if j=5 then sd5$='State WH'   	: gl$=gln$(3)  : pr 'gl$=gln$(3)'
-			if j>5 and j<26 then sd5$=abrevName$(j-5) : gl$=dedGl$(j-5)
-			if j=26 then gl$=gln$(1): sd5$='eic' : goto L4990 ! use federal
-			! if j=27 then goto L4990 ! skip tips i think
-			! If J=28 Then gL$=GLN$(1): sD5$='Meals' : Goto 4890 ! use wages
-
+			! L4910: !
+			! if j=2 then sd5$='Federal WH' 	: gl$=gln$(1)  : pr 'gl$=gln$(1)'
+			! if j=3 then sd5$='FICA WH'    	: gl$=gln$(2)  : pr 'gl$=gln$(2)'    : fica0=val(ded$(j))
+			! if j=4 then sd5$='Medicare'   	: gl$=gln$(2)  : pr 'gl$=gln$(2)'    : medi0=val(ded$(j)) : goto L4990
+			! if j=5 then sd5$='State WH'   	: gl$=gln$(3)  : pr 'gl$=gln$(3)'
+			! if j>5 and j<26 then sd5$=abrevName$(j-5) : gl$=dedGl$(j-5)
+			! if j=26 then gl$=gln$(1): sd5$='eic' : goto L4990 ! use federal
+			! ! if j=27 then goto L4990 ! skip tips i think
+			! ! If J=28 Then gL$=GLN$(1): sD5$='Meals' : Goto 4890 ! use wages
 			L4990: !
+
 			cd1=1
 				! pr 'gl$="'&gl$&'"'
 				! pr 'fnCleanGl$="'&fnCleanGl$(gl$)&'"'
@@ -612,19 +631,30 @@ def fn_buildCheckRecord
 			invalidCount=0
 			read #h_clGl,using F_CL_GLMSTR,key=rpad$(gl$,kln(h_clGl)),release: de$ nokey InvalidGlNumber
 			F_CL_GLMSTR: form pos 13,c 30
+
 			BCR_GLN_VALIDATED: !
+
 			if j>1 then alloc=val(ded$(j))
+
 			if j=29 then miscode=(alloc*100)+29 else miscode=j
 			! store # of deduction in the invoice date field;
 			! if weeks worked store weeks worked and code both
+
 			if j>1 then alloc=-alloc
+
 			if j<6 or j>25 then goto L5070 ! all tax w/h = negative
+
 			if dedcode(j-5)=2 then alloc=-alloc ! reverse on additions to net
+
 			L5070: !
+
 			if j=30 then alloc=0 ! meals
+
 			!       if env$('client')='Washington Parrish' and j=16 then alloc=0 ! don't allow tips to post on washington parrish
-			if j=4 and ficam1=1 then alloc=alloc-medic3 ! prb 2012
-			if j=3 and ficam1=1 then alloc=alloc-ficam3 ! prb 2012
+
+			if j=4 and ficam1=1 then alloc-=medic3 ! prb 2012
+			if j=3 and ficam1=1 then alloc-=ficam3 ! prb 2012
+
 			if alloc<>0 then  ! write non-zero allocations
 				lr3=lrec(h_clTransAlloc)+1
 				if j=3 then
@@ -636,6 +666,7 @@ def fn_buildCheckRecord
 				write #h_clTransAlloc,using F_ClTransAlloc,rec=lr3: bankcode,1,val(tr$(1)),gl$,alloc,de$(1:30),miscode,0
 				F_ClTransAlloc:  form pos 1,n 2,n 1,g 8,c 12,pd 5.2,c 30,n 6,pd 3
 			end if
+
 			L5220_Next_J1: !
 		if j=1 then next j1
 		BcrNextJ: !
@@ -1527,7 +1558,7 @@ fnend
 		! tdep(j2,4) gl account part 3 ! made redundant by mat tdepGl$
 		! tdep(j2,5) department number
 		! tdep(j2,6) fica match
-		! 
+
 		if tdepXcount then
 			for j2=1 to tdepXcount
 				if tdep(j2,5)=tdn then goto adt_L1790
@@ -1601,7 +1632,7 @@ InvalidGlNumber: ! r:
 		fnLbl(2,1,'Department Number:',mylen,1)               	: fnTxt(2,mypos,10, 0,0,'',1) : resp$(2)=str$(tdn)
 		fnLbl(4,1,'Invalid General Ledger Number:',mylen,1) 	: fnTxt(4,mypos,12, 0,0,'',1) : resp$(3)=gl$
 		fnLbl(5,1,'Purpose for GL Number:',mylen,1)          	: fnTxt(5,mypos,40, 0,0,'',1) : resp$(4)=sd5$
-	
+
 		fnLbl(7,1,'The General Ledger Number is invalid.',40,0)
 		fnLbl(8,1,'Please select the correct one.',40,0)
 		fnLbl(3,1,'Correct General Ledger Number:',mylen,1) 	: fnQgl(3,mypos,0,2)       	: resp$(5)=fnRgl$(goodgl$)
