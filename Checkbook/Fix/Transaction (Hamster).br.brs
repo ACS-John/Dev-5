@@ -1,6 +1,6 @@
 autoLibrary
 on error goto Ertn
-fnTop(program$,'Transaction (Hamster)')
+fnTop(program$)
 open #hPrimary=1: 'Name=[Q]\CLmstr\TrMstr.h[cno],Version=2,KFName=[Q]\CLmstr\TrIdx1.h[cno],Use,RecL=84,KPs=1,KLn=11,Shr',i,outIn,k
 open #2: 'Name=[Q]\CLmstr\TrMstr.h[cno],Version=2,KFName=[Q]\CLmstr\TrIdx2.h[cno],Use,RecL=84,KPs=28/1,KLn=8/11,Shr',i,outIn,k
 open #3: 'Name=[Q]\CLmstr\TrMstr.h[cno],Version=2,KFName=[Q]\CLmstr\TrIdx3.h[cno],Use,RecL=84,KPs=16/12/4,KLn=2/4/8,Shr',i,outIn,k

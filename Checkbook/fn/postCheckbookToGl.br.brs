@@ -519,9 +519,36 @@ def library fnPostCheckbookToGl(; enablePost,___,pg)
 		gosub CreateFundTransfers
 	goto Areturn ! /r
 	Areturn: !
-	return  !
+	return
 	Xit: !
 fnend
+	CreateFundTransfers: ! r:
+		if EndAll=1 then goto EoFundTr
+		if uprc$(gw$(1:3))=uprc$(bgl$(1:3)) then goto EoFundTr
+		if val(gw$(1:3))=0 then goto EoFundTr
+		td$='Fund Transfer'
+		gl1$=gl2$=gl3$='  0     0  0'
+		read #hGlControl,using FglControl2,key=gw$(1:3): gl1$,gl2$,gl3$ nokey EoFundTr
+		gl1$=lpad$(rtrm$(gl1$),9)
+		gl2$=lpad$(rtrm$(gl2$),9)
+		if val(gl1$(1:3))=0 and val(gl1$(4:9))=0 and val(gl1$(10:12))=0 then
+			goto EoFundTr ! no interfund entries if no gl # in i/f file
+		else if val(gl2$(1:3))=0 and val(gl2$(4:9))=0 and val(gl2$(10:12))=0 then
+			goto EoFundTr ! no interfund entries if no gl # in i/f file
+		end if
+		read #hGlControl,using FglControlGw,key=bgl$(1:3): bankgl3$ nokey EoFundTr
+		if gde>1 and gl3$=bankgl3$ then goto EoFundTr ! skip as check if previously posted interfund transfers in the Unpaid Invoice File (will post in unpaid file if AP numbers same in fund file
+		if enablePost then
+			! fn_checkGlnumber('gw&gl1',gw$(1:3)&gl1$)
+			write #hGlwk,using 'form pos 1,C 12,N 6,PD 6.2,2*N 2,C 12,C 30,C 8,C 6,C 5,C 3,C 12': gw$(1:3)&gl1$,tr4,-tr5,tr6,0,tr$,td$,'','','','',bgl$
+			! fn_checkGlnumber('bgl&gl2',bgl$(1:3)&gl2$)
+			write #hGlwk,using 'form pos 1,C 12,N 6,PD 6.2,2*N 2,C 12,C 30,C 8,C 6,C 5,C 3,C 12': bgl$(1:3)&gl2$,tr4,tr5,tr6,0,tr$,td$,'','','','',bgl$
+		end if
+		if enableDistributionListing then
+			pr #255,using 'form pos 1,X 14,C 60': 'Transferred from '&gw$(1:3)&gl1$&' to '&bgl$(1:3)&gl2$&cnvrt$('N 10.2',tr5) pageoflow NewPge
+		end if
+		EoFundTr: !
+	return  ! /r
 	def fn_gLBucketStuff(enablePost,&glb,pr2$,&glwk2wsid; ___,hGlBucket,glwk$*256,returnN)
 		if enablePost then
 			open #hGlBucket=fnH: 'Name=[Q]\GLmstr\GLBucket.h[cno]',i,i,r ioerr ignore
@@ -600,33 +627,7 @@ PrdWrite: ! r:
 	L3850: !
 	mat prd=(0)
 return  ! /r
-CreateFundTransfers: ! r:
-	if EndAll=1 then goto EoFundTr
-	if uprc$(gw$(1:3))=uprc$(bgl$(1:3)) then goto EoFundTr
-	if val(gw$(1:3))=0 then goto EoFundTr
-	td$='Fund Transfer'
-	gl1$=gl2$=gl3$='  0     0  0'
-	read #hGlControl,using FglControl2,key=gw$(1:3): gl1$,gl2$,gl3$ nokey EoFundTr
-	gl1$=lpad$(rtrm$(gl1$),9)
-	gl2$=lpad$(rtrm$(gl2$),9)
-	if val(gl1$(1:3))=0 and val(gl1$(4:9))=0 and val(gl1$(10:12))=0 then
-		goto EoFundTr ! no interfund entries if no gl # in i/f file
-	else if val(gl2$(1:3))=0 and val(gl2$(4:9))=0 and val(gl2$(10:12))=0 then
-		goto EoFundTr ! no interfund entries if no gl # in i/f file
-	end if
-	read #hGlControl,using FglControlGw,key=bgl$(1:3): bankgl3$ nokey EoFundTr
-	if gde>1 and gl3$=bankgl3$ then goto EoFundTr ! skip as check if previously posted interfund transfers in the Unpaid Invoice File (will post in unpaid file if AP numbers same in fund file
-	if enablePost then
-		! fn_checkGlnumber('gw&gl1',gw$(1:3)&gl1$)
-		write #hGlwk,using 'form pos 1,C 12,N 6,PD 6.2,2*N 2,C 12,C 30,C 8,C 6,C 5,C 3,C 12': gw$(1:3)&gl1$,tr4,-tr5,tr6,0,tr$,td$,'','','','',bgl$
-		! fn_checkGlnumber('bgl&gl2',bgl$(1:3)&gl2$)
-		write #hGlwk,using 'form pos 1,C 12,N 6,PD 6.2,2*N 2,C 12,C 30,C 8,C 6,C 5,C 3,C 12': bgl$(1:3)&gl2$,tr4,tr5,tr6,0,tr$,td$,'','','','',bgl$
-	end if
-	if enableDistributionListing then
-		pr #255,using 'form pos 1,X 14,C 60': 'Transferred from '&gw$(1:3)&gl1$&' to '&bgl$(1:3)&gl2$&cnvrt$('N 10.2',tr5) pageoflow NewPge
-	end if
-	EoFundTr: !
-return  ! /r
+
 
 def fn_breakdownsAddUp(; ___,returnN)
 	returnN=1
