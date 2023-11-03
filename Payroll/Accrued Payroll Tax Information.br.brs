@@ -7,7 +7,7 @@ on error goto Ertn
 
 	dim fullname$(20)*20,abbrevname$(20)*8,dedcode(20) ! ,calcode(20),dedfed(20),dedfica(20),dedst(20),deduc(20),gl$(20)*12
 	fnDedNames(mat fullname$,mat abbrevname$,mat dedcode) ! ,mat calcode,mat dedfed,mat dedfica,mat dedst,mat deduc,mat gl$)
-	
+
 	dim label1$(22)*20
 	label1$(1)='Fica Match'
 	x=1
@@ -15,14 +15,14 @@ on error goto Ertn
 		if dedcode(j)=3 then label1$(x+=1)=rtrm$(fullname$(j))
 	next j
 	mat label1$(x)
-	
+
 	!                                             if ~exists('[Q]\PRmstr\MGLMstr.h[cno]') then  ! r: create files
 	!                                             	close #1: ioerr ignore
 	!   old should already be created in          	open #1: 'Name=[Q]\PRmstr\MGLMstr.h[cno],RecL=135,Replace',internal,output
 	!      S:\Core\Check File Versions            	close #1:
 	!                                             	execute 'Index [Q]\PRmstr\MGLMstr.h[cno],[Q]\PRmstr\MGLIdx1.h[cno],1,3,Replace,DupKeys'
 	!                                             end if ! /r
-	
+
 	open #hMgl=fnH: 'Name=[Q]\PRmstr\MGLMstr.h[cno],KFName=[Q]\PRmstr\MGLIdx1.h[cno],Shr',i,outIn,k
 	open #hDept=fnH: 'Name=[Q]\PRmstr\DeptName.h[cno],KFName=[Q]\PRmstr\DeptNameIdx.h[cno],Shr',i,i,k
 ! /r

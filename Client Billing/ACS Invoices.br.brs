@@ -5,7 +5,7 @@ client_id_sageAx$='3811'
 client_id_brc$='90'
 enableMinimumMonthlyBill=100
 
-invoice_number=fncreg_read('Last Invoice Number',tmp$)
+! invoice_number=fncreg_read('Last Invoice Number',tmp$)
 invoice_number+=1
 if invoice_number=1 then invoice_number=val(date$(days(date$)-20,'yymm')&'01')
 
