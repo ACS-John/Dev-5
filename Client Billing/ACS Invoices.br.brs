@@ -95,10 +95,10 @@ execute 'sy "C:\ACS\Util\Dev-5 Commit.cmd"'
 			goto Xit
 		else if resp$(1)='True' then
 			fnEmailQueuedInvoices(str$(invoiceDateCcyymmdd))
-			fnMergeInvoices
+			fn_mergeInvoices
 			goto Xit
 		else if resp$(2)='True' then
-			fnMergeInvoices
+			fn_mergeInvoices
 			goto Xit
 		end if
 	loop
