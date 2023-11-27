@@ -1,36 +1,54 @@
 autoLibrary
 on error goto Ertn
-
-dim amt(15,3),iv$(15,3),de$(15,3)*13,ivdate(15,3)
-dim tr(2),misc$(10)*20,miscgl$(10)*12
-dim de$*50,gl$*12,allocde$*30
-dim in3$(150)*30,bn$*30,b$(4)*30
-dim ade$*30,agl(3),de$*50
-dim t1(5),arec(100),d(2)
-dim pr$(4)*30,myact$*20
-dim resp$(92)*50,item4$(2)*35,item5$(2)*35
-dim holdpayee$*50,holdresp$(94)*50,contact$*30,email$*50,fax$*12
-dim inl$(4)*50,ml$(5)*90
-dim allockey$*20
-dim eng$*128,wording$(27)*9,amount(11)
-dim tr$(5)*35,sn$*30,dtr$(5)*35,payeegl$*12,gldesc$*30
-
 fnTop(program$)
-prd=val(date$(4:5)&date$(7:8)&date$(1:2))
-open #bankmstr:=12: 'Name=[Q]\CLmstr\BankMstr.h[cno],KFName=[Q]\CLmstr\BankIdx1.h[cno],Shr',i,outIn,k
-open #h_paymstr1:=13: 'Name=[Q]\CLmstr\PayMstr.h[cno],KFName=[Q]\CLmstr\PayIdx1.h[cno],Shr',i,outIn,k
-open #paymstr2:=14: 'Name=[Q]\CLmstr\PayMstr.h[cno],KFName=[Q]\CLmstr\PayIdx2.h[cno],Shr',i,outIn,k
-open #trmstr1:=1: 'Name=[Q]\CLmstr\TrMstr.h[cno],KFName=[Q]\CLmstr\TrIdx1.h[cno],Shr',i,outIn,k
-open #trmstr2:=2: 'Name=[Q]\CLmstr\TrMstr.h[cno],KFName=[Q]\CLmstr\TrIdx2.h[cno],Shr',i,outIn,k
-open #tralloc:=3: 'Name=[Q]\CLmstr\TrAlloc.h[cno],KFName=[Q]\CLmstr\tralloc-idx.h[cno],Shr',i,outIn,k
-open #hPayTrans:=4: 'Name=[Q]\CLmstr\PayTrans.h[cno],KFName=[Q]\CLmstr\UnPdIdx1.h[cno],Shr',i,outIn,k
-open #hUnPdAlloc:=fnH: 'Name=[Q]\CLmstr\UnPdAloc.h[cno],KFName=[Q]\CLmstr\uaidx2.h[cno],Shr',i,outIn,k
-open #hGlAccount:=fnH: 'Name=[Q]\CLmstr\GLmstr.h[cno],KFName=[Q]\CLmstr\GLIndex.h[cno],Shr',i,outIn,k
-open #hGlControl:=fnH: 'Name=[Q]\CLmstr\Fundmstr.h[cno],KFName=[Q]\CLmstr\Fundidx1.h[cno],Shr',i,i,k
-open #ivpaid:=6: 'Name=[Q]\CLmstr\IvPaid.h[cno],KFName=[Q]\CLmstr\IVIndex.h[cno],Shr',i,outIn,k
-open #payeegl:=17: 'Name=[Q]\CLmstr\payeeGLBreakdown.h[cno],KFName=[Q]\CLmstr\Payeeglbkdidx.h[cno],Shr',i,outIn,k
-fn_get_coinfo
-MENU1: !
+! r: dims, opens, set constants and defaults (i.e. prd)
+	dim amt(15,3),iv$(15,3)
+	dim de2$(15,3)*13,ivdate(15,3)
+	
+	dim de$*50,allocde$*30
+	dim in3$(150)*30,bn$*30,b$(4)*30
+	dim ade$*30,agl(3)
+	dim t1(5),arec(100)
+	dim pr$(4)*30,myact$*20
+	dim resp$(92)*50
+	dim contact$*30,email$*50
+	dim inl$(4)*50,ml$(5)*90
+	dim allockey$*20
+	dim eng$*128,wording$(27)*9,amount(11)
+	dim tr$(5)*35,sn$*30,dtr$(5)*35,payeegl$*12,gldesc$*30
+	
+	prd=val(date$(4:5)&date$(7:8)&date$(1:2))
+	open #bankmstr:=12: 'Name=[Q]\CLmstr\BankMstr.h[cno],KFName=[Q]\CLmstr\BankIdx1.h[cno],Shr',i,outIn,k
+	open #h_paymstr1:=13: 'Name=[Q]\CLmstr\PayMstr.h[cno],KFName=[Q]\CLmstr\PayIdx1.h[cno],Shr',i,outIn,k
+	open #paymstr2:=14: 'Name=[Q]\CLmstr\PayMstr.h[cno],KFName=[Q]\CLmstr\PayIdx2.h[cno],Shr',i,outIn,k
+	open #trmstr1:=1: 'Name=[Q]\CLmstr\TrMstr.h[cno],KFName=[Q]\CLmstr\TrIdx1.h[cno],Shr',i,outIn,k
+	open #trmstr2:=2: 'Name=[Q]\CLmstr\TrMstr.h[cno],KFName=[Q]\CLmstr\TrIdx2.h[cno],Shr',i,outIn,k
+	open #tralloc:=3: 'Name=[Q]\CLmstr\TrAlloc.h[cno],KFName=[Q]\CLmstr\tralloc-idx.h[cno],Shr',i,outIn,k
+	open #hPayTrans:=4: 'Name=[Q]\CLmstr\PayTrans.h[cno],KFName=[Q]\CLmstr\UnPdIdx1.h[cno],Shr',i,outIn,k
+	open #hUnPdAlloc:=fnH: 'Name=[Q]\CLmstr\UnPdAloc.h[cno],KFName=[Q]\CLmstr\uaidx2.h[cno],Shr',i,outIn,k
+	open #hGlAccount:=fnH: 'Name=[Q]\CLmstr\GLmstr.h[cno],KFName=[Q]\CLmstr\GLIndex.h[cno],Shr',i,outIn,k
+	open #hGlControl:=fnH: 'Name=[Q]\CLmstr\Fundmstr.h[cno],KFName=[Q]\CLmstr\Fundidx1.h[cno],Shr',i,i,k
+	open #ivpaid:=fnH: 'Name=[Q]\CLmstr\IvPaid.h[cno],KFName=[Q]\CLmstr\IVIndex.h[cno],Shr',i,outIn,k ! #6
+	open #payeegl:=fnH: 'Name=[Q]\CLmstr\payeeGLBreakdown.h[cno],KFName=[Q]\CLmstr\Payeeglbkdidx.h[cno],Shr',i,outIn,k ! 17
+	! r: get_coinfo
+		open #company=fnH: 'Name=[Q]\CLmstr\Company.h[cno],Shr',i,outi,r
+		dim whgl(5,3)
+		dim dedcode(10)
+		dim xd(2)
+		dim misc$(10)*20
+		dim miscgl$(10)*12
+		read #company,using 'form pos 150,2*N 1,N 2,pos 418,10*C 20,pos 668,10*C 12,pos 298,15*PD 4,pos 618,10*N 1,pos 406,N 1',rec=1,release: mat xd,bankcode ,mat misc$,mat miscgl$,mat whgl,mat dedcode,prenum
+		method$='C' ! temporary kJ  ! Read #COMPANY,Using 'form pos 789,c 1',Rec=1,Release: method$
+		close #company:
+		do
+			read #hPayTrans,using 'form pos 63,N 10.2,N 1',release: upa,pcde eof EO_PAYTRANS_1
+			if pcde=1 then t1(2)+=upa else t1(4)+=upa
+			t1(5)+=upa
+		loop
+		EO_PAYTRANS_1: !
+	! /r
+! /r
+MENU1: ! r: main loop
 	dim lcn$*8
 	read #bankmstr,using 'form pos 3,C 30,pos 45,PD 6.2,PD 6.2,G 8',key=lpad$(str$(bankcode),2),release: bn$,bal,upi,lcn$ nokey MAIN_QUESTIONS
 	t1(1)=bal
@@ -42,20 +60,20 @@ MAIN_QUESTIONS: !
 	if fn_scr_main_questions=5 then goto Xit
 
 	tac=0
-	if ti1=3 and pri=1 then h_vf1=23 else h_vf1=h_paymstr1
-	if ti1=1 then h_vf1=13
+	h_vf1=h_paymstr1
+	if ckoption=1 then h_vf1=13
 	allign=0
-	if ti1=3 then goto REPRINT_CHECKS
+	if ckoption=3 then goto ReprintChecks
 	open #company=15: 'Name=[Q]\CLmstr\Company.h[cno],Shr',i,outi,r
 	rewrite #company,using 'form pos 152,N 2',rec=1: bankcode
 	close #company:
 	read #bankmstr,using 'form pos 3,C 30,pos 45,PD 6.2,PD 6.2,G 8',key=lpad$(str$(bankcode),2),release: bn$,bal,upi,lcn$ nokey MAIN_QUESTIONS
 	mat in3$=('')
 	bn$=rtrm$(bn$)
-	if ti1=1 or ti1=3 then goto CKOPTION1_CHECK_ENTRY
+	if ckoption=1 or ckoption=3 then goto CKOPTION1_CHECK_ENTRY
 	restore #hPayTrans,key>=lpad$(rtrm$(begvn$),8)&'            ': nokey MENU1
 	amt=arec=x=y=0
-	mat amt=(0) : mat de$=('')
+	mat amt=(0) : mat de2$=('')
 READ_4: !
 	dim vn$*8
 	dim disamt(15,3)
@@ -71,18 +89,18 @@ READ_4: !
 	if holdvn$=vn$ or rtrm$(holdvn$)='' then 
 		goto L1130 
 	else 
-		gosub SUB_PRINT_CHECK
+		gosub SubPrintCheck
 	end if
 	L1130: !
-	if arec>30 then gosub SUB_PRINT_CHECK
+	if arec>30 then gosub SubPrintCheck
 	fn_checkDiscount
 	if iv$<>hiv$ then
 		y=y+1
 		if y>2 then y=1
 		if y=1 then x+=1
-		if x>15 then gosub SUB_PRINT_CHECK
+		if x>15 then gosub SubPrintCheck
 		iv$(x,y)=iv$(1:12)
-		de$(x,y)=up$(4)(1:13) ! this one for printing from unpaid file
+		de2$(x,y)=up$(4)(1:13) ! this one for printing from unpaid file
 	end if
 	amt(x,y)=amt(x,y)+upa
 	ivdate(x,y)=dp
@@ -94,17 +112,19 @@ READ_4: !
 	amt=sum(amt)
 	st1=1
 goto READ_4
+EOF_ROUTINE: !
+	if st1=1 then gosub SubPrintCheck
+	fnClosePrn
+	mat amt=(0) : mat de2$=('') : mat iv$=('') : mat de2$=('') : x=y=1
+	st1=0 : holdvn$=''
+goto ScrFinal ! /r
 
-SUB_PRINT_CHECK: ! r:
+SubPrintCheck: ! r:
 	fn_cknum
-	! if env$('client')='Washington Parrish' then fnProcess(1) ! skip Atlantis screen
 	fnOpenPrn
 	ckn1=ckn
-	!   on ckoption goto L1360,L1360 none L1360 ! L1390
-	! L1360: !
 	if amt<=0 then goto L2420
 	if scc$='CSS' then fn_portion_check : fn_portion_stub(1) : fn_portion_stub(2)
-	! L1390: !
 	if scc$='SCS' then fn_portion_stub(1) : fn_portion_check : fn_portion_stub(2)
 	if scc$='SSC' then fn_portion_stub(1) : fn_portion_stub(2) : fn_portion_check
 	if scc$='SCC' then fn_portion_stub(1) : fn_portion_check : fn_portion_check
@@ -120,8 +140,9 @@ UpdateInvoice: ! r:
 	pr #255: newpage
 	fnClosePrn
 	! if env$('client')='Washington Parrish' then fnProcess(0)
+	dim holdpayee$*50
 	holdpayee$=''
-	if ti1=1 then ckoption=1 : allign=2 : goto L2300 ! skip the continue routine when entering and printing checks
+	if ckoption=1 then allign=2 : goto L2300 ! skip the continue routine when entering and printing checks
 	if ~allign then
 		if ckoption=1 or ckoption=3 then
 			mat inl$(4)
@@ -163,7 +184,7 @@ SCR_CKPRT7: !
 	fnCmdSet(2)
 	ckey=fnAcs(mat resp$)
 	if (ckey=5 or ckey=99) and ckoption=1 then fn_write_ck_hist_1 : goto MENU1
-	if (ckey=5 or cmdkey=99) then goto TRANS_TO_CK_HIST
+	if (ckey=5 or cmdkey=99) then fn_write_history : goto Finis
 	for j=1 to 4
 		if resp$(j)(1:1)="T" then allign=j : goto L2300
 	next j
@@ -179,9 +200,9 @@ SCR_CKPRT7: !
 		ckn=ckn+1
 		tr$(1)=str$(ckn)
 	end if
-	goto SUB_PRINT_CHECK
+	goto SubPrintCheck
 	ALIGN_COMPLETED: !
-	if ckoption=3 and allign=3 then goto TRANS_TO_CK_HIST
+	if ckoption=3 and allign=3 then fn_write_history : goto Finis
 	ALIGN_PRINT_NEXT: !
 	if allign=4 and prenum=1 then
 		write #trmstr1,using 'form pos 1,N 2,N 1,G 8,g 6,PD 10.2,C 8,C 35,N 1,N 6,N 1': bankcode,1,ckn,prdmmddyy,0,"","VOID",0,dp,1
@@ -189,8 +210,8 @@ SCR_CKPRT7: !
 	ckn=ckn+1
 	goto L2420
 	L2420: !
-	mat iv$=('') : mat de$=('')
-	mat amt=(0) : mat de$=('')
+	mat iv$=('') : mat de2$=('')
+	mat amt=(0) : mat de2$=('')
 	amt=arec=x=y=0
 	x=y=1
 	st1=0
@@ -200,56 +221,61 @@ SCR_CKPRT7: !
 	tac=0
 	if (ckoption=1 or ckoption=3) and allign=3 then goto MENU1
 return ! /r
-EOF_ROUTINE: ! r:
-	if st1=1 then gosub SUB_PRINT_CHECK
-	fnClosePrn
-! if env$('client')='Washington Parrish' then fnProcess(0)
-	mat amt=(0) : mat de$=('') : mat iv$=('') : mat de$=('') : x=y=1
-	st1=0 : holdvn$=''
-	goto MENU3
-! /r
-MENU3: ! r: (reprint or transfer to history)
+
+ScrFinal: ! r: (reprint or transfer to history)
 	fnTos
 	respc=0
-	fnLbl(1,1,'Reprint Options:',38)
-	item5$(1)='Reprint Checks'
-	item5$(2)='Transfer to Check History'
-	fnComboA('ckprt-cmb1',1,40,mat item5$,tt$)
-	resp$(respc+=1)=item5$(2)
-	fnCmdSet(41): ckey=fnAcs(mat resp$)
-	if resp$(1)=item5$(1) then ti2=1 else ti2=2
+	
+	fnLbl(1,1,'Reprint Options:',16,1)
+	fnOpt(1,18,'Reprint Checks',0)
+	resp$(respc+=1)='False'
+	fnOpt(2,18,'Transfer to Check History',0)
+	resp$(respc+=1)='False'
+
+	! fnLbl(1,1,'Reprint Options:',38)
+	! dim item5$(2)*35
+	! item5$(1)='Reprint Checks'
+	! item5$(2)='Transfer to Check History'
+	! fnComboA('ckprt-cmb1',1,40,mat item5$,tt$)
+	! resp$(respc+=1)=item5$(2)
+	fnCmdSet(41)
+	ckey=fnAcs(mat resp$)
+	if resp$(1)='True' then ti2=1 else ti2=2
 	allign=0
-	on ti2 goto MENU4,TRANS_TO_CK_HIST none MENU3
+	if ti2=1 then 
+		goto ScrReprint
+	else if ti=2 then
+		fn_write_history
+		goto Finis
+	else 
+		goto ScrFinal
+	end if
 ! /r
-MENU4: ! r: (Reprint Options)
+ScrReprint: ! r: (Reprint Options)
 	fnTos
 	respc=0
-	fnLbl(1,1,'Reprint Options:',38)
+	fnLbl(1,1,'Reprint Options:',17)
+	dim item4$(2)*35
 	item4$(1)='Reprint all checks'
 	item4$(2)='Begin with specific Payee'
-	fnComboA('ckprt-cmb2',1,40,mat item4$,tt$)
+	fnComboA('ckprt-cmb2',1,19,mat item4$,tt$)
 	resp$(respc+=1)=item4$(1)
-	fnLbl(3,1,'Beginning payee number:',38)
-	fnComboF('Paymstr',3,10,30,'[Q]\CLmstr\PayMstr.h[cno]',1,8,9,30,'[Q]\CLmstr\Payidx1.h[cno]',0,pas, 'Enter the beginning payee number if you wish to only reprint part of the checks')
+	fnLbl(3,1,'Starting Payee:',17)
+	fnComboF('Paymstr',3,19,0,'[Q]\CLmstr\PayMstr.h[cno]',1,8,9,30,'[Q]\CLmstr\Payidx1.h[cno]',0,pas, 'Enter the beginning payee number if you wish to only reprint part of the checks')
 	resp$(respc+=1)=holdpayee$
 	fnCmdSet(2)
 	ckey=fnAcs(mat resp$)
 	if ckey=5 then goto Xit
 	if resp$(1)=item4$(1) then ti2=1 else ti2=2
 	begvn$=resp$(2)(1:8) ! beginning payee to start reprint
-	on ti2 goto L3430,L3470
-L3430: ! REPRINT ALL
-	restore #hPayTrans,key>='                    ':
-	hiv$='' : de$='' ! ???
-	goto MAIN_QUESTIONS
-L3470: ! reprint beginning with specific payee
-	restore #hPayTrans,key>=lpad$(rtrm$(begvn$),8)&'            ': nokey MENU4
-	hiv$='' : de$=''
-	goto MAIN_QUESTIONS
+	if ti2=1 then ! REPRINT ALL
+		restore #hPayTrans,key>='                    ':
+	else if ti2=2 then ! reprint beginning with specific payee
+		restore #hPayTrans,key>=lpad$(rtrm$(begvn$),8)&'            ': nokey ScrReprint
+	end if
+	hiv$='' : de2$=''
+goto MAIN_QUESTIONS
 ! /r
-TRANS_TO_CK_HIST: ! r: TRANSFER TO CHECK HISTORY
-	fn_write_history
-	goto Finis ! /r
 Finis: ! r: COMPLETE
 	fn_close(1)
 	fn_close(trmstr2)
@@ -261,8 +287,9 @@ Finis: ! r: COMPLETE
 	fn_close(company)
 	if idx then fn_index
 	goto Xit ! /r
-def fn_close(h_closeme)
+def fn_close(&h_closeme)
 	close #h_closeme: ioerr ignore
+	h_closeme=0
 fnend
 Xit: fnXit
 
@@ -280,6 +307,7 @@ CKOPTION1_CHECK_ENTRY_2: !
 ! /r
 STORE_GL_BREAKDOWNS: ! r: store general ledger breakdowns
 	x=0 : tac=0
+	dim holdresp$(94)*50
 	for j=1 to 146 step 5
 		x=x+3
 		if x=33 then x=35 ! skip check# and date (resp$(33)&34
@@ -293,7 +321,10 @@ STORE_GL_BREAKDOWNS: ! r: store general ledger breakdowns
 	if ckey=20 or ckey=21 then
 		goto ASSIGN_SCREENS
 	else
-		goto COMPLETED_WITH_SCREEN
+		screen=0
+		if ckey<>2 then goto PrintRegularChecks ! skip automatic allocation
+		fn_read_standard_breakdowns
+		goto CKOPTION1_CHECK_ENTRY_2
 	end if
 ! /r
 ASSIGN_SCREENS: ! r: assign screen # based on more and back options
@@ -304,39 +335,37 @@ ASSIGN_SCREENS: ! r: assign screen # based on more and back options
 	if ckey=21 and screen=2 then screen=1 : goto L5070
 	if ckey=21 and screen=1 then screen=1 : goto L5070 ! shouldn't happen
 	if ckey=21 and screen=3 then screen=2 : goto L5070
-L5070: for j=1 to 30
+	L5070: !
+	for j=1 to 30
 		if screen=1 then x=j+2
 		if screen=2 then x=j+34
 		if screen=3 then x=j+64
 		if int(j+2/3)=(j+2/3) then resp$(j+2)=holdresp$(x) else resp$(j+2)=holdresp$(x)
 	next j
 	goto CKOPTION1_CHECK_ENTRY_2 ! /r
-COMPLETED_WITH_SCREEN: ! r:
-	screen=0
-	if ckey<>2 then goto PRINT_REGULAR_CHECKS ! skip automatic allocation
-	fn_read_standard_breakdowns
-	goto CKOPTION1_CHECK_ENTRY_2
-! /r
-PRINT_REGULAR_CHECKS: ! r:
+
+PrintRegularChecks: ! r:
 	fn_cknum
 	amt=arec=x=y=0
-	mat amt=(0) : mat de$=('')
+	mat amt=(0) : mat de2$=('')
 	if tac<>val(tr$(3)) then fn_msg_allocations_off : goto CKOPTION1_CHECK_ENTRY_2 ! ALLOCATIONS NOT EQUAL
 	for j=1 to 30 ! kj was 10
-		if in3$(j*5)=hiv$ and rtrm$(hiv$)<>'' then goto L5460
-		y=y+1: if y>2 then y=1
-		if y=1 then x=x+1
-		de$(x,y)=in3$(j*5)(1:13)
-L5460: !
+		! if in3$(j*5)=hiv$ and rtrm$(hiv$)<>'' then goto L5460
+		if in3$(j*5)<>hiv$ or rtrm$(hiv$)='' then
+			y+=1: if y>2 then y=1
+			if y=1 then x+=1
+			de2$(x,y)=in3$(j*5)(1:13)
+		end if
+		! L5460: !
 		amt(x,y)=amt(x,y)+val(in3$(j*5-1))
 		hiv$=in3$(j*5)(1:15)
 	next j
 	amt=val(tr$(3)) : vn$=holdvn$=lpad$(rtrm$(tr$(4)),8)
-	gosub SUB_PRINT_CHECK
+	gosub SubPrintCheck
 	mat holdresp$=('')
 	goto CKOPTION1_CHECK_ENTRY
 ! /r
-REPRINT_CHECKS: ! r:
+ReprintChecks: ! r:
 	fnTos
 	respc=0
 	fnLbl(1,1,'First Check Number to Reprint:',38,1)
@@ -350,55 +379,55 @@ REPRINT_CHECKS: ! r:
 	if ckey=5 then goto Xit
 	firstckn=ckn1=reprintckn=val(resp$(1))
 	lastckn=val(resp$(2)) : if lastckn=0 then lastckn=firstckn
-	if lastckn>0 and lastckn<firstckn then goto REPRINT_CHECKS ! smaller lastckn
-REPRINT_CHECK_LOOP_TOP: !
-	check_ref$=cnvrt$('pic(ZZ)',bankcode)&str$(1)&cnvrt$('n 8',reprintckn)
-	read #trmstr1,using 'form pos 1,C 3,C 8,G 6,PD 10.2,C 8,C 35,N 1,N 6,N 1',key=check_ref$: newkey$,tr$(1),tr$(2),tr3,tr$(4),tr$(5),posting_code,clr,scd nokey L7780
-! pr 'key=';check_ref$ : pause
-	prdmmddyy=val(tr$(2)) ! use old check date
-	vn$=lpad$(trim$(tr$(4)),8)
-	amt=tr3 ! set amount for check
-	mat amt=(0) : mat de$=('') : mat iv$=('') : x=1: y=0
-	st1=0 : holdvn$='        ': amt=0
-	vn$=holdvn$=lpad$(rtrm$(tr$(4)),8)
+	if lastckn>0 and lastckn<firstckn then goto ReprintChecks ! smaller lastckn
+	ReprintChecksLoopTop: !
+		check_ref$=cnvrt$('pic(ZZ)',bankcode)&str$(1)&cnvrt$('n 8',reprintckn)
+		read #trmstr1,using 'form pos 1,C 3,C 8,G 6,PD 10.2,C 8,C 35,N 1,N 6,N 1',key=check_ref$: newkey$,tr$(1),tr$(2),tr3,tr$(4),tr$(5),posting_code,clr,scd nokey L7780
+		!	pr 'key=';check_ref$ : pause
+		prdmmddyy=val(tr$(2)) ! use old check date
+		vn$=lpad$(trim$(tr$(4)),8)
+		amt=tr3 ! set amount for check
+		mat amt=(0) : mat de2$=('') : mat iv$=('') : x=1: y=0
+		st1=0 : holdvn$='        ': amt=0
+		vn$=holdvn$=lpad$(rtrm$(tr$(4)),8)
 	goto L7790
-L7780: !
-	if firstckn=reprintckn then goto L7785
-	if reprintckn>=lastckn then goto L7970 ! complete
-	mat ml$(2)
-	ml$(1)='Could not locate check number '&str$(reprintckn)&' for bank number '&str$(bankcode)&'.'
-	ml$(2)='This check will be skipped.'
-	reprintckn+=1
-	fnMsgBox(mat ml$,resp$)
-	goto REPRINT_CHECK_LOOP_TOP
-L7785: !
-	mat ml$(2)
-	ml$(1)='Cannot locate the first check (number '&str$(reprintckn)&' for bank number '&str$(bankcode)&'.)'
-	ml$(2)='You must choose another check number.'
-	fnMsgBox(mat ml$,resp$)
-	goto REPRINT_CHECKS
-L7790: !
+	L7780: !
+		if firstckn=reprintckn then goto L7785
+		if reprintckn>=lastckn then goto L7970 ! complete
+		mat ml$(2)
+		ml$(1)='Could not locate check number '&str$(reprintckn)&' for bank number '&str$(bankcode)&'.'
+		ml$(2)='This check will be skipped.'
+		reprintckn+=1
+		fnMsgBox(mat ml$,resp$)
+	goto ReprintChecksLoopTop
+	L7785: !
+		mat ml$(2)
+		ml$(1)='Cannot locate the first check (number '&str$(reprintckn)&' for bank number '&str$(bankcode)&'.)'
+		ml$(2)='You must choose another check number.'
+		fnMsgBox(mat ml$,resp$)
+	goto ReprintChecks
+	L7790: !
 	key$=cnvrt$('pic(ZZ)',bankcode)&str$(1)&cnvrt$('n 8',reprintckn)
 	restore #tralloc,key>=key$: nokey L7780
 	do
-READ_DETAILS: !
-
+		READ_DETAILS: !
+		dim gl$*12
 		read #tralloc,using 'form pos 1,N 2,N 1,n 8,C 12,PD 5.2,C 30,N 6,x 3,C 12,N 1': transbankcode,tcode,transckn,gl$,alloc,allocde$,allocdate conv L7815,eof L7910
 		goto L7820
-L7815: !
+		L7815: !
 		reread #tralloc,using 'form pos 1,c 2': x$ eof L7910 : goto READ_DETAILS
-L7820: !
+		L7820: !
 		if transbankcode><bankcode or tcode<>1 or transckn<>reprintckn then goto L7910
 		y=y+1: if y>2 then y=1
 		if y=1 then x+=1
-		if x>15 then gosub SUB_PRINT_CHECK
+		if x>15 then gosub SubPrintCheck
 		iv$(x,y)=cnvrt$('pic(zzzzzz)',allocdate) ! IV$(1:12)
-		de$(x,y)=allocde$(1:13) ! this one for printing from unpaid file
+		de2$(x,y)=allocde$(1:13) ! this one for printing from unpaid file
 		amt(x,y)=amt(x,y)+alloc
 		ivdate(x,y)=0
 		disamt(x,y)=0 ! already out of net check
 	loop
-L7910: !
+	L7910: !
 	fnOpenPrn
 	ckn1=reprintckn: amt=tr3
 	if scc$='CSS' then fn_portion_check   : fn_portion_stub(1) : fn_portion_stub(2)
@@ -406,33 +435,12 @@ L7910: !
 	if scc$='SCS' then fn_portion_stub(1) : fn_portion_check   : fn_portion_stub(2)
 	if scc$='SSC' then fn_portion_stub(1) : fn_portion_stub(2) : fn_portion_check
 	if scc$='SCC' then fn_portion_stub(1) : fn_portion_check    : fn_portion_check
-	if lastckn>0 and reprintckn<lastckn then reprintckn+=1 : pr #255: newpage : goto REPRINT_CHECK_LOOP_TOP
-L7970: !
-	fnClosePrn
-	if firstckn<>lastckn then goto Xit
-	goto REPRINT_CHECKS ! /r
-def fn_get_coinfo
-	open #company=15: 'Name=[Q]\CLmstr\Company.h[cno],Shr',i,outi,r
-	dim whgl(5,3)
-	dim dedcode(10)
-	read #company,using 'form pos 150,2*N 1,N 2,pos 418,10*C 20,pos 668,10*C 12,pos 298,15*PD 4,pos 618,10*N 1,pos 406,N 1',rec=1,release: mat d,bankcode ,mat misc$,mat miscgl$,mat whgl,mat dedcode,prenum
-	method$='C' ! temporary kJ  ! Read #COMPANY,Using 'form pos 789,c 1',Rec=1,Release: method$
-	close #company:
-	! dim whgl$(5)*12
-	! for j=1 to 5
-	! 	whgl$(j)=lpad$(str$(whgl(j,1)),3)&lpad$(str$(whgl(j,2)),6)&lpad$(str$(whgl(j,3)),3)
-	! next j
-	! w1$=whgl$(1)
-	! whgl$(1)=whgl$(2)
-	! whgl$(2)=w1$
+	if lastckn>0 and reprintckn<lastckn then reprintckn+=1 : pr #255: newpage : goto ReprintChecksLoopTop
+	L7970: !
+		fnClosePrn
+		if firstckn<>lastckn then goto Xit
+	goto ReprintChecks ! /r
 
-	do
-		read #hPayTrans,using 'form pos 63,N 10.2,N 1',release: upa,pcde eof EO_PAYTRANS_1
-		if pcde=1 then t1(2)+=upa else t1(4)+=upa
-		t1(5)+=upa
-	loop
-	EO_PAYTRANS_1: !
-fnend
 def fn_scr_check_entry
 	fnTos
 	respc=0
@@ -522,6 +530,7 @@ def fn_scr_check_entry
 	fn_scr_check_entry=ckey
 fnend
 def fn_read_standard_breakdowns ! pull standard gl breakdowns from payee file
+	dim fax$*12
 	read #h_paymstr1,using 'form pos 1,C 8,4*C 30,PD 5.2,N 2,C 11,X 6,C 12,C 30,C 50,C 12,C 20',key=lpad$(rtrm$(vn$),8),release: vn$,mat pr$,ytdp,typ,ss$,ph$,contact$,email$,fax$,myact$ nokey RSB_XIT
 	mat holdresp$=('')
 	restore #payeegl,key>=vn$: nokey RSB_EO_READSTGL
@@ -555,7 +564,7 @@ def fn_write_history
 	if gde=1 then gde=0 ! dont allow posting code of 1 from unpaid file
 	if upa=0 then goto WH_L3910
 	if dp=0 and ckpay=0 then goto WH_LOOP_TOP
-	if bc=0 then bc=bankcode ! IF CODED FOR PAYMENT WITH NO BANK CODE, PAY FROM THE CURRENT BANK ACCOUNT
+	if bc=0 then bc=bankcode ! if coded for payment without bank code, pay from the current bank account
 	if bc<>bankcode then goto WH_LOOP_TOP
 	iv$=rpad$(ltrm$(iv$),12)
 	read #ivpaid,using 'form pos 1,c 8,c 12,n 6,n 8',key=vn$&iv$,release: vn$ nokey WH_L3650
@@ -564,6 +573,7 @@ def fn_write_history
 	write #ivpaid,using 'form pos 1,c 8,c 12,n 6,n 8': vn$,iv$,dp,ckpay
 	WH_L3660: !
 	if vn$=holdvn$ and hck=ckpay then goto WH_L3770
+	dim tr(2)
 	mat tr=(0)
 	totalupa=0
 	vn$=lpad$(rtrm$(vn$),8)
@@ -583,15 +593,18 @@ def fn_write_history
 	rewrite #bankmstr,using 'form pos 3,C 30,pos 45,PD 6.2,PD 6.2,G 8',key=lpad$(str$(bankcode),2): bn$,bal,upi,ckpay nokey ignore ! WH_L3800
 	WH_L3800: ! form pos 1,n 2,n 1,g 8,g 6,g 10.2,c 8,c 35,n 1,n 6,n 1,2*pd 3
 	restore #hUnPdAlloc,key>=lpad$(rtrm$(vn$),8)&lpad$(rtrm$(iv$),12): nokey WH_EO_UNPDALOC
-	WH_L3820: !
-	read #hUnPdAlloc,using 'form pos 1,c 20,N 3,N 6,N 3,PD 5.2,C 30': allockey$,mat agl,aamt,ade$ eof WH_EO_UNPDALOC
-	if trim$(allockey$(1:8))<>trim$(vn$) or trim$(allockey$(9:20))<>trim$(iv$) then goto WH_EO_UNPDALOC ! if ALLOCKEY$<>VN$&IV$ Then Goto 3690
-	if sum(agl)=0 and aamt=0 then goto WH_L3820 ! don't allow zero allocations to write
-	write #tralloc,using 'form pos 1,N 2,N 1,G 8,G 3,G 6,G 3,PD 5.2,C 30,G 6,x 3,C 12,N 1': bc,1,ckpay,mat agl,aamt,ltrm$(rtrm$(iv$))&' '&ade$(1:17),up$(1),up$(3),gde
-	! hOLDVN$=VN$
-	hck=ckpay
-	totalupa+=aamt
-	goto WH_L3820
+	do
+		! WH_L3820: !
+		read #hUnPdAlloc,using 'form pos 1,c 20,N 3,N 6,N 3,PD 5.2,C 30': allockey$,mat agl,aamt,ade$ eof WH_EO_UNPDALOC
+		if trim$(allockey$(1:8))<>trim$(vn$) or trim$(allockey$(9:20))<>trim$(iv$) then goto WH_EO_UNPDALOC ! if ALLOCKEY$<>VN$&IV$ Then Goto 3690
+		! if sum(agl)=0 and aamt=0 then goto WH_L3820 ! don't allow zero allocations to write
+		if sum(mat agl) or aamt then ! don't allow zero allocations to write
+			write #tralloc,using 'form pos 1,N 2,N 1,G 8,G 3,G 6,G 3,PD 5.2,C 30,G 6,x 3,C 12,N 1': bc,1,ckpay,mat agl,aamt,ltrm$(rtrm$(iv$))&' '&ade$(1:17),up$(1),up$(3),gde
+			! hOLDVN$=VN$
+			hck=ckpay
+			totalupa+=aamt
+		end if
+	loop ! 	goto WH_L3820
 	WH_EO_UNPDALOC: !
 	rewrite #trmstr1,using 'form pos 18,pd 10.2',key=lpad$(rtrm$(str$(bc)),2)&'1'&lpad$(rtrm$(str$(ckpay)),8): totalupa
 	WH_L3910: !
@@ -853,7 +866,7 @@ def fn_portion_stub_generic
 	pr #255: 'Invoice Number   Amount   Description   Invoice Number   Amount   Description'
 	pr #255: '_______________________________________ _______________________________________'
 	for j=1 to 15
-		pr #255,using 'form pos 1,C 12,PIC(ZZZZ,ZZZ.ZZCR),X 1,C 13,pos 41,C 12,PIC(ZZZZ,ZZZ.ZZCR),C 13': iv$(j,1)(1:12),amt(j,1),de$(j,1),iv$(j,2)(1:12),amt(j,2),de$(j,2)
+		pr #255,using 'form pos 1,C 12,PIC(ZZZZ,ZZZ.ZZCR),X 1,C 13,pos 41,C 12,PIC(ZZZZ,ZZZ.ZZCR),C 13': iv$(j,1)(1:12),amt(j,1),de2$(j,1),iv$(j,2)(1:12),amt(j,2),de2$(j,2)
 	next j
 fnend
 def fn_portion_stub_billings(stubOnCheck)
@@ -867,7 +880,7 @@ def fn_portion_stub_billings(stubOnCheck)
 	pr #255: 'Invoice Number   Amount   Description   Invoice Number   Amount   Description'
 	pr #255: '_______________________________________ _______________________________________'
 	for j=1 to 15
-		pr #255,using 'form pos 1,C 12,PIC(ZZZZ,ZZZ.ZZCR),X 1,C 13,pos 41,C 12,PIC(ZZZZ,ZZZ.ZZCR),C 13': iv$(j,1)(1:12),amt(j,1),de$(j,1),iv$(j,2)(1:12),amt(j,2),de$(j,2)
+		pr #255,using 'form pos 1,C 12,PIC(ZZZZ,ZZZ.ZZCR),X 1,C 13,pos 41,C 12,PIC(ZZZZ,ZZZ.ZZCR),C 13': iv$(j,1)(1:12),amt(j,1),de2$(j,1),iv$(j,2)(1:12),amt(j,2),de2$(j,2)
 	next j
 	if stubOnCheck=1 then ! it is the first stub on the check
 		pr #255: ''
@@ -887,7 +900,7 @@ def fn_portion_stub_divernon
 	pr #255: 'Invoice Number   Amount   Description   Invoice Number   Amount   Description'
 	pr #255: '_______________________________________ _______________________________________'
 	for j=1 to 15
-		pr #255,using 'form pos 1,C 12,PIC(ZZZZ,ZZZ.ZZCR),X 1,C 13,pos 41,C 12,PIC(ZZZZ,ZZZ.ZZCR),C 13': iv$(j,1)(1:12),amt(j,1),de$(j,1),iv$(j,2)(1:12),amt(j,2),de$(j,2)
+		pr #255,using 'form pos 1,C 12,PIC(ZZZZ,ZZZ.ZZCR),X 1,C 13,pos 41,C 12,PIC(ZZZZ,ZZZ.ZZCR),C 13': iv$(j,1)(1:12),amt(j,1),de2$(j,1),iv$(j,2)(1:12),amt(j,2),de2$(j,2)
 	next j
 fnend
 def fn_portion_check
@@ -1310,7 +1323,7 @@ def fn_scr_main_questions(;___,ckey)
 	ckey=fnAcs(mat resp$)
 	if ckey<>5 then
 		for j=1 to 3
-			if resp$(j)='True' then ti1=j : ckoption=j
+			if resp$(j)='True' then ckoption=j
 		next j
 		prd=val(resp$(4)) ! date of checks
 		prdmmddyy=val(resp$(4)(5:6))*10000+val(resp$(4)(7:8))*100+val(resp$(4)(3:4)) ! convert date back to mmddyy format

@@ -4,7 +4,7 @@ Transaction                               ^ [cursystem]\*
 >Transaction Journals                     ^ [cursystem]\*
 >Remove Old Transactions                  ^ [cursystem]\*
 >Endorse Checks                           ^ [cursystem]\*
-Unpaid Invoice                            ^ [cursystem]\*
+Unpaid Invoice                            ^ [cursystem]\*        ^   ^ Select Invoices for Payment
 >Print Selected Invoice Listing           ^ [cursystem]\*
 >Unpaid Invoice Listing (Current)         ^ [cursystem]\*
 >Unpaid Invoice Summary                   ^ [cursystem]\*
