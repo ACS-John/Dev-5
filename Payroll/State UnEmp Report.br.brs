@@ -130,6 +130,7 @@
 	gosub HDR
 TOP: !
 	read #2,using "form pos 1,N 8,3*C 30,C 11": eno,mat em$,ss$ eof DONE
+	if eno=149 then pause 
 	m1=m2=h2=h3=dcq=dcy=0 : mat ytdtotal=(0)
 	mat qtr1tcp=(0): mat qtr2tcp=(0): mat qtr3tcp=(0): mat qtr4tcp=(0)
 	mat ytdtota(0)
@@ -148,7 +149,7 @@ L830: if prd>=qtr1 and prd<qtr2 then mat qtr1tcp=qtr1tcp+tcp ! 1st qtr earnings
 	if prd>=qtr2 and prd<qtr3 then mat qtr2tcp=qtr2tcp+tcp
 	if prd>=qtr3 and prd<qtr4 then mat qtr3tcp=qtr3tcp+tcp
 	if prd>=qtr4 and prd<=end_date then mat qtr4tcp=qtr4tcp+tcp
-	if prd>=qtr1 and prd<ending_date then mat ytdtotal=ytdtotal+tcp ! only total year to date wages to end of current quarter
+	if prd>=qtr1 and prd<=ending_date then mat ytdtotal=ytdtotal+tcp ! only total year to date wages to end of current quarter
 	goto MAIN_LOOP ! /r
 ANALYZE_WAGES: ! r: analyze wages on each person
 	if quarter_code=1 then mat qtr=qtr1tcp
