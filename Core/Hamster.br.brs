@@ -239,7 +239,7 @@ def fn_hamster(uw$*128,mat lbl$,mat fln,hIn,mat p$; mat flTyp$,mat sln,mat mask$
 			for j=1 to itemCount
 				mylen=max(mylen,len(lbl$(j)))
 			next j
-			dim p2$(100)*1024 ! used to hold mat P$ + 1 more response for Add Loop
+			dim p2$(0)*2048 ! used to hold mat P$ + 1 more response for Add Loop
 			mat p2$(alana=udim(mat p$)+1) : mat p2$(1:udim(mat p$))=p$(1:udim(mat p$))
 			fnTos
 			mypos=mylen+3 : lc=ic=0 : col=1 : colpos=1
