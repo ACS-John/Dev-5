@@ -646,7 +646,7 @@ Xit: fnend
 				dim grid_row$(1)*10000
 				if not grid_populated then ! file_nonempty then ! if no rows have been populated, we have to create one
 					pr f gridspec$&',headers,[gridheaders]' : (mat _headings$,mat _widths,mat _forms$)
-					mat grid_row$(udim(ace_resp$))=('')
+					mat grid_row$(udim(mat ace_resp$))=('')
 					pr f gridspec$&',=': mat grid_row$
 				end if
 
@@ -657,27 +657,27 @@ Xit: fnend
 					curfld(2) !	 if ~current_grid_row then curfld(2) ! if grid is first control than set the focus to the filter box
 					rinput fields mat ace_io$: mat ace_resp$, grid_filter$ error ignore ! error MainInput886Avoidance
 					current_grid_row=0
-					if udim(ace_resp$)>1 then
-						mat ace_resp$(1:udim(ace_resp$)-1)=ace_resp$(2:udim(ace_resp$))
-						mat ace_resp$(udim(ace_resp$)-1)
+					if udim(mat ace_resp$)>1 then
+						mat ace_resp$(1:udim(mat ace_resp$)-1)=ace_resp$(2:udim(mat ace_resp$))
+						mat ace_resp$(udim(mat ace_resp$)-1)
 					else
 						mat ace_resp$(ace_io_count)=resp$(1:ace_io_count)
 					end if
 				else ! this is if the grid is not the only control
 					mat grid_row$(udim(_headings$))=('') ! this will contain the selected row data
-					if not udim(ace_io$)-1=udim(ace_resp$) then
+					if not udim(ace_io$)-1=udim(mat ace_resp$) then
 						mat ace_resp$(udim(mat ace_resp$)-1) ! this will contain the rest of the non-grid data
 						ace_io_count-=1
 					end if
 					if grid_index=1 then ! the grid and filter are the FIRST two controls in ace_io$
 						curfld(2) ! if grid is first control than set the focus to the filter box
-						rinput fields mat ace_io$: mat grid_row$, grid_filter$, mat ace_resp$(2:udim(ace_resp$)) error IGNORE ! conv CONV_HANDLER
-					else if grid_index=udim(ace_resp$) then ! the grid and filter are the LAST two controls in ace_io$
+						rinput fields mat ace_io$: mat grid_row$, grid_filter$, mat ace_resp$(2:udim(mat ace_resp$)) error IGNORE ! conv CONV_HANDLER
+					else if grid_index=udim(mat ace_resp$) then ! the grid and filter are the LAST two controls in ace_io$
 						curfld(1)
-						rinput fields mat ace_io$: mat ace_resp$(1:udim(ace_resp$)-1), mat grid_row$, grid_filter$ conv CONV_HANDLER error ignore ! error IGNORE_886
+						rinput fields mat ace_io$: mat ace_resp$(1:udim(mat ace_resp$)-1), mat grid_row$, grid_filter$ conv CONV_HANDLER error ignore ! error IGNORE_886
 					else ! the grid and filter are in the middle of other controls in ace_io$
 						curfld(1)
-						rinput fields mat ace_io$: mat ace_resp$(1:grid_index-1), mat grid_row$, grid_filter$, mat ace_resp$(grid_index+1:udim(ace_resp$)) conv CONV_HANDLER error IGNORE
+						rinput fields mat ace_io$: mat ace_resp$(1:grid_index-1), mat grid_row$, grid_filter$, mat ace_resp$(grid_index+1:udim(mat ace_resp$)) conv CONV_HANDLER error IGNORE
 					end if
 					if udim(grid_row$)>1 then ace_resp$(grid_index)=grid_row$(2) else ace_resp$(grid_index)=''
 				end if
@@ -812,7 +812,7 @@ Xit: fnend
 		fnend
 		def fn_equalizeRespArrays
 			respc=0
-			dim ace_resp$(1)*1024, grid_filter$*1024
+			dim ace_resp$(1)*4096, grid_filter$*2048
 			if ace_io_count>udim(mat resp$) then mat resp$(ace_io_count)
 			if ace_io_count then
 				if grid_present then
@@ -914,7 +914,7 @@ Xit: fnend
 				dim temp_resp$(1)*512,temp_ace_resp$(1)*512
 				mat temp_io$(udim(ace_io$))=ace_io$
 				mat temp_resp$(udim(resp$))=resp$
-				mat temp_ace_resp$(udim(ace_resp$))=ace_resp$
+				mat temp_ace_resp$(udim(mat ace_resp$))=ace_resp$
 				temp_io_count=ace_io_count
 				fnprogram_properties
 				mat ace_io$ (udim(temp_io$))=temp_io$
@@ -976,7 +976,7 @@ include: filenamesPopUpperCase
 		fnend
 		def fn_reformatUserInput
 			!		if udim(resp$)<ace_io_count then mat resp$(ace_io_count)
-			!		if udim(ace_resp$)<ace_io_count then mat ace_resp$(ace_io_count)
+			!		if udim(mat ace_resp$)<ace_io_count then mat ace_resp$(ace_io_count)
 			for ace_resp_item=1 to ace_io_count
 				if ace_resp_item<=udim(mat ace_resp$) and ace_resp_item<=udim(mat resp$) then
 					if pos(ace_io$(ace_resp_item),'check ')>0 or pos(ace_io$(ace_resp_item),'radio ')>0 then
