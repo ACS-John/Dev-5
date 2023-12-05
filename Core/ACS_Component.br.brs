@@ -318,7 +318,7 @@ def library fnFlexInit1(sfn$*100,lyne,ps,height,width,mat ch$; mat colMask$,selt
 	hFlex=fn_hFlex(1)
 	sfn$=trim$(sfn$)&'[cno]'
 	optfile$=sfn$&'[session].tmp'
-	hdr_count=udim(ch$) : hdrfile$=sfn$&'.hdr'
+	hdr_count=udim(mat ch$) : hdrfile$=sfn$&'.hdr'
 	if ~usr then 
 		fnFree('[temp]\acs\'&optfile$)
 		close #hFlex: ioerr ignore
@@ -335,7 +335,7 @@ def library fnFlexInit1(sfn$*100,lyne,ps,height,width,mat ch$; mat colMask$,selt
 	for j=1 to udim(mat colMask$)
 		if trim$(colMask$(j))='' then colMask$(j)='80'
 	next j
-	for j=1 to udim(ch$) : all_hdr$=all_hdr$&ch$(j)&chr$(9) : next j
+	for j=1 to udim(mat ch$) : all_hdr$=all_hdr$&ch$(j)&chr$(9) : next j
 	for j=1 to udim(mat colMask$) : all_mask$&=colMask$(j)&chr$(9) : next j
 	pr #hFlex,using 'form pos 1,C '&str$(len(all_hdr$)): all_hdr$
 	pr #hFlex,using 'form pos 1,C '&str$(len(all_mask$)): all_mask$
@@ -653,7 +653,7 @@ Xit: fnend
 
 				! mat ace_io$(ace_io_count)
 				! mat ace_resp$(ace_io_count)
-				if udim(ace_io$)=2 then ! this is if the grid is the only control
+				if udim(mat ace_io$)=2 then ! this is if the grid is the only control
 					curfld(2) !	 if ~current_grid_row then curfld(2) ! if grid is first control than set the focus to the filter box
 					rinput fields mat ace_io$: mat ace_resp$, grid_filter$ error ignore ! error MainInput886Avoidance
 					current_grid_row=0
@@ -664,8 +664,8 @@ Xit: fnend
 						mat ace_resp$(ace_io_count)=resp$(1:ace_io_count)
 					end if
 				else ! this is if the grid is not the only control
-					mat grid_row$(udim(_headings$))=('') ! this will contain the selected row data
-					if not udim(ace_io$)-1=udim(mat ace_resp$) then
+					mat grid_row$(udim(mat _headings$))=('') ! this will contain the selected row data
+					if not udim(mat ace_io$)-1=udim(mat ace_resp$) then
 						mat ace_resp$(udim(mat ace_resp$)-1) ! this will contain the rest of the non-grid data
 						ace_io_count-=1
 					end if
@@ -679,7 +679,7 @@ Xit: fnend
 						curfld(1)
 						rinput fields mat ace_io$: mat ace_resp$(1:grid_index-1), mat grid_row$, grid_filter$, mat ace_resp$(grid_index+1:udim(mat ace_resp$)) conv CONV_HANDLER error IGNORE
 					end if
-					if udim(grid_row$)>1 then ace_resp$(grid_index)=grid_row$(2) else ace_resp$(grid_index)=''
+					if udim(mat grid_row$)>1 then ace_resp$(grid_index)=grid_row$(2) else ace_resp$(grid_index)=''
 				end if
 			else if ace_io_count <> 0 then
 				if fn_allFieldsProtected(mat ace_io$) then
@@ -843,7 +843,7 @@ Xit: fnend
 			grid_selection_valid=1
 			if fkey=0 or (fkey=201 and pos(ace_io$(curfld),'list ')) or fkey=default_button_fkey then
 				if grid_present and row_count then
-					if udim(ace_io$)=2 then
+					if udim(mat ace_io$)=2 then
 						if fnArrayEmpty(mat ace_resp$) then
 							msgbox('Please, click on a row to select it and repeat your attempt.')
 							grid_selection_valid=0
@@ -912,14 +912,14 @@ Xit: fnend
 		fnend
 			def fn_programProperties
 				dim temp_resp$(1)*512,temp_ace_resp$(1)*512
-				mat temp_io$(udim(ace_io$))=ace_io$
-				mat temp_resp$(udim(resp$))=resp$
+				mat temp_io$(udim(mat ace_io$))=ace_io$
+				mat temp_resp$(udim(mat resp$))=resp$
 				mat temp_ace_resp$(udim(mat ace_resp$))=ace_resp$
 				temp_io_count=ace_io_count
 				fnprogram_properties
-				mat ace_io$ (udim(temp_io$))=temp_io$
-				mat resp$(udim(temp_resp$))=temp_resp$
-				mat ace_resp$(udim(temp_ace_resp$))=temp_ace_resp$
+				mat ace_io$ (udim(mat temp_io$))=temp_io$
+				mat resp$(udim(mat temp_resp$))=temp_resp$
+				mat ace_resp$(udim(mat temp_ace_resp$))=temp_ace_resp$
 				ace_io_count=temp_io_count
 			fnend
 			def fn_printGrid
@@ -928,7 +928,7 @@ Xit: fnend
 				fnlistprint(0,gridspec$,'','','Grid Print',mat dummy,0,0,'000000',0)
 				!		goto PRINT_GRID_XIT
 				!		fnOpenPrn
-				!		mat2str(mat _headings$(2:udim(_headings$)),_line$,tab$)
+				!		mat2str(mat _headings$(2:udim(mat _headings$)),_line$,tab$)
 				!		pr #255: _line$
 				!		input fields gridspec$&',rowcnt,all,nowait': grid_rows
 				!		input fields gridspec$&',colcnt,all,nowait': grid_columns
@@ -975,7 +975,7 @@ include: filenamesPopUpperCase
 			end if
 		fnend
 		def fn_reformatUserInput
-			!		if udim(resp$)<ace_io_count then mat resp$(ace_io_count)
+			!		if udim(mat resp$)<ace_io_count then mat resp$(ace_io_count)
 			!		if udim(mat ace_resp$)<ace_io_count then mat ace_resp$(ace_io_count)
 			for ace_resp_item=1 to ace_io_count
 				if ace_resp_item<=udim(mat ace_resp$) and ace_resp_item<=udim(mat resp$) then
@@ -1039,16 +1039,16 @@ include: filenamesPopUpperCase
 		dim message$(1)*255, response$*255,temp_io$(1)*255
 		bad_field=cnt+1
 		message$(1)='You have entered an incorrect value at field number '&str$(bad_field)
-		mat temp_io$(udim(ace_io$))=ace_io$
+		mat temp_io$(udim(mat ace_io$))=ace_io$
 		fnMsgBox(mat message$, response$, 'Error!',0)
 		fnpause
-		mat ace_resp$(udim(resp$))=resp$
-		mat ace_io$(udim(temp_io$))=temp_io$
+		mat ace_resp$(udim(mat resp$))=resp$
+		mat ace_io$(udim(mat temp_io$))=temp_io$
 		curfld(bad_field)
 	retry	 ! /r
 		def fn_validateFields(;___,found_invalid,_idx)
 			! requires local: mat text_masks,mat ace_resp$,mat resp$
-			for _idx=1 to udim(text_masks)
+			for _idx=1 to udim(mat text_masks)
 				if text_masks(_idx)>=1 and text_masks(_idx)<=5 then
 					if ace_resp$(_idx)<>'0' then
 						if not fn_validateMdy(ace_resp$(_idx)) then
@@ -1175,8 +1175,8 @@ def fn_aceRdPicBut(; ___,lyne$,pos$,comkey$,height$,width$,container,tabcon,defa
 	    pr #tmpWin, fields lyne$&','&pos$&',P '&height$&'/'&width$&',[buttons],'&comkey$: path1$ ! ioerr ignore
 		end if
 
-		mat return_keys(udim(return_keys)+1)
-		return_keys(udim(return_keys))=val(comkey$)
+		mat return_keys(udim(mat return_keys)+1)
+		return_keys(udim(mat return_keys))=val(comkey$)
 
 
 fnend
@@ -1195,10 +1195,10 @@ mat tabs
 ! 
 ! 		tabline$=tabline$&trim$(txt$)&tab$
 ! 		open #hIoTab=fnH: 'srow='&str$(lyne+1)&',scol='&str$(ps+1)&',rows='&str$(height+1)&',cols='&str$(width+1)&',tab='&trim$(txt$)&',parent='&str$(acs_win)&',border=S:[screen],N=[screen]',display,outIn
-! 		mat tabs(udim(tabs)+1,3)
-! 		tabs(udim(tabs),1)=hIoTab
-! 		tabs(udim(tabs),2)=lyne+1
-! 		tabs(udim(tabs),3)=ps+1
+! 		mat tabs(udim(mat tabs)+1,3)
+! 		tabs(udim(mat tabs),1)=hIoTab
+! 		tabs(udim(mat tabs),2)=lyne+1
+! 		tabs(udim(mat tabs),3)=ps+1
 ! 	next j
 ! 	close #hTabIn:
 ! fnend! /r
@@ -1214,16 +1214,16 @@ def fn_aceRdFrame
 	height+=1
 	txt$=trim$(txt$)
 	! txt$=srep$(txt$,'"','""') ! fn2quote(txt$)
-	mat frames(udim(frames)+1,4)
+	mat frames(udim(mat frames)+1,4)
 	if tabcon then
 		open #frame=fnH: 'srow='&str$(lyne+1)&',scol='&str$(ps+1)&',rows='&str$(height-1)&',cols='&str$(width)&',parent='&str$(tabs(tabcon,1))&',border=S:[screen],N=[screen],caption='&srep$(txt$,',','.'),display,outIn
-		frames(udim(frames),4)=tabs(tabcon,1)
+		frames(udim(mat frames),4)=tabs(tabcon,1)
 	else
 		open #frame=fnH: 'srow='&str$(lyne+1)&',scol='&str$(ps+1)&',rows='&str$(height-1)&',cols='&str$(width)&',parent='&str$(acs_win)&',border=S:[screen],N=[screen],caption='&srep$(txt$,',','.'),display,outIn
 	end if
-	frames(udim(frames),1)=frame
-	frames(udim(frames),2)=lyne+1
-	frames(udim(frames),3)=ps+1
+	frames(udim(mat frames),1)=frame
+	frames(udim(mat frames),2)=lyne+1
+	frames(udim(mat frames),3)=ps+1
 fnend
 def fn_aceRdFlex(;___,index_,masknumber)
 	lyne         	= val(control$(2))
@@ -1246,7 +1246,7 @@ def fn_aceRdFlex(;___,index_,masknumber)
 	str2mat(_line$,mat _headings$,tab$)
 	linput #grid_headers: _line$
 	str2mat(_line$,mat _mask$,tab$)
-	mat _mask$(udim(_headings$))
+	mat _mask$(udim(mat _headings$))
 	close #grid_headers:
 	file_nonempty=fn_gridForm(mat _widths,mat _forms$,mat _mask$,mat _headings$)
 	if not file_nonempty then
@@ -1256,7 +1256,7 @@ def fn_aceRdFlex(;___,index_,masknumber)
 		next col_index_
 	end if
 	! this is done when there is a grid to the right of a frame, so they don't overlap
-	if udim(frames) and not container and ps > 2 then
+	if udim(mat frames) and not container and ps > 2 then
 		ps+=1
 	end if
 	widthEnhanced=width+2 ! tried to increase to +28 on 1/6/2018 to make work for UB Meter Info via fnHamsterFio	but it did not fix the error 4
@@ -1287,7 +1287,7 @@ def fn_aceRdFlex(;___,index_,masknumber)
 
 	dim long_row$(1)*2100		 ! dim long_row$(1)*1024
 	rows=1000								 ! rows=2000
-	mat long_row$(rows * udim(_headings$))
+	mat long_row$(rows * udim(mat _headings$))
 	row_count=1 : record_count=1
 	printed=0
 
@@ -1307,8 +1307,8 @@ def fn_aceRdFlex(;___,index_,masknumber)
 		end if
 
 		str2mat(_line$,mat _chunks$,tab$)
-		if udim(_chunks$)<>udim(_headings$)-1 then ! truncate extra columns, which are there by mistake
-			mat _chunks$(udim(_headings$)-1 )
+		if udim(mat _chunks$)<>udim(mat _headings$)-1 then ! truncate extra columns, which are there by mistake
+			mat _chunks$(udim(mat _headings$)-1 )
 		end if
 
 		mat2str(mat _chunks$,_line$,' ')
@@ -1321,8 +1321,8 @@ def fn_aceRdFlex(;___,index_,masknumber)
 		_chunks$(alpha_mask_indices(index_))='0' : retry
 
 		CREATE_FILTER_COLUMN: !
-		mat _chunks$(udim(_chunks$)+1)
-		mat _chunks$(2:udim(_chunks$))=_chunks$(1:udim(_chunks$)-1)
+		mat _chunks$(udim(mat _chunks$)+1)
+		mat _chunks$(2:udim(mat _chunks$))=_chunks$(1:udim(mat _chunks$)-1)
 		_chunks$(1)=_line$
 
 		! CHECK_JULIAN_DATES: ! Convert dates to julain format for BR internal date specs
@@ -1355,7 +1355,7 @@ def fn_aceRdFlex(;___,index_,masknumber)
 			NOT_JULIAN_DATE: ! Not a julian date field, leave it alone
 		next index_
 		if row_count <= rows then
-			mat long_row$(1+(row_count-1)*udim(_chunks$):row_count*udim(_chunks$))= _chunks$
+			mat long_row$(1+(row_count-1)*udim(mat _chunks$):row_count*udim(mat _chunks$))= _chunks$
 			if row_count=rows then
 				pr f gridspec$&','&clearflag$&'L': mat long_row$
 				pr f loading_spec$ : 'Loading... Please wait'
@@ -1372,10 +1372,10 @@ def fn_aceRdFlex(;___,index_,masknumber)
 	row_count-=1
 	if row_count then
 		if not printed then
-			pr f gridspec$&',=L': mat long_row$(1:(row_count)*udim(_chunks$))
+			pr f gridspec$&',=L': mat long_row$(1:(row_count)*udim(mat _chunks$))
 		else if row_count <> rows then
 			! get an error 58 below - check (mat _headings$,mat _widths,mat _forms$)
-			pr f gridspec$&',+L': mat long_row$(1:(row_count)*udim(_chunks$)) ! soflow ignore
+			pr f gridspec$&',+L': mat long_row$(1:(row_count)*udim(mat _chunks$)) ! soflow ignore
 		end if
 	end if
 	GRID_DATA_LOAD_COMPLETE: !
@@ -1410,10 +1410,10 @@ fnend
 	fnend
 	def fn_gridForm(mat _widths,mat _forms$,mat _mask$,mat _headings$; ___,index_)
 		data_file_nonempty=0
-		mat _headings$(udim(_headings$)+1)
-		mat _headings$(2:udim(_headings$))=_headings$(1:udim(_headings$)-1)
+		mat _headings$(udim(mat _headings$)+1)
+		mat _headings$(2:udim(mat _headings$))=_headings$(1:udim(mat _headings$)-1)
 		_headings$(1)='Combined'
-		mat _widths(udim(_headings$))=(0): mat _forms$(udim(_headings$))=('')
+		mat _widths(udim(mat _headings$))=(0): mat _forms$(udim(mat _headings$))=('')
 
 		open #grid_data=fnH: 'Name=[temp]\acs\'&trim$(path1$)&'[SESSION].tmp',display,input
 		for count=1 to 1500
@@ -1424,7 +1424,7 @@ fnend
 				mat _chunks$( udim(mat _headings$)-1 )
 			end if
 			mat2str(mat _chunks$,_line$,' ')
-			_widths(1)=max(_widths(1),len(_line$)+udim(_chunks$)-1)
+			_widths(1)=max(_widths(1),len(_line$)+udim(mat _chunks$)-1)
 			for _index=1 to udim(mat _chunks$)
 				_widths(_index+1)=max(_widths(_index+1),len(_chunks$(_index))+1)
 				_widths(_index+1)=max(_widths(_index+1),len(_headings$(_index+1))+4)
@@ -1554,11 +1554,11 @@ def fn_aceRdPic
 fnend
 def fn_aceRdCmdkey(; ___,_help$*255,spec$*255)
 	txt$=control$(2)
-	mat return_keys(udim(return_keys)+1)
-	returnkey=return_keys(udim(return_keys))=val(control$(3))
+	mat return_keys(udim(mat return_keys)+1)
+	returnkey=return_keys(udim(mat return_keys))=val(control$(3))
 	default=val(control$(4))
 	xCancel=val(control$(5))
-	if udim(control$)>=6 then
+	if udim(mat control$)>=6 then
 		tt$=control$(6)
 	end if
 	if xCancel then fkey_cancel=returnkey
@@ -1592,8 +1592,8 @@ def fn_aceRdButton(; ___,_help$*255,spec$*255)
 	width=val(control$(5))
 	comkey=val(control$(6))
 
-	mat return_keys(udim(return_keys)+1)
-	return_keys(udim(return_keys))=comkey
+	mat return_keys(udim(mat return_keys)+1)
+	return_keys(udim(mat return_keys))=comkey
 
 	txt$=srep$(trim$(control$(7)),chr$(38),'')
 	tt$=control$(8) error ignore
@@ -1740,7 +1740,7 @@ def fn_aceRdlabel(; ___,lbl_win)
 	font_mod  	=val(control$(9))
 	txt$      	=srep$(trim$(txt$),'&','')
 	dim lbl_tooltip$*256
-	if udim(control$)>=10 then lbl_tooltip$=control$(10) else lbl_tooltip$=''
+	if udim(mat control$)>=10 then lbl_tooltip$=control$(10) else lbl_tooltip$=''
 	if txt$<>'' then
 	! txt$=srep$(txt$,'"','""') ! fn2quote(txt$)
 		mylen=max(mylen,len(txt$))
@@ -2319,7 +2319,7 @@ def fn_exportGrid(;___,index_)
 	input fields gridspec$&',RowCnt,all,nowait': grid_rows
 	input fields gridspec$&',ColCnt,all,nowait': grid_columns
 	mat _chunks$(grid_columns)
-	mat2str(mat _headings$(2:udim(_headings$)),_line$,tab$)
+	mat2str(mat _headings$(2:udim(mat _headings$)),_line$,tab$)
 	pr #export_file: _line$
 	for index_=1 to grid_rows
 		input fields gridspec$&',row,range,nowait': index_, index_, mat _chunks$
@@ -2346,7 +2346,7 @@ def fn_exportGrid(;___,index_)
 			end if
 		next eg_grid_line_item
 
-		mat2str(mat _chunks$(2:udim(_chunks$)),_line$,tab$)
+		mat2str(mat _chunks$(2:udim(mat _chunks$)),_line$,tab$)
 		pr #export_file: _line$ ! pr _line$ : pause
 	next index_
 	close #export_file:
