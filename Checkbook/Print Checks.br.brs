@@ -64,7 +64,7 @@ MAIN_QUESTIONS: !
 	if ckoption=1 then h_vf1=13
 	allign=0
 	if ckoption=3 then goto ReprintChecks
-	open #company=15: 'Name=[Q]\CLmstr\Company.h[cno],Shr',i,outi,r
+	open #company=fnH: 'Name=[Q]\CLmstr\Company.h[cno],Shr',i,outi,r
 	rewrite #company,using 'form pos 152,N 2',rec=1: bankcode
 	close #company:
 	read #bankmstr,using 'form pos 3,C 30,pos 45,PD 6.2,PD 6.2,G 8',key=lpad$(str$(bankcode),2),release: bn$,bal,upi,lcn$ nokey MAIN_QUESTIONS
@@ -244,7 +244,7 @@ ScrFinal: ! r: (reprint or transfer to history)
 	allign=0
 	if ti2=1 then 
 		goto ScrReprint
-	else if ti=2 then
+	else if ti2=2 then
 		fn_write_history
 		goto Finis
 	else 
@@ -277,7 +277,7 @@ ScrReprint: ! r: (Reprint Options)
 goto MAIN_QUESTIONS
 ! /r
 Finis: ! r: COMPLETE
-	fn_close(1)
+	fn_close(trmstr1)
 	fn_close(trmstr2)
 	fn_close(tralloc)
 	fn_close(hPayTrans)
@@ -558,7 +558,7 @@ def fn_write_history
 	holdvn$=''
 	hck=0
 	fn_close(hPayTrans:=4)
-	open #hPayTrans: 'Name=[Q]\CLmstr\PayTrans.h[cno],KFName=[Q]\CLmstr\UnPdIdx1.h[cno],Shr',i,outIn,k
+	open #hPayTrans=fnH: 'Name=[Q]\CLmstr\PayTrans.h[cno],KFName=[Q]\CLmstr\UnPdIdx1.h[cno],Shr',i,outIn,k
 	WH_LOOP_TOP: !
 	read #hPayTrans,using 'form pos 1,C 8,C 12,2*G 6,C 12,C 18,G 10.2,N 1,N 2,G 8,G 6,N 1': vn$,iv$,mat up$,upa,pcde,bc,ckpay,dp,gde eof WH_XIT
 	if gde=1 then gde=0 ! dont allow posting code of 1 from unpaid file
