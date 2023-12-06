@@ -31,8 +31,8 @@ MENU1: ! r:
 	if fnClientHas('U4') then
 		! fnLbl(frame_line+=2,2,'Hand Held:',0,0,0,frame_current)
 		! fnButton(frame_line+=1,1,'Import from Hand Held to Book'     ,fky_importHHtoBook:=2007,'Retrieve Hand Held File'                                                               ,0,moe_button_width,frame_current)
-		! fnButton(frame_line+=1,1,'Load Hand Held Book'               ,fky_loadBook:=2005      ,'Generally for use after 'Retreive (Import) from Hand Held to Book''                    ,0,moe_button_width,frame_current)
-		fnButton(frame_line+=2,1,'Hand Held Books'               ,fky_loadBook:=2005      ,'Generally for use after "Retreive (Import) from Hand Held to Book"'                    ,0,moe_button_width,frame_current)
+		! fnButton(frame_line+=1,1,'Load Hand Held Book'               ,fky_books:=2005      ,'Generally for use after 'Retreive (Import) from Hand Held to Book''                    ,0,moe_button_width,frame_current)
+		fnButton(frame_line+=2,1,'Hand Held Books'               ,fky_books:=2005      ,'Generally for use after "Retreive (Import) from Hand Held to Book"'                    ,0,moe_button_width,frame_current)
 
 		! fnButton(frame_line+=1,1,'Import and Load Hand Held (Book 1)',fky_importAndLoad:=2009 ,'Completes "Import to Hand Held to Book" (using book 1) and then "Load Hand Held Book".',0,moe_button_width,frame_current)
 	end if
@@ -220,7 +220,7 @@ MENU1READWORKEOF: ! /r
 		fnCmdKey('E&dit',2,1,0,'Edit highlighted record by clicking this button, pressing enter or double clicking the record.')
 		fnCmdKey('&Print',4,0,0,'Print a proof listing of the entered records.')
 		fnCmdKey('Save to &Holding File',fkey_saveToHoldingFile:=6,0,0,'Save entered readings to a Holding File for later calculation.')
-		fnCmdKey('&Delete',8)
+		fnCmdKey('&Delete',ck_deleteEntry=8)
 		fnCmdKey('&Close',5,0,1)
 		fnCmdKey('&Meter Change',9,0,0,'Calculates usage on meter change out.')
 		fnCmdKey('&Finish and Calculate',10,0,0,'Calculate entered readings')
@@ -244,7 +244,7 @@ MENU1READWORKEOF: ! /r
 		fn_print_readings(hWork)
 	else if fkey_saveToHoldingFile and ckey=fkey_saveToHoldingFile then ! add to holding file
 		if fn_holdingFileSave(hWork) then goto Xit
-	else if ckey=8 then
+	else if ckey=ck_deleteEntry then
 		delete #hWork,key=x$:
 	else if ckey=9 then
 		if fn_meter_change_out=3 then goto EnterReadings3
@@ -271,7 +271,7 @@ MENU1READWORKEOF: ! /r
 	else if fky_estimateReadings and ckey=fky_estimateReadings then
 		addmethod=am_estimateReadings
 		goto EstimateRoute
-	else if ckey=fky_loadBook then
+	else if ckey=fky_books then
 		addmethod=am_fromHhFile
 		fn_loadBookOrHoldingFile(addmethod)
 	else if fky_importTabDelimited and ckey=fky_importTabDelimited then
@@ -1388,7 +1388,7 @@ def fn_holdingFileLoad(; ___,hld9)
 	open #hld9=fnH: 'Name='&holdingFile$,i,i ioerr L7460 ! was =9
 	do
 		read #hld9,using Fwork: x$,mat x eof IPHOLD_EO_HLD9
-		fn_writeWork(hWork,x$,mat x, 1)
+		fn_writeWork(hWork,x$,mat x)
 		fn_accumulateProofTotals
 	loop
 	IPHOLD_EO_HLD9: !
@@ -1429,7 +1429,7 @@ def fn_holdingFileSave(hWork) ! probably requires more than just hWork
 		restore #hWork: ! ,search>='': nokey AppendFinis
 		do
 			read #hWork,using Fwork: x$,mat x eof AppendFinis
-			fn_writeWork(hld8,x$,mat x, 1)
+			fn_writeWork(hld8,x$,mat x)
 		loop
 		AppendFinis: !
 		close #hld8:
@@ -1967,19 +1967,19 @@ def fn_flexRead(myline,mypos,filnum,z$,begdate,enddate,selcode) ! library ready
 		fnFlexAdd1(mat item$)
 	FlexReadXit: !
 fnend
-def fn_writeWork(hWork,x$,mat x; overwriteDupeAccount) ! write to hWork file
+def fn_writeWork(hWork,x$,mat x; ___,rctr) ! overwriteDupeAccount,___,rctr) ! write to hWork file
 
-	if overwriteDupeAccount then
+	! if overwriteDupeAccount then
 		rewrite #hWork,using Fwork,key=lpad$(trim$(x$),kln(hWork)): trim$(x$),mat x nokey ww_overwriteAdd
 		goto ww_overwriteFinis
 		ww_overwriteAdd: !
 		write #hWork,using Fwork: trim$(x$),mat x
 		ww_overwriteFinis: !
-	else
-		ww_writeWorkIncriment: ! write to hWork file
-		rctr=lrec(hWork)+1
-		write #hWork,using Fwork,rec=rctr: trim$(x$),mat x duprec ww_writeWorkIncriment
-	end if
+	! else
+	! 	ww_writeWorkIncriment: ! write to hWork file
+	! 	rctr=lrec(hWork)+1
+	! 	write #hWork,using Fwork,rec=rctr: trim$(x$),mat x duprec ww_writeWorkIncriment
+	! end if
 fnend
 Fwork: form pos 1,cr 10,4*pd 5,7*pd 4.2,3*pd 5,n 1
 def fn_meter_change_out
@@ -2360,7 +2360,7 @@ def fn_hot_writeWork(hWork,hwwAccount$,mat x,&hotDataImportAsked,&hotDataImportE
 		end if
 	end if ! /r
 	if ~finalBillingCode or hotFinaledImportEnabled then
-		fn_writeWork(hWork,hot_z_prior$,mat x, 1)
+		fn_writeWork(hWork,hot_z_prior$,mat x)
 	end if
 	if hotDataImportEnabled then
 		fnCloseFile(hLocation,'U4 Meter Location')
