@@ -116,6 +116,8 @@ PrintBill_Basic: ! r: set prefrences for clients
 		include_zero_bal=include_credit_bal=1
 		! pause : pa_enabled=0
 		forceWordProcessor$='atlantis'
+		message1_line_count=3
+		message1_max_len=30
 	else if env$('client')='Exeter' then
 		basePenaltyOnCurrentBillOnly=1
 		message1_line_count=3
@@ -471,7 +473,7 @@ MainLoop: ! r: main loop
 	else if env$('client')='Billings' or env$('client')='Diamond' then
 		fn_print_bill_billings(mat mg$,mat g,mat b,bal,mat penalty$,d1,serviceFromMmddYy,serviceToMmddYy,d4,mat pe$,final$,z$) !
 	else if env$('client')='Choctaw' then
-		fn_print_bill_choctaw(z$,mat g,mat b,mat penalty$,d1,serviceFromMmddYy,serviceToMmddYy,d4,mat e$,final)
+		fn_print_bill_choctaw(z$,mat mg$,mat g,mat b,mat penalty$,d1,serviceFromMmddYy,serviceToMmddYy,d4,mat e$,final)
 		! fn_print_bill_choctaw(z$,mat g,mat b,mat penalty$,d1,serviceFromMmddYy,serviceToMmddYy,d4,mat pe$,final)
 	! else if env$('client')='GreeneCo' and ~enableNewGreeneCoBill then
 	! 	fn_print_bill_GreeneCo
@@ -1842,7 +1844,7 @@ def fn_print_bill_billings(mat mg$,mat g,mat b,bal,mat penalty$,d1,serviceFrom,s
 	end if
 	! billsPrintedCount(1)+=1  ! not sure if (1) is right.
 fnend
-def fn_print_bill_choctaw(z$,mat g,mat b,mat penalty$,d1,serviceFrom,serviceTo,d4,mat e$,final)
+def fn_print_bill_choctaw(z$,mat mg$,mat g,mat b,mat penalty$,d1,serviceFrom,serviceTo,d4,mat e$,final)
 !    Good margins in Word (5/2/2017)  Top .4', Bottom, .5', Left 1.5', Right .25'
 !    Good margins in Word (5/2/2017)  Top .4', Bottom, .5', Left 1.5', Right .25'
 	if final=2 then
@@ -1882,9 +1884,9 @@ def fn_print_bill_choctaw(z$,mat g,mat b,mat penalty$,d1,serviceFrom,serviceTo,d
 	pr #255,using ce_L1690: mis$,g(8),d4$,e$(4)
 	pr #255,using 'form pos 3,c 30': e$(2)
 	pr #255: ''
-	pr #255,using 'form pos 1,n 8.2,pos 20,n 8.2': g(12),g(11)
-	pr #255,using 'form pos 1,n 8.2,pos 20,n 8.2': pb,pb
-	pr #255,using 'form pos 1,n 8.2,pos 20,n 8.2': bal+penalty,bal
+	pr #255,using 'form pos 1,n 8.2,pos 20,n 8.2,pos 32,c 30': g(12),g(11),mg$(1)
+	pr #255,using 'form pos 1,n 8.2,pos 20,n 8.2,pos 32,c 30': pb,pb,mg$(2)
+	pr #255,using 'form pos 1,n 8.2,pos 20,n 8.2,pos 32,c 30': bal+penalty,bal,mg$(3)
 	pr #255: ''
 	bills+=1
 	billOnPage+=1
