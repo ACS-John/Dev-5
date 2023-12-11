@@ -275,7 +275,7 @@ L2110: if g(6)=0 then goto L2120 else : _
 		pr #20: 'Call Print.AddText("SSur",'&str$(xmargin+1)&','&str$(lyne*(meter+=1)+ymargin)&')' : _
 		pr #20: 'Call Print.AddText("'&fnformnumb$(g(6),2,9)&'",'&str$(xmargin+45)&','&str$(lyne*meter+ymargin)&')'
 L2120: if g(7)=0 then goto L2130 else : _
-		pr #20: 'Call Print.AddText("FUEL ADJ",'&str$(xmargin+1)&','&str$(lyne*(meter+=1)+ymargin)&')' : _
+		pr #20: 'Call Print.AddText("Cell Chg",'&str$(xmargin+1)&','&str$(lyne*(meter+=1)+ymargin)&')' : _
 		pr #20: 'Call Print.AddText("'&fnformnumb$(g(7),2,9)&'",'&str$(xmargin+45)&','&str$(lyne*meter+ymargin)&')'
 L2130: if g(8)=0 then goto L2140 else : _
 		pr #20: 'Call Print.AddText("MISC",'&str$(xmargin+1)&','&str$(lyne*(meter+=1)+ymargin)&')' : _
