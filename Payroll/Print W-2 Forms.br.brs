@@ -238,6 +238,10 @@ do ! r: main loop
 					if box12aCode$='' and box12aAmt$='' then
 						box12aCode$=lpad$(dedcode$(dedItem),4)
 						box12aAmt$=cnvrt$('Nz 10.2',miscded(dedItem))
+					else if env$('client')='Billings' then  ! specific catch for adding 2 items into one box 
+						if trim$(box12aCode$)='G' then 
+							let box12aAmt$=cnvrt$('Nz 10.2',val(box12aAmt$)+miscded(dedItem))
+						end if 
 					end if
 					! descWhich=3
 				else if box12which(dedItem)=box_12b then
