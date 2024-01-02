@@ -403,7 +403,7 @@ def fn_getClientLicense(mat clientHas$)
 			fn_getClientLicense_add('CL')
 			fn_getClientLicense_add('U4') : u4_device$='Boson' ! ACEECA MEZ 1500 ! U4 Utility Billing Hand Held Add-On
 		else if env$('client')='Edison' then
-			fn_userLimit(3)
+			fn_userLimit(4) ! 4th user added 12/23/2023 jb
 			fn_getClientLicense_add('UB') : fn_setUbLimit(1000) ! U3 Utility Billing (<500 Customers)
 			fn_getClientLicense_add('GL')
 			fn_getClientLicense_add('PR')

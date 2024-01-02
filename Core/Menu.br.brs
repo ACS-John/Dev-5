@@ -980,6 +980,9 @@ def fn_dropDownMenus
 		end if
 		fn_dm_add('&Company',str$(x+=1))
 		fn_dm_add(' Configure','S:\[cursystem]\Company.br')
+		if cursys$='PR' and fnpayroll_client_state$='IL' then
+			fn_dm_add(' PLAWA Settings','S:\Payroll\PLAWA Settings.br')
+		end if
 		fn_dm_add(' &Select','S:\Core\Programs\Select Company.br')
 		if fnclient_is_converting then
 			fn_dm_add(' -')

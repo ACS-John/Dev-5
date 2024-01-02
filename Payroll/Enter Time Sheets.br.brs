@@ -122,7 +122,7 @@ goto PastSkipDeductions ! /r
 PastSkipDeductions: ! r: fall into this logic
 	if noauto<>2 then empStatus=0 ! do not allow any employment status code if not selecting to automatically pay salaried
 	if (~exists('[Q]\PRmstr\timesheet[acsUserId].h[cno]') and additional=2) or additional<>2 then
-		open #hTimesheet=fnH: 'Name=[Q]\PRmstr\timesheet[acsUserId].h[cno],RecL=167,Replace',internal,output
+		open #hTimesheet=fnH: 'Name=[Q]\PRmstr\timesheet[acsUserId].h[cno],RecL=171,Replace',internal,output
 		close #hTimesheet:
 		hTimesheet=0
 	end if
@@ -237,43 +237,53 @@ L1490: ! r: build mat inpX and goto ScrAskTime
 goto ScrAskTime ! /r
 ScrAskTime: ! r:
 	fnTos
-	respc=0: mylen=20: fraNum=0: rc=0
-	fnLbl(1,1,'Employee Number: '&str$(eno),60,2,0,fraNum)
-	fnLbl(2,1,'Employee Name: '&rtrm$(em$),60,2,0,fraNum)
-	fnLbl(3,1,'Department: '&str$(dep)&' '&fnDeptName$(dep),60,2,0,fraNum)
-	fnLbl(5,1,'Regular Hours:',mylen,1,0,fraNum)
-	fnTxt(5,mylen+2,12,0,1,'10',0,'.',fraNum)
+	respc=0: mylen=20: fraNum=rc=lc=0
+	fnLbl(lc+=1,1,'Employee Number: '&str$(eno),60,2,0,fraNum)
+	fnLbl(lc+=1,1,'Employee Name: '&rtrm$(em$),60,2,0,fraNum)
+	fnLbl(lc+=1,1,'Department: '&str$(dep)&' '&fnDeptName$(dep),60,2,0,fraNum)
+	lc+=1
+	fnLbl(lc+=1,1,'Regular Hours:',mylen,1,0,fraNum)
+	fnTxt(lc,mylen+2,12,0,1,'10',0,'.',fraNum)
 	resp$(rc+=1)=str$(inpX(1))
-	fnLbl(6,1,'Overtime Hours:',mylen,1,0,fraNum)
-	fnTxt(6,mylen+2,12,0,1,'10',0,'.',fraNum)
+	fnLbl(lc+=1,1,'Overtime Hours:',mylen,1,0,fraNum)
+	fnTxt(lc,mylen+2,12,0,1,'10',0,'.',fraNum)
 	resp$(rc+=1)=str$(inpX(2))
-	fnLbl(7,1,'Sick Hours:',mylen,1,0,fraNum)
-	fnTxt(7,mylen+2,12,0,1,'10',0,'.',fraNum)
+	fnLbl(lc+=1,1,'Sick Hours:',mylen,1,0,fraNum)
+	fnTxt(lc,mylen+2,12,0,1,'10',0,'.',fraNum)
 	resp$(rc+=1)=str$(inpX(3))
-	fnLbl(8,1,'Vacation Hours:',mylen,1,0,fraNum)
-	fnTxt(8,mylen+2,12,0,1,'10',0,'.',fraNum)
+	fnLbl(lc+=1,1,'Vacation Hours:',mylen,1,0,fraNum)
+	fnTxt(lc,mylen+2,12,0,1,'10',0,'.',fraNum)
 	resp$(rc+=1)=str$(inpX(4))
-	fnLbl(9,1,'Holiday Hours:',mylen,1,0,fraNum)
-	fnTxt(9,mylen+2,12,0,1,'10',0,'.',fraNum)
+	fnLbl(lc+=1,1,'Holiday Hours:',mylen,1,0,fraNum)
+	fnTxt(lc,mylen+2,12,0,1,'10',0,'.',fraNum)
 	resp$(rc+=1)=str$(inpX(5))
-	fnLbl(10,1,'Salary:',mylen,1,0,fraNum)
-	fnTxt(10,mylen+2,12,0,1,'10',0,'.',fraNum)
-	resp$(rc+=1)=str$(inpX(6))
-	fnLbl(11,1,'Other Compensation:',mylen,1,0,fraNum)
-	fnTxt(11,mylen+2,12,0,1,'10',0,'.',fraNum)
-	resp$(rc+=1)=str$(inpX(7))
-	fnLbl(12,1,'Meals:',mylen,1,0,fraNum)
-	fnTxt(12,mylen+2,12,0,1,'10',0,'.',fraNum)
-	resp$(rc+=1)=str$(inpX(8))
-	fnLbl(13,1,'Tips:',mylen,1,0,fraNum)
-	fnTxt(13,mylen+2,12,0,1,'10',0,'.',fraNum)
-	resp$(rc+=1)=str$(inpX(9))
-	fnLbl(15,1,'Reg Hourly Rate:',mylen,1,0,fraNum)
-	fnTxt(15,mylen+2,12,0,1,'10',0,'.',fraNum)
-	resp$(rc+=1)=str$(hr(1))
-	fnLbl(16,1,'O/T Hourly Rate:',mylen,1,0,fraNum)
-	fnTxt(16,mylen+2,12,0,1,'10',0,'.',fraNum)
-	resp$(rc+=1)=str$(hr(2))
+	lc+=1
+	if fnpayroll_client_state$='IL' then
+		fnLbl(lc+=1,1,'PLAWA Hours:',mylen,1,0,fraNum)
+		fnTxt(lc,mylen+2,12,0,1,'10',0,'.',fraNum)
+		resp$(rc_plawaHours=rc+=1)=str$(plawaHours)
+
+	end if
+	lc+=1
+	fnLbl(lc+=1,1,'Salary:',mylen,1,0,fraNum)
+	fnTxt(lc,mylen+2,12,0,1,'10',0,'.',fraNum)
+	resp$(rc_inp6=rc+=1)=str$(inpX(6))
+	fnLbl(lc+=1,1,'Other Compensation:',mylen,1,0,fraNum)
+	fnTxt(lc,mylen+2,12,0,1,'10',0,'.',fraNum)
+	resp$(rc_inp7=rc+=1)=str$(inpX(7))
+	fnLbl(lc+=1,1,'Meals:',mylen,1,0,fraNum)
+	fnTxt(lc,mylen+2,12,0,1,'10',0,'.',fraNum)
+	resp$(rc_inp8=rc+=1)=str$(inpX(8))
+	fnLbl(lc+=1,1,'Tips:',mylen,1,0,fraNum)
+	fnTxt(lc,mylen+2,12,0,1,'10',0,'.',fraNum)
+	resp$(rc_tips=rc+=1)=str$(inpX(9))
+	lc+=1
+	fnLbl(lc+=1,1,'Reg Hourly Rate:',mylen,1,0,fraNum)
+	fnTxt(lc,mylen+2,12,0,1,'10',0,'.',fraNum)
+	resp$(rc_hr1=rc+=1)=str$(hr(1))
+	fnLbl(lc+=1,1,'O/T Hourly Rate:',mylen,1,0,fraNum)
+	fnTxt(lc,mylen+2,12,0,1,'10',0,'.',fraNum)
+	resp$(rc_hr2=rc+=1)=str$(hr(2))
 	dim name$(20)*21
 	for j=1 to 20
 		if trim$(dedName$(j))='' then name$(j)='' else name$(j)=trim$(dedName$(j))&':'
@@ -284,7 +294,7 @@ ScrAskTime: ! r:
 		resp$(rc+=1)=str$(inpX(j+9))
 	next j
 	fnCmdKey('&Next',1,1,0,'Record this time' )
-	if ~editMode then fnCmdKey('&skip Department F2',2,0,0,'Skips this department.')
+	if ~editMode then fnCmdKey('&Skip Department F2',2,0,0,'Skips this department.')
 	if ~editMode and semp>=1 then fnCmdKey('&Prev Department',12,0,0,'Go back to last department.')
 	if editMode then fnCmdKey('&Delete Department',10,0,0,'Deletes the hours, etc for this department.')
 	if ~editMode then fnCmdKey('&Track Hours',8,0,0,'Track hours other than those entered above.')
@@ -293,14 +303,26 @@ ScrAskTime: ! r:
 	if editMode then fnCmdKey('&Finish',7,0,1,'Finished making ScrCorrections')
 	ckey=fnAcs(mat resp$) ! ask time
 	if ckey=5 and ~editMode then goto FinishAndConfirm
-	for j=1 to 9
+	for j=1 to 5
 		inpX(j)=val(resp$(j))
 	next j
-	hr(1)=val(resp$(10))
-	hr(2)=val(resp$(11))
-	for j=12 to 31
-		inpX(j-2)=val(resp$(j))
-	next j
+	inpX(6)=val(resp$(rc_inp6))
+	inpX(7)=val(resp$(rc_inp7))
+	inpX(8)=val(resp$(rc_inp8))
+	inpX(9)=val(resp$(rc_tips))
+	hr(1)=val(resp$(rc_hr2))
+	hr(2)=val(resp$(rc_hr2))
+	if fnpayroll_client_state$='IL' then
+		for j=(rc_hr2+1) to (rc_hr2+20) ! for j=(12 or 13) to (31 or 32)
+			inpX(j-2)=val(resp$(j))
+		next j
+		plawaHours=val(resp$(rc_plawaHours))
+		resp$(rc+=1)=str$(plawaHours)
+	else
+		for j=12 to 31
+			inpX(j-2)=val(resp$(j))
+		next j
+	end if
 	if ckey=8 then fnHours(eno) : goto ScrAskTime !  breakdown=1 : goto ScrAskTime
 	if ckey=5 and editMode then goto L2290
 	if ckey=10 and editMode then goto DeleteTimesheetEntry
@@ -651,7 +673,7 @@ PullFromJobCost: ! r:
 	gosub SortIt
 	open #hJcPrh1=fnH: 'Name=[Q]\PRmstr\JCPRH1.h[cno]',i,i,r ! #5
 	open #hAddr=fnH: 'Name=[Temp]\Addr.'&session$,i,i ! #6
-	open #hTimesheet=fnH: 'Name=[Q]\PRmstr\timesheet[acsUserId].h[cno],RecL=167,Replace',internal,output ! #3
+	open #hTimesheet=fnH: 'Name=[Q]\PRmstr\timesheet[acsUserId].h[cno],RecL=168,Replace',internal,output ! #3
 	close #hTimesheet:
 	fnIndex('[Q]\PRmstr\timesheet[acsUserId].h[cno]','[Q]\PRmstr\timesheet[acsUserId]Idx.h[cno]','1,11')
 	open #hTimesheet=fnH: 'Name=[Q]\PRmstr\timesheet[acsUserId].h[cno],KFName=[Q]\PRmstr\timesheet[acsUserId]Idx.h[cno]',i,outIn,k

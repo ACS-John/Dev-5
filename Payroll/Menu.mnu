@@ -34,8 +34,8 @@ Annual
 >Corrected W-2                              ^ [cursystem]\Job Cost\*     ^    ^W2
 >Electronic W-2                             ^ [cursystem]\*              ^    ^W2
 >Corrected Electronic W-2                   ^ [cursystem]\*              ^    ^W2
->Print 1099-Misc Forms                      ^ [cursystem]\*              ^    ^
->Print 1099-NEC Forms                       ^ [cursystem]\*              ^    ^
+>Print 1099-Misc Forms                      ^ [cursystem]\*              ^    ^Export,IRIS,csv
+>Print 1099-NEC Forms                       ^ [cursystem]\*              ^    ^Export,IRIS,csv
 >Electronic 401K                            ^ [cursystem]\*              ^    ^
 Print
 ! consolidated into Custom Reports >Custom Reports           ^ [cursystem]\*^ ^Print,User,Designed,Reports,Custom

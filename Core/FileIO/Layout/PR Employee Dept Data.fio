@@ -1,0 +1,8 @@
+[Q]\PRmstr\EmployeeDeptData.h[cno]  ,  ed_   , 0
+[Q]\PRmstr\EmployeeDeptDataIdx.h[cno] ,  emp/dept
+recl=196
+===================================================
+emp     	,  Employee Id        	,  n    8 , ! Pos=  1
+dept    	,  Dept No            	,  n    3 , ! Pos=  9
+field   	,  Field Name         	,  c   64 , ! Pos= 13
+value   	,  Value              	,  c  128 , ! Pos= 77
