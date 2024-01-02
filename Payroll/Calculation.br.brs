@@ -2695,12 +2695,10 @@ def library fnCheckPayrollCalculation(; ___, _
 					read #hEmployee,using Femployee,key=eno$: mat em,lpd,totalGrossPay,w4step2,w4Year$,w4Step3,w4step4a,w4step4b,w4step4c
 					deptKey$=eno$&cnvrt$('pic(zz#)',empDept)
 					read #hDepartment,using 'form pos 1,N 8,n 3,c 12,4*N 6,3*N 2,pd 4.2,23*PD 4.2',key=deptKey$: teno,empDept,gl$,mat tdt,mat tcd,tli,mat tdet
-					! open #hTimesheet=fnH: 'Name=[Q]\PRmstr\timesheet[acsUserId].h[cno],KFName=[Q]\PRmstr\timesheet[acsUserId]idx.h[cno]',i,outIn,k
-					! open #hTimesheet=fnH: 'Name=[Q]\PRmstr\timesheet[acsUserId].h[cno],RecL=167,Replace',internal,output
 					if exists('[Q]\PRmstr\timesheet[acsUserId].h[cno]') then
 						fnCopy('[Q]\PRmstr\timesheet[acsUserId].h[cno]','[Q]\PRmstr\timesheet[acsUserId]backup.h[cno]')
 					end if
-					open #hTimesheet=fnH: 'Name=[Q]\PRmstr\timesheet[acsUserId].h[cno],Version=0,KFName=[Q]\PRmstr\timesheet[acsUserId]Idx.h[cno],Replace,RecL=167,KPs=1,KLn=11,Shr',i,outIn,k
+					open #hTimesheet=fnH: 'Name=[Q]\PRmstr\timesheet[acsUserId].h[cno],Version=0,KFName=[Q]\PRmstr\timesheet[acsUserId]Idx.h[cno],Replace,RecL=168,KPs=1,KLn=11,Shr',i,outIn,k
 					!  r: make timesheet record from read stuff
 						empNo$=eno$ ! heno
 						dep=empDept

@@ -28,7 +28,7 @@ def fn_1099testPrint
 	testBox(10)=  0   	! testBox(10)=9000001000
 	! /r
 	disableCopyAWarning=1
-	fn_1099print('account1','Laura Smith'  ,mat testAddr$,'111-11-1111',mat testBox)
+	fn_1099print('account1','Recipient One'  ,mat testAddr$,'111-11-1111',mat testBox)
 	fn_1099print('Account2','Recipient Two'  ,mat testAddr$,'222-22-2222',mat testBox)
 	fn_1099print('Account3','Recipient Three',mat testAddr$,'333-33-3333',mat testBox)
 	disableCopyAWarning=0
@@ -214,6 +214,7 @@ def fn_ask(&seltpN,&typeN,&minAmt,&beg_date,&end_date; ___, _
 		fnpcreg_write('Enable Background',enableBackground$)
 		fnpcreg_write('3 Per Page',perPage$)
 		fnpcreg_write('Export 1',destinationOpt$(2))
+		fnpcreg_write('Export IRIS',destinationOpt$(3))
 		fnureg_write('1099 - Export Filename',output_filename$)
 		fncreg_write('Phone Number',ph$)
 		! /r
@@ -289,6 +290,7 @@ def fn_1099print(vn$*8,nam$*30,mat empAddr$,ss$*11,mat box; ___, _
 			fed$='12-456789012'
 		end if
 		fnpcreg_read('Export 1' ,ten99Export$,'False')
+		fnpcreg_read('Export IRIS' ,ten99ExportIris$,'False')
 		gosub SetDefaultMargins
 		form1y 	=fnPcRegReadN('form 1 Y'	,val(defaultMargin$(1)))
 		form2y 	=fnPcRegReadN('form 2 Y'	,val(defaultMargin$(2)))
@@ -307,15 +309,20 @@ def fn_1099print(vn$*8,nam$*30,mat empAddr$,ss$*11,mat box; ___, _
 		dim ph$*12
 		fnCreg_read('Phone Number',ph$)
 		copyCurrentN=fnPcRegReadN('Copy Current',2)
-		if ten99Export$='True' then
+		if ten99ExportIris$='True' or ten99Export$='True' then
 			dim output_filename$*256
 			output_filename$=srep$(output_filename$,'[CompanyNumber]',env$('cno'))
 			output_filename$=srep$(output_filename$,'[companynumber]',env$('cno'))
+			output_filename$=srep$(output_filename$,'[companyNumber]',env$('cno'))
 			output_filename$=srep$(output_filename$,'[COMPANYNUMBER]',env$('cno'))
 			output_filename$=srep$(output_filename$,'[TaxYear]',taxYear$)
 			output_filename$=srep$(output_filename$,'[taxyear]',taxYear$)
+			output_filename$=srep$(output_filename$,'[taxYear]',taxYear$)
 			output_filename$=srep$(output_filename$,'[TAXYEAR]',taxYear$)
+		end if
+		if ten99Export$='True' then
 			open #hExport=fnH: 'Name='&br_filename$(output_filename$)&',REPLACE',d,o ioerr ASK_INFO
+		end if
 		else
 			fnpa_open('',optCopy$(copyCurrentN),'PDF')
 		end if

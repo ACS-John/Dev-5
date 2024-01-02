@@ -4,14 +4,14 @@ gosub Enum
 fnTop(program$)
 ! r: layout
 fnH2Init
-fnH2AddText('eno'                   ,8                           )
-fnH2AddText('dep'                   ,3                           )
-fnH2AddText('Regular Hours  inp(01)',7,'PD',4.2,mask_pointtwo, 12)
-fnH2AddText('OverTime Hours inp(02)',7,'PD',4.2,mask_pointtwo, 16)
-fnH2AddText('Vacation Hours inp(03)',7,'PD',4.2,mask_pointtwo, 20)
-fnH2AddText('Sick Hours     inp(04)',7,'PD',4.2,mask_pointtwo, 24)
-fnH2AddText('Holiday Hours  inp(05)',7,'PD',4.2,mask_pointtwo, 28)
-fnH2AddText('Other Compensa inp(06)',7,'PD',5.2,mask_pointtwo, 32)
+fnH2AddText('eno'                   ,8                            )
+fnH2AddText('dep'                   ,3                            )
+fnH2AddText('Regular Hours  inp(1)',7,'PD',4.2,mask_pointtwo, 12)
+fnH2AddText('OverTime Hours inp(2)',7,'PD',4.2,mask_pointtwo, 16)
+fnH2AddText('Vacation Hours inp(3)',7,'PD',4.2,mask_pointtwo, 20)
+fnH2AddText('Sick Hours     inp(4)',7,'PD',4.2,mask_pointtwo, 24)
+fnH2AddText('Holiday Hours  inp(5)',7,'PD',4.2,mask_pointtwo, 28)
+fnH2AddText('Other Compensa inp(6)',7,'PD',5.2,mask_pointtwo, 32)
 fnH2AddText('inp(07)'               ,7,'PD',5.2,mask_pointtwo, 37)
 fnH2AddText('inp(08)'               ,7,'PD',5.2,mask_pointtwo, 42)
 fnH2AddText('inp(09)'               ,7,'PD',5.2,mask_pointtwo, 47)
@@ -38,8 +38,9 @@ fnH2AddText('inp(29)'               ,7,'PD',5.2,mask_pointtwo,147)
 fnH2AddText('GPD'                   ,7,'PD',5.2,mask_pointtwo,152)
 fnH2AddText('hr(1)'                 ,7,'PD',4.2,mask_pointtwo,157)
 fnH2AddText('hr(2)'                 ,7,'PD',4.2,mask_pointtwo,161)
+fnH2AddText('PLAWA'                 ,7,'PD',4.2,mask_pointtwo,165)
 ! /r
-open #1: 'Name=[Q]\PRmstr\timesheet[acsUserId].h[cno],Version=0,KFName=[Q]\PRmstr\timesheet[acsUserId]Idx.h[cno],Use,RecL=167,KPs=1,KLn=11,Shr',i,outIn,k
+open #1: 'Name=[Q]\PRmstr\timesheet[acsUserId].h[cno],Version=0,KFName=[Q]\PRmstr\timesheet[acsUserId]Idx.h[cno],Use,RecL=168,KPs=1,KLn=11,Shr',i,outIn,k
 fnHamster2('Timesheet')
 close #1:
 goto Xit

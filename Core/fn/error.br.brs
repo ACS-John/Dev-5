@@ -284,9 +284,9 @@ def library fnError(callingprogram$*256, errornumber, linenumber, &ertnAct$, sto
 			goto ERROR_XIT
 			! /r
 		else if cmdkey=22 then ! r:
-			ertnAct$='Proc rr.prc'
+			ertnAct$='Proc rr'
 			fnLog('action taken = '&ertnAct$,2)
-			fnWriteProc('rr.prc','end')
+			fnWriteProc('rr','end')
 			fnWriteProc(''      ,'execute ''load "''&program$&''"''')
 			fnWriteProc(''      ,'run')
 			goto ERROR_XIT

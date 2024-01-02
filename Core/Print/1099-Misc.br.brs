@@ -76,7 +76,7 @@ def library fn1099MiscAsk(&seltpN,&typeN,&minAmt,&beg_date,&end_date)
 fnend
 def fn_ask(&seltpN,&typeN,&minAmt,&beg_date,&end_date; ___, _
 	returnN,rc,lc,mylen,mypos,mylen,resc_taxYear,respc_deduction,respc_minAmt,respc_phone, _
-	respc_Print1099,respc_perPage,respc_export_ams,resp_export_file, _
+	respc_Print1099,respc_perPage,respc_export_ams,respc_exportIris,resp_export_file, _
 	ckey_defaultFilename,ckey_margins,ckey_test)
 	! local retained values: awi_setup$, taxYear$, mat deductionFullName$, mat deductionOption$,deductionOptionCount, and many many more
 	if awi_setup$<>env$('cursys')&env$('cno') then ! r: read or set values for ASK_INFO screen
@@ -99,14 +99,16 @@ def fn_ask(&seltpN,&typeN,&minAmt,&beg_date,&end_date; ___, _
 		end if
 
 		minAmt=fnpcreg_read('Filter - Minimum Amount',tmp$, '600')
-
-		fnpcreg_read('Print 1099'       	,destinationOpt$(1)	,'True' )
+		dim destinationOpt$(3)
+		fnpcreg_read('Print 1099'       	,destinationOpt$(1)	,'False' )
 		fnpcreg_read('Export 1'         	,destinationOpt$(2)	,'False')
+		fnpcreg_read('Export IRIS'        ,destinationOpt$(3)	,'True')
 		fnpcreg_read('Enable Background'	,enableBackground$	,'True' )
 		fnpcreg_read('2 Per Page'       	,perPage$       	,'True')
 		copyCurrentN=fnPcRegReadN('Copy Current',2)
 		fnureg_read('1099 - Export Filename',output_filename$,os_filename$(env$('Desktop')&'\ACS [TaxYear] 1099 Export (Company [CompanyNumber]).txt'))
 		fncreg_read('Phone Number',ph$)
+		fncreg_read('Email',email$)
 		dim seltp$*256
 		seltpN=fnPcReg_Read('seltpN',seltp$)
 		if env$('cursys')='PR' then
@@ -139,6 +141,9 @@ def fn_ask(&seltpN,&typeN,&minAmt,&beg_date,&end_date; ___, _
 	fnLbl(lc+=1,1,'Your Telephone Number:',mylen,1)
 	fnTxt(lc,mypos,12,0,1,'',0,'You can use dashes, etc.')
 	resp$(respc_phone:=rc+=1)=ph$
+	fnLbl(lc+=1,1,'Email:',mylen,1)
+	fnTxt(lc,mypos,64,30,0,'',0,'')
+	resp$(respc_email:=rc+=1)=email$
 	lc+=1
 	fnOpt(lc+=1,3,'Print 1099-Misc')
 	resp$(respc_Print1099:=rc+=1)=destinationOpt$(1)
@@ -151,6 +156,8 @@ def fn_ask(&seltpN,&typeN,&minAmt,&beg_date,&end_date; ___, _
 	fnChk(lc+=1,20,'2 Per Page',1)
 	resp$(respc_perPage:=rc+=1)=perPage$
 	lc+=1
+	fnOpt(lc+=1,3,'Export CSV for IRIS')
+	resp$(respc_exportIris:=rc+=1)=destinationOpt$(3)
 	fnOpt(lc+=1,3,'Export for Advanced Micro Solutions')
 	resp$(respc_export_ams:=rc+=1)=destinationOpt$(2)
 	fnLbl(lc+=1,5,'Export File:',12,1,0,franum)
@@ -177,6 +184,7 @@ def fn_ask(&seltpN,&typeN,&minAmt,&beg_date,&end_date; ___, _
 		end if
 		minAmt=val(resp$(respc_minAmt))
 		ph$=resp$(respc_phone)
+		email$=resp$(respc_email)
 		beg_date=val(taxYear$&'0101')
 		end_date=val(taxYear$&'1231')
 		copyCurrentN=srch(mat optCopy$,resp$(respc_copyCurrent))
@@ -184,6 +192,7 @@ def fn_ask(&seltpN,&typeN,&minAmt,&beg_date,&end_date; ___, _
 		perPage$=resp$(respc_perPage)
 		destinationOpt$(1)=resp$(respc_Print1099)
 		destinationOpt$(2)=resp$(respc_export_ams)
+		destinationOpt$(3)=resp$(respc_exportIris)
 		output_filename$=resp$(resp_export_file)
 		! /r
 		! r: validate, respond and/or reject
@@ -225,8 +234,10 @@ def fn_ask(&seltpN,&typeN,&minAmt,&beg_date,&end_date; ___, _
 		fnpcreg_write('Enable Background',enableBackground$)
 		fnpcreg_write('2 Per Page',perPage$)
 		fnpcreg_write('Export 1',destinationOpt$(2))
+		fnpcreg_write('Export IRIS',destinationOpt$(3))
 		fnureg_write('1099 - Export Filename',output_filename$)
 		fncreg_write('Phone Number',ph$)
+		fncreg_write('Email',email$)
 		! /r
 		if copyCurrentN=1 and enableBackground$='True' and ~disableCopyAWarning then fnFormCopyAwithBackgroundWarn
 		if ckey=ckey_test then
@@ -297,6 +308,7 @@ def fn_1099print(vn$*8,nam$*30,mat empAddr$,ss$*11,mat box; ___, _
 			fed$='12-456789012'
 		end if
 		fnpcreg_read('Export 1' ,ten99Export$,'False')
+		fnpcreg_read('Export IRIS' ,ten99ExportIris$,'False')
 		gosub SetDefaultMargins
 		form1y 	=fnPcRegReadN('form 1 Y'	,val(defaultMargin$(1)))
 		form2y 	=fnPcRegReadN('form 2 Y'	,val(defaultMargin$(2)))
@@ -310,25 +322,131 @@ def fn_1099print(vn$*8,nam$*30,mat empAddr$,ss$*11,mat box; ___, _
 
 		fnPcReg_read('2 Per Page',perPage$,'True' )
 		fnPcReg_read('Enable Background',enableBackground$,'True' )
+		dim output_filename$*256
 		fnureg_read('1099 - Export Filename',output_filename$,os_filename$(env$('Desktop')&'\ACS [TaxYear] 1099 Export (Company [CompanyNumber]).txt'))
 		dim ph$*12
+		dim email$*128
 		fnCreg_read('Phone Number',ph$)
+		fnCreg_read('Email',email$)
 		copyCurrentN=fnPcRegReadN('Copy Current',2)
-		if ten99Export$='True' then
-			dim output_filename$*256
+		if ten99ExportIris$='True' or ten99Export$='True' then
 			output_filename$=srep$(output_filename$,'[CompanyNumber]',env$('cno'))
 			output_filename$=srep$(output_filename$,'[companynumber]',env$('cno'))
+			output_filename$=srep$(output_filename$,'[companyNumber]',env$('cno'))
 			output_filename$=srep$(output_filename$,'[COMPANYNUMBER]',env$('cno'))
 			output_filename$=srep$(output_filename$,'[TaxYear]',taxYear$)
 			output_filename$=srep$(output_filename$,'[taxyear]',taxYear$)
+			output_filename$=srep$(output_filename$,'[taxYear]',taxYear$)
 			output_filename$=srep$(output_filename$,'[TAXYEAR]',taxYear$)
+		end if
+		if ten99Export$='True' then
 			open #hExport=fnH: 'Name='&br_filename$(output_filename$)&',REPLACE',d,o ioerr ASK_INFO
+		else if ten99ExportIris$='True' then
+			open #hExport=fnH: 'Name='&br_filename$(output_filename$)&',recL=4096,REPLACE',d,o ioerr ASK_INFO
+			! r: pr IRIS CSV header
+				pr #hExport: 'Form Type,Tax Year,Payer TIN Type,';
+				pr #hExport: 'Payer Taxpayer ID Number,Payer Name Type,Payer Business or Entity Name Line 1,Payer Business or Entity Name Line 2,Payer First Name,Payer Middle Name,Payer Last Name (Surname),Payer Suffix,Payer Country,Payer Address Line 1,Payer Address Line 2,Payer City/Town,Payer State/Province/Territory,Payer ZIP/Postal Code,Payer Phone Type,Payer Phone,Payer Email Address,';
+				pr #hExport: 'Recipient TIN Type,Recipient Taxpayer ID Number,Recipient Name Type,';
+				pr #hExport: 'Recipient Business or Entity Name Line 1,Recipient Business or Entity Name Line 2,Recipient First Name,Recipient Middle Name,Recipient Last Name (Surname),Recipient Suffix,Recipient Country,Recipient Address Line 1,Recipient Address Line 2,Recipient City/Town,Recipient State/Province/Territory,Recipient ZIP/Postal Code,';
+				pr #hExport: 'Office Code,Form Account Number,FATCA Filing Requirements,2nd TIN Notice,';
+				pr #hExport: 'Box  1 - Rents,';
+				pr #hExport: 'Box  2 - Royalties,';
+				pr #hExport: 'Box  3 - Other Income,';
+				pr #hExport: 'Box  4 - Federal income tax withheld,';
+				pr #hExport: 'Box  5 - Fishing boat proceeds,';
+				pr #hExport: 'Box  6 - Medical and health care payments,';
+				pr #hExport: 'Box  7 - Direct sales of $5000 or more of consumer products to a recipient for resale,';
+				pr #hExport: 'Box  8 - Subtitute payments in lieu of dividends or interest,';
+				pr #hExport: 'Box  9 - Crop insurance proceeds,';
+				pr #hExport: 'Box 10 - Gross proceeds paid to an attorney,';
+				pr #hExport: 'Box 11 - Fish purchased for resale,';
+				pr #hExport: 'Box 12 - Section 409A deferrals,';
+				pr #hExport: 'Box 14 - Excess golden parachute payments,';
+				pr #hExport: 'Box 15 - Nonqualified deferred compensation,';
+				pr #hExport: 'Combined Federal/State Filing,';
+				pr #hExport: 'State 1,State 1 - State Tax Withheld,State 1 - State/Payer state number,State 1 - State income,State 1 - Local income tax withheld,State 1 - Special Data Entries,';
+				pr #hExport: 'State 2,State 2 - State Tax Withheld,State 2 - State/Payer state number,State 2 - State income,State 2 - Local income tax withheld,State 2 - Special Data Entries,';
+				pr #hExport: '' ! ',,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,'
+			! /r
 		else
 			fnpa_open('',optCopy$(copyCurrentN),'PDF')
 		end if
 	end if ! /r
-	if ten99Export$='True' then
-		! r: export one
+	if ten99ExportIris$='True' then ! r: pr #hExport: IRIS CSV entry
+		pr #hExport: '1099-MISC,';
+		pr #hExport: taxYear$&',';
+		pr #hExport: 'EIN,'; ! EIN or SSN for company
+		pr #hExport: ss$&','; ! dashes and numbers only
+		pr #hExport: 'B,'; ! B for business or I for individutal Payer Name Type
+		pr #hExport: fn_c$(companyNameAddr$(1));
+		pr #hExport: ','; ! Payer Business or Entity Name Line 2
+		pr #hExport: ','; ! Payer First Name
+		pr #hExport: ','; ! Payer Middle Name
+		pr #hExport: ','; ! Payer Last Name (Surname)
+		pr #hExport: ','; ! Payer Suffix
+		pr #hExport: 'US,'; ! Payer Country
+		pr #hExport: fn_c$(companyNameAddr$(2));
+		pr #hExport: fn_c$(companyNameAddr$(3));
+		dim city$*64,state$*2,zip$*10
+		fncsz(empAddr$(2),city$,state$,zip$)
+		pr #hExport: city$&',';  ! Payer City/Town
+		pr #hExport: state$&','; ! Payer State/Province/Territory
+		pr #hExport: zip$&',';   ! Payer ZIP/Postal Code
+		pr #hExport: 'D,'; ! Payer Phone Type - D for Domestic or I for International
+		pr #hExport: ph$&','; ! Payer Phone
+		pr #hExport: email$&','; ! Payer Email Address
+		pr #hExport: 'SSN,';  ! Recipient TIN Type
+		pr #hExport: ss$&','; ! Recipient Taxpayer ID Number
+		pr #hExport: 'I,';    ! Recipient Name Type B for business or I for individual
+		pr #hExport: ','; ! Recipient Business or Entity Name Line 1
+		pr #hExport: ','; ! Recipient Business or Entity Name Line 2
+		dim nameFirst$*64,nameMiddle$*64,nameLast$*64,nameSuffix$*64
+		fnNameParse(nam$,nameFirst$,nameMiddle$,nameLast$,nameSuffix$)
+		pr #hExport: nameFirst$&','; ! Recipient First Name
+		pr #hExport: nameMiddle$&','; ! Recipient Middle Name
+		pr #hExport: nameLast$&','; ! Recipient Last Name (Surname)
+		pr #hExport: nameSuffix$&','; ! Recipient Suffix
+		pr #hExport: 'Recipient Country,';
+		pr #hExport: 'Recipient Address Line 1,';
+		pr #hExport: 'Recipient Address Line 2,';
+		pr #hExport: 'Recipient City/Town,';
+		pr #hExport: 'Recipient State/Province/Territory,';
+		pr #hExport: 'Recipient ZIP/Postal Code,';
+		pr #hExport: 'Office Code,';
+		pr #hExport: 'Form Account Number,';
+		pr #hExport: 'FATCA Filing Requirements,';
+		pr #hExport: '2nd TIN Notice,';
+		pr #hExport: str$(box(1 ))&','; ! Box 1 - Rents
+		pr #hExport: str$(box(2 ))&','; ! Box 2 - Royalties
+		pr #hExport: str$(box(3 ))&','; ! Box 3 - Other Income
+		pr #hExport: str$(box(4 ))&','; ! Box 4 - Federal income tax withheld
+		pr #hExport: str$(box(5 ))&','; ! Box 5 - Fishing boat proceeds
+		pr #hExport: str$(box(6 ))&','; ! Box 6 - Medical and health care payments
+		pr #hExport: str$(box(7 ))&','; ! Box 7 - Direct sales of $5000 or more of consumer products to a recipient for resale
+		pr #hExport: str$(box(8 ))&','; ! Box 8 - Subtitute payments in lieu of dividends or interest
+		pr #hExport: str$(box(9 ))&','; ! Box 9 - Crop insurance proceeds
+		pr #hExport: str$(box(10))&','; ! Box 10 - Gross proceeds paid to an attorney
+		pr #hExport: str$(box(11))&','; ! Box 11 - Fish purchased for resale
+		pr #hExport: str$(box(12))&','; ! Box 12 - Section 409A deferrals
+		pr #hExport: str$(box(14))&','; ! Box 14 - Excess golden parachute payments
+		pr #hExport: str$(box(15))&','; ! Box 15 - Nonqualified deferred compensation
+		pr #hExport: 'Combined Federal/State Filing,';
+		pr #hExport: 'State 1,';
+		pr #hExport: 'State 1 - State Tax Withheld,';
+		pr #hExport: 'State 1 - State/Payer state number,';
+		pr #hExport: 'State 1 - State income,';
+		pr #hExport: 'State 1 - Local income tax withheld,';
+		pr #hExport: 'State 1 - Special Data Entries,';
+		pr #hExport: 'State 2,';
+		pr #hExport: 'State 2 - State Tax Withheld,';
+		pr #hExport: 'State 2 - State/Payer state number,';
+		pr #hExport: 'State 2 - State income,';
+		pr #hExport: 'State 2 - Local income tax withheld,';
+		pr #hExport: 'State 2 - Special Data Entries,';
+		pr #hExport: ''
+		! /r
+	else if ten99Export$='True' then
+		! r: export AMS
 		pr #hExport: '01 ';' '
 		pr #hExport: '02 ';ph$
 		pr #hExport: '03 ';companyNameAddr$(1)
@@ -443,6 +561,13 @@ def fn_1099print(vn$*8,nam$*30,mat empAddr$,ss$*11,mat box; ___, _
 	end if
 	Xit: !
 fnend
+	def fn_c$*256(c$*256)
+		c$=trim$(c$)
+		if pos(c$,'"')>0 then c$=srep$(c$,'"','')
+		if pos(c$,',')>0 then c$='"'&c$&'"'
+		c$&=',' ! c$=c$&','
+		fn_c$=c$
+	fnend
 	def fn_line(lineNumber)
 		! inherrits local yOffset
 		! retains setup_line,mat lineXy

@@ -5,9 +5,9 @@
 recl=224
 ===================================================
 emp          	,Employee                   	, N  8  ,                 	,! SPos=  1 aka=eno  comboFio(PR Employee)
-dept         	,Department                 	, N  3  ,                 	,! SPos=  9 aka=tdn  
-payrollDate 	,Payroll Date               	, PD 6  , date(ccyymmdd)	,! SPos= 12 aka=prd  
-ckno         	,Check Number               	, N  7  ,                 	,! SPos= 18 aka=ckno 
+dept         	,Department                 	, N  3  ,                 	,! SPos=  9 aka=tdn
+payrollDate 	,Payroll Date               	, PD 6  , date(ccyymmdd) 	,! SPos= 12 aka=prd
+ckno         	,Check Number               	, N  7  ,                 	,! SPos= 18 aka=ckno
 tdc1         	,Hours - Regular            	, PD 3.2,                 	,! SPos= 25 aka=tdc(1)
 tdc2         	,Hours - OverTime           	, PD 3.2,                 	,! SPos= 28 aka=tdc(2)
 tdc3         	,Hours - Sick               	, PD 3.2,                 	,! SPos= 31 aka=tdc(3)
