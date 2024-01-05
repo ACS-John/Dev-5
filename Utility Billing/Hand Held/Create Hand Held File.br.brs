@@ -190,7 +190,7 @@ goto NextReadForAll ! /r
 
 SendRecordToOutFile: ! r:
 	! if trim$(z$)='100100.99' then pause
-	if udim(mat filterAccount$) or ~final or u4_includeFinalBilled$='True' then ! skip IF FINAL BILLED
+	if udim(mat filterAccount$) or (~final or final=3) or u4_includeFinalBilled$='True' then ! skip IF FINAL BILLED
 
 		if ~(selection_method=sm_meterTypes) or deviceSelected$=fn_meterInfo$('Device',z$,serviceCodeMetered$(1)) then
 			if ~filterNoLocationId or val(fn_meterInfo$('Location_ID',z$,'WA'))>0 then
@@ -267,10 +267,10 @@ NextReadForAll: ! ! r:
 	if fn_customerRead=-54 then
 		goto End1
 	else if selection_method=sm_aRoute then
-		if ~route then
-			goto NextReadForAll
-		else if bk1<>route then
+		if route and bk1<>route then
 			goto End1
+		else if ~route then
+			goto NextReadForAll
 		end if
 	end if
 goto SendRecordToOutFile ! /r
@@ -546,7 +546,7 @@ def fn_badgerBeacon(account$*10,srvCode$*2)
 		fn_record_addC(20,fn_meterInfo$('Transmitter Number',account$,srvCode$)) ! Endpoint_SN'                 Meter Location - Transmitter Serial Number
 		
 		if env$('client')='Moweaqua' or env$('client')='Kincaid' then 
-			fn_record_addC(19,fn_meterInfo$('Meter Type',account$,srvCode$)(1:1))   ! just the first letter of the type code for Moweaqua
+			fn_record_addC(19,fn_meterInfo$('Meter Type',account$,srvCode$)(1:1))   ! just the first letter of the type code
 		else
 			fn_record_addC(19,fn_meterInfo$('Meter Type',account$,srvCode$))         ! Endpoint_Type                meter type - read type
 		end if

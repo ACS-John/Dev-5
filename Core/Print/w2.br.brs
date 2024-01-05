@@ -7,7 +7,7 @@ fn_setup
 		! nex x
 	! /r
 
-	! r: test naeme parser
+	! r: test name parser
 	! nameFormat$=optNameFormat$(2)
 	! fncreg_write('Employee Name Format',nameFormat$)
 	! dim n1$*64,n2$*64,n3$*64
@@ -95,7 +95,7 @@ def library fnask_w2_info(&taxYear$,&beg_date,&end_date,&empStart$, _
 		! /r
 		! r: read or set values for ASK_INFO screen
 		taxYear$=date$(days(date$)-120,'CCYY')
-		if env$('client')='Payroll Done Right' then let taxYear$=date$(days(date$)-100,'CCYY') ! client requested to print 2019 early
+		if env$('client')='Payroll Done Right' then taxYear$=date$(days(date$)-100,'CCYY') ! client requested to print 2019 early
 		empStart$='[All]'
 		empEnd$='[All]'
 		ssrate=.062
@@ -111,6 +111,8 @@ def library fnask_w2_info(&taxYear$,&beg_date,&end_date,&empStart$, _
 				ssmax=137700
 		else if taxyear$='2021' then
 				ssmax=142800
+		else if taxyear$='2023' then ! from page 28 of 15-T  ( https://www.irs.gov/pub/irs-prior/p15--2024.pdf )
+				ssmax=168600
 		end if
 		mcrate=.0145
 		mcmax=999999
@@ -612,15 +614,15 @@ def fn_w2_text(w2Yoffset,maskSsn,mat a$,empId$*12,ss$,controlNumber$,mat w,dcb$,
 			fnpa_txt(cnvrt$('pic(zzzzzzzzzzzzz.zz',w(7)),left+79,speciallastline)
 			fnpa_txt(cnvrt$('pic(zzzzzzzzzzzzz.zz',w(10)),left+109,speciallastline)
 			fnpa_txt(cnvrt$('pic(zzzzzzzzzzzzz.zz',w(8)),left+137,speciallastline)
-			fnpa_txt(printLocality$(1:6),left+164,speciallastline)
-		else 
-			fnpa_txt(state$,left-3,fn_line(11))
-			fnpa_txt(stcode$,left+10,fn_line(11))
-			fnpa_txt(cnvrt$('pic(zzzzzzzzzzzzz.zz',w(9)),left+51,fn_line(11))
-			fnpa_txt(cnvrt$('pic(zzzzzzzzzzzzz.zz',w(7)),left+79,fn_line(11))
-			fnpa_txt(cnvrt$('pic(zzzzzzzzzzzzz.zz',w(10)),left+109,fn_line(11))
-			fnpa_txt(cnvrt$('pic(zzzzzzzzzzzzz.zz',w(8)),left+137,fn_line(11))
-			fnpa_txt(printLocality$(1:6),left+164,fn_line(11))
+			fnp a_txt(printLocality$(1:6),left+164,speciallastline)
+		else  
+			fnpa_txt(state$                                	,left-3  ,fn_line(11))
+			fnpa_txt(stcode$                               	,left+10 ,fn_line(11))
+			fnpa_txt(cnvrt$('pic(zzzzzzzzzzzzz.zz',w(9)) 	,left+51 ,fn_line(11))
+			fnpa_txt(cnvrt$('pic(zzzzzzzzzzzzz.zz',w(7)) 	,left+79 ,fn_line(11))
+			fnpa_txt(cnvrt$('pic(zzzzzzzzzzzzz.zz',w(10))	,left+109,fn_line(11))
+			fnpa_txt(cnvrt$('pic(zzzzzzzzzzzzz.zz',w(8)) 	,left+137,fn_line(11))
+			fnpa_txt(printLocality$(1:6)                   	,left+164,fn_line(11))
 		end if
 	end if
 fnend
