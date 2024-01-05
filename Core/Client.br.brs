@@ -488,7 +488,7 @@ def fn_getClientLicense(mat clientHas$)
 		else if env$('client')='Kincaid' then
 			fn_userLimit(2)
 			fn_getClientLicense_add('UB') : fn_setUbLimit(1000) ! U2 Utility Billing (500-1000 customers)
-			fn_getClientLicense_add('U4') : u4_device$='Boson' ! U4 Utility Billing Hand Held Add-On
+			fn_getClientLicense_add('U4') : u4_device$='Badger Beacon' ! formerly 'Boson' ! U4 Utility Billing Hand Held Add-On
 			fn_getClientLicense_add('U5') ! UB External Collections Processing - given freely on 5/27/21
 			!     fn_getClientLicense_add('GL')
 			fn_getClientLicense_add('PR')
@@ -545,7 +545,6 @@ def fn_getClientLicense(mat clientHas$)
 		else if env$('client')='Scottville Rural' then
 			fn_userLimit(1)
 			fn_getClientLicense_add('UB') : fn_setUbLimit(500) ! U3 Utility Billing (<500 Customers)
-			
 		! else if env$('client')='Starr County Gas' then
 		! 	fn_userLimit(1)
 		! 	if days(date$)<=days('04/15/2018','mm/dd/ccyy') then fn_getClientLicense_add('UB') : fn_setUbLimit(9999)

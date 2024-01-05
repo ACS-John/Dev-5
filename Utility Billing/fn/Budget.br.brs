@@ -62,8 +62,7 @@ fnend
 def library fnCloseBudMstr
 	autoLibrary
 	close #hBudMstr1: ioerr ignore
-	! close #hBudMstr2: ioerr ignore
-	hBudMstr1=hBudMstr2=0
+	! hBudMstr1=0   ! leave this available for fnBudgetTransMatchingRecords if it is called later
 fnend
 
 
