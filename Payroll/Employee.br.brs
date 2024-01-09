@@ -361,7 +361,7 @@ fnend
 ScrDepartment: ! r:
 	fnTos ! r:
 	respc=0
-	mylen=20 : mypos=mylen+2 : mat resp$=('')
+	mylen=21 : mypos=mylen+2 : mat resp$=('')
 	dim departmentCap$*128
 	lc=0
 	if ~deptNew then
@@ -433,8 +433,8 @@ ScrDepartment: ! r:
 		fnLbl(j,1,dednames$(j*2-1),mylen,1,0,fram3)
 		fnTxt(j,mylen+3,12,12,1,'10',0,'Enter the standard amount or the percent.',fram3)
 		resp$(respc+=1)=str$(tdet(j*2-1+3))
-		fnLbl(j,35,dednames$(j*2),mylen,1,0,fram3)
-		fnTxt(j,58,12,12,1,'10',0,'Enter the standard amount or the percent.',fram3)
+		fnLbl(j,35+2,dednames$(j*2),mylen,1,0,fram3)
+		fnTxt(j,58+2,12,12,1,'10',0,'Enter the standard amount or the percent.',fram3)
 		resp$(respc+=1)=str$(tdet(j*2+3))
 	next j
 
@@ -841,7 +841,7 @@ def fn_setup
 	dim state_option$(10)*11
 	for j=1 to 10: state_option$(j)=cnvrt$('Pic(z#)',j)&' '&statenames$(j): next j
 
-	dim dednames$(20)*20
+	dim dednames$(20)*21
 	fnDedNames(mat dednames$)
 	for j=1 to 20
 		if trim$(dednames$(j))<>'' then

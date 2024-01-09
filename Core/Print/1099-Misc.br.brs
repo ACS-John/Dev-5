@@ -142,7 +142,7 @@ def fn_ask(&seltpN,&typeN,&minAmt,&beg_date,&end_date; ___, _
 	fnTxt(lc,mypos,12,0,1,'',0,'You can use dashes, etc.')
 	resp$(respc_phone:=rc+=1)=ph$
 	fnLbl(lc+=1,1,'Email:',mylen,1)
-	fnTxt(lc,mypos,64,30,0,'',0,'')
+	fnTxt(lc,mypos,30,64,0,'',0,'')
 	resp$(respc_email:=rc+=1)=email$
 	lc+=1
 	fnOpt(lc+=1,3,'Print 1099-Misc')
@@ -291,7 +291,7 @@ def library fn1099MiscPrint(vn$*8,nam$*30,mat empAddr$,ss$*11,mat box)
 	fn1099MiscPrint=fn_1099print(vn$,nam$,mat empAddr$,ss$,mat box)
 fnend
 def fn_1099print(vn$*8,nam$*30,mat empAddr$,ss$*11,mat box; ___, _
-		lineN)
+		lineN,yn$*1,city$*64,state$*2,zip$*10)
 	! inherrits local: disableCopyAWarning
 	if ~ten99initialized then ! r: initialize output destination (if needed)
 		ten99initialized=1
@@ -386,9 +386,8 @@ def fn_1099print(vn$*8,nam$*30,mat empAddr$,ss$*11,mat box; ___, _
 		pr #hExport: ','; ! Payer Suffix
 		pr #hExport: 'US,'; ! Payer Country
 		pr #hExport: fn_c$(companyNameAddr$(2));
-		pr #hExport: fn_c$(companyNameAddr$(3));
-		dim city$*64,state$*2,zip$*10
-		fncsz(empAddr$(2),city$,state$,zip$)
+		pr #hExport: ','; ! fn_c$(companyNameAddr$(3));
+		fncsz(companyNameAddr$(3),city$,state$,zip$)
 		pr #hExport: city$&',';  ! Payer City/Town
 		pr #hExport: state$&','; ! Payer State/Province/Territory
 		pr #hExport: zip$&',';   ! Payer ZIP/Postal Code
@@ -406,16 +405,18 @@ def fn_1099print(vn$*8,nam$*30,mat empAddr$,ss$*11,mat box; ___, _
 		pr #hExport: nameMiddle$&','; ! Recipient Middle Name
 		pr #hExport: nameLast$&','; ! Recipient Last Name (Surname)
 		pr #hExport: nameSuffix$&','; ! Recipient Suffix
-		pr #hExport: 'Recipient Country,';
-		pr #hExport: 'Recipient Address Line 1,';
-		pr #hExport: 'Recipient Address Line 2,';
-		pr #hExport: 'Recipient City/Town,';
-		pr #hExport: 'Recipient State/Province/Territory,';
-		pr #hExport: 'Recipient ZIP/Postal Code,';
-		pr #hExport: 'Office Code,';
-		pr #hExport: 'Form Account Number,';
-		pr #hExport: 'FATCA Filing Requirements,';
-		pr #hExport: '2nd TIN Notice,';
+		pr #hExport: 'US,'; ! Recipient Country
+		pr #hExport: empAddr$(1)&','; ! Recipient Address Line 1
+		pr #hExport: ','; ! Recipient Address Line 2
+		fncsz(empAddr$(2),city$,state$,zip$)
+		pr #hExport: city$&',';  ! 'Recipient City/Town,';
+		pr #hExport: state$&','; ! 'Recipient State/Province/Territory,';
+		pr #hExport: zip$&',';   ! 'Recipient ZIP/Postal Code,';
+		pr #hExport: '1234,'; ! Office Code
+		pr #hExport: vn$&','; ! Form Account Number
+		if box(13) then yn$='Y' else yn$='N' 
+		pr #hExport: yn$&','; ! FATCA Filing Requirements  Y for checked N for unchecked
+		pr #hExport: '2nd TIN Notice,'; ! Y for checked N for unchecked
 		pr #hExport: str$(box(1 ))&','; ! Box 1 - Rents
 		pr #hExport: str$(box(2 ))&','; ! Box 2 - Royalties
 		pr #hExport: str$(box(3 ))&','; ! Box 3 - Other Income
@@ -432,9 +433,9 @@ def fn_1099print(vn$*8,nam$*30,mat empAddr$,ss$*11,mat box; ___, _
 		pr #hExport: str$(box(15))&','; ! Box 15 - Nonqualified deferred compensation
 		pr #hExport: 'Combined Federal/State Filing,';
 		pr #hExport: 'State 1,';
-		pr #hExport: 'State 1 - State Tax Withheld,';
-		pr #hExport: 'State 1 - State/Payer state number,';
-		pr #hExport: 'State 1 - State income,';
+		pr #hExport: str$(box(16))&','; ! State 1 - State Tax Withheld
+		pr #hExport: str$(box(17))&','; 'State 1 - State/Payer state number,';
+		pr #hExport: str$(box(18))&','; 'State 1 - State income,';
 		pr #hExport: 'State 1 - Local income tax withheld,';
 		pr #hExport: 'State 1 - Special Data Entries,';
 		pr #hExport: 'State 2,';
@@ -482,7 +483,7 @@ def fn_1099print(vn$*8,nam$*30,mat empAddr$,ss$*11,mat box; ___, _
 		pr #hExport: '*'
 		! /r
 	else
-		! r: pr one
+		! r: pr one PDF
 		column1 	= left +  15
 		column2 	= left + 102
 		column3 	= left + 137
@@ -495,15 +496,15 @@ def fn_1099print(vn$*8,nam$*30,mat empAddr$,ss$*11,mat box; ___, _
 			fnpa_background(CopyFile$(copyCurrentN))
 		end if
 		fnpa_FontSize
-		! ! r: draw developer lines
-		! if env$('acsDeveloper')<>'' then
-		! 	for lineN=1 to udim(mat lineXy)
-		! 		fnpa_txt(str$(lineN)  ,left+1,fn_line(lineN))
-		! 		fnpa_txt('('&str$(lineXy(lineN))&')' ,left+10,fn_line(lineN))
-		! 		fnpa_txt(rpt$('_ ',50),left+1,fn_line(lineN))
-		! 	nex lineN
-		! end if
-		! ! /r
+		! r: draw developer lines
+		if env$('acsDeveloper')<>'' then
+			for lineN=1 to udim(mat lineXy)
+				fnpa_txt(str$(lineN)  ,left+1,fn_line(lineN))
+				fnpa_txt('('&str$(lineXy(lineN))&')' ,left+10,fn_line(lineN))
+				fnpa_txt(rpt$('_ ',50),left+1,fn_line(lineN))
+			nex lineN
+		end if
+		! /r
 		! r: print the text in the boxes
 			! r: left side
 				! PAYER'S name, street address, city, etc
@@ -597,8 +598,13 @@ def library fn1099MiscPrintClose
 	fn1099MiscPrintClose=fn_1099print_close
 fnend
 def fn_1099print_close
-		if ten99Export$='True' then
+		if ten99Export$='True' or ten99ExportIris$='True' then
+			dim msgTxt$(0)*256
+			mat msgTxt$(2)
+			msgTxt$(2)=os_filename$(file$(hExport))
 			close #hExport:
+			msgTxt$(1)='Created file:'
+			fnMsgBox(mat msgTxt$)
 		else
 			fnpa_finis
 		end if
