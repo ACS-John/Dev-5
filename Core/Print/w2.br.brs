@@ -222,7 +222,7 @@ def library fnask_w2_info(&taxYear$,&beg_date,&end_date,&empStart$, _
 	cf+=1 : franum=cf : mylen=26 : mypos=mylen+2
 	fnOpt(1,3,'Print W-2',0,franum)
 	resp$(respc_PrintW2:=rc+=1)=w2destinationOpt$(1)
-	fnLbl(1,fraWidth-50,'(2 per page is not yet available with Backgrounds)',50,1,0,franum)
+	! fnLbl(1,fraWidth-50,'(2 per page is not yet available with Backgrounds)',50,1,0,franum)
 	fnLbl(2,5,'Copy:',12,1,0,franum)
 	fnComboA('w2Copy',2,19,mat optW2Copy$, '',20,franum)
 	resp$(respc_w2copy:=rc+=1)=w2Copy$
@@ -610,18 +610,18 @@ def fn_w2_text(w2Yoffset,maskSsn,mat a$,empId$*12,ss$,controlNumber$,mat w,dcb$,
 		let speciallastline=w2Yoffset+10+(8.5*10)+5
 			fnpa_txt(state$,left-3,speciallastline)
 			fnpa_txt(stcode$,left+10,speciallastline)
-			fnpa_txt(cnvrt$('pic(zzzzzzzzzzzzz.zz',w(9)),left+51,speciallastline)
-			fnpa_txt(cnvrt$('pic(zzzzzzzzzzzzz.zz',w(7)),left+79,speciallastline)
+			fnpa_txt(cnvrt$('pic(zzzzzzzzzzzzz.zz',w( 9)),left+ 51,speciallastline)
+			fnpa_txt(cnvrt$('pic(zzzzzzzzzzzzz.zz',w( 7)),left+ 79,speciallastline)
 			fnpa_txt(cnvrt$('pic(zzzzzzzzzzzzz.zz',w(10)),left+109,speciallastline)
-			fnpa_txt(cnvrt$('pic(zzzzzzzzzzzzz.zz',w(8)),left+137,speciallastline)
-			fnp a_txt(printLocality$(1:6),left+164,speciallastline)
+			fnpa_txt(cnvrt$('pic(zzzzzzzzzzzzz.zz',w( 8)),left+137,speciallastline)
+			fnpa_txt(printLocality$(1:6),left+164,speciallastline)
 		else  
 			fnpa_txt(state$                                	,left-3  ,fn_line(11))
 			fnpa_txt(stcode$                               	,left+10 ,fn_line(11))
-			fnpa_txt(cnvrt$('pic(zzzzzzzzzzzzz.zz',w(9)) 	,left+51 ,fn_line(11))
-			fnpa_txt(cnvrt$('pic(zzzzzzzzzzzzz.zz',w(7)) 	,left+79 ,fn_line(11))
+			fnpa_txt(cnvrt$('pic(zzzzzzzzzzzzz.zz',w( 9)) 	,left+51 ,fn_line(11))
+			fnpa_txt(cnvrt$('pic(zzzzzzzzzzzzz.zz',w( 7)) 	,left+79 ,fn_line(11))
 			fnpa_txt(cnvrt$('pic(zzzzzzzzzzzzz.zz',w(10))	,left+109,fn_line(11))
-			fnpa_txt(cnvrt$('pic(zzzzzzzzzzzzz.zz',w(8)) 	,left+137,fn_line(11))
+			fnpa_txt(cnvrt$('pic(zzzzzzzzzzzzz.zz',w( 8)) 	,left+137,fn_line(11))
 			fnpa_txt(printLocality$(1:6)                   	,left+164,fn_line(11))
 		end if
 	end if

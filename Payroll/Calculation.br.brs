@@ -935,10 +935,10 @@ def fn_getFederalTable(taxYear,marital,w4Year$,w4step2,mat fedTable,&fed_annual_
 			fhc(8,1)=279650 : fhc(8,2)=80609.25  : fhc(8,3)=0.37
 			! /r
 		end if ! /r
-		if taxYear=>2023 then ! r: 2022 Federal Tables
+		if taxYear=2023 then ! r: 2023 Federal Tables
 			! https://www.irs.gov/pub/irs-pdf/p15t.pdf
 			if w4year$='2019' then
-				fed_annual_wh_allowance=4300 ! every year
+				fed_annual_wh_allowance=4300
 				! r: f2m=federal  2019  married
 				dim f2m(8,3)
 				f2m(1,1)=     0 : f2m(1,2)=     0     : f2m(1,3)=0
@@ -1053,8 +1053,104 @@ def fn_getFederalTable(taxYear,marital,w4Year$,w4step2,mat fedTable,&fed_annual_
 			! fhc(7,1)=126025 : fhc(7,2)=25613     : fhc(7,3)=0.35
 			! fhc(8,1)=299450 : fhc(8,2)=86311.75  : fhc(8,3)=0.37
 			! /r
-			end if
-		end if 	! every year /r
+			end if ! /r
+		else if taxYear=>2024 then ! r: Federal Tables
+			! https://www.irs.gov/pub/irs-pdf/p15t.pdf
+			if w4year$='2019' then
+				fed_annual_wh_allowance=4300 ! every year
+				! r: f2m=federal  2019  married
+				dim f2m(8,3)
+				f2m(1,1)=     0 : f2m(1,2)=     0     : f2m(1,3)=0
+				f2m(2,1)= 16300 : f2m(2,2)=     0     : f2m(2,3)=0.1
+				f2m(3,1)= 39500 : f2m(3,2)=  2320     : f2m(3,3)=0.12
+				f2m(4,1)=110600 : f2m(4,2)= 10852     : f2m(4,3)=0.22
+				f2m(5,1)=217350 : f2m(5,2)= 34337     : f2m(5,3)=0.24
+				f2m(6,1)=400200 : f2m(6,2)= 78221     : f2m(6,3)=0.32
+				f2m(7,1)=503750 : f2m(7,2)=111357     : f2m(7,3)=0.35
+				f2m(8,1)=747500 : f2m(8,2)=196669.5   : f2m(8,3)=0.37
+				! /r
+				! r: f2s=federal  2019  single
+				dim f2s(8,3)
+				f2s(1,1)=     0 : f2s(1,2)=     0     : f2s(1,3)=0
+				f2s(2,1)=  6000 : f2s(2,2)=     0     : f2s(2,3)=0.1
+				f2s(3,1)= 17600 : f2s(3,2)=  1160     : f2s(3,3)=0.12
+				f2s(4,1)= 53150 : f2s(4,2)=  5426     : f2s(4,3)=0.22
+				f2s(5,1)=106525 : f2s(5,2)= 17168.5   : f2s(5,3)=0.24
+				f2s(6,1)=197950 : f2s(6,2)= 39110.5   : f2s(6,3)=0.32
+				f2s(7,1)=249725 : f2s(7,2)= 55678.5   : f2s(7,3)=0.35
+				f2s(8,1)=615350 : f2s(8,2)=183647.25  : f2s(8,3)=0.37
+				! /r
+			else ! w4year$='2020'
+				! r: fss=federal  joint             standard             Top Left
+				dim fjs(8,3)
+				fjs(1,1)=12*     0 : fjs(1,2)=12*     0    : fjs(1,3)=0
+				fjs(2,1)=12*  2433 : fjs(2,2)=12*     0    : fjs(2,3)=0.10
+				fjs(3,1)=12*  4367 : fjs(3,2)=12*   193.4  : fjs(3,3)=0.12
+				fjs(4,1)=12* 10292 : fjs(4,2)=12*   904.4  : fjs(4,3)=0.22
+				fjs(5,1)=12* 19188 : fjs(5,2)=12*  2861.52 : fjs(5,3)=0.24
+				fjs(6,1)=12* 34425 : fjs(6,2)=12*  6518.4  : fjs(6,3)=0.32
+				fjs(7,1)=12* 43054 : fjs(7,2)=12*  9279.68 : fjs(7,3)=0.35
+				fjs(8,1)=12* 63367 : fjs(8,2)=12* 16389.23 : fjs(8,3)=0.37
+				! /r
+				! r: fjc=federal  joint              W-4 Step 2 checked   Top Right (Married Filing Jointly)
+				dim fjc(8,3)
+				fjc(1,1)=12*     0 : fjc(1,2)=12*    0      : fjc(1,3)=0
+				fjc(2,1)=12*  1217 : fjc(2,2)=12*    0      : fjc(2,3)=0.1
+				fjc(3,1)=12*  2183 : fjc(3,2)=12*   96.6    : fjc(3,3)=0.12
+				fjc(4,1)=12*  5146 : fjc(4,2)=12*  452.16   : fjc(4,3)=0.22
+				fjc(5,1)=12*  9594 : fjc(5,2)=12* 1430.72   : fjc(5,3)=0.24
+				fjc(6,1)=12* 17213 : fjc(6,2)=12* 3259.28   : fjc(6,3)=0.32
+				fjc(7,1)=12* 21527 : fjc(7,2)=12* 4639.76   : fjc(7,3)=0.35
+				fjc(8,1)=12* 31683 : fjc(8,2)=12* 8194.36   : fjc(8,3)=0.37
+
+				! /r
+				! r: fss=federal  single             standard             Middle Left (single or Married Filing Seperately)
+							! same as 2019-W4 Single Annual table (pg 64 right side)
+				dim fss(8,3)
+				fss(1,1)=12*     0 : fss(1,2)=12*     0    : fss(1,3)=0
+				fss(2,1)=12*  1217 : fss(2,2)=12*     0    : fss(2,3)=0.10
+				fss(3,1)=12*  2183 : fss(3,2)=12*    96.6  : fss(3,3)=0.12
+				fss(4,1)=12*  5146 : fss(4,2)=12*   452.16 : fss(4,3)=0.22
+				fss(5,1)=12*  9594 : fss(5,2)=12*  1430.72 : fss(5,3)=0.24
+				fss(6,1)=12* 17213 : fss(6,2)=12*  3259.28 : fss(6,3)=0.32
+				fss(7,1)=12* 21527 : fss(7,2)=12*  4639.76 : fss(7,3)=0.35
+				fss(8,1)=12* 51996 : fss(8,2)=12* 15303.91 : fss(8,3)=0.37
+				! /r
+				! r: fsc=federal  single             W-4 Step 2 checked   Middle Right (single or Married Filing Seperately)
+				dim fsc(8,3)
+				fsc(1,1)=12*     0 : fsc(1,2)=12*    0    : fsc(1,3)=0
+				fsc(2,1)=12*   608 : fsc(2,2)=12*    0    : fsc(2,3)=0.1
+				fsc(3,1)=12*  1092 : fsc(3,2)=12*   48.4  : fsc(3,3)=0.12
+				fsc(5,1)=12*  2573 : fsc(5,2)=12*  226.12 : fsc(5,3)=0.24
+				fsc(4,1)=12*  4797 : fsc(4,2)=12*  715.4  : fsc(4,3)=0.22
+				fsc(6,1)=12*  8606 : fsc(6,2)=12* 1629.56 : fsc(6,3)=0.32
+				fsc(7,1)=12* 10764 : fsc(7,2)=12* 2320.12 : fsc(7,3)=0.35
+				fsc(8,1)=12* 25998 : fsc(8,2)=12* 7652.02 : fsc(8,3)=0.37
+				! /r
+				! r: fhs=federal  head of household  standard             Bottom Left (Head of Household)
+				dim fhs(8,3)
+				fhs(1,1)=12*     0 : fhs(1,2)=12*     0    : fhs(1,3)=0
+				fhs(2,1)=12*  1825 : fhs(2,2)=12*     0    : fhs(2,3)=0.1
+				fhs(3,1)=12*  3204 : fhs(3,2)=12*   137.9  : fhs(3,3)=0.12
+				fhs(4,1)=12*  7083 : fhs(4,2)=12*   603.38 : fhs(4,3)=0.22
+				fhs(5,1)=12* 10200 : fhs(5,2)=12*  1289.12 : fhs(5,3)=0.24
+				fhs(6,1)=12* 17821 : fhs(6,2)=12*  3118.16 : fhs(6,3)=0.32
+				fhs(7,1)=12* 22133 : fhs(7,2)=12*  4498    : fhs(7,3)=0.35
+				fhs(8,1)=12* 52604 : fhs(8,2)=12* 15162.85 : fhs(8,3)=0.37
+				! /r
+				! r: fhc=federal  head of household  W-4 Step 2 checked   Bottom Right (Head of Household)
+			dim fhc(8,3)
+			fhc(1,1)=12*     0 : fhc(1,2)=12*    0     : fhc(1,3)=0
+			fhc(2,1)=12*   913 : fhc(2,2)=12*    0     : fhc(2,3)=0.1
+			fhc(3,1)=12*  1602 : fhc(3,2)=12*   68.9   : fhc(3,3)=0.12
+			fhc(4,1)=12*  3542 : fhc(4,2)=12*  301.7   : fhc(4,3)=0.22
+			fhc(5,1)=12*  5100 : fhc(5,2)=12*  644.46  : fhc(5,3)=0.24
+			fhc(6,1)=12*  8910 : fhc(6,2)=12* 1558.86  : fhc(6,3)=0.32
+			fhc(7,1)=12* 11067 : fhc(7,2)=12* 2249.1   : fhc(7,3)=0.35
+			fhc(8,1)=12* 26302 : fhc(8,2)=12* 7581.35  : fhc(8,3)=0.37
+			! /r
+			end if ! /r
+		end if 	! /r
 	end if
 	! r: set mat fedTable
 		dim fedTable(8,3)

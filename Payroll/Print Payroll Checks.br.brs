@@ -819,17 +819,17 @@ def fn_print_check
 		pos_date               =57
 		pos_amt                =69
 		fn_check_dynamic(length,line_date,line_amount,line_amount_english,line_name_and_address, pos_date,pos_amt) ! /r
-	else if env$('client')='Carr Plumbing' then ! r:
-		length                = 26
-		line_date             =  4
-		line_amount           =  7
-		line_amount_english   = 10
-		line_name_and_address = 14
-		pos_date              = 78
-		pos_amt               = 72
-		line_nameOnly         =  7
-		pos_nameOnly=0 ! default to 12
-		fn_check_dynamic(length,line_date,line_amount,line_amount_english,line_name_and_address, pos_date,pos_amt,line_nameOnly,pos_nameOnly) ! /r
+	! else if env$('client')='Carr Plumbing' then ! r:
+	! 	length                = 26
+	! 	line_date             =  4
+	! 	line_amount           =  7
+	! 	line_amount_english   = 10
+	! 	line_name_and_address = 14
+	! 	pos_date              = 78
+	! 	pos_amt               = 72
+	! 	line_nameOnly         =  7
+	! 	pos_nameOnly=0 ! default to 12
+	! 	fn_check_dynamic(length,line_date,line_amount,line_amount_english,line_name_and_address, pos_date,pos_amt,line_nameOnly,pos_nameOnly) ! /r
 	else if env$('client')='Cerro Gordo V' then
 		fn_check_cerrogordo
 	else if env$('client')='Cerro Gordo T' then ! r:
