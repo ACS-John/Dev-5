@@ -310,7 +310,7 @@ ScrAskTime: ! r:
 	inpX(7)=val(resp$(rc_inp7))
 	inpX(8)=val(resp$(rc_inp8))
 	inpX(9)=val(resp$(rc_tips))
-	hr(1)=val(resp$(rc_hr2))
+	hr(1)=val(resp$(rc_hr1))
 	hr(2)=val(resp$(rc_hr2))
 	if fnpayroll_client_state$='IL' then
 		for j=(rc_hr2+1) to (rc_hr2+20) ! for j=(12 or 13) to (31 or 32)

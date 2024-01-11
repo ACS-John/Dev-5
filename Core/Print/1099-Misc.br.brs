@@ -416,7 +416,7 @@ def fn_1099print(vn$*8,nam$*30,mat empAddr$,ss$*11,mat box; ___, _
 		pr #hExport: vn$&','; ! Form Account Number
 		if box(13) then yn$='Y' else yn$='N' 
 		pr #hExport: yn$&','; ! FATCA Filing Requirements  Y for checked N for unchecked
-		pr #hExport: '2nd TIN Notice,'; ! Y for checked N for unchecked
+		pr #hExport: 'N,'; ! 2nd TIN Notice  Y for checked N for unchecked
 		pr #hExport: str$(box(1 ))&','; ! Box 1 - Rents
 		pr #hExport: str$(box(2 ))&','; ! Box 2 - Royalties
 		pr #hExport: str$(box(3 ))&','; ! Box 3 - Other Income
@@ -431,19 +431,19 @@ def fn_1099print(vn$*8,nam$*30,mat empAddr$,ss$*11,mat box; ___, _
 		pr #hExport: str$(box(12))&','; ! Box 12 - Section 409A deferrals
 		pr #hExport: str$(box(14))&','; ! Box 14 - Excess golden parachute payments
 		pr #hExport: str$(box(15))&','; ! Box 15 - Nonqualified deferred compensation
-		pr #hExport: 'Combined Federal/State Filing,';
-		pr #hExport: 'State 1,';
-		pr #hExport: str$(box(16))&','; ! State 1 - State Tax Withheld
-		pr #hExport: str$(box(17))&','; 'State 1 - State/Payer state number,';
-		pr #hExport: str$(box(18))&','; 'State 1 - State income,';
-		pr #hExport: 'State 1 - Local income tax withheld,';
-		pr #hExport: 'State 1 - Special Data Entries,';
-		pr #hExport: 'State 2,';
-		pr #hExport: 'State 2 - State Tax Withheld,';
-		pr #hExport: 'State 2 - State/Payer state number,';
-		pr #hExport: 'State 2 - State income,';
-		pr #hExport: 'State 2 - Local income tax withheld,';
-		pr #hExport: 'State 2 - Special Data Entries,';
+		pr #hExport: ','; ! fnpayroll_client_state$&','; ! Combined Federal/State Filing
+		pr #hExport: ','; ! fnpayroll_client_state$&','; ! State 1
+		pr #hExport: ','; ! str$(box(16))&','; ! State 1 - State Tax Withheld
+		pr #hExport: ','; ! str$(box(17))&','; ! State 1 - State/Payer state number
+		pr #hExport: ','; ! str$(box(18))&','; ! State 1 - State income
+		pr #hExport: ','; ! str$(box(--))&','; ! State 1 - Local income tax withheld
+		pr #hExport: ','; ! State 1 - Special Data Entries
+		pr #hExport: ','; ! State 2
+		pr #hExport: ','; ! State 2 - State Tax Withheld
+		pr #hExport: ','; ! State 2 - State/Payer state number
+		pr #hExport: ','; ! State 2 - State income
+		pr #hExport: ','; ! State 2 - Local income tax withheld
+		pr #hExport: ','; ! State 2 - Special Data Entries
 		pr #hExport: ''
 		! /r
 	else if ten99Export$='True' then
@@ -497,7 +497,8 @@ def fn_1099print(vn$*8,nam$*30,mat empAddr$,ss$*11,mat box; ___, _
 		end if
 		fnpa_FontSize
 		! r: draw developer lines
-		if env$('acsDeveloper')<>'' then
+		developerLinesEnabled=0
+		if developerLinesEnabled and env$('acsDeveloper')<>'' then
 			for lineN=1 to udim(mat lineXy)
 				fnpa_txt(str$(lineN)  ,left+1,fn_line(lineN))
 				fnpa_txt('('&str$(lineXy(lineN))&')' ,left+10,fn_line(lineN))
@@ -512,24 +513,26 @@ def fn_1099print(vn$*8,nam$*30,mat empAddr$,ss$*11,mat box; ___, _
 				fnpa_txt(companyNameAddr$(2)	,column1    	,fn_line(2))
 				fnpa_txt(companyNameAddr$(3)	,column1    	,fn_line(3))
 				fnpa_txt(ph$                 	,column1    	,fn_line(5))
-				fnpa_txt(fed$                	,column1    	,fn_line(8))  ! PAYER'S TIN
-				fnpa_txt(ss$                 	,column1+45	 	,fn_line(8))  ! RECIPIENT'S TIN
-				fnpa_txt(nam$                	,column1    	,fn_line(9))  ! RECIPIENT'S name
-				if udim(mat empAddr$)=2 then
-					fnpa_txt(empAddr$(1)       	,column1    	,fn_line(10)) ! address line 1
-					fnpa_txt(empAddr$(2)       	,column1    	,fn_line(12)) !  CSZ
+				fnpa_txt(fed$                	,column1    	,fn_line(7))  ! PAYER'S TIN
+				! fnpa_txt(fed$                	,column1    	,fn_line(8))  ! PAYER'S TIN
+				fnpa_txt(ss$                 	,column1+45	 	,fn_line(7))  ! RECIPIENT'S TIN
+				! fnpa_txt(ss$                 	,column1+45	 	,fn_line(8))  ! RECIPIENT'S TIN
+				fnpa_txt(nam$                	,column1    	,fn_line(9)-2)  ! RECIPIENT'S name
+				if udim(mat empAddr$)=3 and trim$(empAddr$(3))='' then mat empAddr$(2)
+				if udim(mat empAddr$)=2 or (udim(mat empAddr$)=3 and trim$(empAddr$(2))='') then
+					fnpa_txt(empAddr$(1)       	,column1    	,fn_line(10)+2) ! address line 1
 				else if udim(mat empAddr$)=3 then
-					fnpa_txt(rtrm$(empAddr$(1)),column1    	,fn_line(10))
-					fnpa_txt(trim$(empAddr$(2))        	,column1    	,fn_line(11)) ! address line 2
-					fnpa_txt(empAddr$(3)       	,column1    	,fn_line(12)) !  CSZ
+					fnpa_txt(rtrm$(empAddr$(1))	,column1    	,fn_line(10))
+					fnpa_txt(trim$(empAddr$(2))	,column1    	,fn_line(11)) ! address line 2
 				else
 					pr 'udim(mat empAddr$)=';udim(mat empAddr$);' this is unexpected by '&program$ : pause
 				end if
+				fnpa_txt(empAddr$(udim(mat empAddr$))       	,column1    	,fn_line(12)) !  CSZ
 			!/r
 			! r: right side (column2 and column3)
 				fnpa_txt(cnvrt$('pic(zzzzzzzzzz.zz',box(1) ),column2   		,fn_line(1) )
 				fnpa_txt(cnvrt$('pic(zzzzzzzzzz.zz',box(2) ),column2   		,fn_line(4) )
-				fnpa_txt(taxyear$(3:4)                       ,column5   		,fn_line(4) )
+				fnpa_txt(taxyear$                             ,column5-5   		,fn_line(4) )
 				fnpa_txt(cnvrt$('pic(zzzzzzzzzz.zz',box(3) ),column2   		,fn_line(6) )
 				fnpa_txt(cnvrt$('pic(zzzzzzzzzz.zz',box(6) ),column3   		,fn_line(6) ) ! fed withheld
 				fnpa_txt(cnvrt$('pic(zzzzzzzzzz.zz',box(5) ),column2   		,fn_line(8) )
