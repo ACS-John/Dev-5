@@ -239,7 +239,7 @@ L1780: form pos 1,n 2,c 51,x 27,2*c 132,n 3,3*n 1,100*pd 6.3,20*c 50,40*pd 2,80*
 L1790: close #1:
 	fnrx(rn)
 	execute "INDEX S:\acsPR\JCREPORT.MST,S:\acsPR\JCREPORT.idx,1,2,Replace,DupKeys -n"
-	fnChain('S:\acsPR\newjcRptS1')
+	fnChain('S:\Payroll\Job Cost\User Designed Reports (JC)')
  
 	restore #1,key>="  ": nokey L2490
 	fnopenwin(win=102,10,28,15,52,cap$)

@@ -427,7 +427,7 @@ AFP_XIT: ! r:
 		if sel=6 then tr(6)=8 ! purchases
 	end if
 	if ckey=17 then
-		fnaddglpayee
+		fnGlPayee
 		goto MAIN
 	else if ckey=18 then
 		gosub EditAllocations
