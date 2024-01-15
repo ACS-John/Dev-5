@@ -1,16 +1,14 @@
-! Replace S:\acsPR\newjcRptS1
+! formerly S:\acsPR\newjcRptS1
 ! Create Job Cost Report Program
 
 	autoLibrary
 	on error goto Ertn
+	fnTop(program$)
 
-	dim rn$*2,rt$*51,ch$(2)*132,psc(100),cap$*128,message$*40
+	dim rn$*2,rt$*51,ch$(2)*132
 	dim f$(20)*50,pp(20),ppr(20),dp(20),fc(20),tcj(20),tcs(20),ty$(24)*8
-	dim a$(20)*32,a(20),underlin$*30
-	dim ln$*255,pf$*255,af$*255,gpf$*255,gaf$*255,jpf$*255,jaf$*255,upf$*255
-	dim uaf$*255
-
-	fnTop(program$,cap$="User Designed Reports (1)")
+	dim a$(20)*32,a(20)
+	dim ln$*255,pf$*255,af$*255,gpf$*255,gaf$*255,jpf$*255
 
 	data "JN"
 	data "n$"
@@ -39,11 +37,13 @@
 	read mat ty$
 
 	rn=fnrx
+	dim underlin$*30
 	underlin$="______________________________"
-	cap$="Create Job Cost Report Program"
+	! cap$="Create Job Cost Report Program"
 	rn$=lpad$(str$(rn),2)
 
 	open #1: "Name=S:\acsPR\JCREPORT.MST,KFName=S:\acsPR\JCREPORT.idx",i,i,k
+	dim psc(100)
 	read #1,using L490,key=rn$: rn,rt$,mat ch$,ips,sd,cp,sc,mat psc,mat f$,mat pp,mat ppr,mat dp,mat fc,mat tcj,mat tcs nokey Xit
 L490: form pos 1,n 2,c 51,x 27,2*c 132,n 3,3*n 1,100*pd 6.3,20*c 50,40*pd 2,80*n 1
 	close #1:
@@ -54,8 +54,8 @@ L570: open #11: "Name=PROC.[Session],SIZE=0,RecL=255",d,o
 	pr #11: "Clear"
 	pr #11: "ProcErr Return"
 	pr #11: "Load S:\acsPR\newJCRpt-Mod"
-	pr #11: "00010 ! Replace S:\acsPR\JCPrnt";str$(rn) : _
-	! this program is dynamicaly created by S:\acsPR\jcRptS1 and : _
+	pr #11: "00010 ! Replace S:\acsPR\JCPrnt";str$(rn)
+	! this program is dynamicaly created by S:\acsPR\jcRptS1 and
 	! uses S:\acsPR\newJCRpt-Mod as a base"
 	pr #11: '00051 RN$="';rn$;'"'
 	pf$="19900 pr #255, USING 19910: "
@@ -63,8 +63,11 @@ L570: open #11: "Name=PROC.[Session],SIZE=0,RecL=255",d,o
 	gpf$="20140 pr #255, USING 20150: "
 	gaf$="20150 form skip 2,""Grand Totals"""
 	jpf$="20025 pr #255, USING 20026: "
+	dim jaf$*255
 	jaf$="20026 form skip 1,""Job Totals"""
+	dim upf$*255
 	upf$="20000 pr #255,using 20020: "
+	dim uaf$*255
 	uaf$="20020 form skip 0"
 	pr #11: "19850 on zdiv goto 25000"
 	pr #11: "19851 on uflow goto 25000"
@@ -95,22 +98,15 @@ L920: next j
 	pr #11: "19899 if sd = 1 then 19833"
 	for j=1 to 20
 		if rtrm$(f$(j))="" then goto L1350
-		if f$(j)(3:3)>="0" and f$(j)(3:3)<="9" then goto L1060 : _
-			! Search Category Record
-		if f$(j)(1:2)="x1" or f$(j)(1:2)="X1" then : _
-			i$="jn$(1:"&str$(ppr(j))&")"
-		if f$(j)(1:2)="x2" or f$(j)(1:2)="X2" then : _
-			i$="n$(1:"&str$(ppr(j))&")"
-		if f$(j)(1:2)="x3" or f$(j)(1:2)="X3" then : _
-			i$="a$(1)  (1:"&str$(ppr(j))&")"
-		if f$(j)(1:2)="x4" or f$(j)(1:2)="X4" then : _
-			i$="a$(2)  (1:"&str$(ppr(j))&")"
-		if f$(j)(1:2)="x5" or f$(j)(1:2)="X5" then : _
-			i$="a$(3)  (1:"&str$(ppr(j))&")"
-L1060: if f$(j)(1:3)="x10" or f$(j)(1:3)="X10" then : _
-			i$="cn$(7:11)"
-		if f$(j)(1:3)="x11" or f$(j)(1:3)="X11" then : _
-			i$="k$(1:"&str$(ppr(j))&")"
+		if f$(j)(3:3)>="0" and f$(j)(3:3)<="9" then goto L1060 ! Search Category Record
+		if f$(j)(1:2)="x1" or f$(j)(1:2)="X1" then i$="jn$(1:"&str$(ppr(j))&")"
+		if f$(j)(1:2)="x2" or f$(j)(1:2)="X2" then i$="n$(1:"&str$(ppr(j))&")"
+		if f$(j)(1:2)="x3" or f$(j)(1:2)="X3" then i$="a$(1)  (1:"&str$(ppr(j))&")"
+		if f$(j)(1:2)="x4" or f$(j)(1:2)="X4" then i$="a$(2)  (1:"&str$(ppr(j))&")"
+		if f$(j)(1:2)="x5" or f$(j)(1:2)="X5" then i$="a$(3)  (1:"&str$(ppr(j))&")"
+L1060: !
+	if f$(j)(1:3)="x10" or f$(j)(1:3)="X10" then i$="cn$(7:11)"
+	if f$(j)(1:3)="x11" or f$(j)(1:3)="X11" then i$="k$(1:"&str$(ppr(j))&")"
 		if rtrm$(i$)="" then cn=1 else cn=0
 		if rtrm$(i$)="" then i$="c("&str$(j)&")"
 		if fc(j)=1 then goto L1170 ! skip Detail Print
@@ -118,18 +114,16 @@ L1060: if f$(j)(1:3)="x10" or f$(j)(1:3)="X10" then : _
 		if j=<1 then goto L1150
 		if fc(j-1)=1 then goto L1150
 		if pp(j)<pp(j-1)+ppr(j-1) then af$=af$&",skip 1"
-L1150: if cn=1 then : _
-			af$=rtrm$(af$)&",pos "&str$(pp(j))&",N "&str$(ppr(j)) : _
-			! form Statement
-		if cn<>1 then : _
-			af$=rtrm$(af$)&",pos "&str$(pp(j))&",C "&str$(ppr(j)) : _
-			! form Statement
-L1170: if tcs(j)=0 then goto L1210
+L1150: !
+		if cn=1 then af$=rtrm$(af$)&",pos "&str$(pp(j))&",N "&str$(ppr(j)) ! form Statement
+		if cn<>1 then af$=rtrm$(af$)&",pos "&str$(pp(j))&",C "&str$(ppr(j)) ! form Statement
+L1170: !
+		if tcs(j)=0 then goto L1210
 		i$(1:1)="t"
 		gpf$=rtrm$(gpf$)&","&i$ ! pr Stmt-Grand Totals
-		gaf$=rtrm$(gaf$)&",pos "&str$(pp(j))&",N "&str$(ppr(j)) : _
-		! form Statement Grand Totals
-L1210: if tcj(j)=0 then goto L1270
+		gaf$=rtrm$(gaf$)&",pos "&str$(pp(j))&",N "&str$(ppr(j)) ! form Statement Grand Totals
+L1210: !
+		if tcj(j)=0 then goto L1270
 		i$(1:1)="s"
 		jpf$=rtrm$(jpf$)&","&i$ ! pr Stmt-Job Totals
 		jaf$=rtrm$(jaf$)&",pos "&str$(pp(j))&",N "&str$(ppr(j)) : _

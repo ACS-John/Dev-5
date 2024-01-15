@@ -258,12 +258,12 @@ ScrAskTime: ! r:
 	fnTxt(lc,mylen+2,12,0,1,'10',0,'.',fraNum)
 	resp$(rc+=1)=str$(inpX(5))
 	lc+=1
-	if fnpayroll_client_state$='IL' then
-		fnLbl(lc+=1,1,'PLAWA Hours:',mylen,1,0,fraNum)
-		fnTxt(lc,mylen+2,12,0,1,'10',0,'.',fraNum)
-		resp$(rc_plawaHours=rc+=1)=str$(plawaHours)
-
-	end if
+	! if fnpayroll_client_state$='IL' then
+	! 	fnLbl(lc+=1,1,'PLAWA Hours:',mylen,1,0,fraNum)
+	! 	fnTxt(lc,mylen+2,12,0,1,'10',0,'.',fraNum)
+	! 	resp$(rc_plawaHours=rc+=1)=str$(plawaHours)
+	! 
+	! end if
 	lc+=1
 	fnLbl(lc+=1,1,'Salary:',mylen,1,0,fraNum)
 	fnTxt(lc,mylen+2,12,0,1,'10',0,'.',fraNum)
@@ -312,17 +312,17 @@ ScrAskTime: ! r:
 	inpX(9)=val(resp$(rc_tips))
 	hr(1)=val(resp$(rc_hr1))
 	hr(2)=val(resp$(rc_hr2))
-	if fnpayroll_client_state$='IL' then
-		for j=(rc_hr2+1) to (rc_hr2+20) ! for j=(12 or 13) to (31 or 32)
-			inpX(j-2)=val(resp$(j))
-		next j
-		plawaHours=val(resp$(rc_plawaHours))
-		resp$(rc+=1)=str$(plawaHours)
-	else
+	! if fnpayroll_client_state$='IL' then
+	! 	for j=(rc_hr2+1) to (rc_hr2+20) ! for j=(12 or 13) to (31 or 32)
+	! 		inpX(j-2)=val(resp$(j))
+	! 	next j
+	! 	plawaHours=val(resp$(rc_plawaHours))
+	! 	resp$(rc+=1)=str$(plawaHours)
+	! else
 		for j=12 to 31
 			inpX(j-2)=val(resp$(j))
 		next j
-	end if
+	! end if
 	if ckey=8 then fnHours(eno) : goto ScrAskTime !  breakdown=1 : goto ScrAskTime
 	if ckey=5 and editMode then goto L2290
 	if ckey=10 and editMode then goto DeleteTimesheetEntry

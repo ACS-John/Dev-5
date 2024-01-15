@@ -1684,9 +1684,9 @@ fnend
 		library 'S:\General Ledger\company.br': fnLastAccountingPeriodClosed
 		fnLastAccountingPeriodClosed=fnLastAccountingPeriodClosed( setit)
 	fnend
-	def library fnAddGlPayee
-		library 'S:\General Ledger\fn\addGlPayee.br': fnAddGlPayee
-		fnAddGlPayee=fnAddGlPayee
+	def library fnGlPayee
+		library 'S:\General Ledger\Payee.br': fnGlPayee
+		fnGlPayee=fnGlPayee
 	fnend
 	def library fnBalanceSheet(; defaultFormat$)
 		library 'S:\General Ledger\fn\balanceSheet.br': fnBalanceSheet

@@ -579,7 +579,7 @@ def fn_scrMain(hMerge; editRecord,heading$*64,glBank$*12,transDate,bankAcctName$
 	tType=selx
 
 	if ckey=ck_payeeAdd then
-		fnaddglpayee
+		fnGlPayee
 		goto ScrMainTop
 	else if ckey=ck_breakdownEdit then
 		fn_editAllocation(val(resp$(7)))

@@ -49,24 +49,24 @@ fnend
 def fn_file_setup_data(fsad_name$*512,fsad_recl,fsad_version_proper)
 	dim g_fs_name$*512
 	g_fs_name$=fsad_name$
-	fn_make_data_file_exist(g_fs_name$,fsad_recl,fsad_version_proper)
+	fn_makeDataFileExist(g_fs_name$,fsad_recl,fsad_version_proper)
 	fn_min_rln(fsad_name$,fsad_recl)
 fnend
 def fn_file_setup_index(fsi_kfname$*512,fsi_kps$,fsi_kln$)
 	dim g_fs_kfname$*512
 	g_fs_kfname$=fsi_kfname$
-	if ~exists(fsi_kfname$) or lwrc$(env$('force_reindex'))='yes' or ~fn_check_indexes(g_fs_name$,fsi_kfname$,fsi_kps$,fsi_kln$) then
+	if ~exists(fsi_kfname$) or lwrc$(env$('force_reindex'))='yes' or ~fn_checkIndexes(g_fs_name$,fsi_kfname$,fsi_kps$,fsi_kln$) then
 		fnIndex(g_fs_name$,fsi_kfname$,fsi_kps$&' '&fsi_kln$)
 	end if
 fnend
-def fn_make_data_file_exist(name$*512,myrln,version_proper)
-	if exists(name$)=0 then
-		fnStatus('Creating new file: Name='&name$&',Shr,Use,RecL='&str$(myrln)&',Version='&str$(version_proper))
-		open #tmp=fnH: 'Name='&name$&',Shr,Use,RecL='&str$(myrln)&',Version='&str$(version_proper),internal,outIn
+def fn_makeDataFileExist(name$*512,myrln,versionX; ___,tmp)
+	if ~exists(name$) then
+		fnStatus('Creating new file: Name='&name$&',Shr,Use,RecL='&str$(myrln)&',Version='&str$(versionX))
+		open #tmp=fnH: 'Name='&name$&',Shr,Use,RecL='&str$(myrln)&',Version='&str$(versionX),internal,outIn
 		close #tmp:
 	end if
 fnend
-def fn_check_indexes(name$*512,mat kfnames$,mat kps$,mat kln$)
+def fn_checkIndexes(name$*512,mat kfnames$,mat kps$,mat kln$)
 	ci_return=1 ! function should return 1 if all indexes tested are fine or 0 if any tested fail
 	for ci_item=1 to udim(mat kfnames$)
 		str2mat(kps$(ci_item),mat ci_kps$,'/')
@@ -107,7 +107,7 @@ def fn_check_indexes(name$*512,mat kfnames$,mat kps$,mat kln$)
 		fnStatus('error unhandled')
 	end if
 	CI_XIT: !
-	fn_check_indexes=ci_return
+	fn_checkIndexes=ci_return
 fnend
 def fn_min_rln(mr_filename$*512,mr_rln_minimum)
 	if fn_recl(mr_filename$)<mr_rln_minimum then
@@ -120,7 +120,7 @@ def fn_recl(filename$*512; ___,hTmp,returnN)
 	close #hTmp:
 	fn_recl=returnN
 fnend
-def fn_check_version(cv_version_current,cv_version_proper,cv_file$*256)
+def fn_checkVersion(cv_version_current,cv_version_proper,cv_file$*256)
 	cv_return=1 ! function should return 1 if version tested matches or 0 if versions are different
 	if cv_version_current<>cv_version_proper then
 		fnStatus('Version Error of file:'&cv_file$ )
@@ -128,7 +128,7 @@ def fn_check_version(cv_version_current,cv_version_proper,cv_file$*256)
 		fnStatus('     Version  Proper: '&str$(cv_version_proper))
 		cv_return=0
 	end if
-	fn_check_version=cv_return
+	fn_checkVersion=cv_return
 fnend
 
 def fn_getFileInfo(name$*512,kfname$*512,mat tmpkps,mat tmpkln,&tmpversion,&tmprln,&tmpfile$; ___,returnN,hTmp)
@@ -161,7 +161,7 @@ fnend
 
 def fn_cfv_client_billing
 	! open #h_tmwk1=fnH:
-	! fn_check_version(tmpversion,version_proper,'')
+	! fn_checkVersion(tmpversion,version_proper,'')
 fnend
 def fn_cfv_utility_billing
 	if ~exists('[Q]\UBmstr') then execute 'MkDir "[Q]\UBmstr"'
@@ -188,7 +188,7 @@ def fn_cfv_utility_billing
 	myrln=133
 	version_proper=0
 	if fn_getFileInfo(name$,kfname$,mat tmpkps,mat tmpkln,tmpversion,tmprln,tmpfile$) then
-		fn_check_version(tmpversion,version_proper,tmpfile$)
+		fn_checkVersion(tmpversion,version_proper,tmpfile$)
 		if tmprln<>myrln then
 			fnStatus('Record Length Error in File: '&tmpfile$)
 			fnStatus('         RLn: '&str$(tmprln))
@@ -325,7 +325,7 @@ def fn_cfv_checkbook
 	fn_file_setup_data('[Q]\CLmstr\TrMstr.h[cno]',78,2)
 	fn_file_setup_index('[Q]\CLmstr\TrIdx1.h[cno]','1','11')
 	fn_getFileInfo(g_fs_name$,g_fs_kfname$,mat tmpkps,mat tmpkln,tmpversion,tmprln,tmpfile$)
-	if ~fn_check_version(tmpversion,version_proper:=2,g_fs_name$) then
+	if ~fn_checkVersion(tmpversion,version_proper:=2,g_fs_name$) then
 		if tmpversion=0 or tmpversion=-1 then
 			fn_checkbookTrmstr_v0_to_v1
 			goto CL_TRMSTR1
@@ -347,12 +347,12 @@ def fn_cfv_checkbook
 	kfname$='[Q]\CLmstr\TrAlloc-Idx.h[cno]'
 	myrln=80
 	version_proper=2
-	fn_make_data_file_exist(name$,myrln,version_proper)
+	fn_makeDataFileExist(name$,myrln,version_proper)
 	if lwrc$(env$('force_reindex'))='yes' or ~exists(kfname$) then
 		fnIndex(name$,kfname$,'1 11')
 	end if
 	fn_getFileInfo(name$,kfname$,mat tmpkps,mat tmpkln,tmpversion,tmprln,tmpfile$)
-	fn_check_version(tmpversion,version_proper,tmpfile$)
+	fn_checkVersion(tmpversion,version_proper,tmpfile$)
 	if tmpversion=1 or tmpversion=0 or tmpversion=-1 then
 		fn_checkbookTrAlloc_v1_to_v2
 		goto CL_TRALLOC
@@ -378,13 +378,13 @@ def fn_cfv_checkbook
 	kfname$='[Q]\CLmstr\UAIdx1.h[cno]'
 	myrln=67
 	version_proper=2
-	fn_make_data_file_exist(name$,myrln,version_proper)
+	fn_makeDataFileExist(name$,myrln,version_proper)
 	L1840: !
 	if lwrc$(env$('force_reindex'))='yes' or ~exists(kfname$) then
 		fnIndex(name$,kfname$,'9 12')
 	end if
 	fn_getFileInfo(name$,kfname$,mat tmpkps,mat tmpkln,tmpversion,tmprln,tmpfile$)
-	fn_check_version(tmpversion,version_proper,tmpfile$)
+	fn_checkVersion(tmpversion,version_proper,tmpfile$)
 	if tmpversion=1 or tmpversion=0 or tmpversion=-1 then
 		fn_checkbookUnpdaloc_v1_to_v2
 		goto CL_UNPDALOC1
@@ -426,12 +426,12 @@ def fn_cfv_checkbook
 	kfname$='[Q]\CLmstr\UnPdIdx1.h[cno]'
 	myrln=114
 	version_proper=2
-	fn_make_data_file_exist(name$,myrln,version_proper)
+	fn_makeDataFileExist(name$,myrln,version_proper)
 	if lwrc$(env$('force_reindex'))='yes' or ~exists(kfname$) then
 		fnIndex(name$,kfname$,'1 20')
 	end if
 	fn_getFileInfo(name$,kfname$,mat tmpkps,mat tmpkln,tmpversion,tmprln,tmpfile$)
-	fn_check_version(tmpversion,version_proper,tmpfile$)
+	fn_checkVersion(tmpversion,version_proper,tmpfile$)
 	if tmpversion=1 or tmpversion=0 or tmpversion=-1 then
 		fn_checkbookPaytrans_v1_to_v2 : goto CL_PAYTRANS1
 	end if
@@ -487,12 +487,12 @@ def fn_cfv_checkbook
 	kfname$='[Q]\CLmstr\PayIdx1.h[cno]'
 	myrln=736
 	version_proper=1
-	fn_make_data_file_exist(name$,myrln,version_proper)
+	fn_makeDataFileExist(name$,myrln,version_proper)
 	if lwrc$(env$('force_reindex'))='yes' or ~exists(kfname$) then
 		fnIndex(name$,kfname$,'1 8')
 	end if
 	fn_getFileInfo(name$,kfname$,mat tmpkps,mat tmpkln,tmpversion,tmprln,tmpfile$)
-	fn_check_version(tmpversion,version_proper,tmpfile$)
+	fn_checkVersion(tmpversion,version_proper,tmpfile$)
 	if tmpversion=0 or tmpversion=-1 then
 		fn_checkbookPaymstr_v0_to_v1
 		goto CL_PAYMSTR1
@@ -514,12 +514,12 @@ def fn_cfv_checkbook
 	kfname$='[Q]\CLmstr\RecIdx1.h[cno]'
 	myrln=38
 	version_proper=1
-	fn_make_data_file_exist(name$,myrln,version_proper)
+	fn_makeDataFileExist(name$,myrln,version_proper)
 	if lwrc$(env$('force_reindex'))='yes' or ~exists(kfname$) then
 		fnIndex(name$,kfname$,'1 8')
 	end if
 	fn_getFileInfo(name$,kfname$,mat tmpkps,mat tmpkln,tmpversion,tmprln,tmpfile$)
-	fn_check_version(tmpversion,version_proper,tmpfile$)
+	fn_checkVersion(tmpversion,version_proper,tmpfile$)
 	if tmpversion=0 or tmpversion=-1 then
 		fn_checkbookPaymstr_v0_to_v1
 		goto CL_PAYMSTR1
@@ -558,14 +558,14 @@ def fn_cfv_checkbook
 	kfname$='[Q]\CLmstr\GLIndex.h[cno]'
 	myrln=62
 	!   version_proper=0
-	!   fn_make_data_file_exist(name$,myrln,version_proper)
+	!   fn_makeDataFileExist(name$,myrln,version_proper)
 	!   if lwrc$(env$('force_reindex'))='yes' or ~exists(kfname$) then
 	!     fnIndex(name$,kfname$,'1 12')
 	!   end if
 	fn_file_setup_data('[Q]\CLmstr\GLmstr.h[cno]',62,1)
 	fn_file_setup_index('[Q]\CLmstr\GLIndex.h[cno]','1','12')
 	fn_getFileInfo(g_fs_name$,g_fs_kfname$,mat tmpkps,mat tmpkln,tmpversion,tmprln,tmpfile$)
-	fn_check_version(tmpversion,version_proper,tmpfile$)
+	fn_checkVersion(tmpversion,version_proper,tmpfile$)
 	!   if tmprln<>myrln then
 	!     pr 'Record Length Error in File: '&tmpfile$
 	!     pr '         RLn: '&str$(tmprln)
@@ -591,7 +591,7 @@ def fn_cfv_checkbook
 	fn_file_setup_data('[Q]\CLmstr\fundmstr.h[cno]',75,0)
 	fn_file_setup_index('[Q]\CLmstr\fundidx1.h[cno]','1','3')
 	fn_getFileInfo(g_fs_name$,g_fs_kfname$,mat tmpkps,mat tmpkln,tmpversion,tmprln,tmpfile$)
-	fn_check_version(tmpversion,version_proper,tmpfile$)
+	fn_checkVersion(tmpversion,version_proper,tmpfile$)
 	if tmprln=63 then
 		fnCopy('[Q]\CLmstr\FundMstr.h[cno]','',75)
 		fnIndex('[Q]\CLmstr\FundMstr.h[cno]','[Q]\CLmstr\fundidx1.h[cno]','1,3')
@@ -944,7 +944,7 @@ def fn_cfv_general_ledger
 	kfname$='[Q]\GLmstr\BudIndx.h[cno]'
 	myrln=28
 	version_proper=0
-	fn_make_data_file_exist(name$,myrln,version_proper)
+	fn_makeDataFileExist(name$,myrln,version_proper)
 	if lwrc$(env$('force_reindex'))='yes' or ~exists(kfname$) then
 		fnIndex(name$,kfname$,'1 14')
 	end if
@@ -953,12 +953,12 @@ def fn_cfv_general_ledger
 	kfname$='[Q]\GLmstr\GLIndex.h[cno]'
 	myrln=416
 	version_proper=0
-	fn_make_data_file_exist(name$,myrln,version_proper)
+	fn_makeDataFileExist(name$,myrln,version_proper)
 	if lwrc$(env$('force_reindex'))='yes' or ~exists(kfname$) then
 		fnIndex(name$,kfname$,'1 12')
 	end if
 	fn_getFileInfo(name$,kfname$,mat tmpkps,mat tmpkln,tmpversion,tmprln,tmpfile$)
-	fn_check_version(tmpversion,version_proper,tmpfile$)
+	fn_checkVersion(tmpversion,version_proper,tmpfile$)
 	if tmprln<>myrln then
 		fnStatus('Record Length Error in File: '&tmpfile$)
 		fnStatus('         RLn: '&str$(tmprln))
@@ -1007,12 +1007,12 @@ def fn_cfv_general_ledger
 	fn_file_setup_index(kfname$,'1','5')
 	! myrln=83
 	! version_proper=1
-	! fn_make_data_file_exist(name$,myrln,version_proper)
+	! fn_makeDataFileExist(name$,myrln,version_proper)
 	! if lwrc$(env$('force_reindex'))='yes' or ~exists(kfname$) then
 	!   fnIndex(name$,kfname$,'1 5')
 	! end if
 	fn_getFileInfo(name$,kfname$,mat tmpkps,mat tmpkln,tmpversion,tmprln,tmpfile$)
-	fn_check_version(tmpversion,version_proper,tmpfile$)
+	fn_checkVersion(tmpversion,version_proper,tmpfile$)
 	if tmpversion=0 then fnfinstmt_v0_to_v1
 	if tmprln<>myrln then
 		pr 'Record Length Error in File: '&tmpfile$
@@ -1046,12 +1046,12 @@ def fn_cfv_general_ledger
 	kfname$='[Q]\GLmstr\Payeeglbkdidx.h[cno]'
 	myrln=56
 	version_proper=1
-	fn_make_data_file_exist(name$,myrln,version_proper)
+	fn_makeDataFileExist(name$,myrln,version_proper)
 	L3510: !
 	if lwrc$(env$('force_reindex'))='yes' or ~exists(kfname$) then
 		fnIndex(name$,kfname$,'1 8')
 	end if
-	fn_check_version(tmpversion,version_proper,tmpfile$)
+	fn_checkVersion(tmpversion,version_proper,tmpfile$)
 	if tmprln<>myrln then
 		pr 'Record Length Error in File: '&tmpfile$
 		pr '         RLn: '&str$(tmprln)
@@ -1070,13 +1070,13 @@ def fn_cfv_general_ledger
 	kfname$='[Q]\GLmstr\Payidx1.h[cno]'
 	myrln=276
 	version_proper=1
-	fn_make_data_file_exist(name$,myrln,version_proper)
+	fn_makeDataFileExist(name$,myrln,version_proper)
 	L3600: !
 	if lwrc$(env$('force_reindex'))='yes' or ~exists(kfname$) then
 		fnIndex(name$,kfname$,'1 8') : fnglpayee_v0_to_v1
 	end if
 	fn_getFileInfo(name$,kfname$,mat tmpkps,mat tmpkln,tmpversion,tmprln,tmpfile$)
-	fn_check_version(tmpversion,version_proper,tmpfile$)
+	fn_checkVersion(tmpversion,version_proper,tmpfile$)
 	if tmprln<>myrln then
 		pr 'Record Length Error in File: '&tmpfile$
 		pr '         RLn: '&str$(tmprln)
@@ -1095,13 +1095,13 @@ def fn_cfv_general_ledger
 	kfname$='[Q]\GLmstr\gltridx1.h[cno]'
 	myrln=64
 	version_proper=1
-	fn_make_data_file_exist(name$,myrln,version_proper)
+	fn_makeDataFileExist(name$,myrln,version_proper)
 	L3690: !
 	if lwrc$(env$('force_reindex'))='yes' or ~exists(kfname$) then
 		fnIndex(name$,kfname$,'1 8')
 	end if
 	fn_getFileInfo(name$,kfname$,mat tmpkps,mat tmpkln,tmpversion,tmprln,tmpfile$)
-	fn_check_version(tmpversion,version_proper,tmpfile$)
+	fn_checkVersion(tmpversion,version_proper,tmpfile$)
 	if tmprln<>myrln then
 		pr 'Record Length Error in File: '&tmpfile$
 		pr '         RLn: '&str$(tmprln)
@@ -1119,13 +1119,13 @@ def fn_cfv_general_ledger
 	kfname$='[Q]\GLmstr\glrecidx.h[cno]'
 	myrln=68
 	version_proper=1
-	fn_make_data_file_exist(name$,myrln,version_proper)
+	fn_makeDataFileExist(name$,myrln,version_proper)
 	if lwrc$(env$('force_reindex'))='yes' or ~exists(kfname$) then
 	GlBrecIndex: !
 		fnIndex(name$,kfname$,'1 24')
 	end if
 	if ~fn_getFileInfo(name$,kfname$,mat tmpkps,mat tmpkln,tmpversion,tmprln,tmpfile$) then goto GlBrecOpenErr
-	fn_check_version(tmpversion,version_proper,tmpfile$)
+	fn_checkVersion(tmpversion,version_proper,tmpfile$)
 	if tmprln<>myrln then
 		pr 'Record Length Error in File: '&tmpfile$
 		pr '         RLn: '&str$(tmprln)
@@ -1151,10 +1151,10 @@ def fn_cfv_general_ledger
 	kfname$='[Q]\GLmstr\schindex.h[cno]'
 	myrln=162
 	version_proper=1
-	fn_make_data_file_exist(name$,myrln,version_proper)
+	fn_makeDataFileExist(name$,myrln,version_proper)
 	L3870: fnIndex(name$,kfname$,'1 3')
 	fn_getFileInfo(name$,kfname$,mat tmpkps,mat tmpkln,tmpversion,tmprln,tmpfile$)
-	fn_check_version(tmpversion,version_proper,tmpfile$)
+	fn_checkVersion(tmpversion,version_proper,tmpfile$)
 	if tmprln<>myrln then
 		pr 'Record Length Error in File: '&tmpfile$
 		pr '         RLn: '&str$(tmprln)
