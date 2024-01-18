@@ -416,7 +416,7 @@ Xit: fnXit
 	! seems unnecessary in new world   if sum(mat tgb)>0 then haveBudget=1 else haveBudget=0
 ! return  ! /r
 
-def fn_chooseBudgetUpdates(x1$*10,transDate,mat billToPay; ___,bd1Count,ck1,j,key$*14,billingDate,btRecCount,btpCount) ! very local.
+def fn_chooseBudgetUpdates(x1$*10,transDate,mat billToPay; ___,bd1Count,ck1,j,key$*14,billingDate,btRecCount,btpCount,cbAdded) ! very local.
 	! haveBudget=0   !   this seems really wrong - should not be turing it off constantly
 	if hBudMstr then
 	   if fnCustomerBudgetEnable(x1$)  then
@@ -428,11 +428,13 @@ def fn_chooseBudgetUpdates(x1$*10,transDate,mat billToPay; ___,bd1Count,ck1,j,ke
 				billingDate=bt1(1,1)
 				fnChk(j+2,10,cnvrt$('pic(zz/zz/zz)',billingDate))
 				resp$(j)='False' : if srch(mat billToPay,btRec(j)) then resp$(j)='True'
+				cbAdded+=1
 			next j
 			if btRecCount>5 then
 				fnLbl(j+2,1,'Select up to 5 bills to pay',30,2)
 			end if
 			fnCmdSet(2)
+			if cbAdded=0 then goto Bud2Finis
 			ck1=fnAcs(mat resp$)
 			if ck1<>5 then
 				btpCount=0

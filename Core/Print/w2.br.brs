@@ -7,25 +7,7 @@ fn_setup
 		! nex x
 	! /r
 
-	! r: test name parser
-	! nameFormat$=optNameFormat$(2)
-	! fncreg_write('Employee Name Format',nameFormat$)
-	! dim n1$*64,n2$*64,n3$*64
-	! pr 'name format: "'&nameFormat$&'"'
-	! dim nFull$(4)*256
-	! nFull$(1)='JOINER,JR JOHNNY C.'
-	! nFull$(2)='CRUZ,  BRYAN EDUARDO DEL'
-	! nFull$(3)='SAN NICOLAS, CHRISTOPHER'
-	! nFull$(4)='GARCIA,JR JESUS'
-	! for nFullItem=1 to udim(mat nFull$)
-	! 	fn_nameParse(nFull$(nFullItem),n1$,n2$,n3$,n4$)
-	! 	pr 'source name: "'&nFull$(nFullItem)&'"'
-	! 	pr '     first: "'&n1$&'"'
-	! 	pr '    middle: "'&n2$&'"'
-	! 	pr '      last: "'&n3$&'"'
-	! 	pr '    suffix: "'&n4$&'"'
-	! nex nFullItem
-	! /r
+
 
 	fn_test
 
@@ -168,29 +150,29 @@ def library fnask_w2_info(&taxYear$,&beg_date,&end_date,&empStart$, _
 	cf+=1 : franum=cf : lc=0
 	fnLbl(lc+=1,1,'Tax Year:',mylen,1,0,franum)
 	fnTxt(lc,mypos,4,0,1,'',1,'Year to pr W-2s for',franum)
-	resp$(resc_taxYear:=rc+=1)=taxYear$
+	resp$(resc_taxYear=rc+=1)=taxYear$
 	if enableDateRange then
 		fnLbl(lc+=1,1,'Starting Date:',mylen,1,0,franum)
 		fnTxt(lc,mypos,10,0,1,'3',0,'First day of calendar year',franum)
-		resp$(respc_startdate:=rc+=1)='0101'&date$(days(date$)-180,'YY')
+		resp$(respc_startdate=rc+=1)='0101'&date$(days(date$)-180,'YY')
 		fnLbl(lc+=1,1,'Ending Date:',mylen,1,0,franum)
 		fnTxt(lc,mypos,10,0,1,'3',0,'Last day of calendar year',franum)
-		resp$(respc_enddate:=rc+=1)='1231'&date$(days(date$)-180,'YY')
+		resp$(respc_enddate=rc+=1)='1231'&date$(days(date$)-180,'YY')
 		lc+=1
 	end if
 	if enableEmpRange then
 		fnLbl(lc+=1,1,'Starting Employee:',mylen,1,0,franum)
 		fnCmbEmp(lc,mypos,1,franum)
-		resp$(respc_empStart:=rc+=1)=''
+		resp$(respc_empStart=rc+=1)=''
 		fnLbl(lc+=1,1,'Ending Employee:',mylen,1,0,franum)
 		fnCmbEmp(lc,mypos,1,franum)
-		resp$(respc_empEnd:=rc+=1)=''
+		resp$(respc_empEnd=rc+=1)=''
 		lc+=1
 	end if
 	if enableAskCLocality then
 		fnLbl(lc+=1,1,'Locality Name:',mylen,1,0,franum)
 		fnTxt(lc,mypos,12,0,1,'',0,cLocalityToolTip$,franum)
-		resp$(resp_cLocality:=rc+=1)=cLocality$
+		resp$(resp_cLocality=rc+=1)=cLocality$
 		fnLbl(lc   ,mypos+12+2,'Enter the locality name if the same on all employees.',57,0,0,franum)
 		fnLbl(lc+=1,mypos+12+2,'Enter NO (or blank) if it is not applicable.',57,0,0,franum)
 		fnLbl(lc+=1,mypos+12+2,'Enter YES if applicable, but not he same on all employees',57,0,0,franum)
@@ -198,7 +180,7 @@ def library fnask_w2_info(&taxYear$,&beg_date,&end_date,&empStart$, _
 	end if
 	fnLbl(lc+=1,1,'Employee Name Format:',mylen,1,0,franum)
 	fnComboA('nameFormat',lc,mypos,mat optNameFormat$, '',20,franum)
-	resp$(resp_namcde:=rc+=1)=nameFormat$
+	resp$(resp_namcde=rc+=1)=nameFormat$
 	!
 	fra2Height=5 : fra2Y=fraGeneralHeight+3
 	fnFra(fra2Y,1,fra2Height,fraWidth,'Print W-2s','',0)
@@ -206,35 +188,35 @@ def library fnask_w2_info(&taxYear$,&beg_date,&end_date,&empStart$, _
 	mylen=46: mypos=mylen+2
 	fnLbl(1,1,'Social Security Withholding Rate:',mylen,1,0,franum)
 	fnTxt(1,mypos,10,0,1,'34',disableSSMCedit,'Use format such as .062.',franum)
-	resp$(respc_ssrate:=rc+=1)=str$(ssrate)
+	resp$(respc_ssrate=rc+=1)=str$(ssrate)
 	fnLbl(2,1,'Maximum Wage Subject to SS Withholdings:',mylen,1,0,franum)
 	fnTxt(2,mypos,10,0,1,'10',disableSSMCedit,'Enter the maximum wage subject to social security withholdings for the current year just ended.',franum)
-	resp$(respc_ssmax:=rc+=1)=str$(ssmax)
+	resp$(respc_ssmax=rc+=1)=str$(ssmax)
 	fnLbl(4,1,'Medicare Withholding Rate:',mylen,1,0,franum)
 	fnTxt(4,mypos,10,0,1,'34',disableSSMCedit,'Use format such as .0145 .',franum)
-	resp$(respc_mcrate:=rc+=1)=str$(mcrate)
+	resp$(respc_mcrate=rc+=1)=str$(mcrate)
 	fnLbl(5,1,'Maximum Wage Subject to Medicare Withholdings:',mylen,1,0,franum)
 	fnTxt(5,mypos,10,0,1,'10',disableSSMCedit,'At the present time there is no maximum.  Enter a number larger than any one''s wages can be. For example, 999999.00',franum)
-	resp$(respc_mcmax:=rc+=1)=str$(mcmax)
+	resp$(respc_mcmax=rc+=1)=str$(mcmax)
 
 	fra3Y=fra2Y+fra2Height+2 : fra3Height=6
 	fnFra(fra3Y,1,fra3Height,fraWidth,'Printing or Exporting','You have the option to either pr the W-2s or export them to another system for printing.')
 	cf+=1 : franum=cf : mylen=26 : mypos=mylen+2
 	fnOpt(1,3,'Print W-2',0,franum)
-	resp$(respc_PrintW2:=rc+=1)=w2destinationOpt$(1)
+	resp$(respc_PrintW2=rc+=1)=w2destinationOpt$(1)
 	! fnLbl(1,fraWidth-50,'(2 per page is not yet available with Backgrounds)',50,1,0,franum)
 	fnLbl(2,5,'Copy:',12,1,0,franum)
 	fnComboA('w2Copy',2,19,mat optW2Copy$, '',20,franum)
-	resp$(respc_w2copy:=rc+=1)=w2Copy$
+	resp$(respc_w2copy=rc+=1)=w2Copy$
 	fnChk(2,68,'W-2 - Enable Background',1,franum)
-	resp$(respc_enableBackground:=rc+=1)=enableBackground$
+	resp$(respc_enableBackground=rc+=1)=enableBackground$
 	fnChk(4,68,'Print W-3 also',1,franum)
-	resp$(respc_w3:=rc+=1)=enableW3$
+	resp$(respc_w3=rc+=1)=enableW3$
 	fnOpt(4,3,'Export for Advanced Micro Solutions',0,franum)
-	resp$(respc_export_ams:=rc+=1)=w2destinationOpt$(2)
+	resp$(respc_export_ams=rc+=1)=w2destinationOpt$(2)
 	fnLbl(5,5,'Export File:',12,1,0,franum)
 	fnTxt(5,19,20,256,0,'72',0,'Choose a destination location for the ACS export.',franum)
-	resp$(resp_w2_export_file:=rc+=1)=w2laser_output_filename$
+	resp$(resp_w2_export_file=rc+=1)=w2laser_output_filename$
 	fnButton(5,5+12+20+5,'Default',14,'Choose to set the default for the selected destination software.',0,0,franum)
 	fnLbl(6,19,'([CompanyNumber] and [TaxYear] will be substituted in filename)',0,0,0,franum)
 
@@ -244,19 +226,19 @@ def library fnask_w2_info(&taxYear$,&beg_date,&end_date,&empStart$, _
 		cf+=1 : franum=cf
 		fnLbl(1,1,'Qualified Pension Plan:',mylen,1,0,franum)
 		fnTxt(1,mypos,2,0,1,'30',0,'If you have a qualified pension plan that requires the pension plan box to be checked, count down from your 1st miscellaneous deduction to determine the number to enter here.',franum)
-		resp$(respc_qpenplan:=rc+=1)=str$(pn1)
+		resp$(respc_qpenplan=rc+=1)=str$(pn1)
 		fnLbl(2,1,'Dependent Care Benefits:',mylen,1,0,franum)
 		fnTxt(2,mypos,2,0,1,'30',0,'If you have dependent care benefits that should be identifies on the W-2, count down from your 1st miscellaneous deduction to determine the number to enter here.',franum)
-		resp$(respc_depCareBen:=rc+=1)=str$(dc1)
+		resp$(respc_depCareBen=rc+=1)=str$(dc1)
 	else if enableAskState then
 		fra4Y=fra3y+fra3Height+2 ! 25
 		fnFra(fra4Y,1,2,fraWidth,'State','')
 		cf+=1 : franum=cf
 		fnLbl(1,1,'State Name:',mylen,1,0,franum)
 		fnTxt(1,mypos,2,0,1,'',0,'If you have a qualified pension plan that requires the pension plan box to be checked, count down from your 1st miscellaneous deduction to determine the number to enter here.',franum)
-		resp$(respc_state:=rc+=1)=state$
+		resp$(respc_state=rc+=1)=state$
 	end if
-	fnCmdKey('&Margins',ckey_margins:=1021,0,0,'Manually adjust margins for hitting forms')
+	fnCmdKey('&Margins',ckey_margins=1021,0,0,'Manually adjust margins for hitting forms')
 	fnCmdKey('&Next',1,1,0,'Proceed to next screen.')
 	fnCmdKey('&Cancel',5,0,1,'Returns to menu')
 	ckey=fnAcs(mat resp$)
@@ -383,138 +365,7 @@ def fn_ask_margins
 		left        	=val(amResp$(3))
 	end if
 fnend
-def library fnNameParse(fullname$*128,&nameFirst$,&nameMiddle$,&nameLast$,&nameSuffix$)
-	if ~setup then fn_setup
-	fnNameParse=fn_nameParse(fullname$,nameFirst$,nameMiddle$,nameLast$,nameSuffix$)
-fnend
-def fn_nameParse(fullname$*128,&nameFirst$,&nameMiddle$,&nameLast$,&nameSuffix$)
-	if ~setup then fn_setup
-	! passed in: fullname$
-	! gathered: nameFormat$, mat optNameFormat$
-	! returns: nameFirst$,nameMiddle$,nameLast$
-	! calling program should include:  dim nameFirst$*15,nameMiddle$*15,nameLast$*20
-	fncreg_read('Employee Name Format',nameFormat$,optNameFormat$(1))
-	fullname$=uprc$(rtrm$(fullname$)): ! nameFormat$='s'
-	npPosSpace1=pos(fullname$,' ',1)
-	npPosSpace2=pos(fullname$,' ',npPosSpace1+1)
-	if nameFormat$=optNameFormat$(1) then
-		! r: first name first
-		nameFirst$=fullname$(1:max(min(15,npPosSpace1-1),1))
-		if npPosSpace2>0 then
-			nameMiddle$=fullname$(npPosSpace1+1:npPosSpace2-1)
-			nameLast$=fullname$(npPosSpace2+1:len(fullname$))
-		end if
-		if npPosSpace2=0 then
-			nameLast$=fullname$(npPosSpace1+1:len(fullname$))
-			nameMiddle$=''
-		end if
-		! /r
-	else  ! last name first
-		! r: last name first
-		! npPosComma=pos(fullname$,',')
-		! if npPosComma then
-		!   ! r: last name, first name
-		!   dim fullNameCopy$*256
-		!   fullNameCopy$=fullname$
-		!   nameLast$=fullNameCopy$(1:npPosComma-1)
-		!   fullNameCopy$(1:npPosComma)=''
-		!   fullNameCopy$=trim$(fullNameCopy$)
-		!   npFncPosSpace1=pos(fullNameCopy$,' ')
-		!   if npFncPosSpace1<=0 then npFncPosSpace1=len(fullNameCopy$)
-		!   nameFirst$=trim$(fullNameCopy$(1:npFncPosSpace1))
-		!   fullNameCopy$(1:npFncPosSpace1)=''
-		!   nameMiddle$=trim$(fullNameCopy$)
-		!   fullNameCopy$=''
-		!   ! /r
-		! else
-		!   ! r: last name [space] first name
-		!   ! /r
-		! ! end if
-		if npPosSpace1>0 and fullname$(npPosSpace1-1:npPosSpace1-1)=',' then
-			nameLast$=fullname$(1:npPosSpace1-2)
-		else
-			nameLast$=fullname$(1:max(npPosSpace1-1,1))
-		end if
-		if npPosSpace2>0 then
-			nameFirst$=fullname$(npPosSpace1+1:npPosSpace2-1): nameMiddle$=fullname$(npPosSpace2+1:len(fullname$))
-		else ! if npPosSpace2=0 then
-			nameFirst$=fullname$(npPosSpace1+1:len(fullname$)): nameMiddle$=''
-		end if
-		! /r
-	end if
-	nameFirst$=rtrm$(nameFirst$,',')
-	! r: nameSuffix$ process ! JR
-	nameSuffix$='' err npNsFinis
-	if namefirst$='II' or namefirst$='III' then
-		namesuffix$=namefirst$
-		namefirst$=namemiddle$
-		namemiddle$=''
-	end if
-	if uprc$(nameFirst$&'*')<>uprc$(srep$(nameFirst$&'*',',JR*','')) then
-		nameSuffix$='JR'
-		nameFirst$=rtrm$(nameFirst$)
-		nameFirst$=nameFirst$(1:len(nameFirst$)-3)
-	end if
-	if uprc$(nameLast$&'*')<>uprc$(srep$(nameLast$&'*',',JR*','')) then
-		nameSuffix$='JR'
-		nameLast$=rtrm$(nameLast$)
-		nameLast$=nameLast$(1:len(nameLast$)-3)
-	end if
-	if uprc$(nameLast$&'*')<>uprc$(srep$(nameLast$&'*',',JR.*','')) then
-		nameSuffix$='JR'
-		nameLast$=rtrm$(nameLast$)
-		nameLast$=nameLast$(1:len(nameLast$)-4)
-	end if
-	! SR and II and III
-	if uprc$(nameFirst$&'*')<>uprc$(srep$(nameFirst$&'*',',SR*','')) then
-		nameSuffix$='SR'
-		nameFirst$=rtrm$(nameFirst$)
-		nameFirst$=nameFirst$(1:len(nameFirst$)-3)
-	end if
-	if uprc$(nameLast$&'*')<>uprc$(srep$(nameLast$&'*',',SR*','')) then
-		nameSuffix$='SR'
-		nameLast$=rtrm$(nameLast$)
-		nameLast$=nameLast$(1:len(nameLast$)-3)
-	end if
-	if uprc$(nameLast$&'*')<>uprc$(srep$(nameLast$&'*',',SR.*','')) then
-		nameSuffix$='SR'
-		nameLast$=rtrm$(nameLast$)
-		nameLast$=nameLast$(1:len(nameLast$)-4)
-	end if
-	if uprc$(nameFirst$&'*')<>uprc$(srep$(nameFirst$&'*',',II*','')) then
-		nameSuffix$='II'
-		nameFirst$=rtrm$(nameFirst$)
-		nameFirst$=nameFirst$(1:len(nameFirst$)-3)
-	end if
-	if uprc$(nameLast$&'*')<>uprc$(srep$(nameLast$&'*',',II*','')) then
-		nameSuffix$='II'
-		nameLast$=rtrm$(nameLast$)
-		nameLast$=nameLast$(1:len(nameLast$)-3)
-	end if
-	if uprc$(nameLast$&'*')<>uprc$(srep$(nameLast$&'*',',II.*','')) then
-		nameSuffix$='II'
-		nameLast$=rtrm$(nameLast$)
-		nameLast$=nameLast$(1:len(nameLast$)-4)
-	end if
-	if uprc$(nameFirst$&'*')<>uprc$(srep$(nameFirst$&'*',',III*','')) then
-		nameSuffix$='III'
-		nameFirst$=rtrm$(nameFirst$)
-		nameFirst$=nameFirst$(1:len(nameFirst$)-4)
-	end if
-	if uprc$(nameLast$&'*')<>uprc$(srep$(nameLast$&'*',' III*','')) then
-		nameSuffix$='III'
-		nameLast$=rtrm$(nameLast$)
-		nameLast$=nameLast$(1:len(nameLast$)-4)
-	end if
-	if uprc$(nameLast$&'*')<>uprc$(srep$(nameLast$&'*',',III.*','')) then
-		nameSuffix$='III'
-		nameLast$=rtrm$(nameLast$)
-		nameLast$=nameLast$(1:len(nameLast$)-5)
-	end if
-	npNsFinis: !
-	! /r
-	! pr nameFirst$,nameMiddle$,nameLast$
-fnend
+
 def library fnw2_text(w2Yoffset,maskSsn,mat a$,empId$*12,ss$,controlNumber$,mat w,dcb$,nameFirst$*64,nameMiddle$*64,nameLast$*64,nameSuffix$*64,retirementPlanX$,mat k$,box12aCode$,box12aAmt$,box12bCode$,box12bAmt$,box12cCode$,box12cAmt$,box12dCode$,box12dAmt$,state$,stcode$,printLocality$*6; w2Box14Amt,specialform2018)
 	if ~setup then fn_setup
 	fnw2_text=fn_w2_text(w2Yoffset,maskSsn,mat a$,empId$,ss$,controlNumber$,mat w,dcb$,nameFirst$,nameMiddle$,nameLast$,nameSuffix$,retirementPlanX$,mat k$,box12aCode$,box12aAmt$,box12bCode$,box12bAmt$,box12cCode$,box12cAmt$,box12dCode$,box12dAmt$,state$,stcode$,printLocality$, w2Box14Amt,specialform2018)

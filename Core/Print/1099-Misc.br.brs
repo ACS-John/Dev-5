@@ -99,6 +99,7 @@ def fn_ask(&seltpN,&typeN,&minAmt,&beg_date,&end_date; ___, _
 		end if
 
 		minAmt=fnpcreg_read('Filter - Minimum Amount',tmp$, '600')
+
 		dim destinationOpt$(3)
 		fnpcreg_read('Print 1099'       	,destinationOpt$(1)	,'False' )
 		fnpcreg_read('Export 1'         	,destinationOpt$(2)	,'False')
@@ -538,9 +539,7 @@ def fn_1099print(vn$*8,nam$*30,mat recipientAddr$,ss$*11,mat box; ___, _
 				fnpa_txt(companyNameAddr$(3)	,column1    	,fn_line(3))
 				fnpa_txt(ph$                 	,column1    	,fn_line(5))
 				fnpa_txt(fed$                	,column1    	,fn_line(7))  ! PAYER'S TIN
-				! fnpa_txt(fed$                	,column1    	,fn_line(8))  ! PAYER'S TIN
 				fnpa_txt(ss$                 	,column1+45	 	,fn_line(7))  ! RECIPIENT'S TIN
-				! fnpa_txt(ss$                 	,column1+45	 	,fn_line(8))  ! RECIPIENT'S TIN
 				fnpa_txt(nam$                	,column1    	,fn_line(9)-2)  ! RECIPIENT'S name
 				if udim(mat recipientAddr$)=3 and trim$(recipientAddr$(3))='' then mat recipientAddr$(2)
 				if udim(mat recipientAddr$)=2 or (udim(mat recipientAddr$)=3 and trim$(recipientAddr$(2))='') then
@@ -561,9 +560,9 @@ def fn_1099print(vn$*8,nam$*30,mat recipientAddr$,ss$*11,mat box; ___, _
 				fnpa_txt(cnvrt$('pic(zzzzzzzzzz.zz',box(6) ),column3   		,fn_line(6) ) ! fed withheld
 				fnpa_txt(cnvrt$('pic(zzzzzzzzzz.zz',box(5) ),column2   		,fn_line(8) )
 				fnpa_txt(cnvrt$('pic(zzzzzzzzzz.zz',box(6) ),column3   		,fn_line(8) )
-				if sum(mat box)>5000 then
-					fnpa_txt('X'                                ,column2+21 	,fn_line(9))
-				end if
+				! if sum(mat box)>5000 then
+				! 	fnpa_txt('X'                                ,column2+21 	,fn_line(9))
+				! end if
 				fnpa_txt(cnvrt$('pic(zzzzzzzzzz.zz',box(8) ),column3    	,fn_line(9) )
 				fnpa_txt(cnvrt$('pic(zzzzzzzzzz.zz',box(9) ),column2    	,fn_line(11))
 				fnpa_txt(cnvrt$('pic(zzzzzzzzzz.zz',box(10)),column3    	,fn_line(11))
