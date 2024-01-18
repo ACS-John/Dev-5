@@ -568,10 +568,6 @@ fnend
 		library 'S:\Core\Print\w3.br': fnW3
 		fnW3=fnW3(taxYear$,empId$,w2printCount,mat a$,mat w,dcb,state$,stcode$)
 	fnend
-	def library fnNameParse(fullname$*128,&nameFirst$,&nameMiddle$,&nameLast$,&nameSuffix$)
-		library 'S:\Core\Print\w2.br': fnNameParse
-		fnNameParse=fnNameParse(fullname$,nameFirst$,nameMiddle$,nameLast$,nameSuffix$)
-	fnend
 	def library fn_FormCopyAwithBackgroundWarn
 		library 'S:\Core\Print\w2.br': fn_FormCopyAwithBackgroundWarn
 	fn_FormCopyAwithBackgroundWarn=fn_FormCopyAwithBackgroundWarn
@@ -817,6 +813,10 @@ fnend
 ! /r
 
 ! r: parse   S:\Core\parse\
+	def library fnNameParse(fullname$*128,&nameFirst$,&nameMiddle$,&nameLast$,&nameSuffix$)
+		library 'S:\Core\Parse\name.br': fnNameParse
+		fnNameParse=fnNameParse(fullname$,nameFirst$,nameMiddle$,nameLast$,nameSuffix$)
+	fnend
 	def library fnremove2(&and$,&word$)
 		library 'S:\Core\parse\remove2.br': fnremove2
 		fnremove2=fnremove2(and$,word$)
@@ -1412,7 +1412,7 @@ fnend
 		library 'S:\Core\CNo.br': fnPutCno
 		fnPutCno=fnPutCno(cno)
 	fnend
-	def library fndat(&dat$; get_or_put)
+	def library fndat(&dat$; get_or_put)  ! date$('Month DD, CCYY')
 		library 'S:\Core\CNo.br': fndat
 		fndat=fndat(dat$,get_or_put)
 	fnend

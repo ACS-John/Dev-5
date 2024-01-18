@@ -111,52 +111,59 @@ def fn_ask(&seltpN,&typeN,&minAmt,&beg_date,&end_date; ___, _
 	rc=lc=0 : mylen=40 : mypos=mylen+3
 	fnLbl(lc+=1,1,'Tax Year:',mylen,1)
 	fnTxt(lc,mypos,4,0,1,'',1,'Year to pr 1099s for')
-	resp$(resc_taxYear:=rc+=1)=taxYear$
+	resp$(resc_taxYear=rc+=1)=taxYear$
 	if env$('cursys')='PR' then
 		lc+=1
 		fnLbl(lc+=1,1,'Miscellaneous Deduction to Print:',mylen,1)
 		fnComboA('deductions',lc,mypos,mat deductionOption$,'Select the deduction you want printed.')
-		resp$(respc_deduction:=rc+=1)=seltp$
+		resp$(respc_deduction=rc+=1)=seltp$
 		fnLbl(lc+=1,1,'1099 Box to Print:',mylen,1)
 		fnComboA('type',lc,mypos,mat typeOption$,'Select the code for the 1099 vendor type.')
-		resp$(respc_type:=rc+=1)=type$
+		resp$(respc_type=rc+=1)=type$
 	else if env$('cursys')='GL' or env$('cursys')='CL' then
 		fnLbl(lc+=1,1,'Payee Type to Print:',mylen,1)
-		resp$(respc_deduction:=rc+=1)=seltp$
+		resp$(respc_deduction=rc+=1)=seltp$
 		fnComboF('Payeetype',lc,mypos,27,'[Q]\[CurSys]mstr\PayeeType.dat',1,2,3,25,'',0,0, 'The payee type is a code used to detemine which box should be used on a 1099 misc form.  Enter the code for the payee type to print.')
 	end if
 	lc+=1
 	fnLbl(lc+=1,1,'Minimum Amount to Print:',mylen,1)
 	fnTxt(lc,mypos,12,0,1,'10',0,'Enter the minimum amount that should be printed.')
-	resp$(respc_minAmt:=rc+=1)=str$(minAmt)
+	resp$(respc_minAmt=rc+=1)=str$(minAmt)
 	fnLbl(lc+=1,1,'Your Telephone Number:',mylen,1)
 	fnTxt(lc,mypos,12,0,1,'',0,'You can use dashes, etc.')
-	resp$(respc_phone:=rc+=1)=ph$
+	resp$(respc_phone=rc+=1)=ph$
 	fnLbl(lc+=1,1,'Email:',mylen,1)
 	fnTxt(lc,mypos,30,64,0,'',0,'')
-	resp$(respc_email:=rc+=1)=email$
+	resp$(respc_email=rc+=1)=email$
+	lc+=1
+	fnLbl(lc+=1,1,'Payee Name Format:',mylen,1)
+	dim optNameFormat$(2)*20
+	optNameFormat$(1)='First Name First'
+	optNameFormat$(2)='Last Name First'
+	fnComboA('nameFormat',lc,mypos,mat optNameFormat$, '',20)
+	fncreg_read('Payee Name Format',resp$(respc_nameFormat=rc+=1),optNameFormat$(1))
 	lc+=1
 	fnOpt(lc+=1,3,'Print 1099-NEC')
-	resp$(respc_Print1099:=rc+=1)=destinationOpt$(1)
+	resp$(respc_Print1099=rc+=1)=destinationOpt$(1)
 	fnLbl(lc+=1,5,'Copy:',12,1,0)
 	fnComboA('Copy',lc,19,mat optCopy$, '',20)
-	resp$(respc_copyCurrent:=rc+=1)=optCopy$(copyCurrentN)
+	resp$(respc_copyCurrent=rc+=1)=optCopy$(copyCurrentN)
 	fnChk(lc+=1,20,'Enable Background',1)
 	resp$(respc_enableBackground:=rc+=1)=enableBackground$
 	fnChk(lc+=1,20,'3 Per Page',1)
 	resp$(respc_perPage:=rc+=1)=perPage$
 	lc+=1
 	fnOpt(lc+=1,3,'Export CSV for IRIS')
-	resp$(respc_exportIris:=rc+=1)=destinationOpt$(3)
+	resp$(respc_exportIris=rc+=1)=destinationOpt$(3)
 	fnOpt(lc+=1,3,'Export for Advanced Micro Solutions')
-	resp$(respc_export_ams:=rc+=1)=destinationOpt$(2)
+	resp$(respc_export_ams=rc+=1)=destinationOpt$(2)
 	fnLbl(lc+=1,5,'Export File:',12,1,0,franum)
 	fnTxt(lc,19,20,128,0,'72',0,'Choose a destination location for the ACS export.',franum)
-	resp$(resp_export_file:=rc+=1)=output_filename$
+	resp$(resp_export_file=rc+=1)=output_filename$
 	fnButton(lc,5+12+20+5,'Default',ckey_defaultFilename=14,'Choose to set the default for the selected destination software.',0,0,franum)
 	fnLbl(lc+=1,19,'([CompanyNumber] and [TaxYear] will be substituted in filename)',0,0,0,franum)
 
-	fnCmdKey('&Margins',ckey_margins:=1021,0,0,'Manually adjust margins for hitting forms')
+	fnCmdKey('&Margins',ckey_margins=1021,0,0,'Manually adjust margins for hitting forms')
 	fnCmdKey('&Next',1,1,0,'Proceed to next screen.')
 	fnCmdKey('&Test',ckey_test=10,0,0,'Produce a Test 1099')
 	fnCmdKey('&Cancel',5,0,1,'Returns to menu')
@@ -211,6 +218,7 @@ def fn_ask(&seltpN,&typeN,&minAmt,&beg_date,&end_date; ___, _
 		! /r
 		! r: save stuff
 		fnpcreg_write('Filter - Minimum Amount',str$(minAmt))
+		fncreg_write('Payee Name Format',resp$(respc_nameFormat))
 		if env$('cursys')='CL' or env$('cursys')='GL' then
 			fnpcreg_write('seltp',seltp$(1:2))
 		else ! env$('cursys')='PR'
@@ -279,11 +287,11 @@ fnend
 		defaultMargin$(3)=         '180'    	!        '180'    	! '180' ! form 3 top margin
 		defaultMargin$(4)=           '5'    	!          '5'    	!   '5' ! left
 	return ! /r
-def library fn1099NecPrint(vn$*8,nam$*30,mat empAddr$,ss$*11,mat box)
+def library fn1099NecPrint(vn$*8,nam$*30,mat recipientAddr$,ss$*11,mat box)
 	if ~setup then fn_setup
-	fn1099NecPrint=fn_1099print(vn$,nam$,mat empAddr$,ss$,mat box)
+	fn1099NecPrint=fn_1099print(vn$,nam$,mat recipientAddr$,ss$,mat box)
 fnend
-def fn_1099print(vn$*8,nam$*30,mat empAddr$,ss$*11,mat box; ___, _
+def fn_1099print(vn$*8,nam$*30,mat recipientAddr$,ss$*11,mat box; ___, _
 		lineN,yn$*1,city$*64,state$*2,zip$*10)
 	! inherrits local: disableCopyAWarning
 	if ~ten99initialized then ! r: initialize output destination (if needed)
@@ -399,19 +407,34 @@ def fn_1099print(vn$*8,nam$*30,mat empAddr$,ss$*11,mat box; ___, _
 		pr #hExport: email$&','; ! Payer Email Address
 		pr #hExport: 'SSN,';  ! Recipient TIN Type
 		pr #hExport: ss$&','; ! Recipient Taxpayer ID Number
-		pr #hExport: 'I,';    ! Recipient Name Type B for business or I for individual
-		pr #hExport: ','; ! Recipient Business or Entity Name Line 1
-		pr #hExport: ','; ! Recipient Business or Entity Name Line 2
-		dim nameFirst$*64,nameMiddle$*64,nameLast$*64,nameSuffix$*64
-		fnNameParse(nam$,nameFirst$,nameMiddle$,nameLast$,nameSuffix$)
-		pr #hExport: nameFirst$&','; ! Recipient First Name
-		pr #hExport: nameMiddle$&','; ! Recipient Middle Name
-		pr #hExport: nameLast$&','; ! Recipient Last Name (Surname)
-		pr #hExport: nameSuffix$&','; ! Recipient Suffix
+		dim recipientType$*1
+		if fn_isBusiness(ss$) then recipientType$='B' else recipientType$='I'
+		pr #hExport: recipientType$&',';    ! Recipient Name Type B for business or I for individual
+		if recipientType$='B' then
+			pr #hExport: nam$&','; ! Recipient Business or Entity Name Line 1
+			pr #hExport: ','; ! Recipient Business or Entity Name Line 2
+			pr #hExport: ','; ! Recipient First Name
+			pr #hExport: ','; ! Recipient Middle Name
+			pr #hExport: ','; ! Recipient Last Name (Surname)
+			pr #hExport: ','; ! Recipient Suffix
+		else
+			pr #hExport: ','; ! Recipient Business or Entity Name Line 1
+			pr #hExport: ','; ! Recipient Business or Entity Name Line 2
+			dim nameFirst$*64,nameMiddle$*64,nameLast$*64,nameSuffix$*64
+			fnNameParse(nam$,nameFirst$,nameMiddle$,nameLast$,nameSuffix$)
+			pr #hExport: nameFirst$&','; ! Recipient First Name
+			pr #hExport: nameMiddle$&','; ! Recipient Middle Name
+			pr #hExport: nameLast$&','; ! Recipient Last Name (Surname)
+			pr #hExport: nameSuffix$&','; ! Recipient Suffix
+		end if
 		pr #hExport: 'US,'; ! Recipient Country
-		pr #hExport: empAddr$(1)&','; ! Recipient Address Line 1
+		pr #hExport: recipientAddr$(1)&','; ! Recipient Address Line 1
+		if udim(mat recipientAddr$)=2 then
 		pr #hExport: ','; ! Recipient Address Line 2
-		fncsz(empAddr$(2),city$,state$,zip$)
+		else
+			pr #hExport: recipientAddr$(2)&','; ! Recipient Address Line 2
+		end if
+		fncsz(recipientAddr$(udim(mat recipientAddr$)),city$,state$,zip$)
 		pr #hExport: city$&',';  ! 'Recipient City/Town,';
 		pr #hExport: state$&','; ! 'Recipient State/Province/Territory,';
 		pr #hExport: zip$&',';   ! 'Recipient ZIP/Postal Code,';
@@ -459,8 +482,8 @@ def fn_1099print(vn$*8,nam$*30,mat empAddr$,ss$*11,mat box; ___, _
 		pr #hExport: '18 ';' '
 		pr #hExport: '19 ';' '
 		pr #hExport: '20 ';box(10)
-		pr #hExport: '21 ';empAddr$(1)
-		pr #hExport: '22 ';empAddr$(2)
+		pr #hExport: '21 ';recipientAddr$(1)
+		pr #hExport: '22 ';recipientAddr$(2)
 		pr #hExport: '23 ';' '
 		pr #hExport: '24 ';0
 		pr #hExport: '25 ';vn$
@@ -473,8 +496,7 @@ def fn_1099print(vn$*8,nam$*30,mat empAddr$,ss$*11,mat box; ___, _
 		! pr #hExport: '32 ';0
 		pr #hExport: '*'
 		! /r
-	else
-		! r: pr one
+	else ! r: pr one
 		column1 	= left +   8
 		column1b	= left +  65
 		column2 	= left +  97
@@ -489,41 +511,44 @@ def fn_1099print(vn$*8,nam$*30,mat empAddr$,ss$*11,mat box; ___, _
 			fnpa_background(CopyFile$(copyCurrentN))
 		end if
 		fnpa_FontSize
-		! ! r: draw developer lines
-		! if env$('acsDeveloper')<>'' then
-		! 	for lineN=1 to 14
-		! 		fnpa_txt(str$(lineN)  ,left+1,fn_line(lineN))
-		! 		fnpa_txt(rpt$('_',100),left+1,fn_line(lineN))
-		! 	nex lineN
-		! end if
-		! ! /r
+		! r: draw developer lines
+		developerLinesEnabled=0
+		if developerLinesEnabled and env$('acsDeveloper')<>'' then
+			for lineN=1 to udim(mat lineXy)
+				fnpa_txt(str$(lineN)  ,left+1,fn_line(lineN))
+				fnpa_txt('('&str$(lineXy(lineN))&')' ,left+10,fn_line(lineN))
+				fnpa_txt(rpt$('_ ',50),left+1,fn_line(lineN))
+			nex lineN
+		end if
+		! /r
 		! r: print the text in the boxes
 			! r: left side
 				! PAYER'S name, street address, city, etc
 				fnpa_txt(companyNameAddr$(1),column1,fn_line(1))
 				fnpa_txt(companyNameAddr$(2),column1,fn_line(2))
 				fnpa_txt(companyNameAddr$(3),column1,fn_line(3))
-				fnpa_txt(ph$,column1,fn_line(4))
-				fnpa_txt(taxyear$(3:4),column3b,fn_line(15))
+				fnpa_txt(ph$,column1,fn_line(5))
+				! fnpa_txt(taxyear$(3:4),column3b,fn_line(15))
 				fnpa_txt(fed$,column1,fn_line(5)) ! PAYER'S TIN
 				fnpa_txt(ss$,column1b,fn_line(5)) ! RECIPIENT'S TIN
 				fnpa_txt(nam$,column1,fn_line(7)) ! RECIPIENT'S name
-				if udim(mat empAddr$)=2 then
-					fnpa_txt(empAddr$(1),column1,fn_line(9)) ! Street address (including apt. no.) ( address line 1 )
-					fnpa_txt(empAddr$(2),column1,fn_line(11)) !  CSZ
-				else if udim(mat empAddr$)=3 then
-					fnpa_txt(rtrm$(empAddr$(1))&'  '&trim$(empAddr$(2)),column1,fn_line(9)) ! address line 2
-					fnpa_txt(empAddr$(3),column1,fn_line(11)) !  CSZ
+				if udim(mat recipientAddr$)=2 then
+					fnpa_txt(recipientAddr$(1),column1,fn_line(9)) ! Street address (including apt. no.) ( address line 1 )
+					fnpa_txt(recipientAddr$(2),column1,fn_line(11)) !  CSZ
+				else if udim(mat recipientAddr$)=3 then
+					fnpa_txt(rtrm$(recipientAddr$(1))&'  '&trim$(recipientAddr$(2)),column1,fn_line(9)) ! address line 2
+					fnpa_txt(recipientAddr$(3),column1,fn_line(11)) !  CSZ
 				else
-					pr 'udim(mat empAddr$)=';udim(mat empAddr$);' this is unexpected by '&program$ : pause
+					pr 'udim(mat recipientAddr$)=';udim(mat recipientAddr$);' this is unexpected by '&program$ : pause
 				end if
 				fnpa_txt(vn$,column1,fn_line(13))
 			!/r
 			! r: right side
+				fnpa_txt(taxyear$                             ,column5-5   		,fn_line(4) )
 				fnpa_txt(cnvrt$('pic(zzzzzzzzzz.zz',box(1)  ),column3  ,fn_line(5) )
-				if box(2)>5000 then 
-					fnpa_txt('X'                                 ,column3+24,fn_line(6))
-				end if
+				! if box(2)>5000 then 
+				! 	fnpa_txt('X'                                 ,column3+24,fn_line(6))
+				! end if
 				fnpa_txt(cnvrt$('pic(zzzzzzzzzz.zz',box(3)  ),column3   ,fn_line(8) )
 				fnpa_txt(cnvrt$('pic(zzzzzzzzzz.zz',box(4)  ),column3   ,fn_line(10)) ! fed withheld
 				
@@ -578,6 +603,13 @@ fnend
 		fn_line=lineXy(lineNumber)+yOffset
 	fnend
 
+	def fn_isBusiness(xx$; ___,xx12n,returnN)
+		xx$=trim$(xx$)
+		xx12n=val(xx$(1:2)) conv IbFinis
+		if xx12n and xx$(3:3)='-' then returnN=1
+		IbFinis: !
+		fn_isBusiness=returnN
+	fnend
 def library fn1099NecPrintClose
 	if ~setup then fn_setup
 	fn1099NecPrintClose=fn_1099print_close
