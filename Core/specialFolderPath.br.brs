@@ -36,6 +36,11 @@ def fn_specialFolderPath$*256(folderName$*64; ___,line$*256,lineCount,return$*25
 		tmpFile$=env$('client_temp')&'\sfp'&session$&'.txt' ! [client_temp]\sfp[session].txt
 		
 	end if
+	! r: warning found 1/18/24 in Regedit
+	! HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Shell Folders
+	! !Do not use this registry key
+	! /r
+	! Use the SHGetFolderPath or SHGetKnownFolderPath function instead
 	exe 'sy -M reg query "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Shell Folders" /v "'&folderName$&'" >"'&tmpFile$&'"'
 	open #hTmp=fnH: 'name='&env$('at')&tmpFile$,d,input
 	do

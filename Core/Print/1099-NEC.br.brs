@@ -97,7 +97,7 @@ def fn_ask(&seltpN,&typeN,&minAmt,&beg_date,&end_date; ___, _
 		fnpcreg_read('Enable Background'	,enableBackground$ 	,'True' )
 		fnpcreg_read('3 Per Page'       	,perPage$           	,'True' )
 		copyCurrentN=fnPcRegReadN('Copy Current',2)
-		fnureg_read('1099 - Export Filename',output_filename$,os_filename$(env$('Desktop')&'\ACS [TaxYear] 1099 Export (Company [CompanyNumber]).txt'))
+		fnureg_read('1099-NEC - Export Filename',outputFilename$,os_filename$(env$('Desktop')&'\ACS [TaxYear] 1099-NEC Export (Company [CompanyNumber]).txt'))
 		fncreg_read('Phone Number',ph$)
 		fncreg_read('Email',email$)
 		dim seltp$*256
@@ -159,7 +159,7 @@ def fn_ask(&seltpN,&typeN,&minAmt,&beg_date,&end_date; ___, _
 	resp$(respc_export_ams=rc+=1)=destinationOpt$(2)
 	fnLbl(lc+=1,5,'Export File:',12,1,0,franum)
 	fnTxt(lc,19,20,128,0,'72',0,'Choose a destination location for the ACS export.',franum)
-	resp$(resp_export_file=rc+=1)=output_filename$
+	resp$(resp_export_file=rc+=1)=outputFilename$
 	fnButton(lc,5+12+20+5,'Default',ckey_defaultFilename=14,'Choose to set the default for the selected destination software.',0,0,franum)
 	fnLbl(lc+=1,19,'([CompanyNumber] and [TaxYear] will be substituted in filename)',0,0,0,franum)
 
@@ -190,7 +190,7 @@ def fn_ask(&seltpN,&typeN,&minAmt,&beg_date,&end_date; ___, _
 		destinationOpt$(1)=resp$(respc_Print1099)
 		destinationOpt$(2)=resp$(respc_export_ams)
 		destinationOpt$(3)=resp$(respc_exportIris)
-		output_filename$=resp$(resp_export_file)
+		outputFilename$=resp$(resp_export_file)
 		! /r
 		! r: validate, respond and/or reject
 		dim ml$(0)*128
@@ -209,7 +209,7 @@ def fn_ask(&seltpN,&typeN,&minAmt,&beg_date,&end_date; ___, _
 			goto ASK_INFO
 		end if
 		if ckey=ckey_defaultFilename then
-				output_filename$=os_filename$(env$('Desktop')&'\ACS [TaxYear] 1099 Export (Company [CompanyNumber]).txt')
+				outputFilename$=os_filename$(env$('Desktop')&'\ACS [TaxYear] 1099 Export (Company [CompanyNumber]).txt')
 			goto ASK_INFO
 		else if ckey=ckey_margins then
 			fn_ask_margins
@@ -233,7 +233,7 @@ def fn_ask(&seltpN,&typeN,&minAmt,&beg_date,&end_date; ___, _
 		fnpcreg_write('3 Per Page',perPage$)
 		fnpcreg_write('Export 1',destinationOpt$(2))
 		fnpcreg_write('Export IRIS',destinationOpt$(3))
-		fnureg_write('1099 - Export Filename',output_filename$)
+		fnureg_write('1099 - Export Filename',outputFilename$)
 		fncreg_write('Phone Number',ph$)
 		fncreg_write('Email',email$)
 		! /r
@@ -324,38 +324,33 @@ def fn_1099print(vn$*8,nam$*30,mat recipientAddr$,ss$*11,mat box; ___, _
 		
 		fnPcReg_read('3 Per Page',perPage$,'True' )
 		fnPcReg_read('Enable Background',enableBackground$,'True' )
-		dim output_filename$*256
-		fnureg_read('1099 - Export Filename',output_filename$,os_filename$(env$('Desktop')&'\ACS [TaxYear] 1099 Export (Company [CompanyNumber]).txt'))
+		dim outputFilename$*256
+		fnureg_read('1099 - Export Filename',outputFilename$,os_filename$(env$('Desktop')&'\ACS [TaxYear] 1099 Export (Company [CompanyNumber]).txt'))
 		dim ph$*12
 		dim email$*128
 		fnCreg_read('Phone Number',ph$)
 		fnCreg_read('Email',email$)
 		copyCurrentN=fnPcRegReadN('Copy Current',2)
 		if ten99ExportIris$='True' or ten99Export$='True' then
-			output_filename$=srep$(output_filename$,'[CompanyNumber]',env$('cno'))
-			output_filename$=srep$(output_filename$,'[companynumber]',env$('cno'))
-			output_filename$=srep$(output_filename$,'[companyNumber]',env$('cno'))
-			output_filename$=srep$(output_filename$,'[COMPANYNUMBER]',env$('cno'))
-			output_filename$=srep$(output_filename$,'[TaxYear]',taxYear$)
-			output_filename$=srep$(output_filename$,'[taxyear]',taxYear$)
-			output_filename$=srep$(output_filename$,'[taxYear]',taxYear$)
-			output_filename$=srep$(output_filename$,'[TAXYEAR]',taxYear$)
+			outputFilename$=srep$(outputFilename$,'[CompanyNumber]',env$('cno'))
+			outputFilename$=srep$(outputFilename$,'[companynumber]',env$('cno'))
+			outputFilename$=srep$(outputFilename$,'[companyNumber]',env$('cno'))
+			outputFilename$=srep$(outputFilename$,'[COMPANYNUMBER]',env$('cno'))
+			outputFilename$=srep$(outputFilename$,'[TaxYear]',taxYear$)
+			outputFilename$=srep$(outputFilename$,'[taxyear]',taxYear$)
+			outputFilename$=srep$(outputFilename$,'[taxYear]',taxYear$)
+			outputFilename$=srep$(outputFilename$,'[TAXYEAR]',taxYear$)
 		end if
 		if ten99Export$='True' then
-			open #hExport=fnH: 'Name='&br_filename$(output_filename$)&',REPLACE',d,o ioerr ASK_INFO
+			open #hExport=fnH: 'Name='&br_filename$(outputFilename$)&',REPLACE',d,o ioerr ASK_INFO
 		else if ten99ExportIris$='True' then
-			open #hExport=fnH: 'Name='&br_filename$(output_filename$)&',recL=4096,REPLACE',d,o ioerr ASK_INFO
+			open #hExport=fnH: 'Name='&br_filename$(outputFilename$)&',recL=4096,REPLACE',d,o ioerr ASK_INFO
 			! r: pr IRIS CSV header
 				pr #hExport: 'Form Type,Tax Year,Payer TIN Type,';
 				pr #hExport: 'Payer Taxpayer ID Number,Payer Name Type,Payer Business or Entity Name Line 1,Payer Business or Entity Name Line 2,Payer First Name,Payer Middle Name,Payer Last Name (Surname),Payer Suffix,Payer Country,Payer Address Line 1,Payer Address Line 2,Payer City/Town,Payer State/Province/Territory,Payer ZIP/Postal Code,Payer Phone Type,Payer Phone,Payer Email Address,';
-			
-'Form Type,Tax Year,Payer TIN Type,Payer Taxpayer ID Number,Payer Name Type,Payer Business or Entity Name Line 1,Payer Business or Entity Name Line 2,Payer First Name,Payer Middle Name,Payer Last Name (Surname),Payer Suffix,Payer Country,Payer Address Line 1,Payer Address Line 2,Payer City/Town,Payer State/Province/Territory,Payer ZIP/Postal Code,Payer Phone Type,Payer Phone,Payer Email Address,'
-'Recipient TIN Type,Recipient Taxpayer ID Number,Recipient Name Type,Recipient Business or Entity Name Line 1,Recipient Business or Entity Name Line 2,Recipient First Name,Recipient Middle Name,Recipient Last Name (Surname),Recipient Suffix,Recipient Country,Recipient Address Line 1,Recipient Address Line 2,Recipient City/Town,Recipient State/Province/Territory,Recipient ZIP/Postal Code,'
-			
-			
 				pr #hExport: 'Recipient TIN Type,Recipient Taxpayer ID Number,Recipient Name Type,';
-				pr #hExport: 'Recipient Business or Entity Name Line 1,Recipient Business or Entity Name Line 2,Recipient First Name,Recipient Middle Name,Recipient Last Name (Surname),Recipient Suffix,Recipient Country,Recipient Address Line 1,Recipient Address Line 2,Recipient City/Town,Recipient State/Province/Territory,Recipient ZIP/Postal Code,';
-											'Office Code,Form Account Number,'
+				pr #hExport: 'Recipient Business or Entity Name Line 1,Recipient Business or Entity Name Line 2,Recipient First Name,Recipient Middle Name,Recipient Last Name (Surname),Recipient Suffix,Recipient Country,Recipient Address Line 1,Recipient Address Line 2,'
+				pr #hExport: 'Recipient City/Town,Recipient State/Province/Territory,Recipient ZIP/Postal Code,';
 				pr #hExport: 'Office Code,';
 				pr #hExport: 'Form Account Number,';
 				pr #hExport: '2nd TIN Notice,';
