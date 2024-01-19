@@ -107,7 +107,7 @@ def fn_ask(&seltpN,&typeN,&minAmt,&beg_date,&end_date; ___, _
 		fnpcreg_read('Enable Background'	,enableBackground$	,'True' )
 		fnpcreg_read('2 Per Page'       	,perPage$       	,'True')
 		copyCurrentN=fnPcRegReadN('Copy Current',2)
-		fnureg_read('1099 - Export Filename',outputFilename$,os_filename$(env$('Desktop')&'\ACS [TaxYear] 1099-Misc Export (Company [CompanyNumber]).txt'))
+		fnureg_read('1099 - Export Filename',outputFilename$,os_filename$(env$('Documents')&'\ACS\[TaxYear] 1099-Misc Export\Company [CompanyNumber].csv'))
 		fncreg_read('Phone Number',ph$)
 		fncreg_read('Email',email$)
 		dim seltp$*256
@@ -220,7 +220,7 @@ def fn_ask(&seltpN,&typeN,&minAmt,&beg_date,&end_date; ___, _
 			goto ASK_INFO
 		end if
 		if ckey=ckey_defaultFilename then
-				outputFilename$=os_filename$(env$('Desktop')&'\ACS [TaxYear] 1099 Export (Company [CompanyNumber]).txt')
+				outputFilename$=os_filename$(env$('Documents')&'\ACS\[TaxYear] 1099-Misc Export\Company [CompanyNumber].csv')
 			goto ASK_INFO
 		else if ckey=ckey_margins then
 			fn_ask_margins
@@ -332,7 +332,7 @@ def fn_1099print(vn$*8,nam$*30,mat recipientAddr$,ss$*11,mat box; ___, _
 		fnPcReg_read('2 Per Page',perPage$,'True' )
 		fnPcReg_read('Enable Background',enableBackground$,'True' )
 		dim outputFilename$*256
-		fnureg_read('1099 - Export Filename',outputFilename$,os_filename$(env$('Desktop')&'\ACS [TaxYear] 1099 Export (Company [CompanyNumber]).txt'))
+		fnureg_read('1099 - Export Filename',outputFilename$,os_filename$(env$('Documents')&'\ACS\[TaxYear] 1099-Misc Export\Company [CompanyNumber].csv'))
 		dim ph$*12
 		dim email$*128
 		fnCreg_read('Phone Number',ph$)
@@ -349,9 +349,11 @@ def fn_1099print(vn$*8,nam$*30,mat recipientAddr$,ss$*11,mat box; ___, _
 			outputFilename$=srep$(outputFilename$,'[TAXYEAR]',taxYear$)
 		end if
 		if ten99Export$='True' then
-			open #hExport=fnH: 'Name='&br_filename$(outputFilename$)&',REPLACE',d,o ioerr ASK_INFO
+			fnMakeSurePathExists(outputFilename$)
+			open #hExport=fnH: 'Name='&br_filename$(outputFilename$)&',REPLACE',d,o ! ioerr ASK_INFO
 		else if ten99ExportIris$='True' then
-			open #hExport=fnH: 'Name='&br_filename$(outputFilename$)&',recL=4096,REPLACE',d,o ioerr ASK_INFO
+			fnMakeSurePathExists(outputFilename$)
+			open #hExport=fnH: 'Name='&br_filename$(outputFilename$)&',recL=4096,REPLACE',d,o ! ioerr ASK_INFO
 			! r: pr IRIS CSV header
 				pr #hExport: 'Form Type,';
 				pr #hExport: 'Tax Year,';
@@ -360,13 +362,20 @@ def fn_1099print(vn$*8,nam$*30,mat recipientAddr$,ss$*11,mat box; ___, _
 				pr #hExport: 'Payer Name Type,';
 				pr #hExport: 'Payer Business or Entity Name Line 1,';
 				pr #hExport: 'Payer Business or Entity Name Line 2,';
-				pr #hExport: 'Payer First Name,Payer Middle Name,Payer Last Name (Surname),';
+				pr #hExport: 'Payer First Name,';
+				pr #hExport: 'Payer Middle Name,';
+				pr #hExport: 'Payer Last Name (Surname),';
 				pr #hExport: 'Payer Suffix,Payer Country,';
 				pr #hExport: 'Payer Address Line 1,Payer Address Line 2,';
-				pr #hExport: 'Payer City/Town,Payer State/Province/Territory,Payer ZIP/Postal Code,';
-				pr #hExport: 'Payer Phone Type,Payer Phone,';
+				pr #hExport: 'Payer City/Town,';
+				pr #hExport: 'Payer State/Province/Territory,';
+				pr #hExport: 'Payer ZIP/Postal Code,';
+				pr #hExport: 'Payer Phone Type,';
+				pr #hExport: 'Payer Phone,';
 				pr #hExport: 'Payer Email Address,';
-				pr #hExport: 'Recipient TIN Type,Recipient Taxpayer ID Number,Recipient Name Type,';
+				pr #hExport: 'Recipient TIN Type,';
+				pr #hExport: 'Recipient Taxpayer ID Number,';
+				pr #hExport: 'Recipient Name Type,';
 				pr #hExport: 'Recipient Business or Entity Name Line 1,';
 				pr #hExport: 'Recipient Business or Entity Name Line 2,';
 				pr #hExport: 'Recipient First Name,';
@@ -381,20 +390,20 @@ def fn_1099print(vn$*8,nam$*30,mat recipientAddr$,ss$*11,mat box; ___, _
 				pr #hExport: 'Form Account Number,';
 				pr #hExport: 'FATCA Filing Requirements,';
 				pr #hExport: '2nd TIN Notice,';
-				pr #hExport: 'Box  1 - Rents,';
-				pr #hExport: 'Box  2 - Royalties,';
-				pr #hExport: 'Box  3 - Other Income,';
-				pr #hExport: 'Box  4 - Federal income tax withheld,';
-				pr #hExport: 'Box  5 - Fishing boat proceeds,';
-				pr #hExport: 'Box  6 - Medical and health care payments,';
-				pr #hExport: 'Box  7 - Direct sales of $5000 or more of consumer products to a recipient for resale,';
-				pr #hExport: 'Box  8 - Subtitute payments in lieu of dividends or interest,';
-				pr #hExport: 'Box  9 - Crop insurance proceeds,';
-				pr #hExport: 'Box 10 - Gross proceeds paid to an attorney,';
-				pr #hExport: 'Box 11 - Fish purchased for resale,';
-				pr #hExport: 'Box 12 - Section 409A deferrals,';
-				pr #hExport: 'Box 14 - Excess golden parachute payments,';
-				pr #hExport: 'Box 15 - Nonqualified deferred compensation,';
+				pr #hExport: 'Box  1,'; ! - Rents,';
+				pr #hExport: 'Box  2,'; ! - Royalties,';
+				pr #hExport: 'Box  3,'; ! - Other Income,';
+				pr #hExport: 'Box  4,'; ! - Federal income tax withheld,';
+				pr #hExport: 'Box  5,'; ! - Fishing boat proceeds,';
+				pr #hExport: 'Box  6,'; ! - Medical and health care payments,';
+				pr #hExport: 'Box  7,'; ! - Direct sales of $5000 or more of consumer products to a recipient for resale,';
+				pr #hExport: 'Box  8,'; ! - Subtitute payments in lieu of dividends or interest,';
+				pr #hExport: 'Box  9,'; ! - Crop insurance proceeds,';
+				pr #hExport: 'Box 10,'; ! - Gross proceeds paid to an attorney,';
+				pr #hExport: 'Box 11,'; ! - Fish purchased for resale,';
+				pr #hExport: 'Box 12,'; ! - Section 409A deferrals,';
+				pr #hExport: 'Box 14,'; ! - Excess golden parachute payments,';
+				pr #hExport: 'Box 15,'; ! - Nonqualified deferred compensation,';
 				pr #hExport: 'Combined Federal/State Filing,';
 				pr #hExport: 'State 1,State 1 - State Tax Withheld,State 1 - State/Payer state number,State 1 - State income,State 1 - Local income tax withheld,State 1 - Special Data Entries,';
 				pr #hExport: 'State 2,State 2 - State Tax Withheld,State 2 - State/Payer state number,State 2 - State income,State 2 - Local income tax withheld,State 2 - Special Data Entries,';
@@ -426,12 +435,12 @@ def fn_1099print(vn$*8,nam$*30,mat recipientAddr$,ss$*11,mat box; ___, _
 		pr #hExport: 'D,'; ! Payer Phone Type - D for Domestic or I for International
 		pr #hExport: ph$&','; ! Payer Phone
 		pr #hExport: email$&','; ! Payer Email Address
-		pr #hExport: 'SSN,';  ! Recipient TIN Type
-		pr #hExport: ss$&','; ! Recipient Taxpayer ID Number
 		dim recipientType$*1
 		if fn_isBusiness(ss$) then recipientType$='B' else recipientType$='I'
-		pr #hExport: recipientType$&',';    ! Recipient Name Type B for business or I for individual
 		if recipientType$='B' then
+			pr #hExport: 'EIN,';  ! Recipient TIN Type
+			pr #hExport: ss$&','; ! Recipient Taxpayer ID Number
+			pr #hExport: recipientType$&',';    ! Recipient Name Type B for business or I for individual
 			pr #hExport: nam$&','; ! Recipient Business or Entity Name Line 1
 			pr #hExport: ','; ! Recipient Business or Entity Name Line 2
 			pr #hExport: ','; ! Recipient First Name
@@ -439,6 +448,10 @@ def fn_1099print(vn$*8,nam$*30,mat recipientAddr$,ss$*11,mat box; ___, _
 			pr #hExport: ','; ! Recipient Last Name (Surname)
 			pr #hExport: ','; ! Recipient Suffix
 		else
+			pr #hExport: 'SSN,';  ! Recipient TIN Type
+			pr #hExport: ss$&','; ! Recipient Taxpayer ID Number
+			pr #hExport: recipientType$&',';    ! Recipient Name Type B for business or I for individual
+
 			pr #hExport: ','; ! Recipient Business or Entity Name Line 1
 			pr #hExport: ','; ! Recipient Business or Entity Name Line 2
 			dim nameFirst$*64,nameMiddle$*64,nameLast$*64,nameSuffix$*64

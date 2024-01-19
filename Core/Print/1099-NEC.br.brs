@@ -97,7 +97,7 @@ def fn_ask(&seltpN,&typeN,&minAmt,&beg_date,&end_date; ___, _
 		fnpcreg_read('Enable Background'	,enableBackground$ 	,'True' )
 		fnpcreg_read('3 Per Page'       	,perPage$           	,'True' )
 		copyCurrentN=fnPcRegReadN('Copy Current',2)
-		fnureg_read('1099-NEC - Export Filename',outputFilename$,os_filename$(env$('Desktop')&'\ACS [TaxYear] 1099-NEC Export (Company [CompanyNumber]).txt'))
+		fnureg_read('1099-NEC - Export Filename',outputFilename$,os_filename$(env$('Documents')&'\ACS\[TaxYear] 1099-NEC Export\Company [CompanyNumber].csv'))
 		fncreg_read('Phone Number',ph$)
 		fncreg_read('Email',email$)
 		dim seltp$*256
