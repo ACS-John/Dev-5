@@ -4,7 +4,7 @@
 autoLibrary
 on error goto Ertn
 
-dim a$(3)*40,b$(2)*12,c$*5,d(2),e$(2)*12,lastact$*12,tb$*30
+dim a$(3)*40,b$(2)*12,c$*5,xd(2),e$(2)*12,lastact$*12,tb$*30
 dim miscname$(10)*20
 dim dedcode(10)
 dim dedfed(10)
@@ -46,13 +46,13 @@ goto BLD_COINFO
 BLD_COINFO: !
 	open #company=1: 'Name=[Q]\GLmstr\Company.h[cno],RecL=882,Replace',i,outi,r
 COINFO_WRITE: !
-	write #company,using 'form pos 1,3*C 40,2*C 12,C 5,2*N 1,2*C 12,N 3,N 6,N 3,PD 7.2,C 30,pos 298,15*PD 4,pos 382,N 2,N 2,PD 5.3,PD 5.2,PD 5.3,PD 5.2,G 1,PD 5.3,PD 5.2,N 1,10*C 20,50*N 1,10*C 12',rec=1: mat a$,mat b$,c$,mat d,mat e$,a1,a2,a3,ucm,tb$,mat prgl,jccode,nap,ficarate,ficawage,feducrat,feducwag,actr$,mcr,mcm,reccode,mat miscname$,mat dedcode,mat dedfed,mat dedfica,mat dedst,mat deduc,mat miscgl$
+	write #company,using 'form pos 1,3*C 40,2*C 12,C 5,2*N 1,2*C 12,N 3,N 6,N 3,PD 7.2,C 30,pos 298,15*PD 4,pos 382,N 2,N 2,PD 5.3,PD 5.2,PD 5.3,PD 5.2,G 1,PD 5.3,PD 5.2,N 1,10*C 20,50*N 1,10*C 12',rec=1: mat a$,mat b$,c$,mat xd,mat e$,a1,a2,a3,ucm,tb$,mat prgl,jccode,nap,ficarate,ficawage,feducrat,feducwag,actr$,mcr,mcm,reccode,mat miscname$,mat dedcode,mat dedfed,mat dedfica,mat dedst,mat deduc,mat miscgl$
 
 READ_COINFO: !
-read #company,using 'form pos 1,3*C 40,2*C 12,C 5,2*N 1,2*C 12,N 3,N 6,N 3,PD 7.2,C 30,pos 298,15*PD 4,pos 382,N 2,N 2,PD 5.3,PD 5.2,PD 5.3,PD 5.2,G 1,PD 5.3,PD 5.2,N 1,10*C 20,50*N 1,10*C 12',rec=1: mat a$,mat b$,c$,mat d,mat e$,a1,a2,a3,ucm,tb$,mat prgl,jccode,nap,ficarate,ficawage,feducrat,feducwag,actr$,mcr,mcm,reccode,mat miscname$,mat dedcode,mat dedfed,mat dedfica,mat dedst,mat deduc,mat miscgl$ conv COINFO_WRITE, ioerr COINFO_READ_ERR
+read #company,using 'form pos 1,3*C 40,2*C 12,C 5,2*N 1,2*C 12,N 3,N 6,N 3,PD 7.2,C 30,pos 298,15*PD 4,pos 382,N 2,N 2,PD 5.3,PD 5.2,PD 5.3,PD 5.2,G 1,PD 5.3,PD 5.2,N 1,10*C 20,50*N 1,10*C 12',rec=1: mat a$,mat b$,c$,mat xd,mat e$,a1,a2,a3,ucm,tb$,mat prgl,jccode,nap,ficarate,ficawage,feducrat,feducwag,actr$,mcr,mcm,reccode,mat miscname$,mat dedcode,mat dedfed,mat dedfica,mat dedst,mat deduc,mat miscgl$ conv COINFO_WRITE, ioerr COINFO_READ_ERR
 
 lastgl$=cnvrt$('pic(zz#)',a1)&cnvrt$('pic(zzzzz#)',a2)&cnvrt$('pic(zz#)',a3)
-SCREEN_1: ! r:
+Screen1: ! r: Identification and Annually Adjusted Tax Settings
 	fnTos
 	mylen=30 : mypos=mylen+3 : right=1
 	respc=0
@@ -85,10 +85,10 @@ SCREEN_1: ! r:
 	resp$(resp_nap:=respc+=1)=str$(nap)
 	fnChk(12,60,'Use Department Number Field:',1)
 	resp$(resp_useDeptNo:=respc+=1)='False'
-	if d(1)=1 then resp$(resp_useDeptNo)='True' else resp$(resp_useDeptNo)='False'
+	if xd(1)=1 then resp$(resp_useDeptNo)='True' else resp$(resp_useDeptNo)='False'
 	fnChk(13,60,'Use Sub Number Field:',1)
 	resp_useSubAcct:=respc+=1
-	if d(2)=1 then resp$(resp_useSubAcct)='True' else resp$(resp_useSubAcct)='False'
+	if xd(2)=1 then resp$(resp_useSubAcct)='True' else resp$(resp_useSubAcct)='False'
 	fnChk(15,60,'Utilize Bank Reconciliation:',1)
 	resp_useBankRec:=respc+=1
 	if recc$='Y' or reccode=1 then resp$(resp_useBankRec)='True' else resp$(resp_useBankRec)='False'
@@ -103,7 +103,7 @@ SCREEN_1: ! r:
 	resp_glb=respc+=1
 	if glb=1 or glb=0 then resp$(resp_glb)=postingOption$(1) else resp$(resp_glb)=postingOption$(2)
 	fnCmdKey('&Next',1,1,0,'Moves to 2nd screen of company information.')
-	fnCmdKey('&Save',4,0,0,'Saves any changes and returns to menu without reviewing remainder of screens.')
+	fnCmdKey('&Save',4,0,0,'Saves any changes and returns to menu.')
 	fnCmdKey('&Cancel',5,0,1,'Returns to menu without saving any changes.')
 	ckey=fnAcs(mat resp$)
 	if ckey=5 then
@@ -118,8 +118,8 @@ SCREEN_1: ! r:
 		ucm=val(resp$(resp_ucm))
 		tb$=resp$(resp_typeOfBusiness)
 		nap=val(resp$(resp_nap))
-		if resp$(resp_useDeptNo) ='True' then d1$='Y': d(1)=1 else d1$='N': d(1)=0
-		if resp$(resp_useSubAcct)='True' then d2$='Y': d(2)=1 else d2$='N': d(2)=0
+		if resp$(resp_useDeptNo) ='True' then d1$='Y': xd(1)=1 else d1$='N': xd(1)=0
+		if resp$(resp_useSubAcct)='True' then d2$='Y': xd(2)=1 else d2$='N': xd(2)=0
 		if resp$(resp_useBankRec)='True' then recc$='Y': reccode=1 else recc$='N': reccode=0
 		lastgl$=fnagl$(resp$(resp_lastBalSheetAccount)) : a1=val(lastgl$(1:3)) : a2=val(lastgl$(4:9)) : a3=val(lastgl$(10:12)) ! gl number
 		if resp$(resp_AllocExpToJc)='True' then jcc$='Y': jccode=1 else jcc$='N': jccode=0
@@ -130,8 +130,8 @@ SCREEN_1: ! r:
 			goto Xit
 		end if
 	end if
-goto SCREEN_2 ! /r
-SCREEN_2: ! r:
+goto Screen2 ! /r
+Screen2: ! r: Payroll Withholding - Summary Account Range
 	fnTos
 	mylen=30: mypos=mylen+3 : right=1
 	fnLbl(1,1,'   The system will allow you to summarize the Payroll Withholding entries into',85,left)
@@ -146,7 +146,7 @@ SCREEN_2: ! r:
 	fnQgl(7,mypos,0,2,1)
 	resp$(2)=fnrgl$(e$(2))
 	fnCmdKey('&Next',1,1,0,'Moves to 3nd screen of company information.')
-	fnCmdKey('&Save',4,0,0,'Saves any changes and returns to menu without reviewing remainder of screens.')
+	fnCmdKey('&Save',4,0,0,'Saves any changes and returns to menu.')
 	fnCmdKey('&Back',2,0,0,'Returns to previous screen.')
 	fnCmdKey('&Cancel',5,0,1,'Returns to menu without saving any changes.')
 	ckey=fnAcs(mat resp$)
@@ -156,10 +156,10 @@ SCREEN_2: ! r:
 		gosub SAVE
 		goto Xit
 	end if
-	if ckey=2 then goto SCREEN_1
-goto SCREEN_3 ! /r
+	if ckey=2 then goto Screen1
+goto Screen3 ! /r
 
-SCREEN_3: ! r:
+Screen3: ! r: After-the Fact Payroll
 	for j=1 to 5
 		gl$(j)=cnvrt$('pic(zz#)',prgl(j,1))&cnvrt$('pic(zzzzz#)',prgl(j,2))&cnvrt$('pic(zz#)',prgl(j,3))
 	next j
@@ -202,12 +202,12 @@ SCREEN_3: ! r:
 	fnQgl(15,mypos,0,2,1)
 	resp$(11)=fnrgl$(gl$(5))
 	fnCmdKey('&Next',1,1,0,'Moves to 4th screen of company information.')
-	fnCmdKey('&Save',4,0,0,'Saves any changes and returns to menu without reviewing remainder of screens.')
+	fnCmdKey('&Save',4,0,0,'Saves any changes and returns to menu.')
 	fnCmdKey('&Back',2,0,0,'Returns to previous screen.')
 	fnCmdKey('&Cancel',5,0,1,'Returns to menu without saving any changes.')
 	ckey=fnAcs(mat resp$)
 	if ckey=5 then goto Xit
-	if ckey=2 then goto SCREEN_2
+	if ckey=2 then goto Screen2
 	ficarate=val(resp$(1))
 	ficawage=val(resp$(2))
 	feducrat=val(resp$(3))
@@ -222,9 +222,9 @@ SCREEN_3: ! r:
 		gosub SAVE
 		goto Xit
 	end if
-goto SCREEN_4 ! /r
+goto Screen4 ! /r
 
-SCREEN_4: ! r:
+Screen4: ! r: Miscellaneous Deductions
 	fnTos
 	mylen=32: mypos=mylen+3 : right=1
 	fnLbl(1,1,'Enter the names of the 10 Miscellaneous Deductions and indicate',90,left)
@@ -275,7 +275,11 @@ goto Xit ! /r
 
 Xit: fnXit
 SAVE: ! r:
-	rewrite #company,using 'form pos 1,3*C 40,2*C 12,C 5,2*N 1,2*C 12,N 3,N 6,N 3,PD 7.2,C 30,pos 298,15*PD 4,pos 382,N 2,N 2,PD 5.3,PD 5.2,PD 5.3,PD 5.2,G 1,PD 5.3,PD 5.2,N 1,10*C 20,50*N 1,10*C 12',rec=1: mat a$,mat b$,c$,mat d,mat e$,a1,a2,a3,ucm,tb$,mat prgl,jccode,nap,ficarate,ficawage,feducrat,feducwag,unused,mcr,mcm,reccode,mat miscname$,mat dedcode,mat dedfed,mat dedfica,mat dedst,mat deduc,mat miscgl$
+	rewrite #company,using _
+		'form pos 1,3*C 40,2*C 12,C 5,2*N 1,2*C 12,N 3,N 6,N 3,PD 7.2,C 30,pos 298,15*PD 4,pos 382,N 2,N 2,PD 5.3,PD 5.2,PD 5.3,PD 5.2,G 1,PD 5.3,PD 5.2,N 1,10*C 20,50*N 1,10*C 12' _
+		,rec=1: mat a$,mat b$,c$,mat xd,mat e$,a1,a2,a3,ucm,tb$,mat prgl,jccode,nap,ficarate, _
+		ficawage,feducrat,feducwag,unused,mcr,mcm,reccode, _
+		mat miscname$,mat dedcode,mat dedfed,mat dedfica,mat dedst,mat deduc,mat miscgl$
 	open #20: 'Name=[Q]\GLmstr\GLBucket.h[cno],RecL=1,Use',i,outi,r
 	rewrite #20,using 'form pos 1,N 1',rec=1: glb
 	close #20:

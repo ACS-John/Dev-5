@@ -213,6 +213,7 @@ def fn_acsSystemInitialize(; syInitMode)
 		end if
 
 		fnSetEnv('Desktop',fnSpecialFolderPath$('Desktop'))
+		fnSetEnv('Documents',fnSpecialFolderPath$('Personal'))
 
 		if version_current$>version_prior$ then
 			if  env$('cursys')<>'CM' then
