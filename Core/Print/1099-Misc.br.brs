@@ -351,10 +351,11 @@ def fn_1099print(vn$*8,nam$*30,mat recipientAddr$,ss$*11,mat box; ___, _
 		if ten99Export$='True' then
 			fnMakeSurePathExists(outputFilename$)
 			open #hExport=fnH: 'Name='&br_filename$(outputFilename$)&',REPLACE',d,o ! ioerr ASK_INFO
-		else if ten99ExportIris$='True' then
+		else if ten99ExportIris$='True' then ! 100 return max ( https://www.smallbiz.irs.gov/Business/Resources/CSVFileUploadDemonstration )
 			fnMakeSurePathExists(outputFilename$)
 			open #hExport=fnH: 'Name='&br_filename$(outputFilename$)&',recL=4096,REPLACE',d,o ! ioerr ASK_INFO
 			! r: pr IRIS CSV header
+
 				pr #hExport: 'Form Type,';
 				pr #hExport: 'Tax Year,';
 				pr #hExport: 'Payer TIN Type,';
@@ -365,8 +366,10 @@ def fn_1099print(vn$*8,nam$*30,mat recipientAddr$,ss$*11,mat box; ___, _
 				pr #hExport: 'Payer First Name,';
 				pr #hExport: 'Payer Middle Name,';
 				pr #hExport: 'Payer Last Name (Surname),';
-				pr #hExport: 'Payer Suffix,Payer Country,';
-				pr #hExport: 'Payer Address Line 1,Payer Address Line 2,';
+				pr #hExport: 'Payer Suffix,';
+				pr #hExport: 'Payer Country,';
+				pr #hExport: 'Payer Address Line 1,';
+				pr #hExport: 'Payer Address Line 2,';
 				pr #hExport: 'Payer City/Town,';
 				pr #hExport: 'Payer State/Province/Territory,';
 				pr #hExport: 'Payer ZIP/Postal Code,';
@@ -385,28 +388,32 @@ def fn_1099print(vn$*8,nam$*30,mat recipientAddr$,ss$*11,mat box; ___, _
 				pr #hExport: 'Recipient Country,';
 				pr #hExport: 'Recipient Address Line 1,';
 				pr #hExport: 'Recipient Address Line 2,';
-				pr #hExport: 'Recipient City/Town,Recipient State/Province/Territory,Recipient ZIP/Postal Code,';
+				pr #hExport: 'Recipient City/Town,';
+				pr #hExport: 'Recipient State/Province/Territory,';
+				pr #hExport: 'Recipient ZIP/Postal Code,';
 				pr #hExport: 'Office Code,';
 				pr #hExport: 'Form Account Number,';
 				pr #hExport: 'FATCA Filing Requirements,';
 				pr #hExport: '2nd TIN Notice,';
-				pr #hExport: 'Box  1,'; ! - Rents,';
-				pr #hExport: 'Box  2,'; ! - Royalties,';
-				pr #hExport: 'Box  3,'; ! - Other Income,';
-				pr #hExport: 'Box  4,'; ! - Federal income tax withheld,';
-				pr #hExport: 'Box  5,'; ! - Fishing boat proceeds,';
-				pr #hExport: 'Box  6,'; ! - Medical and health care payments,';
-				pr #hExport: 'Box  7,'; ! - Direct sales of $5000 or more of consumer products to a recipient for resale,';
-				pr #hExport: 'Box  8,'; ! - Subtitute payments in lieu of dividends or interest,';
-				pr #hExport: 'Box  9,'; ! - Crop insurance proceeds,';
-				pr #hExport: 'Box 10,'; ! - Gross proceeds paid to an attorney,';
-				pr #hExport: 'Box 11,'; ! - Fish purchased for resale,';
-				pr #hExport: 'Box 12,'; ! - Section 409A deferrals,';
-				pr #hExport: 'Box 14,'; ! - Excess golden parachute payments,';
-				pr #hExport: 'Box 15,'; ! - Nonqualified deferred compensation,';
+				pr #hExport: 'Box 1 - Rents,';
+				pr #hExport: 'Box 2 - Royalties,';
+				pr #hExport: 'Box 3 - Other Income,';
+				pr #hExport: 'Box 4 - Federal income tax withheld,';
+				pr #hExport: 'Box 5 - Fishing boat proceeds,';
+				pr #hExport: 'Box 6 - Medical and health care payments,';
+				pr #hExport: 'Box 7 - Direct sales of $5000 or more of consumer products to a recipient for resale,';
+				pr #hExport: 'Box 8 - Subtitute payments in lieu of dividends or interest,';
+				pr #hExport: 'Box 9 - Crop insurance proceeds,';
+				pr #hExport: 'Box 10 - Gross proceeds paid to an attorney,';
+				pr #hExport: 'Box 11 - Fish purchased for resale,';
+				pr #hExport: 'Box 12 - Section 409A deferrals,';
+				pr #hExport: 'Box 14 - Excess golden parachute payments,';
+				pr #hExport: 'Box 15 - Nonqualified deferred compensation,';
 				pr #hExport: 'Combined Federal/State Filing,';
-				pr #hExport: 'State 1,State 1 - State Tax Withheld,State 1 - State/Payer state number,State 1 - State income,State 1 - Local income tax withheld,State 1 - Special Data Entries,';
-				pr #hExport: 'State 2,State 2 - State Tax Withheld,State 2 - State/Payer state number,State 2 - State income,State 2 - Local income tax withheld,State 2 - Special Data Entries,';
+				pr #hExport: 'State 1,';
+				pr #hExport: 'State 1 - State Tax Withheld,State 1 - State/Payer state number,State 1 - State income,State 1 - Local income tax withheld,State 1 - Special Data Entries,';
+				pr #hExport: 'State 2,';
+				pr #hExport: 'State 2 - State Tax Withheld,State 2 - State/Payer state number,State 2 - State income,State 2 - Local income tax withheld,State 2 - Special Data Entries';
 				pr #hExport: '' ! ',,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,'
 			! /r
 		else
