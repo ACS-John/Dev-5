@@ -300,7 +300,7 @@ def library fn1099MiscPrint(vn$*8,nam$*30,mat recipientAddr$,ss$*11,mat box)
 	fn1099MiscPrint=fn_1099print(vn$,nam$,mat recipientAddr$,ss$,mat box)
 fnend
 def fn_1099print(vn$*8,nam$*30,mat recipientAddr$,ss$*11,mat box; ___, _
-		lineN,yn$*1,city$*64,state$*2,zip$*10)
+		lineN,yn$*1,city$*64,state$*2,zip$*10,line$*4096)
 	! inherrits local: disableCopyAWarning
 	if ~ten99initialized then ! r: initialize output destination (if needed)
 		ten99initialized=1
@@ -355,163 +355,166 @@ def fn_1099print(vn$*8,nam$*30,mat recipientAddr$,ss$*11,mat box; ___, _
 			fnMakeSurePathExists(outputFilename$)
 			open #hExport=fnH: 'Name='&br_filename$(outputFilename$)&',recL=4096,REPLACE',d,o ! ioerr ASK_INFO
 			! r: pr IRIS CSV header
-
-				pr #hExport: 'Form Type,';
-				pr #hExport: 'Tax Year,';
-				pr #hExport: 'Payer TIN Type,';
-				pr #hExport: 'Payer Taxpayer ID Number,';
-				pr #hExport: 'Payer Name Type,';
-				pr #hExport: 'Payer Business or Entity Name Line 1,';
-				pr #hExport: 'Payer Business or Entity Name Line 2,';
-				pr #hExport: 'Payer First Name,';
-				pr #hExport: 'Payer Middle Name,';
-				pr #hExport: 'Payer Last Name (Surname),';
-				pr #hExport: 'Payer Suffix,';
-				pr #hExport: 'Payer Country,';
-				pr #hExport: 'Payer Address Line 1,';
-				pr #hExport: 'Payer Address Line 2,';
-				pr #hExport: 'Payer City/Town,';
-				pr #hExport: 'Payer State/Province/Territory,';
-				pr #hExport: 'Payer ZIP/Postal Code,';
-				pr #hExport: 'Payer Phone Type,';
-				pr #hExport: 'Payer Phone,';
-				pr #hExport: 'Payer Email Address,';
-				pr #hExport: 'Recipient TIN Type,';
-				pr #hExport: 'Recipient Taxpayer ID Number,';
-				pr #hExport: 'Recipient Name Type,';
-				pr #hExport: 'Recipient Business or Entity Name Line 1,';
-				pr #hExport: 'Recipient Business or Entity Name Line 2,';
-				pr #hExport: 'Recipient First Name,';
-				pr #hExport: 'Recipient Middle Name,';
-				pr #hExport: 'Recipient Last Name (Surname),';
-				pr #hExport: 'Recipient Suffix,';
-				pr #hExport: 'Recipient Country,';
-				pr #hExport: 'Recipient Address Line 1,';
-				pr #hExport: 'Recipient Address Line 2,';
-				pr #hExport: 'Recipient City/Town,';
-				pr #hExport: 'Recipient State/Province/Territory,';
-				pr #hExport: 'Recipient ZIP/Postal Code,';
-				pr #hExport: 'Office Code,';
-				pr #hExport: 'Form Account Number,';
-				pr #hExport: 'FATCA Filing Requirements,';
-				pr #hExport: '2nd TIN Notice,';
-				pr #hExport: 'Box 1 - Rents,';
-				pr #hExport: 'Box 2 - Royalties,';
-				pr #hExport: 'Box 3 - Other Income,';
-				pr #hExport: 'Box 4 - Federal income tax withheld,';
-				pr #hExport: 'Box 5 - Fishing boat proceeds,';
-				pr #hExport: 'Box 6 - Medical and health care payments,';
-				pr #hExport: 'Box 7 - Direct sales of $5000 or more of consumer products to a recipient for resale,';
-				pr #hExport: 'Box 8 - Subtitute payments in lieu of dividends or interest,';
-				pr #hExport: 'Box 9 - Crop insurance proceeds,';
-				pr #hExport: 'Box 10 - Gross proceeds paid to an attorney,';
-				pr #hExport: 'Box 11 - Fish purchased for resale,';
-				pr #hExport: 'Box 12 - Section 409A deferrals,';
-				pr #hExport: 'Box 14 - Excess golden parachute payments,';
-				pr #hExport: 'Box 15 - Nonqualified deferred compensation,';
-				pr #hExport: 'Combined Federal/State Filing,';
-				pr #hExport: 'State 1,';
-				pr #hExport: 'State 1 - State Tax Withheld,State 1 - State/Payer state number,State 1 - State income,State 1 - Local income tax withheld,State 1 - Special Data Entries,';
-				pr #hExport: 'State 2,';
-				pr #hExport: 'State 2 - State Tax Withheld,State 2 - State/Payer state number,State 2 - State income,State 2 - Local income tax withheld,State 2 - Special Data Entries';
-				pr #hExport: '' ! ',,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,'
+				line$='Form Type,'
+				line$&='Tax Year,'
+				line$&='Payer TIN Type,'
+				line$&='Payer Taxpayer ID Number,'
+				line$&='Payer Name Type,'
+				line$&='Payer Business or Entity Name Line 1,'
+				line$&='Payer Business or Entity Name Line 2,'
+				line$&='Payer First Name,'
+				line$&='Payer Middle Name,'
+				line$&='Payer Last Name (Surname),'
+				line$&='Payer Suffix,'
+				line$&='Payer Country,'
+				line$&='Payer Address Line 1,'
+				line$&='Payer Address Line 2,'
+				line$&='Payer City/Town,'
+				line$&='Payer State/Province/Territory,'
+				line$&='Payer ZIP/Postal Code,'
+				line$&='Payer Phone Type,'
+				line$&='Payer Phone,'
+				line$&='Payer Email Address,'
+				line$&='Recipient TIN Type,'
+				line$&='Recipient Taxpayer ID Number,'
+				line$&='Recipient Name Type,'
+				line$&='Recipient Business or Entity Name Line 1,'
+				line$&='Recipient Business or Entity Name Line 2,'
+				line$&='Recipient First Name,'
+				line$&='Recipient Middle Name,'
+				line$&='Recipient Last Name (Surname),'
+				line$&='Recipient Suffix,'
+				line$&='Recipient Country,'
+				line$&='Recipient Address Line 1,'
+				line$&='Recipient Address Line 2,'
+				line$&='Recipient City/Town,'
+				line$&='Recipient State/Province/Territory,'
+				line$&='Recipient ZIP/Postal Code,'
+				line$&='Office Code,'
+				line$&='Form Account Number,'
+				line$&='FATCA Filing Requirements,'
+				line$&='2nd TIN Notice,'
+				line$&='Box 1 - Rents,'
+				line$&='Box 2 - Royalties,'
+				line$&='Box 3 - Other Income,'
+				line$&='Box 4 - Federal income tax withheld,'
+				line$&='Box 5 - Fishing boat proceeds,'
+				line$&='Box 6 - Medical and health care payments,'
+				line$&='Box 7 - Direct sales of $5000 or more of consumer products to a recipient for resale,'
+				line$&='Box 8 - Subtitute payments in lieu of dividends or interest,'
+				line$&='Box 9 - Crop insurance proceeds,'
+				line$&='Box 10 - Gross proceeds paid to an attorney,'
+				line$&='Box 11 - Fish purchased for resale,'
+				line$&='Box 12 - Section 409A deferrals,'
+				line$&='Box 14 - Excess golden parachute payments,'
+				line$&='Box 15 - Nonqualified deferred compensation,'
+				line$&='Combined Federal/State Filing,'
+				line$&='State 1,'
+				line$&='State 1 - State Tax Withheld,State 1 - State/Payer state number,State 1 - State income,State 1 - Local income tax withheld,State 1 - Special Data Entries,'
+				line$&='State 2,'
+				line$&='State 2 - State Tax Withheld,State 2 - State/Payer state number,State 2 - State income,State 2 - Local income tax withheld,State 2 - Special Data Entries'
+				pr #hExport: 	line$
 			! /r
 		else
 			fnpa_open('',optCopy$(copyCurrentN),'PDF')
 		end if
 	end if ! /r
 	if ten99ExportIris$='True' then ! r: pr #hExport: IRIS CSV entry
-		pr #hExport: '1099-MISC,';
-		pr #hExport: taxYear$&',';
-		pr #hExport: 'EIN,'; ! EIN or SSN for company
-		pr #hExport: fed$&','; ! dashes and numbers only
-		pr #hExport: 'B,'; ! B for business or I for individutal Payer Name Type
-		pr #hExport: fn_c$(companyNameAddr$(1));
-		pr #hExport: ','; ! Payer Business or Entity Name Line 2
-		pr #hExport: ','; ! Payer First Name
-		pr #hExport: ','; ! Payer Middle Name
-		pr #hExport: ','; ! Payer Last Name (Surname)
-		pr #hExport: ','; ! Payer Suffix
-		pr #hExport: 'US,'; ! Payer Country
-		pr #hExport: fn_c$(companyNameAddr$(2));
-		pr #hExport: ','; ! fn_c$(companyNameAddr$(3));
+		line$='1099-MISC,'
+		line$&=taxYear$&','
+		line$&='EIN,' ! EIN or SSN for company
+		line$&=trim$(fed$)&',' ! dashes and numbers only
+		line$&='B,' ! B for business or I for individutal Payer Name Type
+		line$&=fn_c$(companyNameAddr$(1))
+		line$&=',' ! Payer Business or Entity Name Line 2
+		line$&=',' ! Payer First Name
+		line$&=',' ! Payer Middle Name
+		line$&=',' ! Payer Last Name (Surname)
+		line$&=',' ! Payer Suffix
+		line$&='US,' ! Payer Country
+		line$&=fn_c$(companyNameAddr$(2))
+		line$&=',' ! fn_c$(companyNameAddr$(3))
 		fncsz(companyNameAddr$(3),city$,state$,zip$)
-		pr #hExport: city$&',';  ! Payer City/Town
-		pr #hExport: state$&','; ! Payer State/Province/Territory
-		pr #hExport: zip$&',';   ! Payer ZIP/Postal Code
-		pr #hExport: 'D,'; ! Payer Phone Type - D for Domestic or I for International
-		pr #hExport: ph$&','; ! Payer Phone
-		pr #hExport: email$&','; ! Payer Email Address
+		line$&=trim$(city$)&','  ! Payer City/Town
+		line$&=trim$(state$)&',' ! Payer State/Province/Territory
+		line$&=trim$(zip$)(1:5)&','   ! Payer ZIP/Postal Code
+		line$&='D,' ! Payer Phone Type - D for Domestic or I for International
+		line$&=trim$(ph$)&',' ! Payer Phone
+		line$&=trim$(email$)&',' ! Payer Email Address
 		dim recipientType$*1
 		if fn_isBusiness(ss$) then recipientType$='B' else recipientType$='I'
-		if recipientType$='B' then
-			pr #hExport: 'EIN,';  ! Recipient TIN Type
-			pr #hExport: ss$&','; ! Recipient Taxpayer ID Number
-			pr #hExport: recipientType$&',';    ! Recipient Name Type B for business or I for individual
-			pr #hExport: nam$&','; ! Recipient Business or Entity Name Line 1
-			pr #hExport: ','; ! Recipient Business or Entity Name Line 2
-			pr #hExport: ','; ! Recipient First Name
-			pr #hExport: ','; ! Recipient Middle Name
-			pr #hExport: ','; ! Recipient Last Name (Surname)
-			pr #hExport: ','; ! Recipient Suffix
-		else
-			pr #hExport: 'SSN,';  ! Recipient TIN Type
-			pr #hExport: ss$&','; ! Recipient Taxpayer ID Number
-			pr #hExport: recipientType$&',';    ! Recipient Name Type B for business or I for individual
-
-			pr #hExport: ','; ! Recipient Business or Entity Name Line 1
-			pr #hExport: ','; ! Recipient Business or Entity Name Line 2
-			dim nameFirst$*64,nameMiddle$*64,nameLast$*64,nameSuffix$*64
+		dim nameFirst$*64,nameMiddle$*64,nameLast$*64,nameSuffix$*64
+		nameFirst$=nameMiddle$=nameLast$=nameSuffix$=''
+		if recipientType$='B' then ! 5 commas
+			line$&='EIN,'  ! Recipient TIN Type
+			line$&=trim$(ss$)&',' ! Recipient Taxpayer ID Number
+			line$&=recipientType$&','    ! Recipient Name Type B for business or I for individual
+			line$&=fn_cName$(nam$) ! Recipient Business or Entity Name Line 1
+			line$&=',' ! Recipient Business or Entity Name Line 2
+		else ! 5 commas
+			line$&='SSN,'  ! Recipient TIN Type
+			line$&=trim$(ss$)&',' ! Recipient Taxpayer ID Number
+			line$&=recipientType$&','    ! Recipient Name Type B for business or I for individual
+			line$&=',' ! Recipient Business or Entity Name Line 1
+			line$&=',' ! Recipient Business or Entity Name Line 2
 			fnNameParse(nam$,nameFirst$,nameMiddle$,nameLast$,nameSuffix$)
-			pr #hExport: nameFirst$&','; ! Recipient First Name
-			pr #hExport: nameMiddle$&','; ! Recipient Middle Name
-			pr #hExport: nameLast$&','; ! Recipient Last Name (Surname)
-			pr #hExport: nameSuffix$&','; ! Recipient Suffix
 		end if
-		pr #hExport: 'US,'; ! Recipient Country
-		pr #hExport: recipientAddr$(1)&','; ! Recipient Address Line 1
+		line$&=nameFirst$&',' ! Recipient First Name
+		line$&=nameMiddle$&',' ! Recipient Middle Name
+		line$&=nameLast$&',' ! Recipient Last Name (Surname)
+		line$&=nameSuffix$&',' ! Recipient Suffix
+		line$&='US,' ! Recipient Country
+		line$&=trim$(recipientAddr$(1))&',' ! Recipient Address Line 1
 		if udim(mat recipientAddr$)=2 then
-			pr #hExport: ','; ! Recipient Address Line 2
+			line$&=',' ! Recipient Address Line 2
 		else
-			pr #hExport: recipientAddr$(2)&','; ! Recipient Address Line 2
+			line$&=trim$(recipientAddr$(2))&',' ! Recipient Address Line 2
 		end if
 		fncsz(recipientAddr$(udim(mat recipientAddr$)),city$,state$,zip$)
-		pr #hExport: city$&',';  ! 'Recipient City/Town,';
-		pr #hExport: state$&','; ! 'Recipient State/Province/Territory,';
-		pr #hExport: zip$&',';   ! 'Recipient ZIP/Postal Code,';
-		pr #hExport: '1234,'; ! Office Code
-		pr #hExport: vn$&','; ! Form Account Number
+		line$&=trim$(city$)&','  ! 'Recipient City/Town,'
+		line$&=trim$(state$)&',' ! 'Recipient State/Province/Territory,'
+		line$&=trim$(zip$)(1:5)&','   ! 'Recipient ZIP/Postal Code,'
+		line$&='1234,' ! Office Code
+		line$&=trim$(vn$)&',' ! Form Account Number
 		if box(13) then yn$='Y' else yn$='N' 
-		pr #hExport: yn$&','; ! FATCA Filing Requirements  Y for checked N for unchecked
-		pr #hExport: 'N,'; ! 2nd TIN Notice  Y for checked N for unchecked
-		pr #hExport: str$(box(1 ))&','; ! Box 1 - Rents
-		pr #hExport: str$(box(2 ))&','; ! Box 2 - Royalties
-		pr #hExport: str$(box(3 ))&','; ! Box 3 - Other Income
-		pr #hExport: str$(box(4 ))&','; ! Box 4 - Federal income tax withheld
-		pr #hExport: str$(box(5 ))&','; ! Box 5 - Fishing boat proceeds
-		pr #hExport: str$(box(6 ))&','; ! Box 6 - Medical and health care payments
-		pr #hExport: str$(box(7 ))&','; ! Box 7 - Direct sales of $5000 or more of consumer products to a recipient for resale
-		pr #hExport: str$(box(8 ))&','; ! Box 8 - Subtitute payments in lieu of dividends or interest
-		pr #hExport: str$(box(9 ))&','; ! Box 9 - Crop insurance proceeds
-		pr #hExport: str$(box(10))&','; ! Box 10 - Gross proceeds paid to an attorney
-		pr #hExport: str$(box(11))&','; ! Box 11 - Fish purchased for resale
-		pr #hExport: str$(box(12))&','; ! Box 12 - Section 409A deferrals
-		pr #hExport: str$(box(14))&','; ! Box 14 - Excess golden parachute payments
-		pr #hExport: str$(box(15))&','; ! Box 15 - Nonqualified deferred compensation
-		pr #hExport: ','; ! fnpayroll_client_state$&','; ! Combined Federal/State Filing
-		pr #hExport: ','; ! fnpayroll_client_state$&','; ! State 1
-		pr #hExport: ','; ! str$(box(16))&','; ! State 1 - State Tax Withheld
-		pr #hExport: ','; ! str$(box(17))&','; ! State 1 - State/Payer state number
-		pr #hExport: ','; ! str$(box(18))&','; ! State 1 - State income
-		pr #hExport: ','; ! str$(box(--))&','; ! State 1 - Local income tax withheld
-		pr #hExport: ','; ! State 1 - Special Data Entries
-		pr #hExport: ','; ! State 2
-		pr #hExport: ','; ! State 2 - State Tax Withheld
-		pr #hExport: ','; ! State 2 - State/Payer state number
-		pr #hExport: ','; ! State 2 - State income
-		pr #hExport: ','; ! State 2 - Local income tax withheld
-		pr #hExport: ','; ! State 2 - Special Data Entries
-		pr #hExport: ''
+		line$&=yn$&',' ! FATCA Filing Requirements  Y for checked N for unchecked
+		line$&='N,' ! 2nd TIN Notice  Y for checked N for unchecked
+		line$&=str$(box(1 ))&',' ! Box 1 - Rents
+		line$&=str$(box(2 ))&',' ! Box 2 - Royalties
+		line$&=str$(box(3 ))&',' ! Box 3 - Other Income
+		line$&=str$(box(4 ))&',' ! Box 4 - Federal income tax withheld
+		line$&=str$(box(5 ))&',' ! Box 5 - Fishing boat proceeds
+		line$&=str$(box(6 ))&',' ! Box 6 - Medical and health care payments
+		if box(7)>=5000 then yn$='Y' else yn$='N' 
+		if env$('client')='Zaleski' then yn$='N' !  "Box 7 can be checked no for all of our clients"
+		line$&=yn$&',' ! Box 7 - Direct sales of $5000 or more of consumer products to a recipient for resale
+		line$&=str$(box(8 ))&',' ! Box 8 - Subtitute payments in lieu of dividends or interest
+		line$&=str$(box(9 ))&',' ! Box 9 - Crop insurance proceeds
+		line$&=str$(box(10))&',' ! Box 10 - Gross proceeds paid to an attorney
+		line$&=str$(box(11))&',' ! Box 11 - Fish purchased for resale
+		line$&=str$(box(12))&',' ! Box 12 - Section 409A deferrals
+		line$&=str$(box(14))&',' ! Box 14 - Excess golden parachute payments
+		line$&=str$(box(15))&',' ! Box 15 - Nonqualified deferred compensation
+		line$&=',' ! fnpayroll_client_state$&',' ! Combined Federal/State Filing
+		line$&=',' ! fnpayroll_client_state$&',' ! State 1
+		line$&=',' ! str$(box(16))&',' ! State 1 - State Tax Withheld
+		line$&=',' ! str$(box(17))&',' ! State 1 - State/Payer state number
+		line$&=',' ! str$(box(18))&',' ! State 1 - State income
+		line$&=',' ! str$(box(--))&',' ! State 1 - Local income tax withheld
+		line$&=',' ! State 1 - Special Data Entries
+		line$&=',' ! State 2
+		line$&=',' ! State 2 - State Tax Withheld
+		line$&=',' ! State 2 - State/Payer state number
+		line$&=',' ! State 2 - State income
+		line$&=',' ! State 2 - Local income tax withheld
+		line$&=''  ! State 2 - Special Data Entries   ! do not use a comma on the very last one.
+		! pr 'sum(mat box)=';sum(mat box) : pause
+		if sum(mat box(1:6))+sum(mat box(8:15)) or box(7)=>5000 then
+			pr #hExport: line$
+		! else
+			! pr 'skipped printing a line because not sum mat box'
+			! pause
+		end if
 		! /r
 	else if ten99Export$='True' then ! r: export AMS
 		pr #hExport: '01 ';' '
@@ -629,11 +632,19 @@ def fn_1099print(vn$*8,nam$*30,mat recipientAddr$,ss$*11,mat box; ___, _
 	Xit: !
 fnend
 	def fn_c$*256(c$*256)
+		! c$=trim$(c$)
+		! if pos(c$,'"')>0 then c$=srep$(c$,'"','')
+		! if pos(c$,',')>0 then c$='"'&c$&'"'
+		! c$&=',' ! c$=c$&','
+		fn_c$=fn_cName$(c$)
+	fnend
+	def fn_cName$*256(c$*256)
 		c$=trim$(c$)
-		if pos(c$,'"')>0 then c$=srep$(c$,'"','')
-		if pos(c$,',')>0 then c$='"'&c$&'"'
+		c$=xlate$(c$,rpt$(' ', 35)&"#$%&'()   -  0123456789       abcdefghijklmnopqrstuvwxyz \  _ abcdefghijklmnopqrstuvwxyz"&rpt$(' ', 133))
+		! if pos(c$,'"')>0 then c$=srep$(c$,'"','')
+		! if pos(c$,',')>0 then c$='"'&c$&'"'
 		c$&=',' ! c$=c$&','
-		fn_c$=c$
+		fn_cName$=c$
 	fnend
 	def fn_line(lineNumber)
 		! inherrits local yOffset
