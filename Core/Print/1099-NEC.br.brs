@@ -209,7 +209,7 @@ def fn_ask(&seltpN,&typeN,&minAmt,&beg_date,&end_date; ___, _
 			goto ASK_INFO
 		end if
 		if ckey=ckey_defaultFilename then
-				outputFilename$=os_filename$(env$('Desktop')&'\ACS [TaxYear] 1099 Export (Company [CompanyNumber]).txt')
+				outputFilename$=os_filename$(env$('Documents')&'\ACS\[TaxYear] 1099-NEC Export\Company [CompanyNumber].csv')
 			goto ASK_INFO
 		else if ckey=ckey_margins then
 			fn_ask_margins
@@ -292,7 +292,7 @@ def library fn1099NecPrint(vn$*8,nam$*30,mat recipientAddr$,ss$*11,mat box)
 	fn1099NecPrint=fn_1099print(vn$,nam$,mat recipientAddr$,ss$,mat box)
 fnend
 def fn_1099print(vn$*8,nam$*30,mat recipientAddr$,ss$*11,mat box; ___, _
-		lineN,yn$*1,city$*64,state$*2,zip$*10)
+		lineN,yn$*1,city$*64,state$*2,zip$*10,line$*4096)
 	! inherrits local: disableCopyAWarning
 	if ~ten99initialized then ! r: initialize output destination (if needed)
 		ten99initialized=1
@@ -325,7 +325,7 @@ def fn_1099print(vn$*8,nam$*30,mat recipientAddr$,ss$*11,mat box; ___, _
 		fnPcReg_read('3 Per Page',perPage$,'True' )
 		fnPcReg_read('Enable Background',enableBackground$,'True' )
 		dim outputFilename$*256
-		fnureg_read('1099 - Export Filename',outputFilename$,os_filename$(env$('Desktop')&'\ACS [TaxYear] 1099 Export (Company [CompanyNumber]).txt'))
+		fnureg_read('1099 - Export Filename',outputFilename$,os_filename$(env$('Documents')&'\ACS\[TaxYear] 1099-NEC Export\Company [CompanyNumber].csv'))
 		dim ph$*12
 		dim email$*128
 		fnCreg_read('Phone Number',ph$)
@@ -342,36 +342,68 @@ def fn_1099print(vn$*8,nam$*30,mat recipientAddr$,ss$*11,mat box; ___, _
 			outputFilename$=srep$(outputFilename$,'[TAXYEAR]',taxYear$)
 		end if
 		if ten99Export$='True' then
-			open #hExport=fnH: 'Name='&br_filename$(outputFilename$)&',REPLACE',d,o ioerr ASK_INFO
-		else if ten99ExportIris$='True' then
-			open #hExport=fnH: 'Name='&br_filename$(outputFilename$)&',recL=4096,REPLACE',d,o ioerr ASK_INFO
+			fnMakeSurePathExists(outputFilename$)
+			open #hExport=fnH: 'Name='&br_filename$(outputFilename$)&',REPLACE',d,o ! ioerr ASK_INFO
+		else if ten99ExportIris$='True' then ! 100 return max ( https://www.smallbiz.irs.gov/Business/Resources/CSVFileUploadDemonstration )
+			fnMakeSurePathExists(outputFilename$)
+			open #hExport=fnH: 'Name='&br_filename$(outputFilename$)&',recL=4096,REPLACE',d,o ! ioerr ASK_INFO
 			! r: pr IRIS CSV header
-				pr #hExport: 'Form Type,Tax Year,Payer TIN Type,';
-				pr #hExport: 'Payer Taxpayer ID Number,Payer Name Type,Payer Business or Entity Name Line 1,Payer Business or Entity Name Line 2,Payer First Name,Payer Middle Name,Payer Last Name (Surname),Payer Suffix,Payer Country,Payer Address Line 1,Payer Address Line 2,Payer City/Town,Payer State/Province/Territory,Payer ZIP/Postal Code,Payer Phone Type,Payer Phone,Payer Email Address,';
-				pr #hExport: 'Recipient TIN Type,Recipient Taxpayer ID Number,Recipient Name Type,';
-				pr #hExport: 'Recipient Business or Entity Name Line 1,Recipient Business or Entity Name Line 2,Recipient First Name,Recipient Middle Name,Recipient Last Name (Surname),Recipient Suffix,Recipient Country,Recipient Address Line 1,Recipient Address Line 2,'
-				pr #hExport: 'Recipient City/Town,Recipient State/Province/Territory,Recipient ZIP/Postal Code,';
-				pr #hExport: 'Office Code,';
-				pr #hExport: 'Form Account Number,';
-				pr #hExport: '2nd TIN Notice,';
+				line$='Form Type,'
+				line$&='Tax Year,'
+				line$&='Payer TIN Type,'
+				line$&='Payer Taxpayer ID Number,'
+				line$&='Payer Name Type,'
+				line$&='Payer Business or Entity Name Line 1,'
+				line$&='Payer Business or Entity Name Line 2,'
+				line$&='Payer First Name,'
+				line$&='Payer Middle Name,'
+				line$&='Payer Last Name (Surname),'
+				line$&='Payer Suffix,'
+				line$&='Payer Country,'
+				line$&='Payer Address Line 1,'
+				line$&='Payer Address Line 2,'
+				line$&='Payer City/Town,'
+				line$&='Payer State/Province/Territory,'
+				line$&='Payer ZIP/Postal Code,'
+				line$&='Payer Phone Type,'
+				line$&='Payer Phone,'
+				line$&='Payer Email Address,'
+				line$&='Recipient TIN Type,'
+				line$&='Recipient Taxpayer ID Number,'
+				line$&='Recipient Name Type,'
+				line$&='Recipient Business or Entity Name Line 1,'
+				line$&='Recipient Business or Entity Name Line 2,'
+				line$&='Recipient First Name,'
+				line$&='Recipient Middle Name,'
+				line$&='Recipient Last Name (Surname),'
+				line$&='Recipient Suffix,'
+				line$&='Recipient Country,'
+				line$&='Recipient Address Line 1,'
+				line$&='Recipient Address Line 2,'
+				line$&='Recipient City/Town,'
+				line$&='Recipient State/Province/Territory,'
+				line$&='Recipient ZIP/Postal Code,'
+				line$&='Office Code,'
+				line$&='Form Account Number,'
+				line$&='2nd TIN Notice,'
 				! not used in 1099-NEC  pr #hExport: 'FATCA Filing Requirements,';
-				pr #hExport: 'Box 1 - Nonemployee Compensation,';
-				pr #hExport: 'Box 2 - Payer made direct sales totaling $5000 or more of consumer products to a recipient for resale,';
-				pr #hExport: 'Box 4 - Federal income tax withheld,';
-				pr #hExport: 'Combined Federal/State Filing,';
-				pr #hExport: 'State 1,';
-				pr #hExport: 'State 1 - State Tax Withheld,';
-				pr #hExport: 'State 1 - State/Payer state number,';
-				pr #hExport: 'State 1 - State income,';
-				pr #hExport: 'State 1 - Local income tax withheld,';
-				pr #hExport: 'State 1 - Special Data Entries,';
-				pr #hExport: 'State 2,';
-				pr #hExport: 'State 2 - State Tax Withheld,';
-				pr #hExport: 'State 2 - State/Payer state number,';
-				pr #hExport: 'State 2 - State income,';
-				pr #hExport: 'State 2 - Local income tax withheld,';
-				pr #hExport: 'State 2 - Special Data Entries,'
-				pr #hExport: '' ! ',,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,'
+				line$&='Box 1 - Nonemployee Compensation,'
+				line$&='Box 2 - Payer made direct sales totaling $5000 or more of consumer products to a recipient for resale,'
+				line$&='Box 4 - Federal income tax withheld,'
+				line$&='Combined Federal/State Filing,'
+				line$&='State 1,'
+				line$&='State 1 - State Tax Withheld,'
+				line$&='State 1 - State/Payer state number,'
+				line$&='State 1 - State income,'
+				line$&='State 1 - Local income tax withheld,'
+				line$&='State 1 - Special Data Entries,'
+				line$&='State 2,'
+				line$&='State 2 - State Tax Withheld,'
+				line$&='State 2 - State/Payer state number,'
+				line$&='State 2 - State income,'
+				line$&='State 2 - Local income tax withheld,'
+				line$&='State 2 - Special Data Entries'   ! do not use a comma on the very last one.
+			pr #hExport: line$
 			! /r
 		else
 			fnpa_open('',optCopy$(copyCurrentN),'PDF')
@@ -379,82 +411,82 @@ def fn_1099print(vn$*8,nam$*30,mat recipientAddr$,ss$*11,mat box; ___, _
 	end if ! /r
 
 	if ten99ExportIris$='True' then ! r: pr #hExport: IRIS CSV entry
-		pr #hExport: '1099-NEC,';
-		pr #hExport: taxYear$&',';
-		pr #hExport: 'EIN,'; ! EIN or SSN for company
-		pr #hExport: ss$&','; ! dashes and numbers only
-		pr #hExport: 'B,'; ! B for business or I for individutal Payer Name Type
-		pr #hExport: fn_c$(companyNameAddr$(1));
-		pr #hExport: ','; ! Payer Business or Entity Name Line 2
-		pr #hExport: ','; ! Payer First Name
-		pr #hExport: ','; ! Payer Middle Name
-		pr #hExport: ','; ! Payer Last Name (Surname)
-		pr #hExport: ','; ! Payer Suffix
-		pr #hExport: 'US,'; ! Payer Country
-		pr #hExport: fn_c$(companyNameAddr$(2));
-		pr #hExport: ','; ! fn_c$(companyNameAddr$(3));
+		line$='1099-NEC,'
+		line$&=taxYear$&','
+		line$&='EIN,' ! EIN or SSN for company
+		line$&=trim$(fed$)&',' ! dashes and numbers only
+		line$&='B,' ! B for business or I for individutal Payer Name Type
+		line$&=fn_c$(companyNameAddr$(1))
+		line$&=',' ! Payer Business or Entity Name Line 2
+		line$&=',' ! Payer First Name
+		line$&=',' ! Payer Middle Name
+		line$&=',' ! Payer Last Name (Surname)
+		line$&=',' ! Payer Suffix
+		line$&='US,' ! Payer Country
+		line$&=fn_c$(companyNameAddr$(2))
+		line$&=',' ! fn_c$(companyNameAddr$(3))
 		fncsz(companyNameAddr$(3),city$,state$,zip$)
-		pr #hExport: city$&',';  ! Payer City/Town
-		pr #hExport: state$&','; ! Payer State/Province/Territory
-		pr #hExport: zip$&',';   ! Payer ZIP/Postal Code
-		pr #hExport: 'D,'; ! Payer Phone Type - D for Domestic or I for International
-		pr #hExport: ph$&','; ! Payer Phone
-		pr #hExport: email$&','; ! Payer Email Address
-		pr #hExport: 'SSN,';  ! Recipient TIN Type
-		pr #hExport: ss$&','; ! Recipient Taxpayer ID Number
+		line$&=trim$(city$)&','  ! Payer City/Town
+		line$&=trim$(state$)&',' ! Payer State/Province/Territory
+		line$&=trim$(zip$)(1:5)&','   ! Payer ZIP/Postal Code
+		line$&='D,' ! Payer Phone Type - D for Domestic or I for International
+		line$&=trim$(ph$)&',' ! Payer Phone
+		line$&=trim$(email$)&',' ! Payer Email Address
 		dim recipientType$*1
 		if fn_isBusiness(ss$) then recipientType$='B' else recipientType$='I'
-		pr #hExport: recipientType$&',';    ! Recipient Name Type B for business or I for individual
-		if recipientType$='B' then
-			pr #hExport: nam$&','; ! Recipient Business or Entity Name Line 1
-			pr #hExport: ','; ! Recipient Business or Entity Name Line 2
-			pr #hExport: ','; ! Recipient First Name
-			pr #hExport: ','; ! Recipient Middle Name
-			pr #hExport: ','; ! Recipient Last Name (Surname)
-			pr #hExport: ','; ! Recipient Suffix
-		else
-			pr #hExport: ','; ! Recipient Business or Entity Name Line 1
-			pr #hExport: ','; ! Recipient Business or Entity Name Line 2
-			dim nameFirst$*64,nameMiddle$*64,nameLast$*64,nameSuffix$*64
+		dim nameFirst$*64,nameMiddle$*64,nameLast$*64,nameSuffix$*64
+		nameFirst$=nameMiddle$=nameLast$=nameSuffix$=''
+		if recipientType$='B' then ! 5 commas
+			line$&='EIN,'  ! Recipient TIN Type
+			line$&=trim$(ss$)&',' ! Recipient Taxpayer ID Number
+		line$&=recipientType$&','    ! Recipient Name Type B for business or I for individual
+			line$&=fn_cName$(nam$) ! Recipient Business or Entity Name Line 1
+			line$&=',' ! Recipient Business or Entity Name Line 2
+		else ! 5 commas
+			line$&='SSN,'  ! Recipient TIN Type
+			line$&=trim$(ss$)&',' ! Recipient Taxpayer ID Number
+			line$&=recipientType$&','    ! Recipient Name Type B for business or I for individual
+			line$&=',' ! Recipient Business or Entity Name Line 1
+			line$&=',' ! Recipient Business or Entity Name Line 2
 			fnNameParse(nam$,nameFirst$,nameMiddle$,nameLast$,nameSuffix$)
-			pr #hExport: nameFirst$&','; ! Recipient First Name
-			pr #hExport: nameMiddle$&','; ! Recipient Middle Name
-			pr #hExport: nameLast$&','; ! Recipient Last Name (Surname)
-			pr #hExport: nameSuffix$&','; ! Recipient Suffix
 		end if
-		pr #hExport: 'US,'; ! Recipient Country
-		pr #hExport: recipientAddr$(1)&','; ! Recipient Address Line 1
+			line$&=nameFirst$&',' ! Recipient First Name
+			line$&=nameMiddle$&',' ! Recipient Middle Name
+			line$&=nameLast$&',' ! Recipient Last Name (Surname)
+			line$&=nameSuffix$&',' ! Recipient Suffix
+		line$&='US,' ! Recipient Country
+		line$&=trim$(recipientAddr$(1))&',' ! Recipient Address Line 1
 		if udim(mat recipientAddr$)=2 then
-		pr #hExport: ','; ! Recipient Address Line 2
+		line$&=',' ! Recipient Address Line 2
 		else
-			pr #hExport: recipientAddr$(2)&','; ! Recipient Address Line 2
+			line$&=trim$(recipientAddr$(2))&',' ! Recipient Address Line 2
 		end if
 		fncsz(recipientAddr$(udim(mat recipientAddr$)),city$,state$,zip$)
-		pr #hExport: city$&',';  ! 'Recipient City/Town,';
-		pr #hExport: state$&','; ! 'Recipient State/Province/Territory,';
-		pr #hExport: zip$&',';   ! 'Recipient ZIP/Postal Code,';
-		pr #hExport: '1234,'; ! Office Code
-		pr #hExport: vn$&','; ! Form Account Number
+		line$&=trim$(city$)&','  ! 'Recipient City/Town,'
+		line$&=trim$(state$)&',' ! 'Recipient State/Province/Territory,'
+		line$&=trim$(zip$)(1:5)&','   ! 'Recipient ZIP/Postal Code,'
+		line$&='1234,' ! Office Code
+		line$&=trim$(vn$)&',' ! Form Account Number
 		if box(13) then yn$='Y' else yn$='N' 
-		! pr #hExport: yn$&','; ! FATCA Filing Requirements  Y for checked N for unchecked   1099-MISC Only
-		pr #hExport: 'N,'; ! 2nd TIN Notice  Y for checked N for unchecked
-		pr #hExport: str$(box(1 ))&','; ! Box 1 
-		pr #hExport: str$(box(2 ))&','; ! Box 2 
-		pr #hExport: str$(box(4 ))&','; ! Box 4 
-		pr #hExport: ','; ! fnpayroll_client_state$&','; ! Combined Federal/State Filing
-		pr #hExport: ','; ! fnpayroll_client_state$&','; ! State 1
-		pr #hExport: ','; ! str$(box(16))&','; ! State 1 - State Tax Withheld
-		pr #hExport: ','; ! str$(box(17))&','; ! State 1 - State/Payer state number
-		pr #hExport: ','; ! str$(box(18))&','; ! State 1 - State income
-		pr #hExport: ','; ! str$(box(--))&','; ! State 1 - Local income tax withheld
-		pr #hExport: ','; ! State 1 - Special Data Entries
-		pr #hExport: ','; ! State 2
-		pr #hExport: ','; ! State 2 - State Tax Withheld
-		pr #hExport: ','; ! State 2 - State/Payer state number
-		pr #hExport: ','; ! State 2 - State income
-		pr #hExport: ','; ! State 2 - Local income tax withheld
-		pr #hExport: ','; ! State 2 - Special Data Entries
-		pr #hExport: ''
+
+		line$&='N,' ! 2nd TIN Notice  Y for checked N for unchecked
+		line$&=str$(box(1 ))&',' ! Box 1 
+		line$&=str$(box(2 ))&',' ! Box 2 
+		line$&=str$(box(4 ))&',' ! Box 4 
+		line$&=',' ! fnpayroll_client_state$&',' ! Combined Federal/State Filing
+		line$&=',' ! fnpayroll_client_state$&',' ! State 1
+		line$&=',' ! str$(box(16))&',' ! State 1 - State Tax Withheld
+		line$&=',' ! str$(box(17))&',' ! State 1 - State/Payer state number
+		line$&=',' ! str$(box(18))&',' ! State 1 - State income
+		line$&=',' ! str$(box(--))&',' ! State 1 - Local income tax withheld
+		line$&=',' ! State 1 - Special Data Entries
+		line$&=',' ! State 2
+		line$&=',' ! State 2 - State Tax Withheld
+		line$&=',' ! State 2 - State/Payer state number
+		line$&=',' ! State 2 - State income
+		line$&=',' ! State 2 - Local income tax withheld
+		line$&=''  ! State 2 - Special Data Entries   ! do not use a comma on the very last one.
+		pr #hExport: line$
 		! /r
 	else if ten99Export$='True' then ! r: export AMS
 		pr #hExport: '01 ';' '
@@ -507,7 +539,7 @@ def fn_1099print(vn$*8,nam$*30,mat recipientAddr$,ss$*11,mat box; ___, _
 		end if
 		fnpa_FontSize
 		! r: draw developer lines
-		developerLinesEnabled=0
+		developerLinesEnabled=1
 		if developerLinesEnabled and env$('acsDeveloper')<>'' then
 			for lineN=1 to udim(mat lineXy)
 				fnpa_txt(str$(lineN)  ,left+1,fn_line(lineN))
@@ -567,11 +599,19 @@ def fn_1099print(vn$*8,nam$*30,mat recipientAddr$,ss$*11,mat box; ___, _
 	Xit: !
 fnend
 	def fn_c$*256(c$*256)
+		! c$=trim$(c$)
+		! if pos(c$,'"')>0 then c$=srep$(c$,'"','')
+		! if pos(c$,',')>0 then c$='"'&c$&'"'
+		! c$&=',' ! c$=c$&','
+		fn_c$=fn_cName$(c$)
+	fnend
+	def fn_cName$*256(c$*256)
 		c$=trim$(c$)
-		if pos(c$,'"')>0 then c$=srep$(c$,'"','')
-		if pos(c$,',')>0 then c$='"'&c$&'"'
+		c$=xlate$(c$,rpt$(' ', 35)&"#$%&'()   -  0123456789       abcdefghijklmnopqrstuvwxyz \  _ abcdefghijklmnopqrstuvwxyz"&rpt$(' ', 133))
+		! if pos(c$,'"')>0 then c$=srep$(c$,'"','')
+		! if pos(c$,',')>0 then c$='"'&c$&'"'
 		c$&=',' ! c$=c$&','
-		fn_c$=c$
+		fn_cName$=c$
 	fnend
 	def fn_line(lineNumber)
 		! inherrits local yOffset
