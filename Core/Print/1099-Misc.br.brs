@@ -648,19 +648,19 @@ fnend
 	fnend
 	def fn_line(lineNumber)
 		! inherrits local yOffset
-		! retains setup_line,mat lineXy
-		if ~setup_line then
-			setup_line=1
+		! retains setupLine,mat lineXy
+		if ~setupLine then
+			setupLine=1
 			dim lineXy(15)
-			lineXy( 1)= 13 ! PAYER'S name and Box 1 Rents
-			lineXy( 2)= 17 ! PAYER's addr
-			lineXy( 3)= 21 ! PAYER's csz
-			lineXy( 4)= 26 ! Box 2 Royalties
-			lineXy( 5)= 30 !
-			lineXy( 6)= 35 ! box 2
-			lineXy( 7)= 48 ! PAYER's TIN
-			lineXy( 8)= 52 ! box 5b,6b
-			lineXy( 9)= 65 ! RECIPIENT'S name  street address
+			lineXy(1) = 13 ! PAYER'S name and Box 1 Rents
+			lineXy(2) = 17 ! PAYER's addr
+			lineXy(3) = 21 ! PAYER's csz
+			lineXy(4) = 26 ! Box 2 Royalties
+			lineXy(5) = 30 !
+			lineXy(6) = 35 ! box 2
+			lineXy(7) = 48 ! PAYER's TIN
+			lineXy(8) = 52 ! box 5b,6b
+			lineXy(9) = 65 ! RECIPIENT'S name  street address
 			lineXy(10)= 72 ! box 7,8
 			lineXy(11)= 77 ! recipient's CSZ
 			lineXy(12)= 88 ! City or town, box 11,12
