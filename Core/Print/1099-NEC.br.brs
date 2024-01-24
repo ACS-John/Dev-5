@@ -570,13 +570,13 @@ def fn_1099print(vn$*8,nam$*30,mat recipientAddr$,ss$*11,mat box; ___, _
 				fnpa_txt(ph$,column1,fn_line(5))
 				fnpa_txt(fed$,column1,fn_line(6)) ! PAYER'S TIN
 				fnpa_txt(ss$,column1b,fn_line(6)) ! RECIPIENT'S TIN
-				fnpa_txt(nam$,column1,fn_line(12)) ! RECIPIENT'S name
+				fnpa_txt(nam$,column1,fn_line(8)) ! RECIPIENT'S name
 				if udim(mat recipientAddr$)=2 then
 					fnpa_txt(recipientAddr$(1),column1,fn_line(10)) ! Street address (including apt. no.) ( address line 1 )
-					fnpa_txt(recipientAddr$(2),column1,fn_line(8)) !  CSZ
+					fnpa_txt(recipientAddr$(2),column1,fn_line(12)) !  CSZ
 				else if udim(mat recipientAddr$)=3 then
 					fnpa_txt(rtrm$(recipientAddr$(1))&'  '&trim$(recipientAddr$(2)),column1,fn_line(10)) ! address line 2
-					fnpa_txt(recipientAddr$(3),column1,fn_line(8)) !  CSZ
+					fnpa_txt(recipientAddr$(3),column1,fn_line(12)) !  CSZ
 				else
 					pr 'udim(mat recipientAddr$)=';udim(mat recipientAddr$);' this is unexpected by '&program$ : pause
 				end if

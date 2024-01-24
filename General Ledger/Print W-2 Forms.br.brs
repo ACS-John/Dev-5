@@ -40,7 +40,7 @@ W2CopyFile$(6)='xs:\Core\pdf\2016\W-2\Copy D.pdf' : w2ssnMask(6)=1
 
 ! /r
 AskInfo: !
-	if ~fnask_w2_info(taxYear$,unusedmaybe_beg_date,unusedmaybe_end_date,empStart$,empEnd$,ssrate,ssmax,mcrate,mcmax,mat w2destinationOpt$,enableW3$,enableBackground$,w2Copy,w2Copy$,exportFormatID,w2laser_output_filename$,pn1,dc1,topmargin,bottom,state$,enableAskCLocality:=1,cLocality$) then goto Xit
+	if ~fnask_w2_info(taxYear$,unusedmaybe_beg_date,unusedmaybe_end_date,empStart$,empEnd$,ssrate,ssmax,mcrate,mcmax,enableW3$,enableBackground$,w2Copy,w2Copy$,pn1,dc1,topmargin,bottom,state$,enableAskCLocality:=1,cLocality$) then goto Xit
 ! r: open export files (if appropriate, return to AskInfo screen if failure
 if exportFormatID then
 	w2laser_output_filename$=srep$(w2laser_output_filename$,'[CompanyNumber]',env$('cno'))
