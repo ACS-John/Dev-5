@@ -58,7 +58,7 @@ fnpa_open('',w2Copy$,'PDF')
 
 fnend
 def library fnask_w2_info(&taxYear$,&beg_date,&end_date,&empStart$, _
-	&empEnd$,&ssrate,&ssmax,&mcrate,&mcmax,mat w2destinationOpt$,&enableW3$, _
+	&empEnd$,&ssrate,&ssmax,&mcrate,&mcmax,&enableW3$, _
 	&enableBackground$,&w2Copy,&w2Copy$,&exportFormatID,&w2laser_output_filename$, _
 	&pn1,&dc1,&topmargin,&bottom,&state$,enableAskCLocality,&cLocality$)
 	if ~awi_setup then ! r:
@@ -66,6 +66,7 @@ def library fnask_w2_info(&taxYear$,&beg_date,&end_date,&empStart$, _
 		if ~setup then fn_setup
 		! r: constants
 		dim resp$(128)*256
+		dim w2destinationOpt$(3)*18
 		dim optW2Copy$(6)*68
 		optW2Copy$(1)='A - For Social Security Administration' ! Send with W-3
 		optW2Copy$(2)='1 - For State, City or Local Tax Department'
@@ -101,7 +102,7 @@ def library fnask_w2_info(&taxYear$,&beg_date,&end_date,&empStart$, _
 		fncreg_read('W-2 - cLocality',cLocality$,'NO')
 		fnreg_read('Print W-2'                          ,w2destinationOpt$(1),'True' )
 		fnreg_read('Export for Advanced Micro Solutions',w2destinationOpt$(2),'False')
-		! fnreg_read('Export for Center Piece Software'   ,w2destinationOpt$(3),'False')  ! removed access 01/03/2017
+		fnreg_read('Export for Social Security Administration',w2destinationOpt$(3),'False')
 		fnreg_read('Print W-3 also'                     ,enableW3$           ,'True' )
 		fnreg_read('W-2 - Enable Background'            ,enableBackground$   ,'True' )
 		fncreg_read('W-2 - Copy Current',w2Copy$,optW2Copy$(1)) : w2Copy=srch(mat optW2Copy$,w2Copy$) : if w2Copy<=0 then w2Copy=1
@@ -199,26 +200,32 @@ def library fnask_w2_info(&taxYear$,&beg_date,&end_date,&empStart$, _
 	fnTxt(5,mypos,10,0,1,'10',disableSSMCedit,'At the present time there is no maximum.  Enter a number larger than any one''s wages can be. For example, 999999.00',franum)
 	resp$(respc_mcmax=rc+=1)=str$(mcmax)
 
-	fra3Y=fra2Y+fra2Height+2 : fra3Height=6
+	fra3Y=fra2Y+fra2Height+2 : fra3Height=9 : lc=0
 	fnFra(fra3Y,1,fra3Height,fraWidth,'Printing or Exporting','You have the option to either pr the W-2s or export them to another system for printing.')
 	cf+=1 : franum=cf : mylen=26 : mypos=mylen+2
-	fnOpt(1,3,'Print W-2',0,franum)
+	fnOpt(lc+=1,3,'Print W-2',0,franum)
 	resp$(respc_PrintW2=rc+=1)=w2destinationOpt$(1)
 	! fnLbl(1,fraWidth-50,'(2 per page is not yet available with Backgrounds)',50,1,0,franum)
-	fnLbl(2,5,'Copy:',12,1,0,franum)
+	fnLbl(lc+=1,5,'Copy:',12,1,0,franum)
 	fnComboA('w2Copy',2,19,mat optW2Copy$, '',20,franum)
 	resp$(respc_w2copy=rc+=1)=w2Copy$
-	fnChk(2,68,'W-2 - Enable Background',1,franum)
+	fnChk(lc,68,'W-2 - Enable Background',1,franum)
 	resp$(respc_enableBackground=rc+=1)=enableBackground$
-	fnChk(4,68,'Print W-3 also',1,franum)
+	lc+=1
+	fnChk(lc+=1,68,'Print W-3 also',1,franum)
 	resp$(respc_w3=rc+=1)=enableW3$
-	fnOpt(4,3,'Export for Advanced Micro Solutions',0,franum)
+lc+=1
+	fnOpt(lc+=1,3,'Export for Social Security Administration',0,franum)
+	resp$(respc_export_ssa=rc+=1)=w2destinationOpt$(3)
+
+
+	fnOpt(lc+=1,3,'Export for Advanced Micro Solutions',0,franum)
 	resp$(respc_export_ams=rc+=1)=w2destinationOpt$(2)
-	fnLbl(5,5,'Export File:',12,1,0,franum)
-	fnTxt(5,19,20,256,0,'72',0,'Choose a destination location for the ACS export.',franum)
+	fnLbl(lc+=1,5,'Export File:',12,1,0,franum)
+	fnTxt(lc,19,20,256,0,'72',0,'Choose a destination location for the ACS export.',franum)
 	resp$(resp_w2_export_file=rc+=1)=w2laser_output_filename$
-	fnButton(5,5+12+20+5,'Default',14,'Choose to set the default for the selected destination software.',0,0,franum)
-	fnLbl(6,19,'([CompanyNumber] and [TaxYear] will be substituted in filename)',0,0,0,franum)
+	fnButton(lc,5+12+20+5,'Default',14,'Choose to set the default for the selected destination software.',0,0,franum)
+	fnLbl(lc+=1,19,'([CompanyNumber] and [TaxYear] will be substituted in filename)',0,0,0,franum)
 
 	if enablePayrollDeductions then
 		fra4Y=fra3y+fra3Height+2 ! 25
@@ -288,6 +295,7 @@ def library fnask_w2_info(&taxYear$,&beg_date,&end_date,&empStart$, _
 		end if
 		w2destinationOpt$(1)=resp$(respc_PrintW2)
 		w2destinationOpt$(2)=resp$(respc_export_ams)
+		w2destinationOpt$(3)=resp$(respc_export_ssa)
 		w2laser_output_filename$=resp$(resp_w2_export_file)
 		if enablePayrollDeductions then
 			pn1=val(resp$(respc_qpenplan))
@@ -310,7 +318,7 @@ def library fnask_w2_info(&taxYear$,&beg_date,&end_date,&empStart$, _
 		fnreg_write('W-2 - Enable Background',enableBackground$)
 		fnreg_write('W-3 - Enable Background',enableBackground$)
 		fnreg_write('Export for Advanced Micro Solutions',w2destinationOpt$(2))
-		!   fnreg_write('Export for Center Piece Software'   ,w2destinationOpt$(3))  ! removed access 01/03/2017
+		fnreg_write('Export for Social Security Administration',w2destinationOpt$(3))
 		fnureg_write('W-2 - Export Filename',w2laser_output_filename$)
 		fncreg_write('Qualified Pension Plan',str$(pn1))
 		fncreg_write('Dependent Care Benefits',str$(dc1))
@@ -458,7 +466,7 @@ def fn_w2_text(w2Yoffset,maskSsn,mat a$,empId$*12,ss$,controlNumber$,mat w,dcb$,
 		! 	fnpa_txt(printLocality$(1:6),left+164,fn_line(12))
 		! else
 		if env$('client')='Kathys Bookkeeping' or env$('client')='Thomasboro' then 
-		let speciallastline=w2Yoffset+10+(8.5*10)+5
+			speciallastline=w2Yoffset+100
 			fnpa_txt(state$,left-3,speciallastline)
 			fnpa_txt(stcode$,left+10,speciallastline)
 			fnpa_txt(cnvrt$('pic(zzzzzzzzzzzzz.zz',w( 9)),left+ 51,speciallastline)

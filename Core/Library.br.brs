@@ -552,9 +552,9 @@ fnend
 		fnUpdateLicense=fnUpdateLicense
 	fnend
 ! r: core W-2, W-3, 1099 stuff
-	def library fnask_w2_info(&taxYear$,&beg_date,&end_date,&empStart$,&empEnd$,&ssrate,&ssmax,&mcrate,&mcmax,mat w2destinationOpt$,&enableW3$,&enableBackground$,&w2Copy,&w2Copy$,&exportFormatID,&w2laser_output_filename$,&pn1,&dc1,&topmargin,&bottom,&state$,enableAskCLocality,&cLocality$)
+	def library fnask_w2_info(&taxYear$,&beg_date,&end_date,&empStart$,&empEnd$,&ssrate,&ssmax,&mcrate,&mcmax,&enableW3$,&enableBackground$,&w2Copy,&w2Copy$,&pn1,&dc1,&topmargin,&bottom,&state$,enableAskCLocality,&cLocality$)
 		library 'S:\Core\Print\w2.br': fnask_w2_info
-		fnask_w2_info=fnask_w2_info(taxYear$,beg_date,end_date,empStart$,empEnd$,ssrate,ssmax,mcrate,mcmax,mat w2destinationOpt$,enableW3$,enableBackground$,w2Copy,w2Copy$,exportFormatID,w2laser_output_filename$,pn1,dc1,topmargin,bottom,state$,enableAskCLocality,cLocality$)
+		fnask_w2_info=fnask_w2_info(taxYear$,beg_date,end_date,empStart$,empEnd$,ssrate,ssmax,mcrate,mcmax,enableW3$,enableBackground$,w2Copy,w2Copy$,pn1,dc1,topmargin,bottom,state$,enableAskCLocality,cLocality$)
 	fnend
 	def library fnFormCopyAwithBackgroundWarn
 		library 'S:\Core\Print\w2.br': fnFormCopyAwithBackgroundWarn

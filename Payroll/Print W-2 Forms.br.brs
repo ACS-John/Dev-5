@@ -51,8 +51,8 @@
 
 	! /r
 AskInfo: !
-if ~fnask_w2_info(taxYear$,beg_date,end_date,empStart$,empEnd$,ssrate,ssmax,mcrate,mcmax,mat w2destinationOpt$, _
-	enableW3$,enableBackground$,w2Copy,w2Copy$,exportFormatID,w2laser_output_filename$,pn1,dc1,topmargin,bottom, _
+if ~fnask_w2_info(taxYear$,beg_date,end_date,empStart$,empEnd$,ssrate,ssmax,mcrate,mcmax, _
+	enableW3$,enableBackground$,w2Copy,w2Copy$,pn1,dc1,topmargin,bottom, _
 	unused_state$,loccode,cLocality$) then goto Xit
 ! r: set ssn mask by copy
 	dim w2ssnMask(6) 	! W2CopyFile2pp$(6)*128,W2CopyFile$(6)*128,
@@ -64,15 +64,7 @@ if ~fnask_w2_info(taxYear$,beg_date,end_date,empStart$,empEnd$,ssrate,ssmax,mcra
 	w2ssnMask(6)=1   	! W2CopyFile$(6)='S:\Core\pdf\'&taxYear$&'\W-2\Copy D.pdf' :  W2CopyFile2pp$(6)='S:\Core\pdf\'&taxYear$&'\W-2\Copy D - 2pp.pdf'
 ! /r
 ! r: open export files (if appropriate, return to AskInfo screen if failure
-	if exportFormatID then
-		w2laser_output_filename$=srep$(w2laser_output_filename$,'[CompanyNumber]',env$('cno'))
-		w2laser_output_filename$=srep$(w2laser_output_filename$,'[companynumber]',env$('cno'))
-		w2laser_output_filename$=srep$(w2laser_output_filename$,'[COMPANYNUMBER]',env$('cno'))
-		w2laser_output_filename$=srep$(w2laser_output_filename$,'[TaxYear]',taxYear$)
-		w2laser_output_filename$=srep$(w2laser_output_filename$,'[taxyear]',taxYear$)
-		w2laser_output_filename$=srep$(w2laser_output_filename$,'[TAXYEAR]',taxYear$)
-		open #hExport=fnH: 'Name='&br_filename$(w2laser_output_filename$)&',REPLACE',d,o ioerr AskInfo
-	end if
+
 ! /r
 ! AskDeductions: ! r: ! ask if any misecllaneous deductions should pr in box 12
 	fullnameBlankCount=0
