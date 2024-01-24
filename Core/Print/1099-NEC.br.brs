@@ -31,7 +31,15 @@ def fn_1099testPrint
 	fn_1099print('account1','Recipient One'  ,mat testAddr$,'111-11-1111',mat testBox)
 	fn_1099print('Account2','Recipient Two'  ,mat testAddr$,'222-22-2222',mat testBox)
 	fn_1099print('Account3','Recipient Three',mat testAddr$,'333-33-3333',mat testBox)
-	disableCopyAWarning=0
+	fn_1099print('account4','Recipient Four' ,mat testAddr$,'444-44-4444',mat testBox)
+	fn_1099print('Account5','Recipient Five' ,mat testAddr$,'555-55-5555',mat testBox)
+	fn_1099print('Account6','Recipient Six'  ,mat testAddr$,'666-66-6666',mat testBox)
+	fn_1099print('account7','Recipient Seven',mat testAddr$,'777-77-7777',mat testBox)
+	fn_1099print('Account8','Recipient Eight',mat testAddr$,'888-88-8888',mat testBox)
+	fn_1099print('Account9','Recipient Nine' ,mat testAddr$,'999-99-9999',mat testBox)
+
+
+	disableCopyAWarning=1
 	fn_1099print_close
 fnend
 
@@ -42,6 +50,10 @@ def fn_setup
 		autoLibrary
 		on error goto Ertn
 		! r: constants
+
+		dim formName$*8
+		formName$='1099-NEC'
+
 		dim resp$(128)*256
 		dim optCopy$(5)*72
 		optCopy$(1)='A - For Internal Revenue Service Center'
@@ -51,11 +63,11 @@ def fn_setup
 		optCopy$(5)='2 - To be filed with recipient''s state income tax return, when required'
 		dim copyFile$(5)*128,ssnMask(5)
 		taxYear$=date$(days(date$)-120,'CCYY')
-		copyFile$(1)='S:\Core\pdf\'&taxYear$&'\1099-Nec\Copy A.pdf' : ssnMask(1)=0
-		copyFile$(2)='S:\Core\pdf\'&taxYear$&'\1099-Nec\Copy 1.pdf' : ssnMask(2)=0
-		copyFile$(3)='S:\Core\pdf\'&taxYear$&'\1099-Nec\Copy B.pdf' : ssnMask(3)=0
-		copyFile$(4)='S:\Core\pdf\'&taxYear$&'\1099-Nec\Copy C.pdf' : ssnMask(4)=1
-		copyFile$(5)='S:\Core\pdf\'&taxYear$&'\1099-Nec\Copy 2.pdf' : ssnMask(5)=1
+		copyFile$(1)='S:\Core\pdf\'&taxYear$&'\'&formName$&'\Copy A.pdf' : ssnMask(1)=0
+		copyFile$(2)='S:\Core\pdf\'&taxYear$&'\'&formName$&'\Copy 1.pdf' : ssnMask(2)=0
+		copyFile$(3)='S:\Core\pdf\'&taxYear$&'\'&formName$&'\Copy B.pdf' : ssnMask(3)=0
+		copyFile$(4)='S:\Core\pdf\'&taxYear$&'\'&formName$&'\Copy C.pdf' : ssnMask(4)=1
+		copyFile$(5)='S:\Core\pdf\'&taxYear$&'\'&formName$&'\Copy 2.pdf' : ssnMask(5)=1
 		! /r
 	end if
 fnend
@@ -97,7 +109,7 @@ def fn_ask(&seltpN,&typeN,&minAmt,&beg_date,&end_date; ___, _
 		fnpcreg_read('Enable Background'	,enableBackground$ 	,'True' )
 		fnpcreg_read('3 Per Page'       	,perPage$           	,'True' )
 		copyCurrentN=fnPcRegReadN('Copy Current',2)
-		fnureg_read('1099-NEC - Export Filename',outputFilename$,os_filename$(env$('Documents')&'\ACS\[TaxYear] 1099-NEC Export\Company [CompanyNumber].csv'))
+		fnureg_read(formName$&' - Export Filename',outputFilename$,os_filename$(env$('Documents')&'\ACS\[TaxYear] '&formName$&' Export\Company [CompanyNumber].csv'))
 		fncreg_read('Phone Number',ph$)
 		fncreg_read('Email',email$)
 		dim seltp$*256
@@ -143,7 +155,7 @@ def fn_ask(&seltpN,&typeN,&minAmt,&beg_date,&end_date; ___, _
 	fnComboA('nameFormat',lc,mypos,mat optNameFormat$, '',20)
 	fncreg_read('Payee Name Format',resp$(respc_nameFormat=rc+=1),optNameFormat$(1))
 	lc+=1
-	fnOpt(lc+=1,3,'Print 1099-NEC')
+	fnOpt(lc+=1,3,'Print '&formName$)
 	resp$(respc_Print1099=rc+=1)=destinationOpt$(1)
 	fnLbl(lc+=1,5,'Copy:',12,1,0)
 	fnComboA('Copy',lc,19,mat optCopy$, '',20)
@@ -209,7 +221,7 @@ def fn_ask(&seltpN,&typeN,&minAmt,&beg_date,&end_date; ___, _
 			goto ASK_INFO
 		end if
 		if ckey=ckey_defaultFilename then
-				outputFilename$=os_filename$(env$('Documents')&'\ACS\[TaxYear] 1099-NEC Export\Company [CompanyNumber].csv')
+				outputFilename$=os_filename$(env$('Documents')&'\ACS\[TaxYear] '&formName$&' Export\Company [CompanyNumber].csv')
 			goto ASK_INFO
 		else if ckey=ckey_margins then
 			fn_ask_margins
@@ -253,7 +265,7 @@ fnend
 		amResp$(1)=fnPcRegRead$('form 1 Y'	,defaultMargin$(1))
 		amResp$(2)=fnPcRegRead$('form 2 Y'	,defaultMargin$(2))
 		amResp$(3)=fnPcRegRead$('form 3 Y'	,defaultMargin$(3))
-		amResp$(4)=fnPcRegRead$('X'        	,defaultMargin$(4))
+		amResp$! year 2022 and beyond prints year=fnPcRegRead$('X'        	,defaultMargin$(4))
 		AskMargins: !
 		fnTos
 		lc=0 : mylen=30 : mypos=mylen+2
@@ -325,7 +337,7 @@ def fn_1099print(vn$*8,nam$*30,mat recipientAddr$,ss$*11,mat box; ___, _
 		fnPcReg_read('3 Per Page',perPage$,'True' )
 		fnPcReg_read('Enable Background',enableBackground$,'True' )
 		dim outputFilename$*256
-		fnureg_read('1099 - Export Filename',outputFilename$,os_filename$(env$('Documents')&'\ACS\[TaxYear] 1099-NEC Export\Company [CompanyNumber].csv'))
+		fnureg_read('1099 - Export Filename',outputFilename$,os_filename$(env$('Documents')&'\ACS\[TaxYear] '&formName$&' Export\Company [CompanyNumber].csv'))
 		dim ph$*12
 		dim email$*128
 		fnCreg_read('Phone Number',ph$)
@@ -411,7 +423,7 @@ def fn_1099print(vn$*8,nam$*30,mat recipientAddr$,ss$*11,mat box; ___, _
 	end if ! /r
 
 	if ten99ExportIris$='True' then ! r: pr #hExport: IRIS CSV entry
-		line$='1099-NEC,'
+		line$=formName$&','
 		line$&=taxYear$&','
 		line$&='EIN,' ! EIN or SSN for company
 		line$&=trim$(fed$)&',' ! dashes and numbers only
@@ -523,7 +535,7 @@ def fn_1099print(vn$*8,nam$*30,mat recipientAddr$,ss$*11,mat box; ___, _
 		! pr #hExport: '32 ';0
 		pr #hExport: '*'
 		! /r
-	else ! r: pr one
+	else ! r: Print PDF
 		column1 	= left +   8
 		column1b	= left +  65
 		column2 	= left +  97
@@ -539,12 +551,13 @@ def fn_1099print(vn$*8,nam$*30,mat recipientAddr$,ss$*11,mat box; ___, _
 		end if
 		fnpa_FontSize
 		! r: draw developer lines
-		developerLinesEnabled=1
+		developerLinesEnabled=0
 		if developerLinesEnabled and env$('acsDeveloper')<>'' then
+			if ~setupLine then unused=fn_line(1) ! for the very first one so mat lineXy is initialized
 			for lineN=1 to udim(mat lineXy)
-				fnpa_txt(str$(lineN)  ,left+1,fn_line(lineN))
-				fnpa_txt('('&str$(lineXy(lineN))&')' ,left+10,fn_line(lineN))
-				fnpa_txt(rpt$('_ ',50),left+1,fn_line(lineN))
+				fnpa_txt(str$(lineN)  ,left,fn_line(lineN))
+				fnpa_txt('('&str$(lineXy(lineN))&')' ,left+3,fn_line(lineN))
+				fnpa_txt(rpt$('_ ',50),left,fn_line(lineN))
 			nex lineN
 		end if
 		! /r
@@ -555,37 +568,36 @@ def fn_1099print(vn$*8,nam$*30,mat recipientAddr$,ss$*11,mat box; ___, _
 				fnpa_txt(companyNameAddr$(2),column1,fn_line(2))
 				fnpa_txt(companyNameAddr$(3),column1,fn_line(3))
 				fnpa_txt(ph$,column1,fn_line(5))
-				! fnpa_txt(taxyear$(3:4),column3b,fn_line(15))
-				fnpa_txt(fed$,column1,fn_line(5)) ! PAYER'S TIN
-				fnpa_txt(ss$,column1b,fn_line(5)) ! RECIPIENT'S TIN
-				fnpa_txt(nam$,column1,fn_line(7)) ! RECIPIENT'S name
+				fnpa_txt(fed$,column1,fn_line(6)) ! PAYER'S TIN
+				fnpa_txt(ss$,column1b,fn_line(6)) ! RECIPIENT'S TIN
+				fnpa_txt(nam$,column1,fn_line(12)) ! RECIPIENT'S name
 				if udim(mat recipientAddr$)=2 then
-					fnpa_txt(recipientAddr$(1),column1,fn_line(9)) ! Street address (including apt. no.) ( address line 1 )
-					fnpa_txt(recipientAddr$(2),column1,fn_line(11)) !  CSZ
+					fnpa_txt(recipientAddr$(1),column1,fn_line(10)) ! Street address (including apt. no.) ( address line 1 )
+					fnpa_txt(recipientAddr$(2),column1,fn_line(8)) !  CSZ
 				else if udim(mat recipientAddr$)=3 then
-					fnpa_txt(rtrm$(recipientAddr$(1))&'  '&trim$(recipientAddr$(2)),column1,fn_line(9)) ! address line 2
-					fnpa_txt(recipientAddr$(3),column1,fn_line(11)) !  CSZ
+					fnpa_txt(rtrm$(recipientAddr$(1))&'  '&trim$(recipientAddr$(2)),column1,fn_line(10)) ! address line 2
+					fnpa_txt(recipientAddr$(3),column1,fn_line(8)) !  CSZ
 				else
 					pr 'udim(mat recipientAddr$)=';udim(mat recipientAddr$);' this is unexpected by '&program$ : pause
 				end if
-				fnpa_txt(vn$,column1,fn_line(13))
+				fnpa_txt(vn$,column1,fn_line(14))
 			!/r
 			! r: right side
-				fnpa_txt(taxyear$                             ,column5-5   		,fn_line(4) )
-				fnpa_txt(cnvrt$('pic(zzzzzzzzzz.zz',box(1)  ),column3  ,fn_line(5) )
+				fnpa_txt(taxyear$(3:4)                         ,column3b ,fn_line(5) )
+				fnpa_txt(cnvrt$('pic(zzzzzzzzzz.zz',box(1)  ),column3  ,fn_line(6) )
 				! if box(2)>5000 then 
-				! 	fnpa_txt('X'                                 ,column3+24,fn_line(6))
+				! 	fnpa_txt('X'                                 ,column3+24,fn_line(13))
 				! end if
-				fnpa_txt(cnvrt$('pic(zzzzzzzzzz.zz',box(3)  ),column3   ,fn_line(8) )
-				fnpa_txt(cnvrt$('pic(zzzzzzzzzz.zz',box(4)  ),column3   ,fn_line(10)) ! fed withheld
+				fnpa_txt(cnvrt$('pic(zzzzzzzzzz.zz',box(3)  ),column3   ,fn_line(11) )
+				fnpa_txt(cnvrt$('pic(zzzzzzzzzz.zz',box(4)  ),column3   ,fn_line(9)) ! fed withheld
 				
-				fnpa_txt(cnvrt$('pic(zzzzzzzzzz.zz',box(5)  ),column2   ,fn_line(12))
-				fnpa_txt(cnvrt$('pic(zzzzzzzzzz.zz',box(6)  ),column3   ,fn_line(12))
-				fnpa_txt(cnvrt$('pic(zzzzzzzzzz.zz',box(7)  ),column4   ,fn_line(12))
+				fnpa_txt(cnvrt$('pic(zzzzzzzzzz.zz',box(5)  ),column2   ,fn_line(7))
+				fnpa_txt(cnvrt$('pic(zzzzzzzzzz.zz',box(6)  ),column3   ,fn_line(7))
+				fnpa_txt(cnvrt$('pic(zzzzzzzzzz.zz',box(7)  ),column4   ,fn_line(7))
 				
-				fnpa_txt(cnvrt$('pic(zzzzzzzzzz.zz',box(8)  ),column2   ,fn_line(14))
-				fnpa_txt(cnvrt$('pic(zzzzzzzzzz.zz',box(9)  ),column3   ,fn_line(14))
-				fnpa_txt(cnvrt$('pic(zzzzzzzzzz.zz',box(10) ),column4   ,fn_line(14))
+				fnpa_txt(cnvrt$('pic(zzzzzzzzzz.zz',box(8)  ),column2   ,fn_line(4))
+				fnpa_txt(cnvrt$('pic(zzzzzzzzzz.zz',box(9)  ),column3   ,fn_line(4))
+				fnpa_txt(cnvrt$('pic(zzzzzzzzzz.zz',box(10) ),column4   ,fn_line(4))
 			! /r
 		! /r
 
@@ -615,25 +627,26 @@ fnend
 	fnend
 	def fn_line(lineNumber)
 		! inherrits local yOffset
-		! retains setup_line,mat lineXy
-		if ~setup_line then
-			setup_line=1
-			mat lineXy(15)
-			lineXy( 1)=16
-			lineXy( 2)=19
-			lineXy( 3)=22
-			lineXy( 4)=25
-			lineXy( 5)=36 ! PAYER's TIN, box 1, etc
-			lineXy( 6)=43 ! box 2
-			lineXy( 7)=46 ! RECIPIENT'S name
-			lineXy( 8)=52 ! box 3
-			lineXy( 9)=57 ! street address
-			lineXy(10)=61 ! box 4
-			lineXy(11)=66 ! recipient's CSZ
-			lineXy(12)=70 ! box 5,6,7
-			lineXy(13)=74 ! Account number
-			lineXy(14)=75 ! box 5b,6b,7b
-			lineXy(15)=27 ! year 2022 and beyond prints year
+		! retains setupLine,mat lineXy
+		if ~setupLine then
+			setupLine=1
+			dim lineXy(0)
+			mat lineXy(14)
+			lineXy(1) =16 	! lineXy(31) =16
+			lineXy(2) =19 	! lineXy(32) =19
+			lineXy(3) =22 	! lineXy(33) =22
+			lineXy(4) =25 	! lineXy(45)=25   ! year 2022 and beyond prints year
+			lineXy(5) =27 	! lineXy(34) =27 ! tax year ##
+			lineXy(6) =36 	! lineXy(44)=36 ! box 5b,6b,7b
+			lineXy(7) =43 	! lineXy(43)=43 ! Account number
+			lineXy(8) =46 	! lineXy(42)=46 ! box 5,6,7
+			lineXy(9) =52 	! lineXy(41)=52 ! recipient's CSZ
+			lineXy(10)=57 	! lineXy(40)=57 ! box 4
+			lineXy(11)=61 	! lineXy(39) =61 ! street address
+			lineXy(12)=66 	! lineXy(38) =66 ! box 3
+			lineXy(13)=70 	! lineXy(37) =70 ! RECIPIENT'S name
+			lineXy(14)=74 	! lineXy(36) =74 ! box 2
+			! lineXy(15)=75 	! not necessary
 		end if
 		fn_line=lineXy(lineNumber)+yOffset
 	fnend
