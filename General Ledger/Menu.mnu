@@ -104,6 +104,6 @@ General Ledger Accountants Add-On                 ^                             
 >>Zero QTD Payroll Information                    ^ [cursystem]\Accountants\*                             ^ G2
 >>Fix YTD - QTD Earnings                          ^ acsgl\fixytdqtd                                       ^ G2
 >Annually                                                                                                 ^ G2
->>Print W-2 Forms                                 ^ [cursystem]\Print W-2 Forms                           ^ G2
->>Create Electronic W-2s                          ^ [cursystem]\*                                         ^ G2
+>>Print W-2 Forms                                 ^ [cursystem]\Print W-2 Forms                           ^ G2 ^ W2
+>>Create Electronic W-2s                          ^ [cursystem]\*                                         ^ G2 ^ W2
 >>Zero YTD Payroll Information                    ^ acsGL\PRZYTD                                          ^ G2

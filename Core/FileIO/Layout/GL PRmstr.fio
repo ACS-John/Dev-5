@@ -6,15 +6,15 @@ Name                  	,Name                  	,C  25  	,  , !
 Address               	,Address               	,c  25  	,  , !
 CSZ                   	,CSZ                   	,c  25  	,  , !
 SSN                   	,SSN                   	,c  11  	,  , !
-M1                    	,M(1)                   ,PD 5.2		,  , ! mask=32
-M2                    	,M(2)                   ,PD 5.2		,  , ! mask=32
-M3                    	,M(3)                   ,PD 5.2		,  , ! mask=32
-M4                    	,M(4)                   ,PD 5.2		,  , ! mask=32
-M5                    	,M(5)                   ,PD 5.2		,  , ! mask=32
-M6                    	,M(6)                   ,PD 5.2		,  , ! mask=32
-M7                    	,M(7)                   ,PD 5.2		,  , ! mask=32
-M8                    	,M(8)                   ,PD 5.2		,  , ! mask=32
-M9                    	,M(9)                   ,PD 5.2		,  , ! mask=32
+M1                    	,M(1)                   ,PD 5.2	,  , ! mask=32
+M2                    	,M(2)                   ,PD 5.2	,  , ! mask=32
+M3                    	,M(3)                   ,PD 5.2	,  , ! mask=32
+M4                    	,M(4)                   ,PD 5.2	,  , ! mask=32
+M5                    	,M(5)                   ,PD 5.2	,  , ! mask=32
+M6                    	,M(6)                   ,PD 5.2	,  , ! mask=32
+M7                    	,M(7)                   ,PD 5.2	,  , ! mask=32
+M8                    	,M(8)                   ,PD 5.2	,  , ! mask=32
+M9                    	,M(9)                   ,PD 5.2	,  , ! mask=32
 M10                   	,M(10)                  ,PD 5.2	,  , ! mask=32
 M11                   	,M(11)                  ,PD 5.2	,  , ! mask=32
 M12                   	,M(12)                  ,PD 5.2	,  , ! mask=32
@@ -42,5 +42,5 @@ M33                   	,M(33)                  ,PD 5.2	,  , ! mask=32
 M34                   	,M(34)                  ,PD 5.2	,  , ! mask=32
 M35                   	,M(35)                  ,PD 5.2	,  , ! mask=32
 M36                   	,M(36)                  ,PD 5.2	,  , ! mask=32
-fta                   	, First Check Addr     ,N  5   	,  , ! mask=30
-nta                   	, Last Check Addr      ,N  5   	,  , ! mask=30
+fta                   	,First Check Addr      ,N  5   	,  , ! mask=30
+nta                   	,Last Check Addr       ,N  5   	,  , ! mask=30
