@@ -357,7 +357,7 @@ def fn_1099print(vn$*8,nam$*30,mat recipientAddr$,ss$*11,mat box; ___, _
 			fnMakeSurePathExists(outputFilename$)
 			open #hExport=fnH: 'Name='&br_filename$(outputFilename$)&',REPLACE',d,o ! ioerr ASK_INFO
 		else if ten99ExportIris$='True' then ! 100 return max ( https://www.smallbiz.irs.gov/Business/Resources/CSVFileUploadDemonstration )
-			fnMakeSurePathExists(outputFilename$)
+			
 			open #hExport=fnH: 'Name='&br_filename$(outputFilename$)&',recL=4096,REPLACE',d,o ! ioerr ASK_INFO
 			! r: pr IRIS CSV header
 				line$='Form Type,'

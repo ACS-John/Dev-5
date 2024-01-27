@@ -450,7 +450,7 @@ def fn_getClientLicense(mat clientHas$)
 			fn_userLimit(1)
 			fn_getClientLicense_add('UB') : fn_setUbLimit(1000) ! U2 Utility Billing (500-1000 customers)
 		else if env$('client')='Payroll Done Right' then
-			if days(date$)<=days('12/31/2023','mm/dd/ccyy') then 
+			if days(date$)<=days('12/31/2023','mm/dd/ccyy') then
 				fn_userLimit(2)
 			else
 				fn_userLimit(1)
@@ -474,7 +474,7 @@ def fn_getClientLicense(mat clientHas$)
 			! fn_getClientLicense_add('G2') ! G2 Accountant's General Ledger
 			fn_getClientLicense_add('PR')
 			!     fn_getClientLicense_add('P4')
-		else if env$('client')='Kincaid' and env$('Unique_Computer_Id')='1478AEE0-5BCB-11D9-B0AC-BCAEC5EA1947' then
+		else if env$('client')='Kincaid' and env$('Unique_Computer_Id')='1478AEE0-5BCB-11D9-B0AC-BCAEC5EA1947' or env$('Unique_Computer_Id')='FC8A1B84-DA1B-8443-AB0A-3A1BBF9410C2' then
 			fn_userLimit(1)
 			fn_getClientLicense_add('PR')
 			!   else if env$('client')='Kincaid' and and env$('Unique_Computer_Id')='XXX need to do XXX' then
@@ -787,31 +787,40 @@ def fn_payroll_client_state$*2(; client$*64,___,return$*2,which)
 		mat pr_clientstate_client$(0)
 		mat pr_clientstate_state$(0)
 		pr_clientstate_count=0
-		fn_pcs_add('ACS'                     	,'NJ')
+		fn_pcs_add('Edison'                  	,'GA')
+
+		fn_pcs_add('R R Crawford'           	,'KY')
+
+		fn_pcs_add('Thomas Richardson'      	,'LA')
+
 		fn_pcs_add('Ash Grove'              	,'MO')
-		fn_pcs_add('Bethany'                	,'IL')
 		fn_pcs_add('Billings'               	,'MO')
 		fn_pcs_add('Campbell'               	,'MO')
-		! fn_pcs_add('Carr Plumbing'         	,'AR')
-		fn_pcs_add('Cerro Gordo V'         	,'IL')
-		fn_pcs_add('Cerro Gordo T'         	,'IL')
-		fn_pcs_add('Crockett County'       	,'TX')
+		fn_pcs_add('Galena'                  	,'MO')
+		fn_pcs_add('Peter Engler'           	,'MO')
+
+		fn_pcs_add('ACS'                     	,'NJ')
+
+		fn_pcs_add('Kathys Bookkeeping'     	,'OK')
+		fn_pcs_add('Oklahoma'               	,'OK')
+
+		fn_pcs_add('Payroll Done Right'     	,'OR')
+
+		fn_pcs_add('Crockett County'        	,'TX')
+		fn_pcs_add('Zaleski'                 	,'TX')
+
+		fn_pcs_add('Bethany'                 	,'IL')
+		fn_pcs_add('Cerro Gordo V'          	,'IL')
+		fn_pcs_add('Cerro Gordo T'          	,'IL')
 		fn_pcs_add('Divernon'               	,'IL')
 		fn_pcs_add('Edinburg'               	,'IL')
-		fn_pcs_add('Edison'                 	,'GA')
 		fn_pcs_add('Ed Horton'              	,'IL')
-		fn_pcs_add('Galena'                 	,'MO')
 		fn_pcs_add('Hope Welty'             	,'IL')
-		fn_pcs_add('Kincaid'                	,'IL')
-		fn_pcs_add('Kathys Bookkeeping'    	,'OK')
-		fn_pcs_add('Oklahoma'               	,'OK')
-		fn_pcs_add('Payroll Done Right'    	,'OR')
-		fn_pcs_add('Peter Engler'           	,'MO')
-		fn_pcs_add('R R Crawford'           	,'KY')
-		fn_pcs_add('Thomas Richardson'     	,'LA')
+		fn_pcs_add('Kincaid'                 	,'IL')
 		fn_pcs_add('Thomasboro'             	,'IL')
-		fn_pcs_add('Unity'                  	,'IL')
-		fn_pcs_add('Zaleski'                	,'TX')
+		fn_pcs_add('Unity'                   	,'IL')
+
+		! fn_pcs_add('Carr Plumbing'          	,'AR')
 		!   fn_upp_add('Ash Grove','ubprtlas_ashgrove')
 		!   fn_pcs_add('Lamar','MS')
 		!   fn_pcs_add('Battlefield','MO')

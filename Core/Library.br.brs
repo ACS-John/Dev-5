@@ -552,25 +552,32 @@ fnend
 		fnUpdateLicense=fnUpdateLicense
 	fnend
 ! r: core W-2, W-3, 1099 stuff
-	def library fnask_w2_info(&taxYear$,&beg_date,&end_date,&empStart$,&empEnd$,&ssrate,&ssmax,&mcrate,&mcmax,&enableW3$,&enableBackground$,&w2Copy,&w2Copy$,&pn1,&dc1,&topmargin,&bottom,&state$,enableAskCLocality,&cLocality$)
+	def library fnask_w2_info(&taxYear$,&ssrate,&ssmax,&mcrate,&mcmax,&pn1,&dc1,&state$,enableAskCLocality,&cLocality$)
 		library 'S:\Core\Print\w2.br': fnask_w2_info
-		fnask_w2_info=fnask_w2_info(taxYear$,beg_date,end_date,empStart$,empEnd$,ssrate,ssmax,mcrate,mcmax,enableW3$,enableBackground$,w2Copy,w2Copy$,pn1,dc1,topmargin,bottom,state$,enableAskCLocality,cLocality$)
+		fnask_w2_info=fnask_w2_info(taxYear$,ssrate,ssmax,mcrate,mcmax,pn1,dc1,state$,enableAskCLocality,cLocality$)
+	fnend
+	def library fnAme
+		fnAme=0 ! this function does nothing other than exist so that S:\Core\Print\w2.br will compile as it is declared by auto-library
 	fnend
 	def library fnFormCopyAwithBackgroundWarn
 		library 'S:\Core\Print\w2.br': fnFormCopyAwithBackgroundWarn
 		fnFormCopyAwithBackgroundWarn=fnFormCopyAwithBackgroundWarn
 	fnend
-	def library fnw2_text(w2Yoffset,maskSsn,mat a$,empId$*12,ss$,controlNumber$,mat w,dcb$,nameFirst$*64,nameMiddle$*64,nameLast$*64,nameSuffix$*64,retirementPlanX$,mat k$,box12aCode$,box12aAmt$,box12bCode$,box12bAmt$,box12cCode$,box12cAmt$,box12dCode$,box12dAmt$,state$,stcode$,printLocality$*6; box14Amt)
-		library 'S:\Core\Print\w2.br': fnw2_text
-		fnw2_text=fnw2_text(w2Yoffset,maskSsn,mat a$,empId$,ss$,controlNumber$,mat w,dcb$,nameFirst$,nameMiddle$,nameLast$,nameSuffix$,retirementPlanX$,mat k$,box12aCode$,box12aAmt$,box12bCode$,box12bAmt$,box12cCode$,box12cAmt$,box12dCode$,box12dAmt$,state$,stcode$,printLocality$, box14Amt)
+	def library fnW2Text(ss$,controlNumber$,mat w,nameFirst$*64,nameMiddle$*64,nameLast$*64,nameSuffix$*64,retirementPlanX$,mat k$,box12aCode$,box12aAmt$,box12bCode$,box12bAmt$,box12cCode$,box12cAmt$,box12dCode$,box12dAmt$,state$,stcode$,printLocality$*6; box14Amt)
+		library 'S:\Core\Print\w2.br': fnW2Text
+		fnW2Text=fnW2Text(ss$,controlNumber$,mat w,nameFirst$,nameMiddle$,nameLast$,nameSuffix$,retirementPlanX$,mat k$,box12aCode$,box12aAmt$,box12bCode$,box12bAmt$,box12cCode$,box12cAmt$,box12dCode$,box12dAmt$,state$,stcode$,printLocality$, box14Amt)
 	fnend
-	def library fnW3(taxYear$,empId$,w2printCount,mat a$,mat w,dcb,state$,stcode$)
+	def library fnW2PrintClose
+		library 'S:\Core\Print\w2.br': fnW2PrintClose
+		fnW2PrintClose=fnW2PrintClose
+	fnend
+	def library fnW3(taxyear$,w2printCount,mat w,dcb,state$,stcode$)
 		library 'S:\Core\Print\w3.br': fnW3
-		fnW3=fnW3(taxYear$,empId$,w2printCount,mat a$,mat w,dcb,state$,stcode$)
+		fnW3=fnW3(taxyear$,w2printCount,mat w,dcb,state$,stcode$)
 	fnend
-	def library fn_FormCopyAwithBackgroundWarn
-		library 'S:\Core\Print\w2.br': fn_FormCopyAwithBackgroundWarn
-	fn_FormCopyAwithBackgroundWarn=fn_FormCopyAwithBackgroundWarn
+	def library fnFormCopyAwithBackgroundWarn
+		library 'S:\Core\Print\w2.br': fnFormCopyAwithBackgroundWarn
+	fnFormCopyAwithBackgroundWarn=fnFormCopyAwithBackgroundWarn
 	fnend
 	def library fn1099NecPrint(vn$*8,nam$*30,mat ad$,ss$*11,mat box)
 		library 'S:\Core\Print\1099-NEC.br': fn1099NecPrint

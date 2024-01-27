@@ -2,38 +2,28 @@
 ! r: setup
 	autoLibrary
 	on error goto Ertn
- 
-	dim fw2box16$*255
-	dim ss$*11
-	dim sx(13),tx(13)
-	dim cLocality$*8
-	dim desc$(6)*15,amt(6)
-	dim tcp(32),tdc(10)
-	dim resp$(128)*256
-	dim w(13)
-	dim a$(3)*40
-	dim empId$*12,controlNumber$*12
-	dim d$(10)*8,e$(10)*12
-	dim newdedfed(20),deductionCode(20)
-	dim newcalcode(20),dedfica(20),dedst(20),deduc(20),fullname$(20)*20
-	dim abrevname$(20)*8
-	dim dedcode$(20)*2,dedyn$(20)*5
-	dim miscded(20),totalbox12(20)
-	dim tmpMsgLine$(0)*256
-
-	dim in4$(30)
-	dim nameFirst$*64,nameMiddle$*64,nameLast$*64,nameSuffix$*64
-	dim k$(3)*30
- 
 	fnTop(program$)
+
+	dim fw2box16$*255
 	fw2box16$='form  pos 1,C 8'&rpt$(',C 12,G 10.2,3*G 1',6)
  
 	open #hCompany=fnH: 'Name=[Q]\PRmstr\Company.h[cno],Shr',i,i
-	read #hCompany,using Fcompany: mat a$,empId$,mat d$,loccode,ssmax,mat e$
+	dim empId$*12
+	dim d$(10)*8
+	dim e$(10)*12
+	read #hCompany,using Fcompany: mat d$,loccode,ssmax,mat e$
 	ssmax=ssmax*10
-	Fcompany: form pos 1,3*c 40,c 12,pos 150,10*c 8,n 2,pos 239,pd 4.2,pos 317,10*c 12
-	for j=1 to 3: a$(j)=a$(j)(1:30): next j
+	Fcompany: form pos 150,10*c 8,n 2,pos 239,pd 4.2,pos 317,10*c 12
 	close #hCompany:
+
+	dim fullname$(20)*20
+	dim abrevname$(20)*8
+	dim deductionCode(20)
+	dim newcalcode(20)
+	dim newdedfed(20)
+	dim dedfica(20)
+	dim dedst(20)
+	dim deduc(20)
 
 	fnDedNames(mat fullname$,mat abrevname$,mat deductionCode,mat newcalcode,mat newdedfed,mat dedfica,mat dedst,mat deduc)
 
@@ -45,27 +35,14 @@
 	box_12d=fnAddOneC(mat w2box12Opt$,'12d')
 	box_14 =fnAddOneC(mat w2box12Opt$,'14')
 
-	dim w2laser_output_filename$*256
-
-	dim w2Copy$*68
-
-	! /r
+! /r
 AskInfo: !
-if ~fnask_w2_info(taxYear$,beg_date,end_date,empStart$,empEnd$,ssrate,ssmax,mcrate,mcmax, _
-	enableW3$,enableBackground$,w2Copy,w2Copy$,pn1,dc1,topmargin,bottom, _
+dim cLocality$*8
+if ~fnask_w2_info(taxYear$,ssrate,ssmax,mcrate,mcmax, _
+	enableW3$,pn1,dc1, _
 	unused_state$,loccode,cLocality$) then goto Xit
-! r: set ssn mask by copy
-	dim w2ssnMask(6) 	! W2CopyFile2pp$(6)*128,W2CopyFile$(6)*128,
-	w2ssnMask(1)=0   	! W2CopyFile$(1)='S:\Core\pdf\'&taxYear$&'\W-2\Copy A.pdf' :  W2CopyFile2pp$(1)='S:\Core\pdf\'&taxYear$&'\W-2\Copy A - 2pp.pdf'
-	w2ssnMask(2)=0   	! W2CopyFile$(2)='S:\Core\pdf\'&taxYear$&'\W-2\Copy 1.pdf' :  W2CopyFile2pp$(2)='S:\Core\pdf\'&taxYear$&'\W-2\Copy 1 - 2pp.pdf'
-	w2ssnMask(3)=0   	! W2CopyFile$(3)='S:\Core\pdf\'&taxYear$&'\W-2\Copy B.pdf' :  W2CopyFile2pp$(3)='S:\Core\pdf\'&taxYear$&'\W-2\Copy B - 2pp.pdf'
-	w2ssnMask(4)=1   	! W2CopyFile$(4)='S:\Core\pdf\'&taxYear$&'\W-2\Copy C.pdf' :  W2CopyFile2pp$(4)='S:\Core\pdf\'&taxYear$&'\W-2\Copy C - 2pp.pdf'
-	w2ssnMask(5)=1   	! W2CopyFile$(5)='S:\Core\pdf\'&taxYear$&'\W-2\Copy 2.pdf' :  W2CopyFile2pp$(5)='S:\Core\pdf\'&taxYear$&'\W-2\Copy 2 - 2pp.pdf'
-	w2ssnMask(6)=1   	! W2CopyFile$(6)='S:\Core\pdf\'&taxYear$&'\W-2\Copy D.pdf' :  W2CopyFile2pp$(6)='S:\Core\pdf\'&taxYear$&'\W-2\Copy D - 2pp.pdf'
-! /r
-! r: open export files (if appropriate, return to AskInfo screen if failure
-
-! /r
+			beg_date=val(taxYear$&'0101')
+			end_date=val(taxYear$&'1231')
 ! AskDeductions: ! r: ! ask if any misecllaneous deductions should pr in box 12
 	fullnameBlankCount=0
 	for fullnameItem=1 to udim(mat fullname$)
@@ -80,6 +57,7 @@ if ~fnask_w2_info(taxYear$,beg_date,end_date,empStart$,empEnd$,ssrate,ssmax,mcra
 		fnLbl(4,26,'Yes' )
 		fnLbl(4,35,'Box' )
 		fnLbl(4,45,'Code')
+		dim dedyn$(20)*5
 		for dedItem=1 to 20
 			if trim$(fullname$(dedItem))<>'' then
 				fncreg_read('w2 deduction '&str$(dedItem)&' box 12 enable',dedyn$(dedItem),'False')
@@ -88,7 +66,9 @@ if ~fnask_w2_info(taxYear$,beg_date,end_date,empStart$,empEnd$,ssrate,ssmax,mcra
 			end if
 		nex dedItem
 		dedItem=0
-		dim respc_box12opt(20),box12which(20)
+		dim respc_box12opt(20)
+		dim box12which(20)
+		dim resp$(128)*256
 		tmpLine=5
 		for dedItem=1 to 20
 			if trim$(fullname$(dedItem))<>'' then
@@ -114,6 +94,7 @@ if ~fnask_w2_info(taxYear$,beg_date,end_date,empStart$,empEnd$,ssrate,ssmax,mcra
 			goto AskInfo
 		else
 			x=0
+			dim dedcode$(20)*2
 			for dedItem=1 to 20
 				if trim$(fullname$(dedItem))<>'' then
 					dedyn$(dedItem)=resp$(x+=1)
@@ -128,19 +109,16 @@ if ~fnask_w2_info(taxYear$,beg_date,end_date,empStart$,empEnd$,ssrate,ssmax,mcra
 		end if
 	end if ! /r
 ! r: open files, initialize output, etc
-	if exportFormatID=0 then
-		fnpa_open('',w2Copy$,'PDF')
-	end if
+
 	! lyne=topmargin ! starting of 1st line
 	goproc=0
-	open #hEmployee:=1: 'Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr',i,i,k
-	open #hDepartment:=2: 'Name=[Q]\PRmstr\department.h[cno],KFName=[Q]\PRmstr\deptidx.h[cno]',i,outIn,k
+	open #hEmployee=fnH: 'Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr',i,i,k ! #1
+	open #hDepartment=fnH: 'Name=[Q]\PRmstr\department.h[cno],KFName=[Q]\PRmstr\deptidx.h[cno]',i,outIn,k ! #2
 	open #hChecks=fnH: 'Name=[Q]\PRmstr\payrollchecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno]',i,outIn,k
 	! if env$('acsDeveloper')<>'' then pr 'hChecks=';hChecks : pause
 	open #hAddr=fnH: 'Name=[Temp]\Addr.[Session],Replace,RecL=33,NoShr',internal,output
 	write #hAddr,using 'form pos 1,n 10.2,n 1': ssmax,w1
 	open #hW2Box16=fnH: 'Name=[Q]\PRmstr\W2Box16.h[cno],KFName=[Q]\PRmstr\W2Index.h[cno],Shr',i,i,k ioerr ignore
-	w2printCount=0
 	! if loccode=0 or cLocality$='YES' or cLocality$='NO' then
 	!   goto ReadEmployee
 	! else
@@ -150,8 +128,11 @@ if ~fnask_w2_info(taxYear$,beg_date,end_date,empStart$,empEnd$,ssrate,ssmax,mcra
 ! /r
 do ! r: main loop
 	ReadEmployee: ! 
+	dim k$(3)*30
+	dim ss$*11
 	read #hEmployee,using 'form pos 1,n 8,3*c 30,c 11,pos 122,n 2': eno,mat k$,ss$,em6 eof EoEmployee
 	if endnum>0 and eno>endnum then goto EoEmployee ! ending employee number entered
+	dim nameFirst$*64,nameMiddle$*64,nameLast$*64,nameSuffix$*64
 	fnNameParse(k$(1),nameFirst$,nameMiddle$,nameLast$,nameSuffix$)
 	if numb<>0 and eno<empno then goto ReadEmployee
 
@@ -159,14 +140,18 @@ do ! r: main loop
 	retirementPlanX$=''
 	box12aCode$=box12aAmt$=box12bCode$=box12bAmt$=box12cCode$=box12cAmt$=box12dCode$=box12dAmt$=''
 	box14Amt=0
+	dim amt(6)
 	mat amt=(0)
+	dim miscded(20)
 	mat miscded=(0)
-	first=1
+	xFirst=1
 	! Read #hDepartment,Using 1190,Rec=TA: TENO,TCD,MAT TY,TA
 	checkkey$=cnvrt$('pic(zzzzzzz#)',eno)&cnvrt$('pic(zz#)',0)&cnvrt$('pd 6',0) ! index employee#,department# and payroll date
 	restore #hChecks,key>=checkkey$: nokey ReadEmployee
 	do ! r:
 		ReadCheck: !
+		dim tdc(10)
+		dim tcp(32)
 		read #hChecks,using 'form pos 1,N 8,n 3,PD 6,N 7,5*PD 3.2,37*PD 5.2': heno,tdn,prd,ckno,mat tdc,mat tcp eof EoChecksForEmp
 		if heno<>eno then goto EoChecksForEmp
 		if prd<beg_date or prd>end_date then goto ReadCheck ! not this year
@@ -174,9 +159,9 @@ do ! r: main loop
 		if tcd<1 or tcd>10 then tcd=1
 		if exportFormatID then
 			stcode=tcd
-		else if first=1 then 
+		else if xFirst then 
 			stcode=tcd
-		else if first=0 and stcode><tcd then
+		else if ~xFirst and stcode<>tcd then
 			goto L1300
 		end if
 		state$=d$(tcd)(1:2)
@@ -189,6 +174,7 @@ do ! r: main loop
 			if dedfica(dedItem)=1 and deductionCode(dedItem)=1 then dedfica=dedfica+tcp(dedItem+4)
 			miscded(dedItem)=miscded(dedItem)+tcp(dedItem+4)
 		next dedItem
+		dim w(13)
 		w(1)+=tcp(1) ! FED W/H YTD
 		w(2)+=tcp(31)-dedret ! TOTAL TAXABLE WAGES
 		ytdFica+=tcp(2) ! FICA W/H YTD
@@ -219,10 +205,11 @@ do ! r: main loop
 			write #hAddr,using 'form pos 1,n 8,n 2,3*pd 5.2,c 8': eno,tcd,tcp(31)-dedret,tcp(3),lowh,empLocality$
 			goproc=1
 		end if
-		first=0
+		xFirst=0
 	loop ! /r read next check record
 	EoChecksForEmp: !
 	gosub Box16process
+	dim totalbox12(20)
 	for dedItem=1 to 20 ! r:
 		if trim$(fullname$(dedItem))<>'' then
 			if dedyn$(dedItem)='True' and miscded(dedItem)<>0 then
@@ -280,10 +267,11 @@ do ! r: main loop
 		if cLocality$='YES' then gosub AskEmpLocality
 		printLocality$=empLocality$
 	end if
+	dim controlNumber$*12
 	controlNumber$=str$(eno)
 	if w(2)<>0 or w(5)<>0 then ! only pr w2 if wages
 		if exportFormatID=1 then
-			gosub ExportAms
+			gosub PrintW2
 	! else if exportFormatID=2 then
 	!   gosub EXPORT_CPS ! removed access 01/03/2017
 		else
@@ -296,8 +284,11 @@ do ! r: main loop
 	nqp=dcb=ytdFica=0
 loop ! /r
 EoEmployee: ! r:
+	dim sx(13)
+	dim tx(13)
 	mat tx=tx+sx
 	misc=3
+	dim desc$(6)*15
 	for dedItem=1 to 20 ! changed from 10 to 20 on 1/4/17
 		if totalbox12(dedItem)<>0 then
 			desc$(misc)=lpad$('  '&cnvrt$('Nz 10.2', totalbox12(dedItem)),15)
@@ -311,28 +302,21 @@ Finis: ! r:
 	close #hDepartment:
 	close #hAddr:
 	close #hW2Box16:
-	if ~exportFormatID then
-		mat w=tx
-		controlNumber$='Final Total'
-		nameFirst$=nameMiddle$=nameLast$=''
-		mat k$=('')
-		! state$=''
-		ss$=printLocality$=''
-		gosub PrintW2
-		fnpa_finis
-	end if
-	if enableW3$='True' then fnW3(taxYear$,empId$,w2printCount,mat a$,mat w,dcb,state$,stcode$)
+	! if ~exportFormatID then
+	! 	mat w=tx
+	! 	controlNumber$='Final Total'
+	! 	nameFirst$=nameMiddle$=nameLast$=''
+	! 	mat k$=('')
+	! 	! state$=''
+	! 	ss$=printLocality$=''
+	! 	gosub PrintW2
+	! end if
+	fnW2PrintClose
+
 	if exportFormatID then
-			mat tmpMsgLine$(2)
-			tmpMsgLine$(1)='Export file created:'
-			tmpMsgLine$(2)=os_filename$(file$(hExport))
-			close #hExport:
-			fnMsgBox(mat tmpMsgLine$,resp$) ! ,16+4)
 		goto Xit
-	else
-		if goproc=1 then
-			goto PrintSecondStateW2
-		end if
+	else if goproc then
+		goto PrintSecondStateW2
 	end if
 goto Xit ! /r
 Xit: fnXit
@@ -366,6 +350,7 @@ AskEmpLocality: ! r:
 return  ! /r
 Box16process: ! r: Box 16
 	! passed hW2Box16,kz$, mat w, etc
+	dim in4$(30)
 	read #hW2Box16,using fw2box16$,key=kz$: kz$,mat in4$ nokey B16Finis
 	for j=1 to 6
 		amt(j)=val(in4$(j*5-3))
@@ -402,89 +387,8 @@ Box16process: ! r: Box 16
 	next j
 	B16Finis: !
 return  ! /r
-ExportAms: ! r: LASER W2 FOR ADVANCED MICRO SOLUTIONS
-	pr #hExport: 'ROAN='&controlNumber$
-	pr #hExport: 'FEIN='&empId$
-	pr #hExport: 'WAGES='&str$(w(2))
-	pr #hExport: 'FITW='&str$(w(1))
-	pr #hExport: 'PNAME1='&a$(1)
-	pr #hExport: 'PNAME2='
-	pr #hExport: 'SSWAGES='&str$(w(5))
-	pr #hExport: 'SSWH='&str$(w(3))
-	pr #hExport: 'PADDR1='&a$(2)
-	pr #hExport: 'PADDR2='&a$(3)
-	pr #hExport: 'MCWAGES='&str$(w(11))
-	pr #hExport: 'MCWH='&str$(w(12))
-	pr #hExport: 'SSN='&srep$(ss$,' ','')
-	pr #hExport: 'SSTIPS='&str$(w(6))
-	pr #hExport: 'ALLOCATIP='  ! 'ALLOCATIP=';0
-	pr #hExport: 'RNAME1='&(rtrm$(nameLast$)&','&nameFirst$)(1:24)
-	pr #hExport: 'RNAME2='&(k$(2)(1:24))
-! pr #hExport: 'AEIC=';w(4)    ! this field is no longer supported 1/4/2017
-	pr #hExport: 'DEPDCARE='&str$(dcb)
-	pr #hExport: 'RADDR1='
-	pr #hExport: 'RADDR2='&(k$(3)(1:24))
-	if box14Amt<>0 then
-		pr #hExport: 'LAB14A=TRANS'
-	else
-		pr #hExport: 'LAB14A='
-	end if
-	pr #hExport: 'BOX14A='&str$(box14Amt) ! pr #hExport: 'BOX14A=0'
-	pr #hExport: 'LAB12A='&box12aCode$
-	pr #hExport: 'BOX12A='&box12aAmt$
-	pr #hExport: 'CNTRYCODE='
-	pr #hExport: 'RCOUNTRY='
-	pr #hExport: 'EESTAT=' ! 0'
-	pr #hExport: 'EERETR='&retirementPlanX$
-	pr #hExport: 'EESICK=' ! 0'
-	pr #hExport: 'LAB14B='
-	pr #hExport: 'BOX14B=0'
-	pr #hExport: 'LAB12B='&box12bCode$
-	pr #hExport: 'BOX12B='&box12bAmt$
-	pr #hExport: 'LAB14C='
-	pr #hExport: 'BOX14C=0'
-	pr #hExport: 'LAB12C='&box12cCode$
-	pr #hExport: 'BOX12C='&box12cAmt$
-	pr #hExport: 'LAB14D='
-	pr #hExport: 'BOX14D=0'
-	pr #hExport: 'LAB12D='&box12dCode$
-	pr #hExport: 'BOX12D='&box12dAmt$
-	pr #hExport: 'BOX11Q='&str$(nqp)
-	pr #hExport: 'NQPLANS='
-	pr #hExport: 'STATE1='&state$
-	pr #hExport: 'SEIN1='&stcode$
-	pr #hExport: 'SWAGES1='&str$(w(9))
-	pr #hExport: 'SITW1='&str$(w(7))
-	pr #hExport: 'LWAGES1='&str$(w(10))
-	pr #hExport: 'LITW1='&str$(w(8))
-	pr #hExport: 'LOCAL1='&printLocality$
-	pr #hExport: 'STATE2='
-	pr #hExport: 'SEIN2='
-	pr #hExport: 'SWAGES2=0'
-	pr #hExport: 'SITW2=0'
-	pr #hExport: 'LWAGES2=0'
-	pr #hExport: 'LITW2=0'
-	pr #hExport: 'LOCAL2='
-	pr #hExport: 'FName='&nameFirst$(1:24)
-	pr #hExport: 'LName='&nameLast$(1:24)
-	pr #hExport: 'TAG='
-	pr #hExport: 'EBAT='
-	pr #hExport: 'PHONE='
-	pr #hExport: '*'
-return ! /r
 PrintW2: ! r:
-	w2printCount+=1
-	if w2printCount/2=int(w2printCount/2) then ! it's the second one on a page
-		!   if enableBackground$='True' then let fnpa_pic('S:\Core\pdf\W-2 Copy 1.png',1,bottom,200,200)
-		!   if enableBackground$='True' then let fnpa_pic(W2CopyFile$(w2Copy),1,bottom,200,200)
-		fnw2_text(bottom,w2ssnMask(w2Copy),mat a$,empId$,ss$,controlNumber$,mat w,dcb$,nameFirst$,nameMiddle$,nameLast$,nameSuffix$,retirementPlanX$,mat k$,box12aCode$,box12aAmt$,box12bCode$,box12bAmt$,box12cCode$,box12cAmt$,box12dCode$,box12dAmt$,state$,stcode$,printLocality$(1:6),box14Amt)
-		fnpa_newpage
-	else
-		if enableBackground$='True' then
-			fnpa_background('S:\Core\pdf\'&taxYear$&'\W-2\Copy '&w2Copy$(1:1)&'.pdf')
-		end if
-		fnw2_text(topmargin,w2ssnMask(w2Copy),mat a$,empId$,ss$,controlNumber$,mat w,dcb$,nameFirst$,nameMiddle$,nameLast$,nameSuffix$,retirementPlanX$,mat k$,box12aCode$,box12aAmt$,box12bCode$,box12bAmt$,box12cCode$,box12cAmt$,box12dCode$,box12dAmt$,state$,stcode$,printLocality$(1:6),box14Amt)
-	end if
+	fnW2Text(empId$,ss$,controlNumber$,mat w,nameFirst$,nameMiddle$,nameLast$,nameSuffix$,retirementPlanX$,mat k$,box12aCode$,box12aAmt$,box12bCode$,box12bAmt$,box12cCode$,box12cAmt$,box12dCode$,box12dAmt$,state$,stcode$,printLocality$(1:6),box14Amt)
 return  ! /r
 def fn_QAC(mat qac$,qacText$*256)
 	qacCount+=1
