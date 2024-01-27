@@ -351,11 +351,13 @@ fnend
 
 
 
-def fn_setup
-	if setup<>val(env$('cno')) then
-		setup=val(env$('cno'))
+def fn_setup ! libraries and Company
+	if ~setup then
 		autoLibrary
 		on error goto Ertn
+	end if
+	if setup<>val(env$('cno')) then
+		setup=val(env$('cno'))
 		dim optNameFormat$(2)*20,nameFormat$*20
 		optNameFormat$(1)='First Name First'
 		optNameFormat$(2)='Last Name First'
@@ -364,9 +366,12 @@ def fn_setup
 		dim empId$*12
 		read #hCompany,using 'form pos 1,3*C 40,2*C 12,pos 618,40*N 1': mat a$,empId$
 		close #hCompany:
-		
+
+		dim aCity$*64,aSt$*64,aZip$*64
+		fnCsz(a$(3),aCity$,aSt$,aZip$)
+
 		formName$='W-2'
-		
+
 	end if
 fnend
 def fn_ask_margins
@@ -622,32 +627,202 @@ def fn_w2Text(ss$,controlNumber$,mat w, _
 		pr #hExport: '*'
 	! /r
 	else if w2destinationOpt$(3)='True' then ! r: Export SSA
+		if env$('acsDeveloper')<>'' then debug=1
+		if debug then pr #hExport: '_______RA (Submitter) Record – Required__________dev break_________________________________________'
 		! What records are optional in an EFW2 file and which ones are required?
-		! r: • RA (Submitter) Record – Required
-		line$='RA'
-		line$&=fn_c$(ss$,9)
-		line$&='BSO User ID'
-		pr #hExport: line$ ! /r
-		! r: • RE (Employer) Record –Required
-		line$='RE'
-		line$&=fn_c$(ss$,9)
-		line$&='BSO User ID'
-		! • RW (Employee) Record – Required
-		line$='RE'
-		line$&=fn_c$(ss$,9)
-		line$&='BSO User ID'
-		! r: • RO (Employee Optional) Record – Optional
+		fn_c('RA',2) ! r: • RA (Submitter) Record – Required
+		fn_c(ss$       	, 9) !  3-11 Submitter's Employer Identification Number (EIN)
+		fn_c('**BSO**'	, 8) ! 12-19 User Identification (User ID    ! XXX TODO: Ask this on the screen
+		fn_c(''        	, 4) ! 20-23 Software Vendor Code
+		fn_c(''        	, 5) ! 24-28 Blanks
+		fn_c('0'       	, 1) ! 30-35 Resubmission Indicator 1 Enter "1" if this file is being resubmitted. Otherwise, enter “0” (zero).
+		fn_c(''        	, 6) ! 30-35 Resub Wage File Identifier (WFID)
+		fn_c('98'      	, 2) ! 36-37 Software Code 2 Enter one of the following codes to indicate the software used to create your file:   • 98 = In-House Program   • 99 = Off-the-Shelf Software
+		! if len(line$)<>37 then pr 'wrong length len(line$)=';len(line$) : pause
+		fn_c(a$(1)     	,57) ! 38-94 Company Name 57 Enter the company name. Left justify and fill with blanks.
+		fn_c(a$(2)     	,22) ! location address
+		fn_c(a$(2)     	,22) ! delivery address
+		fn_c(aCity$   	,22) !
+		fn_c(aSt$      	, 2) !
+		fn_c(aZip$    	, 5) !
+		fn_c(''        	, 4) ! zip extension
+		fn_c(''        	, 5) ! 172-176 Blank 5 Fill with blanks. Reserved for SSA use.
+		! if len(line$)<>176 then pr 'wrong length len(line$)=';len(line$) : pause
+		fn_c('', 23) ! 177-199 Foreign State/Province
+		fn_c('', 15) ! 200-214 Foreign Postal Code 
+		fn_c('',  2) ! 215-216 Country Code 
+		fn_c('', 57) ! 217-273 Submitter Name This is a required field. Enter the name of the organization to receive error notification if this file cannot be processed.
+		! if len(line$)<>273 then pr 'wrong length len(line$)=';len(line$) : pause
+		fn_c('', 22) ! 274-295 Location Address 
+		fn_c('', 22) ! 296-317 Delivery Address
+		fn_c('', 22) ! 318-339 City
+		fn_c('',  2) ! 340-341 State Abbreviation
+		fn_c('',  5) ! 342-346 ZIP Code 5 This is a required field. Enter the submitter's ZIP code. For a foreign address, fill with blanks.
+		fn_c('',  4) ! 347-350 ZIP Code Extension
+		! if len(line$)<>350 then pr 'wrong length len(line$)=';len(line$) : pause
+		fn_c('',  5) ! 351-355 Blank
+		fn_c('', 23) ! 356-378 Foreign State/Province
+		fn_c('', 15) ! 379-393 Foreign Postal Code 
+		fn_c('',  2) ! 394-395 Country Code
+		fn_c('', 27) ! 396-422 Contact Name
+		fn_c('', 15) ! 423-437 Contact Phone Number
+		fn_c('',  5) ! 438-442 Contact Phone Extension
+		fn_c('',  3) ! 443-445 Blank
+		! if len(line$)<>445 then pr 'wrong length len(line$)=';len(line$) : pause
+		fn_c('', 40) ! 446-485 Contact E-Mail/Internet
+		fn_c('',  3) ! 486-488 Blank
+		fn_c('', 10) ! 489-498 Contact Fax
+		fn_c('',  1) ! 499 Blank
+		fn_c('',  1) ! 500 Preparer Code
+		fn_c('', 12) ! 501-512 Blank
+		if len(line$)<>512 then pr 'wrong length len(line$)=';len(line$) : pause
+		fn_cOut ! /r
+		fn_c('RE',2) ! r: • RE (Employer) Record –Required
+		fn_c(taxYear$,4)
+		fn_c('',  1)
+		fn_c('',  9)
+		fn_c('',  9)
+		fn_c('',  1)
+		fn_c('',  4)
+		fn_c('',  9)
+		fn_c('', 57)
+		fn_c('', 22)
+		fn_c('', 22)
+		fn_c('', 22)
+		fn_c('',  2)
+		fn_c('',  5)
+		fn_c('',  4)
+		fn_c('',  1)
+		fn_c('',  4)
+		fn_c('', 23)
+		fn_c('', 15)
+		fn_c('',  2)
+		fn_c('',  1)
+		fn_c('',  1)
+		fn_c('',  1)
+		fn_c('', 27)
+		fn_c('', 15)
+		fn_c('',  5)
+		fn_c('', 10)
+		fn_c('', 40)
+		fn_c('',194)
+		if len(line$)<>512 then pr 'wrong length len(line$)=';len(line$) : pause
+		fn_cOut ! /r
+		fn_c('RW',2) ! r: • RW (Employee) Record – Required
+		fn_c('',  9) !
+		fn_c('', 15) !
+		fn_c('', 15) !
+		fn_c('', 20) !
+		fn_c('',  4) !
+		fn_c('', 22) !
+		fn_c('', 22) !
+		fn_c('', 22) !
+		fn_c('',  2) !
+		fn_c('',  5) !
+		fn_c('',  4) !
+		fn_c('',  5) !
+		fn_c('', 23) !
+		fn_c('', 15) !
+		fn_c('',  2) !
+		fn_c('', 11) ! 188-198
+		fn_c('', 11) ! 199
+		fn_c('', 11) ! 210
+		fn_c('', 11) ! 221
+		fn_c('', 11) ! 232
+		fn_c('', 11) ! 243
+		fn_c('', 11) ! 254
+		fn_c('', 11) ! 265
+		fn_c('', 11) ! 276
+		fn_c('', 11) ! 287
+		fn_c('', 11) ! 298
+		fn_c('', 11) ! 309
+		fn_c('', 11) ! 320
+		fn_c('', 11) ! 331
+		fn_c('', 11) ! 342
+		fn_c('', 11) ! 353
+		fn_c('', 11) ! 364
+		fn_c('', 11) ! 375
+		fn_c('', 11) ! 386
+		fn_c('', 11) ! 397
+		fn_c('', 11) ! 408
+		fn_c('', 11) ! 419
+		fn_c('', 11) ! 430
+		fn_c('', 11) ! 441
+		fn_c('', 11) ! 452
+		fn_c('', 11) ! 463
+		fn_c('', 11) ! 474
+		fn_c('',  1) ! 485
+		fn_c('',  1) ! 486
+		fn_c('',  1) ! 487
+		fn_c('',  1) ! 488
+		fn_c('',  1) ! 489
+		fn_c('', 23) ! 490
+		if len(line$)<>512 then pr 'wrong length len(line$)=';len(line$) : pause
+		fn_cOut ! /r
+		! • RO (Employee Optional) Record – Optional
 		! • RS (State) Record – Optional
-		! r: • RT (Total) Record – Required
-		line$='RT'
-		line$&=fn_c$(ss$,9)
-		line$&='BSO User ID'
+		fn_c('RT',2) ! r: • RT (Total) Record – Required
+		fn_c('',  7) ! 3
+		fn_c('', 15) ! 10
+		fn_c('', 15) ! 25
+		fn_c('', 15) ! 40
+		fn_c('', 15) ! 55
+		fn_c('', 15) ! 70
+		fn_c('', 15) ! 85
+		fn_c('', 15) ! 100
+		fn_c('', 15) ! 115
+		fn_c('', 15) ! 130
+		fn_c('', 15) ! 145
+		fn_c('', 15) ! 160
+		fn_c('', 15) ! 175
+		fn_c('', 15) ! 190
+		fn_c('', 15) ! 205
+		fn_c('', 15) ! 220
+		fn_c('', 15) ! 235
+		fn_c('', 15) ! 250
+		fn_c('', 15) ! 265
+		fn_c('', 15) ! 280
+		fn_c('', 15) ! 295
+		fn_c('', 15) ! 310
+		fn_c('', 15) ! 325
+		fn_c('', 15) ! 340
+		fn_c('', 15) ! 355
+		fn_c('', 15) ! 370
+		fn_c('', 15) ! 385
+		fn_c('', 15) ! 400
+		fn_c('', 98) ! 415-512
+		if len(line$)<>512 then pr 'wrong length len(line$)=';len(line$) : pause
+		fn_cOut ! /r
 		! • RU (Total Optional) Record – Optional
 		! • RV (State Total) Record – Optional
-		! • RF (Final) Record – Required
-		line$='RF'
-		pr #hExport: line$
-
+		fn_c('RF',2) ! r: • RF (Final) Record – Required
+		fn_c('',  7) ! 3
+		fn_c('', 15) ! 10
+		fn_c('', 15) ! 25
+		fn_c('', 15) ! 40
+		fn_c('', 15) ! 55
+		fn_c('', 15) ! 70
+		fn_c('', 15) ! 85
+		fn_c('', 15) ! 100
+		fn_c('', 15) ! 115
+		fn_c('', 15) ! 130
+		fn_c('', 15) ! 145
+		fn_c('', 15) ! 160
+		fn_c('', 15) ! 175
+		fn_c('',165) ! 190
+		fn_c('', 15) ! 355
+		fn_c('', 15) ! 370
+		fn_c('', 15) ! 385
+		fn_c('', 15) ! 400
+		fn_c('', 15) ! 415
+		fn_c('', 15) ! 430
+		fn_c('', 15) ! 445
+		fn_c('', 15) ! 460
+		fn_c('', 15) ! 475
+		fn_c('', 23) ! 490-512
+		if len(line$)<>512 then pr 'wrong length len(line$)=';len(line$) : pause
+		fn_cOut ! /r
+		if debug then pr #hExport: '__________________________________________dev break_________________________________________'
 
 	! /r
 	end if
@@ -697,8 +872,13 @@ def fn_line(lineNumber; ___,returnN)
 	LineFinis: ! skip here for special pre-printed forms
 	fn_line=returnN
 fnend
-	def fn_c$(text$*256,fieldLength; format$)
-		fn_c$=rpad$(trim$(text$),fieldLength)
+	def fn_c(text$*256,fieldLength; format$)
+		line$&=rpad$(trim$(text$)(1:fieldLength),fieldLength)
+
+	fnend
+	def fn_cOut
+		pr #hExport: line$
+		line$=''
 	fnend
 def library fnFormCopyAwithBackgroundWarn
 	if setup<>val(env$('cno')) then fn_setup
