@@ -68,6 +68,12 @@ dim topmargin
 dim left
 dim bottom
 dim taxYearLocal$
+dim line$*4096
+dim contactName$*64  ! 27 ! Employer Contact Name
+dim contactPhone$*64 ! 15 ! Employer Contact Phone Number
+dim contactPhExt$*64 !  5 ! Employer Contact Phone Extension
+dim contactFax$*64   ! 10 ! Employer Contact Fax Number
+dim contactEmail$*64 ! 40 ! Employer Contact E-Mail/Internet
 
 
 def library fnask_w2_info(&taxYear$,&ssrate,&ssmax,&mcrate,&mcmax,&pn1,&dc1,&state$,enableAskCLocality,&cLocality$)
@@ -126,8 +132,8 @@ def fn_ask_w2_info(&taxYear$, _
 		fnreg_read('Print W-3 also'                     ,enableW3$           ,'True' )
 		fnreg_read('W-2 - Enable Background'            ,enableBackground$   ,'True' )
 		fncreg_read('W-2 - Copy Current',w2Copy$,optW2Copy$(1)) : w2Copy=srch(mat optW2Copy$,w2Copy$) : if w2Copy<=0 then w2Copy=1
-		fncreg_read('Employee Name Format',nameFormat$,optNameFormat$(1))
 		w2Copy$=optW2Copy$(w2Copy)
+		fncreg_read('Employee Name Format',nameFormat$,optNameFormat$(1))
 		fnureg_read('W-2 - Export Filename',outputFilename$,os_filename$(env$('Documents')&'\ACS\[TaxYear] '&formName$&' Export\Company [CompanyNumber].csv'))
 		fncreg_read('Qualified Pension Plan' ,tmp$) : pn1=val(tmp$)
 		fncreg_read('Dependent Care Benefits',tmp$) : dc1=val(tmp$)
@@ -153,8 +159,7 @@ def fn_ask_w2_info(&taxYear$, _
 		pause
 	end if
 	ASK_INFO: !
-	! r: build and display the ASK_INFO screen
-	fnTos
+	fnTos ! build and display the ASK_INFO screen
 	rc=cf=0: mylen=21: mypos=mylen+2
 	if enableAskCLocality then
 		fraWidth=94
@@ -201,7 +206,6 @@ def fn_ask_w2_info(&taxYear$, _
 	fnLbl(lc+=1,1,'Employee Name Format:',mylen,1,0,franum)
 	fnComboA('nameFormat',lc,mypos,mat optNameFormat$, '',20,franum)
 	resp$(resp_namcde=rc+=1)=nameFormat$
-
 	fra2Height=5 : fra2Y=fraGeneralHeight+3
 	fnFra(fra2Y,1,fra2Height,fraWidth,'Print W-2s','',0)
 	cf+=1 : franum=cf : lc=0
@@ -268,7 +272,6 @@ def fn_ask_w2_info(&taxYear$, _
 	fnCmdKey('&Next',1,1,0,'Proceed to next screen.')
 	fnCmdKey('&Cancel',5,0,1,'Returns to menu')
 	ckey=fnAcs(mat resp$)
-	! /r
 	! r: ASK_INFO screen - respond to FKeys, and get local values from mat resp$
 	if ckey=5 then
 		awiReturn=0
@@ -337,9 +340,102 @@ def fn_ask_w2_info(&taxYear$, _
 		fncreg_write('Qualified Pension Plan',str$(pn1))
 		fncreg_write('Dependent Care Benefits',str$(dc1))
 		fncreg_write('Employee Name Format',nameFormat$)
+
 		fncreg_write('W-2 - State',state$)
 
 		! /r
+		if w2destinationOpt$(3)='True' then
+
+			dim bsoUser$*8
+			dim submitterName$*27
+			dim submitterPhone$*15
+			dim submitterPhExt$*5
+			dim submitterFax$*10
+			dim submitterEmail$*40
+			fnreg_read('BSO User Identification',bsoUser$) ! BSO User ID: B7WYT74J
+			fnreg_read('Submitter Name' ,submitterName$ ) 
+			fnreg_read('Submitter Phone',submitterPhone$)
+			fnreg_read('Submitter PhExt',submitterPhExt$)
+			fnreg_read('Submitter Fax'  ,submitterFax$)
+			fnreg_read('Submitter Email',submitterEmail$)
+
+			dim contactName$*27  	! Employer Contact Name
+			dim contactPhone$*15 	! Employer Contact Phone Number
+			dim contactPhExt$*5  	! Employer Contact Phone Extension
+			dim contactFax$*10   	! Employer Contact Fax Number
+			dim contactEmail$*40 	! Employer Contact E-Mail/Internet
+			fncreg_read('Contact Name',contactName$)
+			fncreg_read('Phone Number',contactPhone$)
+			fncreg_read('Phone Extension',contactPhExt$)
+			fncreg_read('Fax Extension',contactFax$)
+			fncreg_read('Email',contactEmail$)
+
+			fnTos : lc=rc=0 : mylen=25 : mypos=mylen+2
+				lc+=1 
+				fnLbl(lc+=1,1,'BSO User ID:',mylen,1)
+				fnTxt(lc,mypos,8,0,0,'',0,'BSO User Identification is required.')
+				resp$(resp_bsoUserId=rc+=1)=bsoUser$
+				lc+=1 
+				fnLbl(lc+=1,1,'Submitter Contact Name:',mylen,1)
+				fnTxt(lc,mypos,27)
+				resp$(resp_submitterName=rc+=1)=submitterName$
+				fnLbl(lc+=1,1,'Submitter Phone:',mylen,1)
+				fnTxt(lc,mypos,15)
+				resp$(resp_submitterPhone=rc+=1)=submitterPhone$
+				fnTxt(lc,mypos+17,5)
+				resp$(resp_submitterPhExt=rc+=1)=submitterPhExt$
+				fnLbl(lc+=1,1,'Fax:',mylen,1)
+				fnTxt(lc,mypos,10)
+				resp$(resp_submitterFax=rc+=1)=submitterFax$
+				fnLbl(lc+=1,1,'Email:',mylen,1)
+				fnTxt(lc,mypos,40)
+				resp$(resp_submitterEmail=rc+=1)=submitterEmail$
+				lc+=1
+				lc+=1
+				fnLbl(lc+=1,1,'Company Contact Name:',mylen,1)
+				fnTxt(lc,mypos,27)
+				resp$(resp_contactName=rc+=1)=contactName$
+				fnLbl(lc+=1,1,'Phone:',mylen,1)
+				fnTxt(lc,mypos,15)
+				resp$(resp_contactPhone=rc+=1)=contactPhone$
+				fnTxt(lc,mypos+17,5)
+				resp$(resp_contactPhExt=rc+=1)=contactPhExt$
+				fnLbl(lc+=1,1,'Fax:',mylen,1)
+				fnTxt(lc,mypos,10)
+				resp$(resp_contactFax=rc+=1)=contactFax$
+				fnLbl(lc+=1,1,'Email:',mylen,1)
+				fnTxt(lc,mypos,40)
+				resp$(resp_contactEmail=rc+=1)=contactEmail$
+				fncmdset(2)
+			ckey=fnAcs(mat resp$)
+			if ckey=5 then
+				goto ASK_INFO
+			else
+				bsoUser$=resp$(resp_bsoUserId)
+				submitterName$ =resp$(resp_submitterName )
+				submitterPhone$=resp$(resp_submitterPhone)
+				submitterPhExt$=resp$(resp_submitterPhExt)
+				submitterFax$=resp$(resp_submitterFax)
+				submitterEmail$=resp$(resp_submitterEmail)
+				fnreg_write('BSO User Identification',bsoUser$)
+				fnreg_write('Submitter Name' ,submitterName$ )
+				fnreg_write('Submitter Phone',submitterPhone$)
+				fnreg_write('Submitter PhExt',submitterPhExt$)
+				fnreg_write('Submitter Fax'  ,submitterFax$  )
+				fnreg_write('Submitter Email',submitterEmail$)
+				
+				contactName$=resp$(resp_contactName)
+				contactPhone$=resp$(resp_contactPhone)
+				contactPhExt$=resp$(resp_contactPhExt)
+				contactFax$=resp$(resp_contactFax)
+				contactEmail$=resp$(resp_contactEmail)
+				fncreg_write('Contact Name',contactName$)
+				fncreg_write('Phone Number',contactPhone$)
+				fncreg_write('Phone Extension',contactPhExt$)
+				fncreg_write('Fax Extension',contactFax$)
+				fncreg_write('Email',contactEmail$)
+			end if
+		end if
 		if w2Copy$=optW2Copy$(1) and enableBackground$='True' and w2destinationOpt$(1)='True' then
 			fn_FormCopyAwithBackgroundWarn
 		end if
@@ -413,8 +509,7 @@ def fn_w2Text(ss$,controlNumber$,mat w, _
 	nameFirst$*64,nameMiddle$*64,nameLast$*64,nameSuffix$*64, _
 	retirementPlanX$,mat k$, _
 	box12aCode$,box12aAmt$,box12bCode$,box12bAmt$,box12cCode$,box12cAmt$,box12dCode$,box12dAmt$, _
-	state$,stcode$,printLocality$*6; box14Amt,___ , _
-	line$*4096)
+	state$,stcode$,printLocality$*6; box14Amt,___ )
 	! r: variable definations
 	! topmargin       how far down the page (mm) is the top of W-2
 	! maskSsn         if 1 than turn all but the last 4 of the SSN into *s
@@ -473,7 +568,13 @@ def fn_w2Text(ss$,controlNumber$,mat w, _
 			outputFilename$=srep$(outputFilename$,'[taxyear]',taxYear$)
 			outputFilename$=srep$(outputFilename$,'[TAXYEAR]',taxYear$)
 			fnMakeSurePathExists(outputFilename$)
-			open #hExport=fnH: 'Name='&br_filename$(outputFilename$)&',recl=4096,REPLACE',d,o ! ioerr AskInfo
+		if w2destinationOpt$(2)='True' then
+			open #hExport=fnH: 'Name='&br_filename$(outputFilename$)&',recl=512,EOL=CRLF,REPLACE',d,o ! ioerr AskInfo
+		else if w2destinationOpt$(3)='True' then
+			open #hO=fnH: 'Name='&br_filename$(outputFilename$)&',recl=514,EOL=CRLF,REPLACE',external,o ! ioerr AskInfo
+			gosub Efw2_Ra
+			gosub Efw2_Re
+		end if
 		end if
 	end if ! /r
 	if w2destinationOpt$(1)='True' then ! ! r: Print PDF
@@ -627,202 +728,13 @@ def fn_w2Text(ss$,controlNumber$,mat w, _
 		pr #hExport: '*'
 	! /r
 	else if w2destinationOpt$(3)='True' then ! r: Export SSA
-		if env$('acsDeveloper')<>'' then debug=1
-		if debug then pr #hExport: '_______RA (Submitter) Record – Required__________dev break_________________________________________'
+		! if env$('acsDeveloper')<>'' then debug=1
+		dim kCity$*64,kSt$*64,kZip$*64
+		fnCsz(k$(3),kCity$,kSt$,kZip$)
+		! if debug then pr #hExport: '_______RA (Submitter) Record – Required__________dev break_________________________________________'
 		! What records are optional in an EFW2 file and which ones are required?
-		fn_c('RA',2) ! r: • RA (Submitter) Record – Required
-		fn_c(ss$       	, 9) !  3-11 Submitter's Employer Identification Number (EIN)
-		fn_c('**BSO**'	, 8) ! 12-19 User Identification (User ID    ! XXX TODO: Ask this on the screen
-		fn_c(''        	, 4) ! 20-23 Software Vendor Code
-		fn_c(''        	, 5) ! 24-28 Blanks
-		fn_c('0'       	, 1) ! 30-35 Resubmission Indicator 1 Enter "1" if this file is being resubmitted. Otherwise, enter “0” (zero).
-		fn_c(''        	, 6) ! 30-35 Resub Wage File Identifier (WFID)
-		fn_c('98'      	, 2) ! 36-37 Software Code 2 Enter one of the following codes to indicate the software used to create your file:   • 98 = In-House Program   • 99 = Off-the-Shelf Software
-		! if len(line$)<>37 then pr 'wrong length len(line$)=';len(line$) : pause
-		fn_c(a$(1)     	,57) ! 38-94 Company Name 57 Enter the company name. Left justify and fill with blanks.
-		fn_c(a$(2)     	,22) ! location address
-		fn_c(a$(2)     	,22) ! delivery address
-		fn_c(aCity$   	,22) !
-		fn_c(aSt$      	, 2) !
-		fn_c(aZip$    	, 5) !
-		fn_c(''        	, 4) ! zip extension
-		fn_c(''        	, 5) ! 172-176 Blank 5 Fill with blanks. Reserved for SSA use.
-		! if len(line$)<>176 then pr 'wrong length len(line$)=';len(line$) : pause
-		fn_c('', 23) ! 177-199 Foreign State/Province
-		fn_c('', 15) ! 200-214 Foreign Postal Code 
-		fn_c('',  2) ! 215-216 Country Code 
-		fn_c('', 57) ! 217-273 Submitter Name This is a required field. Enter the name of the organization to receive error notification if this file cannot be processed.
-		! if len(line$)<>273 then pr 'wrong length len(line$)=';len(line$) : pause
-		fn_c('', 22) ! 274-295 Location Address 
-		fn_c('', 22) ! 296-317 Delivery Address
-		fn_c('', 22) ! 318-339 City
-		fn_c('',  2) ! 340-341 State Abbreviation
-		fn_c('',  5) ! 342-346 ZIP Code 5 This is a required field. Enter the submitter's ZIP code. For a foreign address, fill with blanks.
-		fn_c('',  4) ! 347-350 ZIP Code Extension
-		! if len(line$)<>350 then pr 'wrong length len(line$)=';len(line$) : pause
-		fn_c('',  5) ! 351-355 Blank
-		fn_c('', 23) ! 356-378 Foreign State/Province
-		fn_c('', 15) ! 379-393 Foreign Postal Code 
-		fn_c('',  2) ! 394-395 Country Code
-		fn_c('', 27) ! 396-422 Contact Name
-		fn_c('', 15) ! 423-437 Contact Phone Number
-		fn_c('',  5) ! 438-442 Contact Phone Extension
-		fn_c('',  3) ! 443-445 Blank
-		! if len(line$)<>445 then pr 'wrong length len(line$)=';len(line$) : pause
-		fn_c('', 40) ! 446-485 Contact E-Mail/Internet
-		fn_c('',  3) ! 486-488 Blank
-		fn_c('', 10) ! 489-498 Contact Fax
-		fn_c('',  1) ! 499 Blank
-		fn_c('',  1) ! 500 Preparer Code
-		fn_c('', 12) ! 501-512 Blank
-		if len(line$)<>512 then pr 'wrong length len(line$)=';len(line$) : pause
-		fn_cOut ! /r
-		fn_c('RE',2) ! r: • RE (Employer) Record –Required
-		fn_c(taxYear$,4)
-		fn_c('',  1)
-		fn_c('',  9)
-		fn_c('',  9)
-		fn_c('',  1)
-		fn_c('',  4)
-		fn_c('',  9)
-		fn_c('', 57)
-		fn_c('', 22)
-		fn_c('', 22)
-		fn_c('', 22)
-		fn_c('',  2)
-		fn_c('',  5)
-		fn_c('',  4)
-		fn_c('',  1)
-		fn_c('',  4)
-		fn_c('', 23)
-		fn_c('', 15)
-		fn_c('',  2)
-		fn_c('',  1)
-		fn_c('',  1)
-		fn_c('',  1)
-		fn_c('', 27)
-		fn_c('', 15)
-		fn_c('',  5)
-		fn_c('', 10)
-		fn_c('', 40)
-		fn_c('',194)
-		if len(line$)<>512 then pr 'wrong length len(line$)=';len(line$) : pause
-		fn_cOut ! /r
-		fn_c('RW',2) ! r: • RW (Employee) Record – Required
-		fn_c('',  9) !
-		fn_c('', 15) !
-		fn_c('', 15) !
-		fn_c('', 20) !
-		fn_c('',  4) !
-		fn_c('', 22) !
-		fn_c('', 22) !
-		fn_c('', 22) !
-		fn_c('',  2) !
-		fn_c('',  5) !
-		fn_c('',  4) !
-		fn_c('',  5) !
-		fn_c('', 23) !
-		fn_c('', 15) !
-		fn_c('',  2) !
-		fn_c('', 11) ! 188-198
-		fn_c('', 11) ! 199
-		fn_c('', 11) ! 210
-		fn_c('', 11) ! 221
-		fn_c('', 11) ! 232
-		fn_c('', 11) ! 243
-		fn_c('', 11) ! 254
-		fn_c('', 11) ! 265
-		fn_c('', 11) ! 276
-		fn_c('', 11) ! 287
-		fn_c('', 11) ! 298
-		fn_c('', 11) ! 309
-		fn_c('', 11) ! 320
-		fn_c('', 11) ! 331
-		fn_c('', 11) ! 342
-		fn_c('', 11) ! 353
-		fn_c('', 11) ! 364
-		fn_c('', 11) ! 375
-		fn_c('', 11) ! 386
-		fn_c('', 11) ! 397
-		fn_c('', 11) ! 408
-		fn_c('', 11) ! 419
-		fn_c('', 11) ! 430
-		fn_c('', 11) ! 441
-		fn_c('', 11) ! 452
-		fn_c('', 11) ! 463
-		fn_c('', 11) ! 474
-		fn_c('',  1) ! 485
-		fn_c('',  1) ! 486
-		fn_c('',  1) ! 487
-		fn_c('',  1) ! 488
-		fn_c('',  1) ! 489
-		fn_c('', 23) ! 490
-		if len(line$)<>512 then pr 'wrong length len(line$)=';len(line$) : pause
-		fn_cOut ! /r
-		! • RO (Employee Optional) Record – Optional
-		! • RS (State) Record – Optional
-		fn_c('RT',2) ! r: • RT (Total) Record – Required
-		fn_c('',  7) ! 3
-		fn_c('', 15) ! 10
-		fn_c('', 15) ! 25
-		fn_c('', 15) ! 40
-		fn_c('', 15) ! 55
-		fn_c('', 15) ! 70
-		fn_c('', 15) ! 85
-		fn_c('', 15) ! 100
-		fn_c('', 15) ! 115
-		fn_c('', 15) ! 130
-		fn_c('', 15) ! 145
-		fn_c('', 15) ! 160
-		fn_c('', 15) ! 175
-		fn_c('', 15) ! 190
-		fn_c('', 15) ! 205
-		fn_c('', 15) ! 220
-		fn_c('', 15) ! 235
-		fn_c('', 15) ! 250
-		fn_c('', 15) ! 265
-		fn_c('', 15) ! 280
-		fn_c('', 15) ! 295
-		fn_c('', 15) ! 310
-		fn_c('', 15) ! 325
-		fn_c('', 15) ! 340
-		fn_c('', 15) ! 355
-		fn_c('', 15) ! 370
-		fn_c('', 15) ! 385
-		fn_c('', 15) ! 400
-		fn_c('', 98) ! 415-512
-		if len(line$)<>512 then pr 'wrong length len(line$)=';len(line$) : pause
-		fn_cOut ! /r
-		! • RU (Total Optional) Record – Optional
-		! • RV (State Total) Record – Optional
-		fn_c('RF',2) ! r: • RF (Final) Record – Required
-		fn_c('',  7) ! 3
-		fn_c('', 15) ! 10
-		fn_c('', 15) ! 25
-		fn_c('', 15) ! 40
-		fn_c('', 15) ! 55
-		fn_c('', 15) ! 70
-		fn_c('', 15) ! 85
-		fn_c('', 15) ! 100
-		fn_c('', 15) ! 115
-		fn_c('', 15) ! 130
-		fn_c('', 15) ! 145
-		fn_c('', 15) ! 160
-		fn_c('', 15) ! 175
-		fn_c('',165) ! 190
-		fn_c('', 15) ! 355
-		fn_c('', 15) ! 370
-		fn_c('', 15) ! 385
-		fn_c('', 15) ! 400
-		fn_c('', 15) ! 415
-		fn_c('', 15) ! 430
-		fn_c('', 15) ! 445
-		fn_c('', 15) ! 460
-		fn_c('', 15) ! 475
-		fn_c('', 23) ! 490-512
-		if len(line$)<>512 then pr 'wrong length len(line$)=';len(line$) : pause
-		fn_cOut ! /r
-		if debug then pr #hExport: '__________________________________________dev break_________________________________________'
+		gosub Efw2_Rw
+		! if debug then pr #hO: '__________________________________________dev break_________________________________________'
 
 	! /r
 	end if
@@ -872,38 +784,265 @@ def fn_line(lineNumber; ___,returnN)
 	LineFinis: ! skip here for special pre-printed forms
 	fn_line=returnN
 fnend
-	def fn_c(text$*256,fieldLength; format$)
+	def fn_oC(text$*256,fieldLength; format$)
 		line$&=rpad$(trim$(text$)(1:fieldLength),fieldLength)
-
 	fnend
-	def fn_cOut
-		pr #hExport: line$
+	def fn_oN(num,fieldLength; format$)
+		line$&=lpad$(str$(num),fieldLength,'0')
+	fnend
+	def fn_oOut
+		if len(line$)<>512 then pr 'wrong length len(line$)=';len(line$) : pause
+		write #hO,using Fo1: line$,chr$(13)&chr$(10)
+		Fo1: form pos 1,c 512,c 2
 		line$=''
 	fnend
+	Efw2_Rw: ! r: • RW (Employee) Record – Required
+		fn_oC('RW',2)         : cntRw+=1
+		fn_oC(ss$           	,  9) !
+		fn_oC(nameFirst$   	, 15) !
+		fn_oC(nameMiddle$  	, 15) !
+		fn_oC(nameLast$    	, 20) !
+		fn_oC(nameSuffix$  	,  4) !
+		fn_oC(k$(2)         	, 22) !
+		fn_oC(k$(2)         	, 22) !
+		fn_oC(kCity$       	, 22) !
+		fn_oC(kSt$         	,  2) !
+		fn_oC(kZip$        	,  5) !
+		fn_oC('',  4) ! 139-142 ZIP Code Extension
+		fn_oC('',  5) ! 143-147 Blank
+		fn_oC('', 23) ! 148-170 Foreign State/Province
+		fn_oC('', 15) ! 171-185 Foreign Postal Code
+		fn_oC('',  2) ! 186-187 Country Code
+		fn_oN(w(2) , 11) : tot(1)+=w(2) ! 188-198 Wages, Tips and Other Compensation
+		fn_oN(w(1) , 11) : tot(2)+=w(1) ! 199-209 Federal Income Tax Withheld
+		fn_oN(w(5) , 11) : tot(3)+=w(6) ! 210-220 Social Security Wages
+		fn_oN(w(3) , 11) : tot(4)+=w(12)! 221-231 Social Security Tax Withheld
+		fn_oN(w(11), 11) : tot(5)+=w(11)! 2322-242 Medicare Wages and Tips
+		fn_oN(w(12), 11) : tot(6)+=w(3) ! 243-253 Medicare Tax Withheld
+		fn_oN(w(6) , 11) : tot(7)+=w(5) ! 254-264 Social Security Tips
+		fn_oC('', 11) ! 265-275 Blank
+		fn_oC('', 11) ! 276-297 Deferred Compensation Contributions to Section 401(k) (Code D)
+		fn_oC('', 11) ! 287-297 Deferred Compensation Contributions to Section 401(k) (Code D)
+		fn_oC('', 11) ! 298-308 Deferred Compensation Contributions to Section 403(b) (Code E)
+		fn_oC('', 11) ! 309-319 Deferred Compensation Contributions to Section 408(k)(6) (Code F)
+		fn_oC('', 11) ! 320-330 Deferred Compensation Contributions to Section 457(b) (Code G)
+		fn_oC('', 11) ! 331-341 Deferred Compensation Contributions to Section 501(c)(18)(D) (Code H)
+		fn_oC('', 11) ! 342-352 Blank
+		fn_oC('', 11) ! 353-363 Nonqualified Plan Section 457 Distributions or Contributions
+		fn_oC('', 11) ! 364-374 Employer Contributions to a Health Savings Account (Code W)
+		fn_oC('', 11) ! 375-385 Nonqualified Plan Not Section 457 Distributions or Contributions
+		fn_oC('', 11) ! 386-396 Nontaxable Combat Pay (Code Q)
+		fn_oC('', 11) ! 397-407 Blank
+		fn_oC('', 11) ! 408-418 Employer Cost of Premiums for Group Term Life Insurance Over $50,000 (Code C)
+		fn_oC('', 11) ! 419-429 Income from the Exercise of Nonstatutory Stock Options (Code V)
+		fn_oC('', 11) ! 430-440 Deferrals Under a Section 409A Nonqualified Deferred Compensation Plan (Code Y)
+		fn_oC('', 11) ! 441-451 Designated Roth Contributions to a Section 401(k) Plan (Code AA)
+		fn_oC('', 11) ! 452-462 Designated Roth Contributions Under a Section 403(b) Salary Reduction Agreement (Code BB)
+		fn_oC('', 11) ! 463-473 Cost of Employer-Sponsored Health Coverage (Code DD)
+		fn_oC('', 11) ! 474-484 Permitted Benefits Under a Qualified Small Employer Health Reimbursement Arrangement (Code FF)
+		fn_oC('',  1) ! 485 Blank
+		fn_oC('',  1) ! 486 Statutory Employee Indicator
+		fn_oC('',  1) ! 487 Blank
+		fn_oC('',  1) ! 488 Retirement Plan Indicator
+		fn_oC('',  1) ! 489 Third-Party Sick Pay Indicator
+		fn_oC('', 23) ! 490-512 Blank
+		if len(line$)<>512 then pr 'wrong length len(line$)=';len(line$) : pause
+		fn_oOut
+	return ! /r
+	! • RO (Employee Optional) Record – Optional
+	! r: • RS (State) Record – Optional
+		! fn_oC('RS',2) !   1-2
+		! fn_oC('',  2) !   3-9   State Code
+		! fn_oC('',  5) !  10-24  Taxing Entity Code
+		! fn_oC('',  9) !  25-39  Social Security Number (SSN)
+		! fn_oC('', 15) !  40-54  Employee First Name
+		! fn_oC('', 15) !  55-69  Employee Middle Name or Initial
+		! fn_oC('', 20) !  70-84  Employee Last Name
+		! fn_oC('',  4) !  85-99  Suffix
+		! fn_oC('', 22) ! 100-114 Location Address
+		! fn_oC('', 22) ! 115-129 Delivery Address
+		! fn_oC('', 22) ! 117-138 City
+		! fn_oC('',  2) ! 139-140 State Abbreviation
+		! etc...
+	! /r
+	Efw2_Rt: ! r: • RT (Total) Record – Required
+		fn_oC('RT',2)
+		fn_oN(cntRw,   7) !     3-9 Total Number of RW Records
+		fn_oN(tot(1), 15) !   10-24 Total Wages, Tips and Other Compensation
+		fn_oN(tot(2), 15) !   25-39 Total Federal Income Tax Withheld
+		fn_oN(tot(3), 15) !   40-54 Total Social Security Wages
+		fn_oN(tot(4), 15) !   55-69 Total Social Security Tax Withheld
+		fn_oN(tot(5), 15) !   70-84 Total Medicare Wages and Tips
+		fn_oN(tot(6), 15) !   85-99 Total Medicare Tax Withheld
+		fn_oN(tot(7), 15) ! 100-114 Total Social Security Tips
+		fn_oC('',     15) ! 115-129 Blank
+		fn_oN(0,      15) ! 130-144 Total Dependent Care Benefits
+		fn_oN(0,      15) ! 145-159 Total Deferred Compensation Contributions to Section 401(k) (Code D)
+		fn_oN(0,      15) ! 160-174 Total Deferred Compensation Contributions to Section 403(b) (Code E)
+		fn_oN(0,      15) ! 175-189 Total Deferred Compensation Contributions to Section 408(k)(6) (Code F)
+		fn_oN(0,      15) ! 190-204 Total Deferred Compensation Contributions to Section 457(b) (Code G)
+		fn_oN(0,      15) ! 205-219 Total Deferred Compensation Contributions to Section 501(c)(18)(D) (Code H)
+		fn_oC('',     15) ! 220-234 Blank
+		fn_oN(0,      15) ! 235-249 Total Nonqualified Plan Section 457 Distributions or Contributions
+		fn_oN(0,      15) ! 250-264 Total Employer Contributions to a Health Savings Account (Code W)
+		fn_oN(0,      15) ! 265-279 Total Nonqualified Plan Not Section 457 Distributions or Contributions
+		fn_oN(0,      15) ! 280-294 Total Nontaxable Combat Pay (Code Q)
+		fn_oN(0,      15) ! 295-309 Total Cost of Employer-Sponsored Health Coverage (Code DD)
+		fn_oN(0,      15) ! 310-324 Total Employer Cost of Premiums for Group Term Life Insurance Over $50,000 (Code C)
+		fn_oN(0,      15) ! 325-339 Total Income Tax Withheld by Payer of Third-Party Sick Pay
+		fn_oN(0,      15) ! 340-354 Total Income from the Exercise of Nonstatutory Stock Options (Code V)
+		fn_oN(0,      15) ! 355-369 Total Deferrals Under a Section 409A Nonqualified Deferred Compensation Plan (Code Y)
+		fn_oN(0,      15) ! 370-384 Total Designated Roth Contributions to a Section 401(k) Plan (Code AA)
+		fn_oN(0,      15) ! 385-399 Total Designated Roth Contributions Under a Section 403(b) Salary Reduction Agreement (Code BB)
+		fn_oN(0,      15) ! 400-414 Total Permitted Benefits Under a Qualified Small Employer Health Reimbursement Arrangement (Code FF)
+		fn_oC('',     98) ! 415-512 Blank
+		fn_oOut
+	return ! /r
+	! • RU (Total Optional) Record – Optional
+	! • RV (State Total) Record – Optional
+	Efw2_Rf: ! r: • RF (Final) Record – Required
+		fn_oC('RF'       	,  2)
+		fn_oC(''          	,  5) !  3-7   Blank
+		fn_oN(printCount 	,  9) !  8-16  Number of RW Records
+		fn_oC(''          	,496) ! 17-512 Blank
+		fn_oOut
+	return ! /r
+	Efw2_Ra:  ! r: • RA (Submitter) Record – Required
+		fn_oC('RA',2)
+		fn_oC(empId$   	, 9) !  3-11 Submitter's Employer Identification Number (EIN)
+		fn_oC(bsoUser$ 	, 8) ! 12-19 User Identification (User ID    ! XXX TODO: Ask this on the screen
+		fn_oC(''        	, 4) ! 20-23 Software Vendor Code
+		fn_oC(''        	, 5) ! 24-28 Blanks
+		fn_oC('0'       	, 1) ! 30-35 Resubmission Indicator 1 Enter "1" if this file is being resubmitted. Otherwise, enter “0” (zero).
+		fn_oC(''        	, 6) ! 30-35 Resub Wage File Identifier (WFID)
+		fn_oC('98'      	, 2) ! 36-37 Software Code 2 Enter one of the following codes to indicate the software used to create your file:   • 98 = In-House Program   • 99 = Off-the-Shelf Software
+		! if len(line$)<>37 then pr 'wrong length len(line$)=';len(line$) : pause
+		fn_oC(a$(1)     	,57) ! 38-94 Company Name 57 Enter the company name. Left justify and fill with blanks.
+		fn_oC(''        	,22) ! location address
+		fn_oC(a$(2)     	,22) ! delivery address
+		fn_oC(aCity$   	,22) !
+		fn_oC(aSt$      	, 2) !
+		fn_oC(aZip$    	, 5) !
+		fn_oC(''        	, 4) ! zip extension
+		fn_oC(''        	, 5) ! 172-176 Blank 5 Fill with blanks. Reserved for SSA use.
+		! if len(line$)<>176 then pr 'wrong length len(line$)=';len(line$) : pause
+		fn_oC('', 23) ! 177-199 Foreign State/Province
+		fn_oC('', 15) ! 200-214 Foreign Postal Code
+		fn_oC('',  2) ! 215-216 Country Code
+		fn_oC('', 57) ! 217-273 Submitter Name This is a required field. Enter the name of the organization to receive error notification if this file cannot be processed.
+		! if len(line$)<>273 then pr 'wrong length len(line$)=';len(line$) : pause
+		fn_oC('', 22) ! 274-295 Location Address
+		fn_oC('', 22) ! 296-317 Delivery Address
+		fn_oC('', 22) ! 318-339 City
+		fn_oC('',  2) ! 340-341 State Abbreviation
+		fn_oC('',  5) ! 342-346 ZIP Code 5 This is a required field. Enter the submitter's ZIP code. For a foreign address, fill with blanks.
+		fn_oC('',  4) ! 347-350 ZIP Code Extension
+		if len(line$)<>350 then pr 'wrong length len(line$)=';len(line$) : pause
+		fn_oC('',  5) ! 351-355 Blank
+		fn_oC('', 23) ! 356-378 Foreign State/Province
+		fn_oC('', 15) ! 379-393 Foreign Postal Code
+		fn_oC('',  2) ! 394-395 Country Code
+		fn_oC(submitterName$, 27) ! 396-422 Contact Name
+		fn_oC(submitterPhone$, 15) ! 423-437 Contact Phone Number
+		fn_oC(submitterPhExt$,  5) ! 438-442 Contact Phone Extension
+		fn_oC('',  3) ! 443-445 Blank
+		if len(line$)<>445 then pr 'wrong length len(line$)=';len(line$) : pause
+		fn_oC(submitterEmail$, 40) ! 446-485 Contact E-Mail/Internet
+		fn_oC('',  3) ! 486-488 Blank
+		fn_oC(submitterFax$, 10) ! 489-498 Contact Fax
+		fn_oC('',  1) ! 499 Blank
+		fn_oC('',  1) ! 500 Preparer Code
+		fn_oC('', 12) ! 501-512 Blank
+		fn_oOut
+	return ! /r
+	Efw2_Re: ! r: • RE (Employer) Record –Required
+		fn_oC('RE',2)
+		fn_oC(taxYear$,4) ! 3-6 Tax Year
+		fn_oC('',  1) !       7 Agent Indicator Code
+		fn_oC(empId$,  9) !    8-16 Employer /Agent Identification Number (EIN)
+		fn_oC('',  9) !   17-25 Agent for EIN
+		fn_oC('',  1) !      26 Terminating Business Indicator
+		fn_oC('',  4) !   27-30 Establishment Number
+		fn_oC('',  9) !   31-39 Other EIN
+		fn_oC(a$(1), 57) !   40-96  Employer Name
+		fn_oC('', 22) !  97-118 Location Address
+		fn_oC(a$(2), 22) ! 119-140 Delivery Address
+		fn_oC(aCity$, 22) ! 141-162
+		fn_oC(aSt$,  2) ! 163-164
+		fn_oC(aip$,  5) ! 165-169
+		fn_oC('',  4) ! 170-173
+		fn_oC('N', 1) !     174 Kind of Employer
+														! This is a required field.
+														! Enter the appropriate kind of employer:
+														! F = Federal govt.
+														! (Federal government entity or instrumentality)
+														! S = State/local non-501c.
+														! (State or local government or instrumentality (this includes cities, townships, counties, special-purpose districts or other publicly-owned entities with governmental authority))
+														! T = 501c non-govt.
+														! (Non-governmental tax-exempt Section 501(c) organization (types of 501(c) non-governmental organizations include private foundations, public charities, social and recreation clubs and veterans’ organizations))
+														! Y = State/local 501c.
+														! (State or local government or instrumentality where the employer received a determination letter from the IRS indication that they are also a tax-exempt organization under Section 501(c)(3))
+														! N = None Apply
+		fn_oC('',  4) ! 175-178 Blank
+		fn_oC('', 23) ! 179-201 Foreigh State/Province
+		fn_oC('', 15) ! 202-216 Foreign Postal Code
+		fn_oC('',  2) ! 217-218 Country Code
+		fn_oC('',  1) !     219 Employment Code
+													! This is a required field.
+													! Enter the appropriate employment code:
+													! A = Agriculture  Form 943
+													! H = Household Schedule H
+													! M = Military Form 941
+													! Q = Medicare Qualified Government Employment Form 941
+													! X = Railroad CT-1
+													! F = Regular Form 944
+													! R = Regular (all others) Form 941
+													! If the Tax Jurisdiction Code in position 220 of the RE (Employer) Record is blank (domestic), reporting Employment Code ‘Q’ (MQGE) is valid for tax year 1983 through the current tax year.
+													! If the Tax Jurisdiction Code in position 220 of the RE (Employer) Record is P, V, G, S, or N (not domestic), reporting Employment Code ‘Q’ (MQGE) is valid for tax years 1986 through the current tax year.
+													! Note: Railroad reporting is not applicable for Puerto Rico and territorial employers.
+		fn_oC('',  1) ! 220 Tax Jurisdiction Code
+													! This is a required field.
+													! Enter the code that identifies the type of income tax withheld from the employee’s earnings.
+													! Blank =              W-2
+													! V      = Virgin Islands               W-2VI
+													! G      = Guam                          W-2GU
+													! S      = American Samoa               W-2AS
+													! N      = Northern Mariana Islands    W-2CM
+													! P      = Puerto Rico           W-2PR/499R-2
+		fn_oC('',  1) ! Third-Party Sick Pay Indicator
+		fn_oC(contactName$, 27) ! Employer Contact Name
+		fn_oC(contactPhone$, 15) ! Employer Contact Phone Number
+		fn_oC(contactPhExt$,  5) ! Employer Contact Phone Extension
+		fn_oC(contactFax$, 10) ! Employer Contact Fax Number
+		fn_oC(contactEmail$, 40) ! Employer Contact E-Mail/Internet
+		fn_oC('',194) ! Blank
+		fn_oOut
+	return ! /r
+
 def library fnFormCopyAwithBackgroundWarn
 	if setup<>val(env$('cno')) then fn_setup
 	fnFormCopyAwithBackgroundWarn=fn_FormCopyAwithBackgroundWarn
 fnend
 def fn_FormCopyAwithBackgroundWarn
-	if ~fcawbwSetup then
-		fcawbwSetup=1
-		dim fcawbwText$(0)*128
-		fnAddOneC(mat fcawbwText$,'The IRS Warns you should not pr Copy A with the background.')
-		fnAddOneC(mat fcawbwText$,'This form is provided for informational purposes only. Copy A appears')
-		fnAddOneC(mat fcawbwText$,'in red, similar to the official IRS form. The official printed version')
-		fnAddOneC(mat fcawbwText$,'of this IRS form is scannable, but the online version of it, printed')
-		fnAddOneC(mat fcawbwText$,'from this website, is not. Do not pr and file this Copy A.')
-		fnAddOneC(mat fcawbwText$,'A penalty may be imposed for filing forms that can''t be scanned.')
-		fnAddOneC(mat fcawbwText$,'')
-		fnAddOneC(mat fcawbwText$,'To order official IRS information returns such as Forms W-2 and W-3,')
-		fnAddOneC(mat fcawbwText$,'which include a scannable Copy A for filing, visit www.irs.gov/orderforms')
-		fnAddOneC(mat fcawbwText$,'and click on Employer and Information returns.')
-		fnAddOneC(mat fcawbwText$,'The IRS will mail you the scannable forms and any other products you order.')
-	end if
-	if ~fcawbwToldAlready then
-		fcawbwToldAlready=1
-		fnMsgBox(mat fcawbwText$,response$,'Notification')
-	end if
+	! if ~fcawbwSetup then
+	! 	fcawbwSetup=1
+	! 	dim fcawbwText$(0)*128
+	! 	fnAddOneC(mat fcawbwText$,'The IRS Warns you should not pr Copy A with the background.')
+	! 	fnAddOneC(mat fcawbwText$,'This form is provided for informational purposes only. Copy A appears')
+	! 	fnAddOneC(mat fcawbwText$,'in red, similar to the official IRS form. The official printed version')
+	! 	fnAddOneC(mat fcawbwText$,'of this IRS form is scannable, but the online version of it, printed')
+	! 	fnAddOneC(mat fcawbwText$,'from this website, is not. Do not pr and file this Copy A.')
+	! 	fnAddOneC(mat fcawbwText$,'A penalty may be imposed for filing forms that can''t be scanned.')
+	! 	fnAddOneC(mat fcawbwText$,'')
+	! 	fnAddOneC(mat fcawbwText$,'To order official IRS information returns such as Forms W-2 and W-3,')
+	! 	fnAddOneC(mat fcawbwText$,'which include a scannable Copy A for filing, visit www.irs.gov/orderforms')
+	! 	fnAddOneC(mat fcawbwText$,'and click on Employer and Information returns.')
+	! 	fnAddOneC(mat fcawbwText$,'The IRS will mail you the scannable forms and any other products you order.')
+	! end if
+	! if ~fcawbwToldAlready then
+	! 	fcawbwToldAlready=1
+	! 	fnMsgBox(mat fcawbwText$,response$,'Notification')
+	! end if
 fnend
 
 
@@ -913,14 +1052,14 @@ fnend
 def fn_w2PrintClose
 	! inherrits local: printCount
 	if printCount then
-		if w2destinationOpt$(2)='True' or w2destinationOpt$(3)='True' then
-			dim msgTxt$(0)*256
-			mat msgTxt$(2)
-			msgTxt$(2)=os_filename$(file$(hExport))
-			close #hExport:
-			hExport=0
-			msgTxt$(1)='Created file:'
-			fnMsgBox(mat msgTxt$)
+		if w2destinationOpt$(3)='True' then
+			gosub Efw2_Rt
+			gosub Efw2_Rf
+			fn_reportFileCreated(hO)
+			cntRw=0
+			mat tot=(0)
+		else if w2destinationOpt$(2)='True' then
+			fn_reportFileCreated(hExport)
 		else
 			fnpa_finis
 			! pr 'fnpa_finis for w2' : pause
@@ -935,6 +1074,15 @@ def fn_w2PrintClose
 		fnMsgBox(mat msgTxt$)
 	end if
 fnend
+	def fn_reportFileCreated(&h)
+		dim msgTxt$(0)*256
+		mat msgTxt$(2)
+		msgTxt$(2)=os_filename$(file$(h))
+		close #h:
+		h=0
+		msgTxt$(1)='Created file:'
+		fnMsgBox(mat msgTxt$)
+	fnend
 
 
 include: ertn
