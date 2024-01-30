@@ -45,6 +45,12 @@ ReadEmployee: ! r:
 		dim nameFirst$*64,nameMiddle$*64,nameLast$*64,nameSuffix$*64
 		fnNameParse(k$(1),nameFirst$,nameMiddle$,nameLast$,nameSuffix$)
 
+		! pr 'Name  ='&k$(1)
+		! pr 'First ='&nameFirst$
+		! pr 'Middle='&nameMiddle$
+		! pr 'Last  ='&nameLast$
+		! pause
+
 		if xm(1)=0 then goto ReadEmployee
 		dedFed=dedFica=dedSt=0
 		for j=1 to 10

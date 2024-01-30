@@ -57,7 +57,7 @@ fnTop(program$)
 		p1=p2-4
 		zip$=a$(3)(p1:p2)
 	end if
-	fncreg_read('Employee Name Format',tmp$,optNameFormat$(1)) : nameFormat=max(1,srch(mat optNameFormat$,tmp$))
+	fncreg_read(env$('cursys')&' Name Format',tmp$,optNameFormat$(1)) : nameFormat=max(1,srch(mat optNameFormat$,tmp$))
 	fncreg_read('Miscellaneous Deduction Containing Employer Cost Group-Term Life Ins',tmp$) : ins=val(tmp$)
 	fncreg_read('Miscellaneous Deduction Used For Pension',tmp$) : pen=val(tmp$)
 	fncreg_read('Miscellaneous Deduction Used For Deferred Compensation',tmp$) : dfc=val(tmp$)
