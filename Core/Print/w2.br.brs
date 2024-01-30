@@ -133,7 +133,7 @@ def fn_ask_w2_info(&taxYear$, _
 		fnreg_read('W-2 - Enable Background'            ,enableBackground$   ,'True' )
 		fncreg_read('W-2 - Copy Current',w2Copy$,optW2Copy$(1)) : w2Copy=srch(mat optW2Copy$,w2Copy$) : if w2Copy<=0 then w2Copy=1
 		w2Copy$=optW2Copy$(w2Copy)
-		fncreg_read('Employee Name Format',nameFormat$,optNameFormat$(1))
+		fncreg_read(env$('cursys')&' Name Format',nameFormat$,optNameFormat$(1))
 		fnureg_read('W-2 - Export Filename',outputFilename$,os_filename$(env$('Documents')&'\ACS\[TaxYear] '&formName$&' Export\Company [CompanyNumber].csv'))
 		fncreg_read('Qualified Pension Plan' ,tmp$) : pn1=val(tmp$)
 		fncreg_read('Dependent Care Benefits',tmp$) : dc1=val(tmp$)
@@ -339,8 +339,7 @@ def fn_ask_w2_info(&taxYear$, _
 		fnureg_write('W-2 - Export Filename',outputFilename$)
 		fncreg_write('Qualified Pension Plan',str$(pn1))
 		fncreg_write('Dependent Care Benefits',str$(dc1))
-		fncreg_write('Employee Name Format',nameFormat$)
-
+		fncreg_write(env$('cursys')&' Name Format',nameFormat$)
 		fncreg_write('W-2 - State',state$)
 
 		! /r

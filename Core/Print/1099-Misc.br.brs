@@ -151,7 +151,7 @@ def fn_ask(&seltpN,&typeN,&minAmt,&beg_date,&end_date; ___, _
 	optNameFormat$(1)='First Name First'
 	optNameFormat$(2)='Last Name First'
 	fnComboA('nameFormat',lc,mypos,mat optNameFormat$, '',20)
-	fncreg_read('Payee Name Format',resp$(respc_nameFormat=rc+=1),optNameFormat$(1))
+	fncreg_read(env$('cursys')&' Name Format',resp$(respc_nameFormat=rc+=1),optNameFormat$(1))
 	lc+=1
 	fnOpt(lc+=1,3,'Print 1099-Misc')
 	resp$(respc_Print1099=rc+=1)=destinationOpt$(1)
@@ -229,7 +229,7 @@ def fn_ask(&seltpN,&typeN,&minAmt,&beg_date,&end_date; ___, _
 		! /r
 		! r: save stuff
 		fnpcreg_write('Filter - Minimum Amount',str$(minAmt))
-		fncreg_write('Payee Name Format',resp$(respc_nameFormat))
+		fncreg_write(env$('cursys')&' Name Format',resp$(respc_nameFormat))
 		if env$('cursys')='CL' or env$('cursys')='GL' then
 			fnpcreg_write('seltp',seltp$(1:2))
 		else ! env$('cursys')='PR'

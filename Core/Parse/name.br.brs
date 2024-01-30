@@ -5,14 +5,7 @@
 	optNameFormat$(1)='First Name First'
 	optNameFormat$(2)='Last Name First'
 	nameFormat$=optNameFormat$(1)
-	
-	if env$('cursys')='GL' then 
-		fncreg_write('Payee Name Format',nameFormat$)
-	else if env$('cursys')='PR' then 
-		fncreg_write('Employee Name Format',nameFormat$)
-	end if
-	
-	fncreg_write('Employee Name Format',nameFormat$)
+	fncreg_write(env$('cursys')&' Name Format',nameFormat$)
 	dim n1$*64,n2$*64,n3$*64
 	pr 'name format: "'&nameFormat$&'"'
 	dim nFull$(4)*256
@@ -20,13 +13,13 @@
 	! nFull$(2)='CRUZ,  BRYAN EDUARDO DEL'
 	! nFull$(3)='SAN NICOLAS, CHRISTOPHER'
 	! nFull$(4)='GARCIA,JR JESUS'
-	
+
 	nFull$(1)='CHARLES A. WADE'
 	nFull$(2)='DOUG DUESTORHOFT, JR'
 	nFull$(3)='JOEL J ROZNER'
 	nFull$(4)='MONICA MAREK'
-	
-	
+
+
 	for nFullItem=1 to udim(mat nFull$)
 		fn_nameParse(nFull$(nFullItem),n1$,n2$,n3$,n4$)
 		pr 'source name: "'&nFull$(nFullItem)&'"'
@@ -47,13 +40,11 @@ def fn_nameParse(fullname$*128,&nameFirst$,&nameMiddle$,&nameLast$,&nameSuffix$)
 	dim optNameFormat$(2)*20
 	optNameFormat$(1)='First Name First'
 	optNameFormat$(2)='Last Name First'
-	if env$('cursys')='GL' then 
-		fncreg_read('Payee Name Format',nameFormat$,optNameFormat$(1))
-	else if env$('cursys')='PR' then 
-		fncreg_read('Employee Name Format',nameFormat$,optNameFormat$(1))
-	end if
+	fncreg_read(env$('cursys')&' Name Format',nameFormat$,optNameFormat$(1))
+
 	! pr 'fullname$='&fullname$&' (nameFormat$='&nameFormat$&')'
 	! pause
+
 	fullname$=uprc$(rtrm$(fullname$)): ! nameFormat$='s'
 	npPosSpace1=pos(fullname$,' ',1)
 	npPosSpace2=pos(fullname$,' ',npPosSpace1+1)
@@ -98,9 +89,9 @@ def fn_nameParse(fullname$*128,&nameFirst$,&nameMiddle$,&nameLast$,&nameSuffix$)
 		end if
 		! /r
 	end if
-	
+
 	nameFirst$=rtrm$(nameFirst$,',')
-	
+
 	! r: nameSuffix$ process ! JR
 	nameSuffix$='' err npNsFinis
 	if namefirst$='II' or namefirst$='III' then
@@ -169,14 +160,14 @@ def fn_nameParse(fullname$*128,&nameFirst$,&nameMiddle$,&nameLast$,&nameSuffix$)
 		nameLast$=rtrm$(nameLast$)
 		nameLast$=nameLast$(1:len(nameLast$)-5)
 	end if
-	
+
 	if lwrc$(nameLast$)='jr' or lwrc$(nameLast$)='sr' or lwrc$(nameLast$)='ii' or lwrc$(nameLast$)='iii' then ! in case of suffix but not a middle name
 		nameSuffix$=nameLast$
 		nameLast$=nameMiddle$
 		nameMiddle$=''
 	end if
 	nameLast$=rtrm$(nameLast$,',')
-	
+
 	npNsFinis: !
 	! /r
 fnend
