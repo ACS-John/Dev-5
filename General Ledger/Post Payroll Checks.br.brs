@@ -24,7 +24,7 @@ if exists('[Q]\glmstr\PRmstr.h[cno]')=0 then goto Xit
 open #1: 'Name=[Q]\GLmstr\PRmstr.h[cno],KFName=[Q]\GLmstr\PRIndex.h[cno],Shr',i,outIn,k
 open #2: 'Name=[Q]\GLmstr\GL_Work_[acsUserId].h[cno],NoShr',i,outi,r
 if lrec(2)=0 then goto Xit
-open #3: 'Name=[Q]\GLmstr\ACPRCKS.h[cno],Shr',i,outi,r
+open #3: 'Name=[Q]\GLmstr\AcPrCks.h[cno],Shr',i,outi,r
 READ_ENTRIES: ! r: main loop
 	read #2,using L180: t$,tr(4),tr(5),tr(6),tr(7),tr$,td$,ven$,mat jv$,key$ eof L500
 	rec2=rec(2)

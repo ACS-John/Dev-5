@@ -40,7 +40,7 @@
 	sc3$(21)='Net Pay:'
 	if ~exists('[Q]\GLmstr\PRmstr.h[cno]') then goto InitialBuild
 	open #1: 'Name=[Q]\GLmstr\PRmstr.h[cno],KFName=[Q]\GLmstr\PRIndex.h[cno],Shr',i,outIn,k ioerr ErrOpenGlPrmstr
-	open #2: 'Name=[Q]\GLmstr\ACPRCKS.h[cno],Shr',i,outi,r
+	open #2: 'Name=[Q]\GLmstr\AcPrCks.h[cno],Shr',i,outi,r
 goto Main ! /r
 
 
@@ -193,9 +193,9 @@ InitialBuild: ! r:
 	open #1: 'Name=[Q]\GLmstr\PRmstr.h[cno],SIZE=0,RecL=280,Replace',internal,output
 	close #2: ioerr ignore
 	fnFree('[Q]\GLmstr\PRIndex.h[cno]')
-	open #2: 'Name=[Q]\GLmstr\ACPRCKS.h[cno]',internal,output ioerr ignore
+	open #2: 'Name=[Q]\GLmstr\AcPrCks.h[cno]',internal,output ioerr ignore
 	close #2,free: ioerr ignore
-	open #2: 'Name=[Q]\GLmstr\ACPRCKS.h[cno],SIZE=0,RecL=110,Replace',internal,output,relative
+	open #2: 'Name=[Q]\GLmstr\AcPrCks.h[cno],SIZE=0,RecL=110,Replace',internal,output,relative
 	close #2:
 	L1410: !
 	close #1: ioerr ignore

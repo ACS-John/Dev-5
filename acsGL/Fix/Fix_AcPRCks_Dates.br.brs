@@ -27,7 +27,7 @@ date_bad=val(resp$(1))
 date_good=val(resp$(2))
 
 open #h_prmstr=fnH: "Name=[Q]\GLmstr\PRmstr.h[cno],KFName=[Q]\GLmstr\PRIndex.h[cno],Shr",i,outIn,k
-open #h_acprcks=fnH: "Name=[Q]\GLmstr\ACPRCKS.h[cno],Shr",i,outi,r
+open #h_acprcks=fnH: "Name=[Q]\GLmstr\AcPrCks.h[cno],Shr",i,outi,r
 fnOpenPrn
 fn_hdr1
 L350: if d(1)>0 then goto L360 else goto L390

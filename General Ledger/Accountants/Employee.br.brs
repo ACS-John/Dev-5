@@ -4,20 +4,20 @@
 	autoLibrary
 	on error goto Ertn
 
-	dim fl2$(5),sc2$(5)*38
-	dim sc1$(26),fl1$(26),io1$(41),hd$(2)*78,pr1(21),miscname$(10)*20
-	dim l1(4),l2$(4)*25,l3$(4)*25,sc3$(21)*13,fl3$(21),io3$(21),prd(21)
-	dim l4$(4)*25,l5$(4)*11,mp(4,36),dat$*20,pr$(21),td$*25
-	dim k$(3)*25,ss$*11,m(36),adr(2),d(14),ext(2),en$*4,ta(2)
-	dim sr$(16),en$(16),resp$(50)*35,ml$(4)*80
-	dim iocr$(3),wrdcr$(3)*23
-	dim p$(20)*50,cap$*128,dedcode(10)
+	
+	dim l1(4),l2$(4)*25,l3$(4)*25,prd(21)
+	dim l4$(4)*25,l5$(4)*11,mp(4,36),pr$(21),td$*25
+	dim k$(3)*25,ss$*11,m(36),adr(2),d(14),ext(2),ta(2)
+	dim resp$(50)*35,ml$(4)*80
+	dim p$(20)*50,''*128,dedcode(10)
 
-	fnTop(program$,cap$='Employee')
+	fnTop(program$)
 	open #1: 'Name=[Q]\GLmstr\Company.h[cno],Shr',i,i
+	dim miscname$(10)*20
 	read #1,using 'form pos 418,10*C 20,10*N 1': mat miscname$,mat dedcode
 	close #1:
 
+	dim sc1$(26)
 	sc1$(1)='Description:'
 	sc1$(2)='  Y.T.D.'
 	sc1$(3)='  Q.T.D.'
@@ -35,12 +35,13 @@
 	sc1$(24)='Tips:'
 	sc1$(25)='Weeks Worked:'
 	sc1$(26)='EIC:'
+	dim sc3$(21)*13
 	sc3$(1)='Check Date:'
 	sc3$(2)='Check #:'
 	sc3$(21)='Net Pay:'
 	if exists ('[Q]\GLmstr\PRmstr.h[cno]') =0 then goto INITIAL_BUILD
 	open #1: 'Name=[Q]\GLmstr\PRmstr.h[cno],KFName=[Q]\GLmstr\PRIndex.h[cno],Shr',i,outIn,k ioerr L2900
-	open #2: 'Name=[Q]\GLmstr\ACPRCKS.h[cno],Shr',i,outi,r
+	open #2: 'Name=[Q]\GLmstr\AcPrCks.h[cno],Shr',i,outi,r
 ! /r
 goto MAIN
 
@@ -83,6 +84,7 @@ ASK_NEW_NUMBER: ! r: add new employee
 	addemployee=1 ! code for adding new employee
 goto DISPLAY_RECORD ! /r
 DISPLAY_RECORD: ! r:
+	dim en$*4
 	en$=lpad$(str$(en1),4)
 	read #1,using 'form pos 1,N 4,3*C 25,C 11,36*PD 5.2,2*N 5',key=en$: eno,mat k$,ss$,mat m,mat ta nokey DISPLAY_EMPLOYEE
 	disable=1: goto DISPLAY_EMPLOYEE ! /r
@@ -162,14 +164,14 @@ MSGBOX1: ! r:
 	ml$(1)='You have chosen to delete employee '
 	ml$(2)='number '&str$(eno)&'.  Click OK to delete'
 	ml$(3)='this record or Cancel to retain the record.'
-	fnMsgBox(mat ml$,resp$,cap$,49)
+	fnMsgBox(mat ml$,resp$,'',49)
 if resp$='OK' then goto L1150 else goto MAIN ! /r
 MSGBOX2: ! r:
 	mat ml$(3)
 	ml$(1)='You are attempting to change the employee'
 	ml$(2)='number from '&str$(holden1)&' to '&str$(eno)&'.  Click OK to change'
 	ml$(3)='the number or Cancel to retain the old number.'
-	fnMsgBox(mat ml$,resp$,cap$,49)
+	fnMsgBox(mat ml$,resp$,'',49)
 	if resp$='OK' then goto L1170 else goto MAIN
 L1150: delete #1,key=lpad$(str$(en1),4): nokey MAIN
 ! delete or change numbers
@@ -192,9 +194,9 @@ INITIAL_BUILD: ! r:
 	open #1: 'Name=[Q]\GLmstr\PRmstr.h[cno],RecL=280,Replace',internal,output
 	close #2: ioerr ignore
 	fnFree('[Q]\GLmstr\PRIndex.h[cno]')
-	open #2: 'Name=[Q]\GLmstr\ACPRCKS.h[cno]',internal,output ioerr ignore
+	open #2: 'Name=[Q]\GLmstr\AcPrCks.h[cno]',internal,output ioerr ignore
 	close #2,free: ioerr ignore
-	open #2: 'Name=[Q]\GLmstr\ACPRCKS.h[cno],SIZE=0,RecL=110,Replace',internal,output,relative
+	open #2: 'Name=[Q]\GLmstr\AcPrCks.h[cno],SIZE=0,RecL=110,Replace',internal,output,relative
 	close #2:
 	L1410: close #1: ioerr ignore
 	execute 'Index [Q]\GLmstr\PRmstr.h[cno] [Q]\GLmstr\PRIndex.h[cno] 1 4 Replace DupKeys -n'
@@ -259,6 +261,7 @@ return ! /r
 HDR: ! r:
 	pr #255,using L1990: date$('mm/dd/yy'),env$('cnam')
 L1990: form skip 2,pos 1,c 8,pos 1,cc 108,skip 1
+	dim dat$*20
 	pr #255,using L2010: time$,'Payroll Proof List',dat$
 L2010: form pos 1,c 8,pos 45,c 20,skip 1,pos 1,cc 108,skip 2
 return ! /r
@@ -293,13 +296,15 @@ MSGBOX5: !
 	mat ml$(3)
 	ml$(1)='There are no checks on employee # '&str$(eno)&'.'
 	ml$(2)='Do you wish to add checks?'
-	fnMsgBox(mat ml$,resp$,cap$,35)
+	fnMsgBox(mat ml$,resp$,'',35)
 	if resp$='Yes' then add=1: goto L2340 else goto MAIN
 L2290: adr=ta(1)
 L2300: if adr=0 then goto MAIN
 	read #2,using L2320,rec=adr: en2,mat prd,nca noRec L480
 L2320: form pos 1,n 4,2*pd 4,19*pd 5.2,pd 3
-L2330: mat pr1=prd
+L2330: !
+	dim pr1(21)
+	mat pr1=prd
 L2340: fnTos
 	mylen=15: mypos=mylen+3 : right=1
 	fnLbl(1,1,'Check Date:',mylen,right)
@@ -343,7 +348,7 @@ MSGBOX4: !
 	ml$(2)='('&trim$(cnvrt$('pic(----,---.##)',wh))&') does not equal'
 	ml$(3)='the net check ('&trim$(cnvrt$('pic(----,---.##)',prd(21)))&')'
 	ml$(4)='Click OK to fix the check.'
-	fnMsgBox(mat ml$,resp$,cap$,49)
+	fnMsgBox(mat ml$,resp$,'',49)
 	if resp$='OK' then goto L2340 else goto MAIN
 L2700: lr2=lrec(2)+1
 	if add=1 then write #2,using L2320,rec=lr2: eno,mat prd,0 duprec L2700 else rewrite #2,using L2320,rec=adr: eno,mat prd,nca
