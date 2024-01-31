@@ -42,7 +42,7 @@
 	ficarate=ficarate/100 : feducrat=feducrat/100 : mcr=mcr/100
 	nametab=66-int(len(rtrm$(env$('cnam')))/2)
 	open #1: "Name=[Q]\GLmstr\PRmstr.h[cno],KFName=[Q]\GLmstr\PRIndex.h[cno],Shr",i,outIn,k
-	open #2: "Name=[Q]\GLmstr\ACPRCKS.h[cno],Shr",i,outi,r
+	open #2: "Name=[Q]\GLmstr\AcPrCks.h[cno],Shr",i,outi,r
 L380: read #1,using 'form pos 1,N 4,3*C 25,C 11,36*PD 5.2,2*N 5': eno,mat k$,ss$,mat m,mat adr eof Xit
 	fixqtr=fixytd=0
 	if beg_date>0 and end_date>0 then fixqtr=1: goto L410 else goto L440

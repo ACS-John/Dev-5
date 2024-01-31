@@ -33,14 +33,14 @@ if resp$='OK' then goto ScrOne else goto Xit
 
 L300: !
 	open #1: 'Name=[Q]\GLmstr\PRmstr.h[cno],KFName=[Q]\GLmstr\PRIndex.h[cno],Shr',i,outIn,k
+	F1: form pos 91,36*pd 5.2,2*n 5
 	do
-		read #1,using L320: x eof L350
-		L320: form pos 91,36*pd 5.2,2*n 5
-		rewrite #1,using L320: mat m,mat adr
+		read #1,using F1: x eof Eo1
+		rewrite #1,using F1: mat m,mat adr
 	loop
-L350: !
+Eo1: !
 close #1:
-open #1: 'Name=[Q]\GLmstr\ACPRCKS.h[cno],size=0,RecL=110,Replace',internal,output
+open #1: 'Name=[Q]\GLmstr\AcPrCks.h[cno],size=0,RecL=110,Replace',internal,output
 close #1:
 goto Xit
 Xit: fnXit

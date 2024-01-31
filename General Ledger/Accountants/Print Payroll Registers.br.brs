@@ -32,7 +32,7 @@
 	ficarate=ficarate/100 : feducrat=feducrat/100 : mcr=mcr/100
 	open #h_prmstr=fnH: "Name=[Q]\GLmstr\PRmstr.h[cno],KFName=[Q]\GLmstr\PRIndex.h[cno],Shr",i,outIn,k
 	fPrmstr: form pos 1,n 4,3*c 25,c 11,36*pd 5.2,2*n 5
-	open #h_acprcks=fnH: "Name=[Q]\GLmstr\ACPRCKS.h[cno],Shr",i,outi,r
+	open #h_acprcks=fnH: "Name=[Q]\GLmstr\AcPrCks.h[cno],Shr",i,outi,r
 	report$="Payroll Check Register"
 	fnOpenPrn
 	fn_hdr1

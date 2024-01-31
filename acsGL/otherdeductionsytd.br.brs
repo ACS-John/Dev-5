@@ -18,7 +18,7 @@
 	next j
 	nametab=66-int(len(rtrm$(env$('cnam')))/2)
 	open #1: "Name=[Q]\GLmstr\PRmstr.h[cno],KFName=[Q]\GLmstr\PRIndex.h[cno],Shr",i,outIn,k
-	open #2: "Name=[Q]\GLmstr\ACPRCKS.h[cno],Shr",i,outi,r
+	open #2: "Name=[Q]\GLmstr\AcPrCks.h[cno],Shr",i,outi,r
 	report$="Other Deductions Register-YTD QTD"
 	fnOpenPrn
 	gosub L390

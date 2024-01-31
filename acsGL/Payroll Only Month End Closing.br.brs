@@ -4,7 +4,7 @@
 autoLibrary
 on error goto Ertn
 fnTop(program$)
-open #hTmp=fnH: 'Name=[Q]\GLmstr\ACPRCKS.h[cno],RecL=110,Replace',internal,output
+open #hTmp=fnH: 'Name=[Q]\GLmstr\AcPrCks.h[cno],RecL=110,Replace',internal,output
 close #hTmp:
 open #hPr=fnH: 'Name=[Q]\GLmstr\PRmstr.h[cno],KFName=[Q]\GLmstr\PRIndex.h[cno],NoShr',i,outIn,k
 do

@@ -35,7 +35,7 @@
 	next j
 	nametab=66-int(len(env$('program_caption'))/2)
 	open #1: "Name=[Q]\GLmstr\PRmstr.h[cno],KFName=[Q]\GLmstr\PRIndex.h[cno],Shr",i,outIn,k
-	open #2: "Name=[Q]\GLmstr\ACPRCKS.h[cno],Shr",i,outi,r
+	open #2: "Name=[Q]\GLmstr\AcPrCks.h[cno],Shr",i,outi,r
 	fnOpenPrn
 	gosub L620
 	L350: !
