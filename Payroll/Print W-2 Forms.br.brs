@@ -38,9 +38,9 @@
 ! /r
 AskInfo: !
 dim cLocality$*8
-if ~fnask_w2_info(taxYear$,ssrate,ssmax,mcrate,mcmax, _
-	enableW3$,pn1,dc1, _
-	unused_state$,loccode,cLocality$) then goto Xit
+
+
+if ~fnask_w2_info(taxYear$,ssrate,ssmax,mcrate,mcmax,pn1,dc1,	unused_state$,loccode,cLocality$) then goto Xit
 			beg_date=val(taxYear$&'0101')
 			end_date=val(taxYear$&'1231')
 ! AskDeductions: ! r: ! ask if any misecllaneous deductions should pr in box 12
@@ -388,7 +388,7 @@ Box16process: ! r: Box 16
 	B16Finis: !
 return  ! /r
 PrintW2: ! r:
-	fnW2Text(empId$,ss$,controlNumber$,mat w,nameFirst$,nameMiddle$,nameLast$,nameSuffix$,retirementPlanX$,mat k$,box12aCode$,box12aAmt$,box12bCode$,box12bAmt$,box12cCode$,box12cAmt$,box12dCode$,box12dAmt$,state$,stcode$,printLocality$(1:6),box14Amt)
+	fnW2Text(ss$,controlNumber$,mat w,nameFirst$,nameMiddle$,nameLast$,nameSuffix$,retirementPlanX$,mat k$,box12aCode$,box12aAmt$,box12bCode$,box12bAmt$,box12cCode$,box12cAmt$,box12dCode$,box12dAmt$,state$,stcode$,printLocality$(1:6),box14Amt)
 return  ! /r
 def fn_QAC(mat qac$,qacText$*256)
 	qacCount+=1
