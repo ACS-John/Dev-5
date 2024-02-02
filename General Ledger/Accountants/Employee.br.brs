@@ -7,9 +7,9 @@
 	
 	dim l1(4),l2$(4)*25,l3$(4)*25,prd(21)
 	dim l4$(4)*25,l5$(4)*11,mp(4,36),pr$(21),td$*25
-	dim k$(3)*25,ss$*11,m(36),adr(2),d(14),ext(2),ta(2)
+	dim k$(3)*25,ss$*11,xm(36),adr(2),ta(2)
 	dim resp$(50)*35,ml$(4)*80
-	dim p$(20)*50,''*128,dedcode(10)
+	dim p$(20)*50,dedcode(10)
 
 	fnTop(program$)
 	open #1: 'Name=[Q]\GLmstr\Company.h[cno],Shr',i,i
@@ -70,7 +70,7 @@ L480: if ckey=5 then goto Xit
 goto DISPLAY_RECORD ! /r
 
 ASK_NEW_NUMBER: ! r: add new employee
-	eno=0: mat k$=(''): ss$='': mat m=(0): mat ta=(0)
+	eno=0: mat k$=(''): ss$='': mat xm=(0): mat ta=(0)
 	fnTos
 	mylen=20: mypos=mylen+3 : right=1
 	fnLbl(1,1,'Employee Number:',mylen,right)
@@ -86,7 +86,7 @@ goto DISPLAY_RECORD ! /r
 DISPLAY_RECORD: ! r:
 	dim en$*4
 	en$=lpad$(str$(en1),4)
-	read #1,using 'form pos 1,N 4,3*C 25,C 11,36*PD 5.2,2*N 5',key=en$: eno,mat k$,ss$,mat m,mat ta nokey DISPLAY_EMPLOYEE
+	read #1,using 'form pos 1,N 4,3*C 25,C 11,36*PD 5.2,2*N 5',key=en$: eno,mat k$,ss$,mat xm,mat ta nokey DISPLAY_EMPLOYEE
 	disable=1: goto DISPLAY_EMPLOYEE ! /r
 DISPLAY_EMPLOYEE: ! r: employee screen
 	fnTos
@@ -111,9 +111,9 @@ DISPLAY_EMPLOYEE: ! r: employee screen
 	for j=1 to 18
 		fnLbl(j+1,42,sc1$(j+8),mylen2,right)
 		fnTxt(j+1,mypos,12,0,0,'10',0,'',0 )
-		resp$(j*2-1+5)=str$(m(j*2-1) )
+		resp$(j*2-1+5)=str$(xm(j*2-1) )
 		fnTxt(j+1,mypos+14,12,0,0,'10',0,'',0 )
-		resp$(j*2+5)=str$(m(j*2) )
+		resp$(j*2+5)=str$(xm(j*2) )
 	next j
 	fnCmdKey('&Next',1,1,0,'')
 	fnCmdKey('W-2 Suplimental',2,0,0,'W-2 Suplimental Information')
@@ -130,31 +130,31 @@ DISPLAY_EMPLOYEE: ! r: employee screen
 	if ckey=3 then add=0: goto REVIEW_CHECKS
 	if ckey=7 then disable=0: goto DISPLAY_EMPLOYEE
 	en1=eno=val(resp$(1))
-	if ckey=8 then add=1: mat prd=(0): goto L2340
+	if ckey=8 then add=1 : mat prd=(0) : goto ScrCheck
 	k$(1)=resp$(2)
 	k$(2)=resp$(3)
 	k$(3)=resp$(4)
 	ss$=resp$(5)
 	for j=1 to 36
-		m(j)=val(resp$(j+5))
+		xm(j)=val(resp$(j+5))
 	next j
 	if ckey=1 and holden1<>en1 then goto MSGBOX2
 goto L1250 ! /r
 L1250: ! r:
 	if ckey=1 and addemployee=1 then
 		mat ta=(0)
-		write #1,using 'form pos 1,N 4,3*C 25,C 11,36*PD 5.2,2*N 5': eno,mat k$,ss$,mat m,mat ta
+		write #1,using 'form pos 1,N 4,3*C 25,C 11,36*PD 5.2,2*N 5': eno,mat k$,ss$,mat xm,mat ta
 		addemployee=0
 		new1=1
-		eno=0 : mat k$=('') : ss$='': mat m=(0) : mat ta=(0)
+		eno=0 : mat k$=('') : ss$='': mat xm=(0) : mat ta=(0)
 	else
 		if ckey=1 then
-			rewrite #1,using 'form pos 1,N 4,3*C 25,C 11,36*PD 5.2,2*N 5',key=en$: eno,mat k$,ss$,mat m,mat ta nokey ignore
+			rewrite #1,using 'form pos 1,N 4,3*C 25,C 11,36*PD 5.2,2*N 5',key=en$: eno,mat k$,ss$,mat xm,mat ta nokey ignore
 		end if
 		eno=0
 		mat k$=('')
 		ss$=''
-		mat m=(0)
+		mat xm=(0)
 		mat ta=(0)
 	end if
 goto MAIN ! /r
@@ -173,19 +173,21 @@ MSGBOX2: ! r:
 	ml$(3)='the number or Cancel to retain the old number.'
 	fnMsgBox(mat ml$,resp$,'',49)
 	if resp$='OK' then goto L1170 else goto MAIN
-L1150: delete #1,key=lpad$(str$(en1),4): nokey MAIN
-! delete or change numbers
-L1170: adr=ta(1)
-do
-	if adr=0 then goto L1240
-	read #2,using L1200,rec=adr: en1,nta
-	L1200: form pos 1,n 4,pos 108,pd 3
-	if ckey=6 then delete #2,rec=adr: else rewrite #2,using L1200,rec=adr: eno,nta
-	adr=nta
-loop
-L1240: !
-	if ckey=6 then eno=0: mat k$=('') : ss$='' : mat m=(0): mat ta=(0)
-goto MAIN
+	L1150: !
+	delete #1,key=lpad$(str$(en1),4): nokey MAIN
+	! delete or change numbers
+	L1170: !
+	adr=ta(1)
+	do
+		if adr=0 then goto L1240
+		read #2,using L1200,rec=adr: en1,nta
+		L1200: form pos 1,n 4,pos 108,pd 3
+		if ckey=6 then delete #2,rec=adr: else rewrite #2,using L1200,rec=adr: eno,nta
+		adr=nta
+	loop
+	L1240: !
+	if ckey=6 then eno=0: mat k$=('') : ss$='' : mat xm=(0): mat ta=(0)
+goto MAIN ! /r
 
 
 INITIAL_BUILD: ! r:
@@ -198,7 +200,8 @@ INITIAL_BUILD: ! r:
 	close #2,free: ioerr ignore
 	open #2: 'Name=[Q]\GLmstr\AcPrCks.h[cno],SIZE=0,RecL=110,Replace',internal,output,relative
 	close #2:
-	L1410: close #1: ioerr ignore
+	L1410: !
+	close #1: ioerr ignore
 	execute 'Index [Q]\GLmstr\PRmstr.h[cno] [Q]\GLmstr\PRIndex.h[cno] 1 4 Replace DupKeys -n'
 goto MAIN ! /r
 
@@ -207,7 +210,7 @@ PROOF_LIST: ! r:
 	fnOpenPrn
 	gosub HDR
 do
-	read #1,using 'form pos 1,N 4,3*C 25,C 11,36*PD 5.2,2*N 5': eno,mat k$,ss$,mat m eof L1610
+	read #1,using 'form pos 1,N 4,3*C 25,C 11,36*PD 5.2,2*N 5': eno,mat k$,ss$,mat xm eof L1610
 	pl=pl+1
 	l1(pl)=eno
 	l2$(pl)=k$(1)
@@ -215,7 +218,7 @@ do
 	l4$(pl)=k$(3)
 	l5$(pl)=ss$
 	for j1=1 to 36
-		mp(pl,j1)=m(j1)
+		mp(pl,j1)=xm(j1)
 	next j1
 	if pl=4 then gosub L1660
 loop
@@ -291,21 +294,36 @@ return ! /r
 goto MAIN ! /r
 
 REVIEW_CHECKS: ! r:
-	if ta(1)=0 then goto MSGBOX5 else goto L2290
-MSGBOX5: !
+	if ta(1)=0 then 
+		goto MSGBOX5 
+	else 
+		adr=ta(1)
+		goto L2300
+	end if ! /r
+
+MSGBOX5: ! r:
 	mat ml$(3)
-	ml$(1)='There are no checks on employee # '&str$(eno)&'.'
+	ml$(1)='There are no checks on employee '&str$(eno)&'.'
 	ml$(2)='Do you wish to add checks?'
 	fnMsgBox(mat ml$,resp$,'',35)
-	if resp$='Yes' then add=1: goto L2340 else goto MAIN
-L2290: adr=ta(1)
-L2300: if adr=0 then goto MAIN
+	if resp$='Yes' then 
+		add=1
+		goto ScrCheck 
+	else 
+		goto MAIN
+	end if ! /r
+
+
+L2300: ! r:
+	if adr=0 then goto MAIN
 	read #2,using L2320,rec=adr: en2,mat prd,nca noRec L480
-L2320: form pos 1,n 4,2*pd 4,19*pd 5.2,pd 3
-L2330: !
+	L2320: form pos 1,n 4,2*pd 4,19*pd 5.2,pd 3
+	L2330: !
 	dim pr1(21)
 	mat pr1=prd
-L2340: fnTos
+goto ScrCheck ! /r
+ScrCheck: ! r:
+	fnTos
 	mylen=15: mypos=mylen+3 : right=1
 	fnLbl(1,1,'Check Date:',mylen,right)
 	fnTxt(1,mypos,1,0,0,'1',0,'Date of check.',0 )
@@ -340,42 +358,55 @@ L2340: fnTos
 		if j=18 then wh=wh+prd(18) ! tips
 		if j=19 then goto L2650 ! weeks worked
 		if j=20 then wh=wh-prd(j) ! eic
-L2650: next j
-	if prd(3)<>prd(21)+wh then goto MSGBOX4 else goto L2700
-MSGBOX4: !
+		L2650: !
+	next j
+	if prd(3)<>prd(21)+wh then 
+		goto MSGBOX4 
+	else 
+		goto L2700
+	end if ! /r
+MSGBOX4: ! r:
 	mat ml$(4)
 	ml$(1)='Gross pay ('&trim$(cnvrt$('pic(----,---.##)',prd(3)))&') less withholding '
 	ml$(2)='('&trim$(cnvrt$('pic(----,---.##)',wh))&') does not equal'
 	ml$(3)='the net check ('&trim$(cnvrt$('pic(----,---.##)',prd(21)))&')'
 	ml$(4)='Click OK to fix the check.'
 	fnMsgBox(mat ml$,resp$,'',49)
-	if resp$='OK' then goto L2340 else goto MAIN
-L2700: lr2=lrec(2)+1
-	if add=1 then write #2,using L2320,rec=lr2: eno,mat prd,0 duprec L2700 else rewrite #2,using L2320,rec=adr: eno,mat prd,nca
+	if resp$='OK' then goto ScrCheck else goto MAIN ! /r
+L2700: ! 
+	lr2=lrec(2)+1
+	if add=1 then 
+		write #2,using L2320,rec=lr2: eno,mat prd,0 duprec L2700 
+	else 
+		rewrite #2,using L2320,rec=adr: eno,mat prd,nca
+	end if
 	if add=0 then goto L2770
 	if ta(2)>0 then rewrite #2,using L2740,rec=ta(2): lr2
-L2740: form pos 108,pd 3
+	L2740: form pos 108,pd 3
 	if ta(1)=0 then ta(1)=lr2
 	ta(2)=lr2
-L2770: if add=0 then mat prd=prd-pr1 ! file maintenance
+	L2770: !
+	if add=0 then mat prd=prd-pr1 ! file maintenance
 	for j=3 to 20
 		if j=3 then m1=1
 		if j=4 then m1=3
 		if j=5 then m1=5
 		if j>5 then m1=(j-5)*2+5
-		m(m1)=m(m1)+prd(j)
-		m(m1+1)=m(m1+1)+prd(j)
+		xm(m1)=xm(m1)+prd(j)
+		xm(m1+1)=xm(m1+1)+prd(j)
 	next j
-	rewrite #1,using 'form pos 1,N 4,3*C 25,C 11,36*PD 5.2,2*N 5',key=en$: eno,mat k$,ss$,mat m,mat ta
+	rewrite #1,using 'form pos 1,N 4,3*C 25,C 11,36*PD 5.2,2*N 5',key=en$: eno,mat k$,ss$,mat xm,mat ta
 	adr=nca
-	if add=1 then mat pr1=(0): mat prd=(0): goto L2330
-	if add=0 then goto L2300
+	if add=1 then 
+		mat pr1=(0)
+		mat prd=(0)
+		goto L2330
+	else if add=0 then 
+		goto L2300
+	end if ! /r
 
-
-! /r
-
-L2900: if err=4152 then goto INITIAL_BUILD else goto ERTN
+L2900: !
+	if err=4152 then goto INITIAL_BUILD else goto ERTN
 Xit: fnXit
-
 
 include: ertn
