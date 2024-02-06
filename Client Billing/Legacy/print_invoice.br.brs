@@ -2,7 +2,7 @@
 ! PROGRAMS THAT USE THIS LIBRARY:   C:\ACS\Dev-5\Client Billing\ACS Invoices.br.brs   S:\Client Billing\Enter and Print Invoices
 def library fnprint_invoice(out,align, &actnum$, mat billto$, inv_num$, inv_date, mat desc$, mat amt,pbal,ebilling;pdfline$*255)
 	autoLibrary
-	if file(255)=0 then let fnOpenPrn
+	if file(255)=0 then fnOpenPrn
 	if align<>0 and align<>1 then 
 		pr #out: newpage
 	end if 
@@ -30,7 +30,7 @@ def library fnprint_invoice(out,align, &actnum$, mat billto$, inv_num$, inv_date
 	if ebilling=0 then pr #out,using "form pos 1,C 50": "\ql {\f181 "&billto$(3)&"}" else pr #out: "[pos(+0,+7)]"&trim$(billto$(3)) ! 
 	pr #out: ""
 	pr #out: ""
-	let pdfline$="[pos(+0,+7)][SETSIZE(14)][FONT TIMES][Bold]"&lpad$("_",67,"_")&"[/BOLD][SETSIZE(8)][SETFONT(Lucida Sans)]"
+	pdfline$="[pos(+0,+7)][SETSIZE(14)][FONT TIMES][Bold]"&lpad$("_",67,"_")&"[/BOLD][SETSIZE(8)][SETFONT(Lucida Sans)]"
 	if ebilling=1 then pr #out: "[SETSIZE(36)][BOLD][CENTER]"
 	if ebilling=0 then pr #out: "\qc {\f181 \fs72 \b Invoice}" else pr #out: "[pos(+0,+40)]Invoice"
 	if ebilling=0 then pr #out: "" else print #out: "[SETSIZE(8)][/BOLD][LEFT] [SETFONT(Lucida Sans)]"

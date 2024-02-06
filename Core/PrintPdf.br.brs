@@ -101,7 +101,7 @@ def fn_pdf_decipos(xxx,yyy) ! position cursor on page in decipoints
 	fn_phe('&a'&str$(yyy)&'v'&str$(xxx)&'H') ! notice Vertical (Y) is before Horizontal (X) in this syntax.  Everywhere else it should be (x,y)
 fnend
 def fn_phe(pheText$*2048; disableDebug) ! [p]rint #[h]PdfOut: [e]sc$&
-	if ~disableDebug then let fn_debug('\E'&pheText$)
+	if ~disableDebug then fn_debug('\E'&pheText$)
 	fn_print(esc$&pheText$, 1)
 fnend
 def fn_print(text$*2048; disable_return)

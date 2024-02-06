@@ -120,7 +120,7 @@ def fn_teDE(mat fs$,mat fsN,mp1,&notrans,actpd,mat accum,foot$*132,tabnote,&tota
 	read #hGl,using 'form pos MP1,PD 3,pos 87,27*PD 6.2': br,cb,mat by,mat bp eof EoGlMasterAmounts
 	if br=0 then goto ReadGlMasterAmounts
 	if fnfscode=0 or (fnfscode=actpd and fnpriorcd=1) then goto L610
-	if fnfscode<1 or fnfscode>12 then let fnfscode(1)
+	if fnfscode<1 or fnfscode>12 then fnfscode(1)
 	if fnpriorcd=1 then cb=by(fnfscode) else cb=bp(fnfscode)
 	L610: !
 	if br=val(fs$(fsd_number)) then

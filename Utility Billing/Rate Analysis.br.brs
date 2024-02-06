@@ -33,9 +33,9 @@ SCR1: ! r:
 	if svce<>1 and svce<>3 and svce<>4 then
 		dim ml$(0)*256
 		fnAddoneC(mat ml$,'Only the following services may be analyzed with '&env$('program_caption')&'.')
-		if trim$(srvnam$(1))<>'' then let fnAddoneC(mat ml$,tab$&trim$(srvnam$(1)))
-		if trim$(srvnam$(3))<>'' then let fnAddoneC(mat ml$,tab$&trim$(srvnam$(3)))
-		if trim$(srvnam$(4))<>'' then let fnAddoneC(mat ml$,tab$&trim$(srvnam$(4)))
+		if trim$(srvnam$(1))<>'' then fnAddoneC(mat ml$,tab$&trim$(srvnam$(1)))
+		if trim$(srvnam$(3))<>'' then fnAddoneC(mat ml$,tab$&trim$(srvnam$(3)))
+		if trim$(srvnam$(4))<>'' then fnAddoneC(mat ml$,tab$&trim$(srvnam$(4)))
 		fnMsgBox(mat ml$)
 		goto SCR1
 	end if

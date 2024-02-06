@@ -18,7 +18,7 @@ MAIN: !
 	fnLbl(lc+=1,1,'&Destination Company Number:',mylen,1)
 	fnTxt(lc,mypos,5,0,0,'30')
 	resp$(rc+=1)=str$(dcno)
-	if hcno>0 then let fnLbl(lc+=1,1,'Last Company Selected: '&str$(hcno),mylen,1)
+	if hcno>0 then fnLbl(lc+=1,1,'Last Company Selected: '&str$(hcno),mylen,1)
 	lc+=1
 	fnLbl(lc+=1,1,'Warning',80,2,1)
 	fnLbl(lc+=1,1,'Please make sure no one else is',80,2)

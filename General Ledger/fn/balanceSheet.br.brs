@@ -128,7 +128,7 @@ def fn_tePrnDetailAndEquity(mat fs$,mat fsN,mp1,&notrans,actpd,mat accum,foot$*1
 	read #hGl,using 'form pos mp1,PD 3,pos 87,27*PD 6.2': br,cb,mat by,mat bp eof De_EoGlMasterAmounts
 	if br=0 then goto De_ReadGlMasterAmounts
 	if fnfscode=0 or (fnfscode=actpd and fnpriorcd=1) then goto De_L610
-	if fnfscode<1 or fnfscode>12 then let fnfscode(1)
+	if fnfscode<1 or fnfscode>12 then fnfscode(1)
 	if fnpriorcd=1 then cb=by(fnfscode) else cb=bp(fnfscode)
 	De_L610: !
 	if br=val(fs$(fsd_number)) then

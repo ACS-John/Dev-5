@@ -137,7 +137,7 @@ PHASE4: !
 		close #master:
 		close #transvb:
 		fnIndex("[Q]\UBmstr\UBTransvb.h[cno]", "[Q]\UBmstr\UBTrindx.h[cno]","1 19")
-		if removebaddates$='True' then let fn_removebaddates
+		if removebaddates$='True' then fn_removebaddates
 		fnStatus('    Build Transaction - write_count='&str$(write_count))
 		fnStatus('Building Transactions complete.')
 fnend  ! fn_ub_build_transactions

@@ -26,7 +26,7 @@
 
 	fnGetServices(mat serviceName$) : for servicename_item=1 to udim(mat serviceName$) : serviceName$(servicename_item)=trim$(serviceName$(servicename_item)) : next servicename_item
 	delim$=chr$(9)
-	if env$('client')='Pennington' then let delim$=","
+	if env$('client')='Pennington' then delim$=','
 
 	open #hCustomer=fnH: "Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr",i,i,k
 	open #h_alt_bill=fnH: "Name=[Q]\UBmstr\ubAdrBil.h[cno],KFName=[Q]\UBmstr\AdrIndex.h[cno],Shr",i,i,k

@@ -38,8 +38,8 @@ do ! r: main loop
 	anon_user$=resp$(3) : fnureg_write('CS Anonymous User',anon_user$)
 	anon_pass$=resp$(4) : fnureg_write('CS Anonymous Password',anon_pass$)
 	if ckey=5 then goto Xit
-	if ckey=2 then let fn_server_install
-	if ckey=3 then let fn_server_uninstall
+	if ckey=2 then fn_server_install
+	if ckey=3 then fn_server_uninstall
 	fnStatusClose
 loop ! /r
 def fn_server_install

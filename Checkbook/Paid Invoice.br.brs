@@ -12,7 +12,7 @@ on error goto Ertn
 	lbl$(tc=4)='Check Number' 	: tln(tc)=8        	: fltyp$(tc)='G'	: sln(tc)= 8	: mask(tc)=number=30
 
 
-	! ** Let's Make Some Combo Boxes **
+	! ** Make Some Combo Boxes **
 	! CL = Item you want a ComboBox on
 	! C$(cl,2)=linked file : c$(cl,3)=key pos c$(cl,4)=key len
 	! c$(cl,5)=desc pos c$(cl,6)=desc len  C$(cl,7)=Index File

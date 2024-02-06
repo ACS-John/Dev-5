@@ -329,7 +329,7 @@ def fn_askScreen1(&sourceFile$,&sFileNo$,&forwNo$,&enableImport,&enableImport$,&
 		priorityText$				=resp$(resp_priDiaryText)
 		ocacDiaryCode$			=resp$(resp_ocacDiaryCode)(1:pos(resp$(resp_ocacDiaryCode),' ')-1)
 		enableImport$				=resp$(resp_enableImport)
-		if enableImport$='True' then let enableImport=1 else enableImport=0
+		if enableImport$='True' then enableImport=1 else enableImport=0
 		if sourceFile$(len(sourceFile$):len(sourceFile$))='\' then
 			sourceFile$&='*.*'
 		end if
@@ -345,7 +345,7 @@ def fn_askScreen1(&sourceFile$,&sFileNo$,&forwNo$,&enableImport,&enableImport$,&
 		end if
 	end if
 	AskScreen1_testFileExist: !
-	! sourceFile$=fnBr_filename$(sourceFile$)  this forces all filenames to upper case - let us not do that unless we absolutely have to.
+	! sourceFile$=fnBr_filename$(sourceFile$)  this forces all filenames to upper case - do not do that unless we absolutely have to.
 	if ~exists(env$('at')&sourceFile$) then
 		tempMessageboxResponse=fnMessageBox('The file you specified does not exist.\n'&sourceFile$, mb_exclamation+mb_ignore,env$('program_caption'))
 		if tempMessageboxResponse=Mb_Retry then

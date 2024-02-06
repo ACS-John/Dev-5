@@ -932,7 +932,7 @@ AskDd: !
 	for j=1 to udim(mat optDirectDepositAccountType$)
 		if acc=val(optDirectDepositAccountType$(j)(1:2)) then resp$(respc)=optDirectDepositAccountType$(j)
 	next j
-	if resp$(respc)='' then let resp$(respc)=optDirectDepositAccountType$(1)
+	if resp$(respc)='' then resp$(respc)=optDirectDepositAccountType$(1)
 	fnLbl(5,1,'Employee Bank Account Number:',mylen,right)
 	! fnTxt(5,mylen+3,17,17,1,'30',0,'Enter the employee''s bank account number. ')
 	fnTxt(5,mylen+3,17,17,1,'30',0,'Enter the employee''s bank account number. ')

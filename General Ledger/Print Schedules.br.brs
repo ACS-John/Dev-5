@@ -54,7 +54,7 @@
 				goto L400
 				L450: form pos 13,c 50,pos 81,41*pd 6.2
 				if fnfscode=0 or (fnfscode=pedat and fnpriorcd=1) then goto L530 ! CURRENT OR PRIOR
-				if fnfscode<0 or fnfscode>12 then let fnfscode=1
+				if fnfscode<0 or fnfscode>12 then fnfscode=1
 				if fnpriorcd=1 then cb=by(fnfscode) else cb=bp(fnfscode)
 				if fnpriorcd=2 then goto L520
 				if fnfscode>1 then bb=by(fnfscode-1) else bb=0

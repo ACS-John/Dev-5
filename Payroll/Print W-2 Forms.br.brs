@@ -22,10 +22,10 @@
 	dim newcalcode(20)
 	dim newdedfed(20)
 	dim dedfica(20)
-	dim dedst(20)
-	dim deduc(20)
+	! dim dedst(20)
+	! dim deduc(20)
 
-	fnDedNames(mat fullname$,mat abrevname$,mat deductionCode,mat newcalcode,mat newdedfed,mat dedfica,mat dedst,mat deduc)
+	fnDedNames(mat fullname$,mat abrevname$,mat deductionCode,mat newcalcode,mat newdedfed,mat dedfica) ! ,mat dedst,mat deduc)
 
 	dim w2box12Opt$(0)*3
 	mat w2box12Opt$(0)
@@ -38,7 +38,6 @@
 ! /r
 AskInfo: !
 dim cLocality$*8
-
 
 if ~fnask_w2_info(taxYear$,ssrate,ssmax,mcrate,mcmax,pn1,dc1,	unused_state$,loccode,cLocality$) then goto Xit
 			beg_date=val(taxYear$&'0101')
@@ -219,7 +218,7 @@ do ! r: main loop
 						box12aAmt$=cnvrt$('Nz 10.2',miscded(dedItem))
 					else if env$('client')='Billings' then  ! specific catch for adding 2 items into one box 
 						if trim$(box12aCode$)='G' then 
-							let box12aAmt$=cnvrt$('Nz 10.2',val(box12aAmt$)+miscded(dedItem))
+							box12aAmt$=cnvrt$('Nz 10.2',val(box12aAmt$)+miscded(dedItem))
 						end if 
 					end if
 					! descWhich=3

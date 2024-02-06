@@ -222,7 +222,7 @@ def fn_hasSewer(acctno$)
 	dim hs_a(7)
 	read #hCustomer1,using F_CUSTOMER_1,key=acctno$: hs_z$,mat hs_a
 	F_CUSTOMER_1: form pos 1,c 10,x 132,7*pd 2
-	if hs_a(2) then let fn_hasSewer=1 else let fn_hasSewer=0
+	if hs_a(2) then fn_hasSewer=1 else fn_hasSewer=0
 fnend
 Xit: fnXit
 include: ertn

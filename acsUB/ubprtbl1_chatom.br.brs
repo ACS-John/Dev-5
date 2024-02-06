@@ -360,7 +360,7 @@ L2020: !
 		if checkcounter=2 then checkx=6.75 : checky=3.6875
 		if checkcounter=3 then checkx=1.375 : checky=7.9375
 		if checkcounter=0 then checkx=6.75 : checky=7.9375
-		if checkcounter=0 then let fnpa_newpage
+		if checkcounter=0 then fnpa_newpage
 fnend
 
 def fn_bulksort ! bulk sort order

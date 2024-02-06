@@ -210,6 +210,6 @@ Finis: ! r:
 		fnClosePrn
 	end if
 	fnPayrollRegister2(0,include_tips_in_other_wh,append_reg1,ppd)
-goto Xit ! /r let fnChain('S:\acsPR\newprReg2')
+goto Xit ! /r fnChain('S:\acsPR\newprReg2')
 Xit: fnXit
 include: ertn

@@ -33,12 +33,28 @@ def library fnW3(taxyear$,w2printCount,mat w,dcb,state$,stcode$)
 	if setup<>val(env$('cno')) then
 		setup=val(env$('cno'))
 		autoLibrary
-		
-		open #hCompany=fnH: 'Name=[Q]\GLmstr\Company.h[cno],Shr',i,i
+
+
+		! r: get mat a$ and ein$ (same as in w2.br.brs)
 		dim a$(3)*40
 		dim ein$*12
-		read #hCompany,using 'form pos 1,3*C 40,2*C 12,pos 618,40*N 1': mat a$,ein$
-		close #hCompany:
+		if env$('cursys')='GL' then
+			open #hCompany=fnH: 'Name=[Q]\GLmstr\Company.h[cno],Shr',i,i
+			read #hCompany,using 'form pos 1,3*C 40,2*C 12,pos 618,40*N 1': mat a$,ein$
+			close #hCompany:
+			hCompany=0
+		else if env$('cursys')='PR' then
+			open #hCompany=fnH: 'Name=[Q]\PRmstr\Company.h[cno],Shr',i,i
+			read #hCompany,using 'form pos 1,3*C 40,C 12': mat a$,ein$
+			close #hCompany:
+			hCompany=0
+		else
+			pr ' Core\Print\W3.br.brs is not ready for cursys='&env$('cursys')&', please enhance code.'
+			pr ' need to read mat a$ (comp name and address) and ein$ (federal id)'
+			pause
+		end if
+		! /r
+
 		
 		fnreg_read('W-3 - Enable Background' 	,enableBackground$ 	,'True' )
 		MarginTopN =fnReg_read('W-3 - Margin Top'        	,MarginTop$        	,'5' )

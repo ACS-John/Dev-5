@@ -91,7 +91,7 @@ EO_INVOICE_GRID: ! /r
 	if ckey=5 then goto Finis
 	! screen=0
 	if ckey=2 then edit=1 : RecordNumberToEdit=val(resp$(1)) else edit=0 : RecordNumberToEdit=0
-	if (ckey=1 or ckey=2) then let fn_addInvoice(vn$,iv$,RecordNumberToEdit) : goto menu1
+	if (ckey=1 or ckey=2) then fn_addInvoice(vn$,iv$,RecordNumberToEdit) : goto menu1
 	if ckey=3 then gosub PRINTLISTING : goto DISPLAY_INVOICE_GRID ! pr listings of unpaid invoice file
 	if ckey=8 then goto CODE_FOR_PAYMENT ! select invoices to payment
 	if ckey=9 then
@@ -434,7 +434,7 @@ EO_FLEX1: !
 fnButton(3,70,"&Search",68,"Will search for job numbers",1,9)
 fnButton(5,70,"&Search",69,"Will search for available category codes",1,9)
 fnLbl(18,18,"Total: "&trim$(cnvrt$("pic($$$,$$$,$$$.##)",totalcost)),22,1,0)
-if displayalljobs=0 then let fnLbl(19,18,"Invoice: "&trim$(cnvrt$("pic($$$,$$$,$$$.##)",upa)),22,1,0)
+if displayalljobs=0 then fnLbl(19,18,"Invoice: "&trim$(cnvrt$("pic($$$,$$$,$$$.##)",upa)),22,1,0)
 fnButton(18,53,"&Edit",65,"Will allow you to change an allocation",1,5)
 fnButton(3,70,"&Search",63,"Will search for available category codes",1,9)
 fnCmdKey("&Next",1,1,0,"Accept this transaction)")
@@ -842,7 +842,7 @@ def fn_InvoiceAllocationDelete(selected_alloc$*50)
 		end if
 	next j
 	iadGotIt: !
-	if iadMatch then let fn_2dRemove(mat alloc2d$,iadMatch)
+	if iadMatch then fn_2dRemove(mat alloc2d$,iadMatch)
 fnend
 def fn_InvoiceAllocationFM(vn$,iv$; selected_alloc$*50)
 	dim iaf_desc$*30

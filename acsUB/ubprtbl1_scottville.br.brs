@@ -307,7 +307,7 @@ PRINTGRID: !
 ! end if
 		pr #20: 'Call Print.MyFontSize(9)'
 
-! if estimatedate=d1 then let fnpa_line("Bill estimated!",xmargin+1,lyne*29+ymargin)
+! if estimatedate=d1 then fnpa_line("Bill estimated!",xmargin+1,lyne*29+ymargin)
 ! fnpa_line(xmargin+1,lyne*25+1+ymargin,63,0)
 		if bal>0 then
 			fnpa_txt(fnformnumb$(round(bal*1.1,2),2,8),xmargin-4,lyne*19.5+ymargin)
@@ -318,15 +318,15 @@ PRINTGRID: !
 		fnpa_txt(fnformnumb$(bal,2,9),xmargin+39,lyne*19.5+ymargin)
 		addy=23.6 ! 14
 		fnpa_txt('#'&trim$(z$),xmargin+8,lyne*23.5+ymargin)
-! if pe$(1)<>"" then let fnpa_txt(trim$(pe$(1)),xmargin+9,lyne*(addy+=1.1)+ymargin)
+! if pe$(1)<>"" then fnpa_txt(trim$(pe$(1)),xmargin+9,lyne*(addy+=1.1)+ymargin)
 		if trim$(ba$(1))="" and trim$(ba$(2))="" and trim$(ba$(3))="" and trim$(ba$(4))="" then
-			if trim$(pe$(2))<>"" then let fnpa_txt(trim$(pe$(2)),xmargin+8,lyne*(addy+=1.1)+ymargin)
-			if trim$(pe$(3))<>"" then let fnpa_txt(trim$(pe$(3)),xmargin+8,lyne*(addy+=1.1)+ymargin)
-			if trim$(pe$(4))<>"" then let fnpa_txt(trim$(pe$(4)),xmargin+8,lyne*(addy+=1.1)+ymargin)
+			if trim$(pe$(2))<>"" then fnpa_txt(trim$(pe$(2)),xmargin+8,lyne*(addy+=1.1)+ymargin)
+			if trim$(pe$(3))<>"" then fnpa_txt(trim$(pe$(3)),xmargin+8,lyne*(addy+=1.1)+ymargin)
+			if trim$(pe$(4))<>"" then fnpa_txt(trim$(pe$(4)),xmargin+8,lyne*(addy+=1.1)+ymargin)
 		else
-			if trim$(ba$(2))<>"" then let fnpa_txt(trim$(ba$(2)),xmargin+8,lyne*(addy+=1.1)+ymargin)
-			if trim$(ba$(3))<>"" then let fnpa_txt(trim$(ba$(3)),xmargin+8,lyne*(addy+=1.1)+ymargin)
-			if trim$(ba$(4))<>"" then let fnpa_txt(trim$(ba$(4)),xmargin+8,lyne*(addy+=1.1)+ymargin)
+			if trim$(ba$(2))<>"" then fnpa_txt(trim$(ba$(2)),xmargin+8,lyne*(addy+=1.1)+ymargin)
+			if trim$(ba$(3))<>"" then fnpa_txt(trim$(ba$(3)),xmargin+8,lyne*(addy+=1.1)+ymargin)
+			if trim$(ba$(4))<>"" then fnpa_txt(trim$(ba$(4)),xmargin+8,lyne*(addy+=1.1)+ymargin)
 		end if
 		fnpa_txt(trim$(e$(1)),xmargin+8,lyne*(addy+=1.5)+ymargin)
 ! fnpa_txt("  Office 217-628-3416",xmargin+1,lyne*28.5+ymargin)
@@ -344,12 +344,12 @@ PRINTGRID: !
 		pr #20: 'Call Print.MyFontSize(12)'
 		addy=10
 		fnpa_txt('#'&trim$(z$),xmargin+71,lyne*(addy+=1.3)+ymargin)
-		if pe$(1)<>"" then let fnpa_txt(trim$(pe$(1)),xmargin+71,lyne*(addy+=1.5)+ymargin)
-		if pe$(2)<>"" then let fnpa_txt(trim$(pe$(2)),xmargin+71,lyne*(addy+=1.3)+ymargin)
-		if pe$(3)<>"" then let fnpa_txt(trim$(pe$(3)),xmargin+71,lyne*(addy+=1.3)+ymargin)
-		if pe$(4)<>"" then let fnpa_txt(trim$(pe$(4)),xmargin+71,lyne*(addy+=1.3)+ymargin)
+		if pe$(1)<>"" then fnpa_txt(trim$(pe$(1)),xmargin+71,lyne*(addy+=1.5)+ymargin)
+		if pe$(2)<>"" then fnpa_txt(trim$(pe$(2)),xmargin+71,lyne*(addy+=1.3)+ymargin)
+		if pe$(3)<>"" then fnpa_txt(trim$(pe$(3)),xmargin+71,lyne*(addy+=1.3)+ymargin)
+		if pe$(4)<>"" then fnpa_txt(trim$(pe$(4)),xmargin+71,lyne*(addy+=1.3)+ymargin)
 		pr #20: 'Call Print.MyFontSize(10)'
-		if final>0 then let fnpa_txt("Final Bill",xmargin+75,lyne*(addy+5)+ymargin)
+		if final>0 then fnpa_txt("Final Bill",xmargin+75,lyne*(addy+5)+ymargin)
 
 		if billcounter=0 then
 			fnpa_newpage

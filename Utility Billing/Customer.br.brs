@@ -82,7 +82,7 @@ def fn_customer(; &editOne$,___,editOne,ckey)
 		rewrite #hCustomer1,using form$(hCustomer1),key=z$: mat customer$,mat customerN
 		! rewrite #hCustomer1,using F_CUSTOMER_1,key=z$: z$,mat e$,f$(1),mat a,mat xb,mat c,mat xd,bal,lastBillingDate,mat g,mat adr,alp$,f$(2),f$(3),bra_legacy,mat gb,df$,dr$,dc$,da$,mat extra,mat extra$
 
-		if ad1 then let fn_record_previous_update(z$) ! &' '&e$(2))
+		if ad1 then fn_record_previous_update(z$) ! &' '&e$(2))
 		if oldService1DepositAmount<>xb(8) then
 			fn_depositChangeLog(z$,oldService1DepositAmount,xb(8),date('mmddyy'),trim$(srvnam$(1))(1:15)&' Deposit Changed')
 		end if
@@ -339,7 +339,7 @@ def fn_customer(; &editOne$,___,editOne,ckey)
 		custInfo$(respc+=1)=str$(extra(4))
 		fnLbl(18,1,'Final Billing Code:',mylen,1)
 		code$(1)='0 - Active'
-		! if env$('client')='Merriam Woods' then let code$(1)='0 - Active (And Shut-Off/Bill)'
+		! if env$('client')='Merriam Woods' then code$(1)='0 - Active (And Shut-Off/Bill)'
 		code$(2)='1 - Inactive / Final Billed'
 		code$(3)='2 - Inactive / Deposit Refunded'
 		code$(4)='3 - Active / but Do Not Bill'
@@ -877,7 +877,7 @@ fnend
 	fnend
 def library fnDepositChangeLog(z$*10,odp,ndp,chgDateMmDdYy,comment$*32)
 	if ~setup then fn_setup
-	if ~setup_depositChange then let fn_setup_depositChange
+	if ~setup_depositChange then fn_setup_depositChange
 	fnDepositChangeLog=fn_depositChangeLog(z$,odp,ndp,chgDateMmDdYy,comment$)
 fnend
 def fn_setup_depositChange
@@ -1177,7 +1177,7 @@ REMOVE_INCORRECT_ALLOCATIONS: ! r:
 	next j
 return  ! /r
 def fn_record_previous_update(rp_account$*10)
-	if ~record_previous_load then let fn_record_previous_load(prev_list_id$)
+	if ~record_previous_load then fn_record_previous_load(prev_list_id$)
 	!   pr 'before' : for x=1 to 10 : pr x;'.';rp_prev$(x) : next x
 	rp_which=srch(mat rp_prev$,rp_account$)
 	if rp_which>0 then ! remove the old entry
@@ -1405,7 +1405,7 @@ def fn_ask_account(prev_list_id$,&x$,hCustomer1; select_button_text$,aas_button_
 		else
 			resp$(respc+=1)=hact$
 		end if
-		if aas_button_enable_add then let fnCmdKey('&Add',2,0,0,'Add a new customer' )
+		if aas_button_enable_add then fnCmdKey('&Add',2,0,0,'Add a new customer' )
 		fnCmdKey(select_button_text$,1,1,0,select_button_text$&' the selected/highlighted record.')
 		fnCmdKey('Search',6,0,0,'Search for customer record')
 		fnCmdKey('Back',5,0,1,'Returns to previous screen')

@@ -7,7 +7,7 @@ def library fnub_cnv_note_phase_1
 	! r: ** phase 1 **
   open #note1=fnH: "Name=[Q]\UBmstr\Note1.h[cno]",i,outi,r
 	if version(note1)=0 and rln(note1)=16 then
-		let version(note1,1)
+		version(note1,1)
     close #note1:
     fnStatus("[Q]\UBmstr\Note1.h[cno] was already in version 1 format.  Version number corrected.")
 		goto EOPHASE1

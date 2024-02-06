@@ -58,7 +58,7 @@ PrTeDe: ! r:
 	read #hAcct,using Freport: dno,ano,sno,br,cb,mat by,mat bp eof L740
 	if br=0 then goto ReadAcct
 	if fnfscode=0 or (fnfscode=actpd and priorcd=1) then goto L660
-	if fnfscode<1 or fnfscode>12 then let fnfscode(1)
+	if fnfscode<1 or fnfscode>12 then fnfscode(1)
 	if fnpriorcd=1 then cb=by(fnfscode) else cb=bp(fnfscode)
 	L660: !
 	for x=1 to 10

@@ -38,21 +38,21 @@ MENU1: !
 !  if teno=13 and tdept=21 then pause
     is_first=1
     if workman_comp=0 then workman_comp=99 ! default to 99 if no code entered
-    if prev_comp<>0 and prev_comp<>workman_comp then let fn_sub_total : prev_comp=workman_comp : heno=teno ! subtotal any time codes change !
+    if prev_comp<>0 and prev_comp<>workman_comp then fn_sub_total : prev_comp=workman_comp : heno=teno ! subtotal any time codes change !
     checkkey$=cnvrt$("pic(zzzzzzz#)",teno)&cnvrt$("pic(zz#)",tdept)&cnvrt$("pd 6",beg_date) ! index employee#,department# and payroll date
 ! checkkey$=cnvrt$("pic(zzzzzzz#)",teno)&cnvrt$("pic(zz#)",0)&cnvrt$("pd 6",0) ! index employee#,department# and payroll date
     restore #h_payrollchecks,key>=checkkey$: nokey NEXT_DEPARTMENT
 ! pr #255: '     *restore h_payrollchecks: '&checkkey$
     do
       read #h_payrollchecks,using "form pos 1,N 8,n 3,PD 6,N 7,5*PD 3.2,37*PD 5.2": heno,tdn,prd,ckno,mat tdc,mat tcp eof NEXT_DEPARTMENT
-!   if heno=teno and tdept><tdn then let fn_print_accumulated : goto NEXT_DEPARTMENT
+!   if heno=teno and tdept><tdn then fn_print_accumulated : goto NEXT_DEPARTMENT
       if heno<>teno or tdept<>tdn then
 !         pr #255: '(A)'
         fn_print_accumulated
         goto NEXT_DEPARTMENT
       end if  ! heno<>teno
       if prd=>beg_date and prd<=end_date then ! this year
-!     if prev_comp<>0 and prev_comp<>workman_comp then let fn_sub_total ! subtotal any time codes change !
+!     if prev_comp<>0 and prev_comp<>workman_comp then fn_sub_total ! subtotal any time codes change !
         if is_first=0 then
           if prev_comp=workman_comp and holdeno=teno then
 !         pr #255: ' *(c) read h_payrollchecks: heno='&str$(heno)&',tdn='&str$(tdn)&',prd='&str$(prd)&',ckno='&str$(ckno)
@@ -75,7 +75,7 @@ NEXT_DEPARTMENT: !
   loop
 EO_DEPARTMENT: !
   fn_print_accumulated
-  if sum(subtot)>(0) then let fn_sub_total
+  if sum(subtot)>(0) then fn_sub_total
   pr #255,using F_TOTAL: "Total",tottot(1),tottot(2)
 Finis: !
   close #hEmployee: ioerr ignore

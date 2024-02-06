@@ -162,10 +162,10 @@ MBX_XIT: !
 	Orig_Mb_Fkey=0
 fnend
 def fnarrayreverse$(mat in$,mat out$)
-	let in_udim=udim(in$)
+	in_udim=udim(in$)
 	mat out$(in_udim)
 	for in_item=1 to in_udim
-		let out$(in_udim-in_item+1)=in$(in_item)
+		out$(in_udim-in_item+1)=in$(in_item)
 	next in_item
 fnend
 def fn_fileMenu(Mbxfm_Title$*80,fileCount, _

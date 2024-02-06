@@ -79,7 +79,7 @@ L780: ! read amounts from gl master
 L790: read #3,using L280: ir,bb,cb,mat by,mat bp eof L980
 	if ir=0 then goto L790
 	if fnfscode=0 or (fnfscode=actpd and fnpriorcd=1) then goto L880
-	if fnfscode<1 or fnfscode>13 then let fnfscode=1 ! 6/8/88
+	if fnfscode<1 or fnfscode>13 then fnfscode=1 ! 6/8/88
 	if fnpriorcd=1 then cb=by(fnfscode) else cb=bp(fnfscode)
 	if fnpriorcd=2 then goto L870
 	if fnfscode>1 then bb=by(fnfscode-1) else bb=0

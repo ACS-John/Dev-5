@@ -77,7 +77,7 @@ dim contactEmail$*64 ! 40 ! Employer Contact E-Mail/Internet
 
 
 def library fnask_w2_info(&taxYear$,&ssrate,&ssmax,&mcrate,&mcmax,&pn1,&dc1,&state$,enableAskCLocality,&cLocality$)
-	if setup<>val(env$('cno')) then fn_setup
+	if setup$<>env$('cursys')&env$('cno') then fn_setup
 	fnask_w2_info=fn_ask_w2_info(taxYear$, ssrate,ssmax,mcrate,mcmax, pn1,dc1,state$,enableAskCLocality,cLocality$)
 fnend
 def fn_ask_w2_info(&taxYear$, _
@@ -447,20 +447,34 @@ fnend
 
 
 def fn_setup ! libraries and Company
-	if ~setup then
+	if setup$='' then
 		autoLibrary
 		on error goto Ertn
 	end if
-	if setup<>val(env$('cno')) then
-		setup=val(env$('cno'))
+	if setup$<>env$('cursys')&env$('cno') then
+		setup$=env$('cursys')&env$('cno')
 		dim optNameFormat$(2)*20,nameFormat$*20
 		optNameFormat$(1)='First Name First'
 		optNameFormat$(2)='Last Name First'
-		open #hCompany=fnH: 'Name=[Q]\GLmstr\Company.h[cno],Shr',i,i
+		! r: get mat a$ and ein$  (same as in w3.br.brs)
 		dim a$(3)*40
-		dim empId$*12
-		read #hCompany,using 'form pos 1,3*C 40,2*C 12,pos 618,40*N 1': mat a$,empId$
-		close #hCompany:
+		dim ein$*12
+		if env$('cursys')='GL' then
+			open #hCompany=fnH: 'Name=[Q]\GLmstr\Company.h[cno],Shr',i,i
+			read #hCompany,using 'form pos 1,3*C 40,2*C 12,pos 618,40*N 1': mat a$,ein$
+			close #hCompany:
+			hCompany=0
+		else if env$('cursys')='PR' then
+			open #hCompany=fnH: 'Name=[Q]\PRmstr\Company.h[cno],Shr',i,i
+			read #hCompany,using 'form pos 1,3*C 40,C 12': mat a$,ein$
+			close #hCompany:
+			hCompany=0
+		else
+			pr ' Core\Print\W2.br.brs is not ready for cursys='&env$('cursys')&', please enhance code.'
+			pr ' need to read mat a$ (comp name and address) and ein$ (federal id)'
+			pause
+		end if
+		! /r
 
 		dim aCity$*64,aSt$*64,aZip$*64
 		fnCsz(a$(3),aCity$,aSt$,aZip$)
@@ -500,7 +514,7 @@ def fn_ask_margins
 fnend
 
 def library fnW2Text(ss$,controlNumber$,mat w,nameFirst$*64,nameMiddle$*64,nameLast$*64,nameSuffix$*64,retirementPlanX$,mat k$,box12aCode$,box12aAmt$,box12bCode$,box12bAmt$,box12cCode$,box12cAmt$,box12dCode$,box12dAmt$,state$,stcode$,printLocality$*6; box14Amt)
-	if setup<>val(env$('cno')) then fn_setup
+	if setup$<>env$('cursys')&env$('cno') then fn_setup
 	fnW2Text=fn_w2Text(ss$,controlNumber$,mat w,nameFirst$,nameMiddle$,nameLast$,nameSuffix$,retirementPlanX$,mat k$,box12aCode$,box12aAmt$,box12bCode$,box12bAmt$,box12cCode$,box12cAmt$,box12dCode$,box12dAmt$,state$,stcode$,printLocality$, box14Amt)
 fnend
 
@@ -596,9 +610,9 @@ def fn_w2Text(ss$,controlNumber$,mat w, _
 		else
 			fnpa_txt(ss$,left+44,fn_line(1))
 		end if
-		! if env$('acsdeveloper')<>'' then let specialform2018=1
-		! removed 1/21/2022        ! if env$('client')='Thomasboro' or env$('client')='Cerro Gordo V' or env$('client')='Cerro Gordo T' or env$('client')='Kincaid' or env$('client')='Hope Welty' or env$('client')='Bethany' then let specialform2018=1
-		fnpa_txt(empId$,w2Col1,fn_line(2))
+		! if env$('acsdeveloper')<>'' then specialform2018=1
+		! removed 1/21/2022        ! if env$('client')='Thomasboro' or env$('client')='Cerro Gordo V' or env$('client')='Cerro Gordo T' or env$('client')='Kincaid' or env$('client')='Hope Welty' or env$('client')='Bethany' then specialform2018=1
+		fnpa_txt(ein$,w2Col1,fn_line(2))
 		fnpa_txt(cnvrt$('pic(zzzzzzzzzz.zz',w(2)),w2Col2,fn_line(2))
 		fnpa_txt(cnvrt$('pic(zzzzzzzzzz.zz',w(1)),w2Col3,fn_line(2))
 		fnpa_txt(a$(1),w2Col1,fn_line(3))
@@ -658,7 +672,7 @@ def fn_w2Text(ss$,controlNumber$,mat w, _
 	! /r
 	else if w2destinationOpt$(2)='True' then ! r: Export AMS
 		pr #hExport: 'ROAN='&controlNumber$
-		pr #hExport: 'FEIN='&empId$
+		pr #hExport: 'FEIN='&ein$
 		pr #hExport: 'WAGES='&str$(w(2))
 		pr #hExport: 'FITW='&str$(w(1))
 		pr #hExport: 'PNAME1='&a$(1)
@@ -908,7 +922,7 @@ fnend
 	return ! /r
 	Efw2_Ra:  ! r: • RA (Submitter) Record – Required
 		fn_oC('RA',2)
-		fn_oC(empId$   	, 9) !  3-11 Submitter's Employer Identification Number (EIN)
+		fn_oC(ein$   	, 9) !  3-11 Submitter's Employer Identification Number (EIN)
 		fn_oC(bsoUser$ 	, 8) ! 12-19 User Identification (User ID    ! XXX TODO: Ask this on the screen
 		fn_oC(''        	, 4) ! 20-23 Software Vendor Code
 		fn_oC(''        	, 5) ! 24-28 Blanks
@@ -958,7 +972,7 @@ fnend
 		fn_oC('RE',2)
 		fn_oC(taxYear$,4) ! 3-6 Tax Year
 		fn_oC('',  1) !       7 Agent Indicator Code
-		fn_oC(empId$,  9) !    8-16 Employer /Agent Identification Number (EIN)
+		fn_oC(ein$,  9) !    8-16 Employer /Agent Identification Number (EIN)
 		fn_oC('',  9) !   17-25 Agent for EIN
 		fn_oC('',  1) !      26 Terminating Business Indicator
 		fn_oC('',  4) !   27-30 Establishment Number
@@ -1019,7 +1033,7 @@ fnend
 	return ! /r
 
 def library fnFormCopyAwithBackgroundWarn
-	if setup<>val(env$('cno')) then fn_setup
+	if setup$<>env$('cursys')&env$('cno') then fn_setup
 	fnFormCopyAwithBackgroundWarn=fn_FormCopyAwithBackgroundWarn
 fnend
 def fn_FormCopyAwithBackgroundWarn

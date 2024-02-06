@@ -68,7 +68,7 @@ ASK_JOB: ! r:
 		fnCmbJob(1,mypos)
 		resp$(respc+=1)=jn$
 		if k=1 then goto L600
-		if k>1 then let fnLbl(3,1,'Last Job Number entered was '&prtj$(k-1),50,1)
+		if k>1 then fnLbl(3,1,'Last Job Number entered was '&prtj$(k-1),50,1)
 L600: fnCmdSet(2)
 		ckey=fnAcs(mat resp$)
 		if ckey=5 then goto L690

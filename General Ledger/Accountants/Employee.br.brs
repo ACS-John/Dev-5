@@ -125,7 +125,7 @@ DISPLAY_EMPLOYEE: ! r: employee screen
 	ckey=fnAcs(mat resp$)
 	disable=1
 	if ckey=5 then goto MAIN
-	if ckey=2 then let fnW2supEdit(resp$(1)) : goto DISPLAY_EMPLOYEE
+	if ckey=2 then fnW2supEdit(resp$(1)) : goto DISPLAY_EMPLOYEE
 	if ckey=6 then goto DELETEIT
 	if ckey=3 then add=0: goto REVIEW_CHECKS
 	if ckey=7 then disable=0: goto DISPLAY_EMPLOYEE

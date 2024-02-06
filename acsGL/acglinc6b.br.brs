@@ -59,7 +59,7 @@ L660: ! read amounts from gl master file
 L670: read #3,using L760: ir,bb,cb,mat by,mat bp,mat bm eof L940
 	if ir=0 then goto L670 ! skip accounts with no income reference #
 	if fnfscode=0 then goto L760
-	if fnfscode<1 or fnfscode>13 then let fnfscode=1
+	if fnfscode<1 or fnfscode>13 then fnfscode=1
 	if fnpriorcd=1 then cb=by(fnfscode) else cb=bp(fnfscode)
 	if fnpriorcd=2 then goto L750
 	if fnfscode>1 then bb=by(fnfscode-1) else bb=0
