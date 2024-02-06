@@ -152,7 +152,7 @@ BatchHeaderRecord: ! r: (5) Company/Batch Header Record
 	ecc$="PPD" ! Standard Entry Class Code
 	ced$="Payroll  " ! Company Entry Descriptive
 	eed$=date$("YYMMDD") ! Effective Entry Date
-	if uprc$(trim$(bankname$))="RESOURCE BANK" then let eed$=date$(days(date)+2,"YYMMDD")
+	if uprc$(trim$(bankname$))="RESOURCE BANK" then eed$=date$(days(date)+2,"YYMMDD")
 	osc$="1" ! Originator Status Code
 	bn=1 !  BN=Batch Number
 	write #hDdout,using F_ddout_5: 5,scc,env$('cnam')(1:16),cdd$="Payroll",'9'&fedid$,ecc$,ced$,fncd(d2),eed$,"",osc$,bankaccount$,bn,crlf$

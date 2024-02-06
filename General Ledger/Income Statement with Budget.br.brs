@@ -87,7 +87,7 @@ Te_D: ! r:
 	F3: form pos mp1,pd 3,pos 81,41*pd 6.2
 	if ir=0 then goto L670 ! skip accounts with no income reference #
 	if fnfscode=0 or (fnfscode=actpd and fnpriorcd=1) then goto L760
-	if fnfscode<1 or fnfscode>13 then let fnfscode=1
+	if fnfscode<1 or fnfscode>13 then fnfscode=1
 	if fnpriorcd=1 then cb=by(fnfscode) else cb=bp(fnfscode)
 	if fnpriorcd=2 then goto L750
 	if fnfscode>1 then bb=by(fnfscode-1) else bb=0

@@ -299,7 +299,7 @@ PRINTGRID: !
 
 		pr #20: 'Call Print.MyFontSize(10)'
 !
-		if estimatedate=d1 then let fnpa_txt("Bill estimated!",xmargin+1,lyne*27+ymargin)
+		if estimatedate=d1 then fnpa_txt("Bill estimated!",xmargin+1,lyne*27+ymargin)
 		fnpa_line(xmargin+1,lyne*23+1+ymargin,63,0)
 		fnpa_txt("Pay By    "&cnvrt$("PIC(ZZ/ZZ/ZZ)",d4)&":",xmargin+1,lyne*24+ymargin)
 		fnpa_txt(fnformnumb$(bal,2,9),xmargin+42,lyne*24+ymargin)
@@ -347,14 +347,14 @@ PRINTGRID: !
 		if df$="Y" then
 			fnpa_txt("Drafted",xmargin+1,lyne*(addy+=1)+ymargin)
 		end if
-		if final>0 then let fnpa_txt("Final Bill",xmargin+1,lyne*(addy+5)+ymargin)
+		if final>0 then fnpa_txt("Final Bill",xmargin+1,lyne*(addy+5)+ymargin)
 		pr #20: 'Call Print.MyFontSize(12)'
 		addy+=.5
 		fnpa_txt('#'&trim$(z$),xmargin+75,lyne*(addy+=1.1)+ymargin)
-		if pe$(1)<>"" then let fnpa_txt(trim$(pe$(1)),xmargin+75,lyne*(addy+=1.1)+ymargin)
-		if pe$(2)<>"" then let fnpa_txt(trim$(pe$(2)),xmargin+75,lyne*(addy+=1.1)+ymargin)
-		if pe$(3)<>"" then let fnpa_txt(trim$(pe$(3)),xmargin+75,lyne*(addy+=1.1)+ymargin)
-		if pe$(4)<>"" then let fnpa_txt(trim$(pe$(4)),xmargin+75,lyne*(addy+=1.1)+ymargin)
+		if pe$(1)<>"" then fnpa_txt(trim$(pe$(1)),xmargin+75,lyne*(addy+=1.1)+ymargin)
+		if pe$(2)<>"" then fnpa_txt(trim$(pe$(2)),xmargin+75,lyne*(addy+=1.1)+ymargin)
+		if pe$(3)<>"" then fnpa_txt(trim$(pe$(3)),xmargin+75,lyne*(addy+=1.1)+ymargin)
+		if pe$(4)<>"" then fnpa_txt(trim$(pe$(4)),xmargin+75,lyne*(addy+=1.1)+ymargin)
 !
 		if billcounter=1 then checkx=1.375 : checky=3.6875
 		if billcounter=2 then checkx=6.75 : checky=3.6875

@@ -44,7 +44,7 @@ ASKEMPLOYEE: !
 	eno=val(resp$(1)(1:8)): holdeno=eno
 	eno$=lpad$(str$(eno),8)
 	if ckey=2 then read #1,using L190,key=eno$: eno,name$,burden,burden2,burden3 nokey ASKEMPLOYEE : goto SCREEN_1
-	if ckey=6 then let fnburden_srch(eno$,fixgrid) : eno$=lpad$(rtrm$(eno$),8) : read #1,using L190,key=eno$: eno,name$,burden,burden2,burden3 nokey ASKEMPLOYEE : goto SCREEN_1
+	if ckey=6 then fnburden_srch(eno$,fixgrid) : eno$=lpad$(rtrm$(eno$),8) : read #1,using L190,key=eno$: eno,name$,burden,burden2,burden3 nokey ASKEMPLOYEE : goto SCREEN_1
 	if trim$(eno$)="" then goto ASKEMPLOYEE else read #1,using L190,key=eno$: eno,name$,burden,burden2,burden3 nokey ASKEMPLOYEE : goto SCREEN_1
 	if ckey=7 then gosub RECREATE_GRID: goto ASKEMPLOYEE
 SCREEN_1: ! maintain personnel burdern screen

@@ -29,7 +29,7 @@ MENU1: ! r:
 ! /r
 ! r: get ready to run
 	fnStatus('date range: '&str$(begdat)&' - '&str$(enddat))
-	if del_dupe_only then let fnStatus('only deleting duplicate entries')
+	if del_dupe_only then fnStatus('only deleting duplicate entries')
 	open #1: "Name=[Q]\GLmstr\GLmstr.h[cno],KFName=[Q]\GLmstr\GLIndex.h[cno],Shr",i,outIn,k
 	if uprc$(code$)="H" then
 		fnStatus('Processing history instead of current transactions')

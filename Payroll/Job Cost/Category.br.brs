@@ -40,7 +40,7 @@ ASKCATEGORY: !
 	category=val(resp$(1)(1:5)): holdcategory=category
 	category$=lpad$(str$(category),5)
 	if ckey=2 then read #1,using L180,key=category$: category,name$ nokey ASKCATEGORY : goto SCREEN_1
-	if ckey=6 then let fncategory_srch(category$,fixgrid) : category$=lpad$(rtrm$(category$),5) : read #1,using L180,key=category$: category,name$ nokey ASKCATEGORY : goto SCREEN_1
+	if ckey=6 then fncategory_srch(category$,fixgrid) : category$=lpad$(rtrm$(category$),5) : read #1,using L180,key=category$: category,name$ nokey ASKCATEGORY : goto SCREEN_1
 	if trim$(category$)="" then goto ASKCATEGORY else read #1,using L180,key=catergory$: category,name$ nokey ASKCATEGORY : goto SCREEN_1
 	if ckey=7 then gosub RECREATE_GRID: goto ASKCATEGORY
 SCREEN_1: ! maintain category screen

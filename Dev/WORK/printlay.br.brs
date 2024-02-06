@@ -18,7 +18,7 @@ L120: open #101: "SROW=9,SCOL=4,EROW=13,ECOL=79,BORDER=DR,CAPTION=PRINT LAYOUTS"
 	pr f "10,5,C 60": "Enter 0 for Printer only, 1 for Screen only, or 2 for Both:"
 	pr f "12,5,C 60": "Enter Ext/VolId to pr all or blank to select:"
 L160: input fields mat io1$: pp,ev$ conv L160
-	if pp=0 then let fnOpenPrn
+	if pp=0 then fnOpenPrn
 	if pp<0 or pp>2 then goto L160
 	ev$=rtrm$(ev$)
 	if ev$="" then goto L260

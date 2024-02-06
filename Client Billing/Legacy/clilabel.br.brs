@@ -16,7 +16,7 @@ open #1: 'Name=S:\Core\Data\acsllc\Client.h[cno],KFName=S:\Core\Data\acsllc\Clie
 open #32: 'Name=S:\Core\Data\acsllc\Client.h[cno],KFName=S:\Core\Data\acsllc\CLIndx2.h[cno],Shr',i,i,k
 L190: !
 pr newpage
-if prtall=1 then let fnOpenPrn
+if prtall=1 then fnOpenPrn
 close #101: ioerr ignore
 open #101: 'SROW=10,SCOL=20,EROW=12,ECOL=60,BORDER=DR,CAPTION=PRINT LABELS FOR SELECTED CLIENTS',display,outIn
 pr f '11,21,C 14,N': 'Client Number:'

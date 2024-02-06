@@ -27,8 +27,8 @@ MENU1: ! r:
 		if do_fix_trans_breakdowns then 
 			fn_transBreakdowns(do_fix,do_report)
 		end if
-		if do_move_credit then let fn_moveCredit(do_move_credit)
-		if do_apply_credit then let fn_applyCreditFromOther(do_apply_credit)
+		if do_move_credit then fn_moveCredit(do_move_credit)
+		if do_apply_credit then fn_applyCreditFromOther(do_apply_credit)
 	end if
 goto Xit ! /r
 Xit: fnXit 
@@ -185,7 +185,7 @@ def fn_transBreakdowns(do_fix,do_report; ___,needsFixed)
 fnend  ! fn_balanceBreakdowns
 def fn_reportItClose(&print_count)
 	if print_count>0 then 
-		let fnClosePrn
+		fnClosePrn
 		pr 'print_count=';print_count
 	end if
 	setup_report_it=0

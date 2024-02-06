@@ -114,11 +114,11 @@ CLEARING_OPTIONS: !
 	fnLbl(2,1,"Cleared Amount:",28,1)
 	fnTxt(2,31,12,0,1,'10',0,"You do not have to enter the amount.  If you do, it will compare the amount you enter to your check history and warn you of any differences. ")
 	resp$(respc+=1)=""
-	if ti3=1 then let fnButton(1,50,"Clear Range of Checks",60,"This option allows you to clear a range of checks without having to enter each check number",0,20)
-	if ti3=2 then let fnButton(1,50,"Clear Deposits by Amount",61,"This option allows you to clear deposits by entering the amount without having to know the reference number.",0,30)
-	if ti3=2 then let fnButton(3,50,"Clear Deposits by Date Range",62,"This option allows you to clear deposits by entering a date range.",0,30)
-	if ti3=2 then let fnButton(5,50,"Clear Deposits from List",63,"This option allows you to clear deposits from a listing of all outstanding deposits.",0,30)
-	if ti3=1 then let fnButton(3,50,"Clear Checks from List",64,"This option allows you to clear checks from a listing of all outstanding checks.",0,20)
+	if ti3=1 then fnButton(1,50,"Clear Range of Checks",60,"This option allows you to clear a range of checks without having to enter each check number",0,20)
+	if ti3=2 then fnButton(1,50,"Clear Deposits by Amount",61,"This option allows you to clear deposits by entering the amount without having to know the reference number.",0,30)
+	if ti3=2 then fnButton(3,50,"Clear Deposits by Date Range",62,"This option allows you to clear deposits by entering a date range.",0,30)
+	if ti3=2 then fnButton(5,50,"Clear Deposits from List",63,"This option allows you to clear deposits from a listing of all outstanding deposits.",0,30)
+	if ti3=1 then fnButton(3,50,"Clear Checks from List",64,"This option allows you to clear checks from a listing of all outstanding checks.",0,20)
 	fnCmdSet(2): ckey=fnAcs(mat resp$)
 	if ckey=5 then goto MENU1
 	k$=resp$(1) ! check # to clear
@@ -445,7 +445,7 @@ ENTER_DEPOSITS_CLEARED: !
 	fnLbl(1,1,"Amount to Clear:",25,1)
 	fnTxt(1,28,12,0,1,'10',0,"Enter each deposit amount that shows as cleared on the bank statement.")
 	resp$(respc+=1)=""
-	if am1>0 then let fnLbl(2,1,"Last Amount Entered:"&cnvrt$("N 13.2",am1),38,1)
+	if am1>0 then fnLbl(2,1,"Last Amount Entered:"&cnvrt$("N 13.2",am1),38,1)
 	fnCmdSet(2): ckey=fnAcs(mat resp$)
 	if ckey=5 then goto PRINT_EDITS
 	am1=val(resp$(1)) ! deposit amount entered
@@ -652,8 +652,8 @@ L5690: fnLbl(17,30,"Total Cleared:",16,1)
 	resp$(respc+=1)=displayattop$
 	fnCmdKey("&Display Cleared",3,0,0,"Displays all transactions cleared on this clearing date")
 	fnCmdKey("&Display Uncleared",2,0,0,"Displays all remaining uncleared transactions")
-	if clear_from_range=1 then let fnCmdKey("&Clear by Range",6,1,0,"Enter another range of reference numbers")
-	if clear_from_range=0 then let fnCmdKey("&Clear",1,1,0,"Clear the highlited transaction")
+	if clear_from_range=1 then fnCmdKey("&Clear by Range",6,1,0,"Enter another range of reference numbers")
+	if clear_from_range=0 then fnCmdKey("&Clear",1,1,0,"Clear the highlited transaction")
 	fnCmdKey("C&ancel",5,0,1,"Return to Bank Reconciliation menu")
 	ckey=fnAcs(mat resp$)
 	displaycleared=total= clear_from_range=0

@@ -213,8 +213,8 @@ PRINT_940: ! r: only fills in the blanks at this time
 	fnpa_txt(cnvrt$("pic(zzzzzzzzzzz.##)",t3*feducrat/100),column3+leftmargin,155+topmargin) ! tax
 	fnpa_txt(cnvrt$("pic(zzzzzzzzzzz.##)",t3*feducrat/100),column3+leftmargin,199+topmargin) ! tax
 	fnpa_txt(cnvrt$("pic(zzzzzzzzzzz.##)",deposits),column3+leftmargin,208+topmargin) ! deposits
-	if (t3*feducrat/100)-deposits>0 then let fnpa_txt(cnvrt$("pic(zzzzzzzzzzz.##)",(t3*feducrat/100)-deposits),column3+leftmargin,222.5+topmargin) ! due
-	if (t3*feducrat/100)-deposits<=0 then let fnpa_txt(cnvrt$("pic(-----------.##)",abs((t3*feducrat/100)-deposits)),column3+leftmargin,31+topmargin) ! overpaid
+	if (t3*feducrat/100)-deposits>0 then fnpa_txt(cnvrt$("pic(zzzzzzzzzzz.##)",(t3*feducrat/100)-deposits),column3+leftmargin,222.5+topmargin) ! due
+	if (t3*feducrat/100)-deposits<=0 then fnpa_txt(cnvrt$("pic(-----------.##)",abs((t3*feducrat/100)-deposits)),column3+leftmargin,31+topmargin) ! overpaid
 	fnpa_newpage
 	fnpa_background('S:\Core\pdf\2018\940-PR\Page 2.pdf')
 	! fnpa_pic("S:\acsPR\form 940 pg2.bmp",1,1)

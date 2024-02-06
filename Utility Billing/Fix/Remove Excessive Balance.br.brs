@@ -13,7 +13,7 @@ do
 	cont=fn_options(route,billingdate$) ! collect user options
 	if trim$(billingdate$)="0" then valid=0 else valid=1
 	mat msgtext$(1:1)=("You must enter a billing date")
-	if valid=0 then let fnMsgBox(mat msgtext$,answer$,"Invalid Entry",0)
+	if valid=0 then fnMsgBox(mat msgtext$,answer$,"Invalid Entry",0)
 loop while not valid
 
 mat msgtext$(5)

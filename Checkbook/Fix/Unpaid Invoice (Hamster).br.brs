@@ -113,7 +113,7 @@ BUILD_LAYOUT: ! r:
 	mask(mc+=1)=mmddyy
 ! ** Storage Position ** 
 	sc=0 ! Storage Position Item Counter
-! ** Let's Make Some Combo Boxes ** 
+! ** Make Some Combo Boxes ** 
 	! CL = Item you want a ComboBox on 
 	! C$(cl,2)=linked file : c$(cl,3)=key pos c$(cl,4)=key len 
 	! c$(cl,5)=desc pos c$(cl,6)=desc len  C$(cl,7)=Index File 

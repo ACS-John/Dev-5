@@ -99,7 +99,7 @@ fnend
 def fn_pa_open(; pa_orientation$,pa_sendto_base_name_addition$*128,formsFormatForce$,h)
 	g_pa_batch+=1
 	fnStatus('Initiating a PrintAce Batch '&str$(g_pa_batch))
-	if g_pa_max_pages then let fnStatus('     (up to '&str$(g_pa_max_pages)&' pages per batch)')
+	if g_pa_max_pages then fnStatus('     (up to '&str$(g_pa_max_pages)&' pages per batch)')
 	if h then h_printace=h else h_printace=20
 	if file(h_printace)=-1 then 
 		dim g_pa_filename$*1024

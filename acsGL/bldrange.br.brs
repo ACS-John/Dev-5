@@ -30,10 +30,10 @@ MAIN: !
 	fnLbl(6,1,"First new general ledger # to be used:",mylen,right,0,1)
 	fnLbl(5,44,"Fund #",6,1,0,1)
 	fnLbl(5,58,"Sub #",6,2,0,1)
-	if use_dept=1 then let fnTxt(6,46,3,0,right,'30',0,"Enter the fund portion of the general ledger number.",1 ) else let fnTxt(6,46,3,0,right,'30',1,"Enter the fund portion of the general ledger number.",1 ) ! : rESP$(RC+=1)=STR$(DNO)
+	if use_dept=1 then fnTxt(6,46,3,0,right,'30',0,"Enter the fund portion of the general ledger number.",1 ) else fnTxt(6,46,3,0,right,'30',1,"Enter the fund portion of the general ledger number.",1 )
 	fnTxt(6,51,6,0,right,'30',0,"Enter the main part of the general ledger number.",1 )
-	resp$(rc+=1)=""
-	if use_sub=1 then let fnTxt(6,60,3,0,right,'30',0,"Enter the sub portion of the general ledger number.",1 ) else let fnTxt(6,60,3,0,right,'30',1,"Enter the sub portion of the general ledger number.",1 )
+	resp$(rc+=1)=""  !  rESP$(RC+=1)=STR$(DNO)
+	if use_sub=1 then fnTxt(6,60,3,0,right,'30',0,"Enter the sub portion of the general ledger number.",1 ) else fnTxt(6,60,3,0,right,'30',1,"Enter the sub portion of the general ledger number.",1 )
 		resp$(rc+=1)=""
 	fnFra(9,1,8,125,"Duplicating Matching Range of Financial Statement Formats"," ",0)
  

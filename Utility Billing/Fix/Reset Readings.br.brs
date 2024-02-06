@@ -42,8 +42,8 @@ SCREEN1: !
 		if tdate<>d1 then goto Xit
 		read #hCustomer,using F_CUSTOMER,key=p$: meteradr$,custname$,mat a,mat b,mat c,mat d, bal,f,mat g,mat gb,mat extra nokey NEXT_ONE
 		! if trim$(p$)='100002.00' then pause
-		if do_water then let fn_reading_fix(d(1),d(2),d(3),d(4),_wr) ! water
-		if do_gas then let fn_reading_fix(d(9),d(10),d(11),d(12),gr) ! gas
+		if do_water then fn_reading_fix(d(1),d(2),d(3),d(4),_wr) ! water
+		if do_gas then fn_reading_fix(d(9),d(10),d(11),d(12),gr) ! gas
 		rewrite #hCustomer,using F_CUSTOMER,key=p$: meteradr$,custname$,mat a,mat b,mat c,mat d,bal,f,mat g,mat gb,mat extra
 		NEXT_ONE: !
 	loop

@@ -2,7 +2,7 @@ fn_setup(table$)
 on error goto Ertn
 ! pr 'table$=';table$
 fnTop(program$)
-if ~exists('[Q]\Data\cpt.dat') then let fn_InitialializeCpt
+if ~exists('[Q]\Data\cpt.dat') then fn_InitialializeCpt
 fnHamsterFio(table$)
 Xit: !
 fnXit

@@ -111,7 +111,7 @@ def library fnworkOrderAdd(z$*10)
 
 	if ckey=5 then goto woaXIT
 	z$=resp$(respc_accont)(1:10) ! lpad$(trim$(resp$(respc_accont)(1:10)),10)
-	if ckey=8 then let fnWorkOrderList(z$) : goto WO_TOS
+	if ckey=8 then fnWorkOrderList(z$) : goto WO_TOS
 	! for j=3 to 15 : i$(j-2)=resp$(j) : next j
 	i$(1 )=resp$(3 )
 	i$(2 )=resp$(4 )

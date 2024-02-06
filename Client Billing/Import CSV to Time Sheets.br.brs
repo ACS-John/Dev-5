@@ -47,7 +47,7 @@ for fileItem=1 to fileNameCount
 	dim line$*1024
 	fn_get_next_line(h_in,line$) : lineCount+=1 ! consume headings
 	! if fileItem=2 then pr 'header:',lineCount,line$ : pause
-	if pos(line$,chr$(9))>0 then let delim$=chr$(9) else delim$=','
+	if pos(line$,chr$(9))>0 then delim$=chr$(9) else delim$=','
 	do
 		fn_get_next_line(h_in,line$) : lineCount+=1
 		theDatePrior=theDate

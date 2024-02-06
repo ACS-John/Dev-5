@@ -371,11 +371,11 @@ MAINTAIN_NONB_RECORDS: !
 if add=1 then g1$=gd$=cd$=''
 fnTos
 mylen=23: mypos=mylen+3 : right=1: rc=0
-if use_dept =1 then let fnLbl(1,26,'Fund #',6,2)
-if use_sub =1 then let fnLbl(1,40,'Sub #',6,2)
+if use_dept =1 then fnLbl(1,26,'Fund #',6,2)
+if use_sub =1 then fnLbl(1,40,'Sub #',6,2)
 fnLbl(2,1,'General Ledger Number:',mylen,right)
 if use_dept=1 then
-	let fnTxt(2,26,3,0,right,'30',0,'Enter the fund portion of the general ledger number.',0 )
+	fnTxt(2,26,3,0,right,'30',0,'Enter the fund portion of the general ledger number.',0 )
 	resp$(rc+=1)=g1$(1:3)
 end if
 fnTxt(2,31,6,0,right,'30',0,'Enter the main part of the general ledger number.',0 )

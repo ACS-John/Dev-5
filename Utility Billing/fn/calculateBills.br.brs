@@ -195,7 +195,7 @@ Finis: ! r:
 	end if
 	close #hTrans: ioerr ignore
 	close #hTrans2: ioerr ignore
-	if print_count_unusual or print_count_skip then let fnClosePrn
+	if print_count_unusual or print_count_skip then fnClosePrn
 ! /r
 XIT_CALCULATE: !
 fnend

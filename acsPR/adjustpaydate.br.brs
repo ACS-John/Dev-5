@@ -37,7 +37,7 @@ fnend  ! fn_adjustpaydate
 		if ckey=5 then
 			fn_getdates=0
 		else
-			if prdate$(1)='00000000' or prdate$(2)='00000000' then let fn_getdates=fn_getdates else let fn_getdates=1
+			if prdate$(1)='00000000' or prdate$(2)='00000000' then fn_getdates=fn_getdates else fn_getdates=1
 		end if
 	fnend  ! fn_getdates
 Xit: fnXit

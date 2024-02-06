@@ -61,7 +61,7 @@ L560: read #3,using 'form pos MP1,PD 3,pos 87,27*PD 6.2': br,cb,mat by,mat bp eo
   cb=1
   if br=0 then goto L560
   if fnfscode=0 then goto L610
-  if fnfscode<1 or fnfscode>12 then let fnfscode(1)
+  if fnfscode<1 or fnfscode>12 then fnfscode(1)
 ! If FNPRIORCD=1 Then cB=BY(FNFSCODE) Else cB=BP(FNFSCODE)
 L610: if br=val(r$) then total=total+cb else goto L630
   goto L540
@@ -173,7 +173,7 @@ HEADER: ! r:
 DONE: !
   eofcode=1
   gosub L1220
-  if pors<>2 then let fnClosePrn
+  if pors<>2 then fnClosePrn
   goto Xit
 !
 Xit: fnXit

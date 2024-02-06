@@ -32,7 +32,7 @@ ScrMenu1: ! r:
 	close #1: ioerr ignore
   open #hFSDesign=1: 'Name=[Q]\GLmstr\'&fil$(f1)&',KFName=[Q]\GLmstr\'&idx$(f1)&',Shr',i,outIn,k ioerr ScrMenu1
 	F_FSDesign: form pos 1,c 5,c 50,c 1,2*n 2,15*n 1,n 3,n 5
-	if ckey=3 then let fn_print_proof
+	if ckey=3 then fn_print_proof
 goto ScrGrid ! /r
 ScrGrid: ! r:
 	fnTos

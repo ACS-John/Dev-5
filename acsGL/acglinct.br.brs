@@ -61,7 +61,7 @@ L580: read #3,using L600: ir,pcr,bb,cb,mat by,mat bp eof L740
 	if ir=0 then goto L580 ! skip any gl accounts not pointed to ic
 L600: form pos mp1,pd 3,pos mp2,pd 3,pos 81,41*pd 6.2
 	if fnfscode=0 then goto L680
-	if fnfscode<1 or fnfscode>13 then let fnfscode(1)
+	if fnfscode<1 or fnfscode>13 then fnfscode(1)
 ! If FNPRIORCD=1 Then cB=BY(FNFSCODE) Else cB=BP(FNFSCODE)
 	if fnpriorcd=2 then goto L670
 	if fnfscode>1 then bb=by(fnfscode-1) else bb=0

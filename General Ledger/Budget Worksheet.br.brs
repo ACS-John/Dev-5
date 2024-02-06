@@ -66,8 +66,8 @@ Screen1: ! r:
 	priordate=val(resp$(6))
 	priorpriordate=val(resp$(7))
 	if resp$(8)='True' then yearclosed=1
-	yr1$=resp$(6)(5:6) : if len(yr1$)=1 then let yr1$=resp$(6)(4:5) ! fixed kln conflict error for len(5) dates in resp$
-	yr2$=resp$(7)(5:6) : if len(yr2$)=1 then let yr2$=resp$(7)(4:5)
+	yr1$=resp$(6)(5:6) : if len(yr1$)=1 then yr1$=resp$(6)(4:5) ! fixed kln conflict error for len(5) dates in resp$
+	yr2$=resp$(7)(5:6) : if len(yr2$)=1 then yr2$=resp$(7)(4:5)
 	dim n$*12
 	dim d$*50
 	dim bp(13)

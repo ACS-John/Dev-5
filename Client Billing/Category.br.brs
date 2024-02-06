@@ -28,7 +28,7 @@ fnend
 
 def library fnRead30Categories(mat dimTo30$)
 	if ~setup then fn_setup
-	if ~setupCategories then let fn_setupCategories
+	if ~setupCategories then fn_setupCategories
 	hCategory=fn_openFio('Client Billing Category',mat catData$,mat catDataN)
 	mat dimTo30$=('')
 	for x=1 to 30

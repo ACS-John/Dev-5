@@ -56,7 +56,7 @@ ASKJOB: !
 	fnLbl(1,1,"Job #:",8,1)
 	fnCmbJob(1,11)
 	resp$(respc+=1)=jn$
-	if trim$(jn$)<>"" then let fnLbl(3,1,"Last job processed:"&trim$(jn$),35,1)
+	if trim$(jn$)<>"" then fnLbl(3,1,"Last job processed:"&trim$(jn$),35,1)
 	fnCmdKey("&Next",1,1,0,"Process the job" )
 	fnCmdKey("&Complete",2,0,0,"Start printing")
 	ckey=fnAcs(mat resp$)

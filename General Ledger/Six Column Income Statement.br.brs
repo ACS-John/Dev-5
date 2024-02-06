@@ -65,7 +65,7 @@ L720: ! read amounts from gl master file
 L730: read #3,using L820: ir,bb,cb,mat by,mat bp,mat bm eof L1000
 	if ir=0 then goto L730 ! skip accounts with no income reference #
 	if fnfscode=0 or (fnfscode=actpd and fnpriorcd=1) then goto L820
-	if fnfscode<1 or fnfscode>13 then let fnfscode=1
+	if fnfscode<1 or fnfscode>13 then fnfscode=1
 	if fnpriorcd=1 then cb=by(fnfscode) else cb=bp(fnfscode)
 	if fnpriorcd=2 then goto L810
 	if fnfscode>1 then bb=by(fnfscode-1) else bb=0
