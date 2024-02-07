@@ -128,13 +128,10 @@ def library fnComboFio(lyne,ps,layoutName$*128; limlis,whichIndex,ttt$*200, ___,
 	dim keyList$(0)*256
 	dim keyDescription$(0)*256
 	fnReadLayoutHeader(layoutName$, df$,mat keyList$,mat keyDescription$) ! ,leaveOpen,prefix$)
-	if whichIndex=0 then whichIndex=1
-	if$=keyList$(whichIndex)
+	if whichIndex=0 and udim(mat keyList$)>0 then whichIndex=1
+	if whichIndex then if$=keyList$(whichIndex)
 	sfn$=trim$(layoutName$)(1:100)
-	! open #hTmp=fnH: 'name='&df$&',kfname='&if$,i,i,k
-	! psk=kps(hTmp,whichIndex)
-	! lnk=kln(hTmp,whichIndex)
-	! close #hTmp:
+
 	if layoutName$='CO Client' then
 		keyFormat$='C'
 		psk= 1 ! key position
@@ -146,6 +143,11 @@ def library fnComboFio(lyne,ps,layoutName$*128; limlis,whichIndex,ttt$*200, ___,
 		lnk=11
 		psd=12
 		lnd=64
+	else if layoutName$='CO Employment Code' then
+		psk= 1
+		lnk= 1
+		psd= 2
+		lnd=40
 	else if layoutName$='Client Billing Transaction Type' then
 		psk= 1
 		lnk= 1

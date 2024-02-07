@@ -8,7 +8,7 @@
 autoLibrary
 on error goto Ertn
 fnTop(program$)
- 
+
 	dim em$(3)*30,ss$*11,tcp(32),tmp$*128
 	dim tdc(10),deductionCode(20),newcalcode(20),newdedfed(20),dedfica(20)
 	dim dedst(20),deduc(20),abrevname$(20)*8,fullname$(20)*20
@@ -17,7 +17,7 @@ fnTop(program$)
 	dim emppin$*17 ! Personal ID Number (used in RA Record)
 	dim tlcn$*6,contact$*27,contactph$*15,phoneext$*5,email$*40
 	dim w2(9),i1(9),t1(9),ct$*20,st$*2
-	dim terminat$*1,first$*15,mid$*15,last$*20,resp$(40)*256,path$*256
+	dim terminat$*1,first$*15,mid$*15,last$*20,path$*256
 	open #hCompany=fnH: 'Name=[Q]\PRmstr\Company.h[cno],Shr',i,i
 	read #hCompany,using fCompany: mat a$,federal_id$,loccode
 	fCompany: form pos 1,3*c 40,c 12,pos 150,x 80,n 2
@@ -34,7 +34,7 @@ fnTop(program$)
 	open #hEmployee=fnH: 'Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr',i,i,k
 	open #hChecks=fnH: 'Name=[Q]\PRmstr\payrollchecks.h[cno],KFName=[Q]\PRmstr\checkidx.h[cno]',i,outIn,k
 ! r: initialize variables
- 
+
 	fnureg_read('electronic w-2 file',path$,os_filename$(env$('Desktop')&'\w2elec-[cno]'))
 	beg_date=val('0101'&date$(days(date$)-180,'YY'))
 	end_date=val('1231'&date$(days(date$)-180,'YY'))
@@ -79,7 +79,8 @@ fnTop(program$)
 
 ! /r
 SCREEN1_NEW: ! r:
-	fnTos(sn$='W2-1')
+	dim resp$(64)*512
+	fnTos
 	rc=lyne=0: mylen=17 : mypos=mylen+2
 	fnLbl(lyne+=1,1,'Starting Date:',mylen,1,0,0)
 	fnTxt(lyne,mypos,10,0,1,'3',0,'First day of calendar year',0)
@@ -89,7 +90,7 @@ SCREEN1_NEW: ! r:
 	resp$(respc_dateEnd:=rc+=1)=str$(end_date)
 	lyne+=1
 	fnLbl(lyne+=1,1,'Output File Name:',mylen,1,0,0)
-	fnTxt(lyne,mypos,30,0,0,'70',0,'Destination and file name you wish to use.',0)
+	fnTxt(lyne,mypos,30,128,0,'70',0,'Destination and file name you wish to use.',0)
 	resp$(respc_path:=rc+=1)=path$
 	lyne+=1
 	fnLbl(lyne+=1,1,'Company Name:',mylen,1,0,0)
@@ -110,7 +111,7 @@ SCREEN1_NEW: ! r:
 	fnLbl(lyne+=1,1,'Federal ID:',mylen,1,0,0)
 	fnTxt(lyne,mypos,12,0,0,'1000',0,'Enter the Federal Id number without slashes or dashes.',0)
 	resp$(resp_fid:=rc+=1)=federal_id$
-	!
+
 	lyne=0
 	col3=17+2+30+2 :   mylen=29 : mypos=col3+mylen+2
 	fnLbl(lyne+=1,col3,'Payment Year:',mylen,1,0,0)
@@ -192,27 +193,27 @@ SCREEN1_NEW: ! r:
 	beg_date=val(resp$(respc_dateStart))
 	end_date=val(resp$(respc_dateEnd))
 	path$=resp$(respc_path)
-	
+
 	a$(1)=resp$(resp_cnam)
 	a$(2)=resp$(resp_cstreet)
 	ct$=resp$(resp_ccity)
 	st$=resp$(resp_cstate)
 	zip$=resp$(resp_czip)
-	
+
 	federal_id$=resp$(resp_fid) : federal_id_val=val(srep$(federal_id$,'-',''))
 	yr=val(resp$(resp_paymentYear))
 	ssmax=val(resp$(resp_ssmax))
 	ssrate=val(resp$(resp_ssrate))
 	mcmax=val(resp$(resp_mcmax))
 	mcrate=val(resp$(resp_mcrate))
-	
+
 	nameFormat=srch(mat optNameFormat$,resp$(resp_nameFormat))
-	
+
 	ins=val(resp$(resp_ins))
 	pen=val(resp$(resp_pen))
 	dfc=val(resp$(resp_dfc))
 	dcan=val(resp$(resp_dcan))
-	
+
 	emppin$=resp$(resp_emppin)
 	resub$=resp$(resp_resub)
 	tlcn$=resp$(resp_tlcn)
@@ -221,10 +222,10 @@ SCREEN1_NEW: ! r:
 	phoneext$=resp$(resp_phoneext)
 	email$=resp$(resp_email)
 	terminat$=resp$(resp_terminat)
-	
+
 	sr1=val(resp$(resp_state_code))
 	sr2=val(resp$(resp_fips))
-	
+
 ! /r
 ! r: validate screen1 values
 	if beg_date=0 then goto SCREEN1_NEW
@@ -247,14 +248,14 @@ SCREEN1_NEW: ! r:
 	fncreg_write('W-2 Company City',ct$)
 	fncreg_write('W-2 Company State',st$)
 	fncreg_write('W-2 Company Zip',zip$)
-	open #hCompany=fnH: 'Name=[Q]\PRmstr\Company.h[cno],Shr',internal,outIn
-	rewrite #hCompany,using 'form pos 1,x 120,c 12,pos 150,x 80,n 2',rec=1: federal_id$,loccode
+	open #hCompany=fnH: 'Name=[Q]\PRmstr\Company.h[cno],Shr',i,outi,r
+	rewrite #hCompany,using 'form pos 121,c 12,pos 230,n 2',rec=1: federal_id$,loccode
 	close #hCompany:
 	fncreg_write('Miscellaneous Deduction Containing Employer Cost Group-Term Life Ins',str$(ins))
 	fncreg_write('Miscellaneous Deduction Used For Pension',str$(pen))
 	fncreg_write('Miscellaneous Deduction Used For Deferred Compensation',str$(dfc))
 	fncreg_write('Miscellaneous Deduction Used For Dependent Care Assistance',str$(dcan))
-	
+
 	fncreg_write('W-2 Personal ID Number',emppin$)
 	fncreg_write('W-2 Resub Indicator',resub$)
 	fncreg_write('W-2 Resub TLCN',tlcn$)
@@ -263,10 +264,10 @@ SCREEN1_NEW: ! r:
 	fncreg_write('W-2 Contact Phone Extension',phoneext$)
 	fncreg_write('W-2 Contact E-Mail',email$)
 	fncreg_write('W-2 Terminating Business Indicator',terminat$)
-	
+
 	fncreg_write('W-2 State Code',str$(sr1))
 	fncreg_write('W-2 FIPS',str$(sr2))
-	
+
 ! /r
 	open #hOut=fnH: 'Name=W2REPORT,RecL=512,eol=crlf,replace',d,o
 
@@ -353,7 +354,7 @@ L2480: !
 		! tW2=0  kj 22610
 	end if
 goto NEXT_EMPLOYEE ! /r
- 
+
 RecRA: ! r:
 	pr #hOut,using fRecRA: 'RA',federal_id_val,emppin$(1:8),'',resub$,tlcn$,'98',a$(1),'',a$(2)(1:22),ct$,st$,zip$,'','','','','',a$(1),'',a$(2)(1:22),ct$,st$,zip$,'','','','','',contact$,contactph$,phoneext$,'',email$,'','','2','L',''
 	fRecRA: form pos 1,c 2,pic(#########),c 8,c 9,c 1,c 6,c 2,c 57,c 22,c 22,c 22,c 2,c 5,c 4,c 5,c 23,c 15,c 2,c 57,c 22,c 22,c 22,c 2,c 5,c 4,c 5,c 23,c 15,c 2,c 27,c 15,c 5,c 3,c 40,c 3,c 10,c 1,c 1,c 12

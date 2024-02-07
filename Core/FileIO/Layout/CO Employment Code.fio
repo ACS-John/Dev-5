@@ -1,0 +1,22 @@
+S:\Core\Data\Employment Code.h[cno]  ,  ec_          , 0
+
+===================================================
+Code    	, Key                         	, C   1
+Type    	, Description                 	, C   40
+Form   	, Associated Form              	, C   40
+
+#EoF#
+
+For W-2 submission to SSA 2/6/2024
+This is a required field.
+Enter the appropriate employment code:
+A = Agriculture  Form 943
+H = Household Schedule H
+M = Military Form 941
+Q = Medicare Qualified Government Employment Form 941
+X = Railroad CT-1
+F = Regular Form 944
+R = Regular (all others) Form 941
+If the Tax Jurisdiction Code in position 220 of the RE (Employer) Record is blank (domestic), reporting Employment Code ‘Q’ (MQGE) is valid for tax year 1983 through the current tax year.
+If the Tax Jurisdiction Code in position 220 of the RE (Employer) Record is P, V, G, S, or N (not domestic), reporting Employment Code ‘Q’ (MQGE) is valid for tax years 1986 through the current tax year.
+Note: Railroad reporting is not applicable for Puerto Rico and territorial employers.
