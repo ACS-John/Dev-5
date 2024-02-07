@@ -74,6 +74,7 @@ dim contactPhone$*64 ! 15 ! Employer Contact Phone Number
 dim contactPhExt$*64 !  5 ! Employer Contact Phone Extension
 dim contactFax$*64   ! 10 ! Employer Contact Fax Number
 dim contactEmail$*64 ! 40 ! Employer Contact E-Mail/Internet
+dim employmentCode$*1
 
 
 def library fnask_w2_info(&taxYear$,&ssrate,&ssmax,&mcrate,&mcmax,&pn1,&dc1,&state$,enableAskCLocality,&cLocality$)
@@ -358,16 +359,12 @@ def fn_ask_w2_info(&taxYear$, _
 			fnreg_read('Submitter Fax'  ,submitterFax$)
 			fnreg_read('Submitter Email',submitterEmail$)
 
-			dim contactName$*27  	! Employer Contact Name
-			dim contactPhone$*15 	! Employer Contact Phone Number
-			dim contactPhExt$*5  	! Employer Contact Phone Extension
-			dim contactFax$*10   	! Employer Contact Fax Number
-			dim contactEmail$*40 	! Employer Contact E-Mail/Internet
 			fncreg_read('Contact Name',contactName$)
 			fncreg_read('Phone Number',contactPhone$)
 			fncreg_read('Phone Extension',contactPhExt$)
 			fncreg_read('Fax Extension',contactFax$)
 			fncreg_read('Email',contactEmail$)
+			fncreg_read('Employment Code',employmentCode$)
 
 			fnTos : lc=rc=0 : mylen=25 : mypos=mylen+2
 				lc+=1 
@@ -405,6 +402,12 @@ def fn_ask_w2_info(&taxYear$, _
 				fnLbl(lc+=1,1,'Email:',mylen,1)
 				fnTxt(lc,mypos,40)
 				resp$(resp_contactEmail=rc+=1)=contactEmail$
+				lc+=1
+				fnLbl(lc+=1,1,'Employment Code:',mylen,1)
+				fnComboFio(lc,mypos,'CO Employment Code', 1)
+				resp$(resp_employmentCode=rc+=1)=employmentCode$
+				
+				
 				fncmdset(2)
 			ckey=fnAcs(mat resp$)
 			if ckey=5 then
@@ -428,11 +431,13 @@ def fn_ask_w2_info(&taxYear$, _
 				contactPhExt$=resp$(resp_contactPhExt)
 				contactFax$=resp$(resp_contactFax)
 				contactEmail$=resp$(resp_contactEmail)
+				employmentCode$=resp$(resp_employmentCode)(1:1)
 				fncreg_write('Contact Name',contactName$)
 				fncreg_write('Phone Number',contactPhone$)
 				fncreg_write('Phone Extension',contactPhExt$)
 				fncreg_write('Fax Extension',contactFax$)
 				fncreg_write('Email',contactEmail$)
+				fncreg_write('Employment Code',employmentCode$)
 			end if
 		end if
 		if w2Copy$=optW2Copy$(1) and enableBackground$='True' and w2destinationOpt$(1)='True' then
@@ -798,7 +803,14 @@ def fn_line(lineNumber; ___,returnN)
 	fn_line=returnN
 fnend
 	def fn_oC(text$*256,fieldLength; format$)
-		line$&=rpad$(trim$(text$)(1:fieldLength),fieldLength)
+		if format$='number' then
+			!   xt$=xlate$(text$,rpt$(' ', 35)&"#$%&'()   -  0123456789       abcdefghijklmnopqrstuvwxyz \  _ abcdefghijklmnopqrstuvwxyz"&rpt$(' ', 133))
+			text$=xlate$(text$,rpt$(' ', 35)&"             0123456789                                                                 "&rpt$(' ', 133))
+			text$=srep$(text$,' ','')
+			line$&=rpad$(trim$(text$)(1:fieldLength),fieldLength)
+		else
+			line$&=rpad$(trim$(text$)(1:fieldLength),fieldLength)
+		end if
 	fnend
 	def fn_oN(num,fieldLength; format$)
 		line$&=lpad$(str$(num),fieldLength,'0')
@@ -922,7 +934,7 @@ fnend
 	return ! /r
 	Efw2_Ra:  ! r: • RA (Submitter) Record – Required
 		fn_oC('RA',2)
-		fn_oC(ein$   	, 9) !  3-11 Submitter's Employer Identification Number (EIN)
+		fn_oC(ein$   	, 9,'number') !  3-11 Submitter's Employer Identification Number (EIN)
 		fn_oC(bsoUser$ 	, 8) ! 12-19 User Identification (User ID    ! XXX TODO: Ask this on the screen
 		fn_oC(''        	, 4) ! 20-23 Software Vendor Code
 		fn_oC(''        	, 5) ! 24-28 Blanks
@@ -956,13 +968,13 @@ fnend
 		fn_oC('', 15) ! 379-393 Foreign Postal Code
 		fn_oC('',  2) ! 394-395 Country Code
 		fn_oC(submitterName$, 27) ! 396-422 Contact Name
-		fn_oC(submitterPhone$, 15) ! 423-437 Contact Phone Number
-		fn_oC(submitterPhExt$,  5) ! 438-442 Contact Phone Extension
+		fn_oC(submitterPhone$, 15,'number') ! 423-437 Contact Phone Number
+		fn_oC(submitterPhExt$,  5,'number') ! 438-442 Contact Phone Extension
 		fn_oC('',  3) ! 443-445 Blank
 		if len(line$)<>445 then pr 'wrong length len(line$)=';len(line$) : pause
 		fn_oC(submitterEmail$, 40) ! 446-485 Contact E-Mail/Internet
 		fn_oC('',  3) ! 486-488 Blank
-		fn_oC(submitterFax$, 10) ! 489-498 Contact Fax
+		fn_oC(submitterFax$, 10,'number') ! 489-498 Contact Fax
 		fn_oC('',  1) ! 499 Blank
 		fn_oC('',  1) ! 500 Preparer Code
 		fn_oC('', 12) ! 501-512 Blank
@@ -1022,11 +1034,11 @@ fnend
 													! S      = American Samoa               W-2AS
 													! N      = Northern Mariana Islands    W-2CM
 													! P      = Puerto Rico           W-2PR/499R-2
-		fn_oC('',  1) ! Third-Party Sick Pay Indicator
+		fn_oC('0',  1) ! Third-Party Sick Pay Indicator:  1 = Third-Party Sick Pay Payer or 0 = Not a Third-Party Sick Pay Payer.
 		fn_oC(contactName$, 27) ! Employer Contact Name
-		fn_oC(contactPhone$, 15) ! Employer Contact Phone Number
+		fn_oC(contactPhone$, 15,'number') ! 249-263 Employer Contact Phone Number
 		fn_oC(contactPhExt$,  5) ! Employer Contact Phone Extension
-		fn_oC(contactFax$, 10) ! Employer Contact Fax Number
+		fn_oC(contactFax$, 10,'number') ! Employer Contact Fax Number
 		fn_oC(contactEmail$, 40) ! Employer Contact E-Mail/Internet
 		fn_oC('',194) ! Blank
 		fn_oOut

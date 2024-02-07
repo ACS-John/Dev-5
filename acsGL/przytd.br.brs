@@ -5,9 +5,8 @@ autoLibrary
 fnTop(program$,'Zero YTD Payroll Information')
 on error goto Ertn
 
-dim k$(3)*25,ss$*11,m(36),adr(2),n(2),d(14),ml$(3)*80
+if fnProcess=1 then goto GetStarted
 
-if fnProcess=1 then goto L300
 ScrOne: fnTos
 	mylen=42: mypos=mylen+3 : right=2
 	fnLbl(1,1,'* * * * *   WARNING   * * * * *',mylen,right)
@@ -23,20 +22,23 @@ ScrOne: fnTos
 
 	if ckey=5 then goto Xit
 	pas$=uprc$(resp$(1))
-	if pas$='ZERO' then goto L300
-MSGBOX1: !
+	if pas$='ZERO' then goto GetStarted
+
+	dim ml$(0)*128
 	mat ml$(2)
 	ml$(1)='          Incorrect password! '
 	ml$(2)='Click OK to try again; else Cancel to stop.'
 	fnMsgBox(mat ml$,resp$,'',49)
 if resp$='OK' then goto ScrOne else goto Xit
 
-L300: !
+GetStarted: !
 	open #1: 'Name=[Q]\GLmstr\PRmstr.h[cno],KFName=[Q]\GLmstr\PRIndex.h[cno],Shr',i,outIn,k
 	F1: form pos 91,36*pd 5.2,2*n 5
 	do
 		read #1,using F1: x eof Eo1
-		rewrite #1,using F1: mat m,mat adr
+		dim xm(36)
+		dim adr(2)
+		rewrite #1,using F1: mat xm,mat adr
 	loop
 Eo1: !
 close #1:
