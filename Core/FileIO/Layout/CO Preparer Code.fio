@@ -1,4 +1,4 @@
-S:\Core\Data\Preparer Code.h[cno]  ,  ec_          , 0
+S:\Core\Data\Preparer Code.dat  ,  ec_          , 0
 
 ===================================================
 Code    	, Code                         	, C    1
@@ -13,4 +13,4 @@ A = Accounting Firm
 L = Self-Prepared
 S = Service Bureau
 P = Parent Company
-O = Other.
+O = Other

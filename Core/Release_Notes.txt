@@ -1,5 +1,6 @@
 Time and Date 		Sys	Program(s) and Change(s) Description                                                                       
 _________________	___	____________________________________________________________________________________________________________________________________________________________________________________________________________________________________                                                   
+10:28 AM 2/21/2024	UB	Collections - added a NewPage command to the end of each receipt which should make it cut off on receipt printers that support it
 4:25 PM 2/18/2024	CO	W-2 export improved
 9:26 PM 2/16/2024	CO	Index statuses reduced
 21:09 02/24/2024	CO	5.75354  
