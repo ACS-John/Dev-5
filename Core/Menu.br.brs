@@ -709,8 +709,8 @@ def fn_getProgramList(mat program_plus$,mat program_name$,mat program_name_trim$
 		pause
 	end if
 	if env$('ACSDeveloper')<>'' then
-		fn_getProgramListAdd('S:\[cursystem]\Programmer.mnu',gridLine)
-	end if  ! serial=env$('ACSDeveloper')<>''
+		fn_getProgramListAdd('S:\[cursystem]\(dev).mnu',gridLine)
+	end if
 	if env$('cursys')='PR' then ! r:
 		dim employee$(0)*256
 		dim employeeN(0)
