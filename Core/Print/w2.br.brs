@@ -69,13 +69,14 @@ dim left
 dim bottom
 dim taxYearLocal$
 dim line$*4096
-dim contactName$*64  ! 27 ! Employer Contact Name
-dim contactPhone$*64 ! 15 ! Employer Contact Phone Number
-dim contactPhExt$*64 !  5 ! Employer Contact Phone Extension
-dim contactFax$*64   ! 10 ! Employer Contact Fax Number
-dim contactEmail$*64 ! 40 ! Employer Contact E-Mail/Internet
+dim contactName$*64  	! 27 ! Employer Contact Name
+dim contactPhone$*64 	! 15 ! Employer Contact Phone Number
+dim contactPhExt$*64 	!  5 ! Employer Contact Phone Extension
+dim contactFax$*64   	! 10 ! Employer Contact Fax Number
+dim contactEmail$*64 	! 40 ! Employer Contact E-Mail/Internet
 dim employmentCode$*1
-
+dim preparerCode$*1
+preparerCode$
 
 def library fnask_w2_info(&taxYear$,&ssrate,&ssmax,&mcrate,&mcmax,&pn1,&dc1,&state$,enableAskCLocality,&cLocality$)
 	if setup$<>env$('cursys')&env$('cno') then fn_setup
@@ -365,6 +366,7 @@ def fn_ask_w2_info(&taxYear$, _
 			fncreg_read('Fax Extension',contactFax$)
 			fncreg_read('Email',contactEmail$)
 			fncreg_read('Employment Code',employmentCode$)
+			fncreg_read('Preparer Code',preparerCode$)
 
 			fnTos : lc=rc=0 : mylen=25 : mypos=mylen+2
 				lc+=1 
@@ -405,7 +407,11 @@ def fn_ask_w2_info(&taxYear$, _
 				lc+=1
 				fnLbl(lc+=1,1,'Employment Code:',mylen,1)
 				fnComboFio(lc,mypos,'CO Employment Code', 1)
-				resp$(resp_employmentCode=rc+=1)=employmentCode$
+				resp$(resp_employmentCode=rc+=1)=employmentCode$	
+				lc+=1
+				fnLbl(lc+=1,1,'Preparer Code:',mylen,1)
+				fnComboFio(lc,mypos,'CO Preparer Code', 1)
+				resp$(resp_preparerCode=rc+=1)=preparerCode$
 				
 				
 				fncmdset(2)
@@ -432,12 +438,14 @@ def fn_ask_w2_info(&taxYear$, _
 				contactFax$=resp$(resp_contactFax)
 				contactEmail$=resp$(resp_contactEmail)
 				employmentCode$=resp$(resp_employmentCode)(1:1)
+				preparerCode$=resp$(resp_preparerCode)(1:1)
 				fncreg_write('Contact Name',contactName$)
 				fncreg_write('Phone Number',contactPhone$)
 				fncreg_write('Phone Extension',contactPhExt$)
 				fncreg_write('Fax Extension',contactFax$)
 				fncreg_write('Email',contactEmail$)
 				fncreg_write('Employment Code',employmentCode$)
+				fncreg_write('Preparer Code',preparerCode$)
 			end if
 		end if
 		if w2Copy$=optW2Copy$(1) and enableBackground$='True' and w2destinationOpt$(1)='True' then
@@ -809,11 +817,12 @@ fnend
 			text$=srep$(text$,' ','')
 			line$&=rpad$(trim$(text$)(1:fieldLength),fieldLength)
 		else
+		
 			line$&=rpad$(trim$(text$)(1:fieldLength),fieldLength)
 		end if
 	fnend
 	def fn_oN(num,fieldLength; format$)
-		line$&=lpad$(str$(num),fieldLength,'0')
+		line$&=lpad$(str$(round(num,0)),fieldLength,'0')
 	fnend
 	def fn_oOut
 		if len(line$)<>512 then pr 'wrong length len(line$)=';len(line$) : pause
@@ -823,7 +832,7 @@ fnend
 	fnend
 	Efw2_Rw: ! r: • RW (Employee) Record – Required
 		fn_oC('RW',2)         : cntRw+=1
-		fn_oC(ss$           	,  9) !
+		fn_oC(ss$           	,  9,'number') !
 		fn_oC(nameFirst$   	, 15) !
 		fn_oC(nameMiddle$  	, 15) !
 		fn_oC(nameLast$    	, 20) !
@@ -838,13 +847,13 @@ fnend
 		fn_oC('', 23) ! 148-170 Foreign State/Province
 		fn_oC('', 15) ! 171-185 Foreign Postal Code
 		fn_oC('',  2) ! 186-187 Country Code
-		fn_oN(w(2) , 11) : tot(1)+=w(2) ! 188-198 Wages, Tips and Other Compensation
-		fn_oN(w(1) , 11) : tot(2)+=w(1) ! 199-209 Federal Income Tax Withheld
-		fn_oN(w(5) , 11) : tot(3)+=w(6) ! 210-220 Social Security Wages
-		fn_oN(w(3) , 11) : tot(4)+=w(12)! 221-231 Social Security Tax Withheld
-		fn_oN(w(11), 11) : tot(5)+=w(11)! 2322-242 Medicare Wages and Tips
-		fn_oN(w(12), 11) : tot(6)+=w(3) ! 243-253 Medicare Tax Withheld
-		fn_oN(w(6) , 11) : tot(7)+=w(5) ! 254-264 Social Security Tips
+		fn_oN(w(2) , 11) : tot(1)+=round(w(2) ,0) ! 188-198 Wages, Tips and Other Compensation
+		fn_oN(w(1) , 11) : tot(2)+=round(w(1) ,0) ! 199-209 Federal Income Tax Withheld
+		fn_oN(w(5) , 11) : tot(3)+=round(w(5) ,0) ! 210-220 Social Security Wages
+		fn_oN(w(3) , 11) : tot(4)+=round(w(3) ,0) ! 221-231 Social Security Tax Withheld
+		fn_oN(w(11), 11) : tot(5)+=round(w(11),0) ! 232-242 Medicare Wages and Tips
+		fn_oN(w(12), 11) : tot(6)+=round(w(12),0) ! 243-253 Medicare Tax Withheld
+		fn_oN(w(6) , 11) : tot(7)+=round(w(6) ,0) ! 254-264 Social Security Tips
 		fn_oC('', 11) ! 265-275 Blank
 		fn_oC('', 11) ! 276-297 Deferred Compensation Contributions to Section 401(k) (Code D)
 		fn_oC('', 11) ! 287-297 Deferred Compensation Contributions to Section 401(k) (Code D)
@@ -954,13 +963,13 @@ fnend
 		fn_oC('', 23) ! 177-199 Foreign State/Province
 		fn_oC('', 15) ! 200-214 Foreign Postal Code
 		fn_oC('',  2) ! 215-216 Country Code
-		fn_oC('', 57) ! 217-273 Submitter Name This is a required field. Enter the name of the organization to receive error notification if this file cannot be processed.
+		fn_oC(env$('cnam'), 57) ! 217-273 Submitter Name This is a required field. Enter the name of the organization to receive error notification if this file cannot be processed.
 		! if len(line$)<>273 then pr 'wrong length len(line$)=';len(line$) : pause
 		fn_oC('', 22) ! 274-295 Location Address
-		fn_oC('', 22) ! 296-317 Delivery Address
-		fn_oC('', 22) ! 318-339 City
-		fn_oC('',  2) ! 340-341 State Abbreviation
-		fn_oC('',  5) ! 342-346 ZIP Code 5 This is a required field. Enter the submitter's ZIP code. For a foreign address, fill with blanks.
+		fn_oC(a$(2), 22) ! 296-317 Delivery Address  - This is a required field and must only contain letters (A-Z), numbers (0-9), spaces, non-alpha non-numeric characters (~! @ # $ % ^ & * ( ) _ + { } | : " < > ? ` - = [ ] \ ; ‘ , . / ).
+		fn_oC(aCity$, 22) ! 318-339 City              - This is a required field and must only contain letters (A-Z), numbers (0-9), spaces, non-alpha non-numeric characters (~! @ # $ % ^ & * ( ) _ + { } | : " < > ? ` - = [ ] \ ; ‘ , . / ).
+		fn_oC(aSt$,  2) ! 340-341 State Abbreviation
+		fn_oC(aZip$,  5) ! 342-346 ZIP Code 5 This is a required field. Enter the submitter's ZIP code. For a foreign address, fill with blanks.
 		fn_oC('',  4) ! 347-350 ZIP Code Extension
 		if len(line$)<>350 then pr 'wrong length len(line$)=';len(line$) : pause
 		fn_oC('',  5) ! 351-355 Blank
@@ -976,7 +985,7 @@ fnend
 		fn_oC('',  3) ! 486-488 Blank
 		fn_oC(submitterFax$, 10,'number') ! 489-498 Contact Fax
 		fn_oC('',  1) ! 499 Blank
-		fn_oC('',  1) ! 500 Preparer Code
+		fn_oC(preparerCode$,  1) ! 500 Preparer Code - The field must contain valid codes: A = Accounting Firm, L = Self-Prepared, S = Service Bureau, P = Parent Company or O = Other.
 		fn_oC('', 12) ! 501-512 Blank
 		fn_oOut
 	return ! /r
@@ -1012,7 +1021,7 @@ fnend
 		fn_oC('', 23) ! 179-201 Foreigh State/Province
 		fn_oC('', 15) ! 202-216 Foreign Postal Code
 		fn_oC('',  2) ! 217-218 Country Code
-		fn_oC('',  1) !     219 Employment Code
+		fn_oC(employmentCode$,  1) !     219 Employment Code
 													! This is a required field.
 													! Enter the appropriate employment code:
 													! A = Agriculture  Form 943

@@ -38,7 +38,7 @@ def fn_pr_conversion_add_missing(cno)
 	close #14:
 	open #30: 'Name=[Q]\PRmstr\dd.h[cno],RecL=72,KFName=[Q]\PRmstr\DDidx1.h[cno],kps=1,kln=10,Use',i,outIn,k
 	close #30:
-	fnindex_sys(cno,'PR')
+	fnIndexSys(cno,'PR')
 	goto Xit
 Xit: !
 fnend

@@ -161,8 +161,8 @@ DONE: ! r:
 	close #hUbTranVb2: ioerr ignore
 	close #51: ioerr ignore
 	close #52: ioerr ignore
-	fnindex_sys(co1)
-	fnindex_sys(co2)
+	fnIndexSys(co1)
+	fnIndexSys(co2)
 Xit: fnXit ! /r
 HDR: ! r:
 	pr #255,using 'form pos 1,Cc 80': 'Accounts Transferred from Company Number '&str$(co1)&' to Company Number '&str$(co2)

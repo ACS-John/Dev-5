@@ -330,7 +330,7 @@ def fn_opMain(omFileOpen$*256)
 				opScreenReturn+=1
 				setenv('force_reindex','yes')
 				fnCheckFileVersion
-				fnindex_sys(cno)
+				fnIndexSys(cno)
 				fnStatusClose
 				dim msgTmp$(0)*128
 				mat msgTmp$(0)
@@ -389,7 +389,7 @@ def fn_fileOpenEverything(foeSource$*256)
 			setenv('force_reindex','yes')
 		end if
 		fnCheckFileVersion
-		fnindex_sys(cno)
+		fnIndexSys(cno)
 		fnStatusClose
 	else if env$('acsDebug')='Yes' then
 		pr 'fn_analyze_7zip_compresslog failed.'

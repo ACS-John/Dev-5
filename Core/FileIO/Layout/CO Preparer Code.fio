@@ -1,0 +1,16 @@
+S:\Core\Data\Preparer Code.h[cno]  ,  ec_          , 0
+
+===================================================
+Code    	, Code                         	, C    1
+Desc    	, Description                	, C   18
+
+#EoF#
+
+For W-2 submission to SSA 2/6/2024
+This is a required field.
+The field must contain valid codes: 
+A = Accounting Firm
+L = Self-Prepared
+S = Service Bureau
+P = Parent Company
+O = Other.

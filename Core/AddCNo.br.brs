@@ -45,7 +45,7 @@ else if env$('cursys')='UB' then ! r:
 	fncreg_write('Route Low',str$(bkno1)) ! Route Number Range Low
 	fncreg_write('Route High',str$(bkno2)) ! Route Number Range High
 
-	fnindex_sys(val(env$('cno')),'UB')
+	fnIndexSys(val(env$('cno')),'UB')
 ! /r
 else if env$('cursys')='GL' then ! r:
 	GlMenu1: !

@@ -115,7 +115,7 @@ fnreg_read('Post to Checkbook - Populate Checkbook Payee from Payroll Employee',
 		ficam1$='Y'
 	end if
 	checkMedia$=fnPcRegRead$('Check Media','R')
-	fnreg_read('PR.Check print.skip alignment',skip_alignment$) : if skip_alignment$='' then skip_alignment$='No'
+	skipAlignment$=fnPcRegRead$('Skip Alignment',skipAlignment$, 'Yes')
 goto ScrMainQestions ! /r
 	def fn_openCheckbook
 		open #h_clBank=fnH: 'Name=[Q]\CLmstr\BankMstr.h[cno],KFName=[Q]\CLmstr\BankIdx1.h[cno],Shr',i,outIn,k ioerr OcFinis
@@ -178,7 +178,7 @@ ScrMainQestions: ! r:
 	end if
 	fnLbl(14,1,'Print All Checks (or ask after first):',38,1)
 	fnComboA('prckprt-prall',14,41,mat opt_yn$)
-	resp$(resp_skip_align=respc+=1)=skip_alignment$
+	resp$(resp_skip_align=respc+=1)=skipAlignment$
 	if gl_installed then
 		fnLbl(16,1,'General Ledger detected.',38,1)
 	end if
@@ -210,8 +210,8 @@ ScrMainQestions: ! r:
 	end if
 
 	prdmmddyy=val(ckdat$(5:6))*10000+val(ckdat$(7:8))*100+val(ckdat$(3:4)) ! convert date back to mmddyy format
-	skip_alignment$        	=resp$(resp_skip_align)
-	if skip_alignment$='Yes' then allign=3
+	skipAlignment$        	=resp$(resp_skip_align)
+	if skipAlignment$='Yes' then allign=3
 
 	if posttocl$='Y' then cl_installed=1 else cl_installed=0
 	if ficam1$='Y' then ficam1=1 else ficam1=0
@@ -241,7 +241,7 @@ ScrMainQestions: ! r:
 	fncreg_write('Print Vacation and Sick Leave on Check',accr$)
 	fncreg_write('CL Bank Code',str$(bankcode))
 	fncreg_write('Comp Time Code',compcode$)
-	fnreg_write('PR.Check print.skip alignment',skip_alignment$)
+	fnPcReg_write('Skip Alignment',skipAlignment$)
 	! /r
 	! r: get and validate bank code if ACS Checkbook is in play
 	if ~testCheckFormat then
@@ -269,6 +269,7 @@ ScrMainQestions: ! r:
 	if ~testCheckFormat then
 		if cl_installed then
 			open #hMgl=fnH: 'Name=[Q]\PRmstr\MGLMSTR.h[cno],KFName=[Q]\PRmstr\MGLIDX1.h[cno],Shr',i,i,k ! 7
+			L5790: form pos 4,11*c 12
 		end if
 		! unused removed 12/22/2020     open #praddr=1: 'Name=[Q]\PRmstr\prAddr1.h[cno],Shr',i,i
 		open #hEmployee=fnH: 'Name=[Q]\PRmstr\Employee.h[cno],KFName=[Q]\PRmstr\EmployeeIdx-no.h[cno],Shr',i,i,k
@@ -331,7 +332,7 @@ ScrMainQestions: ! r:
 		if sc1$='SCC' then fn_print_stub  	: fn_print_check 	: fn_print_check
 		if sc1$='CS'  then fn_print_check 	: fn_print_stub
 		if sc1$='SC'  then fn_print_stub  	: fn_print_check
-		if ~testCheckFormat and (allign=3 or skip_alignment$='Yes') then
+		if ~testCheckFormat and (allign=3 or skipAlignment$='Yes') then
 			pr #255: chr$(12) ! NEWPAGE
 			goto PrintNextCheck
 		end if
@@ -390,7 +391,7 @@ def fn_EnglishAmount(dol,mat eng$; n1)
  ! pass amount in dol, returned in mat eng$
  ! n1 = break point (58 is default)
  ! n2  used to hardcoded to 58, try setting it to n1 instead 12/29/2017
- !
+
 	if n1=0 then n1=58
 	n2=n1
 	dol=ttc(32)
@@ -681,7 +682,6 @@ fnend
 		for j=1 to tdepXcount
 			mat mgl$=('            ')
 			read #hMgl,using L5790,key=lpad$(str$(tdep(j,5)),3): mat mgl$ nokey L5800
-			L5790: form pos 4,11*c 12
 			L5800: !
 			for j2=6 to 16
 				if tdep(j,j2)=0 then

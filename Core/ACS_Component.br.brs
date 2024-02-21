@@ -148,6 +148,11 @@ def library fnComboFio(lyne,ps,layoutName$*128; limlis,whichIndex,ttt$*200, ___,
 		lnk= 1
 		psd= 2
 		lnd=40
+	else if layoutName$='CO Preparer Code' then
+		psk= 1
+		lnk= 1
+		psd= 2
+		lnd=18
 	else if layoutName$='Client Billing Transaction Type' then
 		psk= 1
 		lnk= 1

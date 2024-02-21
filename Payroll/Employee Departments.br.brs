@@ -9,7 +9,7 @@
  
 	add_count=0
 	fn_add('Emp',8, '',0,30)       ! used
-	fn_add('Dept',3)                ! used
+	fn_add('Dept',3)               ! used
 	fn_add('gl no 1',3)
 	fn_add('gl no 2',6)
 	fn_add('gl no 3',3)
@@ -43,10 +43,10 @@
 	fn_add('Misc 18',10, 'PD',4.2)
 	fn_add('Misc 19',10, 'PD',4.2)
 	fn_add('Misc 20',10, 'PD',4.2)
-	open #1: "Name=[Q]\PRmstr\Department.h[cno],KFName=[Q]\PRmstr\DeptIdx.h[cno],use,RecL=149,kps=1/9,kln=8/3,Shr",i,outIn,k
-	fnHamster("department",mat lbl$,mat fln,1,mat p$,mat fltyp$,mat sln,mat mask)
+	open #1: 'Name=[Q]\PRmstr\Department.h[cno],KFName=[Q]\PRmstr\DeptIdx.h[cno],use,RecL=149,kps=1/9,kln=8/3,Shr',i,outIn,k
+	fnHamster('department',mat lbl$,mat fln,1,mat p$,mat fltyp$,mat sln,mat mask)
 	close #1:
-	execute "Index [Q]\PRmstr\department.h[cno]"&' '&"[Q]\PRmstr\deptidx.h[cno] 1 11,Replace" ioerr Xit
+	execute 'Index [Q]\PRmstr\department.h[cno] [Q]\PRmstr\deptidx.h[cno] 1 11,Replace' ioerr Xit
 Xit: fnXit
 def fn_add(lbl$*40,fln; field_type$,storage_length,mask)
 		add_count+=1
