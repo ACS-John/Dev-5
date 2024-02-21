@@ -1,5 +1,4 @@
-! formerly S:\acsGL\acGLClos
-! Close Books at Year End
+! Close Books at Year End (formerly S:\acsGL\acGLClos)
 ! r: setup and read constants
 	autoLibrary
 	on error goto Ertn

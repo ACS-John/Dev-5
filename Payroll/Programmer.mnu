@@ -1,9 +1,10 @@
 Payroll New ^ ACS Payroll
 Payroll - Programmer
 >Direct Deposit (Hamster)             ^ HamsterFio:Direct Deposit
->Timesheet             ^ HamsterFio:*
+>Timesheet                            ^ HamsterFio:*
 >YTD Wage Breakdown                   ^ Payroll\*
 >Employee Departments                 ^ Payroll\*
+>Department                           ^ HamsterFio:*
 >timesheetHamster                     ^ acsPR\*
 >Update Checkbook From Check History  ^ Payroll\Fix\*
 >Fix WH Wages in Check History        ^ acsPR\Fix_SS_Med_Wages

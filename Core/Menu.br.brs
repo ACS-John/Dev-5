@@ -98,7 +98,7 @@ if menu$='Exit and Logout' then
 end if
 goto Xit
 	def fn_addIfLicensed(sysCode$)
-		if fnClientHas(sysCode$) and exists('S:\'&fnSystemName$(sysCode$)&'\Menu.mnu') then
+		if fnClientHas(sysCode$) and exists('S:\'&fnSystemName$(sysCode$)&'\.mnu') or exists('S:\'&fnSystemName$(sysCode$)&'\Menu.mnu') then
 			fnAddOneC(mat system_abbr_list$,sysCode$)
 			fnAddOneC(mat system_name$,fnSystemName$(sysCode$))
 		end if
@@ -227,7 +227,7 @@ def fn_main(; ___,menuOpt$*128)
 			else if menu_option$(1:14)='fnPrintAceTest' then
 				fnPrintAceTest(menu_option$(16:len(menu_option$)-1))
 			else if menu_option$='Index Company' then
-				fnindex_sys(val(env$('cno')))
+				fnIndexSys(val(env$('cno')))
 			else if menu_option$='Restart' then
 				fnClearLayoutCache
 				setenv('ForceScreenIOUpdate','yes')
@@ -238,7 +238,7 @@ def fn_main(; ___,menuOpt$*128)
 				close #h_tmp:
 				execute 'proc [temp]\acs_Restart_[session].prc'
 			else if menu_option$='Index System' then
-				fnindex_sys
+				fnIndexSys
 			else if menuOpt$(1:8)='[cursys=' then
 				cursys$=menu_option$(9:10)
 				fncursys$(cursys$)
@@ -700,11 +700,18 @@ def fn_getProgramList(mat program_plus$,mat program_name$,mat program_name_trim$
 
 	mat program_plus$(0) : mat program_name$(0) : mat program_name_trim$(0) : mat program_file$(0) : mat ss_text$(0)
 
-	fn_getProgramListAdd('S:\[cursystem]\Menu.mnu',gridLine)
+	if exists('S:\[CurSystem]\.mnu') then 
+		fn_getProgramListAdd('S:\[cursystem]\.mnu',gridLine)
+	else if exists('S:\[cursystem]\Menu.mnu') then
+		fn_getProgramListAdd('S:\[cursystem]\Menu.mnu',gridLine)
+	else
+		pr 'no .mnu nor menu.mnu file found.'
+		pause
+	end if
 	if env$('ACSDeveloper')<>'' then
 		fn_getProgramListAdd('S:\[cursystem]\Programmer.mnu',gridLine)
 	end if  ! serial=env$('ACSDeveloper')<>''
-	if env$('cursys')='PR' then
+	if env$('cursys')='PR' then ! r:
 		dim employee$(0)*256
 		dim employeeN(0)
 		hPrEmployee=fn_openFio('PR Employee',mat employee$,mat employeeN, 1)
@@ -746,8 +753,8 @@ def fn_getProgramList(mat program_plus$,mat program_name$,mat program_name_trim$
 			end if
 		loop
 		EoPrEmployee: !
-		fnCloseFile(hPrEmployee,'PR Employee')
-	else if env$('cursys')='UB' then
+		fnCloseFile(hPrEmployee,'PR Employee') ! /r
+	else if env$('cursys')='UB' then ! r:
 		if enableUbCustomers then
 			! open #hUbCustomer=fnH: 'Name=[Q]\UBmstr\Customer.h[cno],KFName=[Q]\UBmstr\ubIndex.h[cno],Shr',i,i,k
 			dim customer$(0)*256
@@ -793,7 +800,7 @@ def fn_getProgramList(mat program_plus$,mat program_name$,mat program_name_trim$
 			loop
 			EoUbCustomer: !
 			fnCloseFile(hUbCustomer,'UB Customer')
-		end if ! enableUbCustomers
+		end if ! enableUbCustomers /r
 	end if
 fnend
 ! UbCustomerReadErr: ! r:

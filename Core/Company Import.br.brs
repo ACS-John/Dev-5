@@ -101,7 +101,7 @@ else
 		end if
 	end if
 end if
-fnindex_sys(cno,cursys$)
+fnIndexSys(cno,cursys$)
 Xit: !
 fnXit
 def fn_deleteExistingFiles

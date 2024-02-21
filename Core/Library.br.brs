@@ -696,9 +696,9 @@ fnend
 		library 'S:\Core\Index.br': fnIndex
 		fnIndex=fnIndex(data_file$,index_statement$, index_parameters$)
 	fnend
-	def library fnindex_sys(; only_cno,system_id$*256)
-		library 'S:\Core\Index.br': fnindex_sys
-		fnindex_sys=fnindex_sys( only_cno,system_id$)
+	def library fnIndexSys(; only_cno,system_id$*256)
+		library 'S:\Core\Index.br': fnIndexSys
+		fnIndexSys=fnIndexSys( only_cno,system_id$)
 	fnend
 	def library fnub_index_customer
 		library 'S:\Core\Index.br': fnub_index_customer

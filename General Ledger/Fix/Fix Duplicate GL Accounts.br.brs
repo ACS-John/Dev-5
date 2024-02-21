@@ -47,7 +47,7 @@ if dupesDetected then
 		fnMb(mat mb$, mb_information)
 		! /r
 		fnCloseFile(hGl,'GL Account')
-		fnindex_sys( val(env$('cno')))
+		fnIndexSys( val(env$('cno')))
 	end if
 end if
 goto Finis

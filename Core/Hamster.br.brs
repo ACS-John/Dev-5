@@ -244,10 +244,17 @@ def fn_hamster(uw$*128,mat lbl$,mat fln,hIn,mat p$; mat flTyp$,mat sln,mat mask$
 			fnTos
 			mypos=mylen+3 : lc=ic=0 : col=1 : colpos=1
 			for j=1 to itemCount ! r:
-				if itemCount>30 and j>(itemCount/2) and col=1 then
-					lc=0 : colpos=mypos+myflen+4 : col+=1
+				if itemCount>30 and j>30 and col=1 then ! if itemCount>30 and j>(itemCount/2) and col=1 then ! form Col 2
+					lc=0 : colpos=mypos+myflen+35 : col+=1
+					mypos=colpos+mylen+2
+				else if itemCount>60 and j>60 and col=2 then ! Col 3
+					lc=0 : colpos=mypos+myflen+30 : col+=1
 					mypos=colpos+mylen+2
 				end if
+				
+				
+				
+				
 				if mask2N(ic+1)=>20000 then ic+=1 : goto SkipLabelAndControl
 				fnLbl(lc+=1,colpos,lbl$(ic+=1)&':',mylen,right)
 				if mask2N(ic)>10000 then

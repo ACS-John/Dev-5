@@ -379,7 +379,7 @@ ScrDepartment: ! r:
 		departmentCap$='Department '&str$(whichDepartment)&' of '&str$(deptCount)&' for '&trim$(em$(1))
 	end if
 	! lc=3
-	fnLbl(1,50,'whichDepartment='&str$(whichDepartment)&' scree='&str$(screen))
+	! fnLbl(1,50,'whichDepartment='&str$(whichDepartment)&' scree='&str$(screen))
 	fram1=1 : fnFra(3,1,6,97,departmentCap$)
 	fnLbl(1,1,'Employee Number:',mylen,1,0,fram1)
 	fnTxt(1,mylen+3,8,8,1,'1030',1,'Employee numbers must be numeric.',fram1)
