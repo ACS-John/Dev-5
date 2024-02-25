@@ -341,7 +341,7 @@ L2960: if resub$<>"0" and resub$<>"1" then ce=2 : goto ERR_SCR2
 	if cmdkey=5 then goto SCR1
 return ! /r
 L3030: ! r:
-	dim first$*15,mid$*15,last$*20,em$(3)*30
+	dim first$*128,mid$*15,last$*20,em$(3)*30
 	em$(1)=uprc$(rtrm$(em$(1))): ! nAMCDE$="s"
 	x1=pos(em$(1)," ",1)
 	x2=pos(em$(1)," ",x1+1)

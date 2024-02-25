@@ -987,6 +987,13 @@ def fn_printReceipt(pr_acct_key$,pr_acct_name$*30,rcpt$,bal,pr_trans_amt,pr_tran
 		!   pr #255: '              Date: '&cnvrt$('pic(##/##/##)',pr_trans_date)
 		pr #255: ''
 		pr #255: '________________________________' ! 32 characters - perfect max width fit for my pos-58 usb receipt printer
+		pr #255: ''
+		pr #255: ''
+		pr #255: ''
+		pr #255: ''
+		pr #255: ''
+		pr #255: ''
+		pr #255: ''
 		pr #255: newpage ! ''
 		fnCloseReceiptPrinter
 	end if

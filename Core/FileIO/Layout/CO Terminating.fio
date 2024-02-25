@@ -1,0 +1,13 @@
+S:\Core\Data\Terminating Business Indicator.dat  ,  tbi_       , 0
+
+===================================================
+Code    	, Code                         	, C    1
+Desc    	, Description                	, C   50
+
+#EoF#
+
+For W-2 submission to SSA 2/24/2024
+This is a required field.
+This field must contain valid codes: 
+0 = Business not terminated during this tax year
+1 = Business terminated during this tax year 

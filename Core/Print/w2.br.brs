@@ -76,7 +76,8 @@ dim contactFax$*64   	! 10 ! Employer Contact Fax Number
 dim contactEmail$*64 	! 40 ! Employer Contact E-Mail/Internet
 dim employmentCode$*1
 dim preparerCode$*1
-preparerCode$
+dim TerminatingBusinessIndicator$*1
+
 
 def library fnask_w2_info(&taxYear$,&ssrate,&ssmax,&mcrate,&mcmax,&pn1,&dc1,&state$,enableAskCLocality,&cLocality$)
 	if setup$<>env$('cursys')&env$('cno') then fn_setup
@@ -365,8 +366,9 @@ def fn_ask_w2_info(&taxYear$, _
 			fncreg_read('Phone Extension',contactPhExt$)
 			fncreg_read('Fax Extension',contactFax$)
 			fncreg_read('Email',contactEmail$)
-			fncreg_read('Employment Code',employmentCode$)
+			fncreg_read('Employment Code',employmentCode$,'F')
 			fncreg_read('Preparer Code',preparerCode$)
+			fncreg_read('Terminating Business Indicator',TerminatingBusinessIndicator$,'0')
 
 			fnTos : lc=rc=0 : mylen=25 : mypos=mylen+2
 				lc+=1 
@@ -412,6 +414,11 @@ def fn_ask_w2_info(&taxYear$, _
 				fnLbl(lc+=1,1,'Preparer Code:',mylen,1)
 				fnComboFio(lc,mypos,'CO Preparer Code', 1)
 				resp$(resp_preparerCode=rc+=1)=preparerCode$
+				lc+=1
+				fnLbl(lc+=1,1,'Terminating Business:',mylen,1)
+				fnComboFio(lc,mypos,'CO Terminating', 1)
+				resp$(resp_TerminatingBusiness=rc+=1)=TerminatingBusinessIndicator$
+				fnLbl(lc+=1,1,'.',90,1)
 				
 				
 				fncmdset(2)
@@ -810,10 +817,11 @@ def fn_line(lineNumber; ___,returnN)
 	LineFinis: ! skip here for special pre-printed forms
 	fn_line=returnN
 fnend
-	def fn_oC(text$*256,fieldLength; format$)
+	def fn_oC(text$*256,fieldLength; format$) ! multi-purpose, format$ specifies
 		if format$='number' then
 			!   xt$=xlate$(text$,rpt$(' ', 35)&"#$%&'()   -  0123456789       abcdefghijklmnopqrstuvwxyz \  _ abcdefghijklmnopqrstuvwxyz"&rpt$(' ', 133))
-			text$=xlate$(text$,rpt$(' ', 35)&"             0123456789                                                                 "&rpt$(' ', 133))
+			! text$=xlate$(text$,rpt$(' ', 35)&'             0123456789                                                                 ')
+			text$=xlate$(text$,rpt$(' ',48)&'0123456789'&rpt$(' ',198))
 			text$=srep$(text$,' ','')
 			line$&=rpad$(trim$(text$)(1:fieldLength),fieldLength)
 		else
@@ -821,7 +829,7 @@ fnend
 			line$&=rpad$(trim$(text$)(1:fieldLength),fieldLength)
 		end if
 	fnend
-	def fn_oN(num,fieldLength; format$)
+	def fn_oN(num,fieldLength; format$) ! for money.  it rounds and zero pads
 		line$&=lpad$(str$(round(num,0)),fieldLength,'0')
 	fnend
 	def fn_oOut
@@ -993,9 +1001,9 @@ fnend
 		fn_oC('RE',2)
 		fn_oC(taxYear$,4) ! 3-6 Tax Year
 		fn_oC('',  1) !       7 Agent Indicator Code
-		fn_oC(ein$,  9) !    8-16 Employer /Agent Identification Number (EIN)
+		fn_oC(ein$,  9,'number') !    8-16 Employer /Agent Identification Number (EIN)
 		fn_oC('',  9) !   17-25 Agent for EIN
-		fn_oC('',  1) !      26 Terminating Business Indicator
+		fn_oC(TerminatingBusinessIndicator$,  1) !      26 Terminating Business Indicator
 		fn_oC('',  4) !   27-30 Establishment Number
 		fn_oC('',  9) !   31-39 Other EIN
 		fn_oC(a$(1), 57) !   40-96  Employer Name
