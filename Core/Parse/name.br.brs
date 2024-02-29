@@ -35,8 +35,7 @@ def library fnNameParse(fullname$*128,&nameFirst$,&nameMiddle$,&nameLast$,&nameS
 	autoLibrary
 	fnNameParse=fn_nameParse(fullname$,nameFirst$,nameMiddle$,nameLast$,nameSuffix$)
 fnend
-def fn_nameParse(fullname$*128,&nameFirst$,&nameMiddle$,&nameLast$,&nameSuffix$)
-	dim nameFormat$*20
+def fn_nameParse(fullname$*128,&nameFirst$,&nameMiddle$,&nameLast$,&nameSuffix$; ___,nl,nameFormat$*20)
 	dim optNameFormat$(2)*20
 	optNameFormat$(1)='First Name First'
 	optNameFormat$(2)='Last Name First'
@@ -91,6 +90,7 @@ def fn_nameParse(fullname$*128,&nameFirst$,&nameMiddle$,&nameLast$,&nameSuffix$)
 	end if
 
 	nameFirst$=rtrm$(nameFirst$,',')
+	nameFirst$=rtrm$(nameFirst$)
 
 	! r: nameSuffix$ process ! JR
 	nameSuffix$='' err npNsFinis
@@ -103,6 +103,11 @@ def fn_nameParse(fullname$*128,&nameFirst$,&nameMiddle$,&nameLast$,&nameSuffix$)
 		nameSuffix$='JR'
 		nameFirst$=rtrm$(nameFirst$)
 		nameFirst$=nameFirst$(1:len(nameFirst$)-3)
+	end if
+	nl=len(nameFirst$)
+	if uprc$(nameFirst$)(nl-3:nl)=',JR.' then
+		nameSuffix$='JR'
+		nameFirst$(nl-3:nl)=''
 	end if
 	if uprc$(nameLast$&'*')<>uprc$(srep$(nameLast$&'*',',JR*','')) then
 		nameSuffix$='JR'

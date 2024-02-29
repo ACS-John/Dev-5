@@ -418,7 +418,7 @@ Xit: fnXit
 
 def fn_chooseBudgetUpdates(x1$*10,transDate,mat billToPay; ___,bd1Count,ck1,j,key$*14,billingDate,btRecCount,btpCount,cbAdded) ! very local.
 	! haveBudget=0   !   this seems really wrong - should not be turing it off constantly
-	if hBudMstr then
+	if hBudMstr and hBudgetTrans then
 	   if fnCustomerBudgetEnable(x1$)  then
 			btRecCount=fnBudgetTransMatchingRecords(x1$,mat btRec,'unpaidonly')
 			fnTos

@@ -115,7 +115,7 @@ fnreg_read('Post to Checkbook - Populate Checkbook Payee from Payroll Employee',
 		ficam1$='Y'
 	end if
 	checkMedia$=fnPcRegRead$('Check Media','R')
-	skipAlignment$=fnPcRegRead$('Skip Alignment',skipAlignment$, 'Yes')
+	skipAlignment$=fnPcRegRead$('Skip Alignment', 'Yes')
 goto ScrMainQestions ! /r
 	def fn_openCheckbook
 		open #h_clBank=fnH: 'Name=[Q]\CLmstr\BankMstr.h[cno],KFName=[Q]\CLmstr\BankIdx1.h[cno],Shr',i,outIn,k ioerr OcFinis
