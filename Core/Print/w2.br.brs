@@ -354,12 +354,14 @@ def fn_ask_w2_info(&taxYear$, _
 			dim submitterPhExt$*5
 			dim submitterFax$*10
 			dim submitterEmail$*40
+			dim submitterEin$*9
 			fnreg_read('BSO User Identification',bsoUser$) ! BSO User ID: B7WYT74J
 			fnreg_read('Submitter Name' ,submitterName$ ) 
 			fnreg_read('Submitter Phone',submitterPhone$)
 			fnreg_read('Submitter PhExt',submitterPhExt$)
 			fnreg_read('Submitter Fax'  ,submitterFax$)
 			fnreg_read('Submitter Email',submitterEmail$)
+			fnreg_read('Submitter EIN',submitterEin$)
 
 			fncreg_read('Contact Name',contactName$)
 			fncreg_read('Phone Number',contactPhone$)
@@ -390,6 +392,9 @@ def fn_ask_w2_info(&taxYear$, _
 				fnLbl(lc+=1,1,'Email:',mylen,1)
 				fnTxt(lc,mypos,40)
 				resp$(resp_submitterEmail=rc+=1)=submitterEmail$
+				fnLbl(lc+=1,1,'EIN:',mylen,1)
+				fnTxt(lc,mypos,9)
+				resp$(resp_submitterEin=rc+=1)=submitterEin$
 				lc+=1
 				lc+=1
 				fnLbl(lc+=1,1,'Company Contact Name:',mylen,1)
@@ -432,12 +437,14 @@ def fn_ask_w2_info(&taxYear$, _
 				submitterPhExt$=resp$(resp_submitterPhExt)
 				submitterFax$=resp$(resp_submitterFax)
 				submitterEmail$=resp$(resp_submitterEmail)
+				submitterEin$=resp$(resp_submitterEin)
 				fnreg_write('BSO User Identification',bsoUser$)
 				fnreg_write('Submitter Name' ,submitterName$ )
 				fnreg_write('Submitter Phone',submitterPhone$)
 				fnreg_write('Submitter PhExt',submitterPhExt$)
 				fnreg_write('Submitter Fax'  ,submitterFax$  )
 				fnreg_write('Submitter Email',submitterEmail$)
+				fnreg_write('Submitter EIN',submitterEin$)
 				
 				contactName$=resp$(resp_contactName)
 				contactPhone$=resp$(resp_contactPhone)
@@ -883,10 +890,10 @@ fnend
 		fn_oC('', 11) ! 463-473 Cost of Employer-Sponsored Health Coverage (Code DD)
 		fn_oC('', 11) ! 474-484 Permitted Benefits Under a Qualified Small Employer Health Reimbursement Arrangement (Code FF)
 		fn_oC('',  1) ! 485 Blank
-		fn_oC('',  1) ! 486 Statutory Employee Indicator
+		fn_oC('0', 1) ! 486 Statutory Employee Indicator - This field must contain valid codes: 1 = Statutory Employee or 0 = Not a Statutory Employee.
 		fn_oC('',  1) ! 487 Blank
-		fn_oC('',  1) ! 488 Retirement Plan Indicator
-		fn_oC('',  1) ! 489 Third-Party Sick Pay Indicator
+		fn_oC('0', 1) ! 488 Retirement Plan Indicator - This field must contain valid codes: 1 = Employee is an active participant in a retirement plan or 0 = Employee is not an active participant in a retirement plan.
+		fn_oC('0', 1) ! 489 Third-Party Sick Pay Indicator - This field must contain valid codes: 1 = Employee has Third-Party Sick Pay or 0 = Third-Party Sick Pay does not apply.
 		fn_oC('', 23) ! 490-512 Blank
 		if len(line$)<>512 then pr 'wrong length len(line$)=';len(line$) : pause
 		fn_oOut
@@ -951,22 +958,22 @@ fnend
 	return ! /r
 	Efw2_Ra:  ! r: • RA (Submitter) Record – Required
 		fn_oC('RA',2)
-		fn_oC(ein$   	, 9,'number') !  3-11 Submitter's Employer Identification Number (EIN)
-		fn_oC(bsoUser$ 	, 8) ! 12-19 User Identification (User ID    ! XXX TODO: Ask this on the screen
-		fn_oC(''        	, 4) ! 20-23 Software Vendor Code
-		fn_oC(''        	, 5) ! 24-28 Blanks
-		fn_oC('0'       	, 1) ! 30-35 Resubmission Indicator 1 Enter "1" if this file is being resubmitted. Otherwise, enter “0” (zero).
-		fn_oC(''        	, 6) ! 30-35 Resub Wage File Identifier (WFID)
-		fn_oC('98'      	, 2) ! 36-37 Software Code 2 Enter one of the following codes to indicate the software used to create your file:   • 98 = In-House Program   • 99 = Off-the-Shelf Software
+		fn_oC(submitterEin$	, 9,'number') !  3-11 Submitter's Employer Identification Number (EIN)
+		fn_oC(bsoUser$     	, 8) ! 12-19 User Identification (User ID    ! XXX TODO: Ask this on the screen
+		fn_oC(''            	, 4) ! 20-23 Software Vendor Code
+		fn_oC(''            	, 5) ! 24-28 Blanks
+		fn_oC('0'           	, 1) ! 30-35 Resubmission Indicator 1 Enter "1" if this file is being resubmitted. Otherwise, enter “0” (zero).
+		fn_oC(''            	, 6) ! 30-35 Resub Wage File Identifier (WFID)
+		fn_oC('98'          	, 2) ! 36-37 Software Code 2 Enter one of the following codes to indicate the software used to create your file:   • 98 = In-House Program   • 99 = Off-the-Shelf Software
 		! if len(line$)<>37 then pr 'wrong length len(line$)=';len(line$) : pause
-		fn_oC(a$(1)     	,57) ! 38-94 Company Name 57 Enter the company name. Left justify and fill with blanks.
-		fn_oC(''        	,22) ! location address
-		fn_oC(a$(2)     	,22) ! delivery address
-		fn_oC(aCity$   	,22) !
-		fn_oC(aSt$      	, 2) !
-		fn_oC(aZip$    	, 5) !
-		fn_oC(''        	, 4) ! zip extension
-		fn_oC(''        	, 5) ! 172-176 Blank 5 Fill with blanks. Reserved for SSA use.
+		fn_oC(a$(1)         	,57) ! 38-94 Company Name 57 Enter the company name. Left justify and fill with blanks.
+		fn_oC(''            	,22) ! location address
+		fn_oC(a$(2)         	,22) ! delivery address
+		fn_oC(aCity$       	,22) !
+		fn_oC(aSt$          	, 2) !
+		fn_oC(aZip$         	, 5) !  165-169
+		fn_oC(''            	, 4) ! zip extension
+		fn_oC(''            	, 5) ! 172-176 Blank 5 Fill with blanks. Reserved for SSA use.
 		! if len(line$)<>176 then pr 'wrong length len(line$)=';len(line$) : pause
 		fn_oC('', 23) ! 177-199 Foreign State/Province
 		fn_oC('', 15) ! 200-214 Foreign Postal Code
@@ -1011,7 +1018,7 @@ fnend
 		fn_oC(a$(2), 22) ! 119-140 Delivery Address
 		fn_oC(aCity$, 22) ! 141-162
 		fn_oC(aSt$,  2) ! 163-164
-		fn_oC(aip$,  5) ! 165-169
+		fn_oC(aZip$,  5) ! 165-169
 		fn_oC('',  4) ! 170-173
 		fn_oC('N', 1) !     174 Kind of Employer
 														! This is a required field.

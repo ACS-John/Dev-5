@@ -32,7 +32,7 @@ Annual
 >YTD Deductions Register                    ^ [cursystem]\*              ^    ^
 >Print W-2 Forms                            ^ [cursystem]\*              ^    ^W2
 >Corrected W-2                              ^ [cursystem]\Job Cost\*     ^    ^W2
->Electronic W-2                             ^ [cursystem]\*              ^    ^W2
+! >Electronic W-2                             ^ [cursystem]\*              ^    ^W2
 >Corrected Electronic W-2                   ^ [cursystem]\*              ^    ^W2
 >Print 1099-Misc Forms                      ^ [cursystem]\*              ^    ^Export,IRIS,csv
 >Print 1099-NEC Forms                       ^ [cursystem]\*              ^    ^Export,IRIS,csv
