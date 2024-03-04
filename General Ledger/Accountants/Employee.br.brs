@@ -40,7 +40,7 @@
 	sc3$(2)='Check #:'
 	sc3$(21)='Net Pay:'
 	if exists ('[Q]\GLmstr\PRmstr.h[cno]') =0 then goto INITIAL_BUILD
-	open #1: 'Name=[Q]\GLmstr\PRmstr.h[cno],KFName=[Q]\GLmstr\PRIndex.h[cno],Shr',i,outIn,k ioerr L2900
+	open #1: 'Name=[Q]\GLmstr\PRmstr.h[cno],KFName=[Q]\GLmstr\PRIndex.h[cno],Shr',i,outIn,k ioerr OpenErr
 	open #2: 'Name=[Q]\GLmstr\AcPrCks.h[cno],Shr',i,outi,r
 ! /r
 goto MAIN
@@ -194,7 +194,7 @@ INITIAL_BUILD: ! r:
 	open #1: 'Name=[Q]\GLmstr\PRmstr.h[cno]',internal,output ioerr ignore
 	close #1,free: ioerr ignore
 	open #1: 'Name=[Q]\GLmstr\PRmstr.h[cno],RecL=280,Replace',internal,output
-	close #2: ioerr ignore
+	close #2: ioerr ignorew
 	fnFree('[Q]\GLmstr\PRIndex.h[cno]')
 	open #2: 'Name=[Q]\GLmstr\AcPrCks.h[cno]',internal,output ioerr ignore
 	close #2,free: ioerr ignore
@@ -405,7 +405,7 @@ L2700: !
 		goto L2300
 	end if ! /r
 
-L2900: !
+OpenErr: !
 	if err=4152 then goto INITIAL_BUILD else goto ERTN
 Xit: fnXit
 

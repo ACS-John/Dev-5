@@ -13,12 +13,10 @@ dim dedfed(10)
 read #1,using 'form pos 1,3*C 40,C 12,pos 618,50*N 1': mat a$,b$,mat dedcode,mat dedfed,mat dedfica,mat dedst,mat deduc
 	close #1:
 	on fkey 5 goto Xit
-L210: ! 
-	p1=pos(b$,'-',1)
-	if p1=0 then goto L260
-	b$(p1:p1)=''
-goto L210
-L260: !
+	do
+		p1=pos(b$,'-',1)
+		if p1 then b$(p1:p1)=''
+	loop while p1
 	b1=val(b$)
 	p1=pos(a$(3),',',1): comma=1
 	if p1=0 then p1=pos(a$(3),' ',1): comma=0
@@ -61,7 +59,7 @@ SCR1: ! r:
 	pr newpage
 	! close #101: ioerr ignore
 	! open #101: 'SROW=2,SCOL=3,EROW=23,ECOL=77,BORDER=DR,CAPTION=<Create Electronic W2 Diskette for I.R.S.',display,outIn
-	pr f '3,15,C 51,R,N': '  INSERT DISKETTE FOR ELECTRONIC W2''S IN DRIVE A:'
+	! pr f '3,15,C 51,R,N': '  INSERT DISKETTE FOR ELECTRONIC W2''S IN DRIVE A:'
 	pr f '5,5,C 60': 'Company Name:'
 	pr f '6,5,C 60': 'Street Address:'
 	pr f '7,5,C 60': 'City:'
