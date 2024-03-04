@@ -62,7 +62,7 @@ fnTop(program$)
 	fncreg_read('Miscellaneous Deduction Used For Pension',tmp$) : pen=val(tmp$)
 	fncreg_read('Miscellaneous Deduction Used For Deferred Compensation',tmp$) : dfc=val(tmp$)
 	fncreg_read('Miscellaneous Deduction Used For Dependent Care Assistance',tmp$) : dcan=val(tmp$)
-!
+
 	dim contact$*27
 	dim email$*40
 	fncreg_read('W-2 Personal ID Number',emppin$)
@@ -380,21 +380,21 @@ RecRW: ! r:
 	! pr #hOut,USING 2270: 'RO','',W2(9),W2(7),0,0,0,0,0,'','','',0,0,0,0,0,0,0,'',0,0,''
 	! form pos 1,c 2,c 9,7*pic(###########),c 176,c 1,c 9,7*pic(###########),c 11,2*pic(###########),c 128
 return ! /r
-RecRS: ! r: STATE RECORD
+RecRS: ! r: State Record
 ! if sr1=0 then goto 2880 ! NO STATE SELECTED
 	if s2(1)<>0 or s2(2)<>0 then ! NO STATE WAGES
 		! totrsrecs+=1
 		pr #hOut,using fRecRS: 'RS',sr2,'',ssn,first$,mid$,last$,'','',em$(2)(1:22),emct$,emst$,emzip$,'','','','','','','',0,0,0,0,0,'','','',sr2,s2(1),s2(2),'','',0,0,'','','',''
 		fRecRS: form pos 1,c 2,g 2,c 5,pic(#########),c 15,c 15,c 20,c 4,c 22,c 22,c 22,c 2,c 5,c 4,c 5,c 23,c 15,c 2,c 2,c 6,2*pic(###########),pic(##),2*pic(########),c 5,c 20,c 6,g 2,2*pic(###########),c 10,c 1,2*pic(###########),c 7,c 75,c 75,c 25
 	end if
-	t1=t1+1: mat t1=t1+w2
+	t1+=1: mat t1=t1+w2
 	mat i1=i1+w2
 	mat i2=i2+w3
 	mat t2=t2+w3
-	dc2=dc2+dc1
-	dc3=dc3+dc1
-	dca2=dca2+dca
-	dca3=dca3+dca
+	dc2+=dc1
+	dc3+=dc1
+	dca2+=dca
+	dca3+=dca
 	w2=w3=dca=dc1=0
 	mat w2=(0)
 	mat w3=(0)

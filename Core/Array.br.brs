@@ -382,14 +382,14 @@ fnend
 def library fnArrayItemRemoveC(mat array$,itemToRemove)
 	fnArrayItemRemoveC=fn_arrayItemRemoveC(mat array$,itemToRemove)
 fnend
-def fn_arrayItemRemoveC(mat array$,itemToRemove)
-	if itemToRemove=udim(mat array$) then
-		mat array$(itemToRemove-1)
-	else
-		mat array$(itemToRemove:udim(mat array$)-1)=array$(itemToRemove+1:udim(mat array$))
-		mat array$(udim(mat array$)-1)
-	end if
-fnend
+	def fn_arrayItemRemoveC(mat array$,itemToRemove)
+		if itemToRemove=udim(mat array$) then
+			mat array$(itemToRemove-1) ! 315
+		else
+			mat array$(itemToRemove:udim(mat array$)-1)=array$(itemToRemove+1:udim(mat array$))
+			mat array$(udim(mat array$)-1)
+		end if
+	fnend
 def library fnArrayItemRemoveN(mat arrayN,itemToRemove)
 	fnArrayItemRemoveN=fn_arrayItemRemoveN(mat arrayN,itemToRemove)
 fnend
