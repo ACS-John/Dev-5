@@ -1871,7 +1871,7 @@ fnend
 		fnDeptName$=fnDeptName$(departmentCode)
 	fnend
 	def library fnPrPrintNetZeroDefault$(; ___,return$)
-		if env$('client')='Divernon' or env$('client')='Payroll Done Right' then
+		if env$('client')='Payroll Done Right' then ! env$('client')='Divernon' or 
 			return$='True'
 		else
 			return$='False'

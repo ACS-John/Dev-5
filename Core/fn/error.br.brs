@@ -232,7 +232,8 @@ def library fnError(callingprogram$*256, errornumber, linenumber, &ertnAct$, sto
 				! close #hTmp:
 				! exe '*Free acsErrTmp[session].txt -n'
 				! execute '"'&os_filename$('S:\brEdit.cmd')&'"'
-				execute 'sy ""C:\ACS\Program\Notepad++\notepad++.exe" "'&selectedFile$&'" -n'&str$(selectedLine)&'"'
+				rem execute 'sy ""C:\ACS\Program\Notepad++\notepad++.exe" "'&selectedFile$&'" -n'&str$(selectedLine)&'"'
+				execute 'sy ""C:\Users\niceg\AppData\Local\Programs\Microsoft VS Code\Code.exe" "'&selectedFile$&'":'&str$(selectedLine)&'"'
 
 			
 			

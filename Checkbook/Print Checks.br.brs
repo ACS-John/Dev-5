@@ -838,8 +838,8 @@ def fn_portion_stub(stubOnCheck)
 	! stubOnCheck - 1 or 2 to say if it is the first or second stub on a check.  Some formats care
 	if env$('client')='Billings' or env$('client')='Diamond' then
 		fn_portion_stub_billings(stubOnCheck)
-	else if env$('client')='Divernon' then
-		fn_portion_stub_divernon
+	! else if env$('client')='Divernon' then
+	! 	fn_portion_stub_divernon
 	else
 		fn_portion_stub_generic
 		if (env$('client')='Edison' or env$('client')='Crockett County') and stubOnCheck=1 then
@@ -888,21 +888,21 @@ def fn_portion_stub_billings(stubOnCheck)
 		pr #255: ''
 	end if
 fnend
-def fn_portion_stub_divernon
-	pr #255: ''
-	if trim$(holdvn$)<>'' then read #h_vf1,using 'form pos 9,4*C 30',key=holdvn$,release: mat b$ nokey ignore
-	pr #255: ''
-	pr #255,using 'form pos 19,C 30,pos 50,C 12,PIC(ZZ/ZZ/ZZ),pos 74,N 6': b$(1),holdvn$,prdmmddyy,ckn1
-	pr #255: ''
-	mat b$=(' ') : b$(1)=tr$(5)(1:30)
-	if h_vf1=23 then vp1=173 else vp1=147
-	read #h_vf1,using 'form pos 9,4*C 30,pos VP1,2*PD 3',key=holdvn$,release: mat b$ nokey ignore
-	pr #255: 'Invoice Number   Amount   Description   Invoice Number   Amount   Description'
-	pr #255: '_______________________________________ _______________________________________'
-	for j=1 to 15
-		pr #255,using 'form pos 1,C 12,PIC(ZZZZ,ZZZ.ZZCR),X 1,C 13,pos 41,C 12,PIC(ZZZZ,ZZZ.ZZCR),C 13': iv$(j,1)(1:12),amt(j,1),de2$(j,1),iv$(j,2)(1:12),amt(j,2),de2$(j,2)
-	next j
-fnend
+! def fn_portion_stub_divernon
+! 	pr #255: ''
+! 	if trim$(holdvn$)<>'' then read #h_vf1,using 'form pos 9,4*C 30',key=holdvn$,release: mat b$ nokey ignore
+! 	pr #255: ''
+! 	pr #255,using 'form pos 19,C 30,pos 50,C 12,PIC(ZZ/ZZ/ZZ),pos 74,N 6': b$(1),holdvn$,prdmmddyy,ckn1
+! 	pr #255: ''
+! 	mat b$=(' ') : b$(1)=tr$(5)(1:30)
+! 	if h_vf1=23 then vp1=173 else vp1=147
+! 	read #h_vf1,using 'form pos 9,4*C 30,pos VP1,2*PD 3',key=holdvn$,release: mat b$ nokey ignore
+! 	pr #255: 'Invoice Number   Amount   Description   Invoice Number   Amount   Description'
+! 	pr #255: '_______________________________________ _______________________________________'
+! 	for j=1 to 15
+! 		pr #255,using 'form pos 1,C 12,PIC(ZZZZ,ZZZ.ZZCR),X 1,C 13,pos 41,C 12,PIC(ZZZZ,ZZZ.ZZCR),C 13': iv$(j,1)(1:12),amt(j,1),de2$(j,1),iv$(j,2)(1:12),amt(j,2),de2$(j,2)
+! 	next j
+! fnend
 def fn_portion_check
 	if env$('client')='ACS' and bankcode=2 then
 		fn_portion_check_acs(amt)
@@ -918,8 +918,8 @@ def fn_portion_check
 		fn_portion_check_generic(amt, 28,55)
 	else if env$('client')='Crockett County' then
 		fn_portion_check_Crocket(amt)
-	else if env$('client')='Divernon' then
-		fn_portion_check_divernon(amt)
+	! else if env$('client')='Divernon' then
+	! 	fn_portion_check_divernon(amt)
 	else if env$('client')='Edison' then
 		fn_portion_check_edison(amt)
 	else if env$('client')='Kimberling' then
@@ -943,7 +943,7 @@ def fn_portion_check_generic(dolamt; length,posDate)
 	if dolamt=0 then eng$='        *** V O I D ***'
 	if dolamt<=0 then ca$='***VOID***' else ca$=rtrm$(cnvrt$('PIC($$$,$$$,$$$.##)',dolamt))
 	! /r
-	if env$('client')='ACS' or env$('client')='Thomasboro' or env$('client')='Hope Welty' or env$('client')='Divernon' then goto L1730 ! don't skip
+	if env$('client')='ACS' or env$('client')='Thomasboro' or env$('client')='Hope Welty' then goto L1730 ! don't skip  ! or env$('client')='Divernon'
 	pr #255: '' ! line 1
 	L1730: !
 	skipline=9
@@ -1097,37 +1097,37 @@ def fn_portion_check_Crocket(dolamt)
 	end if
 	! /r
 fnend
-def fn_portion_check_divernon(dolamt)
-	read #h_vf1,using 'form pos 9,4*C 30,pos VP1,2*PD 3',key=holdvn$,release: mat b$ nokey L6690
-	goto L6700
-	L6690: mat b$=('')
-	L6700: fn_englishdollar(dolamt)
-	x=1
-	for j=1 to x
-		pr #255: ''
-	next j
-	if dolamt=0 then eng$='        *** V O I D ***'
-	if dolamt<=0 then ca$='***VOID***' else ca$=rtrm$(cnvrt$('PIC($$$,$$$,$$$.##)',dolamt))
-	for j=1 to 9
-		pr #255: ' '
-	next j
-	a=62
-	pr #255,using 'form pos A,PIC(ZZ/ZZ/ZZ),X 4,C 18': prdmmddyy,ca$
-	skipline=2
-	pr #255,using 'form skip SKIPLINE,pos 4,C 80,skip 1,pos 9,C 70': eng$(1:n), eng$(n+1:128)
-	if trim$(b$(2))='' then
-		b$(2)=b$(3): b$(3)=b$(4) : b$(4)=''
-	else if trim$(b$(3))='' then
-		b$(3)=b$(4) : b$(4)=''
-	end if
-	for j=1 to 4
-		pr #255,using 'form pos 8,C 30': b$(j)
-	next j
-	skipline=6
-	for j=1 to skipline
-		pr #255: ''
-	next j
-fnend
+! def fn_portion_check_divernon(dolamt)
+! 	read #h_vf1,using 'form pos 9,4*C 30,pos VP1,2*PD 3',key=holdvn$,release: mat b$ nokey L6690
+! 	goto L6700
+! 	L6690: mat b$=('')
+! 	L6700: fn_englishdollar(dolamt)
+! 	x=1
+! 	for j=1 to x
+! 		pr #255: ''
+! 	next j
+! 	if dolamt=0 then eng$='        *** V O I D ***'
+! 	if dolamt<=0 then ca$='***VOID***' else ca$=rtrm$(cnvrt$('PIC($$$,$$$,$$$.##)',dolamt))
+! 	for j=1 to 9
+! 		pr #255: ' '
+! 	next j
+! 	a=62
+! 	pr #255,using 'form pos A,PIC(ZZ/ZZ/ZZ),X 4,C 18': prdmmddyy,ca$
+! 	skipline=2
+! 	pr #255,using 'form skip SKIPLINE,pos 4,C 80,skip 1,pos 9,C 70': eng$(1:n), eng$(n+1:128)
+! 	if trim$(b$(2))='' then
+! 		b$(2)=b$(3): b$(3)=b$(4) : b$(4)=''
+! 	else if trim$(b$(3))='' then
+! 		b$(3)=b$(4) : b$(4)=''
+! 	end if
+! 	for j=1 to 4
+! 		pr #255,using 'form pos 8,C 30': b$(j)
+! 	next j
+! 	skipline=6
+! 	for j=1 to skipline
+! 		pr #255: ''
+! 	next j
+! fnend
 def fn_portion_check_acs(dolamt)
 	mat b$=('')
 	read #h_vf1,using 'form pos 9,4*C 30,pos VP1,2*PD 3',key=holdvn$,release: mat b$ nokey ignore

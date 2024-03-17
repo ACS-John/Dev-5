@@ -98,9 +98,9 @@ TOP: ! r:
 		goto TOP
 	else if xf=d1 then ! else recalculation reduce balances
 		for j=1 to 10
-			if env$('client')='Divernon' then goto LX760 ! Divernon's penalties are added into gb
+			! if env$('client')='Divernon' then goto LX760 ! Divernon's penalties are added into gb
 			if uprc$(penalty$(j))='Y' then goto LX770 ! don't subtract penalties out on recalculation
-			LX760: !
+			! LX760: !
 			if env$('client')='White Hall' and (j=6 or j=7 or j=10) then
 				goto LX770
 			else

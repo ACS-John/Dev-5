@@ -111,7 +111,7 @@ fnreg_read('Post to Checkbook - Populate Checkbook Payee from Payroll Employee',
 	check_number=ckno
 	if check_number>9999999 then check_number-=10000000
 	if env$('client')='Billings' or env$('client')='Diamond' then sc1$='CSS'
-	if env$('client')='Divernon' or env$('client')='Thomasboro' or env$('client')='Edinburg' or env$('client')='Hope Welty' then
+	if env$('client')='Thomasboro' or env$('client')='Edinburg' or env$('client')='Hope Welty' then ! env$('client')='Divernon' or 
 		ficam1$='Y'
 	end if
 	checkMedia$=fnPcRegRead$('Check Media','R')
@@ -843,8 +843,8 @@ def fn_print_check
 		line_nameOnly         =  0
 		pos_nameOnly          =  0
 		fn_check_dynamic(length,line_date,line_amount,line_amount_english,line_name_and_address, pos_date,pos_amt,line_nameOnly,pos_nameOnly) ! /r
-	else if env$('client')='Divernon' then
-		fn_check_divernon
+	! else if env$('client')='Divernon' then
+	! 	fn_check_divernon
 	else if env$('client')='Edinburg' then
 		fn_check_edinburg
 	else if env$('client')='Edison' then ! r: 6/29/2017
@@ -1036,29 +1036,29 @@ def fn_check_cerrogordo
 	pr #255: ''
 	pr #255: ''
 fnend
-def fn_check_divernon
-	pr #255: ''
-	pr #255: ''
-	pr #255: ''
-	pr #255: ''
-	pr #255: ''
-	if sc1$='C' then pr #255: : pr #255: : pr #255: : pr #255: : pr #255:
-	pr #255,using 'form pos 55,pic(ZZ/ZZ/ZZ),X 4,C 18': dat,ca$
-	pr #255,using 'form pos 9,C 62': eng$(1:n1)
-	pr #255,using 'form pos 9,C 62': eng$(n1+1:128)
-	pr #255: ''
-	pr #255: ''
-	pr #255: ''
-	pr #255,using 'form pos 12,C 60': em$(1)
-	pr #255,using 'form pos 12,C 60': em$(2)
-	pr #255,using 'form pos 12,C 60': em$(3)
-	pr #255: ''
-	pr #255: ''
-	pr #255: ''
-	pr #255: ''
-	pr #255: ''
-	pr #255: ''
-fnend
+! def fn_check_divernon
+! 	pr #255: ''
+! 	pr #255: ''
+! 	pr #255: ''
+! 	pr #255: ''
+! 	pr #255: ''
+! 	if sc1$='C' then pr #255: : pr #255: : pr #255: : pr #255: : pr #255:
+! 	pr #255,using 'form pos 55,pic(ZZ/ZZ/ZZ),X 4,C 18': dat,ca$
+! 	pr #255,using 'form pos 9,C 62': eng$(1:n1)
+! 	pr #255,using 'form pos 9,C 62': eng$(n1+1:128)
+! 	pr #255: ''
+! 	pr #255: ''
+! 	pr #255: ''
+! 	pr #255,using 'form pos 12,C 60': em$(1)
+! 	pr #255,using 'form pos 12,C 60': em$(2)
+! 	pr #255,using 'form pos 12,C 60': em$(3)
+! 	pr #255: ''
+! 	pr #255: ''
+! 	pr #255: ''
+! 	pr #255: ''
+! 	pr #255: ''
+! 	pr #255: ''
+! fnend
 def fn_check_edinburg
 	for j=1 to 5
 		pr #255: ''
