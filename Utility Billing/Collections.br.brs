@@ -685,7 +685,7 @@ def fn_setup
 				if j=original(j1) then baOrder(j)=j1
 			next j1
 		next j
-		if env$('client')='Divernon' then mat baOrder=original ! may need to be made standard for everyone   !!!
+		! if env$('client')='Divernon' then mat baOrder=original ! may need to be made standard for everyone   !!!
 		! /r
 		! r: dims and constants that need service name constants
 		dim hd1$*260

@@ -41,15 +41,15 @@ if ckey<>5 then
 	else ! r: Manual Update
 		fnclient_support(mat system_id$,mat system_support_end_date,mat on_support,grace_days)
 		fnArraySortC(mat system_id$)
-		itemToRemove=srch(mat system_id$,'G2')                 	: if itemToRemove>0 then fnArrayItemRemoveC(mat system_id$,itemToRemove) : fnArrayItemRemoveN(mat system_support_end_date,itemToRemove) : fnArrayItemRemoveN(mat on_support,itemToRemove)
-		itemToRemove=srch(mat system_id$,'UB-EFT')             	: if itemToRemove>0 then fnArrayItemRemoveC(mat system_id$,itemToRemove) : fnArrayItemRemoveN(mat system_support_end_date,itemToRemove) : fnArrayItemRemoveN(mat on_support,itemToRemove)
-		itemToRemove=srch(mat system_id$,'HH')                 	: if itemToRemove>0 then fnArrayItemRemoveC(mat system_id$,itemToRemove) : fnArrayItemRemoveN(mat system_support_end_date,itemToRemove) : fnArrayItemRemoveN(mat on_support,itemToRemove)
-		itemToRemove=srch(mat system_id$,'P4')                 	: if itemToRemove>0 then fnArrayItemRemoveC(mat system_id$,itemToRemove) : fnArrayItemRemoveN(mat system_support_end_date,itemToRemove) : fnArrayItemRemoveN(mat on_support,itemToRemove)
-		itemToRemove=srch(mat system_id$,'U4')                 	: if itemToRemove>0 then fnArrayItemRemoveC(mat system_id$,itemToRemove) : fnArrayItemRemoveN(mat system_support_end_date,itemToRemove) : fnArrayItemRemoveN(mat on_support,itemToRemove)
-		itemToRemove=srch(mat system_id$,'U5')                 	: if itemToRemove>0 then fnArrayItemRemoveC(mat system_id$,itemToRemove) : fnArrayItemRemoveN(mat system_support_end_date,itemToRemove) : fnArrayItemRemoveN(mat on_support,itemToRemove)
-		itemToRemove=srch(mat system_id$,'GB')                 	: if itemToRemove>0 then fnArrayItemRemoveC(mat system_id$,itemToRemove) : fnArrayItemRemoveN(mat system_support_end_date,itemToRemove) : fnArrayItemRemoveN(mat on_support,itemToRemove)
-		itemToRemove=srch(mat system_id$,'EM')                 	: if itemToRemove>0 then fnArrayItemRemoveC(mat system_id$,itemToRemove) : fnArrayItemRemoveN(mat system_support_end_date,itemToRemove) : fnArrayItemRemoveN(mat on_support,itemToRemove)
-		itemToRemove=srch(mat system_id$,'Client Billing')     	: if itemToRemove>0 then fnArrayItemRemoveC(mat system_id$,itemToRemove) : fnArrayItemRemoveN(mat system_support_end_date,itemToRemove) : fnArrayItemRemoveN(mat on_support,itemToRemove)
+		itemToRemove=srch(mat system_id$,'G2')                	: if itemToRemove>0 then fnArrayItemRemoveC(mat system_id$,itemToRemove) : fnArrayItemRemoveN(mat system_support_end_date,itemToRemove) : fnArrayItemRemoveN(mat on_support,itemToRemove)
+		itemToRemove=srch(mat system_id$,'UB-EFT')           	: if itemToRemove>0 then fnArrayItemRemoveC(mat system_id$,itemToRemove) : fnArrayItemRemoveN(mat system_support_end_date,itemToRemove) : fnArrayItemRemoveN(mat on_support,itemToRemove)
+		itemToRemove=srch(mat system_id$,'HH')                	: if itemToRemove>0 then fnArrayItemRemoveC(mat system_id$,itemToRemove) : fnArrayItemRemoveN(mat system_support_end_date,itemToRemove) : fnArrayItemRemoveN(mat on_support,itemToRemove)
+		itemToRemove=srch(mat system_id$,'P4')                	: if itemToRemove>0 then fnArrayItemRemoveC(mat system_id$,itemToRemove) : fnArrayItemRemoveN(mat system_support_end_date,itemToRemove) : fnArrayItemRemoveN(mat on_support,itemToRemove)
+		itemToRemove=srch(mat system_id$,'U4')                	: if itemToRemove>0 then fnArrayItemRemoveC(mat system_id$,itemToRemove) : fnArrayItemRemoveN(mat system_support_end_date,itemToRemove) : fnArrayItemRemoveN(mat on_support,itemToRemove)
+		itemToRemove=srch(mat system_id$,'U5')                	: if itemToRemove>0 then fnArrayItemRemoveC(mat system_id$,itemToRemove) : fnArrayItemRemoveN(mat system_support_end_date,itemToRemove) : fnArrayItemRemoveN(mat on_support,itemToRemove)
+		itemToRemove=srch(mat system_id$,'GB')                	: if itemToRemove>0 then fnArrayItemRemoveC(mat system_id$,itemToRemove) : fnArrayItemRemoveN(mat system_support_end_date,itemToRemove) : fnArrayItemRemoveN(mat on_support,itemToRemove)
+		itemToRemove=srch(mat system_id$,'EM')                	: if itemToRemove>0 then fnArrayItemRemoveC(mat system_id$,itemToRemove) : fnArrayItemRemoveN(mat system_support_end_date,itemToRemove) : fnArrayItemRemoveN(mat on_support,itemToRemove)
+		itemToRemove=srch(mat system_id$,'Client Billing')   	: if itemToRemove>0 then fnArrayItemRemoveC(mat system_id$,itemToRemove) : fnArrayItemRemoveN(mat system_support_end_date,itemToRemove) : fnArrayItemRemoveN(mat on_support,itemToRemove)
 		dim url$*512
 		manHitCount=0
 		url$='http://planetacs.net/acs5update/'

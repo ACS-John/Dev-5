@@ -109,7 +109,7 @@ fnend
 			fn_setupClient_add('Chatom'             	,   '911',    15678)
 			fn_setupClient_add('Choctaw'            	,   '918',    34214)
 			fn_setupClient_add('Crockett County'   	,  '1141',    15110)
-			fn_setupClient_add('Divernon'           	,  '1350',    33698)
+			! fn_setupClient_add('Divernon'           	,  '1350',    33698)
 			fn_setupClient_add('Dorothy Salch'      	,  '3812',    34494)
 			fn_setupClient_add('Ed Horton'          	,  '5535',        0) ! Ed processes like ACS
 			fn_setupClient_add('Edinburg'           	,  '1478',    34022)
@@ -381,6 +381,7 @@ def fn_getClientLicense(mat clientHas$)
 		else if env$('client')='Choctaw' then
 			fn_userLimit(1)
 			fn_getClientLicense_add('UB') : fn_setUbLimit(500) ! U3 Utility Billing (<500 Customers)
+			fn_getClientLicense_add('U5') ! UB External Collections Processing (purchased 3/15/2024)
 			! fn_getClientLicense_add('GL')  -  removed from support as of 4/30/19
 		else if env$('client')='Crockett County' then
 			fn_userLimit(1)
@@ -697,7 +698,7 @@ def library fnub_printbill_program$*256
 		fn_upp_add('Ash Grove'         	,'ubprtfull_ashgrove'    	)
 		fn_upp_add('Bethany'           	,'ubprtbl1_Bethany'      	)  ! on 12/17/18 I cleaned it up a little but didn't move it into (basic) yet - it could be though -john
 		fn_upp_add('Chatom'            	,'ubprtbl1_chatom'       	)
-		fn_upp_add('Divernon'          	,'ubprtbl1_div'          	)
+		! fn_upp_add('Divernon'          	,'ubprtbl1_div'          	)
 		fn_upp_add('Findlay'           	,'ubprtbl1_fin'          	)
 		fn_upp_add('Grandview'         	,'ubprtbl1_gra'          	)
 		fn_upp_add('Kincaid'           	,'ubprtbl1_kin'          	)
@@ -812,7 +813,7 @@ def fn_payroll_client_state$*2(; client$*64,___,return$*2,which)
 		fn_pcs_add('Bethany'                 	,'IL')
 		fn_pcs_add('Cerro Gordo V'          	,'IL')
 		fn_pcs_add('Cerro Gordo T'          	,'IL')
-		fn_pcs_add('Divernon'                	,'IL')
+		! fn_pcs_add('Divernon'                	,'IL')
 		fn_pcs_add('Edinburg'                	,'IL')
 		fn_pcs_add('Ed Horton'               	,'IL')
 		fn_pcs_add('Hope Welty'              	,'IL')
